@@ -1,0 +1,40 @@
+{
+  "name": "adblocker",
+  "version": "1.0.0",
+  "description": "Cliqz adblocker library",
+  "main": "index.js",
+  "repository": "https://www.github.com/cliqz-oss/adblocker",
+  "author": "Cliqz",
+  "license": "MPL-2.0",
+  "scripts": {
+    "clean": "rm -rf build",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "build": "npm run clean && mkdir build && concurrently 'npm run build-commonjs' 'npm run build-es6'",
+    "build-commonjs": "tsc -p . --module commonjs --outDir 'build/commonjs'",
+    "build-es6": "tsc -p . --module ES6 --outDir 'build/es6'",
+    "watch": "tsc -p . --module commonjs --outDir 'build/commonjs' --watch",
+    "pretest": "npm run lint",
+    "test": "npm run build && jest --coverage build/commonjs/test/",
+    "dev": "concurrently 'npm run watch' 'jest build/commonjs/test/ --watch'"
+  },
+  "jest": {
+    "testMatch": [
+      "**/test/**/*.test.js"
+    ],
+    "testEnvironment": "node"
+  },
+  "devDependencies": {
+    "@types/jest": "21.1.8",
+    "concurrently": "^3.5.1",
+    "deep-eql": "3.0.1",
+    "function-equal": "1.0.0",
+    "jest": "21.2.1",
+    "type-detect": "4.0.5",
+    "typescript": "2.6.2"
+  },
+  "dependencies": {
+    "@types/text-encoding": "0.0.32",
+    "text-encoding": "0.6.4",
+    "tldjs": "2.2.0"
+  }
+}
