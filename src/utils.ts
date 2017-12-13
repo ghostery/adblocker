@@ -1,3 +1,5 @@
+import { fast1a32 } from 'fnv-plus';
+
 /***************************************************************************
  *  Bitwise helpers
  * ************************************************************************* */
@@ -14,40 +16,8 @@ export function clearBit(n: number, mask: number): number {
   return n & ~mask;
 }
 
-export function packInt32(int) {
-  return String.fromCharCode(int & 65535) + String.fromCharCode(int >>> 16);
-}
-
-export function unpackInt32(str) {
-  return str.charCodeAt(0) | (str.charCodeAt(1) << 16);
-}
-
-/**
- * Fast string hashing (*not cryptographic* and *not secure*), used to get ids
- * of filters. This should return only positive numbers.
- *
- * From: https://stackoverflow.com/a/41753979
- */
-export function fastHash(str: string): number {
-  if (!str) {
-    return 0;
-  }
-
-  let hash: number = 5381;
-  for (let i = 0, len = str.length; i < len; i += 1) {
-    hash = (hash * 33) ^ str.charCodeAt(i);
-  }
-
-  // For higher values, we cannot pack/unpack
-  return hash >>> 0;
-}
-
-export function fastHashCombine(...args: number[]): number {
-  let hash: number = 5381;
-  for (let i = 0; i < args.length; i += 1) {
-    hash = (hash * 33) ^ args[i];
-  }
-  return hash >>> 0;
+export function fastHash(str) {
+  return fast1a32(str);
 }
 
 // https://jsperf.com/string-startswith/21
@@ -125,37 +95,45 @@ function isAllowedCSS(ch: number): boolean {
   );
 }
 
-function fastTokenizer(pattern, isAllowedCode, allowRegexSurround = false) {
+function fastTokenizer(pattern, isAllowedCode, allowRegexSurround = false, hash = false) {
   const tokens: number[] = [];
-  let hash: number = 5381;
   let inside: boolean = false;
+  let start = 0;
+  let length = 0;
 
   for (let i: number = 0, len = pattern.length; i < len; i += 1) {
     const ch = pattern.charCodeAt(i);
     if (isAllowedCode(ch)) {
-      hash = (hash * 33) ^ ch;
-      inside = true;
+      if (!inside) {
+        inside = true;
+        start = i;
+        length = 0;
+      }
+      length += 1;
     } else if (inside) {
       inside = false;
       // Should not be followed by '*'
       if (allowRegexSurround || ch !== 42) {
-        tokens.push(hash >>> 0);
+        tokens.push(pattern.substr(start, length));
       }
-      hash = 5381;
     }
   }
 
   if (inside) {
-    tokens.push(hash >>> 0);
+    tokens.push(pattern.substr(start, length));
+  }
+
+  if (hash) {
+    return tokens.map(fastHash);
   }
 
   return tokens;
 }
 
-export function tokenize(pattern: string): number[] {
-  return fastTokenizer(pattern, isAllowed);
+export function tokenize(pattern: string, hash = true): number[] {
+  return fastTokenizer(pattern, isAllowed, false, hash);
 }
 
-export function tokenizeCSS(pattern: string): number[] {
-  return fastTokenizer(pattern, isAllowedCSS, true);
+export function tokenizeCSS(pattern: string, hash = true): number[] {
+  return fastTokenizer(pattern, isAllowedCSS, true, hash);
 }

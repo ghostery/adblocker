@@ -1,6 +1,5 @@
 import {
   fastHash,
-  fastHashCombine,
   fastStartsWith,
   fastStartsWithFrom,
   getBit,
@@ -153,9 +152,8 @@ export function parseCosmeticFilter(line: string): CosmeticFilter | null {
   // at a specific offset defined in COSMETICS_MASK.
   // cf: COSMETICS_MASK for the offset of each property
   let mask = 0;
-  let selector = '';
-  // Coma-separated list of hostnames
-  let hostnames = '';
+  let selector: string = '';
+  let hostnames: string = ''; // Coma-separated list of hostnames
   const sharpIndex = line.indexOf('#');
 
   // Start parsing the line
@@ -236,7 +234,7 @@ export function parseCosmeticFilter(line: string): CosmeticFilter | null {
     return null;
   }
 
-  const id = fastHashCombine(mask, fastHash(selector), fastHash(hostnames));
+  const id = fastHash(line);
 
   return new CosmeticFilter({
     hostnames,
