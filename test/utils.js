@@ -1,23 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-const deepEqual = require('deep-eql');
-const functionEqual = require('function-equal');
-const typeDetect = require('type-detect');
-
-function comparator(left, right) {
-  if (typeDetect(left) === 'function' && typeDetect(right) === 'function') {
-    return functionEqual(left, right);
-  }
-  return null;
-}
-
-export function customDeepEqual(left, right) {
-  return deepEqual(left, right, {
-    comparator,
-  });
-}
-
 function readAsset(filepath) {
   return fs.readFileSync(path.resolve(__dirname, '../../../', filepath), 'utf-8');
 }

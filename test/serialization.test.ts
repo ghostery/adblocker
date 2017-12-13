@@ -1,6 +1,6 @@
 import {} from 'jest';
 
-import { customDeepEqual, loadAllLists, loadResources } from './utils';
+import { loadAllLists, loadResources } from './utils';
 
 import DynamicDataView from '../src/dynamic-data-view';
 import Engine from '../src/filters-engine';
@@ -19,9 +19,9 @@ import {
 } from '../src/serialization';
 
 describe('Serialization', () => {
-  describe('filters', () => {
-    const { networkFilters, cosmeticFilters } = parseList(loadAllLists());
+  const { networkFilters, cosmeticFilters } = parseList(loadAllLists());
 
+  describe('filters', () => {
     it('cosmetic', () => {
       cosmeticFilters.forEach((filter) => {
         const buffer = new DynamicDataView(100);
@@ -42,11 +42,6 @@ describe('Serialization', () => {
   });
 
   it('ReverseIndex', () => {
-    const { networkFilters } = parseList(
-      loadAllLists(),
-      { loadCosmeticFilters: false },
-    );
-
     const filters = new Map();
     networkFilters.forEach((filter) => {
       if (!filters.has(filter.id)) {
@@ -94,6 +89,31 @@ describe('Serialization', () => {
     engine.onUpdateResource([
       { checksum: 'resources1', filters: resources },
     ]);
-    expect(customDeepEqual(deserializeEngine(serializeEngine(engine), 42), engine)).toBeTruthy();
+    const deserialized = deserializeEngine(serializeEngine(engine), 42);
+    expect(deserialized).not.toBe(null);
+    if (deserialized !== null) {
+      expect(deserialized.version).toEqual(engine.version);
+      expect(deserialized.lists).toEqual(engine.lists);
+
+      // NOTE: Here we only compare the index itself, and not the other
+      // attributes which are functions since the `toEqual` does not handle
+      // function comparison properly.
+
+      // Buckets
+      // Network
+      expect(deserialized.exceptions.index.index).toEqual(engine.exceptions.index.index);
+      expect(deserialized.importants.index.index).toEqual(engine.importants.index.index);
+      expect(deserialized.redirects.index.index).toEqual(engine.redirects.index.index);
+      expect(deserialized.filters.index.index).toEqual(engine.filters.index.index);
+
+      // Cosmetic
+      expect(deserialized.cosmetics.hostnameIndex.index).toEqual(engine.cosmetics.hostnameIndex.index);
+      expect(deserialized.cosmetics.selectorIndex.index).toEqual(engine.cosmetics.selectorIndex.index);
+
+      // Resources
+      expect(deserialized.resourceChecksum).toEqual(engine.resourceChecksum);
+      expect(deserialized.js).toEqual(engine.js);
+      expect(deserialized.resources).toEqual(engine.resources);
+    }
   });
 });

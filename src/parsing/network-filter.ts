@@ -1,7 +1,6 @@
 import {
   clearBit,
   fastHash,
-  fastHashCombine,
   fastStartsWith,
   fastStartsWithFrom,
   getBit,
@@ -849,14 +848,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   }
 
   // Compute id of the filter
-  const id = fastHashCombine(
-    fastHash(finalFilter),
-    fastHash(finalHostname),
-    fastHash(optDomains),
-    fastHash(optNotDomains),
-    fastHash(redirect),
-    mask,
-  );
+  const id = fastHash(line);
 
   return new NetworkFilter({
     filter: finalFilter,

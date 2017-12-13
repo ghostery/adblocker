@@ -9,13 +9,11 @@
   "scripts": {
     "clean": "rm -rf build",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
-    "build": "npm run clean && mkdir build && concurrently 'npm run build-commonjs' 'npm run build-es6'",
-    "build-commonjs": "tsc -p . --module commonjs --outDir 'build/commonjs'",
-    "build-es6": "tsc -p . --module ES6 --outDir 'build/es6'",
+    "build": "npm run clean && mkdir build && tsc -p . --module commonjs --outDir 'build/commonjs'",
     "watch": "tsc -p . --module commonjs --outDir 'build/commonjs' --watch",
     "pretest": "npm run lint",
     "test": "npm run build && jest --coverage build/commonjs/test/",
-    "dev": "concurrently 'npm run watch' 'jest build/commonjs/test/ --watch'"
+    "dev": "npm run build && concurrently 'npm run watch' 'jest build/commonjs/test/ --watch'"
   },
   "jest": {
     "testMatch": [
@@ -25,15 +23,13 @@
   },
   "devDependencies": {
     "@types/jest": "21.1.8",
-    "concurrently": "^3.5.1",
-    "deep-eql": "3.0.1",
-    "function-equal": "1.0.0",
+    "concurrently": "3.5.1",
     "jest": "21.2.1",
-    "type-detect": "4.0.5",
     "typescript": "2.6.2"
   },
   "dependencies": {
     "@types/text-encoding": "0.0.32",
+    "fnv-plus": "git+https://git@github.com/tjwebb/fnv-plus.git",
     "text-encoding": "0.6.4",
     "tldjs": "2.2.0"
   }
