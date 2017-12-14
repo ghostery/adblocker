@@ -379,7 +379,7 @@ export class NetworkFilter {
       return getBit(this.mask, mask);
     }
 
-    return false;
+    return true;
   }
 
   public isException() {
