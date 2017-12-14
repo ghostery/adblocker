@@ -1,10 +1,34 @@
 import {} from 'jest';
 
-import { matchCosmeticFilter } from '../src/filters-matching';
+import { matchCosmeticFilter, matchNetworkFilter } from '../src/filters-matching';
 import { f } from '../src/parsing/list';
+import { processRawRequest } from '../src/filters-engine';
 
 expect.extend({
-  toMatchCosmetic(hostname, filter) {
+  toMatchRequest(filter, request) {
+    const processedRequest = processRawRequest({
+      cpt: 6,
+      sourceUrl: '',
+      url: '',
+      ...request,
+    });
+    const match = matchNetworkFilter(filter, processedRequest);
+    if (match) {
+      return {
+        message: () =>
+          `expected ${filter.toString()} to not match ${JSON.stringify(processedRequest)}`,
+        pass: true,
+      };
+    }
+
+    return {
+      message: () =>
+        `expected ${filter.toString()} to match ${JSON.stringify(processedRequest)}`,
+      pass: false,
+    };
+
+  },
+  toMatchHostname(filter, hostname) {
     const match = matchCosmeticFilter(filter, hostname);
     if (match) {
       return {
@@ -23,33 +47,78 @@ expect.extend({
 });
 
 describe('#matchNetworkFilter', () => {
-  it('matches', () => {
+  it('pattern', () => {
+    expect(f`foo`).toMatchRequest({ url: 'https://bar.com/foo' });
+    expect(f`foo`).toMatchRequest({ url: 'https://bar.com/baz/foo' });
+    expect(f`foo`).toMatchRequest({ url: 'https://bar.com/q=foo/baz' });
+    // TODO: should this work?
+    // expect(f`foo`).toMatchRequest({ url: 'https://foo.com' });
+  });
+
+  it('||pattern', () => {
+    expect(f`||foo.com`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||foo.com/bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||foo`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||foo`).toMatchRequest({ url: 'https://baz.foo.com/bar' });
+
+    expect(f`||foo`).not.toMatchRequest({ url: 'https://baz.com' });
+    // TODO - fix
+    // expect(f`||foo`).not.toMatchRequest({ url: 'https://foo.baz.com/bar' });
+    expect(f`||foo.com`).not.toMatchRequest({ url: 'https://foo.de' });
+    expect(f`||foo.com`).not.toMatchRequest({ url: 'https://bar.foo.de' });
+  });
+
+  it('||pattern|', () => {
+    expect(f`||foo.com|`).toMatchRequest({ url: 'https://foo.com' });
+    expect(f`||foo.com/bar|`).toMatchRequest({ url: 'https://foo.com/bar' });
+
+    expect(f`||foo.com/bar|`).not.toMatchRequest({ url: 'https://foo.com/bar/baz' });
+    expect(f`||foo.com/bar|`).not.toMatchRequest({ url: 'https://foo.com/' });
+  });
+
+  it('pattern|', () => {
+    expect(f`foo.com`).toMatchRequest({ url: 'https://foo.com' });
+    expect(f`foo|`).toMatchRequest({ url: 'https://bar.com/foo' });
+    expect(f`foo|`).not.toMatchRequest({ url: 'https://bar.com/foo/' });
+    expect(f`foo|`).not.toMatchRequest({ url: 'https://bar.com/foo/baz' });
+  });
+
+  it('|pattern', () => {
+    expect(f`|http`).toMatchRequest({ url: 'http://foo.com' });
+    expect(f`|http`).toMatchRequest({ url: 'https://foo.com' });
+    expect(f`|https://`).toMatchRequest({ url: 'https://foo.com' });
+
+    expect(f`https`).not.toMatchRequest({ url: 'http://foo.com' });
+  });
+
+  it('|pattern|', () => {
+    expect(f`|https://foo.com|`).toMatchRequest({ url: 'https://foo.com' });
   });
 });
 
 describe('#matchCosmeticFilter', () => {
   it('single domain', () => {
-    expect('foo.com').toMatchCosmetic(f`foo.com##.selector`);
+    expect(f`foo.com##.selector`).toMatchHostname('foo.com');
   });
 
   it('multiple domains', () => {
-    expect('foo.com').toMatchCosmetic(f`foo.com,test.com##.selector`);
-    expect('test.com').toMatchCosmetic(f`foo.com,test.com##.selector`);
+    expect(f`foo.com,test.com##.selector`).toMatchHostname('foo.com');
+    expect(f`foo.com,test.com##.selector`).toMatchHostname('test.com');
   });
 
   it('subdomain', () => {
-    expect('sub.test.com').toMatchCosmetic(f`foo.com,test.com##.selector`);
-    expect('sub.test.com').toMatchCosmetic(f`foo.com,sub.test.com##.selector`);
+    expect(f`foo.com,test.com##.selector`).toMatchHostname('sub.test.com');
+    expect(f`foo.com,sub.test.com##.selector`).toMatchHostname('sub.test.com');
   });
 
   it('entity', () => {
-    expect('sub.test.com').toMatchCosmetic(f`foo.com,sub.test.*##.selector`);
-    expect('sub.test.fr').toMatchCosmetic(f`foo.com,sub.test.*##.selector`);
-    expect('foo.co.uk').toMatchCosmetic(f`foo.*##.selector`);
+    expect(f`foo.com,sub.test.*##.selector`).toMatchHostname('sub.test.com');
+    expect(f`foo.com,sub.test.*##.selector`).toMatchHostname('sub.test.fr');
+    expect(f`foo.*##.selector`).toMatchHostname('foo.co.uk');
   });
 
   it('does not match', () => {
-    expect('foo.bar.com').not.toMatchCosmetic(f`foo.*##.selector`);
-    expect('bar-foo.com').not.toMatchCosmetic(f`foo.*##.selector`);
+    expect(f`foo.*##.selector`).not.toMatchHostname('foo.bar.com');
+    expect(f`foo.*##.selector`).not.toMatchHostname('bar-foo.com');
   });
 });

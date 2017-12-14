@@ -214,11 +214,10 @@ function matchHostname(hostname: string, hostnamePattern: string): boolean {
     const entity = hostnamePattern.slice(0, -2);
 
     // Ignore TLDs suffix
-    // TODO - take care of prefix `~`, tldjs will reject that.
     const publicSuffix = getPublicSuffix(hostname);
     const hostnameWithoutSuffix = hostname.substr(
       0,
-      hostname.length - publicSuffix.length,
+      hostname.length - publicSuffix.length - 1,
     );
 
     if (hostnameWithoutSuffix.length > 0) {
