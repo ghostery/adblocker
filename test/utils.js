@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 function readAsset(filepath) {
-  return fs.readFileSync(path.resolve(__dirname, '../../', filepath), 'utf-8');
+  return fs.readFileSync(path.resolve(__dirname, '../../../', filepath), 'utf-8');
 }
 
 export function loadAllLists() {
