@@ -8,11 +8,67 @@ import ReverseIndex from './reverse-index';
 import { serializeEngine } from './serialization';
 import { fastHash, fastStartsWith, tokenize } from './utils';
 
+interface IRawRequest {
+  url: string;
+  sourceUrl: string;
+  cpt: number;
+}
+
+interface IRequest {
+  url: string;
+  tokens: number[];
+  hostGD: string;
+  hostname: string;
+
+  sourceUrl: string;
+  sourceGD: string;
+  sourceHostname: string;
+
+  cpt: number;
+}
+
+/**
+ * Append all elements of `array` to the end of `target`.
+ *
+ * Example:
+ * >>> extend([1, 2, 3], [4, 5, 6, 7])
+ *  [1, 2, 3, 4, 5, 6, 7]
+ */
 function extend<T>(target: T[], array: T[]): T[] {
   for (let i = 0; i < array.length; i += 1) {
     target.push(array[i]);
   }
   return target;
+}
+
+function collectAllFilters(lists): {
+  filters: NetworkFilter[];
+  exceptions: NetworkFilter[];
+  redirects: NetworkFilter[];
+  importants: NetworkFilter[];
+  cosmetics: CosmeticFilter[];
+} {
+  const filters: NetworkFilter[] = [];
+  const exceptions: NetworkFilter[] = [];
+  const redirects: NetworkFilter[] = [];
+  const importants: NetworkFilter[] = [];
+  const cosmetics: CosmeticFilter[] = [];
+
+  lists.forEach((list) => {
+    extend(filters, list.filters);
+    extend(exceptions, list.exceptions);
+    extend(importants, list.importants);
+    extend(redirects, list.redirects);
+    extend(cosmetics, list.cosmetics);
+  });
+
+  return {
+    cosmetics,
+    exceptions,
+    filters,
+    importants,
+    redirects,
+  };
 }
 
 /**
@@ -106,8 +162,8 @@ export class CosmeticFilterBucket {
     const blockedScripts: string[] = [];
 
     for (let i = 0; i < rules.length; i += 1) {
-      const rule = rules[i];
-      const selector = rule.getSelector();
+      const rule: CosmeticFilter = rules[i];
+      const selector: string = rule.getSelector();
 
       if (rule.isScriptBlock()) {
         blockedScripts.push(selector);
@@ -252,7 +308,7 @@ export class CosmeticFilterBucket {
   }
 }
 
-export function processRawRequest(request) {
+export function processRawRequest(request: IRawRequest): IRequest {
   // Extract hostname
   const url = request.url.toLowerCase();
   const { hostname, domain } = parse(url);
@@ -459,7 +515,7 @@ export default class FilterEngine {
     }
 
     // Re-create all buckets
-    const allFilters = this.collectAllFilters();
+    const allFilters = collectAllFilters(this.lists);
 
     this.filters = new NetworkFilterBucket('filters', allFilters.filters);
     this.exceptions = new NetworkFilterBucket(
@@ -512,7 +568,14 @@ export default class FilterEngine {
     );
   }
 
-  public match(rawRequest: { url: string; sourceUrl: string; cpt: number }) {
+  public match(
+    rawRequest: IRawRequest,
+  ): {
+    match: boolean,
+    redirect?: string,
+    exception?: boolean,
+    filter?: NetworkFilter,
+  } {
     if (!this.loadNetworkFilters) {
       return { match: false };
     }
@@ -520,7 +583,7 @@ export default class FilterEngine {
     // Transforms { url, sourceUrl, cpt } into a more complete request context
     // containing domains, general domains and tokens for this request. This
     // context will be used during the matching in the engine.
-    const request = processRawRequest(rawRequest);
+    const request: IRequest = processRawRequest(rawRequest);
 
     let result: NetworkFilter | null = null;
     let exception: NetworkFilter | null = null;
@@ -585,36 +648,6 @@ export default class FilterEngine {
       exception: exception !== null,
       filter,
       match: false,
-    };
-  }
-
-  private collectAllFilters(): {
-    filters: NetworkFilter[];
-    exceptions: NetworkFilter[];
-    redirects: NetworkFilter[];
-    importants: NetworkFilter[];
-    cosmetics: CosmeticFilter[];
-  } {
-    const filters: NetworkFilter[] = [];
-    const exceptions: NetworkFilter[] = [];
-    const redirects: NetworkFilter[] = [];
-    const importants: NetworkFilter[] = [];
-    const cosmetics: CosmeticFilter[] = [];
-
-    this.lists.forEach((list) => {
-      extend(filters, list.filters);
-      extend(exceptions, list.exceptions);
-      extend(importants, list.importants);
-      extend(redirects, list.redirects);
-      extend(cosmetics, list.cosmetics);
-    });
-
-    return {
-      cosmetics,
-      exceptions,
-      filters,
-      importants,
-      redirects,
     };
   }
 }

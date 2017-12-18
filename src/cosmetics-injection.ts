@@ -1,5 +1,5 @@
 
-function injectCSSRule(rule, doc) {
+function injectCSSRule(rule: string, doc: Document): void {
   const css = doc.createElement('style');
   css.type = 'text/css';
   css.id = 'cliqz-adblokcer-css-rules';
@@ -8,7 +8,7 @@ function injectCSSRule(rule, doc) {
   css.appendChild(doc.createTextNode(rule));
 }
 
-function injectScript(s, doc) {
+function injectScript(s: string, doc: Document): void {
   // Wrap script so that it removes itself when the execution is over.
   const autoRemoveScript = `
     ${s}
@@ -34,10 +34,11 @@ function injectScript(s, doc) {
   parent.appendChild(script);
 }
 
-function blockScript(filter, document) {
+function blockScript(filter: string, doc: Document): void {
   const filterRE = new RegExp(filter);
-  document.addEventListener('beforescriptexecute', ev => {
-    if (filterRE.test(ev.target.textContent)) {
+  doc.addEventListener('beforescriptexecute', ev => {
+    const target = ev.target as HTMLElement;
+    if (target.textContent && filterRE.test(target.textContent)) {
       ev.preventDefault();
       ev.stopPropagation();
     }
@@ -59,6 +60,13 @@ function blockScript(filter, document) {
 export default class CosmeticInjection {
   private url: string;
   private window: Window;
+
+  // TODO: split into two callbacks:
+  // 1. getCosmeticsForDomain
+  // 2. getCosmeticsForNodes
+  // Each of them could return a promise resolving to the filters to be injected
+  // in the page, if any. Currently the communication is async, but a
+  // promise-based API would be nicer to use.
   private backgroundAction: (action: string, ...args: any[]) => Promise<void>;
   private injectedRules: Set<string>;
   private injectedScripts: Set<string>;
@@ -93,10 +101,11 @@ export default class CosmeticInjection {
   }
 
   public onDOMContentLoaded() {
-    // TODO - is this necessary? Can a cosmetic filter apply to an element of
-    // the DOM?
     // Trigger sending of the cosmetic fitlers for the full page
-    // this.onMutation([{ target: this.window.document.body }]);
+    // TODO: This is currently pretty slow, it does not seem to be needed in
+    // most cases, so it could be that MutationObserver is enough for our
+    // purpose.
+    this.onMutation([{ target: this.window.document.body }]);
 
     // attach mutation obsever in case new nodes are added
     if (typeof MutationObserver !== 'undefined') {
@@ -178,8 +187,8 @@ export default class CosmeticInjection {
    * (node name, class, tag) from the modified nodes and request matching
    * cosmetic filters to inject in the page.
    */
-  private onMutation(mutations) {
-    let targets: Set<HTMLElement> = new Set(mutations.map(m => m.target).filter(t => t));
+  private onMutation(mutations: Array<{ target: Node }>) {
+    let targets: Set<Node> = new Set(mutations.map(m => m.target).filter(t => t));
 
     // TODO - it might be necessary to inject scripts, CSS and block scripts
     // from here into iframes with no src. We could first inject/block
@@ -207,12 +216,12 @@ export default class CosmeticInjection {
     // Collect nodes of targets
     const nodeInfo = new Set();
     targets.forEach(target => {
-      const nodes = target.querySelectorAll('*');
+      const nodes = (target as HTMLElement).querySelectorAll('*');
       for (let i = 0; i < nodes.length; i += 1) {
         const node = nodes[i] as HTMLElement;
 
         // Ignore hidden nodes
-        if (node.offsetWidth === 0 && node.offsetHeight === 0) {
+        if (node.hidden || node.offsetWidth === 0 && node.offsetHeight === 0) {
           continue;
         }
 
