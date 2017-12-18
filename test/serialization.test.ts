@@ -89,7 +89,13 @@ describe('Serialization', () => {
     engine.onUpdateResource([
       { checksum: 'resources1', filters: resources },
     ]);
-    const deserialized = deserializeEngine(serializeEngine(engine), 42);
+
+    const serialized = serializeEngine(engine);
+    expect(() => {
+      deserializeEngine(serialized, 41);
+    }).toThrow('serialized engine version mismatch');
+
+    const deserialized = deserializeEngine(serialized, 42);
     expect(deserialized).not.toBe(null);
     if (deserialized !== null) {
       expect(deserialized.version).toEqual(engine.version);

@@ -431,7 +431,7 @@ function serializeEngine(engine: Engine): Uint8Array {
   return buffer.crop();
 }
 
-function deserializeEngine(serialized: Uint8Array, version: number): Engine | null {
+function deserializeEngine(serialized: Uint8Array, version: number): Engine {
   const buffer = new DynamicDataView(0);
   buffer.set(serialized);
 
@@ -440,7 +440,7 @@ function deserializeEngine(serialized: Uint8Array, version: number): Engine | nu
   // fresh and create a new engine from the lists.
   const serializedEngineVersion = buffer.getUint8();
   if (version !== serializedEngineVersion) {
-    return null;
+    throw new Error('serialized engine version mismatch');
   }
 
   // Create a new engine with same options

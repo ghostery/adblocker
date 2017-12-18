@@ -3,6 +3,7 @@
     "outDir": "build",
     "moduleResolution": "node",
     "module": "commonjs",
+    "importHelpers": true,
     "target": "ES6",
     "newLine": "lf",
     "allowJs": true,
@@ -16,10 +17,10 @@
     "noImplicitAny": false,
     "removeComments": false
   },
-  "formatCodeOptions": {
-    "indentSize": 2,
-    "tabSize": 2
-  },
+  "exclude": [
+    "node_modules",
+    "build"
+  ],
   "files": [
     "./index.ts",
     "test/engine.test.ts",
