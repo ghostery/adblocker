@@ -25,12 +25,11 @@ export default {
     }),
 
     commonjs({
-      include: 'node_modules/**',
       extensions: [ '.js', '.json' ],
       namedExports: {
-        'node_modules/tldjs/index.js': [ 'parse', 'getPublicSuffix' ],
-        'node_modules/fnv-plus/index.js': [ 'fast1a32' ],
-        'node_modules/text-encoding/index.js': [ 'TextEncoder', 'TextDecoder' ],
+        'tldjs/index.js': [ 'parse', 'getPublicSuffix' ],
+        'fnv-plus/index.js': [ 'fast1a32' ],
+        'text-encoding/index.js': [ 'TextEncoder', 'TextDecoder' ],
       },
     }),
   ]

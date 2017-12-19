@@ -12,18 +12,15 @@ function testInjectCSS() {
   });
 
   const injection = new CosmeticsInjection(
-    url,
     dom.window,
-    (action, ...args) => {
-      console.log('>>>>', action, args);
+    (/* action, ...args */) => {
+      // console.log('>>>>', action, args);
     },
   );
 
-  // Signal that the DOM is ready
-  injection.onDOMContentLoaded();
-
   // Terminate our JSDOM instance
   dom.window.close();
+  return injection;
 }
 
 describe('Inject CSS filters', () => {

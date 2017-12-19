@@ -11,7 +11,9 @@ function injectCSSRule(rule: string, doc: Document): void {
 function injectScript(s: string, doc: Document): void {
   // Wrap script so that it removes itself when the execution is over.
   const autoRemoveScript = `
-    ${s}
+    try {
+      ${s}
+    } catch (ex) { }
 
     (function() {
       var currentScript = document.currentScript;
@@ -58,7 +60,6 @@ function blockScript(filter: string, doc: Document): void {
  * callback to apply new rules.
  */
 export default class CosmeticInjection {
-  private url: string;
   private window: Window;
 
   // TODO: split into two callbacks:
@@ -72,10 +73,10 @@ export default class CosmeticInjection {
   private injectedScripts: Set<string>;
   private blockedScripts: Set<string>;
 
+  private observedNodes: Set<string>;
   private mutationObserver: MutationObserver | null;
 
-  constructor(url, window, backgroundAction) {
-    this.url = url;
+  constructor(window, backgroundAction) {
     this.window = window;
     this.backgroundAction = backgroundAction;
 
@@ -84,10 +85,19 @@ export default class CosmeticInjection {
     this.injectedScripts = new Set();
     this.blockedScripts = new Set();
 
-    // Get domain rules as soon as possible
+    this.observedNodes = new Set();
+
+    // Request cosmetics specific to this domain as soon as possible
     if (this.isMainDocument()) {
-      this.backgroundAction('getCosmeticsForDomain', this.url);
+      this.backgroundAction('getCosmeticsForDomain');
     }
+
+    // Request cosmetics for nodes already existing in the DOM
+    // this.onMutation([{ target: this.window.document.body }]);
+
+    // Register MutationObserver
+    this.startObserving();
+
   }
 
   public unload() {
@@ -97,25 +107,6 @@ export default class CosmeticInjection {
       } catch (e) {
         /* in case the page is closed */
       }
-    }
-  }
-
-  public onDOMContentLoaded() {
-    // Trigger sending of the cosmetic fitlers for the full page
-    // TODO: This is currently pretty slow, it does not seem to be needed in
-    // most cases, so it could be that MutationObserver is enough for our
-    // purpose.
-    this.onMutation([{ target: this.window.document.body }]);
-
-    // attach mutation obsever in case new nodes are added
-    if (typeof MutationObserver !== 'undefined') {
-      this.mutationObserver = new MutationObserver(mutations =>
-        this.onMutation(mutations),
-      );
-      this.mutationObserver.observe(this.window.document, {
-        childList: true,
-        subtree: true,
-      });
     }
   }
 
@@ -226,16 +217,28 @@ export default class CosmeticInjection {
         }
 
         if (node.id) {
-          nodeInfo.add(`#${node.id}`);
+          const selector = `#${node.id}`;
+          if (!this.observedNodes.has(selector)) {
+            nodeInfo.add(selector);
+            this.observedNodes.add(selector);
+          }
         }
 
         if (node.tagName) {
-          nodeInfo.add(node.tagName);
+          const selector = node.tagName;
+          if (!this.observedNodes.has(selector)) {
+            nodeInfo.add(selector);
+            this.observedNodes.add(selector);
+          }
         }
 
         if (node.className && node.className.split) {
           node.className.split(' ').forEach(name => {
-            nodeInfo.add(`.${name}`);
+            const selector = `.${name}`;
+            if (!this.observedNodes.has(selector)) {
+              nodeInfo.add(selector);
+              this.observedNodes.add(selector);
+            }
           });
         }
       }
@@ -244,6 +247,25 @@ export default class CosmeticInjection {
     // Send node info to background to request corresponding cosmetic filters
     if (nodeInfo.size > 0) {
       this.backgroundAction('getCosmeticsForNodes', [[...nodeInfo]]);
+    }
+  }
+
+  private startObserving() {
+    // Trigger sending of the cosmetic fitlers for the full page
+    // TODO: This is currently pretty slow, it does not seem to be needed in
+    // most cases, so it could be that MutationObserver is enough for our
+    // purpose.
+    // this.onMutation([{ target: this.window.document.body }]);
+
+    // attach mutation obsever in case new nodes are added
+    if (typeof MutationObserver !== 'undefined') {
+      this.mutationObserver = new MutationObserver(mutations =>
+        this.onMutation(mutations),
+      );
+      this.mutationObserver.observe(this.window.document, {
+        childList: true,
+        subtree: true,
+      });
     }
   }
 }
