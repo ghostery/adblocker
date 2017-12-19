@@ -1,7 +1,7 @@
 import CosmeticsInjection from '../src/cosmetics-injection';
 
 /**
- * Because all the filters and matching logic leaves in the background of the
+ * Because all the filters and matching logic lives in the background of the
  * extension, the content script needs a way to request relevant cosmetic
  * filters for each frame. This channel of communication can be handled in
  * several ways (`connect`, `sendMessage`). Here we will make use of
@@ -9,7 +9,7 @@ import CosmeticsInjection from '../src/cosmetics-injection';
  *
  * `backgroundAction` wraps the logic of communicating with the background. It
  * is given as a callback to `CosmeticsInjection`, and will be used to request
- * cosmetic filters for a particular hostname (action:  * 'getCosmeticsForDomain')
+ * cosmetic filters for a particular hostname (action: 'getCosmeticsForDomain')
  * and for particular DOM nodes found in the page (action: 'getCosmeticsForNodes').
  *
  * The background should listen to these messages and answer back with lists of
@@ -25,7 +25,7 @@ const backgroundAction = (action, ...args) => {
 };
 
 /**
- * `CosmeticsInjection` is in charge of all adblocking logic on the
+ * `CosmeticsInjection` is in charge of all ad-blocking logic on the
  * content-script side. It handles the following:
  * - Inject scripts into the page, which might be used to defuse anti-adblockers.
  * - Block the execution of some scripts in the page (only if the
