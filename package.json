@@ -1,6 +1,6 @@
 {
   "name": "@cliqz/adblocker",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Cliqz adblocker library",
   "repository": "https://www.github.com/cliqz-oss/adblocker",
   "author": "Cliqz",
@@ -13,6 +13,7 @@
     "build-es6": "tsc -p . --module ES6 --outDir 'build/es6'",
     "build-cjs": "tsc -p . --module commonjs --outDir 'build/commonjs'",
     "build": "npm run clean && mkdir build && concurrently 'npm run build-es6' 'npm run build-cjs'",
+    "bundle": "npm run clean && npm run build-es6 && rollup -c",
     "watch": "tsc -p . --module commonjs --outDir 'build/commonjs' --watch",
     "pretest": "npm run lint",
     "test": "npm run clean && npm run build-cjs && jest --coverage build/commonjs/test/",

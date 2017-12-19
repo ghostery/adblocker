@@ -1,4 +1,13 @@
 
+// We need this as `MutationObserver` is currently not part of the `Window` type
+// provided by typescript, although it should be! This will be erased at compile
+// time so it has no impact on produced code.
+declare global {
+    interface Window {
+        MutationObserver?: typeof MutationObserver;
+   }
+}
+
 function injectCSSRule(rule: string, doc: Document): void {
   const css = doc.createElement('style');
   css.type = 'text/css';
@@ -93,11 +102,10 @@ export default class CosmeticInjection {
     }
 
     // Request cosmetics for nodes already existing in the DOM
-    // this.onMutation([{ target: this.window.document.body }]);
+    this.onMutation([{ target: this.window.document.body }]);
 
     // Register MutationObserver
     this.startObserving();
-
   }
 
   public unload() {
@@ -251,15 +259,9 @@ export default class CosmeticInjection {
   }
 
   private startObserving() {
-    // Trigger sending of the cosmetic fitlers for the full page
-    // TODO: This is currently pretty slow, it does not seem to be needed in
-    // most cases, so it could be that MutationObserver is enough for our
-    // purpose.
-    // this.onMutation([{ target: this.window.document.body }]);
-
-    // attach mutation obsever in case new nodes are added
-    if (typeof MutationObserver !== 'undefined') {
-      this.mutationObserver = new MutationObserver(mutations =>
+    // Attach mutation observer in case the DOM is mutated.
+    if (this.window.MutationObserver !== undefined) {
+      this.mutationObserver = new this.window.MutationObserver(mutations =>
         this.onMutation(mutations),
       );
       this.mutationObserver.observe(this.window.document, {
