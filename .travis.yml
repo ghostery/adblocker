@@ -8,7 +8,7 @@ node_js:
 
 cache:
   directories:
-    - "node_modules"
+    - node_modules
 
 notifications:
   email:
@@ -19,3 +19,17 @@ install:
 
 script:
   - npm run test
+
+before_deploy:
+  - npm run bundle
+
+deploy:
+  provider: npm
+  email: remi@cliqz.com
+  skip_cleanup: true
+  api_key:
+    secure: EKBjW2ybssJxkVQw5GSuK+llZuBXcS93tsF/xF/bqgjyS4c5QvcN4muxp1dEitroz7cNVTD4moWD/r3PDxZqi/8oczO6kxX5eovE6HGHnrsPLsa7t7DZViBJQdXeX30xTdxGI78FFA/iRW+I1q/hxmEbuELP4acm5QwVIUL2sWLIh1y4fynpA57kRvpBD8STDdpFNfuq4zvqaUocMe2kOcSag8Na9CNrsDuzfMvIOy/nRJ6lrWOGOHeXWcplkvIJ8trABzBFdSAtrODQbbbm59dKG2mynvMcIhJErXWihlsqgzSIRvnqOLF4r/lmcEFf9su2KDTX5JIb30y4PhIdZ9vK4W5BlPLyHik+HIuzXhQbDQeLhC2ihYT++BMQripYGBMPGc5CIB/L4d4SB7ZCqYxUve6WFGqiL1uhL2VDfMZiHuZmjOEueSrZmeayuZ2ZWt07Ybx/6CJELeL2PxtQ44k79fzZHN8ePjXpXStIFmeid5mza0pCt5Bvq/WhXVgzNrr0ar/xu4Lu5xbc2GIFZtByQaGfYGylpkA4+wJIGBwYKa3wD0ABY4iTL0tMjcdiuqo1cfUOrCIchBwqpoHCFvxsqNpc6ea9mpNt+wHZql+PPlg3sEYfp3cIYjMYLvNgyylgZeeKGkZzs1MpY2MLqQ8JIbbqaqJDEycRmSwYmM8=
+  on:
+    branch: master
+    tags: true
+    repo: cliqz-oss/adblocker
