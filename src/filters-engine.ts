@@ -205,7 +205,7 @@ export class CosmeticFilterBucket {
           let script = js.get(scriptName);
           if (script !== undefined) {
             for (let i = 0; i < scriptArguments.length; i += 1) {
-              script = script.replace(`{{${++i}}}`, scriptArguments[i]);
+              script = script.replace(`{{${i + 1}}}`, scriptArguments[i]);
             }
 
             ruleWithScript.selector = script;

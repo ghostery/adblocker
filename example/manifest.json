@@ -16,7 +16,20 @@
   ],
   "background": {
     "scripts": [
-      "background.umd.js"
+      "background.bundle.js"
     ]
-  }
+  },
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "js": [
+        "content-script.bundle.js"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "run_at": "document_start"
+    }
+  ]
 }

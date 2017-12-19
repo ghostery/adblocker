@@ -1,11 +1,19 @@
 import * as adblocker from '../index';
 
+/**
+ * Fetch the latest version of uBlockOrigin's resources, used to inject scripts
+ * in the page or redirect request to data URLs.
+ */
 function fetchResources() {
   return fetch(
     'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt',
   ).then(r => r.text());
 }
 
+/**
+ * Fetch the latest version of several lists of filters that will be used by the
+ * adblocker. They contain network and cosmetic filters.
+ */
 function fetchLists() {
   return Promise.all([
     'https://easylist.to/easylist/easylist.txt',
@@ -19,6 +27,11 @@ function fetchLists() {
   ].map(url => fetch(url))).then(rs => Promise.all(rs.map(r => r.text())));
 }
 
+/**
+ * Initialize the adblocker using lists of filters and resources. It returns a
+ * Promise resolving on the `Engine` that we will use to decide what requests
+ * should be blocked or altered.
+ */
 function loadAdblocker() {
   const engine = new adblocker.FiltersEngine({
     loadCosmeticFilters: true,
@@ -40,8 +53,6 @@ function loadAdblocker() {
       });
     }
 
-    console.log(lists.length);
-
     engine.onUpdateResource([{ filters: resources, checksum: '' }]);
     engine.onUpdateFilters(lists, new Set());
 
@@ -49,6 +60,12 @@ function loadAdblocker() {
   });
 }
 
+/**
+ * Because the WebRequest API does not give us access to the URL of the page
+ * each request comes from (but we know from which tab they originate), we need
+ * to independently keep a mapping from tab ids to source URLs. This information
+ * is needed by the adblocker (some filters only apply on specific domains).
+ */
 const tabs = new Map();
 
 chrome.tabs.onCreated.addListener((tab) => {
@@ -83,7 +100,6 @@ const types = {
   xslt: 18,
 };
 
-
 loadAdblocker().then((engine) => {
   function listener(details) {
     const source = tabs.get(details.tabId);
@@ -94,16 +110,16 @@ loadAdblocker().then((engine) => {
     });
 
     if (result.redirect) {
-      console.log('REDIRECT', details.url, result);
       return { redirectUrl: result.redirect };
     } else if (result.match) {
-      console.log('BLOCKING', details.url, result);
       return { cancel: true };
     }
 
     return {};
   }
 
+  // Start listening to requests, and allow 'blocking' so that we can cancel
+  // some of them (or redirect).
   chrome.webRequest.onBeforeRequest.addListener(
     listener,
     {
@@ -113,4 +129,21 @@ loadAdblocker().then((engine) => {
     },
     ['blocking'],
   );
+
+  // Start listening to messages coming from the content-script
+  chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    // Extract hostname from sender's URL
+    const url = sender.url;
+    let hostname = '';
+    if (url !== undefined) {
+      hostname = (new URL(url)).hostname;
+    }
+
+    // Answer to content-script with a list of nodes
+    if (msg.action === 'getCosmeticsForDomain') {
+      sendResponse(engine.getDomainFilters(hostname));
+    } else if (msg.action === 'getCosmeticsForNodes') {
+      sendResponse(engine.getCosmeticsFilters(hostname, msg.args[0]));
+    }
+  });
 });
