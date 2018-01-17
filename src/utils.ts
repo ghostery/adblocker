@@ -1,5 +1,3 @@
-import { fast1a32 } from 'fnv-plus';
-
 /***************************************************************************
  *  Bitwise helpers
  * ************************************************************************* */
@@ -16,8 +14,18 @@ export function clearBit(n: number, mask: number): number {
   return n & ~mask;
 }
 
-export function fastHash(str) {
-  return fast1a32(str);
+// TODO - depending on the filters we have in the lists, this hash function
+// could result in collisions. One way to make sure it does not happen, would be
+// to select a set of prime numbers for the seed and increment that do not
+// generate collisions on our set of filters.
+export function fastHash(str: string): number {
+  if (!str) { return 0; }
+  let hash = 5407;
+  for (let i = 0; i < str.length; i += 1) {
+    hash = (hash * 31) ^ str.charCodeAt(i);
+  }
+
+  return hash >>> 0;
 }
 
 // https://jsperf.com/string-startswith/21
@@ -95,7 +103,7 @@ function isAllowedCSS(ch: number): boolean {
   );
 }
 
-function fastTokenizer(pattern, isAllowedCode, allowRegexSurround = false, hash = false) {
+function fastTokenizer(pattern, isAllowedCode, allowRegexSurround = false) {
   const tokens: number[] = [];
   let inside: boolean = false;
   let start = 0;
@@ -114,26 +122,22 @@ function fastTokenizer(pattern, isAllowedCode, allowRegexSurround = false, hash 
       inside = false;
       // Should not be followed by '*'
       if (allowRegexSurround || ch !== 42) {
-        tokens.push(pattern.substr(start, length));
+        tokens.push(fastHash(pattern.substr(start, length)));
       }
     }
   }
 
   if (inside) {
-    tokens.push(pattern.substr(start, length));
-  }
-
-  if (hash) {
-    return tokens.map(fastHash);
+    tokens.push(fastHash(pattern.substr(start, length)));
   }
 
   return tokens;
 }
 
-export function tokenize(pattern: string, hash = true): number[] {
-  return fastTokenizer(pattern, isAllowed, false, hash);
+export function tokenize(pattern: string): number[] {
+  return fastTokenizer(pattern, isAllowed, false);
 }
 
-export function tokenizeCSS(pattern: string, hash = true): number[] {
-  return fastTokenizer(pattern, isAllowedCSS, true, hash);
+export function tokenizeCSS(pattern: string): number[] {
+  return fastTokenizer(pattern, isAllowedCSS, true);
 }

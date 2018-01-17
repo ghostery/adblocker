@@ -1,8 +1,12 @@
 import {} from 'jest';
 
 import { parseList } from '../src/parsing/list';
-import { tokenize, tokenizeCSS } from '../src/utils';
+import { fastHash, tokenize, tokenizeCSS } from '../src/utils';
 import { loadAllLists } from './utils';
+
+function t(tokens) {
+  return tokens.map(fastHash);
+}
 
 expect.extend({
   toNotCollideWithOtherFilter(filter: { id: number }, map) {
@@ -46,16 +50,16 @@ describe('Utils', () => {
   });
 
   it('#tokenize', () => {
-    expect(tokenize('', false)).toEqual([]);
-    expect(tokenize('foo', false)).toEqual(['foo']);
-    expect(tokenize('foo/bar', false)).toEqual(['foo', 'bar']);
-    expect(tokenize('foo-bar', false)).toEqual(['foo', 'bar']);
-    expect(tokenize('foo.bar', false)).toEqual(['foo', 'bar']);
+    expect(tokenize('')).toEqual(t([]));
+    expect(tokenize('foo')).toEqual(t(['foo']));
+    expect(tokenize('foo/bar')).toEqual(t(['foo', 'bar']));
+    expect(tokenize('foo-bar')).toEqual(t(['foo', 'bar']));
+    expect(tokenize('foo.bar')).toEqual(t(['foo', 'bar']));
   });
 
   it('#tokenizeCSS', () => {
-    expect(tokenizeCSS('', false)).toEqual([]);
-    expect(tokenizeCSS('.selector', false)).toEqual(['.selector']);
-    expect(tokenizeCSS('.selector-foo', false)).toEqual(['.selector-foo']);
+    expect(tokenizeCSS('')).toEqual([]);
+    expect(tokenizeCSS('.selector')).toEqual(t(['.selector']));
+    expect(tokenizeCSS('.selector-foo')).toEqual(t(['.selector-foo']));
   });
 });

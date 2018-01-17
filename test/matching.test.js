@@ -1,8 +1,10 @@
 import {} from 'jest';
 
-import { matchCosmeticFilter, matchNetworkFilter } from '../src/filters-matching';
+import matchCosmeticFilter from '../src/matching/cosmetics';
+import matchNetworkFilter from '../src/matching/network';
+
 import { f } from '../src/parsing/list';
-import { processRawRequest } from '../src/filters-engine';
+import { processRawRequest } from '../src/request/raw';
 
 expect.extend({
   toMatchRequest(filter, request) {
