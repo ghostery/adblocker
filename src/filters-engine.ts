@@ -1,31 +1,13 @@
-import { parse } from 'tldjs';
-import { matchCosmeticFilter, matchNetworkFilter } from './filters-matching';
+import matchCosmeticFilter from './matching/cosmetics';
+import matchNetworkFilter from './matching/network';
 import networkFiltersOptimizer from './optimizer';
 import { CosmeticFilter } from './parsing/cosmetic-filter';
 import { parseJSResource, parseList } from './parsing/list';
 import { NetworkFilter } from './parsing/network-filter';
+import { IRawRequest, processRawRequest } from './request/raw';
 import ReverseIndex from './reverse-index';
 import { serializeEngine } from './serialization';
 import { fastHash, fastStartsWith, tokenize } from './utils';
-
-interface IRawRequest {
-  url: string;
-  sourceUrl: string;
-  cpt: number;
-}
-
-interface IRequest {
-  url: string;
-  tokens: number[];
-  hostGD: string;
-  hostname: string;
-
-  sourceUrl: string;
-  sourceGD: string;
-  sourceHostname: string;
-
-  cpt: number;
-}
 
 /**
  * Append all elements of `array` to the end of `target`.
@@ -308,43 +290,6 @@ export class CosmeticFilterBucket {
   }
 }
 
-export function processRawRequest(request: IRawRequest): IRequest {
-  // Extract hostname
-  const url = request.url.toLowerCase();
-  const { hostname, domain } = parse(url);
-
-  // Process source url
-  let sourceUrl = request.sourceUrl;
-  let sourceHostname = '';
-  let sourceGD = '';
-
-  if (sourceUrl) {
-    // It can happen when source is not a valid URL, then we simply
-    // leave `sourceHostname` and `sourceGD` as empty strings to allow
-    // some filter matching on the request URL itself.
-    sourceUrl = sourceUrl.toLowerCase();
-    const sourceUrlParts = parse(sourceUrl);
-    sourceHostname = sourceUrlParts.hostname || '';
-    sourceGD = sourceUrlParts.domain || '';
-  }
-
-  // Wrap informations needed to match the request
-  return {
-    cpt: request.cpt,
-    tokens: tokenize(url),
-
-    // SourceUrl
-    sourceGD,
-    sourceHostname,
-    sourceUrl,
-
-    // Url
-    hostGD: domain,
-    hostname,
-    url,
-  };
-}
-
 export interface IList {
   checksum: string;
   cosmetics: CosmeticFilter[];
@@ -583,7 +528,7 @@ export default class FilterEngine {
     // Transforms { url, sourceUrl, cpt } into a more complete request context
     // containing domains, general domains and tokens for this request. This
     // context will be used during the matching in the engine.
-    const request: IRequest = processRawRequest(rawRequest);
+    const request = processRawRequest(rawRequest);
 
     let result: NetworkFilter | null = null;
     let exception: NetworkFilter | null = null;
