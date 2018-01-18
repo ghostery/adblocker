@@ -9,6 +9,7 @@
   "module": "build/es6/index.js",
   "scripts": {
     "clean": "rm -rf build",
+    "generate-changelog": "github-changes -o 'cliqz-oss' -r 'adblocker' --use-commit-body --only-pulls",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "build-es6": "tsc -p . --module ES6 --outDir 'build/es6'",
     "build-cjs": "tsc -p . --module commonjs --outDir 'build/commonjs'",
@@ -42,6 +43,7 @@
     "rollup-plugin-typescript": "0.8.1",
     "rollup-plugin-uglify": "2.0.1",
     "tslint": "5.8.0",
+    "github-changes": "1.1.2",
     "typescript": "2.6.2"
   },
   "dependencies": {
