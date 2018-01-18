@@ -209,11 +209,12 @@ export class NetworkFilter {
       filter += '|';
     }
 
+    if (this.hasHostname()) {
+      filter += this.getHostname();
+      filter += '^';
+    }
+
     if (!this.isRegex()) {
-      if (this.hasHostname()) {
-        filter += this.getHostname();
-        filter += '^';
-      }
       filter += this.getFilter();
     } else {
       // Visualize the compiled regex
