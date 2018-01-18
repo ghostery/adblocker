@@ -1,8 +1,9 @@
 import config from '../rollup.config.js';
 
+const fullConfig = config[2];
 
 export default {
-  ...config,
+  ...fullConfig,
   input: './build/example/background.js',
   output: {
     file: 'background.bundle.js',
