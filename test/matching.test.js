@@ -96,6 +96,10 @@ describe('#matchNetworkFilter', () => {
   it('|pattern|', () => {
     expect(f`|https://foo.com|`).toMatchRequest({ url: 'https://foo.com' });
   });
+
+  it('||hostname^*/pattern', () => {
+    expect(f`||foo.com^*/bar`).not.toMatchRequest({ url: 'https://foo.com/bar' });
+  });
 });
 
 describe('#matchCosmeticFilter', () => {
