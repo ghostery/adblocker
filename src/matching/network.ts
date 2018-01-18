@@ -49,7 +49,9 @@ function checkPatternHostnameAnchorRegexFilter(
   { url, hostname },
 ): boolean {
   if (isAnchoredByHostname(filter.getHostname(), hostname)) {
-    return checkPatternRegexFilter(filter, { url });
+    // remove the hostname and use the rest to match the pattern
+    const urlPath: string = url.substring(url.indexOf(hostname) + hostname.length);
+    return checkPatternRegexFilter(filter, { url: urlPath });
   }
 
   return false;
