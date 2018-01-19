@@ -12,6 +12,13 @@ function isAnchoredByHostname(
   );
 }
 
+function getUrlAfterHostname(
+  url: string,
+  hostname: string,
+): string {
+  return url.substring(url.indexOf(hostname) + hostname.length);
+}
+
 // pattern
 function checkPatternPlainFilter(filter: NetworkFilter, { url }): boolean {
   return url.indexOf(filter.getFilter()) !== -1;
@@ -50,8 +57,8 @@ function checkPatternHostnameAnchorRegexFilter(
 ): boolean {
   if (isAnchoredByHostname(filter.getHostname(), hostname)) {
     // remove the hostname and use the rest to match the pattern
-    const urlPath: string = url.substring(url.indexOf(hostname) + hostname.length);
-    return checkPatternRegexFilter(filter, { url: urlPath });
+    const urlAfterHostname = getUrlAfterHostname(url, filter.getHostname());
+    return checkPatternRegexFilter(filter, { url: urlAfterHostname });
   }
 
   return false;
@@ -66,9 +73,7 @@ function checkPatternHostnameRightAnchorFilter(
     // Since this is not a regex, the filter pattern must follow the hostname
     // with nothing in between. So we extract the part of the URL following
     // after hostname and will perform the matching on it.
-    const urlAfterHostname = url.substring(
-      url.indexOf(filter.getHostname()) + filter.getHostname().length,
-    );
+    const urlAfterHostname = getUrlAfterHostname(url, filter.getHostname());
 
     // Since it must follow immediatly after the hostname and be a suffix of
     // the URL, we conclude that filter must be equal to the part of the
@@ -88,9 +93,7 @@ function checkPatternHostnameAnchorFilter(
     // Since this is not a regex, the filter pattern must follow the hostname
     // with nothing in between. So we extract the part of the URL following
     // after hostname and will perform the matching on it.
-    const urlAfterHostname = url.substring(
-      url.indexOf(filter.getHostname()) + filter.getHostname().length,
-    );
+    const urlAfterHostname = getUrlAfterHostname(url, filter.getHostname());
 
     // Otherwise, it should only be a prefix of the URL.
     return fastStartsWith(urlAfterHostname, filter.getFilter());
