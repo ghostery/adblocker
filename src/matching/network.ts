@@ -1,5 +1,5 @@
 import { NetworkFilter } from '../parsing/network-filter';
-import { fastStartsWith } from '../utils';
+import { createFuzzySignature, fastStartsWith } from '../utils';
 
 function isAnchoredByHostname(
   filterHostname: string,
@@ -17,6 +17,28 @@ function getUrlAfterHostname(
   hostname: string,
 ): string {
   return url.substring(url.indexOf(hostname) + hostname.length);
+}
+
+// pattern$fuzzy
+function checkPatternFuzzyFilter(filter: NetworkFilter, request) {
+  const signature = filter.getFuzzySignature();
+
+  // Only compute this once, lazily
+  if (request.fuzzySignature === undefined) {
+    request.fuzzySignature = createFuzzySignature(request.url);
+  }
+
+  const requestSignature = request.fuzzySignature;
+  let lastIndex = 0;
+  for (let i = 0; i < signature.length; i += 1) {
+    const c = signature[i];
+    // Find the occurrence of `c` in `requestSignature`
+    const j = requestSignature.indexOf(c, lastIndex);
+    if (j === -1) { return false; }
+    lastIndex = j + 1;
+  }
+
+  return true;
 }
 
 // pattern
@@ -102,6 +124,16 @@ function checkPatternHostnameAnchorFilter(
   return false;
 }
 
+// ||pattern$fuzzy
+function checkPatternHostnameAnchorFuzzyFilter(filter: NetworkFilter, request) {
+  const { hostname } = request;
+  if (isAnchoredByHostname(filter.getHostname(), hostname)) {
+    return checkPatternFuzzyFilter(filter, request);
+  }
+
+  return false;
+}
+
 /**
  * Specialize a network filter depending on its type. It allows for more
  * efficient matching function.
@@ -112,6 +144,8 @@ function checkPattern(filter: NetworkFilter, request): boolean {
       return checkPatternHostnameAnchorRegexFilter(filter, request);
     } else if (filter.isRightAnchor()) {
       return checkPatternHostnameRightAnchorFilter(filter, request);
+    } else if (filter.isFuzzy()) {
+      return checkPatternHostnameAnchorFuzzyFilter(filter, request);
     }
     return checkPatternHostnameAnchorFilter(filter, request);
   } else if (filter.isRegex()) {
@@ -122,6 +156,8 @@ function checkPattern(filter: NetworkFilter, request): boolean {
     return checkPatternLeftAnchorFilter(filter, request);
   } else if (filter.isRightAnchor()) {
     return checkPatternRightAnchorFilter(filter, request);
+  } else if (filter.isFuzzy()) {
+    return checkPatternFuzzyFilter(filter, request);
   }
 
   return checkPatternPlainFilter(filter, request);

@@ -57,6 +57,14 @@ describe('#matchNetworkFilter', () => {
     // expect(f`foo`).toMatchRequest({ url: 'https://foo.com' });
   });
 
+  it('pattern$fuzzy', () => {
+    expect(f`foo$fuzzy`).toMatchRequest({ url: 'https://bar.com/foo' });
+    expect(f`foo$fuzzy`).toMatchRequest({ url: 'https://bar.com/foo/baz' });
+    expect(f`foo/bar$fuzzy`).toMatchRequest({ url: 'https://bar.com/foo/baz' });
+    expect(f`foo bar$fuzzy`).toMatchRequest({ url: 'https://bar.com/foo/baz' });
+    expect(f`foo bar baz$fuzzy`).toMatchRequest({ url: 'http://bar.foo.baz' });
+  });
+
   it('||pattern', () => {
     expect(f`||foo.com`).toMatchRequest({ url: 'https://foo.com/bar' });
     expect(f`||foo.com/bar`).toMatchRequest({ url: 'https://foo.com/bar' });
@@ -68,6 +76,12 @@ describe('#matchNetworkFilter', () => {
     // expect(f`||foo`).not.toMatchRequest({ url: 'https://foo.baz.com/bar' });
     expect(f`||foo.com`).not.toMatchRequest({ url: 'https://foo.de' });
     expect(f`||foo.com`).not.toMatchRequest({ url: 'https://bar.foo.de' });
+  });
+
+  it('||pattern$fuzzy', () => {
+    expect(f`||bar.foo/baz$fuzzy`).toMatchRequest({ url: 'http://bar.foo/baz' });
+    expect(f`||bar.foo/baz$fuzzy`).toMatchRequest({ url: 'http://bar.foo/id/baz' });
+    expect(f`||bar.foo/baz$fuzzy`).toMatchRequest({ url: 'http://bar.foo?id=42&baz=1' });
   });
 
   it('||pattern|', () => {
