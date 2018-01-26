@@ -1,5 +1,6 @@
 import {
   clearBit,
+  createFuzzySignature,
   fastHash,
   fastStartsWith,
   fastStartsWithFrom,
@@ -32,17 +33,18 @@ const enum NETWORK_FILTER_MASK {
   fromCSP = 1 << 16,
   isImportant = 1 << 17,
   matchCase = 1 << 18,
+  fuzzyMatch = 1 << 19,
 
   // Kind of patterns
-  thirdParty = 1 << 19,
-  firstParty = 1 << 20,
-  isHostname = 1 << 21,
-  isPlain = 1 << 22,
-  isRegex = 1 << 23,
-  isLeftAnchor = 1 << 24,
-  isRightAnchor = 1 << 25,
-  isHostnameAnchor = 1 << 26,
-  isException = 1 << 27,
+  thirdParty = 1 << 20,
+  firstParty = 1 << 21,
+  isHostname = 1 << 22,
+  isPlain = 1 << 23,
+  isRegex = 1 << 24,
+  isLeftAnchor = 1 << 25,
+  isRightAnchor = 1 << 26,
+  isHostnameAnchor = 1 << 27,
+  isException = 1 << 28,
 }
 
 /**
@@ -154,9 +156,10 @@ export class NetworkFilter {
   // Set only in debug mode
   public rawLine: string | null;
 
-  private regex: RegExp | null;
+  private fuzzySignature: Uint32Array | null;
   private optDomainsSet: Set<string> | null;
   private optNotDomainsSet: Set<string> | null;
+  private regex: RegExp | null;
 
   constructor({
     mask,
@@ -177,9 +180,10 @@ export class NetworkFilter {
     this.hostname = hostname;
 
     // Lazy private attributes
-    this.regex = null;
+    this.fuzzySignature = null;
     this.optDomainsSet = null;
     this.optNotDomainsSet = null;
+    this.regex = null;
 
     // Set only in debug mode
     this.rawLine = null;
@@ -225,6 +229,9 @@ export class NetworkFilter {
     const options: string[] = [];
 
     if (!this.fromAny()) {
+      if (this.isFuzzy()) {
+        options.push('fuzzy');
+      }
       if (this.fromImage()) {
         options.push('image');
       }
@@ -367,6 +374,14 @@ export class NetworkFilter {
     return this.regex;
   }
 
+  public getFuzzySignature(): Uint32Array {
+    if (this.fuzzySignature === null) {
+      this.fuzzySignature = createFuzzySignature(this.filter);
+    }
+
+    return this.fuzzySignature;
+  }
+
   public getTokens() {
     return tokenize(this.filter).concat(tokenize(this.hostname));
   }
@@ -381,6 +396,10 @@ export class NetworkFilter {
     }
 
     return true;
+  }
+
+  public isFuzzy() {
+    return getBit(this.mask, NETWORK_FILTER_MASK.fuzzyMatch);
   }
 
   public isException() {
@@ -713,6 +732,9 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
             // first-party means ~third-party
             mask = clearBit(mask, NETWORK_FILTER_MASK.thirdParty);
           }
+          break;
+        case 'fuzzy':
+          mask = setBit(mask, NETWORK_FILTER_MASK.fuzzyMatch);
           break;
         case 'collapse':
           break;

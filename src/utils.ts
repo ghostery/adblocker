@@ -1,3 +1,5 @@
+import { compactTokens } from './compact-set';
+
 /***************************************************************************
  *  Bitwise helpers
  * ************************************************************************* */
@@ -140,4 +142,8 @@ export function tokenize(pattern: string): number[] {
 
 export function tokenizeCSS(pattern: string): number[] {
   return fastTokenizer(pattern, isAllowedCSS, true);
+}
+
+export function createFuzzySignature(pattern: string): Uint32Array {
+  return compactTokens(new Uint32Array(tokenize(pattern)));
 }
