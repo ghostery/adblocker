@@ -29,6 +29,11 @@ function checkPatternFuzzyFilter(filter: NetworkFilter, request) {
   }
 
   const requestSignature = request.fuzzySignature;
+
+  if (signature.length > requestSignature.length) {
+    return false;
+  }
+
   let lastIndex = 0;
   for (let i = 0; i < signature.length; i += 1) {
     const c = signature[i];
