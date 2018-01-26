@@ -53,8 +53,11 @@ describe('#matchNetworkFilter', () => {
     expect(f`foo`).toMatchRequest({ url: 'https://bar.com/foo' });
     expect(f`foo`).toMatchRequest({ url: 'https://bar.com/baz/foo' });
     expect(f`foo`).toMatchRequest({ url: 'https://bar.com/q=foo/baz' });
-    // TODO: should this work?
-    // expect(f`foo`).toMatchRequest({ url: 'https://foo.com' });
+    expect(f`foo`).toMatchRequest({ url: 'https://foo.com' });
+    expect(f`&fo.o=+_-`).toMatchRequest({ url: 'https://bar.com?baz=42&fo.o=+_-' });
+    expect(f`foo/bar/baz`).toMatchRequest({ url: 'https://bar.com/foo/bar/baz' });
+    expect(f`com/bar/baz`).toMatchRequest({ url: 'https://bar.com/bar/baz' });
+    expect(f`https://bar.com/bar/baz`).toMatchRequest({ url: 'https://bar.com/bar/baz' });
   });
 
   it('pattern$fuzzy', () => {
@@ -70,10 +73,11 @@ describe('#matchNetworkFilter', () => {
     expect(f`||foo.com/bar`).toMatchRequest({ url: 'https://foo.com/bar' });
     expect(f`||foo`).toMatchRequest({ url: 'https://foo.com/bar' });
     expect(f`||foo`).toMatchRequest({ url: 'https://baz.foo.com/bar' });
+    expect(f`||foo`).toMatchRequest({ url: 'https://foo.baz.com/bar' });
+    expect(f`||foo.baz`).toMatchRequest({ url: 'https://foo.baz.com/bar' });
 
     expect(f`||foo`).not.toMatchRequest({ url: 'https://baz.com' });
-    // TODO - fix
-    // expect(f`||foo`).not.toMatchRequest({ url: 'https://foo.baz.com/bar' });
+    expect(f`||foo`).not.toMatchRequest({ url: 'https://foo-bar.baz.com/bar' });
     expect(f`||foo.com`).not.toMatchRequest({ url: 'https://foo.de' });
     expect(f`||foo.com`).not.toMatchRequest({ url: 'https://bar.foo.de' });
   });
@@ -82,6 +86,7 @@ describe('#matchNetworkFilter', () => {
     expect(f`||bar.foo/baz$fuzzy`).toMatchRequest({ url: 'http://bar.foo/baz' });
     expect(f`||bar.foo/baz$fuzzy`).toMatchRequest({ url: 'http://bar.foo/id/baz' });
     expect(f`||bar.foo/baz$fuzzy`).toMatchRequest({ url: 'http://bar.foo?id=42&baz=1' });
+    expect(f`||foo.com/id bar$fuzzy`).toMatchRequest({ url: 'http://foo.com?bar&id=42' });
   });
 
   it('||pattern|', () => {
