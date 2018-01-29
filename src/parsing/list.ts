@@ -3,8 +3,11 @@ import {
   fastStartsWithFrom,
 } from '../utils';
 
-import { CosmeticFilter, parseCosmeticFilter } from './cosmetic-filter';
-import { NetworkFilter, parseNetworkFilter } from './network-filter';
+import { parseCosmeticFilter } from './cosmetic-filter';
+import { parseNetworkFilter } from './network-filter';
+
+import CosmeticFilter from '../types/cosmetics';
+import NetworkFilter from '../types/filter';
 
 const SPACE = /\s/;
 

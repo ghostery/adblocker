@@ -1,13 +1,12 @@
 import matchCosmeticFilter from './matching/cosmetics';
 import matchNetworkFilter from './matching/network';
 import networkFiltersOptimizer from './optimizer';
-import { CosmeticFilter } from './parsing/cosmetic-filter';
 import { parseJSResource, parseList } from './parsing/list';
-import { NetworkFilter } from './parsing/network-filter';
-import { IRequest } from './request/interface';
 import { IRawRequest, processRawRequest } from './request/raw';
 import ReverseIndex from './reverse-index';
 import { serializeEngine } from './serialization';
+import CosmeticFilter from './types/cosmetics';
+import NetworkFilter from './types/filter';
 import { fastHash, fastStartsWith, tokenize } from './utils';
 
 /**

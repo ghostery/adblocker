@@ -1,5 +1,5 @@
-import { NetworkFilter } from '../parsing/network-filter';
 import { IRequest } from '../request/interface';
+import NetworkFilter from '../types/filter';
 import { createFuzzySignature, fastStartsWith } from '../utils';
 
 function isAnchoredByHostname(

@@ -1,11 +1,10 @@
 import {} from 'jest';
 
-import { loadAllLists, loadResources } from './utils';
+import { loadAllLists, loadResources } from '../assets/load';
 
 import DynamicDataView from '../src/dynamic-data-view';
 import Engine from '../src/filters-engine';
 import { parseList } from '../src/parsing/list';
-import { NetworkFilter } from '../src/parsing/network-filter';
 import ReverseIndex from '../src/reverse-index';
 import {
   deserializeCosmeticFilter,
@@ -17,6 +16,7 @@ import {
   serializeNetworkFilter,
   serializeReverseIndex,
 } from '../src/serialization';
+import NetworkFilter from '../src/types/filter';
 
 describe('Serialization', () => {
   const { networkFilters, cosmeticFilters } = parseList(loadAllLists());

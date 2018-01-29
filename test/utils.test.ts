@@ -1,8 +1,8 @@
 import {} from 'jest';
 
+import { loadAllLists } from '../assets/load';
 import { parseList } from '../src/parsing/list';
 import { fastHash, tokenize, tokenizeCSS } from '../src/utils';
-import { loadAllLists } from './utils';
 
 function t(tokens: string[]) {
   return tokens.map(fastHash);

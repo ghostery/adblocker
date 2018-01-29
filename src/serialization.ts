@@ -8,10 +8,10 @@
 import DynamicDataView from './dynamic-data-view';
 import Engine, { IList } from './filters-engine';
 import FiltersEngine from './filters-engine';
-import { CosmeticFilter } from './parsing/cosmetic-filter';
 import IFilter from './parsing/interface';
-import { NetworkFilter } from './parsing/network-filter';
 import ReverseIndex from './reverse-index';
+import CosmeticFilter from './types/cosmetics';
+import NetworkFilter from './types/filter';
 
 /**
  * To allow for a more compact representation of network filters, the
