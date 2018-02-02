@@ -8,7 +8,12 @@ function isAnchoredByHostname(
   const matchIndex = hostname.indexOf(filterHostname);
   // Either start at beginning of hostname or be preceded by a '.'
   return (
-    matchIndex === 0 || (matchIndex > 0 && hostname[matchIndex - 1] === '.')
+    // Prefix should either be equal to hostname, or end with a full label
+    (matchIndex === 0 && (
+      hostname.length === filterHostname.length ||
+      hostname[filterHostname.length] === '.')) ||
+    // Suffix should start with a full label
+    (matchIndex > 0 && hostname[matchIndex - 1] === '.')
   );
 }
 
