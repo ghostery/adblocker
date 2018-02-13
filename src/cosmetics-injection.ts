@@ -97,9 +97,7 @@ export default class CosmeticInjection {
     this.observedNodes = new Set();
 
     // Request cosmetics specific to this domain as soon as possible
-    if (this.isMainDocument()) {
-      this.backgroundAction('getCosmeticsForDomain');
-    }
+    this.backgroundAction('getCosmeticsForDomain');
 
     // Request cosmetics for nodes already existing in the DOM
     this.onMutation([{ target: this.window.document.body }]);
@@ -143,10 +141,6 @@ export default class CosmeticInjection {
     }
 
     this.handleRules(styles);
-  }
-
-  private isMainDocument() {
-    return this.window === this.window.parent;
   }
 
   private handleRules(rules) {
