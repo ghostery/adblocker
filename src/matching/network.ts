@@ -11,6 +11,7 @@ function isAnchoredByHostname(
     // Prefix should either be equal to hostname, or end with a full label
     (matchIndex === 0 && (
       hostname.length === filterHostname.length ||
+      filterHostname[filterHostname.length - 1] === '.' ||
       hostname[filterHostname.length] === '.')) ||
     // Suffix should start with a full label
     (matchIndex > 0 && hostname[matchIndex - 1] === '.')
