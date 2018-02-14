@@ -75,6 +75,7 @@ describe('#matchNetworkFilter', () => {
     expect(f`||foo`).toMatchRequest({ url: 'https://baz.foo.com/bar' });
     expect(f`||foo`).toMatchRequest({ url: 'https://foo.baz.com/bar' });
     expect(f`||foo.baz`).toMatchRequest({ url: 'https://foo.baz.com/bar' });
+    expect(f`||foo.baz.`).toMatchRequest({ url: 'https://foo.baz.com/bar' });
 
     expect(f`||foo`).not.toMatchRequest({ url: 'https://baz.com' });
     expect(f`||foo`).not.toMatchRequest({ url: 'https://foo-bar.baz.com/bar' });
