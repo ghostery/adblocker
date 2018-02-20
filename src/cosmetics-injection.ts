@@ -214,7 +214,7 @@ export default class CosmeticInjection {
         const node = nodes[i] as HTMLElement;
 
         // Ignore hidden nodes
-        if (node.hidden || node.offsetWidth === 0 && node.offsetHeight === 0) {
+        if (node.hidden) {
           continue;
         }
 
