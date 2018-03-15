@@ -136,7 +136,7 @@ export function convertFilter(filter: NetworkFilter) {
 
   return {
     action: {
-      type: filter.isException() ? 'ignore-previous-rule' : 'block',
+      type: filter.isException() ? 'ignore-previous-rules' : 'block',
     },
     trigger,
   };
