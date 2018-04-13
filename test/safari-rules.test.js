@@ -77,8 +77,11 @@ test('rule must be a valid safari rule', () => {
   for (let i = 0; i < json.length; i += 1) {
     // describe('convert Filters', () => {
     const rule = json[i];
-    // TODO: check for lowercase and punnycode
-    // rule
+    //const punycode = require('punycode');
+
+    // TODO: test if string is punycode encoded.
+    // TODO: look at the Apple tests. Make sure we implement all of them.
+
     // rule must be an object
     expect(typeof rule).toBe('object');
 
@@ -119,21 +122,27 @@ test('rule must be a valid safari rule', () => {
       expect(typeof value).toBe('boolean');
     }
 
-    // if-domain must be an array of strings
+    // if-domain must be an array of punnycode lowercase strings
     value = rule.trigger['if-domain'];
     if (value !== undefined) {
       expect(Array.isArray(value)).toBe(true);
       for (let j = 0; j < value.length; j += 1) {
-        expect(typeof value[j]).toBe('string');
+        const elem = value[j];
+        expect(typeof elem).toBe('string');
+        expect(elem === elem.toLowerCase()).toBe(true);
+        // TODO: test if string is punycode encoded
       }
     }
 
-    // unless-domain must be an array of strings
+    // unless-domain must be an array of punnycode lowercase strings
     value = rule.trigger['unless-domain'];
     if (value !== undefined) {
       expect(Array.isArray(value)).toBe(true);
       for (let j = 0; j < value.length; j += 1) {
-        expect(typeof value[j]).toBe('string');
+        const elem = value[j];
+        expect(typeof elem).toBe('string');
+        expect(elem === elem.toLowerCase()).toBe(true);
+        // TODO: test if string is punycode encoded
       }
     }
 
@@ -149,21 +158,27 @@ test('rule must be a valid safari rule', () => {
       allowedLoadTypeValues,
     );
 
-    // if-top-url must be an array of strings
+    // if-top-url must be an array of punnycode lowercase strings
     value = rule.trigger['if-top-url'];
     if (value !== undefined) {
       expect(Array.isArray(value)).toBe(true);
       for (let j = 0; j < value.length; j += 1) {
-        expect(typeof value[j]).toBe('string');
+        const elem = value[j];
+        expect(typeof elem).toBe('string');
+        expect(elem === elem.toLowerCase()).toBe(true);
+        // TODO: test if string is punycode encoded
       }
     }
 
-    // unless-top-url must be an array of strings
+    // unless-top-url must be an array of punnycode lowercase strings
     value = rule.trigger['unless-top-url'];
     if (value !== undefined) {
       expect(Array.isArray(value)).toBe(true);
       for (let j = 0; j < value.length; j += 1) {
-        expect(typeof value[j]).toBe('string');
+        const elem = value[j];
+        expect(typeof elem).toBe('string');
+        expect(elem === elem.toLowerCase()).toBe(true);
+        // TODO: test if string is punycode encoded
       }
     }
 
