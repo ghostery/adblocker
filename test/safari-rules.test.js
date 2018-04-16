@@ -122,10 +122,11 @@ test('rule must be a valid safari rule', () => {
       expect(typeof value).toBe('boolean');
     }
 
-    // if-domain must be an array of punnycode lowercase strings
+    // if-domain must be a non-empty array of punnycode lowercase strings
     value = rule.trigger['if-domain'];
     if (value !== undefined) {
       expect(Array.isArray(value)).toBe(true);
+      expect(value.length).not.toBeLessThan(1);
       for (let j = 0; j < value.length; j += 1) {
         const elem = value[j];
         expect(typeof elem).toBe('string');
@@ -134,10 +135,11 @@ test('rule must be a valid safari rule', () => {
       }
     }
 
-    // unless-domain must be an array of punnycode lowercase strings
+    // unless-domain must be a non-empty array of punnycode lowercase strings
     value = rule.trigger['unless-domain'];
     if (value !== undefined) {
       expect(Array.isArray(value)).toBe(true);
+      expect(value.length).not.toBeLessThan(1);
       for (let j = 0; j < value.length; j += 1) {
         const elem = value[j];
         expect(typeof elem).toBe('string');
@@ -146,22 +148,25 @@ test('rule must be a valid safari rule', () => {
       }
     }
 
-    // resource-type must be an array of strings with the following values
+    // resource-type must be a non-empty array of strings with the following values
+    expect(rule.trigger['resource-type'].length).not.toBeLessThan(1);
     checkObjectKeysAllowed(
       rule.trigger['resource-type'] || [],
       allowedResourceTypes,
     );
 
-    // load-type must be an array of strings with the following values
+    // load-type must be a non-empty array of strings with the following values
+    expect(rule.trigger['load-type'].length).not.toBeLessThan(1);
     checkObjectKeysAllowed(
       rule.trigger['load-type'] || [],
       allowedLoadTypeValues,
     );
 
-    // if-top-url must be an array of punnycode lowercase strings
+    // if-top-url must be a non-empty array of punnycode lowercase strings
     value = rule.trigger['if-top-url'];
     if (value !== undefined) {
       expect(Array.isArray(value)).toBe(true);
+      expect(value.length).not.toBeLessThan(1);
       for (let j = 0; j < value.length; j += 1) {
         const elem = value[j];
         expect(typeof elem).toBe('string');
@@ -170,10 +175,11 @@ test('rule must be a valid safari rule', () => {
       }
     }
 
-    // unless-top-url must be an array of punnycode lowercase strings
+    // unless-top-url must be a non-empty array of punnycode lowercase strings
     value = rule.trigger['unless-top-url'];
     if (value !== undefined) {
       expect(Array.isArray(value)).toBe(true);
+      expect(value.length).not.toBeLessThan(1);
       for (let j = 0; j < value.length; j += 1) {
         const elem = value[j];
         expect(typeof elem).toBe('string');
