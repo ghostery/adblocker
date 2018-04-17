@@ -1,6 +1,16 @@
-
 import CosmeticFilter from '../types/cosmetics';
 import NetworkFilter from '../types/filter';
+
+function isAscii(domain: string) {
+    for (let i = 0; i < domain.length; i +=1) {
+      const code = domain.charCodeAt(i);
+      if (code > 255) {
+        console.error('domain is not ASCII - ' + domain);
+        return false;
+      }
+    }
+    return true;
+}
 
 export function convertCosmetics(cosmetics: CosmeticFilter) {
   if (cosmetics.isScriptBlock()) {
@@ -16,13 +26,14 @@ export function convertCosmetics(cosmetics: CosmeticFilter) {
   if (cosmetics.hasHostnames()) {
     const domains: string[] = [];
     const notDomains: string[] = [];
-    const punycode = require('punycode');
 
     cosmetics.getHostnames().forEach((hostname) => {
-      if (hostname.indexOf('~') === 0) {
-        notDomains.push('*' + punycode.encode(hostname.substr(1).toLowerCase()));
-      } else {
-        domains.push('*' + punycode.encode(hostname.toLowerCase()));
+      if (isAscii(hostname)) {
+        if (hostname.indexOf('~') === 0) {
+          notDomains.push('*' + hostname.substr(1).toLowerCase());
+        } else {
+          domains.push('*' + hostname.toLowerCase());
+        }
       }
     });
 
@@ -64,14 +75,14 @@ export function convertFilter(filter: NetworkFilter) {
   }
 
   const trigger = {};
-  const punycode = require('punycode');
 
   // url-filter
-  // Tim: Checked
   let urlFilter = '';
   if (filter.isPlain) {
-    if (filter.hasHostname()) {
-      urlFilter += '(.*)?' + punycode.encode(filter.getHostname().toLowerCase()) + '/';
+    if (filter.hasHostname() && isAscii(filter.getHostname())) {
+      urlFilter += '(.*)?' + filter.getHostname().toLowerCase() + '/';
+    } else {
+      return null;
     }
   }
 
@@ -95,23 +106,20 @@ export function convertFilter(filter: NetworkFilter) {
   }
 
   // url-filter-is-case-sensitive
-  // Tim: Checked
   trigger['url-filter-is-case-sensitive'] = filter.matchCase();
 
   // if-domain unless-domain
-  // TODO - prepend a '*' before each domain to also match sub-domains
-  // Tim: Checked
+  // prepend a '*' before each domain to also match sub-domains
   if (filter.hasOptDomains() && filter.hasOptNotDomains()) {
     return null;
   } else if (filter.hasOptDomains()) {
-    trigger['if-domain'] = [...filter.getOptDomains()].map(punycode.encode);
+    trigger['if-domain'] = [...filter.getOptDomains()].filter(isAscii).map(d => '*' + d);
   } else if (filter.hasOptNotDomains()) {
-    trigger['unless-domain'] = [...filter.getOptNotDomains()].map(punycode.encode);
+    trigger['unless-domain'] = [...filter.getOptNotDomains()].filter(isAscii).map(d => '*' + d);
   }
 
   // resource-type
   // NOTE - we currently do not support 'document' filters
-  // Tim: Checked
   if (!filter.fromAny()) {
     const resourceTypes: string[] = [];
     if (filter.fromImage()) {
@@ -146,7 +154,6 @@ export function convertFilter(filter: NetworkFilter) {
   }
 
   // load-type
-  // Tim: Checked
   const loadType: string[] = [];
   if (filter.firstParty() && !filter.thirdParty()) {
     loadType.push('first-party');
