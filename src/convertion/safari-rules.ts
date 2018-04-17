@@ -113,9 +113,9 @@ export function convertFilter(filter: NetworkFilter) {
   if (filter.hasOptDomains() && filter.hasOptNotDomains()) {
     return null;
   } else if (filter.hasOptDomains()) {
-    trigger['if-domain'] = [...filter.getOptDomains()].filter(isAscii).map(d => '*' + d);
+    trigger['if-domain'] = [...filter.getOptDomains()].filter(isAscii).map(d => '*' + d.toLowerCase());
   } else if (filter.hasOptNotDomains()) {
-    trigger['unless-domain'] = [...filter.getOptNotDomains()].filter(isAscii).map(d => '*' + d);
+    trigger['unless-domain'] = [...filter.getOptNotDomains()].filter(isAscii).map(d => '*' + d.toLowerCase());
   }
 
   // resource-type
