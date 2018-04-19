@@ -1,4 +1,6 @@
+// @ts-ignore
 import { parse } from 'tldjs';
+
 import { mkRequest } from './interface';
 
 export interface IRawRequest {

@@ -8,6 +8,7 @@ import {
   setBit,
   tokenize,
 } from '../utils';
+import IFilter from './interface';
 
 /**
  * Masks used to store options of network filters in a bitmask.
@@ -144,7 +145,7 @@ function parseDomainsOption(domains: string): Set<string> {
 //  - popunder
 //  - generichide
 //  - genericblock
-export class NetworkFilter {
+export class NetworkFilter implements IFilter {
   public id: number;
   public mask: number;
   public filter: string;
@@ -169,6 +170,14 @@ export class NetworkFilter {
     redirect,
     hostname,
     id,
+  }: {
+    mask: number,
+    filter: string,
+    optDomains: string,
+    optNotDomains: string,
+    redirect: string,
+    hostname: string,
+    id: number,
   }) {
     // Those fields should not be mutated.
     this.id = id;
@@ -355,7 +364,7 @@ export class NetworkFilter {
   /**
    * Special method, should only be used by the filter optimizer
    */
-  public setRegex(re) {
+  public setRegex(re: RegExp) {
     this.regex = re;
     this.mask = setBit(this.mask, NETWORK_FILTER_MASK.isRegex);
     this.mask = clearBit(this.mask, NETWORK_FILTER_MASK.isPlain);
@@ -382,14 +391,14 @@ export class NetworkFilter {
     return this.fuzzySignature;
   }
 
-  public getTokens() {
-    return tokenize(this.filter).concat(tokenize(this.hostname));
+  public getTokens(): number[][] {
+    return [tokenize(this.filter).concat(tokenize(this.hostname))];
   }
 
   /**
    * Check if this filter should apply to a request with this content type.
    */
-  public isCptAllowed(cpt) {
+  public isCptAllowed(cpt: number) {
     const mask = CPT_TO_MASK[cpt];
     if (mask !== undefined) {
       return getBit(this.mask, mask);

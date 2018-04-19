@@ -1,7 +1,6 @@
 import {} from 'jest';
 import { compactTokens, hasEmptyIntersection, mergeCompactSets } from '../src/compact-set';
 
-
 function a(strings) {
   const str = strings.raw[0];
   const array = new Uint32Array(str.length);
@@ -12,27 +11,27 @@ function a(strings) {
 }
 
 it('#compactTokens', () => {
-  expect(compactTokens(a``)).to.eql(a``);
-  expect(compactTokens(a`b`)).to.eql(a`b`);
-  expect(compactTokens(a`foo`)).to.eql(a`fo`);
-  expect(compactTokens(a`bbbaaacc`)).to.eql(a`abc`);
+  expect(compactTokens(a``)).toEqual(a``);
+  expect(compactTokens(a`b`)).toEqual(a`b`);
+  expect(compactTokens(a`foo`)).toEqual(a`fo`);
+  expect(compactTokens(a`bbbaaacc`)).toEqual(a`abc`);
 });
 
 it('#hasEmptyIntersection', () => {
-  expect(hasEmptyIntersection(a`abcde`, a`efgh`)).to.eql(false);
-  expect(hasEmptyIntersection(a`bcde`, a`aefgh`)).to.eql(false);
-  expect(hasEmptyIntersection(a`abcde`, a`fgh`)).to.eql(true);
-  expect(hasEmptyIntersection(a``, a``)).to.eql(true);
-  expect(hasEmptyIntersection(a`abc`, a``)).to.eql(true);
-  expect(hasEmptyIntersection(a``, a`abc`)).to.eql(true);
+  expect(hasEmptyIntersection(a`abcde`, a`efgh`)).toEqual(false);
+  expect(hasEmptyIntersection(a`bcde`, a`aefgh`)).toEqual(false);
+  expect(hasEmptyIntersection(a`abcde`, a`fgh`)).toEqual(true);
+  expect(hasEmptyIntersection(a``, a``)).toEqual(true);
+  expect(hasEmptyIntersection(a`abc`, a``)).toEqual(true);
+  expect(hasEmptyIntersection(a``, a`abc`)).toEqual(true);
 });
 
 it('#mergeCompactSets', () => {
-  expect(mergeCompactSets(a``, a``)).to.eql(a``);
-  expect(mergeCompactSets(a``, a`cde`)).to.eql(a`cde`);
-  expect(mergeCompactSets(a`abc`, a``)).to.eql(a`abc`);
-  expect(mergeCompactSets(a`abc`, a`cde`)).to.eql(a`abcde`);
-  expect(mergeCompactSets(a`abc`, a`def`)).to.eql(a`abcdef`);
-  expect(mergeCompactSets(a`cba`, a`cde`)).to.eql(a`abcde`);
-  expect(mergeCompactSets(a`c`, a`b`, a`a`, a`cde`)).to.eql(a`abcde`);
+  expect(mergeCompactSets(a``, a``)).toEqual(a``);
+  expect(mergeCompactSets(a``, a`cde`)).toEqual(a`cde`);
+  expect(mergeCompactSets(a`abc`, a``)).toEqual(a`abc`);
+  expect(mergeCompactSets(a`abc`, a`cde`)).toEqual(a`abcde`);
+  expect(mergeCompactSets(a`abc`, a`def`)).toEqual(a`abcdef`);
+  expect(mergeCompactSets(a`cba`, a`cde`)).toEqual(a`abcde`);
+  expect(mergeCompactSets(a`c`, a`b`, a`a`, a`cde`)).toEqual(a`abcde`);
 });

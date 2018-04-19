@@ -14,6 +14,7 @@ function testInjectCSS() {
   const injection = new CosmeticsInjection(
     dom.window,
     (/* action, ...args */) => {
+      return Promise.resolve();
       // console.log('>>>>', action, args);
     },
   );

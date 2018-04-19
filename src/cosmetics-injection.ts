@@ -8,6 +8,13 @@ declare global {
    }
 }
 
+interface IMessageFromBackground {
+  active: boolean;
+  scripts: string[];
+  blockedScripts: string[];
+  styles: string[];
+}
+
 function injectCSSRule(rule: string, doc: Document): void {
   const css = doc.createElement('style');
   css.type = 'text/css';
@@ -85,7 +92,7 @@ export default class CosmeticInjection {
   private observedNodes: Set<string>;
   private mutationObserver: MutationObserver | null;
 
-  constructor(window, backgroundAction) {
+  constructor(window: Window, backgroundAction: (action: string, ...args: any[]) => Promise<void>) {
     this.window = window;
     this.backgroundAction = backgroundAction;
 
@@ -116,7 +123,7 @@ export default class CosmeticInjection {
     }
   }
 
-  public handleResponseFromBackground({ active, scripts, blockedScripts, styles }) {
+  public handleResponseFromBackground({ active, scripts, blockedScripts, styles }: IMessageFromBackground) {
     if (!active) {
       this.unload();
       return;
@@ -143,7 +150,7 @@ export default class CosmeticInjection {
     this.handleRules(styles);
   }
 
-  private handleRules(rules) {
+  private handleRules(rules: string[]) {
     const rulesToInject: string[] = [];
 
     // Check which rules should be injected in the page.

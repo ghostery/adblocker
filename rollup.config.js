@@ -4,6 +4,8 @@ import globals from 'rollup-plugin-node-globals';
 import json from 'rollup-plugin-json';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import sourcemaps from 'rollup-plugin-sourcemaps';
+import babel from 'rollup-plugin-babel';
+import babelrc from 'babelrc-rollup';
 
 const namedExports = {
       'tldjs/index.js': [ 'parse', 'getPublicSuffix' ],
@@ -25,6 +27,8 @@ const plugins = [
     extensions: [ '.js', '.json' ],
     namedExports,
   }),
+
+  babel(babelrc()),
 ];
 
 export default [

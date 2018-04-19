@@ -1,6 +1,6 @@
 import IFilter from './parsing/interface';
 
-function nope(arg) {
+function nope(arg: any) {
   return arg;
 }
 
@@ -32,9 +32,10 @@ export interface IBucket<T extends IFilter> {
  *   Currently this is only available for network filters.
  *
  *   2. Insert a filter multiple times (with multiple keys). It is sometimes
- *   needed to insert the same filter at different keys. For this purpose it is
- *   possible to provide the `multiKeys` options + a `getTokens` tokenizer
- *   returning a list of list of tokens (instead of just a list of token).
+ *   needed to insert the same filter at different keys. For this purpose
+ *   `getTokens` should return a list of list of tokens, so that it can be
+ *   inserted several times. If you want it to be inserted only once, then
+ *   returning a list of only one list of tokens will do the trick.
  *
  *   For each set of tokens returned by the `getTokens` function, the filter
  *   will be inserted once. This is currently used only for hostname dispatch of
@@ -45,13 +46,12 @@ export default class ReverseIndex<T extends IFilter> {
   public index: Map<number, IBucket<T>>;
 
   private optimizer: (filters: T[]) => T[];
-  private getTokens;
-  private multiKeys: boolean;
+  private getTokens: (filter: IFilter) => number[][];
 
   constructor(
-    filters,
-    getTokens,
-    { optimizer = nope, multiKeys = false } = {},
+    filters: T[],
+    getTokens: (filter: IFilter) => number[][],
+    { optimizer = nope } = {},
   ) {
     // Mapping from tokens to filters
     this.index = new Map();
@@ -59,7 +59,6 @@ export default class ReverseIndex<T extends IFilter> {
 
     this.optimizer = optimizer;
     this.getTokens = getTokens;
-    this.multiKeys = multiKeys || false;
 
     this.addFilters(filters || []);
   }
@@ -135,9 +134,7 @@ export default class ReverseIndex<T extends IFilter> {
 
       // Deal with filters generating several sets of tokens
       // (eg: cosmetic filters and their hostnames)
-      const multiTokens = this.multiKeys
-        ? this.getTokens(filter)
-        : [this.getTokens(filter)];
+      const multiTokens = this.getTokens(filter);
 
       idToTokens.set(filter.id, multiTokens);
       for (let j = 0; j < multiTokens.length; j += 1) {

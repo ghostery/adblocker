@@ -4,6 +4,7 @@ import networkFiltersOptimizer from './optimizer';
 import { CosmeticFilter } from './parsing/cosmetic-filter';
 import { parseJSResource, parseList } from './parsing/list';
 import { NetworkFilter } from './parsing/network-filter';
+import { IRequest } from './request/interface';
 import { IRawRequest, processRawRequest } from './request/raw';
 import ReverseIndex from './reverse-index';
 import { serializeEngine } from './serialization';
@@ -23,7 +24,7 @@ function extend<T>(target: T[], array: T[]): T[] {
   return target;
 }
 
-function collectAllFilters(lists): {
+function collectAllFilters(lists: Map<string, IList>): {
   filters: NetworkFilter[];
   exceptions: NetworkFilter[];
   redirects: NetworkFilter[];
@@ -61,7 +62,7 @@ export class NetworkFilterBucket {
   public name: string;
   public index: ReverseIndex<NetworkFilter>;
 
-  constructor(name, filters: NetworkFilter[] = []) {
+  constructor(name: string, filters: NetworkFilter[] = []) {
     this.name = name;
     this.index = new ReverseIndex(filters, (filter) => filter.getTokens(), {
       optimizer: networkFiltersOptimizer,
@@ -80,10 +81,10 @@ export class NetworkFilterBucket {
     this.index.optimizeAheadOfTime();
   }
 
-  public match(request): NetworkFilter | null {
+  public match(request: IRequest): NetworkFilter | null {
     let match = null;
 
-    const checkMatch = (filter) => {
+    const checkMatch = (filter: NetworkFilter) => {
       if (matchNetworkFilter(filter, request)) {
         match = filter;
         return false; // Break iteration
@@ -107,14 +108,13 @@ export class CosmeticFilterBucket {
     // specified and we index each filter several time (one time per hostname).
     this.hostnameIndex = new ReverseIndex(
       (filters || []).filter((f) => f.hasHostnames()),
-      (filter) => {
+      (filter: any) => {
         const multiTokens: number[][] = [];
-        filter.hostnames.split(',').forEach((h) => {
+        filter.hostnames.split(',').forEach((h: string) => {
           multiTokens.push(tokenize(h));
         });
         return multiTokens;
       },
-      { multiKeys: true },
     );
 
     // Store cosmetic filters dispatched using their selector. This will allow a
@@ -122,7 +122,7 @@ export class CosmeticFilterBucket {
     // based on some node information.
     this.selectorIndex = new ReverseIndex(
       (filters || []).filter((f) => !(f.isScriptBlock() || f.isScriptInject())),
-      (filter) => filter.getTokensSelector(),
+      (filter) => filter.getTokens(),
       {},
     );
   }
@@ -132,7 +132,7 @@ export class CosmeticFilterBucket {
   }
 
   public createContentScriptResponse(
-    rules,
+    rules: CosmeticFilter[],
   ): {
     active: boolean;
     blockedScripts: string[];
@@ -170,7 +170,7 @@ export class CosmeticFilterBucket {
   ): CosmeticFilter[] {
     // Collect matching rules
     const rules: Array<{ rule: CosmeticFilter; hostname: string }> = [];
-    const checkMatch = (rule) => {
+    const checkMatch = (rule: CosmeticFilter) => {
       const result = matchCosmeticFilter(rule, hostname);
       if (result !== null) {
         // Update script injection rule
@@ -228,7 +228,7 @@ export class CosmeticFilterBucket {
 
     // Collect matching rules
     const rules: Array<{ hostname: string; rule: CosmeticFilter }> = [];
-    const checkMatch = (rule) => {
+    const checkMatch = (rule: CosmeticFilter) => {
       const result = matchCosmeticFilter(rule, hostname);
       if (result !== null) {
         rules.push({
@@ -317,14 +317,17 @@ export default class FilterEngine {
   public loadNetworkFilters: boolean;
   public optimizeAOT: boolean;
 
-  constructor(options) {
-    const {
-      loadCosmeticFilters,
-      loadNetworkFilters,
-      optimizeAOT,
-      version,
-    } = options;
-
+  constructor({
+    loadCosmeticFilters,
+    loadNetworkFilters,
+    optimizeAOT,
+    version,
+  }: {
+    loadCosmeticFilters: boolean,
+    loadNetworkFilters: boolean,
+    optimizeAOT: boolean,
+    version: number,
+  }) {
     // Options
     this.loadCosmeticFilters = loadCosmeticFilters;
     this.loadNetworkFilters = loadNetworkFilters;
@@ -519,7 +522,7 @@ export default class FilterEngine {
     match: boolean,
     redirect?: string,
     exception?: boolean,
-    filter?: NetworkFilter,
+    filter?: string,
   } {
     if (!this.loadNetworkFilters) {
       return { match: false };

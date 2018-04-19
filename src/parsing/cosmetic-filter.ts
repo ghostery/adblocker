@@ -6,6 +6,7 @@ import {
   setBit,
   tokenizeCSS,
 } from '../utils';
+import IFilter from './interface';
 
 /**
  * Masks used to store options of cosmetic filters in a bitmask.
@@ -20,7 +21,7 @@ const enum COSMETICS_MASK {
  *  Cosmetic filters parsing
  * ************************************************************************ */
 
-export class CosmeticFilter {
+export class CosmeticFilter implements IFilter {
   public id: number;
   public mask: number;
   public selector: string;
@@ -31,7 +32,17 @@ export class CosmeticFilter {
 
   private hostnamesArray: string[] | null;
 
-  constructor({ mask, selector, hostnames, id }) {
+  constructor({
+    mask,
+    selector,
+    hostnames,
+    id,
+  }: {
+    mask: number,
+    selector: string,
+    hostnames: string,
+    id: number,
+  }) {
     this.id = id;
     this.mask = mask;
     this.selector = selector;
@@ -81,6 +92,10 @@ export class CosmeticFilter {
     }
 
     return filter;
+  }
+
+  public getTokens(): number[][] {
+    return [this.getTokensSelector()];
   }
 
   public getTokensSelector(): number[] {

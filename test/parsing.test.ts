@@ -5,7 +5,7 @@ import { parseList } from '../src/parsing/list';
 import { parseNetworkFilter } from '../src/parsing/network-filter';
 
 // TODO: collaps, popup, popunder, generichide, genericblock
-function network(filter: string, expected) {
+function network(filter: string, expected: any) {
   const parsed = parseNetworkFilter(filter);
   if (parsed !== null) {
     const verbose = {
@@ -631,7 +631,7 @@ describe('Network filters', () => {
   });
 });
 
-function cosmetic(filter: string, expected) {
+function cosmetic(filter: string, expected: any) {
   const parsed = parseCosmeticFilter(filter);
   if (parsed !== null) {
     const verbose = {
