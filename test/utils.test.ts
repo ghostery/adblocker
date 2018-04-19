@@ -4,7 +4,7 @@ import { parseList } from '../src/parsing/list';
 import { fastHash, tokenize, tokenizeCSS } from '../src/utils';
 import { loadAllLists } from './utils';
 
-function t(tokens) {
+function t(tokens: string[]) {
   return tokens.map(fastHash);
 }
 
@@ -26,7 +26,7 @@ expect.extend({
   },
 });
 
-function checkCollisions(filters) {
+function checkCollisions(filters: any) {
   const hashes = new Map();
   for (let i = 0; i < filters.length; i += 1) {
     const filter = filters[i];

@@ -105,7 +105,7 @@ function isAllowedCSS(ch: number): boolean {
   );
 }
 
-function fastTokenizer(pattern, isAllowedCode, allowRegexSurround = false) {
+function fastTokenizer(pattern: string, isAllowedCode: (ch: number) => boolean, allowRegexSurround = false) {
   const tokens: number[] = [];
   let inside: boolean = false;
   let start = 0;

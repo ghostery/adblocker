@@ -123,14 +123,14 @@ export default function(filters: NetworkFilter[]): NetworkFilter[] {
               newFilterNotDomains = new NetworkFilter(f);
               optNotDomains = f.getOptNotDomains();
             } else {
-              f.getOptNotDomains().forEach(d => optNotDomains.add(d));
+              f.getOptNotDomains().forEach((d: string) => optNotDomains.add(d));
             }
           } else if (f.hasOptDomains()) {
             if (newFilterDomains === null) {
               newFilterDomains = new NetworkFilter(f);
               optDomains = f.getOptDomains();
             } else {
-              f.getOptDomains().forEach(d => optDomains.add(d));
+              f.getOptDomains().forEach((d: string) => optDomains.add(d));
             }
           } else if (newFilter === null) {
             newFilter = new NetworkFilter(f);

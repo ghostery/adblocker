@@ -1,4 +1,6 @@
+// @ts-ignore
 import { getPublicSuffix } from 'tldjs';
+
 import { CosmeticFilter } from '../parsing/cosmetic-filter';
 import { fastStartsWith } from '../utils';
 

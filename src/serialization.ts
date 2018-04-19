@@ -187,7 +187,7 @@ function serializeCosmeticFilters(
 
 function deserializeNetworkFilters(
   buffer: DynamicDataView,
-  allFilters,
+  allFilters: Map<number, NetworkFilter>,
 ): NetworkFilter[] {
   const length = buffer.getUint32();
   const filters: NetworkFilter[] = [];
@@ -202,7 +202,7 @@ function deserializeNetworkFilters(
 
 function deserializeCosmeticFilters(
   buffer: DynamicDataView,
-  allFilters,
+  allFilters: Map<number, CosmeticFilter>,
 ): CosmeticFilter[] {
   const length = buffer.getUint32();
   const filters: CosmeticFilter[] = [];

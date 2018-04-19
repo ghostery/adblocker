@@ -10,6 +10,8 @@ export interface IRequest {
   sourceHostname: string;
 
   cpt: number;
+
+  fuzzySignature: Uint32Array | undefined;
 }
 
 export function mkRequest({
@@ -32,5 +34,8 @@ export function mkRequest({
     hostGD: domain,
     hostname,
     url: url.toLowerCase(),
+
+    // Fuzzy signature
+    fuzzySignature: undefined,
   };
 }

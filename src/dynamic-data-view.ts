@@ -20,7 +20,7 @@ export default class DynamicDataView {
   private buffer: Uint8Array;
   private pos: number;
 
-  constructor(length) {
+  constructor(length: number) {
     this.buffer = new Uint8Array(length);
     this.pos = 0;
   }
