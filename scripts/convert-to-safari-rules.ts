@@ -244,11 +244,7 @@ export function convertAndValidateFilters(lists) {
     const filter = networkFilters[j];
     const rule = convertFilter(filter);
     if (rule !== null && rule !== undefined) {
-      try {
-        testRule(rule);
-      } catch (ex) {
-        return ex;
-      }
+      testRule(rule);
       if (rule.action.type === 'ignore-previous-rules') {
         exceptions.push(rule);
       } else {
@@ -261,11 +257,7 @@ export function convertAndValidateFilters(lists) {
     const cosmetic = cosmeticFilters[i];
     const rule = convertCosmetics(cosmetic);
     if (rule !== null && rule !== undefined) {
-      try {
-        testRule(rule);
-      } catch (ex) {
-        return ex;
-      }
+      testRule(rule);
       rules.push(rule);
     }
   }
