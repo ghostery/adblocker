@@ -7,4 +7,3 @@ export function fetchLists(lists: string[]) {
       return text;
     }));
   }
-  
