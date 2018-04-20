@@ -237,19 +237,8 @@ export function testRule(rule) {
 
 export function convertAndValidateFilters(lists) {
   const { networkFilters, cosmeticFilters } = parseList(lists);
-  let json: any[] = [];
-  for (let i = 0; i < cosmeticFilters.length; i += 1) {
-    const cosmetic = cosmeticFilters[i];
-    const rule = convertCosmetics(cosmetic);
-    if (rule !== null && rule !== undefined) {
-      try {
-        testRule(rule);
-      } catch (ex) {
-        return ex;
-      }
-      json.push(rule);
-    }
-  }
+  let rules: any[] = [];
+  let exceptions: any[] = [];
 
   for (let j = 0; j < networkFilters.length; j += 1) {
     const filter = networkFilters[j];
@@ -260,14 +249,46 @@ export function convertAndValidateFilters(lists) {
       } catch (ex) {
         return ex;
       }
-      json.push(rule);
+      if (rule.action.type === 'ignore-previous-rules') {
+        exceptions.push(rule);
+      } else {
+        rules.push(rule);
+      }
     }
   }
-  return JSON.stringify(json);
+
+  for (let i = 0; i < cosmeticFilters.length; i += 1) {
+    const cosmetic = cosmeticFilters[i];
+    const rule = convertCosmetics(cosmetic);
+    if (rule !== null && rule !== undefined) {
+      try {
+        testRule(rule);
+      } catch (ex) {
+        return ex;
+      }
+      rules.push(rule);
+    }
+  }
+  
+  return JSON.stringify([...rules,...exceptions]);
 }
 
+const adblockerLists = [
+  'https://easylist.to/easylist/easylist.txt',
+  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/annoyances.txt',
+  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
+  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
+  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
+  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
+];
+
+// const antitrackingLists = [
+//   'https://easylist.to/easylist/easyprivacy.txt',
+//   'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
+// ]
+
 function main() {
-  fetchLists().then(list => {
+  fetchLists(adblockerLists).then(list => {
     console.log(convertAndValidateFilters(list.join('\n')));
   });
 }
