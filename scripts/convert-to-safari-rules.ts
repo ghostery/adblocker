@@ -19,7 +19,7 @@ const allowedLoadTypes = new Set(['first-party', 'third-party']);
 
 const allowedActions = new Set(['block', 'block-cookies', 'css-display-none', 'ignore-previous-rules', 'make-https']);
 
-function checkObjectKeysAllowed(keys, allowedKeys) {
+function checkObjectKeysAllowed(keys: string[], allowedKeys: Set<string>) {
   for (let i = 0; i < keys.length; i += 1) {
     if (!allowedKeys.has(keys[i])) {
       throw new Error('key not allowed');
@@ -27,17 +27,17 @@ function checkObjectKeysAllowed(keys, allowedKeys) {
   }
 }
 
-function isOfType(thing, type, errormsg: string) {
+function isOfType(thing: any, type: string, errormsg: string) {
   isSame(typeof thing, type, errormsg);
 }
 
-function isSame(thing, anotherThing, errormsg: string) {
+function isSame(thing: any, anotherThing: any, errormsg: string) {
   if (thing !== anotherThing) {
     throw new Error(errormsg + ' | ' + thing + ' | ' + anotherThing);
   }
 }
 
-function isNotSame(thing, anotherThing, errormsg: string) {
+function isNotSame(thing: any, anotherThing: any, errormsg: string) {
   if (thing === anotherThing) {
     throw new Error(errormsg + ' | ' + thing + ' | ' + anotherThing);
   }
@@ -49,8 +49,7 @@ function isGreaterThan(thing: number, anotherThing: number, errormsg: string) {
   }
 }
 
-export function testRule(rule) {
-
+export function testRule(rule: any) {
   // TODO: test if string is punycode encoded.
 
   // rule must be an object
@@ -91,7 +90,7 @@ export function testRule(rule) {
   let value = rule.trigger['url-filter'];
   let isValid = true;
   try {
-    new RegExp(value);
+    RegExp(value);
   } catch (e) {
     isValid = false;
   }
@@ -235,7 +234,7 @@ export function testRule(rule) {
   }
 }
 
-export function convertAndValidateFilters(lists) {
+export function convertAndValidateFilters(lists: string) {
   const { networkFilters, cosmeticFilters } = parseList(lists);
   const rules: any[] = [];
   const exceptions: any[] = [];
@@ -280,6 +279,7 @@ const adblockerLists = [
 
 function main() {
   fetchLists(adblockerLists).then(list => {
+    // tslint:disable-next-line
     console.log(convertAndValidateFilters(list.join('\n')));
   });
 }

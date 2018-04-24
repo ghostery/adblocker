@@ -1,11 +1,9 @@
 import CosmeticFilter from '../types/cosmetics';
 import NetworkFilter from '../types/filter';
 
-function isAscii(domain: string) {
-    for (let i = 0; i < domain.length; i += 1) {
-      const code = domain.charCodeAt(i);
-      if (code > 255) {
-        console.error('domain is not ASCII - ' + domain);
+function isAscii(str: string) {
+    for (let i = 0; i < str.length; i += 1) {
+      if (str.charCodeAt(i) > 255) {
         return false;
       }
     }

@@ -2,6 +2,7 @@ import matchCosmeticFilter from './matching/cosmetics';
 import matchNetworkFilter from './matching/network';
 import networkFiltersOptimizer from './optimizer';
 import { parseJSResource, parseList } from './parsing/list';
+import { IRequest } from './request/interface';
 import { IRawRequest, processRawRequest } from './request/raw';
 import ReverseIndex from './reverse-index';
 import { serializeEngine } from './serialization';
