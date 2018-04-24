@@ -18,7 +18,8 @@
     "watch": "tsc -p . --module commonjs --outDir 'build/commonjs' --watch",
     "pretest": "npm run lint",
     "test": "npm run clean && npm run build-cjs && jest --coverage build/commonjs/test/",
-    "dev": "npm run clean && npm run build-cjs && concurrently 'npm run watch' 'jest build/commonjs/test/ --watch'"
+    "dev": "npm run clean && npm run build-cjs && concurrently 'npm run watch' 'jest build/commonjs/test/ --watch'",
+    "generate-safari-rules": "npm run build && node build/commonjs/scripts/convert-to-safari-rules.js > safari-rules.json && echo 'written to safari-rules.json'"
   },
   "jest": {
     "testMatch": [

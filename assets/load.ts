@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
+import * as fs from 'fs';
+import * as path from 'path';
 
-function readAsset(filepath) {
+function readAsset(filepath: string) {
   return fs.readFileSync(path.resolve(__dirname, '../../../', filepath), 'utf-8');
 }
 
