@@ -10,3 +10,5 @@ export { default as ReverseIndex } from './src/reverse-index';
 
 export { parseCosmeticFilter } from './src/parsing/cosmetic-filter';
 export { parseNetworkFilter } from './src/parsing/network-filter';
+
+export { compactTokens, hasEmptyIntersection, mergeCompactSets } from './src/compact-set';
