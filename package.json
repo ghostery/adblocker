@@ -12,7 +12,6 @@
   "module": "build/es6/index.js",
   "scripts": {
     "clean": "rm -rf build",
-    "generate-changelog": "github-changes -o 'cliqz-oss' -r 'adblocker' --use-commit-body --only-pulls",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "build-es6": "tsc -p . --module ES6 --outDir 'build/es6'",
     "build-cjs": "tsc -p . --module commonjs --outDir 'build/commonjs'",
@@ -30,7 +29,7 @@
     "testEnvironment": "node"
   },
   "devDependencies": {
-    "@types/chrome": "0.0.64",
+    "@types/chrome": "0.0.65",
     "@types/jest": "22.2.3",
     "@types/jsdom": "11.0.4",
     "babel-eslint": "8.2.3",
@@ -39,21 +38,20 @@
     "babel-register": "6.26.0",
     "babelrc-rollup": "3.0.0",
     "concurrently": "3.5.1",
-    "github-changes": "1.1.2",
     "jest": "22.4.3",
-    "jsdom": "11.8.0",
-    "rollup": "0.54.1",
-    "rollup-plugin-babel": "3.0.3",
-    "rollup-plugin-commonjs": "8.2.6",
+    "jsdom": "11.10.0",
+    "rollup": "0.58.2",
+    "rollup-plugin-babel": "3.0.4",
+    "rollup-plugin-commonjs": "9.1.3",
     "rollup-plugin-json": "2.3.0",
     "rollup-plugin-node-builtins": "2.1.2",
-    "rollup-plugin-node-globals": "1.1.0",
-    "rollup-plugin-node-resolve": "3.0.0",
+    "rollup-plugin-node-globals": "1.2.0",
+    "rollup-plugin-node-resolve": "3.3.0",
     "rollup-plugin-sourcemaps": "0.4.2",
     "rollup-plugin-typescript": "0.8.1",
-    "rollup-plugin-uglify": "2.0.1",
-    "tslint": "5.9.1",
-    "typescript": "2.8.1"
+    "rollup-plugin-uglify": "3.0.0",
+    "tslint": "5.10.0",
+    "typescript": "2.8.3"
   },
   "dependencies": {
     "tldjs": "2.3.1"
