@@ -17,7 +17,7 @@ function setWithDefault<K, V>(map: Map<K, V[]>, key: K, value: V): void {
   bucket.push(value);
 }
 
-export default function(filters: NetworkFilter[]): NetworkFilter[] {
+export default function optimize(filters: NetworkFilter[]): NetworkFilter[] {
   const fused: NetworkFilter[] = [];
 
   // 1. Group filters by same options
