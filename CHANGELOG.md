@@ -4,6 +4,7 @@
 
 *unreleased*
 
+  * Network filter matching handle empty hostname [#18](https://github.com/cliqz-oss/adblocker/pull/18)
   * Update dependencies to fix node.js 10 build [#17](https://github.com/cliqz-oss/adblocker/pull/17)
 
 ## 0.1.9
