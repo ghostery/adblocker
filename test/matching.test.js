@@ -119,6 +119,26 @@ describe('#matchNetworkFilter', () => {
 
   it('||hostname^*/pattern', () => {
     expect(f`||foo.com^*/bar`).not.toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||com^*/bar`).not.toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||foo^*/bar`).not.toMatchRequest({ url: 'https://foo.com/bar' });
+
+    expect(f`||com*^bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||foo.com^bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||com^bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||foo*^bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||foo*/bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||foo*com/bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||foo*com*/bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||foo*com*^bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||*foo*com*^bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||*/bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||*^bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||*com/bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||*.com/bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||*foo.com/bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||*com/bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||*com*/bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`||*com*^bar`).toMatchRequest({ url: 'https://foo.com/bar' });
   });
 });
 
