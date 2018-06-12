@@ -4,6 +4,7 @@
 
 *unreleased*
 
+  * Handle falsy publicSuffix in cosmetic filters matching [#19](https://github.com/cliqz-oss/adblocker/pull/19)
   * Network filter matching handle empty hostname [#18](https://github.com/cliqz-oss/adblocker/pull/18)
   * Update dependencies to fix node.js 10 build [#17](https://github.com/cliqz-oss/adblocker/pull/17)
 
