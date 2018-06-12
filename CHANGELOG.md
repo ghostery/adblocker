@@ -1,8 +1,8 @@
 # Adblocker
 
-## 0.2.0
+## 0.1.10
 
-*unreleased*
+*2018-06-12*
 
   * Handle falsy publicSuffix in cosmetic filters matching [#19](https://github.com/cliqz-oss/adblocker/pull/19)
   * Network filter matching handle empty hostname [#18](https://github.com/cliqz-oss/adblocker/pull/18)
