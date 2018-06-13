@@ -1,6 +1,4 @@
-import {} from 'jest';
-
-import Engine from '../src/filters-engine';
+import Engine from '../src/engine/engine';
 
 describe('Engine', () => {
   it('TODO', () => {

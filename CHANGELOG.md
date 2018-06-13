@@ -1,5 +1,9 @@
 # Adblocker
 
+## *not released*
+
+  * Split engine code + update building dependencies [#20](https://github.com/cliqz-oss/adblocker/pull/19)
+
 ## 0.1.11
 
 *2018-06-14*

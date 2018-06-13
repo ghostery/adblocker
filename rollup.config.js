@@ -8,7 +8,7 @@ import babel from 'rollup-plugin-babel';
 import babelrc from 'babelrc-rollup';
 
 const namedExports = {
-      'tldjs/index.js': [ 'parse', 'getPublicSuffix' ],
+  'tldjs/index.js': [ 'parse', 'getPublicSuffix' ],
 };
 
 const plugins = [
@@ -24,7 +24,7 @@ const plugins = [
   }),
 
   commonjs({
-    extensions: [ '.js', '.json' ],
+    extensions: ['.js', '.json'],
     namedExports,
   }),
 

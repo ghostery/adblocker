@@ -1,12 +1,10 @@
-import {} from 'jest';
-
 import { loadAllLists, loadResources } from './utils';
 
 import DynamicDataView from '../src/dynamic-data-view';
-import Engine from '../src/filters-engine';
+import Engine from '../src/engine/engine';
+import ReverseIndex from '../src/engine/reverse-index';
 import { parseList } from '../src/parsing/list';
 import { NetworkFilter } from '../src/parsing/network-filter';
-import ReverseIndex from '../src/reverse-index';
 import {
   deserializeCosmeticFilter,
   deserializeEngine,

@@ -1,5 +1,3 @@
-import {} from 'jest';
-
 import { JSDOM } from 'jsdom';
 import CosmeticsInjection from '../src/cosmetics-injection';
 
