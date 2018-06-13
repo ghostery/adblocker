@@ -1,5 +1,3 @@
-import {} from 'jest';
-
 import { parseList } from '../src/parsing/list';
 import { fastHash, tokenize, tokenizeCSS } from '../src/utils';
 import { loadAllLists } from './utils';

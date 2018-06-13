@@ -1,4 +1,4 @@
-import IFilter from './parsing/interface';
+import IFilter from '../parsing/interface';
 
 function nope(arg: any) {
   return arg;

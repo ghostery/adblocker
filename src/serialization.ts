@@ -6,12 +6,12 @@
  */
 
 import DynamicDataView from './dynamic-data-view';
-import Engine, { IList } from './filters-engine';
-import FiltersEngine from './filters-engine';
+import Engine from './engine/engine';
+import IList from './engine/list';
+import ReverseIndex from './engine/reverse-index';
 import { CosmeticFilter } from './parsing/cosmetic-filter';
 import IFilter from './parsing/interface';
 import { NetworkFilter } from './parsing/network-filter';
-import ReverseIndex from './reverse-index';
 
 /**
  * To allow for a more compact representation of network filters, the
@@ -402,7 +402,7 @@ function deserializeResources(
 /**
  * Creates a string representation of the full engine. It can be stored
  * on-disk for faster loading of the adblocker. The `load` method of a
- * `FiltersEngine` instance can be used to restore the engine *in-place*.
+ * `Engine` instance can be used to restore the engine *in-place*.
  */
 function serializeEngine(engine: Engine): Uint8Array {
   // Create a big buffer! It does not have to be the right size since
@@ -450,7 +450,7 @@ function deserializeEngine(serialized: Uint8Array, version: number): Engine {
     optimizeAOT: Boolean(buffer.getUint8()),
     version: serializedEngineVersion,
   };
-  const engine = new FiltersEngine(options);
+  const engine = new Engine(options);
 
   // Deserialize resources
   const { js, resources, resourceChecksum } = deserializeResources(buffer);

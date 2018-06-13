@@ -1,4 +1,4 @@
-import { NetworkFilter } from './parsing/network-filter';
+import { NetworkFilter } from '../parsing/network-filter';
 
 function processRegex(r: RegExp): string {
   return `(?:${r.source})`;

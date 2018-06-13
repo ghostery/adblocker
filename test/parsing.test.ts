@@ -1,5 +1,3 @@
-import {} from 'jest';
-
 import { parseCosmeticFilter } from '../src/parsing/cosmetic-filter';
 import { parseList } from '../src/parsing/list';
 import { parseNetworkFilter } from '../src/parsing/network-filter';
