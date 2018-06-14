@@ -2,7 +2,7 @@
 
 ## 0.1.11
 
-*not released yet*
+*2018-06-14*
 
   * Ignore babelrc [#21](https://github.com/cliqz-oss/adblocker/pull/21)
 
