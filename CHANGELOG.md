@@ -2,6 +2,7 @@
 
 ## *not released*
 
+  * Export createFuzzySignature from pattern-matching bundle [#24](https://github.com/cliqz-oss/adblocker/pull/24)
   * Implement user agent overriding + clean-up example extension. [#25](https://github.com/cliqz-oss/adblocker/pull/25)
   * Split engine code + update building dependencies [#20](https://github.com/cliqz-oss/adblocker/pull/20)
 
