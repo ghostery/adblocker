@@ -28,7 +28,14 @@ const plugins = [
     namedExports,
   }),
 
-  babel(babelrc()),
+  babel(babelrc({
+    config: {
+      babelrc: false,
+      presets: [
+        "es2015",
+      ],
+    },
+  })),
 ];
 
 export default [

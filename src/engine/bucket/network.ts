@@ -33,7 +33,7 @@ export default class NetworkFilterBucket {
   }
 
   public match(request: IRequest): NetworkFilter | null {
-    let match = null;
+    let match: NetworkFilter | null = null;
 
     const checkMatch = (filter: NetworkFilter) => {
       if (matchNetworkFilter(filter, request)) {

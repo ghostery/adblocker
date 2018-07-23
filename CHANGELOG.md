@@ -2,7 +2,8 @@
 
 ## *not released*
 
-  * Split engine code + update building dependencies [#20](https://github.com/cliqz-oss/adblocker/pull/19)
+  * Implement user agent overriding + clean-up example extension. [#25](https://github.com/cliqz-oss/adblocker/pull/25)
+  * Split engine code + update building dependencies [#20](https://github.com/cliqz-oss/adblocker/pull/20)
 
 ## 0.1.11
 

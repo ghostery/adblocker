@@ -1,33 +1,6 @@
 import * as adblocker from '../index';
 
 /**
- * Fetch the latest version of uBlockOrigin's resources, used to inject scripts
- * in the page or redirect request to data URLs.
- */
-function fetchResources() {
-  return fetch(
-    'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt',
-  ).then(r => r.text());
-}
-
-/**
- * Fetch the latest version of several lists of filters that will be used by the
- * adblocker. They contain network and cosmetic filters.
- */
-function fetchLists() {
-  return Promise.all([
-    'https://easylist.to/easylist/easylist.txt',
-    'https://easylist.to/easylist/easyprivacy.txt',
-    'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/annoyances.txt',
-    'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
-    'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
-    'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
-    'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
-    'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
-  ].map(url => fetch(url))).then(rs => Promise.all(rs.map(r => r.text())));
-}
-
-/**
  * Initialize the adblocker using lists of filters and resources. It returns a
  * Promise resolving on the `Engine` that we will use to decide what requests
  * should be blocked or altered.
@@ -41,8 +14,8 @@ function loadAdblocker() {
   });
 
   return Promise.all([
-    fetchLists(),
-    fetchResources(),
+    adblocker.fetchLists(),
+    adblocker.fetchResources(),
   ]).then(([responses, resources]) => {
     const lists: Array<{ filters: string, checksum: string, asset: string }> = [];
     for (let i = 0; i < responses.length; i += 1) {
@@ -68,12 +41,42 @@ function loadAdblocker() {
  */
 const tabs = new Map();
 
+function resetState(tabId, source) {
+  tabs.set(tabId, { source, count: 0 });
+}
+
+function updateBadgeCount(tabId) {
+  if (tabs.has(tabId)) {
+    const { count } = tabs.get(tabId);
+    chrome.browserAction.setBadgeText({ text: '' + count });
+  }
+}
+
+function incrementBlockedCounter(tabId) {
+  if (tabs.has(tabId)) {
+    const tabStats = tabs.get(tabId);
+    tabStats.count += 1;
+    updateBadgeCount(tabId);
+  }
+}
+
 chrome.tabs.onCreated.addListener((tab) => {
-  tabs.set(tab.id, tab.url);
+  resetState(tab.id, tab.url);
+  updateBadgeCount(tab.id);
 });
 
 chrome.tabs.onUpdated.addListener((_0, _1, tab) => {
-  tabs.set(tab.id, tab.url);
+  if (tabs.has(tab.id)) {
+    const { source } = tabs.get(tab.id);
+    if (source !== tab.url) {
+      resetState(tab.id, tab.url);
+      updateBadgeCount(tab.id);
+    }
+  }
+});
+
+chrome.tabs.onActivated.addListener(({ tabId }) => {
+  updateBadgeCount(tabId);
 });
 
 const types = {
@@ -102,7 +105,10 @@ const types = {
 
 loadAdblocker().then((engine) => {
   function listener(details) {
-    const source = tabs.get(details.tabId);
+    let source;
+    if (tabs.has(details.tabId)) {
+      source = tabs.get(details.tabId).source;
+    }
     const result = engine.match({
       cpt: types[details.type],
       sourceUrl: source,
@@ -110,8 +116,10 @@ loadAdblocker().then((engine) => {
     });
 
     if (result.redirect) {
+      incrementBlockedCounter(details.tabId);
       return { redirectUrl: result.redirect };
     } else if (result.match) {
+      incrementBlockedCounter(details.tabId);
       return { cancel: true };
     }
 

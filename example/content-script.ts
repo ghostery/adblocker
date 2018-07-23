@@ -1,4 +1,7 @@
-import CosmeticsInjection from '../src/cosmetics-injection';
+import { CosmeticsInjection, overrideUserAgent } from '../index-cosmetics';
+
+// This is used to fool some anti-content-blockers
+overrideUserAgent();
 
 /**
  * Because all the filters and matching logic lives in the background of the
@@ -15,12 +18,15 @@ import CosmeticsInjection from '../src/cosmetics-injection';
  * The background should listen to these messages and answer back with lists of
  * filters to be injected in the page.
  */
-const backgroundAction = (action, ...args) => {
-  chrome.runtime.sendMessage({
-    action,
-    args,
-  }, (response) => {
-    injection.handleResponseFromBackground(response);
+const backgroundAction = (action, ...args): Promise<void> => {
+  return new Promise((resolve) => {
+    chrome.runtime.sendMessage({
+      action,
+      args,
+    }, (response) => {
+      injection.handleResponseFromBackground(response);
+      resolve();
+    });
   });
 };
 
@@ -49,7 +55,6 @@ const onUnload = () => {
 };
 
 /**
- * Listen to onDOMContentLoaded to start cosmetic injection, and make sure we
- * clean-up when content script is unloaded.
+ * Make sure we clean-up when content script is unloaded.
  */
 window.addEventListener('unload', onUnload);
