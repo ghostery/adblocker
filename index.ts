@@ -11,3 +11,5 @@ export { parseCosmeticFilter } from './src/parsing/cosmetic-filter';
 export { parseNetworkFilter } from './src/parsing/network-filter';
 
 export { compactTokens, hasEmptyIntersection, mergeCompactSets } from './src/compact-set';
+
+export { fetchLists, fetchResources } from './src/fetch';

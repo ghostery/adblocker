@@ -63,6 +63,15 @@ function blockScript(filter: string, doc: Document): void {
   });
 }
 
+export function overrideUserAgent(): void {
+  const script = () => {
+    Object.defineProperty(navigator, 'userAgent', {
+      get: () => 'Mozilla/5.0 Gecko Firefox',
+    });
+  };
+  injectScript(`(${script.toString()})()`, window.document);
+}
+
 /**
  * Takes care of injecting cosmetic filters in a given window. Responsabilities:
  * - Inject scripts.
