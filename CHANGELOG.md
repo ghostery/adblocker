@@ -2,7 +2,12 @@
 
 ## *not released*
 
+## 0.1.13
+
+*2018-07-24*
+
   * Export overrideUserAgent from main bundle [#27](https://github.com/cliqz-oss/adblocker/pull/27)
+  * Update npm ignore [#26](https://github.com/cliqz-oss/adblocker/pull/26)
 
 ## 0.1.12
 
