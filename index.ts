@@ -1,4 +1,8 @@
+// Cosmetic injection
 export { default as CosmeticsInjection } from './src/cosmetics-injection';
+export { overrideUserAgent } from './src/cosmetics-injection';
+
+// Blocking
 export { default as FiltersEngine } from './src/engine/engine';
 export { default as ReverseIndex } from './src/engine/reverse-index';
 export { processRawRequest } from './src/request/raw';

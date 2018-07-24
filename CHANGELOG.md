@@ -2,6 +2,8 @@
 
 ## *not released*
 
+  * Export overrideUserAgent from main bundle [#27](https://github.com/cliqz-oss/adblocker/pull/27)
+
 ## 0.1.12
 
 *2018-07-23*
