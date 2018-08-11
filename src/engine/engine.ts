@@ -8,6 +8,16 @@ import CosmeticFilterBucket from './bucket/cosmetics';
 import NetworkFilterBucket from './bucket/network';
 import IList from './list';
 
+// Polyfill for `btoa`
+function btoaPolyfill(buffer: string): string {
+  if (typeof btoa !== 'undefined') {
+    return btoa(buffer);
+  } else if (typeof Buffer !== 'undefined') {
+    return new Buffer(buffer).toString('base64');
+  }
+  return buffer;
+}
+
 /**
  * Append all elements of `array` to the end of `target`.
  *
@@ -329,7 +339,7 @@ export default class FilterEngine {
           if (contentType.indexOf(';') !== -1) {
             dataUrl = `data:${contentType},${data}`;
           } else {
-            dataUrl = `data:${contentType};base64,${btoa(data)}`;
+            dataUrl = `data:${contentType};base64,${btoaPolyfill(data)}`;
           }
 
           return {
