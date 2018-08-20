@@ -1,4 +1,4 @@
-const { AdBlockClient } = require('ad-block');
+const { AdBlockClient, FilterOptions } = require('ad-block');
 const adblocker = require('../adblocker.umd.js');
 
 const types = {
@@ -24,6 +24,26 @@ const types = {
   xmlhttprequest: 11,
   xslt: 18,
 };
+
+
+const typesToBrave = {
+  font: FilterOptions.font,
+  image: FilterOptions.image,
+  imageset: FilterOptions.image,
+  main_frame: FilterOptions.document,
+  media: FilterOptions.media,
+  object: FilterOptions.object,
+  object_subrequest: FilterOptions.objectSubrequest,
+  other: FilterOptions.other,
+  ping: FilterOptions.ping,
+  script: FilterOptions.script,
+  stylesheet: FilterOptions.stylesheet,
+  sub_frame: FilterOptions.subdocument,
+  websocket: FilterOptions.websocket,
+  xbl: FilterOptions.xbl,
+  xmlhttprequest: FilterOptions.xmlHttpRequest,
+};
+
 
 function createEngine(lists, resources, options = {}, serialize = false) {
   const engine = new adblocker.FiltersEngine({
@@ -51,9 +71,12 @@ function createBraveClient(lists) {
   return client;
 }
 
+const NANOSECS_PER_SEC = 1e9;
 
 module.exports = {
   createEngine,
   createBraveClient,
   types,
+  typesToBrave,
+  NANOSECS_PER_SEC,
 };

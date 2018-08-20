@@ -8,14 +8,23 @@
 // automatically detect regressions?) -> it would be dumped on disk then only
 // overwritten any time there is no regression of more than N%? (Or no
 // regression at all)
+//
+// TODO
+// * Output statistics about the benchmark as well as memory usage
+//
+// TODO: We could make it possible to run the benchmark in any browser
+// supporting webextension by running it with Selenium, then streaming the data
+// using a WebSocket. The adblocker would be running in the browser and
+// processing the requests + making the measurement. We could also compare this
+// with Node.js perf and output a summary.
+
+const fs = require('fs');
 
 const chalk = require('chalk');
-const fs = require('fs');
 const Benchmark = require('benchmark');
 const fetch = require('cross-fetch');
-const { AdBlockClient, FilterOptions } = require('ad-block');
-const { parse } = require('tldjs');
-const { createEngine, createBraveClient } = require('./utils');
+
+const { createEngine, createBraveClient, NANOSECS_PER_SEC } = require('./utils');
 
 const {
   benchEngineCreation,
@@ -31,6 +40,12 @@ const {
   benchBraveSerialize,
   // benchBraveEngineCreation,
 } = require('./micro');
+
+const {
+  benchTldsBaseline,
+  benchMatching,
+  benchBraveMatching,
+} = require('./macro');
 
 
 function fetchResource(url) {
@@ -57,56 +72,6 @@ async function loadLists() {
   };
 }
 
-// TODO
-// * Output statistics about the benchmark as well as memory usage
-//
-// TODO: We could make it possible to run the benchmark in any browser
-// supporting webextension by running it with Selenium, then streaming the data
-// using a WebSocket. The adblocker would be running in the browser and
-// processing the requests + making the measurement. We could also compare this
-// with Node.js perf and output a summary.
-
-const types = {
-  // maps string (web-ext) to int (FF cpt)
-  beacon: 19,
-  csp_report: 17,
-  font: 14,
-  image: 3,
-  imageset: 21,
-  main_frame: 6,
-  media: 15,
-  object: 5,
-  object_subrequest: 12,
-  other: 1,
-  ping: 10,
-  script: 2,
-  stylesheet: 4,
-  sub_frame: 7,
-  web_manifest: 22,
-  websocket: 16,
-  xbl: 9,
-  xml_dtd: 13,
-  xmlhttprequest: 11,
-  xslt: 18,
-};
-
-const typesToBrave = {
-  font: FilterOptions.font,
-  image: FilterOptions.image,
-  imageset: FilterOptions.image,
-  main_frame: FilterOptions.document,
-  media: FilterOptions.media,
-  object: FilterOptions.object,
-  object_subrequest: FilterOptions.objectSubrequest,
-  other: FilterOptions.other,
-  ping: FilterOptions.ping,
-  script: FilterOptions.script,
-  stylesheet: FilterOptions.stylesheet,
-  sub_frame: FilterOptions.subdocument,
-  websocket: FilterOptions.websocket,
-  xbl: FilterOptions.xbl,
-  xmlhttprequest: FilterOptions.xmlHttpRequest,
-};
 
 function loadRequests() {
   const requestsPath = process.argv[process.argv.length - 1];
@@ -131,136 +96,6 @@ function getMemoryConsumption() {
   return process.memoryUsage().heapUsed / 1024 / 1024;
 }
 
-function createBraveEngine(lists) {
-  const client = createBraveClient(lists);
-
-  // TODO getParsingStats
-  // console.log('Brave parsing stats', client.getParsingStats());
-
-  return {
-    // Implement match using same API as FiltersEngine
-    match: ({ cpt, sourceUrl, url }) => ({
-      match: client.matches(
-        url,
-        typesToBrave[cpt] || FilterOptions.noFilterOption,
-        parse(sourceUrl).domain,
-      ),
-    }),
-    findMatchingFilters: ({ cpt, sourceUrl, url }) => client.findMatchingFilters(
-      url,
-      typesToBrave[cpt] || FilterOptions.noFilterOption,
-      parse(sourceUrl).domain,
-    ),
-  };
-}
-
-function createCliqzEngine(lists, resources) {
-  const { engine } = createEngine(lists, resources, {
-    loadCosmeticFilters: true,
-    loadNetworkFilters: true,
-  });
-
-  return {
-    match: req => engine.match(req),
-    findMatchingFilters: (req) => {
-      const {
-        match, exception, filter,
-      } = engine.match(req);
-      return {
-        matches: match,
-        matchingFilter: match ? filter : undefined,
-        matchingExceptionFilter: exception ? filter : undefined,
-      };
-    },
-  };
-}
-
-
-function createEngines(lists, resources) {
-  // Create Engine
-  console.log('Create engine');
-  let baseLineMemory = getMemoryConsumption();
-  const engine = createCliqzEngine(lists, resources);
-  const engineConsumption = getMemoryConsumption() - baseLineMemory;
-  console.log(`Engine consumption: ${engineConsumption} MB`);
-
-  // Create Brave Engine
-  console.log('Create Brave engine');
-  baseLineMemory = getMemoryConsumption();
-  const braveEngine = createBraveEngine(lists, resources);
-  // TODO: This does not seem to count memory allocated by Brave
-  const braveEngineConsumption = getMemoryConsumption() - baseLineMemory;
-  console.log(`Brave Engine consumption: ${braveEngineConsumption} MB`);
-
-  return {
-    engine,
-    braveEngine,
-  };
-}
-
-function compareResults(engine, braveEngine, requests) {
-  for (let i = 0; i < requests.length; i += 1) {
-    const request = requests[i % requests.length];
-    if (request.sourceUrl === undefined) { continue; }
-    const requestInfo = {
-      cpt: types[request.cpt],
-      sourceUrl: request.sourceUrl,
-      url: request.url,
-    };
-
-    const match = engine.findMatchingFilters(requestInfo);
-
-    // findMatchingFilters
-    const braveMatch = braveEngine.findMatchingFilters(requestInfo);
-
-    if (match.matches !== braveMatch.matches) {
-      console.log('Mismatch', {
-        ...requestInfo,
-        match,
-        braveMatch,
-      });
-    }
-  }
-}
-
-const NANOSECS_PER_SEC = 1e9;
-
-function runBenchmark(engine, requests, requestsToProcess = null) {
-  if (!requestsToProcess) {
-    requestsToProcess = requests.length;
-  }
-  console.log(`Start benchmark with ${requests.length} requests...`);
-  let noMatch = 0;
-  const t0 = process.hrtime();
-
-  for (let i = 0; i < requestsToProcess; i += 1) {
-    const request = requests[i % requests.length];
-    if (engine.match({
-      cpt: types[request.cpt],
-      sourceUrl: request.sourceUrl,
-      url: request.url,
-    }).match) {
-      noMatch += 1;
-    }
-  }
-
-  const diff = process.hrtime(t0);
-
-  console.log('Number of matches', noMatch);
-  const nanoseconds = diff[0] * NANOSECS_PER_SEC + diff[1];
-
-  // Timings
-  console.log('Total', nanoseconds, 'ns');
-  // console.log('Total', nanoseconds / MICROSECS_PER_SEC, 'μs');
-  // console.log('Total', nanoseconds / MICROSECS_PER_SEC, 'ms');
-  console.log('Total', nanoseconds / NANOSECS_PER_SEC, 'seconds');
-
-  console.log('Avg', nanoseconds / (requestsToProcess), 'ns/request');
-  console.log('Avg', (nanoseconds / (requestsToProcess)) / 1e6, 'ms/request');
-  console.log('Avg', (nanoseconds / (requestsToProcess)) / NANOSECS_PER_SEC, 'second/request');
-}
-
-
 function getFiltersFromLists(lists) {
   const filters = [];
 
@@ -275,10 +110,53 @@ function getFiltersFromLists(lists) {
 }
 
 
+function runMacroBenchmarks(lists, resources) {
+  console.log('Loading requests...');
+  const requests = loadRequests();
+
+  console.log('Creating engine...');
+  const { engine } = createEngine(lists, resources, {
+    loadCosmeticFilters: false,
+    loadNetworkFilters: true,
+    optimizeAOT: true,
+  });
+
+  console.log('Creating Brave engine...');
+  const braveEngine = createBraveClient(lists);
+
+  const results = {};
+
+  [
+    benchTldsBaseline,
+    benchMatching,
+    benchBraveMatching,
+  ].forEach((bench) => {
+    triggerGC();
+    const t0 = process.hrtime();
+    bench({
+      engine,
+      braveEngine,
+      requests,
+    });
+    const diff = process.hrtime(t0);
+    const seconds = diff[0] + (diff[1] / NANOSECS_PER_SEC);
+    const opsPerSecond = requests.length / seconds;
+    results[bench.name] = {
+      opsPerSecond,
+      relativeMarginOfError: 0.0,
+      numberOfSamples: 1,
+    };
+  });
+
+  return {
+    macroBenchmarks: results,
+  };
+}
+
 /**
  * Micro benchmarks are a set of benchmarks measuring specific aspects of the library
  */
-function runMiroBenchmarks(lists, resources) {
+function runMicroBenchmarks(lists, resources) {
   // Create adb engine to use in benchmark
   const { engine, serialized } = createEngine(lists, resources, {
     loadCosmeticFilters: true,
@@ -287,9 +165,7 @@ function runMiroBenchmarks(lists, resources) {
   }, true /* Also serialize engine */);
 
   // Create Brave engine to use in benchmark
-  const braveEngine = new AdBlockClient();
-  braveEngine.parse(lists.join('\n'));
-
+  const braveEngine = createBraveClient(lists);
   const serializedBraveEngine = braveEngine.serialize();
 
   const filters = getFiltersFromLists(lists);
@@ -361,8 +237,7 @@ function runMemoryBench(lists, resources) {
 
   // Create Brave engine to use in benchmark
   baseMemory = getMemoryConsumption();
-  const braveEngine = new AdBlockClient();
-  braveEngine.parse(lists.join('\n'));
+  const braveEngine = createBraveClient(lists);
   const braveEngineMemory = getMemoryConsumption() - baseMemory;
 
   const serializedBraveEngine = braveEngine.serialize();
@@ -384,15 +259,28 @@ function compareNumbers(name, {
   number2,
   relativeMarginOfError2,
   unit,
+  moreIsBetter,
 }) {
-  const number1WithError = number1 * (1.0 + (relativeMarginOfError1 / 100.0));
-  const number2WithError = number2 * (1.0 - (relativeMarginOfError2 / 100.0));
-  const change = Math.floor(((number2WithError - number1WithError) / number2WithError) * 100.0);
+  const change = Math.floor(((number2 - number1) / number2) * 100.0);
+  const allowedChange = relativeMarginOfError1 + relativeMarginOfError2;
 
-  if (change > 0) {
-    console.log(`${chalk.grey.bold.bgRed(name)} ${chalk.green(Math.floor(number1))} ~> ${chalk.red.bold(Math.floor(number2))} ${unit} (+${change}%)`);
+  const nameOutput = chalk.yellow.bold(name);
+  const ok = () => console.log(`${chalk.black.bold.bgGreen('OK')} ${nameOutput} ${chalk.red(Math.floor(number1))} ~> ${chalk.green.bold(Math.floor(number2))} ${unit} (${change}%)`);
+  const notOk = () => console.log(`${chalk.yellow.bold.bgRed('FAIL')} ${nameOutput} ${chalk.green(Math.floor(number1))} ~> ${chalk.red.bold(Math.floor(number2))} ${unit} (${change}%)`);
+  const neutral = () => console.log(`${chalk.black.bold.bgWhite('OK')} ${nameOutput} ${chalk.green.bold(Math.floor(number2))} ${unit}`);
+
+  if (change > allowedChange) {
+    if (moreIsBetter) {
+      ok();
+    } else {
+      notOk();
+    }
+  } else if (change === 0) {
+    neutral();
+  } else if (moreIsBetter) {
+    notOk();
   } else {
-    console.log(`${chalk.grey.bold.bgGreen(name)} ${chalk.red(Math.floor(number1))} ~> ${chalk.green.bold(Math.floor(number2))} ${unit} (${change}%)`);
+    ok();
   }
 }
 
@@ -403,13 +291,52 @@ function compareMemoryResults(results1, results2) {
     number2: results2.engineSerializedBytes,
     relativeMarginOfError2: 0.0,
     unit: 'bytes',
+    moreIsBetter: false,
   });
+
   compareNumbers('engineMemory', {
     number1: results1.engineMemory,
     relativeMarginOfError1: 0.0,
     number2: results2.engineMemory,
     relativeMarginOfError2: 0.0,
     unit: 'MB',
+    moreIsBetter: false,
+  });
+
+  console.log();
+  compareNumbers('Versus Brave Serialized', {
+    number1: results2.braveEngineSerializedBytes,
+    relativeMarginOfError1: 0.0,
+    number2: results2.engineSerializedBytes,
+    relativeMarginOfError2: 0.0,
+    unit: 'bytes',
+    moreIsBetter: false,
+  });
+}
+
+function compareMacroBenchmarkResults(results1, results2) {
+  Object.keys(results1).forEach((key) => {
+    if (results2[key] !== undefined) {
+      compareNumbers(key, {
+        number1: results1[key].opsPerSecond,
+        relativeMarginOfError1: results1[key].relativeMarginOfError,
+        number2: results2[key].opsPerSecond,
+        relativeMarginOfError2: results2[key].relativeMarginOfError,
+        unit: 'ops/sec',
+        moreIsBetter: true,
+      });
+    }
+  });
+
+  // Versus Brave
+  console.log();
+  compareNumbers('Versus Brave Matching', {
+    number1: results2.benchBraveMatching.opsPerSecond,
+    relativeMarginOfError1: results2.benchBraveMatching.relativeMarginOfError,
+    number2: results2.benchMatching.opsPerSecond,
+    relativeMarginOfError2: results2.benchMatching.relativeMarginOfError,
+    unit: 'ops/sec',
+    moreIsBetter: true,
   });
 }
 
@@ -422,15 +349,51 @@ function compareMicroBenchmarkResults(results1, results2) {
         number2: results2[key].opsPerSecond,
         relativeMarginOfError2: results2[key].relativeMarginOfError,
         unit: 'ops/sec',
+        moreIsBetter: true,
       });
     }
+  });
+
+  // Versus Brave
+  console.log();
+  compareNumbers('Versus Brave Serialize', {
+    number1: results2.benchBraveSerialize.opsPerSecond,
+    relativeMarginOfError1: results2.benchBraveSerialize.relativeMarginOfError,
+    number2: results2.benchEngineSerialization.opsPerSecond,
+    relativeMarginOfError2: results2.benchEngineSerialization.relativeMarginOfError,
+    unit: 'ops/sec',
+    moreIsBetter: true,
+  });
+  compareNumbers('Versus Brave Deserialize', {
+    number1: results2.benchBraveDeserialize.opsPerSecond,
+    relativeMarginOfError1: results2.benchBraveDeserialize.relativeMarginOfError,
+    number2: results2.benchEngineDeserialization.opsPerSecond,
+    relativeMarginOfError2: results2.benchEngineDeserialization.relativeMarginOfError,
+    unit: 'ops/sec',
+    moreIsBetter: true,
   });
 }
 
 function compareBenchmarkResults(results1, results2) {
-  compareMemoryResults(results1.memory, results2.memory);
+  console.log(chalk.bold('Memory Benchmark:'));
+  console.log(chalk.bold('================='));
+  if (results1.memory !== undefined && results2.memory !== undefined) {
+    compareMemoryResults(results1.memory, results2.memory);
+  }
+
   console.log();
-  compareMicroBenchmarkResults(results1.microBenchmarks, results2.microBenchmarks);
+  console.log(chalk.bold('Micro Benchmark:'));
+  console.log(chalk.bold('================'));
+  if (results1.microBenchmarks !== undefined && results2.microBenchmarks !== undefined) {
+    compareMicroBenchmarkResults(results1.microBenchmarks, results2.microBenchmarks);
+  }
+
+  console.log();
+  console.log(chalk.bold('Macro Benchmark:'));
+  console.log(chalk.bold('================'));
+  if (results1.macroBenchmarks !== undefined && results2.macroBenchmarks !== undefined) {
+    compareMacroBenchmarkResults(results1.macroBenchmarks, results2.macroBenchmarks);
+  }
 }
 
 async function main() {
@@ -439,8 +402,10 @@ async function main() {
 
   const benchmarkResults = {
     ...runMemoryBench(lists, resources),
-    ...runMiroBenchmarks(lists, resources),
+    ...runMicroBenchmarks(lists, resources),
+    ...runMacroBenchmarks(lists, resources),
   };
+  console.log(benchmarkResults);
 
   // Read previous bench dump if any
   const benchDumpPath = '.bench.json';
@@ -452,7 +417,7 @@ async function main() {
     compareBenchmarkResults(previousResults, benchmarkResults);
   } catch (ex) {
     /* No previous result to compare to */
-    console.error('EX', ex);
+    compareBenchmarkResults(benchmarkResults, benchmarkResults);
   }
 
   // Dump current results
@@ -461,26 +426,6 @@ async function main() {
     JSON.stringify(benchmarkResults),
     { encoding: 'utf-8' },
   );
-
-  return;
-
-  console.log('Loading requests...');
-  const requests = loadRequests();
-
-  console.log('Creating engine...');
-  const { engine, braveEngine } = createEngines(lists, resources);
-  compareResults(engine, braveEngine, requests);
-
-  console.log('>>>> tld.js baseline');
-  runBenchmark({
-    match: ({ url, sourceUrl }) => ((parse(url).domain || '').length + (parse(sourceUrl).domain || '').length) > 0,
-  }, requests);
-
-  console.log('>>>> Engine');
-  runBenchmark(engine, requests);
-
-  console.log('>>>> Brave Engine');
-  runBenchmark(braveEngine, requests);
 }
 
 main();
