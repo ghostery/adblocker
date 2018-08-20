@@ -583,6 +583,21 @@ describe('Network filters', () => {
       });
     });
 
+    const allOptions = (value: boolean) => ({
+      fromFont: value,
+      fromImage: value,
+      fromMedia: value,
+      fromObject: value,
+      fromObjectSubrequest: value,
+      fromOther: value,
+      fromPing: value,
+      fromScript: value,
+      fromStylesheet: value,
+      fromSubdocument: value,
+      fromWebsocket: value,
+      fromXmlHttpRequest: value,
+    });
+
     [
       ['font', 'fromFont'],
       ['image', 'fromImage'],
@@ -597,21 +612,27 @@ describe('Network filters', () => {
       ['websocket', 'fromWebsocket'],
       ['xmlhttprequest', 'fromXmlHttpRequest'],
     ].forEach(([ option, attribute ]) => {
+      // all other attributes should be false if `$attribute` or true if `$~attribute`
       describe(option, () => {
         it(`parses ${option}`, () => {
           network(`||foo.com$${option}`, {
+            ...allOptions(false),
             [attribute]: true,
           });
           network(`||foo.com$object,${option}`, {
+            ...allOptions(false),
+            fromObject: true,
             [attribute]: true,
           });
           network(`||foo.com$domain=bar.com,${option}`, {
+            ...allOptions(false),
             [attribute]: true,
           });
         });
 
         it(`parses ~${option}`, () => {
           network(`||foo.com$~${option}`, {
+            ...allOptions(true),
             [attribute]: false,
           });
           network(`||foo.com$${option},~${option}`, {
@@ -621,6 +642,7 @@ describe('Network filters', () => {
 
         it('defaults to true', () => {
           network('||foo.com', {
+            ...allOptions(true),
             [attribute]: true,
           });
         });

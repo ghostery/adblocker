@@ -212,7 +212,7 @@ export default class ReverseIndex<T extends IFilter> {
     const bucket = this.index.get(token);
     if (bucket !== undefined) {
       bucket.hit += 1;
-      this.optimize(bucket);
+      // this.optimize(bucket);
 
       const filters = bucket.filters;
       for (let k = 0; k < filters.length; k += 1) {

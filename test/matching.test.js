@@ -1,7 +1,5 @@
-import {} from 'jest';
-
 import matchCosmeticFilter from '../src/matching/cosmetics';
-import matchNetworkFilter from '../src/matching/network';
+import matchNetworkFilter, { isAnchoredByHostname } from '../src/matching/network';
 
 import { f } from '../src/parsing/list';
 import { processRawRequest } from '../src/request/raw';
@@ -48,12 +46,103 @@ expect.extend({
   },
 });
 
+describe('#isAnchoredByHostname', () => {
+  it('matches empty hostname', () => {
+    expect(isAnchoredByHostname('', 'foo.com')).toBeTruthy();
+  });
+
+  it('does not match when filter hostname is longer than hostname', () => {
+    expect(isAnchoredByHostname('bar.foo.com', 'foo.com')).toBeFalsy();
+    expect(isAnchoredByHostname('b', '')).toBeFalsy();
+    expect(isAnchoredByHostname('foo.com', 'foo.co')).toBeFalsy();
+  });
+
+  it('does not match if there is not match', () => {
+    expect(isAnchoredByHostname('bar', 'foo.com')).toBeFalsy();
+  });
+
+  describe('prefix match', () => {
+    it('matches exact match', () => {
+      expect(isAnchoredByHostname('', '')).toBeTruthy();
+      expect(isAnchoredByHostname('f', 'f')).toBeTruthy();
+      expect(isAnchoredByHostname('foo', 'foo')).toBeTruthy();
+      expect(isAnchoredByHostname('foo.com', 'foo.com')).toBeTruthy();
+      expect(isAnchoredByHostname('.com', '.com')).toBeTruthy();
+      expect(isAnchoredByHostname('com.', 'com.')).toBeTruthy();
+    });
+
+    it('matches partial', () => {
+      // Single label
+      expect(isAnchoredByHostname('foo', 'foo.com')).toBeTruthy();
+      expect(isAnchoredByHostname('foo.', 'foo.com')).toBeTruthy();
+      expect(isAnchoredByHostname('.foo', '.foo.com')).toBeTruthy();
+      expect(isAnchoredByHostname('.foo.', '.foo.com')).toBeTruthy();
+
+      // Multiple labels
+      expect(isAnchoredByHostname('foo.com', 'foo.com.')).toBeTruthy();
+      expect(isAnchoredByHostname('foo.com.', 'foo.com.')).toBeTruthy();
+      expect(isAnchoredByHostname('.foo.com.', '.foo.com.')).toBeTruthy();
+      expect(isAnchoredByHostname('.foo.com', '.foo.com')).toBeTruthy();
+
+      expect(isAnchoredByHostname('foo.bar', 'foo.bar.com')).toBeTruthy();
+      expect(isAnchoredByHostname('foo.bar.', 'foo.bar.com')).toBeTruthy();
+    });
+
+    it('does not match partial prefix', () => {
+      // Single label
+      expect(isAnchoredByHostname('foo', 'foobar.com')).toBeFalsy();
+      expect(isAnchoredByHostname('fo', 'foo.com')).toBeFalsy();
+      expect(isAnchoredByHostname('.foo', 'foobar.com')).toBeFalsy();
+
+      // Multiple labels
+      expect(isAnchoredByHostname('foo.bar', 'foo.barbaz.com')).toBeFalsy();
+      expect(isAnchoredByHostname('.foo.bar', '.foo.barbaz.com')).toBeFalsy();
+    });
+  });
+
+  describe('suffix match', () => {
+    it('matches partial', () => {
+      // Single label
+      expect(isAnchoredByHostname('com', 'foo.com')).toBeTruthy();
+      expect(isAnchoredByHostname('.com', 'foo.com')).toBeTruthy();
+      expect(isAnchoredByHostname('.com.', 'foo.com.')).toBeTruthy();
+      expect(isAnchoredByHostname('com.', 'foo.com.')).toBeTruthy();
+
+      // Multiple labels
+      expect(isAnchoredByHostname('foo.com.', '.foo.com.')).toBeTruthy();
+      expect(isAnchoredByHostname('foo.com', '.foo.com')).toBeTruthy();
+    });
+
+    it('does not match partial', () => {
+      // Single label
+      expect(isAnchoredByHostname('om', 'foo.com')).toBeFalsy();
+      expect(isAnchoredByHostname('com', 'foocom')).toBeFalsy();
+
+      // Multiple labels
+      expect(isAnchoredByHostname('foo.bar.com', 'baz.bar.com')).toBeFalsy();
+      expect(isAnchoredByHostname('fo.bar.com', 'foo.bar.com')).toBeFalsy();
+      expect(isAnchoredByHostname('.fo.bar.com', 'foo.bar.com')).toBeFalsy();
+      expect(isAnchoredByHostname('bar.com', 'foobar.com')).toBeFalsy();
+      expect(isAnchoredByHostname('.bar.com', 'foobar.com')).toBeFalsy();
+    });
+  });
+
+  describe('infix match', () => {
+    it('matches partial', () => {
+      expect(isAnchoredByHostname('bar', 'foo.bar.com')).toBeTruthy();
+      expect(isAnchoredByHostname('bar.', 'foo.bar.com')).toBeTruthy();
+      expect(isAnchoredByHostname('.bar.', 'foo.bar.com')).toBeTruthy();
+    });
+  });
+});
+
 describe('#matchNetworkFilter', () => {
   it('pattern', () => {
     expect(f`foo`).toMatchRequest({ url: 'https://bar.com/foo' });
     expect(f`foo`).toMatchRequest({ url: 'https://bar.com/baz/foo' });
     expect(f`foo`).toMatchRequest({ url: 'https://bar.com/q=foo/baz' });
     expect(f`foo`).toMatchRequest({ url: 'https://foo.com' });
+    expect(f`-foo-`).toMatchRequest({ url: 'https://bar.com/baz/42-foo-q' });
     expect(f`&fo.o=+_-`).toMatchRequest({ url: 'https://bar.com?baz=42&fo.o=+_-' });
     expect(f`foo/bar/baz`).toMatchRequest({ url: 'https://bar.com/foo/bar/baz' });
     expect(f`com/bar/baz`).toMatchRequest({ url: 'https://bar.com/bar/baz' });
@@ -121,6 +210,10 @@ describe('#matchNetworkFilter', () => {
     expect(f`||foo.com^*/bar`).not.toMatchRequest({ url: 'https://foo.com/bar' });
     expect(f`||com^*/bar`).not.toMatchRequest({ url: 'https://foo.com/bar' });
     expect(f`||foo^*/bar`).not.toMatchRequest({ url: 'https://foo.com/bar' });
+
+    // @see https://github.com/cliqz-oss/adblocker/issues/29
+    expect(f`||foo.co^aaa/`).not.toMatchRequest({ url: 'https://bar.foo.com/bbb/aaa/' });
+    expect(f`||foo.com^aaa/`).not.toMatchRequest({ url: 'https://bar.foo.com/bbb/aaa/' });
 
     expect(f`||com*^bar`).toMatchRequest({ url: 'https://foo.com/bar' });
     expect(f`||foo.com^bar`).toMatchRequest({ url: 'https://foo.com/bar' });

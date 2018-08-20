@@ -1,7 +1,6 @@
-import {} from 'jest';
 import { compactTokens, hasEmptyIntersection, mergeCompactSets } from '../src/compact-set';
 
-function a(strings) {
+function a(strings: TemplateStringsArray) {
   const str = strings.raw[0];
   const array = new Uint32Array(str.length);
   for (let i = 0; i < str.length; i += 1) {
