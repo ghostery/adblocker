@@ -248,15 +248,19 @@ export default class FilterEngine {
 
     // Optimize ahead of time if asked for
     if (this.optimizeAOT) {
-      this.filters.optimizeAheadOfTime();
-      this.exceptions.optimizeAheadOfTime();
-      this.importants.optimizeAheadOfTime();
-      this.redirects.optimizeAheadOfTime();
-      // Cosmetic bucket does not expose any optimization yet.
-      // this.cosmetics.optimizeAheadOfTime();
+      this.optimize();
     }
 
     return serialized;
+  }
+
+  public optimize() {
+    this.filters.optimizeAheadOfTime();
+    this.exceptions.optimizeAheadOfTime();
+    this.importants.optimizeAheadOfTime();
+    this.redirects.optimizeAheadOfTime();
+    // Cosmetic bucket does not expose any optimization yet.
+    // this.cosmetics.optimizeAheadOfTime();
   }
 
   public getCosmeticsFilters(hostname: string, nodes: string[][]) {
