@@ -5,6 +5,8 @@ function fetchResource(url: string): Promise<string> {
 }
 
 const defaultLists = [
+  'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
+  'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
   'https://easylist.to/easylist/easylist.txt',
   'https://easylist.to/easylist/easyprivacy.txt',
   'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',

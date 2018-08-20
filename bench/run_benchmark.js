@@ -7,8 +7,10 @@ const { parse } = require('tldjs');
 
 const lists = [
   'https://easylist.to/easylist/easylist.txt',
-  // 'assets/easylist.to/easylistgermany/easylistgermany.txt',
-  // 'assets/easylist-downloads.adblockplus.org/antiadblockfilters.txt',
+
+  // 'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
+  // 'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
+  // 'https://easylist.to/easylist/easylist.txt',
   // 'https://easylist.to/easylist/easyprivacy.txt',
   // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
   // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
