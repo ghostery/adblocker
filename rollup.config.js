@@ -7,9 +7,9 @@ import sourcemaps from 'rollup-plugin-sourcemaps';
 import babel from 'rollup-plugin-babel';
 import babelrc from 'babelrc-rollup';
 
-const namedExports = {
-  'tldjs/index.js': [ 'parse', 'getPublicSuffix' ],
-};
+// const namedExports = {
+//   'tldjs/index.js': [ 'parse', 'getPublicSuffix' ],
+// };
 
 const plugins = [
   globals(),
@@ -25,14 +25,14 @@ const plugins = [
 
   commonjs({
     extensions: ['.js', '.json'],
-    namedExports,
+    // namedExports,
   }),
 
   babel(babelrc({
     config: {
       babelrc: false,
       presets: [
-        "es2015",
+        'es2015',
       ],
     },
   })),

@@ -255,10 +255,11 @@ export default class FilterEngine {
   }
 
   public optimize() {
-    this.filters.optimizeAheadOfTime();
-    this.exceptions.optimizeAheadOfTime();
-    this.importants.optimizeAheadOfTime();
-    this.redirects.optimizeAheadOfTime();
+    // TODO: enable again and make sure it works
+    // this.filters.optimizeAheadOfTime();
+    // this.exceptions.optimizeAheadOfTime();
+    // this.importants.optimizeAheadOfTime();
+    // this.redirects.optimizeAheadOfTime();
     // Cosmetic bucket does not expose any optimization yet.
     // this.cosmetics.optimizeAheadOfTime();
   }

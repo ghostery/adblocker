@@ -1,12 +1,24 @@
 const { FilterOptions } = require('ad-block');
-const { parse } = require('tldjs');
-const { types, typesToBrave } = require('./utils');
+const { getHostname } = require('tldjs');
+const {
+  types, typesToBrave, createBraveClient, createEngine, loadRequests,
+} = require('./utils');
 
-function compareResults(engine, braveEngine, requests) {
+function compareResults(lists, resources) {
+  const { engine } = createEngine(lists, resources, {
+    loadCosmeticFilters: false,
+    loadNetworkFilters: true,
+    optimizeAOT: true,
+  });
+
+  const braveEngine = createBraveClient(lists);
+
+  const requests = loadRequests();
+
   const getBraveFilters = ({ cpt, sourceUrl, url }) => braveEngine.findMatchingFilters(
     url,
     typesToBrave[cpt] || FilterOptions.noFilterOption,
-    parse(sourceUrl).domain,
+    getHostname(sourceUrl),
   );
 
   const getFilters = (req) => {

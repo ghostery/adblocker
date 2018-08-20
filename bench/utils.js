@@ -1,4 +1,5 @@
 const { AdBlockClient, FilterOptions } = require('ad-block');
+const fs = require('fs');
 const adblocker = require('../adblocker.umd.js');
 
 const types = {
@@ -73,10 +74,22 @@ function createBraveClient(lists) {
 
 const NANOSECS_PER_SEC = 1e9;
 
+function loadRequests() {
+  const requestsPath = process.argv[process.argv.length - 1];
+  return fs.readFileSync(requestsPath, { encoding: 'utf-8' })
+    .split(/\n/g)
+    .map((line) => {
+      try { return JSON.parse(line); } catch (ex) { return null; }
+    })
+    .filter(r => r !== null);
+}
+
+
 module.exports = {
   createEngine,
   createBraveClient,
   types,
   typesToBrave,
   NANOSECS_PER_SEC,
+  loadRequests,
 };

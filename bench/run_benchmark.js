@@ -17,6 +17,8 @@
 // using a WebSocket. The adblocker would be running in the browser and
 // processing the requests + making the measurement. We could also compare this
 // with Node.js perf and output a summary.
+//
+// TODO: Update to tld.js next major version for perf boost
 
 const fs = require('fs');
 
@@ -24,7 +26,9 @@ const chalk = require('chalk');
 const Benchmark = require('benchmark');
 const fetch = require('cross-fetch');
 
-const { createEngine, createBraveClient, NANOSECS_PER_SEC } = require('./utils');
+const {
+  createEngine, createBraveClient, NANOSECS_PER_SEC, loadRequests,
+} = require('./utils');
 
 const {
   benchEngineCreation,
@@ -47,6 +51,7 @@ const {
   benchBraveMatching,
 } = require('./macro');
 
+const { compareResults } = require('./compare');
 
 function fetchResource(url) {
   return fetch(url).then(response => response.text());
@@ -72,16 +77,6 @@ async function loadLists() {
   };
 }
 
-
-function loadRequests() {
-  const requestsPath = process.argv[process.argv.length - 1];
-  return fs.readFileSync(requestsPath, { encoding: 'utf-8' })
-    .split(/\n/g)
-    .map((line) => {
-      try { return JSON.parse(line); } catch (ex) { return null; }
-    })
-    .filter(r => r !== null);
-}
 
 function triggerGC() {
   if (global.gc) {
@@ -261,12 +256,13 @@ function compareNumbers(name, {
   unit,
   moreIsBetter,
 }) {
-  const change = Math.floor(((number2 - number1) / number2) * 100.0);
+  const change = ((number2 - number1) / number2) * 100.0;
   const allowedChange = relativeMarginOfError1 + relativeMarginOfError2;
+  const multiplicator = (number2 / number1).toFixed(2);
 
   const nameOutput = chalk.yellow.bold(name);
-  const ok = () => console.log(`${chalk.black.bold.bgGreen('OK')} ${nameOutput} ${chalk.red(Math.floor(number1))} ~> ${chalk.green.bold(Math.floor(number2))} ${unit} (${change}%)`);
-  const notOk = () => console.log(`${chalk.yellow.bold.bgRed('FAIL')} ${nameOutput} ${chalk.green(Math.floor(number1))} ~> ${chalk.red.bold(Math.floor(number2))} ${unit} (${change}%)`);
+  const ok = () => console.log(`${chalk.black.bold.bgGreen('OK')} ${nameOutput} ${chalk.red(Math.floor(number1))} ~> ${chalk.green.bold(Math.floor(number2))} ${unit} (x${multiplicator})`);
+  const notOk = () => console.log(`${chalk.yellow.bold.bgRed('FAIL')} ${nameOutput} ${chalk.green(Math.floor(number1))} ~> ${chalk.red.bold(Math.floor(number2))} ${unit} (x${multiplicator})`);
   const neutral = () => console.log(`${chalk.black.bold.bgWhite('OK')} ${nameOutput} ${chalk.green.bold(Math.floor(number2))} ${unit}`);
 
   if (change > allowedChange) {
@@ -399,6 +395,9 @@ function compareBenchmarkResults(results1, results2) {
 async function main() {
   console.log('Get lists...');
   const { lists, resources } = await loadLists();
+
+  // TODO: enable with a flag
+  // compareResults(lists, resources);
 
   const benchmarkResults = {
     ...runMemoryBench(lists, resources),
