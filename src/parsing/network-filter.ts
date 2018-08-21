@@ -145,6 +145,8 @@ function parseDomainsOption(domains: string): Set<string> {
 //  - popunder
 //  - generichide
 //  - genericblock
+// 2. csp option: ||wikia.com^$csp=script-src 'self' * 'unsafe-inline' 'unsafe-eval'
+// 3. Replace `split` with `substr`
 export class NetworkFilter implements IFilter {
   public id: number;
   public mask: number;
@@ -404,7 +406,8 @@ export class NetworkFilter implements IFilter {
       return getBit(this.mask, mask);
     }
 
-    return true;
+    // If content type is not supported then we return false
+    return false;
   }
 
   public isFuzzy() {

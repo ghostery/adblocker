@@ -1,4 +1,4 @@
-const { getHostname } = require('tldjs');
+const { extractHostname } = require('tldjs');
 const { FilterOptions } = require('ad-block');
 
 const { types, typesToBrave } = require('./utils');
@@ -26,7 +26,7 @@ function benchBraveMatching({ braveEngine, requests }) {
     ({ cpt, sourceUrl, url }) => braveEngine.matches(
       url,
       typesToBrave[cpt] || FilterOptions.noFilterOption,
-      getHostname(sourceUrl),
+      extractHostname(sourceUrl),
     ),
     requests,
   );
@@ -41,7 +41,7 @@ function benchMatching({ engine, requests }) {
 
 function benchTldsBaseline({ requests }) {
   return benchMatchingImpl(
-    ({ url, sourceUrl }) => ((getHostname(url) || '').length + (getHostname(sourceUrl) || '').length) > 0,
+    ({ url, sourceUrl }) => ((extractHostname(url) || '').length + (extractHostname(sourceUrl) || '').length) > 0,
     requests,
   );
 }

@@ -289,8 +289,8 @@ export default class FilterEngine {
   ): {
     match: boolean,
     redirect?: string,
-    exception?: boolean,
-    filter?: string,
+    exception?: NetworkFilter,
+    filter?: NetworkFilter,
   } {
     if (!this.loadNetworkFilters) {
       return { match: false };
@@ -301,43 +301,33 @@ export default class FilterEngine {
     // context will be used during the matching in the engine.
     const request = processRawRequest(rawRequest);
 
-    let result: NetworkFilter | null = null;
-    let exception: NetworkFilter | null = null;
+    let filter: NetworkFilter | undefined;
+    let exception: NetworkFilter | undefined;
 
     // Check the filters in the following order:
     // 1. $important (not subject to exceptions)
     // 2. redirection ($redirect=resource)
     // 3. normal filters
     // 4. exceptions
-    result = this.importants.match(request);
+    filter = this.importants.match(request);
 
-    if (result === null) {
+    if (filter === undefined) {
       // Check if there is a redirect or a normal match
-      result = this.redirects.match(request);
-      if (result === null) {
-        result = this.filters.match(request);
+      filter = this.redirects.match(request);
+      if (filter === undefined) {
+        filter = this.filters.match(request);
       }
 
       // If we found something, check for exceptions
-      if (result !== null) {
+      if (filter !== undefined) {
         exception = this.exceptions.match(request);
-        if (exception !== null) {
-          result = null;
-        }
       }
     }
 
     // If there is a match
-    let filter;
-    if (result !== null) {
-      filter = result.toString();
-    } else if (exception !== null) {
-      filter = exception.toString();
-    }
-
-    if (result !== null) {
-      if (result.isRedirect()) {
-        const redirect = this.resources.get(result.getRedirect());
+    if (filter !== undefined) {
+      if (filter.isRedirect()) {
+        const redirect = this.resources.get(filter.getRedirect());
         if (redirect !== undefined) {
           const { data, contentType } = redirect;
           let dataUrl;
@@ -348,20 +338,23 @@ export default class FilterEngine {
           }
 
           return {
+            exception,
             filter,
             match: true,
             redirect: dataUrl.trim(),
           };
         } // TODO - else, throw an exception
       }
+
       return {
+        exception,
         filter,
         match: true,
       };
     }
 
     return {
-      exception: exception !== null,
+      exception,
       filter,
       match: false,
     };

@@ -32,8 +32,8 @@ export default class NetworkFilterBucket {
     this.index.optimizeAheadOfTime();
   }
 
-  public match(request: IRequest): NetworkFilter | null {
-    let match: NetworkFilter | null = null;
+  public match(request: IRequest): NetworkFilter | undefined {
+    let match: NetworkFilter | undefined;
 
     const checkMatch = (filter: NetworkFilter) => {
       if (matchNetworkFilter(filter, request)) {

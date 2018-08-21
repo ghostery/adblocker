@@ -7,9 +7,9 @@ import sourcemaps from 'rollup-plugin-sourcemaps';
 import babel from 'rollup-plugin-babel';
 import babelrc from 'babelrc-rollup';
 
-// const namedExports = {
-//   'tldjs/index.js': [ 'parse', 'getPublicSuffix' ],
-// };
+const namedExports = {
+  'tldjs/index.js': ['parse', 'getPublicSuffix', 'extractHostname'],
+};
 
 const plugins = [
   globals(),
@@ -25,7 +25,7 @@ const plugins = [
 
   commonjs({
     extensions: ['.js', '.json'],
-    // namedExports,
+    namedExports,
   }),
 
   babel(babelrc({

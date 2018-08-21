@@ -4,6 +4,9 @@ import matchNetworkFilter, { isAnchoredByHostname } from '../src/matching/networ
 import { f } from '../src/parsing/list';
 import { processRawRequest } from '../src/request/raw';
 
+// TODO add tests with positive match in parameters, fragment, etc. (all
+// possible parts of a URL).
+
 expect.extend({
   toMatchRequest(filter, request) {
     const processedRequest = processRawRequest({
@@ -15,32 +18,27 @@ expect.extend({
     const match = matchNetworkFilter(filter, processedRequest);
     if (match) {
       return {
-        message: () =>
-          `expected ${filter.toString()} to not match ${JSON.stringify(processedRequest)}`,
+        message: () => `expected ${filter.toString()} to not match ${JSON.stringify(processedRequest)}`,
         pass: true,
       };
     }
 
     return {
-      message: () =>
-        `expected ${filter.toString()} to match ${JSON.stringify(processedRequest)}`,
+      message: () => `expected ${filter.toString()} to match ${JSON.stringify(processedRequest)}`,
       pass: false,
     };
-
   },
   toMatchHostname(filter, hostname) {
     const match = matchCosmeticFilter(filter, hostname);
     if (match) {
       return {
-        message: () =>
-          `expected ${filter.toString()} to not match ${hostname}`,
+        message: () => `expected ${filter.toString()} to not match ${hostname}`,
         pass: true,
       };
     }
 
     return {
-      message: () =>
-        `expected ${filter.toString()} to match ${hostname}`,
+      message: () => `expected ${filter.toString()} to match ${hostname}`,
       pass: false,
     };
   },

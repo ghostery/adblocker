@@ -27,7 +27,7 @@ const Benchmark = require('benchmark');
 const fetch = require('cross-fetch');
 
 const {
-  createEngine, createBraveClient, NANOSECS_PER_SEC, loadRequests,
+  createEngine, createBraveClient, NANOSECS_PER_SEC, loadRequests, getFiltersFromLists,
 } = require('./utils');
 
 const {
@@ -63,15 +63,15 @@ async function loadLists() {
     lists: await Promise.all([
       'https://easylist.to/easylist/easylist.txt',
 
-      // 'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
-      // 'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
-      // 'https://easylist.to/easylist/easylist.txt',
+      'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
+      'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
+      'https://easylist.to/easylist/easylist.txt',
       // 'https://easylist.to/easylist/easyprivacy.txt',
-      // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
-      // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
+      'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
+      'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
       // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
-      // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
-      // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
+      'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
+      'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
     ].map(fetchResource)),
     resources: await fetchResource('https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt'),
   };
@@ -89,19 +89,6 @@ function triggerGC() {
 function getMemoryConsumption() {
   triggerGC();
   return process.memoryUsage().heapUsed / 1024 / 1024;
-}
-
-function getFiltersFromLists(lists) {
-  const filters = [];
-
-  for (let i = 0; i < lists.length; i += 1) {
-    const splitted = lists[i].split(/\n/g);
-    for (let j = 0; j < splitted.length; j += 1) {
-      filters.push(splitted[j]);
-    }
-  }
-
-  return filters;
 }
 
 
@@ -250,28 +237,24 @@ function runMemoryBench(lists, resources) {
 
 function compareNumbers(name, {
   number1,
-  relativeMarginOfError1,
   number2,
-  relativeMarginOfError2,
   unit,
   moreIsBetter,
 }) {
-  const change = ((number2 - number1) / number2) * 100.0;
-  const allowedChange = relativeMarginOfError1 + relativeMarginOfError2;
-  const multiplicator = (number2 / number1).toFixed(2);
+  const multiplicator = number2 / number1;
 
   const nameOutput = chalk.yellow.bold(name);
-  const ok = () => console.log(`${chalk.black.bold.bgGreen('OK')} ${nameOutput} ${chalk.red(Math.floor(number1))} ~> ${chalk.green.bold(Math.floor(number2))} ${unit} (x${multiplicator})`);
-  const notOk = () => console.log(`${chalk.yellow.bold.bgRed('FAIL')} ${nameOutput} ${chalk.green(Math.floor(number1))} ~> ${chalk.red.bold(Math.floor(number2))} ${unit} (x${multiplicator})`);
+  const ok = () => console.log(`${chalk.black.bold.bgGreen('OK')} ${nameOutput} ${chalk.red(Math.floor(number1))} ~> ${chalk.green.bold(Math.floor(number2))} ${unit} (x${multiplicator.toFixed(2)})`);
+  const notOk = () => console.log(`${chalk.yellow.bold.bgRed('FAIL')} ${nameOutput} ${chalk.green(Math.floor(number1))} ~> ${chalk.red.bold(Math.floor(number2))} ${unit} (x${multiplicator.toFixed(2)})`);
   const neutral = () => console.log(`${chalk.black.bold.bgWhite('OK')} ${nameOutput} ${chalk.green.bold(Math.floor(number2))} ${unit}`);
 
-  if (change > allowedChange) {
+  if (multiplicator > 1.001) {
     if (moreIsBetter) {
       ok();
     } else {
       notOk();
     }
-  } else if (change === 0) {
+  } else if (Math.abs(1.0 - multiplicator) <= 0.01) {
     neutral();
   } else if (moreIsBetter) {
     notOk();
@@ -283,18 +266,14 @@ function compareNumbers(name, {
 function compareMemoryResults(results1, results2) {
   compareNumbers('engineSerializedBytes', {
     number1: results1.engineSerializedBytes,
-    relativeMarginOfError1: 0.0,
     number2: results2.engineSerializedBytes,
-    relativeMarginOfError2: 0.0,
     unit: 'bytes',
     moreIsBetter: false,
   });
 
   compareNumbers('engineMemory', {
     number1: results1.engineMemory,
-    relativeMarginOfError1: 0.0,
     number2: results2.engineMemory,
-    relativeMarginOfError2: 0.0,
     unit: 'MB',
     moreIsBetter: false,
   });
@@ -302,9 +281,7 @@ function compareMemoryResults(results1, results2) {
   console.log();
   compareNumbers('Versus Brave Serialized', {
     number1: results2.braveEngineSerializedBytes,
-    relativeMarginOfError1: 0.0,
     number2: results2.engineSerializedBytes,
-    relativeMarginOfError2: 0.0,
     unit: 'bytes',
     moreIsBetter: false,
   });
@@ -315,9 +292,7 @@ function compareMacroBenchmarkResults(results1, results2) {
     if (results2[key] !== undefined) {
       compareNumbers(key, {
         number1: results1[key].opsPerSecond,
-        relativeMarginOfError1: results1[key].relativeMarginOfError,
         number2: results2[key].opsPerSecond,
-        relativeMarginOfError2: results2[key].relativeMarginOfError,
         unit: 'ops/sec',
         moreIsBetter: true,
       });
@@ -328,9 +303,7 @@ function compareMacroBenchmarkResults(results1, results2) {
   console.log();
   compareNumbers('Versus Brave Matching', {
     number1: results2.benchBraveMatching.opsPerSecond,
-    relativeMarginOfError1: results2.benchBraveMatching.relativeMarginOfError,
     number2: results2.benchMatching.opsPerSecond,
-    relativeMarginOfError2: results2.benchMatching.relativeMarginOfError,
     unit: 'ops/sec',
     moreIsBetter: true,
   });
@@ -341,9 +314,7 @@ function compareMicroBenchmarkResults(results1, results2) {
     if (results2[key] !== undefined) {
       compareNumbers(key, {
         number1: results1[key].opsPerSecond,
-        relativeMarginOfError1: results1[key].relativeMarginOfError,
         number2: results2[key].opsPerSecond,
-        relativeMarginOfError2: results2[key].relativeMarginOfError,
         unit: 'ops/sec',
         moreIsBetter: true,
       });
@@ -354,17 +325,13 @@ function compareMicroBenchmarkResults(results1, results2) {
   console.log();
   compareNumbers('Versus Brave Serialize', {
     number1: results2.benchBraveSerialize.opsPerSecond,
-    relativeMarginOfError1: results2.benchBraveSerialize.relativeMarginOfError,
     number2: results2.benchEngineSerialization.opsPerSecond,
-    relativeMarginOfError2: results2.benchEngineSerialization.relativeMarginOfError,
     unit: 'ops/sec',
     moreIsBetter: true,
   });
   compareNumbers('Versus Brave Deserialize', {
     number1: results2.benchBraveDeserialize.opsPerSecond,
-    relativeMarginOfError1: results2.benchBraveDeserialize.relativeMarginOfError,
     number2: results2.benchEngineDeserialization.opsPerSecond,
-    relativeMarginOfError2: results2.benchEngineDeserialization.relativeMarginOfError,
     unit: 'ops/sec',
     moreIsBetter: true,
   });
@@ -397,7 +364,8 @@ async function main() {
   const { lists, resources } = await loadLists();
 
   // TODO: enable with a flag
-  // compareResults(lists, resources);
+  compareResults(lists, resources);
+  return;
 
   const benchmarkResults = {
     ...runMemoryBench(lists, resources),
