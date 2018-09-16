@@ -10,7 +10,7 @@ import { processRawRequest } from '../src/request/raw';
 expect.extend({
   toMatchRequest(filter, request) {
     const processedRequest = processRawRequest({
-      cpt: 6,
+      cpt: 2,
       sourceUrl: '',
       url: '',
       ...request,

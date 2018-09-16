@@ -1,67 +1,47 @@
-import builtins from 'rollup-plugin-node-builtins';
-import commonjs from 'rollup-plugin-commonjs';
-import globals from 'rollup-plugin-node-globals';
-import json from 'rollup-plugin-json';
-import nodeResolve from 'rollup-plugin-node-resolve';
-import sourcemaps from 'rollup-plugin-sourcemaps';
-import babel from 'rollup-plugin-babel';
-import babelrc from 'babelrc-rollup';
-
-const namedExports = {
-  'tldjs/index.js': ['parse', 'getPublicSuffix', 'extractHostname'],
-};
+import resolve from 'rollup-plugin-node-resolve';
 
 const plugins = [
-  globals(),
-  builtins(),
-  sourcemaps(),
-  json(),
-
-  nodeResolve({
+  resolve({
+    module: true,
     jsnext: true,
-    main: true,
-    browser: true,
+    main: false,
+    preferBuiltins: false,
+    modulesOnly: true,
   }),
-
-  commonjs({
-    extensions: ['.js', '.json'],
-    namedExports,
-  }),
-
-  babel(babelrc({
-    config: {
-      babelrc: false,
-      presets: [
-        'es2015',
-      ],
-    },
-  })),
 ];
 
 export default [
   {
-    input: './build/es6/index-cosmetics.js',
+    input: './build/index-cosmetics.js',
     output: {
-      file: 'adblocker-cosmetics.umd.js',
+      file: './dist/adblocker-cosmetics.umd.js',
       name: 'adblocker',
       format: 'umd',
     },
     plugins,
   },
   {
-    input: './build/es6/index-matching.js',
+    input: './build/index-matching.js',
     output: {
-      file: 'pattern-matching.es',
+      file: './dist/pattern-matching.es',
       format: 'es',
     },
     plugins,
   },
   {
-    input: './build/es6/index.js',
+    input: './build/index.js',
     output: {
-      file: 'adblocker.umd.js',
+      file: './dist/adblocker.umd.js',
       name: 'adblocker',
       format: 'umd',
+    },
+    plugins,
+  },
+  {
+    input: './build/index.js',
+    output: {
+      file: './dist/adblocker.es.js',
+      format: 'es',
     },
     plugins,
   },

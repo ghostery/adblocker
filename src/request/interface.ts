@@ -20,7 +20,7 @@ export function mkRequest({
   domain = '',
   sourceHostname = '',
   sourceDomain = '',
-  cpt = 6 },
+  cpt = 6 } = {},
 ): IRequest {
   return {
     cpt,

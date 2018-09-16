@@ -1,5 +1,5 @@
 const { FilterOptions } = require('ad-block');
-const { extractHostname } = require('tldjs');
+const { getHostname } = require('tldts');
 const adblocker = require('../adblocker.umd.js');
 const {
   types, typesToBrave, createBraveClient, createEngine, loadRequests, getFiltersFromLists,
@@ -33,7 +33,7 @@ function compareResults(lists, resources) {
   // const getBraveFilters = ({ cpt, sourceUrl, url }) => braveEngine.findMatchingFilters(
   //   url,
   //   typesToBrave[cpt] || FilterOptions.noFilterOption,
-  //   extractHostname(sourceUrl),
+  //   getHostname(sourceUrl),
   // );
 
   const getFilters = (req) => {

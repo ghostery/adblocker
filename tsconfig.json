@@ -1,38 +1,22 @@
 {
   "compilerOptions": {
-    "types": ["jest", "chrome", "jsdom", "es6-promise"],
-    "outDir": "build",
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "importHelpers": true,
+    "declaration": true,
+    "declarationDir": "dist",
+    "types": ["jest", "chrome", "node", "tldts"],
     "target": "ES6",
-    "newLine": "lf",
-    "allowJs": true,
-    "strict": true,
-    "suppressImplicitAnyIndexErrors": true,
+    "lib": ["ES6", "DOM"],
+    "moduleResolution": "Node",
+    "removeComments": true,
+    "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
+    "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "pretty": true,
-    "sourceMap": true,
-    "noImplicitAny": true,
-    "removeComments": true
+    "strict": true
   },
-  "exclude": [
-    "node_modules",
-    "build"
-  ],
   "files": [
     "./index.ts",
     "./index-cosmetics.ts",
-    "./index-matching.ts",
-    "test/engine.test.ts",
-    "test/injection.test.ts",
-    "test/matching.test.js",
-    "test/parsing.test.ts",
-    "test/serialization.test.ts",
-    "test/utils.js",
-    "test/data/requests.js",
-    "test/utils.test.ts"
+    "./index-matching.ts"
   ]
 }

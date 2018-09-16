@@ -74,7 +74,11 @@ const FROM_ANY: number =
  * Map content type value to mask the corresponding mask.
  * ref: https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIContentPolicy
  */
-const CPT_TO_MASK = {
+interface IDict {
+  [s: string]: number;
+}
+
+const CPT_TO_MASK: IDict = {
   1: NETWORK_FILTER_MASK.fromOther,
   2: NETWORK_FILTER_MASK.fromScript,
   3: NETWORK_FILTER_MASK.fromImage,

@@ -1,4 +1,3 @@
-
 const WS_OPEN = 1;
 const socket = new WebSocket('ws://localhost:3000');
 let messages = [];
@@ -37,11 +36,15 @@ chrome.webRequest.onBeforeRequest.addListener(
     }
 
     sendMessageToCollector({
+      ts: details.timeStamp,
+      method: details.method,
+      frameId: details.frameId,
       cpt: details.type,
       sourceUrl: source,
       url: details.url,
-    })
+      body: details.requestBody,
+    });
   },
   { urls: ['*://*/*'] },
-  [],
+  ['requestBody'],
 );
