@@ -1,5 +1,5 @@
 const { AdBlockClient } = require('ad-block');
-const adblocker = require('../adblocker.umd');
+const adblocker = require('../dist/adblocker.umd.min.js');
 const { createEngine, createBraveClient } = require('./utils');
 
 

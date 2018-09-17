@@ -1,6 +1,6 @@
 const { AdBlockClient, FilterOptions } = require('ad-block');
 const fs = require('fs');
-const adblocker = require('../adblocker.umd.js');
+const adblocker = require('../dist/adblocker.umd.min.js');
 
 const types = {
   // maps string (web-ext) to int (FF cpt)

@@ -57,6 +57,7 @@ expect.extend({
   },
 });
 
+// TODO - put that in utils
 interface Dict {
   [s: string]: number;
 }
@@ -84,25 +85,6 @@ const types: Dict = {
   xmlhttprequest: 11,
   xslt: 18,
 };
-
-it('against list of requests', () => {
-  requests.forEach(({ filter, exception, cpt, sourceUrl, url }) => {
-    let networkFilter;
-    if (filter !== undefined) {
-      networkFilter = parseNetworkFilter(filter);
-    } else if (exception !== undefined) {
-      networkFilter = parseNetworkFilter(exception);
-    }
-
-    expect(networkFilter).not.toBeUndefined();
-    expect(networkFilter).not.toBeNull();
-    expect(networkFilter).toMatchRequest({
-      cpt: types[cpt],
-      sourceUrl,
-      url,
-    });
-  });
-});
 
 describe('#isAnchoredByHostname', () => {
   it('matches empty hostname', () => {
@@ -195,6 +177,25 @@ describe('#isAnchoredByHostname', () => {
 });
 
 describe('#matchNetworkFilter', () => {
+  it('against list of requests', () => {
+    requests.forEach(({ filter, exception, cpt, sourceUrl, url }) => {
+      let networkFilter;
+      if (filter !== undefined) {
+        networkFilter = parseNetworkFilter(filter);
+      } else if (exception !== undefined) {
+        networkFilter = parseNetworkFilter(exception);
+      }
+
+      expect(networkFilter).not.toBeUndefined();
+      expect(networkFilter).not.toBeNull();
+      expect(networkFilter).toMatchRequest({
+        cpt: types[cpt],
+        sourceUrl,
+        url,
+      });
+    });
+  });
+
   it('pattern', () => {
     expect(f`foo`).toMatchRequest({ url: 'https://bar.com/foo' });
     expect(f`foo`).toMatchRequest({ url: 'https://bar.com/baz/foo' });
@@ -213,6 +214,8 @@ describe('#matchNetworkFilter', () => {
     expect(f`foo/bar$fuzzy`).toMatchRequest({ url: 'https://bar.com/foo/baz' });
     expect(f`foo bar$fuzzy`).toMatchRequest({ url: 'https://bar.com/foo/baz' });
     expect(f`foo bar baz$fuzzy`).toMatchRequest({ url: 'http://bar.foo.baz' });
+
+    expect(f`foo bar baz 42$fuzzy`).not.toMatchRequest({ url: 'http://bar.foo.baz' });
   });
 
   it('||pattern', () => {
@@ -235,6 +238,9 @@ describe('#matchNetworkFilter', () => {
     expect(f`||bar.foo/baz$fuzzy`).toMatchRequest({ url: 'http://bar.foo/id/baz' });
     expect(f`||bar.foo/baz$fuzzy`).toMatchRequest({ url: 'http://bar.foo?id=42&baz=1' });
     expect(f`||foo.com/id bar$fuzzy`).toMatchRequest({ url: 'http://foo.com?bar&id=42' });
+
+    expect(f`||bar.com/id bar$fuzzy`).not.toMatchRequest({ url: 'http://foo.com?bar&id=42' });
+    expect(f`||bar.com/id bar baz foo 42 id$fuzzy`).not.toMatchRequest({ url: 'http://foo.com?bar&id=42' });
   });
 
   it('||pattern|', () => {
@@ -243,6 +249,7 @@ describe('#matchNetworkFilter', () => {
 
     expect(f`||foo.com/bar|`).not.toMatchRequest({ url: 'https://foo.com/bar/baz' });
     expect(f`||foo.com/bar|`).not.toMatchRequest({ url: 'https://foo.com/' });
+    expect(f`||bar.com/bar|`).not.toMatchRequest({ url: 'https://foo.com/' });
   });
 
   it('pattern|', () => {
@@ -292,6 +299,29 @@ describe('#matchNetworkFilter', () => {
     expect(f`||*com/bar`).toMatchRequest({ url: 'https://foo.com/bar' });
     expect(f`||*com*/bar`).toMatchRequest({ url: 'https://foo.com/bar' });
     expect(f`||*com*^bar`).toMatchRequest({ url: 'https://foo.com/bar' });
+  });
+
+  it('options', () => {
+    // cpt test
+    expect(f`||foo$image`).toMatchRequest({ url: 'https://foo.com/bar', cpt: types.image });
+    expect(f`||foo$image`).not.toMatchRequest({ url: 'https://foo.com/bar', cpt: types.script });
+    expect(f`||foo$~image`).toMatchRequest({ url: 'https://foo.com/bar', cpt: types.script });
+
+    // ~third-party
+    expect(f`||foo$~third-party`).toMatchRequest({ url: 'https://foo.com/bar', sourceUrl: 'http://baz.foo.com' });
+    expect(f`||foo$~third-party`).not.toMatchRequest({ url: 'https://foo.com/bar', sourceUrl: 'http://baz.bar.com' });
+
+    // ~first-party
+    expect(f`||foo$~first-party`).toMatchRequest({ url: 'https://foo.com/bar', sourceUrl: 'http://baz.bar.com' });
+    expect(f`||foo$~first-party`).not.toMatchRequest({ url: 'https://foo.com/bar', sourceUrl: 'http://baz.foo.com' });
+
+    // opt-domain
+    expect(f`||foo$domain=foo.com`).toMatchRequest({ url: 'https://foo.com/bar', sourceUrl: 'http://foo.com' });
+    expect(f`||foo$domain=foo.com`).not.toMatchRequest({ url: 'https://foo.com/bar', sourceUrl: 'http://bar.com' });
+
+    // opt-not-domain
+    expect(f`||foo$domain=~bar.com`).toMatchRequest({ url: 'https://foo.com/bar', sourceUrl: 'http://foo.com' });
+    expect(f`||foo$domain=~bar.com`).not.toMatchRequest({ url: 'https://foo.com/bar', sourceUrl: 'http://bar.com' });
   });
 });
 

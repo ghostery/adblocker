@@ -13,7 +13,7 @@ function btoaPolyfill(buffer: string): string {
   if (typeof btoa !== 'undefined') {
     return btoa(buffer);
   } else if (typeof Buffer !== 'undefined') {
-    return new Buffer(buffer).toString('base64');
+    return Buffer.from(buffer).toString('base64');
   }
   return buffer;
 }

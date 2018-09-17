@@ -1,6 +1,6 @@
 const { FilterOptions } = require('ad-block');
 const { getHostname } = require('tldts');
-const adblocker = require('../adblocker.umd.js');
+const adblocker = require('../dist/adblocker.umd.min.js');
 const {
   types, typesToBrave, createBraveClient, createEngine, loadRequests, getFiltersFromLists,
 } = require('./utils');
