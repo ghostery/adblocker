@@ -2,23 +2,17 @@
 // * real engine creation + network request benchmark with (server streaming data + launchers):
 //    * node.js launcher
 //    * browser launcher (webextension: Chromium + Firefox)
-//    * node.js Brave launcher
 // Everything could be launched from a single runners (taking options?). This
 // would dump a report which would be easy to inspect by a human (and also to
 // automatically detect regressions?) -> it would be dumped on disk then only
 // overwritten any time there is no regression of more than N%? (Or no
 // regression at all)
 //
-// TODO
-// * Output statistics about the benchmark as well as memory usage
-//
 // TODO: We could make it possible to run the benchmark in any browser
 // supporting webextension by running it with Selenium, then streaming the data
 // using a WebSocket. The adblocker would be running in the browser and
 // processing the requests + making the measurement. We could also compare this
 // with Node.js perf and output a summary.
-//
-// TODO: Update to tld.js next major version for perf boost
 
 const fs = require('fs');
 
@@ -27,7 +21,10 @@ const Benchmark = require('benchmark');
 const fetch = require('cross-fetch');
 
 const {
-  createEngine, createBraveClient, NANOSECS_PER_SEC, loadRequests, getFiltersFromLists,
+  NANOSECS_PER_SEC,
+  createEngine,
+  getFiltersFromLists,
+  loadRequests,
 } = require('./utils');
 
 const {
@@ -39,16 +36,11 @@ const {
   benchCosmeticsFiltersParsing,
   benchStringHashing,
   benchStringTokenize,
-
-  benchBraveDeserialize,
-  benchBraveSerialize,
-  // benchBraveEngineCreation,
 } = require('./micro');
 
 const {
   benchTldsBaseline,
   benchMatching,
-  benchBraveMatching,
 } = require('./macro');
 
 // const { compareResults } = require('./compare');
@@ -66,10 +58,10 @@ async function loadLists() {
       // 'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
       // 'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
       // 'https://easylist.to/easylist/easylist.txt',
-      // // 'https://easylist.to/easylist/easyprivacy.txt',
+      // 'https://easylist.to/easylist/easyprivacy.txt',
       // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
       // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
-      // // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
+      // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
       // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
       // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
     ].map(fetchResource)),
@@ -104,21 +96,16 @@ function runMacroBenchmarks(lists, resources) {
     optimizeAOT: true,
   });
 
-  console.log('Creating Brave engine...');
-  const braveEngine = createBraveClient(lists);
-
   const results = {};
 
   [
     benchTldsBaseline,
     benchMatching,
-    benchBraveMatching,
   ].forEach((bench) => {
     triggerGC();
     const t0 = process.hrtime();
     bench({
       engine,
-      braveEngine,
       requests,
     });
     const diff = process.hrtime(t0);
@@ -148,10 +135,6 @@ function runMicroBenchmarks(lists, resources) {
     optimizeAOT: true,
   }, true /* Also serialize engine */);
 
-  // Create Brave engine to use in benchmark
-  const braveEngine = createBraveClient(lists);
-  const serializedBraveEngine = braveEngine.serialize();
-
   const filters = getFiltersFromLists(lists);
   const results = {};
 
@@ -162,8 +145,6 @@ function runMicroBenchmarks(lists, resources) {
     engine,
     filters,
     serialized,
-    braveEngine,
-    serializedBraveEngine,
   };
 
   [
@@ -175,14 +156,6 @@ function runMicroBenchmarks(lists, resources) {
     benchEngineCreation,
     benchEngineDeserialization,
     benchEngineSerialization,
-
-    benchBraveDeserialize,
-    benchBraveSerialize,
-
-    // NOTE: this is a bit slow but probably not very relevant as
-    // serialization/deserialization is very fast and is likely used in
-    // production.
-    // benchBraveEngineCreation,
   ].forEach((bench) => {
     const suite = new Benchmark.Suite();
     suite.add(bench.name, () => bench(args)).on('cycle', (event) => {
@@ -202,7 +175,6 @@ function runMicroBenchmarks(lists, resources) {
       numImportantFilters: engine.importants.size,
       numRedirectFilters: engine.redirects.size,
     },
-    braveEngineStats: braveEngine.getParsingStats(),
     microBenchmarks: results,
   };
 }
@@ -211,7 +183,7 @@ function runMicroBenchmarks(lists, resources) {
 function runMemoryBench(lists, resources) {
   console.log('Run memory bench...');
   // Create adb engine to use in benchmark
-  let baseMemory = getMemoryConsumption();
+  const baseMemory = getMemoryConsumption();
   // eslint-disable-next-line no-unused-vars
   const { engine, serialized } = createEngine(lists, resources, {
     loadCosmeticFilters: true,
@@ -220,19 +192,10 @@ function runMemoryBench(lists, resources) {
   }, true /* Also serialize engine */);
   const engineMemory = getMemoryConsumption() - baseMemory;
 
-  // Create Brave engine to use in benchmark
-  baseMemory = getMemoryConsumption();
-  const braveEngine = createBraveClient(lists);
-  const braveEngineMemory = getMemoryConsumption() - baseMemory;
-
-  const serializedBraveEngine = braveEngine.serialize();
-
   return {
     memory: {
       engineSerializedBytes: serialized.byteLength,
       engineMemory,
-      braveEngineSerializedBytes: serializedBraveEngine.byteLength,
-      braveEngineMemory,
     },
   };
 }
@@ -280,14 +243,6 @@ function compareMemoryResults(results1, results2) {
     unit: 'MB',
     moreIsBetter: false,
   });
-
-  console.log();
-  compareNumbers('Versus Brave Serialized', {
-    number1: results2.braveEngineSerializedBytes,
-    number2: results2.engineSerializedBytes,
-    unit: 'bytes',
-    moreIsBetter: false,
-  });
 }
 
 function compareMacroBenchmarkResults(results1, results2) {
@@ -301,15 +256,6 @@ function compareMacroBenchmarkResults(results1, results2) {
       });
     }
   });
-
-  // Versus Brave
-  console.log();
-  compareNumbers('Versus Brave Matching', {
-    number1: results2.benchBraveMatching.opsPerSecond,
-    number2: results2.benchMatching.opsPerSecond,
-    unit: 'ops/sec',
-    moreIsBetter: true,
-  });
 }
 
 function compareMicroBenchmarkResults(results1, results2) {
@@ -322,21 +268,6 @@ function compareMicroBenchmarkResults(results1, results2) {
         moreIsBetter: true,
       });
     }
-  });
-
-  // Versus Brave
-  console.log();
-  compareNumbers('Versus Brave Serialize', {
-    number1: results2.benchBraveSerialize.opsPerSecond,
-    number2: results2.benchEngineSerialization.opsPerSecond,
-    unit: 'ops/sec',
-    moreIsBetter: true,
-  });
-  compareNumbers('Versus Brave Deserialize', {
-    number1: results2.benchBraveDeserialize.opsPerSecond,
-    number2: results2.benchEngineDeserialization.opsPerSecond,
-    unit: 'ops/sec',
-    moreIsBetter: true,
   });
 }
 

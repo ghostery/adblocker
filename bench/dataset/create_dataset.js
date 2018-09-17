@@ -1,9 +1,4 @@
-
-
-// TODO
-// 1. Take as input a list of domains to visit (e.g.: Alexa top N)
-// 2. Visit each domain's homepage, saving all requests made (using custom webextension?)
-// 3. Retrieve all requests and dump into a file
+#!/usr/bin/env node
 
 const fs = require('fs');
 const chrome = require('selenium-webdriver/chrome');
@@ -36,7 +31,7 @@ function zipWebExtension(extensionPath) {
   });
 }
 
-function createRequestStream(outputFile = 'requests.json') {
+function createRequestStream() {
   class RequestStreamer extends stream.Readable {
     constructor(options) {
       super(options);
@@ -74,7 +69,7 @@ function createRequestStream(outputFile = 'requests.json') {
       try { this.push(null); } catch (ex) { /* Ignore */ }
     }
 
-    _read(size) { /* Do nothing?*/ }
+    _read() { /* Do nothing? */ }
   }
 
   return new RequestStreamer();
@@ -141,10 +136,10 @@ async function collectDataset(domains) {
     try {
       urlsInPage = (await Promise.all(
         (await driver.findElements(webdriver.By.tagName('a')))
-        .map(e => e.getAttribute('href'))
+          .map(e => e.getAttribute('href')),
       )).filter(href => Boolean(href) && href.includes(domain));
     } catch (ex) {
-      console.log('Coult not extra links')
+      console.log('Coult not extra links');
     }
 
     if (urlsInPage.length === 0) {
@@ -171,7 +166,7 @@ async function collectDataset(domains) {
     const domain = domains[i];
     try {
       // Visit home page of domain
-      console.log(`Home page: ${domain}`)
+      console.log(`Home page: ${domain}`);
       const linksOnPage = await visitUrl({ domain });
 
       // Visit N random URLs from the page

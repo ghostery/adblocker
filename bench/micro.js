@@ -1,6 +1,5 @@
-const { AdBlockClient } = require('ad-block');
 const adblocker = require('../dist/adblocker.umd.min.js');
-const { createEngine, createBraveClient } = require('./utils');
+const { createEngine } = require('./utils');
 
 
 function benchEngineCreation({ lists, resources }) {
@@ -67,20 +66,6 @@ function benchNetworkFiltersParsing({ lists }) {
   });
 }
 
-function benchBraveEngineCreation({ lists }) {
-  return createBraveClient(lists);
-}
-
-function benchBraveSerialize({ braveEngine }) {
-  return braveEngine.serialize();
-}
-
-function benchBraveDeserialize({ serializedBraveEngine }) {
-  const braveEngine = new AdBlockClient();
-  braveEngine.deserialize(serializedBraveEngine);
-  return braveEngine;
-}
-
 
 module.exports = {
   benchCosmeticsFiltersParsing,
@@ -92,8 +77,4 @@ module.exports = {
   benchStringHashing,
   benchStringTokenize,
 
-  // Brave micro-benchmarks
-  benchBraveDeserialize,
-  benchBraveSerialize,
-  benchBraveEngineCreation,
 };

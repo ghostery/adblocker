@@ -1,7 +1,7 @@
 const { getHostname } = require('tldts');
-const { FilterOptions } = require('ad-block');
 
-const { types, typesToBrave } = require('./utils');
+const { types } = require('./utils');
+
 
 function benchMatchingImpl(match, requests) {
   let dummy = 0;
@@ -21,23 +21,13 @@ function benchMatchingImpl(match, requests) {
 }
 
 
-function benchBraveMatching({ braveEngine, requests }) {
-  return benchMatchingImpl(
-    ({ cpt, sourceUrl, url }) => braveEngine.matches(
-      url,
-      typesToBrave[cpt] || FilterOptions.noFilterOption,
-      getHostname(sourceUrl || ''),
-    ),
-    requests,
-  );
-}
-
 function benchMatching({ engine, requests }) {
   return benchMatchingImpl(
     req => engine.match(req).match,
     requests,
   );
 }
+
 
 function benchTldsBaseline({ requests }) {
   return benchMatchingImpl(
@@ -46,8 +36,8 @@ function benchTldsBaseline({ requests }) {
   );
 }
 
+
 module.exports = {
   benchMatching,
-  benchBraveMatching,
   benchTldsBaseline,
 };

@@ -1,4 +1,3 @@
-const { AdBlockClient, FilterOptions } = require('ad-block');
 const fs = require('fs');
 const adblocker = require('../dist/adblocker.umd.min.js');
 
@@ -27,25 +26,6 @@ const types = {
 };
 
 
-const typesToBrave = {
-  font: FilterOptions.font,
-  image: FilterOptions.image,
-  imageset: FilterOptions.image,
-  main_frame: FilterOptions.document,
-  media: FilterOptions.media,
-  object: FilterOptions.object,
-  object_subrequest: FilterOptions.objectSubrequest,
-  other: FilterOptions.other,
-  ping: FilterOptions.ping,
-  script: FilterOptions.script,
-  stylesheet: FilterOptions.stylesheet,
-  sub_frame: FilterOptions.subdocument,
-  websocket: FilterOptions.websocket,
-  xbl: FilterOptions.xbl,
-  xmlhttprequest: FilterOptions.xmlHttpRequest,
-};
-
-
 function createEngine(lists, resources, options = {}, serialize = false) {
   const engine = new adblocker.FiltersEngine({
     ...options,
@@ -65,12 +45,6 @@ function createEngine(lists, resources, options = {}, serialize = false) {
   };
 }
 
-
-function createBraveClient(lists) {
-  const client = new AdBlockClient();
-  client.parse(lists.join('\n'));
-  return client;
-}
 
 const NANOSECS_PER_SEC = 1e9;
 
@@ -101,9 +75,7 @@ function getFiltersFromLists(lists) {
 
 module.exports = {
   createEngine,
-  createBraveClient,
   types,
-  typesToBrave,
   NANOSECS_PER_SEC,
   loadRequests,
   getFiltersFromLists,
