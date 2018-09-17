@@ -21,24 +21,6 @@ var ReverseIndex = (function () {
         }
         this.iterBucket(0, cb);
     };
-    ReverseIndex.prototype.report = function () {
-        var sizes = new Map();
-        var strResult = '';
-        this.index.forEach(function (bucket, token) {
-            var filters = bucket.filters;
-            sizes.set(filters.length, (sizes.get(filters.length) || 0) + 1);
-            if (length > 5) {
-                strResult = strResult.concat("adblocker size bucket \"" + token + "\" => " + filters.length + "\n");
-                filters.forEach(function (f) {
-                    strResult = strResult.concat("    " + f.toString() + " " + f.mask + "\n");
-                });
-            }
-        });
-        sizes.forEach(function (count, size) {
-            strResult = strResult.concat("adblocker sizes " + size + " => " + count + " buckets\n");
-        });
-        return strResult;
-    };
     ReverseIndex.prototype.optimizeAheadOfTime = function () {
         var _this = this;
         if (this.optimizer) {

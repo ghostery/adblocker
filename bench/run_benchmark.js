@@ -51,7 +51,7 @@ const {
   benchBraveMatching,
 } = require('./macro');
 
-const { compareResults } = require('./compare');
+// const { compareResults } = require('./compare');
 
 function fetchResource(url) {
   return fetch(url).then(response => response.text());
@@ -63,15 +63,15 @@ async function loadLists() {
     lists: await Promise.all([
       'https://easylist.to/easylist/easylist.txt',
 
-      'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
-      'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
-      'https://easylist.to/easylist/easylist.txt',
-      // 'https://easylist.to/easylist/easyprivacy.txt',
-      'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
-      'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
-      // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
-      'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
-      'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
+      // 'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
+      // 'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
+      // 'https://easylist.to/easylist/easylist.txt',
+      // // 'https://easylist.to/easylist/easyprivacy.txt',
+      // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
+      // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
+      // // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
+      // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
+      // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
     ].map(fetchResource)),
     resources: await fetchResource('https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt'),
   };
@@ -93,6 +93,7 @@ function getMemoryConsumption() {
 
 
 function runMacroBenchmarks(lists, resources) {
+  console.log('Run macro bench...');
   console.log('Loading requests...');
   const requests = loadRequests();
 
@@ -139,6 +140,7 @@ function runMacroBenchmarks(lists, resources) {
  * Micro benchmarks are a set of benchmarks measuring specific aspects of the library
  */
 function runMicroBenchmarks(lists, resources) {
+  console.log('Run micro bench...');
   // Create adb engine to use in benchmark
   const { engine, serialized } = createEngine(lists, resources, {
     loadCosmeticFilters: true,
@@ -207,6 +209,7 @@ function runMicroBenchmarks(lists, resources) {
 
 
 function runMemoryBench(lists, resources) {
+  console.log('Run memory bench...');
   // Create adb engine to use in benchmark
   let baseMemory = getMemoryConsumption();
   // eslint-disable-next-line no-unused-vars
@@ -363,10 +366,7 @@ async function main() {
   console.log('Get lists...');
   const { lists, resources } = await loadLists();
 
-  // TODO: enable with a flag
-  compareResults(lists, resources);
-  return;
-
+  console.log('Run Benchmark...');
   const benchmarkResults = {
     ...runMemoryBench(lists, resources),
     ...runMicroBenchmarks(lists, resources),

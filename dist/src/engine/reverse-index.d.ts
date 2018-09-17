@@ -15,7 +15,6 @@ export default class ReverseIndex<T extends IFilter> {
     private getTokens;
     constructor(filters: (cb: (f: T) => void) => void, getTokens: (filter: T) => number[][], { enableOptimizations, optimizer, }?: Partial<IOptions<T>>);
     iterMatchingFilters(tokens: number[], cb: (f: T) => boolean): void;
-    report(): string;
     optimizeAheadOfTime(): void;
     private addFilters;
     private optimize;

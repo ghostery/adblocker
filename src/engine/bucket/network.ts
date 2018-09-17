@@ -27,10 +27,6 @@ export default class NetworkFilterBucket {
     this.size = this.index.size;
   }
 
-  public report() {
-    return this.index.report();
-  }
-
   public optimizeAheadOfTime() {
     this.index.optimizeAheadOfTime();
   }

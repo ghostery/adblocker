@@ -26,7 +26,7 @@ function benchBraveMatching({ braveEngine, requests }) {
     ({ cpt, sourceUrl, url }) => braveEngine.matches(
       url,
       typesToBrave[cpt] || FilterOptions.noFilterOption,
-      getHostname(sourceUrl),
+      getHostname(sourceUrl || ''),
     ),
     requests,
   );
@@ -41,7 +41,7 @@ function benchMatching({ engine, requests }) {
 
 function benchTldsBaseline({ requests }) {
   return benchMatchingImpl(
-    ({ url, sourceUrl }) => ((getHostname(url) || '').length + (getHostname(sourceUrl) || '').length) > 0,
+    ({ url, sourceUrl }) => ((getHostname(url || '') || '').length + (getHostname(sourceUrl || '') || '').length) > 0,
     requests,
   );
 }

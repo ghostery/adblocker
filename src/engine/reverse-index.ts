@@ -91,36 +91,6 @@ export default class ReverseIndex<T extends IFilter> {
   }
 
   /**
-   * Returns a report (string) of bucket sizes to be printed on the console.
-   * This is mainly designed for debugging purposes.
-   */
-  public report(): string {
-    const sizes: Map<number, number> = new Map();
-    // Report size of buckets
-    let strResult = '';
-    this.index.forEach((bucket, token) => {
-      const filters = bucket.filters;
-      sizes.set(filters.length, (sizes.get(filters.length) || 0) + 1);
-      if (length > 5) {
-        strResult = strResult.concat(
-          `adblocker size bucket "${token}" => ${filters.length}\n`,
-        );
-        filters.forEach((f) => {
-          strResult = strResult.concat(`    ${f.toString()} ${f.mask}\n`);
-        });
-      }
-    });
-
-    sizes.forEach((count, size) => {
-      strResult = strResult.concat(
-        `adblocker sizes ${size} => ${count} buckets\n`,
-      );
-    });
-
-    return strResult;
-  }
-
-  /**
    * Force optimization of all buckets.
    */
   public optimizeAheadOfTime(): void {
