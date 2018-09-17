@@ -1,4 +1,5 @@
 import { CosmeticFilter } from '../parsing/cosmetic-filter';
+import IFilter from '../parsing/interface';
 import { parseJSResource, parseList } from '../parsing/list';
 import { NetworkFilter } from '../parsing/network-filter';
 import { IRawRequest, processRawRequest } from '../request/raw';
@@ -18,48 +19,30 @@ function btoaPolyfill(buffer: string): string {
   return buffer;
 }
 
-/**
- * Append all elements of `array` to the end of `target`.
- *
- * Example:
- * >>> extend([1, 2, 3], [4, 5, 6, 7])
- *  [1, 2, 3, 4, 5, 6, 7]
- */
-function extend<T>(target: T[], array: T[]): T[] {
-  for (let i = 0; i < array.length; i += 1) {
-    target.push(array[i]);
-  }
-  return target;
+// tslint:disable-next-line variable-name
+function noopIter<T extends IFilter>(_cb: (f: T) => void): void {
+  // no-op
 }
 
-function collectAllFilters(lists: Map<string, IList>): {
-  filters: NetworkFilter[];
-  exceptions: NetworkFilter[];
-  redirects: NetworkFilter[];
-  importants: NetworkFilter[];
-  cosmetics: CosmeticFilter[];
-} {
-  const filters: NetworkFilter[] = [];
-  const exceptions: NetworkFilter[] = [];
-  const redirects: NetworkFilter[] = [];
-  const importants: NetworkFilter[] = [];
-  const cosmetics: CosmeticFilter[] = [];
-
-  lists.forEach((list) => {
-    extend(filters, list.filters);
-    extend(exceptions, list.exceptions);
-    extend(importants, list.importants);
-    extend(redirects, list.redirects);
-    extend(cosmetics, list.cosmetics);
+function iterFilters<F extends IFilter>(
+  lists: Map<string, IList>,
+  select: (l: IList) => F[],
+  cb: (f: F) => void,
+): void {
+  lists.forEach((list: IList) => {
+    const filters: F[] = select(list);
+    for (let i = 0; i < filters.length; i += 1) {
+      cb(filters[i]);
+    }
   });
+}
 
-  return {
-    cosmetics,
-    exceptions,
-    filters,
-    importants,
-    redirects,
-  };
+interface IOptions {
+  loadCosmeticFilters: boolean;
+  loadNetworkFilters: boolean;
+  optimizeAOT: boolean;
+  enableOptimizations: boolean;
+  version: number;
 }
 
 export default class FilterEngine {
@@ -81,44 +64,35 @@ export default class FilterEngine {
   public loadCosmeticFilters: boolean;
   public loadNetworkFilters: boolean;
   public optimizeAOT: boolean;
+  public enableOptimizations: boolean;
 
   constructor({
-    loadCosmeticFilters,
-    loadNetworkFilters,
-    optimizeAOT,
+    enableOptimizations = true,
+    loadCosmeticFilters = true,
+    loadNetworkFilters = true,
+    optimizeAOT = true,
     version,
-  }: {
-    loadCosmeticFilters: boolean,
-    loadNetworkFilters: boolean,
-    optimizeAOT: boolean,
-    version: number,
-  }) {
+  }: IOptions) {
     // Options
     this.loadCosmeticFilters = loadCosmeticFilters;
     this.loadNetworkFilters = loadNetworkFilters;
     this.optimizeAOT = optimizeAOT;
+    this.enableOptimizations = enableOptimizations;
     this.version = version;
 
     this.lists = new Map();
+    this.size = 0;
 
     // @@filter
-    this.exceptions = new NetworkFilterBucket('exceptions');
+    this.exceptions = new NetworkFilterBucket('exceptions', noopIter);
     // $important
-    this.importants = new NetworkFilterBucket('importants');
+    this.importants = new NetworkFilterBucket('importants', noopIter);
     // $redirect
-    this.redirects = new NetworkFilterBucket('redirects');
+    this.redirects = new NetworkFilterBucket('redirects', noopIter);
     // All other filters
-    this.filters = new NetworkFilterBucket('filters');
+    this.filters = new NetworkFilterBucket('filters', noopIter);
     // Cosmetic filters
-    this.cosmetics = new CosmeticFilterBucket();
-
-    this.size = (
-      this.exceptions.size +
-      this.importants.size +
-      this.redirects.size +
-      this.cosmetics.size +
-      this.filters.size
-    );
+    this.cosmetics = new CosmeticFilterBucket(noopIter);
 
     // Injections
     this.resourceChecksum = '';
@@ -165,7 +139,7 @@ export default class FilterEngine {
 
   public onUpdateFilters(
     lists: Array<{ filters: string; checksum: string; asset: string }>,
-    loadedAssets: Set<string>,
+    loadedAssets: Set<string> = new Set(),
     onDiskCache: boolean = false,
     debug: boolean = false,
   ): Uint8Array | null {
@@ -226,19 +200,31 @@ export default class FilterEngine {
     }
 
     // Re-create all buckets
-    const allFilters = collectAllFilters(this.lists);
-
-    this.filters = new NetworkFilterBucket('filters', allFilters.filters);
+    this.filters = new NetworkFilterBucket(
+      'filters',
+      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, l => l.filters, cb),
+      this.enableOptimizations,
+    );
     this.exceptions = new NetworkFilterBucket(
       'exceptions',
-      allFilters.exceptions,
+      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, l => l.exceptions, cb),
+      this.enableOptimizations,
     );
     this.importants = new NetworkFilterBucket(
       'importants',
-      allFilters.importants,
+      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, l => l.importants, cb),
+      this.enableOptimizations,
     );
-    this.redirects = new NetworkFilterBucket('redirects', allFilters.redirects);
-    this.cosmetics = new CosmeticFilterBucket(allFilters.cosmetics);
+    this.redirects = new NetworkFilterBucket(
+      'redirects',
+      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, l => l.redirects, cb),
+      this.enableOptimizations,
+    );
+
+    // Eagerly collect filters in this case only
+    this.cosmetics = new CosmeticFilterBucket(
+      (cb: (f: CosmeticFilter) => void) => iterFilters(this.lists, l => l.cosmetics, cb),
+    );
 
     // Update size
     this.size = (
@@ -264,11 +250,10 @@ export default class FilterEngine {
   }
 
   public optimize() {
-    // TODO: enable again and make sure it works
-    // this.filters.optimizeAheadOfTime();
-    // this.exceptions.optimizeAheadOfTime();
-    // this.importants.optimizeAheadOfTime();
-    // this.redirects.optimizeAheadOfTime();
+    this.filters.optimizeAheadOfTime();
+    this.exceptions.optimizeAheadOfTime();
+    this.importants.optimizeAheadOfTime();
+    this.redirects.optimizeAheadOfTime();
     // Cosmetic bucket does not expose any optimization yet.
     // this.cosmetics.optimizeAheadOfTime();
   }

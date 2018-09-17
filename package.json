@@ -24,8 +24,8 @@
     "watch": "tsc -p . --module ES6 --outDir build --watch",
     "bundle": "rollup -c rollup.config.js && google-closure-compiler --js=./dist/adblocker.umd.js --js_output_file=./dist/adblocker.umd.min.js",
     "pretest": "npm run lint",
-    "test": "jest --coverage",
-    "dev": "jest --watch"
+    "test": "jest --coverage --no-cache ./test/",
+    "dev": "jest --watch ./test/"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.73",
@@ -44,7 +44,7 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
     "google-closure-compiler": "^20180805.0.0",
-    "jest": "^23.5.0",
+    "jest": "^23.6.0",
     "jsdom": "^11.12.0",
     "rollup": "^0.64.1",
     "rollup-plugin-node-resolve": "^3.3.0",

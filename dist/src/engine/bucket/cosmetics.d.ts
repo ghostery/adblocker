@@ -4,7 +4,7 @@ export default class CosmeticFilterBucket {
     hostnameIndex: ReverseIndex<CosmeticFilter>;
     selectorIndex: ReverseIndex<CosmeticFilter>;
     size: number;
-    constructor(filters?: CosmeticFilter[]);
+    constructor(filters: (cb: (f: CosmeticFilter) => void) => void);
     createContentScriptResponse(rules: CosmeticFilter[]): {
         active: boolean;
         blockedScripts: string[];

@@ -5,7 +5,7 @@ export default class NetworkFilterBucket {
     name: string;
     index: ReverseIndex<NetworkFilter>;
     size: number;
-    constructor(name: string, filters?: NetworkFilter[]);
+    constructor(name: string, filters: (cb: (f: NetworkFilter) => void) => void, enableOptimizations?: boolean);
     report(): string;
     optimizeAheadOfTime(): void;
     match(request: IRequest): NetworkFilter | undefined;

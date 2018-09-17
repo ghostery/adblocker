@@ -3,6 +3,13 @@ import { IRawRequest } from '../request/raw';
 import CosmeticFilterBucket from './bucket/cosmetics';
 import NetworkFilterBucket from './bucket/network';
 import IList from './list';
+interface IOptions {
+    loadCosmeticFilters: boolean;
+    loadNetworkFilters: boolean;
+    optimizeAOT: boolean;
+    enableOptimizations: boolean;
+    version: number;
+}
 export default class FilterEngine {
     version: number;
     lists: Map<string, IList>;
@@ -21,12 +28,8 @@ export default class FilterEngine {
     loadCosmeticFilters: boolean;
     loadNetworkFilters: boolean;
     optimizeAOT: boolean;
-    constructor({ loadCosmeticFilters, loadNetworkFilters, optimizeAOT, version, }: {
-        loadCosmeticFilters: boolean;
-        loadNetworkFilters: boolean;
-        optimizeAOT: boolean;
-        version: number;
-    });
+    enableOptimizations: boolean;
+    constructor({ enableOptimizations, loadCosmeticFilters, loadNetworkFilters, optimizeAOT, version, }: IOptions);
     hasList(asset: string, checksum: string): boolean;
     onUpdateResource(updates: Array<{
         filters: string;
@@ -36,7 +39,7 @@ export default class FilterEngine {
         filters: string;
         checksum: string;
         asset: string;
-    }>, loadedAssets: Set<string>, onDiskCache?: boolean, debug?: boolean): Uint8Array | null;
+    }>, loadedAssets?: Set<string>, onDiskCache?: boolean, debug?: boolean): Uint8Array | null;
     optimize(): void;
     getCosmeticsFilters(hostname: string, nodes: string[][]): {
         active: boolean;
@@ -57,3 +60,4 @@ export default class FilterEngine {
         filter?: NetworkFilter;
     };
 }
+export {};

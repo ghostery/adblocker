@@ -177,8 +177,8 @@ describe('#isAnchoredByHostname', () => {
 });
 
 describe('#matchNetworkFilter', () => {
-  it('against list of requests', () => {
-    requests.forEach(({ filter, exception, cpt, sourceUrl, url }) => {
+  requests.forEach(({ filter, exception, cpt, sourceUrl, url }) => {
+    it(`${filter}, ${exception}, ${cpt}, ${url}, ${sourceUrl}`, () => {
       let networkFilter;
       if (filter !== undefined) {
         networkFilter = parseNetworkFilter(filter);

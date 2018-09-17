@@ -2221,6 +2221,7 @@
     function serializeEngine(engine) {
         var buffer = new DynamicDataView(4000000);
         buffer.pushUint8(engine.version);
+        buffer.pushUint8(Number(engine.enableOptimizations));
         buffer.pushUint8(Number(engine.loadCosmeticFilters));
         buffer.pushUint8(Number(engine.loadNetworkFilters));
         buffer.pushUint8(Number(engine.optimizeAOT));
@@ -2242,6 +2243,7 @@
             throw new Error('serialized engine version mismatch');
         }
         var options = {
+            enableOptimizations: Boolean(buffer.getUint8()),
             loadCosmeticFilters: Boolean(buffer.getUint8()),
             loadNetworkFilters: Boolean(buffer.getUint8()),
             optimizeAOT: Boolean(buffer.getUint8()),
@@ -2304,17 +2306,20 @@
         return { hostname: '' };
     }
 
-    function nope(arg) {
-        return arg;
+    function noop(filters) {
+        return filters;
     }
     var ReverseIndex = (function () {
         function ReverseIndex(filters, getTokens, _a) {
-            var _b = (_a === void 0 ? {} : _a).optimizer, optimizer = _b === void 0 ? nope : _b;
+            var _b = _a === void 0 ? {
+                enableOptimizations: true,
+                optimizer: noop
+            } : _a, _c = _b.enableOptimizations, enableOptimizations = _c === void 0 ? true : _c, _d = _b.optimizer, optimizer = _d === void 0 ? noop : _d;
             this.index = new Map();
             this.size = 0;
-            this.optimizer = optimizer;
+            this.optimizer = enableOptimizations ? optimizer : noop;
             this.getTokens = getTokens;
-            this.addFilters(filters || []);
+            this.addFilters(filters);
         }
         ReverseIndex.prototype.iterMatchingFilters = function (tokens, cb) {
             for (var j = 0; j < tokens.length; j += 1) {
@@ -2350,31 +2355,32 @@
                 });
             }
         };
-        ReverseIndex.prototype.addFilters = function (filters) {
-            var length = filters.length;
-            this.size = length;
+        ReverseIndex.prototype.addFilters = function (iterFilters) {
+            var _this = this;
             var idToTokens = new Map();
             var histogram = new Map();
-            for (var i = 0; i < filters.length; i += 1) {
-                var filter = filters[i];
-                var multiTokens = this.getTokens(filter);
-                idToTokens.set(filter.id, multiTokens);
-                for (var j = 0; j < multiTokens.length; j += 1) {
-                    var tokens = multiTokens[j];
-                    for (var k = 0; k < tokens.length; k += 1) {
-                        var token = tokens[k];
+            iterFilters(function (filter) {
+                var multiTokens = _this.getTokens(filter);
+                idToTokens.set(filter.id, {
+                    filter: filter,
+                    multiTokens: multiTokens
+                });
+                for (var i = 0; i < multiTokens.length; i += 1) {
+                    var tokens = multiTokens[i];
+                    for (var j = 0; j < tokens.length; j += 1) {
+                        var token = tokens[j];
                         histogram.set(token, (histogram.get(token) || 0) + 1);
                     }
                 }
-            }
-            for (var i = 0; i < filters.length; i += 1) {
+            });
+            this.size = idToTokens.size;
+            idToTokens.forEach(function (_a) {
+                var filter = _a.filter, multiTokens = _a.multiTokens;
                 var wildCardInserted = false;
-                var filter = filters[i];
-                var multiTokens = idToTokens.get(filter.id);
-                for (var j = 0; j < multiTokens.length; j += 1) {
-                    var tokens = multiTokens[j];
+                for (var i = 0; i < multiTokens.length; i += 1) {
+                    var tokens = multiTokens[i];
                     var bestToken = 0;
-                    var count = length;
+                    var count = idToTokens.size;
                     for (var k = 0; k < tokens.length; k += 1) {
                         var token = tokens[k];
                         var tokenCount = histogram.get(token);
@@ -2391,9 +2397,9 @@
                             wildCardInserted = true;
                         }
                     }
-                    var bucket = this.index.get(bestToken);
+                    var bucket = _this.index.get(bestToken);
                     if (bucket === undefined) {
-                        this.index.set(bestToken, {
+                        _this.index.set(bestToken, {
                             filters: [filter],
                             hit: 0,
                             optimized: false
@@ -2403,7 +2409,7 @@
                         bucket.filters.push(filter);
                     }
                 }
-            }
+            });
         };
         ReverseIndex.prototype.optimize = function (bucket, force) {
             if (force === void 0) { force = false; }
@@ -2418,6 +2424,7 @@
             var bucket = this.index.get(token);
             if (bucket !== undefined) {
                 bucket.hit += 1;
+                this.optimize(bucket);
                 var filters = bucket.filters;
                 for (var k = 0; k < filters.length; k += 1) {
                     if (cb(filters[k]) === false) {
@@ -2432,15 +2439,24 @@
 
     var CosmeticFilterBucket = (function () {
         function CosmeticFilterBucket(filters) {
-            if (filters === void 0) { filters = []; }
-            this.hostnameIndex = new ReverseIndex((filters || []).filter(function (f) { return f.hasHostnames(); }), function (filter) {
+            this.hostnameIndex = new ReverseIndex(function (cb) { return filters(function (f) {
+                if (f.hasHostnames()) {
+                    cb(f);
+                }
+            }); }, function (filter) {
                 var multiTokens = [];
                 filter.hostnames.split(',').forEach(function (h) {
                     multiTokens.push(tokenize(h));
                 });
                 return multiTokens;
             });
-            this.selectorIndex = new ReverseIndex((filters || []).filter(function (f) { return !(f.isScriptBlock() || f.isScriptInject()); }), function (filter) { return filter.getTokens(); }, {});
+            this.selectorIndex = new ReverseIndex(function (cb) { return filters(function (f) {
+                if (f.hasHostnames()) {
+                    if (!(f.isScriptBlock() || f.isScriptInject())) {
+                        cb(f);
+                    }
+                }
+            }); }, function (filter) { return filter.getTokens(); });
             this.size = this.hostnameIndex.size + this.selectorIndex.size;
         }
         CosmeticFilterBucket.prototype.createContentScriptResponse = function (rules) {
@@ -2735,189 +2751,94 @@
         }
         bucket.push(value);
     }
-    function optimize(filters) {
-        var fused = [];
-        var groupedByOption = new Map();
+    function groupBy(filters, criteria) {
+        var grouped = new Map();
         for (var i = 0; i < filters.length; i += 1) {
             var filter = filters[i];
-            var mask = filter.getMask();
-            setWithDefault(groupedByOption, mask, filter);
+            setWithDefault(grouped, criteria(filter), filter);
         }
-        groupedByOption.forEach(function (lst) {
-            var plainNoDomains = new Map();
-            var plainPatterns = new Map();
-            var regexPatterns = new Map();
-            for (var i = 0; i < lst.length; i += 1) {
-                var filter = lst[i];
-                if (filter.isPlain()) {
-                    if (!(filter.hasOptDomains() ||
-                        filter.hasOptNotDomains() ||
-                        filter.isHostname() ||
-                        filter.isHostnameAnchor())) {
-                        setWithDefault(plainNoDomains, "" + filter.redirect, filter);
+        return __spread(grouped.values());
+    }
+    function splitBy(filters, condition) {
+        var positive = [];
+        var negative = [];
+        for (var i = 0; i < filters.length; i += 1) {
+            var filter = filters[i];
+            if (condition(filter)) {
+                positive.push(filter);
+            }
+            else {
+                negative.push(filter);
+            }
+        }
+        return {
+            negative: negative,
+            positive: positive
+        };
+    }
+    var OPTIMIZATIONS = [
+        {
+            description: 'Group simple patterns, into a single filter',
+            fusion: function (filters) {
+                var filter = new NetworkFilter(filters[0]);
+                var patterns = new Set();
+                for (var i = 0; i < filters.length; i += 1) {
+                    var f = filters[i];
+                    if (f.isRegex()) {
+                        patterns.add(processRegex(f.getRegex()));
+                    }
+                    else if (f.isRightAnchor()) {
+                        patterns.add(escape$1(f.getFilter()) + "$");
+                    }
+                    else if (f.isLeftAnchor()) {
+                        patterns.add("^" + escape$1(f.getFilter()));
                     }
                     else {
-                        setWithDefault(plainPatterns, filter.getHostname() + "|||" + filter.getFilter() + "|||" + filter.redirect, filter);
+                        patterns.add(escape$1(f.getFilter()));
                     }
                 }
-                else if (!(filter.hasOptDomains() || filter.hasOptNotDomains())) {
-                    setWithDefault(plainNoDomains, "" + filter.redirect, filter);
+                if (patterns.size > 1) {
+                    filter.setRegex(new RegExp(__spread(patterns).join('|')));
                 }
-                else {
-                    setWithDefault(regexPatterns, filter.getHostname() + "|||" + filter.getRegex().source, filter);
-                }
-            }
-            plainNoDomains.forEach(function (bucket) {
-                if (bucket.length === 1) {
-                    fused.push(bucket[0]);
-                }
-                else {
-                    var filter = null;
-                    var patterns = new Set();
-                    for (var i = 0; i < bucket.length; i += 1) {
-                        var f = bucket[i];
-                        if (filter === null) {
-                            filter = new NetworkFilter(f);
-                        }
-                        if (f.isRegex()) {
-                            patterns.add(processRegex(f.getRegex()));
-                        }
-                        else if (f.isRightAnchor()) {
-                            patterns.add(escape$1(f.getFilter()) + "$");
-                        }
-                        else if (f.isLeftAnchor()) {
-                            patterns.add("^" + escape$1(f.getFilter()));
-                        }
-                        else {
-                            patterns.add(escape$1(f.getFilter()));
-                        }
-                    }
-                    if (filter !== null) {
-                        if (patterns.size > 1) {
-                            filter.setRegex(new RegExp(__spread(patterns).join('|')));
-                        }
-                        fused.push(filter);
-                    }
-                }
-            });
-            plainPatterns.forEach(function (bucket) {
-                if (bucket.length === 1) {
-                    fused.push(bucket[0]);
+                return filter;
+            },
+            groupByCriteria: function (filter) { return '' + filter.getMask(); },
+            select: function (filter) { return (!filter.isFuzzy() &&
+                !filter.hasOptDomains() &&
+                !filter.hasOptNotDomains() &&
+                !filter.isHostname() &&
+                !filter.isHostnameAnchor() &&
+                !filter.isRedirect()); }
+        },
+    ];
+    function optimize(filters) {
+        var fused = [];
+        var toFuse = filters;
+        OPTIMIZATIONS.forEach(function (_a) {
+            var select = _a.select, fusion = _a.fusion, groupByCriteria = _a.groupByCriteria;
+            var _b = splitBy(toFuse, select), positive = _b.positive, negative = _b.negative;
+            toFuse = negative;
+            groupBy(positive, groupByCriteria).forEach(function (group) {
+                if (group.length > 1) {
+                    fused.push(fusion(group));
                 }
                 else {
-                    var newFilterDomains = null;
-                    var optDomains_1 = new Set();
-                    var newFilterNotDomains = null;
-                    var optNotDomains_1 = new Set();
-                    var newFilter = null;
-                    for (var i = 0; i < bucket.length; i += 1) {
-                        var f = bucket[i];
-                        if (f.hasOptNotDomains()) {
-                            if (newFilterNotDomains === null) {
-                                newFilterNotDomains = new NetworkFilter(f);
-                                optNotDomains_1 = f.getOptNotDomains();
-                            }
-                            else {
-                                f.getOptNotDomains().forEach(function (d) { return optNotDomains_1.add(d); });
-                            }
-                        }
-                        else if (f.hasOptDomains()) {
-                            if (newFilterDomains === null) {
-                                newFilterDomains = new NetworkFilter(f);
-                                optDomains_1 = f.getOptDomains();
-                            }
-                            else {
-                                f.getOptDomains().forEach(function (d) { return optDomains_1.add(d); });
-                            }
-                        }
-                        else if (newFilter === null) {
-                            newFilter = new NetworkFilter(f);
-                        }
-                    }
-                    if (newFilter !== null) {
-                        fused.push(newFilter);
-                    }
-                    if (newFilterDomains !== null) {
-                        fused.push(newFilterDomains);
-                    }
-                    if (newFilterNotDomains !== null) {
-                        fused.push(newFilterNotDomains);
-                    }
-                }
-            });
-            regexPatterns.forEach(function (bucket) {
-                if (bucket.length === 1) {
-                    fused.push(bucket[0]);
-                }
-                else {
-                    var newFilterDomains = null;
-                    var newFilterDomainsRegex = new Set();
-                    var optDomains = new Set();
-                    var newFilterNotDomains = null;
-                    var optNotDomains = new Set();
-                    var newFilterNotDomainsRegex = new Set();
-                    var newFilter = null;
-                    var newFilterRegex = new Set();
-                    for (var i = 0; i < bucket.length; i += 1) {
-                        var f = bucket[i];
-                        if (f.hasOptNotDomains()) {
-                            if (newFilterNotDomains === null) {
-                                newFilterNotDomains = new NetworkFilter(f);
-                                optNotDomains = f.getOptNotDomains();
-                                newFilterNotDomainsRegex.add(processRegex(f.getRegex()));
-                            }
-                            else {
-                                f
-                                    .getOptNotDomains()
-                                    .forEach(optNotDomains.add.bind(optNotDomains));
-                                newFilterNotDomainsRegex.add(processRegex(f.getRegex()));
-                            }
-                        }
-                        else if (f.hasOptDomains()) {
-                            if (newFilterDomains === null) {
-                                newFilterDomains = new NetworkFilter(f);
-                                optDomains = f.getOptDomains();
-                                newFilterDomainsRegex.add(processRegex(f.getRegex()));
-                            }
-                            else {
-                                f.getOptDomains().forEach(optDomains.add.bind(optDomains));
-                                newFilterDomainsRegex.add(processRegex(f.getRegex()));
-                            }
-                        }
-                        else if (newFilter === null) {
-                            newFilter = new NetworkFilter(f);
-                            newFilterRegex.add(processRegex(f.getRegex()));
-                        }
-                        else {
-                            newFilterRegex.add(processRegex(f.getRegex()));
-                        }
-                    }
-                    if (newFilter !== null) {
-                        var fusedRegex = __spread(newFilterRegex).join('|');
-                        newFilter.setRegex(new RegExp(fusedRegex));
-                        fused.push(newFilter);
-                    }
-                    if (newFilterDomains !== null) {
-                        var fusedRegex = __spread(newFilterDomainsRegex).join('|');
-                        newFilterDomains.setRegex(new RegExp(fusedRegex));
-                        fused.push(newFilterDomains);
-                    }
-                    if (newFilterNotDomains !== null) {
-                        var fusedRegex = __spread(newFilterNotDomainsRegex).join('|');
-                        newFilterNotDomains.setRegex(new RegExp(fusedRegex));
-                        fused.push(newFilterNotDomains);
-                    }
+                    toFuse.push(group[0]);
                 }
             });
         });
+        for (var i = 0; i < toFuse.length; i += 1) {
+            fused.push(toFuse[i]);
+        }
         return fused;
     }
 
     var NetworkFilterBucket = (function () {
-        function NetworkFilterBucket(name, filters) {
-            if (filters === void 0) { filters = []; }
+        function NetworkFilterBucket(name, filters, enableOptimizations) {
+            if (enableOptimizations === void 0) { enableOptimizations = true; }
             this.name = name;
             this.index = new ReverseIndex(filters, function (filter) { return filter.getTokens(); }, {
+                enableOptimizations: enableOptimizations,
                 optimizer: optimize
             });
             this.size = this.index.size;
@@ -2948,55 +2869,35 @@
             return btoa(buffer);
         }
         else if (typeof Buffer !== 'undefined') {
-            return new Buffer(buffer).toString('base64');
+            return Buffer.from(buffer).toString('base64');
         }
         return buffer;
     }
-    function extend(target, array) {
-        for (var i = 0; i < array.length; i += 1) {
-            target.push(array[i]);
-        }
-        return target;
+    function noopIter(_cb) {
     }
-    function collectAllFilters(lists) {
-        var filters = [];
-        var exceptions = [];
-        var redirects = [];
-        var importants = [];
-        var cosmetics = [];
+    function iterFilters(lists, select, cb) {
         lists.forEach(function (list) {
-            extend(filters, list.filters);
-            extend(exceptions, list.exceptions);
-            extend(importants, list.importants);
-            extend(redirects, list.redirects);
-            extend(cosmetics, list.cosmetics);
+            var filters = select(list);
+            for (var i = 0; i < filters.length; i += 1) {
+                cb(filters[i]);
+            }
         });
-        return {
-            cosmetics: cosmetics,
-            exceptions: exceptions,
-            filters: filters,
-            importants: importants,
-            redirects: redirects
-        };
     }
     var FilterEngine = (function () {
         function FilterEngine(_a) {
-            var loadCosmeticFilters = _a.loadCosmeticFilters, loadNetworkFilters = _a.loadNetworkFilters, optimizeAOT = _a.optimizeAOT, version = _a.version;
+            var _b = _a.enableOptimizations, enableOptimizations = _b === void 0 ? true : _b, _c = _a.loadCosmeticFilters, loadCosmeticFilters = _c === void 0 ? true : _c, _d = _a.loadNetworkFilters, loadNetworkFilters = _d === void 0 ? true : _d, _e = _a.optimizeAOT, optimizeAOT = _e === void 0 ? true : _e, version = _a.version;
             this.loadCosmeticFilters = loadCosmeticFilters;
             this.loadNetworkFilters = loadNetworkFilters;
             this.optimizeAOT = optimizeAOT;
+            this.enableOptimizations = enableOptimizations;
             this.version = version;
             this.lists = new Map();
-            this.exceptions = new NetworkFilterBucket('exceptions');
-            this.importants = new NetworkFilterBucket('importants');
-            this.redirects = new NetworkFilterBucket('redirects');
-            this.filters = new NetworkFilterBucket('filters');
-            this.cosmetics = new CosmeticFilterBucket();
-            this.size = (this.exceptions.size +
-                this.importants.size +
-                this.redirects.size +
-                this.cosmetics.size +
-                this.filters.size);
+            this.size = 0;
+            this.exceptions = new NetworkFilterBucket('exceptions', noopIter);
+            this.importants = new NetworkFilterBucket('importants', noopIter);
+            this.redirects = new NetworkFilterBucket('redirects', noopIter);
+            this.filters = new NetworkFilterBucket('filters', noopIter);
+            this.cosmetics = new CosmeticFilterBucket(noopIter);
             this.resourceChecksum = '';
             this.js = new Map();
             this.resources = new Map();
@@ -3030,6 +2931,7 @@
         };
         FilterEngine.prototype.onUpdateFilters = function (lists, loadedAssets, onDiskCache, debug) {
             var _this = this;
+            if (loadedAssets === void 0) { loadedAssets = new Set(); }
             if (onDiskCache === void 0) { onDiskCache = false; }
             if (debug === void 0) { debug = false; }
             var updated = false;
@@ -3077,12 +2979,11 @@
                     redirects: redirects
                 });
             }
-            var allFilters = collectAllFilters(this.lists);
-            this.filters = new NetworkFilterBucket('filters', allFilters.filters);
-            this.exceptions = new NetworkFilterBucket('exceptions', allFilters.exceptions);
-            this.importants = new NetworkFilterBucket('importants', allFilters.importants);
-            this.redirects = new NetworkFilterBucket('redirects', allFilters.redirects);
-            this.cosmetics = new CosmeticFilterBucket(allFilters.cosmetics);
+            this.filters = new NetworkFilterBucket('filters', function (cb) { return iterFilters(_this.lists, function (l) { return l.filters; }, cb); }, this.enableOptimizations);
+            this.exceptions = new NetworkFilterBucket('exceptions', function (cb) { return iterFilters(_this.lists, function (l) { return l.exceptions; }, cb); }, this.enableOptimizations);
+            this.importants = new NetworkFilterBucket('importants', function (cb) { return iterFilters(_this.lists, function (l) { return l.importants; }, cb); }, this.enableOptimizations);
+            this.redirects = new NetworkFilterBucket('redirects', function (cb) { return iterFilters(_this.lists, function (l) { return l.redirects; }, cb); }, this.enableOptimizations);
+            this.cosmetics = new CosmeticFilterBucket(function (cb) { return iterFilters(_this.lists, function (l) { return l.cosmetics; }, cb); });
             this.size = (this.exceptions.size +
                 this.importants.size +
                 this.redirects.size +
@@ -3098,6 +2999,10 @@
             return serialized;
         };
         FilterEngine.prototype.optimize = function () {
+            this.filters.optimizeAheadOfTime();
+            this.exceptions.optimizeAheadOfTime();
+            this.importants.optimizeAheadOfTime();
+            this.redirects.optimizeAheadOfTime();
         };
         FilterEngine.prototype.getCosmeticsFilters = function (hostname, nodes) {
             if (!this.loadCosmeticFilters) {

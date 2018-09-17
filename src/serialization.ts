@@ -410,6 +410,8 @@ function serializeEngine(engine: Engine): Uint8Array {
   const buffer = new DynamicDataView(4000000);
 
   buffer.pushUint8(engine.version);
+
+  buffer.pushUint8(Number(engine.enableOptimizations));
   buffer.pushUint8(Number(engine.loadCosmeticFilters));
   buffer.pushUint8(Number(engine.loadNetworkFilters));
   buffer.pushUint8(Number(engine.optimizeAOT));
@@ -445,6 +447,7 @@ function deserializeEngine(serialized: Uint8Array, version: number): Engine {
 
   // Create a new engine with same options
   const options = {
+    enableOptimizations: Boolean(buffer.getUint8()),
     loadCosmeticFilters: Boolean(buffer.getUint8()),
     loadNetworkFilters: Boolean(buffer.getUint8()),
     optimizeAOT: Boolean(buffer.getUint8()),

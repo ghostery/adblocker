@@ -14,11 +14,16 @@ export default class NetworkFilterBucket {
   public index: ReverseIndex<NetworkFilter>;
   public size: number;
 
-  constructor(name: string, filters: NetworkFilter[] = []) {
+  constructor(name: string, filters: (cb: (f: NetworkFilter) => void) => void, enableOptimizations = true) {
     this.name = name;
-    this.index = new ReverseIndex(filters, (filter) => filter.getTokens(), {
-      optimizer: networkFiltersOptimizer,
-    });
+    this.index = new ReverseIndex<NetworkFilter>(
+      filters,
+      (filter: NetworkFilter) => filter.getTokens(),
+      {
+        enableOptimizations,
+        optimizer: networkFiltersOptimizer,
+      },
+    );
     this.size = this.index.size;
   }
 

@@ -1,14 +1,17 @@
-function nope(arg) {
-    return arg;
+function noop(filters) {
+    return filters;
 }
 var ReverseIndex = (function () {
     function ReverseIndex(filters, getTokens, _a) {
-        var _b = (_a === void 0 ? {} : _a).optimizer, optimizer = _b === void 0 ? nope : _b;
+        var _b = _a === void 0 ? {
+            enableOptimizations: true,
+            optimizer: noop
+        } : _a, _c = _b.enableOptimizations, enableOptimizations = _c === void 0 ? true : _c, _d = _b.optimizer, optimizer = _d === void 0 ? noop : _d;
         this.index = new Map();
         this.size = 0;
-        this.optimizer = optimizer;
+        this.optimizer = enableOptimizations ? optimizer : noop;
         this.getTokens = getTokens;
-        this.addFilters(filters || []);
+        this.addFilters(filters);
     }
     ReverseIndex.prototype.iterMatchingFilters = function (tokens, cb) {
         for (var j = 0; j < tokens.length; j += 1) {
@@ -44,31 +47,32 @@ var ReverseIndex = (function () {
             });
         }
     };
-    ReverseIndex.prototype.addFilters = function (filters) {
-        var length = filters.length;
-        this.size = length;
+    ReverseIndex.prototype.addFilters = function (iterFilters) {
+        var _this = this;
         var idToTokens = new Map();
         var histogram = new Map();
-        for (var i = 0; i < filters.length; i += 1) {
-            var filter = filters[i];
-            var multiTokens = this.getTokens(filter);
-            idToTokens.set(filter.id, multiTokens);
-            for (var j = 0; j < multiTokens.length; j += 1) {
-                var tokens = multiTokens[j];
-                for (var k = 0; k < tokens.length; k += 1) {
-                    var token = tokens[k];
+        iterFilters(function (filter) {
+            var multiTokens = _this.getTokens(filter);
+            idToTokens.set(filter.id, {
+                filter: filter,
+                multiTokens: multiTokens
+            });
+            for (var i = 0; i < multiTokens.length; i += 1) {
+                var tokens = multiTokens[i];
+                for (var j = 0; j < tokens.length; j += 1) {
+                    var token = tokens[j];
                     histogram.set(token, (histogram.get(token) || 0) + 1);
                 }
             }
-        }
-        for (var i = 0; i < filters.length; i += 1) {
+        });
+        this.size = idToTokens.size;
+        idToTokens.forEach(function (_a) {
+            var filter = _a.filter, multiTokens = _a.multiTokens;
             var wildCardInserted = false;
-            var filter = filters[i];
-            var multiTokens = idToTokens.get(filter.id);
-            for (var j = 0; j < multiTokens.length; j += 1) {
-                var tokens = multiTokens[j];
+            for (var i = 0; i < multiTokens.length; i += 1) {
+                var tokens = multiTokens[i];
                 var bestToken = 0;
-                var count = length;
+                var count = idToTokens.size;
                 for (var k = 0; k < tokens.length; k += 1) {
                     var token = tokens[k];
                     var tokenCount = histogram.get(token);
@@ -85,9 +89,9 @@ var ReverseIndex = (function () {
                         wildCardInserted = true;
                     }
                 }
-                var bucket = this.index.get(bestToken);
+                var bucket = _this.index.get(bestToken);
                 if (bucket === undefined) {
-                    this.index.set(bestToken, {
+                    _this.index.set(bestToken, {
                         filters: [filter],
                         hit: 0,
                         optimized: false
@@ -97,7 +101,7 @@ var ReverseIndex = (function () {
                     bucket.filters.push(filter);
                 }
             }
-        }
+        });
     };
     ReverseIndex.prototype.optimize = function (bucket, force) {
         if (force === void 0) { force = false; }
@@ -112,6 +116,7 @@ var ReverseIndex = (function () {
         var bucket = this.index.get(token);
         if (bucket !== undefined) {
             bucket.hit += 1;
+            this.optimize(bucket);
             var filters = bucket.filters;
             for (var k = 0; k < filters.length; k += 1) {
                 if (cb(filters[k]) === false) {
