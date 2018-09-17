@@ -72,6 +72,8 @@ export default class FilterEngine {
   public filters: NetworkFilterBucket;
   public cosmetics: CosmeticFilterBucket;
 
+  public size: number;
+
   public resourceChecksum: string;
   public js: Map<string, string>;
   public resources: Map<string, { contentType: string; data: string }>;
@@ -110,20 +112,18 @@ export default class FilterEngine {
     // Cosmetic filters
     this.cosmetics = new CosmeticFilterBucket();
 
-    // Injections
-    this.resourceChecksum = '';
-    this.js = new Map();
-    this.resources = new Map();
-  }
-
-  get size() {
-    return (
+    this.size = (
       this.exceptions.size +
       this.importants.size +
       this.redirects.size +
       this.cosmetics.size +
       this.filters.size
     );
+
+    // Injections
+    this.resourceChecksum = '';
+    this.js = new Map();
+    this.resources = new Map();
   }
 
   public hasList(asset: string, checksum: string): boolean {
@@ -239,6 +239,15 @@ export default class FilterEngine {
     );
     this.redirects = new NetworkFilterBucket('redirects', allFilters.redirects);
     this.cosmetics = new CosmeticFilterBucket(allFilters.cosmetics);
+
+    // Update size
+    this.size = (
+      this.exceptions.size +
+      this.importants.size +
+      this.redirects.size +
+      this.cosmetics.size +
+      this.filters.size
+    );
 
     // Serialize engine
     let serialized: Uint8Array | null = null;

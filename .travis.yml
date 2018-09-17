@@ -1,8 +1,9 @@
 sudo: false
 dist: trusty
 language: node_js
+
 node_js:
-  - 7
+  - 6
   - 8
   - 9
   - node
@@ -15,6 +16,9 @@ notifications:
   email:
     on_failure: change
 
+before_install:
+  - npm install -g npm@latest
+
 install:
   - npm ci
 
@@ -22,6 +26,8 @@ script:
   - npm run test
 
 before_deploy:
+  - npm run clean
+  - npm run build
   - npm run bundle
 
 deploy:

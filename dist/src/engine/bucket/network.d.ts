@@ -4,8 +4,8 @@ import ReverseIndex from '../reverse-index';
 export default class NetworkFilterBucket {
     name: string;
     index: ReverseIndex<NetworkFilter>;
+    size: number;
     constructor(name: string, filters?: NetworkFilter[]);
-    readonly size: number;
     report(): string;
     optimizeAheadOfTime(): void;
     match(request: IRequest): NetworkFilter | undefined;

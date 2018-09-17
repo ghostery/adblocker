@@ -7,6 +7,16 @@ import { processRawRequest } from '../src/request/raw';
 // TODO add tests with positive match in parameters, fragment, etc. (all
 // possible parts of a URL).
 
+// Extend jest Matchers with our custom `toMatchRequest` and `toMatchHostname`
+declare global {
+  namespace jest {
+    interface Matchers<R> {
+      toMatchRequest: (arg: any) => object;
+      toMatchHostname: (arg: any) => object;
+    }
+  }
+}
+
 expect.extend({
   toMatchRequest(filter, request) {
     const processedRequest = processRawRequest({

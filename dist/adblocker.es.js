@@ -1,37 +1,73 @@
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+function __spread() {
+    for (var ar = [], i = 0; i < arguments.length; i++)
+        ar = ar.concat(__read(arguments[i]));
+    return ar;
+}
+
 function injectCSSRule(rule, doc) {
-    const css = doc.createElement('style');
+    var css = doc.createElement('style');
     css.type = 'text/css';
     css.id = 'cliqz-adblokcer-css-rules';
-    const parent = doc.head || doc.documentElement;
+    var parent = doc.head || doc.documentElement;
     parent.appendChild(css);
     css.appendChild(doc.createTextNode(rule));
 }
 function injectScript(s, doc) {
-    const autoRemoveScript = `
-    try {
-      ${s}
-    } catch (ex) { }
-
-    (function() {
-      var currentScript = document.currentScript;
-      var parent = currentScript && currentScript.parentNode;
-
-      if (parent) {
-        parent.removeChild(currentScript);
-      }
-    })();
-  `;
-    const script = doc.createElement('script');
+    var autoRemoveScript = "\n    try {\n      " + s + "\n    } catch (ex) { }\n\n    (function() {\n      var currentScript = document.currentScript;\n      var parent = currentScript && currentScript.parentNode;\n\n      if (parent) {\n        parent.removeChild(currentScript);\n      }\n    })();\n  ";
+    var script = doc.createElement('script');
     script.type = 'text/javascript';
     script.id = 'cliqz-adblocker-script';
     script.appendChild(doc.createTextNode(autoRemoveScript));
-    const parent = doc.head || doc.documentElement;
+    var parent = doc.head || doc.documentElement;
     parent.appendChild(script);
 }
 function blockScript(filter, doc) {
-    const filterRE = new RegExp(filter);
-    doc.addEventListener('beforescriptexecute', ev => {
-        const target = ev.target;
+    var filterRE = new RegExp(filter);
+    doc.addEventListener('beforescriptexecute', function (ev) {
+        var target = ev.target;
         if (target.textContent && filterRE.test(target.textContent)) {
             ev.preventDefault();
             ev.stopPropagation();
@@ -39,15 +75,15 @@ function blockScript(filter, doc) {
     });
 }
 function overrideUserAgent() {
-    const script = () => {
+    var script = function () {
         Object.defineProperty(navigator, 'userAgent', {
-            get: () => 'Mozilla/5.0 Gecko Firefox',
+            get: function () { return 'Mozilla/5.0 Gecko Firefox'; }
         });
     };
-    injectScript(`(${script.toString()})()`, window.document);
+    injectScript("(" + script.toString() + ")()", window.document);
 }
-class CosmeticInjection {
-    constructor(window, backgroundAction) {
+var CosmeticInjection = (function () {
+    function CosmeticInjection(window, backgroundAction) {
         this.window = window;
         this.backgroundAction = backgroundAction;
         this.mutationObserver = null;
@@ -59,7 +95,7 @@ class CosmeticInjection {
         this.onMutation([{ target: this.window.document.body }]);
         this.startObserving();
     }
-    unload() {
+    CosmeticInjection.prototype.unload = function () {
         if (this.mutationObserver) {
             try {
                 this.mutationObserver.disconnect();
@@ -67,32 +103,33 @@ class CosmeticInjection {
             catch (e) {
             }
         }
-    }
-    handleResponseFromBackground({ active, scripts, blockedScripts, styles }) {
+    };
+    CosmeticInjection.prototype.handleResponseFromBackground = function (_a) {
+        var active = _a.active, scripts = _a.scripts, blockedScripts = _a.blockedScripts, styles = _a.styles;
         if (!active) {
             this.unload();
             return;
         }
-        for (let i = 0; i < scripts.length; i += 1) {
-            const script = scripts[i];
+        for (var i = 0; i < scripts.length; i += 1) {
+            var script = scripts[i];
             if (!this.injectedScripts.has(script)) {
                 injectScript(script, this.window.document);
                 this.injectedScripts.add(script);
             }
         }
-        for (let i = 0; i < blockedScripts.length; i += 1) {
-            const script = blockedScripts[i];
+        for (var i = 0; i < blockedScripts.length; i += 1) {
+            var script = blockedScripts[i];
             if (!this.blockedScripts.has(script)) {
                 blockScript(script, this.window.document);
                 this.blockedScripts.add(script);
             }
         }
         this.handleRules(styles);
-    }
-    handleRules(rules) {
-        const rulesToInject = [];
-        for (let i = 0; i < rules.length; i += 1) {
-            const rule = rules[i];
+    };
+    CosmeticInjection.prototype.handleRules = function (rules) {
+        var rulesToInject = [];
+        for (var i = 0; i < rules.length; i += 1) {
+            var rule = rules[i];
             if (!this.injectedRules.has(rule)) {
                 try {
                     if (!this.window.document.querySelector(rule)) {
@@ -103,73 +140,78 @@ class CosmeticInjection {
                     continue;
                 }
                 this.injectedRules.add(rule);
-                rulesToInject.push(` :root ${rule}`);
+                rulesToInject.push(" :root " + rule);
             }
         }
         if (rulesToInject.length > 0) {
-            injectCSSRule(`${rulesToInject.join(' ,')} {display:none !important;}`, this.window.document);
+            injectCSSRule(rulesToInject.join(' ,') + " {display:none !important;}", this.window.document);
         }
-    }
-    onMutation(mutations) {
-        let targets = new Set(mutations.map(m => m.target).filter(t => t));
+    };
+    CosmeticInjection.prototype.onMutation = function (mutations) {
+        var _this = this;
+        var targets = new Set(mutations.map(function (m) { return m.target; }).filter(function (t) { return t; }));
         if (targets.size > 100) {
             targets = new Set([this.window.document.body]);
         }
         if (targets.size === 0) {
             return;
         }
-        const nodeInfo = new Set();
-        targets.forEach(target => {
-            const nodes = target.querySelectorAll('*');
-            for (let i = 0; i < nodes.length; i += 1) {
-                const node = nodes[i];
+        var nodeInfo = new Set();
+        targets.forEach(function (target) {
+            var nodes = target.querySelectorAll('*');
+            for (var i = 0; i < nodes.length; i += 1) {
+                var node = nodes[i];
                 if (node.hidden) {
                     continue;
                 }
                 if (node.id) {
-                    const selector = `#${node.id}`;
-                    if (!this.observedNodes.has(selector)) {
+                    var selector = "#" + node.id;
+                    if (!_this.observedNodes.has(selector)) {
                         nodeInfo.add(selector);
-                        this.observedNodes.add(selector);
+                        _this.observedNodes.add(selector);
                     }
                 }
                 if (node.tagName) {
-                    const selector = node.tagName;
-                    if (!this.observedNodes.has(selector)) {
+                    var selector = node.tagName;
+                    if (!_this.observedNodes.has(selector)) {
                         nodeInfo.add(selector);
-                        this.observedNodes.add(selector);
+                        _this.observedNodes.add(selector);
                     }
                 }
                 if (node.className && node.className.split) {
-                    node.className.split(' ').forEach(name => {
-                        const selector = `.${name}`;
-                        if (!this.observedNodes.has(selector)) {
+                    node.className.split(' ').forEach(function (name) {
+                        var selector = "." + name;
+                        if (!_this.observedNodes.has(selector)) {
                             nodeInfo.add(selector);
-                            this.observedNodes.add(selector);
+                            _this.observedNodes.add(selector);
                         }
                     });
                 }
             }
         });
         if (nodeInfo.size > 0) {
-            this.backgroundAction('getCosmeticsForNodes', [[...nodeInfo]]);
+            this.backgroundAction('getCosmeticsForNodes', [__spread(nodeInfo)]);
         }
-    }
-    startObserving() {
+    };
+    CosmeticInjection.prototype.startObserving = function () {
+        var _this = this;
         if (this.window.MutationObserver !== undefined) {
-            this.mutationObserver = new this.window.MutationObserver(mutations => this.onMutation(mutations));
+            this.mutationObserver = new this.window.MutationObserver(function (mutations) {
+                return _this.onMutation(mutations);
+            });
             this.mutationObserver.observe(this.window.document, {
                 childList: true,
-                subtree: true,
+                subtree: true
             });
         }
-    }
-}
+    };
+    return CosmeticInjection;
+}());
 
 function compactTokens(tokens) {
-    const sorted = tokens.sort();
-    let lastIndex = 1;
-    for (let i = 1; i < sorted.length; i += 1) {
+    var sorted = tokens.sort();
+    var lastIndex = 1;
+    for (var i = 1; i < sorted.length; i += 1) {
         if (sorted[lastIndex - 1] !== sorted[i]) {
             sorted[lastIndex] = sorted[i];
             lastIndex += 1;
@@ -178,8 +220,8 @@ function compactTokens(tokens) {
     return sorted.subarray(0, lastIndex);
 }
 function hasEmptyIntersection(s1, s2) {
-    let i = 0;
-    let j = 0;
+    var i = 0;
+    var j = 0;
     while (i < s1.length && j < s2.length && s1[i] !== s2[j]) {
         if (s1[i] < s2[j]) {
             i += 1;
@@ -190,24 +232,32 @@ function hasEmptyIntersection(s1, s2) {
     }
     return !(i < s1.length && j < s2.length);
 }
-function concatTypedArrays(...arrays) {
-    let totalSize = 0;
-    for (let i = 0; i < arrays.length; i += 1) {
+function concatTypedArrays() {
+    var arrays = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        arrays[_i] = arguments[_i];
+    }
+    var totalSize = 0;
+    for (var i = 0; i < arrays.length; i += 1) {
         totalSize += arrays[i].length;
     }
-    const result = new Uint32Array(totalSize);
-    let index = 0;
-    for (let i = 0; i < arrays.length; i += 1) {
-        const array = arrays[i];
-        for (let j = 0; j < array.length; j += 1) {
+    var result = new Uint32Array(totalSize);
+    var index = 0;
+    for (var i = 0; i < arrays.length; i += 1) {
+        var array = arrays[i];
+        for (var j = 0; j < array.length; j += 1) {
             result[index] = array[j];
             index += 1;
         }
     }
     return result;
 }
-function mergeCompactSets(...arrays) {
-    return compactTokens(concatTypedArrays(...arrays));
+function mergeCompactSets() {
+    var arrays = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        arrays[_i] = arguments[_i];
+    }
+    return compactTokens(concatTypedArrays.apply(void 0, __spread(arrays)));
 }
 
 function getBit(n, mask) {
@@ -220,8 +270,8 @@ function clearBit(n, mask) {
     return n & ~mask;
 }
 function fastHashBetween(str, begin, end) {
-    let hash = 5407;
-    for (let i = begin; i < end; i += 1) {
+    var hash = 5407;
+    for (var i = begin; i < end; i += 1) {
         hash = (hash * 31) ^ str.charCodeAt(i);
     }
     return hash >>> 0;
@@ -236,8 +286,8 @@ function fastStartsWith(haystack, needle) {
     if (haystack.length < needle.length) {
         return false;
     }
-    const ceil = needle.length;
-    for (let i = 0; i < ceil; i += 1) {
+    var ceil = needle.length;
+    for (var i = 0; i < ceil; i += 1) {
         if (haystack[i] !== needle[i]) {
             return false;
         }
@@ -248,8 +298,8 @@ function fastStartsWithFrom(haystack, needle, start) {
     if (haystack.length - start < needle.length) {
         return false;
     }
-    const ceil = start + needle.length;
-    for (let i = start; i < ceil; i += 1) {
+    var ceil = start + needle.length;
+    for (var i = start; i < ceil; i += 1) {
         if (haystack[i] !== needle[i - start]) {
             return false;
         }
@@ -277,13 +327,14 @@ function isAllowedCSS(ch) {
         ch === 46 ||
         ch === 35);
 }
-function fastTokenizer(pattern, isAllowedCode, allowRegexSurround = false) {
-    const tokens = [];
-    let inside = false;
-    let start = 0;
-    let length = 0;
-    for (let i = 0, len = pattern.length; i < len; i += 1) {
-        const ch = pattern.charCodeAt(i);
+function fastTokenizer(pattern, isAllowedCode, allowRegexSurround) {
+    if (allowRegexSurround === void 0) { allowRegexSurround = false; }
+    var tokens = [];
+    var inside = false;
+    var start = 0;
+    var length = 0;
+    for (var i = 0, len = pattern.length; i < len; i += 1) {
+        var ch = pattern.charCodeAt(i);
         if (isAllowedCode(ch)) {
             if (!inside) {
                 inside = true;
@@ -314,8 +365,9 @@ function createFuzzySignature(pattern) {
     return compactTokens(new Uint32Array(tokenize(pattern)));
 }
 
-class CosmeticFilter {
-    constructor({ mask, selector, hostnames, id, }) {
+var CosmeticFilter = (function () {
+    function CosmeticFilter(_a) {
+        var mask = _a.mask, selector = _a.selector, hostnames = _a.hostnames, id = _a.id;
         this.id = id;
         this.mask = mask;
         this.selector = selector;
@@ -323,14 +375,14 @@ class CosmeticFilter {
         this.hostnamesArray = null;
         this.rawLine = null;
     }
-    isCosmeticFilter() {
+    CosmeticFilter.prototype.isCosmeticFilter = function () {
         return true;
-    }
-    isNetworkFilter() {
+    };
+    CosmeticFilter.prototype.isNetworkFilter = function () {
         return false;
-    }
-    toString() {
-        let filter = '';
+    };
+    CosmeticFilter.prototype.toString = function () {
+        var filter = '';
         if (this.hasHostnames()) {
             filter += this.hostnames;
         }
@@ -354,30 +406,30 @@ class CosmeticFilter {
             filter += this.selector;
         }
         return filter;
-    }
-    getTokens() {
+    };
+    CosmeticFilter.prototype.getTokens = function () {
         return [this.getTokensSelector()];
-    }
-    getTokensSelector() {
+    };
+    CosmeticFilter.prototype.getTokensSelector = function () {
         if (this.isScriptInject() || this.isScriptBlock()) {
             return [];
         }
-        const sepIndex = this.selector.lastIndexOf('>');
+        var sepIndex = this.selector.lastIndexOf('>');
         if (sepIndex !== -1) {
             return tokenizeCSS(this.selector.substr(sepIndex));
         }
         return tokenizeCSS(this.selector);
-    }
-    getSelector() {
+    };
+    CosmeticFilter.prototype.getSelector = function () {
         return this.selector;
-    }
-    hasHostnames() {
+    };
+    CosmeticFilter.prototype.hasHostnames = function () {
         return !!this.hostnames;
-    }
-    getHostnames() {
+    };
+    CosmeticFilter.prototype.getHostnames = function () {
         if (this.hostnamesArray === null) {
             if (this.hasHostnames()) {
-                this.hostnamesArray = this.hostnames.split(',').sort((h1, h2) => {
+                this.hostnamesArray = this.hostnames.split(',').sort(function (h1, h2) {
                     if (h1.length > h2.length) {
                         return -1;
                     }
@@ -392,24 +444,25 @@ class CosmeticFilter {
             }
         }
         return this.hostnamesArray;
-    }
-    isUnhide() {
+    };
+    CosmeticFilter.prototype.isUnhide = function () {
         return getBit(this.mask, 1);
-    }
-    isScriptInject() {
+    };
+    CosmeticFilter.prototype.isScriptInject = function () {
         return getBit(this.mask, 2);
-    }
-    isScriptBlock() {
+    };
+    CosmeticFilter.prototype.isScriptBlock = function () {
         return getBit(this.mask, 4);
-    }
-}
+    };
+    return CosmeticFilter;
+}());
 function parseCosmeticFilter(line) {
-    let mask = 0;
-    let selector = '';
-    let hostnames = '';
-    const sharpIndex = line.indexOf('#');
-    const afterSharpIndex = sharpIndex + 1;
-    let suffixStartIndex = afterSharpIndex + 1;
+    var mask = 0;
+    var selector = '';
+    var hostnames = '';
+    var sharpIndex = line.indexOf('#');
+    var afterSharpIndex = sharpIndex + 1;
+    var suffixStartIndex = afterSharpIndex + 1;
     if (line[afterSharpIndex] === '@') {
         mask = setBit(mask, 1);
         suffixStartIndex += 1;
@@ -419,9 +472,9 @@ function parseCosmeticFilter(line) {
     }
     selector = line.substr(suffixStartIndex);
     if (fastStartsWith(selector, 'script:')) {
-        const scriptMethodIndex = 'script:'.length;
-        let scriptSelectorIndexStart = scriptMethodIndex;
-        let scriptSelectorIndexEnd = selector.length - 1;
+        var scriptMethodIndex = 'script:'.length;
+        var scriptSelectorIndexStart = scriptMethodIndex;
+        var scriptSelectorIndexEnd = selector.length - 1;
         if (fastStartsWithFrom(selector, 'inject(', scriptMethodIndex)) {
             mask = setBit(mask, 2);
             scriptSelectorIndexStart += 'inject('.length;
@@ -444,16 +497,16 @@ function parseCosmeticFilter(line) {
         (getBit(mask, 1) && hostnames.length === 0)) {
         return null;
     }
-    const id = fastHash(line);
+    var id = fastHash(line);
     return new CosmeticFilter({
-        hostnames,
-        id,
-        mask,
-        selector,
+        hostnames: hostnames,
+        id: id,
+        mask: mask,
+        selector: selector
     });
 }
 
-const FROM_ANY = 1 |
+var FROM_ANY = 1 |
     2 |
     4 |
     8 |
@@ -470,7 +523,7 @@ const FROM_ANY = 1 |
     16384 |
     32768 |
     65536;
-const CPT_TO_MASK = {
+var CPT_TO_MASK = {
     1: 16,
     2: 64,
     3: 1,
@@ -488,19 +541,19 @@ const CPT_TO_MASK = {
     18: 16384,
     19: 32768,
     20: 2048,
-    21: 1,
+    21: 1
 };
-const SEPARATOR = /[/^*]/;
+var SEPARATOR = /[/^*]/;
 function compileRegex(filterStr, isRightAnchor, isLeftAnchor, matchCase) {
-    let filter = filterStr;
+    var filter = filterStr;
     filter = filter.replace(/([|.$+?{}()[\]\\])/g, '\\$1');
     filter = filter.replace(/\*/g, '.*');
     filter = filter.replace(/\^/g, '(?:[^\\w\\d_.%-]|$)');
     if (isRightAnchor) {
-        filter = `${filter}$`;
+        filter = filter + "$";
     }
     if (isLeftAnchor) {
-        filter = `^${filter}`;
+        filter = "^" + filter;
     }
     if (matchCase) {
         return new RegExp(filter);
@@ -510,8 +563,9 @@ function compileRegex(filterStr, isRightAnchor, isLeftAnchor, matchCase) {
 function parseDomainsOption(domains) {
     return new Set(domains ? domains.split('|') : []);
 }
-class NetworkFilter {
-    constructor({ mask, filter, optDomains, optNotDomains, redirect, hostname, id, }) {
+var NetworkFilter = (function () {
+    function NetworkFilter(_a) {
+        var mask = _a.mask, filter = _a.filter, optDomains = _a.optDomains, optNotDomains = _a.optNotDomains, redirect = _a.redirect, hostname = _a.hostname, id = _a.id;
         this.id = id;
         this.mask = mask;
         this.filter = filter;
@@ -525,14 +579,14 @@ class NetworkFilter {
         this.regex = null;
         this.rawLine = null;
     }
-    isCosmeticFilter() {
+    NetworkFilter.prototype.isCosmeticFilter = function () {
         return false;
-    }
-    isNetworkFilter() {
+    };
+    NetworkFilter.prototype.isNetworkFilter = function () {
         return true;
-    }
-    toString() {
-        let filter = '';
+    };
+    NetworkFilter.prototype.toString = function () {
+        var filter = '';
         if (this.isException()) {
             filter += '@@';
         }
@@ -552,7 +606,7 @@ class NetworkFilter {
         else {
             filter += this.getRegex().source;
         }
-        const options = [];
+        var options = [];
         if (!this.fromAny()) {
             if (this.isFuzzy()) {
                 options.push('fuzzy');
@@ -598,7 +652,7 @@ class NetworkFilter {
             options.push('important');
         }
         if (this.isRedirect()) {
-            options.push(`redirect=${this.getRedirect()}`);
+            options.push("redirect=" + this.getRedirect());
         }
         if (this.firstParty() !== this.thirdParty()) {
             if (this.firstParty()) {
@@ -609,158 +663,159 @@ class NetworkFilter {
             }
         }
         if (this.hasOptDomains() || this.hasOptNotDomains()) {
-            const domains = [...this.getOptDomains()];
-            this.getOptNotDomains().forEach(nd => domains.push(`~${nd}`));
-            options.push(`domain=${domains.join('|')}`);
+            var domains_1 = __spread(this.getOptDomains());
+            this.getOptNotDomains().forEach(function (nd) { return domains_1.push("~" + nd); });
+            options.push("domain=" + domains_1.join('|'));
         }
         if (options.length > 0) {
-            filter += `$${options.join(',')}`;
+            filter += "$" + options.join(',');
         }
         if (this.isRightAnchor()) {
             filter += '|';
         }
         return filter;
-    }
-    hasFilter() {
+    };
+    NetworkFilter.prototype.hasFilter = function () {
         return !!this.filter;
-    }
-    hasOptNotDomains() {
+    };
+    NetworkFilter.prototype.hasOptNotDomains = function () {
         return !!this.optNotDomains;
-    }
-    getOptNotDomains() {
+    };
+    NetworkFilter.prototype.getOptNotDomains = function () {
         this.optNotDomainsSet =
             this.optNotDomainsSet || parseDomainsOption(this.optNotDomains);
         return this.optNotDomainsSet;
-    }
-    hasOptDomains() {
+    };
+    NetworkFilter.prototype.hasOptDomains = function () {
         return !!this.optDomains;
-    }
-    getOptDomains() {
+    };
+    NetworkFilter.prototype.getOptDomains = function () {
         this.optDomainsSet =
             this.optDomainsSet || parseDomainsOption(this.optDomains);
         return this.optDomainsSet;
-    }
-    getMask() {
+    };
+    NetworkFilter.prototype.getMask = function () {
         return this.mask;
-    }
-    isRedirect() {
+    };
+    NetworkFilter.prototype.isRedirect = function () {
         return !!this.redirect;
-    }
-    getRedirect() {
+    };
+    NetworkFilter.prototype.getRedirect = function () {
         return this.redirect;
-    }
-    hasHostname() {
+    };
+    NetworkFilter.prototype.hasHostname = function () {
         return !!this.hostname;
-    }
-    getHostname() {
+    };
+    NetworkFilter.prototype.getHostname = function () {
         return this.hostname;
-    }
-    getFilter() {
+    };
+    NetworkFilter.prototype.getFilter = function () {
         return this.filter;
-    }
-    setRegex(re) {
+    };
+    NetworkFilter.prototype.setRegex = function (re) {
         this.regex = re;
         this.mask = setBit(this.mask, 16777216);
         this.mask = clearBit(this.mask, 8388608);
-    }
-    getRegex() {
+    };
+    NetworkFilter.prototype.getRegex = function () {
         if (this.regex === null) {
             this.regex = compileRegex(this.filter, this.isRightAnchor(), this.isLeftAnchor(), this.matchCase());
         }
         return this.regex;
-    }
-    getFuzzySignature() {
+    };
+    NetworkFilter.prototype.getFuzzySignature = function () {
         if (this.fuzzySignature === null) {
             this.fuzzySignature = createFuzzySignature(this.filter);
         }
         return this.fuzzySignature;
-    }
-    getTokens() {
+    };
+    NetworkFilter.prototype.getTokens = function () {
         return [tokenize(this.filter).concat(tokenize(this.hostname))];
-    }
-    isCptAllowed(cpt) {
-        const mask = CPT_TO_MASK[cpt];
+    };
+    NetworkFilter.prototype.isCptAllowed = function (cpt) {
+        var mask = CPT_TO_MASK[cpt];
         if (mask !== undefined) {
             return getBit(this.mask, mask);
         }
         return false;
-    }
-    isFuzzy() {
+    };
+    NetworkFilter.prototype.isFuzzy = function () {
         return getBit(this.mask, 524288);
-    }
-    isException() {
+    };
+    NetworkFilter.prototype.isException = function () {
         return getBit(this.mask, 268435456);
-    }
-    isHostnameAnchor() {
+    };
+    NetworkFilter.prototype.isHostnameAnchor = function () {
         return getBit(this.mask, 134217728);
-    }
-    isRightAnchor() {
+    };
+    NetworkFilter.prototype.isRightAnchor = function () {
         return getBit(this.mask, 67108864);
-    }
-    isLeftAnchor() {
+    };
+    NetworkFilter.prototype.isLeftAnchor = function () {
         return getBit(this.mask, 33554432);
-    }
-    matchCase() {
+    };
+    NetworkFilter.prototype.matchCase = function () {
         return getBit(this.mask, 262144);
-    }
-    isImportant() {
+    };
+    NetworkFilter.prototype.isImportant = function () {
         return getBit(this.mask, 131072);
-    }
-    isRegex() {
+    };
+    NetworkFilter.prototype.isRegex = function () {
         return getBit(this.mask, 16777216);
-    }
-    isPlain() {
+    };
+    NetworkFilter.prototype.isPlain = function () {
         return !getBit(this.mask, 16777216);
-    }
-    isHostname() {
+    };
+    NetworkFilter.prototype.isHostname = function () {
         return getBit(this.mask, 4194304);
-    }
-    fromAny() {
+    };
+    NetworkFilter.prototype.fromAny = function () {
         return (this.mask & FROM_ANY) === FROM_ANY;
-    }
-    thirdParty() {
+    };
+    NetworkFilter.prototype.thirdParty = function () {
         return getBit(this.mask, 1048576);
-    }
-    firstParty() {
+    };
+    NetworkFilter.prototype.firstParty = function () {
         return getBit(this.mask, 2097152);
-    }
-    fromImage() {
+    };
+    NetworkFilter.prototype.fromImage = function () {
         return getBit(this.mask, 1);
-    }
-    fromMedia() {
+    };
+    NetworkFilter.prototype.fromMedia = function () {
         return getBit(this.mask, 2);
-    }
-    fromObject() {
+    };
+    NetworkFilter.prototype.fromObject = function () {
         return getBit(this.mask, 4);
-    }
-    fromObjectSubrequest() {
+    };
+    NetworkFilter.prototype.fromObjectSubrequest = function () {
         return getBit(this.mask, 8);
-    }
-    fromOther() {
+    };
+    NetworkFilter.prototype.fromOther = function () {
         return getBit(this.mask, 16);
-    }
-    fromPing() {
+    };
+    NetworkFilter.prototype.fromPing = function () {
         return getBit(this.mask, 32);
-    }
-    fromScript() {
+    };
+    NetworkFilter.prototype.fromScript = function () {
         return getBit(this.mask, 64);
-    }
-    fromStylesheet() {
+    };
+    NetworkFilter.prototype.fromStylesheet = function () {
         return getBit(this.mask, 128);
-    }
-    fromSubdocument() {
+    };
+    NetworkFilter.prototype.fromSubdocument = function () {
         return getBit(this.mask, 256);
-    }
-    fromWebsocket() {
+    };
+    NetworkFilter.prototype.fromWebsocket = function () {
         return getBit(this.mask, 512);
-    }
-    fromXmlHttpRequest() {
+    };
+    NetworkFilter.prototype.fromXmlHttpRequest = function () {
         return getBit(this.mask, 1024);
-    }
-    fromFont() {
+    };
+    NetworkFilter.prototype.fromFont = function () {
         return getBit(this.mask, 8192);
-    }
-}
+    };
+    return NetworkFilter;
+}());
 function setNetworkMask(mask, m, value) {
     if (value === true) {
         return setBit(mask, m);
@@ -768,36 +823,36 @@ function setNetworkMask(mask, m, value) {
     return clearBit(mask, m);
 }
 function checkIsRegex(filter, start, end) {
-    const starIndex = filter.indexOf('*', start);
-    const separatorIndex = filter.indexOf('^', start);
+    var starIndex = filter.indexOf('*', start);
+    var separatorIndex = filter.indexOf('^', start);
     return ((starIndex !== -1 && starIndex < end) ||
         (separatorIndex !== -1 && separatorIndex < end));
 }
 function parseNetworkFilter(rawLine) {
-    const line = rawLine;
-    let mask = 1048576 | 2097152;
-    let cptMaskPositive = 0;
-    let cptMaskNegative = FROM_ANY;
-    let filter = null;
-    let hostname = null;
-    let optDomains = '';
-    let optNotDomains = '';
-    let redirect = '';
-    let filterIndexStart = 0;
-    let filterIndexEnd = line.length;
+    var line = rawLine;
+    var mask = 1048576 | 2097152;
+    var cptMaskPositive = 0;
+    var cptMaskNegative = FROM_ANY;
+    var filter = null;
+    var hostname = null;
+    var optDomains = '';
+    var optNotDomains = '';
+    var redirect = '';
+    var filterIndexStart = 0;
+    var filterIndexEnd = line.length;
     if (fastStartsWith(line, '@@')) {
         filterIndexStart += 2;
         mask = setBit(mask, 268435456);
     }
-    const optionsIndex = line.indexOf('$', filterIndexStart);
+    var optionsIndex = line.indexOf('$', filterIndexStart);
     if (optionsIndex !== -1) {
         filterIndexEnd = optionsIndex;
-        const rawOptions = line.substr(optionsIndex + 1);
-        const options = rawOptions.split(',');
-        for (let i = 0; i < options.length; i += 1) {
-            const rawOption = options[i];
-            let negation = false;
-            let option = rawOption;
+        var rawOptions = line.substr(optionsIndex + 1);
+        var options = rawOptions.split(',');
+        for (var i = 0; i < options.length; i += 1) {
+            var rawOption = options[i];
+            var negation = false;
+            var option = rawOption;
             if (fastStartsWith(option, '~')) {
                 negation = true;
                 option = option.substr(1);
@@ -805,18 +860,18 @@ function parseNetworkFilter(rawLine) {
             else {
                 negation = false;
             }
-            let optionValues = [];
+            var optionValues = [];
             if (option.indexOf('=') !== -1) {
-                const optionAndValues = option.split('=', 2);
+                var optionAndValues = option.split('=', 2);
                 option = optionAndValues[0];
                 optionValues = optionAndValues[1].split('|');
             }
             switch (option) {
                 case 'domain': {
-                    const optDomainsArray = [];
-                    const optNotDomainsArray = [];
-                    for (let j = 0; j < optionValues.length; j += 1) {
-                        const value = optionValues[j];
+                    var optDomainsArray = [];
+                    var optNotDomainsArray = [];
+                    for (var j = 0; j < optionValues.length; j += 1) {
+                        var value = optionValues[j];
                         if (value) {
                             if (fastStartsWith(value, '~')) {
                                 optNotDomainsArray.push(value.substr(1));
@@ -877,7 +932,7 @@ function parseNetworkFilter(rawLine) {
                     redirect = optionValues[0];
                     break;
                 default: {
-                    let optionMask = 0;
+                    var optionMask = 0;
                     switch (option) {
                         case 'image':
                             optionMask = 1;
@@ -965,11 +1020,11 @@ function parseNetworkFilter(rawLine) {
             filterIndexEnd - filterIndexStart > 1) {
             filterIndexEnd -= 1;
         }
-        const isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
+        var isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
         mask = setNetworkMask(mask, 16777216, isRegex);
-        const isHostnameAnchor = getBit(mask, 134217728);
+        var isHostnameAnchor = getBit(mask, 134217728);
         if (!isRegex && isHostnameAnchor) {
-            const slashIndex = line.indexOf('/', filterIndexStart);
+            var slashIndex = line.indexOf('/', filterIndexStart);
             if (slashIndex !== -1) {
                 hostname = line.substring(filterIndexStart, slashIndex);
                 filterIndexStart = slashIndex;
@@ -980,7 +1035,7 @@ function parseNetworkFilter(rawLine) {
             }
         }
         else if (isRegex && isHostnameAnchor) {
-            const firstSeparator = line.search(SEPARATOR);
+            var firstSeparator = line.search(SEPARATOR);
             if (firstSeparator !== -1) {
                 hostname = line.substring(filterIndexStart, firstSeparator);
                 filterIndexStart = firstSeparator;
@@ -998,11 +1053,11 @@ function parseNetworkFilter(rawLine) {
     if (filter === null) {
         filter = line.substring(filterIndexStart, filterIndexEnd).toLowerCase();
     }
-    let finalHostname = '';
+    var finalHostname = '';
     if (hostname !== null) {
         finalHostname = hostname;
     }
-    let finalFilter = '';
+    var finalFilter = '';
     if (filter !== null) {
         finalFilter = filter;
     }
@@ -1013,19 +1068,19 @@ function parseNetworkFilter(rawLine) {
     if (finalHostname !== '') {
         finalHostname = finalHostname.toLowerCase();
     }
-    const id = fastHash(line);
+    var id = fastHash(line);
     return new NetworkFilter({
         filter: finalFilter,
         hostname: finalHostname,
-        id,
-        mask,
-        optDomains,
-        optNotDomains,
-        redirect,
+        id: id,
+        mask: mask,
+        optDomains: optDomains,
+        optNotDomains: optNotDomains,
+        redirect: redirect
     });
 }
 
-const SPACE = /\s/;
+var SPACE = /\s/;
 function detectFilterType(line) {
     if (line.length === 1 ||
         line.charAt(0) === '!' ||
@@ -1039,9 +1094,9 @@ function detectFilterType(line) {
     if (line.indexOf('$$') !== -1) {
         return 0;
     }
-    const sharpIndex = line.indexOf('#');
+    var sharpIndex = line.indexOf('#');
     if (sharpIndex > -1) {
-        const afterSharpIndex = sharpIndex + 1;
+        var afterSharpIndex = sharpIndex + 1;
         if (fastStartsWithFrom(line, '@$#', afterSharpIndex) ||
             fastStartsWithFrom(line, '@%#', afterSharpIndex) ||
             fastStartsWithFrom(line, '%#', afterSharpIndex) ||
@@ -1056,8 +1111,8 @@ function detectFilterType(line) {
     return 1;
 }
 function f(strings) {
-    const rawFilter = strings.raw[0];
-    const filterType = detectFilterType(rawFilter);
+    var rawFilter = strings.raw[0];
+    var filterType = detectFilterType(rawFilter);
     if (filterType === 1) {
         return parseNetworkFilter(rawFilter);
     }
@@ -1066,16 +1121,17 @@ function f(strings) {
     }
     return null;
 }
-function parseList(data, { loadNetworkFilters = true, loadCosmeticFilters = true, debug = false } = {}) {
-    const networkFilters = [];
-    const cosmeticFilters = [];
-    const lines = data.split('\n');
-    for (let i = 0; i < lines.length; i += 1) {
-        const line = lines[i].trim();
+function parseList(data, _a) {
+    var _b = _a === void 0 ? {} : _a, _c = _b.loadNetworkFilters, loadNetworkFilters = _c === void 0 ? true : _c, _d = _b.loadCosmeticFilters, loadCosmeticFilters = _d === void 0 ? true : _d, _e = _b.debug, debug = _e === void 0 ? false : _e;
+    var networkFilters = [];
+    var cosmeticFilters = [];
+    var lines = data.split('\n');
+    for (var i = 0; i < lines.length; i += 1) {
+        var line = lines[i].trim();
         if (line.length > 0) {
-            const filterType = detectFilterType(line);
+            var filterType = detectFilterType(line);
             if (filterType === 1 && loadNetworkFilters) {
-                const filter = parseNetworkFilter(line);
+                var filter = parseNetworkFilter(line);
                 if (filter !== null) {
                     networkFilters.push(filter);
                     if (debug) {
@@ -1084,7 +1140,7 @@ function parseList(data, { loadNetworkFilters = true, loadCosmeticFilters = true
                 }
             }
             else if (filterType === 2 && loadCosmeticFilters) {
-                const filter = parseCosmeticFilter(line);
+                var filter = parseCosmeticFilter(line);
                 if (filter !== null) {
                     cosmeticFilters.push(filter);
                     if (debug) {
@@ -1095,19 +1151,20 @@ function parseList(data, { loadNetworkFilters = true, loadCosmeticFilters = true
         }
     }
     return {
-        cosmeticFilters,
-        networkFilters,
+        cosmeticFilters: cosmeticFilters,
+        networkFilters: networkFilters
     };
 }
 function parseJSResource(data) {
-    let state = 'end';
-    let tmpContent = '';
-    let name = '';
-    let type = '';
-    const parsed = new Map();
-    const lines = data.split('\n');
-    lines.forEach(line => {
-        const trimmed = line.trim();
+    var state = 'end';
+    var tmpContent = '';
+    var name = '';
+    var type = '';
+    var parsed = new Map();
+    var lines = data.split('\n');
+    lines.forEach(function (line) {
+        var _a;
+        var trimmed = line.trim();
         if (fastStartsWith(trimmed, '#')) {
             state = 'comment';
         }
@@ -1125,7 +1182,7 @@ function parseJSResource(data) {
         switch (state) {
             case 'end':
                 if (tmpContent) {
-                    let map = parsed.get(type);
+                    var map = parsed.get(type);
                     if (map === undefined) {
                         map = new Map();
                         parsed.set(type, map);
@@ -1138,16 +1195,16 @@ function parseJSResource(data) {
             case 'comment':
                 break;
             case 'title':
-                [name, type] = trimmed.split(' ');
+                _a = __read(trimmed.split(' '), 2), name = _a[0], type = _a[1];
                 break;
             case 'content':
-                tmpContent += `${trimmed}\n`;
+                tmpContent += trimmed + "\n";
                 break;
             default:
         }
     });
     if (tmpContent) {
-        let map = parsed.get(type);
+        var map = parsed.get(type);
         if (map === undefined) {
             map = new Map();
             parsed.set(type, map);
@@ -1753,45 +1810,46 @@ function getPublicSuffix$1(url, options) {
     return parseImpl(url, options, 1).publicSuffix;
 }
 
-function mkRequest({ url = '', hostname = '', domain = '', sourceHostname = '', sourceDomain = '', cpt = 6 } = {}) {
+function mkRequest(_a) {
+    var _b = _a === void 0 ? {} : _a, _c = _b.url, url = _c === void 0 ? '' : _c, _d = _b.hostname, hostname = _d === void 0 ? '' : _d, _e = _b.domain, domain = _e === void 0 ? '' : _e, _f = _b.sourceHostname, sourceHostname = _f === void 0 ? '' : _f, _g = _b.sourceDomain, sourceDomain = _g === void 0 ? '' : _g, _h = _b.cpt, cpt = _h === void 0 ? 6 : _h;
     return {
-        cpt,
+        cpt: cpt,
         tokens: tokenize(url),
         sourceGD: sourceDomain,
-        sourceHostname,
+        sourceHostname: sourceHostname,
         hostGD: domain,
-        hostname,
+        hostname: hostname,
         url: url.toLowerCase(),
-        fuzzySignature: undefined,
+        fuzzySignature: undefined
     };
 }
 
 function processRawRequest(request) {
-    const url = request.url.toLowerCase();
-    const { host, domain } = parse$1(url);
-    let sourceUrl = request.sourceUrl;
-    let sourceHostname = '';
-    let sourceDomain = '';
+    var url = request.url.toLowerCase();
+    var _a = parse$1(url), host = _a.host, domain = _a.domain;
+    var sourceUrl = request.sourceUrl;
+    var sourceHostname = '';
+    var sourceDomain = '';
     if (sourceUrl) {
         sourceUrl = sourceUrl.toLowerCase();
-        const sourceUrlParts = parse$1(sourceUrl);
+        var sourceUrlParts = parse$1(sourceUrl);
         sourceHostname = sourceUrlParts.host || '';
         sourceDomain = sourceUrlParts.domain || '';
     }
     return mkRequest({
         cpt: request.cpt,
-        sourceDomain,
-        sourceHostname,
+        sourceDomain: sourceDomain,
+        sourceHostname: sourceHostname,
         domain: domain || '',
         hostname: host || '',
-        url,
+        url: url
     });
 }
 
 function fromString(str) {
-    const res = new Uint8Array(str.length);
-    const len = str.length;
-    for (let i = 0; i < len; i += 1) {
+    var res = new Uint8Array(str.length);
+    var len = str.length;
+    for (var i = 0; i < len; i += 1) {
         res[i] = str.charCodeAt(i);
     }
     return res;
@@ -1803,62 +1861,63 @@ function decode$1(bytes) {
     return decodeURIComponent(escape(String.fromCharCode.apply(null, bytes)));
 }
 
-class DynamicDataView {
-    constructor(length) {
+var DynamicDataView = (function () {
+    function DynamicDataView(length) {
         this.buffer = new Uint8Array(length);
         this.pos = 0;
     }
-    seek(pos = 0) {
+    DynamicDataView.prototype.seek = function (pos) {
+        if (pos === void 0) { pos = 0; }
         this.pos = pos;
-    }
-    crop() {
+    };
+    DynamicDataView.prototype.crop = function () {
         return this.buffer.subarray(0, this.pos);
-    }
-    set(buffer) {
+    };
+    DynamicDataView.prototype.set = function (buffer) {
         this.buffer = new Uint8Array(buffer);
         this.seek(0);
-    }
-    pushBytes(bytes) {
+    };
+    DynamicDataView.prototype.pushBytes = function (bytes) {
         this.checkShouldResize(bytes.byteLength);
         this.buffer.set(bytes, this.pos);
         this.pos += bytes.byteLength;
-    }
-    pushByte(octet) {
+    };
+    DynamicDataView.prototype.pushByte = function (octet) {
         this.pushUint8(octet);
-    }
-    pushUint8(uint8) {
+    };
+    DynamicDataView.prototype.pushUint8 = function (uint8) {
         this.checkShouldResize(1);
         this.buffer[this.pos] = uint8;
         this.pos += 1;
-    }
-    pushUint16(uint16) {
+    };
+    DynamicDataView.prototype.pushUint16 = function (uint16) {
         this.checkShouldResize(2);
         this.buffer[this.pos] = uint16 >>> 8;
         this.buffer[this.pos + 1] = uint16;
         this.pos += 2;
-    }
-    pushUint32(uint32) {
+    };
+    DynamicDataView.prototype.pushUint32 = function (uint32) {
         this.checkShouldResize(4);
         this.buffer[this.pos] = uint32 >>> 24;
         this.buffer[this.pos + 1] = uint32 >>> 16;
         this.buffer[this.pos + 2] = uint32 >>> 8;
         this.buffer[this.pos + 3] = uint32;
         this.pos += 4;
-    }
-    pushUTF8(str) {
-        const buffer = encode(str);
+    };
+    DynamicDataView.prototype.pushUTF8 = function (str) {
+        var buffer = encode(str);
         this.pushUint16(buffer.byteLength);
         this.pushBytes(buffer);
-    }
-    pushStr(str) {
-        const originalPos = this.pos;
-        let foundUnicode = false;
+    };
+    DynamicDataView.prototype.pushStr = function (str) {
+        var originalPos = this.pos;
+        var foundUnicode = false;
         this.checkShouldResize(2 + str.length);
         this.pushUint16(str.length);
-        const offset = this.pos;
-        const buffer = this.buffer;
-        for (let i = 0; i < str.length && !foundUnicode; i += 1) {
-            const ch = str.charCodeAt(i);
+        var offset = this.pos;
+        var buffer = this.buffer;
+        for (var i = 0; i < str.length && !foundUnicode; i += 1) {
+            var ch = str.charCodeAt(i);
             buffer[offset + i] = ch;
             foundUnicode = foundUnicode || ch > 127;
         }
@@ -1869,41 +1928,41 @@ class DynamicDataView {
         else {
             this.pos += str.length;
         }
-    }
-    getBytes(n) {
-        const bytes = this.buffer.subarray(this.pos, this.pos + n);
+    };
+    DynamicDataView.prototype.getBytes = function (n) {
+        var bytes = this.buffer.subarray(this.pos, this.pos + n);
         this.pos += n;
         return bytes;
-    }
-    getByte() {
+    };
+    DynamicDataView.prototype.getByte = function () {
         return this.getUint8();
-    }
-    getUint8() {
-        const uint8 = this.buffer[this.pos];
+    };
+    DynamicDataView.prototype.getUint8 = function () {
+        var uint8 = this.buffer[this.pos];
         this.pos += 1;
         return uint8;
-    }
-    getUint16() {
-        const uint16 = ((this.buffer[this.pos] << 8) |
+    };
+    DynamicDataView.prototype.getUint16 = function () {
+        var uint16 = ((this.buffer[this.pos] << 8) |
             this.buffer[this.pos + 1]) >>> 0;
         this.pos += 2;
         return uint16;
-    }
-    getUint32() {
-        const uint32 = (((this.buffer[this.pos] << 24) >>> 0) +
+    };
+    DynamicDataView.prototype.getUint32 = function () {
+        var uint32 = (((this.buffer[this.pos] << 24) >>> 0) +
             ((this.buffer[this.pos + 1] << 16) |
                 (this.buffer[this.pos + 2] << 8) |
                 this.buffer[this.pos + 3])) >>> 0;
         this.pos += 4;
         return uint32;
-    }
-    getUTF8() {
+    };
+    DynamicDataView.prototype.getUTF8 = function () {
         return decode$1(this.getBytes(this.getUint16()));
-    }
-    getStr() {
-        const originalPos = this.pos;
-        const size = this.getUint16();
-        let i = 0;
+    };
+    DynamicDataView.prototype.getStr = function () {
+        var originalPos = this.pos;
+        var size = this.getUint16();
+        var i = 0;
         for (; i < size && this.buffer[this.pos + i] <= 127; i += 1) {
         }
         if (i < size) {
@@ -1911,21 +1970,23 @@ class DynamicDataView {
             return this.getUTF8();
         }
         return String.fromCharCode.apply(null, this.getBytes(size));
-    }
-    checkShouldResize(n) {
+    };
+    DynamicDataView.prototype.checkShouldResize = function (n) {
         if (this.pos + n >= this.buffer.byteLength) {
             this.resize(n);
         }
-    }
-    resize(n = 0) {
-        const newBuffer = new Uint8Array(Math.floor((this.pos + n) * 1.5));
+    };
+    DynamicDataView.prototype.resize = function (n) {
+        if (n === void 0) { n = 0; }
+        var newBuffer = new Uint8Array(Math.floor((this.pos + n) * 1.5));
         newBuffer.set(this.buffer);
         this.buffer = newBuffer;
-    }
-}
+    };
+    return DynamicDataView;
+}());
 
 function serializeNetworkFilter(filter, buffer) {
-    let numberOfOptionalParts = 0;
+    var numberOfOptionalParts = 0;
     if (filter.isRedirect()) {
         numberOfOptionalParts = 5;
     }
@@ -1966,22 +2027,22 @@ function serializeNetworkFilter(filter, buffer) {
     buffer.pushStr(filter.redirect);
 }
 function deserializeNetworkFilter(buffer) {
-    const numberOfOptionalParts = buffer.getUint8();
-    const mask = buffer.getUint32();
-    const id = buffer.getUint32();
-    const hostname = numberOfOptionalParts > 0 ? buffer.getStr() : '';
-    const filter = numberOfOptionalParts > 1 ? buffer.getStr() : '';
-    const optDomains = numberOfOptionalParts > 2 ? buffer.getStr() : '';
-    const optNotDomains = numberOfOptionalParts > 3 ? buffer.getStr() : '';
-    const redirect = numberOfOptionalParts > 4 ? buffer.getStr() : '';
+    var numberOfOptionalParts = buffer.getUint8();
+    var mask = buffer.getUint32();
+    var id = buffer.getUint32();
+    var hostname = numberOfOptionalParts > 0 ? buffer.getStr() : '';
+    var filter = numberOfOptionalParts > 1 ? buffer.getStr() : '';
+    var optDomains = numberOfOptionalParts > 2 ? buffer.getStr() : '';
+    var optNotDomains = numberOfOptionalParts > 3 ? buffer.getStr() : '';
+    var redirect = numberOfOptionalParts > 4 ? buffer.getStr() : '';
     return new NetworkFilter({
-        filter,
-        hostname,
-        id,
-        mask,
-        optDomains,
-        optNotDomains,
-        redirect,
+        filter: filter,
+        hostname: hostname,
+        id: id,
+        mask: mask,
+        optDomains: optDomains,
+        optNotDomains: optNotDomains,
+        redirect: redirect
     });
 }
 function serializeCosmeticFilter(filter, buffer) {
@@ -1991,44 +2052,44 @@ function serializeCosmeticFilter(filter, buffer) {
     buffer.pushStr(filter.hostnames);
 }
 function deserializeCosmeticFilter(buffer) {
-    const mask = buffer.getUint8();
-    const id = buffer.getUint32();
-    const selector = buffer.getStr();
-    const hostnames = buffer.getStr();
+    var mask = buffer.getUint8();
+    var id = buffer.getUint32();
+    var selector = buffer.getStr();
+    var hostnames = buffer.getStr();
     return new CosmeticFilter({
-        hostnames,
-        id,
-        mask,
-        selector,
+        hostnames: hostnames,
+        id: id,
+        mask: mask,
+        selector: selector
     });
 }
 function serializeNetworkFilters(filters, buffer) {
     buffer.pushUint32(filters.length);
-    for (let i = 0; i < filters.length; i += 1) {
+    for (var i = 0; i < filters.length; i += 1) {
         serializeNetworkFilter(filters[i], buffer);
     }
 }
 function serializeCosmeticFilters(filters, buffer) {
     buffer.pushUint32(filters.length);
-    for (let i = 0; i < filters.length; i += 1) {
+    for (var i = 0; i < filters.length; i += 1) {
         serializeCosmeticFilter(filters[i], buffer);
     }
 }
 function deserializeNetworkFilters(buffer, allFilters) {
-    const length = buffer.getUint32();
-    const filters = [];
-    for (let i = 0; i < length; i += 1) {
-        const filter = deserializeNetworkFilter(buffer);
+    var length = buffer.getUint32();
+    var filters = [];
+    for (var i = 0; i < length; i += 1) {
+        var filter = deserializeNetworkFilter(buffer);
         filters.push(filter);
         allFilters.set(filter.id, filter);
     }
     return filters;
 }
 function deserializeCosmeticFilters(buffer, allFilters) {
-    const length = buffer.getUint32();
-    const filters = [];
-    for (let i = 0; i < length; i += 1) {
-        const filter = deserializeCosmeticFilter(buffer);
+    var length = buffer.getUint32();
+    var filters = [];
+    for (var i = 0; i < length; i += 1) {
+        var filter = deserializeCosmeticFilter(buffer);
         filters.push(filter);
         allFilters.set(filter.id, filter);
     }
@@ -2036,7 +2097,7 @@ function deserializeCosmeticFilters(buffer, allFilters) {
 }
 function serializeLists(buffer, lists) {
     buffer.pushUint8(lists.size);
-    lists.forEach((list, asset) => {
+    lists.forEach(function (list, asset) {
         buffer.pushStr(asset);
         buffer.pushStr(list.checksum);
         serializeCosmeticFilters(list.cosmetics, buffer);
@@ -2047,40 +2108,40 @@ function serializeLists(buffer, lists) {
     });
 }
 function deserializeLists(buffer) {
-    const lists = new Map();
-    const networkFilters = new Map();
-    const cosmeticFilters = new Map();
-    const size = buffer.getUint8();
-    for (let i = 0; i < size; i += 1) {
+    var lists = new Map();
+    var networkFilters = new Map();
+    var cosmeticFilters = new Map();
+    var size = buffer.getUint8();
+    for (var i = 0; i < size; i += 1) {
         lists.set(buffer.getStr(), {
             checksum: buffer.getStr(),
             cosmetics: deserializeCosmeticFilters(buffer, cosmeticFilters),
             exceptions: deserializeNetworkFilters(buffer, networkFilters),
             filters: deserializeNetworkFilters(buffer, networkFilters),
             importants: deserializeNetworkFilters(buffer, networkFilters),
-            redirects: deserializeNetworkFilters(buffer, networkFilters),
+            redirects: deserializeNetworkFilters(buffer, networkFilters)
         });
     }
     return {
-        cosmeticFilters,
-        lists,
-        networkFilters,
+        cosmeticFilters: cosmeticFilters,
+        lists: lists,
+        networkFilters: networkFilters
     };
 }
 function serializeBucket(token, filters, buffer) {
     buffer.pushUint16(filters.length);
     buffer.pushUint32(token);
-    for (let i = 0; i < filters.length; i += 1) {
+    for (var i = 0; i < filters.length; i += 1) {
         buffer.pushUint32(filters[i].id);
     }
 }
 function deserializeBucket(buffer, filters) {
-    const bucket = [];
-    const length = buffer.getUint16();
-    const token = buffer.getUint32();
-    for (let i = 0; i < length; i += 1) {
-        const id = buffer.getUint32();
-        const filter = filters.get(id);
+    var bucket = [];
+    var length = buffer.getUint16();
+    var token = buffer.getUint32();
+    for (var i = 0; i < length; i += 1) {
+        var id = buffer.getUint32();
+        var filter = filters.get(id);
         if (filter !== undefined) {
             bucket.push(filter);
         }
@@ -2089,26 +2150,26 @@ function deserializeBucket(buffer, filters) {
         bucket: {
             filters: bucket,
             hit: 0,
-            optimized: false,
+            optimized: false
         },
-        token,
+        token: token
     };
 }
 function serializeReverseIndex(reverseIndex, buffer) {
-    const index = reverseIndex.index;
-    const tokens = [...index.keys()];
+    var index = reverseIndex.index;
+    var tokens = __spread(index.keys());
     buffer.pushUint32(reverseIndex.size);
     buffer.pushUint32(tokens.length);
-    index.forEach((bucket, token) => {
+    index.forEach(function (bucket, token) {
         serializeBucket(token, bucket.filters, buffer);
     });
 }
 function deserializeReverseIndex(buffer, index, filters) {
-    const deserializedIndex = new Map();
-    const size = buffer.getUint32();
-    const numberOfTokens = buffer.getUint32();
-    for (let i = 0; i < numberOfTokens; i += 1) {
-        const { token, bucket } = deserializeBucket(buffer, filters);
+    var deserializedIndex = new Map();
+    var size = buffer.getUint32();
+    var numberOfTokens = buffer.getUint32();
+    for (var i = 0; i < numberOfTokens; i += 1) {
+        var _a = deserializeBucket(buffer, filters), token = _a.token, bucket = _a.bucket;
         deserializedIndex.set(token, bucket);
     }
     index.index = deserializedIndex;
@@ -2118,40 +2179,41 @@ function deserializeReverseIndex(buffer, index, filters) {
 function serializeResources(engine, buffer) {
     buffer.pushStr(engine.resourceChecksum);
     buffer.pushUint8(engine.js.size);
-    engine.js.forEach((resource, name) => {
+    engine.js.forEach(function (resource, name) {
         buffer.pushStr(name);
         buffer.pushStr(resource);
     });
     buffer.pushUint8(engine.resources.size);
-    engine.resources.forEach(({ contentType, data }, name) => {
+    engine.resources.forEach(function (_a, name) {
+        var contentType = _a.contentType, data = _a.data;
         buffer.pushStr(name);
         buffer.pushStr(contentType);
         buffer.pushStr(data);
     });
 }
 function deserializeResources(buffer) {
-    const js = new Map();
-    const resources = new Map();
-    const resourceChecksum = buffer.getStr();
-    const jsSize = buffer.getUint8();
-    for (let i = 0; i < jsSize; i += 1) {
+    var js = new Map();
+    var resources = new Map();
+    var resourceChecksum = buffer.getStr();
+    var jsSize = buffer.getUint8();
+    for (var i = 0; i < jsSize; i += 1) {
         js.set(buffer.getStr(), buffer.getStr());
     }
-    const resourcesSize = buffer.getUint8();
-    for (let i = 0; i < resourcesSize; i += 1) {
+    var resourcesSize = buffer.getUint8();
+    for (var i = 0; i < resourcesSize; i += 1) {
         resources.set(buffer.getStr(), {
             contentType: buffer.getStr(),
-            data: buffer.getStr(),
+            data: buffer.getStr()
         });
     }
     return {
-        js,
-        resourceChecksum,
-        resources,
+        js: js,
+        resourceChecksum: resourceChecksum,
+        resources: resources
     };
 }
 function serializeEngine(engine) {
-    const buffer = new DynamicDataView(4000000);
+    var buffer = new DynamicDataView(4000000);
     buffer.pushUint8(engine.version);
     buffer.pushUint8(Number(engine.loadCosmeticFilters));
     buffer.pushUint8(Number(engine.loadNetworkFilters));
@@ -2167,24 +2229,24 @@ function serializeEngine(engine) {
     return buffer.crop();
 }
 function deserializeEngine(serialized, version) {
-    const buffer = new DynamicDataView(0);
+    var buffer = new DynamicDataView(0);
     buffer.set(serialized);
-    const serializedEngineVersion = buffer.getUint8();
+    var serializedEngineVersion = buffer.getUint8();
     if (version !== serializedEngineVersion) {
         throw new Error('serialized engine version mismatch');
     }
-    const options = {
+    var options = {
         loadCosmeticFilters: Boolean(buffer.getUint8()),
         loadNetworkFilters: Boolean(buffer.getUint8()),
         optimizeAOT: Boolean(buffer.getUint8()),
-        version: serializedEngineVersion,
+        version: serializedEngineVersion
     };
-    const engine = new FilterEngine(options);
-    const { js, resources, resourceChecksum } = deserializeResources(buffer);
+    var engine = new FilterEngine(options);
+    var _a = deserializeResources(buffer), js = _a.js, resources = _a.resources, resourceChecksum = _a.resourceChecksum;
     engine.js = js;
     engine.resources = resources;
     engine.resourceChecksum = resourceChecksum;
-    const { lists, networkFilters, cosmeticFilters } = deserializeLists(buffer);
+    var _b = deserializeLists(buffer), lists = _b.lists, networkFilters = _b.networkFilters, cosmeticFilters = _b.cosmeticFilters;
     engine.lists = lists;
     deserializeReverseIndex(buffer, engine.filters.index, networkFilters);
     deserializeReverseIndex(buffer, engine.exceptions.index, networkFilters);
@@ -2196,12 +2258,12 @@ function deserializeEngine(serialized, version) {
 }
 
 function checkHostnamesPartialMatch(hostname, hostnamePattern) {
-    let pattern = hostnamePattern;
+    var pattern = hostnamePattern;
     if (fastStartsWith(hostnamePattern, '~')) {
         pattern = pattern.substr(1);
     }
     if (hostname.endsWith(pattern)) {
-        const patternIndex = hostname.length - pattern.length;
+        var patternIndex = hostname.length - pattern.length;
         if (patternIndex === 0 || hostname[patternIndex - 1] === '.') {
             return true;
         }
@@ -2210,12 +2272,12 @@ function checkHostnamesPartialMatch(hostname, hostnamePattern) {
 }
 function matchHostname(hostname, hostnamePattern) {
     if (hostnamePattern.endsWith('.*')) {
-        const entity = hostnamePattern.slice(0, -2);
-        const publicSuffix = getPublicSuffix$1(hostname);
+        var entity = hostnamePattern.slice(0, -2);
+        var publicSuffix = getPublicSuffix$1(hostname);
         if (!publicSuffix) {
             return false;
         }
-        const hostnameWithoutSuffix = hostname.substr(0, hostname.length - publicSuffix.length - 1);
+        var hostnameWithoutSuffix = hostname.substr(0, hostname.length - publicSuffix.length - 1);
         if (hostnameWithoutSuffix.length > 0) {
             return checkHostnamesPartialMatch(hostnameWithoutSuffix, entity);
         }
@@ -2225,8 +2287,8 @@ function matchHostname(hostname, hostnamePattern) {
 }
 function matchCosmeticFilter(filter, hostname) {
     if (filter.hasHostnames() && hostname) {
-        const hostnames = filter.getHostnames();
-        for (let i = 0; i < hostnames.length; i += 1) {
+        var hostnames = filter.getHostnames();
+        for (var i = 0; i < hostnames.length; i += 1) {
             if (matchHostname(hostname, hostnames[i])) {
                 return { hostname: hostnames[i] };
             }
@@ -2239,75 +2301,77 @@ function matchCosmeticFilter(filter, hostname) {
 function nope(arg) {
     return arg;
 }
-class ReverseIndex {
-    constructor(filters, getTokens, { optimizer = nope } = {}) {
+var ReverseIndex = (function () {
+    function ReverseIndex(filters, getTokens, _a) {
+        var _b = (_a === void 0 ? {} : _a).optimizer, optimizer = _b === void 0 ? nope : _b;
         this.index = new Map();
         this.size = 0;
         this.optimizer = optimizer;
         this.getTokens = getTokens;
         this.addFilters(filters || []);
     }
-    iterMatchingFilters(tokens, cb) {
-        for (let j = 0; j < tokens.length; j += 1) {
+    ReverseIndex.prototype.iterMatchingFilters = function (tokens, cb) {
+        for (var j = 0; j < tokens.length; j += 1) {
             if (this.iterBucket(tokens[j], cb) === false) {
                 return;
             }
         }
         this.iterBucket(0, cb);
-    }
-    report() {
-        const sizes = new Map();
-        let strResult = '';
-        this.index.forEach((bucket, token) => {
-            const filters = bucket.filters;
+    };
+    ReverseIndex.prototype.report = function () {
+        var sizes = new Map();
+        var strResult = '';
+        this.index.forEach(function (bucket, token) {
+            var filters = bucket.filters;
             sizes.set(filters.length, (sizes.get(filters.length) || 0) + 1);
             if (length > 5) {
-                strResult = strResult.concat(`adblocker size bucket "${token}" => ${filters.length}\n`);
-                filters.forEach((f) => {
-                    strResult = strResult.concat(`    ${f.toString()} ${f.mask}\n`);
+                strResult = strResult.concat("adblocker size bucket \"" + token + "\" => " + filters.length + "\n");
+                filters.forEach(function (f) {
+                    strResult = strResult.concat("    " + f.toString() + " " + f.mask + "\n");
                 });
             }
         });
-        sizes.forEach((count, size) => {
-            strResult = strResult.concat(`adblocker sizes ${size} => ${count} buckets\n`);
+        sizes.forEach(function (count, size) {
+            strResult = strResult.concat("adblocker sizes " + size + " => " + count + " buckets\n");
         });
         return strResult;
-    }
-    optimizeAheadOfTime() {
+    };
+    ReverseIndex.prototype.optimizeAheadOfTime = function () {
+        var _this = this;
         if (this.optimizer) {
-            this.index.forEach((bucket) => {
-                this.optimize(bucket, true);
+            this.index.forEach(function (bucket) {
+                _this.optimize(bucket, true);
             });
         }
-    }
-    addFilters(filters) {
-        const length = filters.length;
+    };
+    ReverseIndex.prototype.addFilters = function (filters) {
+        var length = filters.length;
         this.size = length;
-        const idToTokens = new Map();
-        const histogram = new Map();
-        for (let i = 0; i < filters.length; i += 1) {
-            const filter = filters[i];
-            const multiTokens = this.getTokens(filter);
+        var idToTokens = new Map();
+        var histogram = new Map();
+        for (var i = 0; i < filters.length; i += 1) {
+            var filter = filters[i];
+            var multiTokens = this.getTokens(filter);
             idToTokens.set(filter.id, multiTokens);
-            for (let j = 0; j < multiTokens.length; j += 1) {
-                const tokens = multiTokens[j];
-                for (let k = 0; k < tokens.length; k += 1) {
-                    const token = tokens[k];
+            for (var j = 0; j < multiTokens.length; j += 1) {
+                var tokens = multiTokens[j];
+                for (var k = 0; k < tokens.length; k += 1) {
+                    var token = tokens[k];
                     histogram.set(token, (histogram.get(token) || 0) + 1);
                 }
             }
         }
-        for (let i = 0; i < filters.length; i += 1) {
-            let wildCardInserted = false;
-            const filter = filters[i];
-            const multiTokens = idToTokens.get(filter.id);
-            for (let j = 0; j < multiTokens.length; j += 1) {
-                const tokens = multiTokens[j];
-                let bestToken = 0;
-                let count = length;
-                for (let k = 0; k < tokens.length; k += 1) {
-                    const token = tokens[k];
-                    const tokenCount = histogram.get(token);
+        for (var i = 0; i < filters.length; i += 1) {
+            var wildCardInserted = false;
+            var filter = filters[i];
+            var multiTokens = idToTokens.get(filter.id);
+            for (var j = 0; j < multiTokens.length; j += 1) {
+                var tokens = multiTokens[j];
+                var bestToken = 0;
+                var count = length;
+                for (var k = 0; k < tokens.length; k += 1) {
+                    var token = tokens[k];
+                    var tokenCount = histogram.get(token);
                     if (tokenCount < count) {
                         bestToken = token;
                         count = tokenCount;
@@ -2321,12 +2385,12 @@ class ReverseIndex {
                         wildCardInserted = true;
                     }
                 }
-                const bucket = this.index.get(bestToken);
+                var bucket = this.index.get(bestToken);
                 if (bucket === undefined) {
                     this.index.set(bestToken, {
                         filters: [filter],
                         hit: 0,
-                        optimized: false,
+                        optimized: false
                     });
                 }
                 else {
@@ -2334,51 +2398,52 @@ class ReverseIndex {
                 }
             }
         }
-    }
-    optimize(bucket, force = false) {
+    };
+    ReverseIndex.prototype.optimize = function (bucket, force) {
+        if (force === void 0) { force = false; }
         if (this.optimizer && !bucket.optimized && (force || bucket.hit >= 5)) {
             if (bucket.filters.length > 1) {
                 bucket.filters = this.optimizer(bucket.filters);
             }
             bucket.optimized = true;
         }
-    }
-    iterBucket(token, cb) {
-        const bucket = this.index.get(token);
+    };
+    ReverseIndex.prototype.iterBucket = function (token, cb) {
+        var bucket = this.index.get(token);
         if (bucket !== undefined) {
             bucket.hit += 1;
-            const filters = bucket.filters;
-            for (let k = 0; k < filters.length; k += 1) {
+            var filters = bucket.filters;
+            for (var k = 0; k < filters.length; k += 1) {
                 if (cb(filters[k]) === false) {
                     return false;
                 }
             }
         }
         return true;
-    }
-}
+    };
+    return ReverseIndex;
+}());
 
-class CosmeticFilterBucket {
-    constructor(filters = []) {
-        this.hostnameIndex = new ReverseIndex((filters || []).filter((f) => f.hasHostnames()), (filter) => {
-            const multiTokens = [];
-            filter.hostnames.split(',').forEach((h) => {
+var CosmeticFilterBucket = (function () {
+    function CosmeticFilterBucket(filters) {
+        if (filters === void 0) { filters = []; }
+        this.hostnameIndex = new ReverseIndex((filters || []).filter(function (f) { return f.hasHostnames(); }), function (filter) {
+            var multiTokens = [];
+            filter.hostnames.split(',').forEach(function (h) {
                 multiTokens.push(tokenize(h));
             });
             return multiTokens;
         });
-        this.selectorIndex = new ReverseIndex((filters || []).filter((f) => !(f.isScriptBlock() || f.isScriptInject())), (filter) => filter.getTokens(), {});
+        this.selectorIndex = new ReverseIndex((filters || []).filter(function (f) { return !(f.isScriptBlock() || f.isScriptInject()); }), function (filter) { return filter.getTokens(); }, {});
+        this.size = this.hostnameIndex.size + this.selectorIndex.size;
     }
-    get size() {
-        return this.hostnameIndex.size + this.selectorIndex.size;
-    }
-    createContentScriptResponse(rules) {
-        const styles = [];
-        const scripts = [];
-        const blockedScripts = [];
-        for (let i = 0; i < rules.length; i += 1) {
-            const rule = rules[i];
-            const selector = rule.getSelector();
+    CosmeticFilterBucket.prototype.createContentScriptResponse = function (rules) {
+        var styles = [];
+        var scripts = [];
+        var blockedScripts = [];
+        for (var i = 0; i < rules.length; i += 1) {
+            var rule = rules[i];
+            var selector = rule.getSelector();
             if (rule.isScriptBlock()) {
                 blockedScripts.push(selector);
             }
@@ -2391,41 +2456,41 @@ class CosmeticFilterBucket {
         }
         return {
             active: true,
-            blockedScripts,
-            scripts,
-            styles,
+            blockedScripts: blockedScripts,
+            scripts: scripts,
+            styles: styles
         };
-    }
-    getDomainRules(hostname, js) {
-        const rules = [];
-        const checkMatch = (rule) => {
-            const result = matchCosmeticFilter(rule, hostname);
+    };
+    CosmeticFilterBucket.prototype.getDomainRules = function (hostname, js) {
+        var rules = [];
+        var checkMatch = function (rule) {
+            var result = matchCosmeticFilter(rule, hostname);
             if (result !== null) {
                 if (rule.isScriptInject()) {
-                    const ruleWithScript = new CosmeticFilter(rule);
-                    let scriptName = rule.getSelector();
-                    let scriptArguments = [];
+                    var ruleWithScript = new CosmeticFilter(rule);
+                    var scriptName = rule.getSelector();
+                    var scriptArguments = [];
                     if (scriptName.indexOf(',') !== -1) {
-                        const parts = scriptName.split(',');
+                        var parts = scriptName.split(',');
                         scriptName = parts[0];
-                        scriptArguments = parts.slice(1).map((s) => s.trim());
+                        scriptArguments = parts.slice(1).map(function (s) { return s.trim(); });
                     }
-                    let script = js.get(scriptName);
+                    var script = js.get(scriptName);
                     if (script !== undefined) {
-                        for (let i = 0; i < scriptArguments.length; i += 1) {
-                            script = script.replace(`{{${i + 1}}}`, scriptArguments[i]);
+                        for (var i = 0; i < scriptArguments.length; i += 1) {
+                            script = script.replace("{{" + (i + 1) + "}}", scriptArguments[i]);
                         }
                         ruleWithScript.selector = script;
                         rules.push({
                             hostname: result.hostname,
-                            rule: ruleWithScript,
+                            rule: ruleWithScript
                         });
                     }
                 }
                 else {
                     rules.push({
                         hostname: result.hostname,
-                        rule,
+                        rule: rule
                     });
                 }
             }
@@ -2433,64 +2498,66 @@ class CosmeticFilterBucket {
         };
         this.hostnameIndex.iterMatchingFilters(tokenize(hostname), checkMatch);
         return this.filterExceptions(rules);
-    }
-    getMatchingRules(hostname, nodeInfo) {
-        const tokens = new Set();
-        for (let i = 0; i < nodeInfo.length; i += 1) {
-            const node = nodeInfo[i];
-            for (let j = 0; j < node.length; j += 1) {
+    };
+    CosmeticFilterBucket.prototype.getMatchingRules = function (hostname, nodeInfo) {
+        var tokens = new Set();
+        for (var i = 0; i < nodeInfo.length; i += 1) {
+            var node = nodeInfo[i];
+            for (var j = 0; j < node.length; j += 1) {
                 tokens.add(fastHash(node[j]));
             }
         }
-        const rules = [];
-        const checkMatch = (rule) => {
-            const result = matchCosmeticFilter(rule, hostname);
+        var rules = [];
+        var checkMatch = function (rule) {
+            var result = matchCosmeticFilter(rule, hostname);
             if (result !== null) {
                 rules.push({
                     hostname: result.hostname,
-                    rule,
+                    rule: rule
                 });
             }
             return true;
         };
-        this.selectorIndex.iterMatchingFilters([...tokens], checkMatch);
+        this.selectorIndex.iterMatchingFilters(__spread(tokens), checkMatch);
         return this.filterExceptions(rules);
-    }
-    filterExceptions(matches) {
-        const matchingRules = new Map();
-        for (let i = 0; i < matches.length; i += 1) {
-            const { rule, hostname } = matches[i];
-            const selector = rule.getSelector();
-            const isException = fastStartsWith(hostname, '~');
+    };
+    CosmeticFilterBucket.prototype.filterExceptions = function (matches) {
+        var matchingRules = new Map();
+        for (var i = 0; i < matches.length; i += 1) {
+            var _a = matches[i], rule = _a.rule, hostname = _a.hostname;
+            var selector = rule.getSelector();
+            var isException = fastStartsWith(hostname, '~');
             if (matchingRules.has(selector)) {
-                const otherRule = matchingRules.get(selector);
+                var otherRule = matchingRules.get(selector);
                 if (rule.isUnhide() ||
                     isException ||
                     hostname.length > otherRule.hostname.length) {
                     matchingRules.set(selector, {
-                        hostname,
-                        isException,
-                        rule,
+                        hostname: hostname,
+                        isException: isException,
+                        rule: rule
                     });
                 }
             }
             else {
                 matchingRules.set(selector, {
-                    hostname,
-                    isException,
-                    rule,
+                    hostname: hostname,
+                    isException: isException,
+                    rule: rule
                 });
             }
         }
-        const rules = [];
-        matchingRules.forEach(({ rule, isException }) => {
+        var rules = [];
+        matchingRules.forEach(function (_a) {
+            var rule = _a.rule, isException = _a.isException;
             if (!isException && !rule.isUnhide()) {
                 rules.push(rule);
             }
         });
         return rules;
-    }
-}
+    };
+    return CosmeticFilterBucket;
+}());
 
 function isAnchoredByHostname(filterHostname, hostname) {
     if (filterHostname.length === 0) {
@@ -2499,7 +2566,7 @@ function isAnchoredByHostname(filterHostname, hostname) {
     if (filterHostname.length > hostname.length) {
         return false;
     }
-    const matchIndex = hostname.indexOf(filterHostname);
+    var matchIndex = hostname.indexOf(filterHostname);
     if (matchIndex === -1) {
         return false;
     }
@@ -2514,18 +2581,18 @@ function getUrlAfterHostname(url, hostname) {
     return url.substring(url.indexOf(hostname) + hostname.length);
 }
 function checkPatternFuzzyFilter(filter, request) {
-    const signature = filter.getFuzzySignature();
+    var signature = filter.getFuzzySignature();
     if (request.fuzzySignature === undefined) {
         request.fuzzySignature = createFuzzySignature(request.url);
     }
-    const requestSignature = request.fuzzySignature;
+    var requestSignature = request.fuzzySignature;
     if (signature.length > requestSignature.length) {
         return false;
     }
-    let lastIndex = 0;
-    for (let i = 0; i < signature.length; i += 1) {
-        const c = signature[i];
-        const j = requestSignature.indexOf(c, lastIndex);
+    var lastIndex = 0;
+    for (var i = 0; i < signature.length; i += 1) {
+        var c = signature[i];
+        var j = requestSignature.indexOf(c, lastIndex);
         if (j === -1) {
             return false;
         }
@@ -2534,51 +2601,51 @@ function checkPatternFuzzyFilter(filter, request) {
     return true;
 }
 function checkPatternPlainFilter(filter, request) {
-    const { url } = request;
+    var url = request.url;
     return url.indexOf(filter.getFilter()) !== -1;
 }
 function checkPatternRightAnchorFilter(filter, request) {
-    const { url } = request;
+    var url = request.url;
     return url.endsWith(filter.getFilter());
 }
 function checkPatternLeftAnchorFilter(filter, request) {
-    const { url } = request;
+    var url = request.url;
     return fastStartsWith(url, filter.getFilter());
 }
 function checkPatternLeftRightAnchorFilter(filter, request) {
-    const { url } = request;
+    var url = request.url;
     return url === filter.getFilter();
 }
 function checkPatternRegexFilter(filter, request) {
-    const { url } = request;
+    var url = request.url;
     return filter.getRegex().test(url);
 }
 function checkPatternHostnameAnchorRegexFilter(filter, request) {
-    const { url, hostname } = request;
+    var url = request.url, hostname = request.hostname;
     if (isAnchoredByHostname(filter.getHostname(), hostname)) {
-        const urlAfterHostname = getUrlAfterHostname(url, filter.getHostname());
-        return checkPatternRegexFilter(filter, Object.assign({}, request, { url: urlAfterHostname }));
+        var urlAfterHostname = getUrlAfterHostname(url, filter.getHostname());
+        return checkPatternRegexFilter(filter, __assign({}, request, { url: urlAfterHostname }));
     }
     return false;
 }
 function checkPatternHostnameRightAnchorFilter(filter, request) {
-    const { url, hostname } = request;
+    var url = request.url, hostname = request.hostname;
     if (isAnchoredByHostname(filter.getHostname(), hostname)) {
-        const urlAfterHostname = getUrlAfterHostname(url, filter.getHostname());
+        var urlAfterHostname = getUrlAfterHostname(url, filter.getHostname());
         return filter.getFilter() === urlAfterHostname;
     }
     return false;
 }
 function checkPatternHostnameAnchorFilter(filter, request) {
-    const { url, hostname } = request;
+    var url = request.url, hostname = request.hostname;
     if (isAnchoredByHostname(filter.getHostname(), hostname)) {
-        const urlAfterHostname = getUrlAfterHostname(url, filter.getHostname());
+        var urlAfterHostname = getUrlAfterHostname(url, filter.getHostname());
         return fastStartsWith(urlAfterHostname, filter.getFilter());
     }
     return false;
 }
 function checkPatternHostnameAnchorFuzzyFilter(filter, request) {
-    const { hostname } = request;
+    var hostname = request.hostname;
     if (isAnchoredByHostname(filter.getHostname(), hostname)) {
         return checkPatternFuzzyFilter(filter, request);
     }
@@ -2618,10 +2685,10 @@ function checkOptions(filter, request) {
     if (!filter.isCptAllowed(request.cpt)) {
         return false;
     }
-    const sHost = request.sourceHostname;
-    const sHostGD = request.sourceGD;
-    const hostGD = request.hostGD;
-    const isFirstParty = sHostGD === hostGD;
+    var sHost = request.sourceHostname;
+    var sHostGD = request.sourceGD;
+    var hostGD = request.hostGD;
+    var isFirstParty = sHostGD === hostGD;
     if (!filter.firstParty() && isFirstParty) {
         return false;
     }
@@ -2629,14 +2696,14 @@ function checkOptions(filter, request) {
         return false;
     }
     if (filter.hasOptDomains()) {
-        const optDomains = filter.getOptDomains();
+        var optDomains = filter.getOptDomains();
         if (optDomains.size > 0 &&
             !(optDomains.has(sHostGD) || optDomains.has(sHost))) {
             return false;
         }
     }
     if (filter.hasOptNotDomains()) {
-        const optNotDomains = filter.getOptNotDomains();
+        var optNotDomains = filter.getOptNotDomains();
         if (optNotDomains.size > 0 &&
             (optNotDomains.has(sHostGD) || optNotDomains.has(sHost))) {
             return false;
@@ -2649,13 +2716,13 @@ function matchNetworkFilter(filter, request) {
 }
 
 function processRegex(r) {
-    return `(?:${r.source})`;
+    return "(?:" + r.source + ")";
 }
 function escape$1(s) {
-    return `(?:${s.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')})`;
+    return "(?:" + s.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&') + ")";
 }
 function setWithDefault(map, key, value) {
-    let bucket = map.get(key);
+    var bucket = map.get(key);
     if (bucket === undefined) {
         bucket = [];
         map.set(key, bucket);
@@ -2663,46 +2730,46 @@ function setWithDefault(map, key, value) {
     bucket.push(value);
 }
 function optimize(filters) {
-    const fused = [];
-    const groupedByOption = new Map();
-    for (let i = 0; i < filters.length; i += 1) {
-        const filter = filters[i];
-        const mask = filter.getMask();
+    var fused = [];
+    var groupedByOption = new Map();
+    for (var i = 0; i < filters.length; i += 1) {
+        var filter = filters[i];
+        var mask = filter.getMask();
         setWithDefault(groupedByOption, mask, filter);
     }
-    groupedByOption.forEach(lst => {
-        const plainNoDomains = new Map();
-        const plainPatterns = new Map();
-        const regexPatterns = new Map();
-        for (let i = 0; i < lst.length; i += 1) {
-            const filter = lst[i];
+    groupedByOption.forEach(function (lst) {
+        var plainNoDomains = new Map();
+        var plainPatterns = new Map();
+        var regexPatterns = new Map();
+        for (var i = 0; i < lst.length; i += 1) {
+            var filter = lst[i];
             if (filter.isPlain()) {
                 if (!(filter.hasOptDomains() ||
                     filter.hasOptNotDomains() ||
                     filter.isHostname() ||
                     filter.isHostnameAnchor())) {
-                    setWithDefault(plainNoDomains, `${filter.redirect}`, filter);
+                    setWithDefault(plainNoDomains, "" + filter.redirect, filter);
                 }
                 else {
-                    setWithDefault(plainPatterns, `${filter.getHostname()}|||${filter.getFilter()}|||${filter.redirect}`, filter);
+                    setWithDefault(plainPatterns, filter.getHostname() + "|||" + filter.getFilter() + "|||" + filter.redirect, filter);
                 }
             }
             else if (!(filter.hasOptDomains() || filter.hasOptNotDomains())) {
-                setWithDefault(plainNoDomains, `${filter.redirect}`, filter);
+                setWithDefault(plainNoDomains, "" + filter.redirect, filter);
             }
             else {
-                setWithDefault(regexPatterns, `${filter.getHostname()}|||${filter.getRegex().source}`, filter);
+                setWithDefault(regexPatterns, filter.getHostname() + "|||" + filter.getRegex().source, filter);
             }
         }
-        plainNoDomains.forEach(bucket => {
+        plainNoDomains.forEach(function (bucket) {
             if (bucket.length === 1) {
                 fused.push(bucket[0]);
             }
             else {
-                let filter = null;
-                const patterns = new Set();
-                for (let i = 0; i < bucket.length; i += 1) {
-                    const f = bucket[i];
+                var filter = null;
+                var patterns = new Set();
+                for (var i = 0; i < bucket.length; i += 1) {
+                    var f = bucket[i];
                     if (filter === null) {
                         filter = new NetworkFilter(f);
                     }
@@ -2710,10 +2777,10 @@ function optimize(filters) {
                         patterns.add(processRegex(f.getRegex()));
                     }
                     else if (f.isRightAnchor()) {
-                        patterns.add(`${escape$1(f.getFilter())}$`);
+                        patterns.add(escape$1(f.getFilter()) + "$");
                     }
                     else if (f.isLeftAnchor()) {
-                        patterns.add(`^${escape$1(f.getFilter())}`);
+                        patterns.add("^" + escape$1(f.getFilter()));
                     }
                     else {
                         patterns.add(escape$1(f.getFilter()));
@@ -2721,40 +2788,40 @@ function optimize(filters) {
                 }
                 if (filter !== null) {
                     if (patterns.size > 1) {
-                        filter.setRegex(new RegExp([...patterns].join('|')));
+                        filter.setRegex(new RegExp(__spread(patterns).join('|')));
                     }
                     fused.push(filter);
                 }
             }
         });
-        plainPatterns.forEach(bucket => {
+        plainPatterns.forEach(function (bucket) {
             if (bucket.length === 1) {
                 fused.push(bucket[0]);
             }
             else {
-                let newFilterDomains = null;
-                let optDomains = new Set();
-                let newFilterNotDomains = null;
-                let optNotDomains = new Set();
-                let newFilter = null;
-                for (let i = 0; i < bucket.length; i += 1) {
-                    const f = bucket[i];
+                var newFilterDomains = null;
+                var optDomains_1 = new Set();
+                var newFilterNotDomains = null;
+                var optNotDomains_1 = new Set();
+                var newFilter = null;
+                for (var i = 0; i < bucket.length; i += 1) {
+                    var f = bucket[i];
                     if (f.hasOptNotDomains()) {
                         if (newFilterNotDomains === null) {
                             newFilterNotDomains = new NetworkFilter(f);
-                            optNotDomains = f.getOptNotDomains();
+                            optNotDomains_1 = f.getOptNotDomains();
                         }
                         else {
-                            f.getOptNotDomains().forEach((d) => optNotDomains.add(d));
+                            f.getOptNotDomains().forEach(function (d) { return optNotDomains_1.add(d); });
                         }
                     }
                     else if (f.hasOptDomains()) {
                         if (newFilterDomains === null) {
                             newFilterDomains = new NetworkFilter(f);
-                            optDomains = f.getOptDomains();
+                            optDomains_1 = f.getOptDomains();
                         }
                         else {
-                            f.getOptDomains().forEach((d) => optDomains.add(d));
+                            f.getOptDomains().forEach(function (d) { return optDomains_1.add(d); });
                         }
                     }
                     else if (newFilter === null) {
@@ -2772,21 +2839,21 @@ function optimize(filters) {
                 }
             }
         });
-        regexPatterns.forEach(bucket => {
+        regexPatterns.forEach(function (bucket) {
             if (bucket.length === 1) {
                 fused.push(bucket[0]);
             }
             else {
-                let newFilterDomains = null;
-                const newFilterDomainsRegex = new Set();
-                let optDomains = new Set();
-                let newFilterNotDomains = null;
-                let optNotDomains = new Set();
-                const newFilterNotDomainsRegex = new Set();
-                let newFilter = null;
-                const newFilterRegex = new Set();
-                for (let i = 0; i < bucket.length; i += 1) {
-                    const f = bucket[i];
+                var newFilterDomains = null;
+                var newFilterDomainsRegex = new Set();
+                var optDomains = new Set();
+                var newFilterNotDomains = null;
+                var optNotDomains = new Set();
+                var newFilterNotDomainsRegex = new Set();
+                var newFilter = null;
+                var newFilterRegex = new Set();
+                for (var i = 0; i < bucket.length; i += 1) {
+                    var f = bucket[i];
                     if (f.hasOptNotDomains()) {
                         if (newFilterNotDomains === null) {
                             newFilterNotDomains = new NetworkFilter(f);
@@ -2820,17 +2887,17 @@ function optimize(filters) {
                     }
                 }
                 if (newFilter !== null) {
-                    const fusedRegex = [...newFilterRegex].join('|');
+                    var fusedRegex = __spread(newFilterRegex).join('|');
                     newFilter.setRegex(new RegExp(fusedRegex));
                     fused.push(newFilter);
                 }
                 if (newFilterDomains !== null) {
-                    const fusedRegex = [...newFilterDomainsRegex].join('|');
+                    var fusedRegex = __spread(newFilterDomainsRegex).join('|');
                     newFilterDomains.setRegex(new RegExp(fusedRegex));
                     fused.push(newFilterDomains);
                 }
                 if (newFilterNotDomains !== null) {
-                    const fusedRegex = [...newFilterNotDomainsRegex].join('|');
+                    var fusedRegex = __spread(newFilterNotDomainsRegex).join('|');
                     newFilterNotDomains.setRegex(new RegExp(fusedRegex));
                     fused.push(newFilterNotDomains);
                 }
@@ -2840,25 +2907,24 @@ function optimize(filters) {
     return fused;
 }
 
-class NetworkFilterBucket {
-    constructor(name, filters = []) {
+var NetworkFilterBucket = (function () {
+    function NetworkFilterBucket(name, filters) {
+        if (filters === void 0) { filters = []; }
         this.name = name;
-        this.index = new ReverseIndex(filters, (filter) => filter.getTokens(), {
-            optimizer: optimize,
+        this.index = new ReverseIndex(filters, function (filter) { return filter.getTokens(); }, {
+            optimizer: optimize
         });
+        this.size = this.index.size;
     }
-    get size() {
-        return this.index.size;
-    }
-    report() {
+    NetworkFilterBucket.prototype.report = function () {
         return this.index.report();
-    }
-    optimizeAheadOfTime() {
+    };
+    NetworkFilterBucket.prototype.optimizeAheadOfTime = function () {
         this.index.optimizeAheadOfTime();
-    }
-    match(request) {
-        let match;
-        const checkMatch = (filter) => {
+    };
+    NetworkFilterBucket.prototype.match = function (request) {
+        var match;
+        var checkMatch = function (filter) {
             if (matchNetworkFilter(filter, request)) {
                 match = filter;
                 return false;
@@ -2867,8 +2933,9 @@ class NetworkFilterBucket {
         };
         this.index.iterMatchingFilters(request.tokens, checkMatch);
         return match;
-    }
-}
+    };
+    return NetworkFilterBucket;
+}());
 
 function btoaPolyfill(buffer) {
     if (typeof btoa !== 'undefined') {
@@ -2880,18 +2947,18 @@ function btoaPolyfill(buffer) {
     return buffer;
 }
 function extend(target, array) {
-    for (let i = 0; i < array.length; i += 1) {
+    for (var i = 0; i < array.length; i += 1) {
         target.push(array[i]);
     }
     return target;
 }
 function collectAllFilters(lists) {
-    const filters = [];
-    const exceptions = [];
-    const redirects = [];
-    const importants = [];
-    const cosmetics = [];
-    lists.forEach((list) => {
+    var filters = [];
+    var exceptions = [];
+    var redirects = [];
+    var importants = [];
+    var cosmetics = [];
+    lists.forEach(function (list) {
         extend(filters, list.filters);
         extend(exceptions, list.exceptions);
         extend(importants, list.importants);
@@ -2899,15 +2966,16 @@ function collectAllFilters(lists) {
         extend(cosmetics, list.cosmetics);
     });
     return {
-        cosmetics,
-        exceptions,
-        filters,
-        importants,
-        redirects,
+        cosmetics: cosmetics,
+        exceptions: exceptions,
+        filters: filters,
+        importants: importants,
+        redirects: redirects
     };
 }
-class FilterEngine {
-    constructor({ loadCosmeticFilters, loadNetworkFilters, optimizeAOT, version, }) {
+var FilterEngine = (function () {
+    function FilterEngine(_a) {
+        var loadCosmeticFilters = _a.loadCosmeticFilters, loadNetworkFilters = _a.loadNetworkFilters, optimizeAOT = _a.optimizeAOT, version = _a.version;
         this.loadCosmeticFilters = loadCosmeticFilters;
         this.loadNetworkFilters = loadNetworkFilters;
         this.optimizeAOT = optimizeAOT;
@@ -2918,67 +2986,69 @@ class FilterEngine {
         this.redirects = new NetworkFilterBucket('redirects');
         this.filters = new NetworkFilterBucket('filters');
         this.cosmetics = new CosmeticFilterBucket();
-        this.resourceChecksum = '';
-        this.js = new Map();
-        this.resources = new Map();
-    }
-    get size() {
-        return (this.exceptions.size +
+        this.size = (this.exceptions.size +
             this.importants.size +
             this.redirects.size +
             this.cosmetics.size +
             this.filters.size);
+        this.resourceChecksum = '';
+        this.js = new Map();
+        this.resources = new Map();
     }
-    hasList(asset, checksum) {
-        const list = this.lists.get(asset);
+    FilterEngine.prototype.hasList = function (asset, checksum) {
+        var list = this.lists.get(asset);
         if (list !== undefined) {
             return list.checksum === checksum;
         }
         return false;
-    }
-    onUpdateResource(updates) {
-        for (let i = 0; i < updates.length; i += 1) {
-            const { filters, checksum } = updates[i];
+    };
+    FilterEngine.prototype.onUpdateResource = function (updates) {
+        var _this = this;
+        for (var i = 0; i < updates.length; i += 1) {
+            var _a = updates[i], filters = _a.filters, checksum = _a.checksum;
             this.resourceChecksum = checksum;
-            const typeToResource = parseJSResource(filters);
-            const js = typeToResource.get('application/javascript');
+            var typeToResource = parseJSResource(filters);
+            var js = typeToResource.get('application/javascript');
             if (js !== undefined) {
                 this.js = js;
             }
-            typeToResource.forEach((resources, contentType) => {
-                resources.forEach((data, name) => {
-                    this.resources.set(name, {
-                        contentType,
-                        data,
+            typeToResource.forEach(function (resources, contentType) {
+                resources.forEach(function (data, name) {
+                    _this.resources.set(name, {
+                        contentType: contentType,
+                        data: data
                     });
                 });
             });
         }
-    }
-    onUpdateFilters(lists, loadedAssets, onDiskCache = false, debug = false) {
-        let updated = false;
-        this.lists.forEach((_, asset) => {
+    };
+    FilterEngine.prototype.onUpdateFilters = function (lists, loadedAssets, onDiskCache, debug) {
+        var _this = this;
+        if (onDiskCache === void 0) { onDiskCache = false; }
+        if (debug === void 0) { debug = false; }
+        var updated = false;
+        this.lists.forEach(function (_, asset) {
             if (!loadedAssets.has(asset)) {
-                this.lists.delete(asset);
+                _this.lists["delete"](asset);
                 updated = true;
             }
         });
         if (lists.length > 0) {
             updated = true;
         }
-        for (let i = 0; i < lists.length; i += 1) {
-            const { asset, filters, checksum } = lists[i];
-            const { cosmeticFilters, networkFilters } = parseList(filters, {
-                debug,
+        for (var i = 0; i < lists.length; i += 1) {
+            var _a = lists[i], asset = _a.asset, filters = _a.filters, checksum = _a.checksum;
+            var _b = parseList(filters, {
+                debug: debug,
                 loadCosmeticFilters: this.loadCosmeticFilters,
-                loadNetworkFilters: this.loadNetworkFilters,
-            });
-            const miscFilters = [];
-            const exceptions = [];
-            const importants = [];
-            const redirects = [];
-            for (let j = 0; j < networkFilters.length; j += 1) {
-                const filter = networkFilters[j];
+                loadNetworkFilters: this.loadNetworkFilters
+            }), cosmeticFilters = _b.cosmeticFilters, networkFilters = _b.networkFilters;
+            var miscFilters = [];
+            var exceptions = [];
+            var importants = [];
+            var redirects = [];
+            for (var j = 0; j < networkFilters.length; j += 1) {
+                var filter = networkFilters[j];
                 if (filter.isException()) {
                     exceptions.push(filter);
                 }
@@ -2993,21 +3063,26 @@ class FilterEngine {
                 }
             }
             this.lists.set(asset, {
-                checksum,
+                checksum: checksum,
                 cosmetics: cosmeticFilters,
-                exceptions,
+                exceptions: exceptions,
                 filters: miscFilters,
-                importants,
-                redirects,
+                importants: importants,
+                redirects: redirects
             });
         }
-        const allFilters = collectAllFilters(this.lists);
+        var allFilters = collectAllFilters(this.lists);
         this.filters = new NetworkFilterBucket('filters', allFilters.filters);
         this.exceptions = new NetworkFilterBucket('exceptions', allFilters.exceptions);
         this.importants = new NetworkFilterBucket('importants', allFilters.importants);
         this.redirects = new NetworkFilterBucket('redirects', allFilters.redirects);
         this.cosmetics = new CosmeticFilterBucket(allFilters.cosmetics);
-        let serialized = null;
+        this.size = (this.exceptions.size +
+            this.importants.size +
+            this.redirects.size +
+            this.cosmetics.size +
+            this.filters.size);
+        var serialized = null;
         if (updated && onDiskCache) {
             serialized = serializeEngine(this);
         }
@@ -3015,28 +3090,28 @@ class FilterEngine {
             this.optimize();
         }
         return serialized;
-    }
-    optimize() {
-    }
-    getCosmeticsFilters(hostname, nodes) {
+    };
+    FilterEngine.prototype.optimize = function () {
+    };
+    FilterEngine.prototype.getCosmeticsFilters = function (hostname, nodes) {
         if (!this.loadCosmeticFilters) {
             return this.cosmetics.createContentScriptResponse([]);
         }
         return this.cosmetics.createContentScriptResponse(this.cosmetics.getMatchingRules(hostname, nodes));
-    }
-    getDomainFilters(hostname) {
+    };
+    FilterEngine.prototype.getDomainFilters = function (hostname) {
         if (!this.loadCosmeticFilters) {
             return this.cosmetics.createContentScriptResponse([]);
         }
         return this.cosmetics.createContentScriptResponse(this.cosmetics.getDomainRules(hostname, this.js));
-    }
-    match(rawRequest) {
+    };
+    FilterEngine.prototype.match = function (rawRequest) {
         if (!this.loadNetworkFilters) {
             return { match: false };
         }
-        const request = processRawRequest(rawRequest);
-        let filter;
-        let exception;
+        var request = processRawRequest(rawRequest);
+        var filter;
+        var exception;
         filter = this.importants.match(request);
         if (filter === undefined) {
             filter = this.redirects.match(request);
@@ -3049,36 +3124,37 @@ class FilterEngine {
         }
         if (filter !== undefined) {
             if (filter.isRedirect()) {
-                const redirect = this.resources.get(filter.getRedirect());
+                var redirect = this.resources.get(filter.getRedirect());
                 if (redirect !== undefined) {
-                    const { data, contentType } = redirect;
-                    let dataUrl;
+                    var data = redirect.data, contentType = redirect.contentType;
+                    var dataUrl = void 0;
                     if (contentType.indexOf(';') !== -1) {
-                        dataUrl = `data:${contentType},${data}`;
+                        dataUrl = "data:" + contentType + "," + data;
                     }
                     else {
-                        dataUrl = `data:${contentType};base64,${btoaPolyfill(data)}`;
+                        dataUrl = "data:" + contentType + ";base64," + btoaPolyfill(data);
                     }
                     return {
-                        exception,
-                        filter,
+                        exception: exception,
+                        filter: filter,
                         match: true,
-                        redirect: dataUrl.trim(),
+                        redirect: dataUrl.trim()
                     };
                 }
             }
             return {
-                exception,
-                filter,
-                match: true,
+                exception: exception,
+                filter: filter,
+                match: true
             };
         }
         return {
-            exception,
-            filter,
-            match: false,
+            exception: exception,
+            filter: filter,
+            match: false
         };
-    }
-}
+    };
+    return FilterEngine;
+}());
 
 export { CosmeticInjection as CosmeticsInjection, overrideUserAgent, FilterEngine as FiltersEngine, ReverseIndex, processRawRequest, deserializeEngine, matchCosmeticFilter, matchNetworkFilter, parseCosmeticFilter, parseNetworkFilter, f, parseList, compactTokens, hasEmptyIntersection, mergeCompactSets, tokenize, fastHash };

@@ -8,12 +8,14 @@
   },
   "author": "Cliqz",
   "license": "MPL-2.0",
-  "main": "dist/adblocker.umd.js",
+  "main": "dist/adblocker.umd.min.js",
   "module": "dist/adblocker.es.js",
   "jsnext:main": "dist/adblocker.es.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "index.ts",
+    "src"
   ],
   "scripts": {
     "clean": "rm -rfv dist build",
@@ -22,24 +24,8 @@
     "watch": "tsc -p . --module ES6 --outDir build --watch",
     "bundle": "rollup -c rollup.config.js && google-closure-compiler --js=./dist/adblocker.umd.js --js_output_file=./dist/adblocker.umd.min.js",
     "pretest": "npm run lint",
-    "test": "jest --coverage",
-    "dev": "npm run clean && concurrently 'npm run watch' 'jest --watch'"
-  },
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "diagnostics": {
-          "warnOnly": true
-        }
-      }
-    },
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "node",
-      "ts"
-    ],
-    "preset": "ts-jest"
+    "test": "jest --coverage --no-cache",
+    "dev": "jest --watch"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.73",
@@ -61,12 +47,7 @@
     "jest": "^23.5.0",
     "jsdom": "^11.12.0",
     "rollup": "^0.64.1",
-    "rollup-plugin-commonjs": "^9.1.3",
-    "rollup-plugin-json": "^3.0.0",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.2.1",
     "rollup-plugin-node-resolve": "^3.3.0",
-    "rollup-plugin-sourcemaps": "^0.4.2",
     "selenium-webdriver": "^3.6.0",
     "ts-jest": "^23.10.0-beta.6",
     "tslint": "^5.11.0",

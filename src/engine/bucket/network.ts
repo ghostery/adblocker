@@ -12,16 +12,14 @@ import ReverseIndex from '../reverse-index';
 export default class NetworkFilterBucket {
   public name: string;
   public index: ReverseIndex<NetworkFilter>;
+  public size: number;
 
   constructor(name: string, filters: NetworkFilter[] = []) {
     this.name = name;
     this.index = new ReverseIndex(filters, (filter) => filter.getTokens(), {
       optimizer: networkFiltersOptimizer,
     });
-  }
-
-  get size() {
-    return this.index.size;
+    this.size = this.index.size;
   }
 
   public report() {

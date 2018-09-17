@@ -11,6 +11,7 @@ export default class FilterEngine {
     redirects: NetworkFilterBucket;
     filters: NetworkFilterBucket;
     cosmetics: CosmeticFilterBucket;
+    size: number;
     resourceChecksum: string;
     js: Map<string, string>;
     resources: Map<string, {
@@ -26,7 +27,6 @@ export default class FilterEngine {
         optimizeAOT: boolean;
         version: number;
     });
-    readonly size: number;
     hasList(asset: string, checksum: string): boolean;
     onUpdateResource(updates: Array<{
         filters: string;

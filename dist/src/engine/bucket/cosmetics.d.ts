@@ -3,8 +3,8 @@ import ReverseIndex from '../reverse-index';
 export default class CosmeticFilterBucket {
     hostnameIndex: ReverseIndex<CosmeticFilter>;
     selectorIndex: ReverseIndex<CosmeticFilter>;
+    size: number;
     constructor(filters?: CosmeticFilter[]);
-    readonly size: number;
     createContentScriptResponse(rules: CosmeticFilter[]): {
         active: boolean;
         blockedScripts: string[];

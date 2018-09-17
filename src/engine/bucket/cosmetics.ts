@@ -7,6 +7,7 @@ import ReverseIndex from '../reverse-index';
 export default class CosmeticFilterBucket {
   public hostnameIndex: ReverseIndex<CosmeticFilter>;
   public selectorIndex: ReverseIndex<CosmeticFilter>;
+  public size: number;
 
   constructor(filters: CosmeticFilter[] = []) {
     // This accelerating data structure is used to retrieve cosmetic filters for
@@ -31,10 +32,8 @@ export default class CosmeticFilterBucket {
       (filter) => filter.getTokens(),
       {},
     );
-  }
 
-  get size() {
-    return this.hostnameIndex.size + this.selectorIndex.size;
+    this.size = this.hostnameIndex.size + this.selectorIndex.size;
   }
 
   public createContentScriptResponse(
