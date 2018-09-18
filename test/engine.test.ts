@@ -22,7 +22,7 @@ function createEngine(filters: string, enableOptimizations: boolean) {
 }
 
 describe('#FiltersEngine', () => {
-  const allFilters =
+  const allRequestFilters =
     requests
       .map(({ filter, exception }) => `${filter || ''}\n${exception || ''}`)
       .join('\n');
@@ -30,20 +30,23 @@ describe('#FiltersEngine', () => {
   [
     { enableOptimizations: true, allFilters: '' },
     { enableOptimizations: false, allFilters: '' },
-    { enableOptimizations: true, allFilters },
-    { enableOptimizations: false, allFilters },
+    { enableOptimizations: true, allFilters: allRequestFilters },
+    { enableOptimizations: false, allFilters: allRequestFilters },
   ].forEach((setup) => {
-    describe(`initialized with optimization: ${setup.enableOptimizations} and filters: ${!!allFilters}`, () => {
+    describe(`initialized with optimization: ${setup.enableOptimizations} and filters: ${!!setup.allFilters}`, () => {
       const engine = createEngine(setup.allFilters, setup.enableOptimizations);
 
       requests.forEach(({ filter, exception, cpt, url, sourceUrl }) => {
         it(`${filter}, ${exception}, ${cpt}, ${url}, ${sourceUrl}`, () => {
-          // Update engine with this specific filter
-          engine.onUpdateFilters([{
-            asset: 'extraFilters',
-            checksum: '',
-            filters: `${filter || ''}\n${exception || ''}`,
-          }], new Set(['filters']));
+          // Update engine with this specific filter only if the engine is
+          // initially empty.
+          if (setup.allFilters.length === 0) {
+            engine.onUpdateFilters([{
+              asset: 'extraFilters',
+              checksum: '',
+              filters: `${filter || ''}\n${exception || ''}`,
+            }], new Set(['filters']));
+          }
 
           const result = engine.match({
             cpt: types[cpt],
