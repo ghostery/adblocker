@@ -1026,18 +1026,18 @@ function parseNetworkFilter(rawLine) {
         if (!isRegex && isHostnameAnchor) {
             var slashIndex = line.indexOf('/', filterIndexStart);
             if (slashIndex !== -1) {
-                hostname = line.substring(filterIndexStart, slashIndex);
+                hostname = line.slice(filterIndexStart, slashIndex);
                 filterIndexStart = slashIndex;
             }
             else {
-                hostname = line.substring(filterIndexStart, filterIndexEnd);
+                hostname = line.slice(filterIndexStart, filterIndexEnd);
                 filter = '';
             }
         }
         else if (isRegex && isHostnameAnchor) {
             var firstSeparator = line.search(SEPARATOR);
             if (firstSeparator !== -1) {
-                hostname = line.substring(filterIndexStart, firstSeparator);
+                hostname = line.slice(filterIndexStart, firstSeparator);
                 filterIndexStart = firstSeparator;
                 if (filterIndexEnd - filterIndexStart === 1 &&
                     line.charAt(filterIndexStart) === '^') {
@@ -1051,7 +1051,7 @@ function parseNetworkFilter(rawLine) {
         }
     }
     if (filter === null) {
-        filter = line.substring(filterIndexStart, filterIndexEnd).toLowerCase();
+        filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
     }
     var finalHostname = '';
     if (hostname !== null) {

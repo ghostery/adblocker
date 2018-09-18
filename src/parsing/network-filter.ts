@@ -809,10 +809,10 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
       // Look for next /
       const slashIndex = line.indexOf('/', filterIndexStart);
       if (slashIndex !== -1) {
-        hostname = line.substring(filterIndexStart, slashIndex);
+        hostname = line.slice(filterIndexStart, slashIndex);
         filterIndexStart = slashIndex;
       } else {
-        hostname = line.substring(filterIndexStart, filterIndexEnd);
+        hostname = line.slice(filterIndexStart, filterIndexEnd);
         filter = '';
       }
     } else if (isRegex && isHostnameAnchor) {
@@ -823,7 +823,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
       const firstSeparator = line.search(SEPARATOR);
 
       if (firstSeparator !== -1) {
-        hostname = line.substring(filterIndexStart, firstSeparator);
+        hostname = line.slice(filterIndexStart, firstSeparator);
         filterIndexStart = firstSeparator;
         if (
           filterIndexEnd - filterIndexStart === 1 &&
@@ -843,7 +843,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   }
 
   if (filter === null) {
-    filter = line.substring(filterIndexStart, filterIndexEnd).toLowerCase();
+    filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
   }
 
   let finalHostname = '';

@@ -15,10 +15,10 @@
 // with Node.js perf and output a summary.
 
 const fs = require('fs');
+const path = require('path');
 
 const chalk = require('chalk');
 const Benchmark = require('benchmark');
-const fetch = require('cross-fetch');
 
 const {
   NANOSECS_PER_SEC,
@@ -43,29 +43,17 @@ const {
   benchMatching,
 } = require('./macro');
 
-// const { compareResults } = require('./compare');
 
-function fetchResource(url) {
-  return fetch(url).then(response => response.text());
-}
-
-
-async function loadLists() {
+function loadLists() {
   return {
-    lists: await Promise.all([
-      'https://easylist.to/easylist/easylist.txt',
-
-      // 'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
-      // 'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
-      // 'https://easylist.to/easylist/easylist.txt',
-      // 'https://easylist.to/easylist/easyprivacy.txt',
-      // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
-      // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
-      // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
-      // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
-      // 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
-    ].map(fetchResource)),
-    resources: await fetchResource('https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt'),
+    lists: [fs.readFileSync(
+      path.resolve(__dirname, '../assets/easylist.to/easylist/easylist.txt'),
+      { encoding: 'utf-8' },
+    )],
+    resources: fs.readFileSync(
+      path.resolve(__dirname, '../assets/raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt'),
+      { encoding: 'utf-8' },
+    ),
   };
 }
 
@@ -293,9 +281,9 @@ function compareBenchmarkResults(results1, results2) {
   }
 }
 
-async function main() {
+function main() {
   console.log('Get lists...');
-  const { lists, resources } = await loadLists();
+  const { lists, resources } = loadLists();
 
   console.log('Run Benchmark...');
   const benchmarkResults = {
