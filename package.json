@@ -22,7 +22,8 @@
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "build": "tsc -p tsconfig.json --module ES6 --outDir build",
     "watch": "tsc -p tsconfig.json --module ES6 --outDir build --watch",
-    "bundle": "rollup -c rollup.config.js && google-closure-compiler --js=./dist/adblocker.umd.js --js_output_file=./dist/adblocker.umd.min.js",
+    "bundle": "rollup -c rollup.config.js",
+    "minify": "google-closure-compiler --js=./dist/adblocker.umd.js --js_output_file=./dist/adblocker.umd.min.js",
     "pretest": "npm run lint",
     "test": "jest --coverage --no-cache ./test/",
     "dev": "jest --watch ./test/"
@@ -55,8 +56,6 @@
     "ws": "^6.0.0"
   },
   "dependencies": {
-    "ad-block": "^4.1.1",
-    "cross-fetch": "^2.2.2",
     "tldts": "file:tldts-3.0.0.tgz"
   }
 }

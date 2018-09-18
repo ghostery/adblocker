@@ -17,4 +17,5 @@ export { f, parseList } from './src/parsing/list';
 
 export { compactTokens, hasEmptyIntersection, mergeCompactSets } from './src/compact-set';
 
+export { fetchLists, fetchResources } from './src/fetch';
 export { tokenize, fastHash } from './src/utils';

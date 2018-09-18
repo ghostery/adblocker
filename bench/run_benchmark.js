@@ -288,8 +288,8 @@ function main() {
   console.log('Run Benchmark...');
   const benchmarkResults = {
     ...runMemoryBench(lists, resources),
-    ...runMicroBenchmarks(lists, resources),
-    ...runMacroBenchmarks(lists, resources),
+    // ...runMicroBenchmarks(lists, resources),
+    // ...runMacroBenchmarks(lists, resources),
   };
   console.log(benchmarkResults);
 

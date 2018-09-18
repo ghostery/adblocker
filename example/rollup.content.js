@@ -1,12 +1,11 @@
-import config from '../rollup.config.js';
+import configs from '../rollup.config.js';
 
-const fullConfig = config[2];
 
 export default {
-  ...fullConfig,
   input: './build/example/content-script.js',
   output: {
     file: 'content-script.bundle.js',
     format: 'iife',
   },
+  plugins: configs[0].plugins,
 };

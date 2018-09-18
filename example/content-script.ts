@@ -24,7 +24,9 @@ const backgroundAction = (action, ...args): Promise<void> => {
       action,
       args,
     }, (response) => {
-      injection.handleResponseFromBackground(response);
+      if (response !== undefined) {
+        injection.handleResponseFromBackground(response);
+      }
       resolve();
     });
   });

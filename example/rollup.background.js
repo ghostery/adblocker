@@ -1,12 +1,10 @@
-import config from '../rollup.config.js';
-
-const fullConfig = config[2];
+import configs from '../rollup.config.js';
 
 export default {
-  ...fullConfig,
   input: './build/example/background.js',
   output: {
     file: 'background.bundle.js',
     format: 'iife',
   },
+  plugins: configs[0].plugins,
 };

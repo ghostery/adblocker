@@ -1,5 +1,3 @@
-import fetch from 'cross-fetch';
-
 function fetchResource(url: string): Promise<string> {
   return fetch(url).then((response: any) => response.text());
 }

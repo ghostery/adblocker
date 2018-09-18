@@ -3047,6 +3047,28 @@
         return FilterEngine;
     }());
 
+    function fetchResource(url) {
+        return fetch(url).then(function (response) { return response.text(); });
+    }
+    var defaultLists = [
+        'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
+        'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
+        'https://easylist.to/easylist/easylist.txt',
+        'https://easylist.to/easylist/easyprivacy.txt',
+        'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
+        'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
+        'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
+        'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
+        'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
+    ];
+    function fetchLists(lists) {
+        if (lists === void 0) { lists = defaultLists; }
+        return Promise.all(lists.map(fetchResource));
+    }
+    function fetchResources() {
+        return fetchResource('https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt');
+    }
+
     exports.CosmeticsInjection = CosmeticInjection;
     exports.overrideUserAgent = overrideUserAgent;
     exports.FiltersEngine = FilterEngine;
@@ -3062,6 +3084,8 @@
     exports.compactTokens = compactTokens;
     exports.hasEmptyIntersection = hasEmptyIntersection;
     exports.mergeCompactSets = mergeCompactSets;
+    exports.fetchLists = fetchLists;
+    exports.fetchResources = fetchResources;
     exports.tokenize = tokenize;
     exports.fastHash = fastHash;
 
