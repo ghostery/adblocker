@@ -2,6 +2,29 @@
 
 ## *not released*
 
+  * Add benchmark module + various improvements [#31](https://github.com/cliqz-oss/adblocker/pull/31)
+    * [test] Add tests for matching and Engine based on Alex top 1000 domains
+    * [perf] Add `bench` module to measure performance + memory consumption in Node.js
+    * [perf] Avoid string copy in tokenizer
+    * [perf] Avoid copy of filters during Engine initialization
+    * [perf] Add minified version of bundle using Closure Compiler
+    * [fix] Fix network filter option parsing
+    * [fix] Fix `isAnchoredByHostname` in network filter matching
+    * [fix] Re-work optimization framework to be easier to understand and extend
+      (also fix bugs in incorrect optimizations)
+    * [breaking] `Engine.match` will now return the original filter matching
+      the request instead of a pretty-printed version (caveat: when
+      optimizations kick-in, the original filter might not be available anymore.)
+    * [breaking] Build artifacts are now located in `dist` folder.
+    * Remove dependency to babel and let TypeScript compile to ES3 instead
+    * Simplify TypeScript config + make more strict
+    * Simplify rollup config
+    * Update dependencies
+    * Make use of new `tldts` package for URL parsing
+    * Add type definitions in build artifacts to allow the adblocker to be used
+      in a TypeScript project, as a library.
+    * Update filters list assets + add script to ease future updates.
+
 ## 0.1.13
 
 *2018-07-24*
