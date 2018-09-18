@@ -8,10 +8,6 @@ node_js:
   - 9
   - node
 
-cache:
-  directories:
-    - node_modules
-
 notifications:
   email:
     on_failure: change
@@ -23,7 +19,7 @@ install:
   - npm ci
 
 script:
-  - npm run test
+  - npm test
 
 before_deploy:
   - npm run clean
