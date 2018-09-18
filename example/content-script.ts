@@ -1,7 +1,4 @@
-import { CosmeticsInjection, overrideUserAgent } from '../index-cosmetics';
-
-// This is used to fool some anti-content-blockers
-overrideUserAgent();
+import { CosmeticsInjection } from '../index-cosmetics';
 
 /**
  * Because all the filters and matching logic lives in the background of the

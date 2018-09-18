@@ -297,6 +297,7 @@ export default class FilterEngine {
 
     let filter: NetworkFilter | undefined;
     let exception: NetworkFilter | undefined;
+    let redirect: string | undefined;
 
     // Check the filters in the following order:
     // 1. $important (not subject to exceptions)
@@ -321,9 +322,9 @@ export default class FilterEngine {
     // If there is a match
     if (filter !== undefined) {
       if (filter.isRedirect()) {
-        const redirect = this.resources.get(filter.getRedirect());
-        if (redirect !== undefined) {
-          const { data, contentType } = redirect;
+        const redirectResource = this.resources.get(filter.getRedirect());
+        if (redirectResource !== undefined) {
+          const { data, contentType } = redirectResource;
           let dataUrl;
           if (contentType.indexOf(';') !== -1) {
             dataUrl = `data:${contentType},${data}`;
@@ -331,26 +332,16 @@ export default class FilterEngine {
             dataUrl = `data:${contentType};base64,${btoaPolyfill(data)}`;
           }
 
-          return {
-            exception,
-            filter,
-            match: true,
-            redirect: dataUrl.trim(),
-          };
+          redirect = dataUrl.trim();
         } // TODO - else, throw an exception
       }
-
-      return {
-        exception,
-        filter,
-        match: true,
-      };
     }
 
     return {
       exception,
       filter,
-      match: false,
+      match: exception === undefined && filter !== undefined,
+      redirect,
     };
   }
 }
