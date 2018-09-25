@@ -2276,7 +2276,7 @@ function matchHostname(hostname, hostnamePattern) {
     if (hostnamePattern.endsWith('.*')) {
         var entity = hostnamePattern.slice(0, -2);
         var publicSuffix = getPublicSuffix$1(hostname);
-        if (!publicSuffix) {
+        if (publicSuffix === null) {
             return false;
         }
         var hostnameWithoutSuffix = hostname.substr(0, hostname.length - publicSuffix.length - 1);
@@ -2996,6 +2996,7 @@ var FilterEngine = (function () {
         var request = processRawRequest(rawRequest);
         var filter;
         var exception;
+        var redirect;
         filter = this.importants.match(request);
         if (filter === undefined) {
             filter = this.redirects.match(request);
@@ -3008,9 +3009,9 @@ var FilterEngine = (function () {
         }
         if (filter !== undefined) {
             if (filter.isRedirect()) {
-                var redirect = this.resources.get(filter.getRedirect());
-                if (redirect !== undefined) {
-                    var data = redirect.data, contentType = redirect.contentType;
+                var redirectResource = this.resources.get(filter.getRedirect());
+                if (redirectResource !== undefined) {
+                    var data = redirectResource.data, contentType = redirectResource.contentType;
                     var dataUrl = void 0;
                     if (contentType.indexOf(';') !== -1) {
                         dataUrl = "data:" + contentType + "," + data;
@@ -3018,24 +3019,15 @@ var FilterEngine = (function () {
                     else {
                         dataUrl = "data:" + contentType + ";base64," + btoaPolyfill(data);
                     }
-                    return {
-                        exception: exception,
-                        filter: filter,
-                        match: true,
-                        redirect: dataUrl.trim()
-                    };
+                    redirect = dataUrl.trim();
                 }
             }
-            return {
-                exception: exception,
-                filter: filter,
-                match: true
-            };
         }
         return {
             exception: exception,
             filter: filter,
-            match: false
+            match: exception === undefined && filter !== undefined,
+            redirect: redirect
         };
     };
     return FilterEngine;
