@@ -21,6 +21,20 @@ const enum COSMETICS_MASK {
  *  Cosmetic filters parsing
  * ************************************************************************ */
 
+/**
+ * TODO: Make sure these are implemented properly and write tests.
+ * - -abp-contains
+ * - -abp-has
+ * - contains
+ * - has
+ * - has-text
+ * - if
+ * - if-not
+ * - matches-css
+ * - matches-css-after
+ * - matches-css-before
+ * - xpath
+ */
 export class CosmeticFilter implements IFilter {
   public id: number;
   public mask: number;

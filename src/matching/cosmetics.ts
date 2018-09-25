@@ -39,7 +39,7 @@ function matchHostname(hostname: string, hostnamePattern: string): boolean {
 
     // Ignore TLDs suffix
     const publicSuffix = getPublicSuffix(hostname);
-    if (!publicSuffix) {
+    if (publicSuffix === null) {
       return false;
     }
 
