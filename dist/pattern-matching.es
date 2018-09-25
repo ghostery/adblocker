@@ -47,7 +47,7 @@ var ReverseIndex = (function () {
                 }
             }
         });
-        this.size = idToTokens.size;
+        this.index = new Map();
         idToTokens.forEach(function (_a) {
             var filter = _a.filter, multiTokens = _a.multiTokens;
             var wildCardInserted = false;
@@ -84,6 +84,7 @@ var ReverseIndex = (function () {
                 }
             }
         });
+        this.size = idToTokens.size;
     };
     ReverseIndex.prototype.optimize = function (bucket, force) {
         if (force === void 0) { force = false; }
@@ -276,26 +277,23 @@ function fastTokenizer(pattern, isAllowedCode, allowRegexSurround) {
     var tokens = [];
     var inside = false;
     var start = 0;
-    var length = 0;
     for (var i = 0, len = pattern.length; i < len; i += 1) {
         var ch = pattern.charCodeAt(i);
         if (isAllowedCode(ch)) {
-            if (!inside) {
+            if (inside === false) {
                 inside = true;
                 start = i;
-                length = 0;
             }
-            length += 1;
         }
         else if (inside) {
             inside = false;
-            if (allowRegexSurround || ch !== 42) {
-                tokens.push(fastHashBetween(pattern, start, start + length));
+            if (allowRegexSurround === true || ch !== 42) {
+                tokens.push(fastHashBetween(pattern, start, i));
             }
         }
     }
     if (inside) {
-        tokens.push(fastHashBetween(pattern, start, start + length));
+        tokens.push(fastHashBetween(pattern, start, pattern.length));
     }
     return tokens;
 }

@@ -130,28 +130,25 @@ function fastTokenizer(pattern: string, isAllowedCode: (ch: number) => boolean, 
   const tokens: number[] = [];
   let inside: boolean = false;
   let start = 0;
-  let length = 0;
 
   for (let i: number = 0, len = pattern.length; i < len; i += 1) {
     const ch = pattern.charCodeAt(i);
     if (isAllowedCode(ch)) {
-      if (!inside) {
+      if (inside === false) {
         inside = true;
         start = i;
-        length = 0;
       }
-      length += 1;
     } else if (inside) {
       inside = false;
       // Should not be followed by '*'
-      if (allowRegexSurround || ch !== 42) {
-        tokens.push(fastHashBetween(pattern, start, start + length));
+      if (allowRegexSurround === true || ch !== 42) {
+        tokens.push(fastHashBetween(pattern, start, i));
       }
     }
   }
 
   if (inside) {
-    tokens.push(fastHashBetween(pattern, start, start + length));
+    tokens.push(fastHashBetween(pattern, start, pattern.length));
   }
 
   return tokens;

@@ -1,6 +1,7 @@
 import { parseCosmeticFilter } from '../src/parsing/cosmetic-filter';
 import { parseList } from '../src/parsing/list';
 import { parseNetworkFilter } from '../src/parsing/network-filter';
+import { fastHash } from '../src/utils';
 
 // TODO: collaps, popup, popunder, generichide, genericblock
 function network(filter: string, expected: any) {
@@ -747,6 +748,45 @@ describe('Cosmetic filters', () => {
       ...DEFAULT_COSMETIC_FILTER,
       isScriptInject: true,
       selector: 'script.js, arg1, arg2, arg3',
+    });
+  });
+
+  describe('tokenizes filter', () => {
+    [
+      // Plain selectors
+      { selector: '.c', tokens: ['.c'] },
+      { selector: '.c.d', tokens: ['.c.d'] },
+      { selector: '.c .d', tokens: ['.c', '.d'] },
+
+      // With styles included (brackets)
+      { selector: '.c[foo]', tokens: ['.c'] },
+      { selector: '[foo].c', tokens: ['.c'] },
+      { selector: '[foo].c[foo]', tokens: ['.c'] },
+      { selector: '[foo[bar]].c[foo]', tokens: ['.c'] },
+      { selector: '[foo[bar]].c[foo].d', tokens: ['.c', '.d'] },
+      { selector: '[foo[bar]].c[foo[baz]].d', tokens: ['.c', '.d'] },
+      { selector: '.c[foo[bar]].d[foo[baz]].e', tokens: ['.c', '.d', '.e'] },
+
+      // With combinators
+      { selector: '.b > .c', tokens: ['.c'] },
+      { selector: '.a ~ .b > .c', tokens: ['.c'] },
+      { selector: '.a ~ .b ~ .c', tokens: ['.c'] },
+      { selector: '.a + .b ~ .c', tokens: ['.c'] },
+      { selector: '.a + .b + .c', tokens: ['.c'] },
+
+      // With combinators + styles
+      { selector: '.c[foo[bar]].d[foo[baz]].e > .c', tokens: ['.c'] },
+      { selector: '.a > .c[foo[bar]].d[foo[baz]].e ~ .c', tokens: ['.c'] },
+      { selector: '.a > .c[foo[bar]].d[foo[baz]].e ~ .c[foo]', tokens: ['.c'] },
+      { selector: '.a > .c[foo[bar]].d[foo[baz]].e ~ .c[foo[bar]].d', tokens: ['.c', '.d'] },
+    ].forEach((testCase) => {
+      it(testCase.selector, () => {
+        const parsed = parseCosmeticFilter(`##${testCase.selector}`);
+        expect(parsed).not.toBeNull();
+        if (parsed !== null) {
+          expect(parsed.getTokensSelector()).toEqual(testCase.tokens.map(fastHash));
+        }
+      });
     });
   });
 });

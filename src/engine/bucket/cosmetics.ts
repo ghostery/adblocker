@@ -33,10 +33,8 @@ export default class CosmeticFilterBucket {
     // based on some node information.
     this.selectorIndex = new ReverseIndex(
       (cb: (f: CosmeticFilter) => void) => filters((f: CosmeticFilter) => {
-        if (f.hasHostnames()) {
-          if (!(f.isScriptBlock() || f.isScriptInject())) {
-            cb(f);
-          }
+        if (!(f.isScriptBlock() || f.isScriptInject())) {
+          cb(f);
         }
       }),
       (filter) => filter.getTokens(),

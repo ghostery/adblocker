@@ -122,7 +122,8 @@ export default class ReverseIndex<T extends IFilter> {
       }
     });
 
-    this.size = idToTokens.size;
+    // Reset index
+    this.index = new Map();
 
     // For each filter, take the best token (least seen)
     idToTokens.forEach(({ filter, multiTokens }) => {
@@ -165,6 +166,9 @@ export default class ReverseIndex<T extends IFilter> {
         }
       }
     });
+
+    // Update size
+    this.size = idToTokens.size;
   }
 
   private optimize(bucket: IBucket<T>, force: boolean = false): void {

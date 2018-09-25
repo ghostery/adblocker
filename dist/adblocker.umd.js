@@ -338,26 +338,23 @@
         var tokens = [];
         var inside = false;
         var start = 0;
-        var length = 0;
         for (var i = 0, len = pattern.length; i < len; i += 1) {
             var ch = pattern.charCodeAt(i);
             if (isAllowedCode(ch)) {
-                if (!inside) {
+                if (inside === false) {
                     inside = true;
                     start = i;
-                    length = 0;
                 }
-                length += 1;
             }
             else if (inside) {
                 inside = false;
-                if (allowRegexSurround || ch !== 42) {
-                    tokens.push(fastHashBetween(pattern, start, start + length));
+                if (allowRegexSurround === true || ch !== 42) {
+                    tokens.push(fastHashBetween(pattern, start, i));
                 }
             }
         }
         if (inside) {
-            tokens.push(fastHashBetween(pattern, start, start + length));
+            tokens.push(fastHashBetween(pattern, start, pattern.length));
         }
         return tokens;
     }
@@ -420,11 +417,36 @@
             if (this.isScriptInject() || this.isScriptBlock()) {
                 return [];
             }
-            var sepIndex = this.selector.lastIndexOf('>');
-            if (sepIndex !== -1) {
-                return tokenizeCSS(this.selector.substr(sepIndex));
+            var sepIndex = 0;
+            for (var i = this.selector.length - 1; i >= 0; i -= 1) {
+                var code = this.selector.charCodeAt(i);
+                if (code === 43 ||
+                    code === 62 ||
+                    code === 126) {
+                    sepIndex = i;
+                    break;
+                }
             }
-            return tokenizeCSS(this.selector);
+            var inside = 0;
+            var start = sepIndex;
+            var tokens = [];
+            for (var i = sepIndex, len = this.selector.length; i < len; i += 1) {
+                var code = this.selector.charCodeAt(i);
+                if (code === 91) {
+                    if (inside === 0 && start < i) {
+                        tokens.push.apply(tokens, __spread(tokenizeCSS(this.selector.slice(start, i))));
+                    }
+                    inside += 1;
+                }
+                else if (code === 93) {
+                    inside -= 1;
+                    start = i + 1;
+                }
+            }
+            if (inside === 0 && start < this.selector.length) {
+                tokens.push.apply(tokens, __spread(tokenizeCSS(this.selector.slice(start, this.selector.length))));
+            }
+            return tokens;
         };
         CosmeticFilter.prototype.getSelector = function () {
             return this.selector;
@@ -1139,19 +1161,19 @@
                 if (filterType === 1 && loadNetworkFilters) {
                     var filter = parseNetworkFilter(line);
                     if (filter !== null) {
-                        networkFilters.push(filter);
-                        if (debug) {
+                        if (debug === true) {
                             filter.rawLine = line;
                         }
+                        networkFilters.push(filter);
                     }
                 }
                 else if (filterType === 2 && loadCosmeticFilters) {
                     var filter = parseCosmeticFilter(line);
                     if (filter !== null) {
-                        cosmeticFilters.push(filter);
-                        if (debug) {
+                        if (debug === true) {
                             filter.rawLine = line;
                         }
+                        cosmeticFilters.push(filter);
                     }
                 }
             }
@@ -2355,7 +2377,7 @@
                     }
                 }
             });
-            this.size = idToTokens.size;
+            this.index = new Map();
             idToTokens.forEach(function (_a) {
                 var filter = _a.filter, multiTokens = _a.multiTokens;
                 var wildCardInserted = false;
@@ -2392,6 +2414,7 @@
                     }
                 }
             });
+            this.size = idToTokens.size;
         };
         ReverseIndex.prototype.optimize = function (bucket, force) {
             if (force === void 0) { force = false; }
@@ -2433,10 +2456,8 @@
                 return multiTokens;
             });
             this.selectorIndex = new ReverseIndex(function (cb) { return filters(function (f) {
-                if (f.hasHostnames()) {
-                    if (!(f.isScriptBlock() || f.isScriptInject())) {
-                        cb(f);
-                    }
+                if (!(f.isScriptBlock() || f.isScriptInject())) {
+                    cb(f);
                 }
             }); }, function (filter) { return filter.getTokens(); });
             this.size = this.hostnameIndex.size + this.selectorIndex.size;
