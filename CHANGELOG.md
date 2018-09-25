@@ -24,6 +24,8 @@
     * Add type definitions in build artifacts to allow the adblocker to be used
       in a TypeScript project, as a library.
     * Update filters list assets + add script to ease future updates.
+    * [fix] Cosmetic filter tokenization (ignoring styles) + add tests
+
 
 ## 0.1.13
 
