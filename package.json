@@ -1,6 +1,6 @@
 {
   "name": "@cliqz/adblocker",
-  "version": "0.1.13",
+  "version": "0.2.0",
   "description": "Cliqz adblocker library",
   "repository": {
     "type": "git",
@@ -8,53 +8,53 @@
   },
   "author": "Cliqz",
   "license": "MPL-2.0",
-  "main": "./adblocker.umd.js",
-  "module": "build/es6/index.js",
+  "main": "dist/adblocker.umd.min.js",
+  "module": "dist/adblocker.es.js",
+  "jsnext:main": "dist/adblocker.es.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "index.ts",
+    "src"
+  ],
   "scripts": {
-    "clean": "rm -rf build",
+    "clean": "rm -rfv dist build",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
-    "build-es6": "tsc -p . --module ES6 --outDir 'build/es6'",
-    "build-cjs": "tsc -p . --module commonjs --outDir 'build/commonjs'",
-    "build": "npm run clean && mkdir build && concurrently 'npm run build-es6' 'npm run build-cjs'",
-    "bundle": "npm run clean && npm run build-es6 && rollup -c",
-    "watch": "tsc -p . --module commonjs --outDir 'build/commonjs' --watch",
+    "build": "tsc -p tsconfig.json --module ES6 --outDir build",
+    "watch": "tsc -p tsconfig.json --module ES6 --outDir build --watch",
+    "bundle": "rollup -c rollup.config.js",
+    "minify": "google-closure-compiler --js=./dist/adblocker.umd.js --js_output_file=./dist/adblocker.umd.min.js",
     "pretest": "npm run lint",
-    "test": "npm run clean && npm run build-cjs && jest --coverage build/commonjs/test/",
-    "dev": "npm run clean && npm run build-cjs && concurrently 'npm run watch' 'jest build/commonjs/test/ --watch'"
-  },
-  "jest": {
-    "testMatch": [
-      "**/test/**/*.test.js"
-    ],
-    "testEnvironment": "node"
+    "test": "jest --coverage --no-cache ./test/",
+    "dev": "jest --watch ./test/"
   },
   "devDependencies": {
-    "@types/chrome": "0.0.69",
-    "@types/es6-promise": "3.3.0",
-    "@types/jest": "23.3.0",
-    "@types/jsdom": "11.0.6",
-    "babel-eslint": "8.2.6",
-    "babel-plugin-external-helpers": "6.22.0",
-    "babel-preset-env": "1.7.0",
-    "babel-preset-es2015": "6.24.1",
-    "babel-register": "6.26.0",
-    "babelrc-rollup": "3.0.0",
-    "concurrently": "3.5.1",
-    "jest": "23.4.1",
-    "jsdom": "11.11.0",
-    "rollup": "0.63.4",
-    "rollup-plugin-babel": "3.0.7",
-    "rollup-plugin-commonjs": "9.1.3",
-    "rollup-plugin-json": "3.0.0",
-    "rollup-plugin-node-builtins": "2.1.2",
-    "rollup-plugin-node-globals": "1.2.1",
-    "rollup-plugin-node-resolve": "3.3.0",
-    "rollup-plugin-sourcemaps": "0.4.2",
-    "tslint": "5.11.0",
-    "typescript": "2.9.2"
+    "@types/chrome": "^0.0.73",
+    "@types/jest": "^23.3.2",
+    "@types/jsdom": "^11.12.0",
+    "@types/node": "^10.10.1",
+    "archiver": "^3.0.0",
+    "benchmark": "^2.1.4",
+    "chalk": "^2.4.1",
+    "concurrently": "^4.0.1",
+    "eslint": "^5.6.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-airbnb-base": "^11.3.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.1",
+    "google-closure-compiler": "^20180805.0.0",
+    "jest": "^23.6.0",
+    "jsdom": "^11.12.0",
+    "rollup": "^0.66.0",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "selenium-webdriver": "^3.6.0",
+    "ts-jest": "^23.10.0-beta.6",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.3",
+    "ws": "^6.0.0"
   },
   "dependencies": {
-    "cross-fetch": "2.2.2",
-    "tldjs": "2.3.1"
+    "tldts": "^3.0.0"
   }
 }

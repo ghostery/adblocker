@@ -7,16 +7,19 @@ import * as adblocker from '../index';
  */
 function loadAdblocker() {
   const engine = new adblocker.FiltersEngine({
+    enableOptimizations: true,
     loadCosmeticFilters: true,
     loadNetworkFilters: true,
-    optimizeAOT: false,
+    optimizeAOT: true,
     version: 1,
   });
 
+  console.log('Fetching resources...');
   return Promise.all([
     adblocker.fetchLists(),
     adblocker.fetchResources(),
   ]).then(([responses, resources]) => {
+    console.log('Initialize adblocker...');
     const lists: Array<{ filters: string, checksum: string, asset: string }> = [];
     for (let i = 0; i < responses.length; i += 1) {
       lists.push({
@@ -154,4 +157,6 @@ loadAdblocker().then((engine) => {
       sendResponse(engine.getCosmeticsFilters(hostname, msg.args[0]));
     }
   });
+
+  console.log('Ready to roll!');
 });

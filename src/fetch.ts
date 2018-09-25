@@ -1,10 +1,10 @@
-import fetch from 'cross-fetch';
-
 function fetchResource(url: string): Promise<string> {
-  return fetch(url).then(response => response.text());
+  return fetch(url).then((response: any) => response.text());
 }
 
 const defaultLists = [
+  'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
+  'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
   'https://easylist.to/easylist/easylist.txt',
   'https://easylist.to/easylist/easyprivacy.txt',
   'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',

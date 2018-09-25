@@ -1,6 +1,7 @@
 import { parseCosmeticFilter } from '../src/parsing/cosmetic-filter';
 import { parseList } from '../src/parsing/list';
 import { parseNetworkFilter } from '../src/parsing/network-filter';
+import { fastHash } from '../src/utils';
 
 // TODO: collaps, popup, popunder, generichide, genericblock
 function network(filter: string, expected: any) {
@@ -583,6 +584,21 @@ describe('Network filters', () => {
       });
     });
 
+    const allOptions = (value: boolean) => ({
+      fromFont: value,
+      fromImage: value,
+      fromMedia: value,
+      fromObject: value,
+      fromObjectSubrequest: value,
+      fromOther: value,
+      fromPing: value,
+      fromScript: value,
+      fromStylesheet: value,
+      fromSubdocument: value,
+      fromWebsocket: value,
+      fromXmlHttpRequest: value,
+    });
+
     [
       ['font', 'fromFont'],
       ['image', 'fromImage'],
@@ -597,21 +613,27 @@ describe('Network filters', () => {
       ['websocket', 'fromWebsocket'],
       ['xmlhttprequest', 'fromXmlHttpRequest'],
     ].forEach(([ option, attribute ]) => {
+      // all other attributes should be false if `$attribute` or true if `$~attribute`
       describe(option, () => {
         it(`parses ${option}`, () => {
           network(`||foo.com$${option}`, {
+            ...allOptions(false),
             [attribute]: true,
           });
           network(`||foo.com$object,${option}`, {
+            ...allOptions(false),
+            fromObject: true,
             [attribute]: true,
           });
           network(`||foo.com$domain=bar.com,${option}`, {
+            ...allOptions(false),
             [attribute]: true,
           });
         });
 
         it(`parses ~${option}`, () => {
           network(`||foo.com$~${option}`, {
+            ...allOptions(true),
             [attribute]: false,
           });
           network(`||foo.com$${option},~${option}`, {
@@ -621,6 +643,7 @@ describe('Network filters', () => {
 
         it('defaults to true', () => {
           network('||foo.com', {
+            ...allOptions(true),
             [attribute]: true,
           });
         });
@@ -725,6 +748,45 @@ describe('Cosmetic filters', () => {
       ...DEFAULT_COSMETIC_FILTER,
       isScriptInject: true,
       selector: 'script.js, arg1, arg2, arg3',
+    });
+  });
+
+  describe('tokenizes filter', () => {
+    [
+      // Plain selectors
+      { selector: '.c', tokens: ['.c'] },
+      { selector: '.c.d', tokens: ['.c.d'] },
+      { selector: '.c .d', tokens: ['.c', '.d'] },
+
+      // With styles included (brackets)
+      { selector: '.c[foo]', tokens: ['.c'] },
+      { selector: '[foo].c', tokens: ['.c'] },
+      { selector: '[foo].c[foo]', tokens: ['.c'] },
+      { selector: '[foo[bar]].c[foo]', tokens: ['.c'] },
+      { selector: '[foo[bar]].c[foo].d', tokens: ['.c', '.d'] },
+      { selector: '[foo[bar]].c[foo[baz]].d', tokens: ['.c', '.d'] },
+      { selector: '.c[foo[bar]].d[foo[baz]].e', tokens: ['.c', '.d', '.e'] },
+
+      // With combinators
+      { selector: '.b > .c', tokens: ['.c'] },
+      { selector: '.a ~ .b > .c', tokens: ['.c'] },
+      { selector: '.a ~ .b ~ .c', tokens: ['.c'] },
+      { selector: '.a + .b ~ .c', tokens: ['.c'] },
+      { selector: '.a + .b + .c', tokens: ['.c'] },
+
+      // With combinators + styles
+      { selector: '.c[foo[bar]].d[foo[baz]].e > .c', tokens: ['.c'] },
+      { selector: '.a > .c[foo[bar]].d[foo[baz]].e ~ .c', tokens: ['.c'] },
+      { selector: '.a > .c[foo[bar]].d[foo[baz]].e ~ .c[foo]', tokens: ['.c'] },
+      { selector: '.a > .c[foo[bar]].d[foo[baz]].e ~ .c[foo[bar]].d', tokens: ['.c', '.d'] },
+    ].forEach((testCase) => {
+      it(testCase.selector, () => {
+        const parsed = parseCosmeticFilter(`##${testCase.selector}`);
+        expect(parsed).not.toBeNull();
+        if (parsed !== null) {
+          expect(parsed.getTokensSelector()).toEqual(testCase.tokens.map(fastHash));
+        }
+      });
     });
   });
 });

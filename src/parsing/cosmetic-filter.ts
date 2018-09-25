@@ -21,6 +21,20 @@ const enum COSMETICS_MASK {
  *  Cosmetic filters parsing
  * ************************************************************************ */
 
+/**
+ * TODO: Make sure these are implemented properly and write tests.
+ * - -abp-contains
+ * - -abp-has
+ * - contains
+ * - has
+ * - has-text
+ * - if
+ * - if-not
+ * - matches-css
+ * - matches-css-after
+ * - matches-css-before
+ * - xpath
+ */
 export class CosmeticFilter implements IFilter {
   public id: number;
   public mask: number;
@@ -99,17 +113,53 @@ export class CosmeticFilter implements IFilter {
   }
 
   public getTokensSelector(): number[] {
+    // These filters are only matched based on their domains, not selectors
     if (this.isScriptInject() || this.isScriptBlock()) {
       return [];
     }
 
-    // Only keep the part after the last '>'
-    const sepIndex = this.selector.lastIndexOf('>');
-    if (sepIndex !== -1) {
-      return tokenizeCSS(this.selector.substr(sepIndex));
+    // Only keep the part after the last combinator: '>', '+', '~'
+    let sepIndex = 0;
+    for (let i = this.selector.length - 1; i >= 0; i -= 1) {
+      const code = this.selector.charCodeAt(i);
+      if (
+        code === 43 || // '+'
+        code === 62 || // '>'
+        code === 126 // '~'
+      ) {
+        sepIndex = i;
+        break;
+      }
     }
 
-    return tokenizeCSS(this.selector);
+    // We do not want to take styles contained in brackets () into account while
+    // extracting the tokens, so we loop over the selector and ignore these
+    // parts.
+    let inside = 0; // number of brackets openings seen, allows to handle multiple levels of depth
+    let start = sepIndex;
+    const tokens: number[] = [];
+
+    for (let i = sepIndex, len = this.selector.length; i < len; i += 1) {
+      const code = this.selector.charCodeAt(i);
+      if (code === 91) { // '['
+        if (inside === 0 && start < i) {
+          tokens.push(...tokenizeCSS(this.selector.slice(start, i)));
+        }
+        inside += 1;
+      } else if (code === 93) { // ']'
+        inside -= 1;
+        start = i + 1;
+      }
+    }
+
+    if (inside === 0 && start < this.selector.length) {
+      tokens.push(...tokenizeCSS(this.selector.slice(
+        start,
+        this.selector.length,
+      )));
+    }
+
+    return tokens;
   }
 
   public getSelector(): string {

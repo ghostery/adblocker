@@ -2,21 +2,48 @@ import { NetworkFilter } from '../parsing/network-filter';
 import { IRequest } from '../request/interface';
 import { createFuzzySignature, fastStartsWith } from '../utils';
 
-function isAnchoredByHostname(
+export function isAnchoredByHostname(
   filterHostname: string,
   hostname: string,
 ): boolean {
+  // Corner-case, if `filterHostname` is empty, then it's a match
+  if (filterHostname.length === 0) {
+    return true;
+  }
+
+  // `filterHostname` cannot be longer than actual hostname
+  if (filterHostname.length > hostname.length) {
+    return false;
+  }
+
+  // Check if `filterHostname` appears anywhere in `hostname`
   const matchIndex = hostname.indexOf(filterHostname);
+
+  // No match
+  if (matchIndex === -1) {
+    return false;
+  }
+
   // Either start at beginning of hostname or be preceded by a '.'
   return (
-    // Prefix should either be equal to hostname, or end with a full label
+    // Prefix match
     (matchIndex === 0 && (
-      filterHostname.length === 0 ||
+      // This means `filterHostname` is equal to `hostname`
       hostname.length === filterHostname.length ||
+
+      // This means that `filterHostname` is a prefix of `hostname` (ends with a '.')
       filterHostname[filterHostname.length - 1] === '.' ||
       hostname[filterHostname.length] === '.')) ||
-    // Suffix should start with a full label
-    (matchIndex > 0 && hostname[matchIndex - 1] === '.')
+
+    // Suffix or infix match
+    ((hostname[matchIndex - 1] === '.' || filterHostname[0] === '.') && (
+      // `filterHostname` is a full suffix of `hostname`
+      (hostname.length - matchIndex) === filterHostname.length ||
+
+      // This means that `filterHostname` is infix of `hostname` (ends with a '.')
+      filterHostname[filterHostname.length - 1] === '.' ||
+      hostname[matchIndex + filterHostname.length] === '.')
+    )
   );
 }
 

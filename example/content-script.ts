@@ -1,7 +1,4 @@
-import { CosmeticsInjection, overrideUserAgent } from '../index-cosmetics';
-
-// This is used to fool some anti-content-blockers
-overrideUserAgent();
+import { CosmeticsInjection } from '../index-cosmetics';
 
 /**
  * Because all the filters and matching logic lives in the background of the
@@ -24,7 +21,9 @@ const backgroundAction = (action, ...args): Promise<void> => {
       action,
       args,
     }, (response) => {
-      injection.handleResponseFromBackground(response);
+      if (response !== undefined) {
+        injection.handleResponseFromBackground(response);
+      }
       resolve();
     });
   });

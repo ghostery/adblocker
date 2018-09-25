@@ -12,28 +12,27 @@ import ReverseIndex from '../reverse-index';
 export default class NetworkFilterBucket {
   public name: string;
   public index: ReverseIndex<NetworkFilter>;
+  public size: number;
 
-  constructor(name: string, filters: NetworkFilter[] = []) {
+  constructor(name: string, filters: (cb: (f: NetworkFilter) => void) => void, enableOptimizations = true) {
     this.name = name;
-    this.index = new ReverseIndex(filters, (filter) => filter.getTokens(), {
-      optimizer: networkFiltersOptimizer,
-    });
-  }
-
-  get size() {
-    return this.index.size;
-  }
-
-  public report() {
-    return this.index.report();
+    this.index = new ReverseIndex<NetworkFilter>(
+      filters,
+      (filter: NetworkFilter) => filter.getTokens(),
+      {
+        enableOptimizations,
+        optimizer: networkFiltersOptimizer,
+      },
+    );
+    this.size = this.index.size;
   }
 
   public optimizeAheadOfTime() {
     this.index.optimizeAheadOfTime();
   }
 
-  public match(request: IRequest): NetworkFilter | null {
-    let match: NetworkFilter | null = null;
+  public match(request: IRequest): NetworkFilter | undefined {
+    let match: NetworkFilter | undefined;
 
     const checkMatch = (filter: NetworkFilter) => {
       if (matchNetworkFilter(filter, request)) {

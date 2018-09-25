@@ -20,14 +20,19 @@ export function clearBit(n: number, mask: number): number {
 // could result in collisions. One way to make sure it does not happen, would be
 // to select a set of prime numbers for the seed and increment that do not
 // generate collisions on our set of filters.
-export function fastHash(str: string): number {
-  if (!str) { return 0; }
+function fastHashBetween(str: string, begin: number, end: number): number {
   let hash = 5407;
-  for (let i = 0; i < str.length; i += 1) {
+
+  for (let i = begin; i < end; i += 1) {
     hash = (hash * 31) ^ str.charCodeAt(i);
   }
 
   return hash >>> 0;
+}
+
+export function fastHash(str: string): number {
+  if (!str) { return 0; }
+  return fastHashBetween(str, 0, str.length);
 }
 
 // https://jsperf.com/string-startswith/21
@@ -90,7 +95,7 @@ function isAlpha(ch: number): boolean {
   return ch >= 65 && ch <= 90;
 }
 
-function isAlphaExtended(ch: number) {
+function isAlphaExtended(ch: number): boolean {
   // 192 -> 450
   // À  Á  Â  Ã  Ä  Å  Æ  Ç  È  É  Ê  Ë  Ì  Í  Î  Ï  Ð  Ñ  Ò  Ó  Ô  Õ  Ö  ×  Ø
   // Ù  Ú  Û  Ü  Ý  Þ  ß  à  á  â  ã  ä  å  æ  ç  è  é  ê  ë  ì  í  î  ï  ð  ñ
@@ -121,32 +126,29 @@ function isAllowedCSS(ch: number): boolean {
   );
 }
 
-function fastTokenizer(pattern: string, isAllowedCode: (ch: number) => boolean, allowRegexSurround = false) {
+function fastTokenizer(pattern: string, isAllowedCode: (ch: number) => boolean, allowRegexSurround = false): number[] {
   const tokens: number[] = [];
   let inside: boolean = false;
   let start = 0;
-  let length = 0;
 
   for (let i: number = 0, len = pattern.length; i < len; i += 1) {
     const ch = pattern.charCodeAt(i);
     if (isAllowedCode(ch)) {
-      if (!inside) {
+      if (inside === false) {
         inside = true;
         start = i;
-        length = 0;
       }
-      length += 1;
     } else if (inside) {
       inside = false;
       // Should not be followed by '*'
-      if (allowRegexSurround || ch !== 42) {
-        tokens.push(fastHash(pattern.substr(start, length)));
+      if (allowRegexSurround === true || ch !== 42) {
+        tokens.push(fastHashBetween(pattern, start, i));
       }
     }
   }
 
   if (inside) {
-    tokens.push(fastHash(pattern.substr(start, length)));
+    tokens.push(fastHashBetween(pattern, start, pattern.length));
   }
 
   return tokens;

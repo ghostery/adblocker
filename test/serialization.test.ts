@@ -49,8 +49,10 @@ describe('Serialization', () => {
 
     // Initialize index
     const reverseIndex = new ReverseIndex<NetworkFilter>(
-      [...filters.values()],
-      f => f.getTokens());
+      (cb) => {
+        [...filters.values()].forEach(cb);
+      },
+      (f: NetworkFilter) => f.getTokens());
 
     // Serialize index
     const buffer = new DynamicDataView(4000000);
@@ -71,6 +73,7 @@ describe('Serialization', () => {
     const filters = loadAllLists();
 
     const engine = new Engine({
+      enableOptimizations: true,
       loadCosmeticFilters: true,
       loadNetworkFilters: true,
       optimizeAOT: false,
@@ -79,9 +82,6 @@ describe('Serialization', () => {
 
     engine.onUpdateFilters(
       [{ filters, asset: 'list1', checksum: 'checksum' }],
-      new Set(),
-      false, // onDiskCache
-      false, // debug
     );
 
     engine.onUpdateResource([

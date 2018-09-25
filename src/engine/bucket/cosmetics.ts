@@ -7,14 +7,19 @@ import ReverseIndex from '../reverse-index';
 export default class CosmeticFilterBucket {
   public hostnameIndex: ReverseIndex<CosmeticFilter>;
   public selectorIndex: ReverseIndex<CosmeticFilter>;
+  public size: number;
 
-  constructor(filters: CosmeticFilter[] = []) {
+  constructor(filters: (cb: (f: CosmeticFilter) => void) => void) {
     // This accelerating data structure is used to retrieve cosmetic filters for
     // a given hostname. We only store filters having at least one hostname
     // specified and we index each filter several time (one time per hostname).
     this.hostnameIndex = new ReverseIndex(
-      (filters || []).filter((f) => f.hasHostnames()),
-      (filter: any) => {
+      (cb: (f: CosmeticFilter) => void) => filters((f: CosmeticFilter) => {
+        if (f.hasHostnames()) {
+          cb(f);
+        }
+      }),
+      (filter: CosmeticFilter) => {
         const multiTokens: number[][] = [];
         filter.hostnames.split(',').forEach((h: string) => {
           multiTokens.push(tokenize(h));
@@ -27,14 +32,15 @@ export default class CosmeticFilterBucket {
     // fast look-up when we need to get a set of rules to inject in a window,
     // based on some node information.
     this.selectorIndex = new ReverseIndex(
-      (filters || []).filter((f) => !(f.isScriptBlock() || f.isScriptInject())),
+      (cb: (f: CosmeticFilter) => void) => filters((f: CosmeticFilter) => {
+        if (!(f.isScriptBlock() || f.isScriptInject())) {
+          cb(f);
+        }
+      }),
       (filter) => filter.getTokens(),
-      {},
     );
-  }
 
-  get size() {
-    return this.hostnameIndex.size + this.selectorIndex.size;
+    this.size = this.hostnameIndex.size + this.selectorIndex.size;
   }
 
   public createContentScriptResponse(
@@ -72,8 +78,8 @@ export default class CosmeticFilterBucket {
 
   public getDomainRules(
     hostname: string,
-    js: Map<string, string>,
-  ): CosmeticFilter[] {
+    js: Map < string, string >,
+  ) {
     // Collect matching rules
     const rules: Array<{ rule: CosmeticFilter; hostname: string }> = [];
     const checkMatch = (rule: CosmeticFilter) => {
@@ -152,7 +158,7 @@ export default class CosmeticFilterBucket {
   }
 
   private filterExceptions(
-    matches: Array<{ rule: CosmeticFilter; hostname: string }>,
+    matches: Array < { rule: CosmeticFilter; hostname: string } > ,
   ): CosmeticFilter[] {
     const matchingRules = new Map();
 

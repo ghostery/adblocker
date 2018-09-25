@@ -1,5 +1,4 @@
-// @ts-ignore
-import { getPublicSuffix } from 'tldjs';
+import { getPublicSuffix } from 'tldts';
 
 import { CosmeticFilter } from '../parsing/cosmetic-filter';
 import { fastStartsWith } from '../utils';
@@ -40,7 +39,7 @@ function matchHostname(hostname: string, hostnamePattern: string): boolean {
 
     // Ignore TLDs suffix
     const publicSuffix = getPublicSuffix(hostname);
-    if (!publicSuffix) {
+    if (publicSuffix === null) {
       return false;
     }
 

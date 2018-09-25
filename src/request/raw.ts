@@ -1,5 +1,4 @@
-// @ts-ignore
-import { parse } from 'tldjs';
+import { parse } from 'tldts';
 
 import { mkRequest } from './interface';
 
@@ -12,7 +11,7 @@ export interface IRawRequest {
 export function processRawRequest(request: IRawRequest) {
   // Extract hostname
   const url = request.url.toLowerCase();
-  const { hostname, domain } = parse(url);
+  const { host, domain } = parse(url);
 
   // Process source url
   let sourceUrl = request.sourceUrl;
@@ -25,7 +24,7 @@ export function processRawRequest(request: IRawRequest) {
     // some filter matching on the request URL itself.
     sourceUrl = sourceUrl.toLowerCase();
     const sourceUrlParts = parse(sourceUrl);
-    sourceHostname = sourceUrlParts.hostname || '';
+    sourceHostname = sourceUrlParts.host || '';
     sourceDomain = sourceUrlParts.domain || '';
   }
 
@@ -38,8 +37,8 @@ export function processRawRequest(request: IRawRequest) {
     sourceHostname,
 
     // Url
-    domain,
-    hostname,
+    domain: domain || '',
+    hostname: host || '',
     url,
   });
 }

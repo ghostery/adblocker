@@ -74,7 +74,11 @@ const FROM_ANY: number =
  * Map content type value to mask the corresponding mask.
  * ref: https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIContentPolicy
  */
-const CPT_TO_MASK = {
+interface IDict {
+  [s: string]: number;
+}
+
+const CPT_TO_MASK: IDict = {
   1: NETWORK_FILTER_MASK.fromOther,
   2: NETWORK_FILTER_MASK.fromScript,
   3: NETWORK_FILTER_MASK.fromImage,
@@ -145,6 +149,8 @@ function parseDomainsOption(domains: string): Set<string> {
 //  - popunder
 //  - generichide
 //  - genericblock
+// 2. csp option: ||wikia.com^$csp=script-src 'self' * 'unsafe-inline' 'unsafe-eval'
+// 3. Replace `split` with `substr`
 export class NetworkFilter implements IFilter {
   public id: number;
   public mask: number;
@@ -404,7 +410,8 @@ export class NetworkFilter implements IFilter {
       return getBit(this.mask, mask);
     }
 
-    return true;
+    // If content type is not supported then we return false
+    return false;
   }
 
   public isFuzzy() {
@@ -513,7 +520,7 @@ export class NetworkFilter implements IFilter {
 // ---------------------------------------------------------------------------
 
 function setNetworkMask(mask: number, m: number, value: boolean): number {
-  if (value) {
+  if (value === true) {
     return setBit(mask, m);
   }
 
@@ -546,6 +553,11 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   // Represent options as a bitmask
   let mask: number = NETWORK_FILTER_MASK.thirdParty | NETWORK_FILTER_MASK.firstParty;
 
+  // Temporary masks for positive (e.g.: $script) and negative (e.g.: $~script)
+  // content type options.
+  let cptMaskPositive: number = 0;
+  let cptMaskNegative: number = FROM_ANY;
+
   // Get rid of those and just return `null` when possible
   let filter: string | null = null;
   let hostname: string | null = null;
@@ -553,11 +565,6 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   let optDomains: string = '';
   let optNotDomains: string = '';
   let redirect: string = '';
-
-  // Check if this filter had at least one option constraining the acceptable
-  // content policy type. If this remains false, then the filter will have the
-  // value of FROM_ANY and will be applied on any request.
-  let hasCptOption: boolean = false;
 
   // Start parsing
   let filterIndexStart: number = 0;
@@ -632,82 +639,6 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
 
           break;
         }
-        case 'image':
-          hasCptOption = true;
-          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.fromImage, !negation);
-          break;
-        case 'media':
-          hasCptOption = true;
-          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.fromMedia, !negation);
-          break;
-        case 'object':
-          hasCptOption = true;
-          mask = setNetworkMask(
-            mask,
-            NETWORK_FILTER_MASK.fromObject,
-            !negation,
-          );
-          break;
-        case 'object-subrequest':
-          hasCptOption = true;
-          mask = setNetworkMask(
-            mask,
-            NETWORK_FILTER_MASK.fromObjectSubrequest,
-            !negation,
-          );
-          break;
-        case 'other':
-          hasCptOption = true;
-          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.fromOther, !negation);
-          break;
-        case 'ping':
-          hasCptOption = true;
-          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.fromPing, !negation);
-          break;
-        case 'script':
-          hasCptOption = true;
-          mask = setNetworkMask(
-            mask,
-            NETWORK_FILTER_MASK.fromScript,
-            !negation,
-          );
-          break;
-        case 'stylesheet':
-          hasCptOption = true;
-          mask = setNetworkMask(
-            mask,
-            NETWORK_FILTER_MASK.fromStylesheet,
-            !negation,
-          );
-          break;
-        case 'subdocument':
-          hasCptOption = true;
-          mask = setNetworkMask(
-            mask,
-            NETWORK_FILTER_MASK.fromSubdocument,
-            !negation,
-          );
-          break;
-        case 'xmlhttprequest':
-          hasCptOption = true;
-          mask = setNetworkMask(
-            mask,
-            NETWORK_FILTER_MASK.fromXmlHttpRequest,
-            !negation,
-          );
-          break;
-        case 'websocket':
-          hasCptOption = true;
-          mask = setNetworkMask(
-            mask,
-            NETWORK_FILTER_MASK.fromWebsocket,
-            !negation,
-          );
-          break;
-        case 'font':
-          hasCptOption = true;
-          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.fromFont, !negation);
-          break;
         case 'important':
           // Note: `negation` should always be `false` here.
           if (negation) {
@@ -760,18 +691,76 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
 
           redirect = optionValues[0];
           break;
-        default:
+        default: {
+          // Handle content type options separatly
+          let optionMask: number = 0;
+          switch (option) {
+            case 'image':
+              optionMask = NETWORK_FILTER_MASK.fromImage;
+              break;
+            case 'media':
+              optionMask = NETWORK_FILTER_MASK.fromMedia;
+              break;
+            case 'object':
+              optionMask = NETWORK_FILTER_MASK.fromObject;
+              break;
+            case 'object-subrequest':
+              optionMask = NETWORK_FILTER_MASK.fromObjectSubrequest;
+              break;
+            case 'other':
+              optionMask = NETWORK_FILTER_MASK.fromOther;
+              break;
+            case 'ping':
+              optionMask = NETWORK_FILTER_MASK.fromPing;
+              break;
+            case 'script':
+              optionMask = NETWORK_FILTER_MASK.fromScript;
+              break;
+            case 'stylesheet':
+              optionMask = NETWORK_FILTER_MASK.fromStylesheet;
+              break;
+            case 'subdocument':
+              optionMask = NETWORK_FILTER_MASK.fromSubdocument;
+              break;
+            case 'xmlhttprequest':
+              optionMask = NETWORK_FILTER_MASK.fromXmlHttpRequest;
+              break;
+            case 'websocket':
+              optionMask = NETWORK_FILTER_MASK.fromWebsocket;
+              break;
+            case 'font':
+              optionMask = NETWORK_FILTER_MASK.fromFont;
+              break;
+            default:
+              return null;
+          }
+
           // Disable this filter if we don't support all the options
-          return null;
+          if (optionMask === 0) {
+            return null;
+          }
+
+          // We got a valid cpt option, update mask
+          if (negation) {
+            cptMaskNegative = clearBit(cptMaskNegative, optionMask);
+          } else {
+            cptMaskPositive = setBit(cptMaskPositive, optionMask);
+          }
+          break;
+        }
       }
     }
     // End of option parsing
     // --------------------------------------------------------------------- //
   }
 
-  // Apply mask to the internal state.
-  if (hasCptOption === false) {
-    mask = setBit(mask, FROM_ANY);
+  // TODO update `mask` using cptMaskPositive and cptMaskNegative
+  if (cptMaskPositive === 0) {
+    mask |= cptMaskNegative;
+  } else if (cptMaskNegative === FROM_ANY) {
+    mask |= cptMaskPositive;
+  } else {
+    mask |= cptMaskPositive & cptMaskNegative;
   }
 
   // Identify kind of pattern
@@ -820,10 +809,10 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
       // Look for next /
       const slashIndex = line.indexOf('/', filterIndexStart);
       if (slashIndex !== -1) {
-        hostname = line.substring(filterIndexStart, slashIndex);
+        hostname = line.slice(filterIndexStart, slashIndex);
         filterIndexStart = slashIndex;
       } else {
-        hostname = line.substring(filterIndexStart, filterIndexEnd);
+        hostname = line.slice(filterIndexStart, filterIndexEnd);
         filter = '';
       }
     } else if (isRegex && isHostnameAnchor) {
@@ -834,7 +823,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
       const firstSeparator = line.search(SEPARATOR);
 
       if (firstSeparator !== -1) {
-        hostname = line.substring(filterIndexStart, firstSeparator);
+        hostname = line.slice(filterIndexStart, firstSeparator);
         filterIndexStart = firstSeparator;
         if (
           filterIndexEnd - filterIndexStart === 1 &&
@@ -854,7 +843,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   }
 
   if (filter === null) {
-    filter = line.substring(filterIndexStart, filterIndexEnd).toLowerCase();
+    filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
   }
 
   let finalHostname = '';

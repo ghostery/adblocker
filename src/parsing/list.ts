@@ -94,20 +94,20 @@ export function parseList(
       if (filterType === FilterType.NETWORK && loadNetworkFilters) {
         const filter = parseNetworkFilter(line);
         if (filter !== null) {
-          networkFilters.push(filter);
           // In debug mode, keep the original line
-          if (debug) {
+          if (debug === true) {
             filter.rawLine = line;
           }
+          networkFilters.push(filter);
         }
       } else if (filterType === FilterType.COSMETIC && loadCosmeticFilters) {
         const filter = parseCosmeticFilter(line);
         if (filter !== null) {
-          cosmeticFilters.push(filter);
           // In debug mode, keep the original line
-          if (debug) {
+          if (debug === true) {
             filter.rawLine = line;
           }
+          cosmeticFilters.push(filter);
         }
       }
     }

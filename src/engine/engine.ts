@@ -1,4 +1,5 @@
 import { CosmeticFilter } from '../parsing/cosmetic-filter';
+import IFilter from '../parsing/interface';
 import { parseJSResource, parseList } from '../parsing/list';
 import { NetworkFilter } from '../parsing/network-filter';
 import { IRawRequest, processRawRequest } from '../request/raw';
@@ -8,48 +9,40 @@ import CosmeticFilterBucket from './bucket/cosmetics';
 import NetworkFilterBucket from './bucket/network';
 import IList from './list';
 
-/**
- * Append all elements of `array` to the end of `target`.
- *
- * Example:
- * >>> extend([1, 2, 3], [4, 5, 6, 7])
- *  [1, 2, 3, 4, 5, 6, 7]
- */
-function extend<T>(target: T[], array: T[]): T[] {
-  for (let i = 0; i < array.length; i += 1) {
-    target.push(array[i]);
+// Polyfill for `btoa`
+function btoaPolyfill(buffer: string): string {
+  if (typeof btoa !== 'undefined') {
+    return btoa(buffer);
+  } else if (typeof Buffer !== 'undefined') {
+    return Buffer.from(buffer).toString('base64');
   }
-  return target;
+  return buffer;
 }
 
-function collectAllFilters(lists: Map<string, IList>): {
-  filters: NetworkFilter[];
-  exceptions: NetworkFilter[];
-  redirects: NetworkFilter[];
-  importants: NetworkFilter[];
-  cosmetics: CosmeticFilter[];
-} {
-  const filters: NetworkFilter[] = [];
-  const exceptions: NetworkFilter[] = [];
-  const redirects: NetworkFilter[] = [];
-  const importants: NetworkFilter[] = [];
-  const cosmetics: CosmeticFilter[] = [];
+// tslint:disable-next-line variable-name
+function noopIter<T extends IFilter>(_cb: (f: T) => void): void {
+  // no-op
+}
 
-  lists.forEach((list) => {
-    extend(filters, list.filters);
-    extend(exceptions, list.exceptions);
-    extend(importants, list.importants);
-    extend(redirects, list.redirects);
-    extend(cosmetics, list.cosmetics);
+function iterFilters<F extends IFilter>(
+  lists: Map<string, IList>,
+  select: (l: IList) => F[],
+  cb: (f: F) => void,
+): void {
+  lists.forEach((list: IList) => {
+    const filters: F[] = select(list);
+    for (let i = 0; i < filters.length; i += 1) {
+      cb(filters[i]);
+    }
   });
+}
 
-  return {
-    cosmetics,
-    exceptions,
-    filters,
-    importants,
-    redirects,
-  };
+interface IOptions {
+  loadCosmeticFilters: boolean;
+  loadNetworkFilters: boolean;
+  optimizeAOT: boolean;
+  enableOptimizations: boolean;
+  version: number;
 }
 
 export default class FilterEngine {
@@ -62,6 +55,8 @@ export default class FilterEngine {
   public filters: NetworkFilterBucket;
   public cosmetics: CosmeticFilterBucket;
 
+  public size: number;
+
   public resourceChecksum: string;
   public js: Map<string, string>;
   public resources: Map<string, { contentType: string; data: string }>;
@@ -69,51 +64,40 @@ export default class FilterEngine {
   public loadCosmeticFilters: boolean;
   public loadNetworkFilters: boolean;
   public optimizeAOT: boolean;
+  public enableOptimizations: boolean;
 
   constructor({
-    loadCosmeticFilters,
-    loadNetworkFilters,
-    optimizeAOT,
+    enableOptimizations = true,
+    loadCosmeticFilters = true,
+    loadNetworkFilters = true,
+    optimizeAOT = true,
     version,
-  }: {
-    loadCosmeticFilters: boolean,
-    loadNetworkFilters: boolean,
-    optimizeAOT: boolean,
-    version: number,
-  }) {
+  }: IOptions) {
     // Options
     this.loadCosmeticFilters = loadCosmeticFilters;
     this.loadNetworkFilters = loadNetworkFilters;
     this.optimizeAOT = optimizeAOT;
+    this.enableOptimizations = enableOptimizations;
     this.version = version;
 
     this.lists = new Map();
+    this.size = 0;
 
     // @@filter
-    this.exceptions = new NetworkFilterBucket('exceptions');
+    this.exceptions = new NetworkFilterBucket('exceptions', noopIter);
     // $important
-    this.importants = new NetworkFilterBucket('importants');
+    this.importants = new NetworkFilterBucket('importants', noopIter);
     // $redirect
-    this.redirects = new NetworkFilterBucket('redirects');
+    this.redirects = new NetworkFilterBucket('redirects', noopIter);
     // All other filters
-    this.filters = new NetworkFilterBucket('filters');
+    this.filters = new NetworkFilterBucket('filters', noopIter);
     // Cosmetic filters
-    this.cosmetics = new CosmeticFilterBucket();
+    this.cosmetics = new CosmeticFilterBucket(noopIter);
 
     // Injections
     this.resourceChecksum = '';
     this.js = new Map();
     this.resources = new Map();
-  }
-
-  get size() {
-    return (
-      this.exceptions.size +
-      this.importants.size +
-      this.redirects.size +
-      this.cosmetics.size +
-      this.filters.size
-    );
   }
 
   public hasList(asset: string, checksum: string): boolean {
@@ -155,7 +139,7 @@ export default class FilterEngine {
 
   public onUpdateFilters(
     lists: Array<{ filters: string; checksum: string; asset: string }>,
-    loadedAssets: Set<string>,
+    loadedAssets: Set<string> = new Set(),
     onDiskCache: boolean = false,
     debug: boolean = false,
   ): Uint8Array | null {
@@ -216,19 +200,40 @@ export default class FilterEngine {
     }
 
     // Re-create all buckets
-    const allFilters = collectAllFilters(this.lists);
-
-    this.filters = new NetworkFilterBucket('filters', allFilters.filters);
+    this.filters = new NetworkFilterBucket(
+      'filters',
+      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, l => l.filters, cb),
+      this.enableOptimizations,
+    );
     this.exceptions = new NetworkFilterBucket(
       'exceptions',
-      allFilters.exceptions,
+      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, l => l.exceptions, cb),
+      this.enableOptimizations,
     );
     this.importants = new NetworkFilterBucket(
       'importants',
-      allFilters.importants,
+      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, l => l.importants, cb),
+      this.enableOptimizations,
     );
-    this.redirects = new NetworkFilterBucket('redirects', allFilters.redirects);
-    this.cosmetics = new CosmeticFilterBucket(allFilters.cosmetics);
+    this.redirects = new NetworkFilterBucket(
+      'redirects',
+      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, l => l.redirects, cb),
+      this.enableOptimizations,
+    );
+
+    // Eagerly collect filters in this case only
+    this.cosmetics = new CosmeticFilterBucket(
+      (cb: (f: CosmeticFilter) => void) => iterFilters(this.lists, l => l.cosmetics, cb),
+    );
+
+    // Update size
+    this.size = (
+      this.exceptions.size +
+      this.importants.size +
+      this.redirects.size +
+      this.cosmetics.size +
+      this.filters.size
+    );
 
     // Serialize engine
     let serialized: Uint8Array | null = null;
@@ -238,15 +243,19 @@ export default class FilterEngine {
 
     // Optimize ahead of time if asked for
     if (this.optimizeAOT) {
-      this.filters.optimizeAheadOfTime();
-      this.exceptions.optimizeAheadOfTime();
-      this.importants.optimizeAheadOfTime();
-      this.redirects.optimizeAheadOfTime();
-      // Cosmetic bucket does not expose any optimization yet.
-      // this.cosmetics.optimizeAheadOfTime();
+      this.optimize();
     }
 
     return serialized;
+  }
+
+  public optimize() {
+    this.filters.optimizeAheadOfTime();
+    this.exceptions.optimizeAheadOfTime();
+    this.importants.optimizeAheadOfTime();
+    this.redirects.optimizeAheadOfTime();
+    // Cosmetic bucket does not expose any optimization yet.
+    // this.cosmetics.optimizeAheadOfTime();
   }
 
   public getCosmeticsFilters(hostname: string, nodes: string[][]) {
@@ -274,8 +283,8 @@ export default class FilterEngine {
   ): {
     match: boolean,
     redirect?: string,
-    exception?: boolean,
-    filter?: string,
+    exception?: NetworkFilter,
+    filter?: NetworkFilter,
   } {
     if (!this.loadNetworkFilters) {
       return { match: false };
@@ -286,69 +295,53 @@ export default class FilterEngine {
     // context will be used during the matching in the engine.
     const request = processRawRequest(rawRequest);
 
-    let result: NetworkFilter | null = null;
-    let exception: NetworkFilter | null = null;
+    let filter: NetworkFilter | undefined;
+    let exception: NetworkFilter | undefined;
+    let redirect: string | undefined;
 
     // Check the filters in the following order:
     // 1. $important (not subject to exceptions)
     // 2. redirection ($redirect=resource)
     // 3. normal filters
     // 4. exceptions
-    result = this.importants.match(request);
+    filter = this.importants.match(request);
 
-    if (result === null) {
+    if (filter === undefined) {
       // Check if there is a redirect or a normal match
-      result = this.redirects.match(request);
-      if (result === null) {
-        result = this.filters.match(request);
+      filter = this.redirects.match(request);
+      if (filter === undefined) {
+        filter = this.filters.match(request);
       }
 
       // If we found something, check for exceptions
-      if (result !== null) {
+      if (filter !== undefined) {
         exception = this.exceptions.match(request);
-        if (exception !== null) {
-          result = null;
-        }
       }
     }
 
     // If there is a match
-    let filter;
-    if (result !== null) {
-      filter = result.toString();
-    } else if (exception !== null) {
-      filter = exception.toString();
-    }
-
-    if (result !== null) {
-      if (result.isRedirect()) {
-        const redirect = this.resources.get(result.getRedirect());
-        if (redirect !== undefined) {
-          const { data, contentType } = redirect;
+    if (filter !== undefined) {
+      if (filter.isRedirect()) {
+        const redirectResource = this.resources.get(filter.getRedirect());
+        if (redirectResource !== undefined) {
+          const { data, contentType } = redirectResource;
           let dataUrl;
           if (contentType.indexOf(';') !== -1) {
             dataUrl = `data:${contentType},${data}`;
           } else {
-            dataUrl = `data:${contentType};base64,${btoa(data)}`;
+            dataUrl = `data:${contentType};base64,${btoaPolyfill(data)}`;
           }
 
-          return {
-            filter,
-            match: true,
-            redirect: dataUrl.trim(),
-          };
+          redirect = dataUrl.trim();
         } // TODO - else, throw an exception
       }
-      return {
-        filter,
-        match: true,
-      };
     }
 
     return {
-      exception: exception !== null,
+      exception,
       filter,
-      match: false,
+      match: exception === undefined && filter !== undefined,
+      redirect,
     };
   }
 }

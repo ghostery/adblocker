@@ -1,13 +1,18 @@
 import IFilter from '../parsing/interface';
 
-function nope(arg: any) {
-  return arg;
+function noop<T>(filters: T[]): T[] {
+  return filters;
 }
 
 export interface IBucket<T extends IFilter> {
   hit: number;
   optimized: boolean;
   filters: T[];
+}
+
+interface IOptions<T> {
+  optimizer: (filters: T[]) => T[];
+  enableOptimizations: boolean;
 }
 
 /**
@@ -46,21 +51,27 @@ export default class ReverseIndex<T extends IFilter> {
   public index: Map<number, IBucket<T>>;
 
   private optimizer: (filters: T[]) => T[];
-  private getTokens: (filter: IFilter) => number[][];
+  private getTokens: (filter: T) => number[][];
 
   constructor(
-    filters: T[],
-    getTokens: (filter: IFilter) => number[][],
-    { optimizer = nope } = {},
+    filters: (cb: (f: T) => void) => void,
+    getTokens: (filter: T) => number[][],
+    {
+      enableOptimizations = true,
+      optimizer = noop,
+    }: Partial<IOptions<T>> = {
+      enableOptimizations: true,
+      optimizer: noop,
+    },
   ) {
     // Mapping from tokens to filters
     this.index = new Map();
     this.size = 0;
 
-    this.optimizer = optimizer;
+    this.optimizer = enableOptimizations ? optimizer : noop;
     this.getTokens = getTokens;
 
-    this.addFilters(filters || []);
+    this.addFilters(filters);
   }
 
   /**
@@ -69,7 +80,6 @@ export default class ReverseIndex<T extends IFilter> {
    * achieved if the callback returns `false`.
    */
   public iterMatchingFilters(tokens: number[], cb: (f: T) => boolean): void {
-    // Doing so will make sure that time to find a match is minimized over time
     for (let j = 0; j < tokens.length; j += 1) {
       if (this.iterBucket(tokens[j], cb) === false) {
         return;
@@ -78,36 +88,6 @@ export default class ReverseIndex<T extends IFilter> {
 
     // Fallback to 0 bucket if nothing was found before.
     this.iterBucket(0, cb);
-  }
-
-  /**
-   * Returns a report (string) of bucket sizes to be printed on the console.
-   * This is mainly designed for debugging purposes.
-   */
-  public report(): string {
-    const sizes: Map<number, number> = new Map();
-    // Report size of buckets
-    let strResult = '';
-    this.index.forEach((bucket, token) => {
-      const filters = bucket.filters;
-      sizes.set(filters.length, (sizes.get(filters.length) || 0) + 1);
-      if (length > 5) {
-        strResult = strResult.concat(
-          `adblocker size bucket "${token}" => ${filters.length}\n`,
-        );
-        filters.forEach((f) => {
-          strResult = strResult.concat(`    ${f.toString()} ${f.mask}\n`);
-        });
-      }
-    });
-
-    sizes.forEach((count, size) => {
-      strResult = strResult.concat(
-        `adblocker sizes ${size} => ${count} buckets\n`,
-      );
-    });
-
-    return strResult;
   }
 
   /**
@@ -121,43 +101,40 @@ export default class ReverseIndex<T extends IFilter> {
     }
   }
 
-  private addFilters(filters: T[]): void {
-    const length = filters.length;
-    this.size = length;
-
+  private addFilters(iterFilters: (cb: (f: T) => void) => void): void {
     const idToTokens = new Map();
     const histogram = new Map();
 
     // Update histogram with new tokens
-    for (let i = 0; i < filters.length; i += 1) {
-      const filter = filters[i];
-
-      // Deal with filters generating several sets of tokens
-      // (eg: cosmetic filters and their hostnames)
+    iterFilters((filter: T) => {
       const multiTokens = this.getTokens(filter);
+      idToTokens.set(filter.id, {
+        filter,
+        multiTokens,
+      });
 
-      idToTokens.set(filter.id, multiTokens);
-      for (let j = 0; j < multiTokens.length; j += 1) {
-        const tokens = multiTokens[j];
-        for (let k = 0; k < tokens.length; k += 1) {
-          const token = tokens[k];
+      for (let i = 0; i < multiTokens.length; i += 1) {
+        const tokens = multiTokens[i];
+        for (let j = 0; j < tokens.length; j += 1) {
+          const token = tokens[j];
           histogram.set(token, (histogram.get(token) || 0) + 1);
         }
       }
-    }
+    });
+
+    // Reset index
+    this.index = new Map();
 
     // For each filter, take the best token (least seen)
-    for (let i = 0; i < filters.length; i += 1) {
+    idToTokens.forEach(({ filter, multiTokens }) => {
       let wildCardInserted = false;
-      const filter = filters[i];
-      const multiTokens = idToTokens.get(filter.id);
 
-      for (let j = 0; j < multiTokens.length; j += 1) {
-        const tokens = multiTokens[j];
+      for (let i = 0; i < multiTokens.length; i += 1) {
+        const tokens = multiTokens[i];
 
         // Empty token is used as a wild-card
         let bestToken = 0;
-        let count = length;
+        let count = idToTokens.size;
         for (let k = 0; k < tokens.length; k += 1) {
           const token = tokens[k];
           const tokenCount = histogram.get(token);
@@ -188,7 +165,10 @@ export default class ReverseIndex<T extends IFilter> {
           bucket.filters.push(filter);
         }
       }
-    }
+    });
+
+    // Update size
+    this.size = idToTokens.size;
   }
 
   private optimize(bucket: IBucket<T>, force: boolean = false): void {
@@ -204,7 +184,7 @@ export default class ReverseIndex<T extends IFilter> {
   }
 
   /**
-   * If a bucket exist for the given `token`, call the callback on each filter
+   * If a bucket exists for the given `token`, call the callback on each filter
    * found inside. An early termination mechanism is built-in, to stop iterating
    * as soon as `false` is returned from the callback.
    */

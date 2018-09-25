@@ -1,28 +1,31 @@
 sudo: false
 dist: trusty
 language: node_js
+
 node_js:
-  - 7
+  - 6
   - 8
   - 9
   - node
-
-cache:
-  directories:
-    - node_modules
 
 notifications:
   email:
     on_failure: change
 
+before_install:
+  - npm install -g npm@latest
+
 install:
-  - npm install
+  - npm ci
 
 script:
-  - npm run test
+  - npm test
 
 before_deploy:
+  - npm run clean
+  - npm run build
   - npm run bundle
+  - npm run minify
 
 deploy:
   provider: npm
