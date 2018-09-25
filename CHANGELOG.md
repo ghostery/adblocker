@@ -2,6 +2,10 @@
 
 ## *not released*
 
+## 0.2.0
+
+*2018-09-25*
+
   * Add benchmark module + various improvements [#31](https://github.com/cliqz-oss/adblocker/pull/31)
     * [test] Add tests for matching and Engine based on Alex top 1000 domains
     * [perf] Add `bench` module to measure performance + memory consumption in Node.js
