@@ -33,6 +33,7 @@ var ReverseIndex = (function () {
         var _this = this;
         var idToTokens = new Map();
         var histogram = new Map();
+        var totalTokens = 0;
         iterFilters(function (filter) {
             var multiTokens = _this.getTokens(filter);
             idToTokens.set(filter.id, {
@@ -44,6 +45,7 @@ var ReverseIndex = (function () {
                 for (var j = 0; j < tokens.length; j += 1) {
                     var token = tokens[j];
                     histogram.set(token, (histogram.get(token) || 0) + 1);
+                    totalTokens += 1;
                 }
             }
         });
@@ -54,7 +56,7 @@ var ReverseIndex = (function () {
             for (var i = 0; i < multiTokens.length; i += 1) {
                 var tokens = multiTokens[i];
                 var bestToken = 0;
-                var count = idToTokens.size;
+                var count = totalTokens + 1;
                 for (var k = 0; k < tokens.length; k += 1) {
                     var token = tokens[k];
                     var tokenCount = histogram.get(token);
@@ -272,8 +274,7 @@ function isAlphaExtended(ch) {
 function isAllowed(ch) {
     return isDigit(ch) || isAlpha(ch) || isAlphaExtended(ch);
 }
-function fastTokenizer(pattern, isAllowedCode, allowRegexSurround) {
-    if (allowRegexSurround === void 0) { allowRegexSurround = false; }
+function fastTokenizer(pattern, isAllowedCode, allowRegexSurround, skipLastToken) {
     var tokens = [];
     var inside = false;
     var start = 0;
@@ -285,20 +286,23 @@ function fastTokenizer(pattern, isAllowedCode, allowRegexSurround) {
                 start = i;
             }
         }
-        else if (inside) {
+        else if (inside === true) {
             inside = false;
             if (allowRegexSurround === true || ch !== 42) {
                 tokens.push(fastHashBetween(pattern, start, i));
             }
         }
     }
-    if (inside) {
+    if (inside === true && skipLastToken === false) {
         tokens.push(fastHashBetween(pattern, start, pattern.length));
     }
     return tokens;
 }
 function tokenize(pattern) {
-    return fastTokenizer(pattern, isAllowed, false);
+    return fastTokenizer(pattern, isAllowed, false, false);
+}
+function tokenizeFilter(pattern, skipLastToken) {
+    return fastTokenizer(pattern, isAllowed, false, skipLastToken);
 }
 function createFuzzySignature(pattern) {
     return compactTokens(new Uint32Array(tokenize(pattern)));
@@ -684,7 +688,7 @@ var NetworkFilter = (function () {
         return this.fuzzySignature;
     };
     NetworkFilter.prototype.getTokens = function () {
-        return [tokenize(this.filter).concat(tokenize(this.hostname))];
+        return [tokenizeFilter(this.filter, this.isPlain()).concat(tokenizeFilter(this.hostname, false))];
     };
     NetworkFilter.prototype.isCptAllowed = function (cpt) {
         var mask = CPT_TO_MASK[cpt];

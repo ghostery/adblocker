@@ -104,6 +104,7 @@ export default class ReverseIndex<T extends IFilter> {
   private addFilters(iterFilters: (cb: (f: T) => void) => void): void {
     const idToTokens = new Map();
     const histogram = new Map();
+    let totalTokens = 0;
 
     // Update histogram with new tokens
     iterFilters((filter: T) => {
@@ -118,6 +119,7 @@ export default class ReverseIndex<T extends IFilter> {
         for (let j = 0; j < tokens.length; j += 1) {
           const token = tokens[j];
           histogram.set(token, (histogram.get(token) || 0) + 1);
+          totalTokens += 1;
         }
       }
     });
@@ -134,7 +136,7 @@ export default class ReverseIndex<T extends IFilter> {
 
         // Empty token is used as a wild-card
         let bestToken = 0;
-        let count = idToTokens.size;
+        let count = totalTokens + 1;
         for (let k = 0; k < tokens.length; k += 1) {
           const token = tokens[k];
           const tokenCount = histogram.get(token);

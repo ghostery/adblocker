@@ -2,6 +2,16 @@
 
 ## *not released*
 
+  * Fix reverse engine bucket selection [#40](https://github.com/cliqz-oss/adblocker/pull/40)
+    1. The selection of bucket for each filter in ReverseIndex would
+    needlessly fallback to the default bucket in some cases (even if a
+    better bucket could be available).
+    2. Some plain patterns would not be indexed properly if we expect
+    their last token to be a potential partial match. For example
+    ||foo.com/bar would not always match foo.com/barbaz, if bar (the
+    last token of the filter) was selected as "best token". The
+    work-around is to ignore the last token of plain patterns (to be
+    safe).
   *  Allow filters without specific resource type to match any cpt [#42](https://github.com/cliqz-oss/adblocker/pull/42)
 
 ## 0.2.0

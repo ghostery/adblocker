@@ -6,7 +6,7 @@ import {
   fastStartsWithFrom,
   getBit,
   setBit,
-  tokenize,
+  tokenizeFilter,
 } from '../utils';
 import IFilter from './interface';
 
@@ -398,7 +398,7 @@ export class NetworkFilter implements IFilter {
   }
 
   public getTokens(): number[][] {
-    return [tokenize(this.filter).concat(tokenize(this.hostname))];
+    return [tokenizeFilter(this.filter, this.isPlain()).concat(tokenizeFilter(this.hostname, false))];
   }
 
   /**
