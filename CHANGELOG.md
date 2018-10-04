@@ -7,6 +7,9 @@
 *2018-09-25*
 
   * Add benchmark module + various improvements [#31](https://github.com/cliqz-oss/adblocker/pull/31)
+    * [breaking] If a request contains an unknown cpt (content type), it will
+      not match any filter. This differs from previous behavior where an unknown
+      cpt would be accepted.
     * [test] Add tests for matching and Engine based on Alex top 1000 domains
     * [perf] Add `bench` module to measure performance + memory consumption in Node.js
     * [perf] Avoid string copy in tokenizer
