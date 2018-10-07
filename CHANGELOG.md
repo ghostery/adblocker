@@ -2,6 +2,8 @@
 
 ## *not released*
 
+  *  Allow filters without specific resource type to match any cpt [#42](https://github.com/cliqz-oss/adblocker/pull/42)
+
 ## 0.2.0
 
 *2018-09-25*

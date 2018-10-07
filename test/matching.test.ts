@@ -23,7 +23,6 @@ declare global {
 expect.extend({
   toMatchRequest(filter, request) {
     const processedRequest = processRawRequest({
-      cpt: 2,
       sourceUrl: '',
       url: '',
       ...request,

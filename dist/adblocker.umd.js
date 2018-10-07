@@ -765,7 +765,7 @@
             if (mask !== undefined) {
                 return getBit(this.mask, mask);
             }
-            return false;
+            return this.fromAny();
         };
         NetworkFilter.prototype.isFuzzy = function () {
             return getBit(this.mask, 524288);
