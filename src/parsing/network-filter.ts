@@ -177,13 +177,13 @@ export class NetworkFilter implements IFilter {
     hostname,
     id,
   }: {
-    mask: number,
-    filter: string,
-    optDomains: string,
-    optNotDomains: string,
-    redirect: string,
-    hostname: string,
-    id: number,
+    mask: number;
+    filter: string;
+    optDomains: string;
+    optNotDomains: string;
+    redirect: string;
+    hostname: string;
+    id: number;
   }) {
     // Those fields should not be mutated.
     this.id = id;
@@ -410,8 +410,9 @@ export class NetworkFilter implements IFilter {
       return getBit(this.mask, mask);
     }
 
-    // If content type is not supported then we return false
-    return false;
+    // If content type is not supported (or not specified), we return `true`
+    // only if the filter does not specify any resource type.
+    return this.fromAny();
   }
 
   public isFuzzy() {
@@ -551,7 +552,8 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   const line: string = rawLine;
 
   // Represent options as a bitmask
-  let mask: number = NETWORK_FILTER_MASK.thirdParty | NETWORK_FILTER_MASK.firstParty;
+  let mask: number =
+    NETWORK_FILTER_MASK.thirdParty | NETWORK_FILTER_MASK.firstParty;
 
   // Temporary masks for positive (e.g.: $script) and negative (e.g.: $~script)
   // content type options.
