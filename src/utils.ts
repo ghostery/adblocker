@@ -126,7 +126,12 @@ function isAllowedCSS(ch: number): boolean {
   );
 }
 
-function fastTokenizer(pattern: string, isAllowedCode: (ch: number) => boolean, allowRegexSurround = false): number[] {
+function fastTokenizer(
+  pattern: string,
+  isAllowedCode: (ch: number) => boolean,
+  allowRegexSurround: boolean,
+  skipLastToken: boolean,
+): number[] {
   const tokens: number[] = [];
   let inside: boolean = false;
   let start = 0;
@@ -138,7 +143,7 @@ function fastTokenizer(pattern: string, isAllowedCode: (ch: number) => boolean, 
         inside = true;
         start = i;
       }
-    } else if (inside) {
+    } else if (inside === true) {
       inside = false;
       // Should not be followed by '*'
       if (allowRegexSurround === true || ch !== 42) {
@@ -147,7 +152,7 @@ function fastTokenizer(pattern: string, isAllowedCode: (ch: number) => boolean, 
     }
   }
 
-  if (inside) {
+  if (inside === true && skipLastToken === false) {
     tokens.push(fastHashBetween(pattern, start, pattern.length));
   }
 
@@ -155,11 +160,15 @@ function fastTokenizer(pattern: string, isAllowedCode: (ch: number) => boolean, 
 }
 
 export function tokenize(pattern: string): number[] {
-  return fastTokenizer(pattern, isAllowed, false);
+  return fastTokenizer(pattern, isAllowed, false, false);
+}
+
+export function tokenizeFilter(pattern: string, skipLastToken: boolean): number[] {
+  return fastTokenizer(pattern, isAllowed, false, skipLastToken);
 }
 
 export function tokenizeCSS(pattern: string): number[] {
-  return fastTokenizer(pattern, isAllowedCSS, true);
+  return fastTokenizer(pattern, isAllowedCSS, true, false);
 }
 
 export function createFuzzySignature(pattern: string): Uint32Array {

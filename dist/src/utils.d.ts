@@ -5,5 +5,6 @@ export declare function fastHash(str: string): number;
 export declare function fastStartsWith(haystack: string, needle: string): boolean;
 export declare function fastStartsWithFrom(haystack: string, needle: string, start: number): boolean;
 export declare function tokenize(pattern: string): number[];
+export declare function tokenizeFilter(pattern: string, skipLastToken: boolean): number[];
 export declare function tokenizeCSS(pattern: string): number[];
 export declare function createFuzzySignature(pattern: string): Uint32Array;

@@ -8844,7 +8844,7 @@ export default [
     url: 'https://www.cam4ultimate.net/exports/tour_20/',
   },
   {
-    filter: '.ads.css',
+    filter: '/videojs.ads.',
     cpt: 'stylesheet',
     sourceUrl: 'https://www.imagefap.com',
     url: 'https://www.imagefap.com/css/videojs.ads.css',
