@@ -18,7 +18,7 @@ export default class CosmeticInjection {
     private blockedScripts;
     private observedNodes;
     private mutationObserver;
-    constructor(window: Window, backgroundAction: (action: string, ...args: any[]) => Promise<void>);
+    constructor(window: Window, backgroundAction: (action: string, ...args: any[]) => Promise<void>, useMutationObserver?: boolean);
     unload(): void;
     handleResponseFromBackground({ active, scripts, blockedScripts, styles }: IMessageFromBackground): void;
     private handleRules;

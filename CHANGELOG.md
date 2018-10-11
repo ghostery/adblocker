@@ -1,7 +1,12 @@
 # Adblocker
 
 ## *not released*
-  * Allow disable mutation observer
+
+## 0.2.1
+
+*2018-10-11*
+
+  * Allow disable mutation observer [#43](https://github.com/cliqz-oss/adblocker/pull/43)
   * Fix reverse engine bucket selection [#40](https://github.com/cliqz-oss/adblocker/pull/40)
     1. The selection of bucket for each filter in ReverseIndex would
     needlessly fallback to the default bucket in some cases (even if a
