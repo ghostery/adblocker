@@ -78,7 +78,8 @@
         injectScript("(" + script.toString() + ")()", window.document);
     }
     var CosmeticInjection = (function () {
-        function CosmeticInjection(window, backgroundAction) {
+        function CosmeticInjection(window, backgroundAction, useMutationObserver) {
+            if (useMutationObserver === void 0) { useMutationObserver = true; }
             this.window = window;
             this.backgroundAction = backgroundAction;
             this.mutationObserver = null;
@@ -87,8 +88,10 @@
             this.blockedScripts = new Set();
             this.observedNodes = new Set();
             this.backgroundAction('getCosmeticsForDomain');
-            this.onMutation([{ target: this.window.document.body }]);
-            this.startObserving();
+            if (useMutationObserver) {
+                this.onMutation([{ target: this.window.document.body }]);
+                this.startObserving();
+            }
         }
         CosmeticInjection.prototype.unload = function () {
             if (this.mutationObserver) {
