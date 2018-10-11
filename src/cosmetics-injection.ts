@@ -101,7 +101,8 @@ export default class CosmeticInjection {
   private observedNodes: Set<string>;
   private mutationObserver: MutationObserver | null;
 
-  constructor(window: Window, backgroundAction: (action: string, ...args: any[]) => Promise<void>) {
+  constructor(window: Window, backgroundAction: (action: string, ...args: any[]) => Promise<void>,
+              useMutationObserver = true) {
     this.window = window;
     this.backgroundAction = backgroundAction;
 
@@ -115,11 +116,13 @@ export default class CosmeticInjection {
     // Request cosmetics specific to this domain as soon as possible
     this.backgroundAction('getCosmeticsForDomain');
 
-    // Request cosmetics for nodes already existing in the DOM
-    this.onMutation([{ target: this.window.document.body }]);
+    if (useMutationObserver) {
+      // Request cosmetics for nodes already existing in the DOM
+      this.onMutation([{ target: this.window.document.body }]);
 
-    // Register MutationObserver
-    this.startObserving();
+      // Register MutationObserver
+      this.startObserving();
+    }
   }
 
   public unload() {
