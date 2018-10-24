@@ -347,6 +347,10 @@ export class NetworkFilter implements IFilter {
     return this.mask;
   }
 
+  public getCptMask() {
+    return this.getMask() & FROM_ANY;
+  }
+
   public isRedirect() {
     return !!this.redirect;
   }
@@ -456,7 +460,7 @@ export class NetworkFilter implements IFilter {
   }
 
   public fromAny() {
-    return (this.mask & FROM_ANY) === FROM_ANY;
+    return this.getCptMask() === FROM_ANY;
   }
 
   public thirdParty() {

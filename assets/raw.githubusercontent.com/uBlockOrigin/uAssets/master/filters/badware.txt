@@ -76,9 +76,12 @@ chip.de##[href^="javascript:DownloadStartInit"]
 ||securetoolext.com^$document
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/99
-douploads.com,uplod.*##script:inject(remove-attr.js, checked, #chkIsAdd)
+douploads.com,upload.ac##+js(remove-attr.js, checked, #chkIsAdd)
 
-! scammy site ublock.org
+! https://github.com/HandyUserscripts/AntiAdware/issues/52
+upload4earn.org##+js(remove-attr.js, checked)
+
+! https://github.com/gorhill/uBlock/wiki/Badware-risks#ublockorg
 ||ublock.org^$document
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3060
@@ -109,3 +112,7 @@ douploads.com,uplod.*##script:inject(remove-attr.js, checked, #chkIsAdd)
 ||thunderbird.es^$document
 ||unetbootin.net^$document
 ||unetbootin.org^$document
+
+! https://github.com/uBlockOrigin/uAssets/issues/3730
+! https://blog.sucuri.net/2018/10/malicious-redirects-from-newsharecounts-com-tweet-counter.html
+||newsharecounts.s3-us-west-2.amazonaws.com/nsc.js$script

@@ -73,7 +73,7 @@
 ||hatevery.info^$third-party
 
 ! https://github.com/hoshsadiq/adblock-nocoin-list/issues/59
-csgoconfigs.com##script:inject(abort-current-inline-script.js, m, CH.Anonymous)
+csgoconfigs.com##+js(abort-current-inline-script.js, m, CH.Anonymous)
 ||coinhiveproxy.com^$third-party
 
 ! https://github.com/hoshsadiq/adblock-nocoin-list/issues/63
@@ -162,7 +162,6 @@ csgoconfigs.com##script:inject(abort-current-inline-script.js, m, CH.Anonymous)
 ||cloudcoins.co^$third-party
 ||coinhive-manager.com^$third-party
 ||coinhive-proxy.party^$third-party
-||coinhive.com^$third-party
 ||coinlab.biz^$third-party
 ||coinminerz.com^$third-party
 ||cookiescript.info^$third-party
@@ -182,7 +181,6 @@ csgoconfigs.com##script:inject(abort-current-inline-script.js, m, CH.Anonymous)
 ||jroqvbvw.info^$third-party
 ||jyhfuqoh.info^$third-party
 ||kdowqlpt.info^$third-party
-||kiwifarms.net/js/Jawsh/xmr/xmr.min.js
 ||megabanners.cf^$third-party
 ||megabanners.cf^$websocket
 ||minecrunch.co^$third-party
@@ -235,7 +233,7 @@ csgoconfigs.com##script:inject(abort-current-inline-script.js, m, CH.Anonymous)
 ||web.dle-news.pw^$third-party
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1149
-vidzi.tv##script:inject(abort-on-property-write.js, decodeURIComponent)
+vidzi.tv##+js(abort-on-property-write.js, decodeURIComponent)
 ||vidzi.si^$csp=worker-src 'none';
 
 ! https://github.com/hoshsadiq/adblock-nocoin-list/issues/85#issuecomment-354658527
@@ -277,7 +275,7 @@ vidzi.tv##script:inject(abort-on-property-write.js, decodeURIComponent)
 ||zlx.com.br/assets/playermon.js$script
 
 ! https://github.com/hoshsadiq/adblock-nocoin-list/issues/101
-*$csp=worker-src 'none',domain=a-o.ninja|alltube.tv|biter.tv|byter.tv|centrum-dramy.pl|hentai-online.pl|lewd.ninja|love-drama.pl|milujivareni.cz|tokyodrift.ga|vidfile.net|ya3ale.com
+*$csp=worker-src 'none',domain=a-o.ninja|alltube.tv|biter.tv|byter.tv|centrum-dramy.pl|hentai-online.pl|lewd.ninja|love-drama.pl|milujivareni.cz|tokyodrift.ga|subswiki.com|vidfile.net|ya3ale.com
 ||vidfile.net/*.wasm
 /angular8.js
 ||tubetitties.com/worker.js
@@ -295,7 +293,6 @@ vidzi.tv##script:inject(abort-on-property-write.js, decodeURIComponent)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1369
 /crn.wasm
-||freecontent.bid^$third-party
 
 ! https://github.com/easylist/easylist/commit/b750557d82c3f56b0b4ba31bbd9a21b2536a6841#commitcomment-27140868
 ||300mbfilms.co^$csp=worker-src 'none';
@@ -303,7 +300,7 @@ vidzi.tv##script:inject(abort-on-property-write.js, decodeURIComponent)
 ||mutuza.win^$third-party
 
 ! https://github.com/easylist/easylist/issues/861
-tubettajat.net##script:inject(abort-on-property-read.js, miner)
+tubettajat.net##+js(abort-on-property-read.js, miner)
 ||crypto-webminer.com^$third-party
 ||cryweb.github.io^
 ||crywebber.github.io^
@@ -316,7 +313,7 @@ tubettajat.net##script:inject(abort-on-property-read.js, miner)
 ||vzhjnorkudcxbiy.com^
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/7tgjce/new_cryptocurrency_mining_website_not_blocked_by/
-tasma.ru##script:inject(abort-on-property-write.js, decodeURIComponent)
+tasma.ru##+js(abort-on-property-write.js, decodeURIComponent)
 ||ogrid.org^
 ||igrid.org^
 ||stat0808.info^
@@ -329,15 +326,16 @@ tasma.ru##script:inject(abort-on-property-write.js, decodeURIComponent)
 ||nablabee.com^$third-party
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1503
-shrink-service.it##script:inject(abort-on-property-read.js, WebAssembly)
+shrink-service.it##+js(abort-on-property-read.js, WebAssembly)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/7wwejy/cryptojackers_defeat_all_countermeasures/
 ! https://github.com/NanoAdblocker/NanoFilters/issues/35#issuecomment-403137195
-*$csp=worker-src 'none',domain=estream.to|flashx.cc|streamango.com|vidoza.net|vidto.me|vidto.se|vidtudu.com
+! https://github.com/uBlockOrigin/uAssets/issues/3244#issuecomment-420854707
+*$csp=worker-src 'none',domain=estream.to|flashx.cc|flashx.co|streamango.com|vidoza.net|vidto.me|vidto.se|vidtudu.com
 ||tulip18.com^$third-party
 
 ! https://github.com/uBlockOrigin/uAssets/pull/818#issuecomment-365770341
-djs.sk,mladipodnikatelia.sk##script:inject(abort-on-property-read.js, miner)
+djs.sk,mladipodnikatelia.sk##+js(abort-on-property-read.js, miner)
 ||pr0gram.org^$third-party
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=39991&p=132468#p132468
@@ -352,20 +350,18 @@ djs.sk,mladipodnikatelia.sk##script:inject(abort-on-property-read.js, miner)
 ||gofile.io/js/coinGofile.min.js
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/7yudc2/coinhive_getting_through/
-howucan.gr##script:inject(abort-on-property-read.js, miner)
+howucan.gr##+js(abort-on-property-read.js, miner)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1602
 ||thevideo.*^$csp=worker-src 'none';
 ||interestingz.pw^$third-party
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1649
-cloudtime.to,nowvideo.sx,sickrage.ca,tomadivx.org,videoplayer2.xyz,wholecloud.net##script:inject(abort-on-property-read.js, WebAssembly)
-
-||freecontent.*./$script
+cloudtime.to,nowvideo.sx,sickrage.ca,tomadivx.org,videoplayer2.xyz,wholecloud.net##+js(abort-on-property-read.js, WebAssembly)
 
 ! https://github.com/hoshsadiq/adblock-nocoin-list/pull/173
 ! https://github.com/uBlockOrigin/uAssets/issues/1698
-123telugu.com,netiap.com##script:inject(abort-on-property-read.js, _0x7bc7)
+123telugu.com,netiap.com##+js(abort-on-property-read.js, _0x7bc7)
 ||datasecu.download^$third-party
 ||jquery-cdn.download^$third-party
 
@@ -374,17 +370,17 @@ cloudtime.to,nowvideo.sx,sickrage.ca,tomadivx.org,videoplayer2.xyz,wholecloud.ne
 ||gustaver.ddns.net^$third-party
 
 ! https://forums.lanik.us/viewtopic.php?f=90&t=40270
-nxload.com##script:inject(abort-on-property-read.js, miner)
+nxload.com##+js(abort-on-property-read.js, miner)
 ||cryptaloot.pro^$third-party
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1782
-sleeptimer.org##script:inject(abort-on-property-read.js, WebAssembly)
+sleeptimer.org##+js(abort-on-property-read.js, WebAssembly)
 
 ! https://github.com/easylist/easylist/commit/8ef593
 *$csp=worker-src 'none',domain=kinokongo.cc
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1826
-*$csp=worker-src 'none',domain=povw1deo.com|povwideo.net|powvideo.net
+*$csp=worker-src 'none',domain=powvideo.cc|povw1deo.com|povwideo.net|powvideo.net
 
 ! https://github.com/gorhill/uBlock/issues/3675
 ||potomy.ru^$csp=worker-src 'none'
@@ -418,10 +414,46 @@ sleeptimer.org##script:inject(abort-on-property-read.js, WebAssembly)
 ||gramombird.com^$third-party
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1850#issuecomment-406864063
-hqq.tv,hqq.watch##script:inject(abort-on-property-read.js,  mscript)
+hqq.tv,hqq.watch##+js(abort-on-property-read.js,  mscript)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3080
 ||verifier.live^$third-party
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3139
-tomadivx.tv##script:inject(abort-on-property-read.js, WebAssembly)
+tomadivx.tv##+js(abort-on-property-read.js, WebAssembly)
+
+! https://forums.lanik.us/viewtopic.php?f=62&t=41585
+./M5q5.js$script
+||jshosting.*^
+||freecontent.*^
+||hostingcloud.*^
+
+! https://github.com/uBlockOrigin/uAssets/issues/1962#issuecomment-420471103
+descargas2020.com##+js(abort-current-inline-script.js, atob, _0x)
+||money-maker-default.info^
+||money-maker-script.info^
+||service4refresh.info^
+
+! https://github.com/uBlockOrigin/uAssets/issues/3459
+||cinemafacil.com^$csp=worker-src 'none'
+
+! https://github.com/uBlockOrigin/uAssets/issues/3542
+||hdvid.tv^$csp=worker-src 'none'
+||feesocrald.com^$third-party
+
+! https://github.com/uBlockOrigin/uAssets/issues/3643
+||void.cat^$csp=worker-src 'none'
+
+! https://github.com/uBlockOrigin/uAssets/issues/3653
+||wallpoper.com^$csp=worker-src 'none'
+
+! https://github.com/uBlockOrigin/uAssets/issues/3695
+||piratebay.click^$csp=worker-src 'none'
+
+! https://github.com/uBlockOrigin/uAssets/issues/3720
+||severita-service.ru^$csp=worker-src 'none'
+||reauthenticator.com^$third-party
+
+! https://github.com/uBlockOrigin/uAssets/issues/3724
+||swiftmining.win^$third-party
+||wmtech.website^
