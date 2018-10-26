@@ -5,7 +5,7 @@ export { overrideUserAgent } from './src/cosmetics-injection';
 // Blocking
 export { default as FiltersEngine } from './src/engine/engine';
 export { default as ReverseIndex } from './src/engine/reverse-index';
-export { processRawRequest } from './src/request/raw';
+export { default as Request } from './src/request';
 export { deserializeEngine } from './src/serialization';
 
 export {default as matchCosmeticFilter } from './src/matching/cosmetics';

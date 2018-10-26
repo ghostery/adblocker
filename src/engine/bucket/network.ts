@@ -1,6 +1,6 @@
 import matchNetworkFilter from '../../matching/network';
 import { NetworkFilter } from '../../parsing/network-filter';
-import { IRequest } from '../../request/interface';
+import Request from '../../request';
 
 import networkFiltersOptimizer from '../optimizer';
 import ReverseIndex from '../reverse-index';
@@ -14,7 +14,11 @@ export default class NetworkFilterBucket {
   public index: ReverseIndex<NetworkFilter>;
   public size: number;
 
-  constructor(name: string, filters: (cb: (f: NetworkFilter) => void) => void, enableOptimizations = true) {
+  constructor(
+    name: string,
+    filters: (cb: (f: NetworkFilter) => void) => void,
+    enableOptimizations = true,
+  ) {
     this.name = name;
     this.index = new ReverseIndex<NetworkFilter>(
       filters,
@@ -31,7 +35,7 @@ export default class NetworkFilterBucket {
     this.index.optimizeAheadOfTime();
   }
 
-  public match(request: IRequest): NetworkFilter | undefined {
+  public match(request: Request): NetworkFilter | undefined {
     let match: NetworkFilter | undefined;
 
     const checkMatch = (filter: NetworkFilter) => {
@@ -43,7 +47,7 @@ export default class NetworkFilterBucket {
       return true; // Continue iterating on buckets
     };
 
-    this.index.iterMatchingFilters(request.tokens, checkMatch);
+    this.index.iterMatchingFilters(request.getTokens(), checkMatch);
     return match;
   }
 }

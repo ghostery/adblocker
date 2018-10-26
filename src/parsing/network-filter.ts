@@ -1,3 +1,4 @@
+import { RequestType } from '../request';
 import {
   clearBit,
   createFuzzySignature,
@@ -75,28 +76,27 @@ const FROM_ANY: number =
  * ref: https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIContentPolicy
  */
 interface IDict {
-  [s: string]: number;
+  [s: number]: number;
 }
 
 const CPT_TO_MASK: IDict = {
-  1: NETWORK_FILTER_MASK.fromOther,
-  2: NETWORK_FILTER_MASK.fromScript,
-  3: NETWORK_FILTER_MASK.fromImage,
-  4: NETWORK_FILTER_MASK.fromStylesheet,
-  5: NETWORK_FILTER_MASK.fromObject,
-  7: NETWORK_FILTER_MASK.fromSubdocument,
-  10: NETWORK_FILTER_MASK.fromPing,
-  11: NETWORK_FILTER_MASK.fromXmlHttpRequest,
-  12: NETWORK_FILTER_MASK.fromObjectSubrequest,
-  13: NETWORK_FILTER_MASK.fromDTD,
-  14: NETWORK_FILTER_MASK.fromFont,
-  15: NETWORK_FILTER_MASK.fromMedia,
-  16: NETWORK_FILTER_MASK.fromWebsocket,
-  17: NETWORK_FILTER_MASK.fromCSP,
-  18: NETWORK_FILTER_MASK.fromXLST,
-  19: NETWORK_FILTER_MASK.fromBeacon,
-  20: NETWORK_FILTER_MASK.fromFetch,
-  21: NETWORK_FILTER_MASK.fromImage, // TYPE_IMAGESET
+  [RequestType.other]: NETWORK_FILTER_MASK.fromOther,
+  [RequestType.script]: NETWORK_FILTER_MASK.fromScript,
+  [RequestType.image]: NETWORK_FILTER_MASK.fromImage,
+  [RequestType.stylesheet]: NETWORK_FILTER_MASK.fromStylesheet,
+  [RequestType.object]: NETWORK_FILTER_MASK.fromObject,
+  [RequestType.subdocument]: NETWORK_FILTER_MASK.fromSubdocument,
+  [RequestType.ping]: NETWORK_FILTER_MASK.fromPing,
+  [RequestType.xmlhttprequest]: NETWORK_FILTER_MASK.fromXmlHttpRequest,
+  [RequestType.objectSubrequest]: NETWORK_FILTER_MASK.fromObjectSubrequest,
+  [RequestType.dtd]: NETWORK_FILTER_MASK.fromDTD,
+  [RequestType.font]: NETWORK_FILTER_MASK.fromFont,
+  [RequestType.media]: NETWORK_FILTER_MASK.fromMedia,
+  [RequestType.websocket]: NETWORK_FILTER_MASK.fromWebsocket,
+  [RequestType.csp]: NETWORK_FILTER_MASK.fromCSP,
+  [RequestType.xlst]: NETWORK_FILTER_MASK.fromXLST,
+  [RequestType.beacon]: NETWORK_FILTER_MASK.fromBeacon,
+  [RequestType.fetch]: NETWORK_FILTER_MASK.fromFetch,
 };
 
 const SEPARATOR = /[/^*]/;
@@ -106,12 +106,7 @@ const SEPARATOR = /[/^*]/;
  * filters containing at least a * or ^ symbol. Because Regexes are expansive,
  * we try to convert some patterns to plain filters.
  */
-function compileRegex(
-  filterStr: string,
-  isRightAnchor: boolean,
-  isLeftAnchor: boolean,
-  matchCase: boolean,
-): RegExp {
+function compileRegex(filterStr: string, isRightAnchor: boolean, isLeftAnchor: boolean): RegExp {
   let filter = filterStr;
 
   // Escape special regex characters: |.$+?{}()[]\
@@ -131,12 +126,7 @@ function compileRegex(
     filter = `^${filter}`;
   }
 
-  // we will throw an exception if it fails. We need to remove the console
-  // dependency here since we need to use it in the workers
-  if (matchCase) {
-    return new RegExp(filter);
-  }
-  return new RegExp(filter, 'i');
+  return new RegExp(filter);
 }
 
 function parseDomainsOption(domains: string): Set<string> {
@@ -161,12 +151,12 @@ export class NetworkFilter implements IFilter {
   public hostname: string;
 
   // Set only in debug mode
-  public rawLine: string | null;
+  public rawLine?: string;
 
-  private fuzzySignature: Uint32Array | null;
-  private optDomainsSet: Set<string> | null;
-  private optNotDomainsSet: Set<string> | null;
-  private regex: RegExp | null;
+  private fuzzySignature?: Uint32Array;
+  private optDomainsSet?: Set<string>;
+  private optNotDomainsSet?: Set<string>;
+  private regex?: RegExp;
 
   constructor({
     mask,
@@ -193,15 +183,6 @@ export class NetworkFilter implements IFilter {
     this.optNotDomains = optNotDomains;
     this.redirect = redirect;
     this.hostname = hostname;
-
-    // Lazy private attributes
-    this.fuzzySignature = null;
-    this.optDomainsSet = null;
-    this.optNotDomainsSet = null;
-    this.regex = null;
-
-    // Set only in debug mode
-    this.rawLine = null;
   }
 
   public isCosmeticFilter() {
@@ -302,7 +283,7 @@ export class NetworkFilter implements IFilter {
 
     if (this.hasOptDomains() || this.hasOptNotDomains()) {
       const domains = [...this.getOptDomains()];
-      this.getOptNotDomains().forEach(nd => domains.push(`~${nd}`));
+      this.getOptNotDomains().forEach((nd) => domains.push(`~${nd}`));
       options.push(`domain=${domains.join('|')}`);
     }
 
@@ -328,8 +309,9 @@ export class NetworkFilter implements IFilter {
   }
 
   public getOptNotDomains() {
-    this.optNotDomainsSet =
-      this.optNotDomainsSet || parseDomainsOption(this.optNotDomains);
+    if (this.optNotDomainsSet === undefined) {
+      this.optNotDomainsSet = parseDomainsOption(this.optNotDomains);
+    }
     return this.optNotDomainsSet;
   }
 
@@ -338,8 +320,9 @@ export class NetworkFilter implements IFilter {
   }
 
   public getOptDomains() {
-    this.optDomainsSet =
-      this.optDomainsSet || parseDomainsOption(this.optDomains);
+    if (this.optDomainsSet === undefined) {
+      this.optDomainsSet = parseDomainsOption(this.optDomains);
+    }
     return this.optDomainsSet;
   }
 
@@ -381,20 +364,15 @@ export class NetworkFilter implements IFilter {
   }
 
   public getRegex() {
-    if (this.regex === null) {
-      this.regex = compileRegex(
-        this.filter,
-        this.isRightAnchor(),
-        this.isLeftAnchor(),
-        this.matchCase(),
-      );
+    if (this.regex === undefined) {
+      this.regex = compileRegex(this.filter, this.isRightAnchor(), this.isLeftAnchor());
     }
 
     return this.regex;
   }
 
   public getFuzzySignature(): Uint32Array {
-    if (this.fuzzySignature === null) {
+    if (this.fuzzySignature === undefined) {
       this.fuzzySignature = createFuzzySignature(this.filter);
     }
 
@@ -402,13 +380,18 @@ export class NetworkFilter implements IFilter {
   }
 
   public getTokens(): number[][] {
-    return [tokenizeFilter(this.filter, this.isPlain()).concat(tokenizeFilter(this.hostname, false))];
+    const tokens = tokenizeFilter(this.filter, this.isPlain());
+    const hostnameTokens = tokenizeFilter(this.hostname, false);
+    for (let i = 0; i < hostnameTokens.length; i += 1) {
+      tokens.push(hostnameTokens[i]);
+    }
+    return [tokens];
   }
 
   /**
    * Check if this filter should apply to a request with this content type.
    */
-  public isCptAllowed(cpt: number) {
+  public isCptAllowed(cpt: RequestType): boolean {
     const mask = CPT_TO_MASK[cpt];
     if (mask !== undefined) {
       return getBit(this.mask, mask);
@@ -542,10 +525,7 @@ function setNetworkMask(mask: number, m: number, value: boolean): number {
 function checkIsRegex(filter: string, start: number, end: number): boolean {
   const starIndex = filter.indexOf('*', start);
   const separatorIndex = filter.indexOf('^', start);
-  return (
-    (starIndex !== -1 && starIndex < end) ||
-    (separatorIndex !== -1 && separatorIndex < end)
-  );
+  return (starIndex !== -1 && starIndex < end) || (separatorIndex !== -1 && separatorIndex < end);
 }
 
 /**
@@ -556,8 +536,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   const line: string = rawLine;
 
   // Represent options as a bitmask
-  let mask: number =
-    NETWORK_FILTER_MASK.thirdParty | NETWORK_FILTER_MASK.firstParty;
+  let mask: number = NETWORK_FILTER_MASK.thirdParty | NETWORK_FILTER_MASK.firstParty;
 
   // Temporary masks for positive (e.g.: $script) and negative (e.g.: $~script)
   // content type options.
@@ -796,10 +775,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
     // If pattern ends with "*", strip it as it often can be
     // transformed into a "plain pattern" this way.
     // TODO: add a test
-    if (
-      line.charAt(filterIndexEnd - 1) === '*' &&
-      filterIndexEnd - filterIndexStart > 1
-    ) {
+    if (line.charAt(filterIndexEnd - 1) === '*' && filterIndexEnd - filterIndexStart > 1) {
       filterIndexEnd -= 1;
     }
 
@@ -831,10 +807,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
       if (firstSeparator !== -1) {
         hostname = line.slice(filterIndexStart, firstSeparator);
         filterIndexStart = firstSeparator;
-        if (
-          filterIndexEnd - filterIndexStart === 1 &&
-          line.charAt(filterIndexStart) === '^'
-        ) {
+        if (filterIndexEnd - filterIndexStart === 1 && line.charAt(filterIndexStart) === '^') {
           filter = '';
           mask = clearBit(mask, NETWORK_FILTER_MASK.isRegex);
         } else {

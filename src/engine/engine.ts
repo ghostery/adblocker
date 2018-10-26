@@ -2,7 +2,7 @@ import { CosmeticFilter } from '../parsing/cosmetic-filter';
 import IFilter from '../parsing/interface';
 import { parseJSResource, parseList } from '../parsing/list';
 import { NetworkFilter } from '../parsing/network-filter';
-import { IRawRequest, processRawRequest } from '../request/raw';
+import Request, { IRequestInitialization } from '../request';
 import { serializeEngine } from '../serialization';
 
 import CosmeticFilterBucket from './bucket/cosmetics';
@@ -108,9 +108,7 @@ export default class FilterEngine {
     return false;
   }
 
-  public onUpdateResource(
-    updates: Array<{ filters: string; checksum: string }>,
-  ): void {
+  public onUpdateResource(updates: Array<{ filters: string; checksum: string }>): void {
     for (let i = 0; i < updates.length; i += 1) {
       const { filters, checksum } = updates[i];
 
@@ -222,18 +220,17 @@ export default class FilterEngine {
     );
 
     // Eagerly collect filters in this case only
-    this.cosmetics = new CosmeticFilterBucket(
-      (cb: (f: CosmeticFilter) => void) => iterFilters(this.lists, l => l.cosmetics, cb),
+    this.cosmetics = new CosmeticFilterBucket((cb: (f: CosmeticFilter) => void) =>
+      iterFilters(this.lists, l => l.cosmetics, cb),
     );
 
     // Update size
-    this.size = (
+    this.size =
       this.exceptions.size +
       this.importants.size +
       this.redirects.size +
       this.cosmetics.size +
-      this.filters.size
-    );
+      this.filters.size;
 
     // Serialize engine
     let serialized: Uint8Array | null = null;
@@ -279,12 +276,12 @@ export default class FilterEngine {
   }
 
   public match(
-    rawRequest: IRawRequest,
+    rawRequest: Partial<IRequestInitialization>,
   ): {
-    match: boolean,
-    redirect?: string,
-    exception?: NetworkFilter,
-    filter?: NetworkFilter,
+    match: boolean;
+    redirect?: string;
+    exception?: NetworkFilter;
+    filter?: NetworkFilter;
   } {
     if (!this.loadNetworkFilters) {
       return { match: false };
@@ -293,7 +290,7 @@ export default class FilterEngine {
     // Transforms { url, sourceUrl, cpt } into a more complete request context
     // containing domains, general domains and tokens for this request. This
     // context will be used during the matching in the engine.
-    const request = processRawRequest(rawRequest);
+    const request = new Request(rawRequest);
 
     let filter: NetworkFilter | undefined;
     let exception: NetworkFilter | undefined;

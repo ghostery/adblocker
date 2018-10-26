@@ -1,7 +1,6 @@
 import Engine from '../src/engine/engine';
 import { parseNetworkFilter } from '../src/parsing/network-filter';
 import requests from './data/requests';
-import { types } from './utils';
 
 function createEngine(filters: string, enableOptimizations: boolean) {
   const newEngine = new Engine({
@@ -50,7 +49,7 @@ describe('#FiltersEngine', () => {
             }
 
             const result = engine.match({
-              cpt: types[cpt],
+              cpt,
               sourceUrl,
               url,
             });

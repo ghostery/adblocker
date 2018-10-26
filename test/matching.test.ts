@@ -3,7 +3,7 @@ import matchNetworkFilter, { isAnchoredByHostname } from '../src/matching/networ
 
 import { f } from '../src/parsing/list';
 import { parseNetworkFilter } from '../src/parsing/network-filter';
-import { processRawRequest } from '../src/request/raw';
+import Request from '../src/request';
 
 import requests from './data/requests';
 
@@ -22,15 +22,12 @@ declare global {
 
 expect.extend({
   toMatchRequest(filter, request) {
-    const processedRequest = processRawRequest({
-      sourceUrl: '',
-      url: '',
-      ...request,
-    });
+    const processedRequest = new Request(request);
     const match = matchNetworkFilter(filter, processedRequest);
     if (match) {
       return {
-        message: () => `expected ${filter.toString()} to not match ${JSON.stringify(processedRequest)}`,
+        message: () =>
+          `expected ${filter.toString()} to not match ${JSON.stringify(processedRequest)}`,
         pass: true,
       };
     }
@@ -55,35 +52,6 @@ expect.extend({
     };
   },
 });
-
-// TODO - put that in utils
-interface Dict {
-  [s: string]: number;
-}
-
-const types: Dict = {
-  // maps string (web-ext) to int (FF cpt)
-  beacon: 19,
-  csp_report: 17,
-  font: 14,
-  image: 3,
-  imageset: 21,
-  main_frame: 6,
-  media: 15,
-  object: 5,
-  object_subrequest: 12,
-  other: 1,
-  ping: 10,
-  script: 2,
-  stylesheet: 4,
-  sub_frame: 7,
-  web_manifest: 22,
-  websocket: 16,
-  xbl: 9,
-  xml_dtd: 13,
-  xmlhttprequest: 11,
-  xslt: 18,
-};
 
 describe('#isAnchoredByHostname', () => {
   it('matches empty hostname', () => {
@@ -188,7 +156,7 @@ describe('#matchNetworkFilter', () => {
       expect(networkFilter).not.toBeUndefined();
       expect(networkFilter).not.toBeNull();
       expect(networkFilter).toMatchRequest({
-        cpt: types[cpt],
+        cpt,
         sourceUrl,
         url,
       });
@@ -239,7 +207,9 @@ describe('#matchNetworkFilter', () => {
     expect(f`||foo.com/id bar$fuzzy`).toMatchRequest({ url: 'http://foo.com?bar&id=42' });
 
     expect(f`||bar.com/id bar$fuzzy`).not.toMatchRequest({ url: 'http://foo.com?bar&id=42' });
-    expect(f`||bar.com/id bar baz foo 42 id$fuzzy`).not.toMatchRequest({ url: 'http://foo.com?bar&id=42' });
+    expect(f`||bar.com/id bar baz foo 42 id$fuzzy`).not.toMatchRequest({
+      url: 'http://foo.com?bar&id=42',
+    });
   });
 
   it('||pattern|', () => {
@@ -302,25 +272,55 @@ describe('#matchNetworkFilter', () => {
 
   it('options', () => {
     // cpt test
-    expect(f`||foo$image`).toMatchRequest({ url: 'https://foo.com/bar', cpt: types.image });
-    expect(f`||foo$image`).not.toMatchRequest({ url: 'https://foo.com/bar', cpt: types.script });
-    expect(f`||foo$~image`).toMatchRequest({ url: 'https://foo.com/bar', cpt: types.script });
+    expect(f`||foo$image`).toMatchRequest({ url: 'https://foo.com/bar', cpt: 'image' });
+    expect(f`||foo$image`).not.toMatchRequest({
+      cpt: 'script',
+      url: 'https://foo.com/bar',
+    });
+    expect(f`||foo$~image`).toMatchRequest({
+      cpt: 'script',
+      url: 'https://foo.com/bar',
+    });
 
     // ~third-party
-    expect(f`||foo$~third-party`).toMatchRequest({ url: 'https://foo.com/bar', sourceUrl: 'http://baz.foo.com' });
-    expect(f`||foo$~third-party`).not.toMatchRequest({ url: 'https://foo.com/bar', sourceUrl: 'http://baz.bar.com' });
+    expect(f`||foo$~third-party`).toMatchRequest({
+      sourceUrl: 'http://baz.foo.com',
+      url: 'https://foo.com/bar',
+    });
+    expect(f`||foo$~third-party`).not.toMatchRequest({
+      sourceUrl: 'http://baz.bar.com',
+      url: 'https://foo.com/bar',
+    });
 
     // ~first-party
-    expect(f`||foo$~first-party`).toMatchRequest({ url: 'https://foo.com/bar', sourceUrl: 'http://baz.bar.com' });
-    expect(f`||foo$~first-party`).not.toMatchRequest({ url: 'https://foo.com/bar', sourceUrl: 'http://baz.foo.com' });
+    expect(f`||foo$~first-party`).toMatchRequest({
+      sourceUrl: 'http://baz.bar.com',
+      url: 'https://foo.com/bar',
+    });
+    expect(f`||foo$~first-party`).not.toMatchRequest({
+      sourceUrl: 'http://baz.foo.com',
+      url: 'https://foo.com/bar',
+    });
 
     // opt-domain
-    expect(f`||foo$domain=foo.com`).toMatchRequest({ url: 'https://foo.com/bar', sourceUrl: 'http://foo.com' });
-    expect(f`||foo$domain=foo.com`).not.toMatchRequest({ url: 'https://foo.com/bar', sourceUrl: 'http://bar.com' });
+    expect(f`||foo$domain=foo.com`).toMatchRequest({
+      sourceUrl: 'http://foo.com',
+      url: 'https://foo.com/bar',
+    });
+    expect(f`||foo$domain=foo.com`).not.toMatchRequest({
+      sourceUrl: 'http://bar.com',
+      url: 'https://foo.com/bar',
+    });
 
     // opt-not-domain
-    expect(f`||foo$domain=~bar.com`).toMatchRequest({ url: 'https://foo.com/bar', sourceUrl: 'http://foo.com' });
-    expect(f`||foo$domain=~bar.com`).not.toMatchRequest({ url: 'https://foo.com/bar', sourceUrl: 'http://bar.com' });
+    expect(f`||foo$domain=~bar.com`).toMatchRequest({
+      sourceUrl: 'http://foo.com',
+      url: 'https://foo.com/bar',
+    });
+    expect(f`||foo$domain=~bar.com`).not.toMatchRequest({
+      sourceUrl: 'http://bar.com',
+      url: 'https://foo.com/bar',
+    });
   });
 });
 

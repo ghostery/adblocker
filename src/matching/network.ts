@@ -1,11 +1,8 @@
 import { NetworkFilter } from '../parsing/network-filter';
-import { IRequest } from '../request/interface';
-import { createFuzzySignature, fastStartsWith } from '../utils';
+import Request from '../request';
+import { fastStartsWith } from '../utils';
 
-export function isAnchoredByHostname(
-  filterHostname: string,
-  hostname: string,
-): boolean {
+export function isAnchoredByHostname(filterHostname: string, hostname: string): boolean {
   // Corner-case, if `filterHostname` is empty, then it's a match
   if (filterHostname.length === 0) {
     return true;
@@ -27,43 +24,30 @@ export function isAnchoredByHostname(
   // Either start at beginning of hostname or be preceded by a '.'
   return (
     // Prefix match
-    (matchIndex === 0 && (
+    (matchIndex === 0 &&
       // This means `filterHostname` is equal to `hostname`
-      hostname.length === filterHostname.length ||
-
-      // This means that `filterHostname` is a prefix of `hostname` (ends with a '.')
-      filterHostname[filterHostname.length - 1] === '.' ||
-      hostname[filterHostname.length] === '.')) ||
-
+      (hostname.length === filterHostname.length ||
+        // This means that `filterHostname` is a prefix of `hostname` (ends with a '.')
+        filterHostname[filterHostname.length - 1] === '.' ||
+        hostname[filterHostname.length] === '.')) ||
     // Suffix or infix match
-    ((hostname[matchIndex - 1] === '.' || filterHostname[0] === '.') && (
+    ((hostname[matchIndex - 1] === '.' || filterHostname[0] === '.') &&
       // `filterHostname` is a full suffix of `hostname`
-      (hostname.length - matchIndex) === filterHostname.length ||
-
-      // This means that `filterHostname` is infix of `hostname` (ends with a '.')
-      filterHostname[filterHostname.length - 1] === '.' ||
-      hostname[matchIndex + filterHostname.length] === '.')
-    )
+      (hostname.length - matchIndex === filterHostname.length ||
+        // This means that `filterHostname` is infix of `hostname` (ends with a '.')
+        filterHostname[filterHostname.length - 1] === '.' ||
+        hostname[matchIndex + filterHostname.length] === '.'))
   );
 }
 
-function getUrlAfterHostname(
-  url: string,
-  hostname: string,
-): string {
-  return url.substring(url.indexOf(hostname) + hostname.length);
+function getUrlAfterHostname(url: string, hostname: string): string {
+  return url.slice(url.indexOf(hostname) + hostname.length);
 }
 
 // pattern$fuzzy
-function checkPatternFuzzyFilter(filter: NetworkFilter, request: IRequest) {
+function checkPatternFuzzyFilter(filter: NetworkFilter, request: Request) {
   const signature = filter.getFuzzySignature();
-
-  // Only compute this once, lazily
-  if (request.fuzzySignature === undefined) {
-    request.fuzzySignature = createFuzzySignature(request.url);
-  }
-
-  const requestSignature = request.fuzzySignature;
+  const requestSignature = request.getFuzzySignature();
 
   if (signature.length > requestSignature.length) {
     return false;
@@ -74,7 +58,9 @@ function checkPatternFuzzyFilter(filter: NetworkFilter, request: IRequest) {
     const c = signature[i];
     // Find the occurrence of `c` in `requestSignature`
     const j = requestSignature.indexOf(c, lastIndex);
-    if (j === -1) { return false; }
+    if (j === -1) {
+      return false;
+    }
     lastIndex = j + 1;
   }
 
@@ -82,70 +68,60 @@ function checkPatternFuzzyFilter(filter: NetworkFilter, request: IRequest) {
 }
 
 // pattern
-function checkPatternPlainFilter(filter: NetworkFilter, request: IRequest): boolean {
-  const { url } = request;
-  return url.indexOf(filter.getFilter()) !== -1;
+function checkPatternPlainFilter(filter: NetworkFilter, request: Request): boolean {
+  return request.getUrl().indexOf(filter.getFilter()) !== -1;
 }
 
 // pattern|
-function checkPatternRightAnchorFilter(
-  filter: NetworkFilter,
-  request: IRequest,
-): boolean {
-  const { url } = request;
-  return url.endsWith(filter.getFilter());
+function checkPatternRightAnchorFilter(filter: NetworkFilter, request: Request): boolean {
+  return request.getUrl().endsWith(filter.getFilter());
 }
 
 // |pattern
-function checkPatternLeftAnchorFilter(filter: NetworkFilter, request: IRequest): boolean {
-  const { url } = request;
-  return fastStartsWith(url, filter.getFilter());
+function checkPatternLeftAnchorFilter(filter: NetworkFilter, request: Request): boolean {
+  return fastStartsWith(request.getUrl(), filter.getFilter());
 }
 
 // |pattern|
-function checkPatternLeftRightAnchorFilter(
-  filter: NetworkFilter,
-  request: IRequest,
-): boolean {
-  const { url } = request;
-  return url === filter.getFilter();
+function checkPatternLeftRightAnchorFilter(filter: NetworkFilter, request: Request): boolean {
+  return request.getUrl() === filter.getFilter();
 }
 
 // pattern*^
-function checkPatternRegexFilter(filter: NetworkFilter, request: IRequest): boolean {
-  const { url } = request;
+function checkPatternRegexFilter(
+  filter: NetworkFilter,
+  request: Request,
+  startFrom: number = 0,
+): boolean {
+  let url = request.getUrl();
+  if (startFrom > 0) {
+    url = url.slice(startFrom);
+  }
   return filter.getRegex().test(url);
 }
 
 // ||pattern*^
-function checkPatternHostnameAnchorRegexFilter(
-  filter: NetworkFilter,
-  request: IRequest,
-): boolean {
-  const { url, hostname } = request;
+function checkPatternHostnameAnchorRegexFilter(filter: NetworkFilter, request: Request): boolean {
+  const url = request.getUrl();
+  const hostname = request.getHostname();
   if (isAnchoredByHostname(filter.getHostname(), hostname)) {
-    // remove the hostname and use the rest to match the pattern
-    const urlAfterHostname = getUrlAfterHostname(url, filter.getHostname());
-    return checkPatternRegexFilter(filter, {
-      ...request,
-      url: urlAfterHostname,
-    });
+    return checkPatternRegexFilter(
+      filter,
+      request,
+      url.indexOf(hostname) + filter.getHostname().length,
+    );
   }
 
   return false;
 }
 
 // ||pattern|
-function checkPatternHostnameRightAnchorFilter(
-  filter: NetworkFilter,
-  request: IRequest,
-): boolean {
-  const { url, hostname } = request;
-  if (isAnchoredByHostname(filter.getHostname(), hostname)) {
+function checkPatternHostnameRightAnchorFilter(filter: NetworkFilter, request: Request): boolean {
+  if (isAnchoredByHostname(filter.getHostname(), request.getHostname())) {
     // Since this is not a regex, the filter pattern must follow the hostname
     // with nothing in between. So we extract the part of the URL following
     // after hostname and will perform the matching on it.
-    const urlAfterHostname = getUrlAfterHostname(url, filter.getHostname());
+    const urlAfterHostname = getUrlAfterHostname(request.getUrl(), filter.getHostname());
 
     // Since it must follow immediatly after the hostname and be a suffix of
     // the URL, we conclude that filter must be equal to the part of the
@@ -157,18 +133,12 @@ function checkPatternHostnameRightAnchorFilter(
 }
 
 // ||pattern
-function checkPatternHostnameAnchorFilter(
-  filter: NetworkFilter,
-  request: IRequest,
-): boolean {
-  const { url, hostname } = request;
-  if (isAnchoredByHostname(filter.getHostname(), hostname)) {
+function checkPatternHostnameAnchorFilter(filter: NetworkFilter, request: Request): boolean {
+  if (isAnchoredByHostname(filter.getHostname(), request.getHostname())) {
     // Since this is not a regex, the filter pattern must follow the hostname
     // with nothing in between. So we extract the part of the URL following
     // after hostname and will perform the matching on it.
-    const urlAfterHostname = getUrlAfterHostname(url, filter.getHostname());
-
-    // Otherwise, it should only be a prefix of the URL.
+    const urlAfterHostname = getUrlAfterHostname(request.getUrl(), filter.getHostname());
     return fastStartsWith(urlAfterHostname, filter.getFilter());
   }
 
@@ -176,9 +146,8 @@ function checkPatternHostnameAnchorFilter(
 }
 
 // ||pattern$fuzzy
-function checkPatternHostnameAnchorFuzzyFilter(filter: NetworkFilter, request: IRequest) {
-  const { hostname } = request;
-  if (isAnchoredByHostname(filter.getHostname(), hostname)) {
+function checkPatternHostnameAnchorFuzzyFilter(filter: NetworkFilter, request: Request) {
+  if (isAnchoredByHostname(filter.getHostname(), request.getHostname())) {
     return checkPatternFuzzyFilter(filter, request);
   }
 
@@ -189,7 +158,7 @@ function checkPatternHostnameAnchorFuzzyFilter(filter: NetworkFilter, request: I
  * Specialize a network filter depending on its type. It allows for more
  * efficient matching function.
  */
-function checkPattern(filter: NetworkFilter, request: IRequest): boolean {
+function checkPattern(filter: NetworkFilter, request: Request): boolean {
   if (filter.isHostnameAnchor()) {
     if (filter.isRegex()) {
       return checkPatternHostnameAnchorRegexFilter(filter, request);
@@ -214,19 +183,14 @@ function checkPattern(filter: NetworkFilter, request: IRequest): boolean {
   return checkPatternPlainFilter(filter, request);
 }
 
-function checkOptions(filter: NetworkFilter, request: IRequest): boolean {
+function checkOptions(filter: NetworkFilter, request: Request): boolean {
   // This is really cheap and should be done first
-  if (!filter.isCptAllowed(request.cpt)) {
+  if (!filter.isCptAllowed(request.getCpt())) {
     return false;
   }
 
-  // Source
-  const sHost = request.sourceHostname;
-  const sHostGD = request.sourceGD;
-
   // Url endpoint
-  const hostGD = request.hostGD;
-  const isFirstParty = sHostGD === hostGD;
+  const isFirstParty = request.isFirstParty();
 
   // Check option $third-party
   // source domain and requested domain must be different
@@ -244,8 +208,8 @@ function checkOptions(filter: NetworkFilter, request: IRequest): boolean {
   if (filter.hasOptDomains()) {
     const optDomains = filter.getOptDomains();
     if (
-      optDomains.size > 0 &&
-      !(optDomains.has(sHostGD) || optDomains.has(sHost))
+      !optDomains.has(request.getSourceHostname()) &&
+      !optDomains.has(request.getSourceDomain())
     ) {
       return false;
     }
@@ -255,8 +219,8 @@ function checkOptions(filter: NetworkFilter, request: IRequest): boolean {
   if (filter.hasOptNotDomains()) {
     const optNotDomains = filter.getOptNotDomains();
     if (
-      optNotDomains.size > 0 &&
-      (optNotDomains.has(sHostGD) || optNotDomains.has(sHost))
+      optNotDomains.has(request.getSourceHostname()) ||
+      optNotDomains.has(request.getSourceDomain())
     ) {
       return false;
     }
@@ -265,6 +229,6 @@ function checkOptions(filter: NetworkFilter, request: IRequest): boolean {
   return true;
 }
 
-export default function matchNetworkFilter(filter: NetworkFilter, request: IRequest): boolean {
+export default function matchNetworkFilter(filter: NetworkFilter, request: Request): boolean {
   return checkOptions(filter, request) && checkPattern(filter, request);
 }

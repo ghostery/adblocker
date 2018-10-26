@@ -1,3 +1,4 @@
+import { RequestType } from '../request';
 import IFilter from './interface';
 export declare class NetworkFilter implements IFilter {
     id: number;
@@ -7,11 +8,11 @@ export declare class NetworkFilter implements IFilter {
     optNotDomains: string;
     redirect: string;
     hostname: string;
-    rawLine: string | null;
-    private fuzzySignature;
-    private optDomainsSet;
-    private optNotDomainsSet;
-    private regex;
+    rawLine?: string;
+    private fuzzySignature?;
+    private optDomainsSet?;
+    private optNotDomainsSet?;
+    private regex?;
     constructor({ mask, filter, optDomains, optNotDomains, redirect, hostname, id, }: {
         mask: number;
         filter: string;
@@ -40,7 +41,7 @@ export declare class NetworkFilter implements IFilter {
     getRegex(): RegExp;
     getFuzzySignature(): Uint32Array;
     getTokens(): number[][];
-    isCptAllowed(cpt: number): boolean;
+    isCptAllowed(cpt: RequestType): boolean;
     isFuzzy(): boolean;
     isException(): boolean;
     isHostnameAnchor(): boolean;

@@ -1,5 +1,5 @@
 import { NetworkFilter } from '../parsing/network-filter';
-import { IRawRequest } from '../request/raw';
+import { IRequestInitialization } from '../request';
 import CosmeticFilterBucket from './bucket/cosmetics';
 import NetworkFilterBucket from './bucket/network';
 import IList from './list';
@@ -53,7 +53,7 @@ export default class FilterEngine {
         scripts: string[];
         styles: string[];
     };
-    match(rawRequest: IRawRequest): {
+    match(rawRequest: Partial<IRequestInitialization>): {
         match: boolean;
         redirect?: string;
         exception?: NetworkFilter;

@@ -31,7 +31,9 @@ function fastHashBetween(str: string, begin: number, end: number): number {
 }
 
 export function fastHash(str: string): number {
-  if (!str) { return 0; }
+  if (!str) {
+    return 0;
+  }
   return fastHashBetween(str, 0, str.length);
 }
 
@@ -51,11 +53,7 @@ export function fastStartsWith(haystack: string, needle: string): boolean {
   return true;
 }
 
-export function fastStartsWithFrom(
-  haystack: string,
-  needle: string,
-  start: number,
-): boolean {
+export function fastStartsWithFrom(haystack: string, needle: string, start: number): boolean {
   if (haystack.length - start < needle.length) {
     return false;
   }
@@ -70,16 +68,6 @@ export function fastStartsWithFrom(
   return true;
 }
 
-// const COSMETIC_SPLIT_RE = /[#.\w_-]{2,}/g;
-// export function tokenizeCSS(selector) {
-//   return selector.match(COSMETIC_SPLIT_RE) || [];
-// }
-
-// const TOKENIZE_RE = /[a-zA-Z0-9](?![*])/g;
-// export function tokenize(pattern) {
-//   return pattern.match(TOKENIZE_RE) || [];
-// }
-
 // Efficient manuel lexer
 function isDigit(ch: number): boolean {
   // 48 == '0'
@@ -88,11 +76,11 @@ function isDigit(ch: number): boolean {
 }
 
 function isAlpha(ch: number): boolean {
-  // Force to upper-case
-  ch &= ~32;
+  // Force to lower-case
+  ch |= 32;
   // 65 == 'A'
   // 90 == 'Z'
-  return ch >= 65 && ch <= 90;
+  return ch >= 97 && ch <= 122;
 }
 
 function isAlphaExtended(ch: number): boolean {
