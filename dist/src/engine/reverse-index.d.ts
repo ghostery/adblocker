@@ -1,8 +1,11 @@
 import IFilter from '../parsing/interface';
 export interface IBucket<T extends IFilter> {
-    hit: number;
-    optimized: boolean;
+    cumulTime: number;
     filters: T[];
+    hit: number;
+    match: number;
+    optimized: boolean;
+    tokensHit: any;
 }
 interface IOptions<T> {
     optimizer: (filters: T[]) => T[];
@@ -13,7 +16,7 @@ export default class ReverseIndex<T extends IFilter> {
     index: Map<number, IBucket<T>>;
     private optimizer;
     private getTokens;
-    constructor(filters: (cb: (f: T) => void) => void, getTokens: (filter: T) => number[][], { enableOptimizations, optimizer, }?: Partial<IOptions<T>>);
+    constructor(filters: (cb: (f: T) => void) => void, getTokens: (filter: T) => number[][], { enableOptimizations, optimizer }?: Partial<IOptions<T>>);
     iterMatchingFilters(tokens: number[], cb: (f: T) => boolean): void;
     optimizeAheadOfTime(): void;
     private addFilters;

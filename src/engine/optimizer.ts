@@ -33,8 +33,8 @@ function splitBy(
   filters: NetworkFilter[],
   condition: (filter: NetworkFilter) => boolean,
 ): {
-  positive: NetworkFilter[],
-  negative: NetworkFilter[],
+  positive: NetworkFilter[];
+  negative: NetworkFilter[];
 } {
   const positive: NetworkFilter[] = [];
   const negative: NetworkFilter[] = [];
@@ -64,9 +64,64 @@ interface IOptimization {
 // TODO: re-introduce more optimizations
 const OPTIMIZATIONS: IOptimization[] = [
   {
+    description: 'Group idential filter with same mask but different domains in single filters',
+    fusion: (filters: NetworkFilter[]) => {
+      // console.log('GROUPING 1');
+      // filters.forEach((f) => {
+      //   console.log('   *', f.rawLine);
+      // });
+
+      const filter = new NetworkFilter(filters[0]);
+
+      // Keep track of original filters view rawLine attribute
+      if (filter.rawLine !== undefined) {
+        filter.rawLine = filters.map(({ rawLine }) => rawLine).join(' <+> ');
+      }
+
+      const domains = new Set();
+      const notDomains = new Set();
+
+      for (let i = 0; i < filters.length; i += 1) {
+        const f = filters[i];
+        f.getOptDomains().forEach((d) => {
+          domains.add(d);
+        });
+        f.getOptNotDomains().forEach((d) => {
+          notDomains.add(d);
+        });
+      }
+
+      if (domains.size > 0) {
+        filter.optDomains = [...domains].join('|');
+      }
+
+      if (notDomains.size > 0) {
+        filter.optNotDomains = [...notDomains].join('|');
+      }
+
+      return filter;
+    },
+    groupByCriteria: (filter: NetworkFilter) =>
+      filter.getHostname() + filter.getFilter() + filter.getMask() + filter.getRedirect(),
+    select: (filter: NetworkFilter) => !filter.isFuzzy() && !filter.isHostname(),
+    // !filter.isLeftAnchor() &&
+    // !filter.isRightAnchor(),
+  },
+  {
     description: 'Group simple patterns, into a single filter',
     fusion: (filters: NetworkFilter[]) => {
+      // console.log('GROUPING 2');
+      // filters.forEach((f) => {
+      //   console.log('   *', f.rawLine);
+      // });
+
       const filter = new NetworkFilter(filters[0]);
+
+      // Keep track of original filters view rawLine attribute
+      if (filter.rawLine !== undefined) {
+        filter.rawLine = filters.map(({ rawLine }) => rawLine).join(' <+> ');
+      }
+
       const patterns = new Set();
       for (let i = 0; i < filters.length; i += 1) {
         const f = filters[i];
@@ -88,14 +143,13 @@ const OPTIMIZATIONS: IOptimization[] = [
       return filter;
     },
     groupByCriteria: (filter: NetworkFilter) => '' + filter.getMask(),
-    select: (filter: NetworkFilter) => (
+    select: (filter: NetworkFilter) =>
       !filter.isFuzzy() &&
       !filter.hasOptDomains() &&
       !filter.hasOptNotDomains() &&
       !filter.isHostname() &&
       !filter.isHostnameAnchor() &&
-      !filter.isRedirect()
-    ),
+      !filter.isRedirect(),
   },
 ];
 

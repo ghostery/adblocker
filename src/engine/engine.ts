@@ -200,28 +200,28 @@ export default class FilterEngine {
     // Re-create all buckets
     this.filters = new NetworkFilterBucket(
       'filters',
-      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, l => l.filters, cb),
+      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, (l) => l.filters, cb),
       this.enableOptimizations,
     );
     this.exceptions = new NetworkFilterBucket(
       'exceptions',
-      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, l => l.exceptions, cb),
+      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, (l) => l.exceptions, cb),
       this.enableOptimizations,
     );
     this.importants = new NetworkFilterBucket(
       'importants',
-      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, l => l.importants, cb),
+      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, (l) => l.importants, cb),
       this.enableOptimizations,
     );
     this.redirects = new NetworkFilterBucket(
       'redirects',
-      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, l => l.redirects, cb),
+      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, (l) => l.redirects, cb),
       this.enableOptimizations,
     );
 
     // Eagerly collect filters in this case only
     this.cosmetics = new CosmeticFilterBucket((cb: (f: CosmeticFilter) => void) =>
-      iterFilters(this.lists, l => l.cosmetics, cb),
+      iterFilters(this.lists, (l) => l.cosmetics, cb),
     );
 
     // Update size
@@ -282,9 +282,10 @@ export default class FilterEngine {
     redirect?: string;
     exception?: NetworkFilter;
     filter?: NetworkFilter;
+    req: Request;
   } {
     if (!this.loadNetworkFilters) {
-      return { match: false };
+      return { match: false, req: new Request(rawRequest) };
     }
 
     // Transforms { url, sourceUrl, cpt } into a more complete request context
@@ -296,41 +297,43 @@ export default class FilterEngine {
     let exception: NetworkFilter | undefined;
     let redirect: string | undefined;
 
-    // Check the filters in the following order:
-    // 1. $important (not subject to exceptions)
-    // 2. redirection ($redirect=resource)
-    // 3. normal filters
-    // 4. exceptions
-    filter = this.importants.match(request);
+    if (request.isSupported) {
+      // Check the filters in the following order:
+      // 1. $important (not subject to exceptions)
+      // 2. redirection ($redirect=resource)
+      // 3. normal filters
+      // 4. exceptions
+      filter = this.importants.match(request);
 
-    if (filter === undefined) {
-      // Check if there is a redirect or a normal match
-      filter = this.redirects.match(request);
       if (filter === undefined) {
-        filter = this.filters.match(request);
+        // Check if there is a redirect or a normal match
+        filter = this.redirects.match(request);
+        if (filter === undefined) {
+          filter = this.filters.match(request);
+        }
+
+        // If we found something, check for exceptions
+        if (filter !== undefined) {
+          exception = this.exceptions.match(request);
+        }
       }
 
-      // If we found something, check for exceptions
+      // If there is a match
       if (filter !== undefined) {
-        exception = this.exceptions.match(request);
-      }
-    }
+        if (filter.isRedirect()) {
+          const redirectResource = this.resources.get(filter.getRedirect());
+          if (redirectResource !== undefined) {
+            const { data, contentType } = redirectResource;
+            let dataUrl;
+            if (contentType.indexOf(';') !== -1) {
+              dataUrl = `data:${contentType},${data}`;
+            } else {
+              dataUrl = `data:${contentType};base64,${btoaPolyfill(data)}`;
+            }
 
-    // If there is a match
-    if (filter !== undefined) {
-      if (filter.isRedirect()) {
-        const redirectResource = this.resources.get(filter.getRedirect());
-        if (redirectResource !== undefined) {
-          const { data, contentType } = redirectResource;
-          let dataUrl;
-          if (contentType.indexOf(';') !== -1) {
-            dataUrl = `data:${contentType},${data}`;
-          } else {
-            dataUrl = `data:${contentType};base64,${btoaPolyfill(data)}`;
-          }
-
-          redirect = dataUrl.trim();
-        } // TODO - else, throw an exception
+            redirect = dataUrl.trim();
+          } // TODO - else, throw an exception
+        }
       }
     }
 
@@ -339,6 +342,7 @@ export default class FilterEngine {
       filter,
       match: exception === undefined && filter !== undefined,
       redirect,
+      req: request,
     };
   }
 }

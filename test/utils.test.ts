@@ -7,12 +7,12 @@ function t(tokens: string[]) {
 }
 
 expect.extend({
-  toNotCollideWithOtherFilter(filter: { id: number }, map) {
-    const found = map.get(filter.id);
+  toNotCollideWithOtherFilter(filter: { getId: () => number }, map) {
+    const found = map.get(filter.getId());
     if (found !== undefined && found !== filter.toString()) {
       return {
         message: () =>
-          `expected ${filter.toString()} to not collide, found ${found} (${filter.id})`,
+          `expected ${filter.toString()} to not collide, found ${found} (${filter.getId()})`,
         pass: false,
       };
     }
@@ -30,7 +30,7 @@ function checkCollisions(filters: any) {
     const filter = filters[i];
     // @ts-ignore
     expect(filter).toNotCollideWithOtherFilter(hashes);
-    hashes.set(filter.id, filters[i].toString());
+    hashes.set(filter.getId(), filters[i].toString());
   }
 }
 

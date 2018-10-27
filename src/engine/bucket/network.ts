@@ -38,16 +38,23 @@ export default class NetworkFilterBucket {
   public match(request: Request): NetworkFilter | undefined {
     let match: NetworkFilter | undefined;
 
-    const checkMatch = (filter: NetworkFilter) => {
+    this.index.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
+      request.filtersHit.push(filter.rawLine);
+
+      filter.hit += 1;
+      let continueIteration = true;
+      const start = process.hrtime();
       if (matchNetworkFilter(filter, request)) {
+        filter.match += 1;
         match = filter;
-        return false; // Break iteration
+        continueIteration = false; // break iteration
       }
+      const diff = process.hrtime(start);
+      filter.cumulTime += (diff[0] * 1000000000 + diff[1]) / 1000000;
 
-      return true; // Continue iterating on buckets
-    };
+      return continueIteration;
+    });
 
-    this.index.iterMatchingFilters(request.getTokens(), checkMatch);
     return match;
   }
 }

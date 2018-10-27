@@ -272,9 +272,9 @@
         return n & ~mask;
     }
     function fastHashBetween(str, begin, end) {
-        var hash = 5407;
+        var hash = 5381;
         for (var i = begin; i < end; i += 1) {
-            hash = (hash * 31) ^ str.charCodeAt(i);
+            hash = (hash << 5) + hash + str.charCodeAt(i);
         }
         return hash >>> 0;
     }
@@ -283,6 +283,22 @@
             return 0;
         }
         return fastHashBetween(str, 0, str.length);
+    }
+    function computeFilterId(mask) {
+        var parts = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            parts[_i - 1] = arguments[_i];
+        }
+        var hash = (5408 * 33) ^ mask;
+        for (var i = 0; i < parts.length; i += 1) {
+            var str = parts[i];
+            if (str !== undefined) {
+                for (var j = 0; j < str.length; j += 1) {
+                    hash = (hash * 33) ^ str.charCodeAt(j);
+                }
+            }
+        }
+        return hash >>> 0;
     }
     function fastStartsWith(haystack, needle) {
         if (haystack.length < needle.length) {
@@ -368,13 +384,10 @@
 
     var CosmeticFilter = (function () {
         function CosmeticFilter(_a) {
-            var mask = _a.mask, selector = _a.selector, hostnames = _a.hostnames, id = _a.id;
-            this.id = id;
+            var mask = _a.mask, selector = _a.selector, hostnames = _a.hostnames;
             this.mask = mask;
             this.selector = selector;
             this.hostnames = hostnames;
-            this.hostnamesArray = null;
-            this.rawLine = null;
         }
         CosmeticFilter.prototype.isCosmeticFilter = function () {
             return true;
@@ -408,6 +421,12 @@
             }
             return filter;
         };
+        CosmeticFilter.prototype.getId = function () {
+            if (this.id === undefined) {
+                this.id = computeFilterId(this.mask, this.selector, this.hostnames);
+            }
+            return this.id;
+        };
         CosmeticFilter.prototype.getTokens = function () {
             return [this.getTokensSelector()];
         };
@@ -415,9 +434,10 @@
             if (this.isScriptInject() || this.isScriptBlock()) {
                 return [];
             }
+            var selector = this.selector || '';
             var sepIndex = 0;
-            for (var i = this.selector.length - 1; i >= 0; i -= 1) {
-                var code = this.selector.charCodeAt(i);
+            for (var i = selector.length - 1; i >= 0; i -= 1) {
+                var code = selector.charCodeAt(i);
                 if (code === 43 ||
                     code === 62 ||
                     code === 126) {
@@ -428,11 +448,11 @@
             var inside = 0;
             var start = sepIndex;
             var tokens = [];
-            for (var i = sepIndex, len = this.selector.length; i < len; i += 1) {
-                var code = this.selector.charCodeAt(i);
+            for (var i = sepIndex, len = selector.length; i < len; i += 1) {
+                var code = selector.charCodeAt(i);
                 if (code === 91) {
                     if (inside === 0 && start < i) {
-                        tokens.push.apply(tokens, __spread(tokenizeCSS(this.selector.slice(start, i))));
+                        tokens.push.apply(tokens, __spread(tokenizeCSS(selector.slice(start, i))));
                     }
                     inside += 1;
                 }
@@ -441,33 +461,31 @@
                     start = i + 1;
                 }
             }
-            if (inside === 0 && start < this.selector.length) {
-                tokens.push.apply(tokens, __spread(tokenizeCSS(this.selector.slice(start, this.selector.length))));
+            if (inside === 0 && start < selector.length) {
+                tokens.push.apply(tokens, __spread(tokenizeCSS(selector.slice(start, selector.length))));
             }
             return tokens;
         };
         CosmeticFilter.prototype.getSelector = function () {
-            return this.selector;
+            return this.selector || '';
         };
         CosmeticFilter.prototype.hasHostnames = function () {
-            return !!this.hostnames;
+            return this.hostnames !== undefined;
         };
         CosmeticFilter.prototype.getHostnames = function () {
-            if (this.hostnamesArray === null) {
-                if (this.hasHostnames()) {
-                    this.hostnamesArray = this.hostnames.split(',').sort(function (h1, h2) {
-                        if (h1.length > h2.length) {
-                            return -1;
-                        }
-                        else if (h1.length < h2.length) {
-                            return 1;
-                        }
-                        return 0;
-                    });
-                }
-                else {
-                    this.hostnamesArray = [];
-                }
+            if (this.hostnamesArray === undefined) {
+                this.hostnamesArray =
+                    this.hostnames === undefined
+                        ? []
+                        : this.hostnames.split(',').sort(function (h1, h2) {
+                            if (h1.length > h2.length) {
+                                return -1;
+                            }
+                            else if (h1.length < h2.length) {
+                                return 1;
+                            }
+                            return 0;
+                        });
             }
             return this.hostnamesArray;
         };
@@ -484,56 +502,60 @@
     }());
     function parseCosmeticFilter(line) {
         var mask = 0;
-        var selector = '';
-        var hostnames = '';
+        var selector;
+        var hostnames;
         var sharpIndex = line.indexOf('#');
         var afterSharpIndex = sharpIndex + 1;
         var suffixStartIndex = afterSharpIndex + 1;
-        if (line[afterSharpIndex] === '@') {
+        if (line.length > afterSharpIndex && line[afterSharpIndex] === '@') {
             mask = setBit(mask, 1);
             suffixStartIndex += 1;
         }
         if (sharpIndex > 0) {
-            hostnames = line.substring(0, sharpIndex);
+            hostnames = line.slice(0, sharpIndex);
         }
-        selector = line.substr(suffixStartIndex);
-        if (fastStartsWith(selector, 'script:')) {
-            var scriptMethodIndex = 'script:'.length;
+        if (fastStartsWithFrom(line, 'script:', suffixStartIndex)) {
+            var scriptMethodIndex = suffixStartIndex + 7;
             var scriptSelectorIndexStart = scriptMethodIndex;
-            var scriptSelectorIndexEnd = selector.length - 1;
-            if (fastStartsWithFrom(selector, 'inject(', scriptMethodIndex)) {
+            var scriptSelectorIndexEnd = line.length - 1;
+            if (fastStartsWithFrom(line, 'inject(', scriptMethodIndex)) {
                 mask = setBit(mask, 2);
-                scriptSelectorIndexStart += 'inject('.length;
+                scriptSelectorIndexStart += 7;
             }
-            else if (fastStartsWithFrom(selector, 'contains(', scriptMethodIndex)) {
+            else if (fastStartsWithFrom(line, 'contains(', scriptMethodIndex)) {
                 mask = setBit(mask, 4);
-                scriptSelectorIndexStart += 'contains('.length;
-                if (selector[scriptSelectorIndexStart] === '/' &&
-                    selector[scriptSelectorIndexEnd - 1] === '/') {
+                scriptSelectorIndexStart += 9;
+                if (line[scriptSelectorIndexStart] === '/' && line[scriptSelectorIndexEnd - 1] === '/') {
                     scriptSelectorIndexStart += 1;
                     scriptSelectorIndexEnd -= 1;
                 }
             }
-            selector = selector.substring(scriptSelectorIndexStart, scriptSelectorIndexEnd);
+            selector = line.slice(scriptSelectorIndexStart, scriptSelectorIndexEnd);
         }
-        if (selector === null ||
+        else if (fastStartsWithFrom(line, '+js(', suffixStartIndex)) {
+            mask = setBit(mask, 2);
+            selector = line.slice(suffixStartIndex + 4, line.length - 1);
+        }
+        else if (suffixStartIndex < line.length) {
+            selector = line.slice(suffixStartIndex);
+        }
+        if (selector === undefined ||
             selector.length === 0 ||
             selector.endsWith('}') ||
             selector.indexOf('##') !== -1 ||
-            (getBit(mask, 1) && hostnames.length === 0)) {
+            (getBit(mask, 1) && hostnames === undefined)) {
             return null;
         }
-        var id = fastHash(line);
         return new CosmeticFilter({
             hostnames: hostnames,
-            id: id,
             mask: mask,
             selector: selector
         });
     }
 
     var _a;
-    var FROM_ANY = 1 |
+    var FROM_ANY = 2048 |
+        1 |
         2 |
         4 |
         8 |
@@ -543,13 +565,7 @@
         128 |
         256 |
         512 |
-        1024 |
-        2048 |
-        4096 |
-        8192 |
-        16384 |
-        32768 |
-        65536;
+        1024;
     var CPT_TO_MASK = (_a = {},
         _a[10] = 16,
         _a[12] = 64,
@@ -560,14 +576,9 @@
         _a[11] = 32,
         _a[17] = 1024,
         _a[9] = 8,
-        _a[3] = 4096,
-        _a[5] = 8192,
+        _a[5] = 2048,
         _a[7] = 2,
         _a[15] = 512,
-        _a[1] = 65536,
-        _a[16] = 16384,
-        _a[0] = 32768,
-        _a[4] = 2048,
         _a);
     var SEPARATOR = /[/^*]/;
     function compileRegex(filterStr, isRightAnchor, isLeftAnchor) {
@@ -584,18 +595,23 @@
         return new RegExp(filter);
     }
     function parseDomainsOption(domains) {
-        return new Set(domains ? domains.split('|') : []);
+        return new Set(domains ? domains.split('|').map(fastHash) : []);
     }
+    var EMPTY_SET = new Set();
+    var MATCH_ALL = new RegExp('');
     var NetworkFilter = (function () {
         function NetworkFilter(_a) {
-            var mask = _a.mask, filter = _a.filter, optDomains = _a.optDomains, optNotDomains = _a.optNotDomains, redirect = _a.redirect, hostname = _a.hostname, id = _a.id;
-            this.id = id;
+            var mask = _a.mask, filter = _a.filter, hostname = _a.hostname, optDomains = _a.optDomains, optNotDomains = _a.optNotDomains, redirect = _a.redirect, rawLine = _a.rawLine;
             this.mask = mask;
             this.filter = filter;
             this.optDomains = optDomains;
             this.optNotDomains = optNotDomains;
             this.redirect = redirect;
             this.hostname = hostname;
+            this.rawLine = rawLine;
+            this.hit = 0;
+            this.match = 0;
+            this.cumulTime = 0;
         }
         NetworkFilter.prototype.isCosmeticFilter = function () {
             return false;
@@ -604,6 +620,9 @@
             return true;
         };
         NetworkFilter.prototype.toString = function () {
+            if (this.rawLine !== undefined) {
+                return this.rawLine;
+            }
             var filter = '';
             if (this.isException()) {
                 filter += '@@';
@@ -680,11 +699,6 @@
                     options.push('third-party');
                 }
             }
-            if (this.hasOptDomains() || this.hasOptNotDomains()) {
-                var domains_1 = __spread(this.getOptDomains());
-                this.getOptNotDomains().forEach(function (nd) { return domains_1.push("~" + nd); });
-                options.push("domain=" + domains_1.join('|'));
-            }
             if (options.length > 0) {
                 filter += "$" + options.join(',');
             }
@@ -693,24 +707,38 @@
             }
             return filter;
         };
+        NetworkFilter.prototype.getId = function () {
+            if (this.id === undefined) {
+                this.id = computeFilterId(this.mask, this.filter, this.hostname, this.optDomains, this.optNotDomains);
+            }
+            return this.id;
+        };
         NetworkFilter.prototype.hasFilter = function () {
-            return !!this.filter;
+            return this.filter !== undefined;
         };
         NetworkFilter.prototype.hasOptNotDomains = function () {
-            return !!this.optNotDomains;
+            return this.optNotDomains !== undefined || this.optNotDomainsSet !== undefined;
         };
         NetworkFilter.prototype.getOptNotDomains = function () {
             if (this.optNotDomainsSet === undefined) {
+                if (this.optNotDomains === undefined) {
+                    return EMPTY_SET;
+                }
                 this.optNotDomainsSet = parseDomainsOption(this.optNotDomains);
+                this.optNotDomains = undefined;
             }
             return this.optNotDomainsSet;
         };
         NetworkFilter.prototype.hasOptDomains = function () {
-            return !!this.optDomains;
+            return this.optDomains !== undefined || this.optDomainsSet !== undefined;
         };
         NetworkFilter.prototype.getOptDomains = function () {
             if (this.optDomainsSet === undefined) {
+                if (this.optDomains === undefined) {
+                    return EMPTY_SET;
+                }
                 this.optDomainsSet = parseDomainsOption(this.optDomains);
+                this.optDomains = undefined;
             }
             return this.optDomainsSet;
         };
@@ -721,42 +749,53 @@
             return this.getMask() & FROM_ANY;
         };
         NetworkFilter.prototype.isRedirect = function () {
-            return !!this.redirect;
+            return this.redirect !== undefined;
         };
         NetworkFilter.prototype.getRedirect = function () {
-            return this.redirect;
+            return this.redirect || '';
         };
         NetworkFilter.prototype.hasHostname = function () {
-            return !!this.hostname;
+            return this.hostname !== undefined;
         };
         NetworkFilter.prototype.getHostname = function () {
-            return this.hostname;
+            return this.hostname || '';
         };
         NetworkFilter.prototype.getFilter = function () {
-            return this.filter;
+            return this.filter || '';
         };
         NetworkFilter.prototype.setRegex = function (re) {
             this.regex = re;
-            this.mask = setBit(this.mask, 16777216);
-            this.mask = clearBit(this.mask, 8388608);
+            this.mask = setBit(this.mask, 2097152);
+            this.mask = clearBit(this.mask, 1048576);
         };
         NetworkFilter.prototype.getRegex = function () {
             if (this.regex === undefined) {
-                this.regex = compileRegex(this.filter, this.isRightAnchor(), this.isLeftAnchor());
+                this.regex =
+                    this.filter !== undefined
+                        ? compileRegex(this.filter, this.isRightAnchor(), this.isLeftAnchor())
+                        : MATCH_ALL;
             }
             return this.regex;
         };
         NetworkFilter.prototype.getFuzzySignature = function () {
             if (this.fuzzySignature === undefined) {
-                this.fuzzySignature = createFuzzySignature(this.filter);
+                this.fuzzySignature =
+                    this.filter !== undefined ? createFuzzySignature(this.filter) : new Uint32Array([]);
             }
             return this.fuzzySignature;
         };
         NetworkFilter.prototype.getTokens = function () {
-            var tokens = tokenizeFilter(this.filter, this.isPlain());
-            var hostnameTokens = tokenizeFilter(this.hostname, false);
+            var skipLastToken = this.isPlain() && !this.isRightAnchor();
+            var tokens = this.filter !== undefined ? tokenizeFilter(this.filter, skipLastToken) : [];
+            var hostnameTokens = this.hostname !== undefined ? tokenize(this.hostname) : [];
             for (var i = 0; i < hostnameTokens.length; i += 1) {
                 tokens.push(hostnameTokens[i]);
+            }
+            if (this.fromHttp() && !this.fromHttps()) {
+                tokens.push(fastHash('http'));
+            }
+            else if (this.fromHttps() && !this.fromHttp()) {
+                tokens.push(fastHash('https'));
             }
             return [tokens];
         };
@@ -768,43 +807,43 @@
             return this.fromAny();
         };
         NetworkFilter.prototype.isFuzzy = function () {
-            return getBit(this.mask, 524288);
+            return getBit(this.mask, 65536);
         };
         NetworkFilter.prototype.isException = function () {
-            return getBit(this.mask, 268435456);
-        };
-        NetworkFilter.prototype.isHostnameAnchor = function () {
-            return getBit(this.mask, 134217728);
-        };
-        NetworkFilter.prototype.isRightAnchor = function () {
-            return getBit(this.mask, 67108864);
-        };
-        NetworkFilter.prototype.isLeftAnchor = function () {
             return getBit(this.mask, 33554432);
         };
-        NetworkFilter.prototype.matchCase = function () {
-            return getBit(this.mask, 262144);
-        };
-        NetworkFilter.prototype.isImportant = function () {
-            return getBit(this.mask, 131072);
-        };
-        NetworkFilter.prototype.isRegex = function () {
+        NetworkFilter.prototype.isHostnameAnchor = function () {
             return getBit(this.mask, 16777216);
         };
+        NetworkFilter.prototype.isRightAnchor = function () {
+            return getBit(this.mask, 8388608);
+        };
+        NetworkFilter.prototype.isLeftAnchor = function () {
+            return getBit(this.mask, 4194304);
+        };
+        NetworkFilter.prototype.matchCase = function () {
+            return getBit(this.mask, 32768);
+        };
+        NetworkFilter.prototype.isImportant = function () {
+            return getBit(this.mask, 16384);
+        };
+        NetworkFilter.prototype.isRegex = function () {
+            return getBit(this.mask, 2097152);
+        };
         NetworkFilter.prototype.isPlain = function () {
-            return !getBit(this.mask, 16777216);
+            return !getBit(this.mask, 2097152);
         };
         NetworkFilter.prototype.isHostname = function () {
-            return getBit(this.mask, 4194304);
+            return getBit(this.mask, 524288);
         };
         NetworkFilter.prototype.fromAny = function () {
             return this.getCptMask() === FROM_ANY;
         };
         NetworkFilter.prototype.thirdParty = function () {
-            return getBit(this.mask, 1048576);
+            return getBit(this.mask, 131072);
         };
         NetworkFilter.prototype.firstParty = function () {
-            return getBit(this.mask, 2097152);
+            return getBit(this.mask, 262144);
         };
         NetworkFilter.prototype.fromImage = function () {
             return getBit(this.mask, 1);
@@ -836,11 +875,17 @@
         NetworkFilter.prototype.fromWebsocket = function () {
             return getBit(this.mask, 512);
         };
+        NetworkFilter.prototype.fromHttp = function () {
+            return getBit(this.mask, 4096);
+        };
+        NetworkFilter.prototype.fromHttps = function () {
+            return getBit(this.mask, 8192);
+        };
         NetworkFilter.prototype.fromXmlHttpRequest = function () {
             return getBit(this.mask, 1024);
         };
         NetworkFilter.prototype.fromFont = function () {
-            return getBit(this.mask, 8192);
+            return getBit(this.mask, 2048);
         };
         return NetworkFilter;
     }());
@@ -857,24 +902,26 @@
     }
     function parseNetworkFilter(rawLine) {
         var line = rawLine;
-        var mask = 1048576 | 2097152;
+        var mask = 131072 |
+            262144 |
+            8192 |
+            4096;
         var cptMaskPositive = 0;
         var cptMaskNegative = FROM_ANY;
-        var filter = null;
-        var hostname = null;
-        var optDomains = '';
-        var optNotDomains = '';
-        var redirect = '';
+        var hostname;
+        var optDomains;
+        var optNotDomains;
+        var redirect;
         var filterIndexStart = 0;
         var filterIndexEnd = line.length;
         if (fastStartsWith(line, '@@')) {
             filterIndexStart += 2;
-            mask = setBit(mask, 268435456);
+            mask = setBit(mask, 33554432);
         }
         var optionsIndex = line.indexOf('$', filterIndexStart);
         if (optionsIndex !== -1) {
             filterIndexEnd = optionsIndex;
-            var rawOptions = line.substr(optionsIndex + 1);
+            var rawOptions = line.slice(optionsIndex + 1);
             var options = rawOptions.split(',');
             for (var i = 0; i < options.length; i += 1) {
                 var rawOption = options[i];
@@ -882,7 +929,7 @@
                 var option = rawOption;
                 if (fastStartsWith(option, '~')) {
                     negation = true;
-                    option = option.substr(1);
+                    option = option.slice(1);
                 }
                 else {
                     negation = false;
@@ -901,7 +948,7 @@
                             var value = optionValues[j];
                             if (value) {
                                 if (fastStartsWith(value, '~')) {
-                                    optNotDomainsArray.push(value.substr(1));
+                                    optNotDomainsArray.push(value.slice(1));
                                 }
                                 else {
                                     optDomainsArray.push(value);
@@ -920,32 +967,32 @@
                         if (negation) {
                             return null;
                         }
-                        mask = setBit(mask, 131072);
+                        mask = setBit(mask, 16384);
                         break;
                     case 'match-case':
                         if (negation) {
                             return null;
                         }
-                        mask = setBit(mask, 262144);
+                        mask = setBit(mask, 32768);
                         break;
                     case 'third-party':
                         if (negation) {
-                            mask = clearBit(mask, 1048576);
+                            mask = clearBit(mask, 131072);
                         }
                         else {
-                            mask = clearBit(mask, 2097152);
+                            mask = clearBit(mask, 262144);
                         }
                         break;
                     case 'first-party':
                         if (negation) {
-                            mask = clearBit(mask, 2097152);
+                            mask = clearBit(mask, 262144);
                         }
                         else {
-                            mask = clearBit(mask, 1048576);
+                            mask = clearBit(mask, 131072);
                         }
                         break;
                     case 'fuzzy':
-                        mask = setBit(mask, 524288);
+                        mask = setBit(mask, 65536);
                         break;
                     case 'collapse':
                         break;
@@ -995,7 +1042,7 @@
                                 optionMask = 512;
                                 break;
                             case 'font':
-                                optionMask = 8192;
+                                optionMask = 2048;
                                 break;
                             default:
                                 return null;
@@ -1023,33 +1070,35 @@
         else {
             mask |= cptMaskPositive & cptMaskNegative;
         }
-        if (fastStartsWith(line, '127.0.0.1')) {
-            hostname = line.substr(line.lastIndexOf(' ') + 1);
-            filter = '';
-            mask = clearBit(mask, 16777216);
-            mask = setBit(mask, 4194304);
-            mask = setBit(mask, 134217728);
+        if (line[filterIndexEnd - 1] === '|') {
+            mask = setBit(mask, 8388608);
+            filterIndexEnd -= 1;
         }
-        else {
-            if (line[filterIndexEnd - 1] === '|') {
-                mask = setBit(mask, 67108864);
-                filterIndexEnd -= 1;
+        if (fastStartsWithFrom(line, '||', filterIndexStart)) {
+            mask = setBit(mask, 16777216);
+            filterIndexStart += 2;
+        }
+        else if (line[filterIndexStart] === '|') {
+            mask = setBit(mask, 4194304);
+            filterIndexStart += 1;
+        }
+        var isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
+        mask = setNetworkMask(mask, 2097152, isRegex);
+        if (getBit(mask, 16777216)) {
+            if (isRegex) {
+                var firstSeparator = line.search(SEPARATOR);
+                if (firstSeparator !== -1) {
+                    hostname = line.slice(filterIndexStart, firstSeparator);
+                    filterIndexStart = firstSeparator;
+                    if (filterIndexEnd - filterIndexStart === 1 && line[filterIndexStart] === '^') {
+                        mask = clearBit(mask, 2097152);
+                    }
+                    else {
+                        mask = setNetworkMask(mask, 2097152, checkIsRegex(line, filterIndexStart, filterIndexEnd));
+                    }
+                }
             }
-            if (fastStartsWithFrom(line, '||', filterIndexStart)) {
-                mask = setBit(mask, 134217728);
-                filterIndexStart += 2;
-            }
-            else if (line[filterIndexStart] === '|') {
-                mask = setBit(mask, 33554432);
-                filterIndexStart += 1;
-            }
-            if (line.charAt(filterIndexEnd - 1) === '*' && filterIndexEnd - filterIndexStart > 1) {
-                filterIndexEnd -= 1;
-            }
-            var isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
-            mask = setNetworkMask(mask, 16777216, isRegex);
-            var isHostnameAnchor = getBit(mask, 134217728);
-            if (!isRegex && isHostnameAnchor) {
+            else {
                 var slashIndex = line.indexOf('/', filterIndexStart);
                 if (slashIndex !== -1) {
                     hostname = line.slice(filterIndexStart, slashIndex);
@@ -1057,47 +1106,56 @@
                 }
                 else {
                     hostname = line.slice(filterIndexStart, filterIndexEnd);
-                    filter = '';
-                }
-            }
-            else if (isRegex && isHostnameAnchor) {
-                var firstSeparator = line.search(SEPARATOR);
-                if (firstSeparator !== -1) {
-                    hostname = line.slice(filterIndexStart, firstSeparator);
-                    filterIndexStart = firstSeparator;
-                    if (filterIndexEnd - filterIndexStart === 1 && line.charAt(filterIndexStart) === '^') {
-                        filter = '';
-                        mask = clearBit(mask, 16777216);
-                    }
-                    else {
-                        mask = setNetworkMask(mask, 16777216, checkIsRegex(line, filterIndexStart, filterIndexEnd));
-                    }
+                    filterIndexStart = filterIndexEnd;
                 }
             }
         }
-        if (filter === null) {
+        if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexEnd - 1] === '*') {
+            filterIndexEnd -= 1;
+        }
+        if (getBit(mask, 4194304)) {
+            if (filterIndexEnd - filterIndexStart === 5 &&
+                fastStartsWithFrom(line, 'ws://', filterIndexStart)) {
+                mask = setBit(mask, 512);
+                mask = clearBit(mask, 4194304);
+                filterIndexStart = filterIndexEnd;
+            }
+            else if (filterIndexEnd - filterIndexStart === 7 &&
+                fastStartsWithFrom(line, 'http://', filterIndexStart)) {
+                mask = setBit(mask, 4096);
+                mask = clearBit(mask, 8192);
+                mask = clearBit(mask, 4194304);
+                filterIndexStart = filterIndexEnd;
+            }
+            else if (filterIndexEnd - filterIndexStart === 8 &&
+                fastStartsWithFrom(line, 'https://', filterIndexStart)) {
+                mask = setBit(mask, 8192);
+                mask = clearBit(mask, 4096);
+                mask = clearBit(mask, 4194304);
+                filterIndexStart = filterIndexEnd;
+            }
+            else if (filterIndexEnd - filterIndexStart === 8 &&
+                fastStartsWithFrom(line, 'http*://', filterIndexStart)) {
+                mask = setBit(mask, 8192);
+                mask = setBit(mask, 4096);
+                mask = clearBit(mask, 4194304);
+                filterIndexStart = filterIndexEnd;
+            }
+        }
+        var filter;
+        if (filterIndexEnd - filterIndexStart > 0) {
             filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
+            mask = setNetworkMask(mask, 2097152, checkIsRegex(filter, 0, filter.length));
         }
-        var finalHostname = '';
-        if (hostname !== null) {
-            finalHostname = hostname;
+        if (hostname !== undefined) {
+            if (getBit(mask, 16777216) && fastStartsWith(hostname, 'www.')) {
+                hostname = hostname.slice(4);
+            }
+            hostname = hostname.toLowerCase();
         }
-        var finalFilter = '';
-        if (filter !== null) {
-            finalFilter = filter;
-        }
-        if (getBit(mask, 134217728) &&
-            fastStartsWith(finalHostname, 'www.')) {
-            finalHostname = finalHostname.slice(4);
-        }
-        if (finalHostname !== '') {
-            finalHostname = finalHostname.toLowerCase();
-        }
-        var id = fastHash(line);
         return new NetworkFilter({
-            filter: finalFilter,
-            hostname: finalHostname,
-            id: id,
+            filter: filter,
+            hostname: hostname,
             mask: mask,
             optDomains: optDomains,
             optNotDomains: optNotDomains,
@@ -1828,14 +1886,11 @@
         };
     }
     var parseImpl = parseImplFactory();
+    function parse$1(url, options) {
+        return parseImpl(url, options);
+    }
     function getPublicSuffix$1(url, options) {
         return parseImpl(url, options, 1).publicSuffix;
-    }
-    function getDomain$1(url, options) {
-        return parseImpl(url, options, 2).domain;
-    }
-    function getHostname(url, options) {
-        return parseImpl(url, options, 0).host;
     }
 
     var CPT_TO_TYPE = {
@@ -1874,51 +1929,39 @@
     };
     var Request = (function () {
         function Request(_a) {
-            var _b = _a === void 0 ? {} : _a, _c = _b.cpt, cpt = _c === void 0 ? 6 : _c, _d = _b.url, url = _d === void 0 ? '' : _d, hostname = _b.hostname, domain = _b.domain, _e = _b.sourceUrl, sourceUrl = _e === void 0 ? '' : _e, sourceHostname = _b.sourceHostname, sourceDomain = _b.sourceDomain;
+            var _b = _a === void 0 ? {} : _a, _c = _b.cpt, cpt = _c === void 0 ? 'document' : _c, _d = _b.url, url = _d === void 0 ? '' : _d, _e = _b.sourceUrl, sourceUrl = _e === void 0 ? '' : _e;
+            this.filtersHit = [];
             this.cpt = CPT_TO_TYPE[cpt];
             this.url = url.toLowerCase();
-            this.hostname = hostname;
-            this.domain = domain;
+            var _f = parse$1(this.url), host = _f.host, domain = _f.domain;
+            this.hostname = host || '';
+            this.domain = domain || '';
             this.sourceUrl = sourceUrl.toLowerCase();
-            this.sourceHostname = sourceHostname;
-            this.sourceDomain = sourceDomain;
+            var _g = parse$1(this.sourceUrl), sourceHost = _g.host, sourceDomain = _g.domain;
+            this.sourceHostname = sourceHost || '';
+            this.sourceHostnameHash = fastHash(this.sourceHostname);
+            this.sourceDomain = sourceDomain || '';
+            this.sourceDomainHash = fastHash(this.sourceDomain);
+            this.isFirstParty = this.sourceDomain === this.domain;
+            var endOfProtocol = this.url.indexOf(':');
+            if (endOfProtocol === -1) {
+                this.isHttps = true;
+                this.isHttp = false;
+                this.isSupported = true;
+            }
+            else {
+                var protocol = this.url.slice(0, endOfProtocol);
+                this.isHttp = protocol === 'http';
+                this.isHttps = this.isHttp === false && protocol === 'https';
+                var isWebsocket = this.isHttp === false &&
+                    this.isHttps === false &&
+                    (protocol === 'ws' || protocol === 'wss');
+                this.isSupported = this.isHttp || this.isHttps || isWebsocket;
+                if (isWebsocket) {
+                    this.cpt = 15;
+                }
+            }
         }
-        Request.prototype.getCpt = function () {
-            return this.cpt;
-        };
-        Request.prototype.getUrl = function () {
-            return this.url;
-        };
-        Request.prototype.getHostname = function () {
-            if (this.hostname === undefined) {
-                this.hostname = getHostname(this.url) || '';
-            }
-            return this.hostname;
-        };
-        Request.prototype.getDomain = function () {
-            if (this.domain === undefined) {
-                this.domain = getDomain$1(this.getHostname()) || '';
-            }
-            return this.domain;
-        };
-        Request.prototype.getSourceUrl = function () {
-            return this.sourceUrl;
-        };
-        Request.prototype.getSourceHostname = function () {
-            if (this.sourceHostname === undefined) {
-                this.sourceHostname = getHostname(this.sourceUrl) || '';
-            }
-            return this.sourceHostname;
-        };
-        Request.prototype.getSourceDomain = function () {
-            if (this.sourceDomain === undefined) {
-                this.sourceDomain = getDomain$1(this.getSourceHostname()) || '';
-            }
-            return this.sourceDomain;
-        };
-        Request.prototype.isFirstParty = function () {
-            return this.getSourceDomain() === this.getDomain();
-        };
         Request.prototype.getTokens = function () {
             if (this.tokens === undefined) {
                 this.tokens = tokenize(this.url);
@@ -1998,23 +2041,29 @@
             this.pushBytes(buffer);
         };
         DynamicDataView.prototype.pushStr = function (str) {
-            var originalPos = this.pos;
-            var foundUnicode = false;
-            this.checkShouldResize(2 + str.length);
-            this.pushUint16(str.length);
-            var offset = this.pos;
-            var buffer = this.buffer;
-            for (var i = 0; i < str.length && !foundUnicode; i += 1) {
-                var ch = str.charCodeAt(i);
-                buffer[offset + i] = ch;
-                foundUnicode = foundUnicode || ch > 127;
-            }
-            if (foundUnicode) {
-                this.pos = originalPos;
-                this.pushUTF8(str);
+            if (str === undefined) {
+                this.checkShouldResize(2);
+                this.pushUint16(0);
             }
             else {
-                this.pos += str.length;
+                var originalPos = this.pos;
+                var foundUnicode = false;
+                this.checkShouldResize(2 + str.length);
+                this.pushUint16(str.length);
+                var offset = this.pos;
+                var buffer = this.buffer;
+                for (var i = 0; i < str.length && !foundUnicode; i += 1) {
+                    var ch = str.charCodeAt(i);
+                    buffer[offset + i] = ch;
+                    foundUnicode = foundUnicode || ch > 127;
+                }
+                if (foundUnicode) {
+                    this.pos = originalPos;
+                    this.pushUTF8(str);
+                }
+                else {
+                    this.pos += str.length;
+                }
             }
         };
         DynamicDataView.prototype.getBytes = function (n) {
@@ -2031,8 +2080,7 @@
             return uint8;
         };
         DynamicDataView.prototype.getUint16 = function () {
-            var uint16 = ((this.buffer[this.pos] << 8) |
-                this.buffer[this.pos + 1]) >>> 0;
+            var uint16 = ((this.buffer[this.pos] << 8) | this.buffer[this.pos + 1]) >>> 0;
             this.pos += 2;
             return uint16;
         };
@@ -2040,7 +2088,8 @@
             var uint32 = (((this.buffer[this.pos] << 24) >>> 0) +
                 ((this.buffer[this.pos + 1] << 16) |
                     (this.buffer[this.pos + 2] << 8) |
-                    this.buffer[this.pos + 3])) >>> 0;
+                    this.buffer[this.pos + 3])) >>>
+                0;
             this.pos += 4;
             return uint32;
         };
@@ -2050,6 +2099,9 @@
         DynamicDataView.prototype.getStr = function () {
             var originalPos = this.pos;
             var size = this.getUint16();
+            if (size === 0) {
+                return '';
+            }
             var i = 0;
             for (; i < size && this.buffer[this.pos + i] <= 127; i += 1) {
             }
@@ -2092,7 +2144,6 @@
         }
         buffer.pushUint8(numberOfOptionalParts);
         buffer.pushUint32(filter.mask);
-        buffer.pushUint32(filter.id);
         if (numberOfOptionalParts === 0) {
             return;
         }
@@ -2117,16 +2168,29 @@
     function deserializeNetworkFilter(buffer) {
         var numberOfOptionalParts = buffer.getUint8();
         var mask = buffer.getUint32();
-        var id = buffer.getUint32();
-        var hostname = numberOfOptionalParts > 0 ? buffer.getStr() : '';
-        var filter = numberOfOptionalParts > 1 ? buffer.getStr() : '';
-        var optDomains = numberOfOptionalParts > 2 ? buffer.getStr() : '';
-        var optNotDomains = numberOfOptionalParts > 3 ? buffer.getStr() : '';
-        var redirect = numberOfOptionalParts > 4 ? buffer.getStr() : '';
+        var hostname;
+        var filter;
+        var optDomains;
+        var optNotDomains;
+        var redirect;
+        if (numberOfOptionalParts > 0) {
+            hostname = buffer.getStr() || undefined;
+        }
+        if (numberOfOptionalParts > 1) {
+            filter = buffer.getStr() || undefined;
+        }
+        if (numberOfOptionalParts > 2) {
+            optDomains = buffer.getStr() || undefined;
+        }
+        if (numberOfOptionalParts > 3) {
+            optNotDomains = buffer.getStr() || undefined;
+        }
+        if (numberOfOptionalParts > 4) {
+            redirect = buffer.getStr() || undefined;
+        }
         return new NetworkFilter({
             filter: filter,
             hostname: hostname,
-            id: id,
             mask: mask,
             optDomains: optDomains,
             optNotDomains: optNotDomains,
@@ -2135,20 +2199,17 @@
     }
     function serializeCosmeticFilter(filter, buffer) {
         buffer.pushUint8(filter.mask);
-        buffer.pushUint32(filter.id);
         buffer.pushStr(filter.selector);
         buffer.pushStr(filter.hostnames);
     }
     function deserializeCosmeticFilter(buffer) {
         var mask = buffer.getUint8();
-        var id = buffer.getUint32();
         var selector = buffer.getStr();
         var hostnames = buffer.getStr();
         return new CosmeticFilter({
-            hostnames: hostnames,
-            id: id,
+            hostnames: hostnames || undefined,
             mask: mask,
-            selector: selector
+            selector: selector || undefined
         });
     }
     function serializeNetworkFilters(filters, buffer) {
@@ -2169,7 +2230,7 @@
         for (var i = 0; i < length; i += 1) {
             var filter = deserializeNetworkFilter(buffer);
             filters.push(filter);
-            allFilters.set(filter.id, filter);
+            allFilters.set(filter.getId(), filter);
         }
         return filters;
     }
@@ -2179,7 +2240,7 @@
         for (var i = 0; i < length; i += 1) {
             var filter = deserializeCosmeticFilter(buffer);
             filters.push(filter);
-            allFilters.set(filter.id, filter);
+            allFilters.set(filter.getId(), filter);
         }
         return filters;
     }
@@ -2220,7 +2281,7 @@
         buffer.pushUint16(filters.length);
         buffer.pushUint32(token);
         for (var i = 0; i < filters.length; i += 1) {
-            buffer.pushUint32(filters[i].id);
+            buffer.pushUint32(filters[i].getId());
         }
     }
     function deserializeBucket(buffer, filters) {
@@ -2228,26 +2289,27 @@
         var length = buffer.getUint16();
         var token = buffer.getUint32();
         for (var i = 0; i < length; i += 1) {
-            var id = buffer.getUint32();
-            var filter = filters.get(id);
+            var filter = filters.get(buffer.getUint32());
             if (filter !== undefined) {
                 bucket.push(filter);
             }
         }
         return {
             bucket: {
+                cumulTime: 0,
                 filters: bucket,
                 hit: 0,
-                optimized: false
+                match: 0,
+                optimized: false,
+                tokensHit: Object.create(null)
             },
             token: token
         };
     }
     function serializeReverseIndex(reverseIndex, buffer) {
         var index = reverseIndex.index;
-        var tokens = __spread(index.keys());
         buffer.pushUint32(reverseIndex.size);
-        buffer.pushUint32(tokens.length);
+        buffer.pushUint32(index.size);
         index.forEach(function (bucket, token) {
             serializeBucket(token, bucket.filters, buffer);
         });
@@ -2405,11 +2467,11 @@
         }
         ReverseIndex.prototype.iterMatchingFilters = function (tokens, cb) {
             for (var j = 0; j < tokens.length; j += 1) {
-                if (this.iterBucket(tokens[j], cb) === false) {
+                if (this.iterBucket(tokens[j], j, cb) === false) {
                     return;
                 }
             }
-            this.iterBucket(0, cb);
+            this.iterBucket(0, tokens.length, cb);
         };
         ReverseIndex.prototype.optimizeAheadOfTime = function () {
             var _this = this;
@@ -2426,7 +2488,7 @@
             var totalTokens = 0;
             iterFilters(function (filter) {
                 var multiTokens = _this.getTokens(filter);
-                idToTokens.set(filter.id, {
+                idToTokens.set(filter.getId(), {
                     filter: filter,
                     multiTokens: multiTokens
                 });
@@ -2466,9 +2528,12 @@
                     var bucket = _this.index.get(bestToken);
                     if (bucket === undefined) {
                         _this.index.set(bestToken, {
+                            cumulTime: 0,
                             filters: [filter],
                             hit: 0,
-                            optimized: false
+                            match: 0,
+                            optimized: false,
+                            tokensHit: Object.create(null)
                         });
                     }
                     else {
@@ -2487,41 +2552,54 @@
                 bucket.optimized = true;
             }
         };
-        ReverseIndex.prototype.iterBucket = function (token, cb) {
+        ReverseIndex.prototype.iterBucket = function (token, index, cb) {
+            var ret = true;
             var bucket = this.index.get(token);
             if (bucket !== undefined) {
                 bucket.hit += 1;
                 this.optimize(bucket);
+                var start = process.hrtime();
                 var filters = bucket.filters;
                 for (var k = 0; k < filters.length; k += 1) {
                     if (cb(filters[k]) === false) {
-                        return false;
+                        bucket.match += 1;
+                        bucket.tokensHit[index] = (bucket.tokensHit[index] || 0) + 1;
+                        ret = false;
+                        break;
                     }
                 }
+                var diff = process.hrtime(start);
+                bucket.cumulTime += (diff[0] * 1000000000 + diff[1]) / 1000000;
             }
-            return true;
+            return ret;
         };
         return ReverseIndex;
     }());
 
     var CosmeticFilterBucket = (function () {
         function CosmeticFilterBucket(filters) {
-            this.hostnameIndex = new ReverseIndex(function (cb) { return filters(function (f) {
-                if (f.hasHostnames()) {
-                    cb(f);
-                }
-            }); }, function (filter) {
-                var multiTokens = [];
-                filter.hostnames.split(',').forEach(function (h) {
-                    multiTokens.push(tokenize(h));
+            this.hostnameIndex = new ReverseIndex(function (cb) {
+                return filters(function (f) {
+                    if (f.hasHostnames()) {
+                        cb(f);
+                    }
                 });
+            }, function (filter) {
+                var multiTokens = [];
+                if (filter.hostnames !== undefined) {
+                    filter.hostnames.split(',').forEach(function (h) {
+                        multiTokens.push(tokenize(h));
+                    });
+                }
                 return multiTokens;
             });
-            this.selectorIndex = new ReverseIndex(function (cb) { return filters(function (f) {
-                if (!(f.isScriptBlock() || f.isScriptInject())) {
-                    cb(f);
-                }
-            }); }, function (filter) { return filter.getTokens(); });
+            this.selectorIndex = new ReverseIndex(function (cb) {
+                return filters(function (f) {
+                    if (!(f.isScriptBlock() || f.isScriptInject())) {
+                        cb(f);
+                    }
+                });
+            }, function (filter) { return filter.getTokens(); });
             this.size = this.hostnameIndex.size + this.selectorIndex.size;
         }
         CosmeticFilterBucket.prototype.createContentScriptResponse = function (rules) {
@@ -2616,9 +2694,7 @@
                 var isException = fastStartsWith(hostname, '~');
                 if (matchingRules.has(selector)) {
                     var otherRule = matchingRules.get(selector);
-                    if (rule.isUnhide() ||
-                        isException ||
-                        hostname.length > otherRule.hostname.length) {
+                    if (rule.isUnhide() || isException || hostname.length > otherRule.hostname.length) {
                         matchingRules.set(selector, {
                             hostname: hostname,
                             isException: isException,
@@ -2687,49 +2763,67 @@
         return true;
     }
     function checkPatternPlainFilter(filter, request) {
-        return request.getUrl().indexOf(filter.getFilter()) !== -1;
+        if (filter.hasFilter() === false) {
+            return true;
+        }
+        return request.url.indexOf(filter.getFilter()) !== -1;
     }
     function checkPatternRightAnchorFilter(filter, request) {
-        return request.getUrl().endsWith(filter.getFilter());
+        if (filter.hasFilter() === false) {
+            return true;
+        }
+        return request.url.endsWith(filter.getFilter());
     }
     function checkPatternLeftAnchorFilter(filter, request) {
-        return fastStartsWith(request.getUrl(), filter.getFilter());
+        if (filter.hasFilter() === false) {
+            return true;
+        }
+        return fastStartsWith(request.url, filter.getFilter());
     }
     function checkPatternLeftRightAnchorFilter(filter, request) {
-        return request.getUrl() === filter.getFilter();
+        if (filter.hasFilter() === false) {
+            return true;
+        }
+        return request.url === filter.getFilter();
     }
     function checkPatternRegexFilter(filter, request, startFrom) {
         if (startFrom === void 0) { startFrom = 0; }
-        var url = request.getUrl();
+        var url = request.url;
         if (startFrom > 0) {
             url = url.slice(startFrom);
         }
         return filter.getRegex().test(url);
     }
     function checkPatternHostnameAnchorRegexFilter(filter, request) {
-        var url = request.getUrl();
-        var hostname = request.getHostname();
+        var url = request.url;
+        var hostname = request.hostname;
         if (isAnchoredByHostname(filter.getHostname(), hostname)) {
             return checkPatternRegexFilter(filter, request, url.indexOf(hostname) + filter.getHostname().length);
         }
         return false;
     }
     function checkPatternHostnameRightAnchorFilter(filter, request) {
-        if (isAnchoredByHostname(filter.getHostname(), request.getHostname())) {
-            var urlAfterHostname = getUrlAfterHostname(request.getUrl(), filter.getHostname());
+        if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+            if (filter.hasFilter() === false) {
+                return true;
+            }
+            var urlAfterHostname = getUrlAfterHostname(request.url, filter.getHostname());
             return filter.getFilter() === urlAfterHostname;
         }
         return false;
     }
     function checkPatternHostnameAnchorFilter(filter, request) {
-        if (isAnchoredByHostname(filter.getHostname(), request.getHostname())) {
-            var urlAfterHostname = getUrlAfterHostname(request.getUrl(), filter.getHostname());
+        if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+            if (filter.hasFilter() === false) {
+                return true;
+            }
+            var urlAfterHostname = getUrlAfterHostname(request.url, filter.getHostname());
             return fastStartsWith(urlAfterHostname, filter.getFilter());
         }
         return false;
     }
     function checkPatternHostnameAnchorFuzzyFilter(filter, request) {
-        if (isAnchoredByHostname(filter.getHostname(), request.getHostname())) {
+        if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
             return checkPatternFuzzyFilter(filter, request);
         }
         return false;
@@ -2765,27 +2859,31 @@
         return checkPatternPlainFilter(filter, request);
     }
     function checkOptions(filter, request) {
-        if (!filter.isCptAllowed(request.getCpt())) {
+        if (!filter.isCptAllowed(request.cpt)) {
             return false;
         }
-        var isFirstParty = request.isFirstParty();
-        if (!filter.firstParty() && isFirstParty) {
+        if (request.isHttps === true && filter.fromHttps() === false) {
             return false;
         }
-        if (!filter.thirdParty() && !isFirstParty) {
+        if (request.isHttp === true && filter.fromHttp() === false) {
+            return false;
+        }
+        if (!filter.firstParty() && request.isFirstParty) {
+            return false;
+        }
+        if (!filter.thirdParty() && !request.isFirstParty) {
             return false;
         }
         if (filter.hasOptDomains()) {
             var optDomains = filter.getOptDomains();
-            if (!optDomains.has(request.getSourceHostname()) &&
-                !optDomains.has(request.getSourceDomain())) {
+            if (!optDomains.has(request.sourceHostnameHash) && !optDomains.has(request.sourceDomainHash)) {
                 return false;
             }
         }
         if (filter.hasOptNotDomains()) {
             var optNotDomains = filter.getOptNotDomains();
-            if (optNotDomains.has(request.getSourceHostname()) ||
-                optNotDomains.has(request.getSourceDomain())) {
+            if (optNotDomains.has(request.sourceHostnameHash) ||
+                optNotDomains.has(request.sourceDomainHash)) {
                 return false;
             }
         }
@@ -2836,9 +2934,49 @@
     }
     var OPTIMIZATIONS = [
         {
+            description: 'Group idential filter with same mask but different domains in single filters',
+            fusion: function (filters) {
+                var filter = new NetworkFilter(filters[0]);
+                if (filter.rawLine !== undefined) {
+                    filter.rawLine = filters.map(function (_a) {
+                        var rawLine = _a.rawLine;
+                        return rawLine;
+                    }).join(' <+> ');
+                }
+                var domains = new Set();
+                var notDomains = new Set();
+                for (var i = 0; i < filters.length; i += 1) {
+                    var f = filters[i];
+                    f.getOptDomains().forEach(function (d) {
+                        domains.add(d);
+                    });
+                    f.getOptNotDomains().forEach(function (d) {
+                        notDomains.add(d);
+                    });
+                }
+                if (domains.size > 0) {
+                    filter.optDomains = __spread(domains).join('|');
+                }
+                if (notDomains.size > 0) {
+                    filter.optNotDomains = __spread(notDomains).join('|');
+                }
+                return filter;
+            },
+            groupByCriteria: function (filter) {
+                return filter.getHostname() + filter.getFilter() + filter.getMask() + filter.getRedirect();
+            },
+            select: function (filter) { return !filter.isFuzzy() && !filter.isHostname(); }
+        },
+        {
             description: 'Group simple patterns, into a single filter',
             fusion: function (filters) {
                 var filter = new NetworkFilter(filters[0]);
+                if (filter.rawLine !== undefined) {
+                    filter.rawLine = filters.map(function (_a) {
+                        var rawLine = _a.rawLine;
+                        return rawLine;
+                    }).join(' <+> ');
+                }
                 var patterns = new Set();
                 for (var i = 0; i < filters.length; i += 1) {
                     var f = filters[i];
@@ -2861,12 +2999,14 @@
                 return filter;
             },
             groupByCriteria: function (filter) { return '' + filter.getMask(); },
-            select: function (filter) { return (!filter.isFuzzy() &&
-                !filter.hasOptDomains() &&
-                !filter.hasOptNotDomains() &&
-                !filter.isHostname() &&
-                !filter.isHostnameAnchor() &&
-                !filter.isRedirect()); }
+            select: function (filter) {
+                return !filter.isFuzzy() &&
+                    !filter.hasOptDomains() &&
+                    !filter.hasOptNotDomains() &&
+                    !filter.isHostname() &&
+                    !filter.isHostnameAnchor() &&
+                    !filter.isRedirect();
+            }
         },
     ];
     function optimize(filters) {
@@ -2906,14 +3046,20 @@
         };
         NetworkFilterBucket.prototype.match = function (request) {
             var match;
-            var checkMatch = function (filter) {
+            this.index.iterMatchingFilters(request.getTokens(), function (filter) {
+                request.filtersHit.push(filter.rawLine);
+                filter.hit += 1;
+                var continueIteration = true;
+                var start = process.hrtime();
                 if (matchNetworkFilter(filter, request)) {
+                    filter.match += 1;
                     match = filter;
-                    return false;
+                    continueIteration = false;
                 }
-                return true;
-            };
-            this.index.iterMatchingFilters(request.getTokens(), checkMatch);
+                var diff = process.hrtime(start);
+                filter.cumulTime += (diff[0] * 1000000000 + diff[1]) / 1000000;
+                return continueIteration;
+            });
             return match;
         };
         return NetworkFilterBucket;
@@ -3076,35 +3222,37 @@
         };
         FilterEngine.prototype.match = function (rawRequest) {
             if (!this.loadNetworkFilters) {
-                return { match: false };
+                return { match: false, req: new Request(rawRequest) };
             }
             var request = new Request(rawRequest);
             var filter;
             var exception;
             var redirect;
-            filter = this.importants.match(request);
-            if (filter === undefined) {
-                filter = this.redirects.match(request);
+            if (request.isSupported) {
+                filter = this.importants.match(request);
                 if (filter === undefined) {
-                    filter = this.filters.match(request);
+                    filter = this.redirects.match(request);
+                    if (filter === undefined) {
+                        filter = this.filters.match(request);
+                    }
+                    if (filter !== undefined) {
+                        exception = this.exceptions.match(request);
+                    }
                 }
                 if (filter !== undefined) {
-                    exception = this.exceptions.match(request);
-                }
-            }
-            if (filter !== undefined) {
-                if (filter.isRedirect()) {
-                    var redirectResource = this.resources.get(filter.getRedirect());
-                    if (redirectResource !== undefined) {
-                        var data = redirectResource.data, contentType = redirectResource.contentType;
-                        var dataUrl = void 0;
-                        if (contentType.indexOf(';') !== -1) {
-                            dataUrl = "data:" + contentType + "," + data;
+                    if (filter.isRedirect()) {
+                        var redirectResource = this.resources.get(filter.getRedirect());
+                        if (redirectResource !== undefined) {
+                            var data = redirectResource.data, contentType = redirectResource.contentType;
+                            var dataUrl = void 0;
+                            if (contentType.indexOf(';') !== -1) {
+                                dataUrl = "data:" + contentType + "," + data;
+                            }
+                            else {
+                                dataUrl = "data:" + contentType + ";base64," + btoaPolyfill(data);
+                            }
+                            redirect = dataUrl.trim();
                         }
-                        else {
-                            dataUrl = "data:" + contentType + ";base64," + btoaPolyfill(data);
-                        }
-                        redirect = dataUrl.trim();
                     }
                 }
             }
@@ -3112,7 +3260,8 @@
                 exception: exception,
                 filter: filter,
                 match: exception === undefined && filter !== undefined,
-                redirect: redirect
+                redirect: redirect,
+                req: request
             };
         };
         return FilterEngine;

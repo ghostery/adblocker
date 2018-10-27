@@ -1,5 +1,5 @@
 import { NetworkFilter } from '../parsing/network-filter';
-import { IRequestInitialization } from '../request';
+import Request, { IRequestInitialization } from '../request';
 import CosmeticFilterBucket from './bucket/cosmetics';
 import NetworkFilterBucket from './bucket/network';
 import IList from './list';
@@ -58,6 +58,7 @@ export default class FilterEngine {
         redirect?: string;
         exception?: NetworkFilter;
         filter?: NetworkFilter;
+        req: Request;
     };
 }
 export {};

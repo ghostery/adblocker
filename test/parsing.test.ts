@@ -90,20 +90,6 @@ const DEFAULT_NETWORK_FILTER = {
 };
 
 describe('Network filters', () => {
-  it('parses hostname', () => {
-    const base = {
-      ...DEFAULT_NETWORK_FILTER,
-      isHostname: true,
-    };
-
-    network('127.0.0.1 foo.com', {
-      ...base,
-      hostname: 'foo.com',
-      isHostnameAnchor: true,
-      isPlain: true,
-    });
-  });
-
   it('parses pattern', () => {
     const base = {
       ...DEFAULT_NETWORK_FILTER,
@@ -612,7 +598,7 @@ describe('Network filters', () => {
       ['subdocument', 'fromSubdocument'],
       ['websocket', 'fromWebsocket'],
       ['xmlhttprequest', 'fromXmlHttpRequest'],
-    ].forEach(([ option, attribute ]) => {
+    ].forEach(([option, attribute]) => {
       // all other attributes should be false if `$attribute` or true if `$~attribute`
       describe(option, () => {
         it(`parses ${option}`, () => {
@@ -804,10 +790,7 @@ describe('Filters list', () => {
       '[Adblock] ||foo.com',
       '[Adblock Plus 2.0] ||foo.com',
     ].forEach((content) => {
-      const {
-        cosmeticFilters,
-        networkFilters,
-      } = parseList(content);
+      const { cosmeticFilters, networkFilters } = parseList(content);
 
       expect(cosmeticFilters).toHaveLength(0);
       expect(networkFilters).toHaveLength(0);

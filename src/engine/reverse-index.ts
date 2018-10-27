@@ -5,9 +5,12 @@ function noop<T>(filters: T[]): T[] {
 }
 
 export interface IBucket<T extends IFilter> {
-  hit: number;
-  optimized: boolean;
+  cumulTime: number;
   filters: T[];
+  hit: number;
+  match: number;
+  optimized: boolean;
+  tokensHit: any;
 }
 
 interface IOptions<T> {
@@ -56,10 +59,7 @@ export default class ReverseIndex<T extends IFilter> {
   constructor(
     filters: (cb: (f: T) => void) => void,
     getTokens: (filter: T) => number[][],
-    {
-      enableOptimizations = true,
-      optimizer = noop,
-    }: Partial<IOptions<T>> = {
+    { enableOptimizations = true, optimizer = noop }: Partial<IOptions<T>> = {
       enableOptimizations: true,
       optimizer: noop,
     },
@@ -81,13 +81,13 @@ export default class ReverseIndex<T extends IFilter> {
    */
   public iterMatchingFilters(tokens: number[], cb: (f: T) => boolean): void {
     for (let j = 0; j < tokens.length; j += 1) {
-      if (this.iterBucket(tokens[j], cb) === false) {
+      if (this.iterBucket(tokens[j], j, cb) === false) {
         return;
       }
     }
 
     // Fallback to 0 bucket if nothing was found before.
-    this.iterBucket(0, cb);
+    this.iterBucket(0, tokens.length, cb);
   }
 
   /**
@@ -109,7 +109,7 @@ export default class ReverseIndex<T extends IFilter> {
     // Update histogram with new tokens
     iterFilters((filter: T) => {
       const multiTokens = this.getTokens(filter);
-      idToTokens.set(filter.id, {
+      idToTokens.set(filter.getId(), {
         filter,
         multiTokens,
       });
@@ -159,9 +159,12 @@ export default class ReverseIndex<T extends IFilter> {
         const bucket = this.index.get(bestToken);
         if (bucket === undefined) {
           this.index.set(bestToken, {
+            cumulTime: 0,
             filters: [filter],
             hit: 0,
+            match: 0,
             optimized: false,
+            tokensHit: Object.create(null),
           });
         } else {
           bucket.filters.push(filter);
@@ -190,21 +193,28 @@ export default class ReverseIndex<T extends IFilter> {
    * found inside. An early termination mechanism is built-in, to stop iterating
    * as soon as `false` is returned from the callback.
    */
-  private iterBucket(token: number, cb: (f: T) => boolean): boolean {
+  private iterBucket(token: number, index: number, cb: (f: T) => boolean): boolean {
+    let ret = true;
     const bucket = this.index.get(token);
     if (bucket !== undefined) {
       bucket.hit += 1;
       this.optimize(bucket);
 
+      const start = process.hrtime();
       const filters = bucket.filters;
       for (let k = 0; k < filters.length; k += 1) {
         // Break the loop if the callback returns `false`
         if (cb(filters[k]) === false) {
-          return false;
+          bucket.match += 1;
+          bucket.tokensHit[index] = (bucket.tokensHit[index] || 0) + 1;
+          ret = false;
+          break;
         }
       }
+      const diff = process.hrtime(start);
+      bucket.cumulTime += (diff[0] * 1000000000 + diff[1]) / 1000000;
     }
 
-    return true;
+    return ret;
   }
 }

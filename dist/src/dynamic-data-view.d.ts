@@ -11,7 +11,7 @@ export default class DynamicDataView {
     pushUint16(uint16: number): void;
     pushUint32(uint32: number): void;
     pushUTF8(str: string): void;
-    pushStr(str: string): void;
+    pushStr(str: string | undefined): void;
     getBytes(n: number): Uint8Array;
     getByte(): number;
     getUint8(): number;

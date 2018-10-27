@@ -16,15 +16,12 @@ export function clearBit(n: number, mask: number): number {
   return n & ~mask;
 }
 
-// TODO - depending on the filters we have in the lists, this hash function
-// could result in collisions. One way to make sure it does not happen, would be
-// to select a set of prime numbers for the seed and increment that do not
-// generate collisions on our set of filters.
+// http://www.cse.yorku.ca/~oz/hash.html
 function fastHashBetween(str: string, begin: number, end: number): number {
-  let hash = 5407;
+  let hash = 5381;
 
   for (let i = begin; i < end; i += 1) {
-    hash = (hash * 31) ^ str.charCodeAt(i);
+    hash = (hash << 5) + hash + str.charCodeAt(i);
   }
 
   return hash >>> 0;
@@ -35,6 +32,21 @@ export function fastHash(str: string): number {
     return 0;
   }
   return fastHashBetween(str, 0, str.length);
+}
+
+export function computeFilterId(mask: number, ...parts: Array<string | undefined>): number {
+  let hash = (5408 * 33) ^ mask;
+
+  for (let i = 0; i < parts.length; i += 1) {
+    const str = parts[i];
+    if (str !== undefined) {
+      for (let j = 0; j < str.length; j += 1) {
+        hash = (hash * 33) ^ str.charCodeAt(j);
+      }
+    }
+  }
+
+  return hash >>> 0;
 }
 
 // https://jsperf.com/string-startswith/21

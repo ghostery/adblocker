@@ -9,6 +9,7 @@ import DynamicDataView from './dynamic-data-view';
 import Engine from './engine/engine';
 import IList from './engine/list';
 import ReverseIndex from './engine/reverse-index';
+import { IBucket } from './engine/reverse-index';
 import { CosmeticFilter } from './parsing/cosmetic-filter';
 import IFilter from './parsing/interface';
 import { NetworkFilter } from './parsing/network-filter';
@@ -20,17 +21,17 @@ import { NetworkFilter } from './parsing/network-filter';
  * Header:
  * =======
  *
- *  | opt | mask | id
- *    8     32     32
+ *  | opt | mask
+ *    8     32
  *
- * For an empty filter having no pattern, hostname, the minimum size is: 72 bits.
+ * For an empty filter having no pattern, hostname, the minimum size is: 42 bits.
  *
  * Then for each optional part (filter, hostname optDomains, optNotDomains,
  * redirect), it takes 16 bits for the length of the string + the length of the
- * string in byte.
+ * string in bytes.
  *
  * The optional parts are written in order of there number of occurrence in the
- * filter list using by the adblocker. The most common being `hostname`, then
+ * filter list used by the adblocker. The most common being `hostname`, then
  * `filter`, `optDomains`, `optNotDomains`, `redirect`.
  *
  * Example:
@@ -38,7 +39,7 @@ import { NetworkFilter } from './parsing/network-filter';
  *
  * @@||cliqz.com would result in a serialized version:
  *
- * | 1 | mask | id | 9 | c | l | i | q | z | . | c | o | m  (19 bytes)
+ * | 1 | mask | 9 | c | l | i | q | z | . | c | o | m  (16 bytes)
  *
  * In this case, the serialized version is actually bigger than the original
  * filter, but faster to deserialize. In the future, we could optimize the
@@ -49,10 +50,7 @@ import { NetworkFilter } from './parsing/network-filter';
  *  * first byte could contain the mask as well if small enough.
  *  * when packing ascii string, store several of them in each byte.
  */
-function serializeNetworkFilter(
-  filter: NetworkFilter,
-  buffer: DynamicDataView,
-): void {
+function serializeNetworkFilter(filter: NetworkFilter, buffer: DynamicDataView): void {
   // Check number of optional parts (e.g.: filter, hostname, etc.)
   let numberOfOptionalParts = 0;
 
@@ -70,7 +68,6 @@ function serializeNetworkFilter(
 
   buffer.pushUint8(numberOfOptionalParts);
   buffer.pushUint32(filter.mask);
-  buffer.pushUint32(filter.id);
 
   if (numberOfOptionalParts === 0) {
     return;
@@ -106,18 +103,32 @@ function serializeNetworkFilter(
 function deserializeNetworkFilter(buffer: DynamicDataView): NetworkFilter {
   const numberOfOptionalParts = buffer.getUint8();
   const mask = buffer.getUint32();
-  const id = buffer.getUint32();
 
-  const hostname = numberOfOptionalParts > 0 ? buffer.getStr() : '';
-  const filter = numberOfOptionalParts > 1 ? buffer.getStr() : '';
-  const optDomains = numberOfOptionalParts > 2 ? buffer.getStr() : '';
-  const optNotDomains = numberOfOptionalParts > 3 ? buffer.getStr() : '';
-  const redirect = numberOfOptionalParts > 4 ? buffer.getStr() : '';
+  let hostname: string | undefined;
+  let filter: string | undefined;
+  let optDomains: string | undefined;
+  let optNotDomains: string | undefined;
+  let redirect: string | undefined;
+
+  if (numberOfOptionalParts > 0) {
+    hostname = buffer.getStr() || undefined;
+  }
+  if (numberOfOptionalParts > 1) {
+    filter = buffer.getStr() || undefined;
+  }
+  if (numberOfOptionalParts > 2) {
+    optDomains = buffer.getStr() || undefined;
+  }
+  if (numberOfOptionalParts > 3) {
+    optNotDomains = buffer.getStr() || undefined;
+  }
+  if (numberOfOptionalParts > 4) {
+    redirect = buffer.getStr() || undefined;
+  }
 
   return new NetworkFilter({
     filter,
     hostname,
-    id,
     mask,
     optDomains,
     optNotDomains,
@@ -128,21 +139,17 @@ function deserializeNetworkFilter(buffer: DynamicDataView): NetworkFilter {
 /**
  * The format of a cosmetic filter is:
  *
- * | mask | id | selector length | selector... | hostnames length | hostnames...
- *   32     32   16                              16
+ * | mask | selector length | selector... | hostnames length | hostnames...
+ *   32     16                              16
  *
- * The header (mask + id) is 64 bits, then we have a total of 32 bits to store
- * the length of `selector` and `hostnames` (16 bits each).
+ * The header (mask) is 32 bits, then we have a total of 32 bits to store the
+ * length of `selector` and `hostnames` (16 bits each).
  *
  * Improvements similar to the onces mentioned in `serializeNetworkFilters`
  * could be applied here, to get a more compact representation.
  */
-function serializeCosmeticFilter(
-  filter: CosmeticFilter,
-  buffer: DynamicDataView,
-): void {
+function serializeCosmeticFilter(filter: CosmeticFilter, buffer: DynamicDataView): void {
   buffer.pushUint8(filter.mask);
-  buffer.pushUint32(filter.id);
   buffer.pushStr(filter.selector);
   buffer.pushStr(filter.hostnames);
 }
@@ -153,32 +160,24 @@ function serializeCosmeticFilter(
  */
 function deserializeCosmeticFilter(buffer: DynamicDataView): CosmeticFilter {
   const mask = buffer.getUint8();
-  const id = buffer.getUint32();
   const selector = buffer.getStr();
   const hostnames = buffer.getStr();
 
   return new CosmeticFilter({
-    hostnames,
-    id,
+    hostnames: hostnames || undefined,
     mask,
-    selector,
+    selector: selector || undefined,
   });
 }
 
-function serializeNetworkFilters(
-  filters: NetworkFilter[],
-  buffer: DynamicDataView,
-): void {
+function serializeNetworkFilters(filters: NetworkFilter[], buffer: DynamicDataView): void {
   buffer.pushUint32(filters.length);
   for (let i = 0; i < filters.length; i += 1) {
     serializeNetworkFilter(filters[i], buffer);
   }
 }
 
-function serializeCosmeticFilters(
-  filters: CosmeticFilter[],
-  buffer: DynamicDataView,
-): void {
+function serializeCosmeticFilters(filters: CosmeticFilter[], buffer: DynamicDataView): void {
   buffer.pushUint32(filters.length);
   for (let i = 0; i < filters.length; i += 1) {
     serializeCosmeticFilter(filters[i], buffer);
@@ -194,7 +193,7 @@ function deserializeNetworkFilters(
   for (let i = 0; i < length; i += 1) {
     const filter = deserializeNetworkFilter(buffer);
     filters.push(filter);
-    allFilters.set(filter.id, filter);
+    allFilters.set(filter.getId(), filter);
   }
 
   return filters;
@@ -209,16 +208,13 @@ function deserializeCosmeticFilters(
   for (let i = 0; i < length; i += 1) {
     const filter = deserializeCosmeticFilter(buffer);
     filters.push(filter);
-    allFilters.set(filter.id, filter);
+    allFilters.set(filter.getId(), filter);
   }
 
   return filters;
 }
 
-function serializeLists(
-  buffer: DynamicDataView,
-  lists: Map<string, IList>,
-): void {
+function serializeLists(buffer: DynamicDataView, lists: Map<string, IList>): void {
   // Serialize number of lists
   buffer.pushUint8(lists.size);
 
@@ -264,16 +260,12 @@ function deserializeLists(
   };
 }
 
-function serializeBucket<T extends IFilter>(
-  token: number,
-  filters: T[],
-  buffer: DynamicDataView,
-) {
+function serializeBucket<T extends IFilter>(token: number, filters: T[], buffer: DynamicDataView) {
   buffer.pushUint16(filters.length);
   buffer.pushUint32(token);
 
   for (let i = 0; i < filters.length; i += 1) {
-    buffer.pushUint32(filters[i].id);
+    buffer.pushUint32(filters[i].getId());
   }
 }
 
@@ -282,16 +274,15 @@ function deserializeBucket<T extends IFilter>(
   filters: Map<number, T>,
 ): {
   token: number;
-  bucket: { filters: T[]; hit: number; optimized: boolean };
+  bucket: IBucket<T>;
 } {
   const bucket: T[] = [];
 
-  const length: number = buffer.getUint16();
-  const token: number = buffer.getUint32();
+  const length = buffer.getUint16();
+  const token = buffer.getUint32();
 
   for (let i = 0; i < length; i += 1) {
-    const id = buffer.getUint32();
-    const filter = filters.get(id);
+    const filter = filters.get(buffer.getUint32());
     if (filter !== undefined) {
       bucket.push(filter);
     }
@@ -299,9 +290,12 @@ function deserializeBucket<T extends IFilter>(
 
   return {
     bucket: {
+      cumulTime: 0,
       filters: bucket,
       hit: 0,
+      match: 0,
       optimized: false,
+      tokensHit: Object.create(null),
     },
     token,
   };
@@ -312,10 +306,9 @@ function serializeReverseIndex<T extends IFilter>(
   buffer: DynamicDataView,
 ): void {
   const index = reverseIndex.index;
-  const tokens = [...index.keys()];
 
   buffer.pushUint32(reverseIndex.size);
-  buffer.pushUint32(tokens.length);
+  buffer.pushUint32(index.size);
 
   index.forEach((bucket, token) => {
     serializeBucket<T>(token, bucket.filters, buffer);
@@ -367,7 +360,7 @@ function deserializeResources(
   buffer: DynamicDataView,
 ): {
   js: Map<string, string>;
-  resources: Map<string, { contentType: string, data: string }>;
+  resources: Map<string, { contentType: string; data: string }>;
   resourceChecksum: string;
 } {
   const js = new Map();
@@ -468,36 +461,12 @@ function deserializeEngine(serialized: Uint8Array, version: number): Engine {
   engine.lists = lists;
 
   // Deserialize buckets
-  deserializeReverseIndex<NetworkFilter>(
-    buffer,
-    engine.filters.index,
-    networkFilters,
-  );
-  deserializeReverseIndex<NetworkFilter>(
-    buffer,
-    engine.exceptions.index,
-    networkFilters,
-  );
-  deserializeReverseIndex<NetworkFilter>(
-    buffer,
-    engine.importants.index,
-    networkFilters,
-  );
-  deserializeReverseIndex<NetworkFilter>(
-    buffer,
-    engine.redirects.index,
-    networkFilters,
-  );
-  deserializeReverseIndex<CosmeticFilter>(
-    buffer,
-    engine.cosmetics.hostnameIndex,
-    cosmeticFilters,
-  );
-  deserializeReverseIndex<CosmeticFilter>(
-    buffer,
-    engine.cosmetics.selectorIndex,
-    cosmeticFilters,
-  );
+  deserializeReverseIndex<NetworkFilter>(buffer, engine.filters.index, networkFilters);
+  deserializeReverseIndex<NetworkFilter>(buffer, engine.exceptions.index, networkFilters);
+  deserializeReverseIndex<NetworkFilter>(buffer, engine.importants.index, networkFilters);
+  deserializeReverseIndex<NetworkFilter>(buffer, engine.redirects.index, networkFilters);
+  deserializeReverseIndex<CosmeticFilter>(buffer, engine.cosmetics.hostnameIndex, cosmeticFilters);
+  deserializeReverseIndex<CosmeticFilter>(buffer, engine.cosmetics.selectorIndex, cosmeticFilters);
 
   return engine;
 }

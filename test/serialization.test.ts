@@ -42,8 +42,8 @@ describe('Serialization', () => {
   it('ReverseIndex', () => {
     const filters = new Map();
     networkFilters.forEach((filter) => {
-      if (!filters.has(filter.id)) {
-        filters.set(filter.id, filter);
+      if (!filters.has(filter.getId())) {
+        filters.set(filter.getId(), filter);
       }
     });
 
@@ -52,7 +52,8 @@ describe('Serialization', () => {
       (cb) => {
         [...filters.values()].forEach(cb);
       },
-      (f: NetworkFilter) => f.getTokens());
+      (f: NetworkFilter) => f.getTokens(),
+    );
 
     // Serialize index
     const buffer = new DynamicDataView(4000000);
@@ -80,13 +81,9 @@ describe('Serialization', () => {
       version: 42,
     });
 
-    engine.onUpdateFilters(
-      [{ filters, asset: 'list1', checksum: 'checksum' }],
-    );
+    engine.onUpdateFilters([{ filters, asset: 'list1', checksum: 'checksum' }]);
 
-    engine.onUpdateResource([
-      { checksum: 'resources1', filters: resources },
-    ]);
+    engine.onUpdateResource([{ checksum: 'resources1', filters: resources }]);
 
     const serialized = serializeEngine(engine);
     expect(() => {
@@ -111,8 +108,12 @@ describe('Serialization', () => {
       expect(deserialized.filters.index.index).toEqual(engine.filters.index.index);
 
       // Cosmetic
-      expect(deserialized.cosmetics.hostnameIndex.index).toEqual(engine.cosmetics.hostnameIndex.index);
-      expect(deserialized.cosmetics.selectorIndex.index).toEqual(engine.cosmetics.selectorIndex.index);
+      expect(deserialized.cosmetics.hostnameIndex.index).toEqual(
+        engine.cosmetics.hostnameIndex.index,
+      );
+      expect(deserialized.cosmetics.selectorIndex.index).toEqual(
+        engine.cosmetics.selectorIndex.index,
+      );
 
       // Resources
       expect(deserialized.resourceChecksum).toEqual(engine.resourceChecksum);

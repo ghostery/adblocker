@@ -1,35 +1,39 @@
 import { RequestType } from '../request';
 import IFilter from './interface';
 export declare class NetworkFilter implements IFilter {
-    id: number;
+    hit: number;
+    match: number;
+    cumulTime: number;
     mask: number;
-    filter: string;
-    optDomains: string;
-    optNotDomains: string;
-    redirect: string;
-    hostname: string;
+    filter?: string;
+    optDomains?: string;
+    optNotDomains?: string;
+    redirect?: string;
+    hostname?: string;
     rawLine?: string;
+    private id?;
     private fuzzySignature?;
     private optDomainsSet?;
     private optNotDomainsSet?;
     private regex?;
-    constructor({ mask, filter, optDomains, optNotDomains, redirect, hostname, id, }: {
+    constructor({ mask, filter, hostname, optDomains, optNotDomains, redirect, rawLine, }: {
         mask: number;
-        filter: string;
-        optDomains: string;
-        optNotDomains: string;
-        redirect: string;
-        hostname: string;
-        id: number;
+        filter?: string;
+        optDomains?: string;
+        optNotDomains?: string;
+        redirect?: string;
+        hostname?: string;
+        rawLine?: string;
     });
     isCosmeticFilter(): boolean;
     isNetworkFilter(): boolean;
     toString(): string;
+    getId(): number;
     hasFilter(): boolean;
     hasOptNotDomains(): boolean;
-    getOptNotDomains(): Set<string>;
+    getOptNotDomains(): Set<number>;
     hasOptDomains(): boolean;
-    getOptDomains(): Set<string>;
+    getOptDomains(): Set<number>;
     getMask(): number;
     getCptMask(): number;
     isRedirect(): boolean;
@@ -65,6 +69,8 @@ export declare class NetworkFilter implements IFilter {
     fromStylesheet(): boolean;
     fromSubdocument(): boolean;
     fromWebsocket(): boolean;
+    fromHttp(): boolean;
+    fromHttps(): boolean;
     fromXmlHttpRequest(): boolean;
     fromFont(): boolean;
 }
