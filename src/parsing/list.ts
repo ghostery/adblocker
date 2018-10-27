@@ -1,7 +1,4 @@
-import {
-  fastStartsWith,
-  fastStartsWithFrom,
-} from '../utils';
+import { fastStartsWith, fastStartsWithFrom } from '../utils';
 
 import { CosmeticFilter, parseCosmeticFilter } from './cosmetic-filter';
 import { NetworkFilter, parseNetworkFilter } from './network-filter';
@@ -37,7 +34,7 @@ function detectFilterType(line: string): FilterType {
 
   // Check if filter is cosmetics
   const sharpIndex = line.indexOf('#');
-  if (sharpIndex > -1) {
+  if (sharpIndex !== -1) {
     const afterSharpIndex = sharpIndex + 1;
 
     // Ignore Adguard cosmetics
@@ -119,69 +116,20 @@ export function parseList(
   };
 }
 
-export function parseJSResource(
-  data: string,
-): Map<string, Map<string, string>> {
-  let state: string = 'end';
-  let tmpContent: string = '';
-  let name: string = '';
+export function parseJSResource(data: string): Map<string, Map<string, string>> {
+  const resources = new Map();
+  const trimComments = (str: string) => str.replace(/^#.*$/gm, '');
+  const chunks = data.split('\n\n');
+  for (let i = 0; i < chunks.length; i += 1) {
+    const resource = trimComments(chunks[i]).trim();
+    const firstNewLine = resource.indexOf('\n');
+    const [name, type] = resource.slice(0, firstNewLine).split(' ');
+    const body = resource.slice(firstNewLine + 1);
 
-  let type: string = '';
-  const parsed: Map<string, Map<string, string>> = new Map();
-  const lines: string[] = data.split('\n');
-
-  lines.forEach(line => {
-    const trimmed: string = line.trim();
-
-    if (fastStartsWith(trimmed, '#')) {
-      state = 'comment';
-    } else if (!trimmed) {
-      state = 'end';
-    } else if (
-      state !== 'content' &&
-      !type &&
-      trimmed.split(' ').length === 2
-    ) {
-      state = 'title';
-    } else {
-      state = 'content';
+    if (!resources.has(type)) {
+      resources.set(type, new Map());
     }
-
-    switch (state) {
-      case 'end':
-        if (tmpContent) {
-          let map = parsed.get(type);
-          if (map === undefined) {
-            map = new Map();
-            parsed.set(type, map);
-          }
-
-          map.set(name, tmpContent);
-          tmpContent = '';
-          type = '';
-        }
-        break;
-      case 'comment':
-        break;
-      case 'title':
-        [name, type] = trimmed.split(' ');
-        break;
-      case 'content':
-        tmpContent += `${trimmed}\n`;
-        break;
-      default:
-    }
-  });
-
-  if (tmpContent) {
-    let map = parsed.get(type);
-    if (map === undefined) {
-      map = new Map();
-      parsed.set(type, map);
-    }
-
-    map.set(name, tmpContent);
+    resources.get(type).set(name, body);
   }
-
-  return parsed;
+  return resources;
 }

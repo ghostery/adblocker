@@ -1172,7 +1172,7 @@ function detectFilterType(line) {
         return 0;
     }
     var sharpIndex = line.indexOf('#');
-    if (sharpIndex > -1) {
+    if (sharpIndex !== -1) {
         var afterSharpIndex = sharpIndex + 1;
         if (fastStartsWithFrom(line, '@$#', afterSharpIndex) ||
             fastStartsWithFrom(line, '@%#', afterSharpIndex) ||
@@ -1233,62 +1233,20 @@ function parseList(data, _a) {
     };
 }
 function parseJSResource(data) {
-    var state = 'end';
-    var tmpContent = '';
-    var name = '';
-    var type = '';
-    var parsed = new Map();
-    var lines = data.split('\n');
-    lines.forEach(function (line) {
-        var _a;
-        var trimmed = line.trim();
-        if (fastStartsWith(trimmed, '#')) {
-            state = 'comment';
+    var resources = new Map();
+    var trimComments = function (str) { return str.replace(/^#.*$/gm, ''); };
+    var chunks = data.split('\n\n');
+    for (var i = 0; i < chunks.length; i += 1) {
+        var resource = trimComments(chunks[i]).trim();
+        var firstNewLine = resource.indexOf('\n');
+        var _a = __read(resource.slice(0, firstNewLine).split(' '), 2), name_1 = _a[0], type = _a[1];
+        var body = resource.slice(firstNewLine + 1);
+        if (!resources.has(type)) {
+            resources.set(type, new Map());
         }
-        else if (!trimmed) {
-            state = 'end';
-        }
-        else if (state !== 'content' &&
-            !type &&
-            trimmed.split(' ').length === 2) {
-            state = 'title';
-        }
-        else {
-            state = 'content';
-        }
-        switch (state) {
-            case 'end':
-                if (tmpContent) {
-                    var map = parsed.get(type);
-                    if (map === undefined) {
-                        map = new Map();
-                        parsed.set(type, map);
-                    }
-                    map.set(name, tmpContent);
-                    tmpContent = '';
-                    type = '';
-                }
-                break;
-            case 'comment':
-                break;
-            case 'title':
-                _a = __read(trimmed.split(' '), 2), name = _a[0], type = _a[1];
-                break;
-            case 'content':
-                tmpContent += trimmed + "\n";
-                break;
-            default:
-        }
-    });
-    if (tmpContent) {
-        var map = parsed.get(type);
-        if (map === undefined) {
-            map = new Map();
-            parsed.set(type, map);
-        }
-        map.set(name, tmpContent);
+        resources.get(type).set(name_1, body);
     }
-    return parsed;
+    return resources;
 }
 
 const maxInt = 2147483647;
