@@ -655,6 +655,9 @@ var NetworkFilter = (function () {
     NetworkFilter.prototype.getMask = function () {
         return this.mask;
     };
+    NetworkFilter.prototype.getCptMask = function () {
+        return this.getMask() & FROM_ANY;
+    };
     NetworkFilter.prototype.isRedirect = function () {
         return !!this.redirect;
     };
@@ -728,7 +731,7 @@ var NetworkFilter = (function () {
         return getBit(this.mask, 4194304);
     };
     NetworkFilter.prototype.fromAny = function () {
-        return (this.mask & FROM_ANY) === FROM_ANY;
+        return this.getCptMask() === FROM_ANY;
     };
     NetworkFilter.prototype.thirdParty = function () {
         return getBit(this.mask, 1048576);

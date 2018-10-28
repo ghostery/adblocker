@@ -30,6 +30,7 @@ export declare class NetworkFilter implements IFilter {
     hasOptDomains(): boolean;
     getOptDomains(): Set<string>;
     getMask(): number;
+    getCptMask(): number;
     isRedirect(): boolean;
     getRedirect(): string;
     hasHostname(): boolean;

@@ -47,8 +47,10 @@
         css.type = 'text/css';
         css.id = 'cliqz-adblokcer-css-rules';
         var parent = doc.head || doc.documentElement;
-        parent.appendChild(css);
-        css.appendChild(doc.createTextNode(rule));
+        if (parent !== null) {
+            parent.appendChild(css);
+            css.appendChild(doc.createTextNode(rule));
+        }
     }
     function injectScript(s, doc) {
         var autoRemoveScript = "\n    try {\n      " + s + "\n    } catch (ex) { }\n\n    (function() {\n      var currentScript = document.currentScript;\n      var parent = currentScript && currentScript.parentNode;\n\n      if (parent) {\n        parent.removeChild(currentScript);\n      }\n    })();\n  ";
@@ -57,7 +59,9 @@
         script.id = 'cliqz-adblocker-script';
         script.appendChild(doc.createTextNode(autoRemoveScript));
         var parent = doc.head || doc.documentElement;
-        parent.appendChild(script);
+        if (parent !== null) {
+            parent.appendChild(script);
+        }
     }
     function blockScript(filter, doc) {
         var filterRE = new RegExp(filter);

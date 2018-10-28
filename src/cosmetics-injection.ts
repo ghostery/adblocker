@@ -20,8 +20,10 @@ function injectCSSRule(rule: string, doc: Document): void {
   css.type = 'text/css';
   css.id = 'cliqz-adblokcer-css-rules';
   const parent = doc.head || doc.documentElement;
-  parent.appendChild(css);
-  css.appendChild(doc.createTextNode(rule));
+  if (parent !== null) {
+    parent.appendChild(css);
+    css.appendChild(doc.createTextNode(rule));
+  }
 }
 
 function injectScript(s: string, doc: Document): void {
@@ -49,7 +51,9 @@ function injectScript(s: string, doc: Document): void {
 
   // Insert node
   const parent = doc.head || doc.documentElement;
-  parent.appendChild(script);
+  if (parent !== null) {
+    parent.appendChild(script);
+  }
 }
 
 function blockScript(filter: string, doc: Document): void {
