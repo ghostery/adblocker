@@ -120,16 +120,22 @@ export function parseJSResource(data: string): Map<string, Map<string, string>> 
   const resources = new Map();
   const trimComments = (str: string) => str.replace(/^#.*$/gm, '');
   const chunks = data.split('\n\n');
-  for (let i = 0; i < chunks.length; i += 1) {
+
+  for (let i = 1; i < chunks.length; i += 1) {
     const resource = trimComments(chunks[i]).trim();
     const firstNewLine = resource.indexOf('\n');
     const [name, type] = resource.slice(0, firstNewLine).split(' ');
     const body = resource.slice(firstNewLine + 1);
+
+    if (name === undefined || type === undefined || body === undefined) {
+      continue;
+    }
 
     if (!resources.has(type)) {
       resources.set(type, new Map());
     }
     resources.get(type).set(name, body);
   }
+
   return resources;
 }

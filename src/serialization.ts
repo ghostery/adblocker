@@ -22,7 +22,7 @@ import { NetworkFilter } from './parsing/network-filter';
  * =======
  *
  *  | opt | mask
- *    8     32
+ *     8     32
  *
  * For an empty filter having no pattern, hostname, the minimum size is: 42 bits.
  *
@@ -83,12 +83,22 @@ function serializeNetworkFilter(filter: NetworkFilter, buffer: DynamicDataView):
     return;
   }
 
-  buffer.pushStr(filter.optDomains);
+  buffer.pushUint16(filter.getNumberOfOptDomains());
+  if (filter.optDomains !== undefined) {
+    for (let i = 0; i < filter.optDomains.length; i += 1) {
+      buffer.pushUint32(filter.optDomains[i]);
+    }
+  }
   if (numberOfOptionalParts === 3) {
     return;
   }
 
-  buffer.pushStr(filter.optNotDomains);
+  buffer.pushUint16(filter.getNumberOfOptNotDomains());
+  if (filter.optNotDomains !== undefined) {
+    for (let i = 0; i < filter.optNotDomains.length; i += 1) {
+      buffer.pushUint32(filter.optNotDomains[i]);
+    }
+  }
   if (numberOfOptionalParts === 4) {
     return;
   }
@@ -106,8 +116,8 @@ function deserializeNetworkFilter(buffer: DynamicDataView): NetworkFilter {
 
   let hostname: string | undefined;
   let filter: string | undefined;
-  let optDomains: string | undefined;
-  let optNotDomains: string | undefined;
+  let optDomains: number[] | undefined;
+  let optNotDomains: number[] | undefined;
   let redirect: string | undefined;
 
   if (numberOfOptionalParts > 0) {
@@ -117,10 +127,22 @@ function deserializeNetworkFilter(buffer: DynamicDataView): NetworkFilter {
     filter = buffer.getStr() || undefined;
   }
   if (numberOfOptionalParts > 2) {
-    optDomains = buffer.getStr() || undefined;
+    const numberOfOptDomains = buffer.getUint16();
+    if (numberOfOptDomains > 0) {
+      optDomains = [];
+      for (let i = 0; i < numberOfOptDomains; i += 1) {
+        optDomains.push(buffer.getUint32());
+      }
+    }
   }
   if (numberOfOptionalParts > 3) {
-    optNotDomains = buffer.getStr() || undefined;
+    const numberOfOptNotDomains = buffer.getUint16();
+    if (numberOfOptNotDomains > 0) {
+      optNotDomains = [];
+      for (let i = 0; i < numberOfOptNotDomains; i += 1) {
+        optNotDomains.push(buffer.getUint32());
+      }
+    }
   }
   if (numberOfOptionalParts > 4) {
     redirect = buffer.getStr() || undefined;
@@ -340,13 +362,6 @@ function serializeResources(engine: Engine, buffer: DynamicDataView): void {
   // Serialize `resourceChecksum`
   buffer.pushStr(engine.resourceChecksum);
 
-  // Serialize `js`
-  buffer.pushUint8(engine.js.size);
-  engine.js.forEach((resource, name) => {
-    buffer.pushStr(name);
-    buffer.pushStr(resource);
-  });
-
   // Serialize `resources`
   buffer.pushUint8(engine.resources.size);
   engine.resources.forEach(({ contentType, data }, name) => {
@@ -367,15 +382,6 @@ function deserializeResources(
   const resources = new Map();
   const resourceChecksum = buffer.getStr();
 
-  // Deserialize `js`
-  const jsSize = buffer.getUint8();
-  for (let i = 0; i < jsSize; i += 1) {
-    js.set(
-      buffer.getStr(), // name
-      buffer.getStr(), // resource
-    );
-  }
-
   // Deserialize `resources`
   const resourcesSize = buffer.getUint8();
   for (let i = 0; i < resourcesSize; i += 1) {
@@ -384,6 +390,13 @@ function deserializeResources(
       data: buffer.getStr(),
     });
   }
+
+  // Deserialize `js`
+  resources.forEach(({ contentType, data }, name) => {
+    if (contentType === 'application/javascript') {
+      js.set(name, data);
+    }
+  });
 
   return {
     js,

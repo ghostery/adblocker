@@ -17,7 +17,6 @@ function network(filter: string, expected: any) {
 
       // Filter type
       isException: parsed.isException(),
-      isHostname: parsed.isHostname(),
       isHostnameAnchor: parsed.isHostnameAnchor(),
       isLeftAnchor: parsed.isLeftAnchor(),
       isPlain: parsed.isPlain(),
@@ -62,7 +61,6 @@ const DEFAULT_NETWORK_FILTER = {
 
   // Filter type
   isException: false,
-  isHostname: false,
   isHostnameAnchor: false,
   isLeftAnchor: false,
   isPlain: false,
@@ -239,7 +237,7 @@ describe('Network filters', () => {
 
     network('*bar^', {
       ...base,
-      filter: '*bar^',
+      filter: 'bar^',
       hostname: '',
     });
     network('foo.com/*bar^', {
@@ -415,7 +413,7 @@ describe('Network filters', () => {
       it('parses domain', () => {
         network('||foo.com$domain=bar.com', {
           hasOptDomains: true,
-          optDomains: new Set(['bar.com']),
+          optDomains: new Set([fastHash('bar.com')]),
 
           hasOptNotDomains: false,
           optNotDomains: new Set(),
@@ -423,7 +421,7 @@ describe('Network filters', () => {
 
         network('||foo.com$domain=bar.com|baz.com', {
           hasOptDomains: true,
-          optDomains: new Set(['bar.com', 'baz.com']),
+          optDomains: new Set([fastHash('bar.com'), fastHash('baz.com')]),
 
           hasOptNotDomains: false,
           optNotDomains: new Set(),
@@ -436,7 +434,7 @@ describe('Network filters', () => {
           optDomains: new Set(),
 
           hasOptNotDomains: true,
-          optNotDomains: new Set(['bar.com']),
+          optNotDomains: new Set([fastHash('bar.com')]),
         });
 
         network('||foo.com$domain=~bar.com|~baz.com', {
@@ -444,33 +442,33 @@ describe('Network filters', () => {
           optDomains: new Set(),
 
           hasOptNotDomains: true,
-          optNotDomains: new Set(['bar.com', 'baz.com']),
+          optNotDomains: new Set([fastHash('bar.com'), fastHash('baz.com')]),
         });
       });
 
       it('parses domain and ~domain', () => {
         network('||foo.com$domain=~bar.com|baz.com', {
           hasOptDomains: true,
-          optDomains: new Set(['baz.com']),
+          optDomains: new Set([fastHash('baz.com')]),
 
           hasOptNotDomains: true,
-          optNotDomains: new Set(['bar.com']),
+          optNotDomains: new Set([fastHash('bar.com')]),
         });
 
         network('||foo.com$domain=bar.com|~baz.com', {
           hasOptDomains: true,
-          optDomains: new Set(['bar.com']),
+          optDomains: new Set([fastHash('bar.com')]),
 
           hasOptNotDomains: true,
-          optNotDomains: new Set(['baz.com']),
+          optNotDomains: new Set([fastHash('baz.com')]),
         });
 
         network('||foo.com$domain=foo|~bar|baz', {
           hasOptDomains: true,
-          optDomains: new Set(['foo', 'baz']),
+          optDomains: new Set([fastHash('foo'), fastHash('baz')]),
 
           hasOptNotDomains: true,
-          optNotDomains: new Set(['bar']),
+          optNotDomains: new Set([fastHash('bar')]),
         });
       });
 

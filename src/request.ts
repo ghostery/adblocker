@@ -147,9 +147,11 @@ export default class Request {
 
   public getTokens(): number[] {
     if (this.tokens === undefined) {
-      // this.tokens = compactTokens(new Uint32Array(tokenize(this.url)));
-      // this.tokens = new Uint32Array(tokenize(this.url));
-      this.tokens = tokenize(this.url);
+      this.tokens = [
+        fastHash(this.sourceDomain),
+        fastHash(this.sourceHostname),
+        ...tokenize(this.url),
+      ];
     }
     return this.tokens;
   }

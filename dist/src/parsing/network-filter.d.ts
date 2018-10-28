@@ -6,21 +6,21 @@ export declare class NetworkFilter implements IFilter {
     cumulTime: number;
     mask: number;
     filter?: string;
-    optDomains?: string;
-    optNotDomains?: string;
+    optDomains?: number[];
+    optNotDomains?: number[];
     redirect?: string;
     hostname?: string;
     rawLine?: string;
+    optDomainsSet?: Set<number>;
+    optNotDomainsSet?: Set<number>;
     private id?;
     private fuzzySignature?;
-    private optDomainsSet?;
-    private optNotDomainsSet?;
     private regex?;
     constructor({ mask, filter, hostname, optDomains, optNotDomains, redirect, rawLine, }: {
         mask: number;
         filter?: string;
-        optDomains?: string;
-        optNotDomains?: string;
+        optDomains?: number[];
+        optNotDomains?: number[];
         redirect?: string;
         hostname?: string;
         rawLine?: string;
@@ -31,7 +31,9 @@ export declare class NetworkFilter implements IFilter {
     getId(): number;
     hasFilter(): boolean;
     hasOptNotDomains(): boolean;
+    getNumberOfOptNotDomains(): number;
     getOptNotDomains(): Set<number>;
+    getNumberOfOptDomains(): number;
     hasOptDomains(): boolean;
     getOptDomains(): Set<number>;
     getMask(): number;
@@ -55,7 +57,6 @@ export declare class NetworkFilter implements IFilter {
     isImportant(): boolean;
     isRegex(): boolean;
     isPlain(): boolean;
-    isHostname(): boolean;
     fromAny(): boolean;
     thirdParty(): boolean;
     firstParty(): boolean;

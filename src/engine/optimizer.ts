@@ -78,32 +78,32 @@ const OPTIMIZATIONS: IOptimization[] = [
         filter.rawLine = filters.map(({ rawLine }) => rawLine).join(' <+> ');
       }
 
-      const domains = new Set();
-      const notDomains = new Set();
+      const domains = [];
+      const notDomains = [];
 
       for (let i = 0; i < filters.length; i += 1) {
         const f = filters[i];
-        f.getOptDomains().forEach((d) => {
-          domains.add(d);
-        });
-        f.getOptNotDomains().forEach((d) => {
-          notDomains.add(d);
-        });
+        if (f.optDomains !== undefined) {
+          domains.push(...f.optDomains);
+        }
+        if (f.optNotDomains !== undefined) {
+          notDomains.push(...f.optNotDomains);
+        }
       }
 
-      if (domains.size > 0) {
-        filter.optDomains = [...domains].join('|');
+      if (domains.length > 0) {
+        filter.optDomains = domains;
       }
 
-      if (notDomains.size > 0) {
-        filter.optNotDomains = [...notDomains].join('|');
+      if (notDomains.length > 0) {
+        filter.optNotDomains = notDomains;
       }
 
       return filter;
     },
     groupByCriteria: (filter: NetworkFilter) =>
       filter.getHostname() + filter.getFilter() + filter.getMask() + filter.getRedirect(),
-    select: (filter: NetworkFilter) => !filter.isFuzzy() && !filter.isHostname(),
+    select: (filter: NetworkFilter) => !filter.isFuzzy(),
     // !filter.isLeftAnchor() &&
     // !filter.isRightAnchor(),
   },
@@ -122,22 +122,22 @@ const OPTIMIZATIONS: IOptimization[] = [
         filter.rawLine = filters.map(({ rawLine }) => rawLine).join(' <+> ');
       }
 
-      const patterns = new Set();
+      const patterns = [];
       for (let i = 0; i < filters.length; i += 1) {
         const f = filters[i];
         if (f.isRegex()) {
-          patterns.add(processRegex(f.getRegex()));
+          patterns.push(processRegex(f.getRegex()));
         } else if (f.isRightAnchor()) {
-          patterns.add(`${escape(f.getFilter())}$`);
+          patterns.push(`${escape(f.getFilter())}$`);
         } else if (f.isLeftAnchor()) {
-          patterns.add(`^${escape(f.getFilter())}`);
+          patterns.push(`^${escape(f.getFilter())}`);
         } else {
-          patterns.add(escape(f.getFilter()));
+          patterns.push(escape(f.getFilter()));
         }
       }
 
-      if (patterns.size > 1) {
-        filter.setRegex(new RegExp([...patterns].join('|')));
+      if (patterns.length > 0) {
+        filter.setRegex(new RegExp(patterns.join('|')));
       }
 
       return filter;
@@ -147,7 +147,6 @@ const OPTIMIZATIONS: IOptimization[] = [
       !filter.isFuzzy() &&
       !filter.hasOptDomains() &&
       !filter.hasOptNotDomains() &&
-      !filter.isHostname() &&
       !filter.isHostnameAnchor() &&
       !filter.isRedirect(),
   },

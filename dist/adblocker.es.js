@@ -268,7 +268,7 @@ function clearBit(n, mask) {
 function fastHashBetween(str, begin, end) {
     var hash = 5381;
     for (var i = begin; i < end; i += 1) {
-        hash = (hash << 5) + hash + str.charCodeAt(i);
+        hash = (hash * 33) ^ str.charCodeAt(i);
     }
     return hash >>> 0;
 }
@@ -277,22 +277,6 @@ function fastHash(str) {
         return 0;
     }
     return fastHashBetween(str, 0, str.length);
-}
-function computeFilterId(mask) {
-    var parts = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        parts[_i - 1] = arguments[_i];
-    }
-    var hash = (5408 * 33) ^ mask;
-    for (var i = 0; i < parts.length; i += 1) {
-        var str = parts[i];
-        if (str !== undefined) {
-            for (var j = 0; j < str.length; j += 1) {
-                hash = (hash * 33) ^ str.charCodeAt(j);
-            }
-        }
-    }
-    return hash >>> 0;
 }
 function fastStartsWith(haystack, needle) {
     if (haystack.length < needle.length) {
@@ -376,6 +360,20 @@ function createFuzzySignature(pattern) {
     return compactTokens(new Uint32Array(tokenize(pattern)));
 }
 
+function computeFilterId(mask, selector, hostnames) {
+    var hash = (5408 * 33) ^ mask;
+    if (selector !== undefined) {
+        for (var j = 0; j < selector.length; j += 1) {
+            hash = (hash * 33) ^ selector.charCodeAt(j);
+        }
+    }
+    if (hostnames !== undefined) {
+        for (var j = 0; j < hostnames.length; j += 1) {
+            hash = (hash * 33) ^ hostnames.charCodeAt(j);
+        }
+    }
+    return hash >>> 0;
+}
 var CosmeticFilter = (function () {
     function CosmeticFilter(_a) {
         var mask = _a.mask, selector = _a.selector, hostnames = _a.hostnames;
@@ -574,6 +572,30 @@ var CPT_TO_MASK = (_a = {},
     _a[7] = 2,
     _a[15] = 512,
     _a);
+function computeFilterId$1(mask, filter, hostname, optDomains, optNotDomains) {
+    var hash = (5408 * 33) ^ mask;
+    if (optDomains !== undefined) {
+        for (var i = 0; i < optDomains.length; i += 1) {
+            hash = (hash * 33) ^ optDomains[i];
+        }
+    }
+    if (optNotDomains !== undefined) {
+        for (var i = 0; i < optNotDomains.length; i += 1) {
+            hash = (hash * 33) ^ optNotDomains[i];
+        }
+    }
+    if (filter !== undefined) {
+        for (var j = 0; j < filter.length; j += 1) {
+            hash = (hash * 33) ^ filter.charCodeAt(j);
+        }
+    }
+    if (hostname !== undefined) {
+        for (var j = 0; j < hostname.length; j += 1) {
+            hash = (hash * 33) ^ hostname.charCodeAt(j);
+        }
+    }
+    return hash >>> 0;
+}
 var SEPARATOR = /[/^*]/;
 function compileRegex(filterStr, isRightAnchor, isLeftAnchor) {
     var filter = filterStr;
@@ -588,9 +610,6 @@ function compileRegex(filterStr, isRightAnchor, isLeftAnchor) {
     }
     return new RegExp(filter);
 }
-function parseDomainsOption(domains) {
-    return new Set(domains ? domains.split('|').map(fastHash) : []);
-}
 var EMPTY_SET = new Set();
 var MATCH_ALL = new RegExp('');
 var NetworkFilter = (function () {
@@ -598,11 +617,11 @@ var NetworkFilter = (function () {
         var mask = _a.mask, filter = _a.filter, hostname = _a.hostname, optDomains = _a.optDomains, optNotDomains = _a.optNotDomains, redirect = _a.redirect, rawLine = _a.rawLine;
         this.mask = mask;
         this.filter = filter;
-        this.optDomains = optDomains;
-        this.optNotDomains = optNotDomains;
         this.redirect = redirect;
         this.hostname = hostname;
         this.rawLine = rawLine;
+        this.optDomains = optDomains;
+        this.optNotDomains = optNotDomains;
         this.hit = 0;
         this.match = 0;
         this.cumulTime = 0;
@@ -703,7 +722,7 @@ var NetworkFilter = (function () {
     };
     NetworkFilter.prototype.getId = function () {
         if (this.id === undefined) {
-            this.id = computeFilterId(this.mask, this.filter, this.hostname, this.optDomains, this.optNotDomains);
+            this.id = computeFilterId$1(this.mask, this.filter, this.hostname, this.optDomains, this.optNotDomains);
         }
         return this.id;
     };
@@ -711,28 +730,38 @@ var NetworkFilter = (function () {
         return this.filter !== undefined;
     };
     NetworkFilter.prototype.hasOptNotDomains = function () {
-        return this.optNotDomains !== undefined || this.optNotDomainsSet !== undefined;
+        return this.optNotDomains !== undefined;
+    };
+    NetworkFilter.prototype.getNumberOfOptNotDomains = function () {
+        if (this.optNotDomains !== undefined) {
+            return this.optNotDomains.length;
+        }
+        return 0;
     };
     NetworkFilter.prototype.getOptNotDomains = function () {
         if (this.optNotDomainsSet === undefined) {
             if (this.optNotDomains === undefined) {
                 return EMPTY_SET;
             }
-            this.optNotDomainsSet = parseDomainsOption(this.optNotDomains);
-            this.optNotDomains = undefined;
+            this.optNotDomainsSet = new Set(this.optNotDomains);
         }
         return this.optNotDomainsSet;
     };
+    NetworkFilter.prototype.getNumberOfOptDomains = function () {
+        if (this.optDomains !== undefined) {
+            return this.optDomains.length;
+        }
+        return 0;
+    };
     NetworkFilter.prototype.hasOptDomains = function () {
-        return this.optDomains !== undefined || this.optDomainsSet !== undefined;
+        return this.optDomains !== undefined;
     };
     NetworkFilter.prototype.getOptDomains = function () {
         if (this.optDomainsSet === undefined) {
             if (this.optDomains === undefined) {
                 return EMPTY_SET;
             }
-            this.optDomainsSet = parseDomainsOption(this.optDomains);
-            this.optDomains = undefined;
+            this.optDomainsSet = new Set(this.optDomains);
         }
         return this.optDomainsSet;
     };
@@ -759,8 +788,8 @@ var NetworkFilter = (function () {
     };
     NetworkFilter.prototype.setRegex = function (re) {
         this.regex = re;
-        this.mask = setBit(this.mask, 2097152);
-        this.mask = clearBit(this.mask, 1048576);
+        this.mask = setBit(this.mask, 1048576);
+        this.mask = clearBit(this.mask, 524288);
     };
     NetworkFilter.prototype.getRegex = function () {
         if (this.regex === undefined) {
@@ -791,6 +820,11 @@ var NetworkFilter = (function () {
         else if (this.fromHttps() && !this.fromHttp()) {
             tokens.push(fastHash('https'));
         }
+        if (this.optDomains !== undefined &&
+            this.optNotDomains === undefined &&
+            this.optDomains.length === 1) {
+            tokens.push(this.optDomains[0]);
+        }
         return [tokens];
     };
     NetworkFilter.prototype.isCptAllowed = function (cpt) {
@@ -804,16 +838,16 @@ var NetworkFilter = (function () {
         return getBit(this.mask, 65536);
     };
     NetworkFilter.prototype.isException = function () {
-        return getBit(this.mask, 33554432);
-    };
-    NetworkFilter.prototype.isHostnameAnchor = function () {
         return getBit(this.mask, 16777216);
     };
-    NetworkFilter.prototype.isRightAnchor = function () {
+    NetworkFilter.prototype.isHostnameAnchor = function () {
         return getBit(this.mask, 8388608);
     };
-    NetworkFilter.prototype.isLeftAnchor = function () {
+    NetworkFilter.prototype.isRightAnchor = function () {
         return getBit(this.mask, 4194304);
+    };
+    NetworkFilter.prototype.isLeftAnchor = function () {
+        return getBit(this.mask, 2097152);
     };
     NetworkFilter.prototype.matchCase = function () {
         return getBit(this.mask, 32768);
@@ -822,13 +856,10 @@ var NetworkFilter = (function () {
         return getBit(this.mask, 16384);
     };
     NetworkFilter.prototype.isRegex = function () {
-        return getBit(this.mask, 2097152);
+        return getBit(this.mask, 1048576);
     };
     NetworkFilter.prototype.isPlain = function () {
-        return !getBit(this.mask, 2097152);
-    };
-    NetworkFilter.prototype.isHostname = function () {
-        return getBit(this.mask, 524288);
+        return !getBit(this.mask, 1048576);
     };
     NetworkFilter.prototype.fromAny = function () {
         return this.getCptMask() === FROM_ANY;
@@ -910,7 +941,7 @@ function parseNetworkFilter(rawLine) {
     var filterIndexEnd = line.length;
     if (fastStartsWith(line, '@@')) {
         filterIndexStart += 2;
-        mask = setBit(mask, 33554432);
+        mask = setBit(mask, 16777216);
     }
     var optionsIndex = line.indexOf('$', filterIndexStart);
     if (optionsIndex !== -1) {
@@ -942,18 +973,18 @@ function parseNetworkFilter(rawLine) {
                         var value = optionValues[j];
                         if (value) {
                             if (fastStartsWith(value, '~')) {
-                                optNotDomainsArray.push(value.slice(1));
+                                optNotDomainsArray.push(fastHash(value.slice(1)));
                             }
                             else {
-                                optDomainsArray.push(value);
+                                optDomainsArray.push(fastHash(value));
                             }
                         }
                     }
                     if (optDomainsArray.length > 0) {
-                        optDomains = optDomainsArray.join('|');
+                        optDomains = optDomainsArray;
                     }
                     if (optNotDomainsArray.length > 0) {
-                        optNotDomains = optNotDomainsArray.join('|');
+                        optNotDomains = optNotDomainsArray;
                     }
                     break;
                 }
@@ -1065,30 +1096,30 @@ function parseNetworkFilter(rawLine) {
         mask |= cptMaskPositive & cptMaskNegative;
     }
     if (line[filterIndexEnd - 1] === '|') {
-        mask = setBit(mask, 8388608);
+        mask = setBit(mask, 4194304);
         filterIndexEnd -= 1;
     }
     if (fastStartsWithFrom(line, '||', filterIndexStart)) {
-        mask = setBit(mask, 16777216);
+        mask = setBit(mask, 8388608);
         filterIndexStart += 2;
     }
     else if (line[filterIndexStart] === '|') {
-        mask = setBit(mask, 4194304);
+        mask = setBit(mask, 2097152);
         filterIndexStart += 1;
     }
     var isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
-    mask = setNetworkMask(mask, 2097152, isRegex);
-    if (getBit(mask, 16777216)) {
+    mask = setNetworkMask(mask, 1048576, isRegex);
+    if (getBit(mask, 8388608)) {
         if (isRegex) {
             var firstSeparator = line.search(SEPARATOR);
             if (firstSeparator !== -1) {
                 hostname = line.slice(filterIndexStart, firstSeparator);
                 filterIndexStart = firstSeparator;
                 if (filterIndexEnd - filterIndexStart === 1 && line[filterIndexStart] === '^') {
-                    mask = clearBit(mask, 2097152);
+                    mask = clearBit(mask, 1048576);
                 }
                 else {
-                    mask = setNetworkMask(mask, 2097152, checkIsRegex(line, filterIndexStart, filterIndexEnd));
+                    mask = setNetworkMask(mask, 1048576, checkIsRegex(line, filterIndexStart, filterIndexEnd));
                 }
             }
         }
@@ -1107,42 +1138,47 @@ function parseNetworkFilter(rawLine) {
     if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexEnd - 1] === '*') {
         filterIndexEnd -= 1;
     }
-    if (getBit(mask, 4194304)) {
+    if (getBit(mask, 8388608) === false &&
+        filterIndexEnd - filterIndexStart > 0 &&
+        line[filterIndexStart] === '*') {
+        filterIndexStart += 1;
+    }
+    if (getBit(mask, 2097152)) {
         if (filterIndexEnd - filterIndexStart === 5 &&
             fastStartsWithFrom(line, 'ws://', filterIndexStart)) {
             mask = setBit(mask, 512);
-            mask = clearBit(mask, 4194304);
+            mask = clearBit(mask, 2097152);
             filterIndexStart = filterIndexEnd;
         }
         else if (filterIndexEnd - filterIndexStart === 7 &&
             fastStartsWithFrom(line, 'http://', filterIndexStart)) {
             mask = setBit(mask, 4096);
             mask = clearBit(mask, 8192);
-            mask = clearBit(mask, 4194304);
+            mask = clearBit(mask, 2097152);
             filterIndexStart = filterIndexEnd;
         }
         else if (filterIndexEnd - filterIndexStart === 8 &&
             fastStartsWithFrom(line, 'https://', filterIndexStart)) {
             mask = setBit(mask, 8192);
             mask = clearBit(mask, 4096);
-            mask = clearBit(mask, 4194304);
+            mask = clearBit(mask, 2097152);
             filterIndexStart = filterIndexEnd;
         }
         else if (filterIndexEnd - filterIndexStart === 8 &&
             fastStartsWithFrom(line, 'http*://', filterIndexStart)) {
             mask = setBit(mask, 8192);
             mask = setBit(mask, 4096);
-            mask = clearBit(mask, 4194304);
+            mask = clearBit(mask, 2097152);
             filterIndexStart = filterIndexEnd;
         }
     }
     var filter;
     if (filterIndexEnd - filterIndexStart > 0) {
         filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
-        mask = setNetworkMask(mask, 2097152, checkIsRegex(filter, 0, filter.length));
+        mask = setNetworkMask(mask, 1048576, checkIsRegex(filter, 0, filter.length));
     }
     if (hostname !== undefined) {
-        if (getBit(mask, 16777216) && fastStartsWith(hostname, 'www.')) {
+        if (getBit(mask, 8388608) && fastStartsWith(hostname, 'www.')) {
             hostname = hostname.slice(4);
         }
         hostname = hostname.toLowerCase();
@@ -1236,11 +1272,14 @@ function parseJSResource(data) {
     var resources = new Map();
     var trimComments = function (str) { return str.replace(/^#.*$/gm, ''); };
     var chunks = data.split('\n\n');
-    for (var i = 0; i < chunks.length; i += 1) {
+    for (var i = 1; i < chunks.length; i += 1) {
         var resource = trimComments(chunks[i]).trim();
         var firstNewLine = resource.indexOf('\n');
         var _a = __read(resource.slice(0, firstNewLine).split(' '), 2), name_1 = _a[0], type = _a[1];
         var body = resource.slice(firstNewLine + 1);
+        if (name_1 === undefined || type === undefined || body === undefined) {
+            continue;
+        }
         if (!resources.has(type)) {
             resources.set(type, new Map());
         }
@@ -1916,7 +1955,10 @@ var Request = (function () {
     }
     Request.prototype.getTokens = function () {
         if (this.tokens === undefined) {
-            this.tokens = tokenize(this.url);
+            this.tokens = __spread([
+                fastHash(this.sourceDomain),
+                fastHash(this.sourceHostname)
+            ], tokenize(this.url));
         }
         return this.tokens;
     };
@@ -2107,11 +2149,21 @@ function serializeNetworkFilter(filter, buffer) {
     if (numberOfOptionalParts === 2) {
         return;
     }
-    buffer.pushStr(filter.optDomains);
+    buffer.pushUint16(filter.getNumberOfOptDomains());
+    if (filter.optDomains !== undefined) {
+        for (var i = 0; i < filter.optDomains.length; i += 1) {
+            buffer.pushUint32(filter.optDomains[i]);
+        }
+    }
     if (numberOfOptionalParts === 3) {
         return;
     }
-    buffer.pushStr(filter.optNotDomains);
+    buffer.pushUint16(filter.getNumberOfOptNotDomains());
+    if (filter.optNotDomains !== undefined) {
+        for (var i = 0; i < filter.optNotDomains.length; i += 1) {
+            buffer.pushUint32(filter.optNotDomains[i]);
+        }
+    }
     if (numberOfOptionalParts === 4) {
         return;
     }
@@ -2132,10 +2184,22 @@ function deserializeNetworkFilter(buffer) {
         filter = buffer.getStr() || undefined;
     }
     if (numberOfOptionalParts > 2) {
-        optDomains = buffer.getStr() || undefined;
+        var numberOfOptDomains = buffer.getUint16();
+        if (numberOfOptDomains > 0) {
+            optDomains = [];
+            for (var i = 0; i < numberOfOptDomains; i += 1) {
+                optDomains.push(buffer.getUint32());
+            }
+        }
     }
     if (numberOfOptionalParts > 3) {
-        optNotDomains = buffer.getStr() || undefined;
+        var numberOfOptNotDomains = buffer.getUint16();
+        if (numberOfOptNotDomains > 0) {
+            optNotDomains = [];
+            for (var i = 0; i < numberOfOptNotDomains; i += 1) {
+                optNotDomains.push(buffer.getUint32());
+            }
+        }
     }
     if (numberOfOptionalParts > 4) {
         redirect = buffer.getStr() || undefined;
@@ -2280,11 +2344,6 @@ function deserializeReverseIndex(buffer, index, filters) {
 }
 function serializeResources(engine, buffer) {
     buffer.pushStr(engine.resourceChecksum);
-    buffer.pushUint8(engine.js.size);
-    engine.js.forEach(function (resource, name) {
-        buffer.pushStr(name);
-        buffer.pushStr(resource);
-    });
     buffer.pushUint8(engine.resources.size);
     engine.resources.forEach(function (_a, name) {
         var contentType = _a.contentType, data = _a.data;
@@ -2297,10 +2356,6 @@ function deserializeResources(buffer) {
     var js = new Map();
     var resources = new Map();
     var resourceChecksum = buffer.getStr();
-    var jsSize = buffer.getUint8();
-    for (var i = 0; i < jsSize; i += 1) {
-        js.set(buffer.getStr(), buffer.getStr());
-    }
     var resourcesSize = buffer.getUint8();
     for (var i = 0; i < resourcesSize; i += 1) {
         resources.set(buffer.getStr(), {
@@ -2308,6 +2363,12 @@ function deserializeResources(buffer) {
             data: buffer.getStr()
         });
     }
+    resources.forEach(function (_a, name) {
+        var contentType = _a.contentType, data = _a.data;
+        if (contentType === 'application/javascript') {
+            js.set(name, data);
+        }
+    });
     return {
         js: js,
         resourceChecksum: resourceChecksum,
@@ -2364,7 +2425,7 @@ function deserializeEngine(serialized, version) {
 function checkHostnamesPartialMatch(hostname, hostnamePattern) {
     var pattern = hostnamePattern;
     if (fastStartsWith(hostnamePattern, '~')) {
-        pattern = pattern.substr(1);
+        pattern = pattern.slice(1);
     }
     if (hostname.endsWith(pattern)) {
         var patternIndex = hostname.length - pattern.length;
@@ -2895,29 +2956,29 @@ var OPTIMIZATIONS = [
                     return rawLine;
                 }).join(' <+> ');
             }
-            var domains = new Set();
-            var notDomains = new Set();
+            var domains = [];
+            var notDomains = [];
             for (var i = 0; i < filters.length; i += 1) {
                 var f = filters[i];
-                f.getOptDomains().forEach(function (d) {
-                    domains.add(d);
-                });
-                f.getOptNotDomains().forEach(function (d) {
-                    notDomains.add(d);
-                });
+                if (f.optDomains !== undefined) {
+                    domains.push.apply(domains, __spread(f.optDomains));
+                }
+                if (f.optNotDomains !== undefined) {
+                    notDomains.push.apply(notDomains, __spread(f.optNotDomains));
+                }
             }
-            if (domains.size > 0) {
-                filter.optDomains = __spread(domains).join('|');
+            if (domains.length > 0) {
+                filter.optDomains = domains;
             }
-            if (notDomains.size > 0) {
-                filter.optNotDomains = __spread(notDomains).join('|');
+            if (notDomains.length > 0) {
+                filter.optNotDomains = notDomains;
             }
             return filter;
         },
         groupByCriteria: function (filter) {
             return filter.getHostname() + filter.getFilter() + filter.getMask() + filter.getRedirect();
         },
-        select: function (filter) { return !filter.isFuzzy() && !filter.isHostname(); }
+        select: function (filter) { return !filter.isFuzzy(); }
     },
     {
         description: 'Group simple patterns, into a single filter',
@@ -2929,24 +2990,24 @@ var OPTIMIZATIONS = [
                     return rawLine;
                 }).join(' <+> ');
             }
-            var patterns = new Set();
+            var patterns = [];
             for (var i = 0; i < filters.length; i += 1) {
                 var f = filters[i];
                 if (f.isRegex()) {
-                    patterns.add(processRegex(f.getRegex()));
+                    patterns.push(processRegex(f.getRegex()));
                 }
                 else if (f.isRightAnchor()) {
-                    patterns.add(escape$1(f.getFilter()) + "$");
+                    patterns.push(escape$1(f.getFilter()) + "$");
                 }
                 else if (f.isLeftAnchor()) {
-                    patterns.add("^" + escape$1(f.getFilter()));
+                    patterns.push("^" + escape$1(f.getFilter()));
                 }
                 else {
-                    patterns.add(escape$1(f.getFilter()));
+                    patterns.push(escape$1(f.getFilter()));
                 }
             }
-            if (patterns.size > 1) {
-                filter.setRegex(new RegExp(__spread(patterns).join('|')));
+            if (patterns.length > 0) {
+                filter.setRegex(new RegExp(patterns.join('|')));
             }
             return filter;
         },
@@ -2955,7 +3016,6 @@ var OPTIMIZATIONS = [
             return !filter.isFuzzy() &&
                 !filter.hasOptDomains() &&
                 !filter.hasOptNotDomains() &&
-                !filter.isHostname() &&
                 !filter.isHostnameAnchor() &&
                 !filter.isRedirect();
         }

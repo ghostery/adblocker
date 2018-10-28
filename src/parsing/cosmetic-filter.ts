@@ -1,4 +1,4 @@
-import { computeFilterId, fastStartsWithFrom, getBit, setBit, tokenizeCSS } from '../utils';
+import { fastStartsWithFrom, getBit, setBit, tokenizeCSS } from '../utils';
 import IFilter from './interface';
 
 /**
@@ -8,6 +8,28 @@ const enum COSMETICS_MASK {
   unhide = 1 << 0,
   scriptInject = 1 << 1,
   scriptBlock = 1 << 2,
+}
+
+function computeFilterId(
+  mask: number,
+  selector: string | undefined,
+  hostnames: string | undefined,
+): number {
+  let hash = (5408 * 33) ^ mask;
+
+  if (selector !== undefined) {
+    for (let j = 0; j < selector.length; j += 1) {
+      hash = (hash * 33) ^ selector.charCodeAt(j);
+    }
+  }
+
+  if (hostnames !== undefined) {
+    for (let j = 0; j < hostnames.length; j += 1) {
+      hash = (hash * 33) ^ hostnames.charCodeAt(j);
+    }
+  }
+
+  return hash >>> 0;
 }
 
 /***************************************************************************
