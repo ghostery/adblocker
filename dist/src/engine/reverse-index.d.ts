@@ -5,6 +5,7 @@ export interface IBucket<T extends IFilter> {
     hit: number;
     match: number;
     optimized: boolean;
+    originals: T[];
     tokensHit: any;
 }
 interface IOptions<T> {

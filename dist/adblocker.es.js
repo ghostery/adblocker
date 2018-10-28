@@ -2317,6 +2317,7 @@ function deserializeBucket(buffer, filters) {
             hit: 0,
             match: 0,
             optimized: false,
+            originals: [],
             tokensHit: Object.create(null)
         },
         token: token
@@ -2327,7 +2328,7 @@ function serializeReverseIndex(reverseIndex, buffer) {
     buffer.pushUint32(reverseIndex.size);
     buffer.pushUint32(index.size);
     index.forEach(function (bucket, token) {
-        serializeBucket(token, bucket.filters, buffer);
+        serializeBucket(token, bucket.optimized ? bucket.originals : bucket.filters, buffer);
     });
 }
 function deserializeReverseIndex(buffer, index, filters) {
@@ -2546,6 +2547,7 @@ var ReverseIndex = (function () {
                         hit: 0,
                         match: 0,
                         optimized: false,
+                        originals: [],
                         tokensHit: Object.create(null)
                     });
                 }
@@ -2560,6 +2562,7 @@ var ReverseIndex = (function () {
         if (force === void 0) { force = false; }
         if (this.optimizer && !bucket.optimized && (force || bucket.hit >= 5)) {
             if (bucket.filters.length > 1) {
+                bucket.originals = bucket.filters;
                 bucket.filters = this.optimizer(bucket.filters);
             }
             bucket.optimized = true;
@@ -3115,6 +3118,9 @@ var FilterEngine = (function () {
         this.js = new Map();
         this.resources = new Map();
     }
+    FilterEngine.prototype.serialize = function () {
+        return serializeEngine(this);
+    };
     FilterEngine.prototype.hasList = function (asset, checksum) {
         var list = this.lists.get(asset);
         if (list !== undefined) {
@@ -3142,21 +3148,15 @@ var FilterEngine = (function () {
             });
         }
     };
-    FilterEngine.prototype.onUpdateFilters = function (lists, loadedAssets, onDiskCache, debug) {
+    FilterEngine.prototype.onUpdateFilters = function (lists, loadedAssets, debug) {
         var _this = this;
         if (loadedAssets === void 0) { loadedAssets = new Set(); }
-        if (onDiskCache === void 0) { onDiskCache = false; }
         if (debug === void 0) { debug = false; }
-        var updated = false;
         this.lists.forEach(function (_, asset) {
             if (!loadedAssets.has(asset)) {
                 _this.lists["delete"](asset);
-                updated = true;
             }
         });
-        if (lists.length > 0) {
-            updated = true;
-        }
         for (var i = 0; i < lists.length; i += 1) {
             var _a = lists[i], asset = _a.asset, filters = _a.filters, checksum = _a.checksum;
             var _b = parseList(filters, {
@@ -3205,14 +3205,9 @@ var FilterEngine = (function () {
                 this.redirects.size +
                 this.cosmetics.size +
                 this.filters.size;
-        var serialized = null;
-        if (updated && onDiskCache) {
-            serialized = serializeEngine(this);
-        }
         if (this.optimizeAOT) {
             this.optimize();
         }
-        return serialized;
     };
     FilterEngine.prototype.optimize = function () {
         this.filters.optimizeAheadOfTime();

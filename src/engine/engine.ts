@@ -100,6 +100,10 @@ export default class FilterEngine {
     this.resources = new Map();
   }
 
+  public serialize(): Uint8Array {
+    return serializeEngine(this);
+  }
+
   public hasList(asset: string, checksum: string): boolean {
     const list = this.lists.get(asset);
     if (list !== undefined) {
@@ -138,23 +142,14 @@ export default class FilterEngine {
   public onUpdateFilters(
     lists: Array<{ filters: string; checksum: string; asset: string }>,
     loadedAssets: Set<string> = new Set(),
-    onDiskCache: boolean = false,
     debug: boolean = false,
-  ): Uint8Array | null {
-    let updated = false;
-
+  ): void {
     // Remove assets if needed
     this.lists.forEach((_, asset) => {
       if (!loadedAssets.has(asset)) {
         this.lists.delete(asset);
-        updated = true;
       }
     });
-
-    // Mark the engine as updated, so that it will be serialized on disk
-    if (lists.length > 0) {
-      updated = true;
-    }
 
     // Parse all filters and update `this.lists`
     for (let i = 0; i < lists.length; i += 1) {
@@ -232,18 +227,10 @@ export default class FilterEngine {
       this.cosmetics.size +
       this.filters.size;
 
-    // Serialize engine
-    let serialized: Uint8Array | null = null;
-    if (updated && onDiskCache) {
-      serialized = serializeEngine(this);
-    }
-
     // Optimize ahead of time if asked for
     if (this.optimizeAOT) {
       this.optimize();
     }
-
-    return serialized;
   }
 
   public optimize() {

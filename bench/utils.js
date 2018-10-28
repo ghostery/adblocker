@@ -33,15 +33,15 @@ function createEngine(lists, resources, options = {}, serialize = false) {
   });
 
   engine.onUpdateResource([{ filters: resources, checksum: '' }]);
-  const serialized = engine.onUpdateFilters(lists.map((list, i) => ({
+  engine.onUpdateFilters(lists.map((list, i) => ({
     asset: `${i}`,
     checksum: '',
     filters: lists[i],
-  })), new Set(), serialize);
+  })), new Set());
 
   return {
     engine,
-    serialized,
+    serialized: serialize ? engine.serialize() : undefined,
   };
 }
 

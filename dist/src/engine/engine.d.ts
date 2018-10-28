@@ -30,6 +30,7 @@ export default class FilterEngine {
     optimizeAOT: boolean;
     enableOptimizations: boolean;
     constructor({ enableOptimizations, loadCosmeticFilters, loadNetworkFilters, optimizeAOT, version, }: IOptions);
+    serialize(): Uint8Array;
     hasList(asset: string, checksum: string): boolean;
     onUpdateResource(updates: Array<{
         filters: string;
@@ -39,7 +40,7 @@ export default class FilterEngine {
         filters: string;
         checksum: string;
         asset: string;
-    }>, loadedAssets?: Set<string>, onDiskCache?: boolean, debug?: boolean): Uint8Array | null;
+    }>, loadedAssets?: Set<string>, debug?: boolean): void;
     optimize(): void;
     getCosmeticsFilters(hostname: string, nodes: string[][]): {
         active: boolean;

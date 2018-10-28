@@ -10,6 +10,7 @@ export interface IBucket<T extends IFilter> {
   hit: number;
   match: number;
   optimized: boolean;
+  originals: T[];
   tokensHit: any;
 }
 
@@ -164,6 +165,7 @@ export default class ReverseIndex<T extends IFilter> {
             hit: 0,
             match: 0,
             optimized: false,
+            originals: [],
             tokensHit: Object.create(null),
           });
         } else {
@@ -181,6 +183,7 @@ export default class ReverseIndex<T extends IFilter> {
     // big buckets will be higher than on small buckets.
     if (this.optimizer && !bucket.optimized && (force || bucket.hit >= 5)) {
       if (bucket.filters.length > 1) {
+        bucket.originals = bucket.filters;
         bucket.filters = this.optimizer(bucket.filters);
       }
 

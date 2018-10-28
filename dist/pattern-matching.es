@@ -81,6 +81,7 @@ var ReverseIndex = (function () {
                         hit: 0,
                         match: 0,
                         optimized: false,
+                        originals: [],
                         tokensHit: Object.create(null)
                     });
                 }
@@ -95,6 +96,7 @@ var ReverseIndex = (function () {
         if (force === void 0) { force = false; }
         if (this.optimizer && !bucket.optimized && (force || bucket.hit >= 5)) {
             if (bucket.filters.length > 1) {
+                bucket.originals = bucket.filters;
                 bucket.filters = this.optimizer(bucket.filters);
             }
             bucket.optimized = true;
