@@ -7,6 +7,9 @@ const adblocker = require(path.resolve(__dirname, '../../dist/adblocker.umd.js')
 function loadLists() {
   return {
     // lists: [
+    //   fs.readFileSync('./offers_filters.txt', { encoding: 'utf-8' }),
+    // ],
+    // lists: [
     //   fs.readFileSync('./mobile_filters.txt', { encoding: 'utf-8' }),
     // ],
     lists: [
@@ -50,23 +53,22 @@ function createEngine() {
       filters,
     })),
     new Set(),
-    false,
     true,
   );
 
   return engine;
 }
 
-function main() {
+async function main() {
   const engine = createEngine();
 
-  const lines = fs
-    .readFileSync(process.argv[process.argv.length - 1], { encoding: 'utf-8' })
-    .split(/\n/g);
-  // const lines = readline.createInterface({
-  //   input: fs.createReadStream(process.argv[process.argv.length - 1]),
-  //   crlfDelay: Infinity,
-  // });
+  // const lines = fs
+  //   .readFileSync(process.argv[process.argv.length - 1], { encoding: 'utf-8' })
+  //   .split(/\n/g);
+  const lines = readline.createInterface({
+    input: fs.createReadStream(process.argv[process.argv.length - 1]),
+    crlfDelay: Infinity,
+  });
 
   // Collect network filters
   let index = 0;
@@ -90,10 +92,11 @@ function main() {
   let reqSumFilterNoMatch = 0;
 
   const slowRequests = [];
-  const requests = [];
+  // const requests = [];
 
-  // lines.on('line', (line) => {
-  for (let i = 0; i < lines.length; i += 1) {
+  lines.on('line', (line) => {
+  // for (let i = 0; i < lines.length; i += 1) {
+  //   const line = lines[i];
     if (index !== 0 && index % 10000 === 0) {
       console.log(`Processed ${index} requests`);
     }
@@ -101,18 +104,17 @@ function main() {
 
     let request = null;
     try {
-      request = JSON.parse(lines[i]);
+      request = JSON.parse(line);
     } catch (ex) {
-      continue;
+      return;
+      // continue;
     }
 
     const { cpt, sourceUrl, url } = request;
 
-    // for (let j = 0; j < 1; j += 1) {
     const start = process.hrtime();
-    // TODO - get number of filters inspected in total (attach stats to Request)
     const result = engine.match({
-      cpt: cpt.toLowerCase(),
+      cpt: 'script', // TODO : revert cpt.toLowerCase(),
       sourceUrl,
       url,
     });
@@ -133,17 +135,17 @@ function main() {
       });
     }
 
-    if (result.req.isSupported) {
-      const tokens = result.req.getTokens();
-      requests.push({
-        url: url.length,
-        tokens: tokens.length,
-        tokensDup: tokens.length - [...new Set(tokens)].length,
-        filters: result.req.filtersHit.length,
-        filtersDup: result.req.filtersHit.length - [...new Set(result.req.filtersHit)].length,
-        match: result.filter !== undefined,
-      });
-    }
+    // if (result.req.isSupported) {
+    //   const tokens = result.req.getTokens();
+    //   requests.push({
+    //     url: url.length,
+    //     tokens: tokens.length,
+    //     tokensDup: tokens.length - [...new Set(tokens)].length,
+    //     filters: result.req.filtersHit.length,
+    //     filtersDup: result.req.filtersHit.length - [...new Set(result.req.filtersHit)].length,
+    //     match: result.filter !== undefined,
+    //   });
+    // }
 
     if (result.filter !== undefined) {
       totalMatch += 1;
@@ -164,13 +166,11 @@ function main() {
       reqMinFilterNoMatch = Math.min(reqMinFilterNoMatch, result.req.filtersHit.length);
       reqSumFilterNoMatch += result.req.filtersHit.length;
     }
-    // }
-    // });
-  }
+  });
 
-  // await new Promise((resolve) => {
-  //   lines.on('close', resolve);
-  // });
+  await new Promise((resolve) => {
+    lines.on('close', resolve);
+  });
 
   console.log(`Total requests: ${totalNoMatch + totalMatch}`);
   console.log(`Total match: ${totalMatch}`);
@@ -195,13 +195,14 @@ function main() {
   // Collect stats
   const filterData = [];
   const bucketData = [];
-  ['exceptions', 'importants', 'redirects', 'filters'].forEach((type) => {
+  ['filters'].forEach((type) => {
     engine[type].index.index.forEach((bucket, token) => {
       let originalToken = null;
       bucket.filters.forEach((filter) => {
         // Collect filter data
         filterData.push({
           filter: filter.rawLine,
+          id: filter.getId(),
           hit: filter.hit,
           match: filter.match,
           cumulTime: filter.cumulTime,
@@ -220,6 +221,8 @@ function main() {
           fromAny: filter.fromAny(),
           thirdParty: filter.thirdParty(),
           firstParty: filter.firstParty(),
+          fromHttp: filter.fromHttp(),
+          fromHttps: filter.fromHttps(),
           fromImage: filter.fromImage(),
           fromMedia: filter.fromMedia(),
           fromObject: filter.fromObject(),
@@ -250,6 +253,7 @@ function main() {
         length: bucket.filters.length,
         tokensHit: bucket.tokensHit,
         filters: bucket.filters.map(f => f.rawLine).sort(),
+        filterIds: bucket.filters.map(f => f.getId()),
       });
     });
   });
@@ -264,9 +268,9 @@ function main() {
     return 0;
   });
 
-  fs.writeFileSync('requestData.json', JSON.stringify(requests), {
-    encoding: 'utf-8',
-  });
+  // fs.writeFileSync('requestData.json', JSON.stringify(requests), {
+  //   encoding: 'utf-8',
+  // });
 
   fs.writeFileSync('bucketData.json', JSON.stringify(sortByCumulTime(bucketData)), {
     encoding: 'utf-8',

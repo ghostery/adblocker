@@ -808,7 +808,7 @@ var NetworkFilter = (function () {
         return this.fuzzySignature;
     };
     NetworkFilter.prototype.getTokens = function () {
-        var skipLastToken = this.isPlain() && !this.isRightAnchor();
+        var skipLastToken = this.isPlain() && !this.isRightAnchor() && !this.isFuzzy();
         var tokens = this.filter !== undefined ? tokenizeFilter(this.filter, skipLastToken) : [];
         var hostnameTokens = this.hostname !== undefined ? tokenize(this.hostname) : [];
         for (var i = 0; i < hostnameTokens.length; i += 1) {
@@ -1128,6 +1128,7 @@ function parseNetworkFilter(rawLine) {
             if (slashIndex !== -1) {
                 hostname = line.slice(filterIndexStart, slashIndex);
                 filterIndexStart = slashIndex;
+                mask = setBit(mask, 2097152);
             }
             else {
                 hostname = line.slice(filterIndexStart, filterIndexEnd);
@@ -1137,6 +1138,12 @@ function parseNetworkFilter(rawLine) {
     }
     if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexEnd - 1] === '*') {
         filterIndexEnd -= 1;
+    }
+    if (filterIndexEnd - filterIndexStart > 1 &&
+        line[filterIndexStart] === '^' &&
+        line[filterIndexStart + 1] === '*') {
+        filterIndexStart += 2;
+        mask = clearBit(mask, 2097152);
     }
     if (getBit(mask, 8388608) === false &&
         filterIndexEnd - filterIndexStart > 0 &&
@@ -1954,11 +1961,16 @@ var Request = (function () {
         }
     }
     Request.prototype.getTokens = function () {
+        var _a;
         if (this.tokens === undefined) {
-            this.tokens = __spread([
-                fastHash(this.sourceDomain),
-                fastHash(this.sourceHostname)
-            ], tokenize(this.url));
+            this.tokens = [];
+            if (this.sourceDomain) {
+                this.tokens.push(fastHash(this.sourceDomain));
+            }
+            if (this.sourceHostname) {
+                this.tokens.push(fastHash(this.sourceHostname));
+            }
+            (_a = this.tokens).push.apply(_a, __spread(tokenize(this.url)));
         }
         return this.tokens;
     };
@@ -2516,6 +2528,9 @@ var ReverseIndex = (function () {
             }
         });
         this.index = new Map();
+        histogram.set(fastHash('http'), totalTokens);
+        histogram.set(fastHash('https'), totalTokens);
+        histogram.set(fastHash('www'), totalTokens);
         idToTokens.forEach(function (_a) {
             var filter = _a.filter, multiTokens = _a.multiTokens;
             var wildCardInserted = false;
@@ -2828,13 +2843,23 @@ function checkPatternHostnameRightAnchorFilter(filter, request) {
     }
     return false;
 }
-function checkPatternHostnameAnchorFilter(filter, request) {
+function checkPatternHostnameLeftAnchorFilter(filter, request) {
     if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
         if (filter.hasFilter() === false) {
             return true;
         }
         var urlAfterHostname = getUrlAfterHostname(request.url, filter.getHostname());
         return fastStartsWith(urlAfterHostname, filter.getFilter());
+    }
+    return false;
+}
+function checkPatternHostnameAnchorFilter(filter, request) {
+    var filterHostname = filter.getHostname();
+    if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+        if (filter.hasFilter() === false) {
+            return true;
+        }
+        return (request.url.indexOf(filter.getFilter(), request.url.indexOf(filterHostname) + filterHostname.length) !== -1);
     }
     return false;
 }
@@ -2854,6 +2879,9 @@ function checkPattern(filter, request) {
         }
         else if (filter.isFuzzy()) {
             return checkPatternHostnameAnchorFuzzyFilter(filter, request);
+        }
+        else if (filter.isLeftAnchor()) {
+            return checkPatternHostnameLeftAnchorFilter(filter, request);
         }
         return checkPatternHostnameAnchorFilter(filter, request);
     }
@@ -2875,19 +2903,11 @@ function checkPattern(filter, request) {
     return checkPatternPlainFilter(filter, request);
 }
 function checkOptions(filter, request) {
-    if (!filter.isCptAllowed(request.cpt)) {
-        return false;
-    }
-    if (request.isHttps === true && filter.fromHttps() === false) {
-        return false;
-    }
-    if (request.isHttp === true && filter.fromHttp() === false) {
-        return false;
-    }
-    if (!filter.firstParty() && request.isFirstParty) {
-        return false;
-    }
-    if (!filter.thirdParty() && !request.isFirstParty) {
+    if (filter.isCptAllowed(request.cpt) === false ||
+        (request.isHttps === true && filter.fromHttps() === false) ||
+        (request.isHttp === true && filter.fromHttp() === false) ||
+        (!filter.firstParty() && request.isFirstParty) ||
+        (!filter.thirdParty() && !request.isFirstParty)) {
         return false;
     }
     if (filter.hasOptDomains()) {

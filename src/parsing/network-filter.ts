@@ -458,7 +458,7 @@ export class NetworkFilter implements IFilter {
 
   public getTokens(): number[][] {
     // Get tokens from filter
-    const skipLastToken = this.isPlain() && !this.isRightAnchor();
+    const skipLastToken = this.isPlain() && !this.isRightAnchor() && !this.isFuzzy();
     const tokens = this.filter !== undefined ? tokenizeFilter(this.filter, skipLastToken) : [];
 
     // Append tokens from hostname, if any
@@ -899,6 +899,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
       if (slashIndex !== -1) {
         hostname = line.slice(filterIndexStart, slashIndex);
         filterIndexStart = slashIndex;
+        mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
       } else {
         hostname = line.slice(filterIndexStart, filterIndexEnd);
         filterIndexStart = filterIndexEnd;
@@ -909,6 +910,16 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   // Remove trailing '*'
   if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexEnd - 1] === '*') {
     filterIndexEnd -= 1;
+  }
+
+  // Remove leading '^*'
+  if (
+    filterIndexEnd - filterIndexStart > 1 &&
+    line[filterIndexStart] === '^' &&
+    line[filterIndexStart + 1] === '*'
+  ) {
+    filterIndexStart += 2;
+    mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
   }
 
   // Remove leading '*' if the filter is not hostname anchored.

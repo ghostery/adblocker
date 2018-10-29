@@ -151,8 +151,9 @@ function checkPatternHostnameRightAnchorFilter(filter: NetworkFilter, request: R
   return false;
 }
 
-// ||pattern
-function checkPatternHostnameAnchorFilter(filter: NetworkFilter, request: Request): boolean {
+// ||pattern + left-anchor => This means that a plain pattern needs to appear
+// exactly after the hostname, with nothing in between.
+function checkPatternHostnameLeftAnchorFilter(filter: NetworkFilter, request: Request): boolean {
   if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
     if (filter.hasFilter() === false) {
       return true;
@@ -163,6 +164,26 @@ function checkPatternHostnameAnchorFilter(filter: NetworkFilter, request: Reques
     // after hostname and will perform the matching on it.
     const urlAfterHostname = getUrlAfterHostname(request.url, filter.getHostname());
     return fastStartsWith(urlAfterHostname, filter.getFilter());
+  }
+
+  return false;
+}
+
+// ||pattern
+function checkPatternHostnameAnchorFilter(filter: NetworkFilter, request: Request): boolean {
+  const filterHostname = filter.getHostname();
+  if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+    if (filter.hasFilter() === false) {
+      return true;
+    }
+
+    // We consider this a match if the plain patter (i.e.: filter) appears anywhere.
+    return (
+      request.url.indexOf(
+        filter.getFilter(),
+        request.url.indexOf(filterHostname) + filterHostname.length,
+      ) !== -1
+    );
   }
 
   return false;
@@ -189,6 +210,8 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
       return checkPatternHostnameRightAnchorFilter(filter, request);
     } else if (filter.isFuzzy()) {
       return checkPatternHostnameAnchorFuzzyFilter(filter, request);
+    } else if (filter.isLeftAnchor()) {
+      return checkPatternHostnameLeftAnchorFilter(filter, request);
     }
     return checkPatternHostnameAnchorFilter(filter, request);
   } else if (filter.isRegex()) {
@@ -208,27 +231,13 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
 
 function checkOptions(filter: NetworkFilter, request: Request): boolean {
   // This is really cheap and should be done first
-  if (!filter.isCptAllowed(request.cpt)) {
-    return false;
-  }
-
-  if (request.isHttps === true && filter.fromHttps() === false) {
-    return false;
-  }
-
-  if (request.isHttp === true && filter.fromHttp() === false) {
-    return false;
-  }
-
-  // Check option $third-party
-  // source domain and requested domain must be different
-  if (!filter.firstParty() && request.isFirstParty) {
-    return false;
-  }
-
-  // $~third-party
-  // source domain and requested domain must be the same
-  if (!filter.thirdParty() && !request.isFirstParty) {
+  if (
+    filter.isCptAllowed(request.cpt) === false ||
+    (request.isHttps === true && filter.fromHttps() === false) ||
+    (request.isHttp === true && filter.fromHttp() === false) ||
+    (!filter.firstParty() && request.isFirstParty) ||
+    (!filter.thirdParty() && !request.isFirstParty)
+  ) {
     return false;
   }
 

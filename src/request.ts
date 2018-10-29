@@ -147,11 +147,14 @@ export default class Request {
 
   public getTokens(): number[] {
     if (this.tokens === undefined) {
-      this.tokens = [
-        fastHash(this.sourceDomain),
-        fastHash(this.sourceHostname),
-        ...tokenize(this.url),
-      ];
+      this.tokens = [];
+      if (this.sourceDomain) {
+        this.tokens.push(fastHash(this.sourceDomain));
+      }
+      if (this.sourceHostname) {
+        this.tokens.push(fastHash(this.sourceHostname));
+      }
+      this.tokens.push(...tokenize(this.url));
     }
     return this.tokens;
   }

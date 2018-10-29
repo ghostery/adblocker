@@ -20,7 +20,6 @@ function createEngine(filters: string, enableOptimizations: boolean) {
       },
     ],
     new Set(),
-    false,
     true,
   );
 

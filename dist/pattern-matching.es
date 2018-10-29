@@ -1,131 +1,3 @@
-function noop(filters) {
-    return filters;
-}
-var ReverseIndex = (function () {
-    function ReverseIndex(filters, getTokens, _a) {
-        var _b = _a === void 0 ? {
-            enableOptimizations: true,
-            optimizer: noop
-        } : _a, _c = _b.enableOptimizations, enableOptimizations = _c === void 0 ? true : _c, _d = _b.optimizer, optimizer = _d === void 0 ? noop : _d;
-        this.index = new Map();
-        this.size = 0;
-        this.optimizer = enableOptimizations ? optimizer : noop;
-        this.getTokens = getTokens;
-        this.addFilters(filters);
-    }
-    ReverseIndex.prototype.iterMatchingFilters = function (tokens, cb) {
-        for (var j = 0; j < tokens.length; j += 1) {
-            if (this.iterBucket(tokens[j], j, cb) === false) {
-                return;
-            }
-        }
-        this.iterBucket(0, tokens.length, cb);
-    };
-    ReverseIndex.prototype.optimizeAheadOfTime = function () {
-        var _this = this;
-        if (this.optimizer) {
-            this.index.forEach(function (bucket) {
-                _this.optimize(bucket, true);
-            });
-        }
-    };
-    ReverseIndex.prototype.addFilters = function (iterFilters) {
-        var _this = this;
-        var idToTokens = new Map();
-        var histogram = new Map();
-        var totalTokens = 0;
-        iterFilters(function (filter) {
-            var multiTokens = _this.getTokens(filter);
-            idToTokens.set(filter.getId(), {
-                filter: filter,
-                multiTokens: multiTokens
-            });
-            for (var i = 0; i < multiTokens.length; i += 1) {
-                var tokens = multiTokens[i];
-                for (var j = 0; j < tokens.length; j += 1) {
-                    var token = tokens[j];
-                    histogram.set(token, (histogram.get(token) || 0) + 1);
-                    totalTokens += 1;
-                }
-            }
-        });
-        this.index = new Map();
-        idToTokens.forEach(function (_a) {
-            var filter = _a.filter, multiTokens = _a.multiTokens;
-            var wildCardInserted = false;
-            for (var i = 0; i < multiTokens.length; i += 1) {
-                var tokens = multiTokens[i];
-                var bestToken = 0;
-                var count = totalTokens + 1;
-                for (var k = 0; k < tokens.length; k += 1) {
-                    var token = tokens[k];
-                    var tokenCount = histogram.get(token);
-                    if (tokenCount < count) {
-                        bestToken = token;
-                        count = tokenCount;
-                    }
-                }
-                if (bestToken === 0) {
-                    if (wildCardInserted) {
-                        continue;
-                    }
-                    else {
-                        wildCardInserted = true;
-                    }
-                }
-                var bucket = _this.index.get(bestToken);
-                if (bucket === undefined) {
-                    _this.index.set(bestToken, {
-                        cumulTime: 0,
-                        filters: [filter],
-                        hit: 0,
-                        match: 0,
-                        optimized: false,
-                        originals: [],
-                        tokensHit: Object.create(null)
-                    });
-                }
-                else {
-                    bucket.filters.push(filter);
-                }
-            }
-        });
-        this.size = idToTokens.size;
-    };
-    ReverseIndex.prototype.optimize = function (bucket, force) {
-        if (force === void 0) { force = false; }
-        if (this.optimizer && !bucket.optimized && (force || bucket.hit >= 5)) {
-            if (bucket.filters.length > 1) {
-                bucket.originals = bucket.filters;
-                bucket.filters = this.optimizer(bucket.filters);
-            }
-            bucket.optimized = true;
-        }
-    };
-    ReverseIndex.prototype.iterBucket = function (token, index, cb) {
-        var ret = true;
-        var bucket = this.index.get(token);
-        if (bucket !== undefined) {
-            bucket.hit += 1;
-            this.optimize(bucket);
-            var start = process.hrtime();
-            var filters = bucket.filters;
-            for (var k = 0; k < filters.length; k += 1) {
-                if (cb(filters[k]) === false) {
-                    bucket.match += 1;
-                    bucket.tokensHit[index] = (bucket.tokensHit[index] || 0) + 1;
-                    ret = false;
-                    break;
-                }
-            }
-            var diff = process.hrtime(start);
-            bucket.cumulTime += (diff[0] * 1000000000 + diff[1]) / 1000000;
-        }
-        return ret;
-    };
-    return ReverseIndex;
-}());
-
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -309,6 +181,137 @@ function createFuzzySignature(pattern) {
     return compactTokens(new Uint32Array(tokenize(pattern)));
 }
 
+function noop(filters) {
+    return filters;
+}
+var ReverseIndex = (function () {
+    function ReverseIndex(filters, getTokens, _a) {
+        var _b = _a === void 0 ? {
+            enableOptimizations: true,
+            optimizer: noop
+        } : _a, _c = _b.enableOptimizations, enableOptimizations = _c === void 0 ? true : _c, _d = _b.optimizer, optimizer = _d === void 0 ? noop : _d;
+        this.index = new Map();
+        this.size = 0;
+        this.optimizer = enableOptimizations ? optimizer : noop;
+        this.getTokens = getTokens;
+        this.addFilters(filters);
+    }
+    ReverseIndex.prototype.iterMatchingFilters = function (tokens, cb) {
+        for (var j = 0; j < tokens.length; j += 1) {
+            if (this.iterBucket(tokens[j], j, cb) === false) {
+                return;
+            }
+        }
+        this.iterBucket(0, tokens.length, cb);
+    };
+    ReverseIndex.prototype.optimizeAheadOfTime = function () {
+        var _this = this;
+        if (this.optimizer) {
+            this.index.forEach(function (bucket) {
+                _this.optimize(bucket, true);
+            });
+        }
+    };
+    ReverseIndex.prototype.addFilters = function (iterFilters) {
+        var _this = this;
+        var idToTokens = new Map();
+        var histogram = new Map();
+        var totalTokens = 0;
+        iterFilters(function (filter) {
+            var multiTokens = _this.getTokens(filter);
+            idToTokens.set(filter.getId(), {
+                filter: filter,
+                multiTokens: multiTokens
+            });
+            for (var i = 0; i < multiTokens.length; i += 1) {
+                var tokens = multiTokens[i];
+                for (var j = 0; j < tokens.length; j += 1) {
+                    var token = tokens[j];
+                    histogram.set(token, (histogram.get(token) || 0) + 1);
+                    totalTokens += 1;
+                }
+            }
+        });
+        this.index = new Map();
+        histogram.set(fastHash('http'), totalTokens);
+        histogram.set(fastHash('https'), totalTokens);
+        histogram.set(fastHash('www'), totalTokens);
+        idToTokens.forEach(function (_a) {
+            var filter = _a.filter, multiTokens = _a.multiTokens;
+            var wildCardInserted = false;
+            for (var i = 0; i < multiTokens.length; i += 1) {
+                var tokens = multiTokens[i];
+                var bestToken = 0;
+                var count = totalTokens + 1;
+                for (var k = 0; k < tokens.length; k += 1) {
+                    var token = tokens[k];
+                    var tokenCount = histogram.get(token);
+                    if (tokenCount < count) {
+                        bestToken = token;
+                        count = tokenCount;
+                    }
+                }
+                if (bestToken === 0) {
+                    if (wildCardInserted) {
+                        continue;
+                    }
+                    else {
+                        wildCardInserted = true;
+                    }
+                }
+                var bucket = _this.index.get(bestToken);
+                if (bucket === undefined) {
+                    _this.index.set(bestToken, {
+                        cumulTime: 0,
+                        filters: [filter],
+                        hit: 0,
+                        match: 0,
+                        optimized: false,
+                        originals: [],
+                        tokensHit: Object.create(null)
+                    });
+                }
+                else {
+                    bucket.filters.push(filter);
+                }
+            }
+        });
+        this.size = idToTokens.size;
+    };
+    ReverseIndex.prototype.optimize = function (bucket, force) {
+        if (force === void 0) { force = false; }
+        if (this.optimizer && !bucket.optimized && (force || bucket.hit >= 5)) {
+            if (bucket.filters.length > 1) {
+                bucket.originals = bucket.filters;
+                bucket.filters = this.optimizer(bucket.filters);
+            }
+            bucket.optimized = true;
+        }
+    };
+    ReverseIndex.prototype.iterBucket = function (token, index, cb) {
+        var ret = true;
+        var bucket = this.index.get(token);
+        if (bucket !== undefined) {
+            bucket.hit += 1;
+            this.optimize(bucket);
+            var start = process.hrtime();
+            var filters = bucket.filters;
+            for (var k = 0; k < filters.length; k += 1) {
+                if (cb(filters[k]) === false) {
+                    bucket.match += 1;
+                    bucket.tokensHit[index] = (bucket.tokensHit[index] || 0) + 1;
+                    ret = false;
+                    break;
+                }
+            }
+            var diff = process.hrtime(start);
+            bucket.cumulTime += (diff[0] * 1000000000 + diff[1]) / 1000000;
+        }
+        return ret;
+    };
+    return ReverseIndex;
+}());
+
 function isAnchoredByHostname(filterHostname, hostname) {
     if (filterHostname.length === 0) {
         return true;
@@ -399,13 +402,23 @@ function checkPatternHostnameRightAnchorFilter(filter, request) {
     }
     return false;
 }
-function checkPatternHostnameAnchorFilter(filter, request) {
+function checkPatternHostnameLeftAnchorFilter(filter, request) {
     if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
         if (filter.hasFilter() === false) {
             return true;
         }
         var urlAfterHostname = getUrlAfterHostname(request.url, filter.getHostname());
         return fastStartsWith(urlAfterHostname, filter.getFilter());
+    }
+    return false;
+}
+function checkPatternHostnameAnchorFilter(filter, request) {
+    var filterHostname = filter.getHostname();
+    if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+        if (filter.hasFilter() === false) {
+            return true;
+        }
+        return (request.url.indexOf(filter.getFilter(), request.url.indexOf(filterHostname) + filterHostname.length) !== -1);
     }
     return false;
 }
@@ -425,6 +438,9 @@ function checkPattern(filter, request) {
         }
         else if (filter.isFuzzy()) {
             return checkPatternHostnameAnchorFuzzyFilter(filter, request);
+        }
+        else if (filter.isLeftAnchor()) {
+            return checkPatternHostnameLeftAnchorFilter(filter, request);
         }
         return checkPatternHostnameAnchorFilter(filter, request);
     }
@@ -446,19 +462,11 @@ function checkPattern(filter, request) {
     return checkPatternPlainFilter(filter, request);
 }
 function checkOptions(filter, request) {
-    if (!filter.isCptAllowed(request.cpt)) {
-        return false;
-    }
-    if (request.isHttps === true && filter.fromHttps() === false) {
-        return false;
-    }
-    if (request.isHttp === true && filter.fromHttp() === false) {
-        return false;
-    }
-    if (!filter.firstParty() && request.isFirstParty) {
-        return false;
-    }
-    if (!filter.thirdParty() && !request.isFirstParty) {
+    if (filter.isCptAllowed(request.cpt) === false ||
+        (request.isHttps === true && filter.fromHttps() === false) ||
+        (request.isHttp === true && filter.fromHttp() === false) ||
+        (!filter.firstParty() && request.isFirstParty) ||
+        (!filter.thirdParty() && !request.isFirstParty)) {
         return false;
     }
     if (filter.hasOptDomains()) {
@@ -743,7 +751,7 @@ var NetworkFilter = (function () {
         return this.fuzzySignature;
     };
     NetworkFilter.prototype.getTokens = function () {
-        var skipLastToken = this.isPlain() && !this.isRightAnchor();
+        var skipLastToken = this.isPlain() && !this.isRightAnchor() && !this.isFuzzy();
         var tokens = this.filter !== undefined ? tokenizeFilter(this.filter, skipLastToken) : [];
         var hostnameTokens = this.hostname !== undefined ? tokenize(this.hostname) : [];
         for (var i = 0; i < hostnameTokens.length; i += 1) {
@@ -1063,6 +1071,7 @@ function parseNetworkFilter(rawLine) {
             if (slashIndex !== -1) {
                 hostname = line.slice(filterIndexStart, slashIndex);
                 filterIndexStart = slashIndex;
+                mask = setBit(mask, 2097152);
             }
             else {
                 hostname = line.slice(filterIndexStart, filterIndexEnd);
@@ -1072,6 +1081,12 @@ function parseNetworkFilter(rawLine) {
     }
     if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexEnd - 1] === '*') {
         filterIndexEnd -= 1;
+    }
+    if (filterIndexEnd - filterIndexStart > 1 &&
+        line[filterIndexStart] === '^' &&
+        line[filterIndexStart + 1] === '*') {
+        filterIndexStart += 2;
+        mask = clearBit(mask, 2097152);
     }
     if (getBit(mask, 8388608) === false &&
         filterIndexEnd - filterIndexStart > 0 &&
@@ -1791,11 +1806,16 @@ var Request = (function () {
         }
     }
     Request.prototype.getTokens = function () {
+        var _a;
         if (this.tokens === undefined) {
-            this.tokens = __spread([
-                fastHash(this.sourceDomain),
-                fastHash(this.sourceHostname)
-            ], tokenize(this.url));
+            this.tokens = [];
+            if (this.sourceDomain) {
+                this.tokens.push(fastHash(this.sourceDomain));
+            }
+            if (this.sourceHostname) {
+                this.tokens.push(fastHash(this.sourceHostname));
+            }
+            (_a = this.tokens).push.apply(_a, __spread(tokenize(this.url)));
         }
         return this.tokens;
     };

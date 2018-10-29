@@ -1,4 +1,5 @@
 import IFilter from '../parsing/interface';
+import { fastHash } from '../utils';
 
 function noop<T>(filters: T[]): T[] {
   return filters;
@@ -127,6 +128,13 @@ export default class ReverseIndex<T extends IFilter> {
 
     // Reset index
     this.index = new Map();
+
+    // Add an heavy weight on these common patterns because they appear in
+    // almost all URLs. If there is a choice, then filters should use other
+    // tokens than those.
+    histogram.set(fastHash('http'), totalTokens);
+    histogram.set(fastHash('https'), totalTokens);
+    histogram.set(fastHash('www'), totalTokens);
 
     // For each filter, take the best token (least seen)
     idToTokens.forEach(({ filter, multiTokens }) => {
