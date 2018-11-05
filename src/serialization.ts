@@ -312,13 +312,9 @@ function deserializeBucket<T extends IFilter>(
 
   return {
     bucket: {
-      cumulTime: 0,
       filters: bucket,
-      hit: 0,
-      match: 0,
       optimized: false,
       originals: [],
-      tokensHit: Object.create(null),
     },
     token,
   };

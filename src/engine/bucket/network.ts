@@ -39,16 +39,11 @@ export default class NetworkFilterBucket {
     let match: NetworkFilter | undefined;
 
     this.index.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
-      filter.hit += 1;
       let continueIteration = true;
-      const start = process.hrtime();
       if (matchNetworkFilter(filter, request)) {
-        filter.match += 1;
         match = filter;
         continueIteration = false; // break iteration
       }
-      const diff = process.hrtime(start);
-      filter.cumulTime += (diff[0] * 1000000000 + diff[1]) / 1000000;
 
       return continueIteration;
     });

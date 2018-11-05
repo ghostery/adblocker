@@ -79,9 +79,6 @@ export interface IRequestInitialization {
 }
 
 export default class Request {
-  // TODO - remove
-  public filtersHit: any[];
-
   public type: RequestType;
   public isHttp: boolean;
   public isHttps: boolean;
@@ -112,8 +109,6 @@ export default class Request {
     sourceHostname,
     sourceDomain,
   }: Partial<IRequestInitialization> = {}) {
-    this.filtersHit = [];
-
     this.type = CPT_TO_TYPE[type];
 
     this.url = url.toLowerCase();

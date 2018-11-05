@@ -206,7 +206,6 @@ function checkPatternHostnameAnchorFuzzyFilter(filter: NetworkFilter, request: R
  * efficient matching function.
  */
 function checkPattern(filter: NetworkFilter, request: Request): boolean {
-  request.filtersHit.push(filter.rawLine);
   if (filter.isHostnameAnchor()) {
     if (filter.isRegex()) {
       return checkPatternHostnameAnchorRegexFilter(filter, request);

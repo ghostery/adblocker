@@ -28,7 +28,6 @@ export interface IRequestInitialization {
     type: string | number;
 }
 export default class Request {
-    filtersHit: any[];
     type: RequestType;
     isHttp: boolean;
     isHttps: boolean;

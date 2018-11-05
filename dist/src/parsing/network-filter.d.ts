@@ -1,9 +1,6 @@
 import { RequestType } from '../request';
 import IFilter from './interface';
 export declare class NetworkFilter implements IFilter {
-    hit: number;
-    match: number;
-    cumulTime: number;
     mask: number;
     filter?: string;
     optDomains?: number[];

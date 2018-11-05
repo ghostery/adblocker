@@ -628,9 +628,6 @@
             this.rawLine = rawLine;
             this.optDomains = optDomains;
             this.optNotDomains = optNotDomains;
-            this.hit = 0;
-            this.match = 0;
-            this.cumulTime = 0;
         }
         NetworkFilter.prototype.isCosmeticFilter = function () {
             return false;
@@ -1945,7 +1942,6 @@
     var Request = (function () {
         function Request(_a) {
             var _b = _a === void 0 ? {} : _a, _c = _b.type, type = _c === void 0 ? 'document' : _c, _d = _b.url, url = _d === void 0 ? '' : _d, hostname = _b.hostname, domain = _b.domain, _e = _b.sourceUrl, sourceUrl = _e === void 0 ? '' : _e, sourceHostname = _b.sourceHostname, sourceDomain = _b.sourceDomain;
-            this.filtersHit = [];
             this.type = CPT_TO_TYPE[type];
             this.url = url.toLowerCase();
             this.hostname = hostname || getHostname(this.url) || '';
@@ -2339,13 +2335,9 @@
         }
         return {
             bucket: {
-                cumulTime: 0,
                 filters: bucket,
-                hit: 0,
-                match: 0,
                 optimized: false,
-                originals: [],
-                tokensHit: Object.create(null)
+                originals: []
             },
             token: token
         };
@@ -2508,11 +2500,11 @@
         }
         ReverseIndex.prototype.iterMatchingFilters = function (tokens, cb) {
             for (var i = 0; i < tokens.length; i += 1) {
-                if (this.iterBucket(tokens[i], i, cb) === false) {
+                if (this.iterBucket(tokens[i], cb) === false) {
                     return;
                 }
             }
-            this.iterBucket(0, tokens.length, cb);
+            this.iterBucket(0, cb);
         };
         ReverseIndex.prototype.optimizeAheadOfTime = function () {
             var _this = this;
@@ -2573,13 +2565,9 @@
                     var bucket = _this.index.get(bestToken);
                     if (bucket === undefined) {
                         _this.index.set(bestToken, {
-                            cumulTime: 0,
                             filters: [filter],
-                            hit: 0,
-                            match: 0,
                             optimized: false,
-                            originals: [],
-                            tokensHit: Object.create(null)
+                            originals: []
                         });
                     }
                     else {
@@ -2598,15 +2586,13 @@
                 bucket.optimized = true;
             }
         };
-        ReverseIndex.prototype.iterBucket = function (token, index, cb) {
+        ReverseIndex.prototype.iterBucket = function (token, cb) {
             var ret = true;
             var bucket = this.index.get(token);
             if (bucket !== undefined) {
-                bucket.hit += 1;
                 if (bucket.optimized === false) {
                     this.optimize(bucket);
                 }
-                var start = process.hrtime();
                 var filters = bucket.filters;
                 for (var k = 0; k < filters.length; k += 1) {
                     if (cb(filters[k]) === false) {
@@ -2615,14 +2601,10 @@
                             filters[k] = filters[k - 1];
                             filters[k - 1] = filter;
                         }
-                        bucket.match += 1;
-                        bucket.tokensHit[index] = (bucket.tokensHit[index] || 0) + 1;
                         ret = false;
                         break;
                     }
                 }
-                var diff = process.hrtime(start);
-                bucket.cumulTime += (diff[0] * 1000000000 + diff[1]) / 1000000;
             }
             return ret;
         };
@@ -2891,7 +2873,6 @@
         return false;
     }
     function checkPattern(filter, request) {
-        request.filtersHit.push(filter.rawLine);
         if (filter.isHostnameAnchor()) {
             if (filter.isRegex()) {
                 return checkPatternHostnameAnchorRegexFilter(filter, request);
@@ -3104,16 +3085,11 @@
         NetworkFilterBucket.prototype.match = function (request) {
             var match;
             this.index.iterMatchingFilters(request.getTokens(), function (filter) {
-                filter.hit += 1;
                 var continueIteration = true;
-                var start = process.hrtime();
                 if (matchNetworkFilter(filter, request)) {
-                    filter.match += 1;
                     match = filter;
                     continueIteration = false;
                 }
-                var diff = process.hrtime(start);
-                filter.cumulTime += (diff[0] * 1000000000 + diff[1]) / 1000000;
                 return continueIteration;
             });
             return match;

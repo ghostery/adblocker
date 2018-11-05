@@ -83,16 +83,16 @@ async function main() {
   let timeMatch = 0;
   let totalMatch = 0;
 
-  let reqMinFilterMatch = 1000000;
-  let reqMaxFilterMatch = 0;
-  let reqSumFilterMatch = 0;
+  const reqMinFilterMatch = 1000000;
+  const reqMaxFilterMatch = 0;
+  const reqSumFilterMatch = 0;
 
-  let reqMinFilterNoMatch = 1000000;
-  let reqMaxFilterNoMatch = 0;
-  let reqSumFilterNoMatch = 0;
+  const reqMinFilterNoMatch = 1000000;
+  const reqMaxFilterNoMatch = 0;
+  const reqSumFilterNoMatch = 0;
 
-  const slowRequests = [];
-  const requests = [];
+  // const slowRequests = [];
+  // const requests = [];
 
   lines.on('line', (line) => {
   // for (let i = 0; i < lines.length; i += 1) {
@@ -153,18 +153,18 @@ async function main() {
       minMatch = Math.min(minMatch, totalHighResolution);
       maxMatch = Math.max(maxMatch, totalHighResolution);
 
-      reqMaxFilterMatch = Math.max(reqMaxFilterMatch, result.req.filtersHit.length);
-      reqMinFilterMatch = Math.min(reqMinFilterMatch, result.req.filtersHit.length);
-      reqSumFilterMatch += result.req.filtersHit.length;
+      // reqMaxFilterMatch = Math.max(reqMaxFilterMatch, result.req.filtersHit.length);
+      // reqMinFilterMatch = Math.min(reqMinFilterMatch, result.req.filtersHit.length);
+      // reqSumFilterMatch += result.req.filtersHit.length;
     } else {
       totalNoMatch += 1;
       timeNoMatch += totalHighResolution;
       minNoMatch = Math.min(minNoMatch, totalHighResolution);
       maxNoMatch = Math.max(maxNoMatch, totalHighResolution);
 
-      reqMaxFilterNoMatch = Math.max(reqMaxFilterNoMatch, result.req.filtersHit.length);
-      reqMinFilterNoMatch = Math.min(reqMinFilterNoMatch, result.req.filtersHit.length);
-      reqSumFilterNoMatch += result.req.filtersHit.length;
+      // reqMaxFilterNoMatch = Math.max(reqMaxFilterNoMatch, result.req.filtersHit.length);
+      // reqMinFilterNoMatch = Math.min(reqMinFilterNoMatch, result.req.filtersHit.length);
+      // reqSumFilterNoMatch += result.req.filtersHit.length;
     }
   });
 
@@ -257,6 +257,7 @@ async function main() {
       });
     });
   });
+
   const sortByTokens = arr => arr.sort((r1, r2) => {
     if (r1.tokens.length < r2.tokens.length) {
       return 1;

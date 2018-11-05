@@ -164,11 +164,6 @@ const MATCH_ALL = new RegExp('');
 // 2. csp option: ||wikia.com^$csp=script-src 'self' * 'unsafe-inline' 'unsafe-eval'
 // 3. Replace `split` with `substr`
 export class NetworkFilter implements IFilter {
-  // Stats (TODO: remove)
-  public hit: number;
-  public match: number;
-  public cumulTime: number;
-
   public mask: number;
 
   public filter?: string;
@@ -212,11 +207,6 @@ export class NetworkFilter implements IFilter {
     this.rawLine = rawLine;
     this.optDomains = optDomains;
     this.optNotDomains = optNotDomains;
-
-    // TODO remove
-    this.hit = 0;
-    this.match = 0;
-    this.cumulTime = 0;
   }
 
   public isCosmeticFilter() {
