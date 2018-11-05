@@ -156,8 +156,8 @@ describe('#matchNetworkFilter', () => {
       expect(networkFilter).not.toBeUndefined();
       expect(networkFilter).not.toBeNull();
       expect(networkFilter).toMatchRequest({
-        cpt,
         sourceUrl,
+        type: cpt,
         url,
       });
     });

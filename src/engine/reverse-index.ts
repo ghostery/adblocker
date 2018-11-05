@@ -82,8 +82,8 @@ export default class ReverseIndex<T extends IFilter> {
    * achieved if the callback returns `false`.
    */
   public iterMatchingFilters(tokens: number[], cb: (f: T) => boolean): void {
-    for (let j = 0; j < tokens.length; j += 1) {
-      if (this.iterBucket(tokens[j], j, cb) === false) {
+    for (let i = 0; i < tokens.length; i += 1) {
+      if (this.iterBucket(tokens[i], i, cb) === false) {
         return;
       }
     }
@@ -98,7 +98,7 @@ export default class ReverseIndex<T extends IFilter> {
   public optimizeAheadOfTime(): void {
     if (this.optimizer) {
       this.index.forEach((bucket) => {
-        this.optimize(bucket, true /* force optimization */);
+        this.optimize(bucket);
       });
     }
   }
@@ -132,9 +132,10 @@ export default class ReverseIndex<T extends IFilter> {
     // Add an heavy weight on these common patterns because they appear in
     // almost all URLs. If there is a choice, then filters should use other
     // tokens than those.
-    histogram.set(fastHash('http'), totalTokens);
     histogram.set(fastHash('https'), totalTokens);
-    histogram.set(fastHash('www'), totalTokens);
+    histogram.set(fastHash('http'), totalTokens - 1);
+    histogram.set(fastHash('www'), totalTokens - 2);
+    histogram.set(fastHash('com'), totalTokens - 3);
 
     // For each filter, take the best token (least seen)
     idToTokens.forEach(({ filter, multiTokens }) => {
@@ -186,10 +187,8 @@ export default class ReverseIndex<T extends IFilter> {
     this.size = idToTokens.size;
   }
 
-  private optimize(bucket: IBucket<T>, force: boolean = false): void {
-    // TODO - number of hits should depend on size of the bucket as payoff from
-    // big buckets will be higher than on small buckets.
-    if (this.optimizer && !bucket.optimized && (force || bucket.hit >= 5)) {
+  private optimize(bucket: IBucket<T>): void {
+    if (this.optimizer && !bucket.optimized) {
       if (bucket.filters.length > 1) {
         bucket.originals = bucket.filters;
         bucket.filters = this.optimizer(bucket.filters);
@@ -209,13 +208,25 @@ export default class ReverseIndex<T extends IFilter> {
     const bucket = this.index.get(token);
     if (bucket !== undefined) {
       bucket.hit += 1;
-      this.optimize(bucket);
+      if (bucket.optimized === false) {
+        this.optimize(bucket);
+      }
 
       const start = process.hrtime();
       const filters = bucket.filters;
       for (let k = 0; k < filters.length; k += 1) {
         // Break the loop if the callback returns `false`
         if (cb(filters[k]) === false) {
+          // Whenever we get a match from a filter, we also swap it one position
+          // up in the list. This way, over time, popular filters will be first
+          // and might match earlier. This should decrease the time needed to
+          // get a match.
+          if (k > 0) {
+            const filter = filters[k];
+            filters[k] = filters[k - 1];
+            filters[k - 1] = filter;
+          }
+
           bucket.match += 1;
           bucket.tokensHit[index] = (bucket.tokensHit[index] || 0) + 1;
           ret = false;

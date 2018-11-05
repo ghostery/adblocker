@@ -20,12 +20,16 @@ export declare const enum RequestType {
 }
 export interface IRequestInitialization {
     url: string;
+    hostname: string;
+    domain: string;
     sourceUrl: string;
-    cpt: string | number;
+    sourceHostname: string;
+    sourceDomain: string;
+    type: string | number;
 }
 export default class Request {
     filtersHit: any[];
-    cpt: RequestType;
+    type: RequestType;
     isHttp: boolean;
     isHttps: boolean;
     isSupported: boolean;
@@ -40,7 +44,7 @@ export default class Request {
     sourceDomainHash: number;
     private tokens?;
     private fuzzySignature?;
-    constructor({ cpt, url, sourceUrl, }?: Partial<IRequestInitialization>);
+    constructor({ type, url, hostname, domain, sourceUrl, sourceHostname, sourceDomain, }?: Partial<IRequestInitialization>);
     getTokens(): number[];
     getFuzzySignature(): Uint32Array;
 }

@@ -66,11 +66,6 @@ const OPTIMIZATIONS: IOptimization[] = [
   {
     description: 'Group idential filter with same mask but different domains in single filters',
     fusion: (filters: NetworkFilter[]) => {
-      // console.log('GROUPING 1');
-      // filters.forEach((f) => {
-      //   console.log('   *', f.rawLine);
-      // });
-
       const filter = new NetworkFilter(filters[0]);
 
       // Keep track of original filters view rawLine attribute
@@ -78,8 +73,8 @@ const OPTIMIZATIONS: IOptimization[] = [
         filter.rawLine = filters.map(({ rawLine }) => rawLine).join(' <+> ');
       }
 
-      const domains = [];
-      const notDomains = [];
+      const domains: number[] = [];
+      const notDomains: number[] = [];
 
       for (let i = 0; i < filters.length; i += 1) {
         const f = filters[i];
@@ -104,17 +99,10 @@ const OPTIMIZATIONS: IOptimization[] = [
     groupByCriteria: (filter: NetworkFilter) =>
       filter.getHostname() + filter.getFilter() + filter.getMask() + filter.getRedirect(),
     select: (filter: NetworkFilter) => !filter.isFuzzy(),
-    // !filter.isLeftAnchor() &&
-    // !filter.isRightAnchor(),
   },
   {
     description: 'Group simple patterns, into a single filter',
     fusion: (filters: NetworkFilter[]) => {
-      // console.log('GROUPING 2');
-      // filters.forEach((f) => {
-      //   console.log('   *', f.rawLine);
-      // });
-
       const filter = new NetworkFilter(filters[0]);
 
       // Keep track of original filters view rawLine attribute
@@ -122,7 +110,7 @@ const OPTIMIZATIONS: IOptimization[] = [
         filter.rawLine = filters.map(({ rawLine }) => rawLine).join(' <+> ');
       }
 
-      const patterns = [];
+      const patterns: string[] = [];
       for (let i = 0; i < filters.length; i += 1) {
         const f = filters[i];
         if (f.isRegex()) {

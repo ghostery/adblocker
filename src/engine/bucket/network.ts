@@ -39,8 +39,6 @@ export default class NetworkFilterBucket {
     let match: NetworkFilter | undefined;
 
     this.index.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
-      request.filtersHit.push(filter.rawLine);
-
       filter.hit += 1;
       let continueIteration = true;
       const start = process.hrtime();

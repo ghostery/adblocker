@@ -145,13 +145,13 @@ function isAlphaExtended(ch) {
     return ch >= 192 && ch <= 450;
 }
 function isAllowed(ch) {
-    return isDigit(ch) || isAlpha(ch) || isAlphaExtended(ch);
+    return isDigit(ch) || isAlpha(ch) || isAlphaExtended(ch) || ch === 37;
 }
 function fastTokenizer(pattern, isAllowedCode, allowRegexSurround, skipLastToken) {
     var tokens = [];
     var inside = false;
     var start = 0;
-    for (var i = 0, len = pattern.length; i < len; i += 1) {
+    for (var i = 0, len = Math.min(2048, pattern.length); i < len; i += 1) {
         var ch = pattern.charCodeAt(i);
         if (isAllowedCode(ch)) {
             if (inside === false) {
@@ -161,12 +161,12 @@ function fastTokenizer(pattern, isAllowedCode, allowRegexSurround, skipLastToken
         }
         else if (inside === true) {
             inside = false;
-            if (allowRegexSurround === true || ch !== 42) {
+            if (i - start > 1 && (allowRegexSurround === true || ch !== 42)) {
                 tokens.push(fastHashBetween(pattern, start, i));
             }
         }
     }
-    if (inside === true && skipLastToken === false) {
+    if (pattern.length - start > 1 && inside === true && skipLastToken === false) {
         tokens.push(fastHashBetween(pattern, start, pattern.length));
     }
     return tokens;
@@ -197,8 +197,8 @@ var ReverseIndex = (function () {
         this.addFilters(filters);
     }
     ReverseIndex.prototype.iterMatchingFilters = function (tokens, cb) {
-        for (var j = 0; j < tokens.length; j += 1) {
-            if (this.iterBucket(tokens[j], j, cb) === false) {
+        for (var i = 0; i < tokens.length; i += 1) {
+            if (this.iterBucket(tokens[i], i, cb) === false) {
                 return;
             }
         }
@@ -208,7 +208,7 @@ var ReverseIndex = (function () {
         var _this = this;
         if (this.optimizer) {
             this.index.forEach(function (bucket) {
-                _this.optimize(bucket, true);
+                _this.optimize(bucket);
             });
         }
     };
@@ -233,9 +233,10 @@ var ReverseIndex = (function () {
             }
         });
         this.index = new Map();
-        histogram.set(fastHash('http'), totalTokens);
         histogram.set(fastHash('https'), totalTokens);
-        histogram.set(fastHash('www'), totalTokens);
+        histogram.set(fastHash('http'), totalTokens - 1);
+        histogram.set(fastHash('www'), totalTokens - 2);
+        histogram.set(fastHash('com'), totalTokens - 3);
         idToTokens.forEach(function (_a) {
             var filter = _a.filter, multiTokens = _a.multiTokens;
             var wildCardInserted = false;
@@ -278,9 +279,8 @@ var ReverseIndex = (function () {
         });
         this.size = idToTokens.size;
     };
-    ReverseIndex.prototype.optimize = function (bucket, force) {
-        if (force === void 0) { force = false; }
-        if (this.optimizer && !bucket.optimized && (force || bucket.hit >= 5)) {
+    ReverseIndex.prototype.optimize = function (bucket) {
+        if (this.optimizer && !bucket.optimized) {
             if (bucket.filters.length > 1) {
                 bucket.originals = bucket.filters;
                 bucket.filters = this.optimizer(bucket.filters);
@@ -293,11 +293,18 @@ var ReverseIndex = (function () {
         var bucket = this.index.get(token);
         if (bucket !== undefined) {
             bucket.hit += 1;
-            this.optimize(bucket);
+            if (bucket.optimized === false) {
+                this.optimize(bucket);
+            }
             var start = process.hrtime();
             var filters = bucket.filters;
             for (var k = 0; k < filters.length; k += 1) {
                 if (cb(filters[k]) === false) {
+                    if (k > 0) {
+                        var filter = filters[k];
+                        filters[k] = filters[k - 1];
+                        filters[k - 1] = filter;
+                    }
                     bucket.match += 1;
                     bucket.tokensHit[index] = (bucket.tokensHit[index] || 0) + 1;
                     ret = false;
@@ -407,8 +414,7 @@ function checkPatternHostnameLeftAnchorFilter(filter, request) {
         if (filter.hasFilter() === false) {
             return true;
         }
-        var urlAfterHostname = getUrlAfterHostname(request.url, filter.getHostname());
-        return fastStartsWith(urlAfterHostname, filter.getFilter());
+        return fastStartsWithFrom(request.url, filter.getFilter(), request.url.indexOf(filter.getHostname()) + filter.getHostname().length);
     }
     return false;
 }
@@ -429,6 +435,7 @@ function checkPatternHostnameAnchorFuzzyFilter(filter, request) {
     return false;
 }
 function checkPattern(filter, request) {
+    request.filtersHit.push(filter.rawLine);
     if (filter.isHostnameAnchor()) {
         if (filter.isRegex()) {
             return checkPatternHostnameAnchorRegexFilter(filter, request);
@@ -462,7 +469,7 @@ function checkPattern(filter, request) {
     return checkPatternPlainFilter(filter, request);
 }
 function checkOptions(filter, request) {
-    if (filter.isCptAllowed(request.cpt) === false ||
+    if (filter.isCptAllowed(request.type) === false ||
         (request.isHttps === true && filter.fromHttps() === false) ||
         (request.isHttp === true && filter.fromHttp() === false) ||
         (!filter.firstParty() && request.isFirstParty) ||
@@ -751,22 +758,29 @@ var NetworkFilter = (function () {
         return this.fuzzySignature;
     };
     NetworkFilter.prototype.getTokens = function () {
+        var tokens = [];
+        if (this.optDomains !== undefined &&
+            this.optNotDomains === undefined &&
+            this.optDomains.length === 1) {
+            tokens.push(this.optDomains[0]);
+        }
         var skipLastToken = this.isPlain() && !this.isRightAnchor() && !this.isFuzzy();
-        var tokens = this.filter !== undefined ? tokenizeFilter(this.filter, skipLastToken) : [];
+        var filterTokens = this.filter !== undefined ? tokenizeFilter(this.filter, skipLastToken) : [];
+        for (var i = 0; i < filterTokens.length; i += 1) {
+            tokens.push(filterTokens[i]);
+        }
         var hostnameTokens = this.hostname !== undefined ? tokenize(this.hostname) : [];
         for (var i = 0; i < hostnameTokens.length; i += 1) {
             tokens.push(hostnameTokens[i]);
+        }
+        if (tokens.length === 0 && this.optDomains !== undefined && this.optNotDomains === undefined) {
+            return this.optDomains.map(function (d) { return [d]; });
         }
         if (this.fromHttp() && !this.fromHttps()) {
             tokens.push(fastHash('http'));
         }
         else if (this.fromHttps() && !this.fromHttp()) {
             tokens.push(fastHash('https'));
-        }
-        if (this.optDomains !== undefined &&
-            this.optNotDomains === undefined &&
-            this.optDomains.length === 1) {
-            tokens.push(this.optDomains[0]);
         }
         return [tokens];
     };
@@ -1060,6 +1074,7 @@ function parseNetworkFilter(rawLine) {
                 filterIndexStart = firstSeparator;
                 if (filterIndexEnd - filterIndexStart === 1 && line[filterIndexStart] === '^') {
                     mask = clearBit(mask, 1048576);
+                    filterIndexStart = filterIndexEnd;
                 }
                 else {
                     mask = setNetworkMask(mask, 1048576, checkIsRegex(line, filterIndexStart, filterIndexEnd));
@@ -1732,8 +1747,11 @@ function parseImplFactory(trie) {
     };
 }
 var parseImpl = parseImplFactory();
-function parse$1(url, options) {
-    return parseImpl(url, options);
+function getDomain$1(url, options) {
+    return parseImpl(url, options, 2).domain;
+}
+function getHostname(url, options) {
+    return parseImpl(url, options, 0).host;
 }
 
 var CPT_TO_TYPE = {
@@ -1772,18 +1790,16 @@ var CPT_TO_TYPE = {
 };
 var Request = (function () {
     function Request(_a) {
-        var _b = _a === void 0 ? {} : _a, _c = _b.cpt, cpt = _c === void 0 ? 'document' : _c, _d = _b.url, url = _d === void 0 ? '' : _d, _e = _b.sourceUrl, sourceUrl = _e === void 0 ? '' : _e;
+        var _b = _a === void 0 ? {} : _a, _c = _b.type, type = _c === void 0 ? 'document' : _c, _d = _b.url, url = _d === void 0 ? '' : _d, hostname = _b.hostname, domain = _b.domain, _e = _b.sourceUrl, sourceUrl = _e === void 0 ? '' : _e, sourceHostname = _b.sourceHostname, sourceDomain = _b.sourceDomain;
         this.filtersHit = [];
-        this.cpt = CPT_TO_TYPE[cpt];
+        this.type = CPT_TO_TYPE[type];
         this.url = url.toLowerCase();
-        var _f = parse$1(this.url), host = _f.host, domain = _f.domain;
-        this.hostname = host || '';
-        this.domain = domain || '';
+        this.hostname = hostname || getHostname(this.url) || '';
+        this.domain = domain || getDomain$1(this.hostname) || '';
         this.sourceUrl = sourceUrl.toLowerCase();
-        var _g = parse$1(this.sourceUrl), sourceHost = _g.host, sourceDomain = _g.domain;
-        this.sourceHostname = sourceHost || '';
+        this.sourceHostname = sourceHostname || getHostname(this.sourceUrl) || '';
+        this.sourceDomain = sourceDomain || getDomain$1(this.sourceHostname) || '';
         this.sourceHostnameHash = fastHash(this.sourceHostname);
-        this.sourceDomain = sourceDomain || '';
         this.sourceDomainHash = fastHash(this.sourceDomain);
         this.isFirstParty = this.sourceDomain === this.domain;
         var endOfProtocol = this.url.indexOf(':');
@@ -1801,7 +1817,7 @@ var Request = (function () {
                 (protocol === 'ws' || protocol === 'wss');
             this.isSupported = this.isHttp || this.isHttps || isWebsocket;
             if (isWebsocket) {
-                this.cpt = 15;
+                this.type = 15;
             }
         }
     }

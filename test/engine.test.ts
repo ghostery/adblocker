@@ -61,8 +61,8 @@ describe('#FiltersEngine', () => {
             }
 
             const result = engine.match({
-              cpt,
               sourceUrl,
+              type: cpt,
               url,
             });
 

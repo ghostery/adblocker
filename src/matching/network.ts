@@ -1,6 +1,6 @@
 import { NetworkFilter } from '../parsing/network-filter';
 import Request from '../request';
-import { fastStartsWith } from '../utils';
+import { fastStartsWith, fastStartsWithFrom } from '../utils';
 
 export function isAnchoredByHostname(filterHostname: string, hostname: string): boolean {
   // Corner-case, if `filterHostname` is empty, then it's a match
@@ -162,8 +162,11 @@ function checkPatternHostnameLeftAnchorFilter(filter: NetworkFilter, request: Re
     // Since this is not a regex, the filter pattern must follow the hostname
     // with nothing in between. So we extract the part of the URL following
     // after hostname and will perform the matching on it.
-    const urlAfterHostname = getUrlAfterHostname(request.url, filter.getHostname());
-    return fastStartsWith(urlAfterHostname, filter.getFilter());
+    return fastStartsWithFrom(
+      request.url,
+      filter.getFilter(),
+      request.url.indexOf(filter.getHostname()) + filter.getHostname().length,
+    );
   }
 
   return false;
@@ -203,6 +206,7 @@ function checkPatternHostnameAnchorFuzzyFilter(filter: NetworkFilter, request: R
  * efficient matching function.
  */
 function checkPattern(filter: NetworkFilter, request: Request): boolean {
+  request.filtersHit.push(filter.rawLine);
   if (filter.isHostnameAnchor()) {
     if (filter.isRegex()) {
       return checkPatternHostnameAnchorRegexFilter(filter, request);
@@ -230,9 +234,10 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
 }
 
 function checkOptions(filter: NetworkFilter, request: Request): boolean {
-  // This is really cheap and should be done first
+  // We first discard requests based on type, protocol and party. This is really
+  // cheap and should be done first.
   if (
-    filter.isCptAllowed(request.cpt) === false ||
+    filter.isCptAllowed(request.type) === false ||
     (request.isHttps === true && filter.fromHttps() === false) ||
     (request.isHttp === true && filter.fromHttp() === false) ||
     (!filter.firstParty() && request.isFirstParty) ||
@@ -241,7 +246,7 @@ function checkOptions(filter: NetworkFilter, request: Request): boolean {
     return false;
   }
 
-  // URL must be among these domains to match
+  // Source URL must be among these domains to match
   if (filter.hasOptDomains()) {
     const optDomains = filter.getOptDomains();
     if (!optDomains.has(request.sourceHostnameHash) && !optDomains.has(request.sourceDomainHash)) {
@@ -249,7 +254,7 @@ function checkOptions(filter: NetworkFilter, request: Request): boolean {
     }
   }
 
-  // URL must not be among these domains to match
+  // Source URL must not be among these domains to match
   if (filter.hasOptNotDomains()) {
     const optNotDomains = filter.getOptNotDomains();
     if (

@@ -1,5 +1,7 @@
-import { parse } from 'tldts';
+import { getDomain, getHostname } from 'tldts';
 import { createFuzzySignature, fastHash, tokenize } from './utils';
+
+// TODO - add unit tests (for initialization with existing domain, hostname, etc.)
 
 export const enum RequestType {
   beacon,
@@ -66,15 +68,21 @@ const CPT_TO_TYPE: Types = {
 
 export interface IRequestInitialization {
   url: string;
+  hostname: string;
+  domain: string;
+
   sourceUrl: string;
-  cpt: string | number;
+  sourceHostname: string;
+  sourceDomain: string;
+
+  type: string | number;
 }
 
 export default class Request {
   // TODO - remove
   public filtersHit: any[];
 
-  public cpt: RequestType;
+  public type: RequestType;
   public isHttp: boolean;
   public isHttps: boolean;
   public isSupported: boolean;
@@ -95,26 +103,32 @@ export default class Request {
   private fuzzySignature?: Uint32Array;
 
   constructor({
-    cpt = 'document',
+    type = 'document',
     url = '',
+    hostname,
+    domain,
+
     sourceUrl = '',
+    sourceHostname,
+    sourceDomain,
   }: Partial<IRequestInitialization> = {}) {
     this.filtersHit = [];
 
-    this.cpt = CPT_TO_TYPE[cpt];
+    this.type = CPT_TO_TYPE[type];
 
     this.url = url.toLowerCase();
-    const { host, domain } = parse(this.url);
 
-    this.hostname = host || '';
-    this.domain = domain || '';
+    // Optionally extract hostname and domain of url
+    this.hostname = hostname || getHostname(this.url) || '';
+    this.domain = domain || getDomain(this.hostname) || '';
 
     this.sourceUrl = sourceUrl.toLowerCase();
-    const { host: sourceHost, domain: sourceDomain } = parse(this.sourceUrl);
 
-    this.sourceHostname = sourceHost || '';
+    // Optionally extract hostname and domain of sourceUrl
+    this.sourceHostname = sourceHostname || getHostname(this.sourceUrl) || '';
+    this.sourceDomain = sourceDomain || getDomain(this.sourceHostname) || '';
+
     this.sourceHostnameHash = fastHash(this.sourceHostname);
-    this.sourceDomain = sourceDomain || '';
     this.sourceDomainHash = fastHash(this.sourceDomain);
 
     this.isFirstParty = this.sourceDomain === this.domain;
@@ -140,7 +154,7 @@ export default class Request {
       this.isSupported = this.isHttp || this.isHttps || isWebsocket;
 
       if (isWebsocket) {
-        this.cpt = RequestType.websocket;
+        this.type = RequestType.websocket;
       }
     }
   }

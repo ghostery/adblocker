@@ -457,9 +457,25 @@ export class NetworkFilter implements IFilter {
   }
 
   public getTokens(): number[][] {
+    const tokens = [];
+
+    // If there is only one domain and no domain negation, we also use this
+    // domain as a token.
+    if (
+      this.optDomains !== undefined &&
+      this.optNotDomains === undefined &&
+      this.optDomains.length === 1
+    ) {
+      tokens.push(this.optDomains[0]);
+    }
+
     // Get tokens from filter
     const skipLastToken = this.isPlain() && !this.isRightAnchor() && !this.isFuzzy();
-    const tokens = this.filter !== undefined ? tokenizeFilter(this.filter, skipLastToken) : [];
+    const filterTokens =
+      this.filter !== undefined ? tokenizeFilter(this.filter, skipLastToken) : [];
+    for (let i = 0; i < filterTokens.length; i += 1) {
+      tokens.push(filterTokens[i]);
+    }
 
     // Append tokens from hostname, if any
     const hostnameTokens = this.hostname !== undefined ? tokenize(this.hostname) : [];
@@ -467,20 +483,17 @@ export class NetworkFilter implements IFilter {
       tokens.push(hostnameTokens[i]);
     }
 
+    // If we got no tokens for the filter/hostname part, then we will dispatch
+    // this filter in multiple buckets based on the domains option.
+    if (tokens.length === 0 && this.optDomains !== undefined && this.optNotDomains === undefined) {
+      return this.optDomains.map((d) => [d]);
+    }
+
     // Add optional token for protocol
     if (this.fromHttp() && !this.fromHttps()) {
       tokens.push(fastHash('http'));
     } else if (this.fromHttps() && !this.fromHttp()) {
       tokens.push(fastHash('https'));
-    }
-
-    // If there is only one domain and no domain negation.
-    if (
-      this.optDomains !== undefined &&
-      this.optNotDomains === undefined &&
-      this.optDomains.length === 1
-    ) {
-      tokens.push(this.optDomains[0]);
     }
 
     return [tokens];
@@ -885,6 +898,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
         // If the only symbol remaining for the selector is '^' then ignore it
         if (filterIndexEnd - filterIndexStart === 1 && line[filterIndexStart] === '^') {
           mask = clearBit(mask, NETWORK_FILTER_MASK.isRegex);
+          filterIndexStart = filterIndexEnd;
         } else {
           mask = setNetworkMask(
             mask,
@@ -979,7 +993,6 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
 
   // TODO
   // - ignore hostname anchor is not hostname provided
-  // - transform |http to correct fromHttp, fromSecureConnection options
 
   if (hostname !== undefined) {
     if (getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor) && fastStartsWith(hostname, 'www.')) {

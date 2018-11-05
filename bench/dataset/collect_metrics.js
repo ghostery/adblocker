@@ -13,14 +13,14 @@ function loadLists() {
     //   fs.readFileSync('./mobile_filters.txt', { encoding: 'utf-8' }),
     // ],
     lists: [
-      'raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
-      'raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
-      'raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
-      'raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
-      'easylist-downloads.adblockplus.org/antiadblockfilters.txt',
-      'easylist.to/easylistgermany/easylistgermany.txt',
+      // 'raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
+      // 'raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
+      // 'raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
+      // 'raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
+      // 'easylist-downloads.adblockplus.org/antiadblockfilters.txt',
+      // 'easylist.to/easylistgermany/easylistgermany.txt',
       'easylist.to/easylist/easylist.txt',
-      'pgl.yoyo.org/adservers/serverlist.txt',
+      // 'pgl.yoyo.org/adservers/serverlist.txt',
     ].map(asset => fs
       .readFileSync(path.resolve(__dirname, '../../assets/', asset), { encoding: 'utf-8' })
       .replace(/[+]js[(]/g, 'script:inject(')),
@@ -92,7 +92,7 @@ async function main() {
   let reqSumFilterNoMatch = 0;
 
   const slowRequests = [];
-  // const requests = [];
+  const requests = [];
 
   lines.on('line', (line) => {
   // for (let i = 0; i < lines.length; i += 1) {
@@ -114,35 +114,35 @@ async function main() {
 
     const start = process.hrtime();
     const result = engine.match({
-      cpt: 'script', // TODO : revert cpt.toLowerCase(),
+      cpt: cpt.toLowerCase(),
       sourceUrl,
       url,
     });
     const diff = process.hrtime(start);
     const totalHighResolution = (diff[0] * 1000000000 + diff[1]) / 1000000;
 
-    if (totalHighResolution > 1) {
-      const filter = result.filter !== undefined ? result.filter.rawLine : null;
-      const exception = result.exception !== undefined ? result.exception.rawLine : null;
-      slowRequests.push({
-        cumulTime: totalHighResolution,
-        match: !!filter,
-        filter,
-        exception,
-        cpt,
-        url,
-        sourceUrl,
-      });
-    }
+    // if (totalHighResolution > 1) {
+    //   const filter = result.filter !== undefined ? result.filter.rawLine : null;
+    //   const exception = result.exception !== undefined ? result.exception.rawLine : null;
+    //   slowRequests.push({
+    //     cumulTime: totalHighResolution,
+    //     match: !!filter,
+    //     filter,
+    //     exception,
+    //     cpt,
+    //     url,
+    //     sourceUrl,
+    //   });
+    // }
 
-    // if (result.req.isSupported) {
+    // if (result.req.isSupported && result.req.filtersHit.length >= 10) {
     //   const tokens = result.req.getTokens();
     //   requests.push({
-    //     url: url.length,
-    //     tokens: tokens.length,
+    //     url,
     //     tokensDup: tokens.length - [...new Set(tokens)].length,
-    //     filters: result.req.filtersHit.length,
     //     filtersDup: result.req.filtersHit.length - [...new Set(result.req.filtersHit)].length,
+    //     tokens,
+    //     filters: result.req.filtersHit,
     //     match: result.filter !== undefined,
     //   });
     // }
@@ -257,6 +257,16 @@ async function main() {
       });
     });
   });
+  const sortByTokens = arr => arr.sort((r1, r2) => {
+    if (r1.tokens.length < r2.tokens.length) {
+      return 1;
+    }
+    if (r1.tokens.length > r2.tokens.length) {
+      return -1;
+    }
+    return 0;
+  });
+
 
   const sortByCumulTime = arr => arr.sort((r1, r2) => {
     if (r1.cumulTime < r2.cumulTime) {
@@ -268,7 +278,7 @@ async function main() {
     return 0;
   });
 
-  // fs.writeFileSync('requestData.json', JSON.stringify(requests), {
+  // fs.writeFileSync('requestData.json', JSON.stringify(sortByTokens(requests)), {
   //   encoding: 'utf-8',
   // });
 
@@ -280,13 +290,13 @@ async function main() {
     encoding: 'utf-8',
   });
 
-  fs.writeFileSync(
-    'slowRequests.json',
-    JSON.stringify(sortByCumulTime(slowRequests), undefined, 2),
-    {
-      encoding: 'utf-8',
-    },
-  );
+  // fs.writeFileSync(
+  //   'slowRequests.json',
+  //   JSON.stringify(sortByCumulTime(slowRequests), undefined, 2),
+  //   {
+  //     encoding: 'utf-8',
+  //   },
+  // );
 }
 
 main();

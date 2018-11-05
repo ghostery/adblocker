@@ -96,7 +96,7 @@ function isAlphaExtended(ch: number): boolean {
 }
 
 function isAllowed(ch: number): boolean {
-  return isDigit(ch) || isAlpha(ch) || isAlphaExtended(ch);
+  return isDigit(ch) || isAlpha(ch) || isAlphaExtended(ch) || ch === 37 /* '%' */;
 }
 
 function isAllowedCSS(ch: number): boolean {
@@ -120,7 +120,7 @@ function fastTokenizer(
   let inside: boolean = false;
   let start = 0;
 
-  for (let i: number = 0, len = pattern.length; i < len; i += 1) {
+  for (let i: number = 0, len = Math.min(2048, pattern.length); i < len; i += 1) {
     const ch = pattern.charCodeAt(i);
     if (isAllowedCode(ch)) {
       if (inside === false) {
@@ -130,13 +130,13 @@ function fastTokenizer(
     } else if (inside === true) {
       inside = false;
       // Should not be followed by '*'
-      if (allowRegexSurround === true || ch !== 42) {
+      if (i - start > 1 && (allowRegexSurround === true || ch !== 42)) {
         tokens.push(fastHashBetween(pattern, start, i));
       }
     }
   }
 
-  if (inside === true && skipLastToken === false) {
+  if (pattern.length - start > 1 && inside === true && skipLastToken === false) {
     tokens.push(fastHashBetween(pattern, start, pattern.length));
   }
 
