@@ -20,30 +20,29 @@ const enum NETWORK_FILTER_MASK {
   fromImage = 1 << 0,
   fromMedia = 1 << 1,
   fromObject = 1 << 2,
-  fromObjectSubrequest = 1 << 3,
-  fromOther = 1 << 4,
-  fromPing = 1 << 5,
-  fromScript = 1 << 6,
-  fromStylesheet = 1 << 7,
-  fromSubdocument = 1 << 8,
-  fromWebsocket = 1 << 9, // e.g.: ws, wss
-  fromXmlHttpRequest = 1 << 10,
-  fromFont = 1 << 11,
-  fromHttp = 1 << 12,
-  fromHttps = 1 << 13,
-  isImportant = 1 << 14,
-  matchCase = 1 << 15,
-  fuzzyMatch = 1 << 16,
+  fromOther = 1 << 3,
+  fromPing = 1 << 4,
+  fromScript = 1 << 5,
+  fromStylesheet = 1 << 6,
+  fromSubdocument = 1 << 7,
+  fromWebsocket = 1 << 8, // e.g.: ws, wss
+  fromXmlHttpRequest = 1 << 9,
+  fromFont = 1 << 10,
+  fromHttp = 1 << 11,
+  fromHttps = 1 << 12,
+  isImportant = 1 << 13,
+  matchCase = 1 << 14,
+  fuzzyMatch = 1 << 15,
 
   // Kind of patterns
-  thirdParty = 1 << 17,
-  firstParty = 1 << 18,
-  isPlain = 1 << 19,
-  isRegex = 1 << 20,
-  isLeftAnchor = 1 << 21,
-  isRightAnchor = 1 << 22,
-  isHostnameAnchor = 1 << 23,
-  isException = 1 << 24,
+  thirdParty = 1 << 16,
+  firstParty = 1 << 17,
+  isPlain = 1 << 18,
+  isRegex = 1 << 19,
+  isLeftAnchor = 1 << 20,
+  isRightAnchor = 1 << 21,
+  isHostnameAnchor = 1 << 22,
+  isException = 1 << 23,
 }
 
 /**
@@ -54,7 +53,6 @@ const FROM_ANY: number =
   NETWORK_FILTER_MASK.fromImage |
   NETWORK_FILTER_MASK.fromMedia |
   NETWORK_FILTER_MASK.fromObject |
-  NETWORK_FILTER_MASK.fromObjectSubrequest |
   NETWORK_FILTER_MASK.fromOther |
   NETWORK_FILTER_MASK.fromPing |
   NETWORK_FILTER_MASK.fromScript |
@@ -79,11 +77,14 @@ const CPT_TO_MASK: IDict = {
   [RequestType.object]: NETWORK_FILTER_MASK.fromObject,
   [RequestType.subdocument]: NETWORK_FILTER_MASK.fromSubdocument,
   [RequestType.ping]: NETWORK_FILTER_MASK.fromPing,
+  [RequestType.beacon]: NETWORK_FILTER_MASK.fromPing,
   [RequestType.xmlhttprequest]: NETWORK_FILTER_MASK.fromXmlHttpRequest,
-  [RequestType.objectSubrequest]: NETWORK_FILTER_MASK.fromObjectSubrequest,
   [RequestType.font]: NETWORK_FILTER_MASK.fromFont,
   [RequestType.media]: NETWORK_FILTER_MASK.fromMedia,
   [RequestType.websocket]: NETWORK_FILTER_MASK.fromWebsocket,
+  [RequestType.dtd]: NETWORK_FILTER_MASK.fromOther,
+  [RequestType.fetch]: NETWORK_FILTER_MASK.fromOther,
+  [RequestType.xlst]: NETWORK_FILTER_MASK.fromOther,
 };
 
 function computeFilterId(
@@ -157,6 +158,8 @@ const MATCH_ALL = new RegExp('');
 
 // TODO:
 // 1. Options not supported yet:
+//  - badfilter
+//  - inline-script
 //  - popup
 //  - popunder
 //  - generichide
@@ -264,9 +267,6 @@ export class NetworkFilter implements IFilter {
       }
       if (this.fromObject()) {
         options.push('object');
-      }
-      if (this.fromObjectSubrequest()) {
-        options.push('object-subrequest');
       }
       if (this.fromOther()) {
         options.push('other');
@@ -563,10 +563,6 @@ export class NetworkFilter implements IFilter {
     return getBit(this.mask, NETWORK_FILTER_MASK.fromObject);
   }
 
-  public fromObjectSubrequest() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromObjectSubrequest);
-  }
-
   public fromOther() {
     return getBit(this.mask, NETWORK_FILTER_MASK.fromOther);
   }
@@ -673,7 +669,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   // |     |
   // |     optionsIndex
   // filterIndexStart
-  const optionsIndex: number = line.indexOf('$', filterIndexStart);
+  const optionsIndex: number = line.lastIndexOf('$');
   if (optionsIndex !== -1) {
     // Parse options and set flags
     filterIndexEnd = optionsIndex;
@@ -797,12 +793,13 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
               optionMask = NETWORK_FILTER_MASK.fromObject;
               break;
             case 'object-subrequest':
-              optionMask = NETWORK_FILTER_MASK.fromObjectSubrequest;
+              optionMask = NETWORK_FILTER_MASK.fromObject;
               break;
             case 'other':
               optionMask = NETWORK_FILTER_MASK.fromOther;
               break;
             case 'ping':
+            case 'beacon':
               optionMask = NETWORK_FILTER_MASK.fromPing;
               break;
             case 'script':
@@ -815,6 +812,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
               optionMask = NETWORK_FILTER_MASK.fromSubdocument;
               break;
             case 'xmlhttprequest':
+            case 'xhr':
               optionMask = NETWORK_FILTER_MASK.fromXmlHttpRequest;
               break;
             case 'websocket':
@@ -890,6 +888,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
           mask = clearBit(mask, NETWORK_FILTER_MASK.isRegex);
           filterIndexStart = filterIndexEnd;
         } else {
+          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isLeftAnchor, true);
           mask = setNetworkMask(
             mask,
             NETWORK_FILTER_MASK.isRegex,
@@ -917,14 +916,14 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   }
 
   // Remove leading '^*'
-  if (
-    filterIndexEnd - filterIndexStart > 1 &&
-    line[filterIndexStart] === '^' &&
-    line[filterIndexStart + 1] === '*'
-  ) {
-    filterIndexStart += 2;
-    mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-  }
+  // if (
+  //   filterIndexEnd - filterIndexStart > 1 &&
+  //   line[filterIndexStart] === '^' &&
+  //   line[filterIndexStart + 1] === '*'
+  // ) {
+  //   filterIndexStart += 2;
+  //   mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+  // }
 
   // Remove leading '*' if the filter is not hostname anchored.
   if (

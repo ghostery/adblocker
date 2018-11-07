@@ -35,6 +35,19 @@ export default class NetworkFilterBucket {
     this.index.optimizeAheadOfTime();
   }
 
+  public matchAll(request: Request): NetworkFilter[] {
+    const filters: NetworkFilter[] = [];
+
+    this.index.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
+      if (matchNetworkFilter(filter, request)) {
+        filters.push(filter);
+      }
+      return true;
+    });
+
+    return filters;
+  }
+
   public match(request: Request): NetworkFilter | undefined {
     let match: NetworkFilter | undefined;
 

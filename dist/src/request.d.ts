@@ -8,15 +8,14 @@ export declare const enum RequestType {
     image = 6,
     media = 7,
     object = 8,
-    objectSubrequest = 9,
-    other = 10,
-    ping = 11,
-    script = 12,
-    stylesheet = 13,
-    subdocument = 14,
-    websocket = 15,
-    xlst = 16,
-    xmlhttprequest = 17
+    other = 9,
+    ping = 10,
+    script = 11,
+    stylesheet = 12,
+    subdocument = 13,
+    websocket = 14,
+    xlst = 15,
+    xmlhttprequest = 16
 }
 export interface IRequestInitialization {
     url: string;

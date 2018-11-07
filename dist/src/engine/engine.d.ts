@@ -54,6 +54,7 @@ export default class FilterEngine {
         scripts: string[];
         styles: string[];
     };
+    matchAll(rawRequest: Partial<IRequestInitialization>): Set<NetworkFilter>;
     match(rawRequest: Partial<IRequestInitialization>): {
         match: boolean;
         redirect?: string;

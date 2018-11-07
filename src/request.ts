@@ -13,7 +13,6 @@ export const enum RequestType {
   image,
   media,
   object,
-  objectSubrequest,
   other,
   ping,
   script,
@@ -24,25 +23,33 @@ export const enum RequestType {
   xmlhttprequest,
 }
 
-interface Types {
+const CPT_TO_TYPE: {
   [s: string]: RequestType;
-}
-
-const CPT_TO_TYPE: Types = {
+} = {
   // Webextension request types
+  beacon: RequestType.ping,
   csp_report: RequestType.csp,
+  document: RequestType.document,
   font: RequestType.font,
   image: RequestType.image,
+  imageset: RequestType.image,
   main_frame: RequestType.document,
   media: RequestType.media,
   object: RequestType.object,
+  object_subrequest: RequestType.object,
   other: RequestType.other,
   ping: RequestType.ping,
   script: RequestType.script,
+  speculative: RequestType.other,
   stylesheet: RequestType.stylesheet,
   sub_frame: RequestType.subdocument,
+  web_manifest: RequestType.other,
   websocket: RequestType.websocket,
+  xbl: RequestType.other,
+  xhr: RequestType.xmlhttprequest,
+  xml_dtd: RequestType.other,
   xmlhttprequest: RequestType.xmlhttprequest,
+  xslt: RequestType.other,
 
   // Firefox Bootstrap: https://developer.mozilla.org/en-US/docs/Archive/Mozilla/nsIContentPolicy
   1: RequestType.other,
@@ -54,7 +61,7 @@ const CPT_TO_TYPE: Types = {
   7: RequestType.subdocument,
   10: RequestType.ping,
   11: RequestType.xmlhttprequest,
-  12: RequestType.objectSubrequest,
+  12: RequestType.object,
   13: RequestType.dtd,
   14: RequestType.font,
   15: RequestType.media,
@@ -109,7 +116,7 @@ export default class Request {
     sourceHostname,
     sourceDomain,
   }: Partial<IRequestInitialization> = {}) {
-    this.type = CPT_TO_TYPE[type];
+    this.type = CPT_TO_TYPE[type] || RequestType.other;
 
     this.url = url.toLowerCase();
 

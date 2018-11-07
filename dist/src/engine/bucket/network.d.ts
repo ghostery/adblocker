@@ -7,5 +7,6 @@ export default class NetworkFilterBucket {
     size: number;
     constructor(name: string, filters: (cb: (f: NetworkFilter) => void) => void, enableOptimizations?: boolean);
     optimizeAheadOfTime(): void;
+    matchAll(request: Request): NetworkFilter[];
     match(request: Request): NetworkFilter | undefined;
 }

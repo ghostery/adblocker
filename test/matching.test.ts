@@ -7,9 +7,6 @@ import Request from '../src/request';
 
 import requests from './data/requests';
 
-// TODO add tests with positive match in parameters, fragment, etc. (all
-// possible parts of a URL).
-
 // Extend jest Matchers with our custom `toMatchRequest` and `toMatchHostname`
 declare global {
   namespace jest {
@@ -144,21 +141,21 @@ describe('#isAnchoredByHostname', () => {
 });
 
 describe('#matchNetworkFilter', () => {
-  requests.forEach(({ filter, exception, cpt, sourceUrl, url }) => {
-    it(`${filter}, ${exception}, ${cpt}, ${url}, ${sourceUrl}`, () => {
-      let networkFilter;
-      if (filter !== undefined) {
-        networkFilter = parseNetworkFilter(filter);
-      } else if (exception !== undefined) {
-        networkFilter = parseNetworkFilter(exception);
-      }
+  requests.forEach(({ filters, type, sourceUrl, url }) => {
+    filters.forEach((filter) => {
+      it(`${filter} matches ${type}, url=${url}, source=${sourceUrl}`, () => {
+        const networkFilter = parseNetworkFilter(filter);
+        if (networkFilter !== null) {
+          networkFilter.rawLine = filter;
+        }
 
-      expect(networkFilter).not.toBeUndefined();
-      expect(networkFilter).not.toBeNull();
-      expect(networkFilter).toMatchRequest({
-        sourceUrl,
-        type: cpt,
-        url,
+        expect(networkFilter).not.toBeUndefined();
+        expect(networkFilter).not.toBeNull();
+        expect(networkFilter).toMatchRequest({
+          sourceUrl,
+          type,
+          url,
+        });
       });
     });
   });
@@ -247,9 +244,7 @@ describe('#matchNetworkFilter', () => {
 
     // @see https://github.com/cliqz-oss/adblocker/issues/29
     expect(f`||foo.co^aaa/`).not.toMatchRequest({ url: 'https://bar.foo.com/bbb/aaa/' });
-    // Not sure if this one should fail. It could be expected that the regexp
-    // part could match anywhere in the URL.
-    // expect(f`||foo.com^aaa/`).not.toMatchRequest({ url: 'https://bar.foo.com/bbb/aaa/' });
+    expect(f`||foo.com^aaa/`).not.toMatchRequest({ url: 'https://bar.foo.com/bbb/aaa/' });
 
     expect(f`||com*^bar`).toMatchRequest({ url: 'https://foo.com/bar' });
     expect(f`||foo.com^bar`).toMatchRequest({ url: 'https://foo.com/bar' });
@@ -272,13 +267,13 @@ describe('#matchNetworkFilter', () => {
 
   it('options', () => {
     // cpt test
-    expect(f`||foo$image`).toMatchRequest({ url: 'https://foo.com/bar', cpt: 'image' });
+    expect(f`||foo$image`).toMatchRequest({ url: 'https://foo.com/bar', type: 'image' });
     expect(f`||foo$image`).not.toMatchRequest({
-      cpt: 'script',
+      type: 'script',
       url: 'https://foo.com/bar',
     });
     expect(f`||foo$~image`).toMatchRequest({
-      cpt: 'script',
+      type: 'script',
       url: 'https://foo.com/bar',
     });
 

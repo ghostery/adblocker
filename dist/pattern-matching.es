@@ -384,8 +384,9 @@ function checkPatternRegexFilter(filter, request, startFrom) {
 function checkPatternHostnameAnchorRegexFilter(filter, request) {
     var url = request.url;
     var hostname = request.hostname;
-    if (isAnchoredByHostname(filter.getHostname(), hostname)) {
-        return checkPatternRegexFilter(filter, request, url.indexOf(hostname) + filter.getHostname().length);
+    var filterHostname = filter.getHostname();
+    if (isAnchoredByHostname(filterHostname, hostname)) {
+        return checkPatternRegexFilter(filter, request, url.indexOf(filterHostname) + filterHostname.length);
     }
     return false;
 }
@@ -410,7 +411,7 @@ function checkPatternHostnameLeftAnchorFilter(filter, request) {
 }
 function checkPatternHostnameAnchorFilter(filter, request) {
     var filterHostname = filter.getHostname();
-    if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+    if (isAnchoredByHostname(filterHostname, request.hostname)) {
         if (filter.hasFilter() === false) {
             return true;
         }
@@ -485,7 +486,7 @@ function matchNetworkFilter(filter, request) {
 }
 
 var _a;
-var FROM_ANY = 2048 |
+var FROM_ANY = 1024 |
     1 |
     2 |
     4 |
@@ -495,21 +496,23 @@ var FROM_ANY = 2048 |
     64 |
     128 |
     256 |
-    512 |
-    1024;
+    512;
 var CPT_TO_MASK = (_a = {},
-    _a[10] = 16,
-    _a[12] = 64,
-    _a[6] = 1,
-    _a[13] = 128,
-    _a[8] = 4,
-    _a[14] = 256,
-    _a[11] = 32,
-    _a[17] = 1024,
     _a[9] = 8,
-    _a[5] = 2048,
+    _a[11] = 32,
+    _a[6] = 1,
+    _a[12] = 64,
+    _a[8] = 4,
+    _a[13] = 128,
+    _a[10] = 16,
+    _a[0] = 16,
+    _a[16] = 512,
+    _a[5] = 1024,
     _a[7] = 2,
-    _a[15] = 512,
+    _a[14] = 256,
+    _a[3] = 8,
+    _a[4] = 8,
+    _a[15] = 8,
     _a);
 function computeFilterId(mask, filter, hostname, optDomains, optNotDomains) {
     var hash = (5408 * 33) ^ mask;
@@ -605,9 +608,6 @@ var NetworkFilter = (function () {
             }
             if (this.fromObject()) {
                 options.push('object');
-            }
-            if (this.fromObjectSubrequest()) {
-                options.push('object-subrequest');
             }
             if (this.fromOther()) {
                 options.push('other');
@@ -724,8 +724,8 @@ var NetworkFilter = (function () {
     };
     NetworkFilter.prototype.setRegex = function (re) {
         this.regex = re;
-        this.mask = setBit(this.mask, 1048576);
-        this.mask = clearBit(this.mask, 524288);
+        this.mask = setBit(this.mask, 524288);
+        this.mask = clearBit(this.mask, 262144);
     };
     NetworkFilter.prototype.getRegex = function () {
         if (this.regex === undefined) {
@@ -778,40 +778,40 @@ var NetworkFilter = (function () {
         return this.fromAny();
     };
     NetworkFilter.prototype.isFuzzy = function () {
-        return getBit(this.mask, 65536);
-    };
-    NetworkFilter.prototype.isException = function () {
-        return getBit(this.mask, 16777216);
-    };
-    NetworkFilter.prototype.isHostnameAnchor = function () {
-        return getBit(this.mask, 8388608);
-    };
-    NetworkFilter.prototype.isRightAnchor = function () {
-        return getBit(this.mask, 4194304);
-    };
-    NetworkFilter.prototype.isLeftAnchor = function () {
-        return getBit(this.mask, 2097152);
-    };
-    NetworkFilter.prototype.matchCase = function () {
         return getBit(this.mask, 32768);
     };
-    NetworkFilter.prototype.isImportant = function () {
-        return getBit(this.mask, 16384);
+    NetworkFilter.prototype.isException = function () {
+        return getBit(this.mask, 8388608);
     };
-    NetworkFilter.prototype.isRegex = function () {
+    NetworkFilter.prototype.isHostnameAnchor = function () {
+        return getBit(this.mask, 4194304);
+    };
+    NetworkFilter.prototype.isRightAnchor = function () {
+        return getBit(this.mask, 2097152);
+    };
+    NetworkFilter.prototype.isLeftAnchor = function () {
         return getBit(this.mask, 1048576);
     };
+    NetworkFilter.prototype.matchCase = function () {
+        return getBit(this.mask, 16384);
+    };
+    NetworkFilter.prototype.isImportant = function () {
+        return getBit(this.mask, 8192);
+    };
+    NetworkFilter.prototype.isRegex = function () {
+        return getBit(this.mask, 524288);
+    };
     NetworkFilter.prototype.isPlain = function () {
-        return !getBit(this.mask, 1048576);
+        return !getBit(this.mask, 524288);
     };
     NetworkFilter.prototype.fromAny = function () {
         return this.getCptMask() === FROM_ANY;
     };
     NetworkFilter.prototype.thirdParty = function () {
-        return getBit(this.mask, 131072);
+        return getBit(this.mask, 65536);
     };
     NetworkFilter.prototype.firstParty = function () {
-        return getBit(this.mask, 262144);
+        return getBit(this.mask, 131072);
     };
     NetworkFilter.prototype.fromImage = function () {
         return getBit(this.mask, 1);
@@ -822,38 +822,35 @@ var NetworkFilter = (function () {
     NetworkFilter.prototype.fromObject = function () {
         return getBit(this.mask, 4);
     };
-    NetworkFilter.prototype.fromObjectSubrequest = function () {
+    NetworkFilter.prototype.fromOther = function () {
         return getBit(this.mask, 8);
     };
-    NetworkFilter.prototype.fromOther = function () {
+    NetworkFilter.prototype.fromPing = function () {
         return getBit(this.mask, 16);
     };
-    NetworkFilter.prototype.fromPing = function () {
+    NetworkFilter.prototype.fromScript = function () {
         return getBit(this.mask, 32);
     };
-    NetworkFilter.prototype.fromScript = function () {
+    NetworkFilter.prototype.fromStylesheet = function () {
         return getBit(this.mask, 64);
     };
-    NetworkFilter.prototype.fromStylesheet = function () {
+    NetworkFilter.prototype.fromSubdocument = function () {
         return getBit(this.mask, 128);
     };
-    NetworkFilter.prototype.fromSubdocument = function () {
+    NetworkFilter.prototype.fromWebsocket = function () {
         return getBit(this.mask, 256);
     };
-    NetworkFilter.prototype.fromWebsocket = function () {
-        return getBit(this.mask, 512);
-    };
     NetworkFilter.prototype.fromHttp = function () {
-        return getBit(this.mask, 4096);
+        return getBit(this.mask, 2048);
     };
     NetworkFilter.prototype.fromHttps = function () {
-        return getBit(this.mask, 8192);
+        return getBit(this.mask, 4096);
     };
     NetworkFilter.prototype.fromXmlHttpRequest = function () {
-        return getBit(this.mask, 1024);
+        return getBit(this.mask, 512);
     };
     NetworkFilter.prototype.fromFont = function () {
-        return getBit(this.mask, 2048);
+        return getBit(this.mask, 1024);
     };
     return NetworkFilter;
 }());
@@ -870,10 +867,10 @@ function checkIsRegex(filter, start, end) {
 }
 function parseNetworkFilter(rawLine) {
     var line = rawLine;
-    var mask = 131072 |
-        262144 |
-        8192 |
-        4096;
+    var mask = 65536 |
+        131072 |
+        4096 |
+        2048;
     var cptMaskPositive = 0;
     var cptMaskNegative = FROM_ANY;
     var hostname;
@@ -884,9 +881,9 @@ function parseNetworkFilter(rawLine) {
     var filterIndexEnd = line.length;
     if (fastStartsWith(line, '@@')) {
         filterIndexStart += 2;
-        mask = setBit(mask, 16777216);
+        mask = setBit(mask, 8388608);
     }
-    var optionsIndex = line.indexOf('$', filterIndexStart);
+    var optionsIndex = line.lastIndexOf('$');
     if (optionsIndex !== -1) {
         filterIndexEnd = optionsIndex;
         var rawOptions = line.slice(optionsIndex + 1);
@@ -935,32 +932,32 @@ function parseNetworkFilter(rawLine) {
                     if (negation) {
                         return null;
                     }
-                    mask = setBit(mask, 16384);
+                    mask = setBit(mask, 8192);
                     break;
                 case 'match-case':
                     if (negation) {
                         return null;
                     }
-                    mask = setBit(mask, 32768);
+                    mask = setBit(mask, 16384);
                     break;
                 case 'third-party':
                     if (negation) {
-                        mask = clearBit(mask, 131072);
+                        mask = clearBit(mask, 65536);
                     }
                     else {
-                        mask = clearBit(mask, 262144);
+                        mask = clearBit(mask, 131072);
                     }
                     break;
                 case 'first-party':
                     if (negation) {
-                        mask = clearBit(mask, 262144);
+                        mask = clearBit(mask, 131072);
                     }
                     else {
-                        mask = clearBit(mask, 131072);
+                        mask = clearBit(mask, 65536);
                     }
                     break;
                 case 'fuzzy':
-                    mask = setBit(mask, 65536);
+                    mask = setBit(mask, 32768);
                     break;
                 case 'collapse':
                     break;
@@ -986,31 +983,33 @@ function parseNetworkFilter(rawLine) {
                             optionMask = 4;
                             break;
                         case 'object-subrequest':
-                            optionMask = 8;
+                            optionMask = 4;
                             break;
                         case 'other':
-                            optionMask = 16;
+                            optionMask = 8;
                             break;
                         case 'ping':
-                            optionMask = 32;
+                        case 'beacon':
+                            optionMask = 16;
                             break;
                         case 'script':
-                            optionMask = 64;
+                            optionMask = 32;
                             break;
                         case 'stylesheet':
-                            optionMask = 128;
+                            optionMask = 64;
                             break;
                         case 'subdocument':
-                            optionMask = 256;
+                            optionMask = 128;
                             break;
                         case 'xmlhttprequest':
-                            optionMask = 1024;
-                            break;
-                        case 'websocket':
+                        case 'xhr':
                             optionMask = 512;
                             break;
+                        case 'websocket':
+                            optionMask = 256;
+                            break;
                         case 'font':
-                            optionMask = 2048;
+                            optionMask = 1024;
                             break;
                         default:
                             return null;
@@ -1039,31 +1038,32 @@ function parseNetworkFilter(rawLine) {
         mask |= cptMaskPositive & cptMaskNegative;
     }
     if (line[filterIndexEnd - 1] === '|') {
-        mask = setBit(mask, 4194304);
+        mask = setBit(mask, 2097152);
         filterIndexEnd -= 1;
     }
     if (fastStartsWithFrom(line, '||', filterIndexStart)) {
-        mask = setBit(mask, 8388608);
+        mask = setBit(mask, 4194304);
         filterIndexStart += 2;
     }
     else if (line[filterIndexStart] === '|') {
-        mask = setBit(mask, 2097152);
+        mask = setBit(mask, 1048576);
         filterIndexStart += 1;
     }
     var isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
-    mask = setNetworkMask(mask, 1048576, isRegex);
-    if (getBit(mask, 8388608)) {
+    mask = setNetworkMask(mask, 524288, isRegex);
+    if (getBit(mask, 4194304)) {
         if (isRegex) {
             var firstSeparator = line.search(SEPARATOR);
             if (firstSeparator !== -1) {
                 hostname = line.slice(filterIndexStart, firstSeparator);
                 filterIndexStart = firstSeparator;
                 if (filterIndexEnd - filterIndexStart === 1 && line[filterIndexStart] === '^') {
-                    mask = clearBit(mask, 1048576);
+                    mask = clearBit(mask, 524288);
                     filterIndexStart = filterIndexEnd;
                 }
                 else {
-                    mask = setNetworkMask(mask, 1048576, checkIsRegex(line, filterIndexStart, filterIndexEnd));
+                    mask = setNetworkMask(mask, 1048576, true);
+                    mask = setNetworkMask(mask, 524288, checkIsRegex(line, filterIndexStart, filterIndexEnd));
                 }
             }
         }
@@ -1072,7 +1072,7 @@ function parseNetworkFilter(rawLine) {
             if (slashIndex !== -1) {
                 hostname = line.slice(filterIndexStart, slashIndex);
                 filterIndexStart = slashIndex;
-                mask = setBit(mask, 2097152);
+                mask = setBit(mask, 1048576);
             }
             else {
                 hostname = line.slice(filterIndexStart, filterIndexEnd);
@@ -1083,53 +1083,47 @@ function parseNetworkFilter(rawLine) {
     if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexEnd - 1] === '*') {
         filterIndexEnd -= 1;
     }
-    if (filterIndexEnd - filterIndexStart > 1 &&
-        line[filterIndexStart] === '^' &&
-        line[filterIndexStart + 1] === '*') {
-        filterIndexStart += 2;
-        mask = clearBit(mask, 2097152);
-    }
-    if (getBit(mask, 8388608) === false &&
+    if (getBit(mask, 4194304) === false &&
         filterIndexEnd - filterIndexStart > 0 &&
         line[filterIndexStart] === '*') {
         filterIndexStart += 1;
     }
-    if (getBit(mask, 2097152)) {
+    if (getBit(mask, 1048576)) {
         if (filterIndexEnd - filterIndexStart === 5 &&
             fastStartsWithFrom(line, 'ws://', filterIndexStart)) {
-            mask = setBit(mask, 512);
-            mask = clearBit(mask, 2097152);
+            mask = setBit(mask, 256);
+            mask = clearBit(mask, 1048576);
             filterIndexStart = filterIndexEnd;
         }
         else if (filterIndexEnd - filterIndexStart === 7 &&
             fastStartsWithFrom(line, 'http://', filterIndexStart)) {
-            mask = setBit(mask, 4096);
-            mask = clearBit(mask, 8192);
-            mask = clearBit(mask, 2097152);
+            mask = setBit(mask, 2048);
+            mask = clearBit(mask, 4096);
+            mask = clearBit(mask, 1048576);
             filterIndexStart = filterIndexEnd;
         }
         else if (filterIndexEnd - filterIndexStart === 8 &&
             fastStartsWithFrom(line, 'https://', filterIndexStart)) {
-            mask = setBit(mask, 8192);
-            mask = clearBit(mask, 4096);
-            mask = clearBit(mask, 2097152);
+            mask = setBit(mask, 4096);
+            mask = clearBit(mask, 2048);
+            mask = clearBit(mask, 1048576);
             filterIndexStart = filterIndexEnd;
         }
         else if (filterIndexEnd - filterIndexStart === 8 &&
             fastStartsWithFrom(line, 'http*://', filterIndexStart)) {
-            mask = setBit(mask, 8192);
             mask = setBit(mask, 4096);
-            mask = clearBit(mask, 2097152);
+            mask = setBit(mask, 2048);
+            mask = clearBit(mask, 1048576);
             filterIndexStart = filterIndexEnd;
         }
     }
     var filter;
     if (filterIndexEnd - filterIndexStart > 0) {
         filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
-        mask = setNetworkMask(mask, 1048576, checkIsRegex(filter, 0, filter.length));
+        mask = setNetworkMask(mask, 524288, checkIsRegex(filter, 0, filter.length));
     }
     if (hostname !== undefined) {
-        if (getBit(mask, 8388608) && fastStartsWith(hostname, 'www.')) {
+        if (getBit(mask, 4194304) && fastStartsWith(hostname, 'www.')) {
             hostname = hostname.slice(4);
         }
         hostname = hostname.toLowerCase();
@@ -1741,35 +1735,45 @@ function getHostname(url, options) {
 }
 
 var CPT_TO_TYPE = {
+    beacon: 10,
     csp_report: 1,
+    document: 2,
     font: 5,
     image: 6,
+    imageset: 6,
     main_frame: 2,
     media: 7,
     object: 8,
-    other: 10,
-    ping: 11,
-    script: 12,
-    stylesheet: 13,
-    sub_frame: 14,
-    websocket: 15,
-    xmlhttprequest: 17,
-    1: 10,
-    2: 12,
+    object_subrequest: 8,
+    other: 9,
+    ping: 10,
+    script: 11,
+    speculative: 9,
+    stylesheet: 12,
+    sub_frame: 13,
+    web_manifest: 9,
+    websocket: 14,
+    xbl: 9,
+    xhr: 16,
+    xml_dtd: 9,
+    xmlhttprequest: 16,
+    xslt: 9,
+    1: 9,
+    2: 11,
     3: 6,
-    4: 13,
+    4: 12,
     5: 8,
     6: 2,
-    7: 14,
-    10: 11,
-    11: 17,
-    12: 9,
+    7: 13,
+    10: 10,
+    11: 16,
+    12: 8,
     13: 3,
     14: 5,
     15: 7,
-    16: 15,
+    16: 14,
     17: 1,
-    18: 16,
+    18: 15,
     19: 0,
     20: 4,
     21: 6
@@ -1777,7 +1781,7 @@ var CPT_TO_TYPE = {
 var Request = (function () {
     function Request(_a) {
         var _b = _a === void 0 ? {} : _a, _c = _b.type, type = _c === void 0 ? 'document' : _c, _d = _b.url, url = _d === void 0 ? '' : _d, hostname = _b.hostname, domain = _b.domain, _e = _b.sourceUrl, sourceUrl = _e === void 0 ? '' : _e, sourceHostname = _b.sourceHostname, sourceDomain = _b.sourceDomain;
-        this.type = CPT_TO_TYPE[type];
+        this.type = CPT_TO_TYPE[type] || 9;
         this.url = url.toLowerCase();
         this.hostname = hostname || getHostname(this.url) || '';
         this.domain = domain || getDomain$1(this.hostname) || '';
@@ -1802,7 +1806,7 @@ var Request = (function () {
                 (protocol === 'ws' || protocol === 'wss');
             this.isSupported = this.isHttp || this.isHttps || isWebsocket;
             if (isWebsocket) {
-                this.type = 15;
+                this.type = 14;
             }
         }
     }

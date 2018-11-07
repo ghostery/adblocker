@@ -60,7 +60,6 @@ export declare class NetworkFilter implements IFilter {
     fromImage(): boolean;
     fromMedia(): boolean;
     fromObject(): boolean;
-    fromObjectSubrequest(): boolean;
     fromOther(): boolean;
     fromPing(): boolean;
     fromScript(): boolean;

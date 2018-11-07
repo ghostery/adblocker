@@ -119,11 +119,12 @@ function checkPatternRegexFilter(
 function checkPatternHostnameAnchorRegexFilter(filter: NetworkFilter, request: Request): boolean {
   const url = request.url;
   const hostname = request.hostname;
-  if (isAnchoredByHostname(filter.getHostname(), hostname)) {
+  const filterHostname = filter.getHostname();
+  if (isAnchoredByHostname(filterHostname, hostname)) {
     return checkPatternRegexFilter(
       filter,
       request,
-      url.indexOf(hostname) + filter.getHostname().length,
+      url.indexOf(filterHostname) + filterHostname.length,
     );
   }
 
@@ -175,7 +176,7 @@ function checkPatternHostnameLeftAnchorFilter(filter: NetworkFilter, request: Re
 // ||pattern
 function checkPatternHostnameAnchorFilter(filter: NetworkFilter, request: Request): boolean {
   const filterHostname = filter.getHostname();
-  if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+  if (isAnchoredByHostname(filterHostname, request.hostname)) {
     if (filter.hasFilter() === false) {
       return true;
     }

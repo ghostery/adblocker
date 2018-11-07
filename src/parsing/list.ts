@@ -65,13 +65,18 @@ export function f(strings: TemplateStringsArray): NetworkFilter | CosmeticFilter
   const rawFilter = strings.raw[0];
   const filterType = detectFilterType(rawFilter);
 
+  let filter: NetworkFilter | CosmeticFilter | null = null;
   if (filterType === FilterType.NETWORK) {
-    return parseNetworkFilter(rawFilter);
+    filter = parseNetworkFilter(rawFilter);
   } else if (filterType === FilterType.COSMETIC) {
-    return parseCosmeticFilter(rawFilter);
+    filter = parseCosmeticFilter(rawFilter);
   }
 
-  return null;
+  if (filter !== null) {
+    filter.rawLine = rawFilter;
+  }
+
+  return filter;
 }
 
 export function parseList(

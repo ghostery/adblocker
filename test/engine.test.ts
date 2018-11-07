@@ -1,5 +1,4 @@
 import Engine from '../src/engine/engine';
-import { parseNetworkFilter } from '../src/parsing/network-filter';
 import requests from './data/requests';
 
 function createEngine(filters: string, enableOptimizations: boolean) {
@@ -28,9 +27,7 @@ function createEngine(filters: string, enableOptimizations: boolean) {
 
 describe('#FiltersEngine', () => {
   describe('network filters', () => {
-    const allRequestFilters = requests
-      .map(({ filter, exception }) => `${filter || ''}\n${exception || ''}`)
-      .join('\n');
+    const allRequestFilters = requests.map(({ filters }) => filters.join('\n')).join('\n');
 
     [
       { enableOptimizations: true, allFilters: '' },
@@ -43,46 +40,40 @@ describe('#FiltersEngine', () => {
       } and filters: ${!!setup.allFilters}`, () => {
         const engine = createEngine(setup.allFilters, setup.enableOptimizations);
 
-        requests.forEach(({ filter, exception, cpt, url, sourceUrl }) => {
-          it(`${filter}, ${exception}, ${cpt}, ${url}, ${sourceUrl}`, () => {
-            // Update engine with this specific filter only if the engine is
-            // initially empty.
-            if (setup.allFilters.length === 0) {
-              engine.onUpdateFilters(
-                [
-                  {
-                    asset: 'extraFilters',
-                    checksum: '',
-                    filters: `${filter || ''}\n${exception || ''}`,
-                  },
-                ],
-                new Set(['filters']),
-              );
-            }
-
-            const result = engine.match({
-              sourceUrl,
-              type: cpt,
-              url,
-            });
-
-            // Check filter
-            if (filter !== undefined) {
-              expect(result.filter).not.toBeUndefined();
-              if (setup.enableOptimizations === false || setup.allFilters.length === 0) {
-                expect('' + result.filter).toEqual('' + parseNetworkFilter(filter));
+        requests.forEach(({ filters, type, url, sourceUrl }) => {
+          filters.forEach((filter) => {
+            it(`${filter}, ${type} matches url=${url}, sourceUrl=${sourceUrl}`, () => {
+              // Update engine with this specific filter only if the engine is
+              // initially empty.
+              if (setup.allFilters.length === 0) {
+                engine.onUpdateFilters(
+                  [
+                    {
+                      asset: 'extraFilters',
+                      checksum: '',
+                      filters: filter,
+                    },
+                  ],
+                  new Set(['filters']),
+                  true,
+                );
               }
-            } else {
-              expect(result.filter).toBeUndefined();
-            }
 
-            // Check exception
-            if (exception !== undefined) {
-              expect(result.exception).not.toBeUndefined();
-              expect('' + result.exception).toEqual('' + parseNetworkFilter(exception));
-            } else {
-              expect(result.exception).toBeUndefined();
-            }
+              const matchingFilters = new Set();
+              [
+                ...engine.matchAll({
+                  sourceUrl,
+                  type,
+                  url,
+                }),
+              ].forEach((optimizedFilter) => {
+                (optimizedFilter.rawLine || '').split(' <+> ').forEach((f) => {
+                  matchingFilters.add(f);
+                });
+              });
+
+              expect(matchingFilters).toContain(filter);
+            });
           });
         });
       });
