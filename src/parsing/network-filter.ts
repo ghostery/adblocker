@@ -12,6 +12,8 @@ import {
 } from '../utils';
 import IFilter from './interface';
 
+const TOKENS_BUFFER = new Uint32Array(200);
+
 /**
  * Masks used to store options of network filters in a bitmask.
  */
@@ -91,8 +93,8 @@ function computeFilterId(
   mask: number,
   filter: string | undefined,
   hostname: string | undefined,
-  optDomains: number[] | undefined,
-  optNotDomains: number[] | undefined,
+  optDomains: Uint32Array | undefined,
+  optNotDomains: Uint32Array | undefined,
 ): number {
   let hash = (5408 * 33) ^ mask;
 
@@ -109,14 +111,14 @@ function computeFilterId(
   }
 
   if (filter !== undefined) {
-    for (let j = 0; j < filter.length; j += 1) {
-      hash = (hash * 33) ^ filter.charCodeAt(j);
+    for (let i = 0; i < filter.length; i += 1) {
+      hash = (hash * 33) ^ filter.charCodeAt(i);
     }
   }
 
   if (hostname !== undefined) {
-    for (let j = 0; j < hostname.length; j += 1) {
-      hash = (hash * 33) ^ hostname.charCodeAt(j);
+    for (let i = 0; i < hostname.length; i += 1) {
+      hash = (hash * 33) ^ hostname.charCodeAt(i);
     }
   }
 
@@ -170,17 +172,17 @@ export class NetworkFilter implements IFilter {
   public mask: number;
 
   public filter?: string;
-  public optDomains?: number[];
-  public optNotDomains?: number[];
+  public optDomains?: Uint32Array;
+  public optNotDomains?: Uint32Array;
   public redirect?: string;
   public hostname?: string;
 
   // Set only in debug mode
+  public id?: number;
   public rawLine?: string;
   public optDomainsSet?: Set<number>;
   public optNotDomainsSet?: Set<number>;
 
-  private id?: number;
   private fuzzySignature?: Uint32Array;
   private regex?: RegExp;
 
@@ -195,8 +197,8 @@ export class NetworkFilter implements IFilter {
   }: {
     mask: number;
     filter?: string;
-    optDomains?: number[];
-    optNotDomains?: number[];
+    optDomains?: Uint32Array;
+    optNotDomains?: Uint32Array;
     redirect?: string;
     hostname?: string;
     rawLine?: string;
@@ -337,7 +339,6 @@ export class NetworkFilter implements IFilter {
         this.optNotDomains,
       );
     }
-
     return this.id;
   }
 
@@ -446,8 +447,8 @@ export class NetworkFilter implements IFilter {
     return this.fuzzySignature;
   }
 
-  public getTokens(): number[][] {
-    const tokens = [];
+  public getTokens(): Uint32Array[] {
+    let tokensBufferIndex = 0;
 
     // If there is only one domain and no domain negation, we also use this
     // domain as a token.
@@ -456,37 +457,46 @@ export class NetworkFilter implements IFilter {
       this.optNotDomains === undefined &&
       this.optDomains.length === 1
     ) {
-      tokens.push(this.optDomains[0]);
+      TOKENS_BUFFER[tokensBufferIndex] = this.optDomains[0];
+      tokensBufferIndex += 1;
     }
 
     // Get tokens from filter
-    const skipLastToken = this.isPlain() && !this.isRightAnchor() && !this.isFuzzy();
-    const filterTokens =
-      this.filter !== undefined ? tokenizeFilter(this.filter, skipLastToken) : [];
-    for (let i = 0; i < filterTokens.length; i += 1) {
-      tokens.push(filterTokens[i]);
+    if (this.filter !== undefined) {
+      const skipLastToken = this.isPlain() && !this.isRightAnchor() && !this.isFuzzy();
+      const skipFirstToken = this.isRightAnchor();
+      const filterTokens = tokenizeFilter(this.filter, skipFirstToken, skipLastToken);
+      TOKENS_BUFFER.set(filterTokens, tokensBufferIndex);
+      tokensBufferIndex += filterTokens.length;
     }
 
     // Append tokens from hostname, if any
-    const hostnameTokens = this.hostname !== undefined ? tokenize(this.hostname) : [];
-    for (let i = 0; i < hostnameTokens.length; i += 1) {
-      tokens.push(hostnameTokens[i]);
+    if (this.hostname !== undefined) {
+      const hostnameTokens = tokenize(this.hostname);
+      TOKENS_BUFFER.set(hostnameTokens, tokensBufferIndex);
+      tokensBufferIndex += hostnameTokens.length;
     }
 
     // If we got no tokens for the filter/hostname part, then we will dispatch
     // this filter in multiple buckets based on the domains option.
-    if (tokens.length === 0 && this.optDomains !== undefined && this.optNotDomains === undefined) {
-      return this.optDomains.map((d) => [d]);
+    if (
+      tokensBufferIndex === 0 &&
+      this.optDomains !== undefined &&
+      this.optNotDomains === undefined
+    ) {
+      return [...this.optDomains].map((d) => new Uint32Array([d]));
     }
 
     // Add optional token for protocol
     if (this.fromHttp() && !this.fromHttps()) {
-      tokens.push(fastHash('http'));
+      TOKENS_BUFFER[tokensBufferIndex] = fastHash('http');
+      tokensBufferIndex += 1;
     } else if (this.fromHttps() && !this.fromHttp()) {
-      tokens.push(fastHash('https'));
+      TOKENS_BUFFER[tokensBufferIndex] = fastHash('https');
+      tokensBufferIndex += 1;
     }
 
-    return [tokens];
+    return [TOKENS_BUFFER.slice(0, tokensBufferIndex)];
   }
 
   /**
@@ -650,8 +660,8 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
 
   let hostname: string | undefined;
 
-  let optDomains: number[] | undefined;
-  let optNotDomains: number[] | undefined;
+  let optDomains: Uint32Array | undefined;
+  let optNotDomains: Uint32Array | undefined;
   let redirect: string | undefined;
 
   // Start parsing
@@ -718,11 +728,11 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
           }
 
           if (optDomainsArray.length > 0) {
-            optDomains = optDomainsArray;
+            optDomains = new Uint32Array(optDomainsArray);
           }
 
           if (optNotDomainsArray.length > 0) {
-            optNotDomains = optNotDomainsArray;
+            optNotDomains = new Uint32Array(optNotDomainsArray);
           }
 
           break;
@@ -926,11 +936,8 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   // }
 
   // Remove leading '*' if the filter is not hostname anchored.
-  if (
-    getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor) === false &&
-    filterIndexEnd - filterIndexStart > 0 &&
-    line[filterIndexStart] === '*'
-  ) {
+  if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexStart] === '*') {
+    mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
     filterIndexStart += 1;
   }
 

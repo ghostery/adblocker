@@ -32,6 +32,8 @@ function computeFilterId(
   return hash >>> 0;
 }
 
+const TOKENS_BUFFER = new Uint32Array(200);
+
 /***************************************************************************
  *  Cosmetic filters parsing
  * ************************************************************************ */
@@ -56,9 +58,9 @@ export class CosmeticFilter implements IFilter {
   public hostnames?: string;
 
   // For debug only
+  public id?: number;
   public rawLine?: string;
 
-  private id?: number;
   private hostnamesArray?: string[];
 
   constructor({
@@ -121,14 +123,14 @@ export class CosmeticFilter implements IFilter {
     return this.id;
   }
 
-  public getTokens(): number[][] {
+  public getTokens(): Uint32Array[] {
     return [this.getTokensSelector()];
   }
 
-  public getTokensSelector(): number[] {
+  public getTokensSelector(): Uint32Array {
     // These filters are only matched based on their domains, not selectors
     if (this.isScriptInject() || this.isScriptBlock()) {
-      return [];
+      return new Uint32Array([]);
     }
 
     const selector = this.selector || '';
@@ -152,14 +154,16 @@ export class CosmeticFilter implements IFilter {
     // parts.
     let inside = 0; // number of brackets openings seen, allows to handle multiple levels of depth
     let start = sepIndex;
-    const tokens: number[] = [];
+    let tokensBufferIndex = 0;
 
     for (let i = sepIndex, len = selector.length; i < len; i += 1) {
       const code = selector.charCodeAt(i);
       if (code === 91) {
         // '['
         if (inside === 0 && start < i) {
-          tokens.push(...tokenizeCSS(selector.slice(start, i)));
+          const tokens = tokenizeCSS(selector.slice(start, i));
+          TOKENS_BUFFER.set(tokens, tokensBufferIndex);
+          tokensBufferIndex += tokens.length;
         }
         inside += 1;
       } else if (code === 93) {
@@ -170,10 +174,12 @@ export class CosmeticFilter implements IFilter {
     }
 
     if (inside === 0 && start < selector.length) {
-      tokens.push(...tokenizeCSS(selector.slice(start, selector.length)));
+      const tokens = tokenizeCSS(selector.slice(start, selector.length));
+      TOKENS_BUFFER.set(tokens, tokensBufferIndex);
+      tokensBufferIndex += tokens.length;
     }
 
-    return tokens;
+    return TOKENS_BUFFER.slice(0, tokensBufferIndex);
   }
 
   public getSelector(): string {

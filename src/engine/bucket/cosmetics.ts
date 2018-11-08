@@ -21,7 +21,7 @@ export default class CosmeticFilterBucket {
           }
         }),
       (filter: CosmeticFilter) => {
-        const multiTokens: number[][] = [];
+        const multiTokens: Uint32Array[] = [];
         if (filter.hostnames !== undefined) {
           filter.hostnames.split(',').forEach((h: string) => {
             multiTokens.push(tokenize(h));
@@ -127,7 +127,7 @@ export default class CosmeticFilterBucket {
 
   public getMatchingRules(hostname: string, nodeInfo: string[][]): CosmeticFilter[] {
     // Collect all selectors
-    const tokens = new Set();
+    const tokens: Set<number> = new Set();
     for (let i = 0; i < nodeInfo.length; i += 1) {
       const node = nodeInfo[i];
       // For each attribute of the node: [id, tagName, className] = node
@@ -150,7 +150,7 @@ export default class CosmeticFilterBucket {
       return true;
     };
 
-    this.selectorIndex.iterMatchingFilters([...tokens], checkMatch);
+    this.selectorIndex.iterMatchingFilters(new Uint32Array([...tokens]), checkMatch);
 
     return this.filterExceptions(rules);
   }

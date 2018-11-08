@@ -66,6 +66,7 @@ function serializeNetworkFilter(filter: NetworkFilter, buffer: DynamicDataView):
     numberOfOptionalParts = 1;
   }
 
+  buffer.pushUint32(filter.getId());
   buffer.pushUint8(numberOfOptionalParts);
   buffer.pushUint32(filter.mask);
 
@@ -111,13 +112,14 @@ function serializeNetworkFilter(filter: NetworkFilter, buffer: DynamicDataView):
  * symetrical to the one in `serializeNetworkFilter`.
  */
 function deserializeNetworkFilter(buffer: DynamicDataView): NetworkFilter {
+  const id = buffer.getUint32();
   const numberOfOptionalParts = buffer.getUint8();
   const mask = buffer.getUint32();
 
   let hostname: string | undefined;
   let filter: string | undefined;
-  let optDomains: number[] | undefined;
-  let optNotDomains: number[] | undefined;
+  let optDomains: Uint32Array | undefined;
+  let optNotDomains: Uint32Array | undefined;
   let redirect: string | undefined;
 
   if (numberOfOptionalParts > 0) {
@@ -129,18 +131,18 @@ function deserializeNetworkFilter(buffer: DynamicDataView): NetworkFilter {
   if (numberOfOptionalParts > 2) {
     const numberOfOptDomains = buffer.getUint16();
     if (numberOfOptDomains > 0) {
-      optDomains = [];
+      optDomains = new Uint32Array(numberOfOptDomains);
       for (let i = 0; i < numberOfOptDomains; i += 1) {
-        optDomains.push(buffer.getUint32());
+        optDomains[i] = buffer.getUint32();
       }
     }
   }
   if (numberOfOptionalParts > 3) {
     const numberOfOptNotDomains = buffer.getUint16();
     if (numberOfOptNotDomains > 0) {
-      optNotDomains = [];
+      optNotDomains = new Uint32Array(numberOfOptNotDomains);
       for (let i = 0; i < numberOfOptNotDomains; i += 1) {
-        optNotDomains.push(buffer.getUint32());
+        optNotDomains[i] = buffer.getUint32();
       }
     }
   }
@@ -148,7 +150,7 @@ function deserializeNetworkFilter(buffer: DynamicDataView): NetworkFilter {
     redirect = buffer.getStr() || undefined;
   }
 
-  return new NetworkFilter({
+  const deserializedFilter = new NetworkFilter({
     filter,
     hostname,
     mask,
@@ -156,6 +158,8 @@ function deserializeNetworkFilter(buffer: DynamicDataView): NetworkFilter {
     optNotDomains,
     redirect,
   });
+  deserializedFilter.id = id;
+  return deserializedFilter;
 }
 
 /**
@@ -171,6 +175,7 @@ function deserializeNetworkFilter(buffer: DynamicDataView): NetworkFilter {
  * could be applied here, to get a more compact representation.
  */
 function serializeCosmeticFilter(filter: CosmeticFilter, buffer: DynamicDataView): void {
+  buffer.pushUint32(filter.getId());
   buffer.pushUint8(filter.mask);
   buffer.pushStr(filter.selector);
   buffer.pushStr(filter.hostnames);
@@ -181,15 +186,18 @@ function serializeCosmeticFilter(filter: CosmeticFilter, buffer: DynamicDataView
  * symetrical to the one in `serializeCosmeticFilter`.
  */
 function deserializeCosmeticFilter(buffer: DynamicDataView): CosmeticFilter {
+  const id = buffer.getUint32();
   const mask = buffer.getUint8();
   const selector = buffer.getStr();
   const hostnames = buffer.getStr();
 
-  return new CosmeticFilter({
+  const deserializedFilter = new CosmeticFilter({
     hostnames: hostnames || undefined,
     mask,
     selector: selector || undefined,
   });
+  deserializedFilter.id = id;
+  return deserializedFilter;
 }
 
 function serializeNetworkFilters(filters: NetworkFilter[], buffer: DynamicDataView): void {

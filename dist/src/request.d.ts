@@ -31,7 +31,8 @@ export default class Request {
     isHttp: boolean;
     isHttps: boolean;
     isSupported: boolean;
-    isFirstParty: boolean;
+    isFirstParty: boolean | null;
+    isThirdParty: boolean | null;
     url: string;
     hostname: string;
     domain: string;
@@ -43,6 +44,6 @@ export default class Request {
     private tokens?;
     private fuzzySignature?;
     constructor({ type, url, hostname, domain, sourceUrl, sourceHostname, sourceDomain, }?: Partial<IRequestInitialization>);
-    getTokens(): number[];
+    getTokens(): Uint32Array;
     getFuzzySignature(): Uint32Array;
 }

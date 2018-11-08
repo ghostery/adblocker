@@ -1,9 +1,10 @@
 import { parseList } from '../src/parsing/list';
 import { fastHash, tokenize, tokenizeCSS } from '../src/utils';
+import requests from './data/requests';
 import { loadAllLists } from './utils';
 
-function t(tokens: string[]) {
-  return tokens.map(fastHash);
+function t(tokens: string[]): Uint32Array {
+  return new Uint32Array(tokens.map(fastHash));
 }
 
 expect.extend({
@@ -24,7 +25,7 @@ expect.extend({
   },
 });
 
-function checkCollisions(filters: any) {
+function checkCollisions(filters: any[]) {
   const hashes = new Map();
   for (let i = 0; i < filters.length; i += 1) {
     const filter = filters[i];
@@ -36,13 +37,21 @@ function checkCollisions(filters: any) {
 
 describe('Utils', () => {
   describe('fastHash', () => {
-    const { networkFilters, cosmeticFilters } = parseList(loadAllLists());
-
     it('does not produce collision on network filters', () => {
+      const { networkFilters } = parseList(loadAllLists());
+      checkCollisions(networkFilters);
+    });
+
+    it('does not produce collision on requests dataset', () => {
+      // Collect all raw filters
+      const { networkFilters } = parseList(
+        requests.map(({ filters }) => filters.join('\n')).join('\n'),
+      );
       checkCollisions(networkFilters);
     });
 
     it('does not produce collision on cosmetic filters', () => {
+      const { cosmeticFilters } = parseList(loadAllLists());
       checkCollisions(cosmeticFilters);
     });
   });
@@ -56,7 +65,7 @@ describe('Utils', () => {
   });
 
   it('#tokenizeCSS', () => {
-    expect(tokenizeCSS('')).toEqual([]);
+    expect(tokenizeCSS('')).toEqual(t([]));
     expect(tokenizeCSS('.selector')).toEqual(t(['.selector']));
     expect(tokenizeCSS('.selector-foo')).toEqual(t(['.selector-foo']));
   });

@@ -329,11 +329,48 @@
             ch === 46 ||
             ch === 35);
     }
-    function fastTokenizer(pattern, isAllowedCode, allowRegexSurround, skipLastToken) {
-        var tokens = [];
+    var TOKENS_BUFFER = new Uint32Array(1000);
+    function fastTokenizerNoRegex(pattern, isAllowedCode, skipFirstToken, skipLastToken) {
+        var tokenIndex = 0;
         var inside = false;
         var start = 0;
-        for (var i = 0, len = Math.min(2048, pattern.length); i < len; i += 1) {
+        var precedingCh = 0;
+        for (var i = 0; i < pattern.length && tokenIndex < TOKENS_BUFFER.length; i += 1) {
+            var ch = pattern.charCodeAt(i);
+            if (isAllowedCode(ch)) {
+                if (inside === false) {
+                    inside = true;
+                    start = i;
+                    if (i > 0) {
+                        precedingCh = pattern.charCodeAt(i - 1);
+                    }
+                }
+            }
+            else if (inside === true) {
+                inside = false;
+                if ((skipFirstToken === false || start !== 0) &&
+                    i - start > 1 &&
+                    ch !== 42 &&
+                    precedingCh !== 42) {
+                    TOKENS_BUFFER[tokenIndex] = fastHashBetween(pattern, start, i);
+                    tokenIndex += 1;
+                }
+            }
+        }
+        if (inside === true &&
+            pattern.length - start > 1 &&
+            precedingCh !== 42 &&
+            skipLastToken === false) {
+            TOKENS_BUFFER[tokenIndex] = fastHashBetween(pattern, start, pattern.length);
+            tokenIndex += 1;
+        }
+        return TOKENS_BUFFER.subarray(0, tokenIndex);
+    }
+    function fastTokenizer(pattern, isAllowedCode) {
+        var tokenIndex = 0;
+        var inside = false;
+        var start = 0;
+        for (var i = 0; i < pattern.length && tokenIndex < TOKENS_BUFFER.length; i += 1) {
             var ch = pattern.charCodeAt(i);
             if (isAllowedCode(ch)) {
                 if (inside === false) {
@@ -343,24 +380,24 @@
             }
             else if (inside === true) {
                 inside = false;
-                if (i - start > 1 && (allowRegexSurround === true || ch !== 42)) {
-                    tokens.push(fastHashBetween(pattern, start, i));
-                }
+                TOKENS_BUFFER[tokenIndex] = fastHashBetween(pattern, start, i);
+                tokenIndex += 1;
             }
         }
-        if (pattern.length - start > 1 && inside === true && skipLastToken === false) {
-            tokens.push(fastHashBetween(pattern, start, pattern.length));
+        if (inside === true) {
+            TOKENS_BUFFER[tokenIndex] = fastHashBetween(pattern, start, pattern.length);
+            tokenIndex += 1;
         }
-        return tokens;
+        return TOKENS_BUFFER.subarray(0, tokenIndex);
     }
     function tokenize(pattern) {
-        return fastTokenizer(pattern, isAllowed, false, false);
+        return fastTokenizerNoRegex(pattern, isAllowed, false, false);
     }
-    function tokenizeFilter(pattern, skipLastToken) {
-        return fastTokenizer(pattern, isAllowed, false, skipLastToken);
+    function tokenizeFilter(pattern, skipFirstToken, skipLastToken) {
+        return fastTokenizerNoRegex(pattern, isAllowed, skipFirstToken, skipLastToken);
     }
     function tokenizeCSS(pattern) {
-        return fastTokenizer(pattern, isAllowedCSS, true, false);
+        return fastTokenizer(pattern, isAllowedCSS);
     }
     function createFuzzySignature(pattern) {
         return compactTokens(new Uint32Array(tokenize(pattern)));
@@ -380,6 +417,7 @@
         }
         return hash >>> 0;
     }
+    var TOKENS_BUFFER$1 = new Uint32Array(200);
     var CosmeticFilter = (function () {
         function CosmeticFilter(_a) {
             var mask = _a.mask, selector = _a.selector, hostnames = _a.hostnames;
@@ -430,7 +468,7 @@
         };
         CosmeticFilter.prototype.getTokensSelector = function () {
             if (this.isScriptInject() || this.isScriptBlock()) {
-                return [];
+                return new Uint32Array([]);
             }
             var selector = this.selector || '';
             var sepIndex = 0;
@@ -445,12 +483,14 @@
             }
             var inside = 0;
             var start = sepIndex;
-            var tokens = [];
+            var tokensBufferIndex = 0;
             for (var i = sepIndex, len = selector.length; i < len; i += 1) {
                 var code = selector.charCodeAt(i);
                 if (code === 91) {
                     if (inside === 0 && start < i) {
-                        tokens.push.apply(tokens, __spread(tokenizeCSS(selector.slice(start, i))));
+                        var tokens = tokenizeCSS(selector.slice(start, i));
+                        TOKENS_BUFFER$1.set(tokens, tokensBufferIndex);
+                        tokensBufferIndex += tokens.length;
                     }
                     inside += 1;
                 }
@@ -460,9 +500,11 @@
                 }
             }
             if (inside === 0 && start < selector.length) {
-                tokens.push.apply(tokens, __spread(tokenizeCSS(selector.slice(start, selector.length))));
+                var tokens = tokenizeCSS(selector.slice(start, selector.length));
+                TOKENS_BUFFER$1.set(tokens, tokensBufferIndex);
+                tokensBufferIndex += tokens.length;
             }
-            return tokens;
+            return TOKENS_BUFFER$1.slice(0, tokensBufferIndex);
         };
         CosmeticFilter.prototype.getSelector = function () {
             return this.selector || '';
@@ -552,6 +594,7 @@
     }
 
     var _a;
+    var TOKENS_BUFFER$2 = new Uint32Array(200);
     var FROM_ANY = 1024 |
         1 |
         2 |
@@ -593,13 +636,13 @@
             }
         }
         if (filter !== undefined) {
-            for (var j = 0; j < filter.length; j += 1) {
-                hash = (hash * 33) ^ filter.charCodeAt(j);
+            for (var i = 0; i < filter.length; i += 1) {
+                hash = (hash * 33) ^ filter.charCodeAt(i);
             }
         }
         if (hostname !== undefined) {
-            for (var j = 0; j < hostname.length; j += 1) {
-                hash = (hash * 33) ^ hostname.charCodeAt(j);
+            for (var i = 0; i < hostname.length; i += 1) {
+                hash = (hash * 33) ^ hostname.charCodeAt(i);
             }
         }
         return hash >>> 0;
@@ -810,31 +853,39 @@
             return this.fuzzySignature;
         };
         NetworkFilter.prototype.getTokens = function () {
-            var tokens = [];
+            var tokensBufferIndex = 0;
             if (this.optDomains !== undefined &&
                 this.optNotDomains === undefined &&
                 this.optDomains.length === 1) {
-                tokens.push(this.optDomains[0]);
+                TOKENS_BUFFER$2[tokensBufferIndex] = this.optDomains[0];
+                tokensBufferIndex += 1;
             }
-            var skipLastToken = this.isPlain() && !this.isRightAnchor() && !this.isFuzzy();
-            var filterTokens = this.filter !== undefined ? tokenizeFilter(this.filter, skipLastToken) : [];
-            for (var i = 0; i < filterTokens.length; i += 1) {
-                tokens.push(filterTokens[i]);
+            if (this.filter !== undefined) {
+                var skipLastToken = this.isPlain() && !this.isRightAnchor() && !this.isFuzzy();
+                var skipFirstToken = this.isRightAnchor();
+                var filterTokens = tokenizeFilter(this.filter, skipFirstToken, skipLastToken);
+                TOKENS_BUFFER$2.set(filterTokens, tokensBufferIndex);
+                tokensBufferIndex += filterTokens.length;
             }
-            var hostnameTokens = this.hostname !== undefined ? tokenize(this.hostname) : [];
-            for (var i = 0; i < hostnameTokens.length; i += 1) {
-                tokens.push(hostnameTokens[i]);
+            if (this.hostname !== undefined) {
+                var hostnameTokens = tokenize(this.hostname);
+                TOKENS_BUFFER$2.set(hostnameTokens, tokensBufferIndex);
+                tokensBufferIndex += hostnameTokens.length;
             }
-            if (tokens.length === 0 && this.optDomains !== undefined && this.optNotDomains === undefined) {
-                return this.optDomains.map(function (d) { return [d]; });
+            if (tokensBufferIndex === 0 &&
+                this.optDomains !== undefined &&
+                this.optNotDomains === undefined) {
+                return __spread(this.optDomains).map(function (d) { return new Uint32Array([d]); });
             }
             if (this.fromHttp() && !this.fromHttps()) {
-                tokens.push(fastHash('http'));
+                TOKENS_BUFFER$2[tokensBufferIndex] = fastHash('http');
+                tokensBufferIndex += 1;
             }
             else if (this.fromHttps() && !this.fromHttp()) {
-                tokens.push(fastHash('https'));
+                TOKENS_BUFFER$2[tokensBufferIndex] = fastHash('https');
+                tokensBufferIndex += 1;
             }
-            return [tokens];
+            return [TOKENS_BUFFER$2.slice(0, tokensBufferIndex)];
         };
         NetworkFilter.prototype.isCptAllowed = function (cpt) {
             var mask = CPT_TO_MASK[cpt];
@@ -987,10 +1038,10 @@
                             }
                         }
                         if (optDomainsArray.length > 0) {
-                            optDomains = optDomainsArray;
+                            optDomains = new Uint32Array(optDomainsArray);
                         }
                         if (optNotDomainsArray.length > 0) {
-                            optNotDomains = optNotDomainsArray;
+                            optNotDomains = new Uint32Array(optNotDomainsArray);
                         }
                         break;
                     }
@@ -1149,9 +1200,8 @@
         if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexEnd - 1] === '*') {
             filterIndexEnd -= 1;
         }
-        if (getBit(mask, 4194304) === false &&
-            filterIndexEnd - filterIndexStart > 0 &&
-            line[filterIndexStart] === '*') {
+        if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexStart] === '*') {
+            mask = clearBit(mask, 1048576);
             filterIndexStart += 1;
         }
         if (getBit(mask, 1048576)) {
@@ -1958,7 +2008,8 @@
             this.sourceDomain = sourceDomain || getDomain$1(this.sourceHostname) || '';
             this.sourceHostnameHash = fastHash(this.sourceHostname);
             this.sourceDomainHash = fastHash(this.sourceDomain);
-            this.isFirstParty = this.sourceDomain === this.domain;
+            this.isFirstParty = this.sourceDomain.length === 0 ? null : this.sourceDomain === this.domain;
+            this.isThirdParty = this.sourceDomain.length === 0 ? null : !this.isFirstParty;
             var endOfProtocol = this.url.indexOf(':');
             if (endOfProtocol === -1) {
                 this.isHttps = true;
@@ -1990,7 +2041,7 @@
                 }
                 (_a = this.tokens).push.apply(_a, __spread(tokenize(this.url)));
             }
-            return this.tokens;
+            return new Uint32Array(this.tokens);
         };
         Request.prototype.getFuzzySignature = function () {
             if (this.fuzzySignature === undefined) {
@@ -2166,6 +2217,7 @@
         else if (filter.hasHostname()) {
             numberOfOptionalParts = 1;
         }
+        buffer.pushUint32(filter.getId());
         buffer.pushUint8(numberOfOptionalParts);
         buffer.pushUint32(filter.mask);
         if (numberOfOptionalParts === 0) {
@@ -2200,6 +2252,7 @@
         buffer.pushStr(filter.redirect);
     }
     function deserializeNetworkFilter(buffer) {
+        var id = buffer.getUint32();
         var numberOfOptionalParts = buffer.getUint8();
         var mask = buffer.getUint32();
         var hostname;
@@ -2216,25 +2269,25 @@
         if (numberOfOptionalParts > 2) {
             var numberOfOptDomains = buffer.getUint16();
             if (numberOfOptDomains > 0) {
-                optDomains = [];
+                optDomains = new Uint32Array(numberOfOptDomains);
                 for (var i = 0; i < numberOfOptDomains; i += 1) {
-                    optDomains.push(buffer.getUint32());
+                    optDomains[i] = buffer.getUint32();
                 }
             }
         }
         if (numberOfOptionalParts > 3) {
             var numberOfOptNotDomains = buffer.getUint16();
             if (numberOfOptNotDomains > 0) {
-                optNotDomains = [];
+                optNotDomains = new Uint32Array(numberOfOptNotDomains);
                 for (var i = 0; i < numberOfOptNotDomains; i += 1) {
-                    optNotDomains.push(buffer.getUint32());
+                    optNotDomains[i] = buffer.getUint32();
                 }
             }
         }
         if (numberOfOptionalParts > 4) {
             redirect = buffer.getStr() || undefined;
         }
-        return new NetworkFilter({
+        var deserializedFilter = new NetworkFilter({
             filter: filter,
             hostname: hostname,
             mask: mask,
@@ -2242,21 +2295,27 @@
             optNotDomains: optNotDomains,
             redirect: redirect
         });
+        deserializedFilter.id = id;
+        return deserializedFilter;
     }
     function serializeCosmeticFilter(filter, buffer) {
+        buffer.pushUint32(filter.getId());
         buffer.pushUint8(filter.mask);
         buffer.pushStr(filter.selector);
         buffer.pushStr(filter.hostnames);
     }
     function deserializeCosmeticFilter(buffer) {
+        var id = buffer.getUint32();
         var mask = buffer.getUint8();
         var selector = buffer.getStr();
         var hostnames = buffer.getStr();
-        return new CosmeticFilter({
+        var deserializedFilter = new CosmeticFilter({
             hostnames: hostnames || undefined,
             mask: mask,
             selector: selector || undefined
         });
+        deserializedFilter.id = id;
+        return deserializedFilter;
     }
     function serializeNetworkFilters(filters, buffer) {
         buffer.pushUint32(filters.length);
@@ -2725,7 +2784,7 @@
                 }
                 return true;
             };
-            this.selectorIndex.iterMatchingFilters(__spread(tokens), checkMatch);
+            this.selectorIndex.iterMatchingFilters(new Uint32Array(__spread(tokens)), checkMatch);
             return this.filterExceptions(rules);
         };
         CosmeticFilterBucket.prototype.filterExceptions = function (matches) {
@@ -2847,6 +2906,12 @@
     }
     function checkPatternHostnameRightAnchorFilter(filter, request) {
         if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+            return checkPatternRightAnchorFilter(filter, request);
+        }
+        return false;
+    }
+    function checkPatternHostnameLeftRightAnchorFilter(filter, request) {
+        if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
             if (filter.hasFilter() === false) {
                 return true;
             }
@@ -2885,6 +2950,9 @@
             if (filter.isRegex()) {
                 return checkPatternHostnameAnchorRegexFilter(filter, request);
             }
+            else if (filter.isRightAnchor() && filter.isLeftAnchor()) {
+                return checkPatternHostnameLeftRightAnchorFilter(filter, request);
+            }
             else if (filter.isRightAnchor()) {
                 return checkPatternHostnameRightAnchorFilter(filter, request);
             }
@@ -2917,8 +2985,8 @@
         if (filter.isCptAllowed(request.type) === false ||
             (request.isHttps === true && filter.fromHttps() === false) ||
             (request.isHttp === true && filter.fromHttp() === false) ||
-            (!filter.firstParty() && request.isFirstParty) ||
-            (!filter.thirdParty() && !request.isFirstParty)) {
+            (!filter.firstParty() && request.isFirstParty === true) ||
+            (!filter.thirdParty() && request.isThirdParty === true)) {
             return false;
         }
         if (filter.hasOptDomains()) {
@@ -2990,29 +3058,43 @@
                         return rawLine;
                     }).join(' <+> ');
                 }
-                var domains = [];
-                var notDomains = [];
+                var domains = new Set();
+                var notDomains = new Set();
                 for (var i = 0; i < filters.length; i += 1) {
-                    var f = filters[i];
-                    if (f.optDomains !== undefined) {
-                        domains.push.apply(domains, __spread(f.optDomains));
+                    var _a = filters[i], optDomains = _a.optDomains, optNotDomains = _a.optNotDomains;
+                    if (optDomains !== undefined) {
+                        optDomains.forEach(function (d) {
+                            domains.add(d);
+                        });
                     }
-                    if (f.optNotDomains !== undefined) {
-                        notDomains.push.apply(notDomains, __spread(f.optNotDomains));
+                    if (optNotDomains !== undefined) {
+                        optNotDomains.forEach(function (d) {
+                            notDomains.add(d);
+                        });
                     }
                 }
-                if (domains.length > 0) {
-                    filter.optDomains = domains;
+                if (domains.size > 0) {
+                    filter.optDomains = new Uint32Array(domains);
+                    filter.optDomainsSet = domains;
                 }
-                if (notDomains.length > 0) {
-                    filter.optNotDomains = notDomains;
+                else {
+                    filter.optDomains = undefined;
+                }
+                if (notDomains.size > 0) {
+                    filter.optNotDomains = new Uint32Array(notDomains);
+                    filter.optNotDomainsSet = notDomains;
+                }
+                else {
+                    filter.optNotDomains = undefined;
                 }
                 return filter;
             },
             groupByCriteria: function (filter) {
-                return filter.getHostname() + filter.getFilter() + filter.getMask() + filter.getRedirect();
+                return filter.getHostname() + " <+> " + filter.getFilter() + " <+> " + filter.getMask() + " <+> " + filter.getRedirect();
             },
-            select: function (filter) { return !filter.isFuzzy(); }
+            select: function (filter) {
+                return !filter.isFuzzy() && (filter.hasOptDomains() || filter.hasOptNotDomains());
+            }
         },
         {
             description: 'Group simple patterns, into a single filter',
@@ -3042,6 +3124,9 @@
                 }
                 if (patterns.length > 0) {
                     filter.setRegex(new RegExp(patterns.join('|')));
+                }
+                else {
+                    filter.filter = undefined;
                 }
                 return filter;
             },

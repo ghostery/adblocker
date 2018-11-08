@@ -134,6 +134,18 @@ function checkPatternHostnameAnchorRegexFilter(filter: NetworkFilter, request: R
 // ||pattern|
 function checkPatternHostnameRightAnchorFilter(filter: NetworkFilter, request: Request): boolean {
   if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+    return checkPatternRightAnchorFilter(filter, request);
+  }
+
+  return false;
+}
+
+// |||pattern|
+function checkPatternHostnameLeftRightAnchorFilter(
+  filter: NetworkFilter,
+  request: Request,
+): boolean {
+  if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
     if (filter.hasFilter() === false) {
       return true;
     }
@@ -210,6 +222,8 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
   if (filter.isHostnameAnchor()) {
     if (filter.isRegex()) {
       return checkPatternHostnameAnchorRegexFilter(filter, request);
+    } else if (filter.isRightAnchor() && filter.isLeftAnchor()) {
+      return checkPatternHostnameLeftRightAnchorFilter(filter, request);
     } else if (filter.isRightAnchor()) {
       return checkPatternHostnameRightAnchorFilter(filter, request);
     } else if (filter.isFuzzy()) {
@@ -240,8 +254,8 @@ function checkOptions(filter: NetworkFilter, request: Request): boolean {
     filter.isCptAllowed(request.type) === false ||
     (request.isHttps === true && filter.fromHttps() === false) ||
     (request.isHttp === true && filter.fromHttp() === false) ||
-    (!filter.firstParty() && request.isFirstParty) ||
-    (!filter.thirdParty() && !request.isFirstParty)
+    (!filter.firstParty() && request.isFirstParty === true) ||
+    (!filter.thirdParty() && request.isThirdParty === true)
   ) {
     return false;
   }

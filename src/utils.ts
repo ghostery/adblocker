@@ -110,17 +110,65 @@ function isAllowedCSS(ch: number): boolean {
   );
 }
 
-function fastTokenizer(
+const TOKENS_BUFFER = new Uint32Array(1000);
+
+function fastTokenizerNoRegex(
   pattern: string,
   isAllowedCode: (ch: number) => boolean,
-  allowRegexSurround: boolean,
+  skipFirstToken: boolean,
   skipLastToken: boolean,
-): number[] {
-  const tokens: number[] = [];
+): Uint32Array {
+  let tokenIndex = 0;
+  let inside: boolean = false;
+  let start = 0;
+  let precedingCh = 0; // Used to check if a '*' is not just before a token
+
+  for (let i: number = 0; i < pattern.length && tokenIndex < TOKENS_BUFFER.length; i += 1) {
+    const ch = pattern.charCodeAt(i);
+    if (isAllowedCode(ch)) {
+      if (inside === false) {
+        inside = true;
+        start = i;
+
+        // Keep track of character preceding token
+        if (i > 0) {
+          precedingCh = pattern.charCodeAt(i - 1);
+        }
+      }
+    } else if (inside === true) {
+      inside = false;
+      // Should not be followed by '*'
+      if (
+        (skipFirstToken === false || start !== 0) &&
+        i - start > 1 &&
+        ch !== 42 &&
+        precedingCh !== 42
+      ) {
+        TOKENS_BUFFER[tokenIndex] = fastHashBetween(pattern, start, i);
+        tokenIndex += 1;
+      }
+    }
+  }
+
+  if (
+    inside === true &&
+    pattern.length - start > 1 &&
+    precedingCh !== 42 &&
+    skipLastToken === false
+  ) {
+    TOKENS_BUFFER[tokenIndex] = fastHashBetween(pattern, start, pattern.length);
+    tokenIndex += 1;
+  }
+
+  return TOKENS_BUFFER.subarray(0, tokenIndex);
+}
+
+function fastTokenizer(pattern: string, isAllowedCode: (ch: number) => boolean): Uint32Array {
+  let tokenIndex = 0;
   let inside: boolean = false;
   let start = 0;
 
-  for (let i: number = 0, len = Math.min(2048, pattern.length); i < len; i += 1) {
+  for (let i: number = 0; i < pattern.length && tokenIndex < TOKENS_BUFFER.length; i += 1) {
     const ch = pattern.charCodeAt(i);
     if (isAllowedCode(ch)) {
       if (inside === false) {
@@ -129,30 +177,33 @@ function fastTokenizer(
       }
     } else if (inside === true) {
       inside = false;
-      // Should not be followed by '*'
-      if (i - start > 1 && (allowRegexSurround === true || ch !== 42)) {
-        tokens.push(fastHashBetween(pattern, start, i));
-      }
+      TOKENS_BUFFER[tokenIndex] = fastHashBetween(pattern, start, i);
+      tokenIndex += 1;
     }
   }
 
-  if (pattern.length - start > 1 && inside === true && skipLastToken === false) {
-    tokens.push(fastHashBetween(pattern, start, pattern.length));
+  if (inside === true) {
+    TOKENS_BUFFER[tokenIndex] = fastHashBetween(pattern, start, pattern.length);
+    tokenIndex += 1;
   }
 
-  return tokens;
+  return TOKENS_BUFFER.subarray(0, tokenIndex);
 }
 
-export function tokenize(pattern: string): number[] {
-  return fastTokenizer(pattern, isAllowed, false, false);
+export function tokenize(pattern: string): Uint32Array {
+  return fastTokenizerNoRegex(pattern, isAllowed, false, false);
 }
 
-export function tokenizeFilter(pattern: string, skipLastToken: boolean): number[] {
-  return fastTokenizer(pattern, isAllowed, false, skipLastToken);
+export function tokenizeFilter(
+  pattern: string,
+  skipFirstToken: boolean,
+  skipLastToken: boolean,
+): Uint32Array {
+  return fastTokenizerNoRegex(pattern, isAllowed, skipFirstToken, skipLastToken);
 }
 
-export function tokenizeCSS(pattern: string): number[] {
-  return fastTokenizer(pattern, isAllowedCSS, true, false);
+export function tokenizeCSS(pattern: string): Uint32Array {
+  return fastTokenizer(pattern, isAllowedCSS);
 }
 
 export function createFuzzySignature(pattern: string): Uint32Array {

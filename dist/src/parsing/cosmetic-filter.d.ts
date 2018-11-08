@@ -3,8 +3,8 @@ export declare class CosmeticFilter implements IFilter {
     mask: number;
     selector?: string;
     hostnames?: string;
+    id?: number;
     rawLine?: string;
-    private id?;
     private hostnamesArray?;
     constructor({ mask, selector, hostnames, }: {
         mask: number;
@@ -15,8 +15,8 @@ export declare class CosmeticFilter implements IFilter {
     isNetworkFilter(): boolean;
     toString(): string;
     getId(): number;
-    getTokens(): number[][];
-    getTokensSelector(): number[];
+    getTokens(): Uint32Array[];
+    getTokensSelector(): Uint32Array;
     getSelector(): string;
     hasHostnames(): boolean;
     getHostnames(): string[];

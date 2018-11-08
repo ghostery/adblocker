@@ -52,11 +52,11 @@ export default class ReverseIndex<T extends IFilter> {
   public index: Map<number, IBucket<T>>;
 
   private optimizer: (filters: T[]) => T[];
-  private getTokens: (filter: T) => number[][];
+  private getTokens: (filter: T) => Uint32Array[];
 
   constructor(
     filters: (cb: (f: T) => void) => void,
-    getTokens: (filter: T) => number[][],
+    getTokens: (filter: T) => Uint32Array[],
     { enableOptimizations = true, optimizer = noop }: Partial<IOptions<T>> = {
       enableOptimizations: true,
       optimizer: noop,
@@ -77,7 +77,7 @@ export default class ReverseIndex<T extends IFilter> {
    * tokens. The callback is called on each of them. Early termination can be
    * achieved if the callback returns `false`.
    */
-  public iterMatchingFilters(tokens: number[], cb: (f: T) => boolean): void {
+  public iterMatchingFilters(tokens: Uint32Array, cb: (f: T) => boolean): void {
     for (let i = 0; i < tokens.length; i += 1) {
       if (this.iterBucket(tokens[i], cb) === false) {
         return;

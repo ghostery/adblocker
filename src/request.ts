@@ -90,7 +90,8 @@ export default class Request {
   public isHttp: boolean;
   public isHttps: boolean;
   public isSupported: boolean;
-  public isFirstParty: boolean;
+  public isFirstParty: boolean | null;
+  public isThirdParty: boolean | null;
 
   public url: string;
   public hostname: string;
@@ -133,7 +134,9 @@ export default class Request {
     this.sourceHostnameHash = fastHash(this.sourceHostname);
     this.sourceDomainHash = fastHash(this.sourceDomain);
 
-    this.isFirstParty = this.sourceDomain === this.domain;
+    // Decide on party
+    this.isFirstParty = this.sourceDomain.length === 0 ? null : this.sourceDomain === this.domain;
+    this.isThirdParty = this.sourceDomain.length === 0 ? null : !this.isFirstParty;
 
     // Get protocol
     const endOfProtocol = this.url.indexOf(':');
@@ -161,7 +164,7 @@ export default class Request {
     }
   }
 
-  public getTokens(): number[] {
+  public getTokens(): Uint32Array {
     if (this.tokens === undefined) {
       this.tokens = [];
       if (this.sourceDomain) {
@@ -172,7 +175,7 @@ export default class Request {
       }
       this.tokens.push(...tokenize(this.url));
     }
-    return this.tokens;
+    return new Uint32Array(this.tokens);
   }
 
   public getFuzzySignature(): Uint32Array {

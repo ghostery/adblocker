@@ -67,6 +67,7 @@ describe('#FiltersEngine', () => {
                   url,
                 }),
               ].forEach((optimizedFilter) => {
+                matchingFilters.add(optimizedFilter.rawLine);
                 (optimizedFilter.rawLine || '').split(' <+> ').forEach((f) => {
                   matchingFilters.add(f);
                 });

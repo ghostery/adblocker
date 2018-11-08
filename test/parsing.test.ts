@@ -31,7 +31,6 @@ function network(filter: string, expected: any) {
       fromImage: parsed.fromImage(),
       fromMedia: parsed.fromMedia(),
       fromObject: parsed.fromObject(),
-      fromObjectSubrequest: parsed.fromObjectSubrequest(),
       fromOther: parsed.fromOther(),
       fromPing: parsed.fromPing(),
       fromScript: parsed.fromScript(),
@@ -74,7 +73,6 @@ const DEFAULT_NETWORK_FILTER = {
   fromImage: true,
   fromMedia: true,
   fromObject: true,
-  fromObjectSubrequest: true,
   fromOther: true,
   fromPing: true,
   fromScript: true,
@@ -137,6 +135,7 @@ describe('Network filters', () => {
       filter: '/bar/baz',
       hostname: 'foo.com',
       isImportant: true,
+      isLeftAnchor: true,
     });
   });
 
@@ -165,6 +164,7 @@ describe('Network filters', () => {
       filter: '/bar/baz',
       hostname: 'foo.com',
       isImportant: true,
+      isLeftAnchor: true,
       isPlain: true,
     });
     network('||foo.com^bar/*baz|$important', {
@@ -172,6 +172,7 @@ describe('Network filters', () => {
       filter: '^bar/*baz',
       hostname: 'foo.com',
       isImportant: true,
+      isLeftAnchor: true,
       isRegex: true,
     });
   });
@@ -256,13 +257,14 @@ describe('Network filters', () => {
 
     network('||foo.com*bar^', {
       ...base,
-      filter: '*bar^',
+      filter: 'bar^',
       hostname: 'foo.com',
     });
     network('||foo.com^bar*/baz^', {
       ...base,
       filter: '^bar*/baz^',
       hostname: 'foo.com',
+      isLeftAnchor: true,
     });
   });
 
@@ -276,13 +278,14 @@ describe('Network filters', () => {
 
     network('||foo.com*bar^|', {
       ...base,
-      filter: '*bar^',
+      filter: 'bar^',
       hostname: 'foo.com',
     });
     network('||foo.com^bar*/baz^|', {
       ...base,
       filter: '^bar*/baz^',
       hostname: 'foo.com',
+      isLeftAnchor: true,
     });
   });
 
@@ -341,6 +344,7 @@ describe('Network filters', () => {
       filter: '/ads',
       hostname: 'foo.com',
       isHostnameAnchor: true,
+      isLeftAnchor: true,
       isPlain: true,
     });
     network('@@|foo.com/ads', {
@@ -367,6 +371,7 @@ describe('Network filters', () => {
       filter: '/ads',
       hostname: 'foo.com',
       isHostnameAnchor: true,
+      isLeftAnchor: true,
       isPlain: true,
       isRightAnchor: true,
     });
@@ -573,7 +578,6 @@ describe('Network filters', () => {
       fromImage: value,
       fromMedia: value,
       fromObject: value,
-      fromObjectSubrequest: value,
       fromOther: value,
       fromPing: value,
       fromScript: value,
@@ -588,7 +592,7 @@ describe('Network filters', () => {
       ['image', 'fromImage'],
       ['media', 'fromMedia'],
       ['object', 'fromObject'],
-      ['object-subrequest', 'fromObjectSubrequest'],
+      ['object-subrequest', 'fromObject'],
       ['other', 'fromOther'],
       ['ping', 'fromPing'],
       ['script', 'fromScript'],
@@ -768,7 +772,9 @@ describe('Cosmetic filters', () => {
         const parsed = parseCosmeticFilter(`##${testCase.selector}`);
         expect(parsed).not.toBeNull();
         if (parsed !== null) {
-          expect(parsed.getTokensSelector()).toEqual(testCase.tokens.map(fastHash));
+          expect(parsed.getTokensSelector()).toEqual(
+            new Uint32Array(testCase.tokens.map(fastHash)),
+          );
         }
       });
     });

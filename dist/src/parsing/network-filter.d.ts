@@ -3,21 +3,21 @@ import IFilter from './interface';
 export declare class NetworkFilter implements IFilter {
     mask: number;
     filter?: string;
-    optDomains?: number[];
-    optNotDomains?: number[];
+    optDomains?: Uint32Array;
+    optNotDomains?: Uint32Array;
     redirect?: string;
     hostname?: string;
+    id?: number;
     rawLine?: string;
     optDomainsSet?: Set<number>;
     optNotDomainsSet?: Set<number>;
-    private id?;
     private fuzzySignature?;
     private regex?;
     constructor({ mask, filter, hostname, optDomains, optNotDomains, redirect, rawLine, }: {
         mask: number;
         filter?: string;
-        optDomains?: number[];
-        optNotDomains?: number[];
+        optDomains?: Uint32Array;
+        optNotDomains?: Uint32Array;
         redirect?: string;
         hostname?: string;
         rawLine?: string;
@@ -43,7 +43,7 @@ export declare class NetworkFilter implements IFilter {
     setRegex(re: RegExp): void;
     getRegex(): RegExp;
     getFuzzySignature(): Uint32Array;
-    getTokens(): number[][];
+    getTokens(): Uint32Array[];
     isCptAllowed(cpt: RequestType): boolean;
     isFuzzy(): boolean;
     isException(): boolean;

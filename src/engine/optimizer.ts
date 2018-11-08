@@ -61,8 +61,8 @@ interface IOptimization {
   fusion: (filters: NetworkFilter[]) => NetworkFilter;
 }
 
-// TODO: re-introduce more optimizations
 const OPTIMIZATIONS: IOptimization[] = [
+  // TODO - add filter deduplication
   {
     description: 'Group idential filter with same mask but different domains in single filters',
     fusion: (filters: NetworkFilter[]) => {
@@ -73,32 +73,43 @@ const OPTIMIZATIONS: IOptimization[] = [
         filter.rawLine = filters.map(({ rawLine }) => rawLine).join(' <+> ');
       }
 
-      const domains: number[] = [];
-      const notDomains: number[] = [];
+      const domains: Set<number> = new Set();
+      const notDomains: Set<number> = new Set();
 
       for (let i = 0; i < filters.length; i += 1) {
-        const f = filters[i];
-        if (f.optDomains !== undefined) {
-          domains.push(...f.optDomains);
+        const { optDomains, optNotDomains } = filters[i];
+        if (optDomains !== undefined) {
+          optDomains.forEach((d) => {
+            domains.add(d);
+          });
         }
-        if (f.optNotDomains !== undefined) {
-          notDomains.push(...f.optNotDomains);
+        if (optNotDomains !== undefined) {
+          optNotDomains.forEach((d) => {
+            notDomains.add(d);
+          });
         }
       }
 
-      if (domains.length > 0) {
-        filter.optDomains = domains;
+      if (domains.size > 0) {
+        filter.optDomains = new Uint32Array(domains);
+        filter.optDomainsSet = domains;
+      } else {
+        filter.optDomains = undefined;
       }
 
-      if (notDomains.length > 0) {
-        filter.optNotDomains = notDomains;
+      if (notDomains.size > 0) {
+        filter.optNotDomains = new Uint32Array(notDomains);
+        filter.optNotDomainsSet = notDomains;
+      } else {
+        filter.optNotDomains = undefined;
       }
 
       return filter;
     },
     groupByCriteria: (filter: NetworkFilter) =>
-      filter.getHostname() + filter.getFilter() + filter.getMask() + filter.getRedirect(),
-    select: (filter: NetworkFilter) => !filter.isFuzzy(),
+      `${filter.getHostname()} <+> ${filter.getFilter()} <+> ${filter.getMask()} <+> ${filter.getRedirect()}`,
+    select: (filter: NetworkFilter) =>
+      !filter.isFuzzy() && (filter.hasOptDomains() || filter.hasOptNotDomains()),
   },
   {
     description: 'Group simple patterns, into a single filter',
@@ -126,6 +137,8 @@ const OPTIMIZATIONS: IOptimization[] = [
 
       if (patterns.length > 0) {
         filter.setRegex(new RegExp(patterns.join('|')));
+      } else {
+        filter.filter = undefined;
       }
 
       return filter;
