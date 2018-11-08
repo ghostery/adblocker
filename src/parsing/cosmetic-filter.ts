@@ -64,14 +64,17 @@ export class CosmeticFilter implements IFilter {
   private hostnamesArray?: string[];
 
   constructor({
+    hostnames,
+    id,
     mask,
     selector,
-    hostnames,
   }: {
+    hostnames?: string;
+    id?: number;
     mask: number;
     selector?: string;
-    hostnames?: string;
   }) {
+    this.id = id;
     this.mask = mask;
     this.selector = selector;
     this.hostnames = hostnames;

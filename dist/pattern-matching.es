@@ -579,8 +579,9 @@ var EMPTY_SET = new Set();
 var MATCH_ALL = new RegExp('');
 var NetworkFilter = (function () {
     function NetworkFilter(_a) {
-        var mask = _a.mask, filter = _a.filter, hostname = _a.hostname, optDomains = _a.optDomains, optNotDomains = _a.optNotDomains, redirect = _a.redirect, rawLine = _a.rawLine;
+        var filter = _a.filter, hostname = _a.hostname, id = _a.id, mask = _a.mask, optDomains = _a.optDomains, optNotDomains = _a.optNotDomains, rawLine = _a.rawLine, redirect = _a.redirect;
         this.mask = mask;
+        this.id = id;
         this.filter = filter;
         this.redirect = redirect;
         this.hostname = hostname;

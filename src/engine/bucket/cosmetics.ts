@@ -150,7 +150,7 @@ export default class CosmeticFilterBucket {
       return true;
     };
 
-    this.selectorIndex.iterMatchingFilters(new Uint32Array([...tokens]), checkMatch);
+    this.selectorIndex.iterMatchingFilters(new Uint32Array(tokens), checkMatch);
 
     return this.filterExceptions(rules);
   }

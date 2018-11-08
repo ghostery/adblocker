@@ -67,11 +67,9 @@ const FROM_ANY: number =
  * Map content type value to mask the corresponding mask.
  * ref: https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIContentPolicy
  */
-interface IDict {
+const CPT_TO_MASK: {
   [s: number]: number;
-}
-
-const CPT_TO_MASK: IDict = {
+} = {
   [RequestType.other]: NETWORK_FILTER_MASK.fromOther,
   [RequestType.script]: NETWORK_FILTER_MASK.fromScript,
   [RequestType.image]: NETWORK_FILTER_MASK.fromImage,
@@ -187,24 +185,27 @@ export class NetworkFilter implements IFilter {
   private regex?: RegExp;
 
   constructor({
-    mask,
     filter,
     hostname,
+    id,
+    mask,
     optDomains,
     optNotDomains,
-    redirect,
     rawLine,
+    redirect,
   }: {
-    mask: number;
     filter?: string;
+    hostname?: string;
+    id?: number;
+    mask: number;
     optDomains?: Uint32Array;
     optNotDomains?: Uint32Array;
-    redirect?: string;
-    hostname?: string;
     rawLine?: string;
+    redirect?: string;
   }) {
     // Those fields should not be mutated.
     this.mask = mask;
+    this.id = id;
 
     this.filter = filter;
     this.redirect = redirect;

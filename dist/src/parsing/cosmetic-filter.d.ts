@@ -6,10 +6,11 @@ export declare class CosmeticFilter implements IFilter {
     id?: number;
     rawLine?: string;
     private hostnamesArray?;
-    constructor({ mask, selector, hostnames, }: {
+    constructor({ hostnames, id, mask, selector, }: {
+        hostnames?: string;
+        id?: number;
         mask: number;
         selector?: string;
-        hostnames?: string;
     });
     isCosmeticFilter(): boolean;
     isNetworkFilter(): boolean;

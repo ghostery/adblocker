@@ -13,14 +13,15 @@ export declare class NetworkFilter implements IFilter {
     optNotDomainsSet?: Set<number>;
     private fuzzySignature?;
     private regex?;
-    constructor({ mask, filter, hostname, optDomains, optNotDomains, redirect, rawLine, }: {
-        mask: number;
+    constructor({ filter, hostname, id, mask, optDomains, optNotDomains, rawLine, redirect, }: {
         filter?: string;
+        hostname?: string;
+        id?: number;
+        mask: number;
         optDomains?: Uint32Array;
         optNotDomains?: Uint32Array;
-        redirect?: string;
-        hostname?: string;
         rawLine?: string;
+        redirect?: string;
     });
     isCosmeticFilter(): boolean;
     isNetworkFilter(): boolean;

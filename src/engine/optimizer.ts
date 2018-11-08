@@ -107,7 +107,7 @@ const OPTIMIZATIONS: IOptimization[] = [
       return filter;
     },
     groupByCriteria: (filter: NetworkFilter) =>
-      `${filter.getHostname()} <+> ${filter.getFilter()} <+> ${filter.getMask()} <+> ${filter.getRedirect()}`,
+      filter.getHostname() + filter.getFilter() + filter.getMask() + filter.getRedirect(),
     select: (filter: NetworkFilter) =>
       !filter.isFuzzy() && (filter.hasOptDomains() || filter.hasOptNotDomains()),
   },

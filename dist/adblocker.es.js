@@ -414,7 +414,8 @@ function computeFilterId(mask, selector, hostnames) {
 var TOKENS_BUFFER$1 = new Uint32Array(200);
 var CosmeticFilter = (function () {
     function CosmeticFilter(_a) {
-        var mask = _a.mask, selector = _a.selector, hostnames = _a.hostnames;
+        var hostnames = _a.hostnames, id = _a.id, mask = _a.mask, selector = _a.selector;
+        this.id = id;
         this.mask = mask;
         this.selector = selector;
         this.hostnames = hostnames;
@@ -659,8 +660,9 @@ var EMPTY_SET = new Set();
 var MATCH_ALL = new RegExp('');
 var NetworkFilter = (function () {
     function NetworkFilter(_a) {
-        var mask = _a.mask, filter = _a.filter, hostname = _a.hostname, optDomains = _a.optDomains, optNotDomains = _a.optNotDomains, redirect = _a.redirect, rawLine = _a.rawLine;
+        var filter = _a.filter, hostname = _a.hostname, id = _a.id, mask = _a.mask, optDomains = _a.optDomains, optNotDomains = _a.optNotDomains, rawLine = _a.rawLine, redirect = _a.redirect;
         this.mask = mask;
+        this.id = id;
         this.filter = filter;
         this.redirect = redirect;
         this.hostname = hostname;
@@ -2281,16 +2283,15 @@ function deserializeNetworkFilter(buffer) {
     if (numberOfOptionalParts > 4) {
         redirect = buffer.getStr() || undefined;
     }
-    var deserializedFilter = new NetworkFilter({
+    return new NetworkFilter({
         filter: filter,
         hostname: hostname,
+        id: id,
         mask: mask,
         optDomains: optDomains,
         optNotDomains: optNotDomains,
         redirect: redirect
     });
-    deserializedFilter.id = id;
-    return deserializedFilter;
 }
 function serializeCosmeticFilter(filter, buffer) {
     buffer.pushUint32(filter.getId());
@@ -2303,13 +2304,12 @@ function deserializeCosmeticFilter(buffer) {
     var mask = buffer.getUint8();
     var selector = buffer.getStr();
     var hostnames = buffer.getStr();
-    var deserializedFilter = new CosmeticFilter({
+    return new CosmeticFilter({
         hostnames: hostnames || undefined,
+        id: id,
         mask: mask,
         selector: selector || undefined
     });
-    deserializedFilter.id = id;
-    return deserializedFilter;
 }
 function serializeNetworkFilters(filters, buffer) {
     buffer.pushUint32(filters.length);
@@ -2778,7 +2778,7 @@ var CosmeticFilterBucket = (function () {
             }
             return true;
         };
-        this.selectorIndex.iterMatchingFilters(new Uint32Array(__spread(tokens)), checkMatch);
+        this.selectorIndex.iterMatchingFilters(new Uint32Array(tokens), checkMatch);
         return this.filterExceptions(rules);
     };
     CosmeticFilterBucket.prototype.filterExceptions = function (matches) {
@@ -3084,7 +3084,7 @@ var OPTIMIZATIONS = [
             return filter;
         },
         groupByCriteria: function (filter) {
-            return filter.getHostname() + " <+> " + filter.getFilter() + " <+> " + filter.getMask() + " <+> " + filter.getRedirect();
+            return filter.getHostname() + filter.getFilter() + filter.getMask() + filter.getRedirect();
         },
         select: function (filter) {
             return !filter.isFuzzy() && (filter.hasOptDomains() || filter.hasOptNotDomains());

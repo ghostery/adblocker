@@ -150,16 +150,15 @@ function deserializeNetworkFilter(buffer: DynamicDataView): NetworkFilter {
     redirect = buffer.getStr() || undefined;
   }
 
-  const deserializedFilter = new NetworkFilter({
+  return new NetworkFilter({
     filter,
     hostname,
+    id,
     mask,
     optDomains,
     optNotDomains,
     redirect,
   });
-  deserializedFilter.id = id;
-  return deserializedFilter;
 }
 
 /**
@@ -191,13 +190,12 @@ function deserializeCosmeticFilter(buffer: DynamicDataView): CosmeticFilter {
   const selector = buffer.getStr();
   const hostnames = buffer.getStr();
 
-  const deserializedFilter = new CosmeticFilter({
+  return new CosmeticFilter({
     hostnames: hostnames || undefined,
+    id,
     mask,
     selector: selector || undefined,
   });
-  deserializedFilter.id = id;
-  return deserializedFilter;
 }
 
 function serializeNetworkFilters(filters: NetworkFilter[], buffer: DynamicDataView): void {
