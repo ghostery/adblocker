@@ -147,13 +147,13 @@ function isAlphaExtended(ch) {
 function isAllowed(ch) {
     return isDigit(ch) || isAlpha(ch) || isAlphaExtended(ch) || ch === 37;
 }
-var TOKENS_BUFFER = new Uint32Array(1000);
+var TOKENS_BUFFER = new Uint32Array(200);
 function fastTokenizerNoRegex(pattern, isAllowedCode, skipFirstToken, skipLastToken) {
-    var tokenIndex = 0;
+    var tokensBufferIndex = 0;
     var inside = false;
     var start = 0;
     var precedingCh = 0;
-    for (var i = 0; i < pattern.length && tokenIndex < TOKENS_BUFFER.length; i += 1) {
+    for (var i = 0; i < pattern.length && tokensBufferIndex < TOKENS_BUFFER.length; i += 1) {
         var ch = pattern.charCodeAt(i);
         if (isAllowedCode(ch)) {
             if (inside === false) {
@@ -170,8 +170,8 @@ function fastTokenizerNoRegex(pattern, isAllowedCode, skipFirstToken, skipLastTo
                 i - start > 1 &&
                 ch !== 42 &&
                 precedingCh !== 42) {
-                TOKENS_BUFFER[tokenIndex] = fastHashBetween(pattern, start, i);
-                tokenIndex += 1;
+                TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, i);
+                tokensBufferIndex += 1;
             }
         }
     }
@@ -179,10 +179,10 @@ function fastTokenizerNoRegex(pattern, isAllowedCode, skipFirstToken, skipLastTo
         pattern.length - start > 1 &&
         precedingCh !== 42 &&
         skipLastToken === false) {
-        TOKENS_BUFFER[tokenIndex] = fastHashBetween(pattern, start, pattern.length);
-        tokenIndex += 1;
+        TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, pattern.length);
+        tokensBufferIndex += 1;
     }
-    return TOKENS_BUFFER.subarray(0, tokenIndex);
+    return TOKENS_BUFFER.subarray(0, tokensBufferIndex);
 }
 function tokenize(pattern) {
     return fastTokenizerNoRegex(pattern, isAllowed, false, false);
@@ -1809,6 +1809,7 @@ var CPT_TO_TYPE = {
     20: 4,
     21: 6
 };
+var TOKENS_BUFFER$2 = new Uint32Array(300);
 var Request = (function () {
     function Request(_a) {
         var _b = _a === void 0 ? {} : _a, _c = _b.type, type = _c === void 0 ? 'document' : _c, _d = _b.url, url = _d === void 0 ? '' : _d, hostname = _b.hostname, domain = _b.domain, _e = _b.sourceUrl, sourceUrl = _e === void 0 ? '' : _e, sourceHostname = _b.sourceHostname, sourceDomain = _b.sourceDomain;
@@ -1843,18 +1844,22 @@ var Request = (function () {
         }
     }
     Request.prototype.getTokens = function () {
-        var _a;
         if (this.tokens === undefined) {
-            this.tokens = [];
+            var tokensBufferIndex = 0;
             if (this.sourceDomain) {
-                this.tokens.push(fastHash(this.sourceDomain));
+                TOKENS_BUFFER$2[tokensBufferIndex] = fastHash(this.sourceDomain);
+                tokensBufferIndex += 1;
             }
             if (this.sourceHostname) {
-                this.tokens.push(fastHash(this.sourceHostname));
+                TOKENS_BUFFER$2[tokensBufferIndex] = fastHash(this.sourceHostname);
+                tokensBufferIndex += 1;
             }
-            (_a = this.tokens).push.apply(_a, __spread(tokenize(this.url)));
+            var tokens = tokenize(this.url);
+            TOKENS_BUFFER$2.set(tokens, tokensBufferIndex);
+            tokensBufferIndex += tokens.length;
+            this.tokens = TOKENS_BUFFER$2.slice(0, tokensBufferIndex);
         }
-        return new Uint32Array(this.tokens);
+        return this.tokens;
     };
     Request.prototype.getFuzzySignature = function () {
         if (this.fuzzySignature === undefined) {

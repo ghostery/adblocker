@@ -283,10 +283,9 @@ export default class FilterEngine {
     redirect?: string;
     exception?: NetworkFilter;
     filter?: NetworkFilter;
-    req: Request;
   } {
     if (!this.loadNetworkFilters) {
-      return { match: false, req: new Request(rawRequest) };
+      return { match: false };
     }
 
     // Transforms { url, sourceUrl, cpt } into a more complete request context
@@ -343,7 +342,6 @@ export default class FilterEngine {
       filter,
       match: exception === undefined && filter !== undefined,
       redirect,
-      req: request,
     };
   }
 }

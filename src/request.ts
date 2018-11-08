@@ -73,6 +73,8 @@ const CPT_TO_TYPE: {
   21: RequestType.image,
 };
 
+const TOKENS_BUFFER = new Uint32Array(300);
+
 export interface IRequestInitialization {
   url: string;
   hostname: string;
@@ -104,7 +106,7 @@ export default class Request {
   public sourceDomainHash: number;
 
   // Lazy attributes
-  private tokens?: number[];
+  private tokens?: Uint32Array;
   private fuzzySignature?: Uint32Array;
 
   constructor({
@@ -166,16 +168,24 @@ export default class Request {
 
   public getTokens(): Uint32Array {
     if (this.tokens === undefined) {
-      this.tokens = [];
+      let tokensBufferIndex = 0;
       if (this.sourceDomain) {
-        this.tokens.push(fastHash(this.sourceDomain));
+        TOKENS_BUFFER[tokensBufferIndex] = fastHash(this.sourceDomain);
+        tokensBufferIndex += 1;
       }
       if (this.sourceHostname) {
-        this.tokens.push(fastHash(this.sourceHostname));
+        TOKENS_BUFFER[tokensBufferIndex] = fastHash(this.sourceHostname);
+        tokensBufferIndex += 1;
       }
-      this.tokens.push(...tokenize(this.url));
+
+      const tokens = tokenize(this.url);
+      TOKENS_BUFFER.set(tokens, tokensBufferIndex);
+      tokensBufferIndex += tokens.length;
+
+      this.tokens = TOKENS_BUFFER.slice(0, tokensBufferIndex);
     }
-    return new Uint32Array(this.tokens);
+
+    return this.tokens;
   }
 
   public getFuzzySignature(): Uint32Array {

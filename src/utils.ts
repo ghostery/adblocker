@@ -110,7 +110,7 @@ function isAllowedCSS(ch: number): boolean {
   );
 }
 
-const TOKENS_BUFFER = new Uint32Array(1000);
+const TOKENS_BUFFER = new Uint32Array(200);
 
 function fastTokenizerNoRegex(
   pattern: string,
@@ -118,12 +118,12 @@ function fastTokenizerNoRegex(
   skipFirstToken: boolean,
   skipLastToken: boolean,
 ): Uint32Array {
-  let tokenIndex = 0;
+  let tokensBufferIndex = 0;
   let inside: boolean = false;
   let start = 0;
   let precedingCh = 0; // Used to check if a '*' is not just before a token
 
-  for (let i: number = 0; i < pattern.length && tokenIndex < TOKENS_BUFFER.length; i += 1) {
+  for (let i: number = 0; i < pattern.length && tokensBufferIndex < TOKENS_BUFFER.length; i += 1) {
     const ch = pattern.charCodeAt(i);
     if (isAllowedCode(ch)) {
       if (inside === false) {
@@ -144,8 +144,8 @@ function fastTokenizerNoRegex(
         ch !== 42 &&
         precedingCh !== 42
       ) {
-        TOKENS_BUFFER[tokenIndex] = fastHashBetween(pattern, start, i);
-        tokenIndex += 1;
+        TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, i);
+        tokensBufferIndex += 1;
       }
     }
   }
@@ -156,19 +156,19 @@ function fastTokenizerNoRegex(
     precedingCh !== 42 &&
     skipLastToken === false
   ) {
-    TOKENS_BUFFER[tokenIndex] = fastHashBetween(pattern, start, pattern.length);
-    tokenIndex += 1;
+    TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, pattern.length);
+    tokensBufferIndex += 1;
   }
 
-  return TOKENS_BUFFER.subarray(0, tokenIndex);
+  return TOKENS_BUFFER.subarray(0, tokensBufferIndex);
 }
 
 function fastTokenizer(pattern: string, isAllowedCode: (ch: number) => boolean): Uint32Array {
-  let tokenIndex = 0;
+  let tokensBufferIndex = 0;
   let inside: boolean = false;
   let start = 0;
 
-  for (let i: number = 0; i < pattern.length && tokenIndex < TOKENS_BUFFER.length; i += 1) {
+  for (let i: number = 0; i < pattern.length && tokensBufferIndex < TOKENS_BUFFER.length; i += 1) {
     const ch = pattern.charCodeAt(i);
     if (isAllowedCode(ch)) {
       if (inside === false) {
@@ -177,17 +177,17 @@ function fastTokenizer(pattern: string, isAllowedCode: (ch: number) => boolean):
       }
     } else if (inside === true) {
       inside = false;
-      TOKENS_BUFFER[tokenIndex] = fastHashBetween(pattern, start, i);
-      tokenIndex += 1;
+      TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, i);
+      tokensBufferIndex += 1;
     }
   }
 
   if (inside === true) {
-    TOKENS_BUFFER[tokenIndex] = fastHashBetween(pattern, start, pattern.length);
-    tokenIndex += 1;
+    TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, pattern.length);
+    tokensBufferIndex += 1;
   }
 
-  return TOKENS_BUFFER.subarray(0, tokenIndex);
+  return TOKENS_BUFFER.subarray(0, tokensBufferIndex);
 }
 
 export function tokenize(pattern: string): Uint32Array {
