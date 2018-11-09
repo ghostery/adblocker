@@ -16,22 +16,20 @@ export function clearBit(n: number, mask: number): number {
   return n & ~mask;
 }
 
-// TODO - depending on the filters we have in the lists, this hash function
-// could result in collisions. One way to make sure it does not happen, would be
-// to select a set of prime numbers for the seed and increment that do not
-// generate collisions on our set of filters.
 function fastHashBetween(str: string, begin: number, end: number): number {
-  let hash = 5407;
+  let hash = 5381;
 
   for (let i = begin; i < end; i += 1) {
-    hash = (hash * 31) ^ str.charCodeAt(i);
+    hash = (hash * 33) ^ str.charCodeAt(i);
   }
 
   return hash >>> 0;
 }
 
 export function fastHash(str: string): number {
-  if (!str) { return 0; }
+  if (!str) {
+    return 0;
+  }
   return fastHashBetween(str, 0, str.length);
 }
 
@@ -51,11 +49,7 @@ export function fastStartsWith(haystack: string, needle: string): boolean {
   return true;
 }
 
-export function fastStartsWithFrom(
-  haystack: string,
-  needle: string,
-  start: number,
-): boolean {
+export function fastStartsWithFrom(haystack: string, needle: string, start: number): boolean {
   if (haystack.length - start < needle.length) {
     return false;
   }
@@ -70,16 +64,6 @@ export function fastStartsWithFrom(
   return true;
 }
 
-// const COSMETIC_SPLIT_RE = /[#.\w_-]{2,}/g;
-// export function tokenizeCSS(selector) {
-//   return selector.match(COSMETIC_SPLIT_RE) || [];
-// }
-
-// const TOKENIZE_RE = /[a-zA-Z0-9](?![*])/g;
-// export function tokenize(pattern) {
-//   return pattern.match(TOKENIZE_RE) || [];
-// }
-
 // Efficient manuel lexer
 function isDigit(ch: number): boolean {
   // 48 == '0'
@@ -88,11 +72,11 @@ function isDigit(ch: number): boolean {
 }
 
 function isAlpha(ch: number): boolean {
-  // Force to upper-case
-  ch &= ~32;
+  // Force to lower-case
+  ch |= 32;
   // 65 == 'A'
   // 90 == 'Z'
-  return ch >= 65 && ch <= 90;
+  return ch >= 97 && ch <= 122;
 }
 
 function isAlphaExtended(ch: number): boolean {
@@ -112,7 +96,7 @@ function isAlphaExtended(ch: number): boolean {
 }
 
 function isAllowed(ch: number): boolean {
-  return isDigit(ch) || isAlpha(ch) || isAlphaExtended(ch);
+  return isDigit(ch) || isAlpha(ch) || isAlphaExtended(ch) || ch === 37 /* '%' */;
 }
 
 function isAllowedCSS(ch: number): boolean {
@@ -126,17 +110,65 @@ function isAllowedCSS(ch: number): boolean {
   );
 }
 
-function fastTokenizer(
+const TOKENS_BUFFER = new Uint32Array(200);
+
+function fastTokenizerNoRegex(
   pattern: string,
   isAllowedCode: (ch: number) => boolean,
-  allowRegexSurround: boolean,
+  skipFirstToken: boolean,
   skipLastToken: boolean,
-): number[] {
-  const tokens: number[] = [];
+): Uint32Array {
+  let tokensBufferIndex = 0;
+  let inside: boolean = false;
+  let start = 0;
+  let precedingCh = 0; // Used to check if a '*' is not just before a token
+
+  for (let i: number = 0; i < pattern.length && tokensBufferIndex < TOKENS_BUFFER.length; i += 1) {
+    const ch = pattern.charCodeAt(i);
+    if (isAllowedCode(ch)) {
+      if (inside === false) {
+        inside = true;
+        start = i;
+
+        // Keep track of character preceding token
+        if (i > 0) {
+          precedingCh = pattern.charCodeAt(i - 1);
+        }
+      }
+    } else if (inside === true) {
+      inside = false;
+      // Should not be followed by '*'
+      if (
+        (skipFirstToken === false || start !== 0) &&
+        i - start > 1 &&
+        ch !== 42 &&
+        precedingCh !== 42
+      ) {
+        TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, i);
+        tokensBufferIndex += 1;
+      }
+    }
+  }
+
+  if (
+    inside === true &&
+    pattern.length - start > 1 &&
+    precedingCh !== 42 &&
+    skipLastToken === false
+  ) {
+    TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, pattern.length);
+    tokensBufferIndex += 1;
+  }
+
+  return TOKENS_BUFFER.subarray(0, tokensBufferIndex);
+}
+
+function fastTokenizer(pattern: string, isAllowedCode: (ch: number) => boolean): Uint32Array {
+  let tokensBufferIndex = 0;
   let inside: boolean = false;
   let start = 0;
 
-  for (let i: number = 0, len = pattern.length; i < len; i += 1) {
+  for (let i: number = 0; i < pattern.length && tokensBufferIndex < TOKENS_BUFFER.length; i += 1) {
     const ch = pattern.charCodeAt(i);
     if (isAllowedCode(ch)) {
       if (inside === false) {
@@ -145,32 +177,66 @@ function fastTokenizer(
       }
     } else if (inside === true) {
       inside = false;
-      // Should not be followed by '*'
-      if (allowRegexSurround === true || ch !== 42) {
-        tokens.push(fastHashBetween(pattern, start, i));
-      }
+      TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, i);
+      tokensBufferIndex += 1;
     }
   }
 
-  if (inside === true && skipLastToken === false) {
-    tokens.push(fastHashBetween(pattern, start, pattern.length));
+  if (inside === true) {
+    TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, pattern.length);
+    tokensBufferIndex += 1;
   }
 
-  return tokens;
+  return TOKENS_BUFFER.subarray(0, tokensBufferIndex);
 }
 
-export function tokenize(pattern: string): number[] {
-  return fastTokenizer(pattern, isAllowed, false, false);
+export function tokenize(pattern: string): Uint32Array {
+  return fastTokenizerNoRegex(pattern, isAllowed, false, false);
 }
 
-export function tokenizeFilter(pattern: string, skipLastToken: boolean): number[] {
-  return fastTokenizer(pattern, isAllowed, false, skipLastToken);
+export function tokenizeFilter(
+  pattern: string,
+  skipFirstToken: boolean,
+  skipLastToken: boolean,
+): Uint32Array {
+  return fastTokenizerNoRegex(pattern, isAllowed, skipFirstToken, skipLastToken);
 }
 
-export function tokenizeCSS(pattern: string): number[] {
-  return fastTokenizer(pattern, isAllowedCSS, true, false);
+export function tokenizeCSS(pattern: string): Uint32Array {
+  return fastTokenizer(pattern, isAllowedCSS);
 }
 
 export function createFuzzySignature(pattern: string): Uint32Array {
   return compactTokens(new Uint32Array(tokenize(pattern)));
+}
+
+export function binSearch(arr: Uint32Array, elt: number): boolean {
+  // TODO - check most common case?
+  if (arr.length === 0) {
+    return false;
+  }
+
+  if (arr.length === 1) {
+    return arr[0] === elt;
+  }
+
+  if (arr.length === 2) {
+    return arr[0] === elt || arr[1] === elt;
+  }
+
+  let low = 0;
+  let high = arr.length - 1;
+
+  while (low <= high) {
+    const mid = (low + high) >>> 1;
+    const midVal = arr[mid];
+    if (midVal < elt) {
+      low = mid + 1;
+    } else if (midVal > elt) {
+      high = mid - 1;
+    } else {
+      return true;
+    }
+  }
+  return false;
 }

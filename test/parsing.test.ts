@@ -17,7 +17,6 @@ function network(filter: string, expected: any) {
 
       // Filter type
       isException: parsed.isException(),
-      isHostname: parsed.isHostname(),
       isHostnameAnchor: parsed.isHostnameAnchor(),
       isLeftAnchor: parsed.isLeftAnchor(),
       isPlain: parsed.isPlain(),
@@ -32,7 +31,6 @@ function network(filter: string, expected: any) {
       fromImage: parsed.fromImage(),
       fromMedia: parsed.fromMedia(),
       fromObject: parsed.fromObject(),
-      fromObjectSubrequest: parsed.fromObjectSubrequest(),
       fromOther: parsed.fromOther(),
       fromPing: parsed.fromPing(),
       fromScript: parsed.fromScript(),
@@ -56,13 +54,12 @@ const DEFAULT_NETWORK_FILTER = {
   // Attributes
   filter: '',
   hostname: '',
-  optDomains: new Set(),
-  optNotDomains: new Set(),
+  optDomains: new Uint32Array([]),
+  optNotDomains: new Uint32Array([]),
   redirect: '',
 
   // Filter type
   isException: false,
-  isHostname: false,
   isHostnameAnchor: false,
   isLeftAnchor: false,
   isPlain: false,
@@ -76,7 +73,6 @@ const DEFAULT_NETWORK_FILTER = {
   fromImage: true,
   fromMedia: true,
   fromObject: true,
-  fromObjectSubrequest: true,
   fromOther: true,
   fromPing: true,
   fromScript: true,
@@ -90,20 +86,6 @@ const DEFAULT_NETWORK_FILTER = {
 };
 
 describe('Network filters', () => {
-  it('parses hostname', () => {
-    const base = {
-      ...DEFAULT_NETWORK_FILTER,
-      isHostname: true,
-    };
-
-    network('127.0.0.1 foo.com', {
-      ...base,
-      hostname: 'foo.com',
-      isHostnameAnchor: true,
-      isPlain: true,
-    });
-  });
-
   it('parses pattern', () => {
     const base = {
       ...DEFAULT_NETWORK_FILTER,
@@ -153,6 +135,7 @@ describe('Network filters', () => {
       filter: '/bar/baz',
       hostname: 'foo.com',
       isImportant: true,
+      isLeftAnchor: true,
     });
   });
 
@@ -181,6 +164,7 @@ describe('Network filters', () => {
       filter: '/bar/baz',
       hostname: 'foo.com',
       isImportant: true,
+      isLeftAnchor: true,
       isPlain: true,
     });
     network('||foo.com^bar/*baz|$important', {
@@ -188,6 +172,7 @@ describe('Network filters', () => {
       filter: '^bar/*baz',
       hostname: 'foo.com',
       isImportant: true,
+      isLeftAnchor: true,
       isRegex: true,
     });
   });
@@ -253,7 +238,7 @@ describe('Network filters', () => {
 
     network('*bar^', {
       ...base,
-      filter: '*bar^',
+      filter: 'bar^',
       hostname: '',
     });
     network('foo.com/*bar^', {
@@ -272,13 +257,14 @@ describe('Network filters', () => {
 
     network('||foo.com*bar^', {
       ...base,
-      filter: '*bar^',
+      filter: 'bar^',
       hostname: 'foo.com',
     });
     network('||foo.com^bar*/baz^', {
       ...base,
       filter: '^bar*/baz^',
       hostname: 'foo.com',
+      isLeftAnchor: true,
     });
   });
 
@@ -292,13 +278,14 @@ describe('Network filters', () => {
 
     network('||foo.com*bar^|', {
       ...base,
-      filter: '*bar^',
+      filter: 'bar^',
       hostname: 'foo.com',
     });
     network('||foo.com^bar*/baz^|', {
       ...base,
       filter: '^bar*/baz^',
       hostname: 'foo.com',
+      isLeftAnchor: true,
     });
   });
 
@@ -357,6 +344,7 @@ describe('Network filters', () => {
       filter: '/ads',
       hostname: 'foo.com',
       isHostnameAnchor: true,
+      isLeftAnchor: true,
       isPlain: true,
     });
     network('@@|foo.com/ads', {
@@ -383,6 +371,7 @@ describe('Network filters', () => {
       filter: '/ads',
       hostname: 'foo.com',
       isHostnameAnchor: true,
+      isLeftAnchor: true,
       isPlain: true,
       isRightAnchor: true,
     });
@@ -429,72 +418,72 @@ describe('Network filters', () => {
       it('parses domain', () => {
         network('||foo.com$domain=bar.com', {
           hasOptDomains: true,
-          optDomains: new Set(['bar.com']),
+          optDomains: new Uint32Array([fastHash('bar.com')]),
 
           hasOptNotDomains: false,
-          optNotDomains: new Set(),
+          optNotDomains: new Uint32Array([]),
         });
 
         network('||foo.com$domain=bar.com|baz.com', {
           hasOptDomains: true,
-          optDomains: new Set(['bar.com', 'baz.com']),
+          optDomains: new Uint32Array([fastHash('bar.com'), fastHash('baz.com')]),
 
           hasOptNotDomains: false,
-          optNotDomains: new Set(),
+          optNotDomains: new Uint32Array([]),
         });
       });
 
       it('parses ~domain', () => {
         network('||foo.com$domain=~bar.com', {
           hasOptDomains: false,
-          optDomains: new Set(),
+          optDomains: new Uint32Array([]),
 
           hasOptNotDomains: true,
-          optNotDomains: new Set(['bar.com']),
+          optNotDomains: new Uint32Array([fastHash('bar.com')]),
         });
 
         network('||foo.com$domain=~bar.com|~baz.com', {
           hasOptDomains: false,
-          optDomains: new Set(),
+          optDomains: new Uint32Array([]),
 
           hasOptNotDomains: true,
-          optNotDomains: new Set(['bar.com', 'baz.com']),
+          optNotDomains: new Uint32Array([fastHash('bar.com'), fastHash('baz.com')]),
         });
       });
 
       it('parses domain and ~domain', () => {
         network('||foo.com$domain=~bar.com|baz.com', {
           hasOptDomains: true,
-          optDomains: new Set(['baz.com']),
+          optDomains: new Uint32Array([fastHash('baz.com')]),
 
           hasOptNotDomains: true,
-          optNotDomains: new Set(['bar.com']),
+          optNotDomains: new Uint32Array([fastHash('bar.com')]),
         });
 
         network('||foo.com$domain=bar.com|~baz.com', {
           hasOptDomains: true,
-          optDomains: new Set(['bar.com']),
+          optDomains: new Uint32Array([fastHash('bar.com')]),
 
           hasOptNotDomains: true,
-          optNotDomains: new Set(['baz.com']),
+          optNotDomains: new Uint32Array([fastHash('baz.com')]),
         });
 
         network('||foo.com$domain=foo|~bar|baz', {
           hasOptDomains: true,
-          optDomains: new Set(['foo', 'baz']),
+          optDomains: new Uint32Array([fastHash('foo'), fastHash('baz')]),
 
           hasOptNotDomains: true,
-          optNotDomains: new Set(['bar']),
+          optNotDomains: new Uint32Array([fastHash('bar')]),
         });
       });
 
       it('defaults to no constraint', () => {
         network('||foo.com', {
           hasOptDomains: false,
-          optDomains: new Set(),
+          optDomains: new Uint32Array([]),
 
           hasOptNotDomains: false,
-          optNotDomains: new Set(),
+          optNotDomains: new Uint32Array([]),
         });
       });
     });
@@ -589,7 +578,6 @@ describe('Network filters', () => {
       fromImage: value,
       fromMedia: value,
       fromObject: value,
-      fromObjectSubrequest: value,
       fromOther: value,
       fromPing: value,
       fromScript: value,
@@ -604,7 +592,7 @@ describe('Network filters', () => {
       ['image', 'fromImage'],
       ['media', 'fromMedia'],
       ['object', 'fromObject'],
-      ['object-subrequest', 'fromObjectSubrequest'],
+      ['object-subrequest', 'fromObject'],
       ['other', 'fromOther'],
       ['ping', 'fromPing'],
       ['script', 'fromScript'],
@@ -612,7 +600,7 @@ describe('Network filters', () => {
       ['subdocument', 'fromSubdocument'],
       ['websocket', 'fromWebsocket'],
       ['xmlhttprequest', 'fromXmlHttpRequest'],
-    ].forEach(([ option, attribute ]) => {
+    ].forEach(([option, attribute]) => {
       // all other attributes should be false if `$attribute` or true if `$~attribute`
       describe(option, () => {
         it(`parses ${option}`, () => {
@@ -784,7 +772,9 @@ describe('Cosmetic filters', () => {
         const parsed = parseCosmeticFilter(`##${testCase.selector}`);
         expect(parsed).not.toBeNull();
         if (parsed !== null) {
-          expect(parsed.getTokensSelector()).toEqual(testCase.tokens.map(fastHash));
+          expect(parsed.getTokensSelector()).toEqual(
+            new Uint32Array(testCase.tokens.map(fastHash)),
+          );
         }
       });
     });
@@ -804,10 +794,7 @@ describe('Filters list', () => {
       '[Adblock] ||foo.com',
       '[Adblock Plus 2.0] ||foo.com',
     ].forEach((content) => {
-      const {
-        cosmeticFilters,
-        networkFilters,
-      } = parseList(content);
+      const { cosmeticFilters, networkFilters } = parseList(content);
 
       expect(cosmeticFilters).toHaveLength(0);
       expect(networkFilters).toHaveLength(0);

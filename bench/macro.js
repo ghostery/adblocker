@@ -1,7 +1,5 @@
 const { getHostname } = require('tldts');
 
-const { types } = require('./utils');
-
 
 function benchMatchingImpl(match, requests) {
   let dummy = 0;
@@ -9,7 +7,7 @@ function benchMatchingImpl(match, requests) {
   for (let i = 0; i < requests.length; i += 1) {
     const request = requests[i];
     if (match({
-      cpt: types[request.cpt],
+      cpt: request.cpt,
       sourceUrl: request.sourceUrl,
       url: request.url,
     })) {

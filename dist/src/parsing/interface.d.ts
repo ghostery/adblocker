@@ -1,5 +1,5 @@
 export default interface IFilter {
-    id: number;
     mask: number;
-    getTokens: () => number[][];
+    getId: () => number;
+    getTokens: () => Uint32Array[];
 }

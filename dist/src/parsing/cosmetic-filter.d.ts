@@ -1,22 +1,23 @@
 import IFilter from './interface';
 export declare class CosmeticFilter implements IFilter {
-    id: number;
     mask: number;
-    selector: string;
-    hostnames: string;
-    rawLine: string | null;
-    private hostnamesArray;
-    constructor({ mask, selector, hostnames, id, }: {
+    selector?: string;
+    hostnames?: string;
+    id?: number;
+    rawLine?: string;
+    private hostnamesArray?;
+    constructor({ hostnames, id, mask, selector, }: {
+        hostnames?: string;
+        id?: number;
         mask: number;
-        selector: string;
-        hostnames: string;
-        id: number;
+        selector?: string;
     });
     isCosmeticFilter(): boolean;
     isNetworkFilter(): boolean;
     toString(): string;
-    getTokens(): number[][];
-    getTokensSelector(): number[];
+    getId(): number;
+    getTokens(): Uint32Array[];
+    getTokensSelector(): Uint32Array;
     getSelector(): string;
     hasHostnames(): boolean;
     getHostnames(): string[];

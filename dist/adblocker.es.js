@@ -13,17 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-var __assign = function() {
-    __assign = Object.assign || function __assign(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-
 function __read(o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -277,9 +266,9 @@ function clearBit(n, mask) {
     return n & ~mask;
 }
 function fastHashBetween(str, begin, end) {
-    var hash = 5407;
+    var hash = 5381;
     for (var i = begin; i < end; i += 1) {
-        hash = (hash * 31) ^ str.charCodeAt(i);
+        hash = (hash * 33) ^ str.charCodeAt(i);
     }
     return hash >>> 0;
 }
@@ -317,14 +306,14 @@ function isDigit(ch) {
     return ch >= 48 && ch <= 57;
 }
 function isAlpha(ch) {
-    ch &= ~32;
-    return ch >= 65 && ch <= 90;
+    ch |= 32;
+    return ch >= 97 && ch <= 122;
 }
 function isAlphaExtended(ch) {
     return ch >= 192 && ch <= 450;
 }
 function isAllowed(ch) {
-    return isDigit(ch) || isAlpha(ch) || isAlphaExtended(ch);
+    return isDigit(ch) || isAlpha(ch) || isAlphaExtended(ch) || ch === 37;
 }
 function isAllowedCSS(ch) {
     return (isDigit(ch) ||
@@ -334,11 +323,48 @@ function isAllowedCSS(ch) {
         ch === 46 ||
         ch === 35);
 }
-function fastTokenizer(pattern, isAllowedCode, allowRegexSurround, skipLastToken) {
-    var tokens = [];
+var TOKENS_BUFFER = new Uint32Array(200);
+function fastTokenizerNoRegex(pattern, isAllowedCode, skipFirstToken, skipLastToken) {
+    var tokensBufferIndex = 0;
     var inside = false;
     var start = 0;
-    for (var i = 0, len = pattern.length; i < len; i += 1) {
+    var precedingCh = 0;
+    for (var i = 0; i < pattern.length && tokensBufferIndex < TOKENS_BUFFER.length; i += 1) {
+        var ch = pattern.charCodeAt(i);
+        if (isAllowedCode(ch)) {
+            if (inside === false) {
+                inside = true;
+                start = i;
+                if (i > 0) {
+                    precedingCh = pattern.charCodeAt(i - 1);
+                }
+            }
+        }
+        else if (inside === true) {
+            inside = false;
+            if ((skipFirstToken === false || start !== 0) &&
+                i - start > 1 &&
+                ch !== 42 &&
+                precedingCh !== 42) {
+                TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, i);
+                tokensBufferIndex += 1;
+            }
+        }
+    }
+    if (inside === true &&
+        pattern.length - start > 1 &&
+        precedingCh !== 42 &&
+        skipLastToken === false) {
+        TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, pattern.length);
+        tokensBufferIndex += 1;
+    }
+    return TOKENS_BUFFER.subarray(0, tokensBufferIndex);
+}
+function fastTokenizer(pattern, isAllowedCode) {
+    var tokensBufferIndex = 0;
+    var inside = false;
+    var start = 0;
+    for (var i = 0; i < pattern.length && tokensBufferIndex < TOKENS_BUFFER.length; i += 1) {
         var ch = pattern.charCodeAt(i);
         if (isAllowedCode(ch)) {
             if (inside === false) {
@@ -348,38 +374,78 @@ function fastTokenizer(pattern, isAllowedCode, allowRegexSurround, skipLastToken
         }
         else if (inside === true) {
             inside = false;
-            if (allowRegexSurround === true || ch !== 42) {
-                tokens.push(fastHashBetween(pattern, start, i));
-            }
+            TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, i);
+            tokensBufferIndex += 1;
         }
     }
-    if (inside === true && skipLastToken === false) {
-        tokens.push(fastHashBetween(pattern, start, pattern.length));
+    if (inside === true) {
+        TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, pattern.length);
+        tokensBufferIndex += 1;
     }
-    return tokens;
+    return TOKENS_BUFFER.subarray(0, tokensBufferIndex);
 }
 function tokenize(pattern) {
-    return fastTokenizer(pattern, isAllowed, false, false);
+    return fastTokenizerNoRegex(pattern, isAllowed, false, false);
 }
-function tokenizeFilter(pattern, skipLastToken) {
-    return fastTokenizer(pattern, isAllowed, false, skipLastToken);
+function tokenizeFilter(pattern, skipFirstToken, skipLastToken) {
+    return fastTokenizerNoRegex(pattern, isAllowed, skipFirstToken, skipLastToken);
 }
 function tokenizeCSS(pattern) {
-    return fastTokenizer(pattern, isAllowedCSS, true, false);
+    return fastTokenizer(pattern, isAllowedCSS);
 }
 function createFuzzySignature(pattern) {
     return compactTokens(new Uint32Array(tokenize(pattern)));
 }
+function binSearch(arr, elt) {
+    if (arr.length === 0) {
+        return false;
+    }
+    if (arr.length === 1) {
+        return arr[0] === elt;
+    }
+    if (arr.length === 2) {
+        return arr[0] === elt || arr[1] === elt;
+    }
+    var low = 0;
+    var high = arr.length - 1;
+    while (low <= high) {
+        var mid = (low + high) >>> 1;
+        var midVal = arr[mid];
+        if (midVal < elt) {
+            low = mid + 1;
+        }
+        else if (midVal > elt) {
+            high = mid - 1;
+        }
+        else {
+            return true;
+        }
+    }
+    return false;
+}
 
+function computeFilterId(mask, selector, hostnames) {
+    var hash = (5408 * 33) ^ mask;
+    if (selector !== undefined) {
+        for (var j = 0; j < selector.length; j += 1) {
+            hash = (hash * 33) ^ selector.charCodeAt(j);
+        }
+    }
+    if (hostnames !== undefined) {
+        for (var j = 0; j < hostnames.length; j += 1) {
+            hash = (hash * 33) ^ hostnames.charCodeAt(j);
+        }
+    }
+    return hash >>> 0;
+}
+var TOKENS_BUFFER$1 = new Uint32Array(200);
 var CosmeticFilter = (function () {
     function CosmeticFilter(_a) {
-        var mask = _a.mask, selector = _a.selector, hostnames = _a.hostnames, id = _a.id;
+        var hostnames = _a.hostnames, id = _a.id, mask = _a.mask, selector = _a.selector;
         this.id = id;
         this.mask = mask;
         this.selector = selector;
         this.hostnames = hostnames;
-        this.hostnamesArray = null;
-        this.rawLine = null;
     }
     CosmeticFilter.prototype.isCosmeticFilter = function () {
         return true;
@@ -413,16 +479,23 @@ var CosmeticFilter = (function () {
         }
         return filter;
     };
+    CosmeticFilter.prototype.getId = function () {
+        if (this.id === undefined) {
+            this.id = computeFilterId(this.mask, this.selector, this.hostnames);
+        }
+        return this.id;
+    };
     CosmeticFilter.prototype.getTokens = function () {
         return [this.getTokensSelector()];
     };
     CosmeticFilter.prototype.getTokensSelector = function () {
         if (this.isScriptInject() || this.isScriptBlock()) {
-            return [];
+            return new Uint32Array([]);
         }
+        var selector = this.selector || '';
         var sepIndex = 0;
-        for (var i = this.selector.length - 1; i >= 0; i -= 1) {
-            var code = this.selector.charCodeAt(i);
+        for (var i = selector.length - 1; i >= 0; i -= 1) {
+            var code = selector.charCodeAt(i);
             if (code === 43 ||
                 code === 62 ||
                 code === 126) {
@@ -432,12 +505,14 @@ var CosmeticFilter = (function () {
         }
         var inside = 0;
         var start = sepIndex;
-        var tokens = [];
-        for (var i = sepIndex, len = this.selector.length; i < len; i += 1) {
-            var code = this.selector.charCodeAt(i);
+        var tokensBufferIndex = 0;
+        for (var i = sepIndex, len = selector.length; i < len; i += 1) {
+            var code = selector.charCodeAt(i);
             if (code === 91) {
                 if (inside === 0 && start < i) {
-                    tokens.push.apply(tokens, __spread(tokenizeCSS(this.selector.slice(start, i))));
+                    var tokens = tokenizeCSS(selector.slice(start, i));
+                    TOKENS_BUFFER$1.set(tokens, tokensBufferIndex);
+                    tokensBufferIndex += tokens.length;
                 }
                 inside += 1;
             }
@@ -446,33 +521,33 @@ var CosmeticFilter = (function () {
                 start = i + 1;
             }
         }
-        if (inside === 0 && start < this.selector.length) {
-            tokens.push.apply(tokens, __spread(tokenizeCSS(this.selector.slice(start, this.selector.length))));
+        if (inside === 0 && start < selector.length) {
+            var tokens = tokenizeCSS(selector.slice(start, selector.length));
+            TOKENS_BUFFER$1.set(tokens, tokensBufferIndex);
+            tokensBufferIndex += tokens.length;
         }
-        return tokens;
+        return TOKENS_BUFFER$1.slice(0, tokensBufferIndex);
     };
     CosmeticFilter.prototype.getSelector = function () {
-        return this.selector;
+        return this.selector || '';
     };
     CosmeticFilter.prototype.hasHostnames = function () {
-        return !!this.hostnames;
+        return this.hostnames !== undefined;
     };
     CosmeticFilter.prototype.getHostnames = function () {
-        if (this.hostnamesArray === null) {
-            if (this.hasHostnames()) {
-                this.hostnamesArray = this.hostnames.split(',').sort(function (h1, h2) {
-                    if (h1.length > h2.length) {
-                        return -1;
-                    }
-                    else if (h1.length < h2.length) {
-                        return 1;
-                    }
-                    return 0;
-                });
-            }
-            else {
-                this.hostnamesArray = [];
-            }
+        if (this.hostnamesArray === undefined) {
+            this.hostnamesArray =
+                this.hostnames === undefined
+                    ? []
+                    : this.hostnames.split(',').sort(function (h1, h2) {
+                        if (h1.length > h2.length) {
+                            return -1;
+                        }
+                        else if (h1.length < h2.length) {
+                            return 1;
+                        }
+                        return 0;
+                    });
         }
         return this.hostnamesArray;
     };
@@ -489,55 +564,61 @@ var CosmeticFilter = (function () {
 }());
 function parseCosmeticFilter(line) {
     var mask = 0;
-    var selector = '';
-    var hostnames = '';
+    var selector;
+    var hostnames;
     var sharpIndex = line.indexOf('#');
     var afterSharpIndex = sharpIndex + 1;
     var suffixStartIndex = afterSharpIndex + 1;
-    if (line[afterSharpIndex] === '@') {
+    if (line.length > afterSharpIndex && line[afterSharpIndex] === '@') {
         mask = setBit(mask, 1);
         suffixStartIndex += 1;
     }
     if (sharpIndex > 0) {
-        hostnames = line.substring(0, sharpIndex);
+        hostnames = line.slice(0, sharpIndex);
     }
-    selector = line.substr(suffixStartIndex);
-    if (fastStartsWith(selector, 'script:')) {
-        var scriptMethodIndex = 'script:'.length;
+    if (fastStartsWithFrom(line, 'script:', suffixStartIndex)) {
+        var scriptMethodIndex = suffixStartIndex + 7;
         var scriptSelectorIndexStart = scriptMethodIndex;
-        var scriptSelectorIndexEnd = selector.length - 1;
-        if (fastStartsWithFrom(selector, 'inject(', scriptMethodIndex)) {
+        var scriptSelectorIndexEnd = line.length - 1;
+        if (fastStartsWithFrom(line, 'inject(', scriptMethodIndex)) {
             mask = setBit(mask, 2);
-            scriptSelectorIndexStart += 'inject('.length;
+            scriptSelectorIndexStart += 7;
         }
-        else if (fastStartsWithFrom(selector, 'contains(', scriptMethodIndex)) {
+        else if (fastStartsWithFrom(line, 'contains(', scriptMethodIndex)) {
             mask = setBit(mask, 4);
-            scriptSelectorIndexStart += 'contains('.length;
-            if (selector[scriptSelectorIndexStart] === '/' &&
-                selector[scriptSelectorIndexEnd - 1] === '/') {
+            scriptSelectorIndexStart += 9;
+            if (line[scriptSelectorIndexStart] === '/' && line[scriptSelectorIndexEnd - 1] === '/') {
                 scriptSelectorIndexStart += 1;
                 scriptSelectorIndexEnd -= 1;
             }
         }
-        selector = selector.substring(scriptSelectorIndexStart, scriptSelectorIndexEnd);
+        selector = line.slice(scriptSelectorIndexStart, scriptSelectorIndexEnd);
     }
-    if (selector === null ||
+    else if (fastStartsWithFrom(line, '+js(', suffixStartIndex)) {
+        mask = setBit(mask, 2);
+        selector = line.slice(suffixStartIndex + 4, line.length - 1);
+    }
+    else if (suffixStartIndex < line.length) {
+        selector = line.slice(suffixStartIndex);
+    }
+    if (selector === undefined ||
         selector.length === 0 ||
         selector.endsWith('}') ||
         selector.indexOf('##') !== -1 ||
-        (getBit(mask, 1) && hostnames.length === 0)) {
+        (getBit(mask, 1) && hostnames === undefined)) {
         return null;
     }
-    var id = fastHash(line);
     return new CosmeticFilter({
         hostnames: hostnames,
-        id: id,
         mask: mask,
         selector: selector
     });
 }
 
-var FROM_ANY = 1 |
+var _a;
+var TOKENS_BUFFER$2 = new Uint32Array(200);
+var FROM_ANY = 1024 |
+    1 |
     2 |
     4 |
     8 |
@@ -546,36 +627,50 @@ var FROM_ANY = 1 |
     64 |
     128 |
     256 |
-    512 |
-    1024 |
-    2048 |
-    4096 |
-    8192 |
-    16384 |
-    32768 |
-    65536;
-var CPT_TO_MASK = {
-    1: 16,
-    2: 64,
-    3: 1,
-    4: 128,
-    5: 4,
-    7: 256,
-    10: 32,
-    11: 1024,
-    12: 8,
-    13: 4096,
-    14: 8192,
-    15: 2,
-    16: 512,
-    17: 65536,
-    18: 16384,
-    19: 32768,
-    20: 2048,
-    21: 1
-};
+    512;
+var CPT_TO_MASK = (_a = {},
+    _a[9] = 8,
+    _a[11] = 32,
+    _a[6] = 1,
+    _a[12] = 64,
+    _a[8] = 4,
+    _a[13] = 128,
+    _a[10] = 16,
+    _a[0] = 16,
+    _a[16] = 512,
+    _a[5] = 1024,
+    _a[7] = 2,
+    _a[14] = 256,
+    _a[3] = 8,
+    _a[4] = 8,
+    _a[15] = 8,
+    _a);
+function computeFilterId$1(mask, filter, hostname, optDomains, optNotDomains) {
+    var hash = (5408 * 33) ^ mask;
+    if (optDomains !== undefined) {
+        for (var i = 0; i < optDomains.length; i += 1) {
+            hash = (hash * 33) ^ optDomains[i];
+        }
+    }
+    if (optNotDomains !== undefined) {
+        for (var i = 0; i < optNotDomains.length; i += 1) {
+            hash = (hash * 33) ^ optNotDomains[i];
+        }
+    }
+    if (filter !== undefined) {
+        for (var i = 0; i < filter.length; i += 1) {
+            hash = (hash * 33) ^ filter.charCodeAt(i);
+        }
+    }
+    if (hostname !== undefined) {
+        for (var i = 0; i < hostname.length; i += 1) {
+            hash = (hash * 33) ^ hostname.charCodeAt(i);
+        }
+    }
+    return hash >>> 0;
+}
 var SEPARATOR = /[/^*]/;
-function compileRegex(filterStr, isRightAnchor, isLeftAnchor, matchCase) {
+function compileRegex(filterStr, isRightAnchor, isLeftAnchor) {
     var filter = filterStr;
     filter = filter.replace(/([|.$+?{}()[\]\\])/g, '\\$1');
     filter = filter.replace(/\*/g, '.*');
@@ -586,29 +681,22 @@ function compileRegex(filterStr, isRightAnchor, isLeftAnchor, matchCase) {
     if (isLeftAnchor) {
         filter = "^" + filter;
     }
-    if (matchCase) {
-        return new RegExp(filter);
-    }
-    return new RegExp(filter, 'i');
+    return new RegExp(filter);
 }
-function parseDomainsOption(domains) {
-    return new Set(domains ? domains.split('|') : []);
-}
+var EMPTY_ARRAY = new Uint32Array([]);
+var MATCH_ALL = new RegExp('');
 var NetworkFilter = (function () {
     function NetworkFilter(_a) {
-        var mask = _a.mask, filter = _a.filter, optDomains = _a.optDomains, optNotDomains = _a.optNotDomains, redirect = _a.redirect, hostname = _a.hostname, id = _a.id;
-        this.id = id;
+        var filter = _a.filter, hostname = _a.hostname, id = _a.id, mask = _a.mask, optDomains = _a.optDomains, optNotDomains = _a.optNotDomains, rawLine = _a.rawLine, redirect = _a.redirect;
         this.mask = mask;
+        this.id = id;
+        this.optimized = false;
         this.filter = filter;
-        this.optDomains = optDomains;
-        this.optNotDomains = optNotDomains;
         this.redirect = redirect;
         this.hostname = hostname;
-        this.fuzzySignature = null;
-        this.optDomainsSet = null;
-        this.optNotDomainsSet = null;
-        this.regex = null;
-        this.rawLine = null;
+        this.rawLine = rawLine;
+        this.optDomains = optDomains;
+        this.optNotDomains = optNotDomains;
     }
     NetworkFilter.prototype.isCosmeticFilter = function () {
         return false;
@@ -617,6 +705,9 @@ var NetworkFilter = (function () {
         return true;
     };
     NetworkFilter.prototype.toString = function () {
+        if (this.rawLine !== undefined) {
+            return this.rawLine;
+        }
         var filter = '';
         if (this.isException()) {
             filter += '@@';
@@ -650,9 +741,6 @@ var NetworkFilter = (function () {
             }
             if (this.fromObject()) {
                 options.push('object');
-            }
-            if (this.fromObjectSubrequest()) {
-                options.push('object-subrequest');
             }
             if (this.fromOther()) {
                 options.push('other');
@@ -693,11 +781,6 @@ var NetworkFilter = (function () {
                 options.push('third-party');
             }
         }
-        if (this.hasOptDomains() || this.hasOptNotDomains()) {
-            var domains_1 = __spread(this.getOptDomains());
-            this.getOptNotDomains().forEach(function (nd) { return domains_1.push("~" + nd); });
-            options.push("domain=" + domains_1.join('|'));
-        }
         if (options.length > 0) {
             filter += "$" + options.join(',');
         }
@@ -706,24 +789,40 @@ var NetworkFilter = (function () {
         }
         return filter;
     };
+    NetworkFilter.prototype.getId = function () {
+        if (this.id === undefined) {
+            this.id = computeFilterId$1(this.mask, this.filter, this.hostname, this.optDomains, this.optNotDomains);
+        }
+        return this.id;
+    };
     NetworkFilter.prototype.hasFilter = function () {
-        return !!this.filter;
+        return this.filter !== undefined;
     };
     NetworkFilter.prototype.hasOptNotDomains = function () {
-        return !!this.optNotDomains;
+        return this.optNotDomains !== undefined;
+    };
+    NetworkFilter.prototype.getNumberOfOptNotDomains = function () {
+        if (this.optNotDomains !== undefined) {
+            return this.optNotDomains.length;
+        }
+        return 0;
     };
     NetworkFilter.prototype.getOptNotDomains = function () {
-        this.optNotDomainsSet =
-            this.optNotDomainsSet || parseDomainsOption(this.optNotDomains);
-        return this.optNotDomainsSet;
+        this.optimize();
+        return this.optNotDomains || EMPTY_ARRAY;
+    };
+    NetworkFilter.prototype.getNumberOfOptDomains = function () {
+        if (this.optDomains !== undefined) {
+            return this.optDomains.length;
+        }
+        return 0;
     };
     NetworkFilter.prototype.hasOptDomains = function () {
-        return !!this.optDomains;
+        return this.optDomains !== undefined;
     };
     NetworkFilter.prototype.getOptDomains = function () {
-        this.optDomainsSet =
-            this.optDomainsSet || parseDomainsOption(this.optDomains);
-        return this.optDomainsSet;
+        this.optimize();
+        return this.optDomains || EMPTY_ARRAY;
     };
     NetworkFilter.prototype.getMask = function () {
         return this.mask;
@@ -732,39 +831,66 @@ var NetworkFilter = (function () {
         return this.getMask() & FROM_ANY;
     };
     NetworkFilter.prototype.isRedirect = function () {
-        return !!this.redirect;
+        return this.redirect !== undefined;
     };
     NetworkFilter.prototype.getRedirect = function () {
-        return this.redirect;
+        return this.redirect || '';
     };
     NetworkFilter.prototype.hasHostname = function () {
-        return !!this.hostname;
+        return this.hostname !== undefined;
     };
     NetworkFilter.prototype.getHostname = function () {
-        return this.hostname;
+        return this.hostname || '';
     };
     NetworkFilter.prototype.getFilter = function () {
-        return this.filter;
+        return this.filter || '';
     };
     NetworkFilter.prototype.setRegex = function (re) {
         this.regex = re;
-        this.mask = setBit(this.mask, 16777216);
-        this.mask = clearBit(this.mask, 8388608);
+        this.mask = setBit(this.mask, 262144);
     };
     NetworkFilter.prototype.getRegex = function () {
-        if (this.regex === null) {
-            this.regex = compileRegex(this.filter, this.isRightAnchor(), this.isLeftAnchor(), this.matchCase());
-        }
-        return this.regex;
+        this.optimize();
+        return this.regex || MATCH_ALL;
     };
     NetworkFilter.prototype.getFuzzySignature = function () {
-        if (this.fuzzySignature === null) {
-            this.fuzzySignature = createFuzzySignature(this.filter);
-        }
-        return this.fuzzySignature;
+        this.optimize();
+        return this.fuzzySignature || EMPTY_ARRAY;
     };
     NetworkFilter.prototype.getTokens = function () {
-        return [tokenizeFilter(this.filter, this.isPlain()).concat(tokenizeFilter(this.hostname, false))];
+        var tokensBufferIndex = 0;
+        if (this.optDomains !== undefined &&
+            this.optNotDomains === undefined &&
+            this.optDomains.length === 1) {
+            TOKENS_BUFFER$2[tokensBufferIndex] = this.optDomains[0];
+            tokensBufferIndex += 1;
+        }
+        if (this.filter !== undefined) {
+            var skipLastToken = this.isPlain() && !this.isRightAnchor() && !this.isFuzzy();
+            var skipFirstToken = this.isRightAnchor();
+            var filterTokens = tokenizeFilter(this.filter, skipFirstToken, skipLastToken);
+            TOKENS_BUFFER$2.set(filterTokens, tokensBufferIndex);
+            tokensBufferIndex += filterTokens.length;
+        }
+        if (this.hostname !== undefined) {
+            var hostnameTokens = tokenize(this.hostname);
+            TOKENS_BUFFER$2.set(hostnameTokens, tokensBufferIndex);
+            tokensBufferIndex += hostnameTokens.length;
+        }
+        if (tokensBufferIndex === 0 &&
+            this.optDomains !== undefined &&
+            this.optNotDomains === undefined) {
+            return __spread(this.optDomains).map(function (d) { return new Uint32Array([d]); });
+        }
+        if (this.fromHttp() && !this.fromHttps()) {
+            TOKENS_BUFFER$2[tokensBufferIndex] = fastHash('http');
+            tokensBufferIndex += 1;
+        }
+        else if (this.fromHttps() && !this.fromHttp()) {
+            TOKENS_BUFFER$2[tokensBufferIndex] = fastHash('https');
+            tokensBufferIndex += 1;
+        }
+        return [TOKENS_BUFFER$2.slice(0, tokensBufferIndex)];
     };
     NetworkFilter.prototype.isCptAllowed = function (cpt) {
         var mask = CPT_TO_MASK[cpt];
@@ -774,43 +900,40 @@ var NetworkFilter = (function () {
         return this.fromAny();
     };
     NetworkFilter.prototype.isFuzzy = function () {
-        return getBit(this.mask, 524288);
+        return getBit(this.mask, 32768);
     };
     NetworkFilter.prototype.isException = function () {
-        return getBit(this.mask, 268435456);
+        return getBit(this.mask, 4194304);
     };
     NetworkFilter.prototype.isHostnameAnchor = function () {
-        return getBit(this.mask, 134217728);
+        return getBit(this.mask, 2097152);
     };
     NetworkFilter.prototype.isRightAnchor = function () {
-        return getBit(this.mask, 67108864);
+        return getBit(this.mask, 1048576);
     };
     NetworkFilter.prototype.isLeftAnchor = function () {
-        return getBit(this.mask, 33554432);
+        return getBit(this.mask, 524288);
     };
     NetworkFilter.prototype.matchCase = function () {
-        return getBit(this.mask, 262144);
+        return getBit(this.mask, 16384);
     };
     NetworkFilter.prototype.isImportant = function () {
-        return getBit(this.mask, 131072);
+        return getBit(this.mask, 8192);
     };
     NetworkFilter.prototype.isRegex = function () {
-        return getBit(this.mask, 16777216);
+        return getBit(this.mask, 262144);
     };
     NetworkFilter.prototype.isPlain = function () {
-        return !getBit(this.mask, 16777216);
-    };
-    NetworkFilter.prototype.isHostname = function () {
-        return getBit(this.mask, 4194304);
+        return !getBit(this.mask, 262144);
     };
     NetworkFilter.prototype.fromAny = function () {
         return this.getCptMask() === FROM_ANY;
     };
     NetworkFilter.prototype.thirdParty = function () {
-        return getBit(this.mask, 1048576);
+        return getBit(this.mask, 65536);
     };
     NetworkFilter.prototype.firstParty = function () {
-        return getBit(this.mask, 2097152);
+        return getBit(this.mask, 131072);
     };
     NetworkFilter.prototype.fromImage = function () {
         return getBit(this.mask, 1);
@@ -821,32 +944,52 @@ var NetworkFilter = (function () {
     NetworkFilter.prototype.fromObject = function () {
         return getBit(this.mask, 4);
     };
-    NetworkFilter.prototype.fromObjectSubrequest = function () {
+    NetworkFilter.prototype.fromOther = function () {
         return getBit(this.mask, 8);
     };
-    NetworkFilter.prototype.fromOther = function () {
+    NetworkFilter.prototype.fromPing = function () {
         return getBit(this.mask, 16);
     };
-    NetworkFilter.prototype.fromPing = function () {
+    NetworkFilter.prototype.fromScript = function () {
         return getBit(this.mask, 32);
     };
-    NetworkFilter.prototype.fromScript = function () {
+    NetworkFilter.prototype.fromStylesheet = function () {
         return getBit(this.mask, 64);
     };
-    NetworkFilter.prototype.fromStylesheet = function () {
+    NetworkFilter.prototype.fromSubdocument = function () {
         return getBit(this.mask, 128);
     };
-    NetworkFilter.prototype.fromSubdocument = function () {
+    NetworkFilter.prototype.fromWebsocket = function () {
         return getBit(this.mask, 256);
     };
-    NetworkFilter.prototype.fromWebsocket = function () {
-        return getBit(this.mask, 512);
+    NetworkFilter.prototype.fromHttp = function () {
+        return getBit(this.mask, 2048);
+    };
+    NetworkFilter.prototype.fromHttps = function () {
+        return getBit(this.mask, 4096);
     };
     NetworkFilter.prototype.fromXmlHttpRequest = function () {
-        return getBit(this.mask, 1024);
+        return getBit(this.mask, 512);
     };
     NetworkFilter.prototype.fromFont = function () {
-        return getBit(this.mask, 8192);
+        return getBit(this.mask, 1024);
+    };
+    NetworkFilter.prototype.optimize = function () {
+        if (this.optimized === false) {
+            this.optimized = true;
+            if (this.optNotDomains !== undefined) {
+                this.optNotDomains.sort();
+            }
+            if (this.optDomains !== undefined) {
+                this.optDomains.sort();
+            }
+            if (this.filter !== undefined && this.regex === undefined && this.isRegex()) {
+                this.regex = compileRegex(this.filter, this.isRightAnchor(), this.isLeftAnchor());
+            }
+            if (this.filter !== undefined && this.isFuzzy()) {
+                this.fuzzySignature = createFuzzySignature(this.filter);
+            }
+        }
     };
     return NetworkFilter;
 }());
@@ -859,29 +1002,30 @@ function setNetworkMask(mask, m, value) {
 function checkIsRegex(filter, start, end) {
     var starIndex = filter.indexOf('*', start);
     var separatorIndex = filter.indexOf('^', start);
-    return ((starIndex !== -1 && starIndex < end) ||
-        (separatorIndex !== -1 && separatorIndex < end));
+    return (starIndex !== -1 && starIndex < end) || (separatorIndex !== -1 && separatorIndex < end);
 }
 function parseNetworkFilter(rawLine) {
     var line = rawLine;
-    var mask = 1048576 | 2097152;
+    var mask = 65536 |
+        131072 |
+        4096 |
+        2048;
     var cptMaskPositive = 0;
     var cptMaskNegative = FROM_ANY;
-    var filter = null;
-    var hostname = null;
-    var optDomains = '';
-    var optNotDomains = '';
-    var redirect = '';
+    var hostname;
+    var optDomains;
+    var optNotDomains;
+    var redirect;
     var filterIndexStart = 0;
     var filterIndexEnd = line.length;
     if (fastStartsWith(line, '@@')) {
         filterIndexStart += 2;
-        mask = setBit(mask, 268435456);
+        mask = setBit(mask, 4194304);
     }
-    var optionsIndex = line.indexOf('$', filterIndexStart);
+    var optionsIndex = line.lastIndexOf('$');
     if (optionsIndex !== -1) {
         filterIndexEnd = optionsIndex;
-        var rawOptions = line.substr(optionsIndex + 1);
+        var rawOptions = line.slice(optionsIndex + 1);
         var options = rawOptions.split(',');
         for (var i = 0; i < options.length; i += 1) {
             var rawOption = options[i];
@@ -889,7 +1033,7 @@ function parseNetworkFilter(rawLine) {
             var option = rawOption;
             if (fastStartsWith(option, '~')) {
                 negation = true;
-                option = option.substr(1);
+                option = option.slice(1);
             }
             else {
                 negation = false;
@@ -908,18 +1052,18 @@ function parseNetworkFilter(rawLine) {
                         var value = optionValues[j];
                         if (value) {
                             if (fastStartsWith(value, '~')) {
-                                optNotDomainsArray.push(value.substr(1));
+                                optNotDomainsArray.push(fastHash(value.slice(1)));
                             }
                             else {
-                                optDomainsArray.push(value);
+                                optDomainsArray.push(fastHash(value));
                             }
                         }
                     }
                     if (optDomainsArray.length > 0) {
-                        optDomains = optDomainsArray.join('|');
+                        optDomains = new Uint32Array(optDomainsArray);
                     }
                     if (optNotDomainsArray.length > 0) {
-                        optNotDomains = optNotDomainsArray.join('|');
+                        optNotDomains = new Uint32Array(optNotDomainsArray);
                     }
                     break;
                 }
@@ -927,32 +1071,32 @@ function parseNetworkFilter(rawLine) {
                     if (negation) {
                         return null;
                     }
-                    mask = setBit(mask, 131072);
+                    mask = setBit(mask, 8192);
                     break;
                 case 'match-case':
                     if (negation) {
                         return null;
                     }
-                    mask = setBit(mask, 262144);
+                    mask = setBit(mask, 16384);
                     break;
                 case 'third-party':
                     if (negation) {
-                        mask = clearBit(mask, 1048576);
+                        mask = clearBit(mask, 65536);
                     }
                     else {
-                        mask = clearBit(mask, 2097152);
+                        mask = clearBit(mask, 131072);
                     }
                     break;
                 case 'first-party':
                     if (negation) {
-                        mask = clearBit(mask, 2097152);
+                        mask = clearBit(mask, 131072);
                     }
                     else {
-                        mask = clearBit(mask, 1048576);
+                        mask = clearBit(mask, 65536);
                     }
                     break;
                 case 'fuzzy':
-                    mask = setBit(mask, 524288);
+                    mask = setBit(mask, 32768);
                     break;
                 case 'collapse':
                     break;
@@ -978,31 +1122,33 @@ function parseNetworkFilter(rawLine) {
                             optionMask = 4;
                             break;
                         case 'object-subrequest':
-                            optionMask = 8;
+                            optionMask = 4;
                             break;
                         case 'other':
-                            optionMask = 16;
+                            optionMask = 8;
                             break;
                         case 'ping':
-                            optionMask = 32;
+                        case 'beacon':
+                            optionMask = 16;
                             break;
                         case 'script':
-                            optionMask = 64;
+                            optionMask = 32;
                             break;
                         case 'stylesheet':
-                            optionMask = 128;
+                            optionMask = 64;
                             break;
                         case 'subdocument':
-                            optionMask = 256;
+                            optionMask = 128;
                             break;
                         case 'xmlhttprequest':
-                            optionMask = 1024;
-                            break;
-                        case 'websocket':
+                        case 'xhr':
                             optionMask = 512;
                             break;
+                        case 'websocket':
+                            optionMask = 256;
+                            break;
                         case 'font':
-                            optionMask = 8192;
+                            optionMask = 1024;
                             break;
                         default:
                             return null;
@@ -1030,83 +1176,99 @@ function parseNetworkFilter(rawLine) {
     else {
         mask |= cptMaskPositive & cptMaskNegative;
     }
-    if (fastStartsWith(line, '127.0.0.1')) {
-        hostname = line.substr(line.lastIndexOf(' ') + 1);
-        filter = '';
-        mask = clearBit(mask, 16777216);
-        mask = setBit(mask, 4194304);
-        mask = setBit(mask, 134217728);
+    if (line[filterIndexEnd - 1] === '|') {
+        mask = setBit(mask, 1048576);
+        filterIndexEnd -= 1;
     }
-    else {
-        if (line[filterIndexEnd - 1] === '|') {
-            mask = setBit(mask, 67108864);
-            filterIndexEnd -= 1;
-        }
-        if (fastStartsWithFrom(line, '||', filterIndexStart)) {
-            mask = setBit(mask, 134217728);
-            filterIndexStart += 2;
-        }
-        else if (line[filterIndexStart] === '|') {
-            mask = setBit(mask, 33554432);
-            filterIndexStart += 1;
-        }
-        if (line.charAt(filterIndexEnd - 1) === '*' &&
-            filterIndexEnd - filterIndexStart > 1) {
-            filterIndexEnd -= 1;
-        }
-        var isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
-        mask = setNetworkMask(mask, 16777216, isRegex);
-        var isHostnameAnchor = getBit(mask, 134217728);
-        if (!isRegex && isHostnameAnchor) {
-            var slashIndex = line.indexOf('/', filterIndexStart);
-            if (slashIndex !== -1) {
-                hostname = line.slice(filterIndexStart, slashIndex);
-                filterIndexStart = slashIndex;
-            }
-            else {
-                hostname = line.slice(filterIndexStart, filterIndexEnd);
-                filter = '';
-            }
-        }
-        else if (isRegex && isHostnameAnchor) {
+    if (fastStartsWithFrom(line, '||', filterIndexStart)) {
+        mask = setBit(mask, 2097152);
+        filterIndexStart += 2;
+    }
+    else if (line[filterIndexStart] === '|') {
+        mask = setBit(mask, 524288);
+        filterIndexStart += 1;
+    }
+    var isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
+    mask = setNetworkMask(mask, 262144, isRegex);
+    if (getBit(mask, 2097152)) {
+        if (isRegex) {
             var firstSeparator = line.search(SEPARATOR);
             if (firstSeparator !== -1) {
                 hostname = line.slice(filterIndexStart, firstSeparator);
                 filterIndexStart = firstSeparator;
-                if (filterIndexEnd - filterIndexStart === 1 &&
-                    line.charAt(filterIndexStart) === '^') {
-                    filter = '';
-                    mask = clearBit(mask, 16777216);
+                if (filterIndexEnd - filterIndexStart === 1 && line[filterIndexStart] === '^') {
+                    mask = clearBit(mask, 262144);
+                    filterIndexStart = filterIndexEnd;
                 }
                 else {
-                    mask = setNetworkMask(mask, 16777216, checkIsRegex(line, filterIndexStart, filterIndexEnd));
+                    mask = setNetworkMask(mask, 524288, true);
+                    mask = setNetworkMask(mask, 262144, checkIsRegex(line, filterIndexStart, filterIndexEnd));
                 }
             }
         }
+        else {
+            var slashIndex = line.indexOf('/', filterIndexStart);
+            if (slashIndex !== -1) {
+                hostname = line.slice(filterIndexStart, slashIndex);
+                filterIndexStart = slashIndex;
+                mask = setBit(mask, 524288);
+            }
+            else {
+                hostname = line.slice(filterIndexStart, filterIndexEnd);
+                filterIndexStart = filterIndexEnd;
+            }
+        }
     }
-    if (filter === null) {
+    if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexEnd - 1] === '*') {
+        filterIndexEnd -= 1;
+    }
+    if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexStart] === '*') {
+        mask = clearBit(mask, 524288);
+        filterIndexStart += 1;
+    }
+    if (getBit(mask, 524288)) {
+        if (filterIndexEnd - filterIndexStart === 5 &&
+            fastStartsWithFrom(line, 'ws://', filterIndexStart)) {
+            mask = setBit(mask, 256);
+            mask = clearBit(mask, 524288);
+            filterIndexStart = filterIndexEnd;
+        }
+        else if (filterIndexEnd - filterIndexStart === 7 &&
+            fastStartsWithFrom(line, 'http://', filterIndexStart)) {
+            mask = setBit(mask, 2048);
+            mask = clearBit(mask, 4096);
+            mask = clearBit(mask, 524288);
+            filterIndexStart = filterIndexEnd;
+        }
+        else if (filterIndexEnd - filterIndexStart === 8 &&
+            fastStartsWithFrom(line, 'https://', filterIndexStart)) {
+            mask = setBit(mask, 4096);
+            mask = clearBit(mask, 2048);
+            mask = clearBit(mask, 524288);
+            filterIndexStart = filterIndexEnd;
+        }
+        else if (filterIndexEnd - filterIndexStart === 8 &&
+            fastStartsWithFrom(line, 'http*://', filterIndexStart)) {
+            mask = setBit(mask, 4096);
+            mask = setBit(mask, 2048);
+            mask = clearBit(mask, 524288);
+            filterIndexStart = filterIndexEnd;
+        }
+    }
+    var filter;
+    if (filterIndexEnd - filterIndexStart > 0) {
         filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
+        mask = setNetworkMask(mask, 262144, checkIsRegex(filter, 0, filter.length));
     }
-    var finalHostname = '';
-    if (hostname !== null) {
-        finalHostname = hostname;
+    if (hostname !== undefined) {
+        if (getBit(mask, 2097152) && fastStartsWith(hostname, 'www.')) {
+            hostname = hostname.slice(4);
+        }
+        hostname = hostname.toLowerCase();
     }
-    var finalFilter = '';
-    if (filter !== null) {
-        finalFilter = filter;
-    }
-    if (getBit(mask, 134217728) &&
-        fastStartsWith(finalHostname, 'www.')) {
-        finalHostname = finalHostname.slice(4);
-    }
-    if (finalHostname !== '') {
-        finalHostname = finalHostname.toLowerCase();
-    }
-    var id = fastHash(line);
     return new NetworkFilter({
-        filter: finalFilter,
-        hostname: finalHostname,
-        id: id,
+        filter: filter,
+        hostname: hostname,
         mask: mask,
         optDomains: optDomains,
         optNotDomains: optNotDomains,
@@ -1129,12 +1291,13 @@ function detectFilterType(line) {
         return 0;
     }
     var sharpIndex = line.indexOf('#');
-    if (sharpIndex > -1) {
+    if (sharpIndex !== -1) {
         var afterSharpIndex = sharpIndex + 1;
         if (fastStartsWithFrom(line, '@$#', afterSharpIndex) ||
             fastStartsWithFrom(line, '@%#', afterSharpIndex) ||
             fastStartsWithFrom(line, '%#', afterSharpIndex) ||
-            fastStartsWithFrom(line, '$#', afterSharpIndex)) {
+            fastStartsWithFrom(line, '$#', afterSharpIndex) ||
+            fastStartsWithFrom(line, '?#', afterSharpIndex)) {
             return 0;
         }
         else if (fastStartsWithFrom(line, '#', afterSharpIndex) ||
@@ -1147,13 +1310,17 @@ function detectFilterType(line) {
 function f(strings) {
     var rawFilter = strings.raw[0];
     var filterType = detectFilterType(rawFilter);
+    var filter = null;
     if (filterType === 1) {
-        return parseNetworkFilter(rawFilter);
+        filter = parseNetworkFilter(rawFilter);
     }
     else if (filterType === 2) {
-        return parseCosmeticFilter(rawFilter);
+        filter = parseCosmeticFilter(rawFilter);
     }
-    return null;
+    if (filter !== null) {
+        filter.rawLine = rawFilter;
+    }
+    return filter;
 }
 function parseList(data, _a) {
     var _b = _a === void 0 ? {} : _a, _c = _b.loadNetworkFilters, loadNetworkFilters = _c === void 0 ? true : _c, _d = _b.loadCosmeticFilters, loadCosmeticFilters = _d === void 0 ? true : _d, _e = _b.debug, debug = _e === void 0 ? false : _e;
@@ -1190,62 +1357,23 @@ function parseList(data, _a) {
     };
 }
 function parseJSResource(data) {
-    var state = 'end';
-    var tmpContent = '';
-    var name = '';
-    var type = '';
-    var parsed = new Map();
-    var lines = data.split('\n');
-    lines.forEach(function (line) {
-        var _a;
-        var trimmed = line.trim();
-        if (fastStartsWith(trimmed, '#')) {
-            state = 'comment';
+    var resources = new Map();
+    var trimComments = function (str) { return str.replace(/^#.*$/gm, ''); };
+    var chunks = data.split('\n\n');
+    for (var i = 1; i < chunks.length; i += 1) {
+        var resource = trimComments(chunks[i]).trim();
+        var firstNewLine = resource.indexOf('\n');
+        var _a = __read(resource.slice(0, firstNewLine).split(' '), 2), name_1 = _a[0], type = _a[1];
+        var body = resource.slice(firstNewLine + 1);
+        if (name_1 === undefined || type === undefined || body === undefined) {
+            continue;
         }
-        else if (!trimmed) {
-            state = 'end';
+        if (!resources.has(type)) {
+            resources.set(type, new Map());
         }
-        else if (state !== 'content' &&
-            !type &&
-            trimmed.split(' ').length === 2) {
-            state = 'title';
-        }
-        else {
-            state = 'content';
-        }
-        switch (state) {
-            case 'end':
-                if (tmpContent) {
-                    var map = parsed.get(type);
-                    if (map === undefined) {
-                        map = new Map();
-                        parsed.set(type, map);
-                    }
-                    map.set(name, tmpContent);
-                    tmpContent = '';
-                    type = '';
-                }
-                break;
-            case 'comment':
-                break;
-            case 'title':
-                _a = __read(trimmed.split(' '), 2), name = _a[0], type = _a[1];
-                break;
-            case 'content':
-                tmpContent += trimmed + "\n";
-                break;
-            default:
-        }
-    });
-    if (tmpContent) {
-        var map = parsed.get(type);
-        if (map === undefined) {
-            map = new Map();
-            parsed.set(type, map);
-        }
-        map.set(name, tmpContent);
+        resources.get(type).set(name_1, body);
     }
-    return parsed;
+    return resources;
 }
 
 const maxInt = 2147483647;
@@ -1837,48 +1965,120 @@ function parseImplFactory(trie) {
     };
 }
 var parseImpl = parseImplFactory();
-function parse$1(url, options) {
-    return parseImpl(url, options);
-}
 function getPublicSuffix$1(url, options) {
     return parseImpl(url, options, 1).publicSuffix;
 }
-
-function mkRequest(_a) {
-    var _b = _a === void 0 ? {} : _a, _c = _b.url, url = _c === void 0 ? '' : _c, _d = _b.hostname, hostname = _d === void 0 ? '' : _d, _e = _b.domain, domain = _e === void 0 ? '' : _e, _f = _b.sourceHostname, sourceHostname = _f === void 0 ? '' : _f, _g = _b.sourceDomain, sourceDomain = _g === void 0 ? '' : _g, _h = _b.cpt, cpt = _h === void 0 ? 6 : _h;
-    return {
-        cpt: cpt,
-        tokens: tokenize(url),
-        sourceGD: sourceDomain,
-        sourceHostname: sourceHostname,
-        hostGD: domain,
-        hostname: hostname,
-        url: url.toLowerCase(),
-        fuzzySignature: undefined
-    };
+function getDomain$1(url, options) {
+    return parseImpl(url, options, 2).domain;
+}
+function getHostname(url, options) {
+    return parseImpl(url, options, 0).host;
 }
 
-function processRawRequest(request) {
-    var url = request.url.toLowerCase();
-    var _a = parse$1(url), host = _a.host, domain = _a.domain;
-    var sourceUrl = request.sourceUrl;
-    var sourceHostname = '';
-    var sourceDomain = '';
-    if (sourceUrl) {
-        sourceUrl = sourceUrl.toLowerCase();
-        var sourceUrlParts = parse$1(sourceUrl);
-        sourceHostname = sourceUrlParts.host || '';
-        sourceDomain = sourceUrlParts.domain || '';
+var CPT_TO_TYPE = {
+    beacon: 10,
+    csp_report: 1,
+    document: 2,
+    font: 5,
+    image: 6,
+    imageset: 6,
+    main_frame: 2,
+    media: 7,
+    object: 8,
+    object_subrequest: 8,
+    other: 9,
+    ping: 10,
+    script: 11,
+    speculative: 9,
+    stylesheet: 12,
+    sub_frame: 13,
+    web_manifest: 9,
+    websocket: 14,
+    xbl: 9,
+    xhr: 16,
+    xml_dtd: 9,
+    xmlhttprequest: 16,
+    xslt: 9,
+    1: 9,
+    2: 11,
+    3: 6,
+    4: 12,
+    5: 8,
+    6: 2,
+    7: 13,
+    10: 10,
+    11: 16,
+    12: 8,
+    13: 3,
+    14: 5,
+    15: 7,
+    16: 14,
+    17: 1,
+    18: 15,
+    19: 0,
+    20: 4,
+    21: 6
+};
+var TOKENS_BUFFER$3 = new Uint32Array(300);
+var Request = (function () {
+    function Request(_a) {
+        var _b = _a === void 0 ? {} : _a, _c = _b.type, type = _c === void 0 ? 'document' : _c, _d = _b.url, url = _d === void 0 ? '' : _d, hostname = _b.hostname, domain = _b.domain, _e = _b.sourceUrl, sourceUrl = _e === void 0 ? '' : _e, sourceHostname = _b.sourceHostname, sourceDomain = _b.sourceDomain;
+        this.type = CPT_TO_TYPE[type] || 9;
+        this.url = url.toLowerCase();
+        this.hostname = hostname || getHostname(this.url) || '';
+        this.domain = domain || getDomain$1(this.hostname) || '';
+        this.sourceUrl = sourceUrl.toLowerCase();
+        this.sourceHostname = sourceHostname || getHostname(this.sourceUrl) || '';
+        this.sourceDomain = sourceDomain || getDomain$1(this.sourceHostname) || '';
+        this.sourceHostnameHash = fastHash(this.sourceHostname);
+        this.sourceDomainHash = fastHash(this.sourceDomain);
+        this.isFirstParty = this.sourceDomain.length === 0 ? null : this.sourceDomain === this.domain;
+        this.isThirdParty = this.sourceDomain.length === 0 ? null : !this.isFirstParty;
+        var endOfProtocol = this.url.indexOf(':');
+        if (endOfProtocol === -1) {
+            this.isHttps = true;
+            this.isHttp = false;
+            this.isSupported = true;
+        }
+        else {
+            var protocol = this.url.slice(0, endOfProtocol);
+            this.isHttp = protocol === 'http';
+            this.isHttps = this.isHttp === false && protocol === 'https';
+            var isWebsocket = this.isHttp === false &&
+                this.isHttps === false &&
+                (protocol === 'ws' || protocol === 'wss');
+            this.isSupported = this.isHttp || this.isHttps || isWebsocket;
+            if (isWebsocket) {
+                this.type = 14;
+            }
+        }
     }
-    return mkRequest({
-        cpt: request.cpt,
-        sourceDomain: sourceDomain,
-        sourceHostname: sourceHostname,
-        domain: domain || '',
-        hostname: host || '',
-        url: url
-    });
-}
+    Request.prototype.getTokens = function () {
+        if (this.tokens === undefined) {
+            var tokensBufferIndex = 0;
+            if (this.sourceDomain) {
+                TOKENS_BUFFER$3[tokensBufferIndex] = fastHash(this.sourceDomain);
+                tokensBufferIndex += 1;
+            }
+            if (this.sourceHostname) {
+                TOKENS_BUFFER$3[tokensBufferIndex] = fastHash(this.sourceHostname);
+                tokensBufferIndex += 1;
+            }
+            var tokens = tokenize(this.url);
+            TOKENS_BUFFER$3.set(tokens, tokensBufferIndex);
+            tokensBufferIndex += tokens.length;
+            this.tokens = TOKENS_BUFFER$3.slice(0, tokensBufferIndex);
+        }
+        return this.tokens;
+    };
+    Request.prototype.getFuzzySignature = function () {
+        if (this.fuzzySignature === undefined) {
+            this.fuzzySignature = createFuzzySignature(this.url);
+        }
+        return this.fuzzySignature;
+    };
+    return Request;
+}());
 
 function fromString(str) {
     var res = new Uint8Array(str.length);
@@ -1944,23 +2144,29 @@ var DynamicDataView = (function () {
         this.pushBytes(buffer);
     };
     DynamicDataView.prototype.pushStr = function (str) {
-        var originalPos = this.pos;
-        var foundUnicode = false;
-        this.checkShouldResize(2 + str.length);
-        this.pushUint16(str.length);
-        var offset = this.pos;
-        var buffer = this.buffer;
-        for (var i = 0; i < str.length && !foundUnicode; i += 1) {
-            var ch = str.charCodeAt(i);
-            buffer[offset + i] = ch;
-            foundUnicode = foundUnicode || ch > 127;
-        }
-        if (foundUnicode) {
-            this.pos = originalPos;
-            this.pushUTF8(str);
+        if (str === undefined) {
+            this.checkShouldResize(2);
+            this.pushUint16(0);
         }
         else {
-            this.pos += str.length;
+            var originalPos = this.pos;
+            var foundUnicode = false;
+            this.checkShouldResize(2 + str.length);
+            this.pushUint16(str.length);
+            var offset = this.pos;
+            var buffer = this.buffer;
+            for (var i = 0; i < str.length && !foundUnicode; i += 1) {
+                var ch = str.charCodeAt(i);
+                buffer[offset + i] = ch;
+                foundUnicode = foundUnicode || ch > 127;
+            }
+            if (foundUnicode) {
+                this.pos = originalPos;
+                this.pushUTF8(str);
+            }
+            else {
+                this.pos += str.length;
+            }
         }
     };
     DynamicDataView.prototype.getBytes = function (n) {
@@ -1977,8 +2183,7 @@ var DynamicDataView = (function () {
         return uint8;
     };
     DynamicDataView.prototype.getUint16 = function () {
-        var uint16 = ((this.buffer[this.pos] << 8) |
-            this.buffer[this.pos + 1]) >>> 0;
+        var uint16 = ((this.buffer[this.pos] << 8) | this.buffer[this.pos + 1]) >>> 0;
         this.pos += 2;
         return uint16;
     };
@@ -1986,7 +2191,8 @@ var DynamicDataView = (function () {
         var uint32 = (((this.buffer[this.pos] << 24) >>> 0) +
             ((this.buffer[this.pos + 1] << 16) |
                 (this.buffer[this.pos + 2] << 8) |
-                this.buffer[this.pos + 3])) >>> 0;
+                this.buffer[this.pos + 3])) >>>
+            0;
         this.pos += 4;
         return uint32;
     };
@@ -1996,6 +2202,9 @@ var DynamicDataView = (function () {
     DynamicDataView.prototype.getStr = function () {
         var originalPos = this.pos;
         var size = this.getUint16();
+        if (size === 0) {
+            return '';
+        }
         var i = 0;
         for (; i < size && this.buffer[this.pos + i] <= 127; i += 1) {
         }
@@ -2019,6 +2228,169 @@ var DynamicDataView = (function () {
     return DynamicDataView;
 }());
 
+var DefaultMap = (function () {
+    function DefaultMap(ctr) {
+        this.map = new Map();
+        this.ctr = ctr;
+    }
+    DefaultMap.prototype.getMap = function () {
+        return this.map;
+    };
+    DefaultMap.prototype.set = function (key, value) {
+        this.map.set(key, value);
+    };
+    DefaultMap.prototype.get = function (key) {
+        var value = this.map.get(key);
+        if (value === undefined) {
+            value = this.ctr();
+            this.map.set(key, value);
+        }
+        return value;
+    };
+    return DefaultMap;
+}());
+function noop(filters) {
+    return filters;
+}
+var UID = 1;
+function getNextId() {
+    var id = UID;
+    UID = (UID + 1) % 1000000000;
+    return id;
+}
+function newBucket(filters) {
+    if (filters === void 0) { filters = []; }
+    return {
+        filters: filters,
+        magic: 0,
+        optimized: false,
+        originals: undefined
+    };
+}
+var ReverseIndex = (function () {
+    function ReverseIndex(filters, getTokens, _a) {
+        var _b = _a === void 0 ? {
+            enableOptimizations: true,
+            optimizer: noop
+        } : _a, _c = _b.enableOptimizations, enableOptimizations = _c === void 0 ? true : _c, _d = _b.optimizer, optimizer = _d === void 0 ? noop : _d;
+        this.index = new Map();
+        this.size = 0;
+        this.optimizer = enableOptimizations ? optimizer : noop;
+        this.getTokens = getTokens;
+        this.addFilters(filters);
+    }
+    ReverseIndex.prototype.iterMatchingFilters = function (tokens, cb) {
+        var requestId = getNextId();
+        for (var i = 0; i < tokens.length; i += 1) {
+            if (this.iterBucket(tokens[i], requestId, cb) === false) {
+                return;
+            }
+        }
+        this.iterBucket(0, requestId, cb);
+    };
+    ReverseIndex.prototype.optimizeAheadOfTime = function () {
+        var _this = this;
+        if (this.optimizer !== undefined) {
+            this.index.forEach(function (bucket) {
+                if (bucket.optimized === false) {
+                    _this.optimize(bucket);
+                }
+            });
+        }
+    };
+    ReverseIndex.prototype.addFilters = function (iterFilters) {
+        var _this = this;
+        var totalNumberOfTokens = 0;
+        var filters = [];
+        var index = new DefaultMap(newBucket);
+        var wildcardBucket = index.get(0);
+        iterFilters(function (filter) {
+            var multiTokens = _this.getTokens(filter);
+            filters.push({
+                filter: filter,
+                multiTokens: multiTokens
+            });
+            for (var i = 0; i < multiTokens.length; i += 1) {
+                var tokens = multiTokens[i];
+                for (var j = 0; j < tokens.length; j += 1) {
+                    totalNumberOfTokens += 1;
+                    index.get(tokens[j]).magic += 1;
+                }
+            }
+        });
+        ['http', 'https', 'www', 'com'].forEach(function (badToken) {
+            index.get(fastHash(badToken)).magic = totalNumberOfTokens;
+        });
+        for (var i = 0; i < filters.length; i += 1) {
+            var _a = filters[i], filter = _a.filter, multiTokens = _a.multiTokens;
+            var wildCardInserted = false;
+            for (var j = 0; j < multiTokens.length; j += 1) {
+                var tokens = multiTokens[j];
+                var bestBucket = void 0;
+                var count = totalNumberOfTokens + 1;
+                for (var k = 0; k < tokens.length; k += 1) {
+                    var bucket = index.get(tokens[k]);
+                    if (bucket.magic <= count) {
+                        count = bucket.magic;
+                        bestBucket = bucket;
+                        if (count === 1) {
+                            break;
+                        }
+                    }
+                }
+                if (bestBucket === undefined) {
+                    if (wildCardInserted === false) {
+                        wildCardInserted = true;
+                        wildcardBucket.filters.push(filter);
+                    }
+                }
+                else {
+                    bestBucket.filters.push(filter);
+                }
+            }
+        }
+        this.size = filters.length;
+        this.index = index.getMap();
+        this.index.forEach(function (bucket, key, map) {
+            bucket.magic = 0;
+            if (bucket.filters.length === 0) {
+                map["delete"](key);
+            }
+        });
+    };
+    ReverseIndex.prototype.optimize = function (bucket) {
+        if (this.optimizer !== undefined && bucket.optimized === false) {
+            if (bucket.filters.length > 1) {
+                bucket.originals = bucket.filters;
+                bucket.filters = this.optimizer(bucket.filters);
+            }
+            bucket.optimized = true;
+        }
+    };
+    ReverseIndex.prototype.iterBucket = function (token, requestId, cb) {
+        var bucket = this.index.get(token);
+        if (bucket !== undefined && bucket.magic !== requestId) {
+            bucket.magic = requestId;
+            if (bucket.optimized === false) {
+                this.optimize(bucket);
+            }
+            var filters = bucket.filters;
+            for (var i = 0; i < filters.length; i += 1) {
+                if (cb(filters[i]) === false) {
+                    if (i > 0) {
+                        var filter = filters[i];
+                        filters[i] = filters[i - 1];
+                        filters[i - 1] = filter;
+                    }
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
+    return ReverseIndex;
+}());
+
 function serializeNetworkFilter(filter, buffer) {
     var numberOfOptionalParts = 0;
     if (filter.isRedirect()) {
@@ -2036,9 +2408,9 @@ function serializeNetworkFilter(filter, buffer) {
     else if (filter.hasHostname()) {
         numberOfOptionalParts = 1;
     }
+    buffer.pushUint32(filter.getId());
     buffer.pushUint8(numberOfOptionalParts);
     buffer.pushUint32(filter.mask);
-    buffer.pushUint32(filter.id);
     if (numberOfOptionalParts === 0) {
         return;
     }
@@ -2050,25 +2422,62 @@ function serializeNetworkFilter(filter, buffer) {
     if (numberOfOptionalParts === 2) {
         return;
     }
-    buffer.pushStr(filter.optDomains);
+    buffer.pushUint16(filter.getNumberOfOptDomains());
+    if (filter.optDomains !== undefined) {
+        for (var i = 0; i < filter.optDomains.length; i += 1) {
+            buffer.pushUint32(filter.optDomains[i]);
+        }
+    }
     if (numberOfOptionalParts === 3) {
         return;
     }
-    buffer.pushStr(filter.optNotDomains);
+    buffer.pushUint16(filter.getNumberOfOptNotDomains());
+    if (filter.optNotDomains !== undefined) {
+        for (var i = 0; i < filter.optNotDomains.length; i += 1) {
+            buffer.pushUint32(filter.optNotDomains[i]);
+        }
+    }
     if (numberOfOptionalParts === 4) {
         return;
     }
     buffer.pushStr(filter.redirect);
 }
 function deserializeNetworkFilter(buffer) {
+    var id = buffer.getUint32();
     var numberOfOptionalParts = buffer.getUint8();
     var mask = buffer.getUint32();
-    var id = buffer.getUint32();
-    var hostname = numberOfOptionalParts > 0 ? buffer.getStr() : '';
-    var filter = numberOfOptionalParts > 1 ? buffer.getStr() : '';
-    var optDomains = numberOfOptionalParts > 2 ? buffer.getStr() : '';
-    var optNotDomains = numberOfOptionalParts > 3 ? buffer.getStr() : '';
-    var redirect = numberOfOptionalParts > 4 ? buffer.getStr() : '';
+    var hostname;
+    var filter;
+    var optDomains;
+    var optNotDomains;
+    var redirect;
+    if (numberOfOptionalParts > 0) {
+        hostname = buffer.getStr() || undefined;
+    }
+    if (numberOfOptionalParts > 1) {
+        filter = buffer.getStr() || undefined;
+    }
+    if (numberOfOptionalParts > 2) {
+        var numberOfOptDomains = buffer.getUint16();
+        if (numberOfOptDomains > 0) {
+            optDomains = new Uint32Array(numberOfOptDomains);
+            for (var i = 0; i < numberOfOptDomains; i += 1) {
+                optDomains[i] = buffer.getUint32();
+            }
+        }
+    }
+    if (numberOfOptionalParts > 3) {
+        var numberOfOptNotDomains = buffer.getUint16();
+        if (numberOfOptNotDomains > 0) {
+            optNotDomains = new Uint32Array(numberOfOptNotDomains);
+            for (var i = 0; i < numberOfOptNotDomains; i += 1) {
+                optNotDomains[i] = buffer.getUint32();
+            }
+        }
+    }
+    if (numberOfOptionalParts > 4) {
+        redirect = buffer.getStr() || undefined;
+    }
     return new NetworkFilter({
         filter: filter,
         hostname: hostname,
@@ -2080,21 +2489,21 @@ function deserializeNetworkFilter(buffer) {
     });
 }
 function serializeCosmeticFilter(filter, buffer) {
+    buffer.pushUint32(filter.getId());
     buffer.pushUint8(filter.mask);
-    buffer.pushUint32(filter.id);
     buffer.pushStr(filter.selector);
     buffer.pushStr(filter.hostnames);
 }
 function deserializeCosmeticFilter(buffer) {
-    var mask = buffer.getUint8();
     var id = buffer.getUint32();
+    var mask = buffer.getUint8();
     var selector = buffer.getStr();
     var hostnames = buffer.getStr();
     return new CosmeticFilter({
-        hostnames: hostnames,
+        hostnames: hostnames || undefined,
         id: id,
         mask: mask,
-        selector: selector
+        selector: selector || undefined
     });
 }
 function serializeNetworkFilters(filters, buffer) {
@@ -2115,7 +2524,7 @@ function deserializeNetworkFilters(buffer, allFilters) {
     for (var i = 0; i < length; i += 1) {
         var filter = deserializeNetworkFilter(buffer);
         filters.push(filter);
-        allFilters.set(filter.id, filter);
+        allFilters.set(filter.getId(), filter);
     }
     return filters;
 }
@@ -2125,7 +2534,7 @@ function deserializeCosmeticFilters(buffer, allFilters) {
     for (var i = 0; i < length; i += 1) {
         var filter = deserializeCosmeticFilter(buffer);
         filters.push(filter);
-        allFilters.set(filter.id, filter);
+        allFilters.set(filter.getId(), filter);
     }
     return filters;
 }
@@ -2166,7 +2575,7 @@ function serializeBucket(token, filters, buffer) {
     buffer.pushUint16(filters.length);
     buffer.pushUint32(token);
     for (var i = 0; i < filters.length; i += 1) {
-        buffer.pushUint32(filters[i].id);
+        buffer.pushUint32(filters[i].getId());
     }
 }
 function deserializeBucket(buffer, filters) {
@@ -2174,28 +2583,22 @@ function deserializeBucket(buffer, filters) {
     var length = buffer.getUint16();
     var token = buffer.getUint32();
     for (var i = 0; i < length; i += 1) {
-        var id = buffer.getUint32();
-        var filter = filters.get(id);
+        var filter = filters.get(buffer.getUint32());
         if (filter !== undefined) {
             bucket.push(filter);
         }
     }
     return {
-        bucket: {
-            filters: bucket,
-            hit: 0,
-            optimized: false
-        },
+        bucket: newBucket(bucket),
         token: token
     };
 }
 function serializeReverseIndex(reverseIndex, buffer) {
     var index = reverseIndex.index;
-    var tokens = __spread(index.keys());
     buffer.pushUint32(reverseIndex.size);
-    buffer.pushUint32(tokens.length);
+    buffer.pushUint32(index.size);
     index.forEach(function (bucket, token) {
-        serializeBucket(token, bucket.filters, buffer);
+        serializeBucket(token, bucket.originals || bucket.filters, buffer);
     });
 }
 function deserializeReverseIndex(buffer, index, filters) {
@@ -2212,11 +2615,6 @@ function deserializeReverseIndex(buffer, index, filters) {
 }
 function serializeResources(engine, buffer) {
     buffer.pushStr(engine.resourceChecksum);
-    buffer.pushUint8(engine.js.size);
-    engine.js.forEach(function (resource, name) {
-        buffer.pushStr(name);
-        buffer.pushStr(resource);
-    });
     buffer.pushUint8(engine.resources.size);
     engine.resources.forEach(function (_a, name) {
         var contentType = _a.contentType, data = _a.data;
@@ -2229,10 +2627,6 @@ function deserializeResources(buffer) {
     var js = new Map();
     var resources = new Map();
     var resourceChecksum = buffer.getStr();
-    var jsSize = buffer.getUint8();
-    for (var i = 0; i < jsSize; i += 1) {
-        js.set(buffer.getStr(), buffer.getStr());
-    }
     var resourcesSize = buffer.getUint8();
     for (var i = 0; i < resourcesSize; i += 1) {
         resources.set(buffer.getStr(), {
@@ -2240,6 +2634,12 @@ function deserializeResources(buffer) {
             data: buffer.getStr()
         });
     }
+    resources.forEach(function (_a, name) {
+        var contentType = _a.contentType, data = _a.data;
+        if (contentType === 'application/javascript') {
+            js.set(name, data);
+        }
+    });
     return {
         js: js,
         resourceChecksum: resourceChecksum,
@@ -2296,7 +2696,7 @@ function deserializeEngine(serialized, version) {
 function checkHostnamesPartialMatch(hostname, hostnamePattern) {
     var pattern = hostnamePattern;
     if (fastStartsWith(hostnamePattern, '~')) {
-        pattern = pattern.substr(1);
+        pattern = pattern.slice(1);
     }
     if (hostname.endsWith(pattern)) {
         var patternIndex = hostname.length - pattern.length;
@@ -2334,140 +2734,30 @@ function matchCosmeticFilter(filter, hostname) {
     return { hostname: '' };
 }
 
-function noop(filters) {
-    return filters;
-}
-var ReverseIndex = (function () {
-    function ReverseIndex(filters, getTokens, _a) {
-        var _b = _a === void 0 ? {
-            enableOptimizations: true,
-            optimizer: noop
-        } : _a, _c = _b.enableOptimizations, enableOptimizations = _c === void 0 ? true : _c, _d = _b.optimizer, optimizer = _d === void 0 ? noop : _d;
-        this.index = new Map();
-        this.size = 0;
-        this.optimizer = enableOptimizations ? optimizer : noop;
-        this.getTokens = getTokens;
-        this.addFilters(filters);
-    }
-    ReverseIndex.prototype.iterMatchingFilters = function (tokens, cb) {
-        for (var j = 0; j < tokens.length; j += 1) {
-            if (this.iterBucket(tokens[j], cb) === false) {
-                return;
-            }
-        }
-        this.iterBucket(0, cb);
-    };
-    ReverseIndex.prototype.optimizeAheadOfTime = function () {
-        var _this = this;
-        if (this.optimizer) {
-            this.index.forEach(function (bucket) {
-                _this.optimize(bucket, true);
-            });
-        }
-    };
-    ReverseIndex.prototype.addFilters = function (iterFilters) {
-        var _this = this;
-        var idToTokens = new Map();
-        var histogram = new Map();
-        var totalTokens = 0;
-        iterFilters(function (filter) {
-            var multiTokens = _this.getTokens(filter);
-            idToTokens.set(filter.id, {
-                filter: filter,
-                multiTokens: multiTokens
-            });
-            for (var i = 0; i < multiTokens.length; i += 1) {
-                var tokens = multiTokens[i];
-                for (var j = 0; j < tokens.length; j += 1) {
-                    var token = tokens[j];
-                    histogram.set(token, (histogram.get(token) || 0) + 1);
-                    totalTokens += 1;
-                }
-            }
-        });
-        this.index = new Map();
-        idToTokens.forEach(function (_a) {
-            var filter = _a.filter, multiTokens = _a.multiTokens;
-            var wildCardInserted = false;
-            for (var i = 0; i < multiTokens.length; i += 1) {
-                var tokens = multiTokens[i];
-                var bestToken = 0;
-                var count = totalTokens + 1;
-                for (var k = 0; k < tokens.length; k += 1) {
-                    var token = tokens[k];
-                    var tokenCount = histogram.get(token);
-                    if (tokenCount < count) {
-                        bestToken = token;
-                        count = tokenCount;
-                    }
-                }
-                if (bestToken === 0) {
-                    if (wildCardInserted) {
-                        continue;
-                    }
-                    else {
-                        wildCardInserted = true;
-                    }
-                }
-                var bucket = _this.index.get(bestToken);
-                if (bucket === undefined) {
-                    _this.index.set(bestToken, {
-                        filters: [filter],
-                        hit: 0,
-                        optimized: false
-                    });
-                }
-                else {
-                    bucket.filters.push(filter);
-                }
-            }
-        });
-        this.size = idToTokens.size;
-    };
-    ReverseIndex.prototype.optimize = function (bucket, force) {
-        if (force === void 0) { force = false; }
-        if (this.optimizer && !bucket.optimized && (force || bucket.hit >= 5)) {
-            if (bucket.filters.length > 1) {
-                bucket.filters = this.optimizer(bucket.filters);
-            }
-            bucket.optimized = true;
-        }
-    };
-    ReverseIndex.prototype.iterBucket = function (token, cb) {
-        var bucket = this.index.get(token);
-        if (bucket !== undefined) {
-            bucket.hit += 1;
-            this.optimize(bucket);
-            var filters = bucket.filters;
-            for (var k = 0; k < filters.length; k += 1) {
-                if (cb(filters[k]) === false) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    };
-    return ReverseIndex;
-}());
-
 var CosmeticFilterBucket = (function () {
     function CosmeticFilterBucket(filters) {
-        this.hostnameIndex = new ReverseIndex(function (cb) { return filters(function (f) {
-            if (f.hasHostnames()) {
-                cb(f);
-            }
-        }); }, function (filter) {
-            var multiTokens = [];
-            filter.hostnames.split(',').forEach(function (h) {
-                multiTokens.push(tokenize(h));
+        this.hostnameIndex = new ReverseIndex(function (cb) {
+            return filters(function (f) {
+                if (f.hasHostnames()) {
+                    cb(f);
+                }
             });
+        }, function (filter) {
+            var multiTokens = [];
+            if (filter.hostnames !== undefined) {
+                filter.hostnames.split(',').forEach(function (h) {
+                    multiTokens.push(tokenize(h));
+                });
+            }
             return multiTokens;
         });
-        this.selectorIndex = new ReverseIndex(function (cb) { return filters(function (f) {
-            if (!(f.isScriptBlock() || f.isScriptInject())) {
-                cb(f);
-            }
-        }); }, function (filter) { return filter.getTokens(); });
+        this.selectorIndex = new ReverseIndex(function (cb) {
+            return filters(function (f) {
+                if (!(f.isScriptBlock() || f.isScriptInject())) {
+                    cb(f);
+                }
+            });
+        }, function (filter) { return filter.getTokens(); });
         this.size = this.hostnameIndex.size + this.selectorIndex.size;
     }
     CosmeticFilterBucket.prototype.createContentScriptResponse = function (rules) {
@@ -2551,7 +2841,7 @@ var CosmeticFilterBucket = (function () {
             }
             return true;
         };
-        this.selectorIndex.iterMatchingFilters(__spread(tokens), checkMatch);
+        this.selectorIndex.iterMatchingFilters(new Uint32Array(tokens), checkMatch);
         return this.filterExceptions(rules);
     };
     CosmeticFilterBucket.prototype.filterExceptions = function (matches) {
@@ -2562,9 +2852,7 @@ var CosmeticFilterBucket = (function () {
             var isException = fastStartsWith(hostname, '~');
             if (matchingRules.has(selector)) {
                 var otherRule = matchingRules.get(selector);
-                if (rule.isUnhide() ||
-                    isException ||
-                    hostname.length > otherRule.hostname.length) {
+                if (rule.isUnhide() || isException || hostname.length > otherRule.hostname.length) {
                     matchingRules.set(selector, {
                         hostname: hostname,
                         isException: isException,
@@ -2603,22 +2891,21 @@ function isAnchoredByHostname(filterHostname, hostname) {
     if (matchIndex === -1) {
         return false;
     }
-    return ((matchIndex === 0 && (hostname.length === filterHostname.length ||
-        filterHostname[filterHostname.length - 1] === '.' ||
-        hostname[filterHostname.length] === '.')) ||
-        ((hostname[matchIndex - 1] === '.' || filterHostname[0] === '.') && ((hostname.length - matchIndex) === filterHostname.length ||
+    return ((matchIndex === 0 &&
+        (hostname.length === filterHostname.length ||
             filterHostname[filterHostname.length - 1] === '.' ||
-            hostname[matchIndex + filterHostname.length] === '.')));
+            hostname[filterHostname.length] === '.')) ||
+        ((hostname[matchIndex - 1] === '.' || filterHostname[0] === '.') &&
+            (hostname.length - matchIndex === filterHostname.length ||
+                filterHostname[filterHostname.length - 1] === '.' ||
+                hostname[matchIndex + filterHostname.length] === '.')));
 }
 function getUrlAfterHostname(url, hostname) {
-    return url.substring(url.indexOf(hostname) + hostname.length);
+    return url.slice(url.indexOf(hostname) + hostname.length);
 }
 function checkPatternFuzzyFilter(filter, request) {
     var signature = filter.getFuzzySignature();
-    if (request.fuzzySignature === undefined) {
-        request.fuzzySignature = createFuzzySignature(request.url);
-    }
-    var requestSignature = request.fuzzySignature;
+    var requestSignature = request.getFuzzySignature();
     if (signature.length > requestSignature.length) {
         return false;
     }
@@ -2634,52 +2921,83 @@ function checkPatternFuzzyFilter(filter, request) {
     return true;
 }
 function checkPatternPlainFilter(filter, request) {
-    var url = request.url;
-    return url.indexOf(filter.getFilter()) !== -1;
+    if (filter.hasFilter() === false) {
+        return true;
+    }
+    return request.url.indexOf(filter.getFilter()) !== -1;
 }
 function checkPatternRightAnchorFilter(filter, request) {
-    var url = request.url;
-    return url.endsWith(filter.getFilter());
+    if (filter.hasFilter() === false) {
+        return true;
+    }
+    return request.url.endsWith(filter.getFilter());
 }
 function checkPatternLeftAnchorFilter(filter, request) {
-    var url = request.url;
-    return fastStartsWith(url, filter.getFilter());
+    if (filter.hasFilter() === false) {
+        return true;
+    }
+    return fastStartsWith(request.url, filter.getFilter());
 }
 function checkPatternLeftRightAnchorFilter(filter, request) {
-    var url = request.url;
-    return url === filter.getFilter();
+    if (filter.hasFilter() === false) {
+        return true;
+    }
+    return request.url === filter.getFilter();
 }
-function checkPatternRegexFilter(filter, request) {
+function checkPatternRegexFilter(filter, request, startFrom) {
+    if (startFrom === void 0) { startFrom = 0; }
     var url = request.url;
+    if (startFrom > 0) {
+        url = url.slice(startFrom);
+    }
     return filter.getRegex().test(url);
 }
 function checkPatternHostnameAnchorRegexFilter(filter, request) {
-    var url = request.url, hostname = request.hostname;
-    if (isAnchoredByHostname(filter.getHostname(), hostname)) {
-        var urlAfterHostname = getUrlAfterHostname(url, filter.getHostname());
-        return checkPatternRegexFilter(filter, __assign({}, request, { url: urlAfterHostname }));
+    var url = request.url;
+    var hostname = request.hostname;
+    var filterHostname = filter.getHostname();
+    if (isAnchoredByHostname(filterHostname, hostname)) {
+        return checkPatternRegexFilter(filter, request, url.indexOf(filterHostname) + filterHostname.length);
     }
     return false;
 }
 function checkPatternHostnameRightAnchorFilter(filter, request) {
-    var url = request.url, hostname = request.hostname;
-    if (isAnchoredByHostname(filter.getHostname(), hostname)) {
-        var urlAfterHostname = getUrlAfterHostname(url, filter.getHostname());
+    if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+        return checkPatternRightAnchorFilter(filter, request);
+    }
+    return false;
+}
+function checkPatternHostnameLeftRightAnchorFilter(filter, request) {
+    if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+        if (filter.hasFilter() === false) {
+            return true;
+        }
+        var urlAfterHostname = getUrlAfterHostname(request.url, filter.getHostname());
         return filter.getFilter() === urlAfterHostname;
     }
     return false;
 }
+function checkPatternHostnameLeftAnchorFilter(filter, request) {
+    if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+        if (filter.hasFilter() === false) {
+            return true;
+        }
+        return fastStartsWithFrom(request.url, filter.getFilter(), request.url.indexOf(filter.getHostname()) + filter.getHostname().length);
+    }
+    return false;
+}
 function checkPatternHostnameAnchorFilter(filter, request) {
-    var url = request.url, hostname = request.hostname;
-    if (isAnchoredByHostname(filter.getHostname(), hostname)) {
-        var urlAfterHostname = getUrlAfterHostname(url, filter.getHostname());
-        return fastStartsWith(urlAfterHostname, filter.getFilter());
+    var filterHostname = filter.getHostname();
+    if (isAnchoredByHostname(filterHostname, request.hostname)) {
+        if (filter.hasFilter() === false) {
+            return true;
+        }
+        return (request.url.indexOf(filter.getFilter(), request.url.indexOf(filterHostname) + filterHostname.length) !== -1);
     }
     return false;
 }
 function checkPatternHostnameAnchorFuzzyFilter(filter, request) {
-    var hostname = request.hostname;
-    if (isAnchoredByHostname(filter.getHostname(), hostname)) {
+    if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
         return checkPatternFuzzyFilter(filter, request);
     }
     return false;
@@ -2689,11 +3007,17 @@ function checkPattern(filter, request) {
         if (filter.isRegex()) {
             return checkPatternHostnameAnchorRegexFilter(filter, request);
         }
+        else if (filter.isRightAnchor() && filter.isLeftAnchor()) {
+            return checkPatternHostnameLeftRightAnchorFilter(filter, request);
+        }
         else if (filter.isRightAnchor()) {
             return checkPatternHostnameRightAnchorFilter(filter, request);
         }
         else if (filter.isFuzzy()) {
             return checkPatternHostnameAnchorFuzzyFilter(filter, request);
+        }
+        else if (filter.isLeftAnchor()) {
+            return checkPatternHostnameLeftAnchorFilter(filter, request);
         }
         return checkPatternHostnameAnchorFilter(filter, request);
     }
@@ -2715,30 +3039,24 @@ function checkPattern(filter, request) {
     return checkPatternPlainFilter(filter, request);
 }
 function checkOptions(filter, request) {
-    if (!filter.isCptAllowed(request.cpt)) {
-        return false;
-    }
-    var sHost = request.sourceHostname;
-    var sHostGD = request.sourceGD;
-    var hostGD = request.hostGD;
-    var isFirstParty = sHostGD === hostGD;
-    if (!filter.firstParty() && isFirstParty) {
-        return false;
-    }
-    if (!filter.thirdParty() && !isFirstParty) {
+    if (filter.isCptAllowed(request.type) === false ||
+        (request.isHttps === true && filter.fromHttps() === false) ||
+        (request.isHttp === true && filter.fromHttp() === false) ||
+        (!filter.firstParty() && request.isFirstParty === true) ||
+        (!filter.thirdParty() && request.isThirdParty === true)) {
         return false;
     }
     if (filter.hasOptDomains()) {
         var optDomains = filter.getOptDomains();
-        if (optDomains.size > 0 &&
-            !(optDomains.has(sHostGD) || optDomains.has(sHost))) {
+        if (!binSearch(optDomains, request.sourceHostnameHash) &&
+            !binSearch(optDomains, request.sourceDomainHash)) {
             return false;
         }
     }
     if (filter.hasOptNotDomains()) {
         var optNotDomains = filter.getOptNotDomains();
-        if (optNotDomains.size > 0 &&
-            (optNotDomains.has(sHostGD) || optNotDomains.has(sHost))) {
+        if (binSearch(optNotDomains, request.sourceHostnameHash) ||
+            binSearch(optNotDomains, request.sourceDomainHash)) {
             return false;
         }
     }
@@ -2789,37 +3107,93 @@ function splitBy(filters, condition) {
 }
 var OPTIMIZATIONS = [
     {
+        description: 'Group idential filter with same mask but different domains in single filters',
+        fusion: function (filters) {
+            var filter = new NetworkFilter(filters[0]);
+            if (filter.rawLine !== undefined) {
+                filter.rawLine = filters.map(function (_a) {
+                    var rawLine = _a.rawLine;
+                    return rawLine;
+                }).join(' <+> ');
+            }
+            var domains = new Set();
+            var notDomains = new Set();
+            for (var i = 0; i < filters.length; i += 1) {
+                var _a = filters[i], optDomains = _a.optDomains, optNotDomains = _a.optNotDomains;
+                if (optDomains !== undefined) {
+                    optDomains.forEach(function (d) {
+                        domains.add(d);
+                    });
+                }
+                if (optNotDomains !== undefined) {
+                    optNotDomains.forEach(function (d) {
+                        notDomains.add(d);
+                    });
+                }
+            }
+            if (domains.size > 0) {
+                filter.optDomains = new Uint32Array(domains);
+            }
+            else {
+                filter.optDomains = undefined;
+            }
+            if (notDomains.size > 0) {
+                filter.optNotDomains = new Uint32Array(notDomains);
+            }
+            else {
+                filter.optNotDomains = undefined;
+            }
+            return filter;
+        },
+        groupByCriteria: function (filter) {
+            return filter.getHostname() + filter.getFilter() + filter.getMask() + filter.getRedirect();
+        },
+        select: function (filter) {
+            return !filter.isFuzzy() && (filter.hasOptDomains() || filter.hasOptNotDomains());
+        }
+    },
+    {
         description: 'Group simple patterns, into a single filter',
         fusion: function (filters) {
             var filter = new NetworkFilter(filters[0]);
-            var patterns = new Set();
+            if (filter.rawLine !== undefined) {
+                filter.rawLine = filters.map(function (_a) {
+                    var rawLine = _a.rawLine;
+                    return rawLine;
+                }).join(' <+> ');
+            }
+            var patterns = [];
             for (var i = 0; i < filters.length; i += 1) {
                 var f = filters[i];
                 if (f.isRegex()) {
-                    patterns.add(processRegex(f.getRegex()));
+                    patterns.push(processRegex(f.getRegex()));
                 }
                 else if (f.isRightAnchor()) {
-                    patterns.add(escape$1(f.getFilter()) + "$");
+                    patterns.push(escape$1(f.getFilter()) + "$");
                 }
                 else if (f.isLeftAnchor()) {
-                    patterns.add("^" + escape$1(f.getFilter()));
+                    patterns.push("^" + escape$1(f.getFilter()));
                 }
                 else {
-                    patterns.add(escape$1(f.getFilter()));
+                    patterns.push(escape$1(f.getFilter()));
                 }
             }
-            if (patterns.size > 1) {
-                filter.setRegex(new RegExp(__spread(patterns).join('|')));
+            if (patterns.length > 0) {
+                filter.setRegex(new RegExp(patterns.join('|')));
+            }
+            else {
+                filter.filter = undefined;
             }
             return filter;
         },
         groupByCriteria: function (filter) { return '' + filter.getMask(); },
-        select: function (filter) { return (!filter.isFuzzy() &&
-            !filter.hasOptDomains() &&
-            !filter.hasOptNotDomains() &&
-            !filter.isHostname() &&
-            !filter.isHostnameAnchor() &&
-            !filter.isRedirect()); }
+        select: function (filter) {
+            return !filter.isFuzzy() &&
+                !filter.hasOptDomains() &&
+                !filter.hasOptNotDomains() &&
+                !filter.isHostnameAnchor() &&
+                !filter.isRedirect();
+        }
     },
 ];
 function optimize(filters) {
@@ -2857,16 +3231,25 @@ var NetworkFilterBucket = (function () {
     NetworkFilterBucket.prototype.optimizeAheadOfTime = function () {
         this.index.optimizeAheadOfTime();
     };
+    NetworkFilterBucket.prototype.matchAll = function (request) {
+        var filters = [];
+        this.index.iterMatchingFilters(request.getTokens(), function (filter) {
+            if (matchNetworkFilter(filter, request)) {
+                filters.push(filter);
+            }
+            return true;
+        });
+        return filters;
+    };
     NetworkFilterBucket.prototype.match = function (request) {
         var match;
-        var checkMatch = function (filter) {
+        this.index.iterMatchingFilters(request.getTokens(), function (filter) {
             if (matchNetworkFilter(filter, request)) {
                 match = filter;
                 return false;
             }
             return true;
-        };
-        this.index.iterMatchingFilters(request.tokens, checkMatch);
+        });
         return match;
     };
     return NetworkFilterBucket;
@@ -2910,6 +3293,9 @@ var FilterEngine = (function () {
         this.js = new Map();
         this.resources = new Map();
     }
+    FilterEngine.prototype.serialize = function () {
+        return serializeEngine(this);
+    };
     FilterEngine.prototype.hasList = function (asset, checksum) {
         var list = this.lists.get(asset);
         if (list !== undefined) {
@@ -2937,21 +3323,15 @@ var FilterEngine = (function () {
             });
         }
     };
-    FilterEngine.prototype.onUpdateFilters = function (lists, loadedAssets, onDiskCache, debug) {
+    FilterEngine.prototype.onUpdateFilters = function (lists, loadedAssets, debug) {
         var _this = this;
         if (loadedAssets === void 0) { loadedAssets = new Set(); }
-        if (onDiskCache === void 0) { onDiskCache = false; }
         if (debug === void 0) { debug = false; }
-        var updated = false;
         this.lists.forEach(function (_, asset) {
             if (!loadedAssets.has(asset)) {
                 _this.lists["delete"](asset);
-                updated = true;
             }
         });
-        if (lists.length > 0) {
-            updated = true;
-        }
         for (var i = 0; i < lists.length; i += 1) {
             var _a = lists[i], asset = _a.asset, filters = _a.filters, checksum = _a.checksum;
             var _b = parseList(filters, {
@@ -2991,20 +3371,18 @@ var FilterEngine = (function () {
         this.exceptions = new NetworkFilterBucket('exceptions', function (cb) { return iterFilters(_this.lists, function (l) { return l.exceptions; }, cb); }, this.enableOptimizations);
         this.importants = new NetworkFilterBucket('importants', function (cb) { return iterFilters(_this.lists, function (l) { return l.importants; }, cb); }, this.enableOptimizations);
         this.redirects = new NetworkFilterBucket('redirects', function (cb) { return iterFilters(_this.lists, function (l) { return l.redirects; }, cb); }, this.enableOptimizations);
-        this.cosmetics = new CosmeticFilterBucket(function (cb) { return iterFilters(_this.lists, function (l) { return l.cosmetics; }, cb); });
-        this.size = (this.exceptions.size +
-            this.importants.size +
-            this.redirects.size +
-            this.cosmetics.size +
-            this.filters.size);
-        var serialized = null;
-        if (updated && onDiskCache) {
-            serialized = serializeEngine(this);
-        }
+        this.cosmetics = new CosmeticFilterBucket(function (cb) {
+            return iterFilters(_this.lists, function (l) { return l.cosmetics; }, cb);
+        });
+        this.size =
+            this.exceptions.size +
+                this.importants.size +
+                this.redirects.size +
+                this.cosmetics.size +
+                this.filters.size;
         if (this.optimizeAOT) {
             this.optimize();
         }
-        return serialized;
     };
     FilterEngine.prototype.optimize = function () {
         this.filters.optimizeAheadOfTime();
@@ -3024,37 +3402,50 @@ var FilterEngine = (function () {
         }
         return this.cosmetics.createContentScriptResponse(this.cosmetics.getDomainRules(hostname, this.js));
     };
+    FilterEngine.prototype.matchAll = function (rawRequest) {
+        var request = new Request(rawRequest);
+        var filters = [];
+        if (request.isSupported) {
+            filters.push.apply(filters, __spread(this.importants.matchAll(request)));
+            filters.push.apply(filters, __spread(this.filters.matchAll(request)));
+            filters.push.apply(filters, __spread(this.exceptions.matchAll(request)));
+            filters.push.apply(filters, __spread(this.redirects.matchAll(request)));
+        }
+        return new Set(filters);
+    };
     FilterEngine.prototype.match = function (rawRequest) {
         if (!this.loadNetworkFilters) {
             return { match: false };
         }
-        var request = processRawRequest(rawRequest);
+        var request = new Request(rawRequest);
         var filter;
         var exception;
         var redirect;
-        filter = this.importants.match(request);
-        if (filter === undefined) {
-            filter = this.redirects.match(request);
+        if (request.isSupported) {
+            filter = this.importants.match(request);
             if (filter === undefined) {
-                filter = this.filters.match(request);
+                filter = this.redirects.match(request);
+                if (filter === undefined) {
+                    filter = this.filters.match(request);
+                }
+                if (filter !== undefined) {
+                    exception = this.exceptions.match(request);
+                }
             }
             if (filter !== undefined) {
-                exception = this.exceptions.match(request);
-            }
-        }
-        if (filter !== undefined) {
-            if (filter.isRedirect()) {
-                var redirectResource = this.resources.get(filter.getRedirect());
-                if (redirectResource !== undefined) {
-                    var data = redirectResource.data, contentType = redirectResource.contentType;
-                    var dataUrl = void 0;
-                    if (contentType.indexOf(';') !== -1) {
-                        dataUrl = "data:" + contentType + "," + data;
+                if (filter.isRedirect()) {
+                    var redirectResource = this.resources.get(filter.getRedirect());
+                    if (redirectResource !== undefined) {
+                        var data = redirectResource.data, contentType = redirectResource.contentType;
+                        var dataUrl = void 0;
+                        if (contentType.indexOf(';') !== -1) {
+                            dataUrl = "data:" + contentType + "," + data;
+                        }
+                        else {
+                            dataUrl = "data:" + contentType + ";base64," + btoaPolyfill(data);
+                        }
+                        redirect = dataUrl.trim();
                     }
-                    else {
-                        dataUrl = "data:" + contentType + ";base64," + btoaPolyfill(data);
-                    }
-                    redirect = dataUrl.trim();
                 }
             }
         }
@@ -3072,10 +3463,9 @@ function fetchResource(url) {
     return fetch(url).then(function (response) { return response.text(); });
 }
 var defaultLists = [
-    'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
-    'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
     'https://easylist.to/easylist/easylist.txt',
     'https://easylist.to/easylist/easyprivacy.txt',
+    'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=1&mimetype=plaintext',
     'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
     'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
     'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
@@ -3090,4 +3480,4 @@ function fetchResources() {
     return fetchResource('https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt');
 }
 
-export { CosmeticInjection as CosmeticsInjection, overrideUserAgent, FilterEngine as FiltersEngine, ReverseIndex, processRawRequest, deserializeEngine, matchCosmeticFilter, matchNetworkFilter, parseCosmeticFilter, parseNetworkFilter, f, parseList, compactTokens, hasEmptyIntersection, mergeCompactSets, fetchLists, fetchResources, tokenize, fastHash };
+export { CosmeticInjection as CosmeticsInjection, overrideUserAgent, FilterEngine as FiltersEngine, ReverseIndex, Request, deserializeEngine, matchCosmeticFilter, matchNetworkFilter, parseCosmeticFilter, parseNetworkFilter, f, parseList, compactTokens, hasEmptyIntersection, mergeCompactSets, fetchLists, fetchResources, tokenize, fastHash };

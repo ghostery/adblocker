@@ -13,7 +13,7 @@ function checkHostnamesPartialMatch(
 ): boolean {
   let pattern = hostnamePattern;
   if (fastStartsWith(hostnamePattern, '~')) {
-    pattern = pattern.substr(1);
+    pattern = pattern.slice(1);
   }
 
   if (hostname.endsWith(pattern)) {

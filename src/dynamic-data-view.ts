@@ -83,29 +83,35 @@ export default class DynamicDataView {
    *
    * WARNING: Currently only strings of size <= 65k can be stored.
    */
-  public pushStr(str: string): void {
-    // Keep track of original position to be able to fallback
-    // to pushUTF8 if we encounter non-ascii characters.
-    const originalPos = this.pos;
-    let foundUnicode = false;
-
-    this.checkShouldResize(2 + str.length);
-    this.pushUint16(str.length);
-
-    const offset = this.pos;
-    const buffer = this.buffer;
-    for (let i = 0; i < str.length && !foundUnicode; i += 1) {
-      const ch = str.charCodeAt(i);
-      buffer[offset + i] = ch;
-      foundUnicode = foundUnicode || ch > 127;
-    }
-
-    if (foundUnicode) {
-      // Fallback to a slower utf-8 text encoder
-      this.pos = originalPos;
-      this.pushUTF8(str);
+  public pushStr(str: string | undefined): void {
+    if (str === undefined) {
+      // Special handling for empty strings
+      this.checkShouldResize(2);
+      this.pushUint16(0);
     } else {
-      this.pos += str.length;
+      // Keep track of original position to be able to fallback
+      // to pushUTF8 if we encounter non-ascii characters.
+      const originalPos = this.pos;
+      let foundUnicode = false;
+
+      this.checkShouldResize(2 + str.length);
+      this.pushUint16(str.length);
+
+      const offset = this.pos;
+      const buffer = this.buffer;
+      for (let i = 0; i < str.length && !foundUnicode; i += 1) {
+        const ch = str.charCodeAt(i);
+        buffer[offset + i] = ch;
+        foundUnicode = foundUnicode || ch > 127;
+      }
+
+      if (foundUnicode) {
+        // Fallback to a slower utf-8 text encoder
+        this.pos = originalPos;
+        this.pushUTF8(str);
+      } else {
+        this.pos += str.length;
+      }
     }
   }
 
@@ -128,21 +134,18 @@ export default class DynamicDataView {
   }
 
   public getUint16(): number {
-    const uint16 = (
-      (this.buffer[this.pos] << 8) |
-      this.buffer[this.pos + 1]
-    ) >>> 0;
+    const uint16 = ((this.buffer[this.pos] << 8) | this.buffer[this.pos + 1]) >>> 0;
     this.pos += 2;
     return uint16;
   }
 
   public getUint32(): number {
-    const uint32 = (
-      ((this.buffer[this.pos] << 24) >>> 0) +
-      ((this.buffer[this.pos + 1] << 16) |
-       (this.buffer[this.pos + 2] << 8) |
-        this.buffer[this.pos + 3])
-    ) >>> 0;
+    const uint32 =
+      (((this.buffer[this.pos] << 24) >>> 0) +
+        ((this.buffer[this.pos + 1] << 16) |
+          (this.buffer[this.pos + 2] << 8) |
+          this.buffer[this.pos + 3])) >>>
+      0;
     this.pos += 4;
     return uint32;
   }
@@ -156,6 +159,11 @@ export default class DynamicDataView {
     // to getUTF8 if we encounter non-ascii characters.
     const originalPos = this.pos;
     const size = this.getUint16();
+
+    // Special handling for empty strings
+    if (size === 0) {
+      return '';
+    }
 
     // Check if there is a non-ascii character in the string.
     let i = 0;

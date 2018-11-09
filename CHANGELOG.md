@@ -2,6 +2,120 @@
 
 ## *not released*
 
+  * Optimizations [#46](https://github.com/cliqz-oss/adblocker/pull/46)
+
+    - Requests can now use `type` as a string or number (e.g.: `script` or `2`).
+    ```js
+    // Both are equivalent
+    new Request({ type: 2, url, sourceUrl })
+    new Request({ type: 'script', url, sourceUrl })
+    ```
+    - [BREAKING] format of serialized engine has been changed to store less data
+    - [BREAKING] `id` attribute from filters has been remove, use `getId()` instead (please note that the `id` is not stored internally anymore, but generated every time `getId()` is called).
+    ```js
+    // Bad
+    filter.id
+    // Good
+    filter.getId()
+    ```
+    - [BREAKING] values returned by `getId()` will differ from values stored in
+      the `id` attribute for identical filters (the algorithm is now different
+      and will do less work).
+    - [BREAKING] domains specified in `$domains=` option are now stored hashed
+      instead of as string, and can only be retried in their original form if
+      `debug` flag is used in `FiltersEngine`
+    - [BREAKING] `fastTokenizer` will now only consider tokens longer than 1
+    - [BREAKING] `fastTokenizer` will now only tokenize up to 2048 characters from URLs
+    - [BREAKING] hashes produced by `fastHash` and `fastHashBetween` will not
+      match what was produced by the same function before this change (the seed
+      and hashing algorithm was slightly changed for speed).
+    - [BREAKING] un-initialized attributes of filters instances
+      (`CosmeticFilter` and `NetworkFilter`) will have value `undefined`
+      instead of `null` or empty string like before. It is recommended
+      to use accessors (e.g.: `filter.getHostname()` instead of
+      `filter.hostname`) to access internal attributes, as they will
+      always return consistent types and fall-back to meaningful defaults.
+    ```js
+    // Bad
+    filter.redirect
+    filter.filter
+    filter.hostname
+
+    // Good
+    filter.getRedirect()
+    filter.getFilter()
+    filter.getHostname()
+    ```
+    - [BREAKING] a new `Request` abstraction supersedes `IRequest` and
+      `IRawRequest`. This new class offers a more consistent experience to work
+      will requests.
+    ```js
+    new Request({ url })
+    new Request({ url, sourceUrl })
+    new Request({ url, sourceUrl, type: 'string' })
+    new Request({ url, hostname, domain, type: 'string' })
+    ```
+    - [BREAKING] remove support for `hosts` format (e.g.: `127.0.0.1 domain`),
+      since servers blocklists can also be exported in hostname anchored format
+      (e.g.: `||domain^$third-party`). This simplifies the parsing logic.
+    - [BREAKING] remove the following unused legacy request types:
+        * `fromFetch`
+        * `fromDTD`
+        * `fromXLST`
+        * `fromBeacon`
+        * `fromCSP`
+    - [BREAKING] `cpt` (Content Policy Type of requests) is now called `type`,
+      to match the terminology of the WebRequestAPI.
+    ```js
+    // Bad
+    request.cpt
+    new Request({ cpt })
+
+    // Good
+    request.type
+    new Request({ type })
+    ```
+    - Optimized and simplified implementation of `parseJSResource` (~4 times faster)
+    - Optimized matching of some kinds of filters to prevent any string copy (reduced the number of calls to `slice`, `substr` and `substring`)
+    - Optimized buckets ordering by moving matching filters towards the
+      beginning of the array. This results in generic filter being tried first.
+    - Optimized some classes of filters sharing the same pattern and options,
+      with different domains. They are now fused into a single filter. For
+      example, the following filters:
+        * `|https://$script,domain=downloadpirate.com`
+        * `|https://$script,domain=dwindly.io`
+        * `|https://$script,domain=intoupload.net`
+        * `|https://$script,domain=linkshrink.net`
+        * `|https://$script,domain=movpod.in`
+        * `|https://$script,domain=povw1deo.com|povwideo.net|powvideo.net`
+        * `|https://$script,domain=sendit.cloud`
+        * `|https://$script,domain=sfiles.org|suprafiles.me|suprafiles.net|suprafiles.org`
+        * `|https://$script,domain=streamplay.to`
+        * `|https://$script,domain=userscloud.com`
+        * `|https://$script,domain=yourporn.sexy`
+    will be optimized into: `|https://$script,domain=dwindly.io|movpod.in|...|yourporn.sexy`
+    - `tokenize` will now allow `%` as part of tokens for filters
+    - `CosmeticFilter` now support the new `+js()` syntax to inject scripts
+    - `NetworkFilter`'s `getTokens()` method will now return more tokens in some
+      cases. For example, if only one domain is specified in the `$domain=`
+      option, then it can be used as a token (before we would only use the pattern part of each filter to extract tokens).
+    - In case a `NetworkFilter` has no token available (e.g.:
+      `$image,domain=ads.com`), then it can be indexed using the domains
+      specified in the `$domain=` option, if any.
+    - Filters of the form `*pattern` (regex) are now optimized into `pattern` (plain)
+    - Filters of the form `|http://` or `|https://` or `|http*://` are now
+      optimized using the newly introduced `http` and `https` options. The
+      `Request` instances will now say if they are `http` or `https`, and this
+      saves string comparisons while matching.
+    - Fixed a bug where javascript resources were serialized twice
+    - Serialization can now be performed even after `engine` has been optimized
+    - Addition of a `serialize` method on `FiltersEngine` class
+    - Reverse Index is now created using only one `Map` instead of two
+    - optDomains and optNotDomains are now stored in a compact typed array
+      instead of `Set` and a binary search is used for lookups.
+    - Prevent filters from being checked twice for requests by remembering which
+      request last checked a given bucket in reverse index (i.e.: `magic` field)
+
 ## 0.2.1
 
 *2018-10-11*

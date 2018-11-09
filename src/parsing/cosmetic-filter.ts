@@ -1,11 +1,4 @@
-import {
-  fastHash,
-  fastStartsWith,
-  fastStartsWithFrom,
-  getBit,
-  setBit,
-  tokenizeCSS,
-} from '../utils';
+import { fastStartsWithFrom, getBit, setBit, tokenizeCSS } from '../utils';
 import IFilter from './interface';
 
 /**
@@ -16,6 +9,30 @@ const enum COSMETICS_MASK {
   scriptInject = 1 << 1,
   scriptBlock = 1 << 2,
 }
+
+function computeFilterId(
+  mask: number,
+  selector: string | undefined,
+  hostnames: string | undefined,
+): number {
+  let hash = (5408 * 33) ^ mask;
+
+  if (selector !== undefined) {
+    for (let j = 0; j < selector.length; j += 1) {
+      hash = (hash * 33) ^ selector.charCodeAt(j);
+    }
+  }
+
+  if (hostnames !== undefined) {
+    for (let j = 0; j < hostnames.length; j += 1) {
+      hash = (hash * 33) ^ hostnames.charCodeAt(j);
+    }
+  }
+
+  return hash >>> 0;
+}
+
+const TOKENS_BUFFER = new Uint32Array(200);
 
 /***************************************************************************
  *  Cosmetic filters parsing
@@ -36,37 +53,31 @@ const enum COSMETICS_MASK {
  * - xpath
  */
 export class CosmeticFilter implements IFilter {
-  public id: number;
   public mask: number;
-  public selector: string;
-  public hostnames: string;
+  public selector?: string;
+  public hostnames?: string;
 
   // For debug only
-  public rawLine: string | null;
+  public id?: number;
+  public rawLine?: string;
 
-  private hostnamesArray: string[] | null;
+  private hostnamesArray?: string[];
 
   constructor({
-    mask,
-    selector,
     hostnames,
     id,
+    mask,
+    selector,
   }: {
-    mask: number,
-    selector: string,
-    hostnames: string,
-    id: number,
+    hostnames?: string;
+    id?: number;
+    mask: number;
+    selector?: string;
   }) {
     this.id = id;
     this.mask = mask;
     this.selector = selector;
     this.hostnames = hostnames;
-
-    // Lazily set when needed
-    this.hostnamesArray = null;
-
-    // Only in debug mode
-    this.rawLine = null;
   }
 
   public isCosmeticFilter(): boolean {
@@ -108,20 +119,29 @@ export class CosmeticFilter implements IFilter {
     return filter;
   }
 
-  public getTokens(): number[][] {
+  public getId(): number {
+    if (this.id === undefined) {
+      this.id = computeFilterId(this.mask, this.selector, this.hostnames);
+    }
+    return this.id;
+  }
+
+  public getTokens(): Uint32Array[] {
     return [this.getTokensSelector()];
   }
 
-  public getTokensSelector(): number[] {
+  public getTokensSelector(): Uint32Array {
     // These filters are only matched based on their domains, not selectors
     if (this.isScriptInject() || this.isScriptBlock()) {
-      return [];
+      return new Uint32Array([]);
     }
+
+    const selector = this.selector || '';
 
     // Only keep the part after the last combinator: '>', '+', '~'
     let sepIndex = 0;
-    for (let i = this.selector.length - 1; i >= 0; i -= 1) {
-      const code = this.selector.charCodeAt(i);
+    for (let i = selector.length - 1; i >= 0; i -= 1) {
+      const code = selector.charCodeAt(i);
       if (
         code === 43 || // '+'
         code === 62 || // '>'
@@ -137,57 +157,59 @@ export class CosmeticFilter implements IFilter {
     // parts.
     let inside = 0; // number of brackets openings seen, allows to handle multiple levels of depth
     let start = sepIndex;
-    const tokens: number[] = [];
+    let tokensBufferIndex = 0;
 
-    for (let i = sepIndex, len = this.selector.length; i < len; i += 1) {
-      const code = this.selector.charCodeAt(i);
-      if (code === 91) { // '['
+    for (let i = sepIndex, len = selector.length; i < len; i += 1) {
+      const code = selector.charCodeAt(i);
+      if (code === 91) {
+        // '['
         if (inside === 0 && start < i) {
-          tokens.push(...tokenizeCSS(this.selector.slice(start, i)));
+          const tokens = tokenizeCSS(selector.slice(start, i));
+          TOKENS_BUFFER.set(tokens, tokensBufferIndex);
+          tokensBufferIndex += tokens.length;
         }
         inside += 1;
-      } else if (code === 93) { // ']'
+      } else if (code === 93) {
+        // ']'
         inside -= 1;
         start = i + 1;
       }
     }
 
-    if (inside === 0 && start < this.selector.length) {
-      tokens.push(...tokenizeCSS(this.selector.slice(
-        start,
-        this.selector.length,
-      )));
+    if (inside === 0 && start < selector.length) {
+      const tokens = tokenizeCSS(selector.slice(start, selector.length));
+      TOKENS_BUFFER.set(tokens, tokensBufferIndex);
+      tokensBufferIndex += tokens.length;
     }
 
-    return tokens;
+    return TOKENS_BUFFER.slice(0, tokensBufferIndex);
   }
 
   public getSelector(): string {
-    return this.selector;
+    return this.selector || '';
   }
 
   public hasHostnames(): boolean {
-    return !!this.hostnames;
+    return this.hostnames !== undefined;
   }
 
   public getHostnames(): string[] {
-    if (this.hostnamesArray === null) {
-      if (this.hasHostnames()) {
-        // Sort them from longer hostname to shorter.
-        // This is to make sure that we will always start by the most specific
-        // when matching.
-        this.hostnamesArray = this.hostnames.split(',').sort((h1, h2) => {
-          if (h1.length > h2.length) {
-            return -1;
-          } else if (h1.length < h2.length) {
-            return 1;
-          }
+    if (this.hostnamesArray === undefined) {
+      // Sort them from longer hostname to shorter.
+      // This is to make sure that we will always start by the most specific
+      // when matching.
+      this.hostnamesArray =
+        this.hostnames === undefined
+          ? []
+          : this.hostnames.split(',').sort((h1, h2) => {
+              if (h1.length > h2.length) {
+                return -1;
+              } else if (h1.length < h2.length) {
+                return 1;
+              }
 
-          return 0;
-        });
-      } else {
-        this.hostnamesArray = [];
-      }
+              return 0;
+            });
     }
 
     return this.hostnamesArray;
@@ -217,8 +239,8 @@ export function parseCosmeticFilter(line: string): CosmeticFilter | null {
   // at a specific offset defined in COSMETICS_MASK.
   // cf: COSMETICS_MASK for the offset of each property
   let mask = 0;
-  let selector: string = '';
-  let hostnames: string = ''; // Coma-separated list of hostnames
+  let selector: string | undefined;
+  let hostnames: string | undefined;
   const sharpIndex = line.indexOf('#');
 
   // Start parsing the line
@@ -233,22 +255,18 @@ export function parseCosmeticFilter(line: string): CosmeticFilter | null {
   //                    sharpIndex
 
   // Check if unhide
-  if (line[afterSharpIndex] === '@') {
+  if (line.length > afterSharpIndex && line[afterSharpIndex] === '@') {
     mask = setBit(mask, COSMETICS_MASK.unhide);
     suffixStartIndex += 1;
   }
 
   // Parse hostnames
   if (sharpIndex > 0) {
-    hostnames = line.substring(0, sharpIndex);
+    hostnames = line.slice(0, sharpIndex);
   }
 
-  // Parse selector
-  // TODO - avoid the double call to substring
-  selector = line.substr(suffixStartIndex);
-
   // Deal with script:inject and script:contains
-  if (fastStartsWith(selector, 'script:')) {
+  if (fastStartsWithFrom(line, 'script:', suffixStartIndex)) {
     //      script:inject(.......)
     //                    ^      ^
     //   script:contains(/......./)
@@ -261,49 +279,45 @@ export function parseCosmeticFilter(line: string): CosmeticFilter | null {
     //           |        |          |scriptArguments
     //           |        scriptSelectorIndexStart
     //           scriptMethodIndex
-    const scriptMethodIndex = 'script:'.length;
+    const scriptMethodIndex = suffixStartIndex + 7;
     let scriptSelectorIndexStart = scriptMethodIndex;
-    let scriptSelectorIndexEnd = selector.length - 1;
+    let scriptSelectorIndexEnd = line.length - 1;
 
-    if (fastStartsWithFrom(selector, 'inject(', scriptMethodIndex)) {
+    if (fastStartsWithFrom(line, 'inject(', scriptMethodIndex)) {
       mask = setBit(mask, COSMETICS_MASK.scriptInject);
-      scriptSelectorIndexStart += 'inject('.length;
-    } else if (fastStartsWithFrom(selector, 'contains(', scriptMethodIndex)) {
+      scriptSelectorIndexStart += 7;
+    } else if (fastStartsWithFrom(line, 'contains(', scriptMethodIndex)) {
       mask = setBit(mask, COSMETICS_MASK.scriptBlock);
-      scriptSelectorIndexStart += 'contains('.length;
+      scriptSelectorIndexStart += 9;
 
       // If it's a regex
-      if (
-        selector[scriptSelectorIndexStart] === '/' &&
-        selector[scriptSelectorIndexEnd - 1] === '/'
-      ) {
+      if (line[scriptSelectorIndexStart] === '/' && line[scriptSelectorIndexEnd - 1] === '/') {
         scriptSelectorIndexStart += 1;
         scriptSelectorIndexEnd -= 1;
       }
     }
 
-    selector = selector.substring(
-      scriptSelectorIndexStart,
-      scriptSelectorIndexEnd,
-    );
+    selector = line.slice(scriptSelectorIndexStart, scriptSelectorIndexEnd);
+  } else if (fastStartsWithFrom(line, '+js(', suffixStartIndex)) {
+    mask = setBit(mask, COSMETICS_MASK.scriptInject);
+    selector = line.slice(suffixStartIndex + 4, line.length - 1);
+  } else if (suffixStartIndex < line.length) {
+    selector = line.slice(suffixStartIndex);
   }
 
   // Exceptions
   if (
-    selector === null ||
+    selector === undefined ||
     selector.length === 0 ||
     selector.endsWith('}') ||
     selector.indexOf('##') !== -1 ||
-    (getBit(mask, COSMETICS_MASK.unhide) && hostnames.length === 0)
+    (getBit(mask, COSMETICS_MASK.unhide) && hostnames === undefined)
   ) {
     return null;
   }
 
-  const id = fastHash(line);
-
   return new CosmeticFilter({
     hostnames,
-    id,
     mask,
     selector,
   });

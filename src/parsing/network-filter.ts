@@ -1,3 +1,4 @@
+import { RequestType } from '../request';
 import {
   clearBit,
   createFuzzySignature,
@@ -6,9 +7,12 @@ import {
   fastStartsWithFrom,
   getBit,
   setBit,
+  tokenize,
   tokenizeFilter,
 } from '../utils';
 import IFilter from './interface';
+
+const TOKENS_BUFFER = new Uint32Array(200);
 
 /**
  * Masks used to store options of network filters in a bitmask.
@@ -18,86 +22,105 @@ const enum NETWORK_FILTER_MASK {
   fromImage = 1 << 0,
   fromMedia = 1 << 1,
   fromObject = 1 << 2,
-  fromObjectSubrequest = 1 << 3,
-  fromOther = 1 << 4,
-  fromPing = 1 << 5,
-  fromScript = 1 << 6,
-  fromStylesheet = 1 << 7,
-  fromSubdocument = 1 << 8,
-  fromWebsocket = 1 << 9,
-  fromXmlHttpRequest = 1 << 10,
-  fromFetch = 1 << 11,
-  fromDTD = 1 << 12,
-  fromFont = 1 << 13,
-  fromXLST = 1 << 14,
-  fromBeacon = 1 << 15,
-  fromCSP = 1 << 16,
-  isImportant = 1 << 17,
-  matchCase = 1 << 18,
-  fuzzyMatch = 1 << 19,
+  fromOther = 1 << 3,
+  fromPing = 1 << 4,
+  fromScript = 1 << 5,
+  fromStylesheet = 1 << 6,
+  fromSubdocument = 1 << 7,
+  fromWebsocket = 1 << 8, // e.g.: ws, wss
+  fromXmlHttpRequest = 1 << 9,
+  fromFont = 1 << 10,
+  fromHttp = 1 << 11,
+  fromHttps = 1 << 12,
+  isImportant = 1 << 13,
+  matchCase = 1 << 14,
+  fuzzyMatch = 1 << 15,
 
   // Kind of patterns
-  thirdParty = 1 << 20,
-  firstParty = 1 << 21,
-  isHostname = 1 << 22,
-  isPlain = 1 << 23,
-  isRegex = 1 << 24,
-  isLeftAnchor = 1 << 25,
-  isRightAnchor = 1 << 26,
-  isHostnameAnchor = 1 << 27,
-  isException = 1 << 28,
+  thirdParty = 1 << 16,
+  firstParty = 1 << 17,
+  isRegex = 1 << 18,
+  isLeftAnchor = 1 << 19,
+  isRightAnchor = 1 << 20,
+  isHostnameAnchor = 1 << 21,
+  isException = 1 << 22,
 }
 
 /**
  * Mask used when a network filter can be applied on any content type.
  */
 const FROM_ANY: number =
+  NETWORK_FILTER_MASK.fromFont |
   NETWORK_FILTER_MASK.fromImage |
   NETWORK_FILTER_MASK.fromMedia |
   NETWORK_FILTER_MASK.fromObject |
-  NETWORK_FILTER_MASK.fromObjectSubrequest |
   NETWORK_FILTER_MASK.fromOther |
   NETWORK_FILTER_MASK.fromPing |
   NETWORK_FILTER_MASK.fromScript |
   NETWORK_FILTER_MASK.fromStylesheet |
   NETWORK_FILTER_MASK.fromSubdocument |
   NETWORK_FILTER_MASK.fromWebsocket |
-  NETWORK_FILTER_MASK.fromXmlHttpRequest |
-  NETWORK_FILTER_MASK.fromFetch |
-  NETWORK_FILTER_MASK.fromDTD |
-  NETWORK_FILTER_MASK.fromFont |
-  NETWORK_FILTER_MASK.fromXLST |
-  NETWORK_FILTER_MASK.fromBeacon |
-  NETWORK_FILTER_MASK.fromCSP;
+  NETWORK_FILTER_MASK.fromXmlHttpRequest;
 
 /**
  * Map content type value to mask the corresponding mask.
  * ref: https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIContentPolicy
  */
-interface IDict {
-  [s: string]: number;
-}
-
-const CPT_TO_MASK: IDict = {
-  1: NETWORK_FILTER_MASK.fromOther,
-  2: NETWORK_FILTER_MASK.fromScript,
-  3: NETWORK_FILTER_MASK.fromImage,
-  4: NETWORK_FILTER_MASK.fromStylesheet,
-  5: NETWORK_FILTER_MASK.fromObject,
-  7: NETWORK_FILTER_MASK.fromSubdocument,
-  10: NETWORK_FILTER_MASK.fromPing,
-  11: NETWORK_FILTER_MASK.fromXmlHttpRequest,
-  12: NETWORK_FILTER_MASK.fromObjectSubrequest,
-  13: NETWORK_FILTER_MASK.fromDTD,
-  14: NETWORK_FILTER_MASK.fromFont,
-  15: NETWORK_FILTER_MASK.fromMedia,
-  16: NETWORK_FILTER_MASK.fromWebsocket,
-  17: NETWORK_FILTER_MASK.fromCSP,
-  18: NETWORK_FILTER_MASK.fromXLST,
-  19: NETWORK_FILTER_MASK.fromBeacon,
-  20: NETWORK_FILTER_MASK.fromFetch,
-  21: NETWORK_FILTER_MASK.fromImage, // TYPE_IMAGESET
+const CPT_TO_MASK: {
+  [s: number]: number;
+} = {
+  [RequestType.other]: NETWORK_FILTER_MASK.fromOther,
+  [RequestType.script]: NETWORK_FILTER_MASK.fromScript,
+  [RequestType.image]: NETWORK_FILTER_MASK.fromImage,
+  [RequestType.stylesheet]: NETWORK_FILTER_MASK.fromStylesheet,
+  [RequestType.object]: NETWORK_FILTER_MASK.fromObject,
+  [RequestType.subdocument]: NETWORK_FILTER_MASK.fromSubdocument,
+  [RequestType.ping]: NETWORK_FILTER_MASK.fromPing,
+  [RequestType.beacon]: NETWORK_FILTER_MASK.fromPing,
+  [RequestType.xmlhttprequest]: NETWORK_FILTER_MASK.fromXmlHttpRequest,
+  [RequestType.font]: NETWORK_FILTER_MASK.fromFont,
+  [RequestType.media]: NETWORK_FILTER_MASK.fromMedia,
+  [RequestType.websocket]: NETWORK_FILTER_MASK.fromWebsocket,
+  [RequestType.dtd]: NETWORK_FILTER_MASK.fromOther,
+  [RequestType.fetch]: NETWORK_FILTER_MASK.fromOther,
+  [RequestType.xlst]: NETWORK_FILTER_MASK.fromOther,
 };
+
+function computeFilterId(
+  mask: number,
+  filter: string | undefined,
+  hostname: string | undefined,
+  optDomains: Uint32Array | undefined,
+  optNotDomains: Uint32Array | undefined,
+): number {
+  let hash = (5408 * 33) ^ mask;
+
+  if (optDomains !== undefined) {
+    for (let i = 0; i < optDomains.length; i += 1) {
+      hash = (hash * 33) ^ optDomains[i];
+    }
+  }
+
+  if (optNotDomains !== undefined) {
+    for (let i = 0; i < optNotDomains.length; i += 1) {
+      hash = (hash * 33) ^ optNotDomains[i];
+    }
+  }
+
+  if (filter !== undefined) {
+    for (let i = 0; i < filter.length; i += 1) {
+      hash = (hash * 33) ^ filter.charCodeAt(i);
+    }
+  }
+
+  if (hostname !== undefined) {
+    for (let i = 0; i < hostname.length; i += 1) {
+      hash = (hash * 33) ^ hostname.charCodeAt(i);
+    }
+  }
+
+  return hash >>> 0;
+}
 
 const SEPARATOR = /[/^*]/;
 
@@ -106,12 +129,7 @@ const SEPARATOR = /[/^*]/;
  * filters containing at least a * or ^ symbol. Because Regexes are expansive,
  * we try to convert some patterns to plain filters.
  */
-function compileRegex(
-  filterStr: string,
-  isRightAnchor: boolean,
-  isLeftAnchor: boolean,
-  matchCase: boolean,
-): RegExp {
+function compileRegex(filterStr: string, isRightAnchor: boolean, isLeftAnchor: boolean): RegExp {
   let filter = filterStr;
 
   // Escape special regex characters: |.$+?{}()[]\
@@ -131,20 +149,16 @@ function compileRegex(
     filter = `^${filter}`;
   }
 
-  // we will throw an exception if it fails. We need to remove the console
-  // dependency here since we need to use it in the workers
-  if (matchCase) {
-    return new RegExp(filter);
-  }
-  return new RegExp(filter, 'i');
+  return new RegExp(filter);
 }
 
-function parseDomainsOption(domains: string): Set<string> {
-  return new Set(domains ? domains.split('|') : []);
-}
+const EMPTY_ARRAY = new Uint32Array([]);
+const MATCH_ALL = new RegExp('');
 
 // TODO:
 // 1. Options not supported yet:
+//  - badfilter
+//  - inline-script
 //  - popup
 //  - popunder
 //  - generichide
@@ -152,56 +166,52 @@ function parseDomainsOption(domains: string): Set<string> {
 // 2. csp option: ||wikia.com^$csp=script-src 'self' * 'unsafe-inline' 'unsafe-eval'
 // 3. Replace `split` with `substr`
 export class NetworkFilter implements IFilter {
-  public id: number;
   public mask: number;
-  public filter: string;
-  public optDomains: string;
-  public optNotDomains: string;
-  public redirect: string;
-  public hostname: string;
+
+  public filter?: string;
+  public optDomains?: Uint32Array;
+  public optNotDomains?: Uint32Array;
+  public redirect?: string;
+  public hostname?: string;
 
   // Set only in debug mode
-  public rawLine: string | null;
+  public rawLine?: string;
 
-  private fuzzySignature: Uint32Array | null;
-  private optDomainsSet: Set<string> | null;
-  private optNotDomainsSet: Set<string> | null;
-  private regex: RegExp | null;
+  public id?: number;
+  private fuzzySignature?: Uint32Array;
+  private regex?: RegExp;
+  private optimized: boolean;
 
   constructor({
-    mask,
     filter,
-    optDomains,
-    optNotDomains,
-    redirect,
     hostname,
     id,
+    mask,
+    optDomains,
+    optNotDomains,
+    rawLine,
+    redirect,
   }: {
+    filter?: string;
+    hostname?: string;
+    id?: number;
     mask: number;
-    filter: string;
-    optDomains: string;
-    optNotDomains: string;
-    redirect: string;
-    hostname: string;
-    id: number;
+    optDomains?: Uint32Array;
+    optNotDomains?: Uint32Array;
+    rawLine?: string;
+    redirect?: string;
   }) {
     // Those fields should not be mutated.
-    this.id = id;
     this.mask = mask;
+    this.id = id;
+    this.optimized = false;
+
     this.filter = filter;
-    this.optDomains = optDomains;
-    this.optNotDomains = optNotDomains;
     this.redirect = redirect;
     this.hostname = hostname;
-
-    // Lazy private attributes
-    this.fuzzySignature = null;
-    this.optDomainsSet = null;
-    this.optNotDomainsSet = null;
-    this.regex = null;
-
-    // Set only in debug mode
-    this.rawLine = null;
+    this.rawLine = rawLine;
+    this.optDomains = optDomains;
+    this.optNotDomains = optNotDomains;
   }
 
   public isCosmeticFilter() {
@@ -216,6 +226,10 @@ export class NetworkFilter implements IFilter {
    * syntax) from the internal representation.
    */
   public toString() {
+    if (this.rawLine !== undefined) {
+      return this.rawLine;
+    }
+
     let filter = '';
 
     if (this.isException()) {
@@ -255,9 +269,6 @@ export class NetworkFilter implements IFilter {
       }
       if (this.fromObject()) {
         options.push('object');
-      }
-      if (this.fromObjectSubrequest()) {
-        options.push('object-subrequest');
       }
       if (this.fromOther()) {
         options.push('other');
@@ -300,11 +311,11 @@ export class NetworkFilter implements IFilter {
       }
     }
 
-    if (this.hasOptDomains() || this.hasOptNotDomains()) {
-      const domains = [...this.getOptDomains()];
-      this.getOptNotDomains().forEach(nd => domains.push(`~${nd}`));
-      options.push(`domain=${domains.join('|')}`);
-    }
+    // if (this.hasOptDomains() || this.hasOptNotDomains()) {
+    //   const domains = [...this.getOptDomains()];
+    //   this.getOptNotDomains().forEach((nd) => domains.push(`~${nd}`));
+    //   options.push(`domain=${domains.join('|')}`);
+    // }
 
     if (options.length > 0) {
       filter += `$${options.join(',')}`;
@@ -318,97 +329,157 @@ export class NetworkFilter implements IFilter {
   }
 
   // Public API (Read-Only)
-
-  public hasFilter() {
-    return !!this.filter;
+  public getId(): number {
+    if (this.id === undefined) {
+      this.id = computeFilterId(
+        this.mask,
+        this.filter,
+        this.hostname,
+        this.optDomains,
+        this.optNotDomains,
+      );
+    }
+    return this.id;
   }
 
-  public hasOptNotDomains() {
-    return !!this.optNotDomains;
+  public hasFilter(): boolean {
+    return this.filter !== undefined;
   }
 
-  public getOptNotDomains() {
-    this.optNotDomainsSet =
-      this.optNotDomainsSet || parseDomainsOption(this.optNotDomains);
-    return this.optNotDomainsSet;
+  public hasOptNotDomains(): boolean {
+    return this.optNotDomains !== undefined;
   }
 
-  public hasOptDomains() {
-    return !!this.optDomains;
+  public getNumberOfOptNotDomains(): number {
+    if (this.optNotDomains !== undefined) {
+      return this.optNotDomains.length;
+    }
+    return 0;
   }
 
-  public getOptDomains() {
-    this.optDomainsSet =
-      this.optDomainsSet || parseDomainsOption(this.optDomains);
-    return this.optDomainsSet;
+  public getOptNotDomains(): Uint32Array {
+    this.optimize();
+    return this.optNotDomains || EMPTY_ARRAY;
   }
 
-  public getMask() {
+  public getNumberOfOptDomains(): number {
+    if (this.optDomains !== undefined) {
+      return this.optDomains.length;
+    }
+    return 0;
+  }
+
+  public hasOptDomains(): boolean {
+    return this.optDomains !== undefined;
+  }
+
+  public getOptDomains(): Uint32Array {
+    this.optimize();
+    return this.optDomains || EMPTY_ARRAY;
+  }
+
+  public getMask(): number {
     return this.mask;
   }
 
-  public getCptMask() {
+  public getCptMask(): number {
     return this.getMask() & FROM_ANY;
   }
 
-  public isRedirect() {
-    return !!this.redirect;
+  public isRedirect(): boolean {
+    return this.redirect !== undefined;
   }
 
-  public getRedirect() {
-    return this.redirect;
+  public getRedirect(): string {
+    return this.redirect || '';
   }
 
-  public hasHostname() {
-    return !!this.hostname;
+  public hasHostname(): boolean {
+    return this.hostname !== undefined;
   }
 
-  public getHostname() {
-    return this.hostname;
+  public getHostname(): string {
+    return this.hostname || '';
   }
 
-  public getFilter() {
-    return this.filter;
+  public getFilter(): string {
+    return this.filter || '';
   }
 
   /**
    * Special method, should only be used by the filter optimizer
    */
-  public setRegex(re: RegExp) {
+  public setRegex(re: RegExp): void {
     this.regex = re;
     this.mask = setBit(this.mask, NETWORK_FILTER_MASK.isRegex);
-    this.mask = clearBit(this.mask, NETWORK_FILTER_MASK.isPlain);
   }
 
-  public getRegex() {
-    if (this.regex === null) {
-      this.regex = compileRegex(
-        this.filter,
-        this.isRightAnchor(),
-        this.isLeftAnchor(),
-        this.matchCase(),
-      );
-    }
-
-    return this.regex;
+  public getRegex(): RegExp {
+    this.optimize();
+    return this.regex || MATCH_ALL;
   }
 
   public getFuzzySignature(): Uint32Array {
-    if (this.fuzzySignature === null) {
-      this.fuzzySignature = createFuzzySignature(this.filter);
-    }
-
-    return this.fuzzySignature;
+    this.optimize();
+    return this.fuzzySignature || EMPTY_ARRAY;
   }
 
-  public getTokens(): number[][] {
-    return [tokenizeFilter(this.filter, this.isPlain()).concat(tokenizeFilter(this.hostname, false))];
+  public getTokens(): Uint32Array[] {
+    let tokensBufferIndex = 0;
+
+    // If there is only one domain and no domain negation, we also use this
+    // domain as a token.
+    if (
+      this.optDomains !== undefined &&
+      this.optNotDomains === undefined &&
+      this.optDomains.length === 1
+    ) {
+      TOKENS_BUFFER[tokensBufferIndex] = this.optDomains[0];
+      tokensBufferIndex += 1;
+    }
+
+    // Get tokens from filter
+    if (this.filter !== undefined) {
+      const skipLastToken = this.isPlain() && !this.isRightAnchor() && !this.isFuzzy();
+      const skipFirstToken = this.isRightAnchor();
+      const filterTokens = tokenizeFilter(this.filter, skipFirstToken, skipLastToken);
+      TOKENS_BUFFER.set(filterTokens, tokensBufferIndex);
+      tokensBufferIndex += filterTokens.length;
+    }
+
+    // Append tokens from hostname, if any
+    if (this.hostname !== undefined) {
+      const hostnameTokens = tokenize(this.hostname);
+      TOKENS_BUFFER.set(hostnameTokens, tokensBufferIndex);
+      tokensBufferIndex += hostnameTokens.length;
+    }
+
+    // If we got no tokens for the filter/hostname part, then we will dispatch
+    // this filter in multiple buckets based on the domains option.
+    if (
+      tokensBufferIndex === 0 &&
+      this.optDomains !== undefined &&
+      this.optNotDomains === undefined
+    ) {
+      return [...this.optDomains].map((d) => new Uint32Array([d]));
+    }
+
+    // Add optional token for protocol
+    if (this.fromHttp() && !this.fromHttps()) {
+      TOKENS_BUFFER[tokensBufferIndex] = fastHash('http');
+      tokensBufferIndex += 1;
+    } else if (this.fromHttps() && !this.fromHttp()) {
+      TOKENS_BUFFER[tokensBufferIndex] = fastHash('https');
+      tokensBufferIndex += 1;
+    }
+
+    return [TOKENS_BUFFER.slice(0, tokensBufferIndex)];
   }
 
   /**
    * Check if this filter should apply to a request with this content type.
    */
-  public isCptAllowed(cpt: number) {
+  public isCptAllowed(cpt: RequestType): boolean {
     const mask = CPT_TO_MASK[cpt];
     if (mask !== undefined) {
       return getBit(this.mask, mask);
@@ -455,10 +526,6 @@ export class NetworkFilter implements IFilter {
     return !getBit(this.mask, NETWORK_FILTER_MASK.isRegex);
   }
 
-  public isHostname() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.isHostname);
-  }
-
   public fromAny() {
     return this.getCptMask() === FROM_ANY;
   }
@@ -481,10 +548,6 @@ export class NetworkFilter implements IFilter {
 
   public fromObject() {
     return getBit(this.mask, NETWORK_FILTER_MASK.fromObject);
-  }
-
-  public fromObjectSubrequest() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromObjectSubrequest);
   }
 
   public fromOther() {
@@ -511,12 +574,38 @@ export class NetworkFilter implements IFilter {
     return getBit(this.mask, NETWORK_FILTER_MASK.fromWebsocket);
   }
 
+  public fromHttp() {
+    return getBit(this.mask, NETWORK_FILTER_MASK.fromHttp);
+  }
+
+  public fromHttps() {
+    return getBit(this.mask, NETWORK_FILTER_MASK.fromHttps);
+  }
+
   public fromXmlHttpRequest() {
     return getBit(this.mask, NETWORK_FILTER_MASK.fromXmlHttpRequest);
   }
 
   public fromFont() {
     return getBit(this.mask, NETWORK_FILTER_MASK.fromFont);
+  }
+
+  private optimize() {
+    if (this.optimized === false) {
+      this.optimized = true;
+      if (this.optNotDomains !== undefined) {
+        this.optNotDomains.sort();
+      }
+      if (this.optDomains !== undefined) {
+        this.optDomains.sort();
+      }
+      if (this.filter !== undefined && this.regex === undefined && this.isRegex()) {
+        this.regex = compileRegex(this.filter, this.isRightAnchor(), this.isLeftAnchor());
+      }
+      if (this.filter !== undefined && this.isFuzzy()) {
+        this.fuzzySignature = createFuzzySignature(this.filter);
+      }
+    }
   }
 }
 
@@ -542,10 +631,7 @@ function setNetworkMask(mask: number, m: number, value: boolean): number {
 function checkIsRegex(filter: string, start: number, end: number): boolean {
   const starIndex = filter.indexOf('*', start);
   const separatorIndex = filter.indexOf('^', start);
-  return (
-    (starIndex !== -1 && starIndex < end) ||
-    (separatorIndex !== -1 && separatorIndex < end)
-  );
+  return (starIndex !== -1 && starIndex < end) || (separatorIndex !== -1 && separatorIndex < end);
 }
 
 /**
@@ -557,20 +643,21 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
 
   // Represent options as a bitmask
   let mask: number =
-    NETWORK_FILTER_MASK.thirdParty | NETWORK_FILTER_MASK.firstParty;
+    NETWORK_FILTER_MASK.thirdParty |
+    NETWORK_FILTER_MASK.firstParty |
+    NETWORK_FILTER_MASK.fromHttps |
+    NETWORK_FILTER_MASK.fromHttp;
 
   // Temporary masks for positive (e.g.: $script) and negative (e.g.: $~script)
   // content type options.
   let cptMaskPositive: number = 0;
   let cptMaskNegative: number = FROM_ANY;
 
-  // Get rid of those and just return `null` when possible
-  let filter: string | null = null;
-  let hostname: string | null = null;
+  let hostname: string | undefined;
 
-  let optDomains: string = '';
-  let optNotDomains: string = '';
-  let redirect: string = '';
+  let optDomains: Uint32Array | undefined;
+  let optNotDomains: Uint32Array | undefined;
+  let redirect: string | undefined;
 
   // Start parsing
   let filterIndexStart: number = 0;
@@ -587,7 +674,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   // |     |
   // |     optionsIndex
   // filterIndexStart
-  const optionsIndex: number = line.indexOf('$', filterIndexStart);
+  const optionsIndex: number = line.lastIndexOf('$');
   if (optionsIndex !== -1) {
     // Parse options and set flags
     filterIndexEnd = optionsIndex;
@@ -596,7 +683,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
     // parseOptions
     // TODO: This could be implemented without string copy,
     // using indices, like in main parsing functions.
-    const rawOptions = line.substr(optionsIndex + 1);
+    const rawOptions = line.slice(optionsIndex + 1);
     const options = rawOptions.split(',');
     for (let i = 0; i < options.length; i += 1) {
       const rawOption = options[i];
@@ -606,7 +693,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
       // Check for negation: ~option
       if (fastStartsWith(option, '~')) {
         negation = true;
-        option = option.substr(1);
+        option = option.slice(1);
       } else {
         negation = false;
       }
@@ -621,26 +708,26 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
 
       switch (option) {
         case 'domain': {
-          const optDomainsArray: string[] = [];
-          const optNotDomainsArray: string[] = [];
+          const optDomainsArray: number[] = [];
+          const optNotDomainsArray: number[] = [];
 
           for (let j = 0; j < optionValues.length; j += 1) {
             const value: string = optionValues[j];
             if (value) {
               if (fastStartsWith(value, '~')) {
-                optNotDomainsArray.push(value.substr(1));
+                optNotDomainsArray.push(fastHash(value.slice(1)));
               } else {
-                optDomainsArray.push(value);
+                optDomainsArray.push(fastHash(value));
               }
             }
           }
 
           if (optDomainsArray.length > 0) {
-            optDomains = optDomainsArray.join('|');
+            optDomains = new Uint32Array(optDomainsArray);
           }
 
           if (optNotDomainsArray.length > 0) {
-            optNotDomains = optNotDomainsArray.join('|');
+            optNotDomains = new Uint32Array(optNotDomainsArray);
           }
 
           break;
@@ -711,12 +798,13 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
               optionMask = NETWORK_FILTER_MASK.fromObject;
               break;
             case 'object-subrequest':
-              optionMask = NETWORK_FILTER_MASK.fromObjectSubrequest;
+              optionMask = NETWORK_FILTER_MASK.fromObject;
               break;
             case 'other':
               optionMask = NETWORK_FILTER_MASK.fromOther;
               break;
             case 'ping':
+            case 'beacon':
               optionMask = NETWORK_FILTER_MASK.fromPing;
               break;
             case 'script':
@@ -729,6 +817,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
               optionMask = NETWORK_FILTER_MASK.fromSubdocument;
               break;
             case 'xmlhttprequest':
+            case 'xhr':
               optionMask = NETWORK_FILTER_MASK.fromXmlHttpRequest;
               break;
             case 'websocket':
@@ -760,7 +849,6 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
     // --------------------------------------------------------------------- //
   }
 
-  // TODO update `mask` using cptMaskPositive and cptMaskNegative
   if (cptMaskPositive === 0) {
     mask |= cptMaskNegative;
   } else if (cptMaskNegative === FROM_ANY) {
@@ -772,56 +860,24 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   // Identify kind of pattern
 
   // Deal with hostname pattern
-  if (fastStartsWith(line, '127.0.0.1')) {
-    hostname = line.substr(line.lastIndexOf(' ') + 1);
-    filter = '';
-    mask = clearBit(mask, NETWORK_FILTER_MASK.isRegex);
-    mask = setBit(mask, NETWORK_FILTER_MASK.isHostname);
+  if (line[filterIndexEnd - 1] === '|') {
+    mask = setBit(mask, NETWORK_FILTER_MASK.isRightAnchor);
+    filterIndexEnd -= 1;
+  }
+
+  if (fastStartsWithFrom(line, '||', filterIndexStart)) {
     mask = setBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor);
-  } else {
-    // TODO - can we have an out-of-bound here? (source: V8 profiler)
-    if (line[filterIndexEnd - 1] === '|') {
-      mask = setBit(mask, NETWORK_FILTER_MASK.isRightAnchor);
-      filterIndexEnd -= 1;
-    }
+    filterIndexStart += 2;
+  } else if (line[filterIndexStart] === '|') {
+    mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+    filterIndexStart += 1;
+  }
 
-    if (fastStartsWithFrom(line, '||', filterIndexStart)) {
-      mask = setBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor);
-      filterIndexStart += 2;
-    } else if (line[filterIndexStart] === '|') {
-      mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-      filterIndexStart += 1;
-    }
+  const isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
+  mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRegex, isRegex);
 
-    // If pattern ends with "*", strip it as it often can be
-    // transformed into a "plain pattern" this way.
-    // TODO: add a test
-    if (
-      line.charAt(filterIndexEnd - 1) === '*' &&
-      filterIndexEnd - filterIndexStart > 1
-    ) {
-      filterIndexEnd -= 1;
-    }
-
-    // Is regex?
-    const isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
-    mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRegex, isRegex);
-
-    const isHostnameAnchor = getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor);
-
-    // Extract hostname to match it more easily
-    // NOTE: This is the most common case of filters
-    if (!isRegex && isHostnameAnchor) {
-      // Look for next /
-      const slashIndex = line.indexOf('/', filterIndexStart);
-      if (slashIndex !== -1) {
-        hostname = line.slice(filterIndexStart, slashIndex);
-        filterIndexStart = slashIndex;
-      } else {
-        hostname = line.slice(filterIndexStart, filterIndexEnd);
-        filter = '';
-      }
-    } else if (isRegex && isHostnameAnchor) {
+  if (getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor)) {
+    if (isRegex) {
       // Split at the first '/', '*' or '^' character to get the hostname
       // and then the pattern.
       // TODO - this could be made more efficient if we could match between two
@@ -831,13 +887,13 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
       if (firstSeparator !== -1) {
         hostname = line.slice(filterIndexStart, firstSeparator);
         filterIndexStart = firstSeparator;
-        if (
-          filterIndexEnd - filterIndexStart === 1 &&
-          line.charAt(filterIndexStart) === '^'
-        ) {
-          filter = '';
+
+        // If the only symbol remaining for the selector is '^' then ignore it
+        if (filterIndexEnd - filterIndexStart === 1 && line[filterIndexStart] === '^') {
           mask = clearBit(mask, NETWORK_FILTER_MASK.isRegex);
+          filterIndexStart = filterIndexEnd;
         } else {
+          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isLeftAnchor, true);
           mask = setNetworkMask(
             mask,
             NETWORK_FILTER_MASK.isRegex,
@@ -845,42 +901,90 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
           );
         }
       }
+    } else {
+      // Look for next /
+      const slashIndex = line.indexOf('/', filterIndexStart);
+      if (slashIndex !== -1) {
+        hostname = line.slice(filterIndexStart, slashIndex);
+        filterIndexStart = slashIndex;
+        mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+      } else {
+        hostname = line.slice(filterIndexStart, filterIndexEnd);
+        filterIndexStart = filterIndexEnd;
+      }
     }
   }
 
-  if (filter === null) {
+  // Remove trailing '*'
+  if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexEnd - 1] === '*') {
+    filterIndexEnd -= 1;
+  }
+
+  // Remove leading '*' if the filter is not hostname anchored.
+  if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexStart] === '*') {
+    mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+    filterIndexStart += 1;
+  }
+
+  // Transform filters on protocol (http, https, ws)
+  if (getBit(mask, NETWORK_FILTER_MASK.isLeftAnchor)) {
+    if (
+      filterIndexEnd - filterIndexStart === 5 &&
+      fastStartsWithFrom(line, 'ws://', filterIndexStart)
+    ) {
+      mask = setBit(mask, NETWORK_FILTER_MASK.fromWebsocket);
+      mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+      filterIndexStart = filterIndexEnd;
+    } else if (
+      filterIndexEnd - filterIndexStart === 7 &&
+      fastStartsWithFrom(line, 'http://', filterIndexStart)
+    ) {
+      mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
+      mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttps);
+      mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+      filterIndexStart = filterIndexEnd;
+    } else if (
+      filterIndexEnd - filterIndexStart === 8 &&
+      fastStartsWithFrom(line, 'https://', filterIndexStart)
+    ) {
+      mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
+      mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttp);
+      mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+      filterIndexStart = filterIndexEnd;
+    } else if (
+      filterIndexEnd - filterIndexStart === 8 &&
+      fastStartsWithFrom(line, 'http*://', filterIndexStart)
+    ) {
+      mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
+      mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
+      mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+      filterIndexStart = filterIndexEnd;
+    }
+  }
+
+  let filter: string | undefined;
+  if (filterIndexEnd - filterIndexStart > 0) {
     filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
+    mask = setNetworkMask(
+      mask,
+      NETWORK_FILTER_MASK.isRegex,
+      checkIsRegex(filter, 0, filter.length),
+    );
   }
 
-  let finalHostname = '';
-  if (hostname !== null) {
-    finalHostname = hostname;
-  }
+  // TODO
+  // - ignore hostname anchor is not hostname provided
 
-  let finalFilter = '';
-  if (filter !== null) {
-    finalFilter = filter;
+  if (hostname !== undefined) {
+    if (getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor) && fastStartsWith(hostname, 'www.')) {
+      hostname = hostname.slice(4);
+    }
+    hostname = hostname.toLowerCase();
   }
-
-  // Strip www from hostname if present
-  if (
-    getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor) &&
-    fastStartsWith(finalHostname, 'www.')
-  ) {
-    finalHostname = finalHostname.slice(4);
-  }
-
-  if (finalHostname !== '') {
-    finalHostname = finalHostname.toLowerCase();
-  }
-
-  // Compute id of the filter
-  const id = fastHash(line);
 
   return new NetworkFilter({
-    filter: finalFilter,
-    hostname: finalHostname,
-    id,
+    filter,
+    hostname,
     mask,
     optDomains,
     optNotDomains,

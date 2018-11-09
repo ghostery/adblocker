@@ -3,10 +3,11 @@ function fetchResource(url: string): Promise<string> {
 }
 
 const defaultLists = [
-  'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
-  'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
+  // 'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
+  // 'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
   'https://easylist.to/easylist/easylist.txt',
   'https://easylist.to/easylist/easyprivacy.txt',
+  'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=1&mimetype=plaintext',
   'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
   'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
   'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
@@ -26,5 +27,7 @@ export function fetchLists(lists: string[] = defaultLists): Promise<string[]> {
  * the page or redirect request to data URLs.
  */
 export function fetchResources(): Promise<string> {
-  return fetchResource('https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt');
+  return fetchResource(
+    'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt',
+  );
 }

@@ -14,16 +14,19 @@ export default class CosmeticFilterBucket {
     // a given hostname. We only store filters having at least one hostname
     // specified and we index each filter several time (one time per hostname).
     this.hostnameIndex = new ReverseIndex(
-      (cb: (f: CosmeticFilter) => void) => filters((f: CosmeticFilter) => {
-        if (f.hasHostnames()) {
-          cb(f);
-        }
-      }),
+      (cb: (f: CosmeticFilter) => void) =>
+        filters((f: CosmeticFilter) => {
+          if (f.hasHostnames()) {
+            cb(f);
+          }
+        }),
       (filter: CosmeticFilter) => {
-        const multiTokens: number[][] = [];
-        filter.hostnames.split(',').forEach((h: string) => {
-          multiTokens.push(tokenize(h));
-        });
+        const multiTokens: Uint32Array[] = [];
+        if (filter.hostnames !== undefined) {
+          filter.hostnames.split(',').forEach((h: string) => {
+            multiTokens.push(tokenize(h));
+          });
+        }
         return multiTokens;
       },
     );
@@ -32,11 +35,12 @@ export default class CosmeticFilterBucket {
     // fast look-up when we need to get a set of rules to inject in a window,
     // based on some node information.
     this.selectorIndex = new ReverseIndex(
-      (cb: (f: CosmeticFilter) => void) => filters((f: CosmeticFilter) => {
-        if (!(f.isScriptBlock() || f.isScriptInject())) {
-          cb(f);
-        }
-      }),
+      (cb: (f: CosmeticFilter) => void) =>
+        filters((f: CosmeticFilter) => {
+          if (!(f.isScriptBlock() || f.isScriptInject())) {
+            cb(f);
+          }
+        }),
       (filter) => filter.getTokens(),
     );
 
@@ -76,10 +80,7 @@ export default class CosmeticFilterBucket {
     };
   }
 
-  public getDomainRules(
-    hostname: string,
-    js: Map < string, string >,
-  ) {
+  public getDomainRules(hostname: string, js: Map<string, string>) {
     // Collect matching rules
     const rules: Array<{ rule: CosmeticFilter; hostname: string }> = [];
     const checkMatch = (rule: CosmeticFilter) => {
@@ -124,12 +125,9 @@ export default class CosmeticFilterBucket {
     return this.filterExceptions(rules);
   }
 
-  public getMatchingRules(
-    hostname: string,
-    nodeInfo: string[][],
-  ): CosmeticFilter[] {
+  public getMatchingRules(hostname: string, nodeInfo: string[][]): CosmeticFilter[] {
     // Collect all selectors
-    const tokens = new Set();
+    const tokens: Set<number> = new Set();
     for (let i = 0; i < nodeInfo.length; i += 1) {
       const node = nodeInfo[i];
       // For each attribute of the node: [id, tagName, className] = node
@@ -152,13 +150,13 @@ export default class CosmeticFilterBucket {
       return true;
     };
 
-    this.selectorIndex.iterMatchingFilters([...tokens], checkMatch);
+    this.selectorIndex.iterMatchingFilters(new Uint32Array(tokens), checkMatch);
 
     return this.filterExceptions(rules);
   }
 
   private filterExceptions(
-    matches: Array < { rule: CosmeticFilter; hostname: string } > ,
+    matches: Array<{ rule: CosmeticFilter; hostname: string }>,
   ): CosmeticFilter[] {
     const matchingRules = new Map();
 
@@ -169,11 +167,7 @@ export default class CosmeticFilterBucket {
       if (matchingRules.has(selector)) {
         const otherRule = matchingRules.get(selector);
 
-        if (
-          rule.isUnhide() ||
-          isException ||
-          hostname.length > otherRule.hostname.length
-        ) {
+        if (rule.isUnhide() || isException || hostname.length > otherRule.hostname.length) {
           // Take the longest hostname
           matchingRules.set(selector, {
             hostname,

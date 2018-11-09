@@ -1,6 +1,6 @@
 import matchNetworkFilter from '../../matching/network';
 import { NetworkFilter } from '../../parsing/network-filter';
-import { IRequest } from '../../request/interface';
+import Request from '../../request';
 
 import networkFiltersOptimizer from '../optimizer';
 import ReverseIndex from '../reverse-index';
@@ -14,7 +14,11 @@ export default class NetworkFilterBucket {
   public index: ReverseIndex<NetworkFilter>;
   public size: number;
 
-  constructor(name: string, filters: (cb: (f: NetworkFilter) => void) => void, enableOptimizations = true) {
+  constructor(
+    name: string,
+    filters: (cb: (f: NetworkFilter) => void) => void,
+    enableOptimizations = true,
+  ) {
     this.name = name;
     this.index = new ReverseIndex<NetworkFilter>(
       filters,
@@ -31,19 +35,30 @@ export default class NetworkFilterBucket {
     this.index.optimizeAheadOfTime();
   }
 
-  public match(request: IRequest): NetworkFilter | undefined {
+  public matchAll(request: Request): NetworkFilter[] {
+    const filters: NetworkFilter[] = [];
+
+    this.index.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
+      if (matchNetworkFilter(filter, request)) {
+        filters.push(filter);
+      }
+      return true;
+    });
+
+    return filters;
+  }
+
+  public match(request: Request): NetworkFilter | undefined {
     let match: NetworkFilter | undefined;
 
-    const checkMatch = (filter: NetworkFilter) => {
+    this.index.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
       if (matchNetworkFilter(filter, request)) {
         match = filter;
-        return false; // Break iteration
+        return false;
       }
+      return true;
+    });
 
-      return true; // Continue iterating on buckets
-    };
-
-    this.index.iterMatchingFilters(request.tokens, checkMatch);
     return match;
   }
 }

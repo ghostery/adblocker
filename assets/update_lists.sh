@@ -9,6 +9,7 @@ curl 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/reso
 curl 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt' > ./raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt &
 curl 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt' > ./raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt &
 curl 'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=0&mimetype=plaintext' > ./pgl.yoyo.org/adservers/serverlist.txt
+curl 'https://easylist.to/easylist/easyprivacy.txt' > ./easylist.to/easylist/easyprivacy.txt &
 
 # Wait for child processes to terminate
 wait

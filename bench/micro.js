@@ -14,8 +14,8 @@ function benchEngineOptimization({ engine }) {
   return engine.optimize();
 }
 
-function benchEngineSerialization() {
-  // TODO: as soon as we are able to serialize any engine (even after optimization)
+function benchEngineSerialization({ engine }) {
+  return engine.serialize();
 }
 
 function benchEngineDeserialization({ serialized }) {
