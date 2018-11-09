@@ -110,6 +110,11 @@
     - Fixed a bug where javascript resources were serialized twice
     - Serialization can now be performed even after `engine` has been optimized
     - Addition of a `serialize` method on `FiltersEngine` class
+    - Reverse Index is now created using only one `Map` instead of two
+    - optDomains and optNotDomains are now stored in a compact typed array
+      instead of `Set` and a binary search is used for lookups.
+    - Prevent filters from being checked twice for requests by remembering which
+      request last checked a given bucket in reverse index (i.e.: `magic` field)
 
 ## 0.2.1
 

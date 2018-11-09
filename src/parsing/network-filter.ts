@@ -920,16 +920,6 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
     filterIndexEnd -= 1;
   }
 
-  // Remove leading '^*'
-  // if (
-  //   filterIndexEnd - filterIndexStart > 1 &&
-  //   line[filterIndexStart] === '^' &&
-  //   line[filterIndexStart + 1] === '*'
-  // ) {
-  //   filterIndexStart += 2;
-  //   mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-  // }
-
   // Remove leading '*' if the filter is not hostname anchored.
   if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexStart] === '*') {
     mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
