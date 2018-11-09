@@ -7,12 +7,11 @@ export declare class NetworkFilter implements IFilter {
     optNotDomains?: Uint32Array;
     redirect?: string;
     hostname?: string;
-    id?: number;
     rawLine?: string;
-    optDomainsSet?: Set<number>;
-    optNotDomainsSet?: Set<number>;
+    id?: number;
     private fuzzySignature?;
     private regex?;
+    private optimized;
     constructor({ filter, hostname, id, mask, optDomains, optNotDomains, rawLine, redirect, }: {
         filter?: string;
         hostname?: string;
@@ -30,10 +29,10 @@ export declare class NetworkFilter implements IFilter {
     hasFilter(): boolean;
     hasOptNotDomains(): boolean;
     getNumberOfOptNotDomains(): number;
-    getOptNotDomains(): Set<number>;
+    getOptNotDomains(): Uint32Array;
     getNumberOfOptDomains(): number;
     hasOptDomains(): boolean;
-    getOptDomains(): Set<number>;
+    getOptDomains(): Uint32Array;
     getMask(): number;
     getCptMask(): number;
     isRedirect(): boolean;
@@ -71,5 +70,6 @@ export declare class NetworkFilter implements IFilter {
     fromHttps(): boolean;
     fromXmlHttpRequest(): boolean;
     fromFont(): boolean;
+    private optimize;
 }
 export declare function parseNetworkFilter(rawLine: string): NetworkFilter | null;

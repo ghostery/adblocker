@@ -209,3 +209,34 @@ export function tokenizeCSS(pattern: string): Uint32Array {
 export function createFuzzySignature(pattern: string): Uint32Array {
   return compactTokens(new Uint32Array(tokenize(pattern)));
 }
+
+export function binSearch(arr: Uint32Array, elt: number): boolean {
+  // TODO - check most common case?
+  if (arr.length === 0) {
+    return false;
+  }
+
+  if (arr.length === 1) {
+    return arr[0] === elt;
+  }
+
+  if (arr.length === 2) {
+    return arr[0] === elt || arr[1] === elt;
+  }
+
+  let low = 0;
+  let high = arr.length - 1;
+
+  while (low <= high) {
+    const mid = (low + high) >>> 1;
+    const midVal = arr[mid];
+    if (midVal < elt) {
+      low = mid + 1;
+    } else if (midVal > elt) {
+      high = mid - 1;
+    } else {
+      return true;
+    }
+  }
+  return false;
+}

@@ -39,12 +39,11 @@ const enum NETWORK_FILTER_MASK {
   // Kind of patterns
   thirdParty = 1 << 16,
   firstParty = 1 << 17,
-  isPlain = 1 << 18,
-  isRegex = 1 << 19,
-  isLeftAnchor = 1 << 20,
-  isRightAnchor = 1 << 21,
-  isHostnameAnchor = 1 << 22,
-  isException = 1 << 23,
+  isRegex = 1 << 18,
+  isLeftAnchor = 1 << 19,
+  isRightAnchor = 1 << 20,
+  isHostnameAnchor = 1 << 21,
+  isException = 1 << 22,
 }
 
 /**
@@ -153,7 +152,7 @@ function compileRegex(filterStr: string, isRightAnchor: boolean, isLeftAnchor: b
   return new RegExp(filter);
 }
 
-const EMPTY_SET = new Set();
+const EMPTY_ARRAY = new Uint32Array([]);
 const MATCH_ALL = new RegExp('');
 
 // TODO:
@@ -176,13 +175,12 @@ export class NetworkFilter implements IFilter {
   public hostname?: string;
 
   // Set only in debug mode
-  public id?: number;
   public rawLine?: string;
-  public optDomainsSet?: Set<number>;
-  public optNotDomainsSet?: Set<number>;
 
+  public id?: number;
   private fuzzySignature?: Uint32Array;
   private regex?: RegExp;
+  private optimized: boolean;
 
   constructor({
     filter,
@@ -206,6 +204,7 @@ export class NetworkFilter implements IFilter {
     // Those fields should not be mutated.
     this.mask = mask;
     this.id = id;
+    this.optimized = false;
 
     this.filter = filter;
     this.redirect = redirect;
@@ -358,15 +357,9 @@ export class NetworkFilter implements IFilter {
     return 0;
   }
 
-  public getOptNotDomains(): Set<number> {
-    if (this.optNotDomainsSet === undefined) {
-      if (this.optNotDomains === undefined) {
-        return EMPTY_SET;
-      }
-
-      this.optNotDomainsSet = new Set(this.optNotDomains);
-    }
-    return this.optNotDomainsSet;
+  public getOptNotDomains(): Uint32Array {
+    this.optimize();
+    return this.optNotDomains || EMPTY_ARRAY;
   }
 
   public getNumberOfOptDomains(): number {
@@ -380,15 +373,9 @@ export class NetworkFilter implements IFilter {
     return this.optDomains !== undefined;
   }
 
-  public getOptDomains(): Set<number> {
-    if (this.optDomainsSet === undefined) {
-      if (this.optDomains === undefined) {
-        return EMPTY_SET;
-      }
-
-      this.optDomainsSet = new Set(this.optDomains);
-    }
-    return this.optDomainsSet;
+  public getOptDomains(): Uint32Array {
+    this.optimize();
+    return this.optDomains || EMPTY_ARRAY;
   }
 
   public getMask(): number {
@@ -425,27 +412,16 @@ export class NetworkFilter implements IFilter {
   public setRegex(re: RegExp): void {
     this.regex = re;
     this.mask = setBit(this.mask, NETWORK_FILTER_MASK.isRegex);
-    this.mask = clearBit(this.mask, NETWORK_FILTER_MASK.isPlain);
   }
 
   public getRegex(): RegExp {
-    if (this.regex === undefined) {
-      this.regex =
-        this.filter !== undefined
-          ? compileRegex(this.filter, this.isRightAnchor(), this.isLeftAnchor())
-          : MATCH_ALL;
-    }
-
-    return this.regex;
+    this.optimize();
+    return this.regex || MATCH_ALL;
   }
 
   public getFuzzySignature(): Uint32Array {
-    if (this.fuzzySignature === undefined) {
-      this.fuzzySignature =
-        this.filter !== undefined ? createFuzzySignature(this.filter) : new Uint32Array([]);
-    }
-
-    return this.fuzzySignature;
+    this.optimize();
+    return this.fuzzySignature || EMPTY_ARRAY;
   }
 
   public getTokens(): Uint32Array[] {
@@ -612,6 +588,24 @@ export class NetworkFilter implements IFilter {
 
   public fromFont() {
     return getBit(this.mask, NETWORK_FILTER_MASK.fromFont);
+  }
+
+  private optimize() {
+    if (this.optimized === false) {
+      this.optimized = true;
+      if (this.optNotDomains !== undefined) {
+        this.optNotDomains.sort();
+      }
+      if (this.optDomains !== undefined) {
+        this.optDomains.sort();
+      }
+      if (this.filter !== undefined && this.regex === undefined) {
+        this.regex = compileRegex(this.filter, this.isRightAnchor(), this.isLeftAnchor());
+      }
+      if (this.filter !== undefined && this.isFuzzy()) {
+        this.fuzzySignature = createFuzzySignature(this.filter);
+      }
+    }
   }
 }
 

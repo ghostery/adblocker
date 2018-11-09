@@ -167,6 +167,9 @@ export default class Request {
   }
 
   public getTokens(): Uint32Array {
+    // TODO - try to only remove duplication for tokens which have a hit in
+    // reverse index. Tokens non-existing are ok. We could set a bit in each
+    // bucket with last request seen?
     if (this.tokens === undefined) {
       let tokensBufferIndex = 0;
       if (this.sourceDomain) {

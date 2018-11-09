@@ -1,6 +1,6 @@
 import { NetworkFilter } from '../parsing/network-filter';
 import Request from '../request';
-import { fastStartsWith, fastStartsWithFrom } from '../utils';
+import { binSearch, fastStartsWith, fastStartsWithFrom } from '../utils';
 
 export function isAnchoredByHostname(filterHostname: string, hostname: string): boolean {
   // Corner-case, if `filterHostname` is empty, then it's a match
@@ -263,7 +263,10 @@ function checkOptions(filter: NetworkFilter, request: Request): boolean {
   // Source URL must be among these domains to match
   if (filter.hasOptDomains()) {
     const optDomains = filter.getOptDomains();
-    if (!optDomains.has(request.sourceHostnameHash) && !optDomains.has(request.sourceDomainHash)) {
+    if (
+      !binSearch(optDomains, request.sourceHostnameHash) &&
+      !binSearch(optDomains, request.sourceDomainHash)
+    ) {
       return false;
     }
   }
@@ -272,8 +275,8 @@ function checkOptions(filter: NetworkFilter, request: Request): boolean {
   if (filter.hasOptNotDomains()) {
     const optNotDomains = filter.getOptNotDomains();
     if (
-      optNotDomains.has(request.sourceHostnameHash) ||
-      optNotDomains.has(request.sourceDomainHash)
+      binSearch(optNotDomains, request.sourceHostnameHash) ||
+      binSearch(optNotDomains, request.sourceDomainHash)
     ) {
       return false;
     }

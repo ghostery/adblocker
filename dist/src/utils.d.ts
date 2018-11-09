@@ -8,3 +8,4 @@ export declare function tokenize(pattern: string): Uint32Array;
 export declare function tokenizeFilter(pattern: string, skipFirstToken: boolean, skipLastToken: boolean): Uint32Array;
 export declare function tokenizeCSS(pattern: string): Uint32Array;
 export declare function createFuzzySignature(pattern: string): Uint32Array;
+export declare function binSearch(arr: Uint32Array, elt: number): boolean;

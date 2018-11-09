@@ -1,8 +1,9 @@
 import IFilter from '../parsing/interface';
 export interface IBucket<T extends IFilter> {
     filters: T[];
+    magic: number;
     optimized: boolean;
-    originals: T[];
+    originals: T[] | undefined;
 }
 interface IOptions<T> {
     optimizer: (filters: T[]) => T[];

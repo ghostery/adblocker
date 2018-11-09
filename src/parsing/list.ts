@@ -40,11 +40,13 @@ function detectFilterType(line: string): FilterType {
     // Ignore Adguard cosmetics
     // `#$#` `#@$#`
     // `#%#` `#@%#`
+    // `#?#`
     if (
       fastStartsWithFrom(line, /* #@$# */ '@$#', afterSharpIndex) ||
       fastStartsWithFrom(line, /* #@%# */ '@%#', afterSharpIndex) ||
       fastStartsWithFrom(line, /* #%# */ '%#', afterSharpIndex) ||
-      fastStartsWithFrom(line, /* #$# */ '$#', afterSharpIndex)
+      fastStartsWithFrom(line, /* #$# */ '$#', afterSharpIndex) ||
+      fastStartsWithFrom(line, /* #?# */ '?#', afterSharpIndex)
     ) {
       return FilterType.NOT_SUPPORTED;
     } else if (

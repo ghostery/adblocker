@@ -54,8 +54,8 @@ const DEFAULT_NETWORK_FILTER = {
   // Attributes
   filter: '',
   hostname: '',
-  optDomains: new Set(),
-  optNotDomains: new Set(),
+  optDomains: new Uint32Array([]),
+  optNotDomains: new Uint32Array([]),
   redirect: '',
 
   // Filter type
@@ -418,72 +418,72 @@ describe('Network filters', () => {
       it('parses domain', () => {
         network('||foo.com$domain=bar.com', {
           hasOptDomains: true,
-          optDomains: new Set([fastHash('bar.com')]),
+          optDomains: new Uint32Array([fastHash('bar.com')]),
 
           hasOptNotDomains: false,
-          optNotDomains: new Set(),
+          optNotDomains: new Uint32Array([]),
         });
 
         network('||foo.com$domain=bar.com|baz.com', {
           hasOptDomains: true,
-          optDomains: new Set([fastHash('bar.com'), fastHash('baz.com')]),
+          optDomains: new Uint32Array([fastHash('bar.com'), fastHash('baz.com')]),
 
           hasOptNotDomains: false,
-          optNotDomains: new Set(),
+          optNotDomains: new Uint32Array([]),
         });
       });
 
       it('parses ~domain', () => {
         network('||foo.com$domain=~bar.com', {
           hasOptDomains: false,
-          optDomains: new Set(),
+          optDomains: new Uint32Array([]),
 
           hasOptNotDomains: true,
-          optNotDomains: new Set([fastHash('bar.com')]),
+          optNotDomains: new Uint32Array([fastHash('bar.com')]),
         });
 
         network('||foo.com$domain=~bar.com|~baz.com', {
           hasOptDomains: false,
-          optDomains: new Set(),
+          optDomains: new Uint32Array([]),
 
           hasOptNotDomains: true,
-          optNotDomains: new Set([fastHash('bar.com'), fastHash('baz.com')]),
+          optNotDomains: new Uint32Array([fastHash('bar.com'), fastHash('baz.com')]),
         });
       });
 
       it('parses domain and ~domain', () => {
         network('||foo.com$domain=~bar.com|baz.com', {
           hasOptDomains: true,
-          optDomains: new Set([fastHash('baz.com')]),
+          optDomains: new Uint32Array([fastHash('baz.com')]),
 
           hasOptNotDomains: true,
-          optNotDomains: new Set([fastHash('bar.com')]),
+          optNotDomains: new Uint32Array([fastHash('bar.com')]),
         });
 
         network('||foo.com$domain=bar.com|~baz.com', {
           hasOptDomains: true,
-          optDomains: new Set([fastHash('bar.com')]),
+          optDomains: new Uint32Array([fastHash('bar.com')]),
 
           hasOptNotDomains: true,
-          optNotDomains: new Set([fastHash('baz.com')]),
+          optNotDomains: new Uint32Array([fastHash('baz.com')]),
         });
 
         network('||foo.com$domain=foo|~bar|baz', {
           hasOptDomains: true,
-          optDomains: new Set([fastHash('foo'), fastHash('baz')]),
+          optDomains: new Uint32Array([fastHash('foo'), fastHash('baz')]),
 
           hasOptNotDomains: true,
-          optNotDomains: new Set([fastHash('bar')]),
+          optNotDomains: new Uint32Array([fastHash('bar')]),
         });
       });
 
       it('defaults to no constraint', () => {
         network('||foo.com', {
           hasOptDomains: false,
-          optDomains: new Set(),
+          optDomains: new Uint32Array([]),
 
           hasOptNotDomains: false,
-          optNotDomains: new Set(),
+          optNotDomains: new Uint32Array([]),
         });
       });
     });

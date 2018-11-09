@@ -402,6 +402,33 @@
     function createFuzzySignature(pattern) {
         return compactTokens(new Uint32Array(tokenize(pattern)));
     }
+    function binSearch(arr, elt) {
+        if (arr.length === 0) {
+            return false;
+        }
+        if (arr.length === 1) {
+            return arr[0] === elt;
+        }
+        if (arr.length === 2) {
+            return arr[0] === elt || arr[1] === elt;
+        }
+        var low = 0;
+        var high = arr.length - 1;
+        while (low <= high) {
+            var mid = (low + high) >>> 1;
+            var midVal = arr[mid];
+            if (midVal < elt) {
+                low = mid + 1;
+            }
+            else if (midVal > elt) {
+                high = mid - 1;
+            }
+            else {
+                return true;
+            }
+        }
+        return false;
+    }
 
     function computeFilterId(mask, selector, hostnames) {
         var hash = (5408 * 33) ^ mask;
@@ -662,13 +689,14 @@
         }
         return new RegExp(filter);
     }
-    var EMPTY_SET = new Set();
+    var EMPTY_ARRAY = new Uint32Array([]);
     var MATCH_ALL = new RegExp('');
     var NetworkFilter = (function () {
         function NetworkFilter(_a) {
             var filter = _a.filter, hostname = _a.hostname, id = _a.id, mask = _a.mask, optDomains = _a.optDomains, optNotDomains = _a.optNotDomains, rawLine = _a.rawLine, redirect = _a.redirect;
             this.mask = mask;
             this.id = id;
+            this.optimized = false;
             this.filter = filter;
             this.redirect = redirect;
             this.hostname = hostname;
@@ -786,13 +814,8 @@
             return 0;
         };
         NetworkFilter.prototype.getOptNotDomains = function () {
-            if (this.optNotDomainsSet === undefined) {
-                if (this.optNotDomains === undefined) {
-                    return EMPTY_SET;
-                }
-                this.optNotDomainsSet = new Set(this.optNotDomains);
-            }
-            return this.optNotDomainsSet;
+            this.optimize();
+            return this.optNotDomains || EMPTY_ARRAY;
         };
         NetworkFilter.prototype.getNumberOfOptDomains = function () {
             if (this.optDomains !== undefined) {
@@ -804,13 +827,8 @@
             return this.optDomains !== undefined;
         };
         NetworkFilter.prototype.getOptDomains = function () {
-            if (this.optDomainsSet === undefined) {
-                if (this.optDomains === undefined) {
-                    return EMPTY_SET;
-                }
-                this.optDomainsSet = new Set(this.optDomains);
-            }
-            return this.optDomainsSet;
+            this.optimize();
+            return this.optDomains || EMPTY_ARRAY;
         };
         NetworkFilter.prototype.getMask = function () {
             return this.mask;
@@ -835,24 +853,15 @@
         };
         NetworkFilter.prototype.setRegex = function (re) {
             this.regex = re;
-            this.mask = setBit(this.mask, 524288);
-            this.mask = clearBit(this.mask, 262144);
+            this.mask = setBit(this.mask, 262144);
         };
         NetworkFilter.prototype.getRegex = function () {
-            if (this.regex === undefined) {
-                this.regex =
-                    this.filter !== undefined
-                        ? compileRegex(this.filter, this.isRightAnchor(), this.isLeftAnchor())
-                        : MATCH_ALL;
-            }
-            return this.regex;
+            this.optimize();
+            return this.regex || MATCH_ALL;
         };
         NetworkFilter.prototype.getFuzzySignature = function () {
-            if (this.fuzzySignature === undefined) {
-                this.fuzzySignature =
-                    this.filter !== undefined ? createFuzzySignature(this.filter) : new Uint32Array([]);
-            }
-            return this.fuzzySignature;
+            this.optimize();
+            return this.fuzzySignature || EMPTY_ARRAY;
         };
         NetworkFilter.prototype.getTokens = function () {
             var tokensBufferIndex = 0;
@@ -900,16 +909,16 @@
             return getBit(this.mask, 32768);
         };
         NetworkFilter.prototype.isException = function () {
-            return getBit(this.mask, 8388608);
-        };
-        NetworkFilter.prototype.isHostnameAnchor = function () {
             return getBit(this.mask, 4194304);
         };
-        NetworkFilter.prototype.isRightAnchor = function () {
+        NetworkFilter.prototype.isHostnameAnchor = function () {
             return getBit(this.mask, 2097152);
         };
-        NetworkFilter.prototype.isLeftAnchor = function () {
+        NetworkFilter.prototype.isRightAnchor = function () {
             return getBit(this.mask, 1048576);
+        };
+        NetworkFilter.prototype.isLeftAnchor = function () {
+            return getBit(this.mask, 524288);
         };
         NetworkFilter.prototype.matchCase = function () {
             return getBit(this.mask, 16384);
@@ -918,10 +927,10 @@
             return getBit(this.mask, 8192);
         };
         NetworkFilter.prototype.isRegex = function () {
-            return getBit(this.mask, 524288);
+            return getBit(this.mask, 262144);
         };
         NetworkFilter.prototype.isPlain = function () {
-            return !getBit(this.mask, 524288);
+            return !getBit(this.mask, 262144);
         };
         NetworkFilter.prototype.fromAny = function () {
             return this.getCptMask() === FROM_ANY;
@@ -971,6 +980,23 @@
         NetworkFilter.prototype.fromFont = function () {
             return getBit(this.mask, 1024);
         };
+        NetworkFilter.prototype.optimize = function () {
+            if (this.optimized === false) {
+                this.optimized = true;
+                if (this.optNotDomains !== undefined) {
+                    this.optNotDomains.sort();
+                }
+                if (this.optDomains !== undefined) {
+                    this.optDomains.sort();
+                }
+                if (this.filter !== undefined && this.regex === undefined) {
+                    this.regex = compileRegex(this.filter, this.isRightAnchor(), this.isLeftAnchor());
+                }
+                if (this.filter !== undefined && this.isFuzzy()) {
+                    this.fuzzySignature = createFuzzySignature(this.filter);
+                }
+            }
+        };
         return NetworkFilter;
     }());
     function setNetworkMask(mask, m, value) {
@@ -1000,7 +1026,7 @@
         var filterIndexEnd = line.length;
         if (fastStartsWith(line, '@@')) {
             filterIndexStart += 2;
-            mask = setBit(mask, 8388608);
+            mask = setBit(mask, 4194304);
         }
         var optionsIndex = line.lastIndexOf('$');
         if (optionsIndex !== -1) {
@@ -1157,32 +1183,32 @@
             mask |= cptMaskPositive & cptMaskNegative;
         }
         if (line[filterIndexEnd - 1] === '|') {
-            mask = setBit(mask, 2097152);
+            mask = setBit(mask, 1048576);
             filterIndexEnd -= 1;
         }
         if (fastStartsWithFrom(line, '||', filterIndexStart)) {
-            mask = setBit(mask, 4194304);
+            mask = setBit(mask, 2097152);
             filterIndexStart += 2;
         }
         else if (line[filterIndexStart] === '|') {
-            mask = setBit(mask, 1048576);
+            mask = setBit(mask, 524288);
             filterIndexStart += 1;
         }
         var isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
-        mask = setNetworkMask(mask, 524288, isRegex);
-        if (getBit(mask, 4194304)) {
+        mask = setNetworkMask(mask, 262144, isRegex);
+        if (getBit(mask, 2097152)) {
             if (isRegex) {
                 var firstSeparator = line.search(SEPARATOR);
                 if (firstSeparator !== -1) {
                     hostname = line.slice(filterIndexStart, firstSeparator);
                     filterIndexStart = firstSeparator;
                     if (filterIndexEnd - filterIndexStart === 1 && line[filterIndexStart] === '^') {
-                        mask = clearBit(mask, 524288);
+                        mask = clearBit(mask, 262144);
                         filterIndexStart = filterIndexEnd;
                     }
                     else {
-                        mask = setNetworkMask(mask, 1048576, true);
-                        mask = setNetworkMask(mask, 524288, checkIsRegex(line, filterIndexStart, filterIndexEnd));
+                        mask = setNetworkMask(mask, 524288, true);
+                        mask = setNetworkMask(mask, 262144, checkIsRegex(line, filterIndexStart, filterIndexEnd));
                     }
                 }
             }
@@ -1191,7 +1217,7 @@
                 if (slashIndex !== -1) {
                     hostname = line.slice(filterIndexStart, slashIndex);
                     filterIndexStart = slashIndex;
-                    mask = setBit(mask, 1048576);
+                    mask = setBit(mask, 524288);
                 }
                 else {
                     hostname = line.slice(filterIndexStart, filterIndexEnd);
@@ -1203,45 +1229,45 @@
             filterIndexEnd -= 1;
         }
         if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexStart] === '*') {
-            mask = clearBit(mask, 1048576);
+            mask = clearBit(mask, 524288);
             filterIndexStart += 1;
         }
-        if (getBit(mask, 1048576)) {
+        if (getBit(mask, 524288)) {
             if (filterIndexEnd - filterIndexStart === 5 &&
                 fastStartsWithFrom(line, 'ws://', filterIndexStart)) {
                 mask = setBit(mask, 256);
-                mask = clearBit(mask, 1048576);
+                mask = clearBit(mask, 524288);
                 filterIndexStart = filterIndexEnd;
             }
             else if (filterIndexEnd - filterIndexStart === 7 &&
                 fastStartsWithFrom(line, 'http://', filterIndexStart)) {
                 mask = setBit(mask, 2048);
                 mask = clearBit(mask, 4096);
-                mask = clearBit(mask, 1048576);
+                mask = clearBit(mask, 524288);
                 filterIndexStart = filterIndexEnd;
             }
             else if (filterIndexEnd - filterIndexStart === 8 &&
                 fastStartsWithFrom(line, 'https://', filterIndexStart)) {
                 mask = setBit(mask, 4096);
                 mask = clearBit(mask, 2048);
-                mask = clearBit(mask, 1048576);
+                mask = clearBit(mask, 524288);
                 filterIndexStart = filterIndexEnd;
             }
             else if (filterIndexEnd - filterIndexStart === 8 &&
                 fastStartsWithFrom(line, 'http*://', filterIndexStart)) {
                 mask = setBit(mask, 4096);
                 mask = setBit(mask, 2048);
-                mask = clearBit(mask, 1048576);
+                mask = clearBit(mask, 524288);
                 filterIndexStart = filterIndexEnd;
             }
         }
         var filter;
         if (filterIndexEnd - filterIndexStart > 0) {
             filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
-            mask = setNetworkMask(mask, 524288, checkIsRegex(filter, 0, filter.length));
+            mask = setNetworkMask(mask, 262144, checkIsRegex(filter, 0, filter.length));
         }
         if (hostname !== undefined) {
-            if (getBit(mask, 4194304) && fastStartsWith(hostname, 'www.')) {
+            if (getBit(mask, 2097152) && fastStartsWith(hostname, 'www.')) {
                 hostname = hostname.slice(4);
             }
             hostname = hostname.toLowerCase();
@@ -1276,7 +1302,8 @@
             if (fastStartsWithFrom(line, '@$#', afterSharpIndex) ||
                 fastStartsWithFrom(line, '@%#', afterSharpIndex) ||
                 fastStartsWithFrom(line, '%#', afterSharpIndex) ||
-                fastStartsWithFrom(line, '$#', afterSharpIndex)) {
+                fastStartsWithFrom(line, '$#', afterSharpIndex) ||
+                fastStartsWithFrom(line, '?#', afterSharpIndex)) {
                 return 0;
             }
             else if (fastStartsWithFrom(line, '#', afterSharpIndex) ||
@@ -2407,6 +2434,7 @@
         return {
             bucket: {
                 filters: bucket,
+                magic: -1,
                 optimized: false,
                 originals: []
             },
@@ -2418,7 +2446,7 @@
         buffer.pushUint32(reverseIndex.size);
         buffer.pushUint32(index.size);
         index.forEach(function (bucket, token) {
-            serializeBucket(token, bucket.optimized ? bucket.originals : bucket.filters, buffer);
+            serializeBucket(token, bucket.originals || bucket.filters, buffer);
         });
     }
     function deserializeReverseIndex(buffer, index, filters) {
@@ -2554,8 +2582,43 @@
         return { hostname: '' };
     }
 
+    var DefaultMap = (function () {
+        function DefaultMap(ctr) {
+            this.map = new Map();
+            this.ctr = ctr;
+        }
+        DefaultMap.prototype.getMap = function () {
+            return this.map;
+        };
+        DefaultMap.prototype.set = function (key, value) {
+            this.map.set(key, value);
+        };
+        DefaultMap.prototype.get = function (key) {
+            var value = this.map.get(key);
+            if (value === undefined) {
+                value = this.ctr();
+                this.map.set(key, value);
+            }
+            return value;
+        };
+        return DefaultMap;
+    }());
     function noop(filters) {
         return filters;
+    }
+    var UID = 1;
+    function getNextId() {
+        var id = UID;
+        UID = (UID + 1) % 1000000000;
+        return id;
+    }
+    function newBucket() {
+        return {
+            filters: [],
+            magic: 0,
+            optimized: false,
+            originals: undefined
+        };
     }
     var ReverseIndex = (function () {
         function ReverseIndex(filters, getTokens, _a) {
@@ -2570,86 +2633,86 @@
             this.addFilters(filters);
         }
         ReverseIndex.prototype.iterMatchingFilters = function (tokens, cb) {
+            var requestId = getNextId();
             for (var i = 0; i < tokens.length; i += 1) {
-                if (this.iterBucket(tokens[i], cb) === false) {
+                if (this.iterBucket(tokens[i], requestId, cb) === false) {
                     return;
                 }
             }
-            this.iterBucket(0, cb);
+            this.iterBucket(0, requestId, cb);
         };
         ReverseIndex.prototype.optimizeAheadOfTime = function () {
             var _this = this;
-            if (this.optimizer) {
+            if (this.optimizer !== undefined) {
                 this.index.forEach(function (bucket) {
-                    _this.optimize(bucket);
+                    if (bucket.optimized === false) {
+                        _this.optimize(bucket);
+                    }
                 });
             }
         };
         ReverseIndex.prototype.addFilters = function (iterFilters) {
             var _this = this;
-            var idToTokens = new Map();
-            var histogram = new Map();
-            var totalTokens = 0;
+            var totalNumberOfTokens = 0;
+            var filters = [];
+            var index = new DefaultMap(newBucket);
+            var wildcardBucket = index.get(0);
             iterFilters(function (filter) {
                 var multiTokens = _this.getTokens(filter);
-                idToTokens.set(filter.getId(), {
+                filters.push({
                     filter: filter,
                     multiTokens: multiTokens
                 });
                 for (var i = 0; i < multiTokens.length; i += 1) {
                     var tokens = multiTokens[i];
                     for (var j = 0; j < tokens.length; j += 1) {
-                        var token = tokens[j];
-                        histogram.set(token, (histogram.get(token) || 0) + 1);
-                        totalTokens += 1;
+                        totalNumberOfTokens += 1;
+                        index.get(tokens[j]).magic += 1;
                     }
                 }
             });
-            this.index = new Map();
-            histogram.set(fastHash('https'), totalTokens);
-            histogram.set(fastHash('http'), totalTokens - 1);
-            histogram.set(fastHash('www'), totalTokens - 2);
-            histogram.set(fastHash('com'), totalTokens - 3);
-            idToTokens.forEach(function (_a) {
-                var filter = _a.filter, multiTokens = _a.multiTokens;
+            ['http', 'https', 'www', 'com'].forEach(function (badToken) {
+                index.get(fastHash(badToken)).magic = totalNumberOfTokens;
+            });
+            for (var i = 0; i < filters.length; i += 1) {
+                var _a = filters[i], filter = _a.filter, multiTokens = _a.multiTokens;
                 var wildCardInserted = false;
-                for (var i = 0; i < multiTokens.length; i += 1) {
-                    var tokens = multiTokens[i];
-                    var bestToken = 0;
-                    var count = totalTokens + 1;
+                for (var j = 0; j < multiTokens.length; j += 1) {
+                    var tokens = multiTokens[j];
+                    var bestBucket = void 0;
+                    var count = totalNumberOfTokens + 1;
                     for (var k = 0; k < tokens.length; k += 1) {
-                        var token = tokens[k];
-                        var tokenCount = histogram.get(token);
-                        if (tokenCount < count) {
-                            bestToken = token;
-                            count = tokenCount;
+                        var bucket = index.get(tokens[k]);
+                        if (bucket.magic <= count) {
+                            count = bucket.magic;
+                            bestBucket = bucket;
+                            if (count === 1) {
+                                break;
+                            }
                         }
                     }
-                    if (bestToken === 0) {
-                        if (wildCardInserted) {
-                            continue;
-                        }
-                        else {
+                    if (bestBucket === undefined) {
+                        if (wildCardInserted === false) {
                             wildCardInserted = true;
+                            wildcardBucket.filters.push(filter);
                         }
-                    }
-                    var bucket = _this.index.get(bestToken);
-                    if (bucket === undefined) {
-                        _this.index.set(bestToken, {
-                            filters: [filter],
-                            optimized: false,
-                            originals: []
-                        });
                     }
                     else {
-                        bucket.filters.push(filter);
+                        bestBucket.filters.push(filter);
                     }
                 }
+            }
+            this.size = filters.length;
+            this.index = index.getMap();
+            this.index.forEach(function (bucket, key, map) {
+                bucket.magic = 0;
+                if (bucket.filters.length === 0) {
+                    map["delete"](key);
+                }
             });
-            this.size = idToTokens.size;
         };
         ReverseIndex.prototype.optimize = function (bucket) {
-            if (this.optimizer && !bucket.optimized) {
+            if (this.optimizer !== undefined && bucket.optimized === false) {
                 if (bucket.filters.length > 1) {
                     bucket.originals = bucket.filters;
                     bucket.filters = this.optimizer(bucket.filters);
@@ -2657,27 +2720,26 @@
                 bucket.optimized = true;
             }
         };
-        ReverseIndex.prototype.iterBucket = function (token, cb) {
-            var ret = true;
+        ReverseIndex.prototype.iterBucket = function (token, requestId, cb) {
             var bucket = this.index.get(token);
-            if (bucket !== undefined) {
+            if (bucket !== undefined && bucket.magic !== requestId) {
+                bucket.magic = requestId;
                 if (bucket.optimized === false) {
                     this.optimize(bucket);
                 }
                 var filters = bucket.filters;
-                for (var k = 0; k < filters.length; k += 1) {
-                    if (cb(filters[k]) === false) {
-                        if (k > 0) {
-                            var filter = filters[k];
-                            filters[k] = filters[k - 1];
-                            filters[k - 1] = filter;
+                for (var i = 0; i < filters.length; i += 1) {
+                    if (cb(filters[i]) === false) {
+                        if (i > 0) {
+                            var filter = filters[i];
+                            filters[i] = filters[i - 1];
+                            filters[i - 1] = filter;
                         }
-                        ret = false;
-                        break;
+                        return false;
                     }
                 }
             }
-            return ret;
+            return true;
         };
         return ReverseIndex;
     }());
@@ -2996,14 +3058,15 @@
         }
         if (filter.hasOptDomains()) {
             var optDomains = filter.getOptDomains();
-            if (!optDomains.has(request.sourceHostnameHash) && !optDomains.has(request.sourceDomainHash)) {
+            if (!binSearch(optDomains, request.sourceHostnameHash) &&
+                !binSearch(optDomains, request.sourceDomainHash)) {
                 return false;
             }
         }
         if (filter.hasOptNotDomains()) {
             var optNotDomains = filter.getOptNotDomains();
-            if (optNotDomains.has(request.sourceHostnameHash) ||
-                optNotDomains.has(request.sourceDomainHash)) {
+            if (binSearch(optNotDomains, request.sourceHostnameHash) ||
+                binSearch(optNotDomains, request.sourceDomainHash)) {
                 return false;
             }
         }
@@ -3080,14 +3143,12 @@
                 }
                 if (domains.size > 0) {
                     filter.optDomains = new Uint32Array(domains);
-                    filter.optDomainsSet = domains;
                 }
                 else {
                     filter.optDomains = undefined;
                 }
                 if (notDomains.size > 0) {
                     filter.optNotDomains = new Uint32Array(notDomains);
-                    filter.optNotDomainsSet = notDomains;
                 }
                 else {
                     filter.optNotDomains = undefined;

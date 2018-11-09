@@ -319,6 +319,7 @@ function deserializeBucket<T extends IFilter>(
   return {
     bucket: {
       filters: bucket,
+      magic: -1,
       optimized: false,
       originals: [],
     },
@@ -336,7 +337,7 @@ function serializeReverseIndex<T extends IFilter>(
   buffer.pushUint32(index.size);
 
   index.forEach((bucket, token) => {
-    serializeBucket<T>(token, bucket.optimized ? bucket.originals : bucket.filters, buffer);
+    serializeBucket<T>(token, bucket.originals || bucket.filters, buffer);
   });
 }
 

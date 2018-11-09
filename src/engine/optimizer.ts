@@ -92,14 +92,12 @@ const OPTIMIZATIONS: IOptimization[] = [
 
       if (domains.size > 0) {
         filter.optDomains = new Uint32Array(domains);
-        filter.optDomainsSet = domains;
       } else {
         filter.optDomains = undefined;
       }
 
       if (notDomains.size > 0) {
         filter.optNotDomains = new Uint32Array(notDomains);
-        filter.optNotDomainsSet = notDomains;
       } else {
         filter.optNotDomains = undefined;
       }
