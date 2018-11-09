@@ -3250,12 +3250,11 @@
         NetworkFilterBucket.prototype.match = function (request) {
             var match;
             this.index.iterMatchingFilters(request.getTokens(), function (filter) {
-                var continueIteration = true;
                 if (matchNetworkFilter(filter, request)) {
                     match = filter;
-                    continueIteration = false;
+                    return false;
                 }
-                return continueIteration;
+                return true;
             });
             return match;
         };

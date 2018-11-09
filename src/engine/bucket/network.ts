@@ -52,13 +52,11 @@ export default class NetworkFilterBucket {
     let match: NetworkFilter | undefined;
 
     this.index.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
-      let continueIteration = true;
       if (matchNetworkFilter(filter, request)) {
         match = filter;
-        continueIteration = false; // break iteration
+        return false;
       }
-
-      return continueIteration;
+      return true;
     });
 
     return match;
