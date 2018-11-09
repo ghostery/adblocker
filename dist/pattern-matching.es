@@ -251,9 +251,10 @@ function getNextId() {
     UID = (UID + 1) % 1000000000;
     return id;
 }
-function newBucket() {
+function newBucket(filters) {
+    if (filters === void 0) { filters = []; }
     return {
-        filters: [],
+        filters: filters,
         magic: 0,
         optimized: false,
         originals: undefined

@@ -8,8 +8,7 @@
 import DynamicDataView from './dynamic-data-view';
 import Engine from './engine/engine';
 import IList from './engine/list';
-import ReverseIndex from './engine/reverse-index';
-import { IBucket } from './engine/reverse-index';
+import ReverseIndex, { IBucket, newBucket } from './engine/reverse-index';
 import { CosmeticFilter } from './parsing/cosmetic-filter';
 import IFilter from './parsing/interface';
 import { NetworkFilter } from './parsing/network-filter';
@@ -317,12 +316,7 @@ function deserializeBucket<T extends IFilter>(
   }
 
   return {
-    bucket: {
-      filters: bucket,
-      magic: -1,
-      optimized: false,
-      originals: [],
-    },
+    bucket: newBucket<T>(bucket),
     token,
   };
 }

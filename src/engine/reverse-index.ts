@@ -46,9 +46,9 @@ export interface IBucket<T extends IFilter> {
   originals: T[] | undefined;
 }
 
-function newBucket() {
+export function newBucket<T extends IFilter>(filters: T[] = []): IBucket<T> {
   return {
-    filters: [],
+    filters,
     magic: 0,
     optimized: false,
     originals: undefined,
@@ -159,7 +159,7 @@ export default class ReverseIndex<T extends IFilter> {
     // Index will be used both as a histogram while constructing buckets and
     // then as the final reverse index. We re-use the same Map to avoid having
     // to construct two big ones.
-    const index: DefaultMap<number, IBucket<T>> = new DefaultMap(newBucket);
+    const index = new DefaultMap<number, IBucket<T>>(newBucket);
 
     // The wildcard bucket will contains some filters for which we could not
     // find any valid token.

@@ -42,15 +42,13 @@ describe('Serialization', () => {
   it('ReverseIndex', () => {
     const filters = new Map();
     networkFilters.forEach((filter) => {
-      if (!filters.has(filter.getId())) {
-        filters.set(filter.getId(), filter);
-      }
+      filters.set(filter.getId(), filter);
     });
 
     // Initialize index
     const reverseIndex = new ReverseIndex<NetworkFilter>(
       (cb) => {
-        [...filters.values()].forEach(cb);
+        networkFilters.forEach(cb);
       },
       (f: NetworkFilter) => f.getTokens(),
     );

@@ -5,6 +5,7 @@ export interface IBucket<T extends IFilter> {
     optimized: boolean;
     originals: T[] | undefined;
 }
+export declare function newBucket<T extends IFilter>(filters?: T[]): IBucket<T>;
 interface IOptions<T> {
     optimizer: (filters: T[]) => T[];
     enableOptimizations: boolean;

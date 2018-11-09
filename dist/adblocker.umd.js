@@ -2234,6 +2234,169 @@
         return DynamicDataView;
     }());
 
+    var DefaultMap = (function () {
+        function DefaultMap(ctr) {
+            this.map = new Map();
+            this.ctr = ctr;
+        }
+        DefaultMap.prototype.getMap = function () {
+            return this.map;
+        };
+        DefaultMap.prototype.set = function (key, value) {
+            this.map.set(key, value);
+        };
+        DefaultMap.prototype.get = function (key) {
+            var value = this.map.get(key);
+            if (value === undefined) {
+                value = this.ctr();
+                this.map.set(key, value);
+            }
+            return value;
+        };
+        return DefaultMap;
+    }());
+    function noop(filters) {
+        return filters;
+    }
+    var UID = 1;
+    function getNextId() {
+        var id = UID;
+        UID = (UID + 1) % 1000000000;
+        return id;
+    }
+    function newBucket(filters) {
+        if (filters === void 0) { filters = []; }
+        return {
+            filters: filters,
+            magic: 0,
+            optimized: false,
+            originals: undefined
+        };
+    }
+    var ReverseIndex = (function () {
+        function ReverseIndex(filters, getTokens, _a) {
+            var _b = _a === void 0 ? {
+                enableOptimizations: true,
+                optimizer: noop
+            } : _a, _c = _b.enableOptimizations, enableOptimizations = _c === void 0 ? true : _c, _d = _b.optimizer, optimizer = _d === void 0 ? noop : _d;
+            this.index = new Map();
+            this.size = 0;
+            this.optimizer = enableOptimizations ? optimizer : noop;
+            this.getTokens = getTokens;
+            this.addFilters(filters);
+        }
+        ReverseIndex.prototype.iterMatchingFilters = function (tokens, cb) {
+            var requestId = getNextId();
+            for (var i = 0; i < tokens.length; i += 1) {
+                if (this.iterBucket(tokens[i], requestId, cb) === false) {
+                    return;
+                }
+            }
+            this.iterBucket(0, requestId, cb);
+        };
+        ReverseIndex.prototype.optimizeAheadOfTime = function () {
+            var _this = this;
+            if (this.optimizer !== undefined) {
+                this.index.forEach(function (bucket) {
+                    if (bucket.optimized === false) {
+                        _this.optimize(bucket);
+                    }
+                });
+            }
+        };
+        ReverseIndex.prototype.addFilters = function (iterFilters) {
+            var _this = this;
+            var totalNumberOfTokens = 0;
+            var filters = [];
+            var index = new DefaultMap(newBucket);
+            var wildcardBucket = index.get(0);
+            iterFilters(function (filter) {
+                var multiTokens = _this.getTokens(filter);
+                filters.push({
+                    filter: filter,
+                    multiTokens: multiTokens
+                });
+                for (var i = 0; i < multiTokens.length; i += 1) {
+                    var tokens = multiTokens[i];
+                    for (var j = 0; j < tokens.length; j += 1) {
+                        totalNumberOfTokens += 1;
+                        index.get(tokens[j]).magic += 1;
+                    }
+                }
+            });
+            ['http', 'https', 'www', 'com'].forEach(function (badToken) {
+                index.get(fastHash(badToken)).magic = totalNumberOfTokens;
+            });
+            for (var i = 0; i < filters.length; i += 1) {
+                var _a = filters[i], filter = _a.filter, multiTokens = _a.multiTokens;
+                var wildCardInserted = false;
+                for (var j = 0; j < multiTokens.length; j += 1) {
+                    var tokens = multiTokens[j];
+                    var bestBucket = void 0;
+                    var count = totalNumberOfTokens + 1;
+                    for (var k = 0; k < tokens.length; k += 1) {
+                        var bucket = index.get(tokens[k]);
+                        if (bucket.magic <= count) {
+                            count = bucket.magic;
+                            bestBucket = bucket;
+                            if (count === 1) {
+                                break;
+                            }
+                        }
+                    }
+                    if (bestBucket === undefined) {
+                        if (wildCardInserted === false) {
+                            wildCardInserted = true;
+                            wildcardBucket.filters.push(filter);
+                        }
+                    }
+                    else {
+                        bestBucket.filters.push(filter);
+                    }
+                }
+            }
+            this.size = filters.length;
+            this.index = index.getMap();
+            this.index.forEach(function (bucket, key, map) {
+                bucket.magic = 0;
+                if (bucket.filters.length === 0) {
+                    map["delete"](key);
+                }
+            });
+        };
+        ReverseIndex.prototype.optimize = function (bucket) {
+            if (this.optimizer !== undefined && bucket.optimized === false) {
+                if (bucket.filters.length > 1) {
+                    bucket.originals = bucket.filters;
+                    bucket.filters = this.optimizer(bucket.filters);
+                }
+                bucket.optimized = true;
+            }
+        };
+        ReverseIndex.prototype.iterBucket = function (token, requestId, cb) {
+            var bucket = this.index.get(token);
+            if (bucket !== undefined && bucket.magic !== requestId) {
+                bucket.magic = requestId;
+                if (bucket.optimized === false) {
+                    this.optimize(bucket);
+                }
+                var filters = bucket.filters;
+                for (var i = 0; i < filters.length; i += 1) {
+                    if (cb(filters[i]) === false) {
+                        if (i > 0) {
+                            var filter = filters[i];
+                            filters[i] = filters[i - 1];
+                            filters[i - 1] = filter;
+                        }
+                        return false;
+                    }
+                }
+            }
+            return true;
+        };
+        return ReverseIndex;
+    }());
+
     function serializeNetworkFilter(filter, buffer) {
         var numberOfOptionalParts = 0;
         if (filter.isRedirect()) {
@@ -2432,12 +2595,7 @@
             }
         }
         return {
-            bucket: {
-                filters: bucket,
-                magic: -1,
-                optimized: false,
-                originals: []
-            },
+            bucket: newBucket(bucket),
             token: token
         };
     }
@@ -2581,168 +2739,6 @@
         }
         return { hostname: '' };
     }
-
-    var DefaultMap = (function () {
-        function DefaultMap(ctr) {
-            this.map = new Map();
-            this.ctr = ctr;
-        }
-        DefaultMap.prototype.getMap = function () {
-            return this.map;
-        };
-        DefaultMap.prototype.set = function (key, value) {
-            this.map.set(key, value);
-        };
-        DefaultMap.prototype.get = function (key) {
-            var value = this.map.get(key);
-            if (value === undefined) {
-                value = this.ctr();
-                this.map.set(key, value);
-            }
-            return value;
-        };
-        return DefaultMap;
-    }());
-    function noop(filters) {
-        return filters;
-    }
-    var UID = 1;
-    function getNextId() {
-        var id = UID;
-        UID = (UID + 1) % 1000000000;
-        return id;
-    }
-    function newBucket() {
-        return {
-            filters: [],
-            magic: 0,
-            optimized: false,
-            originals: undefined
-        };
-    }
-    var ReverseIndex = (function () {
-        function ReverseIndex(filters, getTokens, _a) {
-            var _b = _a === void 0 ? {
-                enableOptimizations: true,
-                optimizer: noop
-            } : _a, _c = _b.enableOptimizations, enableOptimizations = _c === void 0 ? true : _c, _d = _b.optimizer, optimizer = _d === void 0 ? noop : _d;
-            this.index = new Map();
-            this.size = 0;
-            this.optimizer = enableOptimizations ? optimizer : noop;
-            this.getTokens = getTokens;
-            this.addFilters(filters);
-        }
-        ReverseIndex.prototype.iterMatchingFilters = function (tokens, cb) {
-            var requestId = getNextId();
-            for (var i = 0; i < tokens.length; i += 1) {
-                if (this.iterBucket(tokens[i], requestId, cb) === false) {
-                    return;
-                }
-            }
-            this.iterBucket(0, requestId, cb);
-        };
-        ReverseIndex.prototype.optimizeAheadOfTime = function () {
-            var _this = this;
-            if (this.optimizer !== undefined) {
-                this.index.forEach(function (bucket) {
-                    if (bucket.optimized === false) {
-                        _this.optimize(bucket);
-                    }
-                });
-            }
-        };
-        ReverseIndex.prototype.addFilters = function (iterFilters) {
-            var _this = this;
-            var totalNumberOfTokens = 0;
-            var filters = [];
-            var index = new DefaultMap(newBucket);
-            var wildcardBucket = index.get(0);
-            iterFilters(function (filter) {
-                var multiTokens = _this.getTokens(filter);
-                filters.push({
-                    filter: filter,
-                    multiTokens: multiTokens
-                });
-                for (var i = 0; i < multiTokens.length; i += 1) {
-                    var tokens = multiTokens[i];
-                    for (var j = 0; j < tokens.length; j += 1) {
-                        totalNumberOfTokens += 1;
-                        index.get(tokens[j]).magic += 1;
-                    }
-                }
-            });
-            ['http', 'https', 'www', 'com'].forEach(function (badToken) {
-                index.get(fastHash(badToken)).magic = totalNumberOfTokens;
-            });
-            for (var i = 0; i < filters.length; i += 1) {
-                var _a = filters[i], filter = _a.filter, multiTokens = _a.multiTokens;
-                var wildCardInserted = false;
-                for (var j = 0; j < multiTokens.length; j += 1) {
-                    var tokens = multiTokens[j];
-                    var bestBucket = void 0;
-                    var count = totalNumberOfTokens + 1;
-                    for (var k = 0; k < tokens.length; k += 1) {
-                        var bucket = index.get(tokens[k]);
-                        if (bucket.magic <= count) {
-                            count = bucket.magic;
-                            bestBucket = bucket;
-                            if (count === 1) {
-                                break;
-                            }
-                        }
-                    }
-                    if (bestBucket === undefined) {
-                        if (wildCardInserted === false) {
-                            wildCardInserted = true;
-                            wildcardBucket.filters.push(filter);
-                        }
-                    }
-                    else {
-                        bestBucket.filters.push(filter);
-                    }
-                }
-            }
-            this.size = filters.length;
-            this.index = index.getMap();
-            this.index.forEach(function (bucket, key, map) {
-                bucket.magic = 0;
-                if (bucket.filters.length === 0) {
-                    map["delete"](key);
-                }
-            });
-        };
-        ReverseIndex.prototype.optimize = function (bucket) {
-            if (this.optimizer !== undefined && bucket.optimized === false) {
-                if (bucket.filters.length > 1) {
-                    bucket.originals = bucket.filters;
-                    bucket.filters = this.optimizer(bucket.filters);
-                }
-                bucket.optimized = true;
-            }
-        };
-        ReverseIndex.prototype.iterBucket = function (token, requestId, cb) {
-            var bucket = this.index.get(token);
-            if (bucket !== undefined && bucket.magic !== requestId) {
-                bucket.magic = requestId;
-                if (bucket.optimized === false) {
-                    this.optimize(bucket);
-                }
-                var filters = bucket.filters;
-                for (var i = 0; i < filters.length; i += 1) {
-                    if (cb(filters[i]) === false) {
-                        if (i > 0) {
-                            var filter = filters[i];
-                            filters[i] = filters[i - 1];
-                            filters[i - 1] = filter;
-                        }
-                        return false;
-                    }
-                }
-            }
-            return true;
-        };
-        return ReverseIndex;
-    }());
 
     var CosmeticFilterBucket = (function () {
         function CosmeticFilterBucket(filters) {
