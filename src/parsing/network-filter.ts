@@ -599,7 +599,7 @@ export class NetworkFilter implements IFilter {
       if (this.optDomains !== undefined) {
         this.optDomains.sort();
       }
-      if (this.filter !== undefined && this.regex === undefined) {
+      if (this.filter !== undefined && this.regex === undefined && this.isRegex()) {
         this.regex = compileRegex(this.filter, this.isRightAnchor(), this.isLeftAnchor());
       }
       if (this.filter !== undefined && this.isFuzzy()) {
