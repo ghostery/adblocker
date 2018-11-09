@@ -7,10 +7,7 @@ import { fastStartsWith } from '../utils';
  * Partial matches are allowed, but hostname should be a valid
  * subdomain of hostnamePattern.
  */
-function checkHostnamesPartialMatch(
-  hostname: string,
-  hostnamePattern: string,
-): boolean {
+function checkHostnamesPartialMatch(hostname: string, hostnamePattern: string): boolean {
   let pattern = hostnamePattern;
   if (fastStartsWith(hostnamePattern, '~')) {
     pattern = pattern.slice(1);
@@ -43,10 +40,7 @@ function matchHostname(hostname: string, hostnamePattern: string): boolean {
       return false;
     }
 
-    const hostnameWithoutSuffix = hostname.substr(
-      0,
-      hostname.length - publicSuffix.length - 1,
-    );
+    const hostnameWithoutSuffix = hostname.substr(0, hostname.length - publicSuffix.length - 1);
 
     if (hostnameWithoutSuffix.length > 0) {
       // Check if we have a match
@@ -64,11 +58,13 @@ export default function matchCosmeticFilter(
   hostname: string,
 ): { hostname: string } | null {
   // Check hostnames
-  if (filter.hasHostnames() && hostname) {
-    const hostnames = filter.getHostnames();
-    for (let i = 0; i < hostnames.length; i += 1) {
-      if (matchHostname(hostname, hostnames[i])) {
-        return { hostname: hostnames[i] };
+  if (filter.hasHostnames()) {
+    if (hostname) {
+      const hostnames = filter.getHostnames();
+      for (let i = 0; i < hostnames.length; i += 1) {
+        if (matchHostname(hostname, hostnames[i])) {
+          return { hostname: hostnames[i] };
+        }
       }
     }
 

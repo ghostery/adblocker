@@ -265,7 +265,7 @@ export default class FilterEngine {
   public matchAll(rawRequest: Partial<IRequestInitialization>): Set<NetworkFilter> {
     const request = new Request(rawRequest);
 
-    const filters = [];
+    const filters: NetworkFilter[] = [];
     if (request.isSupported) {
       filters.push(...this.importants.matchAll(request));
       filters.push(...this.filters.matchAll(request));
