@@ -15,25 +15,24 @@ function loadAdblocker() {
   });
 
   console.log('Fetching resources...');
-  return Promise.all([
-    adblocker.fetchLists(),
-    adblocker.fetchResources(),
-  ]).then(([responses, resources]) => {
-    console.log('Initialize adblocker...');
-    const lists: Array<{ filters: string, checksum: string, asset: string }> = [];
-    for (let i = 0; i < responses.length; i += 1) {
-      lists.push({
-        asset: '' + i,
-        checksum: '',
-        filters: responses[i],
-      });
-    }
+  return Promise.all([adblocker.fetchLists(), adblocker.fetchResources()]).then(
+    ([responses, resources]) => {
+      console.log('Initialize adblocker...');
+      const lists: Array<{ filters: string; checksum: string; asset: string }> = [];
+      for (let i = 0; i < responses.length; i += 1) {
+        lists.push({
+          asset: '' + i,
+          checksum: '',
+          filters: responses[i],
+        });
+      }
 
-    engine.onUpdateResource([{ filters: resources, checksum: '' }]);
-    engine.onUpdateFilters(lists, new Set());
+      engine.onUpdateResource([{ filters: resources, checksum: '' }]);
+      engine.onUpdateFilters(lists, new Set());
 
-    return engine;
-  });
+      return engine;
+    },
+  );
 }
 
 /**
@@ -82,47 +81,23 @@ chrome.tabs.onActivated.addListener(({ tabId }) => {
   updateBadgeCount(tabId);
 });
 
-const types = {
-  // maps string (web-ext) to int (FF cpt)
-  beacon: 19,
-  csp_report: 17,
-  font: 14,
-  image: 3,
-  imageset: 21,
-  main_frame: 6,
-  media: 15,
-  object: 5,
-  object_subrequest: 12,
-  other: 1,
-  ping: 10,
-  script: 2,
-  stylesheet: 4,
-  sub_frame: 7,
-  web_manifest: 22,
-  websocket: 16,
-  xbl: 9,
-  xml_dtd: 13,
-  xmlhttprequest: 11,
-  xslt: 18,
-};
-
 loadAdblocker().then((engine) => {
-  function listener(details) {
+  function listener({ tabId, type, url }) {
     let source;
-    if (tabs.has(details.tabId)) {
-      source = tabs.get(details.tabId).source;
+    if (tabs.has(tabId)) {
+      source = tabs.get(tabId).source;
     }
     const result = engine.match({
-      cpt: types[details.type],
       sourceUrl: source,
-      url: details.url,
+      type,
+      url,
     });
 
     if (result.redirect) {
-      incrementBlockedCounter(details.tabId);
+      incrementBlockedCounter(tabId);
       return { redirectUrl: result.redirect };
     } else if (result.match) {
-      incrementBlockedCounter(details.tabId);
+      incrementBlockedCounter(tabId);
       return { cancel: true };
     }
 
@@ -134,9 +109,7 @@ loadAdblocker().then((engine) => {
   chrome.webRequest.onBeforeRequest.addListener(
     listener,
     {
-      urls: [
-        '*://*/*',
-      ],
+      urls: ['*://*/*'],
     },
     ['blocking'],
   );
@@ -147,7 +120,7 @@ loadAdblocker().then((engine) => {
     const url = sender.url;
     let hostname = '';
     if (url !== undefined) {
-      hostname = (new URL(url)).hostname;
+      hostname = new URL(url).hostname;
     }
 
     // Answer to content-script with a list of nodes
