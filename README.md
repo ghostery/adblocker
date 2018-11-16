@@ -22,6 +22,7 @@ $ npm install
 
 Build:
 ```sh
+$ npm run build
 $ npm run bundle
 ```
 
