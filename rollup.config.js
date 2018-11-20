@@ -31,6 +31,14 @@ export default [
   {
     input: './build/index.js',
     output: {
+      file: './dist/adblocker.cjs.js',
+      name: 'adblocker',
+      format: 'cjs',
+    },
+  },
+  {
+    input: './build/index.js',
+    output: {
       file: './dist/adblocker.umd.js',
       name: 'adblocker',
       format: 'umd',
