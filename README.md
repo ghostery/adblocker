@@ -24,6 +24,7 @@ Build:
 ```sh
 $ npm run build
 $ npm run bundle
+$ npm run bundle
 ```
 
 Test:
