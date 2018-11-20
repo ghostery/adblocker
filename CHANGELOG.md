@@ -1,7 +1,14 @@
 # Adblocker
 
-## *not released*
+## 0.3.0
 
+*2018-11-20*
+
+  * Distribute both un-bundled cjs and es6 source [#54](https://github.com/cliqz-oss/adblocker/pull/54)
+  * Produce a commonjs build artifact [#53](https://github.com/cliqz-oss/adblocker/pull/53)
+  * Update build instructions in README.md [#52](https://github.com/cliqz-oss/adblocker/pull/52)
+  * Remove dist folder from source tree [#50](https://github.com/cliqz-oss/adblocker/pull/50)
+  * Cosmetics: fix rule matching when hostname is empty [#49](https://github.com/cliqz-oss/adblocker/pull/49)
   * Optimizations [#46](https://github.com/cliqz-oss/adblocker/pull/46)
 
     - Requests can now use `type` as a string or number (e.g.: `script` or `2`).
