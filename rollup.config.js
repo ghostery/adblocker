@@ -12,7 +12,7 @@ const plugins = [
 
 export default [
   {
-    input: './build/index-cosmetics.js',
+    input: './dist/es6/index-cosmetics.js',
     output: {
       file: './dist/adblocker-cosmetics.umd.js',
       name: 'adblocker',
@@ -21,35 +21,11 @@ export default [
     plugins,
   },
   {
-    input: './build/index-matching.js',
-    output: {
-      file: './dist/pattern-matching.es',
-      format: 'es',
-    },
-    plugins,
-  },
-  {
-    input: './build/index.js',
-    output: {
-      file: './dist/adblocker.cjs.js',
-      name: 'adblocker',
-      format: 'cjs',
-    },
-  },
-  {
-    input: './build/index.js',
+    input: './dist/es6/index.js',
     output: {
       file: './dist/adblocker.umd.js',
       name: 'adblocker',
       format: 'umd',
-    },
-    plugins,
-  },
-  {
-    input: './build/index.js',
-    output: {
-      file: './dist/adblocker.es.js',
-      format: 'es',
     },
     plugins,
   },
