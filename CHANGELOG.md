@@ -1,5 +1,18 @@
 # Adblocker
 
+## Next
+
+*not released*
+
+  * Add hard-coded circumvention logic (+ IL defuser) [#59](https://github.com/cliqz-oss/adblocker/pull/59)
+    - Simplify 'example' extension
+    - Add circumvention module and entry-point in cosmetics injection
+    - Clean-up cjs and esm bundles
+    - Remove obsolete logic to override user-agent in content-script
+    - Simplify travis config (using new pre* hooks)
+    - Consolidate 'fetch' module (with metadata about lists)
+
+
 ## 0.3.0
 
 *2018-11-20*

@@ -1,11 +1,13 @@
+import injectCircumvention from './content/circumvention';
+import { blockScript, injectCSSRule, injectScript } from './content/injection';
 
 // We need this as `MutationObserver` is currently not part of the `Window` type
 // provided by typescript, although it should be! This will be erased at compile
 // time so it has no impact on produced code.
 declare global {
-    interface Window {
-        MutationObserver?: typeof MutationObserver;
-   }
+  interface Window {
+    MutationObserver?: typeof MutationObserver;
+  }
 }
 
 interface IMessageFromBackground {
@@ -13,67 +15,6 @@ interface IMessageFromBackground {
   scripts: string[];
   blockedScripts: string[];
   styles: string[];
-}
-
-function injectCSSRule(rule: string, doc: Document): void {
-  const css = doc.createElement('style');
-  css.type = 'text/css';
-  css.id = 'cliqz-adblokcer-css-rules';
-  const parent = doc.head || doc.documentElement;
-  if (parent !== null) {
-    parent.appendChild(css);
-    css.appendChild(doc.createTextNode(rule));
-  }
-}
-
-function injectScript(s: string, doc: Document): void {
-  // Wrap script so that it removes itself when the execution is over.
-  const autoRemoveScript = `
-    try {
-      ${s}
-    } catch (ex) { }
-
-    (function() {
-      var currentScript = document.currentScript;
-      var parent = currentScript && currentScript.parentNode;
-
-      if (parent) {
-        parent.removeChild(currentScript);
-      }
-    })();
-  `;
-
-  // Create node
-  const script = doc.createElement('script');
-  script.type = 'text/javascript';
-  script.id = 'cliqz-adblocker-script';
-  script.appendChild(doc.createTextNode(autoRemoveScript));
-
-  // Insert node
-  const parent = doc.head || doc.documentElement;
-  if (parent !== null) {
-    parent.appendChild(script);
-  }
-}
-
-function blockScript(filter: string, doc: Document): void {
-  const filterRE = new RegExp(filter);
-  doc.addEventListener('beforescriptexecute', ev => {
-    const target = ev.target as HTMLElement;
-    if (target.textContent && filterRE.test(target.textContent)) {
-      ev.preventDefault();
-      ev.stopPropagation();
-    }
-  });
-}
-
-export function overrideUserAgent(): void {
-  const script = () => {
-    Object.defineProperty(navigator, 'userAgent', {
-      get: () => 'Mozilla/5.0 Gecko Firefox',
-    });
-  };
-  injectScript(`(${script.toString()})()`, window.document);
 }
 
 /**
@@ -105,8 +46,11 @@ export default class CosmeticInjection {
   private observedNodes: Set<string>;
   private mutationObserver: MutationObserver | null;
 
-  constructor(window: Window, backgroundAction: (action: string, ...args: any[]) => Promise<void>,
-              useMutationObserver = true) {
+  constructor(
+    window: Window,
+    backgroundAction: (action: string, ...args: any[]) => Promise<void>,
+    useMutationObserver = true,
+  ) {
     this.window = window;
     this.backgroundAction = backgroundAction;
 
@@ -139,7 +83,16 @@ export default class CosmeticInjection {
     }
   }
 
-  public handleResponseFromBackground({ active, scripts, blockedScripts, styles }: IMessageFromBackground) {
+  public injectCircumvention(): void {
+    injectCircumvention(this.window);
+  }
+
+  public handleResponseFromBackground({
+    active,
+    scripts,
+    blockedScripts,
+    styles,
+  }: IMessageFromBackground) {
     if (!active) {
       this.unload();
       return;
@@ -204,7 +157,7 @@ export default class CosmeticInjection {
    * cosmetic filters to inject in the page.
    */
   private onMutation(mutations: Array<{ target: Node }>) {
-    let targets: Set<Node> = new Set(mutations.map(m => m.target).filter(t => t));
+    let targets: Set<Node> = new Set(mutations.map((m) => m.target).filter((t) => t));
 
     // TODO - it might be necessary to inject scripts, CSS and block scripts
     // from here into iframes with no src. We could first inject/block
@@ -231,7 +184,7 @@ export default class CosmeticInjection {
 
     // Collect nodes of targets
     const nodeInfo = new Set();
-    targets.forEach(target => {
+    targets.forEach((target) => {
       const nodes = (target as HTMLElement).querySelectorAll('*');
       for (let i = 0; i < nodes.length; i += 1) {
         const node = nodes[i] as HTMLElement;
@@ -258,7 +211,7 @@ export default class CosmeticInjection {
         }
 
         if (node.className && node.className.split) {
-          node.className.split(' ').forEach(name => {
+          node.className.split(' ').forEach((name) => {
             const selector = `.${name}`;
             if (!this.observedNodes.has(selector)) {
               nodeInfo.add(selector);
@@ -278,7 +231,7 @@ export default class CosmeticInjection {
   private startObserving() {
     // Attach mutation observer in case the DOM is mutated.
     if (this.window.MutationObserver !== undefined) {
-      this.mutationObserver = new this.window.MutationObserver(mutations =>
+      this.mutationObserver = new this.window.MutationObserver((mutations) =>
         this.onMutation(mutations),
       );
       this.mutationObserver.observe(this.window.document, {

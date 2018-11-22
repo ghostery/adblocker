@@ -17,15 +17,18 @@ import { CosmeticsInjection } from '../index-cosmetics';
  */
 const backgroundAction = (action, ...args): Promise<void> => {
   return new Promise((resolve) => {
-    chrome.runtime.sendMessage({
-      action,
-      args,
-    }, (response) => {
-      if (response !== undefined) {
-        injection.handleResponseFromBackground(response);
-      }
-      resolve();
-    });
+    chrome.runtime.sendMessage(
+      {
+        action,
+        args,
+      },
+      (response) => {
+        if (response !== undefined) {
+          injection.handleResponseFromBackground(response);
+        }
+        resolve();
+      },
+    );
   });
 };
 
@@ -39,10 +42,9 @@ const backgroundAction = (action, ...args): Promise<void> => {
  * - Observe mutations in the page (using MutationObserver) and inject relevant
  * filters for new nodes of the DOM.
  */
-const injection = new CosmeticsInjection(
-  window,
-  backgroundAction,
-);
+const injection = new CosmeticsInjection(window, backgroundAction);
+
+injection.injectCircumvention();
 
 /**
  * Make sure we clean-up all resources and event listeners when this content

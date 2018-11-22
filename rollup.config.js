@@ -1,18 +1,16 @@
 import resolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
+import pkg from './package.json';
 
 const plugins = [
-  resolve({
-    module: true,
-    jsnext: true,
-    main: false,
-    preferBuiltins: false,
-    modulesOnly: true,
-  }),
+  resolve(),
+  commonjs(),
 ];
 
 export default [
+  // Custom bundle for content-script, contains only a small subset
   {
-    input: './dist/es6/index-cosmetics.js',
+    input: './build/index-cosmetics.js',
     output: {
       file: './dist/adblocker-cosmetics.umd.js',
       name: 'adblocker',
@@ -20,13 +18,23 @@ export default [
     },
     plugins,
   },
+  // Browser-friendly bundle
   {
-    input: './dist/es6/index.js',
+    input: './build/index.js',
     output: {
-      file: './dist/adblocker.umd.js',
+      file: pkg.browser,
       name: 'adblocker',
       format: 'umd',
     },
     plugins,
+  },
+  // Commonjs and ES module bundles (without third-party deps)
+  {
+    input: './build/index.js',
+    external: ['tldts', 'tslib'],
+    output: [
+      { file: pkg.module, format: 'es' },
+      { file: pkg.main, format: 'cjs' },
+    ],
   },
 ];
