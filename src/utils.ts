@@ -240,3 +240,30 @@ export function binSearch(arr: Uint32Array, elt: number): boolean {
   }
   return false;
 }
+
+export function updateResponseHeadersWithCSP(
+  details: chrome.webRequest.WebResponseHeadersDetails,
+  policies: string | undefined,
+): chrome.webRequest.BlockingResponse {
+  if (policies === undefined) {
+    return {};
+  }
+
+  let responseHeaders = details.responseHeaders || [];
+  const CSP_HEADER_NAME = 'content-security-policy';
+
+  // Collect existing CSP headers from response
+  responseHeaders.forEach(({ name, value }) => {
+    if (name.toLowerCase() === CSP_HEADER_NAME) {
+      policies += `; ${value}`;
+    }
+  });
+
+  // Remove all CSP headers from response
+  responseHeaders = responseHeaders.filter(({ name }) => name.toLowerCase() !== CSP_HEADER_NAME);
+
+  // Add updated CSP header
+  responseHeaders.push({ name: CSP_HEADER_NAME, value: policies });
+
+  return { responseHeaders };
+}

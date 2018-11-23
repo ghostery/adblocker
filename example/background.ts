@@ -83,37 +83,54 @@ chrome.tabs.onActivated.addListener(({ tabId }) => {
   updateBadgeCount(tabId);
 });
 
-loadAdblocker().then((engine) => {
-  function listener({ tabId, type, url }) {
-    let source;
-    if (tabs.has(tabId)) {
-      source = tabs.get(tabId).source;
-    }
-    const result = engine.match({
-      sourceUrl: source,
-      type,
-      url,
-    });
-
-    if (result.redirect) {
-      incrementBlockedCounter(tabId);
-      return { redirectUrl: result.redirect };
-    } else if (result.match) {
-      incrementBlockedCounter(tabId);
-      return { cancel: true };
-    }
-
-    return {};
+function requestFromDetails({ tabId, type, url }) {
+  let source;
+  if (tabs.has(tabId)) {
+    source = tabs.get(tabId).source;
   }
+  return {
+    sourceUrl: source,
+    type,
+    url,
+  };
+}
 
+loadAdblocker().then((engine) => {
   // Start listening to requests, and allow 'blocking' so that we can cancel
   // some of them (or redirect).
   chrome.webRequest.onBeforeRequest.addListener(
-    listener,
+    (details) => {
+      const result = engine.match(requestFromDetails(details));
+
+      if (result.redirect) {
+        incrementBlockedCounter(details.tabId);
+        return { redirectUrl: result.redirect };
+      } else if (result.match) {
+        incrementBlockedCounter(details.tabId);
+        return { cancel: true };
+      }
+
+      return {};
+    },
     {
-      urls: ['*://*/*'],
+      urls: ['<all_urls>'],
     },
     ['blocking'],
+  );
+
+  chrome.webRequest.onHeadersReceived.addListener(
+    (details) => {
+      if (details.type !== 'main_frame') {
+        return {};
+      }
+
+      return adblocker.updateResponseHeadersWithCSP(
+        details,
+        engine.getCSPDirectives(requestFromDetails(details)),
+      );
+    },
+    { urls: ['<all_urls>'] },
+    ['blocking', 'responseHeaders'],
   );
 
   // Start listening to messages coming from the content-script
