@@ -28,7 +28,7 @@ function loadAdblocker() {
       }
 
       engine.onUpdateResource([{ filters: resources, checksum: '' }]);
-      engine.onUpdateFilters(lists, new Set());
+      engine.onUpdateFilters(lists, new Set(), true);
 
       return engine;
     },
@@ -68,12 +68,14 @@ chrome.tabs.onCreated.addListener((tab) => {
 });
 
 chrome.tabs.onUpdated.addListener((_0, _1, tab) => {
-  if (tabs.has(tab.id)) {
-    const { source } = tabs.get(tab.id);
-    if (source !== tab.url) {
-      resetState(tab.id, tab.url);
-      updateBadgeCount(tab.id);
-    }
+  if (!tabs.has(tab.id)) {
+    resetState(tab.id, tab.url);
+    updateBadgeCount(tab.id);
+  }
+  const { source } = tabs.get(tab.id);
+  if (source !== tab.url) {
+    resetState(tab.id, tab.url);
+    updateBadgeCount(tab.id);
   }
 });
 

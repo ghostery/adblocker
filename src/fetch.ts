@@ -2,24 +2,78 @@ function fetchResource(url: string): Promise<string> {
   return fetch(url).then((response: any) => response.text());
 }
 
-const defaultLists = [
-  // 'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
-  // 'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
-  'https://easylist.to/easylist/easylist.txt',
-  'https://easylist.to/easylist/easyprivacy.txt',
-  'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=1&mimetype=plaintext',
-  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
-  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
-  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
-  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
-  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
+const enum Category {
+  Privacy,
+  Ads,
+  Unbreak,
+  Circumvention,
+  Country,
+  Misc,
+}
+
+const lists = [
+  {
+    category: Category.Unbreak,
+    enabledByDefault: true,
+    url: 'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
+  },
+  {
+    category: Category.Country,
+    country: 'de',
+    enabledByDefault: false,
+    url: 'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
+  },
+  {
+    category: Category.Ads,
+    enabledByDefault: true,
+    url: 'https://easylist.to/easylist/easylist.txt',
+  },
+  {
+    category: Category.Privacy,
+    enabledByDefault: false,
+    url: 'https://easylist.to/easylist/easyprivacy.txt',
+  },
+  {
+    category: Category.Ads,
+    enabledByDefault: false,
+    url:
+      'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=1&mimetype=plaintext',
+  },
+  {
+    category: Category.Misc,
+    enabledByDefault: false,
+    url: 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
+  },
+  {
+    category: Category.Ads,
+    enabledByDefault: true,
+    url: 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
+  },
+  {
+    category: Category.Privacy,
+    enabledByDefault: false,
+    url: 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
+  },
+  {
+    category: Category.Misc,
+    enabledByDefault: true,
+    url:
+      'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
+  },
+  {
+    category: Category.Unbreak,
+    enabledByDefault: true,
+    url: 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
+  },
 ];
 
 /**
- * Fetch latest version of default blocking lists.
+ * Fetch latest version of enabledByDefault blocking lists.
  */
-export function fetchLists(lists: string[] = defaultLists): Promise<string[]> {
-  return Promise.all(lists.map(fetchResource));
+export function fetchLists(): Promise<string[]> {
+  return Promise.all(
+    lists.filter(({ enabledByDefault }) => enabledByDefault).map(({ url }) => fetchResource(url)),
+  );
 }
 
 /**

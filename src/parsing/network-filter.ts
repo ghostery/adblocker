@@ -732,6 +732,12 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
 
           break;
         }
+        case 'badfilter':
+          // TODO - how to handle those, if we start in mask, then the id will
+          // differ from the other filter. We could keep original line. How do
+          // to eliminate thos efficiently? They will probably endup in the same
+          // bucket, so maybe we could do that on a per-bucket basis?
+          return null;
         case 'important':
           // Note: `negation` should always be `false` here.
           if (negation) {
