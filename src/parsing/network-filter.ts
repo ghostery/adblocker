@@ -44,6 +44,7 @@ const enum NETWORK_FILTER_MASK {
   isRightAnchor = 1 << 20,
   isHostnameAnchor = 1 << 21,
   isException = 1 << 22,
+  isCSP = 1 << 23,
 }
 
 /**
@@ -87,6 +88,7 @@ const CPT_TO_MASK: {
 };
 
 function computeFilterId(
+  csp: string | undefined,
   mask: number,
   filter: string | undefined,
   hostname: string | undefined,
@@ -94,6 +96,12 @@ function computeFilterId(
   optNotDomains: Uint32Array | undefined,
 ): number {
   let hash = (5408 * 33) ^ mask;
+
+  if (csp !== undefined) {
+    for (let i = 0; i < csp.length; i += 1) {
+      hash = (hash * 33) ^ csp.charCodeAt(i);
+    }
+  }
 
   if (optDomains !== undefined) {
     for (let i = 0; i < optDomains.length; i += 1) {
@@ -163,8 +171,7 @@ const MATCH_ALL = new RegExp('');
 //  - popunder
 //  - generichide
 //  - genericblock
-// 2. csp option: ||wikia.com^$csp=script-src 'self' * 'unsafe-inline' 'unsafe-eval'
-// 3. Replace `split` with `substr`
+// 2. Replace `split` with `substr`
 export class NetworkFilter implements IFilter {
   public mask: number;
 
@@ -173,6 +180,7 @@ export class NetworkFilter implements IFilter {
   public optNotDomains?: Uint32Array;
   public redirect?: string;
   public hostname?: string;
+  public csp?: string;
 
   // Set only in debug mode
   public rawLine?: string;
@@ -183,6 +191,7 @@ export class NetworkFilter implements IFilter {
   private optimized: boolean;
 
   constructor({
+    csp,
     filter,
     hostname,
     id,
@@ -191,27 +200,17 @@ export class NetworkFilter implements IFilter {
     optNotDomains,
     rawLine,
     redirect,
-  }: {
-    filter?: string;
-    hostname?: string;
-    id?: number;
-    mask: number;
-    optDomains?: Uint32Array;
-    optNotDomains?: Uint32Array;
-    rawLine?: string;
-    redirect?: string;
-  }) {
-    // Those fields should not be mutated.
+  }: { mask: number } & Partial<NetworkFilter>) {
     this.mask = mask;
     this.id = id;
     this.optimized = false;
-
+    this.csp = csp;
     this.filter = filter;
-    this.redirect = redirect;
     this.hostname = hostname;
-    this.rawLine = rawLine;
     this.optDomains = optDomains;
     this.optNotDomains = optNotDomains;
+    this.rawLine = rawLine;
+    this.redirect = redirect;
   }
 
   public isCosmeticFilter() {
@@ -332,6 +331,7 @@ export class NetworkFilter implements IFilter {
   public getId(): number {
     if (this.id === undefined) {
       this.id = computeFilterId(
+        this.csp,
         this.mask,
         this.filter,
         this.hostname,
@@ -526,6 +526,10 @@ export class NetworkFilter implements IFilter {
     return !getBit(this.mask, NETWORK_FILTER_MASK.isRegex);
   }
 
+  public isCSP() {
+    return getBit(this.mask, NETWORK_FILTER_MASK.isCSP);
+  }
+
   public fromAny() {
     return this.getCptMask() === FROM_ANY;
   }
@@ -658,6 +662,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   let optDomains: Uint32Array | undefined;
   let optNotDomains: Uint32Array | undefined;
   let redirect: string | undefined;
+  let csp: string | undefined;
 
   // Start parsing
   let filterIndexStart: number = 0;
@@ -699,15 +704,16 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
       }
 
       // Check for options: option=value1|value2
-      let optionValues: string[] = [];
+      let optionValue: string = '';
       if (option.indexOf('=') !== -1) {
         const optionAndValues = option.split('=', 2);
         option = optionAndValues[0];
-        optionValues = optionAndValues[1].split('|');
+        optionValue = optionAndValues[1];
       }
 
       switch (option) {
         case 'domain': {
+          const optionValues: string[] = optionValue.split('|');
           const optDomainsArray: number[] = [];
           const optNotDomainsArray: number[] = [];
 
@@ -784,11 +790,17 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
           }
 
           // Ignore this filter if no redirection resource is specified
-          if (optionValues.length === 0) {
+          if (optionValue.length === 0) {
             return null;
           }
 
-          redirect = optionValues[0];
+          redirect = optionValue;
+          break;
+        case 'csp':
+          mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
+          if (optionValue.length > 0) {
+            csp = optionValue;
+          }
           break;
         default: {
           // Handle content type options separatly
@@ -989,6 +1001,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   }
 
   return new NetworkFilter({
+    csp,
     filter,
     hostname,
     mask,

@@ -76,6 +76,17 @@ export default class DynamicDataView {
     this.pushBytes(buffer);
   }
 
+  public pushUint32Array(arr: Uint32Array | undefined): void {
+    if (arr === undefined) {
+      this.pushUint16(0);
+    } else {
+      this.pushUint16(arr.length);
+      for (let i = 0; i < arr.length; i += 1) {
+        this.pushUint32(arr[i]);
+      }
+    }
+  }
+
   /**
    * This method is very optimistic and will assume that by default every string
    * is ascii only, but fallback to a slower utf-8 method if a non-ascii char is
@@ -154,7 +165,7 @@ export default class DynamicDataView {
     return decode(this.getBytes(this.getUint16()));
   }
 
-  public getStr(): string {
+  public getStr(): string | undefined {
     // Keep track of original position to be able to fallback
     // to getUTF8 if we encounter non-ascii characters.
     const originalPos = this.pos;
@@ -162,7 +173,7 @@ export default class DynamicDataView {
 
     // Special handling for empty strings
     if (size === 0) {
-      return '';
+      return undefined;
     }
 
     // Check if there is a non-ascii character in the string.
@@ -177,6 +188,18 @@ export default class DynamicDataView {
     }
 
     return String.fromCharCode.apply(null, this.getBytes(size));
+  }
+
+  public getUint32Array(): Uint32Array | undefined {
+    const length = this.getUint16();
+    if (length > 0) {
+      const arr = new Uint32Array(length);
+      for (let i = 0; i < length; i += 1) {
+        arr[i] = this.getUint32();
+      }
+      return arr;
+    }
+    return undefined;
   }
 
   private checkShouldResize(n: number): void {

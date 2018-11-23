@@ -53,7 +53,9 @@ function serializeNetworkFilter(filter: NetworkFilter, buffer: DynamicDataView):
   // Check number of optional parts (e.g.: filter, hostname, etc.)
   let numberOfOptionalParts = 0;
 
-  if (filter.isRedirect()) {
+  if (filter.isCSP()) {
+    numberOfOptionalParts = 6;
+  } else if (filter.isRedirect()) {
     numberOfOptionalParts = 5;
   } else if (filter.hasOptNotDomains()) {
     numberOfOptionalParts = 4;
@@ -66,8 +68,8 @@ function serializeNetworkFilter(filter: NetworkFilter, buffer: DynamicDataView):
   }
 
   buffer.pushUint32(filter.getId());
-  buffer.pushUint8(numberOfOptionalParts);
   buffer.pushUint32(filter.mask);
+  buffer.pushUint8(numberOfOptionalParts);
 
   if (numberOfOptionalParts === 0) {
     return;
@@ -83,27 +85,22 @@ function serializeNetworkFilter(filter: NetworkFilter, buffer: DynamicDataView):
     return;
   }
 
-  buffer.pushUint16(filter.getNumberOfOptDomains());
-  if (filter.optDomains !== undefined) {
-    for (let i = 0; i < filter.optDomains.length; i += 1) {
-      buffer.pushUint32(filter.optDomains[i]);
-    }
-  }
+  buffer.pushUint32Array(filter.optDomains);
   if (numberOfOptionalParts === 3) {
     return;
   }
 
-  buffer.pushUint16(filter.getNumberOfOptNotDomains());
-  if (filter.optNotDomains !== undefined) {
-    for (let i = 0; i < filter.optNotDomains.length; i += 1) {
-      buffer.pushUint32(filter.optNotDomains[i]);
-    }
-  }
+  buffer.pushUint32Array(filter.optNotDomains);
   if (numberOfOptionalParts === 4) {
     return;
   }
 
   buffer.pushStr(filter.redirect);
+  if (numberOfOptionalParts === 5) {
+    return;
+  }
+
+  buffer.pushStr(filter.csp);
 }
 
 /**
@@ -112,44 +109,37 @@ function serializeNetworkFilter(filter: NetworkFilter, buffer: DynamicDataView):
  */
 function deserializeNetworkFilter(buffer: DynamicDataView): NetworkFilter {
   const id = buffer.getUint32();
-  const numberOfOptionalParts = buffer.getUint8();
   const mask = buffer.getUint32();
+  const numberOfOptionalParts = buffer.getUint8();
 
   let hostname: string | undefined;
   let filter: string | undefined;
   let optDomains: Uint32Array | undefined;
   let optNotDomains: Uint32Array | undefined;
   let redirect: string | undefined;
+  let csp: string | undefined;
 
   if (numberOfOptionalParts > 0) {
-    hostname = buffer.getStr() || undefined;
+    hostname = buffer.getStr();
   }
   if (numberOfOptionalParts > 1) {
-    filter = buffer.getStr() || undefined;
+    filter = buffer.getStr();
   }
   if (numberOfOptionalParts > 2) {
-    const numberOfOptDomains = buffer.getUint16();
-    if (numberOfOptDomains > 0) {
-      optDomains = new Uint32Array(numberOfOptDomains);
-      for (let i = 0; i < numberOfOptDomains; i += 1) {
-        optDomains[i] = buffer.getUint32();
-      }
-    }
+    optDomains = buffer.getUint32Array();
   }
   if (numberOfOptionalParts > 3) {
-    const numberOfOptNotDomains = buffer.getUint16();
-    if (numberOfOptNotDomains > 0) {
-      optNotDomains = new Uint32Array(numberOfOptNotDomains);
-      for (let i = 0; i < numberOfOptNotDomains; i += 1) {
-        optNotDomains[i] = buffer.getUint32();
-      }
-    }
+    optNotDomains = buffer.getUint32Array();
   }
   if (numberOfOptionalParts > 4) {
-    redirect = buffer.getStr() || undefined;
+    redirect = buffer.getStr();
+  }
+  if (numberOfOptionalParts > 5) {
+    csp = buffer.getStr();
   }
 
   return new NetworkFilter({
+    csp,
     filter,
     hostname,
     id,
@@ -249,6 +239,7 @@ function serializeLists(buffer: DynamicDataView, lists: Map<string, IList>): voi
     buffer.pushStr(asset);
     buffer.pushStr(list.checksum);
     serializeCosmeticFilters(list.cosmetics, buffer);
+    serializeNetworkFilters(list.csp, buffer);
     serializeNetworkFilters(list.exceptions, buffer);
     serializeNetworkFilters(list.filters, buffer);
     serializeNetworkFilters(list.importants, buffer);
@@ -273,6 +264,7 @@ function deserializeLists(
     lists.set(buffer.getStr(), {
       checksum: buffer.getStr(),
       cosmetics: deserializeCosmeticFilters(buffer, cosmeticFilters),
+      csp: deserializeNetworkFilters(buffer, networkFilters),
       exceptions: deserializeNetworkFilters(buffer, networkFilters),
       filters: deserializeNetworkFilters(buffer, networkFilters),
       importants: deserializeNetworkFilters(buffer, networkFilters),
@@ -378,7 +370,7 @@ function deserializeResources(
 } {
   const js = new Map();
   const resources = new Map();
-  const resourceChecksum = buffer.getStr();
+  const resourceChecksum = buffer.getStr() || '';
 
   // Deserialize `resources`
   const resourcesSize = buffer.getUint8();

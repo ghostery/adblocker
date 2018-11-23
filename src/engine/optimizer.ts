@@ -107,7 +107,9 @@ const OPTIMIZATIONS: IOptimization[] = [
     groupByCriteria: (filter: NetworkFilter) =>
       filter.getHostname() + filter.getFilter() + filter.getMask() + filter.getRedirect(),
     select: (filter: NetworkFilter) =>
-      !filter.isFuzzy() && (filter.hasOptDomains() || filter.hasOptNotDomains()),
+      !filter.isFuzzy() &&
+      !filter.isCSP() &&
+      (filter.hasOptDomains() || filter.hasOptNotDomains()),
   },
   {
     description: 'Group simple patterns, into a single filter',
@@ -147,7 +149,8 @@ const OPTIMIZATIONS: IOptimization[] = [
       !filter.hasOptDomains() &&
       !filter.hasOptNotDomains() &&
       !filter.isHostnameAnchor() &&
-      !filter.isRedirect(),
+      !filter.isRedirect() &&
+      !filter.isCSP(),
   },
 ];
 

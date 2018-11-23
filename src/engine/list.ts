@@ -5,6 +5,7 @@ export default interface IList {
   checksum: string;
   cosmetics: CosmeticFilter[];
   exceptions: NetworkFilter[];
+  csp: NetworkFilter[];
   filters: NetworkFilter[];
   importants: NetworkFilter[];
   redirects: NetworkFilter[];
