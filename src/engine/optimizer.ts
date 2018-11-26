@@ -1,4 +1,5 @@
-import { NetworkFilter } from '../parsing/network-filter';
+import { NETWORK_FILTER_MASK, NetworkFilter } from '../parsing/network-filter';
+import { setBit } from '../utils';
 
 function processRegex(r: RegExp): string {
   return `(?:${r.source})`;
@@ -66,13 +67,6 @@ const OPTIMIZATIONS: IOptimization[] = [
   {
     description: 'Group idential filter with same mask but different domains in single filters',
     fusion: (filters: NetworkFilter[]) => {
-      const filter = new NetworkFilter(filters[0]);
-
-      // Keep track of original filters view rawLine attribute
-      if (filter.rawLine !== undefined) {
-        filter.rawLine = filters.map(({ rawLine }) => rawLine).join(' <+> ');
-      }
-
       const domains: Set<number> = new Set();
       const notDomains: Set<number> = new Set();
 
@@ -90,19 +84,15 @@ const OPTIMIZATIONS: IOptimization[] = [
         }
       }
 
-      if (domains.size > 0) {
-        filter.optDomains = new Uint32Array(domains);
-      } else {
-        filter.optDomains = undefined;
-      }
-
-      if (notDomains.size > 0) {
-        filter.optNotDomains = new Uint32Array(notDomains);
-      } else {
-        filter.optNotDomains = undefined;
-      }
-
-      return filter;
+      return new NetworkFilter({
+        ...filters[0],
+        optDomains: domains.size > 0 ? new Uint32Array(domains) : undefined,
+        optNotDomains: notDomains.size > 0 ? new Uint32Array(notDomains) : undefined,
+        rawLine:
+          filters[0].rawLine !== undefined
+            ? filters.map(({ rawLine }) => rawLine).join(' <+> ')
+            : undefined,
+      });
     },
     groupByCriteria: (filter: NetworkFilter) =>
       filter.getHostname() + filter.getFilter() + filter.getMask() + filter.getRedirect(),
@@ -114,13 +104,6 @@ const OPTIMIZATIONS: IOptimization[] = [
   {
     description: 'Group simple patterns, into a single filter',
     fusion: (filters: NetworkFilter[]) => {
-      const filter = new NetworkFilter(filters[0]);
-
-      // Keep track of original filters view rawLine attribute
-      if (filter.rawLine !== undefined) {
-        filter.rawLine = filters.map(({ rawLine }) => rawLine).join(' <+> ');
-      }
-
       const patterns: string[] = [];
       for (let i = 0; i < filters.length; i += 1) {
         const f = filters[i];
@@ -135,13 +118,15 @@ const OPTIMIZATIONS: IOptimization[] = [
         }
       }
 
-      if (patterns.length > 0) {
-        filter.setRegex(new RegExp(patterns.join('|')));
-      } else {
-        filter.filter = undefined;
-      }
-
-      return filter;
+      return new NetworkFilter({
+        ...filters[0],
+        mask: setBit(filters[0].mask, NETWORK_FILTER_MASK.isRegex),
+        rawLine:
+          filters[0].rawLine !== undefined
+            ? filters.map(({ rawLine }) => rawLine).join(' <+> ')
+            : undefined,
+        regex: new RegExp(patterns.join('|')),
+      });
     },
     groupByCriteria: (filter: NetworkFilter) => '' + filter.getMask(),
     select: (filter: NetworkFilter) =>

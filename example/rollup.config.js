@@ -3,7 +3,9 @@ import commonjs from 'rollup-plugin-commonjs';
 
 
 const plugins = [
-  resolve(),
+  resolve({
+    preferBuiltins: false,
+  }),
   commonjs(),
 ];
 

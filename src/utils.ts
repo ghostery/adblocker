@@ -267,3 +267,12 @@ export function updateResponseHeadersWithCSP(
 
   return { responseHeaders };
 }
+
+export function hasUnicode(str: string): boolean {
+  for (let i = 0; i < str.length; i += 1) {
+    if (str.charCodeAt(i) > 127) {
+      return true;
+    }
+  }
+  return false;
+}

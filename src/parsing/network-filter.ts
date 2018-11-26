@@ -1,3 +1,4 @@
+import * as punycode from 'punycode';
 import { RequestType } from '../request';
 import {
   clearBit,
@@ -6,6 +7,7 @@ import {
   fastStartsWith,
   fastStartsWithFrom,
   getBit,
+  hasUnicode,
   setBit,
   tokenize,
   tokenizeFilter,
@@ -17,7 +19,7 @@ const TOKENS_BUFFER = new Uint32Array(200);
 /**
  * Masks used to store options of network filters in a bitmask.
  */
-const enum NETWORK_FILTER_MASK {
+export const enum NETWORK_FILTER_MASK {
   // Content Policy Type
   fromImage = 1 << 0,
   fromMedia = 1 << 1,
@@ -173,14 +175,13 @@ const MATCH_ALL = new RegExp('');
 //  - genericblock
 // 2. Replace `split` with `substr`
 export class NetworkFilter implements IFilter {
-  public mask: number;
-
-  public filter?: string;
-  public optDomains?: Uint32Array;
-  public optNotDomains?: Uint32Array;
-  public redirect?: string;
-  public hostname?: string;
-  public csp?: string;
+  public readonly mask: number;
+  public readonly filter?: string;
+  public readonly optDomains?: Uint32Array;
+  public readonly optNotDomains?: Uint32Array;
+  public readonly redirect?: string;
+  public readonly hostname?: string;
+  public readonly csp?: string;
 
   // Set only in debug mode
   public rawLine?: string;
@@ -188,7 +189,7 @@ export class NetworkFilter implements IFilter {
   public id?: number;
   private fuzzySignature?: Uint32Array;
   private regex?: RegExp;
-  private optimized: boolean;
+  private optimized: boolean = false;
 
   constructor({
     csp,
@@ -200,17 +201,18 @@ export class NetworkFilter implements IFilter {
     optNotDomains,
     rawLine,
     redirect,
-  }: { mask: number } & Partial<NetworkFilter>) {
-    this.mask = mask;
-    this.id = id;
-    this.optimized = false;
+    regex,
+  }: { mask: number; regex?: RegExp } & Partial<NetworkFilter>) {
     this.csp = csp;
     this.filter = filter;
     this.hostname = hostname;
+    this.id = id;
+    this.mask = mask;
     this.optDomains = optDomains;
     this.optNotDomains = optNotDomains;
     this.rawLine = rawLine;
     this.redirect = redirect;
+    this.regex = regex;
   }
 
   public isCosmeticFilter() {
@@ -404,14 +406,6 @@ export class NetworkFilter implements IFilter {
 
   public getFilter(): string {
     return this.filter || '';
-  }
-
-  /**
-   * Special method, should only be used by the filter optimizer
-   */
-  public setRegex(re: RegExp): void {
-    this.regex = re;
-    this.mask = setBit(this.mask, NETWORK_FILTER_MASK.isRegex);
   }
 
   public getRegex(): RegExp {
@@ -998,6 +992,9 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
       hostname = hostname.slice(4);
     }
     hostname = hostname.toLowerCase();
+    if (hasUnicode(hostname)) {
+      hostname = punycode.toASCII(hostname);
+    }
   }
 
   return new NetworkFilter({
