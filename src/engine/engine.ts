@@ -2,7 +2,7 @@ import { CosmeticFilter } from '../parsing/cosmetic-filter';
 import IFilter from '../parsing/interface';
 import { parseJSResource, parseList } from '../parsing/list';
 import { NetworkFilter } from '../parsing/network-filter';
-import Request, { IRequestInitialization } from '../request';
+import Request, { IRequestInitialization, RequestType } from '../request';
 import { serializeEngine } from '../serialization';
 
 import CosmeticFilterBucket from './bucket/cosmetics';
@@ -49,6 +49,7 @@ export default class FilterEngine {
   public version: number;
   public lists: Map<string, IList>;
 
+  public csp: NetworkFilterBucket;
   public exceptions: NetworkFilterBucket;
   public importants: NetworkFilterBucket;
   public redirects: NetworkFilterBucket;
@@ -83,6 +84,8 @@ export default class FilterEngine {
     this.lists = new Map();
     this.size = 0;
 
+    // $csp=
+    this.csp = new NetworkFilterBucket('csp', noopIter);
     // @@filter
     this.exceptions = new NetworkFilterBucket('exceptions', noopIter);
     // $important
@@ -165,13 +168,16 @@ export default class FilterEngine {
       // Network filters
       const miscFilters: NetworkFilter[] = [];
       const exceptions: NetworkFilter[] = [];
+      const csp: NetworkFilter[] = [];
       const importants: NetworkFilter[] = [];
       const redirects: NetworkFilter[] = [];
 
       // Dispatch filters into their bucket
       for (let j = 0; j < networkFilters.length; j += 1) {
         const filter = networkFilters[j];
-        if (filter.isException()) {
+        if (filter.isCSP()) {
+          csp.push(filter);
+        } else if (filter.isException()) {
           exceptions.push(filter);
         } else if (filter.isImportant()) {
           importants.push(filter);
@@ -185,6 +191,7 @@ export default class FilterEngine {
       this.lists.set(asset, {
         checksum,
         cosmetics: cosmeticFilters,
+        csp,
         exceptions,
         filters: miscFilters,
         importants,
@@ -197,6 +204,11 @@ export default class FilterEngine {
       'filters',
       (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, (l) => l.filters, cb),
       this.enableOptimizations,
+    );
+    this.csp = new NetworkFilterBucket(
+      'csp',
+      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, (l) => l.csp, cb),
+      false, // Disable optimizations
     );
     this.exceptions = new NetworkFilterBucket(
       'exceptions',
@@ -221,11 +233,12 @@ export default class FilterEngine {
 
     // Update size
     this.size =
-      this.exceptions.size +
-      this.importants.size +
-      this.redirects.size +
       this.cosmetics.size +
-      this.filters.size;
+      this.csp.size +
+      this.exceptions.size +
+      this.filters.size +
+      this.importants.size +
+      this.redirects.size;
 
     // Optimize ahead of time if asked for
     if (this.optimizeAOT) {
@@ -270,10 +283,43 @@ export default class FilterEngine {
       filters.push(...this.importants.matchAll(request));
       filters.push(...this.filters.matchAll(request));
       filters.push(...this.exceptions.matchAll(request));
+      filters.push(...this.csp.matchAll(request));
       filters.push(...this.redirects.matchAll(request));
     }
 
     return new Set(filters);
+  }
+
+  public getCSPDirectives(rawRequest: Partial<IRequestInitialization>): string | undefined {
+    if (!this.loadNetworkFilters) {
+      return undefined;
+    }
+
+    const request = new Request(rawRequest);
+    if (request.isSupported !== true || request.type !== RequestType.document) {
+      return undefined;
+    }
+
+    const matches = this.csp.matchAll(request);
+
+    // Collect all CSP directives and keep track of exceptions
+    const disabledCsp = new Set();
+    const enabledCsp = new Set();
+    for (let i = 0; i < matches.length; i += 1) {
+      const filter = matches[i];
+      if (filter.isException()) {
+        if (filter.csp === undefined) {
+          // All CSP directives are disabled for this site
+          return undefined;
+        }
+        disabledCsp.add(filter.csp);
+      } else {
+        enabledCsp.add(filter.csp);
+      }
+    }
+
+    // Combine all CSPs (except the black-listed ones)
+    return [...enabledCsp].filter((csp) => !disabledCsp.has(csp)).join('; ') || undefined;
   }
 
   public match(

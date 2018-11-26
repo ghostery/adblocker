@@ -14,8 +14,10 @@ function network(filter: string, expected: any) {
       optDomains: parsed.getOptDomains(),
       optNotDomains: parsed.getOptNotDomains(),
       redirect: parsed.getRedirect(),
+      csp: parsed.csp,
 
       // Filter type
+      isCSP: parsed.isCSP(),
       isException: parsed.isException(),
       isHostnameAnchor: parsed.isHostnameAnchor(),
       isLeftAnchor: parsed.isLeftAnchor(),
@@ -52,6 +54,7 @@ function network(filter: string, expected: any) {
 
 const DEFAULT_NETWORK_FILTER = {
   // Attributes
+  csp: undefined,
   filter: '',
   hostname: '',
   optDomains: new Uint32Array([]),
@@ -59,6 +62,7 @@ const DEFAULT_NETWORK_FILTER = {
   redirect: '',
 
   // Filter type
+  isCSP: false,
   isException: false,
   isHostnameAnchor: false,
   isLeftAnchor: false,
@@ -411,6 +415,37 @@ describe('Network filters', () => {
 
       it('defaults to false', () => {
         network('||foo.com', { isImportant: false });
+      });
+    });
+
+    describe('csp', () => {
+      it('defaults to no csp', () => {
+        network('||foo.com', {
+          csp: undefined,
+          isCSP: false,
+        });
+      });
+
+      it('parses simple csp', () => {
+        network('||foo.com$csp=self bar ""', {
+          csp: 'self bar ""',
+          isCSP: true,
+        });
+      });
+
+      it('parses empty csp', () => {
+        network('||foo.com$csp', {
+          csp: undefined,
+          isCSP: true,
+        });
+      });
+
+      it('parses csp mixed with other options', () => {
+        network('||foo.com$domain=foo|bar,csp=self bar "",image', {
+          csp: 'self bar ""',
+          fromImage: true,
+          isCSP: true,
+        });
       });
     });
 
