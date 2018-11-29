@@ -2,8 +2,14 @@
 
 ## Next
 
-*not released*
+*not released yet*
 
+## 0.3.1
+
+*2018-11-29*
+
+  * Fix fuzzy matching by allowing tokens of any size [#61](https://github.com/cliqz-oss/adblocker/pull/62)
+  * Add support for CSP (Content Security Policy) filters [#60](https://github.com/cliqz-oss/adblocker/pull/60)
   * Add hard-coded circumvention logic (+ IL defuser) [#59](https://github.com/cliqz-oss/adblocker/pull/59)
     - Simplify 'example' extension
     - Add circumvention module and entry-point in cosmetics injection
