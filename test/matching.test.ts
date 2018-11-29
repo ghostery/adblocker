@@ -173,6 +173,7 @@ describe('#matchNetworkFilter', () => {
   });
 
   it('pattern$fuzzy', () => {
+    expect(f`f$fuzzy`).toMatchRequest({ url: 'https://bar.com/f' });
     expect(f`foo$fuzzy`).toMatchRequest({ url: 'https://bar.com/foo' });
     expect(f`foo$fuzzy`).toMatchRequest({ url: 'https://bar.com/foo/baz' });
     expect(f`foo/bar$fuzzy`).toMatchRequest({ url: 'https://bar.com/foo/baz' });

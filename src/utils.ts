@@ -207,7 +207,7 @@ export function tokenizeCSS(pattern: string): Uint32Array {
 }
 
 export function createFuzzySignature(pattern: string): Uint32Array {
-  return compactTokens(new Uint32Array(tokenize(pattern)));
+  return compactTokens(new Uint32Array(fastTokenizer(pattern, isAllowed)));
 }
 
 export function binSearch(arr: Uint32Array, elt: number): boolean {
