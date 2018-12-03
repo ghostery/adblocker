@@ -1,4 +1,5 @@
-import { fastStartsWithFrom, getBit, setBit, tokenizeCSS } from '../utils';
+import * as punycode from 'punycode';
+import { fastStartsWithFrom, getBit, hasUnicode, setBit, tokenizeCSS } from '../utils';
 import IFilter from './interface';
 
 /**
@@ -53,14 +54,12 @@ const TOKENS_BUFFER = new Uint32Array(200);
  * - xpath
  */
 export class CosmeticFilter implements IFilter {
-  public mask: number;
-  public selector?: string;
-  public hostnames?: string;
+  public readonly mask: number;
+  public selector?: string; // TODO - set to read-only
+  public readonly hostnames?: string;
 
-  // For debug only
   public id?: number;
   public rawLine?: string;
-
   private hostnamesArray?: string[];
 
   constructor({
@@ -263,6 +262,9 @@ export function parseCosmeticFilter(line: string): CosmeticFilter | null {
   // Parse hostnames
   if (sharpIndex > 0) {
     hostnames = line.slice(0, sharpIndex);
+    if (hasUnicode(hostnames)) {
+      hostnames = punycode.encode(hostnames);
+    }
   }
 
   // Deal with script:inject and script:contains

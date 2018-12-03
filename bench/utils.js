@@ -1,5 +1,5 @@
 const fs = require('fs');
-const adblocker = require('../dist/adblocker.umd.min.js');
+const adblocker = require('../dist/adblocker.cjs.js');
 
 function createEngine(lists, resources, options = {}, serialize = false) {
   const engine = new adblocker.FiltersEngine({

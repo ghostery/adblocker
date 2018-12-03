@@ -1,11 +1,9 @@
 /**
  * This modules contains all functions and utils to serialize the adblocker
- * efficiently. The central part if `DynamicDataView`, a dynamically growing
- * ArrayBuffer exposing an API allowing to set values of type: String, uint8,
- * uint16 and uint32 efficiently.
+ * efficiently. The central part if `StaticDataView`.
  */
 
-import DynamicDataView from './dynamic-data-view';
+import StaticDataView from './data-view';
 import Engine from './engine/engine';
 import IList from './engine/list';
 import ReverseIndex, { IBucket, newBucket } from './engine/reverse-index';
@@ -49,7 +47,7 @@ import { NetworkFilter } from './parsing/network-filter';
  *  * first byte could contain the mask as well if small enough.
  *  * when packing ascii string, store several of them in each byte.
  */
-function serializeNetworkFilter(filter: NetworkFilter, buffer: DynamicDataView): void {
+function serializeNetworkFilter(filter: NetworkFilter, buffer: StaticDataView): void {
   // Check number of optional parts (e.g.: filter, hostname, etc.)
   let numberOfOptionalParts = 0;
 
@@ -75,12 +73,12 @@ function serializeNetworkFilter(filter: NetworkFilter, buffer: DynamicDataView):
     return;
   }
 
-  buffer.pushStr(filter.hostname);
+  buffer.pushASCII(filter.hostname);
   if (numberOfOptionalParts === 1) {
     return;
   }
 
-  buffer.pushStr(filter.filter);
+  buffer.pushASCII(filter.filter);
   if (numberOfOptionalParts === 2) {
     return;
   }
@@ -95,19 +93,19 @@ function serializeNetworkFilter(filter: NetworkFilter, buffer: DynamicDataView):
     return;
   }
 
-  buffer.pushStr(filter.redirect);
+  buffer.pushASCII(filter.redirect);
   if (numberOfOptionalParts === 5) {
     return;
   }
 
-  buffer.pushStr(filter.csp);
+  buffer.pushASCII(filter.csp);
 }
 
 /**
  * Deserialize network filters. The code accessing the buffer should be
  * symetrical to the one in `serializeNetworkFilter`.
  */
-function deserializeNetworkFilter(buffer: DynamicDataView): NetworkFilter {
+function deserializeNetworkFilter(buffer: StaticDataView): NetworkFilter {
   const id = buffer.getUint32();
   const mask = buffer.getUint32();
   const numberOfOptionalParts = buffer.getUint8();
@@ -120,10 +118,10 @@ function deserializeNetworkFilter(buffer: DynamicDataView): NetworkFilter {
   let csp: string | undefined;
 
   if (numberOfOptionalParts > 0) {
-    hostname = buffer.getStr();
+    hostname = buffer.getASCII();
   }
   if (numberOfOptionalParts > 1) {
-    filter = buffer.getStr();
+    filter = buffer.getASCII();
   }
   if (numberOfOptionalParts > 2) {
     optDomains = buffer.getUint32Array();
@@ -132,10 +130,10 @@ function deserializeNetworkFilter(buffer: DynamicDataView): NetworkFilter {
     optNotDomains = buffer.getUint32Array();
   }
   if (numberOfOptionalParts > 4) {
-    redirect = buffer.getStr();
+    redirect = buffer.getASCII();
   }
   if (numberOfOptionalParts > 5) {
-    csp = buffer.getStr();
+    csp = buffer.getASCII();
   }
 
   return new NetworkFilter({
@@ -162,39 +160,39 @@ function deserializeNetworkFilter(buffer: DynamicDataView): NetworkFilter {
  * Improvements similar to the onces mentioned in `serializeNetworkFilters`
  * could be applied here, to get a more compact representation.
  */
-function serializeCosmeticFilter(filter: CosmeticFilter, buffer: DynamicDataView): void {
+function serializeCosmeticFilter(filter: CosmeticFilter, buffer: StaticDataView): void {
   buffer.pushUint32(filter.getId());
   buffer.pushUint8(filter.mask);
-  buffer.pushStr(filter.selector);
-  buffer.pushStr(filter.hostnames);
+  buffer.pushASCII(filter.hostnames);
+  buffer.pushUTF8(filter.selector);
 }
 
 /**
  * Deserialize cosmetic filters. The code accessing the buffer should be
  * symetrical to the one in `serializeCosmeticFilter`.
  */
-function deserializeCosmeticFilter(buffer: DynamicDataView): CosmeticFilter {
+function deserializeCosmeticFilter(buffer: StaticDataView): CosmeticFilter {
   const id = buffer.getUint32();
   const mask = buffer.getUint8();
-  const selector = buffer.getStr();
-  const hostnames = buffer.getStr();
+  const hostnames = buffer.getASCII();
+  const selector = buffer.getUTF8();
 
   return new CosmeticFilter({
-    hostnames: hostnames || undefined,
+    hostnames,
     id,
     mask,
-    selector: selector || undefined,
+    selector,
   });
 }
 
-function serializeNetworkFilters(filters: NetworkFilter[], buffer: DynamicDataView): void {
+function serializeNetworkFilters(filters: NetworkFilter[], buffer: StaticDataView): void {
   buffer.pushUint32(filters.length);
   for (let i = 0; i < filters.length; i += 1) {
     serializeNetworkFilter(filters[i], buffer);
   }
 }
 
-function serializeCosmeticFilters(filters: CosmeticFilter[], buffer: DynamicDataView): void {
+function serializeCosmeticFilters(filters: CosmeticFilter[], buffer: StaticDataView): void {
   buffer.pushUint32(filters.length);
   for (let i = 0; i < filters.length; i += 1) {
     serializeCosmeticFilter(filters[i], buffer);
@@ -202,7 +200,7 @@ function serializeCosmeticFilters(filters: CosmeticFilter[], buffer: DynamicData
 }
 
 function deserializeNetworkFilters(
-  buffer: DynamicDataView,
+  buffer: StaticDataView,
   allFilters: Map<number, NetworkFilter>,
 ): NetworkFilter[] {
   const length = buffer.getUint32();
@@ -217,7 +215,7 @@ function deserializeNetworkFilters(
 }
 
 function deserializeCosmeticFilters(
-  buffer: DynamicDataView,
+  buffer: StaticDataView,
   allFilters: Map<number, CosmeticFilter>,
 ): CosmeticFilter[] {
   const length = buffer.getUint32();
@@ -231,13 +229,13 @@ function deserializeCosmeticFilters(
   return filters;
 }
 
-function serializeLists(buffer: DynamicDataView, lists: Map<string, IList>): void {
+function serializeLists(buffer: StaticDataView, lists: Map<string, IList>): void {
   // Serialize number of lists
   buffer.pushUint8(lists.size);
 
   lists.forEach((list, asset) => {
-    buffer.pushStr(asset);
-    buffer.pushStr(list.checksum);
+    buffer.pushASCII(asset);
+    buffer.pushASCII(list.checksum);
     serializeCosmeticFilters(list.cosmetics, buffer);
     serializeNetworkFilters(list.csp, buffer);
     serializeNetworkFilters(list.exceptions, buffer);
@@ -248,7 +246,7 @@ function serializeLists(buffer: DynamicDataView, lists: Map<string, IList>): voi
 }
 
 function deserializeLists(
-  buffer: DynamicDataView,
+  buffer: StaticDataView,
 ): {
   cosmeticFilters: Map<number, CosmeticFilter>;
   networkFilters: Map<number, NetworkFilter>;
@@ -261,8 +259,8 @@ function deserializeLists(
   // Get number of assets
   const size = buffer.getUint8();
   for (let i = 0; i < size; i += 1) {
-    lists.set(buffer.getStr(), {
-      checksum: buffer.getStr(),
+    lists.set(buffer.getASCII(), {
+      checksum: buffer.getASCII(),
       cosmetics: deserializeCosmeticFilters(buffer, cosmeticFilters),
       csp: deserializeNetworkFilters(buffer, networkFilters),
       exceptions: deserializeNetworkFilters(buffer, networkFilters),
@@ -279,7 +277,7 @@ function deserializeLists(
   };
 }
 
-function serializeBucket<T extends IFilter>(token: number, filters: T[], buffer: DynamicDataView) {
+function serializeBucket<T extends IFilter>(token: number, filters: T[], buffer: StaticDataView) {
   buffer.pushUint16(filters.length);
   buffer.pushUint32(token);
 
@@ -289,7 +287,7 @@ function serializeBucket<T extends IFilter>(token: number, filters: T[], buffer:
 }
 
 function deserializeBucket<T extends IFilter>(
-  buffer: DynamicDataView,
+  buffer: StaticDataView,
   filters: Map<number, T>,
 ): {
   token: number;
@@ -315,7 +313,7 @@ function deserializeBucket<T extends IFilter>(
 
 function serializeReverseIndex<T extends IFilter>(
   reverseIndex: ReverseIndex<T>,
-  buffer: DynamicDataView,
+  buffer: StaticDataView,
 ): void {
   const index = reverseIndex.index;
 
@@ -328,7 +326,7 @@ function serializeReverseIndex<T extends IFilter>(
 }
 
 function deserializeReverseIndex<T extends IFilter>(
-  buffer: DynamicDataView,
+  buffer: StaticDataView,
   index: ReverseIndex<T>,
   filters: Map<number, T>,
 ): ReverseIndex<T> {
@@ -348,21 +346,21 @@ function deserializeReverseIndex<T extends IFilter>(
   return index;
 }
 
-function serializeResources(engine: Engine, buffer: DynamicDataView): void {
+function serializeResources(engine: Engine, buffer: StaticDataView): void {
   // Serialize `resourceChecksum`
-  buffer.pushStr(engine.resourceChecksum);
+  buffer.pushASCII(engine.resourceChecksum);
 
   // Serialize `resources`
   buffer.pushUint8(engine.resources.size);
   engine.resources.forEach(({ contentType, data }, name) => {
-    buffer.pushStr(name);
-    buffer.pushStr(contentType);
-    buffer.pushStr(data);
+    buffer.pushASCII(name);
+    buffer.pushASCII(contentType);
+    buffer.pushASCII(data);
   });
 }
 
 function deserializeResources(
-  buffer: DynamicDataView,
+  buffer: StaticDataView,
 ): {
   js: Map<string, string>;
   resources: Map<string, { contentType: string; data: string }>;
@@ -370,14 +368,14 @@ function deserializeResources(
 } {
   const js = new Map();
   const resources = new Map();
-  const resourceChecksum = buffer.getStr() || '';
+  const resourceChecksum = buffer.getASCII() || '';
 
   // Deserialize `resources`
   const resourcesSize = buffer.getUint8();
   for (let i = 0; i < resourcesSize; i += 1) {
-    resources.set(buffer.getStr(), {
-      contentType: buffer.getStr(),
-      data: buffer.getStr(),
+    resources.set(buffer.getASCII(), {
+      contentType: buffer.getASCII(),
+      data: buffer.getASCII(),
     });
   }
 
@@ -402,8 +400,8 @@ function deserializeResources(
  */
 function serializeEngine(engine: Engine): Uint8Array {
   // Create a big buffer! It does not have to be the right size since
-  // `DynamicDataView` is able to resize itself dynamically if needed.
-  const buffer = new DynamicDataView(4000000);
+  // `StaticDataView` is able to resize itself dynamically if needed.
+  const buffer = new StaticDataView(8000000);
 
   buffer.pushUint8(engine.version);
 
@@ -430,8 +428,7 @@ function serializeEngine(engine: Engine): Uint8Array {
 }
 
 function deserializeEngine(serialized: Uint8Array, version: number): Engine {
-  const buffer = new DynamicDataView(0);
-  buffer.set(serialized);
+  const buffer = new StaticDataView(0, serialized);
 
   // Before starting deserialization, we make sure that the version of the
   // serialized engine is the same as the current source code. If not, we start

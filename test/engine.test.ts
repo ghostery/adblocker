@@ -1,7 +1,7 @@
 import Engine from '../src/engine/engine';
 import requests from './data/requests';
 
-function createEngine(filters: string, enableOptimizations: boolean) {
+function createEngine(filters: string, enableOptimizations: boolean = true) {
   const newEngine = new Engine({
     enableOptimizations,
     loadCosmeticFilters: true,
@@ -26,6 +26,74 @@ function createEngine(filters: string, enableOptimizations: boolean) {
 }
 
 describe('#FiltersEngine', () => {
+  describe('cps policies', () => {
+    it('no policy in engine', () => {
+      expect(
+        createEngine('this is not a csp').getCSPDirectives({
+          url: 'https://foo.com',
+        }),
+      ).toBeUndefined();
+    });
+
+    it('does not match request', () => {
+      expect(
+        createEngine('||bar.com$csp=bar').getCSPDirectives({
+          url: 'https://foo.com',
+        }),
+      ).toBeUndefined();
+    });
+
+    it('matches request (1 policy)', () => {
+      expect(
+        createEngine('||foo.com$csp=bar').getCSPDirectives({
+          url: 'https://foo.com',
+        }),
+      ).toEqual('bar');
+    });
+
+    it('matches request (2 policy)', () => {
+      const policies = createEngine(`
+||foo.com$csp=bar
+$csp=baz,domain=bar.com
+`).getCSPDirectives({
+        sourceUrl: 'https://bar.com',
+        url: 'https://foo.com',
+      });
+
+      expect(policies).not.toBeUndefined();
+      if (policies !== undefined) {
+        expect(policies.split('; ').sort()).toEqual(['bar', 'baz']);
+      }
+    });
+
+    it('matches request (1 policy with one exception)', () => {
+      expect(
+        createEngine(`
+||foo.com$csp=bar
+@@$csp=baz
+$csp=baz,domain=bar.com
+`).getCSPDirectives({
+          sourceUrl: 'https://bar.com',
+          url: 'https://foo.com',
+        }),
+      ).toEqual('bar');
+    });
+
+    it('exception global exception', () => {
+      expect(
+        createEngine(`
+@@$csp,domain=bar.com
+||foo.com$csp=bar
+@@$csp=baz
+$csp=baz,domain=bar.com
+`).getCSPDirectives({
+          sourceUrl: 'https://bar.com',
+          url: 'https://foo.com',
+        }),
+      ).toBeUndefined();
+    });
+  });
+
   describe('network filters', () => {
     const allRequestFilters = requests.map(({ filters }) => filters.join('\n')).join('\n');
 

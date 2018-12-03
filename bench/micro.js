@@ -1,4 +1,4 @@
-const adblocker = require('../dist/adblocker.umd.min.js');
+const adblocker = require('../dist/adblocker.cjs.js');
 const { createEngine } = require('./utils');
 
 

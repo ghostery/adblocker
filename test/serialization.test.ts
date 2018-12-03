@@ -1,6 +1,6 @@
 import { loadAllLists, loadResources } from './utils';
 
-import DynamicDataView from '../src/dynamic-data-view';
+import StaticDataView from '../src/data-view';
 import Engine from '../src/engine/engine';
 import ReverseIndex from '../src/engine/reverse-index';
 import { parseList } from '../src/parsing/list';
@@ -20,20 +20,21 @@ describe('Serialization', () => {
   const { networkFilters, cosmeticFilters } = parseList(loadAllLists());
 
   describe('filters', () => {
+    const buffer = new StaticDataView(1000000);
     it('cosmetic', () => {
       cosmeticFilters.forEach((filter) => {
-        const buffer = new DynamicDataView(100);
+        buffer.seekZero();
         serializeCosmeticFilter(filter, buffer);
-        buffer.seek(0);
+        buffer.seekZero();
         expect(deserializeCosmeticFilter(buffer)).toEqual(filter);
       });
     });
 
     it('network', () => {
       networkFilters.forEach((filter) => {
-        const buffer = new DynamicDataView(100);
+        buffer.seekZero();
         serializeNetworkFilter(filter, buffer);
-        buffer.seek(0);
+        buffer.seekZero();
         expect(deserializeNetworkFilter(buffer)).toEqual(filter);
       });
     });
@@ -54,9 +55,9 @@ describe('Serialization', () => {
     );
 
     // Serialize index
-    const buffer = new DynamicDataView(4000000);
+    const buffer = new StaticDataView(4000000);
     serializeReverseIndex(reverseIndex, buffer);
-    buffer.seek(0);
+    buffer.seekZero();
 
     const deserialized: any = {};
     deserializeReverseIndex(buffer, deserialized, filters);
