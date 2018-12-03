@@ -1,5 +1,5 @@
 import { parseList } from '../src/parsing/list';
-import { fastHash, tokenize, tokenizeCSS } from '../src/utils';
+import { fastHash, tokenize } from '../src/utils';
 import requests from './data/requests';
 import { loadAllLists } from './utils';
 
@@ -62,11 +62,5 @@ describe('Utils', () => {
     expect(tokenize('foo/bar')).toEqual(t(['foo', 'bar']));
     expect(tokenize('foo-bar')).toEqual(t(['foo', 'bar']));
     expect(tokenize('foo.bar')).toEqual(t(['foo', 'bar']));
-  });
-
-  it('#tokenizeCSS', () => {
-    expect(tokenizeCSS('')).toEqual(t([]));
-    expect(tokenizeCSS('.selector')).toEqual(t(['.selector']));
-    expect(tokenizeCSS('.selector-foo')).toEqual(t(['.selector-foo']));
   });
 });

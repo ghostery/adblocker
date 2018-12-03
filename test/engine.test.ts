@@ -1,4 +1,5 @@
 import Engine from '../src/engine/engine';
+import { CosmeticFilter } from '../src/parsing/cosmetic-filter';
 import requests from './data/requests';
 
 function createEngine(filters: string, enableOptimizations: boolean = true) {
@@ -7,7 +8,6 @@ function createEngine(filters: string, enableOptimizations: boolean = true) {
     loadCosmeticFilters: true,
     loadNetworkFilters: true,
     optimizeAOT: true,
-    version: 1,
   });
 
   newEngine.onUpdateFilters(
@@ -135,7 +135,7 @@ $csp=baz,domain=bar.com
                   url,
                 }),
               ].forEach((optimizedFilter) => {
-                (optimizedFilter.rawLine || '').split(' <+> ').forEach((f) => {
+                (optimizedFilter.rawLine || '').split(' <+> ').forEach((f: string) => {
                   matchingFilters.add(f);
                 });
               });
@@ -169,9 +169,9 @@ $csp=baz,domain=bar.com
           const shouldMatch: Set<string> = new Set(testCase.matches);
           const shouldNotMatch: Set<string> = new Set(testCase.misMatches);
 
-          const rules = engine.cosmetics.getDomainRules(testCase.hostname, engine.js);
+          const rules = engine.cosmetics.getCosmeticsFilters(testCase.hostname);
           expect(rules.length).toEqual(shouldMatch.size);
-          rules.forEach((rule) => {
+          rules.forEach((rule: CosmeticFilter) => {
             expect(rule.rawLine).not.toBeNull();
             if (rule.rawLine !== undefined && !shouldMatch.has(rule.rawLine)) {
               throw new Error(`Expected node ${testCase.hostname} ` + ` to match ${rule.rawLine}`);
@@ -261,7 +261,7 @@ $csp=baz,domain=bar.com
             const shouldMatch: Set<string> = new Set(testCase.matches);
             const shouldNotMatch: Set<string> = new Set(testCase.misMatches);
 
-            const rules = engine.cosmetics.getMatchingRules(testCase.hostname, [testCase.node]);
+            const rules = engine.cosmetics.getCosmeticsFilters(testCase.hostname);
             expect(rules.length).toEqual(shouldMatch.size);
             rules.forEach((rule) => {
               expect(rule.rawLine).not.toBeNull();

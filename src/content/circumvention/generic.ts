@@ -22,6 +22,7 @@ export const swallowOwnErrors = bundle((magic) => {
     }
 
     if (windowOnError instanceof Function) {
+      // @ts-ignore
       return windowOnError.apply(this, arguments);
     }
 
@@ -47,6 +48,7 @@ export const protectConsole = bundle(() => {
           return;
         }
       }
+      // @ts-ignore
       return originalLog.apply(originalConsole, arguments);
     }.bind(console),
   });

@@ -1,5 +1,5 @@
 import * as punycode from 'punycode';
-import { fastStartsWithFrom, getBit, hasUnicode, setBit, tokenizeCSS } from '../utils';
+import { fastStartsWithFrom, getBit, hasUnicode, setBit, tokenizeHostnames } from '../utils';
 import IFilter from './interface';
 
 /**
@@ -33,8 +33,6 @@ function computeFilterId(
   return hash >>> 0;
 }
 
-const TOKENS_BUFFER = new Uint32Array(200);
-
 /***************************************************************************
  *  Cosmetic filters parsing
  * ************************************************************************ */
@@ -55,7 +53,7 @@ const TOKENS_BUFFER = new Uint32Array(200);
  */
 export class CosmeticFilter implements IFilter {
   public readonly mask: number;
-  public selector?: string; // TODO - set to read-only
+  public readonly selector?: string;
   public readonly hostnames?: string;
 
   public id?: number;
@@ -118,70 +116,39 @@ export class CosmeticFilter implements IFilter {
     return filter;
   }
 
+  public getTokens(): Uint32Array[] {
+    if (this.hostnames !== undefined) {
+      return this.hostnames.split(',').map(tokenizeHostnames);
+    }
+    return [];
+  }
+
+  public getScript(js: Map<string, string>): string | undefined {
+    let scriptName = this.getSelector();
+    let scriptArguments: string[] = [];
+    if (scriptName.indexOf(',') !== -1) {
+      const parts = scriptName.split(',');
+      scriptName = parts[0];
+      scriptArguments = parts.slice(1).map((s) => s.trim());
+    }
+
+    let script = js.get(scriptName);
+    if (script !== undefined) {
+      for (let i = 0; i < scriptArguments.length; i += 1) {
+        script = script.replace(`{{${i + 1}}}`, scriptArguments[i]);
+      }
+
+      return script;
+    } // TODO - else throw an exception?
+
+    return undefined;
+  }
+
   public getId(): number {
     if (this.id === undefined) {
       this.id = computeFilterId(this.mask, this.selector, this.hostnames);
     }
     return this.id;
-  }
-
-  public getTokens(): Uint32Array[] {
-    return [this.getTokensSelector()];
-  }
-
-  public getTokensSelector(): Uint32Array {
-    // These filters are only matched based on their domains, not selectors
-    if (this.isScriptInject() || this.isScriptBlock()) {
-      return new Uint32Array([]);
-    }
-
-    const selector = this.selector || '';
-
-    // Only keep the part after the last combinator: '>', '+', '~'
-    let sepIndex = 0;
-    for (let i = selector.length - 1; i >= 0; i -= 1) {
-      const code = selector.charCodeAt(i);
-      if (
-        code === 43 || // '+'
-        code === 62 || // '>'
-        code === 126 // '~'
-      ) {
-        sepIndex = i;
-        break;
-      }
-    }
-
-    // We do not want to take styles contained in brackets () into account while
-    // extracting the tokens, so we loop over the selector and ignore these
-    // parts.
-    let inside = 0; // number of brackets openings seen, allows to handle multiple levels of depth
-    let start = sepIndex;
-    let tokensBufferIndex = 0;
-
-    for (let i = sepIndex, len = selector.length; i < len; i += 1) {
-      const code = selector.charCodeAt(i);
-      if (code === 91) {
-        // '['
-        if (inside === 0 && start < i) {
-          const tokens = tokenizeCSS(selector.slice(start, i));
-          TOKENS_BUFFER.set(tokens, tokensBufferIndex);
-          tokensBufferIndex += tokens.length;
-        }
-        inside += 1;
-      } else if (code === 93) {
-        // ']'
-        inside -= 1;
-        start = i + 1;
-      }
-    }
-
-    if (inside === 0 && start < selector.length) {
-      const tokens = tokenizeCSS(selector.slice(start, selector.length));
-      TOKENS_BUFFER.set(tokens, tokensBufferIndex);
-      tokensBufferIndex += tokens.length;
-    }
-
-    return TOKENS_BUFFER.slice(0, tokensBufferIndex);
   }
 
   public getSelector(): string {

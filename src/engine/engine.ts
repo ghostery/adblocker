@@ -42,11 +42,9 @@ interface IOptions {
   loadNetworkFilters: boolean;
   optimizeAOT: boolean;
   enableOptimizations: boolean;
-  version: number;
 }
 
 export default class FilterEngine {
-  public version: number;
   public lists: Map<string, IList>;
 
   public csp: NetworkFilterBucket;
@@ -72,14 +70,12 @@ export default class FilterEngine {
     loadCosmeticFilters = true,
     loadNetworkFilters = true,
     optimizeAOT = true,
-    version,
   }: IOptions) {
     // Options
     this.loadCosmeticFilters = loadCosmeticFilters;
     this.loadNetworkFilters = loadNetworkFilters;
     this.optimizeAOT = optimizeAOT;
     this.enableOptimizations = enableOptimizations;
-    this.version = version;
 
     this.lists = new Map();
     this.size = 0;
@@ -255,24 +251,35 @@ export default class FilterEngine {
     // this.cosmetics.optimizeAheadOfTime();
   }
 
-  public getCosmeticsFilters(hostname: string, nodes: string[][]) {
-    if (!this.loadCosmeticFilters) {
-      return this.cosmetics.createContentScriptResponse([]);
+  public getCosmeticsFilters(hostname: string) {
+    const styles: string[] = [];
+    const scripts: string[] = [];
+    const blockedScripts: string[] = [];
+
+    if (this.loadCosmeticFilters) {
+      const rules = this.cosmetics.getCosmeticsFilters(hostname);
+      for (let i = 0; i < rules.length; i += 1) {
+        const rule: CosmeticFilter = rules[i];
+
+        if (rule.isScriptBlock()) {
+          blockedScripts.push(rule.getSelector());
+        } else if (rule.isScriptInject()) {
+          const script = rule.getScript(this.js);
+          if (script !== undefined) {
+            scripts.push(script);
+          }
+        } else {
+          styles.push(rule.getSelector());
+        }
+      }
     }
 
-    return this.cosmetics.createContentScriptResponse(
-      this.cosmetics.getMatchingRules(hostname, nodes),
-    );
-  }
-
-  public getDomainFilters(hostname: string) {
-    if (!this.loadCosmeticFilters) {
-      return this.cosmetics.createContentScriptResponse([]);
-    }
-
-    return this.cosmetics.createContentScriptResponse(
-      this.cosmetics.getDomainRules(hostname, this.js),
-    );
+    return {
+      active: this.loadCosmeticFilters,
+      blockedScripts,
+      scripts,
+      styles,
+    };
   }
 
   public matchAll(rawRequest: Partial<IRequestInitialization>): Set<NetworkFilter> {

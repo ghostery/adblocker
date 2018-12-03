@@ -11,6 +11,8 @@ import { CosmeticFilter } from './parsing/cosmetic-filter';
 import IFilter from './parsing/interface';
 import { NetworkFilter } from './parsing/network-filter';
 
+export const ENGINE_VERSION = 15;
+
 /**
  * To allow for a more compact representation of network filters, the
  * representation is composed of a mandatory header, and some optional
@@ -277,13 +279,30 @@ function deserializeLists(
   };
 }
 
-function serializeBucket<T extends IFilter>(token: number, filters: T[], buffer: StaticDataView) {
+function serializeListOfFilter<T extends IFilter>(filters: T[], buffer: StaticDataView) {
   buffer.pushUint16(filters.length);
-  buffer.pushUint32(token);
-
   for (let i = 0; i < filters.length; i += 1) {
     buffer.pushUint32(filters[i].getId());
   }
+}
+
+function serializeBucket<T extends IFilter>(token: number, filters: T[], buffer: StaticDataView) {
+  buffer.pushUint32(token);
+  serializeListOfFilter(filters, buffer);
+}
+
+function deserializeListOfFilters<T extends IFilter>(buffer: StaticDataView, filters: Map<number, T>): T[] {
+  const bucket: T[] = [];
+  const length = buffer.getUint16();
+
+  for (let i = 0; i < length; i += 1) {
+    const filter = filters.get(buffer.getUint32());
+    if (filter !== undefined) {
+      bucket.push(filter);
+    }
+  }
+
+  return bucket;
 }
 
 function deserializeBucket<T extends IFilter>(
@@ -293,20 +312,10 @@ function deserializeBucket<T extends IFilter>(
   token: number;
   bucket: IBucket<T>;
 } {
-  const bucket: T[] = [];
-
-  const length = buffer.getUint16();
   const token = buffer.getUint32();
 
-  for (let i = 0; i < length; i += 1) {
-    const filter = filters.get(buffer.getUint32());
-    if (filter !== undefined) {
-      bucket.push(filter);
-    }
-  }
-
   return {
-    bucket: newBucket<T>(bucket),
+    bucket: newBucket<T>(deserializeListOfFilters(buffer, filters)),
     token,
   };
 }
@@ -403,8 +412,7 @@ function serializeEngine(engine: Engine): Uint8Array {
   // `StaticDataView` is able to resize itself dynamically if needed.
   const buffer = new StaticDataView(8000000);
 
-  buffer.pushUint8(engine.version);
-
+  buffer.pushUint8(ENGINE_VERSION);
   buffer.pushUint8(Number(engine.enableOptimizations));
   buffer.pushUint8(Number(engine.loadCosmeticFilters));
   buffer.pushUint8(Number(engine.loadNetworkFilters));
@@ -422,19 +430,19 @@ function serializeEngine(engine: Engine): Uint8Array {
   serializeReverseIndex(engine.importants.index, buffer);
   serializeReverseIndex(engine.redirects.index, buffer);
   serializeReverseIndex(engine.cosmetics.hostnameIndex, buffer);
-  serializeReverseIndex(engine.cosmetics.selectorIndex, buffer);
+  serializeListOfFilter(engine.cosmetics.genericRules, buffer);
 
   return buffer.crop();
 }
 
-function deserializeEngine(serialized: Uint8Array, version: number): Engine {
+function deserializeEngine(serialized: Uint8Array): Engine {
   const buffer = new StaticDataView(0, serialized);
 
   // Before starting deserialization, we make sure that the version of the
   // serialized engine is the same as the current source code. If not, we start
   // fresh and create a new engine from the lists.
   const serializedEngineVersion = buffer.getUint8();
-  if (version !== serializedEngineVersion) {
+  if (ENGINE_VERSION !== serializedEngineVersion) {
     throw new Error('serialized engine version mismatch');
   }
 
@@ -444,7 +452,6 @@ function deserializeEngine(serialized: Uint8Array, version: number): Engine {
     loadCosmeticFilters: Boolean(buffer.getUint8()),
     loadNetworkFilters: Boolean(buffer.getUint8()),
     optimizeAOT: Boolean(buffer.getUint8()),
-    version: serializedEngineVersion,
   };
   const engine = new Engine(options);
 
@@ -465,8 +472,11 @@ function deserializeEngine(serialized: Uint8Array, version: number): Engine {
   deserializeReverseIndex<NetworkFilter>(buffer, engine.exceptions.index, networkFilters);
   deserializeReverseIndex<NetworkFilter>(buffer, engine.importants.index, networkFilters);
   deserializeReverseIndex<NetworkFilter>(buffer, engine.redirects.index, networkFilters);
+
   deserializeReverseIndex<CosmeticFilter>(buffer, engine.cosmetics.hostnameIndex, cosmeticFilters);
-  deserializeReverseIndex<CosmeticFilter>(buffer, engine.cosmetics.selectorIndex, cosmeticFilters);
+  engine.cosmetics.genericRules = deserializeListOfFilters(buffer, cosmeticFilters);
+
+  engine.cosmetics.size = engine.cosmetics.hostnameIndex.size + engine.cosmetics.genericRules.length;
 
   return engine;
 }

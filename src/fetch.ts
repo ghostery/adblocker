@@ -20,7 +20,7 @@ const lists = [
   {
     category: Category.Country,
     country: 'de',
-    enabledByDefault: false,
+    enabledByDefault: true,
     url: 'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
   },
   {

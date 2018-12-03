@@ -77,7 +77,6 @@ describe('Serialization', () => {
       loadCosmeticFilters: true,
       loadNetworkFilters: true,
       optimizeAOT: false,
-      version: 42,
     });
 
     engine.onUpdateFilters([{ filters, asset: 'list1', checksum: 'checksum' }]);
@@ -85,14 +84,17 @@ describe('Serialization', () => {
     engine.onUpdateResource([{ checksum: 'resources1', filters: resources }]);
 
     const serialized = serializeEngine(engine);
-    expect(() => {
-      deserializeEngine(serialized, 41);
-    }).toThrow('serialized engine version mismatch');
 
-    const deserialized = deserializeEngine(serialized, 42);
+    const version = serialized[0];
+    serialized[0] = 1; // override version
+    expect(() => {
+      deserializeEngine(serialized);
+    }).toThrow('serialized engine version mismatch');
+    serialized[0] = version;
+
+    const deserialized = deserializeEngine(serialized);
     expect(deserialized).not.toBe(null);
     if (deserialized !== null) {
-      expect(deserialized.version).toEqual(engine.version);
       expect(deserialized.lists).toEqual(engine.lists);
 
       // NOTE: Here we only compare the index itself, and not the other
@@ -110,8 +112,8 @@ describe('Serialization', () => {
       expect(deserialized.cosmetics.hostnameIndex.index).toEqual(
         engine.cosmetics.hostnameIndex.index,
       );
-      expect(deserialized.cosmetics.selectorIndex.index).toEqual(
-        engine.cosmetics.selectorIndex.index,
+      expect(deserialized.cosmetics.genericRules).toEqual(
+        engine.cosmetics.genericRules,
       );
 
       // Resources

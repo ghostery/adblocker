@@ -55,13 +55,13 @@ export function blockScript(filter: string, doc: Document): void {
 }
 
 export function injectCSSRule(rule: string, doc: Document): void {
-  const css = doc.createElement('style');
-  css.type = 'text/css';
-  css.id = 'cliqz-adblokcer-css-rules';
-  const parent = doc.head || doc.documentElement;
+  const parent = doc.head || doc.getElementsByTagName('head')[0] || doc.documentElement;
   if (parent !== null) {
-    parent.appendChild(css);
+    const css = doc.createElement('style');
+    css.type = 'text/css';
+    css.id = 'cliqz-adblokcer-css-rules';
     css.appendChild(doc.createTextNode(rule));
+    parent.appendChild(css);
   }
 }
 

@@ -164,6 +164,8 @@ export default class StaticDataView {
     }
 
     this.pos += byteLength;
+
+    // @ts-ignore
     return String.fromCharCode.apply(null, this.buffer.subarray(this.pos - byteLength, this.pos));
   }
 }
