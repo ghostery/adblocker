@@ -160,7 +160,7 @@ function fastTokenizerNoRegex(
     tokensBufferIndex += 1;
   }
 
-  return TOKENS_BUFFER.subarray(0, tokensBufferIndex);
+  return TOKENS_BUFFER.slice(0, tokensBufferIndex);
 }
 
 function fastTokenizer(pattern: string, isAllowedCode: (ch: number) => boolean): Uint32Array {
@@ -187,7 +187,7 @@ function fastTokenizer(pattern: string, isAllowedCode: (ch: number) => boolean):
     tokensBufferIndex += 1;
   }
 
-  return TOKENS_BUFFER.subarray(0, tokensBufferIndex);
+  return TOKENS_BUFFER.slice(0, tokensBufferIndex);
 }
 
 export function tokenize(pattern: string): Uint32Array {

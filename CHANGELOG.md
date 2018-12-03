@@ -4,12 +4,14 @@
 
 *not released yet*
 
+  * Fix cosmetic matching (tokenization bug) [#65](https://github.com/cliqz-oss/adblocker/pull/65)
+  * Optimize serialization and properly handle unicode in filters [#61](https://github.com/cliqz-oss/adblocker/pull/61)
+
 ## 0.3.1
 
 *2018-11-29*
 
-  * Optimize serialization and properly handle unicode in filters [#61](https://github.com/cliqz-oss/adblocker/pull/61)
-  * Fix fuzzy matching by allowing tokens of any size [#61](https://github.com/cliqz-oss/adblocker/pull/62)
+  * Fix fuzzy matching by allowing tokens of any size [#62](https://github.com/cliqz-oss/adblocker/pull/62)
   * Add support for CSP (Content Security Policy) filters [#60](https://github.com/cliqz-oss/adblocker/pull/60)
   * Add hard-coded circumvention logic (+ IL defuser) [#59](https://github.com/cliqz-oss/adblocker/pull/59)
     - Simplify 'example' extension
