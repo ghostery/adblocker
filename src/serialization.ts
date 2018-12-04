@@ -4,6 +4,8 @@
  */
 
 import StaticDataView from './data-view';
+import CosmeticFilterBucket from './engine/bucket/cosmetics';
+import NetworkFilterBucket from './engine/bucket/network';
 import Engine from './engine/engine';
 import IList from './engine/list';
 import ReverseIndex, { IBucket, newBucket } from './engine/reverse-index';
@@ -11,7 +13,7 @@ import { CosmeticFilter } from './parsing/cosmetic-filter';
 import IFilter from './parsing/interface';
 import { NetworkFilter } from './parsing/network-filter';
 
-export const ENGINE_VERSION = 15;
+export const ENGINE_VERSION = 16;
 
 /**
  * To allow for a more compact representation of network filters, the
@@ -291,7 +293,10 @@ function serializeBucket<T extends IFilter>(token: number, filters: T[], buffer:
   serializeListOfFilter(filters, buffer);
 }
 
-function deserializeListOfFilters<T extends IFilter>(buffer: StaticDataView, filters: Map<number, T>): T[] {
+function deserializeListOfFilters<T extends IFilter>(
+  buffer: StaticDataView,
+  filters: Map<number, T>,
+): T[] {
   const bucket: T[] = [];
   const length = buffer.getUint16();
 
@@ -353,6 +358,49 @@ function deserializeReverseIndex<T extends IFilter>(
   index.size = size;
 
   return index;
+}
+
+function serializeNetworkFilterBucket(bucket: NetworkFilterBucket, buffer: StaticDataView): void {
+  buffer.pushASCII(bucket.name);
+  buffer.pushUint8(Number(bucket.enableOptimizations));
+  serializeReverseIndex(bucket.index, buffer);
+}
+
+function deserializeNetworkFilterBucket(
+  buffer: StaticDataView,
+  filters: Map<number, NetworkFilter>,
+): NetworkFilterBucket {
+  const bucket = new NetworkFilterBucket(
+    buffer.getASCII() || '',
+    undefined,
+    Boolean(buffer.getUint8()),
+  );
+  bucket.index = deserializeReverseIndex<NetworkFilter>(buffer, bucket.index, filters);
+  bucket.size = bucket.index.size;
+  return bucket;
+}
+
+function serializeCosmeticFilterBucket(
+  bucket: CosmeticFilterBucket,
+  buffer: StaticDataView,
+): void {
+  serializeListOfFilter(bucket.genericRules, buffer);
+  serializeReverseIndex(bucket.hostnameIndex, buffer);
+}
+
+function deserializeCosmeticFilterBucket(
+  buffer: StaticDataView,
+  filters: Map<number, CosmeticFilter>,
+): CosmeticFilterBucket {
+  const bucket = new CosmeticFilterBucket();
+  bucket.genericRules = deserializeListOfFilters(buffer, filters);
+  bucket.hostnameIndex = deserializeReverseIndex<CosmeticFilter>(
+    buffer,
+    bucket.hostnameIndex,
+    filters,
+  );
+  bucket.size = bucket.hostnameIndex.size + bucket.genericRules.length;
+  return bucket;
 }
 
 function serializeResources(engine: Engine, buffer: StaticDataView): void {
@@ -418,6 +466,8 @@ function serializeEngine(engine: Engine): Uint8Array {
   buffer.pushUint8(Number(engine.loadNetworkFilters));
   buffer.pushUint8(Number(engine.optimizeAOT));
 
+  buffer.pushUint32(Number(engine.size));
+
   // Resources (js, resources)
   serializeResources(engine, buffer);
 
@@ -425,12 +475,13 @@ function serializeEngine(engine: Engine): Uint8Array {
   serializeLists(buffer, engine.lists);
 
   // Buckets
-  serializeReverseIndex(engine.filters.index, buffer);
-  serializeReverseIndex(engine.exceptions.index, buffer);
-  serializeReverseIndex(engine.importants.index, buffer);
-  serializeReverseIndex(engine.redirects.index, buffer);
-  serializeReverseIndex(engine.cosmetics.hostnameIndex, buffer);
-  serializeListOfFilter(engine.cosmetics.genericRules, buffer);
+  serializeNetworkFilterBucket(engine.filters, buffer);
+  serializeNetworkFilterBucket(engine.exceptions, buffer);
+  serializeNetworkFilterBucket(engine.importants, buffer);
+  serializeNetworkFilterBucket(engine.redirects, buffer);
+  serializeNetworkFilterBucket(engine.csp, buffer);
+
+  serializeCosmeticFilterBucket(engine.cosmetics, buffer);
 
   return buffer.crop();
 }
@@ -454,6 +505,7 @@ function deserializeEngine(serialized: Uint8Array): Engine {
     optimizeAOT: Boolean(buffer.getUint8()),
   };
   const engine = new Engine(options);
+  engine.size = buffer.getUint32();
 
   // Deserialize resources
   const { js, resources, resourceChecksum } = deserializeResources(buffer);
@@ -468,15 +520,12 @@ function deserializeEngine(serialized: Uint8Array): Engine {
   engine.lists = lists;
 
   // Deserialize buckets
-  deserializeReverseIndex<NetworkFilter>(buffer, engine.filters.index, networkFilters);
-  deserializeReverseIndex<NetworkFilter>(buffer, engine.exceptions.index, networkFilters);
-  deserializeReverseIndex<NetworkFilter>(buffer, engine.importants.index, networkFilters);
-  deserializeReverseIndex<NetworkFilter>(buffer, engine.redirects.index, networkFilters);
-
-  deserializeReverseIndex<CosmeticFilter>(buffer, engine.cosmetics.hostnameIndex, cosmeticFilters);
-  engine.cosmetics.genericRules = deserializeListOfFilters(buffer, cosmeticFilters);
-
-  engine.cosmetics.size = engine.cosmetics.hostnameIndex.size + engine.cosmetics.genericRules.length;
+  engine.filters = deserializeNetworkFilterBucket(buffer, networkFilters);
+  engine.exceptions = deserializeNetworkFilterBucket(buffer, networkFilters);
+  engine.importants = deserializeNetworkFilterBucket(buffer, networkFilters);
+  engine.redirects = deserializeNetworkFilterBucket(buffer, networkFilters);
+  engine.csp = deserializeNetworkFilterBucket(buffer, networkFilters);
+  engine.cosmetics = deserializeCosmeticFilterBucket(buffer, cosmeticFilters);
 
   return engine;
 }

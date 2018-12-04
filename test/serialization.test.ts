@@ -47,31 +47,21 @@ describe('Serialization', () => {
     });
 
     // Initialize index
-    const reverseIndex = new ReverseIndex<NetworkFilter>(
-      (cb) => {
-        networkFilters.forEach(cb);
-      },
-      (f: NetworkFilter) => f.getTokens(),
-    );
+    const reverseIndex = new ReverseIndex<NetworkFilter>((cb) => {
+      networkFilters.forEach(cb);
+    });
 
     // Serialize index
     const buffer = new StaticDataView(4000000);
     serializeReverseIndex(reverseIndex, buffer);
     buffer.seekZero();
 
-    const deserialized: any = {};
+    const deserialized = new ReverseIndex<NetworkFilter>();
     deserializeReverseIndex(buffer, deserialized, filters);
-
-    expect(deserialized).toEqual({
-      index: reverseIndex.index,
-      size: reverseIndex.size,
-    });
+    expect(deserialized).toEqual(reverseIndex);
   });
 
   it('Engine', () => {
-    const resources = loadResources();
-    const filters = loadAllLists();
-
     const engine = new Engine({
       enableOptimizations: true,
       loadCosmeticFilters: true,
@@ -79,9 +69,8 @@ describe('Serialization', () => {
       optimizeAOT: false,
     });
 
-    engine.onUpdateFilters([{ filters, asset: 'list1', checksum: 'checksum' }]);
-
-    engine.onUpdateResource([{ checksum: 'resources1', filters: resources }]);
+    engine.onUpdateFilters([{ filters: loadAllLists(), asset: 'list1', checksum: 'checksum' }]);
+    engine.onUpdateResource([{ checksum: 'resources1', filters: loadResources() }]);
 
     const serialized = serializeEngine(engine);
 
@@ -92,34 +81,6 @@ describe('Serialization', () => {
     }).toThrow('serialized engine version mismatch');
     serialized[0] = version;
 
-    const deserialized = deserializeEngine(serialized);
-    expect(deserialized).not.toBe(null);
-    if (deserialized !== null) {
-      expect(deserialized.lists).toEqual(engine.lists);
-
-      // NOTE: Here we only compare the index itself, and not the other
-      // attributes which are functions since the `toEqual` does not handle
-      // function comparison properly.
-
-      // Buckets
-      // Network
-      expect(deserialized.exceptions.index.index).toEqual(engine.exceptions.index.index);
-      expect(deserialized.importants.index.index).toEqual(engine.importants.index.index);
-      expect(deserialized.redirects.index.index).toEqual(engine.redirects.index.index);
-      expect(deserialized.filters.index.index).toEqual(engine.filters.index.index);
-
-      // Cosmetic
-      expect(deserialized.cosmetics.hostnameIndex.index).toEqual(
-        engine.cosmetics.hostnameIndex.index,
-      );
-      expect(deserialized.cosmetics.genericRules).toEqual(
-        engine.cosmetics.genericRules,
-      );
-
-      // Resources
-      expect(deserialized.resourceChecksum).toEqual(engine.resourceChecksum);
-      expect(deserialized.js).toEqual(engine.js);
-      expect(deserialized.resources).toEqual(engine.resources);
-    }
+    expect(deserializeEngine(serialized)).toEqual(engine);
   });
 });

@@ -32,6 +32,10 @@ function noop<T>(filters: T[]): T[] {
   return filters;
 }
 
+function noFilter<T>(_: (f: T) => void): void {
+  /* do nothing */
+}
+
 let UID = 1;
 function getNextId() {
   const id = UID;
@@ -53,11 +57,6 @@ export function newBucket<T extends IFilter>(filters: T[] = []): IBucket<T> {
     optimized: false,
     originals: undefined,
   };
-}
-
-interface IOptions<T> {
-  optimizer: (filters: T[]) => T[];
-  enableOptimizations: boolean;
 }
 
 /**
@@ -94,25 +93,17 @@ interface IOptions<T> {
 export default class ReverseIndex<T extends IFilter> {
   public size: number;
   public index: Map<number, IBucket<T>>;
-
   private optimizer: (filters: T[]) => T[];
-  private getTokens: (filter: T) => Uint32Array[];
 
   constructor(
-    filters: (cb: (f: T) => void) => void,
-    getTokens: (filter: T) => Uint32Array[],
-    { enableOptimizations = true, optimizer = noop }: Partial<IOptions<T>> = {
-      enableOptimizations: true,
-      optimizer: noop,
-    },
+    filters: (cb: (f: T) => void) => void = noFilter,
+    optimizer: (filters: T[]) => T[] = noop,
   ) {
     // Mapping from tokens to filters
     this.index = new Map();
     this.size = 0;
 
-    this.optimizer = enableOptimizations ? optimizer : noop;
-    this.getTokens = getTokens;
-
+    this.optimizer = optimizer;
     this.addFilters(filters);
   }
 
@@ -167,7 +158,7 @@ export default class ReverseIndex<T extends IFilter> {
 
     // Count number of occurrences of each token, globally
     iterFilters((filter: T) => {
-      const multiTokens = this.getTokens(filter);
+      const multiTokens = filter.getTokens();
       filters.push({
         filter,
         multiTokens,
