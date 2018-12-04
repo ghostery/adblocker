@@ -4,6 +4,10 @@
 
 *not released yet*
 
+## 0.3.2
+
+*2018-12-04*
+
   * Fix style injection and cosmetic filtering logic [#67](https://github.com/cliqz-oss/adblocker/pull/67)
     * All cosmetics are now using only one background action (instead of two)
     * No unloading is needed in content-script anymore
