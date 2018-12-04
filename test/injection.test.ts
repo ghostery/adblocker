@@ -1,5 +1,5 @@
 import { JSDOM } from 'jsdom';
-import CosmeticsInjection from '../src/cosmetics-injection';
+import injectCosmetics from '../src/cosmetics-injection';
 
 function testInjectCSS() {
   const url = 'https://foo.com';
@@ -9,17 +9,17 @@ function testInjectCSS() {
     url,
   });
 
-  const injection = new CosmeticsInjection(
-    dom.window,
-    (/* action, ...args */) => {
-      return Promise.resolve();
-      // console.log('>>>>', action, args);
-    },
+  injectCosmetics(dom.window, () =>
+    Promise.resolve({
+      active: true,
+      blockedScripts: [],
+      scripts: [],
+      styles: [],
+    }),
   );
 
   // Terminate our JSDOM instance
   dom.window.close();
-  return injection;
 }
 
 describe('Inject CSS filters', () => {

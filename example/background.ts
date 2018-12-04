@@ -42,18 +42,18 @@ function loadAdblocker() {
  */
 const tabs = new Map();
 
-function resetState(tabId, source) {
+function resetState(tabId?: number, source?: string): void {
   tabs.set(tabId, { source, count: 0 });
 }
 
-function updateBadgeCount(tabId) {
+function updateBadgeCount(tabId?: number): void {
   if (tabs.has(tabId)) {
     const { count } = tabs.get(tabId);
     chrome.browserAction.setBadgeText({ text: '' + count });
   }
 }
 
-function incrementBlockedCounter(tabId) {
+function incrementBlockedCounter(tabId: number): void {
   if (tabs.has(tabId)) {
     const tabStats = tabs.get(tabId);
     tabStats.count += 1;
@@ -82,7 +82,11 @@ chrome.tabs.onActivated.addListener(({ tabId }) => {
   updateBadgeCount(tabId);
 });
 
-function requestFromDetails({ tabId, type, url }) {
+function requestFromDetails({
+  tabId,
+  type,
+  url,
+}: chrome.webRequest.WebRequestBodyDetails | chrome.webRequest.WebResponseHeadersDetails) {
   let source;
   if (tabs.has(tabId)) {
     source = tabs.get(tabId).source;
