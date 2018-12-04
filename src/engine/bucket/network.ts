@@ -10,23 +10,21 @@ import ReverseIndex from '../reverse-index';
  * reverse index structure defined above.
  */
 export default class NetworkFilterBucket {
-  public name: string;
+  public readonly name: string;
   public index: ReverseIndex<NetworkFilter>;
   public size: number;
+  public enableOptimizations: boolean;
 
   constructor(
     name: string,
-    filters: (cb: (f: NetworkFilter) => void) => void,
+    filters?: (cb: (f: NetworkFilter) => void) => void,
     enableOptimizations = true,
   ) {
     this.name = name;
+    this.enableOptimizations = enableOptimizations;
     this.index = new ReverseIndex<NetworkFilter>(
       filters,
-      (filter: NetworkFilter) => filter.getTokens(),
-      {
-        enableOptimizations,
-        optimizer: networkFiltersOptimizer,
-      },
+      enableOptimizations ? networkFiltersOptimizer : undefined,
     );
     this.size = this.index.size;
   }

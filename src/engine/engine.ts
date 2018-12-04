@@ -19,11 +19,6 @@ function btoaPolyfill(buffer: string): string {
   return buffer;
 }
 
-// tslint:disable-next-line variable-name
-function noopIter<T extends IFilter>(_cb: (f: T) => void): void {
-  // no-op
-}
-
 function iterFilters<F extends IFilter>(
   lists: Map<string, IList>,
   select: (l: IList) => F[],
@@ -81,17 +76,17 @@ export default class FilterEngine {
     this.size = 0;
 
     // $csp=
-    this.csp = new NetworkFilterBucket('csp', noopIter);
+    this.csp = new NetworkFilterBucket('csp', undefined, false);
     // @@filter
-    this.exceptions = new NetworkFilterBucket('exceptions', noopIter);
+    this.exceptions = new NetworkFilterBucket('exceptions');
     // $important
-    this.importants = new NetworkFilterBucket('importants', noopIter);
+    this.importants = new NetworkFilterBucket('importants');
     // $redirect
-    this.redirects = new NetworkFilterBucket('redirects', noopIter);
+    this.redirects = new NetworkFilterBucket('redirects');
     // All other filters
-    this.filters = new NetworkFilterBucket('filters', noopIter);
+    this.filters = new NetworkFilterBucket('filters');
     // Cosmetic filters
-    this.cosmetics = new CosmeticFilterBucket(noopIter);
+    this.cosmetics = new CosmeticFilterBucket();
 
     // Injections
     this.resourceChecksum = '';
