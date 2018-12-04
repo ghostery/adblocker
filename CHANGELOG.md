@@ -4,6 +4,11 @@
 
 *not released yet*
 
+  * Fix style injection and cosmetic filtering logic [#67](https://github.com/cliqz-oss/adblocker/pull/67)
+    * All cosmetics are now using only one background action (instead of two)
+    * No unloading is needed in content-script anymore
+    * Simplified and optimized the implementation of CosmeticBucket
+    * Internalized the version of serialized engine for auto-invalidation on update
   * Fix cosmetic matching (tokenization bug) [#65](https://github.com/cliqz-oss/adblocker/pull/65)
   * Optimize serialization and properly handle unicode in filters [#61](https://github.com/cliqz-oss/adblocker/pull/61)
 

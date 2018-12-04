@@ -45,17 +45,3 @@ const backgroundAction = (action, ...args): Promise<void> => {
 const injection = new CosmeticsInjection(window, backgroundAction);
 
 injection.injectCircumvention();
-
-/**
- * Make sure we clean-up all resources and event listeners when this content
- * script is unloaded (stop MutationObserver, etc.).
- */
-const onUnload = () => {
-  injection.unload();
-  window.removeEventListener('unload', onUnload);
-};
-
-/**
- * Make sure we clean-up when content script is unloaded.
- */
-window.addEventListener('unload', onUnload);

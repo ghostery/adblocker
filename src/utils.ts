@@ -95,19 +95,12 @@ function isAlphaExtended(ch: number): boolean {
   return ch >= 192 && ch <= 450;
 }
 
-function isAllowed(ch: number): boolean {
+function isAllowedFilter(ch: number): boolean {
   return isDigit(ch) || isAlpha(ch) || isAlphaExtended(ch) || ch === 37 /* '%' */;
 }
 
-function isAllowedCSS(ch: number): boolean {
-  return (
-    isDigit(ch) ||
-    isAlpha(ch) ||
-    ch === 95 || // '_' (underscore)
-    ch === 45 || // '-' (dash)
-    ch === 46 || // '.' (dot)
-    ch === 35 // '#' (sharp)
-  );
+function isAllowedHostname(ch: number): boolean {
+  return isAllowedFilter(ch) || ch === 95 /* '_' */ || ch === 45 /* '-' */;
 }
 
 const TOKENS_BUFFER = new Uint32Array(200);
@@ -191,7 +184,7 @@ function fastTokenizer(pattern: string, isAllowedCode: (ch: number) => boolean):
 }
 
 export function tokenize(pattern: string): Uint32Array {
-  return fastTokenizerNoRegex(pattern, isAllowed, false, false);
+  return fastTokenizerNoRegex(pattern, isAllowedFilter, false, false);
 }
 
 export function tokenizeFilter(
@@ -199,15 +192,15 @@ export function tokenizeFilter(
   skipFirstToken: boolean,
   skipLastToken: boolean,
 ): Uint32Array {
-  return fastTokenizerNoRegex(pattern, isAllowed, skipFirstToken, skipLastToken);
+  return fastTokenizerNoRegex(pattern, isAllowedFilter, skipFirstToken, skipLastToken);
 }
 
-export function tokenizeCSS(pattern: string): Uint32Array {
-  return fastTokenizer(pattern, isAllowedCSS);
+export function tokenizeHostnames(pattern: string): Uint32Array {
+  return fastTokenizer(pattern, isAllowedHostname);
 }
 
 export function createFuzzySignature(pattern: string): Uint32Array {
-  return compactTokens(new Uint32Array(fastTokenizer(pattern, isAllowed)));
+  return compactTokens(new Uint32Array(fastTokenizer(pattern, isAllowedFilter)));
 }
 
 export function binSearch(arr: Uint32Array, elt: number): boolean {

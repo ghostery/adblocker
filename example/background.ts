@@ -11,7 +11,6 @@ function loadAdblocker() {
     loadCosmeticFilters: true,
     loadNetworkFilters: true,
     optimizeAOT: true,
-    version: 1,
   });
 
   console.log('Fetching resources...');
@@ -143,10 +142,8 @@ loadAdblocker().then((engine) => {
     }
 
     // Answer to content-script with a list of nodes
-    if (msg.action === 'getCosmeticsForDomain') {
-      sendResponse(engine.getDomainFilters(hostname));
-    } else if (msg.action === 'getCosmeticsForNodes') {
-      sendResponse(engine.getCosmeticsFilters(hostname, msg.args[0]));
+    if (msg.action === 'getCosmeticsFilters') {
+      sendResponse(engine.getCosmeticsFilters(hostname));
     }
   });
 
