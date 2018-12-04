@@ -4,6 +4,13 @@
 
 *not released yet*
 
+## 0.4.0
+
+*2018-12-04*
+
+  * Fix serialization to include CSP bucket [#69](https://github.com/cliqz-oss/adblocker/pull/69)
+    * [BREAKING] `NetworkFilterBucket` and `ReverseIndex` now expect different arguments
+
 ## 0.3.2
 
 *2018-12-04*
