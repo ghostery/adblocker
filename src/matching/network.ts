@@ -133,8 +133,21 @@ function checkPatternHostnameAnchorRegexFilter(filter: NetworkFilter, request: R
 
 // ||pattern|
 function checkPatternHostnameRightAnchorFilter(filter: NetworkFilter, request: Request): boolean {
-  if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
-    return checkPatternRightAnchorFilter(filter, request);
+  const filterHostname = filter.getHostname();
+  const requestHostname = request.hostname;
+  if (isAnchoredByHostname(filterHostname, requestHostname)) {
+    if (filter.hasFilter() === false) {
+      // In this specific case it means that the specified hostname should match
+      // at the end of the hostname of the request. This allows to prevent false
+      // positive like ||foo.bar which would match https://foo.bar.baz where
+      // ||foo.bar^ would not.
+      return (
+        filterHostname.length === requestHostname.length ||
+        requestHostname.endsWith(filterHostname)
+      );
+    } else {
+      return checkPatternRightAnchorFilter(filter, request);
+    }
   }
 
   return false;
@@ -257,6 +270,12 @@ function checkOptions(filter: NetworkFilter, request: Request): boolean {
     (!filter.firstParty() && request.isFirstParty === true) ||
     (!filter.thirdParty() && request.isThirdParty === true)
   ) {
+    return false;
+  }
+
+  // Make sure that an exception with a bug ID can only apply to a request being
+  // matched for a specific bug ID.
+  if (filter.bug !== undefined && filter.isException() && filter.bug !== request.bug) {
     return false;
   }
 

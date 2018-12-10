@@ -362,6 +362,11 @@ export default class FilterEngine {
 
         // If we found something, check for exceptions
         if (filter !== undefined) {
+          // Set `bug` of request
+          if (filter.hasBug()) {
+            request.bug = filter.bug;
+          }
+
           exception = this.exceptions.match(request);
         }
       }

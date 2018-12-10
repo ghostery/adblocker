@@ -52,57 +52,51 @@ export const ENGINE_VERSION = 16;
  *  * when packing ascii string, store several of them in each byte.
  */
 function serializeNetworkFilter(filter: NetworkFilter, buffer: StaticDataView): void {
-  // Check number of optional parts (e.g.: filter, hostname, etc.)
-  let numberOfOptionalParts = 0;
-
-  if (filter.isCSP()) {
-    numberOfOptionalParts = 6;
-  } else if (filter.isRedirect()) {
-    numberOfOptionalParts = 5;
-  } else if (filter.hasOptNotDomains()) {
-    numberOfOptionalParts = 4;
-  } else if (filter.hasOptDomains()) {
-    numberOfOptionalParts = 3;
-  } else if (filter.hasFilter()) {
-    numberOfOptionalParts = 2;
-  } else if (filter.hasHostname()) {
-    numberOfOptionalParts = 1;
-  }
-
   buffer.pushUint32(filter.getId());
   buffer.pushUint32(filter.mask);
-  buffer.pushUint8(numberOfOptionalParts);
 
-  if (numberOfOptionalParts === 0) {
-    return;
+  const index = buffer.getPos();
+  buffer.pushUint8(0);
+
+  // This bit-mask indicates which optional parts of the filter were serialized.
+  let optionalParts = 0;
+
+  if (filter.bug !== undefined) {
+    optionalParts |= 1;
+    buffer.pushUint16(filter.bug);
   }
 
-  buffer.pushASCII(filter.hostname);
-  if (numberOfOptionalParts === 1) {
-    return;
+  if (filter.isCSP()) {
+    optionalParts |= 2;
+    buffer.pushASCII(filter.csp);
   }
 
-  buffer.pushASCII(filter.filter);
-  if (numberOfOptionalParts === 2) {
-    return;
+  if (filter.hasFilter()) {
+    optionalParts |= 4;
+    buffer.pushASCII(filter.filter);
   }
 
-  buffer.pushUint32Array(filter.optDomains);
-  if (numberOfOptionalParts === 3) {
-    return;
+  if (filter.hasHostname()) {
+    optionalParts |= 8;
+    buffer.pushASCII(filter.hostname);
   }
 
-  buffer.pushUint32Array(filter.optNotDomains);
-  if (numberOfOptionalParts === 4) {
-    return;
+  if (filter.hasOptDomains()) {
+    optionalParts |= 16;
+    buffer.pushUint32Array(filter.optDomains);
   }
 
-  buffer.pushASCII(filter.redirect);
-  if (numberOfOptionalParts === 5) {
-    return;
+  if (filter.hasOptNotDomains()) {
+    optionalParts |= 32;
+    buffer.pushUint32Array(filter.optNotDomains);
   }
 
-  buffer.pushASCII(filter.csp);
+  if (filter.isRedirect()) {
+    optionalParts |= 64;
+    buffer.pushASCII(filter.redirect);
+  }
+
+  buffer.setByte(index, optionalParts);
 }
 
 /**
@@ -112,43 +106,25 @@ function serializeNetworkFilter(filter: NetworkFilter, buffer: StaticDataView): 
 function deserializeNetworkFilter(buffer: StaticDataView): NetworkFilter {
   const id = buffer.getUint32();
   const mask = buffer.getUint32();
-  const numberOfOptionalParts = buffer.getUint8();
+  const optionalParts = buffer.getUint8();
 
-  let hostname: string | undefined;
-  let filter: string | undefined;
-  let optDomains: Uint32Array | undefined;
-  let optNotDomains: Uint32Array | undefined;
-  let redirect: string | undefined;
-  let csp: string | undefined;
-
-  if (numberOfOptionalParts > 0) {
-    hostname = buffer.getASCII();
-  }
-  if (numberOfOptionalParts > 1) {
-    filter = buffer.getASCII();
-  }
-  if (numberOfOptionalParts > 2) {
-    optDomains = buffer.getUint32Array();
-  }
-  if (numberOfOptionalParts > 3) {
-    optNotDomains = buffer.getUint32Array();
-  }
-  if (numberOfOptionalParts > 4) {
-    redirect = buffer.getASCII();
-  }
-  if (numberOfOptionalParts > 5) {
-    csp = buffer.getASCII();
-  }
-
+  // The order of these statements is important. Since `buffer.getX()` will
+  // internally increment the position of next byte to read, they need to be
+  // retrieved in the exact same order they were serialized (check
+  // `serializeNetworkFilter`).
   return new NetworkFilter({
-    csp,
-    filter,
-    hostname,
+    // Mandatory fields
     id,
     mask,
-    optDomains,
-    optNotDomains,
-    redirect,
+
+    // Optional parts
+    bug: (optionalParts & 1) === 1 ? buffer.getUint16() : undefined,
+    csp: (optionalParts & 2) === 2 ? buffer.getASCII() : undefined,
+    filter: (optionalParts & 4) === 4 ? buffer.getASCII() : undefined,
+    hostname: (optionalParts & 8) === 8 ? buffer.getASCII() : undefined,
+    optDomains: (optionalParts & 16) === 16 ? buffer.getUint32Array() : undefined,
+    optNotDomains: (optionalParts & 32) === 32 ? buffer.getUint32Array() : undefined,
+    redirect: (optionalParts & 64) === 64 ? buffer.getASCII() : undefined,
   });
 }
 
@@ -165,9 +141,9 @@ function deserializeNetworkFilter(buffer: StaticDataView): NetworkFilter {
  * could be applied here, to get a more compact representation.
  */
 function serializeCosmeticFilter(filter: CosmeticFilter, buffer: StaticDataView): void {
+  buffer.pushASCII(filter.hostnames);
   buffer.pushUint32(filter.getId());
   buffer.pushUint8(filter.mask);
-  buffer.pushASCII(filter.hostnames);
   buffer.pushUTF8(filter.selector);
 }
 
@@ -176,16 +152,12 @@ function serializeCosmeticFilter(filter: CosmeticFilter, buffer: StaticDataView)
  * symetrical to the one in `serializeCosmeticFilter`.
  */
 function deserializeCosmeticFilter(buffer: StaticDataView): CosmeticFilter {
-  const id = buffer.getUint32();
-  const mask = buffer.getUint8();
-  const hostnames = buffer.getASCII();
-  const selector = buffer.getUTF8();
-
+  // The order of these fields should be the same as when we serialize them.
   return new CosmeticFilter({
-    hostnames,
-    id,
-    mask,
-    selector,
+    hostnames: buffer.getASCII(),
+    id: buffer.getUint32(),
+    mask: buffer.getUint8(),
+    selector: buffer.getUTF8(),
   });
 }
 

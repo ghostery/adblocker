@@ -8,6 +8,11 @@
 
 *2018-12-04*
 
+  * Add support for Ghostery rules [#73](https://github.com/cliqz-oss/adblocker/pull/73)
+    * Add support for `bug` filter attribute
+    * Exceptions can now match filters with `bug` option
+    * Simplify and speed-up serialization for network filters
+    * Fix hostname anchor matching by preventing infix match in some corner case
   * Fix serialization to include CSP bucket [#69](https://github.com/cliqz-oss/adblocker/pull/69)
     * [BREAKING] `NetworkFilterBucket` and `ReverseIndex` now expect different arguments
 
