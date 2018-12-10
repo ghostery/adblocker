@@ -17,19 +17,24 @@ function loadAdblocker() {
   return Promise.all([adblocker.fetchLists(), adblocker.fetchResources()]).then(
     ([responses, resources]) => {
       console.log('Initialize adblocker...');
-      const lists: Array<{ filters: string; checksum: string; asset: string }> = [];
+      const deduplicatedLines = new Set();
       for (let i = 0; i < responses.length; i += 1) {
-        lists.push({
-          asset: '' + i,
-          checksum: '',
-          filters: responses[i],
-        });
+        const lines = responses[i].split(/\n/g);
+        for (let j = 0; j < lines.length; j += 1) {
+          deduplicatedLines.add(lines[j]);
+        }
       }
 
       engine.onUpdateResource([{ filters: resources, checksum: '' }]);
-      engine.onUpdateFilters(lists, new Set(), true);
+      engine.onUpdateFilters([
+        {
+          asset: 'filters',
+          checksum: '',
+          filters: [...deduplicatedLines].join('\n'),
+        },
+      ]);
 
-      return engine;
+      return adblocker.deserializeEngine(engine.serialize());
     },
   );
 }
