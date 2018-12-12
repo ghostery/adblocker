@@ -4,6 +4,12 @@
 
 *not released yet*
 
+## 0.4.1
+
+*2018-12-12*
+
+  * Update `tldts` to version `3.1.1`
+
 ## 0.4.0
 
 *2018-12-04*
