@@ -2,7 +2,8 @@
 
 ## Next
 
-*not released yet*
+* not released yet *
+  * Split injected cosmetic filters *
 
 ## 0.4.1
 

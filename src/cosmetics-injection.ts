@@ -56,9 +56,13 @@ export default class CosmeticInjection {
   }
 
   private handleRules(rules: string[]) {
-    injectCSSRule(
-      `${rules.join(',')} { display: none!important; }`,
-      this.window.document,
-    );
+    let idx = 0;
+    while (idx < rules.length) {
+      injectCSSRule(
+        `${rules.slice(idx, idx + 1000).join(',')} { display: none!important; }`,
+        this.window.document,
+      );
+      idx = idx + 1000;
+    }
   }
 }
