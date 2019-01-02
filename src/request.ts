@@ -88,22 +88,25 @@ export interface IRequestInitialization {
 }
 
 export default class Request {
-  public type: RequestType;
-  public isHttp: boolean;
-  public isHttps: boolean;
-  public isSupported: boolean;
-  public isFirstParty: boolean | null;
-  public isThirdParty: boolean | null;
+  public readonly type: RequestType;
+  public readonly isHttp: boolean;
+  public readonly isHttps: boolean;
+  public readonly isSupported: boolean;
+  public readonly isFirstParty: boolean | null;
+  public readonly isThirdParty: boolean | null;
 
-  public url: string;
-  public hostname: string;
-  public domain: string;
+  public readonly url: string;
+  public readonly hostname: string;
+  public readonly domain: string;
 
-  public sourceUrl: string;
-  public sourceHostname: string;
-  public sourceHostnameHash: number;
-  public sourceDomain: string;
-  public sourceDomainHash: number;
+  public readonly sourceUrl: string;
+  public readonly sourceHostname: string;
+  public readonly sourceHostnameHash: number;
+  public readonly sourceDomain: string;
+  public readonly sourceDomainHash: number;
+
+  // Set later
+  public bug?: number;
 
   // Lazy attributes
   private tokens?: Uint32Array;

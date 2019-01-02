@@ -9,12 +9,13 @@ function network(filter: string, expected: any) {
   if (parsed !== null) {
     const verbose = {
       // Attributes
+      bug: parsed.bug,
+      csp: parsed.csp,
       filter: parsed.getFilter(),
       hostname: parsed.getHostname(),
       optDomains: parsed.getOptDomains(),
       optNotDomains: parsed.getOptNotDomains(),
       redirect: parsed.getRedirect(),
-      csp: parsed.csp,
 
       // Filter type
       isCSP: parsed.isCSP(),
@@ -608,6 +609,19 @@ describe('Network filters', () => {
       });
     });
 
+    describe('bug', () => {
+      it('parses bug', () => {
+        network('||foo.com$bug=42', { bug: 42 });
+        network('@@||foo.com$bug=1337', { isException: true, bug: 1337 });
+        network('@@||foo.com|$bug=11111', { isException: true, bug: 11111 });
+        network('@@$bug=11111', { isException: true, bug: 11111 });
+      });
+
+      it('defaults to undefined', () => {
+        network('||foo.com', { bug: undefined });
+      });
+    });
+
     const allOptions = (value: boolean) => ({
       fromFont: value,
       fromImage: value,
@@ -635,6 +649,7 @@ describe('Network filters', () => {
       ['subdocument', 'fromSubdocument'],
       ['websocket', 'fromWebsocket'],
       ['xmlhttprequest', 'fromXmlHttpRequest'],
+      ['xhr', 'fromXmlHttpRequest'],
     ].forEach(([option, attribute]) => {
       // all other attributes should be false if `$attribute` or true if `$~attribute`
       describe(option, () => {

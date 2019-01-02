@@ -182,6 +182,7 @@ export class NetworkFilter implements IFilter {
   public readonly redirect?: string;
   public readonly hostname?: string;
   public readonly csp?: string;
+  public readonly bug?: number;
 
   // Set only in debug mode
   public rawLine?: string;
@@ -192,6 +193,7 @@ export class NetworkFilter implements IFilter {
   private optimized: boolean = false;
 
   constructor({
+    bug,
     csp,
     filter,
     hostname,
@@ -203,6 +205,7 @@ export class NetworkFilter implements IFilter {
     redirect,
     regex,
   }: { mask: number; regex?: RegExp } & Partial<NetworkFilter>) {
+    this.bug = bug;
     this.csp = csp;
     this.filter = filter;
     this.hostname = hostname;
@@ -524,6 +527,10 @@ export class NetworkFilter implements IFilter {
     return getBit(this.mask, NETWORK_FILTER_MASK.isCSP);
   }
 
+  public hasBug() {
+    return this.bug !== undefined;
+  }
+
   public fromAny() {
     return this.getCptMask() === FROM_ANY;
   }
@@ -657,6 +664,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   let optNotDomains: Uint32Array | undefined;
   let redirect: string | undefined;
   let csp: string | undefined;
+  let bug: number | undefined;
 
   // Start parsing
   let filterIndexStart: number = 0;
@@ -776,6 +784,9 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
           mask = setBit(mask, NETWORK_FILTER_MASK.fuzzyMatch);
           break;
         case 'collapse':
+          break;
+        case 'bug':
+          bug = parseInt(optionValue, 10);
           break;
         case 'redirect':
           // Negation of redirection doesn't make sense
@@ -901,9 +912,12 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
         filterIndexStart = firstSeparator;
 
         // If the only symbol remaining for the selector is '^' then ignore it
+        // but set the filter as right anchored since there should not be any
+        // other label on the right
         if (filterIndexEnd - filterIndexStart === 1 && line[filterIndexStart] === '^') {
           mask = clearBit(mask, NETWORK_FILTER_MASK.isRegex);
           filterIndexStart = filterIndexEnd;
+          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRightAnchor, true);
         } else {
           mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isLeftAnchor, true);
           mask = setNetworkMask(
@@ -998,6 +1012,7 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   }
 
   return new NetworkFilter({
+    bug,
     csp,
     filter,
     hostname,

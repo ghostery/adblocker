@@ -25,6 +25,10 @@ export default class StaticDataView {
     this.pos = 0;
   }
 
+  public getPos(): number {
+    return this.pos;
+  }
+
   public seekZero(): void {
     this.pos = 0;
   }
@@ -41,6 +45,10 @@ export default class StaticDataView {
   public set(buffer: Uint8Array): void {
     this.buffer = new Uint8Array(buffer);
     this.seekZero();
+  }
+
+  public setByte(pos: number, byte: number): void {
+    this.buffer[pos] = byte;
   }
 
   public pushByte(octet: number): void {

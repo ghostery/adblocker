@@ -20224,13 +20224,6 @@ export default [
     url: 'https://www.mlstat.com',
   },
   {
-    check: true,
-    filters: ['||retargeter.com^$third-party', '||retargeter.com^'],
-    sourceUrl: 'http://',
-    type: 'xhr',
-    url: 'http://click.retargeter.com.br',
-  },
-  {
     filters: ['@@||connect.facebook.net^$script,domain=eztv.ag|eztv.tf|eztv.yt'],
     sourceUrl: 'https://eztv.ag',
     type: 'script',
@@ -26071,13 +26064,6 @@ export default [
     sourceUrl: 'http://',
     type: 'image',
     url: 'http://r.i.ua',
-  },
-  {
-    check: true,
-    filters: ['||mediatraffic.com^$third-party', '||mediatraffic.com.ua^$third-party'],
-    sourceUrl: 'http://',
-    type: 'script',
-    url: 'http://i.mediatraffic.com.ua',
   },
   {
     filters: [
@@ -35789,13 +35775,6 @@ export default [
     sourceUrl: 'http://',
     type: 'script',
     url: 'http://media1.admicro.vn/core/viewplus/admicro_core_vplus_mb.js',
-  },
-  {
-    check: true,
-    filters: ['||adnet.com^$third-party'],
-    sourceUrl: 'http://',
-    type: 'script',
-    url: 'http://adnet.com.ua',
   },
   {
     filters: ['_300x250-'],
