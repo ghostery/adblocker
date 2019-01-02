@@ -35,17 +35,21 @@ export default function injectCosmetics(
       }
 
       // Inject scripts
-      for (let i = 0; i < scripts.length; i += 1) {
-        injectScript(scripts[i], window.document);
+      if (scripts) {
+        for (let i = 0; i < scripts.length; i += 1) {
+          injectScript(scripts[i], window.document);
+        }
       }
 
       // Block scripts
-      for (let i = 0; i < blockedScripts.length; i += 1) {
-        blockScript(blockedScripts[i], window.document);
+      if (blockedScripts) {
+        for (let i = 0; i < blockedScripts.length; i += 1) {
+          blockScript(blockedScripts[i], window.document);
+        }
       }
 
       // Inject CSS
-      if (styles.length > 0) {
+      if (styles && styles.length > 0) {
         injectCSSRule(`${styles.join(',')} { display: none!important; }`, window.document);
       }
     },

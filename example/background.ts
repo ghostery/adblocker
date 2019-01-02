@@ -138,6 +138,11 @@ loadAdblocker().then((engine) => {
 
   // Start listening to messages coming from the content-script
   chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    // Ignore if there is no tab origin
+    if (sender.tab === undefined || sender.tab.id === undefined || sender.frameId === undefined) {
+      return;
+    }
+
     // Extract hostname from sender's URL
     const url = sender.url;
     let hostname = '';
@@ -147,7 +152,36 @@ loadAdblocker().then((engine) => {
 
     // Answer to content-script with a list of nodes
     if (msg.action === 'getCosmeticsFilters') {
-      sendResponse(engine.getCosmeticsFilters(hostname));
+      const { active, blockedScripts, styles, scripts } = engine.getCosmeticsFilters(hostname);
+      if (active === false) {
+        return;
+      }
+
+      // Use tabs API to inject cosmetics
+      if (styles.length > 0) {
+        chrome.tabs.insertCSS(
+          sender.tab.id,
+          {
+            code: `${styles.join('\n,')}\n{display:none!important;}`,
+            cssOrigin: 'user',
+            frameId: sender.frameId,
+            matchAboutBlank: true,
+            runAt: 'document_start',
+          },
+          () => {
+            if (chrome.runtime.lastError) {
+              console.error('Error while injecting CSS', chrome.runtime.lastError.message);
+            }
+          },
+        );
+      }
+
+      // Inject scripts from content script
+      sendResponse({
+        active,
+        blockedScripts,
+        scripts,
+      });
     }
   });
 
