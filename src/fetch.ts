@@ -65,6 +65,31 @@ const lists = [
     enabledByDefault: true,
     url: 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
   },
+  // Adguard filters
+  {
+    category: Category.Ads,
+    description: 'English filters',
+    enabledByDefault: false,
+    url: 'https://filters.adtidy.org/extension/chromium/filters/2.txt',
+  },
+  {
+    category: Category.Privacy,
+    description: 'Spyware filters',
+    enabledByDefault: false,
+    url: 'https://filters.adtidy.org/extension/chromium/filters/3.txt',
+  },
+  {
+    category: Category.Ads,
+    description: 'German filters',
+    enabledByDefault: false,
+    url: 'https://filters.adtidy.org/extension/chromium/filters/6.txt',
+  },
+  {
+    category: Category.Ads,
+    description: 'Mobile ads filters',
+    enabledByDefault: false,
+    url: 'https://filters.adtidy.org/extension/chromium/filters/11.txt',
+  },
 ];
 
 /**
