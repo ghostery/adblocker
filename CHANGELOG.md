@@ -4,6 +4,18 @@
 
 *not released yet*
 
+  * Fix cosmetics injection [#79](https://github.com/cliqz-oss/adblocker/pull/79)
+    * Ignore cosmetic filters with extended syntax
+    * Ignore invalid cosmetic filters (using strict validation)
+    * Make use of tabs.insertCSS to inject style from background
+  * Update dependencies [#78](https://github.com/cliqz-oss/adblocker/pull/78)
+  * Harden typescript + simplify cosmetic injection [#71](https://github.com/cliqz-oss/adblocker/pull/71)
+  * Add support for Ghostery rules [#73](https://github.com/cliqz-oss/adblocker/pull/73)
+    * Add support for `bug` filter attribute
+    * Exceptions can now match filters with `bug` option
+    * Simplify and speed-up serialization for network filters
+    * Fix hostname anchor matching by preventing infix match in some corner case
+
 ## 0.4.1
 
 *2018-12-12*
@@ -14,11 +26,6 @@
 
 *2018-12-04*
 
-  * Add support for Ghostery rules [#73](https://github.com/cliqz-oss/adblocker/pull/73)
-    * Add support for `bug` filter attribute
-    * Exceptions can now match filters with `bug` option
-    * Simplify and speed-up serialization for network filters
-    * Fix hostname anchor matching by preventing infix match in some corner case
   * Fix serialization to include CSP bucket [#69](https://github.com/cliqz-oss/adblocker/pull/69)
     * [BREAKING] `NetworkFilterBucket` and `ReverseIndex` now expect different arguments
 

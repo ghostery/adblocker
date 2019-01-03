@@ -33,7 +33,6 @@ const getCosmeticsFilters = (): Promise<IMessageFromBackground> => {
  * side. It handles the following:
  * - Inject scripts into the page, which might be used to defuse anti-adblockers.
  * - Block the execution of some scripts in the page (only if the
- * 'beforescriptexecute' event is avaliable, currently only on Firefox).
- * - Inject CSS styles (cosmetics) to hide ads or remove empty placeholders.
+ * 'beforescriptexecute' event is available, currently only on Firefox).
  */
 injectCosmetics(window, getCosmeticsFilters);

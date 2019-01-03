@@ -3,6 +3,38 @@ import { fastStartsWithFrom, getBit, hasUnicode, setBit, tokenizeHostnames } fro
 import IFilter from './interface';
 
 /**
+ * Validate CSS selector. There is a fast path for simple selectors (e.g.: #foo
+ * or .bar) which are the most common case. For complex ones, we rely on
+ * `Element.matches` (if available).
+ */
+const isValidCss = (() => {
+  const div =
+    typeof document !== 'undefined'
+      ? document.createElement('div')
+      : {
+          matches: () => {
+            /* noop */
+          },
+        };
+  const matches = (selector: string): void | boolean => div.matches(selector);
+  const validSelectorRe = /^[#.]?[\w-.]+$/;
+
+  return function isValidCssImpl(selector: string): boolean {
+    if (validSelectorRe.test(selector)) {
+      return true;
+    }
+
+    try {
+      matches(selector);
+    } catch (ex) {
+      return false;
+    }
+
+    return true;
+  };
+})();
+
+/**
  * Masks used to store options of cosmetic filters in a bitmask.
  */
 const enum COSMETICS_MASK {
@@ -234,6 +266,11 @@ export function parseCosmeticFilter(line: string): CosmeticFilter | null {
     }
   }
 
+  // We should not have unhide without any hostname
+  if (getBit(mask, COSMETICS_MASK.unhide) && hostnames === undefined) {
+    return null;
+  }
+
   // Deal with script:inject and script:contains
   if (fastStartsWithFrom(line, 'script:', suffixStartIndex)) {
     //      script:inject(.......)
@@ -270,19 +307,41 @@ export function parseCosmeticFilter(line: string): CosmeticFilter | null {
   } else if (fastStartsWithFrom(line, '+js(', suffixStartIndex)) {
     mask = setBit(mask, COSMETICS_MASK.scriptInject);
     selector = line.slice(suffixStartIndex + 4, line.length - 1);
-  } else if (suffixStartIndex < line.length) {
-    selector = line.slice(suffixStartIndex);
-  }
+  } else {
+    // Detect if this filter has extended syntax and discard it
+    let indexOfColon = line.indexOf(':', suffixStartIndex);
+    while (indexOfColon !== -1) {
+      indexOfColon += 1;
+      if (
+        fastStartsWithFrom(line, '-abp-', indexOfColon) ||
+        fastStartsWithFrom(line, 'contains', indexOfColon) ||
+        fastStartsWithFrom(line, 'has', indexOfColon) ||
+        fastStartsWithFrom(line, 'if', indexOfColon) ||
+        fastStartsWithFrom(line, 'if-not', indexOfColon) ||
+        fastStartsWithFrom(line, 'matches-css', indexOfColon) ||
+        fastStartsWithFrom(line, 'matches-css-after', indexOfColon) ||
+        fastStartsWithFrom(line, 'matches-css-before', indexOfColon) ||
+        fastStartsWithFrom(line, 'not', indexOfColon) ||
+        fastStartsWithFrom(line, 'properties', indexOfColon) ||
+        fastStartsWithFrom(line, 'style', indexOfColon) ||
+        fastStartsWithFrom(line, 'subject', indexOfColon) ||
+        fastStartsWithFrom(line, 'xpath', indexOfColon)
+      ) {
+        return null;
+      }
+      indexOfColon = line.indexOf(':', indexOfColon);
+    }
 
-  // Exceptions
-  if (
-    selector === undefined ||
-    selector.length === 0 ||
-    selector.endsWith('}') ||
-    selector.indexOf('##') !== -1 ||
-    (getBit(mask, COSMETICS_MASK.unhide) && hostnames === undefined)
-  ) {
-    return null;
+    // If we reach this point, filter is not extended syntax
+    if (suffixStartIndex < line.length) {
+      selector = line.slice(suffixStartIndex);
+      if (isValidCss(selector) === false) {
+        return null;
+      }
+    } else {
+      // No valid selector
+      return null;
+    }
   }
 
   return new CosmeticFilter({
