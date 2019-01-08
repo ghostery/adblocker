@@ -13,7 +13,7 @@ This library is the building block technology used to power Cliqz and Ghostery's
 
 The library provides the low-level implementation to fetch, parse and match filters; which makes it possible to manipulate the lists at a high level.
 
-## Developement
+## Development
 
 Install dependencies:
 ```sh
@@ -22,9 +22,7 @@ $ npm install
 
 Build:
 ```sh
-$ npm run build
-$ npm run bundle
-$ npm run bundle
+$ npm pack
 ```
 
 Test:
@@ -40,9 +38,9 @@ To publish a new version:
 
 1. Update `version` in [package.json](./package.json)
 2. Update [CHANGELOG.md](./CHANGELOG.md)
-3. New commit on local `master` branch (e.g.: `Release v0.1.x`)
-4. Add new tag `git tag -f -a vX.Y.Z -m "vX.Y.Z"`
-5. Push release commit + tag `git push upstream master --tags`
+3. New commit on local `master` branch (e.g.: `Release vx.y.z`)
+5. Make release PR with your commit
+6. Merge and create new Release on GitHub
 6. Travis takes care of the rest!
 
 ## License
