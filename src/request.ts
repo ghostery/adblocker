@@ -1,4 +1,3 @@
-import { getDomain, getHostname } from 'tldts';
 import { createFuzzySignature, fastHash, tokenize } from './utils';
 
 // TODO - add unit tests (for initialization with existing domain, hostname, etc.)
@@ -113,28 +112,25 @@ export default class Request {
   private fuzzySignature?: Uint32Array;
 
   constructor({
-    type = 'document',
-    url = '',
-    hostname,
-    domain,
+    type,
 
-    sourceUrl = '',
-    sourceHostname,
+    domain,
+    hostname,
+    url,
+
     sourceDomain,
-  }: Partial<IRequestInitialization> = {}) {
+    sourceHostname,
+    sourceUrl,
+  }: IRequestInitialization) {
     this.type = CPT_TO_TYPE[type] || RequestType.other;
 
-    this.url = url.toLowerCase();
+    this.url = url;
+    this.hostname = hostname;
+    this.domain = domain;
 
-    // Optionally extract hostname and domain of url
-    this.hostname = hostname || getHostname(this.url) || '';
-    this.domain = domain || getDomain(this.hostname) || '';
-
-    this.sourceUrl = sourceUrl.toLowerCase();
-
-    // Optionally extract hostname and domain of sourceUrl
-    this.sourceHostname = sourceHostname || getHostname(this.sourceUrl) || '';
-    this.sourceDomain = sourceDomain || getDomain(this.sourceHostname) || '';
+    this.sourceUrl = sourceUrl;
+    this.sourceHostname = sourceHostname;
+    this.sourceDomain = sourceDomain;
 
     this.sourceHostnameHash = fastHash(this.sourceHostname);
     this.sourceDomainHash = fastHash(this.sourceDomain);
@@ -197,4 +193,61 @@ export default class Request {
     }
     return this.fuzzySignature;
   }
+}
+
+/**
+ * The library does not include a URL parser anymore, but for matching we still
+ * rely on information about hostnames and domains of request URL as well as
+ * source URL (optionally); the `makeRequest` helper function helps construct a
+ * `Request` from partial inputs but you need to provide implementations of
+ * functions to extract a hostname from a URL and extract the domain of a given
+ * hostname. You could use `tldts` for this purpose but any other implementation
+ * based on public suffix lists would work as well.
+ *
+ * Example of usage:
+ *
+ *   import * as tldts from 'tldts';
+ *
+ *   makeRequest({ url: 'https://foo.com', type: 'script' }, tldts);
+ */
+export function makeRequest(
+  {
+    url = '',
+    hostname,
+    domain,
+    sourceUrl = '',
+    sourceHostname,
+    sourceDomain,
+    type = 'document',
+  }: Partial<IRequestInitialization>,
+  {
+    getHostname,
+    getDomain,
+  }: {
+    getHostname: (url: string) => string | null;
+    getDomain: (url: string) => string | null;
+  },
+): Request {
+  // Initialize URL
+  url = url.toLowerCase();
+  hostname = hostname || getHostname(url) || '';
+  domain = domain || getDomain(hostname) || '';
+
+  // Initialize source URL
+  sourceUrl = sourceUrl.toLowerCase();
+  sourceHostname = sourceHostname || getHostname(sourceUrl) || '';
+  sourceDomain = sourceDomain || getDomain(sourceHostname) || '';
+
+  // source URL
+  return new Request({
+    domain,
+    hostname,
+    url,
+
+    sourceDomain,
+    sourceHostname,
+    sourceUrl,
+
+    type,
+  });
 }
