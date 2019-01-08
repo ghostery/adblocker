@@ -1,5 +1,5 @@
 import injectCircumvention from './content/circumvention';
-import { blockScript, injectCSSRule, injectScript } from './content/injection';
+import { blockScript, createStylesheet, injectCSSRule, injectScript } from './content/injection';
 
 export interface IMessageFromBackground {
   active: boolean;
@@ -50,7 +50,7 @@ export default function injectCosmetics(
 
       // Inject CSS
       if (styles && styles.length > 0) {
-        injectCSSRule(`${styles.join(',')} { display: none!important; }`, window.document);
+        injectCSSRule(createStylesheet(styles), window.document);
       }
     },
   );

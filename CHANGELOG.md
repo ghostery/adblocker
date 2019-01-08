@@ -4,6 +4,8 @@
 
 *not released yet*
 
+  * Fix maximum number of selectors in stylesheet limitation on Chrome [#83](https://github.com/cliqz-oss/adblocker/pull/83)
+
 ## 0.5.0
 
 *2019-01-08*
