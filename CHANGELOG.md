@@ -4,6 +4,19 @@
 
 *not released yet*
 
+  * Remove tldts dependency and allow to plug any implementation instead [#81](https://github.com/cliqz-oss/adblocker/pull/81)
+    * Adblocker does not include tldts by default anymore
+    * APIs now expect either already constructed Request as arguments of both
+      hostname and domain when needed (e.g.: getCosmeticsFilters)
+    * A makeRequest helper is provided to construct Request objects
+    * [BREAKING] engine.match expects a `Request` as argument
+    * [BREAKING] engine.matchAll expects a `Request` as argument
+    * [BREAKING] engine.getCSPDirectives expects a `Request` as argument
+    * [BREAKING] engine.getCosmeticsFilter expects a new `domain` argument
+    * [BREAKING] `Request`'s constructor does not apply default value
+      anymore and expects all arguments to be provided and initialized. You
+      can now use `makeRequest` to reproduce the previous behavior of `new
+      Request`.
   * Fix cosmetics injection [#79](https://github.com/cliqz-oss/adblocker/pull/79)
     * Ignore cosmetic filters with extended syntax
     * Ignore invalid cosmetic filters (using strict validation)

@@ -1,5 +1,9 @@
+import * as tldts from 'tldts';
+
 import Engine from '../src/engine/engine';
 import { CosmeticFilter } from '../src/parsing/cosmetic-filter';
+import { makeRequest } from '../src/request';
+
 import requests from './data/requests';
 
 function createEngine(filters: string, enableOptimizations: boolean = true) {
@@ -28,9 +32,14 @@ function createEngine(filters: string, enableOptimizations: boolean = true) {
 describe('#FiltersEngine', () => {
   describe('filters with bug id', () => {
     it('matches bug filter', () => {
-      const filter = createEngine('||foo.com$bug=42').match({
-        url: 'https://foo.com',
-      }).filter;
+      const filter = createEngine('||foo.com$bug=42').match(
+        makeRequest(
+          {
+            url: 'https://foo.com',
+          },
+          tldts,
+        ),
+      ).filter;
       expect(filter).not.toBeUndefined();
       if (filter !== undefined) {
         expect(filter.bug).toEqual(42);
@@ -41,10 +50,15 @@ describe('#FiltersEngine', () => {
       const exception = createEngine(`
 ||foo.com$bug=42
 @@$bug=42,domain=bar.com
-`).match({
-        sourceUrl: 'https://bar.com',
-        url: 'https://foo.com',
-      }).exception;
+`).match(
+        makeRequest(
+          {
+            sourceUrl: 'https://bar.com',
+            url: 'https://foo.com',
+          },
+          tldts,
+        ),
+      ).exception;
       expect(exception).not.toBeUndefined();
       if (exception !== undefined) {
         expect(exception.bug).toEqual(42);
@@ -55,10 +69,15 @@ describe('#FiltersEngine', () => {
       const exception = createEngine(`
 ||foo.com
 @@$bug=42,domain=bar.com
-`).match({
-        sourceUrl: 'https://bar.com',
-        url: 'https://foo.com',
-      }).exception;
+`).match(
+        makeRequest(
+          {
+            sourceUrl: 'https://bar.com',
+            url: 'https://foo.com',
+          },
+          tldts,
+        ),
+      ).exception;
       expect(exception).toBeUndefined();
     });
   });
@@ -66,25 +85,40 @@ describe('#FiltersEngine', () => {
   describe('cps policies', () => {
     it('no policy in engine', () => {
       expect(
-        createEngine('this is not a csp').getCSPDirectives({
-          url: 'https://foo.com',
-        }),
+        createEngine('this is not a csp').getCSPDirectives(
+          makeRequest(
+            {
+              url: 'https://foo.com',
+            },
+            tldts,
+          ),
+        ),
       ).toBeUndefined();
     });
 
     it('does not match request', () => {
       expect(
-        createEngine('||bar.com$csp=bar').getCSPDirectives({
-          url: 'https://foo.com',
-        }),
+        createEngine('||bar.com$csp=bar').getCSPDirectives(
+          makeRequest(
+            {
+              url: 'https://foo.com',
+            },
+            tldts,
+          ),
+        ),
       ).toBeUndefined();
     });
 
     it('matches request (1 policy)', () => {
       expect(
-        createEngine('||foo.com$csp=bar').getCSPDirectives({
-          url: 'https://foo.com',
-        }),
+        createEngine('||foo.com$csp=bar').getCSPDirectives(
+          makeRequest(
+            {
+              url: 'https://foo.com',
+            },
+            tldts,
+          ),
+        ),
       ).toEqual('bar');
     });
 
@@ -92,10 +126,15 @@ describe('#FiltersEngine', () => {
       const policies = createEngine(`
 ||foo.com$csp=bar
 $csp=baz,domain=bar.com
-`).getCSPDirectives({
-        sourceUrl: 'https://bar.com',
-        url: 'https://foo.com',
-      });
+`).getCSPDirectives(
+        makeRequest(
+          {
+            sourceUrl: 'https://bar.com',
+            url: 'https://foo.com',
+          },
+          tldts,
+        ),
+      );
 
       expect(policies).not.toBeUndefined();
       if (policies !== undefined) {
@@ -109,10 +148,15 @@ $csp=baz,domain=bar.com
 ||foo.com$csp=bar
 @@$csp=baz
 $csp=baz,domain=bar.com
-`).getCSPDirectives({
-          sourceUrl: 'https://bar.com',
-          url: 'https://foo.com',
-        }),
+`).getCSPDirectives(
+          makeRequest(
+            {
+              sourceUrl: 'https://bar.com',
+              url: 'https://foo.com',
+            },
+            tldts,
+          ),
+        ),
       ).toEqual('bar');
     });
 
@@ -123,10 +167,15 @@ $csp=baz,domain=bar.com
 ||foo.com$csp=bar
 @@$csp=baz
 $csp=baz,domain=bar.com
-`).getCSPDirectives({
-          sourceUrl: 'https://bar.com',
-          url: 'https://foo.com',
-        }),
+`).getCSPDirectives(
+          makeRequest(
+            {
+              sourceUrl: 'https://bar.com',
+              url: 'https://foo.com',
+            },
+            tldts,
+          ),
+        ),
       ).toBeUndefined();
     });
   });
@@ -166,11 +215,16 @@ $csp=baz,domain=bar.com
 
               const matchingFilters = new Set();
               [
-                ...engine.matchAll({
-                  sourceUrl,
-                  type,
-                  url,
-                }),
+                ...engine.matchAll(
+                  makeRequest(
+                    {
+                      sourceUrl,
+                      type,
+                      url,
+                    },
+                    tldts,
+                  ),
+                ),
               ].forEach((optimizedFilter) => {
                 (optimizedFilter.rawLine || '').split(' <+> ').forEach((f: string) => {
                   matchingFilters.add(f);
@@ -206,7 +260,10 @@ $csp=baz,domain=bar.com
           const shouldMatch: Set<string> = new Set(testCase.matches);
           const shouldNotMatch: Set<string> = new Set(testCase.misMatches);
 
-          const rules = engine.cosmetics.getCosmeticsFilters(testCase.hostname);
+          const rules = engine.cosmetics.getCosmeticsFilters(
+            testCase.hostname,
+            tldts.getDomain(testCase.hostname) || '',
+          );
           expect(rules.length).toEqual(shouldMatch.size);
           rules.forEach((rule: CosmeticFilter) => {
             expect(rule.rawLine).not.toBeNull();
@@ -298,7 +355,10 @@ $csp=baz,domain=bar.com
             const shouldMatch: Set<string> = new Set(testCase.matches);
             const shouldNotMatch: Set<string> = new Set(testCase.misMatches);
 
-            const rules = engine.cosmetics.getCosmeticsFilters(testCase.hostname);
+            const rules = engine.cosmetics.getCosmeticsFilters(
+              testCase.hostname,
+              tldts.getDomain(testCase.hostname) || '',
+            );
             expect(rules.length).toEqual(shouldMatch.size);
             rules.forEach((rule) => {
               expect(rule.rawLine).not.toBeNull();

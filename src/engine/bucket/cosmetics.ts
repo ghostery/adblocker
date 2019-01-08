@@ -33,13 +33,13 @@ export default class CosmeticFilterBucket {
     this.size = this.hostnameIndex.size + this.genericRules.length;
   }
 
-  public getCosmeticsFilters(hostname: string) {
+  public getCosmeticsFilters(hostname: string, domain: string) {
     const disabledRules = new Set();
     const rules: CosmeticFilter[] = [];
 
     // Collect rules specifying a domain
     this.hostnameIndex.iterMatchingFilters(tokenizeHostnames(hostname), (rule: CosmeticFilter) => {
-      if (matchCosmeticFilter(rule, hostname)) {
+      if (matchCosmeticFilter(rule, hostname, domain)) {
         if (rule.isUnhide()) {
           disabledRules.add(rule.getSelector());
         } else {

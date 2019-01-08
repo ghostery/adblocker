@@ -1,3 +1,4 @@
+import { getDomain, getHostname } from 'tldts';
 import * as adblocker from '../index';
 
 /**
@@ -96,11 +97,14 @@ function requestFromDetails({
   if (tabs.has(tabId)) {
     source = tabs.get(tabId).source;
   }
-  return {
-    sourceUrl: source,
-    type,
-    url,
-  };
+  return adblocker.makeRequest(
+    {
+      sourceUrl: source,
+      type,
+      url,
+    },
+    { getDomain, getHostname },
+  );
 }
 
 loadAdblocker().then((engine) => {
@@ -157,7 +161,10 @@ loadAdblocker().then((engine) => {
 
     // Answer to content-script with a list of nodes
     if (msg.action === 'getCosmeticsFilters') {
-      const { active, blockedScripts, styles, scripts } = engine.getCosmeticsFilters(hostname);
+      const { active, blockedScripts, styles, scripts } = engine.getCosmeticsFilters(
+        hostname,
+        getDomain(hostname) || '',
+      );
       if (active === false) {
         return;
       }

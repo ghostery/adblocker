@@ -1,9 +1,11 @@
-import matchCosmeticFilter from '../src/matching/cosmetics';
+import { getDomain, getHostname } from 'tldts';
+
+import matchCosmeticFilter, { getHostnameWithoutPublicSuffix } from '../src/matching/cosmetics';
 import matchNetworkFilter, { isAnchoredByHostname } from '../src/matching/network';
 
 import { f } from '../src/parsing/list';
 import { parseNetworkFilter } from '../src/parsing/network-filter';
-import Request from '../src/request';
+import { makeRequest } from '../src/request';
 
 import requests from './data/requests';
 
@@ -19,7 +21,10 @@ declare global {
 
 expect.extend({
   toMatchRequest(filter, request) {
-    const processedRequest = new Request(request);
+    const processedRequest = makeRequest(request, {
+      getDomain,
+      getHostname,
+    });
     const match = matchNetworkFilter(filter, processedRequest);
     if (match) {
       return {
@@ -35,7 +40,7 @@ expect.extend({
     };
   },
   toMatchHostname(filter, hostname) {
-    const match = matchCosmeticFilter(filter, hostname);
+    const match = matchCosmeticFilter(filter, hostname, getDomain(hostname) || '');
     if (match) {
       return {
         message: () => `expected ${filter.toString()} to not match ${hostname}`,
@@ -347,5 +352,27 @@ describe('#matchCosmeticFilter', () => {
   it('does not match', () => {
     expect(f`foo.*##.selector`).not.toMatchHostname('foo.bar.com');
     expect(f`foo.*##.selector`).not.toMatchHostname('bar-foo.com');
+  });
+});
+
+describe('#getHostnameWithoutPublicSuffix', () => {
+  it('returns null for empty hostname', () => {
+    expect(getHostnameWithoutPublicSuffix('', '')).toEqual(null);
+  });
+
+  it('returns null for empty domain', () => {
+    expect(getHostnameWithoutPublicSuffix('com', '')).toEqual(null);
+  });
+
+  it('returns null for a single label', () => {
+    expect(getHostnameWithoutPublicSuffix('com', 'com')).toEqual(null);
+  });
+
+  it('simple domain', () => {
+    expect(getHostnameWithoutPublicSuffix('foo.com', 'foo.com')).toEqual('foo');
+  });
+
+  it('with subdomain', () => {
+    expect(getHostnameWithoutPublicSuffix('foo.bar.com', 'bar.com')).toEqual('foo.bar');
   });
 });

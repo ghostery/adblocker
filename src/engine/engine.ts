@@ -2,7 +2,7 @@ import { CosmeticFilter } from '../parsing/cosmetic-filter';
 import IFilter from '../parsing/interface';
 import { parseJSResource, parseList } from '../parsing/list';
 import { NetworkFilter } from '../parsing/network-filter';
-import Request, { IRequestInitialization, RequestType } from '../request';
+import Request, { RequestType } from '../request';
 import { serializeEngine } from '../serialization';
 
 import CosmeticFilterBucket from './bucket/cosmetics';
@@ -246,13 +246,13 @@ export default class FilterEngine {
     // this.cosmetics.optimizeAheadOfTime();
   }
 
-  public getCosmeticsFilters(hostname: string) {
+  public getCosmeticsFilters(hostname: string, domain: string | null | undefined) {
     const styles: string[] = [];
     const scripts: string[] = [];
     const blockedScripts: string[] = [];
 
     if (this.loadCosmeticFilters) {
-      const rules = this.cosmetics.getCosmeticsFilters(hostname);
+      const rules = this.cosmetics.getCosmeticsFilters(hostname, domain || '');
       for (let i = 0; i < rules.length; i += 1) {
         const rule: CosmeticFilter = rules[i];
 
@@ -277,9 +277,7 @@ export default class FilterEngine {
     };
   }
 
-  public matchAll(rawRequest: Partial<IRequestInitialization>): Set<NetworkFilter> {
-    const request = new Request(rawRequest);
-
+  public matchAll(request: Request): Set<NetworkFilter> {
     const filters: NetworkFilter[] = [];
     if (request.isSupported) {
       filters.push(...this.importants.matchAll(request));
@@ -292,12 +290,11 @@ export default class FilterEngine {
     return new Set(filters);
   }
 
-  public getCSPDirectives(rawRequest: Partial<IRequestInitialization>): string | undefined {
+  public getCSPDirectives(request: Request): string | undefined {
     if (!this.loadNetworkFilters) {
       return undefined;
     }
 
-    const request = new Request(rawRequest);
     if (request.isSupported !== true || request.type !== RequestType.document) {
       return undefined;
     }
@@ -325,7 +322,7 @@ export default class FilterEngine {
   }
 
   public match(
-    rawRequest: Partial<IRequestInitialization>,
+    request: Request,
   ): {
     match: boolean;
     redirect?: string;
@@ -335,11 +332,6 @@ export default class FilterEngine {
     if (!this.loadNetworkFilters) {
       return { match: false };
     }
-
-    // Transforms { url, sourceUrl, cpt } into a more complete request context
-    // containing domains, general domains and tokens for this request. This
-    // context will be used during the matching in the engine.
-    const request = new Request(rawRequest);
 
     let filter: NetworkFilter | undefined;
     let exception: NetworkFilter | undefined;
