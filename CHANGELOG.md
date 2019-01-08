@@ -4,6 +4,10 @@
 
 *not released yet*
 
+## 0.5.0
+
+*2019-01-08*
+
   * Remove tldts dependency and allow to plug any implementation instead [#81](https://github.com/cliqz-oss/adblocker/pull/81)
     * Adblocker does not include tldts by default anymore
     * APIs now expect either already constructed Request as arguments of both
