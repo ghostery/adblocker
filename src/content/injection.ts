@@ -90,3 +90,19 @@ export function bundle(fn: (...args: any[]) => void, deps: Array<(...args: any[]
   return (window: Window, ...args: any[]) =>
     injectScript(wrapCallableInContext(autoCallFunction(fn, ...args), deps), window.document);
 }
+
+/**
+ * Given a list of CSS selectors, create a valid stylesheet ready to be injected
+ * in the page. This also takes care to no create rules with too many selectors
+ * for Chrome, see: https://crbug.com/804179
+ */
+export function createStylesheet(rules: string[]): string {
+  const maximumNumberOfSelectors = 1024;
+  const parts: string[] = [];
+  for (let i = 0; i < rules.length; i += maximumNumberOfSelectors) {
+    parts.push(
+      `${rules.slice(i, i + maximumNumberOfSelectors).join(',')} { display: none!important; }`,
+    );
+  }
+  return parts.join('\n');
+}
