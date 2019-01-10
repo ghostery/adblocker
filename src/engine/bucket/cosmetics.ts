@@ -33,7 +33,7 @@ export default class CosmeticFilterBucket {
     this.size = this.hostnameIndex.size + this.genericRules.length;
   }
 
-  public getCosmeticsFilters(hostname: string, domain: string) {
+  public getCosmeticsFilters(hostname: string, domain: string): CosmeticFilter[] {
     const disabledRules = new Set();
     const rules: CosmeticFilter[] = [];
 

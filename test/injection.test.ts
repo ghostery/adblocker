@@ -14,7 +14,7 @@ function testInjectCSS() {
       active: true,
       blockedScripts: [],
       scripts: [],
-      styles: [],
+      styles: '',
     }),
   );
 

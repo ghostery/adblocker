@@ -4,6 +4,12 @@
 
 *not released yet*
 
+  * Implement support for :style cosmetic filters [#86](https://github.com/cliqz-oss/adblocker/pull/86)
+    * [BREAKING] `getCosmeticsFilters` will now return CSS as a single string
+      (stylesheet) instead of a list of selectors. This simplifies the usage and
+      allows to directly inject this into the page using the method of your
+      choice: through content scripts or tabs.injectCSS API.
+
 ## 0.5.1
 
 * 2019-01-09*

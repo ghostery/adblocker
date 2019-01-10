@@ -87,6 +87,7 @@ export class CosmeticFilter implements IFilter {
   public readonly mask: number;
   public readonly selector?: string;
   public readonly hostnames?: string;
+  public readonly style?: string;
 
   public id?: number;
   public rawLine?: string;
@@ -97,16 +98,13 @@ export class CosmeticFilter implements IFilter {
     id,
     mask,
     selector,
-  }: {
-    hostnames?: string;
-    id?: number;
-    mask: number;
-    selector?: string;
-  }) {
+    style,
+  }: Partial<CosmeticFilter> & { mask: number }) {
     this.id = id;
     this.mask = mask;
     this.selector = selector;
     this.hostnames = hostnames;
+    this.style = style;
   }
 
   public isCosmeticFilter(): boolean {
@@ -183,6 +181,10 @@ export class CosmeticFilter implements IFilter {
     return this.id;
   }
 
+  public getStyle(): string {
+    return this.style || 'display: none !important;';
+  }
+
   public getSelector(): string {
     return this.selector || '';
   }
@@ -239,6 +241,7 @@ export function parseCosmeticFilter(line: string): CosmeticFilter | null {
   let mask = 0;
   let selector: string | undefined;
   let hostnames: string | undefined;
+  let style: string | undefined;
   const sharpIndex = line.indexOf('#');
 
   // Start parsing the line
@@ -308,38 +311,45 @@ export function parseCosmeticFilter(line: string): CosmeticFilter | null {
     mask = setBit(mask, COSMETICS_MASK.scriptInject);
     selector = line.slice(suffixStartIndex + 4, line.length - 1);
   } else {
-    // Detect if this filter has extended syntax and discard it
+    // Detect special syntax
     let indexOfColon = line.indexOf(':', suffixStartIndex);
     while (indexOfColon !== -1) {
-      indexOfColon += 1;
-      if (
-        fastStartsWithFrom(line, '-abp-', indexOfColon) ||
-        fastStartsWithFrom(line, 'contains', indexOfColon) ||
-        fastStartsWithFrom(line, 'has', indexOfColon) ||
-        fastStartsWithFrom(line, 'if', indexOfColon) ||
-        fastStartsWithFrom(line, 'if-not', indexOfColon) ||
-        fastStartsWithFrom(line, 'matches-css', indexOfColon) ||
-        fastStartsWithFrom(line, 'matches-css-after', indexOfColon) ||
-        fastStartsWithFrom(line, 'matches-css-before', indexOfColon) ||
-        fastStartsWithFrom(line, 'not', indexOfColon) ||
-        fastStartsWithFrom(line, 'properties', indexOfColon) ||
-        fastStartsWithFrom(line, 'style', indexOfColon) ||
-        fastStartsWithFrom(line, 'subject', indexOfColon) ||
-        fastStartsWithFrom(line, 'xpath', indexOfColon)
+      const indexAfterColon = indexOfColon + 1;
+      if (fastStartsWithFrom(line, 'style', indexAfterColon)) {
+        // ##selector :style(...)
+        if (line[indexAfterColon + 5] === '(' && line[line.length - 1] === ')') {
+          selector = line.slice(suffixStartIndex, indexOfColon);
+          style = line.slice(indexAfterColon + 6, -1);
+        } else {
+          console.error('?????', line, indexAfterColon);
+          return null;
+        }
+      } else if (
+        fastStartsWithFrom(line, '-abp-', indexAfterColon) ||
+        fastStartsWithFrom(line, 'contains', indexAfterColon) ||
+        fastStartsWithFrom(line, 'has', indexAfterColon) ||
+        fastStartsWithFrom(line, 'if', indexAfterColon) ||
+        fastStartsWithFrom(line, 'if-not', indexAfterColon) ||
+        fastStartsWithFrom(line, 'matches-css', indexAfterColon) ||
+        fastStartsWithFrom(line, 'matches-css-after', indexAfterColon) ||
+        fastStartsWithFrom(line, 'matches-css-before', indexAfterColon) ||
+        fastStartsWithFrom(line, 'not', indexAfterColon) ||
+        fastStartsWithFrom(line, 'properties', indexAfterColon) ||
+        fastStartsWithFrom(line, 'subject', indexAfterColon) ||
+        fastStartsWithFrom(line, 'xpath', indexAfterColon)
       ) {
         return null;
       }
-      indexOfColon = line.indexOf(':', indexOfColon);
+      indexOfColon = line.indexOf(':', indexAfterColon);
     }
 
     // If we reach this point, filter is not extended syntax
-    if (suffixStartIndex < line.length) {
+    if (selector === undefined && suffixStartIndex < line.length) {
       selector = line.slice(suffixStartIndex);
-      if (isValidCss(selector) === false) {
-        return null;
-      }
-    } else {
-      // No valid selector
+    }
+
+    if (selector === undefined || !isValidCss(selector)) {
+      // Not a valid selector
       return null;
     }
   }
@@ -348,5 +358,6 @@ export function parseCosmeticFilter(line: string): CosmeticFilter | null {
     hostnames,
     mask,
     selector,
+    style,
   });
 }

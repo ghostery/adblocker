@@ -1,11 +1,11 @@
 import injectCircumvention from './content/circumvention';
-import { blockScript, createStylesheet, injectCSSRule, injectScript } from './content/injection';
+import { blockScript, injectCSSRule, injectScript } from './content/injection';
 
 export interface IMessageFromBackground {
   active: boolean;
   scripts: string[];
   blockedScripts: string[];
-  styles: string[];
+  styles: string;
 }
 
 /**
@@ -50,7 +50,7 @@ export default function injectCosmetics(
 
       // Inject CSS
       if (styles && styles.length > 0) {
-        injectCSSRule(createStylesheet(styles), window.document);
+        injectCSSRule(styles, window.document);
       }
     },
   );

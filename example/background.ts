@@ -174,7 +174,7 @@ loadAdblocker().then((engine) => {
         chrome.tabs.insertCSS(
           sender.tab.id,
           {
-            code: adblocker.createStylesheet(styles),
+            code: styles,
             cssOrigin: 'user',
             frameId: sender.frameId,
             matchAboutBlank: true,
