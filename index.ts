@@ -1,6 +1,5 @@
 // Cosmetic injection
-export { default as CosmeticsInjection } from './src/cosmetics-injection';
-export { createStylesheet } from './src/content/injection';
+export { default as injectCosmetics, IMessageFromBackground } from './src/cosmetics-injection';
 
 // Blocking
 export { default as FiltersEngine } from './src/engine/engine';

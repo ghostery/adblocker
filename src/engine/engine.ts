@@ -9,6 +9,8 @@ import CosmeticFilterBucket from './bucket/cosmetics';
 import NetworkFilterBucket from './bucket/network';
 import IList from './list';
 
+import { createStylesheet } from '../content/injection';
+
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
   if (typeof btoa !== 'undefined') {
@@ -247,7 +249,7 @@ export default class FilterEngine {
   }
 
   public getCosmeticsFilters(hostname: string, domain: string | null | undefined) {
-    const styles: string[] = [];
+    const selectorsPerStyle: Map<string, string[]> = new Map();
     const scripts: string[] = [];
     const blockedScripts: string[] = [];
 
@@ -264,16 +266,27 @@ export default class FilterEngine {
             scripts.push(script);
           }
         } else {
-          styles.push(rule.getSelector());
+          const style = rule.getStyle();
+          const selectors = selectorsPerStyle.get(style);
+          if (selectors === undefined) {
+            selectorsPerStyle.set(style, [rule.getSelector()]);
+          } else {
+            selectors.push(rule.getSelector());
+          }
         }
       }
     }
+
+    const stylesheets: string[] = [];
+    selectorsPerStyle.forEach((selectors, style) => {
+      stylesheets.push(createStylesheet(selectors, style));
+    });
 
     return {
       active: this.loadCosmeticFilters,
       blockedScripts,
       scripts,
-      styles,
+      styles: stylesheets.join('\n\n'),
     };
   }
 

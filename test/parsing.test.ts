@@ -697,6 +697,7 @@ function cosmetic(filter: string, expected: any) {
       // Attributes
       hostnames: parsed.getHostnames(),
       selector: parsed.getSelector(),
+      style: parsed.style,
 
       // Options
       isScriptBlock: parsed.isScriptBlock(),
@@ -713,6 +714,7 @@ const DEFAULT_COSMETIC_FILTER = {
   // Attributes
   hostnames: [],
   selector: '',
+  style: undefined,
 
   // Options
   isScriptBlock: false,
@@ -776,7 +778,7 @@ describe('Cosmetic filters', () => {
     });
   });
 
-  describe('parses script inject', () => {
+  it('parses script inject', () => {
     cosmetic('##script:inject(script.js, argument)', {
       ...DEFAULT_COSMETIC_FILTER,
       isScriptInject: true,
@@ -786,6 +788,27 @@ describe('Cosmetic filters', () => {
       ...DEFAULT_COSMETIC_FILTER,
       isScriptInject: true,
       selector: 'script.js, arg1, arg2, arg3',
+    });
+  });
+
+  it('parses :style', () => {
+    cosmetic('###foo :style(display: none)', {
+      ...DEFAULT_COSMETIC_FILTER,
+      selector: '#foo ',
+      style: 'display: none',
+    });
+
+    cosmetic('###foo > bar >baz:style(display: none)', {
+      ...DEFAULT_COSMETIC_FILTER,
+      selector: '#foo > bar >baz',
+      style: 'display: none',
+    });
+
+    cosmetic('foo.com,bar.de###foo > bar >baz:style(display: none)', {
+      ...DEFAULT_COSMETIC_FILTER,
+      hostnames: ['foo.com', 'bar.de'],
+      selector: '#foo > bar >baz',
+      style: 'display: none',
     });
   });
 });

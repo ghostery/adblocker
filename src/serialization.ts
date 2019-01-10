@@ -145,6 +145,7 @@ function serializeCosmeticFilter(filter: CosmeticFilter, buffer: StaticDataView)
   buffer.pushUint32(filter.getId());
   buffer.pushUint8(filter.mask);
   buffer.pushUTF8(filter.selector);
+  buffer.pushASCII(filter.style);
 }
 
 /**
@@ -158,6 +159,7 @@ function deserializeCosmeticFilter(buffer: StaticDataView): CosmeticFilter {
     id: buffer.getUint32(),
     mask: buffer.getUint8(),
     selector: buffer.getUTF8(),
+    style: buffer.getASCII(),
   });
 }
 
