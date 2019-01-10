@@ -768,7 +768,7 @@ bab-defuser.js application/javascript
 	};
 	var realEval = window.eval;
 	window.eval = function(a) {
-		if ( !check(a) ) {
+		if ( typeof a !== 'string' || !check(a) ) {
 			return realEval(a);
 		}
 		var el = document.body;
@@ -1952,6 +1952,7 @@ abort-current-inline-script.js application/javascript
 			? needle.slice(1,-1)
 			: needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 	}
+	var thisScript = document.currentScript;
 	var re = new RegExp(reText);
 	var chain = target.split('.');
 	var owner = window, prop;
@@ -1968,7 +1969,12 @@ abort-current-inline-script.js application/javascript
 	var value = owner[prop];
 	var validate = function() {
 		var e = document.currentScript;
-		if ( e instanceof HTMLScriptElement && e.src === '' && re.test(e.textContent) ) {
+		if (
+			e instanceof HTMLScriptElement &&
+			e.src === '' &&
+			e !== thisScript &&
+			re.test(e.textContent)
+		) {
 			throw new ReferenceError(magic);
 		}
 	};
@@ -2111,6 +2117,8 @@ set-constant.js application/javascript
 		cValue = false;
 	} else if ( cValue === 'true' ) {
 		cValue = true;
+	} else if ( cValue === 'null' ) {
+		cValue = null;
 	} else if ( cValue === 'noopFunc' ) {
 		cValue = function(){};
 	} else if ( cValue === 'trueFunc' ) {
@@ -2121,6 +2129,8 @@ set-constant.js application/javascript
 		cValue = parseFloat(cValue);
 		if ( isNaN(cValue) ) { return; }
 		if ( Math.abs(cValue) > 0x7FFF ) { return; }
+	} else if ( cValue === "''" ) {
+		cValue = '';
 	} else {
 		return;
 	}
@@ -2174,6 +2184,7 @@ set-constant.js application/javascript
 	};
 	makeProxy(owner, chain);
 })();
+
 
 # Imported from:
 #   https://github.com/NanoAdblocker/NanoFilters/blob/1f3be7211bb0809c5106996f52564bf10c4525f7/NanoFiltersSource/NanoResources.txt#L82
@@ -2292,31 +2303,32 @@ remove-attr.js application/javascript
 
 damoh-defuser.js application/javascript
 (function() {
-    var handled = new WeakSet();
-    var asyncTimer;
-    var cleanVideo = function() {
-        asyncTimer = undefined;
-        var v = document.querySelector('video');
-        if ( v === null ) { return; }
-        if ( handled.has(v) ) { return; }
-        handled.add(v);
-        v.pause();
-        v.controls = true;
-        var el = v.querySelector('meta[itemprop="contentURL"][content]');
-        if ( el === null ) { return; }
-        v.src = el.getAttribute('content');
-        el = v.querySelector('meta[itemprop="thumbnailUrl"][content]');
-        if ( el !== null ) { v.poster = el.getAttribute('content'); }
-    };
-    var cleanVideoAsync = function() {
-        if ( asyncTimer !== undefined ) { return; }
-        asyncTimer = window.requestAnimationFrame(cleanVideo);
-    };
-    var observer = new MutationObserver(cleanVideoAsync);
-    observer.observe(document.documentElement, { childList: true, subtree: true });
+	var handled = new WeakSet();
+	var asyncTimer;
+	var cleanVideo = function() {
+		asyncTimer = undefined;
+		var v = document.querySelector('video');
+		if ( v === null ) { return; }
+		if ( handled.has(v) ) { return; }
+		handled.add(v);
+		v.pause();
+		v.controls = true;
+		var el = v.querySelector('meta[itemprop="contentURL"][content]');
+		if ( el === null ) { return; }
+		v.src = el.getAttribute('content');
+		el = v.querySelector('meta[itemprop="thumbnailUrl"][content]');
+		if ( el !== null ) { v.poster = el.getAttribute('content'); }
+	};
+	var cleanVideoAsync = function() {
+		if ( asyncTimer !== undefined ) { return; }
+		asyncTimer = window.requestAnimationFrame(cleanVideo);
+	};
+	var observer = new MutationObserver(cleanVideoAsync);
+	observer.observe(document.documentElement, { childList: true, subtree: true });
 })();
 
 
+# https://github.com/uBlockOrigin/uAssets/pull/3517
 twitch-videoad.js application/javascript
 (function() {
 	if ( /(^|\.)twitch\.tv$/.test(document.location.hostname) === false ) { return; }
@@ -2360,13 +2372,13 @@ twitch-videoad.js application/javascript
 # https://github.com/uBlockOrigin/uAssets/issues/2912
 fingerprint2.js application/javascript
 (function() {
-    let fp2 = function(){};
-    fp2.prototype = {
-        get: function(cb) {
-            setTimeout(function() { cb('', []); }, 1);
-        }
-    };
-    window.Fingerprint2 = fp2;
+	let fp2 = function(){};
+	fp2.prototype = {
+		get: function(cb) {
+			setTimeout(function() { cb('', []); }, 1);
+		}
+	};
+	window.Fingerprint2 = fp2;
 })();
 
 
