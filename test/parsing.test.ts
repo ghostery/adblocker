@@ -1,11 +1,11 @@
-import { parseCosmeticFilter } from '../src/parsing/cosmetic-filter';
-import { parseList } from '../src/parsing/list';
-import { parseNetworkFilter } from '../src/parsing/network-filter';
+import CosmeticFilter from '../src/filters/cosmetic';
+import NetworkFilter from '../src/filters/network';
+import { List } from '../src/lists';
 import { fastHash } from '../src/utils';
 
 // TODO: collaps, popup, popunder, generichide, genericblock
 function network(filter: string, expected: any) {
-  const parsed = parseNetworkFilter(filter);
+  const parsed = NetworkFilter.parse(filter);
   if (parsed !== null) {
     const verbose = {
       // Attributes
@@ -691,7 +691,7 @@ describe('Network filters', () => {
 });
 
 function cosmetic(filter: string, expected: any) {
-  const parsed = parseCosmeticFilter(filter);
+  const parsed = CosmeticFilter.parse(filter);
   if (parsed !== null) {
     const verbose = {
       // Attributes
@@ -825,11 +825,8 @@ describe('Filters list', () => {
       '! ||foo.com',
       '[Adblock] ||foo.com',
       '[Adblock Plus 2.0] ||foo.com',
-    ].forEach((content) => {
-      const { cosmeticFilters, networkFilters } = parseList(content);
-
-      expect(cosmeticFilters).toHaveLength(0);
-      expect(networkFilters).toHaveLength(0);
+    ].forEach((data) => {
+      expect(List.parse({ data })).toEqual(List.parse({ data: '' }));
     });
   });
 });

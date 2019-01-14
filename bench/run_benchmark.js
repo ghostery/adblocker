@@ -29,7 +29,6 @@ const {
 
 const {
   benchEngineCreation,
-  benchEngineOptimization,
   benchEngineSerialization,
   benchEngineDeserialization,
   benchNetworkFiltersParsing,
@@ -136,7 +135,6 @@ function runMicroBenchmarks(lists, resources) {
   };
 
   [
-    benchEngineOptimization,
     benchStringHashing,
     benchCosmeticsFiltersParsing,
     benchStringTokenize,
@@ -289,7 +287,7 @@ function main() {
   const benchmarkResults = {
     ...runMemoryBench(lists, resources),
     ...runMicroBenchmarks(lists, resources),
-    ...runMacroBenchmarks(lists, resources),
+    // ...runMacroBenchmarks(lists, resources),
   };
   console.log(benchmarkResults);
 

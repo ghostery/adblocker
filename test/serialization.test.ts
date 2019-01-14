@@ -3,84 +3,84 @@ import { loadAllLists, loadResources } from './utils';
 import StaticDataView from '../src/data-view';
 import Engine from '../src/engine/engine';
 import ReverseIndex from '../src/engine/reverse-index';
-import { parseList } from '../src/parsing/list';
-import { NetworkFilter } from '../src/parsing/network-filter';
-import {
-  deserializeCosmeticFilter,
-  deserializeEngine,
-  deserializeNetworkFilter,
-  deserializeReverseIndex,
-  serializeCosmeticFilter,
-  serializeEngine,
-  serializeNetworkFilter,
-  serializeReverseIndex,
-} from '../src/serialization';
+import CosmeticFilter from '../src/filters/cosmetic';
+import IFilter from '../src/filters/interface';
+import NetworkFilter from '../src/filters/network';
+import { List } from '../src/lists';
 
 describe('Serialization', () => {
-  const { networkFilters, cosmeticFilters } = parseList(loadAllLists());
+  const list = List.parse({
+    data: loadAllLists(),
+  });
+  const cosmeticFilters = list.getCosmeticFilters();
+  const networkFilters = list.getNetworkFilters();
 
   describe('filters', () => {
     const buffer = new StaticDataView(1000000);
     it('cosmetic', () => {
       cosmeticFilters.forEach((filter) => {
         buffer.seekZero();
-        serializeCosmeticFilter(filter, buffer);
+        filter.serialize(buffer);
         buffer.seekZero();
-        expect(deserializeCosmeticFilter(buffer)).toEqual(filter);
+        expect(CosmeticFilter.deserialize(buffer)).toEqual(filter);
       });
     });
 
     it('network', () => {
       networkFilters.forEach((filter) => {
         buffer.seekZero();
-        serializeNetworkFilter(filter, buffer);
+        filter.serialize(buffer);
         buffer.seekZero();
-        expect(deserializeNetworkFilter(buffer)).toEqual(filter);
+        expect(NetworkFilter.deserialize(buffer)).toEqual(filter);
       });
     });
   });
 
-  it('ReverseIndex', () => {
-    const filters = new Map();
-    networkFilters.forEach((filter) => {
-      filters.set(filter.getId(), filter);
+  describe('ReverseIndex', () => {
+    function testReverseIndex(filters: IFilter[]): void {
+      // Initialize index
+      const reverseIndex = new ReverseIndex((cb) => {
+        filters.forEach(cb);
+      });
+
+      // Serialize index
+      const buffer = new StaticDataView(4000000);
+      reverseIndex.serialize(buffer);
+
+      // Deserialize
+      buffer.seekZero();
+      expect(ReverseIndex.deserialize(buffer)).toEqual(reverseIndex);
+    }
+
+    it('network', () => {
+      testReverseIndex(networkFilters);
     });
 
-    // Initialize index
-    const reverseIndex = new ReverseIndex<NetworkFilter>((cb) => {
-      networkFilters.forEach(cb);
+    it('cosmetic', () => {
+      testReverseIndex(cosmeticFilters);
     });
-
-    // Serialize index
-    const buffer = new StaticDataView(4000000);
-    serializeReverseIndex(reverseIndex, buffer);
-    buffer.seekZero();
-
-    const deserialized = new ReverseIndex<NetworkFilter>();
-    deserializeReverseIndex(buffer, deserialized, filters);
-    expect(deserialized).toEqual(reverseIndex);
   });
 
   it('Engine', () => {
     const engine = new Engine({
+      debug: false,
       enableOptimizations: true,
       loadCosmeticFilters: true,
       loadNetworkFilters: true,
-      optimizeAOT: false,
     });
 
     engine.onUpdateFilters([{ filters: loadAllLists(), asset: 'list1', checksum: 'checksum' }]);
     engine.onUpdateResource(loadResources(), 'resources1');
 
-    const serialized = serializeEngine(engine);
+    const serialized = engine.serialize();
 
     const version = serialized[0];
     serialized[0] = 1; // override version
     expect(() => {
-      deserializeEngine(serialized);
+      Engine.deserialize(serialized);
     }).toThrow('serialized engine version mismatch');
     serialized[0] = version;
 
-    expect(deserializeEngine(serialized)).toEqual(engine);
+    expect(Engine.deserialize(serialized)).toEqual(engine);
   });
 });

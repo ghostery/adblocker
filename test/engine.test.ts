@@ -1,17 +1,17 @@
 import * as tldts from 'tldts';
 
 import Engine from '../src/engine/engine';
-import { CosmeticFilter } from '../src/parsing/cosmetic-filter';
+import CosmeticFilter from '../src/filters/cosmetic';
 import { makeRequest } from '../src/request';
 
 import requests from './data/requests';
 
 function createEngine(filters: string, enableOptimizations: boolean = true) {
   const newEngine = new Engine({
+    debug: true,
     enableOptimizations,
     loadCosmeticFilters: true,
     loadNetworkFilters: true,
-    optimizeAOT: true,
   });
 
   newEngine.onUpdateFilters(
@@ -23,7 +23,6 @@ function createEngine(filters: string, enableOptimizations: boolean = true) {
       },
     ],
     new Set(),
-    true,
   );
 
   return newEngine;
@@ -209,7 +208,6 @@ $csp=baz,domain=bar.com
                     },
                   ],
                   new Set(['filters']),
-                  true,
                 );
               }
 
@@ -263,6 +261,7 @@ $csp=baz,domain=bar.com
           const rules = engine.cosmetics.getCosmeticsFilters(
             testCase.hostname,
             tldts.getDomain(testCase.hostname) || '',
+            (id) => engine.lists.getCosmeticFilter(id),
           );
           expect(rules.length).toEqual(shouldMatch.size);
           rules.forEach((rule: CosmeticFilter) => {
@@ -358,6 +357,7 @@ $csp=baz,domain=bar.com
             const rules = engine.cosmetics.getCosmeticsFilters(
               testCase.hostname,
               tldts.getDomain(testCase.hostname) || '',
+              (id) => engine.lists.getCosmeticFilter(id),
             );
             expect(rules.length).toEqual(shouldMatch.size);
             rules.forEach((rule) => {

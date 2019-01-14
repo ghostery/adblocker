@@ -10,16 +10,12 @@ function benchEngineCreation({ lists, resources }) {
   });
 }
 
-function benchEngineOptimization({ engine }) {
-  return engine.optimize();
-}
-
 function benchEngineSerialization({ engine }) {
   return engine.serialize();
 }
 
 function benchEngineDeserialization({ serialized }) {
-  return adblocker.deserializeEngine(serialized, 1);
+  return adblocker.FiltersEngine.deserialize(serialized);
 }
 
 function benchStringHashing({ filters }) {
@@ -42,11 +38,13 @@ function benchParsingImpl(lists, { loadNetworkFilters, loadCosmeticFilters }) {
   let dummy = 0;
 
   for (let i = 0; i < lists.length; i += 1) {
-    dummy = (dummy + adblocker.parseList(lists[i], {
+    dummy = (dummy + adblocker.List.parse({
+      data: lists[i],
+      checksum: '',
       loadNetworkFilters,
       loadCosmeticFilters,
       debug: false,
-    }).length) % 100000;
+    }).filters.length) % 100000;
   }
 
   return dummy;
@@ -70,7 +68,6 @@ function benchNetworkFiltersParsing({ lists }) {
 module.exports = {
   benchCosmeticsFiltersParsing,
   benchEngineCreation,
-  benchEngineOptimization,
   benchEngineSerialization,
   benchEngineDeserialization,
   benchNetworkFiltersParsing,

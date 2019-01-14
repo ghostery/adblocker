@@ -1,6 +1,9 @@
 import * as punycode from 'punycode';
+import StaticDataView from '../data-view';
 import { RequestType } from '../request';
+import Request from '../request';
 import {
+  binSearch,
   clearBit,
   createFuzzySignature,
   fastHash,
@@ -174,7 +177,40 @@ const MATCH_ALL = new RegExp('');
 //  - generichide
 //  - genericblock
 // 2. Replace `split` with `substr`
-export class NetworkFilter implements IFilter {
+export default class NetworkFilter implements IFilter {
+  public static parse(line: string): NetworkFilter | null {
+    return parseNetworkFilter(line);
+  }
+
+  /**
+   * Deserialize network filters. The code accessing the buffer should be
+   * symetrical to the one in `serializeNetworkFilter`.
+   */
+  public static deserialize(buffer: StaticDataView): NetworkFilter {
+    const id = buffer.getUint32();
+    const mask = buffer.getUint32();
+    const optionalParts = buffer.getUint8();
+
+    // The order of these statements is important. Since `buffer.getX()` will
+    // internally increment the position of next byte to read, they need to be
+    // retrieved in the exact same order they were serialized (check
+    // `serializeNetworkFilter`).
+    return new NetworkFilter({
+      // Mandatory fields
+      id,
+      mask,
+
+      // Optional parts
+      bug: (optionalParts & 1) === 1 ? buffer.getUint16() : undefined,
+      csp: (optionalParts & 2) === 2 ? buffer.getASCII() : undefined,
+      filter: (optionalParts & 4) === 4 ? buffer.getASCII() : undefined,
+      hostname: (optionalParts & 8) === 8 ? buffer.getASCII() : undefined,
+      optDomains: (optionalParts & 16) === 16 ? buffer.getUint32Array() : undefined,
+      optNotDomains: (optionalParts & 32) === 32 ? buffer.getUint32Array() : undefined,
+      redirect: (optionalParts & 64) === 64 ? buffer.getASCII() : undefined,
+    });
+  }
+
   public readonly mask: number;
   public readonly filter?: string;
   public readonly optDomains?: Uint32Array;
@@ -223,6 +259,94 @@ export class NetworkFilter implements IFilter {
   }
   public isNetworkFilter() {
     return true;
+  }
+
+  public match(request: Request): boolean {
+    return checkOptions(this, request) && checkPattern(this, request);
+  }
+
+  /**
+   * To allow for a more compact representation of network filters, the
+   * representation is composed of a mandatory header, and some optional
+   *
+   * Header:
+   * =======
+   *
+   *  | opt | mask
+   *     8     32
+   *
+   * For an empty filter having no pattern, hostname, the minimum size is: 42 bits.
+   *
+   * Then for each optional part (filter, hostname optDomains, optNotDomains,
+   * redirect), it takes 16 bits for the length of the string + the length of the
+   * string in bytes.
+   *
+   * The optional parts are written in order of there number of occurrence in the
+   * filter list used by the adblocker. The most common being `hostname`, then
+   * `filter`, `optDomains`, `optNotDomains`, `redirect`.
+   *
+   * Example:
+   * ========
+   *
+   * @@||cliqz.com would result in a serialized version:
+   *
+   * | 1 | mask | 9 | c | l | i | q | z | . | c | o | m  (16 bytes)
+   *
+   * In this case, the serialized version is actually bigger than the original
+   * filter, but faster to deserialize. In the future, we could optimize the
+   * representation to compact small filters better.
+   *
+   * Ideas:
+   *  * variable length encoding for the mask (if not option, take max 1 byte).
+   *  * first byte could contain the mask as well if small enough.
+   *  * when packing ascii string, store several of them in each byte.
+   */
+  public serialize(buffer: StaticDataView): void {
+    buffer.pushUint32(this.getId());
+    buffer.pushUint32(this.mask);
+
+    const index = buffer.getPos();
+    buffer.pushUint8(0);
+
+    // This bit-mask indicates which optional parts of the filter were serialized.
+    let optionalParts = 0;
+
+    if (this.bug !== undefined) {
+      optionalParts |= 1;
+      buffer.pushUint16(this.bug);
+    }
+
+    if (this.isCSP()) {
+      optionalParts |= 2;
+      buffer.pushASCII(this.csp);
+    }
+
+    if (this.hasFilter()) {
+      optionalParts |= 4;
+      buffer.pushASCII(this.filter);
+    }
+
+    if (this.hasHostname()) {
+      optionalParts |= 8;
+      buffer.pushASCII(this.hostname);
+    }
+
+    if (this.hasOptDomains()) {
+      optionalParts |= 16;
+      buffer.pushUint32Array(this.optDomains);
+    }
+
+    if (this.hasOptNotDomains()) {
+      optionalParts |= 32;
+      buffer.pushUint32Array(this.optNotDomains);
+    }
+
+    if (this.isRedirect()) {
+      optionalParts |= 64;
+      buffer.pushASCII(this.redirect);
+    }
+
+    buffer.setByte(index, optionalParts);
   }
 
   /**
@@ -643,7 +767,7 @@ function checkIsRegex(filter: string, start: number, end: number): boolean {
  * Parse a line containing a network filter into a NetworkFilter object.
  * This must be *very* efficient.
  */
-export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
+function parseNetworkFilter(rawLine: string): NetworkFilter | null {
   const line: string = rawLine;
 
   // Represent options as a bitmask
@@ -1021,4 +1145,306 @@ export function parseNetworkFilter(rawLine: string): NetworkFilter | null {
     optNotDomains,
     redirect,
   });
+}
+
+export function isAnchoredByHostname(filterHostname: string, hostname: string): boolean {
+  // Corner-case, if `filterHostname` is empty, then it's a match
+  if (filterHostname.length === 0) {
+    return true;
+  }
+
+  // `filterHostname` cannot be longer than actual hostname
+  if (filterHostname.length > hostname.length) {
+    return false;
+  }
+
+  // Check if `filterHostname` appears anywhere in `hostname`
+  const matchIndex = hostname.indexOf(filterHostname);
+
+  // No match
+  if (matchIndex === -1) {
+    return false;
+  }
+
+  // Either start at beginning of hostname or be preceded by a '.'
+  return (
+    // Prefix match
+    (matchIndex === 0 &&
+      // This means `filterHostname` is equal to `hostname`
+      (hostname.length === filterHostname.length ||
+        // This means that `filterHostname` is a prefix of `hostname` (ends with a '.')
+        filterHostname[filterHostname.length - 1] === '.' ||
+        hostname[filterHostname.length] === '.')) ||
+    // Suffix or infix match
+    ((hostname[matchIndex - 1] === '.' || filterHostname[0] === '.') &&
+      // `filterHostname` is a full suffix of `hostname`
+      (hostname.length - matchIndex === filterHostname.length ||
+        // This means that `filterHostname` is infix of `hostname` (ends with a '.')
+        filterHostname[filterHostname.length - 1] === '.' ||
+        hostname[matchIndex + filterHostname.length] === '.'))
+  );
+}
+
+function getUrlAfterHostname(url: string, hostname: string): string {
+  return url.slice(url.indexOf(hostname) + hostname.length);
+}
+
+// pattern$fuzzy
+function checkPatternFuzzyFilter(filter: NetworkFilter, request: Request) {
+  const signature = filter.getFuzzySignature();
+  const requestSignature = request.getFuzzySignature();
+
+  if (signature.length > requestSignature.length) {
+    return false;
+  }
+
+  let lastIndex = 0;
+  for (let i = 0; i < signature.length; i += 1) {
+    const c = signature[i];
+    // Find the occurrence of `c` in `requestSignature`
+    const j = requestSignature.indexOf(c, lastIndex);
+    if (j === -1) {
+      return false;
+    }
+    lastIndex = j + 1;
+  }
+
+  return true;
+}
+
+// pattern
+function checkPatternPlainFilter(filter: NetworkFilter, request: Request): boolean {
+  if (filter.hasFilter() === false) {
+    return true;
+  }
+
+  return request.url.indexOf(filter.getFilter()) !== -1;
+}
+
+// pattern|
+function checkPatternRightAnchorFilter(filter: NetworkFilter, request: Request): boolean {
+  if (filter.hasFilter() === false) {
+    return true;
+  }
+
+  return request.url.endsWith(filter.getFilter());
+}
+
+// |pattern
+function checkPatternLeftAnchorFilter(filter: NetworkFilter, request: Request): boolean {
+  if (filter.hasFilter() === false) {
+    return true;
+  }
+
+  return fastStartsWith(request.url, filter.getFilter());
+}
+
+// |pattern|
+function checkPatternLeftRightAnchorFilter(filter: NetworkFilter, request: Request): boolean {
+  if (filter.hasFilter() === false) {
+    return true;
+  }
+  return request.url === filter.getFilter();
+}
+
+// pattern*^
+function checkPatternRegexFilter(
+  filter: NetworkFilter,
+  request: Request,
+  startFrom: number = 0,
+): boolean {
+  let url = request.url;
+  if (startFrom > 0) {
+    url = url.slice(startFrom);
+  }
+  return filter.getRegex().test(url);
+}
+
+// ||pattern*^
+function checkPatternHostnameAnchorRegexFilter(filter: NetworkFilter, request: Request): boolean {
+  const url = request.url;
+  const hostname = request.hostname;
+  const filterHostname = filter.getHostname();
+  if (isAnchoredByHostname(filterHostname, hostname)) {
+    return checkPatternRegexFilter(
+      filter,
+      request,
+      url.indexOf(filterHostname) + filterHostname.length,
+    );
+  }
+
+  return false;
+}
+
+// ||pattern|
+function checkPatternHostnameRightAnchorFilter(filter: NetworkFilter, request: Request): boolean {
+  const filterHostname = filter.getHostname();
+  const requestHostname = request.hostname;
+  if (isAnchoredByHostname(filterHostname, requestHostname)) {
+    if (filter.hasFilter() === false) {
+      // In this specific case it means that the specified hostname should match
+      // at the end of the hostname of the request. This allows to prevent false
+      // positive like ||foo.bar which would match https://foo.bar.baz where
+      // ||foo.bar^ would not.
+      return (
+        filterHostname.length === requestHostname.length ||
+        requestHostname.endsWith(filterHostname)
+      );
+    } else {
+      return checkPatternRightAnchorFilter(filter, request);
+    }
+  }
+
+  return false;
+}
+
+// |||pattern|
+function checkPatternHostnameLeftRightAnchorFilter(
+  filter: NetworkFilter,
+  request: Request,
+): boolean {
+  if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+    if (filter.hasFilter() === false) {
+      return true;
+    }
+
+    // Since this is not a regex, the filter pattern must follow the hostname
+    // with nothing in between. So we extract the part of the URL following
+    // after hostname and will perform the matching on it.
+    const urlAfterHostname = getUrlAfterHostname(request.url, filter.getHostname());
+
+    // Since it must follow immediatly after the hostname and be a suffix of
+    // the URL, we conclude that filter must be equal to the part of the
+    // url following the hostname.
+    return filter.getFilter() === urlAfterHostname;
+  }
+
+  return false;
+}
+
+// ||pattern + left-anchor => This means that a plain pattern needs to appear
+// exactly after the hostname, with nothing in between.
+function checkPatternHostnameLeftAnchorFilter(filter: NetworkFilter, request: Request): boolean {
+  if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+    if (filter.hasFilter() === false) {
+      return true;
+    }
+
+    // Since this is not a regex, the filter pattern must follow the hostname
+    // with nothing in between. So we extract the part of the URL following
+    // after hostname and will perform the matching on it.
+    return fastStartsWithFrom(
+      request.url,
+      filter.getFilter(),
+      request.url.indexOf(filter.getHostname()) + filter.getHostname().length,
+    );
+  }
+
+  return false;
+}
+
+// ||pattern
+function checkPatternHostnameAnchorFilter(filter: NetworkFilter, request: Request): boolean {
+  const filterHostname = filter.getHostname();
+  if (isAnchoredByHostname(filterHostname, request.hostname)) {
+    if (filter.hasFilter() === false) {
+      return true;
+    }
+
+    // We consider this a match if the plain patter (i.e.: filter) appears anywhere.
+    return (
+      request.url.indexOf(
+        filter.getFilter(),
+        request.url.indexOf(filterHostname) + filterHostname.length,
+      ) !== -1
+    );
+  }
+
+  return false;
+}
+
+// ||pattern$fuzzy
+function checkPatternHostnameAnchorFuzzyFilter(filter: NetworkFilter, request: Request) {
+  if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+    return checkPatternFuzzyFilter(filter, request);
+  }
+
+  return false;
+}
+
+/**
+ * Specialize a network filter depending on its type. It allows for more
+ * efficient matching function.
+ */
+function checkPattern(filter: NetworkFilter, request: Request): boolean {
+  if (filter.isHostnameAnchor()) {
+    if (filter.isRegex()) {
+      return checkPatternHostnameAnchorRegexFilter(filter, request);
+    } else if (filter.isRightAnchor() && filter.isLeftAnchor()) {
+      return checkPatternHostnameLeftRightAnchorFilter(filter, request);
+    } else if (filter.isRightAnchor()) {
+      return checkPatternHostnameRightAnchorFilter(filter, request);
+    } else if (filter.isFuzzy()) {
+      return checkPatternHostnameAnchorFuzzyFilter(filter, request);
+    } else if (filter.isLeftAnchor()) {
+      return checkPatternHostnameLeftAnchorFilter(filter, request);
+    }
+    return checkPatternHostnameAnchorFilter(filter, request);
+  } else if (filter.isRegex()) {
+    return checkPatternRegexFilter(filter, request);
+  } else if (filter.isLeftAnchor() && filter.isRightAnchor()) {
+    return checkPatternLeftRightAnchorFilter(filter, request);
+  } else if (filter.isLeftAnchor()) {
+    return checkPatternLeftAnchorFilter(filter, request);
+  } else if (filter.isRightAnchor()) {
+    return checkPatternRightAnchorFilter(filter, request);
+  } else if (filter.isFuzzy()) {
+    return checkPatternFuzzyFilter(filter, request);
+  }
+
+  return checkPatternPlainFilter(filter, request);
+}
+
+function checkOptions(filter: NetworkFilter, request: Request): boolean {
+  // We first discard requests based on type, protocol and party. This is really
+  // cheap and should be done first.
+  if (
+    filter.isCptAllowed(request.type) === false ||
+    (request.isHttps === true && filter.fromHttps() === false) ||
+    (request.isHttp === true && filter.fromHttp() === false) ||
+    (!filter.firstParty() && request.isFirstParty === true) ||
+    (!filter.thirdParty() && request.isThirdParty === true)
+  ) {
+    return false;
+  }
+
+  // Make sure that an exception with a bug ID can only apply to a request being
+  // matched for a specific bug ID.
+  if (filter.bug !== undefined && filter.isException() && filter.bug !== request.bug) {
+    return false;
+  }
+
+  // Source URL must be among these domains to match
+  if (filter.hasOptDomains()) {
+    const optDomains = filter.getOptDomains();
+    if (
+      !binSearch(optDomains, request.sourceHostnameHash) &&
+      !binSearch(optDomains, request.sourceDomainHash)
+    ) {
+      return false;
+    }
+  }
+
+  // Source URL must not be among these domains to match
+  if (filter.hasOptNotDomains()) {
+    const optNotDomains = filter.getOptNotDomains();
+    if (
+      binSearch(optNotDomains, request.sourceHostnameHash) ||
+      binSearch(optNotDomains, request.sourceDomainHash)
+    ) {
+      return false;
+    }
+  }
+
+  return true;
 }

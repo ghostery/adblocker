@@ -1,4 +1,4 @@
-import { parseList } from '../src/parsing/list';
+import { List } from '../src/lists';
 import { fastHash, tokenize } from '../src/utils';
 import requests from './data/requests';
 import { loadAllLists } from './utils';
@@ -38,21 +38,28 @@ function checkCollisions(filters: any[]) {
 describe('Utils', () => {
   describe('fastHash', () => {
     it('does not produce collision on network filters', () => {
-      const { networkFilters } = parseList(loadAllLists());
-      checkCollisions(networkFilters);
+      checkCollisions(
+        List.parse({
+          data: loadAllLists(),
+        }).getNetworkFilters(),
+      );
     });
 
     it('does not produce collision on requests dataset', () => {
       // Collect all raw filters
-      const { networkFilters } = parseList(
-        requests.map(({ filters }) => filters.join('\n')).join('\n'),
+      checkCollisions(
+        List.parse({
+          data: requests.map(({ filters }) => filters.join('\n')).join('\n'),
+        }).getNetworkFilters(),
       );
-      checkCollisions(networkFilters);
     });
 
     it('does not produce collision on cosmetic filters', () => {
-      const { cosmeticFilters } = parseList(loadAllLists());
-      checkCollisions(cosmeticFilters);
+      checkCollisions(
+        List.parse({
+          data: loadAllLists(),
+        }).getCosmeticFilters(),
+      );
     });
   });
 

@@ -1,10 +1,9 @@
 import { getDomain, getHostname } from 'tldts';
 
-import matchCosmeticFilter, { getHostnameWithoutPublicSuffix } from '../src/matching/cosmetics';
-import matchNetworkFilter, { isAnchoredByHostname } from '../src/matching/network';
+import { getHostnameWithoutPublicSuffix } from '../src/filters/cosmetic';
+import NetworkFilter, { isAnchoredByHostname } from '../src/filters/network';
 
-import { f } from '../src/parsing/list';
-import { parseNetworkFilter } from '../src/parsing/network-filter';
+import { f } from '../src/lists';
 import { makeRequest } from '../src/request';
 
 import requests from './data/requests';
@@ -25,7 +24,7 @@ expect.extend({
       getDomain,
       getHostname,
     });
-    const match = matchNetworkFilter(filter, processedRequest);
+    const match = filter.match(processedRequest);
     if (match) {
       return {
         message: () =>
@@ -40,7 +39,7 @@ expect.extend({
     };
   },
   toMatchHostname(filter, hostname) {
-    const match = matchCosmeticFilter(filter, hostname, getDomain(hostname) || '');
+    const match = filter.match(hostname, getDomain(hostname) || '');
     if (match) {
       return {
         message: () => `expected ${filter.toString()} to not match ${hostname}`,
@@ -149,7 +148,7 @@ describe('#matchNetworkFilter', () => {
   requests.forEach(({ filters, type, sourceUrl, url }) => {
     filters.forEach((filter) => {
       it(`${filter} matches ${type}, url=${url}, source=${sourceUrl}`, () => {
-        const networkFilter = parseNetworkFilter(filter);
+        const networkFilter = NetworkFilter.parse(filter);
         if (networkFilter !== null) {
           networkFilter.rawLine = filter;
         }

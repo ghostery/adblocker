@@ -1,4 +1,5 @@
 import * as punycode from 'punycode';
+import StaticDataView from '../data-view';
 import { fastStartsWithFrom, getBit, hasUnicode, setBit, tokenizeHostnames } from '../utils';
 import IFilter from './interface';
 
@@ -83,7 +84,25 @@ function computeFilterId(
  * - matches-css-before
  * - xpath
  */
-export class CosmeticFilter implements IFilter {
+export default class CosmeticFilter implements IFilter {
+  public static parse(line: string): CosmeticFilter | null {
+    return parseCosmeticFilter(line);
+  }
+
+  /**
+   * Deserialize cosmetic filters. The code accessing the buffer should be
+   * symetrical to the one in `serializeCosmeticFilter`.
+   */
+  public static deserialize(buffer: StaticDataView): CosmeticFilter {
+    // The order of these fields should be the same as when we serialize them.
+    return new CosmeticFilter({
+      hostnames: buffer.getASCII(),
+      id: buffer.getUint32(),
+      mask: buffer.getUint8(),
+      selector: buffer.getUTF8(),
+      style: buffer.getASCII(),
+    });
+  }
   public readonly mask: number;
   public readonly selector: string;
   public readonly hostnames?: string;
@@ -112,6 +131,26 @@ export class CosmeticFilter implements IFilter {
   }
   public isNetworkFilter(): boolean {
     return false;
+  }
+
+  /**
+   * The format of a cosmetic filter is:
+   *
+   * | mask | selector length | selector... | hostnames length | hostnames...
+   *   32     16                              16
+   *
+   * The header (mask) is 32 bits, then we have a total of 32 bits to store the
+   * length of `selector` and `hostnames` (16 bits each).
+   *
+   * Improvements similar to the onces mentioned in `serializeNetworkFilters`
+   * could be applied here, to get a more compact representation.
+   */
+  public serialize(buffer: StaticDataView): void {
+    buffer.pushASCII(this.hostnames);
+    buffer.pushUint32(this.getId());
+    buffer.pushUint8(this.mask);
+    buffer.pushUTF8(this.selector);
+    buffer.pushASCII(this.style);
   }
 
   /**
@@ -144,6 +183,43 @@ export class CosmeticFilter implements IFilter {
     }
 
     return filter;
+  }
+
+  public match(hostname: string, domain: string): boolean {
+    const hostnameWithoutPublicSuffix = getHostnameWithoutPublicSuffix(hostname, domain);
+
+    // Check hostnames
+    if (this.hasHostnames()) {
+      if (hostname) {
+        const hostnames = this.getHostnames();
+
+        // Check for exceptions
+        for (let i = 0; i < hostnames.length; i += 1) {
+          const filterHostname = hostnames[i];
+          if (
+            filterHostname[0] === '~' &&
+            matchHostname(hostname, hostnameWithoutPublicSuffix, filterHostname.slice(1))
+          ) {
+            return false;
+          }
+        }
+
+        // Check for positive matches
+        for (let i = 0; i < hostnames.length; i += 1) {
+          const filterHostname = hostnames[i];
+          if (
+            filterHostname[0] !== '~' &&
+            matchHostname(hostname, hostnameWithoutPublicSuffix, filterHostname)
+          ) {
+            return true;
+          }
+        }
+      }
+
+      return false;
+    }
+
+    return true;
   }
 
   public getTokens(): Uint32Array[] {
@@ -233,7 +309,7 @@ export class CosmeticFilter implements IFilter {
  * instance out of it. This function should be *very* efficient, as it will be
  * used to parse tens of thousands of lines.
  */
-export function parseCosmeticFilter(line: string): CosmeticFilter | null {
+function parseCosmeticFilter(line: string): CosmeticFilter | null {
   // Mask to store attributes
   // Each flag (unhide, scriptInject, etc.) takes only 1 bit
   // at a specific offset defined in COSMETICS_MASK.
@@ -360,4 +436,60 @@ export function parseCosmeticFilter(line: string): CosmeticFilter | null {
     selector,
     style,
   });
+}
+
+/* Checks that hostnamePattern matches at the end of the hostname.
+ * Partial matches are allowed, but hostname should be a valid
+ * subdomain of hostnamePattern.
+ */
+function checkHostnamesPartialMatch(hostname: string, hostnamePattern: string): boolean {
+  if (hostname.endsWith(hostnamePattern)) {
+    const patternIndex = hostname.length - hostnamePattern.length;
+    if (patternIndex === 0 || hostname[patternIndex - 1] === '.') {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/* Checks if `hostname` matches `hostnamePattern`, which can appear as
+ * a domain selector in a cosmetic filter: hostnamePattern##selector
+ *
+ * It takes care of the concept of entities introduced by uBlock: google.*
+ * https://github.com/gorhill/uBlock/wiki/Static-filter-syntax#entity-based-cosmetic-filters
+ */
+function matchHostname(
+  hostname: string,
+  hostnameWithoutPublicSuffix: string | null,
+  hostnamePattern: string,
+): boolean {
+  if (hostnamePattern.endsWith('.*')) {
+    // Check if we have an entity match
+    if (hostnameWithoutPublicSuffix !== null) {
+      return checkHostnamesPartialMatch(hostnameWithoutPublicSuffix, hostnamePattern.slice(0, -2));
+    }
+
+    return false;
+  }
+
+  return checkHostnamesPartialMatch(hostname, hostnamePattern);
+}
+
+/**
+ * Given a hostname and its domain, return the hostname without the public
+ * suffix. We know that the domain, with one less label on the left, will be a
+ * the public suffix; and from there we know which trailing portion of
+ * `hostname` we should remove.
+ */
+export function getHostnameWithoutPublicSuffix(hostname: string, domain: string): string | null {
+  let hostnameWithoutPublicSuffix: string | null = null;
+
+  const indexOfDot = domain.indexOf('.');
+  if (indexOfDot !== -1) {
+    const publicSuffix = domain.slice(indexOfDot + 1);
+    hostnameWithoutPublicSuffix = hostname.slice(0, -publicSuffix.length - 1);
+  }
+
+  return hostnameWithoutPublicSuffix;
 }

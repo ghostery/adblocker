@@ -1,16 +1,16 @@
-import { CosmeticFilter } from '../parsing/cosmetic-filter';
-import IFilter from '../parsing/interface';
-import { parseList } from '../parsing/list';
-import { NetworkFilter } from '../parsing/network-filter';
+import StaticDataView from '../data-view';
+import CosmeticFilter from '../filters/cosmetic';
+import NetworkFilter from '../filters/network';
 import Request, { RequestType } from '../request';
 import Resources from '../resources';
-import { serializeEngine } from '../serialization';
 
-import CosmeticFilterBucket from './bucket/cosmetics';
+import Lists from '../lists';
+import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
-import IList from './list';
 
 import { createStylesheet } from '../content/injection';
+
+export const ENGINE_VERSION = 16;
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -22,28 +22,51 @@ function btoaPolyfill(buffer: string): string {
   return buffer;
 }
 
-function iterFilters<F extends IFilter>(
-  lists: Map<string, IList>,
-  select: (l: IList) => F[],
-  cb: (f: F) => void,
-): void {
-  lists.forEach((list: IList) => {
-    const filters: F[] = select(list);
-    for (let i = 0; i < filters.length; i += 1) {
-      cb(filters[i]);
-    }
-  });
-}
-
 interface IOptions {
+  debug: boolean;
+  enableOptimizations: boolean;
   loadCosmeticFilters: boolean;
   loadNetworkFilters: boolean;
-  optimizeAOT: boolean;
-  enableOptimizations: boolean;
 }
 
 export default class FilterEngine {
-  public lists: Map<string, IList>;
+  public static deserialize(serialized: Uint8Array): FilterEngine {
+    const buffer = new StaticDataView(0, serialized);
+
+    // Before starting deserialization, we make sure that the version of the
+    // serialized engine is the same as the current source code. If not, we start
+    // fresh and create a new engine from the lists.
+    const serializedEngineVersion = buffer.getUint8();
+    if (ENGINE_VERSION !== serializedEngineVersion) {
+      throw new Error('serialized engine version mismatch');
+    }
+
+    // Create a new engine with same options
+    const engine = new FilterEngine({
+      debug: false,
+      enableOptimizations: Boolean(buffer.getUint8()),
+      loadCosmeticFilters: Boolean(buffer.getUint8()),
+      loadNetworkFilters: Boolean(buffer.getUint8()),
+    });
+
+    // Deserialize resources
+    engine.resources = Resources.deserialize(buffer);
+
+    // Deserialize lists + filters
+    engine.lists = Lists.deserialize(buffer);
+
+    // Deserialize buckets
+    engine.filters = NetworkFilterBucket.deserialize(buffer);
+    engine.exceptions = NetworkFilterBucket.deserialize(buffer);
+    engine.importants = NetworkFilterBucket.deserialize(buffer);
+    engine.redirects = NetworkFilterBucket.deserialize(buffer);
+    engine.csp = NetworkFilterBucket.deserialize(buffer);
+    engine.cosmetics = CosmeticFilterBucket.deserialize(buffer);
+
+    return engine;
+  }
+
+  public lists: Lists;
 
   public csp: NetworkFilterBucket;
   public exceptions: NetworkFilterBucket;
@@ -52,40 +75,37 @@ export default class FilterEngine {
   public filters: NetworkFilterBucket;
   public cosmetics: CosmeticFilterBucket;
 
-  public size: number;
-
   public resources: Resources;
 
-  public loadCosmeticFilters: boolean;
-  public loadNetworkFilters: boolean;
-  public optimizeAOT: boolean;
-  public enableOptimizations: boolean;
+  public readonly loadCosmeticFilters: boolean;
+  public readonly loadNetworkFilters: boolean;
+  public readonly enableOptimizations: boolean;
+  public readonly debug: boolean;
 
   constructor({
     enableOptimizations = true,
     loadCosmeticFilters = true,
     loadNetworkFilters = true,
-    optimizeAOT = true,
+    debug = false,
   }: IOptions) {
     // Options
     this.loadCosmeticFilters = loadCosmeticFilters;
     this.loadNetworkFilters = loadNetworkFilters;
-    this.optimizeAOT = optimizeAOT;
     this.enableOptimizations = enableOptimizations;
+    this.debug = debug;
 
-    this.lists = new Map();
-    this.size = 0;
+    this.lists = new Lists();
 
     // $csp=
-    this.csp = new NetworkFilterBucket('csp', undefined, false);
+    this.csp = new NetworkFilterBucket(undefined, false);
     // @@filter
-    this.exceptions = new NetworkFilterBucket('exceptions');
+    this.exceptions = new NetworkFilterBucket();
     // $important
-    this.importants = new NetworkFilterBucket('importants');
+    this.importants = new NetworkFilterBucket();
     // $redirect
-    this.redirects = new NetworkFilterBucket('redirects');
+    this.redirects = new NetworkFilterBucket();
     // All other filters
-    this.filters = new NetworkFilterBucket('filters');
+    this.filters = new NetworkFilterBucket();
     // Cosmetic filters
     this.cosmetics = new CosmeticFilterBucket();
 
@@ -93,133 +113,92 @@ export default class FilterEngine {
     this.resources = new Resources();
   }
 
+  /**
+   * Creates a binary representation of the full engine. It can be stored
+   * on-disk for faster loading of the adblocker. The `deserialize` static
+   * method of Engine can be used to restore the engine.
+   */
   public serialize(): Uint8Array {
-    return serializeEngine(this);
+    // Create a big buffer! It should always be bigger than the serialized
+    // engine since `StaticDataView` will neither resize it nor detect overflows
+    // (for efficiency purposes).
+    const buffer = new StaticDataView(8000000);
+
+    buffer.pushUint8(ENGINE_VERSION);
+    buffer.pushUint8(Number(this.enableOptimizations));
+    buffer.pushUint8(Number(this.loadCosmeticFilters));
+    buffer.pushUint8(Number(this.loadNetworkFilters));
+
+    // Resources (js, resources)
+    this.resources.serialize(buffer);
+
+    // Lists
+    this.lists.serialize(buffer);
+
+    // Network Filters Buckets
+    this.filters.serialize(buffer);
+    this.exceptions.serialize(buffer);
+    this.importants.serialize(buffer);
+    this.redirects.serialize(buffer);
+    this.csp.serialize(buffer);
+
+    // Cosmecit Filters Bucket
+    this.cosmetics.serialize(buffer);
+
+    return buffer.crop();
   }
 
   public hasList(asset: string, checksum: string): boolean {
-    const list = this.lists.get(asset);
-    if (list !== undefined) {
-      return list.checksum === checksum;
-    }
-    return false;
+    return this.lists.has(asset, checksum);
   }
 
   public onUpdateResource(data: string, checksum: string): void {
-    this.resources = Resources.fromString(data, checksum);
+    if (checksum !== this.resources.checksum) {
+      this.resources = Resources.parse(data, checksum);
+    }
   }
 
   public onUpdateFilters(
     lists: Array<{ filters: string; checksum: string; asset: string }>,
     loadedAssets: Set<string> = new Set(),
-    debug: boolean = false,
-  ): void {
-    // Remove assets if needed
-    this.lists.forEach((_, asset) => {
-      if (!loadedAssets.has(asset)) {
-        this.lists.delete(asset);
-      }
+  ): boolean {
+    const updated = this.lists.update({
+      debug: this.debug,
+      lists,
+      loadCosmeticFilters: this.loadCosmeticFilters,
+      loadNetworkFilters: this.loadNetworkFilters,
+      loadedAssets,
     });
 
-    // Parse all filters and update `this.lists`
-    for (let i = 0; i < lists.length; i += 1) {
-      const { asset, filters, checksum } = lists[i];
+    if (updated) {
+      // Re-create all buckets
+      this.filters = new NetworkFilterBucket(
+        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFilters(cb, (l) => l.filters),
+        this.enableOptimizations,
+      );
+      this.csp = new NetworkFilterBucket(
+        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFilters(cb, (l) => l.csp),
+        false, // Disable optimizations
+      );
+      this.exceptions = new NetworkFilterBucket(
+        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFilters(cb, (l) => l.exceptions),
+        this.enableOptimizations,
+      );
+      this.importants = new NetworkFilterBucket(
+        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFilters(cb, (l) => l.importants),
+        this.enableOptimizations,
+      );
+      this.redirects = new NetworkFilterBucket(
+        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFilters(cb, (l) => l.redirects),
+        this.enableOptimizations,
+      );
 
-      // Parse and dispatch filters depending on type
-      const { cosmeticFilters, networkFilters } = parseList(filters, {
-        debug,
-        loadCosmeticFilters: this.loadCosmeticFilters,
-        loadNetworkFilters: this.loadNetworkFilters,
-      });
-
-      // Network filters
-      const miscFilters: NetworkFilter[] = [];
-      const exceptions: NetworkFilter[] = [];
-      const csp: NetworkFilter[] = [];
-      const importants: NetworkFilter[] = [];
-      const redirects: NetworkFilter[] = [];
-
-      // Dispatch filters into their bucket
-      for (let j = 0; j < networkFilters.length; j += 1) {
-        const filter = networkFilters[j];
-        if (filter.isCSP()) {
-          csp.push(filter);
-        } else if (filter.isException()) {
-          exceptions.push(filter);
-        } else if (filter.isImportant()) {
-          importants.push(filter);
-        } else if (filter.isRedirect()) {
-          redirects.push(filter);
-        } else {
-          miscFilters.push(filter);
-        }
-      }
-
-      this.lists.set(asset, {
-        checksum,
-        cosmetics: cosmeticFilters,
-        csp,
-        exceptions,
-        filters: miscFilters,
-        importants,
-        redirects,
-      });
+      this.cosmetics = new CosmeticFilterBucket((cb: (f: CosmeticFilter) => void) =>
+        this.lists.iterCosmeticFilters(cb),
+      );
     }
 
-    // Re-create all buckets
-    this.filters = new NetworkFilterBucket(
-      'filters',
-      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, (l) => l.filters, cb),
-      this.enableOptimizations,
-    );
-    this.csp = new NetworkFilterBucket(
-      'csp',
-      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, (l) => l.csp, cb),
-      false, // Disable optimizations
-    );
-    this.exceptions = new NetworkFilterBucket(
-      'exceptions',
-      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, (l) => l.exceptions, cb),
-      this.enableOptimizations,
-    );
-    this.importants = new NetworkFilterBucket(
-      'importants',
-      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, (l) => l.importants, cb),
-      this.enableOptimizations,
-    );
-    this.redirects = new NetworkFilterBucket(
-      'redirects',
-      (cb: (f: NetworkFilter) => void) => iterFilters(this.lists, (l) => l.redirects, cb),
-      this.enableOptimizations,
-    );
-
-    // Eagerly collect filters in this case only
-    this.cosmetics = new CosmeticFilterBucket((cb: (f: CosmeticFilter) => void) =>
-      iterFilters(this.lists, (l) => l.cosmetics, cb),
-    );
-
-    // Update size
-    this.size =
-      this.cosmetics.size +
-      this.csp.size +
-      this.exceptions.size +
-      this.filters.size +
-      this.importants.size +
-      this.redirects.size;
-
-    // Optimize ahead of time if asked for
-    if (this.optimizeAOT) {
-      this.optimize();
-    }
-  }
-
-  public optimize() {
-    this.filters.optimizeAheadOfTime();
-    this.exceptions.optimizeAheadOfTime();
-    this.importants.optimizeAheadOfTime();
-    this.redirects.optimizeAheadOfTime();
-    // Cosmetic bucket does not expose any optimization yet.
-    // this.cosmetics.optimizeAheadOfTime();
+    return updated;
   }
 
   public getCosmeticsFilters(hostname: string, domain: string | null | undefined) {
@@ -228,7 +207,9 @@ export default class FilterEngine {
     const blockedScripts: string[] = [];
 
     if (this.loadCosmeticFilters) {
-      const rules = this.cosmetics.getCosmeticsFilters(hostname, domain || '');
+      const rules = this.cosmetics.getCosmeticsFilters(hostname, domain || '', (id) =>
+        this.lists.getCosmeticFilter(id),
+      );
       for (let i = 0; i < rules.length; i += 1) {
         const rule: CosmeticFilter = rules[i];
 
@@ -266,12 +247,13 @@ export default class FilterEngine {
 
   public matchAll(request: Request): Set<NetworkFilter> {
     const filters: NetworkFilter[] = [];
+    const getFilter = (id: number) => this.lists.getNetworkFilter(id);
     if (request.isSupported) {
-      filters.push(...this.importants.matchAll(request));
-      filters.push(...this.filters.matchAll(request));
-      filters.push(...this.exceptions.matchAll(request));
-      filters.push(...this.csp.matchAll(request));
-      filters.push(...this.redirects.matchAll(request));
+      filters.push(...this.importants.matchAll(request, getFilter));
+      filters.push(...this.filters.matchAll(request, getFilter));
+      filters.push(...this.exceptions.matchAll(request, getFilter));
+      filters.push(...this.csp.matchAll(request, getFilter));
+      filters.push(...this.redirects.matchAll(request, getFilter));
     }
 
     return new Set(filters);
@@ -286,7 +268,7 @@ export default class FilterEngine {
       return undefined;
     }
 
-    const matches = this.csp.matchAll(request);
+    const matches = this.csp.matchAll(request, (id) => this.lists.getNetworkFilter(id));
 
     // Collect all CSP directives and keep track of exceptions
     const disabledCsp = new Set();
@@ -325,18 +307,20 @@ export default class FilterEngine {
     let redirect: string | undefined;
 
     if (request.isSupported) {
+      const getFilter = (id: number) => this.lists.getNetworkFilter(id);
+
       // Check the filters in the following order:
       // 1. $important (not subject to exceptions)
       // 2. redirection ($redirect=resource)
       // 3. normal filters
       // 4. exceptions
-      filter = this.importants.match(request);
+      filter = this.importants.match(request, getFilter);
 
       if (filter === undefined) {
         // Check if there is a redirect or a normal match
-        filter = this.redirects.match(request);
+        filter = this.redirects.match(request, getFilter);
         if (filter === undefined) {
-          filter = this.filters.match(request);
+          filter = this.filters.match(request, getFilter);
         }
 
         // If we found something, check for exceptions
@@ -346,7 +330,7 @@ export default class FilterEngine {
             request.bug = filter.bug;
           }
 
-          exception = this.exceptions.match(request);
+          exception = this.exceptions.match(request, getFilter);
         }
       }
 

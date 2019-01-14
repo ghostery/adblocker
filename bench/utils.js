@@ -7,7 +7,7 @@ function createEngine(lists, resources, options = {}, serialize = false) {
     version: 1,
   });
 
-  engine.onUpdateResource([{ filters: resources, checksum: '' }]);
+  engine.onUpdateResource(resources, '');
   engine.onUpdateFilters(lists.map((list, i) => ({
     asset: `${i}`,
     checksum: '',

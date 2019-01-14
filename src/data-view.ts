@@ -60,34 +60,37 @@ export default class StaticDataView {
   }
 
   public pushUint8(uint8: number): void {
-    this.buffer[this.pos] = uint8;
-    this.pos += 1;
+    this.buffer[this.pos++] = uint8;
   }
 
   public getUint8(): number {
-    const uint8 = this.buffer[this.pos];
-    this.pos += 1;
-    return uint8;
+    return this.buffer[this.pos++];
   }
 
   public pushUint16(uint16: number): void {
-    this.buffer[this.pos] = uint16 >>> 8;
-    this.buffer[this.pos + 1] = uint16;
-    this.pos += 2;
+    this.buffer[this.pos++] = uint16 >>> 8;
+    this.buffer[this.pos++] = uint16;
   }
 
   public getUint16(): number {
-    const uint16 = ((this.buffer[this.pos] << 8) | this.buffer[this.pos + 1]) >>> 0;
-    this.pos += 2;
-    return uint16;
+    return ((this.buffer[this.pos++] << 8) | this.buffer[this.pos++]) >>> 0;
   }
 
   public pushUint32(uint32: number): void {
-    this.buffer[this.pos] = uint32 >>> 24;
-    this.buffer[this.pos + 1] = uint32 >>> 16;
-    this.buffer[this.pos + 2] = uint32 >>> 8;
-    this.buffer[this.pos + 3] = uint32;
-    this.pos += 4;
+    this.buffer[this.pos++] = uint32 >>> 24;
+    this.buffer[this.pos++] = uint32 >>> 16;
+    this.buffer[this.pos++] = uint32 >>> 8;
+    this.buffer[this.pos++] = uint32;
+  }
+
+  public getUint32(): number {
+    return (
+      (((this.buffer[this.pos++] << 24) >>> 0) +
+        ((this.buffer[this.pos++] << 16) |
+          (this.buffer[this.pos++] << 8) |
+          this.buffer[this.pos++])) >>>
+      0
+    );
   }
 
   public pushUint32Array(arr: Uint32Array | undefined): void {
@@ -95,6 +98,7 @@ export default class StaticDataView {
       this.pushUint16(0);
     } else {
       this.pushUint16(arr.length);
+      // TODO - use `set` to push the full buffer at once?
       for (let i = 0; i < arr.length; i += 1) {
         this.pushUint32(arr[i]);
       }
@@ -107,21 +111,29 @@ export default class StaticDataView {
       return undefined;
     }
     const arr = new Uint32Array(length);
+    // TODO - use `subarray`?
     for (let i = 0; i < length; i += 1) {
       arr[i] = this.getUint32();
     }
     return arr;
   }
 
-  public getUint32(): number {
-    const uint32 =
-      (((this.buffer[this.pos] << 24) >>> 0) +
-        ((this.buffer[this.pos + 1] << 16) |
-          (this.buffer[this.pos + 2] << 8) |
-          this.buffer[this.pos + 3])) >>>
-      0;
-    this.pos += 4;
-    return uint32;
+  public pushUint32ArrayStrict(arr: Uint32Array): void {
+    this.pushUint32(arr.length);
+    // TODO - use `set` to push the full buffer at once?
+    for (let i = 0; i < arr.length; i += 1) {
+      this.pushUint32(arr[i]);
+    }
+  }
+
+  public getUint32ArrayStrict(): Uint32Array {
+    const length = this.getUint32();
+    const arr = new Uint32Array(length);
+    // TODO - use `subarray`?
+    for (let i = 0; i < length; i += 1) {
+      arr[i] = this.getUint32();
+    }
+    return arr;
   }
 
   public pushUTF8(str: string): void {
@@ -149,9 +161,8 @@ export default class StaticDataView {
   public pushASCIIStrict(str: string): void {
     this.pushUint16(str.length);
     for (let i = 0; i < str.length; i += 1) {
-      this.buffer[this.pos + i] = str.charCodeAt(i);
+      this.buffer[this.pos++] = str.charCodeAt(i);
     }
-    this.pos += str.length;
   }
 
   public getASCIIStrict(): string {
