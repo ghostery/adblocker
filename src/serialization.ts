@@ -12,6 +12,7 @@ import ReverseIndex, { IBucket, newBucket } from './engine/reverse-index';
 import { CosmeticFilter } from './parsing/cosmetic-filter';
 import IFilter from './parsing/interface';
 import { NetworkFilter } from './parsing/network-filter';
+import Resources from './resources';
 
 export const ENGINE_VERSION = 16;
 
@@ -377,53 +378,6 @@ function deserializeCosmeticFilterBucket(
   return bucket;
 }
 
-function serializeResources(engine: Engine, buffer: StaticDataView): void {
-  // Serialize `resourceChecksum`
-  buffer.pushASCII(engine.resourceChecksum);
-
-  // Serialize `resources`
-  buffer.pushUint8(engine.resources.size);
-  engine.resources.forEach(({ contentType, data }, name) => {
-    buffer.pushASCII(name);
-    buffer.pushASCII(contentType);
-    buffer.pushASCII(data);
-  });
-}
-
-function deserializeResources(
-  buffer: StaticDataView,
-): {
-  js: Map<string, string>;
-  resources: Map<string, { contentType: string; data: string }>;
-  resourceChecksum: string;
-} {
-  const js = new Map();
-  const resources = new Map();
-  const resourceChecksum = buffer.getASCII() || '';
-
-  // Deserialize `resources`
-  const resourcesSize = buffer.getUint8();
-  for (let i = 0; i < resourcesSize; i += 1) {
-    resources.set(buffer.getASCII(), {
-      contentType: buffer.getASCII(),
-      data: buffer.getASCII(),
-    });
-  }
-
-  // Deserialize `js`
-  resources.forEach(({ contentType, data }, name) => {
-    if (contentType === 'application/javascript') {
-      js.set(name, data);
-    }
-  });
-
-  return {
-    js,
-    resourceChecksum,
-    resources,
-  };
-}
-
 /**
  * Creates a string representation of the full engine. It can be stored
  * on-disk for faster loading of the adblocker. The `load` method of a
@@ -443,7 +397,7 @@ function serializeEngine(engine: Engine): Uint8Array {
   buffer.pushUint32(Number(engine.size));
 
   // Resources (js, resources)
-  serializeResources(engine, buffer);
+  engine.resources.serialize(buffer);
 
   // Lists
   serializeLists(buffer, engine.lists);
@@ -482,11 +436,7 @@ function deserializeEngine(serialized: Uint8Array): Engine {
   engine.size = buffer.getUint32();
 
   // Deserialize resources
-  const { js, resources, resourceChecksum } = deserializeResources(buffer);
-
-  engine.js = js;
-  engine.resources = resources;
-  engine.resourceChecksum = resourceChecksum;
+  engine.resources = Resources.fromSerialized(buffer);
 
   // Deserialize lists + filters
   const { lists, networkFilters, cosmeticFilters } = deserializeLists(buffer);

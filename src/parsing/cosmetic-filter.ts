@@ -85,7 +85,7 @@ function computeFilterId(
  */
 export class CosmeticFilter implements IFilter {
   public readonly mask: number;
-  public readonly selector?: string;
+  public readonly selector: string;
   public readonly hostnames?: string;
   public readonly style?: string;
 
@@ -99,7 +99,7 @@ export class CosmeticFilter implements IFilter {
     mask,
     selector,
     style,
-  }: Partial<CosmeticFilter> & { mask: number }) {
+  }: Partial<CosmeticFilter> & { mask: number; selector: string }) {
     this.id = id;
     this.mask = mask;
     this.selector = selector;

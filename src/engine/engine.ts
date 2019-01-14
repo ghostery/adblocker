@@ -1,8 +1,9 @@
 import { CosmeticFilter } from '../parsing/cosmetic-filter';
 import IFilter from '../parsing/interface';
-import { parseJSResource, parseList } from '../parsing/list';
+import { parseList } from '../parsing/list';
 import { NetworkFilter } from '../parsing/network-filter';
 import Request, { RequestType } from '../request';
+import Resources from '../resources';
 import { serializeEngine } from '../serialization';
 
 import CosmeticFilterBucket from './bucket/cosmetics';
@@ -53,9 +54,7 @@ export default class FilterEngine {
 
   public size: number;
 
-  public resourceChecksum: string;
-  public js: Map<string, string>;
-  public resources: Map<string, { contentType: string; data: string }>;
+  public resources: Resources;
 
   public loadCosmeticFilters: boolean;
   public loadNetworkFilters: boolean;
@@ -91,9 +90,7 @@ export default class FilterEngine {
     this.cosmetics = new CosmeticFilterBucket();
 
     // Injections
-    this.resourceChecksum = '';
-    this.js = new Map();
-    this.resources = new Map();
+    this.resources = new Resources();
   }
 
   public serialize(): Uint8Array {
@@ -108,31 +105,8 @@ export default class FilterEngine {
     return false;
   }
 
-  public onUpdateResource(updates: Array<{ filters: string; checksum: string }>): void {
-    for (let i = 0; i < updates.length; i += 1) {
-      const { filters, checksum } = updates[i];
-
-      // NOTE: Here we can only handle one resource file at a time.
-      this.resourceChecksum = checksum;
-      const typeToResource = parseJSResource(filters);
-
-      // the resource containing javascirpts to be injected
-      const js = typeToResource.get('application/javascript');
-      if (js !== undefined) {
-        this.js = js;
-      }
-
-      // Create a mapping from resource name to { contentType, data }
-      // used for request redirection.
-      typeToResource.forEach((resources, contentType) => {
-        resources.forEach((data, name) => {
-          this.resources.set(name, {
-            contentType,
-            data,
-          });
-        });
-      });
-    }
+  public onUpdateResource(data: string, checksum: string): void {
+    this.resources = Resources.fromString(data, checksum);
   }
 
   public onUpdateFilters(
@@ -261,7 +235,7 @@ export default class FilterEngine {
         if (rule.isScriptBlock()) {
           blockedScripts.push(rule.getSelector());
         } else if (rule.isScriptInject()) {
-          const script = rule.getScript(this.js);
+          const script = rule.getScript(this.resources.js);
           if (script !== undefined) {
             scripts.push(script);
           }
@@ -379,7 +353,7 @@ export default class FilterEngine {
       // If there is a match
       if (filter !== undefined) {
         if (filter.isRedirect()) {
-          const redirectResource = this.resources.get(filter.getRedirect());
+          const redirectResource = this.resources.getResource(filter.getRedirect());
           if (redirectResource !== undefined) {
             const { data, contentType } = redirectResource;
             let dataUrl;

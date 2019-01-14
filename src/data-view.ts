@@ -124,43 +124,49 @@ export default class StaticDataView {
     return uint32;
   }
 
-  public pushUTF8(str: string | undefined): void {
-    if (str === undefined) {
-      this.pushUint16(0);
+  public pushUTF8(str: string): void {
+    this.pushUint16(str.length);
+    if (hasUnicode(str)) {
+      this.pushASCII(punycode.encode(str));
     } else {
-      this.pushUint16(str.length);
-      if (hasUnicode(str)) {
-        this.pushASCII(punycode.encode(str));
-      } else {
-        this.pushASCII(str);
-      }
+      this.pushASCII(str);
     }
   }
 
-  public getUTF8(): string | undefined {
+  public getUTF8(): string {
     const length = this.getUint16();
     if (length === 0) {
-      return undefined;
+      return '';
     }
 
-    const str = this.getASCII();
-    if (str === undefined || str.length === length) {
+    const str = this.getASCIIStrict();
+    if (str.length === length) {
       return str;
     }
     return punycode.decode(str);
+  }
+
+  public pushASCIIStrict(str: string): void {
+    this.pushUint16(str.length);
+    for (let i = 0; i < str.length; i += 1) {
+      this.buffer[this.pos + i] = str.charCodeAt(i);
+    }
+    this.pos += str.length;
+  }
+
+  public getASCIIStrict(): string {
+    const byteLength = this.getUint16();
+    this.pos += byteLength;
+
+    // @ts-ignore
+    return String.fromCharCode.apply(null, this.buffer.subarray(this.pos - byteLength, this.pos));
   }
 
   public pushASCII(str: string | undefined): void {
     if (str === undefined) {
       this.pushUint16(0);
     } else {
-      this.pushUint16(str.length);
-      const len = str.length;
-      const offset = this.pos;
-      for (let i = 0; i < len; i += 1) {
-        this.buffer[offset + i] = str.charCodeAt(i);
-      }
-      this.pos += len;
+      this.pushASCIIStrict(str);
     }
   }
 

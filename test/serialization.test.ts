@@ -70,7 +70,7 @@ describe('Serialization', () => {
     });
 
     engine.onUpdateFilters([{ filters: loadAllLists(), asset: 'list1', checksum: 'checksum' }]);
-    engine.onUpdateResource([{ checksum: 'resources1', filters: loadResources() }]);
+    engine.onUpdateResource(loadResources(), 'resources1');
 
     const serialized = serializeEngine(engine);
 
