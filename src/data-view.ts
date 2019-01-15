@@ -2,8 +2,6 @@ import * as punycode from 'punycode';
 import { hasUnicode } from './utils';
 
 /**
- * @class StaticDataView
- *
  * This abstraction allows to serialize efficiently low-level values of types:
  * String, uint8, uint16, uint32 while hiding the complexity of managing the
  * current offset and growing. It should always be instantiated with a

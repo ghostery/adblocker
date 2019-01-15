@@ -47,8 +47,6 @@ export class Bucket<T extends IFilter> {
   }
 }
 
-const EMPTY_BUCKET = new Bucket([]);
-
 /**
  * Accelerating data structure based on a reverse token index. The creation of
  * the index follows the following algorithm:
@@ -94,6 +92,7 @@ export default class ReverseIndex<T extends IFilter> {
   private cache: Map<number, Bucket<T>>;
 
   private readonly optimize: (filters: T[]) => T[];
+  private readonly emptyBucket: Bucket<T>;
 
   constructor(
     filters: (cb: (f: T) => void) => void = noFilter,
@@ -102,6 +101,8 @@ export default class ReverseIndex<T extends IFilter> {
     this.index = new Uint32Array(0);
     this.cache = new Map();
     this.optimize = optimize;
+
+    this.emptyBucket = new Bucket([]);
 
     this.addFilters(filters);
   }
@@ -254,7 +255,7 @@ export default class ReverseIndex<T extends IFilter> {
       // (log(n) where n is the number of filters in the index).
       bucket =
         filters.length === 0
-          ? EMPTY_BUCKET
+          ? this.emptyBucket
           : new Bucket(filters.length > 1 ? this.optimize(filters) : filters);
       this.cache.set(token, bucket);
     }
