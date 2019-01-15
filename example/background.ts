@@ -8,10 +8,10 @@ import * as adblocker from '../index';
  */
 function loadAdblocker() {
   const engine = new adblocker.FiltersEngine({
+    debug: false,
     enableOptimizations: true,
     loadCosmeticFilters: true,
     loadNetworkFilters: true,
-    optimizeAOT: true,
   });
 
   console.log('Fetching resources...');
@@ -26,7 +26,7 @@ function loadAdblocker() {
         }
       }
 
-      engine.onUpdateResource([{ filters: resources, checksum: '' }]);
+      engine.onUpdateResource(resources, '');
       engine.onUpdateFilters([
         {
           asset: 'filters',
@@ -35,7 +35,7 @@ function loadAdblocker() {
         },
       ]);
 
-      return adblocker.deserializeEngine(engine.serialize());
+      return adblocker.FiltersEngine.deserialize(engine.serialize());
     },
   );
 }
