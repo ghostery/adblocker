@@ -4,6 +4,7 @@ import { RequestType } from '../request';
 import Request from '../request';
 import {
   binSearch,
+  bitCount,
   clearBit,
   createFuzzySignature,
   fastHash,
@@ -351,7 +352,11 @@ export default class NetworkFilter implements IFilter {
 
   /**
    * Tries to recreate the original representation of the filter (adblock
-   * syntax) from the internal representation.
+   * syntax) from the internal representation. If `rawLine` is set (when filters
+   * are parsed in `debug` mode for example), then it is returned directly.
+   * Otherwise, we try to stick as closely as possible to the original form;
+   * there are things which cannot be recovered though, like domains options
+   * of which only hashes are stored.
    */
   public toString() {
     if (this.rawLine !== undefined) {
@@ -363,9 +368,11 @@ export default class NetworkFilter implements IFilter {
     if (this.isException()) {
       filter += '@@';
     }
+
     if (this.isHostnameAnchor()) {
       filter += '||';
     }
+
     if (this.isLeftAnchor()) {
       filter += '|';
     }
@@ -386,50 +393,100 @@ export default class NetworkFilter implements IFilter {
     const options: string[] = [];
 
     if (!this.fromAny()) {
-      if (this.isFuzzy()) {
-        options.push('fuzzy');
+      const numberOfCptOptions = bitCount(this.getCptMask());
+      const numberOfNegatedOptions = bitCount(FROM_ANY) - numberOfCptOptions;
+
+      if (numberOfNegatedOptions < numberOfCptOptions) {
+        if (!this.fromImage()) {
+          options.push('~image');
+        }
+        if (!this.fromMedia()) {
+          options.push('~media');
+        }
+        if (!this.fromObject()) {
+          options.push('~object');
+        }
+        if (!this.fromOther()) {
+          options.push('~other');
+        }
+        if (!this.fromPing()) {
+          options.push('~ping');
+        }
+        if (!this.fromScript()) {
+          options.push('~script');
+        }
+        if (!this.fromStylesheet()) {
+          options.push('~stylesheet');
+        }
+        if (!this.fromSubdocument()) {
+          options.push('~subdocument');
+        }
+        if (!this.fromWebsocket()) {
+          options.push('~websocket');
+        }
+        if (!this.fromXmlHttpRequest()) {
+          options.push('~xmlhttprequest');
+        }
+        if (!this.fromFont()) {
+          options.push('~font');
+        }
+      } else {
+        if (this.fromImage()) {
+          options.push('image');
+        }
+        if (this.fromMedia()) {
+          options.push('media');
+        }
+        if (this.fromObject()) {
+          options.push('object');
+        }
+        if (this.fromOther()) {
+          options.push('other');
+        }
+        if (this.fromPing()) {
+          options.push('ping');
+        }
+        if (this.fromScript()) {
+          options.push('script');
+        }
+        if (this.fromStylesheet()) {
+          options.push('stylesheet');
+        }
+        if (this.fromSubdocument()) {
+          options.push('subdocument');
+        }
+        if (this.fromWebsocket()) {
+          options.push('websocket');
+        }
+        if (this.fromXmlHttpRequest()) {
+          options.push('xmlhttprequest');
+        }
+        if (this.fromFont()) {
+          options.push('font');
+        }
       }
-      if (this.fromImage()) {
-        options.push('image');
-      }
-      if (this.fromMedia()) {
-        options.push('media');
-      }
-      if (this.fromObject()) {
-        options.push('object');
-      }
-      if (this.fromOther()) {
-        options.push('other');
-      }
-      if (this.fromPing()) {
-        options.push('ping');
-      }
-      if (this.fromScript()) {
-        options.push('script');
-      }
-      if (this.fromStylesheet()) {
-        options.push('stylesheet');
-      }
-      if (this.fromSubdocument()) {
-        options.push('subdocument');
-      }
-      if (this.fromWebsocket()) {
-        options.push('websocket');
-      }
-      if (this.fromXmlHttpRequest()) {
-        options.push('xmlhttprequest');
-      }
-      if (this.fromFont()) {
-        options.push('font');
-      }
+    }
+
+    if (this.isFuzzy()) {
+      options.push('fuzzy');
     }
 
     if (this.isImportant()) {
       options.push('important');
     }
+
     if (this.isRedirect()) {
       options.push(`redirect=${this.getRedirect()}`);
     }
+
+    if (this.isCSP()) {
+      options.push(`csp=${this.csp}`);
+    }
+
+    if (this.hasBug()) {
+      options.push(`bug=${this.bug}`);
+    }
+
     if (this.firstParty() !== this.thirdParty()) {
       if (this.firstParty()) {
         options.push('first-party');
@@ -439,11 +496,9 @@ export default class NetworkFilter implements IFilter {
       }
     }
 
-    // if (this.hasOptDomains() || this.hasOptNotDomains()) {
-    //   const domains = [...this.getOptDomains()];
-    //   this.getOptNotDomains().forEach((nd) => domains.push(`~${nd}`));
-    //   options.push(`domain=${domains.join('|')}`);
-    // }
+    if (this.hasOptDomains() || this.hasOptNotDomains()) {
+      options.push('domain=<hashed>');
+    }
 
     if (options.length > 0) {
       filter += `$${options.join(',')}`;
@@ -479,23 +534,9 @@ export default class NetworkFilter implements IFilter {
     return this.optNotDomains !== undefined;
   }
 
-  public getNumberOfOptNotDomains(): number {
-    if (this.optNotDomains !== undefined) {
-      return this.optNotDomains.length;
-    }
-    return 0;
-  }
-
   public getOptNotDomains(): Uint32Array {
     this.optimize();
     return this.optNotDomains || EMPTY_ARRAY;
-  }
-
-  public getNumberOfOptDomains(): number {
-    if (this.optDomains !== undefined) {
-      return this.optDomains.length;
-    }
-    return 0;
   }
 
   public hasOptDomains(): boolean {
@@ -733,6 +774,9 @@ export default class NetworkFilter implements IFilter {
       }
       if (this.filter !== undefined && this.isFuzzy()) {
         this.fuzzySignature = createFuzzySignature(this.filter);
+        if (this.fuzzySignature.length === 0) {
+          this.fuzzySignature = undefined;
+        }
       }
     }
   }
@@ -974,12 +1018,8 @@ function parseNetworkFilter(rawLine: string): NetworkFilter | null {
               optionMask = NETWORK_FILTER_MASK.fromFont;
               break;
             default:
+              // Disable this filter if we don't support all the options
               return null;
-          }
-
-          // Disable this filter if we don't support all the options
-          if (optionMask === 0) {
-            return null;
           }
 
           // We got a valid cpt option, update mask
@@ -1030,26 +1070,27 @@ function parseNetworkFilter(rawLine: string): NetworkFilter | null {
       // TODO - this could be made more efficient if we could match between two
       // indices. Once again, we have to do more work than is really needed.
       const firstSeparator = line.search(SEPARATOR);
+      // NOTE: `firstSeparator` shall never be -1 here since `isRegex` is true.
+      // This means there must be at least an occurrence of `*` or `^`
+      // somewhere.
 
-      if (firstSeparator !== -1) {
-        hostname = line.slice(filterIndexStart, firstSeparator);
-        filterIndexStart = firstSeparator;
+      hostname = line.slice(filterIndexStart, firstSeparator);
+      filterIndexStart = firstSeparator;
 
-        // If the only symbol remaining for the selector is '^' then ignore it
-        // but set the filter as right anchored since there should not be any
-        // other label on the right
-        if (filterIndexEnd - filterIndexStart === 1 && line[filterIndexStart] === '^') {
-          mask = clearBit(mask, NETWORK_FILTER_MASK.isRegex);
-          filterIndexStart = filterIndexEnd;
-          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRightAnchor, true);
-        } else {
-          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isLeftAnchor, true);
-          mask = setNetworkMask(
-            mask,
-            NETWORK_FILTER_MASK.isRegex,
-            checkIsRegex(line, filterIndexStart, filterIndexEnd),
-          );
-        }
+      // If the only symbol remaining for the selector is '^' then ignore it
+      // but set the filter as right anchored since there should not be any
+      // other label on the right
+      if (filterIndexEnd - filterIndexStart === 1 && line[filterIndexStart] === '^') {
+        mask = clearBit(mask, NETWORK_FILTER_MASK.isRegex);
+        filterIndexStart = filterIndexEnd;
+        mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRightAnchor, true);
+      } else {
+        mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isLeftAnchor, true);
+        mask = setNetworkMask(
+          mask,
+          NETWORK_FILTER_MASK.isRegex,
+          checkIsRegex(line, filterIndexStart, filterIndexEnd),
+        );
       }
     } else {
       // Look for next /
@@ -1223,27 +1264,16 @@ function checkPatternPlainFilter(filter: NetworkFilter, request: Request): boole
 
 // pattern|
 function checkPatternRightAnchorFilter(filter: NetworkFilter, request: Request): boolean {
-  if (filter.hasFilter() === false) {
-    return true;
-  }
-
   return request.url.endsWith(filter.getFilter());
 }
 
 // |pattern
 function checkPatternLeftAnchorFilter(filter: NetworkFilter, request: Request): boolean {
-  if (filter.hasFilter() === false) {
-    return true;
-  }
-
   return fastStartsWith(request.url, filter.getFilter());
 }
 
 // |pattern|
 function checkPatternLeftRightAnchorFilter(filter: NetworkFilter, request: Request): boolean {
-  if (filter.hasFilter() === false) {
-    return true;
-  }
   return request.url === filter.getFilter();
 }
 
@@ -1304,10 +1334,6 @@ function checkPatternHostnameLeftRightAnchorFilter(
   request: Request,
 ): boolean {
   if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
-    if (filter.hasFilter() === false) {
-      return true;
-    }
-
     // Since this is not a regex, the filter pattern must follow the hostname
     // with nothing in between. So we extract the part of the URL following
     // after hostname and will perform the matching on it.
@@ -1326,10 +1352,6 @@ function checkPatternHostnameLeftRightAnchorFilter(
 // exactly after the hostname, with nothing in between.
 function checkPatternHostnameLeftAnchorFilter(filter: NetworkFilter, request: Request): boolean {
   if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
-    if (filter.hasFilter() === false) {
-      return true;
-    }
-
     // Since this is not a regex, the filter pattern must follow the hostname
     // with nothing in between. So we extract the part of the URL following
     // after hostname and will perform the matching on it.

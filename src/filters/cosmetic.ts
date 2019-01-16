@@ -3,6 +3,8 @@ import StaticDataView from '../data-view';
 import { fastStartsWithFrom, getBit, hasUnicode, setBit, tokenizeHostnames } from '../utils';
 import IFilter from './interface';
 
+export const DEFAULT_HIDDING_STYLE: string = 'display: none !important;';
+
 /**
  * Validate CSS selector. There is a fast path for simple selectors (e.g.: #foo
  * or .bar) which are the most common case. For complex ones, we rely on
@@ -158,6 +160,10 @@ export default class CosmeticFilter implements IFilter {
    * debugging purpose, as it will expand the values stored in the bit mask.
    */
   public toString(): string {
+    if (this.rawLine !== undefined) {
+      return this.rawLine;
+    }
+
     let filter = '';
 
     if (this.hasHostnames()) {
@@ -171,7 +177,7 @@ export default class CosmeticFilter implements IFilter {
     }
 
     if (this.isScriptInject()) {
-      filter += 'script:inject(';
+      filter += '+js(';
       filter += this.selector;
       filter += ')';
     } else if (this.isScriptBlock()) {
@@ -258,7 +264,7 @@ export default class CosmeticFilter implements IFilter {
   }
 
   public getStyle(): string {
-    return this.style || 'display: none !important;';
+    return this.style || DEFAULT_HIDDING_STYLE;
   }
 
   public getSelector(): string {
@@ -397,7 +403,6 @@ function parseCosmeticFilter(line: string): CosmeticFilter | null {
           selector = line.slice(suffixStartIndex, indexOfColon);
           style = line.slice(indexAfterColon + 6, -1);
         } else {
-          console.error('?????', line, indexAfterColon);
           return null;
         }
       } else if (

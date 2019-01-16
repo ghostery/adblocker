@@ -1,4 +1,4 @@
-import CosmeticFilter from '../src/filters/cosmetic';
+import CosmeticFilter, { DEFAULT_HIDDING_STYLE } from '../src/filters/cosmetic';
 import NetworkFilter from '../src/filters/network';
 import { List } from '../src/lists';
 import { fastHash } from '../src/utils';
@@ -7,6 +7,8 @@ import { fastHash } from '../src/utils';
 function network(filter: string, expected: any) {
   const parsed = NetworkFilter.parse(filter);
   if (parsed !== null) {
+    expect(parsed.isNetworkFilter()).toBeTruthy();
+    expect(parsed.isCosmeticFilter()).toBeFalsy();
     const verbose = {
       // Attributes
       bug: parsed.bug,
@@ -91,6 +93,74 @@ const DEFAULT_NETWORK_FILTER = {
 };
 
 describe('Network filters', () => {
+  describe('toString', () => {
+    const checkToString = (line: string, expected: string, debug: boolean = false) => {
+      const parsed = NetworkFilter.parse(line);
+      expect(parsed).not.toBeNull();
+      if (parsed !== null) {
+        if (debug) {
+          parsed.rawLine = line;
+        }
+        expect(parsed.toString()).toBe(expected);
+      }
+    };
+
+    [
+      // Negations
+      'ads$~image',
+      'ads$~media',
+      'ads$~object',
+      'ads$~other',
+      'ads$~ping',
+      'ads$~script',
+      'ads$~font',
+      'ads$~stylesheet',
+      'ads$~xmlhttprequest',
+
+      // Options
+      'ads$fuzzy',
+      'ads$image',
+      'ads$media',
+      'ads$object',
+      'ads$other',
+      'ads$ping',
+      'ads$script',
+      'ads$font',
+      'ads$third-party',
+      'ads$first-party',
+      'ads$stylesheet',
+      'ads$xmlhttprequest',
+
+      'ads$important',
+      'ads$fuzzy',
+      'ads$redirect=noop',
+      'ads$bug=42',
+    ].forEach((line) => {
+      it(`pprint ${line}`, () => {
+        checkToString(line, line);
+      });
+    });
+
+    it('pprint anchored hostnames', () => {
+      checkToString('@@||foo.com', '@@||foo.com^');
+      checkToString('@@||foo.com|', '@@||foo.com^|');
+      checkToString('|foo.com|', '|foo.com|');
+      checkToString('foo.com|', 'foo.com|');
+    });
+
+    it('pprint domain', () => {
+      checkToString('ads$domain=foo.com|bar.co.uk|~baz.io', 'ads$domain=<hashed>');
+    });
+
+    it('pprint with debug=true', () => {
+      checkToString(
+        'ads$domain=foo.com|bar.co.uk|~baz.io',
+        'ads$domain=foo.com|bar.co.uk|~baz.io',
+        true,
+      );
+    });
+  });
+
   it('parses pattern', () => {
     const base = {
       ...DEFAULT_NETWORK_FILTER,
@@ -414,6 +484,11 @@ describe('Network filters', () => {
         network('||foo.com$important', { isImportant: true });
       });
 
+      it('parses ~important', () => {
+        // Not supported
+        network('||foo.com$~important', null);
+      });
+
       it('defaults to false', () => {
         network('||foo.com', { isImportant: false });
       });
@@ -541,6 +616,12 @@ describe('Network filters', () => {
         network('||foo.com$~redirect', null);
       });
 
+      it('parses redirect without a value', () => {
+        // Not valid
+        network('||foo.com$redirect', null);
+        network('||foo.com$redirect=', null);
+      });
+
       it('defaults to false', () => {
         network('||foo.com', {
           isRedirect: false,
@@ -622,6 +703,22 @@ describe('Network filters', () => {
       });
     });
 
+    describe('un-supported options', () => {
+      [
+        'badfilter',
+        'genericblock',
+        'generichide',
+        'inline-script',
+        'popunder',
+        'popup',
+        'woot',
+      ].forEach((unsupportedOption) => {
+        it(unsupportedOption, () => {
+          network(`||foo.com$${unsupportedOption}`, null);
+        });
+      });
+    });
+
     const allOptions = (value: boolean) => ({
       fromFont: value,
       fromImage: value,
@@ -693,11 +790,13 @@ describe('Network filters', () => {
 function cosmetic(filter: string, expected: any) {
   const parsed = CosmeticFilter.parse(filter);
   if (parsed !== null) {
+    expect(parsed.isNetworkFilter()).toBeFalsy();
+    expect(parsed.isCosmeticFilter()).toBeTruthy();
     const verbose = {
       // Attributes
       hostnames: parsed.getHostnames(),
       selector: parsed.getSelector(),
-      style: parsed.style,
+      style: parsed.getStyle(),
 
       // Options
       isScriptBlock: parsed.isScriptBlock(),
@@ -714,7 +813,7 @@ const DEFAULT_COSMETIC_FILTER = {
   // Attributes
   hostnames: [],
   selector: '',
-  style: undefined,
+  style: DEFAULT_HIDDING_STYLE,
 
   // Options
   isScriptBlock: false,
@@ -723,6 +822,36 @@ const DEFAULT_COSMETIC_FILTER = {
 };
 
 describe('Cosmetic filters', () => {
+  describe('toString', () => {
+    const checkToString = (line: string, expected: string, debug: boolean = false) => {
+      const parsed = CosmeticFilter.parse(line);
+      expect(parsed).not.toBeNull();
+      if (parsed !== null) {
+        if (debug) {
+          parsed.rawLine = line;
+        }
+        expect(parsed.toString()).toBe(expected);
+      }
+    };
+
+    [
+      '##.selector',
+      'foo.com##.selector',
+      'foo.com,*.baz##.selector',
+      'foo.com#@#.selector',
+      '##+js(foo.js)',
+      '##script:contains(ads)',
+    ].forEach((line) => {
+      it(`pprint ${line}`, () => {
+        checkToString(line, line);
+      });
+    });
+
+    it('pprint with debug=true', () => {
+      checkToString('foo.com##.selector', 'foo.com##.selector', true);
+    });
+  });
+
   describe('parses selector', () => {
     cosmetic('##iframe[src]', {
       ...DEFAULT_COSMETIC_FILTER,
@@ -789,6 +918,11 @@ describe('Cosmetic filters', () => {
       isScriptInject: true,
       selector: 'script.js, arg1, arg2, arg3',
     });
+    cosmetic('##+js(script.js, arg1, arg2, arg3)', {
+      ...DEFAULT_COSMETIC_FILTER,
+      isScriptInject: true,
+      selector: 'script.js, arg1, arg2, arg3',
+    });
   });
 
   it('parses :style', () => {
@@ -810,6 +944,50 @@ describe('Cosmetic filters', () => {
       selector: '#foo > bar >baz',
       style: 'display: none',
     });
+
+    cosmetic('foo.com,bar.de###foo > bar >baz:styleTYPO(display: none)', null);
+  });
+
+  // TODO
+  // it('rejects invalid selectors', () => {
+  //   // @ts-ignore
+  //   global.document = {
+  //     createElement: () => ({ matches: () => false }),
+  //   };
+  //   cosmetic('###.selector /invalid/', null);
+
+  //   // @ts-ignore
+  //   global.document = {
+  //     createElement: () => ({
+  //       matches: () => {
+  //         throw new Error('Invalid');
+  //       },
+  //     }),
+  //   };
+  //   cosmetic('###.selector /invalid/', null);
+
+  //   // @ts-ignore
+  //   global.document = undefined;
+  // });
+
+  it('sorts hostnames by decreasing size', () => {
+    cosmetic('ccc.com,a.com,bb.com,ccc.com##.selector', {
+      ...DEFAULT_COSMETIC_FILTER,
+      hostnames: ['ccc.com', 'ccc.com', 'bb.com', 'a.com'],
+      selector: '.selector',
+    });
+  });
+
+  it('#getScript', () => {
+    const parsed = CosmeticFilter.parse('##+js(script.js, arg1, arg2, arg3)');
+    expect(parsed).not.toBeNull();
+    if (parsed !== null) {
+      expect(parsed.getScript(new Map([['script.js', '{{1}},{{2}},{{3}}']]))).toEqual(
+        'arg1,arg2,arg3',
+      );
+
+      expect(parsed.getScript(new Map())).toBeUndefined();
+    }
   });
 });
 

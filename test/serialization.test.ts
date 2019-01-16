@@ -17,22 +17,30 @@ describe('Serialization', () => {
 
   describe('filters', () => {
     const buffer = new StaticDataView(1000000);
-    it('cosmetic', () => {
-      cosmeticFilters.forEach((filter) => {
+    const checkFilterSerialization = (Filter: any, filter: IFilter | null) => {
+      expect(filter).not.toBeNull();
+      if (filter !== null) {
         buffer.seekZero();
         filter.serialize(buffer);
         buffer.seekZero();
-        expect(CosmeticFilter.deserialize(buffer)).toEqual(filter);
+        expect(Filter.deserialize(buffer)).toEqual(filter);
+      }
+    };
+
+    it('cosmetic', () => {
+      cosmeticFilters.forEach((filter) => {
+        checkFilterSerialization(CosmeticFilter, filter);
       });
     });
 
     it('network', () => {
       networkFilters.forEach((filter) => {
-        buffer.seekZero();
-        filter.serialize(buffer);
-        buffer.seekZero();
-        expect(NetworkFilter.deserialize(buffer)).toEqual(filter);
+        checkFilterSerialization(NetworkFilter, filter);
       });
+    });
+
+    it('with bug ID', () => {
+      checkFilterSerialization(NetworkFilter, NetworkFilter.parse('ads$bug=42'));
     });
   });
 

@@ -1,6 +1,6 @@
 import { getDomain, getHostname } from 'tldts';
 
-import { getHostnameWithoutPublicSuffix } from '../src/filters/cosmetic';
+import CosmeticFilter, { getHostnameWithoutPublicSuffix } from '../src/filters/cosmetic';
 import NetworkFilter, { isAnchoredByHostname } from '../src/filters/network';
 
 import { f } from '../src/lists';
@@ -144,7 +144,7 @@ describe('#isAnchoredByHostname', () => {
   });
 });
 
-describe('#matchNetworkFilter', () => {
+describe('#NetworkFilter.match', () => {
   requests.forEach(({ filters, type, sourceUrl, url }) => {
     filters.forEach((filter) => {
       it(`${filter} matches ${type}, url=${url}, source=${sourceUrl}`, () => {
@@ -185,6 +185,12 @@ describe('#matchNetworkFilter', () => {
     expect(f`foo bar baz$fuzzy`).toMatchRequest({ url: 'http://bar.foo.baz' });
 
     expect(f`foo bar baz 42$fuzzy`).not.toMatchRequest({ url: 'http://bar.foo.baz' });
+
+    // Fast-path for when pattern is longer than the URL
+    expect(f`foo bar baz 42 43$fuzzy`).not.toMatchRequest({ url: 'http://bar.foo.baz' });
+
+    // No fuzzy signature, matches every URL?
+    expect(f`+$fuzzy`).toMatchRequest({ url: 'http://bar.foo.baz' });
   });
 
   it('||pattern', () => {
@@ -243,6 +249,18 @@ describe('#matchNetworkFilter', () => {
 
   it('|pattern|', () => {
     expect(f`|https://foo.com|`).toMatchRequest({ url: 'https://foo.com' });
+  });
+
+  it('||pattern + left-anchor', () => {
+    expect(f`||foo.com^test`).toMatchRequest({ url: 'https://foo.com/test' });
+    expect(f`||foo.com/test`).toMatchRequest({ url: 'https://foo.com/test' });
+    expect(f`||foo.com^test`).not.toMatchRequest({ url: 'https://foo.com/tes' });
+    expect(f`||foo.com/test`).not.toMatchRequest({ url: 'https://foo.com/tes' });
+
+    expect(f`||foo.com^`).toMatchRequest({ url: 'https://foo.com/test' });
+
+    expect(f`||foo.com/test*bar`).toMatchRequest({ url: 'https://foo.com/testbar' });
+    expect(f`||foo.com^test*bar`).toMatchRequest({ url: 'https://foo.com/testbar' });
   });
 
   it('||hostname^*/pattern', () => {
@@ -327,7 +345,11 @@ describe('#matchNetworkFilter', () => {
   });
 });
 
-describe('#matchCosmeticFilter', () => {
+describe('#CosmeticFilter.match', () => {
+  it('genercic filter', () => {
+    expect(f`##.selector`).toMatchHostname('foo.com');
+  });
+
   it('single domain', () => {
     expect(f`foo.com##.selector`).toMatchHostname('foo.com');
   });
@@ -351,6 +373,14 @@ describe('#matchCosmeticFilter', () => {
   it('does not match', () => {
     expect(f`foo.*##.selector`).not.toMatchHostname('foo.bar.com');
     expect(f`foo.*##.selector`).not.toMatchHostname('bar-foo.com');
+  });
+
+  it('no domain provided', () => {
+    const parsed = CosmeticFilter.parse('foo.*##.selector');
+    expect(parsed).not.toBeNull();
+    if (parsed !== null) {
+      expect(parsed.match('foo.com', '')).toBeFalsy();
+    }
   });
 });
 

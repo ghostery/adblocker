@@ -4,6 +4,13 @@ import { compactTokens } from './compact-set';
  *  Bitwise helpers
  * ************************************************************************* */
 
+// From: https://stackoverflow.com/a/43122214/1185079
+export function bitCount(n: number): number {
+  n = n - ((n >> 1) & 0x55555555);
+  n = (n & 0x33333333) + ((n >> 2) & 0x33333333);
+  return (((n + (n >> 4)) & 0xf0f0f0f) * 0x1010101) >> 24;
+}
+
 export function getBit(n: number, mask: number): boolean {
   return !!(n & mask);
 }

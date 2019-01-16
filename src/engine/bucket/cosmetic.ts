@@ -97,6 +97,7 @@ export default class CosmeticFilterBucket {
     for (let i = 0; i < rules.length; i += 1) {
       const rule = rules[i];
       if (!disabledRules.has(rule.getSelector())) {
+        console.error('???? 1'); // this is not reached during tests?
         rulesWithoutExceptions.push(rule);
       }
     }
@@ -104,6 +105,7 @@ export default class CosmeticFilterBucket {
     for (let i = 0; i < this.cache.length; i += 1) {
       const rule = this.cache[i];
       if (!disabledRules.has(rule.getSelector())) {
+        console.error('???? 2'); // this is not reached during tests?
         rulesWithoutExceptions.push(rule);
       }
     }

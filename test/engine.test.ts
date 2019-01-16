@@ -1,7 +1,6 @@
 import * as tldts from 'tldts';
 
 import Engine from '../src/engine/engine';
-import CosmeticFilter from '../src/filters/cosmetic';
 import { makeRequest } from '../src/request';
 
 import requests from './data/requests';
@@ -238,78 +237,67 @@ $csp=baz,domain=bar.com
   });
 
   describe('cosmetic filters', () => {
-    describe('hostnames', () => {
+    describe('#getCosmeticsFilters', () => {
       [
+        // Exception cancels generic rule
         {
-          hostname: 'bild.de',
+          hostname: 'google.com',
           matches: [],
-          misMatches: [
-            'bild.de##script:contains(/^s*de.bild.cmsKonfig/)',
-            'bild.de#@#script:contains(/^s*de.bild.cmsKonfig/)',
-          ],
+          misMatches: ['##.adwords', 'google.com#@#.adwords'],
         },
-      ].forEach((testCase: { hostname: string; matches: string[]; misMatches: string[] }) => {
-        it(testCase.hostname, () => {
-          const engine = createEngine(
-            [...testCase.matches, ...testCase.misMatches].join('\n'),
-            true,
-          );
-
-          const shouldMatch: Set<string> = new Set(testCase.matches);
-          const shouldNotMatch: Set<string> = new Set(testCase.misMatches);
-
-          const rules = engine.cosmetics.getCosmeticsFilters(
-            testCase.hostname,
-            tldts.getDomain(testCase.hostname) || '',
-            (id) => engine.lists.getCosmeticFilter(id),
-          );
-          expect(rules.length).toEqual(shouldMatch.size);
-          rules.forEach((rule: CosmeticFilter) => {
-            expect(rule.rawLine).not.toBeNull();
-            if (rule.rawLine !== undefined && !shouldMatch.has(rule.rawLine)) {
-              throw new Error(`Expected node ${testCase.hostname} ` + ` to match ${rule.rawLine}`);
-            }
-            if (rule.rawLine !== undefined && shouldNotMatch.has(rule.rawLine)) {
-              throw new Error(
-                `Expected node ${testCase.hostname} ` + ` not to match ${rule.rawLine}`,
-              );
-            }
-          });
-        });
-      });
-    });
-
-    describe('nodes', () => {
-      [
+        // Exception cancels entity rule
+        {
+          hostname: 'google.com',
+          matches: [],
+          misMatches: ['google.*##.adwords', 'google.com#@#.adwords'],
+        },
+        // Exception cancels hostname rule
+        {
+          hostname: 'google.com',
+          matches: [],
+          misMatches: ['google.com##.adwords', 'google.com#@#.adwords'],
+        },
+        // Entity exception cancels generic rule
+        {
+          hostname: 'google.com',
+          matches: [],
+          misMatches: ['##.adwords', 'google.*#@#.adwords'],
+        },
+        // Entity exception cancels entity rule
+        {
+          hostname: 'google.com',
+          matches: [],
+          misMatches: ['google.*##.adwords', 'google.*#@#.adwords'],
+        },
+        {
+          hostname: 'google.de',
+          matches: ['##.adwords'],
+          misMatches: ['google.com#@#.adwords'],
+        },
         {
           hostname: 'google.com',
           matches: ['##.adwords'],
           misMatches: ['accounts.google.com#@#.adwords'],
-          node: ['.adwords'],
         },
         {
           hostname: 'speedtest.net',
           matches: ['##.ad-stack'],
           misMatches: [],
-          node: ['.ad-stack'],
         },
         {
           hostname: 'example.de',
           matches: ['###AD300Right'],
           misMatches: [],
-          node: ['#AD300Right'],
         },
         {
           hostname: 'pokerupdate.com',
           matches: [],
           misMatches: [],
-          node: ['#not_an_ad'],
         },
         {
           hostname: 'pokerupdate.com',
           matches: ['pokerupdate.com##.related-room', 'pokerupdate.com##.prev-article'],
           misMatches: [],
-          node: ['.related-room', '.prev-article'],
         },
         {
           hostname: 'google.com',
@@ -320,7 +308,6 @@ $csp=baz,domain=bar.com
             '##.mw > #rcnt > #center_col > #taw > .c',
           ],
           misMatches: [],
-          node: ['.c'],
         },
         {
           hostname: 'mail.google.com',
@@ -330,56 +317,49 @@ $csp=baz,domain=bar.com
             '##.mw > #rcnt > #center_col > #taw > .c',
           ],
           misMatches: ['google.com,~mail.google.com##.c[style="margin: 0pt;"]'],
-          node: ['.c'],
         },
         {
           hostname: 'bitbucket.org',
           matches: [],
           misMatches: [],
-          node: ['.p'],
         },
-      ].forEach(
-        (testCase: {
-          hostname: string;
-          matches: string[];
-          misMatches: string[];
-          node: string[];
-        }) => {
-          it(`${testCase.hostname}: ${JSON.stringify(testCase.node)}`, () => {
-            const engine = createEngine(
-              [...testCase.matches, ...testCase.misMatches].join('\n'),
-              true,
-            );
+        {
+          hostname: 'bild.de',
+          matches: [],
+          misMatches: [
+            'bild.de##script:contains(/^s*de.bild.cmsKonfig/)',
+            'bild.de#@#script:contains(/^s*de.bild.cmsKonfig/)',
+          ],
+        },
+      ].forEach((testCase: { hostname: string; matches: string[]; misMatches: string[] }) => {
+        it(`${testCase.hostname}`, () => {
+          // Initialize engine with all rules from test case
+          const engine = createEngine([...testCase.matches, ...testCase.misMatches].join('\n'));
 
-            const shouldMatch: Set<string> = new Set(testCase.matches);
-            const shouldNotMatch: Set<string> = new Set(testCase.misMatches);
+          const shouldMatch: Set<string> = new Set(testCase.matches);
+          const shouldNotMatch: Set<string> = new Set(testCase.misMatches);
 
-            const rules = engine.cosmetics.getCosmeticsFilters(
-              testCase.hostname,
-              tldts.getDomain(testCase.hostname) || '',
-              (id) => engine.lists.getCosmeticFilter(id),
-            );
-            expect(rules.length).toEqual(shouldMatch.size);
-            rules.forEach((rule) => {
-              expect(rule.rawLine).not.toBeNull();
-              if (rule.rawLine !== undefined && !shouldMatch.has(rule.rawLine)) {
-                throw new Error(
-                  `Expected node ${testCase.hostname} + ` +
-                    `${JSON.stringify(testCase.node)}` +
-                    ` to match ${rule.rawLine} ${JSON.stringify(rule)}`,
-                );
+          // #getCosmeticFilters
+          const rules = engine.cosmetics.getCosmeticsFilters(
+            testCase.hostname,
+            tldts.getDomain(testCase.hostname) || '',
+            (id) => engine.lists.getCosmeticFilter(id),
+          );
+
+          expect(rules.length).toEqual(shouldMatch.size);
+          rules.forEach((rule) => {
+            expect(rule.rawLine).not.toBeUndefined();
+            if (rule.rawLine !== undefined) {
+              if (!shouldMatch.has(rule.rawLine)) {
+                throw new Error(`Expected ${rule.rawLine} to match ${testCase.hostname}`);
               }
-              if (rule.rawLine !== undefined && shouldNotMatch.has(rule.rawLine)) {
-                throw new Error(
-                  `Expected node ${testCase.hostname} + ` +
-                    `${JSON.stringify(testCase.node)}` +
-                    ` not to match ${rule.rawLine} ${JSON.stringify(rule)}`,
-                );
+              if (shouldNotMatch.has(rule.rawLine)) {
+                throw new Error(`Expected ${rule.rawLine} not to match ${testCase.hostname}`);
               }
-            });
+            }
           });
-        },
-      );
+        });
+      });
     });
   });
 });

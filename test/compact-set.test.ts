@@ -18,10 +18,12 @@ it('#compactTokens', () => {
 
 it('#hasEmptyIntersection', () => {
   expect(hasEmptyIntersection(a`abcde`, a`efgh`)).toEqual(false);
+  expect(hasEmptyIntersection(a`efgh`, a`abcde`)).toEqual(false);
   expect(hasEmptyIntersection(a`bcde`, a`aefgh`)).toEqual(false);
   expect(hasEmptyIntersection(a`abcde`, a`fgh`)).toEqual(true);
   expect(hasEmptyIntersection(a``, a``)).toEqual(true);
   expect(hasEmptyIntersection(a`abc`, a``)).toEqual(true);
+  expect(hasEmptyIntersection(a``, a`abc`)).toEqual(true);
   expect(hasEmptyIntersection(a``, a`abc`)).toEqual(true);
 });
 
