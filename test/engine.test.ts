@@ -1,9 +1,153 @@
 import * as tldts from 'tldts';
 
 import Engine from '../src/engine/engine';
-import { makeRequest } from '../src/request';
+import NetworkFilter from '../src/filters/network';
+import Request, { makeRequest } from '../src/request';
+import Resources from '../src/resources';
 
 import requests from './data/requests';
+
+/**
+ * Helper function used in the Engine tests. All the assertions are performed by
+ * this function. It will be called to tests the different configurations of
+ * engines, for each of the requests and all of the filters.
+ */
+function test({
+  engine,
+  filter,
+  testFiltersInIsolation,
+  resources,
+  request,
+  importants,
+  redirects,
+  exceptions,
+  normalFilters,
+}: {
+  engine: Engine;
+  filter: NetworkFilter;
+  testFiltersInIsolation: boolean;
+  resources: Resources;
+  request: Request;
+  importants: string[];
+  redirects: string[];
+  exceptions: string[];
+  normalFilters: string[];
+}): void {
+  it(`[engine] isolation=${testFiltersInIsolation} optimized=${engine.enableOptimizations} ${
+    filter.rawLine
+  }`, () => {
+    // Each each filter should be tested in isolation, this means that `engine`
+    // is currently empty and we will add only the filter we want to test.
+    if (testFiltersInIsolation) {
+      engine.onUpdateFilters(
+        [
+          {
+            asset: 'extraFilters',
+            checksum: '',
+            filters: filter.rawLine || '',
+          },
+        ],
+        new Set(['filters']),
+      );
+    }
+
+    // Set correct resources in `engine` (`resources` is expected to have been
+    // created using the matching redirect filters for the current Request so
+    // that all redirect matches will have a corresponding resource in
+    // `resources`).
+    engine.resources = resources;
+
+    // Collect all matching filters for this request.
+    const matchingFilters = new Set();
+    [...engine.matchAll(request)].forEach((matchingFilter) => {
+      (matchingFilter.rawLine || '').split(' <+> ').forEach((f: string) => {
+        matchingFilters.add(f);
+      });
+    });
+
+    // Check if one of the filters is a special case: important,
+    // exception or redirect; and perform extra checks then.
+    if (filter.isImportant()) {
+      const result = engine.match(request);
+      expect(result.filter).not.toBeUndefined();
+      if (
+        result.filter !== undefined &&
+        result.filter.rawLine !== undefined &&
+        !result.filter.rawLine.includes('<+>')
+      ) {
+        expect(importants).toContainEqual(result.filter.rawLine);
+
+        // Handle case where important filter is also a redirect
+        if (filter.isRedirect()) {
+          expect(redirects).toContainEqual(result.filter.rawLine);
+        }
+      }
+
+      expect(result.exception).toBeUndefined();
+
+      if (!filter.isRedirect()) {
+        expect(result.redirect).toBeUndefined();
+      }
+
+      expect(result.match).toBeTruthy();
+    } else if (
+      filter.isException() &&
+      normalFilters.length !== 0 &&
+      !testFiltersInIsolation &&
+      importants.length === 0
+    ) {
+      const result = engine.match(request);
+      expect(result.exception).not.toBeUndefined();
+      if (
+        result.exception !== undefined &&
+        result.exception.rawLine !== undefined &&
+        !result.exception.rawLine.includes('<+>')
+      ) {
+        expect(exceptions).toContainEqual(result.exception.rawLine);
+      }
+
+      expect(result.filter).not.toBeUndefined();
+      expect(result.redirect).toBeUndefined();
+      expect(result.match).toBeFalsy();
+    } else if (filter.isRedirect() && exceptions.length === 0 && importants.length === 0) {
+      const result = engine.match(request);
+      expect(result.filter).not.toBeUndefined();
+      if (
+        result.filter !== undefined &&
+        result.filter.rawLine !== undefined &&
+        !result.filter.rawLine.includes('<+>')
+      ) {
+        expect(redirects).toContainEqual(result.filter.rawLine);
+      }
+
+      expect(result.exception).toBeUndefined();
+      expect(result.redirect).not.toBeUndefined();
+      expect(result.match).toBeTruthy();
+    }
+
+    expect(matchingFilters).toContain(filter.rawLine);
+  });
+}
+
+function buildResourcesFromRequests(filters: NetworkFilter[]): Resources {
+  const resources: string[] = [];
+
+  filters.forEach((filter) => {
+    if (filter.redirect !== undefined) {
+      const redirect = filter.redirect;
+
+      // Guess resource type
+      let type = 'application/javascript';
+      if (redirect.endsWith('.gif')) {
+        type = 'image/gif;base64';
+      }
+
+      resources.push(`${redirect} ${type}\n${redirect}`);
+    }
+  });
+
+  return Resources.parse(resources.join('\n\n'), '');
+}
 
 function createEngine(filters: string, enableOptimizations: boolean = true) {
   const newEngine = new Engine({
@@ -28,6 +172,59 @@ function createEngine(filters: string, enableOptimizations: boolean = true) {
 }
 
 describe('#FiltersEngine', () => {
+  it('#hasList', () => {
+    const engine = new Engine();
+    expect(engine.hasList('filters', 'checksum')).toBeFalsy();
+
+    engine.onUpdateFilters([{ filters: '||foo.com', asset: 'filters', checksum: '42' }]);
+    expect(engine.hasList('filters', 'checksum')).toBeFalsy();
+
+    engine.onUpdateFilters([{ filters: '||foo.com', asset: 'filters', checksum: 'checksum' }]);
+    expect(engine.hasList('filters', 'checksum')).toBeTruthy();
+  });
+
+  it('network filters are disabled', () => {
+    const request = makeRequest({ url: 'https://foo.com' }, tldts);
+
+    // Enabled
+    expect(
+      Engine.parse('||foo.com', { loadNetworkFilters: true }).match(request).match,
+    ).toBeTruthy();
+
+    // Disabled
+    expect(
+      Engine.parse('||foo.com', { loadNetworkFilters: false }).match(request).match,
+    ).toBeFalsy();
+  });
+
+  it('cosmetic filters are disabled', () => {
+    // Enabled
+    expect(
+      Engine.parse('##.selector', { loadCosmeticFilters: true }).getCosmeticsFilters(
+        'foo.com', // hostname
+        'foo.com', // domain
+      ),
+    ).toEqual({
+      active: true,
+      blockedScripts: [],
+      scripts: [],
+      styles: '.selector { display: none !important; }',
+    });
+
+    // Disabled
+    expect(
+      Engine.parse('##.selector', { loadCosmeticFilters: false }).getCosmeticsFilters(
+        'foo.com', // hostname
+        'foo.com', // domain
+      ),
+    ).toEqual({
+      active: false,
+      blockedScripts: [],
+      scripts: [],
+      styles: '',
+    });
+  });
+
   describe('filters with bug id', () => {
     it('matches bug filter', () => {
       const filter = createEngine('||foo.com$bug=42').match(
@@ -87,6 +284,46 @@ describe('#FiltersEngine', () => {
           makeRequest(
             {
               url: 'https://foo.com',
+            },
+            tldts,
+          ),
+        ),
+      ).toBeUndefined();
+    });
+
+    it('network filters are disabled', () => {
+      expect(
+        Engine.parse('||foo.com$csp=bar', { loadNetworkFilters: false }).getCSPDirectives(
+          makeRequest(
+            {
+              url: 'https://foo.com',
+            },
+            tldts,
+          ),
+        ),
+      ).toBeUndefined();
+    });
+
+    it('request not supported', () => {
+      // Not supported protocol
+      expect(
+        Engine.parse('||foo.com$csp=bar').getCSPDirectives(
+          makeRequest(
+            {
+              url: 'ftp://foo.com',
+            },
+            tldts,
+          ),
+        ),
+      ).toBeUndefined();
+
+      // Not document request
+      expect(
+        Engine.parse('||foo.com$csp=bar').getCSPDirectives(
+          makeRequest(
+            {
+              url: 'ftp://foo.com',
+              type: 'script',
             },
             tldts,
           ),
@@ -179,185 +416,292 @@ $csp=baz,domain=bar.com
   });
 
   describe('network filters', () => {
+    // Collect all filters from all requests in the dataset. Each test case
+    // contains one request as well as a list of filters matching this request
+    // (exceptions, normal filters, etc.). We create a big list of filters out
+    // of them.
     const allRequestFilters = requests.map(({ filters }) => filters.join('\n')).join('\n');
 
-    [
-      { enableOptimizations: true, allFilters: '' },
-      { enableOptimizations: false, allFilters: '' },
-      { enableOptimizations: true, allFilters: allRequestFilters },
-      { enableOptimizations: false, allFilters: allRequestFilters },
-    ].forEach((setup) => {
-      describe(`initialized with optimization: ${
-        setup.enableOptimizations
-      } and filters: ${!!setup.allFilters}`, () => {
-        const engine = createEngine(setup.allFilters, setup.enableOptimizations);
+    // Create several base engines to be used in different scenarii:
+    // - Engine with *no filter* optimizations *enabled*
+    // - Engine with *no filter* optimizations *disabled*
+    // - Engine with *all filters* optimizations *enabled*
+    // - Engine with *all filters* optimizations *disabled*
+    const engineEmptyOptimized = createEngine('', true);
+    const engineEmpty = createEngine('', false);
+    const engineFullOptimized = createEngine(allRequestFilters, true);
+    const engineFull = createEngine(allRequestFilters, false);
 
-        requests.forEach(({ filters, type, url, sourceUrl }) => {
-          filters.forEach((filter) => {
-            it(`${filter}, ${type} matches url=${url}, sourceUrl=${sourceUrl}`, () => {
-              // Update engine with this specific filter only if the engine is
-              // initially empty.
-              if (setup.allFilters.length === 0) {
-                engine.onUpdateFilters(
-                  [
-                    {
-                      asset: 'extraFilters',
-                      checksum: '',
-                      filters: filter,
-                    },
-                  ],
-                  new Set(['filters']),
-                );
-              }
+    // For each request, make sure that we get the correct match in 4 different
+    // setups:
+    // - Engine with only the filter being tested
+    // - Engine with all the filters
+    // - Engine with optimizations enabled
+    // - Engine with optimizations disabled
+    for (let i = 0; i < requests.length; i += 1) {
+      const { filters, type, url, sourceUrl } = requests[i];
 
-              const matchingFilters = new Set();
-              [
-                ...engine.matchAll(
-                  makeRequest(
-                    {
-                      sourceUrl,
-                      type,
-                      url,
-                    },
-                    tldts,
-                  ),
-                ),
-              ].forEach((optimizedFilter) => {
-                (optimizedFilter.rawLine || '').split(' <+> ').forEach((f: string) => {
-                  matchingFilters.add(f);
-                });
-              });
+      // Dispatch `filters` into the following categories: exception, important,
+      // redirects or normal filters. This will be used later to check the
+      // output of Engine.match. Additionally, we keep the list of NetworkFilter
+      // instances.
+      const exceptions: string[] = [];
+      const importants: string[] = [];
+      const redirects: string[] = [];
+      const normalFilters: string[] = [];
+      const parsedFilters: NetworkFilter[] = [];
+      for (let j = 0; j < filters.length; j += 1) {
+        const filter = filters[j];
+        const parsed = NetworkFilter.parse(filter);
+        expect(parsed).not.toBeNull();
+        if (parsed !== null) {
+          parsed.rawLine = filter;
+          parsedFilters.push(parsed);
 
-              expect(matchingFilters).toContain(filter);
-            });
+          if (parsed.isException()) {
+            exceptions.push(filter);
+          }
+
+          if (parsed.isImportant()) {
+            importants.push(filter);
+          }
+
+          if (parsed.isRedirect()) {
+            redirects.push(filter);
+          }
+
+          if (!parsed.isRedirect() && !parsed.isException() && !parsed.isImportant()) {
+            normalFilters.push(filter);
+          }
+        }
+      }
+
+      // Prepare a fake `resources.txt` created from the list of filters of type
+      // `redirect` in `filters`. A resource of the right name will be created
+      // for each of them.
+      const resources = buildResourcesFromRequests(parsedFilters);
+
+      // Create an instance of `Request` to be shared for all the calls to
+      // `Engine.match` or `Engine.matchAll`.
+      const request = makeRequest(
+        {
+          sourceUrl,
+          type,
+          url,
+        },
+        tldts,
+      );
+
+      describe(`[request] type=${type} url=${url}, sourceUrl=${sourceUrl}`, () => {
+        // Check each filter individually
+        for (let j = 0; j < parsedFilters.length; j += 1) {
+          const filter = parsedFilters[j];
+          const baseConfig = {
+            exceptions,
+            importants,
+            normalFilters,
+            redirects,
+            request,
+            resources,
+            filter,
+          };
+
+          // Empty engine with optimizations enabled
+          test({
+            ...baseConfig,
+            engine: engineEmptyOptimized,
+            testFiltersInIsolation: true,
           });
-        });
+
+          // Empty engine with optimizations disabled
+          test({
+            ...baseConfig,
+            engine: engineEmpty,
+            testFiltersInIsolation: true,
+          });
+
+          // All filters with optimizations enabled
+          test({
+            ...baseConfig,
+            engine: engineFullOptimized,
+            testFiltersInIsolation: false,
+          });
+
+          // All filters with optimizations disabled
+          test({
+            ...baseConfig,
+            engine: engineFull,
+            testFiltersInIsolation: false,
+          });
+        }
       });
-    });
+    }
   });
 
-  describe('cosmetic filters', () => {
-    describe('#getCosmeticsFilters', () => {
-      [
-        // Exception cancels generic rule
-        {
-          hostname: 'google.com',
-          matches: [],
-          misMatches: ['##.adwords', 'google.com#@#.adwords'],
-        },
-        // Exception cancels entity rule
-        {
-          hostname: 'google.com',
-          matches: [],
-          misMatches: ['google.*##.adwords', 'google.com#@#.adwords'],
-        },
-        // Exception cancels hostname rule
-        {
-          hostname: 'google.com',
-          matches: [],
-          misMatches: ['google.com##.adwords', 'google.com#@#.adwords'],
-        },
-        // Entity exception cancels generic rule
-        {
-          hostname: 'google.com',
-          matches: [],
-          misMatches: ['##.adwords', 'google.*#@#.adwords'],
-        },
-        // Entity exception cancels entity rule
-        {
-          hostname: 'google.com',
-          matches: [],
-          misMatches: ['google.*##.adwords', 'google.*#@#.adwords'],
-        },
-        {
-          hostname: 'google.de',
-          matches: ['##.adwords'],
-          misMatches: ['google.com#@#.adwords'],
-        },
-        {
-          hostname: 'google.com',
-          matches: ['##.adwords'],
-          misMatches: ['accounts.google.com#@#.adwords'],
-        },
-        {
-          hostname: 'speedtest.net',
-          matches: ['##.ad-stack'],
-          misMatches: [],
-        },
-        {
-          hostname: 'example.de',
-          matches: ['###AD300Right'],
-          misMatches: [],
-        },
-        {
-          hostname: 'pokerupdate.com',
-          matches: [],
-          misMatches: [],
-        },
-        {
-          hostname: 'pokerupdate.com',
-          matches: ['pokerupdate.com##.related-room', 'pokerupdate.com##.prev-article'],
-          misMatches: [],
-        },
-        {
-          hostname: 'google.com',
-          matches: [
-            'google.com,~mail.google.com##.c[style="margin: 0pt;"]',
-            '###tads + div + .c',
-            '##.mw > #rcnt > #center_col > #taw > #tvcap > .c',
-            '##.mw > #rcnt > #center_col > #taw > .c',
-          ],
-          misMatches: [],
-        },
-        {
-          hostname: 'mail.google.com',
-          matches: [
-            '###tads + div + .c',
-            '##.mw > #rcnt > #center_col > #taw > #tvcap > .c',
-            '##.mw > #rcnt > #center_col > #taw > .c',
-          ],
-          misMatches: ['google.com,~mail.google.com##.c[style="margin: 0pt;"]'],
-        },
-        {
-          hostname: 'bitbucket.org',
-          matches: [],
-          misMatches: [],
-        },
-        {
-          hostname: 'bild.de',
-          matches: [],
-          misMatches: [
-            'bild.de##script:contains(/^s*de.bild.cmsKonfig/)',
-            'bild.de#@#script:contains(/^s*de.bild.cmsKonfig/)',
-          ],
-        },
-      ].forEach((testCase: { hostname: string; matches: string[]; misMatches: string[] }) => {
-        it(`${testCase.hostname}`, () => {
-          // Initialize engine with all rules from test case
-          const engine = createEngine([...testCase.matches, ...testCase.misMatches].join('\n'));
+  describe('#getCosmeticFilters', () => {
+    it('handles script blocking', () => {
+      expect(
+        Engine.parse('foo.*##script:contains(ads)').getCosmeticsFilters('foo.com', 'foo.com')
+          .blockedScripts,
+      ).toEqual(['ads']);
+    });
 
-          const shouldMatch: Set<string> = new Set(testCase.matches);
-          const shouldNotMatch: Set<string> = new Set(testCase.misMatches);
+    describe('script injections', () => {
+      it('injects script', () => {
+        const engine = Engine.parse('##+js(script.js,arg1)');
+        engine.resources = Resources.parse('script.js application/javascript\n{{1}}', '');
+        expect(engine.getCosmeticsFilters('foo.com', 'foo.com').scripts).toEqual(['arg1']);
+      });
 
-          // #getCosmeticFilters
-          const rules = engine.cosmetics.getCosmeticsFilters(
-            testCase.hostname,
-            tldts.getDomain(testCase.hostname) || '',
-            (id) => engine.lists.getCosmeticFilter(id),
-          );
+      it('script missing', () => {
+        expect(
+          Engine.parse('##+js(foo,arg1)').getCosmeticsFilters('foo.com', 'foo.com').scripts,
+        ).toEqual([]);
+      });
+    });
 
-          expect(rules.length).toEqual(shouldMatch.size);
-          rules.forEach((rule) => {
-            expect(rule.rawLine).not.toBeUndefined();
-            if (rule.rawLine !== undefined) {
-              if (!shouldMatch.has(rule.rawLine)) {
-                throw new Error(`Expected ${rule.rawLine} to match ${testCase.hostname}`);
-              }
-              if (shouldNotMatch.has(rule.rawLine)) {
-                throw new Error(`Expected ${rule.rawLine} not to match ${testCase.hostname}`);
-              }
+    it('handles custom :styles', () => {
+      expect(
+        Engine.parse(
+          `
+##.selector :style(foo)
+##.selector :style(bar)
+##.selector1 :style(foo)`,
+        ).getCosmeticsFilters('foo.com', 'foo.com').styles,
+      ).toEqual('.selector ,.selector  { bar }\n\n.selector1  { foo }');
+    });
+
+    [
+      // Exception cancels generic rule
+      {
+        hostname: 'google.com',
+        matches: [],
+        misMatches: ['##.adwords', 'google.com#@#.adwords'],
+      },
+      // Exception cancels entity rule
+      {
+        hostname: 'google.com',
+        matches: [],
+        misMatches: ['google.*##.adwords', 'google.com#@#.adwords'],
+      },
+      // Exception cancels hostname rule
+      {
+        hostname: 'google.com',
+        matches: [],
+        misMatches: ['google.com##.adwords', 'google.com#@#.adwords'],
+      },
+      // Entity exception cancels generic rule
+      {
+        hostname: 'google.com',
+        matches: [],
+        misMatches: ['##.adwords', 'google.*#@#.adwords'],
+      },
+      // Entity exception cancels entity rule
+      {
+        hostname: 'google.com',
+        matches: [],
+        misMatches: ['google.*##.adwords', 'google.*#@#.adwords'],
+      },
+      // Exception does not cancel if selector is different
+      {
+        hostname: 'google.de',
+        matches: ['##.adwords2'],
+        misMatches: ['google.de#@#.adwords'],
+      },
+      {
+        hostname: 'google.de',
+        matches: ['google.de##.adwords2'],
+        misMatches: ['google.de#@#.adwords'],
+      },
+      // Exception does not cancel if hostname is different
+      {
+        hostname: 'google.de',
+        matches: ['##.adwords'],
+        misMatches: ['google.com#@#.adwords'],
+      },
+      {
+        hostname: 'google.com',
+        matches: ['##.adwords'],
+        misMatches: ['accounts.google.com#@#.adwords'],
+      },
+      {
+        hostname: 'speedtest.net',
+        matches: ['##.ad-stack'],
+        misMatches: [],
+      },
+      {
+        hostname: 'example.de',
+        matches: ['###AD300Right'],
+        misMatches: [],
+      },
+      {
+        hostname: 'pokerupdate.com',
+        matches: [],
+        misMatches: [],
+      },
+      {
+        hostname: 'pokerupdate.com',
+        matches: ['pokerupdate.com##.related-room', 'pokerupdate.com##.prev-article'],
+        misMatches: [],
+      },
+      {
+        hostname: 'google.com',
+        matches: [
+          'google.com,~mail.google.com##.c[style="margin: 0pt;"]',
+          '###tads + div + .c',
+          '##.mw > #rcnt > #center_col > #taw > #tvcap > .c',
+          '##.mw > #rcnt > #center_col > #taw > .c',
+        ],
+        misMatches: [],
+      },
+      {
+        hostname: 'mail.google.com',
+        matches: [
+          '###tads + div + .c',
+          '##.mw > #rcnt > #center_col > #taw > #tvcap > .c',
+          '##.mw > #rcnt > #center_col > #taw > .c',
+        ],
+        misMatches: ['google.com,~mail.google.com##.c[style="margin: 0pt;"]'],
+      },
+      {
+        hostname: 'bitbucket.org',
+        matches: [],
+        misMatches: [],
+      },
+      {
+        hostname: 'bild.de',
+        matches: [],
+        misMatches: [
+          'bild.de##script:contains(/^s*de.bild.cmsKonfig/)',
+          'bild.de#@#script:contains(/^s*de.bild.cmsKonfig/)',
+        ],
+      },
+    ].forEach((testCase: { hostname: string; matches: string[]; misMatches: string[] }) => {
+      it(JSON.stringify(testCase), () => {
+        // Initialize engine with all rules from test case
+        const engine = createEngine([...testCase.matches, ...testCase.misMatches].join('\n'));
+
+        const shouldMatch: Set<string> = new Set(testCase.matches);
+        const shouldNotMatch: Set<string> = new Set(testCase.misMatches);
+
+        // #getCosmeticFilters
+        const rules = engine.cosmetics.getCosmeticsFilters(
+          testCase.hostname,
+          tldts.getDomain(testCase.hostname) || '',
+          (id) => engine.lists.getCosmeticFilter(id),
+        );
+
+        expect(rules.length).toEqual(shouldMatch.size);
+        rules.forEach((rule) => {
+          expect(rule.rawLine).not.toBeUndefined();
+          if (rule.rawLine !== undefined) {
+            if (!shouldMatch.has(rule.rawLine)) {
+              throw new Error(`Expected ${rule.rawLine} to match ${testCase.hostname}`);
             }
-          });
+            if (shouldNotMatch.has(rule.rawLine)) {
+              throw new Error(`Expected ${rule.rawLine} not to match ${testCase.hostname}`);
+            }
+          }
         });
       });
     });

@@ -44,20 +44,22 @@ export default class Resources {
     const trimComments = (str: string) => str.replace(/^#.*$/gm, '');
     const chunks = data.split('\n\n');
 
-    for (let i = 1; i < chunks.length; i += 1) {
+    for (let i = 0; i < chunks.length; i += 1) {
       const resource = trimComments(chunks[i]).trim();
-      const firstNewLine = resource.indexOf('\n');
-      const [name, type] = resource.slice(0, firstNewLine).split(' ');
-      const body = resource.slice(firstNewLine + 1);
+      if (resource.length !== 0) {
+        const firstNewLine = resource.indexOf('\n');
+        const [name, type] = resource.slice(0, firstNewLine).split(' ');
+        const body = resource.slice(firstNewLine + 1);
 
-      if (name === undefined || type === undefined || body === undefined) {
-        continue;
-      }
+        if (name === undefined || type === undefined || body === undefined) {
+          continue;
+        }
 
-      if (!typeToResource.has(type)) {
-        typeToResource.set(type, new Map());
+        if (!typeToResource.has(type)) {
+          typeToResource.set(type, new Map());
+        }
+        typeToResource.get(type).set(name, body);
       }
-      typeToResource.get(type).set(name, body);
     }
 
     // the resource containing javascirpts to be injected

@@ -252,7 +252,14 @@ export default class ReverseIndex<T extends IFilter> {
       // have one key for each in `this.cache`. And the number of keys could
       // potentially grow to 2^31-1. The alternative would be to do the lookup
       // on the packed data-structure every time, which will probably be slow
-      // (log(n) where n is the number of filters in the index).
+      // (log(n) where n is the number of filters in the index; assuming we
+      // implemented the lookup using a binary search). Maybe we could have an
+      // approximate lookup table using only N bits of the hashes (where N would
+      // be sufficiently small so that we can store all the numbers of N bits in
+      // a typed array without using too much memory); this could be used both
+      // to not start a binary search if there is no chance a token exists in
+      // our packed representation and to avoid having to store all tokens in
+      // `this.cache`.
       bucket =
         filters.length === 0
           ? this.emptyBucket

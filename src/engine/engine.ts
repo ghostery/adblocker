@@ -30,6 +30,12 @@ interface IOptions {
 }
 
 export default class FilterEngine {
+  public static parse(filters: string, options: Partial<IOptions> = {}): FilterEngine {
+    const engine = new FilterEngine(options);
+    engine.onUpdateFilters([{ filters, checksum: '', asset: '<anonymous>' }]);
+    return engine;
+  }
+
   public static deserialize(serialized: Uint8Array): FilterEngine {
     const buffer = new StaticDataView(0, serialized);
 
@@ -87,7 +93,7 @@ export default class FilterEngine {
     loadCosmeticFilters = true,
     loadNetworkFilters = true,
     debug = false,
-  }: IOptions) {
+  }: Partial<IOptions> = {}) {
     // Options
     this.loadCosmeticFilters = loadCosmeticFilters;
     this.loadNetworkFilters = loadNetworkFilters;

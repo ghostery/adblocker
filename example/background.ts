@@ -26,7 +26,7 @@ function loadAdblocker() {
         }
       }
 
-      engine.onUpdateResource(resources, '');
+      engine.onUpdateResource(resources, '' + adblocker.fastHash(resources));
       engine.onUpdateFilters([
         {
           asset: 'filters',
