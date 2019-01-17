@@ -7,13 +7,6 @@ import * as adblocker from '../index';
  * should be blocked or altered.
  */
 function loadAdblocker() {
-  const engine = new adblocker.FiltersEngine({
-    debug: false,
-    enableOptimizations: true,
-    loadCosmeticFilters: true,
-    loadNetworkFilters: true,
-  });
-
   console.log('Fetching resources...');
   return Promise.all([adblocker.fetchLists(), adblocker.fetchResources()]).then(
     ([responses, resources]) => {
@@ -26,15 +19,8 @@ function loadAdblocker() {
         }
       }
 
+      const engine = adblocker.FiltersEngine.parse([...deduplicatedLines].join('\n'));
       engine.onUpdateResource(resources, '' + adblocker.fastHash(resources));
-      engine.onUpdateFilters([
-        {
-          asset: 'filters',
-          checksum: '',
-          filters: [...deduplicatedLines].join('\n'),
-        },
-      ]);
-
       return adblocker.FiltersEngine.deserialize(engine.serialize());
     },
   );
