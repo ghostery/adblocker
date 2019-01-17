@@ -1,6 +1,6 @@
 import StaticDataView from '../data-view';
 import IFilter from '../filters/interface';
-import { fastHash } from '../utils';
+import { binSearch, fastHash } from '../utils';
 
 class Counter<K> {
   private counter: Map<K, number>;
@@ -47,6 +47,19 @@ export class Bucket<T extends IFilter> {
   }
 }
 
+// This global variable is used to optionally store a bit mask answering
+// approximatly to the question: "do we *likely* have an entry for this token in
+// the reverse index?". Because this is only approximate and we do not want to
+// pay the cost of this for each instance of a ReverseIndex, it's stored
+// globally and updated by all the indices.
+// let TOKEN_MASK: Uint32Array | undefined;
+// function getGlobalMask(): Uint32Array {
+//   if (TOKEN_MASK === undefined) {
+//     TOKEN_MASK = new Uint32Array(1000000);
+//   }
+//   return TOKEN_MASK;
+// }
+
 /**
  * Accelerating data structure based on a reverse token index. The creation of
  * the index follows the following algorithm:
@@ -84,31 +97,33 @@ export default class ReverseIndex<T extends IFilter> {
     optimize: (filters: T[]) => T[] = noopOptimize,
   ): ReverseIndex<T> {
     const reverseIndex = new ReverseIndex<T>(noFilter, optimize);
-    reverseIndex.index = buffer.getUint32ArrayStrict();
+    reverseIndex.indexTokens = buffer.getUint32ArrayStrict();
+    reverseIndex.indexIds = buffer.getUint32ArrayStrict();
     return reverseIndex;
   }
 
-  public index: Uint32Array;
+  private indexIds: Uint32Array;
+  private indexTokens: Uint32Array;
   private cache: Map<number, Bucket<T>>;
 
   private readonly optimize: (filters: T[]) => T[];
-  private readonly emptyBucket: Bucket<T>;
 
   constructor(
     filters: (cb: (f: T) => void) => void = noFilter,
     optimize: (filters: T[]) => T[] = noopOptimize,
   ) {
-    this.index = new Uint32Array(0);
+    this.indexIds = new Uint32Array(0);
+    this.indexTokens = new Uint32Array(0);
+
     this.cache = new Map();
     this.optimize = optimize;
-
-    this.emptyBucket = new Bucket([]);
 
     this.addFilters(filters);
   }
 
   public serialize(buffer: StaticDataView): void {
-    buffer.pushUint32ArrayStrict(this.index);
+    buffer.pushUint32ArrayStrict(this.indexTokens);
+    buffer.pushUint32ArrayStrict(this.indexIds);
   }
 
   /**
@@ -136,13 +151,21 @@ export default class ReverseIndex<T extends IFilter> {
     this.iterBucket(0, requestId, getFilter, cb);
   }
 
+  /**
+   * Re-create the internal data-structure of the reverse index *in-place*. It
+   * needs to be called using a generator function (which accepts a callback) to
+   * iterate over *all the filters* we want to store in the index. Knowing all
+   * the filters at construction time allows to find the optimal shape of the
+   * index and speed-up look-ups. Although this might increase the time of
+   * initialization, one needs to keep in mind that the index is created once,
+   * but used many times to look-up filters (potentially thousands of times).
+   */
   private addFilters(iterFilters: (cb: (f: T) => void) => void): void {
     let totalNumberOfTokens = 0;
 
     // Keep track of all filters with their tokens
     const filters: Array<{ filter: T; multiTokens: Uint32Array[] }> = [];
 
-    // TODO - use HyperLogLog here to avoid high memory consumption?
     const histogram = new Counter<number>();
 
     // Count number of occurrences of each token, globally
@@ -164,7 +187,8 @@ export default class ReverseIndex<T extends IFilter> {
 
     // No filter given
     if (filters.length === 0) {
-      this.index = new Uint32Array(0);
+      this.indexTokens = new Uint32Array(0);
+      this.indexIds = new Uint32Array(0);
       this.cache = new Map();
       return;
     }
@@ -177,7 +201,8 @@ export default class ReverseIndex<T extends IFilter> {
     });
 
     // For each filter, take the best token (least seen)
-    const index = [];
+    const bestTokens: number[] = [];
+    const ids: number[] = [];
     for (let i = 0; i < filters.length; i += 1) {
       const { filter, multiTokens } = filters[i];
       let wildCardInserted: boolean = false;
@@ -207,13 +232,37 @@ export default class ReverseIndex<T extends IFilter> {
           wildCardInserted = true;
         }
 
-        index.push(bestToken);
-        index.push(filter.getId());
+        bestTokens.push(bestToken);
+        ids.push(filter.getId());
       }
     }
 
-    // Update state of the reverse index
-    this.index = new Uint32Array(index);
+    // Arg-sort of tokens
+    const args = new Uint32Array(bestTokens.length);
+    for (let i = 0; i < args.length; i += 1) {
+      args[i] = i;
+    }
+
+    args.sort((i1, i2) => {
+      if (bestTokens[i1] < bestTokens[i2]) {
+        return -1;
+      } else if (bestTokens[i1] > bestTokens[i2]) {
+        return 1;
+      }
+      return 0;
+    });
+
+    const indexTokens = new Uint32Array(bestTokens.length);
+    const indexIds = new Uint32Array(ids.length);
+
+    for (let i = 0; i < bestTokens.length; i += 1) {
+      indexTokens[i] = bestTokens[args[i]];
+      indexIds[i] = ids[args[i]];
+    }
+
+    // Update internals
+    this.indexTokens = indexTokens;
+    this.indexIds = indexIds;
     this.cache = new Map();
   }
 
@@ -230,40 +279,51 @@ export default class ReverseIndex<T extends IFilter> {
   ): boolean {
     let bucket: Bucket<T> | undefined = this.cache.get(token);
 
+    // TODO - implement probabilistic lookup table to check if we have a chance
+    // to have an entry for this `token` in the reverse index. This could be
+    // implemented either as a bit-mask or a typed array where only N bits would
+    // be used as a key.
+
     // Lazily create bucket if it does not yet exist. Lookup the compact bucket
     // representation and find all filters being associated with `token`. Create
     // a `Bucket` out of them and store them in cache.
     if (bucket === undefined) {
-      // TODO - implement using binary search instead of linear search for
-      // speed boost!
+      const found: number = binSearch(this.indexTokens, token);
+      if (found === -1) {
+        return true;
+      }
+
       const filters: T[] = [];
-      for (let i = 0; i < this.index.length; i += 2) {
-        if (this.index[i] === token) {
-          const filter = getFilter(this.index[i + 1]);
-          if (filter !== undefined) {
-            filters.push(filter);
-          }
+      let filter = getFilter(this.indexIds[found]);
+      if (filter !== undefined) {
+        filters.push(filter);
+      }
+
+      // Go check on the left
+      for (let i = found - 1; i >= 0 && this.indexTokens[i] === token; i -= 1) {
+        filter = getFilter(this.indexIds[i]);
+        if (filter !== undefined) {
+          filters.push(filter);
         }
       }
 
-      // NOTE: If we create `Bucket` instances for all tokens, even when there
-      // is no filter, it's going to use a lot of memory (as in: memory leak!).
-      // We should probably not do this. But at the very least we are going to
-      // have one key for each in `this.cache`. And the number of keys could
-      // potentially grow to 2^31-1. The alternative would be to do the lookup
-      // on the packed data-structure every time, which will probably be slow
-      // (log(n) where n is the number of filters in the index; assuming we
-      // implemented the lookup using a binary search). Maybe we could have an
-      // approximate lookup table using only N bits of the hashes (where N would
-      // be sufficiently small so that we can store all the numbers of N bits in
-      // a typed array without using too much memory); this could be used both
-      // to not start a binary search if there is no chance a token exists in
-      // our packed representation and to avoid having to store all tokens in
-      // `this.cache`.
-      bucket =
-        filters.length === 0
-          ? this.emptyBucket
-          : new Bucket(filters.length > 1 ? this.optimize(filters) : filters);
+      // Go check on the right
+      for (
+        let i = found + 1;
+        i < this.indexTokens.length && this.indexTokens[i] === token;
+        i += 1
+      ) {
+        filter = getFilter(this.indexIds[i]);
+        if (filter !== undefined) {
+          filters.push(filter);
+        }
+      }
+
+      if (filters.length === 0) {
+        return true;
+      }
+
+      bucket = new Bucket(filters.length > 1 ? this.optimize(filters) : filters);
       this.cache.set(token, bucket);
     }
 

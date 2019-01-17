@@ -210,18 +210,14 @@ export function createFuzzySignature(pattern: string): Uint32Array {
   return compactTokens(new Uint32Array(fastTokenizer(pattern, isAllowedFilter)));
 }
 
-export function binSearch(arr: Uint32Array, elt: number): boolean {
+export function binSearch(arr: Uint32Array, elt: number): number {
   // TODO - check most common case?
   if (arr.length === 0) {
-    return false;
+    return -1;
   }
 
   if (arr.length === 1) {
-    return arr[0] === elt;
-  }
-
-  if (arr.length === 2) {
-    return arr[0] === elt || arr[1] === elt;
+    return arr[0] === elt ? 0 : -1;
   }
 
   let low = 0;
@@ -235,10 +231,11 @@ export function binSearch(arr: Uint32Array, elt: number): boolean {
     } else if (midVal > elt) {
       high = mid - 1;
     } else {
-      return true;
+      return mid;
     }
   }
-  return false;
+
+  return -1;
 }
 
 export function updateResponseHeadersWithCSP(

@@ -1450,8 +1450,8 @@ function checkOptions(filter: NetworkFilter, request: Request): boolean {
   if (filter.hasOptDomains()) {
     const optDomains = filter.getOptDomains();
     if (
-      !binSearch(optDomains, request.sourceHostnameHash) &&
-      !binSearch(optDomains, request.sourceDomainHash)
+      binSearch(optDomains, request.sourceHostnameHash) === -1 &&
+      binSearch(optDomains, request.sourceDomainHash) === -1
     ) {
       return false;
     }
@@ -1461,8 +1461,8 @@ function checkOptions(filter: NetworkFilter, request: Request): boolean {
   if (filter.hasOptNotDomains()) {
     const optNotDomains = filter.getOptNotDomains();
     if (
-      binSearch(optNotDomains, request.sourceHostnameHash) ||
-      binSearch(optNotDomains, request.sourceDomainHash)
+      binSearch(optNotDomains, request.sourceHostnameHash) !== -1 ||
+      binSearch(optNotDomains, request.sourceDomainHash) !== -1
     ) {
       return false;
     }
