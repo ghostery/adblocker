@@ -146,7 +146,7 @@ function buildResourcesFromRequests(filters: NetworkFilter[]): Resources {
     }
   });
 
-  return Resources.parse(resources.join('\n\n'), '');
+  return Resources.parse(resources.join('\n\n'), { checksum: '' });
 }
 
 function createEngine(filters: string, enableOptimizations: boolean = true) {
@@ -549,7 +549,7 @@ $csp=baz,domain=bar.com
     describe('script injections', () => {
       it('injects script', () => {
         const engine = Engine.parse('##+js(script.js,arg1)');
-        engine.resources = Resources.parse('script.js application/javascript\n{{1}}', '');
+        engine.resources = Resources.parse('script.js application/javascript\n{{1}}', { checksum: '' });
         expect(engine.getCosmeticsFilters('foo.com', 'foo.com').scripts).toEqual(['arg1']);
       });
 

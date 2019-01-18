@@ -128,19 +128,20 @@ export class List {
     });
   }
 
-  public static parse({
-    data,
-    checksum = '',
-    loadNetworkFilters = true,
-    loadCosmeticFilters = true,
-    debug = false,
-  }: {
-    data: string;
-    checksum?: string;
-    loadNetworkFilters?: boolean;
-    loadCosmeticFilters?: boolean;
-    debug?: boolean;
-  }): List {
+  public static parse(
+    list: string,
+    {
+      checksum = '',
+      loadNetworkFilters = true,
+      loadCosmeticFilters = true,
+      debug = false,
+    }: {
+      checksum?: string;
+      loadNetworkFilters?: boolean;
+      loadCosmeticFilters?: boolean;
+      debug?: boolean;
+    } = {},
+  ): List {
     const filters: NetworkFilter[] = [];
     const exceptions: NetworkFilter[] = [];
     const csp: NetworkFilter[] = [];
@@ -148,7 +149,7 @@ export class List {
     const redirects: NetworkFilter[] = [];
     const cosmetics: CosmeticFilter[] = [];
 
-    const lines = data.split('\n');
+    const lines = list.split('\n');
 
     for (let i = 0; i < lines.length; i += 1) {
       const line = lines[i].trim();
@@ -376,9 +377,8 @@ export default class Lists {
       if (!this.has(asset, checksum)) {
         this.lists.set(
           asset,
-          List.parse({
+          List.parse(filters, {
             checksum,
-            data: filters,
             debug,
             loadCosmeticFilters,
             loadNetworkFilters,

@@ -39,16 +39,16 @@ export default class Resources {
     });
   }
 
-  public static parse(data: string, checksum: string): Resources {
+  public static parse(data: string, { checksum }: { checksum: string }): Resources {
     const typeToResource = new Map();
-    const trimComments = (str: string) => str.replace(/^#.*$/gm, '');
+    const trimComments = (str: string) => str.replace(/^\s*#.*$/gm, '');
     const chunks = data.split('\n\n');
 
     for (let i = 0; i < chunks.length; i += 1) {
       const resource = trimComments(chunks[i]).trim();
       if (resource.length !== 0) {
         const firstNewLine = resource.indexOf('\n');
-        const [name, type] = resource.slice(0, firstNewLine).split(' ');
+        const [name, type] = resource.slice(0, firstNewLine).split(/\s+/);
         const body = resource.slice(firstNewLine + 1);
 
         if (name === undefined || type === undefined || body === undefined) {

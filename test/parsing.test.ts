@@ -1004,7 +1004,7 @@ describe('Filters list', () => {
       '[Adblock] ||foo.com',
       '[Adblock Plus 2.0] ||foo.com',
     ].forEach((data) => {
-      expect(List.parse({ data })).toEqual(List.parse({ data: '' }));
+      expect(List.parse(data)).toEqual(List.parse(''));
     });
   });
 });

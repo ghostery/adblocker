@@ -160,7 +160,7 @@ export default class FilterEngine {
 
   public onUpdateResource(data: string, checksum: string): void {
     if (checksum !== this.resources.checksum) {
-      this.resources = Resources.parse(data, checksum);
+      this.resources = Resources.parse(data, { checksum });
     }
   }
 

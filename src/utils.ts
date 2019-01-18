@@ -211,13 +211,8 @@ export function createFuzzySignature(pattern: string): Uint32Array {
 }
 
 export function binSearch(arr: Uint32Array, elt: number): number {
-  // TODO - check most common case?
   if (arr.length === 0) {
     return -1;
-  }
-
-  if (arr.length === 1) {
-    return arr[0] === elt ? 0 : -1;
   }
 
   let low = 0;

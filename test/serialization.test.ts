@@ -9,9 +9,7 @@ import NetworkFilter from '../src/filters/network';
 import { List } from '../src/lists';
 
 describe('Serialization', () => {
-  const list = List.parse({
-    data: loadAllLists(),
-  });
+  const list = List.parse(loadAllLists());
   const cosmeticFilters = list.getCosmeticFilters();
   const networkFilters = list.getNetworkFilters();
 
