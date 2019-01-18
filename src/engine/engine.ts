@@ -27,6 +27,7 @@ interface IOptions {
   enableOptimizations: boolean;
   loadCosmeticFilters: boolean;
   loadNetworkFilters: boolean;
+  enableUpdates: boolean;
 }
 
 export default class FilterEngine {
@@ -51,6 +52,7 @@ export default class FilterEngine {
     const engine = new FilterEngine({
       debug: false,
       enableOptimizations: Boolean(buffer.getUint8()),
+      enableUpdates: Boolean(buffer.getUint8()),
       loadCosmeticFilters: Boolean(buffer.getUint8()),
       loadNetworkFilters: Boolean(buffer.getUint8()),
     });
@@ -83,22 +85,25 @@ export default class FilterEngine {
 
   public resources: Resources;
 
+  public readonly debug: boolean;
+  public readonly enableOptimizations: boolean;
+  public readonly enableUpdates: boolean;
   public readonly loadCosmeticFilters: boolean;
   public readonly loadNetworkFilters: boolean;
-  public readonly enableOptimizations: boolean;
-  public readonly debug: boolean;
 
   constructor({
+    debug = false,
     enableOptimizations = true,
+    enableUpdates = true,
     loadCosmeticFilters = true,
     loadNetworkFilters = true,
-    debug = false,
   }: Partial<IOptions> = {}) {
     // Options
+    this.debug = debug;
+    this.enableOptimizations = enableOptimizations;
+    this.enableUpdates = enableUpdates;
     this.loadCosmeticFilters = loadCosmeticFilters;
     this.loadNetworkFilters = loadNetworkFilters;
-    this.enableOptimizations = enableOptimizations;
-    this.debug = debug;
 
     this.lists = new Lists();
 
@@ -132,6 +137,7 @@ export default class FilterEngine {
 
     buffer.pushUint8(ENGINE_VERSION);
     buffer.pushUint8(Number(this.enableOptimizations));
+    buffer.pushUint8(Number(this.enableUpdates));
     buffer.pushUint8(Number(this.loadCosmeticFilters));
     buffer.pushUint8(Number(this.loadNetworkFilters));
 
@@ -159,6 +165,10 @@ export default class FilterEngine {
   }
 
   public onUpdateResource(data: string, checksum: string): void {
+    if (this.enableUpdates === false) {
+      return;
+    }
+
     if (checksum !== this.resources.checksum) {
       this.resources = Resources.parse(data, { checksum });
     }
@@ -168,6 +178,10 @@ export default class FilterEngine {
     lists: Array<{ filters: string; checksum: string; asset: string }>,
     loadedAssets: Set<string> = new Set(),
   ): boolean {
+    if (this.enableUpdates === false) {
+      return false;
+    }
+
     const updated = this.lists.update({
       debug: this.debug,
       lists,
@@ -179,23 +193,23 @@ export default class FilterEngine {
     if (updated) {
       // Re-create all buckets
       this.filters = new NetworkFilterBucket(
-        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFilters(cb, (l) => l.filters),
+        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFiltersNormal(cb),
         this.enableOptimizations,
       );
       this.csp = new NetworkFilterBucket(
-        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFilters(cb, (l) => l.csp),
+        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFiltersCSP(cb),
         false, // Disable optimizations
       );
       this.exceptions = new NetworkFilterBucket(
-        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFilters(cb, (l) => l.exceptions),
+        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFiltersExceptions(cb),
         this.enableOptimizations,
       );
       this.importants = new NetworkFilterBucket(
-        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFilters(cb, (l) => l.importants),
+        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFiltersImportants(cb),
         this.enableOptimizations,
       );
       this.redirects = new NetworkFilterBucket(
-        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFilters(cb, (l) => l.redirects),
+        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFiltersRedirects(cb),
         this.enableOptimizations,
       );
 

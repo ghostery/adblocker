@@ -11,6 +11,12 @@ const enum FilterType {
   COSMETIC,
 }
 
+/**
+ * Given a single line (string), checks if this would likely be a cosmetic
+ * filter, a network filter or something that is not supported. This check is
+ * performed before calling a more specific parser to create an instance of
+ * `NetworkFilter` or `CosmeticFilter`.
+ */
 function detectFilterType(line: string): FilterType {
   // Ignore comments
   if (
@@ -115,19 +121,82 @@ function deserializeCosmeticFilters(buffer: StaticDataView): CosmeticFilter[] {
   return filters;
 }
 
-export class List {
-  public static deserialize(buffer: StaticDataView): List {
-    return new List({
+export class CompactList {
+  public static deserialize(buffer: StaticDataView): CompactList {
+    return new CompactList({
       checksum: buffer.getASCIIStrict(),
-      cosmetics: deserializeCosmeticFilters(buffer),
-      csp: deserializeNetworkFilters(buffer),
-      exceptions: deserializeNetworkFilters(buffer),
-      filters: deserializeNetworkFilters(buffer),
-      importants: deserializeNetworkFilters(buffer),
-      redirects: deserializeNetworkFilters(buffer),
+      cosmeticFilters: buffer.crop(), // TODO
+      networkFilters: buffer.crop(), // TODO
     });
   }
 
+  public readonly checksum: string;
+  private readonly cosmeticFilters: Uint8Array;
+  private readonly networkFilters: Uint8Array;
+
+  constructor({
+    checksum,
+    cosmeticFilters,
+    networkFilters,
+  }: {
+    checksum: string;
+    cosmeticFilters: Uint8Array;
+    networkFilters: Uint8Array;
+  }) {
+    this.checksum = checksum;
+    this.cosmeticFilters = cosmeticFilters;
+    this.networkFilters = networkFilters;
+  }
+
+  /**
+   * Re-create the in-memory `List` instance from `CompactList`
+   */
+  public toList(): List {
+    const filters: NetworkFilter[] = [];
+    const csp: NetworkFilter[] = [];
+    const exceptions: NetworkFilter[] = [];
+    const importants: NetworkFilter[] = [];
+    const redirects: NetworkFilter[] = [];
+
+    const networkFilters = deserializeNetworkFilters(
+      StaticDataView.fromUint8Array(this.networkFilters),
+    );
+    for (let i = 0; i < networkFilters.length; i += 1) {
+      const filter = networkFilters[i];
+      if (filter.isCSP()) {
+        csp.push(filter);
+      } else if (filter.isException()) {
+        exceptions.push(filter);
+      } else if (filter.isImportant()) {
+        importants.push(filter);
+      } else if (filter.isRedirect()) {
+        redirects.push(filter);
+      } else {
+        filters.push(filter);
+      }
+    }
+
+    return new List({
+      checksum: this.checksum,
+      cosmetics: deserializeCosmeticFilters(StaticDataView.fromUint8Array(this.cosmeticFilters)),
+      csp,
+      exceptions,
+      filters,
+      importants,
+      redirects,
+    });
+  }
+
+  public getNetworkFilter(_: number[]): NetworkFilter[] {
+    return [];
+  }
+
+  public getCosmeticFilter(_: number[]): CosmeticFilter[] {
+    return [];
+  }
+}
+
+export class List {
   public static parse(
     list: string,
     {
@@ -202,15 +271,12 @@ export class List {
   }
 
   public readonly checksum: string;
-  public readonly cosmetics: CosmeticFilter[];
-  public readonly exceptions: NetworkFilter[];
-  public readonly csp: NetworkFilter[];
-  public readonly filters: NetworkFilter[];
-  public readonly importants: NetworkFilter[];
-  public readonly redirects: NetworkFilter[];
-
-  private readonly networkIds: Map<number, NetworkFilter>;
-  private readonly cosmeticIds: Map<number, CosmeticFilter>;
+  private readonly cosmetics: CosmeticFilter[];
+  private readonly exceptions: NetworkFilter[];
+  private readonly csp: NetworkFilter[];
+  private readonly filters: NetworkFilter[];
+  private readonly importants: NetworkFilter[];
+  private readonly redirects: NetworkFilter[];
 
   constructor({
     checksum,
@@ -231,37 +297,53 @@ export class List {
   }) {
     this.checksum = checksum;
     this.cosmetics = cosmetics;
-    this.exceptions = exceptions;
     this.csp = csp;
+    this.exceptions = exceptions;
     this.filters = filters;
     this.importants = importants;
     this.redirects = redirects;
-
-    this.cosmeticIds = new Map();
-    this.networkIds = new Map();
-    this.initIdsMappings();
-  }
-
-  public getNetworkFilters(): NetworkFilter[] {
-    return [
-      ...this.exceptions,
-      ...this.csp,
-      ...this.filters,
-      ...this.importants,
-      ...this.redirects,
-    ];
   }
 
   public getNetworkFilter(id: number): NetworkFilter | undefined {
     return this.networkIds.get(id);
   }
 
+  public getCosmeticFilter(id: number): CosmeticFilter | undefined {
+    return this.cosmeticIds.get(id);
+  }
+
+  public getNetworkFilters(): NetworkFilter[] {
+    return [
+      ...this.getNetworkFilterExceptions(),
+      ...this.getNetworkFilterCSP(),
+      ...this.getNetworkFilterNormal(),
+      ...this.getNetworkFilterRedirects(),
+      ...this.getNetworkFilterImportants(),
+    ];
+  }
+
   public getCosmeticFilters(): CosmeticFilter[] {
     return this.cosmetics;
   }
 
-  public getCosmeticFilter(id: number): CosmeticFilter | undefined {
-    return this.cosmeticIds.get(id);
+  public getNetworkFilterNormal(): NetworkFilter[] {
+    return this.filters;
+  }
+
+  public getNetworkFilterExceptions(): NetworkFilter[] {
+    return this.exceptions;
+  }
+
+  public getNetworkFilterCSP(): NetworkFilter[] {
+    return this.csp;
+  }
+
+  public getNetworkFilterImportants(): NetworkFilter[] {
+    return this.importants;
+  }
+
+  public getNetworkFilterRedirects(): NetworkFilter[] {
+    return this.redirects;
   }
 
   public serialize(buffer: StaticDataView): void {
@@ -273,64 +355,60 @@ export class List {
     serializeNetworkFilters(this.importants, buffer);
     serializeNetworkFilters(this.redirects, buffer);
   }
-
-  private initIdsMappings(): void {
-    // TODO - this should be populated lazily from the serialized form
-    // id mapping
-    this.cosmeticIds.clear();
-    this.getCosmeticFilters().forEach((filter) => {
-      this.cosmeticIds.set(filter.getId(), filter);
-    });
-
-    this.networkIds.clear();
-    this.getNetworkFilters().forEach((filter) => {
-      this.networkIds.set(filter.getId(), filter);
-    });
-  }
 }
 
 export default class Lists {
   public static deserialize(buffer: StaticDataView): Lists {
-    const lists = new Map();
+    const lists: Map<string, CompactList> = new Map();
 
     const size = buffer.getUint8();
     for (let i = 0; i < size; i += 1) {
-      lists.set(buffer.getASCIIStrict(), List.deserialize(buffer));
+      lists.set(buffer.getASCIIStrict(), CompactList.deserialize(buffer));
     }
 
     return new Lists(lists);
   }
 
-  public readonly lists: Map<string, List>;
+  public readonly lists: Map<string, CompactList>;
+  private readonly newLists: Map<string, List>;
 
-  private readonly networkIdsCache: Map<number, NetworkFilter>;
-  private readonly cosmeticIdsCache: Map<number, CosmeticFilter>;
-
-  constructor(lists: Map<string, List> = new Map()) {
+  constructor(lists: Map<string, CompactList> = new Map()) {
     this.lists = lists;
-
-    this.networkIdsCache = new Map();
-    this.cosmeticIdsCache = new Map();
+    this.newLists = new Map();
   }
 
   public has(asset: string, checksum: string): boolean {
+    // Check in-memory lists
     const list = this.lists.get(asset);
     if (list !== undefined) {
       return list.checksum === checksum;
     }
+
+    // Check compact lists
+    const compactList = this.newLists.get(asset);
+    if (compactList !== undefined) {
+      return compactList.checksum === checksum;
+    }
+
     return false;
   }
 
   public serialize(buffer: StaticDataView): void {
     buffer.pushUint8(this.lists.size);
-    this.lists.forEach((list, asset) => {
+
+    this.newLists.forEach((list, asset) => {
       buffer.pushASCIIStrict(asset);
       list.serialize(buffer);
     });
+
+    // TODO - serialize CompactList (this.lists)
+    // TODO - while serializing List from `this.newLists`, remove them and
+    // populate CompactList from them. This way, after a call to `serialize`,
+    // all lists are store in their compact form.
   }
 
   public iterCosmeticFilters(cb: (f: CosmeticFilter) => void): void {
-    this.lists.forEach((list: List) => {
+    this.lists.forEach((list: CompactList) => {
       const filters = list.cosmetics;
       for (let i = 0; i < filters.length; i += 1) {
         cb(filters[i]);
@@ -338,16 +416,55 @@ export default class Lists {
     });
   }
 
-  public iterNetworkFilters(
-    cb: (f: NetworkFilter) => void,
-    select: (l: List) => NetworkFilter[],
-  ): void {
-    this.lists.forEach((list: List) => {
-      const filters = select(list);
+  public iterNetworkFiltersExceptions(cb: (f: NetworkFilter) => void): void {
+    this.lists.forEach((list: CompactList) => {
+      const filters = list.getNetworkFilterExceptions();
       for (let i = 0; i < filters.length; i += 1) {
         cb(filters[i]);
       }
     });
+  }
+
+  public iterNetworkFiltersCSP(cb: (f: NetworkFilter) => void): void {
+    this.lists.forEach((list: CompactList) => {
+      const filters = list.getNetworkFilterCSP();
+      for (let i = 0; i < filters.length; i += 1) {
+        cb(filters[i]);
+      }
+    });
+  }
+
+  public iterNetworkFiltersImportants(cb: (f: NetworkFilter) => void): void {
+    this.lists.forEach((list: CompactList) => {
+      const filters = list.getNetworkFilterImportants();
+      for (let i = 0; i < filters.length; i += 1) {
+        cb(filters[i]);
+      }
+    });
+  }
+  public iterNetworkFiltersRedirects(cb: (f: NetworkFilter) => void): void {
+    this.lists.forEach((list: CompactList) => {
+      const filters = list.getNetworkFilterRedirects();
+      for (let i = 0; i < filters.length; i += 1) {
+        cb(filters[i]);
+      }
+    });
+  }
+  public iterNetworkFiltersNormal(cb: (f: NetworkFilter) => void): void {
+    this.lists.forEach((list: CompactList) => {
+      const filters = list.getNetworkFilterNormal();
+      for (let i = 0; i < filters.length; i += 1) {
+        cb(filters[i]);
+      }
+    });
+  }
+
+  public iterNetworkFilters(cb: (f: NetworkFilter) => void): void {
+    this.iterNetworkFiltersExceptions(cb);
+    this.iterNetworkFiltersCSP(cb);
+    this.iterNetworkFiltersImportants(cb);
+    this.iterNetworkFiltersRedirects(cb);
+    this.iterNetworkFiltersNormal(cb);
   }
 
   public update({
@@ -363,10 +480,20 @@ export default class Lists {
     loadedAssets: Set<string>;
     debug: boolean;
   }): boolean {
+    let updated: boolean = false;
+
     // Remove assets if needed
     this.lists.forEach((_, asset) => {
       if (!loadedAssets.has(asset)) {
+        updated = true;
         this.lists.delete(asset);
+      }
+    });
+
+    this.newLists.forEach((_, asset) => {
+      if (!loadedAssets.has(asset)) {
+        updated = true;
+        this.newLists.delete(asset);
       }
     });
 
@@ -375,7 +502,8 @@ export default class Lists {
       const { asset, filters, checksum } = lists[i];
 
       if (!this.has(asset, checksum)) {
-        this.lists.set(
+        updated = true;
+        this.newLists.set(
           asset,
           List.parse(filters, {
             checksum,
@@ -387,19 +515,11 @@ export default class Lists {
       }
     }
 
-    // TODO - only reset cache if a list was updated
-    this.networkIdsCache.clear();
-    this.cosmeticIdsCache.clear();
-
-    // TODO - return true only if at least one list was updated
-    return true;
+    return updated;
   }
 
   public getCosmeticFilter(id: number): CosmeticFilter | undefined {
-    let filter: CosmeticFilter | undefined = this.cosmeticIdsCache.get(id);
-    if (filter !== undefined) {
-      return filter;
-    }
+    let filter: CosmeticFilter | undefined;
 
     this.lists.forEach((list) => {
       if (filter === undefined) {
@@ -407,19 +527,11 @@ export default class Lists {
       }
     });
 
-    if (filter !== undefined) {
-      this.cosmeticIdsCache.set(id, filter);
-      return filter;
-    }
-
-    return;
+    return filter;
   }
 
   public getNetworkFilter(id: number): NetworkFilter | undefined {
-    let filter: NetworkFilter | undefined = this.networkIdsCache.get(id);
-    if (filter !== undefined) {
-      return filter;
-    }
+    let filter: NetworkFilter | undefined;
 
     this.lists.forEach((list) => {
       if (filter === undefined) {
@@ -427,11 +539,6 @@ export default class Lists {
       }
     });
 
-    if (filter !== undefined) {
-      this.networkIdsCache.set(id, filter);
-      return filter;
-    }
-
-    return;
+    return filter;
   }
 }

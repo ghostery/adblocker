@@ -15,6 +15,14 @@ import { hasUnicode } from './utils';
  * deserializer you use `getX` functions to get back the values.
  */
 export default class StaticDataView {
+  public static fromUint32Array(array: Uint32Array): StaticDataView {
+    return new StaticDataView(0, new Uint8Array(array.buffer));
+  }
+
+  public static fromUint8Array(array: Uint8Array): StaticDataView {
+    return new StaticDataView(0, array);
+  }
+
   protected buffer: Uint8Array;
   protected pos: number;
 
