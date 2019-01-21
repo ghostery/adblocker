@@ -7,86 +7,92 @@ import ReverseIndex from '../reverse-index';
 export default class CosmeticFilterBucket {
   public static deserialize(buffer: StaticDataView): CosmeticFilterBucket {
     const bucket = new CosmeticFilterBucket();
-    bucket.genericRules = buffer.getUint32ArrayStrict();
-    bucket.hostnameIndex = ReverseIndex.deserialize(buffer);
+
+    bucket.genericRules = buffer.getBytes();
+    bucket.hostnameIndex = ReverseIndex.deserialize(buffer, CosmeticFilter.deserialize);
+
     return bucket;
   }
 
   public hostnameIndex: ReverseIndex<CosmeticFilter>;
-  public genericRules: Uint32Array;
+  public genericRules: Uint8Array;
+
   private cache: CosmeticFilter[];
 
-  constructor(filters?: (cb: (f: CosmeticFilter) => void) => void) {
+  constructor({ filters = [] }: { filters?: CosmeticFilter[] } = {}) {
+    this.cache = [];
+    this.genericRules = new Uint8Array(0);
+    this.hostnameIndex = new ReverseIndex<CosmeticFilter>({
+      deserialize: CosmeticFilter.deserialize,
+    });
+
+    if (filters.length !== 0) {
+      this.update(filters);
+    }
+  }
+
+  public update(newFilters: CosmeticFilter[], removedFilters: number[] = []) {
     // This will be used to keep in cache the generic CosmeticFilter instances.
     // It will be populated the first time filters are required. TODO - maybe we
     // do not need the full instance there? But instead the selectors only (we
     // only need to know enough to inject and apply exceptions).
-    this.cache = [];
+    const genericRules: CosmeticFilter[] = [];
+    const hostnameSpecificRules: CosmeticFilter[] = [];
+    for (let i = 0; i < newFilters.length; i += 1) {
+      const filter = newFilters[i];
+      if (filter.hasHostnames()) {
+        hostnameSpecificRules.push(filter);
+      } else {
+        genericRules.push(filter);
+      }
+    }
 
     // This accelerating data structure is used to retrieve cosmetic filters for
     // a given hostname. We only store filters having at least one hostname
     // specified and we index each filter several time (one time per hostname).
-    const idsOfGenericRules: number[] = [];
-    this.hostnameIndex = new ReverseIndex((cb: (f: CosmeticFilter) => void) => {
-      if (filters !== undefined) {
-        filters((f: CosmeticFilter) => {
-          if (f.hasHostnames()) {
-            cb(f);
-          } else {
-            idsOfGenericRules.push(f.getId());
-          }
-        });
-      }
-    });
+    this.hostnameIndex.update(hostnameSpecificRules, removedFilters);
 
     // Store generic cosmetic filters in an array. It will be used whenever we
     // need to inject cosmetics in a page and filtered according to
     // domain-specific exceptions/unhide.
-    this.genericRules = new Uint32Array(idsOfGenericRules);
+    const buffer = new StaticDataView(4000000);
+    for (let i = 0; i < genericRules.length; i += 1) {
+      genericRules[i].serialize(buffer);
+    }
+
+    this.cache = [];
+    this.genericRules = buffer.crop().slice();
   }
 
   public serialize(buffer: StaticDataView): void {
-    buffer.pushUint32ArrayStrict(this.genericRules);
+    buffer.pushBytes(this.genericRules);
     this.hostnameIndex.serialize(buffer);
   }
 
-  public getCosmeticsFilters(
-    hostname: string,
-    domain: string,
-    getFilter: (id: number) => CosmeticFilter | undefined,
-  ): CosmeticFilter[] {
+  public getCosmeticsFilters(hostname: string, domain: string): CosmeticFilter[] {
     const disabledRules = new Set();
 
     if (this.cache.length === 0) {
-      // Populate cache. TODO - maybe it would be faster to get all the filters
-      // in batch? Since we know we will want to get all the generic ones it
-      // does not make sense to do one lookup for each of them.
-      for (let i = 0; i < this.genericRules.length; i += 1) {
-        const filter = getFilter(this.genericRules[i]);
-        if (filter !== undefined) {
-          this.cache.push(filter);
-        }
+      const buffer = new StaticDataView(0, this.genericRules);
+      while (buffer.dataAvailable()) {
+        this.cache.push(CosmeticFilter.deserialize(buffer));
       }
     }
 
     const rules: CosmeticFilter[] = [];
 
     // Collect rules specifying a domain
-    this.hostnameIndex.iterMatchingFilters(
-      tokenizeHostnames(hostname),
-      getFilter,
-      (rule: CosmeticFilter) => {
-        if (rule.match(hostname, domain)) {
-          if (rule.isUnhide()) {
-            disabledRules.add(rule.getSelector());
-          } else {
-            rules.push(rule);
-          }
+    this.hostnameIndex.iterMatchingFilters(tokenizeHostnames(hostname), (rule: CosmeticFilter) => {
+      if (rule.match(hostname, domain)) {
+        if (rule.isUnhide()) {
+          disabledRules.add(rule.getSelector());
+        } else {
+          rules.push(rule);
         }
+      }
 
-        return true;
-      },
-    );
+      return true;
+    });
 
     if (disabledRules.size === 0) {
       // No exception/unhide found, so we return all the rules

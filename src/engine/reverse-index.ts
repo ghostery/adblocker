@@ -1,6 +1,6 @@
 import StaticDataView from '../data-view';
 import IFilter from '../filters/interface';
-import { binSearch, fastHash } from '../utils';
+import { fastHash } from '../utils';
 
 class Counter<K> {
   private counter: Map<K, number>;
@@ -24,10 +24,6 @@ class Counter<K> {
 
 function noopOptimize<T>(filters: T[]): T[] {
   return filters;
-}
-
-function noFilter<T>(_: (f: T) => void): void {
-  /* do nothing */
 }
 
 let UID = 1;
@@ -94,36 +90,69 @@ export class Bucket<T extends IFilter> {
 export default class ReverseIndex<T extends IFilter> {
   public static deserialize<T extends IFilter>(
     buffer: StaticDataView,
+    deserialize: (view: StaticDataView) => T,
     optimize: (filters: T[]) => T[] = noopOptimize,
   ): ReverseIndex<T> {
-    const reverseIndex = new ReverseIndex<T>(noFilter, optimize);
-    reverseIndex.indexTokens = buffer.getUint32ArrayStrict();
-    reverseIndex.indexIds = buffer.getUint32ArrayStrict();
+    const reverseIndex = new ReverseIndex<T>({
+      deserialize,
+      optimize,
+    });
+
+    reverseIndex.tokensLookupIndex = buffer.getUint32ArrayStrict();
+    reverseIndex.filtersIndex = buffer.getBytes();
+
     return reverseIndex;
   }
 
-  private indexIds: Uint32Array;
-  private indexTokens: Uint32Array;
+  private tokensLookupIndex: Uint32Array;
+  private filtersIndex: Uint8Array;
   private cache: Map<number, Bucket<T>>;
+  private deserializeFilter: (view: StaticDataView) => T;
 
   private readonly optimize: (filters: T[]) => T[];
 
-  constructor(
-    filters: (cb: (f: T) => void) => void = noFilter,
-    optimize: (filters: T[]) => T[] = noopOptimize,
-  ) {
-    this.indexIds = new Uint32Array(0);
-    this.indexTokens = new Uint32Array(0);
+  constructor({
+    deserialize,
+    filters = [],
+    optimize = noopOptimize,
+  }: {
+    deserialize: (view: StaticDataView) => T;
+    filters?: T[];
+    optimize?: (filters: T[]) => T[];
+  }) {
+    // Expected number of filters in this index.
+    this.deserializeFilter = deserialize;
 
+    // First index: keys are a suffix of `token` and values are indices pointing
+    // to the start of filters for buckets having this token. By checking the
+    // value of the next index
+    this.tokensLookupIndex = new Uint32Array(0);
+
+    // This array contains all the filters instances, serialized. Each filter is
+    // prefixed by the token of its bucket:
+    //
+    // |tok1|filter1|tok2|filter2|tok2|filter2|...
+    //
+    // To navigate this compact representation, `tokensLookupIndex` is needed;
+    // it allows to jump to sections of this array corresponding to some
+    // specific tokens.
+    this.filtersIndex = new Uint8Array(0);
+
+    // Contains a mapping from [token] to `Bucket` (contains a list of filters).
+    // This will be populated lazily as buckets are needed.
     this.cache = new Map();
+
+    // Function used to optimize filters stored in buckets.
     this.optimize = optimize;
 
-    this.addFilters(filters);
+    if (filters.length !== 0) {
+      this.update(filters, []);
+    }
   }
 
   public serialize(buffer: StaticDataView): void {
-    buffer.pushUint32ArrayStrict(this.indexTokens);
-    buffer.pushUint32ArrayStrict(this.indexIds);
+    buffer.pushUint32ArrayStrict(this.tokensLookupIndex);
+    buffer.pushBytes(this.filtersIndex);
   }
 
   /**
@@ -131,24 +160,20 @@ export default class ReverseIndex<T extends IFilter> {
    * tokens. The callback is called on each of them. Early termination can be
    * achieved if the callback returns `false`.
    */
-  public iterMatchingFilters(
-    tokens: Uint32Array,
-    getFilter: (id: number) => T | undefined,
-    cb: (f: T) => boolean,
-  ): void {
+  public iterMatchingFilters(tokens: Uint32Array, cb: (f: T) => boolean): void {
     // Each request is assigned an ID so that we can keep track of the last
     // request seen by each bucket in the reverse index. This provides a cheap
     // way to prevent filters from being inspected more than once per request.
     const requestId = getNextId();
 
     for (let i = 0; i < tokens.length; i += 1) {
-      if (this.iterBucket(tokens[i], requestId, getFilter, cb) === false) {
+      if (this.iterBucket(tokens[i], requestId, cb) === false) {
         return;
       }
     }
 
     // Fallback to 0 bucket if nothing was found before.
-    this.iterBucket(0, requestId, getFilter, cb);
+    this.iterBucket(0, requestId, cb);
   }
 
   /**
@@ -160,35 +185,61 @@ export default class ReverseIndex<T extends IFilter> {
    * initialization, one needs to keep in mind that the index is created once,
    * but used many times to look-up filters (potentially thousands of times).
    */
-  private addFilters(iterFilters: (cb: (f: T) => void) => void): void {
+  public update(newFilters: T[], removedFilters: number[]): void {
     let totalNumberOfTokens = 0;
+
+    const removed = new Set(removedFilters);
 
     // Keep track of all filters with their tokens
     const filters: Array<{ filter: T; multiTokens: Uint32Array[] }> = [];
 
     const histogram = new Counter<number>();
 
-    // Count number of occurrences of each token, globally
-    iterFilters((filter: T) => {
+    // Load all filters contained in this index, omitting the filters with ids
+    // is in the `removed` set.
+    const view = StaticDataView.fromUint8Array(this.filtersIndex);
+    while (view.dataAvailable()) {
+      view.getUint32(); // ignore token used to index this filter before update
+      const filter = this.deserializeFilter(view); // TODO - `T` can be CosmeticFilter or NetworkFilter
+      if (!removed.has(filter.getId())) {
+        const multiTokens = filter.getTokens();
+        filters.push({
+          filter,
+          multiTokens,
+        });
+
+        for (let j = 0; j < multiTokens.length; j += 1) {
+          const tokens = multiTokens[j];
+          for (let k = 0; k < tokens.length; k += 1) {
+            totalNumberOfTokens += 1;
+            histogram.incr(tokens[k]);
+          }
+        }
+      }
+    }
+
+    // Process new filters
+    for (let i = 0; i < newFilters.length; i += 1) {
+      const filter = newFilters[i];
       const multiTokens = filter.getTokens();
       filters.push({
         filter,
         multiTokens,
       });
 
-      for (let i = 0; i < multiTokens.length; i += 1) {
-        const tokens = multiTokens[i];
-        for (let j = 0; j < tokens.length; j += 1) {
+      for (let j = 0; j < multiTokens.length; j += 1) {
+        const tokens = multiTokens[j];
+        for (let k = 0; k < tokens.length; k += 1) {
           totalNumberOfTokens += 1;
-          histogram.incr(tokens[j]);
+          histogram.incr(tokens[k]);
         }
       }
-    });
+    }
 
-    // No filter given
+    // No filter given; reset to empty bucket
     if (filters.length === 0) {
-      this.indexTokens = new Uint32Array(0);
-      this.indexIds = new Uint32Array(0);
+      this.tokensLookupIndex = new Uint32Array(0);
+      this.filtersIndex = new Uint8Array(0);
       this.cache = new Map();
       return;
     }
@@ -200,9 +251,15 @@ export default class ReverseIndex<T extends IFilter> {
       histogram.set(fastHash(badToken), totalNumberOfTokens);
     });
 
+    // Build compact representation of filters
+    const bits = 16;
+    const mask = 2 ** bits - 1;
+    const prefixes: Array<Array<{ token: number; filter: T }>> = [];
+    for (let i = 0; i <= mask; i += 1) {
+      prefixes.push([]);
+    }
+
     // For each filter, take the best token (least seen)
-    const bestTokens: number[] = [];
-    const ids: number[] = [];
     for (let i = 0; i < filters.length; i += 1) {
       const { filter, multiTokens } = filters[i];
       let wildCardInserted: boolean = false;
@@ -232,38 +289,32 @@ export default class ReverseIndex<T extends IFilter> {
           wildCardInserted = true;
         }
 
-        bestTokens.push(bestToken);
-        ids.push(filter.getId());
+        prefixes[bestToken & mask].push({ token: bestToken, filter });
       }
     }
 
-    // Arg-sort of tokens
-    const args = new Uint32Array(bestTokens.length);
-    for (let i = 0; i < args.length; i += 1) {
-      args[i] = i;
-    }
-
-    args.sort((i1, i2) => {
-      if (bestTokens[i1] < bestTokens[i2]) {
-        return -1;
-      } else if (bestTokens[i1] > bestTokens[i2]) {
-        return 1;
+    // Create compact representation
+    const buffer = new StaticDataView(4000000);
+    const tokensLookupIndex = new Uint32Array(mask + 1);
+    const emptyBucket = Number.MAX_SAFE_INTEGER;
+    for (let i = 0; i <= mask; i += 1) {
+      const filtersForMask = prefixes[i];
+      if (filtersForMask.length === 0) {
+        tokensLookupIndex[mask] = emptyBucket;
+      } else {
+        tokensLookupIndex[i] = buffer.getPos();
+        for (let j = 0; j < filtersForMask.length; j += 1) {
+          const { token, filter } = filtersForMask[j];
+          buffer.pushUint32(token);
+          filter.serialize(buffer); // push filter
+        }
       }
-      return 0;
-    });
-
-    const indexTokens = new Uint32Array(bestTokens.length);
-    const indexIds = new Uint32Array(ids.length);
-
-    for (let i = 0; i < bestTokens.length; i += 1) {
-      indexTokens[i] = bestTokens[args[i]];
-      indexIds[i] = ids[args[i]];
     }
 
-    // Update internals
-    this.indexTokens = indexTokens;
-    this.indexIds = indexIds;
+    // Update reverse index
     this.cache = new Map();
+    this.tokensLookupIndex = tokensLookupIndex;
+    this.filtersIndex = buffer.crop().slice();
   }
 
   /**
@@ -271,60 +322,48 @@ export default class ReverseIndex<T extends IFilter> {
    * found inside. An early termination mechanism is built-in, to stop iterating
    * as soon as `false` is returned from the callback.
    */
-  private iterBucket(
-    token: number,
-    requestId: number,
-    getFilter: (id: number) => T | undefined,
-    cb: (f: T) => boolean,
-  ): boolean {
+  private iterBucket(token: number, requestId: number, cb: (f: T) => boolean): boolean {
     let bucket: Bucket<T> | undefined = this.cache.get(token);
-
-    // TODO - implement probabilistic lookup table to check if we have a chance
-    // to have an entry for this `token` in the reverse index. This could be
-    // implemented either as a bit-mask or a typed array where only N bits would
-    // be used as a key.
 
     // Lazily create bucket if it does not yet exist. Lookup the compact bucket
     // representation and find all filters being associated with `token`. Create
     // a `Bucket` out of them and store them in cache.
     if (bucket === undefined) {
-      const found: number = binSearch(this.indexTokens, token);
-      if (found === -1) {
-        return true;
-      }
+      const mask = this.tokensLookupIndex.length - 1;
+      const prefix = token & mask;
+      const startOfBucket = this.tokensLookupIndex[prefix];
+      const endOfBucket =
+        prefix === mask ? this.filtersIndex.length : this.tokensLookupIndex[prefix + 1];
+      const buffer = new StaticDataView(0, this.filtersIndex);
+      buffer.setPos(startOfBucket);
 
-      const filters: T[] = [];
-      let filter = getFilter(this.indexIds[found]);
-      if (filter !== undefined) {
-        filters.push(filter);
-      }
-
-      // Go check on the left
-      for (let i = found - 1; i >= 0 && this.indexTokens[i] === token; i -= 1) {
-        filter = getFilter(this.indexIds[i]);
-        if (filter !== undefined) {
-          filters.push(filter);
+      // Deserialize all buckets (each bucket containing one or more filters)
+      const deserializedBuckets: Map<number, T[]> = new Map();
+      while (buffer.getPos() !== endOfBucket) {
+        const bestToken = buffer.getUint32();
+        const currentFilter = this.deserializeFilter(buffer);
+        let currentBucket: T[] | undefined = deserializedBuckets.get(bestToken);
+        if (currentBucket === undefined) {
+          currentBucket = [currentFilter];
+          deserializedBuckets.set(bestToken, currentBucket);
+        } else {
+          currentBucket.push(currentFilter);
         }
       }
 
-      // Go check on the right
-      for (
-        let i = found + 1;
-        i < this.indexTokens.length && this.indexTokens[i] === token;
-        i += 1
-      ) {
-        filter = getFilter(this.indexIds[i]);
-        if (filter !== undefined) {
-          filters.push(filter);
+      // Update cache
+      deserializedBuckets.forEach((filters, bestToken) => {
+        if (this.cache.has(bestToken)) {
+          throw new Error(`token already in cache; that should not happen! ${bestToken}`);
         }
-      }
 
-      if (filters.length === 0) {
-        return true;
-      }
+        this.cache.set(
+          bestToken,
+          new Bucket(filters.length > 1 ? this.optimize(filters) : filters),
+        );
+      });
 
-      bucket = new Bucket(filters.length > 1 ? this.optimize(filters) : filters);
-      this.cache.set(token, bucket);
+      bucket = this.cache.get(token);
     }
 
     // Look for matching filter in this bucket

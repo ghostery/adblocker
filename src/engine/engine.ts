@@ -4,13 +4,13 @@ import NetworkFilter from '../filters/network';
 import Request, { RequestType } from '../request';
 import Resources from '../resources';
 
-import Lists from '../lists';
+import Lists, { IListDiff, IListsOptions, parseFilters } from '../lists';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 
 import { createStylesheet } from '../content/injection';
 
-export const ENGINE_VERSION = 16;
+export const ENGINE_VERSION = 17;
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -32,13 +32,17 @@ interface IOptions {
 
 export default class FilterEngine {
   public static parse(filters: string, options: Partial<IOptions> = {}): FilterEngine {
-    const engine = new FilterEngine(options);
-    engine.onUpdateFilters([{ filters, checksum: '', asset: '<anonymous>' }]);
-    return engine;
+    return new FilterEngine({
+      ...parseFilters(filters, options),
+      ...options,
+    });
   }
 
-  public static deserialize(serialized: Uint8Array): FilterEngine {
-    const buffer = new StaticDataView(0, serialized);
+  public static deserialize(
+    serialized: Uint8Array,
+    { fetch }: { fetch?: (url: string) => Promise<string> } = {},
+  ): FilterEngine {
+    const buffer = StaticDataView.fromUint8Array(serialized);
 
     // Before starting deserialization, we make sure that the version of the
     // serialized engine is the same as the current source code. If not, we start
@@ -48,20 +52,29 @@ export default class FilterEngine {
       throw new Error('serialized engine version mismatch');
     }
 
+    const subscriptionsEnabled = buffer.getBool();
+    if (subscriptionsEnabled && fetch === undefined) {
+      throw new Error(
+        'Could not serialize Engine with subscriptions enabled without specifying an implementation for fetch',
+      );
+    }
+
     // Create a new engine with same options
     const engine = new FilterEngine({
       debug: false,
-      enableOptimizations: Boolean(buffer.getUint8()),
-      enableUpdates: Boolean(buffer.getUint8()),
-      loadCosmeticFilters: Boolean(buffer.getUint8()),
-      loadNetworkFilters: Boolean(buffer.getUint8()),
+      enableOptimizations: buffer.getBool(),
+      enableUpdates: buffer.getBool(),
+      loadCosmeticFilters: buffer.getBool(),
+      loadNetworkFilters: buffer.getBool(),
     });
 
     // Deserialize resources
     engine.resources = Resources.deserialize(buffer);
 
-    // Deserialize lists + filters
-    engine.lists = Lists.deserialize(buffer);
+    // Deserialize subscription lists
+    if (subscriptionsEnabled && fetch !== undefined) {
+      engine.lists = Lists.deserialize(buffer, { fetch });
+    }
 
     // Deserialize buckets
     engine.filters = NetworkFilterBucket.deserialize(buffer);
@@ -74,7 +87,7 @@ export default class FilterEngine {
     return engine;
   }
 
-  public lists: Lists;
+  public lists: Lists | undefined;
 
   public csp: NetworkFilterBucket;
   public exceptions: NetworkFilterBucket;
@@ -92,12 +105,20 @@ export default class FilterEngine {
   public readonly loadNetworkFilters: boolean;
 
   constructor({
+    // Optionally initialize the engine with filters
+    cosmeticFilters = [],
+    networkFilters = [],
+
+    // Options
     debug = false,
     enableOptimizations = true,
     enableUpdates = true,
     loadCosmeticFilters = true,
     loadNetworkFilters = true,
-  }: Partial<IOptions> = {}) {
+  }: {
+    cosmeticFilters?: CosmeticFilter[];
+    networkFilters?: NetworkFilter[];
+  } & Partial<IOptions> = {}) {
     // Options
     this.debug = debug;
     this.enableOptimizations = enableOptimizations;
@@ -105,10 +126,11 @@ export default class FilterEngine {
     this.loadCosmeticFilters = loadCosmeticFilters;
     this.loadNetworkFilters = loadNetworkFilters;
 
-    this.lists = new Lists();
+    // Subscription management: disabled by default
+    this.lists = undefined;
 
     // $csp=
-    this.csp = new NetworkFilterBucket(undefined, false);
+    this.csp = new NetworkFilterBucket({ enableOptimizations: false });
     // @@filter
     this.exceptions = new NetworkFilterBucket();
     // $important
@@ -122,6 +144,15 @@ export default class FilterEngine {
 
     // Injections
     this.resources = new Resources();
+
+    if (networkFilters.length !== 0 || cosmeticFilters.length !== 0) {
+      this.update({
+        cosmeticFilters,
+        networkFilters,
+        removedCosmeticFilters: [],
+        removedNetworkFilters: [],
+      });
+    }
   }
 
   /**
@@ -136,100 +167,151 @@ export default class FilterEngine {
     const buffer = new StaticDataView(8000000);
 
     buffer.pushUint8(ENGINE_VERSION);
-    buffer.pushUint8(Number(this.enableOptimizations));
-    buffer.pushUint8(Number(this.enableUpdates));
-    buffer.pushUint8(Number(this.loadCosmeticFilters));
-    buffer.pushUint8(Number(this.loadNetworkFilters));
+
+    buffer.pushBool(this.lists !== undefined); // subscriptions enabled?
+    buffer.pushBool(this.enableOptimizations);
+    buffer.pushBool(this.enableUpdates);
+    buffer.pushBool(this.loadCosmeticFilters);
+    buffer.pushBool(this.loadNetworkFilters);
 
     // Resources (js, resources)
     this.resources.serialize(buffer);
 
-    // Lists
-    this.lists.serialize(buffer);
+    // Subscription management
+    if (this.lists !== undefined) {
+      this.lists.serialize(buffer);
+    }
 
-    // Network Filters Buckets
+    // Filters buckets
     this.filters.serialize(buffer);
     this.exceptions.serialize(buffer);
     this.importants.serialize(buffer);
     this.redirects.serialize(buffer);
     this.csp.serialize(buffer);
-
-    // Cosmecit Filters Bucket
     this.cosmetics.serialize(buffer);
 
     return buffer.crop();
   }
 
-  public hasList(asset: string, checksum: string): boolean {
-    return this.lists.has(asset, checksum);
+  /**
+   * Lists management. Deal with subscribed lists.
+   */
+  public enabledSubscriptions(options: IListsOptions): void {
+    this.lists = new Lists({
+      ...options,
+      loadCosmeticFilters: this.loadCosmeticFilters,
+      loadNetworkFilters: this.loadNetworkFilters,
+    });
   }
 
-  public onUpdateResource(data: string, checksum: string): void {
+  public updateSubscriptions(_: string): Promise<void> {
+    if (this.lists === undefined) {
+      return Promise.reject(new Error('Subscriptions not enabled on engine'));
+    }
+
+    return this.lists
+      .updateSubscriptions()
+      .then(
+        ({
+          cosmeticFilters,
+          networkFilters,
+          removedCosmeticFilters,
+          removedNetworkFilters,
+          resources,
+          resourcesChecksum,
+        }) => {
+          if (resources !== undefined && resourcesChecksum !== undefined) {
+            this.updateResource(resources, resourcesChecksum);
+          }
+
+          if (
+            cosmeticFilters.length !== 0 ||
+            networkFilters.length !== 0 ||
+            removedNetworkFilters.length !== 0 ||
+            removedCosmeticFilters.length !== 0
+          ) {
+            this.update({
+              cosmeticFilters,
+              networkFilters,
+              removedCosmeticFilters,
+              removedNetworkFilters,
+            });
+          }
+        },
+      );
+  }
+
+  /**
+   * Update engine with new filters or resources.
+   */
+
+  /**
+   * Update engine with `resources.txt` content.
+   */
+  public updateResource(data: string, checksum: string): void {
     if (this.enableUpdates === false) {
       return;
     }
 
-    if (checksum !== this.resources.checksum) {
-      this.resources = Resources.parse(data, { checksum });
-    }
+    this.resources = Resources.parse(data, { checksum });
   }
 
-  public onUpdateFilters(
-    lists: Array<{ filters: string; checksum: string; asset: string }>,
-    loadedAssets: Set<string> = new Set(),
-  ): boolean {
-    if (this.enableUpdates === false) {
-      return false;
+  /**
+   * Update engine with new filters as well as optionally removed filters.
+   */
+  public update({
+    networkFilters = [],
+    cosmeticFilters = [],
+    removedCosmeticFilters = [],
+    removedNetworkFilters = [],
+  }: IListDiff): void {
+    const filters: NetworkFilter[] = [];
+    const csp: NetworkFilter[] = [];
+    const exceptions: NetworkFilter[] = [];
+    const importants: NetworkFilter[] = [];
+    const redirects: NetworkFilter[] = [];
+
+    for (let i = 0; i < networkFilters.length; i += 1) {
+      const filter = networkFilters[i];
+      if (filter.isCSP()) {
+        csp.push(filter);
+      } else if (filter.isException()) {
+        exceptions.push(filter);
+      } else if (filter.isImportant()) {
+        importants.push(filter);
+      } else if (filter.isRedirect()) {
+        redirects.push(filter);
+      } else {
+        filters.push(filter);
+      }
     }
 
-    const updated = this.lists.update({
-      debug: this.debug,
-      lists,
-      loadCosmeticFilters: this.loadCosmeticFilters,
-      loadNetworkFilters: this.loadNetworkFilters,
-      loadedAssets,
-    });
+    // Update buckets in-place
+    this.filters.update(filters, removedNetworkFilters);
+    this.csp.update(csp, removedNetworkFilters);
+    this.exceptions.update(exceptions, removedNetworkFilters);
+    this.importants.update(importants, removedNetworkFilters);
+    this.redirects.update(redirects, removedNetworkFilters);
 
-    if (updated) {
-      // Re-create all buckets
-      this.filters = new NetworkFilterBucket(
-        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFiltersNormal(cb),
-        this.enableOptimizations,
-      );
-      this.csp = new NetworkFilterBucket(
-        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFiltersCSP(cb),
-        false, // Disable optimizations
-      );
-      this.exceptions = new NetworkFilterBucket(
-        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFiltersExceptions(cb),
-        this.enableOptimizations,
-      );
-      this.importants = new NetworkFilterBucket(
-        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFiltersImportants(cb),
-        this.enableOptimizations,
-      );
-      this.redirects = new NetworkFilterBucket(
-        (cb: (f: NetworkFilter) => void) => this.lists.iterNetworkFiltersRedirects(cb),
-        this.enableOptimizations,
-      );
-
-      this.cosmetics = new CosmeticFilterBucket((cb: (f: CosmeticFilter) => void) =>
-        this.lists.iterCosmeticFilters(cb),
-      );
-    }
-
-    return updated;
+    this.cosmetics.update(cosmeticFilters, removedCosmeticFilters);
   }
 
+  /**
+   * Matching APIs. The following methods are used to retrieve matching filters
+   * either to apply cosmetics on a page or alter network requests.
+   */
+
+  /**
+   * Given `hostname` and `domain` of a page (or frame), return the list of
+   * styles and scripts to inject in the page.
+   */
   public getCosmeticsFilters(hostname: string, domain: string | null | undefined) {
     const selectorsPerStyle: Map<string, string[]> = new Map();
     const scripts: string[] = [];
     const blockedScripts: string[] = [];
 
     if (this.loadCosmeticFilters) {
-      const rules = this.cosmetics.getCosmeticsFilters(hostname, domain || '', (id) =>
-        this.lists.getCosmeticFilter(id),
-      );
+      const rules = this.cosmetics.getCosmeticsFilters(hostname, domain || '');
       for (let i = 0; i < rules.length; i += 1) {
         const rule: CosmeticFilter = rules[i];
 
@@ -265,20 +347,26 @@ export default class FilterEngine {
     };
   }
 
+  /**
+   * Given a `request`, return all matching network filters found in the engine.
+   */
   public matchAll(request: Request): Set<NetworkFilter> {
     const filters: NetworkFilter[] = [];
-    const getFilter = (id: number) => this.lists.getNetworkFilter(id);
     if (request.isSupported) {
-      filters.push(...this.importants.matchAll(request, getFilter));
-      filters.push(...this.filters.matchAll(request, getFilter));
-      filters.push(...this.exceptions.matchAll(request, getFilter));
-      filters.push(...this.csp.matchAll(request, getFilter));
-      filters.push(...this.redirects.matchAll(request, getFilter));
+      filters.push(...this.importants.matchAll(request));
+      filters.push(...this.filters.matchAll(request));
+      filters.push(...this.exceptions.matchAll(request));
+      filters.push(...this.csp.matchAll(request));
+      filters.push(...this.redirects.matchAll(request));
     }
 
     return new Set(filters);
   }
 
+  /**
+   * Given a "main_frame" request, check if some content security policies
+   * should be injected in the page.
+   */
   public getCSPDirectives(request: Request): string | undefined {
     if (!this.loadNetworkFilters) {
       return undefined;
@@ -288,7 +376,7 @@ export default class FilterEngine {
       return undefined;
     }
 
-    const matches = this.csp.matchAll(request, (id) => this.lists.getNetworkFilter(id));
+    const matches = this.csp.matchAll(request);
 
     // Collect all CSP directives and keep track of exceptions
     const disabledCsp = new Set();
@@ -310,6 +398,10 @@ export default class FilterEngine {
     return [...enabledCsp].filter((csp) => !disabledCsp.has(csp)).join('; ') || undefined;
   }
 
+  /**
+   * Decide if a network request (usually from WebRequest API) should be
+   * blocked, redirected or allowed.
+   */
   public match(
     request: Request,
   ): {
@@ -327,20 +419,18 @@ export default class FilterEngine {
     let redirect: string | undefined;
 
     if (request.isSupported) {
-      const getFilter = (id: number) => this.lists.getNetworkFilter(id);
-
       // Check the filters in the following order:
       // 1. $important (not subject to exceptions)
       // 2. redirection ($redirect=resource)
       // 3. normal filters
       // 4. exceptions
-      filter = this.importants.match(request, getFilter);
+      filter = this.importants.match(request);
 
       if (filter === undefined) {
         // Check if there is a redirect or a normal match
-        filter = this.redirects.match(request, getFilter);
+        filter = this.redirects.match(request);
         if (filter === undefined) {
-          filter = this.filters.match(request, getFilter);
+          filter = this.filters.match(request);
         }
 
         // If we found something, check for exceptions
@@ -350,7 +440,7 @@ export default class FilterEngine {
             request.bug = filter.bug;
           }
 
-          exception = this.exceptions.match(request, getFilter);
+          exception = this.exceptions.match(request);
         }
       }
 

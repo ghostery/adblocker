@@ -69,6 +69,26 @@ function detectFilterType(line: string): FilterType {
   return FilterType.NETWORK;
 }
 
+export function groupFiltersByType(
+  filters: Array<CosmeticFilter | NetworkFilter | null>,
+): { cosmeticFilters: CosmeticFilter[]; networkFilters: NetworkFilter[] } {
+  const networkFilters = [];
+  const cosmeticFilters = [];
+
+  for (let i = 0; i < filters.length; i += 1) {
+    const filter = filters[i];
+    if (filter !== null) {
+      if (filter.isCosmeticFilter()) {
+        cosmeticFilters.push(filter as CosmeticFilter);
+      } else {
+        networkFilters.push(filter as NetworkFilter);
+      }
+    }
+  }
+
+  return { networkFilters, cosmeticFilters };
+}
+
 export function f(strings: TemplateStringsArray): NetworkFilter | CosmeticFilter | null {
   const rawFilter = strings.raw[0];
   const filterType = detectFilterType(rawFilter);
@@ -87,458 +107,426 @@ export function f(strings: TemplateStringsArray): NetworkFilter | CosmeticFilter
   return filter;
 }
 
-function serializeNetworkFilters(filters: NetworkFilter[], buffer: StaticDataView): void {
-  buffer.pushUint32(filters.length);
-  for (let i = 0; i < filters.length; i += 1) {
-    filters[i].serialize(buffer);
-  }
-}
-
-function serializeCosmeticFilters(filters: CosmeticFilter[], buffer: StaticDataView): void {
-  buffer.pushUint32(filters.length);
-  for (let i = 0; i < filters.length; i += 1) {
-    filters[i].serialize(buffer);
-  }
-}
-
-function deserializeNetworkFilters(buffer: StaticDataView): NetworkFilter[] {
-  const length = buffer.getUint32();
-  const filters: NetworkFilter[] = [];
-  for (let i = 0; i < length; i += 1) {
-    filters.push(NetworkFilter.deserialize(buffer));
-  }
-
-  return filters;
-}
-
-function deserializeCosmeticFilters(buffer: StaticDataView): CosmeticFilter[] {
-  const length = buffer.getUint32();
-  const filters: CosmeticFilter[] = [];
-  for (let i = 0; i < length; i += 1) {
-    filters.push(CosmeticFilter.deserialize(buffer));
-  }
-
-  return filters;
-}
-
-export class CompactList {
-  public static deserialize(buffer: StaticDataView): CompactList {
-    return new CompactList({
-      checksum: buffer.getASCIIStrict(),
-      cosmeticFilters: buffer.crop(), // TODO
-      networkFilters: buffer.crop(), // TODO
-    });
-  }
-
-  public readonly checksum: string;
-  private readonly cosmeticFilters: Uint8Array;
-  private readonly networkFilters: Uint8Array;
-
-  constructor({
-    checksum,
-    cosmeticFilters,
-    networkFilters,
+export function parseFilters(
+  list: string,
+  {
+    loadNetworkFilters = true,
+    loadCosmeticFilters = true,
+    debug = false,
   }: {
-    checksum: string;
-    cosmeticFilters: Uint8Array;
-    networkFilters: Uint8Array;
-  }) {
-    this.checksum = checksum;
-    this.cosmeticFilters = cosmeticFilters;
-    this.networkFilters = networkFilters;
-  }
+    loadNetworkFilters?: boolean;
+    loadCosmeticFilters?: boolean;
+    debug?: boolean;
+  } = {},
+): { networkFilters: NetworkFilter[]; cosmeticFilters: CosmeticFilter[] } {
+  const networkFilters: NetworkFilter[] = [];
+  const cosmeticFilters: CosmeticFilter[] = [];
 
-  /**
-   * Re-create the in-memory `List` instance from `CompactList`
-   */
-  public toList(): List {
-    const filters: NetworkFilter[] = [];
-    const csp: NetworkFilter[] = [];
-    const exceptions: NetworkFilter[] = [];
-    const importants: NetworkFilter[] = [];
-    const redirects: NetworkFilter[] = [];
+  const lines = list.split('\n');
 
-    const networkFilters = deserializeNetworkFilters(
-      StaticDataView.fromUint8Array(this.networkFilters),
-    );
-    for (let i = 0; i < networkFilters.length; i += 1) {
-      const filter = networkFilters[i];
-      if (filter.isCSP()) {
-        csp.push(filter);
-      } else if (filter.isException()) {
-        exceptions.push(filter);
-      } else if (filter.isImportant()) {
-        importants.push(filter);
-      } else if (filter.isRedirect()) {
-        redirects.push(filter);
-      } else {
-        filters.push(filter);
-      }
-    }
+  for (let i = 0; i < lines.length; i += 1) {
+    const line = lines[i].trim();
 
-    return new List({
-      checksum: this.checksum,
-      cosmetics: deserializeCosmeticFilters(StaticDataView.fromUint8Array(this.cosmeticFilters)),
-      csp,
-      exceptions,
-      filters,
-      importants,
-      redirects,
-    });
-  }
+    if (line.length > 0) {
+      const filterType = detectFilterType(line);
 
-  public getNetworkFilter(_: number[]): NetworkFilter[] {
-    return [];
-  }
-
-  public getCosmeticFilter(_: number[]): CosmeticFilter[] {
-    return [];
-  }
-}
-
-export class List {
-  public static parse(
-    list: string,
-    {
-      checksum = '',
-      loadNetworkFilters = true,
-      loadCosmeticFilters = true,
-      debug = false,
-    }: {
-      checksum?: string;
-      loadNetworkFilters?: boolean;
-      loadCosmeticFilters?: boolean;
-      debug?: boolean;
-    } = {},
-  ): List {
-    const filters: NetworkFilter[] = [];
-    const exceptions: NetworkFilter[] = [];
-    const csp: NetworkFilter[] = [];
-    const importants: NetworkFilter[] = [];
-    const redirects: NetworkFilter[] = [];
-    const cosmetics: CosmeticFilter[] = [];
-
-    const lines = list.split('\n');
-
-    for (let i = 0; i < lines.length; i += 1) {
-      const line = lines[i].trim();
-
-      if (line.length > 0) {
-        const filterType = detectFilterType(line);
-
-        if (filterType === FilterType.NETWORK && loadNetworkFilters) {
-          const filter = NetworkFilter.parse(line);
-          if (filter !== null) {
-            // In debug mode, keep the original line
-            if (debug === true) {
-              filter.rawLine = line;
-            }
-
-            if (filter.isCSP()) {
-              csp.push(filter);
-            } else if (filter.isException()) {
-              exceptions.push(filter);
-            } else if (filter.isImportant()) {
-              importants.push(filter);
-            } else if (filter.isRedirect()) {
-              redirects.push(filter);
-            } else {
-              filters.push(filter);
-            }
+      if (filterType === FilterType.NETWORK && loadNetworkFilters) {
+        const filter = NetworkFilter.parse(line);
+        if (filter !== null) {
+          // In debug mode, keep the original line
+          if (debug === true) {
+            filter.rawLine = line;
           }
-        } else if (filterType === FilterType.COSMETIC && loadCosmeticFilters) {
-          const filter = CosmeticFilter.parse(line);
-          if (filter !== null) {
-            // In debug mode, keep the original line
-            if (debug === true) {
-              filter.rawLine = line;
-            }
-            cosmetics.push(filter);
+
+          networkFilters.push(filter);
+        }
+      } else if (filterType === FilterType.COSMETIC && loadCosmeticFilters) {
+        const filter = CosmeticFilter.parse(line);
+        if (filter !== null) {
+          // In debug mode, keep the original line
+          if (debug === true) {
+            filter.rawLine = line;
           }
+          cosmeticFilters.push(filter);
         }
       }
     }
-
-    return new List({
-      checksum,
-      cosmetics,
-      csp,
-      exceptions,
-      filters,
-      importants,
-      redirects,
-    });
   }
 
-  public readonly checksum: string;
-  private readonly cosmetics: CosmeticFilter[];
-  private readonly exceptions: NetworkFilter[];
-  private readonly csp: NetworkFilter[];
-  private readonly filters: NetworkFilter[];
-  private readonly importants: NetworkFilter[];
-  private readonly redirects: NetworkFilter[];
+  return { networkFilters, cosmeticFilters };
+}
+
+export interface IListDiff {
+  networkFilters: NetworkFilter[];
+  cosmeticFilters: CosmeticFilter[];
+  removedCosmeticFilters: number[];
+  removedNetworkFilters: number[];
+}
+
+export function serializeListDiff(_: IListDiff): Uint8Array {
+  const view = new StaticDataView(4000000);
+  // TODO
+  return view.crop();
+}
+
+export function deserializeListDiff(_: Uint8Array): IListDiff {
+  // const view = StaticDataView.fromUint8Array(buffer);
+  // TODO
+
+  return {
+    cosmeticFilters: [],
+    networkFilters: [],
+    removedCosmeticFilters: [],
+    removedNetworkFilters: [],
+  };
+}
+
+export class List {
+  public static deserialize(buffer: StaticDataView): List {
+    const checksum: string = buffer.getASCIIStrict();
+    const loadCosmeticFilters: boolean = Boolean(buffer.getByte());
+    const loadNetworkFilters: boolean = Boolean(buffer.getByte());
+    const url: string = buffer.getASCIIStrict();
+
+    const list = new List({
+      checksum,
+      loadCosmeticFilters,
+      loadNetworkFilters,
+      url,
+    });
+
+    list.cosmeticFilterIds = new Set(buffer.getUint32ArrayStrict());
+    list.networkFilterIds = new Set(buffer.getUint32ArrayStrict());
+
+    return list;
+  }
+
+  public checksum: string;
+  public readonly loadCosmeticFilters: boolean;
+  public readonly loadNetworkFilters: boolean;
+  public readonly url: string;
+
+  public networkFilterIds: Set<number>;
+  public cosmeticFilterIds: Set<number>;
 
   constructor({
-    checksum,
-    cosmetics,
-    exceptions,
-    csp,
-    filters,
-    importants,
-    redirects,
+    checksum = '',
+    loadCosmeticFilters = true,
+    loadNetworkFilters = true,
+    url,
   }: {
-    checksum: string;
-    cosmetics: CosmeticFilter[];
-    csp: NetworkFilter[];
-    exceptions: NetworkFilter[];
-    filters: NetworkFilter[];
-    importants: NetworkFilter[];
-    redirects: NetworkFilter[];
+    checksum?: string;
+    loadCosmeticFilters?: boolean;
+    loadNetworkFilters?: boolean;
+    url: string;
   }) {
     this.checksum = checksum;
-    this.cosmetics = cosmetics;
-    this.csp = csp;
-    this.exceptions = exceptions;
-    this.filters = filters;
-    this.importants = importants;
-    this.redirects = redirects;
+    this.loadCosmeticFilters = loadCosmeticFilters;
+    this.loadNetworkFilters = loadNetworkFilters;
+    this.url = url;
+
+    // Keep track of currently loaded filters TODO - could make use of a typed
+    // array to allow fast serialization/deserialization as well as less memory
+    // usage
+    this.cosmeticFilterIds = new Set();
+    this.networkFilterIds = new Set();
   }
 
-  public getNetworkFilter(id: number): NetworkFilter | undefined {
-    return this.networkIds.get(id);
-  }
+  public update(raw: string, checksum: string): IListDiff {
+    // Update current checksum
+    this.checksum = checksum;
 
-  public getCosmeticFilter(id: number): CosmeticFilter | undefined {
-    return this.cosmeticIds.get(id);
-  }
+    // Parse new filters
+    const { cosmeticFilters, networkFilters } = parseFilters(raw, {
+      loadCosmeticFilters: this.loadCosmeticFilters,
+      loadNetworkFilters: this.loadNetworkFilters,
+    });
 
-  public getNetworkFilters(): NetworkFilter[] {
-    return [
-      ...this.getNetworkFilterExceptions(),
-      ...this.getNetworkFilterCSP(),
-      ...this.getNetworkFilterNormal(),
-      ...this.getNetworkFilterRedirects(),
-      ...this.getNetworkFilterImportants(),
-    ];
-  }
+    const newCosmeticFilters: CosmeticFilter[] = [];
+    const newCosmeticFilterIds: Set<number> = new Set();
 
-  public getCosmeticFilters(): CosmeticFilter[] {
-    return this.cosmetics;
-  }
+    const newNetworkFilters: NetworkFilter[] = [];
+    const newNetworkFilterIds: Set<number> = new Set();
 
-  public getNetworkFilterNormal(): NetworkFilter[] {
-    return this.filters;
-  }
+    for (let i = 0; i < cosmeticFilters.length; i += 1) {
+      const filter = cosmeticFilters[i];
+      newCosmeticFilterIds.add(filter.getId());
+      if (!this.cosmeticFilterIds.has(filter.getId())) {
+        newCosmeticFilters.push(filter);
+      }
+    }
 
-  public getNetworkFilterExceptions(): NetworkFilter[] {
-    return this.exceptions;
-  }
+    for (let i = 0; i < networkFilters.length; i += 1) {
+      const filter = networkFilters[i];
+      newNetworkFilterIds.add(filter.getId());
+      if (!this.networkFilterIds.has(filter.getId())) {
+        newNetworkFilters.push(filter);
+      }
+    }
 
-  public getNetworkFilterCSP(): NetworkFilter[] {
-    return this.csp;
-  }
+    // Detect list of IDs which have been removed
+    const removedNetworkFilters: number[] = [...this.cosmeticFilterIds].filter(
+      (id) => !newCosmeticFilterIds.has(id),
+    );
+    const removedCosmeticFilters: number[] = [...this.cosmeticFilterIds].filter(
+      (id) => !newCosmeticFilterIds.has(id),
+    );
 
-  public getNetworkFilterImportants(): NetworkFilter[] {
-    return this.importants;
-  }
+    // Update list of filter IDs
+    this.cosmeticFilterIds = newCosmeticFilterIds;
+    this.networkFilterIds = newNetworkFilterIds;
 
-  public getNetworkFilterRedirects(): NetworkFilter[] {
-    return this.redirects;
+    return {
+      cosmeticFilters: newCosmeticFilters,
+      networkFilters: newNetworkFilters,
+      removedCosmeticFilters,
+      removedNetworkFilters,
+    };
   }
 
   public serialize(buffer: StaticDataView): void {
     buffer.pushASCIIStrict(this.checksum);
-    serializeCosmeticFilters(this.cosmetics, buffer);
-    serializeNetworkFilters(this.csp, buffer);
-    serializeNetworkFilters(this.exceptions, buffer);
-    serializeNetworkFilters(this.filters, buffer);
-    serializeNetworkFilters(this.importants, buffer);
-    serializeNetworkFilters(this.redirects, buffer);
+    buffer.pushByte(Number(this.loadCosmeticFilters));
+    buffer.pushByte(Number(this.loadNetworkFilters));
+    buffer.pushASCIIStrict(this.url);
+
+    buffer.pushUint32ArrayStrict(new Uint32Array([...this.cosmeticFilterIds]));
+    buffer.pushUint32ArrayStrict(new Uint32Array([...this.networkFilterIds]));
   }
 }
 
+type Country =
+  | 'de'
+  | 'germany'
+  | 'es'
+  | 'spain'
+  | 'fr'
+  | 'france'
+  | 'he'
+  | 'hebrew'
+  | 'it'
+  | 'italy'
+  | 'ja'
+  | 'japan'
+  | 'lv'
+  | 'latvia'
+  | 'pl'
+  | 'poland'
+  | 'pt'
+  | 'portugal'
+  | 'ro'
+  | 'romania'
+  | 'sl'
+  | 'slovenia'
+  | 'sv'
+  | 'sweden'
+  | 'th'
+  | 'thailand'
+  | 'zh'
+  | 'china';
+
+export interface IListsOptions {
+  allowedListsUrl: string;
+  countryListsEnabled: boolean;
+  fetch: (url: string) => Promise<string>;
+  loadCosmeticFilters: boolean;
+  loadNetworkFilters: boolean;
+  loadedCountries: Country[];
+}
+
+/* Class responsible for loading, persisting and updating filters lists.
+ */
 export default class Lists {
-  public static deserialize(buffer: StaticDataView): Lists {
-    const lists: Map<string, CompactList> = new Map();
+  public static deserialize(
+    buffer: StaticDataView,
+    options: { fetch: (url: string) => Promise<string> },
+  ): Lists {
+    const allowedListsUrl = buffer.getASCIIStrict();
+    const resourcesChecksum = buffer.getASCIIStrict();
+    const countryListsEnabled = buffer.getBool();
+    const loadNetworkFilters = buffer.getBool();
+    const loadCosmeticFilters = buffer.getBool();
 
-    const size = buffer.getUint8();
-    for (let i = 0; i < size; i += 1) {
-      lists.set(buffer.getASCIIStrict(), CompactList.deserialize(buffer));
+    const loadedCountries: Country[] = [];
+    const numberOfLoadedCountries = buffer.getUint16();
+    for (let i = 0; i < numberOfLoadedCountries; i += 1) {
+      loadedCountries.push(buffer.getASCIIStrict() as Country);
     }
 
-    return new Lists(lists);
+    const lists = new Lists({
+      ...options,
+      allowedListsUrl,
+      countryListsEnabled,
+      loadCosmeticFilters,
+      loadNetworkFilters,
+      loadedCountries,
+    });
+
+    lists.resourcesChecksum = resourcesChecksum;
+
+    // Lists
+    const numberOfLists = buffer.getUint16();
+    for (let i = 0; i < numberOfLists; i += 1) {
+      const list = List.deserialize(buffer);
+      lists.lists.set(list.url, list);
+    }
+
+    return lists;
   }
+  public readonly allowedListsUrl: string;
+  public readonly countryListsEnabled: boolean;
+  public readonly lists: Map<string, List>;
+  public readonly loadedCountries: Set<Country>;
+  public readonly loadNetworkFilters: boolean;
+  public readonly loadCosmeticFilters: boolean;
 
-  public readonly lists: Map<string, CompactList>;
-  private readonly newLists: Map<string, List>;
+  private resourcesChecksum: string;
+  private readonly fetch: (url: string) => Promise<string>;
 
-  constructor(lists: Map<string, CompactList> = new Map()) {
-    this.lists = lists;
-    this.newLists = new Map();
-  }
+  constructor({
+    allowedListsUrl,
+    countryListsEnabled = false,
+    fetch,
+    loadCosmeticFilters = true,
+    loadNetworkFilters = true,
+    loadedCountries = [],
+  }: IListsOptions) {
+    this.allowedListsUrl = allowedListsUrl;
+    this.countryListsEnabled = countryListsEnabled;
+    this.lists = new Map();
+    this.loadedCountries = new Set(loadedCountries);
+    this.loadNetworkFilters = loadNetworkFilters;
+    this.loadCosmeticFilters = loadCosmeticFilters;
 
-  public has(asset: string, checksum: string): boolean {
-    // Check in-memory lists
-    const list = this.lists.get(asset);
-    if (list !== undefined) {
-      return list.checksum === checksum;
-    }
+    this.fetch = fetch;
 
-    // Check compact lists
-    const compactList = this.newLists.get(asset);
-    if (compactList !== undefined) {
-      return compactList.checksum === checksum;
-    }
-
-    return false;
+    this.resourcesChecksum = '';
   }
 
   public serialize(buffer: StaticDataView): void {
-    buffer.pushUint8(this.lists.size);
+    buffer.pushASCIIStrict(this.allowedListsUrl);
+    buffer.pushASCIIStrict(this.resourcesChecksum);
+    buffer.pushBool(this.countryListsEnabled);
+    buffer.pushBool(this.loadNetworkFilters);
+    buffer.pushBool(this.loadCosmeticFilters);
 
-    this.newLists.forEach((list, asset) => {
-      buffer.pushASCIIStrict(asset);
+    // Loaded countries
+    buffer.pushUint16(this.loadedCountries.size);
+    this.loadedCountries.forEach((country) => {
+      buffer.pushASCIIStrict(country);
+    });
+
+    // Lists
+    buffer.pushUint16(this.lists.size);
+    this.lists.forEach((list) => {
       list.serialize(buffer);
     });
-
-    // TODO - serialize CompactList (this.lists)
-    // TODO - while serializing List from `this.newLists`, remove them and
-    // populate CompactList from them. This way, after a call to `serialize`,
-    // all lists are store in their compact form.
   }
 
-  public iterCosmeticFilters(cb: (f: CosmeticFilter) => void): void {
-    this.lists.forEach((list: CompactList) => {
-      const filters = list.cosmetics;
-      for (let i = 0; i < filters.length; i += 1) {
-        cb(filters[i]);
-      }
-    });
+  /**
+   * Enable the use of filters specific to the given country.
+   */
+  public enableCountry(country: Country): void {
+    this.loadedCountries.add(country);
   }
 
-  public iterNetworkFiltersExceptions(cb: (f: NetworkFilter) => void): void {
-    this.lists.forEach((list: CompactList) => {
-      const filters = list.getNetworkFilterExceptions();
-      for (let i = 0; i < filters.length; i += 1) {
-        cb(filters[i]);
-      }
-    });
-  }
-
-  public iterNetworkFiltersCSP(cb: (f: NetworkFilter) => void): void {
-    this.lists.forEach((list: CompactList) => {
-      const filters = list.getNetworkFilterCSP();
-      for (let i = 0; i < filters.length; i += 1) {
-        cb(filters[i]);
-      }
-    });
-  }
-
-  public iterNetworkFiltersImportants(cb: (f: NetworkFilter) => void): void {
-    this.lists.forEach((list: CompactList) => {
-      const filters = list.getNetworkFilterImportants();
-      for (let i = 0; i < filters.length; i += 1) {
-        cb(filters[i]);
-      }
-    });
-  }
-  public iterNetworkFiltersRedirects(cb: (f: NetworkFilter) => void): void {
-    this.lists.forEach((list: CompactList) => {
-      const filters = list.getNetworkFilterRedirects();
-      for (let i = 0; i < filters.length; i += 1) {
-        cb(filters[i]);
-      }
-    });
-  }
-  public iterNetworkFiltersNormal(cb: (f: NetworkFilter) => void): void {
-    this.lists.forEach((list: CompactList) => {
-      const filters = list.getNetworkFilterNormal();
-      for (let i = 0; i < filters.length; i += 1) {
-        cb(filters[i]);
-      }
-    });
-  }
-
-  public iterNetworkFilters(cb: (f: NetworkFilter) => void): void {
-    this.iterNetworkFiltersExceptions(cb);
-    this.iterNetworkFiltersCSP(cb);
-    this.iterNetworkFiltersImportants(cb);
-    this.iterNetworkFiltersRedirects(cb);
-    this.iterNetworkFiltersNormal(cb);
-  }
-
-  public update({
-    lists,
-    loadCosmeticFilters,
-    loadNetworkFilters,
-    loadedAssets = new Set(),
-    debug = false,
-  }: {
-    lists: Array<{ filters: string; checksum: string; asset: string }>;
-    loadCosmeticFilters: boolean;
-    loadNetworkFilters: boolean;
-    loadedAssets: Set<string>;
-    debug: boolean;
-  }): boolean {
-    let updated: boolean = false;
-
-    // Remove assets if needed
-    this.lists.forEach((_, asset) => {
-      if (!loadedAssets.has(asset)) {
-        updated = true;
-        this.lists.delete(asset);
-      }
-    });
-
-    this.newLists.forEach((_, asset) => {
-      if (!loadedAssets.has(asset)) {
-        updated = true;
-        this.newLists.delete(asset);
-      }
-    });
-
-    // Parse all filters and update `this.lists`
-    for (let i = 0; i < lists.length; i += 1) {
-      const { asset, filters, checksum } = lists[i];
-
-      if (!this.has(asset, checksum)) {
-        updated = true;
-        this.newLists.set(
-          asset,
-          List.parse(filters, {
-            checksum,
-            debug,
-            loadCosmeticFilters,
-            loadNetworkFilters,
-          }),
-        );
-      }
+  /**
+   * Trigger updating of all remotly fetched resources. This includes:
+   * - resources.txt file used for script injection and request redirections
+   * - base lists (e.g.: easylist)
+   * - country specific lists (e.g.: easylistgermany)
+   *
+   * This method will first get the latest version of the `allowed_list.json`
+   * file which specifies the set of available subscriptions as well as their
+   * checksums.
+   *
+   * It will then proceed to fetching missing or out-dated resources.
+   */
+  public updateSubscriptions(): Promise<
+    IListDiff & {
+      resources?: string;
+      resourcesChecksum?: string;
     }
+  > {
+    const cosmeticFilters: CosmeticFilter[] = [];
+    const networkFilters: NetworkFilter[] = [];
+    const removedCosmeticFilters: number[] = [];
+    const removedNetworkFilters: number[] = [];
+    let newResources: string | undefined;
+    let newResourcesChecksum: string | undefined;
 
-    return updated;
-  }
+    // Update allowed lists file
+    return this.fetch(this.allowedListsUrl)
+      .then(JSON.parse)
+      .then(({ allowed_lists, country_lists, js_resources }) => {
+        const promises: Array<Promise<void>> = [];
 
-  public getCosmeticFilter(id: number): CosmeticFilter | undefined {
-    let filter: CosmeticFilter | undefined;
+        // Update resources if needed
+        const resourcesUrl = Object.keys(js_resources)[0];
+        if (js_resources[resourcesUrl].checksum !== this.resourcesChecksum) {
+          promises.push(
+            this.fetch(resourcesUrl).then((response) => {
+              newResources = response;
+              this.resourcesChecksum = js_resources[resourcesUrl].checksum;
+              newResourcesChecksum = this.resourcesChecksum;
+            }),
+          );
+        }
 
-    this.lists.forEach((list) => {
-      if (filter === undefined) {
-        filter = list.getCosmeticFilter(id);
-      }
-    });
+        // Collect Urls of lists to fetch/update
+        const enabledLists: Array<{ url: string; checksum: string }> = [];
 
-    return filter;
-  }
+        // Collect from normal lists
+        Object.keys(allowed_lists).forEach((url) => {
+          const { checksum } = allowed_lists[url];
+          enabledLists.push({ url, checksum });
+        });
 
-  public getNetworkFilter(id: number): NetworkFilter | undefined {
-    let filter: NetworkFilter | undefined;
+        // Collect from country lists
+        Object.keys(country_lists).forEach((url) => {
+          const { checksum, language } = allowed_lists[url];
+          if (this.loadedCountries.has(language)) {
+            enabledLists.push({ url, checksum });
+          }
+        });
 
-    this.lists.forEach((list) => {
-      if (filter === undefined) {
-        filter = list.getNetworkFilter(id);
-      }
-    });
+        // Fetch and update or create lists as needed
+        enabledLists.forEach(({ url, checksum }) => {
+          const list: List =
+            this.lists.get(url) ||
+            new List({
+              loadCosmeticFilters: this.loadCosmeticFilters,
+              loadNetworkFilters: this.loadNetworkFilters,
+              url,
+            });
 
-    return filter;
+          // Skip list as there is not available update
+          if (list.checksum === checksum) {
+            return;
+          }
+
+          this.lists.set(url, list);
+
+          promises.push(
+            this.fetch(url).then((listContent) => {
+              const diff = list.update(listContent, checksum);
+              networkFilters.push(...diff.networkFilters);
+              cosmeticFilters.push(...diff.cosmeticFilters);
+              removedNetworkFilters.push(...diff.removedNetworkFilters);
+              removedCosmeticFilters.push(...diff.removedCosmeticFilters);
+            }),
+          );
+        });
+
+        return Promise.all(promises);
+      })
+      .then(() => ({
+        cosmeticFilters,
+        networkFilters,
+        removedCosmeticFilters,
+        removedNetworkFilters,
+        resources: newResources,
+        resourcesChecksum: newResourcesChecksum,
+      }));
   }
 }

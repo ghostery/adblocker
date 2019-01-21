@@ -11,9 +11,10 @@ import ReverseIndex from '../reverse-index';
 export default class NetworkFilterBucket {
   public static deserialize(buffer: StaticDataView): NetworkFilterBucket {
     const enableOptimizations = Boolean(buffer.getUint8());
-    const bucket = new NetworkFilterBucket(undefined, enableOptimizations);
+    const bucket = new NetworkFilterBucket({ enableOptimizations });
     bucket.index = ReverseIndex.deserialize(
       buffer,
+      NetworkFilter.deserialize,
       enableOptimizations ? networkFiltersOptimizer : undefined,
     );
     return bucket;
@@ -22,15 +23,23 @@ export default class NetworkFilterBucket {
   public index: ReverseIndex<NetworkFilter>;
   public enableOptimizations: boolean;
 
-  constructor(
-    filters?: (cb: (f: NetworkFilter) => void) => void,
-    enableOptimizations: boolean = true,
-  ) {
+  constructor({
+    filters = [],
+    enableOptimizations = true,
+  }: {
+    filters?: NetworkFilter[];
+    enableOptimizations?: boolean;
+  } = {}) {
     this.enableOptimizations = enableOptimizations;
-    this.index = new ReverseIndex<NetworkFilter>(
+    this.index = new ReverseIndex<NetworkFilter>({
+      deserialize: NetworkFilter.deserialize,
       filters,
-      enableOptimizations ? networkFiltersOptimizer : undefined,
-    );
+      optimize: enableOptimizations ? networkFiltersOptimizer : undefined,
+    });
+  }
+
+  public update(newFilters: NetworkFilter[], removedFilters: number[] = []): void {
+    this.index.update(newFilters, removedFilters);
   }
 
   public serialize(buffer: StaticDataView): void {
@@ -38,13 +47,10 @@ export default class NetworkFilterBucket {
     this.index.serialize(buffer);
   }
 
-  public matchAll(
-    request: Request,
-    getFilter: (id: number) => NetworkFilter | undefined,
-  ): NetworkFilter[] {
+  public matchAll(request: Request): NetworkFilter[] {
     const filters: NetworkFilter[] = [];
 
-    this.index.iterMatchingFilters(request.getTokens(), getFilter, (filter: NetworkFilter) => {
+    this.index.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
       if (filter.match(request)) {
         filters.push(filter);
       }
@@ -54,13 +60,10 @@ export default class NetworkFilterBucket {
     return filters;
   }
 
-  public match(
-    request: Request,
-    getFilter: (id: number) => NetworkFilter | undefined,
-  ): NetworkFilter | undefined {
+  public match(request: Request): NetworkFilter | undefined {
     let match: NetworkFilter | undefined;
 
-    this.index.iterMatchingFilters(request.getTokens(), getFilter, (filter: NetworkFilter) => {
+    this.index.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
       if (filter.match(request)) {
         match = filter;
         return false;

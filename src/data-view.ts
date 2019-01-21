@@ -31,6 +31,14 @@ export default class StaticDataView {
     this.pos = 0;
   }
 
+  public dataAvailable(): boolean {
+    return this.pos < this.buffer.byteLength;
+  }
+
+  public setPos(pos: number): void {
+    this.pos = pos;
+  }
+
   public getPos(): number {
     return this.pos;
   }
@@ -53,6 +61,14 @@ export default class StaticDataView {
     this.seekZero();
   }
 
+  public pushBool(bool: boolean): void {
+    this.pushByte(Number(bool));
+  }
+
+  public getBool(): boolean {
+    return Boolean(this.getByte());
+  }
+
   public setByte(pos: number, byte: number): void {
     this.buffer[pos] = byte;
   }
@@ -63,6 +79,21 @@ export default class StaticDataView {
 
   public getByte(): number {
     return this.getUint8();
+  }
+
+  public pushBytes(bytes: Uint8Array): void {
+    this.pushUint32(bytes.byteLength);
+    // TODO - use `set` here
+    for (let i = 0; i < bytes.byteLength; i += 1) {
+      this.buffer[this.pos++] = bytes[i];
+    }
+  }
+
+  public getBytes(): Uint8Array {
+    const numberOfBytes = this.getUint32();
+    const buffer = this.buffer.slice(this.pos, this.pos + numberOfBytes);
+    this.pos += numberOfBytes;
+    return buffer;
   }
 
   public pushUint8(uint8: number): void {
