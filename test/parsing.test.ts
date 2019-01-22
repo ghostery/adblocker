@@ -1,6 +1,6 @@
 import CosmeticFilter, { DEFAULT_HIDDING_STYLE } from '../src/filters/cosmetic';
 import NetworkFilter from '../src/filters/network';
-import { List } from '../src/lists';
+import { parseFilters } from '../src/lists';
 import { fastHash } from '../src/utils';
 
 // TODO: collaps, popup, popunder, generichide, genericblock
@@ -1004,7 +1004,7 @@ describe('Filters list', () => {
       '[Adblock] ||foo.com',
       '[Adblock Plus 2.0] ||foo.com',
     ].forEach((data) => {
-      expect(List.parse(data)).toEqual(List.parse(''));
+      expect(parseFilters(data)).toEqual(parseFilters(''));
     });
   });
 });

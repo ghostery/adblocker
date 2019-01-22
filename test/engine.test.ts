@@ -2,6 +2,7 @@ import * as tldts from 'tldts';
 
 import Engine from '../src/engine/engine';
 import NetworkFilter from '../src/filters/network';
+import { parseFilters } from '../src/lists';
 import Request, { makeRequest } from '../src/request';
 import Resources from '../src/resources';
 
@@ -39,16 +40,7 @@ function test({
     // Each each filter should be tested in isolation, this means that `engine`
     // is currently empty and we will add only the filter we want to test.
     if (testFiltersInIsolation) {
-      engine.onUpdateFilters(
-        [
-          {
-            asset: 'extraFilters',
-            checksum: '',
-            filters: filter.rawLine || '',
-          },
-        ],
-        new Set(['filters']),
-      );
+      engine.update(parseFilters(filter.rawLine || ''));
     }
 
     // Set correct resources in `engine` (`resources` is expected to have been
@@ -150,39 +142,13 @@ function buildResourcesFromRequests(filters: NetworkFilter[]): Resources {
 }
 
 function createEngine(filters: string, enableOptimizations: boolean = true) {
-  const newEngine = new Engine({
+  return Engine.parse(filters, {
     debug: true,
     enableOptimizations,
-    loadCosmeticFilters: true,
-    loadNetworkFilters: true,
   });
-
-  newEngine.onUpdateFilters(
-    [
-      {
-        asset: 'filters',
-        checksum: '',
-        filters,
-      },
-    ],
-    new Set(),
-  );
-
-  return newEngine;
 }
 
 describe('#FiltersEngine', () => {
-  it('#hasList', () => {
-    const engine = new Engine();
-    expect(engine.hasList('filters', 'checksum')).toBeFalsy();
-
-    engine.onUpdateFilters([{ filters: '||foo.com', asset: 'filters', checksum: '42' }]);
-    expect(engine.hasList('filters', 'checksum')).toBeFalsy();
-
-    engine.onUpdateFilters([{ filters: '||foo.com', asset: 'filters', checksum: 'checksum' }]);
-    expect(engine.hasList('filters', 'checksum')).toBeTruthy();
-  });
-
   it('network filters are disabled', () => {
     const request = makeRequest({ url: 'https://foo.com' }, tldts);
 
@@ -322,8 +288,8 @@ describe('#FiltersEngine', () => {
         Engine.parse('||foo.com$csp=bar').getCSPDirectives(
           makeRequest(
             {
-              url: 'ftp://foo.com',
               type: 'script',
+              url: 'ftp://foo.com',
             },
             tldts,
           ),
@@ -427,9 +393,9 @@ $csp=baz,domain=bar.com
     // - Engine with *no filter* optimizations *disabled*
     // - Engine with *all filters* optimizations *enabled*
     // - Engine with *all filters* optimizations *disabled*
-    const engineEmptyOptimized = createEngine('', true);
-    const engineEmpty = createEngine('', false);
-    const engineFullOptimized = createEngine(allRequestFilters, true);
+    // const engineEmptyOptimized = createEngine('', true);
+    // const engineEmpty = createEngine('', false);
+    // const engineFullOptimized = createEngine(allRequestFilters, true);
     const engineFull = createEngine(allRequestFilters, false);
 
     // For each request, make sure that we get the correct match in 4 different
@@ -498,34 +464,34 @@ $csp=baz,domain=bar.com
           const filter = parsedFilters[j];
           const baseConfig = {
             exceptions,
+            filter,
             importants,
             normalFilters,
             redirects,
             request,
             resources,
-            filter,
           };
 
           // Empty engine with optimizations enabled
-          test({
-            ...baseConfig,
-            engine: engineEmptyOptimized,
-            testFiltersInIsolation: true,
-          });
+          // test({
+          //   ...baseConfig,
+          //   engine: Engine.deserialize(engineEmptyOptimized.serialize()),
+          //   testFiltersInIsolation: true,
+          // });
 
           // Empty engine with optimizations disabled
-          test({
-            ...baseConfig,
-            engine: engineEmpty,
-            testFiltersInIsolation: true,
-          });
+          // test({
+          //   ...baseConfig,
+          //   engine: Engine.deserialize(engineEmpty.serialize()),
+          //   testFiltersInIsolation: true,
+          // });
 
           // All filters with optimizations enabled
-          test({
-            ...baseConfig,
-            engine: engineFullOptimized,
-            testFiltersInIsolation: false,
-          });
+          // test({
+          //   ...baseConfig,
+          //   engine: engineFullOptimized,
+          //   testFiltersInIsolation: false,
+          // });
 
           // All filters with optimizations disabled
           test({
@@ -549,7 +515,9 @@ $csp=baz,domain=bar.com
     describe('script injections', () => {
       it('injects script', () => {
         const engine = Engine.parse('##+js(script.js,arg1)');
-        engine.resources = Resources.parse('script.js application/javascript\n{{1}}', { checksum: '' });
+        engine.resources = Resources.parse('script.js application/javascript\n{{1}}', {
+          checksum: '',
+        });
         expect(engine.getCosmeticsFilters('foo.com', 'foo.com').scripts).toEqual(['arg1']);
       });
 
@@ -688,7 +656,6 @@ $csp=baz,domain=bar.com
         const rules = engine.cosmetics.getCosmeticsFilters(
           testCase.hostname,
           tldts.getDomain(testCase.hostname) || '',
-          (id) => engine.lists.getCosmeticFilter(id),
         );
 
         expect(rules.length).toEqual(shouldMatch.size);

@@ -188,7 +188,6 @@ export default class NetworkFilter implements IFilter {
    * symetrical to the one in `serializeNetworkFilter`.
    */
   public static deserialize(buffer: StaticDataView): NetworkFilter {
-    const id = buffer.getUint32();
     const mask = buffer.getUint32();
     const optionalParts = buffer.getUint8();
 
@@ -197,18 +196,18 @@ export default class NetworkFilter implements IFilter {
     // retrieved in the exact same order they were serialized (check
     // `serializeNetworkFilter`).
     return new NetworkFilter({
-      // Mandatory fields
-      id,
+      // Mandatory field
       mask,
 
       // Optional parts
       bug: (optionalParts & 1) === 1 ? buffer.getUint16() : undefined,
-      csp: (optionalParts & 2) === 2 ? buffer.getASCII() : undefined,
-      filter: (optionalParts & 4) === 4 ? buffer.getASCII() : undefined,
-      hostname: (optionalParts & 8) === 8 ? buffer.getASCII() : undefined,
-      optDomains: (optionalParts & 16) === 16 ? buffer.getUint32Array() : undefined,
-      optNotDomains: (optionalParts & 32) === 32 ? buffer.getUint32Array() : undefined,
-      redirect: (optionalParts & 64) === 64 ? buffer.getASCII() : undefined,
+      csp: (optionalParts & 2) === 2 ? buffer.getASCIIStrict() : undefined,
+      filter: (optionalParts & 4) === 4 ? buffer.getASCIIStrict() : undefined,
+      hostname: (optionalParts & 8) === 8 ? buffer.getASCIIStrict() : undefined,
+      optDomains: (optionalParts & 16) === 16 ? buffer.getUint32ArrayStrict() : undefined,
+      optNotDomains: (optionalParts & 32) === 32 ? buffer.getUint32ArrayStrict() : undefined,
+      rawLine: (optionalParts & 64) === 64 ? buffer.getUTF8() : undefined,
+      redirect: (optionalParts & 128) === 128 ? buffer.getASCIIStrict() : undefined,
     });
   }
 
@@ -234,7 +233,6 @@ export default class NetworkFilter implements IFilter {
     csp,
     filter,
     hostname,
-    id,
     mask,
     optDomains,
     optNotDomains,
@@ -246,7 +244,6 @@ export default class NetworkFilter implements IFilter {
     this.csp = csp;
     this.filter = filter;
     this.hostname = hostname;
-    this.id = id;
     this.mask = mask;
     this.optDomains = optDomains;
     this.optNotDomains = optNotDomains;
@@ -303,7 +300,6 @@ export default class NetworkFilter implements IFilter {
    *  * when packing ascii string, store several of them in each byte.
    */
   public serialize(buffer: StaticDataView): void {
-    buffer.pushUint32(this.getId());
     buffer.pushUint32(this.mask);
 
     const index = buffer.getPos();
@@ -317,34 +313,39 @@ export default class NetworkFilter implements IFilter {
       buffer.pushUint16(this.bug);
     }
 
-    if (this.isCSP()) {
+    if (this.csp !== undefined) {
       optionalParts |= 2;
-      buffer.pushASCII(this.csp);
+      buffer.pushASCIIStrict(this.csp);
     }
 
-    if (this.hasFilter()) {
+    if (this.filter !== undefined) {
       optionalParts |= 4;
-      buffer.pushASCII(this.filter);
+      buffer.pushASCIIStrict(this.filter);
     }
 
-    if (this.hasHostname()) {
+    if (this.hostname !== undefined) {
       optionalParts |= 8;
-      buffer.pushASCII(this.hostname);
+      buffer.pushASCIIStrict(this.hostname);
     }
 
-    if (this.hasOptDomains()) {
+    if (this.optDomains) {
       optionalParts |= 16;
-      buffer.pushUint32Array(this.optDomains);
+      buffer.pushUint32ArrayStrict(this.optDomains);
     }
 
-    if (this.hasOptNotDomains()) {
+    if (this.optNotDomains !== undefined) {
       optionalParts |= 32;
-      buffer.pushUint32Array(this.optNotDomains);
+      buffer.pushUint32ArrayStrict(this.optNotDomains);
     }
 
-    if (this.isRedirect()) {
+    if (this.rawLine !== undefined) {
       optionalParts |= 64;
-      buffer.pushASCII(this.redirect);
+      buffer.pushUTF8(this.rawLine);
+    }
+
+    if (this.redirect !== undefined) {
+      optionalParts |= 128;
+      buffer.pushASCIIStrict(this.redirect);
     }
 
     buffer.setByte(index, optionalParts);

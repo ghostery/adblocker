@@ -38,7 +38,7 @@ export default class NetworkFilterBucket {
     });
   }
 
-  public update(newFilters: NetworkFilter[], removedFilters: number[] = []): void {
+  public update(newFilters: NetworkFilter[], removedFilters?: Set<number>): void {
     this.index.update(newFilters, removedFilters);
   }
 

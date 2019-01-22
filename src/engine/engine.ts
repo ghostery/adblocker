@@ -4,7 +4,7 @@ import NetworkFilter from '../filters/network';
 import Request, { RequestType } from '../request';
 import Resources from '../resources';
 
-import Lists, { IListDiff, IListsOptions, parseFilters } from '../lists';
+import Lists, { Country, IListDiff, parseFilters } from '../lists';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 
@@ -149,8 +149,6 @@ export default class FilterEngine {
       this.update({
         cosmeticFilters,
         networkFilters,
-        removedCosmeticFilters: [],
-        removedNetworkFilters: [],
       });
     }
   }
@@ -196,7 +194,12 @@ export default class FilterEngine {
   /**
    * Lists management. Deal with subscribed lists.
    */
-  public enabledSubscriptions(options: IListsOptions): void {
+  public enableSubscriptions(options: {
+    allowedListsUrl: string;
+    countryListsEnabled?: boolean;
+    fetch: (url: string) => Promise<string>;
+    loadedCountries?: Country[];
+  }): void {
     this.lists = new Lists({
       ...options,
       loadCosmeticFilters: this.loadCosmeticFilters,
@@ -221,7 +224,7 @@ export default class FilterEngine {
           resourcesChecksum,
         }) => {
           if (resources !== undefined && resourcesChecksum !== undefined) {
-            this.updateResource(resources, resourcesChecksum);
+            this.updateResources(resources, resourcesChecksum);
           }
 
           if (
@@ -248,7 +251,7 @@ export default class FilterEngine {
   /**
    * Update engine with `resources.txt` content.
    */
-  public updateResource(data: string, checksum: string): void {
+  public updateResources(data: string, checksum: string): void {
     if (this.enableUpdates === false) {
       return;
     }
@@ -264,36 +267,48 @@ export default class FilterEngine {
     cosmeticFilters = [],
     removedCosmeticFilters = [],
     removedNetworkFilters = [],
-  }: IListDiff): void {
+  }: Partial<IListDiff>): void {
+    // Update cosmetic filters
+    if (this.loadCosmeticFilters) {
+      this.cosmetics.update(
+        cosmeticFilters,
+        removedCosmeticFilters.length === 0 ? undefined : new Set(removedCosmeticFilters),
+      );
+    }
+
+    // Update network filters
     const filters: NetworkFilter[] = [];
     const csp: NetworkFilter[] = [];
     const exceptions: NetworkFilter[] = [];
     const importants: NetworkFilter[] = [];
     const redirects: NetworkFilter[] = [];
 
-    for (let i = 0; i < networkFilters.length; i += 1) {
-      const filter = networkFilters[i];
-      if (filter.isCSP()) {
-        csp.push(filter);
-      } else if (filter.isException()) {
-        exceptions.push(filter);
-      } else if (filter.isImportant()) {
-        importants.push(filter);
-      } else if (filter.isRedirect()) {
-        redirects.push(filter);
-      } else {
-        filters.push(filter);
+    if (this.loadNetworkFilters) {
+      for (let i = 0; i < networkFilters.length; i += 1) {
+        const filter = networkFilters[i];
+        if (filter.isCSP()) {
+          csp.push(filter);
+        } else if (filter.isException()) {
+          exceptions.push(filter);
+        } else if (filter.isImportant()) {
+          importants.push(filter);
+        } else if (filter.isRedirect()) {
+          redirects.push(filter);
+        } else {
+          filters.push(filter);
+        }
       }
     }
 
-    // Update buckets in-place
-    this.filters.update(filters, removedNetworkFilters);
-    this.csp.update(csp, removedNetworkFilters);
-    this.exceptions.update(exceptions, removedNetworkFilters);
-    this.importants.update(importants, removedNetworkFilters);
-    this.redirects.update(redirects, removedNetworkFilters);
+    const removedNetworkFiltersSet: Set<number> | undefined =
+      removedNetworkFilters.length === 0 ? undefined : new Set(removedNetworkFilters);
 
-    this.cosmetics.update(cosmeticFilters, removedCosmeticFilters);
+    // Update buckets in-place
+    this.filters.update(filters, removedNetworkFiltersSet);
+    this.csp.update(csp, removedNetworkFiltersSet);
+    this.exceptions.update(exceptions, removedNetworkFiltersSet);
+    this.importants.update(importants, removedNetworkFiltersSet);
+    this.redirects.update(redirects, removedNetworkFiltersSet);
   }
 
   /**

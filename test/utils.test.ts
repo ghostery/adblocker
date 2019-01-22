@@ -1,4 +1,4 @@
-import { List } from '../src/lists';
+import { parseFilters } from '../src/lists';
 import {
   binSearch,
   fastHash,
@@ -44,20 +44,18 @@ function checkCollisions(filters: any[]) {
 describe('Utils', () => {
   describe('#fastHash', () => {
     it('does not produce collision on network filters', () => {
-      checkCollisions(List.parse(loadAllLists()).getNetworkFilters());
+      checkCollisions(parseFilters(loadAllLists()).networkFilters);
     });
 
     it('does not produce collision on requests dataset', () => {
       // Collect all raw filters
       checkCollisions(
-        List.parse(
-          requests.map(({ filters }) => filters.join('\n')).join('\n'),
-        ).getNetworkFilters(),
+        parseFilters(requests.map(({ filters }) => filters.join('\n')).join('\n')).networkFilters,
       );
     });
 
     it('does not produce collision on cosmetic filters', () => {
-      checkCollisions(List.parse(loadAllLists()).getCosmeticFilters());
+      checkCollisions(parseFilters(loadAllLists()).cosmeticFilters);
     });
   });
 

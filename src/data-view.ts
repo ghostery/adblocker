@@ -47,12 +47,12 @@ export default class StaticDataView {
     this.pos = 0;
   }
 
+  public slice(): Uint8Array {
+    this.checkSize();
+    return this.buffer.slice(0, this.pos);
+  }
   public crop(): Uint8Array {
-    if (this.pos >= this.buffer.byteLength) {
-      throw new Error(
-        `StaticDataView too small: ${this.buffer.byteLength}, but required ${this.pos - 1} bytes`,
-      );
-    }
+    this.checkSize();
     return this.buffer.subarray(0, this.pos);
   }
 
@@ -83,17 +83,15 @@ export default class StaticDataView {
 
   public pushBytes(bytes: Uint8Array): void {
     this.pushUint32(bytes.byteLength);
-    // TODO - use `set` here
-    for (let i = 0; i < bytes.byteLength; i += 1) {
-      this.buffer[this.pos++] = bytes[i];
-    }
+    this.buffer.set(bytes, this.pos);
+    this.pos += bytes.byteLength;
   }
 
   public getBytes(): Uint8Array {
     const numberOfBytes = this.getUint32();
-    const buffer = this.buffer.slice(this.pos, this.pos + numberOfBytes);
+    const bytes = this.buffer.subarray(this.pos, this.pos + numberOfBytes);
     this.pos += numberOfBytes;
-    return buffer;
+    return bytes;
   }
 
   public pushUint8(uint8: number): void {
@@ -176,18 +174,14 @@ export default class StaticDataView {
   public pushUTF8(str: string): void {
     this.pushUint16(str.length);
     if (hasUnicode(str)) {
-      this.pushASCII(punycode.encode(str));
+      this.pushASCIIStrict(punycode.encode(str));
     } else {
-      this.pushASCII(str);
+      this.pushASCIIStrict(str);
     }
   }
 
   public getUTF8(): string {
     const length = this.getUint16();
-    if (length === 0) {
-      return '';
-    }
-
     const str = this.getASCIIStrict();
     if (str.length === length) {
       return str;
@@ -229,5 +223,13 @@ export default class StaticDataView {
 
     // @ts-ignore
     return String.fromCharCode.apply(null, this.buffer.subarray(this.pos - byteLength, this.pos));
+  }
+
+  private checkSize() {
+    if (this.pos >= this.buffer.byteLength) {
+      throw new Error(
+        `StaticDataView too small: ${this.buffer.byteLength}, but required ${this.pos - 1} bytes`,
+      );
+    }
   }
 }

@@ -295,7 +295,7 @@ export class List {
   }
 }
 
-type Country =
+export type Country =
   | 'de'
   | 'germany'
   | 'es'
@@ -327,11 +327,11 @@ type Country =
 
 export interface IListsOptions {
   allowedListsUrl: string;
-  countryListsEnabled: boolean;
+  countryListsEnabled?: boolean;
   fetch: (url: string) => Promise<string>;
-  loadCosmeticFilters: boolean;
-  loadNetworkFilters: boolean;
-  loadedCountries: Country[];
+  loadCosmeticFilters?: boolean;
+  loadNetworkFilters?: boolean;
+  loadedCountries?: Country[];
 }
 
 /* Class responsible for loading, persisting and updating filters lists.

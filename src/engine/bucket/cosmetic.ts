@@ -31,7 +31,7 @@ export default class CosmeticFilterBucket {
     }
   }
 
-  public update(newFilters: CosmeticFilter[], removedFilters: number[] = []) {
+  public update(newFilters: CosmeticFilter[], removedFilters?: Set<number>) {
     // This will be used to keep in cache the generic CosmeticFilter instances.
     // It will be populated the first time filters are required. TODO - maybe we
     // do not need the full instance there? But instead the selectors only (we
@@ -82,6 +82,19 @@ export default class CosmeticFilterBucket {
     const rules: CosmeticFilter[] = [];
 
     // Collect rules specifying a domain
+    // TODO - we might want to be smarter here with the way we tokenize
+    // hostnames. Maybe we want to have something of the form:
+    // - hostname: label1.label2.label3.label4
+    //
+    // tokenizHostname would then return a list of:
+    // - hash(label4)
+    // - hash(label3.label4)
+    // - hash(label2.label3.label4)
+    // - hash(label1.label2.label3.label4)
+    //
+    // + same without public suffix to match entities.
+    //
+    // This way we would be able to match any subdomain => add unit tests
     this.hostnameIndex.iterMatchingFilters(tokenizeHostnames(hostname), (rule: CosmeticFilter) => {
       if (rule.match(hostname, domain)) {
         if (rule.isUnhide()) {
