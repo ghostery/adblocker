@@ -5,7 +5,7 @@ import IFilter from './interface';
 
 export const DEFAULT_HIDDING_STYLE: string = 'display: none !important;';
 
-function hashHostnameBackward(hostname: string): number {
+export function hashHostnameBackward(hostname: string): number {
   let hash = 5381;
   for (let j = hostname.length - 1; j >= 0; j -= 1) {
     hash = (hash * 33) ^ hostname.charCodeAt(j);
@@ -449,12 +449,13 @@ export default class CosmeticFilter implements IFilter {
 
     let filter = '';
 
-    if (this.hostnames !== undefined && this.entities !== undefined) {
-      filter += '<hostnames>,<entities>';
-    } else if (this.hostnames !== undefined) {
+    if (
+      this.hostnames !== undefined ||
+      this.entities !== undefined ||
+      this.notHostnames !== undefined ||
+      this.notEntities !== undefined
+    ) {
       filter += '<hostnames>';
-    } else if (this.entities !== undefined) {
-      filter += '<entities>';
     }
 
     if (this.isUnhide()) {

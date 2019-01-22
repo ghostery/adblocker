@@ -67,7 +67,7 @@ function triggerGC() {
 
 function getMemoryConsumption() {
   triggerGC();
-  return process.memoryUsage().heapUsed / 1024 / 1024;
+  return process.memoryUsage().heapUsed;
 }
 
 
@@ -174,7 +174,6 @@ function runMemoryBench(lists, resources) {
   const { engine, serialized } = createEngine(lists, resources, {
     loadCosmeticFilters: true,
     loadNetworkFilters: true,
-    optimizeAOT: true,
   }, true /* Also serialize engine */);
   const engineMemory = getMemoryConsumption() - baseMemory;
 

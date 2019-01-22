@@ -38,13 +38,10 @@ function benchParsingImpl(lists, { loadNetworkFilters, loadCosmeticFilters }) {
   let dummy = 0;
 
   for (let i = 0; i < lists.length; i += 1) {
-    dummy = (dummy + adblocker.List.parse({
-      data: lists[i],
-      checksum: '',
+    dummy = (dummy + adblocker.parseFilters(lists[i], {
       loadNetworkFilters,
       loadCosmeticFilters,
-      debug: false,
-    }).filters.length) % 100000;
+    }).networkFilters.length) % 100000;
   }
 
   return dummy;
