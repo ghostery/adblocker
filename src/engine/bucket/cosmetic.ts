@@ -1,6 +1,8 @@
 import StaticDataView from '../../data-view';
-import CosmeticFilter from '../../filters/cosmetic';
-import { tokenizeHostnames } from '../../utils';
+import CosmeticFilter, {
+  getEntityHashesFromLabelsBackward,
+  getHostnameHashesFromLabelsBackward,
+} from '../../filters/cosmetic';
 
 import ReverseIndex from '../reverse-index';
 
@@ -40,7 +42,7 @@ export default class CosmeticFilterBucket {
     const hostnameSpecificRules: CosmeticFilter[] = [];
     for (let i = 0; i < newFilters.length; i += 1) {
       const filter = newFilters[i];
-      if (filter.hasHostnames()) {
+      if (filter.hasHostnameConstraint()) {
         hostnameSpecificRules.push(filter);
       } else {
         genericRules.push(filter);
@@ -95,17 +97,23 @@ export default class CosmeticFilterBucket {
     // + same without public suffix to match entities.
     //
     // This way we would be able to match any subdomain => add unit tests
-    this.hostnameIndex.iterMatchingFilters(tokenizeHostnames(hostname), (rule: CosmeticFilter) => {
-      if (rule.match(hostname, domain)) {
-        if (rule.isUnhide()) {
-          disabledRules.add(rule.getSelector());
-        } else {
-          rules.push(rule);
+    this.hostnameIndex.iterMatchingFilters(
+      new Uint32Array([
+        ...getHostnameHashesFromLabelsBackward(hostname, domain),
+        ...getEntityHashesFromLabelsBackward(hostname, domain),
+      ]),
+      (rule: CosmeticFilter) => {
+        if (rule.match(hostname, domain)) {
+          if (rule.isUnhide()) {
+            disabledRules.add(rule.getSelector());
+          } else {
+            rules.push(rule);
+          }
         }
-      }
 
-      return true;
-    });
+        return true;
+      },
+    );
 
     if (disabledRules.size === 0) {
       // No exception/unhide found, so we return all the rules

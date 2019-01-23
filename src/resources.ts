@@ -12,15 +12,15 @@ interface IResource {
  */
 export default class Resources {
   public static deserialize(buffer: StaticDataView): Resources {
-    const checksum = buffer.getASCIIStrict();
+    const checksum = buffer.getASCII();
 
     // Deserialize `resources`
     const resources: Map<string, IResource> = new Map();
     const numberOfResources = buffer.getUint8();
     for (let i = 0; i < numberOfResources; i += 1) {
-      resources.set(buffer.getASCIIStrict(), {
-        contentType: buffer.getASCIIStrict(),
-        data: buffer.getASCIIStrict(),
+      resources.set(buffer.getASCII(), {
+        contentType: buffer.getASCII(),
+        data: buffer.getASCII(),
       });
     }
 
@@ -100,14 +100,14 @@ export default class Resources {
 
   public serialize(buffer: StaticDataView): void {
     // Serialize `checksum`
-    buffer.pushASCIIStrict(this.checksum);
+    buffer.pushASCII(this.checksum);
 
     // Serialize `resources`
     buffer.pushUint8(this.resources.size);
     this.resources.forEach(({ contentType, data }, name) => {
-      buffer.pushASCIIStrict(name);
-      buffer.pushASCIIStrict(contentType);
-      buffer.pushASCIIStrict(data);
+      buffer.pushASCII(name);
+      buffer.pushASCII(contentType);
+      buffer.pushASCII(data);
     });
   }
 }

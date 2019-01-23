@@ -2,7 +2,6 @@ import * as tldts from 'tldts';
 
 import Engine from '../src/engine/engine';
 import NetworkFilter from '../src/filters/network';
-import { parseFilters } from '../src/lists';
 import Request, { makeRequest } from '../src/request';
 import Resources from '../src/resources';
 
@@ -40,7 +39,7 @@ function test({
     // Each each filter should be tested in isolation, this means that `engine`
     // is currently empty and we will add only the filter we want to test.
     if (testFiltersInIsolation) {
-      engine.update(parseFilters(filter.rawLine || ''));
+      engine.update({ networkFilters: [filter] });
     }
 
     // Set correct resources in `engine` (`resources` is expected to have been
@@ -393,18 +392,19 @@ $csp=baz,domain=bar.com
     // - Engine with *no filter* optimizations *disabled*
     // - Engine with *all filters* optimizations *enabled*
     // - Engine with *all filters* optimizations *disabled*
-    // const engineEmptyOptimized = createEngine('', true);
-    // const engineEmpty = createEngine('', false);
-    // const engineFullOptimized = createEngine(allRequestFilters, true);
+    const engineEmptyOptimized = createEngine('', true);
+    const engineEmpty = createEngine('', false);
+    const engineFullOptimized = createEngine(allRequestFilters, true);
     const engineFull = createEngine(allRequestFilters, false);
 
+    const buffer = new Uint8Array(6000000);
     // For each request, make sure that we get the correct match in 4 different
     // setups:
     // - Engine with only the filter being tested
     // - Engine with all the filters
     // - Engine with optimizations enabled
     // - Engine with optimizations disabled
-    for (let i = 0; i < requests.length; i += 1) {
+    for (let i = 0; i < 1000; i += 1) {
       const { filters, type, url, sourceUrl } = requests[i];
 
       // Dispatch `filters` into the following categories: exception, important,
@@ -418,10 +418,9 @@ $csp=baz,domain=bar.com
       const parsedFilters: NetworkFilter[] = [];
       for (let j = 0; j < filters.length; j += 1) {
         const filter = filters[j];
-        const parsed = NetworkFilter.parse(filter);
+        const parsed = NetworkFilter.parse(filter, true);
         expect(parsed).not.toBeNull();
         if (parsed !== null) {
-          parsed.rawLine = filter;
           parsedFilters.push(parsed);
 
           if (parsed.isException()) {
@@ -473,25 +472,25 @@ $csp=baz,domain=bar.com
           };
 
           // Empty engine with optimizations enabled
-          // test({
-          //   ...baseConfig,
-          //   engine: Engine.deserialize(engineEmptyOptimized.serialize()),
-          //   testFiltersInIsolation: true,
-          // });
+          test({
+            ...baseConfig,
+            engine: Engine.deserialize(engineEmptyOptimized.serialize(buffer)),
+            testFiltersInIsolation: true,
+          });
 
           // Empty engine with optimizations disabled
-          // test({
-          //   ...baseConfig,
-          //   engine: Engine.deserialize(engineEmpty.serialize()),
-          //   testFiltersInIsolation: true,
-          // });
+          test({
+            ...baseConfig,
+            engine: Engine.deserialize(engineEmpty.serialize(buffer)),
+            testFiltersInIsolation: true,
+          });
 
           // All filters with optimizations enabled
-          // test({
-          //   ...baseConfig,
-          //   engine: engineFullOptimized,
-          //   testFiltersInIsolation: false,
-          // });
+          test({
+            ...baseConfig,
+            engine: engineFullOptimized,
+            testFiltersInIsolation: false,
+          });
 
           // All filters with optimizations disabled
           test({
@@ -536,9 +535,10 @@ $csp=baz,domain=bar.com
 ##.selector :style(bar)
 ##.selector1 :style(foo)`,
         ).getCosmeticsFilters('foo.com', 'foo.com').styles,
-      ).toEqual('.selector ,.selector  { bar }\n\n.selector1  { foo }');
+      ).toEqual('.selector ,.selector1  { foo }\n\n.selector  { bar }');
     });
 
+    // TODO - add more coverage here!
     [
       // Exception cancels generic rule
       {

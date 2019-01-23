@@ -131,22 +131,13 @@ export function parseFilters(
       const filterType = detectFilterType(line);
 
       if (filterType === FilterType.NETWORK && loadNetworkFilters) {
-        const filter = NetworkFilter.parse(line);
+        const filter = NetworkFilter.parse(line, debug);
         if (filter !== null) {
-          // In debug mode, keep the original line
-          if (debug === true) {
-            filter.rawLine = line;
-          }
-
           networkFilters.push(filter);
         }
       } else if (filterType === FilterType.COSMETIC && loadCosmeticFilters) {
-        const filter = CosmeticFilter.parse(line);
+        const filter = CosmeticFilter.parse(line, debug);
         if (filter !== null) {
-          // In debug mode, keep the original line
-          if (debug === true) {
-            filter.rawLine = line;
-          }
           cosmeticFilters.push(filter);
         }
       }
@@ -183,10 +174,10 @@ export function deserializeListDiff(_: Uint8Array): IListDiff {
 
 export class List {
   public static deserialize(buffer: StaticDataView): List {
-    const checksum: string = buffer.getASCIIStrict();
+    const checksum: string = buffer.getASCII();
     const loadCosmeticFilters: boolean = Boolean(buffer.getByte());
     const loadNetworkFilters: boolean = Boolean(buffer.getByte());
-    const url: string = buffer.getASCIIStrict();
+    const url: string = buffer.getASCII();
 
     const list = new List({
       checksum,
@@ -195,8 +186,8 @@ export class List {
       url,
     });
 
-    list.cosmeticFilterIds = new Set(buffer.getUint32ArrayStrict());
-    list.networkFilterIds = new Set(buffer.getUint32ArrayStrict());
+    list.cosmeticFilterIds = new Set(buffer.getUint32Array());
+    list.networkFilterIds = new Set(buffer.getUint32Array());
 
     return list;
   }
@@ -285,13 +276,13 @@ export class List {
   }
 
   public serialize(buffer: StaticDataView): void {
-    buffer.pushASCIIStrict(this.checksum);
+    buffer.pushASCII(this.checksum);
     buffer.pushByte(Number(this.loadCosmeticFilters));
     buffer.pushByte(Number(this.loadNetworkFilters));
-    buffer.pushASCIIStrict(this.url);
+    buffer.pushASCII(this.url);
 
-    buffer.pushUint32ArrayStrict(new Uint32Array([...this.cosmeticFilterIds]));
-    buffer.pushUint32ArrayStrict(new Uint32Array([...this.networkFilterIds]));
+    buffer.pushUint32Array(new Uint32Array([...this.cosmeticFilterIds]));
+    buffer.pushUint32Array(new Uint32Array([...this.networkFilterIds]));
   }
 }
 
@@ -341,8 +332,8 @@ export default class Lists {
     buffer: StaticDataView,
     options: { fetch: (url: string) => Promise<string> },
   ): Lists {
-    const allowedListsUrl = buffer.getASCIIStrict();
-    const resourcesChecksum = buffer.getASCIIStrict();
+    const allowedListsUrl = buffer.getASCII();
+    const resourcesChecksum = buffer.getASCII();
     const countryListsEnabled = buffer.getBool();
     const loadNetworkFilters = buffer.getBool();
     const loadCosmeticFilters = buffer.getBool();
@@ -350,7 +341,7 @@ export default class Lists {
     const loadedCountries: Country[] = [];
     const numberOfLoadedCountries = buffer.getUint16();
     for (let i = 0; i < numberOfLoadedCountries; i += 1) {
-      loadedCountries.push(buffer.getASCIIStrict() as Country);
+      loadedCountries.push(buffer.getASCII() as Country);
     }
 
     const lists = new Lists({
@@ -404,8 +395,8 @@ export default class Lists {
   }
 
   public serialize(buffer: StaticDataView): void {
-    buffer.pushASCIIStrict(this.allowedListsUrl);
-    buffer.pushASCIIStrict(this.resourcesChecksum);
+    buffer.pushASCII(this.allowedListsUrl);
+    buffer.pushASCII(this.resourcesChecksum);
     buffer.pushBool(this.countryListsEnabled);
     buffer.pushBool(this.loadNetworkFilters);
     buffer.pushBool(this.loadCosmeticFilters);
@@ -413,7 +404,7 @@ export default class Lists {
     // Loaded countries
     buffer.pushUint16(this.loadedCountries.size);
     this.loadedCountries.forEach((country) => {
-      buffer.pushASCIIStrict(country);
+      buffer.pushASCII(country);
     });
 
     // Lists

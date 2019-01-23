@@ -23,8 +23,8 @@ export default class StaticDataView {
     return new StaticDataView(0, array);
   }
 
-  protected buffer: Uint8Array;
-  protected pos: number;
+  public pos: number;
+  public buffer: Uint8Array;
 
   constructor(length: number, buffer?: Uint8Array) {
     this.buffer = buffer !== undefined ? buffer : new Uint8Array(length);
@@ -128,32 +128,7 @@ export default class StaticDataView {
     );
   }
 
-  public pushUint32Array(arr: Uint32Array | undefined): void {
-    if (arr === undefined) {
-      this.pushUint16(0);
-    } else {
-      this.pushUint16(arr.length);
-      // TODO - use `set` to push the full buffer at once?
-      for (let i = 0; i < arr.length; i += 1) {
-        this.pushUint32(arr[i]);
-      }
-    }
-  }
-
-  public getUint32Array(): Uint32Array | undefined {
-    const length = this.getUint16();
-    if (length === 0) {
-      return undefined;
-    }
-    const arr = new Uint32Array(length);
-    // TODO - use `subarray`?
-    for (let i = 0; i < length; i += 1) {
-      arr[i] = this.getUint32();
-    }
-    return arr;
-  }
-
-  public pushUint32ArrayStrict(arr: Uint32Array): void {
+  public pushUint32Array(arr: Uint32Array): void {
     this.pushUint32(arr.length);
     // TODO - use `set` to push the full buffer at once?
     for (let i = 0; i < arr.length; i += 1) {
@@ -161,7 +136,7 @@ export default class StaticDataView {
     }
   }
 
-  public getUint32ArrayStrict(): Uint32Array {
+  public getUint32Array(): Uint32Array {
     const length = this.getUint32();
     const arr = new Uint32Array(length);
     // TODO - use `subarray`?
@@ -174,51 +149,30 @@ export default class StaticDataView {
   public pushUTF8(str: string): void {
     this.pushUint16(str.length);
     if (hasUnicode(str)) {
-      this.pushASCIIStrict(punycode.encode(str));
+      this.pushASCII(punycode.encode(str));
     } else {
-      this.pushASCIIStrict(str);
+      this.pushASCII(str);
     }
   }
 
   public getUTF8(): string {
     const length = this.getUint16();
-    const str = this.getASCIIStrict();
+    const str = this.getASCII();
     if (str.length === length) {
       return str;
     }
     return punycode.decode(str);
   }
 
-  public pushASCIIStrict(str: string): void {
+  public pushASCII(str: string): void {
     this.pushUint16(str.length);
     for (let i = 0; i < str.length; i += 1) {
       this.buffer[this.pos++] = str.charCodeAt(i);
     }
   }
 
-  public getASCIIStrict(): string {
+  public getASCII(): string {
     const byteLength = this.getUint16();
-    this.pos += byteLength;
-
-    // @ts-ignore
-    return String.fromCharCode.apply(null, this.buffer.subarray(this.pos - byteLength, this.pos));
-  }
-
-  public pushASCII(str: string | undefined): void {
-    if (str === undefined) {
-      this.pushUint16(0);
-    } else {
-      this.pushASCIIStrict(str);
-    }
-  }
-
-  public getASCII(): string | undefined {
-    const byteLength = this.getUint16();
-
-    if (byteLength === 0) {
-      return undefined;
-    }
-
     this.pos += byteLength;
 
     // @ts-ignore

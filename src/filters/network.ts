@@ -3,7 +3,7 @@ import StaticDataView from '../data-view';
 import { RequestType } from '../request';
 import Request from '../request';
 import {
-  binSearch,
+  binLookup,
   bitCount,
   clearBit,
   createFuzzySignature,
@@ -179,8 +179,380 @@ const MATCH_ALL = new RegExp('');
 //  - genericblock
 // 2. Replace `split` with `substr`
 export default class NetworkFilter implements IFilter {
-  public static parse(line: string): NetworkFilter | null {
-    return parseNetworkFilter(line);
+  public static parse(line: string, debug: boolean = false): NetworkFilter | null {
+    // Represent options as a bitmask
+    let mask: number =
+      NETWORK_FILTER_MASK.thirdParty |
+      NETWORK_FILTER_MASK.firstParty |
+      NETWORK_FILTER_MASK.fromHttps |
+      NETWORK_FILTER_MASK.fromHttp;
+
+    // Temporary masks for positive (e.g.: $script) and negative (e.g.: $~script)
+    // content type options.
+    let cptMaskPositive: number = 0;
+    let cptMaskNegative: number = FROM_ANY;
+
+    let hostname: string | undefined;
+
+    let optDomains: Uint32Array | undefined;
+    let optNotDomains: Uint32Array | undefined;
+    let redirect: string | undefined;
+    let csp: string | undefined;
+    let bug: number | undefined;
+
+    // Start parsing
+    let filterIndexStart: number = 0;
+    let filterIndexEnd: number = line.length;
+
+    // @@filter == Exception
+    if (fastStartsWith(line, '@@')) {
+      filterIndexStart += 2;
+      mask = setBit(mask, NETWORK_FILTER_MASK.isException);
+    }
+
+    // filter$options == Options
+    // ^     ^
+    // |     |
+    // |     optionsIndex
+    // filterIndexStart
+    const optionsIndex: number = line.lastIndexOf('$');
+    if (optionsIndex !== -1) {
+      // Parse options and set flags
+      filterIndexEnd = optionsIndex;
+
+      // --------------------------------------------------------------------- //
+      // parseOptions
+      // TODO: This could be implemented without string copy,
+      // using indices, like in main parsing functions.
+      const rawOptions = line.slice(optionsIndex + 1);
+      const options = rawOptions.split(',');
+      for (let i = 0; i < options.length; i += 1) {
+        const rawOption = options[i];
+        let negation = false;
+        let option = rawOption;
+
+        // Check for negation: ~option
+        if (fastStartsWith(option, '~')) {
+          negation = true;
+          option = option.slice(1);
+        } else {
+          negation = false;
+        }
+
+        // Check for options: option=value1|value2
+        let optionValue: string = '';
+        if (option.indexOf('=') !== -1) {
+          const optionAndValues = option.split('=', 2);
+          option = optionAndValues[0];
+          optionValue = optionAndValues[1];
+        }
+
+        switch (option) {
+          case 'domain': {
+            const optionValues: string[] = optionValue.split('|');
+            const optDomainsArray: number[] = [];
+            const optNotDomainsArray: number[] = [];
+
+            for (let j = 0; j < optionValues.length; j += 1) {
+              const value: string = optionValues[j];
+              if (value) {
+                if (fastStartsWith(value, '~')) {
+                  optNotDomainsArray.push(fastHash(value.slice(1)));
+                } else {
+                  optDomainsArray.push(fastHash(value));
+                }
+              }
+            }
+
+            if (optDomainsArray.length > 0) {
+              optDomains = new Uint32Array(optDomainsArray);
+            }
+
+            if (optNotDomainsArray.length > 0) {
+              optNotDomains = new Uint32Array(optNotDomainsArray);
+            }
+
+            break;
+          }
+          case 'badfilter':
+            // TODO - how to handle those, if we start in mask, then the id will
+            // differ from the other filter. We could keep original line. How do
+            // to eliminate thos efficiently? They will probably endup in the same
+            // bucket, so maybe we could do that on a per-bucket basis?
+            return null;
+          case 'important':
+            // Note: `negation` should always be `false` here.
+            if (negation) {
+              return null;
+            }
+
+            mask = setBit(mask, NETWORK_FILTER_MASK.isImportant);
+            break;
+          case 'match-case':
+            // Note: `negation` should always be `false` here.
+            if (negation) {
+              return null;
+            }
+
+            mask = setBit(mask, NETWORK_FILTER_MASK.matchCase);
+            break;
+          case 'third-party':
+            if (negation) {
+              // ~third-party means we should clear the flag
+              mask = clearBit(mask, NETWORK_FILTER_MASK.thirdParty);
+            } else {
+              // third-party means ~first-party
+              mask = clearBit(mask, NETWORK_FILTER_MASK.firstParty);
+            }
+            break;
+          case 'first-party':
+            if (negation) {
+              // ~first-party means we should clear the flag
+              mask = clearBit(mask, NETWORK_FILTER_MASK.firstParty);
+            } else {
+              // first-party means ~third-party
+              mask = clearBit(mask, NETWORK_FILTER_MASK.thirdParty);
+            }
+            break;
+          case 'fuzzy':
+            mask = setBit(mask, NETWORK_FILTER_MASK.fuzzyMatch);
+            break;
+          case 'collapse':
+            break;
+          case 'bug':
+            bug = parseInt(optionValue, 10);
+            break;
+          case 'redirect':
+            // Negation of redirection doesn't make sense
+            if (negation) {
+              return null;
+            }
+
+            // Ignore this filter if no redirection resource is specified
+            if (optionValue.length === 0) {
+              return null;
+            }
+
+            redirect = optionValue;
+            break;
+          case 'csp':
+            mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
+            if (optionValue.length > 0) {
+              csp = optionValue;
+            }
+            break;
+          default: {
+            // Handle content type options separatly
+            let optionMask: number = 0;
+            switch (option) {
+              case 'image':
+                optionMask = NETWORK_FILTER_MASK.fromImage;
+                break;
+              case 'media':
+                optionMask = NETWORK_FILTER_MASK.fromMedia;
+                break;
+              case 'object':
+                optionMask = NETWORK_FILTER_MASK.fromObject;
+                break;
+              case 'object-subrequest':
+                optionMask = NETWORK_FILTER_MASK.fromObject;
+                break;
+              case 'other':
+                optionMask = NETWORK_FILTER_MASK.fromOther;
+                break;
+              case 'ping':
+              case 'beacon':
+                optionMask = NETWORK_FILTER_MASK.fromPing;
+                break;
+              case 'script':
+                optionMask = NETWORK_FILTER_MASK.fromScript;
+                break;
+              case 'stylesheet':
+                optionMask = NETWORK_FILTER_MASK.fromStylesheet;
+                break;
+              case 'subdocument':
+                optionMask = NETWORK_FILTER_MASK.fromSubdocument;
+                break;
+              case 'xmlhttprequest':
+              case 'xhr':
+                optionMask = NETWORK_FILTER_MASK.fromXmlHttpRequest;
+                break;
+              case 'websocket':
+                optionMask = NETWORK_FILTER_MASK.fromWebsocket;
+                break;
+              case 'font':
+                optionMask = NETWORK_FILTER_MASK.fromFont;
+                break;
+              default:
+                // Disable this filter if we don't support all the options
+                return null;
+            }
+
+            // We got a valid cpt option, update mask
+            if (negation) {
+              cptMaskNegative = clearBit(cptMaskNegative, optionMask);
+            } else {
+              cptMaskPositive = setBit(cptMaskPositive, optionMask);
+            }
+            break;
+          }
+        }
+      }
+      // End of option parsing
+      // --------------------------------------------------------------------- //
+    }
+
+    if (cptMaskPositive === 0) {
+      mask |= cptMaskNegative;
+    } else if (cptMaskNegative === FROM_ANY) {
+      mask |= cptMaskPositive;
+    } else {
+      mask |= cptMaskPositive & cptMaskNegative;
+    }
+
+    // Identify kind of pattern
+
+    // Deal with hostname pattern
+    if (line[filterIndexEnd - 1] === '|') {
+      mask = setBit(mask, NETWORK_FILTER_MASK.isRightAnchor);
+      filterIndexEnd -= 1;
+    }
+
+    if (fastStartsWithFrom(line, '||', filterIndexStart)) {
+      mask = setBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor);
+      filterIndexStart += 2;
+    } else if (line[filterIndexStart] === '|') {
+      mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+      filterIndexStart += 1;
+    }
+
+    const isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
+    mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRegex, isRegex);
+
+    if (getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor)) {
+      if (isRegex) {
+        // Split at the first '/', '*' or '^' character to get the hostname
+        // and then the pattern.
+        // TODO - this could be made more efficient if we could match between two
+        // indices. Once again, we have to do more work than is really needed.
+        const firstSeparator = line.search(SEPARATOR);
+        // NOTE: `firstSeparator` shall never be -1 here since `isRegex` is true.
+        // This means there must be at least an occurrence of `*` or `^`
+        // somewhere.
+
+        hostname = line.slice(filterIndexStart, firstSeparator);
+        filterIndexStart = firstSeparator;
+
+        // If the only symbol remaining for the selector is '^' then ignore it
+        // but set the filter as right anchored since there should not be any
+        // other label on the right
+        if (filterIndexEnd - filterIndexStart === 1 && line[filterIndexStart] === '^') {
+          mask = clearBit(mask, NETWORK_FILTER_MASK.isRegex);
+          filterIndexStart = filterIndexEnd;
+          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRightAnchor, true);
+        } else {
+          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isLeftAnchor, true);
+          mask = setNetworkMask(
+            mask,
+            NETWORK_FILTER_MASK.isRegex,
+            checkIsRegex(line, filterIndexStart, filterIndexEnd),
+          );
+        }
+      } else {
+        // Look for next /
+        const slashIndex = line.indexOf('/', filterIndexStart);
+        if (slashIndex !== -1) {
+          hostname = line.slice(filterIndexStart, slashIndex);
+          filterIndexStart = slashIndex;
+          mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+        } else {
+          hostname = line.slice(filterIndexStart, filterIndexEnd);
+          filterIndexStart = filterIndexEnd;
+        }
+      }
+    }
+
+    // Remove trailing '*'
+    if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexEnd - 1] === '*') {
+      filterIndexEnd -= 1;
+    }
+
+    // Remove leading '*' if the filter is not hostname anchored.
+    if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexStart] === '*') {
+      mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+      filterIndexStart += 1;
+    }
+
+    // Transform filters on protocol (http, https, ws)
+    if (getBit(mask, NETWORK_FILTER_MASK.isLeftAnchor)) {
+      if (
+        filterIndexEnd - filterIndexStart === 5 &&
+        fastStartsWithFrom(line, 'ws://', filterIndexStart)
+      ) {
+        mask = setBit(mask, NETWORK_FILTER_MASK.fromWebsocket);
+        mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+        filterIndexStart = filterIndexEnd;
+      } else if (
+        filterIndexEnd - filterIndexStart === 7 &&
+        fastStartsWithFrom(line, 'http://', filterIndexStart)
+      ) {
+        mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
+        mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttps);
+        mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+        filterIndexStart = filterIndexEnd;
+      } else if (
+        filterIndexEnd - filterIndexStart === 8 &&
+        fastStartsWithFrom(line, 'https://', filterIndexStart)
+      ) {
+        mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
+        mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttp);
+        mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+        filterIndexStart = filterIndexEnd;
+      } else if (
+        filterIndexEnd - filterIndexStart === 8 &&
+        fastStartsWithFrom(line, 'http*://', filterIndexStart)
+      ) {
+        mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
+        mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
+        mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+        filterIndexStart = filterIndexEnd;
+      }
+    }
+
+    let filter: string | undefined;
+    if (filterIndexEnd - filterIndexStart > 0) {
+      filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
+      mask = setNetworkMask(
+        mask,
+        NETWORK_FILTER_MASK.isRegex,
+        checkIsRegex(filter, 0, filter.length),
+      );
+    }
+
+    // TODO
+    // - ignore hostname anchor is not hostname provided
+
+    if (hostname !== undefined) {
+      if (getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor) && fastStartsWith(hostname, 'www.')) {
+        hostname = hostname.slice(4);
+      }
+      hostname = hostname.toLowerCase();
+      if (hasUnicode(hostname)) {
+        hostname = punycode.toASCII(hostname);
+      }
+    }
+
+    return new NetworkFilter({
+      bug,
+      csp,
+      filter,
+      hostname,
+      mask,
+      optDomains,
+      optNotDomains,
+      rawLine: debug === true ? line : undefined,
+      redirect,
+    });
   }
 
   /**
@@ -201,13 +573,13 @@ export default class NetworkFilter implements IFilter {
 
       // Optional parts
       bug: (optionalParts & 1) === 1 ? buffer.getUint16() : undefined,
-      csp: (optionalParts & 2) === 2 ? buffer.getASCIIStrict() : undefined,
-      filter: (optionalParts & 4) === 4 ? buffer.getASCIIStrict() : undefined,
-      hostname: (optionalParts & 8) === 8 ? buffer.getASCIIStrict() : undefined,
-      optDomains: (optionalParts & 16) === 16 ? buffer.getUint32ArrayStrict() : undefined,
-      optNotDomains: (optionalParts & 32) === 32 ? buffer.getUint32ArrayStrict() : undefined,
+      csp: (optionalParts & 2) === 2 ? buffer.getASCII() : undefined,
+      filter: (optionalParts & 4) === 4 ? buffer.getASCII() : undefined,
+      hostname: (optionalParts & 8) === 8 ? buffer.getASCII() : undefined,
+      optDomains: (optionalParts & 16) === 16 ? buffer.getUint32Array() : undefined,
+      optNotDomains: (optionalParts & 32) === 32 ? buffer.getUint32Array() : undefined,
       rawLine: (optionalParts & 64) === 64 ? buffer.getUTF8() : undefined,
-      redirect: (optionalParts & 128) === 128 ? buffer.getASCIIStrict() : undefined,
+      redirect: (optionalParts & 128) === 128 ? buffer.getASCII() : undefined,
     });
   }
 
@@ -315,27 +687,27 @@ export default class NetworkFilter implements IFilter {
 
     if (this.csp !== undefined) {
       optionalParts |= 2;
-      buffer.pushASCIIStrict(this.csp);
+      buffer.pushASCII(this.csp);
     }
 
     if (this.filter !== undefined) {
       optionalParts |= 4;
-      buffer.pushASCIIStrict(this.filter);
+      buffer.pushASCII(this.filter);
     }
 
     if (this.hostname !== undefined) {
       optionalParts |= 8;
-      buffer.pushASCIIStrict(this.hostname);
+      buffer.pushASCII(this.hostname);
     }
 
     if (this.optDomains) {
       optionalParts |= 16;
-      buffer.pushUint32ArrayStrict(this.optDomains);
+      buffer.pushUint32Array(this.optDomains);
     }
 
     if (this.optNotDomains !== undefined) {
       optionalParts |= 32;
-      buffer.pushUint32ArrayStrict(this.optNotDomains);
+      buffer.pushUint32Array(this.optNotDomains);
     }
 
     if (this.rawLine !== undefined) {
@@ -345,7 +717,7 @@ export default class NetworkFilter implements IFilter {
 
     if (this.redirect !== undefined) {
       optionalParts |= 128;
-      buffer.pushASCIIStrict(this.redirect);
+      buffer.pushASCII(this.redirect);
     }
 
     buffer.setByte(index, optionalParts);
@@ -808,387 +1180,6 @@ function checkIsRegex(filter: string, start: number, end: number): boolean {
   return (starIndex !== -1 && starIndex < end) || (separatorIndex !== -1 && separatorIndex < end);
 }
 
-/**
- * Parse a line containing a network filter into a NetworkFilter object.
- * This must be *very* efficient.
- */
-function parseNetworkFilter(rawLine: string): NetworkFilter | null {
-  const line: string = rawLine;
-
-  // Represent options as a bitmask
-  let mask: number =
-    NETWORK_FILTER_MASK.thirdParty |
-    NETWORK_FILTER_MASK.firstParty |
-    NETWORK_FILTER_MASK.fromHttps |
-    NETWORK_FILTER_MASK.fromHttp;
-
-  // Temporary masks for positive (e.g.: $script) and negative (e.g.: $~script)
-  // content type options.
-  let cptMaskPositive: number = 0;
-  let cptMaskNegative: number = FROM_ANY;
-
-  let hostname: string | undefined;
-
-  let optDomains: Uint32Array | undefined;
-  let optNotDomains: Uint32Array | undefined;
-  let redirect: string | undefined;
-  let csp: string | undefined;
-  let bug: number | undefined;
-
-  // Start parsing
-  let filterIndexStart: number = 0;
-  let filterIndexEnd: number = line.length;
-
-  // @@filter == Exception
-  if (fastStartsWith(line, '@@')) {
-    filterIndexStart += 2;
-    mask = setBit(mask, NETWORK_FILTER_MASK.isException);
-  }
-
-  // filter$options == Options
-  // ^     ^
-  // |     |
-  // |     optionsIndex
-  // filterIndexStart
-  const optionsIndex: number = line.lastIndexOf('$');
-  if (optionsIndex !== -1) {
-    // Parse options and set flags
-    filterIndexEnd = optionsIndex;
-
-    // --------------------------------------------------------------------- //
-    // parseOptions
-    // TODO: This could be implemented without string copy,
-    // using indices, like in main parsing functions.
-    const rawOptions = line.slice(optionsIndex + 1);
-    const options = rawOptions.split(',');
-    for (let i = 0; i < options.length; i += 1) {
-      const rawOption = options[i];
-      let negation = false;
-      let option = rawOption;
-
-      // Check for negation: ~option
-      if (fastStartsWith(option, '~')) {
-        negation = true;
-        option = option.slice(1);
-      } else {
-        negation = false;
-      }
-
-      // Check for options: option=value1|value2
-      let optionValue: string = '';
-      if (option.indexOf('=') !== -1) {
-        const optionAndValues = option.split('=', 2);
-        option = optionAndValues[0];
-        optionValue = optionAndValues[1];
-      }
-
-      switch (option) {
-        case 'domain': {
-          const optionValues: string[] = optionValue.split('|');
-          const optDomainsArray: number[] = [];
-          const optNotDomainsArray: number[] = [];
-
-          for (let j = 0; j < optionValues.length; j += 1) {
-            const value: string = optionValues[j];
-            if (value) {
-              if (fastStartsWith(value, '~')) {
-                optNotDomainsArray.push(fastHash(value.slice(1)));
-              } else {
-                optDomainsArray.push(fastHash(value));
-              }
-            }
-          }
-
-          if (optDomainsArray.length > 0) {
-            optDomains = new Uint32Array(optDomainsArray);
-          }
-
-          if (optNotDomainsArray.length > 0) {
-            optNotDomains = new Uint32Array(optNotDomainsArray);
-          }
-
-          break;
-        }
-        case 'badfilter':
-          // TODO - how to handle those, if we start in mask, then the id will
-          // differ from the other filter. We could keep original line. How do
-          // to eliminate thos efficiently? They will probably endup in the same
-          // bucket, so maybe we could do that on a per-bucket basis?
-          return null;
-        case 'important':
-          // Note: `negation` should always be `false` here.
-          if (negation) {
-            return null;
-          }
-
-          mask = setBit(mask, NETWORK_FILTER_MASK.isImportant);
-          break;
-        case 'match-case':
-          // Note: `negation` should always be `false` here.
-          if (negation) {
-            return null;
-          }
-
-          mask = setBit(mask, NETWORK_FILTER_MASK.matchCase);
-          break;
-        case 'third-party':
-          if (negation) {
-            // ~third-party means we should clear the flag
-            mask = clearBit(mask, NETWORK_FILTER_MASK.thirdParty);
-          } else {
-            // third-party means ~first-party
-            mask = clearBit(mask, NETWORK_FILTER_MASK.firstParty);
-          }
-          break;
-        case 'first-party':
-          if (negation) {
-            // ~first-party means we should clear the flag
-            mask = clearBit(mask, NETWORK_FILTER_MASK.firstParty);
-          } else {
-            // first-party means ~third-party
-            mask = clearBit(mask, NETWORK_FILTER_MASK.thirdParty);
-          }
-          break;
-        case 'fuzzy':
-          mask = setBit(mask, NETWORK_FILTER_MASK.fuzzyMatch);
-          break;
-        case 'collapse':
-          break;
-        case 'bug':
-          bug = parseInt(optionValue, 10);
-          break;
-        case 'redirect':
-          // Negation of redirection doesn't make sense
-          if (negation) {
-            return null;
-          }
-
-          // Ignore this filter if no redirection resource is specified
-          if (optionValue.length === 0) {
-            return null;
-          }
-
-          redirect = optionValue;
-          break;
-        case 'csp':
-          mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
-          if (optionValue.length > 0) {
-            csp = optionValue;
-          }
-          break;
-        default: {
-          // Handle content type options separatly
-          let optionMask: number = 0;
-          switch (option) {
-            case 'image':
-              optionMask = NETWORK_FILTER_MASK.fromImage;
-              break;
-            case 'media':
-              optionMask = NETWORK_FILTER_MASK.fromMedia;
-              break;
-            case 'object':
-              optionMask = NETWORK_FILTER_MASK.fromObject;
-              break;
-            case 'object-subrequest':
-              optionMask = NETWORK_FILTER_MASK.fromObject;
-              break;
-            case 'other':
-              optionMask = NETWORK_FILTER_MASK.fromOther;
-              break;
-            case 'ping':
-            case 'beacon':
-              optionMask = NETWORK_FILTER_MASK.fromPing;
-              break;
-            case 'script':
-              optionMask = NETWORK_FILTER_MASK.fromScript;
-              break;
-            case 'stylesheet':
-              optionMask = NETWORK_FILTER_MASK.fromStylesheet;
-              break;
-            case 'subdocument':
-              optionMask = NETWORK_FILTER_MASK.fromSubdocument;
-              break;
-            case 'xmlhttprequest':
-            case 'xhr':
-              optionMask = NETWORK_FILTER_MASK.fromXmlHttpRequest;
-              break;
-            case 'websocket':
-              optionMask = NETWORK_FILTER_MASK.fromWebsocket;
-              break;
-            case 'font':
-              optionMask = NETWORK_FILTER_MASK.fromFont;
-              break;
-            default:
-              // Disable this filter if we don't support all the options
-              return null;
-          }
-
-          // We got a valid cpt option, update mask
-          if (negation) {
-            cptMaskNegative = clearBit(cptMaskNegative, optionMask);
-          } else {
-            cptMaskPositive = setBit(cptMaskPositive, optionMask);
-          }
-          break;
-        }
-      }
-    }
-    // End of option parsing
-    // --------------------------------------------------------------------- //
-  }
-
-  if (cptMaskPositive === 0) {
-    mask |= cptMaskNegative;
-  } else if (cptMaskNegative === FROM_ANY) {
-    mask |= cptMaskPositive;
-  } else {
-    mask |= cptMaskPositive & cptMaskNegative;
-  }
-
-  // Identify kind of pattern
-
-  // Deal with hostname pattern
-  if (line[filterIndexEnd - 1] === '|') {
-    mask = setBit(mask, NETWORK_FILTER_MASK.isRightAnchor);
-    filterIndexEnd -= 1;
-  }
-
-  if (fastStartsWithFrom(line, '||', filterIndexStart)) {
-    mask = setBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor);
-    filterIndexStart += 2;
-  } else if (line[filterIndexStart] === '|') {
-    mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-    filterIndexStart += 1;
-  }
-
-  const isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
-  mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRegex, isRegex);
-
-  if (getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor)) {
-    if (isRegex) {
-      // Split at the first '/', '*' or '^' character to get the hostname
-      // and then the pattern.
-      // TODO - this could be made more efficient if we could match between two
-      // indices. Once again, we have to do more work than is really needed.
-      const firstSeparator = line.search(SEPARATOR);
-      // NOTE: `firstSeparator` shall never be -1 here since `isRegex` is true.
-      // This means there must be at least an occurrence of `*` or `^`
-      // somewhere.
-
-      hostname = line.slice(filterIndexStart, firstSeparator);
-      filterIndexStart = firstSeparator;
-
-      // If the only symbol remaining for the selector is '^' then ignore it
-      // but set the filter as right anchored since there should not be any
-      // other label on the right
-      if (filterIndexEnd - filterIndexStart === 1 && line[filterIndexStart] === '^') {
-        mask = clearBit(mask, NETWORK_FILTER_MASK.isRegex);
-        filterIndexStart = filterIndexEnd;
-        mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRightAnchor, true);
-      } else {
-        mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isLeftAnchor, true);
-        mask = setNetworkMask(
-          mask,
-          NETWORK_FILTER_MASK.isRegex,
-          checkIsRegex(line, filterIndexStart, filterIndexEnd),
-        );
-      }
-    } else {
-      // Look for next /
-      const slashIndex = line.indexOf('/', filterIndexStart);
-      if (slashIndex !== -1) {
-        hostname = line.slice(filterIndexStart, slashIndex);
-        filterIndexStart = slashIndex;
-        mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-      } else {
-        hostname = line.slice(filterIndexStart, filterIndexEnd);
-        filterIndexStart = filterIndexEnd;
-      }
-    }
-  }
-
-  // Remove trailing '*'
-  if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexEnd - 1] === '*') {
-    filterIndexEnd -= 1;
-  }
-
-  // Remove leading '*' if the filter is not hostname anchored.
-  if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexStart] === '*') {
-    mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-    filterIndexStart += 1;
-  }
-
-  // Transform filters on protocol (http, https, ws)
-  if (getBit(mask, NETWORK_FILTER_MASK.isLeftAnchor)) {
-    if (
-      filterIndexEnd - filterIndexStart === 5 &&
-      fastStartsWithFrom(line, 'ws://', filterIndexStart)
-    ) {
-      mask = setBit(mask, NETWORK_FILTER_MASK.fromWebsocket);
-      mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-      filterIndexStart = filterIndexEnd;
-    } else if (
-      filterIndexEnd - filterIndexStart === 7 &&
-      fastStartsWithFrom(line, 'http://', filterIndexStart)
-    ) {
-      mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
-      mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttps);
-      mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-      filterIndexStart = filterIndexEnd;
-    } else if (
-      filterIndexEnd - filterIndexStart === 8 &&
-      fastStartsWithFrom(line, 'https://', filterIndexStart)
-    ) {
-      mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
-      mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttp);
-      mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-      filterIndexStart = filterIndexEnd;
-    } else if (
-      filterIndexEnd - filterIndexStart === 8 &&
-      fastStartsWithFrom(line, 'http*://', filterIndexStart)
-    ) {
-      mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
-      mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
-      mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-      filterIndexStart = filterIndexEnd;
-    }
-  }
-
-  let filter: string | undefined;
-  if (filterIndexEnd - filterIndexStart > 0) {
-    filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
-    mask = setNetworkMask(
-      mask,
-      NETWORK_FILTER_MASK.isRegex,
-      checkIsRegex(filter, 0, filter.length),
-    );
-  }
-
-  // TODO
-  // - ignore hostname anchor is not hostname provided
-
-  if (hostname !== undefined) {
-    if (getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor) && fastStartsWith(hostname, 'www.')) {
-      hostname = hostname.slice(4);
-    }
-    hostname = hostname.toLowerCase();
-    if (hasUnicode(hostname)) {
-      hostname = punycode.toASCII(hostname);
-    }
-  }
-
-  return new NetworkFilter({
-    bug,
-    csp,
-    filter,
-    hostname,
-    mask,
-    optDomains,
-    optNotDomains,
-    redirect,
-  });
-}
-
 export function isAnchoredByHostname(filterHostname: string, hostname: string): boolean {
   // Corner-case, if `filterHostname` is empty, then it's a match
   if (filterHostname.length === 0) {
@@ -1451,8 +1442,8 @@ function checkOptions(filter: NetworkFilter, request: Request): boolean {
   if (filter.hasOptDomains()) {
     const optDomains = filter.getOptDomains();
     if (
-      binSearch(optDomains, request.sourceHostnameHash) === -1 &&
-      binSearch(optDomains, request.sourceDomainHash) === -1
+      binLookup(optDomains, request.sourceHostnameHash) === false &&
+      binLookup(optDomains, request.sourceDomainHash) === false
     ) {
       return false;
     }
@@ -1462,8 +1453,8 @@ function checkOptions(filter: NetworkFilter, request: Request): boolean {
   if (filter.hasOptNotDomains()) {
     const optNotDomains = filter.getOptNotDomains();
     if (
-      binSearch(optNotDomains, request.sourceHostnameHash) !== -1 ||
-      binSearch(optNotDomains, request.sourceDomainHash) !== -1
+      binLookup(optNotDomains, request.sourceHostnameHash) === true ||
+      binLookup(optNotDomains, request.sourceDomainHash) === true
     ) {
       return false;
     }

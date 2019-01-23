@@ -1,6 +1,6 @@
 import * as punycode from 'punycode';
 import StaticDataView from '../data-view';
-import { fastStartsWithFrom, getBit, hasUnicode, setBit } from '../utils';
+import { binLookup, fastStartsWithFrom, getBit, hasUnicode, setBit } from '../utils';
 import IFilter from './interface';
 
 export const DEFAULT_HIDDING_STYLE: string = 'display: none !important;';
@@ -11,6 +11,63 @@ export function hashHostnameBackward(hostname: string): number {
     hash = (hash * 33) ^ hostname.charCodeAt(j);
   }
   return hash >>> 0;
+}
+
+export function getHashesFromLabelsBackward(
+  hostname: string,
+  end: number,
+  startOfDomain: number,
+): number[] {
+  const hashes: number[] = [];
+  let hash = 5381;
+
+  // Compute hash backward, label per label
+  for (let i = end - 1; i >= 0; i -= 1) {
+    // Process label
+    if (hostname[i] === '.' && i < startOfDomain) {
+      hashes.push(hash >>> 0);
+    }
+
+    // Update hash
+    hash = (hash * 33) ^ hostname.charCodeAt(i);
+  }
+
+  hashes.push(hash >>> 0);
+  return hashes;
+}
+
+export function getEntityHashesFromLabelsBackward(hostname: string, domain: string): number[] {
+  const hostnameWithoutPublicSuffix = getHostnameWithoutPublicSuffix(hostname, domain);
+  if (hostnameWithoutPublicSuffix !== null) {
+    return getHashesFromLabelsBackward(
+      hostnameWithoutPublicSuffix,
+      hostnameWithoutPublicSuffix.length,
+      hostnameWithoutPublicSuffix.length,
+    );
+  }
+  return [];
+}
+
+export function getHostnameHashesFromLabelsBackward(hostname: string, domain: string): number[] {
+  return getHashesFromLabelsBackward(hostname, hostname.length, hostname.length - domain.length);
+}
+
+/**
+ * Given a hostname and its domain, return the hostname without the public
+ * suffix. We know that the domain, with one less label on the left, will be a
+ * the public suffix; and from there we know which trailing portion of
+ * `hostname` we should remove.
+ */
+export function getHostnameWithoutPublicSuffix(hostname: string, domain: string): string | null {
+  let hostnameWithoutPublicSuffix: string | null = null;
+
+  const indexOfDot = domain.indexOf('.');
+  if (indexOfDot !== -1) {
+    const publicSuffix = domain.slice(indexOfDot + 1);
+    hostnameWithoutPublicSuffix = hostname.slice(0, -publicSuffix.length - 1);
+  }
+
+  return hostnameWithoutPublicSuffix;
 }
 
 /**
@@ -201,19 +258,19 @@ export default class CosmeticFilter implements IFilter {
         });
 
       if (entitiesArray.length !== 0) {
-        entities = new Uint32Array(entitiesArray);
+        entities = new Uint32Array(entitiesArray).sort();
       }
 
       if (hostnamesArray.length !== 0) {
-        hostnames = new Uint32Array(hostnamesArray);
+        hostnames = new Uint32Array(hostnamesArray).sort();
       }
 
       if (notEntitiesArray.length !== 0) {
-        notEntities = new Uint32Array(notEntitiesArray);
+        notEntities = new Uint32Array(notEntitiesArray).sort();
       }
 
       if (notHostnamesArray.length !== 0) {
-        notHostnames = new Uint32Array(notHostnamesArray);
+        notHostnames = new Uint32Array(notHostnamesArray).sort();
       }
     }
 
@@ -329,12 +386,12 @@ export default class CosmeticFilter implements IFilter {
       selector,
 
       // Optional fields
-      entities: (optionalParts & 1) === 1 ? buffer.getUint32ArrayStrict() : undefined,
-      hostnames: (optionalParts & 2) === 2 ? buffer.getUint32ArrayStrict() : undefined,
-      notEntities: (optionalParts & 4) === 4 ? buffer.getUint32ArrayStrict() : undefined,
-      notHostnames: (optionalParts & 8) === 8 ? buffer.getUint32ArrayStrict() : undefined,
+      entities: (optionalParts & 1) === 1 ? buffer.getUint32Array() : undefined,
+      hostnames: (optionalParts & 2) === 2 ? buffer.getUint32Array() : undefined,
+      notEntities: (optionalParts & 4) === 4 ? buffer.getUint32Array() : undefined,
+      notHostnames: (optionalParts & 8) === 8 ? buffer.getUint32Array() : undefined,
       rawLine: (optionalParts & 16) === 16 ? buffer.getUTF8() : undefined,
-      style: (optionalParts & 32) === 32 ? buffer.getASCIIStrict() : undefined,
+      style: (optionalParts & 32) === 32 ? buffer.getASCII() : undefined,
     });
   }
 
@@ -407,22 +464,22 @@ export default class CosmeticFilter implements IFilter {
 
     if (this.entities !== undefined) {
       optionalParts |= 1;
-      buffer.pushUint32ArrayStrict(this.entities);
+      buffer.pushUint32Array(this.entities);
     }
 
     if (this.hostnames !== undefined) {
       optionalParts |= 2;
-      buffer.pushUint32ArrayStrict(this.hostnames);
+      buffer.pushUint32Array(this.hostnames);
     }
 
     if (this.notEntities !== undefined) {
       optionalParts |= 4;
-      buffer.pushUint32ArrayStrict(this.notEntities);
+      buffer.pushUint32Array(this.notEntities);
     }
 
     if (this.notHostnames !== undefined) {
       optionalParts |= 8;
-      buffer.pushUint32ArrayStrict(this.notHostnames);
+      buffer.pushUint32Array(this.notHostnames);
     }
 
     if (this.rawLine !== undefined) {
@@ -432,7 +489,7 @@ export default class CosmeticFilter implements IFilter {
 
     if (this.style !== undefined) {
       optionalParts |= 32;
-      buffer.pushASCIIStrict(this.style);
+      buffer.pushASCII(this.style);
     }
 
     buffer.setByte(index, optionalParts);
@@ -479,37 +536,70 @@ export default class CosmeticFilter implements IFilter {
     return filter;
   }
 
-  public match(hostname: string, _: string): boolean {
-    // const hostnameWithoutPublicSuffix = getHostnameWithoutPublicSuffix(hostname, domain);
+  public hasHostnameConstraint(): boolean {
+    return (
+      this.hostnames !== undefined ||
+      this.entities !== undefined ||
+      this.notEntities !== undefined ||
+      this.notHostnames !== undefined
+    );
+  }
 
-    // Check hostnames
-    if (this.hasHostnames()) {
-      if (hostname) {
-        // TODO
-        return false;
-        // const hostnames = this.getHostnames();
+  public match(hostname: string, domain: string): boolean {
+    // No `hostname` available but this filter has some constraints on hostname.
+    if (
+      !hostname &&
+      (this.hostnames !== undefined ||
+        this.entities !== undefined ||
+        this.notHostnames !== undefined ||
+        this.notEntities !== undefined)
+    ) {
+      return false;
+    }
 
-        // // Check for exceptions
-        // for (let i = 0; i < hostnames.length; i += 1) {
-        //   const filterHostname = hostnames[i];
-        //   if (
-        //     filterHostname[0] === '~' &&
-        //     matchHostname(hostname, hostnameWithoutPublicSuffix, filterHostname.slice(1))
-        //   ) {
-        //     return false;
-        //   }
-        // }
+    const entitiesHashes: number[] =
+      this.entities !== undefined || this.notEntities !== undefined
+        ? getEntityHashesFromLabelsBackward(hostname, domain)
+        : [];
+    const hostnameHashes: number[] =
+      this.hostnames !== undefined || this.notHostnames !== undefined
+        ? getHostnameHashesFromLabelsBackward(hostname, domain)
+        : [];
 
-        // // Check for positive matches
-        // for (let i = 0; i < hostnames.length; i += 1) {
-        //   const filterHostname = hostnames[i];
-        //   if (
-        //     filterHostname[0] !== '~' &&
-        //     matchHostname(hostname, hostnameWithoutPublicSuffix, filterHostname)
-        //   ) {
-        //     return true;
-        //   }
-        // }
+    // Check if `hostname` is blacklisted
+    if (this.notHostnames !== undefined) {
+      for (let i = 0; i < hostnameHashes.length; i += 1) {
+        if (binLookup(this.notHostnames, hostnameHashes[i])) {
+          return false;
+        }
+      }
+    }
+
+    // Check if `hostname` is blacklisted by *entity*
+    if (this.notEntities !== undefined) {
+      for (let i = 0; i < entitiesHashes.length; i += 1) {
+        if (binLookup(this.notEntities, entitiesHashes[i])) {
+          return false;
+        }
+      }
+    }
+
+    // Check if `hostname` is allowed
+    if (this.hostnames !== undefined || this.entities !== undefined) {
+      if (this.hostnames !== undefined) {
+        for (let i = 0; i < hostnameHashes.length; i += 1) {
+          if (binLookup(this.hostnames, hostnameHashes[i])) {
+            return true;
+          }
+        }
+      }
+
+      if (this.entities !== undefined) {
+        for (let i = 0; i < entitiesHashes.length; i += 1) {
+          if (binLookup(this.entities, entitiesHashes[i])) {
+            return true;
+          }
+        }
       }
 
       return false;
@@ -518,9 +608,11 @@ export default class CosmeticFilter implements IFilter {
     return true;
   }
 
+  /**
+   * Get tokens for this filter. It can be indexed multiple times if multiple
+   * hostnames are specified (e.g.: host1,host2##.selector).
+   */
   public getTokens(): Uint32Array[] {
-    // TODO - this does not work well for entities, we need to add one token for
-    // entity on each Request to make sure we can match here.
     const tokens: Uint32Array[] = [];
 
     if (this.hostnames !== undefined) {
@@ -532,6 +624,18 @@ export default class CosmeticFilter implements IFilter {
     if (this.entities !== undefined) {
       for (let i = 0; i < this.entities.length; i += 1) {
         tokens.push(new Uint32Array([this.entities[i]]));
+      }
+    }
+
+    if (this.notEntities !== undefined) {
+      for (let i = 0; i < this.notEntities.length; i += 1) {
+        tokens.push(new Uint32Array([this.notEntities[i]]));
+      }
+    }
+
+    if (this.notHostnames !== undefined) {
+      for (let i = 0; i < this.notHostnames.length; i += 1) {
+        tokens.push(new Uint32Array([this.notHostnames[i]]));
       }
     }
 
@@ -578,7 +682,7 @@ export default class CosmeticFilter implements IFilter {
   }
 
   public getSelector(): string {
-    return this.selector || '';
+    return this.selector;
   }
 
   public hasHostnames(): boolean {
@@ -596,60 +700,4 @@ export default class CosmeticFilter implements IFilter {
   public isScriptBlock(): boolean {
     return getBit(this.mask, COSMETICS_MASK.scriptBlock);
   }
-}
-
-/* Checks that hostnamePattern matches at the end of the hostname.
- * Partial matches are allowed, but hostname should be a valid
- * subdomain of hostnamePattern.
- */
-// function checkHostnamesPartialMatch(hostname: string, hostnamePattern: string): boolean {
-//   if (hostname.endsWith(hostnamePattern)) {
-//     const patternIndex = hostname.length - hostnamePattern.length;
-//     if (patternIndex === 0 || hostname[patternIndex - 1] === '.') {
-//       return true;
-//     }
-//   }
-//
-//   return false;
-// }
-
-/* Checks if `hostname` matches `hostnamePattern`, which can appear as
- * a domain selector in a cosmetic filter: hostnamePattern##selector
- *
- * It takes care of the concept of entities introduced by uBlock: google.*
- * https://github.com/gorhill/uBlock/wiki/Static-filter-syntax#entity-based-cosmetic-filters
- */
-// function matchHostname(
-//   hostname: string,
-//   hostnameWithoutPublicSuffix: string | null,
-//   hostnamePattern: string,
-// ): boolean {
-//   if (hostnamePattern.endsWith('.*')) {
-//     // Check if we have an entity match
-//     if (hostnameWithoutPublicSuffix !== null) {
-//       return checkHostnamesPartialMatch(hostnameWithoutPublicSuffix, hostnamePattern.slice(0, -2));
-//     }
-//
-//     return false;
-//   }
-//
-//   return checkHostnamesPartialMatch(hostname, hostnamePattern);
-// }
-
-/**
- * Given a hostname and its domain, return the hostname without the public
- * suffix. We know that the domain, with one less label on the left, will be a
- * the public suffix; and from there we know which trailing portion of
- * `hostname` we should remove.
- */
-export function getHostnameWithoutPublicSuffix(hostname: string, domain: string): string | null {
-  let hostnameWithoutPublicSuffix: string | null = null;
-
-  const indexOfDot = domain.indexOf('.');
-  if (indexOfDot !== -1) {
-    const publicSuffix = domain.slice(indexOfDot + 1);
-    hostnameWithoutPublicSuffix = hostname.slice(0, -publicSuffix.length - 1);
-  }
-
-  return hostnameWithoutPublicSuffix;
 }

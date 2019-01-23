@@ -158,11 +158,11 @@ export default class FilterEngine {
    * on-disk for faster loading of the adblocker. The `deserialize` static
    * method of Engine can be used to restore the engine.
    */
-  public serialize(): Uint8Array {
+  public serialize(array?: Uint8Array): Uint8Array {
     // Create a big buffer! It should always be bigger than the serialized
     // engine since `StaticDataView` will neither resize it nor detect overflows
     // (for efficiency purposes).
-    const buffer = new StaticDataView(8000000);
+    const buffer = StaticDataView.fromUint8Array(array || new Uint8Array(10000000));
 
     buffer.pushUint8(ENGINE_VERSION);
 

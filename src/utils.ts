@@ -233,6 +233,10 @@ export function binSearch(arr: Uint32Array, elt: number): number {
   return -1;
 }
 
+export function binLookup(arr: Uint32Array, elt: number): boolean {
+  return binSearch(arr, elt) !== -1;
+}
+
 export function updateResponseHeadersWithCSP(
   details: chrome.webRequest.WebResponseHeadersDetails,
   policies: string | undefined,
