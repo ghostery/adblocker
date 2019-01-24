@@ -19,9 +19,28 @@ function loadAdblocker() {
         }
       }
 
+      let t0 = Date.now();
       const engine = adblocker.FiltersEngine.parse([...deduplicatedLines].join('\n'));
-      engine.onUpdateResource(resources, '' + adblocker.fastHash(resources));
-      return adblocker.FiltersEngine.deserialize(engine.serialize());
+      let total = Date.now() - t0;
+      console.log('parsing filters', total);
+
+      t0 = Date.now();
+      engine.updateResources(resources, '' + adblocker.fastHash(resources));
+      total = Date.now() - t0;
+      console.log('parsing resources', total);
+
+      t0 = Date.now();
+      const serialized = engine.serialize();
+      total = Date.now() - t0;
+      console.log('serialization', total);
+      console.log('size', serialized.byteLength);
+
+      t0 = Date.now();
+      const deserialized = adblocker.FiltersEngine.deserialize(serialized);
+      total = Date.now() - t0;
+      console.log('deserialization', total);
+
+      return deserialized;
     },
   );
 }

@@ -58,12 +58,13 @@ export default class CosmeticFilterBucket {
     // need to inject cosmetics in a page and filtered according to
     // domain-specific exceptions/unhide.
     const buffer = new StaticDataView(4000000);
+    buffer.pushUint32(genericRules.length);
     for (let i = 0; i < genericRules.length; i += 1) {
       genericRules[i].serialize(buffer);
     }
 
     this.cache = [];
-    this.genericRules = buffer.crop().slice();
+    this.genericRules = buffer.slice();
   }
 
   public serialize(buffer: StaticDataView): void {
@@ -75,8 +76,9 @@ export default class CosmeticFilterBucket {
     const disabledRules = new Set();
 
     if (this.cache.length === 0) {
-      const buffer = new StaticDataView(0, this.genericRules);
-      while (buffer.dataAvailable()) {
+      const buffer = StaticDataView.fromUint8Array(this.genericRules);
+      const numberOfFilters = buffer.getUint32();
+      for (let i = 0; i < numberOfFilters; i += 1) {
         this.cache.push(CosmeticFilter.deserialize(buffer));
       }
     }

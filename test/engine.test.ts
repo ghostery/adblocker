@@ -38,9 +38,9 @@ function test({
   }`, () => {
     // Each each filter should be tested in isolation, this means that `engine`
     // is currently empty and we will add only the filter we want to test.
-    if (testFiltersInIsolation) {
-      engine.update({ networkFilters: [filter] });
-    }
+    // if (testFiltersInIsolation) {
+    //   engine.update({ networkFilters: [filter] });
+    // }
 
     // Set correct resources in `engine` (`resources` is expected to have been
     // created using the matching redirect filters for the current Request so
@@ -392,19 +392,18 @@ $csp=baz,domain=bar.com
     // - Engine with *no filter* optimizations *disabled*
     // - Engine with *all filters* optimizations *enabled*
     // - Engine with *all filters* optimizations *disabled*
-    const engineEmptyOptimized = createEngine('', true);
-    const engineEmpty = createEngine('', false);
+    // const engineEmptyOptimized = createEngine('', true);
+    // const engineEmpty = createEngine('', false);
     const engineFullOptimized = createEngine(allRequestFilters, true);
     const engineFull = createEngine(allRequestFilters, false);
 
-    const buffer = new Uint8Array(6000000);
     // For each request, make sure that we get the correct match in 4 different
     // setups:
     // - Engine with only the filter being tested
     // - Engine with all the filters
     // - Engine with optimizations enabled
     // - Engine with optimizations disabled
-    for (let i = 0; i < 1000; i += 1) {
+    for (let i = 0; i < requests.length; i += 1) {
       const { filters, type, url, sourceUrl } = requests[i];
 
       // Dispatch `filters` into the following categories: exception, important,
@@ -471,17 +470,10 @@ $csp=baz,domain=bar.com
             resources,
           };
 
-          // Empty engine with optimizations enabled
+          // Engine with only this filter
           test({
             ...baseConfig,
-            engine: Engine.deserialize(engineEmptyOptimized.serialize(buffer)),
-            testFiltersInIsolation: true,
-          });
-
-          // Empty engine with optimizations disabled
-          test({
-            ...baseConfig,
-            engine: Engine.deserialize(engineEmpty.serialize(buffer)),
+            engine: new Engine({ networkFilters: [filter] }),
             testFiltersInIsolation: true,
           });
 

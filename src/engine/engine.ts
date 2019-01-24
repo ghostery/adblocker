@@ -162,7 +162,7 @@ export default class FilterEngine {
     // Create a big buffer! It should always be bigger than the serialized
     // engine since `StaticDataView` will neither resize it nor detect overflows
     // (for efficiency purposes).
-    const buffer = StaticDataView.fromUint8Array(array || new Uint8Array(10000000));
+    const buffer = StaticDataView.fromUint8Array(array || new Uint8Array(3200000));
 
     buffer.pushUint8(ENGINE_VERSION);
 
@@ -269,7 +269,10 @@ export default class FilterEngine {
     removedNetworkFilters = [],
   }: Partial<IListDiff>): void {
     // Update cosmetic filters
-    if (this.loadCosmeticFilters) {
+    if (
+      this.loadCosmeticFilters &&
+      (cosmeticFilters.length !== 0 || removedCosmeticFilters.length !== 0)
+    ) {
       this.cosmetics.update(
         cosmeticFilters,
         removedCosmeticFilters.length === 0 ? undefined : new Set(removedCosmeticFilters),
@@ -277,13 +280,16 @@ export default class FilterEngine {
     }
 
     // Update network filters
-    const filters: NetworkFilter[] = [];
-    const csp: NetworkFilter[] = [];
-    const exceptions: NetworkFilter[] = [];
-    const importants: NetworkFilter[] = [];
-    const redirects: NetworkFilter[] = [];
+    if (
+      this.loadNetworkFilters &&
+      (networkFilters.length !== 0 || removedNetworkFilters.length !== 0)
+    ) {
+      const filters: NetworkFilter[] = [];
+      const csp: NetworkFilter[] = [];
+      const exceptions: NetworkFilter[] = [];
+      const importants: NetworkFilter[] = [];
+      const redirects: NetworkFilter[] = [];
 
-    if (this.loadNetworkFilters) {
       for (let i = 0; i < networkFilters.length; i += 1) {
         const filter = networkFilters[i];
         if (filter.isCSP()) {
@@ -298,17 +304,17 @@ export default class FilterEngine {
           filters.push(filter);
         }
       }
+
+      const removedNetworkFiltersSet: Set<number> | undefined =
+        removedNetworkFilters.length === 0 ? undefined : new Set(removedNetworkFilters);
+
+      // Update buckets in-place
+      this.filters.update(filters, removedNetworkFiltersSet);
+      this.csp.update(csp, removedNetworkFiltersSet);
+      this.exceptions.update(exceptions, removedNetworkFiltersSet);
+      this.importants.update(importants, removedNetworkFiltersSet);
+      this.redirects.update(redirects, removedNetworkFiltersSet);
     }
-
-    const removedNetworkFiltersSet: Set<number> | undefined =
-      removedNetworkFilters.length === 0 ? undefined : new Set(removedNetworkFilters);
-
-    // Update buckets in-place
-    this.filters.update(filters, removedNetworkFiltersSet);
-    this.csp.update(csp, removedNetworkFiltersSet);
-    this.exceptions.update(exceptions, removedNetworkFiltersSet);
-    this.importants.update(importants, removedNetworkFiltersSet);
-    this.redirects.update(redirects, removedNetworkFiltersSet);
   }
 
   /**
