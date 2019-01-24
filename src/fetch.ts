@@ -14,13 +14,13 @@ const enum Category {
 const lists = [
   {
     category: Category.Unbreak,
-    enabledByDefault: false,
+    enabledByDefault: true,
     url: 'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
   },
   {
     category: Category.Country,
     country: 'de',
-    enabledByDefault: false,
+    enabledByDefault: true,
     url: 'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
   },
   {
@@ -46,7 +46,7 @@ const lists = [
   },
   {
     category: Category.Ads,
-    enabledByDefault: false,
+    enabledByDefault: true,
     url: 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
   },
   {
@@ -56,13 +56,13 @@ const lists = [
   },
   {
     category: Category.Misc,
-    enabledByDefault: false,
+    enabledByDefault: true,
     url:
       'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
   },
   {
     category: Category.Unbreak,
-    enabledByDefault: false,
+    enabledByDefault: true,
     url: 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
   },
   // Adguard filters

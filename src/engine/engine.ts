@@ -4,7 +4,7 @@ import NetworkFilter from '../filters/network';
 import Request, { RequestType } from '../request';
 import Resources from '../resources';
 
-import Lists, { Country, IListDiff, parseFilters } from '../lists';
+import Lists, { IListDiff, parseFilters } from '../lists';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 
@@ -38,10 +38,7 @@ export default class FilterEngine {
     });
   }
 
-  public static deserialize(
-    serialized: Uint8Array,
-    { fetch }: { fetch?: (url: string) => Promise<string> } = {},
-  ): FilterEngine {
+  public static deserialize(serialized: Uint8Array): FilterEngine {
     const buffer = StaticDataView.fromUint8Array(serialized);
 
     // Before starting deserialization, we make sure that the version of the
@@ -50,13 +47,6 @@ export default class FilterEngine {
     const serializedEngineVersion = buffer.getUint8();
     if (ENGINE_VERSION !== serializedEngineVersion) {
       throw new Error('serialized engine version mismatch');
-    }
-
-    const subscriptionsEnabled = buffer.getBool();
-    if (subscriptionsEnabled && fetch === undefined) {
-      throw new Error(
-        'Could not serialize Engine with subscriptions enabled without specifying an implementation for fetch',
-      );
     }
 
     // Create a new engine with same options
@@ -71,10 +61,8 @@ export default class FilterEngine {
     // Deserialize resources
     engine.resources = Resources.deserialize(buffer);
 
-    // Deserialize subscription lists
-    if (subscriptionsEnabled && fetch !== undefined) {
-      engine.lists = Lists.deserialize(buffer, { fetch });
-    }
+    // Deserialize lists
+    engine.lists = Lists.deserialize(buffer);
 
     // Deserialize buckets
     engine.filters = NetworkFilterBucket.deserialize(buffer);
@@ -87,7 +75,7 @@ export default class FilterEngine {
     return engine;
   }
 
-  public lists: Lists | undefined;
+  public lists: Lists;
 
   public csp: NetworkFilterBucket;
   public exceptions: NetworkFilterBucket;
@@ -127,7 +115,11 @@ export default class FilterEngine {
     this.loadNetworkFilters = loadNetworkFilters;
 
     // Subscription management: disabled by default
-    this.lists = undefined;
+    this.lists = new Lists({
+      debug: this.debug,
+      loadCosmeticFilters: this.loadCosmeticFilters,
+      loadNetworkFilters: this.loadNetworkFilters,
+    });
 
     // $csp=
     this.csp = new NetworkFilterBucket({ enableOptimizations: false });
@@ -162,11 +154,10 @@ export default class FilterEngine {
     // Create a big buffer! It should always be bigger than the serialized
     // engine since `StaticDataView` will neither resize it nor detect overflows
     // (for efficiency purposes).
-    const buffer = StaticDataView.fromUint8Array(array || new Uint8Array(3200000));
+    const buffer = StaticDataView.fromUint8Array(array || new Uint8Array(9000000));
 
     buffer.pushUint8(ENGINE_VERSION);
 
-    buffer.pushBool(this.lists !== undefined); // subscriptions enabled?
     buffer.pushBool(this.enableOptimizations);
     buffer.pushBool(this.enableUpdates);
     buffer.pushBool(this.loadCosmeticFilters);
@@ -176,9 +167,7 @@ export default class FilterEngine {
     this.resources.serialize(buffer);
 
     // Subscription management
-    if (this.lists !== undefined) {
-      this.lists.serialize(buffer);
-    }
+    this.lists.serialize(buffer);
 
     // Filters buckets
     this.filters.serialize(buffer);
@@ -192,71 +181,59 @@ export default class FilterEngine {
   }
 
   /**
-   * Lists management. Deal with subscribed lists.
-   */
-  public enableSubscriptions(options: {
-    allowedListsUrl: string;
-    countryListsEnabled?: boolean;
-    fetch: (url: string) => Promise<string>;
-    loadedCountries?: Country[];
-  }): void {
-    this.lists = new Lists({
-      ...options,
-      loadCosmeticFilters: this.loadCosmeticFilters,
-      loadNetworkFilters: this.loadNetworkFilters,
-    });
-  }
-
-  public updateSubscriptions(_: string): Promise<void> {
-    if (this.lists === undefined) {
-      return Promise.reject(new Error('Subscriptions not enabled on engine'));
-    }
-
-    return this.lists
-      .updateSubscriptions()
-      .then(
-        ({
-          cosmeticFilters,
-          networkFilters,
-          removedCosmeticFilters,
-          removedNetworkFilters,
-          resources,
-          resourcesChecksum,
-        }) => {
-          if (resources !== undefined && resourcesChecksum !== undefined) {
-            this.updateResources(resources, resourcesChecksum);
-          }
-
-          if (
-            cosmeticFilters.length !== 0 ||
-            networkFilters.length !== 0 ||
-            removedNetworkFilters.length !== 0 ||
-            removedCosmeticFilters.length !== 0
-          ) {
-            this.update({
-              cosmeticFilters,
-              networkFilters,
-              removedCosmeticFilters,
-              removedNetworkFilters,
-            });
-          }
-        },
-      );
-  }
-
-  /**
    * Update engine with new filters or resources.
    */
+
+  public loadedLists(): string[] {
+    return this.lists.getLoaded();
+  }
+
+  public hasList(name: string, checksum: string): boolean {
+    return this.lists.has(name, checksum);
+  }
+
+  public deleteLists(names: string[]): boolean {
+    return this.update(this.lists.delete(names));
+  }
+
+  public deleteList(name: string): boolean {
+    return this.update(this.lists.delete([name]));
+  }
+
+  public updateLists(lists: Array<{ name: string; checksum: string; list: string }>): boolean {
+    if (this.enableUpdates === false) {
+      return false;
+    }
+
+    return this.update(this.lists.update(lists));
+  }
+
+  public updateList({
+    name,
+    checksum,
+    list,
+  }: {
+    name: string;
+    checksum: string;
+    list: string;
+  }): boolean {
+    return this.updateLists([{ name, checksum, list }]);
+  }
 
   /**
    * Update engine with `resources.txt` content.
    */
-  public updateResources(data: string, checksum: string): void {
+  public updateResources(data: string, checksum: string): boolean {
     if (this.enableUpdates === false) {
-      return;
+      return false;
+    }
+
+    if (this.resources.checksum === checksum) {
+      return false;
     }
 
     this.resources = Resources.parse(data, { checksum });
+    return true;
   }
 
   /**
@@ -267,12 +244,19 @@ export default class FilterEngine {
     cosmeticFilters = [],
     removedCosmeticFilters = [],
     removedNetworkFilters = [],
-  }: Partial<IListDiff>): void {
+  }: Partial<IListDiff>): boolean {
+    if (this.enableUpdates === false) {
+      return false;
+    }
+
+    let updated: boolean = false;
+
     // Update cosmetic filters
     if (
       this.loadCosmeticFilters &&
       (cosmeticFilters.length !== 0 || removedCosmeticFilters.length !== 0)
     ) {
+      updated = true;
       this.cosmetics.update(
         cosmeticFilters,
         removedCosmeticFilters.length === 0 ? undefined : new Set(removedCosmeticFilters),
@@ -284,6 +268,7 @@ export default class FilterEngine {
       this.loadNetworkFilters &&
       (networkFilters.length !== 0 || removedNetworkFilters.length !== 0)
     ) {
+      updated = true;
       const filters: NetworkFilter[] = [];
       const csp: NetworkFilter[] = [];
       const exceptions: NetworkFilter[] = [];
@@ -315,6 +300,8 @@ export default class FilterEngine {
       this.importants.update(importants, removedNetworkFiltersSet);
       this.redirects.update(redirects, removedNetworkFiltersSet);
     }
+
+    return updated;
   }
 
   /**

@@ -174,6 +174,29 @@ export default class ReverseIndex<T extends IFilter> {
     return filters;
   }
 
+  public getTokens(): Uint32Array {
+    const tokens: Set<number> = new Set();
+    const view = this.view;
+
+    for (let i = 0; i < this.tokensLookupIndexSize; i += 1) {
+      view.setPos(this.tokensLookupIndexStart + 4 * i);
+      const startOfBucket = view.getUint32();
+
+      // We do not have any filters for this token
+      if (startOfBucket !== Number.MAX_SAFE_INTEGER) {
+        view.setPos(startOfBucket);
+
+        const numberOfFilters = view.getByte();
+        for (let j = 0; j < numberOfFilters; j += 1) {
+          tokens.add(view.getUint32());
+          view.pos += 4; // skip index of corresponding filter
+        }
+      }
+    }
+
+    return new Uint32Array(tokens);
+  }
+
   public serialize(buffer: StaticDataView): void {
     buffer.pushUint32(this.tokensLookupIndexSize);
     buffer.pushUint32(this.tokensLookupIndexStart);
@@ -277,7 +300,7 @@ export default class ReverseIndex<T extends IFilter> {
     // 1. The first section contains all the filters stored in the index
     // 2. The second section contains the compact buckets where filter having
     // their indexing token sharing the last N bits are grouped together.
-    const buffer = new StaticDataView(4000000);
+    const buffer = new StaticDataView(6000000);
     buffer.pushUint32(filtersTokens.length);
 
     // For each filter, find the best token (least seen)

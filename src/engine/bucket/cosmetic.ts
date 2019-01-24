@@ -57,7 +57,7 @@ export default class CosmeticFilterBucket {
     // Store generic cosmetic filters in an array. It will be used whenever we
     // need to inject cosmetics in a page and filtered according to
     // domain-specific exceptions/unhide.
-    const buffer = new StaticDataView(4000000);
+    const buffer = new StaticDataView(1500000);
     buffer.pushUint32(genericRules.length);
     for (let i = 0; i < genericRules.length; i += 1) {
       genericRules[i].serialize(buffer);

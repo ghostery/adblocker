@@ -41,9 +41,10 @@ describe('Serialization', () => {
   });
 
   describe('Engine', () => {
+    const buffer = new Uint8Array(15000000);
     it('fails with wrong version', () => {
       const engine = new Engine();
-      const serialized = engine.serialize();
+      const serialized = engine.serialize(buffer);
       const version = serialized[0];
       serialized[0] = 1; // override version
       expect(() => {
@@ -53,30 +54,28 @@ describe('Serialization', () => {
       expect(Engine.deserialize(serialized)).toEqual(engine);
     });
 
-    it('fails if subscriptions enabled but fetch not specified', () => {
-      const fetch = (_: string) => Promise.resolve('');
-      const engine = new Engine();
-      engine.enableSubscriptions({ fetch, allowedListsUrl: 'https://lists' });
-      const serialized = engine.serialize();
-      expect(() => {
-        Engine.deserialize(serialized);
-      }).toThrow(
-        'Could not serialize Engine with subscriptions enabled without specifying an implementation for fetch',
-      );
-      expect(Engine.deserialize(serialized, { fetch })).toEqual(engine);
-    });
-
     it('handles full engine', () => {
-      const fetch = (_: string) => Promise.resolve('');
       const engine = new Engine();
-      engine.enableSubscriptions({ fetch, allowedListsUrl: 'https://lists' });
       engine.updateResources(loadResources(), 'resources1');
       engine.update({
         cosmeticFilters,
         networkFilters,
       });
-      const serialized = engine.serialize();
-      expect(Engine.deserialize(serialized, { fetch })).toEqual(engine);
+
+      // Add one list
+      engine.updateList({
+        checksum: 'checksum',
+        list: `
+||foo.com
+domain.com##.selector
+/ads/$script
+###foo
+        `,
+        name: 'list',
+      });
+
+      const serialized = engine.serialize(buffer);
+      expect(Engine.deserialize(serialized)).toEqual(engine);
     });
   });
 });
