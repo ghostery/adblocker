@@ -14,6 +14,9 @@ function nextPow2(v: number): number {
   return v;
 }
 
+/**
+ * Counter implemented on top of Map.
+ */
 class Counter<K> {
   private counter: Map<K, number>;
 
@@ -34,10 +37,18 @@ class Counter<K> {
   }
 }
 
+/**
+ * Optimizer which returns the list of original filters.
+ */
 function noopOptimize<T>(filters: T[]): T[] {
   return filters;
 }
 
+/**
+ * Generate unique IDs for requests, which is used to avoid matching the same
+ * buckets multiple times on the same request (which can happen if a token
+ * appears more than once in a URL).
+ */
 let UID = 1;
 function getNextId() {
   const id = UID;
@@ -45,6 +56,9 @@ function getNextId() {
   return id;
 }
 
+/**
+ * List of filters being indexed using the same token in the index.
+ */
 class Bucket<T extends IFilter> {
   public readonly filters: T[];
   public lastRequestSeen: number;
@@ -56,35 +70,50 @@ class Bucket<T extends IFilter> {
 }
 
 /**
- * Accelerating data structure based on a reverse token index. The creation of
- * the index follows the following algorithm:
- *   1. Tokenize each filter
+ * The ReverseIndex is an accelerating data structure which allows finding a
+ * subset of the filters given a list of token seen in a URL. It is the core of
+ * the adblocker's matching capabilities.
+ *
+ * It has mainly two caracteristics:
+ * 1. It should be very compact and be able to load fast.
+ * 2. It should be very fast.
+ *
+ * Conceptually, the reverse index dispatches filters in "buckets" (an array of
+ * one or more filters). Filters living in the same bucket are guaranteed to
+ * share at least one of their token (appearing in the pattern). For example:
+ *
+ *   - Bucket 1 (ads):
+ *       - /ads.js
+ *       - /script/ads/tracking.js
+ *       - /ads/
+ *   - Bucket 2 (tracking)
+ *       - /tracking.js
+ *       - ||tracking.com/cdn
+ *
+ * We see that filters in "Bucket 1" are indexed using the token "ads" and
+ * "Bucket 2" using token "tracking".
+ *
+ * This property allows to quickly discard most of the filters when we match a
+ * URL. To achieve this, the URL is tokenized in the same way filters are
+ * tokenized and for each token, we check if there are some filters available.
+ * For example:
+ *
+ *  URL "https://tracking.com/" has the following tokens: "https", "tracking"
+ *  and "com". We immediatly see that we only check the two filters in the
+ *  "tracking" bucket since they are the only ones having a common token with
+ *  the URL.
+ *
+ * How do we pick the token for each filter?
+ * =========================================
+ *
+ * Each filter is only indexed *once*, which means that we need to pick one of
+ * the tokens appearing in the pattern. We choose the token such has each filter
+ * is indexed using the token which was the *least seen* globally. In other
+ * words, we pick the most discriminative token for each filter. This is done
+ * using the following algorithm:
+ *   1. Tokenize all the filters which will be stored in the index
  *   2. Compute a histogram of frequency of each token (globally)
  *   3. Select the best token for each filter (lowest frequency)
- *
- * By default, each filter is only indexed once, using its token having the
- * lowest global frequency. This is to minimize the size of buckets.
- *
- * The ReverseIndex can be extended in two ways to provide more advanced
- * features:
- *   1. It is possible to provide an `optimize` function, which takes as input
- *   a list of filters (typically the content of a bucket) and returns another
- *   list of filters (new content of the bucket), more compact/efficient. This
- *   allows to dynamically optimize the filters and make matching time and memory
- *   consumption lower. This optimization can be done ahead of time on all
- *   buckets, or dynamically when a bucket is 'hot' (hit several times).
- *
- *   Currently this is only available for network filters.
- *
- *   2. Insert a filter multiple times (with multiple keys). It is sometimes
- *   needed to insert the same filter at different keys. For this purpose
- *   `getTokens` should return a list of list of tokens, so that it can be
- *   inserted several times. If you want it to be inserted only once, then
- *   returning a list of only one list of tokens will do the trick.
- *
- *   For each set of tokens returned by the `getTokens` function, the filter
- *   will be inserted once. This is currently used only for hostname dispatch of
- *   cosmetic filters.
  */
 export default class ReverseIndex<T extends IFilter> {
   public static deserialize<T extends IFilter>(
@@ -110,10 +139,13 @@ export default class ReverseIndex<T extends IFilter> {
   private tokensLookupIndexSize: number;
   private view: StaticDataView;
 
-  private cache: Map<number, Bucket<T>>;
   private deserializeFilter: (view: StaticDataView) => T;
-
   private readonly optimize: (filters: T[]) => T[];
+
+  // In-memory cache used to keep track of buckets which have been loaded from
+  // the compact representation (i.e.: this.view). It is not strictly necessary
+  // but will speed-up retrival of popular filters.
+  private cache: Map<number, Bucket<T>>;
 
   constructor({
     deserialize,
@@ -124,34 +156,60 @@ export default class ReverseIndex<T extends IFilter> {
     filters?: T[];
     optimize?: (filters: T[]) => T[];
   }) {
-    // Expected number of filters in this index.
+    // Function used to load a filter (e.g.: CosmeticFilter or NetworkFilter)
+    // from its compact representation. Each filter exposes a `serialize` method
+    // which is used to store it in `this.view`. While matching we need to
+    // retrieve the instance of the filter to perform matching and use
+    // `this.deserializeFilter` to do so.
     this.deserializeFilter = deserialize;
 
-    // First index: keys are a suffix of `token` and values are indices pointing
-    // to the start of filters for buckets having this token. By checking the
-    // value of the next index
+    // Optional function which will be used to optimize a list of filters
+    // in-memory. Typically this is used while matching when a list of filters
+    // are loaded in memory and stored in `this.cache`. Before using the bucket,
+    // we can `this.optimize` on the list of filters to allow some optimizations
+    // to be performed (e.g.: fusion of similar filters, etc.). Have a look into
+    // `./src/engine/optimizer.ts` for examples of such optimizations.
+    this.optimize = optimize;
+
+    // Cache deserialized buckets in memory for faster retrieval. It is a
+    // mapping from token to `Bucket`.
+    this.cache = new Map();
+
+    // Compact representation of the reverse index (described at the top level
+    // comment of this class). It contains three distinct parts:
+    //
+    // 1. The list of all filters contained in this index, serialized
+    // contiguously (one after the other) in the typed array starting at index
+    // 0. This would look like: |f1|f2|f3|...|fn| Note that not all filters use
+    // the same amount of memory (or number of bytes) so the only way to
+    // navigate the compact representation at this point is to iterate through
+    // all of them from first to last. Which is why we need a small "index" to
+    // help us navigate this compact representation and leads us to the second
+    // section of `this.view`.
+    //
+    // 2. buckets index which conceptually can be understood as a way to group
+    // several buckets in the same neighborhood of the typed array. It could
+    // look something like: |bucket1|bucket2|bucket3|...| each bucket could
+    // contain multiple filters. In reality, for each section of this bucket
+    // index, we know how many filters there are and the filters for multiple
+    // buckets are interleaved. For example if the index starts with a section
+    // containing |bucket1|bucket2|bucket3| and these bucket have tokens `tok1`,
+    // `tok2` and `tok3` respectively, then the final representation in memory
+    // could be: |tok1|f1|tok2|f2|tok1|f3|tok3|f4|tok2|f5| (where `f1`, `f2`,
+    // etc. are indices to the serialized representation of each filter, in the
+    // same array, described in 1. above).
+    //
+    // 3. The last part is called "tokens lookup index" and allows to locate the
+    // bucket given a suffix of the indexing token. If the binary representation
+    // of the token for bucket1 is 101010 and prefix has size 3, then we would
+    // lookup the "tokens lookup index" using the last 3 bits "010" which would
+    // give us the offset in our typed array where we can start reading the
+    // filters of buckets having a token ending with the same 3 bits.
     this.view = new StaticDataView(0);
     this.tokensLookupIndexSize = 0;
     this.tokensLookupIndexStart = 0;
 
-    // This array contains all the filters instances, serialized. Each filter is
-    // prefixed by the token of its bucket:
-    //
-    // |tok1|filter1|tok2|filter2|tok2|filter2|...
-    //
-    // To navigate this compact representation, `tokensLookupIndex` is needed;
-    // it allows to jump to sections of this array corresponding to some
-    // specific tokens.
-    // this.filtersIndex = new Uint8Array(0);
-    // this.bucketsIndex = new Uint8Array(0);
-
-    // Contains a mapping from [token] to `Bucket` (contains a list of filters).
-    // This will be populated lazily as buckets are needed.
-    this.cache = new Map();
-
-    // Function used to optimize filters stored in buckets.
-    this.optimize = optimize;
-
+    // Optionaly initialize the index with given filters.
     if (filters.length !== 0) {
       this.update(filters);
     }
@@ -174,6 +232,9 @@ export default class ReverseIndex<T extends IFilter> {
     return filters;
   }
 
+  /**
+   * Return an array of all the tokens currently used as keys of the index.
+   */
   public getTokens(): Uint32Array {
     const tokens: Set<number> = new Set();
     const view = this.view;
@@ -197,6 +258,9 @@ export default class ReverseIndex<T extends IFilter> {
     return new Uint32Array(tokens);
   }
 
+  /**
+   * Dump this index to `buffer`.
+   */
   public serialize(buffer: StaticDataView): void {
     buffer.pushUint32(this.tokensLookupIndexSize);
     buffer.pushUint32(this.tokensLookupIndexStart);
@@ -207,11 +271,16 @@ export default class ReverseIndex<T extends IFilter> {
    * Iterate on all filters found in buckets associated with the given list of
    * tokens. The callback is called on each of them. Early termination can be
    * achieved if the callback returns `false`.
+   *
+   * This will not check if each filter returned would match a given request but
+   * is instead used as a list of potential candidates (much smaller than the
+   * total set of filters; typically between 5 and 10 filters will be checked).
    */
   public iterMatchingFilters(tokens: Uint32Array, cb: (f: T) => boolean): void {
     // Each request is assigned an ID so that we can keep track of the last
     // request seen by each bucket in the reverse index. This provides a cheap
-    // way to prevent filters from being inspected more than once per request.
+    // way to prevent filters from being inspected more than once per request
+    // (which could happen if the same token appears more than once in the URL).
     const requestId = getNextId();
 
     for (let i = 0; i < tokens.length; i += 1) {
@@ -220,18 +289,15 @@ export default class ReverseIndex<T extends IFilter> {
       }
     }
 
-    // Fallback to 0 bucket if nothing was found before.
+    // Fallback to 0 (i.e.: wildcard bucket) bucket if nothing was found before.
     this.iterBucket(0, requestId, cb);
   }
 
   /**
    * Re-create the internal data-structure of the reverse index *in-place*. It
-   * needs to be called using a generator function (which accepts a callback) to
-   * iterate over *all the filters* we want to store in the index. Knowing all
-   * the filters at construction time allows to find the optimal shape of the
-   * index and speed-up look-ups. Although this might increase the time of
-   * initialization, one needs to keep in mind that the index is created once,
-   * but used many times to look-up filters (potentially thousands of times).
+   * needs to be called with a list of new filters and optionally a list of ids
+   * (as returned by either NetworkFilter.getId() or CosmeticFilter.getId())
+   * which need to be removed from the index.
    */
   public update(newFilters: T[], removedFilters?: Set<number>): void {
     let totalNumberOfTokens = 0;
@@ -306,7 +372,6 @@ export default class ReverseIndex<T extends IFilter> {
     // For each filter, find the best token (least seen)
     for (let i = 0; i < filtersTokens.length; i += 1) {
       const { filter, multiTokens } = filtersTokens[i];
-      let wildCardInserted: boolean = false;
 
       // Serialize this filter and keep track of its index in the byte array
       const filterIndex = buffer.getPos();
@@ -331,16 +396,6 @@ export default class ReverseIndex<T extends IFilter> {
               break;
             }
           }
-        }
-
-        // Only allow each filter to be present one time in the wildcard. If
-        // this particular filter has already been indexed in the "wildcard
-        // bucket" then we just skip it.
-        if (bestToken === 0) {
-          if (wildCardInserted === true) {
-            continue;
-          }
-          wildCardInserted = true;
         }
 
         // `bestToken & mask` represents the N last bits of `bestToken`. We
@@ -430,8 +485,6 @@ export default class ReverseIndex<T extends IFilter> {
       const filters: T[] = [];
       for (let i = 0; i < filtersIndices.length; i += 1) {
         view.setPos(filtersIndices[i]);
-        // TODO - here we could be loading the same filters several times since
-        // some might be indexed multiple times. Check if this is an issue.
         filters.push(this.deserializeFilter(view));
       }
 
