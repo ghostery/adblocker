@@ -269,7 +269,7 @@ export class List {
     }
 
     // Detect list of IDs which have been removed
-    const removedNetworkFilters: number[] = [...this.cosmeticFilterIds].filter(
+    const removedNetworkFilters: number[] = [...this.networkFilterIds].filter(
       (id) => !newNetworkFilterIds.has(id),
     );
     const removedCosmeticFilters: number[] = [...this.cosmeticFilterIds].filter(

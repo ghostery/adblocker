@@ -4,6 +4,23 @@
 
 *not released yet*
 
+  * Implement lazy loading and compact internal representation [#87](https://github.com/cliqz-oss/adblocker/pull/87)
+    * [BREAKING] serialization module has been removed, instead, each class now
+      provides a `serialize` method as well as a static method `deserialize`.
+    * [BREAKING] FiltersEngine now exposes different methods for update:
+      `update` which expects a diff of filters, `updateList` and
+      `updateResources`. This API should be a cleared and allows using the
+      adblocker without managing filters lists.
+    * [BREAKING] ReverseIndex' API dropped the use of a callback to specify
+      filters and instead expects a list of filters.
+    * [BREAKING] parsing and matching filters can now be done using methods of
+      the filters classes directly instead of free functions. For example
+      NetworkFilter has a `parse` and `match` method (with the same expected
+      arguments).
+    * ReverseIndex is now implemented using a very compact
+      representation (stored in a typed array).
+    * `toString` method of filters should now be more accurate.
+    * Addition of numerous unit tests (coverage is now >90%)
   * Implement support for :style cosmetic filters [#86](https://github.com/cliqz-oss/adblocker/pull/86)
     * [BREAKING] `getCosmeticsFilters` will now return CSS as a single string
       (stylesheet) instead of a list of selectors. This simplifies the usage and

@@ -5,12 +5,11 @@ import networkFiltersOptimizer from '../optimizer';
 import ReverseIndex from '../reverse-index';
 
 /**
- * Accelerating data structure for network filters matching. Makes use of the
- * reverse index structure defined above.
+ * Accelerating data structure for network filters matching.
  */
 export default class NetworkFilterBucket {
   public static deserialize(buffer: StaticDataView): NetworkFilterBucket {
-    const enableOptimizations = Boolean(buffer.getUint8());
+    const enableOptimizations = buffer.getBool();
     const bucket = new NetworkFilterBucket({ enableOptimizations });
     bucket.index = ReverseIndex.deserialize(
       buffer,
@@ -43,7 +42,7 @@ export default class NetworkFilterBucket {
   }
 
   public serialize(buffer: StaticDataView): void {
-    buffer.pushUint8(Number(this.enableOptimizations));
+    buffer.pushBool(this.enableOptimizations);
     this.index.serialize(buffer);
   }
 
