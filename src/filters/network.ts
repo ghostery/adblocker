@@ -574,8 +574,8 @@ export default class NetworkFilter implements IFilter {
       // Optional parts
       bug: (optionalParts & 1) === 1 ? buffer.getUint16() : undefined,
       csp: (optionalParts & 2) === 2 ? buffer.getASCII() : undefined,
-      filter: (optionalParts & 4) === 4 ? buffer.getASCII() : undefined,
-      hostname: (optionalParts & 8) === 8 ? buffer.getASCII() : undefined,
+      filter: (optionalParts & 4) === 4 ? buffer.getUTF8() : undefined,
+      hostname: (optionalParts & 8) === 8 ? buffer.getUTF8() : undefined,
       optDomains: (optionalParts & 16) === 16 ? buffer.getUint32Array() : undefined,
       optNotDomains: (optionalParts & 32) === 32 ? buffer.getUint32Array() : undefined,
       rawLine: (optionalParts & 64) === 64 ? buffer.getUTF8() : undefined,
@@ -692,12 +692,12 @@ export default class NetworkFilter implements IFilter {
 
     if (this.filter !== undefined) {
       optionalParts |= 4;
-      buffer.pushASCII(this.filter);
+      buffer.pushUTF8(this.filter);
     }
 
     if (this.hostname !== undefined) {
       optionalParts |= 8;
-      buffer.pushASCII(this.hostname);
+      buffer.pushUTF8(this.hostname);
     }
 
     if (this.optDomains) {

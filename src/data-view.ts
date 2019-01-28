@@ -1,5 +1,7 @@
 import * as punycode from 'punycode';
-import { hasUnicode } from './utils';
+import { clearBit, getBit, hasUnicode, setBit } from './utils';
+
+const PUNY_ENCODED = 1 << 15;
 
 /**
  * This abstraction allows to serialize efficiently low-level values of types:
@@ -146,26 +148,41 @@ export default class StaticDataView {
     return arr;
   }
 
-  public pushUTF8(str: string): void {
-    this.pushUint16(str.length);
-    if (hasUnicode(str)) {
-      this.pushASCII(punycode.encode(str));
+  public pushUTF8(raw: string): void {
+    let str = raw;
+    if (hasUnicode(raw)) {
+      str = punycode.encode(raw);
+      this.pushUint16(setBit(str.length, PUNY_ENCODED));
     } else {
-      this.pushASCII(str);
+      this.pushUint16(str.length);
+    }
+
+    for (let i = 0; i < str.length; i += 1) {
+      this.buffer[this.pos++] = str.charCodeAt(i);
     }
   }
 
   public getUTF8(): string {
-    const length = this.getUint16();
-    const str = this.getASCII();
-    if (str.length === length) {
-      return str;
+    const lengthAndMask = this.getUint16();
+    const byteLength = clearBit(lengthAndMask, PUNY_ENCODED);
+    const punyEncoded = getBit(lengthAndMask, PUNY_ENCODED);
+
+    this.pos += byteLength;
+    const str = String.fromCharCode.apply(
+      null,
+      // @ts-ignore
+      this.buffer.subarray(this.pos - byteLength, this.pos),
+    );
+
+    if (punyEncoded) {
+      return punycode.decode(str);
     }
-    return punycode.decode(str);
+    return str;
   }
 
   public pushASCII(str: string): void {
     this.pushUint16(str.length);
+
     for (let i = 0; i < str.length; i += 1) {
       this.buffer[this.pos++] = str.charCodeAt(i);
     }
