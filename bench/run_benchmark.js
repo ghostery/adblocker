@@ -286,7 +286,7 @@ function main() {
   const benchmarkResults = {
     ...runMemoryBench(lists, resources),
     ...runMicroBenchmarks(lists, resources),
-    // ...runMacroBenchmarks(lists, resources),
+    ...runMacroBenchmarks(lists, resources),
   };
   console.log(benchmarkResults);
 
