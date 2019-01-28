@@ -1,4 +1,4 @@
-import { NETWORK_FILTER_MASK, NetworkFilter } from '../parsing/network-filter';
+import NetworkFilter, { NETWORK_FILTER_MASK } from '../filters/network';
 import { setBit } from '../utils';
 
 function processRegex(r: RegExp): string {

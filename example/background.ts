@@ -7,13 +7,6 @@ import * as adblocker from '../index';
  * should be blocked or altered.
  */
 function loadAdblocker() {
-  const engine = new adblocker.FiltersEngine({
-    enableOptimizations: true,
-    loadCosmeticFilters: true,
-    loadNetworkFilters: true,
-    optimizeAOT: true,
-  });
-
   console.log('Fetching resources...');
   return Promise.all([adblocker.fetchLists(), adblocker.fetchResources()]).then(
     ([responses, resources]) => {
@@ -26,16 +19,28 @@ function loadAdblocker() {
         }
       }
 
-      engine.onUpdateResource([{ filters: resources, checksum: '' }]);
-      engine.onUpdateFilters([
-        {
-          asset: 'filters',
-          checksum: '',
-          filters: [...deduplicatedLines].join('\n'),
-        },
-      ]);
+      let t0 = Date.now();
+      const engine = adblocker.FiltersEngine.parse([...deduplicatedLines].join('\n'));
+      let total = Date.now() - t0;
+      console.log('parsing filters', total);
 
-      return adblocker.deserializeEngine(engine.serialize());
+      t0 = Date.now();
+      engine.updateResources(resources, '' + adblocker.fastHash(resources));
+      total = Date.now() - t0;
+      console.log('parsing resources', total);
+
+      t0 = Date.now();
+      const serialized = engine.serialize();
+      total = Date.now() - t0;
+      console.log('serialization', total);
+      console.log('size', serialized.byteLength);
+
+      t0 = Date.now();
+      const deserialized = adblocker.FiltersEngine.deserialize(serialized);
+      total = Date.now() - t0;
+      console.log('deserialization', total);
+
+      return deserialized;
     },
   );
 }

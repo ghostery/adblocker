@@ -1,43 +1,56 @@
-import matchNetworkFilter from '../../matching/network';
-import { NetworkFilter } from '../../parsing/network-filter';
+import StaticDataView from '../../data-view';
+import NetworkFilter from '../../filters/network';
 import Request from '../../request';
-
 import networkFiltersOptimizer from '../optimizer';
 import ReverseIndex from '../reverse-index';
 
 /**
- * Accelerating data structure for network filters matching. Makes use of the
- * reverse index structure defined above.
+ * Accelerating data structure for network filters matching.
  */
 export default class NetworkFilterBucket {
-  public readonly name: string;
-  public index: ReverseIndex<NetworkFilter>;
-  public size: number;
-  public enableOptimizations: boolean;
-
-  constructor(
-    name: string,
-    filters?: (cb: (f: NetworkFilter) => void) => void,
-    enableOptimizations = true,
-  ) {
-    this.name = name;
-    this.enableOptimizations = enableOptimizations;
-    this.index = new ReverseIndex<NetworkFilter>(
-      filters,
+  public static deserialize(buffer: StaticDataView): NetworkFilterBucket {
+    const enableOptimizations = buffer.getBool();
+    const bucket = new NetworkFilterBucket({ enableOptimizations });
+    bucket.index = ReverseIndex.deserialize(
+      buffer,
+      NetworkFilter.deserialize,
       enableOptimizations ? networkFiltersOptimizer : undefined,
     );
-    this.size = this.index.size;
+    return bucket;
   }
 
-  public optimizeAheadOfTime() {
-    this.index.optimizeAheadOfTime();
+  public index: ReverseIndex<NetworkFilter>;
+  public enableOptimizations: boolean;
+
+  constructor({
+    filters = [],
+    enableOptimizations = true,
+  }: {
+    filters?: NetworkFilter[];
+    enableOptimizations?: boolean;
+  } = {}) {
+    this.enableOptimizations = enableOptimizations;
+    this.index = new ReverseIndex<NetworkFilter>({
+      deserialize: NetworkFilter.deserialize,
+      filters,
+      optimize: enableOptimizations ? networkFiltersOptimizer : undefined,
+    });
+  }
+
+  public update(newFilters: NetworkFilter[], removedFilters?: Set<number>): void {
+    this.index.update(newFilters, removedFilters);
+  }
+
+  public serialize(buffer: StaticDataView): void {
+    buffer.pushBool(this.enableOptimizations);
+    this.index.serialize(buffer);
   }
 
   public matchAll(request: Request): NetworkFilter[] {
     const filters: NetworkFilter[] = [];
 
     this.index.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
-      if (matchNetworkFilter(filter, request)) {
+      if (filter.match(request)) {
         filters.push(filter);
       }
       return true;
@@ -50,7 +63,7 @@ export default class NetworkFilterBucket {
     let match: NetworkFilter | undefined;
 
     this.index.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
-      if (matchNetworkFilter(filter, request)) {
+      if (filter.match(request)) {
         match = filter;
         return false;
       }

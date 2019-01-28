@@ -2,17 +2,12 @@ const fs = require('fs');
 const adblocker = require('../dist/adblocker.cjs.js');
 
 function createEngine(lists, resources, options = {}, serialize = false) {
-  const engine = new adblocker.FiltersEngine({
-    ...options,
-    version: 1,
-  });
+  const engine = adblocker.FiltersEngine.parse(
+    lists.join('\n'),
+    options,
+  );
 
-  engine.onUpdateResource([{ filters: resources, checksum: '' }]);
-  engine.onUpdateFilters(lists.map((list, i) => ({
-    asset: `${i}`,
-    checksum: '',
-    filters: lists[i],
-  })), new Set());
+  engine.updateResources(resources, '');
 
   return {
     engine,

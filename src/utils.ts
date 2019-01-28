@@ -4,6 +4,13 @@ import { compactTokens } from './compact-set';
  *  Bitwise helpers
  * ************************************************************************* */
 
+// From: https://stackoverflow.com/a/43122214/1185079
+export function bitCount(n: number): number {
+  n = n - ((n >> 1) & 0x55555555);
+  n = (n & 0x33333333) + ((n >> 2) & 0x33333333);
+  return (((n + (n >> 4)) & 0xf0f0f0f) * 0x1010101) >> 24;
+}
+
 export function getBit(n: number, mask: number): boolean {
   return !!(n & mask);
 }
@@ -203,18 +210,9 @@ export function createFuzzySignature(pattern: string): Uint32Array {
   return compactTokens(new Uint32Array(fastTokenizer(pattern, isAllowedFilter)));
 }
 
-export function binSearch(arr: Uint32Array, elt: number): boolean {
-  // TODO - check most common case?
+export function binSearch(arr: Uint32Array, elt: number): number {
   if (arr.length === 0) {
-    return false;
-  }
-
-  if (arr.length === 1) {
-    return arr[0] === elt;
-  }
-
-  if (arr.length === 2) {
-    return arr[0] === elt || arr[1] === elt;
+    return -1;
   }
 
   let low = 0;
@@ -228,10 +226,15 @@ export function binSearch(arr: Uint32Array, elt: number): boolean {
     } else if (midVal > elt) {
       high = mid - 1;
     } else {
-      return true;
+      return mid;
     }
   }
-  return false;
+
+  return -1;
+}
+
+export function binLookup(arr: Uint32Array, elt: number): boolean {
+  return binSearch(arr, elt) !== -1;
 }
 
 export function updateResponseHeadersWithCSP(

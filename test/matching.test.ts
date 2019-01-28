@@ -1,10 +1,13 @@
 import { getDomain, getHostname } from 'tldts';
 
-import matchCosmeticFilter, { getHostnameWithoutPublicSuffix } from '../src/matching/cosmetics';
-import matchNetworkFilter, { isAnchoredByHostname } from '../src/matching/network';
+import CosmeticFilter, {
+  getHashesFromLabelsBackward,
+  getHostnameWithoutPublicSuffix,
+  hashHostnameBackward,
+} from '../src/filters/cosmetic';
+import NetworkFilter, { isAnchoredByHostname } from '../src/filters/network';
 
-import { f } from '../src/parsing/list';
-import { parseNetworkFilter } from '../src/parsing/network-filter';
+import { f } from '../src/lists';
 import { makeRequest } from '../src/request';
 
 import requests from './data/requests';
@@ -25,7 +28,7 @@ expect.extend({
       getDomain,
       getHostname,
     });
-    const match = matchNetworkFilter(filter, processedRequest);
+    const match = filter.match(processedRequest);
     if (match) {
       return {
         message: () =>
@@ -40,7 +43,7 @@ expect.extend({
     };
   },
   toMatchHostname(filter, hostname) {
-    const match = matchCosmeticFilter(filter, hostname, getDomain(hostname) || '');
+    const match = filter.match(hostname, getDomain(hostname) || '');
     if (match) {
       return {
         message: () => `expected ${filter.toString()} to not match ${hostname}`,
@@ -145,11 +148,11 @@ describe('#isAnchoredByHostname', () => {
   });
 });
 
-describe('#matchNetworkFilter', () => {
+describe('#NetworkFilter.match', () => {
   requests.forEach(({ filters, type, sourceUrl, url }) => {
     filters.forEach((filter) => {
       it(`${filter} matches ${type}, url=${url}, source=${sourceUrl}`, () => {
-        const networkFilter = parseNetworkFilter(filter);
+        const networkFilter = NetworkFilter.parse(filter);
         if (networkFilter !== null) {
           networkFilter.rawLine = filter;
         }
@@ -186,6 +189,12 @@ describe('#matchNetworkFilter', () => {
     expect(f`foo bar baz$fuzzy`).toMatchRequest({ url: 'http://bar.foo.baz' });
 
     expect(f`foo bar baz 42$fuzzy`).not.toMatchRequest({ url: 'http://bar.foo.baz' });
+
+    // Fast-path for when pattern is longer than the URL
+    expect(f`foo bar baz 42 43$fuzzy`).not.toMatchRequest({ url: 'http://bar.foo.baz' });
+
+    // No fuzzy signature, matches every URL?
+    expect(f`+$fuzzy`).toMatchRequest({ url: 'http://bar.foo.baz' });
   });
 
   it('||pattern', () => {
@@ -244,6 +253,18 @@ describe('#matchNetworkFilter', () => {
 
   it('|pattern|', () => {
     expect(f`|https://foo.com|`).toMatchRequest({ url: 'https://foo.com' });
+  });
+
+  it('||pattern + left-anchor', () => {
+    expect(f`||foo.com^test`).toMatchRequest({ url: 'https://foo.com/test' });
+    expect(f`||foo.com/test`).toMatchRequest({ url: 'https://foo.com/test' });
+    expect(f`||foo.com^test`).not.toMatchRequest({ url: 'https://foo.com/tes' });
+    expect(f`||foo.com/test`).not.toMatchRequest({ url: 'https://foo.com/tes' });
+
+    expect(f`||foo.com^`).toMatchRequest({ url: 'https://foo.com/test' });
+
+    expect(f`||foo.com/test*bar`).toMatchRequest({ url: 'https://foo.com/testbar' });
+    expect(f`||foo.com^test*bar`).toMatchRequest({ url: 'https://foo.com/testbar' });
   });
 
   it('||hostname^*/pattern', () => {
@@ -328,30 +349,103 @@ describe('#matchNetworkFilter', () => {
   });
 });
 
-describe('#matchCosmeticFilter', () => {
+describe('#CosmeticFilter.match', () => {
+  it('genercic filter', () => {
+    expect(f`##.selector`).toMatchHostname('foo.com');
+  });
+
   it('single domain', () => {
     expect(f`foo.com##.selector`).toMatchHostname('foo.com');
+    expect(f`foo.com##.selector`).not.toMatchHostname('bar.com');
   });
 
   it('multiple domains', () => {
     expect(f`foo.com,test.com##.selector`).toMatchHostname('foo.com');
     expect(f`foo.com,test.com##.selector`).toMatchHostname('test.com');
+    expect(f`foo.com,test.com##.selector`).not.toMatchHostname('baz.com');
   });
 
   it('subdomain', () => {
     expect(f`foo.com,test.com##.selector`).toMatchHostname('sub.test.com');
+    expect(f`foo.com,test.com##.selector`).toMatchHostname('sub.foo.com');
+
     expect(f`foo.com,sub.test.com##.selector`).toMatchHostname('sub.test.com');
+    expect(f`foo.com,sub.test.com##.selector`).not.toMatchHostname('test.com');
+    expect(f`foo.com,sub.test.com##.selector`).not.toMatchHostname('com');
   });
 
   it('entity', () => {
+    expect(f`foo.com,sub.test.*##.selector`).toMatchHostname('foo.com');
+    expect(f`foo.com,sub.test.*##.selector`).toMatchHostname('bar.foo.com');
     expect(f`foo.com,sub.test.*##.selector`).toMatchHostname('sub.test.com');
     expect(f`foo.com,sub.test.*##.selector`).toMatchHostname('sub.test.fr');
+    expect(f`foo.com,sub.test.*##.selector`).not.toMatchHostname('sub.test.evil.biz');
+
     expect(f`foo.*##.selector`).toMatchHostname('foo.co.uk');
+    expect(f`foo.*##.selector`).toMatchHostname('bar.foo.co.uk');
+    expect(f`foo.*##.selector`).toMatchHostname('baz.bar.foo.co.uk');
+    expect(f`foo.*##.selector`).not.toMatchHostname('foo.evil.biz');
   });
 
   it('does not match', () => {
     expect(f`foo.*##.selector`).not.toMatchHostname('foo.bar.com');
     expect(f`foo.*##.selector`).not.toMatchHostname('bar-foo.com');
+  });
+
+  describe('negations', () => {
+    it('entity', () => {
+      expect(f`~foo.*##.selector`).not.toMatchHostname('foo.com');
+      expect(f`~foo.*##.selector`).toMatchHostname('foo.evil.biz');
+
+      expect(f`~foo.*,~bar.*##.selector`).toMatchHostname('baz.com');
+      expect(f`~foo.*,~bar.*##.selector`).not.toMatchHostname('foo.com');
+      expect(f`~foo.*,~bar.*##.selector`).not.toMatchHostname('sub.foo.com');
+      expect(f`~foo.*,~bar.*##.selector`).not.toMatchHostname('bar.com');
+      expect(f`~foo.*,~bar.*##.selector`).not.toMatchHostname('sub.bar.com');
+    });
+
+    it('hostnames', () => {
+      expect(f`~foo.com##.selector`).not.toMatchHostname('foo.com');
+      expect(f`~foo.com##.selector`).not.toMatchHostname('bar.foo.com');
+      expect(f`~foo.com##.selector`).toMatchHostname('foo.com.bar');
+      expect(f`~foo.com##.selector`).toMatchHostname('foo.co.uk');
+      expect(f`~foo.com##.selector`).toMatchHostname('foo.co.uk');
+
+      expect(f`~foo.com,~foo.de,~bar.com##.selector`).not.toMatchHostname('foo.com');
+      expect(f`~foo.com,~foo.de,~bar.com##.selector`).not.toMatchHostname('sub.foo.com');
+      expect(f`~foo.com,~foo.de,~bar.com##.selector`).not.toMatchHostname('foo.de');
+      expect(f`~foo.com,~foo.de,~bar.com##.selector`).not.toMatchHostname('sub.foo.de');
+      expect(f`~foo.com,~foo.de,~bar.com##.selector`).not.toMatchHostname('bar.com');
+      expect(f`~foo.com,~foo.de,~bar.com##.selector`).not.toMatchHostname('sub.bar.com');
+
+      expect(f`~foo.com,~foo.de,~bar.com##.selector`).toMatchHostname('bar.de');
+      expect(f`~foo.com,~foo.de,~bar.com##.selector`).toMatchHostname('sub.bar.de');
+    });
+  });
+
+  describe('complex', () => {
+    it('handles entity with suffix exception', () => {
+      expect(f`foo.*,~foo.com##.selector`).not.toMatchHostname('foo.com');
+      expect(f`foo.*,~foo.com##.selector`).not.toMatchHostname('sub.foo.com');
+      expect(f`foo.*,~foo.com##.selector`).toMatchHostname('foo.de');
+      expect(f`foo.*,~foo.com##.selector`).toMatchHostname('sub.foo.de');
+    });
+
+    it('handles entity with subdomain exception', () => {
+      expect(f`foo.*,~sub.foo.*##.selector`).toMatchHostname('foo.com');
+      expect(f`foo.*,~sub.foo.*##.selector`).toMatchHostname('foo.de');
+      expect(f`foo.*,~sub.foo.*##.selector`).not.toMatchHostname('sub.foo.de');
+      expect(f`foo.*,~sub.foo.*##.selector`).not.toMatchHostname('sub.foo.com');
+      expect(f`foo.*,~sub.foo.*##.selector`).toMatchHostname('sub2.foo.com');
+    });
+  });
+
+  it('no domain provided', () => {
+    const parsed = CosmeticFilter.parse('foo.*##.selector');
+    expect(parsed).not.toBeNull();
+    if (parsed !== null) {
+      expect(parsed.match('foo.com', '')).toBeFalsy();
+    }
   });
 });
 
@@ -374,5 +468,31 @@ describe('#getHostnameWithoutPublicSuffix', () => {
 
   it('with subdomain', () => {
     expect(getHostnameWithoutPublicSuffix('foo.bar.com', 'bar.com')).toEqual('foo.bar');
+  });
+});
+
+describe('#getHashesFromLabelsBackward', () => {
+  it('hash all labels', () => {
+    expect(getHashesFromLabelsBackward('foo.bar.baz', 11, 11)).toEqual(
+      ['baz', 'bar.baz', 'foo.bar.baz'].map(hashHostnameBackward),
+    );
+  });
+
+  it('hash subdomains only', () => {
+    expect(getHashesFromLabelsBackward('foo.bar.baz.com', 15, 8 /* start of domain */)).toEqual(
+      ['baz.com', 'bar.baz.com', 'foo.bar.baz.com'].map(hashHostnameBackward),
+    );
+  });
+
+  it('hash ignoring suffix', () => {
+    expect(getHashesFromLabelsBackward('foo.bar.baz.com', 11, 11)).toEqual(
+      ['baz', 'bar.baz', 'foo.bar.baz'].map(hashHostnameBackward),
+    );
+  });
+
+  it('hash subdomains only, ignoring suffix', () => {
+    expect(getHashesFromLabelsBackward('foo.bar.baz.com', 11, 8)).toEqual(
+      ['baz', 'bar.baz', 'foo.bar.baz'].map(hashHostnameBackward),
+    );
   });
 });
