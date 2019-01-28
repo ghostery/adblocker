@@ -139,8 +139,8 @@ export default class FilterEngine {
 
     if (networkFilters.length !== 0 || cosmeticFilters.length !== 0) {
       this.update({
-        cosmeticFilters,
-        networkFilters,
+        newCosmeticFilters: cosmeticFilters,
+        newNetworkFilters: networkFilters,
       });
     }
   }
@@ -240,8 +240,8 @@ export default class FilterEngine {
    * Update engine with new filters as well as optionally removed filters.
    */
   public update({
-    networkFilters = [],
-    cosmeticFilters = [],
+    newNetworkFilters = [],
+    newCosmeticFilters = [],
     removedCosmeticFilters = [],
     removedNetworkFilters = [],
   }: Partial<IListDiff>): boolean {
@@ -254,11 +254,11 @@ export default class FilterEngine {
     // Update cosmetic filters
     if (
       this.loadCosmeticFilters &&
-      (cosmeticFilters.length !== 0 || removedCosmeticFilters.length !== 0)
+      (newCosmeticFilters.length !== 0 || removedCosmeticFilters.length !== 0)
     ) {
       updated = true;
       this.cosmetics.update(
-        cosmeticFilters,
+        newCosmeticFilters,
         removedCosmeticFilters.length === 0 ? undefined : new Set(removedCosmeticFilters),
       );
     }
@@ -266,7 +266,7 @@ export default class FilterEngine {
     // Update network filters
     if (
       this.loadNetworkFilters &&
-      (networkFilters.length !== 0 || removedNetworkFilters.length !== 0)
+      (newNetworkFilters.length !== 0 || removedNetworkFilters.length !== 0)
     ) {
       updated = true;
       const filters: NetworkFilter[] = [];
@@ -275,8 +275,8 @@ export default class FilterEngine {
       const importants: NetworkFilter[] = [];
       const redirects: NetworkFilter[] = [];
 
-      for (let i = 0; i < networkFilters.length; i += 1) {
-        const filter = networkFilters[i];
+      for (let i = 0; i < newNetworkFilters.length; i += 1) {
+        const filter = newNetworkFilters[i];
         if (filter.isCSP()) {
           csp.push(filter);
         } else if (filter.isException()) {

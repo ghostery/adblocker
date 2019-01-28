@@ -36,12 +36,6 @@ function test({
   it(`[engine] isolation=${testFiltersInIsolation} optimized=${engine.enableOptimizations} ${
     filter.rawLine
   }`, () => {
-    // Each each filter should be tested in isolation, this means that `engine`
-    // is currently empty and we will add only the filter we want to test.
-    // if (testFiltersInIsolation) {
-    //   engine.update({ networkFilters: [filter] });
-    // }
-
     // Set correct resources in `engine` (`resources` is expected to have been
     // created using the matching redirect filters for the current Request so
     // that all redirect matches will have a corresponding resource in

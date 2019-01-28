@@ -36,10 +36,6 @@ describe('Serialization', () => {
     });
   });
 
-  describe('Lists', () => {
-    // TODO
-  });
-
   describe('Engine', () => {
     const buffer = new Uint8Array(15000000);
     it('fails with wrong version', () => {
@@ -58,8 +54,8 @@ describe('Serialization', () => {
       const engine = new Engine();
       engine.updateResources(loadResources(), 'resources1');
       engine.update({
-        cosmeticFilters,
-        networkFilters,
+        newCosmeticFilters: cosmeticFilters,
+        newNetworkFilters: networkFilters,
       });
 
       // Add one list

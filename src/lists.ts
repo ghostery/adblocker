@@ -69,26 +69,6 @@ function detectFilterType(line: string): FilterType {
   return FilterType.NETWORK;
 }
 
-export function groupFiltersByType(
-  filters: Array<CosmeticFilter | NetworkFilter | null>,
-): { cosmeticFilters: CosmeticFilter[]; networkFilters: NetworkFilter[] } {
-  const networkFilters = [];
-  const cosmeticFilters = [];
-
-  for (let i = 0; i < filters.length; i += 1) {
-    const filter = filters[i];
-    if (filter !== null) {
-      if (filter.isCosmeticFilter()) {
-        cosmeticFilters.push(filter as CosmeticFilter);
-      } else {
-        networkFilters.push(filter as NetworkFilter);
-      }
-    }
-  }
-
-  return { networkFilters, cosmeticFilters };
-}
-
 export function f(strings: TemplateStringsArray): NetworkFilter | CosmeticFilter | null {
   const rawFilter = strings.raw[0];
   const filterType = detectFilterType(rawFilter);
@@ -148,33 +128,14 @@ export function parseFilters(
 }
 
 export interface IListDiff {
-  networkFilters: NetworkFilter[];
-  cosmeticFilters: CosmeticFilter[];
+  newNetworkFilters: NetworkFilter[];
+  newCosmeticFilters: CosmeticFilter[];
   removedCosmeticFilters: number[];
   removedNetworkFilters: number[];
 }
 
-export function serializeListDiff(_: IListDiff): Uint8Array {
-  const view = new StaticDataView(4000000);
-  // TODO
-  return view.crop();
-}
-
-export function deserializeListDiff(_: Uint8Array): IListDiff {
-  // const view = StaticDataView.fromUint8Array(buffer);
-  // TODO
-
-  return {
-    cosmeticFilters: [],
-    networkFilters: [],
-    removedCosmeticFilters: [],
-    removedNetworkFilters: [],
-  };
-}
-
 export class List {
   public static deserialize(buffer: StaticDataView): List {
-    const name: string = buffer.getASCII();
     const checksum: string = buffer.getASCII();
 
     const debug = buffer.getBool();
@@ -185,7 +146,6 @@ export class List {
       debug,
       loadCosmeticFilters,
       loadNetworkFilters,
-      name,
     });
 
     list.checksum = checksum;
@@ -196,7 +156,6 @@ export class List {
   }
 
   public checksum: string;
-  public readonly name: string;
   public readonly loadCosmeticFilters: boolean;
   public readonly loadNetworkFilters: boolean;
   public readonly debug: boolean;
@@ -205,7 +164,6 @@ export class List {
   public cosmeticFilterIds: Set<number>;
 
   constructor({
-    name,
     debug = false,
     loadCosmeticFilters = true,
     loadNetworkFilters = true,
@@ -213,10 +171,8 @@ export class List {
     debug?: boolean;
     loadCosmeticFilters?: boolean;
     loadNetworkFilters?: boolean;
-    name: string;
-  }) {
+  } = {}) {
     this.debug = debug;
-    this.name = name;
     this.checksum = '';
     this.loadCosmeticFilters = loadCosmeticFilters;
     this.loadNetworkFilters = loadNetworkFilters;
@@ -237,6 +193,15 @@ export class List {
   }
 
   public update(list: string, checksum: string): IListDiff {
+    if (checksum === this.checksum) {
+      return {
+        newCosmeticFilters: [],
+        newNetworkFilters: [],
+        removedCosmeticFilters: [],
+        removedNetworkFilters: [],
+      };
+    }
+
     this.checksum = checksum;
 
     const newCosmeticFilters: CosmeticFilter[] = [];
@@ -281,15 +246,14 @@ export class List {
     this.networkFilterIds = newNetworkFilterIds;
 
     return {
-      cosmeticFilters: newCosmeticFilters,
-      networkFilters: newNetworkFilters,
+      newCosmeticFilters,
+      newNetworkFilters,
       removedCosmeticFilters,
       removedNetworkFilters,
     };
   }
 
   public serialize(buffer: StaticDataView): void {
-    buffer.pushASCII(this.name);
     buffer.pushASCII(this.checksum);
 
     buffer.pushBool(this.debug);
@@ -321,8 +285,9 @@ export default class Lists {
 
     const numberOfLists = buffer.getUint16();
     for (let i = 0; i < numberOfLists; i += 1) {
+      const name = buffer.getASCII();
       const list = List.deserialize(buffer);
-      lists.lists.set(list.name, list);
+      lists.lists.set(name, list);
     }
 
     return lists;
@@ -337,7 +302,7 @@ export default class Lists {
     debug = false,
     loadCosmeticFilters = true,
     loadNetworkFilters = true,
-  }: IListsOptions) {
+  }: IListsOptions = {}) {
     this.lists = new Map();
     this.loadNetworkFilters = loadNetworkFilters;
     this.loadCosmeticFilters = loadCosmeticFilters;
@@ -350,7 +315,8 @@ export default class Lists {
     buffer.pushBool(this.loadNetworkFilters);
 
     buffer.pushUint16(this.lists.size);
-    this.lists.forEach((list) => {
+    this.lists.forEach((list, name) => {
+      buffer.pushASCII(name);
       list.serialize(buffer);
     });
   }
@@ -382,17 +348,17 @@ export default class Lists {
     }
 
     return {
-      cosmeticFilters: [],
-      networkFilters: [],
+      newCosmeticFilters: [],
+      newNetworkFilters: [],
       removedCosmeticFilters,
       removedNetworkFilters,
     };
   }
 
   public update(lists: Array<{ name: string; checksum: string; list: string }>): IListDiff {
-    const networkFilters: NetworkFilter[] = [];
+    const newNetworkFilters: NetworkFilter[] = [];
     const removedNetworkFilters: number[] = [];
-    const cosmeticFilters: CosmeticFilter[] = [];
+    const newCosmeticFilters: CosmeticFilter[] = [];
     const removedCosmeticFilters: number[] = [];
 
     for (let i = 0; i < lists.length; i += 1) {
@@ -403,25 +369,19 @@ export default class Lists {
           debug: this.debug,
           loadCosmeticFilters: this.loadCosmeticFilters,
           loadNetworkFilters: this.loadNetworkFilters,
-          name,
         });
       this.lists.set(name, currentList);
 
-      // Nothing to be done
-      if (currentList.checksum === checksum) {
-        continue;
-      }
-
       const diff = currentList.update(list, checksum);
-      networkFilters.push(...diff.networkFilters);
+      newNetworkFilters.push(...diff.newNetworkFilters);
       removedNetworkFilters.push(...diff.removedNetworkFilters);
-      cosmeticFilters.push(...diff.cosmeticFilters);
+      newCosmeticFilters.push(...diff.newCosmeticFilters);
       removedCosmeticFilters.push(...diff.removedCosmeticFilters);
     }
 
     return {
-      cosmeticFilters,
-      networkFilters,
+      newCosmeticFilters,
+      newNetworkFilters,
       removedCosmeticFilters,
       removedNetworkFilters,
     };
