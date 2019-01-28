@@ -4,6 +4,10 @@
 
 *not released yet*
 
+## 0.6.0
+
+*2019-01-28*
+
   * Implement lazy loading and compact internal representation [#87](https://github.com/cliqz-oss/adblocker/pull/87)
     * [BREAKING] serialization module has been removed, instead, each class now
       provides a `serialize` method as well as a static method `deserialize`.
