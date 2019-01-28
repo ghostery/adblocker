@@ -4,6 +4,12 @@
 
 *not released yet*
 
+## 0.6.1
+
+*2019-01-28*
+
+  * [regression] allow unicode characters in filters [#93](https://github.com/cliqz-oss/adblocker/pull/93)
+
 ## 0.6.0
 
 *2019-01-28*
