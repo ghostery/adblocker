@@ -13,10 +13,20 @@ describe('Serialization', () => {
   describe('filters', () => {
     const buffer = new StaticDataView(1000000);
     const checkFilterSerialization = (Filter: any, filter: IFilter) => {
+      // Keep track of original ID to make sure it's preserved after lazy
+      // attributes are set and filter is serialized/deserialized.
+      const originalId = filter.getId();
+
+      // Serialize filter
       buffer.seekZero();
       filter.serialize(buffer);
       buffer.seekZero();
-      expect(Filter.deserialize(buffer)).toEqual(filter);
+
+      // Reload filter
+      const deserialized = Filter.deserialize(buffer);
+      expect(deserialized.id).toBeUndefined();
+      expect(deserialized.getId()).toBe(originalId);
+      expect(deserialized).toEqual(filter);
     };
 
     it('cosmetic', () => {

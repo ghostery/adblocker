@@ -386,10 +386,14 @@ $csp=baz,domain=bar.com
     // - Engine with *no filter* optimizations *disabled*
     // - Engine with *all filters* optimizations *enabled*
     // - Engine with *all filters* optimizations *disabled*
-    // const engineEmptyOptimized = createEngine('', true);
-    // const engineEmpty = createEngine('', false);
-    const engineFullOptimized = createEngine(allRequestFilters, true);
-    const engineFull = createEngine(allRequestFilters, false);
+    const engineFullOptimized = Engine.parse(allRequestFilters, {
+      debug: true,
+      enableOptimizations: true,
+    });
+    const engineFull = Engine.parse(allRequestFilters, {
+      debug: true,
+      enableOptimizations: false,
+    });
 
     // For each request, make sure that we get the correct match in 4 different
     // setups:
@@ -524,8 +528,31 @@ $csp=baz,domain=bar.com
       ).toEqual('.selector ,.selector1  { foo }\n\n.selector  { bar }');
     });
 
-    // TODO - add more coverage here!
     [
+      // Negated entity on its own is ignored
+      {
+        hostname: 'google.com',
+        matches: ['##.adwords'],
+        misMatches: ['~google.*#@#.adwords'],
+      },
+      // Negated entity on its own is ignored
+      {
+        hostname: 'domain.com',
+        matches: ['##.adwords'],
+        misMatches: ['~google.*#@#.adwords'],
+      },
+      // Negated domain on its own is ignored
+      {
+        hostname: 'google.com',
+        matches: ['##.adwords'],
+        misMatches: ['~google.com#@#.adwords'],
+      },
+      // Negated domain on its own is ignored
+      {
+        hostname: 'google.de',
+        matches: ['##.adwords'],
+        misMatches: ['~google.com#@#.adwords'],
+      },
       // Exception cancels generic rule
       {
         hostname: 'google.com',

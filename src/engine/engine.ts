@@ -124,13 +124,13 @@ export default class FilterEngine {
     // $csp=
     this.csp = new NetworkFilterBucket({ enableOptimizations: false });
     // @@filter
-    this.exceptions = new NetworkFilterBucket();
+    this.exceptions = new NetworkFilterBucket({ enableOptimizations });
     // $important
-    this.importants = new NetworkFilterBucket();
+    this.importants = new NetworkFilterBucket({ enableOptimizations });
     // $redirect
-    this.redirects = new NetworkFilterBucket();
+    this.redirects = new NetworkFilterBucket({ enableOptimizations });
     // All other filters
-    this.filters = new NetworkFilterBucket();
+    this.filters = new NetworkFilterBucket({ enableOptimizations });
     // Cosmetic filters
     this.cosmetics = new CosmeticFilterBucket();
 

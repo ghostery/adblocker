@@ -195,6 +195,7 @@ describe('#NetworkFilter.match', () => {
 
     // No fuzzy signature, matches every URL?
     expect(f`+$fuzzy`).toMatchRequest({ url: 'http://bar.foo.baz' });
+    expect(f`$fuzzy`).toMatchRequest({ url: 'http://bar.foo.baz' });
   });
 
   it('||pattern', () => {
@@ -216,7 +217,11 @@ describe('#NetworkFilter.match', () => {
   });
 
   it('||pattern$fuzzy', () => {
-    expect(f`||bar.foo/baz$fuzzy`).toMatchRequest({ url: 'http://bar.foo/baz' });
+    const filter = f`||bar.foo/baz$fuzzy`;
+    expect(filter).toMatchRequest({ url: 'http://bar.foo/baz' });
+    // Same result when fuzzy signature is cached
+    expect(filter).toMatchRequest({ url: 'http://bar.foo/baz' });
+
     expect(f`||bar.foo/baz$fuzzy`).toMatchRequest({ url: 'http://bar.foo/id/baz' });
     expect(f`||bar.foo/baz$fuzzy`).toMatchRequest({ url: 'http://bar.foo?id=42&baz=1' });
     expect(f`||foo.com/id bar$fuzzy`).toMatchRequest({ url: 'http://foo.com?bar&id=42' });
@@ -350,6 +355,13 @@ describe('#NetworkFilter.match', () => {
 });
 
 describe('#CosmeticFilter.match', () => {
+  it('does not match with hostname constraint but none provided', () => {
+    expect(f`domain.com##.selector`).not.toMatchHostname('');
+    expect(f`domain.*##.selector`).not.toMatchHostname('');
+    expect(f`~domain.*##.selector`).not.toMatchHostname('');
+    expect(f`~domain.com##.selector`).not.toMatchHostname('');
+  });
+
   it('genercic filter', () => {
     expect(f`##.selector`).toMatchHostname('foo.com');
   });

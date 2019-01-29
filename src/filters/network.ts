@@ -265,11 +265,11 @@ export default class NetworkFilter implements IFilter {
             }
 
             if (optDomainsArray.length > 0) {
-              optDomains = new Uint32Array(optDomainsArray);
+              optDomains = new Uint32Array(optDomainsArray).sort();
             }
 
             if (optNotDomainsArray.length > 0) {
-              optNotDomains = new Uint32Array(optNotDomainsArray);
+              optNotDomains = new Uint32Array(optNotDomainsArray).sort();
             }
 
             break;
@@ -595,10 +595,10 @@ export default class NetworkFilter implements IFilter {
   // Set only in debug mode
   public rawLine?: string;
 
+  // Lazy attributes
   public id?: number;
   private fuzzySignature?: Uint32Array;
   private regex?: RegExp;
-  private optimized: boolean = false;
 
   constructor({
     bug,
@@ -908,7 +908,6 @@ export default class NetworkFilter implements IFilter {
   }
 
   public getOptNotDomains(): Uint32Array {
-    this.optimize();
     return this.optNotDomains || EMPTY_ARRAY;
   }
 
@@ -917,7 +916,6 @@ export default class NetworkFilter implements IFilter {
   }
 
   public getOptDomains(): Uint32Array {
-    this.optimize();
     return this.optDomains || EMPTY_ARRAY;
   }
 
@@ -950,13 +948,23 @@ export default class NetworkFilter implements IFilter {
   }
 
   public getRegex(): RegExp {
-    this.optimize();
-    return this.regex || MATCH_ALL;
+    if (this.regex === undefined) {
+      this.regex =
+        this.filter !== undefined && this.isRegex()
+          ? compileRegex(this.filter, this.isRightAnchor(), this.isLeftAnchor())
+          : MATCH_ALL;
+    }
+    return this.regex;
   }
 
   public getFuzzySignature(): Uint32Array {
-    this.optimize();
-    return this.fuzzySignature || EMPTY_ARRAY;
+    if (this.fuzzySignature === undefined) {
+      this.fuzzySignature =
+        this.filter !== undefined && this.isFuzzy()
+          ? createFuzzySignature(this.filter)
+          : EMPTY_ARRAY;
+    }
+    return this.fuzzySignature;
   }
 
   public getTokens(): Uint32Array[] {
@@ -1131,27 +1139,6 @@ export default class NetworkFilter implements IFilter {
 
   public fromFont() {
     return getBit(this.mask, NETWORK_FILTER_MASK.fromFont);
-  }
-
-  private optimize() {
-    if (this.optimized === false) {
-      this.optimized = true;
-      if (this.optNotDomains !== undefined) {
-        this.optNotDomains.sort();
-      }
-      if (this.optDomains !== undefined) {
-        this.optDomains.sort();
-      }
-      if (this.filter !== undefined && this.regex === undefined && this.isRegex()) {
-        this.regex = compileRegex(this.filter, this.isRightAnchor(), this.isLeftAnchor());
-      }
-      if (this.filter !== undefined && this.isFuzzy()) {
-        this.fuzzySignature = createFuzzySignature(this.filter);
-        if (this.fuzzySignature.length === 0) {
-          this.fuzzySignature = undefined;
-        }
-      }
-    }
   }
 }
 
