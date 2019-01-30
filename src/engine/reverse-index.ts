@@ -69,6 +69,8 @@ class Bucket<T extends IFilter> {
   }
 }
 
+const EMPTY_BUCKET = Number.MAX_SAFE_INTEGER >>> 0;
+
 /**
  * The ReverseIndex is an accelerating data structure which allows finding a
  * subset of the filters given a list of token seen in a URL. It is the core of
@@ -244,7 +246,7 @@ export default class ReverseIndex<T extends IFilter> {
       const startOfBucket = view.getUint32();
 
       // We do not have any filters for this token
-      if (startOfBucket !== Number.MAX_SAFE_INTEGER) {
+      if (startOfBucket !== EMPTY_BUCKET) {
         view.setPos(startOfBucket);
 
         const numberOfFilters = view.getByte();
@@ -409,11 +411,10 @@ export default class ReverseIndex<T extends IFilter> {
 
     // We finished dumping all the filters so now starts the buckets index section
     const tokensLookupIndex = new Uint32Array(tokensLookupIndexSize);
-    const emptyBucket = Number.MAX_SAFE_INTEGER;
     for (let i = 0; i < tokensLookupIndexSize; i += 1) {
       const filtersForMask = prefixes[i];
       if (filtersForMask.length === 0) {
-        tokensLookupIndex[mask] = emptyBucket;
+        tokensLookupIndex[mask] = EMPTY_BUCKET;
       } else {
         tokensLookupIndex[i] = buffer.getPos();
         buffer.pushByte(filtersForMask.length);
@@ -457,7 +458,7 @@ export default class ReverseIndex<T extends IFilter> {
       const startOfBucket = view.getUint32();
 
       // We do not have any filters for this token
-      if (startOfBucket === Number.MAX_SAFE_INTEGER) {
+      if (startOfBucket === EMPTY_BUCKET) {
         return true;
       }
 

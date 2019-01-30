@@ -4,7 +4,7 @@ import CosmeticFilter from '../src/filters/cosmetic';
 import IFilter from '../src/filters/interface';
 import NetworkFilter from '../src/filters/network';
 import { parseFilters } from '../src/lists';
-import { tokenize } from '../src/utils';
+import { fastHash, tokenize } from '../src/utils';
 import { loadAllLists } from './utils';
 
 describe('ReverseIndex', () => {
@@ -59,6 +59,10 @@ describe('ReverseIndex', () => {
     );
     filters = reverseIndex.getFilters();
     expect(filters.map((f) => f.rawLine)).toEqual(['||baz.com']);
+
+    // Update with no filters
+    reverseIndex.update([], new Set(reverseIndex.getFilters().map((f) => f.getId())));
+    expect(reverseIndex.getFilters()).toEqual([]);
   });
 
   describe('#iterMatchingFilters', () => {
@@ -90,15 +94,17 @@ describe('ReverseIndex', () => {
     });
 
     it('handle no match', () => {
-      let matches = 0;
-      const cb = (_: NetworkFilter) => {
-        matches += 1;
-        return true;
-      };
+      for (let i = 0; i < 100; i += 1) {
+        let matches = 0;
+        const cb = (_: NetworkFilter) => {
+          matches += 1;
+          return true;
+        };
 
-      // No tokens
-      exampleIndex.iterMatchingFilters(tokenize('bar co.uk de image redirect'), cb);
-      expect(matches).toBe(0);
+        // No tokens
+        exampleIndex.iterMatchingFilters(new Uint32Array([i]), cb);
+        expect(matches).toBe(0);
+      }
     });
 
     it('finds matches', () => {
@@ -159,6 +165,31 @@ wildcard
         index.iterMatchingFilters(tokenize(input as string), cb);
         expect(matches).toEqual(new Set(expected));
       });
+    });
+  });
+
+  describe('#getTokens', () => {
+    it('no token if empty', () => {
+      expect(
+        new ReverseIndex({
+          deserialize: NetworkFilter.deserialize,
+        }).getTokens(),
+      ).toEqual(new Uint32Array(0));
+    });
+
+    it('returns all indexing tokens', () => {
+      expect(
+        new ReverseIndex({
+          deserialize: NetworkFilter.deserialize,
+          filters: parseFilters(`
+/ads/
+/foo/
+-bar-
+          `).networkFilters,
+        })
+          .getTokens()
+          .sort(),
+      ).toEqual(new Uint32Array([fastHash('ads'), fastHash('foo'), fastHash('bar')]).sort());
     });
   });
 

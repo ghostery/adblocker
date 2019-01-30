@@ -1,6 +1,18 @@
+import { loadResources } from './utils';
+
+import StaticDataView from '../src/data-view';
 import Resources from '../src/resources';
 
 describe('#Resources', () => {
+  describe('#serialize', () => {
+    const resources = Resources.parse(loadResources(), { checksum: 'checksum' });
+    expect(resources.checksum).toEqual('checksum');
+    const buffer = new StaticDataView(2000000);
+    resources.serialize(buffer);
+    buffer.seekZero();
+    expect(Resources.deserialize(buffer)).toEqual(resources);
+  });
+
   describe('#parse', () => {
     it('parses empty resources', () => {
       const resources = Resources.parse('', { checksum: 'checksum' });

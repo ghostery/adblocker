@@ -86,8 +86,8 @@ const OPTIMIZATIONS: IOptimization[] = [
 
       return new NetworkFilter({
         ...filters[0],
-        optDomains: domains.size > 0 ? new Uint32Array(domains) : undefined,
-        optNotDomains: notDomains.size > 0 ? new Uint32Array(notDomains) : undefined,
+        optDomains: domains.size > 0 ? new Uint32Array(domains).sort() : undefined,
+        optNotDomains: notDomains.size > 0 ? new Uint32Array(notDomains).sort() : undefined,
         rawLine:
           filters[0].rawLine !== undefined
             ? filters.map(({ rawLine }) => rawLine).join(' <+> ')

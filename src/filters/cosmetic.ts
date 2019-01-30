@@ -275,6 +275,8 @@ export default class CosmeticFilter implements IFilter {
     }
 
     // We should not have unhide without any hostname
+    // NOTE: it does not make sense either to only have a negated domain or
+    // entity (e.g.: ~domain.com or ~entity.*), these are thus ignored.
     if (getBit(mask, COSMETICS_MASK.unhide) && hostnames === undefined && entities === undefined) {
       return null;
     }
@@ -615,6 +617,10 @@ export default class CosmeticFilter implements IFilter {
   public getTokens(): Uint32Array[] {
     const tokens: Uint32Array[] = [];
 
+    // Note, we do not need to use negated domains or entities as tokens here
+    // since they will by definition not match on their own, unless accompanied
+    // by a domain or entity.
+
     if (this.hostnames !== undefined) {
       for (let i = 0; i < this.hostnames.length; i += 1) {
         tokens.push(new Uint32Array([this.hostnames[i]]));
@@ -624,18 +630,6 @@ export default class CosmeticFilter implements IFilter {
     if (this.entities !== undefined) {
       for (let i = 0; i < this.entities.length; i += 1) {
         tokens.push(new Uint32Array([this.entities[i]]));
-      }
-    }
-
-    if (this.notEntities !== undefined) {
-      for (let i = 0; i < this.notEntities.length; i += 1) {
-        tokens.push(new Uint32Array([this.notEntities[i]]));
-      }
-    }
-
-    if (this.notHostnames !== undefined) {
-      for (let i = 0; i < this.notHostnames.length; i += 1) {
-        tokens.push(new Uint32Array([this.notHostnames[i]]));
       }
     }
 
@@ -683,10 +677,6 @@ export default class CosmeticFilter implements IFilter {
 
   public getSelector(): string {
     return this.selector;
-  }
-
-  public hasHostnames(): boolean {
-    return this.hostnames !== undefined;
   }
 
   public isUnhide(): boolean {

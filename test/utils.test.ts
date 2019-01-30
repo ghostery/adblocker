@@ -1,9 +1,13 @@
 import { parseFilters } from '../src/lists';
 import {
+  binLookup,
   binSearch,
+  createFuzzySignature,
   fastHash,
   hasUnicode,
   tokenize,
+  tokenizeFilter,
+  tokenizeHostnames,
   updateResponseHeadersWithCSP,
 } from '../src/utils';
 import requests from './data/requests';
@@ -57,6 +61,33 @@ describe('Utils', () => {
     it('does not produce collision on cosmetic filters', () => {
       checkCollisions(parseFilters(loadAllLists()).cosmeticFilters);
     });
+
+    it('returns 0 for empty string', () => {
+      expect(fastHash('')).toBe(0);
+    });
+  });
+
+  it('#tokenizeFilter', () => {
+    expect(tokenizeFilter('', false, false)).toEqual(t([]));
+    expect(tokenizeFilter('', true, false)).toEqual(t([]));
+    expect(tokenizeFilter('', false, true)).toEqual(t([]));
+    expect(tokenizeFilter('', true, true)).toEqual(t([]));
+
+    expect(tokenizeFilter('foo/bar baz', false, false)).toEqual(t(['foo', 'bar', 'baz']));
+    expect(tokenizeFilter('foo/bar baz', true, false)).toEqual(t(['bar', 'baz']));
+    expect(tokenizeFilter('foo/bar baz', true, true)).toEqual(t(['bar']));
+    expect(tokenizeFilter('foo/bar baz', false, true)).toEqual(t(['foo', 'bar']));
+    expect(tokenizeFilter('foo////bar  baz', false, true)).toEqual(t(['foo', 'bar']));
+  });
+
+  it('#tokenizeHostnames', () => {
+    expect(tokenizeHostnames('')).toEqual(t([]));
+    expect(tokenizeHostnames('foo')).toEqual(t(['foo']));
+    expect(tokenizeHostnames('foo/bar')).toEqual(t(['foo', 'bar']));
+    expect(tokenizeHostnames('foo-barbaz/bar')).toEqual(t(['foo-barbaz', 'bar']));
+    expect(tokenizeHostnames('foo_barbaz/ba%r')).toEqual(t(['foo_barbaz', 'ba%r']));
+    expect(tokenizeHostnames('foo_barbaz/ba%r*')).toEqual(t(['foo_barbaz', 'ba%r']));
+    expect(tokenizeHostnames('foo_barbaz///ba%r*')).toEqual(t(['foo_barbaz', 'ba%r']));
   });
 
   it('#tokenize', () => {
@@ -66,6 +97,18 @@ describe('Utils', () => {
     expect(tokenize('foo-bar')).toEqual(t(['foo', 'bar']));
     expect(tokenize('foo.bar')).toEqual(t(['foo', 'bar']));
     expect(tokenize('foo.barƬ')).toEqual(t(['foo', 'barƬ']));
+
+    // Tokens cannot be surrounded by *
+    expect(tokenize('foo.barƬ*')).toEqual(t(['foo']));
+    expect(tokenize('*foo.barƬ')).toEqual(t(['barƬ']));
+    expect(tokenize('*foo.barƬ*')).toEqual(t([]));
+  });
+
+  it('#createFuzzySignature', () => {
+    expect(createFuzzySignature('')).toEqual(t([]));
+    expect(createFuzzySignature('foo bar')).toEqual(t(['foo', 'bar']).sort());
+    expect(createFuzzySignature('bar foo')).toEqual(t(['foo', 'bar']).sort());
+    expect(createFuzzySignature('foo bar foo foo')).toEqual(t(['foo', 'bar']).sort());
   });
 
   it('#hasUnicode', () => {
@@ -84,6 +127,18 @@ describe('Utils', () => {
     expect(hasUnicode('┬─┬ノ( º _ ºノ)')).toBeTruthy();
     expect(hasUnicode('( ͡° ͜ʖ ͡°)')).toBeTruthy();
     expect(hasUnicode('¯_(ツ)_/¯')).toBeTruthy();
+  });
+
+  it('#binLookup', () => {
+    expect(binLookup(new Uint32Array(0), 42)).toBeFalsy();
+    expect(binLookup(new Uint32Array([]), 42)).toBeFalsy();
+    expect(binLookup(new Uint32Array([42]), 42)).toBeTruthy();
+    expect(binLookup(new Uint32Array([1, 2, 3, 4, 42]), 42)).toBeTruthy();
+    expect(binLookup(new Uint32Array([1, 2, 3, 4, 42]), 1)).toBeTruthy();
+    expect(binLookup(new Uint32Array([1, 2, 3, 4, 42]), 3)).toBeTruthy();
+    expect(binLookup(new Uint32Array([1, 2, 3, 4, 42]), 43)).toBeFalsy();
+    expect(binLookup(new Uint32Array([1, 2, 3, 4, 42]), 0)).toBeFalsy();
+    expect(binLookup(new Uint32Array([1, 2, 3, 4, 42]), 5)).toBeFalsy();
   });
 
   describe('#binSearch', () => {

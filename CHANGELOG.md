@@ -4,6 +4,16 @@
 
 *not released yet*
 
+## 0.6.2
+
+*2019-01-30*
+
+  * [bug] Make sure getId() always returns the same value for a given filter [#94](https://github.com/cliqz-oss/adblocker/pull/94)
+    * Previously the value of ID could change after some internal attribute
+      were changed during matching (in particular 'optDomains' and
+      'optNotDomains' would be sorted to allow more efficient matching which
+      would change the ID).
+
 ## 0.6.1
 
 *2019-01-28*
