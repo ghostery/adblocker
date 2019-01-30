@@ -33,9 +33,9 @@ function test({
   exceptions: string[];
   normalFilters: string[];
 }): void {
-  it(`[engine] isolation=${testFiltersInIsolation} optimized=${engine.enableOptimizations} ${
-    filter.rawLine
-  }`, () => {
+  // it(`[engine] isolation=${testFiltersInIsolation} optimized=${engine.enableOptimizations} ${
+  //   filter.rawLine
+  // }`, () => {
     // Set correct resources in `engine` (`resources` is expected to have been
     // created using the matching redirect filters for the current Request so
     // that all redirect matches will have a corresponding resource in
@@ -111,7 +111,7 @@ function test({
     }
 
     expect(matchingFilters).toContain(filter.rawLine);
-  });
+  // });
 }
 
 function buildResourcesFromRequests(filters: NetworkFilter[]): Resources {
@@ -454,7 +454,7 @@ $csp=baz,domain=bar.com
         tldts,
       );
 
-      describe(`[request] type=${type} url=${url}, sourceUrl=${sourceUrl}`, () => {
+      it(`[request] type=${type} url=${url}, sourceUrl=${sourceUrl}`, () => {
         // Check each filter individually
         for (let j = 0; j < parsedFilters.length; j += 1) {
           const filter = parsedFilters[j];

@@ -59,17 +59,13 @@ function getNextId() {
 /**
  * List of filters being indexed using the same token in the index.
  */
-class Bucket<T extends IFilter> {
-  public readonly filters: T[];
-  public lastRequestSeen: number;
-
-  constructor(filters: T[] = []) {
-    this.filters = filters;
-    this.lastRequestSeen = 0;
-  }
+interface Bucket<T extends IFilter> {
+  readonly filters: T[];
+  lastRequestSeen: number;
 }
 
 const EMPTY_BUCKET = Number.MAX_SAFE_INTEGER >>> 0;
+const EMPTY_UINT32_ARRAY = new Uint32Array(0);
 
 /**
  * The ReverseIndex is an accelerating data structure which allows finding a
@@ -78,11 +74,11 @@ const EMPTY_BUCKET = Number.MAX_SAFE_INTEGER >>> 0;
  *
  * It has mainly two caracteristics:
  * 1. It should be very compact and be able to load fast.
- * 2. It should be very fast.
+ * 2. It should be *very fast*.
  *
  * Conceptually, the reverse index dispatches filters in "buckets" (an array of
  * one or more filters). Filters living in the same bucket are guaranteed to
- * share at least one of their token (appearing in the pattern). For example:
+ * share at least one of their tokens (appearing in the pattern). For example:
  *
  *   - Bucket 1 (ads):
  *       - /ads.js
@@ -98,6 +94,7 @@ const EMPTY_BUCKET = Number.MAX_SAFE_INTEGER >>> 0;
  * This property allows to quickly discard most of the filters when we match a
  * URL. To achieve this, the URL is tokenized in the same way filters are
  * tokenized and for each token, we check if there are some filters available.
+ *
  * For example:
  *
  *  URL "https://tracking.com/" has the following tokens: "https", "tracking"
@@ -123,25 +120,54 @@ export default class ReverseIndex<T extends IFilter> {
     deserialize: (view: StaticDataView) => T,
     optimize: (filters: T[]) => T[] = noopOptimize,
   ): ReverseIndex<T> {
-    const reverseIndex = new ReverseIndex<T>({
+    const tokensLookupIndexSize = buffer.getUint32();
+    const tokensLookupIndexStart = buffer.getUint32();
+    const bucketsIndexSize = buffer.getUint32();
+
+    // Alignement to 4 bytes is important here since `view` (Uint8Array) can
+    // appear at any offset of `buffer`. But to be sure we can read back
+    // Uint32Array directly from raw buffer, the alignement has to be a multiple
+    // of 4. The same alignement is taken care of in `serialize`.
+    buffer.align(4);
+    const view = StaticDataView.fromUint8Array(buffer.getBytes());
+
+    // Read Uint32Array views on top of byte array for fast access.
+    view.setPos(tokensLookupIndexStart);
+    const tokensLookupIndex = view.getUint32ArrayView(tokensLookupIndexSize);
+    const bucketsIndex = view.getUint32ArrayView(bucketsIndexSize);
+    view.seekZero();
+
+    return new ReverseIndex<T>({
       deserialize,
       optimize,
+
+      // Packed internal representation
+      bucketsIndex,
+      tokensLookupIndex,
+      view,
     });
-
-    reverseIndex.tokensLookupIndexSize = buffer.getUint32();
-    reverseIndex.tokensLookupIndexStart = buffer.getUint32();
-
-    reverseIndex.view = StaticDataView.fromUint8Array(buffer.getBytes());
-
-    return reverseIndex;
   }
 
-  // Compact representation
-  private tokensLookupIndexStart: number;
-  private tokensLookupIndexSize: number;
+  // Attributes used as fast-access *views* on top of the typed array. They
+  // share the same internal buffer as `view`.
+  private bucketsIndex: Uint32Array;
+  private tokensLookupIndex: Uint32Array;
+
+  // Compact representation. All the data for this reverse index is stored in
+  // this Uint8Array. This is both very compact and allows to serialize and
+  // deserialize at the speed of light.
   private view: StaticDataView;
 
+  // Because this index can store different kinds of filters (e.g. NetworkFilter
+  // and CosmeticFilter) we need to specify a function used to load them back
+  // from their serialization form at matching time. This function takes a data
+  // view with `pos` at the righ offset (start of a filter) and returns an
+  // instance of the filter itself which will be used for matching.
   private deserializeFilter: (view: StaticDataView) => T;
+
+  // Optionally, filters in a given bucket can be "optimized" when loaded in
+  // memory from the view. Optimizations aim at making sub-sequent matching more
+  // efficient; for example by reducing the number of filters.
   private readonly optimize: (filters: T[]) => T[];
 
   // In-memory cache used to keep track of buckets which have been loaded from
@@ -153,10 +179,26 @@ export default class ReverseIndex<T extends IFilter> {
     deserialize,
     filters = [],
     optimize = noopOptimize,
+
+    // These arguments are only used while initializing the reverse index from
+    // its serialized representation. By default they are initialized such as
+    // the index is empty (no filter).
+    bucketsIndex,
+    tokensLookupIndex,
+    view,
   }: {
     deserialize: (view: StaticDataView) => T;
     filters?: T[];
     optimize?: (filters: T[]) => T[];
+
+    // This section contains arguments which are used while initializing a
+    // reverse index from its compact form (e.g.: after serialization)
+    bucketsIndex?: Uint32Array;
+    tokensLookupIndex?: Uint32Array;
+
+    bucketsIndexSize?: number;
+    tokensLookupIndexSize?: number;
+    view?: StaticDataView;
   }) {
     // Function used to load a filter (e.g.: CosmeticFilter or NetworkFilter)
     // from its compact representation. Each filter exposes a `serialize` method
@@ -207,11 +249,11 @@ export default class ReverseIndex<T extends IFilter> {
     // lookup the "tokens lookup index" using the last 3 bits "010" which would
     // give us the offset in our typed array where we can start reading the
     // filters of buckets having a token ending with the same 3 bits.
-    this.view = new StaticDataView(0);
-    this.tokensLookupIndexSize = 0;
-    this.tokensLookupIndexStart = 0;
-
     // Optionaly initialize the index with given filters.
+    this.bucketsIndex = bucketsIndex || EMPTY_UINT32_ARRAY;
+    this.tokensLookupIndex = tokensLookupIndex || EMPTY_UINT32_ARRAY;
+    this.view = view || StaticDataView.empty();
+
     if (filters.length !== 0) {
       this.update(filters);
     }
@@ -239,22 +281,9 @@ export default class ReverseIndex<T extends IFilter> {
    */
   public getTokens(): Uint32Array {
     const tokens: Set<number> = new Set();
-    const view = this.view;
 
-    for (let i = 0; i < this.tokensLookupIndexSize; i += 1) {
-      view.setPos(this.tokensLookupIndexStart + 4 * i);
-      const startOfBucket = view.getUint32();
-
-      // We do not have any filters for this token
-      if (startOfBucket !== EMPTY_BUCKET) {
-        view.setPos(startOfBucket);
-
-        const numberOfFilters = view.getByte();
-        for (let j = 0; j < numberOfFilters; j += 1) {
-          tokens.add(view.getUint32());
-          view.pos += 4; // skip index of corresponding filter
-        }
-      }
+    for (let i = 0; i < this.bucketsIndex.length; i += 2) {
+      tokens.add(this.bucketsIndex[i]);
     }
 
     return new Uint32Array(tokens);
@@ -264,8 +293,12 @@ export default class ReverseIndex<T extends IFilter> {
    * Dump this index to `buffer`.
    */
   public serialize(buffer: StaticDataView): void {
-    buffer.pushUint32(this.tokensLookupIndexSize);
-    buffer.pushUint32(this.tokensLookupIndexStart);
+    buffer.pushUint32(this.tokensLookupIndex.length);
+    buffer.pushUint32(this.tokensLookupIndex.byteOffset);
+    buffer.pushUint32(this.bucketsIndex.length);
+
+    // Aligmenent is crucial here, see comment in `deserialize` for more info.
+    buffer.align(4);
     buffer.pushBytes(this.view.buffer);
   }
 
@@ -333,9 +366,9 @@ export default class ReverseIndex<T extends IFilter> {
 
     // No filters given; reset to empty bucket
     if (filtersTokens.length === 0) {
-      this.view = new StaticDataView(0);
-      this.tokensLookupIndexSize = 0;
-      this.tokensLookupIndexStart = 0;
+      this.bucketsIndex = EMPTY_UINT32_ARRAY;
+      this.tokensLookupIndex = EMPTY_UINT32_ARRAY;
+      this.view = StaticDataView.empty();
       this.cache = new Map();
       return;
     }
@@ -356,7 +389,7 @@ export default class ReverseIndex<T extends IFilter> {
     const tokensLookupIndexSize = Math.max(2, nextPow2(totalNumberOfIndexedFilters));
     const mask = tokensLookupIndexSize - 1;
     const prefixes: Array<Array<{ token: number; index: number }>> = [];
-    for (let i = 0; i <= mask; i += 1) {
+    for (let i = 0; i < tokensLookupIndexSize; i += 1) {
       prefixes.push([]);
     }
 
@@ -368,8 +401,11 @@ export default class ReverseIndex<T extends IFilter> {
     // 1. The first section contains all the filters stored in the index
     // 2. The second section contains the compact buckets where filter having
     // their indexing token sharing the last N bits are grouped together.
-    const buffer = new StaticDataView(6000000);
+    const buffer = new StaticDataView(4000000);
     buffer.pushUint32(filtersTokens.length);
+
+    // Keep track of the final size of the buckets index
+    let bucketsIndexSize = 0;
 
     // For each filter, find the best token (least seen)
     for (let i = 0; i < filtersTokens.length; i += 1) {
@@ -402,6 +438,7 @@ export default class ReverseIndex<T extends IFilter> {
 
         // `bestToken & mask` represents the N last bits of `bestToken`. We
         // group all filters indexed with a token sharing the same N bits.
+        bucketsIndexSize += 2;
         prefixes[bestToken & mask].push({
           index: filterIndex,
           token: bestToken,
@@ -410,33 +447,26 @@ export default class ReverseIndex<T extends IFilter> {
     }
 
     // We finished dumping all the filters so now starts the buckets index section
-    const tokensLookupIndex = new Uint32Array(tokensLookupIndexSize);
+    const tokensLookupIndex = buffer.getUint32ArrayView(tokensLookupIndexSize);
+    const bucketsIndex = buffer.getUint32ArrayView(bucketsIndexSize);
+    let indexInBucketsIndex = 0;
     for (let i = 0; i < tokensLookupIndexSize; i += 1) {
       const filtersForMask = prefixes[i];
-      if (filtersForMask.length === 0) {
-        tokensLookupIndex[mask] = EMPTY_BUCKET;
-      } else {
-        tokensLookupIndex[i] = buffer.getPos();
-        buffer.pushByte(filtersForMask.length);
-        for (let j = 0; j < filtersForMask.length; j += 1) {
-          const { token, index } = filtersForMask[j];
-          buffer.pushUint32(token);
-          buffer.pushUint32(index);
-        }
+      tokensLookupIndex[i] = indexInBucketsIndex;
+      for (let j = 0; j < filtersForMask.length; j += 1) {
+        const { token, index } = filtersForMask[j];
+        bucketsIndex[indexInBucketsIndex++] = token;
+        bucketsIndex[indexInBucketsIndex++] = index;
       }
     }
 
-    // Write lookupIndex in buffer. It will be used to locate the corresponding
-    // bucket, in the same buffer.
-    const tokensLookupIndexStart = buffer.getPos();
-    for (let i = 0; i < tokensLookupIndexSize; i += 1) {
-      buffer.pushUint32(tokensLookupIndex[i]);
-    }
-
     this.cache = new Map();
-    this.tokensLookupIndexStart = tokensLookupIndexStart;
-    this.tokensLookupIndexSize = tokensLookupIndexSize;
     this.view = StaticDataView.fromUint8Array(buffer.slice());
+
+    // Also keep Uint32Array views sharing the same buffer as `this.view` (only
+    // needed for faster access while matching but does not need to be serialized).
+    this.bucketsIndex = bucketsIndex;
+    this.tokensLookupIndex = tokensLookupIndex;
   }
 
   /**
@@ -451,28 +481,29 @@ export default class ReverseIndex<T extends IFilter> {
     // compact bucket representation and find all filters being associated with
     // `token`. Create a `Bucket` out of them and store them in cache.
     if (bucket === undefined) {
-      const offset = token & (this.tokensLookupIndexSize - 1);
-
-      const view = this.view;
-      view.setPos(this.tokensLookupIndexStart + 4 * offset);
-      const startOfBucket = view.getUint32();
+      const offset = token & (this.tokensLookupIndex.length - 1);
+      const startOfBucket = this.tokensLookupIndex[offset];
 
       // We do not have any filters for this token
       if (startOfBucket === EMPTY_BUCKET) {
         return true;
       }
 
-      // Get indices of filters indexed with `token`, if any.
-      view.setPos(startOfBucket);
+      // Since we do not store explicitly the number of filters in each
+      // "bucket", we check the index of the next one and use it to infer the
+      // number of filters (each filter being stored as a 32bits token + 32bits
+      // index to the "filters store")
+      const endOfBucket =
+        offset === this.tokensLookupIndex.length - 1
+          ? this.bucketsIndex.length
+          : this.tokensLookupIndex[offset + 1];
 
-      const numberOfFilters = view.getByte();
+      // Get indices of filters indexed with `token`, if any.
       const filtersIndices: number[] = [];
-      for (let i = 0; i < numberOfFilters; i += 1) {
-        const currentToken = view.getUint32();
+      for (let i = startOfBucket; i < endOfBucket; i += 2) {
+        const currentToken = this.bucketsIndex[i];
         if (currentToken === token) {
-          filtersIndices.push(view.getUint32());
-        } else {
-          view.pos += 4; // skip one 32bits number
+          filtersIndices.push(this.bucketsIndex[i + 1]);
         }
       }
 
@@ -485,16 +516,22 @@ export default class ReverseIndex<T extends IFilter> {
       // create a `Bucket` instance to hold them for future access.
       const filters: T[] = [];
       for (let i = 0; i < filtersIndices.length; i += 1) {
-        view.setPos(filtersIndices[i]);
-        filters.push(this.deserializeFilter(view));
+        this.view.setPos(filtersIndices[i]);
+        filters.push(this.deserializeFilter(this.view));
       }
 
-      bucket = new Bucket(filters.length > 1 ? this.optimize(filters) : filters);
+      // Create new bucket with found filters (only optimize if we have more
+      // than one filter).
+      bucket = {
+        filters: filters.length > 1 ? this.optimize(filters) : filters,
+        lastRequestSeen: 0,
+      };
+
       this.cache.set(token, bucket);
     }
 
     // Look for matching filter in this bucket
-    if (bucket !== undefined && bucket.lastRequestSeen !== requestId) {
+    if (bucket.lastRequestSeen !== requestId) {
       bucket.lastRequestSeen = requestId;
       const filters = bucket.filters;
       for (let i = 0; i < filters.length; i += 1) {
