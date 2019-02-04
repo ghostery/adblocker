@@ -4,6 +4,15 @@
 
 *not released yet*
 
+## 0.6.4
+
+*2019-02-04*
+
+  * [perf] Speed-up matching by using raw Uint32Array instead of view [#96](https://github.com/cliqz-oss/adblocker/pull/96)
+    * Average time to process request is now 0.007 ms (instead of 0.028
+      after implementing lazy loading). This is now even faster than ever (our
+      previous speed was ~0.008 ms per request).
+
 ## 0.6.2
 
 *2019-01-30*
