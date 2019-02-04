@@ -4,6 +4,12 @@
 
 *not released yet*
 
+## 0.6.5
+
+*2019-02-04*
+
+  * [bug] Bump engine version to invalidate existing cache [#97](https://github.com/cliqz-oss/adblocker/pull/97)
+
 ## 0.6.4
 
 *2019-02-04*
