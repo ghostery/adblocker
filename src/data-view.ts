@@ -3,6 +3,10 @@ import { clearBit, getBit, hasUnicode, setBit } from './utils';
 
 const PUNY_ENCODED = 1 << 15;
 
+const EMPTY_UINT8_ARRAY = new Uint8Array(0);
+
+const LITTLE_ENDIAN: boolean = new Int8Array(new Int16Array([1]).buffer)[0] === 1;
+
 /**
  * This abstraction allows to serialize efficiently low-level values of types:
  * String, uint8, uint16, uint32 while hiding the complexity of managing the
@@ -17,6 +21,10 @@ const PUNY_ENCODED = 1 << 15;
  * deserializer you use `getX` functions to get back the values.
  */
 export default class StaticDataView {
+  public static empty(): StaticDataView {
+    return StaticDataView.fromUint8Array(EMPTY_UINT8_ARRAY);
+  }
+
   public static fromUint32Array(array: Uint32Array): StaticDataView {
     return new StaticDataView(0, new Uint8Array(array.buffer));
   }
@@ -29,6 +37,13 @@ export default class StaticDataView {
   public buffer: Uint8Array;
 
   constructor(length: number, buffer?: Uint8Array) {
+    if (LITTLE_ENDIAN === false) {
+      // This check makes sure that we will not load the adblocker on a
+      // big-endian system. This would not work since byte ordering is important
+      // at the moment (mainly for performance reasons).
+      throw new Error('Adblocker currently does not support Big-endian systems');
+    }
+
     this.buffer = buffer !== undefined ? buffer : new Uint8Array(length);
     this.pos = 0;
   }
@@ -56,6 +71,16 @@ export default class StaticDataView {
   public crop(): Uint8Array {
     this.checkSize();
     return this.buffer.subarray(0, this.pos);
+  }
+
+  /**
+   * Make sure that `this.pos` is aligned on a multiple of `alignement`.
+   */
+  public align(alignement: number): void {
+    this.pos =
+      this.pos % alignement === 0
+        ? this.pos
+        : Math.floor(this.pos / alignement) * alignement + alignement;
   }
 
   public set(buffer: Uint8Array): void {
@@ -94,6 +119,23 @@ export default class StaticDataView {
     const bytes = this.buffer.subarray(this.pos, this.pos + numberOfBytes);
     this.pos += numberOfBytes;
     return bytes;
+  }
+
+  /**
+   * Allows row access to the internal buffer through a Uint32Array acting like
+   * a view. This is used for super fast writing/reading of large chunks of
+   * Uint32 numbers in the byte array.
+   */
+  public getUint32ArrayView(desiredSize: number): Uint32Array {
+    // Round this.pos to next multiple of 4 for alignement
+    this.align(4);
+    const view = new Uint32Array(
+      this.buffer.buffer,
+      this.pos + this.buffer.byteOffset,
+      desiredSize,
+    );
+    this.pos += desiredSize * 4;
+    return view;
   }
 
   public pushUint8(uint8: number): void {
@@ -197,7 +239,7 @@ export default class StaticDataView {
   }
 
   private checkSize() {
-    if (this.pos >= this.buffer.byteLength) {
+    if (this.pos !== 0 && this.pos > this.buffer.byteLength) {
       throw new Error(
         `StaticDataView too small: ${this.buffer.byteLength}, but required ${this.pos - 1} bytes`,
       );
