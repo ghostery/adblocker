@@ -4,6 +4,12 @@
 
 *not released yet*
 
+## 0.6.6
+
+*2019-02-04*
+
+  * [bug] Restore original buffer size for reverse index creation [#98](https://github.com/cliqz-oss/adblocker/pull/98)
+
 ## 0.6.5
 
 *2019-02-04*

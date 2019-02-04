@@ -401,7 +401,7 @@ export default class ReverseIndex<T extends IFilter> {
     // 1. The first section contains all the filters stored in the index
     // 2. The second section contains the compact buckets where filter having
     // their indexing token sharing the last N bits are grouped together.
-    const buffer = new StaticDataView(4000000);
+    const buffer = new StaticDataView(6000000);
     buffer.pushUint32(filtersTokens.length);
 
     // Keep track of the final size of the buckets index
