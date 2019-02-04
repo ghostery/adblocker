@@ -46,7 +46,9 @@ export default class FilterEngine {
     // fresh and create a new engine from the lists.
     const serializedEngineVersion = buffer.getUint8();
     if (ENGINE_VERSION !== serializedEngineVersion) {
-      throw new Error('serialized engine version mismatch');
+      throw new Error(
+        `serialized engine version mismatch current is ${ENGINE_VERSION} but got ${serializedEngineVersion}`,
+      );
     }
 
     // Create a new engine with same options
