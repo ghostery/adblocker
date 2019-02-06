@@ -4,6 +4,12 @@
 
 *not released yet*
 
+## 0.6.7
+
+*2019-02-06*
+
+  * [bug] Invalidate serialized engines with ENGINE_VERSION bump [#99](https://github.com/cliqz-oss/adblocker/pull/99)
+
 ## 0.6.6
 
 *2019-02-04*

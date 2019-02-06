@@ -140,6 +140,7 @@ const {
 
 To publish a new version:
 
+0. Bump `ENGINE_VERSION` in `engine.ts` (to invalidate serialized versions)
 1. Create a new branch (e.g.: `release-x.y.z`)
 2. Update `version` in [package.json](./package.json)
 3. Update [CHANGELOG.md](./CHANGELOG.md)
