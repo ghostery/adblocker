@@ -72,7 +72,6 @@ MRUCache.prototype = {
   },
 };
 
-
 /** *************************************************************************** */
 
 const URI = (function () {
@@ -573,11 +572,10 @@ const URI = (function () {
   /** *************************************************************************** */
 }());
 
-
 /** *************************************************************************** */
 
 const cosmeticFilteringEngine = (function () {
-/** *************************************************************************** */
+  /** *************************************************************************** */
 
   const cosmeticSurveyingMissCountMax = 15;
 
@@ -619,21 +617,19 @@ const cosmeticFilteringEngine = (function () {
     // better-suited class.
     add(hostname, selector) {
       if (hostname === this.hostname) {
-        return new FilterOneMany(
-          this.hostname,
-          [this.selector, selector],
-        );
+        return new FilterOneMany(this.hostname, [this.selector, selector]);
       }
-      return new FilterManyAny([
-        [this.hostname, this.selector],
-        [hostname, selector],
-      ]);
+      return new FilterManyAny([[this.hostname, this.selector], [hostname, selector]]);
     },
 
     retrieve(target, out) {
-      if (target.endsWith(this.hostname) === false) { return; }
+      if (target.endsWith(this.hostname) === false) {
+        return;
+      }
       const i = target.length - this.hostname.length;
-      if (i !== 0 && target.charCodeAt(i - 1) !== 0x2E /* '.' */) { return; }
+      if (i !== 0 && target.charCodeAt(i - 1) !== 0x2e /* '.' */) {
+        return;
+      }
       out.add(this.selector);
     },
 
@@ -668,16 +664,17 @@ const cosmeticFilteringEngine = (function () {
         this.selectors.push(selector);
         return this;
       }
-      return new FilterManyAny([
-        [this.hostname, this.selectors],
-        [hostname, selector],
-      ]);
+      return new FilterManyAny([[this.hostname, this.selectors], [hostname, selector]]);
     },
 
     retrieve(target, out) {
-      if (target.endsWith(this.hostname) === false) { return; }
+      if (target.endsWith(this.hostname) === false) {
+        return;
+      }
       const i = target.length - this.hostname.length;
-      if (i !== 0 && target.charCodeAt(i - 1) !== 0x2E /* '.' */) { return; }
+      if (i !== 0 && target.charCodeAt(i - 1) !== 0x2e /* '.' */) {
+        return;
+      }
       for (const selector of this.selectors) {
         out.add(selector);
       }
@@ -719,9 +716,11 @@ const cosmeticFilteringEngine = (function () {
     retrieve(target, out) {
       for (const entry of this.entries) {
         const hostname = entry[0];
-        if (target.endsWith(hostname) === false) { continue; }
+        if (target.endsWith(hostname) === false) {
+          continue;
+        }
         const i = target.length - hostname.length;
-        if (i !== 0 && target.charCodeAt(i - 1) !== 0x2E /* '.' */) {
+        if (i !== 0 && target.charCodeAt(i - 1) !== 0x2e /* '.' */) {
           continue;
         }
         const selectors = entry[1];
@@ -791,7 +790,6 @@ const cosmeticFilteringEngine = (function () {
     addCosmetic(details) {
       const selectors = details.selectors;
 
-
       let i = selectors.length || 0;
       // https://github.com/gorhill/uBlock/issues/2011
       //   Avoiding seemingly pointless surveys only if they appear costly.
@@ -816,11 +814,13 @@ const cosmeticFilteringEngine = (function () {
       // Net request-derived selectors: I limit the number of cached selectors,
       // as I expect cases where the blocked net-requests are never the
       // exact same URL.
-      if (this.net.size < netSelectorCacheHighWaterMark) { return; }
+      if (this.net.size < netSelectorCacheHighWaterMark) {
+        return;
+      }
       const dict = this.net;
-      const keys = Array.from(dict.keys()).sort(
-        (a, b) => dict.get(b) - dict.get(a),
-      ).slice(netSelectorCacheLowWaterMark);
+      const keys = Array.from(dict.keys())
+        .sort((a, b) => dict.get(b) - dict.get(a))
+        .slice(netSelectorCacheLowWaterMark);
       let i = keys.length;
       while (i--) {
         dict.delete(keys[i]);
@@ -1014,11 +1014,11 @@ const cosmeticFilteringEngine = (function () {
     this.duplicateBuster = new Set();
 
     this.hasGenericHide = this.lowlyGeneric.id.simple.size !== 0
-        || this.lowlyGeneric.id.complex.size !== 0
-        || this.lowlyGeneric.cl.simple.size !== 0
-        || this.lowlyGeneric.cl.complex.size !== 0
-        || this.highlyGeneric.simple.dict.size !== 0
-        || this.highlyGeneric.complex.dict.size !== 0;
+      || this.lowlyGeneric.id.complex.size !== 0
+      || this.lowlyGeneric.cl.simple.size !== 0
+      || this.lowlyGeneric.cl.complex.size !== 0
+      || this.highlyGeneric.simple.dict.size !== 0
+      || this.highlyGeneric.complex.dict.size !== 0;
 
     this.highlyGeneric.simple.str = Array.from(this.highlyGeneric.simple.dict).join(',\n');
     this.highlyGeneric.simple.mru.reset();
@@ -1028,7 +1028,6 @@ const cosmeticFilteringEngine = (function () {
     this.frozen = true;
   };
 
-
   /** *************************************************************************** */
 
   // https://github.com/gorhill/uBlock/issues/1668
@@ -1037,16 +1036,19 @@ const cosmeticFilteringEngine = (function () {
 
   FilterContainer.prototype.keyFromSelector = function (selector) {
     let matches = this.rePlainSelector.exec(selector);
-    if (matches === null) { return; }
+    if (matches === null) {
+      return;
+    }
     let key = matches[0];
     if (key.indexOf('\\') === -1) {
       return key;
     }
     matches = this.rePlainSelectorEscaped.exec(selector);
-    if (matches === null) { return; }
+    if (matches === null) {
+      return;
+    }
     key = '';
     const escaped = matches[0];
-
 
     let beg = 0;
     this.reEscapeSequence.lastIndex = 0;
@@ -1108,10 +1110,7 @@ const cosmeticFilteringEngine = (function () {
 
   /** *************************************************************************** */
 
-  FilterContainer.prototype.compileGenericHideSelector = function (
-    parsed,
-    writer,
-  ) {
+  FilterContainer.prototype.compileGenericHideSelector = function (parsed, writer) {
     const selector = parsed.suffix;
     const type = selector.charCodeAt(0);
     let key;
@@ -1126,7 +1125,7 @@ const cosmeticFilteringEngine = (function () {
         writer.push([0, key.slice(1)]);
         return;
       }
-    } else if (type === 0x2E /* '.' */) {
+    } else if (type === 0x2e /* '.' */) {
       key = this.keyFromSelector(selector);
       // Simple selector-based CSS rule: no need to test for whether the
       // selector is valid, the regex took care of this. Most generic
@@ -1158,10 +1157,7 @@ const cosmeticFilteringEngine = (function () {
     // - ###tads + div + .c
     // - ##.rscontainer > .ellip
     if (key !== undefined) {
-      writer.push([
-        type === 0x23 /* '#' */ ? 1 : 3,
-        key.slice(1),
-        selector]);
+      writer.push([type === 0x23 /* '#' */ ? 1 : 3, key.slice(1), selector]);
       return;
     }
 
@@ -1171,11 +1167,7 @@ const cosmeticFilteringEngine = (function () {
     const matches = this.rePlainSelectorEx.exec(selector);
     if (matches !== null) {
       const key = matches[1] || matches[2];
-      writer.push([
-        key.charCodeAt(0) === 0x23 /* '#' */ ? 1 : 3,
-        key.slice(1),
-        selector,
-      ]);
+      writer.push([key.charCodeAt(0) === 0x23 /* '#' */ ? 1 : 3, key.slice(1), selector]);
       return;
     }
 
@@ -1198,10 +1190,7 @@ const cosmeticFilteringEngine = (function () {
 
   /** *************************************************************************** */
 
-  FilterContainer.prototype.compileGenericUnhideSelector = function (
-    parsed,
-    writer,
-  ) {
+  FilterContainer.prototype.compileGenericUnhideSelector = function (parsed, writer) {
     // Procedural cosmetic filters are acceptable as generic exception filters.
     const compiled = staticExtFilteringEngine.compileSelector(parsed.suffix);
     if (compiled === undefined) {
@@ -1222,11 +1211,7 @@ const cosmeticFilteringEngine = (function () {
 
   /** *************************************************************************** */
 
-  FilterContainer.prototype.compileSpecificSelector = function (
-    hostname,
-    parsed,
-    writer,
-  ) {
+  FilterContainer.prototype.compileSpecificSelector = function (hostname, parsed, writer) {
     // https://github.com/chrisaljoudi/uBlock/issues/145
     let unhide = parsed.exception ? 1 : 0;
     if (hostname.startsWith('~')) {
@@ -1253,7 +1238,7 @@ const cosmeticFilteringEngine = (function () {
     }
 
     // Procedural?
-    if (compiled.charCodeAt(0) === 0x7B) {
+    if (compiled.charCodeAt(0) === 0x7b) {
       hash |= 0b0010;
     }
 
@@ -1275,8 +1260,8 @@ const cosmeticFilteringEngine = (function () {
     // 1000 = cosmetic filtering
     reader.select(1000);
 
-    let db; let
-      bucket;
+    let db;
+    let bucket;
 
     while (reader.next()) {
       this.acceptedCount += 1;
@@ -1347,17 +1332,11 @@ const cosmeticFilteringEngine = (function () {
         case 8:
           bucket = this.specificFilters.get(args[1]);
           if (bucket === undefined) {
-            this.specificFilters.set(
-              args[1],
-              new FilterOneOne(args[2], args[3]),
-            );
+            this.specificFilters.set(args[1], new FilterOneOne(args[2], args[3]));
           } else if (bucket instanceof FilterManyAny) {
             bucket.add(args[2], args[3]);
-          } else /* can morph, so we need to replace entry in map */ {
-            this.specificFilters.set(
-              args[1],
-              bucket.add(args[2], args[3]),
-            );
+          } /* can morph, so we need to replace entry in map */ else {
+            this.specificFilters.set(args[1], bucket.add(args[2], args[3]));
           }
           break;
 
@@ -1398,17 +1377,11 @@ const cosmeticFilteringEngine = (function () {
           this.duplicateBuster.add(fingerprint);
           const bucket = this.specificFilters.get(args[1]);
           if (bucket === undefined) {
-            this.specificFilters.set(
-              args[1],
-              new FilterOneOne(args[2], args[3]),
-            );
+            this.specificFilters.set(args[1], new FilterOneOne(args[2], args[3]));
           } else if (bucket instanceof FilterManyAny) {
             bucket.add(args[2], args[3]);
-          } else /* can morph, so we need to replace entry in map */ {
-            this.specificFilters.set(
-              args[1],
-              bucket.add(args[2], args[3]),
-            );
+          } /* can morph, so we need to replace entry in map */ else {
+            this.specificFilters.set(args[1], bucket.add(args[2], args[3]));
           }
           break;
 
@@ -1495,9 +1468,13 @@ const cosmeticFilteringEngine = (function () {
 
   FilterContainer.prototype.addToSelectorCache = function (details) {
     const hostname = details.hostname;
-    if (typeof hostname !== 'string' || hostname === '') { return; }
+    if (typeof hostname !== 'string' || hostname === '') {
+      return;
+    }
     const selectors = details.selectors;
-    if (Array.isArray(selectors) === false) { return; }
+    if (Array.isArray(selectors) === false) {
+      return;
+    }
     let entry = this.selectorCache.get(hostname);
     if (entry === undefined) {
       entry = SelectorCacheEntry.factory();
@@ -1511,19 +1488,18 @@ const cosmeticFilteringEngine = (function () {
 
   /** *************************************************************************** */
 
-  FilterContainer.prototype.removeFromSelectorCache = function (
-    targetHostname,
-    type,
-  ) {
+  FilterContainer.prototype.removeFromSelectorCache = function (targetHostname, type) {
     const targetHostnameLength = targetHostname.length;
     for (const entry of this.selectorCache) {
       const hostname = entry[0];
       const item = entry[1];
       if (targetHostname !== '*') {
-        if (hostname.endsWith(targetHostname) === false) { continue; }
+        if (hostname.endsWith(targetHostname) === false) {
+          continue;
+        }
         if (
           hostname.length !== targetHostnameLength
-                && hostname.charAt(hostname.length - targetHostnameLength - 1) !== '.'
+          && hostname.charAt(hostname.length - targetHostnameLength - 1) !== '.'
         ) {
           continue;
         }
@@ -1534,11 +1510,7 @@ const cosmeticFilteringEngine = (function () {
 
   /** *************************************************************************** */
 
-  FilterContainer.prototype.retrieveFromSelectorCache = function (
-    hostname,
-    type,
-    out,
-  ) {
+  FilterContainer.prototype.retrieveFromSelectorCache = function (hostname, type, out) {
     const entry = this.selectorCache.get(hostname);
     if (entry !== undefined) {
       entry.retrieve(type, out);
@@ -1549,24 +1521,26 @@ const cosmeticFilteringEngine = (function () {
 
   FilterContainer.prototype.pruneSelectorCacheAsync = function () {
     this.selectorCacheTimer = null;
-    if (this.selectorCache.size <= this.selectorCacheCountMin) { return; }
+    if (this.selectorCache.size <= this.selectorCacheCountMin) {
+      return;
+    }
     const cache = this.selectorCache;
     // Sorted from most-recently-used to least-recently-used, because
     //   we loop beginning at the end below.
     // We can't avoid sorting because we have to keep a minimum number of
     //   entries, and these entries should always be the most-recently-used.
     const hostnames = Array.from(cache.keys())
-      .sort((a, b) => cache.get(b).lastAccessTime
-                       - cache.get(a).lastAccessTime)
+      .sort((a, b) => cache.get(b).lastAccessTime - cache.get(a).lastAccessTime)
       .slice(this.selectorCacheCountMin);
     const obsolete = Date.now() - this.selectorCacheAgeMax;
-
 
     let i = hostnames.length;
     while (i--) {
       const hostname = hostnames[i];
       const entry = cache.get(hostname);
-      if (entry.lastAccessTime > obsolete) { break; }
+      if (entry.lastAccessTime > obsolete) {
+        break;
+      }
       // console.debug('pruneSelectorCacheAsync: flushing "%s"', hostname);
       entry.dispose();
       cache.delete(hostname);
@@ -1579,34 +1553,42 @@ const cosmeticFilteringEngine = (function () {
   /** *************************************************************************** */
 
   FilterContainer.prototype.randomAlphaToken = function () {
-    return String.fromCharCode(Date.now() % 26 + 97)
-           + Math.floor(Math.random() * 982451653 + 982451653).toString(36);
+    return (
+      String.fromCharCode((Date.now() % 26) + 97)
+      + Math.floor(Math.random() * 982451653 + 982451653).toString(36)
+    );
   };
 
   /** *************************************************************************** */
 
   FilterContainer.prototype.retrieveGenericSelectors = function (request) {
-    if (this.acceptedCount === 0) { return; }
-    if (!request.ids && !request.classes) { return; }
+    if (this.acceptedCount === 0) {
+      return;
+    }
+    if (!request.ids && !request.classes) {
+      return;
+    }
 
     // console.time('cosmeticFilteringEngine.retrieveGenericSelectors');
 
     const simpleSelectors = this.setRegister0;
 
-
     const complexSelectors = this.setRegister1;
 
     const cacheEntry = this.selectorCache.get(request.hostname);
 
-
-    const previousHits = cacheEntry && cacheEntry.cosmetic || this.setRegister2;
+    const previousHits = (cacheEntry && cacheEntry.cosmetic) || this.setRegister2;
 
     for (const type in this.lowlyGeneric) {
       const entry = this.lowlyGeneric[type];
       const selectors = request[entry.canonical];
-      if (Array.isArray(selectors) === false) { continue; }
+      if (Array.isArray(selectors) === false) {
+        continue;
+      }
       for (let selector of selectors) {
-        if (entry.simple.has(selector) === false) { continue; }
+        if (entry.simple.has(selector) === false) {
+          continue;
+        }
         const bucket = entry.complex.get(selector);
         if (bucket !== undefined) {
           if (Array.isArray(bucket)) {
@@ -1660,11 +1642,7 @@ const cosmeticFilteringEngine = (function () {
 
     // If user stylesheets are supported in the current process, inject the
     // cosmetic filters now.
-    if (
-      supportsUserStylesheets
-        && request.tabId !== undefined
-        && request.frameId !== undefined
-    ) {
+    if (supportsUserStylesheets && request.tabId !== undefined && request.frameId !== undefined) {
       const injected = [];
       if (out.simple.length !== 0) {
         injected.push(out.simple.join(',\n'));
@@ -1694,14 +1672,10 @@ const cosmeticFilteringEngine = (function () {
 
   /** *************************************************************************** */
 
-  FilterContainer.prototype.retrieveSpecificSelectors = function (
-    request,
-    options,
-  ) {
+  FilterContainer.prototype.retrieveSpecificSelectors = function (request, options) {
     // console.time('cosmeticFilteringEngine.retrieveSpecificSelectors');
 
     const hostname = request.hostname;
-
 
     const cacheEntry = this.selectorCache.get(hostname);
 
@@ -1731,12 +1705,9 @@ const cosmeticFilteringEngine = (function () {
     if (options.noCosmeticFiltering !== true) {
       const entity = request.entity;
 
-
       const domainHash = staticExtFilteringEngine.makeHash(request.domain);
 
-
       const entityHash = staticExtFilteringEngine.makeHash(entity);
-
 
       let bucket;
 
@@ -1812,8 +1783,7 @@ const cosmeticFilteringEngine = (function () {
       if (cacheEntry !== undefined) {
         cacheEntry.retrieve('cosmetic', specificSet);
         if (out.noDOMSurveying === false) {
-          out.noDOMSurveying = cacheEntry.cosmeticSurveyingMissCount
-                                   > cosmeticSurveyingMissCountMax;
+          out.noDOMSurveying = cacheEntry.cosmeticSurveyingMissCount > cosmeticSurveyingMissCountMax;
         }
       }
 
@@ -1871,7 +1841,9 @@ const cosmeticFilteringEngine = (function () {
             let genericSet = entry.dict;
             let hit = false;
             for (const exception of exceptionSet) {
-              if ((hit = genericSet.has(exception))) { break; }
+              if ((hit = genericSet.has(exception))) {
+                break;
+              }
             }
             if (hit) {
               genericSet = new Set(entry.dict);
@@ -1902,11 +1874,7 @@ const cosmeticFilteringEngine = (function () {
     // https://github.com/gorhill/uBlock/issues/3160
     //   If user stylesheets are supported in the current process, inject the
     //   cosmetic filters now.
-    if (
-      supportsUserStylesheets
-        && request.tabId !== undefined
-        && request.frameId !== undefined
-    ) {
+    if (supportsUserStylesheets && request.tabId !== undefined && request.frameId !== undefined) {
       const injectedHideFilters = [];
       if (out.declarativeFilters.length !== 0) {
         injectedHideFilters.push(out.declarativeFilters.join(',\n'));
@@ -2019,7 +1987,9 @@ const staticExtFilteringEngine = (function () {
 
   const translateAdguardCSSInjectionFilter = function (suffix) {
     const matches = /^([^{]+)\{([^}]+)\}$/.exec(suffix);
-    if (matches === null) { return ''; }
+    if (matches === null) {
+      return '';
+    }
     const selector = matches[1].trim();
     const style = matches[2].trim();
     // For some reasons, many of Adguard's plain cosmetic filters are
@@ -2036,11 +2006,13 @@ const staticExtFilteringEngine = (function () {
     let beg = 0;
     while (beg < s.length) {
       let end = s.indexOf(',', beg);
-      if (end === -1) { end = s.length; }
+      if (end === -1) {
+        end = s.length;
+      }
       let hostname = s.slice(beg, end).trim();
       if (hostname.length !== 0) {
         if (hasUnicode) {
-          hostname = hostname.charCodeAt(0) === 0x7E /* '~' */
+          hostname = hostname.charCodeAt(0) === 0x7e /* '~' */
             ? `~${punycode.toASCII(hostname.slice(1))}`
             : punycode.toASCII(hostname);
         }
@@ -2052,37 +2024,36 @@ const staticExtFilteringEngine = (function () {
   };
 
   const compileProceduralSelector = (function () {
-    const reProceduralOperator = new RegExp([
-      '^(?:',
+    const reProceduralOperator = new RegExp(
       [
-        '-abp-contains',
-        '-abp-has',
-        'contains',
-        'has',
-        'has-text',
-        'if',
-        'if-not',
-        'matches-css',
-        'matches-css-after',
-        'matches-css-before',
-        'not',
-        'watch-attrs',
-        'xpath',
-      ].join('|'),
-      ')\\(',
-    ].join(''));
+        '^(?:',
+        [
+          '-abp-contains',
+          '-abp-has',
+          'contains',
+          'has',
+          'has-text',
+          'if',
+          'if-not',
+          'matches-css',
+          'matches-css-after',
+          'matches-css-before',
+          'not',
+          'watch-attrs',
+          'xpath',
+        ].join('|'),
+        ')\\(',
+      ].join(''),
+    );
 
     const reEscapeRegex = /[.*+?^${}()|[\]\\]/g;
 
-
     const reNeedScope = /^\s*[+>~]/;
-
 
     const reIsDanglingSelector = /(?:[+>~]\s*|\s+)$/;
 
     const regexToRawValue = new Map();
     let lastProceduralSelector = '';
-
 
     let lastProceduralSelectorCompiled;
 
@@ -2091,7 +2062,9 @@ const staticExtFilteringEngine = (function () {
       let regexDetails;
       if (match !== null) {
         regexDetails = match[1];
-        if (isBadRegex(regexDetails)) { return; }
+        if (isBadRegex(regexDetails)) {
+          return;
+        }
         if (match[2]) {
           regexDetails = [regexDetails, match[2]];
         }
@@ -2104,14 +2077,18 @@ const staticExtFilteringEngine = (function () {
 
     const compileCSSDeclaration = function (s) {
       const pos = s.indexOf(':');
-      if (pos === -1) { return; }
+      if (pos === -1) {
+        return;
+      }
       const name = s.slice(0, pos).trim();
       const value = s.slice(pos + 1).trim();
       const match = reParseRegexLiteral.exec(value);
       let regexDetails;
       if (match !== null) {
         regexDetails = match[1];
-        if (isBadRegex(regexDetails)) { return; }
+        if (isBadRegex(regexDetails)) {
+          return;
+        }
         if (match[2]) {
           regexDetails = [regexDetails, match[2]];
         }
@@ -2148,7 +2125,7 @@ const staticExtFilteringEngine = (function () {
     };
 
     const compileAttrList = function (s) {
-      const attrs = s.split('\s*,\s*');
+      const attrs = s.split('s*,s*');
       const out = [];
       for (const attr of attrs) {
         if (attr !== '') {
@@ -2247,30 +2224,33 @@ const staticExtFilteringEngine = (function () {
     };
 
     const compile = function (raw) {
-      if (raw === '') { return; }
+      if (raw === '') {
+        return;
+      }
       let prefix = '';
-
 
       let tasks = [];
       let i = 0;
 
-
       const n = raw.length;
-
 
       let opPrefixBeg = 0;
       for (;;) {
-        let c; let
-          match;
+        let c;
+        let match;
         // Advance to next operator.
         while (i < n) {
           c = raw.charCodeAt(i++);
-          if (c === 0x3A /* ':' */) {
+          if (c === 0x3a /* ':' */) {
             match = reProceduralOperator.exec(raw.slice(i));
-            if (match !== null) { break; }
+            if (match !== null) {
+              break;
+            }
           }
         }
-        if (i === n) { break; }
+        if (i === n) {
+          break;
+        }
         const opNameBeg = i - 1;
         const opNameEnd = i + match[0].length - 1;
         i += match[0].length;
@@ -2281,42 +2261,54 @@ const staticExtFilteringEngine = (function () {
         let pcnt = 1;
         while (i < n) {
           c = raw.charCodeAt(i++);
-          if (c === 0x5C /* '\\' */) {
-            if (i < n) { i += 1; }
+          if (c === 0x5c /* '\\' */) {
+            if (i < n) {
+              i += 1;
+            }
           } else if (c === 0x28 /* '(' */) {
             pcnt += 1;
           } else if (c === 0x29 /* ')' */) {
             pcnt -= 1;
-            if (pcnt === 0) { break; }
+            if (pcnt === 0) {
+              break;
+            }
           }
         }
         // Unbalanced parenthesis? An unbalanced parenthesis is fine
         // as long as the last character is a closing parenthesis.
-        if (pcnt !== 0 && c !== 0x29) { return; }
+        if (pcnt !== 0 && c !== 0x29) {
+          return;
+        }
         // https://github.com/uBlockOrigin/uBlock-issues/issues/341#issuecomment-447603588
         //   Maybe that one operator is a valid CSS selector and if so,
         //   then consider it to be part of the prefix. If there is
         //   at least one task present, then we fail, as we do not
         //   support suffix CSS selectors.
-        if (isValidCSSSelector(raw.slice(opNameBeg, i))) { continue; }
+        if (isValidCSSSelector(raw.slice(opNameBeg, i))) {
+          continue;
+        }
         // Extract and remember operator details.
         let operator = raw.slice(opNameBeg, opNameEnd);
         operator = normalizedOperators.get(operator) || operator;
         let args = raw.slice(opNameEnd + 1, i - 1);
         args = compileArgument.get(operator)(args);
-        if (args === undefined) { return; }
+        if (args === undefined) {
+          return;
+        }
         if (opPrefixBeg === 0) {
           prefix = raw.slice(0, opNameBeg);
         } else if (opNameBeg !== opPrefixBeg) {
-          const spath = compileSpathExpression(
-            raw.slice(opPrefixBeg, opNameBeg),
-          );
-          if (spath === undefined) { return; }
+          const spath = compileSpathExpression(raw.slice(opPrefixBeg, opNameBeg));
+          if (spath === undefined) {
+            return;
+          }
           tasks.push([':spath', spath]);
         }
         tasks.push([operator, args]);
         opPrefixBeg = i;
-        if (i === n) { break; }
+        if (i === n) {
+          break;
+        }
       }
       // No task found: then we have a CSS selector.
       // At least one task found: nothing should be left to parse.
@@ -2325,13 +2317,19 @@ const staticExtFilteringEngine = (function () {
         tasks = undefined;
       } else if (opPrefixBeg < n) {
         const spath = compileSpathExpression(raw.slice(opPrefixBeg));
-        if (spath === undefined) { return; }
+        if (spath === undefined) {
+          return;
+        }
         tasks.push([':spath', spath]);
       }
       // https://github.com/NanoAdblocker/NanoCore/issues/1#issuecomment-354394894
       if (prefix !== '') {
-        if (reIsDanglingSelector.test(prefix)) { prefix += '*'; }
-        if (isValidCSSSelector(prefix) === false) { return; }
+        if (reIsDanglingSelector.test(prefix)) {
+          prefix += '*';
+        }
+        if (isValidCSSSelector(prefix) === false) {
+          return;
+        }
       }
       return { selector: prefix, tasks };
     };
@@ -2365,14 +2363,18 @@ const staticExtFilteringEngine = (function () {
 
   const api = {
     get acceptedCount() {
-      return cosmeticFilteringEngine.acceptedCount
-                   + scriptletFilteringEngine.acceptedCount
-                   + htmlFilteringEngine.acceptedCount;
+      return (
+        cosmeticFilteringEngine.acceptedCount
+        + scriptletFilteringEngine.acceptedCount
+        + htmlFilteringEngine.acceptedCount
+      );
     },
     get discardedCount() {
-      return cosmeticFilteringEngine.discardedCount
-                   + scriptletFilteringEngine.discardedCount
-                   + htmlFilteringEngine.discardedCount;
+      return (
+        cosmeticFilteringEngine.discardedCount
+        + scriptletFilteringEngine.discardedCount
+        + htmlFilteringEngine.discardedCount
+      );
     },
   };
 
@@ -2408,7 +2410,9 @@ const staticExtFilteringEngine = (function () {
     },
     retrieve(hash, hostname, out) {
       let bucket = this.db.get(hash);
-      if (bucket === undefined) { return; }
+      if (bucket === undefined) {
+        return;
+      }
       if (Array.isArray(bucket) === false) {
         bucket = [bucket];
       }
@@ -2417,11 +2421,7 @@ const staticExtFilteringEngine = (function () {
           continue;
         }
         const i = hostname.length - entry.hostname.length;
-        if (
-          i === 0
-                    || i === hostname.length
-                    || hostname.charCodeAt(i - 1) === 0x2E /* '.' */
-        ) {
+        if (i === 0 || i === hostname.length || hostname.charCodeAt(i - 1) === 0x2e /* '.' */) {
           out.push(entry);
         }
       }
@@ -2443,7 +2443,9 @@ const staticExtFilteringEngine = (function () {
       let result;
       if (this.arrayIter !== undefined) {
         result = this.arrayIter.next();
-        if (result.done === false) { return result; }
+        if (result.done === false) {
+          return result;
+        }
         this.arrayIter = undefined;
       }
       result = this.mapIter.next();
@@ -2488,7 +2490,9 @@ const staticExtFilteringEngine = (function () {
     // http://www.isthe.com/chongo/tech/comp/fnv/index.html#FNV-reference-source
     // The rest is custom, suited for uBlock.
     const i1 = token.length;
-    if (i1 === 0) { return 0; }
+    if (i1 === 0) {
+      return 0;
+    }
     const i2 = i1 >> 1;
     const i4 = i1 >> 2;
     const i8 = i1 >> 3;
@@ -2516,7 +2520,7 @@ const staticExtFilteringEngine = (function () {
     hval ^= token.charCodeAt(i1 - 1);
     hval += (hval << 1) + (hval << 4) + (hval << 7) + (hval << 8) + (hval << 24);
     hval >>>= 0;
-    hval &= 0xFFF0;
+    hval &= 0xfff0;
     // Can't return 0, it's reserved for empty string.
     return hval !== 0 ? hval : 0xfff0;
   };
@@ -2572,8 +2576,8 @@ const staticExtFilteringEngine = (function () {
       // We  rarely reach this point -- majority of selectors are plain
       // CSS selectors.
 
-      let matches; let
-        operator;
+      let matches;
+      let operator;
 
       // Supported Adguard/ABP advanced selector syntax: will translate into
       // uBO's syntax before further processing.
@@ -2585,19 +2589,20 @@ const staticExtFilteringEngine = (function () {
       if (extendedSyntax) {
         while ((matches = reExtendedSyntaxParser.exec(raw)) !== null) {
           operator = normalizedExtendedSyntaxOperators.get(matches[1]);
-          if (operator === undefined) { return; }
-          raw = `${raw.slice(0, matches.index)
-                          + operator}(${matches[3]})${
-            raw.slice(matches.index + matches[0].length)}`;
+          if (operator === undefined) {
+            return;
+          }
+          raw = `${raw.slice(0, matches.index) + operator}(${matches[3]})${raw.slice(
+            matches.index + matches[0].length,
+          )}`;
         }
         return entryPoint(raw);
       }
 
       let selector = raw;
 
-
-      let pseudoclass; let
-        style;
+      let pseudoclass;
+      let style;
 
       // `:style` selector?
       if ((matches = reStyleSelector.exec(selector)) !== null) {
@@ -2620,7 +2625,9 @@ const staticExtFilteringEngine = (function () {
           selector += pseudoclass;
         }
         if (style !== undefined) {
-          if (isValidStyleProperty(style) === false) { return; }
+          if (isValidStyleProperty(style) === false) {
+            return;
+          }
           return JSON.stringify({
             raw,
             style: [selector, style],
@@ -2644,22 +2651,30 @@ const staticExtFilteringEngine = (function () {
 
   api.compile = function (raw, writer) {
     const lpos = raw.indexOf('#');
-    if (lpos === -1) { return false; }
+    if (lpos === -1) {
+      return false;
+    }
     let rpos = lpos + 1;
     if (raw.charCodeAt(rpos) !== 0x23 /* '#' */) {
       rpos = raw.indexOf('#', rpos + 1);
-      if (rpos === -1) { return false; }
+      if (rpos === -1) {
+        return false;
+      }
     }
 
     // Coarse-check that the anchor is valid.
     // `##`: l = 1
     // `#@#`, `#$#`, `#%#`, `#?#`: l = 2
     // `#@$#`, `#@%#`, `#@?#`: l = 3
-    if ((rpos - lpos) > 3) { return false; }
+    if (rpos - lpos > 3) {
+      return false;
+    }
 
     // Extract the selector.
     let suffix = raw.slice(rpos + 1).trim();
-    if (suffix.length === 0) { return false; }
+    if (suffix.length === 0) {
+      return false;
+    }
     parsed.suffix = suffix;
 
     // https://github.com/gorhill/uBlock/issues/952
@@ -2672,15 +2687,19 @@ const staticExtFilteringEngine = (function () {
     const cCode = raw.charCodeAt(rpos - 1);
     if (cCode !== 0x23 /* '#' */ && cCode !== 0x40 /* '@' */) {
       // Adguard's scriptlet injection: not supported.
-      if (cCode === 0x25 /* '%' */) { return true; }
+      if (cCode === 0x25 /* '%' */) {
+        return true;
+      }
       // Not a known extended filter.
-      if (cCode !== 0x24 /* '$' */ && cCode !== 0x3F /* '?' */) {
+      if (cCode !== 0x24 /* '$' */ && cCode !== 0x3f /* '?' */) {
         return false;
       }
       // Adguard's style injection: translate to uBO's format.
       if (cCode === 0x24 /* '$' */) {
         suffix = translateAdguardCSSInjectionFilter(suffix);
-        if (suffix === '') { return true; }
+        if (suffix === '') {
+          return true;
+        }
         parsed.suffix = suffix;
       }
     }
@@ -2707,7 +2726,7 @@ const staticExtFilteringEngine = (function () {
     const c0 = suffix.charCodeAt(0);
 
     // New shorter syntax for scriptlet injection engine.
-    if (c0 === 0x2B /* '+' */ && suffix.startsWith('+js')) {
+    if (c0 === 0x2b /* '+' */ && suffix.startsWith('+js')) {
       scriptletFilteringEngine.compile(parsed, writer);
       return true;
     }
@@ -2715,7 +2734,7 @@ const staticExtFilteringEngine = (function () {
     // HTML filtering engine.
     // TODO: evaluate converting Adguard's `$$` syntax into uBO's HTML
     //       filtering syntax.
-    if (c0 === 0x5E /* '^' */) {
+    if (c0 === 0x5e /* '^' */) {
       htmlFilteringEngine.compile(parsed, writer);
       return true;
     }
@@ -2763,7 +2782,9 @@ const getBytesInUse = function (callback) {
       bytesInUse += count;
     }
     countdown -= 1;
-    if (countdown > 0) { return; }
+    if (countdown > 0) {
+      return;
+    }
     // µBlock.storageUsed = bytesInUse;
     callback(bytesInUse);
   };
@@ -2773,10 +2794,7 @@ const getBytesInUse = function (callback) {
     countdown += 1;
     vAPI.storage.getBytesInUse(null, process);
   }
-  if (
-    this.cacheStorage !== vAPI.storage
-        && this.cacheStorage.getBytesInUse instanceof Function
-  ) {
+  if (this.cacheStorage !== vAPI.storage && this.cacheStorage.getBytesInUse instanceof Function) {
     countdown += 1;
     this.cacheStorage.getBytesInUse(null, process);
   }
@@ -2817,15 +2835,17 @@ const saveUserSettings = function () {
 
 const loadHiddenSettings = function () {
   vAPI.storage.get('hiddenSettings', (bin) => {
-    if (bin instanceof Object === false) { return; }
+    if (bin instanceof Object === false) {
+      return;
+    }
     const hs = bin.hiddenSettings;
     if (hs instanceof Object) {
       const hsDefault = this.hiddenSettingsDefault;
       for (const key in hsDefault) {
         if (
           hsDefault.hasOwnProperty(key)
-                    && hs.hasOwnProperty(key)
-                    && typeof hs[key] === typeof hsDefault[key]
+          && hs.hasOwnProperty(key)
+          && typeof hs[key] === typeof hsDefault[key]
         ) {
           this.hiddenSettings[key] = hs[key];
         }
@@ -2846,7 +2866,7 @@ const saveHiddenSettings = function (callback) {
   for (const prop in this.hiddenSettings) {
     if (
       this.hiddenSettings.hasOwnProperty(prop)
-            && this.hiddenSettings[prop] !== this.hiddenSettingsDefault[prop]
+      && this.hiddenSettings[prop] !== this.hiddenSettingsDefault[prop]
     ) {
       bin.hiddenSettings[prop] = this.hiddenSettings[prop];
     }
@@ -2860,18 +2880,22 @@ const saveHiddenSettings = function (callback) {
 const hiddenSettingsFromString = function (raw) {
   const out = Object.assign({}, this.hiddenSettingsDefault);
 
-
   const lineIter = new LineIterator(raw);
 
-
-  let line; let matches; let name; let
-    value;
+  let line;
+  let matches;
+  let name;
+  let value;
   while (lineIter.eot() === false) {
     line = lineIter.next();
     matches = /^\s*(\S+)\s+(.+)$/.exec(line);
-    if (matches === null || matches.length !== 3) { continue; }
+    if (matches === null || matches.length !== 3) {
+      continue;
+    }
     name = matches[1];
-    if (out.hasOwnProperty(name) === false) { continue; }
+    if (out.hasOwnProperty(name) === false) {
+      continue;
+    }
     value = matches[2];
     switch (typeof out[name]) {
       case 'boolean':
@@ -2899,7 +2923,6 @@ const hiddenSettingsFromString = function (raw) {
 
 const stringFromHiddenSettings = function () {
   const out = [];
-
 
   const keys = Object.keys(this.hiddenSettings).sort();
   for (const key of keys) {
@@ -2976,9 +2999,7 @@ const loadSelectedFilterLists = function (callback) {
     // Select default filter lists if first-time launch.
     if (!bin || Array.isArray(bin.selectedFilterLists) === false) {
       assets.metadata((availableLists) => {
-        saveSelectedFilterLists(
-          autoSelectRegionalFilterLists(availableLists),
-        );
+        saveSelectedFilterLists(autoSelectRegionalFilterLists(availableLists));
         callback();
       });
       return;
@@ -3020,12 +3041,11 @@ const saveSelectedFilterLists = function (newKeys, append, callback) {
 const applyFilterListSelection = function (details, callback) {
   let selectedListKeySet = new Set(this.selectedFilterLists);
 
-
   let externalLists = this.userSettings.externalLists;
 
-
-  let i; let n; let
-    assetKey;
+  let i;
+  let n;
+  let assetKey;
 
   // Filter lists to select
   if (Array.isArray(details.toSelect)) {
@@ -3041,14 +3061,9 @@ const applyFilterListSelection = function (details, callback) {
   // Imported filter lists to remove
   if (Array.isArray(details.toRemove)) {
     const removeURLFromHaystack = function (haystack, needle) {
-      return haystack.replace(
-        new RegExp(
-          `(^|\\n)${
-            escapeRegex(needle)
-          }(\\n|$)`, 'g',
-        ),
-        '\n',
-      ).trim();
+      return haystack
+        .replace(new RegExp(`(^|\\n)${escapeRegex(needle)}(\\n|$)`, 'g'), '\n')
+        .trim();
     };
     for (i = 0, n = details.toRemove.length; i < n; i++) {
       assetKey = details.toRemove[i];
@@ -3065,16 +3080,22 @@ const applyFilterListSelection = function (details, callback) {
     //   existing stock list.
     const assetKeyFromURL = function (url) {
       const needle = url.replace(/^https?:/, '');
-      const assets = availableFilterLists; let
-        asset;
+      const assets = availableFilterLists;
+      let asset;
       for (const assetKey in assets) {
         asset = assets[assetKey];
-        if (asset.content !== 'filters') { continue; }
-        if (typeof asset.contentURL === 'string') {
-          if (asset.contentURL.endsWith(needle)) { return assetKey; }
+        if (asset.content !== 'filters') {
           continue;
         }
-        if (Array.isArray(asset.contentURL) === false) { continue; }
+        if (typeof asset.contentURL === 'string') {
+          if (asset.contentURL.endsWith(needle)) {
+            return assetKey;
+          }
+          continue;
+        }
+        if (Array.isArray(asset.contentURL) === false) {
+          continue;
+        }
         for (i = 0, n = asset.contentURL.length; i < n; i++) {
           if (asset.contentURL[i].endsWith(needle)) {
             return assetKey;
@@ -3085,17 +3106,20 @@ const applyFilterListSelection = function (details, callback) {
     };
     const importedSet = new Set(this.listKeysFromCustomFilterLists(externalLists));
 
-
     const toImportSet = new Set(this.listKeysFromCustomFilterLists(details.toImport));
     for (const urlKey of toImportSet) {
-      if (importedSet.has(urlKey)) { continue; }
+      if (importedSet.has(urlKey)) {
+        continue;
+      }
       assetKey = assetKeyFromURL(urlKey);
       if (assetKey === urlKey) {
         importedSet.add(urlKey);
       }
       selectedListKeySet.add(assetKey);
     }
-    externalLists = Array.from(importedSet).sort().join('\n');
+    externalLists = Array.from(importedSet)
+      .sort()
+      .join('\n');
   }
 
   const result = Array.from(selectedListKeySet);
@@ -3114,15 +3138,11 @@ const applyFilterListSelection = function (details, callback) {
 const listKeysFromCustomFilterLists = function (raw) {
   const out = new Set();
 
-
   const reIgnore = /^[!#]/;
-
 
   const reValid = /^[a-z-]+:\/\/\S+/;
 
-
   const lineIter = new LineIterator(raw);
-
 
   let location;
   while (lineIter.eot() === false) {
@@ -3141,7 +3161,9 @@ const saveUserFilters = function (content, callback) {
   // https://github.com/gorhill/uBlock/issues/1022
   // Be sure to end with an empty line.
   content = content.trim();
-  if (content !== '') { content += '\n'; }
+  if (content !== '') {
+    content += '\n';
+  }
   this.assets.put(this.userFiltersPath, content, callback);
   this.removeCompiledFilterList(this.userFiltersPath);
 };
@@ -3154,39 +3176,35 @@ const loadUserFilters = function (callback) {
 
 const appendUserFilters = function (filters, options) {
   filters = filters.trim();
-  if (filters.length === 0) { return; }
+  if (filters.length === 0) {
+    return;
+  }
 
   // https://github.com/uBlockOrigin/uBlock-issues/issues/372
   //   Auto comment using user-defined template.
   let comment = '';
   if (
     options instanceof Object
-        && options.autoComment === true
-        && this.hiddenSettings.autoCommentFilterTemplate.indexOf('{{') !== -1
+    && options.autoComment === true
+    && this.hiddenSettings.autoCommentFilterTemplate.indexOf('{{') !== -1
   ) {
     const d = new Date();
-    comment = `! ${
-      this.hiddenSettings.autoCommentFilterTemplate
-        .replace('{{date}}', d.toLocaleDateString())
-        .replace('{{time}}', d.toLocaleTimeString())
-        .replace('{{origin}}', options.origin)}`;
+    comment = `! ${this.hiddenSettings.autoCommentFilterTemplate
+      .replace('{{date}}', d.toLocaleDateString())
+      .replace('{{time}}', d.toLocaleTimeString())
+      .replace('{{origin}}', options.origin)}`;
   }
 
   const onSaved = () => {
-    const compiledFilters = this.compileFilters(
-      filters,
-      { assetKey: this.userFiltersPath },
-    );
+    const compiledFilters = this.compileFilters(filters, { assetKey: this.userFiltersPath });
     const snfe = staticNetFilteringEngine;
     const cfe = cosmeticFilteringEngine;
     const acceptedCount = snfe.acceptedCount + cfe.acceptedCount;
     const discardedCount = snfe.discardedCount + cfe.discardedCount;
     this.applyCompiledFilters(compiledFilters, true);
     const entry = this.availableFilterLists[this.userFiltersPath];
-    const deltaEntryCount = snfe.acceptedCount
-            + cfe.acceptedCount - acceptedCount;
-    const deltaEntryUsedCount = deltaEntryCount
-            - (snfe.discardedCount + cfe.discardedCount - discardedCount);
+    const deltaEntryCount = snfe.acceptedCount + cfe.acceptedCount - acceptedCount;
+    const deltaEntryUsedCount = deltaEntryCount - (snfe.discardedCount + cfe.discardedCount - discardedCount);
     entry.entryCount += deltaEntryCount;
     entry.entryUsedCount += deltaEntryUsedCount;
     vAPI.storage.set({ availableFilterLists: this.availableFilterLists });
@@ -3197,15 +3215,14 @@ const appendUserFilters = function (filters, options) {
   };
 
   const onLoaded = (details) => {
-    if (details.error) { return; }
+    if (details.error) {
+      return;
+    }
     // The comment, if any, will be applied if and only if it is different
     // from the last comment found in the user filter list.
     if (comment !== '') {
       const pos = details.content.lastIndexOf(comment);
-      if (
-        pos === -1
-                || details.content.indexOf('\n!', pos + 1) !== -1
-      ) {
+      if (pos === -1 || details.content.indexOf('\n!', pos + 1) !== -1) {
         filters = `\n${comment}\n${filters}`;
       }
     }
@@ -3224,10 +3241,11 @@ const appendUserFilters = function (filters, options) {
 const autoSelectRegionalFilterLists = function (lists) {
   const selectedListKeys = [this.userFiltersPath];
 
-
   let list;
   for (const key in lists) {
-    if (lists.hasOwnProperty(key) === false) { continue; }
+    if (lists.hasOwnProperty(key) === false) {
+      continue;
+    }
     list = lists[key];
     if (list.off !== true) {
       selectedListKeys.push(key);
@@ -3246,7 +3264,6 @@ const autoSelectRegionalFilterLists = function (lists) {
 const getAvailableLists = function (callback) {
   let oldAvailableLists = {};
 
-
   const newAvailableLists = {};
 
   // User filter list.
@@ -3258,9 +3275,9 @@ const getAvailableLists = function (callback) {
   // Custom filter lists.
   const importedListKeys = this.listKeysFromCustomFilterLists(userSettings.externalLists);
 
-
-  let i = importedListKeys.length; let listKey; let
-    entry;
+  let i = importedListKeys.length;
+  let listKey;
+  let entry;
   while (i--) {
     listKey = importedListKeys[i];
     entry = {
@@ -3278,7 +3295,9 @@ const getAvailableLists = function (callback) {
   // Convert a no longer existing stock list into an imported list.
   const customListFromStockList = function (assetKey) {
     const oldEntry = oldAvailableLists[assetKey];
-    if (oldEntry === undefined || oldEntry.off === true) { return; }
+    if (oldEntry === undefined || oldEntry.off === true) {
+      return;
+    }
     let listURL = oldEntry.contentURL;
     if (Array.isArray(listURL)) {
       listURL = listURL[0];
@@ -3304,8 +3323,9 @@ const getAvailableLists = function (callback) {
   // - reuse existing list metadata if any;
   // - unregister unreferenced imported filter lists if any.
   const finalize = function () {
-    let assetKey; let newEntry; let
-      oldEntry;
+    let assetKey;
+    let newEntry;
+    let oldEntry;
 
     // Reuse existing metadata.
     for (assetKey in oldAvailableLists) {
@@ -3331,11 +3351,7 @@ const getAvailableLists = function (callback) {
       // https://github.com/chrisaljoudi/uBlock/issues/982
       // There is no guarantee the title was successfully extracted from
       // the list content.
-      if (
-        newEntry.title === ''
-                && typeof oldEntry.title === 'string'
-                && oldEntry.title !== ''
-      ) {
+      if (newEntry.title === '' && typeof oldEntry.title === 'string' && oldEntry.title !== '') {
         newEntry.title = oldEntry.title;
       }
     }
@@ -3344,8 +3360,12 @@ const getAvailableLists = function (callback) {
     const dict = new Set(importedListKeys);
     for (assetKey in newAvailableLists) {
       newEntry = newAvailableLists[assetKey];
-      if (newEntry.submitter !== 'user') { continue; }
-      if (dict.has(assetKey)) { continue; }
+      if (newEntry.submitter !== 'user') {
+        continue;
+      }
+      if (dict.has(assetKey)) {
+        continue;
+      }
       delete newAvailableLists[assetKey];
       assets.unregisterAssetSource(assetKey);
       removeFilterList(assetKey);
@@ -3355,9 +3375,13 @@ const getAvailableLists = function (callback) {
   // Built-in filter lists loaded.
   const onBuiltinListsLoaded = function (entries) {
     for (const assetKey in entries) {
-      if (entries.hasOwnProperty(assetKey) === false) { continue; }
+      if (entries.hasOwnProperty(assetKey) === false) {
+        continue;
+      }
       entry = entries[assetKey];
-      if (entry.content !== 'filters') { continue; }
+      if (entry.content !== 'filters') {
+        continue;
+      }
       newAvailableLists[assetKey] = Object.assign({}, entry);
     }
 
@@ -3375,7 +3399,7 @@ const getAvailableLists = function (callback) {
 
   // Available lists previously computed.
   const onOldAvailableListsLoaded = function (bin) {
-    oldAvailableLists = bin && bin.availableFilterLists || {};
+    oldAvailableLists = (bin && bin.availableFilterLists) || {};
     assets.metadata(onBuiltinListsLoaded);
   };
 
@@ -3391,7 +3415,9 @@ const loadingFilterLists = false;
 
 const loadFilterLists = function (callback) {
   // Callers are expected to check this first.
-  if (this.loadingFilterLists) { return; }
+  if (this.loadingFilterLists) {
+    return;
+  }
   this.loadingFilterLists = true;
 
   const loadedListKeys = [];
@@ -3428,15 +3454,12 @@ const loadFilterLists = function (callback) {
     const sxfe = staticExtFilteringEngine;
     const acceptedCount = snfe.acceptedCount + sxfe.acceptedCount;
 
-
     const discardedCount = snfe.discardedCount + sxfe.discardedCount;
     applyCompiledFilters(compiled, assetKey === userFiltersPath);
     if (availableFilterLists.hasOwnProperty(assetKey)) {
       const entry = availableFilterLists[assetKey];
-      entry.entryCount = snfe.acceptedCount + sxfe.acceptedCount
-                - acceptedCount;
-      entry.entryUsedCount = entry.entryCount
-                - (snfe.discardedCount + sxfe.discardedCount - discardedCount);
+      entry.entryCount = snfe.acceptedCount + sxfe.acceptedCount - acceptedCount;
+      entry.entryUsedCount = entry.entryCount - (snfe.discardedCount + sxfe.discardedCount - discardedCount);
     }
     loadedListKeys.push(assetKey);
   };
@@ -3464,8 +3487,12 @@ const loadFilterLists = function (callback) {
     // content.
     const toLoad = [];
     for (const assetKey in lists) {
-      if (lists.hasOwnProperty(assetKey) === false) { continue; }
-      if (lists[assetKey].off) { continue; }
+      if (lists.hasOwnProperty(assetKey) === false) {
+        continue;
+      }
+      if (lists[assetKey].off) {
+        continue;
+      }
       toLoad.push(assetKey);
     }
     filterlistsCount = toLoad.length;
@@ -3488,15 +3515,11 @@ const loadFilterLists = function (callback) {
 const getCompiledFilterList = function (assetKey, callback) {
   const compiledPath = `compiled/${assetKey}`;
 
-
   let rawContent;
 
   const onCompiledListLoaded2 = function (details) {
     if (details.content === '') {
-      details.content = compileFilters(
-        rawContent,
-        { assetKey },
-      );
+      details.content = compileFilters(rawContent, { assetKey });
       assets.put(compiledPath, details.content);
     }
     rawContent = undefined;
@@ -3537,7 +3560,9 @@ const getCompiledFilterList = function (assetKey, callback) {
 
 const extractFilterListMetadata = function (assetKey, raw) {
   const listEntry = this.availableFilterLists[assetKey];
-  if (listEntry === undefined) { return; }
+  if (listEntry === undefined) {
+    return;
+  }
   // Metadata expected to be found at the top of content.
   const head = raw.slice(0, 1024);
   // https://github.com/gorhill/uBlock/issues/313
@@ -3603,20 +3628,28 @@ const compileFilters = function (rawText, details) {
     // could be a lingering `\r` which would cause problems in the
     // following parsing code.
     let line = lineIter.next().trim();
-    if (line.length === 0) { continue; }
+    if (line.length === 0) {
+      continue;
+    }
 
     // Strip comments
     const c = line.charAt(0);
-    if (c === '!' || c === '[') { continue; }
+    if (c === '!' || c === '[') {
+      continue;
+    }
 
     // Parse or skip cosmetic filters
     // All cosmetic filters are caught here
-    if (staticExtFilteringEngine.compile(line, writer)) { continue; }
+    if (staticExtFilteringEngine.compile(line, writer)) {
+      continue;
+    }
 
     // Whatever else is next can be assumed to not be a cosmetic filter
 
     // Most comments start in first column
-    if (c === '#') { continue; }
+    if (c === '#') {
+      continue;
+    }
 
     // Catch comments somewhere on the line
     // Remove:
@@ -3637,11 +3670,15 @@ const compileFilters = function (rawText, details) {
       // Ignore hosts file redirect configuration
       // 127.0.0.1 localhost
       // 255.255.255.255 broadcasthost
-      if (reIsLocalhostRedirect.test(line)) { continue; }
+      if (reIsLocalhostRedirect.test(line)) {
+        continue;
+      }
       line = line.replace(reLocalIp, '').trim();
     }
 
-    if (line.length === 0) { continue; }
+    if (line.length === 0) {
+      continue;
+    }
 
     staticNetFilteringEngine.compile(line, writer);
   }
@@ -3656,7 +3693,9 @@ const compileFilters = function (rawText, details) {
 //   applying 1st-party filters.
 
 const applyCompiledFilters = function (rawText, firstparty) {
-  if (rawText === '') { return; }
+  if (rawText === '') {
+    return;
+  }
   const reader = new Reader(rawText);
   staticNetFilteringEngine.fromCompiledContent(reader);
   staticExtFilteringEngine.fromCompiledContent(reader, {
@@ -3672,25 +3711,28 @@ const applyCompiledFilters = function (rawText, firstparty) {
 const processDirectives = function (content) {
   const reIf = /^!#(if|endif)\b([^\n]*)/gm;
 
-
   const parts = [];
 
-
-  let beg = 0; let depth = 0; let
-    discard = false;
+  let beg = 0;
+  let depth = 0;
+  let discard = false;
   while (beg < content.length) {
     const match = reIf.exec(content);
-    if (match === null) { break; }
+    if (match === null) {
+      break;
+    }
     if (match[1] === 'if') {
       let expr = match[2].trim();
       const target = expr.startsWith('!');
-      if (target) { expr = expr.slice(1); }
+      if (target) {
+        expr = expr.slice(1);
+      }
       const token = this.processDirectives.tokens.get(expr);
       if (
         depth === 0
-                && discard === false
-                && token !== undefined
-                && vAPI.webextFlavor.soup.has(token) === target
+        && discard === false
+        && token !== undefined
+        && vAPI.webextFlavor.soup.has(token) === target
       ) {
         parts.push(content.slice(beg, match.index));
         discard = true;
@@ -3699,7 +3741,9 @@ const processDirectives = function (content) {
       continue;
     }
     depth -= 1;
-    if (depth < 0) { break; }
+    if (depth < 0) {
+      break;
+    }
     if (depth === 0 && discard) {
       beg = match.index + match[0].length + 1;
       discard = false;
@@ -3771,12 +3815,8 @@ const loadPublicSuffixList = function () {
       let selfie;
       try {
         selfie = JSON.parse(details.content);
-      } catch (ex) {
-      }
-      if (
-        selfie instanceof Object
-            && publicSuffixList.fromSelfie(selfie)
-      ) {
+      } catch (ex) {}
+      if (selfie instanceof Object && publicSuffixList.fromSelfie(selfie)) {
         resolve();
         return;
       }
@@ -3795,10 +3835,7 @@ const loadPublicSuffixList = function () {
 
 const compilePublicSuffixList = function (content) {
   publicSuffixList.parse(content, punycode.toASCII);
-  this.assets.put(
-    `compiled/${this.pslAssetKey}`,
-    JSON.stringify(publicSuffixList.toSelfie()),
-  );
+  this.assets.put(`compiled/${this.pslAssetKey}`, JSON.stringify(publicSuffixList.toSelfie()));
 };
 
 /** *************************************************************************** */
@@ -3830,21 +3867,14 @@ const selfieManager = (function () {
 
   const load = function (callback) {
     µb.cacheStorage.get('selfie', (bin) => {
-      if (
-        bin instanceof Object === false
-                || typeof bin.selfie !== 'string'
-      ) {
+      if (bin instanceof Object === false || typeof bin.selfie !== 'string') {
         return callback(false);
       }
       let selfie;
       try {
         selfie = JSON.parse(bin.selfie);
-      } catch (ex) {
-      }
-      if (
-        selfie instanceof Object === false
-                || selfie.magic !== µb.systemSettings.selfieMagic
-      ) {
+      } catch (ex) {}
+      if (selfie instanceof Object === false || selfie.magic !== µb.systemSettings.selfieMagic) {
         return callback(false);
       }
       availableFilterLists = selfie.availableFilterLists;
@@ -3984,12 +4014,16 @@ const listMatchesEnvironment = function (details) {
       re = new RegExp(`\\b${self.navigator.language.slice(0, 2)}\\b`);
       this.listMatchesEnvironment.reLang = re;
     }
-    if (re.test(details.lang)) { return true; }
+    if (re.test(details.lang)) {
+      return true;
+    }
   }
   // Matches user agent?
   if (typeof details.ua === 'string') {
     re = new RegExp(`\\b${this.escapeRegex(details.ua)}\\b`, 'i');
-    if (re.test(self.navigator.userAgent)) { return true; }
+    if (re.test(self.navigator.userAgent)) {
+      return true;
+    }
   }
   return false;
 };
@@ -4036,7 +4070,7 @@ const assetObserver = function (topic, details) {
     if (details.type === 'filters') {
       if (
         this.availableFilterLists.hasOwnProperty(details.assetKey) === false
-                || this.selectedFilterLists.indexOf(details.assetKey) === -1
+        || this.selectedFilterLists.indexOf(details.assetKey) === -1
       ) {
         return;
       }
@@ -4045,7 +4079,7 @@ const assetObserver = function (topic, details) {
     if (details.assetKey === 'ublock-resources') {
       if (
         this.hiddenSettings.ignoreRedirectFilters === true
-                && this.hiddenSettings.ignoreScriptInjectFilters === true
+        && this.hiddenSettings.ignoreScriptInjectFilters === true
       ) {
         return;
       }
@@ -4059,16 +4093,10 @@ const assetObserver = function (topic, details) {
     if (this.availableFilterLists.hasOwnProperty(details.assetKey)) {
       if (cached) {
         if (this.selectedFilterLists.indexOf(details.assetKey) !== -1) {
-          this.extractFilterListMetadata(
-            details.assetKey,
-            details.content,
-          );
+          this.extractFilterListMetadata(details.assetKey, details.content);
           this.assets.put(
             `compiled/${details.assetKey}`,
-            this.compileFilters(
-              details.content,
-              { assetKey: details.assetKey },
-            ),
+            this.compileFilters(details.content, { assetKey: details.assetKey }),
           );
         }
       } else {
@@ -4127,10 +4155,7 @@ const assetObserver = function (topic, details) {
   // auto-select it?
   if (topic === 'builtin-asset-source-added') {
     if (details.entry.content === 'filters') {
-      if (
-        details.entry.off !== true
-                || this.listMatchesEnvironment(details.entry)
-      ) {
+      if (details.entry.off !== true || this.listMatchesEnvironment(details.entry)) {
         this.saveSelectedFilterLists([details.assetKey], true);
       }
     }
@@ -4234,12 +4259,13 @@ const HNTRIE_TRIE0_SLOT = 256 >>> 2; //  64 / 256
 const HNTRIE_TRIE1_SLOT = HNTRIE_TRIE0_SLOT + 1; //  65 / 260
 const HNTRIE_CHAR0_SLOT = HNTRIE_TRIE0_SLOT + 2; //  66 / 264
 const HNTRIE_CHAR1_SLOT = HNTRIE_TRIE0_SLOT + 3; //  67 / 268
-const HNTRIE_TRIE0_START = HNTRIE_TRIE0_SLOT + 4 << 2; //       272
-
+const HNTRIE_TRIE0_START = (HNTRIE_TRIE0_SLOT + 4) << 2; //       272
 
 const HNTrieContainer = function (details) {
-  if (details instanceof Object === false) { details = {}; }
-  const len = (details.byteLength || 0) + HNTRIE_PAGE_SIZE - 1 & ~(HNTRIE_PAGE_SIZE - 1);
+  if (details instanceof Object === false) {
+    details = {};
+  }
+  const len = ((details.byteLength || 0) + HNTRIE_PAGE_SIZE - 1) & ~(HNTRIE_PAGE_SIZE - 1);
   this.buf = new Uint8Array(Math.max(len, 131072));
   this.buf32 = new Uint32Array(this.buf.buffer);
   this.needle = '';
@@ -4253,7 +4279,6 @@ const HNTrieContainer = function (details) {
 };
 
 HNTrieContainer.prototype = {
-
   //--------------------------------------------------------------------------
   // Public methods
   //--------------------------------------------------------------------------
@@ -4267,16 +4292,16 @@ HNTrieContainer.prototype = {
     if (HNTrieContainer.wasmModulePromise instanceof Promise === false) {
       return Promise.resolve();
     }
-    return HNTrieContainer.wasmModulePromise.then(
-      module => this.initWASM(module),
-    );
+    return HNTrieContainer.wasmModulePromise.then(module => this.initWASM(module));
   },
 
   setNeedle(needle) {
     if (needle !== this.needle) {
       const buf = this.buf;
       let i = needle.length;
-      if (i > 254) { i = 254; }
+      if (i > 254) {
+        i = 254;
+      }
       buf[255] = i;
       while (i--) {
         buf[i] = needle.charCodeAt(i);
@@ -4291,43 +4316,55 @@ HNTrieContainer.prototype = {
     let ineedle = this.buf[255];
     let icell = iroot;
     for (;;) {
-      if (ineedle === 0) { return -1; }
+      if (ineedle === 0) {
+        return -1;
+      }
       ineedle -= 1;
       const c = this.buf[ineedle];
-      let v; let
-        i0;
+      let v;
+      let i0;
       // find first segment with a first-character match
       for (;;) {
         v = this.buf32[icell + 2];
-        i0 = char0 + (v & 0x00FFFFFF);
-        if (this.buf[i0] === c) { break; }
+        i0 = char0 + (v & 0x00ffffff);
+        if (this.buf[i0] === c) {
+          break;
+        }
         icell = this.buf32[icell + 0];
-        if (icell === 0) { return -1; }
+        if (icell === 0) {
+          return -1;
+        }
       }
       // all characters in segment must match
       let n = v >>> 24;
       if (n > 1) {
         n -= 1;
-        if (n > ineedle) { return -1; }
+        if (n > ineedle) {
+          return -1;
+        }
         i0 += 1;
         const i1 = i0 + n;
         do {
           ineedle -= 1;
-          if (this.buf[i0] !== this.buf[ineedle]) { return -1; }
+          if (this.buf[i0] !== this.buf[ineedle]) {
+            return -1;
+          }
           i0 += 1;
         } while (i0 < i1);
       }
       // next segment
       icell = this.buf32[icell + 1];
-      if (icell === 0) { break; }
+      if (icell === 0) {
+        break;
+      }
       if (this.buf32[icell + 2] === 0) {
-        if (ineedle === 0 || this.buf[ineedle - 1] === 0x2E) {
+        if (ineedle === 0 || this.buf[ineedle - 1] === 0x2e) {
           return ineedle;
         }
         icell = this.buf32[icell + 1];
       }
     }
-    return ineedle === 0 || this.buf[ineedle - 1] === 0x2E ? ineedle : -1;
+    return ineedle === 0 || this.buf[ineedle - 1] === 0x2e ? ineedle : -1;
   },
   matchesWASM: null,
   matches: null,
@@ -4337,7 +4374,7 @@ HNTrieContainer.prototype = {
       return new HNTrieRef(this, args[0], args[1]);
     }
     // grow buffer if needed
-    if ((this.buf32[HNTRIE_CHAR0_SLOT] - this.buf32[HNTRIE_TRIE1_SLOT]) < 12) {
+    if (this.buf32[HNTRIE_CHAR0_SLOT] - this.buf32[HNTRIE_TRIE1_SLOT] < 12) {
       this.growBuf(12, 0);
     }
     const iroot = this.buf32[HNTRIE_TRIE1_SLOT] >>> 2;
@@ -4354,7 +4391,9 @@ HNTrieContainer.prototype = {
 
   addJS(iroot) {
     let lhnchar = this.buf[255];
-    if (lhnchar === 0) { return 0; }
+    if (lhnchar === 0) {
+      return 0;
+    }
     let icell = iroot;
     // special case: first node in trie
     if (this.buf32[icell + 2] === 0) {
@@ -4363,8 +4402,8 @@ HNTrieContainer.prototype = {
     }
     // grow buffer if needed
     if (
-      (this.buf32[HNTRIE_CHAR0_SLOT] - this.buf32[HNTRIE_TRIE1_SLOT]) < 24
-            || (this.buf.length - this.buf32[HNTRIE_CHAR1_SLOT]) < 256
+      this.buf32[HNTRIE_CHAR0_SLOT] - this.buf32[HNTRIE_TRIE1_SLOT] < 24
+      || this.buf.length - this.buf32[HNTRIE_CHAR1_SLOT] < 256
     ) {
       this.growBuf(24, 256);
     }
@@ -4379,7 +4418,7 @@ HNTrieContainer.prototype = {
         icell = this.buf32[icell + 1];
         continue;
       }
-      let isegchar0 = char0 + (vseg & 0x00FFFFFF);
+      let isegchar0 = char0 + (vseg & 0x00ffffff);
       // if first character is no match, move to next descendant
       if (this.buf[isegchar0] !== this.buf[lhnchar - 1]) {
         inext = this.buf32[icell + 0];
@@ -4397,9 +4436,15 @@ HNTrieContainer.prototype = {
       const lsegchar = vseg >>> 24;
       if (lsegchar !== 1) {
         for (;;) {
-          if (isegchar === lsegchar) { break; }
-          if (lhnchar === 0) { break; }
-          if (this.buf[isegchar0 + isegchar] !== this.buf[lhnchar - 1]) { break; }
+          if (isegchar === lsegchar) {
+            break;
+          }
+          if (lhnchar === 0) {
+            break;
+          }
+          if (this.buf[isegchar0 + isegchar] !== this.buf[lhnchar - 1]) {
+            break;
+          }
           isegchar += 1;
           lhnchar -= 1;
         }
@@ -4410,7 +4455,9 @@ HNTrieContainer.prototype = {
         // needle remainder: no
         if (lhnchar === 0) {
           // boundary cell already present
-          if (inext === 0 || this.buf32[inext + 2] === 0) { return 0; }
+          if (inext === 0 || this.buf32[inext + 2] === 0) {
+            return 0;
+          }
           // need boundary cell
           this.buf32[icell + 1] = this.addCell(0, inext, 0);
         }
@@ -4430,11 +4477,11 @@ HNTrieContainer.prototype = {
       else {
         // split current cell
         isegchar0 -= char0;
-        this.buf32[icell + 2] = isegchar << 24 | isegchar0;
+        this.buf32[icell + 2] = (isegchar << 24) | isegchar0;
         inext = this.addCell(
           0,
           this.buf32[icell + 1],
-          lsegchar - isegchar << 24 | isegchar0 + isegchar,
+          ((lsegchar - isegchar) << 24) | (isegchar0 + isegchar),
         );
         this.buf32[icell + 1] = inext;
         // needle remainder: no = need boundary cell
@@ -4461,7 +4508,9 @@ HNTrieContainer.prototype = {
   },
 
   fromIterable(hostnames, add) {
-    if (add === undefined) { add = 'add'; }
+    if (add === undefined) {
+      add = 'add';
+    }
     const trieRef = this.createOne();
     for (const hn of hostnames) {
       trieRef[add](hn);
@@ -4471,16 +4520,12 @@ HNTrieContainer.prototype = {
 
   serialize() {
     return Array.from(
-      new Uint32Array(
-        this.buf32.buffer,
-        0,
-        this.buf32[HNTRIE_CHAR1_SLOT] + 3 >>> 2,
-      ),
+      new Uint32Array(this.buf32.buffer, 0, (this.buf32[HNTRIE_CHAR1_SLOT] + 3) >>> 2),
     );
   },
 
   unserialize(selfie) {
-    const len = (selfie.length << 2) + HNTRIE_PAGE_SIZE - 1 & ~(HNTRIE_PAGE_SIZE - 1);
+    const len = ((selfie.length << 2) + HNTRIE_PAGE_SIZE - 1) & ~(HNTRIE_PAGE_SIZE - 1);
     if (this.wasmMemory !== null) {
       const pageCountBefore = this.buf.length >>> 16;
       const pageCountAfter = len >>> 16;
@@ -4512,7 +4557,9 @@ HNTrieContainer.prototype = {
   },
 
   addSegment(lsegchar) {
-    if (lsegchar === 0) { return 0; }
+    if (lsegchar === 0) {
+      return 0;
+    }
     let char1 = this.buf32[HNTRIE_CHAR1_SLOT];
     const isegchar = char1 - this.buf32[HNTRIE_CHAR0_SLOT];
     let i = lsegchar;
@@ -4538,7 +4585,9 @@ HNTrieContainer.prototype = {
 
   shrinkBuf() {
     // Can't shrink WebAssembly.Memory
-    if (this.wasmMemory !== null) { return; }
+    if (this.wasmMemory !== null) {
+      return;
+    }
     const char0 = this.buf32[HNTRIE_TRIE1_SLOT] + 24;
     const char1 = char0 + this.buf32[HNTRIE_CHAR1_SLOT] - this.buf32[HNTRIE_CHAR0_SLOT];
     const bufLen = char1 + 256;
@@ -4546,11 +4595,8 @@ HNTrieContainer.prototype = {
   },
 
   resizeBuf(bufLen, char0) {
-    bufLen = bufLen + HNTRIE_PAGE_SIZE - 1 & ~(HNTRIE_PAGE_SIZE - 1);
-    if (
-      bufLen === this.buf.length
-            && char0 === this.buf32[HNTRIE_CHAR0_SLOT]
-    ) {
+    bufLen = (bufLen + HNTRIE_PAGE_SIZE - 1) & ~(HNTRIE_PAGE_SIZE - 1);
+    if (bufLen === this.buf.length && char0 === this.buf32[HNTRIE_CHAR0_SLOT]) {
       return;
     }
     const charDataLen = this.buf32[HNTRIE_CHAR1_SLOT] - this.buf32[HNTRIE_CHAR0_SLOT];
@@ -4563,20 +4609,9 @@ HNTrieContainer.prototype = {
       }
     } else if (bufLen !== this.buf.length) {
       const newBuf = new Uint8Array(bufLen);
+      newBuf.set(new Uint8Array(this.buf.buffer, 0, this.buf32[HNTRIE_TRIE1_SLOT]), 0);
       newBuf.set(
-        new Uint8Array(
-          this.buf.buffer,
-          0,
-          this.buf32[HNTRIE_TRIE1_SLOT],
-        ),
-        0,
-      );
-      newBuf.set(
-        new Uint8Array(
-          this.buf.buffer,
-          this.buf32[HNTRIE_CHAR0_SLOT],
-          charDataLen,
-        ),
+        new Uint8Array(this.buf.buffer, this.buf32[HNTRIE_CHAR0_SLOT], charDataLen),
         char0,
       );
       this.buf = newBuf;
@@ -4586,11 +4621,7 @@ HNTrieContainer.prototype = {
     }
     if (char0 !== this.buf32[HNTRIE_CHAR0_SLOT]) {
       this.buf.set(
-        new Uint8Array(
-          this.buf.buffer,
-          this.buf32[HNTRIE_CHAR0_SLOT],
-          charDataLen,
-        ),
+        new Uint8Array(this.buf.buffer, this.buf32[HNTRIE_CHAR0_SLOT], charDataLen),
         char0,
       );
       this.buf32[HNTRIE_CHAR0_SLOT] = char0;
@@ -4604,18 +4635,15 @@ HNTrieContainer.prototype = {
     }
     if (this.wasmInstancePromise === null) {
       const memory = new WebAssembly.Memory({ initial: 2 });
-      this.wasmInstancePromise = WebAssembly.instantiate(
-        module,
-        {
-          imports: {
-            memory,
-            growBuf: this.growBuf.bind(this, 24, 256),
-          },
+      this.wasmInstancePromise = WebAssembly.instantiate(module, {
+        imports: {
+          memory,
+          growBuf: this.growBuf.bind(this, 24, 256),
         },
-      );
+      });
       this.wasmInstancePromise.then((instance) => {
         this.wasmMemory = memory;
-        const pageCount = this.buf.byteLength + HNTRIE_PAGE_SIZE - 1 >>> 16;
+        const pageCount = (this.buf.byteLength + HNTRIE_PAGE_SIZE - 1) >>> 16;
         if (pageCount > 1) {
           memory.grow(pageCount - 1);
         }
@@ -4641,7 +4669,6 @@ const HNTrieRef = function (container, iroot, size) {
   this.iroot = iroot;
   this.size = size;
 };
-
 
 HNTrieRef.prototype = {
   add(hn) {
@@ -4694,7 +4721,7 @@ HNTrieRef.prototype = {
             this.forks.push(idown, this.charPtr);
           }
           const v = this.container.buf32[this.icell + 2];
-          let i0 = this.container.buf32[HNTRIE_CHAR0_SLOT] + (v & 0x00FFFFFF);
+          let i0 = this.container.buf32[HNTRIE_CHAR0_SLOT] + (v & 0x00ffffff);
           const i1 = i0 + (v >>> 24);
           while (i0 < i1) {
             this.charPtr -= 1;
@@ -4712,9 +4739,7 @@ HNTrieRef.prototype = {
         }
       },
       toHostname() {
-        this.value = this.textDecoder.decode(
-          new Uint8Array(this.charBuf.buffer, this.charPtr),
-        );
+        this.value = this.textDecoder.decode(new Uint8Array(this.charBuf.buffer, this.charPtr));
         return this;
       },
       container: this.container,
@@ -4744,28 +4769,19 @@ HNTrieRef.prototype = {
   HNTrieContainer.prototype.matches = HNTrieContainer.prototype.matchesJS;
   HNTrieContainer.prototype.add = HNTrieContainer.prototype.addJS;
 
-  if (
-    typeof WebAssembly !== 'object'
-        || typeof WebAssembly.compileStreaming !== 'function'
-  ) {
+  if (typeof WebAssembly !== 'object' || typeof WebAssembly.compileStreaming !== 'function') {
     return;
   }
 
   // Soft-dependency on vAPI so that the code here can be used outside of
   // uBO (i.e. tests, benchmarks)
-  if (
-    typeof vAPI === 'object'
-        && vAPI.webextFlavor.soup.has('firefox') === false
-  ) {
+  if (typeof vAPI === 'object' && vAPI.webextFlavor.soup.has('firefox') === false) {
     return;
   }
 
   // Soft-dependency on µBlock's advanced settings so that the code here can
   // be used outside of uBO (i.e. tests, benchmarks)
-  if (
-    typeof µBlock === 'object'
-        && µBlock.hiddenSettings.disableWebAssembly === true
-  ) {
+  if (typeof µBlock === 'object' && µBlock.hiddenSettings.disableWebAssembly === true) {
     return;
   }
 
@@ -4774,7 +4790,9 @@ HNTrieRef.prototype = {
   const uint32s = new Uint32Array(1);
   const uint8s = new Uint8Array(uint32s.buffer);
   uint32s[0] = 1;
-  if (uint8s[0] !== 1) { return; }
+  if (uint8s[0] !== 1) {
+    return;
+  }
 
   // The directory from which the current script was fetched should also
   // contain the related WASM file. The script is fetched from a trusted
@@ -4789,15 +4807,14 @@ HNTrieRef.prototype = {
     workingDir = url.href;
   }
 
-  HNTrieContainer.wasmModulePromise = fetch(
-    `${workingDir}wasm/hntrie.wasm`,
-    { mode: 'same-origin' },
-  ).then(
-    WebAssembly.compileStreaming,
-  ).catch((reason) => {
-    HNTrieContainer.wasmModulePromise = null;
-    console.info(reason);
-  });
+  HNTrieContainer.wasmModulePromise = fetch(`${workingDir}wasm/hntrie.wasm`, {
+    mode: 'same-origin',
+  })
+    .then(WebAssembly.compileStreaming)
+    .catch((reason) => {
+      HNTrieContainer.wasmModulePromise = null;
+      console.info(reason);
+    });
 }());
 
 /** *************************************************************************** */
@@ -4854,7 +4871,6 @@ const urlTokenizer = {
     }
     const vtc = this._validTokenChars;
 
-
     let th = vtc[s.charCodeAt(0)];
     for (let i = 1; i !== 8 && i !== l; i++) {
       th = th * 64 + vtc[s.charCodeAt(i)];
@@ -4868,9 +4884,7 @@ const urlTokenizer = {
   _tokenize() {
     const tokens = this._tokens;
 
-
     let url = this._urlOut;
-
 
     let l = url.length;
     if (l === 0) {
@@ -4883,21 +4897,15 @@ const urlTokenizer = {
     }
     let i = 0;
 
-
     let j = 0;
-
 
     let v;
 
-
     let n;
-
 
     let ti;
 
-
     let th;
-
 
     const vtc = this._validTokenChars;
     for (;;) {
@@ -4940,9 +4948,7 @@ const urlTokenizer = {
   _validTokenChars: (function () {
     const vtc = new Uint8Array(128);
 
-
     const chars = '0123456789%abcdefghijklmnopqrstuvwxyz';
-
 
     let i = chars.length;
     while (i--) {
@@ -5063,7 +5069,6 @@ const Writer = function () {
   this.properties = new Map();
 };
 
-
 const Reader = function (raw, blockId) {
   this.io = CompiledLineIO;
   this.block = '';
@@ -5086,7 +5091,6 @@ const Reader = function (raw, blockId) {
     this.select(blockId);
   }
 };
-
 
 const CompiledLineIO = {
   serialize: JSON.stringify,
@@ -5189,7 +5193,6 @@ const stringDeduplicater = {
     }
   },
 };
-
 
 /** *************************************************************************** */
 
@@ -5354,7 +5357,6 @@ const staticNetFilteringEngine = (function () {
 
   const genericHideException = AllowAction | AnyParty | typeNameToTypeValue.generichide;
 
-
   const genericHideImportant = BlockAction | AnyParty | typeNameToTypeValue.generichide | Important;
 
   // ABP filters: https://adblockplus.org/en/filters
@@ -5366,7 +5368,6 @@ const staticNetFilteringEngine = (function () {
   // valid until the next evaluation.
 
   let pageHostnameRegister = '';
-
 
   let requestHostnameRegister = '';
   // var filterRegister = null;
@@ -5417,7 +5418,7 @@ const staticNetFilteringEngine = (function () {
     if (
       anchor === 0
       && s.charCodeAt(0) === 0x2f
-      && /* '/' */ s.length > 2
+      /* '/' */ && s.length > 2
       && s.charCodeAt(s.length - 1) === 0x2f /* '/' */
     ) {
       s += '*';
@@ -5483,8 +5484,9 @@ const staticNetFilteringEngine = (function () {
     if (n !== b.length) {
       return false;
     }
-    let isArray; let x; let
-      y;
+    let isArray;
+    let x;
+    let y;
     for (let i = 0; i < n; i++) {
       x = a[i];
       y = b[i];
@@ -5661,7 +5663,6 @@ const staticNetFilteringEngine = (function () {
 
   FilterPlainHostname.prototype.match = function () {
     const haystack = requestHostnameRegister;
-
 
     const needle = this.s;
     if (haystack.endsWith(needle) === false) {
@@ -6040,7 +6041,6 @@ const staticNetFilteringEngine = (function () {
       value() {
         const needle = this.hostname;
 
-
         const haystack = pageHostnameRegister;
         if (haystack.endsWith(needle) === false) {
           return false;
@@ -6070,7 +6070,6 @@ const staticNetFilteringEngine = (function () {
     matchOrigin: {
       value() {
         const needle = this.hostname;
-
 
         const haystack = pageHostnameRegister;
         if (haystack.endsWith(needle) === false) {
@@ -6166,7 +6165,6 @@ const staticNetFilteringEngine = (function () {
     init: {
       value() {
         const oneOf = [];
-
 
         const noneOf = [];
         for (const hostname of this.domainOpt.split('|')) {
@@ -6498,9 +6496,7 @@ const staticNetFilteringEngine = (function () {
   FilterPair.load = function (args) {
     const f1 = filterFromCompiledData(args[1]);
 
-
     const f2 = filterFromCompiledData(args[2]);
-
 
     const pair = FilterPair.available;
     if (pair === null) {
@@ -6543,7 +6539,6 @@ const staticNetFilteringEngine = (function () {
   FilterBucket.prototype.remove = function (fdata) {
     let i = this.filters.length;
 
-
     let filter;
     while (i--) {
       filter = this.filters[i];
@@ -6556,7 +6551,6 @@ const staticNetFilteringEngine = (function () {
   // Promote hit filters so they can be found faster next time.
   FilterBucket.prototype.promote = function (i) {
     const filters = this.filters;
-
 
     let pivot = filters.length >>> 1;
     while (i < pivot) {
@@ -6597,7 +6591,6 @@ const staticNetFilteringEngine = (function () {
   FilterBucket.prototype.compile = function () {
     const compiled = [];
 
-
     const filters = this.filters;
     for (let i = 0, n = filters.length; i < n; i++) {
       compiled[i] = filters[i].compile();
@@ -6620,9 +6613,7 @@ const staticNetFilteringEngine = (function () {
   FilterBucket.load = function (args) {
     const bucket = new FilterBucket();
 
-
     const compiledFilters = args[1];
-
 
     const filters = bucket.filters;
     for (let i = 0, n = compiledFilters.length; i < n; i++) {
@@ -6778,7 +6769,6 @@ const staticNetFilteringEngine = (function () {
     if (this.reHasUnicode.test(s)) {
       const hostnames = s.split('|');
 
-
       let i = hostnames.length;
       while (i--) {
         if (this.reHasUnicode.test(hostnames[i])) {
@@ -6798,8 +6788,8 @@ const staticNetFilteringEngine = (function () {
   FilterParser.prototype.parseOptions = function (s) {
     this.fopts = s;
     const opts = s.split(',');
-    let opt; let
-      not;
+    let opt;
+    let not;
     for (let i = 0; i < opts.length; i++) {
       opt = opts[i];
       not = opt.startsWith('~');
@@ -7180,12 +7170,9 @@ const staticNetFilteringEngine = (function () {
     reGoodToken.lastIndex = 0;
     const s = this.f;
 
-
     let matches;
 
-
     let lpos;
-
 
     let badTokenMatch = null;
     while ((matches = reGoodToken.exec(s)) !== null) {
@@ -7213,9 +7200,7 @@ const staticNetFilteringEngine = (function () {
     reRegexToken.lastIndex = 0;
     const s = this.f;
 
-
     let matches;
-
 
     let prefix;
     while ((matches = reRegexToken.exec(s)) !== null) {
@@ -7315,15 +7300,11 @@ const staticNetFilteringEngine = (function () {
   FilterContainer.prototype.freeze = function () {
     const filterPairId = FilterPair.fid;
 
-
     const filterBucketId = FilterBucket.fid;
-
 
     const filterDataHolderId = FilterDataHolder.fid;
 
-
     const redirectTypeValue = typeNameToTypeValue.redirect;
-
 
     const unserialize = CompiledLineIO.unserialize;
 
@@ -7655,14 +7636,11 @@ const staticNetFilteringEngine = (function () {
     // We need to visit ALL the matching filters.
     const toAddImportant = new Map();
 
-
     const toAdd = new Map();
-
 
     const toRemove = new Map();
 
     const tokenHashes = this.urlTokenizer.getTokens();
-
 
     let i = 0;
     while (i < 32) {
@@ -7764,7 +7742,6 @@ const staticNetFilteringEngine = (function () {
 
     const tokenHashes = this.urlTokenizer.getTokens();
 
-
     let i = 0;
     for (;;) {
       const tokenHash = tokenHashes[i++];
@@ -7853,9 +7830,7 @@ const staticNetFilteringEngine = (function () {
     const party = fctxt.is3rdPartyToDoc() ? ThirdParty : FirstParty;
     const categories = this.categories;
 
-
     let catBits;
-
 
     let bucket;
 
@@ -7964,9 +7939,7 @@ const staticNetFilteringEngine = (function () {
     const party = fctxt.is3rdPartyToDoc() ? ThirdParty : FirstParty;
     const categories = this.categories;
 
-
     let catBits;
-
 
     let bucket;
 
@@ -8103,7 +8076,10 @@ const staticNetFilteringEngine = (function () {
     }
     const t1 = performance.now();
     return {
-      t0, t1, duration: t1 - t0, results,
+      t0,
+      t1,
+      duration: t1 - t0,
+      results,
     };
   };
 
@@ -8114,17 +8090,34 @@ const staticNetFilteringEngine = (function () {
   /** *************************************************************************** */
 }());
 
-module.exports = (rawLists) => {
-  staticNetFilteringEngine.fromCompiledContent(new Reader(compileFilters(rawLists)));
-  staticNetFilteringEngine.freeze();
+module.exports = class UBlockOrigin {
+  static parse(rawLists) {
+    staticNetFilteringEngine.fromCompiledContent(new Reader(compileFilters(rawLists)));
+    staticNetFilteringEngine.freeze();
+    return new UBlockOrigin(staticNetFilteringEngine);
+  }
 
-  return ({
+  constructor(engine) {
+    this.engine = engine;
+  }
+
+  serialize() {
+    return JSON.stringify(this.engine.toSelfie());
+  }
+
+  deserialize(serialized) {
+    this.engine.fromSelfie(JSON.parse(serialized));
+  }
+
+  match({
     type, url, hostname, domain, sourceHostname, sourceDomain,
-  }) => staticNetFilteringEngine.matchString({
-    url,
-    type,
-    getDocHostname: () => sourceHostname,
-    getHostname: () => hostname,
-    is3rdPartyToDoc: () => sourceDomain !== domain,
-  });
+  }) {
+    return this.engine.matchString({
+      url,
+      type,
+      getDocHostname: () => sourceHostname,
+      getHostname: () => hostname,
+      is3rdPartyToDoc: () => sourceDomain !== domain,
+    });
+  }
 };

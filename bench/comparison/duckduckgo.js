@@ -12,13 +12,21 @@ const DDG_OPTIONS = {
   other: abp.elementTypes.OTHER,
 };
 
+module.exports = class DuckDuckGo {
+  static parse(rawLists) {
+    const parsed = {};
+    abp.parse(rawLists, parsed);
+    return new DuckDuckGo(parsed);
+  }
 
-module.exports = (rawLists) => {
-  const parsed = {};
-  abp.parse(rawLists, parsed);
+  constructor(parsed) {
+    this.parsed = parsed;
+  }
 
-  return ({ url, type, sourceDomain }) => abp.matches(parsed, url, {
-    domain: sourceDomain,
-    elementTypeMask: DDG_OPTIONS[type],
-  });
+  match({ url, type, sourceDomain }) {
+    return abp.matches(this.parsed, url, {
+      domain: sourceDomain,
+      elementTypeMask: DDG_OPTIONS[type],
+    });
+  }
 };

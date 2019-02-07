@@ -5,14 +5,14 @@ const readline = require('readline');
 const tldts = require('tldts');
 const { makeRequest } = require('../../');
 
-const initUblock = require('./ublock.js');
-const initBrave = require('./brave.js');
-const initDuckduckgo = require('./duckduckgo.js');
-const initCliqz = require('./cliqz.js');
+const UBlockOrigin = require('./ublock.js');
+const Brave = require('./brave.js');
+const Duckduckgo = require('./duckduckgo.js');
+const Cliqz = require('./cliqz.js');
 
-const CHECK_BRAVE = false;
+const CHECK_BRAVE = true;
 const CHECK_DGG = false;
-const CHECK_CLIQZ = true;
+const CHECK_CLIQZ = false;
 const CHECK_UBLOCK = false;
 
 function min(arr) {
@@ -73,31 +73,60 @@ async function main() {
   const engines = [];
 
   [
-    ['cliqz', CHECK_CLIQZ, initCliqz],
-    ['ublock', CHECK_UBLOCK, initUblock],
-    ['brave', CHECK_BRAVE, initBrave],
-    ['ddg', CHECK_DGG, initDuckduckgo],
-  ].forEach(([name, enabled, init]) => {
+    ['cliqz', CHECK_CLIQZ, Cliqz],
+    ['ublock', CHECK_UBLOCK, UBlockOrigin],
+    ['brave', CHECK_BRAVE, Brave],
+    ['ddg', CHECK_DGG, Duckduckgo],
+  ].forEach(([name, enabled, Cls]) => {
     if (enabled) {
       triggerGC();
       const baseMemory = getMemoryConsumption();
 
-      console.log(`Loading ${name}...`);
+      // Parse rules
       const start = process.hrtime();
-      const engine = init(rawLists);
+      const engine = Cls.parse(rawLists);
       const diff = process.hrtime(start);
-      const totalHighResolution = (diff[0] * 1000000000 + diff[1]) / 1000000;
+      const parsingTime = (diff[0] * 1000000000 + diff[1]) / 1000000;
+      console.log(`Time to parse: ${parsingTime}`);
 
+      // Measure memory
       const beforeGCMem = getMemoryConsumption() - baseMemory;
       triggerGC();
       const afterGCMem = getMemoryConsumption() - baseMemory;
 
-      console.log(`Took ${totalHighResolution}`);
+      const serializationTimings = [];
+      const deserializationTimings = [];
+      const cacheSize = null;
+      if (engine.serialize) {
+        // Serialize
+        let serialized;
+        for (let i = 0; i < 1000; i += 1) {
+          start = process.hrtime();
+          serialized = engine.serialize();
+          diff = process.hrtime(start);
+          serializationTimings.push((diff[0] * 1000000000 + diff[1]) / 1000000);
+        }
+        cacheSize = serialized.length;
+        console.log(`Cache size: ${cacheSize}`);
+        console.log(`Average serialization time: ${avg(serializationTimings)}`);
+
+        // Deserialize
+        for (let i = 0; i < 1000; i += 1) {
+          start = process.hrtime();
+          engine.deserialize(serialized);
+          diff = process.hrtime(start);
+          deserializationTimings.push((diff[0] * 1000000000 + diff[1]) / 1000000);
+        }
+        console.log(`Average deserialization time: ${avg(deserializationTimings)}`);
+      }
+
       console.log(`Memory before GC: ${beforeGCMem}`);
       console.log(`Memory after GC: ${afterGCMem}`);
 
       stats[name] = {
-        timeToParseLists: totalHighResolution,
+        serializationTimings,
+        deserializationTimings,
+        cacheSize,
         memoryBeforeGC: beforeGCMem,
         memoryAfterGC: afterGCMem,
         matches: [],
@@ -112,6 +141,9 @@ async function main() {
     input: fs.createReadStream(process.argv[process.argv.length - 1]),
     crlfDelay: Infinity,
   });
+
+  const pages = new Set();
+  const domains = new Set();
 
   let index = 0;
   lines.on('line', (line) => {
@@ -142,11 +174,14 @@ async function main() {
       return;
     }
 
+    pages.add(parsed.sourceUrl);
+    domains.add(parsed.sourceDomain);
+
     // Process request for each engine
     for (let i = 0; i < engines.length; i += 1) {
       const [name, engine] = engines[i];
       const start = process.hrtime();
-      const match = engine(parsed);
+      const match = engine.match(parsed);
       const diff = process.hrtime(start);
       const totalHighResolution = (diff[0] * 1000000000 + diff[1]) / 1000000;
 
@@ -161,6 +196,9 @@ async function main() {
   await new Promise((resolve) => {
     lines.on('close', resolve);
   });
+
+  console.log('Pages', pages.size);
+  console.log('Domains', domains.size);
 
   const cmp = (a, b) => a - b;
 

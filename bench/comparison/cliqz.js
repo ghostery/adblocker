@@ -2,10 +2,24 @@ const path = require('path');
 
 const { FiltersEngine } = require(path.resolve(__dirname, '../../'));
 
-module.exports = (rawList) => {
-  const engine = FiltersEngine.deserialize(
-    FiltersEngine.parse(rawList, { loadCosmeticFilters: false }).serialize(),
-  );
+module.exports = class Cliqz {
+  static parse(rawLists) {
+    return new Cliqz(FiltersEngine.parse(rawLists, { loadCosmeticFilters: false }));
+  }
 
-  return request => engine.match(request).match;
+  constructor(engine) {
+    this.engine = engine;
+  }
+
+  serialize() {
+    return this.engine.serialize();
+  }
+
+  deserialize(serialized) {
+    this.engine = FiltersEngine.deserialize(serialized);
+  }
+
+  match(request) {
+    return this.engine.match(request).match;
+  }
 };

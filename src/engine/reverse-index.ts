@@ -447,6 +447,7 @@ export default class ReverseIndex<T extends IFilter> {
     }
 
     // We finished dumping all the filters so now starts the buckets index section
+    const tokensLookupIndexStart = buffer.getPos();
     const tokensLookupIndex = buffer.getUint32ArrayView(tokensLookupIndexSize);
     const bucketsIndex = buffer.getUint32ArrayView(bucketsIndexSize);
     let indexInBucketsIndex = 0;
@@ -460,13 +461,17 @@ export default class ReverseIndex<T extends IFilter> {
       }
     }
 
-    this.cache = new Map();
     this.view = StaticDataView.fromUint8Array(buffer.slice());
+    this.cache = new Map();
 
     // Also keep Uint32Array views sharing the same buffer as `this.view` (only
     // needed for faster access while matching but does not need to be serialized).
-    this.bucketsIndex = bucketsIndex;
-    this.tokensLookupIndex = tokensLookupIndex;
+    // NOTE: it's important that these indices point to `this.view` and not
+    // `buffer`, otherwise we will be leaking memory.
+    this.view.setPos(tokensLookupIndexStart);
+    this.tokensLookupIndex = this.view.getUint32ArrayView(tokensLookupIndexSize);
+    this.bucketsIndex = this.view.getUint32ArrayView(bucketsIndexSize);
+    this.view.seekZero();
   }
 
   /**

@@ -20,9 +20,26 @@ const BRAVE_OPTIONS = {
   websocket: FilterOptions.websocket,
 };
 
-module.exports = (rawLists) => {
-  const client = new AdBlockClient();
-  client.parse(rawLists);
+module.exports = class Brave {
+  static parse(rawLists) {
+    const client = new AdBlockClient();
+    client.parse(rawLists);
+    return new Brave(client);
+  }
 
-  return ({ type, url, sourceDomain }) => client.matches(url, BRAVE_OPTIONS[type] || FilterOptions.noFilterOption, sourceDomain);
+  constructor(client) {
+    this.client = client;
+  }
+
+  serialize() {
+    return this.client.serialize();
+  }
+
+  deserialize(serialized) {
+    this.client.deserialize(serialized);
+  }
+
+  match({ type, url, sourceDomain }) {
+    return this.client.matches(url, BRAVE_OPTIONS[type] || FilterOptions.noFilterOption, sourceDomain);
+  }
 };
