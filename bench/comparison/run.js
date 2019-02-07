@@ -10,10 +10,10 @@ const Brave = require('./brave.js');
 const Duckduckgo = require('./duckduckgo.js');
 const Cliqz = require('./cliqz.js');
 
-const CHECK_BRAVE = true;
-const CHECK_DGG = false;
-const CHECK_CLIQZ = false;
-const CHECK_UBLOCK = false;
+const ENGINE = process.argv[process.argv.length - 2];
+const REQUESTS_PATH = process.argv[process.argv.length - 1];
+
+console.log(`* ${ENGINE}`);
 
 function min(arr) {
   let acc = Number.MAX_VALUE;
@@ -40,105 +40,64 @@ function avg(arr) {
   return sum / arr.length;
 }
 
-function triggerGC() {
-  if (global.gc) {
-    global.gc();
-  } else {
-    console.log('global.gc not available, measuring memory without.');
-  }
-}
-
-function getMemoryConsumption() {
-  return process.memoryUsage().heapUsed;
-}
-
 function loadLists() {
-  return [
-    // 'raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
-    // 'raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
-    // 'raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
-    // 'raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
-    // 'easylist-downloads.adblockplus.org/antiadblockfilters.txt',
-    // 'easylist.to/easylistgermany/easylistgermany.txt',
-    // 'pgl.yoyo.org/adservers/serverlist.txt',
-    // 'easylist.to/easylist/easyprivacy.txt',
-    'easylist.to/easylist/easylist.txt',
-  ].map(asset => fs.readFileSync(path.resolve(__dirname, '../../assets/', asset), { encoding: 'utf-8' })).join('\n');
+  return fs.readFileSync(path.resolve(__dirname, './easylist.txt'), { encoding: 'utf-8' });
 }
 
 async function main() {
   const rawLists = loadLists();
 
-  const stats = {};
-  const engines = [];
+  const Cls = {
+    cliqz: Cliqz,
+    ublock: UBlockOrigin,
+    brave: Brave,
+    duckduckgo: Duckduckgo,
+  }[ENGINE];
 
-  [
-    ['cliqz', CHECK_CLIQZ, Cliqz],
-    ['ublock', CHECK_UBLOCK, UBlockOrigin],
-    ['brave', CHECK_BRAVE, Brave],
-    ['ddg', CHECK_DGG, Duckduckgo],
-  ].forEach(([name, enabled, Cls]) => {
-    if (enabled) {
-      triggerGC();
-      const baseMemory = getMemoryConsumption();
+  // Parse rules
+  let start = process.hrtime();
+  let engine = Cls.parse(rawLists);
+  let diff = process.hrtime(start);
+  const parsingTime = (diff[0] * 1000000000 + diff[1]) / 1000000;
 
-      // Parse rules
-      const start = process.hrtime();
-      const engine = Cls.parse(rawLists);
-      const diff = process.hrtime(start);
-      const parsingTime = (diff[0] * 1000000000 + diff[1]) / 1000000;
-      console.log(`Time to parse: ${parsingTime}`);
-
-      // Measure memory
-      const beforeGCMem = getMemoryConsumption() - baseMemory;
-      triggerGC();
-      const afterGCMem = getMemoryConsumption() - baseMemory;
-
-      const serializationTimings = [];
-      const deserializationTimings = [];
-      const cacheSize = null;
-      if (engine.serialize) {
-        // Serialize
-        let serialized;
-        for (let i = 0; i < 1000; i += 1) {
-          start = process.hrtime();
-          serialized = engine.serialize();
-          diff = process.hrtime(start);
-          serializationTimings.push((diff[0] * 1000000000 + diff[1]) / 1000000);
-        }
-        cacheSize = serialized.length;
-        console.log(`Cache size: ${cacheSize}`);
-        console.log(`Average serialization time: ${avg(serializationTimings)}`);
-
-        // Deserialize
-        for (let i = 0; i < 1000; i += 1) {
-          start = process.hrtime();
-          engine.deserialize(serialized);
-          diff = process.hrtime(start);
-          deserializationTimings.push((diff[0] * 1000000000 + diff[1]) / 1000000);
-        }
-        console.log(`Average deserialization time: ${avg(deserializationTimings)}`);
-      }
-
-      console.log(`Memory before GC: ${beforeGCMem}`);
-      console.log(`Memory after GC: ${afterGCMem}`);
-
-      stats[name] = {
-        serializationTimings,
-        deserializationTimings,
-        cacheSize,
-        memoryBeforeGC: beforeGCMem,
-        memoryAfterGC: afterGCMem,
-        matches: [],
-        noMatches: [],
-      };
-
-      engines.push([name, engine]);
+  // Bench serialization
+  const serializationTimings = [];
+  const deserializationTimings = [];
+  let cacheSize = null;
+  if (engine.serialize) {
+    // Serialize
+    let serialized;
+    for (let i = 0; i < 1000; i += 1) {
+      start = process.hrtime();
+      serialized = engine.serialize();
+      diff = process.hrtime(start);
+      serializationTimings.push((diff[0] * 1000000000 + diff[1]) / 1000000);
     }
-  });
+    cacheSize = serialized.length;
+
+    // Deserialize
+    for (let i = 0; i < 1000; i += 1) {
+      start = process.hrtime();
+      engine.deserialize(serialized);
+      diff = process.hrtime(start);
+      deserializationTimings.push((diff[0] * 1000000000 + diff[1]) / 1000000);
+    }
+  }
+
+  // Create a clean engine for benchmarking
+  engine = Cls.parse(rawLists);
+
+  const stats = {
+    parsingTime,
+    serializationTimings,
+    deserializationTimings,
+    cacheSize,
+    matches: [],
+    noMatches: [],
+  };
 
   const lines = readline.createInterface({
-    input: fs.createReadStream(process.argv[process.argv.length - 1]),
+    input: fs.createReadStream(REQUESTS_PATH),
     crlfDelay: Infinity,
   });
 
@@ -178,18 +137,15 @@ async function main() {
     domains.add(parsed.sourceDomain);
 
     // Process request for each engine
-    for (let i = 0; i < engines.length; i += 1) {
-      const [name, engine] = engines[i];
-      const start = process.hrtime();
-      const match = engine.match(parsed);
-      const diff = process.hrtime(start);
-      const totalHighResolution = (diff[0] * 1000000000 + diff[1]) / 1000000;
+    start = process.hrtime();
+    const match = engine.match(parsed);
+    diff = process.hrtime(start);
+    const totalHighResolution = (diff[0] * 1000000000 + diff[1]) / 1000000;
 
-      if (match) {
-        stats[name].matches.push(totalHighResolution);
-      } else {
-        stats[name].noMatches.push(totalHighResolution);
-      }
+    if (match) {
+      stats.matches.push(totalHighResolution);
+    } else {
+      stats.noMatches.push(totalHighResolution);
     }
   });
 
@@ -197,44 +153,47 @@ async function main() {
     lines.on('close', resolve);
   });
 
-  console.log('Pages', pages.size);
-  console.log('Domains', domains.size);
+  console.log();
+  console.log('> Domains', domains.size);
+  console.log('> Pages', pages.size);
 
   const cmp = (a, b) => a - b;
 
-  for (let i = 0; i < engines.length; i += 1) {
-    const [name] = engines[i];
+  stats.matches.sort(cmp);
+  stats.noMatches.sort(cmp);
+  stats.all = [
+    ...stats.matches,
+    ...stats.noMatches,
+  ].sort(cmp);
 
-    const engineStats = stats[name];
-    engineStats.matches.sort(cmp);
-    engineStats.noMatches.sort(cmp);
-    engineStats.all = [
-      ...engineStats.matches,
-      ...engineStats.noMatches,
-    ].sort(cmp);
+  const { matches, noMatches, all } = stats;
 
-    const { matches, noMatches, all } = engineStats;
+  console.log();
+  console.log(`Avg serialization time (${serializationTimings.length} samples): ${avg(serializationTimings)}`);
+  console.log(`Avg deserialization time (${deserializationTimings.length} samples): ${avg(deserializationTimings)}`);
+  console.log(`Serialized size: ${cacheSize}`);
+  console.log(`List parsing time: ${parsingTime}`);
+  console.log();
+  console.log(`Total requests: ${all.length}`);
+  console.log(`Total match: ${matches.length}`);
+  console.log(`Total no match: ${noMatches.length}`);
+  console.log();
+  console.log(`Number of samples: ${matches.length}`);
+  console.log(`Min match: ${min(matches)}`);
+  console.log(`Max match: ${max(matches)}`);
+  console.log(`Avg match: ${avg(matches)}`);
+  console.log();
+  console.log(`Number of samples: ${noMatches.length}`);
+  console.log(`Min no match: ${min(noMatches)}`);
+  console.log(`Max no match: ${max(noMatches)}`);
+  console.log(`Avg no match: ${avg(noMatches)}`);
+  console.log();
+  console.log(`Number of samples: ${all.length}`);
+  console.log(`Min (total): ${min(all)}`);
+  console.log(`Max (total): ${max(all)}`);
+  console.log(`Avg (total): ${avg(all)}`);
 
-    console.log();
-    console.log(`>>>> ${name}`);
-    console.log(`Total requests: ${all.length}`);
-    console.log(`Total match: ${matches.length}`);
-    console.log(`Total no match: ${noMatches.length}`);
-    console.log();
-    console.log(`Min match: ${min(matches)}`);
-    console.log(`Max match: ${max(matches)}`);
-    console.log(`Avg match: ${avg(matches)}`);
-    console.log();
-    console.log(`Min no match: ${min(noMatches)}`);
-    console.log(`Max no match: ${max(noMatches)}`);
-    console.log(`Avg no match: ${avg(noMatches)}`);
-    console.log();
-    console.log(`Min (total): ${min(all)}`);
-    console.log(`Max (total): ${max(all)}`);
-    console.log(`Avg (total): ${avg(all)}`);
-  }
-
-  fs.writeFileSync('all_timings.json', JSON.stringify(stats), { encoding: 'utf-8' });
+  fs.writeFileSync(`${ENGINE}_timings.json`, JSON.stringify(stats), { encoding: 'utf-8' });
 }
 
 main();

@@ -6,4 +6,7 @@ deps:
 	cd ../../node_modules/abp-filter-parser/ && npm install && cd -
 
 run:
-	NODE_ENV=production node --expose_gc run.js requests.json
+	NODE_ENV=production node run.js cliqz requests.json
+	NODE_ENV=production node run.js brave requests.json
+	NODE_ENV=production node run.js ublock requests.json
+	NODE_ENV=production node run.js duckduckgo requests.json
