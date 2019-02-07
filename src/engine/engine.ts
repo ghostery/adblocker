@@ -179,7 +179,7 @@ export default class FilterEngine {
     this.csp.serialize(buffer);
     this.cosmetics.serialize(buffer);
 
-    return buffer.crop();
+    return buffer.slice();
   }
 
   /**

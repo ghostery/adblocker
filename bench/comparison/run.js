@@ -88,9 +88,9 @@ async function main() {
       const diff = process.hrtime(start);
       const totalHighResolution = (diff[0] * 1000000000 + diff[1]) / 1000000;
 
-      const beforeGCMem = getMemoryConsumption();
+      const beforeGCMem = getMemoryConsumption() - baseMemory;
       triggerGC();
-      const afterGCMem = getMemoryConsumption();
+      const afterGCMem = getMemoryConsumption() - baseMemory;
 
       console.log(`Took ${totalHighResolution}`);
       console.log(`Memory before GC: ${beforeGCMem}`);
@@ -98,8 +98,8 @@ async function main() {
 
       stats[name] = {
         timeToParseLists: totalHighResolution,
-        memoryBeforeGC: beforeGCMem - baseMemory,
-        memoryAfterGC: afterGCMem - baseMemory,
+        memoryBeforeGC: beforeGCMem,
+        memoryAfterGC: afterGCMem,
         matches: [],
         noMatches: [],
       };

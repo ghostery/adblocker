@@ -68,10 +68,6 @@ export default class StaticDataView {
     this.checkSize();
     return this.buffer.slice(0, this.pos);
   }
-  public crop(): Uint8Array {
-    this.checkSize();
-    return this.buffer.subarray(0, this.pos);
-  }
 
   /**
    * Make sure that `this.pos` is aligned on a multiple of `alignement`.
