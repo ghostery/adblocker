@@ -4,8 +4,8 @@ Results of the benchmarks comparing some of the most popular
 content-blocker engines (Cliqz, Brave, uBlockOrigin, DuckDuckGo). We
 show that Cliqz consistently performs very well.
 
-This comparison does not involve full extensions, but instead focuses on
-the network request blocking engines:
+This comparison does not involve full extensions, but instead **focuses on
+the network request blocking engines**:
 
 * Cliqz' adblocker is available here: https://github.com/cliqz-oss/adblocker
 * Brave's adblocker is available here: https://github.com/brave/ad-block

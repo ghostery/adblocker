@@ -1,6 +1,6 @@
 # Comparison With Other Blockers
 
-This micro-benchmarks compares different content-blockers network-filter
+These micro-benchmarks compare different content-blockers network-filter
 matching engines.
 
 ## Running Benchmarks
