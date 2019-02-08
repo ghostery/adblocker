@@ -69,9 +69,8 @@ across all ad-blockers).
 It results from this observation that ad-blockers will perform better on
 average if they can efficiently decide which requests to *not block*.
 
-The filters used to determine whether or not
-a requests is to be blocked are the ones from
-[Easylist](https://easylist-downloads.adblockplus.org/easylist.txt),
+The filters used to determine whether or not a request is to be blocked
+are the ones from [Easylist](https://easylist-downloads.adblockplus.org/easylist.txt),
 where we removed all the cosmetic rules before running the benchmarks.
 The final list contains 38978 network filters.
 
@@ -127,16 +126,16 @@ The following table details 99th percentile and median timings for requests bloc
 
 ### 4. Serialization and Deserialization
 
-In this section we have a look at the performance of content-blockers when it
-comes to serialize their internal representation for faster sub-sequent
-loading. Only DuckDuckGo's engine does not provide this feature. Both
-uBlock Origin, Cliqz and Brave offer the possibility to serialize or
-cache (uBlock Origin calls them selfies) the entire blocking engine
-to either a string or a buffer, which can then be used to speed-up
-sub-sequent loads. Another use-case allowed by such capability is to
-perform the parsing of the lists on the backend and ship the serialized
-form of the content blocker to clients directly, which allows to remove
-the cost of initialization completely.
+In this section we have a look at the performance of content-blockers
+when it comes to serialize their internal representation for faster
+sub-sequent loading. Only DuckDuckGo's engine does not provide this
+feature. uBlock Origin, Cliqz and Brave all offer the possibility
+to serialize or cache (uBlock Origin calls them selfies) the entire
+blocking engine to either a string or a buffer, which can then be
+used to speed-up sub-sequent loads. Another use-case allowed by such
+capability is to perform the parsing of the lists on the backend and
+ship the serialized form of the content blocker to clients directly,
+which allows to remove the cost of initialization completely.
 
 We performed 1000 serializations for each content blocker and display the
 results below:
@@ -191,7 +190,7 @@ Now if we remove Brave, we see that there are still differences between uBlock
 Origin, Cliqz and DuckDuckGo. One reason Cliqz is slower than uBlock Origin here
 is that to achieve maximum performance while matching as well as minimize size,
 there is a bit more work to do up-front. In practice this does not matter so
-much since this is a one-time operation and that sub-sequent loads are performed
+much since it is a one-time operation and that sub-sequent loads are performed
 from cache, and this is really fast (in fact, we can even perform the parsing
 backend-side and just ship the serialized version of the blocker, which removes
 this step completely).
