@@ -1,21 +1,30 @@
+**DISCLAIMER**: This is still work in progress and will be changing as the
+analysis is refined.
+
+
+
+
+
 ### **Adblockers: Performance overview**
 
-Results of the benchmarks comparing some of the most popular
-content-blocker engines (Cliqz, Brave, uBlockOrigin, DuckDuckGo). We
-show that Cliqz consistently performs very well.
+These are the results of the benchmarks comparing some of the
+most popular content-blocker engines (Cliqz, Brave, uBlockOrigin,
+DuckDuckGo). We show that Cliqz consistently performs very well.
 
-This comparison does not involve full extensions, but instead **focuses on
-the network request blocking engines**:
+This comparison does not involve full extensions, but instead **focuses
+on the network request blocking engines** (in particular, this does
+account for cosmetics engine, etc.). Here are the home pages for all
+content-blockers compared:
 
-* Cliqz' adblocker is available here: https://github.com/cliqz-oss/adblocker
-* Brave's adblocker is available here: https://github.com/brave/ad-block
-* DuckDuckGo's adblocker is available here: https://github.com/duckduckgo/abp-filter-parser
-* uBlock Origin is available here: https://github.com/gorhill/uBlock
+* Cliqz' adblocker: https://github.com/cliqz-oss/adblocker
+* Brave's adblocker: https://github.com/brave/ad-block
+* DuckDuckGo's adblocker: https://github.com/duckduckgo/abp-filter-parser
+* uBlock Origin: https://github.com/gorhill/uBlock
 
 All blockers except uBlock Origin are available as JavaScript libraries
-which can be loaded in Node.js. To allow comparing all of them in
-Node.js we had to extract the static network filtering engine out of the
-uBlock Origin extension.
+which can be loaded in Node.js. To allow comparing uBlock Origin as
+well, we had to extract the static network filtering engine [out of the
+extension](./ublock.js).
 
 All benchmarks were ran on an X1 Carbon 2016 (i7 U6600 + 16 GB) in
 Node.js 11.9.0.
@@ -25,15 +34,15 @@ Node.js 11.9.0.
 Before presenting the detailed analysis of the results, here we present
 our findings in a nutshell:
 
-- **Loading the adblocker**
+- **Loading the Cliqz' blocker**
   - 1153x faster than uBlock Origin
   - 786x faster than Brave's Adblocker
   - DuckDuckGo's adblocker does not load from cache, so it's always parsing lists, which makes it 42000x slower.
-- **Matching Performance**:
+- **Matching Performance** (median):
   - 1.35x faster than uBlock Origin
   - 5.57x faster than Brave's Adblocker
   - 1147x faster than DuckDuckGo's adblocker
-- **Memory Consumption**:
+- **Memory Consumption** (startup in Chrome):
   - 1.6x less memory than uBlock Origin
   - 8.8x less memory than DuckDuckGo's adblocker
 
@@ -118,34 +127,73 @@ The following table details 99th percentile and median timings for requests bloc
 
 ### 4. Serialization and Deserialization
 
-In this section we have a look at the performance of ad-blockers when it comes
-to serialize their internal representation for faster sub-sequent loading. Only
-DuckDuckGo's engine does not provide this feature.
+In this section we have a look at the performance of content-blockers when it
+comes to serialize their internal representation for faster sub-sequent
+loading. Only DuckDuckGo's engine does not provide this feature. Both
+uBlock Origin, Cliqz and Brave offer the possibility to serialize or
+cache (uBlock Origin calls them selfies) the entire blocking engine
+to either a string or a buffer, which can then be used to speed-up
+sub-sequent loads. Another use-case allowed by such capability is to
+perform the parsing of the lists on the backend and ship the serialized
+form of the content blocker to clients directly, which allows to remove
+the cost of initialization completely.
 
-Serialization time:
-
-![](./plots/serialization.svg)
+We performed 1000 serializations for each content blocker and display the
+results below:
 
 ![](./plots/cliqz-ublock-origin-brave-serializationtimings.svg)
 
-Deserialization time:
+This bar plot contains the median time taken to serialize the engine for each
+content blocker:
 
-![](./plots/deserialization.svg)
+![](./plots/serialization.svg)
+
+Similarly, we measure the time it takes to restore the content blocker from its
+serialized form:
 
 ![](./plots/cliqz-ublock-origin-brave-deserializationtimings.svg)
 
-Size of the serialized engines:
+And here is the median time:
+
+![](./plots/deserialization.svg)
+
+Last but not least, we measured the size of the serialized buffer for each
+content blocker:
 
 ![](./plots/cache-size.svg)
 
+From these measurements we see that Cliqz's content blocker offers both
+significantly faster serialization and deserialization times as well as
+a smaller cache size.
+
 ### 5. Memory Consumption at Start-up
 
-Here we consider the memory usage of each blocker after
-initialization from lists (not from cache). The measurements were
-performed using Chrome's devtools Memory snapshot.
+Here we consider the memory usage of each content blocker after
+initialization from lists (not from cache) after one full garbage
+collection. The measurements were performed using Chrome's devtools
+Memory snapshot. We did not measure Brave here since the memory used
+from C++ side does not seem to be taken into account by the devtools.
+Also keep in mind that this memory usage can vary at run-time as content
+blockers might cache frequently used resources, etc.
 
 ![](./plots/memory-usage-at-startup.svg)
 
 ### 6. Parsing Lists
 
-![](./plots/time-to-parse-easylist.svg)
+In this graph, we present the time it takes for each adblocker to be initialized
+from the lists (without any prior caching). We see that only Brave seems to be
+significantly slower and that both uBlock Origin, Cliqz and DuckDuckGo perform
+well.
+
+![](./plots/time-to-parse-easylist-all.svg)
+
+Now if we remove Brave, we see that there are still differences between uBlock
+Origin, Cliqz and DuckDuckGo. One reason Cliqz is slower than uBlock Origin here
+is that to achieve maximum performance while matching as well as minimize size,
+there is a bit more work to do up-front. In practice this does not matter so
+much since this is a one-time operation and that sub-sequent loads are performed
+from cache, and this is really fast (in fact, we can even perform the parsing
+backend-side and just ship the serialized version of the blocker, which removes
+this step completely).
+
+![](./plots/time-to-parse-easylist-without-brave.svg)
