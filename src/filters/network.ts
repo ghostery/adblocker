@@ -1167,6 +1167,12 @@ function checkIsRegex(filter: string, start: number, end: number): boolean {
   return (starIndex !== -1 && starIndex < end) || (separatorIndex !== -1 && separatorIndex < end);
 }
 
+/**
+ * Handle hostname anchored filters, given 'hostname' from ||hostname and
+ * request's hostname, check if there is a match. This is tricky because filters
+ * authors rely and different assumption. We can have prefix of suffix matches
+ * of anchor.
+ */
 export function isAnchoredByHostname(filterHostname: string, hostname: string): boolean {
   // Corner-case, if `filterHostname` is empty, then it's a match
   if (filterHostname.length === 0) {
@@ -1178,6 +1184,11 @@ export function isAnchoredByHostname(filterHostname: string, hostname: string): 
     return false;
   }
 
+  // If they have the same length, they should be equal
+  if (filterHostname.length === hostname.length) {
+    return filterHostname === hostname;
+  }
+
   // Check if `filterHostname` appears anywhere in `hostname`
   const matchIndex = hostname.indexOf(filterHostname);
 
@@ -1186,22 +1197,32 @@ export function isAnchoredByHostname(filterHostname: string, hostname: string): 
     return false;
   }
 
-  // Either start at beginning of hostname or be preceded by a '.'
+  // `filterHostname` is a prefix of `hostname` and needs to match full a label.
+  //
+  // Examples (filterHostname, hostname):
+  //   * (foo, foo.com)
+  //   * (sub.foo, sub.foo.com)
+  if (matchIndex === 0) {
+    return (
+      hostname.charCodeAt(filterHostname.length) === 46 ||
+      filterHostname.charCodeAt(filterHostname.length - 1) === 46
+    );
+  }
+
+  // `filterHostname` is a suffix of `hostname`.
+  //
+  // Examples (filterHostname, hostname):
+  //    * (foo.com, sub.foo.com)
+  //    * (com, foo.com)
+  if (hostname.length === matchIndex + filterHostname.length) {
+    return hostname.charCodeAt(matchIndex - 1) === 46 || filterHostname.charCodeAt(0) === 46;
+  }
+
+  // `filterHostname` is infix of `hostname` and needs match full labels
   return (
-    // Prefix match
-    (matchIndex === 0 &&
-      // This means `filterHostname` is equal to `hostname`
-      (hostname.length === filterHostname.length ||
-        // This means that `filterHostname` is a prefix of `hostname` (ends with a '.')
-        filterHostname[filterHostname.length - 1] === '.' ||
-        hostname[filterHostname.length] === '.')) ||
-    // Suffix or infix match
-    ((hostname[matchIndex - 1] === '.' || filterHostname[0] === '.') &&
-      // `filterHostname` is a full suffix of `hostname`
-      (hostname.length - matchIndex === filterHostname.length ||
-        // This means that `filterHostname` is infix of `hostname` (ends with a '.')
-        filterHostname[filterHostname.length - 1] === '.' ||
-        hostname[matchIndex + filterHostname.length] === '.'))
+    (hostname.charCodeAt(filterHostname.length) === 46 ||
+      filterHostname.charCodeAt(filterHostname.length - 1) === 46) &&
+    (hostname.charCodeAt(matchIndex - 1) === 46 || filterHostname.charCodeAt(0) === 46)
   );
 }
 

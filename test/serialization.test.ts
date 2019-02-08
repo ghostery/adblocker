@@ -81,7 +81,8 @@ domain.com##.selector
       });
 
       const serialized = engine.serialize(buffer);
-      expect(Engine.deserialize(serialized)).toEqual(engine);
+      const deserialized = Engine.deserialize(serialized);
+      expect(deserialized).toEqual(engine);
     });
   });
 });

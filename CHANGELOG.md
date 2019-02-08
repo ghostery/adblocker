@@ -4,6 +4,15 @@
 
 *not released yet*
 
+## 0.6.8
+
+*2019-02-08*
+
+  * Add comparison folder to benchmark different blockers [#100](https://github.com/cliqz-oss/adblocker/pull/100)
+      * Clean-up `isAnchoredByHostname` to be more readable
+      * Fix memory leak in reverse index (where we would keep a reference to buffer needlessly)
+      * Make sure Engine does not use more memory than necessary using `slice` instead of `subarray`
+
 ## 0.6.7
 
 *2019-02-06*

@@ -10,7 +10,7 @@ import NetworkFilterBucket from './bucket/network';
 
 import { createStylesheet } from '../content/injection';
 
-export const ENGINE_VERSION = 20;
+export const ENGINE_VERSION = 21;
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -179,7 +179,7 @@ export default class FilterEngine {
     this.csp.serialize(buffer);
     this.cosmetics.serialize(buffer);
 
-    return buffer.crop();
+    return buffer.slice();
   }
 
   /**
