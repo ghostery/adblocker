@@ -193,7 +193,7 @@ async function main() {
   console.log(`Max (total): ${max(all)}`);
   console.log(`Avg (total): ${avg(all)}`);
 
-  fs.writeFileSync(`${ENGINE}_timings.json`, JSON.stringify(stats), { encoding: 'utf-8' });
+  fs.writeFileSync(`./data/${ENGINE}_timings.json`, JSON.stringify(stats), { encoding: 'utf-8' });
 }
 
 main();
