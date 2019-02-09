@@ -23,10 +23,10 @@ module.exports = class DuckDuckGo {
     this.parsed = parsed;
   }
 
-  match({ url, type, sourceDomain }) {
+  match({ url, rawType, sourceDomain }) {
     return abp.matches(this.parsed, url, {
       domain: sourceDomain,
-      elementTypeMask: DDG_OPTIONS[type],
+      elementTypeMask: DDG_OPTIONS[rawType],
     });
   }
 };

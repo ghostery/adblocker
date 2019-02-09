@@ -39,7 +39,7 @@ module.exports = class Brave {
     this.client.deserialize(serialized);
   }
 
-  match({ type, url, sourceDomain }) {
-    return this.client.matches(url, BRAVE_OPTIONS[type] || FilterOptions.noFilterOption, sourceDomain);
+  match({ rawType, url, sourceDomain }) {
+    return this.client.matches(url, BRAVE_OPTIONS[rawType] || FilterOptions.noFilterOption, sourceDomain);
   }
 };

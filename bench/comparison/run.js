@@ -9,6 +9,7 @@ const UBlockOrigin = require('./ublock.js');
 const Brave = require('./brave.js');
 const Duckduckgo = require('./duckduckgo.js');
 const Cliqz = require('./cliqz.js');
+const AdBlockPlus = require('./adblockplus.js');
 
 const ENGINE = process.argv[process.argv.length - 2];
 const REQUESTS_PATH = process.argv[process.argv.length - 1];
@@ -48,10 +49,11 @@ async function main() {
   const rawLists = loadLists();
 
   const Cls = {
-    cliqz: Cliqz,
-    ublock: UBlockOrigin,
+    adblockplus: AdBlockPlus,
     brave: Brave,
+    cliqz: Cliqz,
     duckduckgo: Duckduckgo,
+    ublock: UBlockOrigin,
   }[ENGINE];
 
   // Parse rules
@@ -67,7 +69,7 @@ async function main() {
   if (engine.serialize) {
     // Serialize
     let serialized;
-    for (let i = 0; i < 1000; i += 1) {
+    for (let i = 0; i < 100; i += 1) {
       start = process.hrtime();
       serialized = engine.serialize();
       diff = process.hrtime(start);
@@ -76,7 +78,7 @@ async function main() {
     cacheSize = serialized.length;
 
     // Deserialize
-    for (let i = 0; i < 1000; i += 1) {
+    for (let i = 0; i < 100; i += 1) {
       start = process.hrtime();
       engine.deserialize(serialized);
       diff = process.hrtime(start);
@@ -116,12 +118,6 @@ async function main() {
       request = JSON.parse(line);
     } catch (ex) {
       return;
-    }
-
-    // Ignore query parameters
-    const indexOfQuery = request.url.indexOf('?');
-    if (indexOfQuery !== -1) {
-      request.url = request.url.slice(0, indexOfQuery);
     }
 
     const parsed = makeRequest({

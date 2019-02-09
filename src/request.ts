@@ -87,6 +87,7 @@ export interface IRequestInitialization {
 }
 
 export default class Request {
+  public readonly rawType: string | number;
   public readonly type: RequestType;
   public readonly isHttp: boolean;
   public readonly isHttps: boolean;
@@ -123,6 +124,7 @@ export default class Request {
     sourceUrl,
   }: IRequestInitialization) {
     this.type = CPT_TO_TYPE[type] || RequestType.other;
+    this.rawType = type;
 
     this.url = url;
     this.hostname = hostname;
