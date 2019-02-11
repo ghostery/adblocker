@@ -186,7 +186,7 @@ results below:
 This bar plot contains the median time taken to serialize the engine for each
 content blocker:
 
-![](./plots/serializationTimings.svg)
+![](./plots/serializationtimings.svg)
 
 Similarly, we measure the time it takes to restore the content blocker from its
 serialized form:
@@ -195,7 +195,7 @@ serialized form:
 
 And here is the median time:
 
-![](./plots/deserializationTimings.svg)
+![](./plots/deserializationtimings.svg)
 
 Last but not least, we measured the size of the serialized buffer for each
 content blocker:
