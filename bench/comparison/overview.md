@@ -55,7 +55,7 @@ our findings in a nutshell:
   - 651x faster than *uBlock Origin*
   - 3754x faster than *Adblock Plus*
   - *DuckDuckGo*'s adblocker does not offer serialization, so the loading cost is always the one from parsing the lists.
-- **Memory Consumption** (at startup, in Chrome):
+- **Memory Consumption of Ghostery's blocking engine** (at startup, in Chrome):
   - 1.6x less memory than *uBlock Origin*
   - 8.4x less memory than *Adblock Plus*
   - 8.8x less memory than *DuckDuckGo*'s adblocker
