@@ -22,6 +22,7 @@ content-blockers compared:
 * Brave's adblocker: https://github.com/brave/ad-block
 * DuckDuckGo's adblocker: https://github.com/duckduckgo/abp-filter-parser
 * uBlock Origin: https://github.com/gorhill/uBlock
+* Adblocker Plus: https://github.com/adblockplus/adblockpluscore
 
 We did not include native blockers from Chromium and Safari projects
 as this would require some significant effort to package them in a way
@@ -43,14 +44,14 @@ Node.js 11.9.0.
 Before presenting the detailed analysis of the results, let us highlight
 our findings in a nutshell:
 
-- **Matching Performance** (median):
+- **Matching Performance of Ghostery** (median):
   - 2.4x faster than uBlock Origin
   - 3.0x faster than Adblock Plus
   - 5.6x faster than Brave's Adblocker
   - 1068.9x faster than DuckDuckGo's adblocker
 - **Loading Ghostery's blocking engine**
-  - 651x faster than uBlock Origin
   - 375x faster than Brave's Adblocker
+  - 651x faster than uBlock Origin
   - 3754x faster than Adblock Plus
   - DuckDuckGo's adblocker does not offer serialization, so the loading cost is always the one from parsing the lists.
 - **Memory Consumption** (at startup, in Chrome):
@@ -62,15 +63,20 @@ our findings in a nutshell:
 
 ### 0. About the Dataset
 
+To measure the performance of each content-blocker, we replayed
+requests from popular domains and kept track of the time it took
+to decide if a request should be blocked or not.
+
 This requests dataset was created using a Chrome
-headless browser (driven by the [`puppeteer` library](https://github.com/GoogleChrome/puppeteer)
+headless browser (driven by the [`puppeteer` library](https://github.com/GoogleChrome/puppeteer))
 to visit home pages of the *top 500 domains* (as reported by Cliqz
 Search), as well as up to 3 pages of each domain (picked randomly from
 the home page) and collecting all the network requests seen (URL, frame
 URL and type).
 
 The dataset is composed of 187406 requests. We released the data publicly at
-this URL: [requests_top500.json.gz](https://cdn.cliqz.com/adblocking/requests_top500.json.gz)
+this URL: [requests_top500.json.gz](https://cdn.cliqz.com/adblocking/requests_top500.json.gz).
+The script to create the dataset is also available on this repository: [create_dataset.js](./create_dataset.js).
 
 ### 1. Composition of Requests
 
@@ -87,7 +93,8 @@ average if they can efficiently decide which requests to *not block*.
 The filters used to determine whether or not a request is to be blocked
 are the ones from [Easylist](https://easylist-downloads.adblockplus.org/easylist.txt),
 where we removed all the cosmetic rules before running the benchmarks.
-The final list contains *38978 network filters*.
+The final list contains *38978 network filters* and is available there:
+[easylist.txt](./easylist.txt).
 
 It should be noted at this point that a bigger proportion of requests
 would be blocked by enabled extra filters lists such as *EasyPrivacy*.
@@ -101,7 +108,7 @@ distribution of the time it takes for content-blockers to decide whether
 or not a request should be blocked.
 
 Here is a break-down of the 99th percentile and median times for each
-ad-blocker:
+content-blocker:
 
 |               | 99% OF REQUESTS                 | MEDIAN                          |
 | ------------- | :------------------------------ | ------------------------------- |
@@ -174,21 +181,21 @@ initialization completely.
 We performed 100 serializations for each content-blocker and display the
 results below:
 
-![](./plots/plots/ghostery-ublock-origin-brave-adblockplus-serializationtimings.svg)
+![](./plots/ghostery-ublock-origin-brave-adblockplus-serializationtimings.svg)
 
 This bar plot contains the median time taken to serialize the engine for each
 content blocker:
 
-![](./plots/serialization.svg)
+![](./plots/serializationTimings.svg)
 
 Similarly, we measure the time it takes to restore the content blocker from its
 serialized form:
 
-![](./plots/plots/ghostery-ublock-origin-brave-adblockplus-deserializationtimings.svg)
+![](./plots/ghostery-ublock-origin-brave-adblockplus-deserializationtimings.svg)
 
 And here is the median time:
 
-![](./plots/deserialization.svg)
+![](./plots/deserializationTimings.svg)
 
 Last but not least, we measured the size of the serialized buffer for each
 content blocker:
@@ -199,25 +206,25 @@ From these measurements we see that Ghostery offers both significantly
 faster serialization and deserialization times as well as a smaller
 cache size.
 
-The gist of it is that the internal representation is already mostly
-stored in a compact form (using Typed Arrays); this means that
+The reason is the following: the internal representation is already
+mostly stored in a compact form (using typed arrays); this means that
 serialization only consists in adding a small amount of metadata
 along-side the already available arrays and deserialization is
 *essentially instantaneous* since it's enough to create some typed array
-views on top of the serialized buffer (think of `mmap` but using Typed
-Arrays). This also explains the very low memory consumption: after
+views on top of the serialized buffer (think of `mmap` but using typed
+arrays). This also explains the very low memory consumption: after
 initialization, the memory usage is only slightly higher than the size
 of the serialized form.
 
 ### 5. Memory Consumption at Start-up
 
-Here we consider the memory usage of each content-blocker after
-initialization from lists (not from cache) after one full garbage
-collection. The measurements were performed using Chrome's devtools
-Memory snapshot. We did not measure Brave here since the memory used
-from C++ side does not seem to be taken into account in the snapshot.
-Also keep in mind that this memory usage can vary at run-time as
-content-blockers might cache frequently used resources, etc.
+Here we consider the memory usage of each content-blocker, initialized
+from lists (not from cache) after one full garbage collection. The
+measurements were performed using Chrome's devtools Memory snapshot. We
+did not measure Brave here since the memory used from C++ side does not
+seem to be taken into account in the snapshot. Also keep in mind that
+this memory usage can vary at run-time as content-blockers might cache
+frequently used resources, etc.
 
 ![](./plots/memory-usage-at-startup.svg)
 
@@ -230,9 +237,9 @@ small over-head for extra meta-data.
 
 In this graph, we present the time it takes for each content-blocker to
 be initialized from the lists (without any prior caching, which means
-initializing all internal resources by parsing the patterns). We see
-that only Brave seems to be significantly slower and that uBlock
-Origin, Ghostery, Adblock Plus and DuckDuckGo all perform well.
+initializing all internal resources by parsing the raw list). We see
+that only Brave seems to be significantly slower and that uBlock Origin,
+Ghostery, Adblock Plus and DuckDuckGo all perform well.
 
 ![](./plots/time-to-parse-easylist-all.svg)
 
