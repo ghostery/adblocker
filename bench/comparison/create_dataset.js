@@ -34,7 +34,7 @@ class RequestStreamer extends stream.Readable {
 async function collectDataset(domains) {
   // Stream requests to file
   const requestStream = new RequestStreamer();
-  const outputStream = fs.createWriteStream('requests2.json');
+  const outputStream = fs.createWriteStream('requests.json');
   requestStream.pipe(outputStream);
 
   const visitUrl = async (browser, { url, domain }) => {
