@@ -160,6 +160,23 @@ can be implemented on top of any content blocker and does not tell
 much about the efficiency of each; we can see this as a mean to trade
 *memory* against *CPU usage*.
 
+From the previous measurements we see that Ghostery out-performs other
+libraries in terms of matching speed. Without going into too much
+details, here are some of the optimizations which can explain these
+results:
+
+* Ghostery makes use of a reverse index associating tokens to filters. Contrary
+  to other libraries, we make sure that we pick *the best* token for each filter
+  at construction time (best being defined as the *least seen token*). This incurs
+  a one-time extra cost but results in maximized dispatching capabilities.
+* Filters are stored in a very compact form, in typed arrays, and only loaded in
+  memory lazily, when there is a chance they will match (if we encounter
+  identical tokens in URLs).
+* Filters loaded in memory are optimized on-the-fly and multiple filters can be
+  combined for increased efficiency. The optimizations were carefully crafted
+  based on common cases observed in Easylist.
+
+
 ### 5. Serialization And Deserialization
 
 In this section we have a look at the performance of content-blockers
@@ -279,7 +296,7 @@ While most content-blockers are indeed efficient, they are not
 equivalent and we observed that *Ghostery* performs consistently as well
 or better across all dimensions, often surpassing other libraries.
 
-We hope that these benchmarks will give an opportunity for content-blocker's
+We hope that these benchmarks will give an opportunity for content-blockers
 developers to measure their own progress against other popular libraries;
 benefiting all users, no matter which extension they use, as the efficiency of
 content-blockers improves.
