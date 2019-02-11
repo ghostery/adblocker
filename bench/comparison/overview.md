@@ -1,8 +1,8 @@
 # **Adblockers: Performance Overview**
 
 These are the results of the benchmarks comparing some of the most
-popular content-blocker engines: Ghostery, uBlock Origin, Adblock Plus,
-Brave and DuckDuckGo.
+popular content-blocker engines: *Ghostery*, *uBlock Origin*, *Adblock Plus*,
+*Brave* and *DuckDuckGo*.
 
 This study was motivated by the recent [Manifest V3
 controversy](https://bugs.chromium.org/p/chromium/issues/detail?id=896897).
@@ -30,10 +30,10 @@ as this would require some significant effort to package them in a way
 that allows benchmarking against the other libraries. We leave this for
 future work.
 
-All blockers except uBlock Origin are available as JavaScript libraries
-which can be loaded in Node.js. To allow comparing uBlock Origin as
+All blockers except *uBlock Origin* are available as JavaScript libraries
+which can be loaded in Node.js. To allow comparing *uBlock Origin* as
 well, we had to extract the static network filtering engine [out of
-the extension](./ublock.js). The version of uBlock Origin running in
+the extension](./ublock.js). The version of *uBlock Origin* running in
 this benchmark *does not make use of the Webassembly* version of domain
 matching.
 
@@ -46,20 +46,20 @@ Before presenting the detailed analysis of the results, let us highlight
 our findings in a nutshell:
 
 - **Matching Performance of Ghostery** (median):
-  - 2.4x faster than uBlock Origin
-  - 3.0x faster than Adblock Plus
-  - 5.6x faster than Brave's Adblocker
-  - 1068.9x faster than DuckDuckGo's adblocker
+  - 2.4x faster than *uBlock Origin*
+  - 3.0x faster than *Adblock Plus*
+  - 5.6x faster than *Brave*'s Adblocker
+  - 1068.9x faster than *DuckDuckGo*'s adblocker
 - **Loading Ghostery's blocking engine**
-  - 375x faster than Brave's Adblocker
-  - 651x faster than uBlock Origin
-  - 3754x faster than Adblock Plus
-  - DuckDuckGo's adblocker does not offer serialization, so the loading cost is always the one from parsing the lists.
+  - 375x faster than *Brave*'s Adblocker
+  - 651x faster than *uBlock Origin*
+  - 3754x faster than *Adblock Plus*
+  - *DuckDuckGo*'s adblocker does not offer serialization, so the loading cost is always the one from parsing the lists.
 - **Memory Consumption** (at startup, in Chrome):
-  - 1.6x less memory than uBlock Origin
-  - 8.4x less memory than Adblock Plus
-  - 8.8x less memory than DuckDuckGo's adblocker
-  - The memory usage of Brave could not be evaluated using the devtools
+  - 1.6x less memory than *uBlock Origin*
+  - 8.4x less memory than *Adblock Plus*
+  - 8.8x less memory than *DuckDuckGo*'s adblocker
+  - The memory usage of *Brave* could not be evaluated using the devtools
     and thus is not included in this section.
 
 ### 0. About the Dataset
@@ -164,9 +164,9 @@ much about the efficiency of each; we can see this as a mean to trade
 
 In this section we have a look at the performance of content-blockers
 when it comes to serializing their internal representation for faster
-sub-sequent loading. Only DuckDuckGo's engine does not provide this
-feature. uBlock Origin, Ghostery, Adblock Plus and Brave all allow to
-serialize or cache (uBlock Origin's terminology is: *selfies*) the
+sub-sequent loading. Only *DuckDuckGo*'s engine does not provide this
+feature. *uBlock Origin*, *Ghostery*, *Adblock Plus* and *Brave* all allow to
+serialize or cache (*uBlock Origin*'s terminology is: *selfies*) the
 entire blocking engine to either a string or a buffer, which can then be
 used to speed-up sub-sequent loads.
 
@@ -203,7 +203,7 @@ content blocker:
 
 ![](./plots/cache-size.svg)
 
-From these measurements we see that Ghostery offers both significantly
+From these measurements we see that *Ghostery* offers both significantly
 faster serialization and deserialization times as well as a smaller
 cache size.
 
@@ -230,7 +230,7 @@ frequently used resources, etc.
 ![](./plots/memory-usage-at-startup.svg)
 
 As mentioned in the previous section on serialization, the very low
-memory usage of Ghostery can be explained by the fact that the internal
+memory usage of *Ghostery* can be explained by the fact that the internal
 representation mostly consists in very compact typed arrays with some
 small over-head for extra meta-data.
 
@@ -239,8 +239,8 @@ small over-head for extra meta-data.
 In this graph, we present the time it takes for each content-blocker to
 be initialized from the lists (without any prior caching, which means
 initializing all internal resources by parsing the raw list). We see
-that only Brave seems to be significantly slower and that uBlock Origin,
-Ghostery, Adblock Plus and DuckDuckGo all perform well.
+that only Brave seems to be significantly slower and that *uBlock Origin*,
+*Ghostery*, *Adblock Plus* and *DuckDuckGo* all perform well.
 
 ![](./plots/time-to-parse-easylist-all.svg)
 
@@ -249,8 +249,8 @@ issue](https://github.com/brave/ad-block/issues/158) tracked on their
 GitHub repository.
 
 Now if we remove Brave, we see that there are still differences between
-uBlock Origin, Ghostery, Adblock Plus and DuckDuckGo. One reason
-Ghostery is slower than uBlock Origin and AdblockPlus here is that to
+*uBlock Origin*, *Ghostery*, *Adblock Plus* and *DuckDuckGo*. One reason
+*Ghostery* is slower than *uBlock Origin* and *AdblockPlus* here is that to
 achieve maximum performance while matching as well as minimize memory
 usage, there is a bit more work to do up-front. In practice this does
 not matter so much since it is a one-time operation and that sub-sequent
@@ -276,7 +276,7 @@ not think this claim holds, as all popular content-blockers are already
 very efficient and should not incur noticeable slow-down for users.
 
 While most content-blockers are indeed efficient, they are not
-equivalent and we observed that Ghostery performs consistently as well
+equivalent and we observed that *Ghostery* performs consistently as well
 or better across all dimensions, often surpassing other libraries.
 
 We hope that these benchmarks will give an opportunity for content-blocker's
