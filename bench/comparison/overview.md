@@ -5,9 +5,9 @@ popular content-blocker engines: Ghostery, uBlock Origin, Adblock Plus,
 Brave and DuckDuckGo.
 
 This study was motivated by the recent [Manifest V3
-controversy](https://bugs.chromium.org/p/chromium/issues/detail?id=89689
-7). One of the proposed changes involves crippling the WebRequest APIs
-to limit their blocking abilities. Two justifications were put forth:
+controversy](https://bugs.chromium.org/p/chromium/issues/detail?id=896897).
+One of the proposed changes involves crippling the WebRequest APIs to
+limit their blocking abilities. Two justifications were put forth:
 *performance* and privacy. We show that the performance of the most
 popular content blockers is very good (having a sub-millisecond median
 decision time per request) and should not result in any over-head
@@ -262,4 +262,24 @@ version of the blocker, which removes this step completely).
 
 ### 7. Conclusion
 
-TODO
+In this study we looked closely at the performance of some of the most
+popular content-blockers in use today. In particular, we focused on the
+efficiency of their network filtering engines, which is the most CPU
+intensive task they perform.
+
+This work was motivated by one of the claims formulated in the [Manifest V3
+proposal](https://bugs.chromium.org/p/chromium/issues/detail?id=896897)
+of the Chromium project: *"the extension then performs arbitrary (and
+potentially very slow) JavaScript"*, talking about content-blockers'
+ability to process all network requests. From the measurements, we do
+not think this claim holds, as all popular content-blockers are already
+very efficient and should not incur noticeable slow-down for users.
+
+While most content-blockers are indeed efficient, they are not
+equivalent and we observed that Ghostery performs consistently as well
+or better across all dimensions, often surpassing other libraries.
+
+We hope that these benchmarks will give an opportunity for content-blocker's
+developers to measure their own progress against other popular libraries;
+benefiting all users, no matter which extension they use, as the efficiency of
+content-blockers improves.
