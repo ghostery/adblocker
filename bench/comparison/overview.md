@@ -1,8 +1,8 @@
 # **Adblockers: Performance Overview**
 
-These are the results of the benchmarks comparing some of the most
-popular content-blocker engines: *Ghostery/Cliqz*, *uBlock Origin*, *Adblock Plus*,
-*Brave* and *DuckDuckGo*.
+Here we present a detailed analysis of the performance of some of the
+most popular content-blocker engines: *Ghostery/Cliqz*, *uBlock Origin*,
+*Adblock Plus*, *Brave* and *DuckDuckGo*.
 
 This study was motivated by the recent [Manifest V3
 controversy](https://bugs.chromium.org/p/chromium/issues/detail?id=896897).
