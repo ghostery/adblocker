@@ -14,8 +14,8 @@ adblockpluscore:
 brave: ../../node_modules/ad-block
 	NODE_ENV=production node run.js brave requests.json
 
-cliqz:
-	NODE_ENV=production node run.js cliqz requests.json
+ghostery:
+	NODE_ENV=production node run.js ghostery requests.json
 
 ublock:
 	NODE_ENV=production node run.js ublock requests.json
@@ -27,4 +27,4 @@ duckduckgo: ../../node_modules/abp-filter-parser
 	NODE_ENV=production node run.js duckduckgo requests.json
 
 deps: adblockpluscore ../../node_modules/abp-filter-parser ../../node_modules/ad-block
-run: cliqz ublock adblockplus brave duckduckgo
+run: ghostery ublock adblockplus brave duckduckgo

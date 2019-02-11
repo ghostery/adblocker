@@ -48,7 +48,7 @@ our findings in a nutshell:
 
 ### 0. About the Dataset
 
-This [requests dataset](https://cdn.cliqz.com/adblocking/requests_200k.json.gz)
+This [requests dataset](https://cdn.cliqz.com/adblocking/requests_top500.json.gz)
 was created using Chrome headless browsers to visit home pages of the
 *top 50k domains* (as reported by Cliqz Search), as well as up to 3
 random pages of each domain (picked randomly from the home page) and

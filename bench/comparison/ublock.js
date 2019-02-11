@@ -346,11 +346,6 @@ const URI = (function () {
     return this.domainFromHostname(this.hostname);
   };
 
-  // CLIQZ: using tldts instead
-  // It is expected that there is higher-scoped `publicSuffixList` lingering
-  // somewhere. Cache it. See <https://github.com/gorhill/publicsuffixlist.js>.
-  // var psl = publicSuffixList;
-
   /** *************************************************************************** */
 
   URI.entityFromDomain = function (domain) {
@@ -1490,12 +1485,6 @@ const stringDeduplicater = {
     let t = this.strings.get(s);
     if (t === undefined) {
       t = this.strings.set(s, s).get(s);
-      if (this.timer === undefined) {
-        // CLIQZ: disable
-        // this.timer = vAPI.setTimeout(() => {
-        //   this.cleanup();
-        // }, 10000);
-      }
     }
     this.last = Date.now();
     return t;
@@ -2492,10 +2481,6 @@ const staticNetFilteringEngine = (function () {
 
   FilterOrigin.trieContainer = (function () {
     let trieDetails;
-    // CLIQZ: disable
-    // try {
-    //   trieDetails = JSON.parse(vAPI.localStorage.getItem('FilterOrigin.trieDetails'));
-    // } catch (ex) {}
     return new HNTrieContainer(trieDetails);
   }());
 
@@ -2615,10 +2600,6 @@ const staticNetFilteringEngine = (function () {
 
   FilterHostnameDict.trieContainer = (function () {
     let trieDetails;
-    // CLIQZ: disable
-    // try {
-    //   trieDetails = JSON.parse(vAPI.localStorage.getItem('FilterHostnameDict.trieDetails'));
-    // } catch (ex) {}
     return new HNTrieContainer(trieDetails);
   }());
 
@@ -2632,8 +2613,6 @@ const staticNetFilteringEngine = (function () {
 
   FilterHostnameDict.optimize = function () {
     FilterHostnameDict.trieContainer.optimize();
-    // CLIQZ: disable
-    // vAPI.localStorage.setItem('FilterHostnameDict.trieDetails', JSON.stringify(trieDetails));
   };
 
   FilterHostnameDict.load = function (args) {
@@ -2879,7 +2858,7 @@ const staticNetFilteringEngine = (function () {
   /** *************************************************************************** */
 
   const FilterParser = function () {
-    this.cantWebsocket = false; // CLIQZ: vAPI.cantWebsocket;
+    this.cantWebsocket = false;
     this.reBadDomainOptChars = /[*+?^${}()[\]\\]/;
     this.reHostnameRule1 = /^[0-9a-z][0-9a-z.-]*[0-9a-z]$/i;
     this.reHostnameRule2 = /^[0-9a-z][0-9a-z.-]*[0-9a-z]\^?$/i;
@@ -3137,10 +3116,6 @@ const staticNetFilteringEngine = (function () {
       this.types = dataTypeBit;
       this.dataType = 'csp';
       this.dataStr = 'connect-src https: http:';
-      // https://bugs.chromium.org/p/chromium/issues/detail?id=669086
-      // TODO: remove when most users are beyond Chromium v56
-      // if (vAPI.webextFlavor.soup.has('chromium') && vAPI.webextFlavor.major < 57) {
-      // CLIQZ: disable
       this.dataStr += '; frame-src *';
       return;
     }
@@ -3571,8 +3546,6 @@ const staticNetFilteringEngine = (function () {
       // Special cases: delegate to more specialized engines.
       // Redirect engine.
       if ((bits & 0x1f0) === redirectTypeValue) {
-        // CLIQZ: disable redirections
-        // µb.redirectEngine.fromCompiledRule(args[1]);
         continue;
       }
 
@@ -3836,13 +3809,6 @@ const staticNetFilteringEngine = (function () {
     // Only static filter with an explicit type can be redirected. If we reach
     // this point, it's because there is one or more explicit type.
     if (parsed.redirect) {
-      // CLIQZ: disable redirections
-      // let redirects = µb.redirectEngine.compileRuleFromStaticFilter(parsed.raw);
-      // if ( Array.isArray(redirects) ) {
-      //     for ( let redirect of redirects ) {
-      //         writer.push([ typeNameToTypeValue.redirect, redirect ]);
-      //    }
-      // }
     }
   };
 

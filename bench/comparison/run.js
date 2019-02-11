@@ -8,7 +8,7 @@ const { makeRequest } = require('../../');
 const UBlockOrigin = require('./ublock.js');
 const Brave = require('./brave.js');
 const Duckduckgo = require('./duckduckgo.js');
-const Cliqz = require('./cliqz.js');
+const Ghostery = require('./ghostery.js');
 const AdBlockPlus = require('./adblockplus.js');
 
 const ENGINE = process.argv[process.argv.length - 2];
@@ -51,7 +51,7 @@ async function main() {
   const Cls = {
     adblockplus: AdBlockPlus,
     brave: Brave,
-    cliqz: Cliqz,
+    ghostery: Ghostery,
     duckduckgo: Duckduckgo,
     ublock: UBlockOrigin,
   }[ENGINE];
