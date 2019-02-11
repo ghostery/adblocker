@@ -120,9 +120,11 @@ async function main() {
       return;
     }
 
+    const { url, cpt, frameUrl } = request;
     const parsed = makeRequest({
-      ...request,
-      type: request.cpt,
+      url,
+      sourceUrl: frameUrl,
+      type: cpt,
     }, tldts);
 
     if (parsed.domain === '' || parsed.hostname === '' || parsed.sourceHostname === '' || parsed.sourceDomain === '') {

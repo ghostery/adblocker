@@ -1,8 +1,9 @@
-#!/usr/bin/env node
+/* eslint-disable no-await-in-loop */
 
 const fs = require('fs');
 const puppeteer = require('puppeteer');
 const stream = require('stream');
+const { getDomain } = require('tldts');
 
 class RequestStreamer extends stream.Readable {
   constructor(options) {
@@ -37,64 +38,100 @@ async function collectDataset(domains) {
   requestStream.pipe(outputStream);
 
   const visitUrl = async (browser, { url, domain }) => {
-    let urlToVisit = url;
-    if (url === undefined) {
-      urlToVisit = `http://www.${domain}`;
-    }
+    const candidates = [
+      url,
+      `https://${domain}`,
+      `https://www.${domain}`,
+      `http://${domain}`,
+      `http://www.${domain}`,
+    ];
 
-    const page = await browser.newPage();
-    try {
-      // Collect all requests used to load the page
-      page.on('request', (request) => {
-        requestStream.onRequest({
-          sourceUrl: request.resourceType() === 'document' ? request.url() : request.frame().url(),
-          url: request.url(),
-          cpt: request.resourceType(),
-        });
-      });
+    for (let i = 0; i < candidates.length; i += 1) {
+      const urlToVisit = candidates[i];
 
-      const status = await page.goto(urlToVisit);
-      if (!status.ok) {
-        return [];
+      if (urlToVisit) {
+        const page = await browser.newPage();
+        try {
+          // Collect all requests used to load the page
+          page.on('request', (request) => {
+            // Ignore data-urls
+            if (request.url().startsWith('data:') || request.url().startsWith('mailto:')) {
+              return;
+            }
+
+            requestStream.onRequest({
+              frameUrl:
+                request.resourceType() === 'document' ? request.url() : request.frame().url(),
+              url: request.url(),
+              cpt: request.resourceType(),
+            });
+          });
+
+          console.log(`  * goto: ${urlToVisit}`);
+          const status = await page.goto(urlToVisit);
+          if (!status.ok) {
+            return [];
+          }
+
+          // Collect hrefs from the page
+          const domainOfPage = getDomain(urlToVisit);
+          const urlsOnPage = await page.evaluate(() => [...document.querySelectorAll('a')].map(a => a.href).filter(Boolean));
+          const sameDomainUrls = urlsOnPage.filter(href => getDomain(href) === domainOfPage);
+          return [...new Set(sameDomainUrls)];
+        } catch (ex) {
+          console.log(`Could not fetch: ${urlToVisit}`, ex);
+        } finally {
+          await page.close();
+        }
       }
 
-      // Collect hrefs from the page
-      return (await page.evaluate(() => [...document.querySelectorAll('a')].map(a => a.href))).filter(href => Boolean(href) && href.includes(domain));
-    } catch (ex) {
-      return [];
-    } finally {
-      await page.close();
+      // If `url` was specified, we do not proceed with visiting other
+      // candidates based on `domain`.
+      if (url !== undefined) {
+        return [];
+      }
     }
+
+    return [];
   };
 
-  const processDomain = async (browser, domain) => {
+  const processDomain = async (browser, domain, index) => {
     try {
       // Visit home page of domain
-      console.log(`Home page: ${domain}`);
+      console.log(`Home page: ${domain} (${index})`);
       const linksOnPage = await visitUrl(browser, { domain });
 
       // Visit 3 random URLs from the page
       if (linksOnPage.length > 0) {
         for (let j = 0; j < Math.min(3, linksOnPage.length); j += 1) {
-          const url = linksOnPage[Math.floor(Math.random() * linksOnPage.length)];
-          console.log(`Sub-page: ${url}`);
-          // eslint-disable-next-line no-await-in-loop
-          await visitUrl(browser, { url, domain });
+          await visitUrl(browser, {
+            url: linksOnPage[Math.floor(Math.random() * linksOnPage.length)],
+            domain,
+          });
         }
       }
 
-      console.log(`Process: ${domain}, total: ${requestStream.totalRequests} reqs`);
+      console.log(`Finished processing: ${domain}, total: ${requestStream.totalRequests} reqs`);
     } catch (ex) {
       console.error(`Error while processing: ${domain}`, ex);
     }
   };
 
-  // Create pool of browsers
+  // Create browser instance
   const browser = await puppeteer.launch();
 
+  let numberOfDomainsProcessed = 0;
   for (let i = 0; i < domains.length; i += 1) {
-    // eslint-disable-next-line no-await-in-loop
-    await processDomain(browser, domains[i]);
+    const requestsBefore = requestStream.totalRequests;
+    await processDomain(browser, domains[i], i);
+    const requestsAfter = requestStream.totalRequests;
+    if (requestsBefore !== requestsAfter) {
+      numberOfDomainsProcessed += 1;
+    }
+
+    if (numberOfDomainsProcessed === 500) {
+      break;
+    }
   }
 
   requestStream.tearDown();
@@ -141,7 +178,6 @@ collectDataset([
   't-online.de',
   'zone-telechargement1.com',
   'leboncoin.fr',
-  'mlomiejdfkolichcflejclcbmpeaniij.',
   'nexusmods.com',
   'amazon.fr',
   'w3schools.com',
@@ -324,7 +360,6 @@ collectDataset([
   'gocomics.com',
   'adme.ru',
   'bestbuy.com',
-  '.gov.uk',
   'gamespot.com',
   'msk.ru',
   'koreus.com',
@@ -602,4 +637,503 @@ collectDataset([
   'hubspot.com',
   'marmiton.org',
   'zillow.com',
+  'bouyguestelecom.fr',
+  'playstation.com',
+  's.to',
+  'ebay.fr',
+  'cinecalidad.to',
+  'telekom.de',
+  'd20pfsrd.com',
+  'nrk.no',
+  'duden.de',
+  'pcgames-download.com',
+  'index.hu',
+  'tagesspiegel.de',
+  'extreme-d0wn.com',
+  'tubegalore.com',
+  'thedailybeast.com',
+  'timeanddate.com',
+  'doramatv.ru',
+  'wetteronline.de',
+  'aldi-sued.de',
+  'teamviewer.com',
+  'consumerreports.org',
+  'sfr.fr',
+  'corriere.it',
+  'majorgeeks.com',
+  'ing.nl',
+  'imagefap.com',
+  'index.hr',
+  'webtoons.com',
+  'hentaihaven.org',
+  'latimes.com',
+  'kiwireport.com',
+  'masterani.me',
+  'google.nl',
+  'funnyjunk.com',
+  'tomshardware.com',
+  'garmin.com',
+  'furaffinity.net',
+  'digg.com',
+  'joyreactor.cc',
+  'mlb.com',
+  'dailywire.com',
+  'meteofrance.com',
+  'logitech.com',
+  'pexels.com',
+  'americanexpress.com',
+  'dkb.de',
+  'banggood.com',
+  'gidonline.in',
+  'sims3pack.ru',
+  'cheezburger.com',
+  '20minutes.fr',
+  'opera.com',
+  'ar15.com',
+  'viki.com',
+  'isnichwahr.de',
+  'vpornoonlain.tv',
+  'amd.com',
+  'wiktionary.org',
+  'linuxmint.com',
+  'belastingdienst.nl',
+  'google.pl',
+  'stoloto.ru',
+  'mailchimp.com',
+  'delta.com',
+  'coursera.org',
+  'onlinesbi.com',
+  'groupon.com',
+  'expedia.com',
+  'youjizz.com',
+  'buienradar.nl',
+  'tvtropes.org',
+  '90skidsonly.com',
+  'giga.de',
+  'discogs.com',
+  'atlassian.com',
+  'leroymerlin.ru',
+  'frandroid.com',
+  'ceneo.pl',
+  'unity3d.com',
+  'wetter.de',
+  'ilfattoquotidiano.it',
+  'livescore.com',
+  'google.ca',
+  'uptodown.com',
+  'syosetu.com',
+  'xbox.com',
+  'korrespondent.net',
+  'commentcamarche.com',
+  'archive.org',
+  'thefappeningblog.com',
+  'lastpass.com',
+  'instructables.com',
+  'pcpartpicker.com',
+  'wizards.com',
+  'mangahere.cc',
+  'journaldesfemmes.com',
+  'conforama.fr',
+  'dictionary.com',
+  'wdr.de',
+  'airbnb.com',
+  'finanzen.net',
+  'bing.com',
+  'onedio.ru',
+  'subscene.com',
+  'lachainemeteo.com',
+  'jbzdy.pl',
+  'goldesel.to',
+  'ok.ru',
+  'boursorama.com',
+  'cheatsheet.com',
+  'idnes.cz',
+  'watchcartoononline.com',
+  'rei.com',
+  'fitgirl-repacks.site',
+  'olx.ua',
+  'utorrent.com',
+  'sport1.de',
+  'taringa.net',
+  'webmd.com',
+  'sephora.com',
+  'docker.com',
+  'pcworld.com',
+  'trello.com',
+  'nrc.nl',
+  'evernote.com',
+  'eroprofile.com',
+  'mercadolivre.com.br',
+  'plex.tv',
+  'vice.com',
+  'literotica.com',
+  'worldofwarcraft.com',
+  'avm.de',
+  'emojipedia.org',
+  'golem.de',
+  'zalando.de',
+  'shopify.com',
+  'infowars.com',
+  'postbank.de',
+  'debian.org',
+  'cont.ws',
+  'senscritique.com',
+  'jquery.com',
+  'gala.fr',
+  'vrt.be',
+  'ebaumsworld.com',
+  'milliyet.com.tr',
+  'altadefinizione.pink',
+  'materiel.net',
+  'geektimes.ru',
+  'papstream.net',
+  'snopes.com',
+  'nintendo.com',
+  'blizzard.com',
+  'urbanoutfitters.com',
+  'slideshare.net',
+  'themeforest.net',
+  'target.com',
+  'lamoda.ru',
+  'watchcartoononline.io',
+  'spiceworks.com',
+  'css-tricks.com',
+  'mmo-champion.com',
+  'bricodepot.fr',
+  'tv2.dk',
+  'origo.hu',
+  'mindfactory.de',
+  'downloadhelper.net',
+  'chefkoch.de',
+  'metacritic.com',
+  'boulanger.com',
+  'otto.de',
+  'freepik.com',
+  'git-scm.com',
+  'dpstream.net',
+  'hclips.com',
+  'autodesk.com',
+  'kijiji.ca',
+  'microsoftonline.com',
+  'weebly.com',
+  'lexpress.fr',
+  'imgsrc.ru',
+  'malwarebytes.com',
+  'androidcentral.com',
+  'bhphotovideo.com',
+  'sky.com',
+  'talkingpointsmemo.com',
+  'bitcointalk.org',
+  'sncf.com',
+  '24.hu',
+  'elconfidencial.com',
+  'urssaf.fr',
+  'castorama.fr',
+  'sozcu.com.tr',
+  'google.it',
+  'iflscience.com',
+  'journaldugeek.com',
+  'nydailynews.com',
+  'onepiece-tube.com',
+  'deutschepost.de',
+  'mayoclinic.org',
+  'flaticon.com',
+  'sports.ru',
+  'huffingtonpost.com',
+  'healthline.com',
+  'warframe.com',
+  'aol.com',
+  'mts.ru',
+  'ebay.com.au',
+  'doctissimo.fr',
+  'soundcloud.com',
+  'zoom.us',
+  'nordstrom.com',
+  'windowscentral.com',
+  'niezalezna.pl',
+  'caf.fr',
+  'ndtv.com',
+  'coinbase.com',
+  'nymag.com',
+  'bol.com',
+  'mangafox.la',
+  'game-game.com.ua',
+  'delfi.lt',
+  'netzwelt.de',
+  'flvto.biz',
+  'immobilienscout24.de',
+  'theweathernetwork.com',
+  'elastic.co',
+  'vmware.com',
+  'delfi.ee',
+  'convert2mp3.net',
+  'eurogamer.net',
+  'vg.no',
+  'rockpapershotgun.com',
+  'solarmoviez.ru',
+  'moddb.com',
+  'playground.ru',
+  'topachat.com',
+  '4pda.ru',
+  'ddl.me',
+  'geforce.com',
+  'thebalance.com',
+  'mysql.com',
+  'pornhd.com',
+  'douyu.com',
+  'macys.com',
+  'teleprogramma.pro',
+  'google.es',
+  'voici.fr',
+  'topito.com',
+  'over-blog.com',
+  'buzzfeed.com',
+  'marca.com',
+  'express.de',
+  'distrowatch.com',
+  'tesla.com',
+  'boardgamegeek.com',
+  'igroutka.net',
+  'vulture.com',
+  'smallpdf.com',
+  'ted.com',
+  'serverfault.com',
+  'qq.com',
+  'zaycev.net',
+  'mangadex.org',
+  'nasa.gov',
+  'dpreview.com',
+  'egaliteetreconciliation.fr',
+  'ibm.com',
+  'thegatewaypundit.com',
+  'animeyt.tv',
+  'meneame.net',
+  'metro.co.uk',
+  'ubnt.com',
+  'mit.edu',
+  'autooverload.com',
+  'torrent9.ec',
+  'avclub.com',
+  'macrumors.com',
+  'vnexpress.net',
+  'google.co.in',
+  'hornbach.de',
+  'millenium.org',
+  'openclassrooms.com',
+  'maximonline.ru',
+  'qz.com',
+  'yle.fi',
+  'shooshtime.com',
+  'zdnet.com',
+  'jutarnji.hr',
+  'fifa.com',
+  'gutefrage.net',
+  '3dnews.ru',
+  'quechoisir.org',
+  'wiocha.pl',
+  'gigazine.net',
+  'postimees.ee',
+  'creditmutuel.fr',
+  'bodybuilding.com',
+  'gitlab.com',
+  'smh.com.au',
+  'aa.com',
+  'walgreens.com',
+  'canva.com',
+  'si.com',
+  'easyjet.com',
+  'medialeaks.ru',
+  'java.com',
+  'rlsbb.ru',
+  'worldation.com',
+  'npo.nl',
+  'hollywoodreporter.com',
+  'eporner.com',
+  'societegenerale.fr',
+  'researchgate.net',
+  'mediamarkt.de',
+  'serienstream.to',
+  'sportmaster.ru',
+  '1und1.de',
+  'himado.in',
+  'kayak.com',
+  'efukt.com',
+  'edf.fr',
+  'msi.com',
+  'tnt-online.ru',
+  'topwar.ru',
+  'heavy-r.com',
+  'animedigitalnetwork.fr',
+  'godaddy.com',
+  'audible.com',
+  'anidub.com',
+  'zara.com',
+  'travelfuntu.com',
+  'google.com.br',
+  'alternate.de',
+  'ardmediathek.de',
+  'slack.com',
+  'anandtech.com',
+  'coolmath-games.com',
+  'svscomics.com',
+  'kurir.rs',
+  'nbcsports.com',
+  'javtorrent.re',
+  'ipko.pl',
+  'cplusplus.com',
+  'tripadvisor.co.uk',
+  'state.gov',
+  'gry-online.pl',
+  'ubuntu-fr.org',
+  'edx.org',
+  'caisse-epargne.fr',
+  'citi.com',
+  'vanguard.com',
+  'zendesk.com',
+  'woot.com',
+  'benchmark.pl',
+  'nalog.ru',
+  'gfycat.com',
+  'ifixit.com',
+  'tass.ru',
+  'pcastuces.com',
+  'tmz.com',
+  'xataka.com',
+  'ndr.de',
+  'torrent9.ru',
+  'sdamgia.ru',
+  'telegraaf.nl',
+  'rueducommerce.fr',
+  'ard.de',
+  'mopo.de',
+  'funda.nl',
+  'kp.ru',
+  'eztv.ag',
+  'obozrevatel.com',
+  'mediapart.fr',
+  'aldi-nord.de',
+  'fidelity.com',
+  'geeksforgeeks.org',
+  'protonmail.com',
+  'surveymonkey.com',
+  'fakt.pl',
+  'cas.sk',
+  'lg.com',
+  'pomponik.pl',
+  'investing.com',
+  'celebjihad.com',
+  'national-lottery.co.uk',
+  'elster.de',
+  'otakustream.tv',
+  'freecodecamp.org',
+  'gazzetta.it',
+  'tripadvisor.de',
+  'cyberciti.biz',
+  'cbslocal.com',
+  'togetter.com',
+  'telerama.fr',
+  'dlsite.com',
+  'ozbargain.com.au',
+  'thestar.com',
+  'misspennystocks.com',
+  'chron.com',
+  'rarbg.to',
+  'winfuture.de',
+  'gta5-mods.com',
+  'slate.fr',
+  'pi-news.net',
+  'clien.net',
+  'aftershock.news',
+  'europe1.fr',
+  'obi.de',
+  'sberbank.ru',
+  'e1.ru',
+  'eksisozluk.com',
+  'economist.com',
+  'novelupdates.com',
+  'unity.com',
+  'pagesix.com',
+  'itv.com',
+  'easeus.com',
+  'cosmo.ru',
+  'caradisiac.com',
+  'tradingview.com',
+  'journaldesfemmes.fr',
+  'planet-streaming.com',
+  'americanthinker.com',
+  'xing.com',
+  'xtube.com',
+  'rtbf.be',
+  'boredomtherapy.com',
+  'hotcleaner.com',
+  'sofoot.com',
+  'perfectgirls.net',
+  'papystreaming.com',
+  'paradoxwikis.com',
+  'tvmuse.com',
+  'aktuality.sk',
+  'mbank.pl',
+  'nhl.com',
+  'gamepress.gg',
+  'google.co.jp',
+  'marriott.com',
+  'alibaba.com',
+  'livestrong.com',
+  'rakuten.co.jp',
+  'abcya.com',
+  'blic.rs',
+  'rouming.cz',
+  'leprogres.fr',
+  'hpjav.com',
+  'tomtom.com',
+  'giantitp.com',
+  'retailmenot.com',
+  'glaz.tv',
+  'gamestorrent.co',
+  'realtor.com',
+  'tvp.pl',
+  'auto.ru',
+  'crazyshit.com',
+  'creditkarma.com',
+  'asos.fr',
+  'mejortorrent.com',
+  'jimdo.com',
+  'modthesims.info',
+  'letribunaldunet.fr',
+  'hqporner.com',
+  'foodnetwork.com',
+  'c-and-a.com',
+  'fmovies.se',
+  'guru3d.com',
+  '16personalities.com',
+  'sfgate.com',
+  'seznamzpravy.cz',
+  'americanupbeat.com',
+  'starhit.ru',
+  'life.ru',
+  'pitchfork.com',
+  'purepeople.com',
+  'digitec.ch',
+  '4tube.com',
+  'sapo.pt',
+  'pydata.org',
+  'y8.com',
+  'hearthstonetopdecks.com',
+  'larousse.fr',
+  'ren.tv',
+  'jw.org',
+  'lacentrale.fr',
+  'scp-wiki.net',
+  'primewire.ag',
+  'scribd.com',
+  'jezebel.com',
+  'esuteru.com',
+  'penny-arcade.com',
+  'b9good.com',
+  'seriouseats.com',
+  'midilibre.fr',
+  'wondershare.com',
+  't-mobile.com',
+  'nordvpn.com',
+  'ea.com',
 ]);

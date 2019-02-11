@@ -26,4 +26,5 @@ adblockplus: adblockpluscore
 duckduckgo: ../../node_modules/abp-filter-parser
 	NODE_ENV=production node run.js duckduckgo requests.json
 
+deps: adblockpluscore ../../node_modules/abp-filter-parser ../../node_modules/ad-block
 run: cliqz ublock adblockplus brave duckduckgo
