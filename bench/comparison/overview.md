@@ -1,4 +1,4 @@
-### **Adblockers: Performance Overview**
+# **Adblockers: Performance Overview**
 
 These are the results of the benchmarks comparing some of the most
 popular content-blocker engines: Ghostery, uBlock Origin, Adblock Plus,
@@ -40,7 +40,7 @@ matching.
 All benchmarks were ran on an X1 Carbon 2016 (i7 U6600 + 16 GB) in
 Node.js 11.9.0.
 
-### Results
+## Results
 
 Before presenting the detailed analysis of the results, let us highlight
 our findings in a nutshell:
@@ -100,7 +100,7 @@ The final list contains *38978 network filters* and is available there:
 It should be noted at this point that a bigger proportion of requests
 would be blocked by enabling extra filters lists such as *EasyPrivacy*.
 
-### 1. On All Requests
+### 2. On All Requests
 
 We first look at all of the requests (whether they will eventually
 be blocked or not). We use a log-scale for the x-axis (time in
@@ -123,7 +123,7 @@ Below you can find the cumulative distribution plots of these timings:
 
 ![](./plots/ghostery-ublock-origin-brave-duckduckgo-adblockplus-all.svg)
 
-### 2. Time To Evaluate Requests Which Are Not Blocked
+### 3. Time To Evaluate Requests Which Are Not Blocked
 
 The following table details 99th percentile and median timings for requests not
 blocked:
@@ -138,7 +138,7 @@ blocked:
 
 ![](./plots/ghostery-ublock-origin-brave-duckduckgo-adblockplus-not-blocked.svg)
 
-### 3. Time To Evaluate Requests That Are Blocked
+### 4. Time To Evaluate Requests That Are Blocked
 
 The following table details 99th percentile and median timings for requests blocked:
 
@@ -160,7 +160,7 @@ can be implemented on top of any content blocker and does not tell
 much about the efficiency of each; we can see this as a mean to trade
 *memory* against *CPU usage*.
 
-### 4. Serialization And Deserialization
+### 5. Serialization And Deserialization
 
 In this section we have a look at the performance of content-blockers
 when it comes to serializing their internal representation for faster
@@ -217,7 +217,7 @@ arrays). This also explains the very low memory consumption: after
 initialization, the memory usage is only slightly higher than the size
 of the serialized form.
 
-### 5. Memory Consumption at Start-up
+### 6. Memory Consumption at Start-up
 
 Here we consider the memory usage of each content-blocker, initialized
 from lists (not from cache) after one full garbage collection. The
@@ -234,7 +234,7 @@ memory usage of Ghostery can be explained by the fact that the internal
 representation mostly consists in very compact typed arrays with some
 small over-head for extra meta-data.
 
-### 6. Parsing Lists
+### 7. Parsing Lists
 
 In this graph, we present the time it takes for each content-blocker to
 be initialized from the lists (without any prior caching, which means
@@ -260,7 +260,7 @@ version of the blocker, which removes this step completely).
 
 ![](./plots/time-to-parse-easylist-without-brave.svg)
 
-### 7. Conclusion
+### 8. Conclusion
 
 In this study we looked closely at the performance of some of the most
 popular content-blockers in use today. In particular, we focused on the
