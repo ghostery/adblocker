@@ -41,7 +41,8 @@ this benchmark *does not make use of the Webassembly* version of domain
 matching.
 
 All benchmarks were ran on an X1 Carbon 2016 (i7 U6600 + 16 GB) in
-Node.js 11.9.0.
+Node.js 11.9.0. Memory measurements were performed in Google Chrome version
+72.0.3626.96 using the memory snapshot tool.
 
 ## Results
 
@@ -58,7 +59,7 @@ our findings in a nutshell:
   - 655x faster than *uBlock Origin*
   - 3808x faster than *Adblock Plus*
   - *DuckDuckGo*'s adblocker does not offer serialization, so the loading cost is always the one from parsing the lists.
-- **Memory Consumption of Ghostery's blocking engine** (at startup, in Chrome):
+- **Memory Consumption of Ghostery's blocking engine** (at startup, in Chrome ):
   - 1.6x less memory than *uBlock Origin*
   - 8.4x less memory than *Adblock Plus*
   - 8.8x less memory than *DuckDuckGo*'s adblocker
@@ -251,7 +252,7 @@ of the serialized form.
 
 Here we consider the memory usage of each content-blocker, initialized
 from lists (not from cache) after one full garbage collection. The
-measurements were performed using Chrome's devtools Memory snapshot. We
+measurements were performed using Chrome's devtools memory snapshot. We
 did not measure Brave here since the memory used from C++ side does not
 seem to be taken into account in the snapshot. Also keep in mind that
 this memory usage can vary at run-time as content-blockers might cache
