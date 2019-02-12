@@ -260,9 +260,11 @@ frequently used resources, etc.
 ![](./plots/memory-usage-at-startup.svg)
 
 As mentioned in the previous section on serialization, the very low
-memory usage of *Ghostery* can be explained by the fact that the internal
-representation mostly consists of very compact typed arrays with some
-small over-head for extra meta-data.
+memory usage of *Ghostery* can be explained by the fact that the
+internal representation mostly consists of very compact typed arrays
+with some small over-head for extra meta-data. Again, we need to stress
+here that this measures the network filtering engine of Ghostery only,
+not the full extension, as described in the introduction.
 
 ### 7. Parsing Lists
 
