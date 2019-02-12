@@ -1,8 +1,10 @@
 # **Adblockers: Performance Overview**
 
 Here we present a detailed analysis of the performance of some of the
-most popular content-blocker engines: *Ghostery/Cliqz*, *uBlock Origin*,
-*Adblock Plus*, *Brave* and *DuckDuckGo*.
+most popular content-blocker engines: *uBlock Origin*, *Adblock Plus*,
+*Brave*, *DuckDuckGo* and *Ghostery/Cliqz'* advanced adblocker (shipped
+since Ghostery 8), which we will refer to as *Ghostery* for the rest of
+the article.
 
 This study was motivated by the recent [Manifest V3
 controversy](https://bugs.chromium.org/p/chromium/issues/detail?id=896897).
@@ -11,12 +13,12 @@ limit their blocking abilities. Two justifications were put forth:
 *performance* and privacy. We show that the performance of the most
 popular content blockers is very good (having a sub-millisecond median
 decision time per request) and should not result in any over-head
-noticeable by the users.
+noticeable by users.
 
 This comparison does not involve full extensions, but instead **focuses
-on the network request blocking engines**, which is the most CPU
+on network request blocking engines**, which is the most CPU
 intensive task performed by content blockers (in particular, this does
-not account for cosmetics engine). Here are the home pages for all
+not account for cosmetics engines). Here are the home pages for all
 content-blockers compared:
 
 * Ghostery and Cliqz's adblocker: https://github.com/cliqz-oss/adblocker
@@ -65,8 +67,10 @@ our findings in a nutshell:
 ### 0. About the Dataset
 
 To measure the performance of each content-blocker, we replayed requests
-from popular domains and kept track of the time it took to decide if they
-should be blocked or not.
+from popular domains *once* and kept track of the time it took to decide
+if they should be blocked or not. We then analyzed the results in three
+different ways: all requests, blocked only and not blocked (taken from
+the same run).
 
 This requests dataset was created using a Chrome
 headless browser (driven by the [`puppeteer` library](https://github.com/GoogleChrome/puppeteer))
@@ -97,7 +101,7 @@ where we removed all the cosmetic rules before running the benchmarks.
 The final list contains *38978 network filters* and is available there:
 [easylist.txt](./easylist.txt).
 
-It should be noted at this point that a bigger proportion of requests
+It should be noted at this point that a larger proportion of requests
 would be blocked by enabling extra filters lists such as *EasyPrivacy*.
 
 ### 2. On All Requests
@@ -155,10 +159,12 @@ The following table details 99th percentile and median timings for requests bloc
 On these graphs we observe a plateau for *Adblock Plus*, *Brave* and
 *Duckduckgo*. This can be explained by the fact that these engines
 implement some form of caching internally, thus having a very fast
-response time for some requests which were already seen. This caching
-can be implemented on top of any content blocker and does not tell
-much about the efficiency of each; we can see this as a mean to trade
-*memory* against *CPU usage*.
+response time for some requests which were already seen (redundancy in
+requests comes from both common third-parties seen on multiple websites
+as well as the fact that we load several pages for each domain). This
+caching can be implemented on top of any content blocker and does not
+tell much about the efficiency of each; we can see this as a means to
+trade *memory* against *CPU usage*.
 
 From the previous measurements we see that Ghostery out-performs other
 libraries in terms of matching speed. Without going into too much
@@ -181,11 +187,11 @@ results:
 
 In this section we have a look at the performance of content-blockers
 when it comes to serializing their internal representation for faster
-sub-sequent loading. Only *DuckDuckGo*'s engine does not provide this
+subsequent loading. Only *DuckDuckGo*'s engine does not provide this
 feature. *uBlock Origin*, *Ghostery*, *Adblock Plus* and *Brave* all allow to
 serialize or cache (*uBlock Origin*'s terminology is: *selfies*) the
 entire blocking engine to either a string or a buffer, which can then be
-used to speed-up sub-sequent loads.
+used to speed-up subsequent loads.
 
 Because this is a one-time operation, having a higher loading-time does not
 impact significantly desktop users. On the other hand, the ability to quickly
@@ -248,7 +254,7 @@ frequently used resources, etc.
 
 As mentioned in the previous section on serialization, the very low
 memory usage of *Ghostery* can be explained by the fact that the internal
-representation mostly consists in very compact typed arrays with some
+representation mostly consists of very compact typed arrays with some
 small over-head for extra meta-data.
 
 ### 7. Parsing Lists
@@ -270,7 +276,7 @@ Now if we remove Brave, we see that there are still differences between
 *Ghostery* is slower than *uBlock Origin* and *AdblockPlus* here is that to
 achieve maximum performance while matching as well as minimize memory
 usage, there is a bit more work to do up-front. In practice this does
-not matter so much since it is a one-time operation and that sub-sequent
+not matter so much since it is a one-time operation and that subsequent
 loads are performed from cache, and this is really fast (in fact, we
 can even perform the parsing backend-side and just ship the serialized
 version of the blocker, which removes this step completely).
