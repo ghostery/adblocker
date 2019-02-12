@@ -1,12 +1,33 @@
 
 all: deps run
 
-deps:
-	npm install --save ad-block git://github.com/duckduckgo/abp-filter-parser.git#0.2.0
+puppeteer:
+	npm install --save git://github.com/remusao/puppeteer-pool.git
+
+adblockpluscore:
+	git clone --depth=1 https://github.com/adblockplus/adblockpluscore.git && cd adblockpluscore && npm install && cd -
+
+../../node_modules/abp-filter-parser:
+	npm install --save git://github.com/duckduckgo/abp-filter-parser.git#0.2.0
 	cd ../../node_modules/abp-filter-parser/ && npm install && cd -
 
-run:
-	NODE_ENV=production node run.js cliqz requests.json
+../../node_modules/ad-block:
+	npm install --save ad-block
+
+brave: ../../node_modules/ad-block
 	NODE_ENV=production node run.js brave requests.json
+
+ghostery:
+	NODE_ENV=production node run.js ghostery requests.json
+
+ublock:
 	NODE_ENV=production node run.js ublock requests.json
+
+adblockplus: adblockpluscore
+	NODE_ENV=production node run.js adblockplus requests.json
+
+duckduckgo: ../../node_modules/abp-filter-parser
 	NODE_ENV=production node run.js duckduckgo requests.json
+
+deps: puppeteer adblockpluscore ../../node_modules/abp-filter-parser ../../node_modules/ad-block
+run: ghostery ublock adblockplus brave duckduckgo

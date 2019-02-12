@@ -1,24 +1,27 @@
 const { AdBlockClient, FilterOptions } = require('ad-block');
 
+// This maps puppeteer types to Brave types
 const BRAVE_OPTIONS = {
-  script: FilterOptions.script,
-  image: FilterOptions.image,
+  // Consider document requests as sub_document. This is because the request
+  // dataset does not contain sub_frame or main_frame but only 'document' and
+  // different blockers have different behaviours.
+  document: FilterOptions.subdocument,
   stylesheet: FilterOptions.stylesheet,
-  object: FilterOptions.object,
-  xhr: FilterOptions.xmlHttpRequest,
-  xmlHttpRequest: FilterOptions.xmlHttpRequest,
-  objectSubrequest: FilterOptions.objectSubrequest,
-  subdocument: FilterOptions.subdocument,
-  document: FilterOptions.document,
-  other: FilterOptions.other,
-  collapse: FilterOptions.collapse,
-  ping: FilterOptions.ping,
-  popup: FilterOptions.popup,
-  font: FilterOptions.font,
+  image: FilterOptions.image,
   media: FilterOptions.media,
-  webrtc: FilterOptions.webrtc,
+  font: FilterOptions.font,
+  script: FilterOptions.script,
+  xhr: FilterOptions.xmlHttpRequest,
   websocket: FilterOptions.websocket,
+
+  // other
+  fetch: FilterOptions.other,
+  other: FilterOptions.other,
+  eventsource: FilterOptions.other,
+  manifest: FilterOptions.other,
+  texttrack: FilterOptions.other,
 };
+
 
 module.exports = class Brave {
   static parse(rawLists) {
@@ -39,7 +42,7 @@ module.exports = class Brave {
     this.client.deserialize(serialized);
   }
 
-  match({ type, url, sourceDomain }) {
+  match(type, { url, sourceDomain }) {
     return this.client.matches(url, BRAVE_OPTIONS[type] || FilterOptions.noFilterOption, sourceDomain);
   }
 };

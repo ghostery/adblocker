@@ -2,9 +2,9 @@ const path = require('path');
 
 const { FiltersEngine } = require(path.resolve(__dirname, '../../'));
 
-module.exports = class Cliqz {
+module.exports = class Ghostery {
   static parse(rawLists) {
-    return new Cliqz(FiltersEngine.parse(rawLists, { loadCosmeticFilters: false }));
+    return new Ghostery(FiltersEngine.parse(rawLists, { loadCosmeticFilters: false }));
   }
 
   constructor(engine) {
@@ -19,7 +19,7 @@ module.exports = class Cliqz {
     this.engine = FiltersEngine.deserialize(serialized);
   }
 
-  match(request) {
+  match(_, request) {
     return this.engine.match(request).match;
   }
 };

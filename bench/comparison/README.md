@@ -5,7 +5,7 @@ matching engines.
 
 ## Running Benchmarks
 
-1. Get the dataset of [requests](https://cdn.cliqz.com/adblocking/requests_200k.json.gz)
+1. Get the dataset of [requests](https://cdn.cliqz.com/adblocking/requests_top500.json.gz)
 2. Make sure you have setup this project, at the root of the repository run:
 ```sh
 $ npm ci
