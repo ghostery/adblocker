@@ -104,7 +104,7 @@ average if they can efficiently decide which requests to *not block*.
 The filters used to determine whether or not a request is to be blocked
 are the ones from [Easylist](https://easylist-downloads.adblockplus.org/easylist.txt),
 where we removed all the cosmetic rules before running the benchmarks.
-The final list contains *38978 network filters* and is available there:
+The final list contains *38978 network filters* and is available here:
 [easylist.txt](./easylist.txt).
 
 It should be noted at this point that a larger proportion of requests
