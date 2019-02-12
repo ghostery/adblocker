@@ -44,22 +44,27 @@ async function collectDataset(domains) {
   const outputStream = fs.createWriteStream('requests2.json');
   requestStream.pipe(outputStream);
 
-  const visitUrl = async (browser, pageId, { url, domain }) => {
+  const visitUrl = async (browser, { domainId, url, domain }) => {
+    const pageId = getNextId();
     // Stream all requests to output file through `requestStream`
     const onRequest = (request) => {
       // Ignore data-urls
       const requestUrl = request.url();
-      if (!(requestUrl.startsWith('https://')
-        || requestUrl.startsWith('http://')
-        || requestUrl.startsWith('ws://')
-        || requestUrl.startsWith('wss://'))) {
+      if (
+        !(
+          requestUrl.startsWith('https://')
+          || requestUrl.startsWith('http://')
+          || requestUrl.startsWith('ws://')
+          || requestUrl.startsWith('wss://')
+        )
+      ) {
         return;
       }
 
       requestStream.onRequest({
+        domainId,
         pageId,
-        frameUrl:
-        request.resourceType() === 'document' ? request.url() : request.frame().url(),
+        frameUrl: request.resourceType() === 'document' ? request.url() : request.frame().url(),
         url: requestUrl,
         cpt: request.resourceType(),
       });
@@ -100,11 +105,12 @@ async function collectDataset(domains) {
             const domainOfPage = getDomain(pageUrl);
             const urlsOnPage = await page.evaluate(() => [...document.querySelectorAll('a')].map(a => a.href).filter(Boolean));
             const sameDomainUrls = urlsOnPage.filter(
-              href => href && (href.startsWith('https://')
-                || href.startsWith('http://')
-                || href.startsWith('ws://')
-                || href.startsWith('wss://'))
-              && getDomain(href) === domainOfPage,
+              href => href
+                && (href.startsWith('https://')
+                  || href.startsWith('http://')
+                  || href.startsWith('ws://')
+                  || href.startsWith('wss://'))
+                && getDomain(href) === domainOfPage,
             );
             return [...new Set(sameDomainUrls)];
           }
@@ -127,17 +133,19 @@ async function collectDataset(domains) {
   };
 
   const processDomain = async (browser, domain, index) => {
+    const domainId = getNextId();
     try {
       // Visit home page of domain
       console.log(`Home page: ${domain} (${index})`);
-      const linksOnPage = await visitUrl(browser, getNextId(), { domain });
+      const linksOnPage = await visitUrl(browser, { domainId, domain });
 
       // Visit 3 random URLs from the page
       if (linksOnPage.length > 0) {
         for (let j = 0; j < Math.min(3, linksOnPage.length); j += 1) {
-          await visitUrl(browser, getNextId(), {
-            url: linksOnPage[Math.floor(Math.random() * linksOnPage.length)],
+          await visitUrl(browser, {
             domain,
+            domainId,
+            url: linksOnPage[Math.floor(Math.random() * linksOnPage.length)],
           });
         }
       } else {
