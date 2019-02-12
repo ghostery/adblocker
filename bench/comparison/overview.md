@@ -49,14 +49,14 @@ Before presenting the detailed analysis of the results, let us highlight
 our findings in a nutshell:
 
 - **Matching Performance of Ghostery** (median):
-  - 2.4x faster than *uBlock Origin*
+  - 2.5x faster than *uBlock Origin*
   - 3.0x faster than *Adblock Plus*
-  - 5.6x faster than *Brave*'s Adblocker
-  - 1068.9x faster than *DuckDuckGo*'s adblocker
+  - 6.3x faster than *Brave*'s Adblocker
+  - 1314.5x faster than *DuckDuckGo*'s adblocker
 - **Loading Ghostery's blocking engine**
-  - 375x faster than *Brave*'s Adblocker
-  - 651x faster than *uBlock Origin*
-  - 3754x faster than *Adblock Plus*
+  - 399x faster than *Brave*'s Adblocker
+  - 655x faster than *uBlock Origin*
+  - 3808x faster than *Adblock Plus*
   - *DuckDuckGo*'s adblocker does not offer serialization, so the loading cost is always the one from parsing the lists.
 - **Memory Consumption of Ghostery's blocking engine** (at startup, in Chrome):
   - 1.6x less memory than *uBlock Origin*
