@@ -1,6 +1,9 @@
 
 all: deps run
 
+puppeteer:
+	npm install --save git://github.com/remusao/puppeteer-pool.git
+
 adblockpluscore:
 	git clone --depth=1 https://github.com/adblockplus/adblockpluscore.git && cd adblockpluscore && npm install && cd -
 
@@ -26,5 +29,5 @@ adblockplus: adblockpluscore
 duckduckgo: ../../node_modules/abp-filter-parser
 	NODE_ENV=production node run.js duckduckgo requests.json
 
-deps: adblockpluscore ../../node_modules/abp-filter-parser ../../node_modules/ad-block
+deps: puppeteer adblockpluscore ../../node_modules/abp-filter-parser ../../node_modules/ad-block
 run: ghostery ublock adblockplus brave duckduckgo

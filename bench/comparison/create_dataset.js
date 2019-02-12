@@ -1,7 +1,7 @@
 /* eslint-disable no-await-in-loop */
 
 const fs = require('fs');
-const puppeteer = require('puppeteer');
+const createPuppeteerPool = require('puppeteer-pool');
 const stream = require('stream');
 const { getDomain } = require('tldts');
 
@@ -31,19 +31,48 @@ class RequestStreamer extends stream.Readable {
   }
 }
 
+let CURRENT_ID = 0;
+function getNextId() {
+  const id = CURRENT_ID;
+  CURRENT_ID += 1;
+  return id;
+}
+
 async function collectDataset(domains) {
   // Stream requests to file
   const requestStream = new RequestStreamer();
-  const outputStream = fs.createWriteStream('requests.json');
+  const outputStream = fs.createWriteStream('requests2.json');
   requestStream.pipe(outputStream);
 
-  const visitUrl = async (browser, { url, domain }) => {
+  const visitUrl = async (browser, pageId, { url, domain }) => {
+    // Stream all requests to output file through `requestStream`
+    const onRequest = (request) => {
+      // Ignore data-urls
+      const requestUrl = request.url();
+      if (!(requestUrl.startsWith('https://')
+        || requestUrl.startsWith('http://')
+        || requestUrl.startsWith('ws://')
+        || requestUrl.startsWith('wss://'))) {
+        return;
+      }
+
+      requestStream.onRequest({
+        pageId,
+        frameUrl:
+        request.resourceType() === 'document' ? request.url() : request.frame().url(),
+        url: requestUrl,
+        cpt: request.resourceType(),
+      });
+    };
+
+    // Whenever `url` is not specified (when we want to visit the home page of a
+    // domain), then we try several candidates (https/http).
     const candidates = [
       url,
-      `https://${domain}`,
       `https://www.${domain}`,
-      `http://${domain}`,
+      `https://${domain}`,
       `http://www.${domain}`,
+      `http://${domain}`,
     ];
 
     for (let i = 0; i < candidates.length; i += 1) {
@@ -53,34 +82,36 @@ async function collectDataset(domains) {
         const page = await browser.newPage();
         try {
           // Collect all requests used to load the page
-          page.on('request', (request) => {
-            // Ignore data-urls
-            if (request.url().startsWith('data:') || request.url().startsWith('mailto:')) {
-              return;
-            }
-
-            requestStream.onRequest({
-              frameUrl:
-                request.resourceType() === 'document' ? request.url() : request.frame().url(),
-              url: request.url(),
-              cpt: request.resourceType(),
-            });
-          });
+          page.on('request', onRequest);
 
           console.log(`  * goto: ${urlToVisit}`);
-          const status = await page.goto(urlToVisit);
-          if (!status.ok) {
-            return [];
+          const status = await page.goto(urlToVisit, {
+            timeout: 60000,
+            waitUntil: 'networkidle2',
+          });
+
+          const pageUrl = page.url();
+          if (pageUrl !== urlToVisit) {
+            console.log(`    > ${page.url()}`);
           }
 
-          // Collect hrefs from the page
-          const domainOfPage = getDomain(urlToVisit);
-          const urlsOnPage = await page.evaluate(() => [...document.querySelectorAll('a')].map(a => a.href).filter(Boolean));
-          const sameDomainUrls = urlsOnPage.filter(href => getDomain(href) === domainOfPage);
-          return [...new Set(sameDomainUrls)];
+          // We do not collect URLs unless we are on the home-page
+          if (status.ok && url === undefined) {
+            const domainOfPage = getDomain(pageUrl);
+            const urlsOnPage = await page.evaluate(() => [...document.querySelectorAll('a')].map(a => a.href).filter(Boolean));
+            const sameDomainUrls = urlsOnPage.filter(
+              href => href && (href.startsWith('https://')
+                || href.startsWith('http://')
+                || href.startsWith('ws://')
+                || href.startsWith('wss://'))
+              && getDomain(href) === domainOfPage,
+            );
+            return [...new Set(sameDomainUrls)];
+          }
         } catch (ex) {
           console.log(`Could not fetch: ${urlToVisit}`, ex);
         } finally {
+          await page.removeAllListeners('request');
           await page.close();
         }
       }
@@ -99,43 +130,51 @@ async function collectDataset(domains) {
     try {
       // Visit home page of domain
       console.log(`Home page: ${domain} (${index})`);
-      const linksOnPage = await visitUrl(browser, { domain });
+      const linksOnPage = await visitUrl(browser, getNextId(), { domain });
 
       // Visit 3 random URLs from the page
       if (linksOnPage.length > 0) {
         for (let j = 0; j < Math.min(3, linksOnPage.length); j += 1) {
-          await visitUrl(browser, {
+          await visitUrl(browser, getNextId(), {
             url: linksOnPage[Math.floor(Math.random() * linksOnPage.length)],
             domain,
           });
         }
+      } else {
+        return false;
       }
 
       console.log(`Finished processing: ${domain}, total: ${requestStream.totalRequests} reqs`);
+      return true;
     } catch (ex) {
       console.error(`Error while processing: ${domain}`, ex);
+      return false;
     }
   };
 
-  // Create browser instance
-  const browser = await puppeteer.launch();
+  // Create pool of browsers
+  const pool = createPuppeteerPool({
+    max: 6,
+    maxUses: 5,
+  });
 
   let numberOfDomainsProcessed = 0;
-  for (let i = 0; i < domains.length; i += 1) {
-    const requestsBefore = requestStream.totalRequests;
-    await processDomain(browser, domains[i], i);
-    const requestsAfter = requestStream.totalRequests;
-    if (requestsBefore !== requestsAfter) {
-      numberOfDomainsProcessed += 1;
-    }
+  domains.forEach((domain, i) => {
+    pool.use(async (browser) => {
+      if (numberOfDomainsProcessed >= 500) {
+        return;
+      }
 
-    if (numberOfDomainsProcessed === 500) {
-      break;
-    }
-  }
+      const success = await processDomain(browser, domain, i);
+      if (success) {
+        numberOfDomainsProcessed += 1;
+      }
+    });
+  });
 
+  await pool.drain();
+  await pool.clear();
   requestStream.tearDown();
-  await browser.close();
 }
 
 collectDataset([
@@ -620,7 +659,6 @@ collectDataset([
   'att.com',
   'indiatimes.com',
   'jalopnik.com',
-  'bbkekonodcdmedgffkkbgmnnekbainbg.',
   'darty.com',
   'thewirecutter.com',
   'instant-gaming.com',
