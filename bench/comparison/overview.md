@@ -13,13 +13,14 @@ limit their blocking abilities. Two justifications were put forth:
 *performance* and privacy. We show that the performance of the most
 popular content blockers is very good (having a sub-millisecond median
 decision time per request) and should not result in any over-head
-noticeable by users.
+noticeable by users. Besides, efficiency is continuously improved and
+technologies such as WebAssembly will allow to go even further.
 
 This comparison does not involve full extensions, but instead **focuses
-on network request blocking engines**, which is the most CPU
-intensive task performed by content blockers (in particular, this does
-not account for cosmetics engines). Here are the home pages for all
-content-blockers compared:
+on network request blocking engines**, which is the most CPU intensive
+task performed by content blockers (in particular, this does not account
+for cosmetics engines or subscription management). Here are the home
+pages for all content-blockers compared:
 
 * Ghostery and Cliqz's adblocker: https://github.com/cliqz-oss/adblocker
 * Brave's adblocker: https://github.com/brave/ad-block
@@ -72,23 +73,28 @@ if they should be blocked or not. We then analyzed the results in three
 different ways: all requests, blocked only and not blocked (taken from
 the same run).
 
-This requests dataset was created using a Chrome
-headless browser (driven by the [`puppeteer` library](https://github.com/GoogleChrome/puppeteer))
+This requests dataset was created using a pool of Chrome
+headless browsers (driven by the [`puppeteer` library](https://github.com/GoogleChrome/puppeteer))
 to visit home pages of the *top 500 domains* (as reported by Cliqz
 Search), as well as up to 3 pages of each domain (picked randomly from
 the home page) and collecting all the network requests seen (URL, frame
-URL and type). The list of requests was then *shuffled*.
+URL and type). The dataset was shuffled in such a way that the different
+pages were visited in a random order, but requests seen on each page
+were replayed as they were recorded initially.
 
-The dataset is composed of 187406 requests. We released the data publicly at
+The dataset is composed of 242944 requests. We released the data publicly at
 this URL: [requests_top500.json.gz](https://cdn.cliqz.com/adblocking/requests_top500.json.gz).
-The script to create the dataset is also available: [create_dataset.js](./create_dataset.js).
+The script to create the dataset is also available:
+[create_dataset.js](./create_dataset.js) and
+[shuffle_dataset.js](./shuffle_dataset.js) was used to shuffle the
+requests to produce the final data.
 
 ### 1. Composition of Requests
 
 For the purpose of this comparison, we consider that each network
 request can be either blocked or allowed by the content-blocker. We
-observed that from our dataset of ~187k requests, only ~13.8% are blocked
-(average across all content-blockers).
+observed that from our dataset, only ~18.7% are blocked (average across
+all content-blockers).
 
 ![](./plots/requests-composition.svg)
 
@@ -115,13 +121,14 @@ or not a request should be blocked.
 Here is a break-down of the 99th percentile and median times for each
 content-blocker:
 
-|               | 99% OF REQUESTS                 | MEDIAN                          |
-| ------------- | :------------------------------ | ------------------------------- |
-| **Ghostery**  |  **0.056015ms**                 | **0.008381ms**                  |
-| uBlock Origin |  0.130038ms (**2.3x slower**)   | 0.020108ms (**2.4x slower**)    |
-| Adblock Plus  |  0.120776ms (**2.2x slower**)   | 0.025350ms (**3.0x slower**)    |
-| Brave         |  1.237248ms (**22.1x slower**)  | 0.046869ms (**5.6x slower**)    |
-| DuckDuckGo    | 12.657208ms (**226.7x slower**) | 8.958578ms (**1068.9x slower**) |
+|               | 99% OF REQUESTS             | MEDIAN                       |
+| ------------- | --------------------------- | ---------------------------- |
+| **Ghostery**  | **0.048ms**                 | **0.007ms**                  |
+| uBlock Origin | 0.121ms (**2.5x slower**)   | 0.017ms (**2.5x slower**)    |
+| Adblock Plus  | 0.103ms (**2.2x slower**)   | 0.02ms (**3.0x slower**)     |
+| Brave         | 1.306ms (**27.4x slower**)  | 0.042ms (**6.3x slower**)    |
+| DuckDuckGo    | 12.67ms (**265.3x slower**) | 8.682ms (**1314.5x slower**) |
+
 
 Below you can find the cumulative distribution plots of these timings:
 
@@ -132,13 +139,13 @@ Below you can find the cumulative distribution plots of these timings:
 The following table details 99th percentile and median timings for requests not
 blocked:
 
-|               | 99% OF REQUESTS                 | MEDIAN                          |
-| ------------- | ------------------------------- | ------------------------------- |
-| **Ghostery**  | **0.051614ms**                  | **0.008287ms**                  |
-| uBlock Origin | 0.113480ms (**2.2x slower**)    | 0.020104ms (**2.4x slower**)    |
-| Adblock Plus  | 0.115511ms (**2.2x slower**)    | 0.025888ms (**3.1x slower**)    |
-| Brave         | 1.214424ms (**23.5x slower**)   | 0.042171ms (**5.1x slower**)    |
-| DuckDuckGo    | 11.788128ms (**228.4x slower**) | 9.690501ms (**1169.4x slower**) |
+|               | 99% OF REQUESTS              | MEDIAN                      |
+| ------------- | ---------------------------- | --------------------------- |
+| **Ghostery**  | **0.047ms**                  | **0.006ms**                 |
+| uBlock Origin | 0.109ms (**2.3x slower**)    | 0.017ms (**2.6x slower**)   |
+| Adblock Plus  | 0.104ms (**2.2x slower**)    | 0.02ms (**3.2x slower**)    |
+| Brave         | 1.281ms (**27.5x slower**)   | 0.038ms (**5.9x slower**)   |
+| DuckDuckGo    | 11.596ms (**248.8x slower**) | 9.35ms (**1448.4x slower**) |
 
 ![](./plots/ghostery-ublock-origin-brave-duckduckgo-adblockplus-not-blocked.svg)
 
@@ -146,13 +153,13 @@ blocked:
 
 The following table details 99th percentile and median timings for requests blocked:
 
-|               | 99% OF REQUESTS                 | MEDIAN                         |
-| ------------- | ------------------------------- | ------------------------------ |
-| **Ghostery**  | **0.063683ms**                  | **0.009223ms**                 |
-| Adblock Plus  | 0.139742ms (**2.2x slower**)    | 0.020507ms (**2.2x slower**)   |
-| uBlock Origin | 0.224135ms (**3.5x slower**)    | 0.020123ms (**2.2x slower**)   |
-| Brave         | 1.625108ms (**25.5x slower**)   | 0.114127ms (**12.4x slower**)  |
-| DuckDuckGo    | 13.814562ms (**216.9x slower**) | 8.527992ms (**924.6x slower**) |
+|               | 99% OF REQUESTS              | MEDIAN                       |
+| ------------- | ---------------------------- | ---------------------------- |
+| **Ghostery**  | **0.05ms**                   | **0.007ms**                  |
+| uBlock Origin | 0.166ms (**3.3x slower**)    | 0.016ms (**2.2x slower**)    |
+| Adblock Plus  | 0.101ms (**2.0x slower**)    | 0.015ms (**2.0x slower**)    |
+| Brave         | 1.586ms (**31.8x slower**)   | 0.066ms (**9.1x slower**)    |
+| DuckDuckGo    | 13.716ms (**275.1x slower**) | 8.604ms (**1181.0x slower**) |
 
 ![](./plots/ghostery-ublock-origin-brave-duckduckgo-adblockplus-blocked.svg)
 
@@ -167,7 +174,7 @@ tell much about the efficiency of each; we can see this as a means to
 trade *memory* against *CPU usage*.
 
 From the previous measurements we see that Ghostery out-performs other
-libraries in terms of matching speed. Without going into too much
+libraries in terms of matching speed. Without going into too many
 details, here are some of the optimizations which can explain these
 results:
 

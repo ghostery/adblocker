@@ -91,7 +91,7 @@ async function collectDataset(domains) {
 
           console.log(`  * goto: ${urlToVisit}`);
           const status = await page.goto(urlToVisit, {
-            timeout: 60000,
+            timeout: 120000,
             waitUntil: 'networkidle2',
           });
 
