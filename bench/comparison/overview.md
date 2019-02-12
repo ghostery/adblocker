@@ -2,7 +2,7 @@
 
 Here we present a detailed analysis of the performance of some of the
 most popular content-blocker engines: *uBlock Origin*, *Adblock Plus*,
-*Brave*, *DuckDuckGo* and *Ghostery/Cliqz'* advanced adblocker (shipped
+*Brave*, *DuckDuckGo* and *Cliqz/Ghostery's* advanced adblocker (shipped
 since Ghostery 8), which we will refer to as *Ghostery* for the rest of
 the article.
 
@@ -297,6 +297,9 @@ potentially very slow) JavaScript"*, talking about content-blockers'
 ability to process all network requests. From the measurements, we do
 not think this claim holds, as all popular content-blockers are already
 very efficient and should not incur noticeable slow-down for users.
+Moreover, the efficiency of content-blockers is *continuously improving*,
+either thanks to more innovative approaches or using technologies like
+WebAssembly to reach native performance.
 
 While most content-blockers are indeed efficient, they are not
 equivalent and we observed that *Ghostery* performs consistently as well
