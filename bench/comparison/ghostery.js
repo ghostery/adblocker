@@ -19,7 +19,7 @@ module.exports = class Ghostery {
     this.engine = FiltersEngine.deserialize(serialized);
   }
 
-  match(request) {
+  match(_, request) {
     return this.engine.match(request).match;
   }
 };

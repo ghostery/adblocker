@@ -1,24 +1,26 @@
 const { CombinedMatcher } = require('./adblockpluscore/lib/matcher.js');
-const { Filter } = require('./adblockpluscore/lib/filterClasses.js');
+const { Filter, RegExpFilter } = require('./adblockpluscore/lib/filterClasses.js');
 
+// This maps puppeteer types to Adblock Plus types
 const TYPE_MAP = {
-  other: 1,
-  script: 2,
-  image: 4,
-  stylesheet: 8,
-  object: 16,
-  sub_frame: 32,
-  main_frame: 64,
-  websocket: 128,
-  webrtc: 256,
-  csp_report: 512,
-  xbl: 1,
-  ping: 1024,
-  xmlhttprequest: 2048,
-  xhr: 2048,
-  dtd: 1,
-  media: 16384,
-  font: 32768,
+  // Consider document requests as sub_document. This is because the request
+  // dataset does not contain sub_frame or main_frame but only 'document' and
+  // different blockers have different behaviours.
+  document: RegExpFilter.typeMap.SUBDOCUMENT,
+  stylesheet: RegExpFilter.typeMap.STYLESHEET,
+  image: RegExpFilter.typeMap.IMAGE,
+  media: RegExpFilter.typeMap.MEDIA,
+  font: RegExpFilter.typeMap.FONT,
+  script: RegExpFilter.typeMap.SCRIPT,
+  xhr: RegExpFilter.typeMap.XMLHTTPREQUEST,
+  websocket: RegExpFilter.typeMap.WEBSOCKET,
+
+  // other
+  fetch: RegExpFilter.typeMap.OTHER,
+  other: RegExpFilter.typeMap.OTHER,
+  eventsource: RegExpFilter.typeMap.OTHER,
+  manifest: RegExpFilter.typeMap.OTHER,
+  texttrack: RegExpFilter.typeMap.OTHER,
 };
 
 module.exports = class AdBlockPlus {
@@ -65,10 +67,15 @@ module.exports = class AdBlockPlus {
     this.filters = filters;
   }
 
-  match({
-    url, rawType, sourceDomain, domain,
-  }) {
-    const match = this.matcher.matchesAny(url, TYPE_MAP[rawType], sourceDomain, sourceDomain !== domain, null, false);
-    return (match !== null && !match.text.startsWith('@@'));
+  match(type, { url, sourceDomain, domain }) {
+    const match = this.matcher.matchesAny(
+      url,
+      TYPE_MAP[type],
+      sourceDomain,
+      sourceDomain !== domain,
+      null,
+      false,
+    );
+    return match !== null && !match.text.startsWith('@@');
   }
 };

@@ -16,6 +16,29 @@ const REQUESTS_PATH = process.argv[process.argv.length - 1];
 
 console.log(`* ${ENGINE}`);
 
+// This maps puppeteer types to WebRequest types
+const WEBREQUEST_OPTIONS = {
+  // Consider document requests as sub_document. This is because the request
+  // dataset does not contain sub_frame or main_frame but only 'document' and
+  // different blockers have different behaviours.
+  document: 'sub_frame',
+  stylesheet: 'stylesheet',
+  image: 'image',
+  media: 'media',
+  font: 'font',
+  script: 'script',
+  xhr: 'xmlhttprequest',
+  websocket: 'websocket',
+
+  // other
+  fetch: 'other',
+  other: 'other',
+  eventsource: 'other',
+  manifest: 'other',
+  texttrack: 'other',
+};
+
+
 function min(arr) {
   let acc = Number.MAX_VALUE;
   for (let i = 0; i < arr.length; i += 1) {
@@ -124,7 +147,7 @@ async function main() {
     const parsed = makeRequest({
       url,
       sourceUrl: frameUrl,
-      type: cpt,
+      type: WEBREQUEST_OPTIONS[cpt],
     }, tldts);
 
     if (parsed.domain === '' || parsed.hostname === '' || parsed.sourceHostname === '' || parsed.sourceDomain === '') {
@@ -136,7 +159,7 @@ async function main() {
 
     // Process request for each engine
     start = process.hrtime();
-    const match = engine.match(parsed);
+    const match = engine.match(cpt, parsed);
     diff = process.hrtime(start);
     const totalHighResolution = (diff[0] * 1000000000 + diff[1]) / 1000000;
 

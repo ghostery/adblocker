@@ -1,15 +1,25 @@
 const abp = require('abp-filter-parser');
 
+// This maps puppeteer types to DuckDuckGo types
 const DDG_OPTIONS = {
-  script: abp.elementTypes.SCRIPT,
-  image: abp.elementTypes.IMAGE,
+  // Consider document requests as sub_document. This is because the request
+  // dataset does not contain sub_frame or main_frame but only 'document' and
+  // different blockers have different behaviours.
+  document: abp.elementTypes.SUBDOCUMENT,
   stylesheet: abp.elementTypes.STYLESHEET,
-  object: abp.elementTypes.OBJECT,
+  image: abp.elementTypes.IMAGE,
+  script: abp.elementTypes.SCRIPT,
   xhr: abp.elementTypes.XMLHTTPREQUEST,
-  objectSubrequest: abp.elementTypes.OBJECTSUBREQUEST,
-  subdocument: abp.elementTypes.SUBDOCUMENT,
-  document: abp.elementTypes.DOCUMENT,
+
+  // other
+  media: abp.elementTypes.OTHER,
+  font: abp.elementTypes.OTHER,
+  websocket: abp.elementTypes.OTHER,
+  fetch: abp.elementTypes.OTHER,
   other: abp.elementTypes.OTHER,
+  eventsource: abp.elementTypes.OTHER,
+  manifest: abp.elementTypes.OTHER,
+  texttrack: abp.elementTypes.OTHER,
 };
 
 module.exports = class DuckDuckGo {
@@ -23,10 +33,10 @@ module.exports = class DuckDuckGo {
     this.parsed = parsed;
   }
 
-  match({ url, rawType, sourceDomain }) {
+  match(type, { url, sourceDomain }) {
     return abp.matches(this.parsed, url, {
       domain: sourceDomain,
-      elementTypeMask: DDG_OPTIONS[rawType],
+      elementTypeMask: DDG_OPTIONS[type],
     });
   }
 };

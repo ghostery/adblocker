@@ -4326,7 +4326,7 @@ module.exports = class UBlockOrigin {
     this.engine.fromSelfie(JSON.parse(serialized));
   }
 
-  match({
+  match(_, {
     rawType, url, hostname, domain, sourceHostname, sourceDomain,
   }) {
     return this.engine.matchString({
