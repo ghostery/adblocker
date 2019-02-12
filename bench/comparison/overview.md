@@ -50,14 +50,14 @@ Before presenting the detailed analysis of the results, let us highlight
 our findings in a nutshell:
 
 - **Matching Performance of Ghostery** (median):
-  - 2.5x faster than *uBlock Origin*
-  - 3.0x faster than *Adblock Plus*
+  - 2.7x faster than *uBlock Origin*
+  - 2.9x faster than *Adblock Plus*
   - 6.3x faster than *Brave*'s Adblocker
-  - 1314.5x faster than *DuckDuckGo*'s adblocker
+  - 1258.4x faster than *DuckDuckGo*'s adblocker
 - **Loading Ghostery's blocking engine**
-  - 399x faster than *Brave*'s Adblocker
-  - 655x faster than *uBlock Origin*
-  - 3808x faster than *Adblock Plus*
+  - 368x faster than *Brave*'s Adblocker
+  - 588x faster than *uBlock Origin*
+  - 3575x faster than *Adblock Plus*
   - *DuckDuckGo*'s adblocker does not offer serialization, so the loading cost is always the one from parsing the lists.
 - **Memory Consumption of Ghostery's blocking engine** (at startup, in Chrome ):
   - 1.6x less memory than *uBlock Origin*
@@ -94,7 +94,7 @@ requests to produce the final data.
 
 For the purpose of this comparison, we consider that each network
 request can be either blocked or allowed by the content-blocker. We
-observed that from our dataset, only ~18.7% are blocked (average across
+observed that from our dataset, only ~19.2% are blocked (average across
 all content-blockers).
 
 ![](./plots/requests-composition.svg)
@@ -122,14 +122,13 @@ or not a request should be blocked.
 Here is a break-down of the 99th percentile and median times for each
 content-blocker:
 
-|               | 99% OF REQUESTS             | MEDIAN                       |
-| ------------- | --------------------------- | ---------------------------- |
-| **Ghostery**  | **0.048ms**                 | **0.007ms**                  |
-| uBlock Origin | 0.121ms (**2.5x slower**)   | 0.017ms (**2.5x slower**)    |
-| Adblock Plus  | 0.103ms (**2.2x slower**)   | 0.02ms (**3.0x slower**)     |
-| Brave         | 1.306ms (**27.4x slower**)  | 0.042ms (**6.3x slower**)    |
-| DuckDuckGo    | 12.67ms (**265.3x slower**) | 8.682ms (**1314.5x slower**) |
-
+|               | 99% OF REQUESTS              | MEDIAN                      |
+| ------------- | ---------------------------- | --------------------------- |
+| **Ghostery**  | **0.05ms**                   | **0.007ms**                 |
+| uBlock Origin | 0.124ms (**2.5x slower**)    | 0.017ms (**2.7x slower**)   |
+| Adblock Plus  | 0.103ms (**2.1x slower**)    | 0.019ms (**2.9x slower**)   |
+| Brave         | 1.288ms (**25.9x slower**)   | 0.041ms (**6.3x slower**)   |
+| DuckDuckGo    | 12.085ms (**242.5x slower**) | 8.27ms (**1258.4x slower**) |
 
 Below you can find the cumulative distribution plots of these timings:
 
@@ -140,13 +139,13 @@ Below you can find the cumulative distribution plots of these timings:
 The following table details 99th percentile and median timings for requests not
 blocked:
 
-|               | 99% OF REQUESTS              | MEDIAN                      |
-| ------------- | ---------------------------- | --------------------------- |
-| **Ghostery**  | **0.047ms**                  | **0.006ms**                 |
-| uBlock Origin | 0.109ms (**2.3x slower**)    | 0.017ms (**2.6x slower**)   |
-| Adblock Plus  | 0.104ms (**2.2x slower**)    | 0.02ms (**3.2x slower**)    |
-| Brave         | 1.281ms (**27.5x slower**)   | 0.038ms (**5.9x slower**)   |
-| DuckDuckGo    | 11.596ms (**248.8x slower**) | 9.35ms (**1448.4x slower**) |
+|               | 99% OF REQUESTS             | MEDIAN                       |
+| ------------- | --------------------------- | ---------------------------- |
+| **Ghostery**  | **0.049ms**                 | **0.006ms**                  |
+| uBlock Origin | 0.112ms (**2.3x slower**)   | 0.018ms (**2.8x slower**)    |
+| Adblock Plus  | 0.105ms (**2.2x slower**)   | 0.02ms (**3.1x slower**)     |
+| Brave         | 1.27ms (**26.2x slower**)   | 0.038ms (**5.9x slower**)    |
+| DuckDuckGo    | 11.19ms (**230.5x slower**) | 6.781ms (**1060.5x slower**) |
 
 ![](./plots/ghostery-ublock-origin-brave-duckduckgo-adblock-plus-not-blocked.svg)
 
@@ -154,13 +153,13 @@ blocked:
 
 The following table details 99th percentile and median timings for requests blocked:
 
-|               | 99% OF REQUESTS              | MEDIAN                       |
-| ------------- | ---------------------------- | ---------------------------- |
-| **Ghostery**  | **0.05ms**                   | **0.007ms**                  |
-| uBlock Origin | 0.166ms (**3.3x slower**)    | 0.016ms (**2.2x slower**)    |
-| Adblock Plus  | 0.101ms (**2.0x slower**)    | 0.015ms (**2.0x slower**)    |
-| Brave         | 1.586ms (**31.8x slower**)   | 0.066ms (**9.1x slower**)    |
-| DuckDuckGo    | 13.716ms (**275.1x slower**) | 8.604ms (**1181.0x slower**) |
+|               | 99% OF REQUESTS              | MEDIAN                      |
+| ------------- | ---------------------------- | --------------------------- |
+| **Ghostery**  | **0.052ms**                  | **0.007ms**                 |
+| uBlock Origin | 0.165ms (**3.1x slower**)    | 0.016ms (**2.2x slower**)   |
+| Adblock Plus  | 0.099ms (**1.9x slower**)    | 0.014ms (**1.9x slower**)   |
+| Brave         | 1.468ms (**28.0x slower**)   | 0.062ms (**8.5x slower**)   |
+| DuckDuckGo    | 13.025ms (**248.5x slower**) | 8.31ms (**1130.6x slower**) |
 
 ![](./plots/ghostery-ublock-origin-brave-duckduckgo-adblock-plus-blocked.svg)
 
