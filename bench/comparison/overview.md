@@ -132,7 +132,7 @@ content-blocker:
 
 Below you can find the cumulative distribution plots of these timings:
 
-![](./plots/ghostery-ublock-origin-brave-duckduckgo-adblockplus-all.svg)
+![](./plots/ghostery-ublock-origin-brave-duckduckgo-adblock-plus-all.svg)
 
 ### 3. Time To Evaluate Requests Which Are Not Blocked
 
@@ -147,7 +147,7 @@ blocked:
 | Brave         | 1.281ms (**27.5x slower**)   | 0.038ms (**5.9x slower**)   |
 | DuckDuckGo    | 11.596ms (**248.8x slower**) | 9.35ms (**1448.4x slower**) |
 
-![](./plots/ghostery-ublock-origin-brave-duckduckgo-adblockplus-not-blocked.svg)
+![](./plots/ghostery-ublock-origin-brave-duckduckgo-adblock-plus-not-blocked.svg)
 
 ### 4. Time To Evaluate Requests That Are Blocked
 
@@ -161,7 +161,7 @@ The following table details 99th percentile and median timings for requests bloc
 | Brave         | 1.586ms (**31.8x slower**)   | 0.066ms (**9.1x slower**)    |
 | DuckDuckGo    | 13.716ms (**275.1x slower**) | 8.604ms (**1181.0x slower**) |
 
-![](./plots/ghostery-ublock-origin-brave-duckduckgo-adblockplus-blocked.svg)
+![](./plots/ghostery-ublock-origin-brave-duckduckgo-adblock-plus-blocked.svg)
 
 On these graphs we observe a plateau for *Adblock Plus*, *Brave* and
 *Duckduckgo*. This can be explained by the fact that these engines
@@ -212,7 +212,7 @@ initialization completely.
 We performed 100 serializations for each content-blocker and display the
 results below:
 
-![](./plots/ghostery-ublock-origin-brave-adblockplus-serializationtimings.svg)
+![](./plots/ghostery-ublock-origin-brave-adblock-plus-serializationtimings.svg)
 
 This bar plot contains the median time taken to serialize the engine for each
 content blocker:
@@ -222,7 +222,7 @@ content blocker:
 Similarly, we measure the time it takes to restore the content blocker from its
 serialized form:
 
-![](./plots/ghostery-ublock-origin-brave-adblockplus-deserializationtimings.svg)
+![](./plots/ghostery-ublock-origin-brave-adblock-plus-deserializationtimings.svg)
 
 And here is the median time:
 
