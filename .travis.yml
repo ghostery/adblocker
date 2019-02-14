@@ -1,11 +1,10 @@
-sudo: false
-dist: trusty
+dist: xenial
 language: node_js
 
 node_js:
   - 6
   - 8
-  - 9
+  - 10
   - node
 
 notifications:
@@ -13,13 +12,9 @@ notifications:
     on_failure: change
 
 before_install:
-  - npm install -g npm@latest
+  - npm install --global npm@latest
 
-install:
-  - npm ci
-
-script:
-  - npm test
+cache: npm
 
 deploy:
   provider: npm
