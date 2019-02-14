@@ -10,11 +10,14 @@ This study was motivated by the recent [Manifest V3
 controversy](https://bugs.chromium.org/p/chromium/issues/detail?id=896897).
 One of the proposed changes involves crippling the WebRequest APIs to
 limit their blocking abilities. Two justifications were put forth:
-*performance* and privacy. We show that the performance of the most
-popular content-blockers is very good (having a sub-millisecond median
-decision time per request) and should not result in any over-head
-noticeable by users. Besides, efficiency is continuously improved and
-technologies such as WebAssembly will allow to go even further.
+one related to *performance* and one related to privacy. The privacy
+argument deserves its own separate analysis and will not be covered
+here. In this study, we show that the *performance* argument does not
+hold. Our comparison demonstrates that the most popular content-blockers
+are already very efficient (having a sub-millisecond median decision
+time per request) and should not result in any over-head noticeable by
+users. Besides, efficiency is continuously improved and technologies
+such as WebAssembly will allow to go even further.
 
 This comparison does not involve full extensions, but instead **focuses
 on network request blocking engines**, which is the most CPU intensive
