@@ -173,7 +173,7 @@ implement some form of caching internally, thus having a very fast
 response time for some requests which were already seen (redundancy in
 requests comes from both common third-parties seen on multiple websites
 as well as the fact that we load several pages for each domain). This
-caching can be implemented on top of any content blocker and does not
+caching can be implemented on top of any content-blocker and does not
 tell much about the efficiency of each; we can see this as a means to
 trade *memory* against *CPU usage*.
 
@@ -210,7 +210,7 @@ initialize the content-blocker is critical on mobile.
 
 Another use-case allowed by such capability is to perform the parsing
 of the lists on the backend and ship the serialized form of the
-content-blocker to clients directly, which allows to remove the cost of
+content-blocker to clients directly, which removes the cost of
 initialization completely.
 
 We performed 100 serializations for each content-blocker and display the
@@ -219,11 +219,11 @@ results below:
 ![](./plots/ghostery-ublock-origin-brave-adblock-plus-serializationtimings.svg)
 
 This bar plot contains the median time taken to serialize the engine for each
-content blocker:
+content-blocker:
 
 ![](./plots/serializationtimings.svg)
 
-Similarly, we measure the time it takes to restore the content blocker from its
+Similarly, we measure the time it takes to restore the content-blocker from its
 serialized form:
 
 ![](./plots/ghostery-ublock-origin-brave-adblock-plus-deserializationtimings.svg)
@@ -233,7 +233,7 @@ And here is the median time:
 ![](./plots/deserializationtimings.svg)
 
 Last but not least, we measured the size of the serialized buffer for each
-content blocker:
+content-blocker:
 
 ![](./plots/cache-size.svg)
 
@@ -309,7 +309,7 @@ of the Chromium project: *"the extension then performs arbitrary (and
 potentially very slow) JavaScript"*, talking about content-blockers'
 ability to process all network requests. From the measurements, we do
 not think this claim holds, as all popular content-blockers are already
-very efficient and should not incur noticeable slow-down for users.
+very efficient and should not incur any noticeable slow-down for users.
 Moreover, the efficiency of content-blockers is *continuously improving*,
 either thanks to more innovative approaches or using technologies like
 WebAssembly to reach native performance.
