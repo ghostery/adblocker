@@ -9,8 +9,8 @@ the article.
 This study was motivated by the recent [Manifest V3
 controversy](https://bugs.chromium.org/p/chromium/issues/detail?id=896897).
 One of the proposed changes involves crippling the WebRequest APIs to
-limit their blocking abilities. Two justifications were put forth:
-one related to *performance* and one related to privacy. The privacy
+limit their blocking abilities. Two justifications were put forth: one
+related to *performance* and another related to privacy. The privacy
 argument deserves its own separate analysis and will not be covered
 here. In this study, we show that the *performance* argument does not
 hold. Our comparison demonstrates that the most popular content-blockers
