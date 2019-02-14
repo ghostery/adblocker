@@ -187,27 +187,22 @@ def generate_table(p99, medians, request_type):
     for name in blockers:
         for kind in ["median", "99"]:
             table = tables[kind]
-            args[f"{name}_{kind}"] = round(
-                float(table[name][table.request_type == request_type]), 3
+            args[f"{name}_{kind}"] = "%.3f" % float(
+                table[name][table.request_type == request_type]
             )
             for vs in blockers:
                 if vs != "ghostery":
-                    args[f"vs_{vs}_{kind}"] = round(
-                        float(
-                            table[f"{vs}_vs_ghostery"][
-                                table.request_type == request_type
-                            ]
-                        ),
-                        1,
+                    args[f"vs_{vs}_{kind}"] = "%.1f" % float(
+                        table[f"{vs}_vs_ghostery"][table.request_type == request_type]
                     )
 
     return """
-|               | 99% OF REQUESTS             | MEDIAN                       |
-| ------------- | --------------------------- | ---------------------------- |
-| **Ghostery**  | **{ghostery_99}ms**                 | **{ghostery_median}ms**                  |
-| uBlock Origin | {ublock_99}ms (**{vs_ublock_99}x slower**)   | {ublock_median}ms (**{vs_ublock_median}x slower**)    |
-| Adblock Plus  | {abp_99}ms (**{vs_abp_99}x slower**)   | {abp_median}ms (**{vs_abp_median}x slower**)     |
-| Brave         | {brave_99}ms (**{vs_brave_99}x slower**)  | {brave_median}ms (**{vs_brave_median}x slower**)    |
+|               | 99% OF REQUESTS              | MEDIAN                       |
+| ------------- | ---------------------------- | ---------------------------- |
+| **Ghostery**  | **{ghostery_99}ms**                  | **{ghostery_median}ms**                  |
+| uBlock Origin | {ublock_99}ms (**{vs_ublock_99}x slower**)    | {ublock_median}ms (**{vs_ublock_median}x slower**)    |
+| Adblock Plus  | {abp_99}ms (**{vs_abp_99}x slower**)    | {abp_median}ms (**{vs_abp_median}x slower**)    |
+| Brave         | {brave_99}ms (**{vs_brave_99}x slower**)   | {brave_median}ms (**{vs_brave_median}x slower**)    |
 | DuckDuckGo    | {duck_99}ms (**{vs_duck_99}x slower**) | {duck_median}ms (**{vs_duck_median}x slower**) |
     """.format(
         **args
