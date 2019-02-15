@@ -334,15 +334,15 @@ export default class Lists {
   }
 
   public delete(names: string[]): IListDiff {
-    const removedNetworkFilters: number[] = [];
-    const removedCosmeticFilters: number[] = [];
+    let removedNetworkFilters: number[] = [];
+    let removedCosmeticFilters: number[] = [];
 
     for (let i = 0; i < names.length; i += 1) {
       const name = names[i];
       const list: List | undefined = this.lists.get(name);
       if (list !== undefined) {
-        removedNetworkFilters.push(...list.getNetworkFiltersIds());
-        removedCosmeticFilters.push(...list.getCosmeticFiltersIds());
+        removedNetworkFilters = removedNetworkFilters.concat(list.getNetworkFiltersIds());
+        removedCosmeticFilters = removedCosmeticFilters.concat(...list.getCosmeticFiltersIds());
         this.lists.delete(name);
       }
     }
@@ -356,10 +356,10 @@ export default class Lists {
   }
 
   public update(lists: Array<{ name: string; checksum: string; list: string }>): IListDiff {
-    const newNetworkFilters: NetworkFilter[] = [];
-    const removedNetworkFilters: number[] = [];
-    const newCosmeticFilters: CosmeticFilter[] = [];
-    const removedCosmeticFilters: number[] = [];
+    let newNetworkFilters: NetworkFilter[] = [];
+    let removedNetworkFilters: number[] = [];
+    let newCosmeticFilters: CosmeticFilter[] = [];
+    let removedCosmeticFilters: number[] = [];
 
     for (let i = 0; i < lists.length; i += 1) {
       const { name, list, checksum } = lists[i];
@@ -373,10 +373,10 @@ export default class Lists {
       this.lists.set(name, currentList);
 
       const diff = currentList.update(list, checksum);
-      newNetworkFilters.push(...diff.newNetworkFilters);
-      removedNetworkFilters.push(...diff.removedNetworkFilters);
-      newCosmeticFilters.push(...diff.newCosmeticFilters);
-      removedCosmeticFilters.push(...diff.removedCosmeticFilters);
+      newNetworkFilters = newNetworkFilters.concat(diff.newNetworkFilters);
+      removedNetworkFilters = removedNetworkFilters.concat(diff.removedNetworkFilters);
+      newCosmeticFilters = newCosmeticFilters.concat(diff.newCosmeticFilters);
+      removedCosmeticFilters = removedCosmeticFilters.concat(diff.removedCosmeticFilters);
     }
 
     return {
