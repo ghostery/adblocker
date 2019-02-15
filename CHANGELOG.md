@@ -4,6 +4,14 @@
 
 *not released yet*
 
+## 0.6.9
+
+*2019-02-15*
+
+  * Fix stack overflow error on Edge [#105](https://github.com/cliqz-oss/adblocker/pull/105)
+  * Update and clean-up travis config [#104](https://github.com/cliqz-oss/adblocker/pull/104)
+  * Add rawType attribute to `Request` class [#102](https://github.com/cliqz-oss/adblocker/pull/104)
+
 ## 0.6.8
 
 *2019-02-08*
