@@ -28,11 +28,12 @@ const {
 } = require('./utils');
 
 const {
-  benchEngineCreation,
-  benchEngineSerialization,
-  benchEngineDeserialization,
-  benchNetworkFiltersParsing,
   benchCosmeticsFiltersParsing,
+  benchEngineCreation,
+  benchEngineDeserialization,
+  benchEngineSerialization,
+  benchListUpdate,
+  benchNetworkFiltersParsing,
   benchStringHashing,
   benchStringTokenize,
 } = require('./micro');
@@ -135,6 +136,7 @@ function runMicroBenchmarks(lists, resources) {
   };
 
   [
+    benchListUpdate,
     benchStringHashing,
     benchCosmeticsFiltersParsing,
     benchStringTokenize,

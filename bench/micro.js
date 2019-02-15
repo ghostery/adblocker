@@ -61,12 +61,22 @@ function benchNetworkFiltersParsing({ lists }) {
   });
 }
 
+function benchListUpdate({ lists }) {
+  const listsManager = new adblocker.Lists();
+  listsManager.update([{
+    name: 'list',
+    checksum: 'checksum',
+    list: lists.join('\n'),
+  }]);
+}
+
 
 module.exports = {
   benchCosmeticsFiltersParsing,
   benchEngineCreation,
-  benchEngineSerialization,
   benchEngineDeserialization,
+  benchEngineSerialization,
+  benchListUpdate,
   benchNetworkFiltersParsing,
   benchStringHashing,
   benchStringTokenize,
