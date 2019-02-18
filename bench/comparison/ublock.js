@@ -564,6 +564,24 @@ const URI = (function () {
   /** *************************************************************************** */
 }());
 
+const normalizePageURL = function (pageURL) {
+  const uri = URI.set(pageURL);
+  const scheme = uri.scheme;
+  if (scheme === 'https' || scheme === 'http') {
+    return uri.normalizedURI();
+  }
+
+  let fakeHostname = `${scheme}-scheme`;
+
+  if (uri.hostname !== '') {
+    fakeHostname = `${uri.hostname}.${fakeHostname}`;
+  } else if (scheme === 'about' && uri.path !== '') {
+    fakeHostname = `${uri.path}.${fakeHostname}`;
+  }
+
+  return `http://${fakeHostname}/`;
+};
+
 /** *************************************************************************** */
 
 const compileFilters = function (rawText) {
@@ -4307,6 +4325,219 @@ const staticNetFilteringEngine = (function () {
   /** *************************************************************************** */
 }());
 
+const FilteringContext = function (other) {
+  this.tstamp = 0;
+  this.realm = '';
+  this.type = undefined;
+  this.url = undefined;
+  this.hostname = undefined;
+  this.domain = undefined;
+  this.docId = undefined;
+  this.docOrigin = undefined;
+  this.docHostname = undefined;
+  this.docDomain = undefined;
+  this.tabId = undefined;
+  this.tabOrigin = undefined;
+  this.tabHostname = undefined;
+  this.tabDomain = undefined;
+  this.filter = undefined;
+};
+
+FilteringContext.prototype = {
+  fromWebrequestDetails(details) {
+    this.tabId = 1;
+    this.realm = '';
+    this.type = details.type;
+    this.setURL(details.url);
+    this.docId = details.type !== 'sub_frame' ? details.frameId : details.parentFrameId;
+    if (this.tabId > 0) {
+      if (this.docId === 0) {
+        this.docOrigin = this.tabOrigin;
+        this.docHostname = this.tabHostname;
+        this.docDomain = this.tabDomain;
+      } else if (details.documentUrl !== undefined) {
+        this.setDocOriginFromURL(details.documentUrl);
+      } else {
+        const pageStore = null;
+        const docStore = pageStore && pageStore.frames.get(this.docId);
+        if (docStore) {
+          this.docOrigin = undefined;
+          this.docHostname = docStore.pageHostname;
+          this.docDomain = docStore.pageDomain;
+        }
+      }
+    } else if (details.documentUrl !== undefined) {
+      const normalURL = normalizePageURL(details.documentUrl);
+      this.setTabOriginFromURL(normalURL);
+      this.setDocOriginFromURL(normalURL);
+    } else {
+      this.setDocOrigin(this.tabOrigin);
+    }
+    this.filter = undefined;
+    return this;
+  },
+  setURL(a) {
+    if (a !== this.url) {
+      this.hostname = this.domain = undefined;
+      this.url = a;
+    }
+    return this;
+  },
+  getHostname() {
+    if (this.hostname === undefined) {
+      this.hostname = this.hostnameFromURI(this.url);
+    }
+    return this.hostname;
+  },
+  setHostname(a) {
+    if (a !== this.hostname) {
+      this.domain = undefined;
+      this.hostname = a;
+    }
+    return this;
+  },
+  getDomain() {
+    if (this.domain === undefined) {
+      this.domain = this.domainFromHostname(this.getHostname());
+    }
+    return this.domain;
+  },
+  setDomain(a) {
+    this.domain = a;
+    return this;
+  },
+  getDocOrigin() {
+    if (this.docOrigin === undefined) {
+      this.docOrigin = this.tabOrigin;
+    }
+    return this.docOrigin;
+  },
+  setDocOrigin(a) {
+    if (a !== this.docOrigin) {
+      this.docHostname = this.docDomain = undefined;
+      this.docOrigin = a;
+    }
+    return this;
+  },
+  setDocOriginFromURL(a) {
+    return this.setDocOrigin(this.originFromURI(a));
+  },
+  getDocHostname() {
+    if (this.docHostname === undefined) {
+      this.docHostname = this.hostnameFromURI(this.getDocOrigin());
+    }
+    return this.docHostname;
+  },
+  setDocHostname(a) {
+    if (a !== this.docHostname) {
+      this.docDomain = undefined;
+      this.docHostname = a;
+    }
+    return this;
+  },
+  getDocDomain() {
+    if (this.docDomain === undefined) {
+      this.docDomain = this.domainFromHostname(this.getDocHostname());
+    }
+    return this.docDomain;
+  },
+  setDocDomain(a) {
+    this.docDomain = a;
+    return this;
+  },
+  // The idea is to minimize the amout of work done to figure out whether
+  // the resource is 3rd-party to the document.
+  is3rdPartyToDoc() {
+    let docDomain = this.getDocDomain();
+    if (docDomain === '') {
+      docDomain = this.docHostname;
+    }
+    if (this.domain !== undefined && this.domain !== '') {
+      return this.domain !== docDomain;
+    }
+    const hostname = this.getHostname();
+    if (hostname.endsWith(docDomain) === false) {
+      return true;
+    }
+    const i = hostname.length - docDomain.length;
+    if (i === 0) {
+      return false;
+    }
+    return hostname.charCodeAt(i - 1) !== 0x2e;
+  },
+  setTabId(a) {
+    this.tabId = a;
+    return this;
+  },
+  getTabOrigin() {
+    if (this.tabOrigin === undefined) {
+      const tabContext = µBlock.tabContextManager.mustLookup(this.tabId);
+      this.tabOrigin = tabContext.origin;
+      this.tabHostname = tabContext.rootHostname;
+      this.tabDomain = tabContext.rootDomain;
+    }
+    return this.tabOrigin;
+  },
+  setTabOrigin(a) {
+    if (a !== this.tabOrigin) {
+      this.tabHostname = this.tabDomain = undefined;
+      this.tabOrigin = a;
+    }
+    return this;
+  },
+  setTabOriginFromURL(a) {
+    return this.setTabOrigin(this.originFromURI(a));
+  },
+  getTabHostname() {
+    if (this.tabHostname === undefined) {
+      this.tabHostname = this.hostnameFromURI(this.getTabOrigin());
+    }
+    return this.tabHostname;
+  },
+  setTabHostname(a) {
+    if (a !== this.tabHostname) {
+      this.tabDomain = undefined;
+      this.tabHostname = a;
+    }
+    return this;
+  },
+  getTabDomain() {
+    if (this.tabDomain === undefined) {
+      this.tabDomain = this.domainFromHostname(this.getTabHostname());
+    }
+    return this.tabDomain;
+  },
+  setTabDomain(a) {
+    this.docDomain = a;
+    return this;
+  },
+  // The idea is to minimize the amout of work done to figure out whether
+  // the resource is 3rd-party to the top document.
+  is3rdPartyToTab() {
+    let tabDomain = this.getTabDomain();
+    if (tabDomain === '') {
+      tabDomain = this.tabHostname;
+    }
+    if (this.domain !== undefined && this.domain !== '') {
+      return this.domain !== tabDomain;
+    }
+    const hostname = this.getHostname();
+    if (hostname.endsWith(tabDomain) === false) {
+      return true;
+    }
+    const i = hostname.length - tabDomain.length;
+    if (i === 0) {
+      return false;
+    }
+    return hostname.charCodeAt(i - 1) !== 0x2e;
+  },
+  originFromURI: URI.originFromURI,
+  hostnameFromURI: URI.hostnameFromURI,
+  domainFromHostname: URI.domainFromHostname,
+};
+
+const filteringContext = new FilteringContext();
+
 module.exports = class UBlockOrigin {
   static parse(rawLists) {
     staticNetFilteringEngine.fromCompiledContent(new Reader(compileFilters(rawLists)));
@@ -4326,15 +4557,10 @@ module.exports = class UBlockOrigin {
     this.engine.fromSelfie(JSON.parse(serialized));
   }
 
-  match(_, {
-    rawType, url, hostname, domain, sourceHostname, sourceDomain,
-  }) {
-    return this.engine.matchString({
-      url,
-      type: rawType,
-      getDocHostname: () => sourceHostname,
-      getHostname: () => hostname,
-      is3rdPartyToDoc: () => sourceDomain !== domain,
-    }) === 1;
+  match({ url, frameUrl, type }) {
+    return (
+      this.engine.matchString(filteringContext.fromWebrequestDetails({
+        url, type, documentUrl: frameUrl,
+      }))) === 1;
   }
 };

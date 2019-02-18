@@ -1,27 +1,30 @@
+const { URL } = require('url');
+
 const { CombinedMatcher } = require('./adblockpluscore/lib/matcher.js');
 const { Filter, RegExpFilter } = require('./adblockpluscore/lib/filterClasses.js');
+const { isThirdParty } = require('./adblockpluscore/lib/domain.js');
 
-// This maps puppeteer types to Adblock Plus types
-const TYPE_MAP = {
-  // Consider document requests as sub_document. This is because the request
-  // dataset does not contain sub_frame or main_frame but only 'document' and
-  // different blockers have different behaviours.
-  document: RegExpFilter.typeMap.SUBDOCUMENT,
-  stylesheet: RegExpFilter.typeMap.STYLESHEET,
-  image: RegExpFilter.typeMap.IMAGE,
-  media: RegExpFilter.typeMap.MEDIA,
-  font: RegExpFilter.typeMap.FONT,
-  script: RegExpFilter.typeMap.SCRIPT,
-  xhr: RegExpFilter.typeMap.XMLHTTPREQUEST,
-  websocket: RegExpFilter.typeMap.WEBSOCKET,
+const extensionProtocol = '<extension_protocol>';
 
-  // other
-  fetch: RegExpFilter.typeMap.OTHER,
-  other: RegExpFilter.typeMap.OTHER,
-  eventsource: RegExpFilter.typeMap.OTHER,
-  manifest: RegExpFilter.typeMap.OTHER,
-  texttrack: RegExpFilter.typeMap.OTHER,
-};
+// Chrome can't distinguish between OBJECT_SUBREQUEST and OBJECT requests.
+RegExpFilter.typeMap.OBJECT_SUBREQUEST = RegExpFilter.typeMap.OBJECT;
+
+// Map of content types reported by the browser to the respecitve content types
+// used by Adblock Plus. Other content types are simply mapped to OTHER.
+const resourceTypes = new Map(
+  (function* () {
+    for (const type in RegExpFilter.typeMap) yield [type.toLowerCase(), type];
+
+    yield ['sub_frame', 'SUBDOCUMENT'];
+
+    // Treat navigator.sendBeacon() the same as <a ping>, it's essentially the
+    // same concept - merely generalized.
+    yield ['beacon', 'PING'];
+
+    // Treat <img srcset> and <picture> the same as other images.
+    yield ['imageset', 'IMAGE'];
+  }()),
+);
 
 module.exports = class AdBlockPlus {
   static parse(rawLists) {
@@ -67,15 +70,19 @@ module.exports = class AdBlockPlus {
     this.filters = filters;
   }
 
-  match(type, { url, sourceDomain, domain }) {
-    const match = this.matcher.matchesAny(
-      url,
-      TYPE_MAP[type],
-      sourceDomain,
-      sourceDomain !== domain,
+  match(request) {
+    const url = new URL(request.url);
+    const sourceURL = new URL(request.frameUrl);
+    const thirdParty = isThirdParty(url, sourceURL.hostname);
+    const filter = this.matcher.matchesAny(
+      url.href,
+      RegExpFilter.typeMap[resourceTypes.get(request.type) || 'OTHER'],
+      sourceURL.hostname,
+      thirdParty,
       null,
       false,
     );
-    return match !== null && !match.text.startsWith('@@');
+
+    return filter !== null && !filter.text.startsWith('@@');
   }
 };

@@ -2,14 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 
-const tldts = require('tldts');
-const { makeRequest } = require('../../');
-
 const UBlockOrigin = require('./ublock.js');
 const Brave = require('./brave.js');
 const Duckduckgo = require('./duckduckgo.js');
 const Ghostery = require('./ghostery.js');
 const AdBlockPlus = require('./adblockplus.js');
+const Tldts = require('./tldts_baseline.js');
+const Url = require('./url_baseline.js');
 
 const ENGINE = process.argv[process.argv.length - 2];
 const REQUESTS_PATH = process.argv[process.argv.length - 1];
@@ -28,16 +27,15 @@ const WEBREQUEST_OPTIONS = {
   font: 'font',
   script: 'script',
   xhr: 'xmlhttprequest',
+  fetch: 'xmlhttprequest',
   websocket: 'websocket',
 
   // other
-  fetch: 'other',
   other: 'other',
   eventsource: 'other',
   manifest: 'other',
   texttrack: 'other',
 };
-
 
 function min(arr) {
   let acc = Number.MAX_VALUE;
@@ -64,6 +62,15 @@ function avg(arr) {
   return sum / arr.length;
 }
 
+function isSupportedUrl(url) {
+  return !!url && (
+    url.startsWith('http:')
+    || url.startsWith('https:')
+    || url.startsWith('ws:')
+    || url.startsWith('wss:')
+  );
+}
+
 function loadLists() {
   return fs.readFileSync(path.resolve(__dirname, './easylist.txt'), { encoding: 'utf-8' });
 }
@@ -74,9 +81,11 @@ async function main() {
   const Cls = {
     adblockplus: AdBlockPlus,
     brave: Brave,
-    ghostery: Ghostery,
     duckduckgo: Duckduckgo,
+    ghostery: Ghostery,
+    tldts: Tldts,
     ublock: UBlockOrigin,
+    url: Url,
   }[ENGINE];
 
   // Parse rules
@@ -126,9 +135,6 @@ async function main() {
     crlfDelay: Infinity,
   });
 
-  const pages = new Set();
-  const domains = new Set();
-
   let index = 0;
   lines.on('line', (line) => {
     if (index !== 0 && index % 10000 === 0) {
@@ -143,23 +149,14 @@ async function main() {
       return;
     }
 
-    const { url, cpt, frameUrl } = request;
-    const parsed = makeRequest({
-      url,
-      sourceUrl: frameUrl,
-      type: WEBREQUEST_OPTIONS[cpt],
-    }, tldts);
+    const { url, frameUrl, cpt } = request;
 
-    if (parsed.domain === '' || parsed.hostname === '' || parsed.sourceHostname === '' || parsed.sourceDomain === '') {
+    if (!isSupportedUrl(url) || !isSupportedUrl(frameUrl)) {
       return;
     }
 
-    pages.add(parsed.sourceUrl);
-    domains.add(parsed.sourceDomain);
-
-    // Process request for each engine
     start = process.hrtime();
-    const match = engine.match(cpt, parsed);
+    const match = engine.match({ type: WEBREQUEST_OPTIONS[cpt], frameUrl, url });
     diff = process.hrtime(start);
     const totalHighResolution = (diff[0] * 1000000000 + diff[1]) / 1000000;
 
@@ -174,24 +171,25 @@ async function main() {
     lines.on('close', resolve);
   });
 
-  console.log();
-  console.log('> Domains', domains.size);
-  console.log('> Pages', pages.size);
-
   const cmp = (a, b) => a - b;
 
   stats.matches.sort(cmp);
   stats.noMatches.sort(cmp);
-  stats.all = [
-    ...stats.matches,
-    ...stats.noMatches,
-  ].sort(cmp);
+  stats.all = [...stats.matches, ...stats.noMatches].sort(cmp);
 
   const { matches, noMatches, all } = stats;
 
   console.log();
-  console.log(`Avg serialization time (${serializationTimings.length} samples): ${avg(serializationTimings)}`);
-  console.log(`Avg deserialization time (${deserializationTimings.length} samples): ${avg(deserializationTimings)}`);
+  console.log(
+    `Avg serialization time (${serializationTimings.length} samples): ${avg(
+      serializationTimings,
+    )}`,
+  );
+  console.log(
+    `Avg deserialization time (${deserializationTimings.length} samples): ${avg(
+      deserializationTimings,
+    )}`,
+  );
   console.log(`Serialized size: ${cacheSize}`);
   console.log(`List parsing time: ${parsingTime}`);
   console.log();

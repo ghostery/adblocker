@@ -222,23 +222,24 @@ export function makeRequest(
     sourceDomain,
     type = 'document',
   }: Partial<IRequestInitialization>,
-  {
-    getHostname,
-    getDomain,
-  }: {
-    getHostname: (url: string) => string | null;
-    getDomain: (url: string) => string | null;
-  },
+  parse: (url: string) => { hostname: string | null; domain: string | null },
 ): Request {
   // Initialize URL
   url = url.toLowerCase();
-  hostname = hostname || getHostname(url) || '';
-  domain = domain || getDomain(hostname) || '';
+
+  if (hostname === undefined || domain === undefined) {
+    const parsed = parse(url);
+    hostname = hostname || parsed.hostname || '';
+    domain = domain || parsed.domain || '';
+  }
 
   // Initialize source URL
   sourceUrl = sourceUrl.toLowerCase();
-  sourceHostname = sourceHostname || getHostname(sourceUrl) || '';
-  sourceDomain = sourceDomain || getDomain(sourceHostname) || '';
+  if (sourceHostname === undefined || sourceDomain === undefined) {
+    const parsed = parse(sourceUrl);
+    sourceHostname = sourceHostname || parsed.hostname || '';
+    sourceDomain = sourceDomain || parsed.domain || '';
+  }
 
   // source URL
   return new Request({

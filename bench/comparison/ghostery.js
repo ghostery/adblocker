@@ -1,6 +1,9 @@
 const path = require('path');
 
-const { FiltersEngine } = require(path.resolve(__dirname, '../../'));
+const tldts = require('tldts');
+
+const { FiltersEngine, makeRequest } = require(path.resolve(__dirname, '../../'));
+
 
 module.exports = class Ghostery {
   static parse(rawLists) {
@@ -19,7 +22,11 @@ module.exports = class Ghostery {
     this.engine = FiltersEngine.deserialize(serialized);
   }
 
-  match(_, request) {
-    return this.engine.match(request).match;
+  match({ url, frameUrl, type }) {
+    return this.engine.match(makeRequest({
+      url,
+      sourceUrl: frameUrl,
+      type,
+    }, tldts.parse)).match;
   }
 };

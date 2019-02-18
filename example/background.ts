@@ -1,4 +1,4 @@
-import { getDomain, getHostname } from 'tldts';
+import { getDomain, parse } from 'tldts';
 import * as adblocker from '../index';
 
 /**
@@ -108,7 +108,7 @@ function requestFromDetails({
       type,
       url,
     },
-    { getDomain, getHostname },
+    parse,
   );
 }
 
