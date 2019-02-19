@@ -48,10 +48,10 @@ module.exports = class AdBlockPlus {
   }
 
   serialize() {
-    return [JSON.stringify(this.filters.map(({ text }) => text))];
+    return JSON.stringify(this.filters.map(({ text }) => text));
   }
 
-  deserialize([serialized]) {
+  deserialize(serialized) {
     const lines = JSON.parse(serialized);
     const filters = [];
     const matcher = new CombinedMatcher();

@@ -1,7 +1,8 @@
 # Comparison With Other Blockers
 
 These micro-benchmarks compare different content-blockers network-filter
-matching engines.
+matching engines as well as the time it takes to process raw requests (e.g.:
+extracting hostnames and domains from URLs).
 
 ## Running Benchmarks
 

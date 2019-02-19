@@ -26,10 +26,10 @@ module.exports = class Brave {
   }
 
   serialize() {
-    return [this.client.serialize()];
+    return this.client.serialize();
   }
 
-  deserialize([serialized]) {
+  deserialize(serialized) {
     this.client.deserialize(serialized);
   }
 

@@ -4,13 +4,13 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 
-const UBlockOrigin = require('./ublock.js');
-const Brave = require('./brave.js');
-const Duckduckgo = require('./duckduckgo.js');
-const Ghostery = require('./ghostery.js');
-const AdBlockPlus = require('./adblockplus.js');
-const Tldts = require('./tldts_baseline.js');
-const Url = require('./url_baseline.js');
+const UBlockOrigin = require('./blockers/ublock.js');
+const Brave = require('./blockers/brave.js');
+const Duckduckgo = require('./blockers/duckduckgo.js');
+const Ghostery = require('./blockers/ghostery.js');
+const AdBlockPlus = require('./blockers/adblockplus.js');
+const Tldts = require('./blockers/tldts_baseline.js');
+const Url = require('./blockers/url_baseline.js');
 
 const ENGINE = process.argv[process.argv.length - 2];
 const REQUESTS_PATH = process.argv[process.argv.length - 1];
@@ -108,16 +108,25 @@ async function main() {
     let serialized;
     for (let i = 0; i < 100; i += 1) {
       start = process.hrtime();
-      serialized = await engine.serialize();
+
+      serialized = engine.serialize();
+      if (serialized instanceof Promise) {
+        serialized = await serialized;
+      }
+
       diff = process.hrtime(start);
       serializationTimings.push((diff[0] * 1000000000 + diff[1]) / 1000000);
     }
-    cacheSize = sum(serialized.map(part => part.length));
+    cacheSize = serialized.length;
 
     // Deserialize
     for (let i = 0; i < 100; i += 1) {
       start = process.hrtime();
-      await engine.deserialize(serialized);
+      const deserializing = engine.deserialize(serialized);
+      if (deserializing instanceof Promise) {
+        await deserializing;
+      }
+
       diff = process.hrtime(start);
       deserializationTimings.push((diff[0] * 1000000000 + diff[1]) / 1000000);
     }

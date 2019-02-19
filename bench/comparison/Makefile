@@ -5,8 +5,9 @@ puppeteer:
 	npm install --save git://github.com/remusao/puppeteer-pool.git
 
 # VERSION: 34c49bbf029e586226220c067c50cec6e8bf8842
-adblockpluscore:
+./blockers/adblockpluscore:
 	tar xjvf adblockpluscore-34c49bbf029e586226220c067c50cec6e8bf8842.tar.bz2
+	mv adblockpluscore blockers
 
 # VERSION: 0.2.0
 ../../node_modules/abp-filter-parser:
@@ -32,7 +33,7 @@ ghostery:
 ublock: ../../node_modules/sandboxed-module ../../node_modules/jsdom
 	NODE_ENV=production node run.js ublock requests.json
 
-adblockplus: adblockpluscore
+adblockplus: ./blockers/adblockpluscore
 	NODE_ENV=production node run.js adblockplus requests.json
 
 duckduckgo: ../../node_modules/abp-filter-parser
@@ -44,5 +45,5 @@ tldts:
 url:
 	NODE_ENV=production node run.js url requests.json
 
-deps: puppeteer adblockpluscore ../../node_modules/abp-filter-parser ../../node_modules/ad-block
+deps: puppeteer adblockpluscore ../../node_modules/abp-filter-parser ../../node_modules/ad-block ../../node_modules/jsdom ../../node_modules/sandboxed-module
 run: url tldts ghostery ublock adblockplus brave duckduckgo

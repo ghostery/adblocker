@@ -121,10 +121,10 @@ module.exports = class UBlockOrigin {
 
   async serialize() {
     await this.engine.toSelfie('path');
-    return [
+    return JSON.stringify([
       (await assets.get('path/main')).content,
       (await assets.get('path/trieContainer')).content,
-    ];
+    ]);
   }
 
   async deserialize() {

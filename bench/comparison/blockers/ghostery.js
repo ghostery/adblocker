@@ -2,7 +2,7 @@ const path = require('path');
 
 const tldts = require('tldts');
 
-const { FiltersEngine, makeRequest } = require(path.resolve(__dirname, '../../'));
+const { FiltersEngine, makeRequest } = require(path.resolve(__dirname, '../../../'));
 
 
 module.exports = class Ghostery {
@@ -15,10 +15,10 @@ module.exports = class Ghostery {
   }
 
   serialize() {
-    return [this.engine.serialize()];
+    return this.engine.serialize();
   }
 
-  deserialize([serialized]) {
+  deserialize(serialized) {
     this.engine = FiltersEngine.deserialize(serialized);
   }
 
