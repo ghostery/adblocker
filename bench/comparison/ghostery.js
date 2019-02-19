@@ -15,10 +15,10 @@ module.exports = class Ghostery {
   }
 
   serialize() {
-    return this.engine.serialize();
+    return [this.engine.serialize()];
   }
 
-  deserialize(serialized) {
+  deserialize([serialized]) {
     this.engine = FiltersEngine.deserialize(serialized);
   }
 

@@ -1,3 +1,5 @@
+/* eslint-disable no-await-in-loop */
+
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
@@ -53,13 +55,16 @@ function max(arr) {
   return acc;
 }
 
-function avg(arr) {
-  let sum = 0.0;
+function sum(arr) {
+  let s = 0.0;
   for (let i = 0; i < arr.length; i += 1) {
-    sum += arr[i];
+    s += arr[i];
   }
+  return s;
+}
 
-  return sum / arr.length;
+function avg(arr) {
+  return sum(arr) / arr.length;
 }
 
 function isSupportedUrl(url) {
@@ -90,7 +95,7 @@ async function main() {
 
   // Parse rules
   let start = process.hrtime();
-  let engine = Cls.parse(rawLists);
+  let engine = await Cls.parse(rawLists);
   let diff = process.hrtime(start);
   const parsingTime = (diff[0] * 1000000000 + diff[1]) / 1000000;
 
@@ -103,23 +108,23 @@ async function main() {
     let serialized;
     for (let i = 0; i < 100; i += 1) {
       start = process.hrtime();
-      serialized = engine.serialize();
+      serialized = await engine.serialize();
       diff = process.hrtime(start);
       serializationTimings.push((diff[0] * 1000000000 + diff[1]) / 1000000);
     }
-    cacheSize = serialized.length;
+    cacheSize = sum(serialized.map(part => part.length));
 
     // Deserialize
     for (let i = 0; i < 100; i += 1) {
       start = process.hrtime();
-      engine.deserialize(serialized);
+      await engine.deserialize(serialized);
       diff = process.hrtime(start);
       deserializationTimings.push((diff[0] * 1000000000 + diff[1]) / 1000000);
     }
   }
 
   // Create a clean engine for benchmarking
-  engine = Cls.parse(rawLists);
+  engine = await Cls.parse(rawLists);
 
   const stats = {
     parsingTime,

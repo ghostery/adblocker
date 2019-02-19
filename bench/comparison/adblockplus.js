@@ -1,10 +1,12 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
+/* eslint-disable func-names */
+
 const { URL } = require('url');
 
 const { CombinedMatcher } = require('./adblockpluscore/lib/matcher.js');
 const { Filter, RegExpFilter } = require('./adblockpluscore/lib/filterClasses.js');
 const { isThirdParty } = require('./adblockpluscore/lib/domain.js');
-
-const extensionProtocol = '<extension_protocol>';
 
 // Chrome can't distinguish between OBJECT_SUBREQUEST and OBJECT requests.
 RegExpFilter.typeMap.OBJECT_SUBREQUEST = RegExpFilter.typeMap.OBJECT;
@@ -46,10 +48,10 @@ module.exports = class AdBlockPlus {
   }
 
   serialize() {
-    return JSON.stringify(this.filters.map(({ text }) => text));
+    return [JSON.stringify(this.filters.map(({ text }) => text))];
   }
 
-  deserialize(serialized) {
+  deserialize([serialized]) {
     const lines = JSON.parse(serialized);
     const filters = [];
     const matcher = new CombinedMatcher();

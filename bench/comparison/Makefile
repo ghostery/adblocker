@@ -23,7 +23,13 @@ brave: ../../node_modules/ad-block
 ghostery:
 	NODE_ENV=production node run.js ghostery requests.json
 
-ublock:
+../../node_modules/jsdom:
+	npm install --save-dev jsdom
+
+../../node_modules/sandboxed-module:
+	npm install --save-dev sandboxed-module
+
+ublock: ../../node_modules/sandboxed-module ../../node_modules/jsdom
 	NODE_ENV=production node run.js ublock requests.json
 
 adblockplus: adblockpluscore
@@ -39,4 +45,4 @@ url:
 	NODE_ENV=production node run.js url requests.json
 
 deps: puppeteer adblockpluscore ../../node_modules/abp-filter-parser ../../node_modules/ad-block
-run: ghostery ublock adblockplus brave duckduckgo
+run: url tldts ghostery ublock adblockplus brave duckduckgo
