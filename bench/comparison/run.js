@@ -1,15 +1,17 @@
+/* eslint-disable no-await-in-loop */
+
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 
-const tldts = require('tldts');
-const { makeRequest } = require('../../');
-
-const UBlockOrigin = require('./ublock.js');
-const Brave = require('./brave.js');
-const Duckduckgo = require('./duckduckgo.js');
-const Ghostery = require('./ghostery.js');
-const AdBlockPlus = require('./adblockplus.js');
+const UBlockOrigin = require('./blockers/ublock.js');
+const Brave = require('./blockers/brave.js');
+const Duckduckgo = require('./blockers/duckduckgo.js');
+const Ghostery = require('./blockers/ghostery.js');
+const AdBlockPlus = require('./blockers/adblockplus.js');
+const Tldts = require('./blockers/tldts_baseline.js');
+const Url = require('./blockers/url_baseline.js');
+const Re = require('./blockers/re_baseline.js');
 
 const ENGINE = process.argv[process.argv.length - 2];
 const REQUESTS_PATH = process.argv[process.argv.length - 1];
@@ -28,16 +30,15 @@ const WEBREQUEST_OPTIONS = {
   font: 'font',
   script: 'script',
   xhr: 'xmlhttprequest',
+  fetch: 'xmlhttprequest',
   websocket: 'websocket',
 
   // other
-  fetch: 'other',
   other: 'other',
   eventsource: 'other',
   manifest: 'other',
   texttrack: 'other',
 };
-
 
 function min(arr) {
   let acc = Number.MAX_VALUE;
@@ -55,13 +56,25 @@ function max(arr) {
   return acc;
 }
 
-function avg(arr) {
-  let sum = 0.0;
+function sum(arr) {
+  let s = 0.0;
   for (let i = 0; i < arr.length; i += 1) {
-    sum += arr[i];
+    s += arr[i];
   }
+  return s;
+}
 
-  return sum / arr.length;
+function avg(arr) {
+  return sum(arr) / arr.length;
+}
+
+function isSupportedUrl(url) {
+  return !!url && (
+    url.startsWith('http:')
+    || url.startsWith('https:')
+    || url.startsWith('ws:')
+    || url.startsWith('wss:')
+  );
 }
 
 function loadLists() {
@@ -74,14 +87,17 @@ async function main() {
   const Cls = {
     adblockplus: AdBlockPlus,
     brave: Brave,
-    ghostery: Ghostery,
     duckduckgo: Duckduckgo,
+    ghostery: Ghostery,
+    re: Re,
+    tldts: Tldts,
     ublock: UBlockOrigin,
+    url: Url,
   }[ENGINE];
 
   // Parse rules
   let start = process.hrtime();
-  let engine = Cls.parse(rawLists);
+  let engine = await Cls.parse(rawLists);
   let diff = process.hrtime(start);
   const parsingTime = (diff[0] * 1000000000 + diff[1]) / 1000000;
 
@@ -94,7 +110,12 @@ async function main() {
     let serialized;
     for (let i = 0; i < 100; i += 1) {
       start = process.hrtime();
+
       serialized = engine.serialize();
+      if (serialized instanceof Promise) {
+        serialized = await serialized;
+      }
+
       diff = process.hrtime(start);
       serializationTimings.push((diff[0] * 1000000000 + diff[1]) / 1000000);
     }
@@ -103,14 +124,18 @@ async function main() {
     // Deserialize
     for (let i = 0; i < 100; i += 1) {
       start = process.hrtime();
-      engine.deserialize(serialized);
+      const deserializing = engine.deserialize(serialized);
+      if (deserializing instanceof Promise) {
+        await deserializing;
+      }
+
       diff = process.hrtime(start);
       deserializationTimings.push((diff[0] * 1000000000 + diff[1]) / 1000000);
     }
   }
 
   // Create a clean engine for benchmarking
-  engine = Cls.parse(rawLists);
+  engine = await Cls.parse(rawLists);
 
   const stats = {
     parsingTime,
@@ -126,9 +151,6 @@ async function main() {
     crlfDelay: Infinity,
   });
 
-  const pages = new Set();
-  const domains = new Set();
-
   let index = 0;
   lines.on('line', (line) => {
     if (index !== 0 && index % 10000 === 0) {
@@ -143,23 +165,14 @@ async function main() {
       return;
     }
 
-    const { url, cpt, frameUrl } = request;
-    const parsed = makeRequest({
-      url,
-      sourceUrl: frameUrl,
-      type: WEBREQUEST_OPTIONS[cpt],
-    }, tldts);
+    const { url, frameUrl, cpt } = request;
 
-    if (parsed.domain === '' || parsed.hostname === '' || parsed.sourceHostname === '' || parsed.sourceDomain === '') {
+    if (!isSupportedUrl(url) || !isSupportedUrl(frameUrl)) {
       return;
     }
 
-    pages.add(parsed.sourceUrl);
-    domains.add(parsed.sourceDomain);
-
-    // Process request for each engine
     start = process.hrtime();
-    const match = engine.match(cpt, parsed);
+    const match = engine.match({ type: WEBREQUEST_OPTIONS[cpt], frameUrl, url });
     diff = process.hrtime(start);
     const totalHighResolution = (diff[0] * 1000000000 + diff[1]) / 1000000;
 
@@ -174,24 +187,25 @@ async function main() {
     lines.on('close', resolve);
   });
 
-  console.log();
-  console.log('> Domains', domains.size);
-  console.log('> Pages', pages.size);
-
   const cmp = (a, b) => a - b;
 
   stats.matches.sort(cmp);
   stats.noMatches.sort(cmp);
-  stats.all = [
-    ...stats.matches,
-    ...stats.noMatches,
-  ].sort(cmp);
+  stats.all = [...stats.matches, ...stats.noMatches].sort(cmp);
 
   const { matches, noMatches, all } = stats;
 
   console.log();
-  console.log(`Avg serialization time (${serializationTimings.length} samples): ${avg(serializationTimings)}`);
-  console.log(`Avg deserialization time (${deserializationTimings.length} samples): ${avg(deserializationTimings)}`);
+  console.log(
+    `Avg serialization time (${serializationTimings.length} samples): ${avg(
+      serializationTimings,
+    )}`,
+  );
+  console.log(
+    `Avg deserialization time (${deserializationTimings.length} samples): ${avg(
+      deserializationTimings,
+    )}`,
+  );
   console.log(`Serialized size: ${cacheSize}`);
   console.log(`List parsing time: ${parsingTime}`);
   console.log();

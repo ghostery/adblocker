@@ -31,12 +31,14 @@ class Adblocker:
             )
 
         # data
-        self.blocked = Dist(
-            raw=self._raw["matches"], cdf=self.generateCDF(self._raw["matches"])
-        )
-        self.not_blocked = Dist(
-            raw=self._raw["noMatches"], cdf=self.generateCDF(self._raw["noMatches"])
-        )
+        matches = self._raw.get("matches")
+        if matches:
+            self.blocked = Dist(raw=matches, cdf=self.generateCDF(matches))
+
+        noMatches = self._raw.get("noMatches")
+        if noMatches:
+            self.not_blocked = Dist(raw=noMatches, cdf=self.generateCDF(noMatches))
+
         self.all = Dist(raw=self._raw["all"], cdf=self.generateCDF(self._raw["all"]))
 
     @staticmethod

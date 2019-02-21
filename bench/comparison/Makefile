@@ -4,15 +4,19 @@ all: deps run
 puppeteer:
 	npm install --save git://github.com/remusao/puppeteer-pool.git
 
-adblockpluscore:
-	git clone --depth=1 https://github.com/adblockplus/adblockpluscore.git && cd adblockpluscore && npm install && cd -
+# VERSION: 34c49bbf029e586226220c067c50cec6e8bf8842
+./blockers/adblockpluscore:
+	tar xjvf adblockpluscore-34c49bbf029e586226220c067c50cec6e8bf8842.tar.bz2
+	mv adblockpluscore blockers
 
+# VERSION: 0.2.0
 ../../node_modules/abp-filter-parser:
 	npm install --save git://github.com/duckduckgo/abp-filter-parser.git#0.2.0
 	cd ../../node_modules/abp-filter-parser/ && npm install && cd -
 
+# VERSION: 4.1.3
 ../../node_modules/ad-block:
-	npm install --save ad-block
+	npm install --save ad-block@4.1.3
 
 brave: ../../node_modules/ad-block
 	NODE_ENV=production node run.js brave requests.json
@@ -20,14 +24,26 @@ brave: ../../node_modules/ad-block
 ghostery:
 	NODE_ENV=production node run.js ghostery requests.json
 
-ublock:
+../../node_modules/jsdom:
+	npm install --save-dev jsdom
+
+../../node_modules/sandboxed-module:
+	npm install --save-dev sandboxed-module
+
+ublock: ../../node_modules/sandboxed-module ../../node_modules/jsdom
 	NODE_ENV=production node run.js ublock requests.json
 
-adblockplus: adblockpluscore
+adblockplus: ./blockers/adblockpluscore
 	NODE_ENV=production node run.js adblockplus requests.json
 
 duckduckgo: ../../node_modules/abp-filter-parser
 	NODE_ENV=production node run.js duckduckgo requests.json
 
-deps: puppeteer adblockpluscore ../../node_modules/abp-filter-parser ../../node_modules/ad-block
-run: ghostery ublock adblockplus brave duckduckgo
+tldts:
+	NODE_ENV=production node run.js tldts requests.json
+
+url:
+	NODE_ENV=production node run.js url requests.json
+
+deps: puppeteer adblockpluscore ../../node_modules/abp-filter-parser ../../node_modules/ad-block ../../node_modules/jsdom ../../node_modules/sandboxed-module
+run: url tldts ghostery ublock adblockplus brave duckduckgo

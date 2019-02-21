@@ -36,81 +36,81 @@ function test({
   // it(`[engine] isolation=${testFiltersInIsolation} optimized=${engine.enableOptimizations} ${
   //   filter.rawLine
   // }`, () => {
-    // Set correct resources in `engine` (`resources` is expected to have been
-    // created using the matching redirect filters for the current Request so
-    // that all redirect matches will have a corresponding resource in
-    // `resources`).
-    engine.resources = resources;
+  // Set correct resources in `engine` (`resources` is expected to have been
+  // created using the matching redirect filters for the current Request so
+  // that all redirect matches will have a corresponding resource in
+  // `resources`).
+  engine.resources = resources;
 
-    // Collect all matching filters for this request.
-    const matchingFilters = new Set();
-    [...engine.matchAll(request)].forEach((matchingFilter) => {
-      (matchingFilter.rawLine || '').split(' <+> ').forEach((f: string) => {
-        matchingFilters.add(f);
-      });
+  // Collect all matching filters for this request.
+  const matchingFilters = new Set();
+  [...engine.matchAll(request)].forEach((matchingFilter) => {
+    (matchingFilter.rawLine || '').split(' <+> ').forEach((f: string) => {
+      matchingFilters.add(f);
     });
+  });
 
-    // Check if one of the filters is a special case: important,
-    // exception or redirect; and perform extra checks then.
-    if (filter.isImportant()) {
-      const result = engine.match(request);
-      expect(result.filter).not.toBeUndefined();
-      if (
-        result.filter !== undefined &&
-        result.filter.rawLine !== undefined &&
-        !result.filter.rawLine.includes('<+>')
-      ) {
-        expect(importants).toContainEqual(result.filter.rawLine);
-
-        // Handle case where important filter is also a redirect
-        if (filter.isRedirect()) {
-          expect(redirects).toContainEqual(result.filter.rawLine);
-        }
-      }
-
-      expect(result.exception).toBeUndefined();
-
-      if (!filter.isRedirect()) {
-        expect(result.redirect).toBeUndefined();
-      }
-
-      expect(result.match).toBeTruthy();
-    } else if (
-      filter.isException() &&
-      normalFilters.length !== 0 &&
-      !testFiltersInIsolation &&
-      importants.length === 0
+  // Check if one of the filters is a special case: important,
+  // exception or redirect; and perform extra checks then.
+  if (filter.isImportant()) {
+    const result = engine.match(request);
+    expect(result.filter).not.toBeUndefined();
+    if (
+      result.filter !== undefined &&
+      result.filter.rawLine !== undefined &&
+      !result.filter.rawLine.includes('<+>')
     ) {
-      const result = engine.match(request);
-      expect(result.exception).not.toBeUndefined();
-      if (
-        result.exception !== undefined &&
-        result.exception.rawLine !== undefined &&
-        !result.exception.rawLine.includes('<+>')
-      ) {
-        expect(exceptions).toContainEqual(result.exception.rawLine);
-      }
+      expect(importants).toContainEqual(result.filter.rawLine);
 
-      expect(result.filter).not.toBeUndefined();
-      expect(result.redirect).toBeUndefined();
-      expect(result.match).toBeFalsy();
-    } else if (filter.isRedirect() && exceptions.length === 0 && importants.length === 0) {
-      const result = engine.match(request);
-      expect(result.filter).not.toBeUndefined();
-      if (
-        result.filter !== undefined &&
-        result.filter.rawLine !== undefined &&
-        !result.filter.rawLine.includes('<+>')
-      ) {
+      // Handle case where important filter is also a redirect
+      if (filter.isRedirect()) {
         expect(redirects).toContainEqual(result.filter.rawLine);
       }
-
-      expect(result.exception).toBeUndefined();
-      expect(result.redirect).not.toBeUndefined();
-      expect(result.match).toBeTruthy();
     }
 
-    expect(matchingFilters).toContain(filter.rawLine);
+    expect(result.exception).toBeUndefined();
+
+    if (!filter.isRedirect()) {
+      expect(result.redirect).toBeUndefined();
+    }
+
+    expect(result.match).toBeTruthy();
+  } else if (
+    filter.isException() &&
+    normalFilters.length !== 0 &&
+    !testFiltersInIsolation &&
+    importants.length === 0
+  ) {
+    const result = engine.match(request);
+    expect(result.exception).not.toBeUndefined();
+    if (
+      result.exception !== undefined &&
+      result.exception.rawLine !== undefined &&
+      !result.exception.rawLine.includes('<+>')
+    ) {
+      expect(exceptions).toContainEqual(result.exception.rawLine);
+    }
+
+    expect(result.filter).not.toBeUndefined();
+    expect(result.redirect).toBeUndefined();
+    expect(result.match).toBeFalsy();
+  } else if (filter.isRedirect() && exceptions.length === 0 && importants.length === 0) {
+    const result = engine.match(request);
+    expect(result.filter).not.toBeUndefined();
+    if (
+      result.filter !== undefined &&
+      result.filter.rawLine !== undefined &&
+      !result.filter.rawLine.includes('<+>')
+    ) {
+      expect(redirects).toContainEqual(result.filter.rawLine);
+    }
+
+    expect(result.exception).toBeUndefined();
+    expect(result.redirect).not.toBeUndefined();
+    expect(result.match).toBeTruthy();
+  }
+
+  expect(matchingFilters).toContain(filter.rawLine);
   // });
 }
 
@@ -143,7 +143,7 @@ function createEngine(filters: string, enableOptimizations: boolean = true) {
 
 describe('#FiltersEngine', () => {
   it('network filters are disabled', () => {
-    const request = makeRequest({ url: 'https://foo.com' }, tldts);
+    const request = makeRequest({ url: 'https://foo.com' }, tldts.parse);
 
     // Enabled
     expect(
@@ -191,7 +191,7 @@ describe('#FiltersEngine', () => {
           {
             url: 'https://foo.com',
           },
-          tldts,
+          tldts.parse,
         ),
       ).filter;
       expect(filter).not.toBeUndefined();
@@ -210,7 +210,7 @@ describe('#FiltersEngine', () => {
             sourceUrl: 'https://bar.com',
             url: 'https://foo.com',
           },
-          tldts,
+          tldts.parse,
         ),
       ).exception;
       expect(exception).not.toBeUndefined();
@@ -229,7 +229,7 @@ describe('#FiltersEngine', () => {
             sourceUrl: 'https://bar.com',
             url: 'https://foo.com',
           },
-          tldts,
+          tldts.parse,
         ),
       ).exception;
       expect(exception).toBeUndefined();
@@ -244,7 +244,7 @@ describe('#FiltersEngine', () => {
             {
               url: 'https://foo.com',
             },
-            tldts,
+            tldts.parse,
           ),
         ),
       ).toBeUndefined();
@@ -257,7 +257,7 @@ describe('#FiltersEngine', () => {
             {
               url: 'https://foo.com',
             },
-            tldts,
+            tldts.parse,
           ),
         ),
       ).toBeUndefined();
@@ -271,7 +271,7 @@ describe('#FiltersEngine', () => {
             {
               url: 'ftp://foo.com',
             },
-            tldts,
+            tldts.parse,
           ),
         ),
       ).toBeUndefined();
@@ -284,7 +284,7 @@ describe('#FiltersEngine', () => {
               type: 'script',
               url: 'ftp://foo.com',
             },
-            tldts,
+            tldts.parse,
           ),
         ),
       ).toBeUndefined();
@@ -297,7 +297,7 @@ describe('#FiltersEngine', () => {
             {
               url: 'https://foo.com',
             },
-            tldts,
+            tldts.parse,
           ),
         ),
       ).toBeUndefined();
@@ -310,7 +310,7 @@ describe('#FiltersEngine', () => {
             {
               url: 'https://foo.com',
             },
-            tldts,
+            tldts.parse,
           ),
         ),
       ).toEqual('bar');
@@ -326,7 +326,7 @@ $csp=baz,domain=bar.com
             sourceUrl: 'https://bar.com',
             url: 'https://foo.com',
           },
-          tldts,
+          tldts.parse,
         ),
       );
 
@@ -348,7 +348,7 @@ $csp=baz,domain=bar.com
               sourceUrl: 'https://bar.com',
               url: 'https://foo.com',
             },
-            tldts,
+            tldts.parse,
           ),
         ),
       ).toEqual('bar');
@@ -367,7 +367,7 @@ $csp=baz,domain=bar.com
               sourceUrl: 'https://bar.com',
               url: 'https://foo.com',
             },
-            tldts,
+            tldts.parse,
           ),
         ),
       ).toBeUndefined();
@@ -451,7 +451,7 @@ $csp=baz,domain=bar.com
           type,
           url,
         },
-        tldts,
+        tldts.parse,
       );
 
       it(`[request] type=${type} url=${url}, sourceUrl=${sourceUrl}`, () => {

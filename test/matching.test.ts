@@ -1,4 +1,4 @@
-import { getDomain, getHostname } from 'tldts';
+import { getDomain, parse } from 'tldts';
 
 import CosmeticFilter, {
   getHashesFromLabelsBackward,
@@ -24,10 +24,7 @@ declare global {
 
 expect.extend({
   toMatchRequest(filter, request) {
-    const processedRequest = makeRequest(request, {
-      getDomain,
-      getHostname,
-    });
+    const processedRequest = makeRequest(request, parse);
     const match = filter.match(processedRequest);
     if (match) {
       return {
