@@ -94,17 +94,13 @@ chrome.tabs.onActivated.addListener(({ tabId }) => {
 });
 
 function requestFromDetails({
-  tabId,
+  initiator,
   type,
   url,
 }: chrome.webRequest.WebRequestBodyDetails | chrome.webRequest.WebResponseHeadersDetails) {
-  let source;
-  if (tabs.has(tabId)) {
-    source = tabs.get(tabId).source;
-  }
   return adblocker.makeRequest(
     {
-      sourceUrl: source,
+      sourceUrl: initiator,
       type,
       url,
     },
