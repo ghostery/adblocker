@@ -1,16 +1,17 @@
+import Config from '../config';
 import StaticDataView from '../data-view';
 import CosmeticFilter from '../filters/cosmetic';
 import NetworkFilter from '../filters/network';
 import Request, { RequestType } from '../request';
 import Resources from '../resources';
 
-import Lists, { IListDiff, parseFilters } from '../lists';
+import { IListDiff, parseFilters } from '../lists';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 
 import { createStylesheet } from '../content/injection';
 
-export const ENGINE_VERSION = 22;
+export const ENGINE_VERSION = 23;
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -22,19 +23,12 @@ function btoaPolyfill(buffer: string): string {
   return buffer;
 }
 
-interface IOptions {
-  debug: boolean;
-  enableOptimizations: boolean;
-  loadCosmeticFilters: boolean;
-  loadNetworkFilters: boolean;
-  enableUpdates: boolean;
-}
-
 export default class FilterEngine {
-  public static parse(filters: string, options: Partial<IOptions> = {}): FilterEngine {
+  public static parse(filters: string, options: Partial<Config> = {}): FilterEngine {
+    const config = new Config(options);
     return new FilterEngine({
-      ...parseFilters(filters, options),
-      ...options,
+      ...parseFilters(filters, config),
+      config,
     });
   }
 
@@ -53,18 +47,19 @@ export default class FilterEngine {
 
     // Create a new engine with same options
     const engine = new FilterEngine({
-      debug: false,
-      enableOptimizations: buffer.getBool(),
-      enableUpdates: buffer.getBool(),
-      loadCosmeticFilters: buffer.getBool(),
-      loadNetworkFilters: buffer.getBool(),
+      config: Config.deserialize(buffer),
     });
 
     // Deserialize resources
     engine.resources = Resources.deserialize(buffer);
 
     // Deserialize lists
-    engine.lists = Lists.deserialize(buffer);
+    const lists = new Map();
+    const numberOfLists = buffer.getUint16();
+    for (let i = 0; i < numberOfLists; i += 1) {
+      lists.set(buffer.getASCII(), buffer.getASCII());
+    }
+    engine.lists = lists;
 
     // Deserialize buckets
     engine.filters = NetworkFilterBucket.deserialize(buffer);
@@ -77,7 +72,7 @@ export default class FilterEngine {
     return engine;
   }
 
-  public lists: Lists;
+  public lists: Map<string, string>;
 
   public csp: NetworkFilterBucket;
   public exceptions: NetworkFilterBucket;
@@ -87,52 +82,44 @@ export default class FilterEngine {
   public cosmetics: CosmeticFilterBucket;
 
   public resources: Resources;
-
-  public readonly debug: boolean;
-  public readonly enableOptimizations: boolean;
-  public readonly enableUpdates: boolean;
-  public readonly loadCosmeticFilters: boolean;
-  public readonly loadNetworkFilters: boolean;
+  public readonly config: Config;
 
   constructor({
     // Optionally initialize the engine with filters
     cosmeticFilters = [],
     networkFilters = [],
 
-    // Options
-    debug = false,
-    enableOptimizations = true,
-    enableUpdates = true,
-    loadCosmeticFilters = true,
-    loadNetworkFilters = true,
+    config = new Config(),
+    lists = new Map(),
   }: {
     cosmeticFilters?: CosmeticFilter[];
     networkFilters?: NetworkFilter[];
-  } & Partial<IOptions> = {}) {
-    // Options
-    this.debug = debug;
-    this.enableOptimizations = enableOptimizations;
-    this.enableUpdates = enableUpdates;
-    this.loadCosmeticFilters = loadCosmeticFilters;
-    this.loadNetworkFilters = loadNetworkFilters;
+    lists?: Map<string, string>;
+    config?: Config;
+  } = {}) {
+    this.config = config;
 
     // Subscription management: disabled by default
-    this.lists = new Lists({
-      debug: this.debug,
-      loadCosmeticFilters: this.loadCosmeticFilters,
-      loadNetworkFilters: this.loadNetworkFilters,
-    });
+    this.lists = lists;
 
     // $csp=
     this.csp = new NetworkFilterBucket({ enableOptimizations: false });
     // @@filter
-    this.exceptions = new NetworkFilterBucket({ enableOptimizations });
+    this.exceptions = new NetworkFilterBucket({
+      enableOptimizations: this.config.enableOptimizations,
+    });
     // $important
-    this.importants = new NetworkFilterBucket({ enableOptimizations });
+    this.importants = new NetworkFilterBucket({
+      enableOptimizations: this.config.enableOptimizations,
+    });
     // $redirect
-    this.redirects = new NetworkFilterBucket({ enableOptimizations });
+    this.redirects = new NetworkFilterBucket({
+      enableOptimizations: this.config.enableOptimizations,
+    });
     // All other filters
-    this.filters = new NetworkFilterBucket({ enableOptimizations });
+    this.filters = new NetworkFilterBucket({
+      enableOptimizations: this.config.enableOptimizations,
+    });
     // Cosmetic filters
     this.cosmetics = new CosmeticFilterBucket();
 
@@ -160,16 +147,18 @@ export default class FilterEngine {
 
     buffer.pushUint8(ENGINE_VERSION);
 
-    buffer.pushBool(this.enableOptimizations);
-    buffer.pushBool(this.enableUpdates);
-    buffer.pushBool(this.loadCosmeticFilters);
-    buffer.pushBool(this.loadNetworkFilters);
+    // Config
+    this.config.serialize(buffer);
 
     // Resources (js, resources)
     this.resources.serialize(buffer);
 
-    // Subscription management
-    this.lists.serialize(buffer);
+    // Serialize the state of lists (names and checksums)
+    buffer.pushUint16(this.lists.size);
+    this.lists.forEach((checksum, name) => {
+      buffer.pushASCII(name);
+      buffer.pushASCII(checksum);
+    });
 
     // Filters buckets
     this.filters.serialize(buffer);
@@ -187,49 +176,17 @@ export default class FilterEngine {
    */
 
   public loadedLists(): string[] {
-    return this.lists.getLoaded();
+    return [...this.lists.keys()];
   }
 
   public hasList(name: string, checksum: string): boolean {
-    return this.lists.has(name, checksum);
-  }
-
-  public deleteLists(names: string[]): boolean {
-    return this.update(this.lists.delete(names));
-  }
-
-  public deleteList(name: string): boolean {
-    return this.update(this.lists.delete([name]));
-  }
-
-  public updateLists(lists: Array<{ name: string; checksum: string; list: string }>): boolean {
-    if (this.enableUpdates === false) {
-      return false;
-    }
-
-    return this.update(this.lists.update(lists));
-  }
-
-  public updateList({
-    name,
-    checksum,
-    list,
-  }: {
-    name: string;
-    checksum: string;
-    list: string;
-  }): boolean {
-    return this.updateLists([{ name, checksum, list }]);
+    return this.lists.has(name) && this.lists.get(name) === checksum;
   }
 
   /**
    * Update engine with `resources.txt` content.
    */
   public updateResources(data: string, checksum: string): boolean {
-    if (this.enableUpdates === false) {
-      return false;
-    }
-
     if (this.resources.checksum === checksum) {
       return false;
     }
@@ -247,15 +204,11 @@ export default class FilterEngine {
     removedCosmeticFilters = [],
     removedNetworkFilters = [],
   }: Partial<IListDiff>): boolean {
-    if (this.enableUpdates === false) {
-      return false;
-    }
-
     let updated: boolean = false;
 
     // Update cosmetic filters
     if (
-      this.loadCosmeticFilters &&
+      this.config.loadCosmeticFilters &&
       (newCosmeticFilters.length !== 0 || removedCosmeticFilters.length !== 0)
     ) {
       updated = true;
@@ -267,7 +220,7 @@ export default class FilterEngine {
 
     // Update network filters
     if (
-      this.loadNetworkFilters &&
+      this.config.loadNetworkFilters &&
       (newNetworkFilters.length !== 0 || removedNetworkFilters.length !== 0)
     ) {
       updated = true;
@@ -320,7 +273,7 @@ export default class FilterEngine {
     const scripts: string[] = [];
     const blockedScripts: string[] = [];
 
-    if (this.loadCosmeticFilters) {
+    if (this.config.loadCosmeticFilters) {
       const rules = this.cosmetics.getCosmeticsFilters(hostname, domain || '');
       for (let i = 0; i < rules.length; i += 1) {
         const rule: CosmeticFilter = rules[i];
@@ -350,7 +303,7 @@ export default class FilterEngine {
     });
 
     return {
-      active: this.loadCosmeticFilters,
+      active: this.config.loadCosmeticFilters,
       blockedScripts,
       scripts,
       styles: stylesheets.join('\n\n'),
@@ -378,7 +331,7 @@ export default class FilterEngine {
    * should be injected in the page.
    */
   public getCSPDirectives(request: Request): string | undefined {
-    if (!this.loadNetworkFilters) {
+    if (!this.config.loadNetworkFilters) {
       return undefined;
     }
 
@@ -420,7 +373,7 @@ export default class FilterEngine {
     exception?: NetworkFilter;
     filter?: NetworkFilter;
   } {
-    if (!this.loadNetworkFilters) {
+    if (!this.config.loadNetworkFilters) {
       return { match: false };
     }
 
