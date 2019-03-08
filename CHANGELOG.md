@@ -4,6 +4,18 @@
 
 *not released yet*
 
+## 0.7.0
+
+*2019-03-08*
+
+  * Introduce Config object + remove lists abstractions [#111](https://github.com/cliqz-oss/adblocker/pull/111)
+  * Remove bench deps + fix matching by using initiator as sourceUrl [#109](https://github.com/cliqz-oss/adblocker/pull/108)
+  * Update benchmarks [#108](https://github.com/cliqz-oss/adblocker/pull/108)
+    * comparison: include request processing for each benchmark
+    * Use latest uBlock Origin with WebAssembly enabled
+    * Update results from benchmarks and clean-up
+    * Add benchmark for regex-based hostname extraction
+
 ## 0.6.9
 
 *2019-02-15*
