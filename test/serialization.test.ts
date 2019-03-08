@@ -1,5 +1,6 @@
 import { loadAllLists, loadResources } from './utils';
 
+import Config from '../src/config';
 import StaticDataView from '../src/data-view';
 import Engine from '../src/engine/engine';
 import CosmeticFilter from '../src/filters/cosmetic';
@@ -8,7 +9,10 @@ import NetworkFilter from '../src/filters/network';
 import { parseFilters } from '../src/lists';
 
 describe('Serialization', () => {
-  const { cosmeticFilters, networkFilters } = parseFilters(loadAllLists(), { debug: true });
+  const { cosmeticFilters, networkFilters } = parseFilters(
+    loadAllLists(),
+    new Config({ debug: true }),
+  );
 
   describe('filters', () => {
     const buffer = new StaticDataView(1000000);
@@ -63,21 +67,10 @@ describe('Serialization', () => {
     it('handles full engine', () => {
       const engine = new Engine();
       engine.updateResources(loadResources(), 'resources1');
+      engine.lists.set('list1', 'checksum');
       engine.update({
         newCosmeticFilters: cosmeticFilters,
         newNetworkFilters: networkFilters,
-      });
-
-      // Add one list
-      engine.updateList({
-        checksum: 'checksum',
-        list: `
-||foo.com
-domain.com##.selector
-/ads/$script
-###foo
-        `,
-        name: 'list',
       });
 
       const serialized = engine.serialize(buffer);
