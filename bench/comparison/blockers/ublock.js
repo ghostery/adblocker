@@ -1,5 +1,7 @@
 const { URL } = require('url');
 const punycode = require('punycode');
+const fs = require('fs');
+const path = require('path');
 
 const SandboxedModule = require('sandboxed-module');
 const { JSDOM } = require('jsdom');
@@ -83,6 +85,7 @@ const globals = {
 // NOTE: some changes were required to load `publicsuffixlist.js in this context.
 // Check `publicsuffixlist.patch` file for more information about what changed.
 globals.publicSuffixList = SandboxedModule.require('./ublock/publicsuffixlist.js', { globals });
+globals.publicSuffixList.parse(fs.readFileSync(path.resolve(__dirname, './ublock/public_suffix_list.dat'), { encoding: 'utf-8' }), punycode.toASCII);
 const publicSuffixListEnabledPromise = globals.publicSuffixList.enableWASM();
 
 // NOTE: some changes were required to load `hntrie.js` in this context. The

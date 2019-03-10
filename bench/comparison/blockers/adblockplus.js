@@ -6,7 +6,7 @@ const { URL } = require('url');
 
 const { CombinedMatcher } = require('./adblockpluscore/lib/matcher.js');
 const { Filter, RegExpFilter } = require('./adblockpluscore/lib/filterClasses.js');
-const { isThirdParty } = require('./adblockpluscore/lib/domain.js');
+const { parseURL, isThirdParty } = require('./adblockpluscore/lib/url.js');
 
 // Chrome can't distinguish between OBJECT_SUBREQUEST and OBJECT requests.
 RegExpFilter.typeMap.OBJECT_SUBREQUEST = RegExpFilter.typeMap.OBJECT;
@@ -73,8 +73,8 @@ module.exports = class AdBlockPlus {
   }
 
   match(request) {
-    const url = new URL(request.url);
-    const sourceURL = new URL(request.frameUrl);
+    const url = parseURL(request.url);
+    const sourceURL = parseURL(request.frameUrl);
     const thirdParty = isThirdParty(url, sourceURL.hostname);
     const filter = this.matcher.matchesAny(
       url.href,

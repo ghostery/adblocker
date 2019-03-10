@@ -1,22 +1,28 @@
 
 all: deps run
 
-puppeteer:
-	npm install --save git://github.com/remusao/puppeteer-pool.git
+../../node_modules/puppeteer-pool:
+	npm install --save https://github.com/remusao/puppeteer-pool.git
 
-# VERSION: 34c49bbf029e586226220c067c50cec6e8bf8842
+requests.json:
+	curl https://cdn.cliqz.com/adblocking/requests_top500.json.gz | gunzip > requests.json
+
+# VERSION: 0b3423e3147bad4c001f5ae3456571a164a6e2e5
 ./blockers/adblockpluscore:
-	tar xjvf adblockpluscore-34c49bbf029e586226220c067c50cec6e8bf8842.tar.bz2
-	mv adblockpluscore blockers
+	git clone --branch=next https://github.com/adblockplus/adblockpluscore.git ./blockers/adblockpluscore
+	cd ./blockers/adblockpluscore && git reset --hard 0b3423e3147bad4c001f5ae3456571a164a6e2e5
 
 # VERSION: 0.2.0
 ../../node_modules/abp-filter-parser:
-	npm install --save git://github.com/duckduckgo/abp-filter-parser.git#0.2.0
+	npm install --save https://github.com/duckduckgo/abp-filter-parser.git#0.2.0
 	cd ../../node_modules/abp-filter-parser/ && npm install && cd -
 
 # VERSION: 4.1.3
 ../../node_modules/ad-block:
 	npm install --save ad-block@4.1.3
+
+../../dist:
+	cd ../../ && npm ci && npm pack
 
 brave: ../../node_modules/ad-block
 	NODE_ENV=production node run.js brave requests.json
@@ -25,10 +31,10 @@ ghostery:
 	NODE_ENV=production node run.js ghostery requests.json
 
 ../../node_modules/jsdom:
-	npm install --save-dev jsdom
+	npm install --save jsdom
 
 ../../node_modules/sandboxed-module:
-	npm install --save-dev sandboxed-module
+	npm install --save sandboxed-module
 
 ublock: ../../node_modules/sandboxed-module ../../node_modules/jsdom
 	NODE_ENV=production node run.js ublock requests.json
@@ -45,5 +51,13 @@ tldts:
 url:
 	NODE_ENV=production node run.js url requests.json
 
-deps: puppeteer adblockpluscore ../../node_modules/abp-filter-parser ../../node_modules/ad-block ../../node_modules/jsdom ../../node_modules/sandboxed-module
-run: url tldts ghostery ublock adblockplus brave duckduckgo
+deps: requests.json \
+	  ../../dist \
+	  ../../node_modules/abp-filter-parser \
+	  ../../node_modules/ad-block \
+	  ../../node_modules/jsdom \
+	  ../../node_modules/puppeteer-pool \
+	  ../../node_modules/sandboxed-module \
+	  ./blockers/adblockpluscore
+
+run: deps url tldts ghostery ublock adblockplus brave duckduckgo
