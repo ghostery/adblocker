@@ -325,7 +325,7 @@ const parse = function(text, toAscii) {
         pslBuffer8.set(charData, treeData.length << 2);
     }
 
-    fireChangedEvent();
+    // fireChangedEvent();
 };
 
 /******************************************************************************/
@@ -521,7 +521,7 @@ const fromSelfie = function(selfie, decoder) {
     hostnameArg = '';
     pslBuffer8[LABEL_INDICES_SLOT] = 0;
 
-    fireChangedEvent();
+    // fireChangedEvent();
 
     return true;
 };
