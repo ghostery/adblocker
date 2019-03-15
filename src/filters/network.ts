@@ -1,5 +1,5 @@
-import * as punycode from 'punycode';
 import StaticDataView from '../data-view';
+// import { toASCII } from '../punycode';
 import { RequestType } from '../request';
 import Request from '../request';
 import {
@@ -534,6 +534,10 @@ export default class NetworkFilter implements IFilter {
         NETWORK_FILTER_MASK.isRegex,
         checkIsRegex(filter, 0, filter.length),
       );
+
+      if (hasUnicode(filter)) {
+        return null;
+      }
     }
 
     // TODO
@@ -545,7 +549,9 @@ export default class NetworkFilter implements IFilter {
       }
       hostname = hostname.toLowerCase();
       if (hasUnicode(hostname)) {
-        hostname = punycode.toASCII(hostname);
+        return null;
+        // console.log('CONVERTING TO ASCII', hostname, toASCII(hostname));
+        // hostname = toASCII(hostname);
       }
     }
 
@@ -580,13 +586,13 @@ export default class NetworkFilter implements IFilter {
 
       // Optional parts
       bug: (optionalParts & 1) === 1 ? buffer.getUint16() : undefined,
-      csp: (optionalParts & 2) === 2 ? buffer.getASCII() : undefined,
-      filter: (optionalParts & 4) === 4 ? buffer.getUTF8() : undefined,
-      hostname: (optionalParts & 8) === 8 ? buffer.getUTF8() : undefined,
+      csp: (optionalParts & 2) === 2 ? buffer.getNetworkCSP() : undefined,
+      filter: (optionalParts & 4) === 4 ? buffer.getNetworkFilter() : undefined,
+      hostname: (optionalParts & 8) === 8 ? buffer.getNetworkHostname() : undefined,
       optDomains: (optionalParts & 16) === 16 ? buffer.getUint32Array() : undefined,
       optNotDomains: (optionalParts & 32) === 32 ? buffer.getUint32Array() : undefined,
-      rawLine: (optionalParts & 64) === 64 ? buffer.getUTF8() : undefined,
-      redirect: (optionalParts & 128) === 128 ? buffer.getASCII() : undefined,
+      rawLine: (optionalParts & 64) === 64 ? buffer.getASCII() : undefined,
+      redirect: (optionalParts & 128) === 128 ? buffer.getNetworkRedirect() : undefined,
     });
   }
 
@@ -694,17 +700,17 @@ export default class NetworkFilter implements IFilter {
 
     if (this.csp !== undefined) {
       optionalParts |= 2;
-      buffer.pushASCII(this.csp);
+      buffer.pushNetworkCSP(this.csp);
     }
 
     if (this.filter !== undefined) {
       optionalParts |= 4;
-      buffer.pushUTF8(this.filter);
+      buffer.pushNetworkFilter(this.filter);
     }
 
     if (this.hostname !== undefined) {
       optionalParts |= 8;
-      buffer.pushUTF8(this.hostname);
+      buffer.pushNetworkHostname(this.hostname);
     }
 
     if (this.optDomains) {
@@ -719,12 +725,12 @@ export default class NetworkFilter implements IFilter {
 
     if (this.rawLine !== undefined) {
       optionalParts |= 64;
-      buffer.pushUTF8(this.rawLine);
+      buffer.pushASCII(this.rawLine);
     }
 
     if (this.redirect !== undefined) {
       optionalParts |= 128;
-      buffer.pushASCII(this.redirect);
+      buffer.pushNetworkRedirect(this.redirect);
     }
 
     buffer.setByte(index, optionalParts);

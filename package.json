@@ -20,7 +20,7 @@
   "scripts": {
     "clean": "rm -rfv dist",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json --module ESNext",
     "bundle": "rollup -c rollup.config.js",
     "minify": "google-closure-compiler --js=./dist/adblocker.umd.js --js_output_file=./dist/adblocker.umd.min.js && google-closure-compiler --js=./dist/adblocker-cosmetics.umd.js --js_output_file=./dist/adblocker-cosmetics.umd.min.js",
     "prebuild": "npm run clean",
@@ -29,7 +29,8 @@
     "prepack": "npm run minify",
     "pretest": "npm run lint",
     "test": "jest --coverage --no-cache ./test/",
-    "dev": "jest --watch --coverage --bail --no-cache ./test/"
+    "dev": "jest --watch --coverage --bail --no-cache ./test/",
+    "generate-codebooks": "ts-node ./tools/generate_compression_codebooks.ts"
   },
   "devDependencies": {
     "@types/chrome": "0.0.82",
@@ -52,11 +53,12 @@
     "rollup-plugin-node-resolve": "^4.2.3",
     "tldts": "^4.0.6",
     "ts-jest": "^24.0.2",
+    "ts-node": "^8.1.0",
     "tslint": "^5.15.0",
     "typescript": "^3.4.3"
   },
   "dependencies": {
-    "punycode": "^2.1.1",
-    "tslib": "^1.9.3"
+    "tslib": "^1.9.3",
+    "tsmaz": "^1.0.3"
   }
 }

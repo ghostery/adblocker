@@ -1,5 +1,5 @@
-import * as punycode from 'punycode';
 import StaticDataView from '../data-view';
+// import { encode } from '../punycode';
 import { binLookup, fastStartsWithFrom, getBit, hasUnicode, setBit } from '../utils';
 import IFilter from './interface';
 
@@ -225,36 +225,36 @@ export default class CosmeticFilter implements IFilter {
       const notHostnamesArray: number[] = [];
 
       // TODO - this could be done without any string copy
-      line
-        .slice(0, sharpIndex)
-        .split(',')
-        .forEach((hostname) => {
-          if (hasUnicode(hostname)) {
-            hostname = punycode.encode(hostname);
-          }
+      const parts = line.slice(0, sharpIndex).split(',');
+      for (let i = 0; i < parts.length; i += 1) {
+        const hostname = parts[i];
+        if (hasUnicode(hostname)) {
+          return null;
+          // hostname = encode(hostname);
+        }
 
-          const negation: boolean = hostname[0] === '~';
-          const entity: boolean = hostname.endsWith('.*');
+        const negation: boolean = hostname[0] === '~';
+        const entity: boolean = hostname.endsWith('.*');
 
-          const start: number = negation ? 1 : 0;
-          const end: number = entity ? hostname.length - 2 : hostname.length;
+        const start: number = negation ? 1 : 0;
+        const end: number = entity ? hostname.length - 2 : hostname.length;
 
-          const hash = hashHostnameBackward(hostname.slice(start, end));
+        const hash = hashHostnameBackward(hostname.slice(start, end));
 
-          if (negation) {
-            if (entity) {
-              notEntitiesArray.push(hash);
-            } else {
-              notHostnamesArray.push(hash);
-            }
+        if (negation) {
+          if (entity) {
+            notEntitiesArray.push(hash);
           } else {
-            if (entity) {
-              entitiesArray.push(hash);
-            } else {
-              hostnamesArray.push(hash);
-            }
+            notHostnamesArray.push(hash);
           }
-        });
+        } else {
+          if (entity) {
+            entitiesArray.push(hash);
+          } else {
+            hostnamesArray.push(hash);
+          }
+        }
+      }
 
       if (entitiesArray.length !== 0) {
         entities = new Uint32Array(entitiesArray).sort();
@@ -350,6 +350,13 @@ export default class CosmeticFilter implements IFilter {
       }
     }
 
+    // Disable support for unicode in CSS selectors for now, there are only
+    // very few of them and they seem out-dated. It is currently not worth
+    // supporting this.
+    if (selector !== undefined && hasUnicode(selector)) {
+      return null;
+    }
+
     return new CosmeticFilter({
       entities,
       hostnames,
@@ -368,7 +375,7 @@ export default class CosmeticFilter implements IFilter {
    */
   public static deserialize(buffer: StaticDataView): CosmeticFilter {
     const mask = buffer.getUint8();
-    const selector = buffer.getUTF8();
+    const selector = buffer.getCosmeticSelector();
     const optionalParts = buffer.getUint8();
 
     // The order of these fields should be the same as when we serialize them.
@@ -382,7 +389,7 @@ export default class CosmeticFilter implements IFilter {
       hostnames: (optionalParts & 2) === 2 ? buffer.getUint32Array() : undefined,
       notEntities: (optionalParts & 4) === 4 ? buffer.getUint32Array() : undefined,
       notHostnames: (optionalParts & 8) === 8 ? buffer.getUint32Array() : undefined,
-      rawLine: (optionalParts & 16) === 16 ? buffer.getUTF8() : undefined,
+      rawLine: (optionalParts & 16) === 16 ? buffer.getASCII() : undefined,
       style: (optionalParts & 32) === 32 ? buffer.getASCII() : undefined,
     });
   }
@@ -446,7 +453,7 @@ export default class CosmeticFilter implements IFilter {
   public serialize(buffer: StaticDataView): void {
     // Mandatory fields
     buffer.pushUint8(this.mask);
-    buffer.pushUTF8(this.selector);
+    buffer.pushCosmeticSelector(this.selector);
 
     const index = buffer.getPos();
     buffer.pushUint8(0);
@@ -476,7 +483,7 @@ export default class CosmeticFilter implements IFilter {
 
     if (this.rawLine !== undefined) {
       optionalParts |= 16;
-      buffer.pushUTF8(this.rawLine);
+      buffer.pushASCII(this.rawLine);
     }
 
     if (this.style !== undefined) {
