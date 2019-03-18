@@ -4,6 +4,15 @@
 
 *not released yet*
 
+  * Implement generichide option + fix generic cosmetic matching [#114](https://github.com/cliqz-oss/adblocker/pull/114)
+    * [BREAKING] Change arguments of FiltersEngine.getCosmeticsFilters
+      getCosmeticsFilters({ url, hostname, domain }) is now expected
+      instead of getCosmeticsFilters(hostname, domain). This allows to
+      apply $generichide options which can match on arbitrary parts of the
+      main_frame URL (not only hostname).
+    * Add support for $generichide option in network filters
+    * Fix matching of generic cosmetics when only negation was specified
+
 ## 0.7.0
 
 *2019-03-08*

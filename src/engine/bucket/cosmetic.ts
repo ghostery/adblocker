@@ -53,10 +53,10 @@ export default class CosmeticFilterBucket {
     // Add new rules
     for (let i = 0; i < newFilters.length; i += 1) {
       const filter = newFilters[i];
-      if (filter.hasHostnameConstraint()) {
-        hostnameSpecificRules.push(filter);
-      } else {
+      if (filter.isGenericHide()) {
         genericRules.push(filter);
+      } else {
+        hostnameSpecificRules.push(filter);
       }
     }
 
@@ -83,7 +83,11 @@ export default class CosmeticFilterBucket {
     this.hostnameIndex.serialize(buffer);
   }
 
-  public getCosmeticsFilters(hostname: string, domain: string): CosmeticFilter[] {
+  public getCosmeticsFilters(
+    hostname: string,
+    domain: string,
+    allowGenericHides: boolean,
+  ): CosmeticFilter[] {
     const disabledRules = new Set();
     const rules: CosmeticFilter[] = [];
 
@@ -106,24 +110,50 @@ export default class CosmeticFilterBucket {
       },
     );
 
-    if (disabledRules.size === 0) {
-      // No exception/unhide found, so we return all the rules
-      return [...rules, ...this.getGenericRules()];
-    }
-
     const rulesWithoutExceptions: CosmeticFilter[] = [];
-    for (let i = 0; i < rules.length; i += 1) {
-      const rule = rules[i];
-      if (!disabledRules.has(rule.getSelector())) {
-        rulesWithoutExceptions.push(rule);
-      }
-    }
 
-    const genericRules = this.getGenericRules();
-    for (let i = 0; i < genericRules.length; i += 1) {
-      const rule = genericRules[i];
-      if (!disabledRules.has(rule.getSelector())) {
-        rulesWithoutExceptions.push(rule);
+    if (disabledRules.size === 0) {
+      // No exception/unhide found, so all rules will be returned
+      for (let i = 0; i < rules.length; i += 1) {
+        rulesWithoutExceptions.push(rules[i]);
+      }
+
+      // If generic cosmetics are allowed, select the ones with a domain match
+      if (allowGenericHides === true) {
+        const genericRules = this.getGenericRules();
+        for (let i = 0; i < genericRules.length; i += 1) {
+          const rule = genericRules[i];
+
+          // Make sure that generic rules with negated domains/entities are checked
+          if (rule.hasHostnameConstraint() && rule.match(hostname, domain) === false) {
+            continue;
+          }
+
+          rulesWithoutExceptions.push(rule);
+        }
+      }
+    } else {
+      for (let i = 0; i < rules.length; i += 1) {
+        const rule = rules[i];
+        if (!disabledRules.has(rule.getSelector())) {
+          rulesWithoutExceptions.push(rule);
+        }
+      }
+
+      if (allowGenericHides === true) {
+        const genericRules = this.getGenericRules();
+        for (let i = 0; i < genericRules.length; i += 1) {
+          const rule = genericRules[i];
+
+          // Make sure that generic rules with negated domains/entities are checked
+          if (rule.hasHostnameConstraint() && rule.match(hostname, domain) === false) {
+            continue;
+          }
+
+          if (disabledRules.has(rule.getSelector()) === false) {
+            rulesWithoutExceptions.push(rule);
+          }
+        }
       }
     }
 

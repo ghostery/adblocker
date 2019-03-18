@@ -159,10 +159,11 @@ describe('#FiltersEngine', () => {
   it('cosmetic filters are disabled', () => {
     // Enabled
     expect(
-      Engine.parse('##.selector', { loadCosmeticFilters: true }).getCosmeticsFilters(
-        'foo.com', // hostname
-        'foo.com', // domain
-      ),
+      Engine.parse('##.selector', { loadCosmeticFilters: true }).getCosmeticsFilters({
+        domain: 'foo.com',
+        hostname: 'foo.com',
+        url: 'https://foo.com',
+      }),
     ).toEqual({
       active: true,
       blockedScripts: [],
@@ -172,10 +173,11 @@ describe('#FiltersEngine', () => {
 
     // Disabled
     expect(
-      Engine.parse('##.selector', { loadCosmeticFilters: false }).getCosmeticsFilters(
-        'foo.com', // hostname
-        'foo.com', // domain
-      ),
+      Engine.parse('##.selector', { loadCosmeticFilters: false }).getCosmeticsFilters({
+        domain: 'foo.com',
+        hostname: 'foo.com',
+        url: 'https://foo.com',
+      }),
     ).toEqual({
       active: false,
       blockedScripts: [],
@@ -493,11 +495,14 @@ $csp=baz,domain=bar.com
     }
   });
 
-  describe('#getCosmeticFilters', () => {
+  describe('#getCosmeticsFilters', () => {
     it('handles script blocking', () => {
       expect(
-        Engine.parse('foo.*##script:contains(ads)').getCosmeticsFilters('foo.com', 'foo.com')
-          .blockedScripts,
+        Engine.parse('foo.*##script:contains(ads)').getCosmeticsFilters({
+          domain: 'foo.com',
+          hostname: 'foo.com',
+          url: 'https://foo.com',
+        }).blockedScripts,
       ).toEqual(['ads']);
     });
 
@@ -507,13 +512,61 @@ $csp=baz,domain=bar.com
         engine.resources = Resources.parse('script.js application/javascript\n{{1}}', {
           checksum: '',
         });
-        expect(engine.getCosmeticsFilters('foo.com', 'foo.com').scripts).toEqual(['arg1']);
+        expect(
+          engine.getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+          }).scripts,
+        ).toEqual(['arg1']);
       });
 
       it('script missing', () => {
         expect(
-          Engine.parse('##+js(foo,arg1)').getCosmeticsFilters('foo.com', 'foo.com').scripts,
+          Engine.parse('##+js(foo,arg1)').getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+          }).scripts,
         ).toEqual([]);
+      });
+    });
+
+    describe('generichide', () => {
+      it('allows generic cosmetics by default', () => {
+        expect(
+          Engine.parse('##.selector').getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+          }).styles,
+        ).not.toBe('');
+      });
+
+      it('disables generic cosmetics if domain matches', () => {
+        expect(
+          Engine.parse(
+            `
+||foo.com^$generichide
+~bar.*##.selector1
+##.selector2
+`,
+          ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+            .styles,
+        ).toBe('');
+      });
+
+      it('allows generic cosmetics if @@$generichide', () => {
+        expect(
+          Engine.parse(
+            `
+||foo.com^$generichide
+##.selector
+@@||foo.com^$generichide
+`,
+          ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+            .styles,
+        ).not.toBe('');
       });
     });
 
@@ -524,34 +577,38 @@ $csp=baz,domain=bar.com
 ##.selector :style(foo)
 ##.selector :style(bar)
 ##.selector1 :style(foo)`,
-        ).getCosmeticsFilters('foo.com', 'foo.com').styles,
+        ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+          .styles,
       ).toEqual('.selector ,.selector1  { foo }\n\n.selector  { bar }');
     });
 
     [
-      // Negated entity on its own is ignored
+      // Generic hides
+      {
+        hostname: 'domain.com',
+        matches: ['##.adwords', '~google.*##.adwords'],
+        misMatches: [],
+      },
       {
         hostname: 'google.com',
         matches: ['##.adwords'],
-        misMatches: ['~google.*#@#.adwords'],
+        misMatches: ['~google.*##.adwords'],
       },
-      // Negated entity on its own is ignored
-      {
-        hostname: 'domain.com',
-        matches: ['##.adwords'],
-        misMatches: ['~google.*#@#.adwords'],
-      },
-      // Negated domain on its own is ignored
+      // Negated entity exceptions do not appear in matches
       {
         hostname: 'google.com',
         matches: ['##.adwords'],
         misMatches: ['~google.com#@#.adwords'],
       },
-      // Negated domain on its own is ignored
       {
         hostname: 'google.de',
         matches: ['##.adwords'],
         misMatches: ['~google.com#@#.adwords'],
+      },
+      {
+        hostname: 'google.com',
+        matches: ['##.adwords'],
+        misMatches: ['~google.*#@#.adwords'],
       },
       // Exception cancels generic rule
       {
@@ -665,10 +722,11 @@ $csp=baz,domain=bar.com
         const shouldMatch: Set<string> = new Set(testCase.matches);
         const shouldNotMatch: Set<string> = new Set(testCase.misMatches);
 
-        // #getCosmeticFilters
+        // #getCosmeticsFilters
         const rules = engine.cosmetics.getCosmeticsFilters(
           testCase.hostname,
           tldts.getDomain(testCase.hostname) || '',
+          true,
         );
 
         expect(rules.length).toEqual(shouldMatch.size);

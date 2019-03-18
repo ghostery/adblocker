@@ -51,6 +51,7 @@ export const enum NETWORK_FILTER_MASK {
   isHostnameAnchor = 1 << 21,
   isException = 1 << 22,
   isCSP = 1 << 23,
+  isGenericHide = 1 << 24,
 }
 
 /**
@@ -340,6 +341,9 @@ export default class NetworkFilter implements IFilter {
             if (optionValue.length > 0) {
               csp = optionValue;
             }
+            break;
+          case 'generichide':
+            mask = setBit(mask, NETWORK_FILTER_MASK.isGenericHide);
             break;
           default: {
             // Handle content type options separatly
@@ -856,6 +860,10 @@ export default class NetworkFilter implements IFilter {
       options.push(`csp=${this.csp}`);
     }
 
+    if (this.isGenericHide()) {
+      options.push('generichide');
+    }
+
     if (this.hasBug()) {
       options.push(`bug=${this.bug}`);
     }
@@ -1071,6 +1079,10 @@ export default class NetworkFilter implements IFilter {
 
   public isCSP() {
     return getBit(this.mask, NETWORK_FILTER_MASK.isCSP);
+  }
+
+  public isGenericHide() {
+    return getBit(this.mask, NETWORK_FILTER_MASK.isGenericHide);
   }
 
   public hasBug() {
