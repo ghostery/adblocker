@@ -29,6 +29,7 @@ function network(filter: string, expected: any) {
       // Filter type
       isCSP: parsed.isCSP(),
       isException: parsed.isException(),
+      isGenericHide: parsed.isGenericHide(),
       isHostnameAnchor: parsed.isHostnameAnchor(),
       isLeftAnchor: parsed.isLeftAnchor(),
       isPlain: parsed.isPlain(),
@@ -74,6 +75,7 @@ const DEFAULT_NETWORK_FILTER = {
   // Filter type
   isCSP: false,
   isException: false,
+  isGenericHide: false,
   isHostnameAnchor: false,
   isLeftAnchor: false,
   isPlain: false,
@@ -710,20 +712,19 @@ describe('Network filters', () => {
       });
     });
 
+    it('generichide', () => {
+      network('||foo.com^$generichide', { isGenericHide: true });
+      network('@@||foo.com^$generichide', { isGenericHide: true, isException: true });
+    });
+
     describe('un-supported options', () => {
-      [
-        'badfilter',
-        'genericblock',
-        'generichide',
-        'inline-script',
-        'popunder',
-        'popup',
-        'woot',
-      ].forEach((unsupportedOption) => {
-        it(unsupportedOption, () => {
-          network(`||foo.com$${unsupportedOption}`, null);
-        });
-      });
+      ['badfilter', 'genericblock', 'inline-script', 'popunder', 'popup', 'woot'].forEach(
+        (unsupportedOption) => {
+          it(unsupportedOption, () => {
+            network(`||foo.com$${unsupportedOption}`, null);
+          });
+        },
+      );
     });
 
     const allOptions = (value: boolean) => ({

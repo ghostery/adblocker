@@ -112,10 +112,7 @@ export function parseFilters(
       } else if (filterType === FilterType.COSMETIC && config.loadCosmeticFilters) {
         const filter = CosmeticFilter.parse(line, config.debug);
         if (filter !== null) {
-          if (
-            config.loadGenericCosmeticsFilters === true ||
-            filter.hasHostnameConstraint() === false
-          ) {
+          if (config.loadGenericCosmeticsFilters === true || filter.isGenericHide() === false) {
             cosmeticFilters.push(filter);
           }
         }

@@ -538,15 +538,6 @@ export default class CosmeticFilter implements IFilter {
     return filter;
   }
 
-  public hasHostnameConstraint(): boolean {
-    return (
-      this.hostnames !== undefined ||
-      this.entities !== undefined ||
-      this.notEntities !== undefined ||
-      this.notHostnames !== undefined
-    );
-  }
-
   public match(hostname: string, domain: string): boolean {
     // No `hostname` available but this filter has some constraints on hostname.
     if (
@@ -657,6 +648,15 @@ export default class CosmeticFilter implements IFilter {
     return undefined;
   }
 
+  public hasHostnameConstraint(): boolean {
+    return (
+      this.hostnames !== undefined ||
+      this.entities !== undefined ||
+      this.notEntities !== undefined ||
+      this.notHostnames !== undefined
+    );
+  }
+
   public getId(): number {
     if (this.id === undefined) {
       this.id = computeFilterId(
@@ -689,5 +689,15 @@ export default class CosmeticFilter implements IFilter {
 
   public isScriptBlock(): boolean {
     return getBit(this.mask, COSMETICS_MASK.scriptBlock);
+  }
+
+  // A generic hide cosmetic filter is one that:
+  //
+  // * Do not have a domain specified. "Hide this element on all domains"
+  // * Have only domain exceptions specified. "Hide this element on all domains except example.com"
+  //
+  // For example: ~example.com##.ad  is a generic filter as well
+  public isGenericHide(): boolean {
+    return this.hostnames === undefined && this.entities === undefined;
   }
 }

@@ -11,7 +11,7 @@ import NetworkFilterBucket from './bucket/network';
 
 import { createStylesheet } from '../content/injection';
 
-export const ENGINE_VERSION = 23;
+export const ENGINE_VERSION = 24;
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -67,6 +67,7 @@ export default class FilterEngine {
     engine.importants = NetworkFilterBucket.deserialize(buffer);
     engine.redirects = NetworkFilterBucket.deserialize(buffer);
     engine.csp = NetworkFilterBucket.deserialize(buffer);
+    engine.genericHides = NetworkFilterBucket.deserialize(buffer);
     engine.cosmetics = CosmeticFilterBucket.deserialize(buffer);
 
     return engine;
@@ -75,6 +76,7 @@ export default class FilterEngine {
   public lists: Map<string, string>;
 
   public csp: NetworkFilterBucket;
+  public genericHides: NetworkFilterBucket;
   public exceptions: NetworkFilterBucket;
   public importants: NetworkFilterBucket;
   public redirects: NetworkFilterBucket;
@@ -104,6 +106,8 @@ export default class FilterEngine {
 
     // $csp=
     this.csp = new NetworkFilterBucket({ enableOptimizations: false });
+    // $generichide
+    this.genericHides = new NetworkFilterBucket({ enableOptimizations: false });
     // @@filter
     this.exceptions = new NetworkFilterBucket({
       enableOptimizations: this.config.enableOptimizations,
@@ -166,6 +170,7 @@ export default class FilterEngine {
     this.importants.serialize(buffer);
     this.redirects.serialize(buffer);
     this.csp.serialize(buffer);
+    this.genericHides.serialize(buffer);
     this.cosmetics.serialize(buffer);
 
     return buffer.slice();
@@ -229,11 +234,17 @@ export default class FilterEngine {
       const exceptions: NetworkFilter[] = [];
       const importants: NetworkFilter[] = [];
       const redirects: NetworkFilter[] = [];
+      const genericHides: NetworkFilter[] = [];
 
       for (let i = 0; i < newNetworkFilters.length; i += 1) {
         const filter = newNetworkFilters[i];
+        // NOTE: it's important to check for $generichide and $csp before
+        // exceptions as we store all of them in the same filter bucket. The
+        // check for exceptions is done at match-time directly.
         if (filter.isCSP()) {
           csp.push(filter);
+        } else if (filter.isGenericHide()) {
+          genericHides.push(filter);
         } else if (filter.isException()) {
           exceptions.push(filter);
         } else if (filter.isImportant()) {
@@ -254,6 +265,7 @@ export default class FilterEngine {
       this.exceptions.update(exceptions, removedNetworkFiltersSet);
       this.importants.update(importants, removedNetworkFiltersSet);
       this.redirects.update(redirects, removedNetworkFiltersSet);
+      this.genericHides.update(genericHides, removedNetworkFiltersSet);
     }
 
     return updated;
@@ -268,13 +280,40 @@ export default class FilterEngine {
    * Given `hostname` and `domain` of a page (or frame), return the list of
    * styles and scripts to inject in the page.
    */
-  public getCosmeticsFilters(hostname: string, domain: string | null | undefined) {
+  public getCosmeticsFilters({
+    url,
+    hostname,
+    domain,
+  }: {
+    url: string;
+    hostname: string;
+    domain: string | null | undefined;
+  }) {
     const selectorsPerStyle: Map<string, string[]> = new Map();
     const scripts: string[] = [];
     const blockedScripts: string[] = [];
 
+    // Check if there is some generichide
+    const genericHides = this.genericHides.matchAll(
+      new Request({
+        type: 'document',
+
+        domain: domain || '',
+        hostname,
+        url,
+
+        sourceDomain: '',
+        sourceHostname: '',
+        sourceUrl: '',
+      }),
+    );
+
+    // Check that there is at least one $generichide match and no exception
+    const allowGenericHides =
+      genericHides.length === 0 || genericHides.some((f) => f.isException()) === true;
+
     if (this.config.loadCosmeticFilters) {
-      const rules = this.cosmetics.getCosmeticsFilters(hostname, domain || '');
+      const rules = this.cosmetics.getCosmeticsFilters(hostname, domain || '', allowGenericHides);
       for (let i = 0; i < rules.length; i += 1) {
         const rule: CosmeticFilter = rules[i];
 
@@ -320,6 +359,7 @@ export default class FilterEngine {
       filters.push(...this.filters.matchAll(request));
       filters.push(...this.exceptions.matchAll(request));
       filters.push(...this.csp.matchAll(request));
+      filters.push(...this.genericHides.matchAll(request));
       filters.push(...this.redirects.matchAll(request));
     }
 
@@ -340,6 +380,11 @@ export default class FilterEngine {
     }
 
     const matches = this.csp.matchAll(request);
+
+    // No $csp filter found
+    if (matches.length === 0) {
+      return undefined;
+    }
 
     // Collect all CSP directives and keep track of exceptions
     const disabledCsp = new Set();
