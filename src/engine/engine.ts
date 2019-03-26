@@ -11,7 +11,7 @@ import NetworkFilterBucket from './bucket/network';
 
 import { createStylesheet } from '../content/injection';
 
-export const ENGINE_VERSION = 25;
+export const ENGINE_VERSION = 24;
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
