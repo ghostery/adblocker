@@ -12,7 +12,7 @@
       main_frame URL (not only hostname).
     * Add support for $generichide option in network filters
     * Fix matching of generic cosmetics when only negation was specified
-  * Support for cyrillic characters [#115]
+  * Support for cyrillic characters [#115](https://github.com/cliqz-oss/adblocker/pull/115)
 
 ## 0.7.0
 
