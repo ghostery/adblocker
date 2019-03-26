@@ -4,6 +4,11 @@
 
 *not released yet*
 
+## 0.8.0
+
+*2019-03-26*
+
+  * Support for cyrillic characters [#115](https://github.com/cliqz-oss/adblocker/pull/115)
   * Implement generichide option + fix generic cosmetic matching [#114](https://github.com/cliqz-oss/adblocker/pull/114)
     * [BREAKING] Change arguments of FiltersEngine.getCosmeticsFilters
       getCosmeticsFilters({ url, hostname, domain }) is now expected
@@ -12,7 +17,6 @@
       main_frame URL (not only hostname).
     * Add support for $generichide option in network filters
     * Fix matching of generic cosmetics when only negation was specified
-  * Support for cyrillic characters [#115](https://github.com/cliqz-oss/adblocker/pull/115)
 
 ## 0.7.0
 
