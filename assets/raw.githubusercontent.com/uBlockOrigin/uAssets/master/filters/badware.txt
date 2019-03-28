@@ -1,7 +1,12 @@
-! uBlock -- To block sites known for delivering adware/crapware.
+! Title: uBlock filters – Badware risks
+! Description: For sites documented to put users at risk of installing adware/crapware etc.
+!              The purpose is to at least ensure a user is warned of the risks ahead.
+! Expires: 4 days
+! Licence: https://github.com/uBlockOrigin/uAssets/blob/master/LICENSE
+! Homepage: https://github.com/uBlockOrigin/uAssets
 !
-! For sites documented to put users at risk of installing adware/crapware etc.
-! The purpose is to at least ensure a user is warned of the risks ahead.
+! GitHub issues: https://github.com/uBlockOrigin/uAssets/issues
+! GitHub pull requests: https://github.com/uBlockOrigin/uAssets/pulls
 !
 ! Each entry has to be well enough sourced, see:
 ! https://github.com/gorhill/uBlock/wiki/Badware-risks
@@ -130,6 +135,63 @@ upload4earn.org##+js(remove-attr.js, checked)
 ||check-now.net^$document
 ||googlo.co^$document
 ||yahoo-news.co^$document
+! https://github.com/uBlockOrigin/uAssets/issues/4201#issuecomment-458340273
+||5qg9ibt1a6.com^$document
+||atreus.hexenschmiede.info^$document
+||axxmtjambo.xyz^$document
+||browsergames2018.com^$document
+||chairgaubsy.com^$document
+||epailseptox.com^$document
+||hentaiplaytime.com^$document
+||jobhelpr.com^$document
+||lameterthenhep.info^$document
+||lavfd.net^$document
+||microsoft.com-repair-windows.live^$document
+||notification-time.com^$document
+||o4uxrk33.com^$document
+||viewmypdf.com^$document
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4236
 ||dnbard.com^$document
+
+! https://github.com/uBlockOrigin/uAssets/issues/4656
+||bitcoinqrcodegenerator.win^$document
+
+! streaming-foot.club badware
+||streaming-foot.club^$document
+
+! com-guest.info badware
+||com-guest.info^$document
+
+! dnsleaktest.net badware
+||dnsleaktest.net^$document
+
+! foxload.com badware
+||foxload.com^$document
+
+! aksia.co badware
+! Ref: https://www.bleepingcomputer.com/news/security/phisher-announces-more-attacks-against-hedge-funds-and-financial-firms/
+||aksia.co^$document
+
+! ReImagePlus links
+! https://github.com/uBlockOrigin/uAssets/issues/5136
+! Ref: https://forums.malwarebytes.com/topic/194200-removal-instructions-for-reimage-repair/
+! https://windowsreport.com/extend-windows-laptop-battery-life/
+windowsreport.com##.code-block
+! https://appuals.com/fix-error-0x800701e3-on-windows-7-8-1-10/
+appuals.com##.appua-reimage-top
+appuals.com##.info.box
+! https://ugetfix.com/ask/how-to-fix-windows-store-error-0x8000ffff/
+pcseguro.es,sauguspc.lt,sichernpc.de,ugetfix.com,wyleczpc.pl##.download_button_info_texts
+pcseguro.es,sauguspc.lt,sichernpc.de,ugetfix.com,wyleczpc.pl##.js-download_button_additional_links
+pcseguro.es,sauguspc.lt,sichernpc.de,ugetfix.com,wyleczpc.pl##.primary_download
+pcseguro.es,sauguspc.lt,sichernpc.de,ugetfix.com,wyleczpc.pl##.sidebar_download_inner
+pcseguro.es,sauguspc.lt,sichernpc.de,ugetfix.com,wyleczpc.pl##div.attention-button-box-green
+! https://www.thewindowsclub.com/fix-windows-update-error-0xc1900130-on-windows-10
+thewindowsclub.com##.entry-content > div > strong:has-text(find & fix Windows error)
+! https://www.majorgeeks.com/files/details/patch_my_pc.html
+majorgeeks.com##b:has(a[target^="reimage"])
+||majorgeeks.com/images/icons/red_icon_18x17px.png$image
+
+! https://github.com/uBlockOrigin/uAssets/issues/5187
+||check-prizes-now2.life^$document
