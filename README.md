@@ -133,7 +133,11 @@ const directives = engine.getCSPDirectives(new Request(...));
 const {
   styles, // stylesheet to inject in the page
   scripts, // Array of scriptlets to inject in the page
-} = engine.getCosmeticFilters('sub.domain.com', 'domain.com');
+} = engine.getCosmeticFilters({
+  url: 'https://sub.domain.com/path',
+  hostname: 'sub.domain.com',
+  domain: 'domain.com',
+});
 ```
 
 # Release Checklist
