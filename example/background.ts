@@ -162,10 +162,12 @@ loadAdblocker().then((engine) => {
 
     // Answer to content-script with a list of nodes
     if (msg.action === 'getCosmeticsFilters') {
-      const { active, blockedScripts, styles, scripts } = engine.getCosmeticsFilters(
+      const { active, blockedScripts, styles, scripts } = engine.getCosmeticsFilters({
+        domain: getDomain(hostname) || '',
         hostname,
-        getDomain(hostname) || '',
-      );
+        url: url === undefined ? '' : url,
+      });
+
       if (active === false) {
         return;
       }
