@@ -43,17 +43,6 @@ try {
 } catch (ex) {  };`;
 }
 
-export function blockScript(filter: string, doc: Document): void {
-  const filterRE = new RegExp(filter);
-  doc.addEventListener('beforescriptexecute', (ev) => {
-    const target = ev.target as HTMLElement;
-    if (target.textContent && filterRE.test(target.textContent)) {
-      ev.preventDefault();
-      ev.stopPropagation();
-    }
-  });
-}
-
 export function injectCSSRule(rule: string, doc: Document): void {
   const parent = doc.head || doc.getElementsByTagName('head')[0] || doc.documentElement;
   if (parent !== null) {

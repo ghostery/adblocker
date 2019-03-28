@@ -1,1 +1,2 @@
-export { default as injectCosmetics, IMessageFromBackground } from './src/cosmetics-injection';
+export { default as injectCosmetics } from './src/cosmetics-injection';
+export { IMessageFromBackground } from './src/content/communication';

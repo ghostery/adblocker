@@ -1,12 +1,6 @@
 import injectCircumvention from './content/circumvention';
-import { blockScript, injectCSSRule, injectScript } from './content/injection';
-
-export interface IMessageFromBackground {
-  active: boolean;
-  scripts: string[];
-  blockedScripts: string[];
-  styles: string;
-}
+import { IMessageFromBackground } from './content/communication';
+import { injectCSSRule, injectScript } from './content/injection';
 
 /**
  * Takes care of injecting cosmetic filters in a given window. Responsabilities:
@@ -28,30 +22,21 @@ export default function injectCosmetics(
     injectCircumvention(window);
   }
 
-  return getCosmeticsFilters().then(
-    ({ active, scripts, blockedScripts, styles }: IMessageFromBackground) => {
-      if (!active) {
-        return;
-      }
+  return getCosmeticsFilters().then(({ active, scripts, styles }: IMessageFromBackground) => {
+    if (active === false) {
+      return;
+    }
 
-      // Inject scripts
-      if (scripts) {
-        for (let i = 0; i < scripts.length; i += 1) {
-          injectScript(scripts[i], window.document);
-        }
+    // Inject scripts
+    if (scripts) {
+      for (let i = 0; i < scripts.length; i += 1) {
+        injectScript(scripts[i], window.document);
       }
+    }
 
-      // Block scripts
-      if (blockedScripts) {
-        for (let i = 0; i < blockedScripts.length; i += 1) {
-          blockScript(blockedScripts[i], window.document);
-        }
-      }
-
-      // Inject CSS
-      if (styles && styles.length > 0) {
-        injectCSSRule(styles, window.document);
-      }
-    },
-  );
+    // Inject CSS
+    if (styles && styles.length > 0) {
+      injectCSSRule(styles, window.document);
+    }
+  });
 }

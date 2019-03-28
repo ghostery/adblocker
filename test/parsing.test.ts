@@ -10,7 +10,7 @@ function h(hostnames: string[]): Uint32Array {
   return new Uint32Array(hostnames.map(hashHostnameBackward));
 }
 
-// TODO: collaps, popup, popunder, generichide, genericblock
+// TODO: collaps, popup, popunder, genericblock
 function network(filter: string, expected: any) {
   const parsed = NetworkFilter.parse(filter);
   if (parsed !== null) {
@@ -811,7 +811,6 @@ function cosmetic(filter: string, expected: any) {
       style: parsed.getStyle(),
 
       // Options
-      isScriptBlock: parsed.isScriptBlock(),
       isScriptInject: parsed.isScriptInject(),
       isUnhide: parsed.isUnhide(),
     };
@@ -827,7 +826,6 @@ const DEFAULT_COSMETIC_FILTER = {
   style: DEFAULT_HIDDING_STYLE,
 
   // Options
-  isScriptBlock: false,
   isScriptInject: false,
   isUnhide: false,
 };
@@ -845,7 +843,7 @@ describe('Cosmetic filters', () => {
       }
     };
 
-    ['##.selector', '##+js(foo.js)', '##script:contains(ads)'].forEach((line) => {
+    ['##.selector', '##+js(foo.js)'].forEach((line) => {
       it(`pprint ${line}`, () => {
         checkToString(line, line);
       });
@@ -899,32 +897,11 @@ describe('Cosmetic filters', () => {
   });
 
   it('parses unhide', () => {
-    cosmetic('#@#script:contains(foo)', null); // We need hostnames
-    cosmetic('foo.com#@#script:contains(foo)', {
-      ...DEFAULT_COSMETIC_FILTER,
-      hostnames: h(['foo.com']),
-      isScriptBlock: true,
-      isUnhide: true,
-      selector: 'foo',
-    });
     cosmetic('foo.com#@#.selector', {
       ...DEFAULT_COSMETIC_FILTER,
       hostnames: h(['foo.com']),
       isUnhide: true,
       selector: '.selector',
-    });
-  });
-
-  it('parses script block', () => {
-    cosmetic('##script:contains(foo)', {
-      ...DEFAULT_COSMETIC_FILTER,
-      isScriptBlock: true,
-      selector: 'foo',
-    });
-    cosmetic('##script:contains(/foo/)', {
-      ...DEFAULT_COSMETIC_FILTER,
-      isScriptBlock: true,
-      selector: 'foo',
     });
   });
 

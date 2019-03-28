@@ -108,7 +108,6 @@ const isValidCss = (() => {
 const enum COSMETICS_MASK {
   unhide = 1 << 0,
   scriptInject = 1 << 1,
-  scriptBlock = 1 << 2,
 }
 
 function computeFilterId(
@@ -297,20 +296,11 @@ export default class CosmeticFilter implements IFilter {
       //           scriptMethodIndex
       const scriptMethodIndex = suffixStartIndex + 7;
       let scriptSelectorIndexStart = scriptMethodIndex;
-      let scriptSelectorIndexEnd = line.length - 1;
+      const scriptSelectorIndexEnd = line.length - 1;
 
       if (fastStartsWithFrom(line, 'inject(', scriptMethodIndex)) {
         mask = setBit(mask, COSMETICS_MASK.scriptInject);
         scriptSelectorIndexStart += 7;
-      } else if (fastStartsWithFrom(line, 'contains(', scriptMethodIndex)) {
-        mask = setBit(mask, COSMETICS_MASK.scriptBlock);
-        scriptSelectorIndexStart += 9;
-
-        // If it's a regex
-        if (line[scriptSelectorIndexStart] === '/' && line[scriptSelectorIndexEnd - 1] === '/') {
-          scriptSelectorIndexStart += 1;
-          scriptSelectorIndexEnd -= 1;
-        }
       }
 
       selector = line.slice(scriptSelectorIndexStart, scriptSelectorIndexEnd);
@@ -527,10 +517,6 @@ export default class CosmeticFilter implements IFilter {
       filter += '+js(';
       filter += this.selector;
       filter += ')';
-    } else if (this.isScriptBlock()) {
-      filter += 'script:contains(';
-      filter += this.selector;
-      filter += ')';
     } else {
       filter += this.selector;
     }
@@ -685,10 +671,6 @@ export default class CosmeticFilter implements IFilter {
 
   public isScriptInject(): boolean {
     return getBit(this.mask, COSMETICS_MASK.scriptInject);
-  }
-
-  public isScriptBlock(): boolean {
-    return getBit(this.mask, COSMETICS_MASK.scriptBlock);
   }
 
   // A generic hide cosmetic filter is one that:
