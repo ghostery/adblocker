@@ -1,4 +1,4 @@
-const adblocker = require('../dist/adblocker.cjs.js');
+const adblocker = require('../');
 const { createEngine } = require('./utils');
 
 
@@ -61,24 +61,12 @@ function benchNetworkFiltersParsing({ lists }) {
   });
 }
 
-function benchListUpdate({ lists }) {
-  const listsManager = new adblocker.Lists();
-  listsManager.update([{
-    name: 'list',
-    checksum: 'checksum',
-    list: lists.join('\n'),
-  }]);
-}
-
-
 module.exports = {
   benchCosmeticsFiltersParsing,
   benchEngineCreation,
   benchEngineDeserialization,
   benchEngineSerialization,
-  benchListUpdate,
   benchNetworkFiltersParsing,
   benchStringHashing,
   benchStringTokenize,
-
 };

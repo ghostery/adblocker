@@ -166,7 +166,6 @@ describe('#FiltersEngine', () => {
       }),
     ).toEqual({
       active: true,
-      blockedScripts: [],
       scripts: [],
       styles: '.selector { display: none !important; }',
     });
@@ -180,7 +179,6 @@ describe('#FiltersEngine', () => {
       }),
     ).toEqual({
       active: false,
-      blockedScripts: [],
       scripts: [],
       styles: '',
     });
@@ -496,16 +494,6 @@ $csp=baz,domain=bar.com
   });
 
   describe('#getCosmeticsFilters', () => {
-    it('handles script blocking', () => {
-      expect(
-        Engine.parse('foo.*##script:contains(ads)').getCosmeticsFilters({
-          domain: 'foo.com',
-          hostname: 'foo.com',
-          url: 'https://foo.com',
-        }).blockedScripts,
-      ).toEqual(['ads']);
-    });
-
     describe('script injections', () => {
       it('injects script', () => {
         const engine = Engine.parse('##+js(script.js,arg1)');

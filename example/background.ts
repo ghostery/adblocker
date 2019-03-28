@@ -162,7 +162,7 @@ loadAdblocker().then((engine) => {
 
     // Answer to content-script with a list of nodes
     if (msg.action === 'getCosmeticsFilters') {
-      const { active, blockedScripts, styles, scripts } = engine.getCosmeticsFilters({
+      const { active, styles, scripts } = engine.getCosmeticsFilters({
         domain: getDomain(hostname) || '',
         hostname,
         url: url === undefined ? '' : url,
@@ -194,7 +194,6 @@ loadAdblocker().then((engine) => {
       // Inject scripts from content script
       sendResponse({
         active,
-        blockedScripts,
         scripts,
       });
     }

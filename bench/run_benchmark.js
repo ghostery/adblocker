@@ -21,10 +21,8 @@ const chalk = require('chalk');
 const Benchmark = require('benchmark');
 
 const {
-  NANOSECS_PER_SEC,
   createEngine,
   getFiltersFromLists,
-  loadRequests,
 } = require('./utils');
 
 const {
@@ -32,16 +30,10 @@ const {
   benchEngineCreation,
   benchEngineDeserialization,
   benchEngineSerialization,
-  benchListUpdate,
   benchNetworkFiltersParsing,
   benchStringHashing,
   benchStringTokenize,
 } = require('./micro');
-
-const {
-  benchTldsBaseline,
-  benchMatching,
-} = require('./macro');
 
 
 function loadLists() {
@@ -71,46 +63,6 @@ function getMemoryConsumption() {
   return process.memoryUsage().heapUsed;
 }
 
-
-function runMacroBenchmarks(lists, resources) {
-  console.log('Run macro bench...');
-  console.log('Loading requests...');
-  const requests = loadRequests();
-
-  console.log('Creating engine...');
-  const { engine } = createEngine(lists, resources, {
-    loadCosmeticFilters: false,
-    loadNetworkFilters: true,
-    optimizeAOT: true,
-  });
-
-  const results = {};
-
-  [
-    benchTldsBaseline,
-    benchMatching,
-  ].forEach((bench) => {
-    triggerGC();
-    const t0 = process.hrtime();
-    bench({
-      engine,
-      requests,
-    });
-    const diff = process.hrtime(t0);
-    const seconds = diff[0] + (diff[1] / NANOSECS_PER_SEC);
-    const opsPerSecond = requests.length / seconds;
-    results[bench.name] = {
-      opsPerSecond,
-      relativeMarginOfError: 0.0,
-      numberOfSamples: 1,
-    };
-  });
-
-  return {
-    macroBenchmarks: results,
-  };
-}
-
 /**
  * Micro benchmarks are a set of benchmarks measuring specific aspects of the library
  */
@@ -120,7 +72,6 @@ function runMicroBenchmarks(lists, resources) {
   const { engine, serialized } = createEngine(lists, resources, {
     loadCosmeticFilters: true,
     loadNetworkFilters: true,
-    optimizeAOT: true,
   }, true /* Also serialize engine */);
 
   const filters = getFiltersFromLists(lists);
@@ -136,7 +87,6 @@ function runMicroBenchmarks(lists, resources) {
   };
 
   [
-    benchListUpdate,
     benchStringHashing,
     benchCosmeticsFiltersParsing,
     benchStringTokenize,
@@ -232,19 +182,6 @@ function compareMemoryResults(results1, results2) {
   });
 }
 
-function compareMacroBenchmarkResults(results1, results2) {
-  Object.keys(results1).forEach((key) => {
-    if (results2[key] !== undefined) {
-      compareNumbers(key, {
-        number1: results1[key].opsPerSecond,
-        number2: results2[key].opsPerSecond,
-        unit: 'ops/sec',
-        moreIsBetter: true,
-      });
-    }
-  });
-}
-
 function compareMicroBenchmarkResults(results1, results2) {
   Object.keys(results1).forEach((key) => {
     if (results2[key] !== undefined) {
@@ -271,13 +208,6 @@ function compareBenchmarkResults(results1, results2) {
   if (results1.microBenchmarks !== undefined && results2.microBenchmarks !== undefined) {
     compareMicroBenchmarkResults(results1.microBenchmarks, results2.microBenchmarks);
   }
-
-  console.log();
-  console.log(chalk.bold('Macro Benchmark:'));
-  console.log(chalk.bold('================'));
-  if (results1.macroBenchmarks !== undefined && results2.macroBenchmarks !== undefined) {
-    compareMacroBenchmarkResults(results1.macroBenchmarks, results2.macroBenchmarks);
-  }
 }
 
 function main() {
@@ -288,7 +218,6 @@ function main() {
   const benchmarkResults = {
     ...runMemoryBench(lists, resources),
     ...runMicroBenchmarks(lists, resources),
-    ...runMacroBenchmarks(lists, resources),
   };
   console.log(benchmarkResults);
 

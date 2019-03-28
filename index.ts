@@ -1,5 +1,6 @@
 // Cosmetic injection
-export { default as injectCosmetics, IMessageFromBackground } from './src/cosmetics-injection';
+export { default as injectCosmetics } from './src/cosmetics-injection';
+export { IMessageFromBackground } from './src/content/communication';
 
 export { default as FiltersEngine, ENGINE_VERSION } from './src/engine/engine';
 export { default as ReverseIndex } from './src/engine/reverse-index';

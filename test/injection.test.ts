@@ -12,7 +12,6 @@ function testInjectCSS() {
   injectCosmetics(dom.window, () =>
     Promise.resolve({
       active: true,
-      blockedScripts: [],
       scripts: [],
       styles: '',
     }),

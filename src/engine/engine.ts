@@ -9,6 +9,7 @@ import { IListDiff, parseFilters } from '../lists';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 
+import { IMessageFromBackground } from '../content/communication';
 import { createStylesheet } from '../content/injection';
 
 export const ENGINE_VERSION = 24;
@@ -288,10 +289,9 @@ export default class FilterEngine {
     url: string;
     hostname: string;
     domain: string | null | undefined;
-  }) {
+  }): IMessageFromBackground {
     const selectorsPerStyle: Map<string, string[]> = new Map();
     const scripts: string[] = [];
-    const blockedScripts: string[] = [];
 
     // Check if there is some generichide
     const genericHides = this.genericHides.matchAll(
@@ -317,9 +317,7 @@ export default class FilterEngine {
       for (let i = 0; i < rules.length; i += 1) {
         const rule: CosmeticFilter = rules[i];
 
-        if (rule.isScriptBlock()) {
-          blockedScripts.push(rule.getSelector());
-        } else if (rule.isScriptInject()) {
+        if (rule.isScriptInject()) {
           const script = rule.getScript(this.resources.js);
           if (script !== undefined) {
             scripts.push(script);
@@ -343,7 +341,6 @@ export default class FilterEngine {
 
     return {
       active: this.config.loadCosmeticFilters,
-      blockedScripts,
       scripts,
       styles: stylesheets.join('\n\n'),
     };

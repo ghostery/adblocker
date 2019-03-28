@@ -169,7 +169,13 @@ export default class StaticDataView {
   }
 
   public pushUint32Array(arr: Uint32Array): void {
-    this.pushUint32(arr.length);
+    const len: number = arr.length;
+    const length = len <= 127 ? len : 1 << 7;
+    this.pushUint8(length);
+    if (len > 127) {
+      this.pushUint16(len);
+    }
+
     // TODO - use `set` to push the full buffer at once?
     for (let i = 0; i < arr.length; i += 1) {
       this.pushUint32(arr[i]);
@@ -177,7 +183,8 @@ export default class StaticDataView {
   }
 
   public getUint32Array(): Uint32Array {
-    const length = this.getUint32();
+    const len = this.getUint8();
+    const length = len === 1 << 7 ? this.getUint16() : len;
     const arr = new Uint32Array(length);
     // TODO - use `subarray`?
     for (let i = 0; i < length; i += 1) {
