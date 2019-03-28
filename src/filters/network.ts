@@ -297,6 +297,7 @@ export default class NetworkFilter implements IFilter {
 
             mask = setBit(mask, NETWORK_FILTER_MASK.matchCase);
             break;
+          case '3p':
           case 'third-party':
             if (negation) {
               // ~third-party means we should clear the flag
@@ -306,6 +307,7 @@ export default class NetworkFilter implements IFilter {
               mask = clearBit(mask, NETWORK_FILTER_MASK.firstParty);
             }
             break;
+          case '1p':
           case 'first-party':
             if (negation) {
               // ~first-party means we should clear the flag
@@ -371,6 +373,7 @@ export default class NetworkFilter implements IFilter {
               case 'script':
                 optionMask = NETWORK_FILTER_MASK.fromScript;
                 break;
+              case 'css':
               case 'stylesheet':
                 optionMask = NETWORK_FILTER_MASK.fromStylesheet;
                 break;
