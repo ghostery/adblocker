@@ -1,5 +1,4 @@
-const fs = require('fs');
-const adblocker = require('../dist/adblocker.cjs.js');
+const adblocker = require('../');
 
 function createEngine(lists, resources, options = {}, serialize = false) {
   const engine = adblocker.FiltersEngine.parse(
@@ -15,19 +14,7 @@ function createEngine(lists, resources, options = {}, serialize = false) {
   };
 }
 
-
 const NANOSECS_PER_SEC = 1e9;
-
-function loadRequests() {
-  const requestsPath = process.argv[process.argv.length - 1];
-  return fs.readFileSync(requestsPath, { encoding: 'utf-8' })
-    .split(/\n/g)
-    .map((line) => {
-      try { return JSON.parse(line); } catch (ex) { return null; }
-    })
-    .filter(r => r !== null);
-}
-
 
 function getFiltersFromLists(lists) {
   const filters = [];
@@ -46,6 +33,5 @@ function getFiltersFromLists(lists) {
 module.exports = {
   createEngine,
   NANOSECS_PER_SEC,
-  loadRequests,
   getFiltersFromLists,
 };
