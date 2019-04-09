@@ -488,6 +488,27 @@ export default class CosmeticFilter implements IFilter {
   }
 
   /**
+   * Return an estimation of the size (in bytes) needed to persist this filter
+   * in a DataView. This does not need to be 100% accurate but should be an
+   * upper-bound. It should also be as fast as possible.
+   */
+  public getEstimatedSerializedSize(): number {
+    return (
+      1 + // mask = 1 byte
+      1 + // optional parts = 1 byte
+      // selector + 2 bytes for length (* 2 for punycode)
+      (this.selector.length * 2 + 2) + // selector + 2 bytes length
+      (this.entities === undefined ? 0 : this.entities.length * 4 + 2) +
+      (this.hostnames === undefined ? 0 : this.hostnames.length * 4 + 2) +
+      (this.notEntities === undefined ? 0 : this.notEntities.length * 4 + 2) +
+      (this.notHostnames === undefined ? 0 : this.notHostnames.length * 4 + 2) +
+      // rawLine + 2 bytes for length (* 2 for punycode)
+      (this.rawLine === undefined ? 0 : this.rawLine.length * 2 + 2) +
+      (this.style === undefined ? 0 : this.style.length + 2)
+    );
+  }
+
+  /**
    * Create a more human-readable version of this filter. It is mainly used for
    * debugging purpose, as it will expand the values stored in the bit mask.
    */

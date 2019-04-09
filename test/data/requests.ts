@@ -52958,4 +52958,10 @@ export default [
     type: 'image',
     url: 'https://www.werstreamt.es/themes/wse/images/partner/',
   },
+  {
+    filters: ['/b/ss/*&aqe=$image'],
+    sourceUrl: 'https://',
+    type: 'image',
+    url: 'https://smetrics.cnn.com/b/ss/cnn-adbp-intl/1/H.26.1/s19259258865278?AQB=1&ndh=1&t=5%2F3%2F2019%2011%3A48%3A34%205%20-120&fid=50308920DCB59DCD-0B21FD511330AE54&ce=UTF-8&ns=cnn&pageName=cnn%3Ain%3Aedition%3A%2F&g=https%3A%2F%2Fedition.cnn.com%2F&cc=USD&ch=cnn%20homepage&server=edition.cnn.com&events=event26&c5=nvs&v5=D%3Dc5&c8=new%3A1&v8=D%3Dc8&c9=nvs&v9=D%3Dc9&c13=section&v13=D%3Dc13&v15=8190&c17=anonymous&v17=D%3Dc17&v22=0&c26=edition.cnn.com%2F&v26=D%3DpageName&v27=D%3Dch&c28=cnn%20homepage%3Anvs&v28=D%3Dc28&v29=edition.cnn.com&c30=cnn%20international&v30=D%3Dc30&c32=adbp%3Aindex&v32=D%3Dc32&c33=adbp%3Anone&v33=D%3Dc33&c35=cnn.41.1-0-0.20181206%3A0&v35=D%3Dc35&c37=desktop&v37=D%3Dc37&c46=15544577135208340916840520&v46=D%3Dc46&c47=5ca7240500fda80a3f92ba001523ae53&v47=D%3Dc47&c56=landscape&v56=D%3Dc56&c57=no%20mvpd%20set&v57=D%3Dc57&c59=no%20mvpd%20set&v59=D%3Dc59&c64=cnn%20news&v64=D%3Dc64&c75=nvs&v75=D%3Dc75&h1=news%7Ccnn%7Ccnn%20international%7Cedition.cnn.com%7Ccnn%20homepage%7Ccnn%20homepage%3Anvs&s=1707x960&c=24&j=1.6&v=N&k=Y&bw=1704&bh=821&AQE=1',
+  }
 ];

@@ -115,7 +115,9 @@ function isCyrillic(ch: number): boolean {
 }
 
 function isAllowedFilter(ch: number): boolean {
-  return isDigit(ch) || isAlpha(ch) || isAlphaExtended(ch) || isCyrillic(ch) || ch === 37 /* '%' */;
+  return (
+    isDigit(ch) || isAlpha(ch) || isAlphaExtended(ch) || isCyrillic(ch) || ch === 37 /* '%' */
+  );
 }
 
 function isAllowedHostname(ch: number): boolean {
@@ -276,11 +278,7 @@ export function updateResponseHeadersWithCSP(
   return { responseHeaders };
 }
 
+const hasUnicodeRe = /[^\x00-\x7F]/;
 export function hasUnicode(str: string): boolean {
-  for (let i = 0; i < str.length; i += 1) {
-    if (str.charCodeAt(i) > 127) {
-      return true;
-    }
-  }
-  return false;
+  return hasUnicodeRe.test(str);
 }
