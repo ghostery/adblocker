@@ -52,6 +52,7 @@ export const enum NETWORK_FILTER_MASK {
   isException = 1 << 22,
   isCSP = 1 << 23,
   isGenericHide = 1 << 24,
+  isBadFilter = 1 << 25,
 }
 
 /**
@@ -172,11 +173,9 @@ const MATCH_ALL = new RegExp('');
 
 // TODO:
 // 1. Options not supported yet:
-//  - badfilter
 //  - inline-script
 //  - popup
 //  - popunder
-//  - generichide
 //  - genericblock
 // 2. Replace `split` with `substr`
 export default class NetworkFilter implements IFilter {
@@ -276,11 +275,8 @@ export default class NetworkFilter implements IFilter {
             break;
           }
           case 'badfilter':
-            // TODO - how to handle those, if we start in mask, then the id will
-            // differ from the other filter. We could keep original line. How do
-            // to eliminate thos efficiently? They will probably endup in the same
-            // bucket, so maybe we could do that on a per-bucket basis?
-            return null;
+            mask = setBit(mask, NETWORK_FILTER_MASK.isBadFilter);
+            break;
           case 'important':
             // Note: `negation` should always be `false` here.
             if (negation) {
@@ -704,7 +700,7 @@ export default class NetworkFilter implements IFilter {
 
     if (this.hostname !== undefined) {
       optionalParts |= 8;
-      buffer.pushUTF8(this.hostname);
+      buffer.pushASCII(this.hostname);
     }
 
     if (this.optDomains) {
@@ -728,6 +724,28 @@ export default class NetworkFilter implements IFilter {
     }
 
     buffer.setByte(index, optionalParts);
+  }
+
+  public getEstimatedSerializedSize(): number {
+    return (
+      4 + // mask = 4 bytes
+      1 + // optional parts = 1 byte
+      2 + // bugId = 2 bytes
+      // csp + 2 bytes for length
+      (this.csp === undefined ? 0 : this.csp.length + 2) +
+      // filter + 2 bytes for length (* 2 for punycode)
+      (this.filter === undefined ? 0 : this.filter.length * 2 + 2) +
+      // hostname + 2 bytes for length
+      (this.hostname === undefined ? 0 : this.hostname.length + 2) +
+      // opt domains + 4 bytes for length
+      (this.optDomains === undefined ? 0 : this.optDomains.length * 4 + 4) +
+      // opt not domains + 4 bytes for length
+      (this.optNotDomains === undefined ? 0 : this.optNotDomains.length * 4 + 4) +
+      // rawLine + 2 bytes for length (* 2 for punycode)
+      (this.rawLine === undefined ? 0 : this.rawLine.length * 2 + 2) +
+      // redirect + 2 bytes for length
+      (this.redirect === undefined ? 0 : this.redirect.length + 2)
+    );
   }
 
   /**
@@ -884,6 +902,10 @@ export default class NetworkFilter implements IFilter {
       options.push('domain=<hashed>');
     }
 
+    if (this.isBadFilter()) {
+      options.push('badfilter');
+    }
+
     if (options.length > 0) {
       filter += `$${options.join(',')}`;
     }
@@ -896,6 +918,21 @@ export default class NetworkFilter implements IFilter {
   }
 
   // Public API (Read-Only)
+  public getIdWithoutBadFilter(): number {
+    // This method computes the id ignoring the $badfilter option (which will
+    // correspond to the ID of filters being discarded). This allows us to
+    // eliminate bad filters by comparing IDs, which is more robust and faster
+    // than string comparison.
+    return computeFilterId(
+      this.csp,
+      this.mask & ~NETWORK_FILTER_MASK.isBadFilter,
+      this.filter,
+      this.hostname,
+      this.optDomains,
+      this.optNotDomains,
+    );
+  }
+
   public getId(): number {
     if (this.id === undefined) {
       this.id = computeFilterId(
@@ -1086,6 +1123,10 @@ export default class NetworkFilter implements IFilter {
 
   public isGenericHide() {
     return getBit(this.mask, NETWORK_FILTER_MASK.isGenericHide);
+  }
+
+  public isBadFilter() {
+    return getBit(this.mask, NETWORK_FILTER_MASK.isBadFilter);
   }
 
   public hasBug() {

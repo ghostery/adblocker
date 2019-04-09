@@ -12,7 +12,7 @@ import NetworkFilterBucket from './bucket/network';
 import { IMessageFromBackground } from '../content/communication';
 import { createStylesheet } from '../content/injection';
 
-export const ENGINE_VERSION = 24;
+export const ENGINE_VERSION = 25;
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {

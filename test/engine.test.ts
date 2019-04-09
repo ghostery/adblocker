@@ -374,6 +374,65 @@ $csp=baz,domain=bar.com
     });
   });
 
+  describe('badfilter', () => {
+    const request = makeRequest(
+      {
+        sourceUrl: 'https://bar.com',
+        type: 'image',
+        url: 'https://foo.com',
+      },
+      tldts.parse,
+    );
+    // - from Engine.parse
+    // - new filter in Engine.update
+    // - works after serialization/deserialization?
+    it('does not match on its own', () => {
+      expect(createEngine('||foo.com$badfilter').match(request).match).toBe(false);
+    });
+
+    it('cancels filter with same ID', () => {
+      expect(
+        createEngine(`
+||foo.com$domain=bar.com|foo.com,badfilter
+||foo.com$domain=foo.com|bar.com
+`).match(request).match,
+      ).toBe(false);
+    });
+
+    it('does not cancel similar filter', () => {
+      expect(
+        createEngine(`
+||foo.com$domain=bar.com|foo.com,badfilter
+||foo.com$domain=foo.com|bar.com,image
+`).match(request).match,
+      ).toBe(true);
+    });
+
+    it('works with update as well', () => {
+      const badfilter = NetworkFilter.parse('||foo.com$domain=bar.com|foo.com,badfilter');
+      expect(badfilter).not.toBeNull();
+      if (badfilter === null) {
+        return;
+      }
+
+      // Initially, no $badfilter
+      const engine = Engine.parse('||foo.com$domain=foo.com|bar.com', { debug: true });
+      expect(engine.match(request).match).toBe(true);
+
+      // Add $badfilter
+      engine.update({
+        newNetworkFilters: [badfilter],
+      });
+      expect(engine.match(request).match).toBe(false);
+
+      // Remove $badfilter
+      engine.update({
+        removedNetworkFilters: [badfilter.getId()],
+      });
+      expect(engine.match(request).match).toBe(true);
+    });
+  });
+
   describe('network filters', () => {
     // Collect all filters from all requests in the dataset. Each test case
     // contains one request as well as a list of filters matching this request

@@ -3,7 +3,8 @@ import { clearBit, getBit, hasUnicode, setBit } from './utils';
 
 const PUNY_ENCODED = 1 << 15;
 
-const EMPTY_UINT8_ARRAY = new Uint8Array(0);
+export const EMPTY_UINT8_ARRAY = new Uint8Array(0);
+export const EMPTY_UINT32_ARRAY = new Uint32Array(0);
 
 const LITTLE_ENDIAN: boolean = new Int8Array(new Int16Array([1]).buffer)[0] === 1;
 
@@ -125,6 +126,13 @@ export default class StaticDataView {
   public getUint32ArrayView(desiredSize: number): Uint32Array {
     // Round this.pos to next multiple of 4 for alignement
     this.align(4);
+
+    // Short-cut when empty array
+    if (desiredSize === 0) {
+      return EMPTY_UINT32_ARRAY;
+    }
+
+    // Create non-empty view
     const view = new Uint32Array(
       this.buffer.buffer,
       this.pos + this.buffer.byteOffset,
