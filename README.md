@@ -4,11 +4,11 @@ Very *fast* and *memory efficient*, pure-JavaScript content-blocking library mad
 
 This library is the building block technology used to power the adblockers from Ghostery and Cliqz on both desktop and mobile platforms. Being a pure JavaScript library it does not make any assumption regarding the environment it will run in (apart from the availability of a JavaScript engine) and is trivial to include in any new project. It can also be used as a building block for tooling. It is already running in production for millions of users and has been used successfully to satisfy the following use-cases:
 
-* Mobile friendly adblocker for Android in multiple setups: react-native, WebExtension, etc. ([ghostery](https://github.com/ghostery/browser-android) and [cliqz](https://github.com/cliqz-oss/browser-android))
-* Ad and tracker blocker in Electron applications, Puppeteer headless browsers, Cliqz browser, WebExtensions ([cliqz](https://github.com/cliqz-oss/browser-core), [ghostery](https://github.com/ghostery/ghostery-extension/) and [standalone](https://github.com/cliqz-oss/adblocker/tree/master/example))
-* Backend request processing job
+* Mobile-friendly adblocker for Android in multiple setups: react-native, WebExtension, etc. ([ghostery](https://github.com/ghostery/browser-android) and [cliqz](https://github.com/cliqz-oss/browser-android))
+* Ads and trackers blocker in Electron applications, Puppeteer headless browsers, Cliqz browser, WebExtensions ([cliqz](https://github.com/cliqz-oss/browser-core), [ghostery](https://github.com/ghostery/ghostery-extension/) and [standalone](https://github.com/remusao/blockrz))
+* Backend requests processing job
 
-The library provides all necessary building blocks to create a powerful and efficient content-blocker and gives full flexibility as to which lists should be used and how they should be fetched.
+The library provides all necessary building blocks to create a powerful and efficient content-blocker and gives full flexibility as to which lists should be used and how they should be fetched or updated.
 
 * [Installation](#installation)
 * [Usage](#usage)
@@ -46,7 +46,7 @@ For a small and documented WebExtension example, you can [check this project out
 <a id="filters"></a>
 ### Manipulating Filters
 
-Content blockers usually manipulate two kinds of filters: *network* and *cosmetics*. The former allows to specify which network request should be block (or redirected), usually from the `WebRequest` API of extensions. The later allows to alter the DOM of pages directly, hiding elements or injecting scripts.
+Content blockers usually manipulate two kinds of filters: *network* and *cosmetics*. The former allows to specify which network requests should be blocked (or redirected), usually from the `WebRequest` API of extensions. The later allows to alter the DOM of pages directly, hiding elements or injecting scripts.
 
 <a id="network"></a>
 #### Network Filters
@@ -59,7 +59,7 @@ const { NetworkFilter } = require('@cliqz/adblocker');
 // Parse filter from string
 const filter = NetworkFilter.parse('||domain.com/ads.js$script');
 
-// Filter
+// Filter attributes
 console.log(filter.isHostnameAnchor()); // true
 console.log(filter.getHostname()); // 'domain.com'
 console.log(filter.getFilter()); // '/ads.js'
@@ -69,7 +69,7 @@ console.log(filter.fromScript()); // true = can match 'script' requests
 console.log(filter.fromImage()); // false = cannot match 'image' requests
 ```
 
-To match a network request, we must first create an instance of the [Request](./src/request.ts) class. It abstracts away the implementation details of a request. It can be initialized from `webRequest` details, puppeteer's request or raw information. The constructor expects to receive the `type` of request (e.g.: *main_frame*, *script*, etc.), the URL of the request, `url` (+ hostname and domain) as well as the `URL` of the frame, `sourceUrl` (this would be either the URL of the page or the iframe where requests originate from).
+To match a network request, we must first create an instance of the [Request](./src/request.ts) class. It abstracts away the implementation details of a request. It can be initialized from `webRequest` details, puppeteer's request or raw information. The constructor expects to receive the `type` of request (e.g.: *main_frame*, *script*, etc.), the URL of the request, `url` (+ hostname and domain) as well as the `URL` of the frame, `sourceUrl` (this would be either the URL of the page or the iframe where this request originates from).
 
 ```javascript
 const { Request } = require('@cliqz/adblocker');
@@ -147,7 +147,7 @@ engine.update({
   newCosmeticFilters: [CosmeticFilter.parse('###selector')],
 });
 
-// Serialize erialize the full engine to a Uint8Array for caching
+// Serialize the full engine to a Uint8Array for caching
 const serialized = engine.serialize();
 engine = FiltersEngine.deserialize(serialized);
 
