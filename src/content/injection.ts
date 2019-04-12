@@ -89,7 +89,7 @@ export function createStylesheet(rules: string[], style: string): string {
   const maximumNumberOfSelectors = 1024;
   const parts: string[] = [];
   for (let i = 0; i < rules.length; i += maximumNumberOfSelectors) {
-    parts.push(`${rules.slice(i, i + maximumNumberOfSelectors).join(',')} { ${style} }`);
+    parts.push(`${rules.slice(i, i + maximumNumberOfSelectors).join(',\n')} { ${style} }`);
   }
   return parts.join('\n');
 }
