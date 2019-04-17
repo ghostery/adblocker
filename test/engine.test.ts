@@ -567,7 +567,7 @@ $csp=baz,domain=bar.com
 ##.selector1 :style(foo)`,
         ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
           .styles,
-      ).toEqual('.selector ,.selector1  { foo }\n\n.selector  { bar }');
+      ).toEqual('.selector ,\n.selector1  { foo }\n\n.selector  { bar }');
     });
 
     [
