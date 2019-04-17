@@ -184,58 +184,6 @@ describe('#FiltersEngine', () => {
     });
   });
 
-  describe('filters with bug id', () => {
-    it('matches bug filter', () => {
-      const filter = createEngine('||foo.com$bug=42').match(
-        makeRequest(
-          {
-            url: 'https://foo.com',
-          },
-          tldts.parse,
-        ),
-      ).filter;
-      expect(filter).not.toBeUndefined();
-      if (filter !== undefined) {
-        expect(filter.bug).toEqual(42);
-      }
-    });
-
-    it('matches bug filter exception', () => {
-      const exception = createEngine(`
-||foo.com$bug=42
-@@$bug=42,domain=bar.com
-`).match(
-        makeRequest(
-          {
-            sourceUrl: 'https://bar.com',
-            url: 'https://foo.com',
-          },
-          tldts.parse,
-        ),
-      ).exception;
-      expect(exception).not.toBeUndefined();
-      if (exception !== undefined) {
-        expect(exception.bug).toEqual(42);
-      }
-    });
-
-    it('matches bug filter exception (only if filter has bug)', () => {
-      const exception = createEngine(`
-||foo.com
-@@$bug=42,domain=bar.com
-`).match(
-        makeRequest(
-          {
-            sourceUrl: 'https://bar.com',
-            url: 'https://foo.com',
-          },
-          tldts.parse,
-        ),
-      ).exception;
-      expect(exception).toBeUndefined();
-    });
-  });
-
   describe('cps policies', () => {
     it('no policy in engine', () => {
       expect(

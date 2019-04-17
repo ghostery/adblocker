@@ -105,9 +105,6 @@ export default class Request {
   public readonly sourceDomain: string;
   public readonly sourceDomainHash: number;
 
-  // Set later
-  public bug?: number;
-
   // Lazy attributes
   private tokens?: Uint32Array;
   private fuzzySignature?: Uint32Array;
