@@ -676,7 +676,6 @@ export default class NetworkFilter implements IFilter {
    *  * when packing ascii string, store several of them in each byte.
    */
   public serialize(buffer: StaticDataView): void {
-    const isUnicode = this.isUnicode();
     buffer.pushUint32(this.mask);
 
     const index = buffer.getPos();
@@ -692,7 +691,7 @@ export default class NetworkFilter implements IFilter {
 
     if (this.filter !== undefined) {
       optionalParts |= 2;
-      if (isUnicode) {
+      if (this.isUnicode()) {
         buffer.pushUTF8(this.filter);
       } else {
         buffer.pushASCII(this.filter);
@@ -716,7 +715,7 @@ export default class NetworkFilter implements IFilter {
 
     if (this.rawLine !== undefined) {
       optionalParts |= 32;
-      if (isUnicode) {
+      if (this.isUnicode()) {
         buffer.pushUTF8(this.rawLine);
       } else {
         buffer.pushASCII(this.rawLine);

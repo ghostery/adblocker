@@ -458,14 +458,12 @@ export default class CosmeticFilter implements IFilter {
    * could be applied here, to get a more compact representation.
    */
   public serialize(buffer: StaticDataView): void {
-    const isUnicode = this.isUnicode();
-
     // Mandatory fields
     buffer.pushUint8(this.mask);
     const index = buffer.getPos();
     buffer.pushUint8(0);
 
-    if (isUnicode) {
+    if (this.isUnicode()) {
       buffer.pushUTF8(this.selector);
     } else {
       buffer.pushASCII(this.selector);
@@ -496,7 +494,7 @@ export default class CosmeticFilter implements IFilter {
 
     if (this.rawLine !== undefined) {
       optionalParts |= 16;
-      if (isUnicode) {
+      if (this.isUnicode()) {
         buffer.pushUTF8(this.rawLine);
       } else {
         buffer.pushASCII(this.rawLine);

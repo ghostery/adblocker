@@ -1,5 +1,10 @@
-import StaticDataView, { EMPTY_UINT8_ARRAY } from '../../data-view';
+import StaticDataView from '../../data-view';
 import IFilter from '../../filters/interface';
+
+// Empty filters is 4 bytes because we need at least one 32 bits number to keep
+// track of the number of filters in the container. If there is no filter then
+// the number will be 0.
+const EMPTY_FILTERS = new Uint8Array(4);
 
 /**
  * Generic filters container (for both CosmeticFilter and NetworkFilter
@@ -45,7 +50,7 @@ export default class FiltersContainer<T extends IFilter> {
     this.predicate = predicate;
     this.deserialize = deserialize;
     this.cache = [];
-    this.filters = EMPTY_UINT8_ARRAY;
+    this.filters = EMPTY_FILTERS;
 
     if (filters.length !== 0) {
       this.update(filters);
@@ -112,17 +117,17 @@ export default class FiltersContainer<T extends IFilter> {
     // If selected changed, then update the compact representation of filters.
     if (storedFiltersAdded === true || storedFiltersRemoved === true) {
       // Store filters in their compact form
-      const buffer = new StaticDataView(bufferSizeEstimation + 4);
+      const buffer = new StaticDataView(bufferSizeEstimation);
       buffer.pushUint32(selected.length);
       for (let i = 0; i < selected.length; i += 1) {
         selected[i].serialize(buffer);
       }
 
       // Update internals
-      this.filters = buffer.slice();
+      this.filters = buffer.buffer;
       this.cache = [];
     } else if (selected.length === 0) {
-      this.filters = EMPTY_UINT8_ARRAY;
+      this.filters = EMPTY_FILTERS;
       this.cache = [];
     }
 

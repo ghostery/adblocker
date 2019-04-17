@@ -278,7 +278,7 @@ export function updateResponseHeadersWithCSP(
   return { responseHeaders };
 }
 
-const hasUnicodeRe = /[^\x00-\x7F]/;
+const hasUnicodeRe = /[^\u0000-\u00ff]/;
 export function hasUnicode(str: string): boolean {
   return hasUnicodeRe.test(str);
 }

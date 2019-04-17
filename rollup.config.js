@@ -5,6 +5,7 @@ import pkg from './package.json';
 const plugins = [
   resolve({
     preferBuiltins: false,
+    mainFields: ['jsnext:main', 'module', 'main'],
   }),
   commonjs(),
 ];
