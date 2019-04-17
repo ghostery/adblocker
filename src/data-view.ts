@@ -1,7 +1,4 @@
-import * as punycode from 'punycode';
-import { clearBit, getBit, hasUnicode, setBit } from './utils';
-
-const PUNY_ENCODED = 1 << 15;
+import { decode, encode } from 'punycode';
 
 export const EMPTY_UINT8_ARRAY = new Uint8Array(0);
 export const EMPTY_UINT32_ARRAY = new Uint32Array(0);
@@ -202,13 +199,8 @@ export default class StaticDataView {
   }
 
   public pushUTF8(raw: string): void {
-    let str = raw;
-    if (hasUnicode(raw)) {
-      str = punycode.encode(raw);
-      this.pushUint16(setBit(str.length, PUNY_ENCODED));
-    } else {
-      this.pushUint16(str.length);
-    }
+    const str = encode(raw);
+    this.pushUint16(str.length);
 
     for (let i = 0; i < str.length; i += 1) {
       this.buffer[this.pos++] = str.charCodeAt(i);
@@ -216,21 +208,15 @@ export default class StaticDataView {
   }
 
   public getUTF8(): string {
-    const lengthAndMask = this.getUint16();
-    const byteLength = clearBit(lengthAndMask, PUNY_ENCODED);
-    const punyEncoded = getBit(lengthAndMask, PUNY_ENCODED);
-
+    const byteLength = this.getUint16();
     this.pos += byteLength;
-    const str = String.fromCharCode.apply(
-      null,
-      // @ts-ignore
-      this.buffer.subarray(this.pos - byteLength, this.pos),
+    return decode(
+      String.fromCharCode.apply(
+        null,
+        // @ts-ignore
+        this.buffer.subarray(this.pos - byteLength, this.pos),
+      ),
     );
-
-    if (punyEncoded) {
-      return punycode.decode(str);
-    }
-    return str;
   }
 
   public pushASCII(str: string): void {

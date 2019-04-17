@@ -59,6 +59,12 @@ export default class FiltersContainer<T extends IFilter> {
    * selected by `this.predicate`.
    */
   public update(newFilters: T[], removedFilters?: Set<number>): T[] {
+    // Estimate size of the buffer we will need to store filters. This avoids
+    // having to allocate a big chunk of memory up-front if it's not needed.
+    // We start with the current size of `this.filters` then update it with
+    // removed/added filters.
+    let bufferSizeEstimation: number = this.filters.byteLength;
+
     let selected: T[] = [];
     const remaining: T[] = [];
 
@@ -77,6 +83,8 @@ export default class FiltersContainer<T extends IFilter> {
           const filter = currentFilters[i];
           if (removedFilters.has(filter.getId()) === false) {
             selected.push(filter);
+          } else {
+            bufferSizeEstimation -= filter.getSerializedSize();
           }
         }
       }
@@ -91,6 +99,7 @@ export default class FiltersContainer<T extends IFilter> {
     for (let i = 0; i < newFilters.length; i += 1) {
       const filter = newFilters[i];
       if (this.predicate(filter) === true) {
+        bufferSizeEstimation += filter.getSerializedSize();
         selected.push(filter);
       } else {
         remaining.push(filter);
@@ -102,17 +111,8 @@ export default class FiltersContainer<T extends IFilter> {
 
     // If selected changed, then update the compact representation of filters.
     if (storedFiltersAdded === true || storedFiltersRemoved === true) {
-      // Estimate size of the buffer we will need to store filters. This avoids
-      // having to allocate a big chunk of memory up-front if it's not needed.
-      // The cost we have to pay in exchange of this is one extra iteration
-      // over the filters.
-      let bufferSizeEstimation: number = 0;
-      for (let i = 0; i < selected.length; i += 1) {
-        bufferSizeEstimation += selected[i].getEstimatedSerializedSize();
-      }
-
       // Store filters in their compact form
-      const buffer = new StaticDataView(Math.max(4, Math.floor(bufferSizeEstimation * 1.5)));
+      const buffer = new StaticDataView(bufferSizeEstimation + 4);
       buffer.pushUint32(selected.length);
       for (let i = 0; i < selected.length; i += 1) {
         selected[i].serialize(buffer);

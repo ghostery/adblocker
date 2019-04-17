@@ -1,4 +1,4 @@
-import * as punycode from 'punycode';
+import { encode, toASCII } from 'punycode';
 import StaticDataView from '../data-view';
 import { RequestType } from '../request';
 import Request from '../request';
@@ -53,6 +53,7 @@ export const enum NETWORK_FILTER_MASK {
   isCSP = 1 << 23,
   isGenericHide = 1 << 24,
   isBadFilter = 1 << 25,
+  isUnicode = 1 << 26,
 }
 
 /**
@@ -521,6 +522,7 @@ export default class NetworkFilter implements IFilter {
     let filter: string | undefined;
     if (filterIndexEnd - filterIndexStart > 0) {
       filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
+      mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isUnicode, hasUnicode(filter));
       mask = setNetworkMask(
         mask,
         NETWORK_FILTER_MASK.isRegex,
@@ -537,7 +539,8 @@ export default class NetworkFilter implements IFilter {
       }
       hostname = hostname.toLowerCase();
       if (hasUnicode(hostname)) {
-        hostname = punycode.toASCII(hostname);
+        mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isUnicode, true);
+        hostname = toASCII(hostname);
       }
     }
 
@@ -560,6 +563,7 @@ export default class NetworkFilter implements IFilter {
   public static deserialize(buffer: StaticDataView): NetworkFilter {
     const mask = buffer.getUint32();
     const optionalParts = buffer.getUint8();
+    const isUnicode = getBit(mask, NETWORK_FILTER_MASK.isUnicode);
 
     // The order of these statements is important. Since `buffer.getX()` will
     // internally increment the position of next byte to read, they need to be
@@ -571,11 +575,17 @@ export default class NetworkFilter implements IFilter {
 
       // Optional parts
       csp: (optionalParts & 1) === 1 ? buffer.getASCII() : undefined,
-      filter: (optionalParts & 2) === 2 ? buffer.getUTF8() : undefined,
-      hostname: (optionalParts & 4) === 4 ? buffer.getUTF8() : undefined,
+      filter:
+        (optionalParts & 2) === 2 ? (isUnicode ? buffer.getUTF8() : buffer.getASCII()) : undefined,
+      hostname: (optionalParts & 4) === 4 ? buffer.getASCII() : undefined,
       optDomains: (optionalParts & 8) === 8 ? buffer.getUint32Array() : undefined,
       optNotDomains: (optionalParts & 16) === 16 ? buffer.getUint32Array() : undefined,
-      rawLine: (optionalParts & 32) === 32 ? buffer.getUTF8() : undefined,
+      rawLine:
+        (optionalParts & 32) === 32
+          ? isUnicode
+            ? buffer.getUTF8()
+            : buffer.getASCII()
+          : undefined,
       redirect: (optionalParts & 64) === 64 ? buffer.getASCII() : undefined,
     });
   }
@@ -666,6 +676,7 @@ export default class NetworkFilter implements IFilter {
    *  * when packing ascii string, store several of them in each byte.
    */
   public serialize(buffer: StaticDataView): void {
+    const isUnicode = this.isUnicode();
     buffer.pushUint32(this.mask);
 
     const index = buffer.getPos();
@@ -681,7 +692,11 @@ export default class NetworkFilter implements IFilter {
 
     if (this.filter !== undefined) {
       optionalParts |= 2;
-      buffer.pushUTF8(this.filter);
+      if (isUnicode) {
+        buffer.pushUTF8(this.filter);
+      } else {
+        buffer.pushASCII(this.filter);
+      }
     }
 
     if (this.hostname !== undefined) {
@@ -701,7 +716,11 @@ export default class NetworkFilter implements IFilter {
 
     if (this.rawLine !== undefined) {
       optionalParts |= 32;
-      buffer.pushUTF8(this.rawLine);
+      if (isUnicode) {
+        buffer.pushUTF8(this.rawLine);
+      } else {
+        buffer.pushASCII(this.rawLine);
+      }
     }
 
     if (this.redirect !== undefined) {
@@ -712,26 +731,52 @@ export default class NetworkFilter implements IFilter {
     buffer.setByte(index, optionalParts);
   }
 
-  public getEstimatedSerializedSize(): number {
-    return (
-      4 + // mask = 4 bytes
-      1 + // optional parts = 1 byte
-      2 + // bugId = 2 bytes
-      // csp + 2 bytes for length
-      (this.csp === undefined ? 0 : this.csp.length + 2) +
-      // filter + 2 bytes for length (* 2 for punycode)
-      (this.filter === undefined ? 0 : this.filter.length * 2 + 2) +
-      // hostname + 2 bytes for length
-      (this.hostname === undefined ? 0 : this.hostname.length + 2) +
-      // opt domains + 4 bytes for length
-      (this.optDomains === undefined ? 0 : this.optDomains.length * 4 + 4) +
-      // opt not domains + 4 bytes for length
-      (this.optNotDomains === undefined ? 0 : this.optNotDomains.length * 4 + 4) +
-      // rawLine + 2 bytes for length (* 2 for punycode)
-      (this.rawLine === undefined ? 0 : this.rawLine.length * 2 + 2) +
-      // redirect + 2 bytes for length
-      (this.redirect === undefined ? 0 : this.redirect.length + 2)
-    );
+  public getSerializedSize(): number {
+    let estimate: number = 4 + 1; // mask = 4 bytes // optional parts = 1 byte
+
+    if (this.csp !== undefined) {
+      estimate += this.csp.length + 2;
+    }
+
+    if (this.filter !== undefined) {
+      if (this.isUnicode()) {
+        estimate += encode(this.filter).length + 2;
+      } else {
+        estimate += this.filter.length + 2;
+      }
+    }
+
+    if (this.hostname !== undefined) {
+      estimate += this.hostname.length + 2;
+    }
+
+    if (this.optDomains !== undefined) {
+      estimate += this.optDomains.length * 4 + 1;
+      if (this.optDomains.length > 127) {
+        estimate += 2;
+      }
+    }
+
+    if (this.optNotDomains !== undefined) {
+      estimate += this.optNotDomains.length * 4 + 1;
+      if (this.optNotDomains.length > 127) {
+        estimate += 2;
+      }
+    }
+
+    if (this.rawLine !== undefined) {
+      if (this.isUnicode()) {
+        estimate += encode(this.rawLine).length + 2;
+      } else {
+        estimate += this.rawLine.length + 2;
+      }
+    }
+
+    if (this.redirect !== undefined) {
+      estimate += this.redirect.length + 2;
+    }
+
+    return estimate;
   }
 
   /**
@@ -1109,6 +1154,10 @@ export default class NetworkFilter implements IFilter {
 
   public isBadFilter() {
     return getBit(this.mask, NETWORK_FILTER_MASK.isBadFilter);
+  }
+
+  public isUnicode() {
+    return getBit(this.mask, NETWORK_FILTER_MASK.isUnicode);
   }
 
   public fromAny() {

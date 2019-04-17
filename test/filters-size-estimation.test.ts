@@ -12,17 +12,17 @@ describe('Make sure size estimate is accurate', () => {
   function testSizeEstimate<T extends IFilter>(filters: T[]): void {
     for (let i = 0; i < filters.length; i += 1) {
       const filter = filters[i];
-      const estimate = filter.getEstimatedSerializedSize();
+      const estimate = filter.getSerializedSize();
 
       // Serialize filter
       buffer.seekZero();
       filter.serialize(buffer);
       const realSize = buffer.pos;
 
-      if (realSize > estimate) {
+      if (realSize !== estimate) {
         throw new Error(`${filter.toString()} got ${estimate} expected ${realSize}`);
       } else {
-        expect(realSize).toBeLessThanOrEqual(estimate);
+        expect(realSize).toBe(estimate);
       }
     }
   }

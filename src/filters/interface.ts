@@ -5,5 +5,6 @@ export default interface IFilter {
   getId: () => number;
   getTokens: () => Uint32Array[];
   serialize: (buffer: StaticDataView) => void;
-  getEstimatedSerializedSize(): number;
+  getSerializedSize(): number;
+  isUnicode(): boolean;
 }
