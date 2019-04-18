@@ -99,7 +99,6 @@ const OPTIMIZATIONS: IOptimization[] = [
     select: (filter: NetworkFilter) =>
       !filter.isFuzzy() &&
       !filter.isCSP() &&
-      !filter.hasBug() &&
       (filter.hasOptDomains() || filter.hasOptNotDomains()),
   },
   {
@@ -136,8 +135,7 @@ const OPTIMIZATIONS: IOptimization[] = [
       !filter.hasOptNotDomains() &&
       !filter.isHostnameAnchor() &&
       !filter.isRedirect() &&
-      !filter.isCSP() &&
-      !filter.hasBug(),
+      !filter.isCSP(),
   },
 ];
 

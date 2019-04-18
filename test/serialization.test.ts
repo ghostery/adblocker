@@ -44,10 +44,6 @@ describe('Serialization', () => {
         checkFilterSerialization(NetworkFilter, networkFilters[i]);
       }
     });
-
-    it('with bug ID', () => {
-      checkFilterSerialization(NetworkFilter, NetworkFilter.parse('ads$bug=42') as NetworkFilter);
-    });
   });
 
   describe('Engine', () => {

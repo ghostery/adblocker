@@ -199,7 +199,6 @@ export default class NetworkFilter implements IFilter {
     let optNotDomains: Uint32Array | undefined;
     let redirect: string | undefined;
     let csp: string | undefined;
-    let bug: number | undefined;
 
     // Start parsing
     let filterIndexStart: number = 0;
@@ -321,9 +320,6 @@ export default class NetworkFilter implements IFilter {
             mask = setBit(mask, NETWORK_FILTER_MASK.fuzzyMatch);
             break;
           case 'collapse':
-            break;
-          case 'bug':
-            bug = parseInt(optionValue, 10);
             break;
           case 'redirect':
             // Negation of redirection doesn't make sense
@@ -550,7 +546,6 @@ export default class NetworkFilter implements IFilter {
     }
 
     return new NetworkFilter({
-      bug,
       csp,
       filter,
       hostname,
@@ -579,14 +574,13 @@ export default class NetworkFilter implements IFilter {
       mask,
 
       // Optional parts
-      bug: (optionalParts & 1) === 1 ? buffer.getUint16() : undefined,
-      csp: (optionalParts & 2) === 2 ? buffer.getASCII() : undefined,
-      filter: (optionalParts & 4) === 4 ? buffer.getUTF8() : undefined,
-      hostname: (optionalParts & 8) === 8 ? buffer.getUTF8() : undefined,
-      optDomains: (optionalParts & 16) === 16 ? buffer.getUint32Array() : undefined,
-      optNotDomains: (optionalParts & 32) === 32 ? buffer.getUint32Array() : undefined,
-      rawLine: (optionalParts & 64) === 64 ? buffer.getUTF8() : undefined,
-      redirect: (optionalParts & 128) === 128 ? buffer.getASCII() : undefined,
+      csp: (optionalParts & 1) === 1 ? buffer.getASCII() : undefined,
+      filter: (optionalParts & 2) === 2 ? buffer.getUTF8() : undefined,
+      hostname: (optionalParts & 4) === 4 ? buffer.getUTF8() : undefined,
+      optDomains: (optionalParts & 8) === 8 ? buffer.getUint32Array() : undefined,
+      optNotDomains: (optionalParts & 16) === 16 ? buffer.getUint32Array() : undefined,
+      rawLine: (optionalParts & 32) === 32 ? buffer.getUTF8() : undefined,
+      redirect: (optionalParts & 64) === 64 ? buffer.getASCII() : undefined,
     });
   }
 
@@ -597,7 +591,6 @@ export default class NetworkFilter implements IFilter {
   public readonly redirect?: string;
   public readonly hostname?: string;
   public readonly csp?: string;
-  public readonly bug?: number;
 
   // Set only in debug mode
   public rawLine?: string;
@@ -608,7 +601,6 @@ export default class NetworkFilter implements IFilter {
   private regex?: RegExp;
 
   constructor({
-    bug,
     csp,
     filter,
     hostname,
@@ -619,7 +611,6 @@ export default class NetworkFilter implements IFilter {
     redirect,
     regex,
   }: { mask: number; regex?: RegExp } & Partial<NetworkFilter>) {
-    this.bug = bug;
     this.csp = csp;
     this.filter = filter;
     this.hostname = hostname;
@@ -687,43 +678,38 @@ export default class NetworkFilter implements IFilter {
     // This bit-mask indicates which optional parts of the filter were serialized.
     let optionalParts = 0;
 
-    if (this.bug !== undefined) {
-      optionalParts |= 1;
-      buffer.pushUint16(this.bug);
-    }
-
     if (this.csp !== undefined) {
-      optionalParts |= 2;
+      optionalParts |= 1;
       buffer.pushASCII(this.csp);
     }
 
     if (this.filter !== undefined) {
-      optionalParts |= 4;
+      optionalParts |= 2;
       buffer.pushUTF8(this.filter);
     }
 
     if (this.hostname !== undefined) {
-      optionalParts |= 8;
+      optionalParts |= 4;
       buffer.pushUTF8(this.hostname);
     }
 
     if (this.optDomains) {
-      optionalParts |= 16;
+      optionalParts |= 8;
       buffer.pushUint32Array(this.optDomains);
     }
 
     if (this.optNotDomains !== undefined) {
-      optionalParts |= 32;
+      optionalParts |= 16;
       buffer.pushUint32Array(this.optNotDomains);
     }
 
     if (this.rawLine !== undefined) {
-      optionalParts |= 64;
+      optionalParts |= 32;
       buffer.pushUTF8(this.rawLine);
     }
 
     if (this.redirect !== undefined) {
-      optionalParts |= 128;
+      optionalParts |= 64;
       buffer.pushASCII(this.redirect);
     }
 
@@ -865,10 +851,6 @@ export default class NetworkFilter implements IFilter {
 
     if (this.isGenericHide()) {
       options.push('generichide');
-    }
-
-    if (this.hasBug()) {
-      options.push(`bug=${this.bug}`);
     }
 
     if (this.firstParty() !== this.thirdParty()) {
@@ -1086,10 +1068,6 @@ export default class NetworkFilter implements IFilter {
 
   public isGenericHide() {
     return getBit(this.mask, NETWORK_FILTER_MASK.isGenericHide);
-  }
-
-  public hasBug() {
-    return this.bug !== undefined;
   }
 
   public fromAny() {
@@ -1452,12 +1430,6 @@ function checkOptions(filter: NetworkFilter, request: Request): boolean {
     (!filter.firstParty() && request.isFirstParty === true) ||
     (!filter.thirdParty() && request.isThirdParty === true)
   ) {
-    return false;
-  }
-
-  // Make sure that an exception with a bug ID can only apply to a request being
-  // matched for a specific bug ID.
-  if (filter.bug !== undefined && filter.isException() && filter.bug !== request.bug) {
     return false;
   }
 
