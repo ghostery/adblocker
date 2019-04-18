@@ -1,5 +1,5 @@
-import { encode, toASCII } from 'punycode';
 import StaticDataView from '../data-view';
+import { encode, toASCII } from '../punycode';
 import { RequestType } from '../request';
 import Request from '../request';
 import {

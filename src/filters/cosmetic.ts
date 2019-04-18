@@ -1,5 +1,5 @@
-import { encode, toASCII } from 'punycode';
 import StaticDataView from '../data-view';
+import { encode, toASCII } from '../punycode';
 import { binLookup, fastStartsWithFrom, getBit, hasUnicode, setBit } from '../utils';
 import IFilter from './interface';
 

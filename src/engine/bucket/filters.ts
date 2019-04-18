@@ -36,7 +36,7 @@ export default class FiltersContainer<T extends IFilter> {
   private readonly deserialize: (view: StaticDataView) => T;
 
   // Optionally keep an in-memory cache of the filter instances after the first call to `getFilters`.
-  private cache: T[];
+  private cache: T[] | null;
 
   constructor({
     filters,
@@ -49,7 +49,7 @@ export default class FiltersContainer<T extends IFilter> {
   }) {
     this.predicate = predicate;
     this.deserialize = deserialize;
-    this.cache = [];
+    this.cache = null;
     this.filters = EMPTY_FILTERS;
 
     if (filters.length !== 0) {
@@ -115,7 +115,10 @@ export default class FiltersContainer<T extends IFilter> {
     const storedFiltersAdded: boolean = selected.length > numberOfExistingFilters;
 
     // If selected changed, then update the compact representation of filters.
-    if (storedFiltersAdded === true || storedFiltersRemoved === true) {
+    if (selected.length === 0) {
+      this.filters = EMPTY_FILTERS;
+      this.cache = null;
+    } else if (storedFiltersAdded === true || storedFiltersRemoved === true) {
       // Store filters in their compact form
       const buffer = new StaticDataView(bufferSizeEstimation);
       buffer.pushUint32(selected.length);
@@ -125,10 +128,7 @@ export default class FiltersContainer<T extends IFilter> {
 
       // Update internals
       this.filters = buffer.buffer;
-      this.cache = [];
-    } else if (selected.length === 0) {
-      this.filters = EMPTY_FILTERS;
-      this.cache = [];
+      this.cache = null;
     }
 
     return remaining;
@@ -139,7 +139,7 @@ export default class FiltersContainer<T extends IFilter> {
   }
 
   public getFilters({ noCache = false } = {}): T[] {
-    if (this.cache.length === 0) {
+    if (this.cache === null) {
       // No filter stored in the container
       if (this.filters.length <= 4) {
         return [];

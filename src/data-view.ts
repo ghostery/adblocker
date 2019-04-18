@@ -1,4 +1,4 @@
-import { decode, encode } from 'punycode';
+import { decode, encode } from './punycode';
 
 export const EMPTY_UINT8_ARRAY = new Uint8Array(0);
 export const EMPTY_UINT32_ARRAY = new Uint32Array(0);

@@ -34,7 +34,7 @@ export default [
   // Commonjs and ES module bundles (without third-party deps)
   {
     input: './build/index.js',
-    external: ['tslib', 'punycode'],
+    external: ['tslib'],
     output: [
       { file: pkg.module, format: 'es' },
       { file: pkg.main, format: 'cjs' },
