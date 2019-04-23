@@ -309,6 +309,8 @@ export default class FilterEngine {
     );
 
     // Check that there is at least one $generichide match and no exception
+    // FIXME: @@||example.com^$generichide - disables all generic cosmetic rules on pages at example.com
+    // FIXME: ||example.com^$generichide,important - cancel disabling of generic cosmetic rules on example.com
     const allowGenericHides =
       genericHides.length === 0 || genericHides.some((f) => f.isException()) === true;
 

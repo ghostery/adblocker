@@ -158,20 +158,28 @@ function computeFilterId(
  *  Cosmetic filters parsing
  * ************************************************************************ */
 
-/**
- * TODO: Make sure these are implemented properly and write tests.
- * - -abp-contains
- * - -abp-has
- * - contains
- * - has
- * - has-text
- * - if
- * - if-not
- * - matches-css
- * - matches-css-after
- * - matches-css-before
- * - xpath
- */
+// Options not supported yet:
+//  * Adguard
+//    - #$# css rules (https://kb.adguard.com/en/general/how-to-create-your-own-ad-filters#cosmetic-css-rules-syntax-1)
+//    - #@$# css rules exceptions
+//    - extended css (https://kb.adguard.com/en/general/how-to-create-your-own-ad-filters#extended-css-selectors-1)
+//      - :has
+//      - :if-not
+//      - :contains
+//      - :matches-css
+//      - :properties
+//
+// - -abp-contains
+// - -abp-has
+// - contains
+// - has
+// - has-text
+// - if
+// - if-not
+// - matches-css
+// - matches-css-after
+// - matches-css-before
+// - xpath
 export default class CosmeticFilter implements IFilter {
   /**
    * Given a line that we know contains a cosmetic filter, create a CosmeticFiler
@@ -276,8 +284,6 @@ export default class CosmeticFilter implements IFilter {
     }
 
     // We should not have unhide without any hostname
-    // NOTE: it does not make sense either to only have a negated domain or
-    // entity (e.g.: ~domain.com or ~entity.*), these are thus ignored.
     if (getBit(mask, COSMETICS_MASK.unhide) && hostnames === undefined && entities === undefined) {
       return null;
     }
@@ -675,7 +681,8 @@ export default class CosmeticFilter implements IFilter {
 
     // Note, we do not need to use negated domains or entities as tokens here
     // since they will by definition not match on their own, unless accompanied
-    // by a domain or entity.
+    // by a domain or entity. Instead, they are handled in
+    // `CosmeticFilterBucket.getCosmeticsFilters`.
 
     if (this.hostnames !== undefined) {
       for (let i = 0; i < this.hostnames.length; i += 1) {

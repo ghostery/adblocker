@@ -2,6 +2,7 @@ import StaticDataView from '../data-view';
 import { encode, toASCII } from '../punycode';
 import { RequestType } from '../request';
 import Request from '../request';
+import TokensBuffer from '../tokens-buffer';
 import {
   binLookup,
   bitCount,
@@ -13,12 +14,12 @@ import {
   getBit,
   hasUnicode,
   setBit,
-  tokenize,
-  tokenizeFilter,
+  tokenizeFilterInPlace,
+  tokenizeInPlace,
 } from '../utils';
 import IFilter from './interface';
 
-const TOKENS_BUFFER = new Uint32Array(200);
+const TOKENS_BUFFER = new TokensBuffer(200);
 
 /**
  * Masks used to store options of network filters in a bitmask.
@@ -172,13 +173,23 @@ function compileRegex(filterStr: string, isRightAnchor: boolean, isLeftAnchor: b
 const EMPTY_ARRAY = new Uint32Array([]);
 const MATCH_ALL = new RegExp('');
 
-// TODO:
-// 1. Options not supported yet:
+// Options not supported yet:
+//  * AdGuard:
+//    - $content (https://kb.adguard.com/en/general/how-to-create-your-own-ad-filters#content)
+//    - $jsinject (https://kb.adguard.com/en/general/how-to-create-your-own-ad-filters#jsinject)
+//    - $urlblock (https://kb.adguard.com/en/general/how-to-create-your-own-ad-filters#urlblock)
+//    - $extension (https://kb.adguard.com/en/general/how-to-create-your-own-ad-filters#extension)
+//    - $important + @@ (https://kb.adguard.com/en/general/how-to-create-your-own-ad-filters#important)
+//    - $empty (https://kb.adguard.com/en/general/how-to-create-your-own-ad-filters#empty)
+//    - $mp4 (https://kb.adguard.com/en/general/how-to-create-your-own-ad-filters#mp4)
+//    - $replace (https://kb.adguard.com/en/general/how-to-create-your-own-ad-filters#replace)
+//    - $csp limitations (https://kb.adguard.com/en/general/how-to-create-your-own-ad-filters#csp)
+//  - document (https://kb.adguard.com/en/general/how-to-create-your-own-ad-filters#document)
+//  - genericblock (https://kb.adguard.com/en/general/how-to-create-your-own-ad-filters#generic-rules-1)
+//
 //  - inline-script
 //  - popup
 //  - popunder
-//  - genericblock
-// 2. Replace `split` with `substr`
 export default class NetworkFilter implements IFilter {
   public static parse(line: string, debug: boolean = false): NetworkFilter | null {
     // Represent options as a bitmask
@@ -204,6 +215,7 @@ export default class NetworkFilter implements IFilter {
     let filterIndexStart: number = 0;
     let filterIndexEnd: number = line.length;
 
+    // FIXME: add first check on charCode before calling startsWith
     // @@filter == Exception
     if (fastStartsWith(line, '@@')) {
       filterIndexStart += 2;
@@ -224,8 +236,7 @@ export default class NetworkFilter implements IFilter {
       // parseOptions
       // TODO: This could be implemented without string copy,
       // using indices, like in main parsing functions.
-      const rawOptions = line.slice(optionsIndex + 1);
-      const options = rawOptions.split(',');
+      const options = line.slice(optionsIndex + 1).split(',');
       for (let i = 0; i < options.length; i += 1) {
         const rawOption = options[i];
         let negation = false;
@@ -337,6 +348,7 @@ export default class NetworkFilter implements IFilter {
               csp = optionValue;
             }
             break;
+          case 'elemhide':
           case 'generichide':
             mask = setBit(mask, NETWORK_FILTER_MASK.isGenericHide);
             break;
@@ -412,16 +424,19 @@ export default class NetworkFilter implements IFilter {
 
     // Identify kind of pattern
 
+    // FIXME: test using charCode
     // Deal with hostname pattern
     if (line[filterIndexEnd - 1] === '|') {
       mask = setBit(mask, NETWORK_FILTER_MASK.isRightAnchor);
       filterIndexEnd -= 1;
     }
 
+    // FIXME: pre-check with charCode before startsWith
     if (fastStartsWithFrom(line, '||', filterIndexStart)) {
       mask = setBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor);
       filterIndexStart += 2;
     } else if (line[filterIndexStart] === '|') {
+      // FIXME: check charCode
       mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
       filterIndexStart += 1;
     }
@@ -435,6 +450,7 @@ export default class NetworkFilter implements IFilter {
         // and then the pattern.
         // TODO - this could be made more efficient if we could match between two
         // indices. Once again, we have to do more work than is really needed.
+        // FIXME: use loop with proper bounds here instead of RegExp
         const firstSeparator = line.search(SEPARATOR);
         // NOTE: `firstSeparator` shall never be -1 here since `isRegex` is true.
         // This means there must be at least an occurrence of `*` or `^`
@@ -446,6 +462,7 @@ export default class NetworkFilter implements IFilter {
         // If the only symbol remaining for the selector is '^' then ignore it
         // but set the filter as right anchored since there should not be any
         // other label on the right
+        // FIXME: use charCode for comparison
         if (filterIndexEnd - filterIndexStart === 1 && line[filterIndexStart] === '^') {
           mask = clearBit(mask, NETWORK_FILTER_MASK.isRegex);
           filterIndexStart = filterIndexEnd;
@@ -473,11 +490,13 @@ export default class NetworkFilter implements IFilter {
     }
 
     // Remove trailing '*'
+    // FIXME: use charCode for comparison
     if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexEnd - 1] === '*') {
       filterIndexEnd -= 1;
     }
 
     // Remove leading '*' if the filter is not hostname anchored.
+    // FIXME: use charCode for comparison
     if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexStart] === '*') {
       mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
       filterIndexStart += 1;
@@ -1042,7 +1061,7 @@ export default class NetworkFilter implements IFilter {
   }
 
   public getTokens(): Uint32Array[] {
-    let tokensBufferIndex = 0;
+    TOKENS_BUFFER.seekZero();
 
     // If there is only one domain and no domain negation, we also use this
     // domain as a token.
@@ -1051,46 +1070,40 @@ export default class NetworkFilter implements IFilter {
       this.optNotDomains === undefined &&
       this.optDomains.length === 1
     ) {
-      TOKENS_BUFFER[tokensBufferIndex] = this.optDomains[0];
-      tokensBufferIndex += 1;
+      TOKENS_BUFFER.push(this.optDomains[0]);
     }
 
     // Get tokens from filter
     if (this.filter !== undefined) {
       const skipLastToken = this.isPlain() && !this.isRightAnchor() && !this.isFuzzy();
       const skipFirstToken = this.isRightAnchor();
-      const filterTokens = tokenizeFilter(this.filter, skipFirstToken, skipLastToken);
-      TOKENS_BUFFER.set(filterTokens, tokensBufferIndex);
-      tokensBufferIndex += filterTokens.length;
+      tokenizeFilterInPlace(this.filter, skipFirstToken, skipLastToken, TOKENS_BUFFER);
     }
 
     // Append tokens from hostname, if any
     if (this.hostname !== undefined) {
-      const hostnameTokens = tokenize(this.hostname);
-      TOKENS_BUFFER.set(hostnameTokens, tokensBufferIndex);
-      tokensBufferIndex += hostnameTokens.length;
+      tokenizeInPlace(this.hostname, TOKENS_BUFFER);
     }
 
     // If we got no tokens for the filter/hostname part, then we will dispatch
     // this filter in multiple buckets based on the domains option.
     if (
-      tokensBufferIndex === 0 &&
+      TOKENS_BUFFER.pos === 0 &&
       this.optDomains !== undefined &&
       this.optNotDomains === undefined
     ) {
+      // TODO - optimize this
       return [...this.optDomains].map((d) => new Uint32Array([d]));
     }
 
     // Add optional token for protocol
-    if (this.fromHttp() && !this.fromHttps()) {
-      TOKENS_BUFFER[tokensBufferIndex] = fastHash('http');
-      tokensBufferIndex += 1;
+    if (this.fromHttp() === true && this.fromHttps() === false) {
+      TOKENS_BUFFER.push(fastHash('http'));
     } else if (this.fromHttps() && !this.fromHttp()) {
-      TOKENS_BUFFER[tokensBufferIndex] = fastHash('https');
-      tokensBufferIndex += 1;
+      TOKENS_BUFFER.push(fastHash('https'));
     }
 
-    return [TOKENS_BUFFER.slice(0, tokensBufferIndex)];
+    return [TOKENS_BUFFER.slice()];
   }
 
   /**
@@ -1244,6 +1257,7 @@ function setNetworkMask(mask: number, m: number, value: boolean): number {
  * // TODO - we could use sticky regex here
  */
 function checkIsRegex(filter: string, start: number, end: number): boolean {
+  // FIXME: implement using loop + benchmark
   const starIndex = filter.indexOf('*', start);
   const separatorIndex = filter.indexOf('^', start);
   return (starIndex !== -1 && starIndex < end) || (separatorIndex !== -1 && separatorIndex < end);
