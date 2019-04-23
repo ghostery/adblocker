@@ -1,4 +1,4 @@
-import StaticDataView from '../data-view';
+import StaticDataView, { EMPTY_UINT32_ARRAY } from '../data-view';
 import IFilter from '../filters/interface';
 import { fastHash } from '../utils';
 
@@ -65,7 +65,6 @@ interface Bucket<T extends IFilter> {
 }
 
 const EMPTY_BUCKET = Number.MAX_SAFE_INTEGER >>> 0;
-const EMPTY_UINT32_ARRAY = new Uint32Array(0);
 
 /**
  * The ReverseIndex is an accelerating data structure which allows finding a
@@ -74,7 +73,7 @@ const EMPTY_UINT32_ARRAY = new Uint32Array(0);
  *
  * It has mainly two caracteristics:
  * 1. It should be very compact and be able to load fast.
- * 2. It should be *very fast*.
+ * 2. It should be *very fast* in finding potential candidates.
  *
  * Conceptually, the reverse index dispatches filters in "buckets" (an array of
  * one or more filters). Filters living in the same bucket are guaranteed to
@@ -342,7 +341,9 @@ export default class ReverseIndex<T extends IFilter> {
 
     // Compute tokens for all filters (the ones already contained in the index
     // *plus* the new ones *minus* the ones removed ).
-    [this.getFilters(), newFilters].forEach((filters) => {
+    const filtersArrays = [this.getFilters(), newFilters];
+    for (let h = 0; h < filtersArrays.length; h += 1) {
+      const filters = filtersArrays[h];
       for (let i = 0; i < filters.length; i += 1) {
         const filter = filters[i];
         if (removedFilters === undefined || !removedFilters.has(filter.getId())) {
@@ -362,7 +363,7 @@ export default class ReverseIndex<T extends IFilter> {
           }
         }
       }
-    });
+    }
 
     // No filters given; reset to empty bucket
     if (filtersTokens.length === 0) {
@@ -376,9 +377,10 @@ export default class ReverseIndex<T extends IFilter> {
     // Add an heavy weight on these common patterns because they appear in
     // almost all URLs. If there is a choice, then filters should use other
     // tokens than those.
-    ['http', 'https', 'www', 'com'].forEach((badToken) => {
-      histogram.set(fastHash(badToken), totalNumberOfTokens);
-    });
+    histogram.set(fastHash('http'), totalNumberOfTokens);
+    histogram.set(fastHash('https'), totalNumberOfTokens);
+    histogram.set(fastHash('www'), totalNumberOfTokens);
+    histogram.set(fastHash('com'), totalNumberOfTokens);
 
     // Prepare tokensLookupIndex. This is an array where keys are suffixes of N
     // bits from tokens (the ones used to index filters in the index) and values
@@ -401,6 +403,10 @@ export default class ReverseIndex<T extends IFilter> {
     // 1. The first section contains all the filters stored in the index
     // 2. The second section contains the compact buckets where filter having
     // their indexing token sharing the last N bits are grouped together.
+    //
+    // TODO - estimate size needed for this bucket (based on filters in
+    // `filtersToken` + tokensLookupIndexSize + bucketsIndexSize). This would
+    // allow to avoid having to pre-allocate a huge buffer up-front.
     const buffer = new StaticDataView(8000000);
     buffer.pushUint32(filtersTokens.length);
 

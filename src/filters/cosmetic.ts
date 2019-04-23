@@ -1,5 +1,5 @@
 import StaticDataView from '../data-view';
-// import { encode } from '../punycode';
+import { encode, toASCII } from '../punycode';
 import { binLookup, fastStartsWithFrom, getBit, hasUnicode, setBit } from '../utils';
 import IFilter from './interface';
 
@@ -108,6 +108,7 @@ const isValidCss = (() => {
 const enum COSMETICS_MASK {
   unhide = 1 << 0,
   scriptInject = 1 << 1,
+  isUnicode = 1 << 2,
 }
 
 function computeFilterId(
@@ -227,10 +228,10 @@ export default class CosmeticFilter implements IFilter {
       // TODO - this could be done without any string copy
       const parts = line.slice(0, sharpIndex).split(',');
       for (let i = 0; i < parts.length; i += 1) {
-        const hostname = parts[i];
+        let hostname = parts[i];
         if (hasUnicode(hostname)) {
-          return null;
-          // hostname = encode(hostname);
+          hostname = toASCII(hostname);
+          mask = setBit(mask, COSMETICS_MASK.isUnicode);
         }
 
         const negation: boolean = hostname[0] === '~';
@@ -350,11 +351,9 @@ export default class CosmeticFilter implements IFilter {
       }
     }
 
-    // Disable support for unicode in CSS selectors for now, there are only
-    // very few of them and they seem out-dated. It is currently not worth
-    // supporting this.
+    // Check if unicode appears in selector
     if (selector !== undefined && hasUnicode(selector)) {
-      return null;
+      mask = setBit(mask, COSMETICS_MASK.isUnicode);
     }
 
     return new CosmeticFilter({
@@ -375,8 +374,9 @@ export default class CosmeticFilter implements IFilter {
    */
   public static deserialize(buffer: StaticDataView): CosmeticFilter {
     const mask = buffer.getUint8();
-    const selector = buffer.getCosmeticSelector();
+    const isUnicode = getBit(mask, COSMETICS_MASK.isUnicode);
     const optionalParts = buffer.getUint8();
+    const selector = isUnicode ? buffer.getUTF8() : buffer.getCosmeticSelector();
 
     // The order of these fields should be the same as when we serialize them.
     return new CosmeticFilter({
@@ -389,7 +389,12 @@ export default class CosmeticFilter implements IFilter {
       hostnames: (optionalParts & 2) === 2 ? buffer.getUint32Array() : undefined,
       notEntities: (optionalParts & 4) === 4 ? buffer.getUint32Array() : undefined,
       notHostnames: (optionalParts & 8) === 8 ? buffer.getUint32Array() : undefined,
-      rawLine: (optionalParts & 16) === 16 ? buffer.getASCII() : undefined,
+      rawLine:
+        (optionalParts & 16) === 16
+          ? isUnicode
+            ? buffer.getUTF8()
+            : buffer.getASCII()
+          : undefined,
       style: (optionalParts & 32) === 32 ? buffer.getASCII() : undefined,
     });
   }
@@ -453,10 +458,14 @@ export default class CosmeticFilter implements IFilter {
   public serialize(buffer: StaticDataView): void {
     // Mandatory fields
     buffer.pushUint8(this.mask);
-    buffer.pushCosmeticSelector(this.selector);
-
     const index = buffer.getPos();
     buffer.pushUint8(0);
+
+    if (this.isUnicode()) {
+      buffer.pushUTF8(this.selector);
+    } else {
+      buffer.pushCosmeticSelector(this.selector);
+    }
 
     // This bit-mask indicates which optional parts of the filter were serialized.
     let optionalParts = 0;
@@ -483,7 +492,11 @@ export default class CosmeticFilter implements IFilter {
 
     if (this.rawLine !== undefined) {
       optionalParts |= 16;
-      buffer.pushASCII(this.rawLine);
+      if (this.isUnicode()) {
+        buffer.pushUTF8(this.rawLine);
+      } else {
+        buffer.pushASCII(this.rawLine);
+      }
     }
 
     if (this.style !== undefined) {
@@ -492,6 +505,63 @@ export default class CosmeticFilter implements IFilter {
     }
 
     buffer.setByte(index, optionalParts);
+  }
+
+  /**
+   * Return an estimation of the size (in bytes) needed to persist this filter
+   * in a DataView. This does not need to be 100% accurate but should be an
+   * upper-bound. It should also be as fast as possible.
+   */
+  public getSerializedSize(): number {
+    let estimate: number = 1 + 1; // mask (1 byte) + optional parts (1 byte)
+
+    if (this.isUnicode()) {
+      estimate += encode(this.selector).length + 2;
+    } else {
+      estimate += this.selector.length + 2;
+    }
+
+    if (this.entities !== undefined) {
+      estimate += this.entities.length * 4 + 1;
+      if (this.entities.length > 127) {
+        estimate += 2;
+      }
+    }
+
+    if (this.hostnames !== undefined) {
+      estimate += this.hostnames.length * 4 + 1;
+      if (this.hostnames.length > 127) {
+        estimate += 2;
+      }
+    }
+
+    if (this.notHostnames !== undefined) {
+      estimate += this.notHostnames.length * 4 + 1;
+      if (this.notHostnames.length > 127) {
+        estimate += 2;
+      }
+    }
+
+    if (this.notEntities !== undefined) {
+      estimate += this.notEntities.length * 4 + 1;
+      if (this.notEntities.length > 127) {
+        estimate += 2;
+      }
+    }
+
+    if (this.rawLine !== undefined) {
+      if (this.isUnicode()) {
+        estimate += encode(this.rawLine).length + 2;
+      } else {
+        estimate += this.rawLine.length + 2;
+      }
+    }
+
+    if (this.style !== undefined) {
+      estimate += this.style.length + 2;
+    }
+
+    return estimate;
   }
 
   /**
@@ -678,6 +748,10 @@ export default class CosmeticFilter implements IFilter {
 
   public isScriptInject(): boolean {
     return getBit(this.mask, COSMETICS_MASK.scriptInject);
+  }
+
+  public isUnicode(): boolean {
+    return getBit(this.mask, COSMETICS_MASK.isUnicode);
   }
 
   // A generic hide cosmetic filter is one that:

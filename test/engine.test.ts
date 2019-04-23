@@ -184,58 +184,6 @@ describe('#FiltersEngine', () => {
     });
   });
 
-  describe('filters with bug id', () => {
-    it('matches bug filter', () => {
-      const filter = createEngine('||foo.com$bug=42').match(
-        makeRequest(
-          {
-            url: 'https://foo.com',
-          },
-          tldts.parse,
-        ),
-      ).filter;
-      expect(filter).not.toBeUndefined();
-      if (filter !== undefined) {
-        expect(filter.bug).toEqual(42);
-      }
-    });
-
-    it('matches bug filter exception', () => {
-      const exception = createEngine(`
-||foo.com$bug=42
-@@$bug=42,domain=bar.com
-`).match(
-        makeRequest(
-          {
-            sourceUrl: 'https://bar.com',
-            url: 'https://foo.com',
-          },
-          tldts.parse,
-        ),
-      ).exception;
-      expect(exception).not.toBeUndefined();
-      if (exception !== undefined) {
-        expect(exception.bug).toEqual(42);
-      }
-    });
-
-    it('matches bug filter exception (only if filter has bug)', () => {
-      const exception = createEngine(`
-||foo.com
-@@$bug=42,domain=bar.com
-`).match(
-        makeRequest(
-          {
-            sourceUrl: 'https://bar.com',
-            url: 'https://foo.com',
-          },
-          tldts.parse,
-        ),
-      ).exception;
-      expect(exception).toBeUndefined();
-    });
-  });
-
   describe('cps policies', () => {
     it('no policy in engine', () => {
       expect(
@@ -371,6 +319,65 @@ $csp=baz,domain=bar.com
           ),
         ),
       ).toBeUndefined();
+    });
+  });
+
+  describe('badfilter', () => {
+    const request = makeRequest(
+      {
+        sourceUrl: 'https://bar.com',
+        type: 'image',
+        url: 'https://foo.com',
+      },
+      tldts.parse,
+    );
+    // - from Engine.parse
+    // - new filter in Engine.update
+    // - works after serialization/deserialization?
+    it('does not match on its own', () => {
+      expect(createEngine('||foo.com$badfilter').match(request).match).toBe(false);
+    });
+
+    it('cancels filter with same ID', () => {
+      expect(
+        createEngine(`
+||foo.com$domain=bar.com|foo.com,badfilter
+||foo.com$domain=foo.com|bar.com
+`).match(request).match,
+      ).toBe(false);
+    });
+
+    it('does not cancel similar filter', () => {
+      expect(
+        createEngine(`
+||foo.com$domain=bar.com|foo.com,badfilter
+||foo.com$domain=foo.com|bar.com,image
+`).match(request).match,
+      ).toBe(true);
+    });
+
+    it('works with update as well', () => {
+      const badfilter = NetworkFilter.parse('||foo.com$domain=bar.com|foo.com,badfilter');
+      expect(badfilter).not.toBeNull();
+      if (badfilter === null) {
+        return;
+      }
+
+      // Initially, no $badfilter
+      const engine = Engine.parse('||foo.com$domain=foo.com|bar.com', { debug: true });
+      expect(engine.match(request).match).toBe(true);
+
+      // Add $badfilter
+      engine.update({
+        newNetworkFilters: [badfilter],
+      });
+      expect(engine.match(request).match).toBe(false);
+
+      // Remove $badfilter
+      engine.update({
+        removedNetworkFilters: [badfilter.getId()],
+      });
+      expect(engine.match(request).match).toBe(true);
     });
   });
 

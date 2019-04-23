@@ -18,7 +18,6 @@ function network(filter: string, expected: any) {
     expect(parsed.isCosmeticFilter()).toBeFalsy();
     const verbose = {
       // Attributes
-      bug: parsed.bug,
       csp: parsed.csp,
       filter: parsed.getFilter(),
       hostname: parsed.getHostname(),
@@ -27,6 +26,7 @@ function network(filter: string, expected: any) {
       redirect: parsed.getRedirect(),
 
       // Filter type
+      isBadFilter: parsed.isBadFilter(),
       isCSP: parsed.isCSP(),
       isException: parsed.isException(),
       isGenericHide: parsed.isGenericHide(),
@@ -73,6 +73,7 @@ const DEFAULT_NETWORK_FILTER = {
   redirect: '',
 
   // Filter type
+  isBadFilter: false,
   isCSP: false,
   isException: false,
   isGenericHide: false,
@@ -143,7 +144,6 @@ describe('Network filters', () => {
       'ads$important',
       'ads$fuzzy',
       'ads$redirect=noop',
-      'ads$bug=42',
     ].forEach((line) => {
       it(`pprint ${line}`, () => {
         checkToString(line, line);
@@ -699,17 +699,9 @@ describe('Network filters', () => {
       });
     });
 
-    describe('bug', () => {
-      it('parses bug', () => {
-        network('||foo.com$bug=42', { bug: 42 });
-        network('@@||foo.com$bug=1337', { isException: true, bug: 1337 });
-        network('@@||foo.com|$bug=11111', { isException: true, bug: 11111 });
-        network('@@$bug=11111', { isException: true, bug: 11111 });
-      });
-
-      it('defaults to undefined', () => {
-        network('||foo.com', { bug: undefined });
-      });
+    it('badfilter', () => {
+      network('||foo.com^$badfilter', { isBadFilter: true });
+      network('@@||foo.com^$badfilter', { isBadFilter: true, isException: true });
     });
 
     it('generichide', () => {
@@ -718,7 +710,7 @@ describe('Network filters', () => {
     });
 
     describe('un-supported options', () => {
-      ['badfilter', 'genericblock', 'inline-script', 'popunder', 'popup', 'woot'].forEach(
+      ['genericblock', 'inline-script', 'popunder', 'popup', 'woot'].forEach(
         (unsupportedOption) => {
           it(unsupportedOption, () => {
             network(`||foo.com$${unsupportedOption}`, null);

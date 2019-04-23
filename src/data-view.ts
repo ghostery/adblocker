@@ -1,10 +1,12 @@
 import * as compression from './compression';
+import { decode, encode } from './punycode';
 
 interface IDataViewOptions {
   enableCompression: boolean;
 }
 
-const EMPTY_UINT8_ARRAY = new Uint8Array(0);
+export const EMPTY_UINT8_ARRAY = new Uint8Array(0);
+export const EMPTY_UINT32_ARRAY = new Uint32Array(0);
 
 const LITTLE_ENDIAN: boolean = new Int8Array(new Int16Array([1]).buffer)[0] === 1;
 
@@ -141,6 +143,12 @@ export default class StaticDataView {
     this.align(4);
 
     // TODO - fix alignement issue with `this.buffer.byteOffset`
+    // Short-cut when empty array
+    if (desiredSize === 0) {
+      return EMPTY_UINT32_ARRAY;
+    }
+
+    // Create non-empty view
     const view = new Uint32Array(
       this.buffer.buffer,
       this.pos + this.buffer.byteOffset,
@@ -207,6 +215,27 @@ export default class StaticDataView {
       arr[i] = this.getUint32();
     }
     return arr;
+  }
+
+  public pushUTF8(raw: string): void {
+    const str = encode(raw);
+    this.pushUint16(str.length);
+
+    for (let i = 0; i < str.length; i += 1) {
+      this.buffer[this.pos++] = str.charCodeAt(i);
+    }
+  }
+
+  public getUTF8(): string {
+    const byteLength = this.getUint16();
+    this.pos += byteLength;
+    return decode(
+      String.fromCharCode.apply(
+        null,
+        // @ts-ignore
+        this.buffer.subarray(this.pos - byteLength, this.pos),
+      ),
+    );
   }
 
   public pushASCII(str: string): void {

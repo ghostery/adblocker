@@ -12,7 +12,7 @@ import NetworkFilterBucket from './bucket/network';
 import { IMessageFromBackground } from '../content/communication';
 import { createStylesheet } from '../content/injection';
 
-export const ENGINE_VERSION = 24;
+export const ENGINE_VERSION = 25;
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -440,11 +440,6 @@ export default class FilterEngine {
 
         // If we found something, check for exceptions
         if (filter !== undefined) {
-          // Set `bug` of request
-          if (filter.hasBug()) {
-            request.bug = filter.bug;
-          }
-
           exception = this.exceptions.match(request);
         }
       }

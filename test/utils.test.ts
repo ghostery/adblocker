@@ -1,3 +1,4 @@
+import IFilter from '../src/filters/interface';
 import { parseFilters } from '../src/lists';
 import {
   binLookup,
@@ -18,7 +19,7 @@ function t(tokens: string[]): Uint32Array {
 }
 
 expect.extend({
-  toNotCollideWithOtherFilter(filter: { getId: () => number }, map) {
+  toNotCollideWithOtherFilter(filter: IFilter, map: Map<number, string>) {
     const found = map.get(filter.getId());
     if (found !== undefined && found !== filter.toString()) {
       return {
@@ -35,8 +36,8 @@ expect.extend({
   },
 });
 
-function checkCollisions(filters: any[]) {
-  const hashes = new Map();
+function checkCollisions(filters: IFilter[]) {
+  const hashes: Map<number, string> = new Map();
   for (let i = 0; i < filters.length; i += 1) {
     const filter = filters[i];
     // @ts-ignore
