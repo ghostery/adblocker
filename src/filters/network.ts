@@ -1,5 +1,5 @@
 import StaticDataView from '../data-view';
-import { encode, toASCII } from '../punycode';
+import { toASCII } from '../punycode';
 import { RequestType } from '../request';
 import Request from '../request';
 import {
@@ -734,45 +734,39 @@ export default class NetworkFilter implements IFilter {
     let estimate: number = 4 + 1; // mask = 4 bytes // optional parts = 1 byte
 
     if (this.csp !== undefined) {
-      estimate += this.csp.length + 2;
+      estimate += StaticDataView.sizeOfASCII(this.csp);
     }
 
     if (this.filter !== undefined) {
       if (this.isUnicode()) {
-        estimate += encode(this.filter).length + 2;
+        estimate += StaticDataView.sizeOfUTF8(this.filter);
       } else {
-        estimate += this.filter.length + 2;
+        estimate += StaticDataView.sizeOfASCII(this.filter);
       }
     }
 
     if (this.hostname !== undefined) {
-      estimate += this.hostname.length + 2;
+      estimate += StaticDataView.sizeOfASCII(this.hostname);
     }
 
     if (this.optDomains !== undefined) {
-      estimate += this.optDomains.length * 4 + 1;
-      if (this.optDomains.length > 127) {
-        estimate += 2;
-      }
+      estimate += StaticDataView.sizeOfUint32Array(this.optDomains);
     }
 
     if (this.optNotDomains !== undefined) {
-      estimate += this.optNotDomains.length * 4 + 1;
-      if (this.optNotDomains.length > 127) {
-        estimate += 2;
-      }
+      estimate += StaticDataView.sizeOfUint32Array(this.optNotDomains);
     }
 
     if (this.rawLine !== undefined) {
       if (this.isUnicode()) {
-        estimate += encode(this.rawLine).length + 2;
+        estimate += StaticDataView.sizeOfUTF8(this.rawLine);
       } else {
-        estimate += this.rawLine.length + 2;
+        estimate += StaticDataView.sizeOfASCII(this.rawLine);
       }
     }
 
     if (this.redirect !== undefined) {
-      estimate += this.redirect.length + 2;
+      estimate += StaticDataView.sizeOfASCII(this.redirect);
     }
 
     return estimate;

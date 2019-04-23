@@ -3,6 +3,7 @@ import { decode, encode } from './punycode';
 export const EMPTY_UINT8_ARRAY = new Uint8Array(0);
 export const EMPTY_UINT32_ARRAY = new Uint32Array(0);
 
+// Check if current architecture is little endian
 const LITTLE_ENDIAN: boolean = new Int8Array(new Int16Array([1]).buffer)[0] === 1;
 
 /**
@@ -19,16 +20,47 @@ const LITTLE_ENDIAN: boolean = new Int8Array(new Int16Array([1]).buffer)[0] === 
  * deserializer you use `getX` functions to get back the values.
  */
 export default class StaticDataView {
+  /**
+   * Return number of bytes needed to serialize `str` ASCII string.
+   */
+  public static sizeOfASCII(str: string): number {
+    return StaticDataView.sizeOfLength(str.length) + str.length;
+  }
+
+  /**
+   * Return number of bytes needed to serialize `str` UTF8 string.
+   */
+  public static sizeOfUTF8(str: string): number {
+    const encoded = encode(str);
+    return StaticDataView.sizeOfLength(encoded.length) + encoded.length;
+  }
+
+  /**
+   * Return number of bytes needed to serialize `array`.
+   */
+  public static sizeOfUint32Array(array: Uint32Array): number {
+    return array.byteLength + StaticDataView.sizeOfLength(array.length);
+  }
+
+  /**
+   * Create an empty (i.e.: size = 0) StaticDataView.
+   */
   public static empty(): StaticDataView {
     return StaticDataView.fromUint8Array(EMPTY_UINT8_ARRAY);
   }
 
-  public static fromUint32Array(array: Uint32Array): StaticDataView {
-    return new StaticDataView(0, new Uint8Array(array.buffer));
-  }
-
+  /**
+   * Instantiate a StaticDataView instance from `array` of type Uint8Array.
+   */
   public static fromUint8Array(array: Uint8Array): StaticDataView {
     return new StaticDataView(0, array);
+  }
+
+  /**
+   * Return number of bytes needed to serialize `length`.
+   */
+  private static sizeOfLength(length: number): number {
+    return length <= 127 ? 1 : 5;
   }
 
   public pos: number;
@@ -68,13 +100,11 @@ export default class StaticDataView {
   }
 
   /**
-   * Make sure that `this.pos` is aligned on a multiple of `alignement`.
+   * Make sure that `this.pos` is aligned on a multiple of 4.
    */
-  public align(alignement: number): void {
-    this.pos =
-      this.pos % alignement === 0
-        ? this.pos
-        : Math.floor(this.pos / alignement) * alignement + alignement;
+  public align4(): void {
+    // From: https://stackoverflow.com/a/2022194
+    this.pos = (this.pos + 3) & ~0x03;
   }
 
   public set(buffer: Uint8Array): void {
@@ -102,14 +132,24 @@ export default class StaticDataView {
     return this.getUint8();
   }
 
-  public pushBytes(bytes: Uint8Array): void {
-    this.pushUint32(bytes.byteLength);
+  public pushBytes(bytes: Uint8Array, align: boolean = false): void {
+    this.pushLength(bytes.length);
+
+    if (align === true) {
+      this.align4();
+    }
+
     this.buffer.set(bytes, this.pos);
     this.pos += bytes.byteLength;
   }
 
-  public getBytes(): Uint8Array {
-    const numberOfBytes = this.getUint32();
+  public getBytes(align: boolean = false): Uint8Array {
+    const numberOfBytes = this.getLength();
+
+    if (align === true) {
+      this.align4();
+    }
+
     const bytes = this.buffer.subarray(this.pos, this.pos + numberOfBytes);
     this.pos += numberOfBytes;
     return bytes;
@@ -122,7 +162,7 @@ export default class StaticDataView {
    */
   public getUint32ArrayView(desiredSize: number): Uint32Array {
     // Round this.pos to next multiple of 4 for alignement
-    this.align(4);
+    this.align4();
 
     // Short-cut when empty array
     if (desiredSize === 0) {
@@ -174,13 +214,7 @@ export default class StaticDataView {
   }
 
   public pushUint32Array(arr: Uint32Array): void {
-    const len: number = arr.length;
-    const length = len <= 127 ? len : 1 << 7;
-    this.pushUint8(length);
-    if (len > 127) {
-      this.pushUint16(len);
-    }
-
+    this.pushLength(arr.length);
     // TODO - use `set` to push the full buffer at once?
     for (let i = 0; i < arr.length; i += 1) {
       this.pushUint32(arr[i]);
@@ -188,8 +222,7 @@ export default class StaticDataView {
   }
 
   public getUint32Array(): Uint32Array {
-    const len = this.getUint8();
-    const length = len === 1 << 7 ? this.getUint16() : len;
+    const length = this.getLength();
     const arr = new Uint32Array(length);
     // TODO - use `subarray`?
     for (let i = 0; i < length; i += 1) {
@@ -200,7 +233,7 @@ export default class StaticDataView {
 
   public pushUTF8(raw: string): void {
     const str = encode(raw);
-    this.pushUint16(str.length);
+    this.pushLength(str.length);
 
     for (let i = 0; i < str.length; i += 1) {
       this.buffer[this.pos++] = str.charCodeAt(i);
@@ -208,7 +241,7 @@ export default class StaticDataView {
   }
 
   public getUTF8(): string {
-    const byteLength = this.getUint16();
+    const byteLength = this.getLength();
     this.pos += byteLength;
     return decode(
       String.fromCharCode.apply(
@@ -220,7 +253,7 @@ export default class StaticDataView {
   }
 
   public pushASCII(str: string): void {
-    this.pushUint16(str.length);
+    this.pushLength(str.length);
 
     for (let i = 0; i < str.length; i += 1) {
       this.buffer[this.pos++] = str.charCodeAt(i);
@@ -228,7 +261,7 @@ export default class StaticDataView {
   }
 
   public getASCII(): string {
-    const byteLength = this.getUint16();
+    const byteLength = this.getLength();
     this.pos += byteLength;
 
     // @ts-ignore
@@ -241,5 +274,20 @@ export default class StaticDataView {
         `StaticDataView too small: ${this.buffer.byteLength}, but required ${this.pos - 1} bytes`,
       );
     }
+  }
+
+  // Serialiez `length` with variable encoding to save space
+  private pushLength(length: number): void {
+    if (length <= 127) {
+      this.pushUint8(length);
+    } else {
+      this.pushUint8(128);
+      this.pushUint32(length);
+    }
+  }
+
+  private getLength(): number {
+    const lengthShort = this.getUint8();
+    return lengthShort === 128 ? this.getUint32() : lengthShort;
   }
 }
