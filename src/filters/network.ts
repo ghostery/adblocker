@@ -1,5 +1,5 @@
-import * as punycode from 'punycode';
 import StaticDataView from '../data-view';
+import { encode, toASCII } from '../punycode';
 import { RequestType } from '../request';
 import Request from '../request';
 import {
@@ -52,6 +52,8 @@ export const enum NETWORK_FILTER_MASK {
   isException = 1 << 22,
   isCSP = 1 << 23,
   isGenericHide = 1 << 24,
+  isBadFilter = 1 << 25,
+  isUnicode = 1 << 26,
 }
 
 /**
@@ -172,11 +174,9 @@ const MATCH_ALL = new RegExp('');
 
 // TODO:
 // 1. Options not supported yet:
-//  - badfilter
 //  - inline-script
 //  - popup
 //  - popunder
-//  - generichide
 //  - genericblock
 // 2. Replace `split` with `substr`
 export default class NetworkFilter implements IFilter {
@@ -275,11 +275,8 @@ export default class NetworkFilter implements IFilter {
             break;
           }
           case 'badfilter':
-            // TODO - how to handle those, if we start in mask, then the id will
-            // differ from the other filter. We could keep original line. How do
-            // to eliminate thos efficiently? They will probably endup in the same
-            // bucket, so maybe we could do that on a per-bucket basis?
-            return null;
+            mask = setBit(mask, NETWORK_FILTER_MASK.isBadFilter);
+            break;
           case 'important':
             // Note: `negation` should always be `false` here.
             if (negation) {
@@ -525,6 +522,7 @@ export default class NetworkFilter implements IFilter {
     let filter: string | undefined;
     if (filterIndexEnd - filterIndexStart > 0) {
       filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
+      mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isUnicode, hasUnicode(filter));
       mask = setNetworkMask(
         mask,
         NETWORK_FILTER_MASK.isRegex,
@@ -541,7 +539,8 @@ export default class NetworkFilter implements IFilter {
       }
       hostname = hostname.toLowerCase();
       if (hasUnicode(hostname)) {
-        hostname = punycode.toASCII(hostname);
+        mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isUnicode, true);
+        hostname = toASCII(hostname);
       }
     }
 
@@ -564,6 +563,7 @@ export default class NetworkFilter implements IFilter {
   public static deserialize(buffer: StaticDataView): NetworkFilter {
     const mask = buffer.getUint32();
     const optionalParts = buffer.getUint8();
+    const isUnicode = getBit(mask, NETWORK_FILTER_MASK.isUnicode);
 
     // The order of these statements is important. Since `buffer.getX()` will
     // internally increment the position of next byte to read, they need to be
@@ -575,11 +575,17 @@ export default class NetworkFilter implements IFilter {
 
       // Optional parts
       csp: (optionalParts & 1) === 1 ? buffer.getASCII() : undefined,
-      filter: (optionalParts & 2) === 2 ? buffer.getUTF8() : undefined,
-      hostname: (optionalParts & 4) === 4 ? buffer.getUTF8() : undefined,
+      filter:
+        (optionalParts & 2) === 2 ? (isUnicode ? buffer.getUTF8() : buffer.getASCII()) : undefined,
+      hostname: (optionalParts & 4) === 4 ? buffer.getASCII() : undefined,
       optDomains: (optionalParts & 8) === 8 ? buffer.getUint32Array() : undefined,
       optNotDomains: (optionalParts & 16) === 16 ? buffer.getUint32Array() : undefined,
-      rawLine: (optionalParts & 32) === 32 ? buffer.getUTF8() : undefined,
+      rawLine:
+        (optionalParts & 32) === 32
+          ? isUnicode
+            ? buffer.getUTF8()
+            : buffer.getASCII()
+          : undefined,
       redirect: (optionalParts & 64) === 64 ? buffer.getASCII() : undefined,
     });
   }
@@ -685,12 +691,16 @@ export default class NetworkFilter implements IFilter {
 
     if (this.filter !== undefined) {
       optionalParts |= 2;
-      buffer.pushUTF8(this.filter);
+      if (this.isUnicode()) {
+        buffer.pushUTF8(this.filter);
+      } else {
+        buffer.pushASCII(this.filter);
+      }
     }
 
     if (this.hostname !== undefined) {
       optionalParts |= 4;
-      buffer.pushUTF8(this.hostname);
+      buffer.pushASCII(this.hostname);
     }
 
     if (this.optDomains) {
@@ -705,7 +715,11 @@ export default class NetworkFilter implements IFilter {
 
     if (this.rawLine !== undefined) {
       optionalParts |= 32;
-      buffer.pushUTF8(this.rawLine);
+      if (this.isUnicode()) {
+        buffer.pushUTF8(this.rawLine);
+      } else {
+        buffer.pushASCII(this.rawLine);
+      }
     }
 
     if (this.redirect !== undefined) {
@@ -714,6 +728,54 @@ export default class NetworkFilter implements IFilter {
     }
 
     buffer.setByte(index, optionalParts);
+  }
+
+  public getSerializedSize(): number {
+    let estimate: number = 4 + 1; // mask = 4 bytes // optional parts = 1 byte
+
+    if (this.csp !== undefined) {
+      estimate += this.csp.length + 2;
+    }
+
+    if (this.filter !== undefined) {
+      if (this.isUnicode()) {
+        estimate += encode(this.filter).length + 2;
+      } else {
+        estimate += this.filter.length + 2;
+      }
+    }
+
+    if (this.hostname !== undefined) {
+      estimate += this.hostname.length + 2;
+    }
+
+    if (this.optDomains !== undefined) {
+      estimate += this.optDomains.length * 4 + 1;
+      if (this.optDomains.length > 127) {
+        estimate += 2;
+      }
+    }
+
+    if (this.optNotDomains !== undefined) {
+      estimate += this.optNotDomains.length * 4 + 1;
+      if (this.optNotDomains.length > 127) {
+        estimate += 2;
+      }
+    }
+
+    if (this.rawLine !== undefined) {
+      if (this.isUnicode()) {
+        estimate += encode(this.rawLine).length + 2;
+      } else {
+        estimate += this.rawLine.length + 2;
+      }
+    }
+
+    if (this.redirect !== undefined) {
+      estimate += this.redirect.length + 2;
+    }
+
+    return estimate;
   }
 
   /**
@@ -866,6 +928,10 @@ export default class NetworkFilter implements IFilter {
       options.push('domain=<hashed>');
     }
 
+    if (this.isBadFilter()) {
+      options.push('badfilter');
+    }
+
     if (options.length > 0) {
       filter += `$${options.join(',')}`;
     }
@@ -878,6 +944,21 @@ export default class NetworkFilter implements IFilter {
   }
 
   // Public API (Read-Only)
+  public getIdWithoutBadFilter(): number {
+    // This method computes the id ignoring the $badfilter option (which will
+    // correspond to the ID of filters being discarded). This allows us to
+    // eliminate bad filters by comparing IDs, which is more robust and faster
+    // than string comparison.
+    return computeFilterId(
+      this.csp,
+      this.mask & ~NETWORK_FILTER_MASK.isBadFilter,
+      this.filter,
+      this.hostname,
+      this.optDomains,
+      this.optNotDomains,
+    );
+  }
+
   public getId(): number {
     if (this.id === undefined) {
       this.id = computeFilterId(
@@ -1068,6 +1149,14 @@ export default class NetworkFilter implements IFilter {
 
   public isGenericHide() {
     return getBit(this.mask, NETWORK_FILTER_MASK.isGenericHide);
+  }
+
+  public isBadFilter() {
+    return getBit(this.mask, NETWORK_FILTER_MASK.isBadFilter);
+  }
+
+  public isUnicode() {
+    return getBit(this.mask, NETWORK_FILTER_MASK.isUnicode);
   }
 
   public fromAny() {

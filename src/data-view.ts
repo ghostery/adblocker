@@ -1,9 +1,7 @@
-import * as punycode from 'punycode';
-import { clearBit, getBit, hasUnicode, setBit } from './utils';
+import { decode, encode } from './punycode';
 
-const PUNY_ENCODED = 1 << 15;
-
-const EMPTY_UINT8_ARRAY = new Uint8Array(0);
+export const EMPTY_UINT8_ARRAY = new Uint8Array(0);
+export const EMPTY_UINT32_ARRAY = new Uint32Array(0);
 
 const LITTLE_ENDIAN: boolean = new Int8Array(new Int16Array([1]).buffer)[0] === 1;
 
@@ -125,6 +123,13 @@ export default class StaticDataView {
   public getUint32ArrayView(desiredSize: number): Uint32Array {
     // Round this.pos to next multiple of 4 for alignement
     this.align(4);
+
+    // Short-cut when empty array
+    if (desiredSize === 0) {
+      return EMPTY_UINT32_ARRAY;
+    }
+
+    // Create non-empty view
     const view = new Uint32Array(
       this.buffer.buffer,
       this.pos + this.buffer.byteOffset,
@@ -194,13 +199,8 @@ export default class StaticDataView {
   }
 
   public pushUTF8(raw: string): void {
-    let str = raw;
-    if (hasUnicode(raw)) {
-      str = punycode.encode(raw);
-      this.pushUint16(setBit(str.length, PUNY_ENCODED));
-    } else {
-      this.pushUint16(str.length);
-    }
+    const str = encode(raw);
+    this.pushUint16(str.length);
 
     for (let i = 0; i < str.length; i += 1) {
       this.buffer[this.pos++] = str.charCodeAt(i);
@@ -208,21 +208,15 @@ export default class StaticDataView {
   }
 
   public getUTF8(): string {
-    const lengthAndMask = this.getUint16();
-    const byteLength = clearBit(lengthAndMask, PUNY_ENCODED);
-    const punyEncoded = getBit(lengthAndMask, PUNY_ENCODED);
-
+    const byteLength = this.getUint16();
     this.pos += byteLength;
-    const str = String.fromCharCode.apply(
-      null,
-      // @ts-ignore
-      this.buffer.subarray(this.pos - byteLength, this.pos),
+    return decode(
+      String.fromCharCode.apply(
+        null,
+        // @ts-ignore
+        this.buffer.subarray(this.pos - byteLength, this.pos),
+      ),
     );
-
-    if (punyEncoded) {
-      return punycode.decode(str);
-    }
-    return str;
   }
 
   public pushASCII(str: string): void {

@@ -26,6 +26,7 @@ function network(filter: string, expected: any) {
       redirect: parsed.getRedirect(),
 
       // Filter type
+      isBadFilter: parsed.isBadFilter(),
       isCSP: parsed.isCSP(),
       isException: parsed.isException(),
       isGenericHide: parsed.isGenericHide(),
@@ -72,6 +73,7 @@ const DEFAULT_NETWORK_FILTER = {
   redirect: '',
 
   // Filter type
+  isBadFilter: false,
   isCSP: false,
   isException: false,
   isGenericHide: false,
@@ -697,13 +699,18 @@ describe('Network filters', () => {
       });
     });
 
+    it('badfilter', () => {
+      network('||foo.com^$badfilter', { isBadFilter: true });
+      network('@@||foo.com^$badfilter', { isBadFilter: true, isException: true });
+    });
+
     it('generichide', () => {
       network('||foo.com^$generichide', { isGenericHide: true });
       network('@@||foo.com^$generichide', { isGenericHide: true, isException: true });
     });
 
     describe('un-supported options', () => {
-      ['badfilter', 'genericblock', 'inline-script', 'popunder', 'popup', 'woot'].forEach(
+      ['genericblock', 'inline-script', 'popunder', 'popup', 'woot'].forEach(
         (unsupportedOption) => {
           it(unsupportedOption, () => {
             network(`||foo.com$${unsupportedOption}`, null);

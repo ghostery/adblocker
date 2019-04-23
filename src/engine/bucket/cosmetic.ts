@@ -3,28 +3,58 @@ import CosmeticFilter, {
   getEntityHashesFromLabelsBackward,
   getHostnameHashesFromLabelsBackward,
 } from '../../filters/cosmetic';
+import FiltersContainer from './filters';
 
 import ReverseIndex from '../reverse-index';
 
+/**
+ * Predicate function used to select generic hide cosmetic filters. This will
+ * be used by the FiltersContainer.
+ */
+function isGenericFilterPredicate(filter: CosmeticFilter): boolean {
+  return filter.isGenericHide();
+}
+
+/**
+ * Efficient container for CosmeticFilter instances. Allows to quickly
+ * retrieved scripts and stylesheets to inject in pages for a specific
+ * hostname/domain.
+ */
 export default class CosmeticFilterBucket {
   public static deserialize(buffer: StaticDataView): CosmeticFilterBucket {
     const bucket = new CosmeticFilterBucket();
 
-    bucket.genericRules = buffer.getBytes();
+    bucket.genericRules = FiltersContainer.deserialize(
+      buffer,
+      CosmeticFilter.deserialize,
+      isGenericFilterPredicate,
+    );
     bucket.hostnameIndex = ReverseIndex.deserialize(buffer, CosmeticFilter.deserialize);
 
     return bucket;
   }
 
+  // `hostnameIndex` contains all cosmetic filters which are specific to one or
+  // several domains (that includes entities as well). They are stored in a
+  // reverse index which allows to efficiently get a subset of the filters
+  // which could be injected on a given page (given hostname and domain).
   public hostnameIndex: ReverseIndex<CosmeticFilter>;
-  public genericRules: Uint8Array;
 
-  private cache: CosmeticFilter[];
+  // `genericRules` is a contiguous container of filters. In this case
+  // we keep track of all generic cosmetic filters, which allows us to
+  // efficiently inject them in any page (either all of them or none of
+  // them, without having to match against the hostname/domain of the
+  // page). Having them separated also makes it easier to disable them.
+  public genericRules: FiltersContainer<CosmeticFilter>;
 
   constructor({ filters = [] }: { filters?: CosmeticFilter[] } = {}) {
-    this.cache = [];
-    this.genericRules = new Uint8Array(0);
-    this.hostnameIndex = new ReverseIndex<CosmeticFilter>({
+    this.genericRules = new FiltersContainer({
+      deserialize: CosmeticFilter.deserialize,
+      filters: [],
+      predicate: isGenericFilterPredicate,
+    });
+
+    this.hostnameIndex = new ReverseIndex({
       deserialize: CosmeticFilter.deserialize,
     });
 
@@ -33,53 +63,14 @@ export default class CosmeticFilterBucket {
     }
   }
 
-  public update(newFilters: CosmeticFilter[], removedFilters?: Set<number>) {
-    // This will be used to keep in cache the generic CosmeticFilter instances.
-    // It will be populated the first time filters are required. TODO - maybe we
-    // do not need the full instance there? But instead the selectors only (we
-    // only need to know enough to inject and apply exceptions).
-    const genericRules: CosmeticFilter[] = [];
-    const hostnameSpecificRules: CosmeticFilter[] = [];
-
-    // Add existing rules (removing the ones with ids in `removedFilters`)
-    const currentGenericRules: CosmeticFilter[] = this.getGenericRules();
-    for (let i = 0; i < currentGenericRules.length; i += 1) {
-      const filter = currentGenericRules[i];
-      if (removedFilters === undefined || !removedFilters.has(filter.getId())) {
-        genericRules.push(filter);
-      }
-    }
-
-    // Add new rules
-    for (let i = 0; i < newFilters.length; i += 1) {
-      const filter = newFilters[i];
-      if (filter.isGenericHide()) {
-        genericRules.push(filter);
-      } else {
-        hostnameSpecificRules.push(filter);
-      }
-    }
-
-    // This accelerating data structure is used to retrieve cosmetic filters for
-    // a given hostname. We only store filters having at least one hostname
-    // specified and we index each filter several time (one time per hostname).
+  public update(newFilters: CosmeticFilter[], removedFilters?: Set<number>): void {
+    // `this.genericRules.update` returns an array of filters not having been selected.
+    const hostnameSpecificRules = this.genericRules.update(newFilters, removedFilters);
     this.hostnameIndex.update(hostnameSpecificRules, removedFilters);
-
-    // Store generic cosmetic filters in an array. It will be used whenever we
-    // need to inject cosmetics in a page and filtered according to
-    // domain-specific exceptions/unhide.
-    const buffer = new StaticDataView(1500000);
-    buffer.pushUint32(genericRules.length);
-    for (let i = 0; i < genericRules.length; i += 1) {
-      genericRules[i].serialize(buffer);
-    }
-
-    this.cache = [];
-    this.genericRules = buffer.slice();
   }
 
   public serialize(buffer: StaticDataView): void {
-    buffer.pushBytes(this.genericRules);
+    this.genericRules.serialize(buffer);
     this.hostnameIndex.serialize(buffer);
   }
 
@@ -120,7 +111,7 @@ export default class CosmeticFilterBucket {
 
       // If generic cosmetics are allowed, select the ones with a domain match
       if (allowGenericHides === true) {
-        const genericRules = this.getGenericRules();
+        const genericRules = this.genericRules.getFilters();
         for (let i = 0; i < genericRules.length; i += 1) {
           const rule = genericRules[i];
 
@@ -141,7 +132,7 @@ export default class CosmeticFilterBucket {
       }
 
       if (allowGenericHides === true) {
-        const genericRules = this.getGenericRules();
+        const genericRules = this.genericRules.getFilters();
         for (let i = 0; i < genericRules.length; i += 1) {
           const rule = genericRules[i];
 
@@ -158,17 +149,5 @@ export default class CosmeticFilterBucket {
     }
 
     return rulesWithoutExceptions;
-  }
-
-  private getGenericRules(): CosmeticFilter[] {
-    if (this.cache.length === 0) {
-      const buffer = StaticDataView.fromUint8Array(this.genericRules);
-      const numberOfFilters = buffer.getUint32();
-      for (let i = 0; i < numberOfFilters; i += 1) {
-        this.cache.push(CosmeticFilter.deserialize(buffer));
-      }
-    }
-
-    return this.cache;
   }
 }
