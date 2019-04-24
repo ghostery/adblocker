@@ -93,19 +93,11 @@ function map(array: string[], fn: (_: string) => string): string[] {
  * function.
  */
 function mapDomain(str: string, fn: (_: string) => string): string {
-  const parts = str.split('@');
-  let result = '';
-  if (parts.length > 1) {
-    // In email addresses, only the domain name should be punycoded. Leave
-    // the local part (i.e. everything up to `@`) intact.
-    result = parts[0] + '@';
-    str = parts[1];
-  }
   // Avoid `split(regex)` for IE8 compatibility. See #17.
   str = str.replace(regexSeparators, '\x2E');
   const labels = str.split('.');
   const encoded = map(labels, fn).join('.');
-  return result + encoded;
+  return encoded;
 }
 
 /**
