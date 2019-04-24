@@ -36,28 +36,19 @@ function benchStringTokenize({ filters }) {
   return dummy;
 }
 
-function benchParsingImpl(lists, { loadNetworkFilters, loadCosmeticFilters }) {
-  let dummy = 0;
-
-  for (let i = 0; i < lists.length; i += 1) {
-    dummy = (dummy + adblocker.parseFilters(lists[i], {
-      loadNetworkFilters,
-      loadCosmeticFilters,
-    }).networkFilters.length) >>> 0;
-  }
-
-  return dummy;
+function benchParsingImpl(lists, options) {
+  return adblocker.parseFilters(lists, options);
 }
 
-function benchCosmeticsFiltersParsing({ lists }) {
-  return benchParsingImpl(lists, {
+function benchCosmeticsFiltersParsing({ combinedLists }) {
+  return benchParsingImpl(combinedLists, {
     loadCosmeticFilters: true,
     loadNetworkFilters: false,
   });
 }
 
-function benchNetworkFiltersParsing({ lists }) {
-  return benchParsingImpl(lists, {
+function benchNetworkFiltersParsing({ combinedLists }) {
+  return benchParsingImpl(combinedLists, {
     loadCosmeticFilters: false,
     loadNetworkFilters: true,
   });
