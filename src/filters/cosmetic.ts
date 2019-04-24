@@ -179,10 +179,9 @@ export default class CosmeticFilter implements IFilter {
    * used to parse tens of thousands of lines.
    */
   public static parse(line: string, debug: boolean = false): CosmeticFilter | null {
-    // Mask to store attributes
-    // Each flag (unhide, scriptInject, etc.) takes only 1 bit
-    // at a specific offset defined in COSMETICS_MASK.
-    // cf: COSMETICS_MASK for the offset of each property
+    // Mask to store attributes. Each flag (unhide, scriptInject, etc.) takes
+    // only 1 bit at a specific offset defined in COSMETICS_MASK.  cf:
+    // COSMETICS_MASK for the offset of each property
     let mask = 0;
     let selector: string | undefined;
     let hostnames: Uint32Array | undefined;
@@ -225,38 +224,40 @@ export default class CosmeticFilter implements IFilter {
       const hostnamesArray: number[] = [];
       const notHostnamesArray: number[] = [];
 
-      // TODO - this could be done without any string copy
-      line
-        .slice(0, sharpIndex)
-        .split(',')
-        .forEach((hostname) => {
-          if (hasUnicode(hostname)) {
-            hostname = toASCII(hostname);
-            mask = setBit(mask, COSMETICS_MASK.isUnicode);
-          }
+      const parts = line.slice(0, sharpIndex).split(',');
+      for (let i = 0; i < parts.length; i += 1) {
+        let hostname = parts[i];
+        if (hasUnicode(hostname)) {
+          hostname = toASCII(hostname);
+          mask = setBit(mask, COSMETICS_MASK.isUnicode);
+        }
 
-          const negation: boolean = hostname[0] === '~';
-          const entity: boolean = hostname.endsWith('.*');
+        const negation: boolean = hostname.charCodeAt(0) === 126 /* '~' */;
+        const entity: boolean =
+            hostname.charCodeAt(hostname.length - 1) === 42 /* '*' */ &&
+            hostname.charCodeAt(hostname.length - 2) === 46 /* '.' */;
 
-          const start: number = negation ? 1 : 0;
-          const end: number = entity ? hostname.length - 2 : hostname.length;
+        const start: number = negation ? 1 : 0;
+        const end: number = entity ? hostname.length - 2 : hostname.length;
 
-          const hash = hashHostnameBackward(hostname.slice(start, end));
+        const hash = hashHostnameBackward(
+          negation === true || entity === true ? hostname.slice(start, end) : hostname,
+        );
 
-          if (negation) {
-            if (entity) {
-              notEntitiesArray.push(hash);
-            } else {
-              notHostnamesArray.push(hash);
-            }
+        if (negation) {
+          if (entity) {
+            notEntitiesArray.push(hash);
           } else {
-            if (entity) {
-              entitiesArray.push(hash);
-            } else {
-              hostnamesArray.push(hash);
-            }
+            notHostnamesArray.push(hash);
           }
-        });
+        } else {
+          if (entity) {
+            entitiesArray.push(hash);
+          } else {
+            hostnamesArray.push(hash);
+          }
+        }
+      }
 
       if (entitiesArray.length !== 0) {
         entities = new Uint32Array(entitiesArray).sort();
@@ -276,14 +277,16 @@ export default class CosmeticFilter implements IFilter {
     }
 
     // We should not have unhide without any hostname
-    // NOTE: it does not make sense either to only have a negated domain or
-    // entity (e.g.: ~domain.com or ~entity.*), these are thus ignored.
     if (getBit(mask, COSMETICS_MASK.unhide) && hostnames === undefined && entities === undefined) {
       return null;
     }
 
     // Deal with script:inject and script:contains
-    if (fastStartsWithFrom(line, 'script:', suffixStartIndex)) {
+    if (
+      line.length - suffixStartIndex > 7 &&
+      line.charCodeAt(suffixStartIndex) === 115 /* 's' */ &&
+      fastStartsWithFrom(line, 'script:', suffixStartIndex)
+    ) {
       //      script:inject(.......)
       //                    ^      ^
       //   script:contains(/......./)
@@ -306,7 +309,11 @@ export default class CosmeticFilter implements IFilter {
       }
 
       selector = line.slice(scriptSelectorIndexStart, scriptSelectorIndexEnd);
-    } else if (fastStartsWithFrom(line, '+js(', suffixStartIndex)) {
+    } else if (
+      line.length - suffixStartIndex > 4 &&
+      line.charCodeAt(suffixStartIndex) === 43 /* '+' */ &&
+      fastStartsWithFrom(line, '+js(', suffixStartIndex)
+    ) {
       mask = setBit(mask, COSMETICS_MASK.scriptInject);
       selector = line.slice(suffixStartIndex + 4, line.length - 1);
     } else {
@@ -663,7 +670,8 @@ export default class CosmeticFilter implements IFilter {
 
     // Note, we do not need to use negated domains or entities as tokens here
     // since they will by definition not match on their own, unless accompanied
-    // by a domain or entity.
+    // by a domain or entity. Instead, they are handled in
+    // `CosmeticFilterBucket.getCosmeticsFilters`.
 
     if (this.hostnames !== undefined) {
       for (let i = 0; i < this.hostnames.length; i += 1) {

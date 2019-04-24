@@ -31,7 +31,7 @@ function benchStringHashing({ filters }) {
 function benchStringTokenize({ filters }) {
   let dummy = 0;
   for (let i = 0; i < filters.length; i += 1) {
-    dummy = (dummy + tokenize(filters[i]).length) >>> ;
+    dummy = (dummy + tokenize(filters[i]).length) >>> 0;
   }
   return dummy;
 }
