@@ -13,6 +13,8 @@ import {
   fastStartsWithFrom,
   getBit,
   hasUnicode,
+  isAlpha,
+  isDigit,
   setBit,
   tokenizeFilterInPlace,
   tokenizeInPlace,
@@ -22,6 +24,12 @@ import IFilter from './interface';
 const TOKENS_BUFFER = new TokensBuffer(200);
 const HTTP_HASH = fastHash('http');
 const HTTPS_HASH = fastHash('https');
+
+function isAllowedHostname(ch: number): boolean {
+  return (
+    isDigit(ch) || isAlpha(ch) || ch === 95 /* '_' */ || ch === 45 /* '-' */ || ch === 46 /* '.' */
+  );
+}
 
 /**
  * Masks used to store options of network filters in a bitmask.
@@ -142,8 +150,6 @@ function computeFilterId(
   return hash >>> 0;
 }
 
-const SEPARATOR = /[/^*]/;
-
 /**
  * Compiles a filter pattern to a regex. This is only performed *lazily* for
  * filters containing at least a * or ^ symbol. Because Regexes are expansive,
@@ -208,7 +214,7 @@ export default class NetworkFilter implements IFilter {
     let filterIndexEnd: number = line.length;
 
     // @@filter == Exception
-    if (fastStartsWith(line, '@@')) {
+    if (line.charCodeAt(0) === 64 /* '@' */ && line.charCodeAt(1) === 64 /* '@' */) {
       filterIndexStart += 2;
       mask = setBit(mask, NETWORK_FILTER_MASK.isException);
     }
@@ -225,29 +231,19 @@ export default class NetworkFilter implements IFilter {
 
       // --------------------------------------------------------------------- //
       // parseOptions
-      // TODO: This could be implemented without string copy,
-      // using indices, like in main parsing functions.
-      const rawOptions = line.slice(optionsIndex + 1);
-      const options = rawOptions.split(',');
+      // --------------------------------------------------------------------- //
+      const options = line.slice(optionsIndex + 1).split(',');
       for (let i = 0; i < options.length; i += 1) {
         const rawOption = options[i];
-        let negation = false;
-        let option = rawOption;
-
-        // Check for negation: ~option
-        if (fastStartsWith(option, '~')) {
-          negation = true;
-          option = option.slice(1);
-        } else {
-          negation = false;
-        }
+        const negation = rawOption.charCodeAt(0) === 126 /* '~' */;
+        let option = negation === true ? rawOption.slice(1) : rawOption;
 
         // Check for options: option=value1|value2
         let optionValue: string = '';
-        if (option.indexOf('=') !== -1) {
-          const optionAndValues = option.split('=', 2);
-          option = optionAndValues[0];
-          optionValue = optionAndValues[1];
+        const indexOfEqual: number = option.indexOf('=');
+        if (indexOfEqual !== -1) {
+          optionValue = option.slice(indexOfEqual + 1);
+          option = option.slice(0, indexOfEqual);
         }
 
         switch (option) {
@@ -259,7 +255,7 @@ export default class NetworkFilter implements IFilter {
             for (let j = 0; j < optionValues.length; j += 1) {
               const value: string = optionValues[j];
               if (value) {
-                if (fastStartsWith(value, '~')) {
+                if (value.charCodeAt(0) === 126 /* '~' */) {
                   optNotDomainsArray.push(fastHash(value.slice(1)));
                 } else {
                   optDomainsArray.push(fastHash(value));
@@ -417,72 +413,77 @@ export default class NetworkFilter implements IFilter {
     // Identify kind of pattern
 
     // Deal with hostname pattern
-    if (line[filterIndexEnd - 1] === '|') {
+    if (line.charCodeAt(filterIndexEnd - 1) === 124 /* '|' */) {
       mask = setBit(mask, NETWORK_FILTER_MASK.isRightAnchor);
       filterIndexEnd -= 1;
     }
 
-    if (fastStartsWithFrom(line, '||', filterIndexStart)) {
-      mask = setBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor);
-      filterIndexStart += 2;
-    } else if (line[filterIndexStart] === '|') {
-      mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-      filterIndexStart += 1;
+    if (line.charCodeAt(filterIndexStart) === 124 /* '|' */) {
+      if (line.charCodeAt(filterIndexStart + 1) === 124 /* '|' */) {
+        mask = setBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor);
+        filterIndexStart += 2;
+      } else {
+        mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+        filterIndexStart += 1;
+      }
     }
 
-    const isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
-    mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRegex, isRegex);
+    // const isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
+    // mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRegex, isRegex);
 
     if (getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor)) {
-      if (isRegex) {
-        // Split at the first '/', '*' or '^' character to get the hostname
-        // and then the pattern.
-        // TODO - this could be made more efficient if we could match between two
-        // indices. Once again, we have to do more work than is really needed.
-        const firstSeparator = line.search(SEPARATOR);
-        // NOTE: `firstSeparator` shall never be -1 here since `isRegex` is true.
-        // This means there must be at least an occurrence of `*` or `^`
-        // somewhere.
+      // Split at the first character which is not allowed in a hostname
+      let firstSeparator = filterIndexStart;
+      while (
+        firstSeparator < filterIndexEnd &&
+        isAllowedHostname(line.charCodeAt(firstSeparator)) === true
+      ) {
+        firstSeparator += 1;
+      }
 
+      // No separator found so hostname has full length
+      if (firstSeparator === filterIndexEnd) {
+        hostname = line.slice(filterIndexStart, filterIndexEnd);
+        filterIndexStart = filterIndexEnd;
+        // mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+      } else {
+        // Found a separator
         hostname = line.slice(filterIndexStart, firstSeparator);
         filterIndexStart = firstSeparator;
+        const separatorCode = line.charCodeAt(firstSeparator);
 
-        // If the only symbol remaining for the selector is '^' then ignore it
-        // but set the filter as right anchored since there should not be any
-        // other label on the right
-        if (filterIndexEnd - filterIndexStart === 1 && line[filterIndexStart] === '^') {
-          mask = clearBit(mask, NETWORK_FILTER_MASK.isRegex);
-          filterIndexStart = filterIndexEnd;
-          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRightAnchor, true);
+        if (separatorCode === 94 /* '^' */) {
+          // If the only symbol remaining for the selector is '^' then ignore it
+          // but set the filter as right anchored since there should not be any
+          // other label on the right
+          if (filterIndexEnd - filterIndexStart === 1) {
+            filterIndexStart = filterIndexEnd;
+            mask = setBit(mask, NETWORK_FILTER_MASK.isRightAnchor);
+          } else {
+            mask = setBit(mask, NETWORK_FILTER_MASK.isRegex);
+            mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+          }
+        } else if (separatorCode === 42 /* '*' */) {
+          mask = setBit(mask, NETWORK_FILTER_MASK.isRegex);
         } else {
-          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isLeftAnchor, true);
-          mask = setNetworkMask(
-            mask,
-            NETWORK_FILTER_MASK.isRegex,
-            checkIsRegex(line, filterIndexStart, filterIndexEnd),
-          );
-        }
-      } else {
-        // Look for next /
-        const slashIndex = line.indexOf('/', filterIndexStart);
-        if (slashIndex !== -1) {
-          hostname = line.slice(filterIndexStart, slashIndex);
-          filterIndexStart = slashIndex;
           mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-        } else {
-          hostname = line.slice(filterIndexStart, filterIndexEnd);
-          filterIndexStart = filterIndexEnd;
         }
       }
     }
 
     // Remove trailing '*'
-    if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexEnd - 1] === '*') {
+    if (
+      filterIndexEnd - filterIndexStart > 0 &&
+      line.charCodeAt(filterIndexEnd - 1) === 42 /* '*' */
+    ) {
       filterIndexEnd -= 1;
     }
 
     // Remove leading '*' if the filter is not hostname anchored.
-    if (filterIndexEnd - filterIndexStart > 0 && line[filterIndexStart] === '*') {
+    if (
+      filterIndexEnd - filterIndexStart > 0 &&
+      line.charCodeAt(filterIndexStart) === 42 /* '*' */
+    ) {
       mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
       filterIndexStart += 1;
     }
@@ -527,11 +528,13 @@ export default class NetworkFilter implements IFilter {
     if (filterIndexEnd - filterIndexStart > 0) {
       filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
       mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isUnicode, hasUnicode(filter));
-      mask = setNetworkMask(
-        mask,
-        NETWORK_FILTER_MASK.isRegex,
-        checkIsRegex(filter, 0, filter.length),
-      );
+      if (getBit(mask, NETWORK_FILTER_MASK.isRegex) === false) {
+        mask = setNetworkMask(
+          mask,
+          NETWORK_FILTER_MASK.isRegex,
+          checkIsRegex(filter, 0, filter.length),
+        );
+      }
     }
 
     // TODO
@@ -1233,15 +1236,16 @@ function setNetworkMask(mask: number, m: number, value: boolean): number {
 
 /**
  * Check if the sub-string contained between the indices start and end is a
- * regex filter (it contains a '*' or '^' char). Here we are limited by the
- * capability of javascript to check the presence of a pattern between two
- * indices (same for Regex...).
- * // TODO - we could use sticky regex here
+ * regex filter (it contains a '*' or '^' char).
  */
 function checkIsRegex(filter: string, start: number, end: number): boolean {
-  const starIndex = filter.indexOf('*', start);
-  const separatorIndex = filter.indexOf('^', start);
-  return (starIndex !== -1 && starIndex < end) || (separatorIndex !== -1 && separatorIndex < end);
+  const indexOfSeparator = filter.indexOf('^', start);
+  if (indexOfSeparator !== -1 && indexOfSeparator < end) {
+    return true;
+  }
+
+  const indexOfWildcard = filter.indexOf('*', start);
+  return indexOfWildcard !== -1 && indexOfWildcard < end;
 }
 
 /**
@@ -1428,14 +1432,15 @@ function checkPatternHostnameLeftRightAnchorFilter(
 // ||pattern + left-anchor => This means that a plain pattern needs to appear
 // exactly after the hostname, with nothing in between.
 function checkPatternHostnameLeftAnchorFilter(filter: NetworkFilter, request: Request): boolean {
-  if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+  const filterHostname = filter.getHostname();
+  if (isAnchoredByHostname(filterHostname, request.hostname)) {
     // Since this is not a regex, the filter pattern must follow the hostname
     // with nothing in between. So we extract the part of the URL following
     // after hostname and will perform the matching on it.
     return fastStartsWithFrom(
       request.url,
       filter.getFilter(),
-      request.url.indexOf(filter.getHostname()) + filter.getHostname().length,
+      request.url.indexOf(filterHostname) + filterHostname.length,
     );
   }
 
