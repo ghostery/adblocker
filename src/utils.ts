@@ -1,4 +1,5 @@
 import { compactTokens } from './compact-set';
+import TokensBuffer from './tokens-buffer';
 
 /***************************************************************************
  *  Bitwise helpers
@@ -120,24 +121,21 @@ function isAllowedFilter(ch: number): boolean {
   );
 }
 
-function isAllowedHostname(ch: number): boolean {
-  return isAllowedFilter(ch) || ch === 95 /* '_' */ || ch === 45 /* '-' */;
-}
-
-const TOKENS_BUFFER = new Uint32Array(200);
+// Shared TokensBuffer used to avoid having to allocate many typed arrays
+const TOKENS_BUFFER = new TokensBuffer(200);
 
 function fastTokenizerNoRegex(
   pattern: string,
   isAllowedCode: (ch: number) => boolean,
   skipFirstToken: boolean,
   skipLastToken: boolean,
-): Uint32Array {
-  let tokensBufferIndex = 0;
+  buffer: TokensBuffer,
+): void {
   let inside: boolean = false;
   let start = 0;
   let precedingCh = 0; // Used to check if a '*' is not just before a token
 
-  for (let i: number = 0; i < pattern.length && tokensBufferIndex < TOKENS_BUFFER.length; i += 1) {
+  for (let i: number = 0; i < pattern.length; i += 1) {
     const ch = pattern.charCodeAt(i);
     if (isAllowedCode(ch)) {
       if (inside === false) {
@@ -158,31 +156,35 @@ function fastTokenizerNoRegex(
         ch !== 42 &&
         precedingCh !== 42
       ) {
-        TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, i);
-        tokensBufferIndex += 1;
+        buffer.push(fastHashBetween(pattern, start, i));
+        if (buffer.pos === buffer.size) {
+          return;
+        }
       }
     }
   }
 
   if (
     inside === true &&
-    pattern.length - start > 1 &&
+    skipLastToken === false &&
     precedingCh !== 42 &&
-    skipLastToken === false
+    pattern.length - start > 1
   ) {
-    TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, pattern.length);
-    tokensBufferIndex += 1;
+    buffer.push(fastHashBetween(pattern, start, pattern.length));
   }
 
-  return TOKENS_BUFFER.slice(0, tokensBufferIndex);
+  return;
 }
 
-function fastTokenizer(pattern: string, isAllowedCode: (ch: number) => boolean): Uint32Array {
-  let tokensBufferIndex = 0;
+function fastTokenizer(
+  pattern: string,
+  isAllowedCode: (ch: number) => boolean,
+  buffer: TokensBuffer,
+): void {
   let inside: boolean = false;
   let start = 0;
 
-  for (let i: number = 0; i < pattern.length && tokensBufferIndex < TOKENS_BUFFER.length; i += 1) {
+  for (let i: number = 0; i < pattern.length; i += 1) {
     const ch = pattern.charCodeAt(i);
     if (isAllowedCode(ch)) {
       if (inside === false) {
@@ -191,21 +193,35 @@ function fastTokenizer(pattern: string, isAllowedCode: (ch: number) => boolean):
       }
     } else if (inside === true) {
       inside = false;
-      TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, i);
-      tokensBufferIndex += 1;
+      buffer.push(fastHashBetween(pattern, start, i));
+      if (buffer.pos === buffer.size) {
+        return;
+      }
     }
   }
 
   if (inside === true) {
-    TOKENS_BUFFER[tokensBufferIndex] = fastHashBetween(pattern, start, pattern.length);
-    tokensBufferIndex += 1;
+    buffer.push(fastHashBetween(pattern, start, pattern.length));
   }
+}
 
-  return TOKENS_BUFFER.slice(0, tokensBufferIndex);
+export function tokenizeInPlace(pattern: string, buffer: TokensBuffer): void {
+  fastTokenizerNoRegex(pattern, isAllowedFilter, false, false, buffer);
 }
 
 export function tokenize(pattern: string): Uint32Array {
-  return fastTokenizerNoRegex(pattern, isAllowedFilter, false, false);
+  TOKENS_BUFFER.seekZero();
+  tokenizeInPlace(pattern, TOKENS_BUFFER);
+  return TOKENS_BUFFER.slice();
+}
+
+export function tokenizeFilterInPlace(
+  pattern: string,
+  skipFirstToken: boolean,
+  skipLastToken: boolean,
+  buffer: TokensBuffer,
+): void {
+  fastTokenizerNoRegex(pattern, isAllowedFilter, skipFirstToken, skipLastToken, buffer);
 }
 
 export function tokenizeFilter(
@@ -213,15 +229,15 @@ export function tokenizeFilter(
   skipFirstToken: boolean,
   skipLastToken: boolean,
 ): Uint32Array {
-  return fastTokenizerNoRegex(pattern, isAllowedFilter, skipFirstToken, skipLastToken);
-}
-
-export function tokenizeHostnames(pattern: string): Uint32Array {
-  return fastTokenizer(pattern, isAllowedHostname);
+  TOKENS_BUFFER.seekZero();
+  tokenizeFilterInPlace(pattern, skipFirstToken, skipLastToken, TOKENS_BUFFER);
+  return TOKENS_BUFFER.slice();
 }
 
 export function createFuzzySignature(pattern: string): Uint32Array {
-  return compactTokens(new Uint32Array(fastTokenizer(pattern, isAllowedFilter)));
+  TOKENS_BUFFER.seekZero();
+  fastTokenizer(pattern, isAllowedFilter, TOKENS_BUFFER);
+  return compactTokens(new Uint32Array(TOKENS_BUFFER.slice()));
 }
 
 export function binSearch(arr: Uint32Array, elt: number): number {

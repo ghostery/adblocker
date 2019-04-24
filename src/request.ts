@@ -1,4 +1,5 @@
-import { createFuzzySignature, fastHash, tokenize } from './utils';
+import TokensBuffer from './tokens-buffer';
+import { createFuzzySignature, fastHash, tokenizeInPlace } from './utils';
 
 // TODO - add unit tests (for initialization with existing domain, hostname, etc.)
 
@@ -72,7 +73,7 @@ const CPT_TO_TYPE: {
   21: RequestType.image,
 };
 
-const TOKENS_BUFFER = new Uint32Array(300);
+const TOKENS_BUFFER = new TokensBuffer(300);
 
 export interface IRequestInitialization {
   url: string;
@@ -166,21 +167,17 @@ export default class Request {
 
   public getTokens(): Uint32Array {
     if (this.tokens === undefined) {
-      let tokensBufferIndex = 0;
+      TOKENS_BUFFER.seekZero();
       if (this.sourceDomain) {
-        TOKENS_BUFFER[tokensBufferIndex] = fastHash(this.sourceDomain);
-        tokensBufferIndex += 1;
+        TOKENS_BUFFER.push(fastHash(this.sourceDomain));
       }
       if (this.sourceHostname) {
-        TOKENS_BUFFER[tokensBufferIndex] = fastHash(this.sourceHostname);
-        tokensBufferIndex += 1;
+        TOKENS_BUFFER.push(fastHash(this.sourceHostname));
       }
 
-      const tokens = tokenize(this.url);
-      TOKENS_BUFFER.set(tokens, tokensBufferIndex);
-      tokensBufferIndex += tokens.length;
+      tokenizeInPlace(this.url, TOKENS_BUFFER);
 
-      this.tokens = TOKENS_BUFFER.slice(0, tokensBufferIndex);
+      this.tokens = TOKENS_BUFFER.slice();
     }
 
     return this.tokens;
