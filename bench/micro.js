@@ -1,6 +1,6 @@
 /* eslint-disable no-bitwise */
 
-const adblocker = require('../');
+const { FiltersEngine, fastHash, tokenize, parseFilters } = require('../');
 const { createEngine } = require('./utils');
 
 
@@ -17,13 +17,13 @@ function benchEngineSerialization({ engine }) {
 }
 
 function benchEngineDeserialization({ serialized }) {
-  return adblocker.FiltersEngine.deserialize(serialized);
+  return FiltersEngine.deserialize(serialized);
 }
 
 function benchStringHashing({ filters }) {
   let dummy = 0;
   for (let i = 0; i < filters.length; i += 1) {
-    dummy = (dummy + adblocker.fastHash(filters[i])) % 1000000000;
+    dummy = (dummy + fastHash(filters[i])) >>> 0;
   }
   return dummy;
 }
@@ -31,13 +31,13 @@ function benchStringHashing({ filters }) {
 function benchStringTokenize({ filters }) {
   let dummy = 0;
   for (let i = 0; i < filters.length; i += 1) {
-    dummy = (dummy + adblocker.tokenize(filters[i]).length) % 1000000000;
+    dummy = (dummy + tokenize(filters[i]).length) >>> ;
   }
   return dummy;
 }
 
 function benchParsingImpl(lists, options) {
-  return adblocker.parseFilters(lists, options);
+  return parseFilters(lists, options);
 }
 
 function benchCosmeticsFiltersParsing({ combinedLists }) {
