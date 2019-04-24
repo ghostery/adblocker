@@ -1,5 +1,5 @@
 import StaticDataView from '../data-view';
-import { encode, toASCII } from '../punycode';
+import { toASCII } from '../punycode';
 import { binLookup, fastStartsWithFrom, getBit, hasUnicode, setBit } from '../utils';
 import IFilter from './interface';
 
@@ -518,49 +518,37 @@ export default class CosmeticFilter implements IFilter {
     let estimate: number = 1 + 1; // mask (1 byte) + optional parts (1 byte)
 
     if (this.isUnicode()) {
-      estimate += encode(this.selector).length + 2;
+      estimate += StaticDataView.sizeOfUTF8(this.selector);
     } else {
-      estimate += this.selector.length + 2;
+      estimate += StaticDataView.sizeOfASCII(this.selector);
     }
 
     if (this.entities !== undefined) {
-      estimate += this.entities.length * 4 + 1;
-      if (this.entities.length > 127) {
-        estimate += 2;
-      }
+      estimate += StaticDataView.sizeOfUint32Array(this.entities);
     }
 
     if (this.hostnames !== undefined) {
-      estimate += this.hostnames.length * 4 + 1;
-      if (this.hostnames.length > 127) {
-        estimate += 2;
-      }
+      estimate += StaticDataView.sizeOfUint32Array(this.hostnames);
     }
 
     if (this.notHostnames !== undefined) {
-      estimate += this.notHostnames.length * 4 + 1;
-      if (this.notHostnames.length > 127) {
-        estimate += 2;
-      }
+      estimate += StaticDataView.sizeOfUint32Array(this.notHostnames);
     }
 
     if (this.notEntities !== undefined) {
-      estimate += this.notEntities.length * 4 + 1;
-      if (this.notEntities.length > 127) {
-        estimate += 2;
-      }
+      estimate += StaticDataView.sizeOfUint32Array(this.notEntities);
     }
 
     if (this.rawLine !== undefined) {
       if (this.isUnicode()) {
-        estimate += encode(this.rawLine).length + 2;
+        estimate += StaticDataView.sizeOfUTF8(this.rawLine);
       } else {
-        estimate += this.rawLine.length + 2;
+        estimate += StaticDataView.sizeOfASCII(this.rawLine);
       }
     }
 
     if (this.style !== undefined) {
-      estimate += this.style.length + 2;
+      estimate += StaticDataView.sizeOfASCII(this.style);
     }
 
     return estimate;

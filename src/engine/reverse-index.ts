@@ -127,11 +127,11 @@ export default class ReverseIndex<T extends IFilter> {
     // appear at any offset of `buffer`. But to be sure we can read back
     // Uint32Array directly from raw buffer, the alignement has to be a multiple
     // of 4. The same alignement is taken care of in `serialize`.
-    buffer.align(4);
-    const view = StaticDataView.fromUint8Array(buffer.getBytes());
+    const view = StaticDataView.fromUint8Array(buffer.getBytes(true /* align */));
 
     // Read Uint32Array views on top of byte array for fast access.
     view.setPos(tokensLookupIndexStart);
+
     const tokensLookupIndex = view.getUint32ArrayView(tokensLookupIndexSize);
     const bucketsIndex = view.getUint32ArrayView(bucketsIndexSize);
     view.seekZero();
@@ -297,8 +297,7 @@ export default class ReverseIndex<T extends IFilter> {
     buffer.pushUint32(this.bucketsIndex.length);
 
     // Aligmenent is crucial here, see comment in `deserialize` for more info.
-    buffer.align(4);
-    buffer.pushBytes(this.view.buffer);
+    buffer.pushBytes(this.view.buffer, true /* align */);
   }
 
   /**
