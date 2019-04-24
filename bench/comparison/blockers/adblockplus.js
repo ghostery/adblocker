@@ -1,12 +1,9 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
-/* eslint-disable func-names */
-
-const { URL } = require('url');
 
 const { CombinedMatcher } = require('./adblockpluscore/lib/matcher.js');
 const { Filter, RegExpFilter } = require('./adblockpluscore/lib/filterClasses.js');
-const { parseURL, isThirdParty } = require('./adblockpluscore/lib/url.js');
+const { parseURL } = require('./adblockpluscore/lib/url.js');
 
 // Chrome can't distinguish between OBJECT_SUBREQUEST and OBJECT requests.
 RegExpFilter.typeMap.OBJECT_SUBREQUEST = RegExpFilter.typeMap.OBJECT;
@@ -14,7 +11,7 @@ RegExpFilter.typeMap.OBJECT_SUBREQUEST = RegExpFilter.typeMap.OBJECT;
 // Map of content types reported by the browser to the respecitve content types
 // used by Adblock Plus. Other content types are simply mapped to OTHER.
 const resourceTypes = new Map(
-  (function* () {
+  (function* resourceTypesGenerator() {
     for (const type in RegExpFilter.typeMap) yield [type.toLowerCase(), type];
 
     yield ['sub_frame', 'SUBDOCUMENT'];
@@ -75,12 +72,10 @@ module.exports = class AdBlockPlus {
   match(request) {
     const url = parseURL(request.url);
     const sourceURL = parseURL(request.frameUrl);
-    const thirdParty = isThirdParty(url, sourceURL.hostname);
     const filter = this.matcher.matchesAny(
-      url.href,
+      url,
       RegExpFilter.typeMap[resourceTypes.get(request.type) || 'OTHER'],
       sourceURL.hostname,
-      thirdParty,
       null,
       false,
     );
