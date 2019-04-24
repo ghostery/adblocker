@@ -337,6 +337,7 @@ export default class NetworkFilter implements IFilter {
               csp = optionValue;
             }
             break;
+          case 'elemhide':
           case 'generichide':
             mask = setBit(mask, NETWORK_FILTER_MASK.isGenericHide);
             break;
