@@ -28,3 +28,7 @@ export function loadResources() {
     'assets/raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt',
   );
 }
+
+export function getNaughtyStrings(): string[] {
+  return fs.readFileSync(path.resolve(__dirname, 'data', 'blns.txt'), 'utf-8').split('\n');
+}
