@@ -51,6 +51,9 @@ tldts:
 url:
 	NODE_ENV=production node run.js url requests.json
 
+adblockfast:
+	NODE_ENV=production node run.js adblockfast requests.json
+
 deps: requests.json \
 	  ../../dist \
 	  ../../node_modules/abp-filter-parser \
@@ -60,4 +63,4 @@ deps: requests.json \
 	  ../../node_modules/sandboxed-module \
 	  ./blockers/adblockpluscore
 
-run: deps url tldts ghostery ublock adblockplus brave duckduckgo
+run: deps url tldts ghostery ublock adblockplus brave duckduckgo adblockfast
