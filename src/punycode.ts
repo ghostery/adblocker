@@ -265,7 +265,8 @@ export function encode(str: string): string {
   let bias = initialBias;
 
   // Handle the basic code points.
-  for (const currentValue of input) {
+  for (let i = 0; i < input.length; i += 1) {
+    const currentValue = input[i];
     if (currentValue < 0x80) {
       output.push(stringFromCharCode(currentValue));
     }
@@ -287,7 +288,8 @@ export function encode(str: string): string {
     // All non-basic code points < n have been handled already. Find the next
     // larger one:
     let m = maxInt;
-    for (const currentValue of input) {
+    for (let i = 0; i < input.length; i += 1) {
+      const currentValue = input[i];
       if (currentValue >= n && currentValue < m) {
         m = currentValue;
       }
@@ -303,7 +305,8 @@ export function encode(str: string): string {
     delta += (m - n) * handledCPCountPlusOne;
     n = m;
 
-    for (const currentValue of input) {
+    for (let i = 0; i < input.length; i += 1) {
+      const currentValue = input[i];
       if (currentValue < n && ++delta > maxInt) {
         error('overflow');
       }
