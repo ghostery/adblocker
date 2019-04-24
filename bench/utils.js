@@ -1,7 +1,7 @@
-const adblocker = require('../');
+const { FiltersEngine, parseFilters } = require('../');
 
 function createEngine(lists, resources, options = {}, serialize = false) {
-  const engine = adblocker.FiltersEngine.parse(
+  const engine = FiltersEngine.parse(
     lists.join('\n'),
     options,
   );
@@ -20,9 +20,9 @@ function getFiltersFromLists(lists) {
   const filters = [];
 
   for (let i = 0; i < lists.length; i += 1) {
-    const splitted = lists[i].split(/\n/g);
-    for (let j = 0; j < splitted.length; j += 1) {
-      filters.push(splitted[j]);
+    const split = lists[i].split(/\n/g);
+    for (let j = 0; j < split.length; j += 1) {
+      filters.push(split[j]);
     }
   }
 
@@ -34,4 +34,5 @@ module.exports = {
   createEngine,
   NANOSECS_PER_SEC,
   getFiltersFromLists,
+  parseFilters,
 };

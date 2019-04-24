@@ -8,7 +8,6 @@ import {
   hasUnicode,
   tokenize,
   tokenizeFilter,
-  tokenizeHostnames,
   updateResponseHeadersWithCSP,
 } from '../src/utils';
 import requests from './data/requests';
@@ -79,16 +78,6 @@ describe('Utils', () => {
     expect(tokenizeFilter('foo/bar baz', true, true)).toEqual(t(['bar']));
     expect(tokenizeFilter('foo/bar baz', false, true)).toEqual(t(['foo', 'bar']));
     expect(tokenizeFilter('foo////bar  baz', false, true)).toEqual(t(['foo', 'bar']));
-  });
-
-  it('#tokenizeHostnames', () => {
-    expect(tokenizeHostnames('')).toEqual(t([]));
-    expect(tokenizeHostnames('foo')).toEqual(t(['foo']));
-    expect(tokenizeHostnames('foo/bar')).toEqual(t(['foo', 'bar']));
-    expect(tokenizeHostnames('foo-barbaz/bar')).toEqual(t(['foo-barbaz', 'bar']));
-    expect(tokenizeHostnames('foo_barbaz/ba%r')).toEqual(t(['foo_barbaz', 'ba%r']));
-    expect(tokenizeHostnames('foo_barbaz/ba%r*')).toEqual(t(['foo_barbaz', 'ba%r']));
-    expect(tokenizeHostnames('foo_barbaz///ba%r*')).toEqual(t(['foo_barbaz', 'ba%r']));
   });
 
   it('#tokenize', () => {

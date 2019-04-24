@@ -1,3 +1,5 @@
+/* eslint-disable no-bitwise */
+
 const adblocker = require('../');
 const { createEngine } = require('./utils');
 
@@ -41,7 +43,7 @@ function benchParsingImpl(lists, { loadNetworkFilters, loadCosmeticFilters }) {
     dummy = (dummy + adblocker.parseFilters(lists[i], {
       loadNetworkFilters,
       loadCosmeticFilters,
-    }).networkFilters.length) % 100000;
+    }).networkFilters.length) >>> 0;
   }
 
   return dummy;
@@ -61,6 +63,26 @@ function benchNetworkFiltersParsing({ lists }) {
   });
 }
 
+function benchGetNetworkTokens({ networkFilters }) {
+  let dummy = 0;
+
+  for (let i = 0; i < networkFilters.length; i += 1) {
+    dummy = (dummy + networkFilters[i].getTokens().length) >>> 0;
+  }
+
+  return dummy;
+}
+
+function benchGetCosmeticTokens({ cosmeticFilters }) {
+  let dummy = 0;
+
+  for (let i = 0; i < cosmeticFilters.length; i += 1) {
+    dummy = (dummy + cosmeticFilters[i].getTokens().length) >>> 0;
+  }
+
+  return dummy;
+}
+
 module.exports = {
   benchCosmeticsFiltersParsing,
   benchEngineCreation,
@@ -69,4 +91,6 @@ module.exports = {
   benchNetworkFiltersParsing,
   benchStringHashing,
   benchStringTokenize,
+  benchGetNetworkTokens,
+  benchGetCosmeticTokens,
 };
