@@ -542,7 +542,7 @@ $csp=baz,domain=bar.com
         expect(
           Engine.parse(
             `
-||foo.com^$generichide
+@@||foo.com^$generichide
 ~bar.*##.selector1
 ##.selector2
 `,
@@ -551,17 +551,43 @@ $csp=baz,domain=bar.com
         ).toBe('');
       });
 
-      it('allows generic cosmetics if @@$generichide', () => {
+      it('allows generic cosmetics if $generichide', () => {
         expect(
           Engine.parse(
             `
-||foo.com^$generichide
-##.selector
 @@||foo.com^$generichide
+##.selector
+||foo.com^$generichide
 `,
           ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
             .styles,
         ).not.toBe('');
+      });
+
+      it('allows generic cosmetics if $generichide,important', () => {
+        expect(
+          Engine.parse(
+            `
+@@||foo.com^$important,generichide
+##.selector
+||foo.com^$generichide,important
+`,
+          ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+            .styles,
+        ).not.toBe('');
+      });
+
+      it('disables generic cosmetics if @@$generichide,important', () => {
+        expect(
+          Engine.parse(
+            `
+@@||foo.com^$important,generichide
+##.selector
+||foo.com^$generichide
+`,
+          ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+            .styles,
+        ).toBe('');
       });
     });
 
