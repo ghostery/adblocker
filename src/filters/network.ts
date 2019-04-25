@@ -582,7 +582,7 @@ export default class NetworkFilter implements IFilter {
       mask,
 
       // Optional parts
-      csp: (optionalParts & 1) === 1 ? buffer.getASCII() : undefined,
+      csp: (optionalParts & 1) === 1 ? buffer.getNetworkCSP() : undefined,
       filter:
         (optionalParts & 2) === 2
           ? isUnicode

@@ -326,11 +326,18 @@ export default class StaticDataView {
   }
 
   public pushNetworkFilter(str: string): void {
-    this.pushBytes(compression.deflateNetworkFilterString(str));
+    if (this.enableCompression === true) {
+      this.pushBytes(compression.deflateNetworkFilterString(str));
+    } else {
+      this.pushASCII(str);
+    }
   }
 
   public getNetworkFilter(): string {
-    return compression.inflateNetworkFilterString(this.getBytes());
+    if (this.enableCompression === true) {
+      return compression.inflateNetworkFilterString(this.getBytes());
+    }
+    return this.getASCII();
   }
 
   public pushCosmeticSelector(str: string): void {
