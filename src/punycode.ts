@@ -34,7 +34,6 @@ const initialN = 128; // 0x80
 const delimiter = '-'; // '\x2D'
 
 /** Regular expressions */
-const regexPunycode = /^xn--/;
 const regexNonASCII = /[^\0-\x7E]/; // non-ASCII chars
 const regexSeparators = /[\x2E\u3002\uFF0E\uFF61]/g; // RFC 3490 separators
 
@@ -50,8 +49,6 @@ const errors: {
 
 /** Convenience shortcuts */
 const baseMinusTMin = base - tMin;
-const floor = Math.floor;
-const stringFromCharCode = String.fromCharCode;
 
 /*--------------------------------------------------------------------------*/
 
@@ -63,49 +60,6 @@ const stringFromCharCode = String.fromCharCode;
  */
 function error(type: errorNames): void {
   throw new RangeError(errors[type]);
-}
-
-/**
- * A generic `Array#map` utility function.
- * @private
- * @param {Array} array The array to iterate over.
- * @param {Function} callback The function that gets called for every array
- * item.
- * @returns {Array} A new array of values returned by the callback function.
- */
-function map(array: string[], fn: (_: string) => string): string[] {
-  const result = [];
-  let length = array.length;
-  while (length--) {
-    result[length] = fn(array[length]);
-  }
-  return result;
-}
-
-/**
- * A simple `Array#map`-like wrapper to work with domain name strings or email
- * addresses.
- * @private
- * @param {String} domain The domain name or email address.
- * @param {Function} callback The function that gets called for every
- * character.
- * @returns {Array} A new string of characters returned by the callback
- * function.
- */
-function mapDomain(str: string, fn: (_: string) => string): string {
-  const parts = str.split('@');
-  let result = '';
-  if (parts.length > 1) {
-    // In email addresses, only the domain name should be punycoded. Leave
-    // the local part (i.e. everything up to `@`) intact.
-    result = parts[0] + '@';
-    str = parts[1];
-  }
-  // Avoid `split(regex)` for IE8 compatibility. See #17.
-  str = str.replace(regexSeparators, '\x2E');
-  const labels = str.split('.');
-  const encoded = map(labels, fn).join('.');
-  return result + encoded;
 }
 
 /**
@@ -192,12 +146,12 @@ function digitToBasic(digit: number, flag: number): number {
  */
 function adapt(delta: number, numPoints: number, firstTime: boolean): number {
   let k = 0;
-  delta = firstTime ? floor(delta / damp) : delta >> 1;
-  delta += floor(delta / numPoints);
+  delta = firstTime ? Math.floor(delta / damp) : delta >> 1;
+  delta += Math.floor(delta / numPoints);
   for (; /* no initialization */ delta > (baseMinusTMin * tMax) >> 1; k += base) {
-    delta = floor(delta / baseMinusTMin);
+    delta = Math.floor(delta / baseMinusTMin);
   }
-  return floor(k + ((baseMinusTMin + 1) * delta) / (delta + skew));
+  return Math.floor(k + ((baseMinusTMin + 1) * delta) / (delta + skew));
 }
 
 /**
@@ -249,7 +203,7 @@ export function decode(input: string): string {
 
       const digit = basicToDigit(input.charCodeAt(index++));
 
-      if (digit >= base || digit > floor((maxInt - i) / w)) {
+      if (digit >= base || digit > Math.floor((maxInt - i) / w)) {
         error('overflow');
       }
 
@@ -261,7 +215,7 @@ export function decode(input: string): string {
       }
 
       const baseMinusT = base - t;
-      if (w > floor(maxInt / baseMinusT)) {
+      if (w > Math.floor(maxInt / baseMinusT)) {
         error('overflow');
       }
 
@@ -273,11 +227,11 @@ export function decode(input: string): string {
 
     // `i` was supposed to wrap around from `out` to `0`,
     // incrementing `n` each time, so we'll fix that now:
-    if (floor(i / out) > maxInt - n) {
+    if (Math.floor(i / out) > maxInt - n) {
       error('overflow');
     }
 
-    n += floor(i / out);
+    n += Math.floor(i / out);
     i %= out;
 
     // Insert `n` at position `i` of the output.
@@ -309,9 +263,10 @@ export function encode(str: string): string {
   let bias = initialBias;
 
   // Handle the basic code points.
-  for (const currentValue of input) {
+  for (let i = 0; i < input.length; i += 1) {
+    const currentValue = input[i];
     if (currentValue < 0x80) {
-      output.push(stringFromCharCode(currentValue));
+      output.push(String.fromCharCode(currentValue));
     }
   }
 
@@ -331,7 +286,8 @@ export function encode(str: string): string {
     // All non-basic code points < n have been handled already. Find the next
     // larger one:
     let m = maxInt;
-    for (const currentValue of input) {
+    for (let i = 0; i < input.length; i += 1) {
+      const currentValue = input[i];
       if (currentValue >= n && currentValue < m) {
         m = currentValue;
       }
@@ -340,14 +296,15 @@ export function encode(str: string): string {
     // Increase `delta` enough to advance the decoder's <n,i> state to <m,0>,
     // but guard against overflow.
     const handledCPCountPlusOne = handledCPCount + 1;
-    if (m - n > floor((maxInt - delta) / handledCPCountPlusOne)) {
+    if (m - n > Math.floor((maxInt - delta) / handledCPCountPlusOne)) {
       error('overflow');
     }
 
     delta += (m - n) * handledCPCountPlusOne;
     n = m;
 
-    for (const currentValue of input) {
+    for (let i = 0; i < input.length; i += 1) {
+      const currentValue = input[i];
       if (currentValue < n && ++delta > maxInt) {
         error('overflow');
       }
@@ -361,11 +318,11 @@ export function encode(str: string): string {
           }
           const qMinusT = q - t;
           const baseMinusT = base - t;
-          output.push(stringFromCharCode(digitToBasic(t + (qMinusT % baseMinusT), 0)));
-          q = floor(qMinusT / baseMinusT);
+          output.push(String.fromCharCode(digitToBasic(t + (qMinusT % baseMinusT), 0)));
+          q = Math.floor(qMinusT / baseMinusT);
         }
 
-        output.push(stringFromCharCode(digitToBasic(q, 0)));
+        output.push(String.fromCharCode(digitToBasic(q, 0)));
         bias = adapt(delta, handledCPCountPlusOne, handledCPCount === basicLength);
         delta = 0;
         ++handledCPCount;
@@ -390,12 +347,14 @@ export function encode(str: string): string {
  * string.
  */
 export function toUnicode(input: string): string {
-  return mapDomain(
-    input,
-    (str: string): string => {
-      return regexPunycode.test(str) ? decode(str.slice(4).toLowerCase()) : str;
-    },
-  );
+  const labels = input.replace(regexSeparators, '\x2E').split('.');
+  const encoded: string[] = [];
+  for (let i = 0; i < labels.length; i += 1) {
+    encoded.push(
+      labels[i].startsWith('xn--') ? decode(labels[i].slice(4).toLowerCase()) : labels[i],
+    );
+  }
+  return encoded.join('.');
 }
 
 /**
@@ -410,12 +369,13 @@ export function toUnicode(input: string): string {
  * email address.
  */
 export function toASCII(input: string): string {
-  return mapDomain(
-    input,
-    (str: string): string => {
-      return regexNonASCII.test(str) ? 'xn--' + encode(str) : str;
-    },
-  );
+  // Avoid `split(regex)` for IE8 compatibility. See #17.
+  const labels = input.replace(regexSeparators, '\x2E').split('.');
+  const encoded: string[] = [];
+  for (let i = 0; i < labels.length; i += 1) {
+    encoded.push(regexNonASCII.test(labels[i]) ? 'xn--' + encode(labels[i]) : labels[i]);
+  }
+  return encoded.join('.');
 }
 
 /**

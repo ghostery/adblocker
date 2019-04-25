@@ -20,9 +20,12 @@ const path = require('path');
 const chalk = require('chalk');
 const Benchmark = require('benchmark');
 
+const GREP = (process.env.GREP || '').toLowerCase();
+
 const {
   createEngine,
   getFiltersFromLists,
+  parseFilters,
 } = require('./utils');
 
 const {
@@ -30,6 +33,8 @@ const {
   benchEngineCreation,
   benchEngineDeserialization,
   benchEngineSerialization,
+  benchGetCosmeticTokens,
+  benchGetNetworkTokens,
   benchNetworkFiltersParsing,
   benchStringHashing,
   benchStringTokenize,
@@ -75,6 +80,7 @@ function runMicroBenchmarks(lists, resources) {
   }, true /* Also serialize engine */);
 
   const filters = getFiltersFromLists(lists);
+  const { networkFilters, cosmeticFilters } = parseFilters(filters.join('\n'));
   const results = {};
 
   // Arguments shared among benchmarks
@@ -84,25 +90,31 @@ function runMicroBenchmarks(lists, resources) {
     engine,
     filters,
     serialized,
+    networkFilters,
+    cosmeticFilters,
   };
 
   [
-    benchStringHashing,
     benchCosmeticsFiltersParsing,
-    benchStringTokenize,
-    benchNetworkFiltersParsing,
     benchEngineCreation,
     benchEngineDeserialization,
     benchEngineSerialization,
+    benchGetCosmeticTokens,
+    benchGetNetworkTokens,
+    benchNetworkFiltersParsing,
+    benchStringHashing,
+    benchStringTokenize,
   ].forEach((bench) => {
-    const suite = new Benchmark.Suite();
-    suite.add(bench.name, () => bench(args)).on('cycle', (event) => {
-      results[bench.name] = {
-        opsPerSecond: event.target.hz,
-        relativeMarginOfError: event.target.stats.rme,
-        numberOfSamples: event.target.stats.sample.length,
-      };
-    }).run({ async: false });
+    if (bench.name.toLowerCase().includes(GREP)) {
+      const suite = new Benchmark.Suite();
+      suite.add(bench.name, () => bench(args)).on('cycle', (event) => {
+        results[bench.name] = {
+          opsPerSecond: event.target.hz,
+          relativeMarginOfError: event.target.stats.rme,
+          numberOfSamples: event.target.stats.sample.length,
+        };
+      }).run({ async: false });
+    }
   });
 
   return {
@@ -119,6 +131,15 @@ function runMicroBenchmarks(lists, resources) {
 
 
 function runMemoryBench(lists, resources) {
+  if ('runMemoryBench'.includes(GREP) === false) {
+    return {
+      memory: {
+        engineSerializedBytes: NaN,
+        engineMemory: NaN,
+      },
+    };
+  }
+
   console.log('Run memory bench...');
   // Create adb engine to use in benchmark
   const baseMemory = getMemoryConsumption();

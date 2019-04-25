@@ -12,6 +12,7 @@ const AdBlockPlus = require('./blockers/adblockplus.js');
 const Tldts = require('./blockers/tldts_baseline.js');
 const Url = require('./blockers/url_baseline.js');
 const Re = require('./blockers/re_baseline.js');
+const AdblockFast = require('./blockers/adblockfast.js');
 
 const ENGINE = process.argv[process.argv.length - 2];
 const REQUESTS_PATH = process.argv[process.argv.length - 1];
@@ -93,6 +94,7 @@ async function main() {
     tldts: Tldts,
     ublock: UBlockOrigin,
     url: Url,
+    adblockfast: AdblockFast,
   }[ENGINE];
 
   // Parse rules

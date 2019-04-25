@@ -7,19 +7,19 @@ all: deps run
 requests.json:
 	curl https://cdn.cliqz.com/adblocking/requests_top500.json.gz | gunzip > requests.json
 
-# VERSION: 0b3423e3147bad4c001f5ae3456571a164a6e2e5
+# VERSION: 23cd2b97bbff5f8a87e4cc6637ac378dcd7a2dd8
 ./blockers/adblockpluscore:
 	git clone --branch=next https://github.com/adblockplus/adblockpluscore.git ./blockers/adblockpluscore
-	cd ./blockers/adblockpluscore && git reset --hard 0b3423e3147bad4c001f5ae3456571a164a6e2e5
+	cd ./blockers/adblockpluscore && git reset --hard 23cd2b97bbff5f8a87e4cc6637ac378dcd7a2dd8
 
 # VERSION: 0.2.0
 ../../node_modules/abp-filter-parser:
 	npm install --save https://github.com/duckduckgo/abp-filter-parser.git#0.2.0
 	cd ../../node_modules/abp-filter-parser/ && npm install && cd -
 
-# VERSION: 4.1.3
+# VERSION: 4.1.7
 ../../node_modules/ad-block:
-	npm install --save ad-block@4.1.3
+	npm install --save ad-block@4.1.7
 
 ../../dist:
 	cd ../../ && npm ci && npm pack
@@ -51,6 +51,9 @@ tldts:
 url:
 	NODE_ENV=production node run.js url requests.json
 
+adblockfast:
+	NODE_ENV=production node run.js adblockfast requests.json
+
 deps: requests.json \
 	  ../../dist \
 	  ../../node_modules/abp-filter-parser \
@@ -60,4 +63,4 @@ deps: requests.json \
 	  ../../node_modules/sandboxed-module \
 	  ./blockers/adblockpluscore
 
-run: deps url tldts ghostery ublock adblockplus brave duckduckgo
+run: deps url tldts ghostery ublock adblockplus brave duckduckgo adblockfast

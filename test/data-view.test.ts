@@ -1,4 +1,5 @@
 import StaticDataView from '../src/data-view';
+import { getNaughtyStrings } from './utils';
 
 describe('#StaticDataView', () => {
   describe('#slice', () => {
@@ -61,6 +62,62 @@ describe('#StaticDataView', () => {
       'roarmyng.bid',
       '.fusion-ads',
       '/dist/assets/omniture/visitorapi.min.js',
+    ].forEach((str) => {
+      it(str, () => {
+        checkString(str);
+      });
+    });
+  });
+
+  describe('#pushUTF8', () => {
+    const view = new StaticDataView(10000);
+    const checkString = (str: string): void => {
+      view.seekZero();
+      view.pushUTF8(str);
+      view.seekZero();
+      expect(view.getUTF8()).toEqual(str);
+    };
+
+    it('empty string', () => {
+      checkString('');
+    });
+
+    [
+      'expogrim.com',
+      '/reklam/',
+      '/playplugins/*/ga/ga.min.js',
+      '.ad-text-blockA01',
+      'ad.pandora.tv',
+      '#header_ad_167',
+      'a > img[src][style]',
+      'stat.youku.com',
+      'addEventListener-defuser.js, load, 2000',
+      'table[width="952"][height="115"]',
+      '#sb_left_tower',
+      '#header_bottom',
+      '.SimpleAcceptableTextAds',
+      '.ads-right',
+      '.bottom-slider-ads',
+      'cnt.spbland.ru',
+      'tracking.base.de',
+      '.RGAdBoxMainDiv',
+      'thumbnail-galleries.net',
+      '/ad_campaigns/',
+      '/product-ad/',
+      '[href*=".an0n."]',
+      '.code-block',
+      '/media/flash/*.swf',
+      'amunx.de',
+      'infusionextreme.com',
+      'pc-magazin.de',
+      '/core/media/automatico/',
+      'smartadserver.com',
+      'button[onclick^="verivox_go("]',
+      '/wrap?',
+      'roarmyng.bid',
+      '.fusion-ads',
+      '/dist/assets/omniture/visitorapi.min.js',
+      ...getNaughtyStrings(),
     ].forEach((str) => {
       it(str, () => {
         checkString(str);

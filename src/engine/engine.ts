@@ -240,8 +240,8 @@ export default class FilterEngine {
       for (let i = 0; i < newNetworkFilters.length; i += 1) {
         const filter = newNetworkFilters[i];
         // NOTE: it's important to check for $generichide and $csp before
-        // exceptions as we store all of them in the same filter bucket. The
-        // check for exceptions is done at match-time directly.
+        // exceptions and important as we store all of them in the same filter
+        // bucket. The check for exceptions is done at match-time directly.
         if (filter.isCSP()) {
           csp.push(filter);
         } else if (filter.isGenericHide()) {
@@ -308,9 +308,28 @@ export default class FilterEngine {
       }),
     );
 
+    // Get $generichide filter with highest priority:
+    // $generichide,important > $generichide > @@$generichide
+    let genericHideFilter: null | NetworkFilter = null;
+    let currentScore = 0;
+    for (let i = 0; i < genericHides.length; i += 1) {
+      const filter = genericHides[i];
+      // To encode priority between filter, we create a bitmask with the following:
+      // $important,generichide = 100 (takes precedence)
+      // $generichide           = 010 (exception to $generichide)
+      // @@$generichide         = 001 (forbids generic hide filters)
+      const score: number = (filter.isImportant() ? 4 : 0) | (filter.isException() ? 1 : 2);
+
+      // Highest `score` has precedence
+      if (score > currentScore) {
+        currentScore = score;
+        genericHideFilter = filter;
+      }
+    }
+
     // Check that there is at least one $generichide match and no exception
     const allowGenericHides =
-      genericHides.length === 0 || genericHides.some((f) => f.isException()) === true;
+      genericHideFilter === null || genericHideFilter.isException() === false;
 
     if (this.config.loadCosmeticFilters) {
       const rules = this.cosmetics.getCosmeticsFilters(hostname, domain || '', allowGenericHides);

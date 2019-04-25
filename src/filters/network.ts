@@ -1,7 +1,8 @@
 import StaticDataView from '../data-view';
-import { encode, toASCII } from '../punycode';
+import { toASCII } from '../punycode';
 import { RequestType } from '../request';
 import Request from '../request';
+import TokensBuffer from '../tokens-buffer';
 import {
   binLookup,
   bitCount,
@@ -13,12 +14,14 @@ import {
   getBit,
   hasUnicode,
   setBit,
-  tokenize,
-  tokenizeFilter,
+  tokenizeFilterInPlace,
+  tokenizeInPlace,
 } from '../utils';
 import IFilter from './interface';
 
-const TOKENS_BUFFER = new Uint32Array(200);
+const TOKENS_BUFFER = new TokensBuffer(200);
+const HTTP_HASH = fastHash('http');
+const HTTPS_HASH = fastHash('https');
 
 /**
  * Masks used to store options of network filters in a bitmask.
@@ -337,6 +340,7 @@ export default class NetworkFilter implements IFilter {
               csp = optionValue;
             }
             break;
+          case 'elemhide':
           case 'generichide':
             mask = setBit(mask, NETWORK_FILTER_MASK.isGenericHide);
             break;
@@ -742,45 +746,39 @@ export default class NetworkFilter implements IFilter {
     let estimate: number = 4 + 1; // mask = 4 bytes // optional parts = 1 byte
 
     if (this.csp !== undefined) {
-      estimate += this.csp.length + 2;
+      estimate += StaticDataView.sizeOfASCII(this.csp);
     }
 
     if (this.filter !== undefined) {
       if (this.isUnicode()) {
-        estimate += encode(this.filter).length + 2;
+        estimate += StaticDataView.sizeOfUTF8(this.filter);
       } else {
-        estimate += this.filter.length + 2;
+        estimate += StaticDataView.sizeOfASCII(this.filter);
       }
     }
 
     if (this.hostname !== undefined) {
-      estimate += this.hostname.length + 2;
+      estimate += StaticDataView.sizeOfASCII(this.hostname);
     }
 
     if (this.optDomains !== undefined) {
-      estimate += this.optDomains.length * 4 + 1;
-      if (this.optDomains.length > 127) {
-        estimate += 2;
-      }
+      estimate += StaticDataView.sizeOfUint32Array(this.optDomains);
     }
 
     if (this.optNotDomains !== undefined) {
-      estimate += this.optNotDomains.length * 4 + 1;
-      if (this.optNotDomains.length > 127) {
-        estimate += 2;
-      }
+      estimate += StaticDataView.sizeOfUint32Array(this.optNotDomains);
     }
 
     if (this.rawLine !== undefined) {
       if (this.isUnicode()) {
-        estimate += encode(this.rawLine).length + 2;
+        estimate += StaticDataView.sizeOfUTF8(this.rawLine);
       } else {
-        estimate += this.rawLine.length + 2;
+        estimate += StaticDataView.sizeOfASCII(this.rawLine);
       }
     }
 
     if (this.redirect !== undefined) {
-      estimate += this.redirect.length + 2;
+      estimate += StaticDataView.sizeOfASCII(this.redirect);
     }
 
     return estimate;
@@ -1050,7 +1048,7 @@ export default class NetworkFilter implements IFilter {
   }
 
   public getTokens(): Uint32Array[] {
-    let tokensBufferIndex = 0;
+    TOKENS_BUFFER.seekZero();
 
     // If there is only one domain and no domain negation, we also use this
     // domain as a token.
@@ -1059,46 +1057,43 @@ export default class NetworkFilter implements IFilter {
       this.optNotDomains === undefined &&
       this.optDomains.length === 1
     ) {
-      TOKENS_BUFFER[tokensBufferIndex] = this.optDomains[0];
-      tokensBufferIndex += 1;
+      TOKENS_BUFFER.push(this.optDomains[0]);
     }
 
     // Get tokens from filter
     if (this.filter !== undefined) {
       const skipLastToken = this.isPlain() && !this.isRightAnchor() && !this.isFuzzy();
       const skipFirstToken = this.isRightAnchor();
-      const filterTokens = tokenizeFilter(this.filter, skipFirstToken, skipLastToken);
-      TOKENS_BUFFER.set(filterTokens, tokensBufferIndex);
-      tokensBufferIndex += filterTokens.length;
+      tokenizeFilterInPlace(this.filter, skipFirstToken, skipLastToken, TOKENS_BUFFER);
     }
 
     // Append tokens from hostname, if any
     if (this.hostname !== undefined) {
-      const hostnameTokens = tokenize(this.hostname);
-      TOKENS_BUFFER.set(hostnameTokens, tokensBufferIndex);
-      tokensBufferIndex += hostnameTokens.length;
+      tokenizeInPlace(this.hostname, TOKENS_BUFFER);
     }
 
     // If we got no tokens for the filter/hostname part, then we will dispatch
     // this filter in multiple buckets based on the domains option.
     if (
-      tokensBufferIndex === 0 &&
+      TOKENS_BUFFER.pos === 0 &&
       this.optDomains !== undefined &&
       this.optNotDomains === undefined
     ) {
-      return [...this.optDomains].map((d) => new Uint32Array([d]));
+      const result: Uint32Array[] = [];
+      for (let i = 0; i < this.optDomains.length; i += 1) {
+        result.push(new Uint32Array([this.optDomains[i]]));
+      }
+      return result;
     }
 
     // Add optional token for protocol
-    if (this.fromHttp() && !this.fromHttps()) {
-      TOKENS_BUFFER[tokensBufferIndex] = fastHash('http');
-      tokensBufferIndex += 1;
-    } else if (this.fromHttps() && !this.fromHttp()) {
-      TOKENS_BUFFER[tokensBufferIndex] = fastHash('https');
-      tokensBufferIndex += 1;
+    if (this.fromHttp() === true && this.fromHttps() === false) {
+      TOKENS_BUFFER.push(HTTP_HASH);
+    } else if (this.fromHttps() === true && this.fromHttp() === false) {
+      TOKENS_BUFFER.push(HTTPS_HASH);
     }
 
-    return [TOKENS_BUFFER.slice(0, tokensBufferIndex)];
+    return [TOKENS_BUFFER.slice()];
   }
 
   /**
