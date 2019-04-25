@@ -113,7 +113,6 @@ loadAdblocker().then((engine) => {
   // some of them (or redirect).
   chrome.webRequest.onBeforeRequest.addListener(
     (details) => {
-      console.error(details.url);
       const result = engine.match(requestFromDetails(details));
 
       if (result.redirect) {
