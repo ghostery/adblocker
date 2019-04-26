@@ -41,57 +41,101 @@
 // Benchmark for string-based tokens vs. safe-integer token values:
 //   https://gorhill.github.io/obj-vs-set-vs-map/tokenize-to-str-vs-to-int.html
 
-µBlock.urlTokenizer = {
-    setURL: function(url) {
+µBlock.urlTokenizer = new (class {
+    constructor() {
+        this._chars = '0123456789%abcdefghijklmnopqrstuvwxyz';
+        this._validTokenChars = new Uint8Array(128);
+        for ( let i = 0, n = this._chars.length; i < n; i++ ) {
+            this._validTokenChars[this._chars.charCodeAt(i)] = i + 1;
+        }
+
+        this._charsEx = '0123456789%abcdefghijklmnopqrstuvwxyz*.';
+        this._validTokenCharsEx = new Uint8Array(128);
+        for ( let i = 0, n = this._charsEx.length; i < n; i++ ) {
+            this._validTokenCharsEx[this._charsEx.charCodeAt(i)] = i + 1;
+        }
+
+        this.dotTokenHash = this.tokenHashFromString('.');
+        this.anyTokenHash = this.tokenHashFromString('..');
+        this.anyHTTPSTokenHash = this.tokenHashFromString('..https');
+        this.anyHTTPTokenHash = this.tokenHashFromString('..http');
+        this.noTokenHash = this.tokenHashFromString('*');
+
+        this._urlIn = '';
+        this._urlOut = '';
+        this._tokenized = false;
+        this._tokens = [ 0 ];
+    }
+
+    setURL(url) {
         if ( url !== this._urlIn ) {
             this._urlIn = url;
             this._urlOut = url.toLowerCase();
             this._tokenized = false;
         }
         return this._urlOut;
-    },
+    }
 
     // Tokenize on demand.
-    getTokens: function() {
-        if ( this._tokenized === false ) {
-            this._tokenize();
-            this._tokenized = true;
+    getTokens() {
+        if ( this._tokenized ) { return this._tokens; }
+        let i = this._tokenize();
+        i = this._appendTokenAt(i, this.anyTokenHash, 0);
+        if ( this._urlOut.startsWith('https://') ) {
+            i = this._appendTokenAt(i, this.anyHTTPSTokenHash, 0);
+        } else if ( this._urlOut.startsWith('http://') ) {
+            i = this._appendTokenAt(i, this.anyHTTPTokenHash, 0);
         }
+        i = this._appendTokenAt(i, this.noTokenHash, 0);
+        this._tokens[i] = 0;
+        this._tokenized = true;
         return this._tokens;
-    },
+    }
 
-    tokenHashFromString: function(s) {
-        var l = s.length;
+    _appendTokenAt(i, th, ti) {
+        this._tokens[i+0] = th;
+        this._tokens[i+1] = ti;
+        return i + 2;
+    }
+
+    tokenHashFromString(s) {
+        const l = s.length;
         if ( l === 0 ) { return 0; }
-        if ( l === 1 ) {
-            if ( s === '*' ) { return 63; }
-            if ( s === '.' ) { return 62; }
-        }
-        var vtc = this._validTokenChars,
-            th = vtc[s.charCodeAt(0)];
-        for ( var i = 1; i !== 8 && i !== l; i++ ) {
+        const vtc = this._validTokenCharsEx;
+        let th = vtc[s.charCodeAt(0)];
+        for ( let i = 1; i !== 8 && i !== l; i++ ) {
             th = th * 64 + vtc[s.charCodeAt(i)];
         }
         return th;
-    },
+    }
+
+    stringFromTokenHash(th) {
+        if ( th === 0 ) { return ''; }
+        let s = '';
+        while ( th > 0 ) {
+            s = `${this._charsEx.charAt((th & 0b111111)-1)}${s}`;
+            th /= 64;
+        }
+        return s;
+    }
 
     // https://github.com/chrisaljoudi/uBlock/issues/1118
     // We limit to a maximum number of tokens.
 
-    _tokenize: function() {
-        var tokens = this._tokens,
-            url = this._urlOut,
-            l = url.length;
-        if ( l === 0 ) { tokens[0] = 0; return; }
+    _tokenize() {
+        const tokens = this._tokens;
+        let url = this._urlOut;
+        let l = url.length;
+        if ( l === 0 ) { return 0; }
         if ( l > 2048 ) {
             url = url.slice(0, 2048);
             l = 2048;
         }
-        var i = 0, j = 0, v, n, ti, th,
-            vtc = this._validTokenChars;
+        const vtc = this._validTokenChars;
+        let i = 0, j = 0, v, n, ti, th;
         for (;;) {
             for (;;) {
-                if ( i === l ) { tokens[j] = 0; return; }
+                if ( i === l ) { return j; }
                 v = vtc[url.charCodeAt(i++)];
                 if ( v !== 0 ) { break; }
             }
@@ -104,25 +148,12 @@
                 th = th * 64 + v;
                 n += 1;
             }
-            tokens[j++] = th;
-            tokens[j++] = ti;
+            tokens[j+0] = th;
+            tokens[j+1] = ti;
+            j += 2;
         }
-    },
-
-    _urlIn: '',
-    _urlOut: '',
-    _tokenized: false,
-    _tokens: [ 0 ],
-    _validTokenChars: (function() {
-        var vtc = new Uint8Array(128),
-            chars = '0123456789%abcdefghijklmnopqrstuvwxyz',
-            i = chars.length;
-        while ( i-- ) {
-            vtc[chars.charCodeAt(i)] = i + 1;
-        }
-        return vtc;
-    })()
-};
+    }
+})();
 
 /******************************************************************************/
 
@@ -499,109 +530,170 @@
 
 /******************************************************************************/
 
-// Custom base128 encoder/decoder
+// Custom base64 encoder/decoder
 //
 // TODO:
 //   Could expand the LZ4 codec API to be able to return UTF8-safe string
 //   representation of a compressed buffer, and thus the code below could be
 //   moved LZ4 codec-side.
+// https://github.com/uBlockOrigin/uBlock-issues/issues/461
+//   Provide a fallback encoding for Chromium 59 and less by issuing a plain
+//   JSON string. The fallback can be removed once min supported version is
+//   above 59.
 
-µBlock.base128 = {
-    encode: function(arrbuf, arrlen) {
-        const inbuf = new Uint8Array(arrbuf, 0, arrlen);
-        const inputLength = arrlen;
-        let _7cnt = Math.floor(inputLength / 7);
-        let outputLength = _7cnt * 8;
-        let _7rem = inputLength % 7;
-        if ( _7rem !== 0 ) {
-            outputLength += 1 + _7rem;
+µBlock.base64 = new (class {
+    constructor() {
+        this.valToDigit = new Uint8Array(64);
+        this.digitToVal = new Uint8Array(128);
+        const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@%";
+        for ( let i = 0, n = chars.length; i < n; i++ ) {
+            const c = chars.charCodeAt(i);
+            this.valToDigit[i] = c;
+            this.digitToVal[c] = i;
         }
+        this.magic = 'Base64_1';
+    }
+
+    encode(arrbuf, arrlen) {
+        const inputLength = arrlen >>> 2;
+        const inbuf = new Uint32Array(arrbuf, 0, inputLength);
+        const outputLength = this.magic.length + 7 + inputLength * 7;
         const outbuf = new Uint8Array(outputLength);
-        let msbits, v;
-        let i = 0, j = 0;
-        while ( _7cnt--  ) {
-            v = inbuf[i+0];
-            msbits  = (v & 0x80) >>> 7;
-            outbuf[j+1] = v & 0x7F;
-            v = inbuf[i+1];
-            msbits |= (v & 0x80) >>> 6;
-            outbuf[j+2] = v & 0x7F;
-            v = inbuf[i+2];
-            msbits |= (v & 0x80) >>> 5;
-            outbuf[j+3] = v & 0x7F;
-            v = inbuf[i+3];
-            msbits |= (v & 0x80) >>> 4;
-            outbuf[j+4] = v & 0x7F;
-            v = inbuf[i+4];
-            msbits |= (v & 0x80) >>> 3;
-            outbuf[j+5] = v & 0x7F;
-            v = inbuf[i+5];
-            msbits |= (v & 0x80) >>> 2;
-            outbuf[j+6] = v & 0x7F;
-            v = inbuf[i+6];
-            msbits |= (v & 0x80) >>> 1;
-            outbuf[j+7] = v & 0x7F;
-            outbuf[j+0] = msbits;
-            i += 7; j += 8;
+        let j = 0;
+        for ( let i = 0; i < this.magic.length; i++ ) {
+            outbuf[j++] = this.magic.charCodeAt(i);
         }
-        if ( _7rem > 0 ) {
-            msbits = 0;
-            for ( let ir = 0; ir < _7rem; ir++ ) {
-                v = inbuf[i+ir];
-                msbits |= (v & 0x80) >>> (7 - ir);
-                outbuf[j+ir+1] = v & 0x7F;
-            }
-            outbuf[j+0] = msbits;
+        let v = inputLength;
+        do {
+            outbuf[j++] = this.valToDigit[v & 0b111111];
+            v >>>= 6;
+        } while ( v !== 0 );
+        outbuf[j++] = 0x20 /* ' ' */;
+        for ( let i = 0; i < inputLength; i++ ) {
+            v = inbuf[i];
+            do {
+                outbuf[j++] = this.valToDigit[v & 0b111111];
+                v >>>= 6;
+            } while ( v !== 0 );
+            outbuf[j++] = 0x20 /* ' ' */;
         }
         const textDecoder = new TextDecoder();
-        return textDecoder.decode(outbuf);
-    },
-    // TODO:
-    //   Surprisingly, there does not seem to be any performance gain when
-    //   first converting the input string into a Uint8Array through
-    //   TextEncoder. Investigate again to confirm original findings and
-    //   to find out whether results have changed. Not using TextEncoder()
-    //   to create an intermediate input buffer lower peak memory usage
-    //   at selfie load time.
-    //
-    //   const textEncoder = new TextEncoder();
-    //   const inbuf = textEncoder.encode(instr);
-    //   const inputLength = inbuf.byteLength;
-    decode: function(instr, arrbuf) {
+        return textDecoder.decode(new Uint8Array(outbuf.buffer, 0, j));
+    }
+
+    decode(instr, arrbuf) {
+        if ( instr.startsWith(this.magic) === false ) {
+            throw new Error('Invalid µBlock.base64 encoding');
+        }
         const inputLength = instr.length;
-        let _8cnt = inputLength >>> 3;
-        let outputLength = _8cnt * 7;
-        let _8rem = inputLength % 8;
-        if ( _8rem !== 0 ) {
-            outputLength += _8rem - 1;
-        }
         const outbuf = arrbuf instanceof ArrayBuffer === false
-            ? new Uint8Array(outputLength)
-            : new Uint8Array(arrbuf);
-        let msbits;
-        let i = 0, j = 0;
-        while ( _8cnt-- ) {
-            msbits = instr.charCodeAt(i+0);
-            outbuf[j+0] = msbits << 7 & 0x80 | instr.charCodeAt(i+1);
-            outbuf[j+1] = msbits << 6 & 0x80 | instr.charCodeAt(i+2);
-            outbuf[j+2] = msbits << 5 & 0x80 | instr.charCodeAt(i+3);
-            outbuf[j+3] = msbits << 4 & 0x80 | instr.charCodeAt(i+4);
-            outbuf[j+4] = msbits << 3 & 0x80 | instr.charCodeAt(i+5);
-            outbuf[j+5] = msbits << 2 & 0x80 | instr.charCodeAt(i+6);
-            outbuf[j+6] = msbits << 1 & 0x80 | instr.charCodeAt(i+7);
-            i += 8; j += 7;
+            ? new Uint32Array(this.decodeSize(instr))
+            : new Uint32Array(arrbuf);
+        let i = instr.indexOf(' ', this.magic.length) + 1;
+        if ( i === -1 ) {
+            throw new Error('Invalid µBlock.base64 encoding');
         }
-        if ( _8rem > 1 ) {
-            msbits = instr.charCodeAt(i+0);
-            for ( let ir = 1; ir < _8rem; ir++ ) {
-                outbuf[j+ir-1] = msbits << (8-ir) & 0x80 | instr.charCodeAt(i+ir);
+        let j = 0;
+        for (;;) {
+            if ( i === inputLength ) { break; }
+            let v = 0, l = 0;
+            for (;;) {
+                const c = instr.charCodeAt(i++);
+                if ( c === 0x20 /* ' ' */ ) { break; }
+                v += this.digitToVal[c] << l;
+                l += 6;
             }
+            outbuf[j++] = v;
         }
         return outbuf;
-    },
-    decodeSize: function(instr) {
-        const size = (instr.length >>> 3) * 7;
-        const rem = instr.length & 7;
-        return rem === 0 ? size : size + rem - 1;
-    },
-};
+    }
+
+    decodeSize(instr) {
+        if ( instr.startsWith(this.magic) === false ) { return 0; }
+        let v = 0, l = 0, i = this.magic.length;
+        for (;;) {
+            const c = instr.charCodeAt(i++);
+            if ( c === 0x20 /* ' ' */ ) { break; }
+            v += this.digitToVal[c] << l;
+            l += 6;
+        }
+        return v << 2;
+    }
+})();
+
+/******************************************************************************/
+
+// The requests.json.gz file can be downloaded from:
+//   https://cdn.cliqz.com/adblocking/requests_top500.json.gz
+//
+// Which is linked from:
+//   https://whotracks.me/blog/adblockers_performance_study.html
+//
+// Copy the file into ./tmp/requests.json.gz
+//
+// If the file is present when you build uBO using `make-[target].sh` from
+// the shell, the resulting package will have `./assets/requests.json`, which
+// will be looked-up by the method below to launch a benchmark session.
+//
+// From uBO's dev console, launch the benchmark:
+//   µBlock.staticNetFilteringEngine.benchmark();
+//
+// The advanced setting `consoleLogLevel` must be set to `info` to see the
+// results in uBO's dev console, see:
+//   https://github.com/gorhill/uBlock/wiki/Advanced-settings#consoleloglevel
+//
+// The usual browser dev tools can be used to obtain useful profiling
+// data, i.e. start the profiler, call the benchmark method from the
+// console, then stop the profiler when it completes.
+//
+// Keep in mind that the measurements at the blog post above where obtained
+// with ONLY EasyList. The CPU reportedly used was:
+//   https://www.cpubenchmark.net/cpu.php?cpu=Intel+Core+i7-6600U+%40+2.60GHz&id=2608
+//
+// Rename ./tmp/requests.json.gz to something else if you no longer want
+// ./assets/requests.json in the build.
+
+µBlock.loadBenchmarkDataset = (function() {
+    let datasetPromise;
+    let ttlTimer;
+
+    return function() {
+        if ( ttlTimer !== undefined ) {
+            clearTimeout(ttlTimer);
+            ttlTimer = undefined;
+        }
+
+        vAPI.setTimeout(( ) => {
+            ttlTimer = undefined;
+            datasetPromise = undefined;
+        }, 60000);
+
+        if ( datasetPromise !== undefined ) {
+            return datasetPromise;
+        }
+
+        console.info(`Loading benchmark dataset...`);
+        const url = vAPI.getURL('/assets/requests.json');
+        datasetPromise = µBlock.assets.fetchText(url).then(details => {
+            console.info(`Parsing benchmark dataset...`);
+            const requests = [];
+            const lineIter = new µBlock.LineIterator(details.content);
+            while ( lineIter.eot() === false ) {
+                let request;
+                try {
+                    request = JSON.parse(lineIter.next());
+                } catch(ex) {
+                }
+                if ( request instanceof Object === false ) { continue; }
+                if ( !request.frameUrl || !request.url ) { continue; }
+                requests.push(request);
+            }
+            return requests;
+        }).catch(details => {
+            console.info(`Not found: ${details.url}`);
+            datasetPromise = undefined;
+        });
+
+        return datasetPromise;
+    };
+})();

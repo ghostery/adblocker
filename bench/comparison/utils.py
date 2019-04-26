@@ -185,7 +185,7 @@ def generate_table(p99, medians, request_type):
     tables = {"99": p99, "median": medians}
 
     args = {}
-    blockers = ["ghostery", "ublock", "abp", "brave", "duck"]
+    blockers = ["cliqz", "ublock", "abp", "brave", "duck"]
     for name in blockers:
         for kind in ["median", "99"]:
             table = tables[kind]
@@ -193,15 +193,15 @@ def generate_table(p99, medians, request_type):
                 table[name][table.request_type == request_type]
             )
             for vs in blockers:
-                if vs != "ghostery":
+                if vs != "cliqz":
                     args[f"vs_{vs}_{kind}"] = "%.1f" % float(
-                        table[f"{vs}_vs_ghostery"][table.request_type == request_type]
+                        table[f"{vs}_vs_cliqz"][table.request_type == request_type]
                     )
 
     return """
 |               | 99% OF REQUESTS              | MEDIAN                       |
 | ------------- | ---------------------------- | ---------------------------- |
-| **Ghostery**  | **{ghostery_99}ms**                  | **{ghostery_median}ms**                  |
+| **Cliqz**     | **{cliqz_99}ms**                  | **{cliqz_median}ms**                  |
 | uBlock Origin | {ublock_99}ms (**{vs_ublock_99}x slower**)    | {ublock_median}ms (**{vs_ublock_median}x slower**)    |
 | Adblock Plus  | {abp_99}ms (**{vs_abp_99}x slower**)    | {abp_median}ms (**{vs_abp_median}x slower**)    |
 | Brave         | {brave_99}ms (**{vs_brave_99}x slower**)   | {brave_median}ms (**{vs_brave_median}x slower**)    |

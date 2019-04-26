@@ -7,7 +7,7 @@ const readline = require('readline');
 const UBlockOrigin = require('./blockers/ublock.js');
 const Brave = require('./blockers/brave.js');
 const Duckduckgo = require('./blockers/duckduckgo.js');
-const Ghostery = require('./blockers/ghostery.js');
+const Cliqz = require('./blockers/cliqz.js');
 const AdBlockPlus = require('./blockers/adblockplus.js');
 const Tldts = require('./blockers/tldts_baseline.js');
 const Url = require('./blockers/url_baseline.js');
@@ -89,7 +89,7 @@ async function main() {
     adblockplus: AdBlockPlus,
     brave: Brave,
     duckduckgo: Duckduckgo,
-    ghostery: Ghostery,
+    cliqz: Cliqz,
     re: Re,
     tldts: Tldts,
     ublock: UBlockOrigin,

@@ -1,6 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
-
 const { CombinedMatcher } = require('./adblockpluscore/lib/matcher.js');
 const { Filter, RegExpFilter } = require('./adblockpluscore/lib/filterClasses.js');
 const { parseURL } = require('./adblockpluscore/lib/url.js');
@@ -36,8 +33,10 @@ module.exports = class AdBlockPlus {
       const line = lines[i].trim();
       if (line.length !== 0 && line[0] !== '!') {
         const filter = Filter.fromText(line);
-        filters.push(filter);
-        matcher.add(filter);
+        if (filter.type === 'blocking' || filter.type === 'whitelist') {
+          filters.push(filter);
+          matcher.add(filter);
+        }
       }
     }
 

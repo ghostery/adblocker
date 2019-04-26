@@ -40,10 +40,10 @@
 
 */
 
+/******************************************************************************/
+
 const fs = require('fs');
 const path = require('path');
-
-/******************************************************************************/
 
 (function(context) {
 // >>>>>>>> start of anonymous namespace
@@ -84,13 +84,6 @@ let hostnameArg = EMPTY_STRING;
 /******************************************************************************/
 
 const fireChangedEvent = function() {
-    if (
-        window instanceof Object &&
-        window.dispatchEvent instanceof Function &&
-        window.CustomEvent instanceof Function
-    ) {
-        window.dispatchEvent(new CustomEvent('publicSuffixListChanged'));
-    }
 };
 
 /******************************************************************************/
@@ -325,7 +318,7 @@ const parse = function(text, toAscii) {
         pslBuffer8.set(charData, treeData.length << 2);
     }
 
-    // fireChangedEvent();
+    fireChangedEvent();
 };
 
 /******************************************************************************/
@@ -334,6 +327,7 @@ const setHostnameArg = function(hostname) {
     const buf = pslBuffer8;
     if ( hostname === hostnameArg ) { return buf[LABEL_INDICES_SLOT]; }
     if ( hostname === null || hostname.length === 0 ) {
+        hostnameArg = '';
         return (buf[LABEL_INDICES_SLOT] = 0);
     }
     hostname = hostname.toLowerCase();
@@ -503,6 +497,7 @@ const fromSelfie = function(selfie, decoder) {
         }
         const bufferStr = selfie.slice(pos + 1);
         byteLength = decoder.decodeSize(bufferStr);
+        if ( byteLength === 0 ) { return false; }
         allocateBuffers(byteLength);
         decoder.decode(bufferStr, pslBuffer8.buffer);
     } else if (
@@ -521,7 +516,7 @@ const fromSelfie = function(selfie, decoder) {
     hostnameArg = '';
     pslBuffer8[LABEL_INDICES_SLOT] = 0;
 
-    // fireChangedEvent();
+    fireChangedEvent();
 
     return true;
 };
@@ -564,7 +559,7 @@ const enableWASM = (function() {
             response,
             { imports: { memory: memory } }
         ).then(({ instance }) => {
-            const curPageCount = memory.buffer.byteLength;
+            const curPageCount = memory.buffer.byteLength >>> 16;
             const newPageCount = pslBuffer8 !== undefined
                 ? pslBuffer8.byteLength + 0xFFFF >>> 16
                 : 0;
@@ -585,7 +580,7 @@ const enableWASM = (function() {
             return true;
         }).catch(reason => {
             console.info(reason);
-            throw new Error();
+            throw new Error(reason);
         });
     };
 })();
