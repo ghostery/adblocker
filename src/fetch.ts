@@ -35,13 +35,13 @@ const lists = [
   },
   {
     category: Category.Ads,
-    enabledByDefault: false,
+    enabledByDefault: true,
     url:
       'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=1&mimetype=plaintext',
   },
   {
     category: Category.Misc,
-    enabledByDefault: false,
+    enabledByDefault: true,
     url: 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
   },
   {
