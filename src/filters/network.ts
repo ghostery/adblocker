@@ -413,13 +413,13 @@ export default class NetworkFilter implements IFilter {
     // Identify kind of pattern
 
     // Deal with hostname pattern
-    if (line.charCodeAt(filterIndexEnd - 1) === 124 /* '|' */) {
+    if (filterIndexEnd > 0 && line.charCodeAt(filterIndexEnd - 1) === 124 /* '|' */) {
       mask = setBit(mask, NETWORK_FILTER_MASK.isRightAnchor);
       filterIndexEnd -= 1;
     }
 
-    if (line.charCodeAt(filterIndexStart) === 124 /* '|' */) {
-      if (line.charCodeAt(filterIndexStart + 1) === 124 /* '|' */) {
+    if (filterIndexStart < filterIndexEnd && line.charCodeAt(filterIndexStart) === 124 /* '|' */) {
+      if (filterIndexStart < filterIndexEnd - 1 && line.charCodeAt(filterIndexStart + 1) === 124 /* '|' */) {
         mask = setBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor);
         filterIndexStart += 2;
       } else {
