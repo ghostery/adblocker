@@ -7,10 +7,10 @@ all: deps run
 requests.json:
 	curl https://cdn.cliqz.com/adblocking/requests_top500.json.gz | gunzip > requests.json
 
-# VERSION: 23cd2b97bbff5f8a87e4cc6637ac378dcd7a2dd8
+# VERSION: 69118b828db0f6a53bc2306deacffc5361aeef0c
 ./blockers/adblockpluscore:
 	git clone --branch=next https://github.com/adblockplus/adblockpluscore.git ./blockers/adblockpluscore
-	cd ./blockers/adblockpluscore && git reset --hard 23cd2b97bbff5f8a87e4cc6637ac378dcd7a2dd8
+	cd ./blockers/adblockpluscore && git reset --hard 69118b828db0f6a53bc2306deacffc5361aeef0c
 
 # VERSION: 0.2.0
 ../../node_modules/abp-filter-parser:
@@ -27,8 +27,8 @@ requests.json:
 brave: ../../node_modules/ad-block
 	NODE_ENV=production node run.js brave requests.json
 
-ghostery:
-	NODE_ENV=production node run.js ghostery requests.json
+cliqz:
+	NODE_ENV=production node run.js cliqz requests.json
 
 ../../node_modules/jsdom:
 	npm install --save jsdom
@@ -63,4 +63,4 @@ deps: requests.json \
 	  ../../node_modules/sandboxed-module \
 	  ./blockers/adblockpluscore
 
-run: deps url tldts ghostery ublock adblockplus brave duckduckgo adblockfast
+run: deps url tldts cliqz ublock adblockplus brave adblockfast duckduckgo

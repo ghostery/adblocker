@@ -173,14 +173,17 @@
             ')\\('
         ].join(''));
 
-        const reEscapeRegex = /[.*+?^${}()|[\]\\]/g,
-            reNeedScope = /^\s*[+>~]/,
-            reIsDanglingSelector = /(?:[+>~]\s*|\s+)$/;
+        const reEatBackslashes = /\\([()])/g;
+        const reEscapeRegex = /[.*+?^${}()|[\]\\]/g;
+        const reNeedScope = /^\s*[+>~]/;
+        const reIsDanglingSelector = /(?:[+>~]\s*|\s+)$/;
 
         const regexToRawValue = new Map();
         let lastProceduralSelector = '',
             lastProceduralSelectorCompiled;
 
+        // When dealing with literal text, we must first eat _some_
+        // backslash characters.
         const compileText = function(s) {
             const match = reParseRegexLiteral.exec(s);
             let regexDetails;
@@ -191,7 +194,8 @@
                     regexDetails = [ regexDetails, match[2] ];
                 }
             } else {
-                regexDetails = s.replace(reEscapeRegex, '\\$&');
+                regexDetails = s.replace(reEatBackslashes, '$1')
+                                .replace(reEscapeRegex, '\\$&');
                 regexToRawValue.set(regexDetails, s);
             }
             return regexDetails;
@@ -332,6 +336,8 @@
                     raw.push(':not', '(', decompile(task[1]), ')');
                     break;
                 case ':spath':
+                    raw.push(task[1]);
+                    break;
                 case ':watch-attrs':
                 case ':xpath':
                     raw.push(task[0], '(', task[1], ')');
@@ -461,7 +467,7 @@
             return µb.cosmeticFilteringEngine.discardedCount +
                    µb.scriptletFilteringEngine.discardedCount +
                    µb.htmlFilteringEngine.discardedCount;
-        }
+        },
     };
 
     //--------------------------------------------------------------------------
@@ -615,7 +621,7 @@
             const pos = hostname.lastIndexOf('.', hostname.length - 3);
             domain = pos !== -1 ? hostname.slice(pos + 1) : hostname;
         } else {
-            domain = µb.URI.domainFromHostnameNoCache(hostname);
+            domain = µb.URI.domainFromHostname(hostname);
         }
         return api.makeHash(domain);
     };
@@ -658,6 +664,8 @@
         };
 
         const entryPoint = function(raw) {
+            entryPoint.pseudoclass = false;
+
             const extendedSyntax = reExtendedSyntax.test(raw);
             if ( isValidCSSSelector(raw) && extendedSyntax === false ) {
                 return raw;
@@ -666,18 +674,18 @@
             // We  rarely reach this point -- majority of selectors are plain
             // CSS selectors.
 
-            let matches, operator;
+            let matches;
 
-            // Supported Adguard/ABP advanced selector syntax: will translate into
-            // uBO's syntax before further processing.
+            // Supported Adguard/ABP advanced selector syntax: will translate
+            // into uBO's syntax before further processing.
             // Mind unsupported advanced selector syntax, such as ABP's
             // `-abp-properties`.
-            // Note: extended selector syntax has been deprecated in ABP, in favor
-            // of the procedural one (i.e. `:operator(...)`). See
-            // https://issues.adblockplus.org/ticket/5287
+            // Note: extended selector syntax has been deprecated in ABP, in
+            // favor of the procedural one (i.e. `:operator(...)`).
+            // See https://issues.adblockplus.org/ticket/5287
             if ( extendedSyntax ) {
                 while ( (matches = reExtendedSyntaxParser.exec(raw)) !== null ) {
-                    operator = normalizedExtendedSyntaxOperators.get(matches[1]);
+                    const operator = normalizedExtendedSyntaxOperators.get(matches[1]);
                     if ( operator === undefined ) { return; }
                     raw = raw.slice(0, matches.index) +
                           operator + '(' + matches[3] + ')' +
@@ -686,8 +694,7 @@
                 return entryPoint(raw);
             }
 
-            let selector = raw,
-                pseudoclass, style;
+            let selector = raw, pseudoclass, style;
 
             // `:style` selector?
             if ( (matches = reStyleSelector.exec(selector)) !== null ) {
@@ -703,23 +710,16 @@
             }
 
             if ( style !== undefined || pseudoclass !== undefined ) {
-                if ( isValidCSSSelector(selector) === false ) {
-                    return;
-                }
+                if ( isValidCSSSelector(selector) === false ) { return; }
                 if ( pseudoclass !== undefined ) {
                     selector += pseudoclass;
                 }
                 if ( style !== undefined ) {
                     if ( isValidStyleProperty(style) === false ) { return; }
-                    return JSON.stringify({
-                        raw: raw,
-                        style: [ selector, style ]
-                    });
+                    return JSON.stringify({ raw, style: [ selector, style ] });
                 }
-                return JSON.stringify({
-                    raw: raw,
-                    pseudoclass: true
-                });
+                entryPoint.pseudoclass = true;
+                return JSON.stringify({ raw, pseudoclass: true });
             }
 
             // Procedural selector?
@@ -728,6 +728,8 @@
                 return compiled;
             }
         };
+
+        entryPoint.pseudoclass = false;
 
         return entryPoint;
     })();
@@ -741,11 +743,22 @@
             if ( rpos === -1 ) { return false; }
         }
 
+        // https://github.com/AdguardTeam/AdguardFilters/commit/4fe02d73cee6
+        //   AdGuard also uses `$?` to force inline-based style rather than
+        //   stylesheet-based style.
         // Coarse-check that the anchor is valid.
-        // `##`: l = 1
-        // `#@#`, `#$#`, `#%#`, `#?#`: l = 2
-        // `#@$#`, `#@%#`, `#@?#`: l = 3
-        if ( (rpos - lpos) > 3 ) { return false; }
+        // `##`: l === 1
+        // `#@#`, `#$#`, `#%#`, `#?#`: l === 2
+        // `#@$#`, `#@%#`, `#@?#`, `#$?#`: l === 3
+        // `#@$?#`: l === 4
+        const anchorLen = rpos - lpos;
+        if ( anchorLen > 4 ) { return false; }
+        if (
+            anchorLen > 1 &&
+            /^@?(?:\$\??|%|\?)?$/.test(raw.slice(lpos + 1, rpos)) === false
+        ) {
+            return false;
+        }
 
         // Extract the selector.
         let suffix = raw.slice(rpos + 1).trim();
@@ -763,9 +776,8 @@
         if ( cCode !== 0x23 /* '#' */ && cCode !== 0x40 /* '@' */ ) {
             // Adguard's scriptlet injection: not supported.
             if ( cCode === 0x25 /* '%' */ ) { return true; }
-            // Not a known extended filter.
-            if ( cCode !== 0x24 /* '$' */ && cCode !== 0x3F /* '?' */ ) {
-                return false;
+            if ( cCode === 0x3F /* '?' */ && anchorLen > 2 ) {
+                cCode = raw.charCodeAt(rpos - 2);
             }
             // Adguard's style injection: translate to uBO's format.
             if ( cCode === 0x24 /* '$' */ ) {
@@ -798,7 +810,7 @@
 
         // New shorter syntax for scriptlet injection engine.
         if ( c0 === 0x2B /* '+' */ && suffix.startsWith('+js') ) {
-            µb.scriptletFilteringEngine.compile(parsed, writer);
+          // µb.scriptletFilteringEngine.compile(parsed, writer);
             return true;
         }
 
@@ -806,12 +818,12 @@
         // TODO: evaluate converting Adguard's `$$` syntax into uBO's HTML
         //       filtering syntax.
         if ( c0 === 0x5E /* '^' */ ) {
-            µb.htmlFilteringEngine.compile(parsed, writer);
+          // µb.htmlFilteringEngine.compile(parsed, writer);
             return true;
         }
 
         // Cosmetic filtering engine.
-        µb.cosmeticFilteringEngine.compile(parsed, writer);
+        // µb.cosmeticFilteringEngine.compile(parsed, writer);
         return true;
     };
 

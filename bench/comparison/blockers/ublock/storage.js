@@ -50,10 +50,13 @@
         countdown += 1;
         vAPI.storage.getBytesInUse(null, process);
     }
-    if ( this.cacheStorage.name !== 'browser.storage.local' ) {
+    if (
+        navigator.storage instanceof Object &&
+        navigator.storage.estimate instanceof Function
+    ) {
         countdown += 1;
-        this.assets.getBytesInUse().then(count => {
-            process(count);
+        navigator.storage.estimate().then(estimate => {
+            process(estimate.usage);
         });
     }
     if ( countdown === 0 ) {
@@ -109,6 +112,12 @@
                 ) {
                     this.hiddenSettings[key] = hs[key];
                 }
+            }
+            if ( typeof this.hiddenSettings.suspendTabsUntilReady === 'boolean' ) {
+                this.hiddenSettings.suspendTabsUntilReady =
+                    this.hiddenSettings.suspendTabsUntilReady
+                        ? 'yes'
+                        : 'unset';
             }
         }
         if ( vAPI.localStorage.getItem('immediateHiddenSettings') === null ) {
@@ -196,10 +205,9 @@
     vAPI.localStorage.setItem(
         'immediateHiddenSettings',
         JSON.stringify({
-                  cacheStorageAPI: this.hiddenSettings.cacheStorageAPI,
+                  consoleLogLevel: this.hiddenSettings.consoleLogLevel,
                disableWebAssembly: this.hiddenSettings.disableWebAssembly,
             suspendTabsUntilReady: this.hiddenSettings.suspendTabsUntilReady,
-            userResourcesLocation: this.hiddenSettings.userResourcesLocation,
         })
     );
 };
@@ -930,17 +938,17 @@
 // https://github.com/AdguardTeam/AdguardBrowserExtension/issues/917
 
 µBlock.processDirectives = function(content) {
-    var reIf = /^!#(if|endif)\b([^\n]*)/gm,
-        parts = [],
-        beg = 0, depth = 0, discard = false;
+    const reIf = /^!#(if|endif)\b([^\n]*)/gm;
+    const parts = [];
+    let  beg = 0, depth = 0, discard = false;
     while ( beg < content.length ) {
-        var match = reIf.exec(content);
+        const match = reIf.exec(content);
         if ( match === null ) { break; }
         if ( match[1] === 'if' ) {
-            var expr = match[2].trim();
-            var target = expr.startsWith('!');
+            let expr = match[2].trim();
+            const target = expr.startsWith('!');
             if ( target ) { expr = expr.slice(1); }
-            var token = this.processDirectives.tokens.get(expr);
+            const token = this.processDirectives.tokens.get(expr);
             if (
                 depth === 0 &&
                 discard === false &&
@@ -980,41 +988,37 @@
 
 /******************************************************************************/
 
-µBlock.loadRedirectResources = function(updatedContent) {
-    let content = '';
+µBlock.loadRedirectResources = function() {
+    return this.redirectEngine.resourcesFromSelfie().then(success => {
+        if ( success === true ) { return; }
 
-    const onDone = ( ) => {
+        const fetchPromises = [ this.assets.get('ublock-resources') ];
+
+        const userResourcesLocation = this.hiddenSettings.userResourcesLocation;
+        if ( userResourcesLocation !== 'unset' ) {
+            for ( const url of userResourcesLocation.split(/\s+/) ) {
+                fetchPromises.push(this.assets.fetchText(url));
+            }
+        }
+
+        return Promise.all(fetchPromises);
+    }).then(results => {
+        if ( Array.isArray(results) === false ) { return; }
+
+        let content = '';
+
+        for ( const result of results ) {
+            if (
+                result instanceof Object === false ||
+                typeof result.content !== 'string' ||
+                result.content === ''
+            ) {
+                continue;
+            }
+            content += '\n\n' + result.content;
+        }
+
         this.redirectEngine.resourcesFromString(content);
-    };
-
-    const onUserResourcesLoaded = details => {
-        if ( details.content !== '' ) {
-            content += '\n\n' + details.content;
-        }
-        onDone();
-    };
-
-    const onResourcesLoaded = details => {
-        if ( details.content !== '' ) {
-            content = details.content;
-        }
-        if ( this.hiddenSettings.userResourcesLocation === 'unset' ) {
-            return onDone();
-        }
-        this.assets.fetchText(
-            this.hiddenSettings.userResourcesLocation,
-            onUserResourcesLoaded
-        );
-    };
-
-    if ( typeof updatedContent === 'string' && updatedContent.length !== 0 ) {
-        return onResourcesLoaded({ content: updatedContent });
-    }
-
-    this.redirectEngine.resourcesFromSelfie().then(success => {
-        if ( success !== true ) {
-            this.assets.get('ublock-resources', onResourcesLoaded);
-        }
     });
 };
 
@@ -1028,9 +1032,12 @@
     return this.assets.get(
         'compiled/' + this.pslAssetKey
     ).then(details =>
-        publicSuffixList.fromSelfie(details.content, µBlock.base128)
-    ).then(valid => {
-        if ( valid === true ) { return; }
+        publicSuffixList.fromSelfie(details.content, µBlock.base64)
+    ).catch(reason => {
+        console.info(reason);
+        return false;
+    }).then(success => {
+        if ( success ) { return; }
         return this.assets.get(this.pslAssetKey, details => {
             if ( details.content !== '' ) {
                 this.compilePublicSuffixList(details.content);
@@ -1043,7 +1050,7 @@
     publicSuffixList.parse(content, punycode.toASCII);
     this.assets.put(
         'compiled/' + this.pslAssetKey,
-        publicSuffixList.toSelfie(µBlock.base128)
+        publicSuffixList.toSelfie(µBlock.base64)
     );
 };
 
@@ -1237,19 +1244,21 @@
 //   Support ability to auto-enable a filter list based on user agent.
 
 µBlock.listMatchesEnvironment = function(details) {
-    var re;
     // Matches language?
     if ( typeof details.lang === 'string' ) {
-        re = this.listMatchesEnvironment.reLang;
+        let re = this.listMatchesEnvironment.reLang;
         if ( re === undefined ) {
-            re = new RegExp('\\b' + self.navigator.language.slice(0, 2) + '\\b');
-            this.listMatchesEnvironment.reLang = re;
+            const match = /^[a-z]+/.exec(self.navigator.language);
+            if ( match !== null ) {
+                re = new RegExp('\\b' + match[0] + '\\b');
+                this.listMatchesEnvironment.reLang = re;
+            }
         }
-        if ( re.test(details.lang) ) { return true; }
+        if ( re !== undefined && re.test(details.lang) ) { return true; }
     }
     // Matches user agent?
     if ( typeof details.ua === 'string' ) {
-        re = new RegExp('\\b' + this.escapeRegex(details.ua) + '\\b', 'i');
+        let re = new RegExp('\\b' + this.escapeRegex(details.ua) + '\\b', 'i');
         if ( re.test(self.navigator.userAgent) ) { return true; }
     }
     return false;
@@ -1340,9 +1349,6 @@
             }
         } else if ( details.assetKey === 'ublock-resources' ) {
             this.redirectEngine.invalidateResourcesSelfie();
-            if ( cached ) {
-                this.loadRedirectResources(details.content);
-            }
         }
         vAPI.messaging.broadcast({
             what: 'assetUpdated',

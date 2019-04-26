@@ -5,9 +5,9 @@ const tldts = require('tldts');
 const { FiltersEngine, makeRequest } = require(path.resolve(__dirname, '../../../'));
 
 
-module.exports = class Ghostery {
+module.exports = class Cliqz {
   static parse(rawLists) {
-    return new Ghostery(FiltersEngine.parse(rawLists, { loadCosmeticFilters: false }));
+    return new Cliqz(FiltersEngine.parse(rawLists, { loadCosmeticFilters: false }));
   }
 
   constructor(engine) {
