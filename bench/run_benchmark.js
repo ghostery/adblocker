@@ -80,7 +80,8 @@ function runMicroBenchmarks(lists, resources) {
   }, true /* Also serialize engine */);
 
   const filters = getFiltersFromLists(lists);
-  const { networkFilters, cosmeticFilters } = parseFilters(filters.join('\n'));
+  const combinedLists = filters.join('\n');
+  const { networkFilters, cosmeticFilters } = parseFilters(combinedLists);
   const results = {};
 
   // Arguments shared among benchmarks
@@ -92,6 +93,7 @@ function runMicroBenchmarks(lists, resources) {
     serialized,
     networkFilters,
     cosmeticFilters,
+    combinedLists,
   };
 
   [

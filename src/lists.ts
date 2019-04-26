@@ -3,8 +3,6 @@ import CosmeticFilter from './filters/cosmetic';
 import NetworkFilter from './filters/network';
 import { fastStartsWith, fastStartsWithFrom } from './utils';
 
-const SPACE = /\s/;
-
 const enum FilterType {
   NOT_SUPPORTED,
   NETWORK,
@@ -18,50 +16,89 @@ const enum FilterType {
  * `NetworkFilter` or `CosmeticFilter`.
  */
 function detectFilterType(line: string): FilterType {
+  // Ignore empty line
+  if (line.length === 0 || line.length === 1) {
+    return FilterType.NOT_SUPPORTED;
+  }
+
   // Ignore comments
+  const firstCharCode: number = line.charCodeAt(0);
+  const secondCharCode: number = line.charCodeAt(1);
   if (
-    line.length === 1 ||
-    line.charAt(0) === '!' ||
-    (line.charAt(0) === '#' && SPACE.test(line.charAt(1))) ||
-    fastStartsWith(line, '[Adblock')
+    firstCharCode === 33 /* '!' */ ||
+    (firstCharCode === 35 /* '#' */ && secondCharCode <= 32) ||
+    (firstCharCode === 91 /* '[' */ && fastStartsWith(line, '[Adblock'))
   ) {
     return FilterType.NOT_SUPPORTED;
   }
 
-  if (fastStartsWith(line, '|') || fastStartsWith(line, '@@|')) {
+  // Fast heuristics to detect network filters
+  const lastCharCode: number = line.charCodeAt(line.length - 1);
+  if (
+    firstCharCode === 36 /* '$' */ ||
+    firstCharCode === 38 /* '&' */ ||
+    firstCharCode === 42 /* '*' */ ||
+    firstCharCode === 45 /* '-' */ ||
+    firstCharCode === 46 /* '.' */ ||
+    firstCharCode === 47 /* '/' */ ||
+    firstCharCode === 58 /* ':' */ ||
+    firstCharCode === 61 /* '=' */ ||
+    firstCharCode === 63 /* '?' */ ||
+    firstCharCode === 64 /* '@' */ ||
+    firstCharCode === 95 /* '_' */ ||
+    firstCharCode === 124 /* '|' */ ||
+    lastCharCode === 124 /* '|' */
+  ) {
     return FilterType.NETWORK;
   }
 
   // Ignore Adguard cosmetics
-  // `$$`
-  if (line.indexOf('$$') !== -1) {
-    return FilterType.NOT_SUPPORTED;
+  // `$$` = HTML filtering rules
+  const dollarIndex: number = line.indexOf('$');
+  if (dollarIndex !== -1 && dollarIndex !== line.length - 1) {
+    const afterDollarIndex = dollarIndex + 1;
+    const afterDollarCharCode = line.charCodeAt(afterDollarIndex);
+
+    // Ignore Adguard HTML rewrite rules
+    if (
+      afterDollarCharCode === 36 /* '$' */ ||
+      (afterDollarCharCode === 64 /* '@' */ &&
+        fastStartsWithFrom(line, /* $@$ */ '@$', afterDollarIndex))
+    ) {
+      return FilterType.NOT_SUPPORTED;
+    }
   }
 
   // Check if filter is cosmetics
-  const sharpIndex = line.indexOf('#');
-  if (sharpIndex !== -1) {
+  const sharpIndex: number = line.indexOf('#');
+  if (sharpIndex !== -1 && sharpIndex !== line.length - 1) {
     const afterSharpIndex = sharpIndex + 1;
+    const afterSharpCharCode = line.charCodeAt(afterSharpIndex);
 
-    // Ignore Adguard cosmetics
-    // `#$#` `#@$#`
-    // `#%#` `#@%#`
-    // `#?#`
     if (
-      fastStartsWithFrom(line, /* #@$# */ '@$#', afterSharpIndex) ||
-      fastStartsWithFrom(line, /* #@%# */ '@%#', afterSharpIndex) ||
-      fastStartsWithFrom(line, /* #%# */ '%#', afterSharpIndex) ||
-      fastStartsWithFrom(line, /* #$# */ '$#', afterSharpIndex) ||
-      fastStartsWithFrom(line, /* #?# */ '?#', afterSharpIndex)
-    ) {
-      return FilterType.NOT_SUPPORTED;
-    } else if (
-      fastStartsWithFrom(line, /* ## */ '#', afterSharpIndex) ||
-      fastStartsWithFrom(line, /* #@# */ '@#', afterSharpIndex)
+      afterSharpCharCode === 35 /* '#'*/ ||
+      (afterSharpCharCode === 64 /* '@' */ &&
+        fastStartsWithFrom(line, /* #@# */ '@#', afterSharpIndex))
     ) {
       // Parse supported cosmetic filter
       // `##` `#@#`
       return FilterType.COSMETIC;
+    } else if (
+      (afterSharpCharCode === 64 /* '@'*/ &&
+        (fastStartsWithFrom(line, /* #@$# */ '@$#', afterSharpIndex) ||
+          fastStartsWithFrom(line, /* #@%# */ '@%#', afterSharpIndex))) ||
+      (afterSharpCharCode === 37 /* '%' */ &&
+        fastStartsWithFrom(line, /* #%# */ '%#', afterSharpIndex)) ||
+      (afterSharpCharCode === 36 /* '$' */ &&
+        fastStartsWithFrom(line, /* #$# */ '$#', afterSharpIndex)) ||
+      (afterSharpCharCode === 63 /* '?' */ &&
+        fastStartsWithFrom(line, /* #?# */ '?#', afterSharpIndex))
+    ) {
+      // Ignore Adguard cosmetics
+      // `#$#` `#@$#`
+      // `#%#` `#@%#`
+      // `#?#`
+      return FilterType.NOT_SUPPORTED;
     }
   }
 
@@ -95,26 +132,31 @@ export function parseFilters(
 
   const networkFilters: NetworkFilter[] = [];
   const cosmeticFilters: CosmeticFilter[] = [];
-
   const lines = list.split('\n');
 
   for (let i = 0; i < lines.length; i += 1) {
-    const line = lines[i].trim();
+    let line = lines[i];
 
-    if (line.length > 0) {
-      const filterType = detectFilterType(line);
+    // Check if `line` should be trimmed before parsing
+    const isTrimmingNeeded =
+      line.length > 1 && (line.charCodeAt(0) <= 32 || line.charCodeAt(line.length - 1) <= 32);
+    if (isTrimmingNeeded) {
+      line = line.trim();
+    }
 
-      if (filterType === FilterType.NETWORK && config.loadNetworkFilters) {
-        const filter = NetworkFilter.parse(line, config.debug);
-        if (filter !== null) {
-          networkFilters.push(filter);
-        }
-      } else if (filterType === FilterType.COSMETIC && config.loadCosmeticFilters) {
-        const filter = CosmeticFilter.parse(line, config.debug);
-        if (filter !== null) {
-          if (config.loadGenericCosmeticsFilters === true || filter.isGenericHide() === false) {
-            cosmeticFilters.push(filter);
-          }
+    // Detect if filter is supported, network or cosmetic
+    const filterType = detectFilterType(line);
+
+    if (filterType === FilterType.NETWORK && config.loadNetworkFilters === true) {
+      const filter = NetworkFilter.parse(line, config.debug);
+      if (filter !== null) {
+        networkFilters.push(filter);
+      }
+    } else if (filterType === FilterType.COSMETIC && config.loadCosmeticFilters === true) {
+      const filter = CosmeticFilter.parse(line, config.debug);
+      if (filter !== null) {
+        if (config.loadGenericCosmeticsFilters === true || filter.isGenericHide() === false) {
+          cosmeticFilters.push(filter);
         }
       }
     }

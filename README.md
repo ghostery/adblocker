@@ -17,6 +17,7 @@ The library provides all necessary building blocks to create a powerful and effi
     * [Cosmetic](#cosmetic)
   * [Engine](#engine)
 * [Performance](#performance)
+* [Supported Filters](#rules)
 * [Releasing](#release)
 
 <a id="installation"></a>
@@ -195,6 +196,11 @@ Cache size corresponds to the size in bytes of the Uint8Array returned by `engin
 
 Another interesting metric is the time it takes to initialize the `FiltersEngine` instance from its serialized form. It is especially beneficial for mobile phones, because this serialized engine can be created backend-side and distributed through a CDN; which means clients do not have any cost to pay except downloading the file.
 ![](https://github.com/cliqz-oss/adblocker/blob/d63d545095a1d47626c9fd29e14a813a2ff4f012/bench/comparison/plots/deserializationtimings.svg)
+
+<a id="rules"></a>
+## Supported Filters
+
+The majority of the common filters are supported out of the box but some rare ones are not. To know more, check [the compatibility matrix](https://github.com/cliqz-oss/adblocker/wiki/Compatibility-Matrix) on the wiki.
 
 <a id="release"></a>
 ## Release Checklist

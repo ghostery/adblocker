@@ -73,13 +73,13 @@ export function fastStartsWithFrom(haystack: string, needle: string, start: numb
 }
 
 // Efficient manuel lexer
-function isDigit(ch: number): boolean {
+export function isDigit(ch: number): boolean {
   // 48 == '0'
   // 57 == '9'
   return ch >= 48 && ch <= 57;
 }
 
-function isAlpha(ch: number): boolean {
+export function isAlpha(ch: number): boolean {
   // Force to lower-case
   ch |= 32;
   // 65 == 'A'
