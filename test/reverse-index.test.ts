@@ -182,8 +182,8 @@ wildcard
         new ReverseIndex({
           deserialize: NetworkFilter.deserialize,
           filters: parseFilters(`
-/ads/
-/foo/
+/ads^
+/foo^
 -bar-
           `).networkFilters,
         })

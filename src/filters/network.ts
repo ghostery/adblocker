@@ -410,6 +410,15 @@ export default class NetworkFilter implements IFilter {
       mask |= cptMaskPositive & cptMaskNegative;
     }
 
+    // Detect and drop Regexps
+    if (
+      filterIndexEnd - filterIndexStart >= 2 &&
+      line.charCodeAt(filterIndexStart) === 47 /* '/' */ &&
+      line.charCodeAt(filterIndexEnd - 1) === 47 /* '/' */
+    ) {
+      return null;
+    }
+
     // Identify kind of pattern
 
     // Deal with hostname pattern
@@ -419,7 +428,10 @@ export default class NetworkFilter implements IFilter {
     }
 
     if (filterIndexStart < filterIndexEnd && line.charCodeAt(filterIndexStart) === 124 /* '|' */) {
-      if (filterIndexStart < filterIndexEnd - 1 && line.charCodeAt(filterIndexStart + 1) === 124 /* '|' */) {
+      if (
+        filterIndexStart < filterIndexEnd - 1 &&
+        line.charCodeAt(filterIndexStart + 1) === 124 /* '|' */
+      ) {
         mask = setBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor);
         filterIndexStart += 2;
       } else {
@@ -527,6 +539,7 @@ export default class NetworkFilter implements IFilter {
     let filter: string | undefined;
     if (filterIndexEnd - filterIndexStart > 0) {
       filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
+
       mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isUnicode, hasUnicode(filter));
       if (getBit(mask, NETWORK_FILTER_MASK.isRegex) === false) {
         mask = setNetworkMask(

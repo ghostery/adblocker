@@ -461,6 +461,34 @@ describe('Network filters', () => {
     });
   });
 
+  describe('drops regexp patterns', () => {
+    [
+      '/pattern/',
+      '@@/pattern/',
+      '//',
+      '//$script',
+      '//$image',
+      '//[0-9].*-.*-[a-z0-9]{4}/$script',
+      '/.space/[0-9]{2,9}/$/$script',
+    ].forEach((filter) => {
+      it(filter, () => {
+        expect(NetworkFilter.parse(filter)).toBeNull();
+      });
+    });
+
+    [
+      '||foo.com/pattern/',
+      '||foo.com/pattern/$script',
+      '@@||foo.com/pattern/$script',
+      '@@|foo.com/pattern/$script',
+      '|foo.com/pattern/$script',
+    ].forEach((filter) => {
+      it(filter, () => {
+        expect(NetworkFilter.parse(filter)).not.toBeNull();
+      });
+    });
+  });
+
   describe('options', () => {
     it('accepts any content type', () => {
       network('||foo.com', { fromAny: true });
