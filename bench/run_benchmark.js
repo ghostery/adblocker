@@ -38,6 +38,7 @@ const {
   benchNetworkFiltersParsing,
   benchStringHashing,
   benchStringTokenize,
+  benchGetCosmeticsFilters,
 } = require('./micro');
 
 
@@ -106,6 +107,7 @@ function runMicroBenchmarks(lists, resources) {
     benchNetworkFiltersParsing,
     benchStringHashing,
     benchStringTokenize,
+    benchGetCosmeticsFilters,
   ].forEach((bench) => {
     if (bench.name.toLowerCase().includes(GREP)) {
       const suite = new Benchmark.Suite();
