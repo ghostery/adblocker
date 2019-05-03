@@ -1,7 +1,7 @@
 /* eslint-disable no-bitwise */
 
 const { FiltersEngine, fastHash, tokenize, parseFilters } = require('../');
-const { createEngine } = require('./utils');
+const { createEngine, domains500 } = require('./utils');
 
 
 function benchEngineCreation({ lists, resources }) {
@@ -74,6 +74,17 @@ function benchGetCosmeticTokens({ cosmeticFilters }) {
   return dummy;
 }
 
+function benchGetCosmeticsFilters({ engine }) {
+  for (let i = 0; i < domains500.length; i += 1) {
+    const domain = domains500[i];
+    engine.getCosmeticsFilters({
+      url: `https://${domain}`,
+      hostname: domain,
+      domain,
+    });
+  }
+}
+
 module.exports = {
   benchCosmeticsFiltersParsing,
   benchEngineCreation,
@@ -84,4 +95,5 @@ module.exports = {
   benchStringTokenize,
   benchGetNetworkTokens,
   benchGetCosmeticTokens,
+  benchGetCosmeticsFilters,
 };

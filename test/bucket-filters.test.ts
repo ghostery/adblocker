@@ -18,8 +18,6 @@ describe('#FiltersContainer', () => {
     beforeEach(() => {
       container = new FiltersContainer({
         deserialize: NetworkFilter.deserialize,
-        filters: [],
-        predicate: (_) => true,
       });
     });
 
@@ -81,7 +79,6 @@ describe('#FiltersContainer', () => {
       const container = new FiltersContainer({
         deserialize,
         filters,
-        predicate: (_) => true,
       });
 
       expect(new Set(container.getFilters().map((f) => f.toString()))).toEqual(
