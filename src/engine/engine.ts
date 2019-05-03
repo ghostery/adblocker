@@ -11,7 +11,7 @@ import NetworkFilterBucket from './bucket/network';
 
 import { IMessageFromBackground } from '../content/communication';
 
-export const ENGINE_VERSION = 25;
+export const ENGINE_VERSION = 26;
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {

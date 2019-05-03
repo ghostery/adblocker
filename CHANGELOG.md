@@ -4,10 +4,25 @@
 
 *not released yet*
 
+## 0.9.1
+
+*03-05-2019*
+
+  * Optimize getCosmeticsFilters [#158](https://github.com/cliqz-oss/adblocker/pull/158)
+    * [BREAKING] `CosmeticFilterBucket.getCosmeticsFilters(...)` now
+      returns `{ injections: CosmeticFilter[]; stylesheet: string }`
+    * Internally `CosmeticFilterBucket` will do much less work to get
+      cosmetic filters. In particular, we pre-compute a base stylesheet with
+      all generic hide filters not having any corresponding unhide (`#@#`)
+      rule in the bucket (that's most of the filters). This means we only need
+      to apply exceptions and compute dynamic stylesheets for a minority of
+      filters (~4%).
+    * Add benchmark for `getCosmeticsFilters`.
+  * Drop RegExp in network filters [#156](https://github.com/cliqz-oss/adblocker/pull/156)
+
 ## 0.9.0
 
-
-*not released yet*
+*26-04-2019*
 
   * prevent potential out-of-bound access [#150](https://github.com/cliqz-oss/adblocker/pull/150)
   * bench: update comparison [#148](https://github.com/cliqz-oss/adblocker/pull/148)
