@@ -1,5 +1,13 @@
-import { getDomain, parse } from 'tldts';
-import * as adblocker from '../index';
+import { getDomain, getHostname, parse } from 'tldts';
+import {
+  fastHash,
+  fetchLists,
+  fetchResources,
+  FiltersEngine,
+  makeRequest,
+  Request,
+  updateResponseHeadersWithCSP,
+} from '../index';
 
 /**
  * Initialize the adblocker using lists of filters and resources. It returns a
@@ -8,97 +16,72 @@ import * as adblocker from '../index';
  */
 function loadAdblocker() {
   console.log('Fetching resources...');
-  return Promise.all([adblocker.fetchLists(), adblocker.fetchResources()]).then(
-    ([responses, resources]) => {
-      console.log('Initialize adblocker...');
-      const deduplicatedLines = new Set();
-      for (let i = 0; i < responses.length; i += 1) {
-        const lines = responses[i].split(/\n/g);
-        for (let j = 0; j < lines.length; j += 1) {
-          deduplicatedLines.add(lines[j]);
-        }
+  return Promise.all([fetchLists(), fetchResources()]).then(([responses, resources]) => {
+    console.log('Initialize adblocker...');
+    const deduplicatedLines = new Set();
+    for (let i = 0; i < responses.length; i += 1) {
+      const lines = responses[i].split(/\n/g);
+      for (let j = 0; j < lines.length; j += 1) {
+        deduplicatedLines.add(lines[j]);
       }
+    }
+    const deduplicatedFilters = [...deduplicatedLines].join('\n');
 
-      let t0 = Date.now();
-      const engine = adblocker.FiltersEngine.parse([...deduplicatedLines].join('\n'));
-      let total = Date.now() - t0;
-      console.log('parsing filters', total);
+    let t0 = Date.now();
+    const engine = FiltersEngine.parse(deduplicatedFilters);
+    let total = Date.now() - t0;
+    console.log('parsing filters', total);
 
-      t0 = Date.now();
-      engine.updateResources(resources, '' + adblocker.fastHash(resources));
-      total = Date.now() - t0;
-      console.log('parsing resources', total);
+    t0 = Date.now();
+    engine.updateResources(resources, '' + fastHash(resources));
+    total = Date.now() - t0;
+    console.log('parsing resources', total);
 
-      t0 = Date.now();
-      const serialized = engine.serialize();
-      total = Date.now() - t0;
-      console.log('serialization', total);
-      console.log('size', serialized.byteLength);
+    t0 = Date.now();
+    const serialized = engine.serialize();
+    total = Date.now() - t0;
+    console.log('serialization', total);
+    console.log('size', serialized.byteLength);
 
-      t0 = Date.now();
-      const deserialized = adblocker.FiltersEngine.deserialize(serialized);
-      total = Date.now() - t0;
-      console.log('deserialization', total);
+    t0 = Date.now();
+    const deserialized = FiltersEngine.deserialize(serialized);
+    total = Date.now() - t0;
+    console.log('deserialization', total);
 
-      return deserialized;
-    },
-  );
+    return deserialized;
+  });
 }
 
 /**
- * Because the WebRequest API does not give us access to the URL of the page
- * each request comes from (but we know from which tab they originate), we need
- * to independently keep a mapping from tab ids to source URLs. This information
- * is needed by the adblocker (some filters only apply on specific domains).
+ * Keep track of number of network requests altered for each tab
  */
-const tabs = new Map();
+const counter: Map<number, number> = new Map();
 
-function resetState(tabId?: number, source?: string): void {
-  tabs.set(tabId, { source, count: 0 });
+/**
+ * Helper function used to both reset, increment and show the current value of
+ * the blocked requests counter for a given tabId.
+ */
+function updateBlockedCounter(tabId: number, { reset = false, incr = false } = {}) {
+  counter.set(tabId, (reset === true ? 0 : counter.get(tabId) || 0) + (incr === true ? 1 : 0));
+
+  chrome.browserAction.setBadgeText({
+    text: '' + (counter.get(tabId) || 0),
+  });
 }
 
-function updateBadgeCount(tabId?: number): void {
-  if (tabs.has(tabId)) {
-    const { count } = tabs.get(tabId);
-    chrome.browserAction.setBadgeText({ text: '' + count });
-  }
-}
-
-function incrementBlockedCounter(tabId: number): void {
-  if (tabs.has(tabId)) {
-    const tabStats = tabs.get(tabId);
-    tabStats.count += 1;
-    updateBadgeCount(tabId);
-  }
-}
-
-chrome.tabs.onCreated.addListener((tab) => {
-  resetState(tab.id, tab.url);
-  updateBadgeCount(tab.id);
-});
-
-chrome.tabs.onUpdated.addListener((_0, _1, tab) => {
-  if (!tabs.has(tab.id)) {
-    resetState(tab.id, tab.url);
-    updateBadgeCount(tab.id);
-  }
-  const { source } = tabs.get(tab.id);
-  if (source !== tab.url) {
-    resetState(tab.id, tab.url);
-    updateBadgeCount(tab.id);
-  }
-});
-
-chrome.tabs.onActivated.addListener(({ tabId }) => {
-  updateBadgeCount(tabId);
-});
+// Whenever the active tab changes, then we update the count of blocked request
+chrome.tabs.onActivated.addListener(({ tabId }: chrome.tabs.TabActiveInfo) =>
+  updateBlockedCounter(tabId),
+);
 
 function requestFromDetails({
   initiator,
   type,
   url,
-}: chrome.webRequest.WebRequestBodyDetails | chrome.webRequest.WebResponseHeadersDetails) {
-  return adblocker.makeRequest(
+}:
+  | chrome.webRequest.WebRequestBodyDetails
+  | chrome.webRequest.WebResponseHeadersDetails): Request {
+  return makeRequest(
     {
       sourceUrl: initiator,
       type,
@@ -113,13 +96,17 @@ loadAdblocker().then((engine) => {
   // some of them (or redirect).
   chrome.webRequest.onBeforeRequest.addListener(
     (details) => {
-      const result = engine.match(requestFromDetails(details));
+      const { redirect, match } = engine.match(requestFromDetails(details));
 
-      if (result.redirect) {
-        incrementBlockedCounter(details.tabId);
-        return { redirectUrl: result.redirect };
-      } else if (result.match) {
-        incrementBlockedCounter(details.tabId);
+      updateBlockedCounter(details.tabId, {
+        incr: Boolean(redirect || match),
+        reset: details.type === 'main_frame',
+      });
+
+      // Create blocking response { cancel, redirectUrl }
+      if (redirect !== undefined) {
+        return { redirectUrl: redirect };
+      } else if (match === true) {
         return { cancel: true };
       }
 
@@ -132,41 +119,33 @@ loadAdblocker().then((engine) => {
   );
 
   chrome.webRequest.onHeadersReceived.addListener(
-    (details) => {
-      if (details.type !== 'main_frame') {
-        return {};
-      }
-
-      return adblocker.updateResponseHeadersWithCSP(
-        details,
-        engine.getCSPDirectives(requestFromDetails(details)),
-      );
-    },
-    { urls: ['<all_urls>'] },
+    (details) =>
+      updateResponseHeadersWithCSP(details, engine.getCSPDirectives(requestFromDetails(details))),
+    { urls: ['<all_urls>'], types: ['main_frame'] },
     ['blocking', 'responseHeaders'],
   );
 
   // Start listening to messages coming from the content-script
   chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-    // Ignore if there is no tab origin
-    if (sender.tab === undefined || sender.tab.id === undefined || sender.frameId === undefined) {
+    if (sender.tab === undefined || sender.tab.id === undefined) {
       return;
-    }
-
-    // Extract hostname from sender's URL
-    const url = sender.url;
-    let hostname = '';
-    if (url !== undefined) {
-      hostname = new URL(url).hostname;
     }
 
     // Answer to content-script with a list of nodes
     if (msg.action === 'getCosmeticsFilters') {
+      // Extract hostname from sender's URL
+      const url = sender.url || '';
+      const hostname = getHostname(url) || '';
+      const domain = getDomain(hostname) || '';
+
+      let t0 = Date.now();
       const { active, styles, scripts } = engine.getCosmeticsFilters({
-        domain: getDomain(hostname) || '',
+        domain,
         hostname,
-        url: url === undefined ? '' : url,
+        url,
       });
+      let total = Date.now() - t0;
+      console.log('getCosmeticsFilters', total);
 
       if (active === false) {
         return;
@@ -174,6 +153,7 @@ loadAdblocker().then((engine) => {
 
       // Use tabs API to inject cosmetics
       if (styles.length > 0) {
+        t0 = Date.now();
         chrome.tabs.insertCSS(
           sender.tab.id,
           {
@@ -184,6 +164,8 @@ loadAdblocker().then((engine) => {
             runAt: 'document_start',
           },
           () => {
+            total = Date.now() - t0;
+            console.log('insertCSS', total);
             if (chrome.runtime.lastError) {
               console.error('Error while injecting CSS', chrome.runtime.lastError.message);
             }
