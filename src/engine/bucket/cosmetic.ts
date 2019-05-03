@@ -1,5 +1,6 @@
 import StaticDataView from '../../data-view';
 import CosmeticFilter, {
+  DEFAULT_HIDDING_STYLE,
   getEntityHashesFromLabelsBackward,
   getHostnameHashesFromLabelsBackward,
 } from '../../filters/cosmetic';
@@ -7,27 +8,54 @@ import ReverseIndex from '../reverse-index';
 import FiltersContainer from './filters';
 
 /**
- * Given a list of CSS selectors, create a valid stylesheet ready to be injected
- * in the page. This also takes care to no create rules with too many selectors
- * for Chrome, see: https://crbug.com/804179
+ * Given a list of CSS selectors, create a valid stylesheet ready to be
+ * injected in the page. This also takes care to no create rules with too many
+ * selectors for Chrome, see: https://crbug.com/804179
  */
 export function createStylesheet(rules: string[], style: string): string {
-  const maximumNumberOfSelectors = 1024;
-  const parts: string[] = [];
-  for (let i = 0; i < rules.length; i += maximumNumberOfSelectors) {
-    parts.push(`${rules.slice(i, i + maximumNumberOfSelectors).join(',\n')} { ${style} }`);
-  }
-  return parts.join('\n');
-}
-
-/**
- * Given a list of cosmetic filters, create a stylesheet ready to be injected.
- */
-function createStylesheetFromRules(rules: CosmeticFilter[]): string {
   if (rules.length === 0) {
     return '';
   }
 
+  const maximumNumberOfSelectors = 1024;
+  const parts: string[] = [];
+  const styleStr: string = ` { ${style} }`;
+
+  for (let i = 0; i < rules.length; i += maximumNumberOfSelectors) {
+    // Accumulate up to `maximumNumberOfSelectors` selectors into `selector`.
+    // We use string concatenation here since it's faster than using
+    // `Array.prototype.join`.
+    let selector = rules[i];
+    for (
+      let j = i + 1, end = Math.min(rules.length, i + maximumNumberOfSelectors);
+      j < end;
+      j += 1
+    ) {
+      selector += ',\n' + rules[j];
+    }
+
+    // Insert CSS after last selector (e.g.: `{ display: none }`)
+    selector += styleStr;
+
+    // If `rules` has less then the limit, we can short-circuit here
+    if (rules.length < maximumNumberOfSelectors) {
+      return selector;
+    }
+
+    // Keep track of this chunk and process next ones
+    parts.push(selector);
+  }
+
+  // Join all chunks together
+  return parts.join('\n');
+}
+
+/**
+ * If at least one filter from `rules` has a custom style (e.g.: `##.foo
+ * :style(...)`) then we fallback to `createStylesheetFromRulesWithCustomStyles`
+ * which is slower then `createStylesheetFromRules`.
+ */
+function createStylesheetFromRulesWithCustomStyles(rules: CosmeticFilter[]): string {
   const selectorsPerStyle: Map<string, string[]> = new Map();
 
   for (let i = 0; i < rules.length; i += 1) {
@@ -42,11 +70,32 @@ function createStylesheetFromRules(rules: CosmeticFilter[]): string {
   }
 
   const stylesheets: string[] = [];
-  selectorsPerStyle.forEach((selectors, style) => {
+  for (const [style, selectors] of selectorsPerStyle.entries()) {
     stylesheets.push(createStylesheet(selectors, style));
-  });
+  }
 
   return stylesheets.join('\n\n');
+}
+
+/**
+ * Given a list of cosmetic filters, create a stylesheet ready to be injected.
+ * This function is optimistic and will assume there is no `:style` filter in
+ * `rules`. In case one is found on the way, we fallback to the slower
+ * `createStylesheetFromRulesWithCustomStyles` function.
+ */
+function createStylesheetFromRules(rules: CosmeticFilter[]): string {
+  const selectors: string[] = [];
+  for (let i = 0; i < rules.length; i += 1) {
+    const rule = rules[i];
+
+    if (rule.hasCustomStyle()) {
+      return createStylesheetFromRulesWithCustomStyles(rules);
+    }
+
+    selectors.push(rule.selector);
+  }
+
+  return createStylesheet(selectors, DEFAULT_HIDDING_STYLE);
 }
 
 function createLookupTokens(hostname: string, domain: string): Uint32Array {
@@ -161,19 +210,18 @@ export default class CosmeticFilterBucket {
     }
 
     // Create final stylesheet
-    const stylesheets = [];
-
-    if (allowGenericHides === true) {
-      stylesheets.push(this.getGenericRulesSplit().baseStylesheet);
-    }
-
+    let stylesheet = allowGenericHides === false ? '' : this.getBaseStylesheet();
     if (styles.length !== 0) {
-      stylesheets.push(createStylesheetFromRules(styles));
+      if (stylesheet.length !== 0) {
+        stylesheet += '\n\n';
+      }
+
+      stylesheet += createStylesheetFromRules(styles);
     }
 
     return {
       injections,
-      stylesheet: stylesheets.join('\n\n').trim(),
+      stylesheet,
     };
   }
 
@@ -213,12 +261,12 @@ export default class CosmeticFilterBucket {
     // and domain since some generic rules can specify negated hostnames and
     // entities.
     if (allowGenericHides === true) {
-      const { genericRules } = this.getGenericRulesSplit();
+      const genericRules = this.getGenericRules();
       for (let i = 0; i < genericRules.length; i += 1) {
         const rule = genericRules[i];
         if (
           (rule.hasHostnameConstraint() === false || rule.match(hostname, domain) === true) &&
-          (disabledRules.size === 0 || !disabledRules.has(rule.getSelector()))
+          (disabledRules.size === 0 || disabledRules.has(rule.getSelector()) === false)
         ) {
           rules.push(rule);
         }
@@ -228,7 +276,21 @@ export default class CosmeticFilterBucket {
     return rules;
   }
 
-  private getGenericRulesSplit(): {
+  private getGenericRules(): CosmeticFilter[] {
+    if (this.extraGenericRules === null) {
+      return this.lazyPopulateGenericRulesCache().genericRules;
+    }
+    return this.extraGenericRules;
+  }
+
+  private getBaseStylesheet(): string {
+    if (this.baseStylesheet === null) {
+      return this.lazyPopulateGenericRulesCache().baseStylesheet;
+    }
+    return this.baseStylesheet;
+  }
+
+  private lazyPopulateGenericRulesCache(): {
     baseStylesheet: string;
     genericRules: CosmeticFilter[];
   } {
@@ -253,6 +315,7 @@ export default class CosmeticFilterBucket {
       for (let i = 0; i < genericRules.length; i += 1) {
         const rule = genericRules[i];
         if (
+          rule.hasCustomStyle() ||
           rule.isScriptInject() ||
           rule.hasHostnameConstraint() ||
           canBeHiddenSelectors.has(rule.getSelector())

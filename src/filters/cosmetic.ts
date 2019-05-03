@@ -726,6 +726,10 @@ export default class CosmeticFilter implements IFilter {
     return this.id;
   }
 
+  public hasCustomStyle(): boolean {
+    return this.style !== undefined;
+  }
+
   public getStyle(): string {
     return this.style || DEFAULT_HIDDING_STYLE;
   }
