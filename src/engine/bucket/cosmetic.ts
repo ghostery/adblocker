@@ -24,6 +24,10 @@ export function createStylesheet(rules: string[], style: string): string {
  * Given a list of cosmetic filters, create a stylesheet ready to be injected.
  */
 function createStylesheetFromRules(rules: CosmeticFilter[]): string {
+  if (rules.length === 0) {
+    return '';
+  }
+
   const selectorsPerStyle: Map<string, string[]> = new Map();
 
   for (let i = 0; i < rules.length; i += 1) {
@@ -157,14 +161,19 @@ export default class CosmeticFilterBucket {
     }
 
     // Create final stylesheet
-    let stylesheet = this.getGenericRulesSplit().baseStylesheet;
+    const stylesheets = [];
+
+    if (allowGenericHides === true) {
+      stylesheets.push(this.getGenericRulesSplit().baseStylesheet);
+    }
+
     if (styles.length !== 0) {
-      stylesheet += '\n\n' + createStylesheetFromRules(styles);
+      stylesheets.push(createStylesheetFromRules(styles));
     }
 
     return {
       injections,
-      stylesheet,
+      stylesheet: stylesheets.join('\n\n').trim(),
     };
   }
 
@@ -208,7 +217,7 @@ export default class CosmeticFilterBucket {
       for (let i = 0; i < genericRules.length; i += 1) {
         const rule = genericRules[i];
         if (
-          (rule.hasHostnameConstraint() || rule.match(hostname, domain) === false) &&
+          (rule.hasHostnameConstraint() === false || rule.match(hostname, domain) === true) &&
           (disabledRules.size === 0 || !disabledRules.has(rule.getSelector()))
         ) {
           rules.push(rule);
@@ -243,7 +252,11 @@ export default class CosmeticFilterBucket {
       const canBeHiddenRules: CosmeticFilter[] = [];
       for (let i = 0; i < genericRules.length; i += 1) {
         const rule = genericRules[i];
-        if (canBeHiddenSelectors.has(rule.getSelector())) {
+        if (
+          rule.isScriptInject() ||
+          rule.hasHostnameConstraint() ||
+          canBeHiddenSelectors.has(rule.getSelector())
+        ) {
           canBeHiddenRules.push(rule);
         } else {
           cannotBeHiddenRules.push(rule);

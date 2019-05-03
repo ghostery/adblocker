@@ -600,13 +600,7 @@ export default class CosmeticFilter implements IFilter {
 
   public match(hostname: string, domain: string): boolean {
     // No `hostname` available but this filter has some constraints on hostname.
-    if (
-      !hostname &&
-      (this.hostnames !== undefined ||
-        this.entities !== undefined ||
-        this.notHostnames !== undefined ||
-        this.notEntities !== undefined)
-    ) {
+    if (!hostname && this.hasHostnameConstraint()) {
       return false;
     }
 
@@ -746,6 +740,10 @@ export default class CosmeticFilter implements IFilter {
 
   public isScriptInject(): boolean {
     return getBit(this.mask, COSMETICS_MASK.scriptInject);
+  }
+
+  public isCSS(): boolean {
+    return this.isScriptInject() === false;
   }
 
   public isUnicode(): boolean {
