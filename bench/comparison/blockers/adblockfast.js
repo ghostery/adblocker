@@ -1,4 +1,4 @@
-/*
+/*!
  * This file is part of Bluhell Firewall Browser Extension,
  * Copyright (c) 2017, Diego Casorran. All rights reserved.
  *
