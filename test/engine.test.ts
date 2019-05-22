@@ -6,11 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import * as tldts from 'tldts';
+import { getDomain } from 'tldts';
 
 import Engine from '../src/engine/engine';
 import NetworkFilter from '../src/filters/network';
-import Request, { makeRequest } from '../src/request';
+import Request, { RequestType } from '../src/request';
 import Resources from '../src/resources';
 
 import requests from './data/requests';
@@ -52,7 +52,7 @@ function test({
 
   // Collect all matching filters for this request.
   const matchingFilters = new Set();
-  for (const matchingFilter of engine.matchAll(request)) {
+  for (const matchingFilter of Array.from(engine.matchAll(request))) {
     (matchingFilter.rawLine || '').split(' <+> ').forEach((f: string) => {
       matchingFilters.add(f);
     });
@@ -151,7 +151,7 @@ function createEngine(filters: string, enableOptimizations: boolean = true) {
 
 describe('#FiltersEngine', () => {
   it('network filters are disabled', () => {
-    const request = makeRequest({ url: 'https://foo.com' }, tldts.parse);
+    const request = Request.fromRawDetails({ url: 'https://foo.com' });
 
     // Enabled
     expect(
@@ -167,26 +167,28 @@ describe('#FiltersEngine', () => {
   it('cosmetic filters are disabled', () => {
     // Enabled
     expect(
-      Engine.parse('##.selector', { loadCosmeticFilters: true }).getCosmeticsFilters({
+      Engine.parse('##selector', { loadCosmeticFilters: true }).getCosmeticsFilters({
         domain: 'foo.com',
         hostname: 'foo.com',
         url: 'https://foo.com',
       }),
     ).toEqual({
       active: true,
+      extended: [],
       scripts: [],
-      styles: '.selector { display: none !important; }',
+      styles: 'selector { display: none !important; }',
     });
 
     // Disabled
     expect(
-      Engine.parse('##.selector', { loadCosmeticFilters: false }).getCosmeticsFilters({
+      Engine.parse('##selector', { loadCosmeticFilters: false }).getCosmeticsFilters({
         domain: 'foo.com',
         hostname: 'foo.com',
         url: 'https://foo.com',
       }),
     ).toEqual({
       active: false,
+      extended: [],
       scripts: [],
       styles: '',
     });
@@ -196,12 +198,9 @@ describe('#FiltersEngine', () => {
     it('no policy in engine', () => {
       expect(
         createEngine('this is not a csp').getCSPDirectives(
-          makeRequest(
-            {
-              url: 'https://foo.com',
-            },
-            tldts.parse,
-          ),
+          Request.fromRawDetails({
+            url: 'https://foo.com',
+          }),
         ),
       ).toBeUndefined();
     });
@@ -209,12 +208,9 @@ describe('#FiltersEngine', () => {
     it('network filters are disabled', () => {
       expect(
         Engine.parse('||foo.com$csp=bar', { loadNetworkFilters: false }).getCSPDirectives(
-          makeRequest(
-            {
-              url: 'https://foo.com',
-            },
-            tldts.parse,
-          ),
+          Request.fromRawDetails({
+            url: 'https://foo.com',
+          }),
         ),
       ).toBeUndefined();
     });
@@ -223,25 +219,19 @@ describe('#FiltersEngine', () => {
       // Not supported protocol
       expect(
         Engine.parse('||foo.com$csp=bar').getCSPDirectives(
-          makeRequest(
-            {
-              url: 'ftp://foo.com',
-            },
-            tldts.parse,
-          ),
+          Request.fromRawDetails({
+            url: 'ftp://foo.com',
+          }),
         ),
       ).toBeUndefined();
 
       // Not document request
       expect(
         Engine.parse('||foo.com$csp=bar').getCSPDirectives(
-          makeRequest(
-            {
-              type: 'script',
-              url: 'ftp://foo.com',
-            },
-            tldts.parse,
-          ),
+          Request.fromRawDetails({
+            type: 'script',
+            url: 'ftp://foo.com',
+          }),
         ),
       ).toBeUndefined();
     });
@@ -249,12 +239,9 @@ describe('#FiltersEngine', () => {
     it('does not match request', () => {
       expect(
         createEngine('||bar.com$csp=bar').getCSPDirectives(
-          makeRequest(
-            {
-              url: 'https://foo.com',
-            },
-            tldts.parse,
-          ),
+          Request.fromRawDetails({
+            url: 'https://foo.com',
+          }),
         ),
       ).toBeUndefined();
     });
@@ -262,12 +249,9 @@ describe('#FiltersEngine', () => {
     it('matches request (1 policy)', () => {
       expect(
         createEngine('||foo.com$csp=bar').getCSPDirectives(
-          makeRequest(
-            {
-              url: 'https://foo.com',
-            },
-            tldts.parse,
-          ),
+          Request.fromRawDetails({
+            url: 'https://foo.com',
+          }),
         ),
       ).toEqual('bar');
     });
@@ -277,13 +261,10 @@ describe('#FiltersEngine', () => {
 ||foo.com$csp=bar
 $csp=baz,domain=bar.com
 `).getCSPDirectives(
-        makeRequest(
-          {
-            sourceUrl: 'https://bar.com',
-            url: 'https://foo.com',
-          },
-          tldts.parse,
-        ),
+        Request.fromRawDetails({
+          sourceUrl: 'https://bar.com',
+          url: 'https://foo.com',
+        }),
       );
 
       expect(policies).not.toBeUndefined();
@@ -299,13 +280,10 @@ $csp=baz,domain=bar.com
 @@$csp=baz
 $csp=baz,domain=bar.com
 `).getCSPDirectives(
-          makeRequest(
-            {
-              sourceUrl: 'https://bar.com',
-              url: 'https://foo.com',
-            },
-            tldts.parse,
-          ),
+          Request.fromRawDetails({
+            sourceUrl: 'https://bar.com',
+            url: 'https://foo.com',
+          }),
         ),
       ).toEqual('bar');
     });
@@ -318,27 +296,21 @@ $csp=baz,domain=bar.com
 @@$csp=baz
 $csp=baz,domain=bar.com
 `).getCSPDirectives(
-          makeRequest(
-            {
-              sourceUrl: 'https://bar.com',
-              url: 'https://foo.com',
-            },
-            tldts.parse,
-          ),
+          Request.fromRawDetails({
+            sourceUrl: 'https://bar.com',
+            url: 'https://foo.com',
+          }),
         ),
       ).toBeUndefined();
     });
   });
 
   describe('badfilter', () => {
-    const request = makeRequest(
-      {
-        sourceUrl: 'https://bar.com',
-        type: 'image',
-        url: 'https://foo.com',
-      },
-      tldts.parse,
-    );
+    const request = Request.fromRawDetails({
+      sourceUrl: 'https://bar.com',
+      type: 'image',
+      url: 'https://foo.com',
+    });
     // - from Engine.parse
     // - new filter in Engine.update
     // - works after serialization/deserialization?
@@ -460,14 +432,11 @@ $csp=baz,domain=bar.com
 
       // Create an instance of `Request` to be shared for all the calls to
       // `Engine.match` or `Engine.matchAll`.
-      const request = makeRequest(
-        {
-          sourceUrl,
-          type,
-          url,
-        },
-        tldts.parse,
-      );
+      const request = Request.fromRawDetails({
+        sourceUrl,
+        type: type as RequestType,
+        url,
+      });
 
       it(`[request] type=${type} url=${url}, sourceUrl=${sourceUrl}`, () => {
         // Check each filter individually
@@ -538,7 +507,7 @@ $csp=baz,domain=bar.com
     describe('generichide', () => {
       it('allows generic cosmetics by default', () => {
         expect(
-          Engine.parse('##.selector').getCosmeticsFilters({
+          Engine.parse('##selector').getCosmeticsFilters({
             domain: 'foo.com',
             hostname: 'foo.com',
             url: 'https://foo.com',
@@ -551,8 +520,8 @@ $csp=baz,domain=bar.com
           Engine.parse(
             `
 @@||foo.com^$generichide
-~bar.*##.selector1
-##.selector2
+~bar.*##selector1
+##selector2
 `,
           ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
             .styles,
@@ -564,7 +533,7 @@ $csp=baz,domain=bar.com
           Engine.parse(
             `
 @@||foo.com^$generichide
-##.selector
+##selector
 ||foo.com^$generichide
 `,
           ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
@@ -577,7 +546,7 @@ $csp=baz,domain=bar.com
           Engine.parse(
             `
 @@||foo.com^$important,generichide
-##.selector
+##selector
 ||foo.com^$generichide,important
 `,
           ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
@@ -590,7 +559,9 @@ $csp=baz,domain=bar.com
           Engine.parse(
             `
 @@||foo.com^$important,generichide
+##selector
 ##.selector
+###selector
 ||foo.com^$generichide
 `,
           ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
@@ -603,103 +574,298 @@ $csp=baz,domain=bar.com
       expect(
         Engine.parse(
           `
-##.selector :style(foo)
-##.selector :style(bar)
-##.selector1 :style(foo)`,
+##selector :style(foo)
+##selector :style(bar)
+##selector1 :style(foo)`,
         ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
           .styles,
-      ).toEqual('.selector ,\n.selector1  { foo }\n\n.selector  { bar }');
+      ).toEqual('selector ,\nselector1  { foo }\n\nselector  { bar }');
     });
 
     [
-      // Generic hides
+      // Unhide
+      // ======
+      // = unhide without domain
       {
-        filters: ['##.adwords1', '~google.*##.adwords2'],
-        hostname: 'domain.com',
-        matches: ['.adwords1', '.adwords2'],
+        filters: ['##selector'],
+        hostname: 'foo.com',
+        matches: ['selector'],
       },
       {
-        filters: ['##.adwords1', '~google.*##.adwords2'],
-        hostname: 'google.com',
+        filters: ['#@#selector', '##selector'],
+        hostname: 'foo.com',
+        matches: [],
+      },
+
+      // = unhide without domain + class
+      {
+        classes: ['selector'],
+        filters: ['##.selector'],
+        hostname: 'foo.com',
+        matches: ['.selector'],
+      },
+      {
+        classes: ['selector'],
+        filters: ['#@#.selector', '##.selector'],
+        hostname: 'foo.com',
+        matches: [],
+      },
+
+      // = unhide without domain + id
+      {
+        filters: ['###selector'],
+        hostname: 'foo.com',
+        ids: ['selector'],
+        matches: ['#selector'],
+      },
+      {
+        filters: ['###selector', '#@##selector'],
+        hostname: 'foo.com',
+        ids: ['selector'],
+        matches: [],
+      },
+
+      // = unhide without domain + href
+      {
+        filters: ['##a[href="https://foo"]'],
+        hostname: 'foo.com',
+        hrefs: ['https://foo.com/bar'],
+        matches: ['a[href="https://foo"]'],
+      },
+      {
+        filters: ['##a[href="https://foo"]', '#@#a[href="https://foo"]'],
+        hostname: 'foo.com',
+        hrefs: ['https://foo.com/bar'],
+        matches: [],
+      },
+
+      // Generic Hides
+      // =============
+      // Filters which are not classes, ids or hrefs are matched using the
+      // generic index so we expect them to be returned even without providing
+      // any DOM information.
+      {
+        filters: ['##adwords1', '~google.*##adwords2'],
+        hostname: 'domain.com',
+        matches: ['adwords1', 'adwords2'],
+      },
+      // Selectors ids, classes and hrefs are not returned without DOM information.
+      {
+        filters: [
+          '##.adwords1',
+          '~google.*##.adwords2',
+          '##[href="https://foo"]',
+          '##[href^="https://foo"]',
+          '##[href*="https://foo"]',
+          '##a[href*="https://foo"]',
+        ],
+        hostname: 'domain.com',
+        matches: [],
+      },
+      // Return filters with correct DOM info
+      // .class
+      {
+        filters: [
+          '##.adwords1',
+          '~google.*###adwords2',
+          '##[href="https://foo"]',
+          '##[href^="https://foo"]',
+          '##[href*="https://foo"]',
+          '##a[href*="https://foo"]',
+        ],
+
+        classes: ['foo', 'bar', 'adwords1'],
+        hostname: 'domain.com',
         matches: ['.adwords1'],
+      },
+      // #id
+      {
+        filters: [
+          '##.adwords1',
+          '~google.*###adwords2',
+          '##[href="https://foo"]',
+          '##[href^="https://foo"]',
+          '##[href*="https://foo"]',
+          '##a[href*="https://foo"]',
+        ],
+
+        hostname: 'domain.com',
+        ids: ['foo', 'bar', 'adwords2'],
+        matches: ['#adwords2'],
+      },
+      // hrefs
+      {
+        filters: [
+          '##.adwords1',
+          '~google.*###adwords2',
+          '##[href="https://foo.com"]',
+          '##[href^="https://bar.com"]',
+          '##[href*="https://baz.net"]',
+          '##a[href*="http://foo.com"]',
+        ],
+
+        hostname: 'domain.com',
+        hrefs: ['https://foo.com', 'https://bar.com'],
+        matches: [
+          '[href="https://foo.com"]',
+          '[href^="https://bar.com"]',
+          'a[href*="http://foo.com"]',
+        ],
+      },
+      // DOM-specific selectors should be subjected to exceptions in hostname and entities
+      // = no matching class
+      {
+        classes: [],
+        filters: ['~foo.com##.selector'],
+        hostname: 'bar.com',
+        matches: [],
+      },
+
+      // = matching class + domain
+      {
+        classes: ['selector'],
+        filters: ['~foo.com##.selector'],
+        hostname: 'bar.com',
+        matches: ['.selector'],
+      },
+
+      // = domain exception
+      {
+        classes: ['selector'],
+        filters: ['~foo.com##.selector'],
+        hostname: 'foo.com',
+        matches: [],
+      },
+
+      // = entity exception
+      {
+        classes: ['selector'],
+        filters: ['~foo.*##.selector'],
+        hostname: 'foo.com',
+        matches: [],
+      },
+      {
+        classes: ['selector'],
+        filters: ['~foo.*##.selector'],
+        hostname: 'foo.co.uk',
+        matches: [],
+      },
+
+      // ==========
+      {
+        filters: ['##adwords1', '~google.*##adwords2'],
+        hostname: 'google.com',
+        matches: ['adwords1'],
       },
       // Negated entity exceptions do not appear in matches
       {
-        filters: ['##.adwords1', '~google.com#@#.adwords2'],
+        filters: ['##adwords1', '~google.com#@#adwords2'],
         hostname: 'google.com',
-        matches: ['.adwords1'],
+        matches: ['adwords1'],
       },
       {
-        filters: ['##.adwords1', '~google.com#@#.adwords2'],
+        filters: ['##adwords1', '~google.com#@#adwords2'],
         hostname: 'google.de',
-        matches: ['.adwords1'],
+        matches: ['adwords1'],
       },
       {
-        filters: ['##.adwords1', '~google.*#@#.adwords2'],
+        filters: ['##adwords1', '~google.*#@#adwords2'],
         hostname: 'google.com',
-        matches: ['.adwords1'],
+        matches: ['adwords1'],
       },
       // Exception cancels generic rule
       {
-        filters: ['##.adwords1', 'google.com#@#.adwords1'],
+        filters: ['##adwords1', 'google.com#@#adwords1'],
         hostname: 'google.com',
         matches: [],
       },
       // Exception cancels entity rule
       {
-        filters: ['google.*##.adwords1', 'google.com#@#.adwords1'],
+        filters: ['google.*##adwords1', 'google.com#@#adwords1'],
         hostname: 'google.com',
         matches: [],
       },
       // Exception cancels hostname rule
       {
-        filters: ['google.com##.adwords1', 'google.com#@#.adwords1'],
+        filters: ['google.com##adwords1', 'google.com#@#adwords1'],
         hostname: 'google.com',
         matches: [],
       },
       // Entity exception cancels generic rule
       {
-        filters: ['##.adwords1', 'google.*#@#.adwords1'],
+        filters: ['##adwords1', 'google.*#@#adwords1'],
         hostname: 'google.com',
         matches: [],
       },
       // Entity exception cancels entity rule
       {
-        filters: ['google.*##.adwords1', 'google.*#@#.adwords1'],
+        filters: ['google.*##adwords1', 'google.*#@#adwords1'],
         hostname: 'google.com',
         matches: [],
       },
       // Exception does not cancel if selector is different
       {
-        filters: ['##.adwords1', 'google.de#@#.adwords2'],
+        filters: ['##adwords1', 'google.de#@#adwords2'],
         hostname: 'google.de',
-        matches: ['.adwords1'],
+        matches: ['adwords1'],
       },
       {
-        filters: ['google.de##.adwords1', 'google.de#@#.adwords2'],
+        filters: ['google.de##adwords1', 'google.de#@#adwords2'],
         hostname: 'google.de',
-        matches: ['.adwords1'],
+        matches: ['adwords1'],
       },
       // Exception does not cancel if hostname is different
       {
-        filters: ['##.adwords1', 'google.com#@#.adwords1'],
+        filters: ['##adwords1', 'google.com#@#adwords1'],
         hostname: 'google.de',
-        matches: ['.adwords1'],
+        matches: ['adwords1'],
       },
       {
-        filters: ['##.adwords1', 'accounts.google.com#@#.adwords1'],
+        filters: ['##adwords1', 'accounts.google.com#@#adwords1'],
         hostname: 'google.com',
-        matches: ['.adwords1'],
+        matches: ['adwords1'],
+      },
+      // Hostname matching hostname vs. domain
+      // = domain constraint matches hostname with subdomains
+      {
+        filters: ['baz.com##selector'],
+        hostname: 'foo.bar.baz.com',
+        matches: ['selector'],
+      },
+      // = entity constraint matches hostname with subdomains
+      {
+        filters: ['baz.*##selector'],
+        hostname: 'foo.bar.baz.com',
+        matches: ['selector'],
       },
       {
-        filters: ['##.ad-stack'],
+        filters: ['baz.*##selector'],
+        hostname: 'foo.bar.baz.co.uk',
+        matches: ['selector'],
+      },
+      // = domain exception matches hostname with subdomain
+      {
+        filters: ['~baz.de##selector'],
+        hostname: 'foo.bar.baz.de',
+        matches: [],
+      },
+      // = entity exception matches hostname with subdomain
+      {
+        filters: ['~baz.*##selector'],
+        hostname: 'foo.bar.baz.co.uk',
+        matches: [],
+      },
+
+      // ===
+      {
+        filters: ['##ad-stack'],
         hostname: 'speedtest.net',
-        matches: ['.ad-stack'],
+        matches: ['ad-stack'],
       },
       {
-        filters: ['###AD300Right'],
+        filters: ['##AD300Right'],
         hostname: 'example.de',
-        matches: ['#AD300Right'],
+        matches: ['AD300Right'],
       },
       {
         filters: [],
@@ -707,28 +873,74 @@ $csp=baz,domain=bar.com
         matches: [],
       },
       {
-        filters: ['pokerupdate.com##.related-room', 'pokerupdate.com##.prev-article'],
+        filters: ['pokerupdate.com##related-room', 'pokerupdate.com##prev-article'],
         hostname: 'pokerupdate.com',
-        matches: ['.related-room', '.prev-article'],
+        matches: ['related-room', 'prev-article'],
       },
       {
         filters: [
-          'google.com,~mail.google.com##.c[style="margin: 0pt;"]',
+          'google.com,~mail.google.com##.class[style="margin: 0pt;"]1',
+          '~mail.google.com##.class[style="margin: 0pt;"]2',
           '###tads + div + .c',
           '##.mw > #rcnt > #center_col > #taw > #tvcap > .c',
           '##.mw > #rcnt > #center_col > #taw > .c',
         ],
         hostname: 'google.com',
         matches: [
-          '.c[style="margin: 0pt;"]',
+          '.class[style="margin: 0pt;"]1',
+          '.class[style="margin: 0pt;"]2',
           '#tads + div + .c',
           '.mw > #rcnt > #center_col > #taw > #tvcap > .c',
           '.mw > #rcnt > #center_col > #taw > .c',
         ],
+
+        classes: ['class', 'mw'],
+        ids: ['tads'],
       },
       {
         filters: [
-          'google.com,~mail.google.com##.c[style="margin: 0pt;"]',
+          'google.com,~mail.google.com##.class[style="margin: 0pt;"]1',
+          '~mail.google.com##.class[style="margin: 0pt;"]2',
+          '###tads + div + .c',
+          '##.mw > #rcnt > #center_col > #taw > #tvcap > .c',
+          '##.mw > #rcnt > #center_col > #taw > .c',
+        ],
+        hostname: 'google.com',
+        matches: [
+          '.class[style="margin: 0pt;"]1',
+          '#tads + div + .c',
+          '.mw > #rcnt > #center_col > #taw > #tvcap > .c',
+          '.mw > #rcnt > #center_col > #taw > .c',
+        ],
+
+        classes: ['mw'],
+        ids: ['tads'],
+      },
+      {
+        filters: [
+          'google.com,~mail.google.com##.class[style="margin: 0pt;"]',
+          '###tads + div + .c',
+          '##.mw > #rcnt > #center_col > #taw > #tvcap > .c',
+          '##.mw > #rcnt > #center_col > #taw > .c',
+        ],
+        hostname: 'google.com',
+        matches: ['.class[style="margin: 0pt;"]', '#tads + div + .c'],
+
+        ids: ['tads'],
+      },
+      {
+        filters: [
+          'google.com,~mail.google.com##.class[style="margin: 0pt;"]',
+          '###tads + div + .c',
+          '##.mw > #rcnt > #center_col > #taw > #tvcap > .c',
+          '##.mw > #rcnt > #center_col > #taw > .c',
+        ],
+        hostname: 'google.com',
+        matches: ['.class[style="margin: 0pt;"]'],
+      },
+      {
+        filters: [
+          'google.com,~mail.google.com##.class[style="margin: 0pt;"]',
           '###tads + div + .c',
           '##.mw > #rcnt > #center_col > #taw > #tvcap > .c',
           '##.mw > #rcnt > #center_col > #taw > .c',
@@ -739,6 +951,9 @@ $csp=baz,domain=bar.com
           '.mw > #rcnt > #center_col > #taw > #tvcap > .c',
           '.mw > #rcnt > #center_col > #taw > .c',
         ],
+
+        classes: ['class', 'mw'],
+        ids: ['tads'],
       },
       {
         filters: [],
@@ -750,10 +965,18 @@ $csp=baz,domain=bar.com
         filters,
         hostname,
         matches,
+        classes,
+        hrefs,
+        ids,
       }: {
         filters: string[];
         hostname: string;
         matches: string[];
+
+        // DOM info
+        classes?: string[];
+        hrefs?: string[];
+        ids?: string[];
       }) => {
         it(JSON.stringify({ filters, hostname, matches }), () => {
           // Initialize engine with all rules from test case
@@ -761,9 +984,13 @@ $csp=baz,domain=bar.com
 
           // #getCosmeticsFilters
           const { styles } = engine.getCosmeticsFilters({
-            domain: tldts.getDomain(hostname) || '',
+            domain: getDomain(hostname) || '',
             hostname,
             url: `https://${hostname}`,
+
+            classes,
+            hrefs,
+            ids,
           });
 
           // Parse stylesheets to get selectors back

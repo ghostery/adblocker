@@ -8,9 +8,7 @@
 
 const path = require('path');
 
-const tldts = require('tldts');
-
-const { FiltersEngine, makeRequest } = require(path.resolve(__dirname, '../../../'));
+const { FiltersEngine, Request } = require(path.resolve(__dirname, '../../../'));
 
 
 module.exports = class Cliqz {
@@ -31,10 +29,10 @@ module.exports = class Cliqz {
   }
 
   match({ url, frameUrl, type }) {
-    return this.engine.match(makeRequest({
+    return this.engine.match(Request.fromRawDetails({
       url,
       sourceUrl: frameUrl,
       type,
-    }, tldts.parse)).match;
+    })).match;
   }
 };

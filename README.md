@@ -77,11 +77,11 @@ const { Request } = require('@cliqz/adblocker');
 
 const request = new Request({
   type: 'script',
-  
+
   url: 'https://sub.domain.com/ads.js?param=42',
   hostname: 'sub.domain.com',
   domain: 'domain.com',
-  
+
   sourceUrl: 'https://frame-domain.com',
   hostname: 'frame-domain.com',
   domain: 'frame-domain.com',
@@ -90,16 +90,22 @@ const request = new Request({
 console.log(filter.match(request)); // true
 ```
 
-Because creating `Request` instances using the constructor is a bit cumbersome, the library provides a helper function to make this smoother: `makeRequest`. It allows to provide only a subset of the information and will assign default values for whatever is missing. Since we also need to extract the hostnames and domains of URLs and do not want to impose a specific library for this, we need to provide an implementation of `parse` which gets an URL as argument and returns its hostname and domain. In this example we use the [tldts](https://www.npmjs.com/package/tldts) library.
+Because creating `Request` instances using the constructor is a bit cumbersome, the library provides a few helper functions to make this smoother:
+
+* `Request.fromRawDetails(...)`
+* `Request.fromWebRequestDetails(...)`
+* `Request.fromPuppeteerDetails(...)`
+* `Request.fromElectronDetails(...)`
+
+If you are creating a `Request` outside of an extension/electron/puppeteer context, you should use `Request.fromRawDetails`. It allows to provide only a subset of the information and will assign default values for whatever is missing.
 
 ```javascript
-const { parse } = require('tldts');
-const { makeRequest } = require('@cliqz/adblocker');
+const { Request } = require('@cliqz/adblocker');
 
-const request = makeRequest({
+const request = Request.fromRawDetails({
   type: 'script',
   url: 'https://domain.com/ads.js',
-}, parse);
+});
 
 filter.match(request); // true
 ```
@@ -130,8 +136,7 @@ filter.match('sub.domain.com', 'domain.com'); // true
 Manipulating filters at a low level is useful to build tooling or debugging, but they are not appropriate for efficient blocking of requests (it would require iterating on all the filters to know if a request needs to be blocked). Instead, we can make use of the `FiltersEngine` class which can be seen as a "container" for both network and cosmetic filters. The filters are organized in a very compact way which also enables fast matching.
 
 ```javascript
-const { FiltersEngine, NetworkFilter, CosmeticFilter, makeRequest } = require('@cliqz/adblocker');
-const { parse } = require('tldts');
+const { FiltersEngine, NetworkFilter, CosmeticFilter, Request } = require('@cliqz/adblocker');
 
 // Parse multiple filters at once
 let engine = FiltersEngine.parse(`
@@ -158,16 +163,16 @@ const {
   redirect, // data url to redirect to if any
   exception, // instance of NetworkFilter exception if any
   filter, // instance of NetworkFilter which matched
-} = engine.match(makeRequest({
+} = engine.match(Request.fromRawDetails({
   type: 'script',
   url: 'https://sub.domain.com/ads.js',
-}, parse));
+}));
 
 // Matching CSP (content security policy) filters.
-const directives = engine.getCSPDirectives(makeRequest({
+const directives = engine.getCSPDirectives(Request.fromRawDetails({
   type: 'main_frame',
   url: 'https://sub.domain.com/',
-}, parse));
+}));
 
 // Matching cosmetic filters
 const {

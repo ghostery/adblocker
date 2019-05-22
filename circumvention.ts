@@ -6,12 +6,4 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-module.exports = {
-  globals: {
-    'ts-jest': {
-      tsConfig: 'tsconfig.json',
-    },
-  },
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-};
+export { default } from './src/content/circumvention';

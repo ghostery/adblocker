@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { getDomain, parse } from 'tldts';
+import { getDomain } from 'tldts';
 
 import CosmeticFilter, {
   getHashesFromLabelsBackward,
@@ -16,7 +16,7 @@ import CosmeticFilter, {
 import NetworkFilter, { isAnchoredByHostname } from '../src/filters/network';
 
 import { f } from '../src/lists';
-import { makeRequest } from '../src/request';
+import Request from '../src/request';
 
 import requests from './data/requests';
 
@@ -32,7 +32,7 @@ declare global {
 
 expect.extend({
   toMatchRequest(filter, request) {
-    const processedRequest = makeRequest(request, parse);
+    const processedRequest = Request.fromRawDetails(request);
     const match = filter.match(processedRequest);
     if (match) {
       return {
@@ -157,11 +157,7 @@ describe('#NetworkFilter.match', () => {
   requests.forEach(({ filters, type, sourceUrl, url }) => {
     filters.forEach((filter) => {
       it(`${filter} matches ${type}, url=${url}, source=${sourceUrl}`, () => {
-        const networkFilter = NetworkFilter.parse(filter);
-        if (networkFilter !== null) {
-          networkFilter.rawLine = filter;
-        }
-
+        const networkFilter = NetworkFilter.parse(filter, true);
         expect(networkFilter).not.toBeUndefined();
         expect(networkFilter).not.toBeNull();
         expect(networkFilter).toMatchRequest({

@@ -2,20 +2,17 @@
   "compilerOptions": {
     "declaration": true,
     "declarationDir": "dist/types",
-    "types": ["jest", "node", "chrome", "jsdom"],
+    "types": ["jest", "node", "chrome", "jsdom", "puppeteer"],
     "target": "ES3",
     "lib": ["es2015", "ES6", "DOM"],
     "module": "ES6",
     "outDir": "build",
-    "newLine": "lf",
+    "esModuleInterop": true,
     "moduleResolution": "Node",
-    "removeComments": true,
-    "downlevelIteration": true,
     "importHelpers": true,
+    "downlevelIteration": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
-    "alwaysStrict": true,
-    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "keyofStringsOnly": true,
     "noFallthroughCasesInSwitch": true,
@@ -30,8 +27,12 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true
   },
+  "include": [
+    "src/**/*.ts"
+  ],
   "files": [
-    "./index.ts",
-    "./index-cosmetics.ts"
+    "./adblocker.ts",
+    "./cosmetics.ts",
+    "./circumvention.ts"
   ]
 }

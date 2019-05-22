@@ -28,7 +28,7 @@ const lists = [
   {
     category: Category.Country,
     country: 'de',
-    enabledByDefault: true,
+    enabledByDefault: false,
     url: 'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
   },
   {
@@ -38,7 +38,7 @@ const lists = [
   },
   {
     category: Category.Privacy,
-    enabledByDefault: false,
+    enabledByDefault: true,
     url: 'https://easylist.to/easylist/easyprivacy.txt',
   },
   {
@@ -49,12 +49,12 @@ const lists = [
   },
   {
     category: Category.Misc,
-    enabledByDefault: true,
+    enabledByDefault: false,
     url: 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
   },
   {
     category: Category.Ads,
-    enabledByDefault: true,
+    enabledByDefault: false,
     url: 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
   },
   {
@@ -64,13 +64,13 @@ const lists = [
   },
   {
     category: Category.Misc,
-    enabledByDefault: true,
+    enabledByDefault: false,
     url:
       'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
   },
   {
     category: Category.Unbreak,
-    enabledByDefault: true,
+    enabledByDefault: false,
     url: 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
   },
   // Adguard filters

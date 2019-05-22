@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { IMessageFromBackground, injectCosmetics } from '../index-cosmetics';
+import { IBackgroundCallback, IMessageFromBackground, injectCosmetics } from '../cosmetics';
 
 /**
  * Because all the filters and matching logic lives in the background of the
@@ -21,13 +21,22 @@ import { IMessageFromBackground, injectCosmetics } from '../index-cosmetics';
  * The background should listen to these messages and answer back with lists of
  * filters to be injected in the page.
  */
-const getCosmeticsFilters = (): Promise<IMessageFromBackground> => {
+const getCosmeticsFilters = ({
+  classes,
+  hrefs,
+  ids,
+  lifecycle,
+}: IBackgroundCallback): Promise<IMessageFromBackground> => {
   return new Promise((resolve) => {
     chrome.runtime.sendMessage(
       {
         action: 'getCosmeticsFilters',
+        classes,
+        hrefs,
+        ids,
+        lifecycle,
       },
-      (response) => {
+      (response: IMessageFromBackground | undefined) => {
         if (response !== undefined) {
           resolve(response);
         }

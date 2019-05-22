@@ -6,11 +6,20 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import StaticDataView from '../data-view';
+import StaticDataView, { EMPTY_UINT32_ARRAY } from '../data-view';
 import { toASCII } from '../punycode';
-import { binLookup, fastStartsWithFrom, getBit, hasUnicode, setBit } from '../utils';
+import {
+  binLookup,
+  fastHash,
+  fastStartsWithFrom,
+  getBit,
+  hasUnicode,
+  setBit,
+  tokenizeFilter,
+} from '../utils';
 import IFilter from './interface';
 
+const EMPTY_TOKENS: [Uint32Array] = [EMPTY_UINT32_ARRAY];
 export const DEFAULT_HIDDING_STYLE: string = 'display: none !important;';
 
 export function hashHostnameBackward(hostname: string): number {
@@ -79,6 +88,58 @@ export function getHostnameWithoutPublicSuffix(hostname: string, domain: string)
 }
 
 /**
+ * Given a `selector` starting with either '#' or '.' check if what follows is
+ * a simple CSS selector: /^-?[_a-zA-Z]+[_a-zA-Z0-9-]*$/
+ */
+function isSimpleSelector(selector: string): boolean {
+  for (let i = 1; i < selector.length; i += 1) {
+    const code: number = selector.charCodeAt(i);
+    if (
+      !(
+        code === 45 /* '-' */ ||
+        code === 95 /* '_' */ ||
+        (code >= 48 && code <= 57) /* [0-9] */ ||
+        (code >= 65 && code <= 90) /* [A-Z] */ ||
+        (code >= 97 && code <= 122)
+      ) /* [a-z] */
+    ) {
+      if (i < selector.length - 1) {
+        // Check if what follows is a ' >' or ' ~' or ' +', in which case we
+        // also consider it a simple selector and the token this filter can be
+        // indexed with is the first selector.
+        const nextCode = selector.charCodeAt(i + 1);
+        if (
+          code === 91 /* '[' */ ||
+          (code === 32 /* ' ' */ &&
+            (nextCode === 62 /* '>' */ ||
+            nextCode === 43 /* '+' */ ||
+            nextCode === 126 /* '~' */ ||
+            nextCode === 46 /* '.' */ ||
+              nextCode === 35)) /* '#' */
+        ) {
+          return true;
+        }
+      }
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
+ * Given a `selector` starting with either 'a[' or '[', check if what follows
+ * is a simple href attribute selector of the form: 'href^=' or 'href*='.
+ */
+function isSimpleHrefSelector(selector: string, start: number): boolean {
+  return (
+    selector.startsWith('href^="', start) ||
+    selector.startsWith('href*="', start) ||
+    selector.startsWith('href="', start)
+  );
+}
+
+/**
  * Validate CSS selector. There is a fast path for simple selectors (e.g.: #foo
  * or .bar) which are the most common case. For complex ones, we rely on
  * `Element.matches` (if available).
@@ -117,6 +178,9 @@ const enum COSMETICS_MASK {
   unhide = 1 << 0,
   scriptInject = 1 << 1,
   isUnicode = 1 << 2,
+  isClassSelector = 1 << 3,
+  isIdSelector = 1 << 4,
+  isHrefSelector = 1 << 5,
 }
 
 function computeFilterId(
@@ -166,20 +230,6 @@ function computeFilterId(
  *  Cosmetic filters parsing
  * ************************************************************************ */
 
-/**
- * TODO: Make sure these are implemented properly and write tests.
- * - -abp-contains
- * - -abp-has
- * - contains
- * - has
- * - has-text
- * - if
- * - if-not
- * - matches-css
- * - matches-css-after
- * - matches-css-before
- * - xpath
- */
 export default class CosmeticFilter implements IFilter {
   /**
    * Given a line that we know contains a cosmetic filter, create a CosmeticFiler
@@ -284,11 +334,6 @@ export default class CosmeticFilter implements IFilter {
       }
     }
 
-    // We should not have unhide without any hostname
-    if (getBit(mask, COSMETICS_MASK.unhide) && hostnames === undefined && entities === undefined) {
-      return null;
-    }
-
     // Deal with script:inject and script:contains
     if (
       line.length - suffixStartIndex > 7 &&
@@ -368,8 +413,38 @@ export default class CosmeticFilter implements IFilter {
     }
 
     // Check if unicode appears in selector
-    if (selector !== undefined && hasUnicode(selector)) {
-      mask = setBit(mask, COSMETICS_MASK.isUnicode);
+    if (selector !== undefined) {
+      if (hasUnicode(selector)) {
+        mask = setBit(mask, COSMETICS_MASK.isUnicode);
+      }
+
+      const c0 = selector.charCodeAt(0);
+      const c1 = selector.charCodeAt(1);
+      const c2 = selector.charCodeAt(2);
+
+      // Check if we have a specific case of simple selector (id, class or
+      // href) These are the most common filters and will benefit greatly from
+      // a custom dispatch mechanism.
+      if (getBit(mask, COSMETICS_MASK.scriptInject) === false) {
+        if (c0 === 46 /* '.' */ && isSimpleSelector(selector)) {
+          mask = setBit(mask, COSMETICS_MASK.isClassSelector);
+        } else if (c0 === 35 /* '#' */ && isSimpleSelector(selector)) {
+          mask = setBit(mask, COSMETICS_MASK.isIdSelector);
+        } else if (
+          c0 === 97 /* a */ &&
+          c1 === 91 /* '[' */ &&
+          c2 === 104 /* 'h' */ &&
+          isSimpleHrefSelector(selector, 2)
+        ) {
+          mask = setBit(mask, COSMETICS_MASK.isHrefSelector);
+        } else if (
+          c0 === 91 /* '[' */ &&
+          c1 === 104 /* 'h' */ &&
+          isSimpleHrefSelector(selector, 1)
+        ) {
+          mask = setBit(mask, COSMETICS_MASK.isHrefSelector);
+        }
+      }
     }
 
     return new CosmeticFilter({
@@ -420,17 +495,17 @@ export default class CosmeticFilter implements IFilter {
   public readonly selector: string;
 
   // hostnames
-  public readonly hostnames?: Uint32Array;
   public readonly entities?: Uint32Array;
+  public readonly hostnames?: Uint32Array;
 
   // Exceptions
-  public readonly notHostnames?: Uint32Array;
   public readonly notEntities?: Uint32Array;
+  public readonly notHostnames?: Uint32Array;
 
   public readonly style?: string;
 
   public id?: number;
-  public rawLine?: string;
+  public readonly rawLine?: string;
 
   constructor({
     entities,
@@ -442,14 +517,21 @@ export default class CosmeticFilter implements IFilter {
     selector,
     style,
   }: Partial<CosmeticFilter> & { mask: number; selector: string }) {
+    this.mask = mask;
+    this.selector = selector;
+
+    // Hostname constraints
     this.entities = entities;
     this.hostnames = hostnames;
-    this.mask = mask;
+
+    // Hostname exceptions
     this.notEntities = notEntities;
     this.notHostnames = notHostnames;
-    this.rawLine = rawLine;
-    this.selector = selector;
+
     this.style = style;
+
+    this.id = undefined;
+    this.rawLine = rawLine;
   }
 
   public isCosmeticFilter(): boolean {
@@ -607,6 +689,11 @@ export default class CosmeticFilter implements IFilter {
   }
 
   public match(hostname: string, domain: string): boolean {
+    // Not constraint on hostname, match is true
+    if (this.hasHostnameConstraint() === false) {
+      return true;
+    }
+
     // No `hostname` available but this filter has some constraints on hostname.
     if (!hostname && this.hasHostnameConstraint()) {
       return false;
@@ -687,6 +774,72 @@ export default class CosmeticFilter implements IFilter {
       }
     }
 
+    // Here we only take selector into account if the filter is not unHide.
+    // TODO - add more detailed comment
+    if (tokens.length === 0 && this.isUnhide() === false) {
+      if (this.isIdSelector() || this.isClassSelector()) {
+        let endOfSelector = this.selector.length;
+
+        // Check if there is a space or '['
+        const indexOfSpace = this.selector.indexOf(' ');
+        if (indexOfSpace !== -1) {
+          endOfSelector = indexOfSpace;
+        }
+
+        const indexOfBracket = this.selector.indexOf('[');
+        if (indexOfBracket !== -1 && indexOfBracket < endOfSelector) {
+          endOfSelector = indexOfBracket;
+        }
+
+        tokens.push(new Uint32Array([fastHash(this.selector.slice(1, endOfSelector))]));
+      } else if (this.isHrefSelector()) {
+        const selector: string = this.getSelector();
+
+        // Locate 'href' in selector
+        let hrefIndex = selector.indexOf('href');
+        if (hrefIndex === -1) {
+          return EMPTY_TOKENS;
+        }
+        hrefIndex += 4;
+
+        // Tokenize optimally depending on the kind of selector: 'href=',
+        // 'href*=', 'href^='.
+        let skipFirstToken: boolean = false;
+        let skipLastToken: boolean = true;
+        if (selector.charCodeAt(hrefIndex) === 42 /* '*' */) {
+          // skip: '*'
+          skipFirstToken = true;
+          hrefIndex += 1;
+        } else if (selector.charCodeAt(hrefIndex) === 94 /* '^' */) {
+          // skip: '^'
+          hrefIndex += 1;
+        } else {
+          skipLastToken = false;
+        }
+
+        hrefIndex += 2; // skip:  '="'
+
+        // Locate end of href
+        const hrefEnd = selector.indexOf('"', hrefIndex);
+        if (hrefEnd === -1) {
+          // That cannot happen unless the filter is not well-formed. In this
+          // case, we just return no tokens, which will result in this filter
+          // ending up in the "wildcard" bucket of the index.
+          return EMPTY_TOKENS;
+        }
+
+        tokens.push(
+          new Uint32Array(
+            tokenizeFilter(this.selector.slice(hrefIndex, hrefEnd), skipFirstToken, skipLastToken),
+          ),
+        );
+      }
+    }
+
+    if (tokens.length === 0) {
+      return EMPTY_TOKENS;
+    }
+
     return tokens;
   }
 
@@ -758,6 +911,18 @@ export default class CosmeticFilter implements IFilter {
     return this.isScriptInject() === false;
   }
 
+  public isIdSelector(): boolean {
+    return getBit(this.mask, COSMETICS_MASK.isIdSelector);
+  }
+
+  public isClassSelector(): boolean {
+    return getBit(this.mask, COSMETICS_MASK.isClassSelector);
+  }
+
+  public isHrefSelector(): boolean {
+    return getBit(this.mask, COSMETICS_MASK.isHrefSelector);
+  }
+
   public isUnicode(): boolean {
     return getBit(this.mask, COSMETICS_MASK.isUnicode);
   }
@@ -767,7 +932,7 @@ export default class CosmeticFilter implements IFilter {
   // * Do not have a domain specified. "Hide this element on all domains"
   // * Have only domain exceptions specified. "Hide this element on all domains except example.com"
   //
-  // For example: ~example.com##.ad  is a generic filter as well
+  // For example: ~example.com##.ad  is a generic filter as well!
   public isGenericHide(): boolean {
     return this.hostnames === undefined && this.entities === undefined;
   }
