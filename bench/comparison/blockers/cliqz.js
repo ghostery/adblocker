@@ -1,3 +1,11 @@
+/*!
+ * Copyright (c) 2017-2019 Cliqz GmbH. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 const path = require('path');
 
 const tldts = require('tldts');
@@ -5,9 +13,9 @@ const tldts = require('tldts');
 const { FiltersEngine, makeRequest } = require(path.resolve(__dirname, '../../../'));
 
 
-module.exports = class Ghostery {
+module.exports = class Cliqz {
   static parse(rawLists) {
-    return new Ghostery(FiltersEngine.parse(rawLists, { loadCosmeticFilters: false }));
+    return new Cliqz(FiltersEngine.parse(rawLists, { loadCosmeticFilters: false }));
   }
 
   constructor(engine) {

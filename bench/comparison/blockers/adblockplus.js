@@ -1,5 +1,10 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
+/*!
+ * Copyright (c) 2017-2019 Cliqz GmbH. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 
 const { CombinedMatcher } = require('./adblockpluscore/lib/matcher.js');
 const { Filter, RegExpFilter } = require('./adblockpluscore/lib/filterClasses.js');
@@ -36,8 +41,10 @@ module.exports = class AdBlockPlus {
       const line = lines[i].trim();
       if (line.length !== 0 && line[0] !== '!') {
         const filter = Filter.fromText(line);
-        filters.push(filter);
-        matcher.add(filter);
+        if (filter.type === 'blocking' || filter.type === 'whitelist') {
+          filters.push(filter);
+          matcher.add(filter);
+        }
       }
     }
 

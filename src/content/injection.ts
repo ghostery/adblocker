@@ -1,3 +1,11 @@
+/*!
+ * Copyright (c) 2017-2019 Cliqz GmbH. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 /**
  * Wrap a self-executing script into a block of custom logic to remove the
  * script tag once execution is terminated. This can be useful to not leave
@@ -78,18 +86,4 @@ export function injectScript(s: string, doc: Document): void {
 export function bundle(fn: (...args: any[]) => void, deps: Array<(...args: any[]) => any> = []) {
   return (window: Window, ...args: any[]) =>
     injectScript(wrapCallableInContext(autoCallFunction(fn, ...args), deps), window.document);
-}
-
-/**
- * Given a list of CSS selectors, create a valid stylesheet ready to be injected
- * in the page. This also takes care to no create rules with too many selectors
- * for Chrome, see: https://crbug.com/804179
- */
-export function createStylesheet(rules: string[], style: string): string {
-  const maximumNumberOfSelectors = 1024;
-  const parts: string[] = [];
-  for (let i = 0; i < rules.length; i += maximumNumberOfSelectors) {
-    parts.push(`${rules.slice(i, i + maximumNumberOfSelectors).join(',\n')} { ${style} }`);
-  }
-  return parts.join('\n');
 }

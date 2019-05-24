@@ -1,7 +1,15 @@
+/*!
+ * Copyright (c) 2017-2019 Cliqz GmbH. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 /* eslint-disable no-bitwise */
 
 const { FiltersEngine, fastHash, tokenize, parseFilters } = require('../');
-const { createEngine } = require('./utils');
+const { createEngine, domains500 } = require('./utils');
 
 
 function benchEngineCreation({ lists, resources }) {
@@ -74,6 +82,17 @@ function benchGetCosmeticTokens({ cosmeticFilters }) {
   return dummy;
 }
 
+function benchGetCosmeticsFilters({ engine }) {
+  for (let i = 0; i < domains500.length; i += 1) {
+    const domain = domains500[i];
+    engine.getCosmeticsFilters({
+      url: `https://${domain}`,
+      hostname: domain,
+      domain,
+    });
+  }
+}
+
 module.exports = {
   benchCosmeticsFiltersParsing,
   benchEngineCreation,
@@ -84,4 +103,5 @@ module.exports = {
   benchStringTokenize,
   benchGetNetworkTokens,
   benchGetCosmeticTokens,
+  benchGetCosmeticsFilters,
 };

@@ -1,3 +1,11 @@
+/*!
+ * Copyright (c) 2017-2019 Cliqz GmbH. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 import * as tldts from 'tldts';
 
 import Engine from '../src/engine/engine';
@@ -44,11 +52,11 @@ function test({
 
   // Collect all matching filters for this request.
   const matchingFilters = new Set();
-  [...engine.matchAll(request)].forEach((matchingFilter) => {
+  for (const matchingFilter of engine.matchAll(request)) {
     (matchingFilter.rawLine || '').split(' <+> ').forEach((f: string) => {
       matchingFilters.add(f);
     });
-  });
+  }
 
   // Check if one of the filters is a special case: important,
   // exception or redirect; and perform extra checks then.
@@ -606,163 +614,175 @@ $csp=baz,domain=bar.com
     [
       // Generic hides
       {
+        filters: ['##.adwords1', '~google.*##.adwords2'],
         hostname: 'domain.com',
-        matches: ['##.adwords', '~google.*##.adwords'],
-        misMatches: [],
+        matches: ['.adwords1', '.adwords2'],
       },
       {
+        filters: ['##.adwords1', '~google.*##.adwords2'],
         hostname: 'google.com',
-        matches: ['##.adwords'],
-        misMatches: ['~google.*##.adwords'],
+        matches: ['.adwords1'],
       },
       // Negated entity exceptions do not appear in matches
       {
+        filters: ['##.adwords1', '~google.com#@#.adwords2'],
         hostname: 'google.com',
-        matches: ['##.adwords'],
-        misMatches: ['~google.com#@#.adwords'],
+        matches: ['.adwords1'],
       },
       {
+        filters: ['##.adwords1', '~google.com#@#.adwords2'],
         hostname: 'google.de',
-        matches: ['##.adwords'],
-        misMatches: ['~google.com#@#.adwords'],
+        matches: ['.adwords1'],
       },
       {
+        filters: ['##.adwords1', '~google.*#@#.adwords2'],
         hostname: 'google.com',
-        matches: ['##.adwords'],
-        misMatches: ['~google.*#@#.adwords'],
+        matches: ['.adwords1'],
       },
       // Exception cancels generic rule
       {
+        filters: ['##.adwords1', 'google.com#@#.adwords1'],
         hostname: 'google.com',
         matches: [],
-        misMatches: ['##.adwords', 'google.com#@#.adwords'],
       },
       // Exception cancels entity rule
       {
+        filters: ['google.*##.adwords1', 'google.com#@#.adwords1'],
         hostname: 'google.com',
         matches: [],
-        misMatches: ['google.*##.adwords', 'google.com#@#.adwords'],
       },
       // Exception cancels hostname rule
       {
+        filters: ['google.com##.adwords1', 'google.com#@#.adwords1'],
         hostname: 'google.com',
         matches: [],
-        misMatches: ['google.com##.adwords', 'google.com#@#.adwords'],
       },
       // Entity exception cancels generic rule
       {
+        filters: ['##.adwords1', 'google.*#@#.adwords1'],
         hostname: 'google.com',
         matches: [],
-        misMatches: ['##.adwords', 'google.*#@#.adwords'],
       },
       // Entity exception cancels entity rule
       {
+        filters: ['google.*##.adwords1', 'google.*#@#.adwords1'],
         hostname: 'google.com',
         matches: [],
-        misMatches: ['google.*##.adwords', 'google.*#@#.adwords'],
       },
       // Exception does not cancel if selector is different
       {
+        filters: ['##.adwords1', 'google.de#@#.adwords2'],
         hostname: 'google.de',
-        matches: ['##.adwords2'],
-        misMatches: ['google.de#@#.adwords'],
+        matches: ['.adwords1'],
       },
       {
+        filters: ['google.de##.adwords1', 'google.de#@#.adwords2'],
         hostname: 'google.de',
-        matches: ['google.de##.adwords2'],
-        misMatches: ['google.de#@#.adwords'],
+        matches: ['.adwords1'],
       },
       // Exception does not cancel if hostname is different
       {
+        filters: ['##.adwords1', 'google.com#@#.adwords1'],
         hostname: 'google.de',
-        matches: ['##.adwords'],
-        misMatches: ['google.com#@#.adwords'],
+        matches: ['.adwords1'],
       },
       {
+        filters: ['##.adwords1', 'accounts.google.com#@#.adwords1'],
         hostname: 'google.com',
-        matches: ['##.adwords'],
-        misMatches: ['accounts.google.com#@#.adwords'],
+        matches: ['.adwords1'],
       },
       {
+        filters: ['##.ad-stack'],
         hostname: 'speedtest.net',
-        matches: ['##.ad-stack'],
-        misMatches: [],
+        matches: ['.ad-stack'],
       },
       {
+        filters: ['###AD300Right'],
         hostname: 'example.de',
-        matches: ['###AD300Right'],
-        misMatches: [],
+        matches: ['#AD300Right'],
       },
       {
+        filters: [],
         hostname: 'pokerupdate.com',
         matches: [],
-        misMatches: [],
       },
       {
+        filters: ['pokerupdate.com##.related-room', 'pokerupdate.com##.prev-article'],
         hostname: 'pokerupdate.com',
-        matches: ['pokerupdate.com##.related-room', 'pokerupdate.com##.prev-article'],
-        misMatches: [],
+        matches: ['.related-room', '.prev-article'],
       },
       {
-        hostname: 'google.com',
-        matches: [
+        filters: [
           'google.com,~mail.google.com##.c[style="margin: 0pt;"]',
           '###tads + div + .c',
           '##.mw > #rcnt > #center_col > #taw > #tvcap > .c',
           '##.mw > #rcnt > #center_col > #taw > .c',
         ],
-        misMatches: [],
+        hostname: 'google.com',
+        matches: [
+          '.c[style="margin: 0pt;"]',
+          '#tads + div + .c',
+          '.mw > #rcnt > #center_col > #taw > #tvcap > .c',
+          '.mw > #rcnt > #center_col > #taw > .c',
+        ],
       },
       {
-        hostname: 'mail.google.com',
-        matches: [
+        filters: [
+          'google.com,~mail.google.com##.c[style="margin: 0pt;"]',
           '###tads + div + .c',
           '##.mw > #rcnt > #center_col > #taw > #tvcap > .c',
           '##.mw > #rcnt > #center_col > #taw > .c',
         ],
-        misMatches: ['google.com,~mail.google.com##.c[style="margin: 0pt;"]'],
-      },
-      {
-        hostname: 'bitbucket.org',
-        matches: [],
-        misMatches: [],
-      },
-      {
-        hostname: 'bild.de',
-        matches: [],
-        misMatches: [
-          'bild.de##script:contains(/^s*de.bild.cmsKonfig/)',
-          'bild.de#@#script:contains(/^s*de.bild.cmsKonfig/)',
+        hostname: 'mail.google.com',
+        matches: [
+          '#tads + div + .c',
+          '.mw > #rcnt > #center_col > #taw > #tvcap > .c',
+          '.mw > #rcnt > #center_col > #taw > .c',
         ],
       },
-    ].forEach((testCase: { hostname: string; matches: string[]; misMatches: string[] }) => {
-      it(JSON.stringify(testCase), () => {
-        // Initialize engine with all rules from test case
-        const engine = createEngine([...testCase.matches, ...testCase.misMatches].join('\n'));
+      {
+        filters: [],
+        hostname: 'bitbucket.org',
+        matches: [],
+      },
+    ].forEach(
+      ({
+        filters,
+        hostname,
+        matches,
+      }: {
+        filters: string[];
+        hostname: string;
+        matches: string[];
+      }) => {
+        it(JSON.stringify({ filters, hostname, matches }), () => {
+          // Initialize engine with all rules from test case
+          const engine = createEngine(filters.join('\n'));
 
-        const shouldMatch: Set<string> = new Set(testCase.matches);
-        const shouldNotMatch: Set<string> = new Set(testCase.misMatches);
+          // #getCosmeticsFilters
+          const { styles } = engine.getCosmeticsFilters({
+            domain: tldts.getDomain(hostname) || '',
+            hostname,
+            url: `https://${hostname}`,
+          });
 
-        // #getCosmeticsFilters
-        const rules = engine.cosmetics.getCosmeticsFilters(
-          testCase.hostname,
-          tldts.getDomain(testCase.hostname) || '',
-          true,
-        );
+          // Parse stylesheets to get selectors back
+          const selectors: string[] = [];
+          if (styles.length !== 0) {
+            for (const stylesheet of styles.trim().split('\n\n')) {
+              const parts = stylesheet.trim().split(',\n');
+              selectors.push(...parts.slice(0, -1));
 
-        expect(rules.length).toEqual(shouldMatch.size);
-        rules.forEach((rule) => {
-          expect(rule.rawLine).not.toBeUndefined();
-          if (rule.rawLine !== undefined) {
-            if (!shouldMatch.has(rule.rawLine)) {
-              throw new Error(`Expected ${rule.rawLine} to match ${testCase.hostname}`);
-            }
-            if (shouldNotMatch.has(rule.rawLine)) {
-              throw new Error(`Expected ${rule.rawLine} not to match ${testCase.hostname}`);
+              // Handle last one separately since it has the CSS rule
+              const last = parts[parts.length - 1];
+              selectors.push(last.slice(0, last.lastIndexOf('{')).trim());
             }
           }
+
+          expect(selectors).toHaveLength(matches.length);
+          expect(selectors.sort()).toEqual(matches.sort());
         });
-      });
-    });
+      },
+    );
   });
 });

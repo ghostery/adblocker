@@ -1,3 +1,11 @@
+/*!
+ * Copyright (c) 2017-2019 Cliqz GmbH. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 import StaticDataView from '../src/data-view';
 import FiltersContainer from '../src/engine/bucket/filters';
 import CosmeticFilter from '../src/filters/cosmetic';
@@ -18,8 +26,6 @@ describe('#FiltersContainer', () => {
     beforeEach(() => {
       container = new FiltersContainer({
         deserialize: NetworkFilter.deserialize,
-        filters: [],
-        predicate: (_) => true,
       });
     });
 
@@ -81,7 +87,6 @@ describe('#FiltersContainer', () => {
       const container = new FiltersContainer({
         deserialize,
         filters,
-        predicate: (_) => true,
       });
 
       expect(new Set(container.getFilters().map((f) => f.toString()))).toEqual(

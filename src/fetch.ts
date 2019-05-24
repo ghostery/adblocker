@@ -1,3 +1,11 @@
+/*!
+ * Copyright (c) 2017-2019 Cliqz GmbH. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 function fetchResource(url: string): Promise<string> {
   return fetch(url).then((response: any) => response.text());
 }
@@ -35,13 +43,13 @@ const lists = [
   },
   {
     category: Category.Ads,
-    enabledByDefault: false,
+    enabledByDefault: true,
     url:
       'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=1&mimetype=plaintext',
   },
   {
     category: Category.Misc,
-    enabledByDefault: false,
+    enabledByDefault: true,
     url: 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
   },
   {

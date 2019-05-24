@@ -1,3 +1,11 @@
+/*!
+ * Copyright (c) 2017-2019 Cliqz GmbH. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 import Config from '../config';
 import StaticDataView from '../data-view';
 import CosmeticFilter from '../filters/cosmetic';
@@ -10,9 +18,8 @@ import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 
 import { IMessageFromBackground } from '../content/communication';
-import { createStylesheet } from '../content/injection';
 
-export const ENGINE_VERSION = 25;
+export const ENGINE_VERSION = 26;
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -290,8 +297,13 @@ export default class FilterEngine {
     hostname: string;
     domain: string | null | undefined;
   }): IMessageFromBackground {
-    const selectorsPerStyle: Map<string, string[]> = new Map();
-    const scripts: string[] = [];
+    if (this.config.loadCosmeticFilters === false) {
+      return {
+        active: false,
+        scripts: [],
+        styles: '',
+      };
+    }
 
     // Check if there is some generichide
     const genericHides = this.genericHides.matchAll(
@@ -314,9 +326,9 @@ export default class FilterEngine {
     let currentScore = 0;
     for (let i = 0; i < genericHides.length; i += 1) {
       const filter = genericHides[i];
-      // To encode priority between filter, we create a bitmask with the following:
+      // To encode priority between filters, we create a bitmask with the following:
       // $important,generichide = 100 (takes precedence)
-      // $generichide           = 010 (exception to $generichide)
+      // $generichide           = 010 (exception to @@$generichide)
       // @@$generichide         = 001 (forbids generic hide filters)
       const score: number = (filter.isImportant() ? 4 : 0) | (filter.isException() ? 1 : 2);
 
@@ -331,37 +343,26 @@ export default class FilterEngine {
     const allowGenericHides =
       genericHideFilter === null || genericHideFilter.isException() === false;
 
-    if (this.config.loadCosmeticFilters) {
-      const rules = this.cosmetics.getCosmeticsFilters(hostname, domain || '', allowGenericHides);
-      for (let i = 0; i < rules.length; i += 1) {
-        const rule: CosmeticFilter = rules[i];
+    // Lookup injections as well as stylesheets
+    const { injections, stylesheet } = this.cosmetics.getCosmeticsFilters(
+      hostname,
+      domain || '',
+      allowGenericHides,
+    );
 
-        if (rule.isScriptInject()) {
-          const script = rule.getScript(this.resources.js);
-          if (script !== undefined) {
-            scripts.push(script);
-          }
-        } else {
-          const style = rule.getStyle();
-          const selectors = selectorsPerStyle.get(style);
-          if (selectors === undefined) {
-            selectorsPerStyle.set(style, [rule.getSelector()]);
-          } else {
-            selectors.push(rule.getSelector());
-          }
-        }
+    // Perform interpolation for injected scripts
+    const scripts: string[] = [];
+    for (let i = 0; i < injections.length; i += 1) {
+      const script = injections[i].getScript(this.resources.js);
+      if (script !== undefined) {
+        scripts.push(script);
       }
     }
 
-    const stylesheets: string[] = [];
-    selectorsPerStyle.forEach((selectors, style) => {
-      stylesheets.push(createStylesheet(selectors, style));
-    });
-
     return {
-      active: this.config.loadCosmeticFilters,
+      active: true,
       scripts,
-      styles: stylesheets.join('\n\n'),
+      styles: stylesheet,
     };
   }
 

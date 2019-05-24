@@ -1,3 +1,11 @@
+/*!
+ * Copyright (c) 2017-2019 Cliqz GmbH. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 const { URL } = require('url');
 const punycode = require('punycode');
 const fs = require('fs');
@@ -46,13 +54,19 @@ const tabContextManager = {
 
 // MOCK: µBlock
 const µBlock = {
+  pageStores: new Map(),
+  getNetFilteringSwitch: () => true,
   hiddenSettings: {
     disableWebAssembly: false,
   },
   tabContextManager,
   assets,
   logger: {
+    enabled: false,
     writeOne: () => {},
+  },
+  sessionSwitches: {
+    evaluateZ: () => true,
   },
 };
 
@@ -67,6 +81,7 @@ const vAPI = {
     registerListeners: () => {},
     onPopupCreated: () => {},
   },
+  i18n: () => '',
 };
 
 
@@ -91,7 +106,8 @@ const publicSuffixListEnabledPromise = globals.publicSuffixList.enableWASM();
 // NOTE: some changes were required to load `hntrie.js` in this context. The
 SandboxedModule.require('./ublock/utils.js', { globals });
 SandboxedModule.require('./ublock/uritools.js', { globals });
-SandboxedModule.require('./ublock/storage.js', { globals });
+SandboxedModule.require('./ublock/strie.js', { globals });
+globals.STrieContainer = µBlock.STrieContainer;
 
 // HNTrieContainer needs to be attached to the global µBlock object to be
 // accessible by other modules.
@@ -101,8 +117,10 @@ const { HNTrieContainerReadyPromise } = µBlock;
 
 SandboxedModule.require('./ublock/static-ext-filtering.js', { globals });
 SandboxedModule.require('./ublock/static-net-filtering.js', { globals });
+SandboxedModule.require('./ublock/storage.js', { globals });
 
 // NOTE: only `normalizePageURL` was kept in `tab.js`.
+SandboxedModule.require('./ublock/pagestore.js', { globals });
 SandboxedModule.require('./ublock/tab.js', { globals });
 SandboxedModule.require('./ublock/filtering-context.js', { globals });
 

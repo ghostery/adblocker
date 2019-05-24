@@ -1,3 +1,11 @@
+/*!
+ * Copyright (c) 2017-2019 Cliqz GmbH. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 // TODO - split in several benchmarking files
 // * real engine creation + network request benchmark with (server streaming data + launchers):
 //    * node.js launcher
@@ -38,6 +46,7 @@ const {
   benchNetworkFiltersParsing,
   benchStringHashing,
   benchStringTokenize,
+  benchGetCosmeticsFilters,
 } = require('./micro');
 
 
@@ -106,6 +115,7 @@ function runMicroBenchmarks(lists, resources) {
     benchNetworkFiltersParsing,
     benchStringHashing,
     benchStringTokenize,
+    benchGetCosmeticsFilters,
   ].forEach((bench) => {
     if (bench.name.toLowerCase().includes(GREP)) {
       const suite = new Benchmark.Suite();

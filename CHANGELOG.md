@@ -4,6 +4,67 @@
 
 *not released yet*
 
+## 0.9.1
+
+*03-05-2019*
+
+  * Optimize getCosmeticsFilters [#158](https://github.com/cliqz-oss/adblocker/pull/158)
+    * [BREAKING] `CosmeticFilterBucket.getCosmeticsFilters(...)` now
+      returns `{ injections: CosmeticFilter[]; stylesheet: string }`
+    * Internally `CosmeticFilterBucket` will do much less work to get
+      cosmetic filters. In particular, we pre-compute a base stylesheet with
+      all generic hide filters not having any corresponding unhide (`#@#`)
+      rule in the bucket (that's most of the filters). This means we only need
+      to apply exceptions and compute dynamic stylesheets for a minority of
+      filters (~4%).
+    * Add benchmark for `getCosmeticsFilters`.
+  * Drop RegExp in network filters [#156](https://github.com/cliqz-oss/adblocker/pull/156)
+
+## 0.9.0
+
+*26-04-2019*
+
+  * prevent potential out-of-bound access [#150](https://github.com/cliqz-oss/adblocker/pull/150)
+  * bench: update comparison [#148](https://github.com/cliqz-oss/adblocker/pull/148)
+    * Rename Ghostery to Cliqz
+    * Update uBlock Origin to 1f8f616fafc0a3267cfe0796f0bbe29410fd6a71
+    * Update adblockpluscore to 69118b828db0f6a53bc2306deacffc5361aeef0c
+    * Update Brave to 4.1.7
+  * Punycode clean-up + tests [#145](https://github.com/cliqz-oss/adblocker/pull/145)
+    * add extensive tests for data-view pushUTF8 and punycode toASCII/toUnicode
+    * punycode: remove support for email addresses
+    * punycode: remove mapDomain
+    * punycode: replace for..of by bare for loops
+    * punycode: inline helpers
+  * Add support for `$elemhide` + fix `$generichide` handling [#143](https://github.com/cliqz-oss/adblocker/pull/143)
+  * Speed-up `parseFilters` [#142](https://github.com/cliqz-oss/adblocker/pull/142)
+    * clean-up filters parsing benchmark
+    * speed-up parseFilters and detectFilterType (10-15% gain)
+    * speed-up CosmeticFilter.parse (15% gain)
+    * speed-up NetworkFilter.parse (10% gain)
+  * Introduce TokensBuffer to speed-up tokenization of filters and requests [#141](https://github.com/cliqz-oss/adblocker/pull/141)
+    * results in a 25% speed-ups on NetworkFilters.getTokens which is one of the bottle-necks of ReverseIndex.update
+  * Implement variable-length encoding in StaticDataView to save space [#138](https://github.com/cliqz-oss/adblocker/pull/138)
+    * saving of ~4% of the total size
+    * fix issue with alignment of Uint32Array when serializing/deserializing (alignment should be done after persisting the size of the array, not before)
+    * clean-up Node.js versions tested in Travis.
+  * Add AdblockFast (originally from Bluhell Firewall) to bench/comparison [#133](https://github.com/cliqz-oss/adblocker/pull/133)
+  * [BREAKING] Remove support for `$bug` option [#131](https://github.com/cliqz-oss/adblocker/pull/131)
+  * Add support for `$badfilter` option [#127](https://github.com/cliqz-oss/adblocker/pull/127)
+    * add FiltersContainer class to store a list of filters
+    * improve allocations by estimating required size of buffer from filters ahead of time
+    * optimize hasUnicode using RegExp
+    * include punycode package in source-tree to allow transpilation by tsc + minification + type checking
+    * filters will now keep track of isUnicode which indicates if filter contains any unicode character. This allows to optimize storage + remove the need from checking later on.
+    * StaticDataView's pushUTF8 now assumes the input is unicode and will not check
+  * Better formatting for injected stylesheets [#126](https://github.com/cliqz-oss/adblocker/pull/126)
+  * Fix python dependencies security alert [#124](https://github.com/cliqz-oss/adblocker/pull/124)
+  * Update locale assets [#121](https://github.com/cliqz-oss/adblocker/pull/121)
+  * [BREAKING] Remove support for `script:contains(...)` cosmetic filters [#120](https://github.com/cliqz-oss/adblocker/pull/120)
+  * Add support for `$3p`, `$1p` and `$css` options [#119](https://github.com/cliqz-oss/adblocker/pull/119)
+  * Fix example extension and README.md [#118](https://github.com/cliqz-oss/adblocker/pull/118)
+  * Update dev dependencies [#117](https://github.com/cliqz-oss/adblocker/pull/117)
+
 ## 0.8.0
 
 *2019-03-26*

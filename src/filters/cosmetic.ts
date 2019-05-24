@@ -1,3 +1,11 @@
+/*!
+ * Copyright (c) 2017-2019 Cliqz GmbH. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 import StaticDataView from '../data-view';
 import { toASCII } from '../punycode';
 import { binLookup, fastStartsWithFrom, getBit, hasUnicode, setBit } from '../utils';
@@ -599,13 +607,7 @@ export default class CosmeticFilter implements IFilter {
 
   public match(hostname: string, domain: string): boolean {
     // No `hostname` available but this filter has some constraints on hostname.
-    if (
-      !hostname &&
-      (this.hostnames !== undefined ||
-        this.entities !== undefined ||
-        this.notHostnames !== undefined ||
-        this.notEntities !== undefined)
-    ) {
+    if (!hostname && this.hasHostnameConstraint()) {
       return false;
     }
 
@@ -731,6 +733,10 @@ export default class CosmeticFilter implements IFilter {
     return this.id;
   }
 
+  public hasCustomStyle(): boolean {
+    return this.style !== undefined;
+  }
+
   public getStyle(): string {
     return this.style || DEFAULT_HIDDING_STYLE;
   }
@@ -745,6 +751,10 @@ export default class CosmeticFilter implements IFilter {
 
   public isScriptInject(): boolean {
     return getBit(this.mask, COSMETICS_MASK.scriptInject);
+  }
+
+  public isCSS(): boolean {
+    return this.isScriptInject() === false;
   }
 
   public isUnicode(): boolean {

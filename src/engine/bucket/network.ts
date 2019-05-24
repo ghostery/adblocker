@@ -1,17 +1,17 @@
+/*!
+ * Copyright (c) 2017-2019 Cliqz GmbH. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 import StaticDataView from '../../data-view';
 import NetworkFilter from '../../filters/network';
 import Request from '../../request';
 import networkFiltersOptimizer from '../optimizer';
 import ReverseIndex from '../reverse-index';
 import FiltersContainer from './filters';
-
-/**
- * Predicate function used to select $badfilter network filters. This will be
- * used by the FiltersContainer.
- */
-function isBadFilterPredicate(filter: NetworkFilter): boolean {
-  return filter.isBadFilter();
-}
 
 /**
  * Accelerating data structure for network filters matching.
@@ -27,11 +27,7 @@ export default class NetworkFilterBucket {
       enableOptimizations ? networkFiltersOptimizer : undefined,
     );
 
-    bucket.badFilters = FiltersContainer.deserialize(
-      buffer,
-      NetworkFilter.deserialize,
-      isBadFilterPredicate,
-    );
+    bucket.badFilters = FiltersContainer.deserialize(buffer, NetworkFilter.deserialize);
 
     return bucket;
   }
@@ -67,11 +63,7 @@ export default class NetworkFilterBucket {
     });
 
     this.badFiltersIds = null;
-    this.badFilters = new FiltersContainer({
-      deserialize: NetworkFilter.deserialize,
-      filters: [],
-      predicate: isBadFilterPredicate,
-    });
+    this.badFilters = new FiltersContainer({ deserialize: NetworkFilter.deserialize });
 
     if (filters.length !== 0) {
       this.update(filters);
@@ -79,9 +71,19 @@ export default class NetworkFilterBucket {
   }
 
   public update(newFilters: NetworkFilter[], removedFilters?: Set<number>): void {
-    // `this.badFilters.update` will return the list of filters which were not selected
-    const filters = this.badFilters.update(newFilters, removedFilters);
-    this.index.update(filters, removedFilters);
+    const badFilters: NetworkFilter[] = [];
+    const remaining: NetworkFilter[] = [];
+    for (let i = 0; i < newFilters.length; i += 1) {
+      const filter = newFilters[i];
+      if (filter.isBadFilter()) {
+        badFilters.push(filter);
+      } else {
+        remaining.push(filter);
+      }
+    }
+
+    this.badFilters.update(badFilters, removedFilters);
+    this.index.update(remaining, removedFilters);
     this.badFiltersIds = null;
   }
 
@@ -127,7 +129,7 @@ export default class NetworkFilterBucket {
     // $badfilter option from mask). This allows to check if a matching filter
     // should be ignored just by doing a lookup in a set of IDs.
     if (this.badFiltersIds === null) {
-      const badFilters = this.badFilters.getFilters({ noCache: true });
+      const badFilters = this.badFilters.getFilters();
 
       // Shortcut if there is no badfilter in this bucket
       if (badFilters.length === 0) {
