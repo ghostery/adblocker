@@ -83,7 +83,7 @@ export default class StaticDataView {
   constructor(
     length: number,
     buffer?: Uint8Array,
-    { enableCompression }: IDataViewOptions = { enableCompression: false },
+    { enableCompression }: IDataViewOptions = { enableCompression: true },
   ) {
     if (LITTLE_ENDIAN === false) {
       // This check makes sure that we will not load the adblocker on a
