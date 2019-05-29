@@ -1,9 +1,9 @@
 ![Adblock Plus 2.0]
-! Checksum: lpyUUg+uDHqre06GPmjN1w
+! Checksum: v/M225GcEKuzQSrL1rAOtw
 ! Title: AdGuard Mobile Ads filter
 ! Description: Filter for all known mobile ad networks. Useful for mobile devices.
-! Version: 2.0.5.73
-! TimeUpdated: 2019-04-15T21:02:07+03:00
+! Version: 2.0.6.10
+! TimeUpdated: 2019-05-29T03:30:10+03:00
 ! Expires: 2 days (update frequency)
 ! Homepage: http://adguard.com/filters.html#mobile
 ! License: http://creativecommons.org/licenses/by-sa/3.0/
@@ -113,6 +113,12 @@
 ||ad.prismamediadigital.com^
 ! https://play.google.com/store/apps/details?id=fr.francetv.pluzz&hl=fr
 ||ad2play.ftv-publicite.fr^
+! Supership.jp (also mobile ads)
+||socdm.com^
+!
+! Criteo mobile ads
+||criteo.com^
+||criteo.net^
 !
 ! DU ads
 /adunion/*
@@ -139,6 +145,13 @@
 ||plugin.mobopay.baidu.com^
 ||mo.freeindoapp.com^
 !
+||activity.browser.intl.miui.com^
+||api.brs.intl.miui.com^
+||api.newsfeed.intl.miui.com^
+||huangye.miui.com^
+||file.market.xiaomi.com^
+||adv.sec.intl.miui.com^
+||zhfosenghtr.com^$third-party
 ||ads.edadeal.ru^
 ||adsrvr.io^
 ||t7z.cupid.iqiyi.com^
@@ -425,7 +438,6 @@
 ||adkmob.com^
 ||adleads.com^
 ||adlibr.com^
-||admail.am^
 ||adman.gr^
 ||admarketing.yahoo.net^
 ||admarvel.s3.amazonaws.com^
@@ -1032,6 +1044,7 @@
 ! https://github.com/AdguardTeam/AdguardForiOS/issues/255
 @@||m.beautypageants.in^$elemhide
 !---
+! https://github.com/AdguardTeam/AdguardFilters/issues/32971
 ! https://github.com/AdguardTeam/AdguardFilters/issues/27586
 @@||js.kanald.com.tr/assets/dist/js/custom/ads.js
 ! https://github.com/AdguardTeam/AdguardFilters/issues/23913
@@ -1107,6 +1120,12 @@ westseattleblog.com#@#.header-ad
 !
 ! Extended CSS rules
 !
+! https://github.com/AdguardTeam/AdguardFilters/issues/28776
+dailynkjp.com#$?##im_interstitial_panel { remove: true; }
+! https://github.com/AdguardTeam/AdguardFilters/issues/28416
+mobile.donanimhaber.com##div[style^="width: 100%; float: left; position: relative;"] > div[style*="margin: 10px auto; text-align: center; width: 320px; height: 100px;"]:has(> div[id^="div-gpt-ad-"])
+! https://github.com/AdguardTeam/AdguardFilters/issues/30369
+m.hd21.com#$?##banner_overlay-postitial-video { remove: true; }
 ! https://github.com/AdguardTeam/AdguardFilters/issues/31011
 ktuu.com##aside > .visible-xs-block > .row:has(> .col-xs-24 > a.ptr[onclick^="trackNativeLink('https://www.ktuu.com/content/sponsored/"])
 ktuu.com##aside > .visible-xs-block > .row:has(> .col-xs-24 > a.ptr[onclick^="trackNativeLink('https://www.ktuu.com/content/sponsored/"]) + hr
@@ -1228,6 +1247,7 @@ m.reddit.com##article[class="Post size-compact"][-ext-has=".PostHeader__sponsore
 ! https://forum.adguard.com/index.php?threads/12443/
 !#################
 !
+! https://github.com/AdguardTeam/AdguardFilters/issues/30369
 ! https://github.com/AdguardTeam/AdguardFilters/issues/30366
 ! https://github.com/AdguardTeam/AdguardFilters/issues/22801
 ! https://github.com/AdguardTeam/AdguardFilters/issues/24463
@@ -1648,7 +1668,6 @@ deviantart.com#@#.mobile-ad
 @@||convertpad.com/ad/
 ! Prevent filtering apk storage of Google Play
 @@||android.clients.google.com/market/GetBinary/$document
-@@||play.google.com/store/apps/$document
 ! Youtube & Samsung issue: https://github.com/AdguardTeam/AdguardForAndroid/issues/986
 !---------------------------------------------------------------------------!
 !-------------- Rules for specific websites --------------------------------!
@@ -1687,7 +1706,30 @@ m.news.de##.unisterAdsStart
 !+ NOT_PLATFORM(ios, ext_android_cb)
 ||mobile.donanimhaber.com/ads^
 !
-argusleader.com,azcentral.com,battlecreekenquirer.com,baxterbulletin.com,bucyrustelegraphforum.com,burlingtonfreepress.com,centralfloridafuture.com,citizen-times.com,clarionledger.com,coloradoan.com,courier-journal.com,courierpress.com,dailyworld.com,delawareonline.com,delmarvanow.com,desertsun.com,desmoinesregister.com,floridatoday.com,freep.com,fsunews.com,greatfallstribune.com,guampdn.com,hattiesburgamerican.com,hometownlife.com,indystar.com,jconline.com,kitsapsun.com,lansingstatejournal.com,lcsun-news.com,montgomeryadvertiser.com,mycentraljersey.com,naplesnews.com,news-leader.com,news-press.com,newsleader.com,pal-item.com,pnj.com,portclintonnewsherald.com,press-citizen.com,redding.com,rgj.com,sctimes.com,shreveporttimes.com,statesmanjournal.com,stevenspointjournal.com,tallahassee.com,tcpalm.com,theadvertiser.com,thecalifornian.com,thegleaner.com,thenews-messenger.com,thenewsstar.com,thespectrum.com,thestarpress.com,thetimesherald.com,thetowntalk.com,usatoday.com,vcstar.com,visaliatimesdelta.com##partner-banner
+theinventory.com,thetakeout.com,theonion.com,splinternews.com,clickhole.com,avclub.com,deadspin.com,gizmodo.com,jalopnik.com,jezebel.com,kotaku.com,lifehacker.com,theroot.com##.inline-ad-container
+rbc.ru##.banners__mobile-freeze
+rbc.ru##.banners__yandex__article
+lifo.gr##.ad_inside > .sticky-wrap
+eporner.com###ad-top-2
+||eporner.com/dotm/pop2.php
+outlook.live.com###topLevelItemsExceptFolderPane > main > div[class*=" "] > div[class^="_"]:not([role="group"])
+ficbook.net##.rkl-stick-to-bottom
+ck101.com###mobile_backgroundAD
+atlasobscura.com##.ad-background-intra-body
+insideevs.com##.top-banner-placeholder
+amarujala.com##.ad-mb
+amarujala.com,www-amarujala-com.cdn.ampproject.org##div.ad
+hurriyetaile.com###banner-sticky
+ridble.com##.mobile-leaderboard
+3prn.com###top11
+3prn.com##.bottom_spot
+3prn.com##.mobile-spot-under-video
+3prn.com##.thumb-text.mobile_vertical
+m.hd21.com##.trade > .mercantile + p
+yandex.com.tr##.content__prelayout > div > a[target="_blank"]
+rp-online.de##.park-section-portal-right > aside[data-portal-id="topmobile2"]
+pcgames.de##.wadtag
+app.com,greenvilleonline.com,argusleader.com,azcentral.com,battlecreekenquirer.com,baxterbulletin.com,bucyrustelegraphforum.com,burlingtonfreepress.com,centralfloridafuture.com,citizen-times.com,clarionledger.com,coloradoan.com,courier-journal.com,courierpress.com,dailyworld.com,delawareonline.com,delmarvanow.com,desertsun.com,desmoinesregister.com,floridatoday.com,freep.com,fsunews.com,greatfallstribune.com,guampdn.com,hattiesburgamerican.com,hometownlife.com,indystar.com,jconline.com,kitsapsun.com,lansingstatejournal.com,lcsun-news.com,montgomeryadvertiser.com,mycentraljersey.com,naplesnews.com,news-leader.com,news-press.com,newsleader.com,pal-item.com,pnj.com,portclintonnewsherald.com,press-citizen.com,redding.com,rgj.com,sctimes.com,shreveporttimes.com,statesmanjournal.com,stevenspointjournal.com,tallahassee.com,tcpalm.com,theadvertiser.com,thecalifornian.com,thegleaner.com,thenews-messenger.com,thenewsstar.com,thespectrum.com,thestarpress.com,thetimesherald.com,thetowntalk.com,usatoday.com,vcstar.com,visaliatimesdelta.com##partner-banner
 m.dm5.com,manhuaren.com##.adform_2
 m.dm5.com,manhuaren.com##.detail-ad-con
 amazon.de###WrapperDivToHideBTF > .aw-campaigns
@@ -1701,7 +1743,6 @@ gotporn.com###floaterBanner
 ||static-cl.xhcdn.com/xh-mobile/js/*.pop.js
 frag-mutti.de##.anchor-ad
 www-xda--developers-com.cdn.ampproject.org##.brave-banner
-freep.com,usatoday.com##partner-banner
 kmph.com,kfoxtv.com,fox17.com##div[class^="interstory_"]
 chefkoch.de##.responsive-ad--top
 kino-teatr.ru###aio_passback
@@ -1715,7 +1756,7 @@ fangraphs.com##div[id^="ra-mobile-unit-"]
 korrespondent.net##amp-iframe[src^="https://recreativ.ru/"]
 pravda.com.ua,korrespondent.net##amp-iframe[src*=".lun.ua/"]
 www-spiegel-de.cdn.ampproject.org##.ampads
-obozrevatel.com##.banner-premium
+obozrevatel.com##div.banner-premium
 cnn.com###social-share_gig_containerParent .PartnerZone
 mobile.donanimhaber.com##body > div[style="float: left;width:100%;"] > div[style="margin:10px auto; text-align:center; width:300px; height:250px;"]
 techrum.vn###revive_banner_mobile_div
@@ -1723,9 +1764,11 @@ scotsman.com##.slab--bottommobilebanner
 usatooday.com##.partner-placement
 denverpost.com###mobile-adhesion
 tubewolf.com##.banner-top
+m.humoruniv.com###ddn_ad_128
+m.humoruniv.com##body > div[id$="_wrap"]
 m.humoruniv.com###read > div[id$="_wrap"]
 m.humoruniv.com##div[style="margin:10px 0 10px 0;"] > div[style*="height:250px"]
-amp.fakty.ua##amp-iframe
+gadgets.ndtv.com,amp.fakty.ua##amp-iframe
 yahoo.com##.stream-sm-ad
 zerohedge.com##iframe[src^="//www.dianomi.com"]
 swedroid.se##div[id$="_ad_mobile"]
@@ -1745,6 +1788,7 @@ m.iceporn.com##.spot+p
 m.discuss.com.hk##.MFV
 kanasoku.info##.adc_g_ko_sec
 gamesradar.com##div[class^="slot-single-height-"]
+gamesradar.com##div[class^="slot-mpu"][style^="position: relative; box-sizing: border-box; height:"]
 techbang.com###related-posts
 egmnow.com##.pt_mobile_ad_iframe
 egmnow.com##.pt-embed-ad-single-mobile
@@ -1839,7 +1883,7 @@ m.doisongphapluat.com##.list_news > li div.title_news > label._mB
 m.doisongphapluat.com##.list_news > li div.title_news > a[href^="http://bit.ly/"]
 m.doisongphapluat.com##.list_news > li > div.block_image_news > .thumb > a[href^="http://bit.ly/"]
 eg.ru##amp-embed[type="smi2"]
-express.co.uk,chip.de,asahi.com,mainichi.jp,jp.ign.com##amp-embed[type="outbrain"]
+dailystar.co.uk,www-dailystar-co-uk.cdn.ampproject.org,express.co.uk,chip.de,asahi.com,mainichi.jp,jp.ign.com##amp-embed[type="outbrain"]
 m.dcinside.com##.adv-inner
 m.dcinside.com##.adv-group
 m.dcinside.com##.adv-groupin
@@ -2007,7 +2051,7 @@ www-inside--handy-de.cdn.ampproject.org###i-amphtml-wrapper div.content_ins
 wsj.com##div[class^="WSJTheme__adWrapper_"][style="min-width: 300px; min-height: 250px;"]
 gametech.ru##.mobile-pic
 m.yourlust.com##.divExoCustomLayer
-amp.slate.com##.ad
+slate.com##.ad
 mobilescout.com##.banner_news_top_box
 mobilescout.com##.banner_list_container
 heise.de##a-paternoster
@@ -2093,7 +2137,6 @@ gesundheitsfrage.net,gutefrage.net,finanzfrage.net###anchor-ad
 apkmirror.com##.appRow.showOnMobileAndTablet
 m.tr.investing.com##.adDrawer
 yahoo.com##div.controller[class*="smartphone_Px"][data-reactid]
-greenvilleonline.com##partner-banner
 yahoo.com##.caas-da
 yahoo.com##.item-beacon.caas-loaded
 ||deutsche-mittelstands-nachrichten.de/wp-content/wptouch-data/include/js/dmn_interstitial_mobile.js
@@ -2394,7 +2437,7 @@ amp.theguardian.com##amp-list
 amp.theguardian.com##amp-iframe
 ntv.com.tr,wccftech.com##.amp-ad
 zeenews.india.com##amp-iframe
-bloomberg.com##.amp-taboola
+indiatoday.in,bloomberg.com##.amp-taboola
 m.gsmarena.com##.top-adv
 m.gsmarena.com##.adv-mid
 m.gsmarena.com##.adv-top
@@ -2674,7 +2717,11 @@ m.news.yandex.by,m.news.yandex.com,m.news.yandex.fr,m.news.yandex.kz,m.news.yand
 ! Fixing Google Play Services 11.7.* misbehavior (tries to open that file in browser when it's blocked)
 !
 ! Google ads (be careful)
-! Blocking of Facebook ads
+!
+! Blocking specific apps tracking
+! Booking app
+!
+! Blocking Facebook mobile ads
 !
 !
 ! https://github.com/AdguardTeam/AdguardFilters/issues/29479
@@ -2929,9 +2976,8 @@ m.news.yandex.by,m.news.yandex.com,m.news.yandex.fr,m.news.yandex.kz,m.news.yand
 ||spotify.com/ads/
 ||trackersimulator.org^
 !
+! https://github.com/AdguardTeam/AdguardFilters/issues/31290
 ! https://github.com/AdguardTeam/AdguardFilters/issues/7099
-!+ NOT_PLATFORM(ios, ext_safari, ext_android_cb)
-||app.adjust.com^
 !
 ! For apps
 ||tracking.ws.eurosport.com^
@@ -3163,7 +3209,6 @@ m.news.yandex.by,m.news.yandex.com,m.news.yandex.fr,m.news.yandex.kz,m.news.yand
 ||config2.mparticle.com^
 ||counter.kingsoft.com^
 ||crasheye.cn^
-||e.crashlytics.com^
 ||crittercism.com/api/
 ||crwdcntrl.net^
 ||data.mistat.*.xiaomi.com^
@@ -3176,7 +3221,6 @@ m.news.yandex.by,m.news.yandex.com,m.news.yandex.fr,m.news.yandex.kz,m.news.yand
 ||etl.xlmc.sandai.net^
 ||events.lbesecapi.com^
 ||facebook.com/rtb_impression/?tr=
-||gate.hockeyapp.net^
 ||geoip.fotoable.net^
 ||google-analytics.com^
 ||googleadapis.l.google.com^

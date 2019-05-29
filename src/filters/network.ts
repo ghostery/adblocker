@@ -137,6 +137,7 @@ function computeFilterId(
   hostname: string | undefined,
   optDomains: Uint32Array | undefined,
   optNotDomains: Uint32Array | undefined,
+  redirect: string | undefined,
 ): number {
   let hash = (5408 * 33) ^ mask;
 
@@ -167,6 +168,12 @@ function computeFilterId(
   if (hostname !== undefined) {
     for (let i = 0; i < hostname.length; i += 1) {
       hash = (hash * 33) ^ hostname.charCodeAt(i);
+    }
+  }
+
+  if (redirect !== undefined) {
+    for (let i = 0; i < redirect.length; i += 1) {
+      hash = (hash * 33) ^ redirect.charCodeAt(i);
     }
   }
 
@@ -994,6 +1001,7 @@ export default class NetworkFilter implements IFilter {
       this.hostname,
       this.optDomains,
       this.optNotDomains,
+      this.redirect,
     );
   }
 
@@ -1006,6 +1014,7 @@ export default class NetworkFilter implements IFilter {
         this.hostname,
         this.optDomains,
         this.optNotDomains,
+        this.redirect,
       );
     }
     return this.id;
