@@ -37,6 +37,7 @@ function network(filter: string, expected: any) {
       isBadFilter: parsed.isBadFilter(),
       isCSP: parsed.isCSP(),
       isException: parsed.isException(),
+      isFullRegex: parsed.isFullRegex(),
       isGenericHide: parsed.isGenericHide(),
       isHostnameAnchor: parsed.isHostnameAnchor(),
       isLeftAnchor: parsed.isLeftAnchor(),
@@ -85,6 +86,7 @@ const DEFAULT_NETWORK_FILTER = {
   isBadFilter: false,
   isCSP: false,
   isException: false,
+  isFullRegex: false,
   isGenericHide: false,
   isHostnameAnchor: false,
   isLeftAnchor: false,
@@ -467,8 +469,8 @@ describe('Network filters', () => {
     });
   });
 
-  describe('drops regexp patterns', () => {
-    [
+  describe('regexp patterns', () => {
+    for (const filter of [
       '/pattern/',
       '@@/pattern/',
       '//',
@@ -476,23 +478,27 @@ describe('Network filters', () => {
       '//$image',
       '//[0-9].*-.*-[a-z0-9]{4}/$script',
       '/.space/[0-9]{2,9}/$/$script',
-    ].forEach((filter) => {
+    ]) {
       it(filter, () => {
-        expect(NetworkFilter.parse(filter)).toBeNull();
+        network(filter, {
+          isFullRegex: true,
+        });
       });
-    });
+    }
 
-    [
+    for (const filter of [
       '||foo.com/pattern/',
       '||foo.com/pattern/$script',
       '@@||foo.com/pattern/$script',
       '@@|foo.com/pattern/$script',
       '|foo.com/pattern/$script',
-    ].forEach((filter) => {
+    ]) {
       it(filter, () => {
-        expect(NetworkFilter.parse(filter)).not.toBeNull();
+        network(filter, {
+          isFullRegex: false,
+        });
       });
-    });
+    }
   });
 
   describe('options', () => {
@@ -818,6 +824,268 @@ describe('Network filters', () => {
         });
       });
     });
+  });
+
+  describe('#getTokens', () => {
+    for (const [regexFilter, regexTokens] of [
+      // TODO Handle character classes
+      ['/^foo$/', [hashStrings(['foo'])]],
+      ['/^fo\\so$/', [new Uint32Array(0)]],
+      ['/^fo\\wo$/', [new Uint32Array(0)]],
+      ['/^fo\\Bo$/', [new Uint32Array(0)]],
+      ['/^foo-bar\\Bo$/', [hashStrings(['foo'])]],
+
+      // All tokens are considered because none is special and surrounded by ^ and $
+      ['/^foo-bar-baz$/', [hashStrings(['foo', 'bar', 'baz'])]],
+      // All tokens except last one
+      ['/^foo-bar-baz+/', [hashStrings(['foo', 'bar'])]],
+      ['/^foo-bar-baz/', [hashStrings(['foo', 'bar'])]],
+      // All tokens except first one
+      ['/foo-bar-baz$/', [hashStrings(['bar', 'baz'])]],
+      ['/.foo-bar-baz$/', [hashStrings(['bar', 'baz'])]],
+
+      // Real filters
+      ['/:\\/\\/[A-Za-z0-9]+.ru\\/[A-Za-z0-9]{20,25}\\.js$/$doc', [hashStrings(['js'])]],
+      ['/:\\/\\/[A-Za-z0-9]+.ru\\/[A-Za-z0-9]{20,25}\\.js/$doc', [new Uint32Array(0)]],
+      ['/:\\/\\/[A-Za-z0-9]+.ru\\/[A-Za-z0-9]{20,25}.js/$doc', [new Uint32Array(0)]],
+      [
+        '/^https?:\\/\\/m\\.anysex\\.com\\/[a-zA-Z]{1,4}\\/[a-zA-Z]+\\.php$/$image,script',
+        [hashStrings(['php'])],
+      ],
+      [
+        '/^https:\\/\\/m\\.anysex\\.com\\/[a-zA-Z]{1,4}\\/[a-zA-Z]+\\.php$/$image,script',
+        [hashStrings(['https', 'anysex', 'com', 'php'])],
+      ],
+
+      ['/wasabisyrup.com\\/storage\\/[-_a-zA-Z0-9]{8,}.gif/$doc', [new Uint32Array(0)]],
+      [
+        '/wasabisyrup\\.com\\/storage\\/[-_a-zA-Z0-9]{8,}.gif/$doc',
+        [hashStrings(['com', 'storage'])],
+      ],
+      [
+        '/^wasabisyrup\\.com\\/storage\\/[-_a-zA-Z0-9]{8,}.gif/$doc',
+        [hashStrings(['wasabisyrup', 'com', 'storage'])],
+      ],
+
+      [
+        '/.*(\\/proxy|\\.wasm|\\.wsm|\\.wa)$/$websocket,xmlhttprequest,badfilter',
+        [new Uint32Array(0)],
+      ],
+
+      [
+        '/^https?:\\/\\/([0-9a-z-]+\\.)?(9anime|animeland|animenova|animeplus|animetoon|animewow|gamestorrent|goodanime|gogoanime|igg-games|kimcartoon|memecenter|readcomiconline|toonget|toonova|watchcartoononline)\\.[a-z]{2,4}\\/(?!([Ee]xternal|[Ii]mages|[Ss]cripts|[Uu]ploads|ac|ajax|assets|combined|content|cov|cover|(img\\/bg)|(img\\/icon)|inc|jwplayer|player|playlist-cat-rss|static|thumbs|wp-content|wp-includes)\\/)(.*)/$first-party,script',
+        [new Uint32Array(0)],
+      ],
+
+      [
+        '/^https?:\\/\\/([0-9a-z\\-]+\\.)?(9anime|animeland|animenova|animeplus|animetoon|animewow|gamestorrent|goodanime|gogoanime|igg-games|kimcartoon|memecenter|readcomiconline|toonget|toonova|watchcartoononline)\\.[a-z]{2,4}\\/(?!([Ee]xternal|[Ii]mages|[Ss]cripts|[Uu]ploads|ac|ajax|assets|combined|content|cov|cover|(img\\/bg)|(img\\/icon)|inc|jwplayer|player|playlist-cat-rss|static|thumbs|wp-content|wp-includes)\\/)(.*)/$first-party,xmlhttprequest,badfilter',
+        [new Uint32Array(0)],
+      ],
+
+      ['/https?:\\/\\/.*[=|&|%|#|+].*/$badfilter', [new Uint32Array(0)]],
+      ['/^http*.:\\/\\/.*[a-zA-Z0-9]{10,}.*/$xmlhttprequest,badfilter', [new Uint32Array(0)]],
+      ['@@/https?:\\/\\/.*[=|&|%|#|+].*/$doc', [new Uint32Array(0)]],
+      [
+        '/^https?:\\/\\/([0-9a-z\\-]+\\.)?(9anime|animeland|animenova|animeplus|animetoon|animewow|gamestorrent|goodanime|gogoanime|igg-games|kimcartoon|memecenter|readcomiconline|toonget|toonova|watchcartoononline)\\.[a-z]{2,4}\\/(?!([Ee]xternal|[Ii]mages|[Ss]cripts|[Uu]ploads|ac|ajax|assets|combined|content|cov|cover|(img\\/bg)|(img\\/icon)|inc|jwplayer|player|playlist-cat-rss|static|thumbs|wp-content|wp-includes)\\/)(.*)/$first-party,image,badfilter',
+        [new Uint32Array(0)],
+      ],
+      ['/^https?:\\/\\/.*\\/.*[(php|?|=)].*/$first-party,image,badfilter', [new Uint32Array(0)]],
+      [
+        '/^https?:\\/\\/([0-9a-z\\-]+\\.)?(9anime|animeland|animenova|animeplus|animetoon|animewow|gamestorrent|goodanime|gogoanime|igg-games|kimcartoon|memecenter|readcomiconline|toonget|toonova|watchcartoononline)\\.[a-z]{2,4}\\/(?!([Ee]xternal|[Ii]mages|[Ss]cripts|[Uu]ploads|ac|ajax|assets|combined|content|cov|cover|(img\\/bg)|(img\\/icon)|inc|jwplayer|player|playlist-cat-rss|static|thumbs|wp-content|wp-includes)\\/)(.*)/$first-party,image,badfilter',
+        [new Uint32Array(0)],
+      ],
+      [
+        '/^(https?|wss?):\\/\\/([0-9a-z\\-]+\\.)?([0-9a-z-]+\\.)(accountant|bid|cf|club|cricket|date|download|faith|fun|ga|gdn|gq|loan|men|ml|network|ovh|party|pro|pw|racing|review|rocks|ru|science|site|space|stream|tk|top|trade|webcam|win|xyz|zone)\\.\\/(.*)/$image,script,subdocument,websocket,xmlhttprequest',
+        [new Uint32Array(0)],
+      ],
+      [
+        '/^(https?|wss?):\\/\\/([0-9a-z-]+\\.)?([0-9a-z-]+\\.)(accountant|bid|cf|club|cricket|date|download|faith|fun|ga|gdn|gq|loan|men|ml|network|ovh|party|pro|pw|racing|review|rocks|science|site|space|stream|tk|top|trade|webcam|win|xyz|zone)\\/(.*)/$third-party,websocket',
+        [new Uint32Array(0)],
+      ],
+      [
+        '/([0-9]{1,3}\\.){3}[0-9]{1,3}.*(\\/proxy|\\.wasm|\\.wsm|\\.wa)$/$third-party,websocket',
+        [new Uint32Array(0)],
+      ],
+      ['/.*(\\/proxy|\\.wasm|\\.wsm|\\.wa)$/$websocket,xmlhttprequest', [new Uint32Array(0)]],
+      [
+        '/^https://www\\.narcity\\.com/assets/[0-9a-f]{24,}\\.js/$script',
+        [hashStrings(['https', 'www', 'narcity', 'com', 'assets'])],
+      ],
+      [
+        '/^https://www\\.mtlblog\\.com/assets/[0-9a-f]{24,}\\.js/$script',
+        [hashStrings(['https', 'www', 'mtlblog', 'com', 'assets'])],
+      ],
+      [
+        '/\\:\\/\\/data.*\\.com\\/[a-zA-Z0-9]{30,}/$third-party,xmlhttprequest',
+        [new Uint32Array(0)],
+      ],
+      [
+        '/\\.(accountant|bid|click|club|com|cricket|date|download|faith|link|loan|lol|men|online|party|racing|review|science|site|space|stream|top|trade|webcam|website|win|xyz|com)\\/(([0-9]{2,9})(\\.|\\/)(css|\\?)?)$/$script,stylesheet,third-party,xmlhttprequest',
+        [new Uint32Array(0)],
+      ],
+      [
+        '/\\.accountant\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['accountant'])],
+      ],
+      [
+        '/\\.bid\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['bid'])],
+      ],
+      [
+        '/\\.click\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['click'])],
+      ],
+      [
+        '/\\.club\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['club'])],
+      ],
+      [
+        '/\\.com\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['com'])],
+      ],
+      [
+        '/\\.cricket\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['cricket'])],
+      ],
+      [
+        '/\\.date\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['date'])],
+      ],
+      [
+        '/\\.download\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['download'])],
+      ],
+      [
+        '/\\.faith\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['faith'])],
+      ],
+      [
+        '/\\.link\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['link'])],
+      ],
+      [
+        '/\\.loan\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['loan'])],
+      ],
+      [
+        '/\\.lol\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['lol'])],
+      ],
+      [
+        '/\\.men\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['men'])],
+      ],
+      [
+        '/\\.online\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['online'])],
+      ],
+      [
+        '/\\.party\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['party'])],
+      ],
+      [
+        '/\\.racing\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['racing'])],
+      ],
+      [
+        '/\\.review\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['review'])],
+      ],
+      [
+        '/\\.science\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['science'])],
+      ],
+      [
+        '/\\.site\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['site'])],
+      ],
+      [
+        '/\\.space\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['space'])],
+      ],
+      [
+        '/\\.stream\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['stream'])],
+      ],
+      [
+        '/\\.top\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['top'])],
+      ],
+      [
+        '/\\.trade\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['trade'])],
+      ],
+      [
+        '/\\.webcam\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['webcam'])],
+      ],
+      [
+        '/\\.website\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['website'])],
+      ],
+      [
+        '/\\.win\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['win'])],
+      ],
+      [
+        '/\\.xyz\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [hashStrings(['xyz'])],
+      ],
+      [
+        '/\\:\\/\\/[a-z0-9]{5,40}\\.com\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
+        [new Uint32Array(0)],
+      ],
+      [
+        '/\\:\\/\\/[a-z0-9]{5,}\\.com\\/[A-Za-z0-9]{3,}\\/$/$script,third-party,xmlhttprequest',
+        [new Uint32Array(0)],
+      ],
+      ['/^https?:\\/\\/.*(bitly|bit)\\.(com|ly)\\/.*/$doc', [new Uint32Array(0)]],
+      ['/^https?:\\/\\/.*\\/.*sw[0-9a-z(.|_)].*/$doc', [new Uint32Array(0)]],
+      [
+        '/^((?!(^https?):\\/\\/(ajax\\.googleapis\\.com|cdnjs\\.cloudflare\\.com|fonts\\.googleapis\\.com)\\/).*)$/$script,third-party',
+        [new Uint32Array(0)],
+      ],
+      [
+        '/^https?:\\/\\/([0-9a-z-]+\\.)?(9anime|animeland|animenova|animeplus|animetoon|animewow|gamestorrent|goodanime|gogoanime|igg-games|kimcartoon|memecenter|readcomiconline|toonget|toonova|watchcartoononline)\\.[a-z]{2,4}\\/(?!([Ee]xternal|[Ii]mages|[Ss]cripts|[Uu]ploads|ac|ajax|assets|combined|content|cov|cover|(img\\/bg)|(img\\/icon)|inc|jwplayer|player|playlist-cat-rss|static|thumbs|wp-content|wp-includes)\\/)(.*)/$image,other,script,~third-party,xmlhttprequest',
+        [new Uint32Array(0)],
+      ],
+      [
+        '/^https?:\\/\\/[\\w.-]*gelbooru\\.com.*[a-zA-Z0-9?!=@%#]{40,}/$image,other',
+        [new Uint32Array(0)],
+      ],
+      ['/\\.filenuke\\.com/.*[a-zA-Z0-9]{4}/$script', [hashStrings(['filenuke', 'com'])]],
+      ['/\\.sharesix\\.com/.*[a-zA-Z0-9]{4}/$script', [hashStrings(['sharesix', 'com'])]],
+      ['/^https?:\\/\\/([0-9]{1,3}\\.){3}[0-9]{1,3}/$doc', [new Uint32Array(0)]],
+      ['/http*.:\\/\\/.*[a-zA-Z0-9]{110,}.*/$doc', [new Uint32Array(0)]],
+      ['/https?:\\/\\/.*[&|%|#|+|=].*/$doc', [new Uint32Array(0)]],
+      ['/^https?:\\/\\/([0-9]{1,3}\\.){3}[0-9]{1,3}/$doc', [new Uint32Array(0)]],
+      ['/\\/[0-9].*\\-.*\\-[a-z0-9]{4}/$script,xmlhttprequest', [new Uint32Array(0)]],
+      ['/^https?:\\/\\/.*\\/.*[0-9a-z]{7,16}\\.js/$script', [new Uint32Array(0)]],
+      [
+        '/^http://[a-zA-Z0-9]+\\.[a-z]+\\/.*(?:[!"#$%&()*+,:;<=>?@/\\^_`{|}~-]).*[a-zA-Z0-9]+/$script,third-party',
+        [hashStrings(['http'])],
+      ],
+      [
+        '/http://[a-zA-Z0-9]+\\.[a-z]+\\/.*(?:[!"#$%&()*+,:;<=>?@/\\^_`{|}~-]).*[a-zA-Z0-9]+/$script,third-party',
+        [new Uint32Array(0)],
+      ],
+      [
+        '/^https?:\\/\\/motherless\\.com\\/[a-z0-9A-Z]{3,}\\.[a-z0-9A-Z]{2,}\\_/$image,subdocument',
+        [new Uint32Array(0)],
+      ],
+      ['/^https?:\\/\\/.*\\/.*sw[0-9(.|_)].*/$script', [new Uint32Array(0)]],
+      ['/http*.:\\/\\/.*[?|=|&|%|#|+].*/$doc', [new Uint32Array(0)]],
+      ['/\\:\\/\\/([0-9]{1,3}\\.){3}[0-9]{1,3}/$doc', [new Uint32Array(0)]],
+      ['@@/wp-content/themes/$script', [hashStrings(['content'])]],
+    ]) {
+      it(`get tokens for ${regexFilter}`, () => {
+        const parsed = NetworkFilter.parse(regexFilter as string, true);
+        expect(parsed).not.toBeNull();
+        if (parsed !== null) {
+          expect(parsed.getTokens()).toEqual(regexTokens);
+        }
+      });
+    }
   });
 });
 

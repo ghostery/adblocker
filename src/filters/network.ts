@@ -38,6 +38,99 @@ function isAllowedHostname(ch: number): boolean {
   );
 }
 
+function tokenizeRegexInPlace(selector: string, tokens: TokensBuffer): void {
+  let end = selector.length - 1;
+  let begin = 1;
+  let prev: number = 0;
+
+  // Try to find the longest safe *prefix* that we can tokenize
+  for (; begin < end; begin += 1) {
+    const code = selector.charCodeAt(begin);
+
+    // If we encounter '|' before any other opening bracket, then it's not safe
+    // to tokenize this filter (e.g.: 'foo|bar'). Instead we abort tokenization
+    // to be safe.
+    if (code === 124 /* '|' */) {
+      return;
+    }
+
+    if (
+      code === 40 /* '(' */ ||
+      code === 42 /* '*' */ ||
+      code === 43 /* '+' */ ||
+      code === 63 /* '?' */ ||
+      code === 91 /* '[' */ ||
+      code === 123 /* '{' */ ||
+      (code === 46 /* '.' */ && prev !== 92) /* '\' */ ||
+      (code === 92 /* '\' */ && isAlpha(selector.charCodeAt(begin + 1)))
+    ) {
+      break;
+    }
+
+    prev = code;
+  }
+
+  // Try to find the longest safe *suffix* that we can tokenize
+  prev = 0;
+  for (; end >= begin; end -= 1) {
+    const code = selector.charCodeAt(end);
+
+    // If we encounter '|' before any other opening bracket, then it's not safe
+    // to tokenize this filter (e.g.: 'foo|bar'). Instead we abort tokenization
+    // to be safe.
+    if (code === 124 /* '|' */) {
+      return;
+    }
+
+    if (
+      code === 41 /* ')' */ ||
+      code === 42 /* '*' */ ||
+      code === 43 /* '+' */ ||
+      code === 63 /* '?' */ ||
+      code === 93 /* ']' */ ||
+      code === 125 /* '}' */ ||
+      (code === 46 /* '.' */ && selector.charCodeAt(end - 1) !== 92) /* '\' */ ||
+      (code === 92 /* '\' */ && isAlpha(prev))
+    ) {
+      break;
+    }
+
+    prev = code;
+  }
+
+  if (end < begin) {
+    // Full selector is safe
+    const skipFirstToken: boolean = selector.charCodeAt(1) !== 94 /* '^' */;
+    const skipLastToken: boolean = selector.charCodeAt(selector.length - 1) !== 36 /* '$' */;
+    tokenizeFilterInPlace(
+      selector.slice(1, selector.length - 1),
+      skipFirstToken,
+      skipLastToken,
+      tokens,
+    );
+  } else {
+    // Tokenize prefix
+    if (begin > 1) {
+      tokenizeFilterInPlace(
+        selector.slice(1, begin),
+        selector.charCodeAt(1) !== 94 /* '^' */, // skipFirstToken
+        true,
+        tokens,
+      );
+    }
+
+    // Tokenize suffix
+    if (end < selector.length - 1) {
+      tokenizeFilterInPlace(
+        selector.slice(end + 1, selector.length - 1),
+        true,
+        selector.charCodeAt(selector.length - 1) !== 94 /* '^' */, // skipLastToken
+        tokens,
+      );
+    }
+  }
+}
+
 /**
  * Masks used to store options of network filters in a bitmask.
  */
@@ -73,6 +166,7 @@ export const enum NETWORK_FILTER_MASK {
   isGenericHide = 1 << 25,
   isBadFilter = 1 << 26,
   isUnicode = 1 << 27,
+  isFullRegex = 1 << 28,
 }
 
 /**
@@ -185,8 +279,15 @@ function computeFilterId(
  * filters containing at least a * or ^ symbol. Because Regexes are expansive,
  * we try to convert some patterns to plain filters.
  */
-function compileRegex(filterStr: string, isRightAnchor: boolean, isLeftAnchor: boolean): RegExp {
-  let filter = filterStr;
+function compileRegex(
+  filter: string,
+  isLeftAnchor: boolean,
+  isRightAnchor: boolean,
+  isFullRegex: boolean,
+): RegExp {
+  if (isFullRegex === true) {
+    return new RegExp(filter.slice(1, filter.length - 1), 'i');
+  }
 
   // Escape special regex characters: |.$+?{}()[]\
   filter = filter.replace(/([|.$+?{}()[\]\\])/g, '\\$1');
@@ -205,7 +306,7 @@ function compileRegex(filterStr: string, isRightAnchor: boolean, isLeftAnchor: b
     filter = `^${filter}`;
   }
 
-  return new RegExp(filter);
+  return new RegExp(filter, 'i');
 }
 
 const EMPTY_ARRAY = new Uint32Array([]);
@@ -248,7 +349,7 @@ export default class NetworkFilter implements IFilter {
     // |     optionsIndex
     // filterIndexStart
     const optionsIndex: number = line.lastIndexOf('$');
-    if (optionsIndex !== -1) {
+    if (optionsIndex !== -1 && line.charCodeAt(optionsIndex + 1) !== 47 /* '/' */) {
       // Parse options and set flags
       filterIndexEnd = optionsIndex;
 
@@ -436,158 +537,182 @@ export default class NetworkFilter implements IFilter {
       mask |= cptMaskPositive & cptMaskNegative;
     }
 
-    // Detect and drop Regexps
+    // Identify kind of pattern
+    let filter: string | undefined;
+
+    // Detect Regexps (i.e.: /pattern/)
     if (
       filterIndexEnd - filterIndexStart >= 2 &&
       line.charCodeAt(filterIndexStart) === 47 /* '/' */ &&
       line.charCodeAt(filterIndexEnd - 1) === 47 /* '/' */
     ) {
-      return null;
-    }
+      // Some extra ideas which could be applied to RegExp filters:
+      // * convert rules without any special RegExp syntax to plain patterns
+      // * remove extra `isFullRegex` flag since `isRegex` might be enough
+      // * apply some optimizations on the fly: /^https?:\\/\\/rest => isHttp + isHttps + rest
+      filter = line.slice(filterIndexStart, filterIndexEnd);
 
-    // Identify kind of pattern
+      // Validate RegExp to make sure this rule is fine
+      try {
+        compileRegex(
+          filter,
+          false /* isLeftAnchor */,
+          false /* isRightAnchor */,
+          true /* isFullRegex */,
+        );
+      } catch (ex) {
+        return null; // invalid RegExp
+      }
 
-    // Deal with hostname pattern
-    if (filterIndexEnd > 0 && line.charCodeAt(filterIndexEnd - 1) === 124 /* '|' */) {
-      mask = setBit(mask, NETWORK_FILTER_MASK.isRightAnchor);
-      filterIndexEnd -= 1;
-    }
+      mask = setBit(mask, NETWORK_FILTER_MASK.isFullRegex);
+    } else {
+      // Deal with hostname pattern
+      if (filterIndexEnd > 0 && line.charCodeAt(filterIndexEnd - 1) === 124 /* '|' */) {
+        mask = setBit(mask, NETWORK_FILTER_MASK.isRightAnchor);
+        filterIndexEnd -= 1;
+      }
 
-    if (filterIndexStart < filterIndexEnd && line.charCodeAt(filterIndexStart) === 124 /* '|' */) {
       if (
-        filterIndexStart < filterIndexEnd - 1 &&
-        line.charCodeAt(filterIndexStart + 1) === 124 /* '|' */
+        filterIndexStart < filterIndexEnd &&
+        line.charCodeAt(filterIndexStart) === 124 /* '|' */
       ) {
-        mask = setBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor);
-        filterIndexStart += 2;
-      } else {
-        mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-        filterIndexStart += 1;
-      }
-    }
-
-    // const isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
-    // mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRegex, isRegex);
-
-    if (getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor)) {
-      // Split at the first character which is not allowed in a hostname
-      let firstSeparator = filterIndexStart;
-      while (
-        firstSeparator < filterIndexEnd &&
-        isAllowedHostname(line.charCodeAt(firstSeparator)) === true
-      ) {
-        firstSeparator += 1;
-      }
-
-      // No separator found so hostname has full length
-      if (firstSeparator === filterIndexEnd) {
-        hostname = line.slice(filterIndexStart, filterIndexEnd);
-        filterIndexStart = filterIndexEnd;
-        // mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-      } else {
-        // Found a separator
-        hostname = line.slice(filterIndexStart, firstSeparator);
-        filterIndexStart = firstSeparator;
-        const separatorCode = line.charCodeAt(firstSeparator);
-
-        if (separatorCode === 94 /* '^' */) {
-          // If the only symbol remaining for the selector is '^' then ignore it
-          // but set the filter as right anchored since there should not be any
-          // other label on the right
-          if (filterIndexEnd - filterIndexStart === 1) {
-            filterIndexStart = filterIndexEnd;
-            mask = setBit(mask, NETWORK_FILTER_MASK.isRightAnchor);
-          } else {
-            mask = setBit(mask, NETWORK_FILTER_MASK.isRegex);
-            mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-          }
-        } else if (separatorCode === 42 /* '*' */) {
-          mask = setBit(mask, NETWORK_FILTER_MASK.isRegex);
-          mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+        if (
+          filterIndexStart < filterIndexEnd - 1 &&
+          line.charCodeAt(filterIndexStart + 1) === 124 /* '|' */
+        ) {
+          mask = setBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor);
+          filterIndexStart += 2;
         } else {
           mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+          filterIndexStart += 1;
         }
       }
-    }
 
-    // Remove trailing '*'
-    if (
-      filterIndexEnd - filterIndexStart > 0 &&
-      line.charCodeAt(filterIndexEnd - 1) === 42 /* '*' */
-    ) {
-      filterIndexEnd -= 1;
-    }
+      // const isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
+      // mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRegex, isRegex);
 
-    // Remove leading '*' if the filter is not hostname anchored.
-    if (
-      filterIndexEnd - filterIndexStart > 0 &&
-      line.charCodeAt(filterIndexStart) === 42 /* '*' */
-    ) {
-      mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-      filterIndexStart += 1;
-    }
+      if (getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor)) {
+        // Split at the first character which is not allowed in a hostname
+        let firstSeparator = filterIndexStart;
+        while (
+          firstSeparator < filterIndexEnd &&
+          isAllowedHostname(line.charCodeAt(firstSeparator)) === true
+        ) {
+          firstSeparator += 1;
+        }
 
-    // Transform filters on protocol (http, https, ws)
-    if (getBit(mask, NETWORK_FILTER_MASK.isLeftAnchor)) {
+        // No separator found so hostname has full length
+        if (firstSeparator === filterIndexEnd) {
+          hostname = line.slice(filterIndexStart, filterIndexEnd);
+          filterIndexStart = filterIndexEnd;
+          // mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+        } else {
+          // Found a separator
+          hostname = line.slice(filterIndexStart, firstSeparator);
+          filterIndexStart = firstSeparator;
+          const separatorCode = line.charCodeAt(firstSeparator);
+
+          if (separatorCode === 94 /* '^' */) {
+            // If the only symbol remaining for the selector is '^' then ignore it
+            // but set the filter as right anchored since there should not be any
+            // other label on the right
+            if (filterIndexEnd - filterIndexStart === 1) {
+              filterIndexStart = filterIndexEnd;
+              mask = setBit(mask, NETWORK_FILTER_MASK.isRightAnchor);
+            } else {
+              mask = setBit(mask, NETWORK_FILTER_MASK.isRegex);
+              mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+            }
+          } else if (separatorCode === 42 /* '*' */) {
+            mask = setBit(mask, NETWORK_FILTER_MASK.isRegex);
+            // mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+          } else {
+            mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+          }
+        }
+      }
+
+      // Remove trailing '*'
       if (
-        filterIndexEnd - filterIndexStart === 5 &&
-        fastStartsWithFrom(line, 'ws://', filterIndexStart)
+        filterIndexEnd - filterIndexStart > 0 &&
+        line.charCodeAt(filterIndexEnd - 1) === 42 /* '*' */
       ) {
-        mask = setBit(mask, NETWORK_FILTER_MASK.fromWebsocket);
-        mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-        filterIndexStart = filterIndexEnd;
-      } else if (
-        filterIndexEnd - filterIndexStart === 7 &&
-        fastStartsWithFrom(line, 'http://', filterIndexStart)
-      ) {
-        mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
-        mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttps);
-        mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-        filterIndexStart = filterIndexEnd;
-      } else if (
-        filterIndexEnd - filterIndexStart === 8 &&
-        fastStartsWithFrom(line, 'https://', filterIndexStart)
-      ) {
-        mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
-        mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttp);
-        mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-        filterIndexStart = filterIndexEnd;
-      } else if (
-        filterIndexEnd - filterIndexStart === 8 &&
-        fastStartsWithFrom(line, 'http*://', filterIndexStart)
-      ) {
-        mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
-        mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
-        mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-        filterIndexStart = filterIndexEnd;
+        filterIndexEnd -= 1;
       }
-    }
 
-    let filter: string | undefined;
-    if (filterIndexEnd - filterIndexStart > 0) {
-      filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
-
-      mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isUnicode, hasUnicode(filter));
-      if (getBit(mask, NETWORK_FILTER_MASK.isRegex) === false) {
-        mask = setNetworkMask(
-          mask,
-          NETWORK_FILTER_MASK.isRegex,
-          checkIsRegex(filter, 0, filter.length),
-        );
+      // Remove leading '*' if the filter is not hostname anchored.
+      if (
+        filterIndexEnd - filterIndexStart > 0 &&
+        line.charCodeAt(filterIndexStart) === 42 /* '*' */
+      ) {
+        mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+        filterIndexStart += 1;
       }
-    }
 
-    // TODO
-    // - ignore hostname anchor is not hostname provided
-
-    if (hostname !== undefined) {
-      if (getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor) && fastStartsWith(hostname, 'www.')) {
-        hostname = hostname.slice(4);
+      // Transform filters on protocol (http, https, ws)
+      if (getBit(mask, NETWORK_FILTER_MASK.isLeftAnchor)) {
+        if (
+          filterIndexEnd - filterIndexStart === 5 &&
+          fastStartsWithFrom(line, 'ws://', filterIndexStart)
+        ) {
+          mask = setBit(mask, NETWORK_FILTER_MASK.fromWebsocket);
+          mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+          filterIndexStart = filterIndexEnd;
+        } else if (
+          filterIndexEnd - filterIndexStart === 7 &&
+          fastStartsWithFrom(line, 'http://', filterIndexStart)
+        ) {
+          mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
+          mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttps);
+          mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+          filterIndexStart = filterIndexEnd;
+        } else if (
+          filterIndexEnd - filterIndexStart === 8 &&
+          fastStartsWithFrom(line, 'https://', filterIndexStart)
+        ) {
+          mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
+          mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttp);
+          mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+          filterIndexStart = filterIndexEnd;
+        } else if (
+          filterIndexEnd - filterIndexStart === 8 &&
+          fastStartsWithFrom(line, 'http*://', filterIndexStart)
+        ) {
+          mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
+          mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
+          mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+          filterIndexStart = filterIndexEnd;
+        }
       }
-      hostname = hostname.toLowerCase();
-      if (hasUnicode(hostname)) {
-        mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isUnicode, true);
-        hostname = toASCII(hostname);
+
+      if (filterIndexEnd - filterIndexStart > 0) {
+        filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
+
+        mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isUnicode, hasUnicode(filter));
+        if (getBit(mask, NETWORK_FILTER_MASK.isRegex) === false) {
+          mask = setNetworkMask(
+            mask,
+            NETWORK_FILTER_MASK.isRegex,
+            checkIsRegex(filter, 0, filter.length),
+          );
+        }
+      }
+
+      // TODO
+      // - ignore hostname anchor is not hostname provided
+
+      if (hostname !== undefined) {
+        if (
+          getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor) &&
+          fastStartsWith(hostname, 'www.')
+        ) {
+          hostname = hostname.slice(4);
+        }
+        hostname = hostname.toLowerCase();
+        if (hasUnicode(hostname)) {
+          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isUnicode, true);
+          hostname = toASCII(hostname);
+        }
       }
     }
 
@@ -600,6 +725,7 @@ export default class NetworkFilter implements IFilter {
       optNotDomains,
       rawLine: debug === true ? line : undefined,
       redirect,
+      regex: undefined,
     });
   }
 
@@ -638,24 +764,25 @@ export default class NetworkFilter implements IFilter {
             : buffer.getASCII()
           : undefined,
       redirect: (optionalParts & 64) === 64 ? buffer.getNetworkRedirect() : undefined,
+      regex: undefined,
     });
   }
 
-  public readonly csp?: string;
-  public readonly filter?: string;
-  public readonly hostname?: string;
+  public readonly csp: string | undefined;
+  public readonly filter: string | undefined;
+  public readonly hostname: string | undefined;
   public readonly mask: number;
-  public readonly optDomains?: Uint32Array;
-  public readonly optNotDomains?: Uint32Array;
-  public readonly redirect?: string;
+  public readonly optDomains: Uint32Array | undefined;
+  public readonly optNotDomains: Uint32Array | undefined;
+  public readonly redirect: string | undefined;
 
   // Set only in debug mode
-  public readonly rawLine?: string;
+  public readonly rawLine: string | undefined;
 
   // Lazy attributes
-  public id?: number;
-  public regex?: RegExp;
-  private fuzzySignature?: Uint32Array;
+  public id: number | undefined;
+  public regex: RegExp | undefined;
+  private fuzzySignature: Uint32Array | undefined;
 
   constructor({
     csp,
@@ -667,7 +794,17 @@ export default class NetworkFilter implements IFilter {
     rawLine,
     redirect,
     regex,
-  }: { mask: number } & Partial<NetworkFilter>) {
+  }: {
+    csp: string | undefined;
+    filter: string | undefined;
+    hostname: string | undefined;
+    mask: number;
+    optDomains: Uint32Array | undefined;
+    optNotDomains: Uint32Array | undefined;
+    rawLine: string | undefined;
+    redirect: string | undefined;
+    regex: RegExp | undefined;
+  }) {
     this.csp = csp;
     this.filter = filter;
     this.hostname = hostname;
@@ -1076,9 +1213,15 @@ export default class NetworkFilter implements IFilter {
     if (this.regex === undefined) {
       this.regex =
         this.filter !== undefined && this.isRegex()
-          ? compileRegex(this.filter, this.isRightAnchor(), this.isLeftAnchor())
+          ? compileRegex(
+              this.filter,
+              this.isLeftAnchor(),
+              this.isRightAnchor(),
+              this.isFullRegex(),
+            )
           : MATCH_ALL;
     }
+
     return this.regex;
   }
 
@@ -1106,15 +1249,19 @@ export default class NetworkFilter implements IFilter {
     }
 
     // Get tokens from filter
-    if (this.filter !== undefined) {
-      const skipLastToken = this.isPlain() && !this.isRightAnchor() && !this.isFuzzy();
-      const skipFirstToken = !this.isLeftAnchor() && !this.isFuzzy();
-      tokenizeFilterInPlace(this.filter, skipFirstToken, skipLastToken, TOKENS_BUFFER);
-    }
+    if (this.isFullRegex() === false) {
+      if (this.filter !== undefined) {
+        const skipLastToken = this.isPlain() && !this.isRightAnchor() && !this.isFuzzy();
+        const skipFirstToken = !this.isLeftAnchor() && !this.isFuzzy();
+        tokenizeFilterInPlace(this.filter, skipFirstToken, skipLastToken, TOKENS_BUFFER);
+      }
 
-    // Append tokens from hostname, if any
-    if (this.hostname !== undefined) {
-      tokenizeInPlace(this.hostname, TOKENS_BUFFER);
+      // Append tokens from hostname, if any
+      if (this.hostname !== undefined) {
+        tokenizeInPlace(this.hostname, TOKENS_BUFFER);
+      }
+    } else if (this.filter !== undefined) {
+      tokenizeRegexInPlace(this.filter, TOKENS_BUFFER);
     }
 
     // If we got no tokens for the filter/hostname part, then we will dispatch
@@ -1183,12 +1330,19 @@ export default class NetworkFilter implements IFilter {
     return getBit(this.mask, NETWORK_FILTER_MASK.isImportant);
   }
 
+  public isFullRegex(): boolean {
+    return getBit(this.mask, NETWORK_FILTER_MASK.isFullRegex);
+  }
+
   public isRegex() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.isRegex);
+    return (
+      getBit(this.mask, NETWORK_FILTER_MASK.isRegex) ||
+      getBit(this.mask, NETWORK_FILTER_MASK.isFullRegex)
+    );
   }
 
   public isPlain() {
-    return !getBit(this.mask, NETWORK_FILTER_MASK.isRegex);
+    return !this.isRegex();
   }
 
   public isCSP() {

@@ -16,6 +16,7 @@ const UBlockOrigin = require('./blockers/ublock.js');
 const Brave = require('./blockers/brave.js');
 const Duckduckgo = require('./blockers/duckduckgo.js');
 const Cliqz = require('./blockers/cliqz.js');
+const CliqzCompression = require('./blockers/cliqz-compression.js');
 const AdBlockPlus = require('./blockers/adblockplus.js');
 const Tldts = require('./blockers/tldts_baseline.js');
 const Url = require('./blockers/url_baseline.js');
@@ -98,6 +99,7 @@ async function main() {
     brave: Brave,
     duckduckgo: Duckduckgo,
     cliqz: Cliqz,
+    cliqzCompression: CliqzCompression,
     re: Re,
     tldts: Tldts,
     ublock: UBlockOrigin,
