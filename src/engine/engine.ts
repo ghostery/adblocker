@@ -44,14 +44,29 @@ export default class FilterEngine {
     const buffer = StaticDataView.fromUint8Array(serialized);
 
     // Before starting deserialization, we make sure that the version of the
-    // serialized engine is the same as the current source code. If not, we start
-    // fresh and create a new engine from the lists.
+    // serialized engine is the same as the current source code. If not, we
+    // start fresh and create a new engine from the lists.
     const serializedEngineVersion = buffer.getUint8();
     if (ENGINE_VERSION !== serializedEngineVersion) {
       throw new Error(
-        `serialized engine version mismatch current is ${ENGINE_VERSION} but got ${serializedEngineVersion}`,
+        `serialized engine version mismatch, expected ${ENGINE_VERSION} but got ${serializedEngineVersion}`,
       );
     }
+
+    // Also make sure that the built-in checksum is correct. This allows to
+    // detect data corruption and start fresh if the serialized version was
+    // altered.
+    buffer.pos = serialized.length - 4;
+    const checksum = buffer.checksum();
+    const expected = buffer.getUint32();
+    if (checksum !== expected) {
+      throw new Error(
+        `serialized engine checksum mismatch, expected ${expected} but got ${checksum}`,
+      );
+    }
+
+    // Reset position to after engine version and start deserialization
+    buffer.pos = 1;
 
     // Create a new engine with same options
     const engine = new FilterEngine({
@@ -180,6 +195,9 @@ export default class FilterEngine {
     this.csp.serialize(buffer);
     this.genericHides.serialize(buffer);
     this.cosmetics.serialize(buffer);
+
+    // Append a checksum at the end
+    buffer.pushUint32(buffer.checksum());
 
     return buffer.slice();
   }
