@@ -34,7 +34,7 @@ export function hasEmptyIntersection(s1: Uint32Array, s2: Uint32Array): boolean 
   return !(i < s1.length && j < s2.length);
 }
 
-function concatTypedArrays(...arrays: Uint32Array[]): Uint32Array {
+export function concatTypedArrays(arrays: Uint32Array[]): Uint32Array {
   let totalSize = 0;
   for (let i = 0; i < arrays.length; i += 1) {
     totalSize += arrays[i].length;
@@ -54,5 +54,5 @@ function concatTypedArrays(...arrays: Uint32Array[]): Uint32Array {
 }
 
 export function mergeCompactSets(...arrays: Uint32Array[]): Uint32Array {
-  return compactTokens(concatTypedArrays(...arrays));
+  return compactTokens(concatTypedArrays(arrays));
 }

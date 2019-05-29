@@ -6,16 +6,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { getDomain, getHostname, parse } from 'tldts';
 import {
   fastHash,
   fetchLists,
   fetchResources,
   FiltersEngine,
-  makeRequest,
-  Request,
-  updateResponseHeadersWithCSP,
-} from '../index';
+  WebExtensionEngine,
+} from '../adblocker';
 
 /**
  * Initialize the adblocker using lists of filters and resources. It returns a
@@ -56,7 +53,7 @@ function loadAdblocker() {
     total = Date.now() - t0;
     console.log('deserialization', total);
 
-    return deserialized;
+    return new WebExtensionEngine(deserialized);
   });
 }
 
@@ -82,43 +79,19 @@ chrome.tabs.onActivated.addListener(({ tabId }: chrome.tabs.TabActiveInfo) =>
   updateBlockedCounter(tabId),
 );
 
-function requestFromDetails({
-  initiator,
-  type,
-  url,
-}:
-  | chrome.webRequest.WebRequestBodyDetails
-  | chrome.webRequest.WebResponseHeadersDetails): Request {
-  return makeRequest(
-    {
-      sourceUrl: initiator,
-      type,
-      url,
-    },
-    parse,
-  );
-}
-
 loadAdblocker().then((engine) => {
   // Start listening to requests, and allow 'blocking' so that we can cancel
   // some of them (or redirect).
   chrome.webRequest.onBeforeRequest.addListener(
     (details) => {
-      const { redirect, match } = engine.match(requestFromDetails(details));
+      const blockingResponse = engine.onBeforeRequest(details);
 
       updateBlockedCounter(details.tabId, {
-        incr: Boolean(redirect || match),
+        incr: Boolean(blockingResponse.cancel || blockingResponse.redirectUrl),
         reset: details.type === 'main_frame',
       });
 
-      // Create blocking response { cancel, redirectUrl }
-      if (redirect !== undefined) {
-        return { redirectUrl: redirect };
-      } else if (match === true) {
-        return { cancel: true };
-      }
-
-      return {};
+      return blockingResponse;
     },
     {
       urls: ['<all_urls>'],
@@ -127,67 +100,13 @@ loadAdblocker().then((engine) => {
   );
 
   chrome.webRequest.onHeadersReceived.addListener(
-    (details) =>
-      updateResponseHeadersWithCSP(details, engine.getCSPDirectives(requestFromDetails(details))),
+    (details) => engine.onHeadersReceived(details),
     { urls: ['<all_urls>'], types: ['main_frame'] },
     ['blocking', 'responseHeaders'],
   );
 
   // Start listening to messages coming from the content-script
-  chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-    if (sender.tab === undefined || sender.tab.id === undefined) {
-      return;
-    }
-
-    // Answer to content-script with a list of nodes
-    if (msg.action === 'getCosmeticsFilters') {
-      // Extract hostname from sender's URL
-      const url = sender.url || '';
-      const hostname = getHostname(url) || '';
-      const domain = getDomain(hostname) || '';
-
-      let t0 = Date.now();
-      const { active, styles, scripts } = engine.getCosmeticsFilters({
-        domain,
-        hostname,
-        url,
-      });
-      let total = Date.now() - t0;
-      console.log('getCosmeticsFilters', total);
-
-      if (active === false) {
-        return;
-      }
-
-      // Use tabs API to inject cosmetics
-      if (styles.length > 0) {
-        t0 = Date.now();
-        chrome.tabs.insertCSS(
-          sender.tab.id,
-          {
-            code: styles,
-            cssOrigin: 'user',
-            frameId: sender.frameId,
-            matchAboutBlank: true,
-            runAt: 'document_start',
-          },
-          () => {
-            total = Date.now() - t0;
-            console.log('insertCSS', total);
-            if (chrome.runtime.lastError) {
-              console.error('Error while injecting CSS', chrome.runtime.lastError.message);
-            }
-          },
-        );
-      }
-
-      // Inject scripts from content script
-      sendResponse({
-        active,
-        scripts,
-      });
-    }
-  });
+  chrome.runtime.onMessage.addListener((...args) => engine.onRuntimeMessage(...args));
 
   console.log('Ready to roll!');
 });

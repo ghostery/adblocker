@@ -10,7 +10,7 @@ import Config from '../config';
 import StaticDataView from '../data-view';
 import CosmeticFilter from '../filters/cosmetic';
 import NetworkFilter from '../filters/network';
-import Request, { RequestType } from '../request';
+import Request from '../request';
 import Resources from '../resources';
 
 import { IListDiff, parseFilters } from '../lists';
@@ -19,7 +19,7 @@ import NetworkFilterBucket from './bucket/network';
 
 import { IMessageFromBackground } from '../content/communication';
 
-export const ENGINE_VERSION = 26;
+export const ENGINE_VERSION = 27;
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -284,22 +284,53 @@ export default class FilterEngine {
    * either to apply cosmetics on a page or alter network requests.
    */
 
+  public getGenericCosmetics(): IMessageFromBackground {
+    return {
+      active: false,
+      extended: [],
+      scripts: [],
+      styles: '',
+    };
+  }
+
   /**
    * Given `hostname` and `domain` of a page (or frame), return the list of
    * styles and scripts to inject in the page.
    */
   public getCosmeticsFilters({
+    // Page information
     url,
     hostname,
     domain,
+
+    // DOM information
+    classes,
+    hrefs,
+    ids,
+
+    // Allows to specify which rules to return
+    getBaseRules = true,
+    getInjectionRules = true,
+    getRulesFromDOM = true,
+    getRulesFromHostname = true,
   }: {
     url: string;
     hostname: string;
     domain: string | null | undefined;
+
+    classes?: string[];
+    hrefs?: string[];
+    ids?: string[];
+
+    getBaseRules?: boolean;
+    getInjectionRules?: boolean;
+    getRulesFromDOM?: boolean;
+    getRulesFromHostname?: boolean;
   }): IMessageFromBackground {
     if (this.config.loadCosmeticFilters === false) {
       return {
         active: false,
+        extended: [],
         scripts: [],
         styles: '',
       };
@@ -307,9 +338,7 @@ export default class FilterEngine {
 
     // Check if there is some generichide
     const genericHides = this.genericHides.matchAll(
-      new Request({
-        type: 'document',
-
+      Request.fromRawDetails({
         domain: domain || '',
         hostname,
         url,
@@ -344,11 +373,21 @@ export default class FilterEngine {
       genericHideFilter === null || genericHideFilter.isException() === false;
 
     // Lookup injections as well as stylesheets
-    const { injections, stylesheet } = this.cosmetics.getCosmeticsFilters(
+    const { injections, stylesheet } = this.cosmetics.getCosmeticsFilters({
+      domain: domain || '',
       hostname,
-      domain || '',
+
+      classes,
+      hrefs,
+      ids,
+
       allowGenericHides,
-    );
+
+      getBaseRules,
+      getInjectionRules,
+      getRulesFromDOM,
+      getRulesFromHostname,
+    });
 
     // Perform interpolation for injected scripts
     const scripts: string[] = [];
@@ -361,6 +400,7 @@ export default class FilterEngine {
 
     return {
       active: true,
+      extended: [],
       scripts,
       styles: stylesheet,
     };
@@ -392,7 +432,7 @@ export default class FilterEngine {
       return undefined;
     }
 
-    if (request.isSupported !== true || request.type !== RequestType.document) {
+    if (request.isSupported !== true || request.type !== 'main_frame') {
       return undefined;
     }
 

@@ -129,7 +129,7 @@ async function main() {
       diff = process.hrtime(start);
       serializationTimings.push((diff[0] * 1000000000 + diff[1]) / 1000000);
     }
-    cacheSize = serialized.length;
+    cacheSize = serialized.length || serialized.byteLength;
 
     // Deserialize
     for (let i = 0; i < 100; i += 1) {

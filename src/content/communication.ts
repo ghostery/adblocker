@@ -10,4 +10,14 @@ export interface IMessageFromBackground {
   active: boolean;
   scripts: string[];
   styles: string;
+  extended: string[];
+}
+
+export type Lifecycle = 'start' | 'dom-update';
+
+export interface IBackgroundCallback {
+  classes: string[];
+  hrefs: string[];
+  ids: string[];
+  lifecycle: Lifecycle;
 }

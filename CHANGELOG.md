@@ -4,6 +4,34 @@
 
 *not released yet*
 
+  * [BREAKING] `getCosmeticsFilter` API changed to allow finer-grain subsetting
+    of cosmetic filters returned: hostname-specific, DOM-specific, generic, etc.
+    This allows to inject x70 less custom styles in frames for the same
+    blocking, which results in a massive memory decrease as well as less time
+    spent in repaint.
+  * [BREAKING] cosmetic unhide filters without hostname constraints are allowed.
+  * [BREAKING] `NetworkFilter.isCptAllowed` now accept request type as a string.
+  * [BREAKING] drop support for legacy Firefox Bootstrap request types.
+  * Fix matching of hostnames anchors with wildcard.
+  * Add support for `$frame` option in network filters.
+  * Add support for `$document` and `$doc` options in network filters.
+  * Add soft dependency to tldts to simplify API
+    - left as require/import in normal bundles
+    - bundled in minified bundles
+  * Add tests for Request abstraction
+  * Add static method helpers to create Request instances
+    - `Request.fromRawDetails(...)`
+    - `Request.fromWebRequestDetails(...)`
+    - `Request.fromPuppeteerDetails(...)`
+    - `Request.fromElectronDetails(...)`
+  * Add tests for injection using `jsdom`
+  * Cosmetic filtering performance improvements
+    - Make use of DOM information to return subset of filters: ids, classes, hrefs
+    - Make use of MutationObserver from content-script to return new DOM info
+  * Create integration benchmark to measure full extension
+  * Add Request parsing micro-benchmark
+  * Update bench/comparison to use adblock-rs instead of ad-block
+
 ## 0.9.1
 
 *03-05-2019*
