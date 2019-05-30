@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 import { generate } from 'tsmaz';
 
-import { parseFilters } from '../index';
+import { parseFilters } from '../adblocker';
 
 function readAsset(filepath: string): string {
   return readFileSync(resolve(__dirname, '../', filepath), 'utf-8');
