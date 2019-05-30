@@ -4,33 +4,40 @@
 
 *not released yet*
 
+  * Add built-in error detection code in serialized engine [#165](https://github.com/cliqz-oss/adblocker/pull/165)
+    - To prevent un-noticed data corruptions of the serialized adblocker,
+      FiltersEngine.serialize now automatically includes a crc32 checksum and
+      FiltersEngine.deserialize will automatically check integrity of the given
+      serialized engine. Any mismatch will raise an exception like when the
+      version of the adblocker does not match between the serialized engine and
+      the code using to load it.
   * [BREAKING] `getCosmeticsFilter` API changed to allow finer-grain subsetting
     of cosmetic filters returned: hostname-specific, DOM-specific, generic, etc.
     This allows to inject x70 less custom styles in frames for the same
     blocking, which results in a massive memory decrease as well as less time
-    spent in repaint.
-  * [BREAKING] cosmetic unhide filters without hostname constraints are allowed.
-  * [BREAKING] `NetworkFilter.isCptAllowed` now accept request type as a string.
-  * [BREAKING] drop support for legacy Firefox Bootstrap request types.
-  * Fix matching of hostnames anchors with wildcard.
-  * Add support for `$frame` option in network filters.
-  * Add support for `$document` and `$doc` options in network filters.
-  * Add soft dependency to tldts to simplify API
+    spent in repaint. [#163](https://github.com/cliqz-oss/adblocker/pull/163)
+  * [BREAKING] cosmetic unhide filters without hostname constraints are allowed. [#163](https://github.com/cliqz-oss/adblocker/pull/163)
+  * [BREAKING] `NetworkFilter.isCptAllowed` now accept request type as a string. [#163](https://github.com/cliqz-oss/adblocker/pull/163)
+  * [BREAKING] drop support for legacy Firefox Bootstrap request types. [#163](https://github.com/cliqz-oss/adblocker/pull/163)
+  * Fix matching of hostnames anchors with wildcard. [#163](https://github.com/cliqz-oss/adblocker/pull/163)
+  * Add support for `$frame` option in network filters. [#163](https://github.com/cliqz-oss/adblocker/pull/163)
+  * Add support for `$document` and `$doc` options in network filters. [#163](https://github.com/cliqz-oss/adblocker/pull/163)
+  * Add soft dependency to tldts to simplify API [#163](https://github.com/cliqz-oss/adblocker/pull/163)
     - left as require/import in normal bundles
     - bundled in minified bundles
-  * Add tests for Request abstraction
-  * Add static method helpers to create Request instances
+  * Add tests for Request abstraction [#163](https://github.com/cliqz-oss/adblocker/pull/163)
+  * Add static method helpers to create Request instances [#163](https://github.com/cliqz-oss/adblocker/pull/163)
     - `Request.fromRawDetails(...)`
     - `Request.fromWebRequestDetails(...)`
     - `Request.fromPuppeteerDetails(...)`
     - `Request.fromElectronDetails(...)`
-  * Add tests for injection using `jsdom`
-  * Cosmetic filtering performance improvements
+  * Add tests for injection using `jsdom` [#163](https://github.com/cliqz-oss/adblocker/pull/163)
+  * Cosmetic filtering performance improvements [#163](https://github.com/cliqz-oss/adblocker/pull/163)
     - Make use of DOM information to return subset of filters: ids, classes, hrefs
     - Make use of MutationObserver from content-script to return new DOM info
-  * Create integration benchmark to measure full extension
-  * Add Request parsing micro-benchmark
-  * Update bench/comparison to use adblock-rs instead of ad-block
+  * Create integration benchmark to measure full extension [#163](https://github.com/cliqz-oss/adblocker/pull/163)
+  * Add Request parsing micro-benchmark [#163](https://github.com/cliqz-oss/adblocker/pull/163)
+  * Update bench/comparison to use adblock-rs instead of ad-block [#163](https://github.com/cliqz-oss/adblocker/pull/163)
 
 ## 0.9.1
 

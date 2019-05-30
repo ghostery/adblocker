@@ -6,6 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import crc32 from './crc32';
 import { decode, encode } from './punycode';
 
 export const EMPTY_UINT8_ARRAY = new Uint8Array(0);
@@ -84,6 +85,10 @@ export default class StaticDataView {
 
     this.buffer = buffer !== undefined ? buffer : new Uint8Array(length);
     this.pos = 0;
+  }
+
+  public checksum(): number {
+    return crc32(this.buffer, 0, this.pos);
   }
 
   public dataAvailable(): boolean {

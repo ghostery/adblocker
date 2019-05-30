@@ -68,6 +68,28 @@ describe('Serialization', () => {
       expect(Engine.deserialize(serialized)).toEqual(engine);
     });
 
+    it('fails with wrong checksum', () => {
+      const engine = new Engine();
+      const serialized = engine.serialize(buffer);
+      for (let i = 0; i < serialized.length; i += 1) {
+        const value = serialized[i];
+        let randomValue = value;
+        while (randomValue === value) {
+          randomValue = Math.floor(Math.random() * 255);
+        }
+        serialized[i] = randomValue;
+
+        // Expect engine to throw
+        expect(() => {
+          Engine.deserialize(serialized);
+        }).toThrow();
+
+        serialized[i] = value;
+      }
+
+      expect(Engine.deserialize(serialized)).toEqual(engine);
+    });
+
     it('handles full engine', () => {
       const engine = new Engine();
       engine.updateResources(loadResources(), 'resources1');
