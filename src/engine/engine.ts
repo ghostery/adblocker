@@ -34,10 +34,7 @@ function btoaPolyfill(buffer: string): string {
 export default class FilterEngine {
   public static parse(filters: string, options: Partial<Config> = {}): FilterEngine {
     const config = new Config(options);
-    return new FilterEngine({
-      ...parseFilters(filters, config),
-      config,
-    });
+    return new FilterEngine(Object.assign({}, parseFilters(filters, config), { config }));
   }
 
   public static deserialize(serialized: Uint8Array): FilterEngine {
@@ -207,7 +204,7 @@ export default class FilterEngine {
    */
 
   public loadedLists(): string[] {
-    return [...this.lists.keys()];
+    return Array.from(this.lists.keys());
   }
 
   public hasList(name: string, checksum: string): boolean {
@@ -430,12 +427,12 @@ export default class FilterEngine {
   public matchAll(request: Request): Set<NetworkFilter> {
     const filters: NetworkFilter[] = [];
     if (request.isSupported) {
-      filters.push(...this.importants.matchAll(request));
-      filters.push(...this.filters.matchAll(request));
-      filters.push(...this.exceptions.matchAll(request));
-      filters.push(...this.csp.matchAll(request));
-      filters.push(...this.genericHides.matchAll(request));
-      filters.push(...this.redirects.matchAll(request));
+      Array.prototype.push.apply(filters, this.importants.matchAll(request));
+      Array.prototype.push.apply(filters, this.filters.matchAll(request));
+      Array.prototype.push.apply(filters, this.exceptions.matchAll(request));
+      Array.prototype.push.apply(filters, this.csp.matchAll(request));
+      Array.prototype.push.apply(filters, this.genericHides.matchAll(request));
+      Array.prototype.push.apply(filters, this.redirects.matchAll(request));
     }
 
     return new Set(filters);
@@ -478,7 +475,11 @@ export default class FilterEngine {
     }
 
     // Combine all CSPs (except the black-listed ones)
-    return [...enabledCsp].filter((csp) => !disabledCsp.has(csp)).join('; ') || undefined;
+    return (
+      Array.from(enabledCsp)
+        .filter((csp) => !disabledCsp.has(csp))
+        .join('; ') || undefined
+    );
   }
 
   /**

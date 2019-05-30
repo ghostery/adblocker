@@ -44,7 +44,7 @@ ${script}
  * Given a function which can accept arguments, serialize it into a string (as
  * well as its argument) so that it will automatically execute upon injection.
  */
-function autoCallFunction(fn: (...args: any[]) => void, ...args: any[]): string {
+function autoCallFunction(fn: (...args: any[]) => void, args: any[]): string {
   return `
 try {
   (${fn.toString()})(${args.map((arg) => JSON.stringify(arg)).join(', ')});
@@ -84,6 +84,6 @@ export function injectScript(s: string, doc: Document): void {
  * window's document as a self-executing, self-erasing script element.
  */
 export function bundle(fn: (...args: any[]) => void, deps: Array<(...args: any[]) => any> = []) {
-  return (window: Window, ...args: any[]) =>
-    injectScript(wrapCallableInContext(autoCallFunction(fn, ...args), deps), window.document);
+  return (window: Window, args: any[]) =>
+    injectScript(wrapCallableInContext(autoCallFunction(fn, args), deps), window.document);
 }
