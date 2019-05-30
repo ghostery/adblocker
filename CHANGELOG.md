@@ -4,6 +4,7 @@
 
 *not released yet*
 
+  * Remove dependency on tslib [#167](https://github.com/cliqz-oss/adblocker/pull/167)
   * Add built-in error detection code in serialized engine [#165](https://github.com/cliqz-oss/adblocker/pull/165)
     - To prevent un-noticed data corruptions of the serialized adblocker,
       FiltersEngine.serialize now automatically includes a crc32 checksum and

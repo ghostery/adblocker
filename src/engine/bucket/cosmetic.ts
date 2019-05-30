@@ -80,7 +80,10 @@ function createStylesheetFromRulesWithCustomStyles(rules: CosmeticFilter[]): str
   }
 
   const stylesheets: string[] = [];
-  for (const [style, selectors] of selectorsPerStyle.entries()) {
+  const selectorsPerStyleArray = Array.from(selectorsPerStyle.entries());
+  for (let i = 0; i < selectorsPerStyleArray.length; i += 1) {
+    const style = selectorsPerStyleArray[i][0];
+    const selectors = selectorsPerStyleArray[i][1];
     stylesheets.push(createStylesheet(selectors, style));
   }
 

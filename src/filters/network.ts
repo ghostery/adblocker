@@ -650,8 +650,8 @@ export default class NetworkFilter implements IFilter {
 
   // Lazy attributes
   public id?: number;
+  public regex?: RegExp;
   private fuzzySignature?: Uint32Array;
-  private regex?: RegExp;
 
   constructor({
     csp,
@@ -663,7 +663,7 @@ export default class NetworkFilter implements IFilter {
     rawLine,
     redirect,
     regex,
-  }: { mask: number; regex?: RegExp } & Partial<NetworkFilter>) {
+  }: { mask: number } & Partial<NetworkFilter>) {
     this.csp = csp;
     this.filter = filter;
     this.hostname = hostname;

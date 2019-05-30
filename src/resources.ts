@@ -56,7 +56,9 @@ export default class Resources {
       const resource = trimComments(chunks[i]).trim();
       if (resource.length !== 0) {
         const firstNewLine = resource.indexOf('\n');
-        const [name, type] = resource.slice(0, firstNewLine).split(/\s+/);
+        const split = resource.slice(0, firstNewLine).split(/\s+/);
+        const name = split[0];
+        const type = split[1];
         const body = resource.slice(firstNewLine + 1);
 
         if (name === undefined || type === undefined || body === undefined) {

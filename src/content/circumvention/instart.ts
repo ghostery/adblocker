@@ -427,8 +427,8 @@ export default function instart(window: Window): void {
     // Un-comment to debug InstartLogic
     // protectConsole(window);
 
-    swallowOwnErrors(window, contentScriptMagic);
-    monkeyPatchNanoVisor(window, contentScriptMagic);
-    shieldPropertiesFromInstart(window, contentScriptMagic);
+    swallowOwnErrors(window, [contentScriptMagic]);
+    monkeyPatchNanoVisor(window, [contentScriptMagic]);
+    shieldPropertiesFromInstart(window, [contentScriptMagic]);
   }
 }

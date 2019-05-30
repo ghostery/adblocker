@@ -35,7 +35,7 @@ function groupBy(
     const filter = filters[i];
     setWithDefault(grouped, criteria(filter), filter);
   }
-  return [...grouped.values()];
+  return Array.from(grouped.values());
 }
 
 function splitBy(
@@ -92,15 +92,16 @@ const OPTIMIZATIONS: IOptimization[] = [
         }
       }
 
-      return new NetworkFilter({
-        ...filters[0],
-        optDomains: domains.size > 0 ? new Uint32Array(domains).sort() : undefined,
-        optNotDomains: notDomains.size > 0 ? new Uint32Array(notDomains).sort() : undefined,
-        rawLine:
-          filters[0].rawLine !== undefined
-            ? filters.map(({ rawLine }) => rawLine).join(' <+> ')
-            : undefined,
-      });
+      return new NetworkFilter(
+        Object.assign({}, filters[0], {
+          optDomains: domains.size > 0 ? new Uint32Array(domains).sort() : undefined,
+          optNotDomains: notDomains.size > 0 ? new Uint32Array(notDomains).sort() : undefined,
+          rawLine:
+            filters[0].rawLine !== undefined
+              ? filters.map(({ rawLine }) => rawLine).join(' <+> ')
+              : undefined,
+        }),
+      );
     },
     groupByCriteria: (filter: NetworkFilter) =>
       filter.getHostname() + filter.getFilter() + filter.getMask() + filter.getRedirect(),
@@ -126,15 +127,16 @@ const OPTIMIZATIONS: IOptimization[] = [
         }
       }
 
-      return new NetworkFilter({
-        ...filters[0],
-        mask: setBit(filters[0].mask, NETWORK_FILTER_MASK.isRegex),
-        rawLine:
-          filters[0].rawLine !== undefined
-            ? filters.map(({ rawLine }) => rawLine).join(' <+> ')
-            : undefined,
-        regex: new RegExp(patterns.join('|')),
-      });
+      return new NetworkFilter(
+        Object.assign({}, filters[0], {
+          mask: setBit(filters[0].mask, NETWORK_FILTER_MASK.isRegex),
+          rawLine:
+            filters[0].rawLine !== undefined
+              ? filters.map(({ rawLine }) => rawLine).join(' <+> ')
+              : undefined,
+          regex: new RegExp(patterns.join('|')),
+        }),
+      );
     },
     groupByCriteria: (filter: NetworkFilter) => '' + filter.getMask(),
     select: (filter: NetworkFilter) =>
