@@ -59,15 +59,22 @@ export default class StaticDataView {
   /**
    * Create an empty (i.e.: size = 0) StaticDataView.
    */
-  public static empty(options?: IDataViewOptions): StaticDataView {
+  public static empty(options: IDataViewOptions): StaticDataView {
     return StaticDataView.fromUint8Array(EMPTY_UINT8_ARRAY, options);
   }
 
   /**
    * Instantiate a StaticDataView instance from `array` of type Uint8Array.
    */
-  public static fromUint8Array(array: Uint8Array, options?: IDataViewOptions): StaticDataView {
-    return new StaticDataView(0, array, options);
+  public static fromUint8Array(array: Uint8Array, options: IDataViewOptions): StaticDataView {
+    return new StaticDataView(array, options);
+  }
+
+  /**
+   * Instantiate a StaticDataView with given `capacity` number of bytes.
+   */
+  public static allocate(capacity: number, options: IDataViewOptions): StaticDataView {
+    return new StaticDataView(new Uint8Array(capacity), options);
   }
 
   /**
@@ -79,13 +86,9 @@ export default class StaticDataView {
 
   public pos: number;
   public buffer: Uint8Array;
-  public readonly enableCompression: boolean;
+  public enableCompression: boolean;
 
-  constructor(
-    length: number,
-    buffer?: Uint8Array,
-    { enableCompression }: IDataViewOptions = { enableCompression: true },
-  ) {
+  constructor(buffer: Uint8Array, { enableCompression }: IDataViewOptions) {
     if (LITTLE_ENDIAN === false) {
       // This check makes sure that we will not load the adblocker on a
       // big-endian system. This would not work since byte ordering is important
@@ -94,7 +97,7 @@ export default class StaticDataView {
     }
 
     this.enableCompression = enableCompression;
-    this.buffer = buffer !== undefined ? buffer : new Uint8Array(length);
+    this.buffer = buffer;
     this.pos = 0;
   }
 

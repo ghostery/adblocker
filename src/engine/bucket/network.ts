@@ -6,10 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import Config from '../../config';
 import StaticDataView from '../../data-view';
 import NetworkFilter from '../../filters/network';
 import Request from '../../request';
-import networkFiltersOptimizer from '../optimizer';
+import { noopOptimizeNetwork, optimizeNetwork } from '../optimizer';
 import ReverseIndex from '../reverse-index';
 import FiltersContainer from './filters';
 
@@ -17,24 +18,20 @@ import FiltersContainer from './filters';
  * Accelerating data structure for network filters matching.
  */
 export default class NetworkFilterBucket {
-  public static deserialize(buffer: StaticDataView): NetworkFilterBucket {
-    const enableOptimizations = buffer.getBool();
-    const bucket = new NetworkFilterBucket({ enableOptimizations });
+  public static deserialize(buffer: StaticDataView, config: Config): NetworkFilterBucket {
+    const bucket = new NetworkFilterBucket({ config });
 
     bucket.index = ReverseIndex.deserialize(
       buffer,
       NetworkFilter.deserialize,
-      enableOptimizations ? networkFiltersOptimizer : undefined,
+      config.enableOptimizations ? optimizeNetwork : noopOptimizeNetwork,
+      config,
     );
 
-    bucket.badFilters = FiltersContainer.deserialize(buffer, NetworkFilter.deserialize);
+    bucket.badFilters = FiltersContainer.deserialize(buffer, NetworkFilter.deserialize, config);
 
     return bucket;
   }
-
-  // Optimizations allow to speed-up the matching of filters when they are
-  // loaded in memory from the reverse index.
-  public enableOptimizations: boolean;
 
   public index: ReverseIndex<NetworkFilter>;
 
@@ -48,29 +45,27 @@ export default class NetworkFilterBucket {
   // should be disabled (only one lookup is needed).
   private badFiltersIds: Set<number> | null;
 
-  constructor({
-    filters = [],
-    enableOptimizations = true,
-  }: {
-    filters?: NetworkFilter[];
-    enableOptimizations?: boolean;
-  } = {}) {
-    this.enableOptimizations = enableOptimizations;
-
+  constructor({ filters = [], config }: { filters?: NetworkFilter[]; config: Config }) {
     this.index = new ReverseIndex({
+      config,
       deserialize: NetworkFilter.deserialize,
-      optimize: enableOptimizations ? networkFiltersOptimizer : undefined,
+      filters: [],
+      optimize: config.enableOptimizations ? optimizeNetwork : noopOptimizeNetwork,
     });
 
     this.badFiltersIds = null;
-    this.badFilters = new FiltersContainer({ deserialize: NetworkFilter.deserialize });
+    this.badFilters = new FiltersContainer({
+      deserialize: NetworkFilter.deserialize,
+      config,
+      filters: [],
+    });
 
     if (filters.length !== 0) {
-      this.update(filters);
+      this.update(filters, undefined);
     }
   }
 
-  public update(newFilters: NetworkFilter[], removedFilters?: Set<number>): void {
+  public update(newFilters: NetworkFilter[], removedFilters: Set<number> | undefined): void {
     const badFilters: NetworkFilter[] = [];
     const remaining: NetworkFilter[] = [];
     for (let i = 0; i < newFilters.length; i += 1) {
@@ -88,7 +83,6 @@ export default class NetworkFilterBucket {
   }
 
   public serialize(buffer: StaticDataView): void {
-    buffer.pushBool(this.enableOptimizations);
     this.index.serialize(buffer);
     this.badFilters.serialize(buffer);
   }

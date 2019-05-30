@@ -15,7 +15,7 @@ describe('#Resources', () => {
   describe('#serialize', () => {
     const resources = Resources.parse(loadResources(), { checksum: 'checksum' });
     expect(resources.checksum).toEqual('checksum');
-    const buffer = new StaticDataView(2000000);
+    const buffer = StaticDataView.allocate(2000000, { enableCompression: false });
     resources.serialize(buffer);
     buffer.seekZero();
     expect(Resources.deserialize(buffer)).toEqual(resources);

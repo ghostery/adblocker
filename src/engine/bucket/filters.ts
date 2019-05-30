@@ -6,6 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import Config from '../../config';
 import StaticDataView from '../../data-view';
 import IFilter from '../../filters/interface';
 
@@ -24,8 +25,9 @@ export default class FiltersContainer<T extends IFilter> {
   public static deserialize<T extends IFilter>(
     buffer: StaticDataView,
     deserialize: (view: StaticDataView) => T,
+    config: Config,
   ): FiltersContainer<T> {
-    const container = new FiltersContainer({ deserialize });
+    const container = new FiltersContainer({ deserialize, config, filters: [] });
     container.filters = buffer.getBytes();
     return container;
   }
@@ -34,25 +36,31 @@ export default class FiltersContainer<T extends IFilter> {
   public filters: Uint8Array;
   private readonly deserialize: (view: StaticDataView) => T;
 
+  // This does not need to be serialized as it is owned globally by the FiltersEngine.
+  private readonly config: Config;
+
   constructor({
-    filters = [],
+    config,
     deserialize,
+    filters,
   }: {
-    filters?: T[];
+    config: Config;
     deserialize: (view: StaticDataView) => T;
+    filters: T[];
   }) {
     this.deserialize = deserialize;
     this.filters = EMPTY_FILTERS;
+    this.config = config;
 
     if (filters.length !== 0) {
-      this.update(filters);
+      this.update(filters, undefined);
     }
   }
 
   /**
    * Update filters based on `newFilters` and `removedFilters`.
    */
-  public update(newFilters: T[], removedFilters?: Set<number>): void {
+  public update(newFilters: T[], removedFilters: Set<number> | undefined): void {
     // Estimate size of the buffer we will need to store filters. This avoids
     // having to allocate a big chunk of memory up-front if it's not needed.
     // We start with the current size of `this.filters` then update it with
@@ -101,7 +109,7 @@ export default class FiltersContainer<T extends IFilter> {
       this.filters = EMPTY_FILTERS;
     } else if (storedFiltersAdded === true || storedFiltersRemoved === true) {
       // Store filters in their compact form
-      const buffer = new StaticDataView(bufferSizeEstimation);
+      const buffer = StaticDataView.allocate(bufferSizeEstimation, this.config);
       buffer.pushUint32(selected.length);
       for (let i = 0; i < selected.length; i += 1) {
         selected[i].serialize(buffer);
@@ -124,7 +132,7 @@ export default class FiltersContainer<T extends IFilter> {
 
     // Load all filters in memory and store them in `cache`
     const filters = [];
-    const buffer = StaticDataView.fromUint8Array(this.filters);
+    const buffer = StaticDataView.fromUint8Array(this.filters, this.config);
     const numberOfFilters = buffer.getUint32();
     for (let i = 0; i < numberOfFilters; i += 1) {
       filters.push(this.deserialize(buffer));

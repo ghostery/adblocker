@@ -38,7 +38,9 @@ export default class FilterEngine {
   }
 
   public static deserialize(serialized: Uint8Array): FilterEngine {
-    const buffer = StaticDataView.fromUint8Array(serialized);
+    const buffer = StaticDataView.fromUint8Array(serialized, {
+      enableCompression: false,
+    });
 
     // Before starting deserialization, we make sure that the version of the
     // serialized engine is the same as the current source code. If not, we
@@ -66,9 +68,13 @@ export default class FilterEngine {
     buffer.pos = 1;
 
     // Create a new engine with same options
-    const engine = new FilterEngine({
-      config: Config.deserialize(buffer),
-    });
+    const config = Config.deserialize(buffer);
+    const engine = new FilterEngine({ config });
+
+    // Optionally turn compression ON
+    if (config.enableCompression) {
+      buffer.enableCompression = true;
+    }
 
     // Deserialize resources
     engine.resources = Resources.deserialize(buffer);
@@ -82,13 +88,13 @@ export default class FilterEngine {
     engine.lists = lists;
 
     // Deserialize buckets
-    engine.filters = NetworkFilterBucket.deserialize(buffer);
-    engine.exceptions = NetworkFilterBucket.deserialize(buffer);
-    engine.importants = NetworkFilterBucket.deserialize(buffer);
-    engine.redirects = NetworkFilterBucket.deserialize(buffer);
-    engine.csp = NetworkFilterBucket.deserialize(buffer);
-    engine.genericHides = NetworkFilterBucket.deserialize(buffer);
-    engine.cosmetics = CosmeticFilterBucket.deserialize(buffer);
+    engine.filters = NetworkFilterBucket.deserialize(buffer, config);
+    engine.exceptions = NetworkFilterBucket.deserialize(buffer, config);
+    engine.importants = NetworkFilterBucket.deserialize(buffer, config);
+    engine.redirects = NetworkFilterBucket.deserialize(buffer, config);
+    engine.csp = NetworkFilterBucket.deserialize(buffer, config);
+    engine.genericHides = NetworkFilterBucket.deserialize(buffer, config);
+    engine.cosmetics = CosmeticFilterBucket.deserialize(buffer, config);
 
     return engine;
   }
@@ -125,27 +131,19 @@ export default class FilterEngine {
     this.lists = lists;
 
     // $csp=
-    this.csp = new NetworkFilterBucket({ enableOptimizations: false });
+    this.csp = new NetworkFilterBucket({ config: this.config });
     // $generichide
-    this.genericHides = new NetworkFilterBucket({ enableOptimizations: false });
+    this.genericHides = new NetworkFilterBucket({ config: this.config });
     // @@filter
-    this.exceptions = new NetworkFilterBucket({
-      enableOptimizations: this.config.enableOptimizations,
-    });
+    this.exceptions = new NetworkFilterBucket({ config: this.config });
     // $important
-    this.importants = new NetworkFilterBucket({
-      enableOptimizations: this.config.enableOptimizations,
-    });
+    this.importants = new NetworkFilterBucket({ config: this.config });
     // $redirect
-    this.redirects = new NetworkFilterBucket({
-      enableOptimizations: this.config.enableOptimizations,
-    });
+    this.redirects = new NetworkFilterBucket({ config: this.config });
     // All other filters
-    this.filters = new NetworkFilterBucket({
-      enableOptimizations: this.config.enableOptimizations,
-    });
+    this.filters = new NetworkFilterBucket({ config: this.config });
     // Cosmetic filters
-    this.cosmetics = new CosmeticFilterBucket();
+    this.cosmetics = new CosmeticFilterBucket({ config: this.config });
 
     // Injections
     this.resources = new Resources();
@@ -167,7 +165,7 @@ export default class FilterEngine {
     // Create a big buffer! It should always be bigger than the serialized
     // engine since `StaticDataView` will neither resize it nor detect overflows
     // (for efficiency purposes).
-    const buffer = StaticDataView.fromUint8Array(array || new Uint8Array(9000000));
+    const buffer = StaticDataView.fromUint8Array(array || new Uint8Array(9000000), this.config);
 
     buffer.pushUint8(ENGINE_VERSION);
 
@@ -490,12 +488,12 @@ export default class FilterEngine {
     request: Request,
   ): {
     match: boolean;
-    redirect?: string;
-    exception?: NetworkFilter;
-    filter?: NetworkFilter;
+    redirect: string | undefined;
+    exception: NetworkFilter | undefined;
+    filter: NetworkFilter | undefined;
   } {
     if (!this.config.loadNetworkFilters) {
-      return { match: false };
+      return { match: false, redirect: undefined, exception: undefined, filter: undefined };
     }
 
     let filter: NetworkFilter | undefined;

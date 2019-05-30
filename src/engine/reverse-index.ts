@@ -6,6 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import Config from '../config';
 import StaticDataView, { EMPTY_UINT32_ARRAY } from '../data-view';
 import IFilter from '../filters/interface';
 import { fastHash } from '../utils';
@@ -46,19 +47,12 @@ class Counter<K> {
 }
 
 /**
- * Optimizer which returns the list of original filters.
- */
-function noopOptimize<T>(filters: T[]): T[] {
-  return filters;
-}
-
-/**
  * Generate unique IDs for requests, which is used to avoid matching the same
  * buckets multiple times on the same request (which can happen if a token
  * appears more than once in a URL).
  */
 let UID = 1;
-function getNextId() {
+function getNextId(): number {
   const id = UID;
   UID = (UID + 1) % 1000000000;
   return id;
@@ -72,7 +66,7 @@ interface Bucket<T extends IFilter> {
   lastRequestSeen: number;
 }
 
-const EMPTY_BUCKET = Number.MAX_SAFE_INTEGER >>> 0;
+const EMPTY_BUCKET: number = Number.MAX_SAFE_INTEGER >>> 0;
 
 /**
  * The ReverseIndex is an accelerating data structure which allows finding a
@@ -125,7 +119,8 @@ export default class ReverseIndex<T extends IFilter> {
   public static deserialize<T extends IFilter>(
     buffer: StaticDataView,
     deserialize: (view: StaticDataView) => T,
-    optimize: (filters: T[]) => T[] = noopOptimize,
+    optimize: (filters: T[]) => T[],
+    config: Config,
   ): ReverseIndex<T> {
     const tokensLookupIndexSize = buffer.getUint32();
     const tokensLookupIndexStart = buffer.getUint32();
@@ -135,7 +130,7 @@ export default class ReverseIndex<T extends IFilter> {
     // appear at any offset of `buffer`. But to be sure we can read back
     // Uint32Array directly from raw buffer, the alignement has to be a multiple
     // of 4. The same alignement is taken care of in `serialize`.
-    const view = StaticDataView.fromUint8Array(buffer.getBytes(true /* align */));
+    const view = StaticDataView.fromUint8Array(buffer.getBytes(true /* align */), config);
 
     // Read Uint32Array views on top of byte array for fast access.
     view.setPos(tokensLookupIndexStart);
@@ -145,7 +140,9 @@ export default class ReverseIndex<T extends IFilter> {
     view.seekZero();
 
     return new ReverseIndex<T>({
+      config,
       deserialize,
+      filters: [],
       optimize,
 
       // Packed internal representation
@@ -177,6 +174,8 @@ export default class ReverseIndex<T extends IFilter> {
   // efficient; for example by reducing the number of filters.
   private readonly optimize: (filters: T[]) => T[];
 
+  private readonly config: Config;
+
   // In-memory cache used to keep track of buckets which have been loaded from
   // the compact representation (i.e.: this.view). It is not strictly necessary
   // but will speed-up retrival of popular filters.
@@ -184,8 +183,9 @@ export default class ReverseIndex<T extends IFilter> {
 
   constructor({
     deserialize,
-    filters = [],
-    optimize = noopOptimize,
+    filters,
+    optimize,
+    config,
 
     // These arguments are only used while initializing the reverse index from
     // its serialized representation. By default they are initialized such as
@@ -195,8 +195,9 @@ export default class ReverseIndex<T extends IFilter> {
     view,
   }: {
     deserialize: (view: StaticDataView) => T;
-    filters?: T[];
-    optimize?: (filters: T[]) => T[];
+    filters: T[];
+    optimize: (filters: T[]) => T[];
+    config: Config;
 
     // This section contains arguments which are used while initializing a
     // reverse index from its compact form (e.g.: after serialization)
@@ -221,6 +222,8 @@ export default class ReverseIndex<T extends IFilter> {
     // to be performed (e.g.: fusion of similar filters, etc.). Have a look into
     // `./src/engine/optimizer.ts` for examples of such optimizations.
     this.optimize = optimize;
+
+    this.config = config;
 
     // Cache deserialized buckets in memory for faster retrieval. It is a
     // mapping from token to `Bucket`.
@@ -259,10 +262,10 @@ export default class ReverseIndex<T extends IFilter> {
     // Optionaly initialize the index with given filters.
     this.bucketsIndex = bucketsIndex || EMPTY_UINT32_ARRAY;
     this.tokensLookupIndex = tokensLookupIndex || EMPTY_UINT32_ARRAY;
-    this.view = view || StaticDataView.empty();
+    this.view = view || StaticDataView.empty(config);
 
     if (filters.length !== 0) {
-      this.update(filters);
+      this.update(filters, undefined);
     }
   }
 
@@ -340,7 +343,7 @@ export default class ReverseIndex<T extends IFilter> {
    * (as returned by either NetworkFilter.getId() or CosmeticFilter.getId())
    * which need to be removed from the index.
    */
-  public update(newFilters: T[], removedFilters?: Set<number>): void {
+  public update(newFilters: T[], removedFilters: Set<number> | undefined): void {
     let totalNumberOfTokens = 0;
     let totalNumberOfIndexedFilters = 0;
     const filtersTokens: Array<{ filter: T; multiTokens: Uint32Array[] }> = [];
@@ -376,7 +379,7 @@ export default class ReverseIndex<T extends IFilter> {
     if (filtersTokens.length === 0) {
       this.bucketsIndex = EMPTY_UINT32_ARRAY;
       this.tokensLookupIndex = EMPTY_UINT32_ARRAY;
-      this.view = StaticDataView.empty();
+      this.view = StaticDataView.empty(this.config);
       this.cache = new Map();
       return;
     }
@@ -414,7 +417,7 @@ export default class ReverseIndex<T extends IFilter> {
     // TODO - estimate size needed for this bucket (based on filters in
     // `filtersToken` + tokensLookupIndexSize + bucketsIndexSize). This would
     // allow to avoid having to pre-allocate a huge buffer up-front.
-    const buffer = new StaticDataView(8000000);
+    const buffer = StaticDataView.allocate(8000000, this.config);
     buffer.pushUint32(filtersTokens.length);
 
     // Keep track of the final size of the buckets index
@@ -474,7 +477,7 @@ export default class ReverseIndex<T extends IFilter> {
       }
     }
 
-    this.view = StaticDataView.fromUint8Array(buffer.slice());
+    this.view = StaticDataView.fromUint8Array(buffer.slice(), this.config);
     this.cache = new Map();
 
     // Also keep Uint32Array views sharing the same buffer as `this.view` (only

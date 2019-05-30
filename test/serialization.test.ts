@@ -23,7 +23,7 @@ describe('Serialization', () => {
   );
 
   describe('filters', () => {
-    const buffer = new StaticDataView(1000000);
+    const buffer = StaticDataView.allocate(1000000, { enableCompression: false });
     const checkFilterSerialization = (Filter: any, filter: IFilter) => {
       // Keep track of original ID to make sure it's preserved after lazy
       // attributes are set and filter is serialized/deserialized.

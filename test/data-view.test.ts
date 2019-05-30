@@ -12,18 +12,18 @@ import { getNaughtyStrings } from './utils';
 describe('#StaticDataView', () => {
   describe('#slice', () => {
     it('returns empty buffer if no data and empty initial size', () => {
-      const view = new StaticDataView(0);
+      const view = StaticDataView.empty({ enableCompression: false });
       expect(view.slice()).toHaveLength(0);
     });
 
     it('returns empty buffer if no data', () => {
-      const view = new StaticDataView(10);
+      const view = StaticDataView.allocate(10, { enableCompression: false });
       expect(view.slice()).toHaveLength(0);
     });
   });
 
   describe('#pushASCII', () => {
-    const view = new StaticDataView(1000);
+    const view = StaticDataView.allocate(1000, { enableCompression: false });
     const checkString = (str: string): void => {
       view.seekZero();
       view.pushASCII(str);
@@ -78,7 +78,7 @@ describe('#StaticDataView', () => {
   });
 
   describe('#pushUTF8', () => {
-    const view = new StaticDataView(10000);
+    const view = StaticDataView.allocate(10000, { enableCompression: false });
     const checkString = (str: string): void => {
       view.seekZero();
       view.pushUTF8(str);
@@ -135,21 +135,21 @@ describe('#StaticDataView', () => {
 
   describe('#getUint32ArrayView', () => {
     it('empty view', () => {
-      const view = new StaticDataView(0);
+      const view = StaticDataView.allocate(0, { enableCompression: false });
       const v = view.getUint32ArrayView(0);
       expect(v).toHaveLength(0);
       expect(view.slice()).toHaveLength(0);
     });
 
     it('should allocate buffer of size 1', () => {
-      const view = new StaticDataView(4);
+      const view = StaticDataView.allocate(4, { enableCompression: false });
       const v = view.getUint32ArrayView(1);
       expect(v).toHaveLength(1);
       expect(view.slice()).toHaveLength(4);
     });
 
     it('should align', () => {
-      const view = new StaticDataView(8);
+      const view = StaticDataView.allocate(8, { enableCompression: false });
       view.setPos(3);
       const v = view.getUint32ArrayView(1);
       expect(v).toHaveLength(1);
@@ -157,7 +157,7 @@ describe('#StaticDataView', () => {
     });
 
     it('should not align if already aligned', () => {
-      const view = new StaticDataView(8);
+      const view = StaticDataView.allocate(8, { enableCompression: false });
       view.setPos(4);
       const v = view.getUint32ArrayView(1);
       expect(v).toHaveLength(1);
@@ -165,7 +165,7 @@ describe('#StaticDataView', () => {
     });
 
     it('should write in original buffer', () => {
-      const view = new StaticDataView(4);
+      const view = StaticDataView.allocate(4, { enableCompression: false });
       let v = view.getUint32ArrayView(1);
       v[0] = Number.MAX_SAFE_INTEGER >>> 0;
       view.seekZero();
@@ -176,7 +176,7 @@ describe('#StaticDataView', () => {
     });
 
     it('serialize/deserialize', () => {
-      const view = new StaticDataView(20);
+      const view = StaticDataView.allocate(20, { enableCompression: false });
       view.pushBool(true);
       const v = view.getUint32ArrayView(4);
       v[0] = 1;
@@ -189,7 +189,7 @@ describe('#StaticDataView', () => {
       );
 
       // Reload
-      const newView = StaticDataView.fromUint8Array(cropped);
+      const newView = StaticDataView.fromUint8Array(cropped, { enableCompression: false });
       expect(newView.getBool()).toBe(true);
       expect(newView.getUint32ArrayView(4)).toEqual(
         new Uint32Array([1, 2, Number.MAX_SAFE_INTEGER >>> 0, 3]),
