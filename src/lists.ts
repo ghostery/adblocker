@@ -120,13 +120,9 @@ export function f(strings: TemplateStringsArray): NetworkFilter | CosmeticFilter
 
   let filter: NetworkFilter | CosmeticFilter | null = null;
   if (filterType === FilterType.NETWORK) {
-    filter = NetworkFilter.parse(rawFilter);
+    filter = NetworkFilter.parse(rawFilter, true);
   } else if (filterType === FilterType.COSMETIC) {
-    filter = CosmeticFilter.parse(rawFilter);
-  }
-
-  if (filter !== null) {
-    filter.rawLine = rawFilter;
+    filter = CosmeticFilter.parse(rawFilter, true);
   }
 
   return filter;

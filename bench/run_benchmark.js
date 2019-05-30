@@ -42,13 +42,15 @@ const {
   benchEngineDeserialization,
   benchEngineSerialization,
   benchGetCosmeticTokens,
+  benchGetCosmeticsFilters,
   benchGetNetworkTokens,
   benchNetworkFiltersParsing,
   benchStringHashing,
   benchStringTokenize,
-  benchGetCosmeticsFilters,
+  benchRequestParsing,
 } = require('./micro');
 
+const requests = require('./requests');
 
 function loadLists() {
   return {
@@ -95,14 +97,15 @@ function runMicroBenchmarks(lists, resources) {
 
   // Arguments shared among benchmarks
   const args = {
-    lists,
-    resources,
+    combinedLists,
+    cosmeticFilters,
     engine,
     filters,
-    serialized,
+    lists,
     networkFilters,
-    cosmeticFilters,
-    combinedLists,
+    requests,
+    resources,
+    serialized,
   };
 
   [
@@ -111,11 +114,12 @@ function runMicroBenchmarks(lists, resources) {
     benchEngineDeserialization,
     benchEngineSerialization,
     benchGetCosmeticTokens,
+    benchGetCosmeticsFilters,
     benchGetNetworkTokens,
     benchNetworkFiltersParsing,
+    benchRequestParsing,
     benchStringHashing,
     benchStringTokenize,
-    benchGetCosmeticsFilters,
   ].forEach((bench) => {
     if (bench.name.toLowerCase().includes(GREP)) {
       const suite = new Benchmark.Suite();

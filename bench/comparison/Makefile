@@ -10,21 +10,21 @@ requests.json:
 # VERSION: 69118b828db0f6a53bc2306deacffc5361aeef0c
 ./blockers/adblockpluscore:
 	git clone --branch=next https://github.com/adblockplus/adblockpluscore.git ./blockers/adblockpluscore
-	cd ./blockers/adblockpluscore && git reset --hard 69118b828db0f6a53bc2306deacffc5361aeef0c
+	cd ./blockers/adblockpluscore && git reset --hard c84ece65137ef991559c6b78d13eae3296236b4e
 
 # VERSION: 0.2.0
 ../../node_modules/abp-filter-parser:
-	npm install --save https://github.com/duckduckgo/abp-filter-parser.git#0.2.0
+	npm install --save https://github.com/duckduckgo/abp-filter-parser.git
 	cd ../../node_modules/abp-filter-parser/ && npm install && cd -
 
-# VERSION: 4.1.7
-../../node_modules/ad-block:
-	npm install --save ad-block@4.1.7
+# VERSION: latest
+../../node_modules/adblock-rs:
+	npm install --save adblock-rs
 
 ../../dist:
 	cd ../../ && npm ci && npm pack
 
-brave: ../../node_modules/ad-block
+brave: ../../node_modules/adblock-rs
 	NODE_ENV=production node run.js brave requests.json
 
 cliqz:
@@ -57,7 +57,7 @@ adblockfast:
 deps: requests.json \
 	  ../../dist \
 	  ../../node_modules/abp-filter-parser \
-	  ../../node_modules/ad-block \
+	  ../../node_modules/adblock-rs \
 	  ../../node_modules/jsdom \
 	  ../../node_modules/puppeteer-pool \
 	  ../../node_modules/sandboxed-module \

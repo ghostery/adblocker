@@ -1,8 +1,8 @@
 [Adblock Plus 2.0]
-! Checksum: iypvVEiXmAuk9yB3lZ6CWg
-! Version: 201904161110
+! Checksum: HhIz/hLOafrFRzwVz1dQ2A
+! Version: 201905291420
 ! Title: Adblock Warning Removal List
-! Last modified: 16 Apr 2019 11:10 UTC
+! Last modified: 29 May 2019 14:20 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 !
@@ -12,21 +12,27 @@
 !
 ! *** antiadblockfilters:antiadblockfilters/antiadblock_arabic.txt ***
 !
+/adb_script/*
 /deadblocker/*
 /mod_ablockdetector/*
 !
 @@||cdn.egy.best/static/global/js/adblock.js$script
+@@||play.bokracdn.run/v2/adsjs/ads.js$script,~third-party
 !
 ###adblock_screen
 ###adblock_message
 ##.adblockInfo
 ##.adblock_floating_message
 ##.adblock_msg
+##.ads-block-warning
 ##.deadblocker-header-bar
 !
 myegy.cc##.disclaimer
 4algeria.com###exposeMask
+chahid4u.tk###unblocker
 4algeria.com##.xenOverlay
+!
+shahid4u.club#@#.adsBox
 !
 ! *** antiadblockfilters:antiadblockfilters/antiadblock_chinese.txt ***
 ! *** antiadblockfilters:antiadblockfilters/antiadblock_czech.txt ***
@@ -46,6 +52,7 @@ myanimelist.net##._unit
 ##.ad-blocker-warning
 mediafire.com###abnotify
 biggestplayer.me##.adblock + *
+nexusmods.com##.areplacer
 hearthhead.com,wowhead.com##.block-bg
 wowhead.com##.block-bgimg
 euroiphone.eu##.div-download-h
@@ -91,13 +98,14 @@ shadbase.com##img[alt="adblock"]
 /adblock-notice-
 /adblock-notify-by-bweb/*
 /adblock-warning-teaser/*
+/adblock_alerter.
 /adblock_gate/images/animated.gif?
 /adblock_notify.js
 /adblocker_message_
 /AdblockMessage.
 /antiadblockmsg.
-/blockadblock.js
-/blockadblock.min.js
+/blockadblock.$script
+/disable-adblock.
 /wp-content/plugins/ad-block-defender/*
 /wp-content/plugins/deadblocker/*
 /wp-content/uploads/an-temp/*$script,stylesheet
@@ -153,6 +161,7 @@ shadbase.com##img[alt="adblock"]
 @@||zagaz.com/img/blogads.css
 !
 ###AdBlockDialog
+###aabl-container
 ###abp-killer
 ###adBlockAlert
 ###adBlockAlertWrap
@@ -163,6 +172,7 @@ shadbase.com##img[alt="adblock"]
 ###adb-enabled
 ###adb-enabled3
 ###adb-warning
+###adbcontainer-popup
 ###adblock-alert
 ###adblock-box
 ###adblock-modal
@@ -175,16 +185,21 @@ shadbase.com##img[alt="adblock"]
 ###adblocker_message
 ###adblocker_modal_overlay
 ###adblockinfo
+###adbpopup
 ###ads-blocked
+###adsblocker_detected
 ###advertisementjsalert
 ###anti_adblock
 ###detection-block
 ###detection-block-overlay
 ###detectadblock
 ###fnAdblockingOverlay
+###js-popup-blocker
 ###message_adblock
+###notify-adblock
 ##.AdblockMessage
 ##.AdblockMessage_msg
+##.ad-alert-message-text
 ##.ad-alert-wrapper
 ##.ad-block-detected
 ##.ad-block-enabled
@@ -219,6 +234,7 @@ shadbase.com##img[alt="adblock"]
 ##.dispositifAdblockMessageBox
 ##.fuckYouAdBlock
 ##.fuckYouAdBlock2
+##.js-ad-whitelist-notice
 ##.js-checkad-warning
 ##.kill-adblock-container
 ##.noadblock
@@ -230,7 +246,7 @@ shadbase.com##img[alt="adblock"]
 !
 wamiz.com###adblocker
 jaitoutcompris.com###antiBlock
-developpez.com,developpez.net###encart_droite div[style="display: inline-block; width: 300px; height: 250px"]
+developpez.com,developpez.net###encart_droite div[style^="display: inline-block; width: 300px;"]
 iphonesoft.fr,iphonetweak.fr###msgNoPub
 retinaboys.com###screen_block
 lagrosseradio.com###warn
@@ -249,6 +265,7 @@ pausecafein.fr###adb-pop
 #@##adblocktest
 !
 dbz-fantasy.com#@##adTeaser
+fstore.biz#@##adblockinfo
 dz-android.com,freeiphone.fr,hommedumatch.fr,jetetroll.com,testious.com#@##adsense
 debrideurstream.fr#@##pubdirecte
 ot-boutique.fr#@##publicite
@@ -283,7 +300,6 @@ elhow.ru###b-info-wrapper
 rockstargame.su###baduser
 ma.by###bodysubcont > div[style^="padding"]:not([id]):not([class])
 pln-pskov.ru###check_ad_block
-helpsetup.ru###d930
 delfi.ee###delfiTopBar
 sd-company.su###dom_adblock
 myshared.ru###download_form > .uk-margin-top[style]
@@ -305,6 +321,7 @@ center-yf.ru,lektsii.org,studopedia.com.ua,studopedia.org,studopedia.ru,studoped
 md4u.ru###pagecontent > div[style*="background-color"]
 alensat.org,forummikrotik.ru###phpbb-ads-ab
 kompravda.eu,kp.ru###popapIsBlockedAd
+sostav.ru###rek_blocker
 math-prosto.ru###requestShutOfBlocker
 pb.wtf,piratbit.org,piratbit.ru###result > .request
 mnogoto4ka.ru###sb-site > div[class][style*="z-index"][style*="999999"]
@@ -388,8 +405,13 @@ kinoprofi.net##.warning-adblock
 xn--80aikhbrhr.net,кинокрад.net##.warning-adblock-box
 forum.bestflowers.ru##.xenOverlay
 /cookie_check.min.js$domain=acetv.me
-/forum/docs/requests.js$script,domain=nnm-club-me.appspot.com|nnm-club.lib|nnm-club.me|nnm-club.ws|nnmclub.to|nontorclub.in.net
+/forum/docs/requests.js$script,domain=nnm-club.lib|nnm-club.me|nnm-club.ws|nnmclub.ro|nnmclub.to|nontorclub.in.net
 /fuckadblock.js$domain=ace-stream.tv
+@@||cc-fan.tv/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
+@@||cn-fan.tv/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
+@@||fox-fan.tv/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
+@@||nf-fan.tv/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
+@@||mult.love/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
 @@||an.yandex.ru/jstracer?aab_detect=$xmlhttprequest,domain=yandex.by|yandex.kz|yandex.ru|yandex.ua
 @@||anime.anidub.com/ads.js$script,domain=anime.anidub.com
 @@||goha.ru/app/video/adblock.teaser.js|$script,domain=goha.ru
@@ -414,7 +436,7 @@ katalog-aktsii.ru,rp5.by,rp5.kz,rp5.ru,rp5.ua##body > div:not([id]):not([class])
 factorio.su##body > div[class][style*="background"][style*="display: block"]
 gdekluet.ru##body > div[class^="stop-block"]
 glav.su##body > div[id]:not([class])[style*="background"][style*="display: block"]
-logist.uxxo.ru,maxpark.com,newdeaf-online.net,newsland.com,smolensk-auto.ru##body > div[id]:not([class])[style="display: block;"]
+logist.uxxo.ru,maxpark.com,meteoservice.ru,newdeaf-online.net,newsland.com,pawno-info.ru,smolensk-auto.ru##body > div[id]:not([class])[style="display: block;"]
 factorio.su##body > div[id][class][style*="background"][style*="visible"]
 gaming.co.ua##body > div[id][class][style*="z-index"][style*="9999"],body > div[id][class][style*="z-index"][style*="9999"] + div[class][style*="z-index"][style*="9999"]
 gisher.news,gisher.org##body > div[id][class][style^="display"][style*="position"][style*="z-index"]
@@ -425,8 +447,9 @@ tut.by##body > div[style*="position: fixed;"][style*="right: 0;"]
 dugtor.ru##body > noindex
 www.qrz.ru#?#div[class]:-abp-has(> .inner > a[href="/help/adblock/"])
 blackdesert-info.ru##div[class][style*="z-index"][style*="999999;"][style*="background"][style*="rgb"]
+game2day.ru##div[class^="adblock_"]
 megogo.net,megogo.ru##div[class^="adBlockBanner"]
-kinopad.net##div[class^="adblock-warning"]
+kinopad.net,playtor.tv##div[class^="adblock-warning"]
 lostfilm.tv##div[class^="alarm"]
 gismeteo.by,gismeteo.ru##div[class^="stopblock"]
 finfront.ru##div[class^="swal2"]
@@ -449,6 +472,7 @@ bigpuzzle.ru##td[valign="top"][width="200px"][height="600"] > div[style]
 ||avito.ru^*/some-pretty-script.js
 ||fainaidea.com/wp-content/uploads/*/*?ver=$script,stylesheet,domain=fainaidea.com
 ||fairtop.in/template/js/fdetect.js
+||helpsetup.ru/home/solnisko.php
 ||i140.ru/js/etxm*.js|$script
 ||ipprof.ru/wp-content/plugins/ad-blocking-advisor/
 ||kontrolnaya-rabota.ru^*/fuckadblock.js$script

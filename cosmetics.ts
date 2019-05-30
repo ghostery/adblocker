@@ -6,5 +6,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-export { default as injectCosmetics } from './src/cosmetics-injection';
-export { IMessageFromBackground } from './src/content/communication';
+export {
+  IMessageFromBackground,
+  IBackgroundCallback,
+  Lifecycle,
+} from './src/content/communication';
+
+export { default as injectCosmetics } from './src/webextension/content';

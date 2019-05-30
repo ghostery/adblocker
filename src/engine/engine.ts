@@ -10,7 +10,7 @@ import Config from '../config';
 import StaticDataView from '../data-view';
 import CosmeticFilter from '../filters/cosmetic';
 import NetworkFilter from '../filters/network';
-import Request, { RequestType } from '../request';
+import Request from '../request';
 import Resources from '../resources';
 
 import { IListDiff, parseFilters } from '../lists';
@@ -19,7 +19,7 @@ import NetworkFilterBucket from './bucket/network';
 
 import { IMessageFromBackground } from '../content/communication';
 
-export const ENGINE_VERSION = 26;
+export const ENGINE_VERSION = 27;
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -34,24 +34,36 @@ function btoaPolyfill(buffer: string): string {
 export default class FilterEngine {
   public static parse(filters: string, options: Partial<Config> = {}): FilterEngine {
     const config = new Config(options);
-    return new FilterEngine({
-      ...parseFilters(filters, config),
-      config,
-    });
+    return new FilterEngine(Object.assign({}, parseFilters(filters, config), { config }));
   }
 
   public static deserialize(serialized: Uint8Array): FilterEngine {
     const buffer = StaticDataView.fromUint8Array(serialized);
 
     // Before starting deserialization, we make sure that the version of the
-    // serialized engine is the same as the current source code. If not, we start
-    // fresh and create a new engine from the lists.
+    // serialized engine is the same as the current source code. If not, we
+    // start fresh and create a new engine from the lists.
     const serializedEngineVersion = buffer.getUint8();
     if (ENGINE_VERSION !== serializedEngineVersion) {
       throw new Error(
-        `serialized engine version mismatch current is ${ENGINE_VERSION} but got ${serializedEngineVersion}`,
+        `serialized engine version mismatch, expected ${ENGINE_VERSION} but got ${serializedEngineVersion}`,
       );
     }
+
+    // Also make sure that the built-in checksum is correct. This allows to
+    // detect data corruption and start fresh if the serialized version was
+    // altered.
+    buffer.pos = serialized.length - 4;
+    const checksum = buffer.checksum();
+    const expected = buffer.getUint32();
+    if (checksum !== expected) {
+      throw new Error(
+        `serialized engine checksum mismatch, expected ${expected} but got ${checksum}`,
+      );
+    }
+
+    // Reset position to after engine version and start deserialization
+    buffer.pos = 1;
 
     // Create a new engine with same options
     const engine = new FilterEngine({
@@ -181,6 +193,9 @@ export default class FilterEngine {
     this.genericHides.serialize(buffer);
     this.cosmetics.serialize(buffer);
 
+    // Append a checksum at the end
+    buffer.pushUint32(buffer.checksum());
+
     return buffer.slice();
   }
 
@@ -189,7 +204,7 @@ export default class FilterEngine {
    */
 
   public loadedLists(): string[] {
-    return [...this.lists.keys()];
+    return Array.from(this.lists.keys());
   }
 
   public hasList(name: string, checksum: string): boolean {
@@ -284,22 +299,53 @@ export default class FilterEngine {
    * either to apply cosmetics on a page or alter network requests.
    */
 
+  public getGenericCosmetics(): IMessageFromBackground {
+    return {
+      active: false,
+      extended: [],
+      scripts: [],
+      styles: '',
+    };
+  }
+
   /**
    * Given `hostname` and `domain` of a page (or frame), return the list of
    * styles and scripts to inject in the page.
    */
   public getCosmeticsFilters({
+    // Page information
     url,
     hostname,
     domain,
+
+    // DOM information
+    classes,
+    hrefs,
+    ids,
+
+    // Allows to specify which rules to return
+    getBaseRules = true,
+    getInjectionRules = true,
+    getRulesFromDOM = true,
+    getRulesFromHostname = true,
   }: {
     url: string;
     hostname: string;
     domain: string | null | undefined;
+
+    classes?: string[];
+    hrefs?: string[];
+    ids?: string[];
+
+    getBaseRules?: boolean;
+    getInjectionRules?: boolean;
+    getRulesFromDOM?: boolean;
+    getRulesFromHostname?: boolean;
   }): IMessageFromBackground {
     if (this.config.loadCosmeticFilters === false) {
       return {
         active: false,
+        extended: [],
         scripts: [],
         styles: '',
       };
@@ -307,9 +353,7 @@ export default class FilterEngine {
 
     // Check if there is some generichide
     const genericHides = this.genericHides.matchAll(
-      new Request({
-        type: 'document',
-
+      Request.fromRawDetails({
         domain: domain || '',
         hostname,
         url,
@@ -344,11 +388,21 @@ export default class FilterEngine {
       genericHideFilter === null || genericHideFilter.isException() === false;
 
     // Lookup injections as well as stylesheets
-    const { injections, stylesheet } = this.cosmetics.getCosmeticsFilters(
+    const { injections, stylesheet } = this.cosmetics.getCosmeticsFilters({
+      domain: domain || '',
       hostname,
-      domain || '',
+
+      classes,
+      hrefs,
+      ids,
+
       allowGenericHides,
-    );
+
+      getBaseRules,
+      getInjectionRules,
+      getRulesFromDOM,
+      getRulesFromHostname,
+    });
 
     // Perform interpolation for injected scripts
     const scripts: string[] = [];
@@ -361,6 +415,7 @@ export default class FilterEngine {
 
     return {
       active: true,
+      extended: [],
       scripts,
       styles: stylesheet,
     };
@@ -372,12 +427,12 @@ export default class FilterEngine {
   public matchAll(request: Request): Set<NetworkFilter> {
     const filters: NetworkFilter[] = [];
     if (request.isSupported) {
-      filters.push(...this.importants.matchAll(request));
-      filters.push(...this.filters.matchAll(request));
-      filters.push(...this.exceptions.matchAll(request));
-      filters.push(...this.csp.matchAll(request));
-      filters.push(...this.genericHides.matchAll(request));
-      filters.push(...this.redirects.matchAll(request));
+      Array.prototype.push.apply(filters, this.importants.matchAll(request));
+      Array.prototype.push.apply(filters, this.filters.matchAll(request));
+      Array.prototype.push.apply(filters, this.exceptions.matchAll(request));
+      Array.prototype.push.apply(filters, this.csp.matchAll(request));
+      Array.prototype.push.apply(filters, this.genericHides.matchAll(request));
+      Array.prototype.push.apply(filters, this.redirects.matchAll(request));
     }
 
     return new Set(filters);
@@ -392,7 +447,7 @@ export default class FilterEngine {
       return undefined;
     }
 
-    if (request.isSupported !== true || request.type !== RequestType.document) {
+    if (request.isSupported !== true || request.type !== 'main_frame') {
       return undefined;
     }
 
@@ -420,7 +475,11 @@ export default class FilterEngine {
     }
 
     // Combine all CSPs (except the black-listed ones)
-    return [...enabledCsp].filter((csp) => !disabledCsp.has(csp)).join('; ') || undefined;
+    return (
+      Array.from(enabledCsp)
+        .filter((csp) => !disabledCsp.has(csp))
+        .join('; ') || undefined
+    );
   }
 
   /**

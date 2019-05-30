@@ -6,12 +6,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { compactTokens, concatTypedArrays } from '../../compact-set';
 import StaticDataView from '../../data-view';
 import CosmeticFilter, {
   DEFAULT_HIDDING_STYLE,
   getEntityHashesFromLabelsBackward,
   getHostnameHashesFromLabelsBackward,
 } from '../../filters/cosmetic';
+import { hashStrings, tokenizeFilter } from '../../utils';
 import ReverseIndex from '../reverse-index';
 import FiltersContainer from './filters';
 
@@ -78,7 +80,10 @@ function createStylesheetFromRulesWithCustomStyles(rules: CosmeticFilter[]): str
   }
 
   const stylesheets: string[] = [];
-  for (const [style, selectors] of selectorsPerStyle.entries()) {
+  const selectorsPerStyleArray = Array.from(selectorsPerStyle.entries());
+  for (let i = 0; i < selectorsPerStyleArray.length; i += 1) {
+    const style = selectorsPerStyleArray[i][0];
+    const selectors = selectorsPerStyleArray[i][1];
     stylesheets.push(createStylesheet(selectors, style));
   }
 
@@ -109,8 +114,9 @@ function createStylesheetFromRules(rules: CosmeticFilter[]): string {
 function createLookupTokens(hostname: string, domain: string): Uint32Array {
   const hostnamesHashes = getHostnameHashesFromLabelsBackward(hostname, domain);
   const entitiesHashes = getEntityHashesFromLabelsBackward(hostname, domain);
-  let index = 0;
   const tokens = new Uint32Array(hostnamesHashes.length + entitiesHashes.length);
+
+  let index = 0;
 
   for (let i = 0; i < hostnamesHashes.length; i += 1) {
     tokens[index++] = hostnamesHashes[i];
@@ -136,6 +142,11 @@ export default class CosmeticFilterBucket {
     bucket.unhideIndex = ReverseIndex.deserialize(buffer, CosmeticFilter.deserialize);
     bucket.hostnameIndex = ReverseIndex.deserialize(buffer, CosmeticFilter.deserialize);
 
+    // DOM index
+    bucket.classesIndex = ReverseIndex.deserialize(buffer, CosmeticFilter.deserialize);
+    bucket.idsIndex = ReverseIndex.deserialize(buffer, CosmeticFilter.deserialize);
+    bucket.hrefsIndex = ReverseIndex.deserialize(buffer, CosmeticFilter.deserialize);
+
     return bucket;
   }
 
@@ -145,6 +156,10 @@ export default class CosmeticFilterBucket {
   // which could be injected on a given page (given hostname and domain).
   public hostnameIndex: ReverseIndex<CosmeticFilter>;
   public unhideIndex: ReverseIndex<CosmeticFilter>;
+
+  public classesIndex: ReverseIndex<CosmeticFilter>;
+  public idsIndex: ReverseIndex<CosmeticFilter>;
+  public hrefsIndex: ReverseIndex<CosmeticFilter>;
 
   // `genericRules` is a contiguous container of filters. In this case
   // we keep track of all generic cosmetic filters, which allows us to
@@ -159,8 +174,12 @@ export default class CosmeticFilterBucket {
 
   constructor({ filters = [] }: { filters?: CosmeticFilter[] } = {}) {
     this.genericRules = new FiltersContainer({ deserialize: CosmeticFilter.deserialize });
-    this.hostnameIndex = new ReverseIndex({ deserialize: CosmeticFilter.deserialize });
     this.unhideIndex = new ReverseIndex({ deserialize: CosmeticFilter.deserialize });
+    this.hostnameIndex = new ReverseIndex({ deserialize: CosmeticFilter.deserialize });
+
+    this.classesIndex = new ReverseIndex({ deserialize: CosmeticFilter.deserialize });
+    this.idsIndex = new ReverseIndex({ deserialize: CosmeticFilter.deserialize });
+    this.hrefsIndex = new ReverseIndex({ deserialize: CosmeticFilter.deserialize });
 
     // In-memory cache, lazily initialized
     this.baseStylesheet = null;
@@ -175,13 +194,24 @@ export default class CosmeticFilterBucket {
     const unHideRules: CosmeticFilter[] = [];
     const genericHideRules: CosmeticFilter[] = [];
     const hostnameSpecificRules: CosmeticFilter[] = [];
+    const classSelectors: CosmeticFilter[] = [];
+    const idSelectors: CosmeticFilter[] = [];
+    const hrefSelectors: CosmeticFilter[] = [];
 
     for (let i = 0; i < newFilters.length; i += 1) {
       const rule = newFilters[i];
       if (rule.isUnhide()) {
         unHideRules.push(rule);
       } else if (rule.isGenericHide()) {
-        genericHideRules.push(rule);
+        if (rule.isClassSelector()) {
+          classSelectors.push(rule);
+        } else if (rule.isIdSelector()) {
+          idSelectors.push(rule);
+        } else if (rule.isHrefSelector()) {
+          hrefSelectors.push(rule);
+        } else {
+          genericHideRules.push(rule);
+        }
       } else {
         hostnameSpecificRules.push(rule);
       }
@@ -190,35 +220,170 @@ export default class CosmeticFilterBucket {
     this.genericRules.update(genericHideRules, removedFilters);
     this.unhideIndex.update(unHideRules, removedFilters);
     this.hostnameIndex.update(hostnameSpecificRules, removedFilters);
+    this.classesIndex.update(classSelectors, removedFilters);
+    this.idsIndex.update(idSelectors, removedFilters);
+    this.hrefsIndex.update(hrefSelectors, removedFilters);
   }
 
   public serialize(buffer: StaticDataView): void {
     this.genericRules.serialize(buffer);
     this.unhideIndex.serialize(buffer);
     this.hostnameIndex.serialize(buffer);
+
+    this.classesIndex.serialize(buffer);
+    this.idsIndex.serialize(buffer);
+    this.hrefsIndex.serialize(buffer);
   }
 
-  public getCosmeticsFilters(
-    hostname: string,
-    domain: string,
-    allowGenericHides: boolean,
-  ): { injections: CosmeticFilter[]; stylesheet: string } {
+  /**
+   * Request cosmetics and scripts to inject in a page.
+   */
+  public getCosmeticsFilters({
+    domain,
+    hostname,
+
+    classes = [],
+    hrefs = [],
+    ids = [],
+
+    allowGenericHides = true,
+
+    // Allows to specify which rules to return
+    getBaseRules = true,
+    getInjectionRules = true,
+    getRulesFromDOM = true,
+    getRulesFromHostname = true,
+  }: {
+    domain: string;
+    hostname: string;
+
+    classes?: string[];
+    hrefs?: string[];
+    ids?: string[];
+
+    allowGenericHides: boolean;
+
+    getBaseRules?: boolean;
+    getInjectionRules?: boolean;
+    getRulesFromDOM?: boolean;
+    getRulesFromHostname?: boolean;
+  }): { injections: CosmeticFilter[]; stylesheet: string } {
+    // Tokens from `hostname` and `domain` which will be used to lookup filters
+    // from the reverse index. The same tokens are re-used for multiple indices.
+    const hostnameTokens = createLookupTokens(hostname, domain);
+    const rules: CosmeticFilter[] = [];
+
+    // =======================================================================
+    // Rules: hostname-specific
+    // =======================================================================
+    // Collect matching rules which specify a hostname constraint.
+    if (getRulesFromHostname === true) {
+      this.hostnameIndex.iterMatchingFilters(hostnameTokens, (rule: CosmeticFilter) => {
+        if (rule.match(hostname, domain)) {
+          rules.push(rule);
+        }
+        return true;
+      });
+    }
+
+    // =======================================================================
+    // Rules: generic hide
+    // =======================================================================
+    // Optionally, collect genericHide rules. We need to make sure the `rule`
+    // matches the hostname and domain since some generic rules can specify
+    // negated hostnames and entities (e.g.: ~foo.*##generic).
+    if (allowGenericHides === true && getRulesFromHostname === true) {
+      const genericRules = this.getGenericRules();
+      for (let i = 0; i < genericRules.length; i += 1) {
+        const rule = genericRules[i];
+        if (rule.match(hostname, domain) === true) {
+          rules.push(rule);
+        }
+      }
+    }
+
+    // =======================================================================
+    // Class selector based
+    // =======================================================================
+    if (allowGenericHides === true && getRulesFromDOM === true && classes.length !== 0) {
+      this.classesIndex.iterMatchingFilters(hashStrings(classes), (rule: CosmeticFilter) => {
+        if (rule.match(hostname, domain)) {
+          rules.push(rule);
+        }
+        return true;
+      });
+    }
+
+    // =======================================================================
+    // Id selector based
+    // =======================================================================
+    if (allowGenericHides === true && getRulesFromDOM === true && ids.length !== 0) {
+      this.idsIndex.iterMatchingFilters(hashStrings(ids), (rule: CosmeticFilter) => {
+        if (rule.match(hostname, domain)) {
+          rules.push(rule);
+        }
+        return true;
+      });
+    }
+
+    // =======================================================================
+    // Href selector based
+    // =======================================================================
+    if (allowGenericHides === true && getRulesFromDOM === true && hrefs.length !== 0) {
+      this.hrefsIndex.iterMatchingFilters(
+        compactTokens(concatTypedArrays(hrefs.map((href) => tokenizeFilter(href, false, true)))),
+        (rule: CosmeticFilter) => {
+          if (rule.match(hostname, domain)) {
+            rules.push(rule);
+          }
+          return true;
+        },
+      );
+    }
+
     const injections: CosmeticFilter[] = [];
     const styles: CosmeticFilter[] = [];
 
-    const rules = this.getMatchingRules(hostname, domain, allowGenericHides);
-    for (let i = 0; i < rules.length; i += 1) {
-      const rule: CosmeticFilter = rules[i];
+    // If we found at least one candidate, check if we have unhidden rules,
+    // apply them and dispatch rules into `injections` (i.e.: '+js(...)') and
+    // `styles` (i.e.: '##rule').
+    if (rules.length !== 0) {
+      // =======================================================================
+      // Rules: unhide
+      // =======================================================================
+      // Collect unhidden selectors. They will be used to filter-out canceled
+      // rules from other indices.
+      const disabledRules: Set<string> = new Set();
+      this.unhideIndex.iterMatchingFilters(hostnameTokens, (rule: CosmeticFilter) => {
+        if (rule.match(hostname, domain)) {
+          disabledRules.add(rule.getSelector());
+        }
 
-      if (rule.isScriptInject()) {
-        injections.push(rule);
-      } else {
-        styles.push(rule);
+        return true;
+      });
+
+      // Apply unhide rules + dispatch
+      for (let i = 0; i < rules.length; i += 1) {
+        const rule: CosmeticFilter = rules[i];
+
+        // Make sure `rule` is not un-hidden by a #@# filter
+        if (disabledRules.size !== 0 && disabledRules.has(rule.getSelector())) {
+          continue;
+        }
+
+        // Dispatch rules in `injections` or `styles` depending on type
+        if (getInjectionRules === true && rule.isScriptInject()) {
+          injections.push(rule);
+        } else {
+          styles.push(rule);
+        }
       }
     }
 
     // Create final stylesheet
-    let stylesheet = allowGenericHides === false ? '' : this.getBaseStylesheet();
+    let stylesheet: string =
+      getBaseRules === false || allowGenericHides === false ? '' : this.getBaseStylesheet();
+
     if (styles.length !== 0) {
       if (stylesheet.length !== 0) {
         stylesheet += '\n\n';
@@ -233,57 +398,10 @@ export default class CosmeticFilterBucket {
     };
   }
 
-  private getMatchingRules(
-    hostname: string,
-    domain: string,
-    allowGenericHides: boolean,
-  ): CosmeticFilter[] {
-    const tokens = createLookupTokens(hostname, domain);
-
-    // Collect unhidden selectors. They will be used to filter-out canceled
-    // rules from `this.hostnameIndex` and `genericRules`.
-    const disabledRules: Set<string> = new Set();
-    this.unhideIndex.iterMatchingFilters(tokens, (rule: CosmeticFilter) => {
-      if (rule.match(hostname, domain)) {
-        disabledRules.add(rule.getSelector());
-      }
-
-      return true;
-    });
-
-    // Collect matching rules, filtering out selectors found in `disabledRules`.
-    const rules: CosmeticFilter[] = [];
-    this.hostnameIndex.iterMatchingFilters(tokens, (rule: CosmeticFilter) => {
-      if (
-        rule.match(hostname, domain) &&
-        (disabledRules.size === 0 || !disabledRules.has(rule.getSelector()))
-      ) {
-        rules.push(rule);
-      }
-
-      return true;
-    });
-
-    // Optionally, collect genericHide rules, also filtering out selectors from
-    // `disabledRules`. We need to make sure the `rule` matches the hostname
-    // and domain since some generic rules can specify negated hostnames and
-    // entities.
-    if (allowGenericHides === true) {
-      const genericRules = this.getGenericRules();
-      for (let i = 0; i < genericRules.length; i += 1) {
-        const rule = genericRules[i];
-        if (
-          (rule.hasHostnameConstraint() === false || rule.match(hostname, domain) === true) &&
-          (disabledRules.size === 0 || disabledRules.has(rule.getSelector()) === false)
-        ) {
-          rules.push(rule);
-        }
-      }
-    }
-
-    return rules;
-  }
-
+  /**
+   * Return the list of filters which can potentially be un-hidden by another
+   * rule currently contained in the cosmetic bucket.
+   */
   private getGenericRules(): CosmeticFilter[] {
     if (this.extraGenericRules === null) {
       return this.lazyPopulateGenericRulesCache().genericRules;
@@ -291,6 +409,13 @@ export default class CosmeticFilterBucket {
     return this.extraGenericRules;
   }
 
+  /**
+   * The base stylesheet is made of generic filters (not specific to any
+   * hostname) which cannot be hidden (i.e.: there is currently no rule which
+   * might hide their selector). This means that it will never change and is
+   * the same for all sites. We generate it once and re-use it any-time we want
+   * to inject it.
+   */
   private getBaseStylesheet(): string {
     if (this.baseStylesheet === null) {
       return this.lazyPopulateGenericRulesCache().baseStylesheet;
@@ -298,6 +423,13 @@ export default class CosmeticFilterBucket {
     return this.baseStylesheet;
   }
 
+  /**
+   * This is used to lazily generate both the list of generic rules which can
+   * *potentially be un-hidden* (i.e.: there exists at least once unhide rule
+   * for the selector) and a stylesheet containing all selectors which cannot
+   * be un-hidden. Since this list will not change between updates we can
+   * generate once and use many times.
+   */
   private lazyPopulateGenericRulesCache(): {
     baseStylesheet: string;
     genericRules: CosmeticFilter[];

@@ -7,6 +7,7 @@
  */
 
 import * as compression from './compression';
+import crc32 from './crc32';
 import { decode, encode } from './punycode';
 
 interface IDataViewOptions {
@@ -95,6 +96,10 @@ export default class StaticDataView {
     this.enableCompression = enableCompression;
     this.buffer = buffer !== undefined ? buffer : new Uint8Array(length);
     this.pos = 0;
+  }
+
+  public checksum(): number {
+    return crc32(this.buffer, 0, this.pos);
   }
 
   public dataAvailable(): boolean {

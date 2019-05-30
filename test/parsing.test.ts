@@ -12,7 +12,7 @@ import CosmeticFilter, {
 } from '../src/filters/cosmetic';
 import NetworkFilter from '../src/filters/network';
 import { parseFilters } from '../src/lists';
-import { fastHash } from '../src/utils';
+import { fastHash, hashStrings, tokenizeFilter } from '../src/utils';
 
 function h(hostnames: string[]): Uint32Array {
   return new Uint32Array(hostnames.map(hashHostnameBackward));
@@ -48,6 +48,7 @@ function network(filter: string, expected: any) {
       // Options
       firstParty: parsed.firstParty(),
       fromAny: parsed.fromAny(),
+      fromDocument: parsed.fromDocument(),
       fromFont: parsed.fromFont(),
       fromImage: parsed.fromImage(),
       fromMedia: parsed.fromMedia(),
@@ -113,12 +114,9 @@ const DEFAULT_NETWORK_FILTER = {
 describe('Network filters', () => {
   describe('toString', () => {
     const checkToString = (line: string, expected: string, debug: boolean = false) => {
-      const parsed = NetworkFilter.parse(line);
+      const parsed = NetworkFilter.parse(line, debug);
       expect(parsed).not.toBeNull();
       if (parsed !== null) {
-        if (debug) {
-          parsed.rawLine = line;
-        }
         expect(parsed.toString()).toBe(expected);
       }
     };
@@ -701,34 +699,29 @@ describe('Network filters', () => {
     });
 
     describe('first-party', () => {
-      it('parses first-party', () => {
-        network('||foo.com$first-party', { firstParty: true });
-        network('@@||foo.com$first-party', { firstParty: true });
-        network('@@||foo.com|$first-party', { firstParty: true });
-      });
-
-      it('parses ~first-party', () => {
-        network('||foo.com$~first-party', { firstParty: false });
-        network('||foo.com$first-party,~first-party', { firstParty: false });
-      });
+      for (const option of ['first-party', '1p', '~third-party', '~3p']) {
+        for (const base of ['||foo.com', '@@||foo.com', '@@||foo.com/bar']) {
+          const filter = `${base}$${option}`;
+          it(filter, () => {
+            network(filter, { thirdParty: false, firstParty: true });
+          });
+        }
+      }
 
       it('defaults to true', () => {
-        network('||foo.com', { firstParty: true });
+        network('||foo.com', { thirdParty: true });
       });
     });
 
     describe('third-party', () => {
-      it('parses third-party', () => {
-        network('||foo.com$third-party', { thirdParty: true });
-        network('@@||foo.com$third-party', { thirdParty: true });
-        network('@@||foo.com|$third-party', { thirdParty: true });
-        network('||foo.com$~first-party', { thirdParty: true });
-      });
-
-      it('parses ~third-party', () => {
-        network('||foo.com$~third-party', { thirdParty: false });
-        network('||foo.com$first-party,~third-party', { thirdParty: false });
-      });
+      for (const option of ['third-party', '3p', '~first-party', '~1p']) {
+        for (const base of ['||foo.com', '@@||foo.com', '@@||foo.com/bar']) {
+          const filter = `${base}$${option}`;
+          it(filter, () => {
+            network(filter, { thirdParty: true, firstParty: false });
+          });
+        }
+      }
 
       it('defaults to true', () => {
         network('||foo.com', { thirdParty: true });
@@ -777,12 +770,17 @@ describe('Network filters', () => {
       ['object-subrequest', 'fromObject'],
       ['other', 'fromOther'],
       ['ping', 'fromPing'],
+      ['beacon', 'fromPing'],
       ['script', 'fromScript'],
       ['stylesheet', 'fromStylesheet'],
+      ['css', 'fromStylesheet'],
       ['subdocument', 'fromSubdocument'],
+      ['frame', 'fromSubdocument'],
       ['websocket', 'fromWebsocket'],
       ['xmlhttprequest', 'fromXmlHttpRequest'],
       ['xhr', 'fromXmlHttpRequest'],
+      ['doc', 'fromDocument'],
+      ['document', 'fromDocument'],
     ].forEach(([option, attribute]) => {
       // all other attributes should be false if `$attribute` or true if `$~attribute`
       describe(option, () => {
@@ -839,6 +837,9 @@ function cosmetic(filter: string, expected: any) {
       style: parsed.getStyle(),
 
       // Options
+      isClassSelector: parsed.isClassSelector(),
+      isHrefSelector: parsed.isHrefSelector(),
+      isIdSelector: parsed.isIdSelector(),
       isScriptInject: parsed.isScriptInject(),
       isUnhide: parsed.isUnhide(),
     };
@@ -854,19 +855,19 @@ const DEFAULT_COSMETIC_FILTER = {
   style: DEFAULT_HIDDING_STYLE,
 
   // Options
+  isClassSelector: false,
+  isHrefSelector: false,
+  isIdSelector: false,
   isScriptInject: false,
   isUnhide: false,
 };
 
 describe('Cosmetic filters', () => {
-  describe('toString', () => {
+  describe('#toString', () => {
     const checkToString = (line: string, expected: string, debug: boolean = false) => {
-      const parsed = CosmeticFilter.parse(line);
+      const parsed = CosmeticFilter.parse(line, debug);
       expect(parsed).not.toBeNull();
       if (parsed !== null) {
-        if (debug) {
-          parsed.rawLine = line;
-        }
         expect(parsed.toString()).toBe(expected);
       }
     };
@@ -889,47 +890,157 @@ describe('Cosmetic filters', () => {
     });
   });
 
-  describe('parses selector', () => {
+  describe('#parse', () => {
     cosmetic('##iframe[src]', {
       ...DEFAULT_COSMETIC_FILTER,
       selector: 'iframe[src]',
     });
+
+    for (const { attr, name, symbol } of [
+      { attr: 'isClassSelector', name: 'class', symbol: '.' },
+      { attr: 'isIdSelector', name: 'id', symbol: '#' },
+    ]) {
+      describe(`${name} selectors`, () => {
+        for (const domains of ['', 'foo.com', 'foo.*', '~foo.com,foo.*']) {
+          for (const unhide of [true, false]) {
+            it('simple', () => {
+              const selector = `${symbol}selector`;
+              const filter = `${domains}${unhide ? '#@#' : '##'}${selector}`;
+              cosmetic(filter, {
+                ...DEFAULT_COSMETIC_FILTER,
+                [attr]: true,
+                isUnhide: unhide,
+                selector,
+              });
+            });
+
+            for (const invalidSeparator of ['~', '.', ', ', '  ~ ', '+', '#', ']']) {
+              const selector = `${symbol}sele${invalidSeparator}ctor`;
+              const filter = `${domains}${unhide ? '#@#' : '##'}${selector}`;
+              it(`rejects ${filter}`, () => {
+                cosmetic(filter, {
+                  ...DEFAULT_COSMETIC_FILTER,
+                  [attr]: false,
+                  isUnhide: unhide,
+                  selector,
+                });
+              });
+            }
+
+            // Accepted compound selectors
+            for (const compound of [
+              '[]',
+              ' > selector',
+              ' ~ selector',
+              ' + selector',
+              ' .selector',
+              ' #selector',
+            ]) {
+              const selector = `${symbol}selector${compound}`;
+              const filter = `${domains}${unhide ? '#@#' : '##'}${selector}`;
+              it(`detects compound ${filter}`, () => {
+                cosmetic(filter, {
+                  ...DEFAULT_COSMETIC_FILTER,
+                  [attr]: true,
+                  isUnhide: unhide,
+                  selector,
+                });
+              });
+            }
+          }
+        }
+      });
+    }
+
+    describe('simple href selectors', () => {
+      for (const domains of ['', 'foo.com', 'foo.*', '~foo.com,foo.*']) {
+        for (const unhide of [true, false]) {
+          describe('rejects', () => {
+            for (const prefix of ['.class', '#id', 'selector']) {
+              for (const operator of ['~=', '|=', '$=']) {
+                const selector = `${prefix}[href${operator}"https://foo.com"]`;
+                const filter = `${domains}${unhide ? '#@#' : '##'}${selector}`;
+                it(filter, () => {
+                  cosmetic(filter, {
+                    isHrefSelector: false,
+                    isUnhide: unhide,
+                    selector,
+                  });
+                });
+              }
+            }
+          });
+
+          for (const prefix of ['a', '']) {
+            for (const operator of ['=', '*=', '^=']) {
+              // Accepts only double quotes
+              {
+                const selector = `${prefix}[href${operator}"https://foo.com"]`;
+                const filter = `${domains}${unhide ? '#@#' : '##'}${selector}`;
+                it(`detects ${filter}`, () => {
+                  cosmetic(filter, {
+                    ...DEFAULT_COSMETIC_FILTER,
+                    isHrefSelector: true,
+                    isUnhide: unhide,
+                    selector,
+                  });
+                });
+              }
+
+              // Rejects because of single quotes
+              {
+                const selector = `${prefix}[href${operator}'https://foo.com']`;
+                const filter = `${domains}${unhide ? '#@#' : '##'}${selector}`;
+                it(`rejects ${filter}`, () => {
+                  cosmetic(filter, {
+                    ...DEFAULT_COSMETIC_FILTER,
+                    isHrefSelector: false,
+                    isUnhide: unhide,
+                    selector,
+                  });
+                });
+              }
+            }
+          }
+        }
+      }
+    });
   });
 
   it('parses hostnames', () => {
-    cosmetic('foo.com##.selector', {
+    cosmetic('foo.com##selector', {
       ...DEFAULT_COSMETIC_FILTER,
       hostnames: h(['foo.com']),
-      selector: '.selector',
+      selector: 'selector',
     });
-    cosmetic('foo.com,bar.io##.selector', {
+    cosmetic('foo.com,bar.io##selector', {
       ...DEFAULT_COSMETIC_FILTER,
       hostnames: h(['foo.com', 'bar.io']),
-      selector: '.selector',
+      selector: 'selector',
     });
-    cosmetic('foo.com,bar.io,baz.*##.selector', {
+    cosmetic('foo.com,bar.io,baz.*##selector', {
       ...DEFAULT_COSMETIC_FILTER,
       entities: h(['baz']),
       hostnames: h(['foo.com', 'bar.io']),
-      selector: '.selector',
+      selector: 'selector',
     });
 
-    cosmetic('~entity.*,foo.com,~bar.io,baz.*,~entity2.*##.selector', {
+    cosmetic('~entity.*,foo.com,~bar.io,baz.*,~entity2.*##selector', {
       ...DEFAULT_COSMETIC_FILTER,
       entities: h(['baz']),
       hostnames: h(['foo.com']),
       notEntities: h(['entity', 'entity2']),
       notHostnames: h(['bar.io']),
-      selector: '.selector',
+      selector: 'selector',
     });
   });
 
   it('parses unhide', () => {
-    cosmetic('foo.com#@#.selector', {
+    cosmetic('foo.com#@#selector', {
       ...DEFAULT_COSMETIC_FILTER,
       hostnames: h(['foo.com']),
       isUnhide: true,
-      selector: '.selector',
+      selector: 'selector',
     });
   });
 
@@ -952,22 +1063,22 @@ describe('Cosmetic filters', () => {
   });
 
   it('parses :style', () => {
-    cosmetic('###foo :style(display: none)', {
+    cosmetic('##foo :style(display: none)', {
       ...DEFAULT_COSMETIC_FILTER,
-      selector: '#foo ',
+      selector: 'foo ',
       style: 'display: none',
     });
 
-    cosmetic('###foo > bar >baz:style(display: none)', {
+    cosmetic('##foo > bar >baz:style(display: none)', {
       ...DEFAULT_COSMETIC_FILTER,
-      selector: '#foo > bar >baz',
+      selector: 'foo > bar >baz',
       style: 'display: none',
     });
 
-    cosmetic('foo.com,bar.de###foo > bar >baz:style(display: none)', {
+    cosmetic('foo.com,bar.de##foo > bar >baz:style(display: none)', {
       ...DEFAULT_COSMETIC_FILTER,
       hostnames: h(['foo.com', 'bar.de']),
-      selector: '#foo > bar >baz',
+      selector: 'foo > bar >baz',
       style: 'display: none',
     });
 
@@ -976,24 +1087,9 @@ describe('Cosmetic filters', () => {
 
   // TODO
   // it('rejects invalid selectors', () => {
-  //   // @ts-ignore
-  //   global.document = {
-  //     createElement: () => ({ matches: () => false }),
-  //   };
-  //   cosmetic('###.selector /invalid/', null);
-
-  //   // @ts-ignore
-  //   global.document = {
-  //     createElement: () => ({
-  //       matches: () => {
-  //         throw new Error('Invalid');
-  //       },
-  //     }),
-  //   };
-  //   cosmetic('###.selector /invalid/', null);
-
-  //   // @ts-ignore
-  //   global.document = undefined;
+  //   const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>');
+  //   Object.defineProperty(global, 'document', { value: dom.window.document, writable: true });
+  //   expect(CosmeticFilter.parse('###.selector /invalid/')).toBeNull();
   // });
 
   it('#getScript', () => {
@@ -1006,6 +1102,66 @@ describe('Cosmetic filters', () => {
 
       expect(parsed.getScript(new Map())).toBeUndefined();
     }
+  });
+
+  describe('#getTokens', () => {
+    function checkTokens(filter: string, tokens: Uint32Array[]): void {
+      const parsed = CosmeticFilter.parse(filter);
+      expect(parsed).not.toBeNull();
+      if (parsed !== null) {
+        expect(parsed.getTokens()).toEqual(tokens);
+      }
+    }
+
+    // TODO - entities, ~entities, hostnames, ~hostnames
+
+    it('empty tokens if none available', () => {
+      checkTokens('#@#[foo]', [new Uint32Array(0)]);
+    });
+
+    it('no tokens from selector if unhide', () => {
+      checkTokens('#@#.selector', [new Uint32Array(0)]);
+      checkTokens('#@##class', [new Uint32Array(0)]);
+      checkTokens('#@#.selector', [new Uint32Array(0)]);
+    });
+
+    describe('tokenize simple selector', () => {
+      for (const kind of ['.', '#']) {
+        for (const compound of [
+          '',
+          '[]',
+          ' > selector',
+          ' ~ selector',
+          ' + selector',
+          ' .selector',
+          ' #selector',
+        ]) {
+          checkTokens(`##${kind}selector${compound}`, [hashStrings(['selector'])]);
+        }
+      }
+    });
+
+    describe('tokenize href selector', () => {
+      for (const prefix of ['a', '']) {
+        it('tokenize href=', () => {
+          checkTokens(`##${prefix}[href="https://foo.com"]`, [
+            tokenizeFilter('https://foo.com', false, false),
+          ]);
+        });
+
+        it('tokenize href*=', () => {
+          checkTokens(`##${prefix}[href*="https://foo.com"]`, [
+            tokenizeFilter('https://foo.com', true, true),
+          ]);
+        });
+
+        it('tokenize href^=', () => {
+          checkTokens(`##${prefix}[href^="https://foo.com"]`, [
+            tokenizeFilter('https://foo.com', false, true),
+          ]);
+        });
+      }
+    });
   });
 });
 

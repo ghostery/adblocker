@@ -238,7 +238,7 @@ export function decode(input: string): string {
     output.splice(i++, 0, n);
   }
 
-  return String.fromCodePoint(...output);
+  return String.fromCodePoint.apply(null, output);
 }
 
 /**

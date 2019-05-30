@@ -8,9 +8,8 @@
 
 /* eslint-disable no-bitwise */
 
-const { FiltersEngine, fastHash, tokenize, parseFilters } = require('../');
+const { FiltersEngine, fastHash, tokenize, parseFilters, Request } = require('../');
 const { createEngine, domains500 } = require('./utils');
-
 
 function benchEngineCreation({ lists, resources }) {
   return createEngine(lists, resources, {
@@ -93,15 +92,27 @@ function benchGetCosmeticsFilters({ engine }) {
   }
 }
 
+function benchRequestParsing({ requests }) {
+  for (let i = 0; i < requests.length; i += 1) {
+    const { url, frameUrl, cpt } = requests[i];
+    Request.fromRawDetails({
+      url,
+      sourceUrl: frameUrl,
+      type: cpt,
+    });
+  }
+}
+
 module.exports = {
   benchCosmeticsFiltersParsing,
   benchEngineCreation,
   benchEngineDeserialization,
   benchEngineSerialization,
-  benchNetworkFiltersParsing,
-  benchStringHashing,
-  benchStringTokenize,
-  benchGetNetworkTokens,
   benchGetCosmeticTokens,
   benchGetCosmeticsFilters,
+  benchGetNetworkTokens,
+  benchNetworkFiltersParsing,
+  benchRequestParsing,
+  benchStringHashing,
+  benchStringTokenize,
 };

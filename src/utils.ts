@@ -7,6 +7,7 @@
  */
 
 import { compactTokens } from './compact-set';
+import { WebRequestHeadersReceivedDetails } from './request';
 import TokensBuffer from './tokens-buffer';
 
 /***************************************************************************
@@ -47,6 +48,14 @@ export function fastHash(str: string): number {
     return 0;
   }
   return fastHashBetween(str, 0, str.length);
+}
+
+export function hashStrings(strings: string[]): Uint32Array {
+  const result = new Uint32Array(strings.length);
+  for (let i = 0; i < strings.length; i += 1) {
+    result[i] = fastHash(strings[i]);
+  }
+  return result;
 }
 
 // https://jsperf.com/string-startswith/21
@@ -140,8 +149,8 @@ function fastTokenizerNoRegex(
   buffer: TokensBuffer,
 ): void {
   let inside: boolean = false;
-  let start = 0;
-  let precedingCh = 0; // Used to check if a '*' is not just before a token
+  let start: number = 0;
+  let precedingCh: number = 0; // Used to check if a '*' is not just before a token
 
   for (let i: number = 0; i < pattern.length; i += 1) {
     const ch = pattern.charCodeAt(i);
@@ -276,7 +285,7 @@ export function binLookup(arr: Uint32Array, elt: number): boolean {
 }
 
 export function updateResponseHeadersWithCSP(
-  details: chrome.webRequest.WebResponseHeadersDetails,
+  details: WebRequestHeadersReceivedDetails,
   policies: string | undefined,
 ): chrome.webRequest.BlockingResponse {
   if (policies === undefined) {
