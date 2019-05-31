@@ -8,8 +8,8 @@
 
 const CliqzBase = require('./cliqz-base');
 
-module.exports = class Cliqz extends CliqzBase {
+module.exports = class CliqzCompression extends CliqzBase {
   static parse(rawLists) {
-    return super.parse(rawLists, false);
+    return super.parse(rawLists, true);
   }
 };

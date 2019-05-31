@@ -1,7 +1,7 @@
 /* crc32.js (C) 2014-present SheetJS -- http://sheetjs.com */
 /* From: https://github.com/SheetJS/js-crc32/ */
 
-const T: Int32Array = (function signedCrcTable(): Int32Array {
+const T: Int32Array = (() => {
   let c: number = 0;
   const table: Int32Array = new Int32Array(256);
 
@@ -25,7 +25,7 @@ export default function crc32(buf: Uint8Array, start: number, end: number): numb
   let C: number = 0 ^ -1;
   const L: number = end - 7;
   let i: number = start;
-  for (; i < L; ) {
+  while (i < L) {
     C = (C >>> 8) ^ T[(C ^ buf[i++]) & 0xff];
     C = (C >>> 8) ^ T[(C ^ buf[i++]) & 0xff];
     C = (C >>> 8) ^ T[(C ^ buf[i++]) & 0xff];

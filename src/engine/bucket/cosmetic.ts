@@ -156,7 +156,7 @@ export default class CosmeticFilterBucket {
       config,
     );
 
-    // DOM index
+    // DOM indices
     bucket.classesIndex = ReverseIndex.deserialize(
       buffer,
       CosmeticFilter.deserialize,
@@ -205,8 +205,8 @@ export default class CosmeticFilterBucket {
 
   constructor({ filters = [], config }: { filters?: CosmeticFilter[]; config: Config }) {
     this.genericRules = new FiltersContainer({
-      deserialize: CosmeticFilter.deserialize,
       config,
+      deserialize: CosmeticFilter.deserialize,
       filters: [],
     });
 

@@ -30,6 +30,9 @@ brave: ../../node_modules/adblock-rs
 cliqz:
 	NODE_ENV=production node run.js cliqz requests.json
 
+cliqz-compression:
+	NODE_ENV=production node run.js cliqzCompression requests.json
+
 ../../node_modules/jsdom:
 	npm install --save jsdom
 

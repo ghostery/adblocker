@@ -191,7 +191,6 @@ export default class StaticDataView {
     // Round this.pos to next multiple of 4 for alignement
     this.align4();
 
-    // TODO - fix alignement issue with `this.buffer.byteOffset`
     // Short-cut when empty array
     if (desiredSize === 0) {
       return EMPTY_UINT32_ARRAY;

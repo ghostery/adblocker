@@ -52,29 +52,31 @@ export default class FilterEngine {
       );
     }
 
-    // Also make sure that the built-in checksum is correct. This allows to
-    // detect data corruption and start fresh if the serialized version was
-    // altered.
-    buffer.pos = serialized.length - 4;
-    const checksum = buffer.checksum();
-    const expected = buffer.getUint32();
-    if (checksum !== expected) {
-      throw new Error(
-        `serialized engine checksum mismatch, expected ${expected} but got ${checksum}`,
-      );
-    }
-
-    // Reset position to after engine version and start deserialization
-    buffer.pos = 1;
-
     // Create a new engine with same options
     const config = Config.deserialize(buffer);
-    const engine = new FilterEngine({ config });
 
     // Optionally turn compression ON
     if (config.enableCompression) {
       buffer.enableCompression = true;
     }
+
+    // Also make sure that the built-in checksum is correct. This allows to
+    // detect data corruption and start fresh if the serialized version was
+    // altered.
+    if (config.integrityCheck) {
+      const currentPos = buffer.pos;
+      buffer.pos = serialized.length - 4;
+      const checksum = buffer.checksum();
+      const expected = buffer.getUint32();
+      if (checksum !== expected) {
+        throw new Error(
+          `serialized engine checksum mismatch, expected ${expected} but got ${checksum}`,
+        );
+      }
+      buffer.pos = currentPos;
+    }
+
+    const engine = new FilterEngine({ config });
 
     // Deserialize resources
     engine.resources = Resources.deserialize(buffer);
@@ -192,7 +194,9 @@ export default class FilterEngine {
     this.cosmetics.serialize(buffer);
 
     // Append a checksum at the end
-    buffer.pushUint32(buffer.checksum());
+    if (this.config.integrityCheck) {
+      buffer.pushUint32(buffer.checksum());
+    }
 
     return buffer.slice();
   }

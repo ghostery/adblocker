@@ -55,8 +55,8 @@ export default class NetworkFilterBucket {
 
     this.badFiltersIds = null;
     this.badFilters = new FiltersContainer({
-      deserialize: NetworkFilter.deserialize,
       config,
+      deserialize: NetworkFilter.deserialize,
       filters: [],
     });
 

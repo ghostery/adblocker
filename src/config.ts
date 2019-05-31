@@ -14,6 +14,7 @@ export default class Config {
       debug: false,
       enableCompression: buffer.getBool(),
       enableOptimizations: buffer.getBool(),
+      integrityCheck: buffer.getBool(),
       loadCosmeticFilters: buffer.getBool(),
       loadGenericCosmeticsFilters: buffer.getBool(),
       loadNetworkFilters: buffer.getBool(),
@@ -23,6 +24,7 @@ export default class Config {
   public readonly debug: boolean;
   public readonly enableCompression: boolean;
   public readonly enableOptimizations: boolean;
+  public readonly integrityCheck: boolean;
   public readonly loadCosmeticFilters: boolean;
   public readonly loadGenericCosmeticsFilters: boolean;
   public readonly loadNetworkFilters: boolean;
@@ -31,6 +33,7 @@ export default class Config {
     debug = false,
     enableCompression = false,
     enableOptimizations = true,
+    integrityCheck = true,
     loadCosmeticFilters = true,
     loadGenericCosmeticsFilters = true,
     loadNetworkFilters = true,
@@ -38,6 +41,7 @@ export default class Config {
     this.debug = debug;
     this.enableCompression = enableCompression;
     this.enableOptimizations = enableOptimizations;
+    this.integrityCheck = integrityCheck;
     this.loadCosmeticFilters = loadCosmeticFilters;
     this.loadGenericCosmeticsFilters = loadGenericCosmeticsFilters;
     this.loadNetworkFilters = loadNetworkFilters;
@@ -46,6 +50,7 @@ export default class Config {
   public serialize(buffer: StaticDataView): void {
     buffer.pushBool(this.enableCompression);
     buffer.pushBool(this.enableOptimizations);
+    buffer.pushBool(this.integrityCheck);
     buffer.pushBool(this.loadCosmeticFilters);
     buffer.pushBool(this.loadGenericCosmeticsFilters);
     buffer.pushBool(this.loadNetworkFilters);
