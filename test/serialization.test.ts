@@ -23,7 +23,7 @@ describe('Serialization', () => {
   );
 
   describe('filters', () => {
-    const buffer = new StaticDataView(1000000);
+    const buffer = StaticDataView.allocate(1000000, { enableCompression: false });
     const checkFilterSerialization = (Filter: any, filter: IFilter) => {
       // Keep track of original ID to make sure it's preserved after lazy
       // attributes are set and filter is serialized/deserialized.
@@ -57,19 +57,19 @@ describe('Serialization', () => {
   describe('Engine', () => {
     const buffer = new Uint8Array(15000000);
     it('fails with wrong version', () => {
-      const engine = new Engine();
+      const engine = Engine.parse('||domain');
       const serialized = engine.serialize(buffer);
       const version = serialized[0];
       serialized[0] = 1; // override version
       expect(() => {
         Engine.deserialize(serialized);
-      }).toThrow('serialized engine version mismatch');
+      }).toThrow();
       serialized[0] = version;
       expect(Engine.deserialize(serialized)).toEqual(engine);
     });
 
-    it('fails with wrong checksum', () => {
-      const engine = new Engine();
+    it('check integrity', () => {
+      const engine = Engine.parse('||domain', { integrityCheck: true });
       const serialized = engine.serialize(buffer);
       for (let i = 0; i < serialized.length; i += 1) {
         const value = serialized[i];
@@ -87,6 +87,22 @@ describe('Serialization', () => {
         serialized[i] = value;
       }
 
+      expect(Engine.deserialize(serialized)).toEqual(engine);
+    });
+
+    it('disable integrity check', () => {
+      const engine = Engine.parse('||domain', { integrityCheck: true });
+      const serialized = engine.serialize(buffer);
+
+      const end = serialized.length - 1;
+      const value = serialized[end];
+      serialized[end] = 0;
+
+      expect(() => {
+        Engine.deserialize(serialized);
+      }).toThrow();
+
+      serialized[end] = value;
       expect(Engine.deserialize(serialized)).toEqual(engine);
     });
 

@@ -11,17 +11,11 @@ export { default as ReverseIndex } from './src/engine/reverse-index';
 export { default as Request } from './src/request';
 export { default as CosmeticFilter } from './src/filters/cosmetic';
 export { default as NetworkFilter } from './src/filters/network';
-
 export { f, parseFilters } from './src/lists';
-
 export { compactTokens, hasEmptyIntersection, mergeCompactSets } from './src/compact-set';
-
 export { fetchLists, fetchResources } from './src/fetch';
-export { tokenize, fastHash, updateResponseHeadersWithCSP } from './src/utils';
-export { default as StaticDataView } from './src/data-view';
-
+export { updateResponseHeadersWithCSP } from './src/utils';
 export { default as Config } from './src/config';
-
 export { default as WebExtensionEngine } from './src/webextension/background';
 
 export * from './cosmetics';

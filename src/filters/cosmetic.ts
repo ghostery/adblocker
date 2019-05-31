@@ -467,8 +467,7 @@ export default class CosmeticFilter implements IFilter {
     const mask = buffer.getUint8();
     const isUnicode = getBit(mask, COSMETICS_MASK.isUnicode);
     const optionalParts = buffer.getUint8();
-
-    const selector = isUnicode ? buffer.getUTF8() : buffer.getASCII();
+    const selector = isUnicode ? buffer.getUTF8() : buffer.getCosmeticSelector();
 
     // The order of these fields should be the same as when we serialize them.
     return new CosmeticFilter({
@@ -563,7 +562,7 @@ export default class CosmeticFilter implements IFilter {
     if (this.isUnicode()) {
       buffer.pushUTF8(this.selector);
     } else {
-      buffer.pushASCII(this.selector);
+      buffer.pushCosmeticSelector(this.selector);
     }
 
     // This bit-mask indicates which optional parts of the filter were serialized.

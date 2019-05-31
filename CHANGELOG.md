@@ -4,6 +4,10 @@
 
 *not released yet*
 
+  * [EXPERIMENTAL] add on-the-fly string compression using short-string
+    optimized method. Off by default, it can be enabled by using the
+    `enableCompression` flag in `Config`. This allows a reduction in size of
+    about 20% for `FiltersEngine`, at the cost of slightly slower updates. [#122](https://github.com/cliqz-oss/adblocker/pull/122)
   * Remove dependency on tslib [#167](https://github.com/cliqz-oss/adblocker/pull/167)
   * Add built-in error detection code in serialized engine [#165](https://github.com/cliqz-oss/adblocker/pull/165)
     - To prevent un-noticed data corruptions of the serialized adblocker,

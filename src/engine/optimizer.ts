@@ -6,6 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import CosmeticFilter from '../filters/cosmetic';
 import NetworkFilter, { NETWORK_FILTER_MASK } from '../filters/network';
 import { setBit } from '../utils';
 
@@ -150,9 +151,20 @@ const OPTIMIZATIONS: IOptimization[] = [
 ];
 
 /**
+ * Optimizer which returns the list of original filters.
+ */
+export function noopOptimizeNetwork(filters: NetworkFilter[]): NetworkFilter[] {
+  return filters;
+}
+
+export function noopOptimizeCosmetic(filters: CosmeticFilter[]): CosmeticFilter[] {
+  return filters;
+}
+
+/**
  * Fusion a set of `filters` by applying optimizations sequentially.
  */
-export default function optimize(filters: NetworkFilter[]): NetworkFilter[] {
+export function optimizeNetwork(filters: NetworkFilter[]): NetworkFilter[] {
   const fused: NetworkFilter[] = [];
   let toFuse = filters;
 

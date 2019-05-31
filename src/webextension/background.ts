@@ -166,7 +166,6 @@ export default class WebExtensionEngine {
     },
   ): void {
     if (styles.length > 0) {
-      console.log('injecting stylesheet', styles.length, 'bytes');
       this.chrome.tabs.insertCSS(
         tabId,
         {

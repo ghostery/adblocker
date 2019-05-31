@@ -22,14 +22,15 @@
   "scripts": {
     "clean": "rm -rfv dist",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json --module ESNext",
     "bundle": "rollup -c rollup.config.ts",
     "prebuild": "npm run clean",
     "prebundle": "npm run build",
     "prepack": "npm run bundle",
     "pretest": "npm run lint",
     "test": "jest --coverage --no-cache ./test/",
-    "dev": "jest --watch --coverage --bail --no-cache ./test/"
+    "dev": "jest --watch --coverage --bail --no-cache ./test/",
+    "generate-codebooks": "ts-node ./tools/generate_compression_codebooks.ts"
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.9.0",
@@ -50,14 +51,16 @@
     "jsdom": "^15.1.1",
     "prettier": "^1.17.1",
     "puppeteer": "^1.17.0",
-    "rollup": "^1.12.4",
+    "rollup": "^1.13.0",
     "rollup-plugin-commonjs": "^10.0.0",
     "rollup-plugin-node-resolve": "^5.0.0",
     "ts-jest": "^24.0.2",
+    "ts-node": "^8.2.0",
     "tslint": "^5.16.0",
     "typescript": "^3.5.1"
   },
   "dependencies": {
-    "tldts": "^5.0.3"
+    "tldts": "^5.0.3",
+    "tsmaz": "^1.2.1"
   }
 }

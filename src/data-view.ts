@@ -6,8 +6,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import * as compression from './compression';
 import crc32 from './crc32';
 import { decode, encode } from './punycode';
+
+interface IDataViewOptions {
+  enableCompression: boolean;
+}
 
 export const EMPTY_UINT8_ARRAY = new Uint8Array(0);
 export const EMPTY_UINT32_ARRAY = new Uint32Array(0);
@@ -54,15 +59,22 @@ export default class StaticDataView {
   /**
    * Create an empty (i.e.: size = 0) StaticDataView.
    */
-  public static empty(): StaticDataView {
-    return StaticDataView.fromUint8Array(EMPTY_UINT8_ARRAY);
+  public static empty(options: IDataViewOptions): StaticDataView {
+    return StaticDataView.fromUint8Array(EMPTY_UINT8_ARRAY, options);
   }
 
   /**
    * Instantiate a StaticDataView instance from `array` of type Uint8Array.
    */
-  public static fromUint8Array(array: Uint8Array): StaticDataView {
-    return new StaticDataView(0, array);
+  public static fromUint8Array(array: Uint8Array, options: IDataViewOptions): StaticDataView {
+    return new StaticDataView(array, options);
+  }
+
+  /**
+   * Instantiate a StaticDataView with given `capacity` number of bytes.
+   */
+  public static allocate(capacity: number, options: IDataViewOptions): StaticDataView {
+    return new StaticDataView(new Uint8Array(capacity), options);
   }
 
   /**
@@ -74,8 +86,9 @@ export default class StaticDataView {
 
   public pos: number;
   public buffer: Uint8Array;
+  public enableCompression: boolean;
 
-  constructor(length: number, buffer?: Uint8Array) {
+  constructor(buffer: Uint8Array, { enableCompression }: IDataViewOptions) {
     if (LITTLE_ENDIAN === false) {
       // This check makes sure that we will not load the adblocker on a
       // big-endian system. This would not work since byte ordering is important
@@ -83,7 +96,8 @@ export default class StaticDataView {
       throw new Error('Adblocker currently does not support Big-endian systems');
     }
 
-    this.buffer = buffer !== undefined ? buffer : new Uint8Array(length);
+    this.enableCompression = enableCompression;
+    this.buffer = buffer;
     this.pos = 0;
   }
 
@@ -281,10 +295,85 @@ export default class StaticDataView {
     return String.fromCharCode.apply(null, this.buffer.subarray(this.pos - byteLength, this.pos));
   }
 
+  public pushNetworkRedirect(str: string): void {
+    if (this.enableCompression === true) {
+      this.pushBytes(compression.deflateNetworkRedirectString(str));
+    } else {
+      this.pushASCII(str);
+    }
+  }
+
+  public getNetworkRedirect(): string {
+    if (this.enableCompression === true) {
+      return compression.inflateNetworkRedirectString(this.getBytes());
+    }
+    return this.getASCII();
+  }
+
+  public pushNetworkHostname(str: string): void {
+    if (this.enableCompression === true) {
+      this.pushBytes(compression.deflateNetworkHostnameString(str));
+    } else {
+      this.pushASCII(str);
+    }
+  }
+
+  public getNetworkHostname(): string {
+    if (this.enableCompression === true) {
+      return compression.inflateNetworkHostnameString(this.getBytes());
+    }
+    return this.getASCII();
+  }
+
+  public pushNetworkCSP(str: string): void {
+    if (this.enableCompression === true) {
+      this.pushBytes(compression.deflateNetworkCSPString(str));
+    } else {
+      this.pushASCII(str);
+    }
+  }
+
+  public getNetworkCSP(): string {
+    if (this.enableCompression === true) {
+      return compression.inflateNetworkCSPString(this.getBytes());
+    }
+    return this.getASCII();
+  }
+
+  public pushNetworkFilter(str: string): void {
+    if (this.enableCompression === true) {
+      this.pushBytes(compression.deflateNetworkFilterString(str));
+    } else {
+      this.pushASCII(str);
+    }
+  }
+
+  public getNetworkFilter(): string {
+    if (this.enableCompression === true) {
+      return compression.inflateNetworkFilterString(this.getBytes());
+    }
+    return this.getASCII();
+  }
+
+  public pushCosmeticSelector(str: string): void {
+    if (this.enableCompression === true) {
+      this.pushBytes(compression.deflateCosmeticString(str));
+    } else {
+      this.pushASCII(str);
+    }
+  }
+
+  public getCosmeticSelector(): string {
+    if (this.enableCompression === true) {
+      return compression.inflateCosmeticString(this.getBytes());
+    }
+    return this.getASCII();
+  }
+
   private checkSize() {
     if (this.pos !== 0 && this.pos > this.buffer.byteLength) {
       throw new Error(
-        `StaticDataView too small: ${this.buffer.byteLength}, but required ${this.pos - 1} bytes`,
+        `StaticDataView too small: ${this.buffer.byteLength}, but required ${this.pos} bytes`,
       );
     }
   }

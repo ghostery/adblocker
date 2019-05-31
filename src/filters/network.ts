@@ -621,10 +621,14 @@ export default class NetworkFilter implements IFilter {
       mask,
 
       // Optional parts
-      csp: (optionalParts & 1) === 1 ? buffer.getASCII() : undefined,
+      csp: (optionalParts & 1) === 1 ? buffer.getNetworkCSP() : undefined,
       filter:
-        (optionalParts & 2) === 2 ? (isUnicode ? buffer.getUTF8() : buffer.getASCII()) : undefined,
-      hostname: (optionalParts & 4) === 4 ? buffer.getASCII() : undefined,
+        (optionalParts & 2) === 2
+          ? isUnicode
+            ? buffer.getUTF8()
+            : buffer.getNetworkFilter()
+          : undefined,
+      hostname: (optionalParts & 4) === 4 ? buffer.getNetworkHostname() : undefined,
       optDomains: (optionalParts & 8) === 8 ? buffer.getUint32Array() : undefined,
       optNotDomains: (optionalParts & 16) === 16 ? buffer.getUint32Array() : undefined,
       rawLine:
@@ -633,7 +637,7 @@ export default class NetworkFilter implements IFilter {
             ? buffer.getUTF8()
             : buffer.getASCII()
           : undefined,
-      redirect: (optionalParts & 64) === 64 ? buffer.getASCII() : undefined,
+      redirect: (optionalParts & 64) === 64 ? buffer.getNetworkRedirect() : undefined,
     });
   }
 
@@ -737,7 +741,7 @@ export default class NetworkFilter implements IFilter {
 
     if (this.csp !== undefined) {
       optionalParts |= 1;
-      buffer.pushASCII(this.csp);
+      buffer.pushNetworkCSP(this.csp);
     }
 
     if (this.filter !== undefined) {
@@ -745,16 +749,16 @@ export default class NetworkFilter implements IFilter {
       if (this.isUnicode()) {
         buffer.pushUTF8(this.filter);
       } else {
-        buffer.pushASCII(this.filter);
+        buffer.pushNetworkFilter(this.filter);
       }
     }
 
     if (this.hostname !== undefined) {
       optionalParts |= 4;
-      buffer.pushASCII(this.hostname);
+      buffer.pushNetworkHostname(this.hostname);
     }
 
-    if (this.optDomains) {
+    if (this.optDomains !== undefined) {
       optionalParts |= 8;
       buffer.pushUint32Array(this.optDomains);
     }
@@ -775,7 +779,7 @@ export default class NetworkFilter implements IFilter {
 
     if (this.redirect !== undefined) {
       optionalParts |= 64;
-      buffer.pushASCII(this.redirect);
+      buffer.pushNetworkRedirect(this.redirect);
     }
 
     buffer.setByte(index, optionalParts);

@@ -27,6 +27,7 @@ export default [
     output: {
       file: 'background.iife.js',
       format: 'iife',
+      name: 'adblocker',
     },
     plugins,
   },
@@ -35,6 +36,7 @@ export default [
     output: {
       file: 'content-script.iife.js',
       format: 'iife',
+      name: 'adblocker',
     },
     plugins,
   },

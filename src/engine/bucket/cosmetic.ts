@@ -7,6 +7,7 @@
  */
 
 import { compactTokens, concatTypedArrays } from '../../compact-set';
+import Config from '../../config';
 import StaticDataView from '../../data-view';
 import CosmeticFilter, {
   DEFAULT_HIDDING_STYLE,
@@ -14,6 +15,7 @@ import CosmeticFilter, {
   getHostnameHashesFromLabelsBackward,
 } from '../../filters/cosmetic';
 import { hashStrings, tokenizeFilter } from '../../utils';
+import { noopOptimizeCosmetic } from '../optimizer';
 import ReverseIndex from '../reverse-index';
 import FiltersContainer from './filters';
 
@@ -135,17 +137,46 @@ function createLookupTokens(hostname: string, domain: string): Uint32Array {
  * hostname/domain.
  */
 export default class CosmeticFilterBucket {
-  public static deserialize(buffer: StaticDataView): CosmeticFilterBucket {
-    const bucket = new CosmeticFilterBucket();
+  public static deserialize(buffer: StaticDataView, config: Config): CosmeticFilterBucket {
+    const bucket = new CosmeticFilterBucket({ config });
 
-    bucket.genericRules = FiltersContainer.deserialize(buffer, CosmeticFilter.deserialize);
-    bucket.unhideIndex = ReverseIndex.deserialize(buffer, CosmeticFilter.deserialize);
-    bucket.hostnameIndex = ReverseIndex.deserialize(buffer, CosmeticFilter.deserialize);
+    bucket.genericRules = FiltersContainer.deserialize(buffer, CosmeticFilter.deserialize, config);
 
-    // DOM index
-    bucket.classesIndex = ReverseIndex.deserialize(buffer, CosmeticFilter.deserialize);
-    bucket.idsIndex = ReverseIndex.deserialize(buffer, CosmeticFilter.deserialize);
-    bucket.hrefsIndex = ReverseIndex.deserialize(buffer, CosmeticFilter.deserialize);
+    bucket.unhideIndex = ReverseIndex.deserialize(
+      buffer,
+      CosmeticFilter.deserialize,
+      noopOptimizeCosmetic,
+      config,
+    );
+
+    bucket.hostnameIndex = ReverseIndex.deserialize(
+      buffer,
+      CosmeticFilter.deserialize,
+      noopOptimizeCosmetic,
+      config,
+    );
+
+    // DOM indices
+    bucket.classesIndex = ReverseIndex.deserialize(
+      buffer,
+      CosmeticFilter.deserialize,
+      noopOptimizeCosmetic,
+      config,
+    );
+
+    bucket.idsIndex = ReverseIndex.deserialize(
+      buffer,
+      CosmeticFilter.deserialize,
+      noopOptimizeCosmetic,
+      config,
+    );
+
+    bucket.hrefsIndex = ReverseIndex.deserialize(
+      buffer,
+      CosmeticFilter.deserialize,
+      noopOptimizeCosmetic,
+      config,
+    );
 
     return bucket;
   }
@@ -172,25 +203,58 @@ export default class CosmeticFilterBucket {
   public baseStylesheet: string | null;
   public extraGenericRules: CosmeticFilter[] | null;
 
-  constructor({ filters = [] }: { filters?: CosmeticFilter[] } = {}) {
-    this.genericRules = new FiltersContainer({ deserialize: CosmeticFilter.deserialize });
-    this.unhideIndex = new ReverseIndex({ deserialize: CosmeticFilter.deserialize });
-    this.hostnameIndex = new ReverseIndex({ deserialize: CosmeticFilter.deserialize });
+  constructor({ filters = [], config }: { filters?: CosmeticFilter[]; config: Config }) {
+    this.genericRules = new FiltersContainer({
+      config,
+      deserialize: CosmeticFilter.deserialize,
+      filters: [],
+    });
 
-    this.classesIndex = new ReverseIndex({ deserialize: CosmeticFilter.deserialize });
-    this.idsIndex = new ReverseIndex({ deserialize: CosmeticFilter.deserialize });
-    this.hrefsIndex = new ReverseIndex({ deserialize: CosmeticFilter.deserialize });
+    this.unhideIndex = new ReverseIndex({
+      config,
+      deserialize: CosmeticFilter.deserialize,
+      filters: [],
+      optimize: noopOptimizeCosmetic,
+    });
+
+    this.hostnameIndex = new ReverseIndex({
+      config,
+      deserialize: CosmeticFilter.deserialize,
+      filters: [],
+      optimize: noopOptimizeCosmetic,
+    });
+
+    this.classesIndex = new ReverseIndex({
+      config,
+      deserialize: CosmeticFilter.deserialize,
+      filters: [],
+      optimize: noopOptimizeCosmetic,
+    });
+
+    this.idsIndex = new ReverseIndex({
+      config,
+      deserialize: CosmeticFilter.deserialize,
+      filters: [],
+      optimize: noopOptimizeCosmetic,
+    });
+
+    this.hrefsIndex = new ReverseIndex({
+      config,
+      deserialize: CosmeticFilter.deserialize,
+      filters: [],
+      optimize: noopOptimizeCosmetic,
+    });
 
     // In-memory cache, lazily initialized
     this.baseStylesheet = null;
     this.extraGenericRules = null;
 
     if (filters.length !== 0) {
-      this.update(filters);
+      this.update(filters, undefined);
     }
   }
 
-  public update(newFilters: CosmeticFilter[], removedFilters?: Set<number>): void {
+  public update(newFilters: CosmeticFilter[], removedFilters: Set<number> | undefined): void {
     const unHideRules: CosmeticFilter[] = [];
     const genericHideRules: CosmeticFilter[] = [];
     const hostnameSpecificRules: CosmeticFilter[] = [];

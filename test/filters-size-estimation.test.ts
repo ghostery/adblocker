@@ -15,7 +15,7 @@ import { loadAllLists } from './utils';
 
 describe('Make sure size estimate is accurate', () => {
   const { cosmeticFilters, networkFilters } = parseFilters(loadAllLists(), { debug: true });
-  const buffer = new StaticDataView(1000000);
+  const buffer = StaticDataView.allocate(1000000, { enableCompression: false });
 
   function testSizeEstimate<T extends IFilter>(filters: T[]): void {
     for (let i = 0; i < filters.length; i += 1) {
