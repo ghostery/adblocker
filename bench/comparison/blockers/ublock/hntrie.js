@@ -43,8 +43,8 @@ const path = require('path');
   For example, `www.abc.com` is deemed matching `abc.com`, because the former
   is a subdomain of the latter. The opposite is of course not true.
 
-  The resulting read-only tries created as a result of using hnTrieManager are
-  simply just typed arrays filled with integers. The matching algorithm is
+  The resulting read-only tries created as a result of using HNTrieContainer
+  are simply just typed arrays filled with integers. The matching algorithm is
   just a matter of reading/comparing these integers, and further using them as
   indices in the array as a way to move around in the trie.
 
@@ -178,7 +178,8 @@ class HNTrieContainer {
     matchesJS(iroot) {
         const char0 = this.buf32[HNTRIE_CHAR0_SLOT];
         let ineedle = this.buf[255];
-        let icell = iroot;
+        let icell = this.buf32[iroot+0];
+        if ( icell === 0 ) { return -1; }
         for (;;) {
             if ( ineedle === 0 ) { return -1; }
             ineedle -= 1;
@@ -241,18 +242,18 @@ class HNTrieContainer {
     addJS(iroot) {
         let lhnchar = this.buf[255];
         if ( lhnchar === 0 ) { return 0; }
-        let icell = iroot;
-        // special case: first node in trie
-        if ( this.buf32[icell+2] === 0 ) {
-            this.buf32[icell+2] = this.addSegment(lhnchar);
-            return 1;
-        }
         // grow buffer if needed
         if (
             (this.buf32[HNTRIE_CHAR0_SLOT] - this.buf32[HNTRIE_TRIE1_SLOT]) < 24 ||
             (this.buf.length - this.buf32[HNTRIE_CHAR1_SLOT]) < 256
         ) {
             this.growBuf(24, 256);
+        }
+        let icell = this.buf32[iroot+0];
+        // special case: first node in trie
+        if ( icell === 0 ) {
+            this.buf32[iroot+0] = this.addCell(0, 0, this.addSegment(lhnchar));
+            return 1;
         }
         //
         const char0 = this.buf32[HNTRIE_CHAR0_SLOT];
@@ -262,6 +263,9 @@ class HNTrieContainer {
             const vseg = this.buf32[icell+2];
             // skip boundary cells
             if ( vseg === 0 ) {
+                // remainder is at label boundary? if yes, no need to add
+                // the rest since the shortest match is always reported
+                if ( this.buf[lhnchar-1] === 0x2E /* '.' */ ) { return -1; }
                 icell = this.buf32[icell+1];
                 continue;
             }
@@ -306,6 +310,9 @@ class HNTrieContainer {
                         icell = inext;
                         continue;
                     }
+                    // remainder is at label boundary? if yes, no need to add
+                    // the rest since the shortest match is always reported
+                    if ( this.buf[lhnchar-1] === 0x2E /* '.' */ ) { return -1; }
                     // boundary cell + needle remainder
                     inext = this.addCell(0, 0, 0);
                     this.buf32[icell+1] = inext;
@@ -553,7 +560,7 @@ HNTrieContainer.prototype.HNTrieRef = class {
     }
 
     add(hn) {
-        if ( this.container.setNeedle(hn).add(this.iroot) === 1 ) {
+        if ( this.container.setNeedle(hn).add(this.iroot) > 0 ) {
             this.last = -1;
             this.needle = '';
             this.size += 1;
@@ -563,7 +570,7 @@ HNTrieContainer.prototype.HNTrieRef = class {
     }
 
     addJS(hn) {
-        if ( this.container.setNeedle(hn).addJS(this.iroot) === 1 ) {
+        if ( this.container.setNeedle(hn).addJS(this.iroot) > 0 ) {
             this.last = -1;
             this.needle = '';
             this.size += 1;
@@ -573,7 +580,7 @@ HNTrieContainer.prototype.HNTrieRef = class {
     }
 
     addWASM(hn) {
-        if ( this.container.setNeedle(hn).addWASM(this.iroot) === 1 ) {
+        if ( this.container.setNeedle(hn).addWASM(this.iroot) > 0 ) {
             this.last = -1;
             this.needle = '';
             this.size += 1;
@@ -604,6 +611,20 @@ HNTrieContainer.prototype.HNTrieRef = class {
             this.last = this.container.setNeedle(needle).matchesWASM(this.iroot);
         }
         return this.last;
+    }
+
+    dump() {
+        let hostnames = Array.from(this);
+        if ( String.prototype.padStart instanceof Function ) {
+            const maxlen = Math.min(
+                hostnames.reduce((maxlen, hn) => Math.max(maxlen, hn.length), 0),
+                64
+            );
+            hostnames = hostnames.map(hn => hn.padStart(maxlen));
+        }
+        for ( const hn of hostnames ) {
+            console.log(hn);
+        }
     }
 
     [Symbol.iterator]() {

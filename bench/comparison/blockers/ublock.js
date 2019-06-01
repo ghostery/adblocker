@@ -42,6 +42,9 @@ const localStorage = {
   setItem: (key, value) => { localStorageStore.set(key, value); },
 };
 
+// MOCK: requestIdleCallback
+DOM.window.requestIdleCallback = cb => setTimeout(cb, 1000);
+
 // MOCK: tabContextManager
 const tabContextManager = {
   mustLookup: () => ({
@@ -93,6 +96,7 @@ const globals = {
   punycode,
   µBlock,
   vAPI,
+  self: DOM.window,
   window: DOM.window,
   document: DOM.window.document,
 };

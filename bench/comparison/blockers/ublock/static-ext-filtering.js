@@ -167,6 +167,7 @@
                 'matches-css-after',
                 'matches-css-before',
                 'not',
+                'nth-ancestor',
                 'watch-attrs',
                 'xpath'
                 ].join('|'),
@@ -240,6 +241,13 @@
             }
         };
 
+        const compileNthAncestorSelector = function(s) {
+            const n = parseInt(s, 10);
+            if ( isNaN(n) === false && n >= 1 && n < 256 ) {
+                return n;
+            }
+        };
+
         const compileSpathExpression = function(s) {
             if ( isValidCSSSelector('*' + s) ) {
                 return s;
@@ -282,6 +290,7 @@
             [ ':matches-css-after', compileCSSDeclaration ],
             [ ':matches-css-before', compileCSSDeclaration ],
             [ ':not', compileNotSelector ],
+            [ ':nth-ancestor', compileNthAncestorSelector ],
             [ ':spath', compileSpathExpression ],
             [ ':watch-attrs', compileAttrList ],
             [ ':xpath', compileXpathExpression ]
@@ -305,42 +314,45 @@
                 switch ( task[0] ) {
                 case ':has':
                 case ':if':
-                    raw.push(':has', '(', decompile(task[1]), ')');
+                    raw.push(`:has(${decompile(task[1])})`);
                     break;
                 case ':has-text':
                     if ( Array.isArray(task[1]) ) {
-                        value = '/' + task[1][0] + '/' + task[1][1];
+                        value = `/${task[1][0]}/${task[1][1]}`;
                     } else {
                         value = regexToRawValue.get(task[1]);
                         if ( value === undefined ) {
-                            value = '/' + task[1] + '/';
+                            value = `/${task[1]}/`;
                         }
                     }
-                    raw.push(task[0], '(', value, ')');
+                    raw.push(`:has-text(${value})`);
                     break;
                 case ':matches-css':
                 case ':matches-css-after':
                 case ':matches-css-before':
                     if ( Array.isArray(task[1].value) ) {
-                        value = '/' + task[1].value[0] + '/' + task[1].value[1];
+                        value = `/${task[1].value[0]}/${task[1].value[1]}`;
                     } else {
                         value = regexToRawValue.get(task[1].value);
                         if ( value === undefined ) {
-                            value = '/' + task[1].value + '/';
+                            value = `/${task[1].value}/`;
                         }
                     }
-                    raw.push(task[0], '(', task[1].name, ': ', value, ')');
+                    raw.push(`${task[0]}(${task[1].name}: ${value})`);
                     break;
                 case ':not':
                 case ':if-not':
-                    raw.push(':not', '(', decompile(task[1]), ')');
+                    raw.push(`:not(${decompile(task[1])})`);
+                    break;
+                case ':nth-ancestor':
+                    raw.push(`:nth-ancestor(${task[1]})`);
                     break;
                 case ':spath':
                     raw.push(task[1]);
                     break;
                 case ':watch-attrs':
                 case ':xpath':
-                    raw.push(task[0], '(', task[1], ')');
+                    raw.push(`${task[0]}(${task[1]})`);
                     break;
                 }
             }
@@ -474,83 +486,111 @@
     // Public classes
     //--------------------------------------------------------------------------
 
-    api.HostnameBasedDB = function(selfie) {
-        if ( selfie !== undefined ) {
-            this.db = new Map(selfie.map);
-            this.size = selfie.size;
-        } else {
-            this.db = new Map();
+    api.HostnameBasedDB = class {
+
+        constructor(nBits, selfie = undefined) {
+            this.nBits = nBits;
+            this.timer = undefined;
+            this.strToIdMap = new Map();
+            if ( selfie !== undefined ) {
+                this.fromSelfie(selfie);
+                return;
+            }
+            this.hostnameToSlotIdMap = new Map();
+            this.hostnameSlots = [];
+            this.strSlots = [];
             this.size = 0;
         }
-    };
 
-    api.HostnameBasedDB.prototype = {
-        add: function(hash, entry) {
-            let bucket = this.db.get(hash);
-            if ( bucket === undefined ) {
-                this.db.set(hash, entry);
-            } else if ( Array.isArray(bucket) ) {
-                bucket.push(entry);
-            } else {
-                this.db.set(hash, [ bucket, entry ]);
-            }
+        store(hn, bits, s) {
             this.size += 1;
-        },
-        clear: function() {
-            this.db.clear();
+            let iStr = this.strToIdMap.get(s);
+            if ( iStr === undefined ) {
+                iStr = this.strSlots.length;
+                this.strSlots.push(s);
+                this.strToIdMap.set(s, iStr);
+                if ( this.timer === undefined ) {
+                    this.collectGarbage(true);
+                }
+            }
+            const strId = iStr << this.nBits | bits;
+            const iHn = this.hostnameToSlotIdMap.get(hn);
+            if ( iHn === undefined ) {
+                this.hostnameToSlotIdMap.set(hn, this.hostnameSlots.length);
+                this.hostnameSlots.push(strId);
+                return;
+            }
+            const bucket = this.hostnameSlots[iHn];
+            if ( Array.isArray(bucket) ) {
+                bucket.push(strId);
+            } else {
+                this.hostnameSlots[iHn] = [ bucket, strId ];
+            }
+        }
+
+        clear() {
+            this.hostnameToSlotIdMap.clear();
+            this.hostnameSlots.length = 0;
+            this.strSlots.length = 0;
+            this.strToIdMap.clear();
             this.size = 0;
-        },
-        retrieve: function(hash, hostname, out) {
-            let bucket = this.db.get(hash);
-            if ( bucket === undefined ) { return; }
-            if ( Array.isArray(bucket) === false ) {
-                bucket = [ bucket ];
-            }
-            for ( let entry of bucket ) {
-                if ( hostname.endsWith(entry.hostname) === false ) {
-                    continue;
+        }
+
+        collectGarbage(async = false) {
+            if ( async === false ) {
+                if ( this.timer !== undefined ) {
+                    self.cancelIdleCallback(this.timer);
+                    this.timer = undefined;
                 }
-                let i = hostname.length - entry.hostname.length;
-                if (
-                    i === 0 ||
-                    i === hostname.length ||
-                    hostname.charCodeAt(i-1) === 0x2E /* '.' */
-                ) {
-                    out.push(entry);
-                }
+                this.strToIdMap.clear();
+                return;
             }
-        },
-        toSelfie: function() {
+            if ( this.timer !== undefined ) { return; }
+            this.timer = self.requestIdleCallback(
+                ( ) => {
+                    this.timer = undefined;
+                    this.strToIdMap.clear();
+                },
+                { timeout: 10000 }
+            );
+        }
+
+        retrieve(hostname, out) {
+            const mask = out.length - 1; // out.length must be power of two
+            for (;;) {
+                const filterId = this.hostnameToSlotIdMap.get(hostname);
+                if ( filterId !== undefined ) {
+                    const bucket = this.hostnameSlots[filterId];
+                    if ( Array.isArray(bucket) ) {
+                        for ( const id of bucket ) {
+                            out[id & mask].add(this.strSlots[id >>> this.nBits]);
+                        }
+                    } else {
+                        out[bucket & mask].add(this.strSlots[bucket >>> this.nBits]);
+                    }
+                }
+                if ( hostname === '' ) { break; }
+                const pos = hostname.indexOf('.');
+                hostname = pos !== -1 ? hostname.slice(pos + 1) : '';
+            }
+        }
+
+        toSelfie() {
             return {
-                map: Array.from(this.db),
+                hostnameToSlotIdMap: Array.from(this.hostnameToSlotIdMap),
+                hostnameSlots: this.hostnameSlots,
+                strSlots: this.strSlots,
                 size: this.size
             };
         }
-    };
 
-    api.HostnameBasedDB.prototype[Symbol.iterator] = (function() {
-        const Iter = function(db) {
-            this.mapIter = db.values();
-            this.arrayIter = undefined;
-        };
-        Iter.prototype.next = function() {
-            let result;
-            if ( this.arrayIter !== undefined ) {
-                result = this.arrayIter.next();
-                if ( result.done === false ) { return result; }
-                this.arrayIter = undefined;
-            }
-            result = this.mapIter.next();
-            if ( result.done || Array.isArray(result.value) === false ) {
-                return result;
-            }
-            this.arrayIter = result.value[Symbol.iterator]();
-            return this.arrayIter.next(); // array should never be empty
-        };
-        return function() {
-            return new Iter(this.db);
-        };
-    })();
+        fromSelfie(selfie) {
+            this.hostnameToSlotIdMap = new Map(selfie.hostnameToSlotIdMap);
+            this.hostnameSlots = selfie.hostnameSlots;
+            this.strSlots = selfie.strSlots;
+            this.size = selfie.size;
+        }
+    };
 
     //--------------------------------------------------------------------------
     // Public methods
@@ -570,60 +610,6 @@
         µb.scriptletFilteringEngine.freeze();
         µb.htmlFilteringEngine.freeze();
         resetParsed(parsed);
-    };
-
-    // HHHHHHHHHHHH0000
-    //            |   |
-    //            |   |
-    //            |   +-- bit  3-0: reserved
-    //            +------ bit 15-4: FNV
-    api.makeHash = function(token) {
-        // Based on: FNV32a
-        // http://www.isthe.com/chongo/tech/comp/fnv/index.html#FNV-reference-source
-        // The rest is custom, suited for uBlock.
-        const i1 = token.length;
-        if ( i1 === 0 ) { return 0; }
-        const i2 = i1 >> 1;
-        const i4 = i1 >> 2;
-        const i8 = i1 >> 3;
-        let hval = (0x811c9dc5 ^ token.charCodeAt(0)) >>> 0;
-        hval += (hval<<1) + (hval<<4) + (hval<<7) + (hval<<8) + (hval<<24);
-        hval >>>= 0;
-        hval ^= token.charCodeAt(i8);
-        hval += (hval<<1) + (hval<<4) + (hval<<7) + (hval<<8) + (hval<<24);
-        hval >>>= 0;
-        hval ^= token.charCodeAt(i4);
-        hval += (hval<<1) + (hval<<4) + (hval<<7) + (hval<<8) + (hval<<24);
-        hval >>>= 0;
-        hval ^= token.charCodeAt(i4+i8);
-        hval += (hval<<1) + (hval<<4) + (hval<<7) + (hval<<8) + (hval<<24);
-        hval >>>= 0;
-        hval ^= token.charCodeAt(i2);
-        hval += (hval<<1) + (hval<<4) + (hval<<7) + (hval<<8) + (hval<<24);
-        hval >>>= 0;
-        hval ^= token.charCodeAt(i2+i8);
-        hval += (hval<<1) + (hval<<4) + (hval<<7) + (hval<<8) + (hval<<24);
-        hval >>>= 0;
-        hval ^= token.charCodeAt(i2+i4);
-        hval += (hval<<1) + (hval<<4) + (hval<<7) + (hval<<8) + (hval<<24);
-        hval >>>= 0;
-        hval ^= token.charCodeAt(i1-1);
-        hval += (hval<<1) + (hval<<4) + (hval<<7) + (hval<<8) + (hval<<24);
-        hval >>>= 0;
-        hval &= 0xFFF0;
-        // Can't return 0, it's reserved for empty string.
-        return hval !== 0 ? hval : 0xfff0;
-    };
-
-    api.compileHostnameToHash = function(hostname) {
-        let domain;
-        if ( hostname.endsWith('.*') ) {
-            const pos = hostname.lastIndexOf('.', hostname.length - 3);
-            domain = pos !== -1 ? hostname.slice(pos + 1) : hostname;
-        } else {
-            domain = µb.URI.domainFromHostname(hostname);
-        }
-        return api.makeHash(domain);
     };
 
     // https://github.com/chrisaljoudi/uBlock/issues/1004
@@ -810,7 +796,7 @@
 
         // New shorter syntax for scriptlet injection engine.
         if ( c0 === 0x2B /* '+' */ && suffix.startsWith('+js') ) {
-          // µb.scriptletFilteringEngine.compile(parsed, writer);
+            µb.scriptletFilteringEngine.compile(parsed, writer);
             return true;
         }
 
@@ -818,12 +804,12 @@
         // TODO: evaluate converting Adguard's `$$` syntax into uBO's HTML
         //       filtering syntax.
         if ( c0 === 0x5E /* '^' */ ) {
-          // µb.htmlFilteringEngine.compile(parsed, writer);
+            µb.htmlFilteringEngine.compile(parsed, writer);
             return true;
         }
 
         // Cosmetic filtering engine.
-        // µb.cosmeticFilteringEngine.compile(parsed, writer);
+        µb.cosmeticFilteringEngine.compile(parsed, writer);
         return true;
     };
 
