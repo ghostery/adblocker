@@ -49,22 +49,23 @@
             this._validTokenChars[this._chars.charCodeAt(i)] = i + 1;
         }
 
-        this._charsEx = '0123456789%abcdefghijklmnopqrstuvwxyz*.';
-        this._validTokenCharsEx = new Uint8Array(128);
-        for ( let i = 0, n = this._charsEx.length; i < n; i++ ) {
-            this._validTokenCharsEx[this._charsEx.charCodeAt(i)] = i + 1;
-        }
-
-        this.dotTokenHash = this.tokenHashFromString('.');
-        this.anyTokenHash = this.tokenHashFromString('..');
-        this.anyHTTPSTokenHash = this.tokenHashFromString('..https');
-        this.anyHTTPTokenHash = this.tokenHashFromString('..http');
-        this.noTokenHash = this.tokenHashFromString('*');
+        // Four upper bits of token hash are reserved for built-in predefined
+        // token hashes, which should never end up being used when tokenizing
+        // any arbitrary string.
+             this.dotTokenHash = 0x10000000;
+             this.anyTokenHash = 0x20000000;
+        this.anyHTTPSTokenHash = 0x30000000;
+         this.anyHTTPTokenHash = 0x40000000;
+              this.noTokenHash = 0x50000000;
+           this.emptyTokenHash = 0xF0000000;
 
         this._urlIn = '';
         this._urlOut = '';
         this._tokenized = false;
         this._tokens = [ 0 ];
+
+        this.knownTokens = new Uint8Array(65536);
+        this.resetKnownTokens();
     }
 
     setURL(url) {
@@ -74,6 +75,19 @@
             this._tokenized = false;
         }
         return this._urlOut;
+    }
+
+    resetKnownTokens() {
+        this.knownTokens.fill(0);
+        this.addKnownToken(this.dotTokenHash);
+        this.addKnownToken(this.anyTokenHash);
+        this.addKnownToken(this.anyHTTPSTokenHash);
+        this.addKnownToken(this.anyHTTPTokenHash);
+        this.addKnownToken(this.noTokenHash);
+    }
+
+    addKnownToken(th) {
+        this.knownTokens[th & 0xFFFF ^ th >>> 16] = 1;
     }
 
     // Tokenize on demand.
@@ -92,45 +106,52 @@
         return this._tokens;
     }
 
-    _appendTokenAt(i, th, ti) {
-        this._tokens[i+0] = th;
-        this._tokens[i+1] = ti;
-        return i + 2;
-    }
-
     tokenHashFromString(s) {
         const l = s.length;
-        if ( l === 0 ) { return 0; }
-        const vtc = this._validTokenCharsEx;
+        if ( l === 0 ) { return this.emptyTokenHash; }
+        const vtc = this._validTokenChars;
         let th = vtc[s.charCodeAt(0)];
-        for ( let i = 1; i !== 8 && i !== l; i++ ) {
-            th = th * 64 + vtc[s.charCodeAt(i)];
+        for ( let i = 1; i !== 7 && i !== l; i++ ) {
+            th = th << 4 ^ vtc[s.charCodeAt(i)];
         }
         return th;
     }
 
     stringFromTokenHash(th) {
         if ( th === 0 ) { return ''; }
-        let s = '';
-        while ( th > 0 ) {
-            s = `${this._charsEx.charAt((th & 0b111111)-1)}${s}`;
-            th /= 64;
-        }
-        return s;
+        return th.toString(16);
+    }
+
+    toSelfie() {
+        return µBlock.base64.encode(
+            this.knownTokens.buffer,
+            this.knownTokens.byteLength
+        );
+    }
+
+    fromSelfie(selfie) {
+        return µBlock.base64.decode(selfie, this.knownTokens.buffer);
     }
 
     // https://github.com/chrisaljoudi/uBlock/issues/1118
     // We limit to a maximum number of tokens.
 
+    _appendTokenAt(i, th, ti) {
+        this._tokens[i+0] = th;
+        this._tokens[i+1] = ti;
+        return i + 2;
+    }
+
     _tokenize() {
         const tokens = this._tokens;
         let url = this._urlOut;
         let l = url.length;
-        if ( l === 0 ) { return 0; }
+        if ( l === 0 ) { return this.emptyTokenHash; }
         if ( l > 2048 ) {
             url = url.slice(0, 2048);
             l = 2048;
         }
+        const knownTokens = this.knownTokens;
         const vtc = this._validTokenChars;
         let i = 0, j = 0, v, n, ti, th;
         for (;;) {
@@ -144,13 +165,15 @@
                 if ( i === l ) { break; }
                 v = vtc[url.charCodeAt(i++)];
                 if ( v === 0 ) { break; }
-                if ( n === 8 ) { continue; }
-                th = th * 64 + v;
+                if ( n === 7 ) { continue; }
+                th = th << 4 ^ v;
                 n += 1;
             }
-            tokens[j+0] = th;
-            tokens[j+1] = ti;
-            j += 2;
+            if ( knownTokens[th & 0xFFFF ^ th >>> 16] !== 0 ) {
+                tokens[j+0] = th;
+                tokens[j+1] = ti;
+                j += 2;
+            }
         }
     }
 })();
@@ -355,40 +378,6 @@
 
 /******************************************************************************/
 
-// I want this helper to be self-maintained, callers must not worry about
-// this helper cleaning after itself by asking them to reset it when it is no
-// longer needed. A timer will be used for self-garbage-collect.
-// Cleaning up 10s after last hit sounds reasonable.
-
-µBlock.stringDeduplicater = {
-    strings: new Map(),
-    timer: undefined,
-    last: 0,
-
-    lookup: function(s) {
-        let t = this.strings.get(s);
-        if ( t === undefined ) {
-            t = this.strings.set(s, s).get(s);
-            if ( this.timer === undefined ) {
-                this.timer = vAPI.setTimeout(() => { this.cleanup(); }, 10000);
-            }
-        }
-        this.last = Date.now();
-        return t;
-    },
-
-    cleanup: function() {
-        if ( (Date.now() - this.last) < 10000 ) {
-            this.timer = vAPI.setTimeout(() => { this.cleanup(); }, 10000);
-        } else {
-            this.timer = undefined;
-            this.strings.clear();
-        }
-    }
-};
-
-/******************************************************************************/
-
 µBlock.openNewTab = function(details) {
     if ( details.url.startsWith('logger-ui.html') ) {
         if ( details.shiftKey ) {
@@ -577,11 +566,25 @@
             } while ( v !== 0 );
             outbuf[j++] = 0x20 /* ' ' */;
         }
+        if ( typeof TextDecoder === 'undefined' ) {
+            return JSON.stringify(
+                Array.from(new Uint32Array(outbuf.buffer, 0, j >>> 2))
+            );
+        }
         const textDecoder = new TextDecoder();
         return textDecoder.decode(new Uint8Array(outbuf.buffer, 0, j));
     }
 
     decode(instr, arrbuf) {
+        if (  instr.charCodeAt(0) === 0x5B /* '[' */ ) {
+            const inbuf = JSON.parse(instr);
+            if ( arrbuf instanceof ArrayBuffer === false ) {
+                return new Uint32Array(inbuf);
+            }
+            const outbuf = new Uint32Array(arrbuf);
+            outbuf.set(inbuf);
+            return outbuf;
+        }
         if ( instr.startsWith(this.magic) === false ) {
             throw new Error('Invalid µBlock.base64 encoding');
         }
