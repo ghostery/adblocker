@@ -7,20 +7,11 @@
  */
 
 /* eslint-disable no-await-in-loop */
+/* eslint-disable global-require */
 
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
-
-const UBlockOrigin = require('./blockers/ublock.js');
-const Brave = require('./blockers/brave.js');
-const Duckduckgo = require('./blockers/duckduckgo.js');
-const Cliqz = require('./blockers/cliqz.js');
-const AdBlockPlus = require('./blockers/adblockplus.js');
-const Tldts = require('./blockers/tldts_baseline.js');
-const Url = require('./blockers/url_baseline.js');
-const Re = require('./blockers/re_baseline.js');
-const AdblockFast = require('./blockers/adblockfast.js');
 
 const ENGINE = process.argv[process.argv.length - 2];
 const REQUESTS_PATH = process.argv[process.argv.length - 1];
@@ -93,17 +84,42 @@ function loadLists() {
 async function main() {
   const rawLists = loadLists();
 
-  const Cls = {
-    adblockplus: AdBlockPlus,
-    brave: Brave,
-    duckduckgo: Duckduckgo,
-    cliqz: Cliqz,
-    re: Re,
-    tldts: Tldts,
-    ublock: UBlockOrigin,
-    url: Url,
-    adblockfast: AdblockFast,
-  }[ENGINE];
+  let Cls;
+  switch (ENGINE) {
+    case 'adblockplus':
+      Cls = require('./blockers/adblockplus.js');
+      break;
+    case 'brave':
+      Cls = require('./blockers/brave.js');
+      break;
+    case 'duckduckgo':
+      Cls = require('./blockers/duckduckgo.js');
+      break;
+    case 'cliqz':
+      Cls = require('./blockers/cliqz.js');
+      break;
+    case 'cliqzCompression':
+      Cls = require('./blockers/cliqz-compression.js');
+      break;
+    case 're':
+      Cls = require('./blockers/re_baseline.js');
+      break;
+    case 'tldts':
+      Cls = require('./blockers/tldts_baseline.js');
+      break;
+    case 'ublock':
+      Cls = require('./blockers/ublock.js');
+      break;
+    case 'url':
+      Cls = require('./blockers/url_baseline.js');
+      break;
+    case 'adblockfast':
+      Cls = require('./blockers/adblockfast.js');
+      break;
+    default:
+      console.error(`Unknown blocker ${ENGINE}`);
+      process.exit(1);
+  }
 
   // Parse rules
   let start = process.hrtime();

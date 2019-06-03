@@ -115,17 +115,16 @@ function detectFilterType(line: string): FilterType {
 }
 
 export function f(strings: TemplateStringsArray): NetworkFilter | CosmeticFilter | null {
-  const rawFilter = strings.raw[0];
+  const rawFilter = strings[0];
   const filterType = detectFilterType(rawFilter);
 
-  let filter: NetworkFilter | CosmeticFilter | null = null;
   if (filterType === FilterType.NETWORK) {
-    filter = NetworkFilter.parse(rawFilter, true);
+    return NetworkFilter.parse(rawFilter, true);
   } else if (filterType === FilterType.COSMETIC) {
-    filter = CosmeticFilter.parse(rawFilter, true);
+    return CosmeticFilter.parse(rawFilter, true);
   }
 
-  return filter;
+  return null;
 }
 
 export function parseFilters(

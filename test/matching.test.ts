@@ -301,6 +301,21 @@ describe('#NetworkFilter.match', () => {
     expect(f`||*com*^bar`).toMatchRequest({ url: 'https://foo.com/bar' });
   });
 
+  it('/regex/', () => {
+    expect(f`/com/`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`/.*/`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`/foo\\.\\w+[/]/`).toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`/foo.[0-9]\\w+[^/]/`).toMatchRequest({ url: 'https://foo.3om/bar' });
+    expect(f`/foo.[0-9]\\w+[^/]/`).not.toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`/foo.[0-9]\\w+[^/]/`).toMatchRequest({ url: 'https://foo43om/bar' });
+    expect(f`/foo\\.[0-9]\\w+[^/]/`).not.toMatchRequest({ url: 'https://foo43om/bar' });
+    expect(f`/com/$image`).not.toMatchRequest({ url: 'https://foo.com/bar' });
+    expect(f`/\\w{10,20}\\.com/$script`).toMatchRequest({
+      type: 'script',
+      url: 'https://qwertyuiopas1234567890.com/bar',
+    });
+  });
+
   it('options', () => {
     // cpt test
     expect(f`||foo$image`).toMatchRequest({ url: 'https://foo.com/bar', type: 'image' });

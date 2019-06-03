@@ -490,32 +490,45 @@ export default class CosmeticFilter implements IFilter {
     });
   }
 
+  // Mandatory fields
   public readonly mask: number;
   public readonly selector: string;
 
   // hostnames
-  public readonly entities?: Uint32Array;
-  public readonly hostnames?: Uint32Array;
+  public readonly entities: Uint32Array | undefined;
+  public readonly hostnames: Uint32Array | undefined;
 
   // Exceptions
-  public readonly notEntities?: Uint32Array;
-  public readonly notHostnames?: Uint32Array;
+  public readonly notEntities: Uint32Array | undefined;
+  public readonly notHostnames: Uint32Array | undefined;
 
-  public readonly style?: string;
+  public readonly style: string | undefined;
+  public readonly rawLine: string | undefined;
 
-  public id?: number;
-  public readonly rawLine?: string;
+  private id: number | undefined;
 
   constructor({
+    mask,
+    selector,
+
     entities,
     hostnames,
-    mask,
+
     notEntities,
     notHostnames,
+
     rawLine,
-    selector,
     style,
-  }: Partial<CosmeticFilter> & { mask: number; selector: string }) {
+  }: {
+    entities: Uint32Array | undefined;
+    hostnames: Uint32Array | undefined;
+    mask: number;
+    notEntities: Uint32Array | undefined;
+    notHostnames: Uint32Array | undefined;
+    rawLine: string | undefined;
+    selector: string;
+    style: string | undefined;
+  }) {
     this.mask = mask;
     this.selector = selector;
 
