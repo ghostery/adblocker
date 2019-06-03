@@ -42,38 +42,39 @@ function isAllowedHostname(ch: number): boolean {
  * Masks used to store options of network filters in a bitmask.
  */
 export const enum NETWORK_FILTER_MASK {
-  // Content Policy Type
-  fromImage = 1 << 0,
-  fromMedia = 1 << 1,
-  fromObject = 1 << 2,
-  fromOther = 1 << 3,
-  fromPing = 1 << 4,
-  fromScript = 1 << 5,
-  fromStylesheet = 1 << 6,
-  fromSubdocument = 1 << 7,
-  fromWebsocket = 1 << 8, // e.g.: ws, wss
-  fromXmlHttpRequest = 1 << 9,
-  fromDocument = 1 << 10,
-  fromFont = 1 << 11,
-  fromHttp = 1 << 12,
-  fromHttps = 1 << 13,
-  isImportant = 1 << 14,
-  matchCase = 1 << 15,
-  fuzzyMatch = 1 << 16,
+  // Request Type
+  fromDocument = 1 << 0,
+  fromFont = 1 << 1,
+  fromHttp = 1 << 2,
+  fromHttps = 1 << 3,
+  fromImage = 1 << 4,
+  fromMedia = 1 << 5,
+  fromObject = 1 << 6,
+  fromOther = 1 << 7,
+  fromPing = 1 << 8,
+  fromScript = 1 << 9,
+  fromStylesheet = 1 << 10,
+  fromSubdocument = 1 << 11,
+  fromWebsocket = 1 << 12, // e.g.: ws, wss
+  fromXmlHttpRequest = 1 << 13,
+
+  // Options
+  firstParty = 1 << 14,
+  fuzzyMatch = 1 << 15,
+  isBadFilter = 1 << 16,
+  isCSP = 1 << 17,
+  isException = 1 << 18,
+  isGenericHide = 1 << 19,
+  isHostnameAnchor = 1 << 20,
+  isImportant = 1 << 21,
+  isLeftAnchor = 1 << 22,
+  isRightAnchor = 1 << 23,
+  thirdParty = 1 << 24,
 
   // Kind of patterns
-  thirdParty = 1 << 17,
-  firstParty = 1 << 18,
-  isRegex = 1 << 19,
-  isLeftAnchor = 1 << 20,
-  isRightAnchor = 1 << 21,
-  isHostnameAnchor = 1 << 22,
-  isException = 1 << 23,
-  isCSP = 1 << 24,
-  isGenericHide = 1 << 25,
-  isBadFilter = 1 << 26,
+  isFullRegex = 1 << 25,
+  isRegex = 1 << 26,
   isUnicode = 1 << 27,
-  isFullRegex = 1 << 28,
 }
 
 /**
@@ -321,7 +322,7 @@ export default class NetworkFilter implements IFilter {
               return null;
             }
 
-            mask = setBit(mask, NETWORK_FILTER_MASK.matchCase);
+            // We currently consider all filters to be case-insensitive.
             break;
           case '3p':
           case 'third-party':
@@ -1233,10 +1234,6 @@ export default class NetworkFilter implements IFilter {
 
   public isLeftAnchor() {
     return getBit(this.mask, NETWORK_FILTER_MASK.isLeftAnchor);
-  }
-
-  public matchCase() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.matchCase);
   }
 
   public isImportant() {

@@ -64,7 +64,6 @@ function network(filter: string, expected: any) {
       hasOptDomains: parsed.hasOptDomains(),
       hasOptNotDomains: parsed.hasOptNotDomains(),
       isImportant: parsed.isImportant(),
-      matchCase: parsed.matchCase(),
       thirdParty: parsed.thirdParty(),
     };
     expect(verbose).toMatchObject(expected);
@@ -109,7 +108,6 @@ const DEFAULT_NETWORK_FILTER = {
   fromWebsocket: true,
   fromXmlHttpRequest: true,
   isImportant: false,
-  matchCase: false,
   thirdParty: true,
 };
 
@@ -681,26 +679,14 @@ describe('Network filters', () => {
 
     describe('match-case', () => {
       it('parses match-case', () => {
-        network('||foo.com$match-case', {
-          matchCase: true,
-        });
-        network('||foo.com$image,match-case', {
-          matchCase: true,
-        });
-        network('||foo.com$media,match-case,image', {
-          matchCase: true,
-        });
+        network('||foo.com$match-case', {});
+        network('||foo.com$image,match-case', {});
+        network('||foo.com$media,match-case,image', {});
       });
 
       it('parses ~match-case', () => {
         // ~match-case is not supported
         network('||foo.com$~match-case', null);
-      });
-
-      it('defaults to false', () => {
-        network('||foo.com', {
-          matchCase: false,
-        });
       });
     });
 
