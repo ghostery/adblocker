@@ -251,6 +251,99 @@ export function tokenizeFilter(
   return TOKENS_BUFFER.slice();
 }
 
+export function tokenizeRegexInPlace(selector: string, tokens: TokensBuffer): void {
+  let end = selector.length - 1;
+  let begin = 1;
+  let prev: number = 0;
+
+  // Try to find the longest safe *prefix* that we can tokenize
+  for (; begin < end; begin += 1) {
+    const code = selector.charCodeAt(begin);
+
+    // If we encounter '|' before any other opening bracket, then it's not safe
+    // to tokenize this filter (e.g.: 'foo|bar'). Instead we abort tokenization
+    // to be safe.
+    if (code === 124 /* '|' */) {
+      return;
+    }
+
+    if (
+      code === 40 /* '(' */ ||
+      code === 42 /* '*' */ ||
+      code === 43 /* '+' */ ||
+      code === 63 /* '?' */ ||
+      code === 91 /* '[' */ ||
+      code === 123 /* '{' */ ||
+      (code === 46 /* '.' */ && prev !== 92) /* '\' */ ||
+      (code === 92 /* '\' */ && isAlpha(selector.charCodeAt(begin + 1)))
+    ) {
+      break;
+    }
+
+    prev = code;
+  }
+
+  // Try to find the longest safe *suffix* that we can tokenize
+  prev = 0;
+  for (; end >= begin; end -= 1) {
+    const code = selector.charCodeAt(end);
+
+    // If we encounter '|' before any other opening bracket, then it's not safe
+    // to tokenize this filter (e.g.: 'foo|bar'). Instead we abort tokenization
+    // to be safe.
+    if (code === 124 /* '|' */) {
+      return;
+    }
+
+    if (
+      code === 41 /* ')' */ ||
+      code === 42 /* '*' */ ||
+      code === 43 /* '+' */ ||
+      code === 63 /* '?' */ ||
+      code === 93 /* ']' */ ||
+      code === 125 /* '}' */ ||
+      (code === 46 /* '.' */ && selector.charCodeAt(end - 1) !== 92) /* '\' */ ||
+      (code === 92 /* '\' */ && isAlpha(prev))
+    ) {
+      break;
+    }
+
+    prev = code;
+  }
+
+  if (end < begin) {
+    // Full selector is safe
+    const skipFirstToken: boolean = selector.charCodeAt(1) !== 94 /* '^' */;
+    const skipLastToken: boolean = selector.charCodeAt(selector.length - 1) !== 36 /* '$' */;
+    tokenizeFilterInPlace(
+      selector.slice(1, selector.length - 1),
+      skipFirstToken,
+      skipLastToken,
+      tokens,
+    );
+  } else {
+    // Tokenize prefix
+    if (begin > 1) {
+      tokenizeFilterInPlace(
+        selector.slice(1, begin),
+        selector.charCodeAt(1) !== 94 /* '^' */, // skipFirstToken
+        true,
+        tokens,
+      );
+    }
+
+    // Tokenize suffix
+    if (end < selector.length - 1) {
+      tokenizeFilterInPlace(
+        selector.slice(end + 1, selector.length - 1),
+        true,
+        selector.charCodeAt(selector.length - 1) !== 94 /* '^' */, // skipLastToken
+        tokens,
+      );
+    }
+  }
+}
+
 export function createFuzzySignature(pattern: string): Uint32Array {
   TOKENS_BUFFER.seekZero();
   fastTokenizer(pattern, isAllowedFilter, TOKENS_BUFFER);

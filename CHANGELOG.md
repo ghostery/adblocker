@@ -4,6 +4,7 @@
 
 *not released yet*
 
+  * Implement support for RegExp network filters [#169](https://github.com/cliqz-oss/adblocker/pull/169)
   * [EXPERIMENTAL] add on-the-fly string compression using short-string
     optimized method. Off by default, it can be enabled by using the
     `enableCompression` flag in `Config`. This allows a reduction in size of
