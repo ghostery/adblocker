@@ -24,7 +24,6 @@ import {
   isDigit,
   setBit,
   tokenizeFilterInPlace,
-  tokenizeInPlace,
   tokenizeRegexInPlace,
 } from '../utils';
 import IFilter from './interface';
@@ -550,6 +549,7 @@ export default class NetworkFilter implements IFilter {
 
       // Remove leading '*' if the filter is not hostname anchored.
       if (
+        getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor) === false &&
         filterIndexEnd - filterIndexStart > 0 &&
         line.charCodeAt(filterIndexStart) === 42 /* '*' */
       ) {
@@ -1166,7 +1166,12 @@ export default class NetworkFilter implements IFilter {
 
       // Append tokens from hostname, if any
       if (this.hostname !== undefined) {
-        tokenizeInPlace(this.hostname, TOKENS_BUFFER);
+        tokenizeFilterInPlace(
+          this.hostname,
+          false,
+          this.filter !== undefined && this.filter.charCodeAt(0) === 42 /* '*' */,
+          TOKENS_BUFFER,
+        );
       }
     } else if (this.filter !== undefined) {
       tokenizeRegexInPlace(this.filter, TOKENS_BUFFER);
@@ -1370,7 +1375,11 @@ function checkIsRegex(filter: string, start: number, end: number): boolean {
  * authors rely and different assumption. We can have prefix of suffix matches
  * of anchor.
  */
-export function isAnchoredByHostname(filterHostname: string, hostname: string): boolean {
+export function isAnchoredByHostname(
+  filterHostname: string,
+  hostname: string,
+  isFollowedByWildcard: boolean,
+): boolean {
   // Corner-case, if `filterHostname` is empty, then it's a match
   if (filterHostname.length === 0) {
     return true;
@@ -1401,6 +1410,7 @@ export function isAnchoredByHostname(filterHostname: string, hostname: string): 
   //   * (sub.foo, sub.foo.com)
   if (matchIndex === 0) {
     return (
+      isFollowedByWildcard ||
       hostname.charCodeAt(filterHostname.length) === 46 ||
       filterHostname.charCodeAt(filterHostname.length - 1) === 46
     );
@@ -1417,7 +1427,8 @@ export function isAnchoredByHostname(filterHostname: string, hostname: string): 
 
   // `filterHostname` is infix of `hostname` and needs match full labels
   return (
-    (hostname.charCodeAt(filterHostname.length) === 46 ||
+    (isFollowedByWildcard ||
+      hostname.charCodeAt(filterHostname.length) === 46 ||
       filterHostname.charCodeAt(filterHostname.length - 1) === 46) &&
     (hostname.charCodeAt(matchIndex - 1) === 46 || filterHostname.charCodeAt(0) === 46)
   );
@@ -1492,7 +1503,13 @@ function checkPatternHostnameAnchorRegexFilter(filter: NetworkFilter, request: R
   const url = request.url;
   const hostname = request.hostname;
   const filterHostname = filter.getHostname();
-  if (isAnchoredByHostname(filterHostname, hostname)) {
+  if (
+    isAnchoredByHostname(
+      filterHostname,
+      hostname,
+      filter.filter !== undefined && filter.filter.charCodeAt(0) === 42 /* '*' */,
+    )
+  ) {
     return checkPatternRegexFilter(
       filter,
       request,
@@ -1507,7 +1524,13 @@ function checkPatternHostnameAnchorRegexFilter(filter: NetworkFilter, request: R
 function checkPatternHostnameRightAnchorFilter(filter: NetworkFilter, request: Request): boolean {
   const filterHostname = filter.getHostname();
   const requestHostname = request.hostname;
-  if (isAnchoredByHostname(filterHostname, requestHostname)) {
+  if (
+    isAnchoredByHostname(
+      filterHostname,
+      requestHostname,
+      filter.filter !== undefined && filter.filter.charCodeAt(0) === 42 /* '*' */,
+    )
+  ) {
     if (filter.hasFilter() === false) {
       // In this specific case it means that the specified hostname should match
       // at the end of the hostname of the request. This allows to prevent false
@@ -1530,7 +1553,13 @@ function checkPatternHostnameLeftRightAnchorFilter(
   filter: NetworkFilter,
   request: Request,
 ): boolean {
-  if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+  if (
+    isAnchoredByHostname(
+      filter.getHostname(),
+      request.hostname,
+      filter.filter !== undefined && filter.filter.charCodeAt(0) === 42 /* '*' */,
+    )
+  ) {
     // Since this is not a regex, the filter pattern must follow the hostname
     // with nothing in between. So we extract the part of the URL following
     // after hostname and will perform the matching on it.
@@ -1549,7 +1578,13 @@ function checkPatternHostnameLeftRightAnchorFilter(
 // exactly after the hostname, with nothing in between.
 function checkPatternHostnameLeftAnchorFilter(filter: NetworkFilter, request: Request): boolean {
   const filterHostname = filter.getHostname();
-  if (isAnchoredByHostname(filterHostname, request.hostname)) {
+  if (
+    isAnchoredByHostname(
+      filterHostname,
+      request.hostname,
+      filter.filter !== undefined && filter.filter.charCodeAt(0) === 42 /* '*' */,
+    )
+  ) {
     // Since this is not a regex, the filter pattern must follow the hostname
     // with nothing in between. So we extract the part of the URL following
     // after hostname and will perform the matching on it.
@@ -1566,7 +1601,13 @@ function checkPatternHostnameLeftAnchorFilter(filter: NetworkFilter, request: Re
 // ||pattern
 function checkPatternHostnameAnchorFilter(filter: NetworkFilter, request: Request): boolean {
   const filterHostname = filter.getHostname();
-  if (isAnchoredByHostname(filterHostname, request.hostname)) {
+  if (
+    isAnchoredByHostname(
+      filterHostname,
+      request.hostname,
+      filter.filter !== undefined && filter.filter.charCodeAt(0) === 42 /* '*' */,
+    )
+  ) {
     if (filter.hasFilter() === false) {
       return true;
     }
@@ -1585,7 +1626,13 @@ function checkPatternHostnameAnchorFilter(filter: NetworkFilter, request: Reques
 
 // ||pattern$fuzzy
 function checkPatternHostnameAnchorFuzzyFilter(filter: NetworkFilter, request: Request) {
-  if (isAnchoredByHostname(filter.getHostname(), request.hostname)) {
+  if (
+    isAnchoredByHostname(
+      filter.getHostname(),
+      request.hostname,
+      filter.filter !== undefined && filter.filter.charCodeAt(0) === 42 /* '*' */,
+    )
+  ) {
     return checkPatternFuzzyFilter(filter, request);
   }
 

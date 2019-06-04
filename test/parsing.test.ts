@@ -349,7 +349,7 @@ describe('Network filters', () => {
 
     network('||foo.com*bar^', {
       ...base,
-      filter: 'bar^',
+      filter: '*bar^',
       hostname: 'foo.com',
     });
     network('||foo.com^bar*/baz^', {
@@ -370,7 +370,7 @@ describe('Network filters', () => {
 
     network('||foo.com*bar^|', {
       ...base,
-      filter: 'bar^',
+      filter: '*bar^',
       hostname: 'foo.com',
     });
     network('||foo.com^bar*/baz^|', {
@@ -827,8 +827,11 @@ describe('Network filters', () => {
   });
 
   describe('#getTokens', () => {
-    for (const [regexFilter, regexTokens] of [
-      // TODO Handle character classes
+    for (const [filter, regexTokens] of [
+      // Wildcard
+      ['||geo*.hltv.org^', [hashStrings(['hltv', 'org'])]],
+
+      // RegExp with character class
       ['/^foo$/', [hashStrings(['foo'])]],
       ['/^fo\\so$/', [new Uint32Array(0)]],
       ['/^fo\\wo$/', [new Uint32Array(0)]],
@@ -1078,8 +1081,8 @@ describe('Network filters', () => {
       ['/\\:\\/\\/([0-9]{1,3}\\.){3}[0-9]{1,3}/$doc', [new Uint32Array(0)]],
       ['@@/wp-content/themes/$script', [hashStrings(['content'])]],
     ]) {
-      it(`get tokens for ${regexFilter}`, () => {
-        const parsed = NetworkFilter.parse(regexFilter as string, true);
+      it(`get tokens for ${filter}`, () => {
+        const parsed = NetworkFilter.parse(filter as string, true);
         expect(parsed).not.toBeNull();
         if (parsed !== null) {
           expect(parsed.getTokens()).toEqual(regexTokens);

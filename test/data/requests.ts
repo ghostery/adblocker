@@ -52861,4 +52861,28 @@ export default [
     type: 'script',
     url: 'http://bar.co.uk/pathwasabisyrup.com/storage/_-3d12dd12d.gif',
   },
+  {
+    filters: ['||geo*.hltv.org^'],
+    sourceUrl: 'https://foo.com',
+    type: 'script',
+    url: 'https://geo2.hltv.org/rekl13.php',
+  },
+  {
+    filters: ['||www*.swatchseries.to^$script'],
+    sourceUrl: 'https://foo.com',
+    type: 'script',
+    url: 'https://www1.swatchseries.to/sw.js',
+  },
+  {
+    filters: ['||imp*.tradedoubler.com^$third-party'],
+    sourceUrl: 'https://foo.com',
+    type: 'script',
+    url: 'https://impde.tradedoubler.com/imp',
+  },
+  {
+    filters: ['||www*.swatchseries.to^$script'],
+    sourceUrl: 'https://foo.com',
+    type: 'script',
+    url: 'https://www1.swatchseries.to/public/js/bootstrap-modal.js',
+  },
 ];

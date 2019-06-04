@@ -65,90 +65,90 @@ expect.extend({
 
 describe('#isAnchoredByHostname', () => {
   it('matches empty hostname', () => {
-    expect(isAnchoredByHostname('', 'foo.com')).toBeTruthy();
+    expect(isAnchoredByHostname('', 'foo.com', false)).toBeTruthy();
   });
 
   it('does not match when filter hostname is longer than hostname', () => {
-    expect(isAnchoredByHostname('bar.foo.com', 'foo.com')).toBeFalsy();
-    expect(isAnchoredByHostname('b', '')).toBeFalsy();
-    expect(isAnchoredByHostname('foo.com', 'foo.co')).toBeFalsy();
+    expect(isAnchoredByHostname('bar.foo.com', 'foo.com', false)).toBeFalsy();
+    expect(isAnchoredByHostname('b', '', false)).toBeFalsy();
+    expect(isAnchoredByHostname('foo.com', 'foo.co', false)).toBeFalsy();
   });
 
   it('does not match if there is not match', () => {
-    expect(isAnchoredByHostname('bar', 'foo.com')).toBeFalsy();
+    expect(isAnchoredByHostname('bar', 'foo.com', false)).toBeFalsy();
   });
 
   describe('prefix match', () => {
     it('matches exact match', () => {
-      expect(isAnchoredByHostname('', '')).toBeTruthy();
-      expect(isAnchoredByHostname('f', 'f')).toBeTruthy();
-      expect(isAnchoredByHostname('foo', 'foo')).toBeTruthy();
-      expect(isAnchoredByHostname('foo.com', 'foo.com')).toBeTruthy();
-      expect(isAnchoredByHostname('.com', '.com')).toBeTruthy();
-      expect(isAnchoredByHostname('com.', 'com.')).toBeTruthy();
+      expect(isAnchoredByHostname('', '', false)).toBeTruthy();
+      expect(isAnchoredByHostname('f', 'f', false)).toBeTruthy();
+      expect(isAnchoredByHostname('foo', 'foo', false)).toBeTruthy();
+      expect(isAnchoredByHostname('foo.com', 'foo.com', false)).toBeTruthy();
+      expect(isAnchoredByHostname('.com', '.com', false)).toBeTruthy();
+      expect(isAnchoredByHostname('com.', 'com.', false)).toBeTruthy();
     });
 
     it('matches partial', () => {
       // Single label
-      expect(isAnchoredByHostname('foo', 'foo.com')).toBeTruthy();
-      expect(isAnchoredByHostname('foo.', 'foo.com')).toBeTruthy();
-      expect(isAnchoredByHostname('.foo', '.foo.com')).toBeTruthy();
-      expect(isAnchoredByHostname('.foo.', '.foo.com')).toBeTruthy();
+      expect(isAnchoredByHostname('foo', 'foo.com', false)).toBeTruthy();
+      expect(isAnchoredByHostname('foo.', 'foo.com', false)).toBeTruthy();
+      expect(isAnchoredByHostname('.foo', '.foo.com', false)).toBeTruthy();
+      expect(isAnchoredByHostname('.foo.', '.foo.com', false)).toBeTruthy();
 
       // Multiple labels
-      expect(isAnchoredByHostname('foo.com', 'foo.com.')).toBeTruthy();
-      expect(isAnchoredByHostname('foo.com.', 'foo.com.')).toBeTruthy();
-      expect(isAnchoredByHostname('.foo.com.', '.foo.com.')).toBeTruthy();
-      expect(isAnchoredByHostname('.foo.com', '.foo.com')).toBeTruthy();
+      expect(isAnchoredByHostname('foo.com', 'foo.com.', false)).toBeTruthy();
+      expect(isAnchoredByHostname('foo.com.', 'foo.com.', false)).toBeTruthy();
+      expect(isAnchoredByHostname('.foo.com.', '.foo.com.', false)).toBeTruthy();
+      expect(isAnchoredByHostname('.foo.com', '.foo.com', false)).toBeTruthy();
 
-      expect(isAnchoredByHostname('foo.bar', 'foo.bar.com')).toBeTruthy();
-      expect(isAnchoredByHostname('foo.bar.', 'foo.bar.com')).toBeTruthy();
+      expect(isAnchoredByHostname('foo.bar', 'foo.bar.com', false)).toBeTruthy();
+      expect(isAnchoredByHostname('foo.bar.', 'foo.bar.com', false)).toBeTruthy();
     });
 
     it('does not match partial prefix', () => {
       // Single label
-      expect(isAnchoredByHostname('foo', 'foobar.com')).toBeFalsy();
-      expect(isAnchoredByHostname('fo', 'foo.com')).toBeFalsy();
-      expect(isAnchoredByHostname('.foo', 'foobar.com')).toBeFalsy();
+      expect(isAnchoredByHostname('foo', 'foobar.com', false)).toBeFalsy();
+      expect(isAnchoredByHostname('fo', 'foo.com', false)).toBeFalsy();
+      expect(isAnchoredByHostname('.foo', 'foobar.com', false)).toBeFalsy();
 
       // Multiple labels
-      expect(isAnchoredByHostname('foo.bar', 'foo.barbaz.com')).toBeFalsy();
-      expect(isAnchoredByHostname('.foo.bar', '.foo.barbaz.com')).toBeFalsy();
+      expect(isAnchoredByHostname('foo.bar', 'foo.barbaz.com', false)).toBeFalsy();
+      expect(isAnchoredByHostname('.foo.bar', '.foo.barbaz.com', false)).toBeFalsy();
     });
   });
 
   describe('suffix match', () => {
     it('matches partial', () => {
       // Single label
-      expect(isAnchoredByHostname('com', 'foo.com')).toBeTruthy();
-      expect(isAnchoredByHostname('.com', 'foo.com')).toBeTruthy();
-      expect(isAnchoredByHostname('.com.', 'foo.com.')).toBeTruthy();
-      expect(isAnchoredByHostname('com.', 'foo.com.')).toBeTruthy();
+      expect(isAnchoredByHostname('com', 'foo.com', false)).toBeTruthy();
+      expect(isAnchoredByHostname('.com', 'foo.com', false)).toBeTruthy();
+      expect(isAnchoredByHostname('.com.', 'foo.com.', false)).toBeTruthy();
+      expect(isAnchoredByHostname('com.', 'foo.com.', false)).toBeTruthy();
 
       // Multiple labels
-      expect(isAnchoredByHostname('foo.com.', '.foo.com.')).toBeTruthy();
-      expect(isAnchoredByHostname('foo.com', '.foo.com')).toBeTruthy();
+      expect(isAnchoredByHostname('foo.com.', '.foo.com.', false)).toBeTruthy();
+      expect(isAnchoredByHostname('foo.com', '.foo.com', false)).toBeTruthy();
     });
 
     it('does not match partial', () => {
       // Single label
-      expect(isAnchoredByHostname('om', 'foo.com')).toBeFalsy();
-      expect(isAnchoredByHostname('com', 'foocom')).toBeFalsy();
+      expect(isAnchoredByHostname('om', 'foo.com', false)).toBeFalsy();
+      expect(isAnchoredByHostname('com', 'foocom', false)).toBeFalsy();
 
       // Multiple labels
-      expect(isAnchoredByHostname('foo.bar.com', 'baz.bar.com')).toBeFalsy();
-      expect(isAnchoredByHostname('fo.bar.com', 'foo.bar.com')).toBeFalsy();
-      expect(isAnchoredByHostname('.fo.bar.com', 'foo.bar.com')).toBeFalsy();
-      expect(isAnchoredByHostname('bar.com', 'foobar.com')).toBeFalsy();
-      expect(isAnchoredByHostname('.bar.com', 'foobar.com')).toBeFalsy();
+      expect(isAnchoredByHostname('foo.bar.com', 'baz.bar.com', false)).toBeFalsy();
+      expect(isAnchoredByHostname('fo.bar.com', 'foo.bar.com', false)).toBeFalsy();
+      expect(isAnchoredByHostname('.fo.bar.com', 'foo.bar.com', false)).toBeFalsy();
+      expect(isAnchoredByHostname('bar.com', 'foobar.com', false)).toBeFalsy();
+      expect(isAnchoredByHostname('.bar.com', 'foobar.com', false)).toBeFalsy();
     });
   });
 
   describe('infix match', () => {
     it('matches partial', () => {
-      expect(isAnchoredByHostname('bar', 'foo.bar.com')).toBeTruthy();
-      expect(isAnchoredByHostname('bar.', 'foo.bar.com')).toBeTruthy();
-      expect(isAnchoredByHostname('.bar.', 'foo.bar.com')).toBeTruthy();
+      expect(isAnchoredByHostname('bar', 'foo.bar.com', false)).toBeTruthy();
+      expect(isAnchoredByHostname('bar.', 'foo.bar.com', false)).toBeTruthy();
+      expect(isAnchoredByHostname('.bar.', 'foo.bar.com', false)).toBeTruthy();
     });
   });
 });
