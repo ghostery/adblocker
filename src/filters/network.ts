@@ -1459,6 +1459,8 @@ function checkPatternFuzzyFilter(filter: NetworkFilter, request: Request) {
  * efficient matching function.
  */
 function checkPattern(filter: NetworkFilter, request: Request): boolean {
+  const pattern = filter.getFilter();
+
   if (filter.isHostnameAnchor()) {
     // Make sure request is anchored by hostname before proceeding to matching
     const filterHostname = filter.getHostname();
@@ -1490,7 +1492,7 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
       // Since it must follow immediatly after the hostname and be a suffix of
       // the URL, we conclude that filter must be equal to the part of the
       // url following the hostname.
-      return filter.getFilter() === urlAfterHostname;
+      return pattern === urlAfterHostname;
     } else if (filter.isRightAnchor()) {
       // ||pattern|
       const requestHostname = request.hostname;
@@ -1505,7 +1507,7 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
         );
       } else {
         // pattern|
-        return request.url.endsWith(filter.getFilter());
+        return request.url.endsWith(pattern);
       }
     } else if (filter.isFuzzy()) {
       // ||pattern$fuzzy
@@ -1518,7 +1520,7 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
       // after hostname and will perform the matching on it.
       return fastStartsWithFrom(
         request.url,
-        filter.getFilter(),
+        pattern,
         request.url.indexOf(filterHostname) + filterHostname.length,
       );
     }
@@ -1529,23 +1531,21 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
 
     // We consider this a match if the plain patter (i.e.: filter) appears anywhere.
     return (
-      request.url.indexOf(
-        filter.getFilter(),
-        request.url.indexOf(filterHostname) + filterHostname.length,
-      ) !== -1
+      request.url.indexOf(pattern, request.url.indexOf(filterHostname) + filterHostname.length) !==
+      -1
     );
   } else if (filter.isRegex()) {
     // pattern*^
     return filter.getRegex().test(request.url);
   } else if (filter.isLeftAnchor() && filter.isRightAnchor()) {
     // |pattern|
-    return request.url === filter.getFilter();
+    return request.url === pattern;
   } else if (filter.isLeftAnchor()) {
     // |pattern
-    return fastStartsWith(request.url, filter.getFilter());
+    return fastStartsWith(request.url, pattern);
   } else if (filter.isRightAnchor()) {
     // pattern|
-    return request.url.endsWith(filter.getFilter());
+    return request.url.endsWith(pattern);
   } else if (filter.isFuzzy()) {
     return checkPatternFuzzyFilter(filter, request);
   }
@@ -1555,7 +1555,7 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
     return true;
   }
 
-  return request.url.indexOf(filter.getFilter()) !== -1;
+  return request.url.indexOf(pattern) !== -1;
 }
 
 function checkOptions(filter: NetworkFilter, request: Request): boolean {
@@ -1565,8 +1565,8 @@ function checkOptions(filter: NetworkFilter, request: Request): boolean {
     filter.isCptAllowed(request.type) === false ||
     (request.isHttps === true && filter.fromHttps() === false) ||
     (request.isHttp === true && filter.fromHttp() === false) ||
-    (!filter.firstParty() && request.isFirstParty === true) ||
-    (!filter.thirdParty() && request.isThirdParty === true)
+    (filter.firstParty() === false && request.isFirstParty === true) ||
+    (filter.thirdParty() === false && request.isThirdParty === true)
   ) {
     return false;
   }
