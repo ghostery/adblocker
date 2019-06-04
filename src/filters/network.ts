@@ -1371,9 +1371,9 @@ function checkIsRegex(filter: string, start: number, end: number): boolean {
 
 /**
  * Handle hostname anchored filters, given 'hostname' from ||hostname and
- * request's hostname, check if there is a match. This is tricky because filters
- * authors rely and different assumption. We can have prefix of suffix matches
- * of anchor.
+ * request's hostname, check if there is a match. This is tricky because
+ * filters authors rely and different assumptions. We can have prefix of suffix
+ * matches of anchor.
  */
 export function isAnchoredByHostname(
   filterHostname: string,
@@ -1434,10 +1434,6 @@ export function isAnchoredByHostname(
   );
 }
 
-function getUrlAfterHostname(url: string, hostname: string): string {
-  return url.slice(url.indexOf(hostname) + hostname.length);
-}
-
 // pattern$fuzzy
 function checkPatternFuzzyFilter(filter: NetworkFilter, request: Request) {
   const signature = filter.getFuzzySignature();
@@ -1461,153 +1457,75 @@ function checkPatternFuzzyFilter(filter: NetworkFilter, request: Request) {
   return true;
 }
 
-// pattern
-function checkPatternPlainFilter(filter: NetworkFilter, request: Request): boolean {
-  if (filter.hasFilter() === false) {
-    return true;
-  }
-
-  return request.url.indexOf(filter.getFilter()) !== -1;
-}
-
-// pattern|
-function checkPatternRightAnchorFilter(filter: NetworkFilter, request: Request): boolean {
-  return request.url.endsWith(filter.getFilter());
-}
-
-// |pattern
-function checkPatternLeftAnchorFilter(filter: NetworkFilter, request: Request): boolean {
-  return fastStartsWith(request.url, filter.getFilter());
-}
-
-// |pattern|
-function checkPatternLeftRightAnchorFilter(filter: NetworkFilter, request: Request): boolean {
-  return request.url === filter.getFilter();
-}
-
-// pattern*^
-function checkPatternRegexFilter(
-  filter: NetworkFilter,
-  request: Request,
-  startFrom: number = 0,
-): boolean {
-  let url = request.url;
-  if (startFrom > 0) {
-    url = url.slice(startFrom);
-  }
-  return filter.getRegex().test(url);
-}
-
-// ||pattern*^
-function checkPatternHostnameAnchorRegexFilter(filter: NetworkFilter, request: Request): boolean {
-  const url = request.url;
-  const hostname = request.hostname;
-  const filterHostname = filter.getHostname();
-  if (
-    isAnchoredByHostname(
-      filterHostname,
-      hostname,
-      filter.filter !== undefined && filter.filter.charCodeAt(0) === 42 /* '*' */,
-    )
-  ) {
-    return checkPatternRegexFilter(
-      filter,
-      request,
-      url.indexOf(filterHostname) + filterHostname.length,
-    );
-  }
-
-  return false;
-}
-
-// ||pattern|
-function checkPatternHostnameRightAnchorFilter(filter: NetworkFilter, request: Request): boolean {
-  const filterHostname = filter.getHostname();
-  const requestHostname = request.hostname;
-  if (
-    isAnchoredByHostname(
-      filterHostname,
-      requestHostname,
-      filter.filter !== undefined && filter.filter.charCodeAt(0) === 42 /* '*' */,
-    )
-  ) {
-    if (filter.hasFilter() === false) {
-      // In this specific case it means that the specified hostname should match
-      // at the end of the hostname of the request. This allows to prevent false
-      // positive like ||foo.bar which would match https://foo.bar.baz where
-      // ||foo.bar^ would not.
-      return (
-        filterHostname.length === requestHostname.length ||
-        requestHostname.endsWith(filterHostname)
-      );
-    } else {
-      return checkPatternRightAnchorFilter(filter, request);
+/**
+ * Specialize a network filter depending on its type. It allows for more
+ * efficient matching function.
+ */
+function checkPattern(filter: NetworkFilter, request: Request): boolean {
+  if (filter.isHostnameAnchor()) {
+    // Make sure request is anchored by hostname before proceeding to matching
+    const filterHostname = filter.getHostname();
+    if (
+      isAnchoredByHostname(
+        filterHostname,
+        request.hostname,
+        filter.filter !== undefined && filter.filter.charCodeAt(0) === 42 /* '*' */,
+      ) === false
+    ) {
+      return false;
     }
-  }
 
-  return false;
-}
+    // At this point we know request is hostname anchored so we match the rest of the filter.
+    if (filter.isRegex()) {
+      // ||pattern*^
+      return filter
+        .getRegex()
+        .test(request.url.slice(request.url.indexOf(filterHostname) + filterHostname.length));
+    } else if (filter.isRightAnchor() && filter.isLeftAnchor()) {
+      // |||pattern|
+      // Since this is not a regex, the filter pattern must follow the hostname
+      // with nothing in between. So we extract the part of the URL following
+      // after hostname and will perform the matching on it.
+      const urlAfterHostname = request.url.slice(
+        request.url.indexOf(filterHostname) + filterHostname.length,
+      );
 
-// |||pattern|
-function checkPatternHostnameLeftRightAnchorFilter(
-  filter: NetworkFilter,
-  request: Request,
-): boolean {
-  if (
-    isAnchoredByHostname(
-      filter.getHostname(),
-      request.hostname,
-      filter.filter !== undefined && filter.filter.charCodeAt(0) === 42 /* '*' */,
-    )
-  ) {
-    // Since this is not a regex, the filter pattern must follow the hostname
-    // with nothing in between. So we extract the part of the URL following
-    // after hostname and will perform the matching on it.
-    const urlAfterHostname = getUrlAfterHostname(request.url, filter.getHostname());
+      // Since it must follow immediatly after the hostname and be a suffix of
+      // the URL, we conclude that filter must be equal to the part of the
+      // url following the hostname.
+      return filter.getFilter() === urlAfterHostname;
+    } else if (filter.isRightAnchor()) {
+      // ||pattern|
+      const requestHostname = request.hostname;
+      if (filter.hasFilter() === false) {
+        // In this specific case it means that the specified hostname should match
+        // at the end of the hostname of the request. This allows to prevent false
+        // positive like ||foo.bar which would match https://foo.bar.baz where
+        // ||foo.bar^ would not.
+        return (
+          filterHostname.length === requestHostname.length ||
+          requestHostname.endsWith(filterHostname)
+        );
+      } else {
+        // pattern|
+        return request.url.endsWith(filter.getFilter());
+      }
+    } else if (filter.isFuzzy()) {
+      // ||pattern$fuzzy
+      return checkPatternFuzzyFilter(filter, request);
+    } else if (filter.isLeftAnchor()) {
+      // ||pattern + left-anchor => This means that a plain pattern needs to appear
+      // exactly after the hostname, with nothing in between.
+      // Since this is not a regex, the filter pattern must follow the hostname
+      // with nothing in between. So we extract the part of the URL following
+      // after hostname and will perform the matching on it.
+      return fastStartsWithFrom(
+        request.url,
+        filter.getFilter(),
+        request.url.indexOf(filterHostname) + filterHostname.length,
+      );
+    }
 
-    // Since it must follow immediatly after the hostname and be a suffix of
-    // the URL, we conclude that filter must be equal to the part of the
-    // url following the hostname.
-    return filter.getFilter() === urlAfterHostname;
-  }
-
-  return false;
-}
-
-// ||pattern + left-anchor => This means that a plain pattern needs to appear
-// exactly after the hostname, with nothing in between.
-function checkPatternHostnameLeftAnchorFilter(filter: NetworkFilter, request: Request): boolean {
-  const filterHostname = filter.getHostname();
-  if (
-    isAnchoredByHostname(
-      filterHostname,
-      request.hostname,
-      filter.filter !== undefined && filter.filter.charCodeAt(0) === 42 /* '*' */,
-    )
-  ) {
-    // Since this is not a regex, the filter pattern must follow the hostname
-    // with nothing in between. So we extract the part of the URL following
-    // after hostname and will perform the matching on it.
-    return fastStartsWithFrom(
-      request.url,
-      filter.getFilter(),
-      request.url.indexOf(filterHostname) + filterHostname.length,
-    );
-  }
-
-  return false;
-}
-
-// ||pattern
-function checkPatternHostnameAnchorFilter(filter: NetworkFilter, request: Request): boolean {
-  const filterHostname = filter.getHostname();
-  if (
-    isAnchoredByHostname(
-      filterHostname,
-      request.hostname,
-      filter.filter !== undefined && filter.filter.charCodeAt(0) === 42 /* '*' */,
-    )
-  ) {
     if (filter.hasFilter() === false) {
       return true;
     }
@@ -1619,57 +1537,28 @@ function checkPatternHostnameAnchorFilter(filter: NetworkFilter, request: Reques
         request.url.indexOf(filterHostname) + filterHostname.length,
       ) !== -1
     );
-  }
-
-  return false;
-}
-
-// ||pattern$fuzzy
-function checkPatternHostnameAnchorFuzzyFilter(filter: NetworkFilter, request: Request) {
-  if (
-    isAnchoredByHostname(
-      filter.getHostname(),
-      request.hostname,
-      filter.filter !== undefined && filter.filter.charCodeAt(0) === 42 /* '*' */,
-    )
-  ) {
-    return checkPatternFuzzyFilter(filter, request);
-  }
-
-  return false;
-}
-
-/**
- * Specialize a network filter depending on its type. It allows for more
- * efficient matching function.
- */
-function checkPattern(filter: NetworkFilter, request: Request): boolean {
-  if (filter.isHostnameAnchor()) {
-    if (filter.isRegex()) {
-      return checkPatternHostnameAnchorRegexFilter(filter, request);
-    } else if (filter.isRightAnchor() && filter.isLeftAnchor()) {
-      return checkPatternHostnameLeftRightAnchorFilter(filter, request);
-    } else if (filter.isRightAnchor()) {
-      return checkPatternHostnameRightAnchorFilter(filter, request);
-    } else if (filter.isFuzzy()) {
-      return checkPatternHostnameAnchorFuzzyFilter(filter, request);
-    } else if (filter.isLeftAnchor()) {
-      return checkPatternHostnameLeftAnchorFilter(filter, request);
-    }
-    return checkPatternHostnameAnchorFilter(filter, request);
   } else if (filter.isRegex()) {
-    return checkPatternRegexFilter(filter, request);
+    // pattern*^
+    return filter.getRegex().test(request.url);
   } else if (filter.isLeftAnchor() && filter.isRightAnchor()) {
-    return checkPatternLeftRightAnchorFilter(filter, request);
+    // |pattern|
+    return request.url === filter.getFilter();
   } else if (filter.isLeftAnchor()) {
-    return checkPatternLeftAnchorFilter(filter, request);
+    // |pattern
+    return fastStartsWith(request.url, filter.getFilter());
   } else if (filter.isRightAnchor()) {
-    return checkPatternRightAnchorFilter(filter, request);
+    // pattern|
+    return request.url.endsWith(filter.getFilter());
   } else if (filter.isFuzzy()) {
     return checkPatternFuzzyFilter(filter, request);
   }
 
-  return checkPatternPlainFilter(filter, request);
+  // pattern
+  if (filter.hasFilter() === false) {
+    return true;
+  }
+
+  return request.url.indexOf(filter.getFilter()) !== -1;
 }
 
 function checkOptions(filter: NetworkFilter, request: Request): boolean {
