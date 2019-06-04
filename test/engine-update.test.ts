@@ -11,7 +11,7 @@ import { loadEasyListFilters, typedArrayEqual } from './utils';
 
 import axios from 'axios';
 import { brotliDecompressSync } from 'zlib';
-import { generateDiff } from '../../adblocker';
+import { generateDiff } from '../adblocker';
 
 describe('diff updates', () => {
   function testUpdates(name: string, baseFilters: string[]): void {
