@@ -64,7 +64,6 @@ function network(filter: string, expected: any) {
       hasOptDomains: parsed.hasOptDomains(),
       hasOptNotDomains: parsed.hasOptNotDomains(),
       isImportant: parsed.isImportant(),
-      matchCase: parsed.matchCase(),
       thirdParty: parsed.thirdParty(),
     };
     expect(verbose).toMatchObject(expected);
@@ -109,7 +108,6 @@ const DEFAULT_NETWORK_FILTER = {
   fromWebsocket: true,
   fromXmlHttpRequest: true,
   isImportant: false,
-  matchCase: false,
   thirdParty: true,
 };
 
@@ -349,7 +347,7 @@ describe('Network filters', () => {
 
     network('||foo.com*bar^', {
       ...base,
-      filter: 'bar^',
+      filter: '*bar^',
       hostname: 'foo.com',
     });
     network('||foo.com^bar*/baz^', {
@@ -370,7 +368,7 @@ describe('Network filters', () => {
 
     network('||foo.com*bar^|', {
       ...base,
-      filter: 'bar^',
+      filter: '*bar^',
       hostname: 'foo.com',
     });
     network('||foo.com^bar*/baz^|', {
@@ -681,26 +679,14 @@ describe('Network filters', () => {
 
     describe('match-case', () => {
       it('parses match-case', () => {
-        network('||foo.com$match-case', {
-          matchCase: true,
-        });
-        network('||foo.com$image,match-case', {
-          matchCase: true,
-        });
-        network('||foo.com$media,match-case,image', {
-          matchCase: true,
-        });
+        network('||foo.com$match-case', {});
+        network('||foo.com$image,match-case', {});
+        network('||foo.com$media,match-case,image', {});
       });
 
       it('parses ~match-case', () => {
         // ~match-case is not supported
         network('||foo.com$~match-case', null);
-      });
-
-      it('defaults to false', () => {
-        network('||foo.com', {
-          matchCase: false,
-        });
       });
     });
 
@@ -827,8 +813,11 @@ describe('Network filters', () => {
   });
 
   describe('#getTokens', () => {
-    for (const [regexFilter, regexTokens] of [
-      // TODO Handle character classes
+    for (const [filter, regexTokens] of [
+      // Wildcard
+      ['||geo*.hltv.org^', [hashStrings(['hltv', 'org'])]],
+
+      // RegExp with character class
       ['/^foo$/', [hashStrings(['foo'])]],
       ['/^fo\\so$/', [new Uint32Array(0)]],
       ['/^fo\\wo$/', [new Uint32Array(0)]],
@@ -1078,8 +1067,8 @@ describe('Network filters', () => {
       ['/\\:\\/\\/([0-9]{1,3}\\.){3}[0-9]{1,3}/$doc', [new Uint32Array(0)]],
       ['@@/wp-content/themes/$script', [hashStrings(['content'])]],
     ]) {
-      it(`get tokens for ${regexFilter}`, () => {
-        const parsed = NetworkFilter.parse(regexFilter as string, true);
+      it(`get tokens for ${filter}`, () => {
+        const parsed = NetworkFilter.parse(filter as string, true);
         expect(parsed).not.toBeNull();
         if (parsed !== null) {
           expect(parsed.getTokens()).toEqual(regexTokens);

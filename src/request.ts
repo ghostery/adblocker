@@ -207,8 +207,8 @@ export default class Request {
   public readonly sourceDomainHash: number;
 
   // Lazy attributes
-  private tokens?: Uint32Array;
-  private fuzzySignature?: Uint32Array;
+  private tokens: Uint32Array | undefined;
+  private fuzzySignature: Uint32Array | undefined;
 
   constructor({
     type,
@@ -254,6 +254,10 @@ export default class Request {
       this.isHttps = false;
       this.isSupported = false;
     }
+
+    // Lazy attributes
+    this.tokens = undefined;
+    this.fuzzySignature = undefined;
   }
 
   public getTokens(): Uint32Array {
