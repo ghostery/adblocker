@@ -13,7 +13,7 @@ import NetworkFilter from '../filters/network';
 import Request from '../request';
 import Resources from '../resources';
 
-import { IListDiff, parseFilters } from '../lists';
+import { IListDiff, IRawDiff, parseFilters } from '../lists';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 
@@ -225,6 +225,23 @@ export default class FilterEngine {
     return true;
   }
 
+  public getFilters(): { networkFilters: NetworkFilter[]; cosmeticFilters: CosmeticFilter[] } {
+    const cosmeticFilters: CosmeticFilter[] = [];
+    const networkFilters: NetworkFilter[] = [];
+
+    return {
+      cosmeticFilters: cosmeticFilters.concat(this.cosmetics.getFilters()),
+      networkFilters: networkFilters.concat(
+        this.filters.getFilters(),
+        this.exceptions.getFilters(),
+        this.importants.getFilters(),
+        this.redirects.getFilters(),
+        this.csp.getFilters(),
+        this.genericHides.getFilters(),
+      ),
+    };
+  }
+
   /**
    * Update engine with new filters as well as optionally removed filters.
    */
@@ -294,6 +311,32 @@ export default class FilterEngine {
     }
 
     return updated;
+  }
+
+  public updateFromDiff({ added, removed }: Partial<IRawDiff>): boolean {
+    const newCosmeticFilters: CosmeticFilter[] = [];
+    const newNetworkFilters: NetworkFilter[] = [];
+    const removedCosmeticFilters: CosmeticFilter[] = [];
+    const removedNetworkFilters: NetworkFilter[] = [];
+
+    if (removed !== undefined && removed.length !== 0) {
+      const { networkFilters, cosmeticFilters } = parseFilters(removed.join('\n'), this.config);
+      Array.prototype.push.apply(removedCosmeticFilters, cosmeticFilters);
+      Array.prototype.push.apply(removedNetworkFilters, networkFilters);
+    }
+
+    if (added !== undefined && added.length !== 0) {
+      const { networkFilters, cosmeticFilters } = parseFilters(added.join('\n'), this.config);
+      Array.prototype.push.apply(newCosmeticFilters, cosmeticFilters);
+      Array.prototype.push.apply(newNetworkFilters, networkFilters);
+    }
+
+    return this.update({
+      newCosmeticFilters,
+      newNetworkFilters,
+      removedCosmeticFilters: removedCosmeticFilters.map((f) => f.getId()),
+      removedNetworkFilters: removedNetworkFilters.map((f) => f.getId()),
+    });
   }
 
   /**

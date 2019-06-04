@@ -9,6 +9,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+export function loadEasyListFilters(): string[] {
+  return JSON.parse(
+    fs.readFileSync(path.resolve(__dirname, 'data', 'easylist.json'), { encoding: 'utf-8' }),
+  );
+}
+
 function readAsset(filepath: string) {
   return fs.readFileSync(path.resolve(__dirname, '../', filepath), 'utf-8');
 }
@@ -39,4 +45,23 @@ export function loadResources() {
 
 export function getNaughtyStrings(): string[] {
   return fs.readFileSync(path.resolve(__dirname, 'data', 'blns.txt'), 'utf-8').split('\n');
+}
+
+export function typedArrayEqual(arr1: Uint8Array, arr2: Uint8Array): boolean {
+  if (arr1.byteLength !== arr2.byteLength) {
+    return false;
+  }
+
+  for (let i = 0; i < arr1.byteLength; i += 1) {
+    if (arr1[i] !== arr2[i]) {
+      console.log('Diff', {
+        arr1: arr1[i],
+        arr2: arr2[i],
+        i,
+      });
+      return false;
+    }
+  }
+
+  return true;
 }

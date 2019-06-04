@@ -356,7 +356,7 @@ export default class ReverseIndex<T extends IFilter> {
       const filters = filtersArrays[h];
       for (let i = 0; i < filters.length; i += 1) {
         const filter = filters[i];
-        if (removedFilters === undefined || !removedFilters.has(filter.getId())) {
+        if (removedFilters === undefined || removedFilters.has(filter.getId()) === false) {
           const multiTokens = filter.getTokens();
           filtersTokens.push({
             filter,
@@ -405,13 +405,13 @@ export default class ReverseIndex<T extends IFilter> {
       prefixes.push([]);
     }
 
-    // This byte array contains all the filters serialized consecutively. Having
-    // them separately from the reverse index structure allows filters to be
-    // indexed more than once while not paying extra storage cost.
+    // This byte array contains all the filters serialized consecutively.
+    // Having them separately from the reverse index structure allows filters
+    // to be indexed more than once while not paying extra storage cost.
     // `buffer` is a contiguous chunk of memory which will be used to store 3
     // kinds of data:
     // 1. The first section contains all the filters stored in the index
-    // 2. The second section contains the compact buckets where filter having
+    // 2. The second section contains the compact buckets where filters having
     // their indexing token sharing the last N bits are grouped together.
     //
     // TODO - estimate size needed for this bucket (based on filters in
@@ -428,7 +428,7 @@ export default class ReverseIndex<T extends IFilter> {
       const { filter, multiTokens } = filtersTokens[i];
 
       // Serialize this filter and keep track of its index in the byte array
-      const filterIndex = buffer.getPos();
+      const filterIndex = buffer.pos;
       filter.serialize(buffer);
 
       // Index the filter once per "tokens"
@@ -462,6 +462,9 @@ export default class ReverseIndex<T extends IFilter> {
       }
     }
 
+    // TODO - if we estimate size of filters exactly then we could store this
+    // section first, this would allow a forward progression of accesses in
+    // memory instead of having to go back.
     // We finished dumping all the filters so now starts the buckets index section
     const tokensLookupIndexStart = buffer.getPos();
     const tokensLookupIndex = buffer.getUint32ArrayView(tokensLookupIndexSize);
@@ -481,9 +484,9 @@ export default class ReverseIndex<T extends IFilter> {
     this.cache = new Map();
 
     // Also keep Uint32Array views sharing the same buffer as `this.view` (only
-    // needed for faster access while matching but does not need to be serialized).
-    // NOTE: it's important that these indices point to `this.view` and not
-    // `buffer`, otherwise we will be leaking memory.
+    // needed for faster access while matching but does not need to be
+    // serialized).  NOTE: it's important that these indices point to
+    // `this.view` and not `buffer`, otherwise we will be leaking memory.
     this.view.setPos(tokensLookupIndexStart);
     this.tokensLookupIndex = this.view.getUint32ArrayView(tokensLookupIndexSize);
     this.bucketsIndex = this.view.getUint32ArrayView(bucketsIndexSize);
@@ -512,8 +515,8 @@ export default class ReverseIndex<T extends IFilter> {
 
       // Since we do not store explicitly the number of filters in each
       // "bucket", we check the index of the next one and use it to infer the
-      // number of filters (each filter being stored as a 32bits token + 32bits
-      // index to the "filters store")
+      // number of filters (each filter being stored as a token + index to the
+      // "filters store")
       const endOfBucket =
         offset === this.tokensLookupIndex.length - 1
           ? this.bucketsIndex.length
@@ -558,10 +561,10 @@ export default class ReverseIndex<T extends IFilter> {
       for (let i = 0; i < filters.length; i += 1) {
         // Break the loop if the callback returns `false`
         if (cb(filters[i]) === false) {
-          // Whenever we get a match from a filter, we also swap it one position
-          // up in the list. This way, over time, popular filters will be first
-          // and might match earlier. This should decrease the time needed to
-          // get a match.
+          // Whenever we get a match from a filter, we also swap it one
+          // position up in the list. This way, over time, popular filters will
+          // be first and might match earlier. This should decrease the time
+          // needed to get a match.
           if (i > 0) {
             const filter = filters[i];
             filters[i] = filters[i - 1];

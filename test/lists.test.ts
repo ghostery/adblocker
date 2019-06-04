@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { f } from '../src/lists';
+import { f, mergeDiffs } from '../src/lists';
 
 describe('#f', () => {
   it('handles CosmeticFilter', () => {
@@ -27,5 +27,30 @@ describe('#f', () => {
 
   it('returns null for invalid filter', () => {
     expect(f`#$#~~~`).toBeNull();
+  });
+});
+
+describe('#mergeDiffs', () => {
+  it('merges one diff', () => {
+    const diff = {
+      added: ['||foo.com'],
+      removed: ['||bar.com'],
+    };
+
+    expect(mergeDiffs([diff])).toEqual(diff);
+  });
+
+  it('merges several diffs', () => {
+    expect(
+      mergeDiffs([
+        { added: ['foo.com', 'baz.com'] },
+        { removed: ['foo.com'] },
+        { added: ['bar.com'], removed: ['foo.com'] },
+        { removed: ['bar.com'] },
+      ]),
+    ).toEqual({
+      added: ['baz.com'],
+      removed: ['foo.com', 'bar.com'],
+    });
   });
 });

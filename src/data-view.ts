@@ -177,9 +177,19 @@ export default class StaticDataView {
       this.align4();
     }
 
-    const bytes = this.buffer.subarray(this.pos, this.pos + numberOfBytes);
-    this.pos += numberOfBytes;
+    const bytes = new Uint8Array(numberOfBytes);
+    for (let i = 0; i < numberOfBytes; i += 1) {
+      bytes[i] = this.buffer[this.pos++];
+    }
+
     return bytes;
+
+    // TODO - using `subarray` here causes issue during updates. It is not
+    // clear why that happens but it would be nice to investigate so that we
+    // can continue to not copy any data while deserializing.
+    //
+    // const bytes = this.buffer.subarray(this.pos, this.pos + numberOfBytes);
+    // this.pos += numberOfBytes;
   }
 
   /**

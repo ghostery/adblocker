@@ -65,6 +65,14 @@ export default class NetworkFilterBucket {
     }
   }
 
+  public getFilters(): NetworkFilter[] {
+    const filters: NetworkFilter[] = [];
+    return filters.concat(
+      this.badFilters.getFilters(),
+      this.index.getFilters(),
+    );
+  }
+
   public update(newFilters: NetworkFilter[], removedFilters: Set<number> | undefined): void {
     const badFilters: NetworkFilter[] = [];
     const remaining: NetworkFilter[] = [];

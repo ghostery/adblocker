@@ -11,7 +11,7 @@ import StaticDataView from './data-view';
 export default class Config {
   public static deserialize(buffer: StaticDataView): Config {
     return new Config({
-      debug: false,
+      debug: buffer.getBool(),
       enableCompression: buffer.getBool(),
       enableOptimizations: buffer.getBool(),
       integrityCheck: buffer.getBool(),
@@ -48,6 +48,7 @@ export default class Config {
   }
 
   public serialize(buffer: StaticDataView): void {
+    buffer.pushBool(this.debug);
     buffer.pushBool(this.enableCompression);
     buffer.pushBool(this.enableOptimizations);
     buffer.pushBool(this.integrityCheck);

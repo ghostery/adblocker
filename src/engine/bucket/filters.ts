@@ -126,12 +126,12 @@ export default class FiltersContainer<T extends IFilter> {
 
   public getFilters(): T[] {
     // No filter stored in the container
-    if (this.filters.length <= 4) {
+    if (this.filters.byteLength <= 4) {
       return [];
     }
 
     // Load all filters in memory and store them in `cache`
-    const filters = [];
+    const filters: T[] = [];
     const buffer = StaticDataView.fromUint8Array(this.filters, this.config);
     const numberOfFilters = buffer.getUint32();
     for (let i = 0; i < numberOfFilters; i += 1) {

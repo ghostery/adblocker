@@ -27,7 +27,7 @@ describe('ReverseIndex', () => {
     new Config({ enableCompression: false }),
   ]) {
     describe(`compression = ${config.enableCompression}`, () => {
-      const { cosmeticFilters, networkFilters } = parseFilters(loadAllLists());
+      const { cosmeticFilters, networkFilters } = parseFilters(loadAllLists(), { debug: true });
 
       describe('#serialize', () => {
         function testSerializeIndexImpl<T extends IFilter>(
@@ -43,7 +43,7 @@ describe('ReverseIndex', () => {
           });
 
           // Serialize index
-          const buffer = StaticDataView.allocate(4000000, config);
+          const buffer = StaticDataView.allocate(10000000, config);
           reverseIndex.serialize(buffer);
 
           // Deserialize
@@ -166,9 +166,9 @@ describe('ReverseIndex', () => {
             const exampleIndex = new ReverseIndex({
               config,
               deserialize: NetworkFilter.deserialize,
-              optimize,
               filters: parseFilters(filters, { loadCosmeticFilters: false, debug: true })
                 .networkFilters,
+              optimize,
             });
 
             it('works on empty index', () => {
@@ -234,7 +234,6 @@ describe('ReverseIndex', () => {
             it('stores filters without tokens in wildcard bucket', () => {
               const index = new ReverseIndex({
                 config,
-                optimize,
                 deserialize: NetworkFilter.deserialize,
                 filters: parseFilters(
                   `
@@ -243,6 +242,7 @@ wildcard
       `,
                   { loadCosmeticFilters: false, debug: true },
                 ).networkFilters,
+                optimize,
               });
 
               const matches: Set<string | undefined> = new Set();
@@ -281,12 +281,12 @@ wildcard
                 new ReverseIndex({
                   config,
                   deserialize: NetworkFilter.deserialize,
-                  optimize,
                   filters: parseFilters(`
 /ads^
 /foo^
 -bar-
           `).networkFilters,
+                  optimize,
                 })
                   .getTokens()
                   .sort(),

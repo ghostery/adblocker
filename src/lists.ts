@@ -174,3 +174,95 @@ export interface IListDiff {
   removedCosmeticFilters: number[];
   removedNetworkFilters: number[];
 }
+
+export interface IRawDiff {
+  added: string[];
+  removed: string[];
+}
+
+/**
+ * Helper used to return a set of lines as strings where each line is
+ * guaranteed to be a valid filter (i.e.: comments, empty lines and
+ * un-supported filters are dropped).
+ */
+export function getLinesWithFilters(raw: string): Set<string> {
+  const {
+    networkFilters,
+    cosmeticFilters,
+  }: {
+    networkFilters: NetworkFilter[];
+    cosmeticFilters: CosmeticFilter[];
+  } = parseFilters(raw, {
+    debug: true,
+  });
+
+  return new Set(
+    networkFilters
+      .map((filter) => filter.rawLine as string)
+      .concat(cosmeticFilters.map((filter) => filter.rawLine as string)),
+  );
+}
+
+/**
+ * Given two versions of the same subscription (e.g.: EasyList) as a string,
+ * generate a raw diff (i.e.: a list of lines added and lines removed).
+ */
+export function generateDiff(prevRevision: string, newRevision: string): IRawDiff {
+  const prevRevisionLines: Set<string> = getLinesWithFilters(prevRevision);
+  const newRevisionLines: Set<string> = getLinesWithFilters(newRevision);
+
+  const added: string[] = [];
+  const removed: string[] = [];
+
+  newRevisionLines.forEach((line) => {
+    if (!prevRevisionLines.has(line)) {
+      added.push(line);
+    }
+  });
+
+  prevRevisionLines.forEach((line) => {
+    if (!newRevisionLines.has(line)) {
+      removed.push(line);
+    }
+  });
+
+  return { added, removed };
+}
+
+/**
+ * Merge several raw diffs into one, taking care of accumulating added and
+ * removed filters, even if several diffs add/remove the same ones.
+ */
+export function mergeDiffs(diffs: Array<Partial<IRawDiff>>): IRawDiff {
+  const addedCumul: Set<string> = new Set();
+  const removedCumul: Set<string> = new Set();
+
+  for (let i = 0; i < diffs.length; i += 1) {
+    const { added, removed } = diffs[i];
+
+    if (added !== undefined) {
+      for (let j = 0; j < added.length; j += 1) {
+        const str = added[j];
+        if (removedCumul.has(str)) {
+          removedCumul.delete(str);
+        }
+        addedCumul.add(str);
+      }
+    }
+
+    if (removed !== undefined) {
+      for (let j = 0; j < removed.length; j += 1) {
+        const str = removed[j];
+        if (addedCumul.has(str)) {
+          addedCumul.delete(str);
+        }
+        removedCumul.add(str);
+      }
+    }
+  }
+
+  return {
+    added: Array.from(addedCumul),
+    removed: Array.from(removedCumul),
+  };
+}

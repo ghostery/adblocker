@@ -254,6 +254,18 @@ export default class CosmeticFilterBucket {
     }
   }
 
+  public getFilters(): CosmeticFilter[] {
+    const filters: CosmeticFilter[] = [];
+    return filters.concat(
+      this.classesIndex.getFilters(),
+      this.genericRules.getFilters(),
+      this.hostnameIndex.getFilters(),
+      this.hrefsIndex.getFilters(),
+      this.idsIndex.getFilters(),
+      this.unhideIndex.getFilters(),
+    );
+  }
+
   public update(newFilters: CosmeticFilter[], removedFilters: Set<number> | undefined): void {
     const unHideRules: CosmeticFilter[] = [];
     const genericHideRules: CosmeticFilter[] = [];
