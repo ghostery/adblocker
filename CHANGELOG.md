@@ -4,6 +4,10 @@
 
 *not released yet*
 
+## 0.10.0
+
+*2019-06-05*
+
   * Add helpers to create and manipulate diffs [#172](https://github.com/cliqz-oss/adblocker/pull/172/)
     * `getLinesWithFilters(...)`
     * `generateDiff(...)`
