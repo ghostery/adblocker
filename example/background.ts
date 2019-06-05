@@ -49,7 +49,7 @@ function loadAdblocker() {
     total = Date.now() - t0;
     console.log('deserialization', total);
 
-    return new WebExtensionEngine(deserialized);
+    return deserialized as WebExtensionEngine;
   });
 }
 

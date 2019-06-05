@@ -7,17 +7,15 @@
  */
 
 import Config from '../config';
+import { IMessageFromBackground } from '../content/communication';
 import StaticDataView from '../data-view';
 import CosmeticFilter from '../filters/cosmetic';
 import NetworkFilter from '../filters/network';
+import { IListDiff, IRawDiff, parseFilters } from '../lists';
 import Request from '../request';
 import Resources from '../resources';
-
-import { IListDiff, IRawDiff, parseFilters } from '../lists';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
-
-import { IMessageFromBackground } from '../content/communication';
 
 export const ENGINE_VERSION = 27;
 
@@ -34,7 +32,7 @@ function btoaPolyfill(buffer: string): string {
 export default class FilterEngine {
   public static parse(filters: string, options: Partial<Config> = {}): FilterEngine {
     const config = new Config(options);
-    return new FilterEngine(Object.assign({}, parseFilters(filters, config), { config }));
+    return new this(Object.assign({}, parseFilters(filters, config), { config }));
   }
 
   public static deserialize(serialized: Uint8Array): FilterEngine {
@@ -76,7 +74,7 @@ export default class FilterEngine {
       buffer.pos = currentPos;
     }
 
-    const engine = new FilterEngine({ config });
+    const engine = new this({ config });
 
     // Deserialize resources
     engine.resources = Resources.deserialize(buffer);

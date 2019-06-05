@@ -99,7 +99,7 @@ export default class WebExtensionEngine extends Engine {
           return;
         }
 
-        this.injectStylesWebExtension(styles, { tabId: sender.tab.id, frameId, allFrames: true });
+        this.injectStylesWebExtension(styles, { tabId: sender.tab.id, allFrames: true });
       }
 
       // Separately, requests cosmetics which depend on the page it self
@@ -152,7 +152,7 @@ export default class WebExtensionEngine extends Engine {
       allFrames = false,
     }: {
       tabId: number;
-      frameId: number;
+      frameId?: number;
       allFrames?: boolean;
     },
   ): void {
