@@ -4,6 +4,8 @@
 
 *not released yet*
 
+  * Add missing dependencies on @types/puppeteer needed by users of the library [#174](https://github.com/cliqz-oss/adblocker/pull/174/)
+
 ## 0.10.0
 
 *2019-06-05*
