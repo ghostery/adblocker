@@ -25,7 +25,7 @@ describe('#injectCosmetics', () => {
       };
     });
 
-    injectCosmetics(dom.window, getCosmeticsFilters);
+    injectCosmetics(dom.window, getCosmeticsFilters, true);
     dom.window.close();
 
     expect(getCosmeticsFilters).toHaveBeenCalledTimes(1);
@@ -57,7 +57,7 @@ describe('#injectCosmetics', () => {
       };
     });
 
-    injectCosmetics(dom.window, getCosmeticsFilters);
+    injectCosmetics(dom.window, getCosmeticsFilters, true);
     await tick();
     dom.window.close();
 
@@ -91,7 +91,7 @@ describe('#injectCosmetics', () => {
     });
 
     // Wait for DOMContentLoaded
-    injectCosmetics(dom.window, getCosmeticsFilters);
+    injectCosmetics(dom.window, getCosmeticsFilters, true);
     await tick();
 
     // Mutate the DOM = add nodes
@@ -163,7 +163,7 @@ describe('#injectCosmetics', () => {
         ],
         styles: '',
       };
-    });
+    }, true);
 
     await tick(1000);
     expect(dom.window.document.getElementsByTagName('span')).toHaveLength(1);
@@ -190,7 +190,7 @@ describe('#injectCosmetics', () => {
         #id1 { display: none !important; }
         `,
       };
-    });
+    }, true);
 
     await tick(1000);
 
@@ -225,7 +225,7 @@ describe('#injectCosmetics', () => {
         ],
         styles: '',
       };
-    });
+    }, true);
 
     await tick(1000);
     expect(dom.window.document.getElementsByTagName('span')).toHaveLength(0);
