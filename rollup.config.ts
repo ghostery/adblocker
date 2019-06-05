@@ -21,7 +21,7 @@ function tasks(entryPoint) {
   return [
     // CommonJS + ES6
     {
-      external: ['tldts', 'tsmaz'],
+      external: ['tslib', 'tldts', 'tsmaz'],
       input: `./build/${entryPoint}.js`,
       output: [
         { file: `./dist/${entryPoint}.esm.js`, format: 'es' },
