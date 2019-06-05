@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { loadAllLists, loadResources } from './utils';
+import { loadAllLists, loadResources, typedArrayEqual } from './utils';
 
 import Config from '../src/config';
 import StaticDataView from '../src/data-view';
@@ -115,9 +115,23 @@ describe('Serialization', () => {
         newNetworkFilters: networkFilters,
       });
 
-      const serialized = engine.serialize(buffer);
-      const deserialized = Engine.deserialize(serialized);
+      const array = new Uint8Array(10000000);
+      const baseSerialized = engine.serialize(array);
+
+      let deserialized = Engine.deserialize(baseSerialized);
       expect(deserialized).toEqual(engine);
+
+      let serialized = deserialized.serialize(array);
+      expect(typedArrayEqual(serialized, baseSerialized)).toBe(true);
+
+      // Perform several deserializations in a row. Testing this is needed to
+      // make sure the low-level typed array manipulation do not corrupt the
+      // data.
+      for (let i = 0; i < 3; i += 1) {
+        deserialized = Engine.deserialize(serialized);
+        serialized = deserialized.serialize(array);
+        expect(typedArrayEqual(serialized, baseSerialized)).toBe(true);
+      }
     });
   });
 });

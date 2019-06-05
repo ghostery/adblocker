@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { fetchLists, fetchResources, FiltersEngine, WebExtensionEngine } from '../adblocker';
+import { fetchLists, fetchResources, WebExtensionEngine } from '../adblocker';
 
 /**
  * Initialize the adblocker using lists of filters and resources. It returns a
@@ -27,7 +27,7 @@ function loadAdblocker() {
     const deduplicatedFilters = [...deduplicatedLines].join('\n');
 
     let t0 = Date.now();
-    const engine = FiltersEngine.parse(deduplicatedFilters, {
+    const engine = WebExtensionEngine.parse(deduplicatedFilters, {
       enableCompression: true,
     });
     let total = Date.now() - t0;
@@ -45,11 +45,11 @@ function loadAdblocker() {
     console.log('size', serialized.byteLength);
 
     t0 = Date.now();
-    const deserialized = FiltersEngine.deserialize(serialized);
+    const deserialized = WebExtensionEngine.deserialize(serialized);
     total = Date.now() - t0;
     console.log('deserialization', total);
 
-    return new WebExtensionEngine(deserialized);
+    return deserialized as WebExtensionEngine;
   });
 }
 

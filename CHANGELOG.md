@@ -4,6 +4,14 @@
 
 *not released yet*
 
+  * Add helpers to create and manipulate diffs [#172](https://github.com/cliqz-oss/adblocker/pull/172/)
+    * `getLinesWithFilters(...)`
+    * `generateDiff(...)`
+    * `mergeDiffs(...)`
+  * Add `updateFromDiff` method on `FiltersEngine` [#172](https://github.com/cliqz-oss/adblocker/pull/172/)
+  * Add `getFilters` method on `FiltersEngine` [#172](https://github.com/cliqz-oss/adblocker/pull/172/)
+  * Fix update issue by performing copy in `StaticDataView.getBytes` [#172](https://github.com/cliqz-oss/adblocker/pull/172/)
+  * Serialize `config.debug` as well [#172](https://github.com/cliqz-oss/adblocker/pull/172/)
   * Implement support for RegExp network filters [#169](https://github.com/cliqz-oss/adblocker/pull/169)
   * [EXPERIMENTAL] add on-the-fly string compression using short-string
     optimized method. Off by default, it can be enabled by using the

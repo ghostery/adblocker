@@ -8,13 +8,21 @@
 
 export { default as FiltersEngine, ENGINE_VERSION } from './src/engine/engine';
 export { default as ReverseIndex } from './src/engine/reverse-index';
-export { default as Request } from './src/request';
+export { default as Request, makeRequest } from './src/request';
 export { default as CosmeticFilter } from './src/filters/cosmetic';
 export { default as NetworkFilter } from './src/filters/network';
-export { f, parseFilters } from './src/lists';
+export {
+  f,
+  parseFilters,
+  IRawDiff,
+  IListDiff,
+  generateDiff,
+  mergeDiffs,
+  getLinesWithFilters,
+} from './src/lists';
 export { compactTokens, hasEmptyIntersection, mergeCompactSets } from './src/compact-set';
 export { fetchLists, fetchResources } from './src/fetch';
-export { updateResponseHeadersWithCSP } from './src/utils';
+export { updateResponseHeadersWithCSP, tokenize } from './src/utils';
 export { default as Config } from './src/config';
 export { default as WebExtensionEngine } from './src/webextension/background';
 

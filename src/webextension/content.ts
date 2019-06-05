@@ -15,12 +15,26 @@ declare global {
   }
 }
 
+let ACTIVE: boolean = true;
+let MUTATION_OBSERVER: MutationObserver | null = null;
+
+function unload() {
+  if (MUTATION_OBSERVER !== null) {
+    MUTATION_OBSERVER.disconnect();
+    MUTATION_OBSERVER = null;
+  }
+}
+
 function handleResponseFromBackground(
   window: Window,
-  { active, scripts, styles, extended }: IMessageFromBackground,
+  { active, scripts, styles }: IMessageFromBackground,
 ) {
   if (active === false) {
+    ACTIVE = false;
+    unload();
     return;
+  } else {
+    ACTIVE = true;
   }
 
   // Inject scripts
@@ -36,9 +50,8 @@ function handleResponseFromBackground(
   }
 
   // Extended CSS
-  if (extended && extended.length > 0) {
-    // console.log('Got extended selectors', extended);
-  }
+  // if (extended && extended.length > 0) {
+  // }
 }
 
 /**
@@ -60,6 +73,7 @@ export default function injectCosmetics(
     ids,
     lifecycle,
   }: IBackgroundCallback) => Promise<IMessageFromBackground>,
+  enableMutationObserver: boolean,
 ) {
   // Invoked as soon as content-script is injected to ask for background to
   // inject cosmetics and scripts as soon as possible. Some extra elements
@@ -74,7 +88,6 @@ export default function injectCosmetics(
   // this will allow the injection of selectors which have a chance to match.
   // We also register a MutationObserver which will monitor the addition of new
   // classes and ids, and might trigger extra filters on a per-need basis.
-  let mutationObserver: MutationObserver | null = null;
   window.addEventListener(
     'DOMContentLoaded',
     () => {
@@ -132,7 +145,6 @@ export default function injectCosmetics(
 
         if (newIds.length !== 0 || newClasses.length !== 0 || newHrefs.length !== 0) {
           // TODO - we might want to throttle that?
-          // console.error('Requesting extra cosmetics');
           getCosmeticsFilters({
             classes: newClasses,
             hrefs: newHrefs,
@@ -150,8 +162,8 @@ export default function injectCosmetics(
 
       // Start observing mutations to detect new ids and classes which would
       // need to be hidden.
-      if (window.MutationObserver) {
-        mutationObserver = new window.MutationObserver((mutations) => {
+      if (ACTIVE && enableMutationObserver && window.MutationObserver) {
+        MUTATION_OBSERVER = new window.MutationObserver((mutations) => {
           // Accumulate all nodes which were updated in `nodes`
           const nodes: HTMLElement[] = [];
           for (let i = 0; i < mutations.length; i += 1) {
@@ -175,7 +187,7 @@ export default function injectCosmetics(
           handleNodes(nodes);
         });
 
-        mutationObserver.observe(window.document.documentElement, {
+        MUTATION_OBSERVER.observe(window.document.documentElement, {
           attributeFilter: ['class', 'id', 'href'],
           attributes: true,
           childList: true,
@@ -187,14 +199,5 @@ export default function injectCosmetics(
   );
 
   // Clean-up afterwards
-  window.addEventListener(
-    'unload',
-    () => {
-      if (mutationObserver !== null) {
-        mutationObserver.disconnect();
-        mutationObserver = null;
-      }
-    },
-    { once: true, passive: true },
-  );
+  window.addEventListener('unload', unload, { once: true, passive: true });
 }

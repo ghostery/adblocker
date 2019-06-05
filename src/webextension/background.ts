@@ -24,15 +24,7 @@ export function checkAvailableAPIs() {
  * Wrap `FiltersEngine` into a WebExtension-friendly helper class. It exposes
  * methods to interface with WebExtension APIs needed to block ads.
  */
-export default class WebExtensionEngine {
-  private readonly engine: Engine;
-  private readonly chrome: typeof chrome;
-
-  constructor(engine: Engine, globalChrome: typeof chrome = chrome) {
-    this.engine = engine;
-    this.chrome = globalChrome;
-  }
-
+export default class WebExtensionEngine extends Engine {
   /**
    * Deal with request cancellation (`{ cancel: true }`) and redirection (`{ redirectUrl: '...' }`).
    */
@@ -40,7 +32,7 @@ export default class WebExtensionEngine {
     details: WebRequestBeforeRequestDetails,
   ): chrome.webRequest.BlockingResponse {
     const request = Request.fromWebRequestDetails(details);
-    const { redirect, match } = this.engine.match(request);
+    const { redirect, match } = this.match(request);
 
     if (redirect !== undefined) {
       return { redirectUrl: redirect };
@@ -59,11 +51,10 @@ export default class WebExtensionEngine {
   ): chrome.webRequest.BlockingResponse {
     return updateResponseHeadersWithCSP(
       details,
-      this.engine.getCSPDirectives(Request.fromWebRequestDetails(details)),
+      this.getCSPDirectives(Request.fromWebRequestDetails(details)),
     );
   }
 
-  // TODO - make sure we support Firefox APIs as well
   public onRuntimeMessage(
     msg: IBackgroundCallback & { action?: string },
     sender: chrome.runtime.MessageSender,
@@ -88,7 +79,7 @@ export default class WebExtensionEngine {
       // Because of this, we specify `allFrames: true` when injecting them so
       // that we do not need to perform this operation for sub-frames.
       if (frameId === 0 && msg.lifecycle === 'start') {
-        const { active, styles } = this.engine.getCosmeticsFilters({
+        const { active, styles } = this.getCosmeticsFilters({
           domain,
           hostname,
           url,
@@ -108,7 +99,7 @@ export default class WebExtensionEngine {
           return;
         }
 
-        this.injectStylesWebExtension(styles, { tabId: sender.tab.id, frameId, allFrames: true });
+        this.injectStylesWebExtension(styles, { tabId: sender.tab.id, allFrames: true });
       }
 
       // Separately, requests cosmetics which depend on the page it self
@@ -117,7 +108,7 @@ export default class WebExtensionEngine {
       // ids and hrefs observed in the DOM. MutationObserver is also used to
       // make sure we can react to changes.
       {
-        const { active, styles, scripts } = this.engine.getCosmeticsFilters({
+        const { active, styles, scripts } = this.getCosmeticsFilters({
           domain,
           hostname,
           url,
@@ -161,12 +152,17 @@ export default class WebExtensionEngine {
       allFrames = false,
     }: {
       tabId: number;
-      frameId: number;
+      frameId?: number;
       allFrames?: boolean;
     },
   ): void {
-    if (styles.length > 0) {
-      this.chrome.tabs.insertCSS(
+    if (
+      styles.length > 0 &&
+      typeof chrome !== 'undefined' &&
+      chrome.tabs &&
+      chrome.tabs.insertCSS
+    ) {
+      chrome.tabs.insertCSS(
         tabId,
         {
           allFrames,
@@ -177,8 +173,8 @@ export default class WebExtensionEngine {
           runAt: 'document_start',
         },
         () => {
-          if (this.chrome.runtime.lastError) {
-            console.error('Error while injecting CSS', this.chrome.runtime.lastError.message);
+          if (chrome.runtime.lastError) {
+            console.error('Error while injecting CSS', chrome.runtime.lastError.message);
           }
         },
       );

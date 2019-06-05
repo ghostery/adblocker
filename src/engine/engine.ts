@@ -7,17 +7,15 @@
  */
 
 import Config from '../config';
+import { IMessageFromBackground } from '../content/communication';
 import StaticDataView from '../data-view';
 import CosmeticFilter from '../filters/cosmetic';
 import NetworkFilter from '../filters/network';
+import { IListDiff, IRawDiff, parseFilters } from '../lists';
 import Request from '../request';
 import Resources from '../resources';
-
-import { IListDiff, parseFilters } from '../lists';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
-
-import { IMessageFromBackground } from '../content/communication';
 
 export const ENGINE_VERSION = 27;
 
@@ -34,7 +32,7 @@ function btoaPolyfill(buffer: string): string {
 export default class FilterEngine {
   public static parse(filters: string, options: Partial<Config> = {}): FilterEngine {
     const config = new Config(options);
-    return new FilterEngine(Object.assign({}, parseFilters(filters, config), { config }));
+    return new this(Object.assign({}, parseFilters(filters, config), { config }));
   }
 
   public static deserialize(serialized: Uint8Array): FilterEngine {
@@ -76,7 +74,7 @@ export default class FilterEngine {
       buffer.pos = currentPos;
     }
 
-    const engine = new FilterEngine({ config });
+    const engine = new this({ config });
 
     // Deserialize resources
     engine.resources = Resources.deserialize(buffer);
@@ -225,6 +223,23 @@ export default class FilterEngine {
     return true;
   }
 
+  public getFilters(): { networkFilters: NetworkFilter[]; cosmeticFilters: CosmeticFilter[] } {
+    const cosmeticFilters: CosmeticFilter[] = [];
+    const networkFilters: NetworkFilter[] = [];
+
+    return {
+      cosmeticFilters: cosmeticFilters.concat(this.cosmetics.getFilters()),
+      networkFilters: networkFilters.concat(
+        this.filters.getFilters(),
+        this.exceptions.getFilters(),
+        this.importants.getFilters(),
+        this.redirects.getFilters(),
+        this.csp.getFilters(),
+        this.genericHides.getFilters(),
+      ),
+    };
+  }
+
   /**
    * Update engine with new filters as well as optionally removed filters.
    */
@@ -294,6 +309,32 @@ export default class FilterEngine {
     }
 
     return updated;
+  }
+
+  public updateFromDiff({ added, removed }: Partial<IRawDiff>): boolean {
+    const newCosmeticFilters: CosmeticFilter[] = [];
+    const newNetworkFilters: NetworkFilter[] = [];
+    const removedCosmeticFilters: CosmeticFilter[] = [];
+    const removedNetworkFilters: NetworkFilter[] = [];
+
+    if (removed !== undefined && removed.length !== 0) {
+      const { networkFilters, cosmeticFilters } = parseFilters(removed.join('\n'), this.config);
+      Array.prototype.push.apply(removedCosmeticFilters, cosmeticFilters);
+      Array.prototype.push.apply(removedNetworkFilters, networkFilters);
+    }
+
+    if (added !== undefined && added.length !== 0) {
+      const { networkFilters, cosmeticFilters } = parseFilters(added.join('\n'), this.config);
+      Array.prototype.push.apply(newCosmeticFilters, cosmeticFilters);
+      Array.prototype.push.apply(newNetworkFilters, networkFilters);
+    }
+
+    return this.update({
+      newCosmeticFilters,
+      newNetworkFilters,
+      removedCosmeticFilters: removedCosmeticFilters.map((f) => f.getId()),
+      removedNetworkFilters: removedNetworkFilters.map((f) => f.getId()),
+    });
   }
 
   /**

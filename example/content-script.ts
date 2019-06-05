@@ -52,4 +52,4 @@ const getCosmeticsFilters = ({
  * - Block the execution of some scripts in the page (only if the
  * 'beforescriptexecute' event is available, currently only on Firefox).
  */
-injectCosmetics(window, getCosmeticsFilters);
+injectCosmetics(window, getCosmeticsFilters, true /* MutationObserver */);
