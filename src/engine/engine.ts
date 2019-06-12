@@ -177,10 +177,11 @@ export default class FilterEngine {
 
     // Serialize the state of lists (names and checksums)
     buffer.pushUint16(this.lists.size);
-    this.lists.forEach((checksum, name) => {
-      buffer.pushASCII(name);
-      buffer.pushASCII(checksum);
-    });
+    const entries = Array.from(this.lists.entries()).sort();
+    for (let i = 0; i < entries.length; i += 1) {
+      buffer.pushASCII(entries[i][0]);
+      buffer.pushASCII(entries[i][1]);
+    }
 
     // Filters buckets
     this.filters.serialize(buffer);

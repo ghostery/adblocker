@@ -185,16 +185,19 @@ export interface IRawDiff {
  * guaranteed to be a valid filter (i.e.: comments, empty lines and
  * un-supported filters are dropped).
  */
-export function getLinesWithFilters(raw: string): Set<string> {
+export function getLinesWithFilters(
+  raw: string,
+  config: Partial<Config> = new Config(),
+): Set<string> {
+  config = new Config(Object.assign(config, { debug: true }));
+
   const {
     networkFilters,
     cosmeticFilters,
   }: {
     networkFilters: NetworkFilter[];
     cosmeticFilters: CosmeticFilter[];
-  } = parseFilters(raw, {
-    debug: true,
-  });
+  } = parseFilters(raw, config);
 
   return new Set(
     networkFilters
@@ -262,7 +265,7 @@ export function mergeDiffs(diffs: Array<Partial<IRawDiff>>): IRawDiff {
   }
 
   return {
-    added: Array.from(addedCumul),
-    removed: Array.from(removedCumul),
+    added: Array.from(addedCumul).sort(),
+    removed: Array.from(removedCumul).sort(),
   };
 }
