@@ -189,7 +189,7 @@ export function getLinesWithFilters(
   raw: string,
   config: Partial<Config> = new Config(),
 ): Set<string> {
-  config = new Config(Object.assign(config, { debug: true }));
+  config = new Config(Object.assign({}, config, { debug: true }));
 
   const {
     networkFilters,
@@ -210,9 +210,13 @@ export function getLinesWithFilters(
  * Given two versions of the same subscription (e.g.: EasyList) as a string,
  * generate a raw diff (i.e.: a list of lines added and lines removed).
  */
-export function generateDiff(prevRevision: string, newRevision: string): IRawDiff {
-  const prevRevisionLines: Set<string> = getLinesWithFilters(prevRevision);
-  const newRevisionLines: Set<string> = getLinesWithFilters(newRevision);
+export function generateDiff(
+  prevRevision: string,
+  newRevision: string,
+  config: Partial<Config> = new Config(),
+): IRawDiff {
+  const prevRevisionLines: Set<string> = getLinesWithFilters(prevRevision, config);
+  const newRevisionLines: Set<string> = getLinesWithFilters(newRevision, config);
 
   const added: string[] = [];
   const removed: string[] = [];
