@@ -111,6 +111,14 @@ export default class FiltersContainer<T extends IFilter> {
       // Store filters in their compact form
       const buffer = StaticDataView.allocate(bufferSizeEstimation, this.config);
       buffer.pushUint32(selected.length);
+
+      // When we run in `debug` mode, we enable fully deterministic updates of
+      // internal data-structure. To this effect, we sort all filters before
+      // insertion.
+      if (this.config.debug === true) {
+        selected.sort((f1: T, f2: T): number => f1.getId() - f2.getId());
+      }
+
       for (let i = 0; i < selected.length; i += 1) {
         selected[i].serialize(buffer);
       }

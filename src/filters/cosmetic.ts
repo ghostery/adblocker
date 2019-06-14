@@ -190,6 +190,7 @@ function computeFilterId(
   entities: Uint32Array | undefined,
   notHostnames: Uint32Array | undefined,
   notEntities: Uint32Array | undefined,
+  style: string | undefined,
 ): number {
   let hash = (5408 * 33) ^ mask;
 
@@ -220,6 +221,12 @@ function computeFilterId(
   if (notEntities !== undefined) {
     for (let i = 0; i < notEntities.length; i += 1) {
       hash = (hash * 33) ^ notEntities[i];
+    }
+  }
+
+  if (style !== undefined) {
+    for (let i = 0; i < style.length; i += 1) {
+      hash = (hash * 33) ^ style.charCodeAt(i);
     }
   }
 
@@ -894,6 +901,7 @@ export default class CosmeticFilter implements IFilter {
         this.entities,
         this.notHostnames,
         this.notEntities,
+        this.style,
       );
     }
     return this.id;

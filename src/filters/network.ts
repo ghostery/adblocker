@@ -280,6 +280,13 @@ export default class NetworkFilter implements IFilter {
 
         switch (option) {
           case 'domain': {
+            // domain list starting or ending with '|' is invalid
+            if (
+              optionValue.charCodeAt(0) === 124 /* '|' */ ||
+              optionValue.charCodeAt(optionValue.length - 1) === 124 /* '|' */
+            ) {
+              return null;
+            }
             const optionValues: string[] = optionValue.split('|');
             const optDomainsArray: number[] = [];
             const optNotDomainsArray: number[] = [];
