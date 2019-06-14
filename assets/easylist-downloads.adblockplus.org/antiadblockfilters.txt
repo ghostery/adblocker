@@ -1,8 +1,8 @@
 [Adblock Plus 2.0]
-! Checksum: GDnspJKxUCiVham5Foh2Eg
-! Version: 201905291530
+! Checksum: X1jHLGvSJ+9G6lmVx0yfLA
+! Version: 201906141512
 ! Title: Adblock Warning Removal List
-! Last modified: 29 May 2019 15:30 UTC
+! Last modified: 14 Jun 2019 15:12 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 !
@@ -104,6 +104,7 @@ shadbase.com##img[alt="adblock"]
 /adblocker_message_
 /AdblockMessage.
 /antiadblockmsg.
+/blockAndInf.js
 /blockadblock.$script
 /disable-adblock.
 /wp-content/plugins/ad-block-defender/*
@@ -125,7 +126,9 @@ shadbase.com##img[alt="adblock"]
 @@/noadblock-nice-message/assets/js/ads.js?$script,~third-party
 !
 @@||abcbourse.com/scripts/ads.js$script,~third-party
+@@||animedigitalnetwork.fr/templates/*/js/advertising.min.js?$script,~third-party
 @@||ausujet.com/skins/common/ads.js
+@@||cdncontent.wakanim.tv/scripts/dist/ads.js$script,~third-party
 @@||cyberdean.fr/js/advertisement.js
 @@||dbz-fantasy.com/ads.css
 @@||dev-dyod.fr/styles/ads.css
@@ -149,6 +152,7 @@ shadbase.com##img[alt="adblock"]
 @@||penducado.com/styles/ads.css
 @@||presse-algerie.net/js/ads.js$script
 @@||primfx.com/js/ads.js|$script,~third-party
+@@||proxy.ads.canalplus-bo.net/web/undefined/v1/adserver/info/?asset=*&channel=$xmlhttprequest,domain=www.mycanal.fr
 @@||ps3-infos.fr/adsense/openads/ads/ads.js
 @@||ptitchef.com/js/ads.js
 @@||static.koreus.com/js/advert.js
@@ -157,6 +161,7 @@ shadbase.com##img[alt="adblock"]
 @@||universfreebox.com/js/advertisement.js
 @@||uplea.com/js/advertisement.js
 @@||peimg.fr/js/ads.js$script,domain=pubeco.fr
+@@||v.fwmrm.net/ad/g/1?$xmlhttprequest,domain=www.mycanal.fr
 @@||wamiz.com/css/ads.css
 @@||zagaz.com/img/blogads.css
 !
@@ -226,6 +231,7 @@ shadbase.com##img[alt="adblock"]
 ##.adblock_floating_message
 ##.adblocker-message
 ##.adblocker-wrap
+##.ads-block-warning
 ##.counterAdblocks
 ##.deadblocker-header-bar
 ##.deadblocker-header-bar-inner
@@ -264,8 +270,10 @@ pausecafein.fr###adb-pop
 !
 #@##adblocktest
 !
+tf1.fr#@#.ad-placement
 dbz-fantasy.com#@##adTeaser
 fstore.biz#@##adblockinfo
+tf1.fr#@#.adsbox
 dz-android.com,freeiphone.fr,hommedumatch.fr,jetetroll.com,testious.com#@##adsense
 debrideurstream.fr#@##pubdirecte
 ot-boutique.fr#@##publicite
@@ -297,7 +305,6 @@ firebit.info###adv-300 + div[class][align="center"][style^="background-color"]
 novostroy-m.ru###advert_result
 cxem.net###antiAdBlock
 elhow.ru###b-info-wrapper
-rockstargame.su###baduser
 ma.by###bodysubcont > div[style^="padding"]:not([id]):not([class])
 pln-pskov.ru###check_ad_block
 delfi.ee###delfiTopBar
@@ -370,6 +377,7 @@ tsn.ua##.c-aside-embed
 kanobu.ru##.c-moneyPlace_empty
 kinoafisha.info,tvcook.ru##.cat
 rusopen.com##.classblsi.addshr
+ppc.world##.detected-block-modal
 smotrisport.online,smotrisport.tv##.dont-add-our-site-pls
 goha.ru#@#.goha_ads
 goha.ru#@#.goha_ads_acceptable
@@ -377,6 +385,7 @@ themoviebay.ru##.is-danger.notification
 ivi.ru##.ivi-footer ~ div[class] > style + div[class]
 doctorrouter.ru##.jgcabd-container
 go.mail.ru##.js-adb-msg
+ppc.world##.js-detected-block
 space.utema.ru##.main-content-padding > div[class]:not([itemprop])
 megatest.online##.msg-AdBlock
 ykt.ru##.n-banner--adblocked
@@ -413,7 +422,7 @@ forum.bestflowers.ru##.xenOverlay
 @@||nf-fan.tv/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
 @@||mult.love/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
 @@||an.yandex.ru/jstracer?aab_detect=$xmlhttprequest,domain=yandex.by|yandex.kz|yandex.ru|yandex.ua
-@@||anime.anidub.com/ads.js$script,domain=anime.anidub.com
+@@||anidub.com/ads.js|$script,domain=anidub.com
 @@||goha.ru/app/video/adblock.teaser.js|$script,domain=goha.ru
 @@||sports.ru^*/adfox.$xmlhttprequest
 auto62rus.ru,eset-key.ru,mycrib.ru,piggy-bank.online,politonline.ru,showmehow.ru##[data-type="anti-abp"]
@@ -423,6 +432,7 @@ tproger.ru#?#article.type-post:-abp-has([href="/adblock"])
 pic4you.ru,pic5you.ru##body > #bb
 forum.vip-cxema.org##body > #document_modal.modal,#some_ad_block_key_popup
 it-enginer.ru##body > #modal[style*="blur"]
+dominus.kiev.ua##body > #myModal
 nnm-club-me.appspot.com,nnm-club.lib,nnm-club.me,nnm-club.ws,nnmclub.to,nontorclub.in.net##body > .request
 newkaliningrad.ru##body > .soclinks + script + div[class]:not([id])
 swaego.ru##body > .special-message-wrapper
@@ -481,11 +491,12 @@ bigpuzzle.ru##td[valign="top"][width="200px"][height="600"] > div[style]
 ||nnm-club.ws/forum/docs/requests.js
 ||olegon.ru/jscookie.js
 ||pwnews.net/des/antiblock.js$script
-||rockstargame.su/adb_script/
+||rockstargame.su/adb_script
 ||rusnext.ru/advar.js$script
 ||sdamgia.ru/img/blockadblock_
 ||sea-man.org/adb_script/
 ||shellcat.ru^$third-party
 ||stroi-help.ru/forum/script_new.js
+||vazhno.ru/cdn-cgi/apps/head/*.js
 ! *** antiadblockfilters:antiadblockfilters/antiadblock_slovak.txt ***
 ! *** antiadblockfilters:antiadblockfilters/antiadblock_spanish.txt ***

@@ -104,8 +104,6 @@
 ! https://github.com/chrisaljoudi/uBlock/issues/602
 ! To counter `/ads.css` in EasyList
 @@||css.washingtonpost.com/*/ads.css$stylesheet,~third-party
-! https://github.com/uBlockOrigin/uAssets/issues/2317#issuecomment-391911664
-@@||washingtonpost.com/wp-stat/analytics/*.js$script,domain=subscribe.washingtonpost.com
 
 ! https://twitter.com/yo_0/status/559748330390323200
 ! To counter `||clickbank.com^` in Dan Pollock's, Peter Lowe's
@@ -127,7 +125,6 @@
 ! Chrome store feedback: "totaljobs.com [...] with μBlock enabled, I can't click any links"
 ! To counter `2o7.net` in Peter Lowe's
 ||2o7.net^$badfilter
-||2o7.net^$third-party
 
 ! https://github.com/chrisaljoudi/uBlock/issues/841
 ! To counter `quantcast.com` in hpHosts, Peter Lowe's
@@ -150,12 +147,10 @@
 ! kissmetrics.com broken
 ! To counter `kissmetrics.com` in Peter Lowe's
 ||kissmetrics.com^$badfilter
-||kissmetrics.com^$third-party
 
 ! https://github.com/chrisaljoudi/uBlock/issues/1421
 ! To counter hpHost, MVPS, Peter Lowe: `woopra.com`
 ||woopra.com^$badfilter
-||woopra.com^$third-party
 
 ! https://github.com/gorhill/uBlock/issues/372
 @@||googleads.g.doubleclick.net/ads/preferences/getcookie$popup,domain=myaccount.google.com
@@ -170,7 +165,6 @@
 ! https://twitter.com/bociusz/status/653693746626871296
 ! To counter Peter Lowe's `pagefair.com`, but only when on `pagefair.com`
 ||pagefair.com^$badfilter
-||pagefair.com^$third-party
 
 ! Chrome store: "Some of the useful content on website such as pictures and maps on redfin get blocked"
 @@||ssl.cdn-redfin.com/*/redfin/common/analytics/PixelTracking.js$script,domain=redfin.com
@@ -244,7 +238,6 @@ phoronix.com#@#div[style^="text-align: center;"]
 
 ! http://www.slideshare.net/aidanajoyce/adblocking-blocking-more-than-ads
 ||ggwebcast.com/*/kaltura/ga/urchin.js$script,redirect=noopjs
-umbro.com#@##ad_main
 
 ! https://twitter.com/komandorTarkin/status/723234211444973569
 @@||shop.puppetlabs.com/store/js/services/googleAnalytics.js$script,first-party
@@ -270,10 +263,6 @@ umbro.com#@##ad_main
 ! https://github.com/gorhill/uBlock/issues/1737
 @@||googletagmanager.com/gtm.js?$domain=willyweather.com.au
 
-! https://www.reddit.com/r/portugal/comments/4qud2t/problemas_com_a_extens%C3%A3o_ublock_origin_em_sites/
-@@||data.netscope.marktest.pt/netscope-gemius.js$script,domain=ojogo.pt
-@@||gapt.hit.gemius.pl/xlgemius.js$script,domain=ojogo.pt
-
 ! https://twitter.com/AmberLynneGirl/status/751099123411980289
 ! To counter `naiadsystems.com` in Peter Lowe's
 @@||naiadsystems.com^$object,domain=streamate.com
@@ -292,7 +281,6 @@ umbro.com#@##ad_main
 ! https://twitter.com/bdarfler/status/768540430988378112
 ! To counter Peter Lowe's `tapad.com`
 ||tapad.com^$badfilter
-||tapad.com^$third-party
 
 ! Reported in Chrome store: "Computershopper.com [...] 'this page did not fully render due to a plugin you have installed.'"
 @@||sp.computershopper.com/xyz?$image,~third-party
@@ -312,7 +300,6 @@ kinopoisk.ru###image:style(opacity: 1 !important;)
 ! https://twitter.com/alexjohnson_io/status/797095422447808512
 ! To counter Peter Lowe's `mouseflow.com`
 ||mouseflow.com^$badfilter
-||mouseflow.com^$third-party
 
 ! http://forums.mozillazine.org/viewtopic.php?f=23&t=3025363
 @@||cinestar.de^*/angular-google-analytics*.js
@@ -320,7 +307,6 @@ kinopoisk.ru###image:style(opacity: 1 !important;)
 ! https://twitter.com/nekbet/status/804387706520342529
 ! To counter Peter Lowe's `hotjar.com`
 ||hotjar.com^$badfilter
-||hotjar.com^$third-party
 
 ! https://twitter.com/6pod4/status/806927623272022016
 @@||jimmyjohns.com/Scripts/angularytics*.js$first-party,script
@@ -360,10 +346,6 @@ kinopoisk.ru###image:style(opacity: 1 !important;)
 ! https://news.ycombinator.com/item?id=13990605
 ! To counter `decknetwork.net` in Peter Lowe's
 ||decknetwork.net^$badfilter
-||decknetwork.net^$third-party
-
-! https://www.reddit.com/r/uBlockOrigin/comments/64c6eq/magicjack_support_site_completely_blocked/
-@@||googletagmanager.com/gtm.js$script,domain=magicjack.com
 
 ! https://github.com/gorhill/uBlock/issues/2532
 @@||upload.facebook.com^$first-party
@@ -381,9 +363,6 @@ kinopoisk.ru###image:style(opacity: 1 !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/417
 @@||bat.bing.com/bat.js$script,domain=airbnb.co.uk|airbnb.com
-
-! https://github.com/gorhill/uBlock/issues/2645
-@@||analytics.logsss.com/logsss10.min.js$script,domain=rosegal.com
 
 ! https://twitter.com/WolliWolta/status/867788502729195520
 ! To counter `sumo.com` in Peter Lowe's
@@ -406,12 +385,6 @@ kinopoisk.ru###image:style(opacity: 1 !important;)
 ! https://github.com/easylist/easylist/issues/2586
 ||bbci.co.uk^*/analytics.js$script,redirect=noopjs,domain=bbc.co.uk
 ||static.bbc.co.uk/bbcdotcom/*/adverts.js$script,1p,important,redirect=noopjs
-
-! https://twitter.com/saandstorm/status/873374292968435712
-@@||blizzardwatch.com^*/bw-ads.js$script,first-party
-
-! https://github.com/uBlockOrigin/uAssets/issues/405
-@@||ba.com/cms/global/scripts/applications/tracking/visualsciences.js
 
 ! https://twitter.com/valentindu38001/status/870008589657620484
 @@||cmcm.com/news-republic/js/googleanalytics.js$script
@@ -514,7 +487,7 @@ pythonjobshq.com##+js(abort-on-property-read.js, Keen)
 ! https://github.com/uBlockOrigin/uAssets/issues/3998
 ! https://github.com/uBlockOrigin/uAssets/issues/4831
 ! https://github.com/uBlockOrigin/uAssets/issues/5133
-@@||cdn.ampproject.org/*/amp-geo-$script,domain=pilotonline.com|richmond.com|amp.tmz.com|amp.usatoday.com|watchdog.org
+@@||cdn.ampproject.org/*/amp-geo-$script,domain=koat.com|pilotonline.com|richmond.com|amp.tmz.com|amp.usatoday.com|watchdog.org
 
 ! https://github.com/uBlockOrigin/uAssets/issues/648
 @@/blockadblock.$script,domain=blockadblock.com
@@ -576,6 +549,7 @@ orange.fr###o_carrepub:style(height: 1px; margin: 0; min-height: auto; visibilit
 
 ! https://github.com/uBlockOrigin/uAssets/issues/750
 @@||citi.com/cards/*/tracking.js$script
+@@|blob:$popup,domain=citi.com
 
 ! https://github.com/gorhill/uBlock/issues/3138
 @@||fbcdn.net/safe_image.php?$image,domain=facebook.com
@@ -1923,8 +1897,8 @@ tasteofhome.com#@#.ad-wrapper
 @@||adobedtm.com^*/satellitelib-$script,domain=virginmobile.ca
 
 ! https://forums.lanik.us/viewtopic.php?f=64&t=42649
-://ads.$domain=~ads.ac.uk|~ads.adstream.com.ro|~ads.am|~ads.bigbom.com|~ads.colombiaonline.com|~ads.comeon.com|~ads.elcarado.com|~ads.google.com|~ads.harvard.edu|~ads.lapalingo.com|~ads.lordlucky.com|~ads.mobilebet.com|~ads.msstate.edu|~ads.nc|~ads.nimses.com|~ads.quasaraffiliates.com|~ads.red|~ads.route.cc|~ads.safi-gmbh.ch|~ads.sk|~ads.socialtheater.com|~ads.taboola.com|~ads.toplayaffiliates.com|~ads.viksaffiliates.com|~ads.watson.ch|~ads.xtribeapp.com|~ads.yahoosmallbusiness.com|~badassembly.com|~caravansforsale.co.uk|~fusac.fr|~memo2.nl|~reempresa.org|~seriouswheels.com,badfilter
-://ads.$domain=~ads.ac.uk|~ads.adstream.com.ro|~ads.am|~ads.bigbom.com|~ads.colombiaonline.com|~ads.comeon.com|~ads.dev.int.revelian.com|~ads.elcarado.com|~ads.google.com|~ads.harvard.edu|~ads.lapalingo.com|~ads.lordlucky.com|~ads.mobilebet.com|~ads.msstate.edu|~ads.nc|~ads.nimses.com|~ads.quasaraffiliates.com|~ads.red|~ads.route.cc|~ads.safi-gmbh.ch|~ads.sk|~ads.socialtheater.com|~ads.taboola.com|~ads.toplayaffiliates.com|~ads.viksaffiliates.com|~ads.watson.ch|~ads.xtribeapp.com|~ads.yahoosmallbusiness.com|~badassembly.com|~caravansforsale.co.uk|~fusac.fr|~memo2.nl|~reempresa.org|~seriouswheels.com
+://ads.$domain=~ads.ac.uk|~ads.adstream.com.ro|~ads.am|~ads.bigbom.com|~ads.brave.com|~ads.colombiaonline.com|~ads.comeon.com|~ads.elcarado.com|~ads.google.com|~ads.harvard.edu|~ads.lapalingo.com|~ads.lordlucky.com|~ads.mobilebet.com|~ads.msstate.edu|~ads.nc|~ads.nimses.com|~ads.quasaraffiliates.com|~ads.red|~ads.route.cc|~ads.safi-gmbh.ch|~ads.sk|~ads.socialtheater.com|~ads.taboola.com|~ads.toplayaffiliates.com|~ads.viksaffiliates.com|~ads.watson.ch|~ads.xtribeapp.com|~ads.yahoosmallbusiness.com|~badassembly.com|~caravansforsale.co.uk|~fusac.fr|~memo2.nl|~reempresa.org|~seriouswheels.com,badfilter
+://ads.$domain=~ads.ac.uk|~ads.adstream.com.ro|~ads.am|~ads.bigbom.com|~ads.brave.com|~ads.colombiaonline.com|~ads.comeon.com|~ads.dev.int.revelian.com|~ads.elcarado.com|~ads.google.com|~ads.harvard.edu|~ads.lapalingo.com|~ads.lordlucky.com|~ads.mobilebet.com|~ads.msstate.edu|~ads.nc|~ads.nimses.com|~ads.quasaraffiliates.com|~ads.red|~ads.route.cc|~ads.safi-gmbh.ch|~ads.sk|~ads.socialtheater.com|~ads.taboola.com|~ads.toplayaffiliates.com|~ads.viksaffiliates.com|~ads.watson.ch|~ads.xtribeapp.com|~ads.yahoosmallbusiness.com|~badassembly.com|~caravansforsale.co.uk|~fusac.fr|~memo2.nl|~reempresa.org|~seriouswheels.com
 ! https://github.com/uBlockOrigin/uAssets/issues/4973
 ||fox5dc.com/html/js/endplay/analytics/ga.js$script,redirect=noopjs,domain=fox5dc.com
 
@@ -2386,7 +2360,7 @@ downloadsource.*##.date:not(dt):style(display: block !important;)
 /api/v1/metrics$badfilter
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5662
-@@||nbcnewyork.com/includes/AppMeasurement.js$script,1p
+@@||nbc*.com/includes/AppMeasurement.js$script,1p
 
 ! https://forums.lanik.us/viewtopic.php?f=103&t=43064
 @@||adobedtm.com/*/satelliteLib$script,domain=fcbarcelona.cat|fcbarcelona.cn|fcbarcelona.com|fcbarcelona.es|fcbarcelona.fr|fcbarcelona.jp
@@ -2414,3 +2388,64 @@ downloadsource.*##.date:not(dt):style(display: block !important;)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1296#issuecomment-496773275
 calgaryherald.com#@#.local-branding
+
+! https://forums.lanik.us/viewtopic.php?f=64&t=43078
+@@||deutschlandfunkkultur.de/*script/smarttag.js$script,1p
+
+! https://github.com/uBlockOrigin/uBlock-issues/issues/608
+/google-analytics-$~image,badfilter
+/google-analytics-$~image,~other
+
+! https://forums.lanik.us/viewtopic.php?f=64&t=43091
+||scroll.com^$third-party,badfilter
+
+! https://github.com/NanoMeow/QuickReports/issues/1321
+@@||cdn.cdn000.club/js/loadjs.min.js$script,domain=vipstand.se
+
+! https://github.com/uBlockOrigin/uAssets/issues/5722
+@@||cdnjs.cloudflare.com/ajax/libs/jquery/*$script,domain=openloed.co
+
+! https://github.com/uBlockOrigin/uAssets/issues/2070#issuecomment-498000989
+@@/video-js.swf$object,1p
+
+! player broken http://www. digi24. ro/live/digi24
+@@||scdn.cxense.com/cx.js$script,domain=digi24.ro
+
+! https://github.com/uBlockOrigin/uAssets/issues/5764
+@@||ebates.com/dist/static/*/analytics/*$script,1p
+@@||rakuten.com/dist/static/*/analytics/*$script,1p
+
+! #1589 csp filters breaking injecting filters / pages
+@@*$csp,domain=100percentfedup.com|activistpost.com|alfonzorachel.com|allenbwest.com|allenwestrepublic.com|allthingsvegas.com|americanewshub.com|americasfreedomfighters.com|appleeats.com|barbwire.com|bb4sp.com|bestfunnyjokes4u.com|bighealthreport.com|bigleaguepolitics.com|bizpacreview.com|boomsbeat.com|breakingfirst.com|bugout.news|bulletsfirst.net|buzzlamp.com|canadafreepress.com|celebrity-gossip.net|cheapism.com|cheatsheet.com|chicksonright.com|clashamerica.com|clashdaily.com|classicalite.com|collapse.news|comicallyincorrect.com|constitution.com|craigjames.com|creepybasement.com|cyberwar.news|dailyheadlines.net|dailysurge.com|damnlol.com|deneenborelli.com|designbump.com|directexpose.com|eaglerising.com|enstarz.com|evil.news|faithit.com|firstinfreedomdaily.com|fitnessconnoisseur.com|foreverymom.com|freedom.news|freedomdaily.com|freedomforce.com|freedomoutpost.com|funnyand.com|gamer4k.com|glitch.news|godfatherpolitics.com|gopocalypse.org|grammarist.com|greatamericanrepublic.com|guardianlv.com|guns.news|hackspirit.com|hautereport.com|hispolitica.com|hngn.com|icepop.com|ifyouonlynews.com|infowars.com|instigatornews.com|intellectualconservative.com|itechpost.com|janmorganmedia.com|jobsnhire.com|joeforamerica.com|juicerhead.com|justdiy.com|kdramastars.com|keepandbear.com|knowledgedish.com|kpopstarz.com|lastresistance.com|latinpost.com|legalinsurrection.com|liberty.news|libertyunyielding.com|lidblog.com|lifebuzz.com|madworldnews.com|millionpictures.co|moneyversed.com|musictimes.com|natural.news|naturalblaze.com|naturalsociety.com|natureworldnews.com|o4anews.com|opednews.com|patriotoutdoornews.com|pjmedia.com|politicalcowboy.com|politicaloutcast.com|politichicks.com|practicallyviral.com|profitconfidential.com|quirlycues.com|readysethealth.com|realmomsrealreviews.com|realtytoday.com|redhotchacha.com|redmaryland.com|reverbpress.com|reviveusa.com|rightwingtribune.com|rollingout.com|sciencetimes.com|shark-tank.com|shedthoselbs.com|slender.news|sonsoflibertymedia.com|sportsworldnews.com|sportsworldreport.com|stupid.news|supercheats.com|survivalnation.com|sweepstakesfanatics.com|techconsumer.com|telexplorer.com.ar|terezowens.com|thealternativedaily.com|theblacksphere.net|theboredmind.com|thedesigninspiration.com|thefreethoughtproject.com|thegatewaypundit.com|thehayride.com|thelastlineofdefense.org|thelibertydaily.com|themattwalshblog.com|thepoke.co.uk|thepolitistick.com|therealside.com|threepercenternation.com|tiebreaker.com|tosavealife.com|twisted.news|universityherald.com|vcpost.com|videogamesblogger.com|viralnova.com|visiontoamerica.com|wakingtimes.com|westernjournalism.com|worldlifestyle.com|xtribune.com|youngcons.com|youthhealthmag.com
+@@||addictinginfo.*^$csp,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/5768
+@@||d24n15hnbwhuhn.cloudfront.net/libs/amplitude-$script,domain=gethuman.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/5784
+@@||cdn.intergi.com/pageos/pageos.js$script,domain=abcya.com
+@@||cdn.playwire.com/bolt*/*$image,domain=abcya.com
+@@||cdn.playwire.com/bolt*/js/zeus/*/frame/admgr$script,1p
+
+! larena .it broken page
+larena.it#@#.v3_horz-banner
+@@||media.larena.it/media/lib/cmp/cmp.bundle.js$script,domain=larena.it
+
+! https://github.com/uBlockOrigin/uAssets/issues/5796
+@@||hyundaiusa.com/js/analytics/analytics.js$script,1p
+
+! https://twitter.com/localnewsman/status/1137958542927835136
+@@||appspot.com/api/*/feed/tag$xhr,domain=apnews.com
+
+! https://forums.lanik.us/viewtopic.php?f=64&t=43137
+@@||adobedtm.com/*/satelliteLib-$script,domain=malaysiaairlines.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/5815
+@@||maxmind.com^$domain=filld.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/5818
+46.166.167.16,semprot.com#@#.adVertical
+46.166.167.16,semprot.com##a[href^="/yum.php"]
+
+! https://forums.lanik.us/viewtopic.php?p=148227#p148227
+|https://$third-party,subdocument,domain=topeuropix.net,badfilter
