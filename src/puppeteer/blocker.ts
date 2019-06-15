@@ -72,80 +72,86 @@ export default class PuppeteerBlocker extends Engine {
 
       // Register callback for network requets filtering
       page.on('request', (request) => {
-        const { redirect, match } = this.match(Request.fromPuppeteerDetails(request));
-
-        if (redirect) {
-          const { body, contentType } = redirect;
-          request.respond({
-            body,
-            contentType,
-          });
-        } else if (match) {
-          request.abort('blockedbyclient');
-        } else {
-          request.continue();
-        }
+        this.onRequest(request);
       });
 
       // Register callback to cosmetics injection (CSS + scriptlets)
       page.on('framenavigated', async (frame) => {
         try {
-          // DOM features
-          const { ids, hrefs, classes } = await frame.$$eval(
-            '[id],[class],[href]',
-            extractFeaturesFromDOM,
-          );
-
-          // Source features
-          const url = frame.url();
-          const parsed = parse(url);
-          const hostname = parsed.hostname || '';
-          const domain = parsed.domain || '';
-
-          // Get cosmetics to inject into the Frame
-          const { active, scripts, styles } = this.getCosmeticsFilters({
-            domain,
-            hostname,
-            url,
-
-            // DOM information
-            classes,
-            hrefs,
-            ids,
-          });
-
-          // Abort if cosmetics are disabled
-          if (active === false) {
-            return;
-          }
-
-          // Inject scripts
-          if (scripts) {
-            for (const script of scripts) {
-              frame
-                .addScriptTag({
-                  content: autoRemoveScript(script),
-                })
-                .catch(() => {
-                  // Ignore
-                });
-            }
-          }
-
-          // Inject CSS
-          if (styles) {
-            frame
-              .addStyleTag({
-                content: styles,
-              })
-              .catch(() => {
-                // Ignore
-              });
-          }
+          await this.onFrame(frame);
         } catch (ex) {
           // Ignore
         }
       });
     });
+  }
+
+  private async onFrame(frame: puppeteer.Frame): Promise<void> {
+    // DOM features
+    const { ids, hrefs, classes } = await frame.$$eval(
+      '[id],[class],[href]',
+      extractFeaturesFromDOM,
+    );
+
+    // Source features
+    const url = frame.url();
+    const parsed = parse(url);
+    const hostname = parsed.hostname || '';
+    const domain = parsed.domain || '';
+
+    // Get cosmetics to inject into the Frame
+    const { active, scripts, styles } = this.getCosmeticsFilters({
+      domain,
+      hostname,
+      url,
+
+      // DOM information
+      classes,
+      hrefs,
+      ids,
+    });
+
+    // Abort if cosmetics are disabled
+    if (active === true) {
+      // Inject scripts
+      if (scripts) {
+        for (const script of scripts) {
+          frame
+            .addScriptTag({
+              content: autoRemoveScript(script),
+            })
+            .catch(() => {
+              // Ignore
+            });
+        }
+      }
+
+      // Inject CSS
+      if (styles) {
+        frame
+          .addStyleTag({
+            content: styles,
+          })
+          .catch(() => {
+            // Ignore
+          });
+      }
+    }
+  }
+
+  private onRequest(request: puppeteer.Request): void {
+    const { redirect, match } = this.match(Request.fromPuppeteerDetails(request));
+
+    if (redirect) {
+      const { body, contentType } = redirect;
+      request.respond({
+        body,
+        contentType,
+      });
+    } else if (match) {
+      request.abort('blockedbyclient');
+    } else {
+      request.continue();
+    }
   }
 }
