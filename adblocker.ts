@@ -24,6 +24,6 @@ export { compactTokens, hasEmptyIntersection, mergeCompactSets } from './src/com
 export { fetchLists, fetchResources } from './src/fetch';
 export { updateResponseHeadersWithCSP, tokenize } from './src/utils';
 export { default as Config } from './src/config';
-export { default as WebExtensionEngine } from './src/webextension/background';
+export { default as WebExtensionBlocker } from './src/webextension/background';
 
 export * from './cosmetics';

@@ -24,7 +24,7 @@ export function checkAvailableAPIs() {
  * Wrap `FiltersEngine` into a WebExtension-friendly helper class. It exposes
  * methods to interface with WebExtension APIs needed to block ads.
  */
-export default class WebExtensionEngine extends Engine {
+export default class WebExtensionBlocker extends Engine {
   /**
    * Deal with request cancellation (`{ cancel: true }`) and redirection (`{ redirectUrl: '...' }`).
    */
