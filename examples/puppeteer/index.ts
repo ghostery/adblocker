@@ -39,4 +39,6 @@ async function loadAdblocker(): Promise<PuppeteerBlocker> {
   const page = await browser.newPage();
   await engine.enableBlockingInPage(page);
   await page.goto('https://www.mangareader.net/');
+  await page.goto('https://economist.com/');
+  await page.goto('https://spiegel.de/');
 })();
