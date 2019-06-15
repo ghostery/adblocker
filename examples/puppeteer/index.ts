@@ -32,7 +32,7 @@ async function loadAdblocker(): Promise<PuppeteerBlocker> {
 (async () => {
   const engine = await loadAdblocker();
   const browser = await puppeteer.launch({
-    devtools: false,
+    defaultViewport: null,
     headless: false,
   });
 
