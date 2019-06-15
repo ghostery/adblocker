@@ -35,7 +35,7 @@ export default class WebExtensionBlocker extends Engine {
     const { redirect, match } = this.match(request);
 
     if (redirect !== undefined) {
-      return { redirectUrl: redirect };
+      return { redirectUrl: redirect.dataUrl };
     } else if (match === true) {
       return { cancel: true };
     }

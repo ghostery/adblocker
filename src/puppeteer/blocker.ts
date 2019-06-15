@@ -22,11 +22,11 @@ export default class PuppeteerBlocker extends Engine {
         const { redirect, match } = this.match(Request.fromPuppeteerDetails(request));
 
         if (redirect) {
-          console.log('ABORT REDIRECT');
-          // NOTE: here we could use `request.respond` instead but this would
-          // require `engine.match` to return more details than just `redirect`
-          // (which is a data:url). Instead we would need `contentType` and `body`.
-          request.abort('blockedbyclient');
+          const { body, contentType } = redirect;
+          request.respond({
+            body,
+            contentType,
+          });
         } else if (match) {
           console.log('ABORT MATCH');
           request.abort('blockedbyclient');
