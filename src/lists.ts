@@ -230,19 +230,21 @@ export function generateDiff(
 
   // Check which filters were added, based on ID
   const added: Set<string> = new Set();
-  newRevisionFilters.forEach((filter) => {
+  for (let i = 0; i < newRevisionFilters.length; i += 1) {
+    const filter = newRevisionFilters[i];
     if (!prevRevisionIds.has(filter.getId())) {
       added.add(filter.rawLine as string);
     }
-  });
+  }
 
   // Check which filters were removed, based on ID
   const removed: Set<string> = new Set();
-  prevRevisionFilters.forEach((filter) => {
+  for (let i = 0; i < prevRevisionFilters.length; i += 1) {
+    const filter = prevRevisionFilters[i];
     if (!newRevisionIds.has(filter.getId())) {
       removed.add(filter.rawLine as string);
     }
-  });
+  }
 
   return { added: Array.from(added), removed: Array.from(removed) };
 }

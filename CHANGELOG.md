@@ -4,6 +4,11 @@
 
 *not released yet*
 
+  * In `debug` mode, make FiltersEngine creation and updates deterministic
+  * Fix bug in ID computation for `:style(...)` cosmetic filters
+  * Detect invalid cases of `domain=` options for in NetworkFilter
+  * Make `generateDiff` more robust and cover corner case with ID collision
+  * Add stress-test for FiltersEngine updates
   * Provide high level puppeteer blocker abstraction [#177](https://github.com/cliqz-oss/adblocker/pull/177)
     * [BREAKING] rename `WebExtensionEngine` into `WebExtensionBlocker`
     * [BREAKING] change format of `redirect` field in blocking response, it now
