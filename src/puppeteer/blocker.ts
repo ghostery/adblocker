@@ -81,7 +81,6 @@ export default class PuppeteerBlocker extends Engine {
             contentType,
           });
         } else if (match) {
-          console.log('ABORT MATCH');
           request.abort('blockedbyclient');
         } else {
           request.continue();
