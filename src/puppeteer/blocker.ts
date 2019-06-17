@@ -14,7 +14,13 @@ import { autoRemoveScript } from '../content/injection';
 import Engine from '../engine/engine';
 import Request from '../request';
 
-function extractFeaturesFromDOM(elements: Element[]) {
+function extractFeaturesFromDOM(
+  elements: Element[],
+): {
+  classes: string[];
+  hrefs: string[];
+  ids: string[];
+} {
   const ignoredTags = new Set(['br', 'head', 'link', 'meta', 'script', 'style']);
   const classes: Set<string> = new Set();
   const hrefs: Set<string> = new Set();
@@ -114,20 +120,18 @@ export default class PuppeteerBlocker extends Engine {
     // Abort if cosmetics are disabled
     if (active === true) {
       // Inject scripts
-      if (scripts) {
-        for (const script of scripts) {
-          frame
-            .addScriptTag({
-              content: autoRemoveScript(script),
-            })
-            .catch(() => {
-              // Ignore
-            });
-        }
+      for (let i = 0; i < scripts.length; i += 1) {
+        frame
+          .addScriptTag({
+            content: autoRemoveScript(scripts[i]),
+          })
+          .catch(() => {
+            // Ignore
+          });
       }
 
       // Inject CSS
-      if (styles) {
+      if (styles.length !== 0) {
         frame
           .addStyleTag({
             content: styles,
@@ -142,13 +146,13 @@ export default class PuppeteerBlocker extends Engine {
   private onRequest(request: puppeteer.Request): void {
     const { redirect, match } = this.match(Request.fromPuppeteerDetails(request));
 
-    if (redirect) {
+    if (redirect !== undefined) {
       const { body, contentType } = redirect;
       request.respond({
         body,
         contentType,
       });
-    } else if (match) {
+    } else if (match === true) {
       request.abort('blockedbyclient');
     } else {
       request.continue();

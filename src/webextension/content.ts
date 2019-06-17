@@ -18,7 +18,7 @@ declare global {
 let ACTIVE: boolean = true;
 let MUTATION_OBSERVER: MutationObserver | null = null;
 
-function unload() {
+function unload(): void {
   if (MUTATION_OBSERVER !== null) {
     MUTATION_OBSERVER.disconnect();
     MUTATION_OBSERVER = null;
@@ -28,7 +28,7 @@ function unload() {
 function handleResponseFromBackground(
   window: Window,
   { active, scripts, styles }: IMessageFromBackground,
-) {
+): void {
   if (active === false) {
     ACTIVE = false;
     unload();
@@ -67,14 +67,9 @@ function handleResponseFromBackground(
  */
 export default function injectCosmetics(
   window: Window,
-  getCosmeticsFilters: ({
-    classes,
-    hrefs,
-    ids,
-    lifecycle,
-  }: IBackgroundCallback) => Promise<IMessageFromBackground>,
+  getCosmeticsFilters: (_: IBackgroundCallback) => Promise<IMessageFromBackground>,
   enableMutationObserver: boolean,
-) {
+): void {
   // Invoked as soon as content-script is injected to ask for background to
   // inject cosmetics and scripts as soon as possible. Some extra elements
   // might be inserted later whenever we know more about the content of the
