@@ -12,7 +12,6 @@
  */
 
 import axios from 'axios';
-import { writeFileSync } from 'fs';
 import { brotliDecompressSync } from 'zlib';
 import {
   Config,
@@ -21,7 +20,7 @@ import {
   getLinesWithFilters,
   parseFilter,
 } from '../adblocker';
-import { typedArrayDiff, typedArrayEqual } from './utils';
+import { typedArrayEqual } from './utils';
 
 /**
  * Convert `option` into its normalized version, if any. Otherwise return the
