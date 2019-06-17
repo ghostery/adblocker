@@ -43,8 +43,8 @@ export const magic = Math.abs((Date.now() * 524287) ^ ((Math.random() * 524287) 
 );
 
 /**
- * WARNING: this function should be self-contained and not contain any global
- * symbole. This constraint needs to be fulfilled because this function can
+ * WARNING: this function should be self-contained and not rely on any global
+ * symbol. That constraint needs to be fulfilled because this function can
  * potentially be injected in content-script (e.g.: see PuppeteerBlocker for
  * more details).
  */
