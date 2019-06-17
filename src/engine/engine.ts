@@ -533,7 +533,13 @@ export default class FilterEngine {
     request: Request,
   ): {
     match: boolean;
-    redirect: string | undefined;
+    redirect:
+      | undefined
+      | {
+          body: string;
+          contentType: string;
+          dataUrl: string;
+        };
     exception: NetworkFilter | undefined;
     filter: NetworkFilter | undefined;
   } {
@@ -543,7 +549,13 @@ export default class FilterEngine {
 
     let filter: NetworkFilter | undefined;
     let exception: NetworkFilter | undefined;
-    let redirect: string | undefined;
+    let redirect:
+      | undefined
+      | {
+          body: string;
+          contentType: string;
+          dataUrl: string;
+        };
 
     if (request.isSupported) {
       // Check the filters in the following order:
@@ -579,7 +591,11 @@ export default class FilterEngine {
               dataUrl = `data:${contentType};base64,${btoaPolyfill(data)}`;
             }
 
-            redirect = dataUrl.trim();
+            redirect = {
+              body: data,
+              contentType,
+              dataUrl: dataUrl.trim(),
+            };
           } // TODO - else, throw an exception
         }
       }

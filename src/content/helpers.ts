@@ -41,3 +41,59 @@ export function getWindowHostname(window: Window) {
 export const magic = Math.abs((Date.now() * 524287) ^ ((Math.random() * 524287) >>> 0)).toString(
   16,
 );
+
+/**
+ * WARNING: this function should be self-contained and not rely on any global
+ * symbol. That constraint needs to be fulfilled because this function can
+ * potentially be injected in content-script (e.g.: see PuppeteerBlocker for
+ * more details).
+ */
+export function extractFeaturesFromDOM(
+  elements: Element[],
+): {
+  classes: string[];
+  hrefs: string[];
+  ids: string[];
+} {
+  const ignoredTags = new Set(['br', 'head', 'link', 'meta', 'script', 'style']);
+  const classes: Set<string> = new Set();
+  const hrefs: Set<string> = new Set();
+  const ids: Set<string> = new Set();
+
+  for (let i = 0; i < elements.length; i += 1) {
+    const element = elements[i];
+
+    if (element.nodeType !== 1 /* Node.ELEMENT_NODE */) {
+      continue;
+    }
+
+    if (ignoredTags.has(element.localName)) {
+      continue;
+    }
+
+    // Update ids
+    const id = element.id;
+    if (id) {
+      ids.add(id);
+    }
+
+    // Update classes
+    const classList = element.classList;
+    for (let j = 0; j < classList.length; j += 1) {
+      classes.add(classList[j]);
+    }
+
+    // Update href
+    // @ts-ignore
+    const href = element.href;
+    if (href) {
+      hrefs.add(href);
+    }
+  }
+
+  return {
+    classes: Array.from(classes),
+    hrefs: Array.from(hrefs),
+    ids: Array.from(ids),
+  };
+}

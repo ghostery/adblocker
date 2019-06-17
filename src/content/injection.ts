@@ -11,7 +11,7 @@
  * script tag once execution is terminated. This can be useful to not leave
  * traces in the DOM after injections.
  */
-function autoRemoveScript(script: string): string {
+export function autoRemoveScript(script: string): string {
   return `
 try {
   ${script}

@@ -23,7 +23,7 @@ const plugins = [
 
 export default [
   {
-    input: './build/example/background.js',
+    input: './build/examples/webextension/background.js',
     output: {
       file: 'background.iife.js',
       format: 'iife',
@@ -32,7 +32,7 @@ export default [
     plugins,
   },
   {
-    input: './build/example/content-script.js',
+    input: './build/examples/webextension/content-script.js',
     output: {
       file: 'content-script.iife.js',
       format: 'iife',
