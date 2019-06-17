@@ -7,6 +7,7 @@
  */
 
 import { IBackgroundCallback, IMessageFromBackground } from '../content/communication';
+import { extractFeaturesFromDOM } from '../content/helpers';
 import { injectCSSRule, injectScript } from '../content/injection';
 
 declare global {
@@ -86,8 +87,6 @@ export default function injectCosmetics(
   window.addEventListener(
     'DOMContentLoaded',
     () => {
-      const ignoredTags = new Set(['br', 'head', 'link', 'meta', 'script', 'style']);
-
       // Keep track of values already seen and processed in this frame
       const knownIds: Set<string> = new Set();
       const knownClasses: Set<string> = new Set();
@@ -96,43 +95,32 @@ export default function injectCosmetics(
       // Given a list of `nodes` (i.e.: instances of `Element` class), extract
       // a list of class names and ids which we never saw before. These will be
       // used to request extra cosmetics to inject if needed.
-      const handleNodes = (nodes: HTMLElement[] | NodeListOf<HTMLElement>) => {
+      const handleNodes = (nodes: Element[]) => {
+        const { classes, ids, hrefs } = extractFeaturesFromDOM(nodes);
         const newIds: string[] = [];
         const newClasses: string[] = [];
         const newHrefs: string[] = [];
 
-        for (let i = 0; i < nodes.length; i += 1) {
-          const node = nodes[i];
-
-          if (node.nodeType !== 1 /* Node.ELEMENT_NODE */) {
-            continue;
-          }
-
-          if (ignoredTags.has(node.localName)) {
-            continue;
-          }
-
-          // Update ids
-          const id = node.id;
-          if (id && !knownIds.has(id)) {
+        // Update ids
+        for (let i = 0; i < ids.length; i += 1) {
+          const id = ids[i];
+          if (knownIds.has(id) === false) {
             newIds.push(id);
             knownIds.add(id);
           }
+        }
 
-          // Update classes
-          const classes = node.classList;
-          for (let j = 0; j < classes.length; j += 1) {
-            const cls = classes[j];
-            if (!knownClasses.has(cls)) {
-              newClasses.push(cls);
-              knownClasses.add(cls);
-            }
+        for (let i = 0; i < classes.length; i += 1) {
+          const cls = classes[i];
+          if (knownClasses.has(cls) === false) {
+            newClasses.push(cls);
+            knownClasses.add(cls);
           }
+        }
 
-          // Update href
-          // @ts-ignore
-          const href = node.href;
-          if (href && !knownHrefs.has(href)) {
+        for (let i = 0; i < hrefs.length; i += 1) {
+          const href = hrefs[i];
+          if (knownHrefs.has(href) === false) {
             newHrefs.push(href);
             knownHrefs.add(href);
           }
@@ -153,7 +141,7 @@ export default function injectCosmetics(
       // all ids and classes in the DOM at this point of time (DOMContentLoaded
       // event). Afterwards, we will rely on the mutation observer to detect
       // changes.
-      handleNodes(window.document.querySelectorAll('[id],[class],[href]'));
+      handleNodes(Array.from(window.document.querySelectorAll('[id],[class],[href]')));
 
       // Start observing mutations to detect new ids and classes which would
       // need to be hidden.
