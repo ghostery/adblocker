@@ -4,6 +4,13 @@
 
 *not released yet*
 
+  * Provide high level puppeteer blocker abstraction [#177](https://github.com/cliqz-oss/adblocker/pull/177)
+    * [BREAKING] rename `WebExtensionEngine` into `WebExtensionBlocker`
+    * [BREAKING] change format of `redirect` field in blocking response, it now
+      exposes more information about the redirected resource: `contentType`,
+      `body` and `dataUrl` (which was the only information originally returned
+      by `FiltersEngine.match(...)`).
+    * Rename `example` into `examples` and move test webextension into `examples/webextension`
   * Add missing dependencies on @types/puppeteer needed by users of the library [#174](https://github.com/cliqz-oss/adblocker/pull/174/)
 
 ## 0.10.0
