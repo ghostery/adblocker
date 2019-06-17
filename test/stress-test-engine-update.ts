@@ -29,6 +29,13 @@ import { typedArrayDiff, typedArrayEqual } from './utils';
  * This particular helper could eventually be included in the adblocker library
  * directly but it is not yet clear if the expected performance overhead is
  * worth it.
+ *
+ * This transformation is needed so that we can actually detect diffs. In some
+ * cases, filters are simply migrated to new option: 'foo$stylesheet' to
+ * 'foo$css'. This is conceptually the exact same filter but the original
+ * string is different so the FiltersEngine before and after update would
+ * contain the same filters except in `debug` mode where the rawLine of this
+ * particular filter would not match.
  */
 function replacer(option: string): string {
   switch (option) {
@@ -166,6 +173,7 @@ async function getRevision(url: string): Promise<string> {
         responseType: 'arraybuffer',
       })).data,
     );
+
     try {
       data = brotliDecompressSync(buffer).toString('utf-8');
     } catch (ex) {
@@ -211,12 +219,14 @@ function getEngineFromList(list: string): Uint8Array {
     return cached.slice();
   }
 
+  // Create FiltersEngine instance
   const engine = new FiltersEngine({ config: ENGINE_CONFIG });
   engine.updateFromDiff({
     added: Array.from(getFiltersFromList(list)),
   });
   const serialized = engine.serialize();
 
+  // Cache for next time
   ENGINES_CACHE.set(list, serialized);
 
   return serialized.slice();
@@ -300,7 +310,7 @@ async function run() {
   ]) {
     console.log(`> ${list}`);
     const testCases = await collectTestCases(list);
-    REVISIONS_CACHE.clear();
+    REVISIONS_CACHE.clear(); // free memory
 
     for (const { previousRevision, currentRevision, currentList, previousList } of testCases) {
       console.log(` + ${previousRevision} => ${currentRevision}`);
@@ -366,20 +376,13 @@ async function run() {
 
       const updatedEngineSerialized = previousEngine.serialize();
       if (typedArrayEqual(updatedEngineSerialized, currentEngineSerialized) === false) {
-        console.error('> DIFF', typedArrayDiff(updatedEngineSerialized, currentEngineSerialized));
-        // throw new Error('Expected serialized engines to be equal');
-        writeFileSync('issue_prev_list', previousList, { encoding: 'utf-8' });
-        writeFileSync('issue_curr_list', currentList, { encoding: 'utf-8' });
-        writeFileSync('issue_diff', JSON.stringify(diff), { encoding: 'utf-8' });
-        return;
+        throw new Error('Expected serialized engines to be equal');
       }
 
       // Make sure we can re-serialize on top of updated engine
       const reSerialized = FiltersEngine.deserialize(updatedEngineSerialized).serialize();
       if (typedArrayEqual(reSerialized, currentEngineSerialized) === false) {
-        console.error('> DIFF', typedArrayDiff(reSerialized, currentEngineSerialized));
-        // console.error('> DIFF', diff);
-        // throw new Error('Expected re-serialized engines to be equal');
+        throw new Error('Expected re-serialized engines to be equal');
       }
     }
 
