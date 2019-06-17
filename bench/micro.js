@@ -8,7 +8,9 @@
 
 /* eslint-disable no-bitwise */
 
-const { FiltersEngine, fastHash, tokenize, parseFilters, Request } = require('../');
+const {
+  FiltersEngine, tokenize, parseFilters, Request,
+} = require('../');
 const { createEngine, domains500 } = require('./utils');
 
 function benchEngineCreation({ lists, resources }) {
@@ -25,14 +27,6 @@ function benchEngineSerialization({ engine }) {
 
 function benchEngineDeserialization({ serialized }) {
   return FiltersEngine.deserialize(serialized);
-}
-
-function benchStringHashing({ filters }) {
-  let dummy = 0;
-  for (let i = 0; i < filters.length; i += 1) {
-    dummy = (dummy + fastHash(filters[i])) >>> 0;
-  }
-  return dummy;
 }
 
 function benchStringTokenize({ filters }) {
@@ -113,6 +107,5 @@ module.exports = {
   benchGetNetworkTokens,
   benchNetworkFiltersParsing,
   benchRequestParsing,
-  benchStringHashing,
   benchStringTokenize,
 };

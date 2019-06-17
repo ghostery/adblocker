@@ -114,17 +114,20 @@ function detectFilterType(line: string): FilterType {
   return FilterType.NETWORK;
 }
 
-export function f(strings: TemplateStringsArray): NetworkFilter | CosmeticFilter | null {
-  const rawFilter = strings[0];
-  const filterType = detectFilterType(rawFilter);
+export function parseFilter(filter: string): NetworkFilter | CosmeticFilter | null {
+  const filterType = detectFilterType(filter);
 
   if (filterType === FilterType.NETWORK) {
-    return NetworkFilter.parse(rawFilter, true);
+    return NetworkFilter.parse(filter, true);
   } else if (filterType === FilterType.COSMETIC) {
-    return CosmeticFilter.parse(rawFilter, true);
+    return CosmeticFilter.parse(filter, true);
   }
 
   return null;
+}
+
+export function f(strings: TemplateStringsArray): NetworkFilter | CosmeticFilter | null {
+  return parseFilter(strings[0]);
 }
 
 export function parseFilters(
@@ -168,6 +171,15 @@ export function parseFilters(
   return { networkFilters, cosmeticFilters };
 }
 
+function getFilters(
+  list: string,
+  config?: Partial<Config>,
+): Array<NetworkFilter | CosmeticFilter> {
+  const { networkFilters, cosmeticFilters } = parseFilters(list, config);
+  const filters: Array<NetworkFilter | CosmeticFilter> = [];
+  return filters.concat(networkFilters).concat(cosmeticFilters);
+}
+
 export interface IListDiff {
   newNetworkFilters: NetworkFilter[];
   newCosmeticFilters: CosmeticFilter[];
@@ -185,48 +197,56 @@ export interface IRawDiff {
  * guaranteed to be a valid filter (i.e.: comments, empty lines and
  * un-supported filters are dropped).
  */
-export function getLinesWithFilters(raw: string): Set<string> {
-  const {
-    networkFilters,
-    cosmeticFilters,
-  }: {
-    networkFilters: NetworkFilter[];
-    cosmeticFilters: CosmeticFilter[];
-  } = parseFilters(raw, {
-    debug: true,
-  });
-
+export function getLinesWithFilters(
+  list: string,
+  config: Partial<Config> = new Config(),
+): Set<string> {
+  // Set config to `debug` so that we keep track of raw lines for each filter
   return new Set(
-    networkFilters
-      .map((filter) => filter.rawLine as string)
-      .concat(cosmeticFilters.map((filter) => filter.rawLine as string)),
+    getFilters(list, new Config(Object.assign({}, config, { debug: true }))).map(
+      ({ rawLine }) => rawLine as string,
+    ),
   );
 }
 
 /**
  * Given two versions of the same subscription (e.g.: EasyList) as a string,
- * generate a raw diff (i.e.: a list of lines added and lines removed).
+ * generate a raw diff (i.e.: a list of filters added and filters removed, in
+ * their raw string form).
  */
-export function generateDiff(prevRevision: string, newRevision: string): IRawDiff {
-  const prevRevisionLines: Set<string> = getLinesWithFilters(prevRevision);
-  const newRevisionLines: Set<string> = getLinesWithFilters(newRevision);
+export function generateDiff(
+  prevRevision: string,
+  newRevision: string,
+  config: Partial<Config> = new Config(),
+): IRawDiff {
+  // Set config to `debug` so that we keep track of raw lines for each filter
+  const debugConfig = new Config(Object.assign({}, config, { debug: true }));
 
-  const added: string[] = [];
-  const removed: string[] = [];
+  const prevRevisionFilters = getFilters(prevRevision, debugConfig);
+  const prevRevisionIds = new Set(prevRevisionFilters.map((filter) => filter.getId()));
 
-  newRevisionLines.forEach((line) => {
-    if (!prevRevisionLines.has(line)) {
-      added.push(line);
+  const newRevisionFilters = getFilters(newRevision, debugConfig);
+  const newRevisionIds = new Set(newRevisionFilters.map((filter) => filter.getId()));
+
+  // Check which filters were added, based on ID
+  const added: Set<string> = new Set();
+  for (let i = 0; i < newRevisionFilters.length; i += 1) {
+    const filter = newRevisionFilters[i];
+    if (!prevRevisionIds.has(filter.getId())) {
+      added.add(filter.rawLine as string);
     }
-  });
+  }
 
-  prevRevisionLines.forEach((line) => {
-    if (!newRevisionLines.has(line)) {
-      removed.push(line);
+  // Check which filters were removed, based on ID
+  const removed: Set<string> = new Set();
+  for (let i = 0; i < prevRevisionFilters.length; i += 1) {
+    const filter = prevRevisionFilters[i];
+    if (!newRevisionIds.has(filter.getId())) {
+      removed.add(filter.rawLine as string);
     }
-  });
+  }
 
-  return { added, removed };
+  return { added: Array.from(added), removed: Array.from(removed) };
 }
 
 /**

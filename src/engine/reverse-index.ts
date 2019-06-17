@@ -351,25 +351,33 @@ export default class ReverseIndex<T extends IFilter> {
 
     // Compute tokens for all filters (the ones already contained in the index
     // *plus* the new ones *minus* the ones removed ).
-    const filtersArrays = [this.getFilters(), newFilters];
-    for (let h = 0; h < filtersArrays.length; h += 1) {
-      const filters = filtersArrays[h];
-      for (let i = 0; i < filters.length; i += 1) {
-        const filter = filters[i];
-        if (removedFilters === undefined || removedFilters.has(filter.getId()) === false) {
-          const multiTokens = filter.getTokens();
-          filtersTokens.push({
-            filter,
-            multiTokens,
-          });
+    const filters = this.getFilters();
+    for (let i = 0; i < newFilters.length; i += 1) {
+      filters.push(newFilters[i]);
+    }
 
-          for (let j = 0; j < multiTokens.length; j += 1) {
-            const tokens = multiTokens[j];
-            totalNumberOfIndexedFilters += 1;
-            for (let k = 0; k < tokens.length; k += 1) {
-              totalNumberOfTokens += 1;
-              histogram.incr(tokens[k]);
-            }
+    // When we run in `debug` mode, we enable fully deterministic updates of
+    // internal data-structure. To this effect, we sort all filters before
+    // insertion.
+    if (this.config.debug === true) {
+      filters.sort((f1: T, f2: T): number => f1.getId() - f2.getId());
+    }
+
+    for (let i = 0; i < filters.length; i += 1) {
+      const filter = filters[i];
+      if (removedFilters === undefined || removedFilters.has(filter.getId()) === false) {
+        const multiTokens = filter.getTokens();
+        filtersTokens.push({
+          filter,
+          multiTokens,
+        });
+
+        for (let j = 0; j < multiTokens.length; j += 1) {
+          const tokens = multiTokens[j];
+          totalNumberOfIndexedFilters += 1;
+          for (let k = 0; k < tokens.length; k += 1) {
+            totalNumberOfTokens += 1;
+            histogram.incr(tokens[k]);
           }
         }
       }

@@ -45,7 +45,6 @@ const {
   benchGetCosmeticsFilters,
   benchGetNetworkTokens,
   benchNetworkFiltersParsing,
-  benchStringHashing,
   benchStringTokenize,
   benchRequestParsing,
 } = require('./micro');
@@ -76,7 +75,7 @@ function triggerGC() {
 
 function getMemoryConsumption() {
   triggerGC();
-  return process.memoryUsage().heapUsed;
+  return process.memoryUsage().heapTotal;
 }
 
 /**
@@ -118,7 +117,6 @@ function runMicroBenchmarks(lists, resources) {
     benchGetNetworkTokens,
     benchNetworkFiltersParsing,
     benchRequestParsing,
-    benchStringHashing,
     benchStringTokenize,
   ].forEach((bench) => {
     if (bench.name.toLowerCase().includes(GREP)) {
