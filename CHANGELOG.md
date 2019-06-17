@@ -4,6 +4,10 @@
 
 *not released yet*
 
+## 0.11.0
+
+*2019-06-17*
+
   * In `debug` mode, make FiltersEngine creation and updates deterministic [#176](https://github.com/cliqz-oss/adblocker/pull/176)
   * Fix bug in ID computation for `:style(...)` cosmetic filters [#176](https://github.com/cliqz-oss/adblocker/pull/176)
   * Detect invalid cases of `domain=` options in NetworkFilter [#176](https://github.com/cliqz-oss/adblocker/pull/176)
