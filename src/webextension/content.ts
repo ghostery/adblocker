@@ -159,9 +159,11 @@ export default function injectCosmetics(
                 const addedNode: HTMLElement = addedNodes[j] as HTMLElement;
                 nodes.push(addedNode);
 
-                const children = addedNode.querySelectorAll('[id],[class],[href]');
-                for (let k = 0; k < children.length; k += 1) {
-                  nodes.push(children[k] as HTMLElement);
+                if (addedNode.querySelectorAll !== undefined) {
+                  const children = addedNode.querySelectorAll('[id],[class],[href]');
+                  for (let k = 0; k < children.length; k += 1) {
+                    nodes.push(children[k] as HTMLElement);
+                  }
                 }
               }
             }

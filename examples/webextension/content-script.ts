@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { IBackgroundCallback, IMessageFromBackground, injectCosmetics } from '../cosmetics';
+import { IBackgroundCallback, IMessageFromBackground, injectCosmetics } from '../../cosmetics';
 
 /**
  * Because all the filters and matching logic lives in the background of the
