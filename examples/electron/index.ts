@@ -42,6 +42,7 @@ async function createWindow() {
   engine.enableBlockingInSession(session.defaultSession as Electron.Session);
 
   mainWindow.loadURL('https://www.mangareader.net/');
+  mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow = null;

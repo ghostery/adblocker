@@ -21,7 +21,7 @@ function tasks(entryPoint) {
   return [
     // CommonJS + ES6
     {
-      external: ['tslib', 'tldts', 'tsmaz'],
+      external: ['tslib', 'tldts', 'tsmaz', 'electron'],
       input: `./build/${entryPoint}.js`,
       output: [
         { file: `./dist/${entryPoint}.esm.js`, format: 'es' },
@@ -30,6 +30,7 @@ function tasks(entryPoint) {
     },
     // UMD
     {
+      external: ['electron'],
       input: `./build/${entryPoint}.js`,
       output: {
         file: `./dist/${entryPoint}.umd.js`,
@@ -40,6 +41,7 @@ function tasks(entryPoint) {
     },
     // ES6 minified
     {
+      external: ['electron'],
       input: `./build/${entryPoint}.js`,
       output: {
         file: `./dist/${entryPoint}.esm.min.js`,
@@ -55,6 +57,7 @@ function tasks(entryPoint) {
     },
     // UMD + CommonJS minified
     {
+      external: ['electron'],
       input: `./dist/${entryPoint}.esm.min.js`,
       output: [
         {
