@@ -30,7 +30,7 @@ async function loadAdblocker(): Promise<ElectronBlocker> {
   return engine;
 }
 
-let mainWindow: BrowserWindow;
+let mainWindow: BrowserWindow | null;
 
 async function createWindow() {
   mainWindow = new BrowserWindow({
@@ -39,7 +39,7 @@ async function createWindow() {
   });
 
   const engine = await loadAdblocker();
-  engine.enableBlockingInSession(session.defaultSession);
+  engine.enableBlockingInSession(session.defaultSession as Electron.Session);
 
   mainWindow.loadURL('https://www.mangareader.net/');
 
