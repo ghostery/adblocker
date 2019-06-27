@@ -39,7 +39,7 @@ async function createWindow() {
   });
 
   const engine = await loadAdblocker();
-  engine.enableBlockingInPage(session.defaultSession);
+  engine.enableBlockingInSession(session.defaultSession);
 
   mainWindow.loadURL('https://www.mangareader.net/');
 
