@@ -180,12 +180,12 @@ export default class Request {
     referrer,
   }: {
     url: string;
-    resourceType: ElectronRequestType;
+    resourceType: string;
     referrer: string;
   }): Request {
     return Request.fromRawDetails({
       sourceUrl: referrer,
-      type: resourceType || 'other',
+      type: (resourceType || 'other') as any,
       url,
     });
   }
