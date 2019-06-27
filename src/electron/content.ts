@@ -6,9 +6,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { ipcRenderer, remote, webFrame } from 'electron';
+
 import { IBackgroundCallback, IMessageFromBackground } from '../content/communication';
 import { extractFeaturesFromDOM } from '../content/helpers';
-import { webFrame, remote, ipcRenderer } from 'electron';
 
 const enableMutationObserver = true; // Not sure what to do with it.
 

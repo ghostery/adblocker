@@ -8,11 +8,11 @@
 
 // Type definition
 import { ipcMain } from 'electron';
+import { parse } from 'tldts';
 
+import { IBackgroundCallback, IMessageFromBackground } from '../../cosmetics';
 import Engine from '../engine/engine';
 import Request from '../request';
-import { IBackgroundCallback, IMessageFromBackground } from '../../cosmetics';
-import { parse } from 'tldts';
 
 /**
  * Wrap `FiltersEngine` into a Electron-friendly helper class.
@@ -28,7 +28,7 @@ export default class ElectronBlocker extends Engine {
   private onGetCosmeticFilters = (
     e: Electron.IpcMessageEvent,
     id: string,
-    msg: IBackgroundCallback & { action?: string }
+    msg: IBackgroundCallback & { action?: string },
   ): void => {
     // Extract hostname from sender's URL
     const url = e.sender.getURL();
@@ -106,7 +106,6 @@ export default class ElectronBlocker extends Engine {
 
       e.sender.send(`get-cosmetic-filters-${id}`, responseFromBackground);
     }
-
   }
 
   private onRequest = (
@@ -121,12 +120,9 @@ export default class ElectronBlocker extends Engine {
     } else {
       callback({ cancel: match });
     }
-  };
+  }
 
-  private injectStyles(
-    sender: Electron.WebContents,
-    styles: string,
-  ): void {
+  private injectStyles(sender: Electron.WebContents, styles: string): void {
     if (sender && styles.length > 0) {
       sender.insertCSS(styles);
     }
