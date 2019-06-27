@@ -28,5 +28,6 @@ export { default as Config } from './src/config';
 
 export { default as WebExtensionBlocker } from './src/webextension/background';
 export { default as PuppeteerBlocker } from './src/puppeteer/blocker';
+export { default as ElectronBlocker } from './src/electron/blocker';
 
 export * from './cosmetics';
