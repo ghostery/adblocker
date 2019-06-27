@@ -7,7 +7,7 @@
  */
 
 // Type definition
-import * as electron from 'electron';
+import * as Electron from 'electron';
 
 import Engine from '../engine/engine';
 import Request from '../request';
@@ -18,6 +18,7 @@ import Request from '../request';
 export default class ElectronBlocker extends Engine {
   public enableBlockingInSession(ses: Electron.Session) {
     ses.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onRequest);
+    ses.setPreloads(['./content.js']);
   }
 
   private onRequest = (
