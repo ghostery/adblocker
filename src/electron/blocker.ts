@@ -20,7 +20,7 @@ import Request from '../request';
 export default class ElectronBlocker extends Engine {
   public enableBlockingInSession(ses: Electron.Session) {
     ses.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onRequest);
-    ses.setPreloads([`./content.js`]);
+    ses.setPreloads(['./content.js']);
 
     ipcMain.on('get-cosmetic-filters', this.onGetCosmeticFilters);
   }
