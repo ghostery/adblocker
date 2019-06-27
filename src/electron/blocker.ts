@@ -16,12 +16,14 @@ import Request from '../request';
  * Wrap `FiltersEngine` into a Electron-friendly helper class.
  */
 export default class ElectronBlocker extends Engine {
-  public enableBlockingInSession(ses: Electron.Session) {}
+  public enableBlockingInSession(ses: Electron.Session) {
+    ses.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onRequest);
+  }
 
-  private onRequest(
+  private onRequest = (
     details: Electron.OnBeforeRequestDetails,
     callback: (a: Electron.Response) => void,
-  ): void {
+  ): void => {
     const { redirect, match } = this.match(Request.fromElectronDetails(details));
 
     if (redirect) {
@@ -30,5 +32,5 @@ export default class ElectronBlocker extends Engine {
     } else {
       callback({ cancel: match });
     }
-  }
+  };
 }
