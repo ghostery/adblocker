@@ -1,44 +1,16 @@
 {
-  "name": "@cliqz/adblocker",
-  "version": "0.11.0",
-  "description": "Cliqz adblocker library",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:cliqz-oss/adblocker.git"
-  },
   "author": "Cliqz",
   "license": "MPL-2.0",
-  "browser": "dist/adblocker.umd.min.js",
-  "main": "dist/adblocker.cjs.js",
-  "module": "dist/adblocker.esm.js",
-  "types": "dist/types/adblocker.d.ts",
-  "files": [
-    "dist",
-    "adblocker.ts",
-    "circumvention.ts",
-    "cosmetics.ts",
-    "src"
-  ],
+  "private": true,
+  "workspaces": ["./packages/*"],
   "scripts": {
-    "clean": "rm -rfv dist",
-    "lint": "tslint -c tslint.json 'src/**/*.ts'",
-    "build": "tsc -p tsconfig.json --module ESNext",
-    "watch": "concurrently 'tsc --project tsconfig.json --module ESNext --watch' 'rollup --config rollup.config.ts --watch'",
-    "bundle": "rollup --config rollup.config.ts",
-    "prebuild": "npm run clean",
-    "prebundle": "npm run build",
-    "prepack": "npm run bundle",
-    "pretest": "npm run lint",
-    "test": "jest --coverage --no-cache ./test/",
-    "dev": "jest --watch --coverage --bail --no-cache ./test/",
-    "generate-codebooks": "ts-node ./tools/generate_compression_codebooks.ts"
+    "lint": "lerna exec npm run lint",
+    "build": "lerna exec npm run build",
+    "test": "lerna exec npm run test",
+    "clean": "lerna exec npm run clean"
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.9.0",
-    "@types/chrome": "0.0.86",
-    "@types/jest": "^24.0.13",
-    "@types/jsdom": "^12.2.3",
-    "@types/node": "^12.0.3",
     "axios": "^0.19.0",
     "benchmark": "^2.1.4",
     "chalk": "^2.4.2",
@@ -50,20 +22,15 @@
     "eslint-plugin-react": "^7.13.0",
     "jest": "^24.8.0",
     "jsdom": "^15.1.1",
+    "lerna": "^3.15.0",
     "prettier": "^1.17.1",
-    "puppeteer": "^1.17.0",
     "rollup": "^1.13.0",
     "rollup-plugin-commonjs": "^10.0.0",
     "rollup-plugin-node-resolve": "^5.0.0",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.2.0",
     "tslint": "^5.16.0",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.5.1"
-  },
-  "dependencies": {
-    "@types/puppeteer": "^1.12.4",
-    "tldts": "^5.0.3",
-    "tslib": "^1.9.3",
-    "tsmaz": "^1.2.1"
   }
 }

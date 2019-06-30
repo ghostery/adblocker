@@ -6,10 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const path = require('path');
-
-const { FiltersEngine, Request } = require(path.resolve(__dirname, '../../../'));
-
+const { FiltersEngine, Request } = require('@cliqz/adblocker');
 
 module.exports = class Cliqz {
   static parse(rawLists, enableCompression) {

@@ -1,0 +1,46 @@
+{
+  "name": "@cliqz/adblocker-webextension-example",
+  "version": "0.11.0",
+  "description": "Example of WebExtension adblocker using Cliqz",
+  "author": "Rémi Berson <remi@cliqz.com>",
+  "homepage": "https://github.com/remusao/adblocker#readme",
+  "license": "MPL-2.0",
+  "main": "lib/adblocker-webextension-example.js",
+  "files": [
+    "dist",
+    "manifest.json"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/remusao/adblocker.git"
+  },
+  "scripts": {
+    "clean": "rm -rfv dist build coverage",
+    "lint": "tslint --config ../../tslint.json --project .",
+    "build-cjs": "tsc -p . --outDir build/cjs --module commonjs",
+    "build-es6": "tsc -p . --outDir build/es6 --module esnext",
+    "build": "concurrently 'npm run build-cjs' 'npm run build-es6'",
+    "prebuild": "npm run clean",
+    "bundle": "rollup --config rollup.config.ts",
+    "prebundle": "npm run build",
+    "prepack": "npm run bundle",
+    "test": "jest --coverage --no-cache ./test/",
+    "pretest": "npm run lint"
+  },
+  "bugs": {
+    "url": "https://github.com/remusao/adblocker/issues"
+  },
+  "dependencies": {
+    "@cliqz/adblocker-webextension": "^0.11.0",
+    "@cliqz/adblocker-webextension-cosmetics": "^0.11.0"
+  },
+  "devDependencies": {
+    "@ampproject/rollup-plugin-closure-compiler": "^0.9.0",
+    "concurrently": "^4.1.1",
+    "rollup": "^1.16.4",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  }
+}
