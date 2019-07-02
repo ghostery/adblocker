@@ -5,10 +5,10 @@
   "author": "Cliqz",
   "homepage": "https://github.com/cliqz-oss/adblocker#readme",
   "license": "MPL-2.0",
-  "main": "build/cjs/index.js",
-  "module": "build/es6/index.js",
-  "browser": "dist/index.umd.min.js",
-  "types": "dist/types/index.ts",
+  "main": "build/cjs/adblocker.js",
+  "module": "build/es6/adblocker.js",
+  "browser": "dist/adblocker.umd.min.js",
+  "types": "dist/types/adblocker.ts",
   "files": [
     "build",
     "dist"
@@ -30,7 +30,7 @@
     "bundle": "rollup --config rollup.config.ts",
     "prebundle": "npm run build",
     "prepack": "npm run bundle",
-    "test": "jest --config ./jest.config.js --coverage --no-cache ./index.test.ts",
+    "test": "jest --config ./jest.config.js --coverage --no-cache ./adblocker.test.ts",
     "pretest": "npm run lint"
   },
   "bugs": {

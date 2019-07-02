@@ -7,7 +7,7 @@
  */
 
 import { JSDOM } from 'jsdom';
-import { injectCosmetics } from './index';
+import { injectCosmetics } from './adblocker';
 
 async function tick(timeout = 0) {
   await new Promise((resolve) => setTimeout(resolve, timeout));

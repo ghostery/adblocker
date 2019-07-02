@@ -12,20 +12,20 @@ import resolve from 'rollup-plugin-node-resolve';
 export default [
   // ES6 + UMD + CommonJS minified
   {
-    input: './build/es6/index.js',
+    input: './build/es6/adblocker.js',
     output: [
       {
-        file: './dist/index.esm.min.js',
+        file: './dist/adblocker.esm.min.js',
         format: 'es',
         sourcemap: true,
       },
       {
-        file: './dist/index.cjs.min.js',
+        file: './dist/adblocker.cjs.min.js',
         format: 'cjs',
         sourcemap: true,
       },
       {
-        file: './dist/index.umd.min.js',
+        file: './dist/adblocker.umd.min.js',
         format: 'umd',
         name: 'adblocker',
         sourcemap: true,
