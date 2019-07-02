@@ -13,7 +13,7 @@ export type ElectronRequestType =
 /**
  * Create an instance of `Request` from `Electron.OnBeforeRequestDetails`.
  */
-function fromElectronDetails({
+export function fromElectronDetails({
   url,
   resourceType,
   referrer,
@@ -28,3 +28,6 @@ function fromElectronDetails({
     url,
   });
 }
+
+// re-export @cliqz/adblocker symbols for convenience
+export * from '@cliqz/adblocker';

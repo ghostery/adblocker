@@ -1,4 +1,4 @@
-import { fromWebRequestDetails, updateResponseHeadersWithCSP } from '../src/background';
+import { fromWebRequestDetails, updateResponseHeadersWithCSP } from './adblocker';
 
 describe('#updateResponseHeadersWithCSP', () => {
   const baseDetails: chrome.webRequest.WebResponseHeadersDetails = {

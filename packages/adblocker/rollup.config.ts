@@ -7,7 +7,6 @@
  */
 
 import compiler from '@ampproject/rollup-plugin-closure-compiler';
-import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
 
 export default [
@@ -33,10 +32,7 @@ export default [
       },
     ],
     plugins: [
-      resolve({
-        preferBuiltins: false,
-      }),
-      commonjs(),
+      resolve(),
       compiler({
         language_out: 'NO_TRANSPILE',
         warning_level: 'DEFAULT',

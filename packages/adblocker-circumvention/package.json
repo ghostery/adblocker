@@ -1,17 +1,17 @@
 {
   "name": "@cliqz/adblocker-circumvention",
   "version": "0.11.0",
-  "description": "Cliqz adblocker circumvention",
-  "author": "Rémi Berson <remi.berson@pm.me>",
+  "description": "Cliqz adblocker circumvention for Chrome",
+  "author": "Cliqz",
   "homepage": "https://github.com/cliqz-oss/adblocker#readme",
   "license": "MPL-2.0",
-  "main": "dist/adblocker-circumvention.cjs.js",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
+  "main": "build/cjs/adblocker.js",
+  "module": "build/es6/adblocker.js",
+  "browser": "dist/adblocker.umd.min.js",
+  "types": "dist/types/adblocker.d.ts",
   "files": [
-    "lib"
+    "build",
+    "dist"
   ],
   "publishConfig": {
     "access": "public"
@@ -21,9 +21,27 @@
     "url": "git+ssh://git@github.com/cliqz-oss/adblocker.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "clean": "rm -rfv dist build coverage",
+    "lint": "tslint --config ../../tslint.json --project .",
+    "build-cjs": "tsc -p . --outDir build/cjs --module commonjs",
+    "build-es6": "tsc -p . --outDir build/es6 --module esnext",
+    "build": "concurrently 'npm run build-cjs' 'npm run build-es6'",
+    "prebuild": "npm run clean && npm run lint",
+    "bundle": "rollup --config rollup.config.ts",
+    "prebundle": "npm run build",
+    "prepack": "npm run bundle"
   },
   "bugs": {
     "url": "https://github.com/cliqz-oss/adblocker/issues"
+  },
+  "devDependencies": {
+    "@ampproject/rollup-plugin-closure-compiler": "^0.9.0",
+    "@types/chrome": "0.0.86",
+    "concurrently": "^4.1.1",
+    "rollup": "^1.16.4",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  },
+  "dependencies": {
+    "@cliqz/adblocker": "^0.11.0"
   }
 }

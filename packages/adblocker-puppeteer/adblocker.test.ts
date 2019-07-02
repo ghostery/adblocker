@@ -1,5 +1,5 @@
 import * as puppeteer from 'puppeteer';
-import { fromPuppeteerDetails } from './index';
+import { fromPuppeteerDetails } from './adblocker';
 
 describe('#fromPuppeteerDetails', () => {
   const baseFrame: Partial<puppeteer.Frame> = {

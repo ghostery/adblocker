@@ -30,7 +30,7 @@
     "bundle": "rollup --config rollup.config.ts",
     "prebundle": "npm run build",
     "prepack": "npm run bundle",
-    "test": "jest --coverage --no-cache ./test/",
+    "test": "jest --config ./jest.config.js --coverage --no-cache ./test/",
     "pretest": "npm run lint",
     "generate-codebooks": "ts-node ./tools/generate_compression_codebooks.ts"
   },
@@ -44,7 +44,8 @@
     "@types/node": "^12.0.3",
     "concurrently": "^4.1.1",
     "jest": "^24.8.0",
-    "rollup": "^1.16.3"
+    "rollup": "^1.16.3",
+    "rollup-plugin-node-resolve": "^5.2.0"
   },
   "dependencies": {
     "tldts": "^5.2.1",

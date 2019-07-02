@@ -6,12 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+const baseConfig = require('../../jest.config.js');
+
 module.exports = {
-  globals: {
-    'ts-jest': {
-      tsConfig: 'tsconfig.json',
-    },
-  },
-  preset: 'ts-jest',
-  testEnvironment: 'node',
+  ...baseConfig,
+  collectCoverageFrom: ['./adblocker.ts'],
 };

@@ -23,12 +23,10 @@
     "build-cjs": "tsc -p . --outDir build/cjs --module commonjs",
     "build-es6": "tsc -p . --outDir build/es6 --module esnext",
     "build": "concurrently 'npm run build-cjs' 'npm run build-es6'",
-    "prebuild": "npm run clean",
+    "prebuild": "npm run clean && npm run lint",
     "bundle": "rollup --config rollup.config.ts",
     "prebundle": "npm run build",
-    "prepack": "npm run bundle",
-    "test": "jest --coverage --no-cache ./test/",
-    "pretest": "npm run lint"
+    "prepack": "npm run bundle"
   },
   "bugs": {
     "url": "https://github.com/remusao/adblocker/issues"

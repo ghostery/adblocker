@@ -10,9 +10,7 @@ import compiler from '@ampproject/rollup-plugin-closure-compiler';
 import resolve from 'rollup-plugin-node-resolve';
 
 const plugins = [
-  resolve({
-    modulesOnly: true,
-  }),
+  resolve(),
   compiler({
     language_out: 'NO_TRANSPILE',
     warning_level: 'DEFAULT',

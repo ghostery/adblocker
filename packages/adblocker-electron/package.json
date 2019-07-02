@@ -2,16 +2,15 @@
   "name": "@cliqz/adblocker-electron",
   "version": "0.11.0",
   "description": "Cliqz adblocker Electron wrapper",
-  "author": "Rémi Berson <remi.berson@pm.me>",
+  "author": "Cliqz",
   "homepage": "https://github.com/cliqz-oss/adblocker#readme",
   "license": "MPL-2.0",
-  "main": "dist/adblocker-electron.cjs.js",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
+  "main": "build/cjs/adblocker.js",
+  "module": "build/es6/adblocker.js",
+  "types": "dist/types/adblocker.d.ts",
   "files": [
-    "lib"
+    "build",
+    "dist"
   ],
   "publishConfig": {
     "access": "public"
@@ -23,7 +22,30 @@
   "bugs": {
     "url": "https://github.com/cliqz-oss/adblocker/issues"
   },
+  "scripts": {
+    "clean": "rm -rfv dist build coverage",
+    "lint": "tslint --config ../../tslint.json --project .",
+    "build-cjs": "tsc -p . --outDir build/cjs --module commonjs",
+    "build-es6": "tsc -p . --outDir build/es6 --module esnext",
+    "build": "concurrently 'npm run build-cjs' 'npm run build-es6'",
+    "prebuild": "npm run clean",
+    "bundle": "rollup --config rollup.config.ts",
+    "prebundle": "npm run build",
+    "prepack": "npm run bundle",
+    "test": "jest --config ./jest.config.js --coverage --no-cache ./adblocker.test.ts",
+    "pretest": "npm run lint"
+  },
   "peerDependencies": {
     "electron": "^5.0.6"
+  },
+  "dependencies": {
+    "@cliqz/adblocker": "^0.11.0"
+  },
+  "devDependencies": {
+    "@ampproject/rollup-plugin-closure-compiler": "^0.9.0",
+    "concurrently": "^4.1.1",
+    "jest": "^24.8.0",
+    "rollup": "^1.16.4",
+    "rollup-plugin-node-resolve": "^5.2.0"
   }
 }

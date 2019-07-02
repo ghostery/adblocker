@@ -30,7 +30,7 @@
     "bundle": "rollup --config rollup.config.ts",
     "prebundle": "npm run build",
     "prepack": "npm run bundle",
-    "test": "jest --coverage --no-cache ./test/",
+    "test": "jest --config ./jest.config.js --coverage --no-cache ./adblocker.test.ts",
     "pretest": "npm run lint"
   },
   "bugs": {
@@ -45,7 +45,6 @@
     "jest": "^24.8.0",
     "jsdom": "^15.1.1",
     "rollup": "^1.16.3",
-    "rollup-plugin-commonjs": "^10.0.1",
     "rollup-plugin-node-resolve": "^5.2.0"
   },
   "dependencies": {

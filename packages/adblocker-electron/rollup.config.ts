@@ -10,8 +10,9 @@ import compiler from '@ampproject/rollup-plugin-closure-compiler';
 import resolve from 'rollup-plugin-node-resolve';
 
 export default [
-  // ES6 + UMD + CommonJS minified
+  // ES6 + CommonJS minified
   {
+    external: ['electron'],
     input: './build/es6/adblocker.js',
     output: [
       {
@@ -22,12 +23,6 @@ export default [
       {
         file: './dist/adblocker.cjs.min.js',
         format: 'cjs',
-        sourcemap: true,
-      },
-      {
-        file: './dist/adblocker.umd.min.js',
-        format: 'umd',
-        name: 'adblocker',
         sourcemap: true,
       },
     ],
