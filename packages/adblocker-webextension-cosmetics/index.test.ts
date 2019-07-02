@@ -7,7 +7,7 @@
  */
 
 import { JSDOM } from 'jsdom';
-import { injectCosmetics } from '../src/content-script';
+import { injectCosmetics } from './index';
 
 async function tick(timeout = 0) {
   await new Promise((resolve) => setTimeout(resolve, timeout));
