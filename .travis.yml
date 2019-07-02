@@ -15,9 +15,11 @@ before_install:
 cache: yarn
 
 script:
+    - node licenser.js --ci
+    - node lerna-lint.js --ci
     - lerna bootstrap
-    - npm run bundle
-    - npm run test
+    - travis_wait 20000 npm run bundle
+    - travis_wait 20000 npm run test
 
 # TODO - migrate to lerna
 # deploy:

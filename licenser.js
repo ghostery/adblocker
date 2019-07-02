@@ -29,6 +29,14 @@ const PATTERNS = [
   'bench/utils.js',
 ];
 
+const ABORT_ON_ERROR = process.argv[process.argv.length - 1] === '--ci';
+
+function abort() {
+  if (ABORT_ON_ERROR === true) {
+    process.exit(1);
+  }
+}
+
 const COPYRIGHT_HEADER_MARKER = '/*!';
 const COPYRIGHT_NOTICE = `Copyright (c) 2017-${new Date().getFullYear()} Cliqz GmbH. All rights reserved.`;
 const COPYRIGHT_HEADER = `/*!
@@ -42,16 +50,19 @@ const COPYRIGHT_HEADER = `/*!
 async function checkLicenseRoot(path, content) {
   if (!content.startsWith('Copyright')) {
     console.log(`No copyright notice in ${path}. Adding...`);
+    abort();
     await promises.writeFile(path, `${COPYRIGHT_NOTICE}\n\n${content.trim()}`, { encoding: 'utf-8' });
   } else if (!content.startsWith(COPYRIGHT_NOTICE)) {
     const endOfNoticeIndex = content.indexOf('\n');
     if (endOfNoticeIndex === -1) {
       console.error('Could not parse notice, aborting...', path);
+      abort();
       return;
     }
 
     console.log(`Notice out-dated in ${path}. Updating...`);
     console.log(`Found: ${content.slice(0, endOfNoticeIndex)}`);
+    abort();
     await promises.writeFile(path, `${COPYRIGHT_NOTICE}\n\n${content.slice(endOfNoticeIndex).trim()}`, { encoding: 'utf-8' });
   }
 }
@@ -61,11 +72,13 @@ async function checkLicense(path, content) {
 
   if (copyrightStartIndex === -1) {
     console.log(`No copyright notice in ${path}. Adding...`);
+    abort();
     await promises.writeFile(path, `${COPYRIGHT_HEADER}\n\n${content}`, { encoding: 'utf-8' });
   } else {
     const copyrightEndIndex = content.indexOf('*/', copyrightStartIndex);
     if (copyrightEndIndex === -1) {
       console.error('Could not parse header, aborting...', path);
+      abort();
       return;
     }
 
@@ -73,6 +86,7 @@ async function checkLicense(path, content) {
     if (copyrightHeader !== COPYRIGHT_HEADER) {
       console.log(`Header out-dated in ${path}. Updating...`);
       console.log(`Found:\n${copyrightHeader}`);
+      abort();
       await promises.writeFile(path, content.replace(copyrightHeader, COPYRIGHT_HEADER), {
         encoding: 'utf-8',
       });
