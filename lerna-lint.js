@@ -70,14 +70,6 @@ const EXPECTED_FIELDS = new Set([
     const package = JSON.parse(readFileSync(path, 'utf-8'));
     console.log('linting', path);
 
-    // Check that name is correct
-    const parts = path.split('/');
-    const name = `@cliqz/${parts[parts.length - 2]}`;
-    assertMetadata('name', name, package);
-
-    // Check version of packages
-    assertMetadata('version', LERNA_CONFIG.version, package);
-
     // Check versions of dependencies
     const versionBound = `^${LERNA_CONFIG.version}`;
     for (const deps of [
@@ -136,6 +128,14 @@ const EXPECTED_FIELDS = new Set([
     if (path === './package.json') {
       continue;
     }
+
+    // Check that name is correct
+    const parts = path.split('/');
+    const name = `@cliqz/${parts[parts.length - 2]}`;
+    assertMetadata('name', name, package);
+
+    // Check version of packages
+    assertMetadata('version', LERNA_CONFIG.version, package);
 
     // Check exported bundles
     if (name.endsWith('-example') === false) {
