@@ -14,10 +14,10 @@
     "./packages/*"
   ],
   "scripts": {
-    "lint": "lerna exec npm run lint",
-    "bundle": "lerna exec npm run bundle",
-    "test": "lerna exec npm run test",
-    "clean": "lerna exec npm run clean"
+    "lint": "lerna run --concurrency 1 lint",
+    "bundle": "lerna run --concurrency 1 bundle",
+    "test": "lerna run --concurrency 1 test",
+    "clean": "lerna run --concurrency 1 clean"
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.9.0",
