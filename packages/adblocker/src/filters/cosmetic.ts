@@ -398,7 +398,6 @@ export default class CosmeticFilter implements IFilter {
           fastStartsWithFrom(line, 'matches-css', indexAfterColon) ||
           fastStartsWithFrom(line, 'matches-css-after', indexAfterColon) ||
           fastStartsWithFrom(line, 'matches-css-before', indexAfterColon) ||
-          fastStartsWithFrom(line, 'not', indexAfterColon) ||
           fastStartsWithFrom(line, 'properties', indexAfterColon) ||
           fastStartsWithFrom(line, 'subject', indexAfterColon) ||
           fastStartsWithFrom(line, 'xpath', indexAfterColon)
