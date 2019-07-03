@@ -1,9 +1,18 @@
 # `@cliqz/adblocker`
 
-> Core logic for content blocking. The package exposes all primitives needed to
-> create an efficient adblocker and can be used in any environment. Use a more
-> specialized package such as `@cliqz/adblocker-webextension` for convenient
-> wrappers abstracting platform-specific logic.
+> Very fast and memory efficient, pure-JavaScript content-blocking library made by Cliqz.
+
+This library is the building block technology used to power the adblockers from Ghostery and Cliqz on both desktop and mobile platforms. Being a pure JavaScript library it does not make any assumption regarding the environment it will run in (apart from the availability of a JavaScript engine) and is trivial to include in any new project. It can also be used as a building block for tooling. It is already running in production for millions of users and has been used successfully to satisfy the following use-cases:
+
+* Mobile-friendly adblocker for Android in multiple setups: react-native, WebExtension, etc. ([ghostery](https://github.com/ghostery/browser-android) and [cliqz](https://github.com/cliqz-oss/browser-android))
+* Ads and trackers blocker in Electron applications, Puppeteer headless browsers, Cliqz browser, WebExtensions ([cliqz](https://github.com/cliqz-oss/browser-core), [ghostery](https://github.com/ghostery/ghostery-extension/) and [standalone](https://github.com/remusao/blockrz))
+* Backend requests processing job
+
+The library provides all necessary building blocks to create a powerful and efficient content-blocker and gives full flexibility as to which lists should be used and how they should be fetched or updated. Alternatively, you can use a more specific package depending on your platform:
+
+* [@cliqz/adblocker-webextension](https://www.npmjs.com/package/@cliqz/adblocker-webextension)
+* [@cliqz/adblocker-puppeteer](https://www.npmjs.com/package/@cliqz/adblocker-webextension)
+* [@cliqz/adblocker-electron](https://www.npmjs.com/package/@cliqz/adblocker-webextension) (work in progress)
 
 * [Usage](#usage)
   * [Filters](#filters)
