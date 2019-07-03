@@ -1,14 +1,4 @@
-import { Request } from '@cliqz/adblocker';
-
-export type ElectronRequestType =
-  | 'image'
-  | 'mainFrame'
-  | 'object'
-  | 'other'
-  | 'script'
-  | 'stylesheet'
-  | 'subFrame'
-  | 'xhr';
+import { ElectronRequestType, Request } from '@cliqz/adblocker';
 
 /**
  * Create an instance of `Request` from `Electron.OnBeforeRequestDetails`.
