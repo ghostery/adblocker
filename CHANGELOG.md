@@ -4,6 +4,25 @@
 
 *not released yet*
 
+  * change structure of the cliqz/adblocker project into a monorepo [#181](https://github.com/cliqz-oss/adblocker/pull/181)
+    * embrace `lerna` and `yarn` workspaces as a way to manage multiple packages
+    * adopt conventional commits as a way to structure contributions
+    * create few single-purpose packages:
+      - `@cliqz/adblocker` (contains most building blocks)
+      - `@cliqz/adblocker-circumvention` (standalone counter measures for IL)
+      - `@cliqz/adblocker-webextension` (WebExtension wrapper)
+      - `@cliqz/adblocker-webextension-cosmetics` (WebExtension cosmetics support)
+      - `@cliqz/adblocker-puppeteer` (Puppeteer wrapper)
+      - `@cliqz/adblocker-electron` (Electron wrapper)
+    * create a few demonstration projects for documentation purposes:
+      - `@cliqz/adblocker-webextension-example`
+      - `@cliqz/adblocker-puppeteer-example`
+      - `@cliqz/adblocker-electron-example`
+    * migrate content blockers benchmark into `@cliqz/adblocker-benchmarks`
+    * add `licenser.js` linter to enforce consistency in licenses and copyright notices
+    * add `lerna-lint.js` linter to enforce consistency between all sub-packages
+
+
 ## 0.11.0
 
 *2019-06-17*
