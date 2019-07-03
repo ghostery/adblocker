@@ -21,11 +21,11 @@
     "lint": "tslint --config ../../tslint.json --project .",
     "build-cjs": "tsc -p . --outDir build/cjs --module commonjs",
     "build-es6": "tsc -p . --outDir build/es6 --module esnext",
-    "build": "concurrently 'npm run build-cjs' 'npm run build-es6'",
-    "prebuild": "npm run clean",
+    "build": "concurrently 'yarn run build-cjs' 'yarn run build-es6'",
+    "prebuild": "yarn run clean",
     "bundle": "rollup --config rollup.config.ts",
-    "prebundle": "npm run build",
-    "prepack": "npm run bundle"
+    "prebundle": "yarn run build",
+    "prepack": "yarn run bundle"
   },
   "bugs": {
     "url": "https://github.com/cliqz-oss/adblocker/issues"

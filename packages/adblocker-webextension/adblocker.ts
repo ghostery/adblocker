@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { parse } from 'tldts';
+import { parse } from 'tldts-experimental';
 
 import { FiltersEngine, Request, WebRequestType } from '@cliqz/adblocker';
 import {

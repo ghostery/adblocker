@@ -16,7 +16,7 @@
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-push": "npm run lint"
+      "pre-push": "yarn lint"
     }
   },
   "scripts": {
@@ -25,7 +25,7 @@
     "bundle": "lerna run --concurrency 1 bundle",
     "test": "lerna run --concurrency 1 test",
     "clean": "lerna run --parallel clean && lerna clean --yes && rimraf node_modules",
-    "prepublish": "npm run lint"
+    "prepublish": "yarn lint"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.0.0",

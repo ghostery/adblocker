@@ -7,6 +7,6 @@ debug the adblocker, or test new features.
 
 ## Workflow
 
-1. `npm run bundle` will build the extension
+1. `yarn bundle` will build the extension
 2. Open your browser and load "unpacked extension" from the `example` folder
 3. On re-build, reload the extension in browser

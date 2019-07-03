@@ -7,7 +7,7 @@
  */
 
 const abp = require('abp-filter-parser');
-const { getHostname } = require('tldts');
+const { getHostname } = require('tldts-experimental');
 
 // This maps webRequest types to DuckDuckGo types
 const DDG_OPTIONS = {

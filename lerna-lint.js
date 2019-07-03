@@ -199,7 +199,7 @@ const EXPECTED_FIELDS = new Set([
       });
       assertMetadata(
         'scripts.build',
-        "concurrently 'npm run build-cjs' 'npm run build-es6'",
+        "concurrently 'yarn run build-cjs' 'yarn run build-es6'",
         package,
         { optional: true },
       );
@@ -248,28 +248,28 @@ const EXPECTED_FIELDS = new Set([
 
     assertMetadata(
       'scripts.prepack',
-      'npm run bundle',
+      'yarn run bundle',
       package,
       { optional: true },
     );
 
     assertMetadata(
       'scripts.prebundle',
-      'npm run build',
+      'yarn run build',
       package,
       { optional: true },
     );
 
     assertMetadata(
       'scripts.prebuild',
-      'npm run clean',
+      'yarn run clean',
       package,
       { optional: true },
     );
 
     assertMetadata(
       'scripts.pretest',
-      'npm run lint',
+      'yarn run lint',
       package,
       { optional: true },
     );

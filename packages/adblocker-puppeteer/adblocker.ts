@@ -8,7 +8,7 @@
 
 // Type definition
 import * as puppeteer from 'puppeteer';
-import { parse } from 'tldts';
+import { parse } from 'tldts-experimental';
 
 import {
   autoRemoveScript,
