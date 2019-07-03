@@ -4,6 +4,11 @@
 
 *not released yet*
 
+  * switch from `tldts` to `tldts-experimental` package [#183](https://github.com/cliqz-oss/adblocker/pull/183)
+    * add `bootstrap` to root package.json
+    * switch from `tldts` to `tldts-experimental` (faster, smaller bundles)
+    * switch internal commands from `npm` to `yarn`
+    * remove redundant `lint` during CI
   * change structure of the cliqz/adblocker project into a monorepo [#181](https://github.com/cliqz-oss/adblocker/pull/181)
     * embrace `lerna` and `yarn` workspaces as a way to manage multiple packages
     * adopt conventional commits as a way to structure contributions
