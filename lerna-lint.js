@@ -54,7 +54,6 @@ const EXPECTED_FIELDS = new Set([
   'name',
   'peerDependencies',
   'private',
-  'publishConfig',
   'repository',
   'scripts',
   'types',
@@ -148,7 +147,7 @@ const EXPECTED_FIELDS = new Set([
     assertMetadata('version', LERNA_CONFIG.version, package);
 
     // Check exported bundles
-    if (name.endsWith('-example') === false) {
+    if (name.endsWith('-example') === false && name.endsWith('-benchmarks') === false) {
       assertMetadata('main', 'build/cjs/adblocker.js', package);
       assertMetadata('module', 'build/es6/adblocker.js', package);
       assertMetadata('types', 'dist/types/adblocker.d.ts', package);
@@ -177,14 +176,6 @@ const EXPECTED_FIELDS = new Set([
         optional: true,
       });
     }
-
-    assertMetadata(
-      'publishConfig',
-      {
-        'access': 'public',
-      },
-      package,
-    );
 
     // NOTE: these are currently checked by Travis
     // assertMetadata(
