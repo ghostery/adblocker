@@ -47,6 +47,7 @@ const EXPECTED_FIELDS = new Set([
   'description',
   'devDependencies',
   'files',
+  'gitHead',
   'homepage',
   'license',
   'main',
@@ -54,6 +55,7 @@ const EXPECTED_FIELDS = new Set([
   'name',
   'peerDependencies',
   'private',
+  'publishConfig',
   'repository',
   'scripts',
   'types',
@@ -176,6 +178,15 @@ const EXPECTED_FIELDS = new Set([
         optional: true,
       });
     }
+
+    assertMetadata(
+      'publishConfig',
+      {
+        'access': 'public',
+      },
+      package,
+      { optional: true },
+    );
 
     // NOTE: these are currently checked by Travis
     // assertMetadata(
