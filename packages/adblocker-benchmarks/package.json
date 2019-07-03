@@ -1,0 +1,30 @@
+{
+  "name": "@cliqz/adblocker-benchmarks",
+  "private": true,
+  "version": "0.12.1-alpha.3",
+  "description": "Content blockers benchmark",
+  "author": "Cliqz",
+  "homepage": "https://github.com/cliqz-oss/adblocker#readme",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:cliqz-oss/adblocker.git"
+  },
+  "scripts": {
+    "download-requests": "make requests.json",
+    "download-abp": "make adblockpluscore",
+    "download-brave": "make adblock-rs",
+    "prepare": "npm run download-requests && npm run download-abp && npm run download-brave"
+  },
+  "bugs": {
+    "url": "https://github.com/cliqz-oss/adblocker/issues"
+  },
+  "peerDependencies": {
+    "adblock-rs": "^0.1.22"
+  },
+  "dependencies": {
+    "@cliqz/adblocker": "^0.12.1-alpha.3",
+    "jsdom": "^15.1.1",
+    "sandboxed-module": "^2.0.3"
+  }
+}
