@@ -54,11 +54,11 @@ const requests = require('./requests');
 function loadLists() {
   return {
     lists: [fs.readFileSync(
-      path.resolve(__dirname, '../assets/easylist.to/easylist/easylist.txt'),
+      path.resolve(__dirname, '../packages/adblocker/assets/easylist.to/easylist/easylist.txt'),
       { encoding: 'utf-8' },
     )],
     resources: fs.readFileSync(
-      path.resolve(__dirname, '../assets/raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt'),
+      path.resolve(__dirname, '../packages/adblocker/assets/raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt'),
       { encoding: 'utf-8' },
     ),
   };
