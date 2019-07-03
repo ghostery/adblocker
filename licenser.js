@@ -6,6 +6,17 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+// `licenser.js` is a small, focused linter which allows to enforce the
+// presence of license notices and copyright attributions in all files of the
+// project. It is also able to analyze LICENSE files.
+//
+// It has the capability to automatically fix inconsistancies detected: adding
+// notices if not detected, updating notices if out-dated (e.g. if the year is
+// not accurate anymore).
+//
+// Last but not least, it accepts a `--ci` argument which will simply abort
+// with error code on first issue detected (useful for CI).
+
 const { promises } = require('fs');
 const glob = require('glob');
 
