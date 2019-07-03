@@ -53,11 +53,13 @@ const EXPECTED_FIELDS = new Set([
   'module',
   'name',
   'peerDependencies',
+  'private',
   'publishConfig',
   'repository',
   'scripts',
   'types',
   'version',
+  'workspaces',
 ]);
 
 (function main() {
@@ -69,6 +71,14 @@ const EXPECTED_FIELDS = new Set([
   for (const path of ['./package.json', ...glob.sync('./packages/*/package.json')]) {
     const package = JSON.parse(readFileSync(path, 'utf-8'));
     console.log('linting', path);
+
+    // Check that no extra fields exit
+    for (const field of Object.keys(package)) {
+      if (EXPECTED_FIELDS.has(field) === false) {
+        console.error(`  + un-expected field ${field}`);
+        abort();
+      }
+    }
 
     // Check versions of dependencies
     const versionBound = `^${LERNA_CONFIG.version}`;
@@ -175,14 +185,6 @@ const EXPECTED_FIELDS = new Set([
       },
       package,
     );
-
-    // Check that no extra fields exit
-    for (const field of Object.keys(package)) {
-      if (EXPECTED_FIELDS.has(field) === false) {
-        console.error(`  + un-expected field ${field}`);
-        abort();
-      }
-    }
 
     // NOTE: these are currently checked by Travis
     // assertMetadata(
