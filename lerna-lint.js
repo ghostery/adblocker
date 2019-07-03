@@ -48,6 +48,7 @@ const EXPECTED_FIELDS = new Set([
   'devDependencies',
   'files',
   'homepage',
+  'husky',
   'license',
   'main',
   'module',
@@ -209,10 +210,32 @@ const EXPECTED_FIELDS = new Set([
     //   package,
     // );
 
-    // TODO: should we enforce these as well?
-    //   "prebuild": "npm run clean",
-    //   "prebundle": "npm run build",
-    //   "prepack": "npm run bundle",
-    //   "pretest": "npm run lint",
+    assertMetadata(
+      'scripts.prepack',
+      'npm run bundle',
+      package,
+      { optional: true },
+    );
+
+    assertMetadata(
+      'scripts.prebundle',
+      'npm run build',
+      package,
+      { optional: true },
+    );
+
+    assertMetadata(
+      'scripts.prebuild',
+      'npm run clean',
+      package,
+      { optional: true },
+    );
+
+    assertMetadata(
+      'scripts.pretest',
+      'npm run lint',
+      package,
+      { optional: true },
+    );
   }
 })();

@@ -23,7 +23,8 @@
     "lint": "lerna run --parallel lint",
     "bundle": "lerna run --concurrency 1 bundle",
     "test": "lerna run --concurrency 1 test",
-    "clean": "rm -frv node_modules && lerna clean --yes && lerna run --parallel clean"
+    "clean": "rm -frv node_modules && lerna clean --yes && lerna run --parallel clean",
+    "prepublish": "npm run lint"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.0.0",
