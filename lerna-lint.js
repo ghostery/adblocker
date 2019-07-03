@@ -154,7 +154,7 @@ const EXPECTED_FIELDS = new Set([
       assertMetadata('types', 'dist/types/adblocker.d.ts', package);
       assertMetadata('browser', 'dist/adblocker.umd.min.js', package, { optional: true });
 
-      assertMetadata('files', ['build', 'dist'], package);
+      assertMetadata('files', ['LICENSE', 'build', 'dist'], package);
 
       assertMetadata(
         'scripts.build-cjs',

@@ -8,25 +8,25 @@ const BLACKLIST = [
 ];
 
 const PATTERNS = [
-  './LICENSE',
+  './packages/*/LICENSE',
   './packages/*/jest.config.js',
   './packages/*/{src,test,example}/**/*.ts',
-  'bench/comparison/shuffle_dataset.js',
-  'bench/comparison/blockers/brave.js',
-  'bench/comparison/blockers/re_baseline.js',
-  'bench/comparison/blockers/adblockplus.js',
-  'bench/comparison/blockers/adblockfast.js',
-  'bench/comparison/blockers/ublock.js',
-  'bench/comparison/blockers/url_baseline.js',
-  'bench/comparison/blockers/duckduckgo.js',
-  'bench/comparison/blockers/tldts_baseline.js',
-  'bench/comparison/blockers/cliqz.js',
-  'bench/comparison/blockers/cliqzCompression.js',
-  'bench/comparison/create_dataset.js',
-  'bench/comparison/run.js',
-  'bench/run_benchmark.js',
-  'bench/micro.js',
-  'bench/utils.js',
+  './bench/comparison/shuffle_dataset.js',
+  './bench/comparison/blockers/brave.js',
+  './bench/comparison/blockers/re_baseline.js',
+  './bench/comparison/blockers/adblockplus.js',
+  './bench/comparison/blockers/adblockfast.js',
+  './bench/comparison/blockers/ublock.js',
+  './bench/comparison/blockers/url_baseline.js',
+  './bench/comparison/blockers/duckduckgo.js',
+  './bench/comparison/blockers/tldts_baseline.js',
+  './bench/comparison/blockers/cliqz.js',
+  './bench/comparison/blockers/cliqzCompression.js',
+  './bench/comparison/create_dataset.js',
+  './bench/comparison/run.js',
+  './bench/run_benchmark.js',
+  './bench/micro.js',
+  './bench/utils.js',
 ];
 
 const ABORT_ON_ERROR = process.argv[process.argv.length - 1] === '--ci';
@@ -64,6 +64,8 @@ async function checkLicenseRoot(path, content) {
     console.log(`Found: ${content.slice(0, endOfNoticeIndex)}`);
     abort();
     await promises.writeFile(path, `${COPYRIGHT_NOTICE}\n\n${content.slice(endOfNoticeIndex).trim()}`, { encoding: 'utf-8' });
+  } else {
+    console.log('LICENSE is up-to-date!', path);
   }
 }
 
