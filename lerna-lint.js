@@ -6,6 +6,27 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+// `lerna-lint.js` is a custom linter created for the purpose of maintaining
+// sanity in the @cliqz/adblocker mono-repository. It might be extracted into a
+// separate, re-usable package in the future. For now it enforces the following
+// in package.json from root and sub-packages (on CI and can be simply invoked
+// locally with `node lerna-lint.js`):
+//
+//   * fields `author`, `homepage`, `license`, `repository`, `bugs`, `version`,
+//     `main`, etc. are consistent across packages (meaning that they should have
+//     the same values most of the time)
+//   * make sure that no unexpected fields appear in `package.json`
+//   * make sure that names of packages are consistent with names of the
+//     folders `./packages/NAME` should result in `@cliqz/NAME` in our case
+//   * make sure that if the same dependency is used in more than one
+//     package.json, the same version is used
+//   * make sure that all `@cliqz/NAME` packages used are aligned on the version
+//     defined in `lerna.json`.
+//
+// So mostly it checks that all sub-packages and root configuration
+// (package.json) are consistent with each-other, that all metadata are set
+// correctly, etc. It would also be useful to add auto-fix in the future.
+
 const { readFileSync } = require('fs');
 const glob = require('glob');
 
