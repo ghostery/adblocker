@@ -1,11 +1,4 @@
 # `@cliqz/adblocker-webextension-cosmetics`
 
-> TODO: description
-
-## Usage
-
-```
-const adblockerWebextensionCosmetics = require('@cliqz/adblocker-webextension-cosmetics');
-
-// TODO: DEMONSTRATE API
-```
+> companion package for `@cliqz/adblocker-webextension` exposing content-script
+> logic to communicate with background and inject cosmetics in frames.

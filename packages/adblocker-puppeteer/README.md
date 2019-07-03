@@ -1,11 +1,3 @@
 # `@cliqz/adblocker-puppeteer`
 
-> TODO: description
-
-## Usage
-
-```
-const adblockerPuppeteer = require('@cliqz/adblocker-puppeteer');
-
-// TODO: DEMONSTRATE API
-```
+> @cliqz/adblocker enhanced with convenient Puppeteer wrapper

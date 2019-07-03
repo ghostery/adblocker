@@ -1,11 +1,3 @@
 # `@cliqz/adblocker-circumvention`
 
-> TODO: description
-
-## Usage
-
-```
-const adblockerCircumvention = require('@cliqz/adblocker-circumvention');
-
-// TODO: DEMONSTRATE API
-```
+> Contains standalone content-script circumvention logic useful on some websites.

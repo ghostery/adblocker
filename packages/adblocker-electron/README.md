@@ -1,11 +1,3 @@
 # `@cliqz/adblocker-electron`
 
-> TODO: description
-
-## Usage
-
-```
-const adblockerElectron = require('@cliqz/adblocker-electron');
-
-// TODO: DEMONSTRATE API
-```
+> @cliqz/adblocker enhanced with convenient Electron wrapper
