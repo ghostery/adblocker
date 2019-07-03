@@ -4,6 +4,7 @@
 
 *not released yet*
 
+  * allow the 'not' pseudoclass in cosmetic filters [#184](https://github.com/cliqz-oss/adblocker/pull/184)
   * switch from `tldts` to `tldts-experimental` package [#183](https://github.com/cliqz-oss/adblocker/pull/183)
     * add `bootstrap` to root package.json
     * switch from `tldts` to `tldts-experimental` (faster, smaller bundles)
