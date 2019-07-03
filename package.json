@@ -23,7 +23,7 @@
     "lint": "lerna run --parallel lint",
     "bundle": "lerna run --concurrency 1 bundle",
     "test": "lerna run --concurrency 1 test",
-    "clean": "lerna run --concurrency 1 clean"
+    "clean": "lerna clean --yes && lerna run --parallel clean"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.0.0",
