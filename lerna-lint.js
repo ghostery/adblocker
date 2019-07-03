@@ -72,6 +72,7 @@ const EXPECTED_FIELDS = new Set([
   'author',
   'browser',
   'bugs',
+  'contributors',
   'dependencies',
   'description',
   'devDependencies',
