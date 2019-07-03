@@ -22,7 +22,7 @@
     "url": "git@github.com:cliqz-oss/adblocker.git"
   },
   "scripts": {
-    "clean": "rm -rfv dist build coverage",
+    "clean": "rimraf dist build coverage",
     "lint": "tslint --config ../../tslint.json --project .",
     "build-cjs": "tsc -p . --outDir build/cjs --module commonjs",
     "build-es6": "tsc -p . --outDir build/es6 --module esnext",
@@ -39,6 +39,7 @@
     "@ampproject/rollup-plugin-closure-compiler": "^0.9.0",
     "@types/chrome": "0.0.86",
     "concurrently": "^4.1.1",
+    "rimraf": "^2.6.3",
     "rollup": "^1.16.4",
     "rollup-plugin-node-resolve": "^5.2.0"
   },

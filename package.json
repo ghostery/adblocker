@@ -23,7 +23,7 @@
     "lint": "lerna run --parallel lint",
     "bundle": "lerna run --concurrency 1 bundle",
     "test": "lerna run --concurrency 1 test",
-    "clean": "rm -frv node_modules && lerna clean --yes && lerna run --parallel clean",
+    "clean": "lerna run --parallel clean && lerna clean --yes && rimraf node_modules",
     "prepublish": "npm run lint"
   },
   "devDependencies": {
@@ -39,6 +39,7 @@
     "glob": "^7.1.4",
     "husky": "^3.0.0",
     "lerna": "^3.15.0",
-    "prettier": "^1.17.1"
+    "prettier": "^1.17.1",
+    "rimraf": "^2.6.3"
   }
 }

@@ -190,7 +190,7 @@ const EXPECTED_FIELDS = new Set([
 
     assertMetadata(
       'scripts.clean',
-      'rm -rfv dist build coverage',
+      'rimraf dist build coverage',
       package,
       { optional: true },
     );
@@ -198,7 +198,7 @@ const EXPECTED_FIELDS = new Set([
     // NOTE: this can be different depending on the package
     // assertMetadata(
     //   'scripts.test',
-    //   'rm -rfv dist build coverage',
+    //   '',
     //   package,
     //   { optional: true },
     // );
