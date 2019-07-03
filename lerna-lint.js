@@ -188,27 +188,34 @@ const EXPECTED_FIELDS = new Set([
       { optional: true },
     );
 
-    // NOTE: these are currently checked by Travis
-    // assertMetadata(
-    //   'scripts.clean',
-    //   name.endsWith('-example') ? "echo 'ok'" : 'rm -rfv dist build coverage',
-    //   package,
-    // );
+    assertMetadata(
+      'scripts.clean',
+      'rm -rfv dist build coverage',
+      package,
+      { optional: true },
+    );
+
+    // NOTE: this can be different depending on the package
     // assertMetadata(
     //   'scripts.test',
-    //   name.endsWith('-example') ? "echo 'ok'" : 'rm -rfv dist build coverage',
+    //   'rm -rfv dist build coverage',
     //   package,
+    //   { optional: true },
     // );
-    // assertMetadata(
-    //   'scripts.bundle',
-    //   name.endsWith('-example') ? "echo 'ok'" : 'rm -rfv dist build coverage',
-    //   package,
-    // );
-    // assertMetadata(
-    //   'scripts.lint',
-    //   name.endsWith('-example') ? "echo 'ok'" : 'rm -rfv dist build coverage',
-    //   package,
-    // );
+
+    assertMetadata(
+      'scripts.bundle',
+      'rollup --config rollup.config.ts',
+      package,
+      { optional: true },
+    );
+
+    assertMetadata(
+      'scripts.lint',
+      'tslint --config ../../tslint.json --project .',
+      package,
+      { optional: true },
+    );
 
     assertMetadata(
       'scripts.prepack',
