@@ -47,7 +47,6 @@ const EXPECTED_FIELDS = new Set([
   'description',
   'devDependencies',
   'files',
-  'gitHead',
   'homepage',
   'license',
   'main',
