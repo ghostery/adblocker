@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const { parse } = require('tldts');
+const { parse } = require('tldts-experimental');
 
 module.exports = class Tldts {
   static parse() {

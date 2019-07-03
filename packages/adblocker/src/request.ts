@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { parse } from 'tldts';
+import { parse } from 'tldts-experimental';
 import TokensBuffer from './tokens-buffer';
 import { createFuzzySignature, fastHash, tokenizeInPlace } from './utils';
 

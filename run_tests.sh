@@ -5,8 +5,9 @@ set -o nounset
 set -o xtrace
 set -o pipefail
 
-npx lerna bootstrap
+yarn bootstrap
 node licenser.js --ci
 node lerna-lint.js --ci
-npm run bundle
-npm run test
+yarn lint
+yarn bundle
+yarn test

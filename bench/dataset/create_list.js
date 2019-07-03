@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 
-const adblocker = require(path.resolve(__dirname, '../../dist/adblocker.umd.min.js'));
-const { getPublicSuffix, getDomain } = require('tldts');
+const adblocker = require('@cliqz/adblocker');
+const { getPublicSuffix, getDomain } = require('tldts-experimental');
 const top50kDomains = require('./hostnames');
 
 function getHostnameWithoutSuffix(hostname) {

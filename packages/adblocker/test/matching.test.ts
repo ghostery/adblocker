@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { getDomain } from 'tldts';
+import { getDomain } from 'tldts-experimental';
 
 import CosmeticFilter, {
   getHashesFromLabelsBackward,

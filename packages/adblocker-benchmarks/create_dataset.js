@@ -11,7 +11,7 @@
 const fs = require('fs');
 const createPuppeteerPool = require('puppeteer-pool');
 const stream = require('stream');
-const { getDomain } = require('tldts');
+const { getDomain } = require('tldts-experimental');
 
 class RequestStreamer extends stream.Readable {
   constructor(options) {
