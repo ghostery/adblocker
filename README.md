@@ -13,6 +13,7 @@ The library provides all necessary building blocks to create a powerful and effi
 * [Installation](#installation)
 * [Performance](#performance)
 * [Supported Filters](#rules)
+* [Development](#development)
 * [Releasing](#release)
 
 <a id="installation"></a>
@@ -49,6 +50,17 @@ Another interesting metric is the time it takes to initialize the `FiltersEngine
 ## Supported Filters
 
 The majority of the common filters are supported out of the box but some rare ones are not. To know more, check [the compatibility matrix](https://github.com/cliqz-oss/adblocker/wiki/Compatibility-Matrix) on the wiki.
+
+<a id="development"></a>
+## Development
+
+This project makes use of [lerna](https://github.com/lerna/lerna) and [yarn workspaces](https://yarnpkg.com/lang/en/docs/workspaces/) (which is actually transparently used by `lerna` behind the scene most of the time). To get started:
+
+1. fork and clone the repository: `git clone git@github.com:<your remote>/adblocker.git`
+2. bootstrap: `npx lerna bootstrap`
+3. start working on one of the sub-packages!
+
+In case you have any question, feel free to open an issue or a pull request to get some help!
 
 <a id="release"></a>
 ## Release Checklist
