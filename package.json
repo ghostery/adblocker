@@ -1,25 +1,36 @@
 {
-  "name": "@cliqz/adblocker",
-  "version": "0.11.0",
-  "description": "Cliqz adblocker library",
+  "author": "Cliqz",
+  "contributors": [
+    "Rémi Berson <remi@cliqz.com>",
+    "Zhonghao Yu <zhonghao@cliqz.com>",
+    "Krzysztof Jan Modras <chrmod@chrmod.net>",
+    "Raymond Hill <gorhill@users.noreply.github.com>",
+    "Eleni <eleni@cliqz.com>",
+    "ecnmst <ecnmst@users.noreply.github.com>",
+    "Asif <arshadasif0312@gmail.com>",
+    "Anton Lazarev <antonok35@gmail.com>"
+  ],
+  "license": "MPL-2.0",
+  "homepage": "https://github.com/cliqz-oss/adblocker#readme",
+  "bugs": {
+    "url": "https://github.com/cliqz-oss/adblocker/issues"
+  },
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git@github.com:cliqz-oss/adblocker.git"
   },
-  "author": "Cliqz",
-  "license": "MPL-2.0",
-  "browser": "dist/adblocker.umd.min.js",
-  "main": "dist/adblocker.cjs.js",
-  "module": "dist/adblocker.esm.js",
-  "types": "dist/types/adblocker.d.ts",
-  "files": [
-    "dist",
-    "adblocker.ts",
-    "circumvention.ts",
-    "cosmetics.ts",
-    "src"
+  "workspaces": [
+    "./packages/*"
   ],
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-push": "yarn lint"
+    }
+  },
   "scripts": {
+<<<<<<< HEAD
     "clean": "rimraf dist",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "build": "tsc -p tsconfig.json --module ESNext",
@@ -32,26 +43,35 @@
     "test": "jest --coverage --no-cache ./test/",
     "dev": "jest --watch --coverage --bail --no-cache ./test/",
     "generate-codebooks": "ts-node ./tools/generate_compression_codebooks.ts"
+=======
+    "bootstrap": "npx lerna bootstrap",
+    "lint": "lerna run --parallel lint",
+    "bundle": "lerna run --concurrency 1 bundle",
+    "test": "lerna run --concurrency 1 test",
+    "clean": "lerna run --parallel clean && lerna clean --yes && rimraf node_modules",
+    "prepublish": "yarn lint"
+>>>>>>> 14ce5611364705a99ca4cccfb51c39b325be32ff
   },
   "devDependencies": {
-    "@ampproject/rollup-plugin-closure-compiler": "^0.9.0",
-    "@types/chrome": "0.0.86",
-    "@types/jest": "^24.0.13",
-    "@types/jsdom": "^12.2.3",
-    "@types/node": "^12.0.3",
-    "axios": "^0.19.0",
+    "@commitlint/cli": "^8.0.0",
+    "@commitlint/config-conventional": "^8.0.0",
     "benchmark": "^2.1.4",
     "chalk": "^2.4.2",
+<<<<<<< HEAD
     "concurrently": "^4.1.0",
     "electron": "^5.0.6",
+=======
+>>>>>>> 14ce5611364705a99ca4cccfb51c39b325be32ff
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.13.0",
-    "jest": "^24.8.0",
-    "jsdom": "^15.1.1",
+    "glob": "^7.1.4",
+    "husky": "^3.0.0",
+    "lerna": "^3.15.0",
     "prettier": "^1.17.1",
+<<<<<<< HEAD
     "puppeteer": "^1.17.0",
     "rimraf": "^2.6.3",
     "rollup": "^1.13.0",
@@ -67,5 +87,8 @@
     "tldts": "^5.0.3",
     "tslib": "^1.9.3",
     "tsmaz": "^1.2.1"
+=======
+    "rimraf": "^2.6.3"
+>>>>>>> 14ce5611364705a99ca4cccfb51c39b325be32ff
   }
 }

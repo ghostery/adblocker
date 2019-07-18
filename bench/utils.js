@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const { FiltersEngine, parseFilters } = require('../');
+const { FiltersEngine, parseFilters } = require('@cliqz/adblocker');
 
 function createEngine(lists, resources, options = {}, serialize = false) {
   const engine = FiltersEngine.parse(

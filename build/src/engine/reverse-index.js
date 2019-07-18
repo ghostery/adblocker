@@ -1,0 +1,462 @@
+/*!
+ * Copyright (c) 2017-2019 Cliqz GmbH. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+import StaticDataView, { EMPTY_UINT32_ARRAY } from '../data-view';
+import { fastHash } from '../utils';
+// https://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
+function nextPow2(v) {
+    v--;
+    v |= v >> 1;
+    v |= v >> 2;
+    v |= v >> 4;
+    v |= v >> 8;
+    v |= v >> 16;
+    v++;
+    return v;
+}
+/**
+ * Counter implemented on top of Map.
+ */
+var Counter = /** @class */ (function () {
+    function Counter() {
+        this.counter = new Map();
+    }
+    Counter.prototype.incr = function (key) {
+        this.counter.set(key, (this.counter.get(key) || 0) + 1);
+    };
+    Counter.prototype.get = function (key) {
+        return this.counter.get(key) || 0;
+    };
+    Counter.prototype.set = function (key, value) {
+        this.counter.set(key, value);
+    };
+    return Counter;
+}());
+/**
+ * Generate unique IDs for requests, which is used to avoid matching the same
+ * buckets multiple times on the same request (which can happen if a token
+ * appears more than once in a URL).
+ */
+var UID = 1;
+function getNextId() {
+    var id = UID;
+    UID = (UID + 1) % 1000000000;
+    return id;
+}
+var EMPTY_BUCKET = Number.MAX_SAFE_INTEGER >>> 0;
+/**
+ * The ReverseIndex is an accelerating data structure which allows finding a
+ * subset of the filters given a list of token seen in a URL. It is the core of
+ * the adblocker's matching capabilities.
+ *
+ * It has mainly two caracteristics:
+ * 1. It should be very compact and be able to load fast.
+ * 2. It should be *very fast* in finding potential candidates.
+ *
+ * Conceptually, the reverse index dispatches filters in "buckets" (an array of
+ * one or more filters). Filters living in the same bucket are guaranteed to
+ * share at least one of their tokens (appearing in the pattern). For example:
+ *
+ *   - Bucket 1 (ads):
+ *       - /ads.js
+ *       - /script/ads/tracking.js
+ *       - /ads/
+ *   - Bucket 2 (tracking)
+ *       - /tracking.js
+ *       - ||tracking.com/cdn
+ *
+ * We see that filters in "Bucket 1" are indexed using the token "ads" and
+ * "Bucket 2" using token "tracking".
+ *
+ * This property allows to quickly discard most of the filters when we match a
+ * URL. To achieve this, the URL is tokenized in the same way filters are
+ * tokenized and for each token, we check if there are some filters available.
+ *
+ * For example:
+ *
+ *  URL "https://tracking.com/" has the following tokens: "https", "tracking"
+ *  and "com". We immediatly see that we only check the two filters in the
+ *  "tracking" bucket since they are the only ones having a common token with
+ *  the URL.
+ *
+ * How do we pick the token for each filter?
+ * =========================================
+ *
+ * Each filter is only indexed *once*, which means that we need to pick one of
+ * the tokens appearing in the pattern. We choose the token such has each filter
+ * is indexed using the token which was the *least seen* globally. In other
+ * words, we pick the most discriminative token for each filter. This is done
+ * using the following algorithm:
+ *   1. Tokenize all the filters which will be stored in the index
+ *   2. Compute a histogram of frequency of each token (globally)
+ *   3. Select the best token for each filter (lowest frequency)
+ */
+var ReverseIndex = /** @class */ (function () {
+    function ReverseIndex(_a) {
+        var deserialize = _a.deserialize, filters = _a.filters, optimize = _a.optimize, config = _a.config, 
+        // These arguments are only used while initializing the reverse index from
+        // its serialized representation. By default they are initialized such as
+        // the index is empty (no filter).
+        bucketsIndex = _a.bucketsIndex, tokensLookupIndex = _a.tokensLookupIndex, view = _a.view;
+        // Function used to load a filter (e.g.: CosmeticFilter or NetworkFilter)
+        // from its compact representation. Each filter exposes a `serialize` method
+        // which is used to store it in `this.view`. While matching we need to
+        // retrieve the instance of the filter to perform matching and use
+        // `this.deserializeFilter` to do so.
+        this.deserializeFilter = deserialize;
+        // Optional function which will be used to optimize a list of filters
+        // in-memory. Typically this is used while matching when a list of filters
+        // are loaded in memory and stored in `this.cache`. Before using the bucket,
+        // we can `this.optimize` on the list of filters to allow some optimizations
+        // to be performed (e.g.: fusion of similar filters, etc.). Have a look into
+        // `./src/engine/optimizer.ts` for examples of such optimizations.
+        this.optimize = optimize;
+        this.config = config;
+        // Cache deserialized buckets in memory for faster retrieval. It is a
+        // mapping from token to `Bucket`.
+        this.cache = new Map();
+        // Compact representation of the reverse index (described at the top level
+        // comment of this class). It contains three distinct parts:
+        //
+        // 1. The list of all filters contained in this index, serialized
+        // contiguously (one after the other) in the typed array starting at index
+        // 0. This would look like: |f1|f2|f3|...|fn| Note that not all filters use
+        // the same amount of memory (or number of bytes) so the only way to
+        // navigate the compact representation at this point is to iterate through
+        // all of them from first to last. Which is why we need a small "index" to
+        // help us navigate this compact representation and leads us to the second
+        // section of `this.view`.
+        //
+        // 2. buckets index which conceptually can be understood as a way to group
+        // several buckets in the same neighborhood of the typed array. It could
+        // look something like: |bucket1|bucket2|bucket3|...| each bucket could
+        // contain multiple filters. In reality, for each section of this bucket
+        // index, we know how many filters there are and the filters for multiple
+        // buckets are interleaved. For example if the index starts with a section
+        // containing |bucket1|bucket2|bucket3| and these bucket have tokens `tok1`,
+        // `tok2` and `tok3` respectively, then the final representation in memory
+        // could be: |tok1|f1|tok2|f2|tok1|f3|tok3|f4|tok2|f5| (where `f1`, `f2`,
+        // etc. are indices to the serialized representation of each filter, in the
+        // same array, described in 1. above).
+        //
+        // 3. The last part is called "tokens lookup index" and allows to locate the
+        // bucket given a suffix of the indexing token. If the binary representation
+        // of the token for bucket1 is 101010 and prefix has size 3, then we would
+        // lookup the "tokens lookup index" using the last 3 bits "010" which would
+        // give us the offset in our typed array where we can start reading the
+        // filters of buckets having a token ending with the same 3 bits.
+        // Optionaly initialize the index with given filters.
+        this.bucketsIndex = bucketsIndex || EMPTY_UINT32_ARRAY;
+        this.tokensLookupIndex = tokensLookupIndex || EMPTY_UINT32_ARRAY;
+        this.view = view || StaticDataView.empty(config);
+        if (filters.length !== 0) {
+            this.update(filters, undefined);
+        }
+    }
+    ReverseIndex.deserialize = function (buffer, deserialize, optimize, config) {
+        var tokensLookupIndexSize = buffer.getUint32();
+        var tokensLookupIndexStart = buffer.getUint32();
+        var bucketsIndexSize = buffer.getUint32();
+        // Alignement to 4 bytes is important here since `view` (Uint8Array) can
+        // appear at any offset of `buffer`. But to be sure we can read back
+        // Uint32Array directly from raw buffer, the alignement has to be a multiple
+        // of 4. The same alignement is taken care of in `serialize`.
+        var view = StaticDataView.fromUint8Array(buffer.getBytes(true /* align */), config);
+        // Read Uint32Array views on top of byte array for fast access.
+        view.setPos(tokensLookupIndexStart);
+        var tokensLookupIndex = view.getUint32ArrayView(tokensLookupIndexSize);
+        var bucketsIndex = view.getUint32ArrayView(bucketsIndexSize);
+        view.seekZero();
+        return new ReverseIndex({
+            config: config,
+            deserialize: deserialize,
+            filters: [],
+            optimize: optimize,
+            // Packed internal representation
+            bucketsIndex: bucketsIndex,
+            tokensLookupIndex: tokensLookupIndex,
+            view: view
+        });
+    };
+    /**
+     * Load all filters from this index in memory (i.e.: deserialize them from the
+     * byte array into NetworkFilter or CosmeticFilter instances).
+     */
+    ReverseIndex.prototype.getFilters = function () {
+        var view = this.view;
+        view.seekZero();
+        var numberOfFilters = view.getUint32();
+        var filters = [];
+        for (var i = 0; i < numberOfFilters; i += 1) {
+            filters.push(this.deserializeFilter(view));
+        }
+        return filters;
+    };
+    /**
+     * Return an array of all the tokens currently used as keys of the index.
+     */
+    ReverseIndex.prototype.getTokens = function () {
+        var tokens = new Set();
+        for (var i = 0; i < this.bucketsIndex.length; i += 2) {
+            tokens.add(this.bucketsIndex[i]);
+        }
+        return new Uint32Array(tokens);
+    };
+    /**
+     * Dump this index to `buffer`.
+     */
+    ReverseIndex.prototype.serialize = function (buffer) {
+        buffer.pushUint32(this.tokensLookupIndex.length);
+        buffer.pushUint32(this.tokensLookupIndex.byteOffset);
+        buffer.pushUint32(this.bucketsIndex.length);
+        // Aligmenent is crucial here, see comment in `deserialize` for more info.
+        buffer.pushBytes(this.view.buffer, true /* align */);
+    };
+    /**
+     * Iterate on all filters found in buckets associated with the given list of
+     * tokens. The callback is called on each of them. Early termination can be
+     * achieved if the callback returns `false`.
+     *
+     * This will not check if each filter returned would match a given request but
+     * is instead used as a list of potential candidates (much smaller than the
+     * total set of filters; typically between 5 and 10 filters will be checked).
+     */
+    ReverseIndex.prototype.iterMatchingFilters = function (tokens, cb) {
+        // Each request is assigned an ID so that we can keep track of the last
+        // request seen by each bucket in the reverse index. This provides a cheap
+        // way to prevent filters from being inspected more than once per request
+        // (which could happen if the same token appears more than once in the URL).
+        var requestId = getNextId();
+        for (var i = 0; i < tokens.length; i += 1) {
+            if (this.iterBucket(tokens[i], requestId, cb) === false) {
+                return;
+            }
+        }
+        // Fallback to 0 (i.e.: wildcard bucket) bucket if nothing was found before.
+        this.iterBucket(0, requestId, cb);
+    };
+    /**
+     * Re-create the internal data-structure of the reverse index *in-place*. It
+     * needs to be called with a list of new filters and optionally a list of ids
+     * (as returned by either NetworkFilter.getId() or CosmeticFilter.getId())
+     * which need to be removed from the index.
+     */
+    ReverseIndex.prototype.update = function (newFilters, removedFilters) {
+        var totalNumberOfTokens = 0;
+        var totalNumberOfIndexedFilters = 0;
+        var filtersTokens = [];
+        var histogram = new Counter();
+        // Compute tokens for all filters (the ones already contained in the index
+        // *plus* the new ones *minus* the ones removed ).
+        var filters = this.getFilters();
+        for (var i = 0; i < newFilters.length; i += 1) {
+            filters.push(newFilters[i]);
+        }
+        // When we run in `debug` mode, we enable fully deterministic updates of
+        // internal data-structure. To this effect, we sort all filters before
+        // insertion.
+        if (this.config.debug === true) {
+            filters.sort(function (f1, f2) { return f1.getId() - f2.getId(); });
+        }
+        for (var i = 0; i < filters.length; i += 1) {
+            var filter = filters[i];
+            if (removedFilters === undefined || removedFilters.has(filter.getId()) === false) {
+                var multiTokens = filter.getTokens();
+                filtersTokens.push({
+                    filter: filter,
+                    multiTokens: multiTokens
+                });
+                for (var j = 0; j < multiTokens.length; j += 1) {
+                    var tokens = multiTokens[j];
+                    totalNumberOfIndexedFilters += 1;
+                    for (var k = 0; k < tokens.length; k += 1) {
+                        totalNumberOfTokens += 1;
+                        histogram.incr(tokens[k]);
+                    }
+                }
+            }
+        }
+        // No filters given; reset to empty bucket
+        if (filtersTokens.length === 0) {
+            this.bucketsIndex = EMPTY_UINT32_ARRAY;
+            this.tokensLookupIndex = EMPTY_UINT32_ARRAY;
+            this.view = StaticDataView.empty(this.config);
+            this.cache = new Map();
+            return;
+        }
+        // Add an heavy weight on these common patterns because they appear in
+        // almost all URLs. If there is a choice, then filters should use other
+        // tokens than those.
+        histogram.set(fastHash('http'), totalNumberOfTokens);
+        histogram.set(fastHash('https'), totalNumberOfTokens);
+        histogram.set(fastHash('www'), totalNumberOfTokens);
+        histogram.set(fastHash('com'), totalNumberOfTokens);
+        // Prepare tokensLookupIndex. This is an array where keys are suffixes of N
+        // bits from tokens (the ones used to index filters in the index) and values
+        // are indices to compact representation of buckets. Each bucket contains a
+        // list of filters associated with a token with identical N bits suffix.
+        // This allows to quickly identify the potential filters given a query
+        // token.
+        var tokensLookupIndexSize = Math.max(2, nextPow2(totalNumberOfIndexedFilters));
+        var mask = tokensLookupIndexSize - 1;
+        var prefixes = [];
+        for (var i = 0; i < tokensLookupIndexSize; i += 1) {
+            prefixes.push([]);
+        }
+        // This byte array contains all the filters serialized consecutively.
+        // Having them separately from the reverse index structure allows filters
+        // to be indexed more than once while not paying extra storage cost.
+        // `buffer` is a contiguous chunk of memory which will be used to store 3
+        // kinds of data:
+        // 1. The first section contains all the filters stored in the index
+        // 2. The second section contains the compact buckets where filters having
+        // their indexing token sharing the last N bits are grouped together.
+        //
+        // TODO - estimate size needed for this bucket (based on filters in
+        // `filtersToken` + tokensLookupIndexSize + bucketsIndexSize). This would
+        // allow to avoid having to pre-allocate a huge buffer up-front.
+        var buffer = StaticDataView.allocate(8000000, this.config);
+        buffer.pushUint32(filtersTokens.length);
+        // Keep track of the final size of the buckets index
+        var bucketsIndexSize = 0;
+        // For each filter, find the best token (least seen)
+        for (var i = 0; i < filtersTokens.length; i += 1) {
+            var _a = filtersTokens[i], filter = _a.filter, multiTokens = _a.multiTokens;
+            // Serialize this filter and keep track of its index in the byte array
+            var filterIndex = buffer.pos;
+            filter.serialize(buffer);
+            // Index the filter once per "tokens"
+            for (var j = 0; j < multiTokens.length; j += 1) {
+                var tokens = multiTokens[j];
+                // Find best token (least seen) from `tokens` using `histogram`.
+                var bestToken = 0;
+                var minCount = totalNumberOfTokens + 1;
+                for (var k = 0; k < tokens.length; k += 1) {
+                    var tokenCount = histogram.get(tokens[k]);
+                    if (tokenCount <= minCount) {
+                        minCount = tokenCount;
+                        bestToken = tokens[k];
+                        // Fast path, if the current token has only been seen once, we can
+                        // stop iterating since we will not find better!
+                        if (minCount === 1) {
+                            break;
+                        }
+                    }
+                }
+                // `bestToken & mask` represents the N last bits of `bestToken`. We
+                // group all filters indexed with a token sharing the same N bits.
+                bucketsIndexSize += 2;
+                prefixes[bestToken & mask].push({
+                    index: filterIndex,
+                    token: bestToken
+                });
+            }
+        }
+        // TODO - if we estimate size of filters exactly then we could store this
+        // section first, this would allow a forward progression of accesses in
+        // memory instead of having to go back.
+        // We finished dumping all the filters so now starts the buckets index section
+        var tokensLookupIndexStart = buffer.getPos();
+        var tokensLookupIndex = buffer.getUint32ArrayView(tokensLookupIndexSize);
+        var bucketsIndex = buffer.getUint32ArrayView(bucketsIndexSize);
+        var indexInBucketsIndex = 0;
+        for (var i = 0; i < tokensLookupIndexSize; i += 1) {
+            var filtersForMask = prefixes[i];
+            tokensLookupIndex[i] = indexInBucketsIndex;
+            for (var j = 0; j < filtersForMask.length; j += 1) {
+                var _b = filtersForMask[j], token = _b.token, index = _b.index;
+                bucketsIndex[indexInBucketsIndex++] = token;
+                bucketsIndex[indexInBucketsIndex++] = index;
+            }
+        }
+        this.view = StaticDataView.fromUint8Array(buffer.slice(), this.config);
+        this.cache = new Map();
+        // Also keep Uint32Array views sharing the same buffer as `this.view` (only
+        // needed for faster access while matching but does not need to be
+        // serialized).  NOTE: it's important that these indices point to
+        // `this.view` and not `buffer`, otherwise we will be leaking memory.
+        this.view.setPos(tokensLookupIndexStart);
+        this.tokensLookupIndex = this.view.getUint32ArrayView(tokensLookupIndexSize);
+        this.bucketsIndex = this.view.getUint32ArrayView(bucketsIndexSize);
+        this.view.seekZero();
+    };
+    /**
+     * If a bucket exists for the given token, call the callback on each filter
+     * found inside. An early termination mechanism is built-in, to stop iterating
+     * as soon as `false` is returned from the callback.
+     */
+    ReverseIndex.prototype.iterBucket = function (token, requestId, cb) {
+        var bucket = this.cache.get(token);
+        // Lazily create bucket if it does not yet exist in memory. Lookup the
+        // compact bucket representation and find all filters being associated with
+        // `token`. Create a `Bucket` out of them and store them in cache.
+        if (bucket === undefined) {
+            var offset = token & (this.tokensLookupIndex.length - 1);
+            var startOfBucket = this.tokensLookupIndex[offset];
+            // We do not have any filters for this token
+            if (startOfBucket === EMPTY_BUCKET) {
+                return true;
+            }
+            // Since we do not store explicitly the number of filters in each
+            // "bucket", we check the index of the next one and use it to infer the
+            // number of filters (each filter being stored as a token + index to the
+            // "filters store")
+            var endOfBucket = offset === this.tokensLookupIndex.length - 1
+                ? this.bucketsIndex.length
+                : this.tokensLookupIndex[offset + 1];
+            // Get indices of filters indexed with `token`, if any.
+            var filtersIndices = [];
+            for (var i = startOfBucket; i < endOfBucket; i += 2) {
+                var currentToken = this.bucketsIndex[i];
+                if (currentToken === token) {
+                    filtersIndices.push(this.bucketsIndex[i + 1]);
+                }
+            }
+            // No filter indexed with `token`.
+            if (filtersIndices.length === 0) {
+                return true; // continue looking for a match
+            }
+            // If we have filters for `token` then deserialize filters in memory and
+            // create a `Bucket` instance to hold them for future access.
+            var filters = [];
+            for (var i = 0; i < filtersIndices.length; i += 1) {
+                this.view.setPos(filtersIndices[i]);
+                filters.push(this.deserializeFilter(this.view));
+            }
+            // Create new bucket with found filters (only optimize if we have more
+            // than one filter).
+            bucket = {
+                filters: filters.length > 1 ? this.optimize(filters) : filters,
+                lastRequestSeen: 0
+            };
+            this.cache.set(token, bucket);
+        }
+        // Look for matching filter in this bucket
+        if (bucket.lastRequestSeen !== requestId) {
+            bucket.lastRequestSeen = requestId;
+            var filters = bucket.filters;
+            for (var i = 0; i < filters.length; i += 1) {
+                // Break the loop if the callback returns `false`
+                if (cb(filters[i]) === false) {
+                    // Whenever we get a match from a filter, we also swap it one
+                    // position up in the list. This way, over time, popular filters will
+                    // be first and might match earlier. This should decrease the time
+                    // needed to get a match.
+                    if (i > 0) {
+                        var filter = filters[i];
+                        filters[i] = filters[i - 1];
+                        filters[i - 1] = filter;
+                    }
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
+    return ReverseIndex;
+}());
+export default ReverseIndex;

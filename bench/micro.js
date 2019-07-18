@@ -10,7 +10,7 @@
 
 const {
   FiltersEngine, tokenize, parseFilters, Request,
-} = require('../');
+} = require('@cliqz/adblocker');
 const { createEngine, domains500 } = require('./utils');
 
 function benchEngineCreation({ lists, resources }) {
