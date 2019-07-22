@@ -30,7 +30,7 @@ async function loadAdblocker(): Promise<ElectronBlocker> {
   return engine;
 }
 
-let mainWindow: BrowserWindow | null;
+let mainWindow: BrowserWindow | null = null;
 
 async function createWindow() {
   mainWindow = new BrowserWindow({

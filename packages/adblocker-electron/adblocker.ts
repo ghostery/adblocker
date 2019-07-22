@@ -17,6 +17,9 @@ import {
   IMessageFromBackground,
 } from '@cliqz/adblocker-webextension-cosmetics';
 
+// https://stackoverflow.com/questions/48854265/why-do-i-see-an-electron-security-warning-after-updating-my-electron-project-t
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
+
 /**
  * Create an instance of `Request` from `Electron.OnBeforeRequestDetails`.
  */
@@ -24,7 +27,7 @@ export function fromElectronDetails({
   url,
   resourceType,
   referrer,
-}: Electron.OnBeforeRequestDetails): Request {
+}: Electron.OnBeforeRequestDetails | Electron.OnHeadersReceivedDetails): Request {
   return Request.fromRawDetails({
     sourceUrl: referrer,
     type: (resourceType || 'other') as ElectronRequestType,
@@ -37,106 +40,103 @@ export function fromElectronDetails({
  */
 export class ElectronBlocker extends FiltersEngine {
   public enableBlockingInSession(ses: Electron.Session) {
-    ses.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onRequest);
-    ses.setPreloads([join(__dirname, './content.js')]);
-
+    ses.webRequest.onHeadersReceived({ urls: ['<all_urls>'] }, this.onHeadersReceived);
+    ses.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onBeforeRequest);
     ipcMain.on('get-cosmetic-filters', this.onGetCosmeticFilters);
+    ses.setPreloads([join(__dirname, './content.js')]);
   }
 
   private onGetCosmeticFilters = (
     e: Electron.IpcMessageEvent,
+    url: string,
     id: string,
     msg: IBackgroundCallback & { action?: string },
   ): void => {
     // Extract hostname from sender's URL
-    const url = e.sender.getURL();
-    const frameId = 0;
     const parsed = parse(url);
     const hostname = parsed.hostname || '';
     const domain = parsed.domain || '';
 
-    // Once per tab/page load we inject base stylesheets. These are always
-    // the same for all frames of a given page because they do not depend on
-    // a particular domain and cannot be cancelled using unhide rules.
-    // Because of this, we specify `allFrames: true` when injecting them so
-    // that we do not need to perform this operation for sub-frames.
-    if (frameId === 0 && msg.lifecycle === 'start') {
-      const { active, styles } = this.getCosmeticsFilters({
-        domain,
-        hostname,
-        url,
+    const { active, styles, scripts } = this.getCosmeticsFilters({
+      domain,
+      hostname,
+      url,
 
-        classes: msg.classes,
-        hrefs: msg.hrefs,
-        ids: msg.ids,
+      classes: msg.classes,
+      hrefs: msg.hrefs,
+      ids: msg.ids,
 
-        // This needs to be done only once per tab
-        getBaseRules: true,
-        getInjectionRules: false,
-        getRulesFromDOM: false,
-        getRulesFromHostname: false,
-      });
+      // This needs to be done only once per frame
+      getBaseRules: msg.lifecycle === 'start',
+      getInjectionRules: msg.lifecycle === 'start',
+      getRulesFromHostname: msg.lifecycle === 'start',
 
-      if (active === false) {
-        return;
-      }
+      // This will be done every time we get information about DOM mutation
+      getRulesFromDOM: msg.lifecycle === 'dom-update',
+    });
 
-      this.injectStyles(e.sender, styles);
+    if (active === false) {
+      return;
     }
 
-    // Separately, requests cosmetics which depend on the page it self
-    // (either because of the hostname or content of the DOM). Content script
-    // logic is responsible for returning information about lists of classes,
-    // ids and hrefs observed in the DOM. MutationObserver is also used to
-    // make sure we can react to changes.
-    {
-      const { active, styles, scripts } = this.getCosmeticsFilters({
-        domain,
-        hostname,
-        url,
+    // Inject custom stylesheets
+    this.injectStyles(e.sender, styles);
 
-        classes: msg.classes,
-        hrefs: msg.hrefs,
-        ids: msg.ids,
-
-        // This needs to be done only once per frame
-        getBaseRules: false,
-        getInjectionRules: msg.lifecycle === 'start',
-        getRulesFromHostname: msg.lifecycle === 'start',
-
-        // This will be done every time we get information about DOM mutation
-        getRulesFromDOM: msg.lifecycle === 'dom-update',
-      });
-
-      if (active === false) {
-        return;
-      }
-
-      this.injectStyles(e.sender, styles);
-
-      // Inject scripts from content script
-      const responseFromBackground: IMessageFromBackground = {
-        active,
-        extended: [],
-        scripts,
-        styles: '',
-      };
-
-      e.sender.send(`get-cosmetic-filters-${id}`, responseFromBackground);
-    }
+    // Inject scripts from content script
+    e.sender.send(`get-cosmetic-filters-response-${id}`, {
+      active,
+      extended: [],
+      scripts,
+      styles: '',
+    } as IMessageFromBackground);
   }
 
-  private onRequest = (
+private onHeadersReceived = (
+    details: Electron.OnHeadersReceivedDetails,
+    callback: (a: Electron.Response) => void,
+  ): void => {
+      const policies: string[] = [];
+      const responseHeaders: Electron.ResponseHeaders = details.responseHeaders || {};
+
+      if (details.resourceType === 'mainFrame' || details.resourceType === 'subFrame') {
+        const CSP_HEADER_NAME = 'content-security-policy';
+        const rawCSP = this.getCSPDirectives(fromElectronDetails(details));
+        if (rawCSP !== undefined) {
+          policies.push(...(rawCSP === undefined ? [] : rawCSP.split(';').map(csp => csp.trim())));
+
+          // Collect existing CSP headers from response
+          for (const [name, value] of Object.entries(responseHeaders)) {
+            if (name.toLowerCase() === CSP_HEADER_NAME) {
+              policies.push(value);
+              // @ts-ignore
+              responseHeaders[name] = undefined;
+            }
+          }
+
+          // @ts-ignore
+          responseHeaders['Content-Security-Policy'] = policies;
+
+          // @ts-ignore
+          callback({ responseHeaders });
+          return;
+        }
+      }
+
+      callback({});
+  }
+
+  private onBeforeRequest = (
     details: Electron.OnBeforeRequestDetails,
     callback: (a: Electron.Response) => void,
   ): void => {
     const { redirect, match } = this.match(fromElectronDetails(details));
 
     if (redirect) {
-      const { dataUrl } = redirect;
-      callback({ redirectURL: dataUrl });
+      callback({ redirectURL: redirect.dataUrl });
+    } else if (match) {
+      callback({ cancel: true });
     } else {
-      callback({ cancel: match });
+      callback({});
     }
   }
 
