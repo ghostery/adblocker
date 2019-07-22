@@ -9,9 +9,12 @@
 import { ElectronRequestType, Engine, Request } from '@cliqz/adblocker';
 
 import { ipcMain } from 'electron';
-import { parse } from 'tldts';
+import { parse } from 'tldts-experimental';
 
-import { IBackgroundCallback, IMessageFromBackground } from '../../cosmetics';
+import {
+  IBackgroundCallback,
+  IMessageFromBackground,
+} from '@cliqz/adblocker-webextension-cosmetics';
 
 /**
  * Create an instance of `Request` from `Electron.OnBeforeRequestDetails`.
@@ -31,9 +34,6 @@ export function fromElectronDetails({
     url,
   });
 }
-
-// re-export @cliqz/adblocker symbols for convenience
-export * from '@cliqz/adblocker';
 
 /**
  * Wrap `FiltersEngine` into a Electron-friendly helper class.
@@ -149,3 +149,6 @@ export default class ElectronBlocker extends Engine {
     }
   }
 }
+
+// re-export @cliqz/adblocker symbols for convenience
+export * from '@cliqz/adblocker';

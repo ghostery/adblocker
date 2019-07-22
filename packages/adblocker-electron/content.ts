@@ -7,9 +7,12 @@
  */
 
 import { ipcRenderer, remote, webFrame } from 'electron';
+import {
+  IBackgroundCallback,
+  IMessageFromBackground,
+} from '@cliqz/adblocker-webextension-cosmetics';
 
-import { IBackgroundCallback, IMessageFromBackground } from '../content/communication';
-import { extractFeaturesFromDOM } from '../content/helpers';
+import { extractFeaturesFromDOM } from '@cliqz/adblocker';
 
 const enableMutationObserver = true; // Not sure what to do with it.
 
