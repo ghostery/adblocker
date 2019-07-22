@@ -132,53 +132,6 @@ export default class Request {
     });
   }
 
-<<<<<<< HEAD:src/request.ts
-  /**
-   * Create an instance of `Request` from `chrome.webRequest.WebRequestDetails`.
-   */
-  public static fromWebRequestDetails(
-    details: WebRequestBeforeRequestDetails | WebRequestHeadersReceivedDetails,
-  ): Request {
-    return Request.fromRawDetails({
-      sourceUrl: details.initiator || details.originUrl || details.documentUrl,
-      type: details.type,
-      url: details.url,
-    });
-  }
-
-  /**
-   * Create an instance of `Request` from `puppeteer.Request`.
-   */
-  public static fromPuppeteerDetails(details: puppeteer.Request): Request {
-    const frame = details.frame();
-    return Request.fromRawDetails({
-      sourceUrl: frame !== null ? frame.url() : undefined,
-      type: details.resourceType(),
-      url: details.url(),
-    });
-  }
-
-  /**
-   * Create an instance of `Request` from `Electron.OnBeforeRequestDetails`.
-   */
-  public static fromElectronDetails({
-    url,
-    resourceType,
-    referrer,
-  }: {
-    url: string;
-    resourceType: string;
-    referrer: string;
-  }): Request {
-    return Request.fromRawDetails({
-      sourceUrl: referrer,
-      type: (resourceType || 'other') as any,
-      url,
-    });
-  }
-
-=======
->>>>>>> 14ce5611364705a99ca4cccfb51c39b325be32ff:packages/adblocker/src/request.ts
   public readonly type: RequestType;
   public readonly isHttp: boolean;
   public readonly isHttps: boolean;

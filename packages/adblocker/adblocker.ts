@@ -32,13 +32,4 @@ export { compactTokens, hasEmptyIntersection, mergeCompactSets } from './src/com
 export { fetchLists, fetchResources } from './src/fetch';
 export { tokenize } from './src/utils';
 export { default as Config } from './src/config';
-<<<<<<< HEAD:adblocker.ts
-
-export { default as WebExtensionBlocker } from './src/webextension/background';
-export { default as PuppeteerBlocker } from './src/puppeteer/blocker';
-export { default as ElectronBlocker } from './src/electron/blocker';
-
-export * from './cosmetics';
-=======
 export * from './src/content/helpers';
->>>>>>> 14ce5611364705a99ca4cccfb51c39b325be32ff:packages/adblocker/adblocker.ts
