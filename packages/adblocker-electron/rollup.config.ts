@@ -39,7 +39,7 @@ export default [
     input: './build/es6/content.js',
     output: [
       {
-        file: './dist/content.min.js',
+        file: './dist/content.js',
         format: 'cjs',
         sourcemap: true,
       },

@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { ElectronRequestType, Request, Engine } from '@cliqz/adblocker';
+import { ElectronRequestType, Engine, Request } from '@cliqz/adblocker';
 
 import { ipcMain } from 'electron';
 import { parse } from 'tldts';
@@ -41,7 +41,7 @@ export * from '@cliqz/adblocker';
 export default class ElectronBlocker extends Engine {
   public enableBlockingInSession(ses: Electron.Session) {
     ses.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onRequest);
-    ses.setPreloads(['./content.js']);
+    ses.setPreloads(['./dist/content.js']);
 
     ipcMain.on('get-cosmetic-filters', this.onGetCosmeticFilters);
   }
