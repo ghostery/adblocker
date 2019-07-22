@@ -23,12 +23,6 @@
   "workspaces": [
     "./packages/*"
   ],
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-push": "yarn lint"
-    }
-  },
   "scripts": {
     "bootstrap": "npx lerna bootstrap",
     "lint": "lerna run --parallel lint",
