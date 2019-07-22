@@ -34,4 +34,22 @@ export default [
       }),
     ],
   },
+  {
+    external: ['electron'],
+    input: './build/es6/content.js',
+    output: [
+      {
+        file: './dist/content.min.js',
+        format: 'cjs',
+        sourcemap: true,
+      },
+    ],
+    plugins: [
+      resolve(),
+      compiler({
+        language_out: 'NO_TRANSPILE',
+        warning_level: 'DEFAULT',
+      }),
+    ],
+  },
 ];
