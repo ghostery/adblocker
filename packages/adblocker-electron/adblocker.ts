@@ -6,9 +6,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { ElectronRequestType, Engine, Request } from '@cliqz/adblocker';
+import { ElectronRequestType, FiltersEngine, Request } from '@cliqz/adblocker';
 
 import { ipcMain } from 'electron';
+import { join } from 'path';
 import { parse } from 'tldts-experimental';
 
 import {
@@ -23,14 +24,10 @@ export function fromElectronDetails({
   url,
   resourceType,
   referrer,
-}: {
-  url: string;
-  resourceType: ElectronRequestType;
-  referrer: string;
-}): Request {
+}: Electron.OnBeforeRequestDetails): Request {
   return Request.fromRawDetails({
     sourceUrl: referrer,
-    type: resourceType || 'other',
+    type: (resourceType || 'other') as ElectronRequestType,
     url,
   });
 }
@@ -38,10 +35,10 @@ export function fromElectronDetails({
 /**
  * Wrap `FiltersEngine` into a Electron-friendly helper class.
  */
-export default class ElectronBlocker extends Engine {
+export class ElectronBlocker extends FiltersEngine {
   public enableBlockingInSession(ses: Electron.Session) {
     ses.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onRequest);
-    ses.setPreloads(['./dist/content.js']);
+    ses.setPreloads([join(__dirname, './content.js')]);
 
     ipcMain.on('get-cosmetic-filters', this.onGetCosmeticFilters);
   }
@@ -133,7 +130,7 @@ export default class ElectronBlocker extends Engine {
     details: Electron.OnBeforeRequestDetails,
     callback: (a: Electron.Response) => void,
   ): void => {
-    const { redirect, match } = this.match(Request.fromElectronDetails(details));
+    const { redirect, match } = this.match(fromElectronDetails(details));
 
     if (redirect) {
       const { dataUrl } = redirect;

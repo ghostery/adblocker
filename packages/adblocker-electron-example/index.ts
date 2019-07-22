@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { app, BrowserWindow, session } from 'electron';
 
-import { ENGINE_VERSION, ElectronBlocker } from '../../';
+import { ElectronBlocker, ENGINE_VERSION } from '@cliqz/adblocker-electron';
 
 async function loadAdblocker(): Promise<ElectronBlocker> {
   // Fetch `allowed-lists.json` from CDN. It contains information about where
@@ -34,8 +34,8 @@ let mainWindow: BrowserWindow | null;
 
 async function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,
     height: 600,
+    width: 800,
   });
 
   const engine = await loadAdblocker();
@@ -52,9 +52,9 @@ async function createWindow() {
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+  if (process.platform !== 'darwin') { app.quit(); }
 })
 
 app.on('activate', () => {
-  if (mainWindow === null) createWindow();
+  if (mainWindow === null) { createWindow(); }
 });

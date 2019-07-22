@@ -6,11 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { ipcRenderer, remote, webFrame } from 'electron';
 import {
   IBackgroundCallback,
   IMessageFromBackground,
 } from '@cliqz/adblocker-webextension-cosmetics';
+import { ipcRenderer, remote, webFrame } from 'electron';
 
 import { extractFeaturesFromDOM } from '@cliqz/adblocker';
 
@@ -68,7 +68,7 @@ function getCosmeticsFilters(data: IBackgroundCallback) {
 
   ipcRenderer.once(
     `get-cosmetic-filters-response-${id}`,
-    (e: Electron.IpcMessageEvent, response: IMessageFromBackground) => {
+    (_: Electron.IpcMessageEvent, response: IMessageFromBackground) => {
       handleResponseFromBackground(response);
     },
   );
