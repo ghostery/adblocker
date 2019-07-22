@@ -14,7 +14,7 @@ import { ipcRenderer, webFrame } from 'electron';
 
 import { extractFeaturesFromDOM } from '@cliqz/adblocker';
 
-const enableMutationObserver = false; // Not sure what to do with it.
+const enableMutationObserver = true; // Not sure what to do with it.
 
 declare global {
   interface Window {
@@ -34,7 +34,6 @@ function unload(): void {
 }
 
 function handleResponseFromBackground({ active, scripts }: IMessageFromBackground): void {
-  console.log('RESPONSE?', JSON.stringify(arguments, null, 2));
   if (active === false) {
     ACTIVE = false;
     unload();
@@ -46,7 +45,7 @@ function handleResponseFromBackground({ active, scripts }: IMessageFromBackgroun
   // Inject scripts
   if (scripts) {
     for (let i = 0; i < scripts.length; i += 1) {
-      setTimeout(() => webFrame.executeJavaScript(scripts[i]));
+      setTimeout(() => webFrame.executeJavaScript(scripts[i]), 0);
     }
   }
 }
@@ -67,8 +66,6 @@ function getCosmeticsFilters(data: IBackgroundCallback) {
 
   ipcRenderer.send('get-cosmetic-filters', window.location.href, id, data);
 }
-
-console.log('WINDOW?', window === window.parent, window.location.href);
 
 if (window === window.top && window.location.href.startsWith('chrome-devtools://') === false) {
   getCosmeticsFilters({ lifecycle: 'start', ids: [], classes: [], hrefs: [] });

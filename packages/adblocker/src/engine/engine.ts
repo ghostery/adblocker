@@ -572,8 +572,6 @@ export default class FilterEngine {
       // If there is a match
       if (filter !== undefined) {
         if (filter.isRedirect()) {
-          console.log('redirect!', filter);
-
           const redirectResource = this.resources.getResource(filter.getRedirect());
           if (redirectResource !== undefined) {
             const { data, contentType } = redirectResource;
@@ -590,9 +588,6 @@ export default class FilterEngine {
               dataUrl: dataUrl.trim(),
             };
           } // TODO - else, throw an exception
-          else {
-            console.log('WOOT?');
-          }
         }
       }
     }

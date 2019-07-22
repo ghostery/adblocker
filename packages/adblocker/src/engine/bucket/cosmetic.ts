@@ -354,11 +354,8 @@ export default class CosmeticFilterBucket {
     // =======================================================================
     // Collect matching rules which specify a hostname constraint.
     if (getRulesFromHostname === true) {
-      console.log('get rules from hostnames?');
       this.hostnameIndex.iterMatchingFilters(hostnameTokens, (rule: CosmeticFilter) => {
-        console.log('candidate??', rule);
         if (rule.match(hostname, domain)) {
-          console.log('match!!');
           rules.push(rule);
         }
         return true;
