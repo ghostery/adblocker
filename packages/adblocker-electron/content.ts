@@ -54,8 +54,8 @@ function getCosmeticsFilters(data: IBackgroundCallback) {
   const id =
     '_' +
     Math.random()
-  .toString(36)
-  .substr(2, 9);
+      .toString(36)
+      .substr(2, 9);
 
   ipcRenderer.once(
     `get-cosmetic-filters-response-${id}`,
@@ -64,7 +64,9 @@ function getCosmeticsFilters(data: IBackgroundCallback) {
     },
   );
 
-  ipcRenderer.send('get-cosmetic-filters', window.location.href, id, data);
+  setTimeout(() => {
+    ipcRenderer.send('get-cosmetic-filters', window.location.href, id, data);
+  }, 1);
 }
 
 if (window === window.top && window.location.href.startsWith('chrome-devtools://') === false) {
@@ -163,7 +165,7 @@ if (window === window.top && window.location.href.startsWith('chrome-devtools://
           handleNodes(nodes);
         });
 
-        MUTATION_OBSERVER.observe(window.document.documentElement, {
+        MUTATION_OBSERVER.observe(window.document.documentElement as Node, {
           attributeFilter: ['class', 'id', 'href'],
           attributes: true,
           childList: true,

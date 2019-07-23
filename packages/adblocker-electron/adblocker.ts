@@ -91,38 +91,38 @@ export class ElectronBlocker extends FiltersEngine {
     } as IMessageFromBackground);
   }
 
-private onHeadersReceived = (
+  private onHeadersReceived = (
     details: Electron.OnHeadersReceivedDetails,
     callback: (a: Electron.Response) => void,
   ): void => {
-      const policies: string[] = [];
-      const responseHeaders: Electron.ResponseHeaders = details.responseHeaders || {};
+    const policies: string[] = [];
+    const responseHeaders: Electron.ResponseHeaders = details.responseHeaders || {};
 
-      if (details.resourceType === 'mainFrame' || details.resourceType === 'subFrame') {
-        const CSP_HEADER_NAME = 'content-security-policy';
-        const rawCSP = this.getCSPDirectives(fromElectronDetails(details));
-        if (rawCSP !== undefined) {
-          policies.push(...(rawCSP === undefined ? [] : rawCSP.split(';').map(csp => csp.trim())));
+    if (details.resourceType === 'mainFrame' || details.resourceType === 'subFrame') {
+      const CSP_HEADER_NAME = 'content-security-policy';
+      const rawCSP = this.getCSPDirectives(fromElectronDetails(details));
+      if (rawCSP !== undefined) {
+        policies.push(...(rawCSP === undefined ? [] : rawCSP.split(';').map(csp => csp.trim())));
 
-          // Collect existing CSP headers from response
-          for (const [name, value] of Object.entries(responseHeaders)) {
-            if (name.toLowerCase() === CSP_HEADER_NAME) {
-              policies.push(value);
-              // @ts-ignore
-              responseHeaders[name] = undefined;
-            }
+        // Collect existing CSP headers from response
+        for (const [name, value] of Object.entries(responseHeaders)) {
+          if (name.toLowerCase() === CSP_HEADER_NAME) {
+            policies.push(value);
+            // @ts-ignore
+            responseHeaders[name] = undefined;
           }
-
-          // @ts-ignore
-          responseHeaders['Content-Security-Policy'] = policies;
-
-          // @ts-ignore
-          callback({ responseHeaders });
-          return;
         }
-      }
 
-      callback({});
+        // @ts-ignore
+        responseHeaders['Content-Security-Policy'] = policies;
+
+        // @ts-ignore
+        callback({ responseHeaders });
+        return;
+      }
+    }
+
+    callback({});
   }
 
   private onBeforeRequest = (
