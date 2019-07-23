@@ -35,21 +35,33 @@ export function fromElectronDetails({
   });
 }
 
+interface ElectronBlockerOptions {
+  mutationObserver?: boolean;
+}
+
 /**
  * Wrap `FiltersEngine` into a Electron-friendly helper class.
  */
 export class ElectronBlocker extends FiltersEngine {
+  constructor(public options: ElectronBlockerOptions = { mutationObserver: true }) {
+    super();
+  }
+
   public enableBlockingInSession(ses: Electron.Session) {
     ses.webRequest.onHeadersReceived({ urls: ['<all_urls>'] }, this.onHeadersReceived);
     ses.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onBeforeRequest);
+
     ipcMain.on('get-cosmetic-filters', this.onGetCosmeticFilters);
     ses.setPreloads([join(__dirname, './content.js')]);
+
+    ipcMain.on('is-mutation-observer-enabled', (event: Electron.IpcMessageEvent) => {
+      event.returnValue = this.options.mutationObserver;
+    });
   }
 
   private onGetCosmeticFilters = (
-    e: Electron.IpcMessageEvent,
+    event: Electron.IpcMessageEvent,
     url: string,
-    id: string,
     msg: IBackgroundCallback & { action?: string },
   ): void => {
     // Extract hostname from sender's URL
@@ -80,10 +92,10 @@ export class ElectronBlocker extends FiltersEngine {
     }
 
     // Inject custom stylesheets
-    this.injectStyles(e.sender, styles);
+    this.injectStyles(event.sender, styles);
 
     // Inject scripts from content script
-    e.sender.send(`get-cosmetic-filters-response-${id}`, {
+    event.sender.send('get-cosmetic-filters-response', {
       active,
       extended: [],
       scripts,
@@ -93,10 +105,10 @@ export class ElectronBlocker extends FiltersEngine {
 
   private onHeadersReceived = (
     details: Electron.OnHeadersReceivedDetails,
-    callback: (a: Electron.Response) => void,
+    callback: any,
   ): void => {
     const policies: string[] = [];
-    const responseHeaders: Electron.ResponseHeaders = details.responseHeaders || {};
+    const responseHeaders: any = details.responseHeaders || {};
 
     if (details.resourceType === 'mainFrame' || details.resourceType === 'subFrame') {
       const CSP_HEADER_NAME = 'content-security-policy';
@@ -107,16 +119,13 @@ export class ElectronBlocker extends FiltersEngine {
         // Collect existing CSP headers from response
         for (const [name, value] of Object.entries(responseHeaders)) {
           if (name.toLowerCase() === CSP_HEADER_NAME) {
-            policies.push(value);
-            // @ts-ignore
+            policies.push(value as string);
             responseHeaders[name] = undefined;
           }
         }
 
-        // @ts-ignore
         responseHeaders['Content-Security-Policy'] = policies;
 
-        // @ts-ignore
         callback({ responseHeaders });
         return;
       }
@@ -141,8 +150,10 @@ export class ElectronBlocker extends FiltersEngine {
   }
 
   private injectStyles(sender: Electron.WebContents, styles: string): void {
-    if (sender && styles.length > 0) {
-      sender.insertCSS(styles);
+    if (sender) {
+      if (styles.length > 0) {
+        sender.insertCSS(styles);
+      }
     }
   }
 }

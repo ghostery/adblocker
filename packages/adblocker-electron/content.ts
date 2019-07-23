@@ -14,7 +14,7 @@ import { ipcRenderer, webFrame } from 'electron';
 
 import { extractFeaturesFromDOM } from '@cliqz/adblocker';
 
-const enableMutationObserver = true; // Not sure what to do with it.
+const enableMutationObserver = ipcRenderer.sendSync('is-mutation-observer-enabled');
 
 declare global {
   interface Window {
@@ -24,7 +24,6 @@ declare global {
 
 let ACTIVE: boolean = true;
 let MUTATION_OBSERVER: MutationObserver | null = null;
-
 
 function unload(): void {
   if (MUTATION_OBSERVER !== null) {
@@ -42,30 +41,21 @@ function handleResponseFromBackground({ active, scripts }: IMessageFromBackgroun
     ACTIVE = true;
   }
 
-  // Inject scripts
-  if (scripts) {
-    for (let i = 0; i < scripts.length; i += 1) {
-      setTimeout(() => webFrame.executeJavaScript(scripts[i]), 0);
-    }
+  for (const script of scripts) {
+    setTimeout(() => webFrame.executeJavaScript(script), 1);
   }
 }
 
+ipcRenderer.on(
+  'get-cosmetic-filters-response',
+  (_: Electron.IpcMessageEvent, response: IMessageFromBackground) => {
+    handleResponseFromBackground(response);
+  },
+);
+
 function getCosmeticsFilters(data: IBackgroundCallback) {
-  const id =
-    '_' +
-    Math.random()
-      .toString(36)
-      .substr(2, 9);
-
-  ipcRenderer.once(
-    `get-cosmetic-filters-response-${id}`,
-    (_: Electron.IpcMessageEvent, response: IMessageFromBackground) => {
-      handleResponseFromBackground(response);
-    },
-  );
-
   setTimeout(() => {
-    ipcRenderer.send('get-cosmetic-filters', window.location.href, id, data);
+    ipcRenderer.send('get-cosmetic-filters', window.location.href, data);
   }, 1);
 }
 
