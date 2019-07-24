@@ -7,7 +7,6 @@
   "license": "MPL-2.0",
   "main": "build/cjs/adblocker.js",
   "module": "build/es6/adblocker.js",
-  "browser": "dist/adblocker.umd.min.js",
   "types": "dist/types/adblocker.d.ts",
   "files": [
     "LICENSE",
@@ -23,12 +22,9 @@
   },
   "scripts": {
     "clean": "rimraf dist build coverage",
-    "lint": "tslint --config ../../tslint.json --project .",
-    "build-cjs": "tsc -p . --outDir build/cjs --module commonjs",
-    "build-es6": "tsc -p . --outDir build/es6 --module esnext",
-    "build": "concurrently \"yarn run build-cjs\" \"yarn run build-es6\"",
-    "prebuild": "yarn run clean",
-    "bundle": "rollup --config rollup.config.ts",
+    "lint": "tslint --config ../../tslint.json --project ./tsconfig.json",
+    "build": "tsc --build ./tsconfig.json",
+    "bundle": "rollup --config ./rollup.config.ts",
     "prebundle": "yarn run build",
     "prepack": "yarn run bundle"
   },
@@ -38,7 +34,6 @@
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.10.0",
     "@types/chrome": "0.0.86",
-    "concurrently": "^4.1.1",
     "rimraf": "^2.6.3",
     "rollup": "^1.16.4",
     "rollup-plugin-node-resolve": "^5.2.0"

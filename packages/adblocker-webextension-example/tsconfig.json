@@ -1,13 +1,15 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "declaration": false,
-    "declarationDir": null,
-    "outDir": "build",
-    "module": "esnext"
+    "outDir": "build/es6",
+    "declarationDir": "dist/types",
+    "composite": true
   },
-  "files": [
-    "./src/background.ts",
-    "./src/content-script.ts"
+  "references": [
+    { "path": "../adblocker-webextension" },
+    { "path": "../adblocker-webextension-cosmetics" }
+  ],
+  "include": [
+    "src/*.ts"
   ]
 }

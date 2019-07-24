@@ -9,6 +9,7 @@
 import resolve from 'rollup-plugin-node-resolve';
 
 export default {
+  // CommonJs bundle for preload script
   external: ['electron'],
   input: './build/es6/content.js',
   output: [
@@ -18,7 +19,5 @@ export default {
       sourcemap: true,
     },
   ],
-  plugins: [
-    resolve(),
-  ],
+  plugins: [resolve()],
 };

@@ -7,7 +7,6 @@
   "license": "MPL-2.0",
   "main": "build/cjs/adblocker.js",
   "module": "build/es6/adblocker.js",
-  "browser": "dist/adblocker.umd.min.js",
   "types": "dist/types/adblocker.d.ts",
   "files": [
     "LICENSE",
@@ -23,12 +22,10 @@
   },
   "scripts": {
     "clean": "rimraf dist build coverage",
-    "lint": "tslint --config ../../tslint.json --project .",
-    "build-cjs": "tsc -p . --outDir build/cjs --module commonjs",
-    "build-es6": "tsc -p . --outDir build/es6 --module esnext",
-    "build": "concurrently \"yarn run build-cjs\" \"yarn run build-es6\"",
+    "lint": "tslint --config ../../tslint.json --project ./tsconfig.json",
+    "build": "tsc --build ./tsconfig.json",
     "prebuild": "yarn run clean",
-    "bundle": "rollup --config rollup.config.ts",
+    "bundle": "rollup --config ./rollup.config.ts",
     "prebundle": "yarn run build",
     "prepack": "yarn run bundle",
     "test": "jest --config ./jest.config.js --coverage ./adblocker.test.ts"
@@ -41,7 +38,6 @@
     "@types/chrome": "0.0.86",
     "@types/jest": "^24.0.15",
     "@types/jsdom": "^12.2.4",
-    "concurrently": "^4.1.1",
     "jest": "^24.8.0",
     "jsdom": "^15.1.1",
     "rimraf": "^2.6.3",

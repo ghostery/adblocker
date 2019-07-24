@@ -188,23 +188,13 @@ const EXPECTED_FIELDS = new Set([
       assertMetadata('files', ['LICENSE', 'build', 'dist'], package);
 
       assertMetadata(
-        'scripts.build-cjs',
-        'tsc -p . --outDir build/cjs --module commonjs',
-        package,
-        {
-          optional: true,
-        },
-      );
-      assertMetadata('scripts.build-es6', 'tsc -p . --outDir build/es6 --module esnext', package, {
-        optional: true,
-      });
-      assertMetadata(
         'scripts.build',
-        'concurrently "yarn run build-cjs" "yarn run build-es6"',
+        'tsc --build ./tsconfig.json',
         package,
         { optional: true },
       );
-      assertMetadata('scripts.bundle', 'rollup --config rollup.config.ts', package, {
+
+      assertMetadata('scripts.bundle', 'rollup --config ./rollup.config.ts', package, {
         optional: true,
       });
     }
@@ -235,14 +225,14 @@ const EXPECTED_FIELDS = new Set([
 
     assertMetadata(
       'scripts.bundle',
-      'rollup --config rollup.config.ts',
+      'rollup --config ./rollup.config.ts',
       package,
       { optional: true },
     );
 
     assertMetadata(
       'scripts.lint',
-      'tslint --config ../../tslint.json --project .',
+      'tslint --config ../../tslint.json --project ./tsconfig.json',
       package,
       { optional: true },
     );
