@@ -200,7 +200,7 @@ const EXPECTED_FIELDS = new Set([
       });
       assertMetadata(
         'scripts.build',
-        "concurrently 'yarn run build-cjs' 'yarn run build-es6'",
+        'concurrently "yarn run build-cjs" "yarn run build-es6"',
         package,
         { optional: true },
       );

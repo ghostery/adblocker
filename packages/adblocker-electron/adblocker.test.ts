@@ -1,13 +1,13 @@
 import { ElectronRequestType, fromElectronDetails } from './adblocker';
 
 describe('#fromElectronDetails', () => {
-  const baseRequest: {
-    referrer: string;
-    resourceType: ElectronRequestType;
-    url: string;
-  } = {
+  const baseRequest: Electron.OnBeforeRequestDetails = {
+    id: 0,
+    method: 'GET',
     referrer: 'https://sub.source.com',
-    resourceType: 'script',
+    resourceType: 'script' as ElectronRequestType,
+    timestamp: 0,
+    uploadData: [],
     url: 'https://sub.url.com',
   };
 

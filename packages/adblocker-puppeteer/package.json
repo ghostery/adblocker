@@ -25,7 +25,7 @@
     "lint": "tslint --config ../../tslint.json --project .",
     "build-cjs": "tsc -p . --outDir build/cjs --module commonjs",
     "build-es6": "tsc -p . --outDir build/es6 --module esnext",
-    "build": "concurrently 'yarn run build-cjs' 'yarn run build-es6'",
+    "build": "concurrently \"yarn run build-cjs\" \"yarn run build-es6\"",
     "prebuild": "yarn run clean",
     "bundle": "rollup --config rollup.config.ts",
     "prebundle": "yarn run build",
