@@ -481,7 +481,7 @@ export default class FilterEngine {
       return undefined;
     }
 
-    if (request.isSupported !== true || request.type !== 'main_frame') {
+    if (request.isSupported !== true || request.isMainFrame() === false) {
       return undefined;
     }
 

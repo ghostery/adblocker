@@ -228,6 +228,14 @@ export default class Request {
     }
     return this.fuzzySignature;
   }
+
+  public isMainFrame(): boolean {
+    return this.type === 'main_frame' || this.type === 'mainFrame';
+  }
+
+  public isSubFrame(): boolean {
+    return this.type === 'sub_frame' || this.type === 'subFrame';
+  }
 }
 
 /**
