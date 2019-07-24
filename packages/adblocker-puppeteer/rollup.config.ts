@@ -11,13 +11,11 @@ import resolve from 'rollup-plugin-node-resolve';
 export default {
   // CommonJS
   external: ['puppeteer'],
-  input: './build/es6/adblocker.js',
-  output: [
-    {
-      file: './build/cjs/adblocker.js',
-      format: 'cjs',
-      sourcemap: true,
-    },
-  ],
+  input: './dist/es6/adblocker.js',
+  output: {
+    file: './dist/cjs/adblocker.js',
+    format: 'cjs',
+    sourcemap: true,
+  },
   plugins: [resolve()],
 };

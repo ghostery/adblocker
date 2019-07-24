@@ -180,12 +180,10 @@ const EXPECTED_FIELDS = new Set([
 
     // Check exported bundles
     if (name.endsWith('-example') === false && name.endsWith('-benchmarks') === false) {
-      assertMetadata('main', 'build/cjs/adblocker.js', package);
-      assertMetadata('module', 'build/es6/adblocker.js', package);
+      assertMetadata('main', 'dist/cjs/adblocker.js', package);
+      assertMetadata('module', 'dist/es6/adblocker.js', package);
       assertMetadata('types', 'dist/types/adblocker.d.ts', package);
-      assertMetadata('browser', 'dist/adblocker.umd.min.js', package, { optional: true });
-
-      assertMetadata('files', ['LICENSE', 'build', 'dist'], package);
+      assertMetadata('files', ['LICENSE', 'dist'], package);
 
       assertMetadata(
         'scripts.build',
@@ -210,7 +208,7 @@ const EXPECTED_FIELDS = new Set([
 
     assertMetadata(
       'scripts.clean',
-      'rimraf dist build coverage',
+      'rimraf dist coverage',
       package,
       { optional: true },
     );

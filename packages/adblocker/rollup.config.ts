@@ -14,7 +14,7 @@ console.log('env?', process.env.NODE_ENV);
 export default [
   // CommonJS
   {
-    input: './build/es6/adblocker.js',
+    input: './dist/es6/adblocker.js',
     output: {
         file: './dist/cjs/adblocker.js',
         format: 'cjs',
@@ -24,7 +24,7 @@ export default [
   },
   // UMD minified
   {
-    input: './build/es6/adblocker.js',
+    input: './dist/es6/adblocker.js',
     output: {
         file: './dist/adblocker.umd.min.js',
         format: 'umd',
@@ -33,10 +33,7 @@ export default [
     },
     plugins: [
       resolve(),
-      compiler({
-        language_out: 'NO_TRANSPILE',
-        warning_level: 'DEFAULT',
-      }),
+      compiler(),
     ],
   },
 ];

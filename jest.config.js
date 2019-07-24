@@ -7,11 +7,9 @@
  */
 
 module.exports = {
-  globals: {
-    'ts-jest': {
-      tsConfig: 'tsconfig.json',
-    },
-  },
   preset: 'ts-jest',
+  // NOTE: default value for `testEnvironment` is 'jsdom', which enabled a
+  // browser-like environment using jsdom abstractions. If we enable this,
+  // cosmetic CSS validation is enabled and some tests will need to be fixed.
   testEnvironment: 'node',
 };

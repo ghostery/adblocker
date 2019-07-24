@@ -10,20 +10,22 @@ import resolve from 'rollup-plugin-node-resolve';
 
 export default [
   {
-    input: './build/es6/src/background.js',
+    input: './dist/es6/background.js',
     output: {
-      file: './dist/background.iife.js',
+      file: './dist/iife/background.js',
       format: 'iife',
       name: 'adblocker',
+      sourcemap: true,
     },
     plugins: [resolve()],
   },
   {
-    input: './build/es6/src/content-script.js',
+    input: './dist/es6/content-script.js',
     output: {
-      file: './dist/content-script.iife.js',
+      file: './dist/iife/content-script.js',
       format: 'iife',
       name: 'adblocker',
+      sourcemap: true,
     },
     plugins: [resolve()],
   },

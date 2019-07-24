@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "build/es6",
+    "outDir": "dist/es6",
     "declarationDir": "dist/types",
     "composite": true
   },
@@ -9,7 +9,8 @@
     { "path": "../adblocker-webextension" },
     { "path": "../adblocker-webextension-cosmetics" }
   ],
-  "include": [
-    "src/*.ts"
+  "files": [
+    "background.ts",
+    "content-script.ts"
   ]
 }

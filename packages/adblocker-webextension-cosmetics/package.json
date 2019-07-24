@@ -5,12 +5,11 @@
   "author": "Cliqz",
   "homepage": "https://github.com/cliqz-oss/adblocker#readme",
   "license": "MPL-2.0",
-  "main": "build/cjs/adblocker.js",
-  "module": "build/es6/adblocker.js",
+  "main": "dist/cjs/adblocker.js",
+  "module": "dist/es6/adblocker.js",
   "types": "dist/types/adblocker.d.ts",
   "files": [
     "LICENSE",
-    "build",
     "dist"
   ],
   "publishConfig": {
@@ -21,10 +20,9 @@
     "url": "git@github.com:cliqz-oss/adblocker.git"
   },
   "scripts": {
-    "clean": "rimraf dist build coverage",
+    "clean": "rimraf dist coverage",
     "lint": "tslint --config ../../tslint.json --project ./tsconfig.json",
     "build": "tsc --build ./tsconfig.json",
-    "prebuild": "yarn run clean",
     "bundle": "rollup --config ./rollup.config.ts",
     "prebundle": "yarn run build",
     "prepack": "yarn run bundle",
