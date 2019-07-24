@@ -69,12 +69,12 @@ To publish a new version:
 
 0. Bump `ENGINE_VERSION` in `engine.ts` (to invalidate serialized versions)
 1. Create a new branch (e.g.: `release-x.y.z`)
-2. Update `version` in [package.json](./package.json)
+2. Update `version` using lerna: `npx lerna version --no-push --no-changelog --no-git-tag-version x.y.z`
 3. Update [CHANGELOG.md](./CHANGELOG.md)
 4. Create a release commit (e.g.: "Release vx.y.z")
 5. Create a PR for the release
 6. Merge and create a new Release on GitHub
-7. Travis takes care of the rest!
+7. Publish changes: `npx lerna publish from-package`
 
 ## License
 

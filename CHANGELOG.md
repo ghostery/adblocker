@@ -2,8 +2,18 @@
 
 ## Next
 
-*not released yet*
+## 0.12.0
 
+*2019-07-24*
+
+  * speed-up building and unify configurations [#212](https://github.com/cliqz-oss/adblocker/pull/212)
+    * switch typescript config into `composite` mode to allow faster re-builds and references between projects
+    * store all build artifacts in `dist` instead of splitting them into `dist` + `build`
+    * only emit `es6` modules with TypeScript and produce everything else with rollup (`cjs` + minimized UMD)
+    * only provide one minimized bundle: `UMD`
+    * remove `browser` key from package.json (not needed as code is cross-platform)
+    * add command to watch for changes
+  * add `ElectronBlocker` abstraction to perform adblocking in Electron [#180](https://github.com/cliqz-oss/adblocker/pull/180)
   * allow the 'not' pseudoclass in cosmetic filters [#184](https://github.com/cliqz-oss/adblocker/pull/184)
   * switch from `tldts` to `tldts-experimental` package [#183](https://github.com/cliqz-oss/adblocker/pull/183)
     * add `bootstrap` to root package.json
