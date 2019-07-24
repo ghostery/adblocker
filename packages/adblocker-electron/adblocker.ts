@@ -20,6 +20,10 @@ import {
 // https://stackoverflow.com/questions/48854265/why-do-i-see-an-electron-security-warning-after-updating-my-electron-project-t
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 
+interface ElectronResponseHeaders {
+  [name: string]: string[];
+}
+
 /**
  * Create an instance of `Request` from `Electron.OnBeforeRequestDetails`.
  */
@@ -62,7 +66,7 @@ export class ElectronBlocker extends FiltersEngine {
   private onGetCosmeticFilters = (
     event: Electron.IpcMessageEvent,
     url: string,
-    msg: IBackgroundCallback & { action?: string },
+    msg: IBackgroundCallback,
   ): void => {
     // Extract hostname from sender's URL
     const parsed = parse(url);
@@ -105,27 +109,33 @@ export class ElectronBlocker extends FiltersEngine {
 
   private onHeadersReceived = (
     details: Electron.OnHeadersReceivedDetails,
-    callback: any,
+    callback: (a: Electron.Response) => void,
   ): void => {
+    const CSP_HEADER_NAME = 'content-security-policy';
     const policies: string[] = [];
-    const responseHeaders: any = details.responseHeaders || {};
+    const responseHeaders: ElectronResponseHeaders = (details.responseHeaders as ElectronResponseHeaders) || {};
 
     if (details.resourceType === 'mainFrame' || details.resourceType === 'subFrame') {
-      const CSP_HEADER_NAME = 'content-security-policy';
-      const rawCSP = this.getCSPDirectives(fromElectronDetails(details));
+      const rawCSP: string | undefined = this.getCSPDirectives(fromElectronDetails(details));
       if (rawCSP !== undefined) {
-        policies.push(...(rawCSP === undefined ? [] : rawCSP.split(';').map(csp => csp.trim())));
+        policies.push(...rawCSP.split(';').map(csp => csp.trim()));
 
         // Collect existing CSP headers from response
         for (const [name, value] of Object.entries(responseHeaders)) {
           if (name.toLowerCase() === CSP_HEADER_NAME) {
-            policies.push(value as string);
-            responseHeaders[name] = undefined;
+            if (Array.isArray(value)) {
+              policies.push(...value);
+            } else {
+              policies.push(value);
+            }
+
+            delete responseHeaders[name];
           }
         }
 
-        responseHeaders['Content-Security-Policy'] = policies;
+        responseHeaders[CSP_HEADER_NAME] = policies;
 
+        // @ts-ignore
         callback({ responseHeaders });
         return;
       }
@@ -150,10 +160,8 @@ export class ElectronBlocker extends FiltersEngine {
   }
 
   private injectStyles(sender: Electron.WebContents, styles: string): void {
-    if (sender) {
-      if (styles.length > 0) {
-        sender.insertCSS(styles);
-      }
+    if (styles.length > 0) {
+      sender.insertCSS(styles);
     }
   }
 }
