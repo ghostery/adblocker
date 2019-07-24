@@ -1,8 +1,8 @@
 [Adblock Plus 2.0]
-! Checksum: X1jHLGvSJ+9G6lmVx0yfLA
-! Version: 201906141512
+! Checksum: Amy7fPNchY2LcIlPva58JA
+! Version: 201907240940
 ! Title: Adblock Warning Removal List
-! Last modified: 14 Jun 2019 15:12 UTC
+! Last modified: 24 Jul 2019 09:40 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 !
@@ -99,6 +99,7 @@ shadbase.com##img[alt="adblock"]
 /adblock-notify-by-bweb/*
 /adblock-warning-teaser/*
 /adblock_alerter.
+/adblock_alerter/*
 /adblock_gate/images/animated.gif?
 /adblock_notify.js
 /adblocker_message_
@@ -107,14 +108,19 @@ shadbase.com##img[alt="adblock"]
 /blockAndInf.js
 /blockadblock.$script
 /disable-adblock.
+/inc/antiblock.
+/testAB.bundle.
 /wp-content/plugins/ad-block-defender/*
 /wp-content/plugins/deadblocker/*
 /wp-content/uploads/an-temp/*$script,stylesheet
 /SvgAdblockDetected/*
+_adblock_killer.
 !
 ||bdgest.com/js/site.js?
 ||cmath.fr/images/fond2.gif
 ||cmath.fr/images/fondsticky.gif
+||developpez.com/template/*.jpg$xmlhttprequest
+||developpez.net/template/*.jpg$xmlhttprequest
 ||ed-protect.org/cdn-cgi/apps/head/
 ||gameblog.fr/images/ablock/
 ||nikopik.com/wp-content/themes/*/js/nikopik.js
@@ -122,13 +128,14 @@ shadbase.com##img[alt="adblock"]
 ||nrj.fr/nrj?Page=/rg.fake&
 ||skyrock.net/img/*/adblock/
 !
-@@/advertisement.js$script,~third-party,domain=fun-animes.fr|upload.ac
+@@/advertisement.js$script,~third-party,domain=fun-animes.fr|macupload.net|upload.ac
 @@/noadblock-nice-message/assets/js/ads.js?$script,~third-party
 !
 @@||abcbourse.com/scripts/ads.js$script,~third-party
+@@||anime-vf.fr/catalog/view/javascript/ads.js$script,~third-party
 @@||animedigitalnetwork.fr/templates/*/js/advertising.min.js?$script,~third-party
 @@||ausujet.com/skins/common/ads.js
-@@||cdncontent.wakanim.tv/scripts/dist/ads.js$script,~third-party
+@@||cdncontent.wakanim.tv/scripts/dist/ads.js$script,xmlhttprequest,~third-party
 @@||cyberdean.fr/js/advertisement.js
 @@||dbz-fantasy.com/ads.css
 @@||dev-dyod.fr/styles/ads.css
@@ -184,6 +191,7 @@ shadbase.com##img[alt="adblock"]
 ###adblock-msg
 ###adblock-notice
 ###adblock-overlay
+###adblock-warning
 ###adblockDetect
 ###adblock_detected
 ###adblocker_announce
@@ -199,6 +207,7 @@ shadbase.com##img[alt="adblock"]
 ###detection-block-overlay
 ###detectadblock
 ###fnAdblockingOverlay
+###fondAdblock
 ###js-popup-blocker
 ###message_adblock
 ###notify-adblock
@@ -246,13 +255,13 @@ shadbase.com##img[alt="adblock"]
 ##.noadblock
 ##.svg-adblock-full
 ##.svg-adblock-full--box
+##.test-adblock-overlay
 ##.top-bar-adblock
 ##[class][data-sitename][data-header-version] > div[id^="detection-block"]
 ##adblock-detect
 !
 wamiz.com###adblocker
 jaitoutcompris.com###antiBlock
-developpez.com,developpez.net###encart_droite div[style^="display: inline-block; width: 300px;"]
 iphonesoft.fr,iphonetweak.fr###msgNoPub
 retinaboys.com###screen_block
 lagrosseradio.com###warn
@@ -265,7 +274,6 @@ forumdz.com##body .breadcrumb + center > [color="red"] > b
 forum.pcastuces.com##div > [src] + [id] + [class][style^="display: block;"]
 closermag.fr##div[id^="detection-block"]
 bd-sanctuary.com,cine-sanctuary.com,comics-sanctuary.com,manga-sanctuary.com##div[style^="background:#444;"]
-developpez.com,developpez.net##div[id^="gabarit_pub"]
 pausecafein.fr###adb-pop
 !
 #@##adblocktest
@@ -340,17 +348,17 @@ czx.to###vdl_ctnr
 chipinfo.pro###warning
 vsaduidoma.com##.ABD_display_wrapper
 sport-express.ru##.a-notice
-scrin.org##.a-overlay
 eurabota.com##.abtop
 sprashivalka.com##.ad
 topcraft.ru##.ad-info
 besplatka.ua##.adBl
-cc-fan.tv,cn-fan.tv,fox-fan.tv,goodfon.ru,nf-fan.tv,satsis.info,swordmaster.org##.adb
+bycard.by,cc-fan.tv,cn-fan.tv,fox-fan.tv,goodfon.ru,nf-fan.tv,satsis.info,swordmaster.org##.adb
 vsadu.ru##.adb-block
 andevice.ru,dietdo.ru##.adb-def
 tuchkatv.ru##.adb_m
 brazzers-hdx.club##.adblck
 forum.qrz.ru,hentaiz.org,life.ru,mastergrad.com##.adblock
+nevasport.ru##.adblock-notify
 exler.ru##.adblock-pls
 zakon.kz##.adblock_alert
 ogorod.ru##.adblock_popup_warning
@@ -398,10 +406,9 @@ music.yandex.by,music.yandex.kz,music.yandex.ru,music.yandex.ua##.page-root > .n
 music.yandex.by,music.yandex.kz,music.yandex.ru,music.yandex.ua##.page-root > .notify *
 alexfilm.cc##.panel-primary
 darkteam.net##.pls_rmv
-mega.dp.ua##.pray-container
 newnavitel.blogspot.com##.post-body > div[dir] > div[dir] > h1#result
 animedub.ru##.poverh
-015.by,023.by,0312.ua,032.ua,0332.ua,0342.ua,0352.ua,0362.ua,0372.ua,0382.ua,0412.ua,04141.com.ua,0432.ua,04563.com.ua,04596.com.ua,04597.com.ua,04598.com.ua,0462.ua,0472.ua,048.ua,04868.com.ua,0512.com.ua,05136.com.ua,05161.com.ua,0522.ua,0532.ua,05366.com.ua,0542.ua,05447.com.ua,0552.ua,056.ua,0564.ua,0566.com.ua,0569.com.ua,057.ua,061.ua,06153.com.ua,0619.com.ua,0623.com.ua,06236.com.ua,06237.com.ua,06239.com.ua,06242.ua,06252.com.ua,06267.com.ua,06272.com.ua,06274.com.ua,06277.com.ua,0629.com.ua,0642.ua,06452.com.ua,0652.ua,0692.ua,1rnd.ru,3652.ru,3654.ru,3849.com.ua,44.ua,4594.com.ua,5692.com.ua,62.ua,6262.com.ua,6264.com.ua,65.media,7232.kz,8422city.ru,anapa.life,angarsk38.ru,bazhopol.ru,city01.am,city41.ru,comores24.com,go01.ru,go11.kz,go212.by,go216.by,go26.ru,go31.ru,go61.ru,godublin.info,golondon.info,goriga.info,gorod3466.ru,gorodarmavir.ru,goroddomodedovo.ru,gorodpushkin.ru,goshymkent.kz,inaktau.kz,inalmaty.kz,inastana.kz,inatyrau.kz,infolyubertsy.ru,inform69.ru,vilniuje.info,yocity12.ru##.pray-container
+015.by,023.by,0312.ua,032.ua,0332.ua,0342.ua,0352.ua,0362.ua,0372.ua,0382.ua,0412.ua,04141.com.ua,0432.ua,04563.com.ua,04596.com.ua,04597.com.ua,04598.com.ua,0462.ua,0472.ua,048.ua,04868.com.ua,0512.com.ua,05136.com.ua,05161.com.ua,0522.ua,0532.ua,05366.com.ua,0542.ua,05447.com.ua,0552.ua,056.ua,0564.ua,0566.com.ua,0569.com.ua,057.ua,061.ua,06153.com.ua,0619.com.ua,0623.com.ua,06236.com.ua,06237.com.ua,06239.com.ua,06242.ua,06252.com.ua,06267.com.ua,06272.com.ua,06274.com.ua,06277.com.ua,0629.com.ua,0642.ua,06452.com.ua,0652.ua,0692.ua,1rnd.ru,3652.ru,3654.ru,3849.com.ua,44.ua,4594.com.ua,5692.com.ua,62.ua,6262.com.ua,6264.com.ua,65.media,7232.kz,8422city.ru,anapa.life,angarsk38.ru,bazhopol.ru,city01.am,city41.ru,comores24.com,go01.ru,go11.kz,go212.by,go216.by,go26.ru,go31.ru,go61.ru,godublin.info,golondon.info,goriga.info,gorod3466.ru,gorodarmavir.ru,goroddomodedovo.ru,gorodpushkin.ru,goshymkent.kz,inaktau.kz,inalmaty.kz,inastana.kz,inatyrau.kz,infolyubertsy.ru,inform69.ru,mega.dp.ua,vilniuje.info,yocity12.ru##.pray-container
 pythonworld.ru##.pythonworld-contributor
 veseloeradio.ru##.racy_sidebar
 fanfics.me##.red.nodata
@@ -416,14 +423,17 @@ forum.bestflowers.ru##.xenOverlay
 /cookie_check.min.js$domain=acetv.me
 /forum/docs/requests.js$script,domain=nnm-club.lib|nnm-club.me|nnm-club.ws|nnmclub.ro|nnmclub.to|nontorclub.in.net
 /fuckadblock.js$domain=ace-stream.tv
-@@||cc-fan.tv/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
-@@||cn-fan.tv/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
-@@||fox-fan.tv/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
-@@||nf-fan.tv/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
-@@||mult.love/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
+@@||a.republer.com/render.js$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
 @@||an.yandex.ru/jstracer?aab_detect=$xmlhttprequest,domain=yandex.by|yandex.kz|yandex.ru|yandex.ua
 @@||anidub.com/ads.js|$script,domain=anidub.com
+@@||cc-fan.tv/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
+@@||cdn-rtb.sape.ru/rtb-b/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
+@@||cdn.adtags.pro/adtagsLoader_with_placeholder.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
+@@||cn-fan.tv/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
+@@||fox-fan.tv/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
 @@||goha.ru/app/video/adblock.teaser.js|$script,domain=goha.ru
+@@||mult.love/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
+@@||nf-fan.tv/*.js|$script,domain=cc-fan.tv|cn-fan.tv|fox-fan.tv|nf-fan.tv
 @@||sports.ru^*/adfox.$xmlhttprequest
 auto62rus.ru,eset-key.ru,mycrib.ru,piggy-bank.online,politonline.ru,showmehow.ru##[data-type="anti-abp"]
 lr-club.com##a[href="https://adblockplus.org/ru/faq_basics#disable"]
@@ -446,7 +456,7 @@ katalog-aktsii.ru,rp5.by,rp5.kz,rp5.ru,rp5.ua##body > div:not([id]):not([class])
 factorio.su##body > div[class][style*="background"][style*="display: block"]
 gdekluet.ru##body > div[class^="stop-block"]
 glav.su##body > div[id]:not([class])[style*="background"][style*="display: block"]
-logist.uxxo.ru,maxpark.com,meteoservice.ru,newdeaf-online.net,newsland.com,pawno-info.ru,smolensk-auto.ru##body > div[id]:not([class])[style="display: block;"]
+logist.uxxo.ru,maxpark.com,meteoservice.ru,newdeaf-online.net,newsland.com,pawno-info.ru,scrin.org,smolensk-auto.ru##body > div[id]:not([class])[style="display: block;"]
 factorio.su##body > div[id][class][style*="background"][style*="visible"]
 gaming.co.ua##body > div[id][class][style*="z-index"][style*="9999"],body > div[id][class][style*="z-index"][style*="9999"] + div[class][style*="z-index"][style*="9999"]
 gisher.news,gisher.org##body > div[id][class][style^="display"][style*="position"][style*="z-index"]
@@ -457,9 +467,9 @@ tut.by##body > div[style*="position: fixed;"][style*="right: 0;"]
 dugtor.ru##body > noindex
 www.qrz.ru#?#div[class]:-abp-has(> .inner > a[href="/help/adblock/"])
 blackdesert-info.ru##div[class][style*="z-index"][style*="999999;"][style*="background"][style*="rgb"]
-game2day.ru##div[class^="adblock_"]
 megogo.net,megogo.ru##div[class^="adBlockBanner"]
 kinopad.net,playtor.tv##div[class^="adblock-warning"]
+game2day.ru##div[class^="adblock_"]
 lostfilm.tv##div[class^="alarm"]
 gismeteo.by,gismeteo.ru##div[class^="stopblock"]
 finfront.ru##div[class^="swal2"]
@@ -498,5 +508,6 @@ bigpuzzle.ru##td[valign="top"][width="200px"][height="600"] > div[style]
 ||shellcat.ru^$third-party
 ||stroi-help.ru/forum/script_new.js
 ||vazhno.ru/cdn-cgi/apps/head/*.js
+||vsthouse.ru/adregain-anti.js
 ! *** antiadblockfilters:antiadblockfilters/antiadblock_slovak.txt ***
 ! *** antiadblockfilters:antiadblockfilters/antiadblock_spanish.txt ***
