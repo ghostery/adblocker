@@ -6,7 +6,6 @@
   "author": "Cliqz",
   "homepage": "https://github.com/cliqz-oss/adblocker#readme",
   "license": "MPL-2.0",
-  "main": "lib/adblocker-webextension-example.js",
   "files": [
     "LICENSE",
     "dist",
@@ -17,13 +16,10 @@
     "url": "git@github.com:cliqz-oss/adblocker.git"
   },
   "scripts": {
-    "clean": "rimraf dist build coverage",
-    "lint": "tslint --config ../../tslint.json --project .",
-    "build-cjs": "tsc -p . --outDir build/cjs --module commonjs",
-    "build-es6": "tsc -p . --outDir build/es6 --module esnext",
-    "build": "concurrently \"yarn run build-cjs\" \"yarn run build-es6\"",
-    "prebuild": "yarn run clean",
-    "bundle": "rollup --config rollup.config.ts",
+    "clean": "rimraf dist coverage",
+    "lint": "tslint --config ../../tslint.json --project ./tsconfig.json",
+    "build": "tsc --build ./tsconfig.json",
+    "bundle": "rollup --config ./rollup.config.ts",
     "prebundle": "yarn run build",
     "prepack": "yarn run bundle"
   },
@@ -35,8 +31,6 @@
     "@cliqz/adblocker-webextension-cosmetics": "^0.12.1-alpha.3"
   },
   "devDependencies": {
-    "@ampproject/rollup-plugin-closure-compiler": "^0.10.0",
-    "concurrently": "^4.1.1",
     "rimraf": "^2.6.3",
     "rollup": "^1.16.4",
     "rollup-plugin-node-resolve": "^5.2.0"

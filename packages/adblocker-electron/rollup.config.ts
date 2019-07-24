@@ -9,16 +9,13 @@
 import resolve from 'rollup-plugin-node-resolve';
 
 export default {
+  // CommonJs bundle for preload script
   external: ['electron'],
-  input: './build/es6/content.js',
-  output: [
-    {
-      file: './dist/content.js',
-      format: 'cjs',
-      sourcemap: true,
-    },
-  ],
-  plugins: [
-    resolve(),
-  ],
+  input: './dist/es6/content.js',
+  output: {
+    file: './dist/content.js',
+    format: 'cjs',
+    sourcemap: true,
+  },
+  plugins: [resolve()],
 };

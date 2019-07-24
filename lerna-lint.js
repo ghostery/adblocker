@@ -180,31 +180,19 @@ const EXPECTED_FIELDS = new Set([
 
     // Check exported bundles
     if (name.endsWith('-example') === false && name.endsWith('-benchmarks') === false) {
-      assertMetadata('main', 'build/cjs/adblocker.js', package);
-      assertMetadata('module', 'build/es6/adblocker.js', package);
+      assertMetadata('main', 'dist/cjs/adblocker.js', package);
+      assertMetadata('module', 'dist/es6/adblocker.js', package);
       assertMetadata('types', 'dist/types/adblocker.d.ts', package);
-      assertMetadata('browser', 'dist/adblocker.umd.min.js', package, { optional: true });
+      assertMetadata('files', ['LICENSE', 'dist'], package);
 
-      assertMetadata('files', ['LICENSE', 'build', 'dist'], package);
-
-      assertMetadata(
-        'scripts.build-cjs',
-        'tsc -p . --outDir build/cjs --module commonjs',
-        package,
-        {
-          optional: true,
-        },
-      );
-      assertMetadata('scripts.build-es6', 'tsc -p . --outDir build/es6 --module esnext', package, {
-        optional: true,
-      });
       assertMetadata(
         'scripts.build',
-        'concurrently "yarn run build-cjs" "yarn run build-es6"',
+        'tsc --build ./tsconfig.json',
         package,
         { optional: true },
       );
-      assertMetadata('scripts.bundle', 'rollup --config rollup.config.ts', package, {
+
+      assertMetadata('scripts.bundle', 'rollup --config ./rollup.config.ts', package, {
         optional: true,
       });
     }
@@ -220,7 +208,7 @@ const EXPECTED_FIELDS = new Set([
 
     assertMetadata(
       'scripts.clean',
-      'rimraf dist build coverage',
+      'rimraf dist coverage',
       package,
       { optional: true },
     );
@@ -235,14 +223,14 @@ const EXPECTED_FIELDS = new Set([
 
     assertMetadata(
       'scripts.bundle',
-      'rollup --config rollup.config.ts',
+      'rollup --config ./rollup.config.ts',
       package,
       { optional: true },
     );
 
     assertMetadata(
       'scripts.lint',
-      'tslint --config ../../tslint.json --project .',
+      'tslint --config ../../tslint.json --project ./tsconfig.json',
       package,
       { optional: true },
     );

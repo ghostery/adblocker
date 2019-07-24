@@ -6,32 +6,27 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import compiler from '@ampproject/rollup-plugin-closure-compiler';
 import resolve from 'rollup-plugin-node-resolve';
-
-const plugins = [
-  resolve(),
-  compiler({
-    language_out: 'NO_TRANSPILE',
-    warning_level: 'DEFAULT',
-  }),
-];
 
 export default [
   {
-    input: './build/es6/background.js',
+    input: './dist/es6/background.js',
     output: {
-      file: './dist/background.iife.js',
+      file: './dist/iife/background.js',
       format: 'iife',
+      name: 'adblocker',
+      sourcemap: true,
     },
-    plugins,
+    plugins: [resolve()],
   },
   {
-    input: './build/es6/content-script.js',
+    input: './dist/es6/content-script.js',
     output: {
-      file: './dist/content-script.iife.js',
+      file: './dist/iife/content-script.js',
       format: 'iife',
+      name: 'adblocker',
+      sourcemap: true,
     },
-    plugins,
+    plugins: [resolve()],
   },
 ];

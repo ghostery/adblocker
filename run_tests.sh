@@ -9,5 +9,6 @@ yarn bootstrap
 node licenser.js --ci
 node lerna-lint.js --ci
 yarn lint
+yarn build
 yarn bundle
 yarn test
