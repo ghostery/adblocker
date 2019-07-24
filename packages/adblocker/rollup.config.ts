@@ -9,8 +9,6 @@
 import compiler from '@ampproject/rollup-plugin-closure-compiler';
 import resolve from 'rollup-plugin-node-resolve';
 
-console.log('env?', process.env.NODE_ENV);
-
 export default [
   // CommonJS
   {
