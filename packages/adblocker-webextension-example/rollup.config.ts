@@ -7,6 +7,7 @@
  */
 
 import resolve from 'rollup-plugin-node-resolve';
+import sourcemaps from 'rollup-plugin-sourcemaps';
 
 export default [
   {
@@ -17,7 +18,10 @@ export default [
       name: 'adblocker',
       sourcemap: true,
     },
-    plugins: [resolve()],
+    plugins: [
+      resolve(),
+      sourcemaps(),
+    ],
   },
   {
     input: './dist/es6/content-script.js',
@@ -27,6 +31,9 @@ export default [
       name: 'adblocker',
       sourcemap: true,
     },
-    plugins: [resolve()],
+    plugins: [
+      resolve(),
+      sourcemaps(),
+    ],
   },
 ];

@@ -8,6 +8,7 @@
 
 import compiler from '@ampproject/rollup-plugin-closure-compiler';
 import resolve from 'rollup-plugin-node-resolve';
+import sourcemaps from 'rollup-plugin-sourcemaps';
 
 export default [
   // CommonJS
@@ -18,7 +19,10 @@ export default [
         format: 'cjs',
         sourcemap: true,
     },
-    plugins: [resolve()],
+    plugins: [
+      resolve(),
+      sourcemaps(),
+    ],
   },
   // UMD minified
   {
@@ -32,6 +36,7 @@ export default [
     plugins: [
       resolve(),
       compiler(),
+      sourcemaps(),
     ],
   },
 ];
