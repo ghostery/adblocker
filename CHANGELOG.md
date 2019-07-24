@@ -2,6 +2,10 @@
 
 ## Next
 
+*not released*
+
+  * fix source maps support for all packages [#219](https://github.com/cliqz-oss/adblocker/pull/219)
+
 ## 0.12.0
 
 *2019-07-24*
