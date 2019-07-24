@@ -38,10 +38,19 @@ async function createWindow() {
     width: 800,
   });
 
-  const engine = await loadAdblocker();
-  engine.enableBlockingInSession(session.defaultSession as Electron.Session);
+  if (session.defaultSession === undefined) {
+    throw new Error('defaultSession is undefined');
+  }
 
-  mainWindow.loadURL('https://www.mangareader.net/');
+  const engine = await loadAdblocker();
+  engine.enableBlockingInSession(session.defaultSession);
+
+  let url = 'https://www.mangareader.net/';
+  if (process.argv[process.argv.length - 1].endsWith('.js') === false) {
+    url = process.argv[process.argv.length - 1];
+  }
+
+  mainWindow.loadURL(url);
   mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
