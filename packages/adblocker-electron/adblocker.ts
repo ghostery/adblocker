@@ -50,13 +50,13 @@ export class ElectronBlocker extends FiltersEngine {
     ipcMain.on('get-cosmetic-filters', this.onGetCosmeticFilters);
     ses.setPreloads([join(__dirname, './preload.js')]);
 
-    ipcMain.on('is-mutation-observer-enabled', (event: Electron.IpcMessageEvent) => {
+    ipcMain.on('is-mutation-observer-enabled', (event: Electron.IpcMainEvent) => {
       event.returnValue = this.config.enableMutationObserver;
     });
   }
 
   private onGetCosmeticFilters = (
-    event: Electron.IpcMessageEvent,
+    event: Electron.IpcMainEvent,
     url: string,
     msg: IBackgroundCallback,
   ): void => {

@@ -48,7 +48,7 @@ function handleResponseFromBackground({ active, scripts }: IMessageFromBackgroun
 
 ipcRenderer.on(
   'get-cosmetic-filters-response',
-  (_: Electron.IpcMessageEvent, response: IMessageFromBackground) => {
+  (_: Electron.IpcRendererEvent, response: IMessageFromBackground) => {
     handleResponseFromBackground(response);
   },
 );

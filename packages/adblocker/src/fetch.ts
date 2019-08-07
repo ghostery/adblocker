@@ -103,9 +103,11 @@ const lists = [
 /**
  * Fetch latest version of enabledByDefault blocking lists.
  */
-export function fetchLists(): Promise<string[]> {
+export function fetchLists(custom?: string[]): Promise<string[]> {
   return Promise.all(
-    lists.filter(({ enabledByDefault }) => enabledByDefault).map(({ url }) => fetchResource(url)),
+    (custom || lists.filter(({ enabledByDefault }) => enabledByDefault).map(({ url }) => url)).map(
+      fetchResource,
+    ),
   );
 }
 
