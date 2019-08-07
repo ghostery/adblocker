@@ -41,8 +41,8 @@ function handleResponseFromBackground({ active, scripts }: IMessageFromBackgroun
     ACTIVE = true;
   }
 
-  for (const script of scripts) {
-    setTimeout(() => webFrame.executeJavaScript(script), 1);
+  for (let i = 0; i < scripts.length; i += 1) {
+    setTimeout(() => webFrame.executeJavaScript(scripts[i]), 1);
   }
 }
 
