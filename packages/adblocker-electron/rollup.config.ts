@@ -9,17 +9,27 @@
 import resolve from 'rollup-plugin-node-resolve';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 
-export default {
-  // CommonJs bundle for preload script
-  external: ['electron'],
-  input: './dist/es6/content.js',
-  output: {
-    file: './dist/content.js',
-    format: 'cjs',
-    sourcemap: true,
+export default [
+  {
+    // CommonJs bundle for preload script
+    external: ['electron', 'path'],
+    input: './dist/es6/adblocker.js',
+    output: {
+      file: './dist/cjs/adblocker.js',
+      format: 'cjs',
+      sourcemap: true,
+    },
+    plugins: [resolve({ preferBuiltins: true }), sourcemaps()],
   },
-  plugins: [
-    resolve(),
-    sourcemaps(),
-  ],
-};
+  {
+    // CommonJs bundle for preload script
+    external: ['electron'],
+    input: './dist/es6/preload.js',
+    output: {
+      file: './dist/cjs/preload.js',
+      format: 'cjs',
+      sourcemap: true,
+    },
+    plugins: [resolve({ preferBuiltins: true }), sourcemaps()],
+  },
+];
