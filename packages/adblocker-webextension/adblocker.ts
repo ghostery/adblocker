@@ -15,6 +15,7 @@ import {
 } from '@cliqz/adblocker-webextension-cosmetics';
 
 export interface WebRequestBeforeRequestDetails {
+  tabId: number;
   url: string;
   type: WebRequestType;
 
@@ -35,6 +36,7 @@ export function fromWebRequestDetails(
 ): Request {
   return Request.fromRawDetails({
     sourceUrl: details.initiator || details.originUrl || details.documentUrl,
+    tabId: details.tabId,
     type: details.type,
     url: details.url,
   });
@@ -72,12 +74,29 @@ export function updateResponseHeadersWithCSP(
  * methods to interface with WebExtension APIs needed to block ads.
  */
 export class WebExtensionBlocker extends FiltersEngine {
+  public enableBlockingInBrowser() {
+    chrome.webRequest.onBeforeRequest.addListener(
+      this.onBeforeRequest,
+      { urls: ['<all_urls>'] },
+      ['blocking'],
+    );
+
+    chrome.webRequest.onHeadersReceived.addListener(
+      this.onHeadersReceived,
+      { urls: ['<all_urls>'], types: ['main_frame'] },
+      ['blocking', 'responseHeaders'],
+    );
+
+    // Start listening to messages coming from the content-script
+    chrome.runtime.onMessage.addListener(this.onRuntimeMessage);
+  }
+
   /**
    * Deal with request cancellation (`{ cancel: true }`) and redirection (`{ redirectUrl: '...' }`).
    */
-  public onBeforeRequest(
+  private onBeforeRequest = (
     details: WebRequestBeforeRequestDetails,
-  ): chrome.webRequest.BlockingResponse {
+  ): chrome.webRequest.BlockingResponse => {
     const request = fromWebRequestDetails(details);
     const { redirect, match } = this.match(request);
 
@@ -88,25 +107,25 @@ export class WebExtensionBlocker extends FiltersEngine {
     }
 
     return {};
-  }
+  };
 
   /**
    *
    */
-  public onHeadersReceived(
+  private onHeadersReceived = (
     details: WebRequestHeadersReceivedDetails,
-  ): chrome.webRequest.BlockingResponse {
+  ): chrome.webRequest.BlockingResponse => {
     return updateResponseHeadersWithCSP(
       details,
       this.getCSPDirectives(fromWebRequestDetails(details)),
     );
   }
 
-  public onRuntimeMessage(
+  private onRuntimeMessage = (
     msg: IBackgroundCallback & { action?: string },
     sender: chrome.runtime.MessageSender,
     sendResponse: (response?: any) => void,
-  ): void {
+  ): void => {
     if (sender.tab === undefined || sender.tab.id === undefined || sender.frameId === undefined) {
       return;
     }

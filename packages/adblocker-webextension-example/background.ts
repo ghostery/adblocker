@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { fetchLists, fetchResources, WebExtensionBlocker } from '@cliqz/adblocker-webextension';
+import { BlockingResponse, fetchLists, fetchResources, Request, WebExtensionBlocker } from '@cliqz/adblocker-webextension';
 
 /**
  * Initialize the adblocker using lists of filters and resources. It returns a
@@ -70,39 +70,22 @@ function updateBlockedCounter(tabId: number, { reset = false, incr = false } = {
   });
 }
 
+function incrementBlockedCounter(request: Request, blockingResponse: BlockingResponse): void {
+  updateBlockedCounter(request.tabId, {
+    incr: Boolean(blockingResponse.match),
+    reset: request.isMainFrame(),
+  });
+}
+
 // Whenever the active tab changes, then we update the count of blocked request
 chrome.tabs.onActivated.addListener(({ tabId }: chrome.tabs.TabActiveInfo) =>
   updateBlockedCounter(tabId),
 );
 
 loadAdblocker().then((engine) => {
-  // Start listening to requests, and allow 'blocking' so that we can cancel
-  // some of them (or redirect).
-  chrome.webRequest.onBeforeRequest.addListener(
-    (details) => {
-      const blockingResponse = engine.onBeforeRequest(details);
-
-      updateBlockedCounter(details.tabId, {
-        incr: Boolean(blockingResponse.cancel || blockingResponse.redirectUrl),
-        reset: details.type === 'main_frame',
-      });
-
-      return blockingResponse;
-    },
-    {
-      urls: ['<all_urls>'],
-    },
-    ['blocking'],
-  );
-
-  chrome.webRequest.onHeadersReceived.addListener(
-    (details) => engine.onHeadersReceived(details),
-    { urls: ['<all_urls>'], types: ['main_frame'] },
-    ['blocking', 'responseHeaders'],
-  );
-
-  // Start listening to messages coming from the content-script
-  chrome.runtime.onMessage.addListener((...args) => engine.onRuntimeMessage(...args));
+  engine.enableBlockingInBrowser();
+  engine.on('request-blocked', incrementBlockedCounter);
+  engine.on('request-redirected', incrementBlockedCounter);
 
   console.log('Ready to roll!');
 });

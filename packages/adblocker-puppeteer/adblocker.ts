@@ -42,9 +42,7 @@ export class PuppeteerBlocker extends FiltersEngine {
       // easily be added if puppeteer implements the required capability.
 
       // Register callback for network requets filtering
-      page.on('request', (request) => {
-        this.onRequest(request);
-      });
+      page.on('request', this.onRequest);
 
       // Register callback to cosmetics injection (CSS + scriptlets)
       page.on('framenavigated', async (frame) => {
@@ -57,7 +55,7 @@ export class PuppeteerBlocker extends FiltersEngine {
     });
   }
 
-  private async onFrame(frame: puppeteer.Frame): Promise<void> {
+  private onFrame = async (frame: puppeteer.Frame): Promise<void> => {
     // DOM features
     const { ids, hrefs, classes } = await frame.$$eval(
       '[id],[class],[href]',
@@ -108,7 +106,7 @@ export class PuppeteerBlocker extends FiltersEngine {
     }
   }
 
-  private onRequest(request: puppeteer.Request): void {
+  private onRequest = (request: puppeteer.Request): void => {
     const { redirect, match } = this.match(fromPuppeteerDetails(request));
 
     if (redirect !== undefined) {
