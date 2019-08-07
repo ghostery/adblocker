@@ -122,9 +122,9 @@ export default class FilterEngine {
     cosmeticFilters?: CosmeticFilter[];
     networkFilters?: NetworkFilter[];
     lists?: Map<string, string>;
-    config?: Config;
+    config?: Partial<Config>;
   } = {}) {
-    this.config = config;
+    this.config = new Config(config);
 
     // Subscription management: disabled by default
     this.lists = lists;

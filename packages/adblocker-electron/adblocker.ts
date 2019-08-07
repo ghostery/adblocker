@@ -39,18 +39,10 @@ export function fromElectronDetails({
   });
 }
 
-interface ElectronBlockerOptions {
-  mutationObserver?: boolean;
-}
-
 /**
  * Wrap `FiltersEngine` into a Electron-friendly helper class.
  */
 export class ElectronBlocker extends FiltersEngine {
-  constructor(public options: ElectronBlockerOptions = { mutationObserver: true }) {
-    super();
-  }
-
   public enableBlockingInSession(ses: Electron.Session) {
     ses.webRequest.onHeadersReceived({ urls: ['<all_urls>'] }, this.onHeadersReceived);
     ses.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onBeforeRequest);
@@ -59,7 +51,7 @@ export class ElectronBlocker extends FiltersEngine {
     ses.setPreloads([join(__dirname, './content.js')]);
 
     ipcMain.on('is-mutation-observer-enabled', (event: Electron.IpcMessageEvent) => {
-      event.returnValue = this.options.mutationObserver;
+      event.returnValue = this.config.enableMutationObserver;
     });
   }
 

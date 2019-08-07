@@ -1,4 +1,4 @@
-import { ElectronRequestType, fromElectronDetails } from './adblocker';
+import { ElectronBlocker, ElectronRequestType, fromElectronDetails } from './adblocker';
 
 describe('#fromElectronDetails', () => {
   const baseRequest: Electron.OnBeforeRequestDetails = {
@@ -29,6 +29,37 @@ describe('#fromElectronDetails', () => {
       domain: 'url.com',
       hostname: 'sub.url.com',
       url: 'https://sub.url.com',
+    });
+  });
+});
+
+describe('#constructor', () => {
+  describe('mutationObserver', () => {
+    it('defaults to true', () => {
+      expect(new ElectronBlocker().config.enableMutationObserver).toBeTruthy();
+      expect(new ElectronBlocker({}).config.enableMutationObserver).toBeTruthy();
+    });
+
+    it('can be set to false', () => {
+      expect(
+        new ElectronBlocker({ config: { enableMutationObserver: false } }).config
+          .enableMutationObserver,
+      ).toBeFalsy();
+    });
+  });
+});
+
+describe('#parse', () => {
+  describe('mutationObserver', () => {
+    it('defaults to true', () => {
+      expect(ElectronBlocker.parse('').config.enableMutationObserver).toBeTruthy();
+      expect(ElectronBlocker.parse('', {}).config.enableMutationObserver).toBeTruthy();
+    });
+
+    it('can be set to false', () => {
+      expect(
+        ElectronBlocker.parse('', { enableMutationObserver: false }).config.enableMutationObserver,
+      ).toBeFalsy();
     });
   });
 });
