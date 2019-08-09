@@ -8,6 +8,7 @@
 
 import Config from '../config';
 import StaticDataView from '../data-view';
+import { EventEmitter } from '../events';
 import CosmeticFilter from '../filters/cosmetic';
 import NetworkFilter from '../filters/network';
 import { IListDiff, IRawDiff, parseFilters } from '../lists';
@@ -28,7 +29,27 @@ function btoaPolyfill(buffer: string): string {
   return buffer;
 }
 
-export default class FilterEngine {
+export interface BlockingResponse {
+  match: boolean;
+  redirect:
+    | undefined
+    | {
+        body: string;
+        contentType: string;
+        dataUrl: string;
+      };
+  exception: NetworkFilter | undefined;
+  filter: NetworkFilter | undefined;
+}
+
+export default class FilterEngine extends EventEmitter<
+  | 'request-blocked'
+  | 'request-redirected'
+  | 'request-whitelisted'
+  | 'csp-injected'
+  | 'script-injected'
+  | 'style-injected'
+> {
   public static parse(filters: string, options: Partial<Config> = {}): FilterEngine {
     const config = new Config(options);
     return new this(Object.assign({}, parseFilters(filters, config), { config }));
@@ -124,6 +145,8 @@ export default class FilterEngine {
     lists?: Map<string, string>;
     config?: Partial<Config>;
   } = {}) {
+    super(); // init super-class EventEmitter
+
     this.config = new Config(config);
 
     // Subscription management: disabled by default
@@ -443,8 +466,14 @@ export default class FilterEngine {
     for (let i = 0; i < injections.length; i += 1) {
       const script = injections[i].getScript(this.resources.js);
       if (script !== undefined) {
+        this.emit('script-injected', script, url);
         scripts.push(script);
       }
+    }
+
+    // Emit events
+    if (stylesheet.length !== 0) {
+      this.emit('style-injected', stylesheet, url);
     }
 
     return {
@@ -509,44 +538,34 @@ export default class FilterEngine {
     }
 
     // Combine all CSPs (except the black-listed ones)
-    return (
+    const csps: string | undefined =
       Array.from(enabledCsp)
         .filter((csp) => !disabledCsp.has(csp))
-        .join('; ') || undefined
-    );
+        .join('; ') || undefined;
+
+    // Emit event
+    if (csps !== undefined) {
+      this.emit('csp-injected', csps, request);
+    }
+
+    return csps;
   }
 
   /**
    * Decide if a network request (usually from WebRequest API) should be
    * blocked, redirected or allowed.
    */
-  public match(
-    request: Request,
-  ): {
-    match: boolean;
-    redirect:
-      | undefined
-      | {
-          body: string;
-          contentType: string;
-          dataUrl: string;
-        };
-    exception: NetworkFilter | undefined;
-    filter: NetworkFilter | undefined;
-  } {
-    if (!this.config.loadNetworkFilters) {
-      return { match: false, redirect: undefined, exception: undefined, filter: undefined };
-    }
+  public match(request: Request): BlockingResponse {
+    const result: BlockingResponse = {
+      exception: undefined,
+      filter: undefined,
+      match: false,
+      redirect: undefined,
+    };
 
-    let filter: NetworkFilter | undefined;
-    let exception: NetworkFilter | undefined;
-    let redirect:
-      | undefined
-      | {
-          body: string;
-          contentType: string;
-          dataUrl: string;
-        };
+    if (!this.config.loadNetworkFilters) {
+      return result;
+    }
 
     if (request.isSupported) {
       // Check the filters in the following order:
@@ -554,25 +573,25 @@ export default class FilterEngine {
       // 2. redirection ($redirect=resource)
       // 3. normal filters
       // 4. exceptions
-      filter = this.importants.match(request);
+      result.filter = this.importants.match(request);
 
-      if (filter === undefined) {
+      if (result.filter === undefined) {
         // Check if there is a redirect or a normal match
-        filter = this.redirects.match(request);
-        if (filter === undefined) {
-          filter = this.filters.match(request);
+        result.filter = this.redirects.match(request);
+        if (result.filter === undefined) {
+          result.filter = this.filters.match(request);
         }
 
         // If we found something, check for exceptions
-        if (filter !== undefined) {
-          exception = this.exceptions.match(request);
+        if (result.filter !== undefined) {
+          result.exception = this.exceptions.match(request);
         }
       }
 
       // If there is a match
-      if (filter !== undefined) {
-        if (filter.isRedirect()) {
-          const redirectResource = this.resources.getResource(filter.getRedirect());
+      if (result.filter !== undefined) {
+        if (result.filter.isRedirect()) {
+          const redirectResource = this.resources.getResource(result.filter.getRedirect());
           if (redirectResource !== undefined) {
             const { data, contentType } = redirectResource;
             let dataUrl;
@@ -582,7 +601,7 @@ export default class FilterEngine {
               dataUrl = `data:${contentType};base64,${btoaPolyfill(data)}`;
             }
 
-            redirect = {
+            result.redirect = {
               body: data,
               contentType,
               dataUrl: dataUrl.trim(),
@@ -592,11 +611,17 @@ export default class FilterEngine {
       }
     }
 
-    return {
-      exception,
-      filter,
-      match: exception === undefined && filter !== undefined,
-      redirect,
-    };
+    result.match = result.exception === undefined && result.filter !== undefined;
+
+    // Emit events if we found a match
+    if (result.exception !== undefined) {
+      this.emit('request-whitelisted', request, result);
+    } else if (result.redirect !== undefined) {
+      this.emit('request-redirected', request, result);
+    } else if (result.filter !== undefined) {
+      this.emit('request-blocked', request, result);
+    }
+
+    return result;
   }
 }

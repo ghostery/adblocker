@@ -1,7 +1,7 @@
 import { app, BrowserWindow, session } from 'electron';
 import fetch from 'node-fetch';
 
-import { ElectronBlocker, fetchLists, fetchResources } from '@cliqz/adblocker-electron';
+import { ElectronBlocker, fetchLists, fetchResources, Request } from '@cliqz/adblocker-electron';
 
 // Polyfill fetch API for Node.js environment
 // @ts-ignore
@@ -52,6 +52,15 @@ async function loadAdblocker(): Promise<ElectronBlocker> {
   });
 }
 
+function getUrlToLoad(): string {
+  let url = 'https://www.mangareader.net/';
+  if (process.argv[process.argv.length - 1].endsWith('.js') === false) {
+    url = process.argv[process.argv.length - 1];
+  }
+
+  return url;
+}
+
 let mainWindow: BrowserWindow | null = null;
 
 async function createWindow() {
@@ -67,12 +76,31 @@ async function createWindow() {
   const engine = await loadAdblocker();
   engine.enableBlockingInSession(session.defaultSession);
 
-  let url = 'https://www.mangareader.net/';
-  if (process.argv[process.argv.length - 1].endsWith('.js') === false) {
-    url = process.argv[process.argv.length - 1];
-  }
+  engine.on('request-blocked', (request: Request) => {
+    console.log('blocked', request.url);
+  });
 
-  mainWindow.loadURL(url);
+  engine.on('request-redirected', (request: Request) => {
+    console.log('redirected', request.url);
+  });
+
+  engine.on('request-whitelisted', (request: Request) => {
+    console.log('whitelisted', request.url);
+  });
+
+  engine.on('csp-injected', (request: Request) => {
+    console.log('csp', request.url);
+  });
+
+  engine.on('script-injected', (script: string, url: string) => {
+    console.log('script', script.length, url);
+  });
+
+  engine.on('style-injected', (style: string, url: string) => {
+    console.log('style', style.length, url);
+  });
+
+  mainWindow.loadURL(getUrlToLoad());
   mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
