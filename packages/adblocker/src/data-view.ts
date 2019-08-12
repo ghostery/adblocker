@@ -29,6 +29,11 @@ function getCompressionSingleton(): Compression {
   return COMPRESSION;
 }
 
+function align4(pos: number): number {
+  // From: https://stackoverflow.com/a/2022194
+  return (pos + 3) & ~0x03;
+}
+
 /**
  * This abstraction allows to serialize efficiently low-level values of types:
  * String, uint8, uint16, uint32 while hiding the complexity of managing the
@@ -43,6 +48,24 @@ function getCompressionSingleton(): Compression {
  * deserializer you use `getX` functions to get back the values.
  */
 export default class StaticDataView {
+  /**
+   * Return number of bytes needed to serialize `array` Uint8Array typed array.
+   *
+   * WARNING: this only returns the correct size of `align` is `false`.
+   */
+  public static sizeOfBytes(array: Uint8Array, align: boolean): number {
+    return StaticDataView.sizeOfBytesWithLength(array.length, align);
+  }
+
+  /**
+   * Return number of bytes needed to serialize `array` Uint8Array typed array.
+   *
+   * WARNING: this only returns the correct size of `align` is `false`.
+   */
+  public static sizeOfBytesWithLength(length: number, align: boolean): number {
+    return length + (align ? align4(StaticDataView.sizeOfLength(length)) : StaticDataView.sizeOfLength(length));
+  }
+
   /**
    * Return number of bytes needed to serialize `str` ASCII string.
    */
@@ -86,6 +109,61 @@ export default class StaticDataView {
     return new StaticDataView(new Uint8Array(capacity), options);
   }
 
+  public static sizeOfNetworkRedirect(str: string, compression: boolean): number {
+    if (compression === true) {
+      return StaticDataView.sizeOfBytesWithLength(
+        getCompressionSingleton().networkRedirect.getCompressedSize(str),
+        false, // align
+      );
+    }
+
+    return StaticDataView.sizeOfASCII(str);
+  }
+
+  public static sizeOfNetworkHostname(str: string, compression: boolean): number {
+    if (compression === true) {
+      return StaticDataView.sizeOfBytesWithLength(
+        getCompressionSingleton().networkHostname.getCompressedSize(str),
+        false, // align
+      );
+    }
+
+    return StaticDataView.sizeOfASCII(str);
+  }
+
+  public static sizeOfNetworkCSP(str: string, compression: boolean): number {
+    if (compression === true) {
+      return StaticDataView.sizeOfBytesWithLength(
+        getCompressionSingleton().networkCSP.getCompressedSize(str),
+        false, // align
+      );
+    }
+
+    return StaticDataView.sizeOfASCII(str);
+  }
+
+  public static sizeOfNetworkFilter(str: string, compression: boolean): number {
+    if (compression === true) {
+      return StaticDataView.sizeOfBytesWithLength(
+        getCompressionSingleton().networkFilter.getCompressedSize(str),
+        false, // align
+      );
+    }
+
+    return StaticDataView.sizeOfASCII(str);
+  }
+
+  public static sizeOfCosmeticSelector(str: string, compression: boolean): number {
+    if (compression === true) {
+      return StaticDataView.sizeOfBytesWithLength(
+        getCompressionSingleton().cosmeticSelector.getCompressedSize(str),
+        false, // align
+      );
+    }
+
+    return StaticDataView.sizeOfASCII(str);
+  }
+
   /**
    * Return number of bytes needed to serialize `length`.
    */
@@ -96,7 +174,6 @@ export default class StaticDataView {
   public pos: number;
   public buffer: Uint8Array;
   public enableCompression: boolean;
-  private compression: Compression | null;
 
   constructor(buffer: Uint8Array, { enableCompression }: IDataViewOptions) {
     if (LITTLE_ENDIAN === false) {
@@ -107,8 +184,6 @@ export default class StaticDataView {
     }
 
     this.enableCompression = enableCompression;
-    this.compression = enableCompression ? getCompressionSingleton() : null;
-
     this.buffer = buffer;
     this.pos = 0;
   }
@@ -142,8 +217,7 @@ export default class StaticDataView {
    * Make sure that `this.pos` is aligned on a multiple of 4.
    */
   public align4(): void {
-    // From: https://stackoverflow.com/a/2022194
-    this.pos = (this.pos + 3) & ~0x03;
+    this.pos = align4(this.pos);
   }
 
   public set(buffer: Uint8Array): void {
@@ -189,12 +263,7 @@ export default class StaticDataView {
       this.align4();
     }
 
-    // TODO - using `subarray` here causes issue during updates. It is not
-    // clear why that happens but it would be nice to investigate so that we
-    // can continue to not copy any data while deserializing.
-    //
-    // const bytes = this.buffer.subarray(this.pos, this.pos + numberOfBytes);
-    const bytes = this.buffer.slice(this.pos, this.pos + numberOfBytes);
+    const bytes = this.buffer.subarray(this.pos, this.pos + numberOfBytes);
     this.pos += numberOfBytes;
 
     return bytes;
@@ -314,76 +383,76 @@ export default class StaticDataView {
   }
 
   public pushNetworkRedirect(str: string): void {
-    if (this.compression !== null) {
-      this.pushBytes(this.compression.deflateNetworkRedirectString(str));
+    if (this.enableCompression) {
+      this.pushBytes(getCompressionSingleton().networkRedirect.compress(str));
     } else {
       this.pushASCII(str);
     }
   }
 
   public getNetworkRedirect(): string {
-    if (this.compression !== null) {
-      return this.compression.inflateNetworkRedirectString(this.getBytes());
+    if (this.enableCompression) {
+      return getCompressionSingleton().networkRedirect.decompress(this.getBytes());
     }
     return this.getASCII();
   }
 
   public pushNetworkHostname(str: string): void {
-    if (this.compression !== null) {
-      this.pushBytes(this.compression.deflateNetworkHostnameString(str));
+    if (this.enableCompression) {
+      this.pushBytes(getCompressionSingleton().networkHostname.compress(str));
     } else {
       this.pushASCII(str);
     }
   }
 
   public getNetworkHostname(): string {
-    if (this.compression !== null) {
-      return this.compression.inflateNetworkHostnameString(this.getBytes());
+    if (this.enableCompression) {
+      return getCompressionSingleton().networkHostname.decompress(this.getBytes());
     }
     return this.getASCII();
   }
 
   public pushNetworkCSP(str: string): void {
-    if (this.compression !== null) {
-      this.pushBytes(this.compression.deflateNetworkCSPString(str));
+    if (this.enableCompression) {
+      this.pushBytes(getCompressionSingleton().networkCSP.compress(str));
     } else {
       this.pushASCII(str);
     }
   }
 
   public getNetworkCSP(): string {
-    if (this.compression !== null) {
-      return this.compression.inflateNetworkCSPString(this.getBytes());
+    if (this.enableCompression) {
+      return getCompressionSingleton().networkCSP.decompress(this.getBytes());
     }
     return this.getASCII();
   }
 
   public pushNetworkFilter(str: string): void {
-    if (this.compression !== null) {
-      this.pushBytes(this.compression.deflateNetworkFilterString(str));
+    if (this.enableCompression) {
+      this.pushBytes(getCompressionSingleton().networkFilter.compress(str));
     } else {
       this.pushASCII(str);
     }
   }
 
   public getNetworkFilter(): string {
-    if (this.compression !== null) {
-      return this.compression.inflateNetworkFilterString(this.getBytes());
+    if (this.enableCompression) {
+      return getCompressionSingleton().networkFilter.decompress(this.getBytes());
     }
     return this.getASCII();
   }
 
   public pushCosmeticSelector(str: string): void {
-    if (this.compression !== null) {
-      this.pushBytes(this.compression.deflateCosmeticString(str));
+    if (this.enableCompression) {
+      this.pushBytes(getCompressionSingleton().cosmeticSelector.compress(str));
     } else {
       this.pushASCII(str);
     }
   }
 
   public getCosmeticSelector(): string {
-    if (this.compression !== null) {
-      return this.compression.inflateCosmeticString(this.getBytes());
+    if (this.enableCompression) {
+      return getCompressionSingleton().cosmeticSelector.decompress(this.getBytes());
     }
     return this.getASCII();
   }

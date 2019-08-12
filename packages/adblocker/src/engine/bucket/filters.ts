@@ -67,6 +67,7 @@ export default class FiltersContainer<T extends IFilter> {
     // removed/added filters.
     let bufferSizeEstimation: number = this.filters.byteLength;
     let selected: T[] = [];
+    const compression = this.config.enableCompression;
 
     // Add existing rules (removing the ones with ids in `removedFilters`)
     const currentFilters = this.getFilters();
@@ -84,7 +85,7 @@ export default class FiltersContainer<T extends IFilter> {
           if (removedFilters.has(filter.getId()) === false) {
             selected.push(filter);
           } else {
-            bufferSizeEstimation -= filter.getSerializedSize();
+            bufferSizeEstimation -= filter.getSerializedSize(compression);
           }
         }
       }
@@ -97,7 +98,7 @@ export default class FiltersContainer<T extends IFilter> {
     const numberOfExistingFilters: number = selected.length;
     for (let i = 0; i < newFilters.length; i += 1) {
       const filter = newFilters[i];
-      bufferSizeEstimation += filter.getSerializedSize();
+      bufferSizeEstimation += filter.getSerializedSize(compression);
       selected.push(filter);
     }
 

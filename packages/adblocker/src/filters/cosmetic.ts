@@ -629,13 +629,13 @@ export default class CosmeticFilter implements IFilter {
    * in a DataView. This does not need to be 100% accurate but should be an
    * upper-bound. It should also be as fast as possible.
    */
-  public getSerializedSize(): number {
+  public getSerializedSize(compression: boolean): number {
     let estimate: number = 1 + 1; // mask (1 byte) + optional parts (1 byte)
 
     if (this.isUnicode()) {
       estimate += StaticDataView.sizeOfUTF8(this.selector);
     } else {
-      estimate += StaticDataView.sizeOfASCII(this.selector);
+      estimate += StaticDataView.sizeOfCosmeticSelector(this.selector, compression);
     }
 
     if (this.entities !== undefined) {
