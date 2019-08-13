@@ -244,18 +244,16 @@ export default class ReverseIndex<T extends IFilter> {
    */
   public getFilters(): T[] {
     const filters: T[] = [];
-    const numberOfFilters = this.numberOfFilters;
 
-    if (numberOfFilters === 0) {
+    if (this.numberOfFilters === 0) {
       return filters;
     }
 
-    const view = this.view;
-    const deserialize = this.deserializeFilter;
-    view.setPos(this.filtersIndexStart);
+    // set view cursor at the start of filters index
+    this.view.setPos(this.filtersIndexStart);
 
-    for (let i = 0; i < numberOfFilters; i += 1) {
-      filters.push(deserialize(view));
+    for (let i = 0; i < this.numberOfFilters; i += 1) {
+      filters.push(this.deserializeFilter(this.view));
     }
 
     return filters;
@@ -275,6 +273,7 @@ export default class ReverseIndex<T extends IFilter> {
   }
 
   public getSerializedSize(): number {
+    // 12 = 4 bytes (tokensLookupIndex.length) + 4 bytes (bucketsIndex.length) + 4 bytes (numberOfFilters)
     return 12 + StaticDataView.sizeOfBytes(this.view.buffer, true /* align */);
   }
 
@@ -331,11 +330,25 @@ export default class ReverseIndex<T extends IFilter> {
     const filtersTokens: Array<{ filter: T; multiTokens: Uint32Array[] }> = [];
     const histogram = new Counter<number>();
 
+    // Keep track of the final size of the buckets index. `bucketsIndexSize` is
+    // the number of indexed filters, multiplied by 2 (since we store both the
+    // token a filter is indexed with and the index of the filter).
+    let bucketsIndexSize = 0;
+    let estimatedBufferSize = this.view.buffer.byteLength - this.filtersIndexStart;
+
     // Compute tokens for all filters (the ones already contained in the index
     // *plus* the new ones *minus* the ones removed).
     const existingFilters = this.getFilters();
-    const shouldCheckRemovedFilters: boolean =
-      existingFilters.length !== 0 && removedFilters !== undefined && removedFilters.size !== 0;
+    const shouldCheckRemovedFilters: boolean = (
+      existingFilters.length !== 0 &&
+      removedFilters !== undefined &&
+      removedFilters.size !== 0
+    );
+
+    // Update estimated view size with new filters
+    for (let i = 0; i < newFilters.length; i += 1) {
+      estimatedBufferSize += newFilters[i].getSerializedSize(compression);
+    }
 
     let filters = existingFilters;
     if (filters.length === 0) {
@@ -354,21 +367,12 @@ export default class ReverseIndex<T extends IFilter> {
       filters.sort((f1: T, f2: T): number => f1.getId() - f2.getId());
     }
 
-    // Keep track of the final size of the buckets index. `bucketsIndexSize` is
-    // the number of indexed filters, multiplied by 2 (since we store both the
-    // token a filter is indexed with and the index of the filter).
-    let bucketsIndexSize = 0;
-    let estimatedBufferSize = 0;
-
     for (let i = 0; i < filters.length; i += 1) {
       const filter = filters[i];
       if (
         shouldCheckRemovedFilters === false ||
         (removedFilters !== undefined && removedFilters.has(filter.getId()) === false)
       ) {
-        // TODO - could be smarter by re-using size before update + updating with new and removed filters only
-        estimatedBufferSize += filter.getSerializedSize(compression); // size of filter once serialized
-
         // Tokenize filter
         const multiTokens = filter.getTokens();
         filtersTokens.push({
@@ -387,13 +391,16 @@ export default class ReverseIndex<T extends IFilter> {
             histogram.incr(tokens[k]);
           }
         }
+      } else {
+        // Filter was removed so we just remove its size from total needed size
+        estimatedBufferSize -= filter.getSerializedSize(compression);
       }
     }
 
-    // TODO
+    // Add size of bucketsIndex to total size (* 4 because these are 32 bits numbers)
     estimatedBufferSize += bucketsIndexSize * 4;
 
-    // No filters given; reset to empty bucket; TODO check?
+    // No filters given; reset to empty bucket
     if (filtersTokens.length === 0) {
       this.updateInternals({
         bucketsIndex: EMPTY_UINT32_ARRAY,
@@ -427,6 +434,7 @@ export default class ReverseIndex<T extends IFilter> {
       prefixes.push([]);
     }
 
+    // Add size of tokensLookupIndex to total size
     estimatedBufferSize += tokensLookupIndexSize * 4;
 
     // This byte array contains all the filters serialized consecutively.
@@ -437,22 +445,11 @@ export default class ReverseIndex<T extends IFilter> {
     // 1. The first section contains all the filters stored in the index
     // 2. The second section contains the compact buckets where filters having
     // their indexing token sharing the last N bits are grouped together.
-
-    // TODO - take care of alignment?
     const buffer = StaticDataView.allocate(estimatedBufferSize, this.config);
 
     // Allocate views for tokens and buckets
     const tokensLookupIndex = buffer.getUint32ArrayView(tokensLookupIndexSize);
-    if (buffer.pos !== (tokensLookupIndexSize * 4)) {
-      console.log('>>> 1', buffer.pos, tokensLookupIndexSize, tokensLookupIndexSize * 4);
-    }
-
-    const before = buffer.pos;
     const bucketsIndex = buffer.getUint32ArrayView(bucketsIndexSize);
-    if ((buffer.pos - before) !== (bucketsIndexSize * 4)) {
-      console.log('>>> 2', buffer.pos - before, bucketsIndexSize, bucketsIndexSize * 4);
-    }
-
     const filtersIndexStart = buffer.getPos();
 
     // For each filter, find the best token (least seen)
@@ -464,9 +461,6 @@ export default class ReverseIndex<T extends IFilter> {
       // Serialize this filter and keep track of its index in the byte array
       const filterIndex = buffer.pos;
       filter.serialize(buffer);
-      if (filter.getSerializedSize(compression) !== (buffer.pos - filterIndex)) {
-        console.log('>>>> 3?', filter.toString(), filter.getSerializedSize(compression), (buffer.pos - filterIndex));
-      }
 
       // Index the filter once per "tokens"
       for (let j = 0; j < multiTokens.length; j += 1) {
@@ -510,10 +504,6 @@ export default class ReverseIndex<T extends IFilter> {
       }
     }
 
-    if (buffer.pos !== estimatedBufferSize) {
-      console.log(`size: got ${buffer.pos}, expected ${estimatedBufferSize}`);
-    }
-
     // Update internals
     buffer.seekZero();
     this.updateInternals({
@@ -523,8 +513,6 @@ export default class ReverseIndex<T extends IFilter> {
       tokensLookupIndex,
       view: buffer,
     });
-
-    // TODO - could this also solve the issue with deserializing without array copy?
   }
 
   private updateInternals({

@@ -129,6 +129,10 @@ export default class FiltersContainer<T extends IFilter> {
     }
   }
 
+  public getSerializedSize(): number {
+    return StaticDataView.sizeOfBytes(this.filters, false /* no alignement */);
+  }
+
   public serialize(buffer: StaticDataView): void {
     buffer.pushBytes(this.filters);
   }

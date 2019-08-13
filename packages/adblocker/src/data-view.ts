@@ -21,9 +21,9 @@ export const EMPTY_UINT32_ARRAY = new Uint32Array(0);
 const LITTLE_ENDIAN: boolean = new Int8Array(new Int16Array([1]).buffer)[0] === 1;
 
 // Store compression in a lazy, global singleton
-let COMPRESSION: Compression | null = null;
+let COMPRESSION: Compression | undefined;
 function getCompressionSingleton(): Compression {
-  if (COMPRESSION === null) {
+  if (COMPRESSION === undefined) {
     COMPRESSION = new Compression();
   }
   return COMPRESSION;
@@ -36,22 +36,38 @@ function align4(pos: number): number {
 
 /**
  * This abstraction allows to serialize efficiently low-level values of types:
- * String, uint8, uint16, uint32 while hiding the complexity of managing the
- * current offset and growing. It should always be instantiated with a
- * big-enough length because this will not allow for resizing.
+ * string, uint8, uint16, uint32, etc. while hiding the complexity of managing
+ * the current offset and growing. It should always be instantiated with a
+ * big-enough length because this will not allow for resizing. To allow
+ * deciding the required total size, function estimating the size needed to
+ * store different primitive values are exposes as static methods.
  *
  * This class is also more efficient than the built-in `DataView`.
  *
  * The way this is used in practice is that you write pairs of function to
- * serialize (respectively) deserialize a given structure/class (with code being
- * pretty symetrical). In the serializer you `pushX` values, and in the
- * deserializer you use `getX` functions to get back the values.
+ * serialize and deserialize a given structure/class (with code being pretty
+ * symetrical). In the serializer you `pushX` values, and in the deserializer
+ * you use `getX` functions to get back the values.
  */
 export default class StaticDataView {
   /**
+   * Return size of of a serialized byte value.
+   */
+  public static sizeOfByte(): number {
+    return 1;
+  }
+
+  /**
+   * Return size of of a serialized boolean value.
+   */
+  public static sizeOfBool(): number {
+    return 1;
+  }
+
+  /**
    * Return number of bytes needed to serialize `array` Uint8Array typed array.
    *
-   * WARNING: this only returns the correct size of `align` is `false`.
+   * WARNING: this only returns the correct size if `align` is `false`.
    */
   public static sizeOfBytes(array: Uint8Array, align: boolean): number {
     return StaticDataView.sizeOfBytesWithLength(array.length, align);
@@ -60,10 +76,15 @@ export default class StaticDataView {
   /**
    * Return number of bytes needed to serialize `array` Uint8Array typed array.
    *
-   * WARNING: this only returns the correct size of `align` is `false`.
+   * WARNING: this only returns the correct size if `align` is `false`.
    */
   public static sizeOfBytesWithLength(length: number, align: boolean): number {
-    return length + (align ? align4(StaticDataView.sizeOfLength(length)) : StaticDataView.sizeOfLength(length));
+    // Alignment is a tricky thing because it depends on the current offset in
+    // the buffer at the time of serialization; which we cannot anticipate
+    // before actually starting serialization. This means that we need to
+    // potentially over-estimate the size (at most by 3 bytes) to make sure the
+    // final size is at least equal or a bit bigger than necessary.
+    return length + (align ? 3 : 0) + StaticDataView.sizeOfLength(length);
   }
 
   /**
@@ -86,27 +107,6 @@ export default class StaticDataView {
    */
   public static sizeOfUint32Array(array: Uint32Array): number {
     return array.byteLength + StaticDataView.sizeOfLength(array.length);
-  }
-
-  /**
-   * Create an empty (i.e.: size = 0) StaticDataView.
-   */
-  public static empty(options: IDataViewOptions): StaticDataView {
-    return StaticDataView.fromUint8Array(EMPTY_UINT8_ARRAY, options);
-  }
-
-  /**
-   * Instantiate a StaticDataView instance from `array` of type Uint8Array.
-   */
-  public static fromUint8Array(array: Uint8Array, options: IDataViewOptions): StaticDataView {
-    return new StaticDataView(array, options);
-  }
-
-  /**
-   * Instantiate a StaticDataView with given `capacity` number of bytes.
-   */
-  public static allocate(capacity: number, options: IDataViewOptions): StaticDataView {
-    return new StaticDataView(new Uint8Array(capacity), options);
   }
 
   public static sizeOfNetworkRedirect(str: string, compression: boolean): number {
@@ -165,6 +165,27 @@ export default class StaticDataView {
   }
 
   /**
+   * Create an empty (i.e.: size = 0) StaticDataView.
+   */
+  public static empty(options: IDataViewOptions): StaticDataView {
+    return StaticDataView.fromUint8Array(EMPTY_UINT8_ARRAY, options);
+  }
+
+  /**
+   * Instantiate a StaticDataView instance from `array` of type Uint8Array.
+   */
+  public static fromUint8Array(array: Uint8Array, options: IDataViewOptions): StaticDataView {
+    return new StaticDataView(array, options);
+  }
+
+  /**
+   * Instantiate a StaticDataView with given `capacity` number of bytes.
+   */
+  public static allocate(capacity: number, options: IDataViewOptions): StaticDataView {
+    return new StaticDataView(new Uint8Array(capacity), options);
+  }
+
+  /**
    * Return number of bytes needed to serialize `length`.
    */
   private static sizeOfLength(length: number): number {
@@ -173,7 +194,7 @@ export default class StaticDataView {
 
   public pos: number;
   public buffer: Uint8Array;
-  public enableCompression: boolean;
+  public compression: Compression | undefined;
 
   constructor(buffer: Uint8Array, { enableCompression }: IDataViewOptions) {
     if (LITTLE_ENDIAN === false) {
@@ -183,9 +204,16 @@ export default class StaticDataView {
       throw new Error('Adblocker currently does not support Big-endian systems');
     }
 
-    this.enableCompression = enableCompression;
+    if (enableCompression === true) {
+      this.enableCompression();
+    }
+
     this.buffer = buffer;
     this.pos = 0;
+  }
+
+  public enableCompression(): void {
+    this.compression = getCompressionSingleton();
   }
 
   public checksum(): number {
@@ -211,6 +239,15 @@ export default class StaticDataView {
   public slice(): Uint8Array {
     this.checkSize();
     return this.buffer.slice(0, this.pos);
+  }
+
+  public subarray(): Uint8Array {
+    if (this.pos === this.buffer.byteLength) {
+      return this.buffer;
+    }
+
+    this.checkSize();
+    return this.buffer.subarray(0, this.pos);
   }
 
   /**
@@ -383,76 +420,76 @@ export default class StaticDataView {
   }
 
   public pushNetworkRedirect(str: string): void {
-    if (this.enableCompression) {
-      this.pushBytes(getCompressionSingleton().networkRedirect.compress(str));
+    if (this.compression !== undefined) {
+      this.pushBytes(this.compression.networkRedirect.compress(str));
     } else {
       this.pushASCII(str);
     }
   }
 
   public getNetworkRedirect(): string {
-    if (this.enableCompression) {
-      return getCompressionSingleton().networkRedirect.decompress(this.getBytes());
+    if (this.compression !== undefined) {
+      return this.compression.networkRedirect.decompress(this.getBytes());
     }
     return this.getASCII();
   }
 
   public pushNetworkHostname(str: string): void {
-    if (this.enableCompression) {
-      this.pushBytes(getCompressionSingleton().networkHostname.compress(str));
+    if (this.compression !== undefined) {
+      this.pushBytes(this.compression.networkHostname.compress(str));
     } else {
       this.pushASCII(str);
     }
   }
 
   public getNetworkHostname(): string {
-    if (this.enableCompression) {
-      return getCompressionSingleton().networkHostname.decompress(this.getBytes());
+    if (this.compression !== undefined) {
+      return this.compression.networkHostname.decompress(this.getBytes());
     }
     return this.getASCII();
   }
 
   public pushNetworkCSP(str: string): void {
-    if (this.enableCompression) {
-      this.pushBytes(getCompressionSingleton().networkCSP.compress(str));
+    if (this.compression !== undefined) {
+      this.pushBytes(this.compression.networkCSP.compress(str));
     } else {
       this.pushASCII(str);
     }
   }
 
   public getNetworkCSP(): string {
-    if (this.enableCompression) {
-      return getCompressionSingleton().networkCSP.decompress(this.getBytes());
+    if (this.compression !== undefined) {
+      return this.compression.networkCSP.decompress(this.getBytes());
     }
     return this.getASCII();
   }
 
   public pushNetworkFilter(str: string): void {
-    if (this.enableCompression) {
-      this.pushBytes(getCompressionSingleton().networkFilter.compress(str));
+    if (this.compression !== undefined) {
+      this.pushBytes(this.compression.networkFilter.compress(str));
     } else {
       this.pushASCII(str);
     }
   }
 
   public getNetworkFilter(): string {
-    if (this.enableCompression) {
-      return getCompressionSingleton().networkFilter.decompress(this.getBytes());
+    if (this.compression !== undefined) {
+      return this.compression.networkFilter.decompress(this.getBytes());
     }
     return this.getASCII();
   }
 
   public pushCosmeticSelector(str: string): void {
-    if (this.enableCompression) {
-      this.pushBytes(getCompressionSingleton().cosmeticSelector.compress(str));
+    if (this.compression !== undefined) {
+      this.pushBytes(this.compression.cosmeticSelector.compress(str));
     } else {
       this.pushASCII(str);
     }
   }
 
   public getCosmeticSelector(): string {
-    if (this.enableCompression) {
-      return getCompressionSingleton().cosmeticSelector.decompress(this.getBytes());
+    if (this.compression !== undefined) {
+      return this.compression.cosmeticSelector.decompress(this.getBytes());
     }
     return this.getASCII();
   }

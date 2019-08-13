@@ -108,6 +108,23 @@ export default class Resources {
     return this.resources.get(name);
   }
 
+  public getSerializedSize(): number {
+    let estimatedSize = (
+      StaticDataView.sizeOfASCII(this.checksum) +
+      StaticDataView.sizeOfByte() // resources.size
+    );
+
+    this.resources.forEach(({ contentType, data }, name) => {
+      estimatedSize += (
+        StaticDataView.sizeOfASCII(name) +
+        StaticDataView.sizeOfASCII(contentType) +
+        StaticDataView.sizeOfASCII(data)
+      );
+    });
+
+    return estimatedSize;
+  }
+
   public serialize(buffer: StaticDataView): void {
     // Serialize `checksum`
     buffer.pushASCII(this.checksum);

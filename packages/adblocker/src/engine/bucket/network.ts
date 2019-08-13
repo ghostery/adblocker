@@ -90,6 +90,13 @@ export default class NetworkFilterBucket {
     this.badFiltersIds = null;
   }
 
+  public getSerializedSize(): number {
+    return (
+      this.index.getSerializedSize() +
+      this.badFilters.getSerializedSize()
+    );
+  }
+
   public serialize(buffer: StaticDataView): void {
     this.index.serialize(buffer);
     this.badFilters.serialize(buffer);

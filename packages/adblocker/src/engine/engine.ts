@@ -75,7 +75,7 @@ export default class FilterEngine extends EventEmitter<
 
     // Optionally turn compression ON
     if (config.enableCompression) {
-      buffer.enableCompression = true;
+      buffer.enableCompression();
     }
 
     // Also make sure that the built-in checksum is correct. This allows to
@@ -178,16 +178,40 @@ export default class FilterEngine extends EventEmitter<
     }
   }
 
+  public getSerializedSize(): number {
+    let estimatedSize: number = (
+      StaticDataView.sizeOfByte() + // engine version
+      this.config.getSerializedSize() +
+      this.resources.getSerializedSize() +
+
+      this.filters.getSerializedSize() +
+      this.exceptions.getSerializedSize() +
+      this.importants.getSerializedSize() +
+      this.redirects.getSerializedSize() +
+      this.csp.getSerializedSize() +
+      this.genericHides.getSerializedSize() +
+      this.cosmetics.getSerializedSize() +
+
+      4 // checksum
+    );
+
+    for (const [name, checksum] of this.lists) {
+      estimatedSize += (
+        StaticDataView.sizeOfASCII(name) +
+        StaticDataView.sizeOfASCII(checksum)
+      );
+    }
+
+    return estimatedSize;
+  }
+
   /**
    * Creates a binary representation of the full engine. It can be stored
    * on-disk for faster loading of the adblocker. The `deserialize` static
    * method of Engine can be used to restore the engine.
    */
   public serialize(array?: Uint8Array): Uint8Array {
-    // Create a big buffer! It should always be bigger than the serialized
-    // engine since `StaticDataView` will neither resize it nor detect overflows
-    // (for efficiency purposes).
-    const buffer = StaticDataView.fromUint8Array(array || new Uint8Array(9000000), this.config);
+    const buffer = StaticDataView.fromUint8Array(array || new Uint8Array(this.getSerializedSize()), this.config);
 
     buffer.pushUint8(ENGINE_VERSION);
 
@@ -219,7 +243,7 @@ export default class FilterEngine extends EventEmitter<
       buffer.pushUint32(buffer.checksum());
     }
 
-    return buffer.slice();
+    return buffer.subarray();
   }
 
   /**
