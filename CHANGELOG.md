@@ -4,6 +4,14 @@
 
 *not released*
 
+## 0.12.1
+
+*2019-08-13*
+
+  *  Update assets + re-generate compression codebooks [#256](https://github.com/cliqz-oss/adblocker/pull/256)
+  * implement simple event emitter for `FiltersEngine` and sub-classes [#251](https://github.com/cliqz-oss/adblocker/pull/251)
+  * electron: fix bundles [#249](https://github.com/cliqz-oss/adblocker/pull/249)
+  * electron: promote mutationObserver option to main config + fix constructor and parse methods [#248](https://github.com/cliqz-oss/adblocker/pull/248)
   * fix source maps support for all packages [#219](https://github.com/cliqz-oss/adblocker/pull/219)
 
 ## 0.12.0
