@@ -108,10 +108,11 @@ export default class FilterEngine extends EventEmitter<
     engine.lists = lists;
 
     // Deserialize buckets
-    engine.filters = NetworkFilterBucket.deserialize(buffer, config);
-    engine.exceptions = NetworkFilterBucket.deserialize(buffer, config);
     engine.importants = NetworkFilterBucket.deserialize(buffer, config);
     engine.redirects = NetworkFilterBucket.deserialize(buffer, config);
+    engine.filters = NetworkFilterBucket.deserialize(buffer, config);
+    engine.exceptions = NetworkFilterBucket.deserialize(buffer, config);
+
     engine.csp = NetworkFilterBucket.deserialize(buffer, config);
     engine.genericHides = NetworkFilterBucket.deserialize(buffer, config);
     engine.cosmetics = CosmeticFilterBucket.deserialize(buffer, config);
@@ -246,10 +247,11 @@ export default class FilterEngine extends EventEmitter<
     }
 
     // Filters buckets
-    this.filters.serialize(buffer);
-    this.exceptions.serialize(buffer);
     this.importants.serialize(buffer);
     this.redirects.serialize(buffer);
+    this.filters.serialize(buffer);
+    this.exceptions.serialize(buffer);
+
     this.csp.serialize(buffer);
     this.genericHides.serialize(buffer);
     this.cosmetics.serialize(buffer);
@@ -362,11 +364,11 @@ export default class FilterEngine extends EventEmitter<
         removedNetworkFilters.length === 0 ? undefined : new Set(removedNetworkFilters);
 
       // Update buckets in-place
-      this.filters.update(filters, removedNetworkFiltersSet);
-      this.csp.update(csp, removedNetworkFiltersSet);
-      this.exceptions.update(exceptions, removedNetworkFiltersSet);
       this.importants.update(importants, removedNetworkFiltersSet);
       this.redirects.update(redirects, removedNetworkFiltersSet);
+      this.filters.update(filters, removedNetworkFiltersSet);
+      this.exceptions.update(exceptions, removedNetworkFiltersSet);
+      this.csp.update(csp, removedNetworkFiltersSet);
       this.genericHides.update(genericHides, removedNetworkFiltersSet);
     }
 
