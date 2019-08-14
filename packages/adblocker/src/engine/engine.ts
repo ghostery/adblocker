@@ -178,6 +178,18 @@ export default class FilterEngine extends EventEmitter<
     }
   }
 
+  /**
+   * Estimate the number of bytes needed to serialize this instance of
+   * `FiltersEngine` using the `serialize(...)` method. It is used internally
+   * by `serialize(...)` to allocate a buffer of the right size and you should
+   * not have to call it yourself most of the time.
+   *
+   * There are cases where we cannot estimate statically the exact size of the
+   * resulting buffer (due to alignement which need to be performed); this
+   * method will return a safe estimate which will always be at least equal to
+   * the real number of bytes needed, or bigger (usually of a few bytes only:
+   * ~20 bytes is to be expected).
+   */
   public getSerializedSize(): number {
     let estimatedSize: number = (
       StaticDataView.sizeOfByte() + // engine version
@@ -195,6 +207,7 @@ export default class FilterEngine extends EventEmitter<
       4 // checksum
     );
 
+    // Estimate size of `this.lists` which stores information of checksum for each list.
     for (const [name, checksum] of this.lists) {
       estimatedSize += (
         StaticDataView.sizeOfASCII(name) +
@@ -211,7 +224,10 @@ export default class FilterEngine extends EventEmitter<
    * method of Engine can be used to restore the engine.
    */
   public serialize(array?: Uint8Array): Uint8Array {
-    const buffer = StaticDataView.fromUint8Array(array || new Uint8Array(this.getSerializedSize()), this.config);
+    const buffer = StaticDataView.fromUint8Array(
+      array || new Uint8Array(this.getSerializedSize()),
+      this.config,
+    );
 
     buffer.pushUint8(ENGINE_VERSION);
 
@@ -238,7 +254,7 @@ export default class FilterEngine extends EventEmitter<
     this.genericHides.serialize(buffer);
     this.cosmetics.serialize(buffer);
 
-    // Append a checksum at the end
+    // Optionally append a checksum at the end
     if (this.config.integrityCheck) {
       buffer.pushUint32(buffer.checksum());
     }
@@ -249,7 +265,6 @@ export default class FilterEngine extends EventEmitter<
   /**
    * Update engine with new filters or resources.
    */
-
   public loadedLists(): string[] {
     return Array.from(this.lists.keys());
   }
