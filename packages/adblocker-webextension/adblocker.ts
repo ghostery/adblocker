@@ -9,10 +9,7 @@
 import { parse } from 'tldts-experimental';
 
 import { FiltersEngine, Request, WebRequestType } from '@cliqz/adblocker';
-import {
-  IBackgroundCallback,
-  IMessageFromBackground,
-} from '@cliqz/adblocker-webextension-cosmetics';
+import { IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-content';
 
 export interface WebRequestBeforeRequestDetails {
   tabId: number;

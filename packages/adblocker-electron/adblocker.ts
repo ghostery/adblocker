@@ -15,7 +15,7 @@ import { parse } from 'tldts-experimental';
 import {
   IBackgroundCallback,
   IMessageFromBackground,
-} from '@cliqz/adblocker-webextension-cosmetics';
+} from '@cliqz/adblocker-content';
 
 // https://stackoverflow.com/questions/48854265/why-do-i-see-an-electron-security-warning-after-updating-my-electron-project-t
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';

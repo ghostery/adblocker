@@ -11,11 +11,14 @@ import * as puppeteer from 'puppeteer';
 import { parse } from 'tldts-experimental';
 
 import {
-  autoRemoveScript,
-  extractFeaturesFromDOM,
   FiltersEngine,
   Request,
 } from '@cliqz/adblocker';
+
+import {
+  autoRemoveScript,
+  extractFeaturesFromDOM,
+} from '@cliqz/adblocker-content';
 
 /**
  * Create an instance of `Request` from `puppeteer.Request`.

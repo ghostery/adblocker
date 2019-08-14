@@ -6,23 +6,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { extractFeaturesFromDOM, injectCSSRule, injectScript } from '@cliqz/adblocker';
-
-export type Lifecycle = 'start' | 'dom-update';
-
-export interface IBackgroundCallback {
-  classes: string[];
-  hrefs: string[];
-  ids: string[];
-  lifecycle: Lifecycle;
-}
-
-export interface IMessageFromBackground {
-  active: boolean;
-  scripts: string[];
-  styles: string;
-  extended: string[];
-}
+import {
+  extractFeaturesFromDOM,
+  IBackgroundCallback,
+  IMessageFromBackground,
+  injectCSSRule,
+  injectScript,
+} from '@cliqz/adblocker-content';
 
 declare global {
   interface Window {

@@ -7,12 +7,11 @@
  */
 
 import {
+  extractFeaturesFromDOM,
   IBackgroundCallback,
   IMessageFromBackground,
-} from '@cliqz/adblocker-webextension-cosmetics';
+} from '@cliqz/adblocker-content';
 import { ipcRenderer, webFrame } from 'electron';
-
-import { extractFeaturesFromDOM } from '@cliqz/adblocker';
 
 const enableMutationObserver = ipcRenderer.sendSync('is-mutation-observer-enabled');
 

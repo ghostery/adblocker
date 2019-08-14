@@ -15,6 +15,15 @@
     > initialization and updates, and there is no longer an arbitrary and
     > hard-coded upper limit.
 
+  * create new @cliqz/adblocker-content package with common utils [#264](https://github.com/cliqz-oss/adblocker/pull/264)
+
+    > We currently rely on rollup to create a small bundle for content
+    > related code imported from @cliqz/adblocker. Multiple times in
+    > the past the bundler was not aggressive enough and code from
+    > background was pulled in content bundles. To make sure we do not
+    > have this issue again, all these content-scripts helpers are moved
+    > into their own package.
+
 ## 0.12.1
 
 *2019-08-13*
