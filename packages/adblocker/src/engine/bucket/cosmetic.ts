@@ -303,12 +303,12 @@ export default class CosmeticFilterBucket {
 
   public getSerializedSize(): number {
     return (
-      this.genericRules.getSerializedSize() +
-      this.unhideIndex.getSerializedSize() +
-      this.hostnameIndex.getSerializedSize() +
       this.classesIndex.getSerializedSize() +
+      this.genericRules.getSerializedSize() +
+      this.hostnameIndex.getSerializedSize() +
+      this.hrefsIndex.getSerializedSize() +
       this.idsIndex.getSerializedSize() +
-      this.hrefsIndex.getSerializedSize()
+      this.unhideIndex.getSerializedSize()
     );
   }
 

@@ -92,8 +92,8 @@ export default class NetworkFilterBucket {
 
   public getSerializedSize(): number {
     return (
-      this.index.getSerializedSize() +
-      this.badFilters.getSerializedSize()
+      this.badFilters.getSerializedSize() +
+      this.index.getSerializedSize()
     );
   }
 
