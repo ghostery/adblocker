@@ -17,7 +17,7 @@ import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 
-export const ENGINE_VERSION = 32;
+export const ENGINE_VERSION = 33;
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -75,7 +75,7 @@ export default class FilterEngine extends EventEmitter<
 
     // Optionally turn compression ON
     if (config.enableCompression) {
-      buffer.enableCompression = true;
+      buffer.enableCompression();
     }
 
     // Also make sure that the built-in checksum is correct. This allows to
@@ -108,10 +108,11 @@ export default class FilterEngine extends EventEmitter<
     engine.lists = lists;
 
     // Deserialize buckets
-    engine.filters = NetworkFilterBucket.deserialize(buffer, config);
-    engine.exceptions = NetworkFilterBucket.deserialize(buffer, config);
     engine.importants = NetworkFilterBucket.deserialize(buffer, config);
     engine.redirects = NetworkFilterBucket.deserialize(buffer, config);
+    engine.filters = NetworkFilterBucket.deserialize(buffer, config);
+    engine.exceptions = NetworkFilterBucket.deserialize(buffer, config);
+
     engine.csp = NetworkFilterBucket.deserialize(buffer, config);
     engine.genericHides = NetworkFilterBucket.deserialize(buffer, config);
     engine.cosmetics = CosmeticFilterBucket.deserialize(buffer, config);
@@ -179,15 +180,55 @@ export default class FilterEngine extends EventEmitter<
   }
 
   /**
+   * Estimate the number of bytes needed to serialize this instance of
+   * `FiltersEngine` using the `serialize(...)` method. It is used internally
+   * by `serialize(...)` to allocate a buffer of the right size and you should
+   * not have to call it yourself most of the time.
+   *
+   * There are cases where we cannot estimate statically the exact size of the
+   * resulting buffer (due to alignement which need to be performed); this
+   * method will return a safe estimate which will always be at least equal to
+   * the real number of bytes needed, or bigger (usually of a few bytes only:
+   * ~20 bytes is to be expected).
+   */
+  public getSerializedSize(): number {
+    let estimatedSize: number = (
+      StaticDataView.sizeOfByte() + // engine version
+      this.config.getSerializedSize() +
+      this.resources.getSerializedSize() +
+
+      this.filters.getSerializedSize() +
+      this.exceptions.getSerializedSize() +
+      this.importants.getSerializedSize() +
+      this.redirects.getSerializedSize() +
+      this.csp.getSerializedSize() +
+      this.genericHides.getSerializedSize() +
+      this.cosmetics.getSerializedSize() +
+
+      4 // checksum
+    );
+
+    // Estimate size of `this.lists` which stores information of checksum for each list.
+    for (const [name, checksum] of this.lists) {
+      estimatedSize += (
+        StaticDataView.sizeOfASCII(name) +
+        StaticDataView.sizeOfASCII(checksum)
+      );
+    }
+
+    return estimatedSize;
+  }
+
+  /**
    * Creates a binary representation of the full engine. It can be stored
    * on-disk for faster loading of the adblocker. The `deserialize` static
    * method of Engine can be used to restore the engine.
    */
   public serialize(array?: Uint8Array): Uint8Array {
-    // Create a big buffer! It should always be bigger than the serialized
-    // engine since `StaticDataView` will neither resize it nor detect overflows
-    // (for efficiency purposes).
-    const buffer = StaticDataView.fromUint8Array(array || new Uint8Array(9000000), this.config);
+    const buffer = StaticDataView.fromUint8Array(
+      array || new Uint8Array(this.getSerializedSize()),
+      this.config,
+    );
 
     buffer.pushUint8(ENGINE_VERSION);
 
@@ -206,26 +247,26 @@ export default class FilterEngine extends EventEmitter<
     }
 
     // Filters buckets
-    this.filters.serialize(buffer);
-    this.exceptions.serialize(buffer);
     this.importants.serialize(buffer);
     this.redirects.serialize(buffer);
+    this.filters.serialize(buffer);
+    this.exceptions.serialize(buffer);
+
     this.csp.serialize(buffer);
     this.genericHides.serialize(buffer);
     this.cosmetics.serialize(buffer);
 
-    // Append a checksum at the end
+    // Optionally append a checksum at the end
     if (this.config.integrityCheck) {
       buffer.pushUint32(buffer.checksum());
     }
 
-    return buffer.slice();
+    return buffer.subarray();
   }
 
   /**
    * Update engine with new filters or resources.
    */
-
   public loadedLists(): string[] {
     return Array.from(this.lists.keys());
   }
@@ -323,11 +364,11 @@ export default class FilterEngine extends EventEmitter<
         removedNetworkFilters.length === 0 ? undefined : new Set(removedNetworkFilters);
 
       // Update buckets in-place
-      this.filters.update(filters, removedNetworkFiltersSet);
-      this.csp.update(csp, removedNetworkFiltersSet);
-      this.exceptions.update(exceptions, removedNetworkFiltersSet);
       this.importants.update(importants, removedNetworkFiltersSet);
       this.redirects.update(redirects, removedNetworkFiltersSet);
+      this.filters.update(filters, removedNetworkFiltersSet);
+      this.exceptions.update(exceptions, removedNetworkFiltersSet);
+      this.csp.update(csp, removedNetworkFiltersSet);
       this.genericHides.update(genericHides, removedNetworkFiltersSet);
     }
 

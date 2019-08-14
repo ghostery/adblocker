@@ -10,5 +10,5 @@ const baseConfig = require('../../jest.config.js');
 
 module.exports = {
   ...baseConfig,
-  collectCoverageFrom: ['./src/*', './adblocker.ts'],
+  collectCoverageFrom: ['./src/**/*.ts', './adblocker.ts'],
 };

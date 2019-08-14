@@ -4,11 +4,22 @@
 
 *not released*
 
+  * allow correct size allocation for data views [#257](https://github.com/cliqz-oss/adblocker/pull/257)
+
+    > Implement a mechanism which allows to predict the number of
+    > bytes needed to serialize any of the data-structures used by the
+    > adblocker, ahead of time (before serialization). This allows to lift
+    > the limitation of size completely (beforehand, we had to allocate
+    > a safe amount of memory to be sure there would be enough space).
+    > As a benefit, only the required amount of memory is used during
+    > initialization and updates, and there is no longer an arbitrary and
+    > hard-coded upper limit.
+
 ## 0.12.1
 
 *2019-08-13*
 
-  *  Update assets + re-generate compression codebooks [#256](https://github.com/cliqz-oss/adblocker/pull/256)
+  * Update assets + re-generate compression codebooks [#256](https://github.com/cliqz-oss/adblocker/pull/256)
   * implement simple event emitter for `FiltersEngine` and sub-classes [#251](https://github.com/cliqz-oss/adblocker/pull/251)
   * electron: fix bundles [#249](https://github.com/cliqz-oss/adblocker/pull/249)
   * electron: promote mutationObserver option to main config + fix constructor and parse methods [#248](https://github.com/cliqz-oss/adblocker/pull/248)

@@ -301,6 +301,17 @@ export default class CosmeticFilterBucket {
     this.hrefsIndex.update(hrefSelectors, removedFilters);
   }
 
+  public getSerializedSize(): number {
+    return (
+      this.classesIndex.getSerializedSize() +
+      this.genericRules.getSerializedSize() +
+      this.hostnameIndex.getSerializedSize() +
+      this.hrefsIndex.getSerializedSize() +
+      this.idsIndex.getSerializedSize() +
+      this.unhideIndex.getSerializedSize()
+    );
+  }
+
   public serialize(buffer: StaticDataView): void {
     this.genericRules.serialize(buffer);
     this.unhideIndex.serialize(buffer);

@@ -51,6 +51,12 @@ export default class Config {
     this.loadNetworkFilters = loadNetworkFilters;
   }
 
+  public getSerializedSize(): number {
+    // NOTE: this should always be the number of attributes and needs to be
+    // updated when `Config` changes.
+    return 8 * StaticDataView.sizeOfBool();
+  }
+
   public serialize(buffer: StaticDataView): void {
     buffer.pushBool(this.debug);
     buffer.pushBool(this.enableCompression);

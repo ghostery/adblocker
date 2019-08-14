@@ -15,12 +15,13 @@ import { loadAllLists } from './utils';
 
 describe('Make sure size estimate is accurate', () => {
   const { cosmeticFilters, networkFilters } = parseFilters(loadAllLists(), { debug: true });
-  const buffer = StaticDataView.allocate(1000000, { enableCompression: false });
 
-  function testSizeEstimate<T extends IFilter>(filters: T[]): void {
+  function testSizeEstimate<T extends IFilter>(filters: T[], compression: boolean): void {
+    const buffer = StaticDataView.allocate(1000000, { enableCompression: compression });
+
     for (let i = 0; i < filters.length; i += 1) {
       const filter = filters[i];
-      const estimate = filter.getSerializedSize();
+      const estimate = filter.getSerializedSize(compression);
 
       // Serialize filter
       buffer.seekZero();
@@ -36,10 +37,18 @@ describe('Make sure size estimate is accurate', () => {
   }
 
   it('network', () => {
-    testSizeEstimate<NetworkFilter>(networkFilters);
+    testSizeEstimate<NetworkFilter>(networkFilters, false);
+  });
+
+  it('network (compression)', () => {
+    testSizeEstimate<NetworkFilter>(networkFilters, true);
   });
 
   it('cosmetic', () => {
-    testSizeEstimate<CosmeticFilter>(cosmeticFilters);
+    testSizeEstimate<CosmeticFilter>(cosmeticFilters, false);
+  });
+
+  it('cosmetic (compression)', () => {
+    testSizeEstimate<CosmeticFilter>(cosmeticFilters, true);
   });
 });
