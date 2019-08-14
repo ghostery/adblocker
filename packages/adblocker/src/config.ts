@@ -52,6 +52,8 @@ export default class Config {
   }
 
   public getSerializedSize(): number {
+    // NOTE: this should always be the number of attributes and needs to be
+    // updated when `Config` changes.
     return 8 * StaticDataView.sizeOfBool();
   }
 

@@ -22,6 +22,21 @@ describe('Serialization', () => {
     new Config({ debug: true }),
   );
 
+  describe('Config', () => {
+    it('serializes with exact size', () => {
+      const config = new Config();
+      const buffer = StaticDataView.allocate(config.getSerializedSize(), config);
+      config.serialize(buffer);
+
+      // Check size
+      expect(buffer.slice()).toHaveLength(config.getSerializedSize());
+
+      // Check deserialization
+      buffer.seekZero();
+      expect(Config.deserialize(buffer)).toEqual(config);
+    });
+  });
+
   describe('filters', () => {
     const buffer = StaticDataView.allocate(1000000, { enableCompression: false });
     const checkFilterSerialization = (Filter: any, filter: IFilter) => {
