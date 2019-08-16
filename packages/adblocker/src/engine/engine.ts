@@ -9,6 +9,14 @@
 import Config from '../config';
 import StaticDataView from '../data-view';
 import { EventEmitter } from '../events';
+import {
+  adsAndTrackingLists,
+  adsLists,
+  Fetch,
+  fetchLists,
+  fetchPrebuilt,
+  fetchResources,
+} from '../fetch';
 import CosmeticFilter from '../filters/cosmetic';
 import NetworkFilter from '../filters/network';
 import { IListDiff, IRawDiff, parseFilters } from '../lists';
@@ -50,12 +58,91 @@ export default class FilterEngine extends EventEmitter<
   | 'script-injected'
   | 'style-injected'
 > {
-  public static parse(filters: string, options: Partial<Config> = {}): FilterEngine {
+  /**
+   * Create an instance of `FiltersEngine` (or subclass like `ElectronBlocker`,
+   * etc.), from the list of subscriptions provided as argument (e.g.:
+   * EasyList).
+   *
+   * Lists are fetched using the instance of `fetch` provided as a first
+   * argument. Optionally resources.txt and config can be provided.
+   */
+  public static fromLists<T extends typeof FilterEngine>(
+    this: T,
+    fetch: Fetch,
+    urls: string[],
+    resourcesUrl?: string | undefined,
+    config: Partial<Config> = {},
+  ): Promise<InstanceType<T>> {
+    const listsPromises = fetchLists(fetch, urls);
+    const resourcesPromise = fetchResources(fetch, resourcesUrl);
+
+    return Promise.all([listsPromises, resourcesPromise]).then(([lists, resources]) => {
+      const engine = this.parse(lists.join('\n'), config);
+      if (resources !== undefined) {
+        engine.updateResources(resources, '' + resources.length);
+      }
+
+      return engine as InstanceType<T>;
+    });
+  }
+
+  /**
+   * Initialize blocker of *ads only*.
+   *
+   * Attempt to initialize a blocking engine using a pre-built version served
+   * from Cliqz's CDN. If this fails (e.g.: if no pre-built engine is available
+   * for this version of the library), then falls-back to using `fromLists(...)`
+   * method with the same subscriptions.
+   */
+  public static fromPrebuiltAdsOnly<T extends typeof FilterEngine>(
+    this: T,
+    fetchImpl: Fetch = fetch,
+  ): Promise<InstanceType<T>> {
+    return fetchPrebuilt(
+      fetchImpl,
+      'https://cdn.cliqz.com/adblocker/configs/desktop-ads/allowed-lists.json',
+      ENGINE_VERSION,
+    )
+      .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
+      .catch(() => {
+        console.log('failed downloading pre-built, fallback to fetching lists');
+        return this.fromLists(fetchImpl, adsLists) as Promise<InstanceType<T>>;
+      });
+  }
+
+  /**
+   * Same as `fromPrebuiltAdsOnly(...)` but also contains rules to block
+   * tracking (i.e.: using extra lists such as EasyPrivacy and more).
+   */
+  public static fromPrebuiltAdsAndTracking<T extends typeof FilterEngine>(
+    this: T,
+    fetchImpl: Fetch = fetch,
+  ): Promise<InstanceType<T>> {
+    return fetchPrebuilt(
+      fetchImpl,
+      'https://cdn.cliqz.com/adblocker/configs/desktop-ads-trackers/allowed-lists.json',
+      ENGINE_VERSION,
+    )
+      .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
+      .catch(() => {
+        console.log('failed downloading pre-built, fallback to fetching lists');
+        return this.fromLists(fetchImpl, adsAndTrackingLists) as Promise<InstanceType<T>>;
+      });
+  }
+
+  public static parse<T extends FilterEngine>(
+    this: new (...args: any[]) => T,
+    filters: string,
+    options: Partial<Config> = {},
+  ): T {
     const config = new Config(options);
     return new this(Object.assign({}, parseFilters(filters, config), { config }));
   }
 
-  public static deserialize(serialized: Uint8Array): FilterEngine {
+  public static deserialize<T extends FilterEngine>(
+    this: new (...args: any[]) => T,
+    serialized: Uint8Array,
+  ): T {
     const buffer = StaticDataView.fromUint8Array(serialized, {
       enableCompression: false,
     });
@@ -192,11 +279,10 @@ export default class FilterEngine extends EventEmitter<
    * ~20 bytes is to be expected).
    */
   public getSerializedSize(): number {
-    let estimatedSize: number = (
+    let estimatedSize: number =
       StaticDataView.sizeOfByte() + // engine version
       this.config.getSerializedSize() +
       this.resources.getSerializedSize() +
-
       this.filters.getSerializedSize() +
       this.exceptions.getSerializedSize() +
       this.importants.getSerializedSize() +
@@ -204,16 +290,11 @@ export default class FilterEngine extends EventEmitter<
       this.csp.getSerializedSize() +
       this.genericHides.getSerializedSize() +
       this.cosmetics.getSerializedSize() +
-
-      4 // checksum
-    );
+      4; // checksum
 
     // Estimate size of `this.lists` which stores information of checksum for each list.
     for (const [name, checksum] of this.lists) {
-      estimatedSize += (
-        StaticDataView.sizeOfASCII(name) +
-        StaticDataView.sizeOfASCII(checksum)
-      );
+      estimatedSize += StaticDataView.sizeOfASCII(name) + StaticDataView.sizeOfASCII(checksum);
     }
 
     return estimatedSize;
