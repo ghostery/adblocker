@@ -34,7 +34,7 @@ Install: `npm install --save @cliqz/adblocker-electron`
 
 For a *complete example* check-out: [@cliqz/adblocker-electron-example](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-electron-example)
 
-Creating an instance of `ElectronBlocker`:
+Creating an instance of `ElectronBlocker` and start blocking ads!
 
 ```javascript
 import { ElectronBlocker } from '@cliqz/adblocker-electron';
