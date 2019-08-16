@@ -4,6 +4,10 @@
 
 *not released*
 
+## 0.13.0
+
+*2019-08-16*
+
   * allow correct size allocation for data views [#257](https://github.com/cliqz-oss/adblocker/pull/257)
 
     > Implement a mechanism which allows to predict the number of
