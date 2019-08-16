@@ -120,7 +120,9 @@ const lists = [
 
 export const adsLists = [
   'https://easylist.to/easylist/easylist.txt',
-  'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=1&mimetype=plaintext',
+  // NOTE: the certificate from yoyo.org expired so for now we serve the list from a mirror on GitHub.
+  // 'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=1&mimetype=plaintext',
+  'https://raw.githubusercontent.com/cliqz-oss/adblocker/master/packages/adblocker/assets/pgl.yoyo.org/adservers/serverlist.txt',
   'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
   'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
   'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',

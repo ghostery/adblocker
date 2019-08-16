@@ -4,6 +4,12 @@
 
 *not released*
 
+## 0.13.2
+
+*2019-08-17*
+
+  * fix certificate issue with Pete Lowe adserver
+
 ## 0.13.1
 
 *2019-08-16*
