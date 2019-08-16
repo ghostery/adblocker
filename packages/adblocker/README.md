@@ -1,42 +1,108 @@
 # `@cliqz/adblocker`
 
-> Very fast and memory efficient, pure-JavaScript content-blocking library made by Cliqz.
+> Efficient, pure-Javascript, multi-platform adblocker library, by Cliqz.
 
-This library is the building block technology used to power the adblockers from Ghostery and Cliqz on both desktop and mobile platforms. Being a pure JavaScript library it does not make any assumption regarding the environment it will run in (apart from the availability of a JavaScript engine) and is trivial to include in any new project. It can also be used as a building block for tooling. It is already running in production for millions of users and has been used successfully to satisfy the following use-cases:
+## Features
 
-* Mobile-friendly adblocker for Android in multiple setups: react-native, WebExtension, etc. ([ghostery](https://github.com/ghostery/browser-android) and [cliqz](https://github.com/cliqz-oss/browser-android))
-* Ads and trackers blocker in Electron applications, Puppeteer headless browsers, Cliqz browser, WebExtensions ([cliqz](https://github.com/cliqz-oss/browser-core), [ghostery](https://github.com/ghostery/ghostery-extension/) and [standalone](https://github.com/remusao/blockrz))
-* Backend requests processing job
+* **extremely efficient** adblocker (both in memory usage and raw speed)
+* pure JavaScript implementation
+* first-class support for [Node.js](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker), [WebExtension](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-webextension), [Electron](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-electron) and [Puppeteer](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-puppeteer).
+* effectively blocks all types of ads and tracking
+* supports cosmetics and scriptlet injection
+* small and minimal (only 64KB minified and gzipped)
+* support most filters: Easylist and uBlock Origin formats
 
-The library provides all necessary building blocks to create a powerful and efficient content-blocker and gives full flexibility as to which lists should be used and how they should be fetched or updated. Alternatively, you can use a more specific package depending on your platform:
+The library provides all necessary building blocks to create a powerful
+and efficient content-blocker and gives full flexibility as to which
+lists should be used and how they should be fetched or updated. Being a
+pure JavaScript library it does not make any assumption regarding the
+environment it will run in (apart from the availability of a JavaScript
+engine) and is trivial to include in any new project. It can also be
+used as a building block for tooling.
 
-* [@cliqz/adblocker-webextension](https://www.npmjs.com/package/@cliqz/adblocker-webextension)
-* [@cliqz/adblocker-puppeteer](https://www.npmjs.com/package/@cliqz/adblocker-webextension)
-* [@cliqz/adblocker-electron](https://www.npmjs.com/package/@cliqz/adblocker-webextension) (work in progress)
+For more details, check-out the following specialized guides:
 
-* [Usage](#usage)
-  * [Filters](#filters)
-    * [Network](#network)
-    * [Cosmetic](#cosmetic)
-  * [Engine](#engine)
+* `WebExtension`, [@cliqz/adblocker-webextension](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-webextension) ([demo](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-webextension-example))
+* `Electron`, [@cliqz/adblocker-electron](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-electron) ([demo](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-electron-example))
+* `Puppeteer`, [@cliqz/adblocker-puppeteer](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-puppeteer) ([demo](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-puppeteer-example))
 
-<a id="usage"></a>
+## Getting Started
+
+Install: `npm install --save @cliqz/adblocker`
+
 ## Usage
 
-For a small and documented WebExtension example, you can [check this project out](https://github.com/remusao/blockrz). The following section will showcase some of the most important APIs of the library.
+There are multiple ways you can *create an instance of the blocking engine* to
+start blocking ads:
 
-<a id="filters"></a>
-### Manipulating Filters
+If you already have filters locally:
+```javascript
+import { FiltersEngine } from '@cliqz/adblocker';
+const engine = FiltersEngine.parse(fs.readFileSync('easylist.txt', 'utf-8'));
+```
 
-Content blockers usually manipulate two kinds of filters: *network* and *cosmetics*. The former allows to specify which network requests should be blocked (or redirected), usually from the `WebRequest` API of extensions. The later allows to alter the DOM of pages directly, hiding elements or injecting scripts.
+Fetching lists from URLs:
+```javascript
+import { FiltersEngine } from '@cliqz/adblocker';
+engine = await FiltersEngine.fromLists(fetch, [
+ 'https://easylist.to/easylist/easylist.txt'
+]);
+```
 
-<a id="network"></a>
-#### Network Filters
+Use ready-made configs to block ads and optionally trackers:
+```javascript
+import { FiltersEngine } from '@cliqz/adblocker';
+engine = await FiltersEngine.fromPrebuiltAdsOnly(fetch); // ads only
+engine = await FiltersEngine.fromPrebuiltAdsAndTracking(fetch); // ads and tracking
+```
 
-Here is how one can parse and match individual *network filters* using the [NetworkFilter](./src/filters/network.ts) class. It offers multiple accessors and helpers to parse, match and manipulate network filters.
+Once you have your `engine`, start matching requests and block ads:
 
 ```javascript
-const { NetworkFilter } = require('@cliqz/adblocker');
+import { Request } from '@cliqz/adblocker';
+
+const { match } = engine.match(Request.fromRawDetails({
+  type: 'script',
+  url: 'https://domain.com/ads.js',
+}));
+```
+
+### Request Abstraction
+
+To abstract over network requests independently from platforms (Node.js,
+WebExtension, etc.), the `Request` provides a unified APIs and helpers functions
+for initialization on different platforms:
+
+```javascript
+import { Request } from '@cliqz/adblocker';
+
+const request = Request.fromRawDetails({
+  url: 'https://sub.example.com',
+  type: 'main_frame',
+});
+
+console.log(request.isMainFrame()); // true
+console.log(request.url); // https://sub.example.com
+console.log(request.hostname); // sub.example.com
+console.log(request.domain); // example.com
+```
+
+### Manipulating Individual Filters
+
+Content blockers usually manipulate two kinds of filters: *network*
+and *cosmetics*. The former allows to specify which network requests
+should be blocked (or redirected), usually from the `WebRequest` API of
+extensions. The later allows to alter the DOM of pages directly, hiding
+elements or injecting scripts.
+
+#### Network Filters
+
+Here is how one can parse and match individual *network filters* using
+the [NetworkFilter](https://github.com/cliqz-oss/adblocker/blob/master/packages/adblocker/src/filters/network.ts) class. It offers multiple
+accessors and helpers to parse, match and manipulate network filters.
+
+```javascript
+import { NetworkFilter } from '@cliqz/adblocker';
 
 // Parse filter from string
 const filter = NetworkFilter.parse('||domain.com/ads.js$script');
@@ -51,50 +117,22 @@ console.log(filter.fromScript()); // true = can match 'script' requests
 console.log(filter.fromImage()); // false = cannot match 'image' requests
 ```
 
-To match a network request, we must first create an instance of the [Request](./src/request.ts) class. It abstracts away the implementation details of a request. It can be initialized from `webRequest` details, puppeteer's request or raw information. The constructor expects to receive the `type` of request (e.g.: *main_frame*, *script*, etc.), the URL of the request, `url` (+ hostname and domain) as well as the `URL` of the frame, `sourceUrl` (this would be either the URL of the page or the iframe where this request originates from).
-
+Matching network filter against requests:
 ```javascript
-const { Request } = require('@cliqz/adblocker');
+import { Request } from '@cliqz/adblocker';
 
-const request = new Request({
+const request = Request.fromRawDetails({
   type: 'script',
-
   url: 'https://sub.domain.com/ads.js?param=42',
-  hostname: 'sub.domain.com',
-  domain: 'domain.com',
-
   sourceUrl: 'https://frame-domain.com',
-  hostname: 'frame-domain.com',
-  domain: 'frame-domain.com',
 });
 
 console.log(filter.match(request)); // true
 ```
 
-Because creating `Request` instances using the constructor is a bit cumbersome, the library provides a few helper functions to make this smoother:
-
-* `Request.fromRawDetails(...)`
-* `Request.fromWebRequestDetails(...)`
-* `Request.fromPuppeteerDetails(...)`
-* `Request.fromElectronDetails(...)`
-
-If you are creating a `Request` outside of an extension/electron/puppeteer context, you should use `Request.fromRawDetails`. It allows to provide only a subset of the information and will assign default values for whatever is missing.
-
-```javascript
-const { Request } = require('@cliqz/adblocker');
-
-const request = Request.fromRawDetails({
-  type: 'script',
-  url: 'https://domain.com/ads.js',
-});
-
-filter.match(request); // true
-```
-
-<a id="cosmetic"></a>
 #### Cosmetic Filters
 
-Similarly, one can parse cosmetic filters using the [CosmeticFilter](./src/filters/cosmetic.ts) class.
+Similarly, one can parse cosmetic filters using the [CosmeticFilter](https://github.com/cliqz-oss/adblocker/blob/master/packages/adblocker/src/filters/cosmetic.ts) class.
 
 ```javascript
 const { CosmeticFilter } = require('@cliqz/adblocker');
@@ -111,13 +149,18 @@ console.log(filter.isUnhide()); // false
 filter.match('sub.domain.com', 'domain.com'); // true
 ```
 
-<a id="engine"></a>
 ### Filters Engine
 
-Manipulating filters at a low level is useful to build tooling or debugging, but they are not appropriate for efficient blocking of requests (it would require iterating on all the filters to know if a request needs to be blocked). Instead, we can make use of the `FiltersEngine` class which can be seen as a "container" for both network and cosmetic filters. The filters are organized in a very compact way which also enables fast matching.
+Manipulating filters at a low level is useful to build tooling or
+debugging, but they are not appropriate for efficient blocking of
+requests (it would require iterating on all the filters to know if
+a request needs to be blocked). Instead, we can make use of the
+[FiltersEngine](https://github.com/cliqz-oss/adblocker/blob/master/packages/adblocker/src/engine/engine.ts) class which can be seen as a "container" for both
+network and cosmetic filters. The filters are organized in a very
+compact way which also enables fast matching.
 
 ```javascript
-const { FiltersEngine, NetworkFilter, CosmeticFilter, Request } = require('@cliqz/adblocker');
+import { FiltersEngine, NetworkFilter, CosmeticFilter, Request } from '@cliqz/adblocker';
 
 // Parse multiple filters at once
 let engine = FiltersEngine.parse(`
@@ -127,17 +170,26 @@ let engine = FiltersEngine.parse(`
 ###selector
 domain.com,entity.*##+js(script,args1)
 `);
+```
 
+Updating an existing engine with new filters:
+```javascript
 // Update with individual filters
 engine.update({
   newNetworkFilters: [NetworkFilter.parse('/ads.js')]
   newCosmeticFilters: [CosmeticFilter.parse('###selector')],
 });
+```
 
+Serializing an engine to `Uint8Array` and reloading it to its original form:
+```javascript
 // Serialize the full engine to a Uint8Array for caching
 const serialized = engine.serialize();
 engine = FiltersEngine.deserialize(serialized);
+```
 
+Matching requests:
+```javascript
 // Matching network filters
 const {
   match, // `true` if there is a match
@@ -148,13 +200,19 @@ const {
   type: 'script',
   url: 'https://sub.domain.com/ads.js',
 }));
+```
 
+Checking for CSP injection rules for a given frame:
+```javascript
 // Matching CSP (content security policy) filters.
 const directives = engine.getCSPDirectives(Request.fromRawDetails({
   type: 'main_frame',
   url: 'https://sub.domain.com/',
 }));
+```
 
+Checking for cosmetics injection:
+```javascript
 // Matching cosmetic filters
 const {
   styles, // stylesheet to inject in the page
