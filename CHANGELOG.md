@@ -24,6 +24,50 @@
     > have this issue again, all these content-scripts helpers are moved
     > into their own package.
 
+  * provide helpers to download and build engines from lists [#280](https://github.com/cliqz-oss/adblocker/pull/280)
+
+    > This change allows to start blocking ads with very little logic in
+    > _Webextension_, _Electron_ and _Puppeteer_ platforms! To achieve this,
+    > blockers abstraction now provide static methods to fetch pre-built
+    > engines from Cliqz's CDN or build them from scratch using lists of URLs
+    > to subscriptions. Here is how it looks like:
+    >
+    > *Webextension*:
+    > ```js
+    > import { WebExtensionBlocker } from '@cliqz/adblocker-webextension';
+    >
+    > WebExtensionBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
+    >   blocker.enableBlockingInBrowser();
+    > });
+    > ```
+    >
+    > *Electron*:
+    > ```js
+    > import { session } from 'electron';
+    > import fetch from 'cross-fetch'; // or 'node-fetch'
+    >
+    > import { ElectronBlocker } from '@cliqz/adblocker-electron';
+    >
+    > ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
+    >   blocker.enableBlockingInSession(session.defaultSession);
+    > });
+    > ```
+    >
+    > *Puppeteer*:
+    > ```js
+    > import puppeteer from 'puppeteer';
+    > import fetch from 'cross-fetch'; // or 'node-fetch'
+    >
+    > import { PuppeteerBlocker } from '@cliqz/adblocker-puppeteer';
+    >
+    > const browser = await puppeteer.launch();
+    > const page = await browser.newPage();
+    >
+    > PuppeteerBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
+    >   blocker.enableBlockingInPage(page);
+    > });
+    > ```
+
 ## 0.12.1
 
 *2019-08-13*

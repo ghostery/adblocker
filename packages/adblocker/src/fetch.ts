@@ -6,8 +6,26 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-function fetchResource(url: string): Promise<string> {
+export type Fetch = (url: string ) => Promise<{
+  text: () => Promise<string>;
+  arrayBuffer: () => Promise<ArrayBuffer>;
+  json: () => Promise<any>;
+}>;
+
+function fetchResource(fetch: Fetch, url: string): Promise<string> {
   return fetch(url).then((response: any) => response.text());
+}
+
+export function fetchPrebuilt(
+  fetch: Fetch,
+  configUrl: string,
+  engineVersion: number,
+): Promise<Uint8Array> {
+  return fetch(configUrl)
+    .then((response) => response.json())
+    .then((allowedLists) => fetch(allowedLists.engines[engineVersion].url))
+    .then((response) => response.arrayBuffer())
+    .then((buffer) => new Uint8Array(buffer));
 }
 
 const enum Category {
@@ -100,13 +118,35 @@ const lists = [
   },
 ];
 
+export const adsLists = [
+  'https://easylist.to/easylist/easylist.txt',
+  'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=1&mimetype=plaintext',
+  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
+  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
+  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
+  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
+];
+
+export const adsAndTrackingLists = [
+  ...adsLists,
+  'https://easylist.to/easylist/easyprivacy.txt',
+  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
+];
+
+export const fullLists = [
+  ...adsAndTrackingLists,
+  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/annoyances.txt',
+  'https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt',
+  'https://www.fanboy.co.nz/fanboy-cookiemonster.txt'
+];
+
 /**
  * Fetch latest version of enabledByDefault blocking lists.
  */
-export function fetchLists(custom?: string[]): Promise<string[]> {
+export function fetchLists(fetch: Fetch, custom?: string[]): Promise<string[]> {
   return Promise.all(
     (custom || lists.filter(({ enabledByDefault }) => enabledByDefault).map(({ url }) => url)).map(
-      fetchResource,
+      (url) => fetchResource(fetch, url),
     ),
   );
 }
@@ -115,8 +155,9 @@ export function fetchLists(custom?: string[]): Promise<string[]> {
  * Fetch latest version of uBlock Origin's resources, used to inject scripts in
  * the page or redirect request to data URLs.
  */
-export function fetchResources(): Promise<string> {
-  return fetchResource(
-    'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt',
-  );
+export function fetchResources(
+  fetch: Fetch,
+  resourcesUrl: string = 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt',
+): Promise<string> {
+  return fetchResource(fetch, resourcesUrl);
 }

@@ -29,6 +29,6 @@ export {
   getLinesWithFilters,
 } from './src/lists';
 export { compactTokens, hasEmptyIntersection, mergeCompactSets } from './src/compact-set';
-export { fetchLists, fetchResources } from './src/fetch';
+export * from './src/fetch';
 export { tokenize } from './src/utils';
 export { default as Config } from './src/config';
