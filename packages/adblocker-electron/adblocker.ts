@@ -31,9 +31,11 @@ export function fromElectronDetails({
   url,
   resourceType,
   referrer,
+  webContentsId,
 }: Electron.OnBeforeRequestDetails | Electron.OnHeadersReceivedDetails): Request {
   return Request.fromRawDetails({
     sourceUrl: referrer,
+    tabId: webContentsId,
     type: (resourceType || 'other') as ElectronRequestType,
     url,
   });

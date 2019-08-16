@@ -4,6 +4,12 @@
 
 *not released*
 
+## 0.13.1
+
+*2019-08-16*
+
+  * set `Request.tabId` to `webContentsId` in Electron platform
+
 ## 0.13.0
 
 *2019-08-16*

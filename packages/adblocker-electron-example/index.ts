@@ -28,15 +28,15 @@ async function createWindow() {
   engine.enableBlockingInSession(session.defaultSession);
 
   engine.on('request-blocked', (request: Request) => {
-    console.log('blocked', request.url);
+    console.log('blocked', request.tabId, request.url);
   });
 
   engine.on('request-redirected', (request: Request) => {
-    console.log('redirected', request.url);
+    console.log('redirected', request.tabId, request.url);
   });
 
   engine.on('request-whitelisted', (request: Request) => {
-    console.log('whitelisted', request.url);
+    console.log('whitelisted', request.tabId, request.url);
   });
 
   engine.on('csp-injected', (request: Request) => {
