@@ -31,7 +31,7 @@ Put this in your `background` code:
 ```js
 import { WebExtensionBlocker } from '@cliqz/adblocker-webextension';
 
-WebExtensionBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
+WebExtensionBlocker.fromPrebuiltAdsAndTracking().then((blocker) => {
   blocker.enableBlockingInBrowser();
 });
 ```
