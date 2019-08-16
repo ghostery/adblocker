@@ -1,12 +1,7 @@
-# Minimal Content Blocker
-
-This is a minimal webextension doing adblocking/antitracking using most
-popular block-lists. It is meant as a very thin wrapper around the
-[adblocker](https://github.com/cliqz-oss/adblocker) library. You can use it to
-debug the adblocker, or test new features.
-
-## Workflow
+Blocking ads in WebExtension (Chrome and Firefox support) using [@cliqz/adblocker-webextension](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-webextension).
 
 1. `yarn bundle` will build the extension
 2. Open your browser and load "unpacked extension" from this folder
 3. On re-build, reload the extension in browser
+
+Checkout [background.ts](https://github.com/cliqz-oss/adblocker/blob/master/packages/adblocker-webextension-example/background.ts) and [content-script.ts](https://github.com/cliqz-oss/adblocker/blob/master/packages/adblocker-webextension-example/content-script.ts) for more details!
