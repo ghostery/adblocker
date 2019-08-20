@@ -4,6 +4,10 @@
 
 *not released*
 
+## 0.14.0
+
+*2019-08-20*
+
   * update compression codebooks [#289](https://github.com/cliqz-oss/adblocker/pull/289)
   * clean-up and update local assets + add fanboy-cookiemonster.txt [#289](https://github.com/cliqz-oss/adblocker/pull/289)
   * only register listeners when network/cosmetics filtering is enabled [#288](https://github.com/cliqz-oss/adblocker/pull/288)
