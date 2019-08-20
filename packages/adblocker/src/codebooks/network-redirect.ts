@@ -1,11 +1,3 @@
-/*!
- * Copyright (c) 2017-2019 Cliqz GmbH. All rights reserved.
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 /* tslint:disable */
 export default [
   "fuckadblock.js-3.2.0",
@@ -16,10 +8,9 @@ export default [
   "google-analytics.com/analytics.js",
   "1x1-transparent.gif",
   "googletagmanager.com/gtm.js",
-  "noopmp4-1s",
   "nooptext",
+  "noopmp4-1s",
   "ligatus.com/*/angular-tag.js",
-  "d3pkae9owd2lcf.cloudfront.net/mb105.js",
   "amazon-adsystem.com/aax2/amzn_ads.js",
   "static.chartbeat.com/chartbeat.js",
   "widgets.outbrain.com/outbrain.js",
@@ -46,8 +37,8 @@ export default [
   "a",
   "-",
   "e",
-  "m",
   "g",
+  "m",
   "r",
   "c",
   "x",
@@ -55,10 +46,10 @@ export default [
   "1",
   "3",
   "l",
-  "d",
   "0",
-  "k",
+  "d",
   "i",
+  "k",
   "f",
   "b",
   "u",
@@ -66,11 +57,9 @@ export default [
   "4",
   "y",
   "h",
-  "w",
   "*",
   "v",
   "_",
-  "z",
-  "9",
-  "5"
+  "w",
+  "z"
 ];
