@@ -110,6 +110,8 @@ function isSimpleSelector(selector: string): boolean {
         const nextCode = selector.charCodeAt(i + 1);
         if (
           code === 91 /* '[' */ ||
+          code === 46 /* '.' */ ||
+          code === 58 /* ':' */ ||
           (code === 32 /* ' ' */ &&
             (nextCode === 62 /* '>' */ ||
             nextCode === 43 /* '+' */ ||
@@ -192,7 +194,7 @@ function computeFilterId(
   notEntities: Uint32Array | undefined,
   style: string | undefined,
 ): number {
-  let hash = (5408 * 33) ^ mask;
+  let hash = (5437 * 33) ^ mask;
 
   if (selector !== undefined) {
     for (let i = 0; i < selector.length; i += 1) {
@@ -778,7 +780,7 @@ export default class CosmeticFilter implements IFilter {
     // Note, we do not need to use negated domains or entities as tokens here
     // since they will by definition not match on their own, unless accompanied
     // by a domain or entity. Instead, they are handled in
-    // `CosmeticFilterBucket.getCosmeticsFilters`.
+    // `CosmeticFilterBucket.getCosmeticsFilters(...)`.
 
     if (this.hostnames !== undefined) {
       for (let i = 0; i < this.hostnames.length; i += 1) {
@@ -793,23 +795,35 @@ export default class CosmeticFilter implements IFilter {
     }
 
     // Here we only take selector into account if the filter is not unHide.
-    // TODO - add more detailed comment
     if (tokens.length === 0 && this.isUnhide() === false) {
       if (this.isIdSelector() || this.isClassSelector()) {
-        let endOfSelector = this.selector.length;
-
-        // Check if there is a space or '['
-        const indexOfSpace = this.selector.indexOf(' ');
-        if (indexOfSpace !== -1) {
-          endOfSelector = indexOfSpace;
+        // Here we try to identify the end of selector si that we can extract a
+        // valid token out of it. In all these examples, 'selector' is our
+        // token:
+        //
+        //   .selector[...]
+        //   #selector[...]
+        //   #selector ~ foo
+        //   .selector:not(...)
+        //   .selector.foo
+        //
+        // We now try to identify the first valid end of selector which will
+        // also be the end of our token: space, bracket, colon, dot.
+        let endOfSelector = 1;
+        const selector = this.selector;
+        for (; endOfSelector < selector.length; endOfSelector += 1) {
+          const code = selector.charCodeAt(endOfSelector);
+          if (
+            code === 32 /* ' ' */ ||
+            code === 46 /* '.' */ ||
+            code === 58 /* ':' */ ||
+            code === 91 /* '[' */
+          ) {
+            break;
+          }
         }
 
-        const indexOfBracket = this.selector.indexOf('[');
-        if (indexOfBracket !== -1 && indexOfBracket < endOfSelector) {
-          endOfSelector = indexOfBracket;
-        }
-
-        tokens.push(new Uint32Array([fastHash(this.selector.slice(1, endOfSelector))]));
+        tokens.push(new Uint32Array([fastHash(selector.slice(1, endOfSelector))]));
       } else if (this.isHrefSelector()) {
         const selector: string = this.getSelector();
 

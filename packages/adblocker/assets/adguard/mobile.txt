@@ -1,9 +1,9 @@
 ![Adblock Plus 2.0]
-! Checksum: Jg5DNdua1qzOXlMxAeg3dQ
+! Checksum: M27KyWzqye37LpRtNizV1A
 ! Title: AdGuard Mobile Ads filter
 ! Description: Filter for all known mobile ad networks. Useful for mobile devices.
-! Version: 2.0.7.30
-! TimeUpdated: 2019-08-08T19:30:09+03:00
+! Version: 2.0.7.42
+! TimeUpdated: 2019-08-20T00:01:45+03:00
 ! Expires: 2 days (update frequency)
 ! Homepage: http://adguard.com/filters.html#mobile
 ! License: http://creativecommons.org/licenses/by-sa/3.0/
@@ -153,7 +153,9 @@
 ||plugin.mobopay.baidu.com^
 ||mo.freeindoapp.com^
 !
+||buysellads.com^
 ||casino-ad-mediation.me2zengame.com^
+||eysmaa.pw^$third-party
 ||vennala.pw^$empty
 ||promoted.soundcloud.com^
 ||activity.browser.intl.miui.com^
@@ -1150,6 +1152,9 @@ merkur.de##.id-Container-content > .id-Teaser > div[class]:has(> div[data-id-adv
 momon-ga.com##.section-box:has(.list-box)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/36509
 winda10.com#?#.entry-content > div[style="height: 600px;"]:has(div[id^="yandex_rtb_R-A-"])
+! https://github.com/AdguardTeam/AdguardFilters/issues/34293
+m.timesofindia.com#?#.contentwrapper > div > div > div > div[class]:has(> div[id^="div-gpt-ad-"])
+m.timesofindia.com#?#.contentwrapper > div > div > div > div[class]:has(> .ctn-workaround-div )
 ! https://github.com/AdguardTeam/AdguardFilters/issues/28776
 dailynkjp.com#$?##im_interstitial_panel { remove: true; }
 ! https://github.com/AdguardTeam/AdguardFilters/issues/28416
@@ -1439,6 +1444,8 @@ deviantart.com#$#div[class*="dp-ad-"] {height: 0!important; width: 0!important; 
 !
 !#####################
 !
+! https://github.com/AdguardTeam/AdguardFilters/issues/38428
+@@||etimg.com/js_etsub/*minify-*.cms$domain=m.economictimes.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/35748
 !+ PLATFORM(ext_ublock)
 @@||guce.advertising.com/collectIdentifiers
@@ -1773,9 +1780,19 @@ m.news.de##.unisterAdsStart
 !+ NOT_PLATFORM(ios, ext_android_cb)
 ||mobile.donanimhaber.com/ads^
 !
+yesiltopuklar.com##div[class^="mobil-header-banner"]
+oggito.com##.oggito-ads
+yemektarifleri-sitesi.com##.footer_fix_reklam
+nijinchu.com###icon-adv
+m.thethao247.vn###add
+rbc.ru##.banners__mobile-freeze
 m.salihlisektorgazetesi.com##iframe[src^="/mobil-reklam-"]
 ||m.salihlisektorgazetesi.com/mobil-reklam-
 swedroid.se##.externalTopMobile
+maxfoodfun.com##.header-fixed-area
+maxfoodfun.com##.recommend-diy
+maxfoodfun.com##.discover-stream
+maxfoodfun.com###article-hot-wrapper
 m.dizilab.pw##.reklam2x
 m.dizilab.pw###textvideo > a[href^="http://bit.ly/"]
 niji-gazo.com##.partner-block
@@ -2339,7 +2356,7 @@ mobile.donanimhaber.com##iframe[src^="/ads/"]
 mobile.donanimhaber.com##.content > #news-container[style*="width: 100%; float: left"][style*="height:"]
 izlesene.com##[id^="ad_320_100_container_"]
 ||61saat.com/_themes/hs-rush-php/mobil/scripts/modal.js
-yurtgazetesi.com.tr,kamuajans.com,kocaelikoz.com,kocaelibarisgazetesi.com,gazetedamga.com.tr,haber61.net,kamudanhaber.net,kamupersoneli.net,61saat.com##.mreklam
+istekadinlar.com,yurtgazetesi.com.tr,kamuajans.com,kocaelikoz.com,kocaelibarisgazetesi.com,gazetedamga.com.tr,haber61.net,kamudanhaber.net,kamupersoneli.net,61saat.com##.mreklam
 61saat.com##a[href^="http://www.trabzonspor.com.tr"]
 vgtimes.ru##.fullb
 mp4mania.mobi##a[href^="http://abc.gogooffer.online"]
@@ -2392,8 +2409,8 @@ t-online.de###ma_mrec
 m.dnn.de##.pdma-adaside-declaration
 thechive.com##.phone-ad
 finance.yahoo.com###mrt-node-Col1-1-GeminiBrokerBtnsMobileWeb
-timesnownews.com,amp.focus.de##amp-fx-flying-carpet
-chip.de,timesnownews.com,amp.focus.de##.amp-flying-carpet-text-border
+theprint.in,timesnownews.com,amp.focus.de##amp-fx-flying-carpet
+theprint.in,chip.de,timesnownews.com,amp.focus.de##.amp-flying-carpet-text-border
 amp.focus.de,m.focus.de##article[data-teaser-type="unspecified_group"]
 vorsprung-online.de##.article-content .adsbygoogle
 ||vorsprung-online.de/images/images/*/Werbung/bannermobilwerbung.jpg
@@ -2864,6 +2881,7 @@ m.news.yandex.by,m.news.yandex.com,m.news.yandex.fr,m.news.yandex.kz,m.news.yand
 ! Blocking Facebook mobile ads
 !
 !
+! https://github.com/AdguardTeam/AdguardFilters/issues/38689
 ! https://github.com/AdguardTeam/AdguardFilters/issues/36310
 ! https://github.com/AdguardTeam/AdguardFilters/issues/37195
 ! https://github.com/AdguardTeam/AdguardFilters/issues/36655

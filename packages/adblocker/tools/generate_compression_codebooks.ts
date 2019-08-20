@@ -10,7 +10,7 @@ function readAsset(filepath: string): string {
 
 function loadAllLists(): string {
   return [
-    'assets/adguard/mobile.txt',
+    // 'assets/adguard/mobile.txt',
     'assets/easylist-downloads.adblockplus.org/antiadblockfilters.txt',
     'assets/easylist.to/easylist/easylist.txt',
     'assets/easylist.to/easylist/easyprivacy.txt',
@@ -21,6 +21,7 @@ function loadAllLists(): string {
     'assets/raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
     'assets/raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
     'assets/raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
+    'assets/fanboy/cookiemonster.txt',
   ]
     .map(readAsset)
     .join('\n');

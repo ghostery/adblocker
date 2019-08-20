@@ -51,7 +51,7 @@ WebExtensionBlocker.fromLists(fetch, fullLists).then((engine: WebExtensionBlocke
   });
 
   engine.on('style-injected', (style: string, url: string) => {
-    console.log('style', style.length, url);
+    console.log('style', url, style.length);
   });
 
   console.log('Ready to roll!');

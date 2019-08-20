@@ -127,6 +127,8 @@ export const adsLists = [
   'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
   'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
   'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
+
+  'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
 ];
 
 export const adsAndTrackingLists = [

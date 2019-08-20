@@ -32,6 +32,7 @@ export function loadAllLists() {
     'assets/raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
     'assets/raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
     'assets/raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
+    'assets/fanboy/cookiemonster.txt',
   ]
     .map(readAsset)
     .join('\n');
