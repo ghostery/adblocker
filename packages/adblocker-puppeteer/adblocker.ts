@@ -44,17 +44,21 @@ export class PuppeteerBlocker extends FiltersEngine {
       // currently no way to modify responses in puppeteer. This feature could
       // easily be added if puppeteer implements the required capability.
 
-      // Register callback for network requets filtering
-      page.on('request', this.onRequest);
+      if (this.config.loadNetworkFilters === true) {
+        // Register callback for network requets filtering
+        page.on('request', this.onRequest);
+      }
 
-      // Register callback to cosmetics injection (CSS + scriptlets)
-      page.on('framenavigated', async (frame) => {
-        try {
-          await this.onFrame(frame);
-        } catch (ex) {
-          // Ignore
-        }
-      });
+      if (this.config.loadCosmeticFilters === true) {
+        // Register callback to cosmetics injection (CSS + scriptlets)
+        page.on('framenavigated', async (frame) => {
+          try {
+            await this.onFrame(frame);
+          } catch (ex) {
+            // Ignore
+          }
+        });
+      }
     });
   }
 

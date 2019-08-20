@@ -72,17 +72,19 @@ export function updateResponseHeadersWithCSP(
  */
 export class WebExtensionBlocker extends FiltersEngine {
   public enableBlockingInBrowser() {
-    chrome.webRequest.onBeforeRequest.addListener(
-      this.onBeforeRequest,
-      { urls: ['<all_urls>'] },
-      ['blocking'],
-    );
+    if (this.config.loadNetworkFilters === true) {
+      chrome.webRequest.onBeforeRequest.addListener(
+        this.onBeforeRequest,
+        { urls: ['<all_urls>'] },
+        ['blocking'],
+      );
 
-    chrome.webRequest.onHeadersReceived.addListener(
-      this.onHeadersReceived,
-      { urls: ['<all_urls>'], types: ['main_frame'] },
-      ['blocking', 'responseHeaders'],
-    );
+      chrome.webRequest.onHeadersReceived.addListener(
+        this.onHeadersReceived,
+        { urls: ['<all_urls>'], types: ['main_frame'] },
+        ['blocking', 'responseHeaders'],
+      );
+    }
 
     // Start listening to messages coming from the content-script
     chrome.runtime.onMessage.addListener(this.onRuntimeMessage);

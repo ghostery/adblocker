@@ -46,15 +46,18 @@ export function fromElectronDetails({
  */
 export class ElectronBlocker extends FiltersEngine {
   public enableBlockingInSession(ses: Electron.Session) {
-    ses.webRequest.onHeadersReceived({ urls: ['<all_urls>'] }, this.onHeadersReceived);
-    ses.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onBeforeRequest);
+    if (this.config.loadNetworkFilters === true) {
+      ses.webRequest.onHeadersReceived({ urls: ['<all_urls>'] }, this.onHeadersReceived);
+      ses.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onBeforeRequest);
+    }
 
-    ipcMain.on('get-cosmetic-filters', this.onGetCosmeticFilters);
-    ses.setPreloads([join(__dirname, './preload.js')]);
-
-    ipcMain.on('is-mutation-observer-enabled', (event: Electron.IpcMainEvent) => {
-      event.returnValue = this.config.enableMutationObserver;
-    });
+    if (this.config.loadCosmeticFilters === true) {
+      ipcMain.on('get-cosmetic-filters', this.onGetCosmeticFilters);
+      ses.setPreloads([join(__dirname, './preload.js')]);
+      ipcMain.on('is-mutation-observer-enabled', (event: Electron.IpcMainEvent) => {
+        event.returnValue = this.config.enableMutationObserver;
+      });
+    }
   }
 
   private onGetCosmeticFilters = (
