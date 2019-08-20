@@ -4,12 +4,12 @@
 
 *not released*
 
+  * update compression codebooks [#289](https://github.com/cliqz-oss/adblocker/pull/289)
+  * clean-up and update local assets + add fanboy-cookiemonster.txt [#289](https://github.com/cliqz-oss/adblocker/pull/289)
   * only register listeners when network/cosmetics filtering is enabled [#288](https://github.com/cliqz-oss/adblocker/pull/288)
   * Improve cosmetics selector tokenization by supporting new cases [#287](https://github.com/cliqz-oss/adblocker/pull/287)
     * correctly tokenize #selector:not(...) and .selector:not(...)
     * correctly tokenize .selector1.selector2
-  * adblocker: update compression codebooks [#287](https://github.com/cliqz-oss/adblocker/pull/287)
-  * adblocker: update local assets + add fanboy-cookiemonster.txt [#287](https://github.com/cliqz-oss/adblocker/pull/287)
 
 ## 0.13.2
 
