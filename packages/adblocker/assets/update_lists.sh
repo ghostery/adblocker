@@ -20,5 +20,8 @@ curl 'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt' > ./eas
 # AdGuard
 curl 'https://filters.adtidy.org/extension/ublock/filters/11.txt' > ./adguard/mobile.txt &
 
+# Fanboy
+curl 'https://www.fanboy.co.nz/fanboy-cookiemonster.txt' > ./fanboy/cookiemonster.txt &
+
 # Wait for child processes to terminate
 wait
