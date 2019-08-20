@@ -4,6 +4,8 @@
 
 *not released*
 
+  * only register listeners when network/cosmetics filtering is enabled [#288](https://github.com/cliqz-oss/adblocker/pull/288)
+
 ## 0.13.2
 
 *2019-08-17*
