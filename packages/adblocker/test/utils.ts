@@ -21,27 +21,25 @@ function readAsset(filepath: string) {
 
 export function loadAllLists() {
   return [
-    'assets/adguard/mobile.txt',
-    'assets/easylist-downloads.adblockplus.org/antiadblockfilters.txt',
-    'assets/easylist.to/easylist/easylist.txt',
-    'assets/easylist.to/easylist/easyprivacy.txt',
-    'assets/easylist.to/easylistgermany/easylistgermany.txt',
-    'assets/pgl.yoyo.org/adservers/serverlist.txt',
-    'assets/raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
-    'assets/raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
-    'assets/raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
-    'assets/raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
-    'assets/raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
+    'assets/easylist/easylist.txt',
+    'assets/easylist/easylistgermany.txt',
+    'assets/easylist/easyprivacy.txt',
+    'assets/fanboy/annoyance.txt',
     'assets/fanboy/cookiemonster.txt',
+    'assets/peter-lowe/serverlist.txt',
+    'assets/ublock-origin/annoyances.txt',
+    'assets/ublock-origin/badware.txt',
+    'assets/ublock-origin/filters.txt',
+    'assets/ublock-origin/privacy.txt',
+    'assets/ublock-origin/resource-abuse.txt',
+    'assets/ublock-origin/unbreak.txt',
   ]
     .map(readAsset)
     .join('\n');
 }
 
 export function loadResources() {
-  return readAsset(
-    'assets/raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt',
-  );
+  return readAsset('assets/ublock-origin/resources.txt');
 }
 
 export function getNaughtyStrings(): string[] {
