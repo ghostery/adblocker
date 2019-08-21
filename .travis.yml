@@ -15,7 +15,11 @@ before_install:
 cache: yarn
 
 script:
-    - ./run_tests.sh
+    - yarn bootstrap
+    - yarn lint
+    - yarn build
+    - yarn bundle
+    - yarn test
 
 # TODO - migrate to lerna
 # deploy:

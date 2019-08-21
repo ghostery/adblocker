@@ -4,6 +4,12 @@
 
 *not released*
 
+  * chore: clean-ups [#294](https://github.com/cliqz-oss/adblocker/pull/294)
+    * Remove use of `eslint` completely (all source code is TypeScript so `tslint` is enough)
+    * Remove `Dockerfile`, `run_tests.sh`
+    * Move `bench` to TypeScript
+    * Remove un-used `bench/dataset/` folder
+    * Make sure that all sub-packages can be installed and built independently (fix missing deps)
   * enable @cliqz/metalint for repository linting [#255](https://github.com/cliqz-oss/adblocker/pull/255)
 
 ## 0.14.0
