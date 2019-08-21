@@ -337,6 +337,12 @@ async function run() {
         removed: diff.removed.map(normalizeFilters),
       };
 
+      // No update?
+      if (diff.added.length === 0 && diff.removed.length === 0) {
+        console.log('Diff is empty, skipping...');
+        continue;
+      }
+
       // Check that previous rev and current rev do not yield the same Engine
       const currentEngineSerialized = getEngineFromList(currentList);
       const previousEngineSerialized = getEngineFromList(previousList);
