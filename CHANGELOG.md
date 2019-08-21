@@ -4,6 +4,8 @@
 
 *not released*
 
+  * enable @cliqz/metalint for repository linting [#255](https://github.com/cliqz-oss/adblocker/pull/255)
+
 ## 0.14.0
 
 *2019-08-20*
