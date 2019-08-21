@@ -71,7 +71,7 @@ function main() {
     const codebook = generate(strings);
     writeFileSync(
       resolve(__dirname, `../src/codebooks/${output}.ts`),
-      `/* tslint:disable */\nexport default ${JSON.stringify(codebook, null, 2)};`,
+      `/* tslint:disable */\nexport default ${JSON.stringify(codebook, null, 2)};\n`,
       'utf-8',
     );
   });

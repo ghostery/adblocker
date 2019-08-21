@@ -1,14 +1,42 @@
 {
-  "author": "Cliqz",
+  "name": "adblocker",
+  "author": {
+    "name": "Cliqz"
+  },
+  "description": "Cliqz adblocker",
   "contributors": [
-    "Rémi Berson <remi@cliqz.com>",
-    "Zhonghao Yu <zhonghao@cliqz.com>",
-    "Krzysztof Jan Modras <chrmod@chrmod.net>",
-    "Raymond Hill <gorhill@users.noreply.github.com>",
-    "Eleni <eleni@cliqz.com>",
-    "ecnmst <ecnmst@users.noreply.github.com>",
-    "Asif <arshadasif0312@gmail.com>",
-    "Anton Lazarev <antonok35@gmail.com>"
+    {
+      "name": "Rémi Berson",
+      "email": "remi@cliqz.com"
+    },
+    {
+      "name": "Zhonghao Yu",
+      "email": "zhonghao@cliqz.com"
+    },
+    {
+      "name": "Krzysztof Jan Modras",
+      "email": "chrmod@chrmod.net"
+    },
+    {
+      "name": "Raymond Hill",
+      "email": "gorhill@users.noreply.github.com"
+    },
+    {
+      "name": "Eleni",
+      "email": "eleni@cliqz.com"
+    },
+    {
+      "name": "ecnmst",
+      "email": "ecnmst@users.noreply.github.com"
+    },
+    {
+      "name": "Asif",
+      "email": "arshadasif0312@gmail.com"
+    },
+    {
+      "name": "Anton Lazarev",
+      "email": "antonok35@gmail.com"
+    }
   ],
   "license": "MPL-2.0",
   "homepage": "https://github.com/cliqz-oss/adblocker#readme",
@@ -18,14 +46,14 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git@github.com:cliqz-oss/adblocker.git"
+    "url": "git+ssh://git@github.com/cliqz-oss/adblocker.git"
   },
   "workspaces": [
     "./packages/*"
   ],
   "scripts": {
     "bootstrap": "npx lerna bootstrap",
-    "lint": "lerna run --parallel lint",
+    "lint": "metalint && lerna run --parallel lint",
     "watch": "tsc --build ./packages/tsconfig.project.json --watch",
     "build": "tsc --build ./packages/tsconfig.project.json",
     "bundle": "lerna run bundle",
@@ -33,6 +61,7 @@
     "clean": "lerna run --parallel clean && lerna clean --yes && rimraf node_modules"
   },
   "devDependencies": {
+    "@cliqz/metalint": "^0.2.0",
     "axios": "^0.19.0",
     "benchmark": "^2.1.4",
     "chalk": "^2.4.2",

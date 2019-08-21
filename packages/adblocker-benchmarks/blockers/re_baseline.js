@@ -6,8 +6,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-
-
 const HOSTNAME_RE = /^(?:[^:]+:)(?:\/\/(?:[^\/]*@)?(\[[^\]]*\]|[^:\/]+))?/;
 function extractHostname(url) {
   const [, hostname] = HOSTNAME_RE.exec(url) || [];
