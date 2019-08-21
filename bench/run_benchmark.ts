@@ -22,48 +22,43 @@
 // processing the requests + making the measurement. We could also compare this
 // with Node.js perf and output a summary.
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-const chalk = require('chalk');
-const Benchmark = require('benchmark');
+import Benchmark from 'benchmark';
+import chalk from 'chalk';
 
-const GREP = (process.env.GREP || '').toLowerCase();
-
-const {
-  createEngine,
-  getFiltersFromLists,
-  parseFilters,
-} = require('./utils');
-
-const {
+import {
   benchCosmeticsFiltersParsing,
   benchEngineCreation,
   benchEngineDeserialization,
   benchEngineSerialization,
-  benchGetCosmeticTokens,
   benchGetCosmeticsFilters,
+  benchGetCosmeticTokens,
   benchGetNetworkTokens,
   benchNetworkFiltersParsing,
-  benchStringTokenize,
   benchRequestParsing,
-} = require('./micro');
+  benchStringTokenize,
+} from './micro';
+import requests from './requests';
+import { createEngine, getFiltersFromLists, parseFilters } from './utils';
 
-const requests = require('./requests');
+const GREP = (process.env.GREP || '').toLowerCase();
 
-function loadLists() {
+function loadLists(): { lists: string[]; resources: string } {
   return {
-    lists: [fs.readFileSync(
-      path.resolve(__dirname, '../packages/adblocker/assets/easylist.to/easylist/easylist.txt'),
-      { encoding: 'utf-8' },
-    )],
+    lists: [
+      fs.readFileSync(
+        path.resolve(__dirname, '../packages/adblocker/assets/easylist/easylist.txt'),
+        { encoding: 'utf-8' },
+      ),
+    ],
     resources: fs.readFileSync(
-      path.resolve(__dirname, '../packages/adblocker/assets/raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt'),
+      path.resolve(__dirname, '../packages/adblocker/assets/ublock-origin/resources.txt'),
       { encoding: 'utf-8' },
     ),
   };
 }
-
 
 function triggerGC() {
   if (global.gc) {
@@ -78,21 +73,44 @@ function getMemoryConsumption() {
   return process.memoryUsage().heapTotal;
 }
 
+interface BenchResult {
+  opsPerSecond: number;
+  relativeMarginOfError: number;
+  numberOfSamples: number;
+}
+
+interface BenchMicroResults {
+  [name: string]: BenchResult;
+}
+
+interface BenchResults {
+  memory: BenchMemoryResult;
+  microBenchmarks: BenchMicroResults;
+}
+
 /**
  * Micro benchmarks are a set of benchmarks measuring specific aspects of the library
  */
-function runMicroBenchmarks(lists, resources) {
+function runMicroBenchmarks(
+  lists: string[],
+  resources: string,
+): { microBenchmarks: BenchMicroResults } {
   console.log('Run micro bench...');
   // Create adb engine to use in benchmark
-  const { engine, serialized } = createEngine(lists, resources, {
-    loadCosmeticFilters: true,
-    loadNetworkFilters: true,
-  }, true /* Also serialize engine */);
+  const { engine, serialized } = createEngine(
+    lists,
+    resources,
+    {
+      loadCosmeticFilters: true,
+      loadNetworkFilters: true,
+    },
+    true /* Also serialize engine */,
+  );
 
   const filters = getFiltersFromLists(lists);
   const combinedLists = filters.join('\n');
   const { networkFilters, cosmeticFilters } = parseFilters(combinedLists);
-  const results = {};
+  const results: BenchMicroResults = {};
 
   // Arguments shared among benchmarks
   const args = {
@@ -121,35 +139,35 @@ function runMicroBenchmarks(lists, resources) {
   ].forEach((bench) => {
     if (bench.name.toLowerCase().includes(GREP)) {
       const suite = new Benchmark.Suite();
-      suite.add(bench.name, () => bench(args)).on('cycle', (event) => {
-        results[bench.name] = {
-          opsPerSecond: event.target.hz,
-          relativeMarginOfError: event.target.stats.rme,
-          numberOfSamples: event.target.stats.sample.length,
-        };
-      }).run({ async: false });
+      suite
+        .add(bench.name, () => bench(args))
+        .on('cycle', (event: any) => {
+          results[bench.name] = {
+            numberOfSamples: event.target.stats.sample.length,
+            opsPerSecond: event.target.hz,
+            relativeMarginOfError: event.target.stats.rme,
+          };
+        })
+        .run({ async: false });
     }
   });
 
   return {
-    engineStats: {
-      numFilters: engine.size,
-      numCosmeticFilters: engine.cosmetics.size,
-      numExceptionFilters: engine.exceptions.size,
-      numImportantFilters: engine.importants.size,
-      numRedirectFilters: engine.redirects.size,
-    },
     microBenchmarks: results,
   };
 }
 
+interface BenchMemoryResult {
+  engineMemory: number;
+  engineSerializedBytes: number;
+}
 
-function runMemoryBench(lists, resources) {
+function runMemoryBench(lists: string[], resources: string): { memory: BenchMemoryResult } {
   if ('runMemoryBench'.includes(GREP) === false) {
     return {
       memory: {
-        engineSerializedBytes: NaN,
         engineMemory: NaN,
+        engineSerializedBytes: NaN,
       },
     };
   }
@@ -157,34 +175,60 @@ function runMemoryBench(lists, resources) {
   console.log('Run memory bench...');
   // Create adb engine to use in benchmark
   const baseMemory = getMemoryConsumption();
-  // eslint-disable-next-line no-unused-vars
-  const { engine, serialized } = createEngine(lists, resources, {
-    loadCosmeticFilters: true,
-    loadNetworkFilters: true,
-  }, true /* Also serialize engine */);
+  const { serialized } = createEngine(
+    lists,
+    resources,
+    {
+      loadCosmeticFilters: true,
+      loadNetworkFilters: true,
+    },
+    true /* Also serialize engine */,
+  );
   const engineMemory = getMemoryConsumption() - baseMemory;
 
   return {
     memory: {
-      engineSerializedBytes: serialized.byteLength,
       engineMemory,
+      engineSerializedBytes: serialized === undefined ? 0 : serialized.byteLength,
     },
   };
 }
 
-
-function compareNumbers(name, {
-  number1,
-  number2,
-  unit,
-  moreIsBetter,
-}) {
+function compareNumbers(
+  name: string,
+  {
+    number1,
+    number2,
+    unit,
+    moreIsBetter,
+  }: {
+    number1: number;
+    number2: number;
+    unit: string;
+    moreIsBetter: boolean;
+  },
+) {
   const multiplicator = number2 / number1;
 
   const nameOutput = chalk.yellow.bold(name);
-  const ok = () => console.log(`${chalk.black.bold.bgGreen('OK')} ${nameOutput} ${chalk.red(Math.floor(number1))} ~> ${chalk.green.bold(Math.floor(number2))} ${unit} (x${multiplicator.toFixed(2)})`);
-  const notOk = () => console.log(`${chalk.yellow.bold.bgRed('FAIL')} ${nameOutput} ${chalk.green(Math.floor(number1))} ~> ${chalk.red.bold(Math.floor(number2))} ${unit} (x${multiplicator.toFixed(2)})`);
-  const neutral = () => console.log(`${chalk.black.bold.bgWhite('OK')} ${nameOutput} ${chalk.green.bold(Math.floor(number2))} ${unit}`);
+  const ok = () =>
+    console.log(
+      `${chalk.black.bold.bgGreen('OK')} ${nameOutput} ${chalk.red(
+        '' + Math.floor(number1),
+      )} ~> ${chalk.green.bold('' + Math.floor(number2))} ${unit} (x${multiplicator.toFixed(2)})`,
+    );
+  const notOk = () =>
+    console.log(
+      `${chalk.yellow.bold.bgRed('FAIL')} ${nameOutput} ${chalk.green(
+        '' + Math.floor(number1),
+      )} ~> ${chalk.red.bold('' + Math.floor(number2))} ${unit} (x${multiplicator.toFixed(2)})`,
+    );
+  const neutral = () =>
+    console.log(
+      `${chalk.black.bold.bgWhite('OK')} ${nameOutput} ${chalk.green.bold(
+        '' + Math.floor(number2),
+      )} ${unit}`,
+    );
 
   if (multiplicator > 1.001) {
     if (moreIsBetter) {
@@ -201,36 +245,36 @@ function compareNumbers(name, {
   }
 }
 
-function compareMemoryResults(results1, results2) {
+function compareMemoryResults(results1: BenchMemoryResult, results2: BenchMemoryResult) {
   compareNumbers('engineSerializedBytes', {
+    moreIsBetter: false,
     number1: results1.engineSerializedBytes,
     number2: results2.engineSerializedBytes,
     unit: 'bytes',
-    moreIsBetter: false,
   });
 
   compareNumbers('engineMemory', {
+    moreIsBetter: false,
     number1: results1.engineMemory,
     number2: results2.engineMemory,
     unit: 'MB',
-    moreIsBetter: false,
   });
 }
 
-function compareMicroBenchmarkResults(results1, results2) {
+function compareMicroBenchmarkResults(results1: BenchMicroResults, results2: BenchMicroResults) {
   Object.keys(results1).forEach((key) => {
     if (results2[key] !== undefined) {
       compareNumbers(key, {
+        moreIsBetter: true,
         number1: results1[key].opsPerSecond,
         number2: results2[key].opsPerSecond,
         unit: 'ops/sec',
-        moreIsBetter: true,
       });
     }
   });
 }
 
-function compareBenchmarkResults(results1, results2) {
+function compareBenchmarkResults(results1: BenchResults, results2: BenchResults) {
   console.log(chalk.bold('Memory Benchmark:'));
   console.log(chalk.bold('================='));
   if (results1.memory !== undefined && results2.memory !== undefined) {
@@ -259,10 +303,7 @@ function main() {
   // Read previous bench dump if any
   const benchDumpPath = '.bench.json';
   try {
-    const previousResults = JSON.parse(fs.readFileSync(
-      benchDumpPath,
-      { encoding: 'utf-8' },
-    ));
+    const previousResults = JSON.parse(fs.readFileSync(benchDumpPath, { encoding: 'utf-8' }));
     compareBenchmarkResults(previousResults, benchmarkResults);
   } catch (ex) {
     /* No previous result to compare to */
@@ -270,11 +311,7 @@ function main() {
   }
 
   // Dump current results
-  fs.writeFileSync(
-    benchDumpPath,
-    JSON.stringify(benchmarkResults),
-    { encoding: 'utf-8' },
-  );
+  fs.writeFileSync(benchDumpPath, JSON.stringify(benchmarkResults), { encoding: 'utf-8' });
 }
 
 main();

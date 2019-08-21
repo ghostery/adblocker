@@ -6,14 +6,18 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/* eslint-disable no-bitwise */
+import {
+  Config,
+  CosmeticFilter,
+  FiltersEngine,
+  NetworkFilter,
+  parseFilters,
+  Request,
+  tokenize,
+} from '@cliqz/adblocker';
+import { createEngine, domains500 } from './utils';
 
-const {
-  FiltersEngine, tokenize, parseFilters, Request,
-} = require('@cliqz/adblocker');
-const { createEngine, domains500 } = require('./utils');
-
-function benchEngineCreation({ lists, resources }) {
+export function benchEngineCreation({ lists, resources }: { lists: string[]; resources: string }) {
   return createEngine(lists, resources, {
     loadCosmeticFilters: true,
     loadNetworkFilters: true,
@@ -21,15 +25,22 @@ function benchEngineCreation({ lists, resources }) {
   });
 }
 
-function benchEngineSerialization({ engine }) {
+export function benchEngineSerialization({ engine }: { engine: FiltersEngine }) {
   return engine.serialize();
 }
 
-function benchEngineDeserialization({ serialized }) {
-  return FiltersEngine.deserialize(serialized);
+export function benchEngineDeserialization({
+  serialized,
+}: {
+  serialized: Uint8Array | undefined;
+}): FiltersEngine | undefined {
+  if (serialized !== undefined) {
+    return FiltersEngine.deserialize(serialized);
+  }
+  return undefined;
 }
 
-function benchStringTokenize({ filters }) {
+export function benchStringTokenize({ filters }: { filters: string[] }) {
   let dummy = 0;
   for (let i = 0; i < filters.length; i += 1) {
     dummy = (dummy + tokenize(filters[i]).length) >>> 0;
@@ -37,25 +48,25 @@ function benchStringTokenize({ filters }) {
   return dummy;
 }
 
-function benchParsingImpl(lists, options) {
+export function benchParsingImpl(lists: string, options: Partial<Config>) {
   return parseFilters(lists, options);
 }
 
-function benchCosmeticsFiltersParsing({ combinedLists }) {
+export function benchCosmeticsFiltersParsing({ combinedLists }: { combinedLists: string }) {
   return benchParsingImpl(combinedLists, {
     loadCosmeticFilters: true,
     loadNetworkFilters: false,
   });
 }
 
-function benchNetworkFiltersParsing({ combinedLists }) {
+export function benchNetworkFiltersParsing({ combinedLists }: { combinedLists: string }) {
   return benchParsingImpl(combinedLists, {
     loadCosmeticFilters: false,
     loadNetworkFilters: true,
   });
 }
 
-function benchGetNetworkTokens({ networkFilters }) {
+export function benchGetNetworkTokens({ networkFilters }: { networkFilters: NetworkFilter[] }) {
   let dummy = 0;
 
   for (let i = 0; i < networkFilters.length; i += 1) {
@@ -65,7 +76,11 @@ function benchGetNetworkTokens({ networkFilters }) {
   return dummy;
 }
 
-function benchGetCosmeticTokens({ cosmeticFilters }) {
+export function benchGetCosmeticTokens({
+  cosmeticFilters,
+}: {
+  cosmeticFilters: CosmeticFilter[];
+}) {
   let dummy = 0;
 
   for (let i = 0; i < cosmeticFilters.length; i += 1) {
@@ -75,37 +90,29 @@ function benchGetCosmeticTokens({ cosmeticFilters }) {
   return dummy;
 }
 
-function benchGetCosmeticsFilters({ engine }) {
+export function benchGetCosmeticsFilters({ engine }: { engine: FiltersEngine }) {
   for (let i = 0; i < domains500.length; i += 1) {
     const domain = domains500[i];
     engine.getCosmeticsFilters({
-      url: `https://${domain}`,
-      hostname: domain,
       domain,
+      hostname: domain,
+      url: `https://${domain}`,
     });
   }
 }
 
-function benchRequestParsing({ requests }) {
+export function benchRequestParsing({
+  requests,
+}: {
+  requests: Array<{ url: string; frameUrl: string; cpt: string }>;
+}) {
   for (let i = 0; i < requests.length; i += 1) {
     const { url, frameUrl, cpt } = requests[i];
     Request.fromRawDetails({
-      url,
       sourceUrl: frameUrl,
+      // @ts-ignore
       type: cpt,
+      url,
     });
   }
 }
-
-module.exports = {
-  benchCosmeticsFiltersParsing,
-  benchEngineCreation,
-  benchEngineDeserialization,
-  benchEngineSerialization,
-  benchGetCosmeticTokens,
-  benchGetCosmeticsFilters,
-  benchGetNetworkTokens,
-  benchNetworkFiltersParsing,
-  benchRequestParsing,
-  benchStringTokenize,
-};

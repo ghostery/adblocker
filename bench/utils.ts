@@ -6,13 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const { FiltersEngine, parseFilters } = require('@cliqz/adblocker');
+import { FiltersEngine } from '@cliqz/adblocker';
+export { parseFilters } from '@cliqz/adblocker';
 
-function createEngine(lists, resources, options = {}, serialize = false) {
-  const engine = FiltersEngine.parse(
-    lists.join('\n'),
-    options,
-  );
+export function createEngine(lists: string[], resources: string, options = {}, serialize = false) {
+  const engine = FiltersEngine.parse(lists.join('\n'), options);
 
   engine.updateResources(resources, '');
 
@@ -22,9 +20,9 @@ function createEngine(lists, resources, options = {}, serialize = false) {
   };
 }
 
-const NANOSECS_PER_SEC = 1e9;
+export const NANOSECS_PER_SEC = 1e9;
 
-function getFiltersFromLists(lists) {
+export function getFiltersFromLists(lists: string[]) {
   const filters = [];
 
   for (let i = 0; i < lists.length; i += 1) {
@@ -37,7 +35,7 @@ function getFiltersFromLists(lists) {
   return filters;
 }
 
-const domains500 = [
+export const domains500 = [
   'wikipedia.org',
   'amazon.com',
   'reddit.com',
@@ -539,11 +537,3 @@ const domains500 = [
   'marmiton.org',
   'zillow.com',
 ];
-
-module.exports = {
-  createEngine,
-  NANOSECS_PER_SEC,
-  getFiltersFromLists,
-  parseFilters,
-  domains500,
-};

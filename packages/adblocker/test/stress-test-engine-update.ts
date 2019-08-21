@@ -343,12 +343,14 @@ async function run() {
       const previousEngine = FiltersEngine.deserialize(previousEngineSerialized);
 
       if (typedArrayEqual(currentEngineSerialized, previousEngineSerialized)) {
+        console.log(JSON.stringify(diff, null, 2));
         throw new Error('Expected engines to not be equal');
       }
 
       // Update `previousEngine` with diff and expect to find `currentEngine`
       const updated = previousEngine.updateFromDiff(diff);
       if (updated === false) {
+        console.log(JSON.stringify(diff, null, 2));
         throw new Error('Expected engine to have been updated');
       }
 
