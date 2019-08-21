@@ -1,0 +1,49 @@
+{
+  "name": "@cliqz/adblocker-content",
+  "version": "0.14.0",
+  "description": "Cliqz adblocker library (content-scripts helpers)",
+  "author": "Cliqz",
+  "homepage": "https://github.com/cliqz-oss/adblocker#readme",
+  "license": "MPL-2.0",
+  "main": "dist/cjs/adblocker.js",
+  "module": "dist/es6/adblocker.js",
+  "types": "dist/types/adblocker.d.ts",
+  "files": [
+    "LICENSE",
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:cliqz-oss/adblocker.git"
+  },
+  "scripts": {
+    "clean": "rimraf dist coverage",
+    "lint": "tslint --config ../../tslint.json --project ./tsconfig.json",
+    "build": "tsc --build ./tsconfig.json",
+    "bundle": "rollup --config ./rollup.config.ts",
+    "prebundle": "yarn run build",
+    "prepack": "yarn run bundle"
+  },
+  "bugs": {
+    "url": "https://github.com/cliqz-oss/adblocker/issues"
+  },
+  "devDependencies": {
+    "@ampproject/rollup-plugin-closure-compiler": "^0.10.0",
+    "@types/chrome": "^0.0.88",
+    "@types/jest": "^24.0.15",
+    "@types/node": "^12.0.3",
+    "jest": "^24.8.0",
+    "rimraf": "^3.0.0",
+    "rollup": "^1.16.4",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "ts-jest": "^24.0.2",
+    "ts-node": "^8.3.0",
+    "tslint": "^5.18.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.5.3"
+  }
+}

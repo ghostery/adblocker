@@ -838,23 +838,23 @@ export default class NetworkFilter implements IFilter {
     buffer.setByte(index, optionalParts);
   }
 
-  public getSerializedSize(): number {
+  public getSerializedSize(compression: boolean): number {
     let estimate: number = 4 + 1; // mask = 4 bytes // optional parts = 1 byte
 
     if (this.csp !== undefined) {
-      estimate += StaticDataView.sizeOfASCII(this.csp);
+      estimate += StaticDataView.sizeOfNetworkCSP(this.csp, compression);
     }
 
     if (this.filter !== undefined) {
       if (this.isUnicode()) {
         estimate += StaticDataView.sizeOfUTF8(this.filter);
       } else {
-        estimate += StaticDataView.sizeOfASCII(this.filter);
+        estimate += StaticDataView.sizeOfNetworkFilter(this.filter, compression);
       }
     }
 
     if (this.hostname !== undefined) {
-      estimate += StaticDataView.sizeOfASCII(this.hostname);
+      estimate += StaticDataView.sizeOfNetworkHostname(this.hostname, compression);
     }
 
     if (this.optDomains !== undefined) {
@@ -874,7 +874,7 @@ export default class NetworkFilter implements IFilter {
     }
 
     if (this.redirect !== undefined) {
-      estimate += StaticDataView.sizeOfASCII(this.redirect);
+      estimate += StaticDataView.sizeOfNetworkRedirect(this.redirect, compression);
     }
 
     return estimate;

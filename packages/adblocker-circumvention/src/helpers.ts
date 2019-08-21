@@ -12,7 +12,7 @@
  * the context of pages.
  */
 
-import { injectScript } from '@cliqz/adblocker';
+import { injectScript } from '@cliqz/adblocker-content';
 
 export function getWindowHostname(window: Window) {
   const strip = (hostname: string): string => {

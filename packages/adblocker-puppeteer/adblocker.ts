@@ -11,11 +11,14 @@ import * as puppeteer from 'puppeteer';
 import { parse } from 'tldts-experimental';
 
 import {
-  autoRemoveScript,
-  extractFeaturesFromDOM,
   FiltersEngine,
   Request,
 } from '@cliqz/adblocker';
+
+import {
+  autoRemoveScript,
+  extractFeaturesFromDOM,
+} from '@cliqz/adblocker-content';
 
 /**
  * Create an instance of `Request` from `puppeteer.Request`.
@@ -41,23 +44,25 @@ export class PuppeteerBlocker extends FiltersEngine {
       // currently no way to modify responses in puppeteer. This feature could
       // easily be added if puppeteer implements the required capability.
 
-      // Register callback for network requets filtering
-      page.on('request', (request) => {
-        this.onRequest(request);
-      });
+      if (this.config.loadNetworkFilters === true) {
+        // Register callback for network requets filtering
+        page.on('request', this.onRequest);
+      }
 
-      // Register callback to cosmetics injection (CSS + scriptlets)
-      page.on('framenavigated', async (frame) => {
-        try {
-          await this.onFrame(frame);
-        } catch (ex) {
-          // Ignore
-        }
-      });
+      if (this.config.loadCosmeticFilters === true) {
+        // Register callback to cosmetics injection (CSS + scriptlets)
+        page.on('framenavigated', async (frame) => {
+          try {
+            await this.onFrame(frame);
+          } catch (ex) {
+            // Ignore
+          }
+        });
+      }
     });
   }
 
-  private async onFrame(frame: puppeteer.Frame): Promise<void> {
+  private onFrame = async (frame: puppeteer.Frame): Promise<void> => {
     // DOM features
     const { ids, hrefs, classes } = await frame.$$eval(
       '[id],[class],[href]',
@@ -108,7 +113,7 @@ export class PuppeteerBlocker extends FiltersEngine {
     }
   }
 
-  private onRequest(request: puppeteer.Request): void {
+  private onRequest = (request: puppeteer.Request): void => {
     const { redirect, match } = this.match(fromPuppeteerDetails(request));
 
     if (redirect !== undefined) {

@@ -22,6 +22,21 @@ describe('Serialization', () => {
     new Config({ debug: true }),
   );
 
+  describe('Config', () => {
+    it('serializes with exact size', () => {
+      const config = new Config();
+      const buffer = StaticDataView.allocate(config.getSerializedSize(), config);
+      config.serialize(buffer);
+
+      // Check size
+      expect(buffer.slice()).toHaveLength(config.getSerializedSize());
+
+      // Check deserialization
+      buffer.seekZero();
+      expect(Config.deserialize(buffer)).toEqual(config);
+    });
+  });
+
   describe('filters', () => {
     const buffer = StaticDataView.allocate(1000000, { enableCompression: false });
     const checkFilterSerialization = (Filter: any, filter: IFilter) => {
@@ -55,10 +70,9 @@ describe('Serialization', () => {
   });
 
   describe('Engine', () => {
-    const buffer = new Uint8Array(15000000);
     it('fails with wrong version', () => {
       const engine = Engine.parse('||domain');
-      const serialized = engine.serialize(buffer);
+      const serialized = engine.serialize();
       const version = serialized[0];
       serialized[0] = 1; // override version
       expect(() => {
@@ -70,7 +84,7 @@ describe('Serialization', () => {
 
     it('check integrity', () => {
       const engine = Engine.parse('||domain', { integrityCheck: true });
-      const serialized = engine.serialize(buffer);
+      const serialized = engine.serialize();
       for (let i = 0; i < serialized.length; i += 1) {
         const value = serialized[i];
         let randomValue = value;
@@ -92,7 +106,7 @@ describe('Serialization', () => {
 
     it('disable integrity check', () => {
       const engine = Engine.parse('||domain', { integrityCheck: true });
-      const serialized = engine.serialize(buffer);
+      const serialized = engine.serialize();
 
       const end = serialized.length - 1;
       const value = serialized[end];
@@ -115,13 +129,12 @@ describe('Serialization', () => {
         newNetworkFilters: networkFilters,
       });
 
-      const array = new Uint8Array(10000000);
-      const baseSerialized = engine.serialize(array);
+      const baseSerialized = engine.serialize();
 
       let deserialized = Engine.deserialize(baseSerialized);
       expect(deserialized).toEqual(engine);
 
-      let serialized = deserialized.serialize(array);
+      let serialized = deserialized.serialize();
       expect(typedArrayEqual(serialized, baseSerialized)).toBe(true);
 
       // Perform several deserializations in a row. Testing this is needed to
@@ -129,7 +142,7 @@ describe('Serialization', () => {
       // data.
       for (let i = 0; i < 3; i += 1) {
         deserialized = Engine.deserialize(serialized);
-        serialized = deserialized.serialize(array);
+        serialized = deserialized.serialize();
         expect(typedArrayEqual(serialized, baseSerialized)).toBe(true);
       }
     });

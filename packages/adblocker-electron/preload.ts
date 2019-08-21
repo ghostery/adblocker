@@ -7,12 +7,11 @@
  */
 
 import {
+  extractFeaturesFromDOM,
   IBackgroundCallback,
   IMessageFromBackground,
-} from '@cliqz/adblocker-webextension-cosmetics';
+} from '@cliqz/adblocker-content';
 import { ipcRenderer, webFrame } from 'electron';
-
-import { extractFeaturesFromDOM } from '@cliqz/adblocker';
 
 const enableMutationObserver = ipcRenderer.sendSync('is-mutation-observer-enabled');
 
@@ -41,14 +40,14 @@ function handleResponseFromBackground({ active, scripts }: IMessageFromBackgroun
     ACTIVE = true;
   }
 
-  for (const script of scripts) {
-    setTimeout(() => webFrame.executeJavaScript(script), 1);
+  for (let i = 0; i < scripts.length; i += 1) {
+    setTimeout(() => webFrame.executeJavaScript(scripts[i]), 1);
   }
 }
 
 ipcRenderer.on(
   'get-cosmetic-filters-response',
-  (_: Electron.IpcMessageEvent, response: IMessageFromBackground) => {
+  (_: Electron.IpcRendererEvent, response: IMessageFromBackground) => {
     handleResponseFromBackground(response);
   },
 );

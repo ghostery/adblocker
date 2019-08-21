@@ -1171,7 +1171,7 @@ describe('Cosmetic filters', () => {
               });
             });
 
-            for (const invalidSeparator of ['~', '.', ', ', '  ~ ', '+', '#', ']']) {
+            for (const invalidSeparator of ['~', ', ', '  ~ ', '+', '#', ']']) {
               const selector = `${symbol}sele${invalidSeparator}ctor`;
               const filter = `${domains}${unhide ? '#@#' : '##'}${selector}`;
               it(`rejects ${filter}`, () => {
@@ -1192,6 +1192,7 @@ describe('Cosmetic filters', () => {
               ' + selector',
               ' .selector',
               ' #selector',
+              '.selector',
             ]) {
               const selector = `${symbol}selector${compound}`;
               const filter = `${domains}${unhide ? '#@#' : '##'}${selector}`;
@@ -1392,8 +1393,13 @@ describe('Cosmetic filters', () => {
           ' + selector',
           ' .selector',
           ' #selector',
+          '.selector',
+          ':not(foo)',
         ]) {
-          checkTokens(`##${kind}selector${compound}`, [hashStrings(['selector'])]);
+          const filter = `##${kind}selector1${compound}`;
+          it(filter, () => {
+            checkTokens(filter, [hashStrings(['selector1'])]);
+          });
         }
       }
     });

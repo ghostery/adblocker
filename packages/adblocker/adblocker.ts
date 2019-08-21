@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-export { default as FiltersEngine, ENGINE_VERSION } from './src/engine/engine';
+export { default as FiltersEngine, ENGINE_VERSION, BlockingResponse } from './src/engine/engine';
 export { default as ReverseIndex } from './src/engine/reverse-index';
 export {
   default as Request,
@@ -29,7 +29,6 @@ export {
   getLinesWithFilters,
 } from './src/lists';
 export { compactTokens, hasEmptyIntersection, mergeCompactSets } from './src/compact-set';
-export { fetchLists, fetchResources } from './src/fetch';
+export * from './src/fetch';
 export { tokenize } from './src/utils';
 export { default as Config } from './src/config';
-export * from './src/content/helpers';

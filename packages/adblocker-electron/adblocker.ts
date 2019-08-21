@@ -15,7 +15,7 @@ import { parse } from 'tldts-experimental';
 import {
   IBackgroundCallback,
   IMessageFromBackground,
-} from '@cliqz/adblocker-webextension-cosmetics';
+} from '@cliqz/adblocker-content';
 
 // https://stackoverflow.com/questions/48854265/why-do-i-see-an-electron-security-warning-after-updating-my-electron-project-t
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
@@ -31,40 +31,37 @@ export function fromElectronDetails({
   url,
   resourceType,
   referrer,
+  webContentsId,
 }: Electron.OnBeforeRequestDetails | Electron.OnHeadersReceivedDetails): Request {
   return Request.fromRawDetails({
     sourceUrl: referrer,
+    tabId: webContentsId,
     type: (resourceType || 'other') as ElectronRequestType,
     url,
   });
-}
-
-interface ElectronBlockerOptions {
-  mutationObserver?: boolean;
 }
 
 /**
  * Wrap `FiltersEngine` into a Electron-friendly helper class.
  */
 export class ElectronBlocker extends FiltersEngine {
-  constructor(public options: ElectronBlockerOptions = { mutationObserver: true }) {
-    super();
-  }
-
   public enableBlockingInSession(ses: Electron.Session) {
-    ses.webRequest.onHeadersReceived({ urls: ['<all_urls>'] }, this.onHeadersReceived);
-    ses.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onBeforeRequest);
+    if (this.config.loadNetworkFilters === true) {
+      ses.webRequest.onHeadersReceived({ urls: ['<all_urls>'] }, this.onHeadersReceived);
+      ses.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onBeforeRequest);
+    }
 
-    ipcMain.on('get-cosmetic-filters', this.onGetCosmeticFilters);
-    ses.setPreloads([join(__dirname, './content.js')]);
-
-    ipcMain.on('is-mutation-observer-enabled', (event: Electron.IpcMessageEvent) => {
-      event.returnValue = this.options.mutationObserver;
-    });
+    if (this.config.loadCosmeticFilters === true) {
+      ipcMain.on('get-cosmetic-filters', this.onGetCosmeticFilters);
+      ses.setPreloads([join(__dirname, './preload.js')]);
+      ipcMain.on('is-mutation-observer-enabled', (event: Electron.IpcMainEvent) => {
+        event.returnValue = this.config.enableMutationObserver;
+      });
+    }
   }
 
   private onGetCosmeticFilters = (
-    event: Electron.IpcMessageEvent,
+    event: Electron.IpcMainEvent,
     url: string,
     msg: IBackgroundCallback,
   ): void => {

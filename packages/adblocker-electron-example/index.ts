@@ -1,33 +1,15 @@
-import axios from 'axios';
 import { app, BrowserWindow, session } from 'electron';
+import fetch from 'node-fetch';
 
-import { ElectronBlocker, ENGINE_VERSION } from '@cliqz/adblocker-electron';
+import { ElectronBlocker, fullLists, Request } from '@cliqz/adblocker-electron';
 
-async function loadAdblocker(): Promise<ElectronBlocker> {
-  // Fetch `allowed-lists.json` from CDN. It contains information about where
-  // to find pre-built engines as well as lists of filters (e.g.: Easylist,
-  // etc.).
-  console.time('fetch allowed lists');
-  const { engines } = (await axios.get(
-    'https://cdn.cliqz.com/adblocker/configs/desktop-ads-trackers/allowed-lists.json',
-  )).data;
-  console.timeEnd('fetch allowed lists');
+function getUrlToLoad(): string {
+  let url = 'https://www.mangareader.net/';
+  if (process.argv[process.argv.length - 1].endsWith('.js') === false) {
+    url = process.argv[process.argv.length - 1];
+  }
 
-  // Once we have the config, we can get the URL of the pre-built engine
-  // corresponding to our installed @cliqz/adblocker version (i.e.:
-  // ENGINE_VERSION). This guarantees that we can download a compabitle one.
-  console.time('fetch serialized engine');
-  const serialized = (await axios.get(engines[ENGINE_VERSION].url, {
-    responseType: 'arraybuffer',
-  })).data;
-  console.timeEnd('fetch serialized engine');
-
-  // Deserialize the FiltersEngine instance from binary form.
-  console.time('deserialize engine');
-  const engine = ElectronBlocker.deserialize(new Uint8Array(serialized)) as ElectronBlocker;
-  console.timeEnd('deserialize engine');
-
-  return engine;
+  return url;
 }
 
 let mainWindow: BrowserWindow | null = null;
@@ -42,15 +24,34 @@ async function createWindow() {
     throw new Error('defaultSession is undefined');
   }
 
-  const engine = await loadAdblocker();
+  const engine = await ElectronBlocker.fromLists(fetch, fullLists);
   engine.enableBlockingInSession(session.defaultSession);
 
-  let url = 'https://www.mangareader.net/';
-  if (process.argv[process.argv.length - 1].endsWith('.js') === false) {
-    url = process.argv[process.argv.length - 1];
-  }
+  engine.on('request-blocked', (request: Request) => {
+    console.log('blocked', request.tabId, request.url);
+  });
 
-  mainWindow.loadURL(url);
+  engine.on('request-redirected', (request: Request) => {
+    console.log('redirected', request.tabId, request.url);
+  });
+
+  engine.on('request-whitelisted', (request: Request) => {
+    console.log('whitelisted', request.tabId, request.url);
+  });
+
+  engine.on('csp-injected', (request: Request) => {
+    console.log('csp', request.url);
+  });
+
+  engine.on('script-injected', (script: string, url: string) => {
+    console.log('script', script.length, url);
+  });
+
+  engine.on('style-injected', (style: string, url: string) => {
+    console.log('style', style.length, url);
+  });
+
+  mainWindow.loadURL(getUrlToLoad());
   mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {

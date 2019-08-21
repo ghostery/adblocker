@@ -1,5 +1,7 @@
-Blocking ads in Electron using @cliqz/adblocker.
+Blocking ads in Electron using [@cliqz/adblocker-electron](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-electron).
 
 ```sh
-$ npx electron index.js
+$ yarn start
 ```
+
+Checkout [index.ts](https://github.com/cliqz-oss/adblocker/blob/master/packages/adblocker-electron-example/index.ts) for more details!

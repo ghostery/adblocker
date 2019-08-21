@@ -13,6 +13,7 @@ export default class Config {
     return new Config({
       debug: buffer.getBool(),
       enableCompression: buffer.getBool(),
+      enableMutationObserver: buffer.getBool(),
       enableOptimizations: buffer.getBool(),
       integrityCheck: buffer.getBool(),
       loadCosmeticFilters: buffer.getBool(),
@@ -23,6 +24,7 @@ export default class Config {
 
   public readonly debug: boolean;
   public readonly enableCompression: boolean;
+  public readonly enableMutationObserver: boolean;
   public readonly enableOptimizations: boolean;
   public readonly integrityCheck: boolean;
   public readonly loadCosmeticFilters: boolean;
@@ -32,6 +34,7 @@ export default class Config {
   constructor({
     debug = false,
     enableCompression = false,
+    enableMutationObserver = true,
     enableOptimizations = true,
     integrityCheck = true,
     loadCosmeticFilters = true,
@@ -40,6 +43,7 @@ export default class Config {
   }: Partial<Config> = {}) {
     this.debug = debug;
     this.enableCompression = enableCompression;
+    this.enableMutationObserver = enableMutationObserver;
     this.enableOptimizations = enableOptimizations;
     this.integrityCheck = integrityCheck;
     this.loadCosmeticFilters = loadCosmeticFilters;
@@ -47,9 +51,16 @@ export default class Config {
     this.loadNetworkFilters = loadNetworkFilters;
   }
 
+  public getSerializedSize(): number {
+    // NOTE: this should always be the number of attributes and needs to be
+    // updated when `Config` changes.
+    return 8 * StaticDataView.sizeOfBool();
+  }
+
   public serialize(buffer: StaticDataView): void {
     buffer.pushBool(this.debug);
     buffer.pushBool(this.enableCompression);
+    buffer.pushBool(this.enableMutationObserver);
     buffer.pushBool(this.enableOptimizations);
     buffer.pushBool(this.integrityCheck);
     buffer.pushBool(this.loadCosmeticFilters);

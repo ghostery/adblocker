@@ -22,10 +22,10 @@ import { fastHash, tokenize } from '../src/utils';
 import { loadAllLists } from './utils';
 
 describe('ReverseIndex', () => {
-  for (const config of [
+  [
     new Config({ enableCompression: true }),
     new Config({ enableCompression: false }),
-  ]) {
+  ].forEach((config) => {
     describe(`compression = ${config.enableCompression}`, () => {
       const { cosmeticFilters, networkFilters } = parseFilters(loadAllLists(), { debug: true });
 
@@ -43,8 +43,11 @@ describe('ReverseIndex', () => {
           });
 
           // Serialize index
-          const buffer = StaticDataView.allocate(10000000, config);
+          const buffer = StaticDataView.allocate(reverseIndex.getSerializedSize(), config);
           reverseIndex.serialize(buffer);
+
+          // Make sure that we predicted serialized size properly
+          expect(buffer.pos).toBe(buffer.buffer.byteLength);
 
           // Deserialize
           buffer.seekZero();
@@ -298,5 +301,5 @@ wildcard
         });
       }
     });
-  }
+  });
 });

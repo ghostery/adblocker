@@ -24,7 +24,7 @@ export default class Resources {
 
     // Deserialize `resources`
     const resources: Map<string, IResource> = new Map();
-    const numberOfResources = buffer.getUint8();
+    const numberOfResources = buffer.getUint16();
     for (let i = 0; i < numberOfResources; i += 1) {
       resources.set(buffer.getASCII(), {
         contentType: buffer.getASCII(),
@@ -108,12 +108,29 @@ export default class Resources {
     return this.resources.get(name);
   }
 
+  public getSerializedSize(): number {
+    let estimatedSize = (
+      StaticDataView.sizeOfASCII(this.checksum) +
+      (2 * StaticDataView.sizeOfByte()) // resources.size
+    );
+
+    this.resources.forEach(({ contentType, data }, name) => {
+      estimatedSize += (
+        StaticDataView.sizeOfASCII(name) +
+        StaticDataView.sizeOfASCII(contentType) +
+        StaticDataView.sizeOfASCII(data)
+      );
+    });
+
+    return estimatedSize;
+  }
+
   public serialize(buffer: StaticDataView): void {
     // Serialize `checksum`
     buffer.pushASCII(this.checksum);
 
     // Serialize `resources`
-    buffer.pushUint8(this.resources.size);
+    buffer.pushUint16(this.resources.size);
     this.resources.forEach(({ contentType, data }, name) => {
       buffer.pushASCII(name);
       buffer.pushASCII(contentType);

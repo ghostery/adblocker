@@ -6,6 +6,22 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+export type Lifecycle = 'start' | 'dom-update';
+
+export interface IBackgroundCallback {
+  classes: string[];
+  hrefs: string[];
+  ids: string[];
+  lifecycle: Lifecycle;
+}
+
+export interface IMessageFromBackground {
+  active: boolean;
+  scripts: string[];
+  styles: string;
+  extended: string[];
+}
+
 /**
  * WARNING: this function should be self-contained and not rely on any global
  * symbol. That constraint needs to be fulfilled because this function can

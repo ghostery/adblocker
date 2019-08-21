@@ -8,6 +8,15 @@
 
 import Config from '../config';
 import StaticDataView from '../data-view';
+import { EventEmitter } from '../events';
+import {
+  adsAndTrackingLists,
+  adsLists,
+  Fetch,
+  fetchLists,
+  fetchPrebuilt,
+  fetchResources,
+} from '../fetch';
 import CosmeticFilter from '../filters/cosmetic';
 import NetworkFilter from '../filters/network';
 import { IListDiff, IRawDiff, parseFilters } from '../lists';
@@ -16,7 +25,7 @@ import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 
-export const ENGINE_VERSION = 30;
+export const ENGINE_VERSION = 34;
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -28,13 +37,112 @@ function btoaPolyfill(buffer: string): string {
   return buffer;
 }
 
-export default class FilterEngine {
-  public static parse(filters: string, options: Partial<Config> = {}): FilterEngine {
+export interface BlockingResponse {
+  match: boolean;
+  redirect:
+    | undefined
+    | {
+        body: string;
+        contentType: string;
+        dataUrl: string;
+      };
+  exception: NetworkFilter | undefined;
+  filter: NetworkFilter | undefined;
+}
+
+export default class FilterEngine extends EventEmitter<
+  | 'request-blocked'
+  | 'request-redirected'
+  | 'request-whitelisted'
+  | 'csp-injected'
+  | 'script-injected'
+  | 'style-injected'
+> {
+  /**
+   * Create an instance of `FiltersEngine` (or subclass like `ElectronBlocker`,
+   * etc.), from the list of subscriptions provided as argument (e.g.:
+   * EasyList).
+   *
+   * Lists are fetched using the instance of `fetch` provided as a first
+   * argument. Optionally resources.txt and config can be provided.
+   */
+  public static fromLists<T extends typeof FilterEngine>(
+    this: T,
+    fetch: Fetch,
+    urls: string[],
+    resourcesUrl?: string | undefined,
+    config: Partial<Config> = {},
+  ): Promise<InstanceType<T>> {
+    const listsPromises = fetchLists(fetch, urls);
+    const resourcesPromise = fetchResources(fetch, resourcesUrl);
+
+    return Promise.all([listsPromises, resourcesPromise]).then(([lists, resources]) => {
+      const engine = this.parse(lists.join('\n'), config);
+      if (resources !== undefined) {
+        engine.updateResources(resources, '' + resources.length);
+      }
+
+      return engine as InstanceType<T>;
+    });
+  }
+
+  /**
+   * Initialize blocker of *ads only*.
+   *
+   * Attempt to initialize a blocking engine using a pre-built version served
+   * from Cliqz's CDN. If this fails (e.g.: if no pre-built engine is available
+   * for this version of the library), then falls-back to using `fromLists(...)`
+   * method with the same subscriptions.
+   */
+  public static fromPrebuiltAdsOnly<T extends typeof FilterEngine>(
+    this: T,
+    fetchImpl: Fetch = fetch,
+  ): Promise<InstanceType<T>> {
+    return fetchPrebuilt(
+      fetchImpl,
+      'https://cdn.cliqz.com/adblocker/configs/desktop-ads/allowed-lists.json',
+      ENGINE_VERSION,
+    )
+      .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
+      .catch(() => {
+        console.log('failed downloading pre-built, fallback to fetching lists');
+        return this.fromLists(fetchImpl, adsLists) as Promise<InstanceType<T>>;
+      });
+  }
+
+  /**
+   * Same as `fromPrebuiltAdsOnly(...)` but also contains rules to block
+   * tracking (i.e.: using extra lists such as EasyPrivacy and more).
+   */
+  public static fromPrebuiltAdsAndTracking<T extends typeof FilterEngine>(
+    this: T,
+    fetchImpl: Fetch = fetch,
+  ): Promise<InstanceType<T>> {
+    return fetchPrebuilt(
+      fetchImpl,
+      'https://cdn.cliqz.com/adblocker/configs/desktop-ads-trackers/allowed-lists.json',
+      ENGINE_VERSION,
+    )
+      .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
+      .catch(() => {
+        console.log('failed downloading pre-built, fallback to fetching lists');
+        return this.fromLists(fetchImpl, adsAndTrackingLists) as Promise<InstanceType<T>>;
+      });
+  }
+
+  public static parse<T extends FilterEngine>(
+    this: new (...args: any[]) => T,
+    filters: string,
+    options: Partial<Config> = {},
+  ): T {
     const config = new Config(options);
     return new this(Object.assign({}, parseFilters(filters, config), { config }));
   }
 
-  public static deserialize(serialized: Uint8Array): FilterEngine {
+  public static deserialize<T extends FilterEngine>(
+    this: new (...args: any[]) => T,
+    serialized: Uint8Array,
+  ): T {
     const buffer = StaticDataView.fromUint8Array(serialized, {
       enableCompression: false,
     });
@@ -54,7 +162,7 @@ export default class FilterEngine {
 
     // Optionally turn compression ON
     if (config.enableCompression) {
-      buffer.enableCompression = true;
+      buffer.enableCompression();
     }
 
     // Also make sure that the built-in checksum is correct. This allows to
@@ -87,10 +195,11 @@ export default class FilterEngine {
     engine.lists = lists;
 
     // Deserialize buckets
-    engine.filters = NetworkFilterBucket.deserialize(buffer, config);
-    engine.exceptions = NetworkFilterBucket.deserialize(buffer, config);
     engine.importants = NetworkFilterBucket.deserialize(buffer, config);
     engine.redirects = NetworkFilterBucket.deserialize(buffer, config);
+    engine.filters = NetworkFilterBucket.deserialize(buffer, config);
+    engine.exceptions = NetworkFilterBucket.deserialize(buffer, config);
+
     engine.csp = NetworkFilterBucket.deserialize(buffer, config);
     engine.genericHides = NetworkFilterBucket.deserialize(buffer, config);
     engine.cosmetics = CosmeticFilterBucket.deserialize(buffer, config);
@@ -122,9 +231,11 @@ export default class FilterEngine {
     cosmeticFilters?: CosmeticFilter[];
     networkFilters?: NetworkFilter[];
     lists?: Map<string, string>;
-    config?: Config;
+    config?: Partial<Config>;
   } = {}) {
-    this.config = config;
+    super(); // init super-class EventEmitter
+
+    this.config = new Config(config);
 
     // Subscription management: disabled by default
     this.lists = lists;
@@ -156,15 +267,49 @@ export default class FilterEngine {
   }
 
   /**
+   * Estimate the number of bytes needed to serialize this instance of
+   * `FiltersEngine` using the `serialize(...)` method. It is used internally
+   * by `serialize(...)` to allocate a buffer of the right size and you should
+   * not have to call it yourself most of the time.
+   *
+   * There are cases where we cannot estimate statically the exact size of the
+   * resulting buffer (due to alignement which need to be performed); this
+   * method will return a safe estimate which will always be at least equal to
+   * the real number of bytes needed, or bigger (usually of a few bytes only:
+   * ~20 bytes is to be expected).
+   */
+  public getSerializedSize(): number {
+    let estimatedSize: number =
+      StaticDataView.sizeOfByte() + // engine version
+      this.config.getSerializedSize() +
+      this.resources.getSerializedSize() +
+      this.filters.getSerializedSize() +
+      this.exceptions.getSerializedSize() +
+      this.importants.getSerializedSize() +
+      this.redirects.getSerializedSize() +
+      this.csp.getSerializedSize() +
+      this.genericHides.getSerializedSize() +
+      this.cosmetics.getSerializedSize() +
+      4; // checksum
+
+    // Estimate size of `this.lists` which stores information of checksum for each list.
+    for (const [name, checksum] of this.lists) {
+      estimatedSize += StaticDataView.sizeOfASCII(name) + StaticDataView.sizeOfASCII(checksum);
+    }
+
+    return estimatedSize;
+  }
+
+  /**
    * Creates a binary representation of the full engine. It can be stored
    * on-disk for faster loading of the adblocker. The `deserialize` static
    * method of Engine can be used to restore the engine.
    */
   public serialize(array?: Uint8Array): Uint8Array {
-    // Create a big buffer! It should always be bigger than the serialized
-    // engine since `StaticDataView` will neither resize it nor detect overflows
-    // (for efficiency purposes).
-    const buffer = StaticDataView.fromUint8Array(array || new Uint8Array(9000000), this.config);
+    const buffer = StaticDataView.fromUint8Array(
+      array || new Uint8Array(this.getSerializedSize()),
+      this.config,
+    );
 
     buffer.pushUint8(ENGINE_VERSION);
 
@@ -183,26 +328,26 @@ export default class FilterEngine {
     }
 
     // Filters buckets
-    this.filters.serialize(buffer);
-    this.exceptions.serialize(buffer);
     this.importants.serialize(buffer);
     this.redirects.serialize(buffer);
+    this.filters.serialize(buffer);
+    this.exceptions.serialize(buffer);
+
     this.csp.serialize(buffer);
     this.genericHides.serialize(buffer);
     this.cosmetics.serialize(buffer);
 
-    // Append a checksum at the end
+    // Optionally append a checksum at the end
     if (this.config.integrityCheck) {
       buffer.pushUint32(buffer.checksum());
     }
 
-    return buffer.slice();
+    return buffer.subarray();
   }
 
   /**
    * Update engine with new filters or resources.
    */
-
   public loadedLists(): string[] {
     return Array.from(this.lists.keys());
   }
@@ -300,11 +445,11 @@ export default class FilterEngine {
         removedNetworkFilters.length === 0 ? undefined : new Set(removedNetworkFilters);
 
       // Update buckets in-place
-      this.filters.update(filters, removedNetworkFiltersSet);
-      this.csp.update(csp, removedNetworkFiltersSet);
-      this.exceptions.update(exceptions, removedNetworkFiltersSet);
       this.importants.update(importants, removedNetworkFiltersSet);
       this.redirects.update(redirects, removedNetworkFiltersSet);
+      this.filters.update(filters, removedNetworkFiltersSet);
+      this.exceptions.update(exceptions, removedNetworkFiltersSet);
+      this.csp.update(csp, removedNetworkFiltersSet);
       this.genericHides.update(genericHides, removedNetworkFiltersSet);
     }
 
@@ -443,8 +588,14 @@ export default class FilterEngine {
     for (let i = 0; i < injections.length; i += 1) {
       const script = injections[i].getScript(this.resources.js);
       if (script !== undefined) {
+        this.emit('script-injected', script, url);
         scripts.push(script);
       }
+    }
+
+    // Emit events
+    if (stylesheet.length !== 0) {
+      this.emit('style-injected', stylesheet, url);
     }
 
     return {
@@ -509,44 +660,34 @@ export default class FilterEngine {
     }
 
     // Combine all CSPs (except the black-listed ones)
-    return (
+    const csps: string | undefined =
       Array.from(enabledCsp)
         .filter((csp) => !disabledCsp.has(csp))
-        .join('; ') || undefined
-    );
+        .join('; ') || undefined;
+
+    // Emit event
+    if (csps !== undefined) {
+      this.emit('csp-injected', csps, request);
+    }
+
+    return csps;
   }
 
   /**
    * Decide if a network request (usually from WebRequest API) should be
    * blocked, redirected or allowed.
    */
-  public match(
-    request: Request,
-  ): {
-    match: boolean;
-    redirect:
-      | undefined
-      | {
-          body: string;
-          contentType: string;
-          dataUrl: string;
-        };
-    exception: NetworkFilter | undefined;
-    filter: NetworkFilter | undefined;
-  } {
-    if (!this.config.loadNetworkFilters) {
-      return { match: false, redirect: undefined, exception: undefined, filter: undefined };
-    }
+  public match(request: Request): BlockingResponse {
+    const result: BlockingResponse = {
+      exception: undefined,
+      filter: undefined,
+      match: false,
+      redirect: undefined,
+    };
 
-    let filter: NetworkFilter | undefined;
-    let exception: NetworkFilter | undefined;
-    let redirect:
-      | undefined
-      | {
-          body: string;
-          contentType: string;
-          dataUrl: string;
-        };
+    if (!this.config.loadNetworkFilters) {
+      return result;
+    }
 
     if (request.isSupported) {
       // Check the filters in the following order:
@@ -554,25 +695,25 @@ export default class FilterEngine {
       // 2. redirection ($redirect=resource)
       // 3. normal filters
       // 4. exceptions
-      filter = this.importants.match(request);
+      result.filter = this.importants.match(request);
 
-      if (filter === undefined) {
+      if (result.filter === undefined) {
         // Check if there is a redirect or a normal match
-        filter = this.redirects.match(request);
-        if (filter === undefined) {
-          filter = this.filters.match(request);
+        result.filter = this.redirects.match(request);
+        if (result.filter === undefined) {
+          result.filter = this.filters.match(request);
         }
 
         // If we found something, check for exceptions
-        if (filter !== undefined) {
-          exception = this.exceptions.match(request);
+        if (result.filter !== undefined) {
+          result.exception = this.exceptions.match(request);
         }
       }
 
       // If there is a match
-      if (filter !== undefined) {
-        if (filter.isRedirect()) {
-          const redirectResource = this.resources.getResource(filter.getRedirect());
+      if (result.filter !== undefined) {
+        if (result.filter.isRedirect()) {
+          const redirectResource = this.resources.getResource(result.filter.getRedirect());
           if (redirectResource !== undefined) {
             const { data, contentType } = redirectResource;
             let dataUrl;
@@ -582,7 +723,7 @@ export default class FilterEngine {
               dataUrl = `data:${contentType};base64,${btoaPolyfill(data)}`;
             }
 
-            redirect = {
+            result.redirect = {
               body: data,
               contentType,
               dataUrl: dataUrl.trim(),
@@ -592,11 +733,17 @@ export default class FilterEngine {
       }
     }
 
-    return {
-      exception,
-      filter,
-      match: exception === undefined && filter !== undefined,
-      redirect,
-    };
+    result.match = result.exception === undefined && result.filter !== undefined;
+
+    // Emit events if we found a match
+    if (result.exception !== undefined) {
+      this.emit('request-whitelisted', request, result);
+    } else if (result.redirect !== undefined) {
+      this.emit('request-redirected', request, result);
+    } else if (result.filter !== undefined) {
+      this.emit('request-blocked', request, result);
+    }
+
+    return result;
   }
 }

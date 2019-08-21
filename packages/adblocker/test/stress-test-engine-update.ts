@@ -72,6 +72,14 @@ function replacer(option: string): string {
  */
 const REGEX = /third-party|first-party|object-subrequest|stylesheet|subdocument|xmlhttprequest|document/g;
 function normalizeFilters(rawFilter: string): string {
+  if (rawFilter.startsWith('|http*://$')) {
+    rawFilter = rawFilter.slice(9);
+  }
+
+  if (rawFilter.includes('object,object')) {
+    rawFilter = rawFilter.replace('object,object', 'object');
+  }
+
   const indexOfOptions = rawFilter.lastIndexOf('$');
   if (indexOfOptions === -1) {
     return rawFilter;
@@ -366,6 +374,7 @@ async function run() {
         for (const difference of diff1) {
           console.log(difference);
         }
+        continue; // TODO - ignore other checks?
       }
 
       const diff2 = filtersDiff(
@@ -374,11 +383,13 @@ async function run() {
         'fromUpdated',
         filtersFromUpdatedEngine,
       );
+
       if (diff2.length !== 0) {
         console.log('Found discrepancy in filters');
         for (const difference of diff2) {
           console.log(difference);
         }
+        continue; // TODO - ignore other checks?
       }
 
       const updatedEngineSerialized = previousEngine.serialize();

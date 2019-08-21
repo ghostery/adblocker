@@ -4,6 +4,105 @@
 
 *not released*
 
+## 0.14.0
+
+*2019-08-20*
+
+  * update compression codebooks [#289](https://github.com/cliqz-oss/adblocker/pull/289)
+  * clean-up and update local assets + add fanboy-cookiemonster.txt [#289](https://github.com/cliqz-oss/adblocker/pull/289)
+  * only register listeners when network/cosmetics filtering is enabled [#288](https://github.com/cliqz-oss/adblocker/pull/288)
+  * Improve cosmetics selector tokenization by supporting new cases [#287](https://github.com/cliqz-oss/adblocker/pull/287)
+    * correctly tokenize #selector:not(...) and .selector:not(...)
+    * correctly tokenize .selector1.selector2
+
+## 0.13.2
+
+*2019-08-17*
+
+  * fix certificate issue with Pete Lowe adserver
+
+## 0.13.1
+
+*2019-08-16*
+
+  * set `Request.tabId` to `webContentsId` in Electron platform
+
+## 0.13.0
+
+*2019-08-16*
+
+  * allow correct size allocation for data views [#257](https://github.com/cliqz-oss/adblocker/pull/257)
+
+    > Implement a mechanism which allows to predict the number of
+    > bytes needed to serialize any of the data-structures used by the
+    > adblocker, ahead of time (before serialization). This allows to lift
+    > the limitation of size completely (beforehand, we had to allocate
+    > a safe amount of memory to be sure there would be enough space).
+    > As a benefit, only the required amount of memory is used during
+    > initialization and updates, and there is no longer an arbitrary and
+    > hard-coded upper limit.
+
+  * create new @cliqz/adblocker-content package with common utils [#264](https://github.com/cliqz-oss/adblocker/pull/264)
+
+    > We currently rely on rollup to create a small bundle for content
+    > related code imported from @cliqz/adblocker. Multiple times in
+    > the past the bundler was not aggressive enough and code from
+    > background was pulled in content bundles. To make sure we do not
+    > have this issue again, all these content-scripts helpers are moved
+    > into their own package.
+
+  * provide helpers to download and build engines from lists [#280](https://github.com/cliqz-oss/adblocker/pull/280)
+
+    > This change allows to start blocking ads with very little logic in
+    > _Webextension_, _Electron_ and _Puppeteer_ platforms! To achieve this,
+    > blockers abstraction now provide static methods to fetch pre-built
+    > engines from Cliqz's CDN or build them from scratch using lists of URLs
+    > to subscriptions. Here is how it looks like:
+    >
+    > *Webextension*:
+    > ```js
+    > import { WebExtensionBlocker } from '@cliqz/adblocker-webextension';
+    >
+    > WebExtensionBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
+    >   blocker.enableBlockingInBrowser();
+    > });
+    > ```
+    >
+    > *Electron*:
+    > ```js
+    > import { session } from 'electron';
+    > import fetch from 'cross-fetch'; // or 'node-fetch'
+    >
+    > import { ElectronBlocker } from '@cliqz/adblocker-electron';
+    >
+    > ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
+    >   blocker.enableBlockingInSession(session.defaultSession);
+    > });
+    > ```
+    >
+    > *Puppeteer*:
+    > ```js
+    > import puppeteer from 'puppeteer';
+    > import fetch from 'cross-fetch'; // or 'node-fetch'
+    >
+    > import { PuppeteerBlocker } from '@cliqz/adblocker-puppeteer';
+    >
+    > const browser = await puppeteer.launch();
+    > const page = await browser.newPage();
+    >
+    > PuppeteerBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
+    >   blocker.enableBlockingInPage(page);
+    > });
+    > ```
+
+## 0.12.1
+
+*2019-08-13*
+
+  * Update assets + re-generate compression codebooks [#256](https://github.com/cliqz-oss/adblocker/pull/256)
+  * implement simple event emitter for `FiltersEngine` and sub-classes [#251](https://github.com/cliqz-oss/adblocker/pull/251)
+  * electron: fix bundles [#249](https://github.com/cliqz-oss/adblocker/pull/249)
+  * electron: promote mutationObserver option to main config + fix constructor and parse methods [#248](https://github.com/cliqz-oss/adblocker/pull/248)
   * fix source maps support for all packages [#219](https://github.com/cliqz-oss/adblocker/pull/219)
 
 ## 0.12.0
