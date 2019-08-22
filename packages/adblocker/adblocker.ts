@@ -19,14 +19,15 @@ export {
 export { default as CosmeticFilter } from './src/filters/cosmetic';
 export { default as NetworkFilter } from './src/filters/network';
 export {
+  IListDiff,
+  IRawDiff,
+  detectFilterType,
   f,
+  generateDiff,
+  getLinesWithFilters,
+  mergeDiffs,
   parseFilter,
   parseFilters,
-  IRawDiff,
-  IListDiff,
-  generateDiff,
-  mergeDiffs,
-  getLinesWithFilters,
 } from './src/lists';
 export { compactTokens, hasEmptyIntersection, mergeCompactSets } from './src/compact-set';
 export * from './src/fetch';
