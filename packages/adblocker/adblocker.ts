@@ -33,3 +33,4 @@ export { compactTokens, hasEmptyIntersection, mergeCompactSets } from './src/com
 export * from './src/fetch';
 export { tokenize } from './src/utils';
 export { default as Config } from './src/config';
+export { default as Resources } from './src/resources';
