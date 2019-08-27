@@ -4,6 +4,12 @@
 
 *not released*
 
+  * small improvements [#300](https://github.com/cliqz-oss/adblocker/pull/300)
+    * minify script injection wrapper to save a few bytes
+    * rename 'engine' into 'blocker' in examples for consistency
+    * use up-to-date resources.txt from CDN
+    * drop 'collapse' type (not supported upstream anymore)
+    * expose some extra symbols: `detectFilterType` and `Resources`
   * chore: clean-ups [#294](https://github.com/cliqz-oss/adblocker/pull/294)
     * Remove use of `eslint` completely (all source code is TypeScript so `tslint` is enough)
     * Remove `Dockerfile`, `run_tests.sh`

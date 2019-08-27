@@ -13,6 +13,9 @@ interface IResource {
   data: string;
 }
 
+// TODO - support # alias
+// TODO - support empty resource body
+
 /**
  * Abstraction on top of resources.txt used for redirections as well as script
  * injections. It contains logic to parse, serialize and get resources by name

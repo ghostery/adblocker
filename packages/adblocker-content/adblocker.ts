@@ -84,20 +84,22 @@ export function extractFeaturesFromDOM(
  * traces in the DOM after injections.
  */
 export function autoRemoveScript(script: string): string {
-  return `
-try {
-  ${script}
-} catch (ex) { }
-
-(function() {
-  var currentScript = document.currentScript;
-  var parent = currentScript && currentScript.parentNode;
-
-  if (parent) {
-    parent.removeChild(currentScript);
-  }
-})();
-  `;
+  // Minified using 'terser'
+  return `try{${script}}catch(c){}!function(){var c=document.currentScript,e=c&&c.parentNode;e&&e.removeChild(c)}();`
+  // Original:
+  //
+  //    try {
+  //      ${script}
+  //    } catch (ex) { }
+  //
+  //    (function() {
+  //      var currentScript = document.currentScript;
+  //      var parent = currentScript && currentScript.parentNode;
+  //
+  //      if (parent) {
+  //        parent.removeChild(currentScript);
+  //      }
+  //    })();
 }
 
 export function injectCSSRule(rule: string, doc: Document): void {

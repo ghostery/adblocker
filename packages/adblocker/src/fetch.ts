@@ -61,13 +61,22 @@ export function fetchLists(fetch: Fetch, urls: string[]): Promise<string[]> {
   return Promise.all(urls.map((url) => fetchResource(fetch, url)));
 }
 
+function getResourcesUrl(fetch: Fetch): Promise<string> {
+  return fetch('https://cdn.cliqz.com/adblocker/resources/ublock-resources/metadata.json')
+    .then((response) => response.json())
+    .then(
+      ({ latestRevision }) =>
+        `https://cdn.cliqz.com/adblocker/resources/ublock-resources/${latestRevision}/list.txt`,
+    );
+}
+
 /**
  * Fetch latest version of uBlock Origin's resources, used to inject scripts in
  * the page or redirect request to data URLs.
  */
-export function fetchResources(
-  fetch: Fetch,
-  resourcesUrl: string = 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resources.txt',
-): Promise<string> {
-  return fetchResource(fetch, resourcesUrl);
+export function fetchResources(fetch: Fetch, resourcesUrl?: string): Promise<string> {
+  return (resourcesUrl === undefined
+    ? getResourcesUrl(fetch)
+    : Promise.resolve(resourcesUrl)
+  ).then((url) => fetchResource(fetch, url));
 }
