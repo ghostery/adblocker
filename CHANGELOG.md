@@ -4,6 +4,10 @@
 
 *not released*
 
+## 1.0.0
+
+*2019-08-27*
+
   * small improvements [#300](https://github.com/cliqz-oss/adblocker/pull/300)
     * minify script injection wrapper to save a few bytes
     * rename 'engine' into 'blocker' in examples for consistency
