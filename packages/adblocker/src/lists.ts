@@ -12,9 +12,9 @@ import NetworkFilter from './filters/network';
 import { fastStartsWith, fastStartsWithFrom } from './utils';
 
 const enum FilterType {
-  NOT_SUPPORTED,
-  NETWORK,
-  COSMETIC,
+  NOT_SUPPORTED = 0,
+  NETWORK = 1,
+  COSMETIC = 2,
 }
 
 /**
@@ -23,7 +23,7 @@ const enum FilterType {
  * performed before calling a more specific parser to create an instance of
  * `NetworkFilter` or `CosmeticFilter`.
  */
-function detectFilterType(line: string): FilterType {
+export function detectFilterType(line: string): FilterType {
   // Ignore empty line
   if (line.length === 0 || line.length === 1) {
     return FilterType.NOT_SUPPORTED;
