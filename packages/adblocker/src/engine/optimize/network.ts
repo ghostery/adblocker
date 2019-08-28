@@ -6,9 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import CosmeticFilter from '../filters/cosmetic';
-import NetworkFilter, { NETWORK_FILTER_MASK } from '../filters/network';
-import { setBit } from '../utils';
+import NetworkFilter, { NETWORK_FILTER_MASK } from '../../filters/network';
+import { setBit } from '../../utils';
+import { Optimization, optimize } from './utils';
 
 function processRegex(r: RegExp): string {
   return `(?:${r.source})`;
@@ -18,60 +18,7 @@ function escape(s: string): string {
   return `(?:${s.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')})`;
 }
 
-function setWithDefault<K, V>(map: Map<K, V[]>, key: K, value: V): void {
-  let bucket = map.get(key);
-  if (bucket === undefined) {
-    bucket = [];
-    map.set(key, bucket);
-  }
-  bucket.push(value);
-}
-
-function groupBy(
-  filters: NetworkFilter[],
-  criteria: (filter: NetworkFilter) => string,
-): NetworkFilter[][] {
-  const grouped: Map<string, NetworkFilter[]> = new Map();
-  for (let i = 0; i < filters.length; i += 1) {
-    const filter = filters[i];
-    setWithDefault(grouped, criteria(filter), filter);
-  }
-  return Array.from(grouped.values());
-}
-
-function splitBy(
-  filters: NetworkFilter[],
-  condition: (filter: NetworkFilter) => boolean,
-): {
-  positive: NetworkFilter[];
-  negative: NetworkFilter[];
-} {
-  const positive: NetworkFilter[] = [];
-  const negative: NetworkFilter[] = [];
-
-  for (let i = 0; i < filters.length; i += 1) {
-    const filter = filters[i];
-    if (condition(filter)) {
-      positive.push(filter);
-    } else {
-      negative.push(filter);
-    }
-  }
-
-  return {
-    negative,
-    positive,
-  };
-}
-
-interface IOptimization {
-  description: string;
-  groupByCriteria: (filter: NetworkFilter) => string;
-  select: (filter: NetworkFilter) => boolean;
-  fusion: (filters: NetworkFilter[]) => NetworkFilter;
-}
-
-const OPTIMIZATIONS: IOptimization[] = [
+const OPTIMIZATIONS: Array<Optimization<NetworkFilter>> = [
   // TODO - add filter deduplication
   {
     description: 'Group idential filter with same mask but different domains in single filters',
@@ -157,32 +104,9 @@ export function noopOptimizeNetwork(filters: NetworkFilter[]): NetworkFilter[] {
   return filters;
 }
 
-export function noopOptimizeCosmetic(filters: CosmeticFilter[]): CosmeticFilter[] {
-  return filters;
-}
-
 /**
  * Fusion a set of `filters` by applying optimizations sequentially.
  */
 export function optimizeNetwork(filters: NetworkFilter[]): NetworkFilter[] {
-  const fused: NetworkFilter[] = [];
-  let toFuse = filters;
-
-  OPTIMIZATIONS.forEach(({ select, fusion, groupByCriteria }) => {
-    const { positive, negative } = splitBy(toFuse, select);
-    toFuse = negative;
-    groupBy(positive, groupByCriteria).forEach((group) => {
-      if (group.length > 1) {
-        fused.push(fusion(group));
-      } else {
-        toFuse.push(group[0]);
-      }
-    });
-  });
-
-  for (let i = 0; i < toFuse.length; i += 1) {
-    fused.push(toFuse[i]);
-  }
-
-  return fused;
+  return optimize(OPTIMIZATIONS, filters);
 }

@@ -5,6 +5,18 @@
 *not released*
 
   * simplify reverse index by removing special tokens handling [#333](https://github.com/cliqz-oss/adblocker/pull/333)
+  * feature: new advanced optimization for cosmetic filters (opt-in) [#305](https://github.com/cliqz-oss/adblocker/pull/305)
+
+    > Add new advanced optimization allowing to fusion similar cosmetic
+    > filters internally and transparently. This results in overall memory
+    > saving of `10%` (together with `enableCompression`, savings can go up to
+    > `30%` of memory used).
+    >
+    > This approach has one main drawback: fusion of filters disable the
+    > ability to remove individual filters from the engine; which is why
+    > this feature is disabled by default. If your use-case does not require
+    > updating the engine with `diffs` of filters (added or removed filters)
+    > then it should be safe to use.
 
 ## 1.1.0
 

@@ -8,11 +8,8 @@
 
 import Config from '../src/config';
 import StaticDataView from '../src/data-view';
-import {
-  noopOptimizeCosmetic,
-  noopOptimizeNetwork,
-  optimizeNetwork,
-} from '../src/engine/optimizer';
+import { noopOptimizeCosmetic } from '../src/engine/optimize/cosmetic';
+import { noopOptimizeNetwork, optimizeNetwork } from '../src/engine/optimize/network';
 import ReverseIndex from '../src/engine/reverse-index';
 import CosmeticFilter from '../src/filters/cosmetic';
 import IFilter from '../src/filters/interface';

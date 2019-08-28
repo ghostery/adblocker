@@ -10,7 +10,7 @@ import Config from '../../config';
 import StaticDataView from '../../data-view';
 import NetworkFilter from '../../filters/network';
 import Request from '../../request';
-import { noopOptimizeNetwork, optimizeNetwork } from '../optimizer';
+import { noopOptimizeNetwork, optimizeNetwork } from '../optimize/network';
 import ReverseIndex from '../reverse-index';
 import FiltersContainer from './filters';
 

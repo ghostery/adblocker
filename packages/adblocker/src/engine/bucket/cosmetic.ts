@@ -15,7 +15,7 @@ import CosmeticFilter, {
   getHostnameHashesFromLabelsBackward,
 } from '../../filters/cosmetic';
 import { hashStrings, tokenizeFilter } from '../../utils';
-import { noopOptimizeCosmetic } from '../optimizer';
+import { noopOptimizeCosmetic, optimizeCosmetic } from '../optimize/cosmetic';
 import ReverseIndex from '../reverse-index';
 import FiltersContainer from './filters';
 
@@ -181,6 +181,9 @@ export default class CosmeticFilterBucket {
     return bucket;
   }
 
+  // Inherited global config
+  public readonly config: Readonly<Config>;
+
   // `hostnameIndex` contains all cosmetic filters which are specific to one or
   // several domains (that includes entities as well). They are stored in a
   // reverse index which allows to efficiently get a subset of the filters
@@ -204,6 +207,8 @@ export default class CosmeticFilterBucket {
   public extraGenericRules: CosmeticFilter[] | null;
 
   constructor({ filters = [], config }: { filters?: CosmeticFilter[]; config: Config }) {
+    this.config = config;
+
     this.genericRules = new FiltersContainer({
       config,
       deserialize: CosmeticFilter.deserialize,
@@ -267,6 +272,16 @@ export default class CosmeticFilterBucket {
   }
 
   public update(newFilters: CosmeticFilter[], removedFilters: Set<number> | undefined): void {
+    if (this.config.enableDangerousOptimizations === true) {
+      if (removedFilters !== undefined && removedFilters.size !== 0) {
+        throw new Error(
+          'cannot remove filters from existing engine when "enableDangerousOptimizations" is true',
+        );
+      }
+
+      newFilters = optimizeCosmetic(newFilters);
+    }
+
     const unHideRules: CosmeticFilter[] = [];
     const genericHideRules: CosmeticFilter[] = [];
     const hostnameSpecificRules: CosmeticFilter[] = [];

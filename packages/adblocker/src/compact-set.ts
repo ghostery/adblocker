@@ -34,7 +34,17 @@ export function hasEmptyIntersection(s1: Uint32Array, s2: Uint32Array): boolean 
   return !(i < s1.length && j < s2.length);
 }
 
+const EMPTY_UINT32_ARRAY = new Uint32Array(0);
+
 export function concatTypedArrays(arrays: Uint32Array[]): Uint32Array {
+  if (arrays.length === 0) {
+    return EMPTY_UINT32_ARRAY;
+  }
+
+  if (arrays.length === 1) {
+    return arrays[0];
+  }
+
   let totalSize = 0;
   for (let i = 0; i < arrays.length; i += 1) {
     totalSize += arrays[i].length;

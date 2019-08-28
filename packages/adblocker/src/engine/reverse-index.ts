@@ -209,7 +209,7 @@ export default class ReverseIndex<T extends IFilter> {
   // loaded in memory and stored in `this.cache`. Before using the bucket, we
   // call `this.optimize(...)` on the list of filters to allow some
   // optimizations to be performed (e.g.: fusion of similar filters, etc.).
-  // Have a look into `./src/engine/optimizer.ts` for examples of such
+  // Have a look into `./src/engine/optimize/` for examples of such
   // optimizations.
   private readonly optimize: (filters: T[]) => T[];
   private readonly config: Readonly<Config>;
