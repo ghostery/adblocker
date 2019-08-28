@@ -183,6 +183,7 @@ const enum COSMETICS_MASK {
   isClassSelector = 1 << 3,
   isIdSelector = 1 << 4,
   isHrefSelector = 1 << 5,
+  htmlFiltering = 1 << 6,
 }
 
 function computeFilterId(
@@ -343,33 +344,22 @@ export default class CosmeticFilter implements IFilter {
       }
     }
 
-    // Deal with script:inject and script:contains
+    // Deal with ^script:has-text(...)
     if (
-      line.length - suffixStartIndex > 7 &&
-      line.charCodeAt(suffixStartIndex) === 115 /* 's' */ &&
-      fastStartsWithFrom(line, 'script:', suffixStartIndex)
+      line.length - suffixStartIndex > 18 &&
+      line.charCodeAt(suffixStartIndex) === 94 /* '^' */ &&
+      fastStartsWithFrom(line, '^script:has-text(', suffixStartIndex)
     ) {
-      //      script:inject(.......)
-      //                    ^      ^
-      //   script:contains(/......./)
-      //                    ^      ^
-      //    script:contains(selector[, args])
-      //           ^        ^               ^^
-      //           |        |          |    ||
-      //           |        |          |    |selector.length
-      //           |        |          |    scriptSelectorIndexEnd
-      //           |        |          |scriptArguments
-      //           |        scriptSelectorIndexStart
-      //           scriptMethodIndex
-      const scriptMethodIndex = suffixStartIndex + 7;
-      let scriptSelectorIndexStart = scriptMethodIndex;
+      //   ^script:has-text(selector)
+      //                    ^       ^
+      //                    |       |
+      //                    |       |
+      //                    |       scriptSelectorIndexEnd
+      //                    |
+      //                    scriptSelectorIndexStart
+      const scriptSelectorIndexStart = suffixStartIndex + 17;
       const scriptSelectorIndexEnd = line.length - 1;
-
-      if (fastStartsWithFrom(line, 'inject(', scriptMethodIndex)) {
-        mask = setBit(mask, COSMETICS_MASK.scriptInject);
-        scriptSelectorIndexStart += 7;
-      }
-
+      mask = setBit(mask, COSMETICS_MASK.htmlFiltering);
       selector = line.slice(scriptSelectorIndexStart, scriptSelectorIndexEnd);
     } else if (
       line.length - suffixStartIndex > 4 &&
@@ -958,6 +948,10 @@ export default class CosmeticFilter implements IFilter {
 
   public isUnicode(): boolean {
     return getBit(this.mask, COSMETICS_MASK.isUnicode);
+  }
+
+  public isHtmlFiltering(): boolean {
+    return getBit(this.mask, COSMETICS_MASK.htmlFiltering);
   }
 
   // A generic hide cosmetic filter is one that:
