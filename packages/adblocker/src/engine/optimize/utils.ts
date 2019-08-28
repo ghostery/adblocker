@@ -41,7 +41,7 @@ function splitBy<T extends Filter>(
 
   for (let i = 0; i < filters.length; i += 1) {
     const filter = filters[i];
-    if (condition(filter)) {
+    if (condition(filter) === true) {
       positive.push(filter);
     } else {
       negative.push(filter);
@@ -68,17 +68,21 @@ export function optimize<T extends Filter>(optimizations: Array<Optimization<T>>
   const fused: T[] = [];
   let toFuse = filters;
 
-  optimizations.forEach(({ select, fusion, groupByCriteria }) => {
+  for (let i = 0; i < optimizations.length; i += 1) {
+    const { select, fusion, groupByCriteria } = optimizations[i];
     const { positive, negative } = splitBy(toFuse, select);
     toFuse = negative;
-    groupBy(positive, groupByCriteria).forEach((group) => {
+
+    const groups = groupBy(positive, groupByCriteria);
+    for (let j = 0; j < groups.length; j += 1) {
+      const group = groups[j];
       if (group.length > 1) {
         fused.push(fusion(group));
       } else {
         toFuse.push(group[0]);
       }
-    });
-  });
+    }
+  }
 
   for (let i = 0; i < toFuse.length; i += 1) {
     fused.push(toFuse[i]);

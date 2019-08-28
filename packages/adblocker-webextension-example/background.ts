@@ -6,7 +6,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { BlockingResponse, fullLists, Request, WebExtensionBlocker } from '@cliqz/adblocker-webextension';
+import {
+  BlockingResponse,
+  fullLists,
+  Request,
+  WebExtensionBlocker,
+} from '@cliqz/adblocker-webextension';
 
 /**
  * Keep track of number of network requests altered for each tab
@@ -37,20 +42,23 @@ chrome.tabs.onActivated.addListener(({ tabId }: chrome.tabs.TabActiveInfo) =>
   updateBlockedCounter(tabId),
 );
 
-WebExtensionBlocker.fromLists(fetch, fullLists).then((engine: WebExtensionBlocker) => {
-  engine.enableBlockingInBrowser();
-  engine.on('request-blocked', incrementBlockedCounter);
-  engine.on('request-redirected', incrementBlockedCounter);
+WebExtensionBlocker.fromLists(fetch, fullLists, {
+  enableCompression: true,
+  enableDangerousOptimizations: true,
+}).then((blocker: WebExtensionBlocker) => {
+  blocker.enableBlockingInBrowser();
+  blocker.on('request-blocked', incrementBlockedCounter);
+  blocker.on('request-redirected', incrementBlockedCounter);
 
-  engine.on('csp-injected', (request: Request) => {
+  blocker.on('csp-injected', (request: Request) => {
     console.log('csp', request.url);
   });
 
-  engine.on('script-injected', (script: string, url: string) => {
+  blocker.on('script-injected', (script: string, url: string) => {
     console.log('script', script.length, url);
   });
 
-  engine.on('style-injected', (style: string, url: string) => {
+  blocker.on('style-injected', (style: string, url: string) => {
     console.log('style', url, style.length);
   });
 

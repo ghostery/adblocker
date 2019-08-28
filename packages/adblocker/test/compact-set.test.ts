@@ -8,7 +8,7 @@
 
 import { compactTokens, hasEmptyIntersection, mergeCompactSets } from '../src/compact-set';
 
-function a(strings: TemplateStringsArray) {
+function a(strings: TemplateStringsArray): Uint32Array {
   const str = strings.raw[0];
   const array = new Uint32Array(str.length);
   for (let i = 0; i < str.length; i += 1) {
@@ -36,11 +36,11 @@ it('#hasEmptyIntersection', () => {
 });
 
 it('#mergeCompactSets', () => {
-  expect(mergeCompactSets(a``, a``)).toEqual(a``);
-  expect(mergeCompactSets(a``, a`cde`)).toEqual(a`cde`);
-  expect(mergeCompactSets(a`abc`, a``)).toEqual(a`abc`);
-  expect(mergeCompactSets(a`abc`, a`cde`)).toEqual(a`abcde`);
-  expect(mergeCompactSets(a`abc`, a`def`)).toEqual(a`abcdef`);
-  expect(mergeCompactSets(a`cba`, a`cde`)).toEqual(a`abcde`);
-  expect(mergeCompactSets(a`c`, a`b`, a`a`, a`cde`)).toEqual(a`abcde`);
+  expect(mergeCompactSets([a``, a``])).toEqual(a``);
+  expect(mergeCompactSets([a``, a`cde`])).toEqual(a`cde`);
+  expect(mergeCompactSets([a`abc`, a``])).toEqual(a`abc`);
+  expect(mergeCompactSets([a`abc`, a`cde`])).toEqual(a`abcde`);
+  expect(mergeCompactSets([a`abc`, a`def`])).toEqual(a`abcdef`);
+  expect(mergeCompactSets([a`cba`, a`cde`])).toEqual(a`abcde`);
+  expect(mergeCompactSets([a`c`, a`b`, a`a`, a`cde`])).toEqual(a`abcde`);
 });

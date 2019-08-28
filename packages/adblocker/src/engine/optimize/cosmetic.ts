@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { concatTypedArrays } from '../../compact-set';
+import { mergeCompactSets } from '../../compact-set';
 import CosmeticFilter from '../../filters/cosmetic';
 import { Optimization, optimize } from './utils';
 
@@ -28,18 +28,18 @@ const OPTIMIZATIONS: Array<Optimization<CosmeticFilter>> = [
       const notHostnames: Uint32Array[] = [];
 
       let rawLine: string | undefined;
-      let onlyNegation = false;
+      let matchAllHostnames = false;
 
       // Accumulate hostnames/entities for all `filters`
       for (let i = 0; i < filters.length; i += 1) {
         const filter = filters[i];
         // Special case where one of the filters is generic (matches any domain, modulo exceptions)
         if (filter.entities === undefined && filter.hostnames === undefined) {
-          onlyNegation = true;
+          matchAllHostnames = true;
         }
 
         // Accumulate hostname constraints
-        if (onlyNegation === false) {
+        if (matchAllHostnames === false) {
           if (filter.entities !== undefined) {
             entities.push(filter.entities);
           }
@@ -73,7 +73,7 @@ const OPTIMIZATIONS: Array<Optimization<CosmeticFilter>> = [
               const parts: string[] = hosts.split(',');
               for (let j = 0; j < parts.length; j += 1) {
                 const part = parts[j];
-                if (onlyNegation === false || part.startsWith('~')) {
+                if (matchAllHostnames === false || part.startsWith('~')) {
                   rawHosts.push(part);
                 }
               }
@@ -94,17 +94,17 @@ const OPTIMIZATIONS: Array<Optimization<CosmeticFilter>> = [
         selector: filters[0].selector,
 
         entities:
-          onlyNegation === true || entities.length === 0
+          matchAllHostnames === true || entities.length === 0
             ? undefined
-            : concatTypedArrays(entities).sort(),
+            : mergeCompactSets(entities),
         hostnames:
-          onlyNegation === true || hostnames.length === 0
+          matchAllHostnames === true || hostnames.length === 0
             ? undefined
-            : concatTypedArrays(hostnames).sort(),
+            : mergeCompactSets(hostnames),
 
-        notEntities: notEntities.length === 0 ? undefined : concatTypedArrays(notEntities).sort(),
+        notEntities: notEntities.length === 0 ? undefined : mergeCompactSets(notEntities),
         notHostnames:
-          notHostnames.length === 0 ? undefined : concatTypedArrays(notHostnames).sort(),
+          notHostnames.length === 0 ? undefined : mergeCompactSets(notHostnames),
 
         style: undefined,
 

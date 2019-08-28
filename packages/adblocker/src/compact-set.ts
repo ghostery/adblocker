@@ -11,8 +11,7 @@ export function compactTokens(tokens: Uint32Array): Uint32Array {
   let lastIndex = 1;
   for (let i = 1; i < sorted.length; i += 1) {
     if (sorted[lastIndex - 1] !== sorted[i]) {
-      sorted[lastIndex] = sorted[i];
-      lastIndex += 1;
+      sorted[lastIndex++] = sorted[i];
     }
   }
 
@@ -26,12 +25,12 @@ export function hasEmptyIntersection(s1: Uint32Array, s2: Uint32Array): boolean 
   while (i < s1.length && j < s2.length && s1[i] !== s2[j]) {
     if (s1[i] < s2[j]) {
       i += 1;
-    } else if (s2[j] < s1[i]) {
+    } else {
       j += 1;
     }
   }
 
-  return !(i < s1.length && j < s2.length);
+  return i === s1.length || j === s2.length;
 }
 
 const EMPTY_UINT32_ARRAY = new Uint32Array(0);
@@ -63,6 +62,6 @@ export function concatTypedArrays(arrays: Uint32Array[]): Uint32Array {
   return result;
 }
 
-export function mergeCompactSets(...arrays: Uint32Array[]): Uint32Array {
+export function mergeCompactSets(arrays: Uint32Array[]): Uint32Array {
   return compactTokens(concatTypedArrays(arrays));
 }

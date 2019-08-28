@@ -24,30 +24,33 @@ async function createWindow() {
     throw new Error('defaultSession is undefined');
   }
 
-  const engine = await ElectronBlocker.fromLists(fetch, fullLists);
-  engine.enableBlockingInSession(session.defaultSession);
+  const blocker = await ElectronBlocker.fromLists(fetch, fullLists, {
+    enableCompression: true,
+    enableDangerousOptimizations: true,
+  });
+  blocker.enableBlockingInSession(session.defaultSession);
 
-  engine.on('request-blocked', (request: Request) => {
+  blocker.on('request-blocked', (request: Request) => {
     console.log('blocked', request.tabId, request.url);
   });
 
-  engine.on('request-redirected', (request: Request) => {
+  blocker.on('request-redirected', (request: Request) => {
     console.log('redirected', request.tabId, request.url);
   });
 
-  engine.on('request-whitelisted', (request: Request) => {
+  blocker.on('request-whitelisted', (request: Request) => {
     console.log('whitelisted', request.tabId, request.url);
   });
 
-  engine.on('csp-injected', (request: Request) => {
+  blocker.on('csp-injected', (request: Request) => {
     console.log('csp', request.url);
   });
 
-  engine.on('script-injected', (script: string, url: string) => {
+  blocker.on('script-injected', (script: string, url: string) => {
     console.log('script', script.length, url);
   });
 
-  engine.on('style-injected', (style: string, url: string) => {
+  blocker.on('style-injected', (style: string, url: string) => {
     console.log('style', style.length, url);
   });
 

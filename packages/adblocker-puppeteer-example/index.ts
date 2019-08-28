@@ -1,9 +1,14 @@
-import { fullLists, PuppeteerBlocker, Request } from '@cliqz/adblocker-puppeteer';
+import { adsAndTrackingLists, PuppeteerBlocker, Request } from '@cliqz/adblocker-puppeteer';
 import fetch from 'node-fetch';
 import puppeteer from 'puppeteer';
 
 (async () => {
-  const blocker = await PuppeteerBlocker.fromLists(fetch, fullLists);
+  const blocker = await PuppeteerBlocker.fromLists(fetch, adsAndTrackingLists, {
+    enableCompression: true,
+    // enableDangerousOptimizations: true,
+  });
+  console.log('SIZE', blocker.serialize().length);
+
   const browser = await puppeteer.launch({
     defaultViewport: null,
     headless: false,
@@ -33,6 +38,7 @@ import puppeteer from 'puppeteer';
   });
 
   blocker.on('style-injected', (style: string, url: string) => {
+    // console.log(style);
     console.log('style', style.length, url);
   });
 

@@ -419,6 +419,7 @@ export default class CosmeticFilterBucket {
     // =======================================================================
     // Id selector based
     // =======================================================================
+    console.log('#IDS', ids.sort(), hashStrings(ids.sort()));
     if (allowGenericHides === true && getRulesFromDOM === true && ids.length !== 0) {
       this.idsIndex.iterMatchingFilters(hashStrings(ids), (rule: CosmeticFilter) => {
         if (rule.match(hostname, domain)) {
