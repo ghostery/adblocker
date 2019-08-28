@@ -4,6 +4,12 @@
 
 *not released*
 
+## 1.0.1
+
+*2019-08-28*
+
+  * fix (electron): prevent preload script from overwriting existing ones [#302](https://github.com/cliqz-oss/adblocker/pull/302)
+
 ## 1.0.0
 
 *2019-08-27*
