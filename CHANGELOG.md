@@ -8,7 +8,7 @@
 
 *2019-09-02*
 
-  * fix: do not block main document requests
+  * fix: do not block main document requests [#312](https://github.com/cliqz-oss/adblocker/pull/312)
 
 ## 1.0.1
 
