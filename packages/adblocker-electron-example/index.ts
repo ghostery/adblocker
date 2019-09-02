@@ -27,8 +27,8 @@ async function createWindow() {
   const engine = await ElectronBlocker.fromLists(fetch, fullLists);
   engine.enableBlockingInSession(session.defaultSession);
 
-  engine.on('request-blocked', (request: Request) => {
-    console.log('blocked', request.tabId, request.url);
+  engine.on('request-blocked', (request: Request, f: any) => {
+    console.log('blocked', request.tabId, request.url, f);
   });
 
   engine.on('request-redirected', (request: Request) => {

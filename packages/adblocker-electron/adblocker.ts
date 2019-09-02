@@ -145,7 +145,13 @@ export class ElectronBlocker extends FiltersEngine {
     details: Electron.OnBeforeRequestDetails,
     callback: (a: Electron.Response) => void,
   ): void => {
-    const { redirect, match } = this.match(fromElectronDetails(details));
+    const request = fromElectronDetails(details);
+    if (request.isMainFrame()) {
+      callback({});
+      return;
+    }
+
+    const { redirect, match } = this.match(request);
 
     if (redirect) {
       callback({ redirectURL: redirect.dataUrl });
