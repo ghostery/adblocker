@@ -113,19 +113,25 @@ export class PuppeteerBlocker extends FiltersEngine {
     }
   }
 
-  private onRequest = (request: puppeteer.Request): void => {
-    const { redirect, match } = this.match(fromPuppeteerDetails(request));
+  private onRequest = (details: puppeteer.Request): void => {
+    const request = fromPuppeteerDetails(details)
+    if (request.isMainFrame()) {
+      details.continue();
+      return;
+    }
+
+    const { redirect, match } = this.match(request);
 
     if (redirect !== undefined) {
       const { body, contentType } = redirect;
-      request.respond({
+      details.respond({
         body,
         contentType,
       });
     } else if (match === true) {
-      request.abort('blockedbyclient');
+      details.abort('blockedbyclient');
     } else {
-      request.continue();
+      details.continue();
     }
   }
 }

@@ -97,6 +97,10 @@ export class WebExtensionBlocker extends FiltersEngine {
     details: WebRequestBeforeRequestDetails,
   ): chrome.webRequest.BlockingResponse => {
     const request = fromWebRequestDetails(details);
+    if (request.isMainFrame()) {
+      return {};
+    }
+
     const { redirect, match } = this.match(request);
 
     if (redirect !== undefined) {
