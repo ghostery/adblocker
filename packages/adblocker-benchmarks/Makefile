@@ -40,6 +40,9 @@ url:
 adblockfast:
 	NODE_ENV=production node run.js adblockfast requests.json
 
+min:
+	NODE_ENV=production node run.js min requests.json
+
 deps:
 	npm run prepare
 

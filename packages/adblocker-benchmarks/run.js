@@ -116,6 +116,9 @@ async function main() {
     case 'adblockfast':
       Cls = require('./blockers/adblockfast.js');
       break;
+    case 'min':
+      Cls = require('./blockers/minbrowser.js');
+      break;
     default:
       console.error(`Unknown blocker ${ENGINE}`);
       process.exit(1);
