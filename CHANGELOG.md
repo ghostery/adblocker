@@ -4,6 +4,9 @@
 
 *not released*
 
+  * feat: allow disabling adblocking in WebExtension context [#328](https://github.com/cliqz-oss/adblocker/pull/328)
+  * feat: allow disabling adblocking in Puppeteer page [#328](https://github.com/cliqz-oss/adblocker/pull/328)
+  * feat: allow disabling adblocking in Electron session [#328](https://github.com/cliqz-oss/adblocker/pull/328)
   * feat: support inline-script and inline-font options [#327](https://github.com/cliqz-oss/adblocker/pull/327)
 
 ## 1.0.2
