@@ -36,31 +36,44 @@ export function fromPuppeteerDetails(details: puppeteer.Request): Request {
  * Wrap `FiltersEngine` into a Puppeteer-friendly helper class.
  */
 export class PuppeteerBlocker extends FiltersEngine {
-  public enableBlockingInPage(page: puppeteer.Page): Promise<void> {
-    // Make sure request interception is enabled for `page` before proceeding
-    return page.setRequestInterception(true).then(() => {
-      // NOTE - page.setBypassCSP(enabled) might be needed to perform injections on some pages
-      // NOTE - we currently do not perform CSP headers injection as there is
-      // currently no way to modify responses in puppeteer. This feature could
-      // easily be added if puppeteer implements the required capability.
+  public async enableBlockingInPage(page: puppeteer.Page): Promise<void> {
+    if (this.config.loadCosmeticFilters === true) {
+      // Register callback to cosmetics injection (CSS + scriptlets)
+      page.on('framenavigated', this.onFrameNavigated);
+    }
 
-      if (this.config.loadNetworkFilters === true) {
-        // Register callback for network requets filtering
-        page.on('request', this.onRequest);
-      }
-
-      if (this.config.loadCosmeticFilters === true) {
-        // Register callback to cosmetics injection (CSS + scriptlets)
-        page.on('framenavigated', async (frame) => {
-          try {
-            await this.onFrame(frame);
-          } catch (ex) {
-            // Ignore
-          }
-        });
-      }
-    });
+    if (this.config.loadNetworkFilters === true) {
+      // Make sure request interception is enabled for `page` before proceeding
+      await page.setRequestInterception(true);
+      // NOTES:
+      //  - page.setBypassCSP(enabled) might be needed to perform
+      //  injections on some pages.
+      //  - we currently do not perform CSP headers injection as there is
+      //  currently no way to modify responses in puppeteer. This feature could
+      //  easily be added if puppeteer implements the required capability.
+      //  Register callback for network requets filtering
+      page.on('request', this.onRequest);
+    }
   }
+
+  public async disableBlockingInPage(page: puppeteer.Page): Promise<void> {
+    if (this.config.loadNetworkFilters === true) {
+      await page.setRequestInterception(false);
+      page.removeListener('request', this.onRequest);
+    }
+
+    if (this.config.loadCosmeticFilters === true) {
+      page.removeListener('framenavigated', this.onFrameNavigated);
+    }
+  }
+
+  private onFrameNavigated = async (frame: puppeteer.Frame) => {
+    try {
+      await this.onFrame(frame);
+    } catch (ex) {
+      // Ignore
+    }
+  };
 
   private onFrame = async (frame: puppeteer.Frame): Promise<void> => {
     // DOM features
