@@ -589,11 +589,13 @@ $csp=baz,domain=bar.com
       {
         filters: ['##selector'],
         hostname: 'foo.com',
+        injections: [],
         matches: ['selector'],
       },
       {
         filters: ['#@#selector', '##selector'],
         hostname: 'foo.com',
+        injections: [],
         matches: [],
       },
 
@@ -602,12 +604,14 @@ $csp=baz,domain=bar.com
         classes: ['selector'],
         filters: ['##.selector'],
         hostname: 'foo.com',
+        injections: [],
         matches: ['.selector'],
       },
       {
         classes: ['selector'],
         filters: ['#@#.selector', '##.selector'],
         hostname: 'foo.com',
+        injections: [],
         matches: [],
       },
 
@@ -616,12 +620,14 @@ $csp=baz,domain=bar.com
         filters: ['###selector'],
         hostname: 'foo.com',
         ids: ['selector'],
+        injections: [],
         matches: ['#selector'],
       },
       {
         filters: ['###selector', '#@##selector'],
         hostname: 'foo.com',
         ids: ['selector'],
+        injections: [],
         matches: [],
       },
 
@@ -630,12 +636,30 @@ $csp=baz,domain=bar.com
         filters: ['##a[href="https://foo"]'],
         hostname: 'foo.com',
         hrefs: ['https://foo.com/bar'],
+        injections: [],
         matches: ['a[href="https://foo"]'],
       },
       {
         filters: ['##a[href="https://foo"]', '#@#a[href="https://foo"]'],
         hostname: 'foo.com',
         hrefs: ['https://foo.com/bar'],
+        injections: [],
+        matches: [],
+      },
+
+      // = unhide +js() exception
+      {
+        filters: ['foo.com##+js(scriptlet)'],
+        hostname: 'foo.com',
+        hrefs: [],
+        injections: ['scriptlet'],
+        matches: [],
+      },
+      {
+        filters: ['foo.com##+js(scriptlet)', 'foo.com#@#+js(scriptlet)'],
+        hostname: 'foo.com',
+        hrefs: [],
+        injections: [],
         matches: [],
       },
 
@@ -647,6 +671,7 @@ $csp=baz,domain=bar.com
       {
         filters: ['##adwords1', '~google.*##adwords2'],
         hostname: 'domain.com',
+        injections: [],
         matches: ['adwords1', 'adwords2'],
       },
       // Selectors ids, classes and hrefs are not returned without DOM information.
@@ -660,6 +685,7 @@ $csp=baz,domain=bar.com
           '##a[href*="https://foo"]',
         ],
         hostname: 'domain.com',
+        injections: [],
         matches: [],
       },
       // Return filters with correct DOM info
@@ -676,6 +702,7 @@ $csp=baz,domain=bar.com
 
         classes: ['foo', 'bar', 'adwords1'],
         hostname: 'domain.com',
+        injections: [],
         matches: ['.adwords1'],
       },
       // #id
@@ -691,6 +718,7 @@ $csp=baz,domain=bar.com
 
         hostname: 'domain.com',
         ids: ['foo', 'bar', 'adwords2'],
+        injections: [],
         matches: ['#adwords2'],
       },
       // hrefs
@@ -706,6 +734,7 @@ $csp=baz,domain=bar.com
 
         hostname: 'domain.com',
         hrefs: ['https://foo.com', 'https://bar.com'],
+        injections: [],
         matches: [
           '[href="https://foo.com"]',
           '[href^="https://bar.com"]',
@@ -718,6 +747,7 @@ $csp=baz,domain=bar.com
         classes: [],
         filters: ['~foo.com##.selector'],
         hostname: 'bar.com',
+        injections: [],
         matches: [],
       },
 
@@ -726,6 +756,7 @@ $csp=baz,domain=bar.com
         classes: ['selector'],
         filters: ['~foo.com##.selector'],
         hostname: 'bar.com',
+        injections: [],
         matches: ['.selector'],
       },
 
@@ -734,6 +765,7 @@ $csp=baz,domain=bar.com
         classes: ['selector'],
         filters: ['~foo.com##.selector'],
         hostname: 'foo.com',
+        injections: [],
         matches: [],
       },
 
@@ -742,12 +774,14 @@ $csp=baz,domain=bar.com
         classes: ['selector'],
         filters: ['~foo.*##.selector'],
         hostname: 'foo.com',
+        injections: [],
         matches: [],
       },
       {
         classes: ['selector'],
         filters: ['~foo.*##.selector'],
         hostname: 'foo.co.uk',
+        injections: [],
         matches: [],
       },
 
@@ -755,74 +789,87 @@ $csp=baz,domain=bar.com
       {
         filters: ['##adwords1', '~google.*##adwords2'],
         hostname: 'google.com',
+        injections: [],
         matches: ['adwords1'],
       },
       // Negated entity exceptions do not appear in matches
       {
         filters: ['##adwords1', '~google.com#@#adwords2'],
         hostname: 'google.com',
+        injections: [],
         matches: ['adwords1'],
       },
       {
         filters: ['##adwords1', '~google.com#@#adwords2'],
         hostname: 'google.de',
+        injections: [],
         matches: ['adwords1'],
       },
       {
         filters: ['##adwords1', '~google.*#@#adwords2'],
         hostname: 'google.com',
+        injections: [],
         matches: ['adwords1'],
       },
       // Exception cancels generic rule
       {
         filters: ['##adwords1', 'google.com#@#adwords1'],
         hostname: 'google.com',
+        injections: [],
         matches: [],
       },
       // Exception cancels entity rule
       {
         filters: ['google.*##adwords1', 'google.com#@#adwords1'],
         hostname: 'google.com',
+        injections: [],
         matches: [],
       },
       // Exception cancels hostname rule
       {
         filters: ['google.com##adwords1', 'google.com#@#adwords1'],
         hostname: 'google.com',
+        injections: [],
         matches: [],
       },
       // Entity exception cancels generic rule
       {
         filters: ['##adwords1', 'google.*#@#adwords1'],
         hostname: 'google.com',
+        injections: [],
         matches: [],
       },
       // Entity exception cancels entity rule
       {
         filters: ['google.*##adwords1', 'google.*#@#adwords1'],
         hostname: 'google.com',
+        injections: [],
         matches: [],
       },
       // Exception does not cancel if selector is different
       {
         filters: ['##adwords1', 'google.de#@#adwords2'],
         hostname: 'google.de',
+        injections: [],
         matches: ['adwords1'],
       },
       {
         filters: ['google.de##adwords1', 'google.de#@#adwords2'],
         hostname: 'google.de',
+        injections: [],
         matches: ['adwords1'],
       },
       // Exception does not cancel if hostname is different
       {
         filters: ['##adwords1', 'google.com#@#adwords1'],
         hostname: 'google.de',
+        injections: [],
         matches: ['adwords1'],
       },
       {
         filters: ['##adwords1', 'accounts.google.com#@#adwords1'],
         hostname: 'google.com',
+        injections: [],
         matches: ['adwords1'],
       },
       // Hostname matching hostname vs. domain
@@ -830,29 +877,34 @@ $csp=baz,domain=bar.com
       {
         filters: ['baz.com##selector'],
         hostname: 'foo.bar.baz.com',
+        injections: [],
         matches: ['selector'],
       },
       // = entity constraint matches hostname with subdomains
       {
         filters: ['baz.*##selector'],
         hostname: 'foo.bar.baz.com',
+        injections: [],
         matches: ['selector'],
       },
       {
         filters: ['baz.*##selector'],
         hostname: 'foo.bar.baz.co.uk',
+        injections: [],
         matches: ['selector'],
       },
       // = domain exception matches hostname with subdomain
       {
         filters: ['~baz.de##selector'],
         hostname: 'foo.bar.baz.de',
+        injections: [],
         matches: [],
       },
       // = entity exception matches hostname with subdomain
       {
         filters: ['~baz.*##selector'],
         hostname: 'foo.bar.baz.co.uk',
+        injections: [],
         matches: [],
       },
 
@@ -860,21 +912,25 @@ $csp=baz,domain=bar.com
       {
         filters: ['##ad-stack'],
         hostname: 'speedtest.net',
+        injections: [],
         matches: ['ad-stack'],
       },
       {
         filters: ['##AD300Right'],
         hostname: 'example.de',
+        injections: [],
         matches: ['AD300Right'],
       },
       {
         filters: [],
         hostname: 'pokerupdate.com',
+        injections: [],
         matches: [],
       },
       {
         filters: ['pokerupdate.com##related-room', 'pokerupdate.com##prev-article'],
         hostname: 'pokerupdate.com',
+        injections: [],
         matches: ['related-room', 'prev-article'],
       },
       {
@@ -886,6 +942,7 @@ $csp=baz,domain=bar.com
           '##.mw > #rcnt > #center_col > #taw > .c',
         ],
         hostname: 'google.com',
+        injections: [],
         matches: [
           '.class[style="margin: 0pt;"]1',
           '.class[style="margin: 0pt;"]2',
@@ -906,6 +963,7 @@ $csp=baz,domain=bar.com
           '##.mw > #rcnt > #center_col > #taw > .c',
         ],
         hostname: 'google.com',
+        injections: [],
         matches: [
           '.class[style="margin: 0pt;"]1',
           '#tads + div + .c',
@@ -924,6 +982,7 @@ $csp=baz,domain=bar.com
           '##.mw > #rcnt > #center_col > #taw > .c',
         ],
         hostname: 'google.com',
+        injections: [],
         matches: ['.class[style="margin: 0pt;"]', '#tads + div + .c'],
 
         ids: ['tads'],
@@ -936,6 +995,7 @@ $csp=baz,domain=bar.com
           '##.mw > #rcnt > #center_col > #taw > .c',
         ],
         hostname: 'google.com',
+        injections: [],
         matches: ['.class[style="margin: 0pt;"]'],
       },
       {
@@ -946,6 +1006,7 @@ $csp=baz,domain=bar.com
           '##.mw > #rcnt > #center_col > #taw > .c',
         ],
         hostname: 'mail.google.com',
+        injections: [],
         matches: [
           '#tads + div + .c',
           '.mw > #rcnt > #center_col > #taw > #tvcap > .c',
@@ -958,32 +1019,36 @@ $csp=baz,domain=bar.com
       {
         filters: [],
         hostname: 'bitbucket.org',
+        injections: [],
         matches: [],
       },
     ].forEach(
       ({
+        classes,
         filters,
         hostname,
-        matches,
-        classes,
         hrefs,
         ids,
+        injections,
+        matches,
       }: {
         filters: string[];
         hostname: string;
         matches: string[];
+        injections: string[];
 
         // DOM info
         classes?: string[];
         hrefs?: string[];
         ids?: string[];
       }) => {
-        it(JSON.stringify({ filters, hostname, matches }), () => {
+        it(JSON.stringify({ filters, hostname, matches, injections }), () => {
           // Initialize engine with all rules from test case
           const engine = createEngine(filters.join('\n'));
+          engine.resources.js.set('scriptlet', 'scriptlet');
 
           // #getCosmeticsFilters
-          const { styles } = engine.getCosmeticsFilters({
+          const { styles, scripts } = engine.getCosmeticsFilters({
             domain: getDomain(hostname) || '',
             hostname,
             url: `https://${hostname}`,
@@ -992,6 +1057,9 @@ $csp=baz,domain=bar.com
             hrefs,
             ids,
           });
+
+          expect(scripts).toHaveLength(injections.length);
+          expect(scripts.sort()).toEqual(injections.sort());
 
           // Parse stylesheets to get selectors back
           const selectors: string[] = [];
