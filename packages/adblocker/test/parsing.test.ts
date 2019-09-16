@@ -541,6 +541,20 @@ describe('Network filters', () => {
       });
     });
 
+    it('inline-font', () => {
+      network('||foo.com$inline-font', {
+        csp: "font-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:",
+        isCSP: true,
+      });
+    });
+
+    it('inline-script', () => {
+      network('||foo.com$inline-script', {
+        csp: "script-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:",
+        isCSP: true,
+      });
+    });
+
     describe('csp', () => {
       it('defaults to no csp', () => {
         network('||foo.com', {
@@ -731,7 +745,7 @@ describe('Network filters', () => {
     });
 
     describe('un-supported options', () => {
-      ['genericblock', 'inline-script', 'popunder', 'popup', 'woot'].forEach(
+      ['genericblock', 'popunder', 'popup', 'woot'].forEach(
         (unsupportedOption) => {
           it(unsupportedOption, () => {
             network(`||foo.com$${unsupportedOption}`, null);

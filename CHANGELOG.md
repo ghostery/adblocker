@@ -4,6 +4,8 @@
 
 *not released*
 
+  * feat: support inline-script and inline-font options [#327](https://github.com/cliqz-oss/adblocker/pull/327)
+
 ## 1.0.2
 
 *2019-09-02*

@@ -377,6 +377,14 @@ export default class NetworkFilter implements IFilter {
           case 'generichide':
             mask = setBit(mask, NETWORK_FILTER_MASK.isGenericHide);
             break;
+          case 'inline-script':
+            mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
+            csp = "script-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:";
+            break;
+          case 'inline-font':
+            mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
+            csp = "font-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:";
+            break;
           default: {
             // Handle content type options separatly
             let optionMask: number = 0;
