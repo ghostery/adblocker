@@ -76,6 +76,14 @@ let blocker = await ElectronBlocker.fromPrebuiltAdsOnly(fetch); // ads only
 blocker = await ElectronBlocker.fromPrebuiltAdsAndTracking(fetch); // ads and tracking
 ```
 
+### Disabling Blocker in session
+
+To stop blocking ads in a session:
+
+```javascript
+blocker.disableBlockingInSession(session.defaultSession);
+```
+
 ### Caching Blocker using Serialization
 
 To avoid having to create the same instance of `ElectronBlocker` all over again,

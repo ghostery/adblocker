@@ -75,6 +75,14 @@ let blocker = await WebExtensionBlocker.fromPrebuiltAdsOnly(); // ads only
 blocker = await WebExtensionBlocker.fromPrebuiltAdsAndTracking(); // ads and tracking
 ```
 
+### Disabling Blocker in extension
+
+To stop blocking ads:
+
+```javascript
+blocker.disableBlockingInBrowser();
+```
+
 ### Caching Blocker using Serialization
 
 To avoid having to create the same instance of `WebExtensionBlocker` all over again,
