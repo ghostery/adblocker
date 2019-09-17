@@ -4,10 +4,10 @@ all: deps run
 requests.json:
 	curl https://cdn.cliqz.com/adblocking/requests_top500.json.gz | gunzip > requests.json
 
-# VERSION: 69118b828db0f6a53bc2306deacffc5361aeef0c
+# VERSION: a15e8020d092f7b9f96834d237b6ca560c6b4335
 ./blockers/adblockpluscore:
 	git clone --branch=next https://github.com/adblockplus/adblockpluscore.git ./blockers/adblockpluscore
-	cd ./blockers/adblockpluscore && git reset --hard 396adf60f5df167c654222d9ed52f6a4da8dd16c
+	cd ./blockers/adblockpluscore && git reset --hard a15e8020d092f7b9f96834d237b6ca560c6b4335
 
 adblockpluscore: ./blockers/adblockpluscore
 
