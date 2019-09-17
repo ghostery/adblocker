@@ -80,6 +80,14 @@ let blocker = await PuppeteerBlocker.fromPrebuiltAdsOnly(fetch); // ads only
 blocker = await PuppeteerBlocker.fromPrebuiltAdsAndTracking(fetch); // ads and tracking
 ```
 
+### Disabling Blocker in page
+
+To stop blocking ads in a page:
+
+```javascript
+await blocker.disableBlockingInPage(page);
+```
+
 ### Caching Blocker using Serialization
 
 To avoid having to create the same instance of `PuppeteerBlocker` all over again,

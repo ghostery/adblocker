@@ -17,6 +17,8 @@ import {
   IMessageFromBackground,
 } from '@cliqz/adblocker-content';
 
+const PRELOAD_PATH = join(__dirname, './preload.js');
+
 // https://stackoverflow.com/questions/48854265/why-do-i-see-an-electron-security-warning-after-updating-my-electron-project-t
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 
@@ -45,7 +47,7 @@ export function fromElectronDetails({
  * Wrap `FiltersEngine` into a Electron-friendly helper class.
  */
 export class ElectronBlocker extends FiltersEngine {
-  public enableBlockingInSession(ses: Electron.Session) {
+  public enableBlockingInSession(ses: Electron.Session): void {
     if (this.config.loadNetworkFilters === true) {
       ses.webRequest.onHeadersReceived({ urls: ['<all_urls>'] }, this.onHeadersReceived);
       ses.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onBeforeRequest);
@@ -53,12 +55,35 @@ export class ElectronBlocker extends FiltersEngine {
 
     if (this.config.loadCosmeticFilters === true) {
       ipcMain.on('get-cosmetic-filters', this.onGetCosmeticFilters);
-      ses.setPreloads(ses.getPreloads().concat([join(__dirname, './preload.js')]));
-      ipcMain.on('is-mutation-observer-enabled', (event: Electron.IpcMainEvent) => {
-        event.returnValue = this.config.enableMutationObserver;
-      });
+      ipcMain.on('is-mutation-observer-enabled', this.onIsMutationObserverEnabled);
+      ses.setPreloads(ses.getPreloads().concat([PRELOAD_PATH]));
     }
   }
+
+  public disableBlockingInSession(ses: Electron.Session): void {
+    if (this.config.loadNetworkFilters === true) {
+      // NOTE - there is currently no support in Electron for multiple
+      // webRequest listeners registered for the same event. This means that
+      // adblocker's listeners can be overriden by other ones in the same
+      // application (or that the adblocker can override another listener
+      // registered previously). Because of this, the only way to disable the
+      // adblocker is to remove all listeners for the events we are interested
+      // in. In the future, we should consider implementing a webRequest
+      // pipeline allowing to register multiple listeners for the same event.
+      ses.webRequest.onHeadersReceived(null);
+      ses.webRequest.onBeforeRequest(null);
+    }
+
+    if (this.config.loadCosmeticFilters === true) {
+      ses.setPreloads(ses.getPreloads().filter(p => p !== PRELOAD_PATH));
+      ipcMain.removeListener('get-cosmetic-filters', this.onGetCosmeticFilters);
+      ipcMain.removeListener('is-mutation-observer-enabled', this.onIsMutationObserverEnabled);
+    }
+  }
+
+  private onIsMutationObserverEnabled = (event: Electron.IpcMainEvent) => {
+    event.returnValue = this.config.enableMutationObserver;
+  };
 
   private onGetCosmeticFilters = (
     event: Electron.IpcMainEvent,
