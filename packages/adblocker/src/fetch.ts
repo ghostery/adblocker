@@ -74,9 +74,6 @@ function getResourcesUrl(fetch: Fetch): Promise<string> {
  * Fetch latest version of uBlock Origin's resources, used to inject scripts in
  * the page or redirect request to data URLs.
  */
-export function fetchResources(fetch: Fetch, resourcesUrl?: string): Promise<string> {
-  return (resourcesUrl === undefined
-    ? getResourcesUrl(fetch)
-    : Promise.resolve(resourcesUrl)
-  ).then((url) => fetchResource(fetch, url));
+export function fetchResources(fetch: Fetch): Promise<string> {
+  return getResourcesUrl(fetch).then(url => fetchResource(fetch, url));
 }

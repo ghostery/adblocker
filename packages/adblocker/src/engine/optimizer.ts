@@ -168,17 +168,21 @@ export function optimizeNetwork(filters: NetworkFilter[]): NetworkFilter[] {
   const fused: NetworkFilter[] = [];
   let toFuse = filters;
 
-  OPTIMIZATIONS.forEach(({ select, fusion, groupByCriteria }) => {
+  for (let i = 0; i < OPTIMIZATIONS.length; i += 1) {
+    const { select, fusion, groupByCriteria } = OPTIMIZATIONS[i];
     const { positive, negative } = splitBy(toFuse, select);
     toFuse = negative;
-    groupBy(positive, groupByCriteria).forEach((group) => {
+
+    const groups = groupBy(positive, groupByCriteria);
+    for (let j = 0; j < groups.length; j += 1) {
+      const group = groups[j];
       if (group.length > 1) {
         fused.push(fusion(group));
       } else {
         toFuse.push(group[0]);
       }
-    });
-  });
+    }
+  }
 
   for (let i = 0; i < toFuse.length; i += 1) {
     fused.push(toFuse[i]);

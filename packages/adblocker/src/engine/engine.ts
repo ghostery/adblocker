@@ -70,11 +70,10 @@ export default class FilterEngine extends EventEmitter<
     this: T,
     fetch: Fetch,
     urls: string[],
-    resourcesUrl?: string | undefined,
     config: Partial<Config> = {},
   ): Promise<InstanceType<T>> {
     const listsPromises = fetchLists(fetch, urls);
-    const resourcesPromise = fetchResources(fetch, resourcesUrl);
+    const resourcesPromise = fetchResources(fetch);
 
     return Promise.all([listsPromises, resourcesPromise]).then(([lists, resources]) => {
       const engine = this.parse(lists.join('\n'), config);

@@ -3,7 +3,9 @@ import fetch from 'node-fetch';
 import puppeteer from 'puppeteer';
 
 (async () => {
-  const blocker = await PuppeteerBlocker.fromLists(fetch, fullLists);
+  const blocker = await PuppeteerBlocker.fromLists(fetch, fullLists, {
+    enableCompression: true,
+  });
   const browser = await puppeteer.launch({
     defaultViewport: null,
     headless: false,

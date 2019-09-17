@@ -29,7 +29,6 @@ export {
   parseFilter,
   parseFilters,
 } from './src/lists';
-export { compactTokens, hasEmptyIntersection, mergeCompactSets } from './src/compact-set';
 export * from './src/fetch';
 export { tokenize } from './src/utils';
 export { default as Config } from './src/config';
