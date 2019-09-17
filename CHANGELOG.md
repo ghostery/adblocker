@@ -4,7 +4,13 @@
 
 *not released*
 
-  * simplify reverse index by removing special tokens handling [#333](https://github.com/cliqz-oss/adblocker/pull/333)
+  * chore: clean-ups and small optimizations [#334](https://github.com/cliqz-oss/adblocker/pull/334)
+    * rename `engine` to `blocker` in example projects (consistent naming)
+    * enable on-the-fly compression in example projects
+    * remove unused compact set exports (keep internal only)
+    * remove explicit `resourcesUrl` in `fromLists(...)` (we always use the one served from CDN)
+    * use bare for loops in compact sets and optimization framework
+  * simplify reverse index by removing ad-hoc tokens handling [#333](https://github.com/cliqz-oss/adblocker/pull/333)
 
 ## 1.1.0
 
