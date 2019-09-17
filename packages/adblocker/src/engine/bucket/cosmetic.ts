@@ -418,7 +418,7 @@ export default class CosmeticFilterBucket {
     // =======================================================================
     if (allowGenericHides === true && getRulesFromDOM === true && hrefs.length !== 0) {
       this.hrefsIndex.iterMatchingFilters(
-        compactTokens(concatTypedArrays(hrefs.map((href) => tokenizeFilter(href, false, true)))),
+        compactTokens(concatTypedArrays(hrefs.map((href) => tokenizeFilter(href, false, false)))),
         (rule: CosmeticFilter) => {
           if (rule.match(hostname, domain)) {
             rules.push(rule);

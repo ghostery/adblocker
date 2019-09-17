@@ -4,6 +4,8 @@
 
 *not released*
 
+  * simplify reverse index by removing special tokens handling [#333](https://github.com/cliqz-oss/adblocker/pull/333)
+
 ## 1.1.0
 
 *2019-09-17*

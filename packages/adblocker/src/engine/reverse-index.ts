@@ -9,7 +9,6 @@
 import Config from '../config';
 import StaticDataView, { EMPTY_UINT32_ARRAY } from '../data-view';
 import IFilter from '../filters/interface';
-import { fastHash } from '../utils';
 
 // https://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
 function nextPow2(v: number): number {
@@ -432,15 +431,6 @@ export default class ReverseIndex<T extends IFilter> {
 
     // Add size of bucketsIndex to total size (x4 because these are 32 bits numbers)
     estimatedBufferSize += bucketsIndexSize * 4;
-
-    // Add an heavy weight on these common patterns because they appear in
-    // almost all URLs. If there is a choice, then filters should use other
-    // tokens than those.
-    histogram.set(fastHash('http'), totalNumberOfTokens);
-    histogram.set(fastHash('https'), totalNumberOfTokens);
-    histogram.set(fastHash('www'), totalNumberOfTokens);
-    histogram.set(fastHash('com'), totalNumberOfTokens);
-    // TODO - consider adding more of these, check on requests dataset
 
     // Prepare "tokens index" (see documentation in constructor of `ReverseIndex` class above).
     const tokensLookupIndexSize: number = Math.max(2, nextPow2(totalNumberOfIndexedFilters));

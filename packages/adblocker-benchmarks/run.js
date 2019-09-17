@@ -11,7 +11,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const readline = require('readline');
 
 const ENGINE = process.argv[process.argv.length - 2];
 const REQUESTS_PATH = process.argv[process.argv.length - 1];
@@ -175,29 +174,18 @@ async function main() {
     noMatches: [],
   };
 
-  const lines = readline.createInterface({
-    input: fs.createReadStream(REQUESTS_PATH),
-    crlfDelay: Infinity,
-  });
-
+  const requests = fs.readFileSync(REQUESTS_PATH, 'utf8').split(/[\n\r]+/g).map(JSON.parse);
   let index = 0;
-  lines.on('line', (line) => {
+  for (const request of requests) {
     if (index !== 0 && index % 10000 === 0) {
       console.log(`Processed ${index} requests`);
     }
     index += 1;
 
-    let request = null;
-    try {
-      request = JSON.parse(line);
-    } catch (ex) {
-      return;
-    }
-
     const { url, frameUrl, cpt } = request;
 
     if (!isSupportedUrl(url) || !isSupportedUrl(frameUrl)) {
-      return;
+      continue;
     }
 
     start = process.hrtime();
@@ -210,11 +198,7 @@ async function main() {
     } else {
       stats.noMatches.push(totalHighResolution);
     }
-  });
-
-  await new Promise((resolve) => {
-    lines.on('close', resolve);
-  });
+  }
 
   const cmp = (a, b) => a - b;
 
