@@ -1140,7 +1140,9 @@ videohelp.com##+js(abort-current-inline-script.js, document.getElementById, bloc
 calorielijst.nl##+js(abort-on-property-write.js, clickIE)
 
 ! https://github.com/NanoMeow/QuickReports/issues/334
-maxedtech.com##+js(set-constant.js, adb, noopFunc)
+! https://github.com/NanoMeow/QuickReports/issues/1790
+||pagead2.googlesyndication.com/pagead/$script,redirect=noopjs,domain=maxedtech.com
+||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,redirect=noopjs,domain=maxedtech.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4148
 humo.be##+js(set-constant.js, checkPrivacyWall, noopFunc)
@@ -2019,6 +2021,9 @@ salary.com###sgpb-popup-dialog-main-div-wrapper, .sgpb-theme-1-overlay
 ! https://github.com/uBlockOrigin/uAssets/issues/5283
 aliexpress.com##.close-layer:xpath(..)
 aliexpress.com##.ui-mask
+! https://github.com/uBlockOrigin/uAssets/issues/6184
+aliexpress.com##.next-overlay-wrapper:has(.newuser-container)
+aliexpress.com##body:style(overflow: auto !important; padding: 0 !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5284
 mlbshop.com##.modal, .modal-backdrop, .modal-wrapper
@@ -2404,9 +2409,6 @@ panditfiles.pro##.unselectable:style(-moz-user-select: text !important; khtml-us
 ! https://github.com/NanoMeow/QuickReports/issues/1458
 @@||ratemyprofessors.com^$generichide
 
-! https://github.com/NanoMeow/QuickReports/issues/1456
-papamuda.net##+js(set-constant.js, showAds, true)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/5916
 lifo.gr##+js(setTimeout-defuser.js, slideout)
 
@@ -2537,3 +2539,81 @@ starblast.io##+js(ra, oncontextmenu)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1692
 @@||thesaurus.com/assets/ads.js$xhr,1p
+
+! block medium.com "pardon the interruption" modal that prompts you to sign-up/log-in.
+medium.com##:xpath(//div[.//div[contains(@tabindex,"-1") and contains(@aria-modal,"true")]])
+
+! https://forums.lanik.us/viewtopic.php?f=62&t=43420
+vedbex.com##.in.fade
+vedbex.com##body:style(overflow: auto !important;)
+||vedbex.com/*banners$image
+||vedbex.com/*/sponsers$image
+
+! https://github.com/NanoMeow/QuickReports/issues/1709
+||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs,domain=files2zip.com
+files2zip.com##div.black.banner
+
+! https://github.com/uBlockOrigin/uAssets/issues/6180
+latestseoupdate.com##+js(set-constant, blurred, false)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/cvm6pn/how_to_get_rid_of_blurred_text_on_websites_such/
+enotes.com##.obscured:style(color: black !important;text-shadow: none !important; filter: none !important)
+enotes.com##.paywall-mount
+
+! https://github.com/uBlockOrigin/uAssets/issues/6194
+bogdankaminski.pl,serwer1695147.home.pl###robactwo:not([style])
+bogdankaminski.pl,serwer1695147.home.pl##*:style(-moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; khtml-user-select: text !important; -webkit-touch-callout: default !important; -webkit-user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/6206
+mtbtutoriales.com##+js(aopw, reEnable)
+
+! https://github.com/NanoMeow/QuickReports/issues/1396
+@@||wired.com^$generichide
+wired.com##.ad
+
+! https://github.com/uBlockOrigin/uAssets/issues/6240
+news.chosun.com##+js(aeld, copy, getSelection)
+
+! https://forums.lanik.us/viewtopic.php?f=64&t=43462
+@@||myanimelist.net^$generichide
+
+! https://github.com/MajkiIT/polish-ads-filter/issues/14597#issuecomment-528321503
+portalwrc.pl##+js(aeld, contextmenu)
+
+! https://github.com/NanoMeow/QuickReports/issues/1780
+@@||belfasttelegraph.co.uk^$generichide
+
+! https://answersafrica .com/joe-bonamassa-bio-wife-net-worth-girlfriend.html right click - select - copy - ctrl-U
+answersafrica.com##+js(acis, document.oncontextmenu)
+answersafrica.com##body:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important;-moz-user-select: text !important;-ms-user-select: text !important;user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/6273
+zerodot1.gitlab.io##+js(set-constant, document.oncontextmenu, undefined)
+zerodot1.gitlab.io##+js(ra, oncontextmenu|onselectstart|ondragstart)
+zerodot1.gitlab.io##+js(set-constant, alert, trueFunc)
+zerodot1.gitlab.io##body:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important;-moz-user-select: text !important;-ms-user-select: text !important;user-select: text !important;)
+
+! thewpclub .net right click, select, copy
+/wp-content/plugins/content-protector-pack/*
+
+! https://github.com/NanoMeow/QuickReports/issues/1813
+@@||release-apk.com^$generichide
+
+! https://github.com/NanoMeow/QuickReports/issues/1822
+tomsguide.com##+js(aopr, _sp_._networkListenerData)
+
+! https://github.com/NanoMeow/QuickReports/issues/1485#issuecomment-531303011
+pluspremieres.nz##+js(ra, oncontextmenu)
+
+! https://github.com/NanoMeow/QuickReports/issues/1832
+@@||flightaware.com^$generichide
+
+! https://github.com/NanoMeow/QuickReports/issues/1830
+@@||leo.org^$generichide
+leo.org###adv-text
+
+! https://github.com/NanoMeow/QuickReports/issues/1052#issuecomment-531842608
+ancient.eu##+js(aopr, googletag)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/d5ekq0/antiadblock_detected_wwwlesoirbe/
+lesoir.be##+js(aopr, abStyle)
