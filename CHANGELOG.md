@@ -4,6 +4,7 @@
 
 *not released*
 
+  * feat: support subset of HTML filtering rules (^script:has-text(...)) [#339](https://github.com/cliqz-oss/adblocker/pull/339)
   * feat: add support for 'all' option [#338](https://github.com/cliqz-oss/adblocker/pull/338)
   * feat: add support for 'redirect-rule' option [#337](https://github.com/cliqz-oss/adblocker/pull/337)
   * chore: update local assets + generate compression codebooks [#335](https://github.com/cliqz-oss/adblocker/pull/335)

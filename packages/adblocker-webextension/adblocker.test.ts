@@ -65,6 +65,7 @@ describe('#fromWebRequestDetails', () => {
     expect(
       fromWebRequestDetails({
         initiator: 'https://sub.foo.com',
+        requestId: '42',
         tabId: 0,
         type: 'script',
         url: 'https://url',
@@ -79,6 +80,7 @@ describe('#fromWebRequestDetails', () => {
     expect(
       fromWebRequestDetails({
         originUrl: 'https://sub.foo.com',
+        requestId: '42',
         tabId: 0,
         type: 'script',
         url: 'https://url',
@@ -93,6 +95,7 @@ describe('#fromWebRequestDetails', () => {
     expect(
       fromWebRequestDetails({
         documentUrl: 'https://sub.foo.com',
+        requestId: '42',
         tabId: 0,
         type: 'script',
         url: 'https://url',
@@ -107,6 +110,7 @@ describe('#fromWebRequestDetails', () => {
     expect(
       fromWebRequestDetails({
         documentUrl: 'https://sub.soURCE.com',
+        requestId: '42',
         tabId: 0,
         type: 'script',
         url: 'https://sub.url.com',

@@ -17,7 +17,7 @@ import {
   fetchPrebuilt,
   fetchResources,
 } from '../fetch';
-import CosmeticFilter from '../filters/cosmetic';
+import CosmeticFilter, { HTMLSelector } from '../filters/cosmetic';
 import NetworkFilter from '../filters/network';
 import { IListDiff, IRawDiff, parseFilters } from '../lists';
 import Request from '../request';
@@ -25,7 +25,7 @@ import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 
-export const ENGINE_VERSION = 37;
+export const ENGINE_VERSION = 38;
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -51,10 +51,11 @@ export interface BlockingResponse {
 }
 
 export default class FilterEngine extends EventEmitter<
+  | 'csp-injected'
+  | 'html-filtered'
   | 'request-blocked'
   | 'request-redirected'
   | 'request-whitelisted'
-  | 'csp-injected'
   | 'script-injected'
   | 'style-injected'
 > {
@@ -479,6 +480,45 @@ export default class FilterEngine extends EventEmitter<
       removedCosmeticFilters: removedCosmeticFilters.map((f) => f.getId()),
       removedNetworkFilters: removedNetworkFilters.map((f) => f.getId()),
     });
+  }
+
+  /**
+   * Return a list of HTML filtering rules.
+   */
+  public getHtmlFilters({
+    // Page information
+    url,
+    hostname,
+    domain,
+  }: {
+    url: string;
+    hostname: string;
+    domain: string | null | undefined;
+  }): HTMLSelector[] {
+    const htmlSelectors: HTMLSelector[] = [];
+
+    if (this.config.enableHtmlFiltering === false || this.config.loadCosmeticFilters === false) {
+      return htmlSelectors;
+    }
+
+    const rules = this.cosmetics.getHtmlRules({
+      domain: domain || '',
+      hostname,
+    });
+
+    for (let i = 0; i < rules.length; i += 1) {
+      const rule = rules[i];
+      const extended = rule.getExtendedSelector();
+      if (extended !== undefined) {
+        htmlSelectors.push(extended);
+      }
+    }
+
+    if (htmlSelectors.length !== 0) {
+      this.emit('html-filtered', htmlSelectors, url);
+    }
+
+    return htmlSelectors;
   }
 
   /**
