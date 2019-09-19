@@ -4,6 +4,7 @@
 
 *not released*
 
+  * feat: add support for redirect-rule option
   * chore: update local assets + generate compression codebooks [#335](https://github.com/cliqz-oss/adblocker/pull/335)
   * chore: clean-ups and small optimizations [#334](https://github.com/cliqz-oss/adblocker/pull/334)
     * rename `engine` to `blocker` in example projects (consistent naming)

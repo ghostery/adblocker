@@ -354,6 +354,7 @@ export default class NetworkFilter implements IFilter {
           case 'fuzzy':
             mask = setBit(mask, NETWORK_FILTER_MASK.fuzzyMatch);
             break;
+          case 'redirect-rule':
           case 'redirect':
             // Negation of redirection doesn't make sense
             if (negation) {
