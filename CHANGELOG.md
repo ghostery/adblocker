@@ -4,7 +4,8 @@
 
 *not released*
 
-  * feat: add support for redirect-rule option
+  * feat: add support for 'all' option [#338](https://github.com/cliqz-oss/adblocker/pull/338)
+  * feat: add support for 'redirect-rule' option [#337](https://github.com/cliqz-oss/adblocker/pull/337)
   * chore: update local assets + generate compression codebooks [#335](https://github.com/cliqz-oss/adblocker/pull/335)
   * chore: clean-ups and small optimizations [#334](https://github.com/cliqz-oss/adblocker/pull/334)
     * rename `engine` to `blocker` in example projects (consistent naming)
@@ -21,7 +22,7 @@
   * feat: allow disabling adblocking in WebExtension context [#328](https://github.com/cliqz-oss/adblocker/pull/328)
   * feat: allow disabling adblocking in Puppeteer page [#328](https://github.com/cliqz-oss/adblocker/pull/328)
   * feat: allow disabling adblocking in Electron session [#328](https://github.com/cliqz-oss/adblocker/pull/328)
-  * feat: support inline-script and inline-font options [#327](https://github.com/cliqz-oss/adblocker/pull/327)
+  * feat: support 'inline-script' and 'inline-font' options [#327](https://github.com/cliqz-oss/adblocker/pull/327)
 
 ## 1.0.2
 

@@ -369,6 +369,10 @@ export default class NetworkFilter implements IFilter {
             redirect = optionValue;
             break;
           case 'csp':
+            if (negation) {
+              return null;
+            }
+
             mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
             if (optionValue.length > 0) {
               csp = optionValue;
@@ -376,13 +380,25 @@ export default class NetworkFilter implements IFilter {
             break;
           case 'elemhide':
           case 'generichide':
+            if (negation) {
+              return null;
+            }
+
             mask = setBit(mask, NETWORK_FILTER_MASK.isGenericHide);
             break;
           case 'inline-script':
+            if (negation) {
+              return null;
+            }
+
             mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
             csp = "script-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:";
             break;
           case 'inline-font':
+            if (negation) {
+              return null;
+            }
+
             mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
             csp = "font-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:";
             break;
@@ -390,6 +406,10 @@ export default class NetworkFilter implements IFilter {
             // Handle content type options separatly
             let optionMask: number = 0;
             switch (option) {
+              case 'all':
+                // We implement 'all' with a different semantic than uBlock
+                // Origin here. It will just match any request type for now.
+                break;
               case 'image':
                 optionMask = NETWORK_FILTER_MASK.fromImage;
                 break;

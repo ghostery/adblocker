@@ -734,6 +734,27 @@ describe('Network filters', () => {
       });
     });
 
+    it('all', () => {
+      network('||foo.com^$all', {
+        isHostnameAnchor: true,
+        isPlain: true,
+
+        firstParty: true,
+        fromAny: true,
+        fromImage: true,
+        fromMedia: true,
+        fromObject: true,
+        fromOther: true,
+        fromPing: true,
+        fromScript: true,
+        fromStylesheet: true,
+        fromSubdocument: true,
+        fromWebsocket: true,
+        fromXmlHttpRequest: true,
+        thirdParty: true,
+      });
+    });
+
     it('badfilter', () => {
       network('||foo.com^$badfilter', { isBadFilter: true });
       network('@@||foo.com^$badfilter', { isBadFilter: true, isException: true });
