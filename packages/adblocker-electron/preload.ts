@@ -123,7 +123,7 @@ if (window === window.top && window.location.href.startsWith('chrome-devtools://
       // all ids and classes in the DOM at this point of time (DOMContentLoaded
       // event). Afterwards, we will rely on the mutation observer to detect
       // changes.
-      // handleNodes(Array.from(window.document.querySelectorAll('[id],[class],[href]')));
+      handleNodes(Array.from(window.document.querySelectorAll('[id],[class],[href]')));
 
       // Start observing mutations to detect new ids and classes which would
       // need to be hidden.
