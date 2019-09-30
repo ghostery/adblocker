@@ -9,6 +9,7 @@
 import {
   BlockingResponse,
   fullLists,
+  HTMLSelector,
   Request,
   WebExtensionBlocker,
 } from '@cliqz/adblocker-webextension';
@@ -58,6 +59,10 @@ WebExtensionBlocker.fromLists(fetch, fullLists, { enableCompression: true }).the
 
     blocker.on('style-injected', (style: string, url: string) => {
       console.log('style', url, style.length);
+    });
+
+    blocker.on('html-filtered', (htmlSelectors: HTMLSelector[]) => {
+      console.log('html selectors', htmlSelectors);
     });
 
     console.log('Ready to roll!');

@@ -142,7 +142,7 @@ export default class CosmeticFilterBucket {
 
     bucket.genericRules = FiltersContainer.deserialize(buffer, CosmeticFilter.deserialize, config);
 
-    bucket.unhideIndex = ReverseIndex.deserialize(
+    bucket.classesIndex = ReverseIndex.deserialize(
       buffer,
       CosmeticFilter.deserialize,
       noopOptimizeCosmetic,
@@ -156,8 +156,14 @@ export default class CosmeticFilterBucket {
       config,
     );
 
-    // DOM indices
-    bucket.classesIndex = ReverseIndex.deserialize(
+    bucket.hrefsIndex = ReverseIndex.deserialize(
+      buffer,
+      CosmeticFilter.deserialize,
+      noopOptimizeCosmetic,
+      config,
+    );
+
+    bucket.htmlIndex = ReverseIndex.deserialize(
       buffer,
       CosmeticFilter.deserialize,
       noopOptimizeCosmetic,
@@ -171,7 +177,7 @@ export default class CosmeticFilterBucket {
       config,
     );
 
-    bucket.hrefsIndex = ReverseIndex.deserialize(
+    bucket.unhideIndex = ReverseIndex.deserialize(
       buffer,
       CosmeticFilter.deserialize,
       noopOptimizeCosmetic,
@@ -181,23 +187,23 @@ export default class CosmeticFilterBucket {
     return bucket;
   }
 
-  // `hostnameIndex` contains all cosmetic filters which are specific to one or
-  // several domains (that includes entities as well). They are stored in a
-  // reverse index which allows to efficiently get a subset of the filters
-  // which could be injected on a given page (given hostname and domain).
-  public hostnameIndex: ReverseIndex<CosmeticFilter>;
-  public unhideIndex: ReverseIndex<CosmeticFilter>;
-
-  public classesIndex: ReverseIndex<CosmeticFilter>;
-  public idsIndex: ReverseIndex<CosmeticFilter>;
-  public hrefsIndex: ReverseIndex<CosmeticFilter>;
-
   // `genericRules` is a contiguous container of filters. In this case
   // we keep track of all generic cosmetic filters, which allows us to
   // efficiently inject them in any page (either all of them or none of
   // them, without having to match against the hostname/domain of the
   // page). Having them separated also makes it easier to disable them.
   public genericRules: FiltersContainer<CosmeticFilter>;
+
+  // `hostnameIndex` contains all cosmetic filters which are specific to one or
+  // several domains (that includes entities as well). They are stored in a
+  // reverse index which allows to efficiently get a subset of the filters
+  // which could be injected on a given page (given hostname and domain).
+  public classesIndex: ReverseIndex<CosmeticFilter>;
+  public hostnameIndex: ReverseIndex<CosmeticFilter>;
+  public hrefsIndex: ReverseIndex<CosmeticFilter>;
+  public htmlIndex: ReverseIndex<CosmeticFilter>;
+  public idsIndex: ReverseIndex<CosmeticFilter>;
+  public unhideIndex: ReverseIndex<CosmeticFilter>;
 
   // In-memory cache
   public baseStylesheet: string | null;
@@ -210,7 +216,7 @@ export default class CosmeticFilterBucket {
       filters: [],
     });
 
-    this.unhideIndex = new ReverseIndex({
+    this.classesIndex = new ReverseIndex({
       config,
       deserialize: CosmeticFilter.deserialize,
       filters: [],
@@ -224,7 +230,14 @@ export default class CosmeticFilterBucket {
       optimize: noopOptimizeCosmetic,
     });
 
-    this.classesIndex = new ReverseIndex({
+    this.hrefsIndex = new ReverseIndex({
+      config,
+      deserialize: CosmeticFilter.deserialize,
+      filters: [],
+      optimize: noopOptimizeCosmetic,
+    });
+
+    this.htmlIndex = new ReverseIndex({
       config,
       deserialize: CosmeticFilter.deserialize,
       filters: [],
@@ -238,7 +251,7 @@ export default class CosmeticFilterBucket {
       optimize: noopOptimizeCosmetic,
     });
 
-    this.hrefsIndex = new ReverseIndex({
+    this.unhideIndex = new ReverseIndex({
       config,
       deserialize: CosmeticFilter.deserialize,
       filters: [],
@@ -257,27 +270,32 @@ export default class CosmeticFilterBucket {
   public getFilters(): CosmeticFilter[] {
     const filters: CosmeticFilter[] = [];
     return filters.concat(
-      this.classesIndex.getFilters(),
       this.genericRules.getFilters(),
+      this.classesIndex.getFilters(),
       this.hostnameIndex.getFilters(),
       this.hrefsIndex.getFilters(),
+      this.htmlIndex.getFilters(),
       this.idsIndex.getFilters(),
       this.unhideIndex.getFilters(),
     );
   }
 
   public update(newFilters: CosmeticFilter[], removedFilters: Set<number> | undefined): void {
-    const unHideRules: CosmeticFilter[] = [];
+    const classSelectors: CosmeticFilter[] = [];
     const genericHideRules: CosmeticFilter[] = [];
     const hostnameSpecificRules: CosmeticFilter[] = [];
-    const classSelectors: CosmeticFilter[] = [];
-    const idSelectors: CosmeticFilter[] = [];
     const hrefSelectors: CosmeticFilter[] = [];
+    const htmlRules: CosmeticFilter[] = [];
+    const idSelectors: CosmeticFilter[] = [];
+    const unHideRules: CosmeticFilter[] = [];
 
     for (let i = 0; i < newFilters.length; i += 1) {
       const rule = newFilters[i];
+
       if (rule.isUnhide()) {
         unHideRules.push(rule);
+      } else if (rule.isHtmlFiltering()) {
+        htmlRules.push(rule);
       } else if (rule.isGenericHide()) {
         if (rule.isClassSelector()) {
           classSelectors.push(rule);
@@ -294,19 +312,21 @@ export default class CosmeticFilterBucket {
     }
 
     this.genericRules.update(genericHideRules, removedFilters);
-    this.unhideIndex.update(unHideRules, removedFilters);
-    this.hostnameIndex.update(hostnameSpecificRules, removedFilters);
     this.classesIndex.update(classSelectors, removedFilters);
-    this.idsIndex.update(idSelectors, removedFilters);
+    this.hostnameIndex.update(hostnameSpecificRules, removedFilters);
     this.hrefsIndex.update(hrefSelectors, removedFilters);
+    this.htmlIndex.update(htmlRules, removedFilters);
+    this.idsIndex.update(idSelectors, removedFilters);
+    this.unhideIndex.update(unHideRules, removedFilters);
   }
 
   public getSerializedSize(): number {
     return (
-      this.classesIndex.getSerializedSize() +
       this.genericRules.getSerializedSize() +
+      this.classesIndex.getSerializedSize() +
       this.hostnameIndex.getSerializedSize() +
       this.hrefsIndex.getSerializedSize() +
+      this.htmlIndex.getSerializedSize() +
       this.idsIndex.getSerializedSize() +
       this.unhideIndex.getSerializedSize()
     );
@@ -314,12 +334,47 @@ export default class CosmeticFilterBucket {
 
   public serialize(buffer: StaticDataView): void {
     this.genericRules.serialize(buffer);
-    this.unhideIndex.serialize(buffer);
-    this.hostnameIndex.serialize(buffer);
-
     this.classesIndex.serialize(buffer);
-    this.idsIndex.serialize(buffer);
+    this.hostnameIndex.serialize(buffer);
     this.hrefsIndex.serialize(buffer);
+    this.htmlIndex.serialize(buffer);
+    this.idsIndex.serialize(buffer);
+    this.unhideIndex.serialize(buffer);
+  }
+
+  public getHtmlRules({
+    domain,
+    hostname,
+  }: {
+    domain: string;
+    hostname: string;
+  }): CosmeticFilter[] {
+    // Tokens from `hostname` and `domain` which will be used to lookup filters
+    // from the reverse index. The same tokens are re-used for multiple indices.
+    const hostnameTokens = createLookupTokens(hostname, domain);
+    const rules: CosmeticFilter[] = [];
+    this.htmlIndex.iterMatchingFilters(hostnameTokens, (rule: CosmeticFilter) => {
+      if (rule.match(hostname, domain)) {
+        rules.push(rule);
+      }
+      return true;
+    });
+
+    // If we found at least one candidate, check if we have unhidden rules.
+    const disabledRules: Set<string> = new Set();
+    if (rules.length !== 0) {
+      this.unhideIndex.iterMatchingFilters(hostnameTokens, (rule: CosmeticFilter) => {
+        if (rule.match(hostname, domain)) {
+          disabledRules.add(rule.getSelector());
+        }
+
+        return true;
+      });
+    }
+
+    return rules.filter(
+      (rule) => disabledRules.size === 0 || disabledRules.has(rule.getSelector()) === false,
+    );
   }
 
   /**

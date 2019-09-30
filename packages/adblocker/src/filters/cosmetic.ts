@@ -173,6 +173,61 @@ const isValidCss = (() => {
   };
 })();
 
+// NOTE: we currently handle only `script` tags
+export type Tag = 'script';
+export type HTMLSelector = [Tag, [string]];
+
+/**
+ * Unescape strings by removing backslashes.
+ */
+function unescape(str: string): string {
+  return str.replace(/[\\]([^\\])/g, '$1');
+}
+
+export function extractHTMLSelectorFromRule(rule: string): HTMLSelector | undefined {
+  const prefix = 'script:has-text(';
+  const suffix = ')';
+  let foundBackslash = false;
+  if (rule.startsWith(prefix) && rule.endsWith(suffix)) {
+    let depth = 1;
+    let i = prefix.length; // skip opening 'script:has-text('
+    const end = rule.length;
+    let prev = -1; // previous character
+    for (; i < end && depth !== 0; i += 1) {
+      const code = rule.charCodeAt(i);
+
+      if (prev !== 92 /* '\' */) {
+        if (code === 40 /* '(' */) {
+          depth += 1;
+        }
+
+        if (code === 41 /* ')' */) {
+          depth -= 1;
+        }
+      } else {
+        foundBackslash = true; // keep track of this for un-escaping
+      }
+
+      prev = code;
+    }
+
+    // Only consider a pattern if it not a compound one (i.e.:
+    // script:has-text(foo))
+    if (i === end) {
+      return [
+        'script',
+        [
+          foundBackslash === true
+            ? unescape(rule.slice(prefix.length, i - 1))
+            : rule.slice(prefix.length, i - 1),
+        ],
+      ];
+    }
+  }
+
+  return undefined;
+}
+
 /**
  * Masks used to store options of cosmetic filters in a bitmask.
  */
@@ -183,6 +238,7 @@ const enum COSMETICS_MASK {
   isClassSelector = 1 << 3,
   isIdSelector = 1 << 4,
   isHrefSelector = 1 << 5,
+  htmlFiltering = 1 << 6,
 }
 
 function computeFilterId(
@@ -343,34 +399,29 @@ export default class CosmeticFilter implements IFilter {
       }
     }
 
-    // Deal with script:inject and script:contains
+    // Deal with ^script:has-text(...)
     if (
-      line.length - suffixStartIndex > 7 &&
-      line.charCodeAt(suffixStartIndex) === 115 /* 's' */ &&
-      fastStartsWithFrom(line, 'script:', suffixStartIndex)
+      line.charCodeAt(suffixStartIndex) === 94 /* '^' */ &&
+      fastStartsWithFrom(line, 'script:has-text(', suffixStartIndex + 1) &&
+      line.charCodeAt(line.length - 1) === 41 /* ')' */
     ) {
-      //      script:inject(.......)
-      //                    ^      ^
-      //   script:contains(/......./)
-      //                    ^      ^
-      //    script:contains(selector[, args])
-      //           ^        ^               ^^
-      //           |        |          |    ||
-      //           |        |          |    |selector.length
-      //           |        |          |    scriptSelectorIndexEnd
-      //           |        |          |scriptArguments
-      //           |        scriptSelectorIndexStart
-      //           scriptMethodIndex
-      const scriptMethodIndex = suffixStartIndex + 7;
-      let scriptSelectorIndexStart = scriptMethodIndex;
-      const scriptSelectorIndexEnd = line.length - 1;
-
-      if (fastStartsWithFrom(line, 'inject(', scriptMethodIndex)) {
-        mask = setBit(mask, COSMETICS_MASK.scriptInject);
-        scriptSelectorIndexStart += 7;
-      }
-
+      //   ^script:has-text(selector)
+      //    ^                       ^
+      //    |                       |
+      //    |                       |
+      //    |                       scriptSelectorIndexEnd
+      //    |
+      //    scriptSelectorIndexStart
+      //
+      const scriptSelectorIndexStart = suffixStartIndex + 1;
+      const scriptSelectorIndexEnd = line.length;
+      mask = setBit(mask, COSMETICS_MASK.htmlFiltering);
       selector = line.slice(scriptSelectorIndexStart, scriptSelectorIndexEnd);
+
+      // Make sure this is a valid selector
+      if (extractHTMLSelectorFromRule(selector) === undefined) {
+        return null;
+      }
     } else if (
       line.length - suffixStartIndex > 4 &&
       line.charCodeAt(suffixStartIndex) === 43 /* '+' */ &&
@@ -426,31 +477,34 @@ export default class CosmeticFilter implements IFilter {
         mask = setBit(mask, COSMETICS_MASK.isUnicode);
       }
 
-      const c0 = selector.charCodeAt(0);
-      const c1 = selector.charCodeAt(1);
-      const c2 = selector.charCodeAt(2);
+      // Classify selector
+      if (getBit(mask, COSMETICS_MASK.htmlFiltering) === false) {
+        const c0 = selector.charCodeAt(0);
+        const c1 = selector.charCodeAt(1);
+        const c2 = selector.charCodeAt(2);
 
-      // Check if we have a specific case of simple selector (id, class or
-      // href) These are the most common filters and will benefit greatly from
-      // a custom dispatch mechanism.
-      if (getBit(mask, COSMETICS_MASK.scriptInject) === false) {
-        if (c0 === 46 /* '.' */ && isSimpleSelector(selector)) {
-          mask = setBit(mask, COSMETICS_MASK.isClassSelector);
-        } else if (c0 === 35 /* '#' */ && isSimpleSelector(selector)) {
-          mask = setBit(mask, COSMETICS_MASK.isIdSelector);
-        } else if (
-          c0 === 97 /* a */ &&
-          c1 === 91 /* '[' */ &&
-          c2 === 104 /* 'h' */ &&
-          isSimpleHrefSelector(selector, 2)
-        ) {
-          mask = setBit(mask, COSMETICS_MASK.isHrefSelector);
-        } else if (
-          c0 === 91 /* '[' */ &&
-          c1 === 104 /* 'h' */ &&
-          isSimpleHrefSelector(selector, 1)
-        ) {
-          mask = setBit(mask, COSMETICS_MASK.isHrefSelector);
+        // Check if we have a specific case of simple selector (id, class or
+        // href) These are the most common filters and will benefit greatly from
+        // a custom dispatch mechanism.
+        if (getBit(mask, COSMETICS_MASK.scriptInject) === false) {
+          if (c0 === 46 /* '.' */ && isSimpleSelector(selector)) {
+            mask = setBit(mask, COSMETICS_MASK.isClassSelector);
+          } else if (c0 === 35 /* '#' */ && isSimpleSelector(selector)) {
+            mask = setBit(mask, COSMETICS_MASK.isIdSelector);
+          } else if (
+            c0 === 97 /* a */ &&
+            c1 === 91 /* '[' */ &&
+            c2 === 104 /* 'h' */ &&
+            isSimpleHrefSelector(selector, 2)
+          ) {
+            mask = setBit(mask, COSMETICS_MASK.isHrefSelector);
+          } else if (
+            c0 === 91 /* '[' */ &&
+            c1 === 104 /* 'h' */ &&
+            isSimpleHrefSelector(selector, 1)
+          ) {
+            mask = setBit(mask, COSMETICS_MASK.isHrefSelector);
+          }
         }
       }
     }
@@ -932,6 +986,10 @@ export default class CosmeticFilter implements IFilter {
     return this.selector;
   }
 
+  public getExtendedSelector(): HTMLSelector | undefined {
+    return extractHTMLSelectorFromRule(this.selector);
+  }
+
   public isUnhide(): boolean {
     return getBit(this.mask, COSMETICS_MASK.unhide);
   }
@@ -958,6 +1016,10 @@ export default class CosmeticFilter implements IFilter {
 
   public isUnicode(): boolean {
     return getBit(this.mask, COSMETICS_MASK.isUnicode);
+  }
+
+  public isHtmlFiltering(): boolean {
+    return getBit(this.mask, COSMETICS_MASK.htmlFiltering);
   }
 
   // A generic hide cosmetic filter is one that:

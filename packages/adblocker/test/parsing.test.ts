@@ -1131,6 +1131,7 @@ function cosmetic(filter: string, expected: any) {
       // Options
       isClassSelector: parsed.isClassSelector(),
       isHrefSelector: parsed.isHrefSelector(),
+      isHtmlFiltering: parsed.isHtmlFiltering(),
       isIdSelector: parsed.isIdSelector(),
       isScriptInject: parsed.isScriptInject(),
       isUnhide: parsed.isUnhide(),
@@ -1149,6 +1150,7 @@ const DEFAULT_COSMETIC_FILTER = {
   // Options
   isClassSelector: false,
   isHrefSelector: false,
+  isHtmlFiltering: false,
   isIdSelector: false,
   isScriptInject: false,
   isUnhide: false,
@@ -1338,20 +1340,78 @@ describe('Cosmetic filters', () => {
   });
 
   it('parses script inject', () => {
-    cosmetic('##script:inject(script.js, argument)', {
+    cosmetic('##+js(script.js, argument)', {
       ...DEFAULT_COSMETIC_FILTER,
       isScriptInject: true,
       selector: 'script.js, argument',
-    });
-    cosmetic('##script:inject(script.js, arg1, arg2, arg3)', {
-      ...DEFAULT_COSMETIC_FILTER,
-      isScriptInject: true,
-      selector: 'script.js, arg1, arg2, arg3',
     });
     cosmetic('##+js(script.js, arg1, arg2, arg3)', {
       ...DEFAULT_COSMETIC_FILTER,
       isScriptInject: true,
       selector: 'script.js, arg1, arg2, arg3',
+    });
+  });
+
+  describe('parses html filtering', () => {
+    it('^script:has-text()', () => {
+      cosmetic('##^script:has-text(foo bar)', {
+        ...DEFAULT_COSMETIC_FILTER,
+        isHtmlFiltering: true,
+        selector: 'script:has-text(foo bar)',
+      });
+    });
+
+    it('with domains', () => {
+      cosmetic('foo.com##^script:has-text(foo bar)', {
+        ...DEFAULT_COSMETIC_FILTER,
+        hostnames: h(['foo.com']),
+        isHtmlFiltering: true,
+        selector: 'script:has-text(foo bar)',
+      });
+    });
+
+    describe('get selector', () => {
+      for (const [rule, selector] of [
+        // Fake filters for tests
+        ['script:has-text()', ''],
+        ['script:has-text(a)', 'a'],
+        ['script:has-text(/a/)', '/a/'],
+        ['script:has-text(/a/i)', '/a/i'],
+        ['script:has-text(/a//i)', '/a//i'],
+        ['script:has-text(/a/i/)', '/a/i/'],
+        ['script:has-text(())', '()'],
+        ['script:has-text(((a))', '((a)'],
+
+        // Real filters
+        ["script:has-text('+'\\x)", "'+'x"],
+        ["script:has-text('+'\\\\x)", "'+'\\x"],
+        ['script:has-text(("0x)', '("0x'],
+        ['script:has-text((window);)', '(window);'],
+        ['script:has-text(,window\\);)', ',window);'],
+        ['script:has-text(/addLinkToCopy/i)', '/addLinkToCopy/i'],
+        ['script:has-text(/i10C/i)', '/i10C/i'],
+        ['script:has-text(/i10C/)', '/i10C/'],
+        ['script:has-text(3f87b0eaddd)', '3f87b0eaddd'],
+        ['script:has-text(ADBLOCK)', 'ADBLOCK'],
+        ['script:has-text(Inject=!)', 'Inject=!'],
+        ['script:has-text(String.fromCodePoint)', 'String.fromCodePoint'],
+        ['script:has-text(a.HTMLImageElement.prototype)', 'a.HTMLImageElement.prototype'],
+        ['script:has-text(this[atob)', 'this[atob'],
+        ['script:has-text(}(window);)', '}(window);'],
+
+        // TODO - implement support for chaining
+        // ['script:has-text(===):has-text(/[\w\W]{14000}/)', ''],
+        // ['script:has-text(===):has-text(/[\w\W]{16000}/)', ''],
+      ]) {
+        it(`${rule}`, () => {
+          const raw = `##^${rule}`;
+          const parsed = CosmeticFilter.parse(raw);
+          expect(parsed).not.toBeNull();
+          if (parsed !== null) {
+            expect(parsed.getExtendedSelector()).toStrictEqual(['script', [selector]]);
+          }
+        });
+      }
     });
   });
 
