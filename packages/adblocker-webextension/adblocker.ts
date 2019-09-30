@@ -206,15 +206,9 @@ export class WebExtensionBlocker extends FiltersEngine {
   }
 
   public disableBlockingInBrowser(): void {
-    if (this.config.loadNetworkFilters === true) {
-      chrome.webRequest.onBeforeRequest.removeListener(this.onBeforeRequest);
-      chrome.webRequest.onHeadersReceived.removeListener(this.onHeadersReceived);
-    }
-
-    // Start listening to messages coming from the content-script
-    if (this.config.loadCosmeticFilters === true) {
-      chrome.runtime.onMessage.removeListener(this.onRuntimeMessage);
-    }
+    chrome.webRequest.onBeforeRequest.removeListener(this.onBeforeRequest);
+    chrome.webRequest.onHeadersReceived.removeListener(this.onHeadersReceived);
+    chrome.runtime.onMessage.removeListener(this.onRuntimeMessage);
   }
 
   /**
