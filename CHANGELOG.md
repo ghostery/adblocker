@@ -4,6 +4,10 @@
 
 *not released*
 
+## 1.2.0
+
+*2019-10-01*
+
   * fix: cosmetics injection in Electron [#358](https://github.com/cliqz-oss/adblocker/pull/358)
   * removeListener regardless of engine config [#359](https://github.com/cliqz-oss/adblocker/pull/359)
   * feat: support subset of HTML filtering rules (^script:has-text(...)) [#339](https://github.com/cliqz-oss/adblocker/pull/339)
