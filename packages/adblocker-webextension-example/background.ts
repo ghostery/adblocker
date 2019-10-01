@@ -43,28 +43,29 @@ chrome.tabs.onActivated.addListener(({ tabId }: chrome.tabs.TabActiveInfo) =>
   updateBlockedCounter(tabId),
 );
 
-WebExtensionBlocker.fromLists(fetch, fullLists, { enableCompression: true }).then(
-  (blocker: WebExtensionBlocker) => {
-    blocker.enableBlockingInBrowser();
-    blocker.on('request-blocked', incrementBlockedCounter);
-    blocker.on('request-redirected', incrementBlockedCounter);
+WebExtensionBlocker.fromLists(fetch, fullLists, {
+  enableCompression: true,
+  enableHtmlFiltering: true,
+}).then((blocker: WebExtensionBlocker) => {
+  blocker.enableBlockingInBrowser();
+  blocker.on('request-blocked', incrementBlockedCounter);
+  blocker.on('request-redirected', incrementBlockedCounter);
 
-    blocker.on('csp-injected', (request: Request) => {
-      console.log('csp', request.url);
-    });
+  blocker.on('csp-injected', (request: Request) => {
+    console.log('csp', request.url);
+  });
 
-    blocker.on('script-injected', (script: string, url: string) => {
-      console.log('script', script.length, url);
-    });
+  blocker.on('script-injected', (script: string, url: string) => {
+    console.log('script', script.length, url);
+  });
 
-    blocker.on('style-injected', (style: string, url: string) => {
-      console.log('style', url, style.length);
-    });
+  blocker.on('style-injected', (style: string, url: string) => {
+    console.log('style', url, style.length);
+  });
 
-    blocker.on('html-filtered', (htmlSelectors: HTMLSelector[]) => {
-      console.log('html selectors', htmlSelectors);
-    });
+  blocker.on('html-filtered', (htmlSelectors: HTMLSelector[]) => {
+    console.log('html selectors', htmlSelectors);
+  });
 
-    console.log('Ready to roll!');
-  },
-);
+  console.log('Ready to roll!');
+});
