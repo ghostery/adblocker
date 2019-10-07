@@ -4,6 +4,16 @@
 
 *not released*
 
+## 1.3.0
+
+*2019-10-07*
+
+  * make it easier to use HTML filtering outside of `WebExtensionBlocker` [#368](https://github.com/cliqz-oss/adblocker/pull/368)
+    * export `isHTMLFilteringSupported`
+    * export `filterRequestHTML`
+    * add `id` attribute on `Request` (takes `requestId` value in WebExtension)
+  * export `FilterType` from main bundle.
+
 ## 1.2.0
 
 *2019-10-01*

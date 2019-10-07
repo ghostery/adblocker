@@ -19,6 +19,7 @@ export {
 export { HTMLSelector, default as CosmeticFilter } from './src/filters/cosmetic';
 export { default as NetworkFilter } from './src/filters/network';
 export {
+  FilterType,
   IListDiff,
   IRawDiff,
   detectFilterType,

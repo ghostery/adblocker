@@ -30,12 +30,14 @@ interface ElectronResponseHeaders {
  * Create an instance of `Request` from `Electron.OnBeforeRequestDetails`.
  */
 export function fromElectronDetails({
+  id,
   url,
   resourceType,
   referrer,
   webContentsId,
 }: Electron.OnBeforeRequestDetails | Electron.OnHeadersReceivedDetails): Request {
   return Request.fromRawDetails({
+    requestId: `${id}`,
     sourceUrl: referrer,
     tabId: webContentsId,
     type: (resourceType || 'other') as ElectronRequestType,
