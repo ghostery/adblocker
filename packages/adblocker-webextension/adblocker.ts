@@ -40,6 +40,7 @@ export function fromWebRequestDetails(
   details: WebRequestBeforeRequestDetails | WebRequestHeadersReceivedDetails,
 ): Request {
   return Request.fromRawDetails({
+    requestId: details.requestId,
     sourceUrl: details.initiator || details.originUrl || details.documentUrl,
     tabId: details.tabId,
     type: details.type,
@@ -105,7 +106,7 @@ const CHARSET_HTTP_EQUIV_RE = /<meta http-equiv="content-type" content="text\/ht
 /**
  * Check if HTML filtering is possible in this browser. Only Firefox is supported.
  */
-function isHTMLFilteringSupported(): boolean {
+export function isHTMLFilteringSupported(): boolean {
   // @ts-ignore
   const browser: any = typeof browser !== 'undefined' ? browser : chrome;
 
@@ -118,12 +119,12 @@ function isHTMLFilteringSupported(): boolean {
   );
 }
 
-function filterRequestHTML(details: { requestId: string }, rules: HTMLSelector[]): void {
+export function filterRequestHTML({ id }: { id: string }, rules: HTMLSelector[]): void {
   // @ts-ignore
   const browser: any = typeof browser !== 'undefined' ? browser : chrome;
 
   // Create filter to observe loading of resource
-  const filter: StreamFilter = browser.webRequest.filterResponseData(details.requestId);
+  const filter: StreamFilter = browser.webRequest.filterResponseData(id);
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
   const htmlFilter = new StreamingHtmlFilter(rules);
@@ -211,13 +212,7 @@ export class WebExtensionBlocker extends FiltersEngine {
     chrome.runtime.onMessage.removeListener(this.onRuntimeMessage);
   }
 
-  /**
-   * Deal with request cancellation (`{ cancel: true }`) and redirection (`{ redirectUrl: '...' }`).
-   */
-  private onBeforeRequest = (
-    details: WebRequestBeforeRequestDetails,
-  ): chrome.webRequest.BlockingResponse => {
-    const request = fromWebRequestDetails(details);
+  public performHTMLFiltering(request: Request): void {
     if (request.isMainFrame()) {
       // Here we optionally perform HTML filtering. This can only be done if:
       // 1. `enableHtmlFiltering` is set to `true`.
@@ -226,10 +221,21 @@ export class WebExtensionBlocker extends FiltersEngine {
       if (this.config.enableHtmlFiltering === true && isHTMLFilteringSupported()) {
         const htmlFilters = this.getHtmlFilters(request);
         if (htmlFilters.length !== 0) {
-          filterRequestHTML(details, htmlFilters);
+          filterRequestHTML(request, htmlFilters);
         }
       }
+    }
+  }
 
+  /**
+   * Deal with request cancellation (`{ cancel: true }`) and redirection (`{ redirectUrl: '...' }`).
+   */
+  private onBeforeRequest = (
+    details: WebRequestBeforeRequestDetails,
+  ): chrome.webRequest.BlockingResponse => {
+    const request = fromWebRequestDetails(details);
+    if (request.isMainFrame()) {
+      this.performHTMLFiltering(request);
       return {};
     }
 

@@ -11,7 +11,7 @@ import CosmeticFilter from './filters/cosmetic';
 import NetworkFilter from './filters/network';
 import { fastStartsWith, fastStartsWithFrom } from './utils';
 
-const enum FilterType {
+export const enum FilterType {
   NOT_SUPPORTED = 0,
   NETWORK = 1,
   COSMETIC = 2,

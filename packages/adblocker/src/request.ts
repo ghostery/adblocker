@@ -79,6 +79,7 @@ export type RequestType = WebRequestType | ElectronRequestType | PuppeteerReques
 const TOKENS_BUFFER = new TokensBuffer(300);
 
 export interface IRequestInitialization {
+  requestId: string;
   tabId: number;
 
   url: string;
@@ -97,6 +98,7 @@ export default class Request {
    * Create an instance of `Request` from raw request details.
    */
   public static fromRawDetails({
+    requestId = '0',
     tabId = 0,
     url = '',
     hostname,
@@ -123,6 +125,7 @@ export default class Request {
 
     // source URL
     return new Request({
+      requestId,
       tabId,
 
       domain,
@@ -144,6 +147,7 @@ export default class Request {
   public readonly isFirstParty: boolean;
   public readonly isThirdParty: boolean;
 
+  public readonly id: string;
   public readonly tabId: number;
   public readonly url: string;
   public readonly hostname: string;
@@ -159,6 +163,7 @@ export default class Request {
   private fuzzySignature: Uint32Array | undefined;
 
   constructor({
+    requestId,
     tabId,
 
     type,
@@ -170,6 +175,7 @@ export default class Request {
     sourceDomain,
     sourceHostname,
   }: IRequestInitialization) {
+    this.id = requestId;
     this.tabId = tabId;
     this.type = type;
 

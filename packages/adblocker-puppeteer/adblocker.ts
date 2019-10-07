@@ -25,8 +25,10 @@ import {
  */
 export function fromPuppeteerDetails(details: puppeteer.Request): Request {
   const frame = details.frame();
+  const sourceUrl = frame !== null ? frame.url() : undefined;
   return Request.fromRawDetails({
-    sourceUrl: frame !== null ? frame.url() : undefined,
+    requestId: `${details.resourceType()} ${details.url()} ${sourceUrl}`,
+    sourceUrl,
     type: details.resourceType(),
     url: details.url(),
   });
