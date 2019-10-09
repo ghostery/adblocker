@@ -16,6 +16,7 @@ import {
   fetchLists,
   fetchPrebuilt,
   fetchResources,
+  fullLists,
 } from '../fetch';
 import CosmeticFilter, { HTMLSelector } from '../filters/cosmetic';
 import NetworkFilter from '../filters/network';
@@ -25,7 +26,7 @@ import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 
-export const ENGINE_VERSION = 39;
+export const ENGINE_VERSION = 40;
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -127,6 +128,26 @@ export default class FilterEngine extends EventEmitter<
       .catch(() => {
         console.log('failed downloading pre-built, fallback to fetching lists');
         return this.fromLists(fetchImpl, adsAndTrackingLists) as Promise<InstanceType<T>>;
+      });
+  }
+
+  /**
+   * Same as `fromPrebuiltAdsAndTracking(...)` but also contains annoyances
+   * rules to block things like cookie notices.
+   */
+  public static fromPrebuiltFull<T extends typeof FilterEngine>(
+    this: T,
+    fetchImpl: Fetch = fetch,
+  ): Promise<InstanceType<T>> {
+    return fetchPrebuilt(
+      fetchImpl,
+      'https://cdn.cliqz.com/adblocker/configs/desktop-full/allowed-lists.json',
+      ENGINE_VERSION,
+    )
+      .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
+      .catch(() => {
+        console.log('failed downloading pre-built, fallback to fetching lists');
+        return this.fromLists(fetchImpl, fullLists) as Promise<InstanceType<T>>;
       });
   }
 

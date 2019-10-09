@@ -4,6 +4,13 @@
 
 *not released*
 
+## 1.3.1
+
+*2019-10-09*
+
+  * fix: fetching of resources.txt for adblocker [#373](https://github.com/cliqz-oss/adblocker/pull/373)
+  * feat: add new `fromPrebuiltFull(...)` helper to initialize engine [#373](https://github.com/cliqz-oss/adblocker/pull/373)
+
 ## 1.3.0
 
 *2019-10-07*
