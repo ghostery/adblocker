@@ -33,9 +33,10 @@ export function fetchPrebuilt(
 export const adsLists = [
   'https://easylist.to/easylist/easylist.txt',
   'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=0&mimetype=plaintext',
-  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
+  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/annoyances.txt',
   'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
   'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
+  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
   'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
 
   'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
@@ -49,7 +50,6 @@ export const adsAndTrackingLists = [
 
 export const fullLists = [
   ...adsAndTrackingLists,
-  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/annoyances.txt',
   'https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt',
   'https://www.fanboy.co.nz/fanboy-cookiemonster.txt',
 ];
@@ -65,8 +65,10 @@ function getResourcesUrl(fetch: Fetch): Promise<string> {
   return fetch('https://cdn.cliqz.com/adblocker/resources/ublock-resources/metadata.json')
     .then((response) => response.json())
     .then(
-      ({ latestRevision }) =>
-        `https://cdn.cliqz.com/adblocker/resources/ublock-resources/${latestRevision}/list.txt`,
+      ({ revisions }) =>
+        `https://cdn.cliqz.com/adblocker/resources/ublock-resources/${
+          revisions[revisions.length - 1]
+        }/list.txt`,
     );
 }
 
@@ -75,5 +77,5 @@ function getResourcesUrl(fetch: Fetch): Promise<string> {
  * the page or redirect request to data URLs.
  */
 export function fetchResources(fetch: Fetch): Promise<string> {
-  return getResourcesUrl(fetch).then(url => fetchResource(fetch, url));
+  return getResourcesUrl(fetch).then((url) => fetchResource(fetch, url));
 }
