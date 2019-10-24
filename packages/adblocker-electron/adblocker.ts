@@ -22,10 +22,6 @@ const PRELOAD_PATH = join(__dirname, './preload.js');
 // https://stackoverflow.com/questions/48854265/why-do-i-see-an-electron-security-warning-after-updating-my-electron-project-t
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 
-interface ElectronResponseHeaders {
-  [name: string]: string[];
-}
-
 /**
  * Create an instance of `Request` from `Electron.OnBeforeRequestDetails`.
  */
@@ -35,7 +31,7 @@ export function fromElectronDetails({
   resourceType,
   referrer,
   webContentsId,
-}: Electron.OnBeforeRequestDetails | Electron.OnHeadersReceivedDetails): Request {
+}: Electron.OnHeadersReceivedListenerDetails | Electron.OnBeforeRequestListenerDetails): Request {
   return Request.fromRawDetails({
     requestId: `${id}`,
     sourceUrl: referrer,
@@ -52,6 +48,7 @@ export class ElectronBlocker extends FiltersEngine {
   public enableBlockingInSession(ses: Electron.Session): void {
     if (this.config.loadNetworkFilters === true) {
       ses.webRequest.onHeadersReceived({ urls: ['<all_urls>'] }, this.onHeadersReceived);
+
       ses.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onBeforeRequest);
     }
 
@@ -78,7 +75,9 @@ export class ElectronBlocker extends FiltersEngine {
 
     if (this.config.loadCosmeticFilters === true) {
       ses.setPreloads(ses.getPreloads().filter(p => p !== PRELOAD_PATH));
+      // @ts-ignore
       ipcMain.removeListener('get-cosmetic-filters', this.onGetCosmeticFilters);
+      // @ts-ignore
       ipcMain.removeListener('is-mutation-observer-enabled', this.onIsMutationObserverEnabled);
     }
   }
@@ -132,12 +131,12 @@ export class ElectronBlocker extends FiltersEngine {
   }
 
   private onHeadersReceived = (
-    details: Electron.OnHeadersReceivedDetails,
+    details: Electron.OnHeadersReceivedListenerDetails,
     callback: (a: Electron.Response) => void,
   ): void => {
     const CSP_HEADER_NAME = 'content-security-policy';
     const policies: string[] = [];
-    const responseHeaders: ElectronResponseHeaders = (details.responseHeaders as ElectronResponseHeaders) || {};
+    const responseHeaders: Record<string, string> = (details.responseHeaders || {});
 
     if (details.resourceType === 'mainFrame' || details.resourceType === 'subFrame') {
       const rawCSP: string | undefined = this.getCSPDirectives(fromElectronDetails(details));
@@ -157,7 +156,7 @@ export class ElectronBlocker extends FiltersEngine {
           }
         }
 
-        responseHeaders[CSP_HEADER_NAME] = policies;
+        responseHeaders[CSP_HEADER_NAME] = policies.join(';');
 
         // @ts-ignore
         callback({ responseHeaders });
@@ -169,7 +168,7 @@ export class ElectronBlocker extends FiltersEngine {
   }
 
   private onBeforeRequest = (
-    details: Electron.OnBeforeRequestDetails,
+    details: Electron.OnBeforeRequestListenerDetails,
     callback: (a: Electron.Response) => void,
   ): void => {
     const request = fromElectronDetails(details);
@@ -191,7 +190,9 @@ export class ElectronBlocker extends FiltersEngine {
 
   private injectStyles(sender: Electron.WebContents, styles: string): void {
     if (styles.length > 0) {
-      sender.insertCSS(styles);
+      sender.insertCSS(styles, {
+        cssOrigin: 'user',
+      });
     }
   }
 }
