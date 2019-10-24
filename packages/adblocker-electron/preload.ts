@@ -58,7 +58,7 @@ function getCosmeticsFilters(data: IBackgroundCallback) {
   }, 1);
 }
 
-if (window === window.top && window.location.href.startsWith('chrome-devtools://') === false) {
+if (window === window.top && window.location.href.startsWith('devtools://') === false) {
   getCosmeticsFilters({ lifecycle: 'start', ids: [], classes: [], hrefs: [] });
 
   // On DOMContentLoaded, start monitoring the DOM. This means that we will
