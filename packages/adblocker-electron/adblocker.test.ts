@@ -1,7 +1,7 @@
 import { ElectronBlocker, ElectronRequestType, fromElectronDetails } from './adblocker';
 
 describe('#fromElectronDetails', () => {
-  const baseRequest: Electron.OnBeforeRequestDetails = {
+  const baseRequest: Electron.OnBeforeRequestListenerDetails = {
     id: 0,
     method: 'GET',
     referrer: 'https://sub.source.com',
