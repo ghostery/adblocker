@@ -600,6 +600,8 @@ export default class NetworkFilter implements IFilter {
         ) {
           mask = setBit(mask, NETWORK_FILTER_MASK.fromWebsocket);
           mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+          mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttp);
+          mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttps);
           filterIndexStart = filterIndexEnd;
         } else if (
           filterIndexEnd - filterIndexStart === 7 &&
