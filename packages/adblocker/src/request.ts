@@ -195,17 +195,21 @@ export default class Request {
 
     // Check protocol
     this.isSupported = true;
-    if (this.url.startsWith('http:')) {
+    if (
+      this.type === 'websocket' ||
+      this.url.startsWith('ws:') ||
+      this.url.startsWith('wss:')
+    ) {
+      this.isHttp = false;
+      this.isHttps = false;
+      this.type = 'websocket';
+      this.isSupported = true;
+    } else if (this.url.startsWith('http:')) {
       this.isHttp = true;
       this.isHttps = false;
     } else if (this.url.startsWith('https:')) {
       this.isHttps = true;
       this.isHttp = false;
-    } else if (this.url.startsWith('ws:') || this.url.startsWith('wss:')) {
-      this.isHttp = false;
-      this.isHttps = false;
-      this.type = 'websocket';
-      this.isSupported = true;
     } else {
       this.isHttp = false;
       this.isHttps = false;

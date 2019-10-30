@@ -6074,12 +6074,33 @@ export default [
     url: 'http://s.nflcdn.com/static/site/7.5/scripts/ad.js',
   },
   {
-    check: true,
+    filters: [],
+    sourceUrl: 'https://www.youporn.com',
+    type: 'other',
+    url: 'https://',
+  },
+  {
     filters: [
       '|ws://$other,domain=pornhub.com|redtube.com|redtube.com.br|tube8.com|tube8.es|tube8.fr|xtube.com|youporn.com|youporngay.com',
     ],
     sourceUrl: 'https://www.youporn.com',
     type: 'other',
+    url: 'wss://',
+  },
+  {
+    filters: [
+      '|ws://$other,domain=pornhub.com|redtube.com|redtube.com.br|tube8.com|tube8.es|tube8.fr|xtube.com|youporn.com|youporngay.com',
+    ],
+    sourceUrl: 'https://www.youporn.com',
+    type: 'other',
+    url: 'ws://',
+  },
+  {
+    filters: [
+      '|ws://$other,domain=pornhub.com|redtube.com|redtube.com.br|tube8.com|tube8.es|tube8.fr|xtube.com|youporn.com|youporngay.com',
+    ],
+    sourceUrl: 'https://www.youporn.com',
+    type: 'websocket',
     url: 'https://',
   },
   {
@@ -16486,11 +16507,28 @@ export default [
     url: 'https://delivery.trafficforce.com',
   },
   {
-    check: true,
-    filters: ['|ws://$domain=4shared.com'],
+    filters: [],
     sourceUrl: 'https://www.4shared.com',
     type: 'stylesheet',
     url: 'https://',
+  },
+  {
+    filters: ['|ws://$domain=4shared.com'],
+    sourceUrl: 'https://www.4shared.com',
+    type: 'websocket',
+    url: 'https://',
+  },
+  {
+    filters: ['|ws://$domain=4shared.com'],
+    sourceUrl: 'https://www.4shared.com',
+    type: 'stylesheet',
+    url: 'wss://',
+  },
+  {
+    filters: ['|ws://$domain=4shared.com'],
+    sourceUrl: 'https://www.4shared.com',
+    type: 'stylesheet',
+    url: 'ws://',
   },
   {
     check: true,

@@ -4,6 +4,10 @@
 
 *not released*
 
+  * fix handling of websocket filters [#388](https://github.com/cliqz-oss/adblocker/pull/388)
+  * bump puppeteer to v2 [#386](https://github.com/cliqz-oss/adblocker/pull/386)
+  * bump electron to v7 + inject CSS with 'user' origin [#385](https://github.com/cliqz-oss/adblocker/pull/385)
+
 ## 1.3.1
 
 *2019-10-09*
