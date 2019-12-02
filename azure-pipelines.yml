@@ -1,0 +1,44 @@
+variables:
+  YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
+
+strategy:
+  matrix:
+    node_10_x:
+      node_version: 10.x
+    node_12_x:
+      node_version: 12.x
+    node_13_x:
+      node_version: 13.x
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: NodeTool@0 
+  inputs:
+    versionSpec: $(node_version)
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install --global yarn@latest
+  displayName: 'install dependencies'
+
+- task: Cache@2
+  inputs:
+    key: 'yarn | "$(Agent.OS)" | yarn.lock'
+    restoreKeys: |
+       yarn | "$(Agent.OS)"
+       yarn
+    path: $(YARN_CACHE_FOLDER)
+  displayName: Cache Yarn packages
+
+- script: |
+    yarn bootstrap
+    yarn lint
+    yarn build
+    yarn bundle
+    yarn test
+  displayName: 'build & test'
