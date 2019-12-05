@@ -217,7 +217,7 @@ Checking for cosmetics injection:
 const {
   styles, // stylesheet to inject in the page
   scripts, // Array of scriptlets to inject in the page
-} = engine.getCosmeticFilters({
+} = engine.getCosmeticsFilters({
   url: 'https://sub.domain.com/path',
   hostname: 'sub.domain.com',
   domain: 'domain.com',
