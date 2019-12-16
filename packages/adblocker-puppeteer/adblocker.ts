@@ -10,15 +10,9 @@
 import * as puppeteer from 'puppeteer';
 import { parse } from 'tldts-experimental';
 
-import {
-  FiltersEngine,
-  Request,
-} from '@cliqz/adblocker';
+import { FiltersEngine, Request } from '@cliqz/adblocker';
 
-import {
-  autoRemoveScript,
-  extractFeaturesFromDOM,
-} from '@cliqz/adblocker-content';
+import { autoRemoveScript, extractFeaturesFromDOM } from '@cliqz/adblocker-content';
 
 /**
  * Create an instance of `Request` from `puppeteer.Request`.
@@ -126,11 +120,15 @@ export class PuppeteerBlocker extends FiltersEngine {
           });
       }
     }
-  }
+  };
 
   private onRequest = (details: puppeteer.Request): void => {
-    const request = fromPuppeteerDetails(details)
-    if (request.isMainFrame()) {
+    const request = fromPuppeteerDetails(details);
+    const frame = details.frame();
+    if (
+      request.isMainFrame() ||
+      (request.type === 'document' && frame !== null && frame.parentFrame() === null)
+    ) {
       details.continue();
       return;
     }
@@ -148,7 +146,7 @@ export class PuppeteerBlocker extends FiltersEngine {
     } else {
       details.continue();
     }
-  }
+  };
 }
 
 // Re-export symboles from @cliqz/adblocker for convenience
