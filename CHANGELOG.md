@@ -4,6 +4,8 @@
 
 *not released*
 
+  * puppeteer: do not block main frames [#401](https://github.com/cliqz-oss/adblocker/pull/401)
+
 ## 1.4.0
 
 *2019-11-12*
