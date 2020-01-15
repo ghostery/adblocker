@@ -21,9 +21,9 @@ const CHANGELOG =   execSync(
 core.setOutput(
   "updated",
   (
-    CHANGELOG !== readFileSync(CHANGELOG_PATH, 'utf-8')
-      ? '1'
-      : '0'
+    CHANGELOG === readFileSync(CHANGELOG_PATH, 'utf-8').trim()
+      ? '0'
+      : '1'
   ),
 );
 
