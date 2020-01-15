@@ -1,3 +1,12 @@
+## v1.4.12 (2020-01-15)
+
+#### :house: Internal
+* [#409](https://github.com/cliqz-oss/adblocker/pull/409) Add action to release on NPM ([@remusao](https://github.com/remusao))
+
+#### Committers: 1
+- Rémi ([@remusao](https://github.com/remusao))
+
+
 ## v1.4.2 (2020-01-15)
 
 #### :memo: Documentation
