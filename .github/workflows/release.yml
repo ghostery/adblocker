@@ -13,12 +13,12 @@ jobs:
 
       - name: Generate the changelog
         id: changelog
-        uses: cliqz-oss/adblocker/generate-changelog@master
+        uses: cliqz-oss/adblocker/actions/generate-changelog@master
         env:
           GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create a GitHub release
-        uses: cliqz-oss/adblocker/publish-github-release@master
+        uses: cliqz-oss/adblocker/actions/publish-github-release@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
