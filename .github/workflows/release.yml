@@ -43,6 +43,7 @@ jobs:
       - name: Create an NPM release
         run: |
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+          yarn bootstrap
           yarn npm-publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
