@@ -1,0 +1,37 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  release:
+    name: Trigger release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Generate the changelog
+        id: changelog
+        uses: cliqz-oss/adblocker/generate-changelog
+        env:
+          GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create a GitHub release
+        uses: cliqz-oss/adblocker/publish-github-release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit CHANGELOG.md
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add CHANGELOG.md
+          git commit -m "Update CHANGELOG.md [skip ci]" --no-verify --quiet
+
+      - name: Push CHANGELOG.md
+        uses: ad-m/github-push-action@v0.5.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: 'master'
+          force: false
