@@ -1,6 +1,6 @@
 name: Tests
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   test:
@@ -21,6 +21,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           registry-url: https://registry.npmjs.org
+
       - name: Get yarn cache
         id: yarn-cache
         run: echo "::set-output name=dir::$(yarn cache dir)"
