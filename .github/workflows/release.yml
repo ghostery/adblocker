@@ -33,5 +33,7 @@ jobs:
 
       - name: Create a GitHub release
         uses: cliqz-oss/adblocker/actions/publish-github-release@master
+        env:
+          GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

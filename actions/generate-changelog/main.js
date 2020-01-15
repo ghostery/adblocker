@@ -14,7 +14,7 @@ writeFileSync(
     `node ${resolve(
       __dirname,
       'node_modules/.bin/lerna-changelog',
-    )} --from v1.0.0 --to ${currentTag}`,
+    )} --from v0.12.0 --to ${currentTag}`,
   ).toString().trim(),
   'utf-8',
 );

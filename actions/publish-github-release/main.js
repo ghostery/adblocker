@@ -1,4 +1,5 @@
 const { resolve } = require('path');
+
 const { execSync } = require('child_process');
 execSync(`cd ${__dirname}; npm ci`);
 
@@ -10,10 +11,12 @@ const token = core.getInput('token', { required: true });
 const currentTag = execSync(`git describe --abbrev=0 --tags ${process.env.GITHUB_SHA}`)
   .toString()
   .trim();
+console.log(`currentTag: '${currentTag}'`);
 
 const lastTag = execSync(`git describe --abbrev=0 --tags ${currentTag}^`)
   .toString()
   .trim();
+console.log(`lastTag: '${lastTag}'`);
 
 const changelog = execSync(
   `node ${resolve(
