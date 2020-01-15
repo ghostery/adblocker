@@ -18,7 +18,14 @@ const CHANGELOG =   execSync(
   )} --from v0.12.0 --to ${currentTag}`,
 ).toString().trim();
 
-core.setOutput("updated", CHANGELOG !== readFileSync(CHANGELOG_PATH, 'utf-8'));
+core.setOutput(
+  "updated",
+  (
+    CHANGELOG !== readFileSync(CHANGELOG_PATH, 'utf-8')
+      ? '1'
+      : '0'
+  ),
+);
 
 writeFileSync(
   CHANGELOG_PATH,
