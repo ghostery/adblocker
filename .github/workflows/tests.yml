@@ -36,8 +36,11 @@ jobs:
       - name: Bootstrap
         run: yarn bootstrap
 
+      # - name: Metalint
+      #   run: yarn metalint
+
       - name: Lint
-        run: yarn lint || exit 0
+        run: yarn lint
 
       - name: Build
         run: yarn build
