@@ -1,5 +1,11 @@
 # Adblocker
 
+![npm](https://img.shields.io/npm/v/@cliqz/adblocker?color=brightgreen)
+![node](https://img.shields.io/node/v/@cliqz/adblocker)
+![tests](https://github.com/cliqz-oss/adblocker/workflows/Tests/badge.svg)
+![dependabot](https://api.dependabot.com/badges/status?host=github&repo=cliqz-oss/adblocker)
+![license](https://img.shields.io/github/license/cliqz-oss/adblocker)
+
 > Efficient, pure-Javascript, multi-platform adblocker library, by Cliqz.
 
 ## Features
