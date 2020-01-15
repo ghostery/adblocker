@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const path_1 = require("path");
 const child_process_1 = require("child_process");
-child_process_1.execSync(`cd ${__dirname}; npm ci`);
+const path_1 = require("path");
 const core_1 = require("@actions/core");
 const github_1 = require("@actions/github");
 const token = core_1.getInput('token', { required: true });

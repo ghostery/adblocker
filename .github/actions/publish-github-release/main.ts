@@ -1,7 +1,5 @@
-import { resolve } from 'path';
-
 import { execSync } from 'child_process';
-execSync(`cd ${__dirname}; npm ci`);
+import { resolve } from 'path';
 
 import { getInput } from '@actions/core';
 import { GitHub } from '@actions/github';

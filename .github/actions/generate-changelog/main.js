@@ -1,9 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const child_process_1 = require("child_process");
 const fs_1 = require("fs");
 const path_1 = require("path");
-const child_process_1 = require("child_process");
-child_process_1.execSync(`cd ${__dirname}; npm ci`);
 const core_1 = require("@actions/core");
 (() => {
     const currentTag = child_process_1.execSync(`git describe --abbrev=0 --tags ${process.env.GITHUB_SHA}`)
