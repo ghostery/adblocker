@@ -29,5 +29,5 @@ const changelog = execSync(
   owner: 'cliqz-oss',
   repo: 'adblocker',
   tag_name: currentTag,
-  body: JSON.parse(changelog),
+  body: changelog,
 });
