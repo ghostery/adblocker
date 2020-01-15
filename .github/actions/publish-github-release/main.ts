@@ -1,12 +1,12 @@
-const { resolve } = require('path');
+import { resolve } from 'path';
 
-const { execSync } = require('child_process');
+import { execSync } from 'child_process';
 execSync(`cd ${__dirname}; npm ci`);
 
-const core = require('@actions/core');
-const github = require('@actions/github');
+import { getInput } from '@actions/core';
+import { GitHub } from '@actions/github';
 
-const token = core.getInput('token', { required: true });
+const token = getInput('token', { required: true });
 
 const currentTag = execSync(`git describe --abbrev=0 --tags ${process.env.GITHUB_SHA}`)
   .toString()
@@ -31,9 +31,9 @@ if (indexAfterTitle !== -1) {
   changelog = changelog.slice(indexAfterTitle).trim();
 }
 
-(new github.GitHub(token)).repos.createRelease({
+(new GitHub(token)).repos.createRelease({
+  body: changelog,
   owner: 'cliqz-oss',
   repo: 'adblocker',
   tag_name: currentTag,
-  body: changelog,
 });
