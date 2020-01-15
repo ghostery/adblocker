@@ -18,12 +18,18 @@ const lastTag = execSync(`git describe --abbrev=0 --tags ${currentTag}^`)
   .trim();
 console.log(`lastTag: '${lastTag}'`);
 
-const changelog = execSync(
+let changelog = execSync(
   `node ${resolve(
     __dirname,
     'node_modules/.bin/lerna-changelog',
   )} --from ${lastTag} --to ${currentTag}`,
 ).toString().trim();
+
+// Remove header, which is redundant with GitHub metadata
+const indexAfterTitle = changelog.indexOf('\n\n');
+if (indexAfterTitle !== -1) {
+  changelog = changelog.slice(indexAfterTitle).trim();
+}
 
 (new github.GitHub(token)).repos.createRelease({
   owner: 'cliqz-oss',
