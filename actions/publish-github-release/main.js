@@ -1,3 +1,4 @@
+const { resolve } = require('path');
 const { execSync } = require('child_process');
 execSync(`cd ${__dirname}; npm ci`);
 

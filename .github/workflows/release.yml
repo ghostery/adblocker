@@ -17,11 +17,6 @@ jobs:
         env:
           GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create a GitHub release
-        uses: cliqz-oss/adblocker/actions/publish-github-release@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Commit CHANGELOG.md
         run: |
           git config --local user.email "action@github.com"
@@ -35,3 +30,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: 'master'
           force: false
+
+      - name: Create a GitHub release
+        uses: cliqz-oss/adblocker/actions/publish-github-release@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
