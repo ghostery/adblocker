@@ -62,7 +62,7 @@
     "test": "lerna run --concurrency 1 test",
     "clean": "lerna run --parallel clean && lerna clean --yes && rimraf node_modules",
     "release": "lerna version",
-    "npm-publish": "yarn clean && yarn bootstrap && yarn build && yarn bundle && lerna publish --ignore-scripts --yes from-package"
+    "ci:npm-publish": "lerna publish --ignore-scripts --yes from-package"
   },
   "devDependencies": {
     "@cliqz/metalint": "^0.2.0",
