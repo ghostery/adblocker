@@ -1,0 +1,32 @@
+{
+  "private": true,
+  "name": "update-changelog",
+  "description": "GitHub action to automatically generate CHANGELOG.md",
+  "author": {
+    "name": "Cliqz"
+  },
+  "version": "1.4.19",
+  "license": "MPL-2.0",
+  "scripts": {
+    "clean": "rimraf main.js.map main.js",
+    "lint": "tslint --config ../../../tslint.json --project ./tsconfig.json",
+    "build": "tsc --build ./tsconfig.json",
+    "bundle": "yarn build"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.1",
+    "lerna-changelog": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.0.3",
+    "rimraf": "^3.0.0",
+    "tslint": "^5.18.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.5.3"
+  },
+  "homepage": "https://github.com/cliqz-oss/adblocker#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/cliqz-oss/adblocker.git"
+  }
+}

@@ -11,9 +11,16 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: Build actions
+        run: |
+          yarn bootstrap
+          yarn build
+          yarn bundle
+          yarn lint
+
       - name: Generate the changelog
         id: changelog
-        uses: cliqz-oss/adblocker/actions/generate-changelog@master
+        uses: cliqz-oss/adblocker/.github/actions/generate-changelog@master
         env:
           GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
 
@@ -34,7 +41,7 @@ jobs:
           force: false
 
       - name: Create a GitHub release
-        uses: cliqz-oss/adblocker/actions/publish-github-release@master
+        uses: cliqz-oss/adblocker/.github/actions/publish-github-release@master
         env:
           GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -43,7 +50,6 @@ jobs:
       - name: Create an NPM release
         run: |
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-          yarn bootstrap
-          yarn npm-publish
+          yarn ci:npm-publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
