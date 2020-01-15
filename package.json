@@ -53,7 +53,8 @@
   ],
   "scripts": {
     "bootstrap": "npx lerna bootstrap",
-    "lint": "metalint && lerna run --parallel lint",
+    "metalint": "metalint",
+    "lint": "lerna run --parallel lint",
     "watch": "tsc --build ./packages/tsconfig.project.json --watch",
     "build": "tsc --build ./packages/tsconfig.project.json",
     "bundle": "lerna run bundle",
