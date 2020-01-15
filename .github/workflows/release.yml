@@ -39,3 +39,10 @@ jobs:
           GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create an NPM release
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+          yarn publish
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
