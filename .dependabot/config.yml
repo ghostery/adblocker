@@ -1,0 +1,26 @@
+version: 1
+
+update_configs:
+  - package_manager: "javascript"
+    directory: "/"
+    update_schedule: "live"
+    target_branch: "master"
+    allowed_updates:
+      - match:
+        dependency_type: "development"
+        update_type: "all"
+      - match:
+        dependency_type: "production"
+        update_type: "all"
+    automerged_updates:
+      - match:
+          dependency_type: "development"
+          update_type: "all"
+      - match:
+          dependency_type: "production"
+          update_type: "semver:patch"
+    default_reviewers:
+      - "remusao"
+    default_labels:
+      - "PR: Internal :house:"
+      - "dependencies"
