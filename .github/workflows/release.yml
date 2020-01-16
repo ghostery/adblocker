@@ -30,7 +30,7 @@ jobs:
 
       - name: Generate the changelog
         id: changelog
-        uses: ./.github/actions/generate-changelog@master
+        uses: ./.github/actions/generate-changelog
         env:
           GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
 
@@ -51,7 +51,7 @@ jobs:
           force: false
 
       - name: Create a GitHub release
-        uses: ./.github/actions/publish-github-release@master
+        uses: ./.github/actions/publish-github-release
         env:
           GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
         with:
