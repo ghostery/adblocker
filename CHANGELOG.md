@@ -1,3 +1,19 @@
+## v1.5.0 (2020-01-16)
+
+#### :nail_care: Polish
+* `adblocker`
+  * [#414](https://github.com/cliqz-oss/adblocker/pull/414) Implement retry mechanism while fetching resources ([@remusao](https://github.com/remusao))
+* `adblocker-webextension`
+  * [#413](https://github.com/cliqz-oss/adblocker/pull/413) webextension: handler for runtime messages now returns a promise ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+* `adblocker-benchmarks`, `adblocker-circumvention`, `adblocker-content`, `adblocker-electron-example`, `adblocker-electron`, `adblocker-puppeteer-example`, `adblocker-puppeteer`, `adblocker-webextension-cosmetics`, `adblocker-webextension-example`, `adblocker-webextension`, `adblocker`
+  * [#415](https://github.com/cliqz-oss/adblocker/pull/415) Clean-up tooling ([@remusao](https://github.com/remusao))
+
+#### Committers: 1
+- Rémi ([@remusao](https://github.com/remusao))
+
+
 ## v1.4.20 (2020-01-15)
 
 #### :house: Internal
