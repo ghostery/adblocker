@@ -231,8 +231,16 @@ export class WebExtensionBlocker extends FiltersEngine {
     msg: IBackgroundCallback & { action?: string },
     sender: chrome.runtime.MessageSender,
   ): Promise<any> => {
-    if (sender.tab === undefined || sender.tab.id === undefined || sender.frameId === undefined) {
-      return;
+    if (sender.tab === undefined) {
+      throw new Error('required "sender.tab" information is not available');
+    }
+
+    if (sender.tab.id === undefined) {
+      throw new Error('required "sender.tab.id" information is not available');
+    }
+
+    if (sender.frameId === undefined) {
+      throw new Error('required "sender.frameId" information is not available');
     }
 
     // Make sure we only listen to messages coming from our content-script
@@ -369,33 +377,45 @@ export class WebExtensionBlocker extends FiltersEngine {
       allFrames?: boolean;
     },
   ): Promise<void> {
-    if (
-      styles.length > 0 &&
-      typeof chrome !== 'undefined' &&
-      chrome.tabs &&
-      chrome.tabs.insertCSS
-    ) {
-      return new Promise((resolve, reject) => {
-        chrome.tabs.insertCSS(
-          tabId,
-          {
-            allFrames,
-            code: styles,
-            cssOrigin: 'user',
-            frameId,
-            matchAboutBlank: true,
-            runAt: 'document_start',
-          },
-          () => {
-            if (chrome.runtime.lastError) {
-              reject(chrome.runtime.lastError.message);
-            } else {
-              resolve();
-            }
-          },
-        );
-      });
+    // Abort if stylesheet is empty.
+    if (styles.length === 0) {
+      return;
     }
+
+    // Abort if `chrome` global is not accessible.
+    if (typeof chrome === 'undefined') {
+      throw new Error('required "chrome" global object is not accessible');
+    }
+
+    // Abort if `chrome.tabs.insertCSS` is not available.
+    if (
+      chrome.tabs === undefined ||
+      chrome.tabs.insertCSS === undefined
+    ) {
+      throw new Error('required "chrome.tabs.insertCSS" is not available');
+    }
+
+    // Proceed with stylesheet injection.
+    return new Promise((resolve, reject) => {
+      chrome.tabs.insertCSS(
+        tabId,
+        {
+          allFrames,
+          code: styles,
+          cssOrigin: 'user',
+          frameId,
+          matchAboutBlank: true,
+          runAt: 'document_start',
+        },
+        () => {
+          if (chrome.runtime.lastError) {
+            reject(chrome.runtime.lastError.message);
+          } else {
+            resolve();
+          }
+        },
+      );
+    });
   }
 }
 
