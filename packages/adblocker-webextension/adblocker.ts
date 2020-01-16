@@ -360,9 +360,11 @@ export class WebExtensionBlocker extends FiltersEngine {
     sender: chrome.runtime.MessageSender,
     sendResponse: (response?: any) => void,
   ): void => {
-    this.handleRuntimeMessage(msg, sender).then(sendResponse).catch((ex) => {
-      console.error('Error while handling runtime message:', ex);
-    });
+    this.handleRuntimeMessage(msg, sender)
+      .then(sendResponse)
+      .catch((ex) => {
+        console.error('Error while handling runtime message:', ex);
+      });
   };
 
   private async injectStylesWebExtension(
@@ -388,10 +390,7 @@ export class WebExtensionBlocker extends FiltersEngine {
     }
 
     // Abort if `chrome.tabs.insertCSS` is not available.
-    if (
-      chrome.tabs === undefined ||
-      chrome.tabs.insertCSS === undefined
-    ) {
+    if (chrome.tabs === undefined || chrome.tabs.insertCSS === undefined) {
       throw new Error('required "chrome.tabs.insertCSS" is not available');
     }
 
