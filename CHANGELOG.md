@@ -1,3 +1,12 @@
+## v1.4.20 (2020-01-15)
+
+#### :house: Internal
+* [#412](https://github.com/cliqz-oss/adblocker/pull/412) Migrate local GitHub actions to TypeScript ([@remusao](https://github.com/remusao))
+
+#### Committers: 1
+- Rémi ([@remusao](https://github.com/remusao))
+
+
 ## v1.4.19 (2020-01-15)
 
 #### :house: Internal
