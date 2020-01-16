@@ -6,16 +6,43 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-export type Fetch = (
-  url: string,
-) => Promise<{
+interface FetchResponse {
   text: () => Promise<string>;
   arrayBuffer: () => Promise<ArrayBuffer>;
   json: () => Promise<any>;
-}>;
+}
+
+export type Fetch = (url: string) => Promise<FetchResponse>;
+
+export function fetchWithRetry(fetch: Fetch, url: string): Promise<FetchResponse> {
+  let retry = 3;
+
+  // Wrap `fetch` into a lightweight retry function which makes sure that if
+  // fetching fails, it can be retried up to three times. Failure can happen if
+  // the remote server times-out, but retrying fetching of the same URL will
+  // usually succeed.
+  const fetchWrapper = (): Promise<FetchResponse> => {
+    return fetch(url).catch((ex) => {
+      if (retry > 0) {
+        retry -= 1;
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            fetchWrapper()
+              .then(resolve)
+              .catch(reject);
+          }, 500);
+        });
+      }
+
+      throw ex;
+    });
+  };
+
+  return fetchWrapper();
+}
 
 function fetchResource(fetch: Fetch, url: string): Promise<string> {
-  return fetch(url).then((response: any) => response.text());
+  return fetchWithRetry(fetch, url).then((response) => response.text());
 }
 
 export function fetchPrebuilt(
@@ -23,9 +50,9 @@ export function fetchPrebuilt(
   configUrl: string,
   engineVersion: number,
 ): Promise<Uint8Array> {
-  return fetch(configUrl)
+  return fetchWithRetry(fetch, configUrl)
     .then((response) => response.json())
-    .then((allowedLists) => fetch(allowedLists.engines[engineVersion].url))
+    .then((allowedLists) => fetchWithRetry(fetch, allowedLists.engines[engineVersion].url))
     .then((response) => response.arrayBuffer())
     .then((buffer) => new Uint8Array(buffer));
 }
@@ -39,7 +66,7 @@ export const adsLists = [
   'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
   'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
 
-  'https://easylist-downloads.adblockplus.org/easylistgermany.txt',
+  'https://easylist.to/easylistgermany/easylistgermany.txt',
 ];
 
 export const adsAndTrackingLists = [
@@ -51,7 +78,7 @@ export const adsAndTrackingLists = [
 export const fullLists = [
   ...adsAndTrackingLists,
   'https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt',
-  'https://www.fanboy.co.nz/fanboy-cookiemonster.txt',
+  'https://easylist-downloads.adblockplus.org/easylist-cookie.txt',
 ];
 
 /**
@@ -62,7 +89,10 @@ export function fetchLists(fetch: Fetch, urls: string[]): Promise<string[]> {
 }
 
 function getResourcesUrl(fetch: Fetch): Promise<string> {
-  return fetch('https://cdn.cliqz.com/adblocker/resources/ublock-resources/metadata.json')
+  return fetchWithRetry(
+    fetch,
+    'https://cdn.cliqz.com/adblocker/resources/ublock-resources/metadata.json',
+  )
     .then((response) => response.json())
     .then(
       ({ revisions }) =>
