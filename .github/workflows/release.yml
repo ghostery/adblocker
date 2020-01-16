@@ -26,7 +26,6 @@ jobs:
         run: |
           yarn bootstrap
           yarn build
-          yarn bundle
 
       - name: Generate the changelog
         id: changelog
@@ -56,6 +55,9 @@ jobs:
           GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create bundles
+        run: yarn bundle
 
       - name: Create an NPM release
         run: |

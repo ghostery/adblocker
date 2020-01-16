@@ -7,36 +7,16 @@
  */
 
 import compiler from '@ampproject/rollup-plugin-closure-compiler';
-import resolve from 'rollup-plugin-node-resolve';
+import resolve from '@rollup/plugin-node-resolve';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 
-export default [
-  // CommonJS
-  {
-    input: './dist/es6/adblocker.js',
-    output: {
-        file: './dist/cjs/adblocker.js',
-        format: 'cjs',
-        sourcemap: true,
-    },
-    plugins: [
-      resolve(),
-      sourcemaps(),
-    ],
+export default {
+  input: './dist/es6/adblocker.js',
+  output: {
+    file: './dist/adblocker.umd.min.js',
+    format: 'umd',
+    name: 'adblocker',
+    sourcemap: true,
   },
-  // UMD minified
-  {
-    input: './dist/es6/adblocker.js',
-    output: {
-        file: './dist/adblocker.umd.min.js',
-        format: 'umd',
-        name: 'adblocker',
-        sourcemap: true,
-    },
-    plugins: [
-      resolve(),
-      compiler(),
-      sourcemaps(),
-    ],
-  },
-];
+  plugins: [resolve(), sourcemaps(), compiler()],
+};

@@ -22,8 +22,7 @@
     "clean": "rimraf dist coverage",
     "lint": "tslint --config ../../tslint.json --project ./tsconfig.json",
     "build": "tsc --build ./tsconfig.json",
-    "bundle": "rollup --config ./rollup.config.ts",
-    "prebundle": "yarn run build",
+    "bundle": "tsc --build ./tsconfig.bundle.json && rollup --config ./rollup.config.ts",
     "prepack": "yarn run bundle",
     "test": "jest --config ./jest.config.js --coverage ./adblocker.test.ts"
   },
@@ -35,6 +34,7 @@
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.10.0",
+    "@rollup/plugin-node-resolve": "^7.0.0",
     "@types/chrome": "^0.0.91",
     "@types/jest": "^24.0.15",
     "@types/jsdom": "^12.2.4",
@@ -42,7 +42,6 @@
     "jsdom": "^15.1.1",
     "rimraf": "^3.0.0",
     "rollup": "^1.16.4",
-    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "ts-jest": "^24.0.2",
     "tslint": "^5.18.0",
