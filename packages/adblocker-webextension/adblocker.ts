@@ -227,46 +227,10 @@ export class WebExtensionBlocker extends FiltersEngine {
     }
   }
 
-  /**
-   * Deal with request cancellation (`{ cancel: true }`) and redirection (`{ redirectUrl: '...' }`).
-   */
-  private onBeforeRequest = (
-    details: WebRequestBeforeRequestDetails,
-  ): chrome.webRequest.BlockingResponse => {
-    const request = fromWebRequestDetails(details);
-    if (request.isMainFrame()) {
-      this.performHTMLFiltering(request);
-      return {};
-    }
-
-    const { redirect, match } = this.match(request);
-
-    if (redirect !== undefined) {
-      return { redirectUrl: redirect.dataUrl };
-    } else if (match === true) {
-      return { cancel: true };
-    }
-
-    return {};
-  };
-
-  /**
-   *
-   */
-  private onHeadersReceived = (
-    details: WebRequestHeadersReceivedDetails,
-  ): chrome.webRequest.BlockingResponse => {
-    return updateResponseHeadersWithCSP(
-      details,
-      this.getCSPDirectives(fromWebRequestDetails(details)),
-    );
-  };
-
-  private onRuntimeMessage = (
+  public handleRuntimeMessage = async (
     msg: IBackgroundCallback & { action?: string },
     sender: chrome.runtime.MessageSender,
-    sendResponse: (response?: any) => void,
-  ): void => {
+  ): Promise<any> => {
     if (sender.tab === undefined || sender.tab.id === undefined || sender.frameId === undefined) {
       return;
     }
@@ -306,7 +270,7 @@ export class WebExtensionBlocker extends FiltersEngine {
           return;
         }
 
-        this.injectStylesWebExtension(styles, { tabId: sender.tab.id, allFrames: true });
+        await this.injectStylesWebExtension(styles, { tabId: sender.tab.id, allFrames: true });
       }
 
       // Separately, requests cosmetics which depend on the page it self
@@ -337,7 +301,7 @@ export class WebExtensionBlocker extends FiltersEngine {
           return;
         }
 
-        this.injectStylesWebExtension(styles, { tabId: sender.tab.id, frameId });
+        await this.injectStylesWebExtension(styles, { tabId: sender.tab.id, frameId });
 
         // Inject scripts from content script
         const responseFromBackground: IMessageFromBackground = {
@@ -346,12 +310,54 @@ export class WebExtensionBlocker extends FiltersEngine {
           scripts,
           styles: '',
         };
-        sendResponse(responseFromBackground);
+        return responseFromBackground;
       }
     }
   };
 
-  private injectStylesWebExtension(
+  /**
+   * Deal with request cancellation (`{ cancel: true }`) and redirection (`{ redirectUrl: '...' }`).
+   */
+  private onBeforeRequest = (
+    details: WebRequestBeforeRequestDetails,
+  ): chrome.webRequest.BlockingResponse => {
+    const request = fromWebRequestDetails(details);
+    if (request.isMainFrame()) {
+      this.performHTMLFiltering(request);
+      return {};
+    }
+
+    const { redirect, match } = this.match(request);
+
+    if (redirect !== undefined) {
+      return { redirectUrl: redirect.dataUrl };
+    } else if (match === true) {
+      return { cancel: true };
+    }
+
+    return {};
+  };
+
+  private onHeadersReceived = (
+    details: WebRequestHeadersReceivedDetails,
+  ): chrome.webRequest.BlockingResponse => {
+    return updateResponseHeadersWithCSP(
+      details,
+      this.getCSPDirectives(fromWebRequestDetails(details)),
+    );
+  };
+
+  private onRuntimeMessage = (
+    msg: IBackgroundCallback & { action?: string },
+    sender: chrome.runtime.MessageSender,
+    sendResponse: (response?: any) => void,
+  ): void => {
+    this.handleRuntimeMessage(msg, sender).then(sendResponse).catch((ex) => {
+      console.error('Error while handling runtime message:', ex);
+    });
+  };
+
+  private async injectStylesWebExtension(
     styles: string,
     {
       tabId,
@@ -362,29 +368,33 @@ export class WebExtensionBlocker extends FiltersEngine {
       frameId?: number;
       allFrames?: boolean;
     },
-  ): void {
+  ): Promise<void> {
     if (
       styles.length > 0 &&
       typeof chrome !== 'undefined' &&
       chrome.tabs &&
       chrome.tabs.insertCSS
     ) {
-      chrome.tabs.insertCSS(
-        tabId,
-        {
-          allFrames,
-          code: styles,
-          cssOrigin: 'user',
-          frameId,
-          matchAboutBlank: true,
-          runAt: 'document_start',
-        },
-        () => {
-          if (chrome.runtime.lastError) {
-            console.error('Error while injecting CSS', chrome.runtime.lastError.message);
-          }
-        },
-      );
+      return new Promise((resolve, reject) => {
+        chrome.tabs.insertCSS(
+          tabId,
+          {
+            allFrames,
+            code: styles,
+            cssOrigin: 'user',
+            frameId,
+            matchAboutBlank: true,
+            runAt: 'document_start',
+          },
+          () => {
+            if (chrome.runtime.lastError) {
+              reject(chrome.runtime.lastError.message);
+            } else {
+              resolve();
+            }
+          },
+        );
+      });
     }
   }
 }
