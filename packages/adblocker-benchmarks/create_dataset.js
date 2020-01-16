@@ -6,8 +6,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/* eslint-disable no-await-in-loop */
-
 const fs = require('fs');
 const createPuppeteerPool = require('puppeteer-pool');
 const stream = require('stream');

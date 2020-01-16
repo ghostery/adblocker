@@ -6,14 +6,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import resolve from 'rollup-plugin-node-resolve';
+import resolve from '@rollup/plugin-node-resolve';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 
 export default [
   {
-    input: './dist/es6/background.js',
+    input: './dist/cjs/background.js',
     output: {
-      file: './dist/iife/background.js',
+      file: './dist/background.iife.js',
       format: 'iife',
       name: 'adblocker',
       sourcemap: true,
@@ -24,9 +24,9 @@ export default [
     ],
   },
   {
-    input: './dist/es6/content-script.js',
+    input: './dist/cjs/content-script.js',
     output: {
-      file: './dist/iife/content-script.js',
+      file: './dist/content-script.iife.js',
       format: 'iife',
       name: 'adblocker',
       sourcemap: true,

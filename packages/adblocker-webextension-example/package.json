@@ -22,8 +22,7 @@
     "lint": "tslint --config ../../tslint.json --project ./tsconfig.json",
     "build": "tsc --build ./tsconfig.json",
     "bundle": "rollup --config ./rollup.config.ts",
-    "prebundle": "yarn run build",
-    "prepack": "yarn run bundle"
+    "prebundle": "yarn build"
   },
   "bugs": {
     "url": "https://github.com/cliqz-oss/adblocker/issues"
@@ -33,10 +32,10 @@
     "@cliqz/adblocker-webextension-cosmetics": "^1.4.24"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^7.0.0",
     "@types/chrome": "^0.0.91",
     "rimraf": "^3.0.0",
     "rollup": "^1.16.4",
-    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
