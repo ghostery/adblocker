@@ -14,6 +14,12 @@ interface FetchResponse {
 
 export type Fetch = (url: string) => Promise<FetchResponse>;
 
+/**
+ * Built-in fetch helpers can be used to initialize the adblocker from
+ * pre-built presets or raw lists (fetched from multiple sources). In case of
+ * failure (e.g. timeout), the whole process of initialization fails. Timeouts
+ * are not so uncommon, and retrying to fetch usually succeeds.
+ */
 export function fetchWithRetry(fetch: Fetch, url: string): Promise<FetchResponse> {
   let retry = 3;
 
