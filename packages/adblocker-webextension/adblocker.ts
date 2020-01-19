@@ -14,31 +14,43 @@ import {
   isUTF8,
   Request,
   StreamingHtmlFilter,
-  WebRequestType,
 } from '@cliqz/adblocker';
 import { IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-content';
 
-export interface WebRequestBeforeRequestDetails {
-  tabId: number;
-  url: string;
-  type: WebRequestType;
+type OnHeadersReceivedDetails = {
   requestId: string;
-
-  initiator?: string;
+  url: string;
+  method: string;
+  frameId: number;
+  parentFrameId: number;
   originUrl?: string;
   documentUrl?: string;
-}
+  tabId: number;
+  type: browser.webRequest.ResourceType;
+  responseHeaders?: browser.webRequest.HttpHeaders;
+} & chrome.webRequest.WebResponseHeadersDetails;
 
-export type WebRequestHeadersReceivedDetails = WebRequestBeforeRequestDetails & {
-  responseHeaders?: chrome.webRequest.HttpHeader[];
-};
+type OnBeforeRequestDetails = {
+  requestId: string;
+  url: string;
+  method: string;
+  frameId: number;
+  parentFrameId: number;
+  originUrl?: string;
+  documentUrl?: string;
+  tabId: number;
+  type: browser.webRequest.ResourceType;
+} & chrome.webRequest.WebRequestBodyDetails;
+
+type Browser = typeof chrome | typeof browser;
+
+// type TypeOfDetails<T extends (details: any) => any> = T extends (details: infer D) => any ? D : never;
+// type Req = chrome.webRequest.WebRequestBodyDetails | chrome.webRequest.WebResponseHeadersDetails | TypeOfDetails<browser.>;
 
 /**
  * Create an instance of `Request` from `chrome.webRequest.WebRequestDetails`.
  */
-export function fromWebRequestDetails(
-  details: WebRequestBeforeRequestDetails | WebRequestHeadersReceivedDetails,
-): Request {
+export function fromWebRequestDetails(details: OnBeforeRequestDetails | OnHeadersReceivedDetails): Request {
   return Request.fromRawDetails({
     requestId: details.requestId,
     sourceUrl: details.initiator || details.originUrl || details.documentUrl,
@@ -75,6 +87,26 @@ export function updateResponseHeadersWithCSP(
   return { responseHeaders };
 }
 
+// Detect charset with UTF-8 encoding from HTML
+const CHARSET_TAG_RE = /<meta charset=['"]utf-8/i;
+const CHARSET_HTTP_EQUIV_RE = /<meta http-equiv="content-type" content="text\/html;charset=utf-8/i;
+
+/**
+ * Check if HTML filtering is possible in this browser. Only Firefox is supported.
+ */
+export function isHTMLFilteringSupported(): boolean {
+  // @ts-ignore
+  const browser: any = typeof browser !== 'undefined' ? browser : chrome;
+
+  // Apply HTML filtering is any
+  return (
+    typeof TextDecoder !== 'undefined' &&
+    typeof TextEncoder !== 'undefined' &&
+    browser.webRequest !== undefined &&
+    browser.webRequest.filterResponseData !== undefined
+  );
+}
+
 // From https://github.com/kelseasy/web-ext-types/blob/master/global/index.d.ts#L1897
 interface StreamFilter {
   error: string;
@@ -99,32 +131,13 @@ interface StreamFilter {
   write(data: Uint8Array | ArrayBuffer): void;
 }
 
-// Detect charset with UTF-8 encoding from HTML
-const CHARSET_TAG_RE = /<meta charset=['"]utf-8/i;
-const CHARSET_HTTP_EQUIV_RE = /<meta http-equiv="content-type" content="text\/html;charset=utf-8/i;
-
-/**
- * Check if HTML filtering is possible in this browser. Only Firefox is supported.
- */
-export function isHTMLFilteringSupported(): boolean {
-  // @ts-ignore
-  const browser: any = typeof browser !== 'undefined' ? browser : chrome;
-
-  // Apply HTML filtering is any
-  return (
-    typeof TextDecoder !== 'undefined' &&
-    typeof TextEncoder !== 'undefined' &&
-    browser.webRequest !== undefined &&
-    browser.webRequest.filterResponseData !== undefined
-  );
-}
-
-export function filterRequestHTML({ id }: { id: string }, rules: HTMLSelector[]): void {
-  // @ts-ignore
-  const browser: any = typeof browser !== 'undefined' ? browser : chrome;
-
+export function filterRequestHTML(
+  { webRequest }: typeof browser,
+  { id }: { id: string },
+  rules: HTMLSelector[],
+): void {
   // Create filter to observe loading of resource
-  const filter: StreamFilter = browser.webRequest.filterResponseData(id);
+  const filter: StreamFilter = webRequest.filterResponseData(id);
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
   const htmlFilter = new StreamingHtmlFilter(rules);
@@ -180,20 +193,16 @@ export function filterRequestHTML({ id }: { id: string }, rules: HTMLSelector[])
   };
 }
 
-/**
- * Wrap `FiltersEngine` into a WebExtension-friendly helper class. It exposes
- * methods to interface with WebExtension APIs needed to block ads.
- */
-export class WebExtensionBlocker extends FiltersEngine {
-  public enableBlockingInBrowser(): void {
-    if (this.config.loadNetworkFilters === true) {
-      chrome.webRequest.onBeforeRequest.addListener(
+class BlockingContext {
+  constructor(private readonly browser: Browser, private readonly blocker: WebExtensionBlocker) {
+    if (this.blocker.config.loadNetworkFilters === true) {
+      browser.webRequest.onBeforeRequest.addListener(
         this.onBeforeRequest,
         { urls: ['<all_urls>'] },
         ['blocking'],
       );
 
-      chrome.webRequest.onHeadersReceived.addListener(
+      browser.webRequest.onHeadersReceived.addListener(
         this.onHeadersReceived,
         { urls: ['<all_urls>'], types: ['main_frame'] },
         ['blocking', 'responseHeaders'],
@@ -201,15 +210,15 @@ export class WebExtensionBlocker extends FiltersEngine {
     }
 
     // Start listening to messages coming from the content-script
-    if (this.config.loadCosmeticFilters === true) {
+    if (this.blocker.config.loadCosmeticFilters === true) {
       chrome.runtime.onMessage.addListener(this.onRuntimeMessage);
     }
   }
 
-  public disableBlockingInBrowser(): void {
-    chrome.webRequest.onBeforeRequest.removeListener(this.onBeforeRequest);
-    chrome.webRequest.onHeadersReceived.removeListener(this.onHeadersReceived);
-    chrome.runtime.onMessage.removeListener(this.onRuntimeMessage);
+  public disable(): void {
+    this.browser.webRequest.onBeforeRequest.removeListener(this.onBeforeRequest);
+    this.browser.webRequest.onHeadersReceived.removeListener(this.onHeadersReceived);
+    this.browser.runtime.onMessage.removeListener(this.onRuntimeMessage);
   }
 
   public performHTMLFiltering(request: Request): void {
@@ -218,10 +227,10 @@ export class WebExtensionBlocker extends FiltersEngine {
       // 1. `enableHtmlFiltering` is set to `true`.
       // 2. `browser.webRequest.filterResponseData` (Firefox only!).
       // 3. `TextEncoder` and `TextDecoder` are available.
-      if (this.config.enableHtmlFiltering === true && isHTMLFilteringSupported()) {
-        const htmlFilters = this.getHtmlFilters(request);
+      if (this.blocker.config.enableHtmlFiltering === true && isHTMLFilteringSupported()) {
+        const htmlFilters = this.blocker.getHtmlFilters(request);
         if (htmlFilters.length !== 0) {
-          filterRequestHTML(request, htmlFilters);
+          filterRequestHTML(this.browser, request, htmlFilters);
         }
       }
     }
@@ -258,7 +267,7 @@ export class WebExtensionBlocker extends FiltersEngine {
       // Because of this, we specify `allFrames: true` when injecting them so
       // that we do not need to perform this operation for sub-frames.
       if (frameId === 0 && msg.lifecycle === 'start') {
-        const { active, styles } = this.getCosmeticsFilters({
+        const { active, styles } = this.blocker.getCosmeticsFilters({
           domain,
           hostname,
           url,
@@ -287,7 +296,7 @@ export class WebExtensionBlocker extends FiltersEngine {
       // ids and hrefs observed in the DOM. MutationObserver is also used to
       // make sure we can react to changes.
       {
-        const { active, styles, scripts } = this.getCosmeticsFilters({
+        const { active, styles, scripts } = this.blocker.getCosmeticsFilters({
           domain,
           hostname,
           url,
@@ -327,7 +336,7 @@ export class WebExtensionBlocker extends FiltersEngine {
    * Deal with request cancellation (`{ cancel: true }`) and redirection (`{ redirectUrl: '...' }`).
    */
   private onBeforeRequest = (
-    details: WebRequestBeforeRequestDetails,
+    details: OnBeforeRequestDetails,
   ): chrome.webRequest.BlockingResponse => {
     const request = fromWebRequestDetails(details);
     if (request.isMainFrame()) {
@@ -335,7 +344,7 @@ export class WebExtensionBlocker extends FiltersEngine {
       return {};
     }
 
-    const { redirect, match } = this.match(request);
+    const { redirect, match } = this.blocker.match(request);
 
     if (redirect !== undefined) {
       return { redirectUrl: redirect.dataUrl };
@@ -347,11 +356,11 @@ export class WebExtensionBlocker extends FiltersEngine {
   };
 
   private onHeadersReceived = (
-    details: WebRequestHeadersReceivedDetails,
+    details: OnHeadersReceivedDetails,
   ): chrome.webRequest.BlockingResponse => {
     return updateResponseHeadersWithCSP(
       details,
-      this.getCSPDirectives(fromWebRequestDetails(details)),
+      this.blocker.getCSPDirectives(fromWebRequestDetails(details)),
     );
   };
 
@@ -415,6 +424,34 @@ export class WebExtensionBlocker extends FiltersEngine {
         },
       );
     });
+  }
+}
+
+/**
+ * Wrap `FiltersEngine` into a WebExtension-friendly helper class. It exposes
+ * methods to interface with WebExtension APIs needed to block ads.
+ */
+export class WebExtensionBlocker extends FiltersEngine {
+  private readonly contexts: Map<Browser, BlockingContext> = new Map();
+
+  public enableBlockingInBrowser(browser: Browser): BlockingContext {
+    let context: undefined | BlockingContext = this.contexts.get(browser);
+    if (context !== undefined) {
+      return context;
+    }
+
+    context = new BlockingContext(browser, this);
+    this.contexts.set(browser, context);
+    return context;
+  }
+
+  public disableBlockingInBrowser(browser: Browser): void {
+    const context: undefined | BlockingContext = this.contexts.get(browser);
+    if (context === undefined) {
+      throw new Error('Trying to disable blocking which was not enabled');
+    }
+
+    context.disable();
   }
 }
 

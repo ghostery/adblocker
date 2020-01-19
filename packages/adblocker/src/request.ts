@@ -47,28 +47,7 @@ export type PuppeteerRequestType =
 export type WebRequestTypeChrome = chrome.webRequest.ResourceType;
 
 // From: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/ResourceType#Type
-export type WebRequestTypeFirefox =
-  | 'beacon'
-  | 'csp_report'
-  | 'font'
-  | 'image'
-  | 'imageset'
-  | 'main_frame'
-  | 'media'
-  | 'object'
-  | 'object_subrequest'
-  | 'other'
-  | 'ping'
-  | 'script'
-  | 'speculative'
-  | 'stylesheet'
-  | 'sub_frame'
-  | 'web_manifest'
-  | 'websocket'
-  | 'xbl'
-  | 'xml_dtd'
-  | 'xmlhttprequest'
-  | 'xslt';
+export type WebRequestTypeFirefox = browser.webRequest.ResourceType;
 
 // The set of WebRequest types is the union of both Firefox and Chrome
 export type WebRequestType = WebRequestTypeChrome | WebRequestTypeFirefox;
