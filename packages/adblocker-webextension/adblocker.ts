@@ -140,10 +140,6 @@ export function updateResponseHeadersWithCSP(
     return {};
   }
 
-  if (details.responseHeaders === undefined) {
-    return {};
-  }
-
   let responseHeaders = details.responseHeaders || [];
   const CSP_HEADER_NAME = 'content-security-policy';
 
