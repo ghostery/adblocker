@@ -537,6 +537,7 @@ export class WebExtensionBlocker extends FiltersEngine {
       throw new Error('Trying to disable blocking which was not enabled');
     }
 
+    this.contexts.delete(browser);
     context.disable();
   }
 }

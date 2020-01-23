@@ -222,6 +222,7 @@ export class ElectronBlocker extends FiltersEngine {
       throw new Error('Trying to disable blocking which was not enabled');
     }
 
+    this.contexts.delete(page);
     context.disable();
   }
 }
