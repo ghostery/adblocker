@@ -32,8 +32,7 @@ export function fromPuppeteerDetails(details: puppeteer.Request): Request {
  * Wrap `FiltersEngine` into a Puppeteer-friendly helper class.
  */
 export class BlockingContext {
-  constructor(private readonly page: puppeteer.Page, private readonly blocker: PuppeteerBlocker) {
-  }
+  constructor(private readonly page: puppeteer.Page, private readonly blocker: PuppeteerBlocker) {}
 
   public async enable(): Promise<void> {
     if (this.blocker.config.loadCosmeticFilters === true) {
