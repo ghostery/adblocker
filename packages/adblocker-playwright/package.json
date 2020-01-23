@@ -1,0 +1,90 @@
+{
+  "name": "@cliqz/adblocker-playwright",
+  "version": "1.15.1",
+  "description": "Cliqz adblocker Playwright wrapper",
+  "author": {
+    "name": "Cliqz"
+  },
+  "homepage": "https://github.com/cliqz-oss/adblocker#readme",
+  "license": "MPL-2.0",
+  "main": "dist/cjs/adblocker.js",
+  "module": "dist/es6/adblocker.js",
+  "types": "dist/types/adblocker.d.ts",
+  "files": [
+    "LICENSE",
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/cliqz-oss/adblocker.git",
+    "directory": "packages/adblocker-playwright"
+  },
+  "scripts": {
+    "clean": "rimraf dist coverage",
+    "lint": "tslint --config ../../tslint.json --project ./tsconfig.json",
+    "build": "tsc --build ./tsconfig.json",
+    "bundle": "tsc --build ./tsconfig.bundle.json",
+    "prepack": "yarn run bundle",
+    "test": "nyc mocha --config ../../.mocharc.js"
+  },
+  "bugs": {
+    "url": "https://github.com/cliqz-oss/adblocker/issues"
+  },
+  "peerDependencies": {
+    "playwright": "^1.0.2"
+  },
+  "dependencies": {
+    "@cliqz/adblocker": "^1.15.1",
+    "@cliqz/adblocker-content": "^1.15.1",
+    "tldts-experimental": "^5.6.21"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "chai": "^4.2.0",
+    "mocha": "^7.1.1",
+    "nyc": "^15.0.0",
+    "playwright": "^1.0.2",
+    "rimraf": "^3.0.0",
+    "tslint": "^6.0.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.7.5"
+  },
+  "contributors": [
+    {
+      "name": "Rémi Berson",
+      "email": "remi@cliqz.com"
+    },
+    {
+      "name": "Zhonghao Yu",
+      "email": "zhonghao@cliqz.com"
+    },
+    {
+      "name": "Krzysztof Jan Modras",
+      "email": "chrmod@chrmod.net"
+    },
+    {
+      "name": "Raymond Hill",
+      "email": "gorhill@users.noreply.github.com"
+    },
+    {
+      "name": "Eleni",
+      "email": "eleni@cliqz.com"
+    },
+    {
+      "name": "ecnmst",
+      "email": "ecnmst@users.noreply.github.com"
+    },
+    {
+      "name": "Asif",
+      "email": "arshadasif0312@gmail.com"
+    },
+    {
+      "name": "Anton Lazarev",
+      "email": "antonok35@gmail.com"
+    }
+  ]
+}
