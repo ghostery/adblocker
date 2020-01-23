@@ -156,7 +156,7 @@ export class BlockingContext {
  * methods to interface with Puppeteer APIs needed to block ads.
  */
 export class PuppeteerBlocker extends FiltersEngine {
-  private readonly contexts: Map<puppeteer.Page, BlockingContext> = new Map();
+  private readonly contexts: WeakMap<puppeteer.Page, BlockingContext> = new Map();
 
   public async enableBlockingInPage(page: puppeteer.Page): Promise<BlockingContext> {
     let context: undefined | BlockingContext = this.contexts.get(page);

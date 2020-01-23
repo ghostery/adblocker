@@ -203,7 +203,7 @@ export class BlockingContext {
  * methods to interface with Electron APIs needed to block ads.
  */
 export class ElectronBlocker extends FiltersEngine {
-  private readonly contexts: Map<Electron.Session, BlockingContext> = new Map();
+  private readonly contexts: WeakMap<Electron.Session, BlockingContext> = new Map();
 
   public enableBlockingInSession(session: Electron.Session): BlockingContext {
     let context: undefined | BlockingContext = this.contexts.get(session);

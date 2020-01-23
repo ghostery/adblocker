@@ -518,7 +518,7 @@ function getDefaultGlobalBrowser(): Browser {
  * methods to interface with WebExtension APIs needed to block ads.
  */
 export class WebExtensionBlocker extends FiltersEngine {
-  private readonly contexts: Map<Browser, BlockingContext> = new Map();
+  private readonly contexts: WeakMap<Browser, BlockingContext> = new Map();
 
   public enableBlockingInBrowser(browser: Browser = getDefaultGlobalBrowser()): BlockingContext {
     let context: undefined | BlockingContext = this.contexts.get(browser);
