@@ -31,16 +31,19 @@ export function fromPuppeteerDetails(details: puppeteer.Request): Request {
 /**
  * Wrap `FiltersEngine` into a Puppeteer-friendly helper class.
  */
-export class PuppeteerBlocker extends FiltersEngine {
-  public async enableBlockingInPage(page: puppeteer.Page): Promise<void> {
-    if (this.config.loadCosmeticFilters === true) {
+export class BlockingContext {
+  constructor(private readonly page: puppeteer.Page, private readonly blocker: PuppeteerBlocker) {
+  }
+
+  public async enable(): Promise<void> {
+    if (this.blocker.config.loadCosmeticFilters === true) {
       // Register callback to cosmetics injection (CSS + scriptlets)
-      page.on('framenavigated', this.onFrameNavigated);
+      this.page.on('framenavigated', this.onFrameNavigated);
     }
 
-    if (this.config.loadNetworkFilters === true) {
+    if (this.blocker.config.loadNetworkFilters === true) {
       // Make sure request interception is enabled for `page` before proceeding
-      await page.setRequestInterception(true);
+      await this.page.setRequestInterception(true);
       // NOTES:
       //  - page.setBypassCSP(enabled) might be needed to perform
       //  injections on some pages.
@@ -48,18 +51,18 @@ export class PuppeteerBlocker extends FiltersEngine {
       //  currently no way to modify responses in puppeteer. This feature could
       //  easily be added if puppeteer implements the required capability.
       //  Register callback for network requets filtering
-      page.on('request', this.onRequest);
+      this.page.on('request', this.onRequest);
     }
   }
 
-  public async disableBlockingInPage(page: puppeteer.Page): Promise<void> {
-    if (this.config.loadNetworkFilters === true) {
-      await page.setRequestInterception(false);
-      page.removeListener('request', this.onRequest);
+  public async disable(): Promise<void> {
+    if (this.blocker.config.loadNetworkFilters === true) {
+      this.page.removeListener('request', this.onRequest);
+      await this.page.setRequestInterception(false);
     }
 
-    if (this.config.loadCosmeticFilters === true) {
-      page.removeListener('framenavigated', this.onFrameNavigated);
+    if (this.blocker.config.loadCosmeticFilters === true) {
+      this.page.removeListener('framenavigated', this.onFrameNavigated);
     }
   }
 
@@ -85,7 +88,7 @@ export class PuppeteerBlocker extends FiltersEngine {
     const domain = parsed.domain || '';
 
     // Get cosmetics to inject into the Frame
-    const { active, scripts, styles } = this.getCosmeticsFilters({
+    const { active, scripts, styles } = this.blocker.getCosmeticsFilters({
       domain,
       hostname,
       url,
@@ -133,7 +136,7 @@ export class PuppeteerBlocker extends FiltersEngine {
       return;
     }
 
-    const { redirect, match } = this.match(request);
+    const { redirect, match } = this.blocker.match(request);
 
     if (redirect !== undefined) {
       const { body, contentType } = redirect;
@@ -147,6 +150,35 @@ export class PuppeteerBlocker extends FiltersEngine {
       details.continue();
     }
   };
+}
+
+/**
+ * Wrap `FiltersEngine` into a Puppeteer-friendly helper class. It exposes
+ * methods to interface with Puppeteer APIs needed to block ads.
+ */
+export class PuppeteerBlocker extends FiltersEngine {
+  private readonly contexts: Map<puppeteer.Page, BlockingContext> = new Map();
+
+  public async enableBlockingInPage(page: puppeteer.Page): Promise<BlockingContext> {
+    let context: undefined | BlockingContext = this.contexts.get(page);
+    if (context !== undefined) {
+      return context;
+    }
+
+    context = new BlockingContext(page, this);
+    this.contexts.set(page, context);
+    await context.enable();
+    return context;
+  }
+
+  public async disableBlockingInPage(page: puppeteer.Page): Promise<void> {
+    const context: undefined | BlockingContext = this.contexts.get(page);
+    if (context === undefined) {
+      throw new Error('Trying to disable blocking which was not enabled');
+    }
+
+    await context.disable();
+  }
 }
 
 // Re-export symboles from @cliqz/adblocker for convenience

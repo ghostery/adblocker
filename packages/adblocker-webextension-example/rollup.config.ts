@@ -6,6 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 
@@ -19,6 +20,7 @@ export default [
       sourcemap: true,
     },
     plugins: [
+      commonjs(),
       resolve(),
       sourcemaps(),
     ],
@@ -32,6 +34,7 @@ export default [
       sourcemap: true,
     },
     plugins: [
+      commonjs(),
       resolve(),
       sourcemaps(),
     ],
