@@ -1,6 +1,12 @@
 name: Tests
 
-on: [pull_request]
+on:
+  push:
+    branches:
+      - 'actions/*'
+  pull_request:
+    branches:
+      - master
 
 jobs:
   test:
@@ -14,7 +20,7 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - name: Use node ${{ matrix.node }}
         uses: actions/setup-node@v1
