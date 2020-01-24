@@ -1,0 +1,46 @@
+name: Assets
+
+# TODO - run once per day?
+# on:
+#   schedule:
+#     - cron:  '*/5 * * * *'
+on: [pull_request]
+
+jobs:
+  assets:
+    name: Update local assets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      # - name: Get yarn cache
+      #   id: yarn-cache
+      #   run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      # - uses: actions/cache@v1
+      #   with:
+      #     path: ${{ steps.yarn-cache.outputs.dir }}
+      #     key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-yarn-
+
+      #- name: Build actions
+      #  run: |
+      #    yarn bootstrap
+      #    yarn build
+
+      - name: Fetch latest assets
+      - id: fetch
+        working-directory: ./packages/adblocker/assets
+        run: |
+          ./update_lists.sh
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v2.2.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update local assets"
+          title: "chore: update local assets"
+          body: "TODO"
+          labels: "PR: Internal :house:"
+          reviewers: remusao
