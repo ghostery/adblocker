@@ -39,13 +39,16 @@ export function fromElectronDetails({
 }
 
 /**
- * Wrap `FiltersEngine` into a Electron-friendly helper class.
+ * This abstraction takes care of blocking in one instance of `Electron.Session`.
  */
 export class BlockingContext {
   constructor(
     private readonly session: Electron.Session,
     private readonly blocker: ElectronBlocker,
   ) {
+  }
+
+  public enable(): void {
     if (this.blocker.config.loadNetworkFilters === true) {
       this.session.webRequest.onHeadersReceived({ urls: ['<all_urls>'] }, this.onHeadersReceived);
       this.session.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onBeforeRequest);
@@ -211,8 +214,11 @@ export class ElectronBlocker extends FiltersEngine {
       return context;
     }
 
+    // Create new blocking context for `session`
     context = new BlockingContext(session, this);
     this.contexts.set(session, context);
+    context.enable();
+
     return context;
   }
 

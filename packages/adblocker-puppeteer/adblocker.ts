@@ -8,6 +8,7 @@
 
 // Type definition
 import * as puppeteer from 'puppeteer';
+
 import { parse } from 'tldts-experimental';
 
 import { FiltersEngine, Request } from '@cliqz/adblocker';
@@ -49,7 +50,8 @@ export class BlockingContext {
       //  - we currently do not perform CSP headers injection as there is
       //  currently no way to modify responses in puppeteer. This feature could
       //  easily be added if puppeteer implements the required capability.
-      //  Register callback for network requets filtering
+      //
+      // Register callback for network requests filtering.
       this.page.on('request', this.onRequest);
     }
   }
