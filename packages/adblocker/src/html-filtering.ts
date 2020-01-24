@@ -15,8 +15,8 @@ import { HTMLSelector } from './filters/cosmetic';
 export function extractTagsFromHtml(
   html: string,
   tag: string,
-): [Array<[number, string]>, string, string] {
-  const tags: Array<[number, string]> = [];
+): [[number, string][], string, string] {
+  const tags: [number, string][] = [];
   const prefix = `<${tag}`;
   const suffix = `</${tag}>`;
 
@@ -115,9 +115,9 @@ export function extractSelectorsFromRules(selectors: HTMLSelector[]): [string[],
 export function selectTagsToRemove(
   patterns: string[],
   regexps: RegExp[],
-  tags: Array<[number, string]>,
-): Array<[number, string]> {
-  const toRemove: Array<[number, string]> = [];
+  tags: [number, string][],
+): [number, string][] {
+  const toRemove: [number, string][] = [];
 
   for (let i = 0; i < tags.length; i += 1) {
     const tag = tags[i];
@@ -143,7 +143,7 @@ export function selectTagsToRemove(
   return toRemove;
 }
 
-export function removeTagsFromHtml(html: string, toRemove: Array<[number, string]>): string {
+export function removeTagsFromHtml(html: string, toRemove: [number, string][]): string {
   if (toRemove.length === 0) {
     return html;
   }

@@ -174,9 +174,9 @@ export function parseFilters(
 function getFilters(
   list: string,
   config?: Partial<Config>,
-): Array<NetworkFilter | CosmeticFilter> {
+): (NetworkFilter | CosmeticFilter)[] {
   const { networkFilters, cosmeticFilters } = parseFilters(list, config);
-  const filters: Array<NetworkFilter | CosmeticFilter> = [];
+  const filters: (NetworkFilter | CosmeticFilter)[] = [];
   return filters.concat(networkFilters).concat(cosmeticFilters);
 }
 
@@ -253,7 +253,7 @@ export function generateDiff(
  * Merge several raw diffs into one, taking care of accumulating added and
  * removed filters, even if several diffs add/remove the same ones.
  */
-export function mergeDiffs(diffs: Array<Partial<IRawDiff>>): IRawDiff {
+export function mergeDiffs(diffs: Partial<IRawDiff>[]): IRawDiff {
   const addedCumul: Set<string> = new Set();
   const removedCumul: Set<string> = new Set();
 

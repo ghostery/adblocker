@@ -59,10 +59,10 @@ type ResourceType =
 
 // From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/335e7a9225dda059c1b494a6c24c8e37c66add7f/types/chrome/index.d.ts#L8305
 // From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/549983f5264e40fd4b24cff16f1987be9e851c8a/types/firefox-webext-browser/index.d.ts#L4204
-type HttpHeaders = Array<{
+type HttpHeaders = {
   name: string;
   value?: string;
-}>;
+}[];
 
 // From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/335e7a9225dda059c1b494a6c24c8e37c66add7f/types/chrome/index.d.ts#L8312
 // From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/549983f5264e40fd4b24cff16f1987be9e851c8a/types/firefox-webext-browser/index.d.ts#L4219

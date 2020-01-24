@@ -77,9 +77,7 @@ export class BlockingContext {
 
     if (this.blocker.config.loadCosmeticFilters === true) {
       this.session.setPreloads(this.session.getPreloads().filter((p) => p !== PRELOAD_PATH));
-      // @ts-ignore
       ipcMain.removeListener('get-cosmetic-filters', this.onGetCosmeticFilters);
-      // @ts-ignore
       ipcMain.removeListener('is-mutation-observer-enabled', this.onIsMutationObserverEnabled);
     }
   }
@@ -134,11 +132,11 @@ export class BlockingContext {
 
   private onHeadersReceived = (
     details: Electron.OnHeadersReceivedListenerDetails,
-    callback: (a: Electron.Response) => void,
+    callback: (a: Electron.HeadersReceivedResponse) => void,
   ): void => {
     const CSP_HEADER_NAME = 'content-security-policy';
     const policies: string[] = [];
-    const responseHeaders: Record<string, string> = details.responseHeaders || {};
+    const responseHeaders: Record<string, string[]> = details.responseHeaders || {};
 
     if (details.resourceType === 'mainFrame' || details.resourceType === 'subFrame') {
       const rawCSP: string | undefined = this.blocker.getCSPDirectives(
@@ -148,21 +146,15 @@ export class BlockingContext {
         policies.push(...rawCSP.split(';').map((csp) => csp.trim()));
 
         // Collect existing CSP headers from response
-        for (const [name, value] of Object.entries(responseHeaders)) {
+        for (const [name, values] of Object.entries(responseHeaders)) {
           if (name.toLowerCase() === CSP_HEADER_NAME) {
-            if (Array.isArray(value)) {
-              policies.push(...value);
-            } else {
-              policies.push(value);
-            }
-
+            policies.push(...values);
             delete responseHeaders[name];
           }
         }
 
-        responseHeaders[CSP_HEADER_NAME] = policies.join(';');
+        responseHeaders[CSP_HEADER_NAME] = [policies.join(';')];
 
-        // @ts-ignore
         callback({ responseHeaders });
         return;
       }
