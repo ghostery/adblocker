@@ -49,7 +49,7 @@ export const magic = Math.abs((Date.now() * 524287) ^ ((Math.random() * 524287) 
  * which are required by the injected script), create a script which contains
  * both the dependencies (as scoped functions) and the script.
  */
-function wrapCallableInContext(script: string, deps: Array<(...args: any[]) => any> = []): string {
+function wrapCallableInContext(script: string, deps: ((...args: any[]) => any)[] = []): string {
   return `
 ${deps.map((dep) => `const ${dep.name} = ${dep.toString()};`).join('\n')}
 ${script}
@@ -74,7 +74,7 @@ try {
  * arguments for the scriptlet. The script will be injected in the head of
  * window's document as a self-executing, self-erasing script element.
  */
-export function bundle(fn: (...args: any[]) => void, deps: Array<(...args: any[]) => any> = []) {
+export function bundle(fn: (...args: any[]) => void, deps: ((...args: any[]) => any)[] = []) {
   return (window: Window, args: any[]) =>
     injectScript(wrapCallableInContext(autoCallFunction(fn, args), deps), window.document);
 }

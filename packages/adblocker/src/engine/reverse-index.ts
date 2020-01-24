@@ -331,7 +331,7 @@ export default class ReverseIndex<T extends IFilter> {
     const compression = this.config.enableCompression;
     let totalNumberOfTokens = 0;
     let totalNumberOfIndexedFilters = 0;
-    const filtersTokens: Array<{ filter: T; multiTokens: Uint32Array[] }> = [];
+    const filtersTokens: { filter: T; multiTokens: Uint32Array[] }[] = [];
     const histogram = new Counter<number>();
 
     // Keep track of the final size of the buckets index. `bucketsIndexSize` is
@@ -435,7 +435,7 @@ export default class ReverseIndex<T extends IFilter> {
     // Prepare "tokens index" (see documentation in constructor of `ReverseIndex` class above).
     const tokensLookupIndexSize: number = Math.max(2, nextPow2(totalNumberOfIndexedFilters));
     const mask: number = tokensLookupIndexSize - 1;
-    const suffixes: Array<Array<[number, number]>> = [];
+    const suffixes: [number, number][][] = [];
     for (let i = 0; i < tokensLookupIndexSize; i += 1) {
       suffixes.push([]);
     }
