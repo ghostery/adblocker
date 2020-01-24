@@ -65,8 +65,7 @@ function main() {
     { strings: networkRedirectStrings, output: 'network-redirect' },
     { strings: networkFilterStrings, output: 'network-filter' },
     { strings: networkHostnameStrings, output: 'network-hostname' },
-    // NOTE: disabled for now as it is fairly slow given the amount of rules.
-    // { strings: cosmeticSelectorStrings, output: 'cosmetic-selector' },
+    { strings: cosmeticSelectorStrings, output: 'cosmetic-selector' },
   ].forEach(({ strings, output }) => {
     console.log(`Generate codebook ${output} using ${strings.length} strings.`);
     const codebook = generate(strings);
