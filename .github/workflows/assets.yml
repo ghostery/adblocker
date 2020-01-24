@@ -11,7 +11,7 @@ jobs:
     name: Update local assets
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       # - name: Get yarn cache
       #   id: yarn-cache
@@ -39,8 +39,15 @@ jobs:
         uses: peter-evans/create-pull-request@v2.2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          committer: Rémi Berson <remusao@users.noreply.github.com>
+          author: Rémi Berson <remusao@users.noreply.github.com>
           commit-message: "chore: update local assets"
           title: "chore: update local assets"
-          body: "TODO"
           labels: "PR: Internal :house:"
           reviewers: remusao
+          branch: update-local-assets
+
+      - name: Check outputs
+        run: |
+          echo "Pull Request Number - ${{ env.PULL_REQUEST_NUMBER }}"
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pr_number }}"
