@@ -24,7 +24,9 @@
     "build": "tsc --build ./tsconfig.json",
     "bundle": "rollup --config ./rollup.config.ts",
     "watch": "rollup --config ./rollup.config.ts --watch",
-    "prebundle": "yarn build"
+    "prebundle": "yarn build",
+    "start:firefox": "npx web-ext run --source-dir='.'",
+    "start:chromium": "npx web-ext run --source-dir='.' --target chromium"
   },
   "bugs": {
     "url": "https://github.com/cliqz-oss/adblocker/issues"
@@ -34,14 +36,16 @@
     "@cliqz/adblocker-webextension-cosmetics": "^1.5.0"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.0.1",
     "@rollup/plugin-node-resolve": "^7.0.0",
     "@types/chrome": "^0.0.91",
+    "@types/firefox-webext-browser": "^70.0.1",
     "rimraf": "^3.0.0",
     "rollup": "^1.16.4",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.7.5"
   },
   "contributors": [
     {

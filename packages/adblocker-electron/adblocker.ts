@@ -12,10 +12,7 @@ import { ipcMain } from 'electron';
 import { join } from 'path';
 import { parse } from 'tldts-experimental';
 
-import {
-  IBackgroundCallback,
-  IMessageFromBackground,
-} from '@cliqz/adblocker-content';
+import { IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-content';
 
 const PRELOAD_PATH = join(__dirname, './preload.js');
 
@@ -42,25 +39,30 @@ export function fromElectronDetails({
 }
 
 /**
- * Wrap `FiltersEngine` into a Electron-friendly helper class.
+ * This abstraction takes care of blocking in one instance of `Electron.Session`.
  */
-export class ElectronBlocker extends FiltersEngine {
-  public enableBlockingInSession(ses: Electron.Session): void {
-    if (this.config.loadNetworkFilters === true) {
-      ses.webRequest.onHeadersReceived({ urls: ['<all_urls>'] }, this.onHeadersReceived);
+export class BlockingContext {
+  constructor(
+    private readonly session: Electron.Session,
+    private readonly blocker: ElectronBlocker,
+  ) {
+  }
 
-      ses.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onBeforeRequest);
+  public enable(): void {
+    if (this.blocker.config.loadNetworkFilters === true) {
+      this.session.webRequest.onHeadersReceived({ urls: ['<all_urls>'] }, this.onHeadersReceived);
+      this.session.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onBeforeRequest);
     }
 
-    if (this.config.loadCosmeticFilters === true) {
+    if (this.blocker.config.loadCosmeticFilters === true) {
       ipcMain.on('get-cosmetic-filters', this.onGetCosmeticFilters);
       ipcMain.on('is-mutation-observer-enabled', this.onIsMutationObserverEnabled);
-      ses.setPreloads(ses.getPreloads().concat([PRELOAD_PATH]));
+      this.session.setPreloads(this.session.getPreloads().concat([PRELOAD_PATH]));
     }
   }
 
-  public disableBlockingInSession(ses: Electron.Session): void {
-    if (this.config.loadNetworkFilters === true) {
+  public disable(): void {
+    if (this.blocker.config.loadNetworkFilters === true) {
       // NOTE - there is currently no support in Electron for multiple
       // webRequest listeners registered for the same event. This means that
       // adblocker's listeners can be overriden by other ones in the same
@@ -69,12 +71,12 @@ export class ElectronBlocker extends FiltersEngine {
       // adblocker is to remove all listeners for the events we are interested
       // in. In the future, we should consider implementing a webRequest
       // pipeline allowing to register multiple listeners for the same event.
-      ses.webRequest.onHeadersReceived(null);
-      ses.webRequest.onBeforeRequest(null);
+      this.session.webRequest.onHeadersReceived(null);
+      this.session.webRequest.onBeforeRequest(null);
     }
 
-    if (this.config.loadCosmeticFilters === true) {
-      ses.setPreloads(ses.getPreloads().filter(p => p !== PRELOAD_PATH));
+    if (this.blocker.config.loadCosmeticFilters === true) {
+      this.session.setPreloads(this.session.getPreloads().filter((p) => p !== PRELOAD_PATH));
       // @ts-ignore
       ipcMain.removeListener('get-cosmetic-filters', this.onGetCosmeticFilters);
       // @ts-ignore
@@ -83,7 +85,7 @@ export class ElectronBlocker extends FiltersEngine {
   }
 
   private onIsMutationObserverEnabled = (event: Electron.IpcMainEvent) => {
-    event.returnValue = this.config.enableMutationObserver;
+    event.returnValue = this.blocker.config.enableMutationObserver;
   };
 
   private onGetCosmeticFilters = (
@@ -96,7 +98,7 @@ export class ElectronBlocker extends FiltersEngine {
     const hostname = parsed.hostname || '';
     const domain = parsed.domain || '';
 
-    const { active, styles, scripts } = this.getCosmeticsFilters({
+    const { active, styles, scripts } = this.blocker.getCosmeticsFilters({
       domain,
       hostname,
       url,
@@ -128,7 +130,7 @@ export class ElectronBlocker extends FiltersEngine {
       scripts,
       styles: '',
     } as IMessageFromBackground);
-  }
+  };
 
   private onHeadersReceived = (
     details: Electron.OnHeadersReceivedListenerDetails,
@@ -136,12 +138,14 @@ export class ElectronBlocker extends FiltersEngine {
   ): void => {
     const CSP_HEADER_NAME = 'content-security-policy';
     const policies: string[] = [];
-    const responseHeaders: Record<string, string> = (details.responseHeaders || {});
+    const responseHeaders: Record<string, string> = details.responseHeaders || {};
 
     if (details.resourceType === 'mainFrame' || details.resourceType === 'subFrame') {
-      const rawCSP: string | undefined = this.getCSPDirectives(fromElectronDetails(details));
+      const rawCSP: string | undefined = this.blocker.getCSPDirectives(
+        fromElectronDetails(details),
+      );
       if (rawCSP !== undefined) {
-        policies.push(...rawCSP.split(';').map(csp => csp.trim()));
+        policies.push(...rawCSP.split(';').map((csp) => csp.trim()));
 
         // Collect existing CSP headers from response
         for (const [name, value] of Object.entries(responseHeaders)) {
@@ -165,7 +169,7 @@ export class ElectronBlocker extends FiltersEngine {
     }
 
     callback({});
-  }
+  };
 
   private onBeforeRequest = (
     details: Electron.OnBeforeRequestListenerDetails,
@@ -177,7 +181,7 @@ export class ElectronBlocker extends FiltersEngine {
       return;
     }
 
-    const { redirect, match } = this.match(request);
+    const { redirect, match } = this.blocker.match(request);
 
     if (redirect) {
       callback({ redirectURL: redirect.dataUrl });
@@ -186,7 +190,7 @@ export class ElectronBlocker extends FiltersEngine {
     } else {
       callback({});
     }
-  }
+  };
 
   private injectStyles(sender: Electron.WebContents, styles: string): void {
     if (styles.length > 0) {
@@ -194,6 +198,38 @@ export class ElectronBlocker extends FiltersEngine {
         cssOrigin: 'user',
       });
     }
+  }
+}
+
+/**
+ * Wrap `FiltersEngine` into a Electron-friendly helper class. It exposes
+ * methods to interface with Electron APIs needed to block ads.
+ */
+export class ElectronBlocker extends FiltersEngine {
+  private readonly contexts: WeakMap<Electron.Session, BlockingContext> = new Map();
+
+  public enableBlockingInSession(session: Electron.Session): BlockingContext {
+    let context: undefined | BlockingContext = this.contexts.get(session);
+    if (context !== undefined) {
+      return context;
+    }
+
+    // Create new blocking context for `session`
+    context = new BlockingContext(session, this);
+    this.contexts.set(session, context);
+    context.enable();
+
+    return context;
+  }
+
+  public disableBlockingInSession(page: Electron.Session): void {
+    const context: undefined | BlockingContext = this.contexts.get(page);
+    if (context === undefined) {
+      throw new Error('Trying to disable blocking which was not enabled');
+    }
+
+    this.contexts.delete(page);
+    context.disable();
   }
 }
 

@@ -14,68 +14,80 @@ import {
   isUTF8,
   Request,
   StreamingHtmlFilter,
-  WebRequestType,
 } from '@cliqz/adblocker';
 import { IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-content';
 
-export interface WebRequestBeforeRequestDetails {
-  tabId: number;
+// The following type definitions represent the small subset of APIs and
+// attributes needed for the purpose of adblocking. It is a combination of both
+// Chrome's and Firefox's APIs, using optional attributes to ensure that the
+// code handles all possible corner cases and can run in both browsers. The goal
+// is to make the code agnostic to the browser it will run on, by specifying
+// only what is really needed.
+//
+// Breaking changes should be caught by the type checker whenever an update to
+// @types/chrome or @types/firefox-webext-browser occurs.
+
+
+//////////////////////////////////////////////////////////////////////////////
+// WebRequest API
+//////////////////////////////////////////////////////////////////////////////
+
+// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/335e7a9225dda059c1b494a6c24c8e37c66add7f/types/chrome/index.d.ts#L8297
+// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/549983f5264e40fd4b24cff16f1987be9e851c8a/types/firefox-webext-browser/index.d.ts#L2901
+type ResourceType =
+  | 'main_frame'
+  | 'beacon'
+  | 'csp_report'
+  | 'font'
+  | 'image'
+  | 'imageset'
+  | 'media'
+  | 'object'
+  | 'object_subrequest'
+  | 'other'
+  | 'ping'
+  | 'script'
+  | 'speculative'
+  | 'stylesheet'
+  | 'sub_frame'
+  | 'web_manifest'
+  | 'websocket'
+  | 'xbl'
+  | 'xml_dtd'
+  | 'xmlhttprequest'
+  | 'xslt';
+
+// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/335e7a9225dda059c1b494a6c24c8e37c66add7f/types/chrome/index.d.ts#L8305
+// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/549983f5264e40fd4b24cff16f1987be9e851c8a/types/firefox-webext-browser/index.d.ts#L4204
+type HttpHeaders = Array<{
+  name: string;
+  value?: string;
+}>;
+
+// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/335e7a9225dda059c1b494a6c24c8e37c66add7f/types/chrome/index.d.ts#L8312
+// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/549983f5264e40fd4b24cff16f1987be9e851c8a/types/firefox-webext-browser/index.d.ts#L4219
+interface BlockingResponse {
+  cancel?: boolean;
+  redirectUrl?: string;
+  responseHeaders?: HttpHeaders;
+}
+
+// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/335e7a9225dda059c1b494a6c24c8e37c66add7f/types/chrome/index.d.ts#L8380
+// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/549983f5264e40fd4b24cff16f1987be9e851c8a/types/firefox-webext-browser/index.d.ts#L4375
+interface WebRequestDetails {
   url: string;
-  type: WebRequestType;
+  type: ResourceType;
   requestId: string;
-
-  initiator?: string;
-  originUrl?: string;
-  documentUrl?: string;
+  tabId: number;
+  responseHeaders?: HttpHeaders;
+  initiator?: string; // Chromium only
+  originUrl?: string; // Firefox only
+  documentUrl?: string; // Firefox only
 }
 
-export type WebRequestHeadersReceivedDetails = WebRequestBeforeRequestDetails & {
-  responseHeaders?: chrome.webRequest.HttpHeader[];
-};
+type WebRequestCallback = (details: WebRequestDetails) => BlockingResponse;
 
-/**
- * Create an instance of `Request` from `chrome.webRequest.WebRequestDetails`.
- */
-export function fromWebRequestDetails(
-  details: WebRequestBeforeRequestDetails | WebRequestHeadersReceivedDetails,
-): Request {
-  return Request.fromRawDetails({
-    requestId: details.requestId,
-    sourceUrl: details.initiator || details.originUrl || details.documentUrl,
-    tabId: details.tabId,
-    type: details.type,
-    url: details.url,
-  });
-}
-
-export function updateResponseHeadersWithCSP(
-  details: chrome.webRequest.BlockingResponse,
-  policies: string | undefined,
-): chrome.webRequest.BlockingResponse {
-  if (policies === undefined) {
-    return {};
-  }
-
-  let responseHeaders = details.responseHeaders || [];
-  const CSP_HEADER_NAME = 'content-security-policy';
-
-  // Collect existing CSP headers from response
-  responseHeaders.forEach(({ name, value }) => {
-    if (name.toLowerCase() === CSP_HEADER_NAME) {
-      policies += `; ${value}`;
-    }
-  });
-
-  // Remove all CSP headers from response
-  responseHeaders = responseHeaders.filter(({ name }) => name.toLowerCase() !== CSP_HEADER_NAME);
-
-  // Add updated CSP header
-  responseHeaders.push({ name: CSP_HEADER_NAME, value: policies });
-
-  return { responseHeaders };
-}
-
-// From https://github.com/kelseasy/web-ext-types/blob/master/global/index.d.ts#L1897
+// From: https://github.com/kelseasy/web-ext-types/blob/ef7aae8b72c784f40322ffcbfa56dda1db3c902c/global/index.d.ts#L1897
 interface StreamFilter {
   error: string;
   status:
@@ -99,6 +111,126 @@ interface StreamFilter {
   write(data: Uint8Array | ArrayBuffer): void;
 }
 
+type FilterResponseData = (requestId: string) => StreamFilter;
+
+interface RequestFilter {
+  types?: ['main_frame'];
+  urls: ['<all_urls>'];
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// Runtime API
+//////////////////////////////////////////////////////////////////////////////
+
+interface MessageSender {
+  id?: string;
+  tab?: Tab;
+  frameId?: number;
+  url?: string;
+}
+
+type RuntimeMessageCallback = (
+  msg: IBackgroundCallback & { action?: string },
+  sender: MessageSender,
+  sendResponse: (response?: any) => void,
+) => void;
+
+
+//////////////////////////////////////////////////////////////////////////////
+// Tabs API
+//////////////////////////////////////////////////////////////////////////////
+
+interface Tab {
+  id?: number;
+}
+
+interface InjectDetails {
+  allFrames: boolean;
+  code: string;
+  runAt: 'document_start';
+  frameId?: number;
+  matchAboutBlank: boolean;
+  cssOrigin: 'user';
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// Global browser/chrome object
+//////////////////////////////////////////////////////////////////////////////
+
+interface Browser {
+  tabs?: {
+    insertCSS?: (tabId: number, details: InjectDetails, callback: () => void) => void;
+  };
+  runtime?: {
+    onMessage?: {
+      addListener: (callback: RuntimeMessageCallback) => void;
+      removeListener: (callback: RuntimeMessageCallback) => void;
+    };
+  };
+  webRequest?: {
+    filterResponseData?: FilterResponseData;
+    onBeforeRequest: {
+      removeListener: (callback: WebRequestCallback) => void;
+      addListener: (
+        callback: WebRequestCallback,
+        filter: RequestFilter,
+        extraInfoSpec: ['blocking'],
+      ) => void;
+    };
+    onHeadersReceived: {
+      removeListener: (callback: WebRequestCallback) => void;
+      addListener: (
+        callback: WebRequestCallback,
+        filter: RequestFilter,
+        extraInfoSpec: ['blocking', 'responseHeaders'],
+      ) => void;
+    };
+  };
+}
+
+/**
+ * Create an instance of `Request` from WebRequest details.
+ */
+export function fromWebRequestDetails(details: WebRequestDetails): Request {
+  return Request.fromRawDetails({
+    requestId: details.requestId,
+    sourceUrl: details.initiator || details.originUrl || details.documentUrl,
+    tabId: details.tabId,
+    type: details.type,
+    url: details.url,
+  });
+}
+
+/**
+ * Helper used when injecting custom CSP headers to update `responseHeaders`.
+ */
+export function updateResponseHeadersWithCSP(
+  details: WebRequestDetails,
+  policies: string | undefined,
+): BlockingResponse {
+  if (policies === undefined) {
+    return {};
+  }
+
+  let responseHeaders = details.responseHeaders || [];
+  const CSP_HEADER_NAME = 'content-security-policy';
+
+  // Collect existing CSP headers from response
+  responseHeaders.forEach(({ name, value }) => {
+    if (name.toLowerCase() === CSP_HEADER_NAME) {
+      policies += `; ${value}`;
+    }
+  });
+
+  // Remove all CSP headers from response
+  responseHeaders = responseHeaders.filter(({ name }) => name.toLowerCase() !== CSP_HEADER_NAME);
+
+  // Add updated CSP header
+  responseHeaders.push({ name: CSP_HEADER_NAME, value: policies });
+
+  return { responseHeaders };
+}
+
 // Detect charset with UTF-8 encoding from HTML
 const CHARSET_TAG_RE = /<meta charset=['"]utf-8/i;
 const CHARSET_HTTP_EQUIV_RE = /<meta http-equiv="content-type" content="text\/html;charset=utf-8/i;
@@ -106,25 +238,32 @@ const CHARSET_HTTP_EQUIV_RE = /<meta http-equiv="content-type" content="text\/ht
 /**
  * Check if HTML filtering is possible in this browser. Only Firefox is supported.
  */
-export function isHTMLFilteringSupported(): boolean {
-  // @ts-ignore
-  const browser: any = typeof browser !== 'undefined' ? browser : chrome;
+function getFilterResponseData(browser?: Browser): undefined | FilterResponseData {
+  if (
+    browser === undefined ||
+    browser.webRequest === undefined ||
+    browser.webRequest.filterResponseData === undefined
+  ) {
+    return undefined;
+  }
 
-  // Apply HTML filtering is any
-  return (
-    typeof TextDecoder !== 'undefined' &&
-    typeof TextEncoder !== 'undefined' &&
-    browser.webRequest !== undefined &&
-    browser.webRequest.filterResponseData !== undefined
-  );
+  if (typeof TextDecoder !== 'undefined' && typeof TextEncoder !== 'undefined') {
+    return undefined;
+  }
+
+  return browser.webRequest.filterResponseData;
 }
 
-export function filterRequestHTML({ id }: { id: string }, rules: HTMLSelector[]): void {
-  // @ts-ignore
-  const browser: any = typeof browser !== 'undefined' ? browser : chrome;
-
+/**
+ * Enable stream HTML filter on request `id` using `rules`.
+ */
+export function filterRequestHTML(
+  filterResponseData: FilterResponseData,
+  { id }: { id: string },
+  rules: HTMLSelector[],
+): void {
   // Create filter to observe loading of resource
-  const filter: StreamFilter = browser.webRequest.filterResponseData(id);
+  const filter: StreamFilter = filterResponseData(id);
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
   const htmlFilter = new StreamingHtmlFilter(rules);
@@ -181,19 +320,25 @@ export function filterRequestHTML({ id }: { id: string }, rules: HTMLSelector[])
 }
 
 /**
- * Wrap `FiltersEngine` into a WebExtension-friendly helper class. It exposes
- * methods to interface with WebExtension APIs needed to block ads.
+ * This abstraction takes care of blocking in one instance of `browser` (in
+ * practice this would be `chrome` or `browser` global in the WebExtension
+ * context).
  */
-export class WebExtensionBlocker extends FiltersEngine {
-  public enableBlockingInBrowser(): void {
-    if (this.config.loadNetworkFilters === true) {
-      chrome.webRequest.onBeforeRequest.addListener(
+class BlockingContext {
+  constructor(private readonly browser: Browser, private readonly blocker: WebExtensionBlocker) {}
+
+  public enable() {
+    if (
+      this.blocker.config.loadNetworkFilters === true &&
+      this.browser.webRequest !== undefined
+    ) {
+      this.browser.webRequest.onBeforeRequest.addListener(
         this.onBeforeRequest,
         { urls: ['<all_urls>'] },
         ['blocking'],
       );
 
-      chrome.webRequest.onHeadersReceived.addListener(
+      this.browser.webRequest.onHeadersReceived.addListener(
         this.onHeadersReceived,
         { urls: ['<all_urls>'], types: ['main_frame'] },
         ['blocking', 'responseHeaders'],
@@ -201,27 +346,44 @@ export class WebExtensionBlocker extends FiltersEngine {
     }
 
     // Start listening to messages coming from the content-script
-    if (this.config.loadCosmeticFilters === true) {
-      chrome.runtime.onMessage.addListener(this.onRuntimeMessage);
+    if (
+      this.blocker.config.loadCosmeticFilters === true &&
+      this.browser.runtime !== undefined &&
+      this.browser.runtime.onMessage !== undefined
+    ) {
+      this.browser.runtime.onMessage.addListener(this.onRuntimeMessage);
     }
   }
 
-  public disableBlockingInBrowser(): void {
-    chrome.webRequest.onBeforeRequest.removeListener(this.onBeforeRequest);
-    chrome.webRequest.onHeadersReceived.removeListener(this.onHeadersReceived);
-    chrome.runtime.onMessage.removeListener(this.onRuntimeMessage);
+  public disable(): void {
+    if (this.browser.webRequest !== undefined) {
+      this.browser.webRequest.onBeforeRequest.removeListener(this.onBeforeRequest);
+      this.browser.webRequest.onHeadersReceived.removeListener(this.onHeadersReceived);
+    }
+
+    if (this.browser.runtime !== undefined && this.browser.runtime.onMessage !== undefined) {
+      this.browser.runtime.onMessage.removeListener(this.onRuntimeMessage);
+    }
   }
 
+  /**
+   * This methods takes care of optionally performing HTML filtering.
+   *
+   * This can only be done if:
+   * 1. Request is 'main_frame'
+   * 2. `enableHtmlFiltering` is set to `true`.
+   * 3. `browser.webRequest.filterResponseData` (Firefox only!).
+   * 4. `TextEncoder` and `TextDecoder` are available.
+   *
+   * In all other cases, `getFilterResponseData` will return `undefined`.
+   */
   public performHTMLFiltering(request: Request): void {
     if (request.isMainFrame()) {
-      // Here we optionally perform HTML filtering. This can only be done if:
-      // 1. `enableHtmlFiltering` is set to `true`.
-      // 2. `browser.webRequest.filterResponseData` (Firefox only!).
-      // 3. `TextEncoder` and `TextDecoder` are available.
-      if (this.config.enableHtmlFiltering === true && isHTMLFilteringSupported()) {
-        const htmlFilters = this.getHtmlFilters(request);
+      const filterResponseData = getFilterResponseData(this.browser);
+      if (this.blocker.config.enableHtmlFiltering === true && filterResponseData !== undefined) {
+        const htmlFilters = this.blocker.getHtmlFilters(request);
         if (htmlFilters.length !== 0) {
-          filterRequestHTML(request, htmlFilters);
+          filterRequestHTML(filterResponseData, request, htmlFilters);
         }
       }
     }
@@ -229,7 +391,7 @@ export class WebExtensionBlocker extends FiltersEngine {
 
   public handleRuntimeMessage = async (
     msg: IBackgroundCallback & { action?: string },
-    sender: chrome.runtime.MessageSender,
+    sender: MessageSender,
   ): Promise<any> => {
     if (sender.tab === undefined) {
       throw new Error('required "sender.tab" information is not available');
@@ -258,7 +420,7 @@ export class WebExtensionBlocker extends FiltersEngine {
       // Because of this, we specify `allFrames: true` when injecting them so
       // that we do not need to perform this operation for sub-frames.
       if (frameId === 0 && msg.lifecycle === 'start') {
-        const { active, styles } = this.getCosmeticsFilters({
+        const { active, styles } = this.blocker.getCosmeticsFilters({
           domain,
           hostname,
           url,
@@ -287,7 +449,7 @@ export class WebExtensionBlocker extends FiltersEngine {
       // ids and hrefs observed in the DOM. MutationObserver is also used to
       // make sure we can react to changes.
       {
-        const { active, styles, scripts } = this.getCosmeticsFilters({
+        const { active, styles, scripts } = this.blocker.getCosmeticsFilters({
           domain,
           hostname,
           url,
@@ -326,16 +488,14 @@ export class WebExtensionBlocker extends FiltersEngine {
   /**
    * Deal with request cancellation (`{ cancel: true }`) and redirection (`{ redirectUrl: '...' }`).
    */
-  private onBeforeRequest = (
-    details: WebRequestBeforeRequestDetails,
-  ): chrome.webRequest.BlockingResponse => {
+  private onBeforeRequest = (details: WebRequestDetails): BlockingResponse => {
     const request = fromWebRequestDetails(details);
     if (request.isMainFrame()) {
       this.performHTMLFiltering(request);
       return {};
     }
 
-    const { redirect, match } = this.match(request);
+    const { redirect, match } = this.blocker.match(request);
 
     if (redirect !== undefined) {
       return { redirectUrl: redirect.dataUrl };
@@ -346,18 +506,16 @@ export class WebExtensionBlocker extends FiltersEngine {
     return {};
   };
 
-  private onHeadersReceived = (
-    details: WebRequestHeadersReceivedDetails,
-  ): chrome.webRequest.BlockingResponse => {
+  private onHeadersReceived = (details: WebRequestDetails): BlockingResponse => {
     return updateResponseHeadersWithCSP(
       details,
-      this.getCSPDirectives(fromWebRequestDetails(details)),
+      this.blocker.getCSPDirectives(fromWebRequestDetails(details)),
     );
   };
 
   private onRuntimeMessage = (
     msg: IBackgroundCallback & { action?: string },
-    sender: chrome.runtime.MessageSender,
+    sender: MessageSender,
     sendResponse: (response?: any) => void,
   ): void => {
     this.handleRuntimeMessage(msg, sender)
@@ -384,19 +542,21 @@ export class WebExtensionBlocker extends FiltersEngine {
       return;
     }
 
-    // Abort if `chrome` global is not accessible.
-    if (typeof chrome === 'undefined') {
-      throw new Error('required "chrome" global object is not accessible');
+    // Abort if `this.browser.tabs` is not available.
+    if (this.browser.tabs === undefined) {
+      throw new Error('required "tabs" API is not defined');
     }
 
-    // Abort if `chrome.tabs.insertCSS` is not available.
-    if (chrome.tabs === undefined || chrome.tabs.insertCSS === undefined) {
-      throw new Error('required "chrome.tabs.insertCSS" is not available');
+    // Abort if `this.browser.tabs.insertCSS` is not available.
+    if (this.browser.tabs.insertCSS === undefined) {
+      throw new Error('required "tabs.insertCSS" API is not defined');
     }
+
+    const insertCSS = this.browser.tabs.insertCSS;
 
     // Proceed with stylesheet injection.
     return new Promise((resolve, reject) => {
-      chrome.tabs.insertCSS(
+      insertCSS(
         tabId,
         {
           allFrames,
@@ -415,6 +575,66 @@ export class WebExtensionBlocker extends FiltersEngine {
         },
       );
     });
+  }
+}
+
+/**
+ * Creates an instance of our custom `Browser` interface based on available
+ * 'browser' and 'chrome' globals. This allows users of the API to not worry
+ * about how to setup the adblocker optimally in a given context.
+ */
+function getDefaultGlobalBrowser(): Browser {
+  if (typeof browser !== 'undefined') {
+    return {
+      runtime: chrome.runtime,
+      tabs: chrome.tabs,
+      // @ts-ignore
+      webRequest: browser.webRequest,
+    };
+  }
+
+  if (typeof chrome !== 'undefined') {
+    return {
+      runtime: chrome.runtime,
+      tabs: chrome.tabs,
+      webRequest: chrome.webRequest,
+    };
+  }
+
+  throw new Error(
+    'Could not enable blocking: none of "browser" and "chrome" globals are available.',
+  );
+}
+
+/**
+ * Wrap `FiltersEngine` into a WebExtension-friendly helper class. It exposes
+ * methods to interface with WebExtension APIs needed to block ads.
+ */
+export class WebExtensionBlocker extends FiltersEngine {
+  private readonly contexts: WeakMap<Browser, BlockingContext> = new Map();
+
+  public enableBlockingInBrowser(browser: Browser = getDefaultGlobalBrowser()): BlockingContext {
+    let context: undefined | BlockingContext = this.contexts.get(browser);
+    if (context !== undefined) {
+      return context;
+    }
+
+    // Create new blocking context for `browser`
+    context = new BlockingContext(browser, this);
+    this.contexts.set(browser, context);
+    context.enable();
+
+    return context;
+  }
+
+  public disableBlockingInBrowser(browser: Browser): void {
+    const context: undefined | BlockingContext = this.contexts.get(browser);
+    if (context === undefined) {
+      throw new Error('Trying to disable blocking which was not enabled');
+    }
+
+    this.contexts.delete(browser);
+    context.disable();
   }
 }
 
