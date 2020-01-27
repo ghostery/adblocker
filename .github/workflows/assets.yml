@@ -2,8 +2,7 @@ name: Assets
 
 on:
   schedule:
-    - cron:  '15 * * * *'
-# - cron:  '0 19 * * *'
+    - cron:  '15 12 * * *'
 
 jobs:
   assets:
@@ -42,7 +41,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets. GITHUB_TOKEN_PR }}
           committer: Rémi Berson <remusao@users.noreply.github.com>
           commit-message: "chore: update local assets"
           title: "Update local assets"
