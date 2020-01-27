@@ -2,7 +2,8 @@ name: Assets
 
 on:
   schedule:
-    - cron:  '* 19 * * *'
+    - cron:  '15 * * * *'
+# - cron:  '0 19 * * *'
 
 jobs:
   assets:
@@ -32,14 +33,14 @@ jobs:
         run: |
           ./update_lists.sh
 
-      - name: Generate compression codebooks
-        id: codebooks
-        working-directory: ./packages/adblocker/
-        run: |
-          yarn generate-codebooks
+      # - name: Generate compression codebooks
+      #   id: codebooks
+      #   working-directory: ./packages/adblocker/
+      #   run: |
+      #     yarn generate-codebooks
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v2.2.0
+        uses: peter-evans/create-pull-request@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           committer: Rémi Berson <remusao@users.noreply.github.com>
@@ -48,8 +49,7 @@ jobs:
           body: "Automated update of local assets."
           labels: "PR: Internal :house:"
           reviewers: remusao
-          branch: actions/upate-assets
-          branch-suffix: timestamp
+          branch: update-assets
 
       - name: Check outputs
         run: |
