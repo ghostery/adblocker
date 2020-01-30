@@ -1,80 +1,85 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { promises as fs } from 'fs';
 import { resolve } from 'path';
 import { generate } from 'tsmaz';
 
-import { parseFilters } from '../adblocker';
+import { parseFilters, NetworkFilter, CosmeticFilter } from '../adblocker';
 
-function readAsset(filepath: string): string {
-  return readFileSync(resolve(__dirname, '../', filepath), 'utf-8');
+function readAsset(filepath: string): Promise<string> {
+  return fs.readFile(resolve(__dirname, '../', filepath), 'utf-8');
 }
 
-function loadAllLists(): string {
-  return [
-    'assets/easylist/easylist.txt',
-    'assets/easylist/easylistgermany.txt',
-    'assets/easylist/easyprivacy.txt',
-    'assets/fanboy/annoyance.txt',
-    'assets/fanboy/cookiemonster.txt',
-    'assets/peter-lowe/serverlist.txt',
-    'assets/ublock-origin/annoyances.txt',
-    'assets/ublock-origin/badware.txt',
-    'assets/ublock-origin/filters.txt',
-    'assets/ublock-origin/privacy.txt',
-    'assets/ublock-origin/resource-abuse.txt',
-    'assets/ublock-origin/unbreak.txt',
-  ]
-    .map(readAsset)
-    .join('\n');
+async function loadAllLists(): Promise<string> {
+  return Promise.all(
+    [
+      'assets/easylist/easylist.txt',
+      'assets/easylist/easylistgermany.txt',
+      'assets/easylist/easyprivacy.txt',
+      'assets/fanboy/annoyance.txt',
+      'assets/fanboy/cookiemonster.txt',
+      'assets/peter-lowe/serverlist.txt',
+      'assets/ublock-origin/annoyances.txt',
+      'assets/ublock-origin/badware.txt',
+      'assets/ublock-origin/filters.txt',
+      'assets/ublock-origin/privacy.txt',
+      'assets/ublock-origin/resource-abuse.txt',
+      'assets/ublock-origin/unbreak.txt',
+    ].map(readAsset),
+  ).then((strings) => strings.join('\n'));
 }
 
-function main() {
-  const { networkFilters, cosmeticFilters } = parseFilters(loadAllLists());
+async function getCosmeticFilters(): Promise<CosmeticFilter[]> {
+  return parseFilters(await loadAllLists(), {
+    loadCosmeticFilters: true,
+    loadNetworkFilters: false,
+  }).cosmeticFilters;
+}
 
-  // Collect all cosmetic strings
-  const cosmeticSelectorStrings: string[] = [];
-  for (const filter of cosmeticFilters) {
-    cosmeticSelectorStrings.push(filter.getSelector());
+async function getNetworkFilters(): Promise<NetworkFilter[]> {
+  return parseFilters(await loadAllLists(), {
+    loadCosmeticFilters: false,
+    loadNetworkFilters: true,
+  }).networkFilters;
+}
+
+async function getStrings(kind: string): Promise<string[]> {
+  switch (kind) {
+    case 'network-csp':
+      return (await getNetworkFilters())
+        .map(({ csp }) => csp || '')
+        .filter((csp) => csp.length !== 0);
+    case 'network-redirect':
+      return (await getNetworkFilters())
+        .map(({ redirect }) => redirect || '')
+        .filter((redirect) => redirect.length !== 0);
+    case 'network-filter':
+      return (await getNetworkFilters())
+        .map(({ filter }) => filter || '')
+        .filter((filter) => filter.length !== 0);
+    case 'network-hostname':
+      return (await getNetworkFilters())
+        .map(({ hostname }) => hostname || '')
+        .filter((hostname) => hostname.length !== 0);
+    case 'cosmetic-selector':
+      return (await getCosmeticFilters())
+        .map(({ selector }) => selector || '')
+        .filter((selector) => selector.length !== 0);
+    default:
+      throw new Error(`Unsupported codebook: ${kind}`);
   }
-
-  // Collect all network strings
-  const networkCSPStrings: string[] = [];
-  const networkFilterStrings: string[] = [];
-  const networkHostnameStrings: string[] = [];
-  const networkRedirectStrings: string[] = [];
-  for (const filter of networkFilters) {
-    if (filter.csp !== undefined) {
-      networkCSPStrings.push(filter.csp);
-    }
-
-    if (filter.filter !== undefined) {
-      networkFilterStrings.push(filter.filter);
-    }
-
-    if (filter.hostname !== undefined) {
-      networkHostnameStrings.push(filter.hostname);
-    }
-
-    if (filter.redirect !== undefined) {
-      networkRedirectStrings.push(filter.redirect);
-    }
-  }
-
-  // Generate codebooks
-  [
-    { strings: networkCSPStrings, output: 'network-csp' },
-    { strings: networkRedirectStrings, output: 'network-redirect' },
-    { strings: networkFilterStrings, output: 'network-filter' },
-    { strings: networkHostnameStrings, output: 'network-hostname' },
-    { strings: cosmeticSelectorStrings, output: 'cosmetic-selector' },
-  ].forEach(({ strings, output }) => {
-    console.log(`Generate codebook ${output} using ${strings.length} strings.`);
-    const codebook = generate(strings);
-    writeFileSync(
-      resolve(__dirname, `../src/codebooks/${output}.ts`),
-      `/* tslint:disable */\nexport default ${JSON.stringify(codebook, null, 2)};\n`,
-      'utf-8',
-    );
-  });
 }
 
-main();
+async function generateCodebook(kind: string): Promise<string[]> {
+  const strings = await getStrings(kind);
+  console.log(`Generate codebook ${kind} using ${strings.length} strings.`);
+  return generate(strings);
+}
+
+(async () => {
+  const kind = process.argv[process.argv.length - 1];
+  const codebook = await generateCodebook(kind);
+  await fs.writeFile(
+    resolve(__dirname, `../src/codebooks/${kind}.ts`),
+    `/* tslint:disable */\nexport default ${JSON.stringify(codebook, null, 2)};\n`,
+    'utf-8',
+  );
+})();

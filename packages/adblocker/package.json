@@ -29,7 +29,12 @@
     "bundle": "tsc --build ./tsconfig.bundle.json && rollup --config ./rollup.config.ts",
     "prepack": "yarn run bundle",
     "test": "jest --config ./jest.config.js --coverage ./test/",
-    "generate-codebooks": "ts-node --project ./tools/tsconfig.json ./tools/generate_compression_codebooks.ts"
+    "generate-codebooks": "concurrently -n build: yarn:codebook-*",
+    "codebook-network-csp": "ts-node --project ./tools/tsconfig.json ./tools/generate_compression_codebooks.ts -- network-csp",
+    "codebook-network-redirect": "ts-node --project ./tools/tsconfig.json ./tools/generate_compression_codebooks.ts -- network-redirect",
+    "codebook-network-filter": "ts-node --project ./tools/tsconfig.json ./tools/generate_compression_codebooks.ts -- network-filter",
+    "codebook-network-hostname": "ts-node --project ./tools/tsconfig.json ./tools/generate_compression_codebooks.ts -- network-hostname",
+    "codebook-cosmetic-selector": "ts-node --project ./tools/tsconfig.json ./tools/generate_compression_codebooks.ts -- cosmetic-selector"
   },
   "bugs": {
     "url": "https://github.com/cliqz-oss/adblocker/issues"
@@ -75,6 +80,7 @@
     "@types/firefox-webext-browser": "^70.0.1",
     "@types/jest": "^25.1.1",
     "@types/node": "^12.0.3",
+    "concurrently": "^5.1.0",
     "jest": "^25.1.0",
     "rimraf": "^3.0.0",
     "rollup": "^1.29.1",
