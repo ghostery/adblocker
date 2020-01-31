@@ -31,7 +31,7 @@ class Counter<K> {
     this.counter.set(key, value);
   }
 
-  public entries(): Array<[K, number]> {
+  public entries(): [K, number][] {
     return Array.from(this.counter.entries());
   }
 }
@@ -43,7 +43,7 @@ async function loadAllLists() {
       '../assets/easylist/easylistgermany.txt',
       '../assets/easylist/easyprivacy.txt',
       '../assets/fanboy/annoyance.txt',
-      '../assets/fanboy/cookiemonster.txt',
+      '../assets/easylist/easylist-cookie.txt',
       '../assets/peter-lowe/serverlist.txt',
       '../assets/ublock-origin/annoyances.txt',
       '../assets/ublock-origin/badware.txt',
