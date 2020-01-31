@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # uBlock Origin
-curl 'https://cdn.cliqz.com/adblocker/resources/ublock-resources/906c4fac4d23c391085409c1341654e6fe2e67b5d0710560756fd00f2d1f229d/list.txt' > ./ublock-origin/resources.txt &
+curl 'https://cdn.cliqz.com/adblocker/resources/ublock-resources/906c4fac4d23c391085409c1341654e6fe2e67b5d0710560756fd00f2d1f229d/list.txt' | gunzip > ./ublock-origin/resources.txt &
 
 curl 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/annoyances.txt' > ./ublock-origin/annoyances.txt &
 curl 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt' > ./ublock-origin/badware.txt &
