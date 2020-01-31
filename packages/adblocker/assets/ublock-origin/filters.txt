@@ -1008,6 +1008,7 @@ watchcartoononline.*,watchcartoonsonline.*,wcostream.*##+js(acis, document.creat
 @@||thewatchcartoononline.tv^$ghide
 @@||wcostream.com^$ghide
 @@||wcoanimedub.tv^$ghide
+@@||wcoanimesub.tv^$ghide
 @@||wco.tv^$ghide
 thewatchcartoononline.tv##.alert
 
@@ -1514,6 +1515,7 @@ streamp1ay.*###uverlay
 ||eontent.streamplay.to^$all
 ||*ontent.streamp1ay.me^$all
 ||streamplay.to/proxy$websocket
+||steamplay.*^$csp=worker-src 'none';
 
 ! https://github.com/uBlockOrigin/uAssets/issues/553
 *$csp=script-src 'self' * 'unsafe-inline' data:,domain=bolde.com|breaking911.com|convertcase.net|convertfiles.com|financemagnates.com|gostica.com|heraldweekly.com|neonnettle.com|powerpyx.com|schoolholidayseurope.eu|tamilo.com|tfln.co|thecomeback.com|truthfeed.com
@@ -9511,12 +9513,14 @@ secureyourdigitallife.in##+js(set, niceAdsCheck, true)
 
 ! https://github.com/NanoMeow/QuickReports/issues/59
 ! https://github.com/NanoMeow/QuickReports/issues/1487
+! https://github.com/NanoMeow/QuickReports/issues/2911
 @@||rp-online.de^$ghide
 @@||saarbruecker-zeitung.de^$ghide
 @@||volksfreund.de^$ghide
 @@||rp-online.de/assets/adsbygoogle.js$script,1p
 @@||saarbruecker-zeitung.de/assets/adsbygoogle.js$script,1p
 @@||volksfreund.de/assets/adsbygoogle.js$script,1p
+volksfreund.de##+js(set, park.exports.config.adblocker, null)
 @@||doubleclick.net/tag/js/gpt.js$xhr,domain=rp-online.de|saarbruecker-zeitung.de|volksfreund.de
 rp-online.de,saarbruecker-zeitung.de,volksfreund.de##.park-portal
 
@@ -20814,7 +20818,7 @@ programmer-books.com##+js(set, canRunAds, true)
 tbib.org##+js(aopr, document.dispatchEvent)
 
 ! google contributor anti adblock
-coloring.ws,dailyprogress.com,distractify.com,dothaneagle.com,elmundo.es,foxbusiness.com,foxnews.com,fredericksburg.com,godanriver.com,greensboro.com,heraldcourier.com,hickoryrecord.com,jg-tc.com,journalnow.com,kearneyhub.com,kenoshanews.com,madison.com,magicvalley.com,marca.com,martinsvillebulletin.com,mcdowellnews.com,morganton.com,mtlblog.com,ntv.com.tr,newsadvance.com,nonpareilonline.com,nptelegraph.com,ntvspor.net,nwitimes.com,oanow.com,omaha.com,pressofatlanticcity.com,proprofs.com,richmond.com,roanoke.com,scnow.com,snopes.com,starexponent.com,starherald.com,startv.com.tr,statesville.com,theeagle.com,theindependent.com,trib.com,tulsaworld.com,wacotrib.com,yorknewstimes.com##+js(nostif, removeChild, 100)
+coloring.ws,dailyprogress.com,distractify.com,dothaneagle.com,elmundo.es,foxbusiness.com,foxnews.com,fredericksburg.com,ghacks.net,godanriver.com,greensboro.com,heraldcourier.com,hickoryrecord.com,jg-tc.com,journalnow.com,kearneyhub.com,kenoshanews.com,madison.com,magicvalley.com,marca.com,martinsvillebulletin.com,mcdowellnews.com,morganton.com,mtlblog.com,ntv.com.tr,newsadvance.com,nonpareilonline.com,nptelegraph.com,ntvspor.net,nwitimes.com,oanow.com,omaha.com,pressofatlanticcity.com,proprofs.com,richmond.com,roanoke.com,scnow.com,snopes.com,starexponent.com,starherald.com,startv.com.tr,statesville.com,theeagle.com,theindependent.com,trib.com,tulsaworld.com,wacotrib.com,yorknewstimes.com##+js(nostif, removeChild, 100)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6437
 healthandhealthforu.com##+js(aopr, app_vars.force_disable_adblock)
@@ -22680,9 +22684,6 @@ midiavip.com##+js(nobab)
 ! https://github.com/NanoMeow/QuickReports/issues/2624
 evileaks.*##+js(acis, $, prompt)
 
-! https://github.com/NanoMeow/QuickReports/issues/2625
-filecr.com##+js(aopw, mdp_deblocker)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/6771
 linkvietvip.com##+js(aopr, app_vars.force_disable_adblock)
 ||adworkmedia.net^$3p
@@ -23059,7 +23060,9 @@ stream.nbcsports.com##+js(set, adBlockEnabled, false)
 @@||v.fwmrm.net/ad/g/1$xhr,domain=stream.nbcsports.com
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/epgjxo/adblock_detection_on_site_via_firefox_android/
-suicidegirlsfree.com,suicidegirlsfreephotos.tk##+js(noeval-if, adblock)
+@@||exosrv.com/ads.js$script,domain=suicidegirlsfree.com|suicidegirlsfreephotos.tk
+@@||suicidegirlsfree.com^$xhr,1p
+@@||suicidegirlsfreephotos.tk^$xhr,1p
 
 ! https://github.com/NanoMeow/QuickReports/issues/2594#issuecomment-575232882
 @@||komiku.co^$ghide
@@ -23444,4 +23447,18 @@ grid.id##+js(acis, Math, '\x)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2737
 kompasiana.com##+js(aopr, initAdserver)
-||asset.kompas.com/data/*/kgmedia/js/notifkgmediasso.min.js$script,domain=kompasiana.com
+||asset.kompas.com/data/*/kgmedia/js/*notif$script
+
+! https://github.com/uBlockOrigin/uAssets/issues/6904
+paiza.hatenablog.com##+js(aopr, jmp)
+
+! https://github.com/NanoMeow/QuickReports/issues/2910
+pclifetutoriales.com##+js(acis, adBlockDetected)
+
+! https://github.com/NanoMeow/QuickReports/issues/2738
+@@||filecr.com/wp-content/plugins/holdback/js/ads.js$script,1p
+||googlesyndication.com/pagead/js/adsbygoogle.js$xhr,redirect=noop.txt,domain=filecr.com
+
+! https://github.com/NanoMeow/QuickReports/issues/2912
+publish0x.com###registerModal, .show.fade.modal-backdrop
+publish0x.com##body:style(overflow: auto !important;)
