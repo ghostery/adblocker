@@ -5,6 +5,7 @@
 ![tests](https://github.com/cliqz-oss/adblocker/workflows/Tests/badge.svg)
 ![dependabot](https://api.dependabot.com/badges/status?host=github&repo=cliqz-oss/adblocker)
 ![license](https://img.shields.io/github/license/cliqz-oss/adblocker)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/cliqz-oss/adblocker.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cliqz-oss/adblocker/alerts/)
 
 > Efficient, pure-Javascript, multi-platform adblocker library, by Cliqz.
 
