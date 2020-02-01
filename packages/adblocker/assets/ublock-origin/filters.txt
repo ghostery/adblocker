@@ -1008,6 +1008,7 @@ watchcartoononline.*,watchcartoonsonline.*,wcostream.*##+js(acis, document.creat
 @@||thewatchcartoononline.tv^$ghide
 @@||wcostream.com^$ghide
 @@||wcoanimedub.tv^$ghide
+@@||wcoanimesub.tv^$ghide
 @@||wco.tv^$ghide
 thewatchcartoononline.tv##.alert
 
@@ -1119,7 +1120,9 @@ dwrean.net##+js(nobab)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4864
 *expires$media,redirect=noopmp3-0.1s,domain=sat1.de|wetter.com
-||zomap.de/*$xhr,redirect=nooptext,domain=sat1.de|wetter.com
+||cdn.zomap.de^$xmlhttprequest,badfilter
+||zomap.de/*&expires=$script,domain=sat1.de|wetter.com
+
 ||vidapi.expepp.de/files/*$media,domain=moviepilot.de
 
 ! https://adblockplus.org/forum/viewtopic.php?f=1&t=52379
@@ -1514,6 +1517,7 @@ streamp1ay.*###uverlay
 ||eontent.streamplay.to^$all
 ||*ontent.streamp1ay.me^$all
 ||streamplay.to/proxy$websocket
+||steamplay.*^$csp=worker-src 'none';
 
 ! https://github.com/uBlockOrigin/uAssets/issues/553
 *$csp=script-src 'self' * 'unsafe-inline' data:,domain=bolde.com|breaking911.com|convertcase.net|convertfiles.com|financemagnates.com|gostica.com|heraldweekly.com|neonnettle.com|powerpyx.com|schoolholidayseurope.eu|tamilo.com|tfln.co|thecomeback.com|truthfeed.com
@@ -8991,6 +8995,7 @@ icdrama.*###closeADV
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5471
 ! https://github.com/uBlockOrigin/uAssets/issues/6069
+file-up.org##+js(acis, document.createElement, 'script')
 file-up.org,file-upload.*##+js(acis, document.getElementById, undefined)
 file-up.org,file-upload.*##+js(acis, Math, zfgloaded)
 file-up.org##+js(aopr, Date.prototype.toUTCString)
@@ -9003,6 +9008,7 @@ file-up.org##.page-wrap.text-center[style="margin-bottom: 20px;"] > div:not([id]
 file-up.org##.page-wrap.text-center[style="margin-bottom: 20px;"] > div:not([id]):not([class]) > .row > div > .blocktxt::first-line:style(color: #0000 !important;)
 file-upload.*##.adsbygoogle
 ||convert-video.online^$script,3p
+||peethobo.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3189
 yify-torrent.org##+js(nowebrtc)
@@ -9511,13 +9517,14 @@ secureyourdigitallife.in##+js(set, niceAdsCheck, true)
 
 ! https://github.com/NanoMeow/QuickReports/issues/59
 ! https://github.com/NanoMeow/QuickReports/issues/1487
+! https://github.com/NanoMeow/QuickReports/issues/2911
+rp-online.de,saarbruecker-zeitung.de,volksfreund.de##+js(set, park.exports.config.adblocker, null)
 @@||rp-online.de^$ghide
 @@||saarbruecker-zeitung.de^$ghide
 @@||volksfreund.de^$ghide
 @@||rp-online.de/assets/adsbygoogle.js$script,1p
 @@||saarbruecker-zeitung.de/assets/adsbygoogle.js$script,1p
 @@||volksfreund.de/assets/adsbygoogle.js$script,1p
-@@||doubleclick.net/tag/js/gpt.js$xhr,domain=rp-online.de|saarbruecker-zeitung.de|volksfreund.de
 rp-online.de,saarbruecker-zeitung.de,volksfreund.de##.park-portal
 
 ! https://github.com/jspenguin2017/uBlockProtector/issues/987
@@ -11578,7 +11585,7 @@ mrdeepfakes.com##[href*="offer"]
 ! https://github.com/NanoMeow/QuickReports/issues/370
 ! https://www.reddit.com/r/uBlockOrigin/comments/a4ms6i/ublock_for_firefoxchrome_not_blocking_video_on/
 *&expires$media,redirect=noopmp3-0.1s,domain=prosieben.at|prosieben.de|prosiebenmaxx.de|ran.de
-||zomap.de/*$xhr,redirect=nooptext,domain=prosieben.at|prosieben.de|prosiebenmaxx.de|ran.de
+||zomap.de/*&expires=$script,domain=prosieben.at|prosieben.de|prosiebenmaxx.de|ran.de
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4189
 ||lzrikate.com^
@@ -11748,6 +11755,7 @@ uiz.*##+js(aopr, adsBlocked)
 uiz.*##+js(acis, $, adBlock)
 uiz.*##+js(nowebrtc)
 uiz.*##+js(acis, Math, zfgloaded)
+uiz.*##+js(aeld, , popMagic)
 ||share.notizie.it^
 ||tracking.notizie.it^
 ||pteefoak.com^
@@ -12195,6 +12203,8 @@ solarmovie.*##+js(window.open-defuser)
 solarmovie.*##[href="/user/profile/premium-membership"]
 solarmovie.*##.close
 solarmovie.*##[href*="/4k"]
+solarmovie.*##table.movie_version:has-text(Promo)
+solarmovie.*##div.row:has-text(in HD)
 ||4ij4g22t67.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4320
@@ -14097,6 +14107,8 @@ hulkstream.com,hulkstreamz.com##+js(aeld, contextmenu)
 hulkstream.com,hulkstreamz.com##+js(nowebrtc)
 hulkstream.com,hulkstreamz.com##+js(aopr, AaDetector)
 hulkstream.com,hulkstreamz.com##+js(aopr, popjs.init)
+mafiasport.club,sportstream.pw##+js(nowebrtc)
+sportstream.pw##+js(aopr, AaDetector)
 @@*$ghide,domain=hulkstream.com|hulkstreamz.com
 @@||alantv*.com/fuckadblock.js$script,1p
 @@||hulkstream*.com/fuckadblock.js$script,1p
@@ -14114,6 +14126,7 @@ emb.apl3.me###ads
 ||neadscxznser.ml^$all
 ||fasttrack.mobi^$all
 ||spotzplay.com^$all
+||fadsecz.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4919
 sportson.me##+js(acis, Math, zfgloaded)
@@ -14938,7 +14951,7 @@ derbyshiretimes.co.uk##.leaderboard-ad
 *expires$media,redirect=noopmp3-0.1s,domain=kabeleinsdoku.de
 *expires$media,redirect=noopmp3-0.1s,domain=sat1gold.de
 *expires$media,redirect=noopmp3-0.1s,domain=sixx.de
-||zomap.de/*$xhr,redirect=nooptext,domain=kabeleins.de|kabeleinsdoku.de|sat1gold.de|sixx.de
+||zomap.de/*&expires=$script,domain=kabeleins.de|kabeleinsdoku.de|sat1gold.de|sixx.de
 ||damoh.vox.de^$media,redirect=noopmp4-1s,domain=vox.de
 
 ! https://github.com/NanoMeow/QuickReports/issues/834
@@ -20814,7 +20827,7 @@ programmer-books.com##+js(set, canRunAds, true)
 tbib.org##+js(aopr, document.dispatchEvent)
 
 ! google contributor anti adblock
-coloring.ws,dailyprogress.com,distractify.com,dothaneagle.com,elmundo.es,foxbusiness.com,foxnews.com,fredericksburg.com,godanriver.com,greensboro.com,heraldcourier.com,hickoryrecord.com,jg-tc.com,journalnow.com,kearneyhub.com,kenoshanews.com,madison.com,magicvalley.com,marca.com,martinsvillebulletin.com,mcdowellnews.com,morganton.com,mtlblog.com,ntv.com.tr,newsadvance.com,nonpareilonline.com,nptelegraph.com,ntvspor.net,nwitimes.com,oanow.com,omaha.com,pressofatlanticcity.com,proprofs.com,richmond.com,roanoke.com,scnow.com,snopes.com,starexponent.com,starherald.com,startv.com.tr,statesville.com,theeagle.com,theindependent.com,trib.com,tulsaworld.com,wacotrib.com,yorknewstimes.com##+js(nostif, removeChild, 100)
+coloring.ws,dailyprogress.com,distractify.com,dothaneagle.com,elmundo.es,foxbusiness.com,foxnews.com,fredericksburg.com,ghacks.net,godanriver.com,greensboro.com,heraldcourier.com,hickoryrecord.com,jg-tc.com,journalnow.com,kearneyhub.com,kenoshanews.com,madison.com,magicvalley.com,marca.com,martinsvillebulletin.com,mcdowellnews.com,morganton.com,mtlblog.com,ntv.com.tr,newsadvance.com,nonpareilonline.com,nptelegraph.com,ntvspor.net,nwitimes.com,oanow.com,omaha.com,pressofatlanticcity.com,proprofs.com,richmond.com,roanoke.com,scnow.com,snopes.com,starexponent.com,starherald.com,startv.com.tr,statesville.com,theeagle.com,theindependent.com,trib.com,tulsaworld.com,wacotrib.com,yorknewstimes.com##+js(nostif, removeChild, 100)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6437
 healthandhealthforu.com##+js(aopr, app_vars.force_disable_adblock)
@@ -22680,9 +22693,6 @@ midiavip.com##+js(nobab)
 ! https://github.com/NanoMeow/QuickReports/issues/2624
 evileaks.*##+js(acis, $, prompt)
 
-! https://github.com/NanoMeow/QuickReports/issues/2625
-filecr.com##+js(aopw, mdp_deblocker)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/6771
 linkvietvip.com##+js(aopr, app_vars.force_disable_adblock)
 ||adworkmedia.net^$3p
@@ -23059,7 +23069,9 @@ stream.nbcsports.com##+js(set, adBlockEnabled, false)
 @@||v.fwmrm.net/ad/g/1$xhr,domain=stream.nbcsports.com
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/epgjxo/adblock_detection_on_site_via_firefox_android/
-suicidegirlsfree.com,suicidegirlsfreephotos.tk##+js(noeval-if, adblock)
+@@||exosrv.com/ads.js$script,domain=suicidegirlsfree.com|suicidegirlsfreephotos.tk
+@@||suicidegirlsfree.com^$xhr,1p
+@@||suicidegirlsfreephotos.tk^$xhr,1p
 
 ! https://github.com/NanoMeow/QuickReports/issues/2594#issuecomment-575232882
 @@||komiku.co^$ghide
@@ -23444,4 +23456,28 @@ grid.id##+js(acis, Math, '\x)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2737
 kompasiana.com##+js(aopr, initAdserver)
-||asset.kompas.com/data/*/kgmedia/js/notifkgmediasso.min.js$script,domain=kompasiana.com
+||asset.kompas.com/data/*/kgmedia/js/*notif$script
+
+! https://github.com/uBlockOrigin/uAssets/issues/6904
+paiza.hatenablog.com##+js(aopr, jmp)
+
+! https://github.com/NanoMeow/QuickReports/issues/2910
+pclifetutoriales.com##+js(acis, adBlockDetected)
+
+! https://github.com/NanoMeow/QuickReports/issues/2738
+@@||filecr.com/wp-content/plugins/holdback/js/ads.js$script,1p
+||googlesyndication.com/pagead/js/adsbygoogle.js$xhr,redirect=noop.txt,domain=filecr.com
+
+! https://github.com/NanoMeow/QuickReports/issues/2912
+publish0x.com###registerModal, .show.fade.modal-backdrop
+publish0x.com##body:style(overflow: auto !important;)
+
+! https://github.com/NanoMeow/QuickReports/issues/2917
+ratudrama.id##+js(aopr, glxopen)
+||aptaleant.club^$3p
+
+! openload.casa antiadblock
+openload.casa##+js(aopw, adBlockDetected)
+
+! https://github.com/jspenguin2017/uBlockProtector/issues/1102
+*$script,redirect-rule=noopjs,domain=myschool-eng.com
