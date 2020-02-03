@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import { resolve } from 'path';
-import { generate, Smaz } from 'tsmaz';
+import { generate } from '@remusao/smaz-generate';
+import { Smaz } from '@remusao/smaz';
 
 import { parseFilters, NetworkFilter, CosmeticFilter } from '../adblocker';
 
@@ -11,9 +12,11 @@ function readAsset(filepath: string): Promise<string> {
 async function loadAllLists(): Promise<string> {
   return Promise.all(
     [
+      'assets/easylist/easylist-cookie.txt',
       'assets/easylist/easylist.txt',
       'assets/easylist/easylistgermany.txt',
       'assets/easylist/easyprivacy.txt',
+      'assets/fanboy/annoyance.txt',
       'assets/peter-lowe/serverlist.txt',
       'assets/ublock-origin/annoyances.txt',
       'assets/ublock-origin/badware.txt',

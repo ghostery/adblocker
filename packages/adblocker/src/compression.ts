@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { Smaz } from 'tsmaz';
+import { Smaz } from '@remusao/smaz';
 
 import cosmeticSelectorCodebook from './codebooks/cosmetic-selector';
 import networkCSPCodebook from './codebooks/network-csp';
