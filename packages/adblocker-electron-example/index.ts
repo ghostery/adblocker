@@ -61,6 +61,8 @@ async function createWindow() {
   });
 }
 
+app.allowRendererProcessReuse = false
+
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {

@@ -2,14 +2,14 @@
   "extends": "../../tsconfig",
   "compilerOptions": {
     "composite": true,
-    "outDir": "dist/cjs",
+    "outDir": "dist/es6",
+    "module": "es6",
     "declarationDir": "dist/types"
   },
   "references": [
-    { "path": "../adblocker/tsconfig.json" },
-    { "path": "../adblocker-electron-preload/tsconfig.json" }
+    { "path": "../adblocker-content/tsconfig.json" }
   ],
   "files": [
-    "adblocker.ts"
+    "preload.ts"
   ]
 }

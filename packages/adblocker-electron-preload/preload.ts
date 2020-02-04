@@ -6,12 +6,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { ipcRenderer, webFrame } from 'electron';
+
 import {
   extractFeaturesFromDOM,
   IBackgroundCallback,
   IMessageFromBackground,
 } from '@cliqz/adblocker-content';
-import { ipcRenderer, webFrame } from 'electron';
 
 const enableMutationObserver = ipcRenderer.sendSync('is-mutation-observer-enabled');
 
@@ -167,3 +168,6 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
 
   window.addEventListener('unload', unload, { once: true, passive: true });
 }
+
+// Re-export symbols for convenience
+export { IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-content';

@@ -1,15 +1,15 @@
 {
-  "name": "@cliqz/adblocker-electron",
+  "name": "@cliqz/adblocker-electron-preload",
   "version": "1.5.0",
-  "description": "Cliqz adblocker Electron wrapper",
+  "description": "Cliqz adblocker Electron wrapper preload script",
   "author": {
     "name": "Cliqz"
   },
   "homepage": "https://github.com/cliqz-oss/adblocker#readme",
   "license": "MPL-2.0",
-  "main": "dist/cjs/adblocker.js",
-  "module": "dist/es6/adblocker.js",
-  "types": "dist/types/adblocker.d.ts",
+  "main": "dist/preload.cjs.js",
+  "module": "dist/preload.es6.js",
+  "types": "dist/types/preload.d.ts",
   "files": [
     "LICENSE",
     "dist"
@@ -20,7 +20,7 @@
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/cliqz-oss/adblocker.git",
-    "directory": "packages/adblocker-electron"
+    "directory": "packages/adblocker-electron-preload"
   },
   "bugs": {
     "url": "https://github.com/cliqz-oss/adblocker/issues"
@@ -28,25 +28,24 @@
   "scripts": {
     "clean": "rimraf dist coverage",
     "lint": "tslint --config ../../tslint.json --project ./tsconfig.json",
-    "build": "tsc --build ./tsconfig.json",
-    "bundle": "tsc --build ./tsconfig.bundle.json",
-    "prepack": "yarn run bundle",
-    "test": "jest --config ./jest.config.js --coverage ./adblocker.test.ts"
+    "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts",
+    "bundle": "yarn build",
+    "prepack": "yarn run bundle"
   },
   "peerDependencies": {
     "electron": "^8.0.0"
   },
   "dependencies": {
-    "@cliqz/adblocker": "^1.5.0",
-    "@cliqz/adblocker-electron-preload": "^1.5.0"
+    "@cliqz/adblocker-content": "^1.5.0"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.0.1",
+    "@rollup/plugin-node-resolve": "^7.0.0",
     "@types/chrome": "^0.0.93",
-    "@types/jest": "^25.1.1",
     "electron": "^8.0.0",
-    "jest": "^25.1.0",
     "rimraf": "^3.0.0",
-    "ts-jest": "^25.0.0",
+    "rollup": "^1.31.0",
+    "rollup-plugin-sourcemaps": "^0.5.0",
     "tslint": "^6.0.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.7.5"

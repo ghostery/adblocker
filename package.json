@@ -53,27 +53,24 @@
     "./.github/actions/*"
   ],
   "scripts": {
-    "bootstrap": "npx lerna bootstrap",
+    "bootstrap": "yarn install --frozen-lock && lerna bootstrap",
     "metalint": "metalint",
     "lint": "lerna run --parallel lint",
     "watch": "tsc --build ./tsconfig.project.json --watch",
-    "build": "tsc --build ./tsconfig.project.json",
+    "build": "tsc --build ./tsconfig.project.json && lerna run build",
     "bundle": "lerna run bundle",
     "test": "lerna run --concurrency 1 test",
-    "clean": "lerna run --parallel clean && lerna clean --yes && rimraf node_modules",
+    "clean": "lerna run --parallel clean && lerna clean --yes",
     "release": "lerna version",
     "ci:npm-publish": "lerna publish --ignore-scripts --yes from-package"
   },
   "devDependencies": {
     "@cliqz/metalint": "^0.2.0",
     "@types/benchmark": "^1.0.31",
-    "axios": "^0.19.2",
     "benchmark": "^2.1.4",
     "chalk": "^3.0.0",
-    "glob": "^7.1.6",
     "lerna": "^3.20.2",
-    "prettier": "^1.19.1",
-    "rimraf": "^3.0.0"
+    "prettier": "^1.19.1"
   },
   "dependencies": {}
 }
