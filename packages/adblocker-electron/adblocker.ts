@@ -6,15 +6,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { ElectronRequestType, FiltersEngine, Request } from '@cliqz/adblocker';
-
 import { ipcMain } from 'electron';
-import { join } from 'path';
 import { parse } from 'tldts-experimental';
 
-import { IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-content';
+import { ElectronRequestType, FiltersEngine, Request } from '@cliqz/adblocker';
+import { IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-electron-preload';
 
-const PRELOAD_PATH = join(__dirname, './preload.js');
+const PRELOAD_PATH = require.resolve('@cliqz/adblocker-electron-preload');
 
 // https://stackoverflow.com/questions/48854265/why-do-i-see-an-electron-security-warning-after-updating-my-electron-project-t
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
