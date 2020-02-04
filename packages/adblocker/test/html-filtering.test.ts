@@ -6,8 +6,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { HTMLSelector } from '../src/filters/cosmetic';
 import {
+  HTMLSelector,
   default as StreamingHtmlFilter,
   extractSelectorsFromRules,
   extractTagsFromHtml,
@@ -98,20 +98,23 @@ describe('html-filtering', () => {
 
   describe('#extractSelectorsFromRules', () => {
     it('empty', () => {
-      const [patterns, regexps] = extractSelectorsFromRules([]);
-      expect(patterns).toHaveLength(0);
-      expect(regexps).toHaveLength(0);
+      expect(extractSelectorsFromRules([])).toHaveLength(0);
     });
 
     it('parses patterns and regexps', () => {
-      const [patterns, regexps] = extractSelectorsFromRules([
+      expect(extractSelectorsFromRules([
         ['script', ['foo']],
         ['script', ['/foo/']],
         ['script', ['(bar)']],
         ['script', ['/(bar)/i']],
+        ['script', ['foo', '/(bar)/i', 'bar', '/baz/']],
+      ])).toEqual([
+        [['foo'], []],
+        [[], [/foo/]],
+        [['(bar)'], []],
+        [[], [/(bar)/i]],
+        [['foo', 'bar'], [/(bar)/i, /baz/]],
       ]);
-      expect(patterns).toEqual(['foo', '(bar)']);
-      expect(regexps).toEqual([/foo/, /(bar)/i]);
     });
   });
 
@@ -137,11 +140,50 @@ describe('html-filtering', () => {
       expect(filter('', [['script', ['foo']]])).toBe('');
     });
 
-    it('removes tags', () => {
-      expect(filter('<script>foo</script>', [['script', ['foo']]])).toBe('');
-      expect(filter('foo <script>foo</script>bar', [['script', ['foo']]])).toBe('foo bar');
-      expect(filter('foo <script>fOo</script>bar', [['script', ['/foo/']]])).toBe('foo <script>fOo</script>bar');
-      expect(filter('foo <script>fOo</script>bar', [['script', ['/foo/i']]])).toBe('foo bar');
+    describe('removes tags', () => {
+      it('simple plain pattern (full HTML)', () => {
+        expect(filter('<script>foo</script>', [['script', ['foo']]])).toBe('');
+      });
+
+      it('simple plain pattern (partial HTML)', () => {
+        expect(filter('foo <script>foo</script>bar', [['script', ['foo']]])).toBe('foo bar');
+      });
+
+      it('RegExp pattern (full HTML)', () => {
+        expect(filter('<script>fOo</script>', [['script', ['/foo/']]])).toBe('<script>fOo</script>');
+        expect(filter('<script>foo</script>', [['script', ['/foo/']]])).toBe('');
+      });
+
+      it('RegExp pattern (partial HTML)', () => {
+        expect(filter('foo <script>fOo</script>bar', [['script', ['/foo/']]])).toBe('foo <script>fOo</script>bar');
+      });
+
+      it('case-insensitive RegExp', () => {
+        expect(filter('foo <script>fOo</script>bar', [['script', ['/foo/i']]])).toBe('foo bar');
+      });
+
+      it('multi-pattern', () => {
+        const patterns: HTMLSelector[] = [['script', [
+          'foo',
+          'bar',
+          '/baz/i',
+        ]]];
+
+        const html1 = 'foo <script></script> bar baz';
+        expect(filter(html1, patterns)).toBe(html1);
+
+        const html2 = 'foo <script>foo</script> bar baz';
+        expect(filter(html2, patterns)).toBe(html2);
+
+        const html3 = 'foo <script>bar    foo</script> bar baz';
+        expect(filter(html3, patterns)).toBe(html3);
+
+        const html4 = 'foo <script>bar  baz  foo</script> bar baz';
+        expect(filter(html4, patterns)).toBe('foo  bar baz');
+
+        const html5 = 'foo <script>bar  BAZ  foo</script> bar baz';
+        expect(filter(html5, patterns)).toBe('foo  bar baz');
+      });
     });
 
     it('handles streamed input', () => {

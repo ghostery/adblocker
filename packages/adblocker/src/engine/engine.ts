@@ -18,7 +18,8 @@ import {
   fetchResources,
   fullLists,
 } from '../fetch';
-import CosmeticFilter, { HTMLSelector } from '../filters/cosmetic';
+import { HTMLSelector } from '../html-filtering';
+import CosmeticFilter from '../filters/cosmetic';
 import NetworkFilter from '../filters/network';
 import { IListDiff, IRawDiff, parseFilters } from '../lists';
 import Request from '../request';

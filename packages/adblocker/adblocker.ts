@@ -16,7 +16,7 @@ export {
   ElectronRequestType,
   PuppeteerRequestType,
 } from './src/request';
-export { HTMLSelector, default as CosmeticFilter } from './src/filters/cosmetic';
+export { default as CosmeticFilter } from './src/filters/cosmetic';
 export { default as NetworkFilter } from './src/filters/network';
 export {
   FilterType,
@@ -35,4 +35,4 @@ export { tokenize } from './src/utils';
 export { isUTF8 } from './src/encoding';
 export { default as Config } from './src/config';
 export { default as Resources } from './src/resources';
-export { default as StreamingHtmlFilter } from './src/html-filtering';
+export { HTMLSelector, default as StreamingHtmlFilter } from './src/html-filtering';

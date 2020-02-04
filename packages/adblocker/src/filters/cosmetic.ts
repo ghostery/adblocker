@@ -18,6 +18,7 @@ import {
   tokenizeFilter,
 } from '../utils';
 import IFilter from './interface';
+import { HTMLSelector, extractHTMLSelectorFromRule } from '../html-filtering';
 
 const EMPTY_TOKENS: [Uint32Array] = [EMPTY_UINT32_ARRAY];
 export const DEFAULT_HIDDING_STYLE: string = 'display: none !important;';
@@ -172,61 +173,6 @@ const isValidCss = (() => {
     return true;
   };
 })();
-
-// NOTE: we currently handle only `script` tags
-export type Tag = 'script';
-export type HTMLSelector = [Tag, [string]];
-
-/**
- * Unescape strings by removing backslashes.
- */
-function unescape(str: string): string {
-  return str.replace(/[\\]([^\\])/g, '$1');
-}
-
-export function extractHTMLSelectorFromRule(rule: string): HTMLSelector | undefined {
-  const prefix = 'script:has-text(';
-  const suffix = ')';
-  let foundBackslash = false;
-  if (rule.startsWith(prefix) && rule.endsWith(suffix)) {
-    let depth = 1;
-    let i = prefix.length; // skip opening 'script:has-text('
-    const end = rule.length;
-    let prev = -1; // previous character
-    for (; i < end && depth !== 0; i += 1) {
-      const code = rule.charCodeAt(i);
-
-      if (prev !== 92 /* '\' */) {
-        if (code === 40 /* '(' */) {
-          depth += 1;
-        }
-
-        if (code === 41 /* ')' */) {
-          depth -= 1;
-        }
-      } else {
-        foundBackslash = true; // keep track of this for un-escaping
-      }
-
-      prev = code;
-    }
-
-    // Only consider a pattern if it not a compound one (i.e.:
-    // script:has-text(foo))
-    if (i === end) {
-      return [
-        'script',
-        [
-          foundBackslash === true
-            ? unescape(rule.slice(prefix.length, i - 1))
-            : rule.slice(prefix.length, i - 1),
-        ],
-      ];
-    }
-  }
-
-  return undefined;
-}
 
 /**
  * Masks used to store options of cosmetic filters in a bitmask.
