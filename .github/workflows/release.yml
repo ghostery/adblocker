@@ -31,7 +31,7 @@ jobs:
         id: changelog
         uses: ./.github/actions/generate-changelog
         env:
-          GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN_BOT }}
 
       - name: Commit CHANGELOG.md
         if: steps.changelog.outputs.updated == 1
@@ -45,16 +45,16 @@ jobs:
         if: steps.changelog.outputs.updated == 1
         uses: ad-m/github-push-action@v0.5.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN_BOT }}
           branch: 'master'
           force: false
 
       - name: Create a GitHub release
         uses: ./.github/actions/publish-github-release
         env:
-          GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN_BOT }}
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN_BOT }}
 
       - name: Create bundles
         run: yarn bundle
