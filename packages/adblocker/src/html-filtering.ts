@@ -10,13 +10,6 @@
 // which is able to consume an HTML document over time and filter part of it
 // using adblocker selectors.
 
-/**
- * Unescape strings by removing backslashes.
- */
-function unescape(str: string): string {
-  return str.replace(/[\\]([^\\])/g, '$1');
-}
-
 export type HTMLSelector = readonly ['script', readonly string[]];
 
 export function extractHTMLSelectorFromRule(rule: string): HTMLSelector | undefined {
@@ -34,7 +27,6 @@ export function extractHTMLSelectorFromRule(rule: string): HTMLSelector | undefi
   // Prepare for finding one or more ':has-text(' selectors in a row
   while (rule.startsWith(prefix, index)) {
     index += prefix.length;
-    let isSelectorUnescapingNeeded = false;
     let currentParsingDepth = 1;
     const startOfSelectorIndex = index;
     let prev = -1; // previous character
@@ -49,18 +41,12 @@ export function extractHTMLSelectorFromRule(rule: string): HTMLSelector | undefi
         if (code === 41 /* ')' */) {
           currentParsingDepth -= 1;
         }
-      } else {
-        isSelectorUnescapingNeeded = true;
       }
 
       prev = code;
     }
 
-    selectors.push(
-      isSelectorUnescapingNeeded === true
-        ? unescape(rule.slice(startOfSelectorIndex, index - 1))
-        : rule.slice(startOfSelectorIndex, index - 1),
-    );
+    selectors.push(rule.slice(startOfSelectorIndex, index - 1));
   }
 
   if (index !== rule.length) {

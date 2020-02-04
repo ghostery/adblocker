@@ -1406,11 +1406,10 @@ describe('Cosmetic filters', () => {
       test('script:has-text(foo):has-text)', null);
 
       // Real filters
-      test("script:has-text('+'\\x)", ['script', ["'+'x"]]);
-      test("script:has-text('+'\\\\x)", ['script', ["'+'\\x"]]);
+      test("script:has-text('+'\\x)", ['script', ["'+'\\x"]]);
       test('script:has-text(("0x)', ['script', ['("0x']]);
       test('script:has-text((window);)', ['script', ['(window);']]);
-      test('script:has-text(,window\\);)', ['script', [',window);']]);
+      test('script:has-text(,window\\);)', ['script', [',window\\);']]);
       test('script:has-text(/addLinkToCopy/i)', ['script', ['/addLinkToCopy/i']]);
       test('script:has-text(/i10C/i)', ['script', ['/i10C/i']]);
       test('script:has-text(/i10C/)', ['script', ['/i10C/']]);
@@ -1421,6 +1420,13 @@ describe('Cosmetic filters', () => {
       test('script:has-text(a.HTMLImageElement.prototype)', ['script', ['a.HTMLImageElement.prototype']]);
       test('script:has-text(this[atob)', ['script', ['this[atob']]);
       test('script:has-text(}(window);)', ['script', ['}(window);']]);
+      test('script:has-text(/^[\w\W]{1700,3000}$/):has-text(/(\\x\d\w){250}/)', [
+        'script',
+        [
+          '/^[\w\W]{1700,3000}$/',
+          '/(\\x\d\w){250}/',
+        ],
+      ])
 
       // Compound
       test('script:has-text(===):has-text(/[\w\W]{14000}/)', [
