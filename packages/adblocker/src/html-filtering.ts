@@ -10,7 +10,65 @@
 // which is able to consume an HTML document over time and filter part of it
 // using adblocker selectors.
 
-import { HTMLSelector } from './filters/cosmetic';
+/**
+ * Unescape strings by removing backslashes.
+ */
+function unescape(str: string): string {
+  return str.replace(/[\\]([^\\])/g, '$1');
+}
+
+export type HTMLSelector = readonly ['script', readonly string[]];
+
+export function extractHTMLSelectorFromRule(rule: string): HTMLSelector | undefined {
+  if (rule.startsWith('script') === false) {
+    return undefined;
+  }
+
+  const prefix = ':has-text(';
+  const selectors: string[] = [];
+
+  let index = 6;
+  // script:has-text
+  //       ^ 6
+
+  // Prepare for finding one or more ':has-text(' selectors in a row
+  while (rule.startsWith(prefix, index)) {
+    index += prefix.length;
+    let isSelectorUnescapingNeeded = false;
+    let currentParsingDepth = 1;
+    const startOfSelectorIndex = index;
+    let prev = -1; // previous character
+    for (; index < rule.length && currentParsingDepth !== 0; index += 1) {
+      const code = rule.charCodeAt(index);
+
+      if (prev !== 92 /* '\' */) {
+        if (code === 40 /* '(' */) {
+          currentParsingDepth += 1;
+        }
+
+        if (code === 41 /* ')' */) {
+          currentParsingDepth -= 1;
+        }
+      } else {
+        isSelectorUnescapingNeeded = true;
+      }
+
+      prev = code;
+    }
+
+    selectors.push(
+      isSelectorUnescapingNeeded === true
+        ? unescape(rule.slice(startOfSelectorIndex, index - 1))
+        : rule.slice(startOfSelectorIndex, index - 1),
+    );
+  }
+
+  if (index !== rule.length) {
+    return undefined;
+  }
+
+  return ['script', selectors];
+}
 
 export function extractTagsFromHtml(
   html: string,
@@ -90,52 +148,74 @@ export function extractTagsFromHtml(
   return [tags, html.slice(0, indexOfNextTag), html.slice(indexOfNextTag)];
 }
 
-export function extractSelectorsFromRules(selectors: HTMLSelector[]): [string[], RegExp[]] {
-  const patterns: string[] = [];
-  const regexps: RegExp[] = [];
+type Patterns = readonly [readonly string[], readonly RegExp[]][];
 
-  for (let i = 0; i < selectors.length; i += 1) {
-    const selector = selectors[i][1][0];
-    if (selector !== undefined) {
+export function extractSelectorsFromRules(filter: HTMLSelector[]): Patterns {
+  const patterns: [string[], RegExp[]][] = [];
+
+  for (let i = 0; i < filter.length; i += 1) {
+    const selectors = filter[i][1];
+    const plainPatterns: string[] = [];
+    const regexpPatterns: RegExp[] = [];
+
+    for (let j = 0; j < selectors.length; j += 1) {
+      const selector = selectors[j];
       if (selector.charCodeAt(0) === 47 /* '/' */) {
         if (selector.endsWith('/')) {
-          regexps.push(new RegExp(selector.slice(1, -1)));
+          regexpPatterns.push(new RegExp(selector.slice(1, -1)));
         } else if (selector.endsWith('/i')) {
-          regexps.push(new RegExp(selector.slice(1, -2), 'i'));
+          regexpPatterns.push(new RegExp(selector.slice(1, -2), 'i'));
         }
       } else {
-        patterns.push(selector);
+        plainPatterns.push(selector);
       }
+    }
+
+    if (plainPatterns.length !== 0 || regexpPatterns.length !== 0) {
+      patterns.push([plainPatterns, regexpPatterns]);
     }
   }
 
-  return [patterns, regexps];
+  return patterns;
+}
+
+/**
+ * Check if `tag` should be removed from HTML based on `plainPatterns` and
+ * `regexpPatterns`. For a tag to be removed, all elements from `plainPatterns`
+ * and `regexpPatterns` must match.
+ */
+function tagShouldBeRemoved(
+  tag: string,
+  plainPatterns: readonly string[],
+  regexpPatterns: readonly RegExp[],
+): boolean {
+  for (let i = 0; i < plainPatterns.length; i += 1) {
+    if (tag.indexOf(plainPatterns[i]) === -1) {
+      return false;
+    }
+  }
+
+  for (let i = 0; i < regexpPatterns.length; i += 1) {
+    if (regexpPatterns[i].test(tag) === false) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 export function selectTagsToRemove(
-  patterns: string[],
-  regexps: RegExp[],
+  patterns: Patterns,
   tags: [number, string][],
 ): [number, string][] {
   const toRemove: [number, string][] = [];
 
   for (let i = 0; i < tags.length; i += 1) {
     const tag = tags[i];
-    let found = false;
     for (let j = 0; j < patterns.length; j += 1) {
-      if (tag[1].indexOf(patterns[j]) !== -1) {
+      if (tagShouldBeRemoved(tag[1], patterns[j][0], patterns[j][1])) {
         toRemove.push(tag);
-        found = true;
         break;
-      }
-    }
-
-    if (found === false) {
-      for (let j = 0; j < regexps.length; j += 1) {
-        if (regexps[j].test(tag[1]) === true) {
-          toRemove.push(tag);
-          break;
-        }
       }
     }
   }
@@ -160,16 +240,11 @@ export function removeTagsFromHtml(html: string, toRemove: [number, string][]): 
 
 export default class StreamingHtmlFilter {
   private buffer: string;
-  private readonly patterns: string[];
-  private readonly regexps: RegExp[];
+  private readonly patterns: Patterns;
 
   constructor(selectors: HTMLSelector[]) {
     this.buffer = '';
-
-    // Prepare patterns
-    const extracted = extractSelectorsFromRules(selectors);
-    this.patterns = extracted[0];
-    this.regexps = extracted[1];
+    this.patterns = extractSelectorsFromRules(selectors);
   }
 
   public flush(): string {
@@ -178,7 +253,7 @@ export default class StreamingHtmlFilter {
 
   public write(chunk: string): string {
     // If there are no valid selectors, we can directly write `data`.
-    if (this.patterns.length === 0 && this.regexps.length === 0) {
+    if (this.patterns.length === 0) {
       return chunk;
     }
 
@@ -195,6 +270,6 @@ export default class StreamingHtmlFilter {
     }
 
     // Perform tags filtering using `this.patterns` and `this.regexps`.
-    return removeTagsFromHtml(parsed, selectTagsToRemove(this.patterns, this.regexps, tags));
+    return removeTagsFromHtml(parsed, selectTagsToRemove(this.patterns, tags));
   }
 }
