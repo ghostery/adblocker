@@ -53,7 +53,7 @@
     "./.github/actions/*"
   ],
   "scripts": {
-    "bootstrap": "npx lerna bootstrap",
+    "bootstrap": "yarn install --frozen-lock && lerna bootstrap",
     "metalint": "metalint",
     "lint": "lerna run --parallel lint",
     "watch": "tsc --build ./tsconfig.project.json --watch",
