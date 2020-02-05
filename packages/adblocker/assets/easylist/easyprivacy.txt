@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202002041827
+! Version: 202002051949
 ! Title: EasyPrivacy
-! Last modified: 04 Feb 2020 18:27 UTC
+! Last modified: 05 Feb 2020 19:49 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -208,6 +208,7 @@
 .de/h.gif?
 .de/l.gif?
 .de/o.gif?
+.de/z.gif?
 .do_tracking&
 .drive-analytics.
 .eloqua.js
@@ -1488,6 +1489,7 @@
 /datacapture/track
 /datacollectcode?
 /datadome/*
+/DavplusAnalytics.
 /dbdm-events.
 /dbdm-events/*
 /dc-storm-track.
@@ -2292,6 +2294,7 @@
 /intstatcheck.
 /iotechnologies.js
 /IPbeacon.
+/ipdvdc/*
 /iperceptions.
 /iperceptions/*
 /iperceptions_
@@ -3218,7 +3221,6 @@
 /prod-client-js-logger/*
 /prodtracker?
 /profile_tracker.
-/profitwell.js
 /promo_tracking/*
 /promos/pixels?
 /propagate_cookie.
@@ -3823,6 +3825,7 @@
 /stats/track.asp?
 /stats/tracker.js
 /stats/tracking.
+/stats/visitors
 /stats/welcome.php?
 /stats/xmsg_
 /stats/xtcore.
@@ -9070,6 +9073,7 @@ _mongo_stats/
 ||caanalytics.com^$third-party
 ||clickmatic.pl^$third-party
 ||conversion.pl^$third-party
+||conversionlabs.net.pl^$third-party
 ||dmdi.pl^$third-party
 ||goprediction.com^$third-party
 ||gostats.pl^$third-party
@@ -9199,8 +9203,10 @@ _mongo_stats/
 ||rnet.plus^$third-party
 ||ru.net^$third-party
 ||rutarget.ru^$third-party
+||sarimsol.com^$third-party
 ||sarov.ws^$third-party
 ||sas.com^$third-party
+||sblftg.com^$third-party
 ||semantiqo.com^$third-party
 ||sensor.org.ua^$third-party
 ||seo-master.net^$third-party
@@ -10062,7 +10068,6 @@ _mongo_stats/
 ||dmcdn.net/behavior/
 ||dmdentertainment.com^*/video_debug.gif?
 ||dn34cbtcv9mef.cloudfront.net^
-||dna8twue3dlxq.cloudfront.net^
 ||dnn506yrbagrg.cloudfront.net^
 ||domodomain.com^*/ddsense.aspx?
 ||doug1izaerwt3.cloudfront.net^
@@ -10177,6 +10182,7 @@ _mongo_stats/
 ||filament-stats.herokuapp.com^
 ||files-hawk.co.uk/hl/hawklinks.js
 ||filesonic.com/referral/$third-party
+||firecrux.com/track/$xmlhttprequest
 ||fitanalytics.com/metrics/
 ||flashstats.libsyn.com^
 ||flex.msn.com/mstag/
@@ -11503,6 +11509,7 @@ _mongo_stats/
 ||onlex.de/_counter.php
 ||onlinepresse.info/counter.php?
 ||onlyfree.de^*/counterservice/
+||orbidder.otto.de^
 ||ottogroup.media/ogm.nitro.
 ||plista.com/getuid?
 ||plista.com/iframeShowItem.php
@@ -11540,7 +11547,9 @@ _mongo_stats/
 ||t.etraveli.com^
 ||t.nativendo.de^
 ||t.quisma.com^
+||tagm.tchibo.de^
 ||top50-solar.de/solarcount/
+||track2.cliplister.com^
 ||track2.dulingo.com^
 ||track2.mycliplister.com^
 ||tracker.euroweb.net^
@@ -11964,10 +11973,12 @@ _mongo_stats/
 ||liczniki.org/hit.php
 ||marketing.tr.netsalesmedia.pl^
 ||pixel.homebook.pl^
+||pixel6.wp.pl^
 ||ppstatic.pl^*/track.js
 ||px.wp.pl^
 ||qai-ir.quartic.pl^$third-party
 ||qai.quartic.pl^$third-party
+||rec-pl.quartic.pl^
 ||rec.quartic.pl^$third-party
 ||scontent.services.tvn.pl^
 ||stats.asp24.pl^
@@ -15232,6 +15243,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 ||news.ch/newslogbug.asp?
 ||newsdeutschland.com/RPC
 ||nickles.de/ivw/
+||notebookinfo.de/p?
 ||nowonscreen.com/statistik_
 ||nox.to/files/frame.htm
 ||noz.de/tracking/
@@ -15999,6 +16011,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 ||c.gazetevatan.com^
 ||d.haberler.com^
 ||haberler.com/dinamik/
+||mark.isbank.com.tr^
 ||p.milliyet.com.tr^
 ||sahibinden.com/sbbi/
 ! Ukrainian
@@ -16188,7 +16201,8 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||dpm.demdex.net/id?$xmlhttprequest,domain=foxnews.com
 @@||dw.cbsi.com/anonc.js$domain=gamespot.com|giantbomb.com
 @@||dw.com.com/js/dw.js$domain=cbsnews.com|gamespot.com|tv.com
-@@||dynamicyield.com/st?$script,domain=computeruniverse.net
+@@||dynamicyield.com/api/$script,domain=zalora.com.my|zalora.com.ph|zalora.sg
+@@||dynamicyield.com/st?$script,domain=computeruniverse.net|zalora.com.my|zalora.com.ph|zalora.sg
 @@||e2e-comms.pearson.com/osbrowserchecker/prd/thirdPartyCookie.html?$subdocument,domain=pearsonmylabandmastering.com
 @@||ec.europa.eu^*/piwik.js
 @@||ensighten.com^*/Bootstrap.js$domain=americanexpress.com|capitalone.com|caranddriver.com|cart.autodesk.com|citizensbank.com|dell.com|france24.com|homedepot.com|hp.com|rfi.fr|sbs.com.au|sfgate.com|staples.com|t-mobile.com|target.com|verizonwireless.com|williamhill.com|zales.com
