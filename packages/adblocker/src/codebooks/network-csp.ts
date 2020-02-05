@@ -85,6 +85,7 @@ export default [
   "cha",
   "dia",
   "eli",
+  "ger",
   "jwp",
   "tag",
   " *",
