@@ -3222,9 +3222,6 @@ nowgoal.com##[href^="/ad/"]
 ! fullmatchesandshows .com page broken by sw easylist regex filter
 @@||fullmatchesandshows.com/wp$script,1p
 
-! https://github.com/uBlockOrigin/uAssets/issues/6842
-@@||disqus.com/embed.js$script
-
 ! https://github.com/NanoMeow/QuickReports/issues/2771
 @@||apollo-ireland.akamaized.net/*/files/*$image,domain=otodom.pl
 
@@ -3315,3 +3312,12 @@ dziennikbaltycki.pl,dzienniklodzki.pl,dziennikpolski24.pl,dziennikzachodni.pl,ec
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6924
 ||px.moatads.com/pixel.gif$image,domain=abcya.com,redirect-rule=1x1.gif
+
+! netaffiliation .com Peter Lowe's
+||metaffiliation.com^$badfilter
+||metaffiliation.com^$3p,domain=~netaffiliation.com
+||netaffiliation.com^$badfilter
+||netaffiliation.com^$3p
+
+! pornomovies .com broken videos
+@@||pornomovies.com/templates/pornomovies/js/videojs.js$script,1p
