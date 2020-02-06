@@ -238,8 +238,13 @@ export default class StreamingHtmlFilter {
   }
 
   public write(chunk: string): string {
-    // If there are no valid selectors, we can directly write `data`.
+    // If there are no valid selectors, abort.
     if (this.patterns.length === 0) {
+      return chunk;
+    }
+
+    // If given an empty string, abort.
+    if (chunk.length === 0) {
       return chunk;
     }
 
