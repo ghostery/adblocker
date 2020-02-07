@@ -378,6 +378,7 @@ export default class NetworkFilter implements IFilter {
               csp = optionValue;
             }
             break;
+          case 'ghide':
           case 'elemhide':
           case 'generichide':
             if (negation) {

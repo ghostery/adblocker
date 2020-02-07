@@ -766,6 +766,11 @@ describe('Network filters', () => {
       network('@@||foo.com^$generichide', { isGenericHide: true, isException: true });
     });
 
+    it('ghide', () => {
+      network('||foo.com^$ghide', { isGenericHide: true });
+      network('@@||foo.com^$ghide', { isGenericHide: true, isException: true });
+    });
+
     describe('un-supported options', () => {
       ['genericblock', 'popunder', 'popup', 'woot'].forEach(
         (unsupportedOption) => {
