@@ -389,6 +389,7 @@ export default class CosmeticFilterBucket {
     ids = [],
 
     allowGenericHides = true,
+    allowSpecificHides = true,
 
     // Allows to specify which rules to return
     getBaseRules = true,
@@ -404,6 +405,7 @@ export default class CosmeticFilterBucket {
     ids?: string[];
 
     allowGenericHides: boolean;
+    allowSpecificHides: boolean;
 
     getBaseRules?: boolean;
     getInjectionRules?: boolean;
@@ -421,7 +423,13 @@ export default class CosmeticFilterBucket {
     // Collect matching rules which specify a hostname constraint.
     if (getRulesFromHostname === true) {
       this.hostnameIndex.iterMatchingFilters(hostnameTokens, (rule: CosmeticFilter) => {
-        if (rule.match(hostname, domain)) {
+        // A hostname-specific filter is considered if it's a scriptlet (not
+        // impacted by disabling of specific filters) or specific hides are
+        // allowed.
+        if (
+          (allowSpecificHides === true || rule.isScriptInject() === true) &&
+          rule.match(hostname, domain)
+        ) {
           rules.push(rule);
         }
         return true;

@@ -69,12 +69,13 @@ export const enum NETWORK_FILTER_MASK {
   isImportant = 1 << 21,
   isLeftAnchor = 1 << 22,
   isRightAnchor = 1 << 23,
-  thirdParty = 1 << 24,
+  isSpecificHide = 1 << 24,
+  thirdParty = 1 << 25,
 
   // Kind of patterns
-  isFullRegex = 1 << 25,
-  isRegex = 1 << 26,
-  isUnicode = 1 << 27,
+  isFullRegex = 1 << 26,
+  isRegex = 1 << 27,
+  isUnicode = 1 << 28,
 }
 
 /**
@@ -378,7 +379,24 @@ export default class NetworkFilter implements IFilter {
               csp = optionValue;
             }
             break;
+          case 'ehide':
           case 'elemhide':
+            if (negation) {
+              return null;
+            }
+
+            mask = setBit(mask, NETWORK_FILTER_MASK.isGenericHide);
+            mask = setBit(mask, NETWORK_FILTER_MASK.isSpecificHide);
+            break;
+          case 'shide':
+          case 'specifichide':
+            if (negation) {
+              return null;
+            }
+
+            mask = setBit(mask, NETWORK_FILTER_MASK.isSpecificHide);
+            break;
+          case 'ghide':
           case 'generichide':
             if (negation) {
               return null;
@@ -1042,6 +1060,14 @@ export default class NetworkFilter implements IFilter {
       options.push(`csp=${this.csp}`);
     }
 
+    if (this.isElemHide()) {
+      options.push('elemhide');
+    }
+
+    if (this.isSpecificHide()) {
+      options.push('specifichide');
+    }
+
     if (this.isGenericHide()) {
       options.push('generichide');
     }
@@ -1293,6 +1319,14 @@ export default class NetworkFilter implements IFilter {
 
   public isCSP() {
     return getBit(this.mask, NETWORK_FILTER_MASK.isCSP);
+  }
+
+  public isElemHide() {
+    return this.isSpecificHide() && this.isGenericHide();
+  }
+
+  public isSpecificHide() {
+    return getBit(this.mask, NETWORK_FILTER_MASK.isSpecificHide);
   }
 
   public isGenericHide() {

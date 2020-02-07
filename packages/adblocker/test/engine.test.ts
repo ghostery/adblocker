@@ -504,6 +504,100 @@ $csp=baz,domain=bar.com
       });
     });
 
+    describe('elemhide', () => {
+      it('disables cosmetics if domain matches', () => {
+        expect(
+          Engine.parse(
+            `
+@@||foo.com^$elemhide
+foo.com##selector1
+##selector1
+`,
+          ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+            .styles,
+        ).toBe('');
+      });
+    });
+
+
+    describe('specifichide', () => {
+      it('allows specific cosmetics by default', () => {
+        expect(
+          Engine.parse('foo.com##selector').getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+          }).styles,
+        ).not.toBe('');
+      });
+
+      it('disables specific cosmetics if domain matches', () => {
+        expect(
+          Engine.parse(
+            `
+@@||foo.com^$specifichide
+foo.com##selector1
+`,
+          ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+            .styles,
+        ).toBe('');
+      });
+
+      it('allows specific cosmetics if $specifichide', () => {
+        expect(
+          Engine.parse(
+            `
+@@||foo.com^$specifichide
+foo.com##selector
+||foo.com^$specifichide
+`,
+          ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+            .styles,
+        ).not.toBe('');
+      });
+
+      it('allows specific cosmetics if $specifichide,important', () => {
+        expect(
+          Engine.parse(
+            `
+@@||foo.com^$important,specifichide
+foo.com##selector
+||foo.com^$specifichide,important
+`,
+          ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+            .styles,
+        ).not.toBe('');
+      });
+
+      it('disables specific cosmetics if @@$specifichide,important', () => {
+        expect(
+          Engine.parse(
+            `
+@@||foo.com^$important,specifichide
+foo.com##selector
+foo.com##.selector
+foo.com###selector
+||foo.com^$specifichide
+`,
+          ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+            .styles,
+        ).toBe('');
+      });
+
+      it('disabling specific hides does not impact scriptlets', () => {
+        const engine = Engine.parse([
+          '@@||foo.com^$specifichide',
+          'foo.com##+js(foo)',
+        ].join('\n'));
+        engine.resources.js.set('foo', '');
+        expect(engine.getCosmeticsFilters({
+          domain: 'foo.com',
+          hostname: 'foo.com',
+          url: 'https://foo.com',
+        }).scripts).toHaveLength(1)
+      });
+    });
+
     describe('generichide', () => {
       it('allows generic cosmetics by default', () => {
         expect(
