@@ -503,10 +503,20 @@ export default class CosmeticFilterBucket {
       // =======================================================================
       // Collect unhidden selectors. They will be used to filter-out canceled
       // rules from other indices.
+      let injectionsDisabled = false;
       const disabledRules: Set<string> = new Set();
       this.unhideIndex.iterMatchingFilters(hostnameTokens, (rule: CosmeticFilter) => {
         if (rule.match(hostname, domain)) {
           disabledRules.add(rule.getSelector());
+
+          // Detect special +js() rules to disable scriptlet injections
+          if (
+            rule.isScriptInject() === true &&
+            rule.isUnhide() === true &&
+            rule.getSelector().length === 0
+          ) {
+            injectionsDisabled = true;
+          }
         }
 
         return true;
@@ -522,8 +532,10 @@ export default class CosmeticFilterBucket {
         }
 
         // Dispatch rules in `injections` or `styles` depending on type
-        if (getInjectionRules === true && rule.isScriptInject()) {
-          injections.push(rule);
+        if (rule.isScriptInject() === true) {
+          if (getInjectionRules === true && injectionsDisabled === false) {
+            injections.push(rule);
+          }
         } else {
           styles.push(rule);
         }

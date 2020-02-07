@@ -373,8 +373,12 @@ export default class CosmeticFilter implements IFilter {
       line.charCodeAt(suffixStartIndex) === 43 /* '+' */ &&
       fastStartsWithFrom(line, '+js(', suffixStartIndex)
     ) {
-      // Generic scriptlets are invalid
-      if (hostnames === undefined && entities === undefined) {
+      // Generic scriptlets are invalid, unless they are un-hide
+      if (
+        hostnames === undefined &&
+        entities === undefined &&
+        getBit(mask, COSMETICS_MASK.unhide) === false
+      ) {
         return null;
       }
 
