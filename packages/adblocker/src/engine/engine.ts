@@ -811,21 +811,25 @@ export default class FilterEngine extends EventEmitter<
       // If there is a match
       if (result.filter !== undefined) {
         if (result.filter.isRedirect()) {
-          const redirectResource = this.resources.getResource(result.filter.getRedirect());
-          if (redirectResource !== undefined) {
-            const { data, contentType } = redirectResource;
-            let dataUrl;
-            if (contentType.indexOf(';') !== -1) {
-              dataUrl = `data:${contentType},${data}`;
-            } else {
-              dataUrl = `data:${contentType};base64,${btoaPolyfill(data)}`;
-            }
+          // Handle case where a filter redirect=none is also specified. If one
+          // is found, we just block the request instead of redirecting.
+          if (this.redirects.matchAll(request).some((f) => f.getRedirect() === 'none') === false) {
+            const redirectResource = this.resources.getResource(result.filter.getRedirect());
+            if (redirectResource !== undefined) {
+              const { data, contentType } = redirectResource;
+              let dataUrl;
+              if (contentType.indexOf(';') !== -1) {
+                dataUrl = `data:${contentType},${data}`;
+              } else {
+                dataUrl = `data:${contentType};base64,${btoaPolyfill(data)}`;
+              }
 
-            result.redirect = {
-              body: data,
-              contentType,
-              dataUrl: dataUrl.trim(),
-            };
+              result.redirect = {
+                body: data,
+                contentType,
+                dataUrl: dataUrl.trim(),
+              };
+            }
           } // TODO - else, throw an exception
         }
       }
