@@ -380,6 +380,13 @@ export default class CosmeticFilter implements IFilter {
 
       mask = setBit(mask, COSMETICS_MASK.scriptInject);
       selector = line.slice(suffixStartIndex + 4, line.length - 1);
+
+      // An empty scriptlet (i.e. '+js()') can be specified to cancel injections
+      // on a specific domain or globally. It does not make sense though to have
+      // an empty scriptlet without an exception (i.e. '#@#' is mandatory).
+      if (getBit(mask, COSMETICS_MASK.unhide) === false && selector.length === 0) {
+        return null;
+      }
     } else {
       // Detect special syntax
       let indexOfColon = line.indexOf(':', suffixStartIndex);
