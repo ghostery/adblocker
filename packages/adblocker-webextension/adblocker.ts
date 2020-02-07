@@ -231,10 +231,6 @@ export function updateResponseHeadersWithCSP(
   return { responseHeaders };
 }
 
-// Detect charset with UTF-8 encoding from HTML
-const CHARSET_TAG_RE = /<meta charset=['"]utf-8/i;
-const CHARSET_HTTP_EQUIV_RE = /<meta http-equiv="content-type" content="text\/html;charset=utf-8/i;
-
 /**
  * Check if HTML filtering is possible in this browser. Only Firefox is supported.
  */
@@ -247,7 +243,7 @@ function getFilterResponseData(browser?: Browser): undefined | FilterResponseDat
     return undefined;
   }
 
-  if (typeof TextDecoder !== 'undefined' && typeof TextEncoder !== 'undefined') {
+  if (typeof TextDecoder === 'undefined' || typeof TextEncoder === 'undefined') {
     return undefined;
   }
 
@@ -267,55 +263,54 @@ export function filterRequestHTML(
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
   const htmlFilter = new StreamingHtmlFilter(rules);
-  let utf8: undefined | boolean;
+
+  const teardown = (event: { data?: ArrayBuffer; }) => {
+    // Before disconnecting our streaming filter, we need to be extra careful
+    // and make sure that no data remains in either our streaming `TextDecoder`
+    // instance or the HTML filterer.
+    //
+    // In case any data remains, we write it to filter.
+    try {
+      const remaining = htmlFilter.write(decoder.decode()) + htmlFilter.flush();
+      if (remaining.length !== 0) {
+        filter.write(encoder.encode(remaining));
+      }
+    } catch (ex) {
+      // If we reach this point, there is probably no way we can recover...
+      console.error('Failed to flush HTML filterer', ex);
+    }
+
+    // If latest event had some data attached (i.e. 'ondata' event), we make
+    // sure to flush it through the filterer before disconnecting.
+    if (event.data !== undefined) {
+      filter.write(event.data);
+    }
+
+    // Disconnect streaming filter.
+    filter.disconnect();
+  }
 
   filter.ondata = (event) => {
-    let decoded = '';
+    // On any chunk of data we implementa very fast UTF-8 validity check to make
+    // sure that we will be able to decode it. Note that in theory it should be
+    // possible that a chunk ends on the boundary of a multi-byte UTF-8 code and
+    // this check would fail?
+    if (isUTF8(new Uint8Array(event.data)) === false) {
+      return teardown(event);
+    }
+
     try {
-      // Attempt decoding chunk (ArrayBuffer) into a string.
-      decoded = decoder.decode(event.data, { stream: true });
+      filter.write(encoder.encode(htmlFilter.write(decoder.decode(event.data, { stream: true }))));
     } catch (ex) {
-      // If we fail to decode chunk, then we need to be extra conservative
-      // and we stop listening to streaming response. This is most likely
-      // because we do not support this encoding.
-      filter.write(event.data);
-      filter.disconnect();
-      return;
-    }
-
-    // Try to guess encoding on first chunk received. The assumption is that
-    // we will find either `charset` or `http-equiv` meta-tag in the header.
-    // If none of this is found, then we fallback to using `isUTF8` which
-    // will make sure `event.data` is valid utf-8 (this check is more
-    // costly).
-    if (utf8 === undefined) {
-      utf8 =
-        CHARSET_TAG_RE.test(decoded) ||
-        CHARSET_HTTP_EQUIV_RE.test(decoded) ||
-        isUTF8(new Uint8Array(event.data));
-    }
-
-    // We only proceed to filter this chunk if we could confirm that encoding
-    // if utf-8. Otherwise we simply proxy the data as-is to not risk
-    // breaking the page.
-    if (utf8 === true) {
-      filter.write(encoder.encode(htmlFilter.write(decoded)));
-    } else {
-      filter.write(event.data);
+      // If we fail to decode a chunk, we need to be extra conservative and stop
+      // listening to streaming response. Teardown takes care of flushing any
+      // data remaining in the pipeline and disconnecting the listener.
+      return teardown(event);
     }
   };
 
-  filter.onstop = async () => {
-    // Make sure we push remaining data if any (needed because both `decoder`
-    // and `htmlFilter` can keep a chunk of data internally which would need
-    // extra input to be processed).
-    const remaining = encoder.encode(htmlFilter.write(decoder.decode())) + htmlFilter.flush();
-
-    if (remaining.length !== 0) {
-      filter.write(encoder.encode(remaining));
-    }
-
-    filter.disconnect();
+  filter.onstop = () => {
+    teardown({});
   };
 }
 
@@ -389,10 +384,13 @@ class BlockingContext {
     }
   }
 
-  public handleRuntimeMessage = async (
+  private handleRuntimeMessage = async (
     msg: IBackgroundCallback & { action?: string },
     sender: MessageSender,
-  ): Promise<any> => {
+    sendResponse: (response?: IMessageFromBackground) => void,
+  ): Promise<void> => {
+    const promises: Promise<void>[] = [];
+
     if (sender.tab === undefined) {
       throw new Error('required "sender.tab" information is not available');
     }
@@ -440,7 +438,7 @@ class BlockingContext {
           return;
         }
 
-        await this.injectStylesWebExtension(styles, { tabId: sender.tab.id, allFrames: true });
+        promises.push(this.injectStylesWebExtension(styles, { tabId: sender.tab.id, allFrames: true }));
       }
 
       // Separately, requests cosmetics which depend on the page it self
@@ -471,18 +469,21 @@ class BlockingContext {
           return;
         }
 
-        await this.injectStylesWebExtension(styles, { tabId: sender.tab.id, frameId });
+        promises.push(this.injectStylesWebExtension(styles, { tabId: sender.tab.id, frameId }));
 
         // Inject scripts from content script
-        const responseFromBackground: IMessageFromBackground = {
-          active,
-          extended: [],
-          scripts,
-          styles: '',
-        };
-        return responseFromBackground;
+        if (scripts.length !== 0) {
+          sendResponse({
+            active,
+            extended: [],
+            scripts,
+            styles: '',
+          });
+        }
       }
     }
+
+    await Promise.all(promises);
   };
 
   /**
@@ -516,13 +517,11 @@ class BlockingContext {
   private onRuntimeMessage = (
     msg: IBackgroundCallback & { action?: string },
     sender: MessageSender,
-    sendResponse: (response?: any) => void,
+    sendResponse: (response?: IMessageFromBackground) => void,
   ): void => {
-    this.handleRuntimeMessage(msg, sender)
-      .then(sendResponse)
-      .catch((ex) => {
-        console.error('Error while handling runtime message:', ex);
-      });
+    this.handleRuntimeMessage(msg, sender, sendResponse).catch((ex) => {
+      console.error('Error while handling runtime message:', ex);
+    });
   };
 
   private async injectStylesWebExtension(

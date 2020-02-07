@@ -20,8 +20,10 @@ export default [
       sourcemap: true,
     },
     plugins: [
+      resolve({
+        mainFields: ['main'],
+      }),
       commonjs(),
-      resolve(),
       sourcemaps(),
     ],
   },
@@ -34,8 +36,10 @@ export default [
       sourcemap: true,
     },
     plugins: [
+      resolve({
+        mainFields: ['main'],
+      }),
       commonjs(),
-      resolve(),
       sourcemaps(),
     ],
   },

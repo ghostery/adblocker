@@ -51,7 +51,7 @@ export default class Resources {
   }
 
   public static parse(data: string, { checksum }: { checksum: string }): Resources {
-    const typeToResource = new Map();
+    const typeToResource: Map<string, Map<string, string>> = new Map();
     const trimComments = (str: string) => str.replace(/^\s*#.*$/gm, '');
     const chunks = data.split('\n\n');
 
@@ -68,15 +68,25 @@ export default class Resources {
           continue;
         }
 
-        if (!typeToResource.has(type)) {
-          typeToResource.set(type, new Map());
+        let resources = typeToResource.get(type);
+        if (resources === undefined) {
+          resources = new Map();
+          typeToResource.set(type, resources);
         }
-        typeToResource.get(type).set(name, body);
+        resources.set(name, body);
       }
     }
 
-    // the resource containing javascirpts to be injected
-    const js = typeToResource.get('application/javascript');
+    // The resource containing javascirpts to be injected
+    const js: Map<string, string> = typeToResource.get('application/javascript') || new Map();
+    const entries = Array.from(js.entries());
+    for (let i = 0; i < entries.length; i += 1) {
+      const key = entries[i][0];
+      const value = entries[i][1];
+      if (key.endsWith('.js')) {
+        js.set(key.slice(0, -3), value);
+      }
+    }
 
     // Create a mapping from resource name to { contentType, data }
     // used for request redirection.
