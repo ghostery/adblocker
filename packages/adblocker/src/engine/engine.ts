@@ -39,6 +39,34 @@ function btoaPolyfill(buffer: string): string {
   return buffer;
 }
 
+function shouldApplyHideException(filters: NetworkFilter[]): boolean {
+  if (filters.length === 0) {
+    return false;
+  }
+
+  // Get $Xhide filter with highest priority:
+  // $Xhide,important > $Xhide > @@$Xhide
+  let genericHideFilter: NetworkFilter = filters[0];
+  let currentScore = 0;
+  for (let i = 0; i < filters.length; i += 1) {
+    const filter = filters[i];
+    // To encode priority between filters, we create a bitmask with the following:
+    // $important,Xhide = 100 (takes precedence)
+    // $Xhide           = 010 (exception to @@$Xhide)
+    // @@$Xhide         = 001 (forbids Xhide filters)
+    const score: number = (filter.isImportant() ? 4 : 0) | (filter.isException() ? 1 : 2);
+
+    // Highest `score` has precedence
+    if (score >= currentScore) {
+      currentScore = score;
+      genericHideFilter = filter;
+    }
+  }
+
+  // Check that there is at least one $generichide match and no exception
+  return genericHideFilter.isException();
+}
+
 export interface BlockingResponse {
   match: boolean;
   redirect:
@@ -223,8 +251,8 @@ export default class FilterEngine extends EventEmitter<
     engine.exceptions = NetworkFilterBucket.deserialize(buffer, config);
 
     engine.csp = NetworkFilterBucket.deserialize(buffer, config);
-    engine.genericHides = NetworkFilterBucket.deserialize(buffer, config);
     engine.cosmetics = CosmeticFilterBucket.deserialize(buffer, config);
+    engine.hideExceptions = NetworkFilterBucket.deserialize(buffer, config);
 
     return engine;
   }
@@ -232,7 +260,7 @@ export default class FilterEngine extends EventEmitter<
   public lists: Map<string, string>;
 
   public csp: NetworkFilterBucket;
-  public genericHides: NetworkFilterBucket;
+  public hideExceptions: NetworkFilterBucket;
   public exceptions: NetworkFilterBucket;
   public importants: NetworkFilterBucket;
   public redirects: NetworkFilterBucket;
@@ -264,8 +292,10 @@ export default class FilterEngine extends EventEmitter<
 
     // $csp=
     this.csp = new NetworkFilterBucket({ config: this.config });
+    // $elemhide
     // $generichide
-    this.genericHides = new NetworkFilterBucket({ config: this.config });
+    // $specifichide
+    this.hideExceptions = new NetworkFilterBucket({ config: this.config });
     // @@filter
     this.exceptions = new NetworkFilterBucket({ config: this.config });
     // $important
@@ -310,8 +340,8 @@ export default class FilterEngine extends EventEmitter<
       this.importants.getSerializedSize() +
       this.redirects.getSerializedSize() +
       this.csp.getSerializedSize() +
-      this.genericHides.getSerializedSize() +
       this.cosmetics.getSerializedSize() +
+      this.hideExceptions.getSerializedSize() +
       4; // checksum
 
     // Estimate size of `this.lists` which stores information of checksum for each list.
@@ -356,8 +386,8 @@ export default class FilterEngine extends EventEmitter<
     this.exceptions.serialize(buffer);
 
     this.csp.serialize(buffer);
-    this.genericHides.serialize(buffer);
     this.cosmetics.serialize(buffer);
+    this.hideExceptions.serialize(buffer);
 
     // Optionally append a checksum at the end
     if (this.config.integrityCheck) {
@@ -402,7 +432,7 @@ export default class FilterEngine extends EventEmitter<
         this.importants.getFilters(),
         this.redirects.getFilters(),
         this.csp.getFilters(),
-        this.genericHides.getFilters(),
+        this.hideExceptions.getFilters(),
       ),
     };
   }
@@ -441,17 +471,18 @@ export default class FilterEngine extends EventEmitter<
       const exceptions: NetworkFilter[] = [];
       const importants: NetworkFilter[] = [];
       const redirects: NetworkFilter[] = [];
-      const genericHides: NetworkFilter[] = [];
+      const hideExceptions: NetworkFilter[] = [];
 
       for (let i = 0; i < newNetworkFilters.length; i += 1) {
         const filter = newNetworkFilters[i];
-        // NOTE: it's important to check for $generichide and $csp before
-        // exceptions and important as we store all of them in the same filter
-        // bucket. The check for exceptions is done at match-time directly.
+        // NOTE: it's important to check for $generichide, $elemhide,
+        // $specifichide and $csp before exceptions and important as we store
+        // all of them in the same filter bucket. The check for exceptions is
+        // done at match-time directly.
         if (filter.isCSP()) {
           csp.push(filter);
-        } else if (filter.isGenericHide()) {
-          genericHides.push(filter);
+        } else if (filter.isGenericHide() || filter.isSpecificHide()) {
+          hideExceptions.push(filter);
         } else if (filter.isException()) {
           exceptions.push(filter);
         } else if (filter.isImportant()) {
@@ -472,7 +503,7 @@ export default class FilterEngine extends EventEmitter<
       this.filters.update(filters, removedNetworkFiltersSet);
       this.exceptions.update(exceptions, removedNetworkFiltersSet);
       this.csp.update(csp, removedNetworkFiltersSet);
-      this.genericHides.update(genericHides, removedNetworkFiltersSet);
+      this.hideExceptions.update(hideExceptions, removedNetworkFiltersSet);
     }
 
     return updated;
@@ -591,8 +622,10 @@ export default class FilterEngine extends EventEmitter<
       };
     }
 
-    // Check if there is some generichide
-    const genericHides = this.genericHides.matchAll(
+    let allowGenericHides = true;
+    let allowSpecificHides = true;
+
+    const exceptions = this.hideExceptions.matchAll(
       Request.fromRawDetails({
         domain: domain || '',
         hostname,
@@ -604,28 +637,31 @@ export default class FilterEngine extends EventEmitter<
       }),
     );
 
-    // Get $generichide filter with highest priority:
-    // $generichide,important > $generichide > @@$generichide
-    let genericHideFilter: null | NetworkFilter = null;
-    let currentScore = 0;
-    for (let i = 0; i < genericHides.length; i += 1) {
-      const filter = genericHides[i];
-      // To encode priority between filters, we create a bitmask with the following:
-      // $important,generichide = 100 (takes precedence)
-      // $generichide           = 010 (exception to @@$generichide)
-      // @@$generichide         = 001 (forbids generic hide filters)
-      const score: number = (filter.isImportant() ? 4 : 0) | (filter.isException() ? 1 : 2);
+    const genericHides: NetworkFilter[] = [];
+    const specificHides: NetworkFilter[] = [];
+    for (let i = 0; i < exceptions.length; i += 1) {
+      const filter = exceptions[i];
 
-      // Highest `score` has precedence
-      if (score > currentScore) {
-        currentScore = score;
-        genericHideFilter = filter;
+      if (filter.isElemHide()) {
+        allowGenericHides = false;
+        allowSpecificHides = false;
+        break;
+      }
+
+      if (filter.isSpecificHide()) {
+        specificHides.push(filter);
+      } else if (filter.isGenericHide()) {
+        genericHides.push(filter);
       }
     }
 
-    // Check that there is at least one $generichide match and no exception
-    const allowGenericHides =
-      genericHideFilter === null || genericHideFilter.isException() === false;
+    if (allowGenericHides === true) {
+      allowGenericHides = shouldApplyHideException(genericHides) === false;
+    }
+
+    if (allowSpecificHides === true) {
+      allowSpecificHides = shouldApplyHideException(specificHides) === false;
+    }
 
     // Lookup injections as well as stylesheets
     const { injections, stylesheet } = this.cosmetics.getCosmeticsFilters({
@@ -637,6 +673,7 @@ export default class FilterEngine extends EventEmitter<
       ids,
 
       allowGenericHides,
+      allowSpecificHides,
 
       getBaseRules,
       getInjectionRules,
@@ -677,7 +714,7 @@ export default class FilterEngine extends EventEmitter<
       Array.prototype.push.apply(filters, this.filters.matchAll(request));
       Array.prototype.push.apply(filters, this.exceptions.matchAll(request));
       Array.prototype.push.apply(filters, this.csp.matchAll(request));
-      Array.prototype.push.apply(filters, this.genericHides.matchAll(request));
+      Array.prototype.push.apply(filters, this.hideExceptions.matchAll(request));
       Array.prototype.push.apply(filters, this.redirects.matchAll(request));
     }
 

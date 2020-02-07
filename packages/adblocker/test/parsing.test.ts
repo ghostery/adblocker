@@ -40,6 +40,8 @@ function network(filter: string, expected: any) {
       isException: parsed.isException(),
       isFullRegex: parsed.isFullRegex(),
       isGenericHide: parsed.isGenericHide(),
+      isSpecificHide: parsed.isSpecificHide(),
+      isElemHide: parsed.isElemHide(),
       isHostnameAnchor: parsed.isHostnameAnchor(),
       isLeftAnchor: parsed.isLeftAnchor(),
       isPlain: parsed.isPlain(),
@@ -88,6 +90,8 @@ const DEFAULT_NETWORK_FILTER = {
   isException: false,
   isFullRegex: false,
   isGenericHide: false,
+  isSpecificHide: false,
+  isElemHide: false,
   isHostnameAnchor: false,
   isLeftAnchor: false,
   isPlain: false,
@@ -761,9 +765,32 @@ describe('Network filters', () => {
       network('@@||foo.com^$badfilter', { isBadFilter: true, isException: true });
     });
 
-    it('generichide', () => {
+    describe('generichide', () => {
+      network('||foo.com^$ghide', { isGenericHide: true });
+      network('@@||foo.com^$ghide', { isGenericHide: true, isException: true });
       network('||foo.com^$generichide', { isGenericHide: true });
       network('@@||foo.com^$generichide', { isGenericHide: true, isException: true });
+    });
+
+    describe('specifichide', () => {
+      network('||foo.com^$shide', { isSpecificHide: true });
+      network('@@||foo.com^$shide', { isSpecificHide: true, isException: true });
+      network('||foo.com^$specifichide', { isSpecificHide: true });
+      network('@@||foo.com^$specifichide', { isSpecificHide: true, isException: true });
+    });
+
+    describe('elemhide', () => {
+      network('||foo.com^$ehide', { isElemHide: true });
+      network('@@||foo.com^$ehide', { isElemHide: true, isException: true });
+
+      network('||foo.com^$shide,ghide', { isElemHide: true });
+      network('@@||foo.com^$shide,ghide', { isElemHide: true, isException: true });
+
+      network('||foo.com^$elemhide', { isElemHide: true });
+      network('@@||foo.com^$elemhide', { isElemHide: true, isException: true });
+
+      network('||foo.com^$generichide,specifichide', { isElemHide: true });
+      network('@@||foo.com^$generichide,specifichide', { isElemHide: true, isException: true });
     });
 
     describe('un-supported options', () => {
