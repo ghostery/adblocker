@@ -480,7 +480,7 @@ $csp=baz,domain=bar.com
   describe('#getCosmeticsFilters', () => {
     describe('script injections', () => {
       it('injects script', () => {
-        const engine = Engine.parse('##+js(script.js,arg1)');
+        const engine = Engine.parse('foo.com##+js(script.js,arg1)');
         engine.resources = Resources.parse('script.js application/javascript\n{{1}}', {
           checksum: '',
         });
@@ -495,7 +495,7 @@ $csp=baz,domain=bar.com
 
       it('script missing', () => {
         expect(
-          Engine.parse('##+js(foo,arg1)').getCosmeticsFilters({
+          Engine.parse('foo.com##+js(foo,arg1)').getCosmeticsFilters({
             domain: 'foo.com',
             hostname: 'foo.com',
             url: 'https://foo.com',
