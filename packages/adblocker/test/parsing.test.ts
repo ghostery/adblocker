@@ -1368,21 +1368,40 @@ describe('Cosmetic filters', () => {
     });
   });
 
-  it('parses script inject', () => {
-    cosmetic('foo.com##+js(script.js, argument)', {
-      ...DEFAULT_COSMETIC_FILTER,
-      isScriptInject: true,
-      selector: 'script.js, argument',
+  describe('+js()', () => {
+    it('parses script inject', () => {
+      cosmetic('foo.com##+js(script.js, argument)', {
+        ...DEFAULT_COSMETIC_FILTER,
+        isScriptInject: true,
+        selector: 'script.js, argument',
+      });
+      cosmetic('foo.com##+js(script.js, arg1, arg2, arg3)', {
+        ...DEFAULT_COSMETIC_FILTER,
+        isScriptInject: true,
+        selector: 'script.js, arg1, arg2, arg3',
+      });
     });
-    cosmetic('foo.com##+js(script.js, arg1, arg2, arg3)', {
-      ...DEFAULT_COSMETIC_FILTER,
-      isScriptInject: true,
-      selector: 'script.js, arg1, arg2, arg3',
-    });
-  });
 
-  it('rejects generic script inject', () => {
-    cosmetic('##+js(script.js, argument)', null);
+    it('rejects generic script inject', () => {
+      cosmetic('##+js(script.js, argument)', null);
+      cosmetic('~foo.com##+js(script.js, argument)', null);
+      cosmetic('~foo.*##+js(script.js, argument)', null);
+    });
+
+    it('rejects empty non-exception', () => {
+      cosmetic('##+js()', null);
+      cosmetic('foo.com##+js()', null);
+      cosmetic('~foo.com##+js()', null);
+    });
+
+    it('accept empty exception', () => {
+      cosmetic('#@#+js()', {
+        ...DEFAULT_COSMETIC_FILTER,
+        isScriptInject: true,
+        selector: '',
+        isUnhide: true,
+      });
+    });
   });
 
   describe('parses html filtering', () => {

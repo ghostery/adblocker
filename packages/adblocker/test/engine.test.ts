@@ -757,6 +757,41 @@ foo.com###selector
         matches: [],
       },
 
+      // = unhide +js() disable
+      {
+        filters: [
+          'foo.com##+js(scriptlet1)',
+          'foo.com##+js(scriptlet2)',
+          // 'foo.com#@#+js()',
+        ],
+        hostname: 'foo.com',
+        hrefs: [],
+        injections: ['scriptlet1', 'scriptlet2'],
+        matches: [],
+      },
+      {
+        filters: [
+          'foo.com##+js(scriptlet1)',
+          'foo.com##+js(scriptlet2)',
+          'foo.com#@#+js()', // specific to hostname
+        ],
+        hostname: 'foo.com',
+        hrefs: [],
+        injections: [],
+        matches: [],
+      },
+      {
+        filters: [
+          'foo.com##+js(scriptlet1)',
+          'foo.com##+js(scriptlet2)',
+          '#@#+js()', // applies to all hostnames
+        ],
+        hostname: 'foo.com',
+        hrefs: [],
+        injections: [],
+        matches: [],
+      },
+
       // Generic Hides
       // =============
       // Filters which are not classes, ids or hrefs are matched using the
@@ -1140,6 +1175,8 @@ foo.com###selector
           // Initialize engine with all rules from test case
           const engine = createEngine(filters.join('\n'));
           engine.resources.js.set('scriptlet', 'scriptlet');
+          engine.resources.js.set('scriptlet1', 'scriptlet1');
+          engine.resources.js.set('scriptlet2', 'scriptlet2');
 
           // #getCosmeticsFilters
           const { styles, scripts } = engine.getCosmeticsFilters({
