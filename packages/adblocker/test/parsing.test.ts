@@ -1194,13 +1194,14 @@ describe('Cosmetic filters', () => {
       }
     };
 
-    ['##.selector', '##+js(foo.js)'].forEach((line) => {
+    ['##.selector'].forEach((line) => {
       it(`pprint ${line}`, () => {
         checkToString(line, line);
       });
     });
 
     it('pprint with hostnames', () => {
+      checkToString('foo.com##+js(foo.js)', '<hostnames>##+js(foo.js)');
       checkToString('foo.com##.selector', '<hostnames>##.selector');
       checkToString('~foo.com##.selector', '<hostnames>##.selector');
       checkToString('~foo.*##.selector', '<hostnames>##.selector');
@@ -1368,16 +1369,20 @@ describe('Cosmetic filters', () => {
   });
 
   it('parses script inject', () => {
-    cosmetic('##+js(script.js, argument)', {
+    cosmetic('foo.com##+js(script.js, argument)', {
       ...DEFAULT_COSMETIC_FILTER,
       isScriptInject: true,
       selector: 'script.js, argument',
     });
-    cosmetic('##+js(script.js, arg1, arg2, arg3)', {
+    cosmetic('foo.com##+js(script.js, arg1, arg2, arg3)', {
       ...DEFAULT_COSMETIC_FILTER,
       isScriptInject: true,
       selector: 'script.js, arg1, arg2, arg3',
     });
+  });
+
+  it('rejects generic script inject', () => {
+    cosmetic('##+js(script.js, argument)', null);
   });
 
   describe('parses html filtering', () => {
@@ -1497,7 +1502,7 @@ describe('Cosmetic filters', () => {
   // });
 
   it('#getScript', () => {
-    const parsed = CosmeticFilter.parse('##+js(script.js, arg1, arg2, arg3)');
+    const parsed = CosmeticFilter.parse('foo.com##+js(script.js, arg1, arg2, arg3)');
     expect(parsed).not.toBeNull();
     if (parsed !== null) {
       expect(parsed.getScript(new Map([['script.js', '{{1}},{{2}},{{3}}']]))).toEqual(
