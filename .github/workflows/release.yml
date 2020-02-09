@@ -31,7 +31,7 @@ jobs:
         id: changelog
         uses: ./.github/actions/generate-changelog
         env:
-          GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN_BOT }}
+          GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit CHANGELOG.md
         if: steps.changelog.outputs.updated == 1

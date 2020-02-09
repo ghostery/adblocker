@@ -22,7 +22,7 @@ import { setOutput } from '@actions/core';
   }
 
   const CHANGELOG_PATH = resolve(process.env.GITHUB_WORKSPACE, 'CHANGELOG.md');
-  const CHANGELOG =   execSync(
+  const CHANGELOG = execSync(
     `node ${resolve(
       __dirname,
       'node_modules/.bin/lerna-changelog',
