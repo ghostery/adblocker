@@ -212,14 +212,18 @@ export class ElectronBlocker extends FiltersEngine {
     return context;
   }
 
-  public disableBlockingInSession(page: Electron.Session): void {
-    const context: undefined | BlockingContext = this.contexts.get(page);
+  public disableBlockingInSession(session: Electron.Session): void {
+    const context: undefined | BlockingContext = this.contexts.get(session);
     if (context === undefined) {
       throw new Error('Trying to disable blocking which was not enabled');
     }
 
-    this.contexts.delete(page);
+    this.contexts.delete(session);
     context.disable();
+  }
+
+  public isBlockingEnabled(session: Electron.Session): boolean {
+    return this.contexts.has(session);
   }
 }
 

@@ -635,6 +635,10 @@ export class WebExtensionBlocker extends FiltersEngine {
     this.contexts.delete(browser);
     context.disable();
   }
+
+  public isBlockingEnabled(browser: Browser): boolean {
+    return this.contexts.has(browser);
+  }
 }
 
 // Re-export symbols from @cliqz/adblocker
