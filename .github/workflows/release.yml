@@ -31,13 +31,13 @@ jobs:
         id: changelog
         uses: ./.github/actions/generate-changelog
         env:
-          GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN_BOT }}
 
       - name: Commit CHANGELOG.md
         if: steps.changelog.outputs.updated == 1
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "adblocker-bot@users.noreply.github.com"
+          git config --local user.name "Adblocker Bot"
           git add CHANGELOG.md
           git commit -m "Update CHANGELOG.md [skip ci]" --no-verify --quiet
 
