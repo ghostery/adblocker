@@ -58,24 +58,26 @@ export const enum NETWORK_FILTER_MASK {
   fromWebsocket = 1 << 12, // e.g.: ws, wss
   fromXmlHttpRequest = 1 << 13,
 
-  // Options
+  // Partiness
   firstParty = 1 << 14,
-  fuzzyMatch = 1 << 15,
-  isBadFilter = 1 << 16,
-  isCSP = 1 << 17,
-  isException = 1 << 18,
+  thirdParty = 1 << 15,
+
+  // Options
+  fuzzyMatch = 1 << 16,
+  isBadFilter = 1 << 17,
+  isCSP = 1 << 18,
   isGenericHide = 1 << 19,
-  isHostnameAnchor = 1 << 20,
-  isImportant = 1 << 21,
-  isLeftAnchor = 1 << 22,
-  isRightAnchor = 1 << 23,
-  isSpecificHide = 1 << 24,
-  thirdParty = 1 << 25,
+  isImportant = 1 << 20,
+  isSpecificHide = 1 << 21,
 
   // Kind of patterns
-  isFullRegex = 1 << 26,
-  isRegex = 1 << 27,
-  isUnicode = 1 << 28,
+  isFullRegex = 1 << 22,
+  isRegex = 1 << 23,
+  isUnicode = 1 << 24,
+  isLeftAnchor = 1 << 25,
+  isRightAnchor = 1 << 26,
+  isException = 1 << 27,
+  isHostnameAnchor = 1 << 28,
 }
 
 /**
