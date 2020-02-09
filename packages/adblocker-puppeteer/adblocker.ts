@@ -181,6 +181,11 @@ export class PuppeteerBlocker extends FiltersEngine {
     this.contexts.delete(page);
     await context.disable();
   }
+
+  public isBlockingEnabled(page: puppeteer.Page): boolean {
+    return this.contexts.has(page);
+  }
+
 }
 
 // Re-export symboles from @cliqz/adblocker for convenience
