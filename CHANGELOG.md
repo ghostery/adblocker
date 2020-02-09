@@ -18,41 +18,13 @@
   * [#470](https://github.com/cliqz-oss/adblocker/pull/470) Generic scriptlets are now correctly rejected ([@remusao](https://github.com/remusao))
 
 #### :house: Internal
-* `adblocker`
-  * [#474](https://github.com/cliqz-oss/adblocker/pull/474) Update local assets ([@adblocker-bot](https://github.com/adblocker-bot))
-  * [#472](https://github.com/cliqz-oss/adblocker/pull/472) Update local assets ([@adblocker-bot](https://github.com/adblocker-bot))
-  * [#466](https://github.com/cliqz-oss/adblocker/pull/466) Update local assets ([@adblocker-bot](https://github.com/adblocker-bot))
-  * [#463](https://github.com/cliqz-oss/adblocker/pull/463) Update local assets ([@adblocker-bot](https://github.com/adblocker-bot))
-  * [#454](https://github.com/cliqz-oss/adblocker/pull/454) Update local assets ([@adblocker-bot](https://github.com/adblocker-bot))
-  * [#449](https://github.com/cliqz-oss/adblocker/pull/449) Update local assets ([@remusao](https://github.com/remusao))
-  * [#447](https://github.com/cliqz-oss/adblocker/pull/447) Update assets + smaz ([@remusao](https://github.com/remusao))
-  * [#446](https://github.com/cliqz-oss/adblocker/pull/446) Update local assets ([@remusao](https://github.com/remusao))
-  * [#444](https://github.com/cliqz-oss/adblocker/pull/444) Update local assets ([@remusao](https://github.com/remusao))
-  * [#439](https://github.com/cliqz-oss/adblocker/pull/439) Update assets ([@remusao](https://github.com/remusao))
-* Other
-  * [#473](https://github.com/cliqz-oss/adblocker/pull/473) build(deps-dev): bump rimraf from 3.0.1 to 3.0.2 ([@dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
-  * [#465](https://github.com/cliqz-oss/adblocker/pull/465) build(deps-dev): bump @types/jest from 25.1.1 to 25.1.2 ([@dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
-  * [#460](https://github.com/cliqz-oss/adblocker/pull/460) build(deps): bump puppeteer from 2.1.0 to 2.1.1 ([@dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
-  * [#450](https://github.com/cliqz-oss/adblocker/pull/450) build(deps-dev): bump ts-jest from 25.1.0 to 25.2.0 ([@dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
-  * [#448](https://github.com/cliqz-oss/adblocker/pull/448) build(deps-dev): bump @rollup/plugin-node-resolve from 7.0.0 to 7.1.1 ([@dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
-  * [#445](https://github.com/cliqz-oss/adblocker/pull/445) build(deps): bump jsdom from 16.0.1 to 16.1.0 ([@dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
-  * [#442](https://github.com/cliqz-oss/adblocker/pull/442) build(deps-dev): bump @rollup/plugin-commonjs from 11.0.1 to 11.0.2 ([@dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
-  * [#426](https://github.com/cliqz-oss/adblocker/pull/426) build(deps-dev): bump rimraf from 3.0.0 to 3.0.1 ([@dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
-  * [#429](https://github.com/cliqz-oss/adblocker/pull/429) build(deps): bump tsmaz from 1.3.0 to 1.4.0 ([@dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
-  * [#428](https://github.com/cliqz-oss/adblocker/pull/428) build(deps-dev): bump ts-jest from 25.0.0 to 25.1.0 ([@dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
-  * [#425](https://github.com/cliqz-oss/adblocker/pull/425) build(deps): bump puppeteer from 2.0.0 to 2.1.0 ([@dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
-  * [#419](https://github.com/cliqz-oss/adblocker/pull/419) chore: automate update of locale assets ([@remusao](https://github.com/remusao))
-  * [#418](https://github.com/cliqz-oss/adblocker/pull/418) Only run CI tests on Linux ([@remusao](https://github.com/remusao))
 * `adblocker-circumvention`, `adblocker-content`, `adblocker-electron-example`, `adblocker-electron-preload`, `adblocker-electron`, `adblocker-webextension-cosmetics`, `adblocker-webextension-example`, `adblocker-webextension`, `adblocker`
   * [#452](https://github.com/cliqz-oss/adblocker/pull/452) chore: update Electron to v8.0.0 ([@remusao](https://github.com/remusao))
-* `adblocker-circumvention`, `adblocker-content`, `adblocker-webextension-cosmetics`, `adblocker-webextension`, `adblocker`
-  * [#451](https://github.com/cliqz-oss/adblocker/pull/451) build(deps-dev): bump @ampproject/rollup-plugin-closure-compiler from 0.20.0 to 0.21.0 ([@dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
-* `adblocker-content`, `adblocker-electron`, `adblocker-puppeteer`, `adblocker-webextension-cosmetics`, `adblocker-webextension`, `adblocker`
-  * [#433](https://github.com/cliqz-oss/adblocker/pull/433) build(deps-dev): bump @types/jest from 24.9.1 to 25.1.1 ([@dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
-* `adblocker-circumvention`, `adblocker-content`, `adblocker-electron`, `adblocker-puppeteer`, `adblocker-webextension-cosmetics`, `adblocker-webextension-example`, `adblocker-webextension`, `adblocker`
-  * [#431](https://github.com/cliqz-oss/adblocker/pull/431) build(deps-dev): bump @types/chrome from 0.0.92 to 0.0.93 ([@dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 * `adblocker-benchmarks`, `adblocker-circumvention`, `adblocker-content`, `adblocker-electron-example`, `adblocker-electron`, `adblocker-puppeteer-example`, `adblocker-puppeteer`, `adblocker-webextension-cosmetics`, `adblocker-webextension-example`, `adblocker-webextension`, `adblocker`
   * [#423](https://github.com/cliqz-oss/adblocker/pull/423) chore: update dependencies ([@remusao](https://github.com/remusao))
+* Other
+  * [#419](https://github.com/cliqz-oss/adblocker/pull/419) chore: automate update of locale assets ([@remusao](https://github.com/remusao))
+  * [#418](https://github.com/cliqz-oss/adblocker/pull/418) Only run CI tests on Linux ([@remusao](https://github.com/remusao))
 
 #### Committers: 3
 - Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
