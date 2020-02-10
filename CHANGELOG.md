@@ -1,3 +1,21 @@
+## v1.7.0 (2020-02-10)
+
+#### :rocket: New Feature
+* `adblocker`
+  * [#478](https://github.com/cliqz-oss/adblocker/pull/478) Implement redirect-rule filters handling ([@remusao](https://github.com/remusao))
+* `adblocker-electron-example`, `adblocker-electron`, `adblocker-puppeteer-example`, `adblocker-puppeteer`, `adblocker`
+  * [#477](https://github.com/cliqz-oss/adblocker/pull/477) Add helper to cache adblocker engine ([@remusao](https://github.com/remusao))
+* `adblocker-electron`, `adblocker-puppeteer`, `adblocker-webextension`
+  * [#475](https://github.com/cliqz-oss/adblocker/pull/475) Add helper to know if blocking is enabled in context ([@remusao](https://github.com/remusao))
+
+#### :bug: Bug Fix
+* `adblocker`
+  * [#476](https://github.com/cliqz-oss/adblocker/pull/476) Put types for chrome and firefox as direct dependencies instead of dev ([@remusao](https://github.com/remusao))
+
+#### Committers: 1
+- Rémi ([@remusao](https://github.com/remusao))
+
+
 ## v1.6.0 (2020-02-09)
 
 #### :rocket: New Feature
