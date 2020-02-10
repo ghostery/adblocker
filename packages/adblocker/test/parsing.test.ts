@@ -46,6 +46,7 @@ function network(filter: string, expected: any) {
       isLeftAnchor: parsed.isLeftAnchor(),
       isPlain: parsed.isPlain(),
       isRedirect: parsed.isRedirect(),
+      isRedirectRule: parsed.isRedirectRule(),
       isRegex: parsed.isRegex(),
       isRightAnchor: parsed.isRightAnchor(),
 
@@ -96,6 +97,7 @@ const DEFAULT_NETWORK_FILTER = {
   isLeftAnchor: false,
   isPlain: false,
   isRedirect: false,
+  isRedirectRule: false,
   isRegex: false,
   isRightAnchor: false,
 
@@ -680,6 +682,7 @@ describe('Network filters', () => {
       it('parses ~redirect', () => {
         // ~redirect is not a valid option
         network('||foo.com$~redirect', null);
+        network('||foo.com$~redirect=foo.js', null);
       });
 
       it('parses redirect without a value', () => {
@@ -691,6 +694,40 @@ describe('Network filters', () => {
       it('defaults to false', () => {
         network('||foo.com', {
           isRedirect: false,
+          redirect: '',
+        });
+      });
+    });
+
+    describe('redirect-rule', () => {
+      it('parses redirect-rule', () => {
+        network('||foo.com$redirect-rule=bar.js', {
+          isRedirect: true,
+          isRedirectRule: true,
+          redirect: 'bar.js',
+        });
+        network('$redirect-rule=bar.js', {
+          isRedirect: true,
+          isRedirectRule: true,
+          redirect: 'bar.js',
+        });
+      });
+
+      it('parses ~redirect-rule', () => {
+        // ~redirect-rule is not a valid option
+        network('||foo.com$~redirect-rule=foo.js', null);
+        network('||foo.com$~redirect-rule', null);
+      });
+
+      it('parses redirect-rule without a value', () => {
+        // Not valid
+        network('||foo.com$redirect-rule', null);
+        network('||foo.com$redirect-rule=', null);
+      });
+
+      it('defaults to false', () => {
+        network('||foo.com', {
+          isRedirectRule: false,
           redirect: '',
         });
       });

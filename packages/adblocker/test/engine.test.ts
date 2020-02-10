@@ -361,6 +361,126 @@ $csp=baz,domain=bar.com
     });
   });
 
+  describe('redirect', () => {
+    const request = Request.fromRawDetails({
+      sourceUrl: 'https://bar.com',
+      type: 'image',
+      url: 'https://foo.com',
+    });
+
+    const createEngineWithResource = (filters: string[], resource: string) => {
+      const engine = createEngine(filters.join('\n'));
+      engine.resources.js.set(resource, resource);
+      engine.resources.resources.set(resource, {
+        data: resource,
+        contentType: 'application/javascript',
+      });
+      return engine;
+    };
+
+    it('normal redirect', () => {
+      const { filter, exception, match, redirect } = createEngineWithResource([
+        '||foo.com$image,redirect=foo.js',
+      ], 'foo.js').match(request);
+      expect(match).toBe(true);
+      expect(exception).toBeUndefined();
+      expect(filter).not.toBeUndefined();
+      expect((filter as NetworkFilter).toString()).toBe(
+        '||foo.com$image,redirect=foo.js',
+      );
+      expect(redirect).toEqual({
+        body: 'foo.js',
+        contentType: 'application/javascript',
+        dataUrl: 'data:application/javascript;base64,Zm9vLmpz',
+      });
+    });
+
+    it('redirect-rule does not match on its own', () => {
+      const { filter, exception, match, redirect } = createEngineWithResource([
+        '||foo.com$image,redirect-rule=foo.js',
+      ], 'foo.js').match(request);
+      expect(match).toBe(false);
+      expect(exception).toBeUndefined();
+      expect(filter).toBeUndefined();
+      expect(redirect).toBeUndefined();
+    });
+
+    it('redirect-rule matches if request was blocked', () => {
+      const { filter, exception, match, redirect } = createEngineWithResource([
+        '||foo.com$image,redirect-rule=foo.js',
+        '||foo.com$image',
+      ], 'foo.js').match(request);
+      expect(match).toBe(true);
+      expect(exception).toBeUndefined();
+      expect(filter).not.toBeUndefined();
+      expect((filter as NetworkFilter).toString()).toBe(
+        '||foo.com$image,redirect-rule=foo.js',
+      );
+      expect(redirect).toEqual({
+        body: 'foo.js',
+        contentType: 'application/javascript',
+        dataUrl: 'data:application/javascript;base64,Zm9vLmpz',
+      });
+    });
+
+    it('redirect=none cancels redirect-rule', () => {
+      const { filter, exception, match, redirect } = createEngineWithResource([
+        '||foo.com$image,redirect-rule=foo.js',
+        '||foo.com$image',
+        '||foo.com$image,redirect=none',
+      ], 'foo.js').match(request);
+      expect(match).toBe(false);
+      expect(exception).not.toBeUndefined();
+      expect((exception as NetworkFilter).toString()).toBe(
+        '||foo.com$image,redirect=none',
+      );
+      expect(filter).not.toBeUndefined();
+      expect((filter as NetworkFilter).toString()).toBe(
+        '||foo.com$image,redirect-rule=foo.js',
+      );
+      expect(redirect).toBeUndefined();
+    });
+
+    it('redirect=none cancels redirect', () => {
+      const { filter, exception, match, redirect } = createEngineWithResource([
+        '||foo.com$image,redirect=foo.js',
+        '||foo.com$image',
+        '||foo.com$image,redirect=none',
+      ], 'foo.js').match(request);
+      expect(match).toBe(false);
+      expect(exception).not.toBeUndefined();
+      expect((exception as NetworkFilter).toString()).toBe(
+        '||foo.com$image,redirect=none',
+      );
+      expect(filter).not.toBeUndefined();
+      expect((filter as NetworkFilter).toString()).toBe(
+        '||foo.com$image,redirect=foo.js',
+      );
+      expect(redirect).toBeUndefined();
+    });
+
+    it('exception rule also cancels redirect', () => {
+      const { filter, exception, match, redirect } = createEngineWithResource([
+        '||foo.com$image,redirect=foo.js',
+        '||foo.com$image',
+        '@@||foo.com$image',
+      ], 'foo.js').match(request);
+
+      expect(match).toBe(false);
+      expect(exception).not.toBeUndefined();
+      expect((exception as NetworkFilter).toString()).toBe(
+        '@@||foo.com$image',
+      );
+      expect(filter).not.toBeUndefined();
+      expect((filter as NetworkFilter).toString()).toBe(
+        '||foo.com$image,redirect=foo.js',
+      );
+      expect(redirect).toBeUndefined();
+    });
+
+
+  });
+
   describe('network filters', () => {
     // Collect all filters from all requests in the dataset. Each test case
     // contains one request as well as a list of filters matching this request

@@ -78,6 +78,7 @@ export const enum NETWORK_FILTER_MASK {
   isRightAnchor = 1 << 26,
   isException = 1 << 27,
   isHostnameAnchor = 1 << 28,
+  isRedirectRule = 1 << 29,
 }
 
 /**
@@ -367,6 +368,10 @@ export default class NetworkFilter implements IFilter {
             // Ignore this filter if no redirection resource is specified
             if (optionValue.length === 0) {
               return null;
+            }
+
+            if (option === 'redirect-rule') {
+              mask = setBit(mask, NETWORK_FILTER_MASK.isRedirectRule);
             }
 
             redirect = optionValue;
@@ -1058,6 +1063,10 @@ export default class NetworkFilter implements IFilter {
       options.push(`redirect=${this.getRedirect()}`);
     }
 
+    if (this.isRedirectRule()) {
+      options.push(`redirect-rule=${this.getRedirect()}`);
+    }
+
     if (this.isCSP()) {
       options.push(`csp=${this.csp}`);
     }
@@ -1164,6 +1173,10 @@ export default class NetworkFilter implements IFilter {
 
   public isRedirect(): boolean {
     return this.redirect !== undefined;
+  }
+
+  public isRedirectRule(): boolean {
+    return getBit(this.mask, NETWORK_FILTER_MASK.isRedirectRule);
   }
 
   public getRedirect(): string {
