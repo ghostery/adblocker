@@ -7,7 +7,7 @@
 * **extremely efficient** adblocker (both in memory usage and raw speed)
 * pure JavaScript implementation
 * first-class support for [Node.js](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker), [WebExtension](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-webextension), [Electron](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-electron) and [Puppeteer](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-puppeteer).
-* effectively blocks all types of ads and tracking
+* efficiently blocks all types of ads and tracking
 * supports cosmetics and scriptlet injection
 * small and minimal (only 64KB minified and gzipped)
 * support most filters: Easylist and uBlock Origin formats
@@ -89,6 +89,22 @@ blocker.disableBlockingInSession(session.defaultSession);
 To avoid having to create the same instance of `ElectronBlocker` all over again,
 you can serialize it to a byte-array which you can store on disk for faster
 loading.
+
+```javascript
+import { ElectronBlocker } from '@cliqz/adblocker-electron';
+import fetch from 'cross-fetch'; // required 'fetch'
+import { promises as fs } from 'fs'; // used for caching
+
+ElectronBlocker.fromPrebuiltAdsAndTracking(fetch, {
+  path: 'engine.bin',
+  read: fs.readFile,
+  write: fs.writeFile,
+}).then((blocker) => {
+  blocker.enableBlockingInSession(session.defaultSession);
+});
+```
+
+Or you can do this manually to control the way caching is done:
 
 ```javascript
 import { ElectronBlocker } from '@cliqz/adblocker-electron';

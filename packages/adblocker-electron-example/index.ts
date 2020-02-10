@@ -1,5 +1,6 @@
 import { app, BrowserWindow, session } from 'electron';
 import fetch from 'node-fetch';
+import { promises as fs } from 'fs';
 
 import { ElectronBlocker, fullLists, Request } from '@cliqz/adblocker-electron';
 
@@ -26,7 +27,12 @@ async function createWindow() {
 
   const blocker = await ElectronBlocker.fromLists(fetch, fullLists, {
     enableCompression: true,
+  }, {
+    path: 'engine.bin',
+    read: fs.readFile,
+    write: fs.writeFile,
   });
+
   blocker.enableBlockingInSession(session.defaultSession);
 
   blocker.on('request-blocked', (request: Request) => {
