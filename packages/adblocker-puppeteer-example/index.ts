@@ -1,11 +1,17 @@
 import { fullLists, PuppeteerBlocker, Request } from '@cliqz/adblocker-puppeteer';
 import fetch from 'node-fetch';
 import puppeteer from 'puppeteer';
+import { promises as fs } from 'fs';
 
 (async () => {
   const blocker = await PuppeteerBlocker.fromLists(fetch, fullLists, {
     enableCompression: true,
+  }, {
+    path: 'engine.bin',
+    read: fs.readFile,
+    write: fs.writeFile,
   });
+
   const browser = await puppeteer.launch({
     defaultViewport: null,
     headless: false,

@@ -80,6 +80,12 @@ export interface BlockingResponse {
   filter: NetworkFilter | undefined;
 }
 
+export interface Caching {
+  path: string;
+  read: (path: string) => Promise<Uint8Array>;
+  write: (path: string, buffer: Uint8Array) => Promise<void>;
+}
+
 export default class FilterEngine extends EventEmitter<
   | 'csp-injected'
   | 'html-filtered'
@@ -89,6 +95,21 @@ export default class FilterEngine extends EventEmitter<
   | 'script-injected'
   | 'style-injected'
 > {
+  private static fromCached<T extends typeof FilterEngine>(
+    this: T,
+    init: () => Promise<InstanceType<T>>,
+    caching?: Caching,
+  ): Promise<InstanceType<T>> {
+    if (caching === undefined) {
+      return init();
+    }
+
+    const { path, read, write } = caching;
+    return read(path)
+      .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
+      .catch(() => init().then((engine) => write(path, engine.serialize()).then(() => engine)));
+  }
+
   /**
    * Create an instance of `FiltersEngine` (or subclass like `ElectronBlocker`,
    * etc.), from the list of subscriptions provided as argument (e.g.:
@@ -102,18 +123,21 @@ export default class FilterEngine extends EventEmitter<
     fetch: Fetch,
     urls: string[],
     config: Partial<Config> = {},
+    caching?: Caching,
   ): Promise<InstanceType<T>> {
-    const listsPromises = fetchLists(fetch, urls);
-    const resourcesPromise = fetchResources(fetch);
+    return this.fromCached(() => {
+      const listsPromises = fetchLists(fetch, urls);
+      const resourcesPromise = fetchResources(fetch);
 
-    return Promise.all([listsPromises, resourcesPromise]).then(([lists, resources]) => {
-      const engine = this.parse(lists.join('\n'), config);
-      if (resources !== undefined) {
-        engine.updateResources(resources, '' + resources.length);
-      }
+      return Promise.all([listsPromises, resourcesPromise]).then(([lists, resources]) => {
+        const engine = this.parse(lists.join('\n'), config);
+        if (resources !== undefined) {
+          engine.updateResources(resources, '' + resources.length);
+        }
 
-      return engine as InstanceType<T>;
-    });
+        return engine as InstanceType<T>;
+      });
+    }, caching);
   }
 
   /**
@@ -127,17 +151,22 @@ export default class FilterEngine extends EventEmitter<
   public static fromPrebuiltAdsOnly<T extends typeof FilterEngine>(
     this: T,
     fetchImpl: Fetch = fetch,
+    caching?: Caching,
   ): Promise<InstanceType<T>> {
-    return fetchPrebuilt(
-      fetchImpl,
-      'https://cdn.cliqz.com/adblocker/configs/desktop-ads/allowed-lists.json',
-      ENGINE_VERSION,
-    )
-      .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
-      .catch(() => {
-        console.log('failed downloading pre-built, fallback to fetching lists');
-        return this.fromLists(fetchImpl, adsLists) as Promise<InstanceType<T>>;
-      });
+    return this.fromCached(
+      () =>
+        fetchPrebuilt(
+          fetchImpl,
+          'https://cdn.cliqz.com/adblocker/configs/desktop-ads/allowed-lists.json',
+          ENGINE_VERSION,
+        )
+          .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
+          .catch(() => {
+            console.log('failed downloading pre-built, fallback to fetching lists');
+            return this.fromLists(fetchImpl, adsLists) as Promise<InstanceType<T>>;
+          }),
+      caching,
+    );
   }
 
   /**
@@ -147,17 +176,22 @@ export default class FilterEngine extends EventEmitter<
   public static fromPrebuiltAdsAndTracking<T extends typeof FilterEngine>(
     this: T,
     fetchImpl: Fetch = fetch,
+    caching?: Caching,
   ): Promise<InstanceType<T>> {
-    return fetchPrebuilt(
-      fetchImpl,
-      'https://cdn.cliqz.com/adblocker/configs/desktop-ads-trackers/allowed-lists.json',
-      ENGINE_VERSION,
-    )
-      .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
-      .catch(() => {
-        console.log('failed downloading pre-built, fallback to fetching lists');
-        return this.fromLists(fetchImpl, adsAndTrackingLists) as Promise<InstanceType<T>>;
-      });
+    return this.fromCached(
+      () =>
+        fetchPrebuilt(
+          fetchImpl,
+          'https://cdn.cliqz.com/adblocker/configs/desktop-ads-trackers/allowed-lists.json',
+          ENGINE_VERSION,
+        )
+          .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
+          .catch(() => {
+            console.log('failed downloading pre-built, fallback to fetching lists');
+            return this.fromLists(fetchImpl, adsAndTrackingLists) as Promise<InstanceType<T>>;
+          }),
+      caching,
+    );
   }
 
   /**
@@ -167,17 +201,22 @@ export default class FilterEngine extends EventEmitter<
   public static fromPrebuiltFull<T extends typeof FilterEngine>(
     this: T,
     fetchImpl: Fetch = fetch,
+    caching?: Caching,
   ): Promise<InstanceType<T>> {
-    return fetchPrebuilt(
-      fetchImpl,
-      'https://cdn.cliqz.com/adblocker/configs/desktop-full/allowed-lists.json',
-      ENGINE_VERSION,
-    )
-      .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
-      .catch(() => {
-        console.log('failed downloading pre-built, fallback to fetching lists');
-        return this.fromLists(fetchImpl, fullLists) as Promise<InstanceType<T>>;
-      });
+    return this.fromCached(
+      () =>
+        fetchPrebuilt(
+          fetchImpl,
+          'https://cdn.cliqz.com/adblocker/configs/desktop-full/allowed-lists.json',
+          ENGINE_VERSION,
+        )
+          .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
+          .catch(() => {
+            console.log('failed downloading pre-built, fallback to fetching lists');
+            return this.fromLists(fetchImpl, fullLists) as Promise<InstanceType<T>>;
+          }),
+      caching,
+    );
   }
 
   public static parse<T extends FilterEngine>(
