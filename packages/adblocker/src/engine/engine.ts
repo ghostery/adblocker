@@ -834,43 +834,83 @@ export default class FilterEngine extends EventEmitter<
       // 4. exceptions
       result.filter = this.importants.match(request);
 
+      let redirectNone: NetworkFilter | undefined;
+      let redirectRule: NetworkFilter | undefined;
+
+      // If `result.filter` is `undefined`, it means there was no $important
+      // filter found so far. We look for a $redirect filter.  There is some
+      // extra logic to handle special cases like redirect-rule and
+      // redirect=none.
+      //
+      // * If redirect=none is found, then cancel all redirects.
+      // * Else if redirect-rule is found, only redirect if request would be blocked.
+      // * Else if redirect is found, redirect.
       if (result.filter === undefined) {
-        // Check if there is a redirect or a normal match
-        result.filter = this.redirects.match(request);
-        if (result.filter === undefined) {
-          result.filter = this.filters.match(request);
+        const redirects = this.redirects.matchAll(request);
+        if (redirects.length !== 0) {
+          for (let i = 0; i < redirects.length; i += 1) {
+            const filter = redirects[i];
+            if (filter.getRedirect() === 'none') {
+              redirectNone = filter;
+            } else if (filter.isRedirectRule()) {
+              redirectRule = filter;
+            } else {
+              result.filter = filter;
+            }
+          }
         }
 
-        // If we found something, check for exceptions
+        // If `result.filter` is still `undefined`, it means that there was no
+        // redirection rule triggered for the request. We look for a normal
+        // match.
+        if (result.filter === undefined) {
+          result.filter = this.filters.match(request);
+
+          // If we found a match, and a `$redirect-rule` as found previously,
+          // then we transform the match into a redirect, following the
+          // semantics of redirect-rule.
+          if (redirectRule !== undefined && result.filter !== undefined) {
+            result.filter = redirectRule;
+          }
+        }
+
+        // If we found either a redirection rule or a normal match, then check
+        // for exceptions which could apply on the request and un-block it.
         if (result.filter !== undefined) {
           result.exception = this.exceptions.match(request);
         }
       }
 
-      // If there is a match
-      if (result.filter !== undefined) {
-        if (result.filter.isRedirect()) {
-          // Handle case where a filter redirect=none is also specified. If one
-          // is found, we just block the request instead of redirecting.
-          if (this.redirects.matchAll(request).some((f) => f.getRedirect() === 'none') === false) {
-            const redirectResource = this.resources.getResource(result.filter.getRedirect());
-            if (redirectResource !== undefined) {
-              const { data, contentType } = redirectResource;
-              let dataUrl;
-              if (contentType.indexOf(';') !== -1) {
-                dataUrl = `data:${contentType},${data}`;
-              } else {
-                dataUrl = `data:${contentType};base64,${btoaPolyfill(data)}`;
-              }
-
-              result.redirect = {
-                body: data,
-                contentType,
-                dataUrl: dataUrl.trim(),
-              };
+      // If there was a redirect match and no exception was found, then we
+      // proceed and process the redirect rule. This means two things:
+      //
+      // 1. Check if a redirect=none rule was found, which acts as exception.
+      // 2. If no exception was found, prepare `result.redirect` response.
+      if (
+        result.filter !== undefined &&
+        result.exception === undefined &&
+        result.filter.isRedirect()
+      ) {
+        if (redirectNone !== undefined) {
+          result.exception = redirectNone;
+        } else {
+          const redirectResource = this.resources.getResource(result.filter.getRedirect());
+          if (redirectResource !== undefined) {
+            const { data, contentType } = redirectResource;
+            let dataUrl;
+            if (contentType.indexOf(';') !== -1) {
+              dataUrl = `data:${contentType},${data}`;
+            } else {
+              dataUrl = `data:${contentType};base64,${btoaPolyfill(data)}`;
             }
-          } // TODO - else, throw an exception
-        }
+
+            result.redirect = {
+              body: data,
+              contentType,
+              dataUrl: dataUrl.trim(),
+            };
+          }
+        } // TODO - else, throw an exception
       }
     }
 
