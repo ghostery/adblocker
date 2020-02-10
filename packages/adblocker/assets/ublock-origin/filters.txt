@@ -6432,7 +6432,6 @@ itv.com##.seek-bar__ad
 mail.yahoo.com##div[aria-describedby="adblock-upsell-description"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2198
-||sisney.net^$3p
 ! https://github.com/uBlockOrigin/uAssets/issues/2198#issuecomment-478436892
 mega-dvdrip.*,peliculas-dvdrip.*##+js(aeld, DOMContentLoaded, shortener)
 peliculas-dvdrip.*##p:has-text(/button-)
@@ -8194,9 +8193,10 @@ indoxx1.*###tutor
 sigma4pc.com##+js(aeld, load, nextFunction)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2843
-forumcoin.win##+js(acis, document.getElementById, adblock)
+forumcoin.win##+js(aopr, open)
+@@||forumcoin.win^$script,1p
+@@||forumcoin.win^$ghide
 forumcoin.win##+js(aopw, _pop)
-forumcoin.win##+js(aopw, adBlockDetected)
 forumcoin.win##+js(nobab)
 ||adop.pw^$3p
 
@@ -11912,6 +11912,7 @@ darkumbra.net##.adsbygoogle:style(height: 1px !important; width: 1px !important;
 ||valipl.cp31.ott.cibntv.net^$media,redirect=noopmp3-0.1s,domain=youku.com
 youku.com##+js(nano-stb, , ,0)
 @@||valipl.cp31.ott.cibntv.net^$xhr,domain=youku.com
+*$image,redirect-rule=1x1.gif,domain=youku.com
 
 ! popunder celebjihad . com nsfw
 celebjihad.com##+js(aopr, dataPopUnder)
@@ -22624,6 +22625,7 @@ url.topadnetworks.net##+js(acis, $, modal)
 url.topadnetworks.net##+js(aopr, app_vars.force_disable_adblock)
 url.topadnetworks.net##+js(nano-sib, progressBar)
 topadnetworks.net##+js(nowebrtc)
+topadnetworks.net##+js(acis, open, popupad)
 ||35.238.205.163^$all
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/eknsyf/popups_ads_etc_on_these_sites/
@@ -23570,8 +23572,6 @@ porn555.com##+js(aeld, , window.open)
 
 ! ok. xxx popups ads
 ok.xxx##+js(acis, document.querySelectorAll, popMagic)
-ok.xxx##div.player-bn
-ok.xxx##.bns-bl
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=44297
 bccondos.net###exampleModal
@@ -23602,3 +23602,26 @@ pcgamez-download.com##+js(acis, Math, zfgloaded)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3004
 sektekomik.com##+js(aeld, , encodeURIComponent)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/49559
+av-uncen.com##+js(aopr, adBlockDetected)
+av-uncen.com##+js(acis, document.querySelectorAll, popMagic)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/49560
+spaziogames.it##+js(aopr, anOptions)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/49562
+boyfriendtv.com##+js(aopw, poperTrigger)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/49521 
+@@||freeallcourse.com^$ghide
+freeallcourse.com##.adsbygoogle
+
+! https://github.com/NanoMeow/QuickReports/issues/3009
+@@||1shortlink.com^$ghide
+
+! https://github.com/uBlockOrigin/uAssets/issues/6942
+qq.com##+js(json-prune, ad, vinfo)
+
+! numbeo .com anti adb
+@@||numbeo.com^$script,1p
