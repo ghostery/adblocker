@@ -30,28 +30,11 @@ type OnHeadersReceivedDetailsType = Pick<
   'responseHeaders' | 'url' | 'type' | 'tabId' | 'requestId'
 >;
 
-// From: https://github.com/kelseasy/web-ext-types/blob/ef7aae8b72c784f40322ffcbfa56dda1db3c902c/global/index.d.ts#L1897
-interface StreamFilter {
-  error: string;
-  status:
-    | 'uninitialized'
-    | 'transferringdata'
-    | 'finishedtransferringdata'
-    | 'suspended'
-    | 'closed'
-    | 'disconnected'
-    | 'failed';
-
+type StreamFilter = WebRequest.StreamFilter & {
   onstart: (event: any) => void;
   ondata: (event: { data: ArrayBuffer }) => void;
   onstop: (event: any) => void;
   onerror: (event: any) => void;
-
-  close(): void;
-  disconnect(): void;
-  resume(): void;
-  suspend(): void;
-  write(data: Uint8Array | ArrayBuffer): void;
 }
 
 /**
@@ -106,7 +89,7 @@ export function filterRequestHTML(
   rules: HTMLSelector[],
 ): void {
   // Create filter to observe loading of resource
-  const filter: StreamFilter = filterResponseData(id) as any;
+  const filter = filterResponseData(id) as StreamFilter;
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
   const htmlFilter = new StreamingHtmlFilter(rules);
