@@ -215,23 +215,17 @@ export class BlockingContext {
    * 4. `TextEncoder` and `TextDecoder` are available.
    */
   public performHTMLFiltering(request: Request): void {
-    if (request.isMainFrame()) {
-      if (typeof TextDecoder === 'undefined' || typeof TextEncoder === 'undefined') {
-        return;
-      }
-
-      if (
-        this.browser.webRequest !== undefined &&
-        this.browser.webRequest.filterResponseData !== undefined
-      ) {
-        const filterResponseData = this.browser.webRequest.filterResponseData;
-
-        if (this.blocker.config.enableHtmlFiltering === true) {
-          const htmlFilters = this.blocker.getHtmlFilters(request);
-          if (htmlFilters.length !== 0) {
-            filterRequestHTML(filterResponseData, request, htmlFilters);
-          }
-        }
+    if (
+      this.blocker.config.enableHtmlFiltering === true &&
+      this.browser.webRequest !== undefined &&
+      this.browser.webRequest.filterResponseData !== undefined &&
+      request.isMainFrame() === true &&
+      typeof TextDecoder !== 'undefined' &&
+      typeof TextEncoder !== 'undefined'
+    ) {
+      const htmlFilters = this.blocker.getHtmlFilters(request);
+      if (htmlFilters.length !== 0) {
+        filterRequestHTML(this.browser.webRequest.filterResponseData, request, htmlFilters);
       }
     }
   }
