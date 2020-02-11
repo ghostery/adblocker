@@ -47,7 +47,7 @@ WebExtensionBlocker.fromPrebuiltAdsAndTracking().then((blocker) => {
 ```
 
 On Chromium-based browsers you will need a polyfill such as
-`webextension-polyfill` to this working:
+`webextension-polyfill` to get this working:
 
 ```javascript
 import { browser } from 'webextension-polyfill-ts';
