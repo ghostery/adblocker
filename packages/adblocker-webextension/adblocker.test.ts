@@ -1,15 +1,9 @@
-import { fromWebRequestDetails, updateResponseHeadersWithCSP } from './adblocker';
+import { fromWebRequestDetails, updateResponseHeadersWithCSP, OnBeforeRequestDetailsType } from './adblocker';
 
 describe('#updateResponseHeadersWithCSP', () => {
-  const baseDetails: chrome.webRequest.WebResponseHeadersDetails = {
-    frameId: 42,
-    method: 'POST',
-    parentFrameId: 42,
+  const baseDetails: OnBeforeRequestDetailsType = {
     requestId: '42',
-    statusCode: 200,
-    statusLine: '',
     tabId: 42,
-    timeStamp: 0,
     type: 'main_frame',
     url: 'https://foo.com',
   };

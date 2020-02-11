@@ -18,6 +18,18 @@ import {
 } from '@cliqz/adblocker';
 import { IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-content';
 
+export type OnBeforeRequestDetailsType = Pick<
+  WebRequest.OnBeforeRequestDetailsType,
+  'url' | 'type' | 'requestId' | 'tabId' | 'originUrl' | 'documentUrl'
+> & {
+  initiator?: string; // Chromium only
+};
+
+type OnHeadersReceivedDetailsType = Pick<
+  WebRequest.OnHeadersReceivedDetailsType,
+  'responseHeaders' | 'url' | 'type' | 'tabId' | 'requestId'
+>;
+
 // From: https://github.com/kelseasy/web-ext-types/blob/ef7aae8b72c784f40322ffcbfa56dda1db3c902c/global/index.d.ts#L1897
 interface StreamFilter {
   error: string;
@@ -45,9 +57,7 @@ interface StreamFilter {
 /**
  * Create an instance of `Request` from WebRequest details.
  */
-export function fromWebRequestDetails(details: WebRequest.OnBeforeRequestDetailsType & {
-  initiator?: string; // Chromium only
-}): Request {
+export function fromWebRequestDetails(details: OnBeforeRequestDetailsType): Request {
   return Request.fromRawDetails({
     requestId: details.requestId,
     sourceUrl: details.initiator || details.originUrl || details.documentUrl,
@@ -61,7 +71,7 @@ export function fromWebRequestDetails(details: WebRequest.OnBeforeRequestDetails
  * Helper used when injecting custom CSP headers to update `responseHeaders`.
  */
 export function updateResponseHeadersWithCSP(
-  details: WebRequest.OnHeadersReceivedDetailsType,
+  details: OnHeadersReceivedDetailsType,
   policies: string | undefined,
 ): WebRequest.BlockingResponse {
   if (policies === undefined) {
@@ -101,7 +111,7 @@ export function filterRequestHTML(
   const encoder = new TextEncoder();
   const htmlFilter = new StreamingHtmlFilter(rules);
 
-  const teardown = (event: { data?: ArrayBuffer; }) => {
+  const teardown = (event: { data?: ArrayBuffer }) => {
     // Before disconnecting our streaming filter, we need to be extra careful
     // and make sure that no data remains in either our streaming `TextDecoder`
     // instance or the HTML filterer.
@@ -125,7 +135,7 @@ export function filterRequestHTML(
 
     // Disconnect streaming filter.
     filter.disconnect();
-  }
+  };
 
   filter.ondata = (event) => {
     // On any chunk of data we implementa very fast UTF-8 validity check to make
@@ -160,10 +170,7 @@ export class BlockingContext {
   constructor(private readonly browser: Browser, private readonly blocker: WebExtensionBlocker) {}
 
   public enable() {
-    if (
-      this.blocker.config.loadNetworkFilters === true &&
-      this.browser.webRequest !== undefined
-    ) {
+    if (this.blocker.config.loadNetworkFilters === true && this.browser.webRequest !== undefined) {
       this.browser.webRequest.onBeforeRequest.addListener(
         this.onBeforeRequest,
         { urls: ['<all_urls>'] },
@@ -213,7 +220,10 @@ export class BlockingContext {
         return;
       }
 
-      if (this.browser.webRequest !== undefined && this.browser.webRequest.filterResponseData !== undefined) {
+      if (
+        this.browser.webRequest !== undefined &&
+        this.browser.webRequest.filterResponseData !== undefined
+      ) {
         const filterResponseData = this.browser.webRequest.filterResponseData;
 
         if (this.blocker.config.enableHtmlFiltering === true) {
@@ -280,7 +290,9 @@ export class BlockingContext {
           return;
         }
 
-        promises.push(this.injectStylesWebExtension(styles, { tabId: sender.tab.id, allFrames: true }));
+        promises.push(
+          this.injectStylesWebExtension(styles, { tabId: sender.tab.id, allFrames: true }),
+        );
       }
 
       // Separately, requests cosmetics which depend on the page it self
@@ -331,9 +343,7 @@ export class BlockingContext {
   /**
    * Deal with request cancellation (`{ cancel: true }`) and redirection (`{ redirectUrl: '...' }`).
    */
-  private onBeforeRequest = (details: WebRequest.OnBeforeRequestDetailsType & {
-    initiator?: string; // Chromium only
-  }): WebRequest.BlockingResponse => {
+  private onBeforeRequest = (details: OnBeforeRequestDetailsType): WebRequest.BlockingResponse => {
     const request = fromWebRequestDetails(details);
     if (request.isMainFrame()) {
       this.performHTMLFiltering(request);
@@ -351,7 +361,9 @@ export class BlockingContext {
     return {};
   };
 
-  private onHeadersReceived = (details: WebRequest.OnHeadersReceivedDetailsType): WebRequest.BlockingResponse => {
+  private onHeadersReceived = (
+    details: OnHeadersReceivedDetailsType,
+  ): WebRequest.BlockingResponse => {
     return updateResponseHeadersWithCSP(
       details,
       this.blocker.getCSPDirectives(fromWebRequestDetails(details)),
@@ -395,17 +407,14 @@ export class BlockingContext {
     }
 
     // Proceed with stylesheet injection.
-    return this.browser.tabs.insertCSS(
-      tabId,
-      {
-        allFrames,
-        code: styles,
-        cssOrigin: 'user',
-        frameId,
-        matchAboutBlank: true,
-        runAt: 'document_start',
-      },
-    );
+    return this.browser.tabs.insertCSS(tabId, {
+      allFrames,
+      code: styles,
+      cssOrigin: 'user',
+      frameId,
+      matchAboutBlank: true,
+      runAt: 'document_start',
+    });
   }
 }
 
