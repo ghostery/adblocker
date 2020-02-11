@@ -6,6 +6,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { browser } from 'webextension-polyfill-ts';
+
 import {
   BlockingResponse,
   fullLists,
@@ -57,7 +59,7 @@ WebExtensionBlocker.fromLists(fetch, fullLists, {
   enableCompression: true,
   enableHtmlFiltering: true,
 }).then((blocker: WebExtensionBlocker) => {
-  blocker.enableBlockingInBrowser();
+  blocker.enableBlockingInBrowser(browser);
   blocker.on('request-blocked', incrementBlockedCounter);
   blocker.on('request-redirected', incrementBlockedCounter);
 

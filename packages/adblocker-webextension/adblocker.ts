@@ -6,6 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { Browser, Runtime, WebRequest } from 'webextension-polyfill-ts';
 import { parse } from 'tldts-experimental';
 
 import {
@@ -17,181 +18,29 @@ import {
 } from '@cliqz/adblocker';
 import { IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-content';
 
-// The following type definitions represent the small subset of APIs and
-// attributes needed for the purpose of adblocking. It is a combination of both
-// Chrome's and Firefox's APIs, using optional attributes to ensure that the
-// code handles all possible corner cases and can run in both browsers. The goal
-// is to make the code agnostic to the browser it will run on, by specifying
-// only what is really needed.
-//
-// Breaking changes should be caught by the type checker whenever an update to
-// @types/chrome or @types/firefox-webext-browser occurs.
-
-
-//////////////////////////////////////////////////////////////////////////////
-// WebRequest API
-//////////////////////////////////////////////////////////////////////////////
-
-// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/335e7a9225dda059c1b494a6c24c8e37c66add7f/types/chrome/index.d.ts#L8297
-// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/549983f5264e40fd4b24cff16f1987be9e851c8a/types/firefox-webext-browser/index.d.ts#L2901
-type ResourceType =
-  | 'main_frame'
-  | 'beacon'
-  | 'csp_report'
-  | 'font'
-  | 'image'
-  | 'imageset'
-  | 'media'
-  | 'object'
-  | 'object_subrequest'
-  | 'other'
-  | 'ping'
-  | 'script'
-  | 'speculative'
-  | 'stylesheet'
-  | 'sub_frame'
-  | 'web_manifest'
-  | 'websocket'
-  | 'xbl'
-  | 'xml_dtd'
-  | 'xmlhttprequest'
-  | 'xslt';
-
-// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/335e7a9225dda059c1b494a6c24c8e37c66add7f/types/chrome/index.d.ts#L8305
-// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/549983f5264e40fd4b24cff16f1987be9e851c8a/types/firefox-webext-browser/index.d.ts#L4204
-type HttpHeaders = {
-  name: string;
-  value?: string;
-}[];
-
-// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/335e7a9225dda059c1b494a6c24c8e37c66add7f/types/chrome/index.d.ts#L8312
-// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/549983f5264e40fd4b24cff16f1987be9e851c8a/types/firefox-webext-browser/index.d.ts#L4219
-interface BlockingResponse {
-  cancel?: boolean;
-  redirectUrl?: string;
-  responseHeaders?: HttpHeaders;
-}
-
-// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/335e7a9225dda059c1b494a6c24c8e37c66add7f/types/chrome/index.d.ts#L8380
-// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/549983f5264e40fd4b24cff16f1987be9e851c8a/types/firefox-webext-browser/index.d.ts#L4375
-interface WebRequestDetails {
-  url: string;
-  type: ResourceType;
-  requestId: string;
-  tabId: number;
-  responseHeaders?: HttpHeaders;
+export type OnBeforeRequestDetailsType = Pick<
+  WebRequest.OnBeforeRequestDetailsType,
+  'url' | 'type' | 'requestId' | 'tabId' | 'originUrl' | 'documentUrl'
+> & {
   initiator?: string; // Chromium only
-  originUrl?: string; // Firefox only
-  documentUrl?: string; // Firefox only
-}
+};
 
-type WebRequestCallback = (details: WebRequestDetails) => BlockingResponse;
+type OnHeadersReceivedDetailsType = Pick<
+  WebRequest.OnHeadersReceivedDetailsType,
+  'responseHeaders' | 'url' | 'type' | 'tabId' | 'requestId'
+>;
 
-// From: https://github.com/kelseasy/web-ext-types/blob/ef7aae8b72c784f40322ffcbfa56dda1db3c902c/global/index.d.ts#L1897
-interface StreamFilter {
-  error: string;
-  status:
-    | 'uninitialized'
-    | 'transferringdata'
-    | 'finishedtransferringdata'
-    | 'suspended'
-    | 'closed'
-    | 'disconnected'
-    | 'failed';
-
+type StreamFilter = WebRequest.StreamFilter & {
   onstart: (event: any) => void;
   ondata: (event: { data: ArrayBuffer }) => void;
   onstop: (event: any) => void;
   onerror: (event: any) => void;
-
-  close(): void;
-  disconnect(): void;
-  resume(): void;
-  suspend(): void;
-  write(data: Uint8Array | ArrayBuffer): void;
-}
-
-type FilterResponseData = (requestId: string) => StreamFilter;
-
-interface RequestFilter {
-  types?: ['main_frame'];
-  urls: ['<all_urls>'];
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// Runtime API
-//////////////////////////////////////////////////////////////////////////////
-
-interface MessageSender {
-  id?: string;
-  tab?: Tab;
-  frameId?: number;
-  url?: string;
-}
-
-type RuntimeMessageCallback = (
-  msg: IBackgroundCallback & { action?: string },
-  sender: MessageSender,
-  sendResponse: (response?: any) => void,
-) => void;
-
-
-//////////////////////////////////////////////////////////////////////////////
-// Tabs API
-//////////////////////////////////////////////////////////////////////////////
-
-interface Tab {
-  id?: number;
-}
-
-interface InjectDetails {
-  allFrames: boolean;
-  code: string;
-  runAt: 'document_start';
-  frameId?: number;
-  matchAboutBlank: boolean;
-  cssOrigin: 'user';
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// Global browser/chrome object
-//////////////////////////////////////////////////////////////////////////////
-
-interface Browser {
-  tabs?: {
-    insertCSS?: (tabId: number, details: InjectDetails, callback: () => void) => void;
-  };
-  runtime?: {
-    onMessage?: {
-      addListener: (callback: RuntimeMessageCallback) => void;
-      removeListener: (callback: RuntimeMessageCallback) => void;
-    };
-  };
-  webRequest?: {
-    filterResponseData?: FilterResponseData;
-    onBeforeRequest: {
-      removeListener: (callback: WebRequestCallback) => void;
-      addListener: (
-        callback: WebRequestCallback,
-        filter: RequestFilter,
-        extraInfoSpec: ['blocking'],
-      ) => void;
-    };
-    onHeadersReceived: {
-      removeListener: (callback: WebRequestCallback) => void;
-      addListener: (
-        callback: WebRequestCallback,
-        filter: RequestFilter,
-        extraInfoSpec: ['blocking', 'responseHeaders'],
-      ) => void;
-    };
-  };
 }
 
 /**
  * Create an instance of `Request` from WebRequest details.
  */
-export function fromWebRequestDetails(details: WebRequestDetails): Request {
+export function fromWebRequestDetails(details: OnBeforeRequestDetailsType): Request {
   return Request.fromRawDetails({
     requestId: details.requestId,
     sourceUrl: details.initiator || details.originUrl || details.documentUrl,
@@ -205,9 +54,9 @@ export function fromWebRequestDetails(details: WebRequestDetails): Request {
  * Helper used when injecting custom CSP headers to update `responseHeaders`.
  */
 export function updateResponseHeadersWithCSP(
-  details: WebRequestDetails,
+  details: OnHeadersReceivedDetailsType,
   policies: string | undefined,
-): BlockingResponse {
+): WebRequest.BlockingResponse {
   if (policies === undefined) {
     return {};
   }
@@ -232,39 +81,20 @@ export function updateResponseHeadersWithCSP(
 }
 
 /**
- * Check if HTML filtering is possible in this browser. Only Firefox is supported.
- */
-function getFilterResponseData(browser?: Browser): undefined | FilterResponseData {
-  if (
-    browser === undefined ||
-    browser.webRequest === undefined ||
-    browser.webRequest.filterResponseData === undefined
-  ) {
-    return undefined;
-  }
-
-  if (typeof TextDecoder === 'undefined' || typeof TextEncoder === 'undefined') {
-    return undefined;
-  }
-
-  return browser.webRequest.filterResponseData;
-}
-
-/**
  * Enable stream HTML filter on request `id` using `rules`.
  */
 export function filterRequestHTML(
-  filterResponseData: FilterResponseData,
+  filterResponseData: Browser['webRequest']['filterResponseData'],
   { id }: { id: string },
   rules: HTMLSelector[],
 ): void {
   // Create filter to observe loading of resource
-  const filter: StreamFilter = filterResponseData(id);
+  const filter = filterResponseData(id) as StreamFilter;
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
   const htmlFilter = new StreamingHtmlFilter(rules);
 
-  const teardown = (event: { data?: ArrayBuffer; }) => {
+  const teardown = (event: { data?: ArrayBuffer }) => {
     // Before disconnecting our streaming filter, we need to be extra careful
     // and make sure that no data remains in either our streaming `TextDecoder`
     // instance or the HTML filterer.
@@ -288,7 +118,7 @@ export function filterRequestHTML(
 
     // Disconnect streaming filter.
     filter.disconnect();
-  }
+  };
 
   filter.ondata = (event) => {
     // On any chunk of data we implementa very fast UTF-8 validity check to make
@@ -323,10 +153,7 @@ export class BlockingContext {
   constructor(private readonly browser: Browser, private readonly blocker: WebExtensionBlocker) {}
 
   public enable() {
-    if (
-      this.blocker.config.loadNetworkFilters === true &&
-      this.browser.webRequest !== undefined
-    ) {
+    if (this.blocker.config.loadNetworkFilters === true && this.browser.webRequest !== undefined) {
       this.browser.webRequest.onBeforeRequest.addListener(
         this.onBeforeRequest,
         { urls: ['<all_urls>'] },
@@ -369,24 +196,26 @@ export class BlockingContext {
    * 2. `enableHtmlFiltering` is set to `true`.
    * 3. `browser.webRequest.filterResponseData` (Firefox only!).
    * 4. `TextEncoder` and `TextDecoder` are available.
-   *
-   * In all other cases, `getFilterResponseData` will return `undefined`.
    */
   public performHTMLFiltering(request: Request): void {
-    if (request.isMainFrame()) {
-      const filterResponseData = getFilterResponseData(this.browser);
-      if (this.blocker.config.enableHtmlFiltering === true && filterResponseData !== undefined) {
-        const htmlFilters = this.blocker.getHtmlFilters(request);
-        if (htmlFilters.length !== 0) {
-          filterRequestHTML(filterResponseData, request, htmlFilters);
-        }
+    if (
+      this.blocker.config.enableHtmlFiltering === true &&
+      this.browser.webRequest !== undefined &&
+      this.browser.webRequest.filterResponseData !== undefined &&
+      request.isMainFrame() === true &&
+      typeof TextDecoder !== 'undefined' &&
+      typeof TextEncoder !== 'undefined'
+    ) {
+      const htmlFilters = this.blocker.getHtmlFilters(request);
+      if (htmlFilters.length !== 0) {
+        filterRequestHTML(this.browser.webRequest.filterResponseData, request, htmlFilters);
       }
     }
   }
 
   private handleRuntimeMessage = async (
     msg: IBackgroundCallback & { action?: string },
-    sender: MessageSender,
+    sender: Runtime.MessageSender,
     sendResponse: (response?: IMessageFromBackground) => void,
   ): Promise<void> => {
     const promises: Promise<void>[] = [];
@@ -438,7 +267,9 @@ export class BlockingContext {
           return;
         }
 
-        promises.push(this.injectStylesWebExtension(styles, { tabId: sender.tab.id, allFrames: true }));
+        promises.push(
+          this.injectStylesWebExtension(styles, { tabId: sender.tab.id, allFrames: true }),
+        );
       }
 
       // Separately, requests cosmetics which depend on the page it self
@@ -489,7 +320,7 @@ export class BlockingContext {
   /**
    * Deal with request cancellation (`{ cancel: true }`) and redirection (`{ redirectUrl: '...' }`).
    */
-  private onBeforeRequest = (details: WebRequestDetails): BlockingResponse => {
+  private onBeforeRequest = (details: OnBeforeRequestDetailsType): WebRequest.BlockingResponse => {
     const request = fromWebRequestDetails(details);
     if (request.isMainFrame()) {
       this.performHTMLFiltering(request);
@@ -507,7 +338,9 @@ export class BlockingContext {
     return {};
   };
 
-  private onHeadersReceived = (details: WebRequestDetails): BlockingResponse => {
+  private onHeadersReceived = (
+    details: OnHeadersReceivedDetailsType,
+  ): WebRequest.BlockingResponse => {
     return updateResponseHeadersWithCSP(
       details,
       this.blocker.getCSPDirectives(fromWebRequestDetails(details)),
@@ -516,11 +349,10 @@ export class BlockingContext {
 
   private onRuntimeMessage = (
     msg: IBackgroundCallback & { action?: string },
-    sender: MessageSender,
-    sendResponse: (response?: IMessageFromBackground) => void,
-  ): void => {
-    this.handleRuntimeMessage(msg, sender, sendResponse).catch((ex) => {
-      console.error('Error while handling runtime message:', ex);
+    sender: Runtime.MessageSender,
+  ): Promise<IMessageFromBackground> => {
+    return new Promise((resolve, reject) => {
+      this.handleRuntimeMessage(msg, sender, resolve).catch(reject);
     });
   };
 
@@ -551,58 +383,16 @@ export class BlockingContext {
       throw new Error('required "tabs.insertCSS" API is not defined');
     }
 
-    const insertCSS = this.browser.tabs.insertCSS;
-
     // Proceed with stylesheet injection.
-    return new Promise((resolve, reject) => {
-      insertCSS(
-        tabId,
-        {
-          allFrames,
-          code: styles,
-          cssOrigin: 'user',
-          frameId,
-          matchAboutBlank: true,
-          runAt: 'document_start',
-        },
-        () => {
-          if (chrome.runtime.lastError) {
-            reject(chrome.runtime.lastError.message);
-          } else {
-            resolve();
-          }
-        },
-      );
+    return this.browser.tabs.insertCSS(tabId, {
+      allFrames,
+      code: styles,
+      cssOrigin: 'user',
+      frameId,
+      matchAboutBlank: true,
+      runAt: 'document_start',
     });
   }
-}
-
-/**
- * Creates an instance of our custom `Browser` interface based on available
- * 'browser' and 'chrome' globals. This allows users of the API to not worry
- * about how to setup the adblocker optimally in a given context.
- */
-function getDefaultGlobalBrowser(): Browser {
-  if (typeof browser !== 'undefined') {
-    return {
-      runtime: chrome.runtime,
-      tabs: chrome.tabs,
-      // @ts-ignore
-      webRequest: browser.webRequest,
-    };
-  }
-
-  if (typeof chrome !== 'undefined') {
-    return {
-      runtime: chrome.runtime,
-      tabs: chrome.tabs,
-      webRequest: chrome.webRequest,
-    };
-  }
-
-  throw new Error(
-    'Could not enable blocking: none of "browser" and "chrome" globals are available.',
-  );
 }
 
 /**
@@ -612,7 +402,7 @@ function getDefaultGlobalBrowser(): Browser {
 export class WebExtensionBlocker extends FiltersEngine {
   private readonly contexts: WeakMap<Browser, BlockingContext> = new Map();
 
-  public enableBlockingInBrowser(browser: Browser = getDefaultGlobalBrowser()): BlockingContext {
+  public enableBlockingInBrowser(browser: Browser): BlockingContext {
     let context: undefined | BlockingContext = this.contexts.get(browser);
     if (context !== undefined) {
       return context;
