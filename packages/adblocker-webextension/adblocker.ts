@@ -319,7 +319,7 @@ export function filterRequestHTML(
  * practice this would be `chrome` or `browser` global in the WebExtension
  * context).
  */
-class BlockingContext {
+export class BlockingContext {
   constructor(private readonly browser: Browser, private readonly blocker: WebExtensionBlocker) {}
 
   public enable() {
