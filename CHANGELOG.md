@@ -1,3 +1,13 @@
+## v1.7.3 (2020-02-11)
+
+#### :nail_care: Polish
+* `adblocker-benchmarks`, `adblocker-circumvention`, `adblocker-content`, `adblocker-electron`, `adblocker-puppeteer`, `adblocker-webextension-example`, `adblocker-webextension`, `adblocker`
+  * [#481](https://github.com/cliqz-oss/adblocker/pull/481) Fix chrome and browser types ([@remusao](https://github.com/remusao))
+
+#### Committers: 1
+- Rémi ([@remusao](https://github.com/remusao))
+
+
 ## v1.7.0 (2020-02-10)
 
 #### :rocket: New Feature
