@@ -49,8 +49,7 @@
     "url": "git+ssh://git@github.com/cliqz-oss/adblocker.git"
   },
   "workspaces": [
-    "./packages/*",
-    "./.github/actions/*"
+    "./packages/*"
   ],
   "scripts": {
     "bootstrap": "yarn install --frozen-lock && lerna bootstrap",
@@ -61,16 +60,22 @@
     "bundle": "lerna run bundle",
     "test": "lerna run --concurrency 1 test",
     "clean": "lerna run --parallel clean && lerna clean --yes",
-    "release": "lerna version",
-    "ci:npm-publish": "lerna publish --ignore-scripts --yes from-package"
+    "release": "auto shipit"
   },
   "devDependencies": {
     "@cliqz/metalint": "^0.2.0",
+    "@remusao/auto-config": "^1.1.0",
     "@types/benchmark": "^1.0.31",
+    "auto": "^9.10.4",
     "benchmark": "^2.1.4",
     "chalk": "^3.0.0",
     "lerna": "^3.20.2",
     "prettier": "^1.19.1"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "auto": {
+    "extends": "@remusao/auto-config",
+    "name": "Adblocker Bot",
+    "email": "adblocker-bot@users.noreply.github.com"
+  }
 }
