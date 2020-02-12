@@ -45,12 +45,16 @@ pelispedia.*##+js(remove-attr.js, oncontextmenu)
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=40386
 n4mo.org##+js(set-constant.js, N4M0Site.disableRightClick, false)
-! https://github.com/uBlockOrigin/uAssets/issues/860#issuecomment-379901645
+
+! https://github.com/uBlockOrigin/uAssets/issues/860
 bestforkodi.com##+js(abort-on-property-write.js, disable_hot_keys)
 bestforkodi.com##+js(abort-on-property-write.js, nocontext)
-bestforkodi.com##body:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+bestforkodi.com##+js(aopr, disable_copy)
+bestforkodi.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
 ! https://github.com/reek/anti-adblock-killer/issues/3973
 assimilator.be,opus.re##+js(abort-on-property-write.js, document.oncontextmenu)
+
 ! https://github.com/uBlockOrigin/uAssets/issues/1574
 safelinku.net,sflink.cc##+js(abort-on-property-write.js, clickIE)
 safelinku.net,sflink.cc##+js(addEventListener-defuser.js, contextmenu, preventDefault)
@@ -102,21 +106,6 @@ igram.im##+js(abort-on-property-write.js, document.oncontextmenu)
 chocolatey.org##+js(abort-current-inline-script.js, $, chocolatey_hide_cookies_notice)
 chocolatey.org###package-disclaimer
 
-! https://github.com/uBlockOrigin/uAssets/issues/1647
-! enable right click italiashare
-italiashare.*##+js(abort-current-inline-script.js, document.onkeydown)
-italiashare.*##+js(abort-current-inline-script.js, isCtrl, mousehandler)
-italiashare.*##+js(abort-on-property-write.js, clickIE4)
-italiashare.*##+js(remove-attr.js, oncontextmenu)
-
-! https://forums.lanik.us/viewtopic.php?p=135537#p135537
-nonpiusolo.com##+js(abort-current-inline-script.js, document.onkeydown)
-nonpiusolo.com##+js(remove-attr.js, oncontextmenu)
-nonpiusolo.com##+js(abort-current-inline-script.js, isCtrl, mousehandler)
-nonpiusolo.com##+js(abort-current-inline-script.js, message, clickIE4)
-nonpiusolo.com##+js(abort-on-property-write.js, clickIE4)
-nonpiusolo.com##+js(abort-on-property-write.js, killCopy)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/1343
 ! https://github.com/uBlockOrigin/uAssets/issues/1879
 agar.io##+js(abort-on-property-write.js, hasAdblock)
@@ -137,9 +126,6 @@ starve.io###trevda
 ! https://github.com/uBlockOrigin/uAssets/issues/1448
 @@||doomed.io/scripts/ads.min.js$script,1p
 
-! https://github.com/uBlockOrigin/uAssets/issues/1449
-glap.io##+js(set-constant.js, adsSupported, true)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/1454
 surviv.io##+js(abort-on-property-write.js, adBlockDetected)
 surviv.io###ad-block-left
@@ -153,10 +139,6 @@ vanar.io##.frame-data
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1450
 @@||mope.io^$generichide
-
-! https://github.com/uBlockOrigin/uAssets/issues/1457
-slain.io##+js(abort-current-inline-script.js, $, ablocked)
-slain.io###ads
 
 ! https://github.com/uBlockOrigin/uAssets/issues/933
 ! https://github.com/easylist/EasyListHebrew/issues/332
@@ -232,11 +214,6 @@ skip.li##.chat-mini-block
 lequipe.fr##.ab-full-wrapper
 lequipe.fr##[rel="stylesheet"][type="text/css"] + * + DIV > DIV:first-child
 
-! https://github.com/uBlockOrigin/uAssets/issues/1870
-idsly.bid##+js(abort-on-property-write.js, clickIE)
-idsly.bid##+js(addEventListener-defuser.js, contextmenu, preventDefault)
-idsly.bid##+js(addEventListener-defuser.js, keydown, disabledEvent)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/1881
 iptvforever.com###adBlock
 
@@ -265,6 +242,7 @@ techonthenet.com##.hidden-print.row
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2007
 @@||zatznotfunny.com^$generichide
+zatznotfunny.com##.ezoic-ad
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2044
 pinterest.*##[data-test-giftwrap]
@@ -615,9 +593,9 @@ blog.naver.com##+js(abort-on-property-write.js, rightClickOpenYn)
 ! https://github.com/uBlockOrigin/uAssets/issues/3411
 @@||radioline.co/*/ad$1p
 
-! https://github.com/uBlockOrigin/uAssets/issues/2938#issuecomment-419927582
-voirfilms.ws##+js(abort-on-property-read.js, document.oncontextmenu)
-voirfilms.ws##+js(abort-on-property-read.js, document.onselectstart)
+! https://github.com/uBlockOrigin/uAssets/issues/2938
+voirfilms.*##+js(abort-on-property-read.js, document.oncontextmenu)
+voirfilms.*##+js(abort-on-property-read.js, document.onselectstart)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3278#issuecomment-421038747
 @@||nyt.com/ads/google/adsbygoogle.js$script,domain=nytimes.com
@@ -628,8 +606,9 @@ nytimes.com##+js(set-constant.js, webkitRequestFileSystem, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/2682#issuecomment-421085748
 @@||xiaomitoday.com^$generichide
 
-! https://github.com/uBlockOrigin/uAssets/issues/2235#issuecomment-421114325
-mixmods.com.br##+js(setTimeout-defuser.js, showAbove, 3000)
+! https://github.com/uBlockOrigin/uAssets/issues/2235
+@@||mixmods.com.br^$script,1p
+mixmods.com.br##+js(acis, importFAB)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3458
 gecce.com.tr##+js(set-constant.js, fakeadloaded, true)
@@ -804,14 +783,8 @@ kashmirobserver.net##+js(abort-current-inline-script.js, document.getElementById
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=gamereactor.asia|gamereactor.de|gamereactor.es|gamereactor.eu|gamereactor.fi|gamereactor.it|gamereactor.nl|gamereactor.no|gamereactor.pt
 gamereactor.*##[href^="//openx.gamereactor.dk/adclick.php"]
 
-! https://github.com/uBlockOrigin/uAssets/issues/3789
-popcorntimes.ws##+js(set-constant.js, checkAds, noopFunc)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/3797
 allafinedelpalo.it##+js(abort-on-property-read.js, ABDSettings)
-
-! https://github.com/uBlockOrigin/uAssets/issues/3805
-wangshidi.com###offline:has(.adblockplus)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3814
 cathouseonthekings.com##+js(abort-current-inline-script.js, document.getElementById, .ab_detected)
@@ -831,9 +804,6 @@ majorgeeks.com##+js(abort-current-inline-script.js, document.getElementById, und
 msofficeskills.com,templatebackground.com,tinyppt.com##+js(abort-on-property-write.js, document.ondragstart)
 msofficeskills.com,templatebackground.com,tinyppt.com##+js(abort-on-property-write.js, disableEnterKey)
 msofficeskills.com,templatebackground.com,tinyppt.com##body:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important;-moz-user-select: text !important;-ms-user-select: text !important;user-select: text !important;)
-
-! https://github.com/uBlockOrigin/uAssets/issues/3836
-@@||lesyt.xyz/*/js/ads.js$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3842
 wotlabs.net##.adSpace:style(min-height: 1px !important;)
@@ -879,9 +849,6 @@ intramed.net##+js(set-constant.js, adblock, false)
 ! https://github.com/uBlockOrigin/uAssets/issues/3883
 @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=onphpid.com
 
-! https://github.com/uBlockOrigin/uAssets/issues/3886
-osuskinner.com##+js(abort-current-inline-script.js, document.getElementById, blocker)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/3888
 protest.eu##+js(set-constant.js, BIA.ADBLOCKER, false)
 
@@ -893,7 +860,7 @@ protest.eu##+js(set-constant.js, BIA.ADBLOCKER, false)
 books-world.net,dinx.in,pc3mag.com##+js(setTimeout-defuser.js, Adblocker, 10000)
 @@||dinx.in^$generichide
 centrumher.eu##[class^="san_howtowhitelist_"]
-centrumher.eu##.sweet-alert
+centrumher.eu##+js(acis, jQuery, undefined)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3884
 opedge.com##+js(setTimeout-defuser.js, (), 2000)
@@ -2761,8 +2728,9 @@ gagetmatome.com##*:style(-webkit-touch-callout: default !important; -webkit-user
 ! https://github.com/NanoMeow/QuickReports/issues/2087
 @@||bbombproxy.github.io^$script,1p
 
-! https://github.com/uBlockOrigin/uAssets/issues/6461
+! https://github.com/uBlockOrigin/uAssets/issues/6461 + anti-adblock banner
 voxc.org##+js(aopw, document.oncontextmenu)
+voxc.org##.banner
 
 ! anisubindo.video right click, select, copy
 anisubindo.*##+js(aeld, keydown, preventDefault)
@@ -3419,3 +3387,8 @@ boyfriendtv.com##+js(set, blockAdblockUser, null)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6943
 itvn.pl,itvnextra.pl,kuchniaplus.pl,miniminiplus.pl,player.pl,ttv.pl,tvn.pl,tvn24.pl,tvn24bis.pl,tvn7.pl,tvnfabula.pl,tvnstyle.pl,tvnturbo.pl,x-link.pl,x-news.pl##+js(aeld, contextmenu, a)
+
+! https://github.com/NanoMeow/QuickReports/issues/3023
+asiadrive.blogspot.com##+js(acis, document.oncontextmenu)
+asiadrive.blogspot.com##+js(aeld, keydown)
+asiadrive.blogspot.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
