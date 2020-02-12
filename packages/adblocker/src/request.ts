@@ -70,6 +70,14 @@ export interface IRequestInitialization {
   sourceDomain: string;
 
   type: RequestType;
+
+  // Optional attribute referencing the original request details used to create
+  // the Request instance. This can be for example:
+  // * Electron.OnHeadersReceivedListenerDetails
+  // * Electron.OnBeforeRequestListenerDetails
+  // * puppeteer.Request
+  // * webRequest details
+  _originalRequestDetails: any | undefined;
 }
 
 export default class Request {
@@ -86,6 +94,7 @@ export default class Request {
     sourceHostname,
     sourceDomain,
     type = 'main_frame',
+    _originalRequestDetails,
   }: Partial<IRequestInitialization>): Request {
     url = url.toLowerCase();
 
@@ -116,8 +125,12 @@ export default class Request {
       sourceUrl,
 
       type,
+
+      _originalRequestDetails,
     });
   }
+
+  public readonly _originalRequestDetails: any | undefined;
 
   public readonly type: RequestType;
   public readonly isHttp: boolean;
@@ -153,7 +166,10 @@ export default class Request {
 
     sourceDomain,
     sourceHostname,
+
+    _originalRequestDetails,
   }: IRequestInitialization) {
+    this._originalRequestDetails = _originalRequestDetails;
     this.id = requestId;
     this.tabId = tabId;
     this.type = type;

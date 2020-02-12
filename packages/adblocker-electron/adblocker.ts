@@ -20,14 +20,12 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 /**
  * Create an instance of `Request` from `Electron.OnBeforeRequestDetails`.
  */
-export function fromElectronDetails({
-  id,
-  url,
-  resourceType,
-  referrer,
-  webContentsId,
-}: Electron.OnHeadersReceivedListenerDetails | Electron.OnBeforeRequestListenerDetails): Request {
+export function fromElectronDetails(
+  details: Electron.OnHeadersReceivedListenerDetails | Electron.OnBeforeRequestListenerDetails,
+): Request {
+  const { id, url, resourceType, referrer, webContentsId } = details;
   return Request.fromRawDetails({
+    _originalRequestDetails: details,
     requestId: `${id}`,
     sourceUrl: referrer,
     tabId: webContentsId,
@@ -43,8 +41,7 @@ export class BlockingContext {
   constructor(
     private readonly session: Electron.Session,
     private readonly blocker: ElectronBlocker,
-  ) {
-  }
+  ) {}
 
   public enable(): void {
     if (this.blocker.config.loadNetworkFilters === true) {

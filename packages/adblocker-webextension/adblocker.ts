@@ -42,6 +42,7 @@ type StreamFilter = WebRequest.StreamFilter & {
  */
 export function fromWebRequestDetails(details: OnBeforeRequestDetailsType): Request {
   return Request.fromRawDetails({
+    _originalRequestDetails: details,
     requestId: details.requestId,
     sourceUrl: details.initiator || details.originUrl || details.documentUrl,
     tabId: details.tabId,
