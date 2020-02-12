@@ -22,6 +22,7 @@ export function fromPuppeteerDetails(details: puppeteer.Request): Request {
   const frame = details.frame();
   const sourceUrl = frame !== null ? frame.url() : undefined;
   return Request.fromRawDetails({
+    _originalRequestDetails: details,
     requestId: `${details.resourceType()} ${details.url()} ${sourceUrl}`,
     sourceUrl,
     type: details.resourceType(),
