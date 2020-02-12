@@ -1,3 +1,16 @@
+# v1.8.2 (Wed Feb 12 2020)
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker`
+  - chore: update local assets [#491](https://github.com/cliqz-oss/adblocker/pull/491) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### Authors: 1
+
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+
+---
+
 # v1.8.1 (Wed Feb 12 2020)
 
 #### :nail_care: Polish
