@@ -1,3 +1,37 @@
+# v1.8.0 (Wed Feb 12 2020)
+
+#### :running_woman: Performance
+
+- `@cliqz/adblocker-circumvention`, `@cliqz/adblocker-electron`, `@cliqz/adblocker-puppeteer`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - Target ES6 instead of ES3 [#489](https://github.com/cliqz-oss/adblocker/pull/489) ([@remusao](https://github.com/remusao))
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker`
+  - chore: update local assets [#485](https://github.com/cliqz-oss/adblocker/pull/485) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### ⚠️  Pushed to master
+
+- ci: populate npmrc before publishing  ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Adopt auto-publishing workflow [#488](https://github.com/cliqz-oss/adblocker/pull/488) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+-  [#487](https://github.com/cliqz-oss/adblocker/pull/487) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#486](https://github.com/cliqz-oss/adblocker/pull/486) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#482](https://github.com/cliqz-oss/adblocker/pull/482) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 ## v1.7.3 (2020-02-11)
 
 #### :nail_care: Polish
