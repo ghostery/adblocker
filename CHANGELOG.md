@@ -1,3 +1,20 @@
+# v1.8.4 (Thu Feb 13 2020)
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker-circumvention`, `@cliqz/adblocker-content`, `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-electron`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - Fix implicit tslib dependency [#494](https://github.com/cliqz-oss/adblocker/pull/494) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Add internal label when updating local assets [#492](https://github.com/cliqz-oss/adblocker/pull/492) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.8.3 (Thu Feb 13 2020)
 
 #### ⚠️  Pushed to master
