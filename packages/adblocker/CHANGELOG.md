@@ -1,3 +1,15 @@
+# v1.8.5 (Thu Feb 13 2020)
+
+#### :nail_care: Polish
+
+- Fetch resources from GitHub repository [#495](https://github.com/cliqz-oss/adblocker/pull/495) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.8.4 (Thu Feb 13 2020)
 
 #### :bug: Bug Fix
