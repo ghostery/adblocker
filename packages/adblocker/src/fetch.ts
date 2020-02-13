@@ -63,28 +63,29 @@ export function fetchPrebuilt(
     .then((buffer) => new Uint8Array(buffer));
 }
 
-export const adsLists = [
-  'https://easylist.to/easylist/easylist.txt',
-  'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=0&mimetype=plaintext',
-  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/annoyances.txt',
-  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
-  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
-  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
-  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
+const PREFIX = 'https://raw.githubusercontent.com/cliqz-oss/adblocker/master/packages/adblocker/assets';
 
-  'https://easylist.to/easylistgermany/easylistgermany.txt',
+export const adsLists = [
+  `${PREFIX}/easylist/easylist.txt`,
+  `${PREFIX}/easylist/easylistgermany.txt`,
+  `${PREFIX}/peter-lowe/serverlist.txt`,
+  `${PREFIX}/ublock-origin/annoyances.txt`,
+  `${PREFIX}/ublock-origin/badware.txt`,
+  `${PREFIX}/ublock-origin/filters.txt`,
+  `${PREFIX}/ublock-origin/resource-abuse.txt`,
+  `${PREFIX}/ublock-origin/unbreak.txt`,
 ];
 
 export const adsAndTrackingLists = [
   ...adsLists,
-  'https://easylist.to/easylist/easyprivacy.txt',
-  'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt',
+  `${PREFIX}/easylist/easyprivacy.txt`,
+  `${PREFIX}/ublock-origin/privacy.txt`,
 ];
 
 export const fullLists = [
   ...adsAndTrackingLists,
-  'https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt',
-  'https://easylist-downloads.adblockplus.org/easylist-cookie.txt',
+  `${PREFIX}/easylist/easylist-cookie.txt`,
+  `${PREFIX}/fanboy/annoyance.txt`,
 ];
 
 /**
@@ -94,24 +95,10 @@ export function fetchLists(fetch: Fetch, urls: string[]): Promise<string[]> {
   return Promise.all(urls.map((url) => fetchResource(fetch, url)));
 }
 
-function getResourcesUrl(fetch: Fetch): Promise<string> {
-  return fetchWithRetry(
-    fetch,
-    'https://cdn.cliqz.com/adblocker/resources/ublock-resources/metadata.json',
-  )
-    .then((response) => response.json())
-    .then(
-      ({ revisions }) =>
-        `https://cdn.cliqz.com/adblocker/resources/ublock-resources/${
-          revisions[revisions.length - 1]
-        }/list.txt`,
-    );
-}
-
 /**
  * Fetch latest version of uBlock Origin's resources, used to inject scripts in
  * the page or redirect request to data URLs.
  */
 export function fetchResources(fetch: Fetch): Promise<string> {
-  return getResourcesUrl(fetch).then((url) => fetchResource(fetch, url));
+  return fetchResource(fetch, `${PREFIX}/ublock-origin/resources.txt`);
 }

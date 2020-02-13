@@ -1,6 +1,6 @@
 import { fullLists, PuppeteerBlocker, Request } from '@cliqz/adblocker-puppeteer';
 import fetch from 'node-fetch';
-import puppeteer from 'puppeteer';
+import * as puppeteer from 'puppeteer';
 import { promises as fs } from 'fs';
 
 (async () => {
