@@ -6,6 +6,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { queueMicrotask } from './queue-microtask';
+
 /**
  * Type of an event listener (i.e.: callback). It accepts arbitrary arguments
  * and is not expected to return any result.
@@ -69,11 +71,11 @@ function triggerCallback<EventNames>(
 
   const listenersForEvent = listeners.get(event);
   if (listenersForEvent !== undefined) {
-    setTimeout(() => {
+    queueMicrotask(() => {
       for (let i = 0; i < listenersForEvent.length; i += 1) {
         listenersForEvent[i](...args);
       }
-    }, 0);
+    });
     return true;
   }
 

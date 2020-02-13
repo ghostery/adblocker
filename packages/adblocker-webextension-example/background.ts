@@ -46,8 +46,8 @@ chrome.tabs.onActivated.addListener(({ tabId }: chrome.tabs.TabActiveInfo) =>
 );
 
 // Reset counter if tab is reloaded
-chrome.tabs.onUpdated.addListener((tabId, { status }) => {
-  if (status === 'loading') {
+chrome.tabs.onUpdated.addListener((tabId, { status, url }) => {
+  if (status === 'loading' && url === undefined) {
     updateBlockedCounter(tabId, {
       incr: false,
       reset: true,
