@@ -1,3 +1,16 @@
+# v1.8.3 (Thu Feb 13 2020)
+
+#### ⚠️  Pushed to master
+
+- `@cliqz/adblocker`
+  - Bump internal engine representation  ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.8.2 (Wed Feb 12 2020)
 
 #### :bug: Bug Fix
