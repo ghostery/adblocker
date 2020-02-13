@@ -35,7 +35,7 @@ type StreamFilter = WebRequest.StreamFilter & {
   ondata: (event: { data: ArrayBuffer }) => void;
   onstop: (event: any) => void;
   onerror: (event: any) => void;
-}
+};
 
 /**
  * Create an instance of `Request` from WebRequest details.
@@ -151,7 +151,24 @@ export function filterRequestHTML(
  * context).
  */
 export class BlockingContext {
-  constructor(private readonly browser: Browser, private readonly blocker: WebExtensionBlocker) {}
+  private readonly onBeforeRequest: (
+    details: OnBeforeRequestDetailsType,
+  ) => WebRequest.BlockingResponse;
+
+  private readonly onHeadersReceived: (
+    details: OnHeadersReceivedDetailsType,
+  ) => WebRequest.BlockingResponse;
+
+  private readonly onRuntimeMessage: (
+    msg: IBackgroundCallback & { action?: string },
+    sender: Runtime.MessageSender,
+  ) => Promise<IMessageFromBackground>;
+
+  constructor(private readonly browser: Browser, private readonly blocker: WebExtensionBlocker) {
+    this.onBeforeRequest = (details) => blocker.onBeforeRequest(browser, details);
+    this.onHeadersReceived = (details) => blocker.onHeadersReceived(browser, details);
+    this.onRuntimeMessage = (msg, sender) => blocker.onRuntimeMessage(browser, msg, sender);
+  }
 
   public enable() {
     if (this.blocker.config.loadNetworkFilters === true && this.browser.webRequest !== undefined) {
@@ -188,6 +205,58 @@ export class BlockingContext {
       this.browser.runtime.onMessage.removeListener(this.onRuntimeMessage);
     }
   }
+}
+
+/**
+ * Wrap `FiltersEngine` into a WebExtension-friendly helper class. It exposes
+ * methods to interface with WebExtension APIs needed to block ads.
+ */
+export class WebExtensionBlocker extends FiltersEngine {
+  private readonly contexts: WeakMap<Browser, BlockingContext> = new Map();
+
+  // ----------------------------------------------------------------------- //
+  // Helpers to enable and disable blocking for 'browser'
+  // ----------------------------------------------------------------------- //
+
+  public enableBlockingInBrowser(browser: Browser): BlockingContext {
+    let context: undefined | BlockingContext = this.contexts.get(browser);
+    if (context !== undefined) {
+      return context;
+    }
+
+    // Create new blocking context for `browser`
+    context = new BlockingContext(browser, this);
+    this.contexts.set(browser, context);
+    context.enable();
+
+    return context;
+  }
+
+  public disableBlockingInBrowser(browser: Browser): void {
+    const context: undefined | BlockingContext = this.contexts.get(browser);
+    if (context === undefined) {
+      throw new Error('Trying to disable blocking which was not enabled');
+    }
+
+    this.contexts.delete(browser);
+    context.disable();
+  }
+
+  public isBlockingEnabled(browser: Browser): boolean {
+    return this.contexts.has(browser);
+  }
+
+  // ----------------------------------------------------------------------- //
+  // WebExtensionBlocker-specific additions to FiltersEngine
+  //
+  // Note: some of these methods internally require access to the 'browser'
+  // global in order to perform their function. Because WebExtensionBlocker can
+  // be registered in multiple ones (in theory), we do not want to depend either
+  // on the global object, or a single instance of 'browser' stored internally
+  // (except as part of a BlockingContext which binds one 'browser' object with
+  // a WebExtensionBlocker object to perform blocking in this context), so an
+  // extra 'browser' argument is often needed.
+  // ----------------------------------------------------------------------- //
 
   /**
    * This methods takes care of optionally performing HTML filtering.
@@ -198,23 +267,24 @@ export class BlockingContext {
    * 3. `browser.webRequest.filterResponseData` (Firefox only!).
    * 4. `TextEncoder` and `TextDecoder` are available.
    */
-  public performHTMLFiltering(request: Request): void {
+  public performHTMLFiltering(browser: Browser, request: Request): void {
     if (
-      this.blocker.config.enableHtmlFiltering === true &&
-      this.browser.webRequest !== undefined &&
-      this.browser.webRequest.filterResponseData !== undefined &&
+      this.config.enableHtmlFiltering === true &&
+      browser.webRequest !== undefined &&
+      browser.webRequest.filterResponseData !== undefined &&
       request.isMainFrame() === true &&
       typeof TextDecoder !== 'undefined' &&
       typeof TextEncoder !== 'undefined'
     ) {
-      const htmlFilters = this.blocker.getHtmlFilters(request);
+      const htmlFilters = this.getHtmlFilters(request);
       if (htmlFilters.length !== 0) {
-        filterRequestHTML(this.browser.webRequest.filterResponseData, request, htmlFilters);
+        filterRequestHTML(browser.webRequest.filterResponseData, request, htmlFilters);
       }
     }
   }
 
   private handleRuntimeMessage = async (
+    browser: Browser,
     msg: IBackgroundCallback & { action?: string },
     sender: Runtime.MessageSender,
     sendResponse: (response?: IMessageFromBackground) => void,
@@ -248,7 +318,7 @@ export class BlockingContext {
       // Because of this, we specify `allFrames: true` when injecting them so
       // that we do not need to perform this operation for sub-frames.
       if (frameId === 0 && msg.lifecycle === 'start') {
-        const { active, styles } = this.blocker.getCosmeticsFilters({
+        const { active, styles } = this.getCosmeticsFilters({
           domain,
           hostname,
           url,
@@ -269,7 +339,10 @@ export class BlockingContext {
         }
 
         promises.push(
-          this.injectStylesWebExtension(styles, { tabId: sender.tab.id, allFrames: true }),
+          this.injectStylesWebExtension(browser, styles, {
+            tabId: sender.tab.id,
+            allFrames: true,
+          }),
         );
       }
 
@@ -279,7 +352,7 @@ export class BlockingContext {
       // ids and hrefs observed in the DOM. MutationObserver is also used to
       // make sure we can react to changes.
       {
-        const { active, styles, scripts } = this.blocker.getCosmeticsFilters({
+        const { active, styles, scripts } = this.getCosmeticsFilters({
           domain,
           hostname,
           url,
@@ -301,7 +374,9 @@ export class BlockingContext {
           return;
         }
 
-        promises.push(this.injectStylesWebExtension(styles, { tabId: sender.tab.id, frameId }));
+        promises.push(
+          this.injectStylesWebExtension(browser, styles, { tabId: sender.tab.id, frameId }),
+        );
 
         // Inject scripts from content script
         if (scripts.length !== 0) {
@@ -321,14 +396,17 @@ export class BlockingContext {
   /**
    * Deal with request cancellation (`{ cancel: true }`) and redirection (`{ redirectUrl: '...' }`).
    */
-  private onBeforeRequest = (details: OnBeforeRequestDetailsType): WebRequest.BlockingResponse => {
+  public onBeforeRequest = (
+    browser: Browser,
+    details: OnBeforeRequestDetailsType,
+  ): WebRequest.BlockingResponse => {
     const request = fromWebRequestDetails(details);
     if (request.isMainFrame()) {
-      this.performHTMLFiltering(request);
+      this.performHTMLFiltering(browser, request);
       return {};
     }
 
-    const { redirect, match } = this.blocker.match(request);
+    const { redirect, match } = this.match(request);
 
     if (redirect !== undefined) {
       return { redirectUrl: redirect.dataUrl };
@@ -339,25 +417,28 @@ export class BlockingContext {
     return {};
   };
 
-  private onHeadersReceived = (
+  public onHeadersReceived = (
+    _: Browser,
     details: OnHeadersReceivedDetailsType,
   ): WebRequest.BlockingResponse => {
     return updateResponseHeadersWithCSP(
       details,
-      this.blocker.getCSPDirectives(fromWebRequestDetails(details)),
+      this.getCSPDirectives(fromWebRequestDetails(details)),
     );
   };
 
-  private onRuntimeMessage = (
+  public onRuntimeMessage = (
+    browser: Browser,
     msg: IBackgroundCallback & { action?: string },
     sender: Runtime.MessageSender,
   ): Promise<IMessageFromBackground> => {
     return new Promise((resolve, reject) => {
-      this.handleRuntimeMessage(msg, sender, resolve).catch(reject);
+      this.handleRuntimeMessage(browser, msg, sender, resolve).catch(reject);
     });
   };
 
   private async injectStylesWebExtension(
+    browser: Browser,
     styles: string,
     {
       tabId,
@@ -375,17 +456,17 @@ export class BlockingContext {
     }
 
     // Abort if `this.browser.tabs` is not available.
-    if (this.browser.tabs === undefined) {
+    if (browser.tabs === undefined) {
       throw new Error('required "tabs" API is not defined');
     }
 
     // Abort if `this.browser.tabs.insertCSS` is not available.
-    if (this.browser.tabs.insertCSS === undefined) {
+    if (browser.tabs.insertCSS === undefined) {
       throw new Error('required "tabs.insertCSS" API is not defined');
     }
 
     // Proceed with stylesheet injection.
-    return this.browser.tabs.insertCSS(tabId, {
+    return browser.tabs.insertCSS(tabId, {
       allFrames,
       code: styles,
       cssOrigin: 'user',
@@ -393,42 +474,6 @@ export class BlockingContext {
       matchAboutBlank: true,
       runAt: 'document_start',
     });
-  }
-}
-
-/**
- * Wrap `FiltersEngine` into a WebExtension-friendly helper class. It exposes
- * methods to interface with WebExtension APIs needed to block ads.
- */
-export class WebExtensionBlocker extends FiltersEngine {
-  private readonly contexts: WeakMap<Browser, BlockingContext> = new Map();
-
-  public enableBlockingInBrowser(browser: Browser): BlockingContext {
-    let context: undefined | BlockingContext = this.contexts.get(browser);
-    if (context !== undefined) {
-      return context;
-    }
-
-    // Create new blocking context for `browser`
-    context = new BlockingContext(browser, this);
-    this.contexts.set(browser, context);
-    context.enable();
-
-    return context;
-  }
-
-  public disableBlockingInBrowser(browser: Browser): void {
-    const context: undefined | BlockingContext = this.contexts.get(browser);
-    if (context === undefined) {
-      throw new Error('Trying to disable blocking which was not enabled');
-    }
-
-    this.contexts.delete(browser);
-    context.disable();
-  }
-
-  public isBlockingEnabled(browser: Browser): boolean {
-    return this.contexts.has(browser);
   }
 }
 

@@ -34,7 +34,13 @@ export function fromPuppeteerDetails(details: puppeteer.Request): Request {
  * Wrap `FiltersEngine` into a Puppeteer-friendly helper class.
  */
 export class BlockingContext {
-  constructor(private readonly page: puppeteer.Page, private readonly blocker: PuppeteerBlocker) {}
+  private readonly onFrameNavigated: (frame: puppeteer.Frame) => Promise<void>;
+  private readonly onRequest: (details: puppeteer.Request) => void;
+
+  constructor(private readonly page: puppeteer.Page, private readonly blocker: PuppeteerBlocker) {
+    this.onFrameNavigated = (frame) => blocker.onFrameNavigated(frame);
+    this.onRequest = (request) => blocker.onRequest(request);
+  }
 
   public async enable(): Promise<void> {
     if (this.blocker.config.loadCosmeticFilters === true) {
@@ -67,8 +73,50 @@ export class BlockingContext {
       this.page.removeListener('framenavigated', this.onFrameNavigated);
     }
   }
+}
 
-  private onFrameNavigated = async (frame: puppeteer.Frame) => {
+/**
+ * Wrap `FiltersEngine` into a Puppeteer-friendly helper class. It exposes
+ * methods to interface with Puppeteer APIs needed to block ads.
+ */
+export class PuppeteerBlocker extends FiltersEngine {
+  private readonly contexts: WeakMap<puppeteer.Page, BlockingContext> = new Map();
+
+  // ----------------------------------------------------------------------- //
+  // Helpers to enable and disable blocking for 'browser'
+  // ----------------------------------------------------------------------- //
+
+  public async enableBlockingInPage(page: puppeteer.Page): Promise<BlockingContext> {
+    let context: undefined | BlockingContext = this.contexts.get(page);
+    if (context !== undefined) {
+      return context;
+    }
+
+    context = new BlockingContext(page, this);
+    this.contexts.set(page, context);
+    await context.enable();
+    return context;
+  }
+
+  public async disableBlockingInPage(page: puppeteer.Page): Promise<void> {
+    const context: undefined | BlockingContext = this.contexts.get(page);
+    if (context === undefined) {
+      throw new Error('Trying to disable blocking which was not enabled');
+    }
+
+    this.contexts.delete(page);
+    await context.disable();
+  }
+
+  public isBlockingEnabled(page: puppeteer.Page): boolean {
+    return this.contexts.has(page);
+  }
+
+  // ----------------------------------------------------------------------- //
+  // PuppeteerBlocker-specific additions to FiltersEngine
+  // ----------------------------------------------------------------------- //
+
+  public onFrameNavigated = async (frame: puppeteer.Frame) => {
     try {
       await this.onFrame(frame);
     } catch (ex) {
@@ -90,7 +138,7 @@ export class BlockingContext {
     const domain = parsed.domain || '';
 
     // Get cosmetics to inject into the Frame
-    const { active, scripts, styles } = this.blocker.getCosmeticsFilters({
+    const { active, scripts, styles } = this.getCosmeticsFilters({
       domain,
       hostname,
       url,
@@ -127,7 +175,7 @@ export class BlockingContext {
     }
   };
 
-  private onRequest = (details: puppeteer.Request): void => {
+  public onRequest = (details: puppeteer.Request): void => {
     const request = fromPuppeteerDetails(details);
     const frame = details.frame();
     if (
@@ -138,7 +186,7 @@ export class BlockingContext {
       return;
     }
 
-    const { redirect, match } = this.blocker.match(request);
+    const { redirect, match } = this.match(request);
 
     if (redirect !== undefined) {
       const { body, contentType } = redirect;
@@ -152,41 +200,6 @@ export class BlockingContext {
       details.continue();
     }
   };
-}
-
-/**
- * Wrap `FiltersEngine` into a Puppeteer-friendly helper class. It exposes
- * methods to interface with Puppeteer APIs needed to block ads.
- */
-export class PuppeteerBlocker extends FiltersEngine {
-  private readonly contexts: WeakMap<puppeteer.Page, BlockingContext> = new Map();
-
-  public async enableBlockingInPage(page: puppeteer.Page): Promise<BlockingContext> {
-    let context: undefined | BlockingContext = this.contexts.get(page);
-    if (context !== undefined) {
-      return context;
-    }
-
-    context = new BlockingContext(page, this);
-    this.contexts.set(page, context);
-    await context.enable();
-    return context;
-  }
-
-  public async disableBlockingInPage(page: puppeteer.Page): Promise<void> {
-    const context: undefined | BlockingContext = this.contexts.get(page);
-    if (context === undefined) {
-      throw new Error('Trying to disable blocking which was not enabled');
-    }
-
-    this.contexts.delete(page);
-    await context.disable();
-  }
-
-  public isBlockingEnabled(page: puppeteer.Page): boolean {
-    return this.contexts.has(page);
-  }
-
 }
 
 // Re-export symboles from @cliqz/adblocker for convenience
