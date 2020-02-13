@@ -1,3 +1,16 @@
+# v1.8.6 (Thu Feb 13 2020)
+
+#### :nail_care: Polish
+
+- `@cliqz/adblocker-electron`, `@cliqz/adblocker-puppeteer`, `@cliqz/adblocker-webextension`
+  - Move BlockingContext methods back into Blocker class. [#496](https://github.com/cliqz-oss/adblocker/pull/496) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.8.5 (Thu Feb 13 2020)
 
 #### :nail_care: Polish
