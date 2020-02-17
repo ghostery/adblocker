@@ -3081,7 +3081,7 @@ xhamster.com##.xplayer-banner-bottom
 ! https://github.com/uBlockOrigin/uAssets/issues/1014
 mangoporn.net##+js(acis, puShown , /doOpen|popundr/)
 mangopron.net##+js(aopr, Date.prototype.toGMTString)
-mangoporn.net##+js(aopr, ExoLoader)
+mangoporn.net##+js(aopr, document.dispatchEvent)
 mangoporn.net##+js(aopw, _pop)
 mangoporn.net##+js(aopw, pURL)
 mangoporn.net##+js(window.open-defuser)
@@ -10402,14 +10402,18 @@ ddl-warez.to##+js(acis, $, event.target)
 megadrive.co##+js(aopw, AaDetector)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3777
+leechpremium.link##+js(aopr, AaDetector)
+leechpremium.link##+js(aopr, pndrCodeScript)
+leechpremium.link##+js(aopw, _pop)
+leechpremium.link##+js(nowebrtc)
 @@||leechpremium.link^$ghide
 leechpremium.link###myModal
 leechpremium.link##.fade.modal-backdrop
 leechpremium.link##[id*="ScriptRoot"]
 leechpremium.link##body:style(overflow: auto !important;)
-leechpremium.link##+js(aopr, AaDetector)
-leechpremium.link##+js(nowebrtc)
 ||newjulads.com^$3p
+! https://github.com/uBlockOrigin/uAssets/issues/3777#issuecomment-586671449
+srt.leechpremium.link##+js(aopr, app_vars.force_disable_adblock)
 
 ! https://github.com/NanoMeow/QuickReports/issues/236
 @@||tsubasa.im^$ghide
@@ -12398,7 +12402,6 @@ pandamovies.pw##+js(aopr, ExoLoader.serve)
 mangovideo.pw,pandamovies.pw##+js(window.open-defuser)
 mangovideo.pw##+js(aopr, AaDetector)
 mangovideo.pw##+js(aopr, popjs.init)
-mangovideo.pw##+js(set, flashvars.float_src, undefined)
 mangovideo.pw##[href^="https://solarporn.net/"]
 ||solarporn.net^$3p
 @@||pandamovies.pw^$ghide
@@ -12826,6 +12829,11 @@ kfrfansub.com##+js(set, adblockEnabled, false)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4368#issuecomment-451455796
 plnk.me,prol.ink,safeku.com##+js(aopr, app_vars.force_disable_adblock)
+! https://github.com/NanoMeow/QuickReports/issues/3056
+safeku.com##+js(aopr, AaDetector)
+safeku.com##+js(nostif, nextFunction, 250)
+safeku.com##[src="https://safeku.com/uploads/getlink.jpg"]
+||fadspmz.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4368#issuecomment-451455796
 on9.net##+js(aopr, app_vars.force_disable_adblock)
@@ -13775,7 +13783,9 @@ webtvhd.com##.adsbygoogle
 apkpedia.co##+js(nano-sib, ,1200)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4863#issuecomment-462169290
+! https://github.com/AdguardTeam/AdguardFilters/issues/49897
 coolmathgames.com##+js(nano-sib)
+coolmathgames.com##+js(set, displayAdblockOverlay, false)
 
 ! https://github.com/NanoMeow/QuickReports/issues/661
 @@||vancouversun.com^$ghide
@@ -15054,11 +15064,16 @@ earthgarage.com##+js(set, process, noopFunc)
 library.avsim.net##^script:has-text(replace)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5233
-slink.bid##+js(popads-dummy.js)
 slink.bid##+js(aopr, app_vars.force_disable_adblock)
 slink.bid##+js(aopr, open)
+slink.bid##+js(aopr, pndrCodeScript)
+slink.bid##+js(aopw, _pop)
+slink.bid##+js(nowebrtc)
+slink.bid##+js(popads-dummy.js)
 /pup.php?$script
 @@||slink.bid^$ghide
+||katerigordas.pro^$3p
+||rydresa.info^$3p
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/293
 kromaxnofansub.*##+js(set, adBlockDetected, falseFunc)
@@ -20361,6 +20376,7 @@ technews.tw##+js(acis, jQuery, adblock)
 technews.tw##.AD_wrapper
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2756
+shon.xyz##+js(aopw, Fingerprint2)
 shon.xyz##+js(aopw, NotDet)
 shon.xyz##+js(ra, onclick, [onclick^="window.open"])
 shon.xyz##+js(popads-dummy)
@@ -22538,6 +22554,7 @@ droidtamvan.me##+js(acis, $, open)
 droidtamvan.me##+js(aopr, app_vars.force_disable_adblock)
 droidtamvan.me##[href="https://www.tautan.pro/"]
 droidtamvan.me##[href^="https://bit.ly/"]
+droidtamvan.me##[href^="https://www.poptival.com/"]
 
 ! https://github.com/NanoMeow/QuickReports/issues/2613
 downloadmv.xyz##+js(acis, puShown , /doOpen|popundr/)
@@ -23707,9 +23724,9 @@ filmey.tv##+js(acis, Math, zfgloaded)
 aflamsexnek.com##+js(acis, document.querySelectorAll, popMagic)
 
 ! NSFW popups exo ads
-nsfwalbum.com,3prn.com,youngleak.com##+js(acis, document.querySelectorAll, popMagic)
-sexmoza.com,18-teen-sex.com,18-teen-tube.com,18girlssex.com,18teen-tube.com,18tubehd.com,2017tube.com,2018tube.com,3prn.com,yogranny.com,youfreepornotube.com,youngleak.com,zhlednito.cz##+js(acis, document.dispatchEvent, myEl)
-24pornvideos.com,2japaneseporn.com,xxxvideor.com,zhlednito.cz,yoerotica.com,youandjizz.com,youngleak.com##+js(aopr, ExoLoader.serve)
+3prn.com,nsfwalbum.com,youngleak.com##+js(acis, document.querySelectorAll, popMagic)
+18-teen-sex.com,18-teen-tube.com,18girlssex.com,18teen-tube.com,18tubehd.com,2017tube.com,2018tube.com,3prn.com,sexmoza.com,yogranny.com,youfreepornotube.com,youngleak.com,zhlednito.cz##+js(acis, document.dispatchEvent, myEl)
+24pornvideos.com,2japaneseporn.com,xxxvideor.com,yoerotica.com,youandjizz.com,youngleak.com,zhlednito.cz##+js(aopr, ExoLoader.serve)
 zhlednito.cz##+js(nosiif, /^/)
 nakedarab-tube.com,xxxtubepass.com,yestubemature.com,yourhomemadetube.com,yourtranny-sex.com##+js(aopr, Aloader.serve)
 yeswegays.com,youramateurtube.com##+js(window.open-defuser)
@@ -23768,7 +23785,6 @@ clicknupload.*##+js(aopr, AaDetector)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/f45bvt/stop_ublock_from_creating_new_tabs/
 gomoviesfree.*##+js(aopr, glxopen)
-||ashaidart.site^$3p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/49873
 @@||uragongaming.blogspot.com^$ghide
@@ -23778,3 +23794,24 @@ brandstofprijzen.info##+js(aeld, load, antiblock)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/f49x70/antiadblock_freemidi/
 @@||freemidi.org^$ghide
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/49892 
+theandroidpro.com##+js(aopr, adBlockDetected)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/49890
+iptvnow.top##+js(acis, addEventListener, displayMessage)
+
+! https://github.com/NanoMeow/QuickReports/issues/3061
+@@||viptools.es/assets/ads.js$script,1p
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/49925
+tiny.do##+js(aopr, app_vars.force_disable_adblock)
+tiny.do###download3:style(display: block !important;)
+tiny.do##a[href^="https://mob1ledev1ces.com"]
+tiny.do##.banner
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/49928
+netfuck.net##+js(set, AlobaidiDetectAdBlock, true)
+
+! https://github.com/uBlockOrigin/uAssets/issues/6964
+webtor.io##+js(window.open-defuser)
