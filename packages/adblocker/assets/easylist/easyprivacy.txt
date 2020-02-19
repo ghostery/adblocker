@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202002181923
+! Version: 202002191856
 ! Title: EasyPrivacy
-! Last modified: 18 Feb 2020 19:23 UTC
+! Last modified: 19 Feb 2020 18:56 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -757,6 +757,7 @@
 /analytics_min.
 /analytics_ping.
 /analytics_prod.
+/analytics_push.
 /analytics_tag.
 /analytics_tracker
 /analytics_v2.js
@@ -1755,6 +1756,7 @@
 /exittracker.
 /exittraffic.
 /expcount/*
+/experiment/impressions.js
 /expose.gif?
 /extBnr.gif?
 /extendedAnalytics.
@@ -2663,7 +2665,7 @@
 /mat0m0?
 /matomo-tracking.
 /matomo.js$domain=~github.com
-/matomo/*$domain=~github.com|~matomo.org
+/matomo/*$domain=~github.com|~matomo.org|~wordpress.org
 /maxymiser.
 /Maxymiser/*
 /mbcom.tracking.
@@ -5414,6 +5416,7 @@ _mongo_stats/
 ||acxiom-online.com^$third-party
 ||acxiomapac.com^$third-party
 ||ad-score.com^$third-party
+||ad-srv-track.com^$third-party
 ||ad.gt^$third-party
 ||adabra.com^$third-party
 ||adalyser.com^$third-party
@@ -16330,7 +16333,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||dynamicyield.com/st?$script,domain=computeruniverse.net|zalora.com.my|zalora.com.ph|zalora.sg
 @@||e2e-comms.pearson.com/osbrowserchecker/prd/thirdPartyCookie.html?$subdocument,domain=pearsonmylabandmastering.com
 @@||ec.europa.eu^*/piwik.js
-@@||ensighten.com^*/Bootstrap.js$domain=americanexpress.com|capitalone.com|caranddriver.com|cart.autodesk.com|citizensbank.com|dell.com|france24.com|homedepot.com|hp.com|rfi.fr|sbs.com.au|sfgate.com|staples.com|t-mobile.com|target.com|verizonwireless.com|williamhill.com|zales.com
+@@||ensighten.com^*/Bootstrap.js$domain=americanexpress.com|britishairways.com|capitalone.com|caranddriver.com|cart.autodesk.com|citizensbank.com|dell.com|france24.com|homedepot.com|hp.com|rfi.fr|sbs.com.au|sfgate.com|staples.com|t-mobile.com|target.com|verizonwireless.com|williamhill.com|zales.com
 @@||ensighten.com^*/code/$script
 @@||ensighten.com^*/scode/$script,domain=norton.com
 @@||ensighten.com^*/serverComponent.php?$script
@@ -16585,7 +16588,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||mlb.com/b/ss/$image
 @@||nokia.com/b/ss/$image,domain=here.com
 @@||oms.dowjoneson.com/b/ss/$image,domain=wsj.com
-@@||omtrdc.net/b/ss/$image,domain=halifax-online.co.uk|logmein.com|macworld.com|msnbc.com|nbc.com|pcworld.com|techhive.com|usanetwork.com
+@@||omtrdc.net/b/ss/$image,domain=britishairways.com|halifax-online.co.uk|logmein.com|macworld.com|msnbc.com|nbc.com|pcworld.com|techhive.com|usanetwork.com
 @@||omtrdc.net/rest/$xmlhttprequest
 @@||royalmail.com/b/ss/$image
 @@||scorecardresearch.com/r2?$image,domain=ancestry.com|billetnet.dk|billettservice.no|lippupalvelu.fi|pcworld.com|techhive.com|ticketmaster.ae|ticketmaster.co.uk|ticketmaster.de|ticketmaster.ie|ticketmaster.nl|ticnet.se|wsj.com
@@ -16679,7 +16682,6 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||googletagmanager.com/gtm.js?$domain=cdon.fi
 @@||inpref.s3.amazonaws.com/sites/$script,domain=kauppahalli24.fi
 @@||lekane.net/lekane/dialogue-tracking.js?$script
-@@||power.fi/Umbraco/Api/Tracking/$xmlhttprequest
 ! Greek
 ! Hebrew
 @@||amazonaws.com/static.madlan.co.il/*/heatmap.json?$xmlhttprequest
@@ -16814,8 +16816,9 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||boxberry.ru/tracking.service/
 @@||criteo.net/js/ld/publishertag.js$domain=novayagazeta.ru
 @@||dict.rambler.ru/fcgi-bin/$xmlhttprequest,domain=rambler.ru
-@@||google-analytics.com/analytics.js$domain=nabortu.ru|poiskstroek.ru|rzd.ru
-@@||googletagmanager.com/gtm.js$domain=besplatka.ua|sportmaster.ru
+@@||google-analytics.com/analytics.js$domain=nabortu.ru|poiskstroek.ru|rzd.ru|teddyfood.com
+@@||google-analytics.com/plugins/ua/ec.js$domain=teddyfood.com
+@@||googletagmanager.com/gtm.js$domain=besplatka.ua|sportmaster.ru|teddyfood.com
 @@||itv.1tv.ru/stat.php?
 @@||k12-company.ru^*/statistics.js$script
 @@||komus.ru/_ui/shared/js/ga/googleTagManager.js$script,~third-party
