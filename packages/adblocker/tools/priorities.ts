@@ -9,8 +9,7 @@
 import { promises as fs } from 'fs';
 import { join } from 'path';
 
-import { CosmeticFilter, detectFilterType, NetworkFilter } from '../adblocker';
-
+import { CosmeticFilter, detectFilterType, NetworkFilter, FilterType } from '../adblocker';
 
 class Counter<K> {
   private counter: Map<K, number>;
@@ -57,117 +56,123 @@ async function loadAllLists() {
   return assets.join('\n');
 }
 
-type Key =
-  | 'redirect-rule='
-  | 'popunder'
-  | 'popup'
-  | 'webrtc'
-  | 'inline-script'
-  | 'genericblock'
-  | 'all'
-  | ':has('
-  | ':xpath('
-  | '^script:has-text('
-  | ':nth-of-type('
-  | ':nth-ancestor('
-  | ':matches-css-before('
-  | ':matches-css('
-  | ':if('
-  | ':has-text('
-  | '#@#+js('
-  | 'redirect=none'
-  | '+js()';
-
 (async () => {
-  const unsupported: Counter<Key> = new Counter();
-  const raw = await loadAllLists();
-  for (const line of raw.split(/\s*[\r\n]+\s*/g)) {
-    const type = detectFilterType(line);
-    if (type === 1) {
+  let numberOfFiltersSupported = 0;
+  let numberOfFiltersUnsupported = 0;
 
-      if (line.includes('redirect=none')) {
-        unsupported.incr('redirect=none');
-        continue;
+  const unsupported: Counter<string> = new Counter();
+  for (const line of (await loadAllLists()).split(/\s*[\r\n]+\s*/g)) {
+    switch (detectFilterType(line)) {
+      case FilterType.NETWORK: {
+        // Filter is not supported as is, try to find out why.
+        if (NetworkFilter.parse(line) === null) {
+          numberOfFiltersUnsupported += 1;
+          const optionStart = line.lastIndexOf('$');
+
+          // No option and not supported
+          if (optionStart === -1) {
+            unsupported.incr(line);
+            continue;
+          }
+
+          // Not supported even without options
+          if (NetworkFilter.parse(line.slice(0, optionStart)) === null) {
+            unsupported.incr(line);
+            continue;
+          }
+
+          // Try to drop each option and check if one is causing the filter parsing
+          // failure. If we can't find one such option, we just report the full line
+          // as not being supported.
+          let found = false;
+          const options = line.slice(optionStart + 1).split(',');
+          for (const option of options) {
+            if (NetworkFilter.parse(`${line.slice(0, optionStart)}$${option}`) === null) {
+              found = true;
+              unsupported.incr(option);
+            }
+          }
+
+          if (found === false) {
+            unsupported.incr(line);
+          }
+        } else {
+          numberOfFiltersSupported += 1;
+        }
+        break;
       }
+      case FilterType.COSMETIC: {
+        // Filter is not supported as is, try to find out why.
+        if (CosmeticFilter.parse(line) === null) {
+          numberOfFiltersUnsupported += 1;
 
-      if (line.includes('#@#+js(')) {
-        unsupported.incr('#@#+js(');
-        continue;
+          // Most likely the issue is one or more procedural filters so we will
+          // try to identify all of them and strip them one by one from the raw
+          // line. Each time we strip an operator, we check if the filter can be
+          // parsed.
+          let indexOfColon = line.indexOf(':');
+          let strippedFilter = line;
+          let found = false;
+
+          while (indexOfColon !== -1) {
+            // Detect something of the form: :<operator>(
+            const indexOfParenthesis = strippedFilter.indexOf('(', indexOfColon);
+            if (indexOfParenthesis !== -1) {
+              // Make sure 'operator' looks valid.
+              const operator = strippedFilter.slice(indexOfColon, indexOfParenthesis);
+              if (/^:[a-z-]+$/.test(operator)) {
+                const filterWithoutOperator = `${strippedFilter.slice(
+                  0,
+                  indexOfColon,
+                )}${strippedFilter.slice(indexOfParenthesis)}`;
+                unsupported.incr(operator);
+
+                if (CosmeticFilter.parse(filterWithoutOperator) !== null) {
+                  found = true;
+                  break;
+                }
+
+                strippedFilter = filterWithoutOperator;
+              }
+            }
+
+            indexOfColon = strippedFilter.indexOf(':', indexOfColon + 1);
+          }
+
+          if (found === false) {
+            unsupported.incr(line);
+          }
+        } else {
+          numberOfFiltersSupported += 1;
+        }
+        break;
       }
-
-      if (line.includes('+js()')) {
-        unsupported.incr('+js()');
-        continue;
-      }
-      const parsed = NetworkFilter.parse(line);
-      let optionStart = line.lastIndexOf('$');
-      if (optionStart === -1) {
-        optionStart = 0;
-      }
-
-      if (parsed === null) {
-        let found = false;
-
-        const patterns: Key[] = [
-          'popunder',
-          'popup',
-          'webrtc',
-          'genericblock',
-        ];
-
-        for (const pattern of patterns) {
-          if (line.includes(pattern, optionStart)) {
-            found = true;
-            unsupported.incr(pattern);
+      default: {
+        if (
+          line.length !== 0 &&
+          line.startsWith('!') === false &&
+          line.startsWith('[Adblock') === false
+        ) {
+          numberOfFiltersUnsupported += 1;
+          const indexOfSharp = line.indexOf('#');
+          if (indexOfSharp !== -1 && line.startsWith('#?#', indexOfSharp)) {
+            unsupported.incr('#?#');
+          } else {
+            unsupported.incr(line);
           }
         }
-
-        if (found === false) {
-          console.log('network', line);
-        }
-      }
-    } else if (type === 2) {
-      // const i1 = line.indexOf('##');
-      // if (i1 !== -1) {
-      //   console.log('!!!', line.slice(i1 + 2));
-      // }
-
-      // const i2 = line.indexOf('#@#');
-      // if (i2 !== -1) {
-      //   console.log('???', line.slice(i2 + 3));
-      // }
-
-      const parsed = CosmeticFilter.parse(line);
-      if (parsed === null) {
-        let found = false;
-
-        const patterns: Key[] = [
-          ':has(',
-          ':xpath(',
-          '^script:has-text(',
-          ':nth-of-type(',
-          ':nth-ancestor(',
-          ':matches-css-before(',
-          ':matches-css(',
-          ':if(',
-          ':has-text(',
-        ];
-
-        for (const pattern of patterns) {
-          if (line.includes(pattern)) {
-            found = true;
-            unsupported.incr(pattern);
-          }
-        }
-
-        if (found === false) {
-          console.log('cosmetic', line);
-        }
+        break;
       }
     }
   }
 
-  for (const [name, count] of unsupported.entries().sort(([_1, c1], [_2, c2]) => c2 -c1)) {
+  for (const [name, count] of unsupported.entries().sort(([_1, c1], [_2, c2]) => c2 - c1)) {
     console.log(`+ ${name} = ${count}`);
   }
+
+  console.log({
+    numberOfFiltersSupported,
+    numberOfFiltersUnsupported,
+    percentage: 100 - 100.0 * (numberOfFiltersUnsupported / numberOfFiltersSupported),
+  });
 })();
