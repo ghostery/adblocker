@@ -1,3 +1,51 @@
+# v1.9.0 (Thu Feb 20 2020)
+
+#### :running_woman: Performance
+
+- `@cliqz/adblocker`
+  - Replace use of setTimeout to delay event by more efficient queueMicrotask. [#523](https://github.com/cliqz-oss/adblocker/pull/523) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#520](https://github.com/cliqz-oss/adblocker/pull/520) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#515](https://github.com/cliqz-oss/adblocker/pull/515) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#510](https://github.com/cliqz-oss/adblocker/pull/510) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#508](https://github.com/cliqz-oss/adblocker/pull/508) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#503](https://github.com/cliqz-oss/adblocker/pull/503) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#502](https://github.com/cliqz-oss/adblocker/pull/502) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#497](https://github.com/cliqz-oss/adblocker/pull/497) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+-  [#521](https://github.com/cliqz-oss/adblocker/pull/521) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#519](https://github.com/cliqz-oss/adblocker/pull/519) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#517](https://github.com/cliqz-oss/adblocker/pull/517) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#514](https://github.com/cliqz-oss/adblocker/pull/514) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#513](https://github.com/cliqz-oss/adblocker/pull/513) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#509](https://github.com/cliqz-oss/adblocker/pull/509) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#507](https://github.com/cliqz-oss/adblocker/pull/507) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#505](https://github.com/cliqz-oss/adblocker/pull/505) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#498](https://github.com/cliqz-oss/adblocker/pull/498) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker`
+  -  [#522](https://github.com/cliqz-oss/adblocker/pull/522) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-circumvention`, `@cliqz/adblocker-content`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  -  [#512](https://github.com/cliqz-oss/adblocker/pull/512) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.8.6 (Thu Feb 13 2020)
 
 #### :nail_care: Polish
