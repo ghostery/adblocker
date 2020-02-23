@@ -83,10 +83,9 @@ google.*##.ads-ad
 google.*###sqh
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3482
-!#if env_firefox
+google.*##a[href*="/aclk?"][data-al]:nth-ancestor(2)
 !#if env_mobile
-google.*###main > div[data-hveid]:has(a[data-al])
-!#endif
+google.*#@#div#main > div.ZINbbc.xpd.O9g5cc.uUPGi
 !#endif
 
 ! https://github.com/NanoMeow/QuickReports/issues/1375#issuecomment-503802350
@@ -3424,6 +3423,7 @@ vikiporn.com##+js(popads-dummy.js)
 ! https://github.com/uBlockOrigin/uAssets/issues/1136
 @@||gocomics.com^$ghide
 gocomics.com##.ad-leaderboard-container
+gocomics.com###cookieconsent-container
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/6
 ! https://github.com/NanoMeow/QuickReports/issues/2426
@@ -5780,6 +5780,7 @@ acortalo.*,megadescargas.net##+js(set, sync, true)
 ||acortar.net^$3p,popup,badfilter
 ||acortalo.*^$3p
 ||megadescargas.net^$popunder
+||insurances.tips^$popunder
 ! https://github.com/uBlockOrigin/uAssets/issues/1932#issuecomment-457093955
 megawarez.org##.onp-sl-content:style(display: block !important;)
 megawarez.org##.onp-sl-social-locker
@@ -10343,7 +10344,7 @@ camwhoreshd.com##+js(aopr, loadTool)
 mediapason.it##+js(set, jQuery.adblock, false)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/9qs04k
-ddl-warez.to##+js(acis, $, event.target)
+ddl-warez.to##+js(aopr, open)
 ||ddl-warez.to/*banner$image
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/9qu759
@@ -14530,7 +14531,10 @@ noz.de##+js(set, nozNoAdBlock, true)
 1004lucifer.*##+js(aopw, adBlockDetected)
 
 ! https://github.com/NanoMeow/QuickReports/issues/766
+! https://github.com/AdguardTeam/AdguardFilters/issues/50267
 @@||thegayuk.com/wp-content/*/js/ads.js$script,1p
+thegayuk.com##+js(aopr, anOptions)
+thegayuk.com##[href^="https://www.thenakedrugbyplayers.com/"]
 
 ! https://github.com/NanoMeow/QuickReports/issues/495
 anime-live.com,animedd.xyz##+js(acis, Math, zfgloaded)
@@ -17570,11 +17574,6 @@ driverays.com##.module_single_ads
 driverays.com##.module_home_ads
 ||finized.co^$3p
 
-! https://github.com/uBlockOrigin/uAssets/issues/5830
-!#if env_mobile
-google.*##a[href*="aclk"]:xpath(//span[(text()='Ad') or (text()='Anzeige')]/../../../..)
-!#endif
-
 ! https://github.com/abp-filters/abp-filters-anti-cv/issues/193
 voiranime.com##+js(acis, document.createElement, currentScript)
 
@@ -19972,6 +19971,9 @@ aii.sh##+js(nowebrtc)
 aii.sh##+js(acis, String.prototype.charCodeAt)
 ||aii.sh/sw$script,1p
 aii.sh##[src^="https://i.imgur.com/"]
+||aii.sh^$csp=script-src 'self' 'unsafe-inline' *.googletagmanager.com *.recaptcha.net *.gstatic.com *.google.com
+##.glx-watermark-container
+||viebitgreasy.email^
 ||ctzs.pw^$all
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4674#issuecomment-533807700
@@ -21745,6 +21747,7 @@ planetaminecraft.com##+js(set, ab, false)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6618
 softdescargas.com##+js(aopr, scriptwz_url)
+globalscripts.xyz##+js(aopr, urlArray)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/e0uvbc/justlightnovelscom_stuck_on_browser_checking/
 @@||justlightnovels.com^$ghide
@@ -23948,3 +23951,34 @@ imghot.net##+js(aopr, console.clear)
 ||pixsense.net^$3p
 ||foreventwithenwas.info^
 ||imgair.net^
+
+! https://github.com/NanoMeow/QuickReports/issues/3097
+tii.ai##+js(acis, Math, zfgloaded)
+tii.ai##+js(aopw, Fingerprint2)
+||tii.ai/*sw*.js$script,1p
+
+! https://github.com/NanoMeow/QuickReports/issues/3111
+dvdgayonline.com##+js(aopr, mdpDeBlocker)
+||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,redirect=noopjs,domain=dvdgayonline.com
+dvdgayonline.com##.aligncenter
+dvdgayonline.com##[href^="https://www.boyspornpics.com/"]
+dvdgayonline.com##[href^="https://www.sexshopboys.com/"]
+
+! wutime_adblock
+spideadcrew.in,trade2win.com##+js(nostif, .show)
+@@/js/wutime_adblock/ads.min.js$script,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/6984
+gomo.to##+js(aopr, glxopen)
+||airartapt.site^$all
+||puntoenun.site^
+
+! https://github.com/uBlockOrigin/uAssets/issues/6986
+iir.ai##+js(aopw, Fingerprint2)
+||iir.ai/sw$script,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/6988
+trendsderzukunft.de##+js(aopr, onload)
+
+! https://github.com/NanoMeow/QuickReports/issues/3117
+@@||vidlii.com^$ghide

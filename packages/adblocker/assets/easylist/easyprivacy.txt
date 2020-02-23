@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202002211849
+! Version: 202002221909
 ! Title: EasyPrivacy
-! Last modified: 21 Feb 2020 18:49 UTC
+! Last modified: 22 Feb 2020 19:09 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -1329,6 +1329,7 @@
 /collectStats;
 /com_joomla-visites/*
 /com_joomlawatch/*
+/common/analytics.js
 /common/ga.js
 /common/tracker.js
 /competeTracking_test.html?
@@ -1615,6 +1616,8 @@
 /earlybirds/script_
 /eatms.js
 /ebonetag.js
+/ebs/tracking.
+/ebs/tracking/*
 /ecanalytics.js
 /ecap.min.js
 /ecblank.gif?
@@ -2084,6 +2087,7 @@
 /googleanalyze1.
 /googleanalyze2.
 /googleEventTracking.
+/googletag.js
 /googletagmanager.js
 /googletagmanager_backend.js
 /googleTagManagerTrackEvent.
@@ -2201,6 +2205,7 @@
 /i?siteid=
 /i?stm=
 /icf-analytics.js
+/iclogs?
 /icon.gif?type=
 /ics/2/pview.gif?
 /id?d_visid_ver=$~xmlhttprequest
@@ -4783,13 +4788,13 @@
 /wp.gif?wpi
 /wp_stat.php?
 /wpblog.gif?
-/wpdcookiejs/*
 /wpengine-analytics/*
 /wprum.
 /wpstatistics/*
 /wrapper/quantcast.swf
 /Wrappers?cmd=
 /WRb.js
+/wreport.js
 /writeKAStats/*
 /writelog.$domain=~writelog.com
 /WritePartnerCookie?$third-party
@@ -5058,6 +5063,7 @@ _mixpanel_events.
 _modal?referer=
 _mzblank.gif?
 _nedstat.js
+_newrelic_min.
 _nielsen.js
 _NielsenNetRatings.
 _ntpagetag.
@@ -10716,6 +10722,7 @@ _mongo_stats/
 ||newton.pm/events/track_bulk
 ||ngpvan.com/v1/Track/
 ||nice264.com/data?$third-party
+||ninja.akamaized.net^
 ||ninja.onap.io^
 ||nitropay.com/nads/$third-party
 ||nol.yahoo.com^
@@ -12041,6 +12048,7 @@ _mongo_stats/
 ||sstats.mora.jp^
 ||sweet-candy.jp/c.php?$third-party
 ||sync.shinobi.jp^
+||t.adlpo.com^
 ||torimochi.line-apps.com^
 ||track.thebase.in^
 ||userdive.com^$third-party
@@ -12512,7 +12520,6 @@ _mongo_stats/
 ||avitop.com^*/hitlist.asp
 ||aviva.co.uk/metrics/
 ||avstop.com^*/poll.gif?
-||axa.com/elements/js/wreport.js
 ||azfamily.com/images/pixel.gif
 ||azureedge.net/prod/1.0/fp.min.js$domain=mercurynews.com
 ||b-aws.techcrunch.com^
@@ -14857,6 +14864,7 @@ _mongo_stats/
 ||heraldscotland-gb.heraldscotland.com^
 ||isgprivacy.cbsi.com^
 ||mdn.neowin.net^
+||mms.gocomics.com^
 ||orionis.techradar.com^
 ||rps-p2.rockpapershotgun.com^
 ||rps-uk.rockpapershotgun.com^
@@ -16256,7 +16264,6 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||adprotv.com^*/comscore.streaming.$script,domain=mundodeportivo.com
 @@||afs-prod.appspot.com^*/tag?tags=$xmlhttprequest,domain=apnews.com
 @@||akamaihd.net/worldwide_analytics/$script,domain=ubi.com|ubisoft.com
-@@||altexsoft.com^*/wpdcookiejs/customcookie.min.js$script,~third-party
 @@||amplitude.com/libs/amplitude-$script,third-party
 @@||ampproject.org/v0/amp-geo-$script,domain=tasty.co
 @@||analytics.edgekey.net/html5/akamaihtml5-min.js$domain=abcnews.go.com|foxbusiness.com|foxnews.com
@@ -16311,6 +16318,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||cloudfront.net/opentag-*.js$domain=telegraph.co.uk
 @@||cloudfront.net^*/comscore.$script,domain=my5.tv
 @@||cloudfront.net^*/VisitorAPI.js$domain=financialpost.com
+@@||cloudinary.com/perimeterx/$image,domain=perimeterx.com
 @@||connect.squareup.com/payments/analytics/frame.html$subdocument
 @@||connect.squareupsandbox.com/payments/analytics/frame.html$subdocument
 @@||constantcontact.com/js/WebTracking/
@@ -16352,6 +16360,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||firstdirect.com^*/logging-code.js
 @@||firststatesuper.com.au^*/js/analytics.js$script
 @@||flagshipmerchantservices.com/clickpathmedia.js
+@@||flippingbook.com^*/static/analytics.js$script,~third-party
 @@||flsenate.gov/Scripts/GoogleAnalytics.js$~third-party
 @@||flurry.com/js/flurry.js$domain=pocketdice.io|slantnews.com
 @@||fncstatic.com^*/visitorapi.js$script,domain=foxbusiness.com|foxnews.com
@@ -16448,6 +16457,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||omtrdc.net^*/mbox/standard?$script,domain=ancestry.co.uk|ancestry.com|ancestry.com.au|ancestry.it|barclays.co.uk|blogtalkradio.com|swisscom.ch
 @@||ourworld.com/ow/evercookie_
 @@||ourworld.com/ow/js/evercookie/$script
+@@||paypalobjects.com/*/pageView.js$script,domain=paypal.com
 @@||pbskids.org/js/ga-current.js
 @@||petsathome.com^*/Analytics.js
 @@||pixel.condenastdigital.com/sparrow.min.js$domain=video.epicurious.com|video.gq.com|video.wired.com
@@ -16783,7 +16793,6 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||fastwhitecat.com/wp-content/plugins/duracelltomi-google-tag-manager/$script,domain=fastwhitecat.com
 @@||gemius.pl/gstream.js
 @@||gminazamosc.pl/wp-content/plugins/wp-google-analytics-events/js/ga-scroll-events.js?
-@@||hdtvpolska.com/wp-content/plugins/wpdiscuz/assets/third-party/wpdcookiejs/customcookie.js
 @@||iwa.iplsc.com/iwa.js$script
 @@||kropka.onet.pl^*/onet.js$domain=tvnwarszawa.pl
 @@||login.ingbank.pl^*/satelliteLib-$script
@@ -16817,7 +16826,6 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||adobedtm.com^*/satelliteLib-$script,domain=laredoute.ru
 @@||afisha.ru/proxy/videonetworkproxy.ashx?$xmlhttprequest
 @@||alfadirect.ru/api/analytics/latest?$~third-party,xmlhttprequest
-@@||alternathistory.com/wp-content/plugins/wpdiscuz/assets/third-party/wpdcookiejs/customcookie.js$script,~third-party
 @@||boxberry.ru/bitrix/templates/main.adaptive/js/tracking.js
 @@||boxberry.ru/tracking.service/
 @@||criteo.net/js/ld/publishertag.js$domain=novayagazeta.ru
