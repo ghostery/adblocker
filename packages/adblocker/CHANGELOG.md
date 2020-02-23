@@ -1,3 +1,24 @@
+# v1.9.1 (Sun Feb 23 2020)
+
+#### :bug: Bug Fix
+
+- Bump internal engine representation [#534](https://github.com/cliqz-oss/adblocker/pull/534) ([@remusao](https://github.com/remusao))
+- Bump internal engine representation  ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Update local assets and compression codebooks [#532](https://github.com/cliqz-oss/adblocker/pull/532) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#529](https://github.com/cliqz-oss/adblocker/pull/529) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#525](https://github.com/cliqz-oss/adblocker/pull/525) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Improve tool to list unsupported filter syntax [#524](https://github.com/cliqz-oss/adblocker/pull/524) ([@remusao](https://github.com/remusao))
+
+#### Authors: 2
+
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.9.0 (Thu Feb 20 2020)
 
 #### :running_woman: Performance

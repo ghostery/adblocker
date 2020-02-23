@@ -1,3 +1,43 @@
+# v1.9.1 (Sun Feb 23 2020)
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker`
+  - Bump internal engine representation [#534](https://github.com/cliqz-oss/adblocker/pull/534) ([@remusao](https://github.com/remusao))
+
+#### ⚠️  Pushed to master
+
+- `@cliqz/adblocker`
+  - Bump internal engine representation  ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#532](https://github.com/cliqz-oss/adblocker/pull/532) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#529](https://github.com/cliqz-oss/adblocker/pull/529) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#525](https://github.com/cliqz-oss/adblocker/pull/525) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Improve tool to list unsupported filter syntax [#524](https://github.com/cliqz-oss/adblocker/pull/524) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+-  [#533](https://github.com/cliqz-oss/adblocker/pull/533) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#531](https://github.com/cliqz-oss/adblocker/pull/531) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#530](https://github.com/cliqz-oss/adblocker/pull/530) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#528](https://github.com/cliqz-oss/adblocker/pull/528) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#527](https://github.com/cliqz-oss/adblocker/pull/527) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#526](https://github.com/cliqz-oss/adblocker/pull/526) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.9.0 (Thu Feb 20 2020)
 
 #### :running_woman: Performance
