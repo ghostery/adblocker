@@ -239,7 +239,7 @@ export default class FilterEngine extends EventEmitter<
     // Before starting deserialization, we make sure that the version of the
     // serialized engine is the same as the current source code. If not, we
     // start fresh and create a new engine from the lists.
-    const serializedEngineVersion = buffer.getUint8();
+    const serializedEngineVersion = buffer.getUint16();
     if (ENGINE_VERSION !== serializedEngineVersion) {
       throw new Error(
         `serialized engine version mismatch, expected ${ENGINE_VERSION} but got ${serializedEngineVersion}`,
@@ -402,7 +402,7 @@ export default class FilterEngine extends EventEmitter<
       this.config,
     );
 
-    buffer.pushUint8(ENGINE_VERSION);
+    buffer.pushUint16(ENGINE_VERSION);
 
     // Config
     this.config.serialize(buffer);
