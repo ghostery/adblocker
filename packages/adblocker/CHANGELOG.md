@@ -1,3 +1,29 @@
+# v1.9.2 (Wed Feb 26 2020)
+
+#### :bug: Bug Fix
+
+- build(deps): bump @types/chrome from 0.0.96 to 0.0.97
+
+Bumps [@types/chrome](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/HEAD/types/chrome) from 0.0.96 to 0.0.97.
+- [Release notes](https://github.com/DefinitelyTyped/DefinitelyTyped/releases)
+- [Commits](https://github.com/DefinitelyTyped/DefinitelyTyped/commits/HEAD/types/chrome)
+
+Signed-off-by: dependabot-preview[bot] <support@dependabot.com>  ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :house: Internal
+
+- Update local assets and compression codebooks [#544](https://github.com/cliqz-oss/adblocker/pull/544) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#537](https://github.com/cliqz-oss/adblocker/pull/537) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Automatically bump internal engine version on codebooks update [#536](https://github.com/cliqz-oss/adblocker/pull/536) ([@remusao](https://github.com/remusao))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.9.1 (Sun Feb 23 2020)
 
 #### :bug: Bug Fix

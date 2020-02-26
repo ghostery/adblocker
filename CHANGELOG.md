@@ -1,3 +1,32 @@
+# v1.9.2 (Wed Feb 26 2020)
+
+#### :nail_care: Polish
+
+- Target ES2017 to avoid use of __awaiter tslib helper [#541](https://github.com/cliqz-oss/adblocker/pull/541) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#544](https://github.com/cliqz-oss/adblocker/pull/544) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#537](https://github.com/cliqz-oss/adblocker/pull/537) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Automatically bump internal engine version on codebooks update [#536](https://github.com/cliqz-oss/adblocker/pull/536) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+-  [#542](https://github.com/cliqz-oss/adblocker/pull/542) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#540](https://github.com/cliqz-oss/adblocker/pull/540) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#538](https://github.com/cliqz-oss/adblocker/pull/538) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.9.1 (Sun Feb 23 2020)
 
 #### :bug: Bug Fix
