@@ -1197,7 +1197,11 @@ shoppable.com###cookiesModal, .in.fade.modal-backdrop
 shoppable.com##body:style(overflow: auto !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4237
+! https://github.com/NanoMeow/QuickReports/issues/3139
 @@||md5hashing.net^$generichide
+*$script,3p,redirect-rule=noopjs,domain=md5hashing.net
+md5hashing.net##.alert-danger.alert
+md5hashing.net##.red.b.center.mute
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4244
 siliconinvestor.com##+js(abort-current-inline-script.js, document.getElementById, undefined)
@@ -3456,3 +3460,18 @@ sportlivefree.com##+js(ra, oncontextmenu)
 
 ! otakukan .com right click
 otakukan.com##+js(acis, document.oncontextmenu)
+
+! https://github.com/NanoMeow/QuickReports/issues/3148
+mdlinx.com##+js(nostif, show)
+
+! suedkurier .de right click - select
+suedkurier.de##+js(ra, oncontextmenu)
+suedkurier.de##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7017
+utamap.com##+js(ra, oncontextmenu)
+utamap.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7018
+utaten.com##+js(ra, oncontextmenu|onselectstart)
+utaten.com##.lyricBody:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
