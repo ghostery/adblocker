@@ -3031,7 +3031,6 @@ pcgamer.com#@#.hawk-widget
 ! https://www.reddit.com/r/uBlockOrigin/comments/e9lps6/history_channel/
 @@||play.history.com/vendor/AppMeasurement.js$script,1p
 @@||play.history.com/vendor/FacebookPixel.min.js$script,1p
-@@||cedexis.com^$xhr,domain=play.history.com
 
 ! https://github.com/NanoMeow/QuickReports/issues/2489
 @@||costco.com.mx/*/js/trackermediator.js$script,1p
@@ -3359,10 +3358,9 @@ dziennikbaltycki.pl,dzienniklodzki.pl,dziennikpolski24.pl,dziennikzachodni.pl,ec
 @@||redfin.com/rift$xhr,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7005
-! https://github.com/uBlockOrigin/uAssets/issues/7012
-!#if env_firefox
-@@||cdx.cedexis.net^$domain=bloomberg.com|hepsiburada.com|linkedin.com
-!#endif
+! https://github.com/uBlockOrigin/uAssets/issues/7012#issuecomment-592815205
+||cedexis.com^$3p,badfilter
+||cedexis.net^$3p,badfilter
 
 ! Conversation broken allthingsvegas .com
 @@||pix.spot.im/api/$xhr,domain=allthingsvegas.com
@@ -3391,3 +3389,11 @@ amnews.com###div-gpt-ad-instory-bottom
 ! https://github.com/uBlockOrigin/uAssets/issues/7001
 ||spade.sci.twitch.tv^$badfilter
 ||spade.sci.twitch.tv^$3p
+
+! https://github.com/uBlockOrigin/uAssets/issues/7026
+@@||ensighten.com^*/Bootstrap.js$domain=fidelity.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/7030
+||ntv.io^$badfilter
+||ntv.io^$3p,badfilter
+||ntv.io^$3p,domain=~teslarati.com
