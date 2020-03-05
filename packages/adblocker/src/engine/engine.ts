@@ -27,7 +27,7 @@ import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 
-export const ENGINE_VERSION = 58;
+export const ENGINE_VERSION = 59;
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
