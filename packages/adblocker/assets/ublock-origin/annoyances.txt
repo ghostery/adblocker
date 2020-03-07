@@ -600,8 +600,12 @@ voirfilms.*##+js(abort-on-property-read.js, document.onselectstart)
 ! https://github.com/uBlockOrigin/uAssets/issues/3278#issuecomment-421038747
 @@||nyt.com/ads/google/adsbygoogle.js$script,domain=nytimes.com
 ! https://github.com/uBlockOrigin/uAssets/issues/5677
+!#if env_chromium
 nytimes.com##+js(set-constant.js, navigator.storage.estimate, undefined)
+!#endif
+!#if env_firefox
 nytimes.com##+js(set-constant.js, webkitRequestFileSystem, noopFunc)
+!#endif
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2682#issuecomment-421085748
 @@||xiaomitoday.com^$generichide
@@ -3530,3 +3534,13 @@ newyorker.com##+js(set, webkitRequestFileSystem, noopFunc)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/50946
 unisinav.com##body:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/NanoMeow/QuickReports/issues/3236
+nekopoi.web.id##+js(acis, document.oncopy)
+nekopoi.web.id##+js(ra, oncontextmenu|ondragstart)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7069
+kickante.com.br##+js(aeld, mouseleave)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7070
+scribd.com##+js(aeld, /^(mouseout|mouseleave)$/)
