@@ -701,8 +701,8 @@ linkneverdie.com###adsqc
 ! https://github.com/uBlockOrigin/uAssets/issues/161
 ||uim.tifbs.net/js/*.js$script,redirect=noopjs,domain=gmx.net|web.de
 ! https://github.com/uBlockOrigin/uAssets/issues/6834
-web.de##body > #app > .main:style(display: block !important;)
 web.de##.main [data-ac]:empty
+gmx.*##.main [data-ac]:empty
 
 ! https://adblockplus.org/forum/viewtopic.php?f=1&t=49326
 ||ditwrite.com^$document
@@ -1755,9 +1755,12 @@ fmovies.*##+js(window.open-defuser)
 mcloud.to###jwa
 *$script,redirect-rule=noopjs,domain=hydrax.net|playhydrax.com
 hydrax.net##+js(nostif, debugger)
+! https://github.com/NanoMeow/QuickReports/issues/3311
 @@||hydrax.net^$ghide
-@@||iamcdn.net/players/*ads.js$script,domain=hydrax.net|playhydrax.com
+@@||iamcdn.net/players/*ads$script,domain=hydrax.net|playhydrax.com
 hydrax.net,playhydrax.com##+js(aopr, AaDetector)
+jav.guru##.aligncenter
+jav.guru##.alignnone
 
 ! https://github.com/uBlockOrigin/uAssets/issues/605
 ! https://forums.lanik.us/viewtopic.php?f=62&t=38997
@@ -4571,19 +4574,14 @@ themeslide.com##+js(nano-stb)
 ! https://github.com/uBlockOrigin/uAssets/pull/6696
 @@||aternos.org^$ghide
 ||tech426.com^$3p
+aternos.org##+js(aeld, /load|error/, _url)
+aternos.org##+js(set, pbjs.adUnits, null)
 @@||cdn.tech426.com^$script,domain=aternos.org
-@@||cmp.tech426.com^$script,xhr,domain=aternos.org
-@@||c.amazon-adsystem.com^$script,xhr,domain=aternos.org
-@@||fastlane.rubiconproject.com^$xhr,domain=aternos.org
-@@||hbopenbid.pubmatic.com^$xhr,domain=aternos.org
-@@||i.connectad.io^$xhr,domain=aternos.org
-@@||ib.adnxs.com^$xhr,domain=aternos.org
-@@||prebid.digitru.st^$xhr,domain=aternos.org
-@@||snigel-d.openx.net^$xhr,domain=aternos.org
-@@||tlx.3lift.com^$xhr,domain=aternos.org
+@@||cmp.tech426.com^$script,domain=aternos.org
+@@||c.amazon-adsystem.com/aax2/apstag.js$script,domain=aternos.org
 aternos.org##.header,.body:style(display: flex !important)
 aternos.org##aside.sidebar:style(position: absolute !important; padding: calc(100vw - 100vw) !important)
-aternos.org##.ad.responsive-leaderboard:style(position: absolute !important; z-index: -2147483647 !important)
+aternos.org##.ad.responsive-leaderboard:style(position: absolute !important; width: 0em!important)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1027
 @@||imasdk.googleapis.com/js/sdkloader/*$script,domain=video.gjirafa.com
@@ -5258,9 +5256,9 @@ xmovies8.*##+js(aopw, Fingerprint2)
 xmovies8.*##+js(aeld, /^(?:click|mousedown|mousemove|touchstart|touchend|touchmove)$/, system.popunder)
 xmovies8.*##+js(set, check_adblock, true)
 ||xmovies8.is/sw.js$script,1p
-! https://github.com/uBlockOrigin/uAssets/issues/4458#issuecomment-515734650
 xmovies08.*##+js(acis, Math, zfgloaded)
 xmovies08.org##+js(aeld, , '0x)
+xmovies8.*###upgrade_pop
 ||doghoust.net^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/pull/1733
@@ -8720,11 +8718,11 @@ tomadivx.tv##+js(nowebrtc)
 ||tomadivx.tv/publi
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3143
-vidcloud.co##+js(aopr, BetterJsPop)
-vidcloud.co##+js(aopw, adBlockDetected)
-vidcloud.co##+js(set, pop_cnt, 1)
-vidcloud.co##[src^="https://i.imgur.com/"]
-vidcloud.co###overlay-center
+vidcloud.*##+js(window.open-defuser)
+vidcloud.*##+js(aopr, BetterJsPop)
+vidcloud.*##+js(aopr, decodeURI)
+vidcloud.*##+js(aopw, adBlockDetected)
+vidcloud.*###overlay-center
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3147
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=devast.io
@@ -10251,6 +10249,8 @@ nhentai.net##+js(window.open-defuser)
 ffmovies.ru##+js(acis, parseInt, incrementClicks)
 ffmovies.ru##+js(acis, decodeURIComponent, atob)
 ffmovies.ru##+js(acis, Math, zfgloaded)
+ffmovies.ru##+js(aopr, AaDetector)
+||xr8wv50k1daj.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1553
 ! https://github.com/uBlockOrigin/uAssets/issues/3731
@@ -17414,7 +17414,7 @@ dreamdth.com##+js(set, adBlockDetected, false)
 dreamdth.com##+js(acis, $, show)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5799
-pornhub.*,pornhubthbh7ap3u.onion##+js(aopr, HTMLElement.prototype.attachShadow)
+pornhub.*,pornhubthbh7ap3u.onion##+js(set, HTMLElement.prototype.attachShadow, null)
 pornhub.*,pornhubthbh7ap3u.onion##+js(aopr, smpop)
 pornhub.*,pornhubthbh7ap3u.onion##+js(set, atob, trueFunc)
 pornhub.*,pornhubthbh7ap3u.onion##+js(window.open-defuser)
@@ -24544,16 +24544,16 @@ securitypcsoluciones.blogspot.com##+js(acis, addEventListener, ADBLOCK)
 securitypcsoluciones.blogspot.com##+js(aopr, document.oncontextmenu)
 
 ! exoclick ads, popunder
-airsextube.com,asianbabestube.com,bigtitsxxxfree.com,blowjobpornset.com,entertubeporn.com,finexxxvideos.com,freesexvideos24.com,fuckhairygirls.com,gopornindian.com,grandmatube.pro,grannyfucko.com,grannyfuckxxx.com,hd-analporn.com,hiddencamhd.com,hindiporno.pro,hotstep-mom.com,indianbestporn.com,japanesemomsex.com,japanxxxass.com,massagefreetube.com,maturepussies.pro,megajapansex.com,new-xxxvideos.com,xxxblowjob.pro,xxxtubegain.com,xxxvideostrue.com,onlinegrannyporn.com,agedtubeporn.com,agedvideos.com,freebigboobsporn.com,tubeinterracial-porn.com,best-xxxvideos.com,bestanime-xxx.com,blowxxxtube.com,callfuck.com,teenhubxxx.com,tubepornasian.com,xxxtubedot.com,blowjobfucks.com,dirtyasiantube.com,maturewomenfucks.com,pornmaturetube.com,setfucktube.com,tourporno.com,do-xxx.com,dotfreesex.com,dotfreexxx.com,easymilftube.net,electsex.com,erospots.info,fineretroporn.com,freehqtube.com##+js(noeval)
-airsextube.com,asianbabestube.com,bigtitsxxxfree.com,blowjobpornset.com,entertubeporn.com,finexxxvideos.com,freesexvideos24.com,fuckhairygirls.com,gopornindian.com,grandmatube.pro,grannyfucko.com,grannyfuckxxx.com,hd-analporn.com,hiddencamhd.com,hindiporno.pro,hotstep-mom.com,indianbestporn.com,japanesemomsex.com,japanxxxass.com,massagefreetube.com,maturepussies.pro,megajapansex.com,new-xxxvideos.com,xxxblowjob.pro,xxxtubegain.com,xxxvideostrue.com,acutetube.net,agedtubeporn.com,agedvideos.com,onlinegrannyporn.com,freebigboobsporn.com,tubeinterracial-porn.com,best-xxxvideos.com,bestanime-xxx.com,blowxxxtube.com,callfuck.com,teenhubxxx.com,tubepornasian.com,xxxtubedot.com,blowjobfucks.com,dirtyasiantube.com,maturewomenfucks.com,pornmaturetube.com,setfucktube.com,tourporno.com,do-xxx.com,dotfreesex.com,dotfreexxx.com,easymilftube.net,electsex.com,fineretroporn.com,freehqtube.com##+js(aopr, Aloader.serve)
+airsextube.com,asianbabestube.com,bigtitsxxxfree.com,blowjobpornset.com,entertubeporn.com,finexxxvideos.com,freesexvideos24.com,fuckhairygirls.com,gopornindian.com,grandmatube.pro,grannyfucko.com,grannyfuckxxx.com,hd-analporn.com,hiddencamhd.com,hindiporno.pro,hotstep-mom.com,indianbestporn.com,japanesemomsex.com,japanxxxass.com,massagefreetube.com,maturepussies.pro,megajapansex.com,new-xxxvideos.com,xxxblowjob.pro,xxxtubegain.com,xxxvideostrue.com,onlinegrannyporn.com,agedtubeporn.com,agedvideos.com,freebigboobsporn.com,tubeinterracial-porn.com,best-xxxvideos.com,bestanime-xxx.com,blowxxxtube.com,callfuck.com,teenhubxxx.com,tubepornasian.com,xxxtubedot.com,blowjobfucks.com,dirtyasiantube.com,maturewomenfucks.com,pornmaturetube.com,setfucktube.com,tourporno.com,do-xxx.com,dotfreesex.com,dotfreexxx.com,easymilftube.net,electsex.com,erospots.info,fineretroporn.com,freehqtube.com,freshmaturespussy.com,freshsexxvideos.com,fuckedporno.com##+js(noeval)
+airsextube.com,asianbabestube.com,bigtitsxxxfree.com,blowjobpornset.com,entertubeporn.com,finexxxvideos.com,freesexvideos24.com,fuckhairygirls.com,gopornindian.com,grandmatube.pro,grannyfucko.com,grannyfuckxxx.com,hd-analporn.com,hiddencamhd.com,hindiporno.pro,hotstep-mom.com,indianbestporn.com,japanesemomsex.com,japanxxxass.com,massagefreetube.com,maturepussies.pro,megajapansex.com,new-xxxvideos.com,xxxblowjob.pro,xxxtubegain.com,xxxvideostrue.com,acutetube.net,agedtubeporn.com,agedvideos.com,onlinegrannyporn.com,freebigboobsporn.com,tubeinterracial-porn.com,best-xxxvideos.com,bestanime-xxx.com,blowxxxtube.com,callfuck.com,teenhubxxx.com,tubepornasian.com,xxxtubedot.com,blowjobfucks.com,dirtyasiantube.com,maturewomenfucks.com,pornmaturetube.com,setfucktube.com,tourporno.com,do-xxx.com,dotfreesex.com,dotfreexxx.com,easymilftube.net,electsex.com,fineretroporn.com,freehqtube.com,freshmaturespussy.com,freshsexxvideos.com,fuckedporno.com##+js(aopr, Aloader.serve)
 activevoyeur.com,allbbwtube.com,alltstube.com##+js(acis, document.dispatchEvent, myEl)
-amateurmaturewives.com,ariestube.com,asian-teen-sex.com,18asiantube.com,wholevideos.com,asianporntube69.com,babeswp.com,bangyourwife.com,basiltube.com,bdsmslavemovie.com,bdsmwaytube.com,bestmaturewomen.com,classicpornvids.com,cocogals.com,pornpaw.com,dawntube.com,desihoes.com,desimmshd.com,dirtytubemix.com,plumperstube.com,enormousbabes.net,erowall.com,exclusiveindianporn.com,figtube.com,amateur-twink.com,freeboytwinks.com,freegrannyvids.com##+js(aopr, document.dispatchEvent)
+amateurmaturewives.com,ariestube.com,asian-teen-sex.com,18asiantube.com,wholevideos.com,asianporntube69.com,babeswp.com,bangyourwife.com,basiltube.com,bdsmslavemovie.com,bdsmwaytube.com,bestmaturewomen.com,classicpornvids.com,cocogals.com,pornpaw.com,dawntube.com,desihoes.com,desimmshd.com,dirtytubemix.com,plumperstube.com,enormousbabes.net,erowall.com,exclusiveindianporn.com,figtube.com,amateur-twink.com,freeboytwinks.com,freegrannyvids.com,freexmovs.com,freshbbw.com,frostytube.com,fuckhottwink.com,fuckslutsonline.com##+js(aopr, document.dispatchEvent)
 8teenxxx.com,activevoyeur.com,allschoolboysecrets.com,babesjoy.com,boobsforfun.com,breedingmoms.com,collegeteentube.com,cumshotlist.com,freepornik.com##+js(aopr, ExoLoader.serve)
 bdsmporntub.com,femdomporntubes.com##+js(aopr, Popunder)
 best18teens.com,comicxxx.eu,desihoes.com,dirtytamil.com##+js(acis, document.querySelectorAll, popMagic)
 blowjobgif.net##+js(aopr, ExoDetector)
 favefreeporn.com##+js(aopr, ExoLoader.addZone)
-decorativemodels.com,erowall.com##+js(aopr, loadTool)
+decorativemodels.com,erowall.com,freyalist.com##+js(aopr, loadTool)
 comicxxx.eu##+js(aopr, open)
 classicpornbest.com,desihoes.com##+js(aopr, decodeURI)
 classicpornbest.com##+js(aeld, popstate)
@@ -24574,6 +24574,15 @@ pornpaw.com##.ipprtcnt
 erospots.info##.custom-html-widget.textwidget
 amateur-twink.com##.banner
 amateur-twink.com##.pl_adv
+freyalist.com##.stripper
+ftopx.com##.advert
+fuckedporno.com##.bannersinner
+fuckhardporn.com##.player_ad_block
+fuckhardporn.com###player_adv_start
+fuckhardporn.com###skim
+iceporn.com##.puFloatLine
+iceporn.com###abmessage
+iceporn.com##.drt-spot-box
 ||seraton.online^$3p
 ##.imggif
 ##.bloc-pub
@@ -24583,6 +24592,8 @@ amateur-twink.com##.pl_adv
 ##.banner-bottom
 ##[href*="librateam.net"]
 ##[src*="librateam.net"]
+###divclose
+##.hor_banner
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/51314
 wotcheatmods.com##+js(aopr, anOptions)
@@ -24688,3 +24699,47 @@ mylinks.xyz##+js(aopr, open)
 ||max-adserv.com^$3p
 ||allittledprevi.info^
 mylinks.xyz##.myButton
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/51520
+@@||pakgamesinfo.com^$ghide
+pakgamesinfo.com##.adsbygoogle
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/51536
+@@||remangas.top^$ghide
+remangas.top##.ads, [class^="ads-"]
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/51553
+robotikforum.net##+js(aopr, adBlockDetected)
+robotikforum.net##[href^="https://www.turhost.com/"]
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/51555
+iptvspor.com##+js(aopr, adBlockDetected)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/51556
+plugincim.com##+js(aopr, adBlockDetected)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/51557
+fivemturk.com##+js(aopr, adBlockDetected)
+fivemturk.com##[src^="https://i.hizliresim.com/"]
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/51558
+sosyalbilgiler.net##+js(aopr, adBlockDetected)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/51561
+auraroleplay.com##+js(nostif, adblock, 3000)
+auraroleplay.com##+js(aopr, anOptions)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/51563
+nadidetarifler.com##+js(set, koddostu_com_adblock_yok, null)
+nadidetarifler.com##.advert-side
+
+! https://github.com/uBlockOrigin/uAssets/issues/7106
+playtube.ws##+js(set, xRds, false)
+playtube.ws##+js(set, cRAds, true)
+
+! https://github.com/NanoMeow/QuickReports/issues/3312
+hwreload.it##+js(acis, $, show)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/51574
+bigbtc.win##+js(nosiif, visibility, 1000)
+bigbtc.win##center
