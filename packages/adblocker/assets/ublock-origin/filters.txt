@@ -1470,6 +1470,7 @@ metacritic.com##.ad_unit
 ! https://www.reddit.com/r/uBlockOrigin/comments/6nrayv/new_to_using_ublock_origin_its_breaking_videos_on/dkd4v0e/
 ! https://www.reddit.com/r/uBlockOrigin/comments/9v1y40/ign_is_circumventing_adblockers/
 ! https://github.com/gorhill/uBO-Extra/issues/114
+! https://github.com/uBlockOrigin/uAssets/issues/7113
 !broken video ign.com##+js(aopr, __eiPb)
 ign.com##^script:has-text(iframeTestTimeMS)
 ign.com##.preShell:style(height: 0 !important;)
@@ -1479,7 +1480,6 @@ ignboards.com##^script:has-text(g02.)
 ||au.ign.com^$inline-script
 !#endif
 *$xhr,redirect-rule=1x1.gif,domain=ign.com
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=ign.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/543
 @@||opencarry.org^$ghide
@@ -2583,7 +2583,7 @@ alrincon.com##+js(aopr, loadTool)
 alrincon.com##+js(aopr, ExoLoader.serve)
 alrincon.com##+js(aopr, open)
 ||trcklks.com^$3p
-##[href^="https://sex.cam/"]
+! ##[href^="https://sex.cam/"]
 alrincon.com##center:has-text(deal)
 ||tracking.scenepass.com^
 
@@ -3358,9 +3358,10 @@ kitguru.net##+js(aopr, anOptions)
 ! https://github.com/uBlockOrigin/uAssets/issues/1108
 pornktube.*##+js(aeld, load, exoJsPop)
 
-! https://github.com/uBlockOrigin/uAssets/issues/1113
 ! https://github.com/uBlockOrigin/uAssets/issues/7062
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect-rule=noop.js,domain=viki.com
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=viki.com
+@@||pubads.g.doubleclick.net/gampad/ads*www.viki.com$xhr,domain=imasdk.googleapis.com
+||pagead2.googlesyndication.com^$xhr,redirect=noopjs,domain=viki.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1114
 hdzog.com##+js(nosiif, document.readyState))
@@ -6613,10 +6614,13 @@ mazterize.com##center
 seriesgato.tv##+js(aopw, smrtSB)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2260
-grantorrent.*,grantorrent1.*##+js(aopr, _0x9fec)
+! https://github.com/NanoMeow/QuickReports/issues/3325
 grantorrent.*,grantorrent1.*##+js(aopr, getUrlParameter)
+grantorrent.*##+js(aopr, LieDetector)
+grantorrent.*##+js(aopw, _pop)
 grantorrent.*,grantorrent1.*##+js(aopw, Fingerprint2)
 grantorrent.*,grantorrent1.*##+js(acis, decodeURI, decodeURIComponent)
+||kbugxeslbjc8.com^$3p
 ! https://github.com/uBlockOrigin/uAssets/issues/2260#issuecomment-488532216
 desbloqueador.*##+js(aeld, mousedown, trigger)
 desbloqueador.*##+js(set, Ok, true)
@@ -16730,8 +16734,10 @@ beautypageants.indiatimes.com##+js(aeld, scroll, _0x)
 @@||googletagmanager.com/gtm.js$script,domain=raiplayradio.it
 
 ! https://github.com/NanoMeow/QuickReports/issues/1277
+! https://github.com/AdguardTeam/AdguardFilters/issues/51758
 freebcc.org##+js(aopr, app_vars.force_disable_adblock)
 freebcc.org##+js(aopr, adBlockDetected)
+freebcc.org##+js(set, canRunAds, true)
 @@||freebcc.org^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5610
@@ -18256,9 +18262,10 @@ festcut.com##+js(aopr, open)
 gsurl.*##+js(aeld, mousedown, preventDefault)
 ||iz682noju02ye5.com^$3p
 
-! easyview.eu popups
+! easyview.eu popups/ads
 easyview.eu##+js(aopr, AaDetector)
 easyview.eu##+js(aopr, eddOptions)
+||ds88pc0kw6cvc.cloudfront.net^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5990
 racaty.com##+js(acis, Object.defineProperty, vocabulary)
@@ -21064,7 +21071,12 @@ shorten.*##+js(aopr, AaDetector)
 shorten.*##+js(aopr, app_vars.force_disable_adblock)
 shorten.*##+js(aopw, _pop)
 shorten.*##+js(window.open-defuser)
+shorten.sh##+js(aopr, Notification)
+shorten.sh##+js(aeld, , _0x)
+shorten.sh##+js(aeld, mousedown)
 shorten.sh##.banner-inner
+||asewlfjqwlflkew.com^
+||repruggob.com^
 
 ||adshob.com^$3p
 ||mediaoaktree.com^$3p
@@ -22118,7 +22130,9 @@ androidonepro.com##+js(aopr, downloadJSAtOnload)
 
 ! https://old.reddit.com/r/uBlockOrigin/comments/ecd6id/removing_scrollblock_on_tagesanzeigerch/
 ! https://github.com/uBlockOrigin/uAssets/issues/6755
-tagesanzeiger.ch##+js(acis, $, adblock)
+! https://www.reddit.com/r/uBlockOrigin/comments/e6lash/cant_log_in_on_digital_news_website/fkrke3j/
+@@||tda.io^$xhr,domain=tagesanzeiger.ch
+@@||tagesanzeiger.ch^$ghide
 
 ! https://github.com/NanoMeow/QuickReports/issues/2518
 @@||rmcmv.us^$ghide
@@ -24864,7 +24878,8 @@ facciabuco.com##+js(nostif, , 3000)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3323
 @@||customercareal.com^$ghide
-customercareal.com##+js(ra, class, a[id="locked_action_link"])
+customercareal.com##a[id^="actionlinkid_"]
+customercareal.com###locked_action_link.disabled:style(cursor:pointer !important; opacity:1 !important; pointer-events:auto !important)
 customercareal.com##+js(nano-sib)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3328
@@ -24872,3 +24887,51 @@ cryptobite.site##+js(set, show_ads_gr8_lite, true)
 cryptobite.site##+js(nosiif, visibility, 1000)
 ||bannertrack.net^$3p
 ||adnetasia.com^$3p
+
+! https://github.com/NanoMeow/QuickReports/issues/3332
+miniurl.pw##+js(aopr, app_vars.force_disable_adblock)
+miniurl.pw##+js(aopw, _pop)
+||miniurl.pw/sw.js$script,1p
+||ym8p.net^$3p
+
+! https://github.com/NanoMeow/QuickReports/issues/3335
+worldgreynews.com##+js(acis, Math, zfgloaded)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/fkhs2h/help_skipaz_detects_ublock_or_blocks_captcha/
+oda365.xyz##+js(aopr, app_vars.force_disable_adblock)
+oda365.xyz##+js(acis, document.getElementById, block)
+oda365.xyz##[href^="https://hihojia7.info/"]
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/51721
+@@||uploader.xzy.pw^$ghide
+uploader.xzy.pw##.adsbygoogle
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/51731
+gazettetimes.com##+js(nostif, removeChild, 100)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/51713
+arabic-robot.blogspot.com##+js(acis, document.createElement, adblock)
+arabic-robot.blogspot.com###preloader
+
+! https://github.com/NanoMeow/QuickReports/issues/3334
+@@||nsfwmega.com^$ghide
+
+! popups https://forums.lanik.us/viewtopic.php?f=64&t=44458
+mavanimes.co##+js(acis, Math, zfgloaded)
+mavanimes.co##+js(aopr, AaDetector)
+||tj9pcnb2ws.com^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/51774
+londragazete.com##+js(set, $tieE3, true)
+londragazete.com##.a-single
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/51775
+dgbauto.100count.net##+js(nano-sib)
+100count.net##+js(aopr, disableButtonTimer)
+100count.net##+js(aopr, adcashMacros)
+100count.net##+js(aopr, app_vars.force_disable_adblock)
+100count.net##+js(acis, Math, zfgloaded)
+100count.net###cookie-pop
+100count.net##.banner
+100count.net##ins[class^="bmadblock-"]
+100count.net##[class^="_"]
