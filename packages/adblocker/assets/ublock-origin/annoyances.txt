@@ -1401,7 +1401,7 @@ runningnews.gr##+js(remove-attr.js, oncontextmenu|onselectstart|ondragstart)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4522
 gordiando.com.br##+js(abort-on-property-write.js, document.oncontextmenu)
-*/wp-content/plugins/wp-content-copy-protection/*$css,1p
+*/wp-content/plugins/wp-content-copy-protection/*$1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4523
 mercurynews.com##.Mg2-connext, .connext-modal-backdrop, .modal-scrollable
@@ -2998,9 +2998,6 @@ insidermonkey.com##+js(aopr, ABD)
 ! https://github.com/NanoMeow/QuickReports/issues/2640
 venea.net##+js(aeld, , ads)
 
-! https://github.com/NanoAdblocker/NanoFilters/issues/442
-thumpertalk.com##+js(cookie-remover, tt4_detectadblock_time)
-
 ! https://github.com/NanoMeow/QuickReports/issues/2341
 @@||puhutv.com^$ghide
 
@@ -3371,8 +3368,9 @@ asiadrive.blogspot.com##*:style(-webkit-touch-callout: default !important; -webk
 digitalcameraworld.com,guitarworld.com,musicradar.com##+js(aopr, _sp_.mms.startMsg)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/49469
-buscape.com.br##.zmodal__body:nth-ancestor(1)
-buscape.com.br###overlay-modal
+! https://github.com/uBlockOrigin/uAssets/commit/ef513afe96d9a0974b3e5d9a13780ed481da34ec#commitcomment-37898639
+buscape.com.br,zoom.com.br##.zmodal__body:nth-ancestor(1)
+buscape.com.br,zoom.com.br###overlay-modal
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6954
 alexeiportableapp.blogspot.com##+js(acis, document.oncontextmenu)
@@ -3608,3 +3606,10 @@ lectortmo.com##body *:style(-webkit-touch-callout: default !important; -webkit-u
 ! https://github.com/NanoMeow/QuickReports/issues/3320
 @@||hack-sat.com^$ghide
 hack-sat.com###login_popup
+
+! papo18 anti-adb
+papo18.com##+js(set, adning_no_adblock, true)
+
+! ostadokom.com contextmenu/selection annoyance
+ostadokom.com##body:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+/wp-content/plugins/rcd-right-click-disabler/*$script,1p
