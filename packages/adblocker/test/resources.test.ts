@@ -8,7 +8,7 @@
 
 import { loadResources } from './utils';
 
-import StaticDataView from '../src/data-view';
+import { StaticDataView } from '../src/data-view';
 import Resources from '../src/resources';
 
 describe('#Resources', () => {

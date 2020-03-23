@@ -15,7 +15,8 @@ import {
   fastHash,
   hasUnicode,
   tokenize,
-  tokenizeFilter,
+  tokenizeWithWildcards,
+  tokenizeNoSkip,
 } from '../src/utils';
 import requests from './data/requests';
 import { loadAllLists } from './utils';
@@ -24,38 +25,29 @@ function t(tokens: string[]): Uint32Array {
   return new Uint32Array(tokens.map(fastHash));
 }
 
-expect.extend({
-  toNotCollideWithOtherFilter(filter: IFilter, map: Map<number, string>) {
-    const found = map.get(filter.getId());
-    if (found !== undefined && found !== filter.toString()) {
-      return {
-        message: () =>
-          `expected ${filter.toString()} to not collide, found ${found} (${filter.getId()})`,
-        pass: false,
-      };
-    }
-
-    return {
-      message: () => 'Ok',
-      pass: true,
-    };
-  },
-});
-
 function checkCollisions(filters: IFilter[]) {
   const hashes: Map<number, string> = new Map();
-  for (let i = 0; i < filters.length; i += 1) {
-    const filter = filters[i];
-    // @ts-ignore
-    expect(filter).toNotCollideWithOtherFilter(hashes);
-    hashes.set(filter.getId(), filters[i].toString());
+  for (const filter of filters) {
+    const id = filter.getId();
+    const found = hashes.get(id);
+    const raw = filter.toString();
+    if (found !== undefined && found !== raw) {
+      throw new Error(`expected ${raw} to not collide, found ${found} (${raw})`);
+    }
+    hashes.set(id, raw);
   }
 }
 
 describe('Utils', () => {
   describe('#fastHash', () => {
+    const { networkFilters, cosmeticFilters } = parseFilters(loadAllLists());
+
     it('does not produce collision on network filters', () => {
-      checkCollisions(parseFilters(loadAllLists()).networkFilters);
+      checkCollisions(networkFilters);
+    });
+
+    it('does not produce collision on cosmetic filters', () => {
+      checkCollisions(cosmeticFilters);
     });
 
     it('does not produce collision on requests dataset', () => {
@@ -65,40 +57,65 @@ describe('Utils', () => {
       );
     });
 
-    it('does not produce collision on cosmetic filters', () => {
-      checkCollisions(parseFilters(loadAllLists()).cosmeticFilters);
-    });
-
     it('returns 0 for empty string', () => {
       expect(fastHash('')).toBe(0);
     });
   });
 
-  it('#tokenizeFilter', () => {
-    expect(tokenizeFilter('', false, false)).toEqual(t([]));
-    expect(tokenizeFilter('', true, false)).toEqual(t([]));
-    expect(tokenizeFilter('', false, true)).toEqual(t([]));
-    expect(tokenizeFilter('', true, true)).toEqual(t([]));
+  it('#tokenizeWithWildcards', () => {
+    expect(tokenizeWithWildcards('', false, false)).toEqual(t([]));
+    expect(tokenizeWithWildcards('', true, false)).toEqual(t([]));
+    expect(tokenizeWithWildcards('', false, true)).toEqual(t([]));
+    expect(tokenizeWithWildcards('', true, true)).toEqual(t([]));
 
-    expect(tokenizeFilter('foo/bar baz', false, false)).toEqual(t(['foo', 'bar', 'baz']));
-    expect(tokenizeFilter('foo/bar baz', true, false)).toEqual(t(['bar', 'baz']));
-    expect(tokenizeFilter('foo/bar baz', true, true)).toEqual(t(['bar']));
-    expect(tokenizeFilter('foo/bar baz', false, true)).toEqual(t(['foo', 'bar']));
-    expect(tokenizeFilter('foo////bar  baz', false, true)).toEqual(t(['foo', 'bar']));
+    expect(tokenizeWithWildcards('foo.barƬ*', false, false)).toEqual(t(['foo']));
+    expect(tokenizeWithWildcards('foo.barƬ*', false, true)).toEqual(t(['foo']));
+    expect(tokenizeWithWildcards('foo.barƬ*', true, false)).toEqual(t([]));
+    expect(tokenizeWithWildcards('foo.barƬ*', true, true)).toEqual(t([]));
+
+    expect(tokenizeWithWildcards('*foo.barƬ', false, false)).toEqual(t(['barƬ']));
+    expect(tokenizeWithWildcards('*foo.barƬ*', false, false)).toEqual(t([]));
+    expect(tokenizeWithWildcards('*foo*barƬ*', false, false)).toEqual(t([]));
+    expect(tokenizeWithWildcards('foo*barƬ*', false, false)).toEqual(t([]));
+    expect(tokenizeWithWildcards('foo*barƬ', false, false)).toEqual(t([]));
+    expect(tokenizeWithWildcards('foo**barƬ', false, false)).toEqual(t([]));
+
+    expect(tokenizeWithWildcards('foo/bar baz', false, false)).toEqual(t(['foo', 'bar', 'baz']));
+    expect(tokenizeWithWildcards('foo/bar baz', true, false)).toEqual(t(['bar', 'baz']));
+    expect(tokenizeWithWildcards('foo/bar baz', true, true)).toEqual(t(['bar']));
+    expect(tokenizeWithWildcards('foo/bar baz', false, true)).toEqual(t(['foo', 'bar']));
+    expect(tokenizeWithWildcards('foo////bar  baz', false, true)).toEqual(t(['foo', 'bar']));
+
   });
 
   it('#tokenize', () => {
-    expect(tokenize('')).toEqual(t([]));
-    expect(tokenize('foo')).toEqual(t(['foo']));
-    expect(tokenize('foo/bar')).toEqual(t(['foo', 'bar']));
-    expect(tokenize('foo-bar')).toEqual(t(['foo', 'bar']));
-    expect(tokenize('foo.bar')).toEqual(t(['foo', 'bar']));
-    expect(tokenize('foo.barƬ')).toEqual(t(['foo', 'barƬ']));
+    expect(tokenize('', false, false)).toEqual(t([]));
+    expect(tokenize('foo', false, false)).toEqual(t(['foo']));
+    expect(tokenize('foo/bar', false, false)).toEqual(t(['foo', 'bar']));
+    expect(tokenize('foo-bar', false, false)).toEqual(t(['foo', 'bar']));
+    expect(tokenize('foo.bar', false, false)).toEqual(t(['foo', 'bar']));
+    expect(tokenize('foo.barƬ', false, false)).toEqual(t(['foo', 'barƬ']));
+    expect(tokenize('*foo.barƬ', false, false)).toEqual(t(['foo', 'barƬ']));
+    expect(tokenize('*foo*.barƬ', false, false)).toEqual(t(['foo', 'barƬ']));
+    expect(tokenize('*foo*.barƬ', true, false)).toEqual(t(['foo', 'barƬ']));
+    expect(tokenize('foo*.barƬ', false, false)).toEqual(t(['foo', 'barƬ']));
+    expect(tokenize('foo.*barƬ', false, false)).toEqual(t(['foo', 'barƬ']));
+    expect(tokenize('foo.barƬ*', false, false)).toEqual(t(['foo', 'barƬ']));
+  });
 
-    // Tokens cannot be surrounded by *
-    expect(tokenize('foo.barƬ*')).toEqual(t(['foo']));
-    expect(tokenize('*foo.barƬ')).toEqual(t(['barƬ']));
-    expect(tokenize('*foo.barƬ*')).toEqual(t([]));
+  it('#tokenizeNoSkip', () => {
+    expect(tokenizeNoSkip('')).toEqual(t([]));
+    expect(tokenizeNoSkip('foo')).toEqual(t(['foo']));
+    expect(tokenizeNoSkip('foo/bar')).toEqual(t(['foo', 'bar']));
+    expect(tokenizeNoSkip('foo-bar')).toEqual(t(['foo', 'bar']));
+    expect(tokenizeNoSkip('foo.bar')).toEqual(t(['foo', 'bar']));
+    expect(tokenizeNoSkip('foo.barƬ')).toEqual(t(['foo', 'barƬ']));
+    expect(tokenizeNoSkip('*foo.barƬ')).toEqual(t(['foo', 'barƬ']));
+    expect(tokenizeNoSkip('*foo*.barƬ')).toEqual(t(['foo', 'barƬ']));
+    expect(tokenizeNoSkip('*foo*.barƬ')).toEqual(t(['foo', 'barƬ']));
+    expect(tokenizeNoSkip('foo*.barƬ')).toEqual(t(['foo', 'barƬ']));
+    expect(tokenizeNoSkip('foo.*barƬ')).toEqual(t(['foo', 'barƬ']));
+    expect(tokenizeNoSkip('foo.barƬ*')).toEqual(t(['foo', 'barƬ']));
   });
 
   it('#createFuzzySignature', () => {

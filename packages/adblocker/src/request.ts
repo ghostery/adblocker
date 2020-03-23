@@ -8,7 +8,7 @@
 
 import { parse } from 'tldts-experimental';
 import TokensBuffer from './tokens-buffer';
-import { createFuzzySignature, fastHash, tokenizeInPlace } from './utils';
+import { createFuzzySignature, fastHash, tokenizeNoSkipInPlace } from './utils';
 
 const TLDTS_OPTIONS = {
   extractHostname: true,
@@ -54,6 +54,38 @@ export type WebRequestType = WebRequestTypeChrome | WebRequestTypeFirefox;
 
 // The set of supported types is the union of WebRequest
 export type RequestType = WebRequestType | ElectronRequestType | PuppeteerRequestType;
+
+export const NORMALIZED_TYPE_TOKEN: { [s in RequestType]: number } = {
+  beacon: fastHash('type:beacon'),
+  csp_report: fastHash('type:csp'),
+  document: fastHash('type:document'),
+  eventsource: fastHash('type:other'),
+  fetch: fastHash('type:xhr'),
+  font: fastHash('type:font'),
+  image: fastHash('type:image'),
+  imageset: fastHash('type:image'),
+  mainFrame: fastHash('type:document'),
+  main_frame: fastHash('type:document'),
+  manifest: fastHash('type:other'),
+  media: fastHash('type:media'),
+  object: fastHash('type:object'),
+  object_subrequest: fastHash('type:object'),
+  other: fastHash('type:other'),
+  ping: fastHash('type:ping'),
+  script: fastHash('type:script'),
+  speculative: fastHash('type:other'),
+  stylesheet: fastHash('type:stylesheet'),
+  subFrame: fastHash('type:subdocument'),
+  sub_frame: fastHash('type:subdocument'),
+  texttrack: fastHash('type:other'),
+  web_manifest: fastHash('type:other'),
+  websocket: fastHash('type:websocket'),
+  xbl: fastHash('type:other'),
+  xhr: fastHash('type:xhr'),
+  xml_dtd: fastHash('type:other'),
+  xmlhttprequest: fastHash('type:xhr'),
+  xslt: fastHash('type:other'),
+};
 
 const TOKENS_BUFFER = new TokensBuffer(300);
 
@@ -218,17 +250,25 @@ export default class Request {
 
   public getTokens(): Uint32Array {
     if (this.tokens === undefined) {
-      TOKENS_BUFFER.seekZero();
+      TOKENS_BUFFER.reset();
 
-      if (this.sourceDomain) {
+      if (this.sourceDomain.length !== 0) {
         TOKENS_BUFFER.push(fastHash(this.sourceDomain));
       }
 
-      if (this.sourceHostname) {
+      if (this.sourceHostname.length !== 0) {
         TOKENS_BUFFER.push(fastHash(this.sourceHostname));
       }
 
-      tokenizeInPlace(this.url, TOKENS_BUFFER);
+      // Add token corresponding to request type
+      TOKENS_BUFFER.push(NORMALIZED_TYPE_TOKEN[this.type]);
+
+      let url = this.url;
+      if (url.length > 2048) {
+        url = url.slice(0, 2048);
+      }
+
+      tokenizeNoSkipInPlace(url, TOKENS_BUFFER);
 
       this.tokens = TOKENS_BUFFER.slice();
     }

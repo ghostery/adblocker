@@ -7,7 +7,7 @@
  */
 
 import Config from '../config';
-import StaticDataView from '../data-view';
+import { StaticDataView, sizeOfASCII, sizeOfByte } from '../data-view';
 import { EventEmitter } from '../events';
 import {
   adsAndTrackingLists,
@@ -371,7 +371,7 @@ export default class FilterEngine extends EventEmitter<
    */
   public getSerializedSize(): number {
     let estimatedSize: number =
-      StaticDataView.sizeOfByte() + // engine version
+      sizeOfByte() + // engine version
       this.config.getSerializedSize() +
       this.resources.getSerializedSize() +
       this.filters.getSerializedSize() +
@@ -385,7 +385,7 @@ export default class FilterEngine extends EventEmitter<
 
     // Estimate size of `this.lists` which stores information of checksum for each list.
     for (const [name, checksum] of this.lists) {
-      estimatedSize += StaticDataView.sizeOfASCII(name) + StaticDataView.sizeOfASCII(checksum);
+      estimatedSize += sizeOfASCII(name) + sizeOfASCII(checksum);
     }
 
     return estimatedSize;

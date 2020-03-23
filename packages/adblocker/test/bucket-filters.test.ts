@@ -7,7 +7,7 @@
  */
 
 import Config from '../src/config';
-import StaticDataView from '../src/data-view';
+import { StaticDataView } from '../src/data-view';
 import FiltersContainer from '../src/engine/bucket/filters';
 import CosmeticFilter from '../src/filters/cosmetic';
 import IFilter from '../src/filters/interface';

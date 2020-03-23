@@ -6,9 +6,18 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import StaticDataView from '../data-view';
+import {
+  StaticDataView,
+  sizeOfASCII,
+  sizeOfNetworkCSP,
+  sizeOfNetworkFilter,
+  sizeOfNetworkHostname,
+  sizeOfNetworkRedirect,
+  sizeOfUTF8,
+  sizeOfUint32Array,
+} from '../data-view';
 import { toASCII } from '../punycode';
-import Request, { RequestType } from '../request';
+import Request, { RequestType, NORMALIZED_TYPE_TOKEN } from '../request';
 import TokensBuffer from '../tokens-buffer';
 import {
   binLookup,
@@ -23,8 +32,9 @@ import {
   isAlpha,
   isDigit,
   setBit,
-  tokenizeFilterInPlace,
+  tokenizeInPlace,
   tokenizeRegexInPlace,
+  tokenizeWithWildcardsInPlace,
 } from '../utils';
 import IFilter from './interface';
 
@@ -135,6 +145,114 @@ const REQUEST_TYPE_TO_MASK: { [s in RequestType]: number | undefined } = {
   xml_dtd: NETWORK_FILTER_MASK.fromOther,
   xslt: NETWORK_FILTER_MASK.fromOther,
 };
+
+function getListOfRequestTypesNegated(filter: NetworkFilter): RequestType[] {
+  const types: RequestType[] = [];
+
+  if (filter.fromDocument() === false) {
+    types.push('document');
+  }
+
+  if (filter.fromImage() === false) {
+    types.push('image');
+  }
+
+  if (filter.fromMedia() === false) {
+    types.push('media');
+  }
+
+  if (filter.fromObject() === false) {
+    types.push('object');
+  }
+
+  if (filter.fromOther() === false) {
+    types.push('other');
+  }
+
+  if (filter.fromPing() === false) {
+    types.push('ping');
+  }
+
+  if (filter.fromScript() === false) {
+    types.push('script');
+  }
+
+  if (filter.fromStylesheet() === false) {
+    types.push('stylesheet');
+  }
+
+  if (filter.fromSubdocument() === false) {
+    types.push('sub_frame');
+  }
+
+  if (filter.fromWebsocket() === false) {
+    types.push('websocket');
+  }
+
+  if (filter.fromXmlHttpRequest() === false) {
+    types.push('xhr');
+  }
+
+  if (filter.fromFont() === false) {
+    types.push('font');
+  }
+
+  return types;
+}
+
+function getListOfRequestTypes(filter: NetworkFilter): RequestType[] {
+  const types: RequestType[] = [];
+
+  if (filter.fromDocument()) {
+    types.push('document');
+  }
+
+  if (filter.fromImage()) {
+    types.push('image');
+  }
+
+  if (filter.fromMedia()) {
+    types.push('media');
+  }
+
+  if (filter.fromObject()) {
+    types.push('object');
+  }
+
+  if (filter.fromOther()) {
+    types.push('other');
+  }
+
+  if (filter.fromPing()) {
+    types.push('ping');
+  }
+
+  if (filter.fromScript()) {
+    types.push('script');
+  }
+
+  if (filter.fromStylesheet()) {
+    types.push('stylesheet');
+  }
+
+  if (filter.fromSubdocument()) {
+    types.push('sub_frame');
+  }
+
+  if (filter.fromWebsocket()) {
+    types.push('websocket');
+  }
+
+  if (filter.fromXmlHttpRequest()) {
+    types.push('xhr');
+  }
+
+  if (filter.fromFont()) {
+    types.push('font');
+  }
+
+  return types;
+}
 
 function computeFilterId(
   csp: string | undefined,
@@ -896,39 +1014,39 @@ export default class NetworkFilter implements IFilter {
     let estimate: number = 4 + 1; // mask = 4 bytes // optional parts = 1 byte
 
     if (this.csp !== undefined) {
-      estimate += StaticDataView.sizeOfNetworkCSP(this.csp, compression);
+      estimate += sizeOfNetworkCSP(this.csp, compression);
     }
 
     if (this.filter !== undefined) {
-      if (this.isUnicode()) {
-        estimate += StaticDataView.sizeOfUTF8(this.filter);
+      if (this.isUnicode() === true) {
+        estimate += sizeOfUTF8(this.filter);
       } else {
-        estimate += StaticDataView.sizeOfNetworkFilter(this.filter, compression);
+        estimate += sizeOfNetworkFilter(this.filter, compression);
       }
     }
 
     if (this.hostname !== undefined) {
-      estimate += StaticDataView.sizeOfNetworkHostname(this.hostname, compression);
+      estimate += sizeOfNetworkHostname(this.hostname, compression);
     }
 
     if (this.optDomains !== undefined) {
-      estimate += StaticDataView.sizeOfUint32Array(this.optDomains);
+      estimate += sizeOfUint32Array(this.optDomains);
     }
 
     if (this.optNotDomains !== undefined) {
-      estimate += StaticDataView.sizeOfUint32Array(this.optNotDomains);
+      estimate += sizeOfUint32Array(this.optNotDomains);
     }
 
     if (this.rawLine !== undefined) {
-      if (this.isUnicode()) {
-        estimate += StaticDataView.sizeOfUTF8(this.rawLine);
+      if (this.isUnicode() === true) {
+        estimate += sizeOfUTF8(this.rawLine);
       } else {
-        estimate += StaticDataView.sizeOfASCII(this.rawLine);
+        estimate += sizeOfASCII(this.rawLine);
       }
     }
 
     if (this.redirect !== undefined) {
-      estimate += StaticDataView.sizeOfNetworkRedirect(this.redirect, compression);
+      estimate += sizeOfNetworkRedirect(this.redirect, compression);
     }
 
     return estimate;
@@ -966,87 +1084,32 @@ export default class NetworkFilter implements IFilter {
       filter += '^';
     }
 
-    if (!this.isRegex()) {
-      filter += this.getFilter();
-    } else {
-      // Visualize the compiled regex
+    if (this.isFullRegex()) {
+      filter += `/${this.getRegex().source}/`;
+    } else if (this.isRegex()) {
       filter += this.getRegex().source;
+    } else {
+      filter += this.getFilter();
+    }
+
+    if (this.isRightAnchor()) {
+      filter += '|';
     }
 
     // Options
     const options: string[] = [];
 
-    if (!this.fromAny()) {
+    if (this.fromAny() === false) {
       const numberOfCptOptions = bitCount(this.getCptMask());
       const numberOfNegatedOptions = bitCount(FROM_ANY) - numberOfCptOptions;
 
       if (numberOfNegatedOptions < numberOfCptOptions) {
-        if (!this.fromImage()) {
-          options.push('~image');
-        }
-        if (!this.fromMedia()) {
-          options.push('~media');
-        }
-        if (!this.fromObject()) {
-          options.push('~object');
-        }
-        if (!this.fromOther()) {
-          options.push('~other');
-        }
-        if (!this.fromPing()) {
-          options.push('~ping');
-        }
-        if (!this.fromScript()) {
-          options.push('~script');
-        }
-        if (!this.fromStylesheet()) {
-          options.push('~stylesheet');
-        }
-        if (!this.fromSubdocument()) {
-          options.push('~subdocument');
-        }
-        if (!this.fromWebsocket()) {
-          options.push('~websocket');
-        }
-        if (!this.fromXmlHttpRequest()) {
-          options.push('~xmlhttprequest');
-        }
-        if (!this.fromFont()) {
-          options.push('~font');
+        for (const type of getListOfRequestTypesNegated(this)) {
+          options.push(`~${type}`);
         }
       } else {
-        if (this.fromImage()) {
-          options.push('image');
-        }
-        if (this.fromMedia()) {
-          options.push('media');
-        }
-        if (this.fromObject()) {
-          options.push('object');
-        }
-        if (this.fromOther()) {
-          options.push('other');
-        }
-        if (this.fromPing()) {
-          options.push('ping');
-        }
-        if (this.fromScript()) {
-          options.push('script');
-        }
-        if (this.fromStylesheet()) {
-          options.push('stylesheet');
-        }
-        if (this.fromSubdocument()) {
-          options.push('subdocument');
-        }
-        if (this.fromWebsocket()) {
-          options.push('websocket');
-        }
-        if (this.fromXmlHttpRequest()) {
-          options.push('xmlhttprequest');
-        }
-        if (this.fromFont()) {
-          options.push('font');
+        for (const type of getListOfRequestTypes(this)) {
+          options.push(type);
         }
       }
     }
@@ -1102,10 +1165,6 @@ export default class NetworkFilter implements IFilter {
 
     if (options.length > 0) {
       filter += `$${options.join(',')}`;
-    }
-
-    if (this.isRightAnchor()) {
-      filter += '|';
     }
 
     return filter;
@@ -1222,7 +1281,7 @@ export default class NetworkFilter implements IFilter {
   }
 
   public getTokens(): Uint32Array[] {
-    TOKENS_BUFFER.seekZero();
+    TOKENS_BUFFER.reset();
 
     // If there is only one domain and no domain negation, we also use this
     // domain as a token.
@@ -1239,12 +1298,12 @@ export default class NetworkFilter implements IFilter {
       if (this.filter !== undefined) {
         const skipLastToken = this.isPlain() && !this.isRightAnchor() && !this.isFuzzy();
         const skipFirstToken = !this.isLeftAnchor() && !this.isFuzzy();
-        tokenizeFilterInPlace(this.filter, skipFirstToken, skipLastToken, TOKENS_BUFFER);
+        tokenizeWithWildcardsInPlace(this.filter, skipFirstToken, skipLastToken, TOKENS_BUFFER);
       }
 
       // Append tokens from hostname, if any
       if (this.hostname !== undefined) {
-        tokenizeFilterInPlace(
+        tokenizeInPlace(
           this.hostname,
           false,
           this.filter !== undefined && this.filter.charCodeAt(0) === 42 /* '*' */,
@@ -1258,15 +1317,34 @@ export default class NetworkFilter implements IFilter {
     // If we got no tokens for the filter/hostname part, then we will dispatch
     // this filter in multiple buckets based on the domains option.
     if (
-      TOKENS_BUFFER.pos === 0 &&
+      TOKENS_BUFFER.empty() === true &&
       this.optDomains !== undefined &&
       this.optNotDomains === undefined
     ) {
       const result: Uint32Array[] = [];
       for (let i = 0; i < this.optDomains.length; i += 1) {
-        result.push(new Uint32Array([this.optDomains[i]]));
+        const arr = new Uint32Array(1);
+        arr[0] = this.optDomains[i];
+        result.push(arr);
       }
       return result;
+    }
+
+    // Add optional token for types
+    if (
+      TOKENS_BUFFER.empty() === true &&
+      this.fromAny() === false
+    ) {
+      const types = getListOfRequestTypes(this);
+      if (types.length !== 0) {
+        const result: Uint32Array[] = [];
+        for (let i = 0; i < types.length; i += 1) {
+          const arr = new Uint32Array(1);
+          arr[0] = NORMALIZED_TYPE_TOKEN[types[i]];
+          result.push(arr);
+        }
+        return result;
+      }
     }
 
     // Add optional token for protocol
@@ -1492,9 +1570,9 @@ export function isAnchoredByHostname(
   //   * (sub.foo, sub.foo.com)
   if (matchIndex === 0) {
     return (
-      isFollowedByWildcard ||
-      hostname.charCodeAt(filterHostname.length) === 46 ||
-      filterHostname.charCodeAt(filterHostname.length - 1) === 46
+      isFollowedByWildcard === true ||
+      hostname.charCodeAt(filterHostname.length) === 46 || /* '.' */
+      filterHostname.charCodeAt(filterHostname.length - 1) === 46 /* '.' */
     );
   }
 
@@ -1504,14 +1582,17 @@ export function isAnchoredByHostname(
   //    * (foo.com, sub.foo.com)
   //    * (com, foo.com)
   if (hostname.length === matchIndex + filterHostname.length) {
-    return hostname.charCodeAt(matchIndex - 1) === 46 || filterHostname.charCodeAt(0) === 46;
+    return (
+      hostname.charCodeAt(matchIndex - 1) === 46 || /* '.' */
+      filterHostname.charCodeAt(0) === 46 /* '.' */
+    );
   }
 
   // `filterHostname` is infix of `hostname` and needs match full labels
   return (
-    (isFollowedByWildcard ||
-      hostname.charCodeAt(filterHostname.length) === 46 ||
-      filterHostname.charCodeAt(filterHostname.length - 1) === 46) &&
+    (isFollowedByWildcard ===true ||
+      hostname.charCodeAt(filterHostname.length) === 46 || /* '.' */
+      filterHostname.charCodeAt(filterHostname.length - 1) === 46) && /* '.' */
     (hostname.charCodeAt(matchIndex - 1) === 46 || filterHostname.charCodeAt(0) === 46)
   );
 }
@@ -1546,7 +1627,7 @@ function checkPatternFuzzyFilter(filter: NetworkFilter, request: Request) {
 function checkPattern(filter: NetworkFilter, request: Request): boolean {
   const pattern = filter.getFilter();
 
-  if (filter.isHostnameAnchor()) {
+  if (filter.isHostnameAnchor() === true) {
     // Make sure request is anchored by hostname before proceeding to matching
     const filterHostname = filter.getHostname();
     if (
@@ -1657,7 +1738,7 @@ function checkOptions(filter: NetworkFilter, request: Request): boolean {
   }
 
   // Source URL must be among these domains to match
-  if (filter.hasOptDomains()) {
+  if (filter.hasOptDomains() === true) {
     const optDomains = filter.getOptDomains();
     if (
       binLookup(optDomains, request.sourceHostnameHash) === false &&
@@ -1668,7 +1749,7 @@ function checkOptions(filter: NetworkFilter, request: Request): boolean {
   }
 
   // Source URL must not be among these domains to match
-  if (filter.hasOptNotDomains()) {
+  if (filter.hasOptNotDomains() === true) {
     const optNotDomains = filter.getOptNotDomains();
     if (
       binLookup(optNotDomains, request.sourceHostnameHash) === true ||

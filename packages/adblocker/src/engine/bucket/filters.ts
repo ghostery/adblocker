@@ -7,7 +7,7 @@
  */
 
 import Config from '../../config';
-import StaticDataView from '../../data-view';
+import { StaticDataView, sizeOfBytes } from '../../data-view';
 import IFilter from '../../filters/interface';
 
 // Empty filters is 4 bytes because we need at least one 32 bits number to keep
@@ -130,7 +130,7 @@ export default class FiltersContainer<T extends IFilter> {
   }
 
   public getSerializedSize(): number {
-    return StaticDataView.sizeOfBytes(this.filters, false /* no alignement */);
+    return sizeOfBytes(this.filters, false /* no alignement */);
   }
 
   public serialize(buffer: StaticDataView): void {

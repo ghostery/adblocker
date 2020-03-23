@@ -158,7 +158,6 @@ describe('#NetworkFilter.match', () => {
     filters.forEach((filter) => {
       it(`${filter} matches ${type}, url=${url}, source=${sourceUrl}`, () => {
         const networkFilter = NetworkFilter.parse(filter, true);
-        expect(networkFilter).not.toBeUndefined();
         expect(networkFilter).not.toBeNull();
         expect(networkFilter).toMatchRequest({
           sourceUrl,

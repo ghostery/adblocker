@@ -72,7 +72,12 @@ interface IOptimization {
 }
 
 const OPTIMIZATIONS: IOptimization[] = [
-  // TODO - add filter deduplication
+  {
+    description: 'Remove duplicated filters by ID',
+    fusion: (filters: NetworkFilter[]) => filters[0],
+    groupByCriteria: (filter: NetworkFilter) => '' + filter.getId(),
+    select: () => true,
+  },
   {
     description: 'Group idential filter with same mask but different domains in single filters',
     fusion: (filters: NetworkFilter[]) => {
@@ -139,7 +144,11 @@ const OPTIMIZATIONS: IOptimization[] = [
         }),
       );
     },
-    groupByCriteria: (filter: NetworkFilter) => '' + filter.getMask(),
+    groupByCriteria: (filter: NetworkFilter) => '' + (
+      filter.getMask() &
+      ~NETWORK_FILTER_MASK.isRegex &
+      ~NETWORK_FILTER_MASK.isFullRegex
+    ),
     select: (filter: NetworkFilter) =>
       !filter.isFuzzy() &&
       !filter.hasOptDomains() &&

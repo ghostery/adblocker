@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import StaticDataView from '../src/data-view';
+import { StaticDataView } from '../src/data-view';
 import { getNaughtyStrings } from './utils';
 
 describe('#StaticDataView', () => {

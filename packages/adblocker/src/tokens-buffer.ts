@@ -14,27 +14,52 @@
  */
 export default class TokensBuffer {
   public readonly size: number;
-  public pos: number;
   private readonly buffer: Uint32Array;
+  public start: number;
+  public end: number;
 
   constructor(size: number) {
     this.size = size;
-    this.pos = 0;
+    this.start = 0;
+    this.end = 0;
     this.buffer = new Uint32Array(size);
   }
 
-  public seekZero(): void {
-    this.pos = 0;
+  public pop(): void {
+    if (this.end === 0) {
+      throw new Error('Cannot pop empty buffer');
+    }
+    this.end -= 0;
+  }
+
+  public shift(): void {
+    if (this.start === this.end) {
+      throw new Error('Cannot shift empty buffer');
+    }
+    this.start += 1;
+  }
+
+  public reset(): void {
+    this.start = 0;
+    this.end = 0;
   }
 
   public slice(): Uint32Array {
-    if (this.pos !== 0 && this.pos > this.buffer.length) {
-      throw new Error(`StaticDataView too small: ${this.buffer.length}, but required ${this.pos}`);
-    }
-    return this.buffer.slice(0, this.pos);
+    return this.buffer.slice(this.start, this.end);
   }
 
   public push(token: number): void {
-    this.buffer[this.pos++] = token;
+    if (this.full()) {
+      throw new Error('Token buffer is full');
+    }
+    this.buffer[this.end++] = token;
+  }
+
+  public empty(): boolean {
+    return this.end === this.start;
+  }
+
+  public full(): boolean {
+    return this.end === this.size;
   }
 }

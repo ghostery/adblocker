@@ -7,7 +7,7 @@
  */
 
 import Config from '../src/config';
-import StaticDataView from '../src/data-view';
+import { StaticDataView } from '../src/data-view';
 import {
   noopOptimizeCosmetic,
   noopOptimizeNetwork,
@@ -22,13 +22,13 @@ import { fastHash, tokenize } from '../src/utils';
 import { loadAllLists } from './utils';
 
 describe('ReverseIndex', () => {
+  const { cosmeticFilters, networkFilters } = parseFilters(loadAllLists(), { debug: true });
+
   [
     new Config({ enableCompression: true }),
     new Config({ enableCompression: false }),
   ].forEach((config) => {
     describe(`compression = ${config.enableCompression}`, () => {
-      const { cosmeticFilters, networkFilters } = parseFilters(loadAllLists(), { debug: true });
-
       describe('#serialize', () => {
         function testSerializeIndexImpl<T extends IFilter>(
           filters: T[],
@@ -51,9 +51,9 @@ describe('ReverseIndex', () => {
 
           // Deserialize
           buffer.seekZero();
-          expect(ReverseIndex.deserialize(buffer, deserialize, optimize, config)).toEqual(
-            reverseIndex,
-          );
+
+          const deserialized = ReverseIndex.deserialize(buffer, deserialize, optimize, config);
+          expect(deserialized).toEqual(reverseIndex);
         }
 
         it('network (optimize = false)', () => {
@@ -85,7 +85,6 @@ describe('ReverseIndex', () => {
             filters,
             optimize,
           });
-
           expect(new Set(reverseIndex.getFilters().map((f) => f.toString()))).toEqual(
             new Set(filters.map((f) => f.toString())),
           );
@@ -186,7 +185,7 @@ describe('ReverseIndex', () => {
               expect(matches).toBe(0);
 
               // Some tokens
-              emptyIndex.iterMatchingFilters(tokenize('foo bar baz'), cb);
+              emptyIndex.iterMatchingFilters(tokenize('foo bar baz', false, false), cb);
               expect(matches).toBe(0);
             });
 
@@ -223,13 +222,13 @@ describe('ReverseIndex', () => {
                 // Get all matches
                 matches.clear();
                 ret = true; // iterate on all filters
-                exampleIndex.iterMatchingFilters(tokenize(input as string), cb);
+                exampleIndex.iterMatchingFilters(tokenize(input as string, false, false), cb);
                 expect(matches).toEqual(new Set(expected));
 
                 // Check early termination
                 matches.clear();
                 ret = false; // early termination on first filter
-                exampleIndex.iterMatchingFilters(tokenize(input as string), cb);
+                exampleIndex.iterMatchingFilters(tokenize(input as string, false, false), cb);
                 expect(matches.size).toEqual(expected.length === 0 ? 0 : 1);
               });
             });
@@ -261,7 +260,7 @@ wildcard
               ].forEach(([input, expected]) => {
                 // Get all matches
                 matches.clear();
-                index.iterMatchingFilters(tokenize(input as string), cb);
+                index.iterMatchingFilters(tokenize(input as string, false, false), cb);
                 expect(matches).toEqual(new Set(expected));
               });
             });

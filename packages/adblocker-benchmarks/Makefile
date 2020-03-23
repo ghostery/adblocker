@@ -12,7 +12,7 @@ requests.json:
 adblockpluscore: ./blockers/adblockpluscore
 
 ./node_modules/adblock-rs:
-	npm install adblock-rs
+	npm install --no-save adblock-rs
 
 adblock-rs: ./node_modules/adblock-rs
 

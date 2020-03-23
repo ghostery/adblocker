@@ -7,7 +7,7 @@
  */
 
 import Config from '../../config';
-import StaticDataView from '../../data-view';
+import { StaticDataView } from '../../data-view';
 import NetworkFilter from '../../filters/network';
 import Request from '../../request';
 import { noopOptimizeNetwork, optimizeNetwork } from '../optimizer';

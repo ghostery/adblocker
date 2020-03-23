@@ -54,8 +54,7 @@ export function concatTypedArrays(arrays: Uint32Array[]): Uint32Array {
   for (let i = 0; i < arrays.length; i += 1) {
     const array = arrays[i];
     for (let j = 0; j < array.length; j += 1) {
-      result[index] = array[j];
-      index += 1;
+      result[index++] = array[j];
     }
   }
 

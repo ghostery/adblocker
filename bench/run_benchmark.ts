@@ -22,11 +22,11 @@
 // processing the requests + making the measurement. We could also compare this
 // with Node.js perf and output a summary.
 
-import fs from 'fs';
-import path from 'path';
+import { readFileSync, writeFileSync } from 'fs';
+import { resolve } from 'path';
 
-import Benchmark from 'benchmark';
-import chalk from 'chalk';
+import * as Benchmark from 'benchmark';
+import * as chalk from 'chalk';
 
 import {
   benchCosmeticsFiltersParsing,
@@ -48,13 +48,13 @@ const GREP = (process.env.GREP || '').toLowerCase();
 function loadLists(): { lists: string[]; resources: string } {
   return {
     lists: [
-      fs.readFileSync(
-        path.resolve(__dirname, '../packages/adblocker/assets/easylist/easylist.txt'),
+      readFileSync(
+        resolve(__dirname, '../packages/adblocker/assets/easylist/easylist.txt'),
         { encoding: 'utf-8' },
       ),
     ],
-    resources: fs.readFileSync(
-      path.resolve(__dirname, '../packages/adblocker/assets/ublock-origin/resources.txt'),
+    resources: readFileSync(
+      resolve(__dirname, '../packages/adblocker/assets/ublock-origin/resources.txt'),
       { encoding: 'utf-8' },
     ),
   };
@@ -303,7 +303,7 @@ function main() {
   // Read previous bench dump if any
   const benchDumpPath = '.bench.json';
   try {
-    const previousResults = JSON.parse(fs.readFileSync(benchDumpPath, { encoding: 'utf-8' }));
+    const previousResults = JSON.parse(readFileSync(benchDumpPath, { encoding: 'utf-8' }));
     compareBenchmarkResults(previousResults, benchmarkResults);
   } catch (ex) {
     /* No previous result to compare to */
@@ -311,7 +311,7 @@ function main() {
   }
 
   // Dump current results
-  fs.writeFileSync(benchDumpPath, JSON.stringify(benchmarkResults), { encoding: 'utf-8' });
+  writeFileSync(benchDumpPath, JSON.stringify(benchmarkResults), { encoding: 'utf-8' });
 }
 
 main();
