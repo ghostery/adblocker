@@ -596,7 +596,7 @@ voirfilms.*##+js(abort-on-property-read.js, document.oncontextmenu)
 voirfilms.*##+js(abort-on-property-read.js, document.onselectstart)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3278#issuecomment-421038747
-@@||nyt.com/ads/google/adsbygoogle.js$script,domain=nytimes.com
+nytimes.com##+js(set, _adBlockCheck, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/5677
 !#if env_chromium
 nytimes.com##+js(set-constant.js, navigator.storage.estimate, undefined)
@@ -3630,3 +3630,12 @@ debeste.de##+js(ra, oncontextmenu)
 
 ! nosteam.ro anti-adb notice
 nosteam.ro###drop
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/52114
+allmusic.com##+js(acis, $, adblock)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7146
+dassen-azara4.com##+js(acis, document.oncontextmenu)
+
+! https://github.com/NanoMeow/QuickReports/issues/3384
+thehouseofportable.com##+js(aeld, /contextmenu|selectstart/)
