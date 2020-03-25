@@ -1,3 +1,27 @@
+# v1.10.1 (Wed Mar 25 2020)
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker-content`, `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-electron`, `@cliqz/adblocker-webextension-cosmetics`
+  - Abstract DOM monitoring away and fix #573 [#657](https://github.com/cliqz-oss/adblocker/pull/657) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Attempt to fix security issue [#656](https://github.com/cliqz-oss/adblocker/pull/656) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+-  [#651](https://github.com/cliqz-oss/adblocker/pull/651) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#545](https://github.com/cliqz-oss/adblocker/pull/545) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#539](https://github.com/cliqz-oss/adblocker/pull/539) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 2
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.10.0 (Wed Mar 25 2020)
 
 #### :running_woman: Performance

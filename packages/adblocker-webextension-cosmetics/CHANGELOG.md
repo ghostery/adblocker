@@ -1,3 +1,15 @@
+# v1.10.1 (Wed Mar 25 2020)
+
+#### :bug: Bug Fix
+
+- Abstract DOM monitoring away and fix #573 [#657](https://github.com/cliqz-oss/adblocker/pull/657) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.10.0 (Wed Mar 25 2020)
 
 #### :nut_and_bolt: Dependencies
