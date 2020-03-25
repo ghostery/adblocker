@@ -10,7 +10,7 @@ import { ipcMain } from 'electron';
 import { parse } from 'tldts-experimental';
 
 import { ElectronRequestType, FiltersEngine, Request } from '@cliqz/adblocker';
-import { IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-electron-preload';
+import type { IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-electron-preload';
 
 const PRELOAD_PATH = require.resolve('@cliqz/adblocker-electron-preload');
 

@@ -22,6 +22,40 @@ export interface IMessageFromBackground {
   extended: string[];
 }
 
+export interface DOMElement {
+  href?: string | SVGAnimatedString | null;
+  nodeType?: number;
+  localName?: string;
+  id?: string;
+  classList?: DOMTokenList;
+  querySelectorAll?: ParentNode['querySelectorAll'];
+}
+
+export function getDOMElementsFromMutations(mutations: MutationRecord[]): DOMElement[] {
+  // Accumulate all nodes which were updated in `nodes`
+  const nodes: DOMElement[] = [];
+  for (let i = 0; i < mutations.length; i += 1) {
+    const mutation = mutations[i];
+    if (mutation.type === 'attributes') {
+      nodes.push(mutation.target);
+    } else if (mutation.type === 'childList') {
+      const addedNodes = mutation.addedNodes;
+      for (let j = 0; j < addedNodes.length; j += 1) {
+        const addedNode: DOMElement = addedNodes[j];
+        nodes.push(addedNode);
+
+        if (addedNode.querySelectorAll !== undefined) {
+          const children = addedNode.querySelectorAll('[id],[class],[href]');
+          for (let k = 0; k < children.length; k += 1) {
+            nodes.push(children[k]);
+          }
+        }
+      }
+    }
+  }
+  return nodes;
+}
+
 /**
  * WARNING: this function should be self-contained and not rely on any global
  * symbol. That constraint needs to be fulfilled because this function can
@@ -29,7 +63,7 @@ export interface IMessageFromBackground {
  * more details).
  */
 export function extractFeaturesFromDOM(
-  elements: Element[],
+  elements: DOMElement[],
 ): {
   classes: string[];
   hrefs: string[];
@@ -47,7 +81,7 @@ export function extractFeaturesFromDOM(
       continue;
     }
 
-    if (ignoredTags.has(element.localName)) {
+    if (element.localName !== undefined && ignoredTags.has(element.localName)) {
       continue;
     }
 
@@ -59,14 +93,15 @@ export function extractFeaturesFromDOM(
 
     // Update classes
     const classList = element.classList;
-    for (let j = 0; j < classList.length; j += 1) {
-      classes.add(classList[j]);
+    if (classList) {
+      for (let j = 0; j < classList.length; j += 1) {
+        classes.add(classList[j]);
+      }
     }
 
     // Update href
-    // @ts-ignore
     const href = element.href;
-    if (href) {
+    if (typeof href === 'string') {
       hrefs.add(href);
     }
   }
@@ -78,6 +113,83 @@ export function extractFeaturesFromDOM(
   };
 }
 
+export class DOMMonitor {
+  private knownIds: Set<string> = new Set();
+  private knownHrefs: Set<string> = new Set();
+  private knownClasses: Set<string> = new Set();
+
+  private observer: MutationObserver | null = null;
+
+  constructor(
+    window: Window,
+    private readonly cb: (features: { ids: string[]; classes: string[]; hrefs: string[] }) => void,
+  ) {
+    this.handleNewNodes(Array.from(window.document.querySelectorAll('[id],[class],[href]')));
+  }
+
+  public start(window: Window & { MutationObserver?: typeof MutationObserver }): void {
+    if (this.observer === null && window.MutationObserver !== undefined) {
+      this.observer = new window.MutationObserver((mutations: MutationRecord[]) => {
+        this.handleNewNodes(getDOMElementsFromMutations(mutations));
+      });
+
+      this.observer.observe(window.document.documentElement, {
+        attributeFilter: ['class', 'id', 'href'],
+        attributes: true,
+        childList: true,
+        subtree: true,
+      });
+    }
+  }
+
+  public stop(): void {
+    if (this.observer !== null) {
+      this.observer.disconnect();
+      this.observer = null;
+    }
+  }
+
+  private handleNewNodes(nodes: DOMElement[]): void {
+    const { classes, ids, hrefs } = extractFeaturesFromDOM(nodes);
+    const newIds: string[] = [];
+    const newClasses: string[] = [];
+    const newHrefs: string[] = [];
+
+    // Update ids
+    for (let i = 0; i < ids.length; i += 1) {
+      const id = ids[i];
+      if (this.knownIds.has(id) === false) {
+        newIds.push(id);
+        this.knownIds.add(id);
+      }
+    }
+
+    for (let i = 0; i < classes.length; i += 1) {
+      const cls = classes[i];
+      if (this.knownClasses.has(cls) === false) {
+        newClasses.push(cls);
+        this.knownClasses.add(cls);
+      }
+    }
+
+    for (let i = 0; i < hrefs.length; i += 1) {
+      const href = hrefs[i];
+      if (this.knownHrefs.has(href) === false) {
+        newHrefs.push(href);
+        this.knownHrefs.add(href);
+      }
+    }
+
+    if (newIds.length !== 0 || newClasses.length !== 0 || newHrefs.length !== 0) {
+      this.cb({
+        classes: newClasses,
+        hrefs: newHrefs,
+        ids: newIds,
+      });
+    }
+  }
+}
+
 /**
  * Wrap a self-executing script into a block of custom logic to remove the
  * script tag once execution is terminated. This can be useful to not leave
@@ -85,7 +197,7 @@ export function extractFeaturesFromDOM(
  */
 export function autoRemoveScript(script: string): string {
   // Minified using 'terser'
-  return `try{${script}}catch(c){}!function(){var c=document.currentScript,e=c&&c.parentNode;e&&e.removeChild(c)}();`
+  return `try{${script}}catch(c){}!function(){var c=document.currentScript,e=c&&c.parentNode;e&&e.removeChild(c)}();`;
   // Original:
   //
   //    try {
