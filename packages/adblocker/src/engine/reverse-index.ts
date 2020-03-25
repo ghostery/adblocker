@@ -7,7 +7,7 @@
  */
 
 import Config from '../config';
-import StaticDataView, { EMPTY_UINT32_ARRAY } from '../data-view';
+import { StaticDataView, EMPTY_UINT32_ARRAY, sizeOfBytes } from '../data-view';
 import IFilter from '../filters/interface';
 
 // https://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
@@ -275,7 +275,7 @@ export default class ReverseIndex<T extends IFilter> {
    */
   public getSerializedSize(): number {
     // 12 = 4 bytes (tokensLookupIndex.length) + 4 bytes (bucketsIndex.length) + 4 bytes (numberOfFilters)
-    return 12 + StaticDataView.sizeOfBytes(this.view.buffer, true /* align */);
+    return 12 + sizeOfBytes(this.view.buffer, true /* align */);
   }
 
   /**
@@ -393,7 +393,7 @@ export default class ReverseIndex<T extends IFilter> {
     }
 
     // When we run in `debug` mode, we enable fully deterministic updates of
-    // internal data-structure. To this effect, we sort all filters before
+    // internal data-structures. To this effect, we sort all filters before
     // insertion.
     if (this.config.debug === true) {
       filters.sort((f1: T, f2: T): number => f1.getId() - f2.getId());

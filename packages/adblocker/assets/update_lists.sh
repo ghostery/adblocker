@@ -19,8 +19,5 @@ curl 'https://easylist.to/easylist/easylist.txt' > ./easylist/easylist.txt &
 curl 'https://easylist-downloads.adblockplus.org/easylistgermany.txt' > ./easylist/easylistgermany.txt &
 curl 'https://easylist-downloads.adblockplus.org/easylist-cookie.txt' > ./easylist/easylist-cookie.txt &
 
-# Fanboy
-curl 'https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt' > ./fanboy/annoyance.txt &
-
 # Wait for child processes to terminate
 wait

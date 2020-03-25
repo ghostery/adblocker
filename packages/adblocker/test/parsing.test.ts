@@ -12,8 +12,9 @@ import CosmeticFilter, {
 } from '../src/filters/cosmetic';
 import NetworkFilter from '../src/filters/network';
 import { parseFilters } from '../src/lists';
-import { fastHash, hashStrings, tokenizeFilter } from '../src/utils';
+import { fastHash, hashStrings, tokenize } from '../src/utils';
 import { HTMLSelector } from '../src/html-filtering';
+import { NORMALIZED_TYPE_TOKEN } from '../src/request';
 
 function h(hostnames: string[]): Uint32Array {
   return new Uint32Array(hostnames.map(hashHostnameBackward));
@@ -138,7 +139,7 @@ describe('Network filters', () => {
       'ads$~script',
       'ads$~font',
       'ads$~stylesheet',
-      'ads$~xmlhttprequest',
+      'ads$~xhr',
 
       // Options
       'ads$fuzzy',
@@ -152,7 +153,7 @@ describe('Network filters', () => {
       'ads$third-party',
       'ads$first-party',
       'ads$stylesheet',
-      'ads$xmlhttprequest',
+      'ads$xhr',
 
       'ads$important',
       'ads$fuzzy',
@@ -831,13 +832,11 @@ describe('Network filters', () => {
     });
 
     describe('un-supported options', () => {
-      ['genericblock', 'popunder', 'popup', 'woot'].forEach(
-        (unsupportedOption) => {
-          it(unsupportedOption, () => {
-            network(`||foo.com$${unsupportedOption}`, null);
-          });
-        },
-      );
+      ['genericblock', 'popunder', 'popup', 'woot'].forEach((unsupportedOption) => {
+        it(unsupportedOption, () => {
+          network(`||foo.com$${unsupportedOption}`, null);
+        });
+      });
     });
 
     const allOptions = (value: boolean) => ({
@@ -935,8 +934,14 @@ describe('Network filters', () => {
 
       // Real filters
       ['/:\\/\\/[A-Za-z0-9]+.ru\\/[A-Za-z0-9]{20,25}\\.js$/$doc', [hashStrings(['js'])]],
-      ['/:\\/\\/[A-Za-z0-9]+.ru\\/[A-Za-z0-9]{20,25}\\.js/$doc', [new Uint32Array(0)]],
-      ['/:\\/\\/[A-Za-z0-9]+.ru\\/[A-Za-z0-9]{20,25}.js/$doc', [new Uint32Array(0)]],
+      [
+        '/:\\/\\/[A-Za-z0-9]+.ru\\/[A-Za-z0-9]{20,25}\\.js/$doc',
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.document])],
+      ],
+      [
+        '/:\\/\\/[A-Za-z0-9]+.ru\\/[A-Za-z0-9]{20,25}.js/$doc',
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.document])],
+      ],
       [
         '/^https?:\\/\\/m\\.anysex\\.com\\/[a-zA-Z]{1,4}\\/[a-zA-Z]+\\.php$/$image,script',
         [hashStrings(['php'])],
@@ -946,7 +951,10 @@ describe('Network filters', () => {
         [hashStrings(['https', 'anysex', 'com', 'php'])],
       ],
 
-      ['/wasabisyrup.com\\/storage\\/[-_a-zA-Z0-9]{8,}.gif/$doc', [new Uint32Array(0)]],
+      [
+        '/wasabisyrup.com\\/storage\\/[-_a-zA-Z0-9]{8,}.gif/$doc',
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.document])],
+      ],
       [
         '/wasabisyrup\\.com\\/storage\\/[-_a-zA-Z0-9]{8,}.gif/$doc',
         [hashStrings(['com', 'storage'])],
@@ -955,47 +963,67 @@ describe('Network filters', () => {
         '/^wasabisyrup\\.com\\/storage\\/[-_a-zA-Z0-9]{8,}.gif/$doc',
         [hashStrings(['wasabisyrup', 'com', 'storage'])],
       ],
-
       [
         '/.*(\\/proxy|\\.wasm|\\.wsm|\\.wa)$/$websocket,xmlhttprequest,badfilter',
-        [new Uint32Array(0)],
+        [
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.websocket]),
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.xhr]),
+        ],
       ],
-
       [
         '/^https?:\\/\\/([0-9a-z-]+\\.)?(9anime|animeland|animenova|animeplus|animetoon|animewow|gamestorrent|goodanime|gogoanime|igg-games|kimcartoon|memecenter|readcomiconline|toonget|toonova|watchcartoononline)\\.[a-z]{2,4}\\/(?!([Ee]xternal|[Ii]mages|[Ss]cripts|[Uu]ploads|ac|ajax|assets|combined|content|cov|cover|(img\\/bg)|(img\\/icon)|inc|jwplayer|player|playlist-cat-rss|static|thumbs|wp-content|wp-includes)\\/)(.*)/$first-party,script',
-        [new Uint32Array(0)],
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.script])],
       ],
-
       [
         '/^https?:\\/\\/([0-9a-z\\-]+\\.)?(9anime|animeland|animenova|animeplus|animetoon|animewow|gamestorrent|goodanime|gogoanime|igg-games|kimcartoon|memecenter|readcomiconline|toonget|toonova|watchcartoononline)\\.[a-z]{2,4}\\/(?!([Ee]xternal|[Ii]mages|[Ss]cripts|[Uu]ploads|ac|ajax|assets|combined|content|cov|cover|(img\\/bg)|(img\\/icon)|inc|jwplayer|player|playlist-cat-rss|static|thumbs|wp-content|wp-includes)\\/)(.*)/$first-party,xmlhttprequest,badfilter',
-        [new Uint32Array(0)],
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.xhr])],
       ],
-
       ['/https?:\\/\\/.*[=|&|%|#|+].*/$badfilter', [new Uint32Array(0)]],
-      ['/^http*.:\\/\\/.*[a-zA-Z0-9]{10,}.*/$xmlhttprequest,badfilter', [new Uint32Array(0)]],
-      ['@@/https?:\\/\\/.*[=|&|%|#|+].*/$doc', [new Uint32Array(0)]],
       [
-        '/^https?:\\/\\/([0-9a-z\\-]+\\.)?(9anime|animeland|animenova|animeplus|animetoon|animewow|gamestorrent|goodanime|gogoanime|igg-games|kimcartoon|memecenter|readcomiconline|toonget|toonova|watchcartoononline)\\.[a-z]{2,4}\\/(?!([Ee]xternal|[Ii]mages|[Ss]cripts|[Uu]ploads|ac|ajax|assets|combined|content|cov|cover|(img\\/bg)|(img\\/icon)|inc|jwplayer|player|playlist-cat-rss|static|thumbs|wp-content|wp-includes)\\/)(.*)/$first-party,image,badfilter',
-        [new Uint32Array(0)],
+        '/^http*.:\\/\\/.*[a-zA-Z0-9]{10,}.*/$xmlhttprequest,badfilter',
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.xhr])],
       ],
-      ['/^https?:\\/\\/.*\\/.*[(php|?|=)].*/$first-party,image,badfilter', [new Uint32Array(0)]],
+      [
+        '@@/https?:\\/\\/.*[=|&|%|#|+].*/$doc',
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.document])],
+      ],
       [
         '/^https?:\\/\\/([0-9a-z\\-]+\\.)?(9anime|animeland|animenova|animeplus|animetoon|animewow|gamestorrent|goodanime|gogoanime|igg-games|kimcartoon|memecenter|readcomiconline|toonget|toonova|watchcartoononline)\\.[a-z]{2,4}\\/(?!([Ee]xternal|[Ii]mages|[Ss]cripts|[Uu]ploads|ac|ajax|assets|combined|content|cov|cover|(img\\/bg)|(img\\/icon)|inc|jwplayer|player|playlist-cat-rss|static|thumbs|wp-content|wp-includes)\\/)(.*)/$first-party,image,badfilter',
-        [new Uint32Array(0)],
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.image])],
+      ],
+      [
+        '/^https?:\\/\\/.*\\/.*[(php|?|=)].*/$first-party,image,badfilter',
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.image])],
+      ],
+      [
+        '/^https?:\\/\\/([0-9a-z\\-]+\\.)?(9anime|animeland|animenova|animeplus|animetoon|animewow|gamestorrent|goodanime|gogoanime|igg-games|kimcartoon|memecenter|readcomiconline|toonget|toonova|watchcartoononline)\\.[a-z]{2,4}\\/(?!([Ee]xternal|[Ii]mages|[Ss]cripts|[Uu]ploads|ac|ajax|assets|combined|content|cov|cover|(img\\/bg)|(img\\/icon)|inc|jwplayer|player|playlist-cat-rss|static|thumbs|wp-content|wp-includes)\\/)(.*)/$first-party,image,badfilter',
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.image])],
       ],
       [
         '/^(https?|wss?):\\/\\/([0-9a-z\\-]+\\.)?([0-9a-z-]+\\.)(accountant|bid|cf|club|cricket|date|download|faith|fun|ga|gdn|gq|loan|men|ml|network|ovh|party|pro|pw|racing|review|rocks|ru|science|site|space|stream|tk|top|trade|webcam|win|xyz|zone)\\.\\/(.*)/$image,script,subdocument,websocket,xmlhttprequest',
-        [new Uint32Array(0)],
+        [
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.image]),
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.script]),
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.sub_frame]),
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.websocket]),
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.xhr]),
+        ],
       ],
       [
         '/^(https?|wss?):\\/\\/([0-9a-z-]+\\.)?([0-9a-z-]+\\.)(accountant|bid|cf|club|cricket|date|download|faith|fun|ga|gdn|gq|loan|men|ml|network|ovh|party|pro|pw|racing|review|rocks|science|site|space|stream|tk|top|trade|webcam|win|xyz|zone)\\/(.*)/$third-party,websocket',
-        [new Uint32Array(0)],
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.websocket])],
       ],
       [
         '/([0-9]{1,3}\\.){3}[0-9]{1,3}.*(\\/proxy|\\.wasm|\\.wsm|\\.wa)$/$third-party,websocket',
-        [new Uint32Array(0)],
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.websocket])],
       ],
-      ['/.*(\\/proxy|\\.wasm|\\.wsm|\\.wa)$/$websocket,xmlhttprequest', [new Uint32Array(0)]],
+      [
+        '/.*(\\/proxy|\\.wasm|\\.wsm|\\.wa)$/$websocket,xmlhttprequest',
+        [
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.websocket]),
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.xhr]),
+        ],
+      ],
       [
         '/^https://www\\.narcity\\.com/assets/[0-9a-f]{24,}\\.js/$script',
         [hashStrings(['https', 'www', 'narcity', 'com', 'assets'])],
@@ -1006,11 +1034,15 @@ describe('Network filters', () => {
       ],
       [
         '/\\:\\/\\/data.*\\.com\\/[a-zA-Z0-9]{30,}/$third-party,xmlhttprequest',
-        [new Uint32Array(0)],
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.xhr])],
       ],
       [
         '/\\.(accountant|bid|click|club|com|cricket|date|download|faith|link|loan|lol|men|online|party|racing|review|science|site|space|stream|top|trade|webcam|website|win|xyz|com)\\/(([0-9]{2,9})(\\.|\\/)(css|\\?)?)$/$script,stylesheet,third-party,xmlhttprequest',
-        [new Uint32Array(0)],
+        [
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.script]),
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.stylesheet]),
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.xhr]),
+        ],
       ],
       [
         '/\\.accountant\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
@@ -1122,49 +1154,100 @@ describe('Network filters', () => {
       ],
       [
         '/\\:\\/\\/[a-z0-9]{5,40}\\.com\\/[0-9]{2,9}\\/$/$script,stylesheet,third-party,xmlhttprequest',
-        [new Uint32Array(0)],
+        [
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.script]),
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.stylesheet]),
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.xhr]),
+        ],
       ],
       [
         '/\\:\\/\\/[a-z0-9]{5,}\\.com\\/[A-Za-z0-9]{3,}\\/$/$script,third-party,xmlhttprequest',
-        [new Uint32Array(0)],
+        [
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.script]),
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.xhr]),
+        ],
       ],
-      ['/^https?:\\/\\/.*(bitly|bit)\\.(com|ly)\\/.*/$doc', [new Uint32Array(0)]],
-      ['/^https?:\\/\\/.*\\/.*sw[0-9a-z(.|_)].*/$doc', [new Uint32Array(0)]],
+      [
+        '/^https?:\\/\\/.*(bitly|bit)\\.(com|ly)\\/.*/$doc',
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.document])],
+      ],
+      [
+        '/^https?:\\/\\/.*\\/.*sw[0-9a-z(.|_)].*/$doc',
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.document])],
+      ],
       [
         '/^((?!(^https?):\\/\\/(ajax\\.googleapis\\.com|cdnjs\\.cloudflare\\.com|fonts\\.googleapis\\.com)\\/).*)$/$script,third-party',
-        [new Uint32Array(0)],
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.script])],
       ],
       [
         '/^https?:\\/\\/([0-9a-z-]+\\.)?(9anime|animeland|animenova|animeplus|animetoon|animewow|gamestorrent|goodanime|gogoanime|igg-games|kimcartoon|memecenter|readcomiconline|toonget|toonova|watchcartoononline)\\.[a-z]{2,4}\\/(?!([Ee]xternal|[Ii]mages|[Ss]cripts|[Uu]ploads|ac|ajax|assets|combined|content|cov|cover|(img\\/bg)|(img\\/icon)|inc|jwplayer|player|playlist-cat-rss|static|thumbs|wp-content|wp-includes)\\/)(.*)/$image,other,script,~third-party,xmlhttprequest',
-        [new Uint32Array(0)],
+        [
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.image]),
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.other]),
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.script]),
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.xhr]),
+        ],
       ],
       [
         '/^https?:\\/\\/[\\w.-]*gelbooru\\.com.*[a-zA-Z0-9?!=@%#]{40,}/$image,other',
-        [new Uint32Array(0)],
+        [
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.image]),
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.other]),
+        ],
       ],
       ['/\\.filenuke\\.com/.*[a-zA-Z0-9]{4}/$script', [hashStrings(['filenuke', 'com'])]],
       ['/\\.sharesix\\.com/.*[a-zA-Z0-9]{4}/$script', [hashStrings(['sharesix', 'com'])]],
-      ['/^https?:\\/\\/([0-9]{1,3}\\.){3}[0-9]{1,3}/$doc', [new Uint32Array(0)]],
-      ['/http*.:\\/\\/.*[a-zA-Z0-9]{110,}.*/$doc', [new Uint32Array(0)]],
-      ['/https?:\\/\\/.*[&|%|#|+|=].*/$doc', [new Uint32Array(0)]],
-      ['/^https?:\\/\\/([0-9]{1,3}\\.){3}[0-9]{1,3}/$doc', [new Uint32Array(0)]],
-      ['/\\/[0-9].*\\-.*\\-[a-z0-9]{4}/$script,xmlhttprequest', [new Uint32Array(0)]],
-      ['/^https?:\\/\\/.*\\/.*[0-9a-z]{7,16}\\.js/$script', [new Uint32Array(0)]],
+      [
+        '/^https?:\\/\\/([0-9]{1,3}\\.){3}[0-9]{1,3}/$doc',
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.document])],
+      ],
+      [
+        '/http*.:\\/\\/.*[a-zA-Z0-9]{110,}.*/$doc',
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.document])],
+      ],
+      ['/https?:\\/\\/.*[&|%|#|+|=].*/$doc', [new Uint32Array([NORMALIZED_TYPE_TOKEN.document])]],
+      [
+        '/^https?:\\/\\/([0-9]{1,3}\\.){3}[0-9]{1,3}/$doc',
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.document])],
+      ],
+      [
+        '/\\/[0-9].*\\-.*\\-[a-z0-9]{4}/$script,xmlhttprequest',
+        [
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.script]),
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.xhr]),
+        ],
+      ],
+      [
+        '/^https?:\\/\\/.*\\/.*[0-9a-z]{7,16}\\.js/$script',
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.script])],
+      ],
       [
         '/^http://[a-zA-Z0-9]+\\.[a-z]+\\/.*(?:[!"#$%&()*+,:;<=>?@/\\^_`{|}~-]).*[a-zA-Z0-9]+/$script,third-party',
         [hashStrings(['http'])],
       ],
       [
         '/http://[a-zA-Z0-9]+\\.[a-z]+\\/.*(?:[!"#$%&()*+,:;<=>?@/\\^_`{|}~-]).*[a-zA-Z0-9]+/$script,third-party',
-        [new Uint32Array(0)],
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.script])],
       ],
       [
         '/^https?:\\/\\/motherless\\.com\\/[a-z0-9A-Z]{3,}\\.[a-z0-9A-Z]{2,}\\_/$image,subdocument',
-        [new Uint32Array(0)],
+        [
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.image]),
+          new Uint32Array([NORMALIZED_TYPE_TOKEN.sub_frame]),
+        ],
       ],
-      ['/^https?:\\/\\/.*\\/.*sw[0-9(.|_)].*/$script', [new Uint32Array(0)]],
-      ['/http*.:\\/\\/.*[?|=|&|%|#|+].*/$doc', [new Uint32Array(0)]],
-      ['/\\:\\/\\/([0-9]{1,3}\\.){3}[0-9]{1,3}/$doc', [new Uint32Array(0)]],
+      [
+        '/^https?:\\/\\/.*\\/.*sw[0-9(.|_)].*/$script',
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.script])],
+      ],
+      [
+        '/http*.:\\/\\/.*[?|=|&|%|#|+].*/$doc',
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.document])],
+      ],
+      [
+        '/\\:\\/\\/([0-9]{1,3}\\.){3}[0-9]{1,3}/$doc',
+        [new Uint32Array([NORMALIZED_TYPE_TOKEN.document])],
+      ],
       ['@@/wp-content/themes/$script', [hashStrings(['content'])]],
     ]) {
       it(`get tokens for ${filter}`, () => {
@@ -1477,17 +1560,14 @@ describe('Cosmetic filters', () => {
 
       // Fake filters for tests
       test('script:has-text()', ['script', ['']]);
-      test('script:has-text(a)', ['script',  ['a']]);
-      test('script:has-text(/a/)', ['script',  ['/a/']]);
-      test('script:has-text(/a/i)', ['script',  ['/a/i']]);
-      test('script:has-text(/a//i)', ['script',  ['/a//i']]);
-      test('script:has-text(/a/i/)', ['script',  ['/a/i/']]);
-      test('script:has-text(())', ['script',  ['()']]);
-      test('script:has-text(((a))', ['script',  ['((a)']]);
-      test('script:has-text((((()', [
-        'script',
-        ['((((']
-      ]);
+      test('script:has-text(a)', ['script', ['a']]);
+      test('script:has-text(/a/)', ['script', ['/a/']]);
+      test('script:has-text(/a/i)', ['script', ['/a/i']]);
+      test('script:has-text(/a//i)', ['script', ['/a//i']]);
+      test('script:has-text(/a/i/)', ['script', ['/a/i/']]);
+      test('script:has-text(())', ['script', ['()']]);
+      test('script:has-text(((a))', ['script', ['((a)']]);
+      test('script:has-text((((()', ['script', ['((((']]);
 
       // Invalid filters
       test('script:has-text(foo):)', null);
@@ -1505,25 +1585,19 @@ describe('Cosmetic filters', () => {
       test('script:has-text(ADBLOCK)', ['script', ['ADBLOCK']]);
       test('script:has-text(Inject=!)', ['script', ['Inject=!']]);
       test('script:has-text(String.fromCodePoint)', ['script', ['String.fromCodePoint']]);
-      test('script:has-text(a.HTMLImageElement.prototype)', ['script', ['a.HTMLImageElement.prototype']]);
+      test('script:has-text(a.HTMLImageElement.prototype)', [
+        'script',
+        ['a.HTMLImageElement.prototype'],
+      ]);
       test('script:has-text(this[atob)', ['script', ['this[atob']]);
       test('script:has-text(}(window);)', ['script', ['}(window);']]);
-      test('script:has-text(/^[\w\W]{1700,3000}$/):has-text(/(\\x\d\w){250}/)', [
+      test('script:has-text(/^[wW]{1700,3000}$/):has-text(/(\\xdw){250}/)', [
         'script',
-        [
-          '/^[\w\W]{1700,3000}$/',
-          '/(\\x\d\w){250}/',
-        ],
-      ])
+        ['/^[wW]{1700,3000}$/', '/(\\xdw){250}/'],
+      ]);
 
       // Compound
-      test('script:has-text(===):has-text(/[\w\W]{14000}/)', [
-        'script',
-        [
-          '===',
-          '/[\w\W]{14000}/',
-        ],
-      ]);
+      test('script:has-text(===):has-text(/[wW]{14000}/)', ['script', ['===', '/[wW]{14000}/']]);
     });
   });
 
@@ -1615,19 +1689,19 @@ describe('Cosmetic filters', () => {
       for (const prefix of ['a', '']) {
         it('tokenize href=', () => {
           checkTokens(`##${prefix}[href="https://foo.com"]`, [
-            tokenizeFilter('https://foo.com', false, false),
+            tokenize('https://foo.com', false, false),
           ]);
         });
 
         it('tokenize href*=', () => {
           checkTokens(`##${prefix}[href*="https://foo.com"]`, [
-            tokenizeFilter('https://foo.com', true, true),
+            tokenize('https://foo.com', true, true),
           ]);
         });
 
         it('tokenize href^=', () => {
           checkTokens(`##${prefix}[href^="https://foo.com"]`, [
-            tokenizeFilter('https://foo.com', false, true),
+            tokenize('https://foo.com', false, true),
           ]);
         });
       }

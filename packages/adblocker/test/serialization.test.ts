@@ -9,7 +9,7 @@
 import { loadAllLists, loadResources, typedArrayEqual } from './utils';
 
 import Config from '../src/config';
-import StaticDataView from '../src/data-view';
+import { StaticDataView } from '../src/data-view';
 import Engine from '../src/engine/engine';
 import CosmeticFilter from '../src/filters/cosmetic';
 import IFilter from '../src/filters/interface';

@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import StaticDataView from './data-view';
+import { StaticDataView, sizeOfASCII, sizeOfByte } from './data-view';
 
 interface IResource {
   contentType: string;
@@ -123,15 +123,15 @@ export default class Resources {
 
   public getSerializedSize(): number {
     let estimatedSize = (
-      StaticDataView.sizeOfASCII(this.checksum) +
-      (2 * StaticDataView.sizeOfByte()) // resources.size
+      sizeOfASCII(this.checksum) +
+      (2 * sizeOfByte()) // resources.size
     );
 
     this.resources.forEach(({ contentType, data }, name) => {
       estimatedSize += (
-        StaticDataView.sizeOfASCII(name) +
-        StaticDataView.sizeOfASCII(contentType) +
-        StaticDataView.sizeOfASCII(data)
+        sizeOfASCII(name) +
+        sizeOfASCII(contentType) +
+        sizeOfASCII(data)
       );
     });
 

@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import StaticDataView from './data-view';
+import { StaticDataView, sizeOfBool } from './data-view';
 
 export default class Config {
   public static deserialize(buffer: StaticDataView): Config {
@@ -58,7 +58,7 @@ export default class Config {
   public getSerializedSize(): number {
     // NOTE: this should always be the number of attributes and needs to be
     // updated when `Config` changes.
-    return 9 * StaticDataView.sizeOfBool();
+    return 9 * sizeOfBool();
   }
 
   public serialize(buffer: StaticDataView): void {

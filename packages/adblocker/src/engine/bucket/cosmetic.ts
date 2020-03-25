@@ -8,13 +8,13 @@
 
 import { compactTokens, concatTypedArrays } from '../../compact-set';
 import Config from '../../config';
-import StaticDataView from '../../data-view';
+import { StaticDataView } from '../../data-view';
 import CosmeticFilter, {
   DEFAULT_HIDDING_STYLE,
   getEntityHashesFromLabelsBackward,
   getHostnameHashesFromLabelsBackward,
 } from '../../filters/cosmetic';
-import { hashStrings, tokenizeFilter } from '../../utils';
+import { hashStrings, tokenizeNoSkip } from '../../utils';
 import { noopOptimizeCosmetic } from '../optimizer';
 import ReverseIndex from '../reverse-index';
 import FiltersContainer from './filters';
@@ -481,7 +481,7 @@ export default class CosmeticFilterBucket {
     // =======================================================================
     if (allowGenericHides === true && getRulesFromDOM === true && hrefs.length !== 0) {
       this.hrefsIndex.iterMatchingFilters(
-        compactTokens(concatTypedArrays(hrefs.map((href) => tokenizeFilter(href, false, false)))),
+        compactTokens(concatTypedArrays(hrefs.map((href) => tokenizeNoSkip(href)))),
         (rule: CosmeticFilter) => {
           if (rule.match(hostname, domain)) {
             rules.push(rule);

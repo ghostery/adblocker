@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import StaticDataView from '../data-view';
+import { StaticDataView } from '../data-view';
 
 export default interface IFilter {
   mask: number;

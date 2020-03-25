@@ -21,17 +21,126 @@ export const EMPTY_UINT32_ARRAY = new Uint32Array(0);
 const LITTLE_ENDIAN: boolean = new Int8Array(new Int16Array([1]).buffer)[0] === 1;
 
 // Store compression in a lazy, global singleton
-let COMPRESSION: Compression | undefined;
-function getCompressionSingleton(): Compression {
-  if (COMPRESSION === undefined) {
-    COMPRESSION = new Compression();
-  }
+let getCompressionSingleton: () => Compression = () => {
+  const COMPRESSION = new Compression();
+  getCompressionSingleton = () => COMPRESSION;
   return COMPRESSION;
-}
+};
 
 function align4(pos: number): number {
   // From: https://stackoverflow.com/a/2022194
   return (pos + 3) & ~0x03;
+}
+
+/**
+ * Return size of of a serialized byte value.
+ */
+export function sizeOfByte(): number {
+  return 1;
+}
+
+/**
+ * Return size of of a serialized boolean value.
+ */
+export function sizeOfBool(): number {
+  return 1;
+}
+
+/**
+ * Return number of bytes needed to serialize `length`.
+ */
+export function sizeOfLength(length: number): number {
+  return length <= 127 ? 1 : 5;
+}
+
+/**
+ * Return number of bytes needed to serialize `array` Uint8Array typed array.
+ *
+ * WARNING: this only returns the correct size if `align` is `false`.
+ */
+export function sizeOfBytes(array: Uint8Array, align: boolean): number {
+  return sizeOfBytesWithLength(array.length, align);
+}
+
+/**
+ * Return number of bytes needed to serialize `array` Uint8Array typed array.
+ *
+ * WARNING: this only returns the correct size if `align` is `false`.
+ */
+export function sizeOfBytesWithLength(length: number, align: boolean): number {
+  // Alignment is a tricky thing because it depends on the current offset in
+  // the buffer at the time of serialization; which we cannot anticipate
+  // before actually starting serialization. This means that we need to
+  // potentially over-estimate the size (at most by 3 bytes) to make sure the
+  // final size is at least equal or a bit bigger than necessary.
+  return (align ? 3 : 0) + length + sizeOfLength(length);
+}
+
+/**
+ * Return number of bytes needed to serialize `str` ASCII string.
+ */
+export function sizeOfASCII(str: string): number {
+  return str.length + sizeOfLength(str.length);
+}
+
+/**
+ * Return number of bytes needed to serialize `str` UTF8 string.
+ */
+export function sizeOfUTF8(str: string): number {
+  const encodedLength = encode(str).length;
+  return encodedLength + sizeOfLength(encodedLength);
+}
+
+/**
+ * Return number of bytes needed to serialize `array`.
+ */
+export function sizeOfUint32Array(array: Uint32Array): number {
+  return array.byteLength + sizeOfLength(array.length);
+}
+
+export function sizeOfNetworkRedirect(str: string, compression: boolean): number {
+  return compression === true
+    ? sizeOfBytesWithLength(
+        getCompressionSingleton().networkRedirect.getCompressedSize(str),
+        false, // align
+      )
+    : sizeOfASCII(str);
+}
+
+export function sizeOfNetworkHostname(str: string, compression: boolean): number {
+  return compression === true
+    ? sizeOfBytesWithLength(
+        getCompressionSingleton().networkHostname.getCompressedSize(str),
+        false, // align
+      )
+    : sizeOfASCII(str);
+}
+
+export function sizeOfNetworkCSP(str: string, compression: boolean): number {
+  return compression === true
+    ? sizeOfBytesWithLength(
+        getCompressionSingleton().networkCSP.getCompressedSize(str),
+        false, // align
+      )
+    : sizeOfASCII(str);
+}
+
+export function sizeOfNetworkFilter(str: string, compression: boolean): number {
+  return compression === true
+    ? sizeOfBytesWithLength(
+        getCompressionSingleton().networkFilter.getCompressedSize(str),
+        false, // align
+      )
+    : sizeOfASCII(str);
+}
+
+export function sizeOfCosmeticSelector(str: string, compression: boolean): number {
+  return compression === true
+    ? sizeOfBytesWithLength(
+        getCompressionSingleton().cosmeticSelector.getCompressedSize(str),
+        false, // align
+      )
+    : sizeOfASCII(str);
 }
 
 /**
@@ -49,121 +158,7 @@ function align4(pos: number): number {
  * symetrical). In the serializer you `pushX` values, and in the deserializer
  * you use `getX` functions to get back the values.
  */
-export default class StaticDataView {
-  /**
-   * Return size of of a serialized byte value.
-   */
-  public static sizeOfByte(): number {
-    return 1;
-  }
-
-  /**
-   * Return size of of a serialized boolean value.
-   */
-  public static sizeOfBool(): number {
-    return 1;
-  }
-
-  /**
-   * Return number of bytes needed to serialize `array` Uint8Array typed array.
-   *
-   * WARNING: this only returns the correct size if `align` is `false`.
-   */
-  public static sizeOfBytes(array: Uint8Array, align: boolean): number {
-    return StaticDataView.sizeOfBytesWithLength(array.length, align);
-  }
-
-  /**
-   * Return number of bytes needed to serialize `array` Uint8Array typed array.
-   *
-   * WARNING: this only returns the correct size if `align` is `false`.
-   */
-  public static sizeOfBytesWithLength(length: number, align: boolean): number {
-    // Alignment is a tricky thing because it depends on the current offset in
-    // the buffer at the time of serialization; which we cannot anticipate
-    // before actually starting serialization. This means that we need to
-    // potentially over-estimate the size (at most by 3 bytes) to make sure the
-    // final size is at least equal or a bit bigger than necessary.
-    return length + (align ? 3 : 0) + StaticDataView.sizeOfLength(length);
-  }
-
-  /**
-   * Return number of bytes needed to serialize `str` ASCII string.
-   */
-  public static sizeOfASCII(str: string): number {
-    return StaticDataView.sizeOfLength(str.length) + str.length;
-  }
-
-  /**
-   * Return number of bytes needed to serialize `str` UTF8 string.
-   */
-  public static sizeOfUTF8(str: string): number {
-    const encoded = encode(str);
-    return StaticDataView.sizeOfLength(encoded.length) + encoded.length;
-  }
-
-  /**
-   * Return number of bytes needed to serialize `array`.
-   */
-  public static sizeOfUint32Array(array: Uint32Array): number {
-    return array.byteLength + StaticDataView.sizeOfLength(array.length);
-  }
-
-  public static sizeOfNetworkRedirect(str: string, compression: boolean): number {
-    if (compression === true) {
-      return StaticDataView.sizeOfBytesWithLength(
-        getCompressionSingleton().networkRedirect.getCompressedSize(str),
-        false, // align
-      );
-    }
-
-    return StaticDataView.sizeOfASCII(str);
-  }
-
-  public static sizeOfNetworkHostname(str: string, compression: boolean): number {
-    if (compression === true) {
-      return StaticDataView.sizeOfBytesWithLength(
-        getCompressionSingleton().networkHostname.getCompressedSize(str),
-        false, // align
-      );
-    }
-
-    return StaticDataView.sizeOfASCII(str);
-  }
-
-  public static sizeOfNetworkCSP(str: string, compression: boolean): number {
-    if (compression === true) {
-      return StaticDataView.sizeOfBytesWithLength(
-        getCompressionSingleton().networkCSP.getCompressedSize(str),
-        false, // align
-      );
-    }
-
-    return StaticDataView.sizeOfASCII(str);
-  }
-
-  public static sizeOfNetworkFilter(str: string, compression: boolean): number {
-    if (compression === true) {
-      return StaticDataView.sizeOfBytesWithLength(
-        getCompressionSingleton().networkFilter.getCompressedSize(str),
-        false, // align
-      );
-    }
-
-    return StaticDataView.sizeOfASCII(str);
-  }
-
-  public static sizeOfCosmeticSelector(str: string, compression: boolean): number {
-    if (compression === true) {
-      return StaticDataView.sizeOfBytesWithLength(
-        getCompressionSingleton().cosmeticSelector.getCompressedSize(str),
-        false, // align
-      );
-    }
-
-    return StaticDataView.sizeOfASCII(str);
-  }
-
+export class StaticDataView {
   /**
    * Create an empty (i.e.: size = 0) StaticDataView.
    */
@@ -183,13 +178,6 @@ export default class StaticDataView {
    */
   public static allocate(capacity: number, options: IDataViewOptions): StaticDataView {
     return new StaticDataView(new Uint8Array(capacity), options);
-  }
-
-  /**
-   * Return number of bytes needed to serialize `length`.
-   */
-  private static sizeOfLength(length: number): number {
-    return length <= 127 ? 1 : 5;
   }
 
   public pos: number;

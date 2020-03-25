@@ -24,7 +24,6 @@ export function loadAllLists() {
     'assets/easylist/easylist.txt',
     'assets/easylist/easylistgermany.txt',
     'assets/easylist/easyprivacy.txt',
-    'assets/fanboy/annoyance.txt',
     'assets/easylist/easylist-cookie.txt',
     'assets/peter-lowe/serverlist.txt',
     'assets/ublock-origin/annoyances.txt',

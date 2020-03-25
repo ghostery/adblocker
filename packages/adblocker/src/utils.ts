@@ -32,7 +32,7 @@ export function clearBit(n: number, mask: number): number {
   return n & ~mask;
 }
 
-function fastHashBetween(str: string, begin: number, end: number): number {
+export function fastHashBetween(str: string, begin: number, end: number): number {
   let hash = 5381;
 
   for (let i = begin; i < end; i += 1) {
@@ -43,9 +43,14 @@ function fastHashBetween(str: string, begin: number, end: number): number {
 }
 
 export function fastHash(str: string): number {
-  if (!str) {
+  if (typeof str !== 'string') {
     return 0;
   }
+
+  if (str.length === 0) {
+    return 0;
+  }
+
   return fastHashBetween(str, 0, str.length);
 }
 
@@ -88,7 +93,6 @@ export function fastStartsWithFrom(haystack: string, needle: string, start: numb
   return true;
 }
 
-// Efficient manuel lexer
 export function isDigit(ch: number): boolean {
   // 48 == '0'
   // 57 == '9'
@@ -96,11 +100,14 @@ export function isDigit(ch: number): boolean {
 }
 
 export function isAlpha(ch: number): boolean {
-  // Force to lower-case
-  ch |= 32;
   // 65 == 'A'
   // 90 == 'Z'
-  return ch >= 97 && ch <= 122;
+  // 97 == 'a'
+  // 122 === 'z'
+  return (
+    (ch >= 97 && ch <= 122) ||
+    (ch >= 65 && ch <= 90)
+  );
 }
 
 function isAlphaExtended(ch: number): boolean {
@@ -131,49 +138,97 @@ function isCyrillic(ch: number): boolean {
   return ch >= 1024 && ch <= 1279;
 }
 
-function isAllowedFilter(ch: number): boolean {
+function isAllowedCode(ch: number): boolean {
   return (
-    isDigit(ch) || isAlpha(ch) || isAlphaExtended(ch) || isCyrillic(ch) || ch === 37 /* '%' */
+    isAlpha(ch) ||
+    isDigit(ch) ||
+    ch === 37 || /* '%' */
+    isAlphaExtended(ch) ||
+    isCyrillic(ch)
   );
 }
 
 // Shared TokensBuffer used to avoid having to allocate many typed arrays
 const TOKENS_BUFFER = new TokensBuffer(200);
 
-function fastTokenizerNoRegex(
+export function tokenizeWithWildcardsInPlace(
   pattern: string,
-  isAllowedCode: (ch: number) => boolean,
   skipFirstToken: boolean,
   skipLastToken: boolean,
   buffer: TokensBuffer,
 ): void {
-  let inside: boolean = false;
-  let start: number = 0;
-  let precedingCh: number = 0; // Used to check if a '*' is not just before a token
+  let inside = false;
+  let precedingCh = 0;
+  let start = 0;
+  let hash = 5381;
 
-  for (let i: number = 0; i < pattern.length; i += 1) {
+  for (let i = 0; i < pattern.length; i += 1) {
     const ch = pattern.charCodeAt(i);
-    if (isAllowedCode(ch)) {
+    if (isAllowedCode(ch) === true) {
       if (inside === false) {
+        hash = 5381;
         inside = true;
         start = i;
+      }
+      hash = (hash * 33) ^ ch;
+    } else {
+      if (inside === true) {
+        inside = false;
 
-        // Keep track of character preceding token
-        if (i > 0) {
-          precedingCh = pattern.charCodeAt(i - 1);
+        if (
+          i - start > 1 && // Ignore tokens of 1 character
+          ch !== 42 && // Ignore tokens followed by a '*'
+          precedingCh !== 42 && // Ignore tokens preceeded by a '*'
+          (skipFirstToken === false || start !== 0)
+        ) {
+          buffer.push(hash >>> 0);
+          if (buffer.full() === true) {
+            return;
+          }
         }
       }
+
+      precedingCh = ch;
+    }
+  }
+
+  if (
+    skipLastToken === false &&
+    inside === true &&
+    precedingCh !== 42 && // Ignore tokens preceeded by a '*'
+    pattern.length - start > 1// Ignore tokens of 1 character
+  ) {
+    buffer.push(hash >>> 0);
+  }
+}
+
+export function tokenizeInPlace(
+  pattern: string,
+  skipFirstToken: boolean,
+  skipLastToken: boolean,
+  buffer: TokensBuffer,
+): void {
+  let inside = false;
+  let start = 0;
+  let hash = 5381;
+
+  for (let i = 0; i < pattern.length; i += 1) {
+    const ch = pattern.charCodeAt(i);
+    if (isAllowedCode(ch) === true) {
+      if (inside === false) {
+        hash = 5381;
+        inside = true;
+        start = i;
+      }
+      hash = (hash * 33) ^ ch;
     } else if (inside === true) {
       inside = false;
-      // Should not be followed by '*'
       if (
-        (skipFirstToken === false || start !== 0) &&
-        i - start > 1 &&
-        ch !== 42 &&
-        precedingCh !== 42
+        i - start > 1 && // Ignore tokens of 1 character
+        (skipFirstToken === false || start !== 0)
       ) {
-        buffer.push(fastHashBetween(pattern, start, i));
-        if (buffer.pos === buffer.size) {
+        buffer.push(hash >>> 0);
+        if (buffer.full() === true) {
           return;
         }
       }
@@ -183,70 +238,68 @@ function fastTokenizerNoRegex(
   if (
     inside === true &&
     skipLastToken === false &&
-    precedingCh !== 42 &&
-    pattern.length - start > 1
+    pattern.length - start > 1// Ignore tokens of 1 character
   ) {
-    buffer.push(fastHashBetween(pattern, start, pattern.length));
+    buffer.push(hash >>> 0);
   }
-
-  return;
 }
 
-function fastTokenizer(
+export function tokenizeNoSkipInPlace(
   pattern: string,
-  isAllowedCode: (ch: number) => boolean,
   buffer: TokensBuffer,
 ): void {
-  let inside: boolean = false;
+  let inside = false;
   let start = 0;
+  let hash = 5381;
 
-  for (let i: number = 0; i < pattern.length; i += 1) {
+  for (let i = 0; i < pattern.length; i += 1) {
     const ch = pattern.charCodeAt(i);
-    if (isAllowedCode(ch)) {
+    if (isAllowedCode(ch) === true) {
       if (inside === false) {
+        hash = 5381;
         inside = true;
         start = i;
       }
+      hash = (hash * 33) ^ ch;
     } else if (inside === true) {
       inside = false;
-      buffer.push(fastHashBetween(pattern, start, i));
-      if (buffer.pos === buffer.size) {
-        return;
+      if (i - start > 1) {
+        buffer.push(hash >>> 0);
+        if (buffer.full() === true) {
+          return;
+        }
       }
     }
   }
 
-  if (inside === true) {
-    buffer.push(fastHashBetween(pattern, start, pattern.length));
+  if (inside === true && pattern.length - start > 1) {
+    buffer.push(hash >>> 0);
   }
 }
 
-export function tokenizeInPlace(pattern: string, buffer: TokensBuffer): void {
-  fastTokenizerNoRegex(pattern, isAllowedFilter, false, false, buffer);
-}
-
-export function tokenize(pattern: string): Uint32Array {
-  TOKENS_BUFFER.seekZero();
-  tokenizeInPlace(pattern, TOKENS_BUFFER);
+export function tokenizeNoSkip(pattern: string): Uint32Array {
+  TOKENS_BUFFER.reset();
+  tokenizeNoSkipInPlace(pattern, TOKENS_BUFFER);
   return TOKENS_BUFFER.slice();
 }
 
-export function tokenizeFilterInPlace(
-  pattern: string,
-  skipFirstToken: boolean,
-  skipLastToken: boolean,
-  buffer: TokensBuffer,
-): void {
-  fastTokenizerNoRegex(pattern, isAllowedFilter, skipFirstToken, skipLastToken, buffer);
-}
-
-export function tokenizeFilter(
+export function tokenizeWithWildcards(
   pattern: string,
   skipFirstToken: boolean,
   skipLastToken: boolean,
 ): Uint32Array {
-  TOKENS_BUFFER.seekZero();
-  tokenizeFilterInPlace(pattern, skipFirstToken, skipLastToken, TOKENS_BUFFER);
+  TOKENS_BUFFER.reset();
+  tokenizeWithWildcardsInPlace(pattern, skipFirstToken, skipLastToken, TOKENS_BUFFER);
+  return TOKENS_BUFFER.slice();
+}
+
+export function tokenize(
+  pattern: string,
+  skipFirstToken: boolean,
+  skipLastToken: boolean,
+): Uint32Array {
+  TOKENS_BUFFER.reset();
+  tokenizeInPlace(pattern, skipFirstToken, skipLastToken, TOKENS_BUFFER);
   return TOKENS_BUFFER.slice();
 }
 
@@ -314,7 +367,7 @@ export function tokenizeRegexInPlace(selector: string, tokens: TokensBuffer): vo
     // Full selector is safe
     const skipFirstToken: boolean = selector.charCodeAt(1) !== 94 /* '^' */;
     const skipLastToken: boolean = selector.charCodeAt(selector.length - 1) !== 36 /* '$' */;
-    tokenizeFilterInPlace(
+    tokenizeInPlace(
       selector.slice(1, selector.length - 1),
       skipFirstToken,
       skipLastToken,
@@ -323,7 +376,7 @@ export function tokenizeRegexInPlace(selector: string, tokens: TokensBuffer): vo
   } else {
     // Tokenize prefix
     if (begin > 1) {
-      tokenizeFilterInPlace(
+      tokenizeInPlace(
         selector.slice(1, begin),
         selector.charCodeAt(1) !== 94 /* '^' */, // skipFirstToken
         true,
@@ -333,7 +386,7 @@ export function tokenizeRegexInPlace(selector: string, tokens: TokensBuffer): vo
 
     // Tokenize suffix
     if (end < selector.length - 1) {
-      tokenizeFilterInPlace(
+      tokenizeInPlace(
         selector.slice(end + 1, selector.length - 1),
         true,
         selector.charCodeAt(selector.length - 1) !== 94 /* '^' */, // skipLastToken
@@ -344,8 +397,8 @@ export function tokenizeRegexInPlace(selector: string, tokens: TokensBuffer): vo
 }
 
 export function createFuzzySignature(pattern: string): Uint32Array {
-  TOKENS_BUFFER.seekZero();
-  fastTokenizer(pattern, isAllowedFilter, TOKENS_BUFFER);
+  TOKENS_BUFFER.reset();
+  tokenizeNoSkipInPlace(pattern, TOKENS_BUFFER);
   return compactTokens(new Uint32Array(TOKENS_BUFFER.slice()));
 }
 

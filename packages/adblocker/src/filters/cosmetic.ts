@@ -6,16 +6,23 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import StaticDataView, { EMPTY_UINT32_ARRAY } from '../data-view';
+import {
+  EMPTY_UINT32_ARRAY,
+  StaticDataView,
+  sizeOfASCII,
+  sizeOfCosmeticSelector,
+  sizeOfUTF8,
+  sizeOfUint32Array,
+} from '../data-view';
 import { toASCII } from '../punycode';
 import {
   binLookup,
-  fastHash,
+  fastHashBetween,
   fastStartsWithFrom,
   getBit,
   hasUnicode,
   setBit,
-  tokenizeFilter,
+  tokenize,
 } from '../utils';
 import IFilter from './interface';
 import { HTMLSelector, extractHTMLSelectorFromRule } from '../html-filtering';
@@ -651,37 +658,37 @@ export default class CosmeticFilter implements IFilter {
     let estimate: number = 1 + 1; // mask (1 byte) + optional parts (1 byte)
 
     if (this.isUnicode()) {
-      estimate += StaticDataView.sizeOfUTF8(this.selector);
+      estimate += sizeOfUTF8(this.selector);
     } else {
-      estimate += StaticDataView.sizeOfCosmeticSelector(this.selector, compression);
+      estimate += sizeOfCosmeticSelector(this.selector, compression);
     }
 
     if (this.entities !== undefined) {
-      estimate += StaticDataView.sizeOfUint32Array(this.entities);
+      estimate += sizeOfUint32Array(this.entities);
     }
 
     if (this.hostnames !== undefined) {
-      estimate += StaticDataView.sizeOfUint32Array(this.hostnames);
+      estimate += sizeOfUint32Array(this.hostnames);
     }
 
     if (this.notHostnames !== undefined) {
-      estimate += StaticDataView.sizeOfUint32Array(this.notHostnames);
+      estimate += sizeOfUint32Array(this.notHostnames);
     }
 
     if (this.notEntities !== undefined) {
-      estimate += StaticDataView.sizeOfUint32Array(this.notEntities);
+      estimate += sizeOfUint32Array(this.notEntities);
     }
 
     if (this.rawLine !== undefined) {
       if (this.isUnicode()) {
-        estimate += StaticDataView.sizeOfUTF8(this.rawLine);
+        estimate += sizeOfUTF8(this.rawLine);
       } else {
-        estimate += StaticDataView.sizeOfASCII(this.rawLine);
+        estimate += sizeOfASCII(this.rawLine);
       }
     }
 
     if (this.style !== undefined) {
-      estimate += StaticDataView.sizeOfASCII(this.style);
+      estimate += sizeOfASCII(this.style);
     }
 
     return estimate;
@@ -839,8 +846,10 @@ export default class CosmeticFilter implements IFilter {
           }
         }
 
-        tokens.push(new Uint32Array([fastHash(selector.slice(1, endOfSelector))]));
-      } else if (this.isHrefSelector()) {
+        const arr = new Uint32Array(1);
+        arr[0] = fastHashBetween(selector, 1, endOfSelector);
+        tokens.push(arr);
+      } else if (this.isHrefSelector() === true) {
         const selector: string = this.getSelector();
 
         // Locate 'href' in selector
@@ -877,9 +886,7 @@ export default class CosmeticFilter implements IFilter {
         }
 
         tokens.push(
-          new Uint32Array(
-            tokenizeFilter(this.selector.slice(hrefIndex, hrefEnd), skipFirstToken, skipLastToken),
-          ),
+          tokenize(this.selector.slice(hrefIndex, hrefEnd), skipFirstToken, skipLastToken),
         );
       }
     }

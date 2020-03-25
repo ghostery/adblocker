@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import StaticDataView from '../src/data-view';
+import { StaticDataView } from '../src/data-view';
 import CosmeticFilter from '../src/filters/cosmetic';
 import IFilter from '../src/filters/interface';
 import NetworkFilter from '../src/filters/network';
@@ -30,8 +30,6 @@ describe('Make sure size estimate is accurate', () => {
 
       if (realSize !== estimate) {
         throw new Error(`${filter.toString()} got ${estimate} expected ${realSize}`);
-      } else {
-        expect(realSize).toBe(estimate);
       }
     }
   }

@@ -104,7 +104,7 @@ export function benchGetCosmeticsFilters({ engine }: { engine: FiltersEngine }) 
 export function benchRequestParsing({
   requests,
 }: {
-  requests: Array<{ url: string; frameUrl: string; cpt: string }>;
+  requests: { url: string; frameUrl: string; cpt: string }[];
 }) {
   for (let i = 0; i < requests.length; i += 1) {
     const { url, frameUrl, cpt } = requests[i];
