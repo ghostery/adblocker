@@ -16,7 +16,6 @@ async function loadAllLists(): Promise<string> {
       'assets/easylist/easylist.txt',
       'assets/easylist/easylistgermany.txt',
       'assets/easylist/easyprivacy.txt',
-      'assets/fanboy/annoyance.txt',
       'assets/peter-lowe/serverlist.txt',
       'assets/ublock-origin/annoyances.txt',
       'assets/ublock-origin/badware.txt',
