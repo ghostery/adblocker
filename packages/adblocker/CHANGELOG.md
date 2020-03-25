@@ -1,3 +1,58 @@
+# v1.10.0 (Wed Mar 25 2020)
+
+#### :running_woman: Performance
+
+- Various optimizations. [#655](https://github.com/cliqz-oss/adblocker/pull/655) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Update local assets and compression codebooks [#652](https://github.com/cliqz-oss/adblocker/pull/652) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#648](https://github.com/cliqz-oss/adblocker/pull/648) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#645](https://github.com/cliqz-oss/adblocker/pull/645) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#637](https://github.com/cliqz-oss/adblocker/pull/637) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#636](https://github.com/cliqz-oss/adblocker/pull/636) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#633](https://github.com/cliqz-oss/adblocker/pull/633) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#628](https://github.com/cliqz-oss/adblocker/pull/628) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#626](https://github.com/cliqz-oss/adblocker/pull/626) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#625](https://github.com/cliqz-oss/adblocker/pull/625) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#623](https://github.com/cliqz-oss/adblocker/pull/623) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#622](https://github.com/cliqz-oss/adblocker/pull/622) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#620](https://github.com/cliqz-oss/adblocker/pull/620) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#616](https://github.com/cliqz-oss/adblocker/pull/616) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#613](https://github.com/cliqz-oss/adblocker/pull/613) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#608](https://github.com/cliqz-oss/adblocker/pull/608) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#604](https://github.com/cliqz-oss/adblocker/pull/604) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#601](https://github.com/cliqz-oss/adblocker/pull/601) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#597](https://github.com/cliqz-oss/adblocker/pull/597) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#590](https://github.com/cliqz-oss/adblocker/pull/590) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#572](https://github.com/cliqz-oss/adblocker/pull/572) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#568](https://github.com/cliqz-oss/adblocker/pull/568) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#562](https://github.com/cliqz-oss/adblocker/pull/562) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#557](https://github.com/cliqz-oss/adblocker/pull/557) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#556](https://github.com/cliqz-oss/adblocker/pull/556) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#554](https://github.com/cliqz-oss/adblocker/pull/554) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#549](https://github.com/cliqz-oss/adblocker/pull/549) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets and compression codebooks [#548](https://github.com/cliqz-oss/adblocker/pull/548) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+-  [#653](https://github.com/cliqz-oss/adblocker/pull/653) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#629](https://github.com/cliqz-oss/adblocker/pull/629) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#617](https://github.com/cliqz-oss/adblocker/pull/617) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#587](https://github.com/cliqz-oss/adblocker/pull/587) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#586](https://github.com/cliqz-oss/adblocker/pull/586) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#560](https://github.com/cliqz-oss/adblocker/pull/560) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#577](https://github.com/cliqz-oss/adblocker/pull/577) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#552](https://github.com/cliqz-oss/adblocker/pull/552) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.9.2 (Wed Feb 26 2020)
 
 #### :bug: Bug Fix

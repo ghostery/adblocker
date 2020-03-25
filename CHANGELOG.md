@@ -1,3 +1,149 @@
+# v1.10.0 (Wed Mar 25 2020)
+
+#### :running_woman: Performance
+
+- `@cliqz/adblocker`
+  - Various optimizations. [#655](https://github.com/cliqz-oss/adblocker/pull/655) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#652](https://github.com/cliqz-oss/adblocker/pull/652) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#648](https://github.com/cliqz-oss/adblocker/pull/648) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#645](https://github.com/cliqz-oss/adblocker/pull/645) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#637](https://github.com/cliqz-oss/adblocker/pull/637) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#636](https://github.com/cliqz-oss/adblocker/pull/636) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#633](https://github.com/cliqz-oss/adblocker/pull/633) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#628](https://github.com/cliqz-oss/adblocker/pull/628) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#626](https://github.com/cliqz-oss/adblocker/pull/626) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#625](https://github.com/cliqz-oss/adblocker/pull/625) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#623](https://github.com/cliqz-oss/adblocker/pull/623) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#622](https://github.com/cliqz-oss/adblocker/pull/622) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#620](https://github.com/cliqz-oss/adblocker/pull/620) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#616](https://github.com/cliqz-oss/adblocker/pull/616) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#613](https://github.com/cliqz-oss/adblocker/pull/613) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#608](https://github.com/cliqz-oss/adblocker/pull/608) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#604](https://github.com/cliqz-oss/adblocker/pull/604) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#601](https://github.com/cliqz-oss/adblocker/pull/601) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#597](https://github.com/cliqz-oss/adblocker/pull/597) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#590](https://github.com/cliqz-oss/adblocker/pull/590) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#572](https://github.com/cliqz-oss/adblocker/pull/572) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#568](https://github.com/cliqz-oss/adblocker/pull/568) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#562](https://github.com/cliqz-oss/adblocker/pull/562) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#557](https://github.com/cliqz-oss/adblocker/pull/557) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#556](https://github.com/cliqz-oss/adblocker/pull/556) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#554](https://github.com/cliqz-oss/adblocker/pull/554) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#549](https://github.com/cliqz-oss/adblocker/pull/549) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#548](https://github.com/cliqz-oss/adblocker/pull/548) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+-  [#650](https://github.com/cliqz-oss/adblocker/pull/650) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#649](https://github.com/cliqz-oss/adblocker/pull/649) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#644](https://github.com/cliqz-oss/adblocker/pull/644) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#642](https://github.com/cliqz-oss/adblocker/pull/642) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#641](https://github.com/cliqz-oss/adblocker/pull/641) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#640](https://github.com/cliqz-oss/adblocker/pull/640) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#639](https://github.com/cliqz-oss/adblocker/pull/639) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#638](https://github.com/cliqz-oss/adblocker/pull/638) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#635](https://github.com/cliqz-oss/adblocker/pull/635) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#634](https://github.com/cliqz-oss/adblocker/pull/634) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#632](https://github.com/cliqz-oss/adblocker/pull/632) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#630](https://github.com/cliqz-oss/adblocker/pull/630) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#627](https://github.com/cliqz-oss/adblocker/pull/627) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#624](https://github.com/cliqz-oss/adblocker/pull/624) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#621](https://github.com/cliqz-oss/adblocker/pull/621) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#619](https://github.com/cliqz-oss/adblocker/pull/619) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#615](https://github.com/cliqz-oss/adblocker/pull/615) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#614](https://github.com/cliqz-oss/adblocker/pull/614) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#612](https://github.com/cliqz-oss/adblocker/pull/612) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#611](https://github.com/cliqz-oss/adblocker/pull/611) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#610](https://github.com/cliqz-oss/adblocker/pull/610) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#609](https://github.com/cliqz-oss/adblocker/pull/609) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#607](https://github.com/cliqz-oss/adblocker/pull/607) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#605](https://github.com/cliqz-oss/adblocker/pull/605) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#603](https://github.com/cliqz-oss/adblocker/pull/603) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#602](https://github.com/cliqz-oss/adblocker/pull/602) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#600](https://github.com/cliqz-oss/adblocker/pull/600) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#599](https://github.com/cliqz-oss/adblocker/pull/599) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#598](https://github.com/cliqz-oss/adblocker/pull/598) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#595](https://github.com/cliqz-oss/adblocker/pull/595) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#594](https://github.com/cliqz-oss/adblocker/pull/594) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#593](https://github.com/cliqz-oss/adblocker/pull/593) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#592](https://github.com/cliqz-oss/adblocker/pull/592) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#591](https://github.com/cliqz-oss/adblocker/pull/591) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#589](https://github.com/cliqz-oss/adblocker/pull/589) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#583](https://github.com/cliqz-oss/adblocker/pull/583) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#582](https://github.com/cliqz-oss/adblocker/pull/582) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#580](https://github.com/cliqz-oss/adblocker/pull/580) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#579](https://github.com/cliqz-oss/adblocker/pull/579) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#578](https://github.com/cliqz-oss/adblocker/pull/578) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#576](https://github.com/cliqz-oss/adblocker/pull/576) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#575](https://github.com/cliqz-oss/adblocker/pull/575) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#574](https://github.com/cliqz-oss/adblocker/pull/574) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#571](https://github.com/cliqz-oss/adblocker/pull/571) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#570](https://github.com/cliqz-oss/adblocker/pull/570) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#569](https://github.com/cliqz-oss/adblocker/pull/569) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#566](https://github.com/cliqz-oss/adblocker/pull/566) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#564](https://github.com/cliqz-oss/adblocker/pull/564) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#563](https://github.com/cliqz-oss/adblocker/pull/563) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#559](https://github.com/cliqz-oss/adblocker/pull/559) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#558](https://github.com/cliqz-oss/adblocker/pull/558) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#555](https://github.com/cliqz-oss/adblocker/pull/555) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#551](https://github.com/cliqz-oss/adblocker/pull/551) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker`
+  -  [#653](https://github.com/cliqz-oss/adblocker/pull/653) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker`
+  -  [#629](https://github.com/cliqz-oss/adblocker/pull/629) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker`
+  -  [#617](https://github.com/cliqz-oss/adblocker/pull/617) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-webextension`
+  -  [#596](https://github.com/cliqz-oss/adblocker/pull/596) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-circumvention`, `@cliqz/adblocker-content`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  -  [#587](https://github.com/cliqz-oss/adblocker/pull/587) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-circumvention`, `@cliqz/adblocker-content`, `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  -  [#586](https://github.com/cliqz-oss/adblocker/pull/586) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-circumvention`, `@cliqz/adblocker-content`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  -  [#560](https://github.com/cliqz-oss/adblocker/pull/560) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker`
+  -  [#577](https://github.com/cliqz-oss/adblocker/pull/577) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker`
+  -  [#552](https://github.com/cliqz-oss/adblocker/pull/552) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.9.2 (Wed Feb 26 2020)
 
 #### :nail_care: Polish
