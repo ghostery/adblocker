@@ -7,7 +7,7 @@
  */
 
 import { parse } from 'tldts-experimental';
-import TokensBuffer from './tokens-buffer';
+import { TOKENS_BUFFER } from './tokens-buffer';
 import { createFuzzySignature, fastHash, tokenizeNoSkipInPlace } from './utils';
 
 const TLDTS_OPTIONS = {
@@ -86,8 +86,6 @@ export const NORMALIZED_TYPE_TOKEN: { [s in RequestType]: number } = {
   xmlhttprequest: fastHash('type:xhr'),
   xslt: fastHash('type:other'),
 };
-
-const TOKENS_BUFFER = new TokensBuffer(300);
 
 export interface IRequestInitialization {
   requestId: string;
@@ -263,12 +261,7 @@ export default class Request {
       // Add token corresponding to request type
       TOKENS_BUFFER.push(NORMALIZED_TYPE_TOKEN[this.type]);
 
-      let url = this.url;
-      if (url.length > 2048) {
-        url = url.slice(0, 2048);
-      }
-
-      tokenizeNoSkipInPlace(url, TOKENS_BUFFER);
+      tokenizeNoSkipInPlace(this.url, TOKENS_BUFFER);
 
       this.tokens = TOKENS_BUFFER.slice();
     }

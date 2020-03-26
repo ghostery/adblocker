@@ -18,7 +18,7 @@ import {
 } from '../data-view';
 import { toASCII } from '../punycode';
 import Request, { RequestType, NORMALIZED_TYPE_TOKEN } from '../request';
-import TokensBuffer from '../tokens-buffer';
+import { TOKENS_BUFFER } from '../tokens-buffer';
 import {
   binLookup,
   bitCount,
@@ -38,7 +38,6 @@ import {
 } from '../utils';
 import IFilter from './interface';
 
-const TOKENS_BUFFER = new TokensBuffer(200);
 const HTTP_HASH = fastHash('http');
 const HTTPS_HASH = fastHash('https');
 

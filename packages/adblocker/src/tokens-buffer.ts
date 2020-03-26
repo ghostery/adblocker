@@ -12,54 +12,37 @@
  * allocations while calling tokenization (mostly beneficitial for
  * `NetworkFilter.getTokens()`).
  */
-export default class TokensBuffer {
-  public readonly size: number;
+export class TokensBuffer {
   private readonly buffer: Uint32Array;
-  public start: number;
-  public end: number;
+  public pos: number = 0;
 
   constructor(size: number) {
-    this.size = size;
-    this.start = 0;
-    this.end = 0;
     this.buffer = new Uint32Array(size);
   }
 
-  public pop(): void {
-    if (this.end === 0) {
-      throw new Error('Cannot pop empty buffer');
-    }
-    this.end -= 0;
-  }
-
-  public shift(): void {
-    if (this.start === this.end) {
-      throw new Error('Cannot shift empty buffer');
-    }
-    this.start += 1;
-  }
-
   public reset(): void {
-    this.start = 0;
-    this.end = 0;
+    this.pos = 0;
   }
 
   public slice(): Uint32Array {
-    return this.buffer.slice(this.start, this.end);
+    return this.buffer.slice(0, this.pos);
   }
 
   public push(token: number): void {
-    if (this.full()) {
-      throw new Error('Token buffer is full');
-    }
-    this.buffer[this.end++] = token;
+    this.buffer[this.pos++] = token;
   }
 
   public empty(): boolean {
-    return this.end === this.start;
+    return this.pos === 0;
   }
 
   public full(): boolean {
-    return this.end === this.size;
+    return this.pos === this.buffer.length;
+  }
+
+  public remaining(): number {
+    return this.buffer.length - this.pos;
   }
 }
+
+export const TOKENS_BUFFER = new TokensBuffer(1024);

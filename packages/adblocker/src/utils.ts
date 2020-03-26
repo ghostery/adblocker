@@ -7,7 +7,7 @@
  */
 
 import { compactTokens } from './compact-set';
-import TokensBuffer from './tokens-buffer';
+import { TokensBuffer, TOKENS_BUFFER } from './tokens-buffer';
 
 /***************************************************************************
  *  Bitwise helpers
@@ -104,10 +104,7 @@ export function isAlpha(ch: number): boolean {
   // 90 == 'Z'
   // 97 == 'a'
   // 122 === 'z'
-  return (
-    (ch >= 97 && ch <= 122) ||
-    (ch >= 65 && ch <= 90)
-  );
+  return (ch >= 97 && ch <= 122) || (ch >= 65 && ch <= 90);
 }
 
 function isAlphaExtended(ch: number): boolean {
@@ -140,16 +137,9 @@ function isCyrillic(ch: number): boolean {
 
 function isAllowedCode(ch: number): boolean {
   return (
-    isAlpha(ch) ||
-    isDigit(ch) ||
-    ch === 37 || /* '%' */
-    isAlphaExtended(ch) ||
-    isCyrillic(ch)
+    isAlpha(ch) || isDigit(ch) || ch === 37 /* '%' */ || isAlphaExtended(ch) || isCyrillic(ch)
   );
 }
-
-// Shared TokensBuffer used to avoid having to allocate many typed arrays
-const TOKENS_BUFFER = new TokensBuffer(200);
 
 export function tokenizeWithWildcardsInPlace(
   pattern: string,
@@ -157,12 +147,13 @@ export function tokenizeWithWildcardsInPlace(
   skipLastToken: boolean,
   buffer: TokensBuffer,
 ): void {
+  const len = Math.min(pattern.length, buffer.remaining() * 2);
   let inside = false;
   let precedingCh = 0;
   let start = 0;
   let hash = 5381;
 
-  for (let i = 0; i < pattern.length; i += 1) {
+  for (let i = 0; i < len; i += 1) {
     const ch = pattern.charCodeAt(i);
     if (isAllowedCode(ch) === true) {
       if (inside === false) {
@@ -182,9 +173,6 @@ export function tokenizeWithWildcardsInPlace(
           (skipFirstToken === false || start !== 0)
         ) {
           buffer.push(hash >>> 0);
-          if (buffer.full() === true) {
-            return;
-          }
         }
       }
 
@@ -196,7 +184,8 @@ export function tokenizeWithWildcardsInPlace(
     skipLastToken === false &&
     inside === true &&
     precedingCh !== 42 && // Ignore tokens preceeded by a '*'
-    pattern.length - start > 1// Ignore tokens of 1 character
+    pattern.length - start > 1 && // Ignore tokens of 1 character
+    TOKENS_BUFFER.full() === false
   ) {
     buffer.push(hash >>> 0);
   }
@@ -208,11 +197,12 @@ export function tokenizeInPlace(
   skipLastToken: boolean,
   buffer: TokensBuffer,
 ): void {
+  const len = Math.min(pattern.length, buffer.remaining() * 2);
   let inside = false;
   let start = 0;
   let hash = 5381;
 
-  for (let i = 0; i < pattern.length; i += 1) {
+  for (let i = 0; i < len; i += 1) {
     const ch = pattern.charCodeAt(i);
     if (isAllowedCode(ch) === true) {
       if (inside === false) {
@@ -228,9 +218,6 @@ export function tokenizeInPlace(
         (skipFirstToken === false || start !== 0)
       ) {
         buffer.push(hash >>> 0);
-        if (buffer.full() === true) {
-          return;
-        }
       }
     }
   }
@@ -238,21 +225,20 @@ export function tokenizeInPlace(
   if (
     inside === true &&
     skipLastToken === false &&
-    pattern.length - start > 1// Ignore tokens of 1 character
+    pattern.length - start > 1 && // Ignore tokens of 1 character
+    TOKENS_BUFFER.full() === false
   ) {
     buffer.push(hash >>> 0);
   }
 }
 
-export function tokenizeNoSkipInPlace(
-  pattern: string,
-  buffer: TokensBuffer,
-): void {
+export function tokenizeNoSkipInPlace(pattern: string, buffer: TokensBuffer): void {
+  const len = Math.min(pattern.length, buffer.remaining() * 2);
   let inside = false;
   let start = 0;
   let hash = 5381;
 
-  for (let i = 0; i < pattern.length; i += 1) {
+  for (let i = 0; i < len; i += 1) {
     const ch = pattern.charCodeAt(i);
     if (isAllowedCode(ch) === true) {
       if (inside === false) {
@@ -265,14 +251,11 @@ export function tokenizeNoSkipInPlace(
       inside = false;
       if (i - start > 1) {
         buffer.push(hash >>> 0);
-        if (buffer.full() === true) {
-          return;
-        }
       }
     }
   }
 
-  if (inside === true && pattern.length - start > 1) {
+  if (inside === true && pattern.length - start > 1 && TOKENS_BUFFER.full() === false) {
     buffer.push(hash >>> 0);
   }
 }
@@ -365,14 +348,9 @@ export function tokenizeRegexInPlace(selector: string, tokens: TokensBuffer): vo
 
   if (end < begin) {
     // Full selector is safe
-    const skipFirstToken: boolean = selector.charCodeAt(1) !== 94 /* '^' */;
-    const skipLastToken: boolean = selector.charCodeAt(selector.length - 1) !== 36 /* '$' */;
-    tokenizeInPlace(
-      selector.slice(1, selector.length - 1),
-      skipFirstToken,
-      skipLastToken,
-      tokens,
-    );
+    const skipFirstToken: boolean = selector.charCodeAt(1) !== 94; /* '^' */
+    const skipLastToken: boolean = selector.charCodeAt(selector.length - 1) !== 36; /* '$' */
+    tokenizeInPlace(selector.slice(1, selector.length - 1), skipFirstToken, skipLastToken, tokens);
   } else {
     // Tokenize prefix
     if (begin > 1) {
