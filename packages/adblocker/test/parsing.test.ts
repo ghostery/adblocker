@@ -1725,4 +1725,55 @@ describe('Filters list', () => {
       expect(parseFilters(data)).toEqual(parseFilters(''));
     });
   });
+
+  describe('multi-line filters', () => {
+    const lines = (content: string) =>
+      parseFilters(content, { debug: true }).networkFilters.map(f => f.toString());
+
+    it('single filter on two lines', () => {
+      expect(lines([
+        '*$3p,script, \\',
+        '    domain=x.com|y.com',
+      ].join('\n'))).toEqual(['*$3p,script,domain=x.com|y.com']);
+    });
+
+    it('single filter on many lines', () => {
+      expect(lines([
+        '*$ \\',
+        '    3p, \\',
+        '    script, \\',
+        '    domain=x.com|y.com',
+      ].join('\n'))).toEqual(['*$3p,script,domain=x.com|y.com']);
+    });
+
+    it('handle leading and trailing spaces', () => {
+      expect(lines([
+        ' \t*$ \\',
+        '    3p, \\',
+        '    script, \\',
+        '    domain=x.com|y.com \t ',
+      ].join('\n'))).toEqual(['*$3p,script,domain=x.com|y.com']);
+    });
+
+    it('mixed with normal filters and comments', () => {
+      expect(lines([
+        '||foo.com^',
+        ' \t*$ \\',
+        '    3p, \\',
+        '    script, \\',
+        '    domain=x.com|y.com \t ',
+        '! comment',
+        '||bar.com^',
+        '|| \\',
+        '    baz. \\',
+        '    com^',
+      ].join('\n'))).toEqual([
+        '||foo.com^',
+        '*$3p,script,domain=x.com|y.com',
+        '||bar.com^',
+        '||baz.com^',
+      ]);
+    });
+
+  });
 });
