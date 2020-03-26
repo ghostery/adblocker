@@ -143,10 +143,38 @@ export function parseFilters(
   for (let i = 0; i < lines.length; i += 1) {
     let line = lines[i];
 
-    // Check if `line` should be trimmed before parsing
-    const isTrimmingNeeded =
-      line.length > 1 && (line.charCodeAt(0) <= 32 || line.charCodeAt(line.length - 1) <= 32);
-    if (isTrimmingNeeded) {
+    // Check if `line` should be left-trimmed
+    if (line.length !== 0 && line.charCodeAt(0) <= 32) {
+      line = line.trim();
+    }
+
+    // Handle continuations
+    if (line.length > 2) {
+      while ((
+        i < lines.length - 1 &&
+        line.charCodeAt(line.length - 1) === 92 &&
+        line.charCodeAt(line.length - 2) === 32
+      )) {
+        line = line.slice(0, -2);
+
+        const nextLine = lines[i + 1];
+        if (nextLine.length > 4 && (
+          nextLine.charCodeAt(0) === 32 &&
+          nextLine.charCodeAt(1) === 32 &&
+          nextLine.charCodeAt(2) === 32 &&
+          nextLine.charCodeAt(3) === 32 &&
+          nextLine.charCodeAt(4) !== 32
+        )) {
+          line += nextLine.slice(4);
+          i += 1;
+        } else {
+          break;
+        }
+      }
+    }
+
+    // Check if `line` should be right-trimmed
+    if (line.length !== 0 && line.charCodeAt(line.length - 1) <= 32) {
       line = line.trim();
     }
 
