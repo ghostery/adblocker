@@ -1,3 +1,15 @@
+# v1.12.0 (Thu Mar 26 2020)
+
+#### :running_woman: Performance
+
+- Fine-tune tokenization by preventing buffer overflows in main loop. [#665](https://github.com/cliqz-oss/adblocker/pull/665) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.11.0 (Thu Mar 26 2020)
 
 #### :rocket: New Feature
