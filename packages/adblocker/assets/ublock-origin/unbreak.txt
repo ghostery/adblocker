@@ -931,7 +931,10 @@ mobile.twitter.com#@#._29ahSMvH section.rn-1oszu61 div[class][style*="padding-"]
 ||geo.kaloo.ga/json/*$script,redirect=noopjs,domain=telesurtv.net
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2295
-@@||bobcat.grahamdigital.com^$image,domain=clickondetroit.com|click2houston.com|clickondetroit.com|clickorlando.com|ksat.com|local10.com|news4jax.com|wsls.com
+@@||bobcat.grahamdigital.com^$image,domain=click2houston.com|clickondetroit.com|clickorlando.com|ksat.com|local10.com|news4jax.com|wsls.com
+! https://github.com/NanoMeow/QuickReports/issues/3400
+@@||imasdk.googleapis.com/js/sdkloader/ima3$script,domain=click2houston.com|clickondetroit.com|clickorlando.com|ksat.com|local10.com|news4jax.com|wsls.com
+@@||pubads.g.doubleclick.net/ssai/event/*/master.m3u8$xhr,domain=click2houston.com|clickondetroit.com|clickorlando.com|ksat.com|local10.com|news4jax.com|wsls.com
 
 ! sites broken by EasyList csp-filter
 ! https://forums.lanik.us/viewtopic.php?f=64&t=41101
@@ -2117,8 +2120,7 @@ kzstock.blogspot.com#@##ad-target
 ||olx.com.br^*/lurker.$badfilter
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5479
-@@||elconfidencial.com/*/EventTracker.js$script,1p
-||cdn.amplitude.com/libs/amplitude-*.gz.js$script,domain=elconfidencial.com,redirect=noopjs,important
+@@||api.deep.bi/v3/init.js$script,domain=elconfidencial.com
 
 ! https://github.com/easylist/easylist/issues/3352
 ||stackpathdns.com^$image,domain=boomsbeat.com|dramastars.com|enstarz.com|foreverymom.com|hngn.com|itechpost.com|kpopstarz.com|latinpost.com|natureworldnews.com|parentherald.com|readysethealth.com|realtytoday.com|sciencetimes.com|sportsworldreport.com|universityherald.com|vcpost.com|youthhealthmag.com,badfilter
@@ -3489,3 +3491,15 @@ examiner.com.au,theadvocate.com.au,thecourier.com.au##.subscribe-truncate:style(
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7125
 @@||images.digi.com.my/*/google_tag/*$script,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/7156
+||widgets.outbrain.com/outbrain.js$script,redirect=noopjs,domain=bongino.com
+
+! https://www.mariogames.be/es-Super_Bomberman_5_Snes_Game
+mariogames.be#@##adsContainer
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=mariogames.be
+
+! elpais.com
+@@||epimg.net^$image,domain=elpais.com
+@@||epimg.net/js/comun/comun.min.js$script,domain=elpais.com
+@@||epimg.net/js/comun/*/lazyload.min.js$script,domain=elpais.com
