@@ -7,6 +7,7 @@
  */
 
 import IFilter from '../src/filters/interface';
+import { TokensBuffer } from '../src/tokens-buffer';
 import { parseFilters } from '../src/lists';
 import {
   binLookup,
@@ -15,8 +16,11 @@ import {
   fastHash,
   hasUnicode,
   tokenize,
-  tokenizeWithWildcards,
+  tokenizeInPlace,
   tokenizeNoSkip,
+  tokenizeNoSkipInPlace,
+  tokenizeWithWildcards,
+  tokenizeWithWildcardsInPlace,
 } from '../src/utils';
 import requests from './data/requests';
 import { loadAllLists } from './utils';
@@ -60,6 +64,22 @@ describe('Utils', () => {
     it('returns 0 for empty string', () => {
       expect(fastHash('')).toBe(0);
     });
+  });
+
+  it('detects remaining space in buffer', () => {
+    const buffer = new TokensBuffer(1);
+
+    buffer.reset();
+    tokenizeInPlace('/foo/baz/baz', false, false, buffer);
+    expect(buffer.pos).toBe(1);
+
+    buffer.reset();
+    tokenizeNoSkipInPlace('/foo/baz/baz', buffer);
+    expect(buffer.pos).toBe(1);
+
+    buffer.reset();
+    tokenizeWithWildcardsInPlace('/foo/baz/baz', false, false, buffer);
+    expect(buffer.pos).toBe(1);
   });
 
   it('#tokenizeWithWildcards', () => {
