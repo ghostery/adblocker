@@ -1,3 +1,15 @@
+# v1.12.1 (Thu Mar 26 2020)
+
+#### :nail_care: Polish
+
+- Make id of fuzzy filter invariant under permutations [#666](https://github.com/cliqz-oss/adblocker/pull/666) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.12.0 (Thu Mar 26 2020)
 
 #### :running_woman: Performance
