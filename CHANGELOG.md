@@ -1,3 +1,33 @@
+# v1.11.0 (Thu Mar 26 2020)
+
+#### :rocket: New Feature
+
+- `@cliqz/adblocker`
+  - Add support for multi-lines filters (i.e. line continuation) [#663](https://github.com/cliqz-oss/adblocker/pull/663) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Fix compression codebooks generation [#660](https://github.com/cliqz-oss/adblocker/pull/660) ([@remusao](https://github.com/remusao))
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#659](https://github.com/cliqz-oss/adblocker/pull/659) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+-  [#664](https://github.com/cliqz-oss/adblocker/pull/664) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#662](https://github.com/cliqz-oss/adblocker/pull/662) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#658](https://github.com/cliqz-oss/adblocker/pull/658) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-webextension`
+  -  [#661](https://github.com/cliqz-oss/adblocker/pull/661) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.10.1 (Wed Mar 25 2020)
 
 #### :bug: Bug Fix

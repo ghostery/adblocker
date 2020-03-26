@@ -1,3 +1,15 @@
+# v1.11.0 (Thu Mar 26 2020)
+
+#### :nut_and_bolt: Dependencies
+
+-  [#661](https://github.com/cliqz-oss/adblocker/pull/661) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.10.0 (Wed Mar 25 2020)
 
 #### :nut_and_bolt: Dependencies
