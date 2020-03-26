@@ -1709,6 +1709,19 @@ describe('Cosmetic filters', () => {
   });
 });
 
+describe('#getId', () => {
+  it('for fuzzy filter is insensitive to permutations', () => {
+    const f1 = NetworkFilter.parse('foo bar baz$fuzzy');
+    const f2 = NetworkFilter.parse('baz bar foo$fuzzy');
+    expect(f1).not.toBeNull();
+    expect(f2).not.toBeNull();
+    if (f1 !== null && f2 !== null) {
+      expect(f1.getId()).toBe(f2.getId());
+      expect(f1.getIdWithoutBadFilter()).toBe(f2.getIdWithoutBadFilter());
+    }
+  });
+});
+
 describe('Filters list', () => {
   it('ignores comments', () => {
     [
