@@ -261,6 +261,7 @@ function computeFilterId(
   optDomains: Uint32Array | undefined,
   optNotDomains: Uint32Array | undefined,
   redirect: string | undefined,
+  fuzzy: Uint32Array | undefined,
 ): number {
   let hash = (5408 * 33) ^ mask;
 
@@ -297,6 +298,12 @@ function computeFilterId(
   if (redirect !== undefined) {
     for (let i = 0; i < redirect.length; i += 1) {
       hash = (hash * 33) ^ redirect.charCodeAt(i);
+    }
+  }
+
+  if (fuzzy !== undefined) {
+    for (let i = 0; i < fuzzy.length; i += 1) {
+      hash = (hash * 33) ^ fuzzy[i];
     }
   }
 
@@ -1178,11 +1185,12 @@ export default class NetworkFilter implements IFilter {
     return computeFilterId(
       this.csp,
       this.mask & ~NETWORK_FILTER_MASK.isBadFilter,
-      this.filter,
+      this.isFuzzy() ? undefined : this.filter,
       this.hostname,
       this.optDomains,
       this.optNotDomains,
       this.redirect,
+      this.isFuzzy() ? this.getFuzzySignature() : undefined,
     );
   }
 
@@ -1191,11 +1199,12 @@ export default class NetworkFilter implements IFilter {
       this.id = computeFilterId(
         this.csp,
         this.mask,
-        this.filter,
+        this.isFuzzy() ? undefined : this.filter,
         this.hostname,
         this.optDomains,
         this.optNotDomains,
         this.redirect,
+        this.isFuzzy() ? this.getFuzzySignature() : undefined,
       );
     }
     return this.id;
