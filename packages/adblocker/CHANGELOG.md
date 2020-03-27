@@ -1,3 +1,15 @@
+# v1.12.2 (Fri Mar 27 2020)
+
+#### :house: Internal
+
+- Update local assets and compression codebooks [#667](https://github.com/cliqz-oss/adblocker/pull/667) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### Authors: 1
+
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+
+---
+
 # v1.12.1 (Thu Mar 26 2020)
 
 #### :nail_care: Polish

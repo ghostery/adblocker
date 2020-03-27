@@ -1,3 +1,27 @@
+# v1.12.2 (Fri Mar 27 2020)
+
+#### ⚠️  Pushed to `master`
+
+- Update README.md ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets and compression codebooks [#667](https://github.com/cliqz-oss/adblocker/pull/667) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+-  [#669](https://github.com/cliqz-oss/adblocker/pull/669) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#668](https://github.com/cliqz-oss/adblocker/pull/668) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.12.1 (Thu Mar 26 2020)
 
 #### :nail_care: Polish
