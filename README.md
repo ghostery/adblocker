@@ -1,123 +1,97 @@
-# Adblocker
+<h1 align="center">Adblocker</h2>
 
-![npm](https://img.shields.io/npm/v/@cliqz/adblocker?color=brightgreen)
-![node](https://img.shields.io/node/v/@cliqz/adblocker)
-![tests](https://github.com/cliqz-oss/adblocker/workflows/Tests/badge.svg)
-![dependabot](https://api.dependabot.com/badges/status?host=github&repo=cliqz-oss/adblocker)
-![license](https://img.shields.io/github/license/cliqz-oss/adblocker)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/cliqz-oss/adblocker.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cliqz-oss/adblocker/alerts/)
+<p align="center">
+  <em>
+    Efficient
+    · Minimal
+    · JavaScript
+    · TypeScript
+    · uBlock Origin- and Easylist-compatible
+  </em>
+  <br />
+  <em>
+    <a href="https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker">Node.js</a>
+    · <a href="https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-puppeteer">Puppeteer</a>
+    · <a href="https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-electron">Electron</a>
+    · <a href="https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-webextension">WebExtension</a>
+  </em>
+</p>
 
-> Efficient, pure-Javascript, multi-platform adblocker library, by Cliqz.
+<p align="center">
+  <a href="https://github.com/cliqz-oss/adblocker/actions?query=workflow%3ATests">
+    <img alt="Github Actions Build Status" src="https://img.shields.io/github/workflow/status/cliqz-oss/adblocker/Tests?label=tests&style=flat-square&logo=github"></a>
+  <a href="https://github.com/cliqz-oss/adblocker/actions?query=workflow%3Assets">
+    <img alt="Github Actions Assets Status" src="https://img.shields.io/github/workflow/status/cliqz-oss/adblocker/Assets?label=assets&style=flat-square&logo=github"></a>
+  <a href="https://twitter.com/acdlite/status/974390255393505280">
+    <img alt="Blazing Fast" src="https://img.shields.io/badge/speed-blazing%20%F0%9F%94%A5-brightgreen.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/@cliqz/adblocker">
+    <img alt="npm version" src="https://img.shields.io/npm/v/@cliqz/adblocker.svg?style=flat-square&logo=npm"></a>
+  <a href="https://www.npmjs.com/package/@cliqz/adblocker">
+    <img alt="weekly downloads from npm" src="https://img.shields.io/npm/dw/@cliqz/adblocker.svg?style=flat-square"></a>
+  <br/>
+  <a href="#badge">
+    <img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square&logo=prettier"></a>
+  <a href="https://twitter.com/cliqz">
+    <img alt="Follow Cliqz on Twitter" src="https://img.shields.io/twitter/follow/cliqz.svg?label=follow+cliqz&style=flat-square&logo=twitter"></a>
+  <a href="https://github.com/cliqz-oss/adblocker">
+    <img alt="Dependabot" src="https://img.shields.io/badge/dependabot-enabled-brightgreen?logo=dependabot&style=flat-square"></a>
+  <a href="https://github.com/cliqz-oss/adblocker/blob/master/LICENSE">
+    <img alt="License Badge" src="https://img.shields.io/github/license/cliqz-oss/adblocker?style=flat-square&logo=mozilla"></a>
+  <a href="https://github.com/cliqz-oss/adblocker/blob/master/LICENSE">
+    <img alt="LGTM Badge" src="https://img.shields.io/lgtm/alerts/github/cliqz-oss/adblocker?style=flat-square&logo=lgtm"></a>
+</p>
 
-## Features
+---
 
-* **extremely efficient** adblocker (both in memory usage and raw speed)
-* pure JavaScript implementation
-* first-class support for [Node.js](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker), [WebExtension](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-webextension), [Electron](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-electron) and [Puppeteer](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-puppeteer).
-* effectively blocks all types of ads and tracking
-* supports cosmetics and scriptlet injection
-* small and minimal (only 64KB minified and gzipped)
-* support most filters: Easylist and uBlock Origin formats
+Cliqz' adblocker is a JavaScript library for *blocking ads, trackers, and annoyances* with a strong focus on [efficiency](https://whotracks.me/blog/adblockers_performance_study.html). It was designed with compatibility in mind and integrates seamlessly with the following environments:
 
-The library provides all necessary building blocks to create a powerful
-and efficient content-blocker and gives full flexibility as to which
-lists should be used and how they should be fetched or updated. Being a
-pure JavaScript library it does not make any assumption regarding the
-environment it will run in (apart from the availability of a JavaScript
-engine) and is trivial to include in any new project. It can also be
-used as a building block for tooling.
+* [Block ads in **Puppeteer**](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-puppeteer/README.md),
+* [Block ads in **Electron**](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-electron/README.md),
+* [Block ads in **Chrome** and **Firefox**](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-webextension/README.md),
+* Or as a [standalone JavaScript library](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker/README.md).
 
 ## Getting Started
 
-Using `@cliqz/adblocker` you can start blocking ads in only a few steps. Here is
-an example to block ads in a *WebExtension* (compatible with Chrome and Firefox):
+Cliqz' adblocker is the easiest and most efficient way to block ads and trackers in your project. Only a few lines of code are required to integrate smoothly with [Puppeteer](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-puppeteer-example), [Electron](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-electron-example), a  Chrome- and Firefox-compatible [browser extension](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-webextension-example), or any environment supporting [JavaScript](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker) (e.g. Node.js or React Native).
 
-Install package: `npm install --save @cliqz/adblocker-webextension`
-
-Put this in your `background` code:
+Here is how to do it in two steps for a Chrome- and Firefox-compatible WebExtension:
+1. Install: `npm install --save @cliqz/adblocker-webextension`
+2. Add the following in your background script:
 ```js
 import { WebExtensionBlocker } from '@cliqz/adblocker-webextension';
 
 WebExtensionBlocker.fromPrebuiltAdsAndTracking().then((blocker) => {
-  blocker.enableBlockingInBrowser();
+  blocker.enableBlockingInBrowser(browser);
 });
 ```
-Congratulations, you are now blocking all ads!
 
-For more details, check-out the following specialized guides:
+Congratulations, you are now blocking all ads and trackers! :tada:
 
-* `Node.js`, [@cliqz/adblocker](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker)
-* `WebExtension`, [@cliqz/adblocker-webextension](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-webextension) ([demo](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-webextension-example))
-* `Electron`, [@cliqz/adblocker-electron](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-electron) ([demo](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-electron-example))
-* `Puppeteer`, [@cliqz/adblocker-puppeteer](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-puppeteer) ([demo](https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-puppeteer-example))
+## Compatibility
 
-## Performance
+The library supports 99% of all filters from the Easylist and uBlock Origin projects. Check [the compatibility matrix](https://github.com/cliqz-oss/adblocker/wiki/Compatibility-Matrix) on the wiki for more details.
 
-To make sure content blocking can run at full-speed on a variety of
-devices (including low-end mobile phones), we built the library with
-performance in mind from the ground-up. From our [recent performance study](https://whotracks.me/blog/adblockers_performance_study.html),
-we perform consistently better than popular alternatives in terms of:
-*memory consumption*, *start from cache time*, *matching speed* and
-*size of cache*.
+## Contributing
 
-Matching speed corresponds to the time it takes to decide if a network
-request should be blocked or allowed. It needs to be as fast as possible
-to not induce any significant over-head in the browser:
+This project makes use of [lerna](https://github.com/lerna/lerna) and [yarn workspaces](https://yarnpkg.com/lang/en/docs/workspaces/) under the hood. Quickly get started with:
 
-![](https://github.com/cliqz-oss/adblocker/blob/d63d545095a1d47626c9fd29e14a813a2ff4f012/bench/comparison/plots/ghostery-ublock-origin-brave-duckduckgo-adblock-plus-all.svg)
+1. Fork and clone the repository,
+2. Install dependencies: `yarn bootrap`,
+3. Build: `yarn watch`,
+4. Test: `yarn test`,
+5. Bundle: `yarn bundle`.
 
-Memory usage is another very important dimension. Here is the memory used after initialization:
-
-![](https://github.com/cliqz-oss/adblocker/blob/d63d545095a1d47626c9fd29e14a813a2ff4f012/bench/comparison/plots/memory-usage-at-startup.svg)
-
-Cache size corresponds to the size in bytes of the Uint8Array returned by `engine.serialize()`:
-
-![](https://github.com/cliqz-oss/adblocker/blob/d63d545095a1d47626c9fd29e14a813a2ff4f012/bench/comparison/plots/cache-size.svg)
-
-Another interesting metric is the time it takes to initialize the
-`FiltersEngine` instance from its serialized form. It is especially
-beneficial for mobile phones, because this serialized engine can be
-created backend-side and distributed through a CDN; which means clients
-do not have any cost to pay except downloading the file.
-
-![](https://github.com/cliqz-oss/adblocker/blob/d63d545095a1d47626c9fd29e14a813a2ff4f012/bench/comparison/plots/deserializationtimings.svg)
-
-## Supported Filters
-
-The majority of the common filters are supported out of the box but some rare ones are not. To know more, check [the compatibility matrix](https://github.com/cliqz-oss/adblocker/wiki/Compatibility-Matrix) on the wiki.
-
-## Development
-
-This project makes use of [lerna](https://github.com/lerna/lerna) and [yarn workspaces](https://yarnpkg.com/lang/en/docs/workspaces/) (which is actually transparently used by `lerna` behind the scene most of the time). To get started:
-
-1. fork and clone the repository: `git clone git@github.com:<your remote>/adblocker.git`
-2. bootstrap: `yarn bootrap`
-3. build packages: `yarn bundle`
-3. start working on one of the sub-packages!
-
-In case you have any question, feel free to open an issue or a pull request to get some help!
+For any question, feel free to [open an issue](https://github.com/cliqz-oss/adblocker/issues/new) or a pull request to get some help!
 
 ## Who is using it?
 
-This library is the building block technology used to power the adblockers from [Ghostery](https://www.ghostery.com/) and [Cliqz](https://cliqz.com/) on both *desktop* and *mobile* platforms. It is already running in production for millions of users and has been used successfully to satisfy the following use-cases:
+This library is the building block technology used to power the adblockers from [Ghostery](https://www.ghostery.com/) and [Cliqz](https://cliqz.com/) on both *desktop* and *mobile* platforms. It is already running in production for millions of users and has been battle-tested to satisfy the following use-cases:
 
-  * Mobile-friendly adblocker for Android in multiple setups: react-native, WebExtension, etc. ([ghostery](https://github.com/ghostery/browser-android) and [cliqz](https://github.com/cliqz-oss/browser-android))
-  * Ads and trackers blocker in [Electron](https://github.com/wexond/desktop) applications, [Puppeteer](https://github.com/Kikobeats/browserless) headless browsers, Cliqz browser, WebExtensions ([cliqz](https://github.com/cliqz-oss/browser-core), [ghostery](https://github.com/ghostery/ghostery-extension/) and [standalone](https://github.com/remusao/blockrz))
-  * Backend requests processing job in Node.js
+  * Mobile-friendly adblocker in react-native, WebExtension, or custom JavaScript context: [Ghostery](https://github.com/ghostery/browser-android) and [Cliqz](https://github.com/cliqz-oss/browser-android).
+  * Ads and trackers blocker in [Electron](https://github.com/wexond/desktop) applications, [Puppeteer](https://github.com/Kikobeats/browserless) headless browsers, Cliqz browser, WebExtensions ([cliqz](https://github.com/cliqz-oss/browser-core), [ghostery](https://github.com/ghostery/ghostery-extension/) and [standalone](https://github.com/remusao/blockrz)).
+  * Batch requests processing in Node.js, HTML fuzzy keywork matcher, and more.
 
-The innovative algorithms and architecture designed and implemented
-in this project have been shown to be among the [most efficient](https://whotracks.me/blog/adblockers_performance_study.html)
-ways to implement ad-blockers and have been used in other
-projects to implement highly performant adblockers such as
-[Brave](https://github.com/brave/adblock-rust).
-
-## Release Checklist
-
-To publish a new version:
-
-0. Bump `ENGINE_VERSION` in `engine.ts` (to invalidate serialized versions)
-
-Everything else is taken care of by `auto`.
+The innovative algorithms and architecture designed and implemented in this project have been shown to be among the [most efficient](https://whotracks.me/blog/adblockers_performance_study.html) ways to implement ad-blockers and have been used in other projects to implement highly performant adblockers such as [Brave](https://github.com/brave/adblock-rust).
 
 ## License
 
