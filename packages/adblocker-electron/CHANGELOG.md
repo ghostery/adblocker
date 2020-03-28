@@ -1,3 +1,15 @@
+# v1.12.3 (Sat Mar 28 2020)
+
+#### :house: Internal
+
+- Update README.md [#670](https://github.com/cliqz-oss/adblocker/pull/670) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.10.1 (Wed Mar 25 2020)
 
 #### :bug: Bug Fix

@@ -1,3 +1,35 @@
+# v1.12.3 (Sat Mar 28 2020)
+
+#### :nail_care: Polish
+
+- `@cliqz/adblocker`
+  - Do not try to get resources from CDN [#680](https://github.com/cliqz-oss/adblocker/pull/680) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Make sure updater always gets latest version of resources [#679](https://github.com/cliqz-oss/adblocker/pull/679) ([@remusao](https://github.com/remusao))
+- `@cliqz/adblocker`
+  - Update local assets [#676](https://github.com/cliqz-oss/adblocker/pull/676) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker-content`, `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-electron`, `@cliqz/adblocker-puppeteer`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - Update README.md [#670](https://github.com/cliqz-oss/adblocker/pull/670) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump auto from 9.22.0 to 9.22.1 [#678](https://github.com/cliqz-oss/adblocker/pull/678) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 9.21.2 to 9.22.0 [#677](https://github.com/cliqz-oss/adblocker/pull/677) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 9.21.1 to 9.21.2 [#675](https://github.com/cliqz-oss/adblocker/pull/675) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 9.21.0 to 9.21.1 [#674](https://github.com/cliqz-oss/adblocker/pull/674) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.102 to 0.0.103 [#671](https://github.com/cliqz-oss/adblocker/pull/671) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.12.2 (Fri Mar 27 2020)
 
 #### ⚠️  Pushed to `master`

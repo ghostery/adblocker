@@ -1,3 +1,27 @@
+# v1.12.3 (Sat Mar 28 2020)
+
+#### :nail_care: Polish
+
+- Do not try to get resources from CDN [#680](https://github.com/cliqz-oss/adblocker/pull/680) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Make sure updater always gets latest version of resources [#679](https://github.com/cliqz-oss/adblocker/pull/679) ([@remusao](https://github.com/remusao))
+- Update local assets [#676](https://github.com/cliqz-oss/adblocker/pull/676) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update README.md [#670](https://github.com/cliqz-oss/adblocker/pull/670) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump @types/chrome from 0.0.102 to 0.0.103 [#671](https://github.com/cliqz-oss/adblocker/pull/671) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.12.2 (Fri Mar 27 2020)
 
 #### :house: Internal
