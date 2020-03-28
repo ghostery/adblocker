@@ -6,20 +6,23 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { expect } from 'chai';
+import 'mocha';
+
 import Request from '../src/request';
 
 describe('#Request', () => {
   describe('#fromRawDetails', () => {
     it('sets default type', () => {
-      expect(Request.fromRawDetails({})).toMatchObject({ type: 'main_frame' });
+      expect(Request.fromRawDetails({})).to.deep.include({ type: 'main_frame' });
     });
 
     it('gets type from arguments', () => {
-      expect(Request.fromRawDetails({ type: 'script' })).toMatchObject({ type: 'script' });
+      expect(Request.fromRawDetails({ type: 'script' })).to.deep.include({ type: 'script' });
     });
 
     it('sets default url to empty', () => {
-      expect(Request.fromRawDetails({})).toMatchObject({
+      expect(Request.fromRawDetails({})).to.deep.include({
         domain: '',
         hostname: '',
         url: '',
@@ -27,7 +30,7 @@ describe('#Request', () => {
     });
 
     it('converts url to lower case', () => {
-      expect(Request.fromRawDetails({ url: 'https://sub.FOO.cOm/bar' })).toMatchObject({
+      expect(Request.fromRawDetails({ url: 'https://sub.FOO.cOm/bar' })).to.deep.include({
         domain: 'foo.com',
         hostname: 'sub.foo.com',
         url: 'https://sub.foo.com/bar',
@@ -35,7 +38,7 @@ describe('#Request', () => {
     });
 
     it('parses url', () => {
-      expect(Request.fromRawDetails({ url: 'https://sub.foo.com/bar' })).toMatchObject({
+      expect(Request.fromRawDetails({ url: 'https://sub.foo.com/bar' })).to.deep.include({
         domain: 'foo.com',
         hostname: 'sub.foo.com',
         url: 'https://sub.foo.com/bar',
@@ -49,7 +52,7 @@ describe('#Request', () => {
           hostname: 'PROVIDED HOSTNAME',
           url: 'https://sub.foo.com/bar',
         }),
-      ).toMatchObject({
+      ).to.deep.include({
         domain: 'PROVIDED DOMAIN',
         hostname: 'PROVIDED HOSTNAME',
         url: 'https://sub.foo.com/bar',
@@ -62,7 +65,7 @@ describe('#Request', () => {
           hostname: 'PROVIDED HOSTNAME',
           url: 'https://sub.foo.com/bar',
         }),
-      ).toMatchObject({
+      ).to.deep.include({
         domain: 'foo.com',
         hostname: 'PROVIDED HOSTNAME',
         url: 'https://sub.foo.com/bar',
@@ -75,7 +78,7 @@ describe('#Request', () => {
           domain: 'PROVIDED DOMAIN',
           url: 'https://sub.foo.com/bar',
         }),
-      ).toMatchObject({
+      ).to.deep.include({
         domain: 'PROVIDED DOMAIN',
         hostname: 'sub.foo.com',
         url: 'https://sub.foo.com/bar',
@@ -83,21 +86,21 @@ describe('#Request', () => {
     });
 
     it('sets default sourceUrl to empty', () => {
-      expect(Request.fromRawDetails({})).toMatchObject({
+      expect(Request.fromRawDetails({})).to.deep.include({
         sourceDomain: '',
         sourceHostname: '',
       });
     });
 
     it('converts sourceUrl to lower case', () => {
-      expect(Request.fromRawDetails({ sourceUrl: 'https://sub.FOO.cOm/bar' })).toMatchObject({
+      expect(Request.fromRawDetails({ sourceUrl: 'https://sub.FOO.cOm/bar' })).to.deep.include({
         sourceDomain: 'foo.com',
         sourceHostname: 'sub.foo.com',
       });
     });
 
     it('parses sourceUrl', () => {
-      expect(Request.fromRawDetails({ sourceUrl: 'https://sub.foo.com/bar' })).toMatchObject({
+      expect(Request.fromRawDetails({ sourceUrl: 'https://sub.foo.com/bar' })).to.deep.include({
         sourceDomain: 'foo.com',
         sourceHostname: 'sub.foo.com',
       });
@@ -110,7 +113,7 @@ describe('#Request', () => {
           sourceHostname: 'PROVIDED HOSTNAME',
           sourceUrl: 'https://sub.foo.com/bar',
         }),
-      ).toMatchObject({
+      ).to.deep.include({
         sourceDomain: 'PROVIDED DOMAIN',
         sourceHostname: 'PROVIDED HOSTNAME',
       });
@@ -122,7 +125,7 @@ describe('#Request', () => {
           sourceHostname: 'PROVIDED HOSTNAME',
           sourceUrl: 'https://sub.foo.com/bar',
         }),
-      ).toMatchObject({
+      ).to.deep.include({
         sourceDomain: 'foo.com',
         sourceHostname: 'PROVIDED HOSTNAME',
       });
@@ -134,15 +137,15 @@ describe('#Request', () => {
           sourceDomain: 'PROVIDED DOMAIN',
           sourceUrl: 'https://sub.foo.com/bar',
         }),
-      ).toMatchObject({
+      ).to.deep.include({
         sourceDomain: 'PROVIDED DOMAIN',
         sourceHostname: 'sub.foo.com',
       });
     });
 
     it('overrides type for websocket requests', () => {
-      expect(Request.fromRawDetails({ url: 'ws://foo.com' }).type).toEqual('websocket');
-      expect(Request.fromRawDetails({ url: 'wss://foo.com' }).type).toEqual('websocket');
+      expect(Request.fromRawDetails({ url: 'ws://foo.com' }).type).to.equal('websocket');
+      expect(Request.fromRawDetails({ url: 'wss://foo.com' }).type).to.equal('websocket');
     });
 
     it('supports http protocol', () => {
@@ -152,9 +155,9 @@ describe('#Request', () => {
         isSupported: true,
       };
 
-      expect(Request.fromRawDetails({ url: 'http:///foo.com' })).toMatchObject(expected);
-      expect(Request.fromRawDetails({ url: 'http://foo.com' })).toMatchObject(expected);
-      expect(Request.fromRawDetails({ url: 'http:/foo.com' })).toMatchObject(expected);
+      expect(Request.fromRawDetails({ url: 'http:///foo.com' })).to.deep.include(expected);
+      expect(Request.fromRawDetails({ url: 'http://foo.com' })).to.deep.include(expected);
+      expect(Request.fromRawDetails({ url: 'http:/foo.com' })).to.deep.include(expected);
     });
 
     it('supports https protocol', () => {
@@ -164,9 +167,9 @@ describe('#Request', () => {
         isSupported: true,
       };
 
-      expect(Request.fromRawDetails({ url: 'https:///foo.com' })).toMatchObject(expected);
-      expect(Request.fromRawDetails({ url: 'https://foo.com' })).toMatchObject(expected);
-      expect(Request.fromRawDetails({ url: 'https:/foo.com' })).toMatchObject(expected);
+      expect(Request.fromRawDetails({ url: 'https:///foo.com' })).to.deep.include(expected);
+      expect(Request.fromRawDetails({ url: 'https://foo.com' })).to.deep.include(expected);
+      expect(Request.fromRawDetails({ url: 'https:/foo.com' })).to.deep.include(expected);
     });
 
     it('supports ws protocol', () => {
@@ -176,9 +179,9 @@ describe('#Request', () => {
         isSupported: true,
       };
 
-      expect(Request.fromRawDetails({ url: 'ws:///foo.com' })).toMatchObject(expected);
-      expect(Request.fromRawDetails({ url: 'ws://foo.com' })).toMatchObject(expected);
-      expect(Request.fromRawDetails({ url: 'ws:/foo.com' })).toMatchObject(expected);
+      expect(Request.fromRawDetails({ url: 'ws:///foo.com' })).to.deep.include(expected);
+      expect(Request.fromRawDetails({ url: 'ws://foo.com' })).to.deep.include(expected);
+      expect(Request.fromRawDetails({ url: 'ws:/foo.com' })).to.deep.include(expected);
     });
 
     it('supports wss protocol', () => {
@@ -188,9 +191,9 @@ describe('#Request', () => {
         isSupported: true,
       };
 
-      expect(Request.fromRawDetails({ url: 'wss:///foo.com' })).toMatchObject(expected);
-      expect(Request.fromRawDetails({ url: 'wss://foo.com' })).toMatchObject(expected);
-      expect(Request.fromRawDetails({ url: 'wss:/foo.com' })).toMatchObject(expected);
+      expect(Request.fromRawDetails({ url: 'wss:///foo.com' })).to.deep.include(expected);
+      expect(Request.fromRawDetails({ url: 'wss://foo.com' })).to.deep.include(expected);
+      expect(Request.fromRawDetails({ url: 'wss:/foo.com' })).to.deep.include(expected);
     });
 
     it('drops data urls', () => {
@@ -200,7 +203,7 @@ describe('#Request', () => {
         'data:text/html,%3Ch1%3EHello%2C%20World!%3C%2Fh1%3E',
         'data:text/html,<script>alert("hi");</script>',
       ]) {
-        expect(Request.fromRawDetails({ url })).toMatchObject({
+        expect(Request.fromRawDetails({ url })).to.deep.include({
           isHttp: false,
           isHttps: false,
           isSupported: false,
@@ -226,9 +229,9 @@ describe('#Request', () => {
         'pop3',
         'imap',
       ]) {
-        expect(Request.fromRawDetails({ url: `${protocol}:///foo.com` })).toMatchObject(expected);
-        expect(Request.fromRawDetails({ url: `${protocol}://foo.com` })).toMatchObject(expected);
-        expect(Request.fromRawDetails({ url: `${protocol}:/foo.com` })).toMatchObject(expected);
+        expect(Request.fromRawDetails({ url: `${protocol}:///foo.com` })).to.deep.include(expected);
+        expect(Request.fromRawDetails({ url: `${protocol}://foo.com` })).to.deep.include(expected);
+        expect(Request.fromRawDetails({ url: `${protocol}:/foo.com` })).to.deep.include(expected);
       }
     });
 
@@ -236,7 +239,7 @@ describe('#Request', () => {
       it('correctly uses domains when available', () => {
         expect(
           Request.fromRawDetails({ url: 'https://foo.com', sourceUrl: 'https://foo.com' }),
-        ).toMatchObject({
+        ).to.deep.include({
           isFirstParty: true,
           isThirdParty: false,
         });
@@ -246,7 +249,7 @@ describe('#Request', () => {
             sourceUrl: 'https://sub1.sub2.foo.com',
             url: 'https://foo.com',
           }),
-        ).toMatchObject({
+        ).to.deep.include({
           isFirstParty: true,
           isThirdParty: false,
         });
@@ -256,7 +259,7 @@ describe('#Request', () => {
             sourceUrl: 'https://sub1.sub2.bar.com',
             url: 'https://foo.com',
           }),
-        ).toMatchObject({
+        ).to.deep.include({
           isFirstParty: false,
           isThirdParty: true,
         });
@@ -267,7 +270,7 @@ describe('#Request', () => {
           Request.fromRawDetails({
             url: 'https://foo.com',
           }),
-        ).toMatchObject({
+        ).to.deep.include({
           isFirstParty: true,
           isThirdParty: false,
         });
@@ -279,7 +282,7 @@ describe('#Request', () => {
             sourceUrl: 'null',
             url: 'https://foo.com',
           }),
-        ).toMatchObject({
+        ).to.deep.include({
           isFirstParty: true,
           isThirdParty: false,
         });
@@ -290,7 +293,7 @@ describe('#Request', () => {
           Request.fromRawDetails({
             sourceUrl: 'null',
           }),
-        ).toMatchObject({
+        ).to.deep.include({
           isFirstParty: true,
           isThirdParty: false,
         });
@@ -302,7 +305,7 @@ describe('#Request', () => {
             sourceUrl: 'null',
             url: 'null',
           }),
-        ).toMatchObject({
+        ).to.deep.include({
           isFirstParty: true,
           isThirdParty: false,
         });

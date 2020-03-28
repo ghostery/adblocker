@@ -6,14 +6,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { expect } from 'chai';
+import 'mocha';
+
 import { getDomain } from 'tldts-experimental';
 
-import Engine from '../src/engine/engine';
-import NetworkFilter from '../src/filters/network';
-import Request, { RequestType } from '../src/request';
-import Resources from '../src/resources';
+import Engine from '../../src/engine/engine';
+import NetworkFilter from '../../src/filters/network';
+import Request, { RequestType } from '../../src/request';
+import Resources from '../../src/resources';
 
-import requests from './data/requests';
+import requests from '../data/requests';
+import { loadEasyListFilters, typedArrayEqual } from '../utils';
+
 
 /**
  * Helper function used in the Engine tests. All the assertions are performed by
@@ -62,27 +67,27 @@ function test({
   // exception or redirect; and perform extra checks then.
   if (filter.isImportant()) {
     const result = engine.match(request);
-    expect(result.filter).not.toBeUndefined();
+    expect(result.filter).not.to.be.undefined;
     if (
       result.filter !== undefined &&
       result.filter.rawLine !== undefined &&
       !result.filter.rawLine.includes('<+>')
     ) {
-      expect(importants).toContainEqual(result.filter.rawLine);
+      expect(importants).to.include(result.filter.rawLine);
 
       // Handle case where important filter is also a redirect
       if (filter.isRedirect()) {
-        expect(redirects).toContainEqual(result.filter.rawLine);
+        expect(redirects).to.include(result.filter.rawLine);
       }
     }
 
-    expect(result.exception).toBeUndefined();
+    expect(result.exception).to.be.undefined;
 
     if (!filter.isRedirect()) {
-      expect(result.redirect).toBeUndefined();
+      expect(result.redirect).to.be.undefined;
     }
 
-    expect(result.match).toBeTruthy();
+    expect(result.match).to.be.true;
   } else if (
     filter.isException() &&
     normalFilters.length !== 0 &&
@@ -90,35 +95,35 @@ function test({
     importants.length === 0
   ) {
     const result = engine.match(request);
-    expect(result.exception).not.toBeUndefined();
+    expect(result.exception).not.to.be.undefined;
     if (
       result.exception !== undefined &&
       result.exception.rawLine !== undefined &&
       !result.exception.rawLine.includes('<+>')
     ) {
-      expect(exceptions).toContainEqual(result.exception.rawLine);
+      expect(exceptions).to.include(result.exception.rawLine);
     }
 
-    expect(result.filter).not.toBeUndefined();
-    expect(result.redirect).toBeUndefined();
-    expect(result.match).toBeFalsy();
+    expect(result.filter).not.to.be.undefined;
+    expect(result.redirect).to.be.undefined;
+    expect(result.match).to.be.false;
   } else if (filter.isRedirect() && exceptions.length === 0 && importants.length === 0) {
     const result = engine.match(request);
-    expect(result.filter).not.toBeUndefined();
+    expect(result.filter).not.to.be.undefined;
     if (
       result.filter !== undefined &&
       result.filter.rawLine !== undefined &&
       !result.filter.rawLine.includes('<+>')
     ) {
-      expect(redirects).toContainEqual(result.filter.rawLine);
+      expect(redirects).to.include(result.filter.rawLine);
     }
 
-    expect(result.exception).toBeUndefined();
-    expect(result.redirect).not.toBeUndefined();
-    expect(result.match).toBeTruthy();
+    expect(result.exception).to.be.undefined;
+    expect(result.redirect).not.to.be.undefined;
+    expect(result.match).to.be.true;
   }
 
-  expect(matchingFilters).toContain(filter.rawLine);
+  expect(matchingFilters).to.include(filter.rawLine);
   // });
 }
 
@@ -156,12 +161,12 @@ describe('#FiltersEngine', () => {
     // Enabled
     expect(
       Engine.parse('||foo.com', { loadNetworkFilters: true }).match(request).match,
-    ).toBeTruthy();
+    ).to.be.true;
 
     // Disabled
     expect(
       Engine.parse('||foo.com', { loadNetworkFilters: false }).match(request).match,
-    ).toBeFalsy();
+    ).to.be.false;
   });
 
   it('cosmetic filters are disabled', () => {
@@ -172,7 +177,7 @@ describe('#FiltersEngine', () => {
         hostname: 'foo.com',
         url: 'https://foo.com',
       }),
-    ).toEqual({
+    ).to.eql({
       active: true,
       extended: [],
       scripts: [],
@@ -186,7 +191,7 @@ describe('#FiltersEngine', () => {
         hostname: 'foo.com',
         url: 'https://foo.com',
       }),
-    ).toEqual({
+    ).to.eql({
       active: false,
       extended: [],
       scripts: [],
@@ -202,7 +207,7 @@ describe('#FiltersEngine', () => {
             url: 'https://foo.com',
           }),
         ),
-      ).toBeUndefined();
+      ).to.be.undefined;
     });
 
     it('network filters are disabled', () => {
@@ -212,7 +217,7 @@ describe('#FiltersEngine', () => {
             url: 'https://foo.com',
           }),
         ),
-      ).toBeUndefined();
+      ).to.be.undefined;
     });
 
     it('request not supported', () => {
@@ -223,7 +228,7 @@ describe('#FiltersEngine', () => {
             url: 'ftp://foo.com',
           }),
         ),
-      ).toBeUndefined();
+      ).to.be.undefined;
 
       // Not document request
       expect(
@@ -233,7 +238,7 @@ describe('#FiltersEngine', () => {
             url: 'ftp://foo.com',
           }),
         ),
-      ).toBeUndefined();
+      ).to.be.undefined;
     });
 
     it('does not match request', () => {
@@ -243,7 +248,7 @@ describe('#FiltersEngine', () => {
             url: 'https://foo.com',
           }),
         ),
-      ).toBeUndefined();
+      ).to.be.undefined;
     });
 
     it('matches request (1 policy)', () => {
@@ -253,7 +258,7 @@ describe('#FiltersEngine', () => {
             url: 'https://foo.com',
           }),
         ),
-      ).toEqual('bar');
+      ).to.equal('bar');
     });
 
     it('matches request (2 policy)', () => {
@@ -267,9 +272,9 @@ $csp=baz,domain=bar.com
         }),
       );
 
-      expect(policies).not.toBeUndefined();
+      expect(policies).not.to.be.undefined;
       if (policies !== undefined) {
-        expect(policies.split('; ').sort()).toEqual(['bar', 'baz']);
+        expect(policies.split('; ').sort()).to.eql(['bar', 'baz']);
       }
     });
 
@@ -285,7 +290,7 @@ $csp=baz,domain=bar.com
             url: 'https://foo.com',
           }),
         ),
-      ).toEqual('bar');
+      ).to.equal('bar');
     });
 
     it('exception global exception', () => {
@@ -301,7 +306,7 @@ $csp=baz,domain=bar.com
             url: 'https://foo.com',
           }),
         ),
-      ).toBeUndefined();
+      ).to.be.undefined;
     });
   });
 
@@ -315,7 +320,7 @@ $csp=baz,domain=bar.com
     // - new filter in Engine.update
     // - works after serialization/deserialization?
     it('does not match on its own', () => {
-      expect(createEngine('||foo.com$badfilter').match(request).match).toBe(false);
+      expect(createEngine('||foo.com$badfilter').match(request).match).to.be.false;
     });
 
     it('cancels filter with same ID', () => {
@@ -324,7 +329,7 @@ $csp=baz,domain=bar.com
 ||foo.com$domain=bar.com|foo.com,badfilter
 ||foo.com$domain=foo.com|bar.com
 `).match(request).match,
-      ).toBe(false);
+      ).to.be.false;
     });
 
     it('does not cancel similar filter', () => {
@@ -333,31 +338,31 @@ $csp=baz,domain=bar.com
 ||foo.com$domain=bar.com|foo.com,badfilter
 ||foo.com$domain=foo.com|bar.com,image
 `).match(request).match,
-      ).toBe(true);
+      ).to.be.true;
     });
 
     it('works with update as well', () => {
       const badfilter = NetworkFilter.parse('||foo.com$domain=bar.com|foo.com,badfilter');
-      expect(badfilter).not.toBeNull();
+      expect(badfilter).not.to.be.null;
       if (badfilter === null) {
         return;
       }
 
       // Initially, no $badfilter
       const engine = Engine.parse('||foo.com$domain=foo.com|bar.com', { debug: true });
-      expect(engine.match(request).match).toBe(true);
+      expect(engine.match(request).match).to.be.true;
 
       // Add $badfilter
       engine.update({
         newNetworkFilters: [badfilter],
       });
-      expect(engine.match(request).match).toBe(false);
+      expect(engine.match(request).match).to.be.false;
 
       // Remove $badfilter
       engine.update({
         removedNetworkFilters: [badfilter.getId()],
       });
-      expect(engine.match(request).match).toBe(true);
+      expect(engine.match(request).match).to.be.true;
     });
   });
 
@@ -382,13 +387,13 @@ $csp=baz,domain=bar.com
       const { filter, exception, match, redirect } = createEngineWithResource([
         '||foo.com$image,redirect=foo.js',
       ], 'foo.js').match(request);
-      expect(match).toBe(true);
-      expect(exception).toBeUndefined();
-      expect(filter).not.toBeUndefined();
-      expect((filter as NetworkFilter).toString()).toBe(
+      expect(match).to.be.true;
+      expect(exception).to.be.undefined;
+      expect(filter).not.to.be.undefined;
+      expect((filter as NetworkFilter).toString()).to.equal(
         '||foo.com$image,redirect=foo.js',
       );
-      expect(redirect).toEqual({
+      expect(redirect).to.eql({
         body: 'foo.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,Zm9vLmpz',
@@ -399,10 +404,10 @@ $csp=baz,domain=bar.com
       const { filter, exception, match, redirect } = createEngineWithResource([
         '||foo.com$image,redirect-rule=foo.js',
       ], 'foo.js').match(request);
-      expect(match).toBe(false);
-      expect(exception).toBeUndefined();
-      expect(filter).toBeUndefined();
-      expect(redirect).toBeUndefined();
+      expect(match).to.be.false;
+      expect(exception).to.be.undefined;
+      expect(filter).to.be.undefined;
+      expect(redirect).to.be.undefined;
     });
 
     it('redirect-rule matches if request was blocked', () => {
@@ -410,13 +415,13 @@ $csp=baz,domain=bar.com
         '||foo.com$image,redirect-rule=foo.js',
         '||foo.com$image',
       ], 'foo.js').match(request);
-      expect(match).toBe(true);
-      expect(exception).toBeUndefined();
-      expect(filter).not.toBeUndefined();
-      expect((filter as NetworkFilter).toString()).toBe(
+      expect(match).to.be.true;
+      expect(exception).to.be.undefined;
+      expect(filter).not.to.be.undefined;
+      expect((filter as NetworkFilter).toString()).to.equal(
         '||foo.com$image,redirect-rule=foo.js',
       );
-      expect(redirect).toEqual({
+      expect(redirect).to.eql({
         body: 'foo.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,Zm9vLmpz',
@@ -429,16 +434,16 @@ $csp=baz,domain=bar.com
         '||foo.com$image',
         '||foo.com$image,redirect=none',
       ], 'foo.js').match(request);
-      expect(match).toBe(false);
-      expect(exception).not.toBeUndefined();
-      expect((exception as NetworkFilter).toString()).toBe(
+      expect(match).to.be.false;
+      expect(exception).not.to.be.undefined;
+      expect((exception as NetworkFilter).toString()).to.equal(
         '||foo.com$image,redirect=none',
       );
-      expect(filter).not.toBeUndefined();
-      expect((filter as NetworkFilter).toString()).toBe(
+      expect(filter).not.to.be.undefined;
+      expect((filter as NetworkFilter).toString()).to.equal(
         '||foo.com$image,redirect-rule=foo.js',
       );
-      expect(redirect).toBeUndefined();
+      expect(redirect).to.be.undefined;
     });
 
     it('redirect=none cancels redirect', () => {
@@ -447,16 +452,16 @@ $csp=baz,domain=bar.com
         '||foo.com$image',
         '||foo.com$image,redirect=none',
       ], 'foo.js').match(request);
-      expect(match).toBe(false);
-      expect(exception).not.toBeUndefined();
-      expect((exception as NetworkFilter).toString()).toBe(
+      expect(match).to.be.false;
+      expect(exception).not.to.be.undefined;
+      expect((exception as NetworkFilter).toString()).to.equal(
         '||foo.com$image,redirect=none',
       );
-      expect(filter).not.toBeUndefined();
-      expect((filter as NetworkFilter).toString()).toBe(
+      expect(filter).not.to.be.undefined;
+      expect((filter as NetworkFilter).toString()).to.equal(
         '||foo.com$image,redirect=foo.js',
       );
-      expect(redirect).toBeUndefined();
+      expect(redirect).to.be.undefined;
     });
 
     it('exception rule also cancels redirect', () => {
@@ -466,16 +471,16 @@ $csp=baz,domain=bar.com
         '@@||foo.com$image',
       ], 'foo.js').match(request);
 
-      expect(match).toBe(false);
-      expect(exception).not.toBeUndefined();
-      expect((exception as NetworkFilter).toString()).toBe(
+      expect(match).to.be.false;
+      expect(exception).not.to.be.undefined;
+      expect((exception as NetworkFilter).toString()).to.equal(
         '@@||foo.com$image',
       );
-      expect(filter).not.toBeUndefined();
-      expect((filter as NetworkFilter).toString()).toBe(
+      expect(filter).not.to.be.undefined;
+      expect((filter as NetworkFilter).toString()).to.equal(
         '||foo.com$image,redirect=foo.js',
       );
-      expect(redirect).toBeUndefined();
+      expect(redirect).to.be.undefined;
     });
 
 
@@ -523,7 +528,7 @@ $csp=baz,domain=bar.com
       for (let j = 0; j < filters.length; j += 1) {
         const filter = filters[j];
         const parsed = NetworkFilter.parse(filter, true);
-        expect(parsed).not.toBeNull();
+        expect(parsed).not.to.be.null;
         if (parsed !== null) {
           parsedFilters.push(parsed);
 
@@ -610,7 +615,7 @@ $csp=baz,domain=bar.com
             hostname: 'foo.com',
             url: 'https://foo.com',
           }).scripts,
-        ).toEqual(['arg1']);
+        ).to.eql(['arg1']);
       });
 
       it('script missing', () => {
@@ -620,7 +625,7 @@ $csp=baz,domain=bar.com
             hostname: 'foo.com',
             url: 'https://foo.com',
           }).scripts,
-        ).toEqual([]);
+        ).to.eql([]);
       });
     });
 
@@ -635,7 +640,7 @@ foo.com##selector1
 `,
           ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
             .styles,
-        ).toBe('');
+        ).to.equal('');
       });
     });
 
@@ -648,7 +653,7 @@ foo.com##selector1
             hostname: 'foo.com',
             url: 'https://foo.com',
           }).styles,
-        ).not.toBe('');
+        ).not.to.equal('');
       });
 
       it('disables specific cosmetics if domain matches', () => {
@@ -660,7 +665,7 @@ foo.com##selector1
 `,
           ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
             .styles,
-        ).toBe('');
+        ).to.equal('');
       });
 
       it('allows specific cosmetics if $specifichide', () => {
@@ -673,7 +678,7 @@ foo.com##selector
 `,
           ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
             .styles,
-        ).not.toBe('');
+        ).not.to.equal('');
       });
 
       it('allows specific cosmetics if $specifichide,important', () => {
@@ -686,7 +691,7 @@ foo.com##selector
 `,
           ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
             .styles,
-        ).not.toBe('');
+        ).not.to.equal('');
       });
 
       it('disables specific cosmetics if @@$specifichide,important', () => {
@@ -701,7 +706,7 @@ foo.com###selector
 `,
           ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
             .styles,
-        ).toBe('');
+        ).to.equal('');
       });
 
       it('disabling specific hides does not impact scriptlets', () => {
@@ -714,7 +719,7 @@ foo.com###selector
           domain: 'foo.com',
           hostname: 'foo.com',
           url: 'https://foo.com',
-        }).scripts).toHaveLength(1)
+        }).scripts).to.have.lengthOf(1)
       });
     });
 
@@ -726,7 +731,7 @@ foo.com###selector
             hostname: 'foo.com',
             url: 'https://foo.com',
           }).styles,
-        ).not.toBe('');
+        ).not.to.equal('');
       });
 
       it('disables generic cosmetics if domain matches', () => {
@@ -739,7 +744,7 @@ foo.com###selector
 `,
           ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
             .styles,
-        ).toBe('');
+        ).to.equal('');
       });
 
       it('allows generic cosmetics if $generichide', () => {
@@ -752,7 +757,7 @@ foo.com###selector
 `,
           ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
             .styles,
-        ).not.toBe('');
+        ).not.to.equal('');
       });
 
       it('allows generic cosmetics if $generichide,important', () => {
@@ -765,7 +770,7 @@ foo.com###selector
 `,
           ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
             .styles,
-        ).not.toBe('');
+        ).not.to.equal('');
       });
 
       it('disables generic cosmetics if @@$generichide,important', () => {
@@ -780,7 +785,7 @@ foo.com###selector
 `,
           ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
             .styles,
-        ).toBe('');
+        ).to.equal('');
       });
     });
 
@@ -793,7 +798,7 @@ foo.com###selector
 ##selector1 :style(foo)`,
         ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
           .styles,
-      ).toEqual('selector ,\nselector1  { foo }\n\nselector  { bar }');
+      ).to.equal('selector ,\nselector1  { foo }\n\nselector  { bar }');
     });
 
     [
@@ -1309,8 +1314,8 @@ foo.com###selector
             ids,
           });
 
-          expect(scripts).toHaveLength(injections.length);
-          expect(scripts.sort()).toEqual(injections.sort());
+          expect(scripts).to.have.lengthOf(injections.length);
+          expect(scripts.sort()).to.eql(injections.sort());
 
           // Parse stylesheets to get selectors back
           const selectors: string[] = [];
@@ -1325,10 +1330,73 @@ foo.com###selector
             }
           }
 
-          expect(selectors).toHaveLength(matches.length);
-          expect(selectors.sort()).toEqual(matches.sort());
+          expect(selectors).to.have.lengthOf(matches.length);
+          expect(selectors.sort()).to.eql(matches.sort());
         });
       },
     );
   });
+});
+
+describe('diff updates', () => {
+  function testUpdates(name: string, baseFilters: string[]): void {
+    describe(name, () => {
+      const base = Engine.parse(baseFilters.join('\n'), {
+        debug: false,
+        enableCompression: false,
+        enableOptimizations: false,
+        integrityCheck: false,
+        loadCosmeticFilters: false,
+        loadGenericCosmeticsFilters: false,
+        loadNetworkFilters: true,
+      });
+      const baseSerialized = base.serialize();
+
+      const getSerialized = () => baseSerialized.slice();
+      const getEngine = () => Engine.deserialize(getSerialized());
+
+      it('stays the same with empty update', () => {
+        const engine = getEngine();
+        const updated = engine.updateFromDiff({});
+        expect(updated).to.be.false;
+        expect(typedArrayEqual(engine.serialize(), getSerialized())).to.be.true;
+      });
+
+      it('stays the same with adding removing same filters', () => {
+        const filtersAdded = [
+          '||hostname*^bar|$image,domain=foo.com|baz.co.uk',
+          '||hostname*^bar|$image,domain=foo.com|baz.co.uk,generichide',
+
+          '||hostame*^bar|$image,domain=foo.com|baz.co.uk,badfilter',
+          '||hostame*^bar|$image,domain=foo.com|baz.co.uk',
+
+          'ads$csp=foo',
+          'tracker$redirect=foo.js',
+
+          '@@||f*o*o.com^$~media',
+          '/very_important/ads.js$important,script',
+
+          'foo.com,bar.*##.selector',
+          '#@#.selector',
+          '##+js(inject.js,arg1,arg2)',
+        ];
+        const filtersRemoved = Array.from(filtersAdded);
+
+        const engine = getEngine();
+
+        // Add filters
+        let updated = engine.updateFromDiff({ added: filtersAdded });
+        expect(updated).to.be.true;
+        expect(typedArrayEqual(engine.serialize(), getSerialized())).to.be.false;
+
+        // Remove same filters
+        updated = engine.updateFromDiff({ removed: filtersRemoved });
+        expect(updated).to.be.true;
+        expect(typedArrayEqual(engine.serialize(), getSerialized())).to.be.true;
+      });
+    });
+  }
+
+  testUpdates('empty engine', []);
+  testUpdates('easylist engine', loadEasyListFilters());
 });

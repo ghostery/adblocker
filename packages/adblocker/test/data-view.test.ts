@@ -6,6 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { expect } from 'chai';
+import 'mocha';
+
 import { StaticDataView } from '../src/data-view';
 import { getNaughtyStrings } from './utils';
 
@@ -13,12 +16,12 @@ describe('#StaticDataView', () => {
   describe('#slice', () => {
     it('returns empty buffer if no data and empty initial size', () => {
       const view = StaticDataView.empty({ enableCompression: false });
-      expect(view.slice()).toHaveLength(0);
+      expect(view.slice()).to.have.lengthOf(0);
     });
 
     it('returns empty buffer if no data', () => {
       const view = StaticDataView.allocate(10, { enableCompression: false });
-      expect(view.slice()).toHaveLength(0);
+      expect(view.slice()).to.have.lengthOf(0);
     });
   });
 
@@ -28,7 +31,7 @@ describe('#StaticDataView', () => {
       view.seekZero();
       view.pushASCII(str);
       view.seekZero();
-      expect(view.getASCII()).toEqual(str);
+      expect(view.getASCII()).to.equal(str);
     };
 
     it('empty string', () => {
@@ -83,7 +86,7 @@ describe('#StaticDataView', () => {
       view.seekZero();
       view.pushUTF8(str);
       view.seekZero();
-      expect(view.getUTF8()).toEqual(str);
+      expect(view.getUTF8()).to.equal(str);
     };
 
     it('empty string', () => {
@@ -137,31 +140,31 @@ describe('#StaticDataView', () => {
     it('empty view', () => {
       const view = StaticDataView.allocate(0, { enableCompression: false });
       const v = view.getUint32ArrayView(0);
-      expect(v).toHaveLength(0);
-      expect(view.slice()).toHaveLength(0);
+      expect(v).to.have.lengthOf(0);
+      expect(view.slice()).to.have.lengthOf(0);
     });
 
     it('should allocate buffer of size 1', () => {
       const view = StaticDataView.allocate(4, { enableCompression: false });
       const v = view.getUint32ArrayView(1);
-      expect(v).toHaveLength(1);
-      expect(view.slice()).toHaveLength(4);
+      expect(v).to.have.lengthOf(1);
+      expect(view.slice()).to.have.lengthOf(4);
     });
 
     it('should align', () => {
       const view = StaticDataView.allocate(8, { enableCompression: false });
       view.setPos(3);
       const v = view.getUint32ArrayView(1);
-      expect(v).toHaveLength(1);
-      expect(view.slice()).toHaveLength(8);
+      expect(v).to.have.lengthOf(1);
+      expect(view.slice()).to.have.lengthOf(8);
     });
 
     it('should not align if already aligned', () => {
       const view = StaticDataView.allocate(8, { enableCompression: false });
       view.setPos(4);
       const v = view.getUint32ArrayView(1);
-      expect(v).toHaveLength(1);
-      expect(view.slice()).toHaveLength(8);
+      expect(v).to.have.lengthOf(1);
+      expect(view.slice()).to.have.lengthOf(8);
     });
 
     it('should write in original buffer', () => {
@@ -170,9 +173,9 @@ describe('#StaticDataView', () => {
       v[0] = Number.MAX_SAFE_INTEGER >>> 0;
       view.seekZero();
       v = view.getUint32ArrayView(1);
-      expect(v[0]).toBe(Number.MAX_SAFE_INTEGER >>> 0);
-      expect(view.pos).toBe(4);
-      expect(view.slice()).toEqual(new Uint8Array([255, 255, 255, 255]));
+      expect(v[0]).to.equal(Number.MAX_SAFE_INTEGER >>> 0);
+      expect(view.pos).to.equal(4);
+      expect(view.slice()).to.eql(new Uint8Array([255, 255, 255, 255]));
     });
 
     it('serialize/deserialize', () => {
@@ -184,14 +187,14 @@ describe('#StaticDataView', () => {
       v[2] = Number.MAX_SAFE_INTEGER >>> 0;
       v[3] = 3;
       const cropped = view.slice();
-      expect(cropped).toEqual(
+      expect(cropped).to.eql(
         new Uint8Array([1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 255, 255, 255, 255, 3, 0, 0, 0]),
       );
 
       // Reload
       const newView = StaticDataView.fromUint8Array(cropped, { enableCompression: false });
-      expect(newView.getBool()).toBe(true);
-      expect(newView.getUint32ArrayView(4)).toEqual(
+      expect(newView.getBool()).to.be.true;
+      expect(newView.getUint32ArrayView(4)).to.eql(
         new Uint32Array([1, 2, Number.MAX_SAFE_INTEGER >>> 0, 3]),
       );
     });

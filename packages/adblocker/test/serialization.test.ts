@@ -6,7 +6,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { loadAllLists, loadResources, typedArrayEqual } from './utils';
+import { expect } from 'chai';
+import 'mocha';
+
+import { allLists, loadResources, typedArrayEqual } from './utils';
 
 import Config from '../src/config';
 import { StaticDataView } from '../src/data-view';
@@ -18,7 +21,7 @@ import { parseFilters } from '../src/lists';
 
 describe('Serialization', () => {
   const { cosmeticFilters, networkFilters } = parseFilters(
-    loadAllLists(),
+    allLists,
     new Config({ debug: true }),
   );
 
@@ -29,17 +32,17 @@ describe('Serialization', () => {
       config.serialize(buffer);
 
       // Check size
-      expect(buffer.slice()).toHaveLength(config.getSerializedSize());
+      expect(buffer.slice()).to.have.lengthOf(config.getSerializedSize());
 
       // Check deserialization
       buffer.seekZero();
-      expect(Config.deserialize(buffer)).toEqual(config);
+      expect(Config.deserialize(buffer)).to.eql(config);
     });
   });
 
   describe('filters', () => {
     const buffer = StaticDataView.allocate(1000000, { enableCompression: false });
-    const checkFilterSerialization = (Filter: any, filter: IFilter) => {
+    const checkFilterSerialization = (Filter: { deserialize(buffer: StaticDataView): IFilter }, filter: IFilter) => {
       // Keep track of original ID to make sure it's preserved after lazy
       // attributes are set and filter is serialized/deserialized.
       const originalId = filter.getId();
@@ -47,13 +50,15 @@ describe('Serialization', () => {
       // Serialize filter
       buffer.seekZero();
       filter.serialize(buffer);
-      buffer.seekZero();
 
       // Reload filter
+      buffer.seekZero();
       const deserialized = Filter.deserialize(buffer);
-      expect(deserialized.id).toBeUndefined();
-      expect(deserialized.getId()).toBe(originalId);
-      expect(deserialized).toEqual(filter);
+
+      // @ts-ignore
+      expect(deserialized.id).to.be.undefined;
+      expect(deserialized.getId()).to.equal(originalId);
+      expect(deserialized).to.eql(filter);
     };
 
     it('cosmetic', () => {
@@ -77,9 +82,9 @@ describe('Serialization', () => {
       serialized[0] = 1; // override version
       expect(() => {
         Engine.deserialize(serialized);
-      }).toThrow();
+      }).to.throw();
       serialized[0] = version;
-      expect(Engine.deserialize(serialized)).toEqual(engine);
+      expect(Engine.deserialize(serialized)).to.eql(engine);
     });
 
     it('check integrity', () => {
@@ -96,12 +101,12 @@ describe('Serialization', () => {
         // Expect engine to throw
         expect(() => {
           Engine.deserialize(serialized);
-        }).toThrow();
+        }).to.throw();
 
         serialized[i] = value;
       }
 
-      expect(Engine.deserialize(serialized)).toEqual(engine);
+      expect(Engine.deserialize(serialized)).to.eql(engine);
     });
 
     it('disable integrity check', () => {
@@ -114,10 +119,10 @@ describe('Serialization', () => {
 
       expect(() => {
         Engine.deserialize(serialized);
-      }).toThrow();
+      }).to.throw();
 
       serialized[end] = value;
-      expect(Engine.deserialize(serialized)).toEqual(engine);
+      expect(Engine.deserialize(serialized)).to.eql(engine);
     });
 
     it('handles full engine', () => {
@@ -132,10 +137,10 @@ describe('Serialization', () => {
       const baseSerialized = engine.serialize();
 
       let deserialized = Engine.deserialize(baseSerialized);
-      expect(deserialized).toEqual(engine);
+      expect(deserialized).to.eql(engine);
 
       let serialized = deserialized.serialize();
-      expect(typedArrayEqual(serialized, baseSerialized)).toBe(true);
+      expect(typedArrayEqual(serialized, baseSerialized)).to.be.true;
 
       // Perform several deserializations in a row. Testing this is needed to
       // make sure the low-level typed array manipulation do not corrupt the
@@ -143,7 +148,7 @@ describe('Serialization', () => {
       for (let i = 0; i < 3; i += 1) {
         deserialized = Engine.deserialize(serialized);
         serialized = deserialized.serialize();
-        expect(typedArrayEqual(serialized, baseSerialized)).toBe(true);
+        expect(typedArrayEqual(serialized, baseSerialized)).to.be.true;
       }
     });
   });

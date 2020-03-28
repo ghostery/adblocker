@@ -57,8 +57,8 @@
     "lint": "lerna run --parallel lint",
     "watch": "tsc --build ./tsconfig.project.json --watch",
     "build": "tsc --build ./tsconfig.project.json && lerna run build",
-    "bundle": "lerna run bundle",
-    "test": "lerna run --concurrency 1 test",
+    "bundle": "lerna run --concurrency 2 bundle",
+    "test": "lerna run --concurrency 2 test",
     "clean": "lerna run --parallel clean && lerna clean --yes",
     "release": "auto shipit"
   },
@@ -71,7 +71,8 @@
     "benchmark": "^2.1.4",
     "chalk": "^3.0.0",
     "lerna": "^3.20.2",
-    "prettier": "^2.0.0"
+    "prettier": "^2.0.0",
+    "tslint-no-unused-expression-chai": "^0.1.4"
   },
   "dependencies": {},
   "auto": {

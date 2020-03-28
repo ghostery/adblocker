@@ -6,15 +6,18 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { expect } from 'chai';
+import 'mocha';
+
 import { StaticDataView } from '../src/data-view';
 import CosmeticFilter from '../src/filters/cosmetic';
 import IFilter from '../src/filters/interface';
 import NetworkFilter from '../src/filters/network';
 import { parseFilters } from '../src/lists';
-import { loadAllLists } from './utils';
+import { allLists } from './utils';
 
 describe('Make sure size estimate is accurate', () => {
-  const { cosmeticFilters, networkFilters } = parseFilters(loadAllLists(), { debug: true });
+  const { cosmeticFilters, networkFilters } = parseFilters(allLists, { debug: true });
 
   function testSizeEstimate<T extends IFilter>(filters: T[], compression: boolean): void {
     const buffer = StaticDataView.allocate(1000000, { enableCompression: compression });
@@ -28,8 +31,8 @@ describe('Make sure size estimate is accurate', () => {
       filter.serialize(buffer);
       const realSize = buffer.pos;
 
-      if (realSize !== estimate) {
-        throw new Error(`${filter.toString()} got ${estimate} expected ${realSize}`);
+      if (estimate !== realSize) {
+        expect(estimate, filter.toString()).to.equal(realSize);
       }
     }
   }

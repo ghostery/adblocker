@@ -6,6 +6,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import * as chaiAsPromised from 'chai-as-promised';
+import { expect, use } from 'chai';
+import 'mocha';
+
+use(chaiAsPromised);
+
 import { Fetch, fetchWithRetry } from '../src/fetch';
 
 describe('#fetchWithRetry', () => {
@@ -26,27 +32,28 @@ describe('#fetchWithRetry', () => {
 
   it('succeeds on first try', async () => {
     const response = await fetchWithRetry(fakeFetchFactory(0), 'https://example.com');
-    expect(response.text()).resolves.toEqual('0');
+    expect(await response.text()).to.equal('0');
   });
 
   it('succeeds on second try', async () => {
     const response = await fetchWithRetry(fakeFetchFactory(1), 'https://example.com');
-    expect(response.text()).resolves.toEqual('0');
+    expect(await response.text()).to.equal('0');
   });
 
   it('succeeds on third try', async () => {
     const response = await fetchWithRetry(fakeFetchFactory(2), 'https://example.com');
-    expect(response.text()).resolves.toEqual('0');
+    expect(await response.text()).to.equal('0');
   });
 
   it('succeeds on fourth try', async () => {
     const response = await fetchWithRetry(fakeFetchFactory(3), 'https://example.com');
-    expect(response.text()).resolves.toEqual('0');
+    expect(await response.text()).to.equal('0');
   });
 
   it('fails on fifth try', async () => {
-    await expect(fetchWithRetry(fakeFetchFactory(4), 'https://example.com')).rejects.toEqual(
-      new Error('Failed: 1'),
+    await expect(fetchWithRetry(fakeFetchFactory(4), 'https://example.com')).to.be.rejectedWith(
+      Error,
+      'Failed: 1',
     );
   });
 });

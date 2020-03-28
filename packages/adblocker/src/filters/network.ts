@@ -47,6 +47,62 @@ function isAllowedHostname(ch: number): boolean {
   );
 }
 
+const NORMALIZE_OPTIONS: { [option: string]: string; } = {
+  'document': 'doc',
+  'first-party': '1p',
+  'generichide': 'ghide',
+  'object-subrequest': 'object',
+  'stylesheet': 'css',
+  'subdocument': 'frame',
+  'third-party': '3p',
+  'xmlhttprequest': 'xhr',
+  '~first-party': '3p',
+  '~third-party': '1p',
+  'all': '',
+};
+
+/**
+ * Normalize a raw filter by replacing options with their canonical forms. For
+ * example `||foo.com$stylesheet,first-party,xhr` would be normalized to
+ * `||foo.com$css,1p,xhr`.
+ */
+const REGEX = /all|~third-party|~first-party|third-party|first-party|object-subrequest|stylesheet|subdocument|xmlhttprequest|document|generichide/g;
+export function normalizeRawFilterOptions(rawFilter: string): string {
+  rawFilter = rawFilter.toLowerCase();
+
+  let indexOfOptions = rawFilter.lastIndexOf('$');
+  if (indexOfOptions === -1) {
+    return rawFilter;
+  }
+
+  // Remove trailing '*' if possible
+  if (indexOfOptions !== 0 && rawFilter[indexOfOptions - 1] === '*') {
+    rawFilter = rawFilter.slice(0, indexOfOptions - 1) + rawFilter.slice(indexOfOptions);
+    indexOfOptions -= 1;
+  }
+
+  // Normalize options
+  const options = rawFilter.slice(indexOfOptions);
+  const normalizedOptions = options.replace(REGEX, (option) => {
+    const normalized = NORMALIZE_OPTIONS[option];
+    if (normalized === undefined) {
+      return option;
+    }
+    return normalized;
+  });
+
+  if (options === normalizedOptions) {
+    return rawFilter;
+  }
+
+  if (normalizedOptions === '$') {
+    return rawFilter.slice(0, indexOfOptions);
+  }
+
+  return rawFilter.slice(0, indexOfOptions) + normalizedOptions;
+}
+
+
 /**
  * Masks used to store options of network filters in a bitmask.
  */
@@ -556,8 +612,18 @@ export default class NetworkFilter implements IFilter {
             let optionMask: number = 0;
             switch (option) {
               case 'all':
-                // We implement 'all' with a different semantic than uBlock
-                // Origin here. It will just match any request type for now.
+                if (negation) {
+                  return null;
+                }
+
+                // NOTE: Currently a filter cannot be both blocking and CSP, so
+                // we will have to create multiple filters to keep the semantics
+                // of 'all'.
+                // mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
+                // csp = [
+                //   "script-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:",
+                //   "font-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:",
+                // ].join('; ');
                 break;
               case 'image':
                 optionMask = NETWORK_FILTER_MASK.fromImage;

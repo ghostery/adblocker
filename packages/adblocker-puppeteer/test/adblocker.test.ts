@@ -1,5 +1,9 @@
+import { expect } from 'chai';
+import 'mocha';
+
 import * as puppeteer from 'puppeteer';
-import { fromPuppeteerDetails } from './adblocker';
+
+import { fromPuppeteerDetails } from '../adblocker';
 
 describe('#fromPuppeteerDetails', () => {
   const baseFrame: Partial<puppeteer.Frame> = {
@@ -13,20 +17,20 @@ describe('#fromPuppeteerDetails', () => {
   };
 
   it('gets sourceUrl from frame', () => {
-    expect(fromPuppeteerDetails(baseRequest as puppeteer.Request)).toMatchObject({
+    expect(fromPuppeteerDetails(baseRequest as puppeteer.Request)).to.deep.include({
       sourceDomain: 'source.com',
       sourceHostname: 'sub.source.com',
     });
   });
 
   it('gets type from resourceType', () => {
-    expect(fromPuppeteerDetails(baseRequest as puppeteer.Request)).toMatchObject({
+    expect(fromPuppeteerDetails(baseRequest as puppeteer.Request)).to.deep.include({
       type: 'script',
     });
   });
 
   it('gets url from url', () => {
-    expect(fromPuppeteerDetails(baseRequest as puppeteer.Request)).toMatchObject({
+    expect(fromPuppeteerDetails(baseRequest as puppeteer.Request)).to.deep.include({
       domain: 'url.com',
       hostname: 'sub.url.com',
       url: 'https://sub.url.com',

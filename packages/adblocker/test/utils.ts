@@ -19,7 +19,7 @@ function readAsset(filepath: string) {
   return fs.readFileSync(path.resolve(__dirname, '../', filepath), 'utf-8');
 }
 
-export function loadAllLists() {
+export const allLists = (() => {
   return [
     'assets/easylist/easylist.txt',
     'assets/easylist/easylistgermany.txt',
@@ -35,7 +35,7 @@ export function loadAllLists() {
   ]
     .map(readAsset)
     .join('\n');
-}
+})();
 
 export function loadResources() {
   return readAsset('assets/ublock-origin/resources.txt');
