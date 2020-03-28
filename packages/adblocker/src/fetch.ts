@@ -51,18 +51,6 @@ function fetchResource(fetch: Fetch, url: string): Promise<string> {
   return fetchWithRetry(fetch, url).then((response) => response.text());
 }
 
-export function fetchPrebuilt(
-  fetch: Fetch,
-  configUrl: string,
-  engineVersion: number,
-): Promise<Uint8Array> {
-  return fetchWithRetry(fetch, configUrl)
-    .then((response) => response.json())
-    .then((allowedLists) => fetchWithRetry(fetch, allowedLists.engines[engineVersion].url))
-    .then((response) => response.arrayBuffer())
-    .then((buffer) => new Uint8Array(buffer));
-}
-
 const PREFIX = 'https://raw.githubusercontent.com/cliqz-oss/adblocker/master/packages/adblocker/assets';
 
 export const adsLists = [

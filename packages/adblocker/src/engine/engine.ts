@@ -14,7 +14,6 @@ import {
   adsLists,
   Fetch,
   fetchLists,
-  fetchPrebuilt,
   fetchResources,
   fullLists,
 } from '../fetch';
@@ -153,20 +152,7 @@ export default class FilterEngine extends EventEmitter<
     fetchImpl: Fetch = fetch,
     caching?: Caching,
   ): Promise<InstanceType<T>> {
-    return this.fromCached(
-      () =>
-        fetchPrebuilt(
-          fetchImpl,
-          'https://cdn.cliqz.com/adblocker/configs/desktop-ads/allowed-lists.json',
-          ENGINE_VERSION,
-        )
-          .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
-          .catch(() => {
-            console.log('failed downloading pre-built, fallback to fetching lists');
-            return this.fromLists(fetchImpl, adsLists) as Promise<InstanceType<T>>;
-          }),
-      caching,
-    );
+    return this.fromLists(fetchImpl, adsLists, {}, caching);
   }
 
   /**
@@ -178,20 +164,7 @@ export default class FilterEngine extends EventEmitter<
     fetchImpl: Fetch = fetch,
     caching?: Caching,
   ): Promise<InstanceType<T>> {
-    return this.fromCached(
-      () =>
-        fetchPrebuilt(
-          fetchImpl,
-          'https://cdn.cliqz.com/adblocker/configs/desktop-ads-trackers/allowed-lists.json',
-          ENGINE_VERSION,
-        )
-          .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
-          .catch(() => {
-            console.log('failed downloading pre-built, fallback to fetching lists');
-            return this.fromLists(fetchImpl, adsAndTrackingLists) as Promise<InstanceType<T>>;
-          }),
-      caching,
-    );
+    return this.fromLists(fetchImpl, adsAndTrackingLists, {}, caching);
   }
 
   /**
@@ -203,20 +176,7 @@ export default class FilterEngine extends EventEmitter<
     fetchImpl: Fetch = fetch,
     caching?: Caching,
   ): Promise<InstanceType<T>> {
-    return this.fromCached(
-      () =>
-        fetchPrebuilt(
-          fetchImpl,
-          'https://cdn.cliqz.com/adblocker/configs/desktop-full/allowed-lists.json',
-          ENGINE_VERSION,
-        )
-          .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
-          .catch(() => {
-            console.log('failed downloading pre-built, fallback to fetching lists');
-            return this.fromLists(fetchImpl, fullLists) as Promise<InstanceType<T>>;
-          }),
-      caching,
-    );
+    return this.fromLists(fetchImpl, fullLists, {}, caching);
   }
 
   public static parse<T extends FilterEngine>(
