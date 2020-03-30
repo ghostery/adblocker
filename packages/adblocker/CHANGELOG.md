@@ -1,3 +1,16 @@
+# v1.13.0 (Mon Mar 30 2020)
+
+#### :house: Internal
+
+- Update local assets [#685](https://github.com/cliqz-oss/adblocker/pull/685) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#681](https://github.com/cliqz-oss/adblocker/pull/681) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### Authors: 1
+
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+
+---
+
 # v1.12.3 (Sat Mar 28 2020)
 
 #### :nail_care: Polish

@@ -1,3 +1,40 @@
+# v1.13.0 (Mon Mar 30 2020)
+
+### Release Notes
+
+_From #690_
+
+PuppeteerBlocker is now more powerful and will be able to better block ads on most websites. Firstly, a bug was fixed which prevented injection of cosmetics in the main frame of pages. Secondly, PuppeteerBlocker will now monitor the DOM for changes to make sure that ads which load later
+are still "handled" (if you know what I mean). Lastly, PuppeteerBlocker is now able to look for advertisement iframes and remove them from the DOM completely, no more blank spaces left unattended...
+
+---
+
+#### :rocket: New Feature
+
+- `@cliqz/adblocker-content`, `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-puppeteer`, `@cliqz/adblocker-webextension-cosmetics`
+  - Fix PuppeteerBlocker and enable blocking of frames and DOM monitoring. [#690](https://github.com/cliqz-oss/adblocker/pull/690) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#685](https://github.com/cliqz-oss/adblocker/pull/685) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets [#681](https://github.com/cliqz-oss/adblocker/pull/681) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump jsdom from 16.2.1 to 16.2.2 [#688](https://github.com/cliqz-oss/adblocker/pull/688) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump tldts-experimental from 5.6.15 to 5.6.16 [#686](https://github.com/cliqz-oss/adblocker/pull/686) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.2.0 to 2.3.0 [#687](https://github.com/cliqz-oss/adblocker/pull/687) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.12.3 (Sat Mar 28 2020)
 
 #### :nail_care: Polish
