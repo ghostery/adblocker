@@ -56,7 +56,7 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
     window.addEventListener(
       'DOMContentLoaded',
       () => {
-        DOM_MONITOR = new DOMMonitor(window, ({ classes, ids, hrefs }) => {
+        DOM_MONITOR = new DOMMonitor(({ classes, ids, hrefs }) => {
           getCosmeticsFilters({
             classes,
             hrefs,
@@ -64,6 +64,8 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
             lifecycle: 'dom-update',
           });
         });
+
+        DOM_MONITOR.queryAll(window);
 
         // Start observing mutations to detect new ids and classes which would
         // need to be hidden.
