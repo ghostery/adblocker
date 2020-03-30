@@ -7,7 +7,6 @@
  */
 /* tslint:disable quotemark */
 export default [
-  "pagead2.googlesyndication",
   "googlesyndication",
   "imasdk.googleapis",
   "cdnjs.cloudflare",
@@ -220,6 +219,7 @@ export default [
   "vo",
   "we",
   "wn",
+  "wp",
   "xx",
   "yo",
   "yp",
