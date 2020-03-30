@@ -3,6 +3,15 @@ import fetch from 'node-fetch';
 import * as puppeteer from 'puppeteer';
 import { promises as fs } from 'fs';
 
+function getUrlToLoad(): string {
+  let url = 'https://www.mangareader.net/';
+  if (process.argv[process.argv.length - 1].endsWith('.ts') === false) {
+    url = process.argv[process.argv.length - 1];
+  }
+
+  return url;
+}
+
 (async () => {
   const blocker = await PuppeteerBlocker.fromLists(fetch, fullLists, {
     enableCompression: true,
@@ -44,5 +53,5 @@ import { promises as fs } from 'fs';
     console.log('style', style.length, url);
   });
 
-  await page.goto('https://www.mangareader.net/');
+  await page.goto(getUrlToLoad());
 })();

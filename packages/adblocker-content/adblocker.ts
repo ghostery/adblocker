@@ -121,12 +121,12 @@ export class DOMMonitor {
   private observer: MutationObserver | null = null;
 
   constructor(
-    window: Window,
     private readonly cb: (features: { ids: string[]; classes: string[]; hrefs: string[] }) => void,
-  ) {
+  ) {}
+
+  public queryAll(window: Window): void {
     this.handleNewNodes(Array.from(window.document.querySelectorAll('[id],[class],[href]')));
   }
-
   public start(window: Window & { MutationObserver?: typeof MutationObserver }): void {
     if (this.observer === null && window.MutationObserver !== undefined) {
       this.observer = new window.MutationObserver((mutations: MutationRecord[]) => {
@@ -149,8 +149,15 @@ export class DOMMonitor {
     }
   }
 
-  private handleNewNodes(nodes: DOMElement[]): void {
-    const { classes, ids, hrefs } = extractFeaturesFromDOM(nodes);
+  public handleNewFeatures({
+    hrefs,
+    ids,
+    classes,
+  }: {
+    hrefs: string[];
+    ids: string[];
+    classes: string[];
+  }): boolean {
     const newIds: string[] = [];
     const newClasses: string[] = [];
     const newHrefs: string[] = [];
@@ -186,7 +193,14 @@ export class DOMMonitor {
         hrefs: newHrefs,
         ids: newIds,
       });
+      return true;
     }
+
+    return false;
+  }
+
+  private handleNewNodes(nodes: DOMElement[]): boolean {
+    return this.handleNewFeatures(extractFeaturesFromDOM(nodes));
   }
 }
 

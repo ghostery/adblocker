@@ -125,7 +125,7 @@ export function injectCosmetics(
   window.addEventListener(
     'DOMContentLoaded',
     () => {
-      DOM_MONITOR = new DOMMonitor(window, ({ classes, ids, hrefs }) => {
+      DOM_MONITOR = new DOMMonitor(({ classes, ids, hrefs }) => {
         getCosmeticsFilters({
           classes,
           hrefs,
@@ -133,6 +133,8 @@ export function injectCosmetics(
           lifecycle: 'dom-update',
         }).then((response) => handleResponseFromBackground(window, response));
       });
+
+      DOM_MONITOR.queryAll(window);
 
       // Start observing mutations to detect new ids and classes which would
       // need to be hidden.

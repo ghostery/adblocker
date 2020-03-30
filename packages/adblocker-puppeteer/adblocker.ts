@@ -13,14 +13,31 @@ import { parse } from 'tldts-experimental';
 
 import { FiltersEngine, Request } from '@cliqz/adblocker';
 
-import { autoRemoveScript, extractFeaturesFromDOM } from '@cliqz/adblocker-content';
+import { autoRemoveScript, extractFeaturesFromDOM, DOMMonitor } from '@cliqz/adblocker-content';
+
+function sleep(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, milliseconds);
+  });
+}
+
+function getTopLevelUrl(frame: puppeteer.Frame | null): string {
+  let sourceUrl = '';
+  while (frame !== null) {
+    sourceUrl = frame.url();
+    if (sourceUrl.length !== 0) {
+      break;
+    }
+    frame = frame.parentFrame();
+  }
+  return sourceUrl;
+}
 
 /**
  * Create an instance of `Request` from `puppeteer.Request`.
  */
 export function fromPuppeteerDetails(details: puppeteer.Request): Request {
-  const frame = details.frame();
-  const sourceUrl = frame !== null ? frame.url() : undefined;
+  const sourceUrl = getTopLevelUrl(details.frame());
   return Request.fromRawDetails({
     _originalRequestDetails: details,
     requestId: `${details.resourceType()} ${details.url()} ${sourceUrl}`,
@@ -45,7 +62,10 @@ export class BlockingContext {
   public async enable(): Promise<void> {
     if (this.blocker.config.loadCosmeticFilters === true) {
       // Register callback to cosmetics injection (CSS + scriptlets)
-      this.page.on('framenavigated', this.onFrameNavigated);
+      this.page.on('frameattached', this.onFrameNavigated);
+      this.page.on('domcontentloaded', () => {
+        this.onFrameNavigated(this.page.mainFrame());
+      });
     }
 
     if (this.blocker.config.loadNetworkFilters === true) {
@@ -70,7 +90,7 @@ export class BlockingContext {
     }
 
     if (this.blocker.config.loadCosmeticFilters === true) {
-      this.page.removeListener('framenavigated', this.onFrameNavigated);
+      this.page.removeListener('frameattached', this.onFrameNavigated);
     }
   }
 }
@@ -125,54 +145,127 @@ export class PuppeteerBlocker extends FiltersEngine {
   };
 
   private onFrame = async (frame: puppeteer.Frame): Promise<void> => {
-    // DOM features
-    const { ids, hrefs, classes } = await frame.$$eval(
-      '[id],[class],[href]',
-      extractFeaturesFromDOM,
-    );
-
-    // Source features
     const url = frame.url();
+
+    if (url === 'chrome-error://chromewebdata/') {
+      return;
+    }
+
+    // Look for all iframes in this context and check if they should be removed
+    // from the DOM completely. For this we check if their `src` or `href`
+    // attribute would be blocked by any network filter.
+    this.blockFrames(frame);
+
     const parsed = parse(url);
     const hostname = parsed.hostname || '';
     const domain = parsed.domain || '';
 
-    // Get cosmetics to inject into the Frame
-    const { active, scripts, styles } = this.getCosmeticsFilters({
-      domain,
-      hostname,
-      url,
+    // We first query for stylesheets and scriptlets which are either generic or
+    // based on the hostname of this frame. We need to get these as fast as
+    // possible to reduce blinking when page loads.
+    {
+      const { active, styles, scripts } = this.getCosmeticsFilters({
+        domain,
+        hostname,
+        url,
 
-      // DOM information
-      classes,
-      hrefs,
-      ids,
+        // Done once per frame.
+        getBaseRules: true,
+        getInjectionRules: true,
+        getRulesFromHostname: true,
+
+        // Will handle DOM features (see below).
+        getRulesFromDOM: false,
+      });
+
+      if (active === false) {
+        return;
+      }
+
+      Promise.all([
+        this.injectScriptletsIntoFrame(frame, scripts),
+        this.injectStylesIntoFrame(frame, styles),
+      ]).catch(() => {
+        /* ignore */
+      });
+    }
+
+    // Seconde step is to start monitoring the DOM of the page in order to
+    // inject more specific selectors based on `id`, `class`, or `href` found on
+    // nodes. We first query all of them, then monitor the DOM for a few
+    // seconds (or until one of the stopping conditions is met, see below).
+
+    const observer = new DOMMonitor(({ ids, hrefs, classes }) => {
+      const { active, styles } = this.getCosmeticsFilters({
+        domain,
+        hostname,
+        url,
+
+        // DOM information
+        classes,
+        hrefs,
+        ids,
+
+        // Only done once per frame (see above).
+        getBaseRules: false,
+        getInjectionRules: false,
+        getRulesFromHostname: false,
+
+        // Allows to get styles for updated DOM.
+        getRulesFromDOM: true,
+      });
+
+      // Abort if cosmetics are disabled
+      if (active === false) {
+        return;
+      }
+
+      this.injectStylesIntoFrame(frame, styles).catch(() => {
+        /* ignore */
+      });
     });
 
-    // Abort if cosmetics are disabled
-    if (active === true) {
-      // Inject scripts
-      for (let i = 0; i < scripts.length; i += 1) {
-        frame
-          .addScriptTag({
-            content: autoRemoveScript(scripts[i]),
-          })
-          .catch(() => {
-            // Ignore
-          });
+    // This loop will periodically check if any new custom styles should be
+    // injected in the page (using values of attributes `id`, `class`, or `href`).
+    //
+    // We stop looking in the following cases:
+    // * Frame was detached.
+    // * No new attribute was found.
+    // * Number of iterations exceeded 10 (i.e. 5 seconds).
+    // * Exception was raised.
+    //
+    // Additionally, we might stop after the first lookup if
+    // `enableMutationObserver` is disabled in config, which means that we
+    // should not actively monitor the DOM for changes.
+    let numberOfIterations = 0;
+    do {
+      if (frame.isDetached()) {
+        break;
       }
 
-      // Inject CSS
-      if (styles.length !== 0) {
-        frame
-          .addStyleTag({
-            content: styles,
-          })
-          .catch(() => {
-            // Ignore
-          });
+      try {
+        const foundNewFeatures = observer.handleNewFeatures(
+          await frame.$$eval('[id],[class],[href]', extractFeaturesFromDOM),
+        );
+        numberOfIterations += 1;
+
+        if (numberOfIterations === 10) {
+          break;
+        }
+
+        if (foundNewFeatures === false) {
+          break;
+        }
+      } catch (ex) {
+        break;
       }
-    }
+
+      if (this.config.enableMutationObserver === false) {
+        break;
+      }
+
+      await sleep(500);
+    } while (true);
   };
 
   public onRequest = (details: puppeteer.Request): void => {
@@ -200,6 +293,59 @@ export class PuppeteerBlocker extends FiltersEngine {
       details.continue();
     }
   };
+
+  private async injectStylesIntoFrame(frame: puppeteer.Frame, styles: string): Promise<void> {
+    if (styles.length !== 0) {
+      await frame.addStyleTag({
+        content: styles,
+      });
+    }
+  }
+
+  private async injectScriptletsIntoFrame(
+    frame: puppeteer.Frame,
+    scripts: string[],
+  ): Promise<void> {
+    const promises: Promise<void>[] = [];
+
+    if (scripts.length !== 0) {
+      for (let i = 0; i < scripts.length; i += 1) {
+        promises.push(
+          frame.addScriptTag({
+            content: autoRemoveScript(scripts[i]),
+          }),
+        );
+      }
+    }
+
+    await promises;
+  }
+
+  /**
+   * Look for sub-frames in `frame`, check if their `src` or `href` would be
+   * blocked, and then proceed to removing them from the DOM completely.
+   */
+  private async blockFrames(frame: puppeteer.Frame): Promise<void> {
+    const sourceUrl = getTopLevelUrl(frame);
+    for (const url of await frame.$$eval('iframe[src],iframe[href]', (elements) =>
+      elements.map(({ src, href }: any) => src || href),
+    )) {
+      const { match } = this.match(
+        Request.fromRawDetails({
+          url,
+          sourceUrl,
+          type: 'sub_frame',
+        }),
+      );
+      if (match) {
+        frame.$$eval(`iframe[src="${url}"],iframe[href="${url}"]`, (iframes) => {
+          for (const iframe of iframes) {
+            iframe?.parentNode?.removeChild(iframe);
+          }
+        });
+      }
+    }
+  }
 }
 
 // Re-export symboles from @cliqz/adblocker for convenience
