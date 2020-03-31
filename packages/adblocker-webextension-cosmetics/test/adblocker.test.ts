@@ -6,8 +6,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { expect, use } from 'chai';
+import * as sinon from 'sinon';
+import * as sinonChai from 'sinon-chai';
+import 'mocha';
+
+use(sinonChai);
+
 import { JSDOM } from 'jsdom';
-import { injectCosmetics } from './adblocker';
+import { injectCosmetics } from '../adblocker';
 
 async function tick(timeout = 0) {
   await new Promise((resolve) => setTimeout(resolve, timeout));
@@ -16,7 +23,7 @@ async function tick(timeout = 0) {
 describe('#injectCosmetics', () => {
   it('asks background for cosmetics when called', () => {
     const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>');
-    const getCosmeticsFilters = jest.fn(async () => {
+    const getCosmeticsFilters = sinon.spy(async () => {
       return {
         active: true,
         extended: [],
@@ -28,8 +35,8 @@ describe('#injectCosmetics', () => {
     injectCosmetics(dom.window, true, getCosmeticsFilters);
     dom.window.close();
 
-    expect(getCosmeticsFilters).toHaveBeenCalledTimes(1);
-    expect(getCosmeticsFilters).toHaveBeenLastCalledWith({
+    expect(getCosmeticsFilters).to.have.been.calledOnce;
+    expect(getCosmeticsFilters).to.have.been.calledWith({
       classes: [],
       hrefs: [],
       ids: [],
@@ -48,7 +55,7 @@ describe('#injectCosmetics', () => {
   </div>
 </body>
 `);
-    const getCosmeticsFilters = jest.fn(async () => {
+    const getCosmeticsFilters = sinon.spy(async () => {
       return {
         active: true,
         extended: [],
@@ -61,8 +68,8 @@ describe('#injectCosmetics', () => {
     await tick();
     dom.window.close();
 
-    expect(getCosmeticsFilters).toHaveBeenCalledTimes(2);
-    expect(getCosmeticsFilters).toHaveBeenLastCalledWith({
+    expect(getCosmeticsFilters).to.have.been.calledTwice;
+    expect(getCosmeticsFilters).to.have.been.calledWith({
       classes: ['class1'],
       hrefs: ['https://foo.com/'],
       ids: ['id1'],
@@ -81,7 +88,7 @@ describe('#injectCosmetics', () => {
   </div>
 </body>
 `);
-    const getCosmeticsFilters = jest.fn(async () => {
+    const getCosmeticsFilters = sinon.spy(async () => {
       return {
         active: true,
         extended: [],
@@ -110,8 +117,8 @@ describe('#injectCosmetics', () => {
     document.body.appendChild(div);
     await tick();
 
-    expect(getCosmeticsFilters).toHaveBeenCalledTimes(3);
-    expect(getCosmeticsFilters).toHaveBeenLastCalledWith({
+    expect(getCosmeticsFilters).to.have.been.calledThrice;
+    expect(getCosmeticsFilters).to.have.been.calledWith({
       classes: ['class2'],
       hrefs: ['https://bar.com/'],
       ids: ['id2'],
@@ -127,8 +134,8 @@ describe('#injectCosmetics', () => {
     await tick();
     dom.window.close();
 
-    expect(getCosmeticsFilters).toHaveBeenCalledTimes(4);
-    expect(getCosmeticsFilters).toHaveBeenLastCalledWith({
+    expect(getCosmeticsFilters.callCount).to.eql(4);
+    expect(getCosmeticsFilters).to.have.been.calledWith({
       classes: ['class3', 'class4'],
       hrefs: ['https://baz.com/'],
       ids: [],
@@ -166,7 +173,7 @@ describe('#injectCosmetics', () => {
     });
 
     await tick(1000);
-    expect(dom.window.document.getElementsByTagName('span')).toHaveLength(1);
+    expect(dom.window.document.getElementsByTagName('span')).to.have.lengthOf(1);
   });
 
   it('injects cosmetic', async () => {
@@ -195,7 +202,7 @@ describe('#injectCosmetics', () => {
     await tick(1000);
 
     const div = dom.window.document.getElementById('cliqz-adblokcer-css-rules');
-    expect(div).not.toBeNull();
+    expect(div).not.to.be.null;
   });
 
   it('does nothing if not active', async () => {
@@ -228,6 +235,6 @@ describe('#injectCosmetics', () => {
     });
 
     await tick(1000);
-    expect(dom.window.document.getElementsByTagName('span')).toHaveLength(0);
+    expect(dom.window.document.getElementsByTagName('span')).to.have.lengthOf(0);
   });
 });

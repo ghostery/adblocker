@@ -6,11 +6,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { expect } from 'chai';
+import 'mocha';
+
 import { toASCII, toUnicode } from '../src/punycode';
 
 describe('#punycode', () => {
   const checkString = (hostname: string): void => {
-    expect(toUnicode(toASCII(hostname))).toEqual(hostname);
+    expect(toUnicode(toASCII(hostname))).to.equal(hostname);
   };
 
   it('empty string', () => {

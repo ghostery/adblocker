@@ -6,6 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { expect } from 'chai';
+import 'mocha';
+
 import CosmeticFilter, {
   DEFAULT_HIDDING_STYLE,
   hashHostnameBackward,
@@ -24,8 +27,8 @@ function h(hostnames: string[]): Uint32Array {
 function network(filter: string, expected: any) {
   const parsed = NetworkFilter.parse(filter);
   if (parsed !== null) {
-    expect(parsed.isNetworkFilter()).toBeTruthy();
-    expect(parsed.isCosmeticFilter()).toBeFalsy();
+    expect(parsed.isNetworkFilter()).to.be.true;
+    expect(parsed.isCosmeticFilter()).to.be.false;
     const verbose = {
       // Attributes
       csp: parsed.csp,
@@ -71,9 +74,9 @@ function network(filter: string, expected: any) {
       isImportant: parsed.isImportant(),
       thirdParty: parsed.thirdParty(),
     };
-    expect(verbose).toMatchObject(expected);
+    expect(verbose).to.deep.include(expected);
   } else {
-    expect(parsed).toEqual(expected);
+    expect(parsed).to.eql(expected);
   }
 }
 
@@ -123,9 +126,9 @@ describe('Network filters', () => {
   describe('toString', () => {
     const checkToString = (line: string, expected: string, debug: boolean = false) => {
       const parsed = NetworkFilter.parse(line, debug);
-      expect(parsed).not.toBeNull();
+      expect(parsed).not.to.be.null;
       if (parsed !== null) {
-        expect(parsed.toString()).toBe(expected);
+        expect(parsed.toString()).to.equal(expected);
       }
     };
 
@@ -1252,9 +1255,9 @@ describe('Network filters', () => {
     ]) {
       it(`get tokens for ${filter}`, () => {
         const parsed = NetworkFilter.parse(filter as string, true);
-        expect(parsed).not.toBeNull();
+        expect(parsed).not.to.be.null;
         if (parsed !== null) {
-          expect(parsed.getTokens()).toEqual(regexTokens);
+          expect(parsed.getTokens()).to.eql(regexTokens);
         }
       });
     }
@@ -1264,8 +1267,8 @@ describe('Network filters', () => {
 function cosmetic(filter: string, expected: any) {
   const parsed = CosmeticFilter.parse(filter);
   if (parsed !== null) {
-    expect(parsed.isNetworkFilter()).toBeFalsy();
-    expect(parsed.isCosmeticFilter()).toBeTruthy();
+    expect(parsed.isNetworkFilter()).to.be.false;
+    expect(parsed.isCosmeticFilter()).to.be.true;
     const verbose = {
       // Attributes
       entities: parsed.entities,
@@ -1284,9 +1287,9 @@ function cosmetic(filter: string, expected: any) {
       isScriptInject: parsed.isScriptInject(),
       isUnhide: parsed.isUnhide(),
     };
-    expect(verbose).toMatchObject(expected);
+    expect(verbose).to.deep.include(expected);
   } else {
-    expect(parsed).toEqual(expected);
+    expect(parsed).to.eql(expected);
   }
 }
 
@@ -1308,9 +1311,9 @@ describe('Cosmetic filters', () => {
   describe('#toString', () => {
     const checkToString = (line: string, expected: string, debug: boolean = false) => {
       const parsed = CosmeticFilter.parse(line, debug);
-      expect(parsed).not.toBeNull();
+      expect(parsed).not.to.be.null;
       if (parsed !== null) {
-        expect(parsed.toString()).toBe(expected);
+        expect(parsed.toString()).to.equal(expected);
       }
     };
 
@@ -1548,11 +1551,11 @@ describe('Cosmetic filters', () => {
           const raw = `##^${rule}`;
           const parsed = CosmeticFilter.parse(raw);
           if (expected === null) {
-            expect(parsed).toBeNull();
+            expect(parsed).to.be.null;
           } else {
-            expect(parsed).not.toBeNull();
+            expect(parsed).not.to.be.null;
             if (parsed !== null) {
-              expect(parsed.getExtendedSelector()).toStrictEqual(expected);
+              expect(parsed.getExtendedSelector()).to.eql(expected);
             }
           }
         });
@@ -1628,27 +1631,27 @@ describe('Cosmetic filters', () => {
   // it('rejects invalid selectors', () => {
   //   const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>');
   //   Object.defineProperty(global, 'document', { value: dom.window.document, writable: true });
-  //   expect(CosmeticFilter.parse('###.selector /invalid/')).toBeNull();
+  //   expect(CosmeticFilter.parse('###.selector /invalid/')).to.be.null;
   // });
 
   it('#getScript', () => {
     const parsed = CosmeticFilter.parse('foo.com##+js(script.js, arg1, arg2, arg3)');
-    expect(parsed).not.toBeNull();
+    expect(parsed).not.to.be.null;
     if (parsed !== null) {
-      expect(parsed.getScript(new Map([['script.js', '{{1}},{{2}},{{3}}']]))).toEqual(
+      expect(parsed.getScript(new Map([['script.js', '{{1}},{{2}},{{3}}']]))).to.equal(
         'arg1,arg2,arg3',
       );
 
-      expect(parsed.getScript(new Map())).toBeUndefined();
+      expect(parsed.getScript(new Map())).to.be.undefined;
     }
   });
 
   describe('#getTokens', () => {
     function checkTokens(filter: string, tokens: Uint32Array[]): void {
       const parsed = CosmeticFilter.parse(filter);
-      expect(parsed).not.toBeNull();
+      expect(parsed).not.to.be.null;
       if (parsed !== null) {
-        expect(parsed.getTokens()).toEqual(tokens);
+        expect(parsed.getTokens()).to.eql(tokens);
       }
     }
 
@@ -1713,11 +1716,11 @@ describe('#getId', () => {
   it('for fuzzy filter is insensitive to permutations', () => {
     const f1 = NetworkFilter.parse('foo bar baz$fuzzy');
     const f2 = NetworkFilter.parse('baz bar foo$fuzzy');
-    expect(f1).not.toBeNull();
-    expect(f2).not.toBeNull();
+    expect(f1).not.to.be.null;
+    expect(f2).not.to.be.null;
     if (f1 !== null && f2 !== null) {
-      expect(f1.getId()).toBe(f2.getId());
-      expect(f1.getIdWithoutBadFilter()).toBe(f2.getIdWithoutBadFilter());
+      expect(f1.getId()).to.equal(f2.getId());
+      expect(f1.getIdWithoutBadFilter()).to.equal(f2.getIdWithoutBadFilter());
     }
   });
 });
@@ -1735,7 +1738,7 @@ describe('Filters list', () => {
       '[Adblock] ||foo.com',
       '[Adblock Plus 2.0] ||foo.com',
     ].forEach((data) => {
-      expect(parseFilters(data)).toEqual(parseFilters(''));
+      expect(parseFilters(data)).to.eql(parseFilters(''));
     });
   });
 
@@ -1747,7 +1750,7 @@ describe('Filters list', () => {
       expect(lines([
         '*$3p,script, \\',
         '    domain=x.com|y.com',
-      ].join('\n'))).toEqual(['*$3p,script,domain=x.com|y.com']);
+      ].join('\n'))).to.eql(['*$3p,script,domain=x.com|y.com']);
     });
 
     it('single filter on many lines', () => {
@@ -1756,7 +1759,7 @@ describe('Filters list', () => {
         '    3p, \\',
         '    script, \\',
         '    domain=x.com|y.com',
-      ].join('\n'))).toEqual(['*$3p,script,domain=x.com|y.com']);
+      ].join('\n'))).to.eql(['*$3p,script,domain=x.com|y.com']);
     });
 
     it('handle leading and trailing spaces', () => {
@@ -1765,7 +1768,7 @@ describe('Filters list', () => {
         '    3p, \\',
         '    script, \\',
         '    domain=x.com|y.com \t ',
-      ].join('\n'))).toEqual(['*$3p,script,domain=x.com|y.com']);
+      ].join('\n'))).to.eql(['*$3p,script,domain=x.com|y.com']);
     });
 
     it('mixed with normal filters and comments', () => {
@@ -1780,7 +1783,7 @@ describe('Filters list', () => {
         '|| \\',
         '    baz. \\',
         '    com^',
-      ].join('\n'))).toEqual([
+      ].join('\n'))).to.eql([
         '||foo.com^',
         '*$3p,script,domain=x.com|y.com',
         '||bar.com^',

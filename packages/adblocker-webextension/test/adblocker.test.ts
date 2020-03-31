@@ -1,4 +1,7 @@
-import { fromWebRequestDetails, updateResponseHeadersWithCSP, OnBeforeRequestDetailsType } from './adblocker';
+import { expect } from 'chai';
+import 'mocha';
+
+import { fromWebRequestDetails, updateResponseHeadersWithCSP, OnBeforeRequestDetailsType } from '../adblocker';
 
 describe('#updateResponseHeadersWithCSP', () => {
   const baseDetails: OnBeforeRequestDetailsType = {
@@ -9,17 +12,17 @@ describe('#updateResponseHeadersWithCSP', () => {
   };
 
   it('does not update if no policies', () => {
-    expect(updateResponseHeadersWithCSP(baseDetails, undefined)).toEqual({});
+    expect(updateResponseHeadersWithCSP(baseDetails, undefined)).to.eql({});
   });
 
   it('creates headers if they do not exist', () => {
-    expect(updateResponseHeadersWithCSP(baseDetails, 'CSP')).toEqual({
+    expect(updateResponseHeadersWithCSP(baseDetails, 'CSP')).to.eql({
       responseHeaders: [{ name: 'content-security-policy', value: 'CSP' }],
     });
   });
 
   it('create csp header if not exist', () => {
-    expect(updateResponseHeadersWithCSP({ ...baseDetails, responseHeaders: [] }, 'CSP')).toEqual({
+    expect(updateResponseHeadersWithCSP({ ...baseDetails, responseHeaders: [] }, 'CSP')).to.eql({
       responseHeaders: [{ name: 'content-security-policy', value: 'CSP' }],
     });
   });
@@ -30,7 +33,7 @@ describe('#updateResponseHeadersWithCSP', () => {
         { ...baseDetails, responseHeaders: [{ name: 'header1', value: 'value1' }] },
         'CSP',
       ),
-    ).toEqual({
+    ).to.eql({
       responseHeaders: [
         { name: 'header1', value: 'value1' },
         { name: 'content-security-policy', value: 'CSP' },
@@ -48,7 +51,7 @@ describe('#updateResponseHeadersWithCSP', () => {
         },
         'CSP',
       ),
-    ).toEqual({
+    ).to.eql({
       responseHeaders: [{ name: 'content-security-policy', value: 'CSP; CSP1' }],
     });
   });
@@ -64,7 +67,7 @@ describe('#fromWebRequestDetails', () => {
         type: 'script',
         url: 'https://url',
       }),
-    ).toMatchObject({
+    ).to.deep.include({
       sourceDomain: 'foo.com',
       sourceHostname: 'sub.foo.com',
     });
@@ -79,7 +82,7 @@ describe('#fromWebRequestDetails', () => {
         type: 'script',
         url: 'https://url',
       }),
-    ).toMatchObject({
+    ).to.deep.include({
       sourceDomain: 'foo.com',
       sourceHostname: 'sub.foo.com',
     });
@@ -94,7 +97,7 @@ describe('#fromWebRequestDetails', () => {
         type: 'script',
         url: 'https://url',
       }),
-    ).toMatchObject({
+    ).to.deep.include({
       sourceDomain: 'foo.com',
       sourceHostname: 'sub.foo.com',
     });
@@ -109,7 +112,7 @@ describe('#fromWebRequestDetails', () => {
         type: 'script',
         url: 'https://sub.url.com',
       }),
-    ).toMatchObject({
+    ).to.deep.include({
       domain: 'url.com',
       hostname: 'sub.url.com',
       url: 'https://sub.url.com',

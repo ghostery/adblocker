@@ -6,19 +6,22 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { expect } from 'chai';
+import 'mocha';
+
 import { f, generateDiff, getLinesWithFilters, mergeDiffs } from '../src/lists';
 
 describe('#getLinesWithFilters', () => {
   it('get not lines if empty', () => {
-    expect(getLinesWithFilters('')).toEqual(new Set());
+    expect(getLinesWithFilters('')).to.eql(new Set());
   });
 
   it('handle single filter', () => {
-    expect(getLinesWithFilters('||foo.com$badfilter')).toEqual(new Set(['||foo.com$badfilter']));
+    expect(getLinesWithFilters('||foo.com$badfilter')).to.eql(new Set(['||foo.com$badfilter']));
   });
 
   it('handle multiple filters', () => {
-    expect(getLinesWithFilters('||foo.com$badfilter\n||bar.co.uk')).toEqual(
+    expect(getLinesWithFilters('||foo.com$badfilter\n||bar.co.uk')).to.eql(
       new Set(['||foo.com$badfilter', '||bar.co.uk']),
     );
   });
@@ -33,7 +36,7 @@ describe('#getLinesWithFilters', () => {
 bar.co.uk^*baz
 
       `),
-    ).toEqual(new Set(['||foo.com', 'bar.co.uk^*baz']));
+    ).to.eql(new Set(['||foo.com', 'bar.co.uk^*baz']));
   });
 
   it('ignore comments', () => {
@@ -47,13 +50,13 @@ bar.co.uk^*baz
 !bar.co.uk^*baz
 
       `),
-    ).toEqual(new Set(['||foo.com']));
+    ).to.eql(new Set(['||foo.com']));
   });
 });
 
 describe('#generateDiff', () => {
   it('diff between empty strings', () => {
-    expect(generateDiff('', '')).toEqual({
+    expect(generateDiff('', '')).to.eql({
       added: [],
       removed: [],
     });
@@ -77,21 +80,21 @@ bar.baz
 ||foo.com
     `,
       ),
-    ).toEqual({
+    ).to.eql({
       added: [],
       removed: [],
     });
   });
 
   it('add filters from empty', () => {
-    expect(generateDiff('', '||foo.com')).toEqual({
+    expect(generateDiff('', '||foo.com')).to.eql({
       added: ['||foo.com'],
       removed: [],
     });
   });
 
   it('remove filters', () => {
-    expect(generateDiff('||foo.com', '')).toEqual({
+    expect(generateDiff('||foo.com', '')).to.eql({
       added: [],
       removed: ['||foo.com'],
     });
@@ -100,7 +103,7 @@ bar.baz
   it('handle filter renaming', () => {
     expect(
       generateDiff('||foo.com$domain=foo.com|bar.com', '||foo.com$domain=bar.com|foo.com'),
-    ).toEqual({
+    ).to.eql({
       added: [],
       removed: [],
     });
@@ -110,22 +113,22 @@ bar.baz
 describe('#f', () => {
   it('handles CosmeticFilter', () => {
     const filter = f`##.selector`;
-    expect(filter).not.toBeNull();
+    expect(filter).not.to.be.null;
     if (filter !== null) {
-      expect(filter.isCosmeticFilter()).toBeTruthy();
+      expect(filter.isCosmeticFilter()).to.be.true;
     }
   });
 
   it('handles NetworkFitler', () => {
     const filter = f`||foo.com`;
-    expect(filter).not.toBeNull();
+    expect(filter).not.to.be.null;
     if (filter !== null) {
-      expect(filter.isNetworkFilter()).toBeTruthy();
+      expect(filter.isNetworkFilter()).to.be.true;
     }
   });
 
   it('returns null for invalid filter', () => {
-    expect(f`#$#~~~`).toBeNull();
+    expect(f`#$#~~~`).to.be.null;
   });
 });
 
@@ -136,7 +139,7 @@ describe('#mergeDiffs', () => {
       removed: ['||bar.com'],
     };
 
-    expect(mergeDiffs([diff])).toEqual(diff);
+    expect(mergeDiffs([diff])).to.eql(diff);
   });
 
   it('merges several diffs', () => {
@@ -147,7 +150,7 @@ describe('#mergeDiffs', () => {
         { added: ['bar.com'], removed: ['foo.com'] },
         { removed: ['bar.com'] },
       ]),
-    ).toEqual({
+    ).to.eql({
       added: ['baz.com'],
       removed: ['foo.com', 'bar.com'],
     });

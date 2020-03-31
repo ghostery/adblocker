@@ -87,7 +87,7 @@ export const NORMALIZED_TYPE_TOKEN: { [s in RequestType]: number } = {
   xslt: fastHash('type:other'),
 };
 
-export interface IRequestInitialization {
+export interface RequestInitialization {
   requestId: string;
   tabId: number;
 
@@ -125,7 +125,7 @@ export default class Request {
     sourceDomain,
     type = 'main_frame',
     _originalRequestDetails,
-  }: Partial<IRequestInitialization>): Request {
+  }: Partial<RequestInitialization>): Request {
     url = url.toLowerCase();
 
     if (hostname === undefined || domain === undefined) {
@@ -198,7 +198,7 @@ export default class Request {
     sourceHostname,
 
     _originalRequestDetails,
-  }: IRequestInitialization) {
+  }: RequestInitialization) {
     this._originalRequestDetails = _originalRequestDetails;
     this.id = requestId;
     this.tabId = tabId;
@@ -289,6 +289,6 @@ export default class Request {
  * Kept for backward compatibility. The recommended way is to call
  * `Request.fromRawDetails` directly.
  */
-export function makeRequest(details: Partial<IRequestInitialization>): Request {
+export function makeRequest(details: Partial<RequestInitialization>): Request {
   return Request.fromRawDetails(details);
 }

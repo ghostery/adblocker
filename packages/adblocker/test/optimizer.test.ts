@@ -7,6 +7,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { expect } from 'chai';
+import 'mocha';
+
 import { optimizeNetwork } from '../src/engine/optimizer';
 import NetworkFilter from '../src/filters/network';
 
@@ -14,7 +17,7 @@ function f(lines: string[]): NetworkFilter[] {
   const filters: NetworkFilter[] = [];
   for (const line of lines) {
     const filter = NetworkFilter.parse(line, true);
-    expect(filter).not.toBeNull();
+    expect(filter).not.to.be.null;
     if (filter !== null) {
       filters.push(filter);
     }
@@ -43,6 +46,6 @@ describe('#optimizeNetwork', () => {
       '.php?p=stats&',
       '/php-stats.js',
       '/php-stats.js/',
-    ])).map(filter => filter.toString())).toHaveLength(1);
+    ])).map(filter => filter.toString())).to.have.lengthOf(1);
   });
 });

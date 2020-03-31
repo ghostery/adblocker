@@ -6,6 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { expect } from 'chai';
+import 'mocha';
+
 import { loadResources } from './utils';
 
 import { StaticDataView } from '../src/data-view';
@@ -14,28 +17,28 @@ import Resources from '../src/resources';
 describe('#Resources', () => {
   describe('#serialize', () => {
     const resources = Resources.parse(loadResources(), { checksum: 'checksum' });
-    expect(resources.checksum).toEqual('checksum');
+    expect(resources.checksum).to.equal('checksum');
     const buffer = StaticDataView.allocate(2000000, { enableCompression: false });
     resources.serialize(buffer);
     buffer.seekZero();
-    expect(Resources.deserialize(buffer)).toEqual(resources);
+    expect(Resources.deserialize(buffer)).to.eql(resources);
   });
 
   describe('#parse', () => {
     it('parses empty resources', () => {
       const resources = Resources.parse('', { checksum: 'checksum' });
-      expect(resources.checksum).toEqual('checksum');
-      expect(resources.js).toEqual(new Map());
-      expect(resources.resources).toEqual(new Map());
+      expect(resources.checksum).to.equal('checksum');
+      expect(resources.js).to.eql(new Map());
+      expect(resources.resources).to.eql(new Map());
     });
 
     it('parses one resource', () => {
       const resources = Resources.parse('foo application/javascript\ncontent', {
         checksum: 'checksum',
       });
-      expect(resources.checksum).toEqual('checksum');
-      expect(resources.js).toEqual(new Map([['foo', 'content']]));
-      expect(resources.resources).toEqual(
+      expect(resources.checksum).to.equal('checksum');
+      expect(resources.js).to.eql(new Map([['foo', 'content']]));
+      expect(resources.resources).to.eql(
         new Map([['foo', { contentType: 'application/javascript', data: 'content' }]]),
       );
     });
@@ -47,9 +50,9 @@ describe('#Resources', () => {
         ),
         { checksum: 'checksum' },
       );
-      expect(resources.checksum).toEqual('checksum');
-      expect(resources.js).toEqual(new Map([['foo', 'content1']]));
-      expect(resources.resources).toEqual(
+      expect(resources.checksum).to.equal('checksum');
+      expect(resources.js).to.eql(new Map([['foo', 'content1']]));
+      expect(resources.resources).to.eql(
         new Map([
           ['foo', { contentType: 'application/javascript', data: 'content1' }],
           ['pixel.png', { contentType: 'image/png;base64', data: 'content2' }],
@@ -79,9 +82,9 @@ content2
 `,
         { checksum: 'checksum' },
       );
-      expect(resources.checksum).toEqual('checksum');
-      expect(resources.js).toEqual(new Map([['foo', 'content1']]));
-      expect(resources.resources).toEqual(
+      expect(resources.checksum).to.equal('checksum');
+      expect(resources.js).to.eql(new Map([['foo', 'content1']]));
+      expect(resources.resources).to.eql(
         new Map([
           ['foo', { contentType: 'application/javascript', data: 'content1' }],
           ['pixel.png', { contentType: 'image/png;base64', data: 'content2' }],
