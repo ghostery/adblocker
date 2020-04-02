@@ -3320,13 +3320,6 @@ dziennikbaltycki.pl,dzienniklodzki.pl,dziennikpolski24.pl,dziennikzachodni.pl,ec
 ! https://github.com/NanoMeow/QuickReports/issues/3132
 @@||cdnjs.cloudflare.com/ajax/libs/*/videojs-contrib-ads.js$script,domain=wtk.pl
 
-! https://github.com/uBlockOrigin/uAssets/issues/7002
-! https://github.com/uBlockOrigin/uAssets/issues/7081
-! CNAME
-!#if env_firefox
-@@||xenforo-lb.techtarget.com^$css,image,script,domain=forum.notebookreview.com
-!#endif
-
 ! https://github.com/uBlockOrigin/uAssets/issues/7003
 @@||try.abtasty.com/$script,domain=shop.euromaster.de
 @@||google-analytics.com/analytics.js$script,domain=shop.euromaster.de
@@ -3524,8 +3517,20 @@ recensionihot.com#@#a[href^="https://www.moscarossa.biz/"]
 @@||hcaptcha.com^*/api.js$script
 @@||hcaptcha.com^*captcha/$script
 
-! https://github.com/uBlockOrigin/uAssets/issues/7181
+! https://forums.lanik.us/viewtopic.php?p=153903#p153903
+@@||googletagmanager.com/gtm.js$script,domain=tv-asahi.co.jp
+
+! CNAME akinator .com
 #if env_firefox
-@@||wptg-lb.techtarget.com^$domain=tabletpcreview.com|technologyguide.com
-@@||xenforo-lb.techtarget.com^$image,css,script,domain=tabletpcreview.com
+@@||akinator.com.cdn.ezoic.net^$css,image,domain=akinator.com
 !#endif
+
+! https://www.reddit.com/r/uBlockOrigin/comments/ftmipe/help/
+||onemanhua.com/js/dynamicjs.js$badfilter
+||onemanhua.com/js/ad/$image
+
+! nascar .com videos broken
+@@||nascar.com^$xhr,1p
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=nascar.com
+@@||moatads.com/nascar$script,domain=nascar.com
+@@||mb.moatads.com^$script,domain=nascar.com
