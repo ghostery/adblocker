@@ -282,11 +282,17 @@ export class PuppeteerBlocker extends FiltersEngine {
     const { redirect, match } = this.match(request);
 
     if (redirect !== undefined) {
-      const { body, contentType } = redirect;
-      details.respond({
-        body,
-        contentType,
-      });
+      if (redirect.contentType.endsWith(';base64')) {
+        details.respond({
+          body: Buffer.from(redirect.body, 'base64'),
+          contentType: redirect.contentType.slice(0, -7),
+        });
+      } else {
+        details.respond({
+          body: redirect.body,
+          contentType: redirect.contentType,
+        });
+      }
     } else if (match === true) {
       details.abort('blockedbyclient');
     } else {
