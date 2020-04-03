@@ -1,3 +1,24 @@
+# v1.13.1 (Fri Apr 03 2020)
+
+#### :house: Internal
+
+- Move from jest to mocha + chai [#682](https://github.com/cliqz-oss/adblocker/pull/682) ([@remusao](https://github.com/remusao))
+
+#### :memo: Documentation
+
+- Fix line break in CHANGELOG.md [#691](https://github.com/cliqz-oss/adblocker/pull/691) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump @types/sinon from 7.5.2 to 9.0.0 [#702](https://github.com/cliqz-oss/adblocker/pull/702) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 2
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.13.0 (Mon Mar 30 2020)
 
 ### Release Notes

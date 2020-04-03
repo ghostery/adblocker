@@ -1,3 +1,15 @@
+# v1.13.1 (Fri Apr 03 2020)
+
+#### :house: Internal
+
+- Move from jest to mocha + chai [#682](https://github.com/cliqz-oss/adblocker/pull/682) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.12.3 (Sat Mar 28 2020)
 
 #### :house: Internal

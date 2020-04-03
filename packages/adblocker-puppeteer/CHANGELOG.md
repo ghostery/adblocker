@@ -1,3 +1,23 @@
+# v1.13.1 (Fri Apr 03 2020)
+
+#### :bug: Bug Fix
+
+- Correctly redirect to binary resources in puppeteer blocker [#715](https://github.com/cliqz-oss/adblocker/pull/715) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Move from jest to mocha + chai [#682](https://github.com/cliqz-oss/adblocker/pull/682) ([@remusao](https://github.com/remusao))
+
+#### :memo: Documentation
+
+- Fix line break in CHANGELOG.md [#691](https://github.com/cliqz-oss/adblocker/pull/691) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.13.0 (Mon Mar 30 2020)
 
 ### Release Notes

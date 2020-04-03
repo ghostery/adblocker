@@ -1,3 +1,20 @@
+# v1.13.1 (Fri Apr 03 2020)
+
+#### :house: Internal
+
+- Update local assets [#711](https://github.com/cliqz-oss/adblocker/pull/711) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#704](https://github.com/cliqz-oss/adblocker/pull/704) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#699](https://github.com/cliqz-oss/adblocker/pull/699) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Move from jest to mocha + chai [#682](https://github.com/cliqz-oss/adblocker/pull/682) ([@remusao](https://github.com/remusao))
+- Update local assets [#693](https://github.com/cliqz-oss/adblocker/pull/693) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### Authors: 2
+
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.13.0 (Mon Mar 30 2020)
 
 #### :house: Internal

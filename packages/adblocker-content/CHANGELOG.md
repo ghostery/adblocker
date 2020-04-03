@@ -1,3 +1,15 @@
+# v1.13.1 (Fri Apr 03 2020)
+
+#### :memo: Documentation
+
+- Fix line break in CHANGELOG.md [#691](https://github.com/cliqz-oss/adblocker/pull/691) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.13.0 (Mon Mar 30 2020)
 
 ### Release Notes
