@@ -11,7 +11,7 @@ import * as puppeteer from 'puppeteer';
 
 import { parse } from 'tldts-experimental';
 
-import { FiltersEngine, Request } from '@cliqz/adblocker';
+import { FiltersEngine, Request, RequestType } from '@cliqz/adblocker';
 
 import { autoRemoveScript, extractFeaturesFromDOM, DOMMonitor } from '@cliqz/adblocker-content';
 
@@ -38,12 +38,15 @@ function getTopLevelUrl(frame: puppeteer.Frame | null): string {
  */
 export function fromPuppeteerDetails(details: puppeteer.Request): Request {
   const sourceUrl = getTopLevelUrl(details.frame());
+  const url = details.url();
+  const type: RequestType = details.resourceType();
+
   return Request.fromRawDetails({
     _originalRequestDetails: details,
-    requestId: `${details.resourceType()} ${details.url()} ${sourceUrl}`,
+    requestId: `${type}-${url}-${sourceUrl}`,
     sourceUrl,
-    type: details.resourceType(),
-    url: details.url(),
+    type,
+    url,
   });
 }
 
@@ -154,7 +157,9 @@ export class PuppeteerBlocker extends FiltersEngine {
     // Look for all iframes in this context and check if they should be removed
     // from the DOM completely. For this we check if their `src` or `href`
     // attribute would be blocked by any network filter.
-    this.blockFrames(frame);
+    this.removeBlockedFrames(frame).catch(() => {
+      /* ignore */
+    });
 
     const parsed = parse(url);
     const hostname = parsed.hostname || '';
@@ -270,7 +275,12 @@ export class PuppeteerBlocker extends FiltersEngine {
 
   public onRequest = (details: puppeteer.Request): void => {
     const request = fromPuppeteerDetails(details);
+    if (this.config.guessRequestTypeFromUrl === true && request.type === 'other') {
+      request.guessTypeOfRequest();
+    }
+
     const frame = details.frame();
+
     if (
       request.isMainFrame() ||
       (request.type === 'document' && frame !== null && frame.parentFrame() === null)
@@ -331,8 +341,10 @@ export class PuppeteerBlocker extends FiltersEngine {
    * Look for sub-frames in `frame`, check if their `src` or `href` would be
    * blocked, and then proceed to removing them from the DOM completely.
    */
-  private async blockFrames(frame: puppeteer.Frame): Promise<void> {
+  private async removeBlockedFrames(frame: puppeteer.Frame): Promise<void> {
+    const promises: Promise<void>[] = [];
     const sourceUrl = getTopLevelUrl(frame);
+
     for (const url of await frame.$$eval('iframe[src],iframe[href]', (elements) =>
       elements.map(({ src, href }: any) => src || href),
     )) {
@@ -343,14 +355,23 @@ export class PuppeteerBlocker extends FiltersEngine {
           type: 'sub_frame',
         }),
       );
+
       if (match) {
-        frame.$$eval(`iframe[src="${url}"],iframe[href="${url}"]`, (iframes) => {
-          for (const iframe of iframes) {
-            iframe?.parentNode?.removeChild(iframe);
-          }
-        });
+        promises.push(
+          frame
+            .$$eval(`iframe[src="${url}"],iframe[href="${url}"]`, (iframes) => {
+              for (const iframe of iframes) {
+                iframe?.parentNode?.removeChild(iframe);
+              }
+            })
+            .catch(() => {
+              /* ignore */
+            }),
+        );
       }
     }
+
+    await Promise.all(promises);
   }
 }
 

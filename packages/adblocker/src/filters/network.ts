@@ -1145,9 +1145,13 @@ export default class NetworkFilter implements IFilter {
 
     if (this.isHostnameAnchor()) {
       filter += '||';
-    }
-
-    if (this.isLeftAnchor()) {
+    } else if (this.fromHttp() !== this.fromHttps()) {
+      if (this.fromHttp()) {
+        filter += '|http://';
+      } else {
+        filter += '|https://';
+      }
+    } else if (this.isLeftAnchor()) {
       filter += '|';
     }
 
@@ -1194,12 +1198,10 @@ export default class NetworkFilter implements IFilter {
       options.push('important');
     }
 
-    if (this.isRedirect()) {
-      options.push(`redirect=${this.getRedirect()}`);
-    }
-
     if (this.isRedirectRule()) {
       options.push(`redirect-rule=${this.getRedirect()}`);
+    } else if (this.isRedirect()) {
+      options.push(`redirect=${this.getRedirect()}`);
     }
 
     if (this.isCSP()) {
@@ -1220,10 +1222,10 @@ export default class NetworkFilter implements IFilter {
 
     if (this.firstParty() !== this.thirdParty()) {
       if (this.firstParty()) {
-        options.push('first-party');
+        options.push('1p');
       }
       if (this.thirdParty()) {
-        options.push('third-party');
+        options.push('3p');
       }
     }
 

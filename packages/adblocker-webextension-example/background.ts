@@ -60,8 +60,16 @@ WebExtensionBlocker.fromLists(fetch, fullLists, {
   enableHtmlFiltering: true,
 }).then((blocker: WebExtensionBlocker) => {
   blocker.enableBlockingInBrowser(browser);
-  blocker.on('request-blocked', incrementBlockedCounter);
-  blocker.on('request-redirected', incrementBlockedCounter);
+
+  blocker.on('request-blocked', (request: Request, result: BlockingResponse) => {
+    incrementBlockedCounter(request, result);
+    console.log('block', request.url);
+  });
+
+  blocker.on('request-redirected', (request: Request, result: BlockingResponse) => {
+    incrementBlockedCounter(request, result);
+    console.log('redirect', request.url, result);
+  });
 
   blocker.on('csp-injected', (request: Request) => {
     console.log('csp', request.url);

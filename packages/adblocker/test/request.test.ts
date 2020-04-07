@@ -196,17 +196,19 @@ describe('#Request', () => {
       expect(Request.fromRawDetails({ url: 'wss:/foo.com' })).to.deep.include(expected);
     });
 
-    it('drops data urls', () => {
+    it('handles data urls', () => {
       for (const url of [
         'data:,Hello%2C%20World!',
         'data:text/plain;base64,SGVsbG8sIFdvcmxkIQ%3D%3D',
         'data:text/html,%3Ch1%3EHello%2C%20World!%3C%2Fh1%3E',
         'data:text/html,<script>alert("hi");</script>',
       ]) {
+        const cleanUrl = url.slice(0, url.indexOf(','));
         expect(Request.fromRawDetails({ url })).to.deep.include({
           isHttp: false,
           isHttps: false,
-          isSupported: false,
+          isSupported: true,
+          url: cleanUrl,
         });
       }
     });
@@ -223,7 +225,6 @@ describe('#Request', () => {
         'ip',
         'ftp',
         'git',
-        'data',
         'ssh',
         'smtp',
         'pop3',

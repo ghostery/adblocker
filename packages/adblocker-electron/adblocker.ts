@@ -10,7 +10,10 @@ import { ipcMain } from 'electron';
 import { parse } from 'tldts-experimental';
 
 import { ElectronRequestType, FiltersEngine, Request } from '@cliqz/adblocker';
-import type { IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-electron-preload';
+import type {
+  IBackgroundCallback,
+  IMessageFromBackground,
+} from '@cliqz/adblocker-electron-preload';
 
 const PRELOAD_PATH = require.resolve('@cliqz/adblocker-electron-preload');
 
@@ -228,6 +231,10 @@ export class ElectronBlocker extends FiltersEngine {
     callback: (a: Electron.Response) => void,
   ): void => {
     const request = fromElectronDetails(details);
+    if (this.config.guessRequestTypeFromUrl === true && request.type === 'other') {
+      request.guessTypeOfRequest();
+    }
+
     if (request.isMainFrame()) {
       callback({});
       return;

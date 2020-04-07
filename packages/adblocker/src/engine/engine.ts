@@ -20,23 +20,14 @@ import {
 import { HTMLSelector } from '../html-filtering';
 import CosmeticFilter from '../filters/cosmetic';
 import NetworkFilter from '../filters/network';
+import { block } from '../filters/dsl';
 import { IListDiff, IRawDiff, parseFilters } from '../lists';
 import Request from '../request';
 import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 
-export const ENGINE_VERSION = 94;
-
-// Polyfill for `btoa`
-function btoaPolyfill(buffer: string): string {
-  if (typeof btoa !== 'undefined') {
-    return btoa(buffer);
-  } else if (typeof Buffer !== 'undefined') {
-    return Buffer.from(buffer).toString('base64');
-  }
-  return buffer;
-}
+export const ENGINE_VERSION = 95;
 
 function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   if (filters.length === 0) {
@@ -107,6 +98,13 @@ export default class FilterEngine extends EventEmitter<
     return read(path)
       .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
       .catch(() => init().then((engine) => write(path, engine.serialize()).then(() => engine)));
+  }
+
+  public static empty<T extends FilterEngine>(
+    this: new (...args: any[]) => T,
+    config: Partial<Config> = {},
+  ): T {
+    return new this({ config });
   }
 
   /**
@@ -185,7 +183,10 @@ export default class FilterEngine extends EventEmitter<
     options: Partial<Config> = {},
   ): T {
     const config = new Config(options);
-    return new this(Object.assign({}, parseFilters(filters, config), { config }));
+    return new this({
+      ...parseFilters(filters, config),
+      config,
+    });
   }
 
   public static deserialize<T extends FilterEngine>(
@@ -854,23 +855,8 @@ export default class FilterEngine extends EventEmitter<
         if (redirectNone !== undefined) {
           result.exception = redirectNone;
         } else {
-          const redirectResource = this.resources.getResource(result.filter.getRedirect());
-          if (redirectResource !== undefined) {
-            const { data, contentType } = redirectResource;
-            let dataUrl;
-            if (contentType.indexOf(';') !== -1) {
-              dataUrl = `data:${contentType},${data}`;
-            } else {
-              dataUrl = `data:${contentType};base64,${btoaPolyfill(data)}`;
-            }
-
-            result.redirect = {
-              body: data,
-              contentType,
-              dataUrl: dataUrl.trim(),
-            };
-          }
-        } // TODO - else, throw an exception
+          result.redirect = this.resources.getResource(result.filter.getRedirect());
+        }
       }
     }
 
@@ -886,5 +872,47 @@ export default class FilterEngine extends EventEmitter<
     }
 
     return result;
+  }
+
+  public blockScripts() {
+    this.updateFromDiff({
+      added: [block().scripts().redirectTo('javascript').toString()],
+    });
+    return this;
+  }
+
+  public blockImages() {
+    this.updateFromDiff({
+      added: [block().images().redirectTo('png').toString()],
+    });
+    return this;
+  }
+
+  public blockMedias() {
+    this.updateFromDiff({
+      added: [block().medias().redirectTo('mp4').toString()],
+    });
+    return this;
+  }
+
+  public blockFrames() {
+    this.updateFromDiff({
+      added: [block().frames().redirectTo('html').toString()],
+    });
+    return this;
+  }
+
+  public blockFonts() {
+    this.updateFromDiff({
+      added: [block().fonts().toString()],
+    });
+    return this;
+  }
+
+  public blockStyles() {
+    this.updateFromDiff({
+      added: [block().styles().toString()],
+    });
+    return this;
   }
 }
