@@ -153,14 +153,15 @@ describe('Network filters', () => {
       'ads$ping',
       'ads$script',
       'ads$font',
-      'ads$third-party',
-      'ads$first-party',
+      'ads$3p',
+      'ads$1p',
       'ads$stylesheet',
       'ads$xhr',
 
       'ads$important',
       'ads$fuzzy',
       'ads$redirect=noop',
+      'ads$redirect-rule=noop',
     ].forEach((line) => {
       it(`pprint ${line}`, () => {
         checkToString(line, line);

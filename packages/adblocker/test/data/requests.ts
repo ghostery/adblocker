@@ -783,7 +783,7 @@ export default [
     ],
     sourceUrl: 'https://www.pornhub.com',
     type: 'image',
-    url: 'http://',
+    url: 'http://foo.com',
   },
   {
     check: true,
@@ -2884,7 +2884,7 @@ export default [
     filters: ['|https://$script,third-party,xmlhttprequest,domain=txxx.com'],
     sourceUrl: 'https://m.txxx.com',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['||i-mobile.co.jp^$third-party'],
@@ -3667,7 +3667,7 @@ export default [
     filters: ['|https://$script,third-party,xmlhttprequest,domain=mediafire.com'],
     sourceUrl: 'https://www.mediafire.com',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['@@||ajax.googleapis.com^$script,domain=mediafire.com'],
@@ -7036,7 +7036,7 @@ export default [
     filters: ['|https://$script,third-party,xmlhttprequest,domain=1337x.to'],
     sourceUrl: 'https://www.1337x.to',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['||djv99sxoqpv11.cloudfront.net^'],
@@ -7277,7 +7277,7 @@ export default [
     ],
     sourceUrl: 'http://www.dailyfeed.co.uk',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['/piwik.$image,script,domain=~matomo.org|~piwik.org'],
@@ -9021,7 +9021,7 @@ export default [
     filters: ['|https://$script,stylesheet,third-party,xmlhttprequest,domain=zippyshare.com'],
     sourceUrl: 'https://www.zippyshare.com',
     type: 'stylesheet',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['/adops.$domain=~adops.co.il'],
@@ -12690,7 +12690,7 @@ export default [
     ],
     sourceUrl: 'http://boards.4chan.org',
     type: 'xhr',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['||pushame.com^$third-party'],
@@ -13353,7 +13353,7 @@ export default [
     filters: ['|https://$script,third-party,xmlhttprequest,domain=hdzog.com'],
     sourceUrl: 'https://m.hdzog.com',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     check: true,
@@ -14484,7 +14484,7 @@ export default [
     filters: ['|https://$image,script,third-party,xmlhttprequest,domain=vporn.com'],
     sourceUrl: 'https://www.vporn.com',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['||t.wayfair.com^'],
@@ -14646,7 +14646,7 @@ export default [
     filters: ['|https://$script,third-party,xmlhttprequest,domain=uptobox.com|uptostream.com'],
     sourceUrl: 'https://uptobox.com',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['@@||gstatic.com^$script,domain=uptobox.com|uptostream.com'],
@@ -15806,7 +15806,7 @@ export default [
     ],
     sourceUrl: 'https://linkshrink.net',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['||tags.newscgp.com^'],
@@ -16542,7 +16542,7 @@ export default [
     filters: ['|https://$script,third-party,xmlhttprequest,domain=4shared.com'],
     sourceUrl: 'https://www.4shared.com',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     check: true,
@@ -19020,7 +19020,7 @@ export default [
     ],
     sourceUrl: 'https://www.clipconverter.cc',
     type: 'image',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['||static.criteo.net/flash^$third-party'],
@@ -20773,7 +20773,7 @@ export default [
     filters: ['|https://$script,subdocument,third-party,xmlhttprequest,domain=opensubtitles.org'],
     sourceUrl: 'https://www.opensubtitles.org',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: [
@@ -23665,13 +23665,13 @@ export default [
     filters: ['|https://$script,stylesheet,third-party,xmlhttprequest,domain=fastpic.ru'],
     sourceUrl: 'http://fastpic.ru',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['|http://$script,stylesheet,third-party,xmlhttprequest,domain=fastpic.ru'],
     sourceUrl: 'http://fastpic.ru',
     type: 'script',
-    url: 'http://',
+    url: 'http://foo.com',
   },
   {
     check: true,
@@ -23681,7 +23681,7 @@ export default [
     ],
     sourceUrl: 'http://fastpic.ru',
     type: 'websocket',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['@@||amazonaws.com^$script,domain=cinemablend.com|thesimsresource.com'],
@@ -24122,7 +24122,7 @@ export default [
     filters: ['|http://$third-party,domain=adf.ly|s1-adfly.com'],
     sourceUrl: 'http://www.adf.ly',
     type: 'script',
-    url: 'http://',
+    url: 'http://foo.com',
   },
   {
     filters: ['@@||adf.ly^$first-party'],
@@ -24350,7 +24350,7 @@ export default [
     filters: ['|https://$third-party,domain=adf.ly|s1-adfly.com'],
     sourceUrl: 'http://www.adf.ly',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['@@||adf.ly^$first-party'],
@@ -27038,7 +27038,7 @@ export default [
     ],
     sourceUrl: 'http://userscloud.com',
     type: 'image',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['||userscloud.com/js/vendor/core/bootstrap.js'],
@@ -27052,7 +27052,7 @@ export default [
     ],
     sourceUrl: 'http://userscloud.com',
     type: 'script',
-    url: 'http://',
+    url: 'http://foo.com',
   },
   {
     filters: ['||rosemand.pro^$third-party'],
@@ -28686,13 +28686,13 @@ export default [
     filters: ['|http://$image,script,third-party,domain=streamcloud.eu'],
     sourceUrl: 'http://streamcloud.eu',
     type: 'script',
-    url: 'http://',
+    url: 'http://foo.com',
   },
   {
     filters: ['|https://$image,script,third-party,domain=streamcloud.eu'],
     sourceUrl: 'http://streamcloud.eu',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['.com^$image,third-party,domain=streamcloud.eu'],
@@ -28758,7 +28758,7 @@ export default [
     filters: ['|https://$script,third-party,xmlhttprequest,domain=skidrowreloaded.com'],
     sourceUrl: 'https://www.skidrowreloaded.com',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['@@||c1.popads.net/pop.js$domain=skidrowreloaded.com'],
@@ -30532,13 +30532,13 @@ export default [
     filters: ['|http://$script,third-party,domain=photobucket.com'],
     sourceUrl: 'http://www.photobucket.com',
     type: 'script',
-    url: 'http://',
+    url: 'http://foo.com',
   },
   {
     filters: ['|https://$script,third-party,domain=photobucket.com'],
     sourceUrl: 'http://www.photobucket.com',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['_minder_tracking/'],
@@ -31657,7 +31657,7 @@ export default [
     ],
     sourceUrl: 'https://www.stream2watch.org',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['||stream2watch.org/sw.js$script'],
@@ -31671,7 +31671,7 @@ export default [
     ],
     sourceUrl: 'https://www.stream2watch.org',
     type: 'image',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     check: true,
@@ -32522,7 +32522,7 @@ export default [
     filters: ['|https://$image,script,subdocument,third-party,domain=vidoza.net'],
     sourceUrl: 'https://vidoza.net',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['||rekovers.ru^$third-party'],
@@ -33472,7 +33472,7 @@ export default [
     filters: ['|https://$script,third-party,domain=clipwatching.com'],
     sourceUrl: 'http://www.clipwatching.com',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['||baidu.com/js/o.js'],
@@ -33528,7 +33528,7 @@ export default [
     ],
     sourceUrl: 'https://m.thepiratebay.rocks',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['||ad.smartmediarep.com^$third-party'],
@@ -34296,7 +34296,7 @@ export default [
     filters: ['|https://$script,third-party,xmlhttprequest,domain=pcgames-download.com'],
     sourceUrl: 'https://www.pcgames-download.com',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     check: true,
@@ -36725,7 +36725,7 @@ export default [
     ],
     sourceUrl: 'https://sfiles.org',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['/Pixel.pl?'],
@@ -36863,7 +36863,7 @@ export default [
     filters: ['|https://$third-party,script,domain=descargasnsn.com|jkanime.net'],
     sourceUrl: 'https://jkanime.net',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['||plista.com/activity'],
@@ -36960,7 +36960,7 @@ export default [
     ],
     sourceUrl: 'https://www1.swatchseries.to',
     type: 'stylesheet',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['||swatchseries.to/sw.js$script'],
@@ -37698,7 +37698,7 @@ export default [
     filters: ['|https://$script,third-party,xmlhttprequest,domain=tvmuse.com'],
     sourceUrl: 'http://www.tvmuse.com',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['||168logger.com^$third-party', '/log/event?'],
@@ -40827,7 +40827,7 @@ export default [
     ],
     sourceUrl: 'https://xmoviesforyou.com',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: [
@@ -43469,7 +43469,7 @@ export default [
     filters: ['|https://$script,third-party,xmlhttprequest,domain=milfzr.com'],
     sourceUrl: 'http://milfzr.com',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: [
@@ -43751,7 +43751,7 @@ export default [
     filters: ['$image,third-party,xmlhttprequest,domain=rd.com'],
     sourceUrl: 'https://www.rd.com',
     type: 'image',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['-ad-pixel-'],
@@ -43989,7 +43989,7 @@ export default [
     filters: ['|https://$script,third-party,domain=alltube.pl'],
     sourceUrl: 'http://www.alltube.pl',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['@@||ajax.googleapis.com/ajax/libs/$script,domain=alltube.pl'],
@@ -44008,7 +44008,7 @@ export default [
     filters: ['|http://$script,third-party,domain=alltube.pl'],
     sourceUrl: 'http://www.alltube.pl',
     type: 'script',
-    url: 'http://',
+    url: 'http://foo.com',
   },
   {
     filters: [
@@ -45399,7 +45399,7 @@ export default [
     filters: ['|http://$script,third-party,xmlhttprequest,domain=rlslog.net'],
     sourceUrl: 'http://www.rlslog.net',
     type: 'script',
-    url: 'http://',
+    url: 'http://foo.com',
   },
   {
     filters: ['||pxl2015x1.com^$third-party'],
@@ -45739,7 +45739,7 @@ export default [
     filters: ['|https://$script,third-party,xmlhttprequest,domain=fullmatchesandshows.com'],
     sourceUrl: 'https://www.fullmatchesandshows.com',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['/adservices/*'],
@@ -46689,7 +46689,7 @@ export default [
     filters: ['@@|https://$script,third-party,domain=eventhubs.com'],
     sourceUrl: 'https://www.eventhubs.com',
     type: 'script',
-    url: 'https://',
+    url: 'https://foo.com',
   },
   {
     filters: ['@@||eventhubs.com^*.$script'],
@@ -47054,7 +47054,7 @@ export default [
     ],
     sourceUrl: 'http://www.primewire.is',
     type: 'script',
-    url: 'http://',
+    url: 'http://foo.com',
   },
   {
     filters: ['@@||courier-js.dallasnews.com^$first-party,script'],

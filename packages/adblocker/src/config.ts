@@ -16,6 +16,7 @@ export default class Config {
       enableHtmlFiltering: buffer.getBool(),
       enableMutationObserver: buffer.getBool(),
       enableOptimizations: buffer.getBool(),
+      guessRequestTypeFromUrl: buffer.getBool(),
       integrityCheck: buffer.getBool(),
       loadCosmeticFilters: buffer.getBool(),
       loadGenericCosmeticsFilters: buffer.getBool(),
@@ -28,6 +29,7 @@ export default class Config {
   public readonly enableHtmlFiltering: boolean;
   public readonly enableMutationObserver: boolean;
   public readonly enableOptimizations: boolean;
+  public readonly guessRequestTypeFromUrl: boolean;
   public readonly integrityCheck: boolean;
   public readonly loadCosmeticFilters: boolean;
   public readonly loadGenericCosmeticsFilters: boolean;
@@ -39,6 +41,7 @@ export default class Config {
     enableHtmlFiltering = false,
     enableMutationObserver = true,
     enableOptimizations = true,
+    guessRequestTypeFromUrl = false,
     integrityCheck = true,
     loadCosmeticFilters = true,
     loadGenericCosmeticsFilters = true,
@@ -49,6 +52,7 @@ export default class Config {
     this.enableHtmlFiltering = enableHtmlFiltering;
     this.enableMutationObserver = enableMutationObserver;
     this.enableOptimizations = enableOptimizations;
+    this.guessRequestTypeFromUrl = guessRequestTypeFromUrl;
     this.integrityCheck = integrityCheck;
     this.loadCosmeticFilters = loadCosmeticFilters;
     this.loadGenericCosmeticsFilters = loadGenericCosmeticsFilters;
@@ -58,7 +62,7 @@ export default class Config {
   public getSerializedSize(): number {
     // NOTE: this should always be the number of attributes and needs to be
     // updated when `Config` changes.
-    return 9 * sizeOfBool();
+    return 10 * sizeOfBool();
   }
 
   public serialize(buffer: StaticDataView): void {
@@ -67,6 +71,7 @@ export default class Config {
     buffer.pushBool(this.enableHtmlFiltering);
     buffer.pushBool(this.enableMutationObserver);
     buffer.pushBool(this.enableOptimizations);
+    buffer.pushBool(this.guessRequestTypeFromUrl);
     buffer.pushBool(this.integrityCheck);
     buffer.pushBool(this.loadCosmeticFilters);
     buffer.pushBool(this.loadGenericCosmeticsFilters);

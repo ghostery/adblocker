@@ -377,7 +377,7 @@ $csp=baz,domain=bar.com
       const engine = createEngine(filters.join('\n'));
       engine.resources.js.set(resource, resource);
       engine.resources.resources.set(resource, {
-        data: resource,
+        body: resource,
         contentType: 'application/javascript',
       });
       return engine;

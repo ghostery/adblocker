@@ -401,6 +401,10 @@ export class WebExtensionBlocker extends FiltersEngine {
     details: OnBeforeRequestDetailsType,
   ): WebRequest.BlockingResponse => {
     const request = fromWebRequestDetails(details);
+    if (this.config.guessRequestTypeFromUrl === true && request.type === 'other') {
+      request.guessTypeOfRequest();
+    }
+
     if (request.isMainFrame()) {
       this.performHTMLFiltering(browser, request);
       return {};

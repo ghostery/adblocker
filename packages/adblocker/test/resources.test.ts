@@ -39,7 +39,7 @@ describe('#Resources', () => {
       expect(resources.checksum).to.equal('checksum');
       expect(resources.js).to.eql(new Map([['foo', 'content']]));
       expect(resources.resources).to.eql(
-        new Map([['foo', { contentType: 'application/javascript', data: 'content' }]]),
+        new Map([['foo', { contentType: 'application/javascript', body: 'content' }]]),
       );
     });
 
@@ -54,8 +54,8 @@ describe('#Resources', () => {
       expect(resources.js).to.eql(new Map([['foo', 'content1']]));
       expect(resources.resources).to.eql(
         new Map([
-          ['foo', { contentType: 'application/javascript', data: 'content1' }],
-          ['pixel.png', { contentType: 'image/png;base64', data: 'content2' }],
+          ['foo', { contentType: 'application/javascript', body: 'content1' }],
+          ['pixel.png', { contentType: 'image/png;base64', body: 'content2' }],
         ]),
       );
     });
@@ -86,8 +86,8 @@ content2
       expect(resources.js).to.eql(new Map([['foo', 'content1']]));
       expect(resources.resources).to.eql(
         new Map([
-          ['foo', { contentType: 'application/javascript', data: 'content1' }],
-          ['pixel.png', { contentType: 'image/png;base64', data: 'content2' }],
+          ['foo', { contentType: 'application/javascript', body: 'content1' }],
+          ['pixel.png', { contentType: 'image/png;base64', body: 'content2' }],
         ]),
       );
     });

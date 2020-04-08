@@ -6,11 +6,23 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { getResourceForMime } from '@remusao/small';
+
 import { StaticDataView, sizeOfASCII, sizeOfByte } from './data-view';
 
-interface IResource {
+// Polyfill for `btoa`
+function btoaPolyfill(buffer: string): string {
+  if (typeof btoa !== 'undefined') {
+    return btoa(buffer);
+  } else if (typeof Buffer !== 'undefined') {
+    return Buffer.from(buffer).toString('base64');
+  }
+  return buffer;
+}
+
+interface Resource {
   contentType: string;
-  data: string;
+  body: string;
 }
 
 // TODO - support # alias
@@ -26,20 +38,20 @@ export default class Resources {
     const checksum = buffer.getASCII();
 
     // Deserialize `resources`
-    const resources: Map<string, IResource> = new Map();
+    const resources: Map<string, Resource> = new Map();
     const numberOfResources = buffer.getUint16();
     for (let i = 0; i < numberOfResources; i += 1) {
       resources.set(buffer.getASCII(), {
         contentType: buffer.getASCII(),
-        data: buffer.getASCII(),
+        body: buffer.getASCII(),
       });
     }
 
     // Deserialize `js`
     const js: Map<string, string> = new Map();
-    resources.forEach(({ contentType, data }, name) => {
+    resources.forEach(({ contentType, body }, name) => {
       if (contentType === 'application/javascript') {
-        js.set(name, data);
+        js.set(name, body);
       }
     });
 
@@ -90,12 +102,12 @@ export default class Resources {
 
     // Create a mapping from resource name to { contentType, data }
     // used for request redirection.
-    const resourcesByName: Map<string, IResource> = new Map();
+    const resourcesByName: Map<string, Resource> = new Map();
     typeToResource.forEach((resources, contentType) => {
       resources.forEach((resource: string, name: string) => {
         resourcesByName.set(name, {
           contentType,
-          data: resource,
+          body: resource,
         });
       });
     });
@@ -109,7 +121,7 @@ export default class Resources {
 
   public readonly checksum: string;
   public readonly js: Map<string, string>;
-  public readonly resources: Map<string, IResource>;
+  public readonly resources: Map<string, Resource>;
 
   constructor({ checksum = '', js = new Map(), resources = new Map() }: Partial<Resources> = {}) {
     this.checksum = checksum;
@@ -117,8 +129,17 @@ export default class Resources {
     this.resources = resources;
   }
 
-  public getResource(name: string): IResource | undefined {
-    return this.resources.get(name);
+  public getResource(name: string): Resource & { dataUrl: string; } {
+    const { body, contentType } = this.resources.get(name) || getResourceForMime(name);
+
+    let dataUrl;
+    if (contentType.indexOf(';') !== -1) {
+      dataUrl = `data:${contentType},${body}`;
+    } else {
+      dataUrl = `data:${contentType};base64,${btoaPolyfill(body)}`;
+    }
+
+    return { body, contentType, dataUrl }
   }
 
   public getSerializedSize(): number {
@@ -127,11 +148,11 @@ export default class Resources {
       (2 * sizeOfByte()) // resources.size
     );
 
-    this.resources.forEach(({ contentType, data }, name) => {
+    this.resources.forEach(({ contentType, body}, name) => {
       estimatedSize += (
         sizeOfASCII(name) +
         sizeOfASCII(contentType) +
-        sizeOfASCII(data)
+        sizeOfASCII(body)
       );
     });
 
@@ -144,10 +165,10 @@ export default class Resources {
 
     // Serialize `resources`
     buffer.pushUint16(this.resources.size);
-    this.resources.forEach(({ contentType, data }, name) => {
+    this.resources.forEach(({ contentType, body }, name) => {
       buffer.pushASCII(name);
       buffer.pushASCII(contentType);
-      buffer.pushASCII(data);
+      buffer.pushASCII(body);
     });
   }
 }

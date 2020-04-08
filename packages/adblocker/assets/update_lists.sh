@@ -1,6 +1,5 @@
 #!/bin/sh
 
-# uBlock Origin
 curl "https://cdn.cliqz.com/adblocker/resources/ublock-resources/$(
     curl 'https://cdn.cliqz.com/adblocker/resources/ublock-resources/metadata.json' |\
         gunzip | \
@@ -8,6 +7,7 @@ curl "https://cdn.cliqz.com/adblocker/resources/ublock-resources/$(
         cut -c 2-65
 )/list.txt" | gunzip > ./ublock-origin/resources.txt &
 
+# uBlock Origin
 curl 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/annoyances.txt' > ./ublock-origin/annoyances.txt &
 curl 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt' > ./ublock-origin/badware.txt &
 curl 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt' > ./ublock-origin/filters.txt &

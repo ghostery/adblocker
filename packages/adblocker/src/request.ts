@@ -6,7 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import guessUrlType from '@remusao/guess-url-type';
 import { parse } from 'tldts-experimental';
+
 import { TOKENS_BUFFER } from './tokens-buffer';
 import { createFuzzySignature, fastHash, tokenizeNoSkipInPlace } from './utils';
 
@@ -162,7 +164,7 @@ export default class Request {
 
   public readonly _originalRequestDetails: any | undefined;
 
-  public readonly type: RequestType;
+  public type: RequestType;
   public readonly isHttp: boolean;
   public readonly isHttps: boolean;
   public readonly isSupported: boolean;
@@ -215,16 +217,15 @@ export default class Request {
     this.sourceDomainHash = fastHash(this.sourceDomain);
 
     // Decide on party
-    this.isThirdParty = this.sourceDomain.length === 0 ? false : this.sourceDomain !== this.domain;
+    this.isThirdParty =
+      this.sourceDomain.length === 0 || this.domain.length === 0
+        ? false
+        : this.sourceDomain !== this.domain;
     this.isFirstParty = !this.isThirdParty;
 
     // Check protocol
     this.isSupported = true;
-    if (
-      this.type === 'websocket' ||
-      this.url.startsWith('ws:') ||
-      this.url.startsWith('wss:')
-    ) {
+    if (this.type === 'websocket' || this.url.startsWith('ws:') || this.url.startsWith('wss:')) {
       this.isHttp = false;
       this.isHttps = false;
       this.type = 'websocket';
@@ -235,6 +236,15 @@ export default class Request {
     } else if (this.url.startsWith('https:')) {
       this.isHttps = true;
       this.isHttp = false;
+    } else if (this.url.startsWith('data:')) {
+      this.isHttp = false;
+      this.isHttps = false;
+
+      // Only keep prefix of URL
+      const indexOfComa = this.url.indexOf(',');
+      if (indexOfComa !== -1) {
+        this.url = this.url.slice(0, indexOfComa);
+      }
     } else {
       this.isHttp = false;
       this.isHttps = false;
@@ -282,6 +292,17 @@ export default class Request {
 
   public isSubFrame(): boolean {
     return this.type === 'sub_frame' || this.type === 'subFrame';
+  }
+
+  /**
+   * Calling this method will attempt to guess the type of a request based on
+   * information found in `url` only. This can be useful to try and fine-tune
+   * the type of a Request when it is not otherwise available or if it was
+   * inferred as 'other'.
+   */
+  public guessTypeOfRequest(): RequestType {
+    this.type = guessUrlType(this.url);
+    return this.type;
   }
 }
 
