@@ -1,3 +1,74 @@
+# v1.14.0 (Wed Apr 08 2020)
+
+### Release Notes
+
+_From #738_
+
+* Add `guessRequestTypeFromUrl` config option to all blocker classes which allows to automatically guess the type of network requests based on their URLs. This can be useful for cases where the type is either not available or not accurately inferred (e.g. when requests have time 'other').
+* Fix a case where `PuppeteerBlocker` could show an async unhandled exception in console when trying to remove blocked iframes in pages.
+* Fix redirection to binary resources (i.e. base64 encoded). An issue caused these resources to be corrupted which means that redirected resources were not valid (e.g. invalid PNG image).
+* Redirection to local resources has been improved and will now always succeed thanks to a system of fallback. More types are also available for redirection.
+* Improve API of blocker classes (i.e. PuppeteerBlocker, ElectronBlocker and WebExtensionBlocker) to allow creating custom blocking logic of resources using: `blockScripts`, `blockImages`, `blockMedias`, `blockFrames`, `blockFonts`, and `blockStyles`. These helpers can be called on any existing blocker instance, or on a new one created with the `empty()` static method.
+* Add initial DSL (Domain Specific Language) to create blocking rules with a high-level API. This is used behind the scene to implement the new blocking methods now exposed by blocker instances. This new DSL should be considered alpha-quality and the API will likely change (and break) in the future. It might also be extended to handle hiding rules (a.k.a cosmetic filters).
+* Fix behavior of `NetworkFilter#toString` which should now return a better pretty-printed version of the original filters whenever the `debug` option was false (in which case some information about the original raw string is lost and the string version needs to be inferred back).
+* Implement handling of data: URLs. This means that the Request abstraction will now treat them as valid requests and that their type should always be inferred correctly. Moreover, the matching of data: URLs will now only take into account the prefix and ignore anything following the ',' separator.
+* Requests with empty domain will not be treated as third-party anymore (this should not happen in the wild and was mostly impacting our unit tests).
+
+---
+
+#### :rocket: New Feature
+
+- `@cliqz/adblocker-content`, `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-electron`, `@cliqz/adblocker-puppeteer`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - Various improvements [#738](https://github.com/cliqz-oss/adblocker/pull/738) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#740](https://github.com/cliqz-oss/adblocker/pull/740) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets [#734](https://github.com/cliqz-oss/adblocker/pull/734) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets [#727](https://github.com/cliqz-oss/adblocker/pull/727) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets [#721](https://github.com/cliqz-oss/adblocker/pull/721) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets [#719](https://github.com/cliqz-oss/adblocker/pull/719) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump sinon from 9.0.1 to 9.0.2 [#745](https://github.com/cliqz-oss/adblocker/pull/745) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 9.26.6 to 9.26.7 [#744](https://github.com/cliqz-oss/adblocker/pull/744) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 9.26.5 to 9.26.6 [#743](https://github.com/cliqz-oss/adblocker/pull/743) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.3.3 to 2.3.4 [#742](https://github.com/cliqz-oss/adblocker/pull/742) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump tldts-experimental from 5.6.21 to 5.6.22 [#741](https://github.com/cliqz-oss/adblocker/pull/741) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 9.26.4 to 9.26.5 [#739](https://github.com/cliqz-oss/adblocker/pull/739) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 9.26.3 to 9.26.4 [#737](https://github.com/cliqz-oss/adblocker/pull/737) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 8.2.0 to 8.2.1 [#736](https://github.com/cliqz-oss/adblocker/pull/736) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 9.26.2 to 9.26.3 [#735](https://github.com/cliqz-oss/adblocker/pull/735) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump prettier from 2.0.3 to 2.0.4 [#731](https://github.com/cliqz-oss/adblocker/pull/731) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump tldts-experimental from 5.6.20 to 5.6.21 [#733](https://github.com/cliqz-oss/adblocker/pull/733) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 9.26.1 to 9.26.2 [#732](https://github.com/cliqz-oss/adblocker/pull/732) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @remusao/auto-config from 1.1.0 to 1.1.1 [#730](https://github.com/cliqz-oss/adblocker/pull/730) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 9.26.0 to 9.26.1 [#729](https://github.com/cliqz-oss/adblocker/pull/729) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump prettier from 2.0.2 to 2.0.3 [#728](https://github.com/cliqz-oss/adblocker/pull/728) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 9.25.4 to 9.26.0 [#726](https://github.com/cliqz-oss/adblocker/pull/726) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 9.25.2 to 9.25.4 [#725](https://github.com/cliqz-oss/adblocker/pull/725) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump ts-node from 8.8.1 to 8.8.2 [#724](https://github.com/cliqz-oss/adblocker/pull/724) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.3.2 to 2.3.3 [#723](https://github.com/cliqz-oss/adblocker/pull/723) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump tldts-experimental from 5.6.19 to 5.6.20 [#722](https://github.com/cliqz-oss/adblocker/pull/722) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 9.25.1 to 9.25.2 [#720](https://github.com/cliqz-oss/adblocker/pull/720) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 9.25.0 to 9.25.1 [#718](https://github.com/cliqz-oss/adblocker/pull/718) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump nyc from 15.0.0 to 15.0.1 [#717](https://github.com/cliqz-oss/adblocker/pull/717) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump sandboxed-module from 2.0.3 to 2.0.4 [#716](https://github.com/cliqz-oss/adblocker/pull/716) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.13.1 (Fri Apr 03 2020)
 
 #### :bug: Bug Fix

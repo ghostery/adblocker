@@ -1,3 +1,40 @@
+# v1.14.0 (Wed Apr 08 2020)
+
+### Release Notes
+
+_From #738_
+
+* Add `guessRequestTypeFromUrl` config option to all blocker classes which allows to automatically guess the type of network requests based on their URLs. This can be useful for cases where the type is either not available or not accurately inferred (e.g. when requests have time 'other').
+* Fix a case where `PuppeteerBlocker` could show an async unhandled exception in console when trying to remove blocked iframes in pages.
+* Fix redirection to binary resources (i.e. base64 encoded). An issue caused these resources to be corrupted which means that redirected resources were not valid (e.g. invalid PNG image).
+* Redirection to local resources has been improved and will now always succeed thanks to a system of fallback. More types are also available for redirection.
+* Improve API of blocker classes (i.e. PuppeteerBlocker, ElectronBlocker and WebExtensionBlocker) to allow creating custom blocking logic of resources using: `blockScripts`, `blockImages`, `blockMedias`, `blockFrames`, `blockFonts`, and `blockStyles`. These helpers can be called on any existing blocker instance, or on a new one created with the `empty()` static method.
+* Add initial DSL (Domain Specific Language) to create blocking rules with a high-level API. This is used behind the scene to implement the new blocking methods now exposed by blocker instances. This new DSL should be considered alpha-quality and the API will likely change (and break) in the future. It might also be extended to handle hiding rules (a.k.a cosmetic filters).
+* Fix behavior of `NetworkFilter#toString` which should now return a better pretty-printed version of the original filters whenever the `debug` option was false (in which case some information about the original raw string is lost and the string version needs to be inferred back).
+* Implement handling of data: URLs. This means that the Request abstraction will now treat them as valid requests and that their type should always be inferred correctly. Moreover, the matching of data: URLs will now only take into account the prefix and ignore anything following the ',' separator.
+* Requests with empty domain will not be treated as third-party anymore (this should not happen in the wild and was mostly impacting our unit tests).
+
+---
+
+#### :rocket: New Feature
+
+- Various improvements [#738](https://github.com/cliqz-oss/adblocker/pull/738) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Update local assets [#740](https://github.com/cliqz-oss/adblocker/pull/740) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#734](https://github.com/cliqz-oss/adblocker/pull/734) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#727](https://github.com/cliqz-oss/adblocker/pull/727) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#721](https://github.com/cliqz-oss/adblocker/pull/721) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#719](https://github.com/cliqz-oss/adblocker/pull/719) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### Authors: 2
+
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.13.1 (Fri Apr 03 2020)
 
 #### :house: Internal
