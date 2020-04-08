@@ -9,7 +9,7 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import Request from '../src/request';
+import Request, { getHostnameHashesFromLabelsBackward } from '../src/request';
 
 describe('#Request', () => {
   describe('#fromRawDetails', () => {
@@ -87,59 +87,53 @@ describe('#Request', () => {
 
     it('sets default sourceUrl to empty', () => {
       expect(Request.fromRawDetails({})).to.deep.include({
-        sourceDomain: '',
-        sourceHostname: '',
+        sourceHostnameHashes: new Uint32Array(0),
       });
     });
 
     it('converts sourceUrl to lower case', () => {
       expect(Request.fromRawDetails({ sourceUrl: 'https://sub.FOO.cOm/bar' })).to.deep.include({
-        sourceDomain: 'foo.com',
-        sourceHostname: 'sub.foo.com',
+        sourceHostnameHashes: getHostnameHashesFromLabelsBackward('sub.foo.com', 'foo.com'),
       });
     });
 
     it('parses sourceUrl', () => {
       expect(Request.fromRawDetails({ sourceUrl: 'https://sub.foo.com/bar' })).to.deep.include({
-        sourceDomain: 'foo.com',
-        sourceHostname: 'sub.foo.com',
+        sourceHostnameHashes: getHostnameHashesFromLabelsBackward('sub.foo.com', 'foo.com'),
       });
     });
 
     it('does not parse sourceUrl if hostname and domain provided', () => {
       expect(
         Request.fromRawDetails({
-          sourceDomain: 'PROVIDED DOMAIN',
-          sourceHostname: 'PROVIDED HOSTNAME',
+          sourceDomain: 'provided.domain',
+          sourceHostname: 'hostname.provided.domain',
           sourceUrl: 'https://sub.foo.com/bar',
         }),
       ).to.deep.include({
-        sourceDomain: 'PROVIDED DOMAIN',
-        sourceHostname: 'PROVIDED HOSTNAME',
+        sourceHostnameHashes: getHostnameHashesFromLabelsBackward('hostname.provided.domain', 'provided.domain'),
       });
     });
 
     it('parses sourceUrl if only hostname is provided', () => {
       expect(
         Request.fromRawDetails({
-          sourceHostname: 'PROVIDED HOSTNAME',
+          sourceHostname: 'hostname.provided.domain',
           sourceUrl: 'https://sub.foo.com/bar',
         }),
       ).to.deep.include({
-        sourceDomain: 'foo.com',
-        sourceHostname: 'PROVIDED HOSTNAME',
+        sourceHostnameHashes: getHostnameHashesFromLabelsBackward('hostname.provided.domain', 'provided.domain'),
       });
     });
 
-    it('parses sourceUrl if only domain is provided', () => {
+    it('fallback to domain for hostname value', () => {
       expect(
         Request.fromRawDetails({
-          sourceDomain: 'PROVIDED DOMAIN',
+          sourceDomain: 'provided.domain',
           sourceUrl: 'https://sub.foo.com/bar',
         }),
       ).to.deep.include({
-        sourceDomain: 'PROVIDED DOMAIN',
-        sourceHostname: 'sub.foo.com',
+        sourceHostnameHashes: getHostnameHashesFromLabelsBackward('provided.domain', 'provided.domain'),
       });
     });
 
@@ -264,6 +258,16 @@ describe('#Request', () => {
           isFirstParty: false,
           isThirdParty: true,
         });
+
+        expect(
+          Request.fromRawDetails({
+            sourceUrl: 'https://localhost:4242/',
+            url: 'https://foo.com',
+          }),
+        ).to.deep.include({
+          isFirstParty: false,
+          isThirdParty: true,
+        });
       });
 
       it('falls-back to first-party if no sourceUrl', () => {
@@ -277,34 +281,10 @@ describe('#Request', () => {
         });
       });
 
-      it('falls-back to first-party if sourceUrl is invalid', () => {
-        expect(
-          Request.fromRawDetails({
-            sourceUrl: 'null',
-            url: 'https://foo.com',
-          }),
-        ).to.deep.include({
-          isFirstParty: true,
-          isThirdParty: false,
-        });
-      });
-
       it('falls-back to first-party if no url', () => {
         expect(
           Request.fromRawDetails({
             sourceUrl: 'null',
-          }),
-        ).to.deep.include({
-          isFirstParty: true,
-          isThirdParty: false,
-        });
-      });
-
-      it('falls-back to first-party if url is invalid', () => {
-        expect(
-          Request.fromRawDetails({
-            sourceUrl: 'null',
-            url: 'null',
           }),
         ).to.deep.include({
           isFirstParty: true,

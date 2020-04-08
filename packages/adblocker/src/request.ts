@@ -9,8 +9,9 @@
 import guessUrlType from '@remusao/guess-url-type';
 import { parse } from 'tldts-experimental';
 
+import { EMPTY_UINT32_ARRAY } from './data-view';
 import { TOKENS_BUFFER } from './tokens-buffer';
-import { createFuzzySignature, fastHash, tokenizeNoSkipInPlace } from './utils';
+import { createFuzzySignature, fastHash, tokenizeNoSkipInPlace, HASH_SEED } from './utils';
 
 const TLDTS_OPTIONS = {
   extractHostname: true,
@@ -89,6 +90,74 @@ export const NORMALIZED_TYPE_TOKEN: { [s in RequestType]: number } = {
   xslt: fastHash('type:other'),
 };
 
+export function hashHostnameBackward(hostname: string): number {
+  let hash = HASH_SEED;
+  for (let j = hostname.length - 1; j >= 0; j -= 1) {
+    hash = (hash * 33) ^ hostname.charCodeAt(j);
+  }
+  return hash >>> 0;
+}
+
+export function getHashesFromLabelsBackward(
+  hostname: string,
+  end: number,
+  startOfDomain: number,
+): Uint32Array {
+  TOKENS_BUFFER.reset();
+  let hash = HASH_SEED;
+
+  // Compute hash backward, label per label
+  for (let i = end - 1; i >= 0; i -= 1) {
+    // Process label
+    if (hostname[i] === '.' && i < startOfDomain) {
+      TOKENS_BUFFER.push(hash >>> 0);
+    }
+
+    // Update hash
+    hash = (hash * 33) ^ hostname.charCodeAt(i);
+  }
+
+  TOKENS_BUFFER.push(hash >>> 0);
+  return TOKENS_BUFFER.slice();
+}
+
+/**
+ * Given a hostname and its domain, return the hostname without the public
+ * suffix. We know that the domain, with one less label on the left, will be a
+ * the public suffix; and from there we know which trailing portion of
+ * `hostname` we should remove.
+ */
+export function getHostnameWithoutPublicSuffix(hostname: string, domain: string): string | null {
+  let hostnameWithoutPublicSuffix: string | null = null;
+
+  const indexOfDot = domain.indexOf('.');
+  if (indexOfDot !== -1) {
+    const publicSuffix = domain.slice(indexOfDot + 1);
+    hostnameWithoutPublicSuffix = hostname.slice(0, -publicSuffix.length - 1);
+  }
+
+  return hostnameWithoutPublicSuffix;
+}
+
+export function getEntityHashesFromLabelsBackward(hostname: string, domain: string): Uint32Array {
+  const hostnameWithoutPublicSuffix = getHostnameWithoutPublicSuffix(hostname, domain);
+  if (hostnameWithoutPublicSuffix !== null) {
+    return getHashesFromLabelsBackward(
+      hostnameWithoutPublicSuffix,
+      hostnameWithoutPublicSuffix.length,
+      hostnameWithoutPublicSuffix.length,
+    );
+  }
+  return EMPTY_UINT32_ARRAY;
+}
+
+export function getHostnameHashesFromLabelsBackward(
+  hostname: string,
+  domain: string,
+): Uint32Array {
+  return getHashesFromLabelsBackward(hostname, hostname.length, hostname.length - domain.length);
+}
+
 export interface RequestInitialization {
   requestId: string;
   tabId: number;
@@ -138,12 +207,11 @@ export default class Request {
 
     // Initialize source URL
     if (sourceHostname === undefined || sourceDomain === undefined) {
-      const parsed = parse(sourceUrl, TLDTS_OPTIONS);
+      const parsed = parse(sourceHostname || sourceDomain || sourceUrl, TLDTS_OPTIONS);
       sourceHostname = sourceHostname || parsed.hostname || '';
-      sourceDomain = sourceDomain || parsed.domain || '';
+      sourceDomain = sourceDomain || parsed.domain || sourceHostname || '';
     }
 
-    // source URL
     return new Request({
       requestId,
       tabId,
@@ -177,10 +245,7 @@ export default class Request {
   public readonly hostname: string;
   public readonly domain: string;
 
-  public readonly sourceHostname: string;
-  public readonly sourceHostnameHash: number;
-  public readonly sourceDomain: string;
-  public readonly sourceDomainHash: number;
+  public sourceHostnameHashes: Uint32Array;
 
   // Lazy attributes
   private tokens: Uint32Array | undefined;
@@ -210,17 +275,14 @@ export default class Request {
     this.hostname = hostname;
     this.domain = domain;
 
-    this.sourceHostname = sourceHostname;
-    this.sourceDomain = sourceDomain;
-
-    this.sourceHostnameHash = fastHash(this.sourceHostname);
-    this.sourceDomainHash = fastHash(this.sourceDomain);
+    this.sourceHostnameHashes =
+      sourceHostname.length === 0
+        ? EMPTY_UINT32_ARRAY
+        : getHostnameHashesFromLabelsBackward(sourceHostname, sourceDomain);
 
     // Decide on party
     this.isThirdParty =
-      this.sourceDomain.length === 0 || this.domain.length === 0
-        ? false
-        : this.sourceDomain !== this.domain;
+      sourceDomain.length === 0 || domain.length === 0 ? false : sourceDomain !== domain;
     this.isFirstParty = !this.isThirdParty;
 
     // Check protocol
@@ -260,12 +322,8 @@ export default class Request {
     if (this.tokens === undefined) {
       TOKENS_BUFFER.reset();
 
-      if (this.sourceDomain.length !== 0) {
-        TOKENS_BUFFER.push(fastHash(this.sourceDomain));
-      }
-
-      if (this.sourceHostname.length !== 0) {
-        TOKENS_BUFFER.push(fastHash(this.sourceHostname));
+      for (let i = 0; i < this.sourceHostnameHashes.length; i += 1) {
+        TOKENS_BUFFER.push(this.sourceHostnameHashes[i]);
       }
 
       // Add token corresponding to request type
@@ -301,7 +359,11 @@ export default class Request {
    * inferred as 'other'.
    */
   public guessTypeOfRequest(): RequestType {
+    const currentType = this.type;
     this.type = guessUrlType(this.url);
+    if (currentType !== this.type) {
+      this.tokens = undefined;
+    }
     return this.type;
   }
 }

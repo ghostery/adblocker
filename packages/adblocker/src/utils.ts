@@ -9,6 +9,8 @@
 import { compactTokens } from './compact-set';
 import { TokensBuffer, TOKENS_BUFFER } from './tokens-buffer';
 
+export const HASH_SEED = 7877;
+
 /***************************************************************************
  *  Bitwise helpers
  * ************************************************************************* */
@@ -33,7 +35,7 @@ export function clearBit(n: number, mask: number): number {
 }
 
 export function fastHashBetween(str: string, begin: number, end: number): number {
-  let hash = 5381;
+  let hash = HASH_SEED;
 
   for (let i = begin; i < end; i += 1) {
     hash = (hash * 33) ^ str.charCodeAt(i);
@@ -151,13 +153,13 @@ export function tokenizeWithWildcardsInPlace(
   let inside = false;
   let precedingCh = 0;
   let start = 0;
-  let hash = 5381;
+  let hash = HASH_SEED;
 
   for (let i = 0; i < len; i += 1) {
     const ch = pattern.charCodeAt(i);
     if (isAllowedCode(ch) === true) {
       if (inside === false) {
-        hash = 5381;
+        hash = HASH_SEED;
         inside = true;
         start = i;
       }
@@ -200,13 +202,13 @@ export function tokenizeInPlace(
   const len = Math.min(pattern.length, buffer.remaining() * 2);
   let inside = false;
   let start = 0;
-  let hash = 5381;
+  let hash = HASH_SEED;
 
   for (let i = 0; i < len; i += 1) {
     const ch = pattern.charCodeAt(i);
     if (isAllowedCode(ch) === true) {
       if (inside === false) {
-        hash = 5381;
+        hash = HASH_SEED;
         inside = true;
         start = i;
       }
@@ -236,13 +238,13 @@ export function tokenizeNoSkipInPlace(pattern: string, buffer: TokensBuffer): vo
   const len = Math.min(pattern.length, buffer.remaining() * 2);
   let inside = false;
   let start = 0;
-  let hash = 5381;
+  let hash = HASH_SEED;
 
   for (let i = 0; i < len; i += 1) {
     const ch = pattern.charCodeAt(i);
     if (isAllowedCode(ch) === true) {
       if (inside === false) {
-        hash = 5381;
+        hash = HASH_SEED;
         inside = true;
         start = i;
       }

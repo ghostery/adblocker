@@ -3,7 +3,7 @@ import 'mocha';
 
 import * as puppeteer from 'puppeteer';
 
-import { fromPuppeteerDetails } from '../adblocker';
+import { fromPuppeteerDetails, getHostnameHashesFromLabelsBackward } from '../adblocker';
 
 describe('#fromPuppeteerDetails', () => {
   const baseFrame: Partial<puppeteer.Frame> = {
@@ -18,8 +18,7 @@ describe('#fromPuppeteerDetails', () => {
 
   it('gets sourceUrl from frame', () => {
     expect(fromPuppeteerDetails(baseRequest as puppeteer.Request)).to.deep.include({
-      sourceDomain: 'source.com',
-      sourceHostname: 'sub.source.com',
+      sourceHostnameHashes: getHostnameHashesFromLabelsBackward('sub.source.com', 'source.com'),
     });
   });
 

@@ -17,7 +17,7 @@ import {
   sizeOfUint32Array,
 } from '../data-view';
 import { toASCII } from '../punycode';
-import Request, { RequestType, NORMALIZED_TYPE_TOKEN } from '../request';
+import Request, { RequestType, NORMALIZED_TYPE_TOKEN, hashHostnameBackward } from '../request';
 import { TOKENS_BUFFER } from '../tokens-buffer';
 import {
   binLookup,
@@ -47,7 +47,7 @@ function isAllowedHostname(ch: number): boolean {
   );
 }
 
-const NORMALIZE_OPTIONS: { [option: string]: string; } = {
+const NORMALIZE_OPTIONS: { [option: string]: string } = {
   'document': 'doc',
   'first-party': '1p',
   'generichide': 'ghide',
@@ -101,7 +101,6 @@ export function normalizeRawFilterOptions(rawFilter: string): string {
 
   return rawFilter.slice(0, indexOfOptions) + normalizedOptions;
 }
-
 
 /**
  * Masks used to store options of network filters in a bitmask.
@@ -319,7 +318,7 @@ function computeFilterId(
   redirect: string | undefined,
   fuzzy: Uint32Array | undefined,
 ): number {
-  let hash = (5408 * 33) ^ mask;
+  let hash = (7907 * 33) ^ mask;
 
   if (csp !== undefined) {
     for (let i = 0; i < csp.length; i += 1) {
@@ -451,7 +450,7 @@ export default class NetworkFilter implements IFilter {
       const options = line.slice(optionsIndex + 1).split(',');
       for (let i = 0; i < options.length; i += 1) {
         const rawOption = options[i];
-        const negation = rawOption.charCodeAt(0) === 126 /* '~' */;
+        const negation = rawOption.charCodeAt(0) === 126; /* '~' */
         let option = negation === true ? rawOption.slice(1) : rawOption;
 
         // Check for options: option=value1|value2
@@ -479,9 +478,9 @@ export default class NetworkFilter implements IFilter {
               const value: string = optionValues[j];
               if (value) {
                 if (value.charCodeAt(0) === 126 /* '~' */) {
-                  optNotDomainsArray.push(fastHash(value.slice(1)));
+                  optNotDomainsArray.push(hashHostnameBackward(value.slice(1)));
                 } else {
-                  optDomainsArray.push(fastHash(value));
+                  optDomainsArray.push(hashHostnameBackward(value));
                 }
               }
             }
@@ -597,7 +596,8 @@ export default class NetworkFilter implements IFilter {
             }
 
             mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
-            csp = "script-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:";
+            csp =
+              "script-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:";
             break;
           case 'inline-font':
             if (negation) {
@@ -605,7 +605,8 @@ export default class NetworkFilter implements IFilter {
             }
 
             mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
-            csp = "font-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:";
+            csp =
+              "font-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:";
             break;
           default: {
             // Handle content type options separatly
@@ -1407,10 +1408,7 @@ export default class NetworkFilter implements IFilter {
     }
 
     // Add optional token for types
-    if (
-      TOKENS_BUFFER.empty() === true &&
-      this.fromAny() === false
-    ) {
+    if (TOKENS_BUFFER.empty() === true && this.fromAny() === false) {
       const types = getListOfRequestTypes(this);
       if (types.length !== 0) {
         const result: Uint32Array[] = [];
@@ -1647,7 +1645,7 @@ export function isAnchoredByHostname(
   if (matchIndex === 0) {
     return (
       isFollowedByWildcard === true ||
-      hostname.charCodeAt(filterHostname.length) === 46 || /* '.' */
+      hostname.charCodeAt(filterHostname.length) === 46 /* '.' */ ||
       filterHostname.charCodeAt(filterHostname.length - 1) === 46 /* '.' */
     );
   }
@@ -1659,16 +1657,16 @@ export function isAnchoredByHostname(
   //    * (com, foo.com)
   if (hostname.length === matchIndex + filterHostname.length) {
     return (
-      hostname.charCodeAt(matchIndex - 1) === 46 || /* '.' */
+      hostname.charCodeAt(matchIndex - 1) === 46 /* '.' */ ||
       filterHostname.charCodeAt(0) === 46 /* '.' */
     );
   }
 
   // `filterHostname` is infix of `hostname` and needs match full labels
   return (
-    (isFollowedByWildcard ===true ||
-      hostname.charCodeAt(filterHostname.length) === 46 || /* '.' */
-      filterHostname.charCodeAt(filterHostname.length - 1) === 46) && /* '.' */
+    (isFollowedByWildcard === true ||
+    hostname.charCodeAt(filterHostname.length) === 46 /* '.' */ ||
+      filterHostname.charCodeAt(filterHostname.length - 1) === 46) /* '.' */ &&
     (hostname.charCodeAt(matchIndex - 1) === 46 || filterHostname.charCodeAt(0) === 46)
   );
 }
@@ -1800,6 +1798,15 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
   return request.url.indexOf(pattern) !== -1;
 }
 
+function checkHostnameHashes(domains: Uint32Array, sourceHostnameHashes: Uint32Array): boolean {
+  for (let i = 0; i < sourceHostnameHashes.length; i += 1) {
+    if (binLookup(domains, sourceHostnameHashes[i]) === true) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function checkOptions(filter: NetworkFilter, request: Request): boolean {
   // We first discard requests based on type, protocol and party. This is really
   // cheap and should be done first.
@@ -1814,25 +1821,19 @@ function checkOptions(filter: NetworkFilter, request: Request): boolean {
   }
 
   // Source URL must be among these domains to match
-  if (filter.hasOptDomains() === true) {
-    const optDomains = filter.getOptDomains();
-    if (
-      binLookup(optDomains, request.sourceHostnameHash) === false &&
-      binLookup(optDomains, request.sourceDomainHash) === false
-    ) {
-      return false;
-    }
+  if (
+    filter.hasOptDomains() === true &&
+    checkHostnameHashes(filter.getOptDomains(), request.sourceHostnameHashes) === false
+  ) {
+    return false;
   }
 
   // Source URL must not be among these domains to match
-  if (filter.hasOptNotDomains() === true) {
-    const optNotDomains = filter.getOptNotDomains();
-    if (
-      binLookup(optNotDomains, request.sourceHostnameHash) === true ||
-      binLookup(optNotDomains, request.sourceDomainHash) === true
-    ) {
-      return false;
-    }
+  if (
+    filter.hasOptNotDomains() === true &&
+    checkHostnameHashes(filter.getOptNotDomains(), request.sourceHostnameHashes) === true
+  ) {
+    return false;
   }
 
   return true;

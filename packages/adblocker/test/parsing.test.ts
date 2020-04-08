@@ -9,18 +9,15 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import CosmeticFilter, {
-  DEFAULT_HIDDING_STYLE,
-  hashHostnameBackward,
-} from '../src/filters/cosmetic';
+import CosmeticFilter, { DEFAULT_HIDDING_STYLE } from '../src/filters/cosmetic';
 import NetworkFilter from '../src/filters/network';
 import { parseFilters } from '../src/lists';
-import { fastHash, hashStrings, tokenize } from '../src/utils';
+import { hashStrings, tokenize } from '../src/utils';
 import { HTMLSelector } from '../src/html-filtering';
-import { NORMALIZED_TYPE_TOKEN } from '../src/request';
+import { NORMALIZED_TYPE_TOKEN, hashHostnameBackward } from '../src/request';
 
 function h(hostnames: string[]): Uint32Array {
-  return new Uint32Array(hostnames.map(hashHostnameBackward));
+  return new Uint32Array(hostnames.map(hashHostnameBackward)).sort();
 }
 
 // TODO: collaps, popup, popunder, genericblock
@@ -602,7 +599,7 @@ describe('Network filters', () => {
       it('parses domain', () => {
         network('||foo.com$domain=bar.com', {
           hasOptDomains: true,
-          optDomains: new Uint32Array([fastHash('bar.com')]),
+          optDomains: h(['bar.com']),
 
           hasOptNotDomains: false,
           optNotDomains: new Uint32Array([]),
@@ -610,7 +607,7 @@ describe('Network filters', () => {
 
         network('||foo.com$domain=bar.com|baz.com', {
           hasOptDomains: true,
-          optDomains: new Uint32Array([fastHash('bar.com'), fastHash('baz.com')]),
+          optDomains: h(['bar.com', 'baz.com']),
 
           hasOptNotDomains: false,
           optNotDomains: new Uint32Array([]),
@@ -623,7 +620,7 @@ describe('Network filters', () => {
           optDomains: new Uint32Array([]),
 
           hasOptNotDomains: true,
-          optNotDomains: new Uint32Array([fastHash('bar.com')]),
+          optNotDomains: h(['bar.com']),
         });
 
         network('||foo.com$domain=~bar.com|~baz.com', {
@@ -631,33 +628,33 @@ describe('Network filters', () => {
           optDomains: new Uint32Array([]),
 
           hasOptNotDomains: true,
-          optNotDomains: new Uint32Array([fastHash('bar.com'), fastHash('baz.com')]),
+          optNotDomains: h(['bar.com', 'baz.com']),
         });
       });
 
       it('parses domain and ~domain', () => {
         network('||foo.com$domain=~bar.com|baz.com', {
           hasOptDomains: true,
-          optDomains: new Uint32Array([fastHash('baz.com')]),
+          optDomains: h(['baz.com']),
 
           hasOptNotDomains: true,
-          optNotDomains: new Uint32Array([fastHash('bar.com')]),
+          optNotDomains: h(['bar.com']),
         });
 
         network('||foo.com$domain=bar.com|~baz.com', {
           hasOptDomains: true,
-          optDomains: new Uint32Array([fastHash('bar.com')]),
+          optDomains: h(['bar.com']),
 
           hasOptNotDomains: true,
-          optNotDomains: new Uint32Array([fastHash('baz.com')]),
+          optNotDomains: h(['baz.com']),
         });
 
         network('||foo.com$domain=foo|~bar|baz', {
           hasOptDomains: true,
-          optDomains: new Uint32Array([fastHash('foo'), fastHash('baz')]),
+          optDomains: h(['foo', 'baz']),
 
           hasOptNotDomains: true,
-          optNotDomains: new Uint32Array([fastHash('bar')]),
+          optNotDomains: h(['bar']),
         });
       });
 
@@ -1745,52 +1742,45 @@ describe('Filters list', () => {
 
   describe('multi-line filters', () => {
     const lines = (content: string) =>
-      parseFilters(content, { debug: true }).networkFilters.map(f => f.toString());
+      parseFilters(content, { debug: true }).networkFilters.map((f) => f.toString());
 
     it('single filter on two lines', () => {
-      expect(lines([
-        '*$3p,script, \\',
-        '    domain=x.com|y.com',
-      ].join('\n'))).to.eql(['*$3p,script,domain=x.com|y.com']);
-    });
-
-    it('single filter on many lines', () => {
-      expect(lines([
-        '*$ \\',
-        '    3p, \\',
-        '    script, \\',
-        '    domain=x.com|y.com',
-      ].join('\n'))).to.eql(['*$3p,script,domain=x.com|y.com']);
-    });
-
-    it('handle leading and trailing spaces', () => {
-      expect(lines([
-        ' \t*$ \\',
-        '    3p, \\',
-        '    script, \\',
-        '    domain=x.com|y.com \t ',
-      ].join('\n'))).to.eql(['*$3p,script,domain=x.com|y.com']);
-    });
-
-    it('mixed with normal filters and comments', () => {
-      expect(lines([
-        '||foo.com^',
-        ' \t*$ \\',
-        '    3p, \\',
-        '    script, \\',
-        '    domain=x.com|y.com \t ',
-        '! comment',
-        '||bar.com^',
-        '|| \\',
-        '    baz. \\',
-        '    com^',
-      ].join('\n'))).to.eql([
-        '||foo.com^',
+      expect(lines(['*$3p,script, \\', '    domain=x.com|y.com'].join('\n'))).to.eql([
         '*$3p,script,domain=x.com|y.com',
-        '||bar.com^',
-        '||baz.com^',
       ]);
     });
 
+    it('single filter on many lines', () => {
+      expect(
+        lines(['*$ \\', '    3p, \\', '    script, \\', '    domain=x.com|y.com'].join('\n')),
+      ).to.eql(['*$3p,script,domain=x.com|y.com']);
+    });
+
+    it('handle leading and trailing spaces', () => {
+      expect(
+        lines(
+          [' \t*$ \\', '    3p, \\', '    script, \\', '    domain=x.com|y.com \t '].join('\n'),
+        ),
+      ).to.eql(['*$3p,script,domain=x.com|y.com']);
+    });
+
+    it('mixed with normal filters and comments', () => {
+      expect(
+        lines(
+          [
+            '||foo.com^',
+            ' \t*$ \\',
+            '    3p, \\',
+            '    script, \\',
+            '    domain=x.com|y.com \t ',
+            '! comment',
+            '||bar.com^',
+            '|| \\',
+            '    baz. \\',
+            '    com^',
+          ].join('\n'),
+        ),
+      ).to.eql(['||foo.com^', '*$3p,script,domain=x.com|y.com', '||bar.com^', '||baz.com^']);
+    });
   });
 });

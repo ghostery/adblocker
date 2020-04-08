@@ -8,31 +8,50 @@
 
 import { promises as fs } from 'fs';
 import { join } from 'path';
+import { gzipSync, brotliCompressSync } from 'zlib';
 
-import { FiltersEngine } from '../adblocker';
+import { FiltersEngine, adsLists, adsAndTrackingLists, fullLists } from '../adblocker';
 
-async function loadAllLists() {
-  const assets = await Promise.all(
-    [
-      '../assets/easylist/easylist.txt',
-      '../assets/easylist/easylistgermany.txt',
-      '../assets/easylist/easyprivacy.txt',
-      '../assets/fanboy/annoyance.txt',
-      '../assets/easylist/easylist-cookie.txt',
-      '../assets/peter-lowe/serverlist.txt',
-      '../assets/ublock-origin/annoyances.txt',
-      '../assets/ublock-origin/badware.txt',
-      '../assets/ublock-origin/filters.txt',
-      '../assets/ublock-origin/privacy.txt',
-      '../assets/ublock-origin/resource-abuse.txt',
-      '../assets/ublock-origin/unbreak.txt',
-    ].map((p) => fs.readFile(join(__dirname, p), 'utf-8')),
-  );
+const PREFIX =
+  'https://raw.githubusercontent.com/cliqz-oss/adblocker/master/packages/adblocker/assets';
 
-  return assets.join('\n');
+async function loadFromLocalAssets(lists: string[]): Promise<string> {
+  return (
+    await Promise.all(
+      lists
+        .map((path) => join(__dirname, '..', 'assets', path.slice(PREFIX.length)))
+        .map((path) => fs.readFile(path, 'utf-8')),
+    )
+  ).join('\n');
+}
+
+function loadAdsLists(): Promise<string> {
+  return loadFromLocalAssets(adsLists);
+}
+
+function loadAdsAndTrackingLists(): Promise<string> {
+  return loadFromLocalAssets(adsAndTrackingLists);
+}
+
+function loadFullLists(): Promise<string> {
+  return loadFromLocalAssets(fullLists);
 }
 
 (async () => {
-  const engine = FiltersEngine.parse(await loadAllLists(), { debug: true, loadNetworkFilters: false, enableCompression: true });
-  console.log(engine.serialize().byteLength);
+  for (const [name, raw] of [
+    ['ads', await loadAdsLists()],
+    ['ads + trackers', await loadAdsAndTrackingLists()],
+    ['ads + trackers + annoyances', await loadFullLists()],
+  ]) {
+    const engine = FiltersEngine.parse(raw, { enableCompression: true });
+    const { networkFilters, cosmeticFilters } = engine.getFilters();
+    console.log(`> ${name} (${networkFilters.length} network + ${cosmeticFilters.length} hide)`);
+    for (const [compression, compress] of [
+      ['raw', (b: Uint8Array) => b],
+      ['gzip', gzipSync],
+      ['brotlit', brotliCompressSync],
+    ] as [string, (b: Uint8Array) => Uint8Array][]) {
+      console.log(' +', compression, compress(engine.serialize()).byteLength, 'bytes');
+    }
+  }
 })();

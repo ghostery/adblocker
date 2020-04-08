@@ -11,9 +11,11 @@ import Config from '../../config';
 import { StaticDataView } from '../../data-view';
 import CosmeticFilter, {
   DEFAULT_HIDDING_STYLE,
+} from '../../filters/cosmetic';
+import {
   getEntityHashesFromLabelsBackward,
   getHostnameHashesFromLabelsBackward,
-} from '../../filters/cosmetic';
+} from '../../request';
 import { hashStrings, tokenizeNoSkip } from '../../utils';
 import { noopOptimizeCosmetic } from '../optimizer';
 import ReverseIndex from '../reverse-index';
