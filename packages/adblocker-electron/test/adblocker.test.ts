@@ -1,7 +1,12 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { ElectronBlocker, ElectronRequestType, fromElectronDetails } from '../adblocker';
+import {
+  ElectronBlocker,
+  ElectronRequestType,
+  fromElectronDetails,
+  getHostnameHashesFromLabelsBackward,
+} from '../adblocker';
 
 describe('#fromElectronDetails', () => {
   const baseRequest: Electron.OnBeforeRequestListenerDetails = {
@@ -16,8 +21,7 @@ describe('#fromElectronDetails', () => {
 
   it('gets sourceUrl from referrer', () => {
     expect(fromElectronDetails(baseRequest)).to.deep.include({
-      sourceDomain: 'source.com',
-      sourceHostname: 'sub.source.com',
+      sourceHostnameHashes: getHostnameHashesFromLabelsBackward('sub.source.com', 'source.com'),
     });
   });
 

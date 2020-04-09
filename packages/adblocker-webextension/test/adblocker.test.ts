@@ -1,7 +1,12 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { fromWebRequestDetails, updateResponseHeadersWithCSP, OnBeforeRequestDetailsType } from '../adblocker';
+import {
+  fromWebRequestDetails,
+  updateResponseHeadersWithCSP,
+  OnBeforeRequestDetailsType,
+  getHostnameHashesFromLabelsBackward,
+} from '../adblocker';
 
 describe('#updateResponseHeadersWithCSP', () => {
   const baseDetails: OnBeforeRequestDetailsType = {
@@ -68,8 +73,7 @@ describe('#fromWebRequestDetails', () => {
         url: 'https://url',
       }),
     ).to.deep.include({
-      sourceDomain: 'foo.com',
-      sourceHostname: 'sub.foo.com',
+      sourceHostnameHashes: getHostnameHashesFromLabelsBackward('sub.foo.com', 'foo.com'),
     });
   });
 
@@ -83,8 +87,7 @@ describe('#fromWebRequestDetails', () => {
         url: 'https://url',
       }),
     ).to.deep.include({
-      sourceDomain: 'foo.com',
-      sourceHostname: 'sub.foo.com',
+      sourceHostnameHashes: getHostnameHashesFromLabelsBackward('sub.foo.com', 'foo.com'),
     });
   });
 
@@ -98,8 +101,7 @@ describe('#fromWebRequestDetails', () => {
         url: 'https://url',
       }),
     ).to.deep.include({
-      sourceDomain: 'foo.com',
-      sourceHostname: 'sub.foo.com',
+      sourceHostnameHashes: getHostnameHashesFromLabelsBackward('sub.foo.com', 'foo.com'),
     });
   });
 
@@ -117,8 +119,7 @@ describe('#fromWebRequestDetails', () => {
       hostname: 'sub.url.com',
       url: 'https://sub.url.com',
 
-      sourceDomain: 'source.com',
-      sourceHostname: 'sub.source.com',
+      sourceHostnameHashes: getHostnameHashesFromLabelsBackward('sub.source.com', 'source.com'),
 
       type: 'script',
     });

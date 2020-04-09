@@ -14,6 +14,11 @@ import {
   sizeOfUTF8,
   sizeOfUint32Array,
 } from '../data-view';
+import {
+  getEntityHashesFromLabelsBackward,
+  getHostnameHashesFromLabelsBackward,
+  hashHostnameBackward,
+} from '../request';
 import { toASCII } from '../punycode';
 import {
   binLookup,
@@ -29,71 +34,6 @@ import { HTMLSelector, extractHTMLSelectorFromRule } from '../html-filtering';
 
 const EMPTY_TOKENS: [Uint32Array] = [EMPTY_UINT32_ARRAY];
 export const DEFAULT_HIDDING_STYLE: string = 'display: none !important;';
-
-export function hashHostnameBackward(hostname: string): number {
-  let hash = 5381;
-  for (let j = hostname.length - 1; j >= 0; j -= 1) {
-    hash = (hash * 33) ^ hostname.charCodeAt(j);
-  }
-  return hash >>> 0;
-}
-
-export function getHashesFromLabelsBackward(
-  hostname: string,
-  end: number,
-  startOfDomain: number,
-): number[] {
-  const hashes: number[] = [];
-  let hash = 5381;
-
-  // Compute hash backward, label per label
-  for (let i = end - 1; i >= 0; i -= 1) {
-    // Process label
-    if (hostname[i] === '.' && i < startOfDomain) {
-      hashes.push(hash >>> 0);
-    }
-
-    // Update hash
-    hash = (hash * 33) ^ hostname.charCodeAt(i);
-  }
-
-  hashes.push(hash >>> 0);
-  return hashes;
-}
-
-export function getEntityHashesFromLabelsBackward(hostname: string, domain: string): number[] {
-  const hostnameWithoutPublicSuffix = getHostnameWithoutPublicSuffix(hostname, domain);
-  if (hostnameWithoutPublicSuffix !== null) {
-    return getHashesFromLabelsBackward(
-      hostnameWithoutPublicSuffix,
-      hostnameWithoutPublicSuffix.length,
-      hostnameWithoutPublicSuffix.length,
-    );
-  }
-  return [];
-}
-
-export function getHostnameHashesFromLabelsBackward(hostname: string, domain: string): number[] {
-  return getHashesFromLabelsBackward(hostname, hostname.length, hostname.length - domain.length);
-}
-
-/**
- * Given a hostname and its domain, return the hostname without the public
- * suffix. We know that the domain, with one less label on the left, will be a
- * the public suffix; and from there we know which trailing portion of
- * `hostname` we should remove.
- */
-export function getHostnameWithoutPublicSuffix(hostname: string, domain: string): string | null {
-  let hostnameWithoutPublicSuffix: string | null = null;
-
-  const indexOfDot = domain.indexOf('.');
-  if (indexOfDot !== -1) {
-    const publicSuffix = domain.slice(indexOfDot + 1);
-    hostnameWithoutPublicSuffix = hostname.slice(0, -publicSuffix.length - 1);
-  }
-
-  return hostnameWithoutPublicSuffix;
-}
 
 /**
  * Given a `selector` starting with either '#' or '.' check if what follows is
@@ -308,10 +248,10 @@ export default class CosmeticFilter implements IFilter {
           mask = setBit(mask, COSMETICS_MASK.isUnicode);
         }
 
-        const negation: boolean = hostname.charCodeAt(0) === 126 /* '~' */;
+        const negation: boolean = hostname.charCodeAt(0) === 126; /* '~' */
         const entity: boolean =
-            hostname.charCodeAt(hostname.length - 1) === 42 /* '*' */ &&
-            hostname.charCodeAt(hostname.length - 2) === 46 /* '.' */;
+          hostname.charCodeAt(hostname.length - 1) === 42 /* '*' */ &&
+          hostname.charCodeAt(hostname.length - 2) === 46; /* '.' */
 
         const start: number = negation ? 1 : 0;
         const end: number = entity ? hostname.length - 2 : hostname.length;
@@ -414,14 +354,19 @@ export default class CosmeticFilter implements IFilter {
         } else if (
           fastStartsWithFrom(line, '-abp-', indexAfterColon) ||
           fastStartsWithFrom(line, 'contains', indexAfterColon) ||
+          fastStartsWithFrom(line, 'has-text', indexAfterColon) ||
           fastStartsWithFrom(line, 'has', indexAfterColon) ||
-          fastStartsWithFrom(line, 'if', indexAfterColon) ||
           fastStartsWithFrom(line, 'if-not', indexAfterColon) ||
-          fastStartsWithFrom(line, 'matches-css', indexAfterColon) ||
+          fastStartsWithFrom(line, 'if', indexAfterColon) ||
           fastStartsWithFrom(line, 'matches-css-after', indexAfterColon) ||
           fastStartsWithFrom(line, 'matches-css-before', indexAfterColon) ||
-          fastStartsWithFrom(line, 'properties', indexAfterColon) ||
-          fastStartsWithFrom(line, 'subject', indexAfterColon) ||
+          fastStartsWithFrom(line, 'matches-css', indexAfterColon) ||
+          fastStartsWithFrom(line, 'min-text-length', indexAfterColon) ||
+          fastStartsWithFrom(line, 'nth-ancestor', indexAfterColon) ||
+          fastStartsWithFrom(line, 'remove', indexAfterColon) ||
+          fastStartsWithFrom(line, 'upward', indexAfterColon) ||
+          fastStartsWithFrom(line, 'watch-attrs', indexAfterColon) ||
+          fastStartsWithFrom(line, 'watch-attr', indexAfterColon) ||
           fastStartsWithFrom(line, 'xpath', indexAfterColon)
         ) {
           return null;
@@ -742,14 +687,14 @@ export default class CosmeticFilter implements IFilter {
       return false;
     }
 
-    const entitiesHashes: number[] =
+    const entitiesHashes: Uint32Array =
       this.entities !== undefined || this.notEntities !== undefined
         ? getEntityHashesFromLabelsBackward(hostname, domain)
-        : [];
-    const hostnameHashes: number[] =
+        : EMPTY_UINT32_ARRAY;
+    const hostnameHashes: Uint32Array =
       this.hostnames !== undefined || this.notHostnames !== undefined
         ? getHostnameHashesFromLabelsBackward(hostname, domain)
-        : [];
+        : EMPTY_UINT32_ARRAY;
 
     // Check if `hostname` is blacklisted
     if (this.notHostnames !== undefined) {

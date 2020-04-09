@@ -11,20 +11,25 @@ import 'mocha';
 
 import { getDomain } from 'tldts-experimental';
 
-import CosmeticFilter, {
-  getHashesFromLabelsBackward,
-  getHostnameWithoutPublicSuffix,
-  hashHostnameBackward,
-} from '../src/filters/cosmetic';
+import CosmeticFilter from '../src/filters/cosmetic';
 import NetworkFilter, { isAnchoredByHostname } from '../src/filters/network';
 
 import { f } from '../src/lists';
-import Request, { RequestInitialization, RequestType } from '../src/request';
+import Request, {
+  RequestInitialization,
+  RequestType,
+  getHashesFromLabelsBackward,
+  getHostnameWithoutPublicSuffix,
+  hashHostnameBackward,
+} from '../src/request';
 
 import requests from './data/requests';
 
 use((chai, utils) => {
-  utils.addMethod(chai.Assertion.prototype, 'matchRequest', function (this: any, req: Partial<Request>) {
+  utils.addMethod(chai.Assertion.prototype, 'matchRequest', function (
+    this: any,
+    req: Partial<Request>,
+  ) {
     const filter = this._obj;
     const request = Request.fromRawDetails(req);
 
@@ -37,7 +42,10 @@ use((chai, utils) => {
     );
   });
 
-  utils.addMethod(chai.Assertion.prototype, 'matchHostname', function (this: any, hostname: string) {
+  utils.addMethod(chai.Assertion.prototype, 'matchHostname', function (
+    this: any,
+    hostname: string,
+  ) {
     const filter = this._obj;
     new chai.Assertion(filter).not.to.be.null;
 
@@ -52,8 +60,8 @@ use((chai, utils) => {
 declare global {
   namespace Chai {
     interface Assertion {
-        matchRequest(req: Partial<RequestInitialization>): Assertion;
-        matchHostname(hostname: string): Assertion;
+      matchRequest(req: Partial<RequestInitialization>): Assertion;
+      matchHostname(hostname: string): Assertion;
     }
   }
 }
@@ -347,6 +355,10 @@ describe('#NetworkFilter.match', () => {
       sourceUrl: 'http://foo.com',
       url: 'https://foo.com/bar',
     });
+    expect(f`||foo$domain=sub1.foo.com`).not.to.matchRequest({
+      sourceUrl: 'http://sub2.sub1.bar.com',
+      url: 'https://foo.com/bar',
+    });
     expect(f`||foo$domain=foo.com`).not.to.matchRequest({
       sourceUrl: 'http://bar.com',
       url: 'https://foo.com/bar',
@@ -359,6 +371,14 @@ describe('#NetworkFilter.match', () => {
     });
     expect(f`||foo$domain=~bar.com`).not.to.matchRequest({
       sourceUrl: 'http://bar.com',
+      url: 'https://foo.com/bar',
+    });
+    expect(f`||foo$domain=~bar.com`).not.to.matchRequest({
+      sourceUrl: 'http://sub.bar.com',
+      url: 'https://foo.com/bar',
+    });
+    expect(f`||foo$domain=~sub1.bar.com`).not.to.matchRequest({
+      sourceUrl: 'http://sub2.sub1.bar.com',
       url: 'https://foo.com/bar',
     });
   });
@@ -496,25 +516,25 @@ describe('#getHostnameWithoutPublicSuffix', () => {
 describe('#getHashesFromLabelsBackward', () => {
   it('hash all labels', () => {
     expect(getHashesFromLabelsBackward('foo.bar.baz', 11, 11)).to.eql(
-      ['baz', 'bar.baz', 'foo.bar.baz'].map(hashHostnameBackward),
+      new Uint32Array(['baz', 'bar.baz', 'foo.bar.baz'].map(hashHostnameBackward)),
     );
   });
 
   it('hash subdomains only', () => {
     expect(getHashesFromLabelsBackward('foo.bar.baz.com', 15, 8 /* start of domain */)).to.eql(
-      ['baz.com', 'bar.baz.com', 'foo.bar.baz.com'].map(hashHostnameBackward),
+      new Uint32Array(['baz.com', 'bar.baz.com', 'foo.bar.baz.com'].map(hashHostnameBackward)),
     );
   });
 
   it('hash ignoring suffix', () => {
     expect(getHashesFromLabelsBackward('foo.bar.baz.com', 11, 11)).to.eql(
-      ['baz', 'bar.baz', 'foo.bar.baz'].map(hashHostnameBackward),
+      new Uint32Array(['baz', 'bar.baz', 'foo.bar.baz'].map(hashHostnameBackward)),
     );
   });
 
   it('hash subdomains only, ignoring suffix', () => {
     expect(getHashesFromLabelsBackward('foo.bar.baz.com', 11, 8)).to.eql(
-      ['baz', 'bar.baz', 'foo.bar.baz'].map(hashHostnameBackward),
+      new Uint32Array(['baz', 'bar.baz', 'foo.bar.baz'].map(hashHostnameBackward)),
     );
   });
 });
