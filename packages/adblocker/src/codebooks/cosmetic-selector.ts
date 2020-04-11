@@ -108,7 +108,7 @@ export default [
   "block",
   "Block",
   "click",
-  "ExoLo",
+  "disab",
   "frame",
   "nobab",
   "olumn",

@@ -392,18 +392,12 @@ kinopoisk.ru###image:style(opacity: 1 !important;)
 ! https://www.reddit.com/r/uBlockOrigin/comments/9c6j8u/
 ! https://github.com/uBlockOrigin/uAssets/issues/5531
 /google-analytics.$badfilter
-/google-analytics.$3p
 /googleanalytics.js$badfilter
-/googleanalytics.js$3p
 -google-analytics.$badfilter
--google-analytics.$3p
 -google-analytics/$badfilter
--google-analytics/$3p
 /google-analytics.$script,badfilter
-/google-analytics.$script,3p
 ! https://forums.lanik.us/viewtopic.php?f=64&p=136474
 /ga_setup.js$badfilter
-/ga_setup.js$3p
 
 ! https://github.com/jspenguin2017/uBlockProtector/issues/349
 @@||facebook.com/*_ad6.$script,1p
@@ -1049,7 +1043,6 @@ forbes.it#@#.ad-row
 ! "Frigidaire.com, [...] registration page refused to submit"
 ! https://github.com/uBlockOrigin/uAssets/issues/6812
 /analytics/analytics.$~xmlhttprequest,badfilter
-/analytics/analytics.$~xmlhttprequest,3p
 @@||mxpnl.com/libs/mixpanel-*.min.js$domain=frigidaire.com
 @@||play2.qbrick.com/framework/modules/analytics/analytics.min.js$script
 
@@ -2186,9 +2179,6 @@ tele5.de##.break-ads
 ! https://github.com/NanoMeow/QuickReports/issues/1210
 torrentfunk.com#@#div[style*="padding:"]
 
-! https://forums.lanik.us/viewtopic.php?p=147492#p147492
-||cheezburger.com^$csp=script-src 'self' 'unsafe-eval' 'unsafe-inline' data: *.youtube.com *.ytimg.com *.google-analytics.com *.facebook.net *.complex.com *.b2c.com *.chartbeat.com *.chzbgr.com *.scorecardresearch.com *.air.tv *.quantserve.com *.optimizely.com *.cheezburger.com *.quantcount.com *.newrelic.com *.spot.im,badfilter
-
 ! https://github.com/NanoMeow/QuickReports/issues/1217
 @@||api.perfops.net/analytics/dns/data$xhr,domain=dnsperf.com
 
@@ -2279,7 +2269,6 @@ calgaryherald.com#@#.local-branding
 
 ! https://github.com/uBlockOrigin/uBlock-issues/issues/608
 /google-analytics-$~image,badfilter
-/google-analytics-$~image,~other
 
 ! https://forums.lanik.us/viewtopic.php?f=64&t=43091
 ||scroll.com^$3p,badfilter
@@ -3567,3 +3556,11 @@ metro.co.uk###taboola-below-article-thumbnails
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7215
 @@||datadoghq-browser-agent.com/datadog-rum-us.js$script,domain=experian.com
+
+! https://forums.lanik.us/viewtopic.php?p=154046#p154046
+! CNAME
+!#if env_firefox
+@@||youtube-ui.l.google.com^$frame
+@@||edgecastcdn.net^$script,frame
+@@||twimg.twitter.map.fastly.net^$script
+!#endif
