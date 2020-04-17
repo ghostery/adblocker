@@ -1286,7 +1286,7 @@ mind42.com###content.sidebar2:style(margin-right: 0 !important;)
 ||ntv.io^$script,important,domain=latimes.com
 ||openx.net^$script,important,domain=latimes.com
 ||rubiconproject.com^$script,important,domain=latimes.com
-latimes.com##+js(nostif, f.parentNode.removeChild(f), 100)
+latimes.com##+js(nostif, a.parentNode.removeChild(a), 100)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6947
 xhamster.*,xhamster1.*##+js(aopr, wih-popunder)
@@ -3059,9 +3059,6 @@ imgdone.com##+js(acis, ExoLoader)
 ! https://github.com/uBlockOrigin/uAssets/issues/1020
 ||frprn.com/*.php$script
 frprn.com##.spot
-
-! https://github.com/reek/anti-adblock-killer/issues/3818
-sozcu.com.tr##+js(aopr, canRunAds)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1028
 imojado.org##+js(nobab)
@@ -5233,7 +5230,8 @@ hd-streams.org##+js(window.open-defuser)
 ||hd-streams.org/sw.js$script
 ! https://github.com/NanoMeow/QuickReports/issues/1594
 nxload.com##+js(aopw, _pop)
-nxload.com##+js(set, String.prototype.charCodeAt, noopFunc)
+nxload.com##+js(aopr, adb)
+||nxload.com^$csp=connect-src 'self' *.nxload.com
 ||raterst.pro^$3p
 ||reberr.pro^$3p
 
@@ -5572,13 +5570,10 @@ aquipelis.net##[class^="adsbutt"]
 gnula.biz##+js(nowebrtc)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2081
-eporner.eu##.vjs-inplayer-container
-eporner.eu##+js(popads-dummy.js)
-eporner.eu##+js(window.open-defuser)
 eporner.com##+js(aopw, EPeventFire)
-eporner.com##+js(aopr, ExoLoader)
-eporner.com##+js(aopr, exoDocumentProtocol)
+eporner.com##+js(nostif, additional_src, 300)
 eporner.com##+js(popads-dummy.js)
+*.xml$xhr,3p,domain=eporner.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1855
 ! https://forums.lanik.us/viewtopic.php?p=134829#p134829
@@ -10834,7 +10829,9 @@ tonspion.de##+js(nostif, (), 15000)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4054
 oncehelp.com##+js(aopr, app_vars.force_disable_adblock)
+oncehelp.com##+js(aeld, click, trigger)
 oncehelp.com##.banner-inner
+oncehelp.com##[href*="?token"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4057
 novagente.pt##+js(set, adBlockDetected, trueFunc)
@@ -16794,9 +16791,9 @@ senpa.io###ad-slot-center-panel
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5667
 ! https://github.com/uBlockOrigin/uAssets/issues/6727
-getfreecourses.me##+js(nosiif, visibility, 1000)
-@@||getfreecourses.me^$ghide
-getfreecourses.me##.adsbygoogle
+getfreecourses.*##+js(nosiif, visibility, 1000)
+@@||getfreecourses.*^$ghide
+getfreecourses.*##.adsbygoogle
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5669
 dramasjc.com##+js(aopw, _pop)
@@ -23558,8 +23555,8 @@ nirjonmela.com##+js(acis, $, AdBlock)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/49979
 downloadbull.com##+js(aopr, anOptions)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/50006
-sozcu.com.tr##+js(aopr, googlefc)
+! https://github.com/NanoMeow/QuickReports/issues/3091#issuecomment-615302046
+sozcu.com.tr##+js(nostif, parentNode.removeChild(f))
 
 ! https://github.com/NanoMeow/QuickReports/issues/3068
 @@||thgss.com^$script,1p
@@ -24165,9 +24162,6 @@ urle.io##.banner-inner
 urle.io##+js(aopr, app_vars.force_disable_adblock)
 urle.io##.box-main > div:nth-of-type(3) > .btn-lg.btn-success.btn
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/50901
-shorterall.com##+js(aopr, app_vars.force_disable_adblock)
-
 ! https://github.com/NanoMeow/QuickReports/issues/3212
 @@||teknosafe.info^$script,1p
 
@@ -24406,7 +24400,7 @@ securitypcsoluciones.blogspot.com##+js(aopr, document.oncontextmenu)
 airsextube.com,asianbabestube.com,bigtitsxxxfree.com,blowjobpornset.com,entertubeporn.com,finexxxvideos.com,freesexvideos24.com,fuckhairygirls.com,gopornindian.com,grandmatube.pro,grannyfucko.com,grannyfuckxxx.com,hd-analporn.com,hiddencamhd.com,hindiporno.pro,hotstep-mom.com,indianbestporn.com,japanesemomsex.com,japanxxxass.com,massagefreetube.com,maturepussies.pro,megajapansex.com,new-xxxvideos.com,xxxblowjob.pro,xxxtubegain.com,xxxvideostrue.com,onlinegrannyporn.com,agedtubeporn.com,agedvideos.com,freebigboobsporn.com,tubeinterracial-porn.com,best-xxxvideos.com,bestanime-xxx.com,blowxxxtube.com,callfuck.com,teenhubxxx.com,tubepornasian.com,xxxtubedot.com,blowjobfucks.com,dirtyasiantube.com,maturewomenfucks.com,pornmaturetube.com,setfucktube.com,tourporno.com,do-xxx.com,dotfreesex.com,dotfreexxx.com,easymilftube.net,electsex.com,erospots.info,fineretroporn.com,freehqtube.com,freshmaturespussy.com,freshsexxvideos.com,fuckedporno.com,gallant-matures.com,hqhardcoreporno.com,getitinside.com,girlssexxxx.com,glamourxxx-online.com,vintagepornnew.com,tubevintageporn.com,goxxxvideos.com,grouppornotube.com,hqxxxmovies.com,hqsex-xxx.com,hqamateurtubes.com,hotpussyhubs.com,hdpornteen.com,indecentvideos.com,ifreefuck.com,kittyfuckstube.com,lightxxxtube.com,momstube-porn.com,modelsxxxtube.com,milfpussy-sex.com,nudistube.com,nudisteens.com,nudismteens.com,nude-beach-tube.com,nicexxxtube.com,neatpornodot.com,neatfreeporn.com,bigtitsporn-tube.com,tubehqxxx.com,nakedbbw-sex.com,onlineteenhub.com,online-xxxmovies.com,pussyhothub.com,pornxxxplace.com,pornoteensex.com,pornonote.pro,pornoaid.com,pornclipshub.com,whitexxxtube.com,sweetadult-tube.com,sweet-maturewomen.com##+js(noeval)
 airsextube.com,asianbabestube.com,bigtitsxxxfree.com,blowjobpornset.com,entertubeporn.com,finexxxvideos.com,freesexvideos24.com,fuckhairygirls.com,gopornindian.com,grandmatube.pro,grannyfucko.com,grannyfuckxxx.com,hd-analporn.com,hiddencamhd.com,hindiporno.pro,hotstep-mom.com,indianbestporn.com,japanesemomsex.com,japanxxxass.com,massagefreetube.com,maturepussies.pro,megajapansex.com,new-xxxvideos.com,xxxblowjob.pro,xxxtubegain.com,xxxvideostrue.com,acutetube.net,agedtubeporn.com,agedvideos.com,onlinegrannyporn.com,freebigboobsporn.com,tubeinterracial-porn.com,best-xxxvideos.com,bestanime-xxx.com,blowxxxtube.com,callfuck.com,teenhubxxx.com,tubepornasian.com,xxxtubedot.com,blowjobfucks.com,dirtyasiantube.com,maturewomenfucks.com,pornmaturetube.com,setfucktube.com,tourporno.com,do-xxx.com,dotfreesex.com,dotfreexxx.com,easymilftube.net,electsex.com,fineretroporn.com,freehqtube.com,freshmaturespussy.com,freshsexxvideos.com,fuckedporno.com,gallant-matures.com,hqhardcoreporno.com,getitinside.com,girlssexxxx.com,glamourxxx-online.com,vintagepornnew.com,tubevintageporn.com,goxxxvideos.com,grouppornotube.com,hqxxxmovies.com,hqsex-xxx.com,hqamateurtubes.com,hotpussyhubs.com,hdpornteen.com,indecentvideos.com,ifreefuck.com,kittyfuckstube.com,lightxxxtube.com,momstube-porn.com,modelsxxxtube.com,milfpussy-sex.com,nicexxxtube.com,neatpornodot.com,neatfreeporn.com,bigtitsporn-tube.com,tubehqxxx.com,nakedbbw-sex.com,onlineteenhub.com,online-xxxmovies.com,pussyhothub.com,pornxxxplace.com,pornoteensex.com,pornonote.pro,pornoaid.com,pornclipshub.com,whitexxxtube.com,sweetadult-tube.com,sweet-maturewomen.com##+js(aopr, Aloader.serve)
 activevoyeur.com,allbbwtube.com,alltstube.com,cockmeter.com##+js(acis, document.dispatchEvent, myEl)
-ateurmaturewives.com,ariestube.com,asian-teen-sex.com,18asiantube.com,wholevideos.com,asianporntube69.com,babeswp.com,bangyourwife.com,basiltube.com,bdsmslavemovie.com,bdsmwaytube.com,bestmaturewomen.com,classicpornvids.com,cockmeter.com,cocogals.com,pornpaw.com,dawntube.com,desihoes.com,desimmshd.com,dirtytubemix.com,plumperstube.com,enormousbabes.net,erowall.com,exclusiveindianporn.com,figtube.com,amateur-twink.com,freeboytwinks.com,freegrannyvids.com,freexmovs.com,freshbbw.com,frostytube.com,fuckhottwink.com,fuckslutsonline.com,gameofporn.com,gayboyshd.com,getitinside.com,giantshemalecocks.com,erofus.com,hd-tube-porn.com,hardcorehd.xxx,hairytwat.org,iwantmature.com,justababes.com,juicyflaps.com,jenpornuj.cz,javteentube.com,hard-tube-porn.com,klaustube.com,kaboomtube.com,lustyspot.com,lushdiaries.com,lovelynudez.com,dailyangels.com,ljcam.net,myfreemoms.com,mybestxtube.com,nakenprat.com,oosex.net,oldgrannylovers.com,ohueli.net,pornuploaded.net,pornstarsadvice.com,alotporn.com,bobs-tube.com,pornohaha.com,pornmam.com,pornhegemon.com,pornabcd.com,porn-hd-tube.com,pandamovies.pw,pomelotube.com,teensporn.tv,thehentaiworld.com,pantyhosepink.com,queenofmature.com,realvoyeursex.com,realbbwsex.com,rawindianporn.com,onlygoldmovies.com,rainytube.com,stileproject.com##+js(aopr, document.dispatchEvent)
+ateurmaturewives.com,ariestube.com,asian-teen-sex.com,18asiantube.com,wholevideos.com,asianporntube69.com,babeswp.com,bangyourwife.com,basiltube.com,bdsmslavemovie.com,bdsmwaytube.com,bestmaturewomen.com,classicpornvids.com,cockmeter.com,cocogals.com,pornpaw.com,dawntube.com,desihoes.com,desimmshd.com,dirtytubemix.com,plumperstube.com,enormousbabes.net,erowall.com,exclusiveindianporn.com,figtube.com,amateur-twink.com,freeboytwinks.com,freegrannyvids.com,freexmovs.com,freshbbw.com,frostytube.com,fuckhottwink.com,fuckslutsonline.com,gameofporn.com,gayboyshd.com,getitinside.com,giantshemalecocks.com,erofus.com,hd-tube-porn.com,hardcorehd.xxx,hairytwat.org,iwantmature.com,justababes.com,juicyflaps.com,jenpornuj.cz,javteentube.com,hard-tube-porn.com,klaustube.com,kaboomtube.com,lustyspot.com,lushdiaries.com,lovelynudez.com,dailyangels.com,ljcam.net,myfreemoms.com,mybestxtube.com,nakenprat.com,oosex.net,oldgrannylovers.com,ohueli.net,pornuploaded.net,pornstarsadvice.com,alotporn.com,bobs-tube.com,pornohaha.com,pornmam.com,pornhegemon.com,pornabcd.com,porn-hd-tube.com,pandamovies.pw,pomelotube.com,teensporn.tv,thehentaiworld.com,pantyhosepink.com,queenofmature.com,realvoyeursex.com,realbbwsex.com,rawindianporn.com,onlygoldmovies.com,rainytube.com,stileproject.com,slutdump.com,skygals.com##+js(aopr, document.dispatchEvent)
 8teenxxx.com,activevoyeur.com,allschoolboysecrets.com,babesjoy.com,boobsforfun.com,breedingmoms.com,cockmeter.com,collegeteentube.com,cumshotlist.com,freepornik.com,fullyhd.com,go-xxx-go.com,pornv.porn,porn0.tv,ritzysex.com,ritzyporn.com##+js(aopr, ExoLoader.serve)
 bdsmporntub.com,femdomporntubes.com##+js(aopr, Popunder)
 best18teens.com,comicxxx.eu,desihoes.com,dirtytamil.com,hotgirlhub.com,hentaiyes.com,nude-beach-tube.com,porndollz.com,xnxxvideo.pro,xvideosxporn.com,oosex.net,onlyhgames.com,pornyeah.com,pornstarsadvice.com,pornhegemon.com,porn0.tv,thehentaiworld.com,reddflix.com,stileproject.com,solopornoitaliani.xxx##+js(acis, document.querySelectorAll, popMagic)
@@ -24414,12 +24408,11 @@ blowjobgif.net##+js(aopr, ExoDetector)
 favefreeporn.com,onlygayvideo.com,peachytube.com,stepsisterfuck.me##+js(aopr, ExoLoader.addZone)
 decorativemodels.com,erowall.com,freyalist.com,eroticacamp.com,ghostbabes.com,guruofporn.com,infinityerotic.com,jesseporn.xyz,kendralist.com,vipergirls.to,lizardporn.com##+js(aopr, loadTool)
 comicxxx.eu,mybestxtube.com,onlyhgames.com,pornobengala.com,pornl.com,pornicom.com,xecce.com,teensporn.tv,pornlift.com,reddflix.com,superbgays.com##+js(aopr, open)
-classicpornbest.com,desihoes.com,indianpornvideo.org,porn18sex.com,pervclips.com##+js(aopr, decodeURI)
+classicpornbest.com,desihoes.com,indianpornvideo.org,porn18sex.com,pervclips.com,slaughtergays.com##+js(aopr, decodeURI)
 classicpornbest.com##+js(aeld, popstate)
 classicpornbest.com##+js(aopr, localStorage)
 embedy.me##+js(window.open-defuser, 0, embedy)
 reddflix.com##+js(aopr, LieDetector)
-fatwhitebutt.com##+js(window.open-defuser)
 erospots.info##+js(aopr, Pub2)
 gameofporn.com##+js(aeld, , exopop)
 jemontremonminou.com,jemontremasextape.com,jemontremabite.com##+js(aopr, localStorage)
@@ -24433,7 +24426,7 @@ bobs-tube.com##+js(nostif, innerText, 2000)
 bobs-tube.com##.sponsored_top
 dreamamateurs.com##+js(popads-dummy.js)
 pornforrelax.com##+js(aopr, adver.abFucker.serve)
-smplace.com##+js(window.open-defuser)
+fatwhitebutt.com,smplace.com,slaughtergays.com##+js(window.open-defuser)
 sokobj.com,smplace.com##+js(aopw, _pop)
 
 ||classicpornbest.com^$csp=script-src *
@@ -24498,6 +24491,9 @@ superbgays.com###CloseAd
 ||ampugi334f.com^
 ||qydhjirz.com^
 ||ntlzbnmyukos.com^
+||psozyhotho.pro^
+||defutohy.pro^
+
 ##.imggif
 ##.bloc-pub
 ##.bloc-pub2
@@ -24886,10 +24882,15 @@ nulljungle.com##+js(acis, jQuery, DHAntiAdBlocker)
 *.gif$domain=nulljungle.com,image
 
 ! https://github.com/NanoMeow/QuickReports/issues/3343
+! https://github.com/AdguardTeam/AdguardFilters/issues/50901
 @@||shorterall.com^$ghide
 shorterall.com##+js(nosiif, visibility, 1000)
 shorterall.com##+js(aopr, AaDetector)
 shorterall.com##+js(aopw, _pop)
+shorterall.com##+js(aopr, app_vars.force_disable_adblock)
+shorterall.com##+js(nostif, alert)
+shorterall.com##+js(set, blurred, false)
+
 
 ! dlapk4all .com popups
 dlapk4all.com##+js(aopr, glxopen)
