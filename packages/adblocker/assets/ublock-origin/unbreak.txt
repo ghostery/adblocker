@@ -3571,3 +3571,15 @@ metro.co.uk###taboola-below-article-thumbnails
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/480
 |https://$subdocument,3p,domain=series9.to,badfilter
+
+! CNAME https://github.com/uBlockOrigin/uAssets/issues/7264
+!#if env_firefox
+@@||pxys.ezoic.net^$font,domain=forum.thaivisa.com
+!#endif
+
+! unbreak myzyia.com CSS
+/\.(accountant|bid|click|club|com|cricket|date|download|faith|link|loan|lol|men|online|party|racing|review|science|site|space|stream|top|trade|webcam|website|win|xyz|com)\/(([0-9]{2,9})(\.|\/)(css|\?)?)$/$stylesheet,3p,badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/7265
+wideo.wp.pl#@#+js(abort-on-property-read, Object.prototype.rebuild)
+wideo.wp.pl#@#A[href*=".wp.pl/"] > DIV > IMG[class][src^="https://v.wpimg.pl/"]
