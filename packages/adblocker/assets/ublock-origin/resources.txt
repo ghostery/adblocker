@@ -303,7 +303,7 @@ fuckadblock.js-3.2.0 application/javascript
 
 
 fingerprint2.js application/javascript
-(function(){let n=function(){};n.prototype={get:function(n){setTimeout((function(){n("",[])}),1)}};window.Fingerprint2=n})();
+(function(){let t="";for(let n=0;n<8;n++)t+=(65536*Math.random()+4096|0).toString(16).slice(-4);const n=function(){};n.get=function(n,o){if(!o)o=n;setTimeout(()=>{o(t,[])},1)};n.prototype={get:n.get};window.Fingerprint2=n})();
 
 
 doubleclick_instream_ad_status.js application/javascript
