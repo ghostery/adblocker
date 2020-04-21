@@ -1745,6 +1745,7 @@ hydrax.net##+js(nostif, debugger)
 @@||hydrax.net^$ghide
 @@||iamcdn.net/players/*ads$script,domain=hydrax.net|playhydrax.com
 hydrax.net,playhydrax.com##+js(aopr, AaDetector)
+hydrax.net,playhydrax.com##+js(window.open-defuser)
 jav.guru##.aligncenter
 jav.guru##.alignnone
 
@@ -2958,13 +2959,11 @@ arawatch.*##A[href$=".html"][rel="nofollow norefferer noopener"]
 arawatch.*##[id*="ScriptRoot"]
 arawatch.*##a[href="https://vidfast.co"]
 
-! https://github.com/uBlockOrigin/uAssets/issues/1001
-! https://forums.lanik.us/viewtopic.php?p=138275#p138275
-! https://forums.lanik.us/viewtopic.php?p=142126#p142126
 ! https://github.com/uBlockOrigin/uAssets/issues/5339
 europixhd.*##+js(acis, Object.defineProperty, vocabulary)
 europixhd.*,hdeuropix.*,topeuropix.net##+js(acis, parseInt, tabunder)
 europixhd.*,hdeuropix.*,topeuropix.net##+js(aopr, AaDetector)
+europixhd.*,hdeuropix.*,topeuropix.net##+js(aopr, LieDetector)
 europixhd.*,hdeuropix.*,topeuropix.net##+js(popads-dummy.js)
 europixhd.*,hdeuropix.*,hindipix.*,topeuropix.*##+js(disable-newtab-links.js)
 europixhd.*,hdeuropix.*,topeuropix.net##+js(nostif, '0x)
@@ -2978,6 +2977,7 @@ europixhd.*,hdeuropix.*,topeuropix.net###MyImageId
 europixhd.*,topeuropix.net##+js(acis, atob, decodeURIComponent)
 topeuropix.*###MyAdsId
 *$frame,domain=topeuropix.net,3p
+||bmkz57b79pxk.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1002
 ! https://github.com/uBlockOrigin/uAssets/issues/1002#issuecomment-369038123
@@ -10237,12 +10237,15 @@ oemdtc.com##.easyazon-block
 
 ! https://github.com/NanoMeow/QuickReports/issues/234
 ! https://github.com/uBlockOrigin/uAssets/issues/4345
+! https://github.com/uBlockOrigin/uAssets/issues/7271
 camwhoreshd.com,cwtvembeds.com##+js(window.open-defuser)
 camwhoreshd.com,cwtvembeds.com##.hola_top_element
+cwtvembeds.com##+js(set, flashvars.video_click_url, undefined)
 camwhoreshd.com##+js(aopr, loadTool)
 @@*$media,domain=camvideos.org
 @@||video$xhr,media,domain=camvideos.org
 ||mcdlks.com^$3p
+||wpnrtnmrewunrtok.xyz^$badfilter
 
 ! https://github.com/jspenguin2017/uBlockProtector/issues/999
 ! https://github.com/uBlockOrigin/uAssets/issues/4176
@@ -16119,7 +16122,9 @@ cinetux.to##+js(aopw, smrtSB)
 @@||ad.71i.de/somtag/loader/loader.js$script,domain=puls4.com
 
 ! radio. securenetsystems. net anti adb
+! https://www.reddit.com/r/uBlockOrigin/comments/g5ja8e/ad_blocker_dectector/
 securenetsystems.net##+js(set, iExist, true)
+@@||securenetsystems.net^$xhr,1p
 
 ! https://github.com/uBlockOrigin/uBlock-issues/issues/556
 @@||putlockerhd.co/js/showads.js$xhr,1p
@@ -18836,8 +18841,9 @@ young-pussy.com##+js(aopr, ExoLoader.serve)
 young-pussy.com###playerOverlay
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=43398
+! https://github.com/NanoMeow/QuickReports/issues/3629
 @@||googlesyndication.com/pagead/js/adsbygoogle.js$script,domain=extremereportbot.com
-extremereportbot.com##+js(nostif, , 1)
+@@||googlesyndication.com/pagead/js/*/show_ads_impl.js$script,domain=extremereportbot.com
 @@||googletagmanager.com/gtag/js$script,domain=extremereportbot.com
 @@||extremereportbot.com^$ghide
 @@||extremereportbot.com^$script,1p
@@ -19576,8 +19582,8 @@ getstocks.net##+js(aopr, adblock)
 ! libros4.com anti adb
 libros4.com##+js(aeld, load, 2000)
 
-! blog.sombex.com anti adb
-blog.sombex.com##+js(acis, document.getElementById, adblock)
+! sombex.com anti adb
+sombex.com##+js(nosiif, visibility, 1000)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2692
 script-stack.com##+js(nobab)
