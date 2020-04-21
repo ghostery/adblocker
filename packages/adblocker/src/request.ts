@@ -158,6 +158,23 @@ export function getHostnameHashesFromLabelsBackward(
   return getHashesFromLabelsBackward(hostname, hostname.length, hostname.length - domain.length);
 }
 
+function isThirdParty(
+  hostname: string,
+  domain: string,
+  sourceHostname: string,
+  sourceDomain: string,
+): boolean {
+  if (domain.length !== 0 && sourceDomain.length !== 0) {
+    return domain !== sourceDomain;
+  } else if (domain.length !== 0 && sourceHostname.length !== 0) {
+    return domain !== sourceHostname;
+  } else if (sourceDomain.length !== 0 && hostname.length !== 0) {
+    return hostname !== sourceDomain;
+  }
+
+  return false;
+}
+
 export interface RequestInitialization {
   requestId: string;
   tabId: number;
@@ -281,8 +298,7 @@ export default class Request {
         : getHostnameHashesFromLabelsBackward(sourceHostname, sourceDomain);
 
     // Decide on party
-    this.isThirdParty =
-      sourceDomain.length === 0 || domain.length === 0 ? false : sourceDomain !== domain;
+    this.isThirdParty = isThirdParty(hostname, domain, sourceHostname, sourceDomain);
     this.isFirstParty = !this.isThirdParty;
 
     // Check protocol
