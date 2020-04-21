@@ -1,3 +1,42 @@
+# v1.14.2 (Tue Apr 21 2020)
+
+#### :bug: Bug Fix
+
+- build(deps-dev): bump @ampproject/rollup-plugin-closure-compiler ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.103 to 0.0.104 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nail_care: Polish
+
+- Make third-party detection more robust [#790](https://github.com/cliqz-oss/adblocker/pull/790) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Update local assets [#788](https://github.com/cliqz-oss/adblocker/pull/788) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#785](https://github.com/cliqz-oss/adblocker/pull/785) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#784](https://github.com/cliqz-oss/adblocker/pull/784) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#782](https://github.com/cliqz-oss/adblocker/pull/782) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#778](https://github.com/cliqz-oss/adblocker/pull/778) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#775](https://github.com/cliqz-oss/adblocker/pull/775) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#773](https://github.com/cliqz-oss/adblocker/pull/773) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#769](https://github.com/cliqz-oss/adblocker/pull/769) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#764](https://github.com/cliqz-oss/adblocker/pull/764) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#760](https://github.com/cliqz-oss/adblocker/pull/760) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#755](https://github.com/cliqz-oss/adblocker/pull/755) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#750](https://github.com/cliqz-oss/adblocker/pull/750) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump @ampproject/rollup-plugin-closure-compiler from 0.24.0 to 0.25.0 [#766](https://github.com/cliqz-oss/adblocker/pull/766) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.103 to 0.0.104 [#751](https://github.com/cliqz-oss/adblocker/pull/751) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.14.1 (Thu Apr 09 2020)
 
 ### Release Notes

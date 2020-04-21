@@ -1,3 +1,19 @@
+# v1.14.2 (Tue Apr 21 2020)
+
+#### :bug: Bug Fix
+
+- build(deps): bump @types/chrome from 0.0.103 to 0.0.104 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump @types/chrome from 0.0.103 to 0.0.104 [#751](https://github.com/cliqz-oss/adblocker/pull/751) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.14.0 (Wed Apr 08 2020)
 
 ### Release Notes
