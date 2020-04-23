@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202004211908
+! Version: 202004221909
 ! Title: EasyPrivacy
-! Last modified: 21 Apr 2020 19:08 UTC
+! Last modified: 22 Apr 2020 19:09 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -27,6 +27,7 @@
 &refererPageDetail=
 &trackingserver=
 &visitor=*&referrer=
+&visitorUuid=
 -action/fingerprint?
 -action/ping?
 -ad-targeting?
@@ -6594,6 +6595,7 @@ _mongo_stats/
 ||ipinfo.info^$third-party
 ||ipinfodb.com^$third-party
 ||ipinyou.com.cn^$third-party
+||iplist.cc^$third-party
 ||iplocationtools.com^$third-party
 ||ipro.com^$third-party
 ||iproanalytics.com^$third-party
@@ -9262,6 +9264,7 @@ _mongo_stats/
 ||smartnews-ads.com^$third-party
 ||socdm.com^$third-party
 ||speee-ad.jp^$third-party
+||taxel.jp^$third-party
 ||team-rec.jp^$third-party
 ||tgknt.com^$third-party
 ||trackfeed.com^$third-party
@@ -11849,7 +11852,7 @@ _mongo_stats/
 ||plista.com/iframeShowItem.php
 ||px.staticfiles.at^
 ||pyroactive.de/counter/
-||quiz.stroeermediabrands.de^
+||quiz.stroeermediabrands.de/pub/$image
 ||rc.aol.de^*/getrcmd.js
 ||retrack.q-divisioncdn.de^
 ||retresco.de^*/stats/$third-party
@@ -11942,6 +11945,7 @@ _mongo_stats/
 ||bnpparibas.fr/JavascriptInsert.js
 ||btstats.devtribu.fr^
 ||c.woopic.com/tools/pdb.min.js
+||calcul-pagerank.fr/client/$third-party
 ||calotag.com^$third-party
 ||cdn-analytics.ladmedia.fr^
 ||cdn-files.prsmedia.fr^*/xiti/
@@ -11978,6 +11982,7 @@ _mongo_stats/
 ||scriptsgratuits.com/sg/stats/
 ||securite.01net.com^
 ||service-webmaster.fr/cpt-visites/$third-party
+||socialrank.fr/client/$third-party
 ||stat.prsmedia.fr^
 ||stats-dc1.frz.io^
 ||stats-factory.digitregroup.io^
@@ -15867,10 +15872,10 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 ||lem.nouvelobs.com^
 ||lemde.fr^*/metrics/
 ||lemde.fr^*/tracking/
+||leparking.fr/jsV038/tracker.js
 ||logs-qos.tf1.fr^
 ||ma-petite-recette.fr/visites
 ||neko-san.fr/stats
-||nextinpact.com/bundles/mtm
 ||nouvelobs.com/scripts/stats.php?
 ||nouvelobs.com/tools/csrum.php
 ||nouvelobs.com/trafiz-
@@ -15916,6 +15921,8 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 ! nextinpact
 ||cdn5.nextinpact.com^
 ||edmi.nextinpact.com^
+||nextinpact.com/bundles/mtm
+||nextinpact.com/image/*=.jpg
 ||pam.nextinpact.com^
 ||poum.nextinpact.com^
 ||rel.nextinpact.com^
@@ -16685,7 +16692,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||easyship.com/api/v1/track/$xmlhttprequest,domain=trackmyshipment.co
 @@||ec.europa.eu^*/piwik.js
 @@||edgedatg.com/aws/apps/datg/web-player-unity/externals/comscore.$script,domain=abc.com
-@@||ensighten.com^*/Bootstrap.js$domain=americanexpress.com|britishairways.com|capitalone.com|caranddriver.com|cart.autodesk.com|citizensbank.com|dell.com|fidelity.com|france24.com|homedepot.com|hp.com|rfi.fr|sbs.com.au|sfgate.com|staples.com|t-mobile.com|target.com|verizonwireless.com|williamhill.com|womenshealthmag.com|zales.com
+@@||ensighten.com^*/Bootstrap.js$domain=americanexpress.com|britishairways.com|capitalone.com|caranddriver.com|cart.autodesk.com|citi.com|citizensbank.com|dell.com|fidelity.com|france24.com|homedepot.com|hp.com|rfi.fr|sbs.com.au|sfgate.com|staples.com|t-mobile.com|target.com|verizonwireless.com|williamhill.com|womenshealthmag.com|zales.com
 @@||ensighten.com^*/code/$script
 @@||ensighten.com^*/scode/$script,domain=norton.com
 @@||ensighten.com^*/serverComponent.php?$script
@@ -16706,6 +16713,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||gatsbyjs.org/packages/$xmlhttprequest
 @@||gatsbyjs.org/page-data/packages/$xmlhttprequest
 @@||geni.us/snippet.min.js$script,domain=pcmonitors.info
+@@||geo-targetly.com/geolocation?id$script,third-party
 @@||geo.kaloo.ga/json/?$script,domain=telesurtv.net
 @@||geoplugin.net/json.gp?jsoncallback=$script,domain=worldc.am
 @@||geostag.cardinalcommerce.com/DeviceFingerprintWeb/includes/js/fingerprint2.min.js$script
