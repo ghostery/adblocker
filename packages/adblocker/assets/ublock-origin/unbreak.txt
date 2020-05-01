@@ -3066,6 +3066,7 @@ nowgoal.com##[href^="/ad/"]
 @@||bloomberg.com/*/captcha/captcha.js$script,1p
 @@||hotelscombined.com/*/captcha/captcha.js$script,1p
 @@||seekingalpha.com/*/captcha/$script,1p
+@@||pxchk.net/api/*/collector/ocaptcha$xhr
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6853
 @@||coreldraw.com/static/common/scripts/omni-tracking/omni-tracking.min.js$script,1p
@@ -3539,3 +3540,21 @@ metro.co.uk###taboola-below-article-thumbnails
 ! trafic .ro blocked Peter Lowe's
 ||trafic.ro^$badfilter
 ||trafic.ro^$3p
+
+! unbreak mac-torrent-download.net thumbnails/images
+|https://$script,3p,domain=mac-torrent-download.net,badfilter
+
+! https://www.reddit.com/r/uBlockOrigin/comments/ga0veq/ubo_is_blocking_ads_and_popups_but_the_site_is/
+|https://$image,other,script,stylesheet,third-party,xmlhttprequest,domain=01fmovies.com|ffmovies.ru|fmovies.mx|fmovies.taxi|fmovies.world|fmovies123.cc|fmovieson.com|thefmovies.me,badfilter
+
+! https://forums.lanik.us/viewtopic.php?p=154386#p154386
+/myads.$badfilter
+
+! https://github.com/NanoMeow/QuickReports/issues/3632#issuecomment-621503457
+|https://$script,3p,domain=thepiratebay.org,badfilter
+
+! CNAME https://github.com/easylist/easylist/issues/5039#issuecomment-621854700
+!#if env_firefox
+@@||cloudfront.net^$domain=tf1.fr
+@@||g.akamaiedge.net^$script,domain=tf1.fr
+!#endif

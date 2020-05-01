@@ -11,7 +11,7 @@ widgets.outbrain.com/outbrain.js application/javascript
 
 
 webrtc-if.js application/javascript
-(function(){let e="{{1}}";if(e.startsWith("/")&&e.endsWith("/"))e=e.slice(1,-1);else e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");let t;try{t=new RegExp(e)}catch(e){return}const n=window.RTCPeerConnection?"RTCPeerConnection":window.webkitRTCPeerConnection?"webkitRTCPeerConnection":"";if(""===n)return;const r=console.log.bind(console);const o=new WeakSet;const s=function(e,n){if(o.has(e))return false;if(n instanceof Object===false)return true;if(false===Array.isArray(n.iceServers))return true;for(const e of n.iceServers){const n="string"===typeof e.urls?[e.urls]:e.urls;if(Array.isArray(n))for(const e of n)if(t.test(e))return true;if("string"===typeof e.username)if(t.test(e.username))return true;if("string"===typeof e.credential)if(t.test(e.credential))return true}o.add(e);return false};const c=window[n];const i=c.prototype;i.createDataChannel=new Proxy(i.createDataChannel,{apply:function(e,t,n){if(false===s(e,n[1])){r(n[1]);return Reflect.apply(e,t,n.slice(0,1))}return Reflect.apply(e,t,n)}});window[n]=new Proxy(c,{construct:function(e,t){if(false===s(e,t[0])){r(t[0]);return Reflect.construct(e)}return Reflect.construct(e,t)}})})();
+(function(){let e="{{1}}";if(e.startsWith("/")&&e.endsWith("/"))e=e.slice(1,-1);else e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");let t;try{t=new RegExp(e)}catch(e){return}const n=window.RTCPeerConnection?"RTCPeerConnection":window.webkitRTCPeerConnection?"webkitRTCPeerConnection":"";if(""===n)return;const r=console.log.bind(console);const o=new WeakSet;const s=function(e,n){if(o.has(e))return false;if(n instanceof Object===false)return true;if(false===Array.isArray(n.iceServers))return true;for(const e of n.iceServers){const n="string"===typeof e.urls?[e.urls]:e.urls;if(Array.isArray(n))for(const e of n)if(t.test(e))return true;if("string"===typeof e.username)if(t.test(e.username))return true;if("string"===typeof e.credential)if(t.test(e.credential))return true}o.add(e);return false};const c=window[n];const i=c.prototype;i.createDataChannel=new Proxy(i.createDataChannel,{apply:function(e,t,n){if(false===s(e,n[1])){r("uBO:",n[1]);return Reflect.apply(e,t,n.slice(0,1))}return Reflect.apply(e,t,n)}});window[n]=new Proxy(c,{construct:function(e,t){if(false===s(e,t[0])){r("uBO:",t[0]);return Reflect.construct(e)}return Reflect.construct(e,t)}})})();
 
 
 upmanager-defuser.js application/javascript
@@ -227,7 +227,7 @@ ligatus.com/*/angular-tag.js application/javascript
 
 
 json-prune.js application/javascript
-(function(){const n=console.log.bind(console);const t="{{1}}";const o="{{2}}";const e="{{1}}"!==t&&""!==t?t.split(/ +/):[];const s="{{2}}"!==o&&""!==o?o.split(/ +/):[];const r=function(n,t){let o=n;let e=t;for(;;){if(o instanceof Object===false)return;const n=e.indexOf(".");if(-1===n)return o.hasOwnProperty(e)?[o,e]:void 0;const t=e.slice(0,n);if(false===o.hasOwnProperty(t))return;o=o[t];e=e.slice(n+1)}};const c=function(n){for(const t of s){const o=r(n,t);if(void 0===o)return false}return true};JSON.parse=new Proxy(JSON.parse,{apply:function(){const t=Reflect.apply(...arguments);if(0===e.length){n(location.hostname,t);return t}if(false===c(t))return t;for(const n of e){const o=r(t,n);if(void 0!==o)delete o[0][o[1]]}return t}})})();
+(function(){const e="{{1}}";const t="{{2}}";const n="{{1}}"!==e&&""!==e?e.split(/ +/):[];let o;let s,i;if(0!==n.length)o=0!==n.length&&"{{2}}"!==t&&""!==t?t.split(/ +/):[];else{s=console.log.bind(console);let e;if(""===t||"{{2}}"===t)e=".?";else if("/"===t.charAt(0)&&"/"===t.slice(-1))e=t.slice(1,-1);else e=t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");i=new RegExp(e)}const l=function(e,t){let n=e;let o=t;for(;;){if(n instanceof Object===false)return;const e=o.indexOf(".");if(-1===e)return n.hasOwnProperty(o)?[n,o]:void 0;const t=o.slice(0,e);if(false===n.hasOwnProperty(t))return;n=n[t];o=o.slice(e+1)}};const r=function(e){for(const t of o){const n=l(e,t);if(void 0===n)return false}return true};JSON.parse=new Proxy(JSON.parse,{apply:function(){const e=Reflect.apply(...arguments);if(void 0!==s){const t=JSON.stringify(e,null,2);if(i.test(t))s("uBO:",location.hostname,t);return e}if(false===r(e))return e;for(const t of n){const n=l(e,t);if(void 0!==n)delete n[0][n[1]]}return e}})})();
 
 
 hd-main.js application/javascript
@@ -383,7 +383,7 @@ alert-buster.js application/javascript
 
 
 aell.js application/javascript
-(function(){const t=console.log.bind(console);self.EventTarget.prototype.addEventListener=new Proxy(self.EventTarget.prototype.addEventListener,{apply:function(n,e,o){const r=o[0].toString();const s=String(o[1]);t('addEventListener("%s", %s)',r,s);return n.apply(e,o)}})})();
+(function(){const t=console.log.bind(console);self.EventTarget.prototype.addEventListener=new Proxy(self.EventTarget.prototype.addEventListener,{apply:function(n,e,o){const r=o[0].toString();const s=String(o[1]);t('uBO: addEventListener("%s", %s)',r,s);return n.apply(e,o)}})})();
 
 
 aeld.js application/javascript
@@ -403,7 +403,7 @@ addthis.com/addthis_widget.js application/javascript
 
 
 addEventListener-logger.js application/javascript
-(function(){const t=console.log.bind(console);self.EventTarget.prototype.addEventListener=new Proxy(self.EventTarget.prototype.addEventListener,{apply:function(n,e,o){const r=o[0].toString();const s=String(o[1]);t('addEventListener("%s", %s)',r,s);return n.apply(e,o)}})})();
+(function(){const t=console.log.bind(console);self.EventTarget.prototype.addEventListener=new Proxy(self.EventTarget.prototype.addEventListener,{apply:function(n,e,o){const r=o[0].toString();const s=String(o[1]);t('uBO: addEventListener("%s", %s)',r,s);return n.apply(e,o)}})})();
 
 
 addEventListener-defuser.js application/javascript
