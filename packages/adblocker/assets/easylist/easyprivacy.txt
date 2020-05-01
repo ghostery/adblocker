@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202004301913
+! Version: 202005011915
 ! Title: EasyPrivacy
-! Last modified: 30 Apr 2020 19:13 UTC
+! Last modified: 01 May 2020 19:15 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -900,6 +900,7 @@
 /audiweb.js
 /audsci.js
 /autotag.
+/autotrack-with-autotrack-analytics.
 /autotrack.carbon.js
 /autotrack.custom.min.js
 /autotrack.js
@@ -2102,6 +2103,7 @@
 /googleAnalyticsBase_
 /GoogleAnalyticsBC3.
 /googleAnalyticsBottom.
+/googleAnalyticsDataLayer.
 /googleanalyticsevents?
 /googleanalyticsmanagement.swf
 /GoogleAnalyticsModule.
@@ -4971,7 +4973,6 @@
 /zig_c.min.js
 /zonapixel.
 /zone-log.
-/zoomd.widget.logger.
 /ztagtrackedevent/*
 /ztracker.js
 /zxc.gif?
@@ -7375,6 +7376,7 @@ _mongo_stats/
 ||searchfeed.com^$third-party
 ||searchignite.com^$third-party
 ||searchplow.com^$third-party
+||secureanalytic.com^$third-party
 ||securepaths.com^$third-party
 ||securitytrfx.com^$third-party
 ||sedotracker.com^$third-party
@@ -8536,6 +8538,7 @@ _mongo_stats/
 ||lumberamount.com^$third-party
 ||lumpylumber.com^$third-party
 ||magnetairport.com^$third-party
+||markedmeasure.com^$third-party
 ||massivemark.com^$third-party
 ||meatydime.com^$third-party
 ||movemeal.com^$third-party
@@ -11734,6 +11737,7 @@ _mongo_stats/
 ||zdlogs.sphereup.com^
 ||zemanta.com/reblog_*.png$image,third-party
 ||zemanta.com/usersync/outbrain/?
+||ziffdavisb2b.com^*/tracker.js
 ||ziffprod.com^*/zdcse.min.js?referrer=
 ||zmags.com/a/p/p.js
 ||zoomtv.me^*?pixel=
@@ -14688,6 +14692,7 @@ _mongo_stats/
 ||tms.eharmony.co.uk^
 ||tnla.thenewslens.com^
 ||tongji.meizu.com^
+||toolbox.com/DataLayerPixelServlet|
 ||tools.ranker.com^
 ||top.gg/api/auctions/impression
 ||top.wn.com^
@@ -15188,12 +15193,16 @@ _mongo_stats/
 ||cdn-alliancegravity.s3.amazonaws.com^
 ||cmp.arnnet.com.au^
 ||cmp.cio.com.au^
+||cmp.cio.com^
 ||cmp.cmo.com.au^
 ||cmp.computerworld.com.au^
 ||cmp.cso.com.au^
 ||cmp.csoonline.com^
 ||cmp.digitalartsonline.co.uk^
 ||cmp.greenbot.com^
+||cmp.idginsiderpro.com^
+||cmp.infoworld.com^
+||cmp.javaworld.com^
 ||cmp.macworld.co.uk^
 ||cmp.macworld.com^
 ||cmp.osano.com^
@@ -15202,6 +15211,7 @@ _mongo_stats/
 ||cmp.pcworld.idg.com.au^
 ||cmp.tech426.com^
 ||cmp.techadvisor.co.uk^
+||cmp.techconnect.com^
 ||cmp.techhive.com^
 ||commsvc.stern.de^
 ||consent.api.osano.com^
@@ -16648,6 +16658,8 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||ad.crwdcntrl.net^$script,domain=investopedia.com
 @@||adblockanalytics.com/ads.js|
 @@||addgene.org/headers/blat/js/analyze.js
+@@||adobedtm.com/*-source.min.js$script,domain=kroger.com
+@@||adobedtm.com/*_source.min.js$script,domain=kroger.com
 @@||adobedtm.com/launch-$script
 @@||adobedtm.com^*/launch-$script
 @@||adobedtm.com^*/mbox-contents-$script,domain=absa.co.za|americanexpress.com|costco.com|fcbarcelona.com|firststatesuper.com.au|hgtv.com|lenovo.com|newyorker.com|nfl.com|oprah.com|pnc.com|usanetwork.com|vanityfair.com|wired.com|wowway.net
@@ -17124,7 +17136,6 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||lekane.net/lekane/dialogue-tracking.js?$script
 ! Hebrew
 @@||amazonaws.com/static.madlan.co.il/*/heatmap.json?$xmlhttprequest
-@@||bitsngo.net/widget-scripts/zoomd.widget.logger.min.js$domain=13news.co.il|13tv.co.il
 @@||cloudvideoplatform.com/scripts/WebAnalytics.js$script
 @@||googletagmanager.com/gtm.js?$domain=feex.co.il|reshet.tv
 @@||haaretz.co.il/logger/p.gif?$image,xmlhttprequest
