@@ -82,24 +82,24 @@ export function normalizeRawFilterOptions(rawFilter: string): string {
   }
 
   // Normalize options
-  const options = rawFilter.slice(indexOfOptions);
+  const options = rawFilter.slice(indexOfOptions + 1);
   const normalizedOptions = options.replace(REGEX, (option) => {
     const normalized = NORMALIZE_OPTIONS[option];
     if (normalized === undefined) {
       return option;
     }
     return normalized;
-  });
+  }).split(',').sort().join(',');
 
   if (options === normalizedOptions) {
     return rawFilter;
   }
 
-  if (normalizedOptions === '$') {
+  if (normalizedOptions === '') {
     return rawFilter.slice(0, indexOfOptions);
   }
 
-  return rawFilter.slice(0, indexOfOptions) + normalizedOptions;
+  return `${rawFilter.slice(0, indexOfOptions)}$${normalizedOptions}`;
 }
 
 /**
