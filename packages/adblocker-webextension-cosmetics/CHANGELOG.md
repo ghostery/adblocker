@@ -1,3 +1,21 @@
+# v1.14.3 (Mon May 04 2020)
+
+#### :bug: Bug Fix
+
+- build(deps-dev): bump rollup-plugin-sourcemaps from 0.5.0 to 0.6.1 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.104 to 0.0.106 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump rollup-plugin-sourcemaps from 0.5.0 to 0.6.1 [#830](https://github.com/cliqz-oss/adblocker/pull/830) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.104 to 0.0.106 [#813](https://github.com/cliqz-oss/adblocker/pull/813) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.14.2 (Tue Apr 21 2020)
 
 #### :bug: Bug Fix

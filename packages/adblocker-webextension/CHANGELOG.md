@@ -1,3 +1,21 @@
+# v1.14.3 (Mon May 04 2020)
+
+#### :bug: Bug Fix
+
+- build(deps): bump webextension-polyfill-ts from 0.14.0 to 0.15.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup-plugin-sourcemaps from 0.5.0 to 0.6.1 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump webextension-polyfill-ts from 0.14.0 to 0.15.0 [#833](https://github.com/cliqz-oss/adblocker/pull/833) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup-plugin-sourcemaps from 0.5.0 to 0.6.1 [#830](https://github.com/cliqz-oss/adblocker/pull/830) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.14.2 (Tue Apr 21 2020)
 
 #### :bug: Bug Fix

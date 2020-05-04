@@ -1,3 +1,38 @@
+# v1.14.3 (Mon May 04 2020)
+
+#### :bug: Bug Fix
+
+- build(deps-dev): bump rollup-plugin-sourcemaps from 0.5.0 to 0.6.1 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.104 to 0.0.106 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :house: Internal
+
+- Update local assets [#840](https://github.com/cliqz-oss/adblocker/pull/840) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#839](https://github.com/cliqz-oss/adblocker/pull/839) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#834](https://github.com/cliqz-oss/adblocker/pull/834) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#831](https://github.com/cliqz-oss/adblocker/pull/831) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#822](https://github.com/cliqz-oss/adblocker/pull/822) ([@adblocker-bot](https://github.com/adblocker-bot) [@remusao](https://github.com/remusao))
+- Update local assets [#817](https://github.com/cliqz-oss/adblocker/pull/817) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#815](https://github.com/cliqz-oss/adblocker/pull/815) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#807](https://github.com/cliqz-oss/adblocker/pull/807) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#804](https://github.com/cliqz-oss/adblocker/pull/804) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#803](https://github.com/cliqz-oss/adblocker/pull/803) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#801](https://github.com/cliqz-oss/adblocker/pull/801) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#794](https://github.com/cliqz-oss/adblocker/pull/794) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump rollup-plugin-sourcemaps from 0.5.0 to 0.6.1 [#830](https://github.com/cliqz-oss/adblocker/pull/830) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.104 to 0.0.106 [#813](https://github.com/cliqz-oss/adblocker/pull/813) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.14.2 (Tue Apr 21 2020)
 
 #### :bug: Bug Fix
