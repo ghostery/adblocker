@@ -95,19 +95,16 @@ The innovative algorithms and architecture designed and implemented in this proj
 
 ## Swag
 
-<a href="https://github.com/cliqz-oss/adblocker/">
-    <img alt="Cliqz Adblocker" src="https://img.shields.io/badge/cliqz-powered-blue?logo=cliqz">
-</a>
+Show the world you're using `@cliqz/adblocker` → [![powered by Cliqz](https://img.shields.io/badge/cliqz-powered-blue?logo=cliqz&style=flat-square)](https://github.com/cliqz-oss/adblocker)
 
-If you are a happy user of `@cliqz/adblocker`, you can add this badge to your README using the following:
+```md
+[![powered by Cliqz](https://img.shields.io/badge/cliqz-powered-blue?logo=cliqz)](https://github.com/cliqz-oss/adblocker)
+```
 
-`https://img.shields.io/badge/cliqz-powered-blue?logo=cliqz`
-
-If you want to make it clickable:
-
+Or HTML:
 ```html
-<a href="https://github.com/cliqz-oss/adblocker/">
-    <img alt="Cliqz Adblocker" src="https://img.shields.io/badge/cliqz-powered-blue?logo=cliqz">
+<a href="https://github.com/cliqz-oss/adblocker/" target="_blank" rel="noopener noreferrer">
+    <img alt="powered by Cliqz" src="https://img.shields.io/badge/cliqz-powered-blue?logo=cliqz">
 </a>
 ```
 
