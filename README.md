@@ -93,6 +93,24 @@ This library is the building block technology used to power the adblockers from 
 
 The innovative algorithms and architecture designed and implemented in this project have been shown to be among the [most efficient](https://whotracks.me/blog/adblockers_performance_study.html) ways to implement ad-blockers and have been used in other projects to implement highly performant adblockers such as [Brave](https://github.com/brave/adblock-rust).
 
+## Swag
+
+<a href="https://github.com/cliqz-oss/adblocker/">
+    <img alt="Cliqz Adblocker" src="https://img.shields.io/badge/cliqz-powered-blue?logo=cliqz">
+</a>
+
+If you are a happy user of `@cliqz/adblocker`, you can add this badge to your README using the following:
+
+`https://img.shields.io/badge/cliqz-powered-blue?logo=cliqz`
+
+If you want to make it clickable:
+
+```html
+<a href="https://github.com/cliqz-oss/adblocker/">
+    <img alt="Cliqz Adblocker" src="https://img.shields.io/badge/cliqz-powered-blue?logo=cliqz">
+</a>
+```
+
 ## License
 
 [Mozilla Public License 2.0](./LICENSE)
