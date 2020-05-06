@@ -14,6 +14,7 @@ curl 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filt
 curl 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/privacy.txt' > ./ublock-origin/privacy.txt &
 curl 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt' > ./ublock-origin/resource-abuse.txt &
 curl 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt' > ./ublock-origin/unbreak.txt &
+curl 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters-2020.txt' > ./ublock-origin/filters-2020.txt &
 
 # Peter Lowe
 curl 'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=0&mimetype=plaintext' > ./peter-lowe/serverlist.txt
