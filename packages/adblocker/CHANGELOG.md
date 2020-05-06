@@ -1,3 +1,29 @@
+# v1.14.4 (Wed May 06 2020)
+
+#### :bug: Bug Fix
+
+- build(deps): bump @types/chrome from 0.0.106 to 0.0.107 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nail_care: Polish
+
+- Update local assets with new list [#847](https://github.com/cliqz-oss/adblocker/pull/847) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Update local assets [#845](https://github.com/cliqz-oss/adblocker/pull/845) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump @types/chrome from 0.0.106 to 0.0.107 [#843](https://github.com/cliqz-oss/adblocker/pull/843) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.14.3 (Mon May 04 2020)
 
 #### :bug: Bug Fix

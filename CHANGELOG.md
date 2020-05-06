@@ -1,3 +1,34 @@
+# v1.14.4 (Wed May 06 2020)
+
+#### :nail_care: Polish
+
+- `@cliqz/adblocker`
+  - Update local assets with new list [#847](https://github.com/cliqz-oss/adblocker/pull/847) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#845](https://github.com/cliqz-oss/adblocker/pull/845) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :memo: Documentation
+
+- Update README.md [#841](https://github.com/cliqz-oss/adblocker/pull/841) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump rollup from 2.7.6 to 2.8.0 [#846](https://github.com/cliqz-oss/adblocker/pull/846) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 9.30.5 to 9.31.1 [#842](https://github.com/cliqz-oss/adblocker/pull/842) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker`
+  - build(deps): bump @types/chrome from 0.0.106 to 0.0.107 [#843](https://github.com/cliqz-oss/adblocker/pull/843) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.14.3 (Mon May 04 2020)
 
 #### ⚠️  Pushed to `master`
