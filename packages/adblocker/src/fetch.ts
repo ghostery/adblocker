@@ -60,6 +60,7 @@ export const adsLists = [
   `${PREFIX}/ublock-origin/annoyances.txt`,
   `${PREFIX}/ublock-origin/badware.txt`,
   `${PREFIX}/ublock-origin/filters.txt`,
+  `${PREFIX}/ublock-origin/filters-2020.txt`,
   `${PREFIX}/ublock-origin/resource-abuse.txt`,
   `${PREFIX}/ublock-origin/unbreak.txt`,
 ];

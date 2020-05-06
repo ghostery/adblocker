@@ -47,6 +47,7 @@ async function loadAllLists() {
       '../assets/ublock-origin/annoyances.txt',
       '../assets/ublock-origin/badware.txt',
       '../assets/ublock-origin/filters.txt',
+      '../assets/ublock-origin/filters-2020.txt',
       '../assets/ublock-origin/privacy.txt',
       '../assets/ublock-origin/resource-abuse.txt',
       '../assets/ublock-origin/unbreak.txt',
