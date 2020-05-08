@@ -961,3 +961,41 @@ itrum.vn##+js(aopr, adBlockDetected)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/geoabd/how_to_block_aboutblank_popups_from_alphapixorg/
 alphapix.org##+js(acis, String.fromCharCode, 'shift')
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55034
+biroads.com##+js(aopr, app_vars.force_disable_adblock)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55038
+globes.co.il##+js(set, document.blocked_var, 1)
+globes.co.il##+js(set, ____ads_js_blocked, false)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55035
+||smailpro.com/js/*/adblock-component$script,1p
+smailpro.com##.ads-mb, #taboola-above-article-thumbnails, .vpn
+
+! https://github.com/uBlockOrigin/uAssets/issues/7322
+novelmultiverse.com##+js(aopr, mdpDeBlocker)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55068
+jardiner-malin.fr##+js(set, wIsAdBlocked, false)
+
+! ricettafitness.com popads
+ricettafitness.com##+js(acis, String.fromCharCode, 'shift')
+
+! https://github.com/NanoMeow/QuickReports/issues/3786
+skidrowcodex.net##+js(acis, String.fromCharCode, 'shift')
+skidrowcodex.net##^script:has-text('shift')
+
+! https://github.com/NanoMeow/QuickReports/issues/3790
+sportif.id##+js(window.open-defuser)
+sportif.id##[href^="https://www.khasiat.id/"]
+
+! https://github.com/NanoMeow/QuickReports/issues/3788
+cuatrolatastv.blogspot.com##+js(acis, String.fromCharCode, 'shift')
+||sites.google.com/site/rvdmarcrailcatrain/home/tomber.js$script
+
+! https://github.com/NanoMeow/QuickReports/issues/3791
+claimfreecoins.cc##+js(set, show_ads_gr8_lite, true)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55076
+kantotero.net##+js(nosiif, visibility, 1000)

@@ -3476,7 +3476,6 @@ java-forum.org###messageList > li.message:has-text(Anzeige)
 cut-urls.com##+js(acis, decodeURI, decodeURIComponent)
 cut-urls.com##+js(aopr, app_vars.force_disable_adblock)
 
-! https://github.com/uBlockOrigin/uAssets/issues/1291
 ! https://github.com/uBlockOrigin/uAssets/issues/2233
 flashx.*##+js(acis, parseInt, tabunder)
 flashx.*##+js(acis, String.fromCharCode, decodeURIComponent)
@@ -3489,6 +3488,8 @@ flashx.*##+js(popads.net.js)
 flashx.*##+js(set, jQuery.adblock, false)
 flashx.*##+js(window.open-defuser)
 flashx.*##+js(aopr, AaDetector)
+flashx.*##+js(acis, Math, zfgloaded)
+flashx.*##+js(acis, String.fromCharCode, 'shift')
 flashx.*##a[href^="https://adsrvmedia.adk2x.com/"]
 @@||ajax.googleapis.com/ajax/libs/jquery/*$script,domain=flashx.tv
 @@||fastcontentdelivery.com/js/showad*.js$script,domain=flashx.to
@@ -5088,9 +5089,9 @@ sourceforge.net##+js(nano-stb)
 ! https://github.com/uBlockOrigin/uAssets/issues/4687
 ! https://github.com/uBlockOrigin/uAssets/issues/4711
 ! https://github.com/uBlockOrigin/uAssets/issues/5919
-!twitter.com##article:has-text(/Promoted|Gesponsert|Реклама|Promocionado|Sponsorisé|Uitgelicht/):xpath(../..)
-twitter.com##:xpath(//span[(text()='Promoted' or text()='Gesponsert' or text()='Реклама' or text()='Promocionado' or text()='Sponsorisé' or text()='Uitgelicht' or text()='推荐')]/../../../../..)
-twitter.com##[data-testid="trend"]:has-text(/推荐|Promoted|Gesponsert|Реклама|Promocionado|Sponsorisé|Uitgelicht/):xpath(..)
+!twitter.com##:xpath(//span[(text()='Promoted' or text()='Gesponsert' or text()='Реклама' or text()='Promocionado' or text()='Sponsorisé' or text()='Uitgelicht' or text()='推荐')]/../../../../..)
+twitter.com##[data-testid="trend"]:has-text(/推荐|Promoted|Gesponsert|Реклама|Promocionado|Sponsorisé|Uitgelicht|プロモーション/):upward(1)
+twitter.com##span:has-text(/^推荐|Promoted|Gesponsert|Реклама|Promocionado|Sponsorisé|Uitgelicht|プロモーション$/):upward(5)
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=40228#p133884
 popularmechanics.com##+js(nostif, addEventListener, 0)
@@ -6126,6 +6127,9 @@ pluspremieres.*##^script:has-text(/^[\w\W]{1700,3000}$/):has-text(/(\\x\d\w){250
 pluspremieres.*##+js(noeval)
 intoupload.net##+js(nowebrtc)
 pluspremieres.*##[class^="banner"]
+@@||pluspremieres.*^$ghide
+@@*$xhr,script,domain=pluspremieres.nl
+pluspremieres.nl##.advertisement
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2122
 hotcopper.com.au##+js(acis, $, blockAds)
@@ -8753,7 +8757,7 @@ wowescape.com##+js(ra, target)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4476
 duellinksmeta.com##+js(noeval)
-duellinksmeta.com##+js(nostif, _0x)
+duellinksmeta.com##+js(nostif, modal)
 *$script,redirect-rule=noopjs,domain=duellinksmeta.com
 @@||duellinksmeta.com^$1p
 @@||duellinksmeta.com^$ghide
@@ -17669,7 +17673,8 @@ gamefront.com##+js(nano-stb, , 10000)
 ! washingtonpost.com##+js(acis, Promise.all, _0x)
 !#endif
 washingtonpost.com##^script:has-text(adblocker)
-@@||securepubads.g.doubleclick.net/gampad/adx$xhr,domain=washingtonpost.com
+washingtonpost.com##+js(nostif, 'overlay', 8000)
+washingtonpost.com##+js(nosiif, 'overlay', 200)
 washingtonpost.com##div:has-text(We noticed you’re blocking ads.)
 washingtonpost.com##.db-ns[style="height: 1250px;"]
 washingtonpost.com##html[style="overflow: hidden;"]:style(overflow: auto !important;)
@@ -19078,8 +19083,11 @@ jibfly.com##+js(aopr, rsrs_popunder)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3419
 mexa.*##+js(acis, document.getElementById, adblockinfo)
+mexa.sh##+js(acis, String.fromCharCode, 'shift')
+mexa.sh##+js(aopr, eddOptions)
 mexa.*##+js(aopw, adBlockDetected)
 mexa.*##+js(aopw, installBtnvar)
+||4cr447ewncl4.com^$3p
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/d0dsyz/is_it_possible_to_disable_you_can_skip_the_ad_in/
 ohyeah1080.co##+js(set, $.fancybox.open, noopFunc)
@@ -21797,7 +21805,7 @@ channelmyanmar.org##+js(aopr, adBD)
 channelmyanmar.org##+js(set, ai_dummy, true)
 channelmyanmar.org##+js(set, ulp_noadb, true)
 ||channelmyanmar.org/banners/*$image,1p
-channelmyanmar.org##.myResponsiveAd
+channelmyanmar.org##[src$=".gif"]
 ||roda.site^$3p
 
 ! https://github.com/NanoMeow/QuickReports/issues/2570
@@ -22635,7 +22643,9 @@ warps.club##+js(aopr, adblockDetect)
 *$script,redirect-rule=noopjs,domain=texviewer.herokuapp.com
 
 ! https://github.com/NanoMeow/QuickReports/issues/2891
-megasubtitles.com##+js(nosiif, visibility, 1000)
+megasubtitles.com##+js(aopr, anOptions)
+megasubtitles.com##+js(aopw, _pop)
+megasubtitles.com##^meta[http-equiv="refresh"]
 megasubtitles.com###popback
 megasubtitles.com###pop1
 
@@ -24972,7 +24982,9 @@ branitube.net##+js(acis, document.querySelectorAll, popMagic)
 @@||sharing.wtf^$ghide
 
 ! https://github.com/NanoMeow/QuickReports/issues/3431
-legendas.dev##+js(nosiif, visibility, 1000)
+legendas.dev##+js(aopr, anOptions)
+legendas.dev##+js(aopw, _pop)
+legendas.dev##^meta[http-equiv="refresh"]
 
 ! https://github.com/NanoMeow/QuickReports/issues/3432
 libreriamo.it##+js(nostif, ai_adb)
