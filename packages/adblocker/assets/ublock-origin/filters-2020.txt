@@ -772,6 +772,7 @@ tubxporn.com##+js(aopr, exoJsPop101)
 ! sythe.org anti adb
 sythe.org##+js(acis, $, adblocker)
 sythe.org##+js(acis, document.getElementsByTagName, adblocker)
+sythe.org##[href*=".php"]
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54747
 mangareddit.com##+js(nostif, visibility, 1500)
@@ -999,3 +1000,24 @@ claimfreecoins.cc##+js(set, show_ads_gr8_lite, true)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/55076
 kantotero.net##+js(nosiif, visibility, 1000)
+
+! hevcbay popads
+hevcbay.com##+js(acis, String.fromCharCode, 'shift')
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55088
+vidtome.stream##+js(nano-sib)
+vidtome.stream##+js(window.open-defuser)
+vidtome.stream##+js(nostif, debugger)
+@@||vidtome.stream^$ghide
+vidtome.stream##[id*="ScriptRoot"]
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55119
+divany.hu##body:style(overflow: auto !important)
+divany.hu##.adbd-layer, iframe.lazy, .tctk, .shopline-box
+
+! https://github.com/uBlockOrigin/uAssets/issues/7328
+ymp4.download##+js(window.open-defuser)
+ymp4.download###mp3button
+
+! https://github.com/uBlockOrigin/uAssets/issues/7314
+redeglobo.globo.com##+js(nostif, f.parentNode.removeChild(f), 100)
