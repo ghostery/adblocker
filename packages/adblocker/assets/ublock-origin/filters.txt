@@ -744,7 +744,7 @@ criminalcasetools.com##+js(nobab)
 ! https://github.com/uBlockOrigin/uAssets/issues/4159#issuecomment-576406060
 vidtudu.com,playto-vid.com##+js(acis, Math, zfgloaded)
 vidtodo.com##+js(acis, parseInt, tabunder)
-vidstodo.me,vidtod.me,vidtodu.com,vidtudu.com,vixtodo.com,playtvid.com,vidtoply.com,playvidto.com,widtodo.com##+js(aopw, _pop)
+vidstodo.me,vidtod.me,vidtodu.com,vidtudu.com,vixtodo.com,vldtodo.com,playtvid.com,vidtoply.com,playvidto.com,widtodo.com##+js(aopw, _pop)
 *$script,redirect-rule=noopjs,domain=vidstodo.me|vidtod.me|vidtodu.com|vidtudu.com|vixtodo.com|playtvid.com|vidtoply.com|playvidto.com|widtodo.com
 vidstodo.me,vidtod.me,vidtodu.com,vidtudu.com,vixtodo.com,playtvid.com,vidtoply.com,playvidto.com,widtodo.com##^script:has-text('shift')
 vidtod.me##+js(aopw, adcashMacros)
@@ -759,9 +759,9 @@ playedvid.com##+js(aopr, open)
 playtvid.com,vidtoply.com##+js(acis, Math, zfgloaded)
 ||vidtoply.com/sw.js$1p
 ! https://github.com/uBlockOrigin/uAssets/issues/4159#issuecomment-579074595
-vixtodo.com##+js(acis, Math, zfgloaded)
-vixtodo.com##+js(aopr, AaDetector)
-vixtodo.com##+js(aopw, Fingerprint2)
+vixtodo.com,vldtodo.com##+js(acis, Math, zfgloaded)
+vixtodo.com,vldtodo.com##+js(aopr, AaDetector)
+vixtodo.com,vldtodo.com##+js(aopw, Fingerprint2)
 ||d141wsrw9m4as6.cloudfront.net^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5532
@@ -2342,8 +2342,9 @@ powerthesaurus.org##+js(aopw, ad_abblock_ad)
 ! Popups triggered by popads
 123tvseries.co,animepahe.com,cloudy.ec,mactorrents.org,mkvcage.*,nodefiles.com,pahe.in,owndrives.com,psarips.*,smallencode.com,weshare.me##+js(aopw, _pop)
 animepahe.com,kwik.*##^script:has-text('shift')
-animepahe.com##+js(acis, Math, zfgloaded)
+animepahe.com,kwik.*##+js(acis, Math, zfgloaded)
 animepahe.com,kwik.*##+js(acis, String.fromCharCode, 'shift')
+animepahe.com,kwik.*##+js(aopr, open)
 animepahe.com,kwik.*##+js(aopr, PopAds)
 
 ! Reported by a reader
@@ -2674,6 +2675,9 @@ daporn.com##.ntv-media
 daporn.com##.bottom-promo
 daporn.com###mediaOverlay
 daporn.com###close-aff
+*.gif$domain=daporn.com,image
+daporn.com##[href*="offer"]
+daporn.com##[href*="&aff"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/918
 4tube.com##+js(aopr, ExoLoader)
@@ -3453,6 +3457,7 @@ sexu.com###jw_video_popup
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3616
 pussyspace.com##+js(aopr, amazon_exoframe)
+pussyspace.com##+js(aeld, , loader)
 pussyspace.com##+js(aopr, open)
 pussyspace.com##:xpath(//span[contains(text(),"PARTNER")]/..)
 
@@ -4564,6 +4569,7 @@ wp-time.com###pop-ad-wrap
 ! https://github.com/AdguardTeam/AdguardFilters/issues/50582
 bc.vc##+js(window.open-defuser)
 bcvc.live##+js(window.open-defuser, 0, bcvc)
+bcvc.live##+js(nostif, document.getElementById, .attr)
 bcvc.live##+js(acis, addEventListener, Blocking)
 *$frame,3p,domain=bc.vc
 ||bc.vc/mload.gif$image
@@ -5199,11 +5205,13 @@ short2win.*##+js(nowebrtc)
 $frame,3p,domain=short2win.com
 
 ! https://github.com/jspenguin2017/uBlockProtector/issues/888
-@@||coinad.com/ads/show/show.php$frame,domain=moonbit.co.in|moondoge.co.in|moonliteco.in
+moondoge.co.in##input#AB:remove()
+moondoge.co.in##.advert
 moonbit.co.in##.hide-xs:style(visibility: collapse !important)
 moonbit.co.in,moondoge.co.in,moonliteco.in###advert-space > iframe:style(visibility: collapse !important)
 moonbit.co.in,moondoge.co.in,moonliteco.in##[src^="//coinad.com/ads/"]:style(visibility: collapse !important)
 moondoge.co.in,moonliteco.in##.captchaAd:style(visibility: collapse !important)
+@@||coinad.com/ads/show/show.php$frame,domain=moonbit.co.in|moonliteco.in
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=40286
 @@||bestarticles.me^$ghide
@@ -5708,17 +5716,13 @@ solowarez.org##+js(window.open-defuser)
 ! https://github.com/uBlockOrigin/uAssets/issues/1930
 peliculasio.com##+js(aopw, smrtSB)
 
-! https://github.com/uBlockOrigin/uAssets/issues/691
-! https://github.com/uBlockOrigin/uAssets/issues/1935
+! https://github.com/uBlockOrigin/uAssets/issues/7348
 hentai2read.com,hentai2w.com##+js(aopr, BetterJsPop)
 hentai2read.com,hentai2w.com##+js(set, ads, 1)
 hentai2read.com##+js(aopr, ARFfwk.Zones.init)
 hentai2read.com##+js(aopr, Feinee)
 hentai2read.com##+js(window.open-defuser)
-hentai2read.com##[href^="https://arf.direct/"]
-hentai2read.com##a[href^="//www.nutaku.net/"]
-hentai2read.com##a[href^="https://network.nutaku.net/"]
-hentai2read.com##[href^="https://www.nutaku.net/signup/"]
+hentai2read.com##[src^="//"]:upward([target="_blank"])
 hentai2w.com###playerOverlay
 
 ! https://github.com/reek/anti-adblock-killer/issues/3973
@@ -6496,10 +6500,12 @@ speedtest.net##+js(set, isBlocked, false)
 ! https://forums.lanik.us/viewtopic.php?p=136580#p136580
 ! https://github.com/uBlockOrigin/uAssets/issues/4483
 seehd.*##+js(acis, Math, zfgloaded)
-seehd.*##+js(window.open-defuser)
+seehd.*##+js(acis, String.fromCharCode, 'shift')
 seehd.*##+js(nowebrtc)
+seehd.*##+js(window.open-defuser)
 ||seehd.*/sw.js$script,1p
 @@||seehd.*^$ghide
+||bokarsolutions.co.uk^$3p
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=40741
 mangaku.in##+js(acis, Math, zfgloaded)
@@ -10996,7 +11002,9 @@ trueachievements.com##^script:has-text(String.fromCodePoint)
 pch.com##^script:has-text(runInIframe)
 pch.com##^script:has-text(adsDetector)
 !#if !env_firefox
-*/*$script,domain=pch.com,redirect=noopjs,3p
+*$script,domain=pch.com,redirect=noopjs,3p
+@@||tags.tiqcdn.com^$script,domain=pch.com
+@@||pchassets.com^$script,domain=pch.com
 @@||ajax.googleapis.com/ajax/$script,domain=pch.com
 @@||gstatic.com^$script,domain=pch.com
 @@||imasdk.googleapis.com^$script,domain=pch.com
@@ -11900,7 +11908,11 @@ audycje.tokfm.pl##+js(set, adsOk, true)
 news-leader.com##+js(aopr, _sp_._networkListenerData)
 
 ! https://github.com/NanoMeow/QuickReports/issues/467
+! https://github.com/NanoMeow/QuickReports/issues/3828
+everydayporn.co##+js(aopr, open)
 everydayporn.co##+js(nostif, (), 2000)
+everydayporn.co##^script:has-text('shift')
+@@||everydayporn.co^$ghide
 
 ! https://github.com/NanoMeow/QuickReports/issues/468
 eroclips.org##+js(nostif, (), 2000)
@@ -15816,6 +15828,7 @@ watchhowimetyourmother.online,watchmadmenonline.com,watchonceuponatimeonline.com
 ||ulaleth.xyz^$3p
 
 ! https://github.com/NanoMeow/QuickReports/issues/1105
+dfiles.*##+js(acis, decodeURI, decodeURIComponent)
 @@||cloudflare.com/ajax/libs/*/fuckadblock.js$script,domain=depositfiles.org|dfiles.eu
 ||dfiles.*/sw.js$script,1p
 
@@ -21069,6 +21082,7 @@ anime-i.com##+js(nostif, nextFunction, 2000)
 ||google.com/adsid/integrator.js$script,redirect=noopjs,domain=961thebreeze.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6588
+cartoonth12.com##.header-ad
 *.gif$domain=cartoonth12.com,image
 @@||jwpcdn.com/player/$script,domain=player.cartoonth12.com
 *.mp4$media,redirect=noopmp3-0.1s,domain=cartoonth12.com
@@ -21151,7 +21165,7 @@ desirehub.me,movieshub.link##+js(acis, Math, zfgloaded)
 vidto-do.com##+js(acis, Math, zfgloaded)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2321
-@@||kwik.cx^$ghide
+@@||kwik.*^$ghide
 
 ! https://github.com/NanoMeow/QuickReports/issues/2325
 @@||sadeempc.com^$ghide
@@ -24554,6 +24568,12 @@ dgbauto.100count.net##+js(nano-sib)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/51785
 freegogpcgames.com##+js(set, DHAntiAdBlocker, true)
+freegogpcgames.com##+js(window.open-defuser)
+||onclickgenius.com^$3p
+||onclickperformance.com^$3p
+||onclickalgo.com^$3p
+||acacdn.com^$3p
+||acdcdn.com^$3p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/51787
 @@||nxmac.com^$ghide
