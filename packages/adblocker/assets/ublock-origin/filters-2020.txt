@@ -367,6 +367,8 @@ earnsats.co##.tracking-wide
 totalcar.hu##+js(aopw, ADBD)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3616
+! https://github.com/uBlockOrigin/uAssets/issues/7402
+mangahost.site##+js(aopr, console.log)
 mangahost.site##+js(set, Goog_Osd_UnloadAdBlock, true)
 mangahost.site##+js(set, google_osd_loaded, true)
 mangahost.site##+js(set, google_tag_data, true)
@@ -817,7 +819,7 @@ rozfly.com##.separator, p
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54797
 afly.us##+js(aopr, app_vars.force_disable_adblock)
 afly.us##+js(aopr, open)
-afly.us##.banner, center:nth-of-type(4), #link-view > div:nth-of-type(3) > center:nth-of-type(2)
+afly.us##.a:has-text(/submit/i)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54800
 hdmp4mania1.net##+js(aopr, absda)
@@ -1183,6 +1185,7 @@ legendaoficial.net##^script:has-text('shift')
 ! https://github.com/uBlockOrigin/uAssets/issues/7362
 @@||tanya-tanya.com^$ghide
 @@||kiddnation.com^$ghide
+@@||ggeguide.com^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7369
 talkceltic.net##+js(set, samDetected, false)
@@ -1256,6 +1259,7 @@ startsiden.no##+js(nostif, f.parentNode.removeChild(f), 100)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3502
 prepostseo.com##+js(set, adsbygoogle.loaded, true)
+prepostseo.com##.adsbygoogle:upward(.col-lg-12.text-center)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7399
 animetrick.com##+js(acis, Math, zfgloaded)
@@ -1263,3 +1267,28 @@ animetrick.com##+js(aopw, td_ad_background_click_link)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7400
 enjoytaiwan.co.kr##+js(aeld, load, nextFunction)
+
+! https://github.com/NanoMeow/QuickReports/issues/3847
+animecomplet.in##+js(set, jswin, true)
+animecomplet.in##+js(acis, Math, zfgloaded)
+animecomplet.in##.text-center
+
+! video ads on dizilla .com https://github.com/NanoMeow/QuickReports/issues/1501#issuecomment-628285007
+||fiorenetwork.com/*/vast.php
+||fiorenetwork.com/*/hdg.php?
+||fiorenetwork.com/*/YtVpaid*.php
+
+! isohunt2 .net popups ads
+isohunt2.net##+js(window.open-defuser)
+||isohunt2.net/nordvpn/$subdocument
+
+! https://github.com/uBlockOrigin/uAssets/issues/7404
+@@||navi.z0i.net^$ghide
+navi.z0i.net##.adsbygoogle:remove()
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55436
+guncelkaynak.com##+js(acis, jQuery, ai_adb)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7407
+allmovies.tube##+js(set, importFAB, null)
+allmovies.tube##+js(acis, Math, zfgloaded)
