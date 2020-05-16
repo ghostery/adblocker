@@ -110,6 +110,10 @@ outbrain-widget.js application/javascript
 (function(){"use strict";const e=function(){};const r={};const c=["callClick","callLoadMore","callRecs","callUserZapping","callWhatIs","cancelRecommendation","cancelRecs","closeCard","closeModal","closeTbx","errorInjectionHandler","getCountOfRecs","getStat","imageError","manualVideoClicked","onOdbReturn","onVideoClick","pagerLoad","recClicked","refreshSpecificWidget","refreshWidget","reloadWidget","researchWidget","returnedError","returnedHtmlData","returnedIrdData","returnedJsonData","scrollLoad","showDescription","showRecInIframe","userZappingMessage","zappingFormAction"];r.extern={video:{getVideoRecs:e,videoClicked:e}};c.forEach((function(c){r.extern[c]=e}));window.OBR=window.OBR||r})();
 
 
+nowoif.js application/javascript
+(function(){"use strict";let e="{{1}}";if("{{1}}"===e)e="";let t="{{2}}";if("{{2}}"===t)t="";let n="{{3}}";if("{{3}}"===n)n="";const o=""!==n?console.log.bind(console):()=>{};const i=false===/^[01]?$/.test(e);let s="";let r=true;let l=-1;if(i){s=e;if(s.startsWith("!")){r=false;s=s.slice(1)}l=parseInt(t);if(isNaN(l))l=-1}else{s=t;if("0"===e)r=false}if(""===s)s=".?";else if(/^\/.+\/$/.test(s))s=s.slice(1,-1);else s=s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");const p=new RegExp(s);window.open=new Proxy(window.open,{apply:function(e,t,i){o("window.open:",...i);const s=i[0];if(p.test(s)!==r)return e.apply(t,i);if(l<0)return null;const c=document.createElement("iframe");c.src=s;c.style.setProperty("display","none","important");c.style.setProperty("height","1px","important");c.style.setProperty("width","1px","important");document.body.appendChild(c);setTimeout(()=>c.remove(),1e3*l);if(""===n)return c.contentWindow;return new Proxy(c.contentWindow,{get:function(e,t){o("window.open / get",t,"===",e[t]);return e[t]},set:function(e,t,n){o("window.open / set",t,"=",n);e[t]=n}})}})})();
+
+
 nowebrtc.js application/javascript
 (function(){var n=window.RTCPeerConnection?"RTCPeerConnection":window.webkitRTCPeerConnection?"webkitRTCPeerConnection":"";if(""===n)return;var e=console.log.bind(console);var o=function(n){e("Document tried to create an RTCPeerConnection: %o",n)};const t=function(){};o.prototype={close:t,createDataChannel:t,createOffer:t,setRemoteDescription:t,toString:function(){return"[object RTCPeerConnection]"}};var i=window[n];window[n]=o.bind(window);if(i.prototype)i.prototype.createDataChannel=function(){return{close:function(){},send:function(){}}}.bind(null)})();
 
@@ -368,6 +372,10 @@ ampproject_v0.js application/javascript
 
 ampproject.org/v0.js application/javascript
 (function(){"use strict";const t=document.head;if(!t)return;const n=document.createElement("style");n.textContent=["body {","  animation: none !important;","  overflow: unset !important;","}"].join("\n");t.appendChild(n)})();
+
+
+amazon_apstag.js application/javascript
+(function(){"use strict";const n=window;const t=function(){}.bind();const i={fetchBids:function(n,t){if(t instanceof Function)t([])},init:t,setDisplayBids:t,targetingKeys:t};n.apstag=i})();
 
 
 amazon_ads.js application/javascript
