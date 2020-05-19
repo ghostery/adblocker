@@ -3568,9 +3568,6 @@ order-order.com#@#.tag-sponsored
 @@||dduhv0txi73d1.cloudfront.net^$script,domain=marmiton.org
 !#endif
 
-! https://forums.lanik.us/viewtopic.php?p=154654#p154654
-@@||cdn.ampproject.org^$script,domain=science-et-vie.com
-
 ! unblock treasuredata .com home page
 ||treasuredata.com^$badfilter
 
@@ -3579,3 +3576,11 @@ order-order.com#@#.tag-sponsored
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7424
 @@||log.mmstat.com/eg.js$script,domain=youku.com
+
+! https://github.com/NanoMeow/QuickReports/issues/470
+@@||imasdk.googleapis.com/js/sdkloader/ima3.$script,domain=independent.co.uk
+
+! https://github.com/uBlockOrigin/uAssets/issues/7429
+!#if env_firefox
+@@||insights-collector.newrelic.com/v1/accounts/*/events$xhr,domain=diariosur.es
+!#endif
