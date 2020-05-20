@@ -365,11 +365,13 @@ totalcar.hu##+js(aopw, ADBD)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3616
 ! https://github.com/uBlockOrigin/uAssets/issues/7402
-mangahost.site##+js(set, Goog_Osd_UnloadAdBlock, true)
-mangahost.site##+js(set, google_osd_loaded, true)
+mangahost.*,mangahost2.com##+js(acis, window.onload)
+mangahost.*,mangahost2.com##+js(set, Goog_Osd_UnloadAdBlock, true)
+mangahost.*,mangahost2.com##+js(set, google_osd_loaded, true)
 ! mangahost.site##+js(set, google_tag_data, true)
-mangahost.site##+js(set, google_unique_id, true)
-@@||mangahost.site^$ghide
+mangahost.*,mangahost2.com##+js(set, google_unique_id, true)
+@@||mangahost.*^$ghide
+@@||mangahost2.com^$ghide
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53966
 btcandalt.com##+js(set, show_ads_gr8_lite, true)
@@ -771,17 +773,11 @@ tubxporn.com##+js(aopr, exoJsPop101)
 
 ! sythe.org anti adb
 sythe.org##+js(acis, $, adblocker)
+sythe.org##body::after:style(content: none !important)
 sythe.org##+js(acis, document.getElementsByTagName, adblocker)
-sythe.org##[href*=".php"]
-sythe.org##[target="_blank"]
-sythe.org##[style^="display: block"]
-sythe.org##[align="center"]
 /?referral=sythe$all
 ||sythe.org/*.php$~css,all
-sythe.org##[href^="https://www.sythe.org/"]:not([href="https://www.sythe.org/"]):not([href*="/threads"]):not([class="internalLink"])
-sythe.org##[onclick*=".href"]
-sythe.org##[onclick*=".location"]
-sythe.org##[onclick*="."]
+sythe.org##+js(ra, src, [style*="max-height"])
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54747
 mangareddit.com##+js(nostif, visibility, 1500)
@@ -830,6 +826,7 @@ interia.pl##+js(nostif, removeChild, 100)
 
 ! https://github.com/NanoMeow/QuickReports/issues/240
 mail.yahoo.com##+js(nostif, dispatchAdBlockDetected)
+mail.yahoo.com##:xpath(//*[contains(text(),"ad-blocker")]):upward(3)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3747
 filmindo21.us##+js(window.open-defuser)
@@ -1390,3 +1387,29 @@ tech-blogs.com##+js(nostif, mdp)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/55676
 sexcamfreeporn.com##+js(nostif, Adblocker)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/gm9k8f/please_disable_adblock_to_proceed_to_the/
+articlix.com##+js(aopr, app_vars.force_disable_adblock)
+articlix.com##+js(nowoif)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55687
+downloaderzone.com##+js(nosiif, visibility, 1000)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55696
+themes-dl.com##+js(nosiif, visibility, 1000)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55697
+freegetdownloader.com##+js(nosiif, visibility, 1000)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55701
+th-jav.co##+js(set, clientSide.adbDetect, null)
+th-jav.co##+js(nowoif)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55705
+pghk.blogspot.com##+js(acis, addEventListener, google_ad_client)
+
+! https://github.com/NanoMeow/QuickReports/issues/3889
+@@||mahimeta.com/networks/ad_code.php$xhr,domain=upnewsinfo.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/7431
+viatorrents.com##+js(acis, $, _blank)
