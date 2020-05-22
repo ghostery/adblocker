@@ -777,7 +777,12 @@ sythe.org##body::after:style(content: none !important)
 sythe.org##+js(acis, document.getElementsByTagName, adblocker)
 /?referral=sythe$all
 ||sythe.org/*.php$~css,all
-sythe.org##+js(ra, src, [style*="max-height"])
+/sytheb$all
+!sythe.org##:xpath(//*[string-length(@href) > 150])
+!sythe.org##:xpath(//*[string-length(@style) > 64]):has([href])
+sythe.org##:xpath(//*[contains(translate(@href,' ',''),"('")])
+sythe.org##:xpath(//*[string-length(@src) > 50]):upward([href][style*="cursor"])
+sythe.org##[href^="/"]:not([class="internalLink"])
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54747
 mangareddit.com##+js(nostif, visibility, 1500)
@@ -879,6 +884,8 @@ pestleanalysis.com##+js(set, blockAdBlock._options.baitClass, null)
 ! https://github.com/uBlockOrigin/uAssets/issues/7311
 abcvideo.cc##+js(set, xRds, false)
 abcvideo.cc##+js(set, cRAds, true)
+abcvideo.cc##+js(acis, Math, zfgloaded)
+||abcvideo.cc^$csp=script-src 'self' 'unsafe-inline' *.gstatic.com *.chatra.io *.googletagmanager.com
 
 ! https://github.com/uBlockOrigin/uAssets/commit/ea0f038f5bf9c80c4840f03317a10269e850a143#commitcomment-38932408
 ouo.*,moviezwaphd.site,clicknupload.co,fullmaza.blog,mirrorace.com,7starhd1.in##+js(acis, String.fromCharCode, 'shift')
@@ -1079,9 +1086,6 @@ supermarches.ca##+js(acis, $, css)
 ! https://github.com/NanoMeow/QuickReports/issues/2987#issuecomment-626225393
 puhutv.com##+js(nostif, f.parentNode.removeChild(f), 100)
 
-! https://github.com/uBlockOrigin/uAssets/issues/7343
-dood.watch##+js(aopw, DoodPop)
-dood.watch##+js(nosiif, _0x)
 ||zi8ivy4b0c7l.com^$3p
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/ggyl0i/help_with_blocking_remaining_ads_on_porn_site/
@@ -1322,6 +1326,7 @@ britannica.com##+js(acis, document.createElement, admiral)
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=44685
 @@||hiphopa.net^$ghide
+hiphopa.net##+js(acis, String.fromCharCode, 'shift')
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7416
 @@||imedikament.de^$ghide
@@ -1409,7 +1414,50 @@ th-jav.co##+js(nowoif)
 pghk.blogspot.com##+js(acis, addEventListener, google_ad_client)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3889
-@@||mahimeta.com/networks/ad_code.php$xhr,domain=upnewsinfo.com
+upnewsinfo.com##+js(aopr, mMCheckAgainBlock)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7431
 viatorrents.com##+js(acis, $, _blank)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55729
+mangallama.com##+js(acis, $, height)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7434
+theta.casa##+js(acis, Math, zfgloaded)
+@@||theta.casa^$ghide
+||delta.theta.casa^$csp=script-src *
+delta.theta.casa##+js(ra, href, [href*="afu.php"])
+
+! https://forums.lanik.us/viewtopic.php?p=154738#p154738
+@@||comandotorrents20.com^$ghide
+comandotorrents20.com##+js(aopr, LieDetector)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55614
+punisoku.blogo.jp##+js(acis, url, Math.random)
+
+! https://github.com/NanoMeow/QuickReports/issues/3852
+@@||eska.pl^$ghide
+
+! https://github.com/NanoAdblocker/NanoFilters/issues/503
+mega4up.com##+js(acis, Math, zfgloaded)
+mega4up.com##+js(ra, onclick, [onclick^="window.open"])
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55784
+oncam.me##+js(nosiif, visibility, 1000)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55791
+resetoff.pl##+js(set, ads_unblocked, true)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55822
+logi.im##+js(nostif, adsbygoogle)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55848
+dailymockup.com##+js(aopr, anOptions)
+
+! https://github.com/NanoMeow/QuickReports/issues/3903
+yourporngod.com##+js(acis, document.querySelectorAll, popMagic)
+yourporngod.com##+js(acis, String.fromCharCode, 'shift')
+@@||yourporngod.com^$ghide
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55772
+prologuepro.com##+js(nosiif, visibility, 1000)

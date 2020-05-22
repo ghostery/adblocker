@@ -1873,7 +1873,9 @@ jpost.com#@#[src*="blob:"]
 ||x1337x.ws^$csp=script-src 'self' 'unsafe-inline',badfilter
 
 ! https://github.com/NanoMeow/QuickReports/issues/893
+! https://forums.lanik.us/viewtopic.php?p=154702#p154702
 @@||analytics.edgekey.net/ma_library/javascript/javascript_malibrary.js$script,domain=nhk.or.jp
+@@||analytics.edgekey.net/config/$xmlhttprequest,domain=nhk.or.jp
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/b7dh6s/cant_change_stlyes_on_4chan_with_ubo_active/
 @@||4cdn.org^$script,domain=4chan.org
@@ -3584,3 +3586,27 @@ order-order.com#@#.tag-sponsored
 !#if env_firefox
 @@||insights-collector.newrelic.com/v1/accounts/*/events$xhr,domain=diariosur.es
 !#endif
+
+! https://github.com/uBlockOrigin/uAssets/issues/7432
+||sibautomation.com^$frame,redirect=noopframe
+
+! https://github.com/uBlockOrigin/uAssets/issues/7435
+@@||api.ipstack.com/*access_key=$xhr,domain=acehardware.com
+
+! https://github.com/NanoMeow/QuickReports/issues/3892
+@@||c.s-microsoft.com/mscc/statics/*$css,domain=microsoft.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/7343#issuecomment-631386079
+*$stylesheet,3p,domain=dood.watch,badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/7438
+@@||pier1.com/static/*/js/analytics.bundle.js$script,1p
+
+! https://github.com/NanoMeow/QuickReports/issues/1659
+||streamplay.*/jquery-$badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/7439
+*$image,redirect-rule=1x1.gif,domain=play.cadenaser.com
+
+! https://www.reddit.com/r/uBlockOrigin/comments/fini9h/subtitles_not_showing_up_on_solarmovieto/fra44cs/
+@@||fmovies.to/subtitles/*$xhr
