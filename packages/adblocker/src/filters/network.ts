@@ -397,7 +397,7 @@ function compileRegex(
     filter = `^${filter}`;
   }
 
-  return new RegExp(filter, 'i');
+  return new RegExp(filter);
 }
 
 const EMPTY_ARRAY = new Uint32Array([]);
