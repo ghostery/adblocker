@@ -1,3 +1,59 @@
+# v1.15.0 (Sat May 23 2020)
+
+#### :running_woman: Performance
+
+- Speed-up index creation by using a typed array as histogram. [#924](https://github.com/cliqz-oss/adblocker/pull/924) ([@remusao](https://github.com/remusao))
+
+#### :bug: Bug Fix
+
+- build(deps): bump @types/chrome from 0.0.113 to 0.0.114 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-node-resolve from 7.1.3 to 8.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.112 to 0.0.113 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.111 to 0.0.112 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.110 to 0.0.111 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.109 to 0.0.110 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.108 to 0.0.109 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.107 to 0.0.108 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :house: Internal
+
+- Extension engine size script [#921](https://github.com/cliqz-oss/adblocker/pull/921) ([@remusao](https://github.com/remusao))
+- Update local assets [#917](https://github.com/cliqz-oss/adblocker/pull/917) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#908](https://github.com/cliqz-oss/adblocker/pull/908) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#900](https://github.com/cliqz-oss/adblocker/pull/900) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#892](https://github.com/cliqz-oss/adblocker/pull/892) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#890](https://github.com/cliqz-oss/adblocker/pull/890) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#886](https://github.com/cliqz-oss/adblocker/pull/886) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#876](https://github.com/cliqz-oss/adblocker/pull/876) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#874](https://github.com/cliqz-oss/adblocker/pull/874) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#867](https://github.com/cliqz-oss/adblocker/pull/867) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#861](https://github.com/cliqz-oss/adblocker/pull/861) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#859](https://github.com/cliqz-oss/adblocker/pull/859) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#857](https://github.com/cliqz-oss/adblocker/pull/857) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#856](https://github.com/cliqz-oss/adblocker/pull/856) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#854](https://github.com/cliqz-oss/adblocker/pull/854) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#849](https://github.com/cliqz-oss/adblocker/pull/849) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump @types/chrome from 0.0.113 to 0.0.114 [#909](https://github.com/cliqz-oss/adblocker/pull/909) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-node-resolve from 7.1.3 to 8.0.0 [#907](https://github.com/cliqz-oss/adblocker/pull/907) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/puppeteer from 2.1.0 to 3.0.0 [#899](https://github.com/cliqz-oss/adblocker/pull/899) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.112 to 0.0.113 [#898](https://github.com/cliqz-oss/adblocker/pull/898) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.111 to 0.0.112 [#881](https://github.com/cliqz-oss/adblocker/pull/881) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.110 to 0.0.111 [#877](https://github.com/cliqz-oss/adblocker/pull/877) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.109 to 0.0.110 [#875](https://github.com/cliqz-oss/adblocker/pull/875) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.108 to 0.0.109 [#873](https://github.com/cliqz-oss/adblocker/pull/873) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.107 to 0.0.108 [#865](https://github.com/cliqz-oss/adblocker/pull/865) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.14.4 (Wed May 06 2020)
 
 #### :bug: Bug Fix

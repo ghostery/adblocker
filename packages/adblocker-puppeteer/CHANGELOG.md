@@ -1,3 +1,20 @@
+# v1.15.0 (Sat May 23 2020)
+
+#### :bug: Bug Fix
+
+- build(deps): bump @types/puppeteer from 2.1.0 to 3.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump @types/sinon from 9.0.1 to 9.0.3 [#901](https://github.com/cliqz-oss/adblocker/pull/901) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/puppeteer from 2.1.0 to 3.0.0 [#899](https://github.com/cliqz-oss/adblocker/pull/899) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.14.1 (Thu Apr 09 2020)
 
 ### Release Notes
