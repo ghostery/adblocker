@@ -43,15 +43,21 @@ function loadFullLists(): Promise<string> {
     ['ads + trackers', await loadAdsAndTrackingLists()],
     ['ads + trackers + annoyances', await loadFullLists()],
   ]) {
-    const engine = FiltersEngine.parse(raw, { enableCompression: true });
-    const { networkFilters, cosmeticFilters } = engine.getFilters();
-    console.log(`> ${name} (${networkFilters.length} network + ${cosmeticFilters.length} hide)`);
-    for (const [compression, compress] of [
-      ['raw', (b: Uint8Array) => b],
-      ['gzip', gzipSync],
-      ['brotlit', brotliCompressSync],
-    ] as [string, (b: Uint8Array) => Uint8Array][]) {
-      console.log(' +', compression, compress(engine.serialize()).byteLength, 'bytes');
+    for (const config of [
+      { loadNetworkFilters: true, loadCosmeticFilters: true },
+      { loadNetworkFilters: false, loadCosmeticFilters: true },
+      { loadNetworkFilters: true, loadCosmeticFilters: false },
+    ]) {
+      const engine = FiltersEngine.parse(raw, { enableCompression: true, ...config });
+      const { networkFilters, cosmeticFilters } = engine.getFilters();
+      console.log(`> ${name} (${networkFilters.length} network + ${cosmeticFilters.length} hide)`);
+      for (const [compression, compress] of [
+        ['raw', (b: Uint8Array) => b],
+        ['gzip', gzipSync],
+        ['brotli', brotliCompressSync],
+      ] as [string, (b: Uint8Array) => Uint8Array][]) {
+        console.log(' +', compression, compress(engine.serialize()).byteLength, 'bytes');
+      }
     }
   }
 })();
