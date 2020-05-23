@@ -3446,9 +3446,6 @@ metro.co.uk###taboola-below-article-thumbnails
 ! unbreak myzyia.com CSS
 /\.(accountant|bid|click|club|com|cricket|date|download|faith|link|loan|lol|men|online|party|racing|review|science|site|space|stream|top|trade|webcam|website|win|xyz|com)\/(([0-9]{2,9})(\.|\/)(css|\?)?)$/$stylesheet,3p,badfilter
 
-! https://forums.lanik.us/viewtopic.php?p=154172#p154172
-@@||sopress.*^$frame,domain=sofoot.com
-
 ! https://github.com/easylist/easylist/issues/5214
 ||techsidea.website^$popup,badfilter
 ||onlineshopping.website^$popup,3p,badfilter
@@ -3608,5 +3605,9 @@ order-order.com#@#.tag-sponsored
 ! https://github.com/uBlockOrigin/uAssets/issues/7439
 *$image,redirect-rule=1x1.gif,domain=play.cadenaser.com
 
-! https://www.reddit.com/r/uBlockOrigin/comments/fini9h/subtitles_not_showing_up_on_solarmovieto/fra44cs/
+! https://www.reddit.com/r/uBlockOrigin/comments/fini9h/subtitles_not_showing_up_on_solarmovieto/
 @@||fmovies.to/subtitles/*$xhr
+@@||ffmovies.ru/subtitles/*$xhr
+
+! https://github.com/uBlockOrigin/uAssets/issues/7443
+@@||googletagmanager.com/gtm.js$script,domain=radiorur.de

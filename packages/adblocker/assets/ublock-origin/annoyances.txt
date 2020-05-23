@@ -2964,7 +2964,9 @@ feel-the-darkness.rocks,takuya1.com##+js(aopr, disableSelection)
 fontsfree.pro##+js(set, adBlock, false)
 
 ! https://github.com/realodix/AdBlockID/issues/158
-kawanfilm21.online##+js(aeld, contextmenu)
+kawanfilm21.*##+js(aeld, /^(?:contextmenu|selectstart)$/)
+kawanfilm21.*##+js(aopr, document.onselectstart)
+*.gif$domain=kawanfilm21.pro,image
 
 ! https://github.com/realodix/AdBlockID/issues/162
 terbit21.online##+js(aeld, /^(click|keydown)$/, preventDefault)
@@ -4002,7 +4004,10 @@ animeuniverse.it##+js(aopw, document.oncontextmenu)
 wstream.*##+js(aopr, onload)
 
 ! https://forums.lanik.us/viewtopic.php?p=154496#p154496
-||assets.allocine.fr/skin/css/allocine/secondary-styles.*.css$css,1p
+allocine.fr###overlay
+allocine.fr##html.open-modal .overlay:style(display: none !important)
+allocine.fr##html.open-modal body:style(overflow: auto !important)
+allocine.fr##html.open-modal body::after:style(display: none !important;)
 
 ! osxinfo.net floating-notice
 osxinfo.net##.notices
@@ -4164,8 +4169,14 @@ tistory.com##+js(aopw, document.oncontextmenu)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/55781
 stevensducks.com###sidearm-adblock-modal
 
-! macdrop.net cookie-notice
-macdrop.net###gdpr-cookie-notice
+! macdrop.net/dropgalaxy.com cookie-notice
+macdrop.net,dropgalaxy.com###gdpr-cookie-notice
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/55778
 ziperto.com##+js(nosiif, visibility, 1000)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/55846
+trojmiasto.pl##+js(aopr, adBlockDetected)
+
+! https://github.com/NanoMeow/QuickReports/issues/3908
+digitaltrends.com##+js(aopr, HTMLIFrameElement)
