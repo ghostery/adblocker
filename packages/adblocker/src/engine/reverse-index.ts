@@ -23,29 +23,6 @@ function nextPow2(v: number): number {
 }
 
 /**
- * Counter implemented on top of Map.
- */
-class Counter<K> {
-  private counter: Map<K, number>;
-
-  constructor() {
-    this.counter = new Map<K, number>();
-  }
-
-  public incr(key: K): void {
-    this.counter.set(key, (this.counter.get(key) || 0) + 1);
-  }
-
-  public get(key: K): number {
-    return this.counter.get(key) || 0;
-  }
-
-  public set(key: K, value: number): void {
-    this.counter.set(key, value);
-  }
-}
-
-/**
  * Generate unique IDs for requests, which is used to avoid matching the same
  * buckets multiple times on the same request (which can happen if a token
  * appears more than once in a URL).
@@ -331,8 +308,7 @@ export default class ReverseIndex<T extends IFilter> {
     const compression = this.config.enableCompression;
     let totalNumberOfTokens = 0;
     let totalNumberOfIndexedFilters = 0;
-    const filtersTokens: { filter: T; multiTokens: Uint32Array[] }[] = [];
-    const histogram = new Counter<number>();
+    const filtersTokens: Uint32Array[][] = [];
 
     // Keep track of the final size of the buckets index. `bucketsIndexSize` is
     // the number of indexed filters, multiplied by 2 (since we store both the
@@ -399,6 +375,8 @@ export default class ReverseIndex<T extends IFilter> {
       filters.sort((f1: T, f2: T): number => f1.getId() - f2.getId());
     }
 
+    const histogram = new Uint32Array(Math.max(nextPow2(2 * filters.length), 256));
+
     // Tokenize all filters stored in this index. And compute a histogram of
     // tokens so that we can decide how to index each filter efficiently.
     for (let i = 0; i < filters.length; i += 1) {
@@ -407,10 +385,7 @@ export default class ReverseIndex<T extends IFilter> {
       // Tokenize `filter` and store the result in `filtersTokens` which will
       // be used in the next step to select the best token for each filter.
       const multiTokens = filter.getTokens();
-      filtersTokens.push({
-        filter,
-        multiTokens,
-      });
+      filtersTokens.push(multiTokens);
 
       // Update estimated size of "buckets index" based on number of times this
       // particular filter will be indexed.
@@ -424,7 +399,7 @@ export default class ReverseIndex<T extends IFilter> {
         const tokens = multiTokens[j];
         totalNumberOfTokens += tokens.length;
         for (let k = 0; k < tokens.length; k += 1) {
-          histogram.incr(tokens[k]);
+          histogram[tokens[k] % histogram.length] += 1;
         }
       }
     }
@@ -456,9 +431,8 @@ export default class ReverseIndex<T extends IFilter> {
     // in the same loop and keep track of their indices so that we can later
     // populate "buckets index".
     for (let i = 0; i < filtersTokens.length; i += 1) {
-      const filterTokens = filtersTokens[i];
-      const filter: T = filterTokens.filter;
-      const multiTokens: Uint32Array[] = filterTokens.multiTokens;
+      const filter: T = filters[i];
+      const multiTokens: Uint32Array[] = filtersTokens[i];
 
       // Serialize this filter and keep track of its index in the byte array;
       // it will be used in "buckets index" to point to this filter.
@@ -473,7 +447,7 @@ export default class ReverseIndex<T extends IFilter> {
         let bestToken: number = 0; // default = wildcard bucket
         let minCount: number = totalNumberOfTokens + 1;
         for (let k = 0; k < tokens.length; k += 1) {
-          const tokenCount = histogram.get(tokens[k]);
+          const tokenCount = histogram[tokens[k] % histogram.length];
           if (tokenCount < minCount) {
             minCount = tokenCount;
             bestToken = tokens[k];

@@ -197,7 +197,7 @@ describe('ReverseIndex', () => {
                 }
               });
 
-              it('finds matches', () => {
+              describe('finds matches', () => {
                 const matches: Set<string | undefined> = new Set();
                 let ret: boolean = true;
                 const cb = (f: NetworkFilter) => {
@@ -213,17 +213,21 @@ describe('ReverseIndex', () => {
                   ['woot', ['|woot|$redirect=noop.js']],
                   ['https://bar.foo.com/ads/tracker.js', ['||foo.com', '/ads/tracker.js$image']],
                 ].forEach(([input, expected]) => {
-                  // Get all matches
-                  matches.clear();
-                  ret = true; // iterate on all filters
-                  exampleIndex.iterMatchingFilters(tokenize(input as string, false, false), cb);
-                  expect(matches).to.eql(new Set(expected));
+                  describe(`token=${input}, expected=${JSON.stringify(expected)}`, () => {
+                    it('get all matches', () => {
+                      matches.clear();
+                      ret = true; // iterate on all filters
+                      exampleIndex.iterMatchingFilters(tokenize(input as string, false, false), cb);
+                      expect(matches).to.eql(new Set(expected));
+                    });
 
-                  // Check early termination
-                  matches.clear();
-                  ret = false; // early termination on first filter
-                  exampleIndex.iterMatchingFilters(tokenize(input as string, false, false), cb);
-                  expect(matches.size).to.equal(expected.length === 0 ? 0 : 1);
+                    it('check early termination', () => {
+                      matches.clear();
+                      ret = false; // early termination on first filter
+                      exampleIndex.iterMatchingFilters(tokenize(input as string, false, false), cb);
+                      expect(matches.size).to.equal(expected.length === 0 ? 0 : 1);
+                    });
+                  });
                 });
               });
 
