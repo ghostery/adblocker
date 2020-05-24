@@ -4553,6 +4553,7 @@ bc.vc##+js(window.open-defuser)
 bcvc.live##+js(window.open-defuser, 0, bcvc)
 bcvc.live##+js(nostif, document.getElementById, .attr)
 bcvc.live##+js(acis, addEventListener, Blocking)
+bcvc.live##:xpath(//*[contains(text(),"adblock")]):upward(2)
 *$frame,3p,domain=bc.vc
 ||bc.vc/mload.gif$image
 ||punosy.top^$3p
@@ -5367,6 +5368,7 @@ povvideo.*,powvldeo.*,powv1deo.*##[src^="/ben/mgnat.html?"]
 povvideo.*,powvldeo.*,powv1deo.*###embed
 povvideo.*,powvldeo.*,powv1deo.*###keepFloatin
 povvideo.*,powvldeo.*,powv1deo.*##iframe:not([src*="recaptcha"])
+||powv1deo.*/jquery.notify.js$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1827
 pcbolsa.com###ContenidoPubliCotiza
@@ -17264,8 +17266,11 @@ pornult.com##+js(aopr, btoa)
 ||pornult.com/sw.js$script,1p
 
 ! https://github.com/NanoMeow/QuickReports/issues/1406
+! https://github.com/NanoMeow/QuickReports/issues/3929
 @@||ad.71i.de/global_js/AppConfig/Joyn/desktop.json$xhr,domain=joyn.de
+@@||adition.com/1x1.gif$xhr,domain=joyn.de
 @@||aws.route71.net/ad-$script,domain=joyn.de
+@@||research.de.com/bb-mx/prime$xhr,domain=joyn.de
 @@||script.ioam.de/iam.js$script,domain=joyn.de
 @@||securepubads.g.doubleclick.net/pcs/view/*$xhr,domain=joyn.de
 
@@ -18595,6 +18600,8 @@ young-pussy.com###playerOverlay
 @@||googletagmanager.com/gtag/js$script,domain=extremereportbot.com
 @@||extremereportbot.com^$ghide
 @@||extremereportbot.com^$script,1p
+*$script,redirect-rule=noopjs,domain=extremereportbot.com
+extremereportbot.com##.adsbygoogle:remove()
 
 ! https://github.com/NanoMeow/QuickReports/issues/1690
 refoblog.xyz##+js(aopr, anOptions)
@@ -25063,10 +25070,10 @@ rarlab.com##.tbar2:has-text(advert)
 dood.*##+js(set, xPoPAdS, false)
 dood.*##+js(acis, Math, zfgloaded)
 dood.*##+js(aopw, _pop)
-dood.*##+js(nowebrtc)
 dood.*##+js(nostif, debugger)
 dood.*##+js(aopw, DoodPop)
 dood.*##+js(nosiif, _0x)
+@@||dood.video^$xmlhttprequest,domain=dood.watch
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7175
 androgamer.org##+js(acis, jQuery, ai_adb)
