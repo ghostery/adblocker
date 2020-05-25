@@ -1438,7 +1438,7 @@ primewire.*##+js(ra, target, [target="_blank"])
 primewire.*##.version_host:has-text(Sponsored):upward(2)
 @@||engine.*/tag.engine?$script,domain=primewire.ag|primewire.in,badfilter
 @@||cdn.engine.*^guid^$3p,script,domain=primewire.ag|primewire.in,badfilter
-||primewire.*^$csp=connect-src 'self'
+||primewire.*^$csp=connect-src 'self' *.opensubtitles.org
 ||primewire.*/sw$script,1p
 ||laratlacrestot.pro^
 
@@ -3248,7 +3248,7 @@ kitguru.net##+js(aopr, anOptions)
 pornktube.*##+js(aeld, load, exoJsPop)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7062
-viki.com##+js(set, VikiPlayer.prototype.pingAbFactor, null)
+viki.com##+js(set, VikiPlayer.prototype.pingAbFactor, noopFunc)
 ! @@||pubads.g.doubleclick.net/gampad/ads*viki.com$xhr,domain=imasdk.googleapis.com
 ||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,redirect=noopjs,domain=viki.com
 *expire=$media,redirect=noopmp3-0.1s,domain=viki.com
@@ -5793,11 +5793,11 @@ teenpornvideo.xxx##.bottom-spots
 fbdown.net##+js(set, harshblock, false)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1963
+tubsexer.com##+js(nowoif)
 tubsexer.com##+js(aopr, ExoLoader.serve)
 tubsexer.com##+js(aopr, document.dispatchEvent)
 tubsexer.com##+js(nostif, offsetWidth)
-tubsexer.com###pre-1adv
-tubsexer.com##.table
+tubsexer.com###pre-1adv, .table, .fp-brand
 ||tubsexer.com/sw.js$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1969
@@ -6525,7 +6525,10 @@ ashemaletube.com##.ads-block-rightside
 ||cc.ashemaletube.com/*/black-header.jpg$image
 ||cc.ashemaletube.com/*/header-black.jpg$image
 ashemaletube.com##.video-end-overlay
-*.mp4$media,redirect=noopmp3-0.1s,domain=ashemaletube.com
+*.mp4$media,3p,redirect=noopmp3-0.1s,domain=ashemaletube.com
+||cc.ashemaletube.com/*/black-main.jpg$image,1p
+ashemaletube.com###site-wrapper:style(padding-top: 0 !important;)
+ashemaletube.com##.header-ads-wrapper
 @@/key=$media,domain=ashemaletube.com
 
 ! piguiqproxy ads https://mirsegondya.com/politika/shantazh-s-pritselom-na-rossiyu-eksperty-raskryli-sut-horoshej-sdelki-kotoruyu-tramp-predlagaet-iranu/
@@ -6908,9 +6911,6 @@ download.hr##+js(set, detector_active, true)
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/89
 @@||sportsvideo.net^$ghide
-
-! https://github.com/uBlockOrigin/uAssets/issues/2443
-brainly.*##+js(aeld, message, data.slice)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2444
 fotbolltransfers.com##+js(aopr, adBlockDetected)
@@ -12827,11 +12827,14 @@ bdsmporn.cc,cocoporn.net,dirtyporn.cc,faperplace.com,freeadultvideos.cc,freeporn
 ! https://github.com/NanoMeow/QuickReports/issues/567
 naszraciborz.pl##+js(aopw, adBlockDetected)
 
+! https://github.com/uBlockOrigin/uAssets/issues/2443
 ! https://github.com/uBlockOrigin/uAssets/issues/5824
-brainly.com##+js(nostif, trigger, 0)
-brainly.com##+js(aopr, localStorage)
-@@||brainly.com^$ghide
-brainly.com##.js-scroll-to-unlock-section.brn-kodiak-answer-redesigned__unlock
+! https://github.com/uBlockOrigin/uAssets/issues/7195
+brainly.*,eodev.com,znanija.com##+js(aeld, message, data.slice)
+brainly.*,eodev.com,znanija.com##+js(nostif, trigger, 0)
+brainly.*,eodev.com,znanija.com##+js(aopr, localStorage)
+@@*$ghide,domain=brainly.com|brainly.com.br|brainly.co.id|brainly.in|brainly.in|brainly.lat|brainly.ph|brainly.pl|brainly.ro|eodev.com|znanija.com
+brainly.*,eodev.com,znanija.com##.js-scroll-to-unlock-section.brn-kodiak-answer-redesigned__unlock
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4647
 anitoki.com##+js(aopr, Base64.encode)
@@ -19355,8 +19358,6 @@ wstream.*##+js(nostif, display)
 wstream.*##.alertvpn, .ads, #premiumdiv
 wstream.*##div[style*="z-index: 999; opacity"]
 @@||wstream.video/js/*$script,1p
-wstream.video##+js(nosiif, /^/)
-wstream.video##:xpath(//*[contains(text(),"adblock")]):upward(1)
 ! https://github.com/NanoMeow/QuickReports/issues/2619
 nowagoal.stream##+js(nowebrtc)
 ||cqyirsc.com^$3p
@@ -19457,6 +19458,8 @@ avseesee.com##.textwidget:has(:scope ins)
 juicywest.com##+js(window.open-defuser)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6329
+aii.sh##+js(aopr, app_vars.force_disable_adblock)
+aii.sh##+js(nowoif)
 aii.sh##+js(acis, Math, zfgloaded)
 aii.sh##+js(acis, Object.defineProperty, vocabulary)
 aii.sh##+js(aopr, Date.prototype.toUTCString)
@@ -20198,7 +20201,9 @@ shemalez.com##+js(nosiif, document.readyState)
 ||leadingru.online^$3p
 
 ! https://forums.lanik.us/viewtopic.php?f=103&t=43734
+! https://github.com/uBlockOrigin/uAssets/issues/7455
 elmundo.es,expansion.com,marca.com##+js(aopr, adUnits)
+marca.com##.ad-item-bt-cont
 marca.com##.banner-sticky
 
 ! https://forums.lanik.us/viewtopic.php?f=64&t=43732#p150600
@@ -22535,7 +22540,7 @@ invistaiptv.com##+js(aopr, adblock)
 encurtabr.net##+js(aopr, app_vars.force_disable_adblock)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6890
-link.debgen.fr##+js(nostif, nextFunction, 250)
+debgen.fr##+js(acis, addEventListener, nextFunction)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2866
 @@||mabzicle.com^$ghide
