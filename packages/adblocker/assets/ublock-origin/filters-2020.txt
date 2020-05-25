@@ -773,7 +773,6 @@ tubxporn.com##+js(aopr, exoJsPop101)
 
 ! sythe.org anti adb
 sythe.org##+js(acis, $, adblocker)
-sythe.org##body::after:style(content: none !important)
 sythe.org##+js(acis, document.getElementsByTagName, adblocker)
 /?referral=sythe$all
 ||sythe.org/*.php$~css,all
@@ -782,14 +781,14 @@ sythe.org##+js(acis, document.getElementsByTagName, adblocker)
 !sythe.org##:xpath(//*[string-length(@style) > 64]):has([href])
 sythe.org##:xpath(//*[contains(translate(@href,' ',''),"('")])
 sythe.org##:xpath(//*[string-length(@src) > 50]):upward([href][style*="cursor"])
-sythe.org##+js(ra, src, :not(div):not(span):not(li):not(h3)>a>*>img)
+!sythe.org##+js(ra, src, :not(div):not(span):not(li):not(h3)>a>*>img)
 !sythe.org##span > [href] [src]:style(width:25px!important; height:15px!important;)
 !sythe.org##span [src]:style(width:25px!important; height:15px!important;)
-sythe.org##img:matches-css(width:/(?:55[0-9]|5[6-9][0-9]|6[0-4][0-9]|650)px/):matches-css(height:/(?:8[0-9]|9[0-9]|100)px/)
+sythe.org##img:matches-css(width: /(?:55[0-9]|5[6-9][0-9]|6[0-4][0-9]|650)px/):matches-css(height: /(?:8[0-9]|9[0-9]|100)px/):remove()
 sythe.org##[src]:matches-css(width:/(?:55[0-9]|5[6-9][0-9]|6[0-4][0-9]|650)px/):matches-css(height:/(?:8[0-9]|9[0-9]|100)px/):remove()
-sythe.org##*:matches-css(background-size:cover):remove()
-sythe.org##a >:matches-css(display:inline-block):remove()
-sythe.org##[href] :matches-css(display:inline-block):remove()
+!sythe.org##[href] :matches-css(display:inline-block):remove()
+!||sythe.org^$csp=style-src * 'sha256-bJP7kRDXOlWK/0X4LvxeAkJ6juW4hm0KzY9lTV/jd+U='
+sythe.org##*:matches-css(background-image: /^url\("https://img.sythe.org//)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54747
 mangareddit.com##+js(nostif, visibility, 1500)
@@ -1511,3 +1510,15 @@ wumpus.club##+js(acis, $, btoa)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/55992
 anonymousceviri.com##+js(acis, addEventListener, nextFunction)
+
+! https://forums.lanik.us/viewtopic.php?f=91&t=44707
+ed-protect.org##+js(aopr, absda)
+
+! https://github.com/NanoMeow/QuickReports/issues/3928
+dnevnik.hr##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7452
+mediatulis.net##+js(nosiif, visibility, 1000)
+
+! https://github.com/NanoMeow/QuickReports/issues/3937
+pinayvids.com##+js(nosiif, visibility, 1000)

@@ -619,7 +619,8 @@ mixmods.com.br##+js(aopr, abde)
 gecce.com.tr##+js(set, fakeadloaded, true)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3466
-unknowncheats.me##+js(acis, $, undefined)
+! https://github.com/NanoMeow/QuickReports/issues/2907
+||googlesyndication.com/pagead/js/adsbygoogle.js$xhr,redirect=noop.js,domain=unknowncheats.me
 ||unknowncheats.me/forum/images/*ban$image
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3489
@@ -2965,7 +2966,7 @@ fontsfree.pro##+js(set, adBlock, false)
 
 ! https://github.com/realodix/AdBlockID/issues/158
 kawanfilm21.*##+js(aeld, /^(?:contextmenu|selectstart)$/)
-kawanfilm21.*##+js(aopr, document.onselectstart)
+kawanfilm21.*##+js(set, document.onselectstart, null)
 
 ! https://github.com/realodix/AdBlockID/issues/162
 terbit21.online##+js(aeld, /^(click|keydown)$/, preventDefault)
@@ -4178,3 +4179,6 @@ digitaltrends.com##+js(aopr, HTMLIFrameElement)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3914
 diffchecker.com##+js(nostif, adStillHere)
+
+! anti adb annoyance
+sythe.org##:xpath(//*[contains(text(),"Adblock")])
