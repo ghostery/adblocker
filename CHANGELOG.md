@@ -1,3 +1,33 @@
+# v1.15.1 (Mon May 25 2020)
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker`
+  - Make fast hash outputs consistent and fix use of globals [#931](https://github.com/cliqz-oss/adblocker/pull/931) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#929](https://github.com/cliqz-oss/adblocker/pull/929) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets [#926](https://github.com/cliqz-oss/adblocker/pull/926) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump lerna from 3.21.0 to 3.22.0 [#930](https://github.com/cliqz-oss/adblocker/pull/930) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.10.8 to 2.10.9 [#928](https://github.com/cliqz-oss/adblocker/pull/928) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 9.36.1 to 9.36.2 [#927](https://github.com/cliqz-oss/adblocker/pull/927) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-webextension`
+  - build(deps): bump webextension-polyfill-ts from 0.15.0 to 0.16.0 [#925](https://github.com/cliqz-oss/adblocker/pull/925) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.15.0 (Sat May 23 2020)
 
 #### :running_woman: Performance

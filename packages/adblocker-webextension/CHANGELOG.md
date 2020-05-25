@@ -1,3 +1,19 @@
+# v1.15.1 (Mon May 25 2020)
+
+#### :bug: Bug Fix
+
+- build(deps): bump webextension-polyfill-ts from 0.15.0 to 0.16.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump webextension-polyfill-ts from 0.15.0 to 0.16.0 [#925](https://github.com/cliqz-oss/adblocker/pull/925) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.15.0 (Sat May 23 2020)
 
 #### :bug: Bug Fix

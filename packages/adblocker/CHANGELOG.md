@@ -1,3 +1,21 @@
+# v1.15.1 (Mon May 25 2020)
+
+#### :bug: Bug Fix
+
+- Make fast hash outputs consistent and fix use of globals [#931](https://github.com/cliqz-oss/adblocker/pull/931) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Update local assets [#929](https://github.com/cliqz-oss/adblocker/pull/929) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#926](https://github.com/cliqz-oss/adblocker/pull/926) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### Authors: 2
+
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.15.0 (Sat May 23 2020)
 
 #### :running_woman: Performance
