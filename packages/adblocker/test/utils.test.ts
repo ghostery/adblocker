@@ -13,10 +13,12 @@ import IFilter from '../src/filters/interface';
 import { TokensBuffer } from '../src/tokens-buffer';
 import { parseFilters } from '../src/lists';
 import {
+  HASH_SEED,
   binLookup,
   binSearch,
   createFuzzySignature,
   fastHash,
+  fastHashBetween,
   hasUnicode,
   tokenize,
   tokenizeInPlace,
@@ -118,8 +120,12 @@ describe('utils.ts', () => {
       checkCollisions(networkFiltersFromRequests);
     });
 
-    it('returns 0 for empty string', () => {
-      expect(fastHash('')).to.equal(0);
+    it('returns HASH_SEED for empty string and non-strings', () => {
+      expect(fastHash('')).to.equal(HASH_SEED);
+      expect(fastHashBetween('', 0, 0)).to.equal(HASH_SEED);
+
+      // @ts-ignore
+      expect(fastHash([])).to.equal(HASH_SEED);
     });
   });
 

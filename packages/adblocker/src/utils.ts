@@ -46,11 +46,11 @@ export function fastHashBetween(str: string, begin: number, end: number): number
 
 export function fastHash(str: string): number {
   if (typeof str !== 'string') {
-    return 0;
+    return HASH_SEED;
   }
 
   if (str.length === 0) {
-    return 0;
+    return HASH_SEED;
   }
 
   return fastHashBetween(str, 0, str.length);
@@ -187,7 +187,7 @@ export function tokenizeWithWildcardsInPlace(
     inside === true &&
     precedingCh !== 42 && // Ignore tokens preceeded by a '*'
     pattern.length - start > 1 && // Ignore tokens of 1 character
-    TOKENS_BUFFER.full() === false
+    buffer.full() === false
   ) {
     buffer.push(hash >>> 0);
   }
@@ -228,7 +228,7 @@ export function tokenizeInPlace(
     inside === true &&
     skipLastToken === false &&
     pattern.length - start > 1 && // Ignore tokens of 1 character
-    TOKENS_BUFFER.full() === false
+    buffer.full() === false
   ) {
     buffer.push(hash >>> 0);
   }
@@ -257,7 +257,7 @@ export function tokenizeNoSkipInPlace(pattern: string, buffer: TokensBuffer): vo
     }
   }
 
-  if (inside === true && pattern.length - start > 1 && TOKENS_BUFFER.full() === false) {
+  if (inside === true && pattern.length - start > 1 && buffer.full() === false) {
     buffer.push(hash >>> 0);
   }
 }
