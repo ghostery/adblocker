@@ -2650,7 +2650,7 @@ wallpaperset.com#@#.ads1
 @@||los40.com^$ghide
 @@||epimg.net^$image,domain=los40.com
 @@||epimg.net/js/pbs/slot_cs.min.js$script,domain=los40.com
-@@||epimg.net/js/pbs/prebid.js$script,domain=los40.com
+@@||epimg.net/js/pbs/prebid$script,domain=los40.com
 @@||doubleclick.net/tag/js/gpt.js$script,domain=los40.com
 @@||doubleclick.net/gpt/pubads_impl_$script,domain=los40.com
 @@||doubleclick.net/gampad/ads?$xhr,domain=los40.com
@@ -2660,6 +2660,7 @@ los40.com##div[id^="google_ads_iframe_"]:style(max-height: 1px !important;)
 los40.com##.publi_luto_horizontal:style(max-height: 1px !important;)
 los40.com##.publi_luto_vertical
 los40.com##.cont_webpush
+los40.com###adunit
 
 ! https://github.com/NanoMeow/QuickReports/issues/593
 @@||cds.connatix.com/embed/$frame,domain=rawstory.com
@@ -3631,3 +3632,16 @@ order-order.com#@#.tag-sponsored
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7467
 *$script,redirect-rule=noopjs,domain=corriere.it
+
+! https://github.com/uBlockOrigin/uAssets/issues/7473
+@@||tags.tiqcdn.com/utag/macys/main/prod/utag*.js$script,domain=macys.com
+
+! https://github.com/NanoMeow/QuickReports/issues/3970
+||cdn.parsely.com/keys/nfl.com/p.js$script,important,redirect=noop.js,domain=nfl.com
+
+! https://forums.lanik.us/viewtopic.php?p=154888#p154888
+*$popup,domain=uptobox.com,badfilter
+
+! https://suicidegirlsfree.com/show/4437721--milliesummers--call-me-a-safe-bet
+.com/ad/$~third-party,domain=~blogs.technet.microsoft.com|~channel4.com|~cspace.com|~linkedin.com|~mediaplex.com|~namemc.com,badfilter
+.com/ad/$~third-party,domain=~blogs.technet.microsoft.com|~channel4.com|~cspace.com|~linkedin.com|~mediaplex.com|~namemc.com|~suicidegirlsfree.com
