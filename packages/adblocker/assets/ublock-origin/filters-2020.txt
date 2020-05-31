@@ -777,18 +777,10 @@ sythe.org##+js(acis, document.getElementsByTagName, adblocker)
 /?referral=sythe$all
 ||sythe.org/*.php$~css,all
 /sytheb$all
-!sythe.org##:xpath(//*[string-length(@href) > 150])
-!sythe.org##:xpath(//*[string-length(@style) > 64]):has([href])
-sythe.org##:xpath(//*[contains(translate(@href,' ',''),"('")])
-sythe.org##:xpath(//*[string-length(@src) > 50]):upward([href][style*="cursor"])
-!sythe.org##+js(ra, src, :not(div):not(span):not(li):not(h3)>a>*>img)
-!sythe.org##span > [href] [src]:style(width:25px!important; height:15px!important;)
-!sythe.org##span [src]:style(width:25px!important; height:15px!important;)
-sythe.org##img:matches-css(width: /(?:55[0-9]|5[6-9][0-9]|6[0-4][0-9]|650)px/):matches-css(height: /(?:8[0-9]|9[0-9]|100)px/):remove()
-sythe.org##[src]:matches-css(width:/(?:55[0-9]|5[6-9][0-9]|6[0-4][0-9]|650)px/):matches-css(height:/(?:8[0-9]|9[0-9]|100)px/):remove()
-!sythe.org##[href] :matches-css(display:inline-block):remove()
-!||sythe.org^$csp=style-src * 'sha256-bJP7kRDXOlWK/0X4LvxeAkJ6juW4hm0KzY9lTV/jd+U='
-sythe.org##*:matches-css(background-image: /^url\("https://img.sythe.org//)
+/^https:\/\/([a-z]+\.)?sythe\.org\/[\w\W]{30,}/$image
+*$image,redirect-rule=1x1.gif,domain=sythe.org
+@@||sythe.org/*.png|$image,1p
+@@||sythe.org/*.jpg?$image,1p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54747
 mangareddit.com##+js(nostif, visibility, 1500)
@@ -1683,3 +1675,35 @@ news247.gr##+js(nostif, f.parentNode.removeChild(f), 100)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/56480
 freeomovie.to##+js(nosiif, visibility, 1000)
 freeomovie.to##+js(acis, String.fromCharCode, 'shift')
+
+! https://github.com/uBlockOrigin/uAssets/issues/7482
+pasteit.*##+js(noeval-if, AdBlock)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7483
+agazeta.com.br##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://github.com/NanoMeow/QuickReports/issues/3987
+freebinchecker.com##+js(nostif, adsBlocked)
+
+! https://github.com/NanoAdblocker/NanoFilters/issues/509
+nyaa.iss.one##+js(aopr, LieDetector)
+
+! https://github.com/NanoMeow/QuickReports/issues/3988
+@@||geekprank.com^$ghide
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/56504
+freshstuff4u.info##+js(acis, addEventListener, google_ad_client)
+freshstuff4u.info##div.widget_list_mag_wp_300px, .img-200
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/56515
+anoboy.*##+js(acis, addEventListener, google_ad_client)
+anoboy.*##div#judi2, #coloma, [href^="//kokipoker.net"]
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/56521
+inazumaotoshifansub.xyz##+js(acis, addEventListener, google_ad_client)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/56429
+turkrock.com##+js(acis, $, .show)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/56441
+movieknowing.com##+js(aopr, anOptions)
