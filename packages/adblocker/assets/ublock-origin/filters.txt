@@ -3087,9 +3087,10 @@ games.baltimoresun.com,games.charlotteobserver.com,games.chicagotribune.com,game
 @@||games.chicagotribune.com/*/video-prebid.html$frame,1p
 @@||games.mcall.com/*/video-prebid.html$frame,1p
 @@||amsarkadium-a.akamaihd.net/*/prebid*.js$script,domain=games.chicagotribune.com|games.mcall.com
-/advertisement/*$badfilter
+@@||cdn.arkadiumhosted.com/advertisement/*/display-ads.js$script,domain=arkadium.com
+@@||cdn.arkadiumhosted.com/advertisement/*/video-ads.js$script,domain=arkadium.com
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=arkadium.com
-arkadium.com##[class*="Banner"]
+arkadium.com##[class*="Banner"], [class^="Ad-"], .ark-ad-message
 arkadium.com##+js(nano-sib)
 
 ! https://github.com/reek/anti-adblock-killer/issues/2242
@@ -6298,6 +6299,8 @@ mega-estrenos.org##.linkhidder.alikemal
 ||toots-a.akamaihd.net/priority/*$media,redirect=noopmp4-1s,domain=itv.com
 itv.com##.stage__upsell-button
 itv.com##.seek-bar__ad
+! https://github.com/uBlockOrigin/uAssets/issues/7481
+@@||itv.com/*/default=defaultvideo$xhr,1p
 
 ! https://github.com/jspenguin2017/uBlockProtector/issues/889
 mail.yahoo.com##div[aria-describedby="adblock-upsell-description"]
@@ -8325,7 +8328,8 @@ moviejones.de##+js(acis, document.getElementById, overlayBtn)
 blackpoolgazette.co.uk##+js(aopr, EV)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3004
-hackyouriphone.org##+js(aopw, adBlockDetected)
+! https://github.com/uBlockOrigin/uAssets/issues/7487
+hackyouriphone.org##+js(nosiif, visibility, 1000)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3005
 donnaglamour.it##+js(aopw, adBlockDetected)
@@ -17905,6 +17909,11 @@ pharmaguideline.com##+js(aeld, load, 2000)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1565
 puzzles.msn.com##+js(set, Adv_ab, false)
+puzzles.msn.com##+js(nano-sib)
+@@||cdn.arkadiumhosted.com/advertisement/*/video-ads.js$script,domain=puzzles.msn.com
+@@||cdn.arkadiumhosted.com/advertisement/*/display-ads.js$script,domain=puzzles.msn.com
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,domain=puzzles.msn.com
+puzzles.msn.com##[class*="displayAd"], .ark-ad-message
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/381
 a7hl-am.com##+js(window.open-defuser)
@@ -24261,7 +24270,7 @@ urlpay.net##+js(nano-sib)
 @@||olinevid.com^$ghide
 olinevid.com###layerName_preroll, #layerName_postroll
 vidmela.com##+js(set, xxSetting.adBlockerDetection, false)
-*$script,redirect-rule=noopjs,domain=olinevid.com|player.vidmela.com
+*$script,redirect-rule=noopjs,domain=olinevid.com
 @@||vidmela.com^$ghide
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/51374
