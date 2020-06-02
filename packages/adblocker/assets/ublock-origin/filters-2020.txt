@@ -860,8 +860,10 @@ tapetus.pl##+js(nostif, /^/)
 tapetus.pl##+js(acis, $, setTimeout)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7308
-streamtape.com##+js(aopr, open)
+streamtape.com##+js(nowoif, /^/, 1)
 streamtape.com##+js(aopw, _pop)
+streamtape.com#@#.google-ad
+streamtape.com##[class*="bn-container"]
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54846
 yabiladi.com##+js(set, adBlockDetected, null)
@@ -1600,6 +1602,7 @@ obaflix.com##+js(acis, Math, zfgloaded)
 platuku.com##.adsbygoogle
 
 ! https://github.com/NanoMeow/QuickReports/issues/3961
+wenxuecity.com##+js(acis, onload, adsbygoogle)
 wenxuecity.com##+js(nostif, ab_root.show)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/49740#issuecomment-634995533
@@ -1713,7 +1716,7 @@ movieknowing.com##+js(aopr, anOptions)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7485
 ||c.amazon-adsystem.com/aax2/apstag.js$script,domain=foxnews.com,important
-||googletagmanager.com/gtag/js$script,domain=foxnews.com,important
+||googletagmanager.com^$script,domain=foxnews.com,important
 ||imasdk.googleapis.com/js/sdkloader/ima3_debug.js$domain=foxnews.com,important
 
 ! https://github.com/NanoMeow/QuickReports/issues/3995
@@ -1748,3 +1751,17 @@ uploadroot.com##.buttonDownload
 
 ! https://github.com/NanoMeow/QuickReports/issues/4001
 @@||key-hub.eu^$ghide
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/56603
+filmesviatorrents.gratis##+js(nosiif, visibility, 1000)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/56617
+onepiece-online-manga.com##+js(set, killAdBlock._options.baitClass, null)
+onepiece-online-manga.com##center
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/56667
+saberprogramas.com##+js(aopr, anOptions)
+saberprogramas.com##.widget_et_ads
+
+! https://github.com/NanoMeow/QuickReports/issues/4005
+*$script,redirect-rule=noopjs,domain=bandab.com.br

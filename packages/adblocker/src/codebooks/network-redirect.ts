@@ -36,6 +36,7 @@ export default [
   "al",
   "ar",
   "ch",
+  "er",
   "et",
   "ga",
   "ic",
