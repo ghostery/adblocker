@@ -3920,7 +3920,8 @@ cpmlink.net##+js(acis, decodeURI, decodeURIComponent)
 cpmlink.net##+js(acis, Math, zfgloaded)
 cpmlink.net##+js(aopw, _pop)
 cpmlink.net##+js(nowebrtc)
-||cpmlink.net^$csp=script-src 'self' 'unsafe-inline' 'unsafe-eval' data: *.gstatic.com *.google-analytics.com *.google.com *.cloudflare.com
+||cpmlink.net^$csp=script-src 'self' 'unsafe-inline' 'unsafe-eval' data: *.gstatic.com *.google-analytics.com *.google.com *.cloudflare.com https://undefined/
+cpmlink.net##+js(aeld, , _blank)
 *$frame,3p,domain=cpmlink.net
 cpmlink.net##[href^="https://bit.ly"]
 cpmlink.net##iframe[src="about:blank"]
@@ -4573,7 +4574,12 @@ bc.vc##+js(window.open-defuser)
 bcvc.live##+js(window.open-defuser, 0, bcvc)
 bcvc.live##+js(nostif, document.getElementById, .attr)
 bcvc.live##+js(acis, addEventListener, Blocking)
-bcvc.live##:xpath(//*[contains(text(),"adblock")]):upward(2)
+*$script,redirect-rule=noopjs,domain=bcvc.live
+bcvc.live##*:style(display:block!important;)
+bcvc.live###bvcontainerx
+bcvc.live##[href*="/url"]
+bcvc.live##head
+bcvc.live##+js(aeld, , push)
 *$frame,3p,domain=bc.vc
 ||bc.vc/mload.gif$image
 ||punosy.top^$3p
@@ -19393,13 +19399,13 @@ wstream.*##+js(acis, String.fromCharCode, 'shift')
 ||advinci.uno^$3p
 ! https://github.com/NanoMeow/QuickReports/issues/2213#issuecomment-562911667
 wstream.*##+js(nostif, display)
-wstream.*##.alertvpn, #premiumdiv, div[id][style*="z-index:"]
 @@||wstream.video/js/*$script,1p
 ! https://github.com/NanoMeow/QuickReports/issues/2619
 nowagoal.stream##+js(nowebrtc)
 ||cqyirsc.com^$3p
 ||vstera.tech^$3p
 @@||vstera.tech^$script,domain=wstream.video
+@@||wstream.*^$ghide
 
 ! thegroupmusic.com anti adb popups
 thegroupmusic.com##+js(acis, Math, zfgloaded)
@@ -24049,6 +24055,8 @@ popcornstream.*##.aoa_overlay
 oyungibi.com##+js(set, jQuery.adblock, false)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3251
+! https://github.com/NanoMeow/QuickReports/issues/4020
+turkmmo.com##+js(acis, $, AdBlock)
 turkmmo.com##+js(nostif, samOverlay)
 turkmmo.com##.special-days, [href^="http://rohan2.global/"]
 

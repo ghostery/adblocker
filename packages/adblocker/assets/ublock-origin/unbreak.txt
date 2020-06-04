@@ -3578,9 +3578,7 @@ order-order.com#@#.tag-sponsored
 @@||imasdk.googleapis.com/js/sdkloader/ima3.$script,domain=independent.co.uk
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7429
-!#if env_firefox
-@@||insights-collector.newrelic.com/v1/accounts/*/events$xhr,domain=diariosur.es
-!#endif
+@@||insights-collector.newrelic.com/*/events$xhr,domain=diariosur.es|diariovasco.com|elcorreo.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7432
 ||sibautomation.com^$frame,redirect=noopframe
@@ -3658,3 +3656,12 @@ order-order.com#@#.tag-sponsored
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7479
 @@||google.com/adsense/search/ads.js^$script,domain=diigo.com
+
+! asmhentai.com fix Next button
+||googletagmanager.com/gtag/js$script,redirect-rule=googletagmanager_gtm.js,domain=asmhentai.com
+
+! https://forums.lanik.us/viewtopic.php?p=155004#p155004
+@@||developers.google.com/analytics/devguides/collection/analyticsjs/$xhr,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/7509
+@@||www.googletagmanager.com/gtm.js$script,domain=vw-sklep.pl
