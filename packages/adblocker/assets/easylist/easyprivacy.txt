@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202006041945
+! Version: 202006051919
 ! Title: EasyPrivacy
-! Last modified: 04 Jun 2020 19:45 UTC
+! Last modified: 05 Jun 2020 19:19 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -630,6 +630,7 @@
 /analytics-event-
 /analytics-event.
 /analytics-gcp.
+/analytics-helper.
 /analytics-ingestion/*
 /analytics-ingress-
 /analytics-js.
@@ -916,6 +917,8 @@
 /awAnalytics.
 /awe/ccs.
 /awesc.php?
+/awp.log
+/awpys.log
 /aws-analytics.js
 /awstats.js
 /awstats_misc_tracker
@@ -3326,6 +3329,7 @@
 /prod-analytics.
 /prod-client-js-logger/*
 /prodtracker?
+/production/analytics.
 /profile_tracker.
 /promo_tracking/*
 /promos/pixels?
@@ -6314,7 +6318,6 @@ _mongo_stats/
 ||flashgamestats.com^$third-party
 ||flashtalking.com^$third-party
 ||flcounter.com^$third-party
-||flix360.com^$third-party
 ||flixfacts.co.uk^$third-party
 ||flixsyndication.net^$third-party
 ||fluencymedia.com^$third-party
@@ -10503,6 +10506,7 @@ _mongo_stats/
 ||flex.msn.com/mstag/
 ||flix360.com/beat?
 ||flixcar.com/delivery/
+||flixcar.com/gvid
 ||flixcdn.com^*/track.js
 ||flixster.com^*/analytics.
 ||flocktory.com^*/tracks/
@@ -11183,6 +11187,7 @@ _mongo_stats/
 ||royalecms.com/statistics.php?
 ||rs.sinajs.cn^
 ||rss.tmgrup.com.tr^
+||rt.flix360.com^
 ||rtt.campanja.com^
 ||ru4.com/click?
 ||rum.conde.io^
@@ -16819,7 +16824,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||google-analytics.com/plugins/ua/ec.js$script,domain=health2000.co.nz
 @@||google.com/js/gweb/analytics/autotrack.js$domain=gradleplease.appspot.com
 @@||googletagmanager.com/gtag/js$script,domain=foxnews.com|gamespot.com|m.putlocker.how|neighborhoodpostcards.com|ryanair.com
-@@||googletagmanager.com/gtm.js$domain=action.com|adsoup.com|airasia.com|asus.com|bhaskar.com|broadcom.com|chipotle.com|complex.com|computerworlduk.com|cyclingnews.com|desigual.com|drumstick.com|ebuyer.com|elevationscu.com|fortune.com|foxnews.com|gamepix.com|git-tower.com|google.com|health2000.co.nz|itv.com|jobs.net|keygames.com|magicjack.com|moviefone.com|nestio.com|newsarama.com|newsy.com|nfl.com|nytimes.com|onesignal.com|optus.com.au|realestate.co.nz|rebtel.com|rockstargames.com|rollingstone.com|rozetka.com.ua|scotsman.com|sixflags.com|support.amd.com|talktalk.co.uk|techradar.com|toto.co.jp|toysrus.ca|trademe.nz|usmagazine.com|wwe.com
+@@||googletagmanager.com/gtm.js$domain=action.com|adsoup.com|airasia.com|asus.com|bhaskar.com|broadcom.com|chipotle.com|complex.com|computerworlduk.com|cyclingnews.com|desigual.com|drumstick.com|ebuyer.com|elevationscu.com|fortune.com|foxnews.com|gamepix.com|git-tower.com|google.com|health2000.co.nz|itv.com|jobs.net|keygames.com|magicjack.com|moviefone.com|nestio.com|newsarama.com|newsy.com|nfl.com|nytimes.com|onesignal.com|optus.com.au|porshe.com|realestate.co.nz|rebtel.com|rockstargames.com|rollingstone.com|rozetka.com.ua|scotsman.com|sixflags.com|support.amd.com|talktalk.co.uk|techradar.com|toto.co.jp|toysrus.ca|trademe.nz|usmagazine.com|wwe.com
 @@||gov.au/Scripts/ga.js$script,~third-party
 @@||guce.advertising.com/collectIdentifiers$domain=guce.advertising.com
 @@||hearstapps.com/static/comscore.$script,domain=womenshealthmag.com
@@ -17011,6 +17016,8 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||zappos.com/js/trackingPixel/mercentTracker.js
 @@||zylom.com/images/site/zylom/scripts/google-analytics.js
 @@||zynga.com/current/iframe/track.php?$domain=apps.facebook.com
+! Cloudflare hcaptcha test
+@@/cdn-cgi/images/trace/captcha/js/h/transparent.gif$image,~third-party
 ! uBO-CNAME (Specific whitelists)
 @@||n8s.jp^$script,domain=nikkei.com
 ! facebook related (https://forums.lanik.us/viewtopic.php?f=64&t=43722)
