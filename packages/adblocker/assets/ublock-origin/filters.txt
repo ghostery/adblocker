@@ -5029,6 +5029,8 @@ animeflv.ru##+js(set, check_adblock, true)
 @@||cdnjs.cloudflare.com/ajax/libs/videojs-contrib-ads/*$script,css,domain=embed.streamx.live
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1690
+! https://github.com/NanoMeow/QuickReports/issues/4040
+jkanime.net##+js(acis, Math, zfgloaded)
 jkanime.net##+js(aopw, adcashMacros)
 jkanime.net##+js(window.open-defuser)
 
@@ -6847,15 +6849,6 @@ zoosintabues.com##+js(aopw, Fingerprint2)
 /tortoise.min.js$domain=boards.net|freeforums.net|proboards.com
 boards.net,freeforums.net,proboards.com##+js(acis, $, vglnk)
 boards.net,freeforums.net,proboards.com##[id^="ad-"], #remove_ads_link
-
-! https://www.reddit.com/r/uBlockOrigin/comments/8n1sk4/vidcloud_blocking_but_sometimes_doesnt/
-! https://github.com/NanoAdblocker/NanoFilters/issues/154
-vcstream.to##+js(aopr, BetterJsPop)
-vcstream.to##+js(set, pop_cnt, 1)
-vcstream.to##+js(nostif, _creatBait)
-*$frame,domain=vcstream.to
-@@||cdnjs.cloudflare.com/*/fuckadblock.min.js$script,domain=vcstream.to
-vcstream.to###overlay-vcplayer
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2413
 crackedgameservers.com##+js(set, adblock, false)
@@ -11212,11 +11205,6 @@ anitube.biz##+js(set, adBlockDetected, noopFunc)
 ||megafilmeshd21.tk^$3p
 anitube.*###iframeCore____
 ||anitube.*/sw.js$script,1p
-! https://www.reddit.com/r/uBlockOrigin/comments/bneolq/need_help_bypassing_this_website_httpsanitubecz/
-@@||cdnjs.cloudflare.com/ajax/libs/blockadblock/*/blockadblock.js$script,domain=anitube.cz
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=anitube.cz
-@@||anitube.cz^$ghide
-@@||anitube.cz/js/advertisement/$script,1p
 
 ! https://github.com/NanoMeow/QuickReports/issues/367
 comtechies.com##+js(aopr, TL_Front)
@@ -19383,26 +19371,18 @@ hiidudemovies.*##+js(acis, Math, zfgloaded)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2206
 ! wstream.*##*:style(opacity: 1.0 !important)
-wstream.*##+js(acis, String.fromCharCode, popups)
 wstream.*##+js(aopr, AaDetector)
-wstream.*##+js(nostif, createElement, 15000)
 wstream.*##+js(ra, onclick)
-wstream.*##+js(nostif, height)
-wstream*.##+js(set, e4e4e4, true)
-wstream.*##+js(window.open-defuser)
 @@||wstream.*^$script,1p
-wstream.*##^script:has-text('shift')
-wstream.*##+js(acis, String.fromCharCode, 'shift')
 ||advinci.uno^$3p
-! https://github.com/NanoMeow/QuickReports/issues/2213#issuecomment-562911667
-wstream.*##+js(nostif, display)
-@@||wstream.video/js/*$script,1p
-! https://github.com/NanoMeow/QuickReports/issues/2619
 nowagoal.stream##+js(nowebrtc)
 ||cqyirsc.com^$3p
 ||vstera.tech^$3p
 @@||vstera.tech^$script,domain=wstream.video
 @@||wstream.*^$ghide
+*$script,redirect-rule=noopjs,domain=wstream.video
+wstream.*##+js(nowoif, /^/, 1)
+*$script,3p,denyallow=jwpcdn.com|jsdelivr.net|cloudflare.net|fastly.net,domain=wstream.video
 
 ! thegroupmusic.com anti adb popups
 thegroupmusic.com##+js(acis, Math, zfgloaded)
@@ -19918,8 +19898,8 @@ medihelp.life##+js(aopw, ai_adb_overlay)
 watchmynameisearl.com##+js(nobab)
 watchmynameisearl.com##+js(aopr, AaDetector)
 
-! torrentmafya .net anti adb
-@@||torrentmafya.net^$ghide
+! https://github.com/AdguardTeam/AdguardFilters/issues/56838
+torrentmafya.*##+js(aopr, anOptions)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6406
 @@||guiamuriae.com.br^$ghide
@@ -22217,9 +22197,6 @@ web2.0rechner.de,web2.0calc.*###abmodal, body > .in.modal-backdrop
 web2.0rechner.de,web2.0calc.*##body:style(overflow: auto !important)
 web2.0rechner.de,web2.0calc.*###nocreditsmodal
 web2.0calc.*##+js(aopr, doads)
-
-! https://www.reddit.com/r/uBlockOrigin/comments/emsp2m/anime_website_blocking_ublock_any_help_is/
-@@||anitube.be^$script,1p
 
 ! https://github.com/NanoMeow/QuickReports/issues/2711
 @@||narutoitalia.com^$ghide
