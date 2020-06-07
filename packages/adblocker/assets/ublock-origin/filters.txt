@@ -106,8 +106,6 @@ youtube.com##.ytp-ad-progress
 youtube.com###masthead-ad
 ! https://redd.it/fg424w
 youtube.com##ytd-video-masthead-ad-advertiser-info-renderer,ytm-promoted-sparkles-web-renderer
-! https://www.reddit.com/r/uBlockOrigin/comments/fg5qks/ublock_origin_and_youtube_ads/fk6wqb6/
-youtube.com##.ytp-ad-module
 ! https://www.reddit.com/r/uBlockOrigin/comments/fnb95h/suggested_products_wont_back_down/
 youtube.com##.ytd-carousel-ad-renderer
 ! https://github.com/easylist/easylist/issues/5112
@@ -1760,7 +1758,6 @@ fmovies.*##+js(window.open-defuser)
 ||fmovies.*/sw.js
 ||aidalbark.site^$3p
 ! https://github.com/uBlockOrigin/uAssets/issues/6738
-mcloud.to###jwa
 *$script,redirect-rule=noopjs,domain=playhydrax.com
 ! https://github.com/NanoMeow/QuickReports/issues/3311
 @@||iamcdn.net/players/*ads$script,domain=playhydrax.com
@@ -5473,8 +5470,8 @@ uploadbaz.*##+js(aopr, AaDetector)
 ||beigeiros.pw^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1839
-vermangasporno.com##+js(aopw, __htapop)
-vermangasporno.com##+js(popads-dummy.js)
+*$script,3p,domain=vermangasporno.com
+vermangasporno.com##[href^="http://bit.ly"]
 ##a[href^="http://gamingadult.biz/"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1842
@@ -5507,8 +5504,6 @@ cinedetodo.*##[id*="yellow"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1846#issuecomment-408513233
 jawcloud.co##+js(aopw, Fingerprint2)
-! https://github.com/uBlockOrigin/uAssets/issues/1846#issuecomment-455822752
-seriesya.com##+js(acis, Math, zfgloaded)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1847
 cinemahd.co##+js(acis, Math, zfgloaded)
@@ -11173,6 +11168,7 @@ singingdalong.*##+js(aeld, load, 2000)
 ! https://forums.lanik.us/viewtopic.php?f=62&t=42217
 mrdeepfakes.com##+js(aopw, ReactAds)
 mrdeepfakes.com##+js(acis, document.getElementsByTagName, script)
+mrdeepfakes.com##+js(aopw, phtData)
 mrdeepfakes.com##[href*="offer"]
 ||plufdsb.com^
 
@@ -17981,6 +17977,11 @@ dailymail.co.uk##.pufftext > .sponsored:upward(3)
 dailymail.co.uk##.pufftext:has-text(/SPONSORED/):upward(2)
 dailymail.co.uk##.mol-ads-label-container
 dailymail.co.uk##.mpu_puff_wrapper
+! https://github.com/NanoMeow/QuickReports/issues/4042
+games.dailymail.co.uk##+js(nano-sib)
+@@||cdn.arkadiumhosted.com/advertisement/*-ads.js$script,domain=games.dailymail.co.uk
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=games.dailymail.co.uk
+games.dailymail.co.uk##display-ad-component, [class^="DisplayAd"], .ark-ad-message
 
 ! cscscholarships.net anti adb
 @@||cscscholarships.net^$ghide
@@ -21016,7 +21017,7 @@ release-apk.com##+js(aeld, load, adblocker)
 release-apk.com##+js(nobab)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2294
-@@||adonisfansub.com^$ghide
+adonisfansub.com##+js(nobab)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2295
 agefi.fr##+js(nostif, {r(), 0)
@@ -22244,6 +22245,7 @@ extreme-down.*,extreme-download.*##+js(aopr, AaDetector)
 extreme-down.*##+js(set, atob, trueFunc)
 extreme-down.*,extreme-download.*##+js(aopr, decodeURIComponent)
 extreme-down.*##+js(acis, $, friendlyduck)
+extreme-down.*##+js(acis, Math, zfgloaded)
 ||ddf67683e4778d.com^
 ||ladsims.com^
 ||fadsabs.com^
@@ -22826,6 +22828,7 @@ rukim.id##+js(set, $tieE3, true)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/49109
 laksa19.github.io##+js(set, ASSetCookieAds, null)
+laksa19.github.io##+js(nostif, 0x)
 *$script,redirect-rule=noopjs,domain=laksa19.github.io
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/49181
