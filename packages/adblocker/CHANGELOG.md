@@ -1,3 +1,44 @@
+# v1.16.0 (Wed Jun 10 2020)
+
+#### :rocket: New Feature
+
+- feature: add support for Playwright blocking [#417](https://github.com/cliqz-oss/adblocker/pull/417) ([@remusao](https://github.com/remusao))
+
+#### :bug: Bug Fix
+
+- build(deps-dev): bump @ampproject/rollup-plugin-closure-compiler ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :house: Internal
+
+- Update local assets [#982](https://github.com/cliqz-oss/adblocker/pull/982) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#978](https://github.com/cliqz-oss/adblocker/pull/978) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#972](https://github.com/cliqz-oss/adblocker/pull/972) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#971](https://github.com/cliqz-oss/adblocker/pull/971) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#970](https://github.com/cliqz-oss/adblocker/pull/970) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#966](https://github.com/cliqz-oss/adblocker/pull/966) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#960](https://github.com/cliqz-oss/adblocker/pull/960) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#958](https://github.com/cliqz-oss/adblocker/pull/958) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#953](https://github.com/cliqz-oss/adblocker/pull/953) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#950](https://github.com/cliqz-oss/adblocker/pull/950) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#948](https://github.com/cliqz-oss/adblocker/pull/948) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#946](https://github.com/cliqz-oss/adblocker/pull/946) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#940](https://github.com/cliqz-oss/adblocker/pull/940) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#935](https://github.com/cliqz-oss/adblocker/pull/935) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#933](https://github.com/cliqz-oss/adblocker/pull/933) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#932](https://github.com/cliqz-oss/adblocker/pull/932) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump @ampproject/rollup-plugin-closure-compiler from 0.25.2 to 0.26.0 [#956](https://github.com/cliqz-oss/adblocker/pull/956) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.15.1 (Mon May 25 2020)
 
 #### :bug: Bug Fix
