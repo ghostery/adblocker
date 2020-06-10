@@ -16,6 +16,7 @@ export {
   ElectronRequestType,
   PuppeteerRequestType,
   getHostnameHashesFromLabelsBackward,
+  PlaywrightRequestType,
 } from './src/request';
 export { default as CosmeticFilter } from './src/filters/cosmetic';
 export { default as NetworkFilter } from './src/filters/network';

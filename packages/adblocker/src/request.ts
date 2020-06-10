@@ -33,18 +33,33 @@ export type ElectronRequestType =
 // From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/7f3549ed0050f2ca8d7fcc00c33eba21f0cbdd88/types/puppeteer/index.d.ts#L945
 export type PuppeteerRequestType =
   | 'document'
-  | 'stylesheet'
-  | 'image'
-  | 'media'
-  | 'font'
-  | 'script'
-  | 'texttrack'
-  | 'xhr'
-  | 'fetch'
   | 'eventsource'
-  | 'websocket'
+  | 'fetch'
+  | 'font'
+  | 'image'
   | 'manifest'
-  | 'other';
+  | 'media'
+  | 'other'
+  | 'script'
+  | 'stylesheet'
+  | 'texttrack'
+  | 'websocket'
+  | 'xhr';
+
+export type PlaywrightRequestType =
+  | 'document'
+  | 'eventsource'
+  | 'fetch'
+  | 'font'
+  | 'image'
+  | 'manifest'
+  | 'media'
+  | 'other'
+  | 'script'
+  | 'stylesheet'
+  | 'texttrack'
+  | 'websocket'
+  | 'xhr';
 
 // From: https://developer.chrome.com/extensions/webRequest#type-ResourceType
 export type WebRequestTypeChrome = chrome.webRequest.ResourceType;
@@ -56,7 +71,7 @@ export type WebRequestTypeFirefox = browser.webRequest.ResourceType;
 export type WebRequestType = WebRequestTypeChrome | WebRequestTypeFirefox;
 
 // The set of supported types is the union of WebRequest
-export type RequestType = WebRequestType | ElectronRequestType | PuppeteerRequestType;
+export type RequestType = WebRequestType | ElectronRequestType | PuppeteerRequestType | PlaywrightRequestType;
 
 export const NORMALIZED_TYPE_TOKEN: { [s in RequestType]: number } = {
   beacon: fastHash('type:beacon'),
