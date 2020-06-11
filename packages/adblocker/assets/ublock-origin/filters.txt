@@ -2303,8 +2303,6 @@ mp4upload.com##+js(popads-dummy)
 @@||ajax.googleapis.com/ajax/libs/jquery/*$script,domain=mp4upload.com
 mp4upload.com###overlay, div.container
 mp4upload.com##.vjs-fade.vjs-over
-@@||direct.apus.tech/inlive/www/delivery$3p,frame,domain=mp4upload.com
-||direct.apus.tech^$3p,frame,csp=default-src 'none'
 *$script,redirect-rule=noopjs,domain=mp4upload.com
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=37976
@@ -3912,7 +3910,8 @@ gogoanime.*,gogoanimes.*##+js(acis, Math, zfgloaded)
 gogoanime.*##+js(nostif, o(), 1)
 gogoanime.*##+js(set, check_adblock, true)
 gogoanime.*##.banner_center
-gogoanime.*##.anime_video_body_cate > div[style]:has(:scope > [src^="//native.propellerclick.com/"])
+gogoanime.*##.anime_video_body_cate > div[style]:has(:scope > div[id] + script[src])
+fcdn.stream##+js(nowoif)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1277
 cpmlink.net##+js(acis, decodeURI, decodeURIComponent)
@@ -5210,8 +5209,8 @@ short2win.*##+js(nowebrtc)
 $frame,3p,domain=short2win.com
 
 ! https://github.com/jspenguin2017/uBlockProtector/issues/888
-moondoge.co.in,moonliteco.in,moonbit.co.in##input#AB,#F4DDbN:remove()
-moondoge.co.in,moonliteco.in,moonbit.co.in##.advert
+moonbit.co.in,moondoge.co.in,moonliteco.in##+js(ra, src, iframe#claimAd)
+moonbit.co.in,moondoge.co.in,moonliteco.in##div.flexContentAd, .btn-sm.btn-coin, .flexBefore, .flexAfter
 moonbit.co.in##.hide-xs:style(visibility: collapse !important)
 moonbit.co.in,moondoge.co.in,moonliteco.in###advert-space > iframe:style(visibility: collapse !important)
 moonbit.co.in,moondoge.co.in,moonliteco.in##[src^="//coinad.com/ads/"]:style(visibility: collapse !important)
@@ -7374,6 +7373,7 @@ uii.io##+js(window.open-defuser)
 uii.io##.banner
 uii.io##a[href^="https://href.li/"]
 uii.io##a[href^="http://mob1ledev1ces.com/"]
+uii.io##body > div[style]:has(input[type="button"])
 ! https://github.com/uBlockOrigin/uAssets/issues/2582#issuecomment-490780661
 !#if env_chromium
 uii.io##+js(aeld, mouseup, _blank)
@@ -11516,6 +11516,9 @@ kizi.cm##+js(aopr, anOptions)
 
 ! popups sharemovies . net
 sharemovies.net##+js(acis, Math, zfgloaded)
+sharemovies.net##+js(aopr, LieDetector)
+||jtpc2pa9o2n7.com^
+||cyih0e43aty7.com^
 
 ! popups biqle . com
 biqle.com##+js(acis, Math, zfgloaded)
@@ -11540,8 +11543,8 @@ paytoshi.in##+js(acis, Math, zfgloaded)
 ||fophaumpoor.com^
 ||ktf5kbl2m4.com^
 
-! https://github.com/uBlockOrigin/uAssets/issues/4159#issuecomment-445131641
-worldtvhd.net##+js(acis, Math, zfgloaded)
+! https://github.com/uBlockOrigin/uAssets/issues/4159
+123films.cc,worldtvhd.net##+js(acis, Math, zfgloaded)
 ||fm6dz864.top^
 
 ||adslop.com^$3p
@@ -11776,7 +11779,6 @@ vidcloud9.com##+js(aopr, isSandboxed)
 putload.tv##+js(nowebrtc)
 ||5f6dmzflgqso.com^
 
-
 ! https://github.com/NanoMeow/QuickReports/issues/445
 freepremium4all.com##+js(set, $tieE3, true)
 
@@ -11983,8 +11985,7 @@ player.hulu.com##+js(set, Object.prototype.sS, trueFunc)
 *$frame,domain=9ig.de,3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4268#issuecomment-449132834
-egypt-mix.com,fastmoney71.com,inurls.co##+js(aopr, app_vars.force_disable_adblock)
-egypt-mix.com##+js(nostif, nextFunction, 250)
+inurls.co##+js(aopr, app_vars.force_disable_adblock)
 
 ! https://github.com/NanoMeow/QuickReports/issues/479
 fzmovies.net##+js(window.open-defuser)
@@ -13234,9 +13235,11 @@ hackstore.net##.onp-sl-social-locker
 ref-dir.com^$popunder
 ! https://github.com/uBlockOrigin/uAssets/issues/4798#issuecomment-464387517
 ! https://github.com/uBlockOrigin/uAssets/issues/6112
-cinemaniahdd.net,hackstore.net,latinomegahd.net,megajuegosfree.com,megapeliculasrip.net,peliculasgoogledrive.info,pelislatino3gp.biz,pelismegahd.pe,pocosmegashdd.org,tododvdfull.com##+js(aeld, DOMContentLoaded, console)
+hackstore.net,latinomegahd.net,megajuegosfree.com,megapeliculasrip.net,peliculasgoogledrive.info,pelislatino3gp.biz,pelismegahd.pe,pocosmegashdd.org,tododvdfull.com##+js(acis, document.onreadystatechange, btoa)
+latinomegahd.net##+js(aopw, _pop)
+pocosmegashdd.org##+js(aeld, DOMContentLoaded, console)
 ! https://github.com/uBlockOrigin/uAssets/issues/1373#issuecomment-566224434
-cinemaniahdd.net##+js(nostif, href, 2000)
+cinemaniahdd.net##+js(nostif, href)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4799
 compucalitv.com##.onp-sl-content:style(display: block !important;)
@@ -17214,17 +17217,6 @@ ktmx.pro##+js(aeld, load, 2000)
 animeyt2.tv##+js(acis, FbotonOn)
 animeyt2.tv##+js(aopr, loadRunative)
 
-! https://github.com/abp-filters/abp-filters-anti-cv/issues/194
-egybest2.com,egybest4.com##+js(acis, Math, zfgloaded)
-egybest2.com,egybest4.com##+js(window.open-defuser)
-egybest2.com,egybest4.com,streamega.com##+js(nowebrtc)
-egybest2.com,egybest4.com##+js(nostif, '0x)
-
-! https://github.com/uBlockOrigin/uAssets/issues/5844
-clx.icu##+js(aopr, app_vars.force_disable_adblock)
-clx.icu##+js(aeld, click, trigger)
-||clx.icu/sw.js$script,1p
-
 ! https://github.com/uBlockOrigin/uAssets/issues/5850
 @@||darkw.pl^$ghide
 
@@ -20700,14 +20692,15 @@ fluentu.com##+js(aopr, __eiPb)
 forocoches.com##+js(aopr, pbjsChunk)
 forocoches.com##table.cajasnews > tbody > tr > td > table > tbody > tr > td > a[rel=nofollow]:has-text(Promos):upward(2)
 forocoches.com##table.cajasprin > tbody > tr > td:has(iframe[src^="//cdn.forocoches.com/lwa/forocoches/fc_promo.html"])
-forocoches.com##table.tborder#threadslist > tbody[id^="threadbits_forum_"] > tr:has(:scope > [id^="td_threadtitle_"][style^="background-color: #ffffff"].alt1 > .smallfont > span)
-forocoches.com##table.tborder[id^="table"] > tbody > tr > .alt1:has([href][target]):has(strong)
-forocoches.com##table.tborder > tbody > tr > .alt1:has([href^="/link.php?url=https%3A%2F%2Fwww.pccomponentes.com"][target])
-forocoches.com##table.tborder > tbody > tr > .alt1:has(:scope > table > tbody > tr > td > a):has(strong):has(span > font > strong)
-forocoches.com##table.tborder > tbody > tr > .alt1:has(:scope > table > tbody > tr > td > table > tbody > tr > td > strong > a[target][href])
+forocoches.com##table.tborder#threadslist > tbody[id^="threadbits_forum_"] > tr:has(:scope > [id^="td_threadtitle_"][style^="background-color: #"].alt1 > .smallfont > span)
+forocoches.com##table.tborder[id^="table"] > tbody:has(:scope > tr > .alt1 [href][target]):has(strong)
+forocoches.com##table.tborder > tbody:has(:scope > tr > .alt1 [href^="/link.php?url=https%3A%2F%2Fwww.pccomponentes.com"][target])
+forocoches.com##table.tborder > tbody:has(:scope > tr > .alt1 > table > tbody > tr > td > a):has(strong):has(span > font > strong)
+forocoches.com##table.tborder > tbody:has(:scope > tr > .alt1 > table > tbody > tr > td > table > tbody > tr > td > strong > a[target][href])
 forocoches.com##table.tborder[id^="table"] > tbody > tr > .alt1:has(:scope > table[id^="table"] > tbody > tr > td > div[style] > a[style][href^="/foro/"] > strong)
+forocoches.com##table.tborder[id^="table"] > tbody:has(:scope > tr > .alt1 > table[id^="table"] > tbody > tr > td > [href] + span > br + strong)
 forocoches.com###vbnotices
-m.forocoches.com##.page > div > ul > li[style^="word-wrap:break-word; word-break:break-word; background-color: #ffffff"]
+m.forocoches.com##.page > div > ul > li[style^="word-wrap:break-word; word-break:break-word; background-color: #"]
 m.forocoches.com##.page > div > ul[style]:has(:scope > li > div[style] > a[style][href^="/foro/"] > strong)
 ||cdn.forocoches.com/lwa/forocoches/fc_promo.html$frame,1p
 ||scripts.static-od.com/setup
@@ -20919,7 +20912,7 @@ allcalidad.*##+js(acis, doOnce)
 allcalidad.*##+js(acis, Math, zfgloaded)
 allcalidad.*##+js(aeld, click, popMagic)
 allcalidad.*##+js(aopw, smrtSB)
-onlink.live##+js(set, B, true)
+allcalidad.*##+js(set, btoa, null)
 ||onlink.live^$popunder
 ||refme.xyz^$popunder
 ||jsblom.com^$3p
@@ -22526,8 +22519,11 @@ liveshootv.com##+js(window.open-defuser)
 liveshootv.com##.banner-inner
 
 ! https://github.com/NanoMeow/QuickReports/issues/2840
-ouofly.com##+js(aopr, app_vars.force_disable_adblock)
 ouofly.com##+js(acis, Math, zfgloaded)
+ouofly.com##+js(aopr, app_vars.force_disable_adblock)
+ouofly.com##+js(aopw, _pop)
+ouofly.com##body > div[style]:has(input[type="button"])
+ouofly.com##.adsbygoogle
 @@||ouofly.com^$ghide
 ||ouofly.com^$csp=script-src * 'unsafe-inline'
 
