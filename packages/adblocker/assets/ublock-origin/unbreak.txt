@@ -3687,3 +3687,11 @@ getcoloringpages.com#@#.adsBlock
 @@||tags.tiqcdn.com/utag/lenovo/$script,domain=lenovo.com
 @@||inside-graph.com^$domain=lenovo.com
 @@||confirmit.com/api/$domain=lenovo.com
+
+! https://github.com/NanoMeow/QuickReports/issues/3663#issuecomment-643001491
+||opensubtitles.org^*.js|$script,domain=opensubtitles.org,badfilter
+
+! CNAME cutcaptcha.com|filecrypt.*
+!#if env_firefox
+@@||bullads.net^$script,frame,xhr,domain=filecrypt.co|cutcaptcha.com|filecrypt.cc
+!#endif

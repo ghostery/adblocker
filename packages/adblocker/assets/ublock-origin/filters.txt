@@ -1781,6 +1781,7 @@ jav.guru##.alignnone
 ||9anime.*/sw.js$script
 ||9anime.*^$script,1p
 @@||9anime.*/assets/$script,1p
+@@||9anime.ru/cdn-cgi/scripts/hcaptcha$script
 ||soujoobafoo.com^
 ! https://www.reddit.com/r/uBlockOrigin/comments/e5b4h6/popups_and_ads_from_certain_websites_dont_get/
 ||bqiovml.com^
@@ -6235,7 +6236,7 @@ ad4msan.*##+js(aopr, anOptions)
 japscan.*##+js(aopw, Fingerprint2)
 japscan.*##+js(acis, Math, zfgloaded)
 japscan.*##^script:has-text(blur)
-||zmctrack.net^$xhr,redirect=nooptext,domain=japscan.cc
+*$3p,script,denyallow=cdnjs.cloudflare.com|code.jquery.com,domain=japscan.co
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2163
 pes-patch.com##+js(nobab)
@@ -7571,18 +7572,19 @@ uploadbank.com##+js(nostif, appendChild)
 ! https://github.com/uBlockOrigin/uAssets/issues/2652
 ! https://github.com/uBlockOrigin/uAssets/issues/2742
 ! https://github.com/NanoMeow/QuickReports/issues/1520
-filecrypt.cc##+js(acis, parseInt, UltraPop)
-filecrypt.cc##+js(aopr, __pop_debug)
-filecrypt.cc##+js(set, isAdblock, false)
-filecrypt.cc##+js(popads-dummy.js)
-||filecrypt.cc^$popunder
-@@||cutcaptcha.com/captcha/*$script,domain=filecrypt.cc
-filecrypt.cc###jvb
-filecrypt.cc##li:has-text(100% Anonym)
-filecrypt.cc##.bums
-filecrypt.cc##.support
-filecrypt.cc##[src^="https://filecrypt.cc/images/"]
-filecrypt.cc##[src^="../../../images/"]
+filecrypt.*##+js(acis, parseInt, UltraPop)
+filecrypt.*##+js(aopr, __pop_debug)
+filecrypt.*##+js(set, isAdblock, false)
+filecrypt.*##+js(popads-dummy.js)
+||filecrypt.*^$popunder
+@@||cutcaptcha.com/captcha/*$script,domain=filecrypt.cc|filecrypt.co
+filecrypt.*##[href="/xu/2.html"], li:nth-of-type(1)
+filecrypt.*###jvb
+filecrypt.*##li:has-text(100% Anonym)
+filecrypt.*##.bums
+filecrypt.*##.support
+filecrypt.*##[src^="https://filecrypt.cc/images/"]
+filecrypt.*##[src^="../../../images/"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2655
 ||pornblade.com/*.php
@@ -9611,6 +9613,7 @@ ourmatch.net##.adsbygoogle
 akvideo.stream##+js(acis, $, .show)
 akvideo.stream##+js(acis, setTimeout, mypop)
 akvideo.stream##+js(window.open-defuser)
+@@||akvideo.stream/js/popunder$script,1p
 
 ! https://github.com/NanoMeow/QuickReports/issues/127
 coron.tech##.adsbygoogle iframe:style(position: relative !important;)
@@ -11295,12 +11298,13 @@ fileone.tv##+js(window.open-defuser)
 ||exoprsdds.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4216
+mywatchseries.*##+js(nosiif, visibility, 1000)
 mywatchseries.*##+js(acis, Math, zfgloaded)
 mywatchseries.*##+js(acis, atob, decodeURI)
 mywatchseries.*##+js(nowebrtc)
 mywatchseries.*##+js(aopw, Fingerprint2)
 ||d19f0dp1dh77jq.cloudfront.net^
-||mywatchseries.stream/sw.js$script,1p
+||mywatchseries.*/sw.js$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4219
 yomovies.*##+js(aopr, decodeURI)
@@ -21975,6 +21979,7 @@ usnovels.*##+js(nostif, mdp)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6776
 @@||yoursavegames.com^$ghide
+yoursavegames.com##.adsbygoogle
 
 ! popups http://hexupload .net/2w9alm9u0p14/Kare_Package_-_Single.zip.html?dl=PP3vM3wL
 hexupload.net##+js(acis, Math, zfgloaded)
@@ -24310,6 +24315,7 @@ kurina.vip##+js(aopr, LieDetector)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/51397
 @@||animesvision.*^$ghide
+animesvision.*##+js(acis, Math, zfgloaded)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/51421
 baltasar5010purohentai.com##+js(acis, addEventListener, nextFunction)
@@ -25328,12 +25334,14 @@ opportunitydesk.org##[href*="//bit.ly/"]
 opportunitydesk.org###text-102
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/52934
-tr.link##+js(set, ads, true)
-tr.link##+js(nano-sib)
+! https://github.com/NanoMeow/QuickReports/issues/4083
+tr.link##+js(nowoif, ppcnt)
 tr.link##+js(ra, data-ppcnt_ads, main[onclick])
-tr.link##+js(window.open-defuser)
 ||tr.link/js/sweets.js$script,1p
+||tr.link/*/sweet.js$script,1p
 ||tr.link/push/push.js$script,1p
+tr.link##.sweet-alert
+tr.link##.sweet-overlay
 
 ! celebmasta.com video ad/banner
 ||celebmasta.com/vast/$1p
