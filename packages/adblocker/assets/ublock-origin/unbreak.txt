@@ -3691,7 +3691,7 @@ getcoloringpages.com#@#.adsBlock
 ! https://github.com/NanoMeow/QuickReports/issues/3663#issuecomment-643001491
 ||opensubtitles.org^*.js|$script,domain=opensubtitles.org,badfilter
 
-! CNAME cutcaptcha.com|filecrypt.*
+! cutcaptcha.com|filecrypt.* CNAME
 !#if env_firefox
 @@||bullads.net^$script,frame,xhr,domain=filecrypt.co|cutcaptcha.com|filecrypt.cc
 !#endif
@@ -3705,3 +3705,14 @@ getcoloringpages.com#@#.adsBlock
 @@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=nieuwsblad.be
 @@||securepubads.g.doubleclick.net/gpt/pubads_impl_$script,domain=nieuwsblad.be
 !#endif
+
+! https://www.wilderssecurity.com/threads/ublock-a-lean-and-fast-blocker.365273/page-180#post-2922999
+@@||choice.faktor.io^$frame,script,xhr,domain=gids.tv
+
+! alidns.com CNAME
+!#if env_firefox
+@@||alibaba.tanx.com^$domain=alidns.com
+!#endif
+
+! https://github.com/NanoMeow/QuickReports/issues/4110
+*$csp=script-src 'self' 'unsafe-inline' 'unsafe-eval' data: *.cloudflare.com *.google.com *.addthis.com *.addthisedge.com *.facebook.net *.twitter.com *.jquery.com *.zencdn.net,domain=kinox.to|kinos.to|kinox.si|kinox.io|kinox.sx|kinox.am|kinox.nu|kinox.sg|kinox.gratis|kinox.mobi|kinox.sh|kinox.lol|kinox.wtf|kinox.fun|kinox.fyi|kinox.cloud|kinox.ai|kinox.club|kinox.digital|kinox.tube|kinox.direct|kinox.pub|kinox.express|kinox.party|kinox.space|kinoz.to,badfilter
