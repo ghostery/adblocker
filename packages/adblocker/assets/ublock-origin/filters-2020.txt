@@ -2133,5 +2133,42 @@ dramanice.*##+js(acis, Math, zfgloaded)
 ! https://github.com/uBlockOrigin/uAssets/issues/7551
 hentaistream.com##+js(aeld, load, script)
 ||trunblock.com^
-movies.hentaistream.com##.skin-hold
-||movies.hentaistream.com/wp-content/*/bann$image
+hentaistream.com##.othercontent
+||movies.hentaistream.com/wp-content/themes/*-holder.jpg|
+
+! https://github.com/uBlockOrigin/uAssets/issues/7552
+whatsaero.com##+js(set, blockAdBlock._options.baitClass, null)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/57256
+hhkungfu.tv##+js(acis, jQuery, GET)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/57433
+||steadycdn.com^$3p,domain=romania-insider.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/7554
+*$xhr,redirect-rule=nooptext,domain=pricez.co.il
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/57331
+onlinemovie.one##+js(nosiif, visibility, 1000)
+onlinemovie.one##+js(aopr, absda)
+onlinemovie.one###fakeplayer
+grhls.stream##+js(aopr, absda)
+grhls.stream##+js(nostif, check, 100)
+||h2ku87viwi.com^
+
+! https://github.com/NanoAdblocker/NanoFilters/issues/516
+@@||upmela.com^$ghide
+
+! https://github.com/NanoMeow/QuickReports/issues/4117
+@@||shinsori.com^$ghide
+
+! https://github.com/NanoMeow/QuickReports/issues/4118
+@@||skaties.lv^$ghide
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/57453
+linkshorten.xyz##+js(aopr, app_vars.force_disable_adblock)
+linkshorten.xyz##+js(aopr, open)
+*$3p,denyallow=google.com|gstatic.com|googleusercontent.com|recaptcha.net|googleapis.com,domain=linkshorten.xyz
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/57454
+axuur.com##+js(aopr, app_vars.force_disable_adblock)
