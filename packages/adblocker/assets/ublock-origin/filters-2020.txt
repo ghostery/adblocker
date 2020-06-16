@@ -340,11 +340,12 @@ blademaster666.com,desktophut.com,fanproj.net,hot2k.com,luchoedu.org,lupaste.com
 
 ! https://github.com/NanoMeow/QuickReports/issues/3606
 ! https://github.com/uBlockOrigin/uAssets/issues/7488
+dropgalaxy.*##+js(set, pplayer, null)
 dropgalaxy.*##+js(nostif, _0x)
 dropgalaxy.*##+js(acis, $, modalpop)
 @@||dropgalaxy.*^$ghide
 @@||googlesyndication.com^$script,xhr,domain=dropgalaxy.com
-dropgalaxy.*##.adsbygoogle:style(max-height: 1px !important;)
+dropgalaxy.*##.adsbygoogle, #modalpop
 *$script,redirect-rule=noopjs,domain=dropgalaxy.com
 *$image,redirect-rule=2x2.png,domain=dropgalaxy.com
 @@.jpg$image,domain=dropgalaxy.com
@@ -367,7 +368,7 @@ earnsats.co##.tracking-wide
 @@||myzyia.com^$ghide
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53948
-totalcar.hu##+js(aopw, ADBD)
+@@||totalcar.hu^$ghide
 
 ! https://github.com/NanoMeow/QuickReports/issues/3616
 ! https://github.com/uBlockOrigin/uAssets/issues/7402
@@ -2112,9 +2113,6 @@ akwam.org##.glx-iframe
 ! https://github.com/NanoMeow/QuickReports/issues/4099
 @@||arab4load.com^$ghide
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/57381
-aktuality.sk##[id^="div-gpt-ad"]:remove()
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57384
 forstreams.com##+js(set, settings.adBlockerDetection, false)
 
@@ -2143,7 +2141,7 @@ whatsaero.com##+js(set, blockAdBlock._options.baitClass, null)
 hhkungfu.tv##+js(acis, jQuery, GET)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57433
-||steadycdn.com^$3p,domain=romania-insider.com
+romania-insider.com##.test-adblock-overlay:remove()
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7554
 *$xhr,redirect-rule=nooptext,domain=pricez.co.il
@@ -2162,13 +2160,49 @@ grhls.stream##+js(nostif, check, 100)
 ! https://github.com/NanoMeow/QuickReports/issues/4117
 @@||shinsori.com^$ghide
 
+! mycima.me
+mycima.me##+js(acis, Math, zfgloaded)
+
 ! https://github.com/NanoMeow/QuickReports/issues/4118
 @@||skaties.lv^$ghide
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57453
+! https://github.com/uBlockOrigin/uAssets/issues/7558
 linkshorten.xyz##+js(aopr, app_vars.force_disable_adblock)
+linkshorten.xyz##+js(aopr, LieDetector)
 linkshorten.xyz##+js(aopr, open)
+linkshorten.xyz##+js(set, blurred, false)
 *$3p,denyallow=google.com|gstatic.com|googleusercontent.com|recaptcha.net|googleapis.com,domain=linkshorten.xyz
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57454
 axuur.com##+js(aopr, app_vars.force_disable_adblock)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/57462
+woodcraftsman.ru##+js(nosiif, visibility, 1000)
+
+! https://github.com/NanoMeow/QuickReports/issues/4127
+||googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=onlinecoursebay.com,redirect-rule=noopjs
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/57467
+utorrentgamesps2.blogspot.com##+js(nosiif, visibility, 1000)
+||shrtfly.com^$3p
+||asccdn.com^
+||ashcdn.com^
+
+! https://github.com/uBlockOrigin/uAssets/issues/7559
+lemonde.fr##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/57477
+aatfal.com##+js(nosiif, visibility, 1000)
+aatfal.com##+js(acis, addEventListener, google_ad_client)
+aatfal.com##+js(acis, Math, break)
+aatfal.com##.ads
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/57482
+tempatak.blogspot.com##+js(acis, addEventListener, google_ad_client)
+
+! https://github.com/NanoAdblocker/NanoFilters/issues/517
+||googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=iunlocked.org,redirect-rule=noopjs
+
+! https://github.com/uBlockOrigin/uAssets/issues/7564
+@@||divany.hu^$ghide
