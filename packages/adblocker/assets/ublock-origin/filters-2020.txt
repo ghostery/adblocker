@@ -808,8 +808,10 @@ moviesrush.in##+js(aeld, , _0x)
 ! https://www.reddit.com/r/uBlockOrigin/comments/gbsl28
 ||pagead2.googlesyndication.com/pagead/show_ads.js$script,domain=websimhockey.com,redirect=noopjs
 
-! https://www.reddit.com/r/uBlockOrigin/comments/gc996i/help_with_blocking_a_dynamic_overlay/
-babupc.com##+js(aopr, lck)
+! https://github.com/NanoMeow/QuickReports/issues/4130
+babupc.com##+js(set, awm, true)
+babupc.com##+js(aeld, , _0x)
+||loktrk.com^$3p
 ||xmlgrab.com^$3p
 
 ! https://forums.lanik.us/viewtopic.php?f=90&t=44637
@@ -2305,3 +2307,29 @@ zagl.info##+js(nosiif, visibility, 1000)
 zagl.info##+js(aopr, app_vars.force_disable_adblock)
 zagl.info##.banner
 
+! As of 2016-12-02, found site uses WebRTC to deliver ads
+tomshardware.*##+js(aopw, tmnramp)
+! https://github.com/uBlockOrigin/uAssets/issues/7446
+||tomshardware.com^$csp=worker-src 'none'
+
+! https://github.com/NanoMeow/QuickReports/issues/4156
+clinixplayer.com##+js(aopr, eddOptions)
+@@||clinixplayer.com^$ghide
+||responserver.com^$3p
+
+! https://github.com/NanoMeow/QuickReports/issues/4158
+news-on-tour.de##+js(aopr, anOptions)
+
+! https://github.com/NanoMeow/QuickReports/issues/4157
+@@||teleboy.ch/assets/js/*$xhr,1p
+teleboy.ch##a[href*="BrandingDay"]
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/57701
+vstplugs.com##+js(nosiif, visibility, 1000)
+vstplugs.com##+js(aopw, _pop)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/hckbn5/cant_get_rid_of_this/
+abola.pt##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/57721
+downloadsachmienphi.com##+js(aopr, anOptions)
