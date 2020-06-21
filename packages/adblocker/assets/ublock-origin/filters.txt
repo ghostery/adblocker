@@ -595,9 +595,6 @@ m.aajtak.in##body > .pubTime:style(display: block !important)
 m.aajtak.in##body > .secArticleImage:style(display: block !important)
 m.aajtak.in##body > .storyBody:style(display: block !important)
 
-! As of 2016-12-02, found site uses WebRTC to deliver ads
-tomshardware.*##+js(aopw, tmnramp)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/110
 ! https://github.com/uBlockOrigin/uAssets/issues/4705
 finanzen.*##+js(nosiif, nrWrapper)
@@ -3122,8 +3119,8 @@ vidlox.*##A[href$=".html"][rel="nofollow norefferer noopener"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1024
 ! https://github.com/NanoMeow/QuickReports/issues/4150
-@@||arkadiumhosted.com^$script,domain=arkadium.com|games.baltimoresun.com|games.charlotteobserver.com|games.chicagotribune.com|games.dailypress.com|games.express.co.uk|games.mcall.com|games.nydailynews.com|games.orlandosentinel.com|games.parade.com|games.reviewjournal.com|games.sandiegouniontribune.com|games.somersetlive.co.uk|games.sun-sentinel.com|puzzles.bestforpuzzles.com|puzzles.independent.co.uk|puzzles.standard.co.uk
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=arkadium.com|games.baltimoresun.com|games.charlotteobserver.com|games.chicagotribune.com|games.dailypress.com|games.express.co.uk|games.mcall.com|games.nydailynews.com|games.orlandosentinel.com|games.parade.com|games.reviewjournal.com|games.sandiegouniontribune.com|games.somersetlive.co.uk|games.sun-sentinel.com|puzzles.bestforpuzzles.com|puzzles.independent.co.uk|puzzles.standard.co.uk
+@@||arkadiumhosted.com^$script,domain=arkadium.com|arkadiumarena.com|games.baltimoresun.com|games.charlotteobserver.com|games.chicagotribune.com|games.dailypress.com|games.express.co.uk|games.mcall.com|games.nydailynews.com|games.orlandosentinel.com|games.sun-sentinel.com|puzzles.bestforpuzzles.com|puzzles.independent.co.uk|puzzles.standard.co.uk
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=arkadium.com|arkadiumarena.com|games.baltimoresun.com|games.charlotteobserver.com|games.chicagotribune.com|games.dailypress.com|games.express.co.uk|games.mcall.com|games.nydailynews.com|games.orlandosentinel.com|games.sun-sentinel.com|puzzles.bestforpuzzles.com|puzzles.independent.co.uk|puzzles.standard.co.uk
 arkadium.com##[class*="Banner"], [class^="Ad-"] 
 arkadium.com##+js(nano-sib)
 ##display-ad-component
@@ -17686,15 +17683,29 @@ bing.com#@#li.b_adBottom
 bing.com#@#.b_adLastChild
 
 ! https://github.com/NanoMeow/QuickReports/issues/1475
+! https://github.com/NanoMeow/QuickReports/issues/1686
 ! https://github.com/NanoAdblocker/NanoFilters/issues/426
+ftuforums.com,freetutorialsus.com,freecoursessites.com,freecourseslab.com##+js(set, adsbygoogle.loaded, true)
+@@||ftuforums.com^$ghide
 @@||freetutorialsus.com^$ghide
 @@||freetutorialseu.com^$ghide
 @@||ftuudemy.com^$ghide
 @@||freecoursessites.com^$ghide
+@@||freecourseslab.com^$ghide
 freetutorialsus.com##.code-block-1.code-block > div
+ftuforums.com###content > div:nth-of-type(1)
+freecoursessites.com###content > div:nth-of-type(1)
+freecoursessites.com###text-5
+freecoursessites.com###text-7
+freecourseslab.com###content > div:nth-of-type(1)
+freecourseslab.com###custom_html-3
+freecourseslab.com###custom_html-2
+freetutorialseu.com###content > div:nth-of-type(1)
+freetutorialseu.com###text-10
+freetutorialseu.com###text-12
 ||googlesyndication.com/pagead/$script,redirect-rule=noopjs,domain=freetutorialseu.com|freetutorialsus.com
 freetutorialseu.com,freetutorialsus.com,freecoursessites.com,ftuforums.com,ftuudemy.com###babasbmsgx
-freetutorialseu.com,freetutorialsus.com,freecoursessites.com##.adsbygoogle
+freetutorialseu.com,freetutorialsus.com,freecoursessites.com,ftuforums.com,freecourseslab.com##.adsbygoogle
 freetutorials.*##+js(nosiif, visibility, 1000)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1480
@@ -17813,9 +17824,6 @@ smwebs.xyz##+js(aopr, app_vars.force_disable_adblock)
 smwebs.xyz##+js(aopr, open)
 @@||smwebs.xyz^$ghide
 
-! https://github.com/uBlockOrigin/uAssets/issues/5959
-ceblog.me##+js(aeld, load, 2000)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/5960
 techpmn.com##+js(aopr, app_vars.force_disable_adblock)
 @@||techpmn.com^$ghide
@@ -17880,10 +17888,6 @@ myvidis.top##.jw-vast-nonlinear-close-button
 egy.best,egybest.*##+js(set, _AdBlock, noopFunc)
 egy.best,egybest.*##+js(nostif, WinMsgHtml)
 egy.best,egybest.*,vidstream.*##+js(window.open-defuser, /(click|cv)\.php/, 10)
-
-! https://github.com/uBlockOrigin/uAssets/issues/5980
-! https://github.com/uBlockOrigin/uAssets/issues/5981
-caizhiqi.com,eg-job.com##+js(aopr, app_vars.force_disable_adblock)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1538
 watchgameofthrones.*##+js(aopr, AaDetector)
@@ -17988,24 +17992,17 @@ novelgo.id##.adsbygoogle
 @@||myfreecourses.com^$ghide
 myfreecourses.com##.adsbygoogle
 
-! https://github.com/uBlockOrigin/uAssets/issues/6004
-knilife.com,tenttom.com##+js(acis, Math, zfgloaded)
-knilife.com,tenttom.com##+js(aopr, app_vars.force_disable_adblock)
-knilife.com,tenttom.com##+js(aopw, open)
-knilife.com,tenttom.com##.blog-content
-knilife.com,tenttom.com##.banner
-||knilife.com/sw.js$script,1p
-||tenttom.com/sw.js$script,1p
 ||hecheckbabronref.info^
 ||nsevermatold.info^$3p
 
 ! https://github.com/abp-filters/abp-filters-anti-cv/issues/229
-streaming-vostfr.com##+js(acis, Math, zfgloaded)
-streaming-vostfr.com##+js(aopw, Fingerprint2)
-streaming-vostfr.com##+js(window.open-defuser)
-||streaming-vostfr.com/sw.js$script,1p
+streaming-vostfr.*##+js(acis, Math, zfgloaded)
+streaming-vostfr.*##+js(aopw, Fingerprint2)
+streaming-vostfr.*##+js(window.open-defuser)
+||streaming-vostfr.*/sw.js$script,1p
 ||rusinlepading.pro^
 ||mancegrative.info^
+||asharbutdints.info^
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/ci5vky/antiadblocker_dailymailcouk/
 ! https://github.com/uBlockOrigin/uAssets/issues/512
@@ -18014,7 +18011,6 @@ streaming-vostfr.com##+js(window.open-defuser)
 dailymail.co.uk#@#.adHolder
 dailymail.co.uk#@#.billboard_wrapper
 dailymail.co.uk##+js(aopw, s_adblock)
-dailymail.co.uk##+js(aopr, adverts)
 dailymail.co.uk##+js(acis, document.addEventListener, adverts)
 dailymail.co.uk##+js(set, atob, trueFunc)
 ||dailymail.co.uk/static/mol-adverts/$1p
@@ -18571,10 +18567,6 @@ nsfw247.to##+js(acis, document.querySelectorAll, popMagic)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6102
 mzee.com##+js(aopr, performance)
-
-! https://github.com/NanoMeow/QuickReports/issues/1686
-@@||ftuforums.com^$ghide
-ftuforums.com##.adsbygoogle
 
 ! https://github.com/NanoMeow/QuickReports/issues/1687
 @@||idalponse.blogspot.com^$ghide
