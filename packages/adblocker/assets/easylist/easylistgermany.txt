@@ -1,8 +1,8 @@
 [Adblock Plus 1.1]
-! Checksum: THnMEqu+rUaVbfKMV9unKw
-! Version: 202006222001
+! Checksum: WDXKaKQ9Df0fkapvERyP3w
+! Version: 202006232001
 ! Title: EasyList Germany
-! Last modified: 22 Jun 2020 20:01 UTC
+! Last modified: 23 Jun 2020 20:01 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.github.io/
 ! Licence: https://easylist.github.io/pages/licence.html
@@ -446,7 +446,7 @@ _woz_banner_vote.
 ##a[href^="https://www.tipico.com/?affiliateId="]
 ##a[href^="https://www.vavoo.tv/promo/"] > img
 ##input[onclick^="window.open('http://www.firstload.de/affiliate/"]
-! *** easylistgermany:easylistgermany/easylistgermany_whitelist_general_hide.txt ***
+! *** easylistgermany:easylistgermany/easylistgermany_allowlist_general_hide.txt ***
 ping-timeout.de#@##Advertisements
 lerunia.de#@##BodyAd
 kids.t-online.de#@##Tadspacehead
@@ -3953,7 +3953,7 @@ kochbar.de#@#iframe[name^="google_ads_iframe"]
 $csp=script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: www.googletagmanager.com *.google.com *.gstatic.com www.google-analytics.com *.googleapis.com *.cloudflare.com *.twitter.com connect.facebook.net cdn.hdfilme.net cdn.hdfilme.cx ssl.p.jwpcdn.com,domain=hdfilme.cc|hdfilme.cx
 ||spiele-umsonst.de^$csp=script-src 'self' * blob: 'unsafe-inline'
 ||xcine.tv^$csp=script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: *.cloudflare.com www.googletagmanager.com images.dmca.com *.google.com *.gstatic.com www.google-analytics.com *.twitter.com connect.facebook.net cdn.xcine.tv ssl.p.jwpcdn.com
-! Specific filters necessary for sites whitelisted with $genericblock filter option
+! Specific filters necessary for sites using $genericblock filter option
 /googleads.$domain=g.doubleclick.net|googlesyndication.com
 /pagead2.$domain=g.doubleclick.net|googlesyndication.com|imasdk.googleapis.com
 @@||amazon-adsystem.com/aax2/amzn_ads.js$domain=autobild.de
@@ -4186,6 +4186,9 @@ helles-koepfchen.de###Superbanner
 helles-koepfchen.de###Syscraper_left
 t-online.de###T-83718912
 t-online.de###T-83783312
+t-online.de###T-85628670
+t-online.de###T-86593348
+t-online.de###T-86926496
 fussball.de###TArtikel2 > img[height="95"][width="302"]:first-child
 mobile.de###TBANNER_SPACER
 unterwasserwelt.de###Tabelle671
@@ -7740,7 +7743,7 @@ gmd-music.com##tr[onclick^="window.open(\"http://gmd-music.com/mirror/"]
 ddl-warez.in##tr[style="background:#D0F5A9"]
 radforum.de##ul[class^="ebayitems"]
 r-b-a.de##ul[style="padding: 0px; margin: 0px; border: 0px none;"]
-! Specific hiding filters necessary for sites whitelisted with $generichide filter option
+! Specific hiding filters necessary for sites using $generichide filter option
 focus.de##.adsBlock
 focus.de##.ob_container a[data-redirect^="http://paid.outbrain.com/network/redir?"]
 boote-forum.de,golem.de,jetzt.de,planetsnow.de,prosieben.at,prosieben.ch,prosieben.de,transfermarkt.de,tvspielfilm.de##.plistaList > .itemLinkPET
@@ -7770,6 +7773,7 @@ computerbild.de,focus.de,pcwelt.de##a[onmousedown^="this.href='http://paid.outbr
 computerbild.de,focus.de,pcwelt.de,sport.de,tvspielfilm.de##a[onmousedown^="this.href='https://paid.outbrain.com/network/redir?"][target="_blank"]
 ! Advanced element hiding rules for Adblock Plus
 20min.ch#?#.clusterTop:-abp-has(.teaser:-abp-has(h3:-abp-contains(Paid Post)))
+finanznachrichten.de#?##artikeltextpuffer > table > tbody > tr > td > font[color="#000000"][face="Arial,Helvetica,sans-serif"][style="font-size:12px; line-height:16px;"]:-abp-contains(Werbung)
 chip.de#?#.Subchapter div[id][class][style="display: flex;"]:-abp-contains(ANZEIGE)
 chip.de#?#article > a:-abp-contains(Anzeige)
 chip.de#?#section > div[id]:-abp-contains(Gesponserte Empfehlung)
@@ -7779,28 +7783,27 @@ ebay.de#?#.s-item:-abp-has(span:-abp-contains(ANZEIGE))
 ebay.de#?#.sresult:-abp-has(div.promoted-lv)
 ebay.de#?#li.mfe-reco-ct:-abp-has(div.mfe-promoted-label)
 finanzen.net#?#.mleft-10:-abp-contains(Werbung) + .box
-finanznachrichten.de#?##artikeltextpuffer > table > tbody > tr > td > font[color="#000000"][face="Arial,Helvetica,sans-serif"][style="font-size:12px; line-height:16px;"]:-abp-contains(Werbung)
 finanznachrichten.de#?#.table-alternating-rows > tr:-abp-has(span.hinweis-c)
 gamestar.de#?#.content-item-medium:-abp-has(data:-abp-contains(Anzeige))
 gamestar.de#?#.content-item-small:-abp-has(h3:-abp-contains(Anzeige))
 gofeminin.de#?#.af-block-native:-abp-contains(Anzeige)
 gofeminin.de#?#.af-block-native:-abp-contains(Sponsored Post)
 goldesel.to#?#:-abp-properties(height: 68px;*width: 958px;)
-goldesel.to#?#div[class^="d_"]:-abp-has(div:-abp-contains(Anonym & Sicher im Netz))
+goldesel.to#?#div[class^="d_"]:-abp-has(div:-abp-contains(Anonym & sicher im Netz))
 lieferheld.de#?#.restaurant-brief:-abp-has(div.restaurant__promo)
 linkedin.com#?#.core-rail > div > div[id^="ember"]:-abp-has(span:-abp-contains(Gesponsert))
 movie-blog.org#?#.beitrag2:-abp-has(#beitrag2-895521)
 movie-blog.org#?#.beitrag2:-abp-has(#beitrag2-938569)
 movie-blog.org#?#.beitrag2:-abp-has(a[href^="http://www.movie-blog.org/2010/F"])
-pcgameshardware.de#?#.item.noImg:-abp-contains([Anzeige])
-saechsische.de#?#article,div:-abp-has(> .landingpage > span:-abp-contains(Anzeige))
+pcgameshardware.de#?#.item.noImg:-abp-contains([anzeige])
+saechsische.de#?#article,div:-abp-has( > .landingpage > span:-abp-contains(Anzeige))
 t-online.de#?#div[id^="T-"][onfocus^="A('zid="]:-abp-has(a:-abp-contains(Anzeige))
 wallstreet-online.de#?#.newsflash:-abp-has(span.suffix:-abp-contains(Anzeige))
 wallstreet-online.de#?#.shareToday:-abp-has(div.adHint)
 wallstreet-online.de#?#.teaser.objectfit:-abp-has(div.anzeige)
 welt.de#?#div[id][data-qa]:-abp-has(.c-buelent-linkbox__label:-abp-contains(Anzeige))
 !------------------Ausnahmeregeln zum Beheben von Problemen-------------------!
-! *** easylistgermany:easylistgermany/easylistgermany_whitelist.txt ***
+! *** easylistgermany:easylistgermany/easylistgermany_allowlist.txt ***
 @@/gujAd.$domain=11freunde.de|kochbar.de|stern.de|vip.de|wetter.de
 @@|http://byte.to/js/javascript.js|
 @@|http://byte.to/js/wz_tooltip.js|
@@ -8331,7 +8334,7 @@ welt.de#?#div[id][data-qa]:-abp-has(.c-buelent-linkbox__label:-abp-contains(Anze
 @@||pagead2.googlesyndication.com/pagead/js/*/show_ads_impl.js$domain=kalender-365.de
 @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=kalender-365.de
 kalender-365.de#@#.adsbygoogle
-! *** easylistgermany:easylistgermany/easylistgermany_whitelist_dimensions.txt ***
+! *** easylistgermany:easylistgermany/easylistgermany_allowlist_dimensions.txt ***
 @@||bueropartner24.de/out/pictures/generated/category/icon/728_90_$image,~third-party
 @@||campact.de^*_300x250.gif
 @@||ebaystatic.com/aw/pics/im/default_300x250.jpg$domain=millionenklick.web.de
@@ -8350,7 +8353,7 @@ kalender-365.de#@#.adsbygoogle
 @@||teletext.zdf.de/teletext/$subdocument,domain=zdf.de
 @@||welt.de/sites/default/files/rectangle-300x250-newsletter.jpg
 @@||wetter.com/layout/1/woys/300_250/300_250_$image
-! *** easylistgermany:easylistgermany/easylistgermany_whitelist_popup.txt ***
+! *** easylistgermany:easylistgermany/easylistgermany_allowlist_popup.txt ***
 @@||888casino.com^$popup,domain=online-casino.de
 @@||ad.doubleclick.net/clk;$popup,domain=gutscheindoktor.de|mydealz.de
 @@||adclick.g.doubleclick.net^$popup,domain=marketing-a.akamaihd.net
