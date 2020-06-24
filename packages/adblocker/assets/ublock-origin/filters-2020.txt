@@ -75,7 +75,7 @@ anirocksite.com,my-code4you.blogspot.com##+js(set, config.pauseInspect, false)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53407
 @@||ileak.xyz^$ghide
-ileak.xyz##+js(acis, document.querySelectorAll, popMagic)
+ileak.xyz##+js(acis, Math, zfgloaded)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53415
 @@||foggiatoday.it^$ghide
@@ -89,8 +89,8 @@ made-by.org##+js(nostif, ads)
 index.hr,klix.ba##+js(nostif, f.parentNode.removeChild(f), 100)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53420
-@@||rnbxclusive.best^$ghide
-rnbxclusive.best##+js(aopw, _pop)
+@@||rnbxclusive.*^$ghide
+rnbxclusive.*##+js(aopw, _pop)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53430
 ilovephd.com##+js(set, adsbygoogle, null)
@@ -118,7 +118,6 @@ rexdlfile.com##+js(aopr, require)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53464
 8shrt.me##+js(window.open-defuser)
-8shrt.me##+js(nano-sib)
 @@||8shrt.me^$ghide
 ||8shrt.me/newbanner/$subdocument
 
@@ -174,6 +173,7 @@ thepiratebay.org##+js(aopr, exoJsPop101)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53580
 kollhong.com##+js(aopr, adBlockDetected)
+@@||kollhong.com^$ghide
 
 ! https://github.com/NanoMeow/QuickReports/issues/3576
 box-series.com##+js(aeld, load, nextFunction)
@@ -818,16 +818,7 @@ babupc.com##+js(aeld, , _0x)
 wg-gesucht.de##+js(acis, $, detectAdBlocker)
 wg-gesucht.de##+js(nostif, removeChild, 100)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/54786
-rozfly.com##+js(window.open-defuser)
-rozfly.com##+js(aopr, app_vars.force_disable_adblock)
-rozfly.com##.separator, p
 ||cdn-server.cc^$3p
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/54797
-afly.us##+js(aopr, app_vars.force_disable_adblock)
-afly.us##+js(aopr, open)
-afly.us##.a:has-text(/submit/i)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54800
 hdmp4mania1.net##+js(aopr, absda)
@@ -2390,3 +2381,44 @@ text2voice.org##+js(nosiif, visibility, 1000)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4182
 galleryhd.art##+js(nostif, ai_adb)
+
+! vidbem .com popups
+vidbem.com##+js(acis, Math, zfgloaded)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/57941
+umecourses.xyz##+js(nosiif, visibility, 1000)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7590
+fulltube.online##+js(acis, Math, zfgloaded)
+||eyebinvex.com^$3p
+
+! https://github.com/uBlockOrigin/uAssets/issues/7591
+movidish2.live##+js(acis, Math, zfgloaded)
+movidish2.live##+js(aopr, adBlockDetected)
+movidish2.live###ads_singlem_bottom
+movidish2.live##+js(aopw, _pop)
+bondibeachau.com##+js(nano-sib)
+bondibeachau.com###custom_html-2
+||googlesyndication.com/pagead/js/adsbygoogle.js$xhr,redirect=noop.js,domain=bondibeachau.com
+
+! https://rbt.asia/g/thread/61009719
+! Appears related to uponit.com
+! Somehow, websocket requests are behind-the-scene with Firefox. Pending
+! further investigation, this fixes the issue.
+||4chan.org^$csp=connect-src https: http:
+! https://www.reddit.com/r/uBlockOrigin/comments/heiw4s/ublock_help/
+*$3p,script,domain=boards.4channel.org,denyallow=4cdn.org|4chan.org|google.com|gstatic.com|cdn.mathjax.org|cdnjs.cloudflare.com|hcaptcha.com
+
+! https://www.reddit.com/r/uBlockOrigin/comments/hf63sv/any_line_to_block_this_message_box/
+infobae.com##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/57985
+nowvid.online##+js(acis, String, 'shift')
+nowvid.online##+js(nowoif)
+nowvid.online##^script:has-text('shift')
+@@||nowvid.online/images/$image,1p
+*$script,redirect-rule=noopjs,domain=nowvid.online
+nowvid.online###fetfin
+
+! actionz .tv popups
+actionz.tv##+js(acis, Math, zfgloaded)
