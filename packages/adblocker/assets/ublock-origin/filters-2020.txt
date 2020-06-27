@@ -195,7 +195,7 @@ linkad.in##+js(aopr, app_vars.force_disable_adblock)
 ||madratesforall.com^$3p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53588
-kelasdesain.com##+js(aopr, adBlockDetected)
+kelasdesain.com##+js(aopr, anOptions)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7235
 footballnews.jp##+js(acis, document.addEventListener, google_ad_client)
@@ -241,7 +241,7 @@ techieway.blogspot.com##+js(acis, addEventListener, AdBlock)
 aldiblogger.com##+js(set, blurred, false)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53671
-poli-vsp.ru##+js(aopr, anOptions)
+poli-vsp.ru,polyvsp.ru##+js(aopr, anOptions)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53659
 micano4u.org##+js(acis, addEventListener, blocker)
@@ -256,6 +256,11 @@ sarapbabe.com##.porn_sites_list
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53717
 pornfd.com##+js(nostif, innerText, 2000)
+pornfd.com##+js(aopr, console.clear)
+pornfd.com##+js(aeld, , bi())
+pornfd.com##.bannerImage
+pornfd.com##.sponsor
+||pornfd.com/*.php
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53723 
 v2rayssr.com##+js(aopr, anOptions)
@@ -449,8 +454,8 @@ shrtbtc.com##+js(nano-sib)
 ||bestmoneysites.com^$3p
 ||cliquesteria.net^$3p
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/54096 
-reifenrechner.at##+js(acis, addEventListener, nextFunction)
+! https://github.com/AdguardTeam/AdguardFilters/issues/54096
+reifenrechner.at,tire-size-calculator.info##+js(aeld, load, nextFunction)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54186
 apkmb.com##+js(acis, jQuery, ai_adb)
@@ -2408,6 +2413,7 @@ bondibeachau.com###custom_html-2
 ||4chan.org^$csp=connect-src https: http:
 ! https://www.reddit.com/r/uBlockOrigin/comments/heiw4s/ublock_help/
 *$3p,script,domain=boards.4channel.org,denyallow=4cdn.org|4chan.org|google.com|gstatic.com|cdn.mathjax.org|cdnjs.cloudflare.com|hcaptcha.com
+*$3p,script,domain=4chan.org,denyallow=4cdn.org|4channel.org|google.com|gstatic.com|cdn.mathjax.org|cdnjs.cloudflare.com|hcaptcha.com
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/hf63sv/any_line_to_block_this_message_box/
 infobae.com##+js(nostif, f.parentNode.removeChild(f), 100)
@@ -2422,3 +2428,64 @@ nowvid.online###fetfin
 
 ! actionz .tv popups
 actionz.tv##+js(acis, Math, zfgloaded)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7596
+@@||tutorialesenlinea.es^$ghide
+tutorialesenlinea.es##.adsbygoogle
+tutorialesenlinea.es###banners-rotate_full
+milapercia.com##+js(aopr, anOptions)
+milapercia.com##+js(nowoif)
+||onsafelink.com^$3p
+@@||brazzers3x.org^$ghide
+brazzers3x.org##.ads
+artesacro.org##+js(acis, onload, adb)
+
+! https://github.com/NanoMeow/QuickReports/issues/4187
+tpaste.in##+js(acis, jQuery, ai_adb)
+
+! https://github.com/NanoMeow/QuickReports/issues/4188
+cloud9.to##^script:has-text(zfgloaded)
+cloud9.to##+js(acis, Math, zfgloaded)
+
+! https://github.com/NanoMeow/QuickReports/issues/4189
+||trdiziizle1.com/player/vast.php$xhr,1p,redirect=noop.txt
+||fiorenetwork.com^$3p
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/58002
+hinjakuhonyaku.com##+js(aopw, ai_front)
+
+! windows-1 .com popups
+windows-1.com##+js(nowoif)
+
+! https://github.com/NanoMeow/QuickReports/issues/4194
+@@||360ptp.online^$script,1p
+
+! https://github.com/NanoMeow/QuickReports/issues/4195
+minimummusic.com##+js(aopr, mdpDeBlocker)
+
+! https://forums.lanik.us/viewtopic.php?p=155265#p155265
+curto.win##+js(aopr, app_vars.force_disable_adblock)
+curto.win##+js(aeld, click, trigger)
+curto.win###cookie-pop
+*$frame,3p,domain=curto.win
+||avantajados.com^$3p
+
+! https://github.com/NanoMeow/QuickReports/issues/4196
+edailybuzz.com##+js(aopr, anOptions)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/58044
+profitlink.info##+js(nosiif, visibility, 1000)
+profitlink.info##+js(aopr, app_vars.force_disable_adblock)
+profitlink.info##.banner
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/58045
+fun4earn.xyz##+js(aopr, app_vars.force_disable_adblock)
+fun4earn.xyz##+js(aopr, open)
+fun4earn.xyz##.banner
+*$3p,denyallow=googleapis.com|google.com|gstatic.com|recaptcha.net,domain=fun4earn.xyz
+
+! https://github.com/NanoMeow/QuickReports/issues/4198
+kontrolkalemi.com##+js(aopr, adBlockDetected)
+
+! fullxxxvideos .net popups
+fullxxxvideos.net##+js(aopr, decodeURI)
