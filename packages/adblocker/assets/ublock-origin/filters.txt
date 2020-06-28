@@ -2233,9 +2233,10 @@ play.anghami.com##.sideBox:has(.adsbox)
 anghami.com##+js(nostif, isDesktopApp, 1000)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5952
-player.glomex.com##+js(set, Promise.race, noopFunc)
-||player-feedback-*.glomex.com^
-||ad.71i.de/somtag/loader/loader.js$script,redirect=noopjs,domain=player.glomex.com
+! works only with uBO dev version
+player.glomex.com##+js(json-prune, [].schedule.start.[].url)
+||player-feedback*.glomex.*^
+||d1miwkthq39xj8.cloudfront.net/t.gif$image,domain=player.glomex.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/781
 ! https://github.com/uBlockOrigin/uAssets/issues/3327
@@ -7748,12 +7749,13 @@ coindice.win##+js(aopr, adBlockDetected)
 @@||coindice.win^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2709
-yannik.biz##+js(aopr, adBlockDetected)
+@@||cdnjs.cloudflare.com/ajax/libs/fuckadblock/*/fuckadblock.js$script,domain=yannik.biz
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/117#issuecomment-401351982
 planet-explorers-isos.com##+js(set, adblock, false)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2711
+plusone8.com##+js(acis, document.querySelectorAll, popMagic)
 plusone8.com##+js(aopr, ExoLoader.serve)
 plusone8.com###overlay-advertising
 
@@ -7781,12 +7783,6 @@ filmix.co##+js(acis, String.fromCharCode, /\/\*[0-9a-f]{40}\*\//)
 @@||filmix.co^$ghide
 ||googleads.g.doubleclick.net/pagead/$xhr,redirect=nooptext,domain=filmix.co
 ||protovid.com/preroll/$media,redirect=noopmp3-0.1s,domain=filmix.co
-
-! https://forums.lanik.us/viewtopic.php?f=62&t=41116
-! https://github.com/uBlockOrigin/uAssets/issues/4153
-solarmoviex.to##+js(acis, decodeURI, atob)
-solarmoviex.to##+js(acis, Math, zfgloaded)
-||solarmoviex.to/sw.js$script
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2722
 adfloz.*##+js(aopr, app_vars.force_disable_adblock)
@@ -7816,11 +7812,6 @@ aliancapes.*##+js(nostif, nextFunction, 2000)
 @@||wcvb.com^$ghide
 wcvb.com##.ad-label
 wcvb.com##.ad-leaderboard
-
-! https://forums.lanik.us/viewtopic.php?p=138401#p138401
-rarbgmirror.*##+js(aeld, mousedown, preventDefault)
-rarbgmirror.*##+js(window.open-defuser)
-##a[href*="?bver="]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2735
 skylinewebcams.com##+js(nostif, change(), 14000)
@@ -7993,12 +7984,6 @@ macbed.com##.adsbygoogle
 ! https://github.com/uBlockOrigin/uAssets/issues/2830
 webcafe.bg##+js(set, bDetect, true)
 
-! https://github.com/uBlockOrigin/uAssets/issues/2829
-||1tiny.net/1up/*$image
-1tiny.net#@##redirectBlock
-1tiny.net###button
-1tiny.net##[href="https://neswangy.net"]
-
 ! https://github.com/uBlockOrigin/uAssets/issues/2831
 transparentcalifornia.com##+js(set, $.magnificPopup.open, noopFunc)
 
@@ -8065,11 +8050,6 @@ filesrom.com##+js(aopr, anOptions)
 ! https://github.com/uBlockOrigin/uAssets/issues/4885
 movies123.*##+js(acis, decodeURI, getScriptFromCss)
 movies123.*##+js(acis, Math, zfgloaded)
-movies123.xyz##^script:has-text(3f87b0eaddd)
-|https://$3p,script,domain=movies123.xyz,badfilter
-|https://$3p,css,domain=movies123.xyz,badfilter
-||amgload.net^$xhr,redirect=nooptext,domain=movies123.xyz
-||piguiqproxy.com^$xhr,redirect=nooptext,domain=movies123.xyz
 ||dirdamid.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2853
@@ -10603,12 +10583,11 @@ stfly.*##+js(aopw, tabUnder)
 stfly.*##+js(aeld, click, trigger)
 ||stfly.*/service-worker.js$script,1p
 @@||stfly.*^$ghide
-*$frame,3p,domain=stfly.io
 ||stfly.*/sw.js$script,1p
-||imgur.com^$image,domain=stfly.io
 stfly.*##.adsbygoogle
 stfly.*##.banner
 stfly.*##[href^="https://dawnupdate.xyz"]
+*$3p,denyallow=googleapis.com|google.com|gstatic.com|recaptcha.net|hcaptcha.com|ajax.cloudflare.com,domain=stfly.me|stfly.io|stfly.press
 ||bulletprofit.com^$3p
 ||tabookbusines.info^$3p
 
@@ -10911,6 +10890,7 @@ y2mate.com###ads_spot1
 ||y2mate.com/*.gif$image
 y2mate.com##.alert-danger
 y2mate.com###adv_box
+y2mate.com##+js(nowoif)
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=42170
 ! https://github.com/uBlockOrigin/uAssets/issues/4505
