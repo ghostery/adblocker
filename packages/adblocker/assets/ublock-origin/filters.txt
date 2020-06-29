@@ -9017,6 +9017,8 @@ seriesgato.net##.externo
 ! https://github.com/uBlockOrigin/uAssets/issues/3317
 file4go.*##+js(acis, document.getElementById, ad_block)
 file4go.*##+js(aopw, _pop)
+@@||file4go.*/ads.js$script,1p
+file4go.*##div.banner300b, .lateral
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1603
 ! https://github.com/uBlockOrigin/uAssets/issues/4860
@@ -16336,6 +16338,8 @@ topito.com##+js(aopr, document.bridCanRunAds)
 ! https://github.com/uBlockOrigin/uAssets/issues/6248
 shortzon.com##+js(aopr, app_vars.force_disable_adblock)
 shortzon.com##+js(nobab)
+*$3p,denyallow=googleapis.com|google.com|gstatic.com|recaptcha.net|hcaptcha.com|ajax.cloudflare.com,domain=shortzon.com
+shortzon.com##[href^="https://x40u1vj75ks9.com/"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5618
 @@||galt.hit.gemius.pl/gplayer.js$script,domain=lrt.lt
@@ -24229,6 +24233,10 @@ kurina.vip##+js(aopr, LieDetector)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/51397
 @@||animesvision.*^$ghide
 animesvision.*##+js(acis, Math, zfgloaded)
+animesvision.*##+js(aopr, LieDetector)
+*$script,3p,denyallow=cloudflare.com|cloudflare.net|disqus.com|disquscdn.com|fastlylb.net|jsdelivr.net,domain=animesvision.biz
+||wt2noay3fgjn.com^
+||5x5i5tj2u97w.com^
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/51421
 baltasar5010purohentai.com##+js(acis, addEventListener, nextFunction)
