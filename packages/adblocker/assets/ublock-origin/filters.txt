@@ -224,6 +224,10 @@ thedesigninspiration.com##.ad-unit
 designbump.com##.disclaimer
 clashdaily.com##[class*="-ad-"]
 
+*$script,redirect-rule=noopjs,domain=gamersheroes.com
+|http://$script,3p,domain=gamersheroes.com,badfilter
+@@*$image,3p,domain=gamersheroes.com
+
 ! https://adblockplus.org/forum/viewtopic.php?f=2&t=43192
 ! Users should not have to punch holes in their blockers if it can be avoided.
 */fuckadblock-$script,redirect=fuckadblock.js-3.2.0
@@ -1513,6 +1517,7 @@ steamplay.*,streamp1ay.*,streamplay.*###uverlay
 @@||streamplay.*^$ghide
 @@||streamp1ay.*^$ghide
 ||streamp1ay.*/jquery-1.8.3.min.js$script,1p
+*$xhr,frame,3p,domain=streamp1ay.cc,denyallow=spcdn.cc
 
 ! https://github.com/uBlockOrigin/uAssets/issues/553
 *$csp=script-src 'self' * 'unsafe-inline' data:,domain=bolde.com|breaking911.com|convertcase.net|convertfiles.com|financemagnates.com|gostica.com|heraldweekly.com|neonnettle.com|powerpyx.com|schoolholidayseurope.eu|tamilo.com|tfln.co|thecomeback.com|truthfeed.com
@@ -2191,6 +2196,7 @@ mylink.*##+js(nobab)
 mylink.*##+js(nostif, nextFunction, 2000)
 mylink.*##a[href^="https://go.nordvpn.net/"], [src^="/nordcode.php"]
 mylink.*##+js(aopr, document.write)
+*$script,redirect-rule=noopjs,domain=mylink.vc
 
 ! Uponit
 ! https://github.com/uBlockOrigin/uAssets/issues/259
@@ -16720,10 +16726,6 @@ vladan.fr##+js(nostif, adb, 0)
 losporn.org##+js(aopr, ExoLoader.serve)
 losporn.org##+js(window.open-defuser)
 
-! https://github.com/NanoMeow/QuickReports/issues/1310
-gamersheroes.com##+js(acis, document.createElement, advertising)
-||gamersheroes.com^$csp=script-src 'self' *.leadpages.net *.gstatic.com *.google.com *.googleapis.com *.playwire.com *.facebook.com *.bootstrapcdn.com *.twitter.com *.spot.im,badfilter
-
 ! https://www.reddit.com/r/uBlockOrigin/comments/bv1k66/blockadblockcom_issue/
 @@||grandmastreams.live^$ghide
 grandmastreams.live##.adsbygoogle
@@ -18334,7 +18336,8 @@ fmoviesto.to##+js(acis, Math, zfgloaded)
 digitalcafez.com##+js(aopr, app_vars.force_disable_adblock)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1664
-@@||lnk2.cc/js/adframe.js$script,1p
+lnk2.cc##+js(set, adblock, false)
+lnk2.cc##+js(nano-stb)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6075
 ucptt.com##+js(aopw, _pop)
@@ -25135,7 +25138,6 @@ smoner.com##+js(set, absda, noopFunc)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7187
 javcl.com##+js(aopw, atOptions)
-javcl.com##+js(aopw, _pop)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3470
 c1ne.co##+js(aopr, mdpDeBlocker)
