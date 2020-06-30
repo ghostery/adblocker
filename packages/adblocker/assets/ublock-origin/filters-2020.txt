@@ -2559,3 +2559,33 @@ torrentarsivi.com##+js(set, killAdBlock._options.baitClass, null)
 ! https://github.com/uBlockOrigin/uAssets/issues/7610
 youav.com##^script:has-text('shift')
 youav.com##+js(acis, String.fromCharCode, 'shift')
+
+! https://github.com/NanoMeow/QuickReports/issues/4216
+uploadraja.com##+js(aopw, _pop)
+uploadraja.com##+js(nowebrtc)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/58301
+linkurl.me##+js(aopr, app_vars.force_disable_adblock)
+linkurl.me##+js(aopw, _pop)
+linkurl.me##+js(aopr, open)
+*$3p,denyallow=googleapis.com|google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=linkurl.me
+
+! https://github.com/NanoAdblocker/NanoFilters/issues/524
+@@||crackall.net^$ghide
+
+! https://www.reddit.com/r/uBlockOrigin/comments/himl0y/
+@@||f1countdown.com^$ghide
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/58324
+shorthitz.com##+js(nosiif, visibility, 1000)
+shorthitz.com##+js(aopr, app_vars.force_disable_adblock)
+shorthitz.com##+js(aopr, open)
+*$3p,denyallow=googleapis.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=shorthitz.com
+
+! https://github.com/NanoMeow/QuickReports/issues/4222
+@@||kiktu.com^$ghide
+
+! https://github.com/NanoMeow/QuickReports/issues/4223
+@@||stgeorgeutah.com^$ghide
+@@*$image,3p,domain=stgeorgeutah.com,denyallow=jwpltx.com
+@@*$script,3p,domain=stgeorgeutah.com,denyallow=addthis.com|facebook.net|googletagmanager.com|google-analytics.com|scorecardresearch.com|izooto.com|googletagservices.com|doubleclick.net|automaticside.com
