@@ -1290,12 +1290,6 @@ h5.fotor.com###main:style(right: 0 !important;)
 mind42.com###sidebar
 mind42.com###content.sidebar2:style(margin-right: 0 !important;)
 
-! https://github.com/uBlockOrigin/uAssets/issues/448
-||d7zatysqm84hv.cloudfront.net/mp3-ad/$media,redirect=noopmp3-0.1s,domain=open.spotify.com
-! https://github.com/uBlockOrigin/uAssets/issues/724
-||akamaized.net/audio/*$media,redirect=noopmp3-0.1s,domain=open.spotify.com
-||scdn.co/audio/*$media,redirect=noopmp3-0.1s,domain=open.spotify.com
-
 ! https://github.com/uBlockOrigin/uAssets/issues/450
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=vooxe.com
 *$xhr,redirect-rule=noopjs,domain=vooxe.com
@@ -2539,6 +2533,8 @@ activeation.com,activetect.net,adf.ly,atabencot.net,atomcurve.com,atominik.com,a
 ! https://github.com/jspenguin2017/uBlockProtector/issues/792
 ! https://github.com/NanoMeow/QuickReports/issues/354
 123link.*,adbull.*,bbf.lt,bit-url.com,coin.mg,ctui.in,cut-win.com,cutwi.in,cutwin.*,eg4link.*,meulink.tk,ourl.io,psl.*,url.gem-flash.com,veneapp.com##+js(aopr, app_vars.force_disable_adblock)
+veneapp.com##+js(aopw, _pop)
+veneapp.com##.banner
 123link.*##+js(aopr, jQuery.adblock)
 123link.*##+js(acis, $, test-block)
 123link.*##+js(acis, $, adi)
@@ -2804,10 +2800,12 @@ whentai.com##+js(aopr, canRunAds)
 ||whentai.com/*.gif$image
 
 ! https://github.com/uBlockOrigin/uAssets/issues/953
+txxx.*##+js(aopr, localStorage)
+txxx.*##+js(nostif, t()?n())
 ||txxx.*^$csp=script-src  'self' 'unsafe-eval' 'unsafe-inline' blob:
 txxx.*##.underplayer__ad, .chan_banner
 *$popunder,3p,domain=txxx.com|txxx.tube
-txxx.*##+js(aopr, localStorage)
+||easyjetset.online^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/956
 voyeurhit.com##+js(aeld, , window.open)
@@ -17963,6 +17961,7 @@ textograto.com##+js(nostif, ())
 ! https://github.com/NanoMeow/QuickReports/issues/1591
 mundodonghua.com##+js(nostif, Blocker)
 mundodonghua.com##+js(set, loadingAds, true)
+mundodonghua.com##+js(nostif, ;})
 
 ! https://forums.lanik.us/viewtopic.php?p=153254#p153254
 rainanime.*##+js(aopr, loadRunative)
@@ -19046,7 +19045,7 @@ mexa.sh##+js(acis, String.fromCharCode, 'shift')
 mexa.sh##+js(aopr, eddOptions)
 mexa.*##+js(aopw, adBlockDetected)
 mexa.*##+js(aopw, installBtnvar)
-||4cr447ewncl4.com^$3p
+*$3p,script,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=mexa.sh
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/d0dsyz/is_it_possible_to_disable_you_can_skip_the_ad_in/
 ohyeah1080.co##+js(set, $.fancybox.open, noopFunc)
@@ -19298,22 +19297,23 @@ hiidudemovies.*##+js(acis, Math, zfgloaded)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2206
 wstream.*##+js(aopr, AaDetector)
-wstream.video##+js(nostif, eval)
+wstream.*##+js(nostif, eval)
+wstream.*##+js(nowoif, /^/, 1)
 wstream.*##+js(ra, onclick)
+@@||wstream.*^$ghide
 @@||wstream.*^$script,1p
 ||advinci.uno^$3p
 nowagoal.stream##+js(nowebrtc)
+@@*$image,domain=wstream.video
+@@||4snip.pw/popads.js$script,domain=wstream.video
+@@||akvideo.stream/popunder.js$script,domain=wstream.video
+@@||vstera.tech^$script,domain=wstream.video
+*$script,redirect-rule=noopjs,domain=wstream.video
+*$script,3p,denyallow=cloudflare.net|fastly.net|jsdelivr.net|jwpcdn.com|zencdn.net,domain=wstream.video
+cb01.*##[href*="/4k"]
+wstream.*##img:style(max-width:1%!important; max-height:1%!important;)
 ||cqyirsc.com^$3p
 ||vstera.tech^$3p
-@@||vstera.tech^$script,domain=wstream.video
-@@||akvideo.stream/popunder.js$script,domain=wstream.video
-@@||wstream.*^$ghide
-*$script,redirect-rule=noopjs,domain=wstream.video
-wstream.*##+js(nowoif, /^/, 1)
-*$script,3p,denyallow=jwpcdn.com|jsdelivr.net|cloudflare.net|fastly.net,domain=wstream.video
-cb01.*##[href*="/4k"]
-@@*$image,domain=wstream.video
-wstream.*##img:style(max-width:1%!important; max-height:1%!important;)
 
 ! thegroupmusic.com anti adb popups
 thegroupmusic.com##+js(acis, Math, zfgloaded)
