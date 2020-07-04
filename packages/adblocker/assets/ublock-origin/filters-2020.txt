@@ -316,7 +316,7 @@ pornky.com,rexporn.com##+js(aopr, exoJsPop101)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7254
 @@||snowfiles.com^$ghide
-snowfiles.com##.ad
+snowfiles.com##.ad, .adsbygoogle
 
 ! skidrowcpy .com popups
 skidrowcpy.com##+js(aopw, _pop)
@@ -1655,6 +1655,7 @@ toolforge.org##+js(aopr, noAdBlockers)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3972
 @@||freedownloadae.com^$ghide
+freedownloadae.com##.adsbygoogle, .custom-html-widget
 
 ! jaewinter .co popups
 jaewinter.co##+js(acis, Math, zfgloaded)
@@ -1876,10 +1877,13 @@ m.z1.fm##div[style^="position: absolute; z-index: 9999999;"]
 blitz.bg,novini.bg##+js(nostif, f.parentNode.removeChild(f), 100)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7520
-anitube.be##+js(aopr, AaDetector)
-||anitube.be/sw.js$script,1p
-||anitubecz.uk^$script,domain=anitube.be
+anitube.*##+js(aopr, AaDetector)
+||anitube.*/sw.js$script,1p
+||anitubecz.uk^$script
 ||1uno1xkktau4.com^$3p
+*$script,xhr,frame,3p,denyallow=hwcdn.net|bootstrapcdn.com|googleapis.com|cloudflare.net|jwpcdn.com|jsdelivr.net|fastly.net|fontawesome.com|anitube.info,domain=anitube.cx
+anitube.*##+js(acis, document.createElement, 'script')
+anitube.*##+js(aeld, , encodeURIComponent)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7522
 movies4k.me##+js(nostif, anOptions)
@@ -2622,12 +2626,34 @@ netphim.tv##+js(nowoif)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/58426
 usb-antivirus.com##+js(aopr, mdpDeBlocker)
 
-! https://github.com/uBlockOrigin/uAssets/issues/7621
-||gp.cointelegraph.com^$xhr,1p
-cointelegraph.com##.bnr-adbutler
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/58440
 cfd.ninja##+js(aopr, anOptions)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/58446
 graphicdesignresources.net##+js(nosiif, visibility, 1000)
+
+! https://github.com/uBlockOrigin/uAssets/issues/448
+||d7zatysqm84hv.cloudfront.net/mp3-ad/$media,redirect=noopmp3-0.1s,domain=open.spotify.com
+! https://github.com/uBlockOrigin/uAssets/issues/724
+||akamaized.net/audio/*$media,redirect=noopmp3-0.1s,domain=open.spotify.com
+||scdn.co/audio/*$media,redirect=noopmp3-0.1s,domain=open.spotify.com
+! https://github.com/uBlockOrigin/uAssets/issues/7620
+open.spotify.com###leaderboard-ad-element
+
+! https://github.com/NanoMeow/QuickReports/issues/4239
+ilgeniodellostreaming.gs##+js(aopr, AaDetector)
+||dt0ok92rg7r8.com^$3p
+
+! https://tver.jp/feature/f0053185 (anti-adblock)
+@@||tver.jp^$ghide
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/58502
+coursedrive.org##+js(aopr, anOptions)
+coursedrive.org##.adcontainer
+coursedrive.org###custom_html-9
+
+! https://github.com/uBlockOrigin/uAssets/issues/7627
+opmovie.xyz##+js(nowoif)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/58505
+arabianbusiness.com##+js(aopr, adBlockDetected)
