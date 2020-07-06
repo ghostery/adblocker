@@ -795,6 +795,7 @@ sythe.org##+js(acis, document.getElementsByTagName, adblocker)
 *$image,redirect-rule=1x1.gif,domain=sythe.org
 @@||sythe.org/*.png|$image,1p
 @@||sythe.org/*.jpg?$image,1p
+||i.imgur.com/*.mp4$media,domain=sythe.org
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54747
 mangareddit.com##+js(nostif, visibility, 1500)
@@ -2146,6 +2147,7 @@ grhls.stream##+js(nostif, check, 100)
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/516
 @@||upmela.com^$ghide
+oms.upmela.com##.footerStickyBox
 
 ! https://github.com/NanoMeow/QuickReports/issues/4117
 @@||shinsori.com^$ghide
@@ -2730,3 +2732,29 @@ shrinkme.in##+js(ra, href, a[href^="https://bestcond1tions.com/"])
 banthang.tv##+js(ra, href, [href*="Popunder"])
 banthang.tv##[href^="https://ad."]
 banthang.tv##.under_menu
+
+! https://github.com/uBlockOrigin/uAssets/issues/7641
+flv2mp3.by##+js(nowoif)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7640
+convert2mp3.tv##+js(acis, Math, zfgloaded)
+convert2mp3.tv##[href="/banner.html"]
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/58462
+sciotocountydailynews.com##+js(aopr, anOptions)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/58700
+shorter.fun##+js(aopr, app_vars.force_disable_adblock)
+*$3p,script,frame,denyallow=google.com|gstatic.com|googleapis.com|recaptcha.net|hcaptcha.com,domain=shorter.fun
+
+! https://forums.lanik.us/viewtopic.php?f=62&t=44865
+cardiagn.com##+js(nostif, mdp)
+
+! https://github.com/NanoMeow/QuickReports/issues/4258
+@@||aosmark.com^$ghide
+
+! https://github.com/NanoMeow/QuickReports/issues/4180#issuecomment-654285263
+@@||legrandrex.com^$ghide
+
+! https://github.com/NanoMeow/QuickReports/issues/4260
+@@||trueid.net^$ghide
