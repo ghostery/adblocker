@@ -7,6 +7,7 @@
  */
 /* tslint:disable quotemark */
 export default [
+  "/^https?:\\/\\/([0-9a-z\\-]+\\.)?(animeland|animenova|animeplus|animetoon|animewow|gamestorrent|goodanime|gogoanime|igg-games|kimcartoon|memecenter|readcomiconline|toonget|toonova|watchcartoononline)\\.[a-z]{2,4}\\/(?!([Ee]xternal|[Ii]mages|[Ss]cripts|[Uu]ploads|ac|ajax|assets|combined|content|cov|cover|(img\\/bg)|(img\\/icon)|inc|jwplayer|player|playlist-cat-rss|static|thumbs|wp-content|wp-includes)\\/)(.*)/",
   "/ajax/libs/fuckadblock/*/fuckadblock.min.js",
   "/pagead/js/adsbygoogle.js",
   "/js/sdkloader/ima3.js",
@@ -169,7 +170,6 @@ export default [
   "ll",
   "lo",
   "ma",
-  "me",
   "mo",
   "mp",
   "no",
