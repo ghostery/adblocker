@@ -334,7 +334,7 @@ export class PuppeteerBlocker extends FiltersEngine {
       }
     }
 
-    await promises;
+    await Promise.all(promises);
   }
 
   /**
