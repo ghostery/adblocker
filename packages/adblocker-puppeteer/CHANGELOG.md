@@ -1,3 +1,21 @@
+# v1.16.1 (Wed Jul 08 2020)
+
+#### :bug: Bug Fix
+
+- Fix puppeteer package with correct promises handling. [#1067](https://github.com/cliqz-oss/adblocker/pull/1067) ([@remusao](https://github.com/remusao))
+- build(deps-dev): bump mocha from 7.2.0 to 8.0.1 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump mocha from 7.2.0 to 8.0.1 [#986](https://github.com/cliqz-oss/adblocker/pull/986) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 2
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.15.0 (Sat May 23 2020)
 
 #### :bug: Bug Fix
