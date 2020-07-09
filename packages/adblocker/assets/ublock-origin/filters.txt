@@ -6249,8 +6249,7 @@ cnnturk.com##+js(set, hasAdBlock, false)
 @@||dogannet.tv/*/comscore/streamsense.$script,domain=cnnturk.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2168
-revivelink.com##+js(aopr, decodeURIComponent)
-revivelink.com##+js(acis, Math, zfgloaded)
+revivelink.com##+js(acis, Object.defineProperty, XMLHttpRequest)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2169
 kodi-tutorials.uk##+js(nobab)
@@ -8759,6 +8758,7 @@ duellinksmeta.com##+js(nostif, modal)
 *$script,redirect-rule=noopjs,domain=duellinksmeta.com
 @@||duellinksmeta.com^$1p
 @@||duellinksmeta.com^$ghide
+@@||vntsm.com/*/ad-manager$script,xhr,domain=duellinksmeta.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3202
 $popunder,domain=ah.pe
@@ -16245,7 +16245,10 @@ v6download.com##.adsbygoogle
 @@||dailythanthi.com^$ghide
 
 ! https://github.com/NanoMeow/QuickReports/issues/1222
+windowcleaningforums.co.uk##+js(nostif, #eabpDialog)
 ||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs,domain=windowcleaningforums.co.uk
+windowcleaningforums.co.uk##li.ipsBox.ipsWidget_vertical.ipsWidget:nth-of-type(1)
+windowcleaningforums.co.uk##a[href^="https://windowcleaningforums.co.uk/index.php?"][target="_blank"]
 windowcleaningforums.co.uk##.ipsAdvertisement_large
 
 ! https://github.com/NanoMeow/QuickReports/issues/1223
@@ -16329,6 +16332,7 @@ cinema.maalaimalar.com##body:style(overflow: auto !important;)
 njiir.com##+js(set, safelink.adblock, false)
 
 ! https://forums.lanik.us/viewtopic.php?f=91&t=43035
+topito.com##+js(nostif, f.parentNode.removeChild(f), 100)
 topito.com##+js(aopr, document.bridCanRunAds)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1254
