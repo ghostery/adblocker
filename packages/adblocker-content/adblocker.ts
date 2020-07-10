@@ -124,10 +124,10 @@ export class DOMMonitor {
     private readonly cb: (features: { ids: string[]; classes: string[]; hrefs: string[] }) => void,
   ) {}
 
-  public queryAll(window: Window): void {
+  public queryAll(window: Pick<Window, 'document'>): void {
     this.handleNewNodes(Array.from(window.document.querySelectorAll('[id],[class],[href]')));
   }
-  public start(window: Window & { MutationObserver?: typeof MutationObserver }): void {
+  public start(window: Pick<Window, 'document'> & { MutationObserver?: typeof MutationObserver }): void {
     if (this.observer === null && window.MutationObserver !== undefined) {
       this.observer = new window.MutationObserver((mutations: MutationRecord[]) => {
         this.handleNewNodes(getDOMElementsFromMutations(mutations));
