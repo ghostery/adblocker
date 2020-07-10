@@ -98,7 +98,6 @@ export const NORMALIZED_TYPE_TOKEN: { [s in RequestType]: number } = {
   texttrack: fastHash('type:other'),
   web_manifest: fastHash('type:other'),
   websocket: fastHash('type:websocket'),
-  xbl: fastHash('type:other'),
   xhr: fastHash('type:xhr'),
   xml_dtd: fastHash('type:other'),
   xmlhttprequest: fastHash('type:xhr'),
