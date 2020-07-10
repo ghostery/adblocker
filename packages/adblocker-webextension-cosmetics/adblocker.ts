@@ -63,7 +63,7 @@ function getCosmeticsFiltersWithSendMessage({
 }
 
 function handleResponseFromBackground(
-  window: Window,
+  window: Pick<Window, 'document'>,
   { active, scripts, styles }: IMessageFromBackground,
 ): void {
   if (active === false) {
@@ -103,7 +103,7 @@ function handleResponseFromBackground(
  * callback to apply new rules.
  */
 export function injectCosmetics(
-  window: Window,
+  window: Pick<Window, 'document' | 'addEventListener'>,
   enableMutationObserver: boolean = true,
   getCosmeticsFilters: (
     _: IBackgroundCallback,
