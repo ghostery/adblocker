@@ -195,7 +195,6 @@ const REQUEST_TYPE_TO_MASK: { [s in RequestType]: number | undefined } = {
   speculative: NETWORK_FILTER_MASK.fromOther,
   texttrack: NETWORK_FILTER_MASK.fromOther,
   web_manifest: NETWORK_FILTER_MASK.fromOther,
-  xbl: NETWORK_FILTER_MASK.fromOther,
   xml_dtd: NETWORK_FILTER_MASK.fromOther,
   xslt: NETWORK_FILTER_MASK.fromOther,
 };
