@@ -1,3 +1,51 @@
+# v1.17.0 (Sun Jul 12 2020)
+
+### Release Notes
+
+_From #1080_
+
+Add support for two new features to make network filtering more flexible and powerful. The new [`denyallow` option](https://github.com/uBlockOrigin/uBlock-issues/wiki/Static-filter-syntax#denyallow) is now fully supported. Moreover, both the new `denyallow` and existing `domain` options can contain [entities](https://github.com/uBlockOrigin/uBlock-issues/wiki/Static-filter-syntax#entity), allowing the use of trailing wildcards to match against all public suffixes (e.g. `evil.*` will match `evil` followed by any valid public suffix like `evil.com` or `evil.co.uk`).
+
+---
+
+#### :rocket: New Feature
+
+- `@cliqz/adblocker`
+  - feat: support denyallow option and entities for network filters [#1080](https://github.com/cliqz-oss/adblocker/pull/1080) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#1076](https://github.com/cliqz-oss/adblocker/pull/1076) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets [#1075](https://github.com/cliqz-oss/adblocker/pull/1075) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets [#1071](https://github.com/cliqz-oss/adblocker/pull/1071) ([@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker`
+  - Update local assets [#1070](https://github.com/cliqz-oss/adblocker/pull/1070) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump auto from 9.43.2 to 9.44.0 [#1078](https://github.com/cliqz-oss/adblocker/pull/1078) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 9.43.1 to 9.43.2 [#1077](https://github.com/cliqz-oss/adblocker/pull/1077) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump jsdom from 16.2.2 to 16.3.0 [#1072](https://github.com/cliqz-oss/adblocker/pull/1072) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-electron`, `@cliqz/adblocker-playwright`, `@cliqz/adblocker-puppeteer`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - build(deps-dev): bump @types/mocha from 7.0.2 to 8.0.0 [#1079](https://github.com/cliqz-oss/adblocker/pull/1079) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-content`, `@cliqz/adblocker-webextension-cosmetics`
+  - build(deps-dev): bump @types/jsdom from 12.2.4 to 16.2.3 [#885](https://github.com/cliqz-oss/adblocker/pull/885) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker`
+  - build(deps): bump @types/firefox-webext-browser from 70.0.1 to 78.0.0 [#1026](https://github.com/cliqz-oss/adblocker/pull/1026) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker`
+  - build(deps): bump @types/chrome from 0.0.119 to 0.0.120 [#1074](https://github.com/cliqz-oss/adblocker/pull/1074) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.16.1 (Wed Jul 08 2020)
 
 #### :bug: Bug Fix

@@ -1,3 +1,22 @@
+# v1.17.0 (Sun Jul 12 2020)
+
+#### :bug: Bug Fix
+
+- build(deps-dev): bump @types/mocha from 7.0.2 to 8.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.119 to 0.0.120 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump @types/mocha from 7.0.2 to 8.0.0 [#1079](https://github.com/cliqz-oss/adblocker/pull/1079) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/jsdom from 12.2.4 to 16.2.3 [#885](https://github.com/cliqz-oss/adblocker/pull/885) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.119 to 0.0.120 [#1074](https://github.com/cliqz-oss/adblocker/pull/1074) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.16.1 (Wed Jul 08 2020)
 
 #### :bug: Bug Fix

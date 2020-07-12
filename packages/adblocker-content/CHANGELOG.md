@@ -1,3 +1,15 @@
+# v1.17.0 (Sun Jul 12 2020)
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump @types/jsdom from 12.2.4 to 16.2.3 [#885](https://github.com/cliqz-oss/adblocker/pull/885) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.16.0 (Wed Jun 10 2020)
 
 #### :bug: Bug Fix
