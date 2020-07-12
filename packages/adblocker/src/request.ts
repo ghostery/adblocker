@@ -122,13 +122,15 @@ export function getHashesFromLabelsBackward(
 
   // Compute hash backward, label per label
   for (let i = end - 1; i >= 0; i -= 1) {
+    const code = hostname.charCodeAt(i);
+
     // Process label
-    if (hostname[i] === '.' && i < startOfDomain) {
+    if (code === 46 /* '.' */ && i < startOfDomain) {
       TOKENS_BUFFER.push(hash >>> 0);
     }
 
     // Update hash
-    hash = (hash * 33) ^ hostname.charCodeAt(i);
+    hash = (hash * 33) ^ code;
   }
 
   TOKENS_BUFFER.push(hash >>> 0);
@@ -276,11 +278,14 @@ export default class Request {
   public readonly hostname: string;
   public readonly domain: string;
 
-  public sourceHostnameHashes: Uint32Array;
+  public readonly sourceHostnameHashes: Uint32Array;
+  public readonly sourceEntityHashes: Uint32Array;
 
   // Lazy attributes
-  private tokens: Uint32Array | undefined;
-  private fuzzySignature: Uint32Array | undefined;
+  private tokens: Uint32Array | undefined = undefined;
+  private fuzzySignature: Uint32Array | undefined = undefined;
+  private hostnameHashes: Uint32Array | undefined = undefined;
+  private entityHashes: Uint32Array | undefined = undefined;
 
   constructor({
     requestId,
@@ -311,7 +316,12 @@ export default class Request {
         ? EMPTY_UINT32_ARRAY
         : getHostnameHashesFromLabelsBackward(sourceHostname, sourceDomain);
 
-    // Decide on party
+    this.sourceEntityHashes =
+      sourceHostname.length === 0
+        ? EMPTY_UINT32_ARRAY
+        : getEntityHashesFromLabelsBackward(sourceHostname, sourceDomain);
+
+    // Decide on partiness
     this.isThirdParty = isThirdParty(hostname, domain, sourceHostname, sourceDomain);
     this.isFirstParty = !this.isThirdParty;
 
@@ -342,10 +352,26 @@ export default class Request {
       this.isHttps = false;
       this.isSupported = false;
     }
+  }
 
-    // Lazy attributes
-    this.tokens = undefined;
-    this.fuzzySignature = undefined;
+  public getHostnameHashes(): Uint32Array {
+    if (this.hostnameHashes === undefined) {
+      this.hostnameHashes = this.hostname.length === 0
+        ? EMPTY_UINT32_ARRAY
+        : getHostnameHashesFromLabelsBackward(this.hostname, this.domain);
+    }
+
+    return this.hostnameHashes;
+  }
+
+  public getEntityHashes(): Uint32Array {
+    if (this.entityHashes === undefined) {
+      this.entityHashes = this.hostname.length === 0
+        ? EMPTY_UINT32_ARRAY
+        : getEntityHashesFromLabelsBackward(this.hostname, this.domain);
+    }
+
+    return this.entityHashes;
   }
 
   public getTokens(): Uint32Array {

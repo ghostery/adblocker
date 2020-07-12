@@ -6,21 +6,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { Domains } from '../engine/domains';
 import {
   StaticDataView,
-  sizeOfASCII,
   sizeOfNetworkCSP,
   sizeOfNetworkFilter,
   sizeOfNetworkHostname,
   sizeOfNetworkRedirect,
   sizeOfUTF8,
-  sizeOfUint32Array,
 } from '../data-view';
 import { toASCII } from '../punycode';
-import Request, { RequestType, NORMALIZED_TYPE_TOKEN, hashHostnameBackward } from '../request';
+import Request, { RequestType, NORMALIZED_TYPE_TOKEN } from '../request';
 import { TOKENS_BUFFER } from '../tokens-buffer';
 import {
-  binLookup,
   bitCount,
   clearBit,
   createFuzzySignature,
@@ -83,13 +81,17 @@ export function normalizeRawFilterOptions(rawFilter: string): string {
 
   // Normalize options
   const options = rawFilter.slice(indexOfOptions + 1);
-  const normalizedOptions = options.replace(REGEX, (option) => {
-    const normalized = NORMALIZE_OPTIONS[option];
-    if (normalized === undefined) {
-      return option;
-    }
-    return normalized;
-  }).split(',').sort().join(',');
+  const normalizedOptions = options
+    .replace(REGEX, (option) => {
+      const normalized = NORMALIZE_OPTIONS[option];
+      if (normalized === undefined) {
+        return option;
+      }
+      return normalized;
+    })
+    .split(',')
+    .sort()
+    .join(',');
 
   if (options === normalizedOptions) {
     return rawFilter;
@@ -312,8 +314,8 @@ function computeFilterId(
   mask: number,
   filter: string | undefined,
   hostname: string | undefined,
-  optDomains: Uint32Array | undefined,
-  optNotDomains: Uint32Array | undefined,
+  domains: Domains | undefined,
+  denyallow: Domains | undefined,
   redirect: string | undefined,
   fuzzy: Uint32Array | undefined,
 ): number {
@@ -325,16 +327,12 @@ function computeFilterId(
     }
   }
 
-  if (optDomains !== undefined) {
-    for (let i = 0; i < optDomains.length; i += 1) {
-      hash = (hash * 33) ^ optDomains[i];
-    }
+  if (domains !== undefined) {
+    hash = domains.updateId(hash);
   }
 
-  if (optNotDomains !== undefined) {
-    for (let i = 0; i < optNotDomains.length; i += 1) {
-      hash = (hash * 33) ^ optNotDomains[i];
-    }
+  if (denyallow !== undefined) {
+    hash = denyallow.updateId(hash);
   }
 
   if (filter !== undefined) {
@@ -384,6 +382,7 @@ function compileRegex(
 
   // * can match anything
   filter = filter.replace(/\*/g, '.*');
+
   // ^ can match any separator or the end of the pattern
   filter = filter.replace(/\^/g, '(?:[^\\w\\d_.%-]|$)');
 
@@ -417,9 +416,8 @@ export default class NetworkFilter implements IFilter {
     let cptMaskNegative: number = FROM_ANY;
 
     let hostname: string | undefined;
-
-    let optDomains: Uint32Array | undefined;
-    let optNotDomains: Uint32Array | undefined;
+    let domains: Domains | undefined;
+    let denyallow: Domains | undefined;
     let redirect: string | undefined;
     let csp: string | undefined;
 
@@ -461,6 +459,10 @@ export default class NetworkFilter implements IFilter {
         }
 
         switch (option) {
+          case 'denyallow': {
+            denyallow = Domains.parse(optionValue.split('|'));
+            break;
+          }
           case 'domain': {
             // domain list starting or ending with '|' is invalid
             if (
@@ -469,29 +471,8 @@ export default class NetworkFilter implements IFilter {
             ) {
               return null;
             }
-            const optionValues: string[] = optionValue.split('|');
-            const optDomainsArray: number[] = [];
-            const optNotDomainsArray: number[] = [];
 
-            for (let j = 0; j < optionValues.length; j += 1) {
-              const value: string = optionValues[j];
-              if (value) {
-                if (value.charCodeAt(0) === 126 /* '~' */) {
-                  optNotDomainsArray.push(hashHostnameBackward(value.slice(1)));
-                } else {
-                  optDomainsArray.push(hashHostnameBackward(value));
-                }
-              }
-            }
-
-            if (optDomainsArray.length > 0) {
-              optDomains = new Uint32Array(optDomainsArray).sort();
-            }
-
-            if (optNotDomainsArray.length > 0) {
-              optNotDomains = new Uint32Array(optNotDomainsArray).sort();
-            }
-
+            domains = Domains.parse(optionValue.split('|'));
             break;
           }
           case 'badfilter':
@@ -881,8 +862,8 @@ export default class NetworkFilter implements IFilter {
       filter,
       hostname,
       mask,
-      optDomains,
-      optNotDomains,
+      domains,
+      denyallow,
       rawLine: debug === true ? line : undefined,
       redirect,
       regex: undefined,
@@ -915,15 +896,10 @@ export default class NetworkFilter implements IFilter {
             : buffer.getNetworkFilter()
           : undefined,
       hostname: (optionalParts & 4) === 4 ? buffer.getNetworkHostname() : undefined,
-      optDomains: (optionalParts & 8) === 8 ? buffer.getUint32Array() : undefined,
-      optNotDomains: (optionalParts & 16) === 16 ? buffer.getUint32Array() : undefined,
-      rawLine:
-        (optionalParts & 32) === 32
-          ? isUnicode
-            ? buffer.getUTF8()
-            : buffer.getASCII()
-          : undefined,
-      redirect: (optionalParts & 64) === 64 ? buffer.getNetworkRedirect() : undefined,
+      domains: (optionalParts & 8) === 8 ? Domains.deserialize(buffer) : undefined,
+      rawLine: (optionalParts & 16) === 16 ? buffer.getUTF8() : undefined,
+      redirect: (optionalParts & 32) === 32 ? buffer.getNetworkRedirect() : undefined,
+      denyallow: (optionalParts & 64) === 64 ? Domains.deserialize(buffer) : undefined,
       regex: undefined,
     });
   }
@@ -932,8 +908,8 @@ export default class NetworkFilter implements IFilter {
   public readonly filter: string | undefined;
   public readonly hostname: string | undefined;
   public readonly mask: number;
-  public readonly optDomains: Uint32Array | undefined;
-  public readonly optNotDomains: Uint32Array | undefined;
+  public readonly domains: Domains | undefined;
+  public readonly denyallow: Domains | undefined;
   public readonly redirect: string | undefined;
 
   // Set only in debug mode
@@ -949,8 +925,8 @@ export default class NetworkFilter implements IFilter {
     filter,
     hostname,
     mask,
-    optDomains,
-    optNotDomains,
+    domains,
+    denyallow,
     rawLine,
     redirect,
     regex,
@@ -959,8 +935,8 @@ export default class NetworkFilter implements IFilter {
     filter: string | undefined;
     hostname: string | undefined;
     mask: number;
-    optDomains: Uint32Array | undefined;
-    optNotDomains: Uint32Array | undefined;
+    domains: Domains | undefined;
+    denyallow: Domains | undefined;
     rawLine: string | undefined;
     redirect: string | undefined;
     regex: RegExp | undefined;
@@ -969,8 +945,8 @@ export default class NetworkFilter implements IFilter {
     this.filter = filter;
     this.hostname = hostname;
     this.mask = mask;
-    this.optDomains = optDomains;
-    this.optNotDomains = optNotDomains;
+    this.domains = domains;
+    this.denyallow = denyallow;
     this.redirect = redirect;
 
     this.rawLine = rawLine;
@@ -1055,28 +1031,24 @@ export default class NetworkFilter implements IFilter {
       buffer.pushNetworkHostname(this.hostname);
     }
 
-    if (this.optDomains !== undefined) {
+    if (this.domains !== undefined) {
       optionalParts |= 8;
-      buffer.pushUint32Array(this.optDomains);
-    }
-
-    if (this.optNotDomains !== undefined) {
-      optionalParts |= 16;
-      buffer.pushUint32Array(this.optNotDomains);
+      this.domains.serialize(buffer);
     }
 
     if (this.rawLine !== undefined) {
-      optionalParts |= 32;
-      if (this.isUnicode()) {
-        buffer.pushUTF8(this.rawLine);
-      } else {
-        buffer.pushASCII(this.rawLine);
-      }
+      optionalParts |= 16;
+      buffer.pushUTF8(this.rawLine);
     }
 
     if (this.redirect !== undefined) {
-      optionalParts |= 64;
+      optionalParts |= 32;
       buffer.pushNetworkRedirect(this.redirect);
+    }
+
+    if (this.denyallow !== undefined) {
+      optionalParts |= 64;
+      this.denyallow.serialize(buffer);
     }
 
     buffer.setByte(index, optionalParts);
@@ -1101,24 +1073,20 @@ export default class NetworkFilter implements IFilter {
       estimate += sizeOfNetworkHostname(this.hostname, compression);
     }
 
-    if (this.optDomains !== undefined) {
-      estimate += sizeOfUint32Array(this.optDomains);
-    }
-
-    if (this.optNotDomains !== undefined) {
-      estimate += sizeOfUint32Array(this.optNotDomains);
+    if (this.domains !== undefined) {
+      estimate += this.domains.getSerializedSize();
     }
 
     if (this.rawLine !== undefined) {
-      if (this.isUnicode() === true) {
-        estimate += sizeOfUTF8(this.rawLine);
-      } else {
-        estimate += sizeOfASCII(this.rawLine);
-      }
+      estimate += sizeOfUTF8(this.rawLine);
     }
 
     if (this.redirect !== undefined) {
       estimate += sizeOfNetworkRedirect(this.redirect, compression);
+    }
+
+    if (this.denyallow !== undefined) {
+      estimate += this.denyallow.getSerializedSize();
     }
 
     return estimate;
@@ -1229,8 +1197,12 @@ export default class NetworkFilter implements IFilter {
       }
     }
 
-    if (this.hasOptDomains() || this.hasOptNotDomains()) {
+    if (this.domains !== undefined) {
       options.push('domain=<hashed>');
+    }
+
+    if (this.denyallow !== undefined) {
+      options.push('denyallow=<hashed>');
     }
 
     if (this.isBadFilter()) {
@@ -1255,8 +1227,8 @@ export default class NetworkFilter implements IFilter {
       this.mask & ~NETWORK_FILTER_MASK.isBadFilter,
       this.isFuzzy() ? undefined : this.filter,
       this.hostname,
-      this.optDomains,
-      this.optNotDomains,
+      this.domains,
+      this.denyallow,
       this.redirect,
       this.isFuzzy() ? this.getFuzzySignature() : undefined,
     );
@@ -1269,8 +1241,8 @@ export default class NetworkFilter implements IFilter {
         this.mask,
         this.isFuzzy() ? undefined : this.filter,
         this.hostname,
-        this.optDomains,
-        this.optNotDomains,
+        this.domains,
+        this.denyallow,
         this.redirect,
         this.isFuzzy() ? this.getFuzzySignature() : undefined,
       );
@@ -1282,20 +1254,8 @@ export default class NetworkFilter implements IFilter {
     return this.filter !== undefined;
   }
 
-  public hasOptNotDomains(): boolean {
-    return this.optNotDomains !== undefined;
-  }
-
-  public getOptNotDomains(): Uint32Array {
-    return this.optNotDomains || EMPTY_ARRAY;
-  }
-
-  public hasOptDomains(): boolean {
-    return this.optDomains !== undefined;
-  }
-
-  public getOptDomains(): Uint32Array {
-    return this.optDomains || EMPTY_ARRAY;
+  public hasDomains(): boolean {
+    return this.domains !== undefined;
   }
 
   public getMask(): number {
@@ -1362,11 +1322,14 @@ export default class NetworkFilter implements IFilter {
     // If there is only one domain and no domain negation, we also use this
     // domain as a token.
     if (
-      this.optDomains !== undefined &&
-      this.optNotDomains === undefined &&
-      this.optDomains.length === 1
+      this.domains !== undefined &&
+      this.domains.hostnames !== undefined &&
+      this.domains.entities === undefined &&
+      this.domains.notHostnames === undefined &&
+      this.domains.notEntities === undefined &&
+      this.domains.hostnames.length === 1
     ) {
-      TOKENS_BUFFER.push(this.optDomains[0]);
+      TOKENS_BUFFER.push(this.domains.hostnames[0]);
     }
 
     // Get tokens from filter
@@ -1394,13 +1357,16 @@ export default class NetworkFilter implements IFilter {
     // this filter in multiple buckets based on the domains option.
     if (
       TOKENS_BUFFER.empty() === true &&
-      this.optDomains !== undefined &&
-      this.optNotDomains === undefined
+      this.domains !== undefined &&
+      this.domains.hostnames !== undefined &&
+      this.domains.entities === undefined &&
+      this.domains.notHostnames === undefined &&
+      this.domains.notEntities === undefined
     ) {
       const result: Uint32Array[] = [];
-      for (let i = 0; i < this.optDomains.length; i += 1) {
+      for (let i = 0; i < this.domains.hostnames.length; i += 1) {
         const arr = new Uint32Array(1);
-        arr[0] = this.optDomains[i];
+        arr[0] = this.domains.hostnames[i];
         result.push(arr);
       }
       return result;
@@ -1797,15 +1763,6 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
   return request.url.indexOf(pattern) !== -1;
 }
 
-function checkHostnameHashes(domains: Uint32Array, sourceHostnameHashes: Uint32Array): boolean {
-  for (let i = 0; i < sourceHostnameHashes.length; i += 1) {
-    if (binLookup(domains, sourceHostnameHashes[i]) === true) {
-      return true;
-    }
-  }
-  return false;
-}
-
 function checkOptions(filter: NetworkFilter, request: Request): boolean {
   // We first discard requests based on type, protocol and party. This is really
   // cheap and should be done first.
@@ -1819,18 +1776,18 @@ function checkOptions(filter: NetworkFilter, request: Request): boolean {
     return false;
   }
 
-  // Source URL must be among these domains to match
+  // If `sourceHostname` is *not* matched by `domain` then the request should be allowed.
   if (
-    filter.hasOptDomains() === true &&
-    checkHostnameHashes(filter.getOptDomains(), request.sourceHostnameHashes) === false
+    filter.domains !== undefined &&
+    filter.domains.match(request.sourceHostnameHashes, request.sourceEntityHashes) === false
   ) {
     return false;
   }
 
-  // Source URL must not be among these domains to match
+  // If `hostname` is matched by `denyallow` then the request should be allowed.
   if (
-    filter.hasOptNotDomains() === true &&
-    checkHostnameHashes(filter.getOptNotDomains(), request.sourceHostnameHashes) === true
+    filter.denyallow !== undefined &&
+    filter.denyallow.match(request.getHostnameHashes(), request.getEntityHashes()) === true
   ) {
     return false;
   }

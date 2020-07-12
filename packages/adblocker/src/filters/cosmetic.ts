@@ -6,22 +6,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { Domains } from '../engine/domains';
 import {
   EMPTY_UINT32_ARRAY,
   StaticDataView,
   sizeOfASCII,
   sizeOfCosmeticSelector,
   sizeOfUTF8,
-  sizeOfUint32Array,
 } from '../data-view';
 import {
-  getEntityHashesFromLabelsBackward,
   getHostnameHashesFromLabelsBackward,
-  hashHostnameBackward,
+  getEntityHashesFromLabelsBackward,
 } from '../request';
-import { toASCII } from '../punycode';
 import {
-  binLookup,
   fastHashBetween,
   fastStartsWithFrom,
   getBit,
@@ -137,10 +134,7 @@ const enum COSMETICS_MASK {
 function computeFilterId(
   mask: number,
   selector: string | undefined,
-  hostnames: Uint32Array | undefined,
-  entities: Uint32Array | undefined,
-  notHostnames: Uint32Array | undefined,
-  notEntities: Uint32Array | undefined,
+  domains: Domains | undefined,
   style: string | undefined,
 ): number {
   let hash = (5437 * 33) ^ mask;
@@ -151,28 +145,8 @@ function computeFilterId(
     }
   }
 
-  if (hostnames !== undefined) {
-    for (let i = 0; i < hostnames.length; i += 1) {
-      hash = (hash * 33) ^ hostnames[i];
-    }
-  }
-
-  if (entities !== undefined) {
-    for (let i = 0; i < entities.length; i += 1) {
-      hash = (hash * 33) ^ entities[i];
-    }
-  }
-
-  if (notHostnames !== undefined) {
-    for (let i = 0; i < notHostnames.length; i += 1) {
-      hash = (hash * 33) ^ notHostnames[i];
-    }
-  }
-
-  if (notEntities !== undefined) {
-    for (let i = 0; i < notEntities.length; i += 1) {
-      hash = (hash * 33) ^ notEntities[i];
-    }
+  if (domains !== undefined) {
+    hash = domains.updateId(hash);
   }
 
   if (style !== undefined) {
@@ -200,10 +174,7 @@ export default class CosmeticFilter implements IFilter {
     // COSMETICS_MASK for the offset of each property
     let mask = 0;
     let selector: string | undefined;
-    let hostnames: Uint32Array | undefined;
-    let notHostnames: Uint32Array | undefined;
-    let entities: Uint32Array | undefined;
-    let notEntities: Uint32Array | undefined;
+    let domains: Domains | undefined;
     let style: string | undefined;
     const sharpIndex = line.indexOf('#');
 
@@ -235,61 +206,7 @@ export default class CosmeticFilter implements IFilter {
     // number of labels considered. This allows a compact representation of
     // hostnames and fast matching without any string copy.
     if (sharpIndex > 0) {
-      const entitiesArray: number[] = [];
-      const notEntitiesArray: number[] = [];
-      const hostnamesArray: number[] = [];
-      const notHostnamesArray: number[] = [];
-
-      const parts = line.slice(0, sharpIndex).split(',');
-      for (let i = 0; i < parts.length; i += 1) {
-        let hostname = parts[i];
-        if (hasUnicode(hostname)) {
-          hostname = toASCII(hostname);
-          mask = setBit(mask, COSMETICS_MASK.isUnicode);
-        }
-
-        const negation: boolean = hostname.charCodeAt(0) === 126; /* '~' */
-        const entity: boolean =
-          hostname.charCodeAt(hostname.length - 1) === 42 /* '*' */ &&
-          hostname.charCodeAt(hostname.length - 2) === 46; /* '.' */
-
-        const start: number = negation ? 1 : 0;
-        const end: number = entity ? hostname.length - 2 : hostname.length;
-
-        const hash = hashHostnameBackward(
-          negation === true || entity === true ? hostname.slice(start, end) : hostname,
-        );
-
-        if (negation) {
-          if (entity) {
-            notEntitiesArray.push(hash);
-          } else {
-            notHostnamesArray.push(hash);
-          }
-        } else {
-          if (entity) {
-            entitiesArray.push(hash);
-          } else {
-            hostnamesArray.push(hash);
-          }
-        }
-      }
-
-      if (entitiesArray.length !== 0) {
-        entities = new Uint32Array(entitiesArray).sort();
-      }
-
-      if (hostnamesArray.length !== 0) {
-        hostnames = new Uint32Array(hostnamesArray).sort();
-      }
-
-      if (notEntitiesArray.length !== 0) {
-        notEntities = new Uint32Array(notEntitiesArray).sort();
-      }
-
-      if (notHostnamesArray.length !== 0) {
-        notHostnames = new Uint32Array(notHostnamesArray).sort();
-      }
+      domains = Domains.parse(line.slice(0, sharpIndex).split(','));
     }
 
     // Deal with ^script:has-text(...)
@@ -322,8 +239,8 @@ export default class CosmeticFilter implements IFilter {
     ) {
       // Generic scriptlets are invalid, unless they are un-hide
       if (
-        hostnames === undefined &&
-        entities === undefined &&
+        (domains === undefined ||
+          (domains.hostnames === undefined && domains.entities === undefined)) &&
         getBit(mask, COSMETICS_MASK.unhide) === false
       ) {
         return null;
@@ -424,14 +341,11 @@ export default class CosmeticFilter implements IFilter {
     }
 
     return new CosmeticFilter({
-      entities,
-      hostnames,
       mask,
-      notEntities,
-      notHostnames,
       rawLine: debug === true ? line : undefined,
       selector,
       style,
+      domains,
     });
   }
 
@@ -452,17 +366,9 @@ export default class CosmeticFilter implements IFilter {
       selector,
 
       // Optional fields
-      entities: (optionalParts & 1) === 1 ? buffer.getUint32Array() : undefined,
-      hostnames: (optionalParts & 2) === 2 ? buffer.getUint32Array() : undefined,
-      notEntities: (optionalParts & 4) === 4 ? buffer.getUint32Array() : undefined,
-      notHostnames: (optionalParts & 8) === 8 ? buffer.getUint32Array() : undefined,
-      rawLine:
-        (optionalParts & 16) === 16
-          ? isUnicode
-            ? buffer.getUTF8()
-            : buffer.getASCII()
-          : undefined,
-      style: (optionalParts & 32) === 32 ? buffer.getASCII() : undefined,
+      domains: (optionalParts & 1) === 1 ? Domains.deserialize(buffer) : undefined,
+      rawLine: (optionalParts & 2) === 2 ? buffer.getUTF8() : undefined,
+      style: (optionalParts & 4) === 4 ? buffer.getASCII() : undefined,
     });
   }
 
@@ -470,13 +376,7 @@ export default class CosmeticFilter implements IFilter {
   public readonly mask: number;
   public readonly selector: string;
 
-  // hostnames
-  public readonly entities: Uint32Array | undefined;
-  public readonly hostnames: Uint32Array | undefined;
-
-  // Exceptions
-  public readonly notEntities: Uint32Array | undefined;
-  public readonly notHostnames: Uint32Array | undefined;
+  public readonly domains: Domains | undefined;
 
   public readonly style: string | undefined;
   public readonly rawLine: string | undefined;
@@ -486,36 +386,19 @@ export default class CosmeticFilter implements IFilter {
   constructor({
     mask,
     selector,
-
-    entities,
-    hostnames,
-
-    notEntities,
-    notHostnames,
-
+    domains,
     rawLine,
     style,
   }: {
-    entities: Uint32Array | undefined;
-    hostnames: Uint32Array | undefined;
     mask: number;
-    notEntities: Uint32Array | undefined;
-    notHostnames: Uint32Array | undefined;
+    domains: Domains | undefined;
     rawLine: string | undefined;
     selector: string;
     style: string | undefined;
   }) {
     this.mask = mask;
     this.selector = selector;
-
-    // Hostname constraints
-    this.entities = entities;
-    this.hostnames = hostnames;
-
-    // Hostname exceptions
-    this.notEntities = notEntities;
-    this.notHostnames = notHostnames;
-
+    this.domains = domains;
     this.style = style;
 
     this.id = undefined;
@@ -557,37 +440,18 @@ export default class CosmeticFilter implements IFilter {
     // This bit-mask indicates which optional parts of the filter were serialized.
     let optionalParts = 0;
 
-    if (this.entities !== undefined) {
+    if (this.domains !== undefined) {
       optionalParts |= 1;
-      buffer.pushUint32Array(this.entities);
-    }
-
-    if (this.hostnames !== undefined) {
-      optionalParts |= 2;
-      buffer.pushUint32Array(this.hostnames);
-    }
-
-    if (this.notEntities !== undefined) {
-      optionalParts |= 4;
-      buffer.pushUint32Array(this.notEntities);
-    }
-
-    if (this.notHostnames !== undefined) {
-      optionalParts |= 8;
-      buffer.pushUint32Array(this.notHostnames);
+      this.domains.serialize(buffer);
     }
 
     if (this.rawLine !== undefined) {
-      optionalParts |= 16;
-      if (this.isUnicode()) {
-        buffer.pushUTF8(this.rawLine);
-      } else {
-        buffer.pushASCII(this.rawLine);
-      }
+      optionalParts |= 2;
+      buffer.pushUTF8(this.rawLine);
     }
 
     if (this.style !== undefined) {
-      optionalParts |= 32;
+      optionalParts |= 4;
       buffer.pushASCII(this.style);
     }
 
@@ -608,28 +472,12 @@ export default class CosmeticFilter implements IFilter {
       estimate += sizeOfCosmeticSelector(this.selector, compression);
     }
 
-    if (this.entities !== undefined) {
-      estimate += sizeOfUint32Array(this.entities);
-    }
-
-    if (this.hostnames !== undefined) {
-      estimate += sizeOfUint32Array(this.hostnames);
-    }
-
-    if (this.notHostnames !== undefined) {
-      estimate += sizeOfUint32Array(this.notHostnames);
-    }
-
-    if (this.notEntities !== undefined) {
-      estimate += sizeOfUint32Array(this.notEntities);
+    if (this.domains !== undefined) {
+      estimate += this.domains.getSerializedSize();
     }
 
     if (this.rawLine !== undefined) {
-      if (this.isUnicode()) {
-        estimate += sizeOfUTF8(this.rawLine);
-      } else {
-        estimate += sizeOfASCII(this.rawLine);
-      }
+      estimate += sizeOfUTF8(this.rawLine);
     }
 
     if (this.style !== undefined) {
@@ -650,12 +498,7 @@ export default class CosmeticFilter implements IFilter {
 
     let filter = '';
 
-    if (
-      this.hostnames !== undefined ||
-      this.entities !== undefined ||
-      this.notHostnames !== undefined ||
-      this.notEntities !== undefined
-    ) {
+    if (this.domains !== undefined) {
       filter += '<hostnames>';
     }
 
@@ -687,52 +530,18 @@ export default class CosmeticFilter implements IFilter {
       return false;
     }
 
-    const entitiesHashes: Uint32Array =
-      this.entities !== undefined || this.notEntities !== undefined
-        ? getEntityHashesFromLabelsBackward(hostname, domain)
-        : EMPTY_UINT32_ARRAY;
-    const hostnameHashes: Uint32Array =
-      this.hostnames !== undefined || this.notHostnames !== undefined
-        ? getHostnameHashesFromLabelsBackward(hostname, domain)
-        : EMPTY_UINT32_ARRAY;
-
-    // Check if `hostname` is blacklisted
-    if (this.notHostnames !== undefined) {
-      for (let i = 0; i < hostnameHashes.length; i += 1) {
-        if (binLookup(this.notHostnames, hostnameHashes[i])) {
-          return false;
-        }
-      }
-    }
-
-    // Check if `hostname` is blacklisted by *entity*
-    if (this.notEntities !== undefined) {
-      for (let i = 0; i < entitiesHashes.length; i += 1) {
-        if (binLookup(this.notEntities, entitiesHashes[i])) {
-          return false;
-        }
-      }
-    }
-
-    // Check if `hostname` is allowed
-    if (this.hostnames !== undefined || this.entities !== undefined) {
-      if (this.hostnames !== undefined) {
-        for (let i = 0; i < hostnameHashes.length; i += 1) {
-          if (binLookup(this.hostnames, hostnameHashes[i])) {
-            return true;
-          }
-        }
-      }
-
-      if (this.entities !== undefined) {
-        for (let i = 0; i < entitiesHashes.length; i += 1) {
-          if (binLookup(this.entities, entitiesHashes[i])) {
-            return true;
-          }
-        }
-      }
-
-      return false;
+    if (this.domains !== undefined) {
+      // TODO - this hashing could be re-used between cosmetics by using an
+      // abstraction like `Request` (similar to network filters matching).
+      // Maybe could we reuse `Request` directly without any change?
+      return this.domains.match(
+        hostname.length === 0
+          ? EMPTY_UINT32_ARRAY
+          : getHostnameHashesFromLabelsBackward(hostname, domain),
+        hostname.length === 0
+          ? EMPTY_UINT32_ARRAY
+          : getEntityHashesFromLabelsBackward(hostname, domain),
+      );
     }
 
     return true;
@@ -750,15 +559,19 @@ export default class CosmeticFilter implements IFilter {
     // by a domain or entity. Instead, they are handled in
     // `CosmeticFilterBucket.getCosmeticsFilters(...)`.
 
-    if (this.hostnames !== undefined) {
-      for (let i = 0; i < this.hostnames.length; i += 1) {
-        tokens.push(new Uint32Array([this.hostnames[i]]));
-      }
-    }
+    if (this.domains !== undefined) {
+      const { hostnames, entities } = this.domains;
 
-    if (this.entities !== undefined) {
-      for (let i = 0; i < this.entities.length; i += 1) {
-        tokens.push(new Uint32Array([this.entities[i]]));
+      if (hostnames !== undefined) {
+        for (let i = 0; i < hostnames.length; i += 1) {
+          tokens.push(new Uint32Array([hostnames[i]]));
+        }
+      }
+
+      if (entities !== undefined) {
+        for (let i = 0; i < entities.length; i += 1) {
+          tokens.push(new Uint32Array([entities[i]]));
+        }
       }
     }
 
@@ -865,25 +678,12 @@ export default class CosmeticFilter implements IFilter {
   }
 
   public hasHostnameConstraint(): boolean {
-    return (
-      this.hostnames !== undefined ||
-      this.entities !== undefined ||
-      this.notEntities !== undefined ||
-      this.notHostnames !== undefined
-    );
+    return this.domains !== undefined;
   }
 
   public getId(): number {
     if (this.id === undefined) {
-      this.id = computeFilterId(
-        this.mask,
-        this.selector,
-        this.hostnames,
-        this.entities,
-        this.notHostnames,
-        this.notEntities,
-        this.style,
-      );
+      this.id = computeFilterId(this.mask, this.selector, this.domains, this.style);
     }
     return this.id;
   }
@@ -943,6 +743,6 @@ export default class CosmeticFilter implements IFilter {
   //
   // For example: ~example.com##.ad  is a generic filter as well!
   public isGenericHide(): boolean {
-    return this.hostnames === undefined && this.entities === undefined;
+    return this?.domains?.hostnames === undefined && this?.domains?.entities === undefined;
   }
 }

@@ -369,8 +369,20 @@ describe('#NetworkFilter.match', () => {
       sourceUrl: 'http://foo.com',
       url: 'https://foo.com/bar',
     });
+    expect(f`||foo$domain=~bar.*`).to.matchRequest({
+      sourceUrl: 'http://foo.com',
+      url: 'https://foo.com/bar',
+    });
     expect(f`||foo$domain=~bar.com`).not.to.matchRequest({
       sourceUrl: 'http://bar.com',
+      url: 'https://foo.com/bar',
+    });
+    expect(f`||foo$domain=~bar.*`).not.to.matchRequest({
+      sourceUrl: 'http://bar.com',
+      url: 'https://foo.com/bar',
+    });
+    expect(f`||foo$domain=~bar.*`).not.to.matchRequest({
+      sourceUrl: 'http://bar.co.uk',
       url: 'https://foo.com/bar',
     });
     expect(f`||foo$domain=~bar.com`).not.to.matchRequest({
@@ -380,6 +392,36 @@ describe('#NetworkFilter.match', () => {
     expect(f`||foo$domain=~sub1.bar.com`).not.to.matchRequest({
       sourceUrl: 'http://sub2.sub1.bar.com',
       url: 'https://foo.com/bar',
+    });
+
+    // denyallow
+    expect(f`*$3p,denyallow=x.com|y.com,domain=a.com|b.com`).to.matchRequest({
+      sourceUrl: 'https://a.com',
+      url: 'https://z.com/bar',
+    });
+    expect(f`*$3p,denyallow=x.com|y.com,domain=a.com|b.com`).to.matchRequest({
+      sourceUrl: 'https://b.com',
+      url: 'https://z.com/bar',
+    });
+    expect(f`*$3p,denyallow=x.com|y.com,domain=a.com|b.com`).to.matchRequest({
+      sourceUrl: 'https://sub.b.com',
+      url: 'https://z.com/bar',
+    });
+    expect(f`*$3p,denyallow=x.com|y.com,domain=a.com|b.com`).to.not.matchRequest({
+      sourceUrl: 'https://a.com',
+      url: 'https://x.com/bar',
+    });
+    expect(f`*$3p,denyallow=x.com|y.com,domain=a.com|b.com`).to.not.matchRequest({
+      sourceUrl: 'https://a.com',
+      url: 'https://sub.y.com/bar',
+    });
+    expect(f`*$3p,denyallow=x.com|y.com,domain=a.com|b.com`).to.not.matchRequest({
+      sourceUrl: 'https://sub.b.com',
+      url: 'https://sub.y.com/bar',
+    });
+    expect(f`*$3p,denyallow=x.com|y.com,domain=a.com|b.com`).to.not.matchRequest({
+      sourceUrl: 'https://c.com',
+      url: 'https://sub.y.com/bar',
     });
   });
 });

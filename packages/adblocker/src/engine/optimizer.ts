@@ -9,6 +9,7 @@
 import CosmeticFilter from '../filters/cosmetic';
 import NetworkFilter, { NETWORK_FILTER_MASK } from '../filters/network';
 import { setBit } from '../utils';
+import { Domains } from '../engine/domains';
 
 function processRegex(r: RegExp): string {
   return `(?:${r.source})`;
@@ -81,27 +82,48 @@ const OPTIMIZATIONS: IOptimization[] = [
   {
     description: 'Group idential filter with same mask but different domains in single filters',
     fusion: (filters: NetworkFilter[]) => {
-      const domains: Set<number> = new Set();
-      const notDomains: Set<number> = new Set();
+      const hostnames: Set<number> = new Set();
+      const notHostnames: Set<number> = new Set();
+      const entities: Set<number> = new Set();
+      const notEntities: Set<number> = new Set();
 
       for (let i = 0; i < filters.length; i += 1) {
-        const { optDomains, optNotDomains } = filters[i];
-        if (optDomains !== undefined) {
-          optDomains.forEach((d) => {
-            domains.add(d);
-          });
-        }
-        if (optNotDomains !== undefined) {
-          optNotDomains.forEach((d) => {
-            notDomains.add(d);
-          });
+        const { domains } = filters[i]
+        if (domains !== undefined) {
+          if (domains.hostnames !== undefined) {
+            for (const hash of domains.hostnames) {
+              hostnames.add(hash);
+            }
+          }
+
+          if (domains.entities !== undefined) {
+            for (const hash of domains.entities) {
+              entities.add(hash);
+            }
+          }
+
+          if (domains.notHostnames !== undefined) {
+            for (const hash of domains.notHostnames) {
+              notHostnames.add(hash);
+            }
+          }
+
+          if (domains.notEntities !== undefined) {
+            for (const hash of domains.notEntities) {
+              notEntities.add(hash);
+            }
+          }
         }
       }
 
       return new NetworkFilter(
         Object.assign({}, filters[0], {
-          optDomains: domains.size > 0 ? new Uint32Array(domains).sort() : undefined,
-          optNotDomains: notDomains.size > 0 ? new Uint32Array(notDomains).sort() : undefined,
+          domains: new Domains({
+            hostnames: hostnames.size !== 0 ? new Uint32Array(hostnames).sort() : undefined,
+            entities: entities.size !== 0 ? new Uint32Array(entities).sort() : undefined,
+            notHostnames: notHostnames.size !== 0 ? new Uint32Array(notHostnames).sort() : undefined,
+            notEntities: notEntities.size !== 0 ? new Uint32Array(notEntities).sort() : undefined,
+          }),
           rawLine:
             filters[0].rawLine !== undefined
               ? filters.map(({ rawLine }) => rawLine).join(' <+> ')
@@ -114,7 +136,8 @@ const OPTIMIZATIONS: IOptimization[] = [
     select: (filter: NetworkFilter) =>
       !filter.isFuzzy() &&
       !filter.isCSP() &&
-      (filter.hasOptDomains() || filter.hasOptNotDomains()),
+      filter.denyallow === undefined &&
+      filter.domains !== undefined,
   },
   {
     description: 'Group simple patterns, into a single filter',
@@ -151,8 +174,8 @@ const OPTIMIZATIONS: IOptimization[] = [
     ),
     select: (filter: NetworkFilter) =>
       !filter.isFuzzy() &&
-      !filter.hasOptDomains() &&
-      !filter.hasOptNotDomains() &&
+      filter.domains === undefined &&
+      filter.denyallow === undefined &&
       !filter.isHostnameAnchor() &&
       !filter.isRedirect() &&
       !filter.isCSP(),
