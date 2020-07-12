@@ -31,8 +31,8 @@ function network(filter: string, expected: any) {
       csp: parsed.csp,
       filter: parsed.getFilter(),
       hostname: parsed.getHostname(),
-      optDomains: parsed.getOptDomains(),
-      optNotDomains: parsed.getOptNotDomains(),
+      denyallow: parsed.denyallow,
+      domains: parsed.domains,
       redirect: parsed.getRedirect(),
 
       // Filter type
@@ -66,14 +66,12 @@ function network(filter: string, expected: any) {
       fromSubdocument: parsed.fromSubdocument(),
       fromWebsocket: parsed.fromWebsocket(),
       fromXmlHttpRequest: parsed.fromXmlHttpRequest(),
-      hasOptDomains: parsed.hasOptDomains(),
-      hasOptNotDomains: parsed.hasOptNotDomains(),
       isImportant: parsed.isImportant(),
       thirdParty: parsed.thirdParty(),
     };
     expect(verbose).to.deep.include(expected);
   } else {
-    expect(parsed).to.eql(expected);
+    expect(parsed).to.equal(expected);
   }
 }
 
@@ -82,8 +80,6 @@ const DEFAULT_NETWORK_FILTER = {
   csp: undefined,
   filter: '',
   hostname: '',
-  optDomains: new Uint32Array([]),
-  optNotDomains: new Uint32Array([]),
   redirect: '',
 
   // Filter type
@@ -598,73 +594,175 @@ describe('Network filters', () => {
     describe('domain', () => {
       it('parses domain', () => {
         network('||foo.com$domain=bar.com', {
-          hasOptDomains: true,
-          optDomains: h(['bar.com']),
-
-          hasOptNotDomains: false,
-          optNotDomains: new Uint32Array([]),
+          domains: {
+            hostnames: h(['bar.com']),
+            entities: undefined,
+            notHostnames: undefined,
+            notEntities: undefined,
+          },
         });
 
         network('||foo.com$domain=bar.com|baz.com', {
-          hasOptDomains: true,
-          optDomains: h(['bar.com', 'baz.com']),
-
-          hasOptNotDomains: false,
-          optNotDomains: new Uint32Array([]),
+          domains: {
+            hostnames: h(['bar.com', 'baz.com']),
+            entities: undefined,
+            notHostnames: undefined,
+            notEntities: undefined,
+          },
         });
       });
 
       it('parses ~domain', () => {
         network('||foo.com$domain=~bar.com', {
-          hasOptDomains: false,
-          optDomains: new Uint32Array([]),
-
-          hasOptNotDomains: true,
-          optNotDomains: h(['bar.com']),
+          domains: {
+            notHostnames: h(['bar.com']),
+            entities: undefined,
+            hostnames: undefined,
+            notEntities: undefined,
+          },
         });
 
         network('||foo.com$domain=~bar.com|~baz.com', {
-          hasOptDomains: false,
-          optDomains: new Uint32Array([]),
-
-          hasOptNotDomains: true,
-          optNotDomains: h(['bar.com', 'baz.com']),
+          domains: {
+            notHostnames: h(['bar.com', 'baz.com']),
+            entities: undefined,
+            hostnames: undefined,
+            notEntities: undefined,
+          },
         });
       });
 
       it('parses domain and ~domain', () => {
         network('||foo.com$domain=~bar.com|baz.com', {
-          hasOptDomains: true,
-          optDomains: h(['baz.com']),
-
-          hasOptNotDomains: true,
-          optNotDomains: h(['bar.com']),
+          domains: {
+            hostnames: h(['baz.com']),
+            notHostnames: h(['bar.com']),
+            entities: undefined,
+            notEntities: undefined,
+          },
         });
 
         network('||foo.com$domain=bar.com|~baz.com', {
-          hasOptDomains: true,
-          optDomains: h(['bar.com']),
-
-          hasOptNotDomains: true,
-          optNotDomains: h(['baz.com']),
+          domains: {
+            hostnames: h(['bar.com']),
+            notHostnames: h(['baz.com']),
+            entities: undefined,
+            notEntities: undefined,
+          },
         });
 
         network('||foo.com$domain=foo|~bar|baz', {
-          hasOptDomains: true,
-          optDomains: h(['foo', 'baz']),
+          domains: {
+            hostnames: h(['foo', 'baz']),
+            notHostnames: h(['bar']),
+            entities: undefined,
+            notEntities: undefined,
+          },
+        });
+      });
 
-          hasOptNotDomains: true,
-          optNotDomains: h(['bar']),
+      it('accepts entities', () => {
+        network('||foo.com$domain=foo.*|~bar.*|baz', {
+          domains: {
+            hostnames: h(['baz']),
+            notHostnames: undefined,
+            entities: h(['foo']),
+            notEntities: h(['bar']),
+          },
         });
       });
 
       it('defaults to no constraint', () => {
         network('||foo.com', {
-          hasOptDomains: false,
-          optDomains: new Uint32Array([]),
+          domains: undefined,
+        });
+      });
+    });
 
-          hasOptNotDomains: false,
-          optNotDomains: new Uint32Array([]),
+    describe('denyallow', () => {
+      it('parses denyallow', () => {
+        network('||foo.com$denyallow=bar.com', {
+          denyallow: {
+            hostnames: h(['bar.com']),
+            entities: undefined,
+            notHostnames: undefined,
+            notEntities: undefined,
+          },
+        });
+
+        network('||foo.com$denyallow=bar.com|baz.com', {
+          denyallow: {
+            hostnames: h(['bar.com', 'baz.com']),
+            entities: undefined,
+            notHostnames: undefined,
+            notEntities: undefined,
+          },
+        });
+      });
+
+      it('parses ~denyallow', () => {
+        network('||foo.com$denyallow=~bar.com', {
+          denyallow: {
+            notHostnames: h(['bar.com']),
+            entities: undefined,
+            hostnames: undefined,
+            notEntities: undefined,
+          },
+        });
+
+        network('||foo.com$denyallow=~bar.com|~baz.com', {
+          denyallow: {
+            notHostnames: h(['bar.com', 'baz.com']),
+            entities: undefined,
+            hostnames: undefined,
+            notEntities: undefined,
+          },
+        });
+      });
+
+      it('parses denyallow and ~denyallow', () => {
+        network('||foo.com$denyallow=~bar.com|baz.com', {
+          denyallow: {
+            hostnames: h(['baz.com']),
+            notHostnames: h(['bar.com']),
+            entities: undefined,
+            notEntities: undefined,
+          },
+        });
+
+        network('||foo.com$denyallow=bar.com|~baz.com', {
+          denyallow: {
+            hostnames: h(['bar.com']),
+            notHostnames: h(['baz.com']),
+            entities: undefined,
+            notEntities: undefined,
+          },
+        });
+
+        network('||foo.com$denyallow=foo|~bar|baz', {
+          denyallow: {
+            hostnames: h(['foo', 'baz']),
+            notHostnames: h(['bar']),
+            entities: undefined,
+            notEntities: undefined,
+          },
+        });
+      });
+
+      it('accepts entities', () => {
+        network('||foo.com$denyallow=foo.*|~bar.*|baz', {
+          denyallow: {
+            hostnames: h(['baz']),
+            notHostnames: undefined,
+            entities: h(['foo']),
+            notEntities: h(['bar']),
+          },
+        });
+      });
+
+      it('defaults to no constraint', () => {
+        network('||foo.com', {
+          denyallow: undefined,
         });
       });
     });
@@ -1269,11 +1367,7 @@ function cosmetic(filter: string, expected: any) {
     expect(parsed.isCosmeticFilter()).to.be.true;
     const verbose = {
       // Attributes
-      entities: parsed.entities,
-      hostnames: parsed.hostnames,
-      notEntities: parsed.notEntities,
-      notHostnames: parsed.notHostnames,
-
+      domains: parsed.domains,
       selector: parsed.getSelector(),
       style: parsed.getStyle(),
 
@@ -1287,7 +1381,7 @@ function cosmetic(filter: string, expected: any) {
     };
     expect(verbose).to.deep.include(expected);
   } else {
-    expect(parsed).to.eql(expected);
+    expect(parsed).to.equal(expected);
   }
 }
 
@@ -1455,27 +1549,43 @@ describe('Cosmetic filters', () => {
   it('parses hostnames', () => {
     cosmetic('foo.com##selector', {
       ...DEFAULT_COSMETIC_FILTER,
-      hostnames: h(['foo.com']),
+      domains: {
+        hostnames: h(['foo.com']),
+        entities: undefined,
+        notHostnames: undefined,
+        notEntities: undefined,
+      },
       selector: 'selector',
     });
     cosmetic('foo.com,bar.io##selector', {
       ...DEFAULT_COSMETIC_FILTER,
-      hostnames: h(['foo.com', 'bar.io']),
+      domains: {
+        hostnames: h(['foo.com', 'bar.io']),
+        entities: undefined,
+        notHostnames: undefined,
+        notEntities: undefined,
+      },
       selector: 'selector',
     });
     cosmetic('foo.com,bar.io,baz.*##selector', {
       ...DEFAULT_COSMETIC_FILTER,
-      entities: h(['baz']),
-      hostnames: h(['foo.com', 'bar.io']),
+      domains: {
+        entities: h(['baz']),
+        hostnames: h(['foo.com', 'bar.io']),
+        notHostnames: undefined,
+        notEntities: undefined,
+      },
       selector: 'selector',
     });
 
     cosmetic('~entity.*,foo.com,~bar.io,baz.*,~entity2.*##selector', {
       ...DEFAULT_COSMETIC_FILTER,
-      entities: h(['baz']),
-      hostnames: h(['foo.com']),
-      notEntities: h(['entity', 'entity2']),
-      notHostnames: h(['bar.io']),
+      domains: {
+        entities: h(['baz']),
+        hostnames: h(['foo.com']),
+        notEntities: h(['entity', 'entity2']),
+        notHostnames: h(['bar.io']),
+      },
       selector: 'selector',
     });
   });
@@ -1483,7 +1593,12 @@ describe('Cosmetic filters', () => {
   it('parses unhide', () => {
     cosmetic('foo.com#@#selector', {
       ...DEFAULT_COSMETIC_FILTER,
-      hostnames: h(['foo.com']),
+      domains: {
+        hostnames: h(['foo.com']),
+        entities: undefined,
+        notHostnames: undefined,
+        notEntities: undefined,
+      },
       isUnhide: true,
       selector: 'selector',
     });
@@ -1493,11 +1608,23 @@ describe('Cosmetic filters', () => {
     it('parses script inject', () => {
       cosmetic('foo.com##+js(script.js, argument)', {
         ...DEFAULT_COSMETIC_FILTER,
+        domains: {
+          hostnames: h(['foo.com']),
+          entities: undefined,
+          notHostnames: undefined,
+          notEntities: undefined,
+        },
         isScriptInject: true,
         selector: 'script.js, argument',
       });
       cosmetic('foo.com##+js(script.js, arg1, arg2, arg3)', {
         ...DEFAULT_COSMETIC_FILTER,
+        domains: {
+          hostnames: h(['foo.com']),
+          entities: undefined,
+          notHostnames: undefined,
+          notEntities: undefined,
+        },
         isScriptInject: true,
         selector: 'script.js, arg1, arg2, arg3',
       });
@@ -1537,7 +1664,12 @@ describe('Cosmetic filters', () => {
     it('with domains', () => {
       cosmetic('foo.com##^script:has-text(foo bar)', {
         ...DEFAULT_COSMETIC_FILTER,
-        hostnames: h(['foo.com']),
+        domains: {
+          hostnames: h(['foo.com']),
+          entities: undefined,
+          notHostnames: undefined,
+          notEntities: undefined,
+        },
         isHtmlFiltering: true,
         selector: 'script:has-text(foo bar)',
       });
@@ -1617,7 +1749,12 @@ describe('Cosmetic filters', () => {
 
     cosmetic('foo.com,bar.de##foo > bar >baz:style(display: none)', {
       ...DEFAULT_COSMETIC_FILTER,
-      hostnames: h(['foo.com', 'bar.de']),
+      domains: {
+        hostnames: h(['foo.com', 'bar.de']),
+        entities: undefined,
+        notHostnames: undefined,
+        notEntities: undefined,
+      },
       selector: 'foo > bar >baz',
       style: 'display: none',
     });
