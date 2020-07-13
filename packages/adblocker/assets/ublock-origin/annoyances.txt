@@ -721,21 +721,18 @@ allafinedelpalo.it##+js(aopr, ABDSettings)
 ! https://github.com/uBlockOrigin/uAssets/issues/3814
 cathouseonthekings.com##+js(acis, document.getElementById, .ab_detected)
 
-! https://github.com/uBlockOrigin/uAssets/issues/3816
-*/ads.js$script,redirect=noopjs,domain=delta-optimist.com|estevanmercury.ca|kamloopsthisweek.com|nsnews.com|princegeorgecitizen.com|thompsoncitizen.net|timescolonist.com|tricitynews.com|vancourier.com|weyburnreview.com|yorktonthisweek.com
-
-! https://github.com/NanoMeow/QuickReports/issues/246
 ! https://github.com/uBlockOrigin/uAssets/issues/4726
 majorgeeks.com##+js(aopr, googletag)
 majorgeeks.com##+js(acis, document.getElementById, undefined)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3830
-msofficeskills.com,templatebackground.com,tinyppt.com##+js(aopw, document.ondragstart)
-msofficeskills.com,templatebackground.com,tinyppt.com##+js(aopw, disableEnterKey)
-msofficeskills.com,templatebackground.com,tinyppt.com##body:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important;-moz-user-select: text !important;-ms-user-select: text !important;user-select: text !important;)
+tinyppt.com##+js(aopw, document.ondragstart)
+tinyppt.com##+js(aopw, disableEnterKey)
+tinyppt.com##+js(acis, document.oncontextmenu)
+tinyppt.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important;-moz-user-select: text !important;-ms-user-select: text !important;user-select: text !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3842
-wotlabs.net##.adSpace:style(min-height: 1px !important;)
+wotlabs.net##:xpath(//*[contains(text(),"AdB")])
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3843
 @@||coloribus.com^$ghide
@@ -746,12 +743,6 @@ kollyinsider.com##+js(aopw, adMessage)
 ! https://github.com/NanoMeow/QuickReports/issues/247
 winaero.com##+js(acis, jQuery, tweaker)
 
-! https://github.com/uBlockOrigin/uAssets/issues/3848
-@@||traniviva.it/Scripts/ads.js$script,1p
-@@||altamuralife.it/Scripts/ads.js$script,1p
-@@||gravinalife.it/Scripts/ads.js$script,1p
-@@||materalife.it/Scripts/ads.js$script,1p
-
 ! https://github.com/uBlockOrigin/uAssets/issues/3857
 guitaruser.ru##+js(nostif, adblock, 7000)
 
@@ -759,7 +750,6 @@ guitaruser.ru##+js(nostif, adblock, 7000)
 harvardmagazine.com##+js(aopr, googletag)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3862
-@@||ewrc-results.com/js/ads.js$script,1p
 ewrc-results.com##+js(aopw, adBlockEnabled)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3864
@@ -886,9 +876,6 @@ tastycookery.com##+js(aeld, DOMContentLoaded, .js-popup-adblock)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3940
 airlinercafe.com##+js(acis, jQuery, ads)
-
-! https://github.com/uBlockOrigin/uAssets/issues/3937
-@@||feedlotmagazine.com/ads.js$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3941
 @@||ricochet.media^$ghide
@@ -1265,7 +1252,7 @@ djelfa.info##+js(ra, onselectstart)
 palemoon.org##+js(set, abd, false)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4386
-portableapps.com##+js(nostif, (), 3000)
+portableapps.com##+js(nostif, innerHTML)
 
 ! right click https://github.com/uBlockOrigin/uAssets/issues/4393
 animeunity.it##+js(ra, oncontextmenu)
@@ -2398,9 +2385,6 @@ recantodasletras.com.br##+js(aopr, RL.licenseman.init)
 @@||cdnjs.cloudflare.com/ajax/libs/blockadblock/*/blockadblock.min.js$script,domain=starblast.io
 @@||starblast.io^$ghide
 
-! https://github.com/NanoMeow/QuickReports/issues/1692
-@@||thesaurus.com/assets/ads.js$xhr,1p
-
 ! https://forums.lanik.us/viewtopic.php?f=62&t=43420
 vedbex.com##.in.fade
 vedbex.com##body:style(overflow: auto !important;)
@@ -3107,7 +3091,7 @@ web-capture.net###stw_ad
 @@||readonepiece.com/wp-content/$script,1p
 
 ! ymovies .to anti adb warning
-@@||ymovies.to/js/ads.js$xhr,1p
+ymovies.*##.alert-danger.alert
 
 ! https://github.com/NanoMeow/QuickReports/issues/2875 right click select
 bfoni.com##+js(acis, document.oncontextmenu)
@@ -3144,9 +3128,6 @@ myschool-eng.com##*:style(-webkit-user-select: text !important; -moz-user-select
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6908
 ofuxico.com.br##+js(aeld, copy)
-
-! novels.pl antiadblock nag
-@@||www.novels.pl/js/ads.js$script,1p
 
 ! https://github.com/NanoMeow/QuickReports/issues/2925
 doujindesu.ch##+js(aopr, document.onkeydown)
@@ -3558,9 +3539,6 @@ tvguide.com##+js(aopr, googletag)
 ! photoshop-online anti-adb
 photoshop-online.biz##+js(nostif, google_jobrunner)
 photoshop-online.biz##div.aslot
-
-! https://github.com/NanoMeow/QuickReports/issues/3419
-@@||auslogics.com/*/js/ads.js$script,1p
 
 ! https://github.com/NanoMeow/QuickReports/issues/3447
 loudersound.com##+js(aopr, _sp_._networkListenerData)
@@ -4423,8 +4401,8 @@ limametti.com##+js(acis, document.oncontextmenu)
 ! https://github.com/uBlockOrigin/uAssets/issues/7653
 order-order.com##+js(acis, document.createElement, admiral)
 
-! https://github.com/uBlockOrigin/uAssets/issues/7655
-instagram.com##p:has-text(cookies):upward(1)
-
 ! luccisan .com anti copy
 ||cdn.bootcss.com^$script,domain=luccisan.com
+
+! https://www.quora.com/Is-it-hard-to-start-and-run-a-video-game-company
+quora.com##div.flex_wrapper
