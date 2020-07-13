@@ -6037,13 +6037,12 @@ pornoreino.com##+js(aopr, ExoLoader)
 pornoreino.com##+js(aopr, open)
 pornoreino.com##.banner
 
-! https://forums.lanik.us/viewtopic.php?p=135735#p135735
-! https://forums.lanik.us/viewtopic.php?f=103&t=41081
 ! https://github.com/uBlockOrigin/uAssets/issues/4931
 atresplayer.com##+js(nostif, _creatBait)
 @@||adpass.atresmedia.com/*/adjs.js$xhr,domain=atresplayer.com
 @@||atresplayer.com^$ghide
 @@||assets.adobedtm.com^$xhr,domain=atresplayer.com
+||assets.adobedtm.com/extensions/*$script,redirect-rule=noopjs,domain=atresplayer.com
 atresplayer.com##[href^="https://www3.smartadserver.com/click"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2088
@@ -6222,9 +6221,9 @@ ctrl.blog##.boxa
 adz.bz###frameAd:style(height: 51 px !important; display: block !important; visibility: collapse !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2153
-*/wp-content/plugins/adunblocker/*$script,1p
-ad4msan.*##+js(aopr, anOptions)
 ! https://github.com/uBlockOrigin/uAssets/commit/de1a12fbfcc5bf8942173a395e3746cc45575166#commitcomment-28816238
+*/wp-content/plugins/adunblocker/*$script,1p
+ad4msan.*##+js(noeval-if, fab)
 @@||ad4msan.*^$ghide
 ||ad4msan.*^$image,1p,redirect-rule=2x2.png
 
@@ -8706,6 +8705,7 @@ icdrama.*###closeADV
 file-up.org##+js(acis, document.createElement, 'script')
 file-up.org,file-upload.*##+js(acis, document.getElementById, undefined)
 file-up.org,file-upload.*##+js(acis, Math, zfgloaded)
+file-upload.*##+js(acis, Object.defineProperty, XMLHttpRequest)
 file-up.org##+js(aopr, Date.prototype.toUTCString)
 file-up.org##+js(noeval)
 file-upload.*##+js(nostif, nextFunction, 2000)
@@ -10248,7 +10248,7 @@ al-arabiya-2-i3dadi.*##+js(aopw, hidekeep)
 sholah.net,2rdroid.com##+js(nostif, keep-ads, 2000)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3830
-tinyppt.com##+js(set, google_jobrunner, true)
+tinyppt.com##+js(nostif, mdp)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3831
 @@||ideaberita.com^$ghide
@@ -10298,6 +10298,7 @@ bisceglielive.it##.mkt-728x90
 ! https://forums.lanik.us/viewtopic.php?f=62&t=42044
 ymovies.*##+js(acis, Math, zfgloaded)
 ymovies.*##+js(acis, String.fromCharCode, Math)
+ymovies.*###banner_publi
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3853
 @@||townmoneysaver.com^$ghide
@@ -10801,6 +10802,7 @@ nandatrio.com##+js(aopw, adBlockDetected)
 ! https://www.reddit.com/r/uBlockOrigin/comments/9w0sst/ublock_origin_not_stopping_new_popup_windows/
 123movies.*##+js(acis, Math, zfgloaded)
 eplayvid.com##+js(aopr, AaDetector)
+eplayvid.com##+js(acis, Math, zfgloaded)
 
 ! https://github.com/NanoMeow/QuickReports/issues/308
 @@||lenouvelliste.com^$ghide
@@ -12082,6 +12084,9 @@ tamiltunes.*##.wpcnt
 ! https://github.com/uBlockOrigin/uAssets/issues/4393
 @@||animeunity.it^$ghide
 animeunity.it##+js(acis, atob, decodeURIComponent)
+animeunity.it##+js(acis, String.fromCharCode, 'shift')
+animeunity.it##+js(nowoif)
+||ushoofop.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4394
 @@||aliancadeherois.*^$ghide
@@ -18591,12 +18596,13 @@ lonely-mature.com##+js(aopr, EviPopunder)
 ! https://github.com/uBlockOrigin/uAssets/issues/6143
 tubepornclassic.com##+js(aeld, , window.open)
 tubepornclassic.com##+js(aopr, preadvercb)
-tubepornclassic.com##+js(aopr, RegExp.prototype.toString)
 tubepornclassic.com##+js(nosiif, complete, 50)
 tubepornclassic.com##+js(nosiif, document.readyState)
 ||tubepornclassic.com/poppy/*$script,1p
 *$popunder,3p,domain=tubepornclassic.com
+||moneypunchstep.online^$3p
 ||spareton.online^$3p
+||vasgenerete.site^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6144
 flashingjungle.com##+js(aeld, /^(click|mousedown|mousemove|touchstart|touchend|touchmove)/, system.popunder)

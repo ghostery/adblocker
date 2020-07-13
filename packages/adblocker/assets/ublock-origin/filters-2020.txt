@@ -2824,6 +2824,12 @@ soft4win.com##+js(nosiif, visibility, 1000)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/59014
 turkceyama.net##+js(aopr, anOptions)
 
+! https://github.com/AdguardTeam/AdguardFilters/issues/59024
+fantasy.lu##+js(set, adBlockDetected, noopFunc)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/59026
+haddoz.net##+js(set, adBlockDetected, noopFunc)
+
 ! https://github.com/NanoMeow/QuickReports/issues/4291
 @@||static.adsafeprotected.com/vans-adapter-google-ima.js$script,domain=motortrend.com
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=motortrend.com
@@ -2884,3 +2890,31 @@ espn-live.stream,pirlotv.*##+js(aopr, LieDetector)
 pirlotv.*##+js(aopr, absda)
 ||hvawrj8yeqru.com^
 ||hriaaim06kts.com^
+
+! lodynet .co, vidlo .us popups
+lodynet.co,vidlo.us##+js(aeld, , _0x)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/59176
+brofist.io##.menuOverlay
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/59200
+moviemaniac.org##+js(nowoif)
+moviemaniac.org##+js(set, clientSide.adbDetect, noopFunc)
+||dewincubiatoll.com^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/59201
+larvelfaucet.com##+js(nosiif, visibility, 1000)
+larvelfaucet.com##[class^="bmadblock"]
+larvelfaucet.com###bottomRightFloatingAd
+larvelfaucet.com##[href^="https://larvelfaucet.com/ads-"]
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/59206
+faucetcoins.org,dogecrypto.club,getdogecoins.com##+js(aopr, show_ads)
+faucetcoins.org,dogecrypto.club,getdogecoins.com##[class^="bmadblock"]
+
+! https://github.com/abp-filters/abp-filters-anti-cv/issues/415
+ahri-hentai.com##+js(acis, document.querySelectorAll, popMagic)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7661
+aparat.cam##+js(acis, Object.defineProperty, XMLHttpRequest)
+aparat.cam##+js(aopw, _pop)
