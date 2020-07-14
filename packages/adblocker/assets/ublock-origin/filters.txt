@@ -1042,6 +1042,7 @@ watchcartoononline.*,watchcartoonsonline.*,wcostream.*##+js(acis, document.creat
 @@||wcoanimesub.tv^$ghide
 @@||wco.tv^$ghide
 thewatchcartoononline.tv##.alert
+thewatchcartoononline.tv##+js(set, isAdBlockActive, false)
 
 there.to##+js(disable-newtab-links.js)
 there.to##+js(aopr, AaDetector)
@@ -1694,13 +1695,10 @@ imdb.com##body#styleguide-v2:style(background-color: #e3e2dd !important; backgro
 imdb.com###injected_navstrip_wrapper
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3138
-myreadingmanga.info##+js(aopr, ExoLoader.serve)
-myreadingmanga.info##+js(popads.net.js)
-myreadingmanga.info##+js(popads-dummy.js)
+myreadingmanga.info##+js(nosiif, visibility, 1000)
 *.gif$domain=myreadingmanga.info,image
-myreadingmanga.info##+js(aopr, console.clear)
-myreadingmanga.info##+js(aopr, decodeURI)
 @@||myreadingmanga.disqus.com^$script
+myreadingmanga.info##.imgtop
 ##[href*="www.gaming-adult.com/"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/620
