@@ -1536,17 +1536,17 @@ daily.bhaskar.com##+js(aopw, popupAdCall)
 ||googlesyndication.com^$important,domain=clubedohardware.com.br
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1286
-yourbittorrent.com##+js(aopr, Date.prototype.toUTCString)
-yourbittorrent.com##+js(aopw, _pop)
-yourbittorrent.com##+js(aopw, Fingerprint2)
-yourbittorrent.com##+js(nowebrtc)
-yourbittorrent.com##.grid_4:has(a[href*=".download/torrent/"])
-yourbittorrent.com##a[href*=".t0r.download/torrent/"]
-yourbittorrent.com##[href*="an0n.date"]
-yourbittorrent.com##.trtbl:has-text(VPN)
-yourbittorrent.com##[href*=".premium"]
-yourbittorrent.com##.extneed
-yourbittorrent.com##[href*="direct"]
+yourbittorrent.*##+js(aopr, Date.prototype.toUTCString)
+yourbittorrent.*##+js(aopw, _pop)
+yourbittorrent.*##+js(aopw, Fingerprint2)
+yourbittorrent.*##+js(nowebrtc)
+yourbittorrent.*##.grid_4:has(a[href*=".download/torrent/"])
+yourbittorrent.*##a[href*=".t0r.download/torrent/"]
+yourbittorrent.*##[href*="an0n.date"]
+yourbittorrent.*##.trtbl:has-text(VPN)
+yourbittorrent.*##[href*=".premium"]
+yourbittorrent.*##.extneed
+yourbittorrent.*##[href*="direct"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3895
 ||sun.torrentfunk.com^$frame
@@ -1588,17 +1588,19 @@ softonic.com###show_banner_leaderboard
 softonic.com###show_banner_medium_rectangle
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1286
-torlock.com##+js(aopr, Date.prototype.toUTCString)
-torlock.com##+js(aopw, _pop)
-torlock.com##+js(aopw, Fingerprint2)
-torlock.com##a[href*=".t0r.download/torrent"]
-||torlock.com/sww.js$script,1p
-torlock.com##[href*=".torlockdownload.host"]
-torlock.com##:xpath(//strong[contains(text(),"VPN")]/../../..)
-torlock2.com##+js(nowebrtc)
-torlock2.com##:xpath(//strong[contains(text(),"VPN")]/../../..)
-torlock2.com##[href*=".torlockdownload.host"]:upward(3)
-torlock.com,torlock2.com##.extneed
+torlock.*##+js(aopr, Date.prototype.toUTCString)
+torlock.*##+js(aopw, _pop)
+torlock.*##+js(aopw, Fingerprint2)
+torlock.*##a[href*=".t0r.download/torrent"]
+||torlock.*/sww.js$script,1p
+torlock.*##[href*=".torlockdownload.host"]
+torlock.*##:xpath(//strong[contains(text(),"VPN")]/../../..)
+torlock.*,torlock2.*##+js(nowebrtc)
+torlock2.*##:xpath(//strong[contains(text(),"VPN")]/../../..)
+torlock2.*##[href*=".torlockdownload.host"]:upward(3)
+torlock.*,torlock2.*##.extneed
+||35.232.188.118^
+||refnippod.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/582
 @@||inoreader.com^$ghide
@@ -1828,6 +1830,7 @@ torrentdownload.*##[href^="https://goo.gl/"]
 torrentdownload.*##TR:has-text(Stream:)
 torrentdownload.*##.table2:has-text(Sponsored)
 ||torrentdownload.*/*.gif$image
+||torrentdownload.*/sw.js$script,1p
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=41875
 streamlive.to##+js(acis, parseInt, charAt)
@@ -2597,14 +2600,6 @@ watchmygf.me##+js(set, flashvars.adv_pre_src, '')
 ||watchmyexgf.net/*.gif$image
 watchmyexgf.net##.adv
 watchmyexgf.net##[href^="http://wct.link/click"]
-
-! https://github.com/uBlockOrigin/uAssets/issues/902
-neumanga.tv##+js(acis, Math.sin, vocabulary)
-neumanga.tv##+js(aeld, load, nextFunction)
-@@||neumanga.tv^$ghide
-||neumanga.tv/*/ad$image,redirect=2x2.png
-.gif$image,domain=neumanga.tv
-||neumanga.tv/sw.js$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4234
 hclips.com##+js(aeld, , window.open)
@@ -4648,11 +4643,9 @@ rd.com##+js(acis, btoa, Adblock)
 bersamatekno.com##+js(nostif, _0x)
 @@||jwpsrv.com^$xhr
 
-! https://www.reddit.com/r/uBlockOrigin/comments/7y6q0j/k2nblog_popups_not_getting_blocked/
 ! https://github.com/uBlockOrigin/uAssets/issues/3973
-k2nblog.com##+js(acis, Math, zfgloaded)
+k2nblog.com##+js(aopw, _pop)
 k2nblog.com##+js(aopw, Fingerprint2)
-k2nblog.com##+js(acis, Object.defineProperty, vocabulary)
 k2nblog.com##+js(nano-stb)
 k2nblog.com##+js(nano-sib)
 @@||k2nblog.com^$ghide
@@ -5191,6 +5184,7 @@ hd-streams.org##+js(window.open-defuser)
 ! https://github.com/NanoMeow/QuickReports/issues/1594
 nxload.com##+js(aopw, _pop)
 nxload.com##+js(aopr, adb)
+nxload.com##+js(aeld, , pop)
 nxload.com##+js(window.open-defuser)
 ||nxload.com^$csp=connect-src 'self' *.nxload.com
 ||raterst.pro^$3p
@@ -9227,6 +9221,7 @@ rp-online.de,saarbruecker-zeitung.de,volksfreund.de##.park-portal
 intoupload.net##a[href*="/go.php?a_aid="]
 intoupload.net##+js(aopw, Fingerprint2)
 intoupload.net##+js(aopr, open)
+intoupload.net##+js(acis, Math, zfgloaded)
 ||intoupload.net/sw.js
 ||buba65.co.pl^$popup
 ||adjan-69-6.co.pl^$popup
@@ -12078,8 +12073,8 @@ tamiltunes.*##+js(nobab)
 tamiltunes.*##.wpcnt
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4393
-@@||animeunity.it^$ghide
-animeunity.it##+js(acis, atob, decodeURIComponent)
+animeunity.it##+js(nosiif, visibility, 1000)
+animeunity.it##+js(acis, Object.defineProperty, XMLHttpRequest)
 animeunity.it##+js(acis, String.fromCharCode, 'shift')
 animeunity.it##+js(nowoif)
 ||ushoofop.com^
@@ -15436,9 +15431,13 @@ modsbase.com##+js(nowebrtc)
 hdstreams.*##+js(aopr, Date.prototype.toUTCString)
 hdstreams.*##+js(aopr, AaDetector)
 hdstreams.*##+js(aopr, popjs)
+hdstreams.*##+js(acis, Math, zfgloaded)
+hdstreams.*##+js(aopr, AdservingModule)
+hdstreams.*##+js(nowoif)
 ||hdstreams.*/sw.js$script,1p
 ||exi8ef83z9.com^
 ||goverallyhandl.club^
+||pkmkkjwknvf.com^
 
 ! https://github.com/NanoMeow/QuickReports/issues/1064
 @@||65creedmoor.com^$ghide
@@ -15662,8 +15661,8 @@ pandafiles.com##+js(acis, Math, zfgloaded)
 @@||pandafiles.com^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5469
-uploadbuzz.*##+js(acis, Math, zfgloaded)
-uploadbuzz.*##+js(acis, Object.defineProperty, vocabulary)
+uploadbuzz.*##+js(acis, Object.defineProperty, XMLHttpRequest)
+uploadbuzz.*##+js(aopr, decodeURI)
 uploadbuzz.*##+js(nostif, '0x)
 ||uploadbuzz.*/sw.js$script,1p
 ||uploadbuzz.*^$csp=script-src 'self' 'unsafe-inline' *.google-analytics.com *.cloudflare.com *.gstatic.com *.google.com *.recaptcha.net *.solvemedia.com
@@ -15674,6 +15673,7 @@ uploadbuzz.*##[href*="7sdcksdc.space/r/"]
 uploadbuzz.*##span.btn-lg.btn-primary.btn
 uploadbuzz.cc#@#.adbutton
 uploadbuzz.cc##.btn-lg.btn-info.btn
+##[href="//xxxrevpushclcdu.com/app.webp"]
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/bi3nw6/ublock_detected_on_some_tv_channel_website/
 @@||proxy.ads.canalplus-bo.net^$xhr,domain=mycanal.fr
@@ -15855,6 +15855,7 @@ securenetsystems.net##+js(set, iExist, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/5509
 tonpornodujour.com##+js(aopr, popunders)
 tonpornodujour.com##+js(set, is_adblocked, false)
+tonpornodujour.com###disclaimerId
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5510
 cyfostreams.com##+js(nowebrtc)
@@ -15867,24 +15868,11 @@ cyfostreams.com###blockblockA
 magiclen.org##.adsbygoogle
 file.magiclen.org##+js(nano-stb, , ,0.02)
 
-! https://github.com/uBlockOrigin/uAssets/issues/5515
-cutls.co##+js(aopr, app_vars.force_disable_adblock)
-
-! https://github.com/uBlockOrigin/uAssets/issues/5513
-shtu.pro##+js(aeld, load, onload)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/5512
 ez4link.org##+js(aopr, app_vars.force_disable_adblock)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5525
 hqcelebcorner.net##+js(aopw, _pop)
-
-! https://www.reddit.com/r/uBlockOrigin/comments/bktgby/how_i_can_get_rid_of_blockadblock/
-nulledpremium.com##+js(nosiif, visibility, 1000)
-nulledpremium.com##+js(aopr, mdp_deblocker)
-@@||nulledpremium.com^$ghide
-*$image,redirect-rule=1x1.gif,domain=nulledpremium.com
-nulledpremium.com##[href^="https://www.webshare.io/"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5527
 streameast.live##+js(aopr, AaDetector)
@@ -16432,10 +16420,9 @@ variety.com##+js(aopr, pmc_admanager.show_interrupt_ads)
 ! https://github.com/NanoMeow/QuickReports/issues/1276
 @@||sme.sk^$ghide
 
-! https://forums.lanik.us/viewtopic.php?f=62&t=43060
-!janjua.tv##+js(nowebrtc)
 ! anti adb http://arembed .com/live.php?ch=Bein_Sports1
 @@||janjua.*^$ghide
+janjua.*##+js(acis, Math, zfgloaded)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5652
 cmovieshd.*##+js(acis, Math, zfgloaded)
@@ -18140,12 +18127,8 @@ ultraurls.com##+js(noeval)
 ||ultraurls.com^$frame
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6057
-letsupload.co##+js(acis, Math.sin, vocabulary)
-letsupload.co##+js(aopr, Date.prototype.toUTCString)
-*$xhr,domain=letsupload.co,3p
-||letsupload.co/sw.js$script,1p
+letsupload.*##+js(acis, Object.defineProperty, XMLHttpRequest)
 ||umbemonop.info^
-letsupload.co##object
 
 ! https://github.com/jspenguin2017/uBlockProtector/issues/1075
 razorlink.us##+js(aopr, atob)
@@ -19218,8 +19201,8 @@ wstream.*##+js(aopr, AaDetector)
 wstream.*##+js(nostif, eval)
 wstream.*##+js(nowoif, /^/, 1)
 wstream.*##+js(ra, onclick)
-wstream.*##+js(nostif, height)
-wstream.*##img:style(max-width:1%!important; max-height:%!important;)
+wstream.to##+js(aopw, _pop)
+wstream.*##img:style(max-width:5%!important; max-height:5%!important;)
 @@||wstream.*^$ghide
 @@||wstream.*^$script,1p
 nowagoal.stream##+js(nowebrtc)
@@ -24536,7 +24519,6 @@ shorterall.com##+js(set, blurred, false)
 ! dlapk4all .com popups
 dlapk4all.com##+js(aopr, glxopen)
 dlapk4all.com##+js(aeld, , _0x)
-||ughhimtoy.com^
 
 ! 4tymode. win anti adb
 4tymode.win##+js(aeld, load, nextFunction)
