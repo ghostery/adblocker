@@ -2370,7 +2370,7 @@ powerthesaurus.org##+js(aopw, ad_abblock_ad)
 ! https://github.com/jspenguin2017/uBlockProtector/issues/816
 ||adscpm.site^$3p
 ! Popups triggered by popads
-123tvseries.co,animepahe.com,cloudy.ec,mactorrents.org,mkvcage.*,nodefiles.com,pahe.in,owndrives.com,psarips.*,smallencode.com,weshare.me##+js(aopw, _pop)
+123tvseries.co,animepahe.com,cloudy.ec,mactorrents.org,mkvcage.*,nodefiles.com,pahe.*,owndrives.com,psarips.*,smallencode.com,weshare.me##+js(aopw, _pop)
 animepahe.com,kwik.*##^script:has-text('shift')
 animepahe.com,kwik.*##+js(acis, Math, zfgloaded)
 animepahe.com,kwik.*##+js(acis, String.fromCharCode, 'shift')
@@ -4367,12 +4367,13 @@ atrix.ovh###topswindow
 webnovel.com##+js(set, adblockSuspected, false)
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=webnovel.com
 
-! https://forums.lanik.us/viewtopic.php?f=62&t=39864
 ! https://github.com/uBlockOrigin/uAssets/issues/5113
-apkmirrorfull.com##+js(popads-dummy.js)
 apkmirrorfull.com##+js(aopr, AaDetector)
 apkmirrorfull.com##^script:has-text('shift')
 apkmirrorfull.com##+js(acis, String.fromCharCode, 'shift')
+apkmirrorfull.com##+js(aopr, AdservingModule)
+||skjdtkoqlvrhcn.com^
+||sjunnwxixycbv.com^
 
 ! nbc anti adb https://forums.lanik.us/viewtopic.php?p=131769#p131769
 @@||doubleclick.net^$image,domain=nbc.com
@@ -4426,23 +4427,16 @@ backin.net##+js(window.open-defuser)
 ! https://github.com/jspenguin2017/uBlockProtector/issues/840
 hideout.*##+js(acis, stop, adblock)
 
-! https://www.reddit.com/r/uBlockOrigin/comments/7v0h2t/any_help_blocking_these_messages/
-@@||bludv.com^$ghide
-
-! https://github.com/uBlockOrigin/uAssets/issues/1057#issuecomment-362942633
-cut-w.in##+js(aopw, adss)
-cut-w.in##+js(aopw, Fingerprint2)
-cut-w.in##+js(nostif, checkAdblockUser)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/1473
 girlsfuck-tube.com##+js(aopr, Aloader.serve)
 girlsfuck-tube.com##+js(noeval)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3604
-oploverz.in##+js(acis, Object.defineProperty, vocabulary)
-oploverz.in##+js(aopr, glxopen)
+oploverz.in##+js(acis, Object.defineProperty, XMLHttpRequest)
 oploverz.in##+js(nostif, nextFunction, 450)
 oploverz.in###ctr_banner
+*$script,3p,denyallow=facebook.com|fbcdn.net|facebook.net|cloudflare.com|googleapis.com,domain=oploverz.in
+||pouluwie.net^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1475
 @@||pastpapers.papacambridge.com^$ghide
@@ -7231,12 +7225,14 @@ anilinkz.to##+js(set, daganKwarta, true)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2554
 @@||safeloadfile.*^$ghide
-@@||asus-zenfone.com^$ghide
 @@||gem-flash.com^$ghide
 @@||safelink99.ga^$ghide
 @@||fw27.xyz^$ghide
 @@||isite.tw^$ghide
 @@||tulatur.ru^$ghide
+@@||asus-zenfone.com^$ghide
+asus-zenfone.com##+js(nowoif)
+asus-zenfone.com##.adsbygoogle
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2555
 fuckmonstercock.com##+js(noeval)
@@ -8753,11 +8749,13 @@ wowescape.com##+js(ra, target)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4476
 duellinksmeta.com##+js(noeval)
-duellinksmeta.com##+js(nostif, modal)
 *$script,redirect-rule=noopjs,domain=duellinksmeta.com
 @@||duellinksmeta.com^$1p
 @@||duellinksmeta.com^$ghide
 @@||vntsm.com/*/ad-manager$script,xhr,domain=duellinksmeta.com
+duellinksmeta.com##.show.fade.modal-backdrop
+duellinksmeta.com##.advertisement-box
+duellinksmeta.com###antiAdblockModal
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3202
 $popunder,domain=ah.pe
@@ -23219,8 +23217,8 @@ zebidead.com,babytorrents.org##[href^="https://clinixplayer.com/"]
 ! https://github.com/NanoMeow/QuickReports/issues/3085
 uptoshort.com##+js(acis, Math, zfgloaded)
 
-! https://github.com/NanoMeow/QuickReports/issues/3086
-pahe.me##+js(aopr, glxopen)
+! https://forums.lanik.us/viewtopic.php?f=62&t=44940 pahe .in / .ph
+pahe.*##+js(aeld, , _0x)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3088
 ! https://github.com/AdguardTeam/AdguardFilters/issues/50747
