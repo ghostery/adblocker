@@ -23,6 +23,7 @@ arcai.com##+js(set, canRunAds, true)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53288
 azm.to##+js(aopr, absda)
 ||6bgaput9ullc.com^$3p
+*$script,3p,denyallow=jquery.com|hwcdn.net|plyr.io|fastly.net|jwpcdn.com,domain=azm.to
 
 ! https://github.com/NanoMeow/QuickReports/issues/3528
 mysflink.blogspot.com##+js(set, safelink.adblock, false)
@@ -544,10 +545,11 @@ ultrapeliculashd.com,uplinks.info##.aligncenter.img-responsive
 
 ! win2url.com anti adb popup
 el7ref.com##+js(nowoif)
-el7ref.com##+js(set, blurred, false)
+el7ref.com,win2url.com##+js(set, blurred, false)
 vico3.online##+js(aopr, app_vars.force_disable_adblock)
 vico3.online##+js(aopr, parcelRequire)
-vico3.online##+js(window.open-defuser)
+vico3.online##+js(nowoif)
+win2url.com##+js(acis, Math, zfgloaded)
 ||thetarhaw.com^$3p
 
 ! bolicheintercambios.net popup
@@ -1924,7 +1926,9 @@ wwwfotografgotlin.blogspot.com##+js(set, fuckAdBlock._options.baitClass, null)
 ||cpmlink.net^$3p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/56927
+! https://github.com/NanoMeow/QuickReports/issues/4351#issuecomment-662797895
 ocanoke.com##+js(aopr, app_vars.force_disable_adblock)
+ocanoke.com##[href="https://anadhif.com/"]
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/56931
 acn.vin##+js(aopr, app_vars.force_disable_adblock)
@@ -3201,3 +3205,58 @@ priberam.org##+js(nostif, f.parentNode.removeChild(f), 100)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/59901
 shortearn.in##+js(aopr, app_vars.force_disable_adblock)
 shortearn.in##+js(aopr, open)
+
+! fix anti adb
+domoplus.pl,kuchniaplus.pl,miniminiplus.pl,teletoonplus.pl##+js(json-prune, ads.servers.[].apiAddress)
+
+! https://github.com/NanoMeow/QuickReports/issues/4375
+loadsamusicsarchives.blogspot.com##+js(aopr, AaDetector)
+||weatherforecastmap.com^$3p
+
+! https://github.com/NanoMeow/QuickReports/issues/4371
+xxxfiles.com##+js(aopr, AaDetector)
+||representativeskipcloudy.com^$3p
+||tidint.pro^$3p
+
+! https://github.com/NanoMeow/QuickReports/issues/4373
+turkcehentai.club##+js(aopw, downloadJSAtOnload)
+
+! https://github.com/NanoAdblocker/NanoFilters/issues/534
+courses4u.info##+js(aopw, ai_front)
+
+! https://github.com/NanoAdblocker/NanoFilters/issues/535
+p4fcourses.com##+js(aopr, anOptions)
+
+! https://github.com/NanoAdblocker/NanoFilters/issues/536
+toppng.com##+js(nostif, nextFunction, 250)
+
+! https://github.com/NanoMeow/QuickReports/issues/4351#issuecomment-662803101
+helow.id##+js(aeld, load, onload)
+dl.helow.id##a[href="https://www.ocanoke.com/"]
+dl.helow.id##a[href="#"]
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/59924
+panjiachen.gitee.io##+js(nofab)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/59929
+@@||seadragons.io/ads.js$script,1p
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/59932
+@@||ninja.io/js/dist/ads.js$script,1p
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/59938
+@@||battlestick2.net/ads.js$script,1p
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/59941
+battleboats.io##+js(nofab)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/59956
+asupload.com##+js(aopr, app_vars.force_disable_adblock)
+asupload.com##+js(aopr, open)
+asupload.com##.banner
+
+! https://forums.lanik.us/viewtopic.php?f=62&t=44953
+vidtobo.com##+js(aopw, _pop)
+vidtobo.com##+js(aopr, LieDetector)
+||supperopeningturnstile.com^
+||gcxjczooe.com^

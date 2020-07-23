@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202007221934
+! Version: 202007231956
 ! Title: EasyPrivacy
-! Last modified: 22 Jul 2020 19:34 UTC
+! Last modified: 23 Jul 2020 19:56 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -1341,6 +1341,7 @@
 /collect/sdk?
 /collect/stats?
 /collect/tracking.
+/collect/view?
 /collect?*&cid=
 /collect?*&tid=
 /collect?callback=
@@ -2700,6 +2701,7 @@
 /LogImpression.
 /LogImpression?
 /logImpressions?
+/logjs.php
 /logLoad/?
 /LogMediaClick?
 /logo.gif?a=
@@ -5097,6 +5099,7 @@
 ?_siteid=
 ?act=counter&
 ?action=event&
+?action=log_promo_impression
 ?action=track_visitor&
 ?action=tracking_script
 ?ad_played=
@@ -5124,6 +5127,7 @@
 ?log=stats-
 ?log_visibility=
 ?mf_referrer=
+?pageviews=$third-party
 ?pvid=*&pn=
 ?rand=*&blk=
 ?rand=*&ref_
@@ -5736,6 +5740,7 @@ _mongo_stats/
 ||apsislead.com^$third-party
 ||apxy.io^$third-party
 ||aqtracker.com^$third-party
+||aralego.net^$third-party
 ||arcadeweb.com^$third-party
 ||arena-quantum.co.uk^$third-party
 ||arianelab.com^$third-party
@@ -7279,6 +7284,7 @@ _mongo_stats/
 ||pureairhits.com^$third-party
 ||purevideo.com^$third-party
 ||putags.com^$third-party
+||px-cdn.net^$third-party
 ||px-cloud.net^$third-party
 ||pxaction.com^$third-party
 ||pxchk.net^$third-party
@@ -7431,6 +7437,7 @@ _mongo_stats/
 ||rtrk.com^$third-party
 ||ru4.com^$third-party
 ||rumanalytics.com^$third-party
+||rumble.com^$ping,third-party
 ||rumpelstiltskinhead.com^$third-party
 ||runtnc.net^$third-party
 ||rztrkr.com^$third-party
@@ -11109,6 +11116,7 @@ _mongo_stats/
 ||newton.pm/events/track_bulk
 ||ngpvan.com/v1/Track/
 ||nice264.com/data?$third-party
+||nile.works/api/save-perf?
 ||nile.works/TargetingWebAPP/
 ||ninja.onap.io^
 ||nitropay.com/nads/$third-party
@@ -11895,6 +11903,7 @@ _mongo_stats/
 ||wpdigital.net/metrics/
 ||ws.amazon.com/widgets/*=gettrackingid|
 ||ws.audioeye.com^
+||ws.sharethis.com^$script
 ||wsf.com/tracking/$third-party
 ||wsj.net/MW5/content/analytics/hooks.js
 ||wss.maven.io^$websocket
@@ -12288,6 +12297,7 @@ _mongo_stats/
 ||bokecc.com/flash/playlog?
 ||bokecc.com/flash/timerecorder?
 ||bzclk.baidu.com^
+||c.holmesmind.com^
 ||cbsi.com.cn/js/dw.js
 ||cdn.hiido.cn^$third-party
 ||cdnmaster.com/sitemaster/sm360.js
@@ -12866,8 +12876,6 @@ _mongo_stats/
 ||akamaihd.net/pixelkabam/
 ||akamaihd.net^$script,domain=allmodern.com|birchlane.com|perigold.com|wayfair.co.uk|wayfair.com
 ||akamaihd.net^*.gif$image,domain=globalnews.ca|inquirer.net
-||alarabiya.net/track_content_
-||alarabiya.net^*/googleid.js
 ||alb.reddit.com^
 ||alibaba.com/js/beacon_
 ||alicdn.com/js/aplus_*.js
@@ -14970,6 +14978,7 @@ _mongo_stats/
 ||tracker.shopclues.com^
 ||tracker.uprinting.com^
 ||tracker.wordstream.com^
+||tracking.alarabiya.net^
 ||tracking.ancestry.com^
 ||tracking.batanga.com^
 ||tracking.battleon.com^
@@ -15125,9 +15134,7 @@ _mongo_stats/
 ||vidxden.com^*/tracker.js
 ||vietnamnet.vn^*/tracking.js
 ||villarenters.com/inttrack.aspx
-||vimeo.com/log/
-||vimeo.com^*?type=$ping
-||vimeocdn.com/js_opt/ablincoln_combined.min.js
+||vimeo.com/ablincoln/
 ||viralnova.com/track.php
 ||viralogy.com/javascript/viralogy_tracker.js
 ||virginholidays.co.uk/_assets/js/dc_storm/track.js
@@ -15429,6 +15436,7 @@ $third-party,websocket,domain=ameriprise.com|beachbody.com|chick-fil-a.com|citi.
 ||sweetwater.com/p2TBVNJZ/
 ||therealreal.com/ev56mY37/
 ||twentytwowords.com/3CVQBi14/
+||upwork.com/Ss13U803/
 ||wine-searcher.com/K6S8okp3/
 ||zazzle.ca/a0o07ort/
 ||zazzle.co.uk/a0o07ort/
@@ -17681,6 +17689,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||amplitude.com/libs/$script,domain=elconfidencial.com
 @@||ampproject.org/v0/amp-analytics-$script,domain=cnnespanol.cnn.com
 @@||ara.cat/static/BB3Core/images/pixel.gif?hash=$image,domain=ara.cat
+@@||bancosantander.es/pagos-inmediatos/common/js/modules/tealium.js$~third-party
 @@||c5n.com^*/angulartics-google-analytics.min.js
 @@||cloudfront.net/libs/amplitude-$script,domain=elconfidencial.com
 @@||elconfidencial.com^*/EventTracker.js
