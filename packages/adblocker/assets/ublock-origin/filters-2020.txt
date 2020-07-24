@@ -2586,6 +2586,7 @@ youav.com##+js(acis, String.fromCharCode, 'shift')
 ! https://github.com/NanoMeow/QuickReports/issues/4216
 uploadraja.com##+js(aopw, _pop)
 uploadraja.com##+js(nowebrtc)
+uploadraja.com##+js(nowoif)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/58301
 linkurl.me##+js(aopr, app_vars.force_disable_adblock)
@@ -3004,9 +3005,6 @@ wcoforever.com##.anti-ad
 ! https://github.com/NanoAdblocker/NanoFilters/issues/531
 live.bdtv.xyz##+js(acis, Math, zfgloaded)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/59401
-@@||snowheroes.io/ads.js$script,1p
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/59404
 creatur.io##+js(set, canRunAds, true)
 
@@ -3071,9 +3069,6 @@ ctrlv.cz##+js(set, adsAllowed2, true)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/59568
 taraa.xyz##+js(adfly-defuser)
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/59570
-@@||chompers.io/ads.js$script,1p
 
 ! https://github.com/NanoMeow/QuickReports/issues/4345
 ||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=coursevania.com,redirect-rule=noopjs
@@ -3238,9 +3233,6 @@ dl.helow.id##a[href="#"]
 ! https://github.com/AdguardTeam/AdguardFilters/issues/59924
 panjiachen.gitee.io##+js(nofab)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/59929
-@@||seadragons.io/ads.js$script,1p
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/59932
 @@||ninja.io/js/dist/ads.js$script,1p
 
@@ -3260,3 +3252,40 @@ vidtobo.com##+js(aopw, _pop)
 vidtobo.com##+js(aopr, LieDetector)
 ||supperopeningturnstile.com^
 ||gcxjczooe.com^
+
+! https://github.com/abp-filters/abp-filters-anti-cv/issues/423
+vudeo.net##+js(acis, Object.defineProperty, XMLHttpRequest)
+
+! Foil blocker-sniffer code on Condé Nast sites.
+architecturaldigest.com,arstechnica.com,bonappetit.com,brides.com,cntraveler.com,epicurious.com,golfdigest.com,newyorker.com,pitchfork.com,self.com,teenvogue.com,vanityfair.com,vogue.com,wmagazine.com##+js(nofab)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/hwrk5l/getting_popup_when_click_on_vid_kavglecom/
+kavgle.com##[href^="https://go.vrbangers.com/"], [href^="https://asiafriendfinder.com/"]
+evoload.io##+js(aopr, AaDetector)
+||tu42het22n.com^$3p
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/60012
+@@||chelseafc.com^$ghide
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/60017
+rumahit.id##+js(acis, eval, ignielAdBlock)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/60020
+btcfaucet.best##+js(nosiif, visibility, 1000)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/60027
+@@||hexagame.io^$ghide
+
+! https://github.com/NanoMeow/QuickReports/issues/4379
+bukadrive.com##+js(noeval-if, AdB)
+
+! https://github.com/NanoAdblocker/NanoFilters/issues/538
+yourdictionary.com##+js(nostif, offsetHeight)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/60077
+1bit.space,1bitspace.com##+js(acis, setTimeout, Constant)
+1bit.space##.modal__overlay
+1bit.space##.active.bnsLayers.is-block-touch.is-grid
+1bit.space##.bounceIn.animated.bnsLayers.is-block-touch.is-grid
+1bitspace.com##.box-element-container.shadow-element.rounded-message.box > .is-flex-centered.is-grid > div:nth-of-type(2)
+1bitspace.com##.box-element-container.shadow-element.rounded-message.box > .is-flex-centered.is-grid > div:nth-of-type(1)
