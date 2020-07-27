@@ -4324,6 +4324,8 @@ apkmirrorfull.com##+js(aopr, AdservingModule)
 @@||doubleclick.net^$image,domain=nbc.com
 @@||googlesyndication.com^$image,domain=nbc.com
 nbc.com##+js(set, canRunAds, true)
+! https://www.reddit.com/r/uBlockOrigin/comments/hxzp5h/ublock_fails_to_block_ads_after_clicking_video/
+player.theplatform.com##+js(disable-newtab-links)
 
 ##iframe[src^="https://smitionsory.co/"]
 ||smitionsory.co^
@@ -18342,11 +18344,13 @@ young-pussy.com###playerOverlay
 ! https://github.com/NanoMeow/QuickReports/issues/3629
 ! https://github.com/NanoMeow/QuickReports/issues/4367
 @@||extremereportbot.com^$ghide
-@@||extremereportbot.com^$script,1p
 *$script,redirect-rule=noopjs,domain=extremereportbot.com
-@@||googleads.g.doubleclick.net/pagead/ads?client=*extremereportbot.com$frame,domain=extremereportbot.com
-@@||pagead2.googlesyndication.com/pagead/js/*/show_ads_impl.js$script,domain=extremereportbot.com
-extremereportbot.com##[id^="aswift"]
+||googleapis.com/discovery/$xhr,domain=extremereportbot.com
+extremereportbot.com##.adsbygoogle
+! @@||google-analytics.com/analytics.js$script,domain=extremereportbot.com
+! @@||googleads.g.doubleclick.net/pagead/ads?client=*extremereportbot.com$frame,domain=extremereportbot.com
+! @@||pagead2.googlesyndication.com/pagead/js/*/show_ads_impl.js$script,domain=extremereportbot.com
+! extremereportbot.com##[id^="aswift"]
 
 ! https://github.com/NanoMeow/QuickReports/issues/1690
 refoblog.xyz##+js(aopr, anOptions)
@@ -18715,9 +18719,6 @@ blackgamer.ru##+js(aopw, adBlockDetected)
 ! https://github.com/uBlockOrigin/uAssets/issues/6229
 @@||dramaencode.com^$ghide
 
-! https://github.com/NanoMeow/QuickReports/issues/1456
-papamuda.net##+js(set, showAds, true)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/6231
 ! https://github.com/NanoMeow/QuickReports/issues/3127
 watchmovie.*##+js(acis, Math, zfgloaded)
@@ -18725,11 +18726,6 @@ watchmovie.*##+js(acis, Math, zfgloaded)
 
 ! jokerlivestream .net popups
 jokerlivestream.net##+js(nowebrtc)
-
-! https://github.com/uBlockOrigin/uAssets/issues/6232
-sctricks.com##+js(aopr, app_vars.force_disable_adblock)
-@@||sctricks.com^$ghide
-sctricks.com##.adsbygoogle
 
 ! live.harleyquinnwidget .com popups
 harleyquinnwidget.com##+js(acis, Math, zfgloaded)
@@ -18959,11 +18955,6 @@ multifaucet.org##+js(aopr, adBlockDetected)
 @@||multifaucet.org^$ghide
 multifaucet.org##.flexbannergroup
 
-! https://github.com/NanoMeow/QuickReports/issues/1873
-animenonton.tv##+js(nostif, nextFunction)
-@@||animenonton.tv^$ghide
-*.gif$domain=animenonton.tv,image
-
 ! popups , ads torrentproject .io / cc
 ||torrentproject.*^$script,frame,1p
 
@@ -18993,6 +18984,7 @@ uiporn.com##+js(aopr, document.dispatchEvent)
 ! https://github.com/uBlockOrigin/uAssets/issues/6302
 xcafe.com##+js(aopr, document.dispatchEvent)
 xcafe.com##+js(popads-dummy.js)
+xcafe.com##+js(aeld, , bi())
 xcafe.com##.adtitle
 
 ! https://github.com/NanoMeow/QuickReports/issues/1836
@@ -22077,7 +22069,6 @@ johnsonweld.com##+js(nostif, ads)
 
 ! new-gomovies. online popups
 new-gomovies.*##+js(aopr, Date.prototype.toUTCString)
-||ezexfzek.com^
 
 ! https://github.com/NanoMeow/QuickReports/issues/2773
 hasde.club##+js(aopr, app_vars.force_disable_adblock)
