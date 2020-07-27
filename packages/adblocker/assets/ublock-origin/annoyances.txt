@@ -1887,6 +1887,8 @@ tomshw.it##+js(nostif, bioEp.showPopup)
 ###bio_ep
 ###bio_ep_bg
 kei.pl##body:style(overflow: auto !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/7699
+ionos.de##body:style(overflow: auto !important)
 
 ! https://github.com/NanoMeow/QuickReports/issues/852
 yoututosjeff.es##^script:has-text(oncontextmenu)
@@ -2129,6 +2131,7 @@ ovagames.com##.unselectable:style(-webkit-touch-callout: default !important; -we
 ! bigulnews .tv right click, select, ctrl-U
 bigulnews.tv##+js(aopw, document.oncontextmenu)
 bigulnews.tv##+js(acis, disableSelection, reEnable)
+bigulnews.tv##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5613
 @@||metabattle.com^$ghide
@@ -4107,7 +4110,7 @@ thegearhunt.com##+js(aeld, /^(?:contextmenu|copy|keydown|mousedown)$/)
 thegearhunt.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/56457
-jootc.com ##+js(aopr, disable_copy)
+jootc.com##+js(aopr, disable_copy)
 jootc.com##+js(aopw, document.oncontextmenu)
 jootc.com##body, div, p, span, a, h1, h2, h3, h4, h5, h6:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 
@@ -4226,6 +4229,7 @@ holakikou.com##+js(aopr, document.oncontextmenu)
 ! programasvirtualespc.net/jobsandhan.com/getwsodo.com WPCP Annoyance
 programasvirtualespc.net##+js(aopr, disable_copy)
 programasvirtualespc.net##+js(aopw, document.oncontextmenu)
+programasvirtualespc.net##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 jobsandhan.com##+js(aopr, disable_copy)
 jobsandhan.com##+js(aopw, document.oncontextmenu)
 jobsandhan.com##.unselectable:style(-webkit-touch-callout:default !important; -webkit-user-select:text !important; -moz-user-select:text !important; -ms-user-select:text !important; user-select:text !important)
@@ -4498,3 +4502,30 @@ download.mokeedev.com##div.center-align
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/60106
 compartiendofull.net##+js(nosiif, visibility, 1000)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/60169
+texte.work##+js(ra, onkeydown|oncontextmenu, body)
+texte.work##+js(aopw, document.oncontextmenu)
+texte.work##+js(aopr, disableselect)
+
+! newsromania .net anti right click, select, ctrl-u
+newsromania.net##+js(acis, document.oncontextmenu)
+newsromania.net##+js(acis, disableSelection, reEnable)
+
+! iqformat .me anti right click, select, ctrl-u
+iqformat.me##+js(aopw, document.oncontextmenu)
+iqformat.me##+js(acis, disableSelection, reEnable)
+iqformat.me##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! allforme .co anti right click, select, ctrl-u
+allforme.co##+js(aopw, document.oncontextmenu)
+allforme.co##+js(acis, disableSelection, reEnable)
+allforme.co##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! cracksone .com anti right click, select, ctrl-u
+cracksone.com##+js(aopw, document.oncontextmenu)
+cracksone.com##+js(acis, disableSelection, reEnable)
+cracksone.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! indiatimes .com selection invisible
+indiatimes.com##*::selection:style(background-color:#338FFF!important)
