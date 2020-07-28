@@ -23,7 +23,7 @@ arcai.com##+js(set, canRunAds, true)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53288
 azm.to##+js(aopr, absda)
 ||6bgaput9ullc.com^$3p
-*$script,3p,denyallow=jquery.com|hwcdn.net|plyr.io|fastly.net|jwpcdn.com,domain=azm.to
+*$script,3p,denyallow=jquery.com|hwcdn.net|plyr.io|fastly.net|jwpcdn.com|googleapis.com,domain=azm.to
 
 ! https://github.com/NanoMeow/QuickReports/issues/3528
 mysflink.blogspot.com##+js(set, safelink.adblock, false)
@@ -3388,3 +3388,12 @@ t-rocforum.de##+js(acis, $, prompt)
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=44972
 @@||starvid.xyz^$ghide
+
+! 141tube.com popup
+141tube.com##+js(acis, document.querySelectorAll, popMagic)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/60310
+*$script,redirect-rule=noopjs,domain=puressh.net
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/60323
+lecturas.com##+js(nostif, f.parentNode.removeChild(f), 100)
