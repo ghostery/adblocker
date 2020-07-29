@@ -1530,11 +1530,6 @@ athletic.net##+js(acis, $, blur)
 protect-link.biz##+js(aopw, document.oncontextmenu)
 protect-link.biz##+js(aopw, document.onselectstart)
 
-! https://github.com/uBlockOrigin/uAssets/issues/4899
-fmoviez.org##+js(acis, document.oncontextmenu)
-fmoviez.org##+js(aopw, disableSelection)
-fmoviez.org##+js(aopw, document.onkeydown)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/4916
 cyberciti.biz##+js(set, canRunAds, true)
 
@@ -1985,7 +1980,7 @@ l2gamers.cl##+js(aopw, document.onkeydown)
 
 ! right click select https://github.com/NanoMeow/QuickReports/issues/1047
 husseinezzat.com##+js(aeld, contextmenu)
-husseinezzat.com##body:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important;-moz-user-select: text !important;-ms-user-select: text !important;user-select: text !important;)
+husseinezzat.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important;-moz-user-select: text !important;-ms-user-select: text !important;user-select: text !important;)
 husseinezzat.com##+js(aeld, keydown)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1051
@@ -2019,11 +2014,6 @@ wirkochen.at##.wrapper.blured:style(filter: none !important;)
 gesund24.at##.cookiesOverlay2
 gesund24.at##.wrapper.blured:style(filter: none !important;)
 
-! https://github.com/uBlockOrigin/uAssets/issues/5305#issuecomment-486487036
-panditfiles.cc##+js(aopw, disableEnterKey)
-panditfiles.cc##+js(aopw, document.ondragstart)
-panditfiles.cc##.unselectable:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
-
 ! https://github.com/NanoMeow/QuickReports/issues/1073
 polygon.com##+js(nostif, adsBlocked)
 
@@ -2056,9 +2046,6 @@ tv2.no###aabl-container
 ! https://github.com/NanoMeow/QuickReports/issues/1126
 @@||sostariffe.it^$ghide
 
-! https://github.com/uBlockOrigin/uAssets/issues/5505
-cablegratis.tv##+js(ra, oncontextmenu)
-
 ! https://github.com/NanoMeow/QuickReports/issues/1136
 aboutchromebooks.com##+js(aopr, googletag)
 
@@ -2078,10 +2065,10 @@ infomoney.com.br##+js(aopr, addLink)
 playonlinux.com##+js(acis, $, load)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5536
-tabonitobrasil.video##+js(aopr, disableSelection)
-tabonitobrasil.video##+js(aopw, document.oncontextmenu)
-tabonitobrasil.video##+js(aeld, keydown, preventDefault)
-tabonitobrasil.video##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+tabonitobrasil.*##+js(aopr, disableSelection)
+tabonitobrasil.*##+js(aopw, document.oncontextmenu)
+tabonitobrasil.*##+js(aeld, keydown, preventDefault)
+tabonitobrasil.*##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 
 ! blocking annoying foxpush notification
 ||foxpush.net^$3p
@@ -2316,22 +2303,8 @@ softwaretestinghelp.com##body:style(overflow: auto !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/6021
 watson.de##+js(set, bAdBlocker, false)
 
-! https://github.com/uBlockOrigin/uAssets/issues/6032
-foodyindians.in##+js(acis, $, modal)
-foodyindians.in##+js(set, blurred, false)
-
-! https://github.com/uBlockOrigin/uAssets/issues/6033
-! https://github.com/uBlockOrigin/uAssets/issues/6034
-! https://github.com/uBlockOrigin/uAssets/issues/6036
-! https://github.com/uBlockOrigin/uAssets/issues/6038
-! https://github.com/uBlockOrigin/uAssets/issues/6039
-adsafelink.net,b.shrtp.com,bollyleague.com,linkqu.site,uusedy.com##+js(set, blurred, false)
-
-! https://github.com/uBlockOrigin/uAssets/issues/6037
-safe.mirrordown.com##+js(set, blurred, false)
-
-! https://github.com/uBlockOrigin/uAssets/issues/6035
-dikmean.com##+js(set, blurred, false)
+! blurred trick
+adsafelink.net##+js(set, blurred, false)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6041
 gpcoder.com##+js(aopr, anOptions)
@@ -2385,9 +2358,6 @@ vedbex.com##body:style(overflow: auto !important;)
 ||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs,domain=files2zip.com
 files2zip.com##div.black.banner
 
-! https://github.com/uBlockOrigin/uAssets/issues/6180
-latestseoupdate.com##+js(set-constant, blurred, false)
-
 ! https://www.reddit.com/r/uBlockOrigin/comments/cvm6pn/how_to_get_rid_of_blurred_text_on_websites_such/
 enotes.com##.obscured:style(color: black !important;text-shadow: none !important; filter: none !important)
 enotes.com##.paywall-mount
@@ -2405,9 +2375,6 @@ wired.com##.ad
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6240
 news.chosun.com##+js(aeld, copy, getSelection)
-
-! https://forums.lanik.us/viewtopic.php?f=64&t=43462
-@@||myanimelist.net^$ghide
 
 ! https://github.com/MajkiIT/polish-ads-filter/issues/14597#issuecomment-528321503
 portalwrc.pl##+js(aeld, contextmenu)
@@ -4539,3 +4506,20 @@ pressherald.com##html:style(overflow:auto !important)
 
 ! freeserial-keys .blogspot .com anti select
 freeserial-keys.blogspot.com##+js(acis, document.onselectstart)
+
+! railf.jp and https://spectank.jp/sl0060045.html right click
+railf.jp,spectank.jp##+js(ra, oncontextmenu|oncopy)
+
+! cookie consent with scroll locked
+analog.com###cookie-consent-container
+analog.com##.modal-backdrop
+analog.com##body.modal-open:style(overflow:auto !important)
+
+! cookie consent with scroll locked
+germany.travel##.consent
+germany.travel##body.consent-overlay:style(overflow:auto !important)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/60183
+liga.net##.modal-backdrop
+liga.net###addBlockModal
+liga.net##body:style(overflow:auto !important)
