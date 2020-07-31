@@ -114,12 +114,7 @@ youtube.com##.ytd-carousel-ad-renderer
 ! https://github.com/easylist/easylist/issues/5112
 ! @@||youtube.com/get_video_info?*timedtext_editor$xhr,1p
 ! https://redd.it/ggcmkp https://redd.it/gx03e0
-!#if env_firefox
 youtube.com##+js(json-prune, [].playerResponse.adPlacements [].playerResponse.playerAds playerResponse.adPlacements playerResponse.playerAds adPlacements playerAds)
-!#endif
-!#if !env_firefox
-youtube.com##+js(json-prune, playerResponse.adPlacements playerResponse.playerAds adPlacements playerAds)
-!#endif
 @@||youtube.com/get_video_info
 ||youtube.com/get_video_info?*=adunit&$important
 
@@ -1757,8 +1752,9 @@ jav.guru##.alignnone
 ||bqiovml.com^
 
 ! https://github.com/uBlockOrigin/uAssets/pull/643
-s.to,serienstream.*##+js(acis, Math, zfgloaded)
+s.to,serienstream.*##+js(acis, parseInt, open)
 s.to,serienstream.*##+js(aeld, , _0x)
+*$popunder,domain=s.to|serienstream.*
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/6vid45/odd_unblockable_ads_on_watchcartoonsonlineeu/
 ||watchcartoonsonline.*^$csp=script-src 'unsafe-inline' 'unsafe-eval' data: *
@@ -3262,6 +3258,7 @@ viki.com##+js(set, VikiPlayer.prototype.pingAbFactor, noopFunc)
 hdzog.com##+js(nosiif, document.readyState))
 hdzog.com###under-pl-ad
 hdzog.com##+js(aeld, , pop)
+hdzog.com##[target="_blank"][href=""]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1115
 realgfporn.com##+js(aopr, ExoLoader)
@@ -14526,7 +14523,7 @@ architetturaecosostenibile.it##.adsbygoogle
 
 ! https://github.com/NanoMeow/QuickReports/issues/888
 worldcupfootball.me##+js(aeld, , _0x)
-worldcupfootball.me##+js(nowebrtc)
+embedstream.me,worldcupfootball.me##+js(nowebrtc)
 ||allsports4free.online^$3p
 
 ! https://github.com/NanoMeow/QuickReports/issues/889
@@ -21489,9 +21486,6 @@ asia-mag.com##+js(aopr, anOptions)
 ! https://github.com/uBlockOrigin/uAssets/issues/6750
 video.9tsu.com##+js(acis, $, 9tsuPopAd)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/46676
-what.cd##+js(acis, Math, zfgloaded)
-
 ! https://github.com/NanoMeow/QuickReports/issues/2582
 channelmyanmar.org##+js(aopr, adBD)
 channelmyanmar.org##+js(set, ai_dummy, true)
@@ -21512,7 +21506,7 @@ btcleets.xyz##[href^="https://faucetpay.io/"]
 @@||mixdrop.to^$script,1p
 
 ! plytv.me popups
-plytv.me##+js(acis, Math, zfgloaded)
+plytv.me##+js(acis, Math, XMLHttpRequest)
 plytv.me##+js(aopw, _pop)
 plytv.me##+js(nowebrtc)
 
@@ -21535,12 +21529,6 @@ player.grandmovie21.com###banner
 
 ! https://github.com/NanoMeow/QuickReports/issues/2595
 blog.infolanjutan.xyz##+js(nofab)
-
-! https://github.com/uBlockOrigin/uAssets/issues/6762
-fullytech24.com##+js(acis, Math, zfgloaded)
-fullytech24.com##+js(nowoif)
-fullytech24.com##.banner
-fullytech24.com##.box-main p
 
 ! https://github.com/NanoMeow/QuickReports/issues/3101
 gdriveplayer.*##+js(acis, Object.defineProperty, vocabulary)
@@ -21583,7 +21571,7 @@ uptobox.com,uptostream.com##+js(acis, Object.defineProperty, vocabulary)
 uptobox.com,uptostream.com##+js(set, jsUnda, noopFunc)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6767
-earnload.com##+js(acis, Math, zfgloaded)
+earnload.com##+js(acis, Math, XMLHttpRequest)
 earnload.com##+js(aopr, app_vars.force_disable_adblock)
 ||earnload.com/sw.js$script,1p
 
@@ -21651,7 +21639,7 @@ usnovels.*##+js(nostif, mdp)
 yoursavegames.com##.adsbygoogle
 
 ! popups http://hexupload .net/2w9alm9u0p14/Kare_Package_-_Single.zip.html?dl=PP3vM3wL
-hexupload.net##+js(acis, Math, zfgloaded)
+hexupload.net##+js(acis, Math, XMLHttpRequest)
 hexupload.net##+js(aopw, _pop)
 hexupload.net##+js(aopw, Fingerprint2)
 
@@ -21659,7 +21647,7 @@ hexupload.net##+js(aopw, Fingerprint2)
 animetak.*##+js(acis, Math, zfgloaded)
 
 ! popups http://www.ebooksz .net/category/business/
-ebooksz.net##+js(acis, Math, zfgloaded)
+ebooksz.neto##+js(acis, Math, XMLHttpRequest)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2639
 shortbitsfree.net##+js(aopr, app_vars.force_disable_adblock)
@@ -21911,7 +21899,7 @@ extreme-down.*,extreme-download.*##+js(aopr, AaDetector)
 extreme-down.*##+js(set, atob, trueFunc)
 extreme-down.*,extreme-download.*##+js(aopr, decodeURIComponent)
 extreme-down.*##+js(acis, $, friendlyduck)
-extreme-down.*##+js(acis, Math, zfgloaded)
+extreme-down.*##+js(acis, Math, XMLHttpRequest)
 ||ddf67683e4778d.com^
 ||ladsims.com^
 ||fadsabs.com^
