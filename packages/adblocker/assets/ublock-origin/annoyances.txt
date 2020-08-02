@@ -166,10 +166,6 @@ raiplay.it##.tagManagerError
 ! https://github.com/uBlockOrigin/uAssets/issues/1627
 mercurynews.com##.info-box-body
 
-! https://github.com/uBlockOrigin/uAssets/issues/1658
-w3schools.com##.trytopnav:style(top:0px !important;)
-w3schools.com###container:style(top:40px !important;)
-
 ! https://github.com/jspenguin2017/uBlockProtector/issues/873
 bittube.me##+js(aeld, visibilitychange)
 
@@ -4345,7 +4341,7 @@ hunterfansub.com##+js(ra, oncontextmenu, body)
 guides4gamers.com##+js(nostif, offsetHeight, 100)
 
 ! mdpUnGrabber /anti right click, select, ctrl+*
-bajecnavareska.sk,lunas.pro,onlinefreecourse.net,pisr.org,script-stack.com,uplod.net##+js(aeld, , mdp)
+bajecnavareska.sk,lunas.pro,onlinefreecourse.net,pisr.org,script-stack.com,uplod.net,downloadtutorials.net,thewpclub.net,thememazing.com,themeslide.com,themebanks.com##+js(aeld, , mdp)
 
 ! right click, select elizabeth-mitchell .org #3401
 elizabeth-mitchell.org##+js(acis, document.oncontextmenu)
@@ -4559,3 +4555,13 @@ doujindesu.info##*:style(-webkit-touch-callout: default !important; -webkit-user
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7718
 m.youtube.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7722
+||disableadblock.com^$3p
+
+! omgmusik .com omglyrics .com anti right click, anti copy anti anti
+||omgmusik.com^$csp=style-src *
+||omgmusik.com^$csp=script-src *
+||omglyrics.com^$csp=style-src *
+||omglyrics.com^$csp=script-src *
+/wp-content/plugins/secure-copy-content-protection/*$script
