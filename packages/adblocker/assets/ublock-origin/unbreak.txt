@@ -164,16 +164,9 @@
 ! Chrome store: "Some of the useful content on website such as pictures and maps on redfin get blocked"
 @@||ssl.cdn-redfin.com/*/redfin/common/analytics/PixelTracking.js$script,domain=redfin.com
 
-! https://github.com/gorhill/uBlock/issues/1016#issuecomment-165153899
-@@||liveperson.net^$1p
-
 ! https://github.com/gorhill/uBlock/issues/1297
 ||taboola.com^$badfilter
 ||api.taboola.com^
-
-! https://twitter.com/SeanHood/status/692387495993024512
-! To counter `207.net` in Peter Lowe's, Disconnect‎'s Malvertising filter list
-@@||ticketmaster.122.2o7.net^$image,domain=ticketweb.co.uk
 
 ! `amazon-adsystem.com` is blocked by Peter Lowe's. The neutered script should
 ! help lower chances of breakage. Examples:
@@ -530,7 +523,7 @@ orange.fr###o_carrepub:style(height: 1px; margin: 0; min-height: auto; visibilit
 
 ! issues /821 / 1703
 @@||ntn24america.com/*ads$script,1p
-@@||freegeoip.net/json/*$xhr,domain=ntn24america.com|familyallergy.com
+@@||freegeoip.net/json/*$xhr,domain=familyallergy.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/820
 @@||google-analytics.com/analytics.js$script,domain=flipagram.com
@@ -1469,22 +1462,6 @@ go.com#@#.has-ad
 @@||litix.io/core/$script,domain=velocity.com|motortrend.com
 @@||fusion.ddmcdn.com/app/*/comscore.streaming.$script,domain=velocity.com|motortrend.com
 
-! https://github.com/uBlockOrigin/uAssets/issues/1660#issuecomment-441504263
-@@||cuatro.com/dist/assets/comscore/streamsense$script,1p
-@@||cuatro.com/dist/assets/omniture/visitorapi.min.js$script,1p
-@@||radioset.es/dist/assets/omniture/visitorapi.min.js$script,1p
-@@||radioset.es/dist/assets/comscore/streamsense$script,1p
-@@||energytv.es/dist/assets/comscore/streamsense$script,1p
-@@||energytv.es/dist/assets/omniture/visitorapi.min.js$script,1p
-@@||yasss.es/dist/assets/comscore/streamsense$script,1p
-@@||yasss.es/dist/assets/omniture/visitorapi.min.js$script,1p
-@@||factoriadeficcion.com/dist/assets/comscore/streamsense$script,1p
-@@||factoriadeficcion.com/dist/assets/omniture/visitorapi.min.js$script,1p
-@@||bemad.es/dist/assets/comscore/streamsense$script,1p
-@@||bemad.es/dist/assets/omniture/visitorapi.min.js$script,1p
-@@||telecinco.es/dist/assets/comscore/streamsense$script,1p
-@@||telecinco.es/dist/assets/omniture/visitorapi.min.js$script,1p
-
 ! https://forums.lanik.us/viewtopic.php?f=64&t=42233
 @@||playstationlifestyle.net/wp-content/plugins/pb-bwp-minify/*chartbeat$script,1p
 
@@ -1493,9 +1470,6 @@ go.com#@#.has-ad
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4226
 @@||computerworld.com/*/jquery$script,1p
-
-! https://github.com/uBlockOrigin/uAssets/issues/4242
-@@||web-scripts.vice.com/*/AdobeAnalyticsSDK.min.js$script,domain=viceland.com
 
 ! m.avito.ru ublock issues 327
 @@||an.yandex.ru/system/context.js$script,domain=avito.ru
@@ -3271,15 +3245,6 @@ kawanfilm21.org#@#+js(abort-current-inline-script, adtival_base64_encode)
 ! https://github.com/uBlockOrigin/uAssets/issues/7120
 @@||onlinebr.xyz^$1p
 
-! https://github.com/uBlockOrigin/uAssets/issues/1459
-!@@||assets.bbystatic.com/analytics-dotcom/*$script,domain=bestbuy.com
-!@@||img.bbystatic.com/BestBuy_US/js/tracking/*$script,domain=bestbuy.com
-!@@||nexus.ensighten.com/*/Bootstrap.js$script,domain=bestbuy.com
-!@@||d1af033869koo7.cloudfront.net/*/247px.js$script,domain=bestbuy.com
-! https://github.com/uBlockOrigin/uAssets/issues/7116
-!@@||bestbuy.com/~assets/bby/_com/analytics-dotcom/*$script,1p
-!@@||247-inc.net^$subdocument,domain=bestbuy.com
-
 ! https://github.com/NanoMeow/QuickReports/issues/3362
 examiner.com.au,theadvocate.com.au,thecourier.com.au##.subscriber-hider:style(display:inherit!important)
 examiner.com.au,theadvocate.com.au,thecourier.com.au##.subscribe-truncate:before:style(background:none!important)
@@ -3920,3 +3885,9 @@ humanbenchmark.com##+js(set, pubg.unload, noopFunc)
 !#if env_firefox
 @@||message-fra.sp-prod.net^$script,xhr,domain=manager-magazin.de
 !#endif
+
+! https://github.com/uBlockOrigin/uAssets/issues/7728
+||doubleclick.net/tag/js/gpt.js$script,redirect-rule=googletagservices_gpt.js,domain=aristeguinoticias.com
+
+! https://www.reddit.com/r/uBlockOrigin/comments/i3nd76/cant_get_site_to_show_video/
+@@||news12.com^$frame,1p
