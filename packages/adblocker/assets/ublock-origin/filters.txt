@@ -5615,7 +5615,8 @@ megawarez.org##+js(aopw, smrtSB)
 megawarez.org##[class^="ads"]
 mwpaste.com##+js(nowoif, /^/, 15)
 ! https://github.com/uBlockOrigin/uAssets/issues/1932#issuecomment-465748184
-acortalo.*##+js(nowoif, !mwpaste, 5)
+acortalo.*##+js(nofab)
+acortalo.*##+js(nowoif, !mwpaste, 1)
 acortalo.*,megadescargas.net##+js(nano-sib, , ,0)
 acortalo.*,megadescargas.net##+js(set, clicked, true)
 acortalo.*,megadescargas.net##+js(set, eClicked, true)
@@ -5626,8 +5627,9 @@ acortalo.*,megadescargas.net##+js(set, sync, true)
 ||acortar.net^$3p,popup,badfilter
 ||acortalo.*^$3p
 ||acortalo.*^$popunder
+@@||acortalo.*^$css,1p
 @@||acortalo.*^$ghide
-@@||cdnjs.cloudflare.com/ajax/libs/fuckadblock/3.2.1/fuckadblock.js$script,domain=acortalo.org
+@@||cdnjs.cloudflare.com/ajax/libs/fuckadblock/3.2.1/fuckadblock.$script,domain=acortalo.*
 ||megadescargas.net^$popunder
 ||insurances.tips^$popunder
 ! https://github.com/uBlockOrigin/uAssets/issues/1932#issuecomment-457093955
@@ -8262,9 +8264,9 @@ globe24.cz##.adsbygoogle
 @@||globaltv.com^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3019
-repelisgoo.*,repelisgt.*##+js(aopr, zfgformats)
-repelisgoo.*,repelisgt.*###ads
-repelisgoo.*,repelisgt.*##div[class]:has(:scope > div[class] > iframe[src*="/srv-pv/tag-"])
+repelisgoo.*,repelisgooo.*,repelisgt.*##+js(aopr, zfgformats)
+repelisgoo.*,repelisgooo.*,repelisgt.*###ads
+repelisgoo.*,repelisgooo.*,repelisgt.*##div[class]:has(:scope > div[class] > iframe[src*="/srv-pv/tag-"])
 kiripiliarload.com##+js(nowoif)
 firedge.com##+js(nano-sib, , , 0)
 firedge.com##+js(nowoif, /^/, 10)
@@ -8279,7 +8281,7 @@ cine24.online###publicidad-video
 @@||cine24.online^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2963
-tornadomovies.*##+js(aopw, Fingerprint2)
+tornadomovies.*##+js(acis, Object.defineProperty, XMLHttpRequest)
 tornadomovies.*##+js(set, atob, noopFunc)
 ||tornadomovies.*/sw.js$script
 ||pptchecker.club^
@@ -13050,7 +13052,9 @@ ref-dir.com^$popunder
 ! https://github.com/uBlockOrigin/uAssets/issues/6112
 hackstore.net,latinomegahd.net,megajuegosfree.com,megapeliculasrip.net,peliculasgoogledrive.info,pelislatino3gp.biz,pelismegahd.pe,pocosmegashdd.org,tododvdfull.com##+js(acis, document.onreadystatechange, btoa)
 latinomegahd.net##+js(aopw, _pop)
-pocosmegashdd.org##+js(aeld, DOMContentLoaded, console)
+hackshort.me,latinolinks.site,pocoslinks.me##+js(set, done, true)
+@@*$ghide,domain=hackshort.me|latinolinks.site|pocoslinks.me
+*$popunder,domain=hackshort.me|latinolinks.site|pocoslinks.me
 ! https://github.com/uBlockOrigin/uAssets/issues/1373#issuecomment-566224434
 cinemaniahdd.net##+js(nostif, href)
 
@@ -15635,6 +15639,7 @@ torontosun.com##.ad__container
 ! https://github.com/uBlockOrigin/uAssets/issues/5498
 programasvirtualespc.net##+js(acis, document.addEventListener, pastepvp)
 pastepvp.org,programasvirtualespc.net##+js(aopw, smrtSB)
+programasvirtualespc.net##+js(nosiif, visibility, 1000)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5500
 @@||online-courses.club^$ghide
@@ -19069,6 +19074,14 @@ putlocker4u.*##+js(aopr, absda)
 ! https://github.com/NanoMeow/QuickReports/issues/1889
 kisstvshow.to##+js(acis, $, getScript)
 kisstvshow.to##.glx-teaser
+kisstvshow.to###hideAds
+kisstvshow.to##.ksAds
+kisstvshow.to###subcontent > div:nth-of-type(2)
+kisstvshow.to##.barContent > div:nth-of-type(2) > div:nth-of-type(2)
+||moontuftboy.com^
+||nunailsum.com^
+||teavateider.com^
+
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1600
 ! https://github.com/NanoMeow/QuickReports/issues/1890
@@ -19415,6 +19428,7 @@ shon.xyz##+js(popads-dummy)
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=43658
 daftsex.com##+js(aopr, AaDetector)
+daxab.com##+js(nowebrtc)
 ||daftsex.com/sw$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6387
@@ -19964,7 +19978,7 @@ opensubtitles.org##.ui-front.ui-widget-overlay
 linkvertise.com##+js(acis, addEventListener, DOMNodeRemoved)
 linkvertise.com##+js(acis, onload, adsbygoogle)
 linkvertise.com##+js(aeld, load, nextFunction)
-linkvertise.com##+js(json-prune, data.meta.require_addon data.meta.require_video data.meta.require_notifications data.meta.require_web)
+linkvertise.com##+js(json-prune, data.meta.require_addon data.meta.require_video data.meta.require_notifications data.meta.require_og_ads data.meta.require_web)
 linkvertise.com##+js(nano-sib)
 linkvertise.com##.cc-window
 
@@ -20776,7 +20790,6 @@ shortgoo.blogspot.com##+js(set, showAds, true)
 @@||downloader.la^$ghide
 
 ! https://reddit.com/r/uBlockOrigin/comments/dzvpgc/
-||ytmp3.cc/ad/^$1p
 |https://$script,3p,domain=ytmp3.cc,badfilter
 ytmp3.cc##+js(nowoif)
 
@@ -21677,7 +21690,7 @@ unishort.com##+js(aopr, app_vars.force_disable_adblock)
 unishort.com##.expop
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6796
-@@||fruitlab.com/plugins/$stylesheet,script,1p
+fruitlab.com##+js(set, adBlockDetected, noopFunc)
 @@||fruitlab.com^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6799
