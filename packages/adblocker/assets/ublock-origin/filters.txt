@@ -460,7 +460,8 @@ indiatimes.com###pollBudgetWidget
 bento.de,brigitte.de,chip.de,desired.de,kicker.de,myspass.de,spiegel.tv,spielaffe.de,tele5.de,thrashermagazine.com,welt.de##+js(golem.de.js)
 ! https://github.com/uBlockOrigin/uBlock-issues/issues/630
 ! https://github.com/uBlockOrigin/uAssets/issues/6002
-golem.de##+js(set, CustomEvent, noopFunc)
+! https://github.com/NanoMeow/QuickReports/issues/2523#issuecomment-669234068
+!golem.de##+js(set, CustomEvent, noopFunc)
 ||video.golem.de/*/scripts/radiant/homad$xhr,redirect=nooptext,domain=golem.de
 
 ! https://adblockplus.org/forum/viewtopic.php?f=10&t=45273&start=15#p156427
@@ -6444,13 +6445,9 @@ seehd.*##+js(nowoif)
 ||bokarsolutions.co.uk^$3p
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=40741
-mangaku.in##+js(acis, Math, zfgloaded)
-mangaku.in##+js(nowebrtc)
-mangaku.in##+js(acis, $, onclick)
-||mangaku.in/Gambar/Ads$frame
-||mangaku.in/manga/img/*-background.
-mangaku.in###cba
-mangaku.in###kanan
+mangaku.*##+js(nowebrtc)
+mangaku.*##+js(acis, $, onclick)
+*.gif$domain=mangaku.*,image
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=29217
 mac2sell.net##+js(nostif, adblock, 200)
@@ -8365,6 +8362,8 @@ discordemoji.com##.advertisement
 ! https://forums.lanik.us/viewtopic.php?f=62&t=41255
 @@||itopmusic.com^$ghide
 itopmusic.com##+js(set, jQuery.adblock, false)
+itopmusic.com##+js(aopw, _pop)
+||nssyawqyj.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3079
 ! https://github.com/uBlockOrigin/uAssets/issues/3287
@@ -11682,6 +11681,9 @@ movie8k.*##+js(aopw, _pop)
 
 ! https://github.com/NanoMeow/QuickReports/issues/443
 @@||miniwebtool.com^$ghide
+miniwebtool.com###videoad
+miniwebtool.com##.attribution:has-text(ᴬᵈ)
+miniwebtool.com##[id*="banner"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4268#issuecomment-447604788
 mademoiselleosaki.com##+js(aopw, adBlockDetected)
@@ -20142,6 +20144,9 @@ macappdownload.com##+js(nosiif, visibility, 1000)
 @@||cdnjs.cloudflare.com/ajax/libs/fuckadblock/*/fuckadblock.js$script,domain=ytmp3.eu
 @@||ytmp3.eu^$ghide
 ytmp3.eu##+js(aopr, open)
+ytmp3.eu##+js(aopw, _pop)
+ytmp3.eu##+js(aopr, AdservingModule)
+||brydhoye.com^
 
 ! canalplus.com anti adb + ads
 ! https://github.com/uBlockOrigin/uAssets/issues/7575
@@ -23405,6 +23410,12 @@ mshares.co,mshare.*##[class^="ads_"]
 ! https://github.com/NanoMeow/QuickReports/issues/3189
 files.im##+js(aopr, absda)
 files.im##+js(acis, Math, zfgloaded)
+files.im##+js(aopr, LieDetector)
+files.im##+js(nowoif)
+||tubecorp.com^$3p
+||ufow9xfashbm.com^
+||catastrophetray.com^
+||preparedjuxtapose.com^
 
 ! https://github.com/NanoMeow/QuickReports/issues/3249
 ! https://github.com/NanoMeow/QuickReports/issues/3294
