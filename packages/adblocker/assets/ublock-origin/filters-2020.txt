@@ -3715,3 +3715,38 @@ anongamez.com##.vc_row-fluid.wpb_row.vc_row:has(.vc_btn3-icon.fa.fa-gamepad):has
 
 ! sportbar .biz popups
 sportbar.*##+js(nowoif)
+
+! https://github.com/uBlockOrigin/uBlock-issues/issues/379#issuecomment-661873300
+streamkiste.cx##+js(ra, href, #clickfakeplayer)
+streamkiste.cx###clickfakeplayer
+
+! https://github.com/uBlockOrigin/uAssets/issues/7743
+thepiratebay0.org##+js(aopw, _pop)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/61065
+politico.com##.gallery-carousel-ad
+
+! chatta .it anti adb
+chatta.it##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/i5iutu/
+@@*$1p,image,script,domain=fighter.stream
+@@||fighter.stream^$ghide
+fighter.stream##+js(aopw, ai_front)
+
+! heavy-r .com popunder / ads
+heavy-r.com##+js(acis, document.createElement, insertBefore)
+heavy-r.com##[class^="adzone"]
+||tradblock.com^
+
+! https://www.reddit.com/r/uBlockOrigin/comments/i5eiga/
+||padslims.com^
+
+! https://github.com/NanoMeow/QuickReports/issues/4469
+youtubetomp3.*##+js(nowoif)
+youtubetomp3.*##a[href="/button.php"]
+
+! https://github.com/NanoMeow/QuickReports/issues/4471
+*$script,3p,denyallow=cloudflare.com|disqus.com|google.com|disquscdn.com|googleapis.com|gstatic.com,domain=veranime.*
+*$script,3p,denyallow=cloudflare.com|disqus.com|google.com|disquscdn.com|googleapis.com|gstatic.com,domain=verhentai.*
+||pkhhyool.com^
