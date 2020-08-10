@@ -53,9 +53,6 @@ bestforkodi.com##+js(aopr, disable_copy)
 bestforkodi.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 bestforkodi.com##*::selection:style(background-color:#338FFF!important)
 
-! https://github.com/reek/anti-adblock-killer/issues/3973
-assimilator.be,opus.re##+js(aopw, document.oncontextmenu)
-
 ! https://github.com/jspenguin2017/uBlockProtector/issues/915
 crackllc.com##+js(aopr, document.oncontextmenu)
 ! https://github.com/NanoAdblocker/NanoCore/issues/166
@@ -80,9 +77,6 @@ converthinks.xyz##+js(aopr, document.oncontextmenu)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1150
 playstation.com##+js(acis, $, PopupManager)
-
-! https://github.com/uBlockOrigin/uAssets/issues/1155
-comandotorrents.com###box
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1171
 weather.com##+js(aopr, _sp_._networkListenerData)
@@ -138,9 +132,6 @@ fandom.com,wikia.com##.featured-video__wrapper
 
 ! dicionariocriativo.com.br anti-adblock messages
 dicionariocriativo.com.br##.usingblock
-
-! https://github.com/uBlockOrigin/uAssets/issues/1567
-@@||nexusmods.com/contents/Scripts/advert.js$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1569
 ! https://www.reddit.com/r/uBlockOrigin/comments/euwy10/spanishdictcom_has_a_lot_of_adblocker_popups/
@@ -2561,7 +2552,7 @@ worldofbitco.in##*:style(-webkit-touch-callout: default !important; -webkit-user
 lgbtqnation.com##+js(aopr, googletag)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6471
-||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs,domain=glitterphoto.net
+glitterphoto.net##.adBlocked
 
 ! https://github.com/NanoMeow/QuickReports/issues/2119
 @@||dumpert.nl^$ghide
@@ -2599,9 +2590,6 @@ defenseone.com,govexec.com,nextgov.com,routefifty.com##body:style(overflow-x: au
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6522
 webtor.io#@#.adsbox
-
-! https://github.com/NanoMeow/QuickReports/issues/2232
-@@||starwars-universe.com/js/anti_adblock/advertisement.js$script,1p
 
 ! https://github.com/NanoMeow/QuickReports/issues/2240
 foxnews.com##:xpath(//*[contains(text(),"blocking software")]/../../..)
@@ -2647,6 +2635,7 @@ jpopsingles.eu##+js(aopw, stopPrntScr)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6590#issuecomment-555175891
 skymovies.live##+js(set, confirm, noopFunc)
+skymovies.live##+js(acis, document.oncontextmenu)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6594
 musixmatch.com##+js(set, MutationObserver, trueFunc)
@@ -4614,3 +4603,13 @@ dogemate.com###cconsent-bar
 ! https://github.com/AdguardTeam/AdguardFilters/issues/61191
 dreamsfriend.com##+js(aeld, /contextmenu|cut|copy|paste/)
 dreamsfriend.com##style:has-text(user-select):remove()
+
+! https://www.reddit.com/r/uBlockOrigin/comments/i6qqy4/how_to_block_admiral_antiadblock_popup/
+freep.com##+js(acis, document.createElement, admiral)
+
+! digital.lasegunda.com anti-contextmenu/anti-selection
+digital.lasegunda.com##+js(aeld, contextmenu)
+digital.lasegunda.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! mhwg.org anti right click, anti select
+mhwg.org##+js(ra, onContextmenu|onSelectStart|style, #body_game)
