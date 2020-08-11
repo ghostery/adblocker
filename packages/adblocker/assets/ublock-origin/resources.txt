@@ -51,11 +51,11 @@ setInterval-defuser.js application/javascript
 
 
 set.js application/javascript
-(function(){const e=document.currentScript;let t="{{2}}";if("undefined"===t)t=void 0;else if("false"===t)t=false;else if("true"===t)t=true;else if("null"===t)t=null;else if("noopFunc"===t)t=function(){};else if("trueFunc"===t)t=function(){return true};else if("falseFunc"===t)t=function(){return false};else if(/^\d+$/.test(t)){t=parseFloat(t);if(isNaN(t))return;if(Math.abs(t)>32767)return}else if("''"===t)t="";else return;let n=false;const r=function(e){if(n)return true;n=void 0!==e&&null!==e&&void 0!==t&&null!==t&&typeof e!==typeof t;return n};const i=function(n,f){const o=f.indexOf(".");if(-1===o){const i=n[f];if(r(i))return;const o=Object.getOwnPropertyDescriptor(n,f);if(void 0===o||void 0===o.get)Object.defineProperty(n,f,{get:function(){return document.currentScript===e?i:t},set:function(e){if(r(e))t=e}});return}const u=f.slice(0,o);let c=n[u];f=f.slice(o+1);if(c instanceof Object||"object"===typeof c&&null!==c){i(c,f);return}const s=Object.getOwnPropertyDescriptor(n,u);if(s&&void 0!==s.set)return;Object.defineProperty(n,u,{get:function(){return c},set:function(e){c=e;if(e instanceof Object)i(e,f)}})};i(window,"{{1}}")})();
+(function(){const t="{{1}}";let e="{{2}}";const n=document.currentScript;if("undefined"===e)e=void 0;else if("false"===e)e=false;else if("true"===e)e=true;else if("null"===e)e=null;else if("noopFunc"===e)e=function(){};else if("trueFunc"===e)e=function(){return true};else if("falseFunc"===e)e=function(){return false};else if(/^\d+$/.test(e)){e=parseFloat(e);if(isNaN(e))return;if(Math.abs(e)>32767)return}else if("''"===e)e="";else return;let i=false;const r=function(t){if(i)return true;i=void 0!==t&&null!==t&&void 0!==e&&null!==e&&typeof t!==typeof e;return i};const f=function(t,e,n){if(false===n.init(t[e]))return;const i=Object.getOwnPropertyDescriptor(t,e);let r,f;if(i instanceof Object){if(i.get instanceof Function)r=i.get;if(i.set instanceof Function)f=i.set}Object.defineProperty(t,e,{configurable:true,get(){if(void 0!==r)r();return n.getter()},set(t){if(void 0!==f)f(t);n.setter(t)}})};const u=function(t,i){const o=i.indexOf(".");if(-1===o){f(t,i,{v:void 0,init:function(t){if(r(t))return false;this.v=t;return true},getter:function(){return document.currentScript===n?this.v:e},setter:function(t){if(false===r(t))return;e=t}});return}const s=i.slice(0,o);const c=t[s];i=i.slice(o+1);if(c instanceof Object||"object"===typeof c&&null!==c){u(c,i);return}f(t,s,{v:void 0,init:function(t){this.v=t;return true},getter:function(){return this.v},setter:function(t){this.v=t;if(t instanceof Object)u(t,i)}})};u(window,t)})();
 
 
 set-constant.js application/javascript
-(function(){const e=document.currentScript;let t="{{2}}";if("undefined"===t)t=void 0;else if("false"===t)t=false;else if("true"===t)t=true;else if("null"===t)t=null;else if("noopFunc"===t)t=function(){};else if("trueFunc"===t)t=function(){return true};else if("falseFunc"===t)t=function(){return false};else if(/^\d+$/.test(t)){t=parseFloat(t);if(isNaN(t))return;if(Math.abs(t)>32767)return}else if("''"===t)t="";else return;let n=false;const r=function(e){if(n)return true;n=void 0!==e&&null!==e&&void 0!==t&&null!==t&&typeof e!==typeof t;return n};const i=function(n,f){const o=f.indexOf(".");if(-1===o){const i=n[f];if(r(i))return;const o=Object.getOwnPropertyDescriptor(n,f);if(void 0===o||void 0===o.get)Object.defineProperty(n,f,{get:function(){return document.currentScript===e?i:t},set:function(e){if(r(e))t=e}});return}const u=f.slice(0,o);let c=n[u];f=f.slice(o+1);if(c instanceof Object||"object"===typeof c&&null!==c){i(c,f);return}const s=Object.getOwnPropertyDescriptor(n,u);if(s&&void 0!==s.set)return;Object.defineProperty(n,u,{get:function(){return c},set:function(e){c=e;if(e instanceof Object)i(e,f)}})};i(window,"{{1}}")})();
+(function(){const t="{{1}}";let e="{{2}}";const n=document.currentScript;if("undefined"===e)e=void 0;else if("false"===e)e=false;else if("true"===e)e=true;else if("null"===e)e=null;else if("noopFunc"===e)e=function(){};else if("trueFunc"===e)e=function(){return true};else if("falseFunc"===e)e=function(){return false};else if(/^\d+$/.test(e)){e=parseFloat(e);if(isNaN(e))return;if(Math.abs(e)>32767)return}else if("''"===e)e="";else return;let i=false;const r=function(t){if(i)return true;i=void 0!==t&&null!==t&&void 0!==e&&null!==e&&typeof t!==typeof e;return i};const f=function(t,e,n){if(false===n.init(t[e]))return;const i=Object.getOwnPropertyDescriptor(t,e);let r,f;if(i instanceof Object){if(i.get instanceof Function)r=i.get;if(i.set instanceof Function)f=i.set}Object.defineProperty(t,e,{configurable:true,get(){if(void 0!==r)r();return n.getter()},set(t){if(void 0!==f)f(t);n.setter(t)}})};const u=function(t,i){const o=i.indexOf(".");if(-1===o){f(t,i,{v:void 0,init:function(t){if(r(t))return false;this.v=t;return true},getter:function(){return document.currentScript===n?this.v:e},setter:function(t){if(false===r(t))return;e=t}});return}const s=i.slice(0,o);const c=t[s];i=i.slice(o+1);if(c instanceof Object||"object"===typeof c&&null!==c){u(c,i);return}f(t,s,{v:void 0,init:function(t){this.v=t;return true},getter:function(){return this.v},setter:function(t){this.v=t;if(t instanceof Object)u(t,i)}})};u(window,t)})();
 
 
 scorecardresearch_beacon.js application/javascript
@@ -318,22 +318,6 @@ doubleclick.net/instream/ad_status.js application/javascript
 window.google_ad_status=1;
 
 
-disqus_forums_embed.js application/javascript
-(function(){"use strict";const e=document.getElementsByTagName("script");let t=e.length,s;while(t--){s=e[t].src||"";if(""===s)continue;if(s.lastIndexOf("disqus.com/embed.js")===s.length-19)return}const n=document.createElement("script");n.async=true;n.src="//"+window.disqus_shortname+".disqus.com/embed.js";document.body.appendChild(n)})();
-
-
-disqus_embed.js application/javascript
-(function(){"use strict";const e=document.getElementById(window.disqus_container_id||"disqus_thread");if(null===e)return;const t=document.createElement("button");t.textContent="Disqus blocked by uBlock Origin: click to unblock";t.type="button";e.appendChild(t);const n=function(e){t.remove();let n=document.querySelector('script[src$=".disqus.com/embed.js"]');let s;if(null!==n){n.remove();s=document.createElement("script");if(n.hasAttributes()){const e=n.attributes;for(let t=0;t<e.length;t++){const n=e[t];s.setAttribute(n.name,n.value)}}}else if("string"===typeof self.disqus_shortname){s=document.createElement("script");s.async=true;s.src=`//${self.disqus_shortname}.disqus.com/embed.js`}if(void 0===s)return;const o=Date.now().toString();s.src+="?_=1457540"+o.slice(-6);document.body.appendChild(s);e.preventDefault();e.stopPropagation()};t.addEventListener("click",n,{once:true})})();
-
-
-disqus.com/forums/*/embed.js application/javascript
-(function(){"use strict";const e=document.getElementsByTagName("script");let t=e.length,s;while(t--){s=e[t].src||"";if(""===s)continue;if(s.lastIndexOf("disqus.com/embed.js")===s.length-19)return}const n=document.createElement("script");n.async=true;n.src="//"+window.disqus_shortname+".disqus.com/embed.js";document.body.appendChild(n)})();
-
-
-disqus.com/embed.js application/javascript
-(function(){"use strict";const e=document.getElementById(window.disqus_container_id||"disqus_thread");if(null===e)return;const t=document.createElement("button");t.textContent="Disqus blocked by uBlock Origin: click to unblock";t.type="button";e.appendChild(t);const n=function(e){t.remove();let n=document.querySelector('script[src$=".disqus.com/embed.js"]');let s;if(null!==n){n.remove();s=document.createElement("script");if(n.hasAttributes()){const e=n.attributes;for(let t=0;t<e.length;t++){const n=e[t];s.setAttribute(n.name,n.value)}}}else if("string"===typeof self.disqus_shortname){s=document.createElement("script");s.async=true;s.src=`//${self.disqus_shortname}.disqus.com/embed.js`}if(void 0===s)return;const o=Date.now().toString();s.src+="?_=1457540"+o.slice(-6);document.body.appendChild(s);e.preventDefault();e.stopPropagation()};t.addEventListener("click",n,{once:true})})();
-
-
 disable-newtab-links.js application/javascript
 (function(){document.addEventListener("click",(function(t){var e=t.target;while(null!==e){if("a"===e.localName&&e.hasAttribute("target")){t.stopPropagation();t.preventDefault();break}e=e.parentNode}}))})();
 
@@ -391,11 +375,11 @@ alert-buster.js application/javascript
 
 
 aell.js application/javascript
-(function(){const t=console.log.bind(console);self.EventTarget.prototype.addEventListener=new Proxy(self.EventTarget.prototype.addEventListener,{apply:function(n,e,o){const r=o[0].toString();const s=String(o[1]);t('uBO: addEventListener("%s", %s)',r,s);return n.apply(e,o)}})})();
+(function(){const n=console.log.bind(console);self.EventTarget.prototype.addEventListener=new Proxy(self.EventTarget.prototype.addEventListener,{apply:function(t,e,o){const r=String(o[0]);const s=String(o[1]);n('uBO: addEventListener("%s", %s)',r,s);return t.apply(e,o)}})})();
 
 
 aeld.js application/javascript
-(function(){let e="{{1}}";if(""===e||"{{1}}"===e)e=".?";else if(/^\/.+\/$/.test(e))e=e.slice(1,-1);else e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");e=new RegExp(e);let t="{{2}}";if(""===t||"{{2}}"===t)t=".?";else if(/^\/.+\/$/.test(t))t=t.slice(1,-1);else t=t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");t=new RegExp(t);self.EventTarget.prototype.addEventListener=new Proxy(self.EventTarget.prototype.addEventListener,{apply:function(n,s,l){const i=l[0].toString();const r=String(l[1]);if(false===e.test(i)||false===t.test(r))return n.apply(s,l)}})})();
+(function(){let e="{{1}}";if(""===e||"{{1}}"===e)e=".?";else if(/^\/.+\/$/.test(e))e=e.slice(1,-1);else e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");e=new RegExp(e);let t="{{2}}";if(""===t||"{{2}}"===t)t=".?";else if(/^\/.+\/$/.test(t))t=t.slice(1,-1);else t=t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");t=new RegExp(t);self.EventTarget.prototype.addEventListener=new Proxy(self.EventTarget.prototype.addEventListener,{apply:function(n,s,l){const i=String(l[0]);const r=String(l[1]);if(false===e.test(i)||false===t.test(r))return n.apply(s,l)}})})();
 
 
 adfly-defuser.js application/javascript
@@ -411,11 +395,11 @@ addthis.com/addthis_widget.js application/javascript
 
 
 addEventListener-logger.js application/javascript
-(function(){const t=console.log.bind(console);self.EventTarget.prototype.addEventListener=new Proxy(self.EventTarget.prototype.addEventListener,{apply:function(n,e,o){const r=o[0].toString();const s=String(o[1]);t('uBO: addEventListener("%s", %s)',r,s);return n.apply(e,o)}})})();
+(function(){const n=console.log.bind(console);self.EventTarget.prototype.addEventListener=new Proxy(self.EventTarget.prototype.addEventListener,{apply:function(t,e,o){const r=String(o[0]);const s=String(o[1]);n('uBO: addEventListener("%s", %s)',r,s);return t.apply(e,o)}})})();
 
 
 addEventListener-defuser.js application/javascript
-(function(){let e="{{1}}";if(""===e||"{{1}}"===e)e=".?";else if(/^\/.+\/$/.test(e))e=e.slice(1,-1);else e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");e=new RegExp(e);let t="{{2}}";if(""===t||"{{2}}"===t)t=".?";else if(/^\/.+\/$/.test(t))t=t.slice(1,-1);else t=t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");t=new RegExp(t);self.EventTarget.prototype.addEventListener=new Proxy(self.EventTarget.prototype.addEventListener,{apply:function(n,s,l){const i=l[0].toString();const r=String(l[1]);if(false===e.test(i)||false===t.test(r))return n.apply(s,l)}})})();
+(function(){let e="{{1}}";if(""===e||"{{1}}"===e)e=".?";else if(/^\/.+\/$/.test(e))e=e.slice(1,-1);else e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");e=new RegExp(e);let t="{{2}}";if(""===t||"{{2}}"===t)t=".?";else if(/^\/.+\/$/.test(t))t=t.slice(1,-1);else t=t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");t=new RegExp(t);self.EventTarget.prototype.addEventListener=new Proxy(self.EventTarget.prototype.addEventListener,{apply:function(n,s,l){const i=String(l[0]);const r=String(l[1]);if(false===e.test(i)||false===t.test(r))return n.apply(s,l)}})})();
 
 
 acis.js application/javascript

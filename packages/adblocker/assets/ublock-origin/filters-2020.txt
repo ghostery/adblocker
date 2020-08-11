@@ -3765,6 +3765,9 @@ gateanime.com##.bnr
 ! https://github.com/NanoMeow/QuickReports/issues/4477
 marriedgames.com.br##+js(nostif, ai_adb)
 
+! https://github.com/AdguardTeam/AdguardFilters/issues/61132
+hakie.net##+js(nosiif, visibility, 1000)
+
 ! https://github.com/AdguardTeam/AdguardFilters/issues/61191
 dreamsfriend.com##+js(nosiif, visibility, 1000)
 
@@ -3779,6 +3782,33 @@ real-sky.com##+js(aopr, app_vars.force_disable_adblock)
 healthline.com##a[href*="/confirm_linkout_redirect.aspx?"]:upward(section)
 healthline.com##hl-adsense
 
+! https://community.brave.com/t/website-kept-asking-leave-site-if-i-click-cancel-it-opened-new-window-i-couldnt-even-close-brave-without-end-process/
+video1tube.com##+js(set, popit, false)
+video1tube.com##+js(acis, btoa)
+
 ! https://github.com/AdguardTeam/AdguardFilters/issues/61263
 @@||mercedesclub.cz^$ghide
 mercedesclub.cz##.adsbygoogle, [class^="side_ad_"]
+
+! https://github.com/NanoMeow/QuickReports/issues/4485
+||googlesyndication.com/pagead/show_ads.js$script,redirect=noop.js,domain=speedtest.appzend.net
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/61270
+dz4win.com##+js(aopr, app_vars.force_disable_adblock)
+dz4win.com##+js(aopr, open)
+dz4win.com##.banner
+*$3p,script,frame,denyallow=googleapis.com|google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=dz4win.com
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/61291
+bokepindohot.pw##+js(nosiif, visibility, 1000)
+
+! reddit adb tracking
+@@||redditstatic.com^*/xads.js$script,domain=reddit.com
+
+! https://www.reddit.com/r/uBlockOrigin/comments/i7sjrq/ads_on_bolly2tollynet/
+bolly2tolly.net##+js(aopr, LieDetector)
+||webpushr.com^$3p
+||e9c1khhwn4uf.com^
+
+! https://github.com/NanoMeow/QuickReports/issues/2530
+@@||bloomberght.com^$ghide
