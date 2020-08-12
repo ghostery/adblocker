@@ -114,7 +114,7 @@ youtube.com##.ytd-carousel-ad-renderer
 ! https://github.com/easylist/easylist/issues/5112
 ! @@||youtube.com/get_video_info?*timedtext_editor$xhr,1p
 ! https://redd.it/ggcmkp https://redd.it/gx03e0
-youtube.com##+js(json-prune, [].playerResponse.adPlacements [].playerResponse.playerAds playerResponse.adPlacements playerResponse.playerAds adPlacements playerAds)
+youtube.com,youtube-nocookie.com##+js(json-prune, [].playerResponse.adPlacements [].playerResponse.playerAds playerResponse.adPlacements playerResponse.playerAds adPlacements playerAds)
 @@||youtube.com/get_video_info
 ||youtube.com/get_video_info?*=adunit&$important
 
@@ -769,6 +769,7 @@ carbuyer.co.uk##+js(aopr, _sp_.mms.startMsg)
 ! https://github.com/uBlockOrigin/uAssets/issues/7753
 @@||asadcdn.com/adlib/$css,domain=bild.de
 @@||asadcdn.com/adlib/pages/bild.js$script,domain=bild.de
+@@||ioam.de/iam.js$script,domain=bild.de
 @@||tiqcdn.com/utag/axelspringer/bild/prod/utag.js$script,domain=bild.de
 bild.de#@##fullBanner
 bild.de#@##powerplace
@@ -9572,7 +9573,9 @@ porndoo.com##+js(aeld, click, pop)
 simulasyonturk.com##+js(aopw, ai_adb_overlay)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3610
-@@||4horlover.com^$ghide
+4horlover.com##+js(nosiif, visibility, 1000)
+4horlover.com##+js(acis, addEventListener, nextFunction)
+4horlover.com##+js(aopw, _pop)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3608
 @@||i8086.de^$ghide
@@ -11587,12 +11590,10 @@ streamingworld.*##+js(aopr, AaDetector)
 streamingworld.*##+js(aopw, Fingerprint2)
 ||123movies123.*/sw.js$script,1p
 c123movies.com,123freemovies.*,123movieslife.*,123movie.*,123movies123.*,123moviesu.com###option-0, a[href="#option-0"]
-123freemovies.*,123movies123.*,123movieslife.*,123movies4u.club,v123movies.com##.pframe:has([href^="javascript: void(0);"])
-123moviesok.com##.pframe:has([src^="https://123moviesok.com/"])
+123freemovies.*,123movies123.*,123movieslife.*,123movies4u.club##.pframe:has([href^="javascript: void(0);"])
 ||c123movies.com/sw.js$script,1p
 ||123freemovies.live/sw.js$script,1p
 123moviesunblocked.net##+js(aopw, Fingerprint2)
-||v123movies.com/sw.js$script,1p
 123movieswatch.fun##+js(aopr, Date.prototype.toUTCString)
 123movieswatch.fun##.btn3d:has-text(/stream/i)
 123movieswatch.fun##.btn3d:has-text(/Download/i)
@@ -11600,10 +11601,9 @@ c123movies.com,123freemovies.*,123movieslife.*,123movie.*,123movies123.*,123movi
 l23movies.*,123moviess.*,123movies.*,123movies0.*,123movieshub.*##+js(acis, Math, zfgloaded)
 e123movies.com,123moviespower.com,123moviez.online##+js(acis, Math, zfgloaded)
 0123movies.*,123movieshub.*##+js(aopr, AaDetector)
-vidwatch.me##+js(aopr, AaDetector)
 123moviesez.com##+js(aopr, glxopen)
 0l23movies.*##+js(aopr, rid)
-0l23movies.com,123movieshd.vip,vidwatch.me##+js(nano-sib)
+0l23movies.com##+js(nano-sib)
 123movies.*##a[href="https://www.123movies.club/stream-now/"]
 123movies.*,123movieslife.*##.btn-watch-area
 123movies.*##li > .options:has-text(Watch Online)
@@ -11653,9 +11653,7 @@ vidcloud9.com##+js(aopr, isSandboxed)
 123moviesfree.*,putload.tv##+js(aopr, LieDetector)
 putload.tv##+js(nowebrtc)
 ||5f6dmzflgqso.com^
-
-! https://github.com/NanoMeow/QuickReports/issues/445
-freepremium4all.com##+js(set, $tieE3, true)
+123movieslife.*##+js(ra, href, [href*="/hd"])
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2689#issuecomment-447592381
 yesmovies.*##+js(disable-newtab-links)
@@ -11668,7 +11666,6 @@ xmovies8.is,yesmovies.*##+js(nowebrtc)
 ||flixtor.life/sw.js$script,1p
 /sw-vodlocker.to.js$script
 yesmovies.*##a.btn-successful
-ffull.co##+js(aopr, absda)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2031
 solarmovie.*##+js(acis, Math, zfgloaded)
@@ -11681,7 +11678,6 @@ solarmovie.*##[href*="/4k"]
 solarmovie.*##table.movie_version:has-text(Promo)
 solarmovie.*##div.row:has-text(in HD)
 *$script,3p,denyallow=cloudflare.com|disqus.com|google.com|disquscdn.com,domain=solarmovie.*
-||4o7cj36hbaip.com^
 ||4ij4g22t67.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4320
@@ -19004,14 +19000,18 @@ movie4me.*##+js(acis, Math, zfgloaded)
 ! https://github.com/NanoMeow/QuickReports/issues/1868
 @@||spesifikasiharga.com^$ghide
 
-! https://github.com/NanoMeow/QuickReports/issues/1201#issuecomment-532751454
 ! https://github.com/NanoMeow/QuickReports/issues/1339
+! https://github.com/NanoAdblocker/NanoFilters/issues/546
 newsjizz.in##+js(aeld, load, onload)
 @@||newsjizz.in^$ghide
 ||newsjizz.in^$image,redirect-rule=1x1.gif,1p
 @@||adsterra.com/images/*$image,domain=newsjizz.in
 @@||googlesyndication.com/pagead/js/adsbygoogle.js$script,domain=newsjizz.in
 newsjizz.in##.adsbygoogle
+newsjizz.in##+js(nostif, adb)
+newsjizz.in##iframe[src="about:blank"]
+*$script,3p,denyallow=recaptcha.net|gstatic.com,domain=dglinker.com
+||capsfogpeck.com^
 
 ! https://github.com/NanoMeow/QuickReports/issues/1808#issuecomment-532751543
 ||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs,domain=go.felanovia.com
