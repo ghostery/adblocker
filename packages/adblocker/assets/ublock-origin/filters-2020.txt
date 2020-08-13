@@ -51,8 +51,8 @@ javhub.*##+js(nosiif, _0x)
 javhub.*##+js(nostif, _0x)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53306
-@@||zt-protect.com^$ghide
-zt-protect.com##.adsbygoogle
+@@||zt-protect.*^$ghide
+zt-protect.*##.adsbygoogle
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53366
 l2db.info##+js(aopr, google_jobrunner)
@@ -831,6 +831,9 @@ wg-gesucht.de##+js(nostif, removeChild, 100)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54800
 hdmp4mania1.net##+js(aopr, absda)
 hdmp4mania1.net##[href^="http://bit.ly/"]
+hdmp4mania1.net,mp4mania1.net##+js(aopr, LieDetector)
+||aqknmbh198dn.com^
+||fingahvf.top^
 
 ! https://github.com/NanoMeow/QuickReports/issues/3745
 interia.pl##+js(nostif, removeChild, 100)
@@ -2972,7 +2975,7 @@ forumdz.com##+js(nostif, offsetHeight)
 
 ! momzr.com popups
 momzr.com##+js(acis, document.querySelectorAll, popMagic)
-momzr.com##.table
+momzr.com##.table, #ex_pu_iframe
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/59292
 depo-program.blogspot.com##+js(acis, addEventListener, google_ad_client)
@@ -3822,3 +3825,29 @@ freeshrinker.com##+js(aopr, app_vars.force_disable_adblock)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4495
 brawlhalla.fr##+js(nostif, check)
+
+! vidshar .tv popups
+vidshar.tv##+js(acis, Math, XMLHttpRequest)
+||k3csecp6zklq.com^
+
+! https://github.com/uBlockOrigin/uAssets/issues/7759
+pornsbox.com##+js(set, DHAntiAdBlocker, true)
+
+! https://github.com/NanoAdblocker/NanoFilters/issues/547
+informaxonline.com##+js(nostif, nextFunction)
+
+! https://github.com/NanoMeow/QuickReports/issues/4500
+familyrenders.com##+js(aopr, adBlockDetected)
+
+! https://github.com/NanoMeow/QuickReports/issues/4502
+rjno1.com#@#+js(nostif, /^/)
+rjno1.com#@#+js(acis, setTimeout)
+_ads.js?$badfilter
+/show_ads.js$badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/7763
+hentaifreak.org##+js(aopr, decodeURI)
+hentaifreak.org##+js(aopw, onpopstate)
+hentaifreak.org##+js(nostif, popState)
+hentaifreak.org##.post-thumbnail-container:has-text(AD):upward(1)
+||fhgh9sd.com^
