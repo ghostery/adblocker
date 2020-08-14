@@ -377,6 +377,7 @@ earnsats.co##.tracking-wide
 @@||myzyia.com^$ghide
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53948
+totalcar.hu##+js(acis, document.querySelector, await)
 @@||totalcar.hu^$ghide
 
 ! https://github.com/NanoMeow/QuickReports/issues/3616
@@ -422,6 +423,7 @@ animepertutticdn.com##+js(nowoif)
 ! https://github.com/NanoMeow/QuickReports/issues/3626
 @@||adslink.pw^$ghide
 adslink.pw##.banner-inner
+adslink.pw##+js(aopw, ai_adb)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3625
 kryptogator.com##+js(aopr, adBlockDetected)
@@ -507,8 +509,11 @@ flutenotes.ph##+js(nosiif, visibility, 1000)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54309
 firefile.cc##+js(set, blockAdBlock._options.baitClass, null)
 
+! https://github.com/NanoMeow/QuickReports/issues/2388
 ! https://www.reddit.com/r/uBlockOrigin/comments/g79cjf/i_am_not_a_satisfied_user_of_ubo_because_i_still/
+@@||manhwa18.com^$ghide
 manhwa18.com##+js(aopr, LieDetector)
+manhwa18.com##+js(acis, Math, XMLHttpRequest)
 ||axwxrnk5ydzy.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7281
@@ -993,7 +998,8 @@ itrum.vn##+js(aopr, adBlockDetected)
 @@||burzowo.info^$1p,script
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/geoabd/how_to_block_aboutblank_popups_from_alphapixorg/
-alphapix.org##+js(acis, String.fromCharCode, 'shift')
+alphapix.org##+js(aopw, _pop)
+||xrqrpdxqpm.com^
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/55034
 biroads.com##+js(aopr, app_vars.force_disable_adblock)
@@ -1042,10 +1048,6 @@ vidtome.stream##+js(nowoif)
 vidtome.stream##+js(nostif, debugger)
 @@||vidtome.stream^$ghide
 vidtome.stream##[id*="ScriptRoot"]
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/55119
-divany.hu##body:style(overflow: auto !important)
-divany.hu##.adbd-layer, iframe.lazy, .tctk, .shopline-box
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7328
 ymp4.download##+js(nowoif)
@@ -2224,7 +2226,11 @@ tempatak.blogspot.com##+js(acis, addEventListener, google_ad_client)
 ||googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=iunlocked.org,redirect-rule=noopjs
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7564
+divany.hu##+js(acis, document.querySelector, await)
 @@||divany.hu^$ghide
+divany.hu##body:style(overflow: auto !important)
+divany.hu##.adbd-layer, iframe.lazy, .shopline-box
+divany.hu#@#.tctk
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/haekcc/farkcom_blocking_all_ad_blockers/
 @@||fark.com/js/$1p,script
@@ -2887,6 +2893,7 @@ adrama.to###closeADV
 
 ! https://github.com/NanoMeow/QuickReports/issues/4298
 hollywoodpq.com##+js(acis, document.querySelector, adb)
+hollywoodpq.com##div.oboxads
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/59078
 trxfaucet.xyz,ethereumfaucet.xyz,bchfaucet.xyz,dashfaucet.xyz,dogfaucet.xyz,ltcfaucet.xyz,digibytefaucet.xyz,bytecoinfaucet.xyz,monerofaucet.xyz,zcashfaucet.xyz,ripplefaucety.xyz,peercoinfaucet.xyz,liskfaucet.xyz,etherclassic.xyz,potcoinfaucet.xyz,wavesfaucet.xyz,neofaucet.xyz,stratisfaucet.xyz##+js(aopr, show_ads_gr8_lite)
@@ -3782,8 +3789,12 @@ bolssc.com##+js(aopr, app_vars.force_disable_adblock)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/61230
 real-sky.com##+js(aopr, app_vars.force_disable_adblock)
 
+! https://github.com/uBlockOrigin/uAssets/issues/4964
 ! https://github.com/uBlockOrigin/uAssets/issues/7750
-healthline.com##a[href*="/confirm_linkout_redirect.aspx?"]:upward(section)
+healthline.com##aside:has(div:matches-css-before(content:/ADVERTISEMENT/))
+healthline.com##div[data-empty^="true"]:matches-css-before(content:/ADVERTISEMENT/)
+healthline.com##[class*="css"]:matches-css-before(content:/ADVERTISEMENT/)
+healthline.com##[href*="redirect"]:upward(section)
 healthline.com##hl-adsense
 
 ! https://community.brave.com/t/website-kept-asking-leave-site-if-i-click-cancel-it-opened-new-window-i-couldnt-even-close-brave-without-end-process/
@@ -3851,3 +3862,20 @@ hentaifreak.org##+js(aopw, onpopstate)
 hentaifreak.org##+js(nostif, popState)
 hentaifreak.org##.post-thumbnail-container:has-text(AD):upward(1)
 ||fhgh9sd.com^
+
+! moneycontrol.com ad interstitial
+moneycontrol.com##+js(acis, document.cookie, adKey)
+moneycontrol.com##^script:has-text(mc_interstitial)
+
+! https://github.com/NanoMeow/QuickReports/issues/4503
+@@||orangeobserver.com^$ghide
+
+! https://github.com/uBlockOrigin/uAssets/issues/7766
+pimylifeup.com##+js(aopr, adthrive.config)
+||lmyiwaakn.com^$3p
+
+! https://www.reddit.com/r/uBlockOrigin/comments/i9ejeo/stuffconz_adblocking_banner/
+stuff.co.nz##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/61502
+ladylike.gr##+js(nostif, f.parentNode.removeChild(f), 100)
