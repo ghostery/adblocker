@@ -1,8 +1,8 @@
 [Adblock Plus 2.0]
-! Checksum: eoPk4z2iW48FlYb1hoGTuw
-! Version: 202008142000
+! Checksum: spAoRXbsiBSdd+KWvpfo/g
+! Version: 202008162001
 ! Title: EasyList Cookie List
-! Last modified: 14 Aug 2020 20:00 UTC
+! Last modified: 16 Aug 2020 20:01 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 ! License: http://creativecommons.org/licenses/by/3.0/
@@ -571,6 +571,7 @@
 /gdpr-banner/*
 /gdpr-bundle.
 /gdpr-cmp-
+/gdpr-consent-
 /gdpr-consent.
 /gdpr-consent/*
 /gdpr-cookie-
@@ -598,6 +599,7 @@
 /gdpr/gdpr_
 /gdpr/img/*
 /gdpr/messaging.
+/gdpr/native-
 /gdpr/optInCookieSSR?
 /gdpr/script_
 /gdpr_check.
@@ -815,6 +817,7 @@
 /uploads/GDPR-
 /usecookies.js
 /usocookies.
+/v1/gdpr/*
 /w034CookieDirective.js
 /wa_consentUI.
 /wa_iframeCmp.
@@ -4998,12 +5001,14 @@ _site_cookie_
 ###gc_web_user_allow_cookie_box
 ###gccookiemessage
 ###gcms_cookie_manager
+###gdpr-acceptance
 ###gdpr-alert
 ###gdpr-banner
 ###gdpr-bar
 ###gdpr-block
 ###gdpr-bottom
 ###gdpr-bottom-banner
+###gdpr-bottom-banner-container
 ###gdpr-box
 ###gdpr-consent
 ###gdpr-consent-banner
@@ -6534,6 +6539,7 @@ _site_cookie_
 ###stormCookiePopup
 ###stormCookieWall
 ###stormdigital-cookieWallId
+###stravaCookieBanner
 ###strawberry-cookiebar
 ###stripe-cookie
 ###stripe_hammon
@@ -10096,6 +10102,7 @@ _site_cookie_
 ##.gdpr-privacy-bar
 ##.gdpr-privacy-notice
 ##.gdpr-prompt
+##.gdpr-reveal
 ##.gdpr-row
 ##.gdpr-section
 ##.gdpr-show
@@ -10145,6 +10152,7 @@ _site_cookie_
 ##.gdprbox
 ##.gdprboxcolor
 ##.gdprcookie
+##.gdprcookie-wrapper
 ##.gdprfooter
 ##.gdprpopup
 ##.gdprrhs
@@ -11930,6 +11938,7 @@ _site_cookie_
 ##[data-target="coockie"]
 ##[data-test-id="cookie-consent-banner"]
 ##[data-test="cookie-banner"]
+##[data-testid="cookienotice-container"]
 ##[data-token="gdpr_cookie_notice"]
 ##[data-type="cookie-addsense"]
 ##[data-unique-cookie-name]
@@ -12821,6 +12830,7 @@ azimutyachts.com##.floatFooter
 maltatoday.com.mt##.floating-bar
 novantas.com##.foobar-container
 doubleviking.com,fallentitans.com##.footer
+swipe.io##.footer-notice
 hackerone.com##.footer-popup
 whimn.com.au##.footer-statements
 palmbeachpost.com##.footer-wrapper
@@ -13513,6 +13523,7 @@ eco-systemes.fr,ffr.fr,midilibre.fr,quelpneu.com,sudouest.fr,tv7.com##.cookie
 creavea.com##.creavea-banner-cookie-consent
 tv5unis.ca##.css-wydzoi.e1v9p9hw0
 lexus.fr##.disclaimer
+doctolib.fr##.dl-drawer
 molotov.tv##.eRnhI
 weclap.fr##.front_web_app_main_menu_front-web-app-main-menu-component_front_show_cookie_container
 woodbrass.com##.hidden-sm.hidden-md.row
@@ -13930,6 +13941,7 @@ cinquantamila.corriere.it,cinquantamila.it###privacy_advisor
 samaritansonlus.org###sB_injected
 malpensabusiness.it###showMessage
 sky.it###soundbox_cookie
+amazon.it###sp-cc
 digimobil.it###sticky-popup
 beniculturali.it,nlite.it,sigmastudio.it###system-message
 sia.eu###toast
@@ -14491,6 +14503,7 @@ fikriyat.com,sabah.com.tr,turkuvazradyolar.com,yeniasir.com.tr##.veriAltBar
 !
 fdu.org.ua###pd_popup
 i.ua##.Disclaimer
+tsn.ua##.c-notification__box
 unian.ua##.cookies
 landrover.ua##.notificationBars
 ua-football.com##.policy-mes
@@ -14510,6 +14523,7 @@ infiniti-vietnam.com.vn##.c_128
 ||byom.de/js/cookie.de.js
 ||cmp.pcwelt.de^
 ||consent.berliner-kurier.de^
+||consent.gutefrage.net^
 ||henryschein.at^*/CookieList.aspx
 ||keltendorf-mitterkirchen.at/system/web/cookie.ashx
 ||strato.de^*/consent.js
@@ -14674,6 +14688,7 @@ popsugar.co.uk#@##_evidon-barrier-wrapper
 etonline.com,popsugar.co.uk,popsugar.com,popsugar.com.au#@##_evidon_banner
 aboutcookies.org#@##aboutcookies
 franziskaner-weissbier.de,xmradio.nl#@##accept-cookies
+epolisbari.com#@##accept_cookie
 aixfoam.com,aixfoam.de,aixfoam.dk,aixfoam.fi,aixfoam.fr,aixfoam.nl,aixfoam.se#@##cc-notification
 aixfoam.com,aixfoam.de,aixfoam.dk,aixfoam.fi,aixfoam.fr,aixfoam.nl,aixfoam.se#@##cc-notification-wrapper
 bing.com#@##cc_container
@@ -14702,7 +14717,7 @@ ad.win.nl#@##cookieConsentBox
 techopital.com#@##cookieConsentContainer
 indebuurt.nl,tweakers.net#@##cookieContainer
 tiger.nl#@##cookieMessage
-arbeiterkammer.at,brieftip.pl,britishairways.com,fotofairsicherung.de,kaliber.pl,naszwybir.pl,onsbrabantnet.nl,tropicana.fr,woolworth.de#@##cookieModal
+arbeiterkammer.at,brieftip.pl,britishairways.com,epolisbari.com,fotofairsicherung.de,kaliber.pl,naszwybir.pl,onsbrabantnet.nl,tropicana.fr,woolworth.de#@##cookieModal
 dhbbank.nl#@##cookieModalCenter
 krefting.de#@##cookieNote
 tweakers.net#@##cookieOverlay
@@ -14732,6 +14747,7 @@ krone.at#@##krn-privacy-center
 bosch-mobility-solutions.com#@##m-cookie-overlay
 17track.net#@##modal-gdpr
 thesocialmedwork.com#@##notice-cookie-block
+crfashionbook.com#@##onetrust-consent-sdk
 api.newsguardtech.com,rockpapershotgun.com#@##optanon
 theverge.com#@##privacy-consent
 readthedocs.io,sportdiver.com#@##privacy-policy
@@ -14785,7 +14801,7 @@ bbcstudios.com,fotopuzzle.de,hearst.co.uk#@#.cookie-policy
 fotopuzzle.de#@#.cookie-policy-wrapper
 60millions-mag.com#@#.cookie-popup
 lot.com#@#.cookie-promo
-lauritz.com,qxl.de,qxl.dk,qxl.fi,qxl.no,qxl.se#@#.cookie-text
+epolisbari.com,lauritz.com,qxl.de,qxl.dk,qxl.fi,qxl.no,qxl.se#@#.cookie-text
 proglib.io#@#.cookie-visible
 538.nl,pieseauto.ro,saxion.edu,unileverfoodsolutions.com.br,unileverfoodsolutions.com.tr,unileverfoodsolutions.it,xmradio.nl,xs4all.nl#@#.cookie-wall
 ben.nl,bynco.com#@#.cookie-wall-container
@@ -14903,6 +14919,7 @@ yoigo.com#@#thor-cookies
 @@||digikey.com^*/cookie-notice.css$stylesheet,domain=digikey.com
 @@||microsoft.com/api/privacy/cookieconsent?$xmlhttprequest,domain=docs.microsoft.com
 @@||stabila.com/bundles/marketingsuite/css/cookie-bar.css
+@@||strava.com/cookie-banner.js$~third-party
 ! https://github.com/ryanbr/fanboy-adblock/issues/721#issuecomment-443395851
 ! https://github.com/ryanbr/fanboy-adblock/issues/1133
 @@/wp-content/plugins/bwp-minify/min/?*,wp-content$script,stylesheet,~third-party
@@ -14919,7 +14936,7 @@ yoigo.com#@#thor-cookies
 @@||bolha.com/js/obj.cookiesPolicy.js
 @@||businessinsider.in/gdpr_js/version-12,minify-1.cms$script,~third-party
 @@||c.evidon.com/sitenotice/evidon-sitenotice-tag.js$script,domain=southpark.de|southparkstudios.nu
-@@||cdn.cookielaw.org^$script,stylesheet,domain=cnn.com|doctoroz.com|eurogamer.net|rockpapershotgun.com
+@@||cdn.cookielaw.org^$script,stylesheet,domain=cnn.com|crfashionbook.com|doctoroz.com|eurogamer.net|rockpapershotgun.com
 @@||civiccomputing.com^*/cookieControl-$script,domain=amplitude.com|msi.com
 @@||cloudflare.com^*/cookieconsent.min.js$domain=ehftv.com|pixieset.com|sammobile.com|xnview.com
 @@||consensu.org/gdpr/$script,domain=mentalfloss.com
@@ -14932,7 +14949,7 @@ yoigo.com#@#thor-cookies
 @@||consentmanager.mgr.consensu.org/delivery/$script,stylesheet,xmlhttprequest,domain=sourceforge.net
 @@||cookie-cdn.cookiepro.com^$script,stylesheet,domain=api.newsguardtech.com
 @@||cookielaw.org/consent/$other,xmlhttprequest
-@@||cookielaw.org/scripttemplates/$script,xmlhttprequest,domain=cbslocal.com|cnet.com|epicgames.com|eurogamer.net|zdnet.com
+@@||cookielaw.org/scripttemplates/$script,xmlhttprequest,domain=cbslocal.com|cnet.com|crfashionbook.com|epicgames.com|eurogamer.net|zdnet.com
 @@||cookielawinfo.com^$~third-party
 @@||costa.co.uk/js/libs/cookieconsent.min.js
 @@||drivetribe.com/*/homepage-cookie-dialog.js
