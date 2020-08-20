@@ -121,6 +121,8 @@ youtube.com##.ytd-carousel-ad-renderer
 youtube.com,youtube-nocookie.com##+js(json-prune, [].playerResponse.adPlacements [].playerResponse.playerAds playerResponse.adPlacements playerResponse.playerAds adPlacements playerAds)
 @@||youtube.com/get_video_info
 ||youtube.com/get_video_info?*=adunit&$important
+youtube.com,youtube-nocookie.com##+js(set, ytInitialPlayerResponse.adPlacements, undefined)
+youtube.com,youtube-nocookie.com##+js(set, playerResponse.adPlacements, undefined)
 
 ! https://github.com/gorhill/uBlock/issues/1100
 ! https://github.com/uBlockOrigin/uAssets/issues/588
@@ -149,7 +151,7 @@ freenet.de##+js(acis, document.createElement, /\}\s*\(.*?\b(self|this|window)\b.
 webmail.freenet.de#@#+js(acis, document.createElement, /\}\s*\(.*?\b(self|this|window)\b.*?\)/)
 !#endif
 kicker.de,musiker-board.de,quoka.de,recording.de,tichyseinblick.de##+js(acis, Math, /\}\s*\(.*?\b(self|this|window)\b.*?\)/)
-airliners.de,auto-motor-und-sport.de,auszeit.bio,autorevue.at,berliner-kurier.de,berliner-zeitung.de,boersennews.de,clever-tanken.de,desired.de,digitalfernsehen.de,express.de,fanfiktion.de,finya.de,frustfrei-lernen.de,fussballdaten.de,gameswelt.*,giga.de,kino.de,liga3-online.de,lz.de,mt.de,news.de,nw.de,prad.de,psychic.de,rimondo.com,spielen.de,spieletipps.de,tichyseinblick.de,tvinfo.de,unicum.de,weltfussball.at,weristdeinfreund.de##+js(acis, Number.isNaN)
+airliners.de,auto-motor-und-sport.de,auszeit.bio,autorevue.at,berliner-kurier.de,berliner-zeitung.de,boersennews.de,clever-tanken.de,desired.de,digitalfernsehen.de,express.de,fanfiktion.de,finya.de,frustfrei-lernen.de,fussballdaten.de,gameswelt.*,giga.de,kino.de,gruenderlexikon.de,liga3-online.de,lz.de,mt.de,news.de,nw.de,prad.de,psychic.de,rimondo.com,spielen.de,spieletipps.de,tichyseinblick.de,tvinfo.de,unicum.de,weltfussball.at,weristdeinfreund.de##+js(acis, Number.isNaN)
 nordbayern.de##^script:has-text(jQuery('#web'))
 airliners.de,auszeit.bio,auto-motor-und-sport.de,autorevue.at,bafoeg-aktuell.de,berliner-kurier.de,berliner-zeitung.de,bikerszene.de,boersennews.de,bonedo.de,chefkoch.de,clever-tanken.de,computerbild.de,deine-tierwelt.de,desired.de,dhd24.com,digitalfernsehen.de,donnerwetter.de,e-hausaufgaben.de,express.de,fanfiktion.de,finya.de,formel1.de,freenet.de,fremdwort.de,frustfrei-lernen.de,fussballdaten.de,gameswelt.*,gartendialog.de,gartenlexikon.de,gewinnspiele.tv,giga.de,gut-erklaert.de,hifi-forum.de,haus-garten-test.de,iban-rechner.de,immobilienscout24.de,inside-digital.de,inside-handy.de,kicker.de,kindergeld.org,kino.de,ksta.de,lablue.*,liga3-online.de,lz.de,meinestadt.de,messen.de,moviejones.de,mt.de,musiker-board.de,mz-web.de,naumburger-tageblatt.de,news.de,newsbreak24.de,nickles.de,nw.de,oeffentlicher-dienst.info,onlinemarketing.de,play3.de,prad.de,psychic.de,quoka.de,quotenmeter.de,rheinische-anzeigenblaetter.de,rimondo.com,rundschau-online.de,sozialversicherung-kompetent.de,spielen.de,spieletipps.de,spielfilm.de,tichyseinblick.de,torgranate.de,transfermarkt.*,truckscout24.*,tvinfo.de,unicum.de,unsere-helden.com,webfail.com,weltfussball.at,weristdeinfreund.de,weser-kurier.de,wieistmeineip.*,wize.life##^script:has-text((window);)
 airliners.de,auszeit.bio,autorevue.at,bafoeg-aktuell.de,berliner-kurier.de,berliner-zeitung.de,bikerszene.de,boersennews.de,bonedo.de,chefkoch.de,clever-tanken.de,computerbild.de,deine-tierwelt.de,dhd24.com,digitalfernsehen.de,donnerwetter.de,e-hausaufgaben.de,express.de,fanfiktion.de,finya.de,formel1.de,freenet.de,fremdwort.de,frustfrei-lernen.de,gameswelt.*,gartendialog.de,gartenlexikon.de,gewinnspiele.tv,gut-erklaert.de,haus-garten-test.de,hifi-forum.de,iban-rechner.de,inside-handy.de,kicker.de,kindergeld.org,kino.de,ksta.de,liga3-online.de,lz.de,messen.de,moviejones.de,mt.de,musiker-board.de,mz-web.de,naumburger-tageblatt.de,news.de,nickles.de,nw.de,oeffentlicher-dienst.info,onlinemarketing.de,prad.de,psychic.de,quoka.de,rennrad-news.de,rheinische-anzeigenblaetter.de,rimondo.com,rundschau-online.de,spielen.de,spieletipps.de,spielfilm.de,tichyseinblick.de,torgranate.de,transfermarkt.*,truckscout24.*,tvinfo.de,unicum.de,unsere-helden.com,webfail.com,weltfussball.at,weristdeinfreund.de,weser-kurier.de,wieistmeineip.*,wize.life##^script:has-text(===):has-text(/[\w\W]{16000}/)
@@ -4123,9 +4125,10 @@ anibatch.id##+js(aopr, anOptions)
 ||whitwise.com^$3p
 ||playwire.com^$domain=readmng.com
 
-! https://www.reddit.com/r/uBlockOrigin/comments/g8aede/blocking_nextepisodenet_popup_antiadblock/
+! https://github.com/uBlockOrigin/uAssets/issues/7788
 @@||next-episode.net^$ghide
-@@||googlesyndication.com/pagead/js/$script,domain=next-episode.net
+next-episode.net##+js(nosiif, /^/)
+next-episode.net##+js(aeld, , ads)
 *$script,domain=next-episode.net,redirect-rule=noopjs
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1402
@@ -11191,8 +11194,10 @@ safelink.kadal.club##+js(aopr, app_vars.force_disable_adblock)
 @@||safelink.kadal.club^$ghide
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/a2bkso/ublock_not_blocking/
+! https://github.com/uBlockOrigin/uAssets/issues/7790
 u.gg###af-header-link
 u.gg###af-all:style(margin-top: 4em;)
+u.gg##+js(nostif, f.parentNode.removeChild(f), 100)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4241
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=actiongame.com|brain-games.co.uk|classicgame.com|games-site.co.uk|hiddenobjectgames.com|mahjong.co.uk|mahjong.com|match3.co.uk|match3games.com|mindgames.com|neongames.co.uk|neongames.com|solitaireonline.com|timemanagementgame.com
@@ -12702,7 +12707,7 @@ watchjavonline.com##+js(aopr, popjs.init)
 tvguia.es##+js(aopr, isAdBlockActive)
 
 ! https://github.com/NanoMeow/QuickReports/issues/591
-||googlesyndication.com/pagead/show_ads.js$script,redirect=noopjs,domain=image2pdf.iblogbox.com
+||googlesyndication.com/pagead/show_ads.js$script,redirect-rule=noopjs,domain=iblogbox.com
 
 ||o4uxrk33.com^$3p
 
@@ -13796,9 +13801,12 @@ nibelungen-kurier.de##+js(set, nlf.custom.userCapabilities, false)
 ! https://github.com/uBlockOrigin/uAssets/issues/5062
 ||googlesyndication.com/pagead/show_ads.js$script,redirect=noopjs,domain=epubreader.1bestlink.net
 
-! coolsoft anti adb
-coolsoft.altervista.org##+js(nobab)
+! https://github.com/AdguardTeam/AdguardFilters/issues/61829
+coolsoft.altervista.org##+js(nostif, _0x)
 @@||coolsoft.altervista.org^$ghide
+coolsoft.altervista.org###block-block-30
+coolsoft.altervista.org###content-right-floatbox
+coolsoft.altervista.org##.adsbygoogle
 
 ! https://github.com/NanoMeow/QuickReports/issues/760
 gembelcit.net##+js(aopr, AaDetector)
@@ -18956,9 +18964,12 @@ checkz.net##.adsbygoogle
 
 ! https://github.com/NanoMeow/QuickReports/issues/1899
 ! https://github.com/NanoMeow/QuickReports/issues/4274
+ff14angler.com##+js(set, local_mode, true)
 @@||ff14angler.com^$ghide
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,domain=ff14angler.com
-@@||pagead2.googlesyndication.com/pagead/js/*/show_ads_impl$script,domain=ff14angler.com
+ff14angler.com##ins.adsbygoogle
+ff14angler.com##div > b
+! @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,domain=ff14angler.com
+! @@||pagead2.googlesyndication.com/pagead/js/*/show_ads_impl$script,domain=ff14angler.com
 
 ! https://github.com/NanoMeow/QuickReports/issues/1900
 health7am.com##+js(aopr, app_vars.force_disable_adblock)
@@ -20224,7 +20235,7 @@ kino.de,spieletipps.de##+js(aopr, CustomEvent)
 ||united-infos.net^$domain=gmx.net|web.de
 ! https://github.com/uBlockOrigin/uAssets/issues/6541#issuecomment-559272733
 focus.de##+js(json-prune, enabled, force_disabled)
-@@*$xhr,3p,domain=gmx.at|gmx.ch|gmx.net|web.de
+gmx.*,web.de##+js(aeld, timeupdate)
 *$media,redirect-rule=noop-0.1s.mp3,3p,domain=gmx.at|gmx.ch|gmx.net|web.de
 ! https://github.com/uBlockOrigin/uAssets/issues/7508#issuecomment-665541485
 !#if env_firefox
