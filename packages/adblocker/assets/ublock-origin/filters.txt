@@ -1751,7 +1751,6 @@ jav.guru##.alignnone
 @@||9anime.*/assets/$script,1p
 @@||9anime.ru/cdn-cgi/scripts/hcaptcha$script
 @@||mcloud.to^$ghide
-||d2wy8f7a9ursnm.cloudfront.net^
 ||soujoobafoo.com^
 ! https://www.reddit.com/r/uBlockOrigin/comments/e5b4h6/popups_and_ads_from_certain_websites_dont_get/
 ||bqiovml.com^
@@ -17752,10 +17751,6 @@ rlslog.net##+js(nowebrtc)
 @@||lolinime.net^$ghide
 lolinime.net##+js(set, showAds, true)
 
-! https://github.com/uBlockOrigin/uAssets/issues/6068
-wegner.tech##+js(aopr,app_vars.force_disable_adblock)
-wegner.tech##+js(nostif, nextFunction, 250)
-
 ! tf1 .fr
 @@||tf1.fr^$ghide
 ||delivery.tf1.fr/pub$media,redirect=noopmp3-0.1s,domain=tf1.fr
@@ -17771,11 +17766,6 @@ f1livegp.net###blockblockA
 
 ! safemaru.blogspot.com anti adb
 safemaru.blogspot.com##+js(aeld, load, 2000)
-
-! https://github.com/uBlockOrigin/uAssets/issues/1789
-short45.cf##+js(aopr, app_vars.force_disable_adblock)
-short45.cf##.banner
-||short45.cf/sw.js$script,1p
 
 ! https://github.com/NanoMeow/QuickReports/issues/1661
 reverso.net##+js(acis, $, adblock)
@@ -17799,9 +17789,6 @@ smutr.com##+js(set, flashvars.popunder_url, undefined)
 
 ! yuvutu .com popunder
 yuvutu.com##+js(acis, String.prototype.charAt)
-
-! fmoviesto .to popups
-fmoviesto.to##+js(acis, Math, zfgloaded)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6074
 digitalcafez.com##+js(aopr, app_vars.force_disable_adblock)
@@ -17839,15 +17826,12 @@ eyes-health.*##+js(aopr, app_vars.force_disable_adblock)
 eyes-health.*##+js(nowoif)
 ||imgur.com^$image,domain=eyes-health.win
 
-! https://github.com/NanoMeow/QuickReports/issues/1673
-shorter.akatsukisubs.com##+js(set, showAds, true)
-
-! https://forums.lanik.us/viewtopic.php?f=62&t=43388&p=149213#p149213
-etcscrs.com,etcsr1.com##+js(aopr, AaDetector)
 ||ljja3ef63g.com^
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=43387
 3movierulz.tv##+js(acis, Math, zfgloaded)
+4movierulz.*##+js(aeld, , _0x)
+||ev2cdn.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6083
 losmovies.*,vidnode.net##+js(acis, Math, zfgloaded)
@@ -17856,18 +17840,13 @@ losmovies.*##.aPlaceHolder
 ! https://github.com/uBlockOrigin/uAssets/issues/6084
 megashare9.*##+js(acis, Math, zfgloaded)
 
-! https://github.com/uBlockOrigin/uAssets/issues/6089
-infotaxco.com##+js(aopr, app_vars.force_disable_adblock)
-@@||infotaxco.com^$ghide
-infotaxco.com##.adsbygoogle
-
 ! sportlemons. net / org popups / ads
-sportlemon.*,sportlemons.*,sportlemonx.*##+js(popads-dummy.js)
+sportlemon.*,sportlemons.*,sportlemonx.*##+js(aopr, decodeURI)
 sportlemons.*###happyDog
 sportlemons.*###lazyCat
-supergoodtvlive.com##+js(aopr, adcashMacros)
 ||securiser.net^$3p
 sportlemonx.com##.tallstreambanner
+||bitcoinsports.org^$3p
 ||tumblebit.org^$3p
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/391
@@ -18019,14 +17998,15 @@ young-pussy.com###playerOverlay
 ! https://forums.lanik.us/viewtopic.php?f=62&t=43398
 ! https://github.com/NanoMeow/QuickReports/issues/3629
 ! https://github.com/NanoMeow/QuickReports/issues/4367
+extremereportbot.com##+js(nostif, /_0x|debug/)
+extremereportbot.com##+js(nosiif, /_0x|debug/)
 @@||extremereportbot.com^$ghide
 *$script,redirect-rule=noopjs,domain=extremereportbot.com
 ||googleapis.com/discovery/$xhr,domain=extremereportbot.com
-extremereportbot.com##.adsbygoogle
-! @@||google-analytics.com/analytics.js$script,domain=extremereportbot.com
-! @@||googleads.g.doubleclick.net/pagead/ads?client=*extremereportbot.com$frame,domain=extremereportbot.com
-! @@||pagead2.googlesyndication.com/pagead/js/*/show_ads_impl.js$script,domain=extremereportbot.com
-! extremereportbot.com##[id^="aswift"]
+extremereportbot.com##.adsbygoogle:style(max-height: 1px !important;)
+@@||google-analytics.com/analytics.js$script,domain=extremereportbot.com
+!@@||googleads.g.doubleclick.net/pagead/ads?client=*extremereportbot.com$frame,domain=extremereportbot.com
+!@@||pagead2.googlesyndication.com/pagead/js/*/show_ads_impl.js$script,domain=extremereportbot.com
 
 ! https://github.com/NanoMeow/QuickReports/issues/1690
 refoblog.xyz##+js(aopr, anOptions)
@@ -20122,6 +20102,7 @@ animeshouse.net##+js(aopr, thumbad)
 @@||animeshouse.net^$script,1p
 *$script,redirect-rule=noopjs,domain=animeshouse.net
 @@||arnett-frz.ml/popads.js$script,domain=animeshouse.net|ganessa-ah.ga
+@@*adblocker.js|$script,domain=feralhosting.com
 
 ! https://github.com/NanoMeow/QuickReports/issues/2238
 fangraphs.com##+js(acis, $, Math.random)
