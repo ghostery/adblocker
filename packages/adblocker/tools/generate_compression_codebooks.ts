@@ -1,30 +1,21 @@
 import { promises as fs } from 'fs';
-import { resolve } from 'path';
+import { resolve, join } from 'path';
 import { generate } from '@remusao/smaz-generate';
 import { Smaz } from '@remusao/smaz';
 
-import { parseFilters, NetworkFilter, CosmeticFilter } from '../adblocker';
+import { parseFilters, NetworkFilter, CosmeticFilter, fullLists } from '../adblocker';
 
-function readAsset(filepath: string): Promise<string> {
-  return fs.readFile(resolve(__dirname, '../', filepath), 'utf-8');
-}
+const PREFIX =
+  'https://raw.githubusercontent.com/cliqz-oss/adblocker/master/packages/adblocker/assets';
 
 async function loadAllLists(): Promise<string> {
-  return Promise.all(
-    [
-      'assets/easylist/easylist-cookie.txt',
-      'assets/easylist/easylist.txt',
-      'assets/easylist/easylistgermany.txt',
-      'assets/easylist/easyprivacy.txt',
-      'assets/peter-lowe/serverlist.txt',
-      'assets/ublock-origin/annoyances.txt',
-      'assets/ublock-origin/badware.txt',
-      'assets/ublock-origin/filters.txt',
-      'assets/ublock-origin/privacy.txt',
-      'assets/ublock-origin/resource-abuse.txt',
-      'assets/ublock-origin/unbreak.txt',
-    ].map(readAsset),
-  ).then((strings) => strings.join('\n'));
+  return (
+    await Promise.all(
+      fullLists
+        .map((path) => join(__dirname, '..', 'assets', path.slice(PREFIX.length)))
+        .map((path) => fs.readFile(path, 'utf-8')),
+    )
+  ).join('\n');
 }
 
 async function getCosmeticFilters(): Promise<CosmeticFilter[]> {
