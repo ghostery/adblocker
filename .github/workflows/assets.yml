@@ -35,7 +35,7 @@ jobs:
         id: fetch
         working-directory: ./packages/adblocker/assets
         run: |
-          ./update_lists.sh
+          node update.js
 
       - name: Generate compression codebooks
         id: codebooks

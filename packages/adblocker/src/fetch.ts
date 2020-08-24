@@ -55,7 +55,6 @@ const PREFIX = 'https://raw.githubusercontent.com/cliqz-oss/adblocker/master/pac
 
 export const adsLists = [
   `${PREFIX}/easylist/easylist.txt`,
-  `${PREFIX}/easylist/easylistgermany.txt`,
   `${PREFIX}/peter-lowe/serverlist.txt`,
   `${PREFIX}/ublock-origin/annoyances.txt`,
   `${PREFIX}/ublock-origin/badware.txt`,
@@ -74,6 +73,7 @@ export const adsAndTrackingLists = [
 export const fullLists = [
   ...adsAndTrackingLists,
   `${PREFIX}/easylist/easylist-cookie.txt`,
+  `${PREFIX}/fanboy/annoyance.txt`,
 ];
 
 /**

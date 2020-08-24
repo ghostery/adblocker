@@ -9,7 +9,13 @@
 import { promises as fs } from 'fs';
 import { join } from 'path';
 
-import { CosmeticFilter, detectFilterType, NetworkFilter, FilterType } from '../adblocker';
+import {
+  fullLists,
+  CosmeticFilter,
+  detectFilterType,
+  NetworkFilter,
+  FilterType,
+} from '../adblocker';
 
 class Counter<K> {
   private counter: Map<K, number>;
@@ -35,26 +41,17 @@ class Counter<K> {
   }
 }
 
-async function loadAllLists() {
-  const assets = await Promise.all(
-    [
-      '../assets/easylist/easylist.txt',
-      '../assets/easylist/easylistgermany.txt',
-      '../assets/easylist/easyprivacy.txt',
-      '../assets/fanboy/annoyance.txt',
-      '../assets/easylist/easylist-cookie.txt',
-      '../assets/peter-lowe/serverlist.txt',
-      '../assets/ublock-origin/annoyances.txt',
-      '../assets/ublock-origin/badware.txt',
-      '../assets/ublock-origin/filters.txt',
-      '../assets/ublock-origin/filters-2020.txt',
-      '../assets/ublock-origin/privacy.txt',
-      '../assets/ublock-origin/resource-abuse.txt',
-      '../assets/ublock-origin/unbreak.txt',
-    ].map((p) => fs.readFile(join(__dirname, p), 'utf-8')),
-  );
+const PREFIX =
+  'https://raw.githubusercontent.com/cliqz-oss/adblocker/master/packages/adblocker/assets';
 
-  return assets.join('\n');
+async function loadAllLists(): Promise<string> {
+  return (
+    await Promise.all(
+      fullLists
+        .map((path) => join(__dirname, '..', 'assets', path.slice(PREFIX.length)))
+        .map((path) => fs.readFile(path, 'utf-8')),
+    )
+  ).join('\n');
 }
 
 (async () => {

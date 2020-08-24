@@ -9,6 +9,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+import { fullLists } from '../adblocker';
+
 export function loadEasyListFilters(): string[] {
   return JSON.parse(
     fs.readFileSync(path.resolve(__dirname, 'data', 'easylist.json'), { encoding: 'utf-8' }),
@@ -19,21 +21,13 @@ function readAsset(filepath: string) {
   return fs.readFileSync(path.resolve(__dirname, '../', filepath), 'utf-8');
 }
 
+const PREFIX =
+  'https://raw.githubusercontent.com/cliqz-oss/adblocker/master/packages/adblocker/assets';
+
 export const allLists = (() => {
-  return [
-    'assets/easylist/easylist.txt',
-    'assets/easylist/easylistgermany.txt',
-    'assets/easylist/easyprivacy.txt',
-    'assets/easylist/easylist-cookie.txt',
-    'assets/peter-lowe/serverlist.txt',
-    'assets/ublock-origin/annoyances.txt',
-    'assets/ublock-origin/badware.txt',
-    'assets/ublock-origin/filters.txt',
-    'assets/ublock-origin/privacy.txt',
-    'assets/ublock-origin/resource-abuse.txt',
-    'assets/ublock-origin/unbreak.txt',
-  ]
-    .map(readAsset)
+  return fullLists
+    .map((p) => path.join('assets', p.slice(PREFIX.length)))
+    .map((p) => readAsset(p))
     .join('\n');
 })();
 
