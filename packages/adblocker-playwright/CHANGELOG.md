@@ -1,3 +1,19 @@
+# v1.18.0 (Mon Aug 24 2020)
+
+#### :bug: Bug Fix
+
+- build(deps-dev): bump typescript from 3.9.7 to 4.0.2 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump typescript from 3.9.7 to 4.0.2 [#1202](https://github.com/cliqz-oss/adblocker/pull/1202) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.17.0 (Sun Jul 12 2020)
 
 #### :bug: Bug Fix

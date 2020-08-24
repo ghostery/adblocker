@@ -1,3 +1,23 @@
+# v1.18.0 (Mon Aug 24 2020)
+
+#### :bug: Bug Fix
+
+- build(deps): bump ts-node from 8.10.2 to 9.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump typescript from 3.9.7 to 4.0.2 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-node-resolve from 8.4.0 to 9.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump ts-node from 8.10.2 to 9.0.0 [#1208](https://github.com/cliqz-oss/adblocker/pull/1208) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump typescript from 3.9.7 to 4.0.2 [#1202](https://github.com/cliqz-oss/adblocker/pull/1202) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-node-resolve from 8.4.0 to 9.0.0 [#1181](https://github.com/cliqz-oss/adblocker/pull/1181) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.17.0 (Sun Jul 12 2020)
 
 #### :bug: Bug Fix

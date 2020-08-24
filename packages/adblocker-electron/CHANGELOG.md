@@ -1,3 +1,37 @@
+# v1.18.0 (Mon Aug 24 2020)
+
+#### :bug: Bug Fix
+
+- build(deps): bump electron from 10.0.0-beta.23 to 10.0.0-beta.25 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump ts-node from 8.10.2 to 9.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump typescript from 3.9.7 to 4.0.2 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.21 to 10.0.0-beta.23 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.19 to 10.0.0-beta.21 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.17 to 10.0.0-beta.19 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.15 to 10.0.0-beta.17 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.14 to 10.0.0-beta.15 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.12 to 10.0.0-beta.14 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump electron from 10.0.0-beta.23 to 10.0.0-beta.25 [#1212](https://github.com/cliqz-oss/adblocker/pull/1212) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump ts-node from 8.10.2 to 9.0.0 [#1208](https://github.com/cliqz-oss/adblocker/pull/1208) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump typescript from 3.9.7 to 4.0.2 [#1202](https://github.com/cliqz-oss/adblocker/pull/1202) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.21 to 10.0.0-beta.23 [#1197](https://github.com/cliqz-oss/adblocker/pull/1197) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.19 to 10.0.0-beta.21 [#1171](https://github.com/cliqz-oss/adblocker/pull/1171) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.17 to 10.0.0-beta.19 [#1158](https://github.com/cliqz-oss/adblocker/pull/1158) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.15 to 10.0.0-beta.17 [#1151](https://github.com/cliqz-oss/adblocker/pull/1151) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.14 to 10.0.0-beta.15 [#1138](https://github.com/cliqz-oss/adblocker/pull/1138) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.12 to 10.0.0-beta.14 [#1130](https://github.com/cliqz-oss/adblocker/pull/1130) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- Update deps [#1107](https://github.com/cliqz-oss/adblocker/pull/1107) ([@remusao](https://github.com/remusao))
+
+#### Authors: 2
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.17.0 (Sun Jul 12 2020)
 
 #### :bug: Bug Fix

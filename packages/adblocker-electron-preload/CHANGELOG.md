@@ -1,3 +1,44 @@
+# v1.18.0 (Mon Aug 24 2020)
+
+#### :bug: Bug Fix
+
+- build(deps): bump electron from 10.0.0-beta.23 to 10.0.0-beta.25 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump typescript from 3.9.7 to 4.0.2 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.21 to 10.0.0-beta.23 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-node-resolve from 8.4.0 to 9.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-commonjs from 14.0.0 to 15.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.19 to 10.0.0-beta.21 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.17 to 10.0.0-beta.19 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.15 to 10.0.0-beta.17 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.14 to 10.0.0-beta.15 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.12 to 10.0.0-beta.14 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.121 to 0.0.122 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-commonjs from 13.0.1 to 14.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump electron from 10.0.0-beta.23 to 10.0.0-beta.25 [#1212](https://github.com/cliqz-oss/adblocker/pull/1212) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump typescript from 3.9.7 to 4.0.2 [#1202](https://github.com/cliqz-oss/adblocker/pull/1202) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.21 to 10.0.0-beta.23 [#1197](https://github.com/cliqz-oss/adblocker/pull/1197) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-node-resolve from 8.4.0 to 9.0.0 [#1181](https://github.com/cliqz-oss/adblocker/pull/1181) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-commonjs from 14.0.0 to 15.0.0 [#1179](https://github.com/cliqz-oss/adblocker/pull/1179) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.19 to 10.0.0-beta.21 [#1171](https://github.com/cliqz-oss/adblocker/pull/1171) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.17 to 10.0.0-beta.19 [#1158](https://github.com/cliqz-oss/adblocker/pull/1158) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.15 to 10.0.0-beta.17 [#1151](https://github.com/cliqz-oss/adblocker/pull/1151) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.14 to 10.0.0-beta.15 [#1138](https://github.com/cliqz-oss/adblocker/pull/1138) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.12 to 10.0.0-beta.14 [#1130](https://github.com/cliqz-oss/adblocker/pull/1130) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.121 to 0.0.122 [#1118](https://github.com/cliqz-oss/adblocker/pull/1118) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- Update deps [#1107](https://github.com/cliqz-oss/adblocker/pull/1107) ([@remusao](https://github.com/remusao))
+- build(deps): bump @types/chrome from 0.0.120 to 0.0.121 [#1103](https://github.com/cliqz-oss/adblocker/pull/1103) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-commonjs from 13.0.1 to 14.0.0 [#1088](https://github.com/cliqz-oss/adblocker/pull/1088) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 2
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.17.0 (Sun Jul 12 2020)
 
 #### :bug: Bug Fix
