@@ -1,3 +1,19 @@
+# vnull (Wed Aug 26 2020)
+
+#### :bug: Bug Fix
+
+- build(deps): bump electron from 10.0.0-beta.25 to 10.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump electron from 10.0.0-beta.25 to 10.0.0 [#1217](https://github.com/cliqz-oss/adblocker/pull/1217) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.18.0 (Mon Aug 24 2020)
 
 #### :bug: Bug Fix

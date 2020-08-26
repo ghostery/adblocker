@@ -1,3 +1,24 @@
+# (Wed Aug 26 2020)
+
+#### ⚠️ Pushed to `master`
+
+- Run asset updates with latest Node ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump mocha from 8.1.1 to 8.1.2 [#1219](https://github.com/cliqz-oss/adblocker/pull/1219) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump tldts-experimental from 5.6.50 to 5.6.51 [#1218](https://github.com/cliqz-oss/adblocker/pull/1218) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump prettier from 2.0.5 to 2.1.0 [#1216](https://github.com/cliqz-oss/adblocker/pull/1216) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-electron-example`, `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-electron`
+  - build(deps): bump electron from 10.0.0-beta.25 to 10.0.0 [#1217](https://github.com/cliqz-oss/adblocker/pull/1217) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 2
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.18.0 (Mon Aug 24 2020)
 
 ### Release Notes
