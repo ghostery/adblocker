@@ -308,6 +308,7 @@ onrpg.com##a[href*="mmo-it.com/"]
 ||gamingaffiliation.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5156
+sport1.de##+js(acis, addEventListener, adBlock)
 ||adnxs.com/*/sport1.js$script,redirect=noopjs,domain=sport1.de
 ||acdn.adnxs.com/as/1h/pages/sport1_mediathek.js$script,redirect=noopjs,domain=sport1.de
 ||asadcdn.com/adlib/*$script,redirect=noopjs,domain=sport1.de
@@ -556,8 +557,6 @@ nmac.to##+js(aopr, open)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2106
 ! https://github.com/uBlockOrigin/uAssets/issues/3573
-userscloud.com##+js(acis, Math, zfgloaded)
-userscloud.com##+js(acis, Object.defineProperty, vocabulary)
 userscloud.com##+js(aopr, parcelRequire)
 userscloud.com##+js(aopw, Fingerprint2)
 userscloud.com##+js(aopw, open)
@@ -565,6 +564,7 @@ userscloud.com##+js(ra, onclick, .btn-icon-stacked)
 userscloud.com##A[href$=".html"][rel="nofollow norefferer noopener"]
 ||userscloud.com^$csp=script-src 'self' 'unsafe-inline' *.google-analytics.com *.cloudflare.com *.gstatic.com *.google.com *.solvemedia.com *.recaptcha.net
 ||userscloud.com/sw.js$script
+@@||userscloud.com^$ghide
 ||pix.sr/images/banner
 
 ! https://github.com/uBlockOrigin/uAssets/issues/108
@@ -1469,7 +1469,6 @@ fux.com##+js(aeld, , /exopop|adb/)
 streamplay.*##+js(aopr, miner)
 streamplay.*##+js(aopw, Fingerprint2)
 steamplay.*##+js(aopr, btoa)
-@@||streamplay.to/js/pop$script,1p
 steamplay.*,streamp1ay.*##+js(aopw, Fingerprint2)
 streamp1ay.*##+js(aopw, Fingerprent2)
 steamplay.*,streamp1ay.*##+js(aopr, console.clear)
@@ -1744,6 +1743,7 @@ jav.guru##.alignnone
 9anime.*##+js(acis, window.open, Cookie)
 9anime.to##+js(nowoif)
 9anime.*##+js(aopr, AaDetector)
+mcloud.to##+js(acis, Math, XMLHttpRequest)
 mcloud.to##+js(aopr, open)
 @@||9anime.*^$ghide
 ||9anime.*/sw.js$script
@@ -5624,8 +5624,6 @@ acortar.live^$popunder
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1945
 ! https://github.com/NanoMeow/QuickReports/issues/3584
-clipwatching.com##+js(acis, Math, zfgloaded)
-clipwatching.com##+js(acis, Object.defineProperty, XMLHttpRequest)
 clipwatching.com##+js(aopw, _pop)
 clipwatching.com##+js(nostif, showpop)
 clipwatching.com##+js(set, adblock, false)
@@ -6913,7 +6911,6 @@ redtube.*##+js(nowoif)
 foumovies.*,hdpopcorns.*,moviescouch.*,mydownloadtube.*,rdxhd.*,123movies.ph##+js(aopw, decodeURIComponent)
 rdxhd.*##+js(acis, Math.sin, vocabulary)
 700mbdownload.*##+js(popads-dummy.js)
-gofilms4u.*##+js(acis, decodeURI, decodeURIComponent)
 123movies.ph##+js(acis, decodeURI, getScriptFromCss)
 fullywatchonline.com,myvidmate.*##+js(acis, atob, decodeURIComponent)
 thevideobee.to##+js(aopw, _pop)
@@ -6923,8 +6920,6 @@ moviescouch.*,movizland.org##+js(aopw, Fingerprint2)
 hubfiles.ws##+js(nowoif)
 hubfiles.ws##+js(nano-stb)
 ||faxfossil.com^
-dlfiles.online##+js(acis, decodeURI, decodeURIComponent)
-dlfiles.online##+js(acis, Math.sin, vocabulary)
 dlfiles.online##+js(nowoif)
 700mbdownload.*##+js(acis, puShown , /doOpen|popundr/)
 700mbdownload.*##+js(acis, decodeURI, decodeURIComponent)
@@ -6942,7 +6937,6 @@ hdpopcorns.*##+js(acis, document.createElement, popup)
 gomostream.com##.adtimes
 /watchbutton11.png$image
 /download11.png$image
-gofilms4u.*##+js(acis, Math, zfgloaded)
 700mbdownload.*##+js(aopr, decodeURI)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4349
@@ -9336,10 +9330,8 @@ descarga-animex.*##+js(aopw, adBlockDetected)
 ||googlesyndication.com/pagead/$script,redirect=noopjs,domain=main-echo.de
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3520
-uploadfiles.pw,w4files.ws##+js(acis, decodeURI, decodeURIComponent)
 uploadfiles.pw##+js(aopr, decodeURIComponent)
 uploadfiles.pw,w4files.ws##+js(ra, onclick)
-w4files.ws##+js(acis, Math.sin, vocabulary)
 ! https://github.com/uBlockOrigin/uAssets/issues/5492
 ||uploadfiles.pw^$csp=default-src 'self' 'unsafe-inline'
 
@@ -10978,7 +10970,7 @@ veedi.com##+js(set, adBlocker, false)
 @@||yoandroide.xyz^$ghide
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/a09q3o/anti_adblock_uonano_defender/
-anitube.biz##+js(acis, Math, zfgloaded)
+anitube.biz##+js(aopr, exoJsPop101)
 anitube.biz##+js(set, adBlockDetected, noopFunc)
 ||megafilmeshd21.tk^$3p
 anitube.*###iframeCore____
@@ -11087,8 +11079,6 @@ mywatchseries.*##+js(aopw, Fingerprint2)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4219
 yomovies.*##+js(aopr, decodeURI)
-yomovies.*##+js(acis, Math, zfgloaded)
-yomovies.*##+js(acis, atob, decodeURIComponent)
 yomovies.*##[href*="//bit.ly/"]
 mixdrop.*##+js(aopw, _pop)
 mixdrop.*##+js(set, MDCore.adblock, 0)
@@ -12701,11 +12691,6 @@ movierulzfree.mx##a.ad_watch_now
 movierulzfree.mx##.hd-buttons
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4700
-9kmovies.*##+js(acis, decodeURI, decodeURIComponent)
-9kmovies.*,9xmovies.*##+js(acis, Math, zfgloaded)
-9kmovies.*##+js(acis, Object.defineProperty, vocabulary)
-9xmovies.*##+js(aopr, decodeURIComponent)
-9xmovies.*##+js(acis, Object.defineProperty, XMLHttpRequest)
 ||ewerhodub.com^
 ||9xmovies.*/sw.js$script,1p
 ||g36525192.com^
@@ -13444,10 +13429,7 @@ ivoox.com###adLayout
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4965
 7starhd.*##+js(aopr, decodeURIComponent)
-7starhd.*,8xfilms.*##+js(acis, puShown , /doOpen|popundr/)
 7starhd.*,8xfilms.*##+js(aopr, Date.prototype.toUTCString)
-7starhd.*##+js(acis, Math.sin, vocabulary)
-7starhd.*##+js(acis, Math, zfgloaded)
 7starhd.*##+js(aeld, keydown, keyCode)
 ##a[href="http://linkswala.club/"]
 ||joralei.pw^
@@ -15177,7 +15159,6 @@ pes.social##.ezoic-ad
 rushtime.in##.adsbygoogle
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5438
-filerio.in##+js(acis, Math, zfgloaded)
 ||filerio.in/sw.js$script,1p
 ||oukrocky.com^
 ||nameketathar.pro^
@@ -15300,13 +15281,15 @@ desiremovies.*##+js(acis, Math, zfgloaded)
 ||presdithas.pw^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5467
-upindia.*##+js(acis, Math, zfgloaded)
-upindia.*##+js(acis, Math.sin, vocabulary)
+upindia.*##+js(acis, Math, XMLHttpRequest)
 ||gstatic.com/firebasejs/*/firebase.js$script,domain=upindia.mobi
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5468
 pandafiles.com##+js(acis, Math, zfgloaded)
+pandafiles.com##+js(aopr, InstallTrigger)
+pandafiles.com##+js(aopw, _pop)
 @@||pandafiles.com^$ghide
+||fbpopr.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5469
 uploadbuzz.*##+js(acis, Object.defineProperty, XMLHttpRequest)
@@ -15729,7 +15712,7 @@ bezpolitickekorektnosti.cz##.SC_TBlock
 glodls.*##+js(nowebrtc)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5580
-uppom.*##+js(acis, String.fromCharCode, 'shift')
+uppom.*##+js(acis, Math, zfgloaded)
 uppom.*##+js(nowoif)
 ##[id^="p_root_"]
 
@@ -16372,7 +16355,7 @@ clipwatching.com,cdn-myhdjav.info,embed.best,embed.media,embedsito.com,fembed.co
 clipwatching.com,cdn-myhdjav.info,embed.best,embed.media,embedsito.com,fembed.com,feurl.com,gaobook.review,gcloud.live,javcl.me,jplayer.net,luxubu.review,mavplay.com,mavplayer.xyz,novelplanet.me,openplayer.net,playfinder.xyz,playvid.host,playvideo.best,qdembed.com,rubicstreaming.com,svpri.xyz,vaplayer.xyz,videobb.*,weirdmovies.xyz,xstreamcdn.com,zidiplay.com##+js(aopw, adcashMacros)
 clipwatching.com,cdn-myhdjav.info,embed.best,embed.media,embedsito.com,fembed.com,feurl.com,gaobook.review,gcloud.live,javcl.me,jplayer.net,luxubu.review,mavplay.com,mavplayer.xyz,novelplanet.me,openplayer.net,playfinder.xyz,playvid.host,playvideo.best,qdembed.com,rubicstreaming.com,svpri.xyz,vaplayer.xyz,videobb.*,weirdmovies.xyz,xstreamcdn.com,zidiplay.com##+js(aopr, AaDetector)
 clipwatching.com,cdn-myhdjav.info,embed.best,embed.media,embedsito.com,fembed.com,feurl.com,gaobook.review,gcloud.live,javcl.me,jplayer.net,luxubu.review,mavplay.com,mavplayer.xyz,novelplanet.me,openplayer.net,playfinder.xyz,playvid.host,playvideo.best,qdembed.com,rubicstreaming.com,svpri.xyz,vaplayer.xyz,videobb.*,weirdmovies.xyz,xstreamcdn.com,zidiplay.com##+js(aopr, glxopen)
-clipwatching.com,cdn-myhdjav.info,embed.best,embed.media,embedsito.com,fembed.com,feurl.com,gaobook.review,gcloud.live,javcl.me,jplayer.net,luxubu.review,mavplay.com,mavplayer.xyz,novelplanet.me,openplayer.net,playfinder.xyz,playvid.host,playvideo.best,qdembed.com,rubicstreaming.com,svpri.xyz,vaplayer.xyz,videobb.*,weirdmovies.xyz,xstreamcdn.com,zidiplay.com##+js(set, globalThis, null)
+cdn-myhdjav.info,embed.best,embed.media,embedsito.com,fembed.com,feurl.com,gaobook.review,gcloud.live,javcl.me,jplayer.net,luxubu.review,mavplay.com,mavplayer.xyz,novelplanet.me,openplayer.net,playfinder.xyz,playvid.host,playvideo.best,qdembed.com,rubicstreaming.com,svpri.xyz,vaplayer.xyz,videobb.*,weirdmovies.xyz,xstreamcdn.com,zidiplay.com##+js(set, globalThis, null)
 clipwatching.com,cdn-myhdjav.info,embed.best,embed.media,embedsito.com,fembed.com,feurl.com,gaobook.review,gcloud.live,javcl.me,jplayer.net,luxubu.review,mavplay.com,mavplayer.xyz,novelplanet.me,openplayer.net,playfinder.xyz,playvid.host,playvideo.best,qdembed.com,rubicstreaming.com,svpri.xyz,vaplayer.xyz,videobb.*,weirdmovies.xyz,xstreamcdn.com,zidiplay.com##+js(nowoif)
 @@||playfinder.xyz^$ghide
 playvid.host#@#.afs_ads
@@ -22547,6 +22530,7 @@ tvn24.pl##+js(json-prune, playlist.movies.0.adserver playlist.movies.1.adserver 
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6959
 clicknupload.co##+js(acis, Object.defineProperty, XMLHttpRequest)
+clicknupload.co##+js(aopw, _pop)
 *$3p,domain=clicknupload.co,denyallow=fontawesome.com|bootstrapcdn.com|netdna-cdn.com|hwcdn.net
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/f45bvt/stop_ublock_from_creating_new_tabs/
@@ -22816,9 +22800,9 @@ trendsderzukunft.de##+js(aopr, onload)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3117
 ||vidlii.com/js/main.js^$script,1p
-vidlii.com##+js(aeld, load, nextFunction)
-vidlii.com##+js(aopw, ABB_config)
-vidlii.com##+js(acis, $, stop)
+vidlii.com##+js(nosiif, visibility, 1000)
+vidlii.com##+js(set, blockAdBlock, trueFunc)
+vidlii.com##+js(set, adsbygoogle.loaded, true)
 *$xhr,redirect-rule=noopjs,domain=vidlii.com
 @@||vidlii.com^$ghide
 vidlii.com##.adsbygoogle
