@@ -1876,7 +1876,7 @@ blitz.bg,novini.bg##+js(nostif, f.parentNode.removeChild(f), 100)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7520
 anitube.*##+js(aopr, AaDetector)
-! [dup] from ublock-origin/filters.txt:10985
+! [dup] from ublock-origin/filters.txt:10977
 ! ||anitube.*/sw.js$script,1p
 ||anitubecz.uk^$script
 ||1uno1xkktau4.com^$3p
@@ -4093,8 +4093,45 @@ annabelle.ch##+js(aopr, _sp_._networkListenerData)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62450
 csgo-ranks.com##+js(nosiif, visibility, 1000)
 
+! https://github.com/AdguardTeam/AdguardFilters/issues/62483
+androidgreek.com##+js(aopr, adBlockDetected)
+
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62484
 detik.com##+js(nostif, f.parentNode.removeChild(f), 100)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62519
 sshagan.net##+js(acis, addEventListener, google_ad_client)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/62530
+k-links.xyz##+js(aopr, disableButtonTimer)
+@@||k-links.xyz/trx/libs/advertisement.js$script,1p
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/62540
+@@||shortclicks.xyz^$ghide
+shortclicks.xyz##.adsbygoogle:remove()
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/62567
+streamanime.xyz##+js(nosiif, visibility, 1000)
+streamanime.xyz###top72890
+mp4cloud.net##+js(nosiif, visibility, 1000)
+mp4cloud.net##.video-overlay
+mp4cloud.net###overlay_toggle
+mp4cloud.net##.overlay-container
+
+! https://github.com/uBlockOrigin/uAssets/issues/7839
+youtube-video.download##+js(aopr, open)
+youtube-video.download##.ads
+youtube-video.download##.g-ban
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/62499
+manikusa.com##+js(set, fuckAdBlock._options.baitClass, null)
+manikusa.com##+js(nowoif)
+manikusa.com###overlay
+@@||cdnjs.cloudflare.com/ajax/libs/fuckadblock/*/fuckadblock.min.js$script,domain=manikusa.com
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/62592
+ad-doge.com##+js(set, blockAdBlock._options.baitClass, null)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/62602
+fshost.me##+js(set, fuckAdBlock, noopFunc)
+fshost.me##+js(set, adsbygoogle.loaded, true)
