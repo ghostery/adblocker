@@ -1,3 +1,31 @@
+# vnull (Sat Aug 29 2020)
+
+#### ⚠️ Pushed to `master`
+
+- Annoyances and Easylist Germany are now enabled in full and ads-only presets ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Update local assets [#1235](https://github.com/cliqz-oss/adblocker/pull/1235) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Add back easylist Germany by default [#1230](https://github.com/cliqz-oss/adblocker/pull/1230) ([@remusao](https://github.com/remusao))
+- Remove line numbers from commented out filters [#1228](https://github.com/cliqz-oss/adblocker/pull/1228) ([@remusao](https://github.com/remusao))
+- Update local assets [#1227](https://github.com/cliqz-oss/adblocker/pull/1227) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1222](https://github.com/cliqz-oss/adblocker/pull/1222) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump tldts-experimental from 5.6.51 to 5.6.52 [#1233](https://github.com/cliqz-oss/adblocker/pull/1233) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.26.6 to 2.26.7 [#1231](https://github.com/cliqz-oss/adblocker/pull/1231) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump mocha from 8.1.2 to 8.1.3 [#1232](https://github.com/cliqz-oss/adblocker/pull/1232) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.18.0 (Mon Aug 24 2020)
 
 ### Release Notes
