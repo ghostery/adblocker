@@ -68,6 +68,10 @@ const adb = require('@cliqz/adblocker');
       'https://easylist-downloads.adblockplus.org/easylist-cookie.txt',
       ['easylist', 'easylist-cookie.txt'],
     ],
+    [
+      'https://easylist.to/easylistgermany/easylistgermany.txt',
+      ['easylist', 'easylistgermany.txt'],
+    ],
 
     // Fanboy
     [
