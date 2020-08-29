@@ -75,7 +75,6 @@ const adb = require('@cliqz/adblocker');
       ['fanboy', 'annoyance.txt'],
     ],
   ]) {
-    let index = 1;
     const lines = (await got(url).text())
       .split(/[\r\n]/g)
       .map((line) => line.trim())
@@ -83,32 +82,27 @@ const adb = require('@cliqz/adblocker');
         const filter = adb.parseFilter(line);
 
         if (filter === null) {
-          index += 1;
           return line;
         }
 
         if (filter.isBadFilter?.()) {
-          badfilters.set(filter.getIdWithoutBadFilter(), `${key.join('/')}:${index}`);
-          index += 1;
+          badfilters.set(filter.getIdWithoutBadFilter(), `${key.join('/')}`);
           return `! [badfilter] ${line}`;
         }
 
         const badfilter = badfilters.get(filter.getIdWithoutBadFilter?.());
         if (badfilter !== undefined) {
           badfiltersCount += 1;
-          index += 2;
           return `! [badfilter] from ${badfilter}\n! ${line}`;
         }
 
         const dup = seen.get(filter.getId());
         if (dup !== undefined) {
           duplicatesCount += 1;
-          index += 2;
           return `! [dup] from ${dup}\n! ${line}`;
         }
 
-        seen.set(filter.getId(), `${key.join('/')}:${index}`);
-        index += 1;
+        seen.set(filter.getId(), `${key.join('/')}`);
         return line;
       });
 
