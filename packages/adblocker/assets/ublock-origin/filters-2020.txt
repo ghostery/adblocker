@@ -519,7 +519,7 @@ movie1168.com##+js(nano-sib)
 *$media,3p,domain=movie1168.com,redirect=noopmp3-0.1s
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7282
-upfordown.xyz##+js(acis, addEventListener, google_ad_client)
+upfordown.xyz##+js(nosiif, visibility, 1000)
 upfordown.xyz##+js(aopw, _pop)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54370
@@ -4167,3 +4167,24 @@ dl.3dmodelshare.org##+js(acis, addEventListener, google_ad_client)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4559
 rtl.hr##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://github.com/NanoMeow/QuickReports/issues/4598
+! https://github.com/AdguardTeam/AdguardFilters/issues/61102
+thingiverse.com##+js(nano-sib)
+thingiverse.com##+js(set, blockedElement.className, null)
+thingiverse.com##[class^="AdBlockDetect"]
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/62686
+surf-trx.com##+js(nosiif, visibility, 1000)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/62713
+zlink.xyz##+js(aopr, app_vars.force_disable_adblock)
+zlink.xyz##+js(aopr, open)
+zlink.xyz##[class^=bmadblock]
+zlink.xyz##b > h4
+*$3p,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com|googleapis.com,domain=zlink.xyz
+||b4f.site^$3p
+||coinad.media^
+
+! https://github.com/uBlockOrigin/uAssets/issues/7848
+responsivevoice.org##.cp-modal-popup-container:remove()
