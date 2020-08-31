@@ -27,6 +27,7 @@ export default [
   "noopjs",
   ".com/",
   "n_ads",
+  "none",
   ".js",
   "ads",
   "ana",
