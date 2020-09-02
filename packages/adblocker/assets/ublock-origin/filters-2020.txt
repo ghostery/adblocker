@@ -4223,6 +4223,9 @@ cgtips.org##+js(acis, addEventListener, google_ad_client)
 saradahentai.com,hentaiarena.com##+js(aopr, document.dispatchEvent)
 saradahentai.com,hentaiarena.com##+js(acis, document.querySelectorAll, popMagic)
 
+! https://github.com/AdguardTeam/AdguardFilters/issues/62802
+eddiekidiw.com##+js(acis, $, _ads)
+
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62803
 blkom.com##+js(set, blockAdBlock._options.baitClass, null)
 blkom.com##+js(aopw, _pop)
@@ -4233,3 +4236,59 @@ uk-vision.blogspot.com##+js(nostif, nextFunction, 250)
 
 ! animeflv .cc ads
 animeflv.cc##+js(acis, JSON.parse)
+
+! https://forums.lanik.us/viewtopic.php?p=156364#p156364
+videosdotados.com##+js(aopr, ExoLoader.serve)
+videosdotados.com##+js(acis, document.querySelectorAll, popMagic)
+videosdotados.com##+js(aopr, open)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/62896
+btcdot.xyz##+js(aopr, app_vars.force_disable_adblock)
+*$3p,script,frame,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=btcdot.xyz
+||mopedisods.com^
+||zurilito.online^
+||y3k7rqxsh55c.com^
+
+! shrinke.me anti adb popup
+shrinke.me##+js(aopr, app_vars.force_disable_adblock)
+shrinke.me##+js(aopr, open)
+shrinke.me##+js(set, blurred, false)
+shrinke.me###imgAddDirectLink
+||shrinke.me/sw.js$script,1p
+||shrinkme.io^$script,3p
+
+! gratispaste.com popup
+gratispaste.com##+js(aopw, _pop)
+gratispaste.com##.content > center
+
+! glinks.co anti adb
+glinks.co,gobrowse.net##+js(nosiif, visibility, 1000)
+
+! https://github.com/NanoMeow/QuickReports/issues/4612
+clipartmax.com##+js(nano-stb)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7850
+short.imagenesderopaparaperros.com##+js(acis, String.fromCharCode, 'shift')
+short.imagenesderopaparaperros.com##+js(aopr, app_vars.force_disable_adblock)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/62906
+tecnoblog.net##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/62910
+shortenbuddy.com##+js(nosiif, visibility, 1000)
+shortenbuddy.com##+js(nano-sib, downloadTimer)
+shortenbuddy.com##+js(aopr, app_vars.force_disable_adblock)
+shortenbuddy.com##.cus-dalert
+shortenbuddy.com##.custom-adbox
+shortenbuddy.com##.custom-shadow.custom-border-color.alert-danger.alert
+||mylead.global^$3p
+
+! https://github.com/NanoMeow/QuickReports/issues/4617
+freewebcart.com##+js(nostif, ai_adb)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/il64iy/cant_get_rid_of_popups_on_a_couple_different_sites/
+wootly.ch##+js(disable-newtab-links)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/62948
+javhdporn.net###player_3x2_container
+javhdporn.net##+js(set, clientSide.adbDetect, null)

@@ -149,7 +149,9 @@ freenet.de##+js(acis, document.createElement, /\}\s*\(.*?\b(self|this|window)\b.
 webmail.freenet.de#@#+js(acis, document.createElement, /\}\s*\(.*?\b(self|this|window)\b.*?\)/)
 !#endif
 kicker.de,musiker-board.de,quoka.de,recording.de,tichyseinblick.de##+js(acis, Math, /\}\s*\(.*?\b(self|this|window)\b.*?\)/)
+freenet.de,kicker.de,musiker-board.de,quoka.de,recording.de,tichyseinblick.de,transfermarkt.*##+js(nostif, .call(null), 10)
 airliners.de,auto-motor-und-sport.de,auszeit.bio,autorevue.at,berliner-kurier.de,berliner-zeitung.de,boersennews.de,clever-tanken.de,desired.de,digitalfernsehen.de,express.de,fanfiktion.de,finya.de,frustfrei-lernen.de,fussballdaten.de,gameswelt.*,giga.de,kino.de,gruenderlexikon.de,liga3-online.de,lz.de,mt.de,news.de,nw.de,prad.de,psychic.de,rimondo.com,spielen.de,spieletipps.de,tichyseinblick.de,tvinfo.de,unicum.de,weltfussball.at,weristdeinfreund.de##+js(acis, Number.isNaN)
+airliners.de,auto-motor-und-sport.de,auszeit.bio,autorevue.at,berliner-kurier.de,berliner-zeitung.de,boersennews.de,clever-tanken.de,desired.de,digitalfernsehen.de,express.de,fanfiktion.de,finya.de,frustfrei-lernen.de,fussballdaten.de,gameswelt.*,giga.de,kino.de,gruenderlexikon.de,liga3-online.de,lz.de,mt.de,news.de,nw.de,prad.de,psychic.de,rimondo.com,spielen.de,spieletipps.de,tichyseinblick.de,tvinfo.de,unicum.de,weltfussball.at,weristdeinfreund.de##+js(nostif, .call(null), 10)
 nordbayern.de##^script:has-text(jQuery('#web'))
 airliners.de,auszeit.bio,auto-motor-und-sport.de,autorevue.at,bafoeg-aktuell.de,berliner-kurier.de,berliner-zeitung.de,bikerszene.de,boersennews.de,bonedo.de,chefkoch.de,clever-tanken.de,computerbild.de,deine-tierwelt.de,desired.de,dhd24.com,digitalfernsehen.de,donnerwetter.de,e-hausaufgaben.de,express.de,fanfiktion.de,finya.de,formel1.de,freenet.de,fremdwort.de,frustfrei-lernen.de,fussballdaten.de,gameswelt.*,gartendialog.de,gartenlexikon.de,gewinnspiele.tv,giga.de,gut-erklaert.de,hifi-forum.de,haus-garten-test.de,iban-rechner.de,immobilienscout24.de,inside-digital.de,inside-handy.de,kicker.de,kindergeld.org,kino.de,ksta.de,lablue.*,liga3-online.de,lz.de,meinestadt.de,messen.de,moviejones.de,mt.de,musiker-board.de,mz-web.de,naumburger-tageblatt.de,news.de,newsbreak24.de,nickles.de,nw.de,oeffentlicher-dienst.info,onlinemarketing.de,play3.de,prad.de,psychic.de,quoka.de,quotenmeter.de,rheinische-anzeigenblaetter.de,rimondo.com,rundschau-online.de,sozialversicherung-kompetent.de,spielen.de,spieletipps.de,spielfilm.de,tichyseinblick.de,torgranate.de,transfermarkt.*,truckscout24.*,tvinfo.de,unicum.de,unsere-helden.com,webfail.com,weltfussball.at,weristdeinfreund.de,weser-kurier.de,wieistmeineip.*,wize.life##^script:has-text((window);)
 airliners.de,auszeit.bio,autorevue.at,bafoeg-aktuell.de,berliner-kurier.de,berliner-zeitung.de,bikerszene.de,boersennews.de,bonedo.de,chefkoch.de,clever-tanken.de,computerbild.de,deine-tierwelt.de,dhd24.com,digitalfernsehen.de,donnerwetter.de,e-hausaufgaben.de,express.de,fanfiktion.de,finya.de,formel1.de,freenet.de,fremdwort.de,frustfrei-lernen.de,gameswelt.*,gartendialog.de,gartenlexikon.de,gewinnspiele.tv,gut-erklaert.de,haus-garten-test.de,hifi-forum.de,iban-rechner.de,inside-handy.de,kicker.de,kindergeld.org,kino.de,ksta.de,liga3-online.de,lz.de,messen.de,moviejones.de,mt.de,musiker-board.de,mz-web.de,naumburger-tageblatt.de,news.de,nickles.de,nw.de,oeffentlicher-dienst.info,onlinemarketing.de,prad.de,psychic.de,quoka.de,rennrad-news.de,rheinische-anzeigenblaetter.de,rimondo.com,rundschau-online.de,spielen.de,spieletipps.de,spielfilm.de,tichyseinblick.de,torgranate.de,transfermarkt.*,truckscout24.*,tvinfo.de,unicum.de,unsere-helden.com,webfail.com,weltfussball.at,weristdeinfreund.de,weser-kurier.de,wieistmeineip.*,wize.life##^script:has-text(===):has-text(/[\w\W]{16000}/)
@@ -1361,7 +1363,7 @@ hltv.org##[class^="col-rek"][id]
 ||popads.net^$script,redirect=popads-dummy.js,domain=vidlox.tv
 ! https://github.com/uBlockOrigin/uAssets/issues/4149
 ! https://github.com/NanoMeow/QuickReports/issues/1109
-vidlox.*##+js(acis, Math, zfgloaded)
+vidlox.*##+js(acis, Math, XMLHttpRequest)
 vidlox.*##+js(aopr, decodeURIComponent)
 vidlox.*##+js(nowebrtc)
 vidlox.*##+js(set, popns, true)
@@ -2472,7 +2474,6 @@ wrestlingtalk.org##+js(nobab)
 *$script,3p,domain=adbull.org
 @@||static.adbull.me^$script,domain=adbull.org
 *$script,redirect-rule=noopjs,domain=adbull.org
-adbull.org##^script:has-text(shift)
 adbull.*##+js(ra, onclick)
 adbull.*##[href^="https://www.cryptominingfarm.io/"]
 adbull.*##[src^="https://i.imgur.com/"]
@@ -3846,7 +3847,11 @@ gogoanime.*##+js(nostif, o(), 1)
 gogoanime.*##+js(set, check_adblock, true)
 gogoanime.*##.banner_center
 gogoanime.*##.anime_video_body_cate > div[style]:has(:scope > div[id] + script[src])
-fcdn.stream##+js(nowoif)
+gogoanimetv.*##+js(aopr, AaDetector)
+gogoanimetv.*##+js(nosiif, _0x)
+fcdn.stream,gogoanimetv.*##+js(nowoif)
+||g8cp5djk1j0r.com^$3p
+||hqr9q6f30371.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1277
 cpmlink.net##+js(acis, decodeURI, decodeURIComponent)
@@ -10362,10 +10367,12 @@ icutlink.com##+js(aopr, confirm)
 icutlink.com##+js(aopr, eval)
 icutlink.com##+js(aopr, open)
 icutlink.com##+js(ra, onclick)
+icutlink.com##+js(set, blurred, false)
 icutlink.com##^script:has-text(confirm)
 ||armaimapt.club^
 icutlink.com##[src="/img/download-now.gif"]
 icutlink.com##.banner-inner
+icutlink.com###link-view > p, #link-view > br
 ||amanasa.com^
 icutlink.com##[href="http://cuiys.com/"]
 ||icutlink.com/*sw.js$script,1p
@@ -10865,10 +10872,8 @@ savelinks.*##+js(aopr, LieDetector)
 ||madsoks.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4159
-||filescdn.net/sw.js
 dbupload.*##+js(aeld, click)
 dbupload.*,movies-300mb.*##+js(aopw, encodeURIComponent)
-filescdn.net##+js(aopw, Fingerprint2)
 uppit.com##+js(aopw, decodeURIComponent)
 *$popunder,domain=oboom.com
 
@@ -11116,7 +11121,6 @@ uiz.*##+js(aopr, AaDetector)
 uiz.*##+js(acis, fuckAdBlock, importFAB)
 uiz.*##+js(aopr, adBlockDetected)
 uiz.*##+js(aopw, _pop)
-uiz.*##+js(nobab)
 uiz.*##+js(aopr, HTMLElement)
 uiz.*##+js(aopr, NaConf)
 uiz.*##+js(aopr, open)
@@ -11132,8 +11136,6 @@ uiz.*#@#.banner-300x250
 uiz.*##.banner-inner
 uiz.*##[src="/img/downloadbutton.gif"]
 uiz.*##[href^="http://ditds.xyz"]
-||uiz.*^$csp=connect-src 'self' *.google.com;child-src 'self' *.google.com;
-||uiz.*^$csp=script-src 'self' 'unsafe-inline' *.gstatic.com *.google.com *.recaptcha.net *.googletagmanager.com *.cloudflare.com
 *$3p,script,redirect-rule=noopjs,domain=uiz.io|uiz.app
 uiz.*##+js(aopr, adsBlocked)
 uiz.*##+js(acis, $, adBlock)
@@ -11141,6 +11143,7 @@ uiz.*##+js(nowebrtc)
 uiz.*##+js(acis, Math, zfgloaded)
 uiz.*##+js(aeld, , popMagic)
 uiz.*##+js(aopr, app_vars.disable_adblock)
+uiz.*##+js(nostif, replaceUrl)
 ||share.notizie.it^
 ||tracking.notizie.it^
 ||pteefoak.com^
@@ -12211,7 +12214,7 @@ groundslife.com,zerooman.com##.blog-item
 ||gplinks.in/sw.js$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4512
-dramacool.*##+js(acis, Math, zfgloaded)
+dramacool.*##+js(acis, Math, XMLHttpRequest)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4368#issuecomment-450945393
 dwl.cyberterminators.co,earnsurl.net,feeds.feedburner.com,fwd.ovh,getsearn.com,geturls.website##+js(aopr, app_vars.force_disable_adblock)
@@ -13991,7 +13994,7 @@ lookmovie.ag##+js(aopr, AaDetector)
 @@||lookmovie.ag^$ghide
 lookmovie.ag##.view-top-ab
 lookmovie.ag##.notifyjs-corner
-*$3p,denyallow=google.com|googleapis.com|gstatic.com|lookmovie.io|hcaptcha.com|nflxext.com,domain=lookmovie.ag
+*$script,3p,denyallow=google.com|googleapis.com|gstatic.com|lookmovie.io|hcaptcha.com|nflxext.com,domain=lookmovie.ag
 ||mopnixhem.com^$3p
 ||opsoomet.net^$3p
 
@@ -18355,7 +18358,7 @@ blackgamer.ru##+js(aopw, adBlockDetected)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6231
 ! https://github.com/NanoMeow/QuickReports/issues/3127
-watchmovie.*##+js(acis, Math, zfgloaded)
+watchmovie.*##+js(acis, Math, XMLHttpRequest)
 /apu.php?zoneid=*$important
 
 ! jokerlivestream .net popups
@@ -19741,11 +19744,12 @@ linkvertise.com##+js(acis, addEventListener, DOMNodeRemoved)
 linkvertise.com##+js(acis, document.dispatchEvent, CustomEvent)
 linkvertise.com##+js(acis, onload, adsbygoogle)
 linkvertise.com##+js(aeld, load, nextFunction)
-linkvertise.com##+js(json-prune, data.meta.require_addon data.meta.require_video data.meta.require_notifications data.meta.require_og_ads data.meta.require_web)
+linkvertise.com##+js(json-prune, data.meta.require_addon data.meta.require_captcha data.meta.require_notifications data.meta.require_og_ads data.meta.require_video data.meta.require_web)
 linkvertise.com##+js(nano-sib)
+linkvertise.com##+js(set, isAdBlockActive, false)
 linkvertise.com##.cc-window
-||cf-se.com^$script,domain=linkvertise.com
-||streamrail.net^$script,domain=linkvertise.com
+||cf-se.com^$script,domain=linkvertise.*
+||streamrail.net^$script,domain=linkvertise.*
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6486
 kumpulmanga.org##+js(set, showAds, true)
@@ -20344,6 +20348,8 @@ news18.com##+js(aeld, scroll, getElementById)
 news18.com##+js(aeld, scroll, Mgid)
 news18.com##+js(aopr, getAdsScripts)
 news18.com##+js(acis, $, scroll)
+news18.com##.ad-container
+news18.com##[class^="adv_placeholder_"]
 !#endif
 
 ! https://github.com/NanoMeow/QuickReports/issues/2290
@@ -22796,11 +22802,13 @@ gomo.to##+js(aopr, glxopen)
 ! https://github.com/uBlockOrigin/uAssets/issues/6986
 ! https://github.com/NanoMeow/QuickReports/issues/3690
 ! https://github.com/NanoMeow/QuickReports/issues/4294#issuecomment-659086334
-iir.ai##+js(acis, Math, zfgloaded)
+iir.ai##+js(acis, Math, XMLHttpRequest)
 iir.ai##+js(aeld, load, .appendChild)
 iir.ai##+js(aopr, app_vars.force_disable_adblock)
 iir.ai##+js(aopr, open)
 iir.ai##+js(aopw, Fingerprint2)
+iir.ai##+js(set, blurred, false)
+iir.ai###link-view > div[style] + p[style] + center > [href][target]
 ||iir.ai/sw$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6988
@@ -24018,17 +24026,21 @@ dogemanager.com##+js(aopr, app_vars.force_disable_adblock)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/51992
 freebitcoin.vip,freelitecoin.vip##+js(aopr, adBlockDetected)
+freebitcoin.vip,freelitecoin.vip##+js(nano-sib)
 freebitcoin.vip,freelitecoin.vip##.brvsid
 freebitcoin.vip,freelitecoin.vip##.show.fade.alert-info.alert
 freebitcoin.vip##body > div:nth-of-type(1)
 freelitecoin.vip##nav:nth-of-type(2) > div
-freebitcoin.vip,freelitecoin.vip##+js(nano-sib)
 freelitecoin.vip,freebitcoin.vip##[class^="bmadblock"]
+freelitecoin.vip##nav:nth-of-type(1) > div
 bigb0ss.net##[href^="https://brave.com/"]
 bigb0ss.net##.box-main > p
 bigb0ss.net##+js(aopw, _pop)
 bigb0ss.net##+js(aopr, app_vars.force_disable_adblock)
 bigb0ss.net##div[class][style*="width:300px;height:250px;"], div[class][style*="width:160px;height:600px"]
+claimcrypto.cc##+js(aopr, app_vars.force_disable_adblock)
+claimcrypto.cc##div.no-padding
+claimcrypto.cc##[class^="bmadblock"]
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/52002
 @@||igtools.net^$ghide
@@ -24546,6 +24558,7 @@ maxidbr.com##+js(acis, addEventListener, nextFunction)
 ! redecanais.bz ads
 canaisgratis.*,redecanais.*###guerejo
 canaisgratis.*,redecanais.*###guerejoback
+redecanais.*###iframeCore____
 bemestarglobal.com.br,canaisgratis.*,cotarseguroautomotivo.com,dietafitness.fun,encripted-encripted-encripted-encripted-encripted-encripted.fun,gamesgo.top,homeingles.com,noticiasfix.com,nutricionistafitness.com.br,redecanais.*,topauto.fun,tudoaquifinancas.online##+js(aopr, zfgformats)
 allgamesejogos.*,bemestarglobal.*,canaisgratis.*,cotarseguroautomotivo.com,dietafitness.fun,encripted-encripted-encripted-encripted-encripted-encripted.fun,gamesgo.*,homeingles.com,lojadebicicleta.com.br,noticiasfix.com,noticiasemfoco.online,nutricionistafitness.com.br,redecanais.*,socialpiri.net,sqldatabasebacks.com,topauto.fun,tudoaquifinancas.online##[id="colunas"]:style(display: block !important;)
 ||5t59uw2iuh.com^$3p
