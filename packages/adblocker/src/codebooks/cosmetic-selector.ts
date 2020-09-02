@@ -36,7 +36,7 @@ export default [
   "text-align:",
   "background",
   "newsletter",
-  "[href^=\"/",
+  "a[href^=\"",
   "container",
   "Container",
   "decodeURI",
