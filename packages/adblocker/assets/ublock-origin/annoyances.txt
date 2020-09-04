@@ -1555,7 +1555,7 @@ instagram.com##.xZ2Xk:has-text(/App/)
 imore.com##.adunit-wrap
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4987
-mobile.twitter.com##span:has-text(/get the most/i):xpath(../../../../../..)
+mobile.twitter.com##span:has-text(/better on the app|Twitterアプリをおすすめ/):upward(5)
 mobile.twitter.com##body:style(overflow: auto !important; margin: 0 !important;)
 mobile.twitter.com##div[tabindex="0"]:matches-css(position:fixed):has([href="/signup"])
 ! https://github.com/uBlockOrigin/uAssets/issues/5911
@@ -4713,3 +4713,16 @@ hackromtools.info##+js(aopr, anOptions)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7866
 cbssports.com##+js(aopr, HTMLIFrameElement)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7867
+anauk.net##+js(ra, oncontextmenu|onselectstart|onselect|ondragstart|ondrag, body)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/63020
+miniroyale2.io##+js(nofab)
+miniroyale2.io###miniroyale2-io_728x90
+
+! https://github.com/uBlockOrigin/uAssets/issues/7871
+memorialrecord.jp##+js(aopw, document.oncontextmenu)
+memorialrecord.jp##+js(aopw, document.onselectstart)
+memorialrecord.jp##+js(aopw, document.ondragstart)
+memorialrecord.jp##*:style(-webkit-touch-callout:default !important; -webkit-user-select:auto !important; -moz-user-select:auto !important; user-select:auto !important)
