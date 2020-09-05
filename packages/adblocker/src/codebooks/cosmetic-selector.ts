@@ -8,7 +8,6 @@
 /* tslint:disable quotemark */
 export default [
   "[cellspacing=\"0\"][cellpadding=\"0\"][border=\"0\"]",
-  "acis, Object.defineProperty, XMLHttpRequest",
   "acis, document.querySelectorAll, popMagic",
   "nostif, f.parentNode.removeChild(f), 100",
   "aopr, app_vars.force_disable_adblock",
@@ -197,6 +196,7 @@ export default [
   "tn",
   "to",
   "tr",
+  "um",
   "un",
   "us",
   " ",
