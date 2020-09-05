@@ -1270,13 +1270,12 @@ mind42.com###content.sidebar2:style(margin-right: 0 !important;)
 ||d1n7ypf85zfej7.cloudfront.net^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/458
-! https://github.com/AdguardTeam/AdguardFilters/issues/50035
+latimes.com##+js(nostif, .parentNode.removeChild, 100)
 ||latimes.com^$ghide,important
 ||googlesyndication.com^$script,important,domain=latimes.com
 ||ntv.io^$script,important,domain=latimes.com
 ||openx.net^$script,important,domain=latimes.com
 ||rubiconproject.com^$script,important,domain=latimes.com
-latimes.com##+js(nostif, a.parentNode.removeChild(a), 100)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6947
 xhamster.*,xhamster1.*##+js(aopr, wih-popunder)
@@ -6896,6 +6895,8 @@ youporn.com##.ad-bottom-text
 youporn.com##.ad-remove
 youporn.com##ads
 youporn.com##aside:has(a.ad-remove)
+youporn.com##.e8-column:has(.ad-remove.removeAdLink)
+youporn.com##.grid-sub-row-2.four-column > div:has([class^="ad"][class*="Link"])
 youporn.com###adblock_1
 redtube.com,redtube.net,youporn.com,xtube.com##+js(aopw, rAb)
 youporn.com##+js(nostif, jQuery)
@@ -12918,7 +12919,9 @@ ref-dir.com^$popunder
 ! https://github.com/uBlockOrigin/uAssets/issues/4798#issuecomment-464387517
 ! https://github.com/uBlockOrigin/uAssets/issues/6112
 hackstore.net,latinomegahd.net,megajuegosfree.com,megapeliculasrip.net,peliculasgoogledrive.info,pelislatino3gp.biz,pelismegahd.pe,pocosmegashdd.org,tododvdfull.com##+js(acis, document.onreadystatechange, btoa)
+hackstore.me##+js(acis, spr)
 latinomegahd.net##+js(aopw, _pop)
+megajuegosfree.com,megapeliculasrip.net##+js(acis, document.readyState, hopepaste)
 hackshort.me,latinolinks.site,pocoslinks.me##+js(aopr, FuckAdBlock)
 hackshort.me,latinolinks.site,pocoslinks.me##+js(set, ms_ads, 0)
 hackshort.me,latinolinks.site,pocoslinks.me##+js(set, df01w9, true)
@@ -15408,18 +15411,24 @@ freetutsdownload.net##[id^="modal-adbmon-"]
 ! https://github.com/uBlockOrigin/uAssets/issues/5495
 fc.lc##+js(aopr, AaDetector)
 fc.lc,fcdot.lc##+js(aopr, app_vars.force_disable_adblock)
+fcdot.lc##+js(aopr, open)
 fc.lc##+js(noeval)
+fc.lc,fcdot.lc##+js(set, blurred, false)
 ||fc.lc/*.html$frame,1p
 ||fc.lc/sw.js$script,1p
 fc.lc##.banner-inner
 fc.lc###ad
+fcdot.lc###overlay
+*$script,3p,denyallow=cloudflare.com|google.com|gstatic.com,domain=fc.lc|fcdot.lc
 fcc.lc##+js(nowoif)
 fcc.lc##+js(ra, disabled, button)
 fcc.lc##+js(set, fuckAdBlock._options.baitClass, null)
 fcc.lc##+js(nano-sib)
 @@||cdnjs.cloudflare.com/ajax/libs/fuckadblock/*/fuckadblock.min.js$script,domain=fcc.lc|fcdot.lc
-fc.lc,fcdot.lc##+js(nowoif, /^/, 1)
+fc.lc##+js(nowoif, /^/, 1)
 @@||fcdot.lc^$ghide
+||creamssicsite.com^$3p
+||in-page-push.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5496
 movie4u.live##+js(aopr, AaDetector)
@@ -16524,6 +16533,7 @@ pornhub.*,pornhubthbh7ap3u.onion##+js(nowoif)
 ||smpop.icfcdn.com/smpop-stable.js$script
 ! https://github.com/uBlockOrigin/uAssets/issues/5799#issuecomment-599266182
 @@||static.trafficjunky.com/ab/ads_test.js$script,domain=pornhub.com|pornhub.net|pornhub.org|pornhubthbh7ap3u.onion
+pornhub.*##.adsbytrafficjunky
 pornhub.*,pornhubthbh7ap3u.onion###pb_template
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5804
@@ -20401,9 +20411,9 @@ projectfreetv.*##+js(aopw, _pop)
 ##.overlay-advertising-new
 projectfreetv.*##[href^="https://projectfreetv.network/high-speed-hd-streaming.html"]:upward(1)
 
-! freevocabulary.com anti adb
+! https://github.com/AdguardTeam/AdguardFilters/issues/63019
 @@||freevocabulary.com^$ghide
-freevocabulary.com##+js(nostif, adsBlocked, 1500)
+*$xhr,redirect-rule=nooptext,domain=freevocubulary.com
 
 ! https://github.com/NanoMeow/QuickReports/issues/2299
 almutmiz.net##+js(aopw, ai_front)
@@ -23137,7 +23147,7 @@ mshares.co,mshare.*##[class^="ads_"]
 
 ! https://github.com/NanoMeow/QuickReports/issues/3189
 files.im##+js(aopr, absda)
-files.im##+js(acis, Math, zfgloaded)
+files.im##+js(acis, Math, XMLHttpRequest)
 files.im##+js(aopr, LieDetector)
 files.im##+js(nowoif)
 ||tubecorp.com^$3p
@@ -23252,6 +23262,7 @@ ibooks.to,semuanyabola.com,theouterhaven.net,watchallchannels.com,wikipekes.com#
 ! https://github.com/AdguardTeam/AdguardFilters/issues/51010
 akwam.net##+js(nosiif, visibility, 1000)
 akwam.net##+js(acis, addEventListener, blocker)
+akwam.net##.ads
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/51029
 @@||seriesynovelas.online^$ghide
@@ -24256,6 +24267,7 @@ edmtunes.com##[id*="div-gpt-ad"]
 @@||pstream.net^$ghide
 pstream.net##+js(aopr, __ASG_IP_PUSH)
 pstream.net##+js(aopw, adcashMacros)
+pstream.net##+js(ra, class, [class*="overlay"])
 ||d22tbsuc3l1g4i.cloudfront.net^$all
 ||lologhfd.com^$all
 
