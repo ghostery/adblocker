@@ -7,7 +7,6 @@
  */
 /* tslint:disable quotemark */
 export default [
-  "script-src 'self' *.leadpages.net *.gstatic.com *.google.com *.googleapis.com *.playwire.com *.facebook.com *.bootstrapcdn.com *.twitter.com *.spot.im",
   "sandbox allow-forms allow-same-origin allow-scripts allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-top-navigation",
   "script-src 'self' *.leadpages.net *.gstatic.com *.google.com *.googleapis.com *.playwire.com *.facebook.com *.bootstrapcdn.com",
   "script-src 'self' *.gstatic.com *.google.com *.googleapis.com *.facebook.com *.bootstrapcdn.com *.twitter.com *.spot.im",
@@ -27,6 +26,7 @@ export default [
   ".com *.google-analytics.com",
   ".com *.googletagmanager.com",
   "https://disqus.com *.disqus",
+  " *.twitter.com *.spot.im",
   ".google-analytics.com",
   ".googletagmanager.com",
   " *.googletagservices",
