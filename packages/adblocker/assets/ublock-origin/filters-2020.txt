@@ -434,9 +434,6 @@ bleachmx.fr##+js(aopr, mdpDeBlocker)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54097
 rutab.net##+js(nosiif, #adv, 20000)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/54106
-bgnews.space##+js(nosiif, visibility, 1000)
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54109
 vstx.*##+js(nosiif, visibility, 1000)
 
@@ -3079,8 +3076,9 @@ fikiri.net##+js(nostif, mdp)
 ||mhktricks.org/sw.js$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/commit/274103138906e4f6e1ca089aa8f215a1c1956a17#commitcomment-40720717
-racaty.net##+js(acis, Object.defineProperty, XMLHttpRequest)
-racaty.net##+js(nowoif)
+racaty.*##+js(acis, Object.defineProperty, XMLHttpRequest)
+racaty.*##+js(aopw, Fingerprint2)
+racaty.*##+js(nowebrtc)
 ||vendnibtemp.com^
 ||weaknickgale.icu^
 
@@ -4374,3 +4372,49 @@ beypazaricekici.com##+js(nostif, .append, 1500)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63186
 boldsky.com##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! ohentai.org popup ads
+ohentai.org##+js(aeld, click, iCanPop)
+ohentai.org##[class^="detail"][class*="iframecontainer"]
+ohentai.org##[class^="listleaderboardcontainer"]
+ohentai.org##.videolistcontainer > .videobrickwrap > div.videobrick:has(:scope > .videocontentblock > .gabuisvelink > .videosubcontainer > .adtag)
+||tubemov.com^$frame,3p
+
+! youngpornvideos.com popup ads
+youngpornvideos.com##+js(acis, url)
+youngpornvideos.com##.ads
+youngpornvideos.com##.ads-mobile
+youngpornvideos.com##.ads-thumb-list:upward(.outer-item)
+||bestcontentoperation.top^$3p
+||titanads1.com^$3p
+
+! hentaicloud.com popup ads
+hentaicloud.com##+js(aopr, Light.Popup)
+hentaicloud.com##+js(aopr, outputCanvas)
+hentaicloud.com###player_one > .vjs-fade.vjs-over
+
+! javdoe.tv popup ads
+player.javdoe.tv##+js(aopr, AaDetector)
+player.javdoe.tv###poster
+player.javdoe.tv###preroll
+||recentrecentinsectsquantity.com^$3p
+
+! javbangers.com popup ads
+javbangers.com##+js(acis, document.addEventListener, initBCPopunder)
+javbangers.com##+js(acis, readCookieDelit)
+javbangers.com##div.opt
+
+! ver-comics-porno.com popup
+ver-comics-porno.com##+js(aeld, click, popMagic)
+
+! netfapx.com popup
+netfapx.com##+js(aeld, click, popMagic)
+
+! phonearena.com anti adb
+phonearena.com##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/63208
+apksvip.com##+js(aopr, app_vars.force_disable_adblock)
+
+! https://github.com/NanoMeow/QuickReports/issues/4646
+linuxsecurity.com##+js(aeld, load, nextFunction)
