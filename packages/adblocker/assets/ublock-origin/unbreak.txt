@@ -1275,7 +1275,9 @@ warszawawpigulce.pl##.eklama
 @@||connect.facebook.*/*/AudienceNetworkPrebid.js$script,domain=cbssports.com
 
 ! https://github.com/NanoMeow/QuickReports/issues/235
+@@||javmost.com/ads3.php$frame,1p
 @@||javpost.net^$frame,domain=javmost.com
+javmost.com##center > div:has-text(ad_idzone)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2043#issuecomment-432499527
 @@||js.helltraffic.com/fluidplayer/$script,css,domain=tubewolf.com
@@ -1773,6 +1775,8 @@ jpost.com#@#[src*="blob:"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5290
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=si.com
+! https://www.si.com/mlb/2020/09/05/baseball-fake-crowd-nosie broken video
+@@||uid.mavencoalition.io^$xhr,domain=si.com
 
 ! https://forums.lanik.us/viewtopic.php?p=146859#p146859
 boards.4chan.org,boards.4channel.org#@#.middlead
@@ -3869,3 +3873,18 @@ eslint.org#@#.sponsor-link
 !#if env_firefox
 @@||cdn13.com^$script,domain=drtuber.com
 !#endif
+
+! hentaiplay.net broken video player
+! [badfilter] *$script,3p,domain=hentaiplay.net,badfilter
+hentaiplay.net###video_overlays
+
+! https://www.yogajournal.com/video broken videos
+@@||uid.mavencoalition.io^$xhr,domain=yogajournal.com
+
+! https://github.com/uBlockOrigin/uAssets/commit/2b20d6313f37a610f54cfc95f4f2d1c1cfb65e1c#commitcomment-42073538
+! [badfilter] ||files.im^$badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/7880
+@@||d5phz18u4wuww.cloudfront.net/vis_opt.js^$script,domain=gre.magoosh.com
+@@||dev.visualwebsiteoptimizer.com/deploy/js_visitor_settings.php^$script,domain=gre.magoosh.com
+@@||dev.visualwebsiteoptimizer.com/*/vis_opt-$script,domain=gre.magoosh.com
