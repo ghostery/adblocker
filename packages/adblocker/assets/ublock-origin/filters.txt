@@ -337,16 +337,14 @@ livenewschat.eu##.widget_taboola
 ! https://github.com/NanoMeow/QuickReports/issues/144
 redtube.com,redtube.net###ab_banner
 redtube.com,redtube.net###browse_section > div:has(:scope > div > a.ad-link)
-redtube.com,redtube.net###pb_block
+redtube.net###pb_block
 ||fotzenparty.eu^$important
 ://192.168.*/images/$important,domain=pornhub.com|pornhub.net|pornhub.org|pornhubthbh7ap3u.onion|xtube.com
 !pornhub.*,pornhubthbh7ap3u.onion,xtube.com##+js(aopw, AdDelivery)
 pornhub.*,pornhubthbh7ap3u.onion##.sectionWrapper > div[class]:has(:scope > div > .ad-link)
 ! https://github.com/uBlockOrigin/uAssets/issues/39#issuecomment-269403620
 /fp.eng?id=$popunder
-pornhub.*,pornhubthbh7ap3u.onion##+js(aopw, rAb)
 ! https://github.com/uBlockOrigin/uAssets/issues/2913
-pornhub.*,pornhubthbh7ap3u.onion##+js(aeld, DOMContentLoaded, [native code])
 pornhub.*,pornhubthbh7ap3u.onion##sads
 ! https://github.com/uBlockOrigin/uAssets/issues/7164
 rt.pornhub.*,rt.pornhubthbh7ap3u.onion##div[id^="customSkin"]
@@ -917,7 +915,7 @@ rarbg.unblockall.org,rarbgtor.org##+js(aopr, __htapop)
 proxyrarbg.*,rarbg.is,rarbg.to,rarbgget.org,rarbgenter.org,rarbgprx.org,rarbgp2p.org,rarbgto.org,rarbg2019.org,rarbg2020.org,rarbg.unblockall.org,rarbg.unblocked.kim,rarbgaccess.org,rarbgcore.org,rarbgdata.org,rarbggo.org,rarbgmirror.*,rarbgproxied.*,rarbgproxy.*,rarbgtor.org,rarbgunblock.*,rarbgunblocked.org,rarbgweb.org,unblockedrarbg.org##+js(aopr, LieDetector)
 rarbgmirrored.org,rarbgproxy.org##+js(nowoif)
 proxyrarbg.*,rarbg.is,rarbg.to,rarbgget.org,rarbgenter.org,rarbgprx.org,rarbgp2p.org,rarbgto.org,rarbgtor.org,rarbg2019.org,rarbg2020.org,rarbg.unblockall.org,rarbg.unblocked.kim,rarbgaccess.org,rarbgcore.org,rarbgdata.org,rarbggo.org,rarbgmirror.*,rarbgmirrored.org,rarbgproxied.*,rarbgproxy.*,rarbgunblock.*,rarbgunblocked.org,rarbgweb.org,unblockedrarbg.org##.lista > tbody > tr:has-text(/v\s{0,}p\s{0,}n/i)
-fullmatchesandshows.com,mediafire.com,newser.com,pornhub.*,pornhubthbh7ap3u.onion,rlslog.net,scienceworldreport.com##+js(aopw, UAParser)
+fullmatchesandshows.com,mediafire.com,newser.com,rlslog.net,scienceworldreport.com##+js(aopw, UAParser)
 ||ladsup.com^$all
 mediafire.com##+js(aeld, click, ClickHandler)
 mediafire.com##.errorExtraContent
@@ -2079,6 +2077,8 @@ putlockertv.*##+js(nowoif)
 ! https://forums.lanik.us/viewtopic.php?f=62&t=41466
 vidsource.me,vidsrc.*##+js(aopr, AaDetector)
 vidsrc.*##+js(set, String.fromCharCode, trueFunc)
+vidsrc.*##+js(nowoif)
+vidsrc.*###pop_asdf
 ! https://www.reddit.com/r/uBlockOrigin/comments/9vmhj2
 ||putlockers.*/sw.js$script,1p
 ||greedseed.world/vpaid/YtVpaid.php
@@ -2598,15 +2598,14 @@ keezmovies.com##+js(aopw, raSettings)
 keezmovies.com##.ad-link
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2482
-tube8.*##+js(aopw, AdDelivery)
-tube8.*##+js(aopw, rAb)
-tube8.*##+js(aopw, loadAdFromHeaderTab)
 tube8.*##+js(aopw, IS_ADBLOCK)
 tube8.*##+js(aopr, _goat)
 tube8.*##+js(nowoif)
 tube8.*##.footerBanner
 tube8.*##.cat-fish-banner-wrapper
+tube8.*##.grydb4nn3r
 tube8.*##.gridBanner
+tube8.*##.ryghtc0lb4nn3r
 tube8.*##.rightColBanner
 
 ! https://github.com/uBlockOrigin/uAssets/issues/921
@@ -6877,12 +6876,12 @@ youporn.com##aside:has(a.ad-remove)
 youporn.com##.e8-column:has(.ad-remove.removeAdLink)
 youporn.com##.grid-sub-row-2.four-column > div:has([class^="ad"][class*="Link"])
 youporn.com###adblock_1
-redtube.com,redtube.net,youporn.com,xtube.com##+js(aopw, rAb)
 youporn.com##+js(nostif, jQuery)
 youporn.com##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/2482#issuecomment-395244585
 redtube.com,redtube.net##+js(aopr, _goat)
 redtube.*##+js(nowoif)
+redtube.*##.adsbytrafficjunky
 
 ! anti adb https://www.tvserial.it/the-generi-serie-tv-sky-maccio-capatonda-video/
 @@||tvserial.it^$ghide
@@ -12910,6 +12909,8 @@ compucalitv.com##+js(aeld, DOMContentLoaded, compupaste)
 compucalitv.com##+js(aopr, redirectURL)
 compucalitv.com,compupaste.com,paste3.org##+js(aopw, _pop)
 compupaste.com##+js(nowoif)
+*$script,3p,domain=compucalitv.com
+||pulpsbarndomed.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4800
 katmovie.*##+js(nostif, '0x)
@@ -21114,6 +21115,8 @@ samehadaku.net.in##+js(aopr, glxopen)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2564
 @@||filmytoday.com^$ghide
+filmytoday.com##.advertisement, .adsbygoogle
+filmytoday.com###container > .block-wrapper > .large-sidebar.sidebar > div.social-widget.widget:nth-of-type(2)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6728
 ||googlesyndication.com/pagead/js/adsbygoogle.js$xhr,redirect=nooptext,domain=sportskeeda.com
@@ -21698,12 +21701,10 @@ streamz.*##+js(nostif, nextFunction, 2000)
 @@||streamz.*^$ghide
 streamz.*##body > div:nth-of-type(3), [href^="http://deloplen.com"]
 ||unelekidan.com^$3p
-@@*$script,xhr,domain=streamz.vg
 streamz.*##iframe
 ||inpagepush.com^$important
-||google-analytics.com/analytics.js$domain=streamz.vg,important
-||certify-js.alexametrics.com^$domain=streamz.vg,important
 *$script,redirect-rule=empty,domain=streamz.vg
+streamz.*##button:has(span:has-text(Skip))
 
 ! https://github.com/NanoMeow/QuickReports/issues/2788
 ||fundingchoicesmessages.google.com^$3p
