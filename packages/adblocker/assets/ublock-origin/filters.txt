@@ -454,6 +454,8 @@ aranzulla.it##+js(aopr, navigator.userAgent)
 www.uol##.content-lightbox
 www.uol##.overlay-lightbox
 uol.com.br##.banner
+uol.com.br##.bg-banner
+uol.com.br##[id^="banner-300x250"]:remove()
 
 ! https://news.ycombinator.com/edit?id=12281229
 quora.com##body:style(overflow: auto !important)
@@ -912,9 +914,9 @@ auto-motor-und-sport.de,caravaning.de,womenshealth.de##+js(aopw, adblockActive)
 ! https://www.reddit.com/r/uBlockOrigin/comments/94c6rr/im_a_bit_of_a_noob_and_need_some_help_blocking/
 zippyshare.com##+js(noeval)
 rarbg.unblockall.org,rarbgtor.org##+js(aopr, __htapop)
-proxyrarbg.*,rarbg.is,rarbg.to,rarbgget.org,rarbgenter.org,rarbgprx.org,rarbgp2p.org,rarbgto.org,rarbg2019.org,rarbg2020.org,rarbg.unblockall.org,rarbg.unblocked.kim,rarbgaccess.org,rarbgcore.org,rarbgdata.org,rarbggo.org,rarbgmirror.*,rarbgproxied.*,rarbgproxy.*,rarbgtor.org,rarbgunblock.*,rarbgunblocked.org,rarbgweb.org,unblockedrarbg.org##+js(aopr, LieDetector)
+proxyrarbg.*,rarbg.is,rarbg.to,rarbgget.org,rarbgenter.org,rarbgprx.org,rarbgp2p.org,rarbgto.org,rarbgtorrents.org,rarbg2019.org,rarbg2020.org,rarbg.unblockall.org,rarbg.unblocked.kim,rarbgaccess.org,rarbgcore.org,rarbgdata.org,rarbggo.org,rarbgmirror.*,rarbgproxied.*,rarbgproxy.*,rarbgtor.org,rarbgunblock.*,rarbgunblocked.org,rarbgweb.org,unblockedrarbg.org##+js(aopr, LieDetector)
 rarbgmirrored.org,rarbgproxy.org##+js(nowoif)
-proxyrarbg.*,rarbg.is,rarbg.to,rarbgget.org,rarbgenter.org,rarbgprx.org,rarbgp2p.org,rarbgto.org,rarbgtor.org,rarbg2019.org,rarbg2020.org,rarbg.unblockall.org,rarbg.unblocked.kim,rarbgaccess.org,rarbgcore.org,rarbgdata.org,rarbggo.org,rarbgmirror.*,rarbgmirrored.org,rarbgproxied.*,rarbgproxy.*,rarbgunblock.*,rarbgunblocked.org,rarbgweb.org,unblockedrarbg.org##.lista > tbody > tr:has-text(/v\s{0,}p\s{0,}n/i)
+proxyrarbg.*,rarbg.is,rarbg.to,rarbgget.org,rarbgenter.org,rarbgprx.org,rarbgp2p.org,rarbgto.org,rarbgtor.org,rarbgtorrents.org,rarbg2019.org,rarbg2020.org,rarbg.unblockall.org,rarbg.unblocked.kim,rarbgaccess.org,rarbgcore.org,rarbgdata.org,rarbggo.org,rarbgmirror.*,rarbgmirrored.org,rarbgproxied.*,rarbgproxy.*,rarbgunblock.*,rarbgunblocked.org,rarbgweb.org,unblockedrarbg.org##.lista > tbody > tr:has-text(/v\s{0,}p\s{0,}n/i)
 fullmatchesandshows.com,mediafire.com,newser.com,rlslog.net,scienceworldreport.com##+js(aopw, UAParser)
 ||ladsup.com^$all
 mediafire.com##+js(aeld, click, ClickHandler)
@@ -1031,11 +1033,13 @@ vivo.sx##+js(aeld, click, tabunder)
 math-aids.com##+js(aopw, __drizzleSettings)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/347
+transfermarkt.*##+js(acis, document.querySelector, popupBlocked)
 transfermarkt.*##+js(acis, Math, /\}\s*\(.*?\b(self|this|window)\b.*?\)/)
 transfermarkt.*##body > div[id]:has(a[href^="/intern/adblock"])
 ||s0.2mdn.net/instream/video/client.js$script,redirect=noopjs,domain=player.performgroup.com
 ||sascdn.com^$important,script,domain=transfermarkt.de
 transfermarkt.de###werbung_superbanner
+transfermarkt.*##[id^="home-rectangle-"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/348
 ! https://github.com/uBlockOrigin/uAssets/issues/695
@@ -1078,6 +1082,7 @@ gaobook.*##+js(aopr, Date.prototype.toUTCString)
 ||i5iog3mlrw.com^
 ||ladspmz.com^
 ||xpx7heciz9.com^
+||graniteacquitcharacteristic.com^$3p
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/bcpexv/australianfrequentflyercomau_ad_detector/
 ! https://github.com/NanoMeow/QuickReports/issues/2384
@@ -2014,6 +2019,7 @@ smps.us,steamid.*##+js(nobab)
 ! https://github.com/jspenguin2017/uBlockProtector/issues/624
 kisshentai.net##+js(aopr, adblock)
 ninjastream.to##+js(nowoif)
+ninjastream.to##.video-fake
 easyload.io##+js(aopr, AaDetector)
 ||hadsimz.com^
 
@@ -5607,6 +5613,7 @@ clipwatching.com##.video_ad2_fadein
 clipwatching.com##div[style] + div:has([class="withoutbg left"] > h3[class="hide"])
 clipwatching.com##[href^="https://packity.com/signup"]
 clipwatching.com##[href^="https://track.totalav.com/"]
+clipwatching.com###coverAds
 clipwatching.com###showmac
 ##[href="https://azzporn.net"]
 ||staitchu.com^
@@ -6882,6 +6889,7 @@ youporn.com##+js(nowoif)
 redtube.com,redtube.net##+js(aopr, _goat)
 redtube.*##+js(nowoif)
 redtube.*##.adsbytrafficjunky
+redtube.*##.adsbytrafficjunky:upward(li)
 
 ! anti adb https://www.tvserial.it/the-generi-serie-tv-sky-maccio-capatonda-video/
 @@||tvserial.it^$ghide
@@ -12477,6 +12485,7 @@ ilinks.in##+js(aopr, app_vars.force_disable_adblock)
 ilinks.in##+js(acis, Math, zfgloaded)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4632
+300mbfilms.*##+js(aopw, _pop)
 300mbfilms.*##+js(popads-dummy)
 300mbfilms.*##+js(aopr, AaDetector)
 earn-money-onlines.info##+js(aopr, document.getElementsByTagName)
@@ -12908,8 +12917,9 @@ compucalitv.com##.onp-sl-social-locker
 compucalitv.com##+js(aeld, DOMContentLoaded, compupaste)
 compucalitv.com##+js(aopr, redirectURL)
 compucalitv.com,compupaste.com,paste3.org##+js(aopw, _pop)
+compucalitv.com##.botondescarga
 compupaste.com##+js(nowoif)
-*$script,3p,domain=compucalitv.com
+*$script,3p,denyallow=chatango.com,domain=compucalitv.com
 ||pulpsbarndomed.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4800
@@ -15390,7 +15400,6 @@ fcc.lc##+js(nano-sib)
 fc.lc##+js(nowoif, /^/, 1)
 @@||fcdot.lc^$ghide
 ||creamssicsite.com^$3p
-||in-page-push.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5496
 movie4u.live##+js(aopr, AaDetector)

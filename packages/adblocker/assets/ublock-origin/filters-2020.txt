@@ -4105,10 +4105,6 @@ sshagan.net##+js(acis, addEventListener, google_ad_client)
 k-links.xyz##+js(aopr, disableButtonTimer)
 @@||k-links.xyz/trx/libs/advertisement.js$script,1p
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/62540
-@@||shortclicks.xyz^$ghide
-shortclicks.xyz##.adsbygoogle:remove()
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62567
 streamanime.xyz##+js(nosiif, visibility, 1000)
 streamanime.xyz###top72890
@@ -4436,5 +4432,26 @@ msmxtended.org###babasbmsgx
 aghaniyt.com##+js(aopr, absda)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63362
-lookcam.pl##+js(set, canRunAds, true)
-lookcam.pl##div.prefix-adlabel
+lookcam.*##+js(set, canRunAds, true)
+lookcam.*##div.prefix-adlabel
+
+! https://github.com/NanoMeow/QuickReports/issues/4654
+rpupdate.pink##+js(set, DHAntiAdBlocker, true)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/ionyx2/how_to_block_the_adblockerenabled_warning_on_this/
+@@||sharpen.design/assets/ads.js^$script,1p
+
+! https://www.reddit.com/r/uBlockOrigin/comments/ioi83o/how_to_block_this_add/
+||batsdivannab.com^
+||clawtoiltaupe.com^
+*$script,3p,denyallow=google.com|gstatic.com|cloudflare.com|cloudflare.net|recaptcha.net|hcaptcha.com|googleapis.com|cdn.jsdelivr.net,domain=manga4life.com
+*$3p,script,frame,denyallow=google.com|gstatic.com|cloudflare.com|cloudflare.net|recaptcha.net|hcaptcha.com|googleapis.com|cdn.jsdelivr.net,domain=mangasee123.com
+
+! https://github.com/NanoMeow/QuickReports/issues/4657
+realityblurb.com##+js(aopr, HTMLIFrameElement)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/63414
+adzec.cc##+js(nosiif, visibility, 1000)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/ioz4uq/imgur_tries_to_be_smart_and_blocks_uploading_of/
+imgur.com##+js(set, usesABP, false)
