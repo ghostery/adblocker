@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202009071551
+! Version: 202009081921
 ! Title: EasyPrivacy
-! Last modified: 07 Sep 2020 15:51 UTC
+! Last modified: 08 Sep 2020 19:21 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -2351,6 +2351,7 @@
 /imp_img.php?
 /imppix/*
 /impr.xlg?
+/impresion/zona/*
 /impress.php?
 /impression.ashx
 /impression.gif?
@@ -3235,6 +3236,7 @@
 /ping_g.jsp?
 /ping_hotclick.js
 /pingAlt.php?*&referrer=
+/pingAudience?
 /pingd?
 /pinger.cgi?
 /PingPixel.
@@ -6620,6 +6622,7 @@ _mongo_stats/
 ||guardwork.info^$third-party
 ||gvisit.com^$third-party
 ||gweini.com^$third-party
+||gwmtracking.com^$third-party
 ||gxgydnhz.com^$third-party
 ||h4k5.com^$third-party
 ||halldata.com^$third-party
@@ -7850,6 +7853,7 @@ _mongo_stats/
 ||thesearchagency.net^$third-party
 ||thespecialsearch.com^$third-party
 ||thingswontend.com^$third-party
+||thinktot.com^$third-party
 ||thisisacoolthing.com^$third-party
 ||thisisanothercoolthing.com^$third-party
 ||threat-analytics.com^$third-party
@@ -10453,6 +10457,7 @@ _mongo_stats/
 ||conversions.genieventures.co.uk^
 ||convertflow.co^*/events/
 ||convertflow.co^*/visitors/
+||convertkit.com^*/visit
 ||cookies.livepartners.com^
 ||cookietracker.cloudapp.net^
 ||cookiex.ngd.yahoo.com^
@@ -10558,6 +10563,7 @@ _mongo_stats/
 ||d2nxi61n77zqpl.cloudfront.net^
 ||d2o67tzzxkqap2.cloudfront.net^
 ||d2oh4tlt9mrke9.cloudfront.net^
+||d2r7bmv6l6bnd1.cloudfront.net^
 ||d2ry9vue95px0b.cloudfront.net^
 ||d2san7t27xb2pn.cloudfront.net^
 ||d2tcg4i9q4js4a.cloudfront.net^
@@ -10637,6 +10643,7 @@ _mongo_stats/
 ||disqus.com/api/ping
 ||disqus.com/event.js?$script
 ||disqus.com/stats.html
+||disquscdn.com/next/embed/alfalfalfa.
 ! [dup] from peter-lowe/serverlist.txt
 ! ||distillery.wistia.com^
 ||djibeacon.djns.com^
@@ -12141,8 +12148,10 @@ _mongo_stats/
 ||fastly.net/plw.js
 ||fastly.net/sp.js
 ! Consent Trackers
+||opencmp.net^$script,third-party
 ||privacy-mgmt.com^$script,third-party
 ! Unnecessary third-party scripts
+||cyveillance.com^$third-party
 ||howsmyssl.com^$third-party
 ||js.trendmd.com^$script,subdocument,third-party
 ||nsg.symantec.com^$third-party
@@ -13345,7 +13354,7 @@ _mongo_stats/
 ||cgi.nch.com.au^*&referrer
 ||chanel.com/js/flashtrack.js
 ||channel4.com/foresee_c4/
-||charter.com/static/scripts/mock/tracking.js
+||charter.com/api/collector
 ||chase.com/activity$image
 ||cheapflights.com/ic/*.gif?
 ||cheapsalesconsulting.com/adaptive.php?
@@ -14246,6 +14255,7 @@ _mongo_stats/
 ||modernsalon.com/includes/sc_video_tracking.js
 ||momtastic.com/libraries/pebblebed/js/pb.track.js
 ||moneysupermarket.com^*/ProphetInsert.js
+||monitor.ebay.com^
 ||monkeyquest.com/monkeyquest/static/js/ga.js
 ||monova.org/js/ga.js
 ||monstercrawler.com/__kl.gif
@@ -15081,6 +15091,7 @@ _mongo_stats/
 ||thegumtree.com^*/tracking.js
 ||theintercept.com/a?
 ||thejc.com/metatraffic2/
+||theneweuropean.co.uk/analytics
 ||thenewsroom.com//playerreporting/
 ||theolivepress.es/cdn-cgi/cl/
 ||theregister.co.uk/k/abt_bb
@@ -15573,8 +15584,10 @@ _mongo_stats/
 ||ebay.com/nkfytkqtoxtljvzbxhr.js$script,domain=ebay.com
 ||ebaystatic.com^*/10341xh50yz21mhhydueu4m5wad.js$script,domain=ebay.com
 ||ebaystatic.com^*/g52yxhxv2mzcbealmlkri4kn5av.js$script,domain=ebay.com
+||pages.ebay.com/identity/device/$subdocument
+||src.ebay-us.com/*=usllpic$script,domain=ebay.com
 ! Fingerprint
-/^https?:\/\/www\.mouser\.com\/[a-z]{30,}.js/$script,domain=mouser.com
+/^https?:\/\/www\.mouser\.com\/[a-z]{25,}.js/$script,xmlhttprequest,domain=mouser.com
 /^https?:\/\/www\.mouser\.com\/static\/[a-z0-9]{30,}/$script,domain=mouser.com
 /^https?:\/\/www\.ugg\.com\/static\/[a-z0-9]{15,}/$domain=ugg.com
 ||aero.bankofamerica.com^$script,~third-party,xmlhttprequest
@@ -17140,9 +17153,12 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 ||estadisticas.lanacion.com.ar^
 ||estadonline.publiguias.cl^
 ||g.siliconweek.es^
+||geo.emol.cl^
 ||hits.antena3.com^
 ||mercadolibre.com/tracks^
 ||pixel.europapress.net^
+||rvv.emol.com^
+||statsmp2.emol.com^
 ||t13.cl/hit/
 ||taringa.net/ajax/track-visit.php
 ||terra.com.mx/js/metricspar_
