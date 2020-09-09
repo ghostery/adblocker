@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202008291510
+! Version: 202009082029
 ! Title: EasyList Germany
-! Last modified: 29 Aug 2020 15:10 UTC
+! Last modified: 08 Sep 2020 20:29 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -3845,10 +3845,12 @@ $csp=script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: www.googletagma
 ! Specific filters necessary for sites using $genericblock filter option
 /googleads.$domain=g.doubleclick.net|googlesyndication.com
 /pagead2.$domain=g.doubleclick.net|googlesyndication.com|imasdk.googleapis.com
+@@||ad.71i.de/somtag/loader/loader.js$domain=gofeminin.de
 @@||amazon-adsystem.com/aax2/amzn_ads.js$domain=autobild.de
 @@||autobild.de^$genericblock,generichide
 ! [dup] from ublock-origin/filters.txt
 ! @@||g.doubleclick.net/dbm/vast?dbm_c=$xmlhttprequest,domain=imasdk.googleapis.com
+@@||g.doubleclick.net/gampad/ads?*&iu_parts=5731%2CDE_GOFEMININ%2Corganic%2Chome&$domain=gofeminin.de
 @@||g.doubleclick.net/gampad/ads?slotname=*stern%2F*^sz=480x360^$xmlhttprequest,domain=imasdk.googleapis.com
 @@||g.doubleclick.net/static/glade.js$domain=autobild.de
 @@||g.doubleclick.net/static/glade/extra_$script,domain=autobild.de
@@ -3879,6 +3881,7 @@ widgets.outbrain.com##a[onmousedown^="this.href='https://paid.outbrain.com/netwo
 |https:$domain=adfarm1.adition.com
 ||2mdn.net^$domain=imasdk.googleapis.com|serving-sys.com
 ||ad.71i.de^$domain=autobild.de|gofeminin.de
+||ad.yieldlab.net^$domain=gofeminin.de
 ||ad4mat.de^$domain=googlesyndication.com
 ||adform.net^$domain=autobild.de|googlesyndication.com
 ||adition.com^$domain=g.doubleclick.net
@@ -3886,26 +3889,30 @@ widgets.outbrain.com##a[onmousedown^="this.href='https://paid.outbrain.com/netwo
 ||adrolays.de^$domain=autobild.de
 ||adsafeprotected.com^$domain=autobild.de|imasdk.googleapis.com
 ||adsnative.com^$domain=autobild.de
-||amazon-adsystem.com^$domain=autobild.de
+||amazon-adsystem.com^$domain=autobild.de|gofeminin.de
 ||betrad.com^$domain=googlesyndication.com
 ||cas.*.criteo.com^$domain=autobild.de
 ||cas.criteo.com^$domain=autobild.de
 ||cdn.flashtalking.com^$domain=autobild.de|imasdk.googleapis.com
+||criteo.net/js/ld/publishertag.prebid.js$domain=gofeminin.de
+||f11-ads.com^$domain=gofeminin.de
 ||flashtalking.com^$domain=g.doubleclick.net
-||g.doubleclick.net^$domain=imasdk.googleapis.com
+||g.doubleclick.net^$domain=gofeminin.de|imasdk.googleapis.com
 ||google.com/adsense/$domain=autobild.de
 ||googlesyndication.com/daca_images/simgad/$domain=g.doubleclick.net
 ||googlesyndication.com/pagead$domain=g.doubleclick.net
 ||googlesyndication.com/pagead/$domain=g.doubleclick.net|googlesyndication.com
 ||googlesyndication.com/sadbundle/$domain=g.doubleclick.net
-||googlesyndication.com/safeframe/$domain=g.doubleclick.net|googlesyndication.com
+||googlesyndication.com/safeframe/$domain=g.doubleclick.net|gofeminin.de|googlesyndication.com
 ||googlesyndication.com/sodar/$domain=googlesyndication.com
+||googletagservices.com/tag/js/gpt.js$domain=gofeminin.de
 ||intellitxt.com^$domain=autobild.de
 ||moatads.com^$domain=autobild.de
 ||mookie1.com^$domain=autobild.de
 ||pagead2.googlesyndication.com^$domain=autobild.de|gofeminin.de
 ||perfectmarket.com^$domain=autobild.de
 ||plista.com/pictureads/$domain=autobild.de
+||pubmatic.com^$domain=gofeminin.de
 ||redintelligence.net^$domain=g.doubleclick.net
 ||rtax.criteo.com^$domain=autobild.de
 ||sascdn.com^$domain=autobild.de
@@ -4928,7 +4935,7 @@ fck.de###site_overlay_wrapper
 next-gamer.de###sitebrandingOpener
 elhabib.com###sitepromo
 wallstreet-online.de###siteteaser
-local.ch,macprime.ch,mysmag.de,n-tv.de,teleboerse.de,tvheute.at###sky
+itmagazine.ch,local.ch,macprime.ch,mysmag.de,n-tv.de,teleboerse.de,tvheute.at###sky
 kalaydo.de###skyID
 aktionspreis.de###skyScraper
 apotheke-adhoc.de###skyWall
@@ -4969,6 +4976,7 @@ studententage.tu-freiberg.de###spo2
 eintracht-handball.de###sponsi
 deutsche-mittelstands-nachrichten.de,myvideo.de###sponsor
 wetteralarm.at###sponsor-info
+itmagazine.ch###sponsorbutton_div
 pressetext.com###sponsoredLinkPortletId
 frischauf-gp.de,fvillertissen.de,gwd-minden.de,h-bw.de,hg-saarlouis.de,hsc-bad-neustadt.de,s15815331.onlinehome-server.info,tbv-lemgo.de###sponsoren
 hg-saarlouis.de,studententage.tu-freiberg.de###sponsoren2
@@ -5342,6 +5350,7 @@ computerbild.de##.articleAdditional > .kaufenteaser .amazon
 computerbild.de##.articleAdditional > .kaufenteaser .idealo
 gamestar.de##.articleAmazonLink
 sosuanachrichten.com##.article[style="width: 440px; background-color: #000066; margin: 6px; margin-top: 6px;"]
+itmagazine.ch##.article_rectangle
 gamersglobal.de##.artikel-cad
 tagblatt.ch##.artikel-detail-einspaltig-spalte-2 > .tbrprehtml
 saarbruecker-zeitung.de##.artikeldetail > .text > .teaserbox.hgray
