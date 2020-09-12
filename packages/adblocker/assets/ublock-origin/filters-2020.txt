@@ -344,10 +344,7 @@ blademaster666.com,desktophut.com,fanproj.net,hot2k.com,luchoedu.org,lupaste.com
 
 ! https://github.com/NanoMeow/QuickReports/issues/3606
 ! https://github.com/uBlockOrigin/uAssets/issues/7488
-dropgalaxy.*##+js(set, pplayer, null)
 dropgalaxy.*##+js(ra, onclick|target, .btn-primary.btn-lg.btn-block.btn)
-dropgalaxy.*##+js(nostif, _0x)
-dropgalaxy.*##+js(acis, $, modalpop)
 @@||dropgalaxy.*^$ghide
 dropgalaxy.*##[href^="https://bit.ly/"]
 *$script,redirect-rule=noopjs,domain=dropgalaxy.com
@@ -1548,8 +1545,7 @@ romatoday.it##+js(nostif, bADBlock)
 digitalstudiome.com##+js(aopr, adBlockDetected)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7462
-bollyflix.me##+js(acis, Object.defineProperty, XMLHttpRequest)
-bollyflix.me##+js(aopr, AdservingModule)
+*$script,3p,denyallow=bootstrapcdn.com|disqus.com|jsdelivr.net|jwpcdn.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=bollyflix.*
 
 ! https://github.com/NanoMeow/QuickReports/issues/3948
 @@||clubparty.pl^$script,1p
@@ -1694,7 +1690,7 @@ pasteit.*##+js(noeval-if, AdBlock)
 agazeta.com.br##+js(nostif, f.parentNode.removeChild(f), 100)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3987
-freebinchecker.com##+js(nostif, adsBlocked)
+*$xhr,redirect-rule=nooptext,domain=freebinchecker.com
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/509
 nyaa.iss.one##+js(aopr, LieDetector)
@@ -2801,9 +2797,9 @@ filmtelecharger.net##+js(acis, Math, zfgloaded)
 spiele-umsonst.de##+js(nostif, f.parentNode.removeChild(f), 100)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/58833
-link1s.com##+js(aopr, app_vars.force_disable_adblock)
-*$3p,denyallow=googleapis.com|google.com|gstatic.com|recaptcha.net|hcaptcha.com|code.jquery.com|stackpath.bootstrapcdn.com|cdn.jsdelivr.net,domain=link1s.com
-link1s.com##.banner
+link1s.*##+js(aopr, app_vars.force_disable_adblock)
+*$3p,denyallow=googleapis.com|google.com|gstatic.com|recaptcha.net|hcaptcha.com|code.jquery.com|stackpath.bootstrapcdn.com|cdn.jsdelivr.net,domain=link1s.*
+link1s.*##.banner
 
 ! https://github.com/NanoMeow/QuickReports/issues/4284
 @@||earlymanga.me^$ghide
@@ -3220,9 +3216,6 @@ panjiachen.gitee.io##+js(nofab)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/59932
 @@||ninja.io/js/dist/ads.js$script,1p
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/59938
-@@||battlestick2.net/ads.js$script,1p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/59941
 battleboats.io##+js(nofab)
@@ -4200,6 +4193,8 @@ thechive.com##+js(aopr, RMPiano)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7820#issuecomment-683383589
 yandexcdn.com##+js(nowebrtc)
+9xmovies.*##+js(nowoif)
+||ledmophemp.com^
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62717
 satoshiquiz.com##+js(nosiif, visibility, 1000)
@@ -4515,3 +4510,97 @@ fotodovana.com##.blog-content
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63574
 hashhackers.com##+js(nosiif, visibility, 1000)
+
+! cashurl.in anti adb ads
+cashurl.in##+js(aopr, app_vars.force_disable_adblock)
+cashurl.in##+js(aopw, atOptions)
+cashurl.in##+js(aopw, _pop)
+cashurl.in##+js(set, blurred, false)
+cashurl.in##.banner
+||cashurl.in/sw.js$script,1p
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/63594
+tron-faucet.xyz##+js(aopr, disableButtonTimer)
+@@||tron-faucet.xyz/libs/advertisement.js^$script,1p
+||bitfun.co^$3p
+||bitsroll.com^$3p
+||btcclicks.com^$3p
+||moremoney.io^$3p
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/63596
+softairbay.com##+js(nosiif, visibility, 1000)
+softairbay.com##.brave
+softairbay.com##.xc449bad4854773ff
+softairbay.com##[class^="bmadblock"]
+softairbay.com##+js(aopw, _pop)
+||hulyyabo.xyz^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/63597
+click2win.xyz##+js(aopr, adBlockDetected)
+||adhits.cf^
+||diptaich.com^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/63598
+swift4claim.com##+js(nosiif, visibility, 1000)
+swift4claim.com##.overlay2
+swift4claim.com##.overlay
+||rightnativecontent.com^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/63599
+best-shopme.com##+js(nosiif, visibility, 1000)
+||publish0x.com^$3p
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/63600
+btcs2u.tk##+js(aopr, adBlockDetected)
+btcs2u.tk##.d-xl-block
+btcs2u.tk##[class^="bmadblock"]
+
+! https://github.com/NanoMeow/QuickReports/issues/4678
+newsphere.jp##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7898
+newsbomb.gr##+js(nostif, f.parentNode.removeChild(f), 100)
+newsbomb.gr##.banner-area
+
+! apkol.co anti-adb
+apkol.co##+js(nosiif, visibility, 1000)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/iqot5a/unable_to_fully_remove_disable_adblocker_message/
+ibeconomist.com##+js(nostif, adsense)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/63631
+getitfree.cn##+js(acis, document.getElementById, .style)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7900
+*$script,3p,domain=webmusic.live
+||galampgab.com^
+
+! https://github.com/NanoMeow/QuickReports/issues/4681
+pacogames.com##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://github.com/uBlockOrigin/uAssets/pull/7901
+smallpocketlibrary.com##+js(aopr, adBlockDetected)
+
+! https://github.com/NanoMeow/QuickReports/issues/4683
+getfilmes.net##+js(nowebrtc)
+@@||getfilmes.net^$ghide
+@@||cdnjs.cloudflare.com/ajax/libs/*/fuckadblock.js$script,domain=getfilmes.net
+
+! https://github.com/NanoMeow/QuickReports/issues/4684
+wordreference.com##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7902
+drugs.com##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! iinbinlist.com/osqa.net/vanhawks.com anti-adb
+*$xhr,redirect-rule=nooptext,domain=iinbinlist.com|osqa.net|vanhawks.com
+
+! https://github.com/NanoMeow/QuickReports/issues/4686
+simkl.com##+js(aeld, load, head)
+*$script,3p,redirect-rule=noopjs,domain=simkl.com
+
+! https://github.com/NanoMeow/QuickReports/issues/4688
+@@||pixel.adsafeprotected.com^$xhr,domain=teleboy.ch
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/63748
+cnnindonesia.com##+js(nostif, f.parentNode.removeChild(f), 100)
