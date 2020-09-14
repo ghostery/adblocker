@@ -4622,3 +4622,32 @@ bfstrms.*###iframe_preview
 bfstrms.*##.in.modal
 bfstrms.*##.in.modal-backdrop
 bfstrms.*###fcnbox
+
+! volokit.com popups
+givemenbastreams.com##+js(aopr, AaDetector)
+crackstreams.net##+js(aopw, _pop)
+crackstreams.net,volokit.com##+js(nowebrtc)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/63847
+||ppfrlfe.com^
+||feelinginspectorathlete.com^
+*$3p,script,domain=apkmaza.net
+
+! https://github.com/uBlockOrigin/uAssets/issues/7912
+tecmundo.com.br##+js(nostif, offsetHeight)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/isickq/
+||ladsats.com^$3p,popup
+
+! 1337xhd .cc popups
+1337xhd.*##+js(nowebrtc)
+1337xhd.*##+js(acis, String.fromCharCode, 'shift')
+
+! amznhd .com popups
+amznhd.com##+js(nowoif)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/63869
+moviehousememories.com##+js(set, $tieE3, true)
+
+! https://github.com/NanoMeow/QuickReports/issues/4666#issuecomment-692159445
+ruplayers.com##+js(aopw, HTMLElement.prototype.insertAdjacentHTML)
