@@ -280,6 +280,7 @@ export default class CosmeticFilter implements IFilter {
           fastStartsWithFrom(line, 'matches-css', indexAfterColon) ||
           fastStartsWithFrom(line, 'min-text-length', indexAfterColon) ||
           fastStartsWithFrom(line, 'nth-ancestor', indexAfterColon) ||
+          fastStartsWithFrom(line, 'nth-of-type', indexAfterColon) ||
           fastStartsWithFrom(line, 'remove', indexAfterColon) ||
           fastStartsWithFrom(line, 'upward', indexAfterColon) ||
           fastStartsWithFrom(line, 'watch-attrs', indexAfterColon) ||
