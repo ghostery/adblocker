@@ -74,7 +74,6 @@ export const adsAndTrackingLists = [
 export const fullLists = [
   ...adsAndTrackingLists,
   `${PREFIX}/easylist/easylist-cookie.txt`,
-  `${PREFIX}/fanboy/annoyance.txt`,
 ];
 
 /**

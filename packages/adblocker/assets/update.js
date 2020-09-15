@@ -74,10 +74,10 @@ const adb = require('@cliqz/adblocker');
     ],
 
     // Fanboy
-    [
-      'https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt',
-      ['fanboy', 'annoyance.txt'],
-    ],
+    // [
+    //   'https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt',
+    //   ['fanboy', 'annoyance.txt'],
+    // ],
   ]) {
     const lines = (await got(url).text())
       .split(/[\r\n]/g)
