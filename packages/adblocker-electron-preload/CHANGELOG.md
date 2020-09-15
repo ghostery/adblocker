@@ -1,3 +1,25 @@
+# v1.18.3 (Tue Sep 15 2020)
+
+#### :bug: Bug Fix
+
+- build(deps): bump electron from 10.1.1 to 10.1.2 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.122 to 0.0.123 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.1.0 to 10.1.1 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump electron from 10.1.1 to 10.1.2 [#1273](https://github.com/cliqz-oss/adblocker/pull/1273) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump puppeteer from 5.2.1 to 5.3.0 [#1269](https://github.com/cliqz-oss/adblocker/pull/1269) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/node from 14.10.0 to 14.10.1 [#1268](https://github.com/cliqz-oss/adblocker/pull/1268) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.122 to 0.0.123 [#1267](https://github.com/cliqz-oss/adblocker/pull/1267) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.1.0 to 10.1.1 [#1240](https://github.com/cliqz-oss/adblocker/pull/1240) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # vnull (Sat Aug 29 2020)
 
 #### :bug: Bug Fix

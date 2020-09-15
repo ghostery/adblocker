@@ -1,3 +1,42 @@
+# v1.18.3 (Tue Sep 15 2020)
+
+#### :bug: Bug Fix
+
+- Disable fanboy annoyances for now [#1274](https://github.com/cliqz-oss/adblocker/pull/1274) ([@remusao](https://github.com/remusao))
+- build(deps): bump @types/chrome from 0.0.122 to 0.0.123 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :house: Internal
+
+- Update local assets [#1272](https://github.com/cliqz-oss/adblocker/pull/1272) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1271](https://github.com/cliqz-oss/adblocker/pull/1271) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1266](https://github.com/cliqz-oss/adblocker/pull/1266) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1262](https://github.com/cliqz-oss/adblocker/pull/1262) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1260](https://github.com/cliqz-oss/adblocker/pull/1260) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1257](https://github.com/cliqz-oss/adblocker/pull/1257) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1254](https://github.com/cliqz-oss/adblocker/pull/1254) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1252](https://github.com/cliqz-oss/adblocker/pull/1252) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1250](https://github.com/cliqz-oss/adblocker/pull/1250) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1248](https://github.com/cliqz-oss/adblocker/pull/1248) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1246](https://github.com/cliqz-oss/adblocker/pull/1246) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1243](https://github.com/cliqz-oss/adblocker/pull/1243) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1238](https://github.com/cliqz-oss/adblocker/pull/1238) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1237](https://github.com/cliqz-oss/adblocker/pull/1237) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1236](https://github.com/cliqz-oss/adblocker/pull/1236) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump puppeteer from 5.2.1 to 5.3.0 [#1269](https://github.com/cliqz-oss/adblocker/pull/1269) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/node from 14.10.0 to 14.10.1 [#1268](https://github.com/cliqz-oss/adblocker/pull/1268) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.122 to 0.0.123 [#1267](https://github.com/cliqz-oss/adblocker/pull/1267) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # vnull (Sat Aug 29 2020)
 
 #### ⚠️ Pushed to `master`
