@@ -2484,6 +2484,7 @@ curto.win###cookie-pop
 
 ! https://github.com/NanoMeow/QuickReports/issues/4196
 edailybuzz.com##+js(aopr, anOptions)
+||fakinggivewacko.com^$3p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/58044
 profitlink.info##+js(nosiif, visibility, 1000)
@@ -2727,7 +2728,9 @@ shrinkme.in##+js(aopr, app_vars.force_disable_adblock)
 shrinkme.in##[src^="https://shrinkme.in/"]
 shrinkme.in##^script:has-text('shift')
 shrinkme.in##+js(aopr, AdservingModule)
-shrinkme.in##+js(ra, href, a[href^="https://bestcond1tions.com/"])
+shrinkme.in##+js(ra, href, a[href][target="_blank"])
+shrinkme.in##+js(set, blurred, false)
+shrinkme.in##.box-main h3, [hight="250px"]
 
 ! https://github.com/NanoMeow/QuickReports/issues/4251
 banthang.tv##+js(ra, href, [href*="Popunder"])
@@ -4677,3 +4680,28 @@ wwe.com##+js(nostif, f.parentNode.removeChild(f), 100)
 pngio.com##+js(aopr, LieDetector)
 *$script,3p,denyallow=cleanpng.com|kisspng.com|disqus.com|disquscdn.com|jsdelivr.net|jwpcdn.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=pngio.com
 ||disavowtwelve.com^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/63962
+quotes.net##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! readm.org ads
+readm.org##+js(acis, String.fromCharCode, btoa)
+readm.org##+js(acis, $, Sponsor)
+
+! https://github.com/NanoMeow/QuickReports/issues/4706
+cpomagazine.com##+js(aopr, advads_passive_groups)
+
+! https://github.com/NanoMeow/QuickReports/issues/4707
+gamerant.com##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://forums.lanik.us/viewtopic.php?f=62&t=45101
+pholder.com##.AdInventory__overlay:upward(4)
+
+! https://github.com/NanoMeow/QuickReports/issues/4703
+uploads.mobi##+js(acis, $, adblock)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/63977
+tw-hkt.blogspot.com##+js(nosiif, visibility, 1000)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7792#issuecomment-693598611
+*$script,redirect-rule=noopjs,domain=speedtesting.herokuapp.com|excelviewer.herokuapp.com|exifviewer.herokuapp.com
