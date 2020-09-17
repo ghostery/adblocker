@@ -246,8 +246,7 @@ chip.de##+js(damoh-defuser)
 chip.de##.video-wrapper > div.video-js
 chip.de##.video-wrapper > video[style]:style(display:block!important;padding-top:0!important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/6587
-chip.de##+js(aopr, initFunctionName)
-chip.de##+js(aopr, decodeURIComponent)
+chip.de##+js(aopr, use_redirector)
 ! https://github.com/uBlockOrigin/uAssets/issues/7589
 chip.de##+js(json-prune, enabled, force_disabled)
 
@@ -1193,7 +1192,7 @@ hackinformer.com##.adsbygoogle:style(max-height: 1px !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/282
 ! https://github.com/uBlockOrigin/uAssets/issues/418
-||googlesyndication.com/pagead/js/adsbygoogle.js$important,script,redirect=googlesyndication.com/adsbygoogle.js,domain=cpu-world.com|wowtoken.info
+||googlesyndication.com/pagead/js/adsbygoogle.js$important,script,redirect=googlesyndication.com/adsbygoogle.js,domain=wowtoken.info
 @@||wowtoken.info^$ghide
 wowtoken.info##.adsbygoogle:style(max-height: 50px !important;)
 
@@ -1856,7 +1855,9 @@ dailyuploads.net##button#downloadBtnClick
 dailyuploads.*##+js(acis, document.getElementById, adblockinfo)
 dailyuploads.*##+js(aopr, parcelRequire)
 dailyuploads.*##+js(nowoif)
-dailyuploads.*##+js(acis, Math, zfgloaded)
+$3p,domain=dailyuploads.*,denyallow=google.com|gstatic.net|googleapis.com
+dailyuploads.*##+js(acis, String.fromCharCode, btoa)
+dailyuploads.*##+js(acis, Math, XMLHttpRequest)
 ||dailyuploads.net/images/gbinsta.jpg$image,1p
 ||dailyuploads.net/images/redbuttonx.png$image,1p
 ||dailyuploads.net/sw.js$script
@@ -5777,6 +5778,7 @@ btc-echo.de##.elementor-row:has-text([Anzeige])
 !#if env_chromium
 ||amazonaws.com/homad-global-configs.schneevonmorgen.com/global_config.json$xhr,redirect=nooptext,domain=fitforfun.de|golem.de|n-tv.de
 !#endif
+fitforfun.de##+js(json-prune, enabled, force_disabled)
 n-tv.de##+js(set, Object.prototype.adReinsertion, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/3443#issuecomment-420714439
 ||amazonaws.com/homad-global-configs.schneevonmorgen.com/global_config.json$xhr,redirect=nooptext,domain=tele5.de
@@ -11488,7 +11490,6 @@ mycoolmoviez.*##[href="javascript:void(0);"]
 moviespur.com##+js(aopr, Date.prototype.toUTCString)
 zeefiles.*##+js(ra, onclick, [onclick^="window.open"])
 zeefiles.*##+js(nowoif)
-zeefiles.*##+js(acis, Math.sin, vocabulary)
 todaypkfree.com##+js(aopr, Date.prototype.toUTCString)
 todaypkfree.com##+js(nowoif)
 todaypkfree.com##[href^="/watchfree.php"]
@@ -13167,6 +13168,7 @@ live-stream365.com###mydiva
 apl15.me##+js(nowoif)
 ##[src^="https://aff1xstavka.com"]
 apl15.me###ads
+||kursatarak.com^
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/270
 @@||cornel1801.com^$ghide
@@ -13320,10 +13322,13 @@ volksstimme.de##+js(aopr, TRM)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/52304
 @@||shortearn.org^$ghide
 shortearn.org##.banner
-shortearn.eu##+js(acis, Math, zfgloaded)
-shortearn.eu##+js(aopr, app_vars.force_disable_adblock)
-shortearn.eu##+js(aopr, AaDetector)
-shortearn.eu##+js(aeld, click, trigger)
+shortearn.org##+js(acis, String.fromCharCode, btoa)
+shortearn.org##+js(aeld, click, trigger)
+shortearn.org##+js(aopr, app_vars.force_disable_adblock)
+shortearn.org##+js(aopr, AaDetector)
+shortearn.org##+js(aopw, _pop)
+shortearn.org##+js(set, blurred, false)
+*$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=shortearn.org
 ||ladsatz.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4975
@@ -15221,6 +15226,7 @@ fc.lc##+js(noeval)
 fc.lc,fcdot.lc##+js(set, blurred, false)
 ||fc.lc/*.html$frame,1p
 ||fc.lc/sw.js$script,1p
+||fcdot.lc/sw.js$script,1p
 fc.lc##.banner-inner
 fc.lc###ad
 fcdot.lc###overlay
@@ -21935,7 +21941,7 @@ honeyhunterworld.com##[class^="ad-wrap"]
 @@||speed-down.org^$ghide
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/49505
-dr-farfar.com##+js(aopr, mdp_deblocker)
+dr-farfar.com##+js(aopr, mdpDeBlocker)
 dr-farfar.com##+js(nowoif)
 
 ! pornq .com popups
@@ -22023,6 +22029,7 @@ qq.com##+js(json-prune, ad)
 
 ! https://github.com/NanoMeow/QuickReports/issues/466
 vectorizer.io##+js(nostif, modal)
+vectorizer.io##[href^="https://track.fiverr.com/"]
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/f25295/ublocked_get_detected_in_this_site/
 ||jsdelivr.net/*/levelmaxblock.js$script,3p
@@ -22716,6 +22723,8 @@ naniplay.com##+js(nowoif)
 ! https://github.com/NanoMeow/QuickReports/issues/3187
 librospreuniversitariospdf.blogspot.com##+js(aopr, eddOptions)
 librospreuniversitariospdf.blogspot.com##+js(aopw, adBlockDetected)
+*$script,3p,denyallow=disqus.com|disquscdn.com|jsdelivr.net|jwpcdn.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com|googleusercontent.com|blogger.com|plyr.io,domain=librospreuniversitariospdf.blogspot.com
+||janitoraccrue.com^
 ||ladsanz.com^$all
 
 ! https://github.com/NanoMeow/QuickReports/issues/867

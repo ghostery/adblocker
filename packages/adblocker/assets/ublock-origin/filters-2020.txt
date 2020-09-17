@@ -864,11 +864,12 @@ tapetus.pl##+js(nostif, /^/)
 tapetus.pl##+js(acis, $, setTimeout)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7308
-streamtape.com##+js(nowoif)
-streamtape.com##+js(aopw, _pop)
-streamtape.com##+js(acis, document.createElement, 'script')
-streamtape.com#@#.google-ad
-streamtape.com##[class*="bn-container"], div[style*="z-index: 300000;"]
+streamtape.*##+js(nowoif)
+streamtape.*##+js(aopw, _pop)
+streamtape.*##+js(acis, document.createElement, 'script')
+streamtape.*#@#.google-ad
+streamtape.*##[class*="bn-container"], div[style*="z-index: 300000;"]
+streamtape.*##iframe[src^="data:"]
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54846
 yabiladi.com##+js(set, adBlockDetected, null)
@@ -1372,7 +1373,10 @@ portable4pc.com##+js(nosiif, visibility, 1000)
 kochamjp.pl##+js(set, blockAdBlock._options.baitClass, null)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3880
-cpu-world.com##+js(nostif, offsetHeight)
+@@||cpu-world.com^$ghide
+@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,domain=cpu-world.com
+@@||pagead2.googlesyndication.com/pagead/js/*/show_ads_impl$script,domain=cpu-world.com
+cpu-world.com##.adsbygoogle
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/55640
 telva.com##+js(nostif, f.parentNode.removeChild(f), 100)
@@ -3182,6 +3186,9 @@ priberam.org##+js(nostif, f.parentNode.removeChild(f), 100)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/59901
 shortearn.in##+js(aopr, app_vars.force_disable_adblock)
 shortearn.in##+js(aopr, open)
+shortearn.in##+js(set, blurred, false)
+*$frame,denyallow=google.com,domain=shortearn.in
+*$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=shortearn.in
 
 ! fix anti adb
 domoplus.pl,kuchniaplus.pl,miniminiplus.pl,teletoonplus.pl##+js(json-prune, ads.servers.[].apiAddress)
@@ -4705,3 +4712,69 @@ tw-hkt.blogspot.com##+js(nosiif, visibility, 1000)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7792#issuecomment-693598611
 *$script,redirect-rule=noopjs,domain=speedtesting.herokuapp.com|excelviewer.herokuapp.com|exifviewer.herokuapp.com
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64013
+hugo3c.tw##+js(nosiif, visibility, 1000)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64027
+4cash.me##+js(aopr, app_vars.force_disable_adblock)
+4cash.me##+js(set, blurred, false)
+4cash.me##.banner
+*$frame,denyallow=google.com,domain=4cash.me
+*$script,3p,denyallow=google.com|googleapis.com|gstatic.com|recaptcha.net,domain=4cash.me
+
+! https://github.com/NanoMeow/QuickReports/issues/4666#issuecomment-693751019
+ukblow.info##+js(aopw, HTMLElement.prototype.insertAdjacentHTML)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64021
+livehd7.com##+js(nosiif, visibility, 1000)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64045
+saungfirmware.id##+js(aopr, short_url_app_vars.force_disable_adblock)
+saungfirmware.id##+js(nano-sib)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64050
+toroox.com##+js(nowoif)
+toroox.com##+js(aopr, app_vars.force_disable_adblock)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64061
+elnacional.com##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64066
+litecoinads.com##+js(set, blockAdBlock, trueFunc)
+litecoinads.com##[class^="bmadblock"]
+
+! https://forums.lanik.us/viewtopic.php?f=62&t=45146
+gizbot.com##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64078
+androidtvbox.eu##+js(set, $tieE3, true)
+androidtvbox.eu##[href^="https://bit.ly"]
+androidtvbox.eu##.stream-item
+androidtvbox.eu##.stream-item-widget
+
+! drivedrama .com anti adb
+drivedrama.com##+js(aeld, load, onload)
+
+! https://github.com/NanoMeow/QuickReports/issues/4716
+animeindo.cc##+js(aopr, decodeURI)
+*$script,3p,denyallow=chatango.com|disqus.com|disquscdn.com|jsdelivr.net|jwpcdn.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=animeindo.cc
+||artpever.com^
+
+! https://github.com/NanoMeow/QuickReports/issues/4717
+download.web.id##+js(acis, jQuery, DHAntiAdBlocker)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7923
+cookpad.com###modals
+cookpad.com##body:style(overflow:auto !important)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/iup10m/blocking_banner_on_freecycleorg/
+freecycle.org##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64099
+namaidani.com##+js(aopr, app_vars.force_disable_adblock)
+namaidani.com##+js(aopr, open)
+*$3p,frame,script,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=namaidani.com
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64100
+bfas237blog.info##+js(aopr, google_jobrunner)
