@@ -3909,6 +3909,8 @@ izismile.com###banner_code_rotator
 izismile.com##.js-banner-top
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7782
+animekisa.tv##+js(acis, include)
+animekisa.tv##+js(aopr, AaDetector)
 *$script,3p,denyallow=disqus.com|jsdelivr.net|jwpcdn.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=animekisa.tv
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/61759
@@ -4812,3 +4814,43 @@ news.goo.ne.jp##+js(nostif, f.parentNode.removeChild(f), 100)
 ! https://github.com/NanoMeow/QuickReports/issues/4721
 7labs.io##+js(nostif, f.parentNode.removeChild(f), 100)
 7labs.io##.widget_text:has-text(Adv)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/ivfy9m/blocking_weird_pc_slowing_you_down_image_on/
+noscript.net##style:has-text(data:image):remove()
+
+! rubtech.xyz popup ads
+rubtech.xyz##+js(aopr, open)
+rubtech.xyz##+js(set, blurred, false)
+rubtech.xyz##.banner-336x280
+rubtech.xyz##.blog-item
+*$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=rubtech.xyz
+
+! https://github.com/NanoMeow/QuickReports/issues/4724
+xxxdan.com##+js(aopr, document.head.appendChild)
+||jannews.pro^$3p
+||nvrblk.xyz^$3p
+
+! https://www.reddit.com/r/uBlockOrigin/comments/ivh48g/ads_passing_through_from_a_weird_domain/
+linuxhint.com,thekitchenmagpie.com##+js(acis, Math, adthrive)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64181
+haberler.com##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64199
+redanimedatabase.cloud##+js(nowoif)
+redanimedatabase.cloud##+js(set, clientSide.adbDetect, null)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64204
+hboav.com##+js(aopw, onload)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64217
+hackinblood.lasermark.co##+js(aopw, KillAdBlock)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64220
+bonobono.com##.custom-html-widget
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64231
+iol.co.za##.pub_300x250.pub_300x250m.pub_728x90.text-ad.textAd.text_ad.text_ads.text-ads.text-ad-links:style(display:block !important)
+
+! https://github.com/NanoMeow/QuickReports/issues/4691
+@@||paperio3.com^$ghide
