@@ -21,7 +21,6 @@
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53288
 azm.to##+js(aopr, absda)
-||6bgaput9ullc.com^$3p
 *$script,3p,denyallow=jquery.com|hwcdn.net|plyr.io|fastly.net|jwpcdn.com|googleapis.com,domain=azm.to
 
 ! https://github.com/NanoMeow/QuickReports/issues/3528
@@ -422,6 +421,9 @@ animepertutticdn.com##+js(nowoif)
 @@||adslink.pw^$ghide
 adslink.pw##.banner-inner
 adslink.pw##+js(aopw, ai_adb)
+adslink.pw##+js(aopw, _pop)
+adslink.pw##+js(set, blurred, false)
+*$script,3p,denyallow=b-cdn.net|google.com|gstatic.com|recaptcha.net,domain=adslink.pw
 
 ! https://github.com/NanoMeow/QuickReports/issues/3625
 kryptogator.com##+js(aopr, adBlockDetected)
@@ -985,6 +987,7 @@ itrum.vn##+js(aopr, adBlockDetected)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/geoabd/how_to_block_aboutblank_popups_from_alphapixorg/
 alphapix.org##+js(aopw, _pop)
+alphapix.org##+js(aopr, AdservingModule)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/55034
 biroads.com##+js(aopr, app_vars.force_disable_adblock)
@@ -1877,8 +1880,6 @@ blitz.bg,novini.bg##+js(nostif, f.parentNode.removeChild(f), 100)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7520
 anitube.*##+js(aopr, AaDetector)
-! [dup] from ublock-origin/filters.txt
-! ||anitube.*/sw.js$script,1p
 ||anitubecz.uk^$script
 ||1uno1xkktau4.com^$3p
 *$script,xhr,frame,3p,denyallow=hwcdn.net|bootstrapcdn.com|googleapis.com|cloudflare.net|jwpcdn.com|jsdelivr.net|fastly.net|fontawesome.com|anitube.info,domain=anitube.cx
@@ -3623,6 +3624,8 @@ nee.my.id##+js(noeval-if, AdBlock)
 
 ! awdescargas.com fake button
 awdescargas.com,awlinks.me##+js(aopw, smrtSB)
+awlinks.me##+js(aopw, _pop)
+*$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=awlinks.me
 
 ! it-swarm.dev ads
 it-swarm.dev##+js(aopr, SERVER_SIDE_URL)
@@ -3839,7 +3842,6 @@ wordcounter.icu##+js(aopw, _pop)
 *$frame,denyallow=google.com|hcaptcha.com,domain=wordcounter.icu
 *$script,3p,denyallow=google.com|gstatic.com|hcaptcha.com|recaptcha.net,domain=wordcounter.icu
 ||uii.io^$3p
-||arableredressalacrity.com^$3p
 
 ! https://github.com/NanoMeow/QuickReports/issues/4519
 tecnotutoshd.net##+js(aopw, adBlockDetected)
@@ -4027,6 +4029,10 @@ onepiecex.xyz##+js(nano-sib)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62267
 cut.my.id##+js(aopr, app_vars.force_disable_adblock)
 cut.my.id##+js(aopr, open)
+cut.my.id##+js(aopw, adcashMacros)
+cut.my.id##+js(set, blurred, false)
+cut.my.id##.blog-item
+cut.my.id##[class^="bmadblock"]
 *$3p,script,frame,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=cut.my.id
 cut.my.id##.banner
 
@@ -4232,6 +4238,7 @@ shrinke.me##+js(set, blurred, false)
 shrinke.me###imgAddDirectLink
 ||shrinke.me/sw.js$script,1p
 ||shrinkme.io^$script,3p
+*$script,3p,denyallow=google.com|gstatic.com|hwcdn.net|jquery.com|recaptcha.net,domain=shrinke.me
 
 ! gratispaste.com popup
 gratispaste.com##+js(aopw, _pop)
@@ -4324,7 +4331,6 @@ youvideoporno.mobi##+js(acis, document.querySelectorAll, popMagic)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/in0gxn/voesx_aggressive_advertising_how_can_i_fix_it/
 *$3p,script,frame,denyallow=vjs.zencdn.net|voe-network.net|cdnjs.cloudflare.com|hcaptcha.com|recaptcha.net|googleapis.com,domain=voe.sx
-||ptoumsid.net^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7874
 interpals.net##+js(nostif, captureException, 100)
@@ -4515,7 +4521,6 @@ softairbay.com##.brave
 softairbay.com##.xc449bad4854773ff
 softairbay.com##[class^="bmadblock"]
 softairbay.com##+js(aopw, _pop)
-||hulyyabo.xyz^
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63597
 click2win.xyz##+js(aopr, adBlockDetected)
@@ -4527,7 +4532,6 @@ swift4claim.com##.overlay
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63599
 best-shopme.com##+js(nosiif, visibility, 1000)
-||publish0x.com^$3p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63600
 btcs2u.tk##+js(aopr, adBlockDetected)
@@ -4622,9 +4626,6 @@ mangalong.com##+js(nostif, f.parentNode.removeChild(f), 100)
 ! https://github.com/NanoMeow/QuickReports/issues/4693
 @@||databaseitalia.it^$ghide
 
-! https://github.com/NanoMeow/QuickReports/issues/4696
-music.dwex.info##+js(aopr, mdpDeBlocker)
-
 ! bfstrms .xyz https://github.com/uBlockOrigin/uAssets/commit/f35dd2a06aa8b940ba58b0a4644cae44ef6fba35#commitcomment-42272213
 bfstrms.*##+js(noeval-if, debugger)
 bfstrms.*##+js(aopw, adcashMacros)
@@ -4639,8 +4640,6 @@ crackstreams.net##+js(aopw, _pop)
 crackstreams.net,volokit.com##+js(nowebrtc)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63847
-||ppfrlfe.com^
-||feelinginspectorathlete.com^
 *$3p,script,domain=apkmaza.net
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7912
@@ -4667,7 +4666,6 @@ ruplayers.com##+js(aopw, HTMLElement.prototype.insertAdjacentHTML)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63880
 serie-novelas.com##+js(aopr, anOptions)
-||wxyn0o3xmora.com^
 
 ! https://github.com/NanoMeow/QuickReports/issues/4700
 @@||ufreegames.com^$ghide
@@ -4686,7 +4684,6 @@ wwe.com##+js(nostif, f.parentNode.removeChild(f), 100)
 ! https://github.com/NanoMeow/QuickReports/issues/4702
 pngio.com##+js(aopr, LieDetector)
 *$script,3p,denyallow=cleanpng.com|kisspng.com|disqus.com|disquscdn.com|jsdelivr.net|jwpcdn.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=pngio.com
-||disavowtwelve.com^
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63962
 quotes.net##+js(nostif, f.parentNode.removeChild(f), 100)
@@ -4759,7 +4756,6 @@ drivedrama.com##+js(aeld, load, onload)
 ! https://github.com/NanoMeow/QuickReports/issues/4716
 animeindo.cc##+js(aopr, decodeURI)
 *$script,3p,denyallow=chatango.com|disqus.com|disquscdn.com|jsdelivr.net|jwpcdn.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=animeindo.cc
-||artpever.com^
 
 ! https://github.com/NanoMeow/QuickReports/issues/4717
 download.web.id##+js(acis, jQuery, DHAntiAdBlocker)
@@ -4774,7 +4770,45 @@ freecycle.org##+js(nostif, f.parentNode.removeChild(f), 100)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/64099
 namaidani.com##+js(aopr, app_vars.force_disable_adblock)
 namaidani.com##+js(aopr, open)
+namaidani.com##+js(set, blurred, false)
+namaidani.com##.blog-item
 *$3p,frame,script,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=namaidani.com
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/64100
 bfas237blog.info##+js(aopr, google_jobrunner)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/iurlai/help_with_a_filter/
+*$script,3p,denyallow=disqus.com|disquscdn.com|jsdelivr.net|jwpcdn.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=mangatx.com
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64101
+pslfive.com##+js(aopr, app_vars.force_disable_adblock)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/iutig2/is_it_possible_to_remove_this_paywall_blocking/
+recordonline.com##+js(set, _sp_.msg.displayMessage, noopFunc)
+
+! doramasyt.com monoschinos.com ads
+doramasyt.com,monoschinos.com##+js(aopr, GLX_GLOBAL_UUID_RESULT)
+*$script,3p,denyallow=cloudflare.com|cloudflare.net|disqus.com|disquscdn.com|facebook.net|fastly.net|fastlylb.net|fbcdn.net|gstatic.com|jwpcdn.com|jwplatform.com,domain=doramasyt.com|monoschinos.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/6241#issuecomment-694656726
+audiosretro.tk##+js(aopw, _pop)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64117
+sondakika.com##+js(nostif, f.parentNode.removeChild(f), 100)
+sondakika.com###aside
+
+! https://www.reddit.com/r/uBlockOrigin/comments/iv27kl/you_are_seeing_this_message_because_ad_or_script/
+blic.rs##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/iv4tk5/what_to_do_when_site_doesnt_allow_us_to_view_the/
+ktm2day.com##+js(aopr, mdpDeBlocker)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64152
+kimchl.tv##+js(nosiif, visibility, 1000)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64163
+news.goo.ne.jp##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://github.com/NanoMeow/QuickReports/issues/4721
+7labs.io##+js(nostif, f.parentNode.removeChild(f), 100)
+7labs.io##.widget_text:has-text(Adv)
