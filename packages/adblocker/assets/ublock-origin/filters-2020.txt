@@ -549,10 +549,12 @@ ultrapeliculashd.com,uplinks.info##.aligncenter.img-responsive
 ! win2url.com anti adb popup
 el7ref.com##+js(nowoif)
 el7ref.com,win2url.com##+js(set, blurred, false)
-vico3.online##+js(aopr, app_vars.force_disable_adblock)
-vico3.online##+js(aopr, parcelRequire)
-vico3.online##+js(nowoif)
-win2url.com##+js(acis, Math, zfgloaded)
+vico3.online,win2url.com##+js(aopr, app_vars.force_disable_adblock)
+vico3.online,win2url.com##+js(aopr, parcelRequire)
+vico3.online,win2url.com##+js(aopr, open)
+vico3.online,win2url.com##+js(acis, String.fromCharCode, btoa)
+vico3.online,win2url.com##.blog-item
+*$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=vico3.online|win2url.com
 
 ! bolicheintercambios.net popup
 bolicheintercambios.net##+js(nano-sib, , ,0)
@@ -866,12 +868,14 @@ tapetus.pl##+js(nostif, /^/)
 tapetus.pl##+js(acis, $, setTimeout)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7308
-streamtape.*##+js(nowoif)
-streamtape.*##+js(aopw, _pop)
 streamtape.*##+js(acis, document.createElement, 'script')
+streamtape.*##+js(acis, Math, XMLHttpRequest)
+streamtape.*##+js(aopw, _pop)
+streamtape.*##+js(nowoif)
 streamtape.*#@#.google-ad
 streamtape.*##[class*="bn-container"], div[style*="z-index: 300000;"]
 streamtape.*##iframe[src^="data:"]
+||paishuno.net^$3p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54846
 yabiladi.com##+js(set, adBlockDetected, null)
@@ -986,6 +990,7 @@ itrum.vn##+js(aopr, adBlockDetected)
 @@||burzowo.info^$1p,script
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/geoabd/how_to_block_aboutblank_popups_from_alphapixorg/
+alphapix.org##+js(aopr, _pop)
 alphapix.org##+js(aopw, _pop)
 alphapix.org##+js(aopr, AdservingModule)
 
@@ -4243,8 +4248,12 @@ shrinke.me###imgAddDirectLink
 *$script,3p,denyallow=google.com|gstatic.com|hwcdn.net|jquery.com|recaptcha.net,domain=shrinke.me
 
 ! gratispaste.com popup
-gratispaste.com##+js(aopw, _pop)
+gratispaste.com##+js(aopr, AdservingModule)
+gratispaste.com##+js(aopr, _pop)
 gratispaste.com##.content > center
+9xlinks.site##+js(aeld, DOMContentLoaded, adlinkfly)
+||za.gl^$script,3p
+*$script,3p,denyallow=googleapis.com,domain=gratispaste.com
 
 ! glinks.co anti adb
 glinks.co,gobrowse.net##+js(nosiif, visibility, 1000)
@@ -4508,6 +4517,7 @@ cashurl.in##+js(aopw, _pop)
 cashurl.in##+js(set, blurred, false)
 cashurl.in##.banner
 ||cashurl.in/sw.js$script,1p
+*$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=cashurl.in
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63594
 tron-faucet.xyz##+js(aopr, disableButtonTimer)
@@ -4854,3 +4864,33 @@ iol.co.za##.pub_300x250.pub_300x250m.pub_728x90.text-ad.textAd.text_ad.text_ads.
 
 ! https://github.com/NanoMeow/QuickReports/issues/4691
 @@||paperio3.com^$ghide
+
+! https://github.com/uBlockOrigin/uAssets/pull/7930
+@@||makefreecallsonline.com^$ghide
+makefreecallsonline.com##.google-ad
+makefreecallsonline.com##.adsbygoogle
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64238
+template.city##+js(set, blockAdBlock, trueFunc)
+
+! https://forums.lanik.us/viewtopic.php?p=156612#p156612
+goodmenproject.com##+js(nostif, f.parentNode.removeChild(f), 100)
+goodmenproject.com##.gmp-instream-ad
+goodmenproject.com##.gmpadaction
+goodmenproject.com##.header-ad-widget-area
+
+! https://github.com/uBlockOrigin/uAssets/issues/7932
+*$script,3p,denyallow=fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=wi.to
+||illustrationmanlypageant.com^
+||fosterstrawberry.com^
+
+! https://github.com/NanoMeow/QuickReports/issues/4727
+@@||imasdk.googleapis.com/js/sdkloader/ima3$script,domain=engine.univtec.com
+@@||doubleclick.net/ssai/$xhr,domain=engine.univtec.com
+
+! https://github.com/NanoMeow/QuickReports/issues/4729
+businesstimes.com.sg##.overlayWhite
+businesstimes.com.sg##html:style(overflow-y: auto !important;)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64293
+wadigi.xyz##+js(nosiif, visibility, 1000)
