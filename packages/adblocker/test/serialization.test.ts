@@ -79,7 +79,7 @@ describe('Serialization', () => {
       const engine = Engine.parse('||domain');
       const serialized = engine.serialize();
       const version = serialized[0];
-      serialized[0] = 1; // override version
+      serialized[0] = (serialized[0] + 1) % 256; // override version
       expect(() => {
         Engine.deserialize(serialized);
       }).to.throw();
