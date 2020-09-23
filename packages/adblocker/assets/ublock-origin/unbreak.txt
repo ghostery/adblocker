@@ -388,7 +388,7 @@ kinopoisk.ru###image:style(opacity: 1 !important;)
 @@|blob:$domain=dailycaller.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/525
-||fls.doubleclick.net/activityi$frame,redirect=noopframe,domain=suntrust.com
+@@||fls.doubleclick.net^$subdocument,domain=billpay.suntrust.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/551
 @@||tvpage.com/tvpa.min.js$script,domain=bleepingcomputer.com
@@ -3905,8 +3905,9 @@ hentaiplay.net###video_overlays
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=usnews.com
 
 ! cname https://github.com/uBlockOrigin/uAssets/issues/7928
+! https://github.com/NanoMeow/QuickReports/issues/4738
 !#if env_firefox
-@@||privacy-mgmt.com^$script,domain=focus.de
+@@||privacy-mgmt.com^$script,domain=focus.de|golem.de
 !#endif
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/ivsm1o/blocking_vistaprint_customisation/
@@ -3915,3 +3916,18 @@ hentaiplay.net###video_overlays
 ! unbreak push home page vendigamus .com
 ! [badfilter] ||vendigamus.com^$badfilter
 ||vendigamus.com^$3p
+
+! https://github.com/uBlockOrigin/uAssets/issues/7934
+! [badfilter] *$script,3p,domain=bdsmstreak.com,badfilter
+
+! pornvibe .org some videos broken blocking https://ssl.p.jwpcdn.com/6/12/jwplayer.js
+! [badfilter] *$script,3p,domain=pornvibe.org,badfilter
+
+! sun-sentinel .com today's top videos broken
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=sun-sentinel.com
+
+! slide show broken https://www.floridatravellife.com/gallery/historic-snapshots-of-baseball-heroes-spring-training-in-florida/
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=floridatravellife.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/7938
+@@||open.spotify.com^$cname
