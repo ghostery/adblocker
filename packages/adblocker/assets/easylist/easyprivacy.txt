@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202009251739
+! Version: 202009261256
 ! Title: EasyPrivacy
-! Last modified: 25 Sep 2020 17:39 UTC
+! Last modified: 26 Sep 2020 12:56 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -3754,6 +3754,7 @@
 /sessioncam/*
 /set-cookie.gif?
 /set_cookie.php?
+/set_optimizely_cookie.js
 /set_tracking.js
 /setAdStatEV?
 /setbucket?signature=
@@ -9484,7 +9485,6 @@ _mongo_stats/
 ||hiperstat.com^$third-party
 ||hitcountersonline.com^$third-party
 ||imetrix.it^$third-party
-||iolam.it^$third-party
 ||ipfrom.com^$third-party
 ||italianadirectory.com^$third-party
 ||keyxel.com^$third-party
@@ -10147,6 +10147,7 @@ _mongo_stats/
 ||ask.com^*/i.gif?
 ||assoc-amazon.*^e/ir?t=$image
 ||asterpix.com/tagcloudview/
+||atcdn.co.uk/frostbite/
 ||atdmt.com/action/
 ||atdmt.com/iaction/
 ||atdmt.com/jaction/
@@ -13823,6 +13824,7 @@ _mongo_stats/
 ||goseek.com/track-
 ||gov.in/js/ga.js
 ||gq-magazine.co.uk^*/LogPageView
+||gql.reddit.com^
 ||grammarly.io/log
 ||groupon.*/tracky$xmlhttprequest
 ||groupon.com/analytic/
@@ -14363,6 +14365,7 @@ _mongo_stats/
 ||onlyfans.com^*/stats-collect?
 ||oodle.co.uk/event/track-first-view/
 ||oodle.com/js/suntracking.js
+||oops.redditmedia.com^
 ||open.mkt1397.com^
 ||openuniversity.co.uk/marketing/
 ||opera.com/js/sfga.js
@@ -15111,6 +15114,7 @@ _mongo_stats/
 ||track.fxstreet.com^
 ! [dup] from easylist/easyprivacy.txt
 ! ||track.hubspot.com^
+||track.lexico.com^
 ||track.netzero.net^
 ||track.ning.com^
 ||track.rediff.com^$script
@@ -17266,6 +17270,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||adobedtm.com/*_source.min.js$script,domain=kroger.com
 @@||adobedtm.com/extensions/$script,domain=atresplayer.com
 @@||adobedtm.com/launch-$script
+@@||adobedtm.com^*/AppMeasurement.min.js$script,domain=apple.com
 @@||adobedtm.com^*/launch-$script,xmlhttprequest
 @@||adobedtm.com^*/mbox-contents-$script,domain=absa.co.za|ally.com|americanexpress.com|costco.com|fcbarcelona.com|firststatesuper.com.au|hgtv.com|lenovo.com|lowes.com|newyorker.com|nfl.com|oprah.com|pnc.com|shoppersdrugmart.ca|usanetwork.com|vanityfair.com|wired.com|wowway.net
 @@||adobedtm.com^*/s-code-$script
@@ -17644,6 +17649,10 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||zappos.com/js/trackingPixel/mercentTracker.js
 @@||zylom.com/images/site/zylom/scripts/google-analytics.js
 @@||zynga.com/current/iframe/track.php?$domain=apps.facebook.com
+! Consent Fixes
+! [dup] from ublock-origin/unbreak.txt
+! @@||notice.sp-prod.net^$subdocument,domain=telegraph.co.uk
+@@||sourcepoint.telegraph.co.uk^$~third-party,xmlhttprequest
 ! Stackoverflow-related. https://forums.lanik.us/viewtopic.php?f=64&t=44747
 @@||askubuntu.com/tags/$~third-party,xmlhttprequest
 @@||mathoverflow.net/tags/$~third-party,xmlhttprequest
@@ -17894,7 +17903,6 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||ilsole24ore.com^*/fingerprint2.min.js?
 @@||imrworldwide.com/novms/*/ggcm*.js$domain=la7.it|sky.it|video.corriere.it
 @@||imrworldwide.com/v60.js$domain=capital.it|corriereadriatico.it|fanpage.it|huffingtonpost.it|ilgazzettino.it|ilmattino.it|ilmessaggero.it|leggo.it|m2o.it|quotidianodipuglia.it|video.deejay.it|video.espresso.repubblica.it|video.ilsecoloxix.it|video.lanuovasardegna.it|video.lastampa.it|video.rep.repubblica.it|video.repubblica.it
-@@||iolam.it/js/iam2.0.js?$script,domain=3bmeteo.com|dilei.it|siviaggia.it|virgilio.it
 @@||kataweb.it/wt/wt.js?http$domain=gelocal.it|video.huffingtonpost.it|video.ilsecoloxix.it|video.lanuovasardegna.it|video.lastampa.it|video.rep.repubblica.it|video.repubblica.it
 @@||mediaworld.it^*/GoogleTagManager.js?
 @@||omtrdc.net^*/mbox/json?$xmlhttprequest,domain=vodafone.it
