@@ -873,6 +873,7 @@ streamtape.*#@#.google-ad
 streamtape.*##[class*="bn-container"], div[style*="z-index: 300000;"]
 streamtape.*##iframe[src^="data:"]
 ||paishuno.net^$3p
+||nortaumi.net^
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54846
 yabiladi.com##+js(set, adBlockDetected, null)
@@ -4838,3 +4839,32 @@ eztvtorrent.org##+js(aopr, exoJsPop101)
 *$script,3p,denyallow=addtoany.com,domain=hdmovieshubz.club
 ||megmeallab.com^
 ||yowlcapkegs.com^
+
+! manga-raw.club ads
+manga-raw.club##+js(acis, document.createElement, '+d+')
+
+! aylink.co popup ads
+aylink.co##+js(aopr, xmlhttp)
+aylink.co##+js(nano-sib)
+aylink.co##+js(ra, data-ppcnt_ads|onclick, #main)
+
+! https://github.com/NanoMeow/QuickReports/issues/4755
+databasegdriveplayer.*##+js(acis, Math, XMLHttpRequest)
+
+! etcscrs .to popups
+etcscrs.to##+js(aopr, LieDetector)
+||layouttransparent.com^
+
+! audizine.com anti adb
+audizine.com##+js(acis, document.createElement, admiral)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/j0dy4q/
+sinfoniarossini.com##+js(nowoif)
+||jwt8e5vzc1.com^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64678
+buynorxviagraonline.com##+js(aopw, adcashMacros)
+buynorxviagraonline.com##+js(acis, addEventListener, google_ad_client)
+buynorxviagraonline.com##.tm-menu
+buynorxviagraonline.com###HTML10
+buynorxviagraonline.com###HTML11
