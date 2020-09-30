@@ -314,6 +314,9 @@ pornky.com,rexporn.com##+js(aopr, exoJsPop101)
 ! https://github.com/uBlockOrigin/uAssets/issues/7254
 @@||snowfiles.com^$ghide
 snowfiles.com##.ad, .adsbygoogle
+*$script,3p,denyallow=bootstrapcdn.com|disquscdn.com|disqus.com|fbcdn.net|facebook.net|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=snowfiles.com
+||snowfiles.com/images/dl-ad.png$image
+||cosmeticsgenerosity.com^
 
 ! skidrowcpy .com popups
 skidrowcpy.com##+js(aopw, _pop)
@@ -622,7 +625,7 @@ uplink.my.id##+js(acis, document.getElementById, alert)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7290
 smutty.com##+js(nowoif)
-||smutty.com^$frame,1p
+||smutty.com^*?id=$frame,1p
 
 ! https://github.com/NanoMeow/QuickReports/issues/3686
 123enjoy.net##+js(aopr, LieDetector)
@@ -1072,7 +1075,7 @@ pornomoll.net##+js(nostif, innerText, 2000)
 kenzato.uk##+js(acis, document.querySelectorAll, popMagic)
 
 ! https://forums.lanik.us/viewtopic.php?f=96&t=44658
-leggenditalia.com,leggenditaloi.com,leggenditaly.com##+js(nowebrtc)
+hentaisaturn.com,leggenditalia.com,leggenditaloi.com##+js(nowebrtc)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7333
 erai-ddl.info,erai-ddl2.info,erai-ddl3.info##+js(nosiif, visibility, 1000)
@@ -2862,7 +2865,7 @@ faucetcoins.org,dogecrypto.club,getdogecoins.com##[class^="bmadblock"]
 ahri-hentai.com##+js(acis, document.querySelectorAll, popMagic)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7661
-aparat.cam##+js(acis, Object.defineProperty, XMLHttpRequest)
+aparat.cam##+js(acis, String.fromCharCode, btoa)
 aparat.cam##+js(aopr, absda)
 aparat.cam##+js(aopw, _pop)
 aparat.cam##+js(nowoif)
@@ -3019,6 +3022,7 @@ fikiri.net##+js(nostif, mdp)
 ! https://github.com/uBlockOrigin/uAssets/commit/274103138906e4f6e1ca089aa8f215a1c1956a17#commitcomment-40720717
 racaty.*##+js(acis, Object.defineProperty, XMLHttpRequest)
 racaty.*##+js(aopw, Fingerprint2)
+racaty.*##+js(aopw, _pop)
 racaty.*##+js(nowebrtc)
 ||vendnibtemp.com^
 
@@ -3369,10 +3373,6 @@ inews.co.uk##div.box.widget:nth-of-type(5)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/60443
 essek.gen.tr##+js(nano-sib)
 dosya.co##+js(nano-stb)
-
-! Rambler ad network (https://reklama.ramblergroup.com/)
-lenta.ru,championat.com,passion.ru,wmj.ru,eda.ru,rambler.ru,motor.ru,autorambler.ru,letidor.ru,quto.ru,rns.online,gazeta.ru##+js(acis, Object.getOwnPropertyDescriptor, octopusGetFingerprint)
-lenta.ru,championat.com,passion.ru,wmj.ru,eda.ru,rambler.ru,motor.ru,autorambler.ru,letidor.ru,quto.ru,rns.online,gazeta.ru##+js(acis, document.querySelectorAll, octopusGetFingerprint)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/60492
 *$xhr,redirect-rule=nooptext,domain=dynast.io
@@ -4610,9 +4610,6 @@ drivedrama.com##+js(aeld, load, onload)
 animeindo.cc##+js(aopr, decodeURI)
 *$script,3p,denyallow=chatango.com|disqus.com|disquscdn.com|jsdelivr.net|jwpcdn.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=animeindo.cc
 
-! https://github.com/NanoMeow/QuickReports/issues/4717
-download.web.id##+js(acis, jQuery, DHAntiAdBlocker)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/7923
 cookpad.com###modals
 cookpad.com##body:style(overflow:auto !important)
@@ -4783,6 +4780,12 @@ pagalworld4u.com##+js(aopr, adBlockDetected)
 ||painsko.com^
 ||adzfun.me^$3p
 ||fhits.xyz^$3p
+kizservice.info###sam
+##[href^="//cadsecs.com/"]
+##[href^="//clk.afftracks.online/"]
+##[href^="//prayuserparka.com/"]
+##[href^="https://wap4dollar.com/ad/nonadult/serve.php"]
+##[href^="//ad.jetx.info/"]
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/563
 *$script,3p,denyallow=fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com|cookieinfoscript.com,domain=sharemods.com
@@ -4882,7 +4885,38 @@ ohmygirl.ml##+js(nosiif, visibility, 1000)
 ! https://www.reddit.com/r/uBlockOrigin/comments/j18b4y/how_to_block_popup_windows/
 hoodsite.com##+js(aopw, _pop)
 
-! https://github.com/uBlockOrigin/uAssets/issues/7964
-@@||pelislinks.me^$ghide
-@@||me-encantas.com^$ghide
-@@||cdnjs.cloudflare.com/ajax/libs/fuckadblock/*/fuckadblock.min.js$script,domain=me-encantas.com
+! brave issue google funding
+globo.com,latimes.com##+js(nostif, f.parentNode.removeChild(f), 100)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/j1zxy9/pop_up_blocking/
+*$3p,script,denyallow=fastly.net|cdn.plyr.io|cdn.jsdelivr.net|cloudflare.com|cdn.radiantmediatechs.com|google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=iplhd.live
+||fourthchoseark.com^
+
+! https://github.com/uBlockOrigin/uAssets/issues/7970
+avimobilemovies.net,hackiee.mobi##+js(aopr, btoa)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7972
+*$script,3p,denyallow=fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=13x4.com
+||greedysafely.com^
+
+! https://github.com/uBlockOrigin/uAssets/issues/7973
+camsclips.net##+js(nostif, innerText, 2000)
+camsclips.net##.place
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64778
+indirlinks.xyz##+js(aopw, _pop)
+@@||indirlinks.xyz^$ghide
+indirlinks.xyz##div[style^="margin:0px 0px 0px 0px"]
+
+! https://github.com/NanoMeow/QuickReports/issues/4768
+*$script,3p,denyallow=disquscdn.com|disqus.com|fbcdn.net|facebook.net|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=loveheaven.net
+||jiltlargosirk.com^
+
+! https://github.com/NanoAdblocker/NanoFilters/issues/568
+*$script,redirect-rule=noopjs,domain=linecad.com
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/64800
+claimrbx.gg##+js(nostif, swal, 500)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7979
+magazyn.wp.pl##+js(nostif, block, 0)
