@@ -115,7 +115,7 @@ describe('Serialization', () => {
 
       const end = serialized.length - 1;
       const value = serialized[end];
-      serialized[end] = 0;
+      serialized[end] += 1;
 
       expect(() => {
         Engine.deserialize(serialized);
