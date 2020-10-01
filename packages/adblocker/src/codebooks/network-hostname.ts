@@ -7,6 +7,7 @@
  */
 /* tslint:disable quotemark */
 export default [
+  "quantcast.mgr.consensu.org",
   "googlesyndication",
   "imasdk.googleapis",
   "cdnjs.cloudflare",
@@ -187,6 +188,7 @@ export default [
   "sp",
   "ss",
   "st",
+  "su",
   "sy",
   "t-",
   "ta",
@@ -196,7 +198,6 @@ export default [
   "tm",
   "tn",
   "to",
-  "tp",
   "tr",
   "ts",
   "tu",
@@ -218,7 +219,6 @@ export default [
   "vo",
   "we",
   "wn",
-  "wp",
   "ws",
   "xx",
   "yo",
