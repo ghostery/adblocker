@@ -2284,6 +2284,8 @@ sxyprn.*###vid_container_id > .tdn
 ! https://github.com/NanoAdblocker/NanoFilters/issues/144
 ! https://github.com/NanoMeow/QuickReports/issues/652
 ! https://github.com/AdguardTeam/AdguardFilters/issues/49981
+*$image,redirect-rule=2x2.png,domain=magesy.blog|magesy.eu|majesy.com
+magesy.*,majesy.*##+js(aost, Math.floor, onload)
 !#if env_chromium
 majesy.*##+js(aeld, /^(?:DOMContentLoaded|load)$/, r.removeEventListener)
 !#endif
@@ -6432,7 +6434,8 @@ muhendisimaaslari.com##.adsbygoogle
 freemegalinks.com##+js(nobab)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2342
-frkn64modding.com##+js(aopr, anOptions)
+@@||frkn64modding.com^$ghide
+frkn64modding.com##+js(aopr, adBlockDetected)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2350
 @@||cdn.vuplay.co.uk/*/comscore.$script,domain=sporza.be
@@ -7053,9 +7056,6 @@ gofetishsex.com##+js(noeval)
 ! https://github.com/uBlockOrigin/uAssets/issues/2577
 hard-tubesex.com##+js(aopr, Aloader.serve)
 hard-tubesex.com##+js(noeval)
-
-! https://github.com/uBlockOrigin/uAssets/issues/2578
-||hardcorepornhot.com^$all
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2579
 hdfuckxxx.com##+js(aopw, ExoLoader)
@@ -12216,9 +12216,6 @@ mov18plus.com##+js(aopr, AaDetector)
 @@||mov18plus.com^$ghide
 mov18plus.com##[id*="ScriptRoot"]
 
-! https://github.com/NanoAdblocker/NanoFilters/issues/257
-@@||frkn64modding.com^$ghide
-
 ! anti adb lutmoney shrink
 lutmoney.com,shrink.*##+js(aopr, app_vars.force_disable_adblock)
 
@@ -16744,6 +16741,8 @@ fmovies123.*##+js(aopr, require)
 ||01fmovies.com/mmmasdfl-asd$xhr,1p
 01fmovies.com##[src^="/addons/"]
 01fmovies.com##.jw-logo
+01fmovies.com##[href="/user/profile/premium-membership"]
+01fmovies.com##.ico.close
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3026
 coolrom.com.au##+js(nano-stb)
@@ -22871,7 +22870,12 @@ player.javboss.me###preroll
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7061
 ! https://github.com/NanoMeow/QuickReports/issues/3227
-duit.cc,ockles.com##+js(nano-sib)
+ockles.com##+js(nano-sib)
+duit.cc##+js(aopr, decodeURI)
+@@||duit.cc^$ghide
+*$image,redirect-rule=1x1.gif,domain=duit.cc
+duit.cc##[id*="ScriptRoot"], .adsbygoogle, .amp-unresolved
+||terra8nb.com^
 
 ! ai_adb anti adb
 ! https://github.com/NanoMeow/QuickReports/issues/3226

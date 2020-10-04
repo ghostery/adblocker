@@ -19,7 +19,7 @@ upmanager-defuser.js application/javascript
 
 
 twitch-videoad.js application/javascript
-(function(){if(false===/(^|\.)twitch\.tv$/.test(document.location.hostname))return;var t=window.fetch;window.fetch=function(e){if(arguments.length>=2&&"string"===typeof e&&e.includes("/access_token")){var n=new URL(arguments[0]);n.searchParams.set("platform","_");arguments[0]=n.href}return t.apply(this,arguments)}})();
+(function(){if(false===/(^|\.)twitch\.tv$/.test(document.location.hostname))return;var t=window.fetch;window.fetch=function(e){if(arguments.length>=2&&"string"===typeof e&&e.includes("/access_token")){var n=new URL(arguments[0]);n.searchParams.delete("platform");arguments[0]=n.href}return t.apply(this,arguments)}})();
 
 
 std.js application/javascript
