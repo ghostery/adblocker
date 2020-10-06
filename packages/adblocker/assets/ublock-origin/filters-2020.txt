@@ -3563,7 +3563,7 @@ awlinks.me##+js(aopw, _pop)
 *$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=awlinks.me
 
 ! it-swarm.dev ads
-it-swarm.dev##+js(aopr, SERVER_SIDE_URL)
+it-swarm.dev,it-swarm.asia,it-swarm-es.tech,it-swarm-eu.dev,it-swarm-ja.tech,it-swarm-ko.tech,it-swarm-pt.tech,it-swarm-ru.tech,it-swarm-vi.tech##+js(aopr, SERVER_SIDE_URL)
 
 ! https://github.com/easylist/easylist/issues/5903#issuecomment-669608003
 deseneledublate.com##+js(acis, Math, XMLHttpRequest)
@@ -3831,7 +3831,7 @@ izismile.com###banner_code_rotator
 izismile.com##.js-banner-top
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7782
-animekisa.tv##+js(acis, include)
+animekisa.tv##+js(acis, XMLHttpRequest, onreadystatechange)
 animekisa.tv##+js(aopr, AaDetector)
 *$script,3p,denyallow=disqus.com|jsdelivr.net|jwpcdn.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=animekisa.tv
 
@@ -4278,6 +4278,8 @@ youngpornvideos.com##.ads-thumb-list:upward(.outer-item)
 ! hentaicloud.com popup ads
 hentaicloud.com##+js(aopr, Light.Popup)
 hentaicloud.com##+js(aopr, outputCanvas)
+hentaicloud.com##.vertical-ads-content
+hentaicloud.com##.ad:upward(.horizontal-ads-content)
 hentaicloud.com###player_one > .vjs-fade.vjs-over
 
 ! javdoe.tv popup ads
@@ -4296,7 +4298,9 @@ javbangers.com##div.opt
 ver-comics-porno.com##+js(aeld, click, popMagic)
 
 ! netfapx.com popup
+netfapx.com##+js(acis, document.querySelectorAll, popMagic)
 netfapx.com##+js(aeld, click, popMagic)
+netfapx.com##[id^="ads-position"]
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63198
 bikemania.org##[id^="blocker-modal-"]
@@ -4478,7 +4482,7 @@ simkl.com##+js(aeld, load, head)
 texture-packs.com##+js(nostif, mdp)
 
 ! jav.la - javmec.com ads
-jav.la,javmec.com##[style^="height: 250px;overflow"]
+jav.la,javmec.com,tubeqd.tv##[style^="height: 250px;overflow"]
 player.javmec.com,player.tubeqd.tv###preroll
 *$script,3p,denyallow=cloudflare.com,domain=jav.la|javmec.com|tubeqd.tv
 
@@ -4854,6 +4858,7 @@ eztvtorrent.org##+js(aopr, exoJsPop101)
 
 ! manga-raw.club ads
 manga-raw.club##+js(acis, document.createElement, '+d+')
+manga-raw.club##+js(acis, String.fromCharCode, btoa)
 
 ! aylink.co popup ads
 aylink.co##+js(aopr, xmlhttp)
@@ -4951,9 +4956,6 @@ gomaainfo.com##+js(acis, addEventListener, google_ad_client)
 javix.net##+js(acis, document.querySelectorAll, popMagic)
 
 https://github.com/NanoMeow/QuickReports/issues/4778
-9tsu.net,miomio.us##.ads-system
-9tsu.net,miomio.us##.cactus-sidebar-content > .widget_text
-||ad-vortex.com^
 *$frame,script,xhr,3p,denyallow=cloudflare.com|facebook.com|google.com|gstatic.com|loadloadingfreevideo.top|mycdn.me|ok.ru,domain=9tsu.net|miomio.us
 
 ! https://github.com/NanoMeow/QuickReports/issues/4776
@@ -4983,10 +4985,14 @@ androidtunado.com.br##+js(nosiif, visibility, 1000)
 wristreview.com##+js(aopw, ai_front)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/64979
+bitfly.io##^script:has-text(/break;case $.|Math|btoa/)
+bitfly.io##+js(acis, String.fromCharCode, btoa)
 bitfly.io##+js(aopr, app_vars.force_disable_adblock)
+bitfly.io##+js(noeval)
 bitfly.io##+js(nowoif)
 bitfly.io##+js(set, blurred, false)
 bitfly.io##.banner
+*$frame,script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=bitfly.io
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7998
 standardmedia.co.ke##+js(set, canRunAds, true)
@@ -5003,13 +5009,46 @@ channelstream.club###html3
 ! https://www.reddit.com/r/uBlockOrigin/comments/j51md6/annoying_popup_embeded_in_stream/
 hhdstreams.club##+js(acis, Math, XMLHttpRequest)
 hhdstreams.club##+js(aopw, _pop)
-hhdstreams.club##+js(aopr, btoa)
+hhdstreams.club##+js(aopr, open)
 hhdstreams.club##[href^="http://www.streamshd.club/"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8001
 vpn-anbieter-vergleich-test.de##+js(nowoif)
 ||vpn-anbieter-vergleich-test.de/link/$frame,1p
+vpn-anbieter-vergleich-test.de##.popup-wrapper
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65030
 @@||soccerlive.casa^$ghide
 *$image,redirect-rule=1x1.gif,domain=soccerlive.casa
+
+! https://github.com/NanoMeow/QuickReports/issues/4791
+||pagead2.googlesyndication.com/pagead/show_ads.js$script,redirect=noop.js,domain=ehubsoft.net
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65058
+midiextreme.com##+js(nosiif, visibility, 1000)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65063
+earnguap.com##+js(aopr, app_vars.force_disable_adblock)
+earnguap.com##.banner
+
+! https://github.com/NanoMeow/QuickReports/issues/4792
+@@||thedelimagazine.com^$ghide
+
+! https://github.com/NanoMeow/QuickReports/issues/4793
+tecnobillo.com##+js(nostif, check)
+tecnobillo.com##.tecnobillo-ad-wrapper-wrapper
+
+! xtits.com pre-roll ads
+xtits.com##+js(set, flashvars.adv_start_html, '')
+xtits.com##+js(set, flashvars.adv_pause_html, '')
+xtits.com##.adv-title
+xtits.com##.table
+xtits.com##.spot-holder
+||xtits.com/sw.js$script,1p
+*$frame,script,3p,denyallow=ahacdn.me,domain=xtits.com
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65071
+darkskyprojects.org##+js(aopr, adBlockDetected)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65099
+kpopstan.com##+js(nano-sib)
