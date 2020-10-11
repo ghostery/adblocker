@@ -79,6 +79,7 @@ google.*##.section-result[data-result-ad-type]
 google.*##.widget-pane-section-result[data-result-ad-type]
 google.*##c-wiz[jsrenderer="YnuqN"] > div > div > .Rn1jbe
 google.*##div[data-crl="true"][data-id^="CarouselPLA-"]
+google.*###atvcap > div:has(h3[role="heading"] > span:has-text(/^Ads/))
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7761
 google.*##div[data-ismultirow="true"][data-id^="CarouselPLA-"]
@@ -1487,6 +1488,10 @@ calciomercato.com##+js(nostif, _0x)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/571
 informer.com##+js(aopr, adblock_added)
+informer.com###ad0
+informer.com##.screen_ad
+informer.com##.spnsd
+informer.com##.adsbygoogle
 
 ! https://github.com/uBlockOrigin/uAssets/issues/572
 softonic.com##+js(nofab)
@@ -2802,6 +2807,7 @@ europixhd.*,hdeuropix.*,hindipix.*,topeuropix.*##+js(disable-newtab-links)
 europixhd.*,hdeuropix.*,topeuropix.*##+js(nostif, '0x)
 europixhd.*,topeuropix.*##+js(nowoif)
 topeuropix.*##+js(aeld, , _0x)
+hindipix.in##+js(nowoif)
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=hindipix.in
 ||europixhd.net/js/propadbl_epxhd.js$script,1p
 europixhd.*,hdeuropix.*,topeuropix.*###MyImageId
@@ -3133,6 +3139,7 @@ imgspice.com###widepage
 mrtechmyth.*##+js(nobab)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1128
+mitly.us##+js(aopr, adBlockDetected)
 mitly.us##+js(aopr, app_vars.force_disable_adblock)
 mitly.us##+js(aopr, open)
 mitly.us##+js(aopw, adcashMacros)
@@ -6190,6 +6197,8 @@ finofilipino.org##+js(set, caca, noopFunc)
 in.search.yahoo.com###right:has-text(/ ads /i)
 in.search.yahoo.com##.reg:has([href*="aclick"])
 in.search.yahoo.com##.reg:has([href*="clk"])
+yahoo.com##[data-test-locator="ntk-ad-link"]:upward(2)
+
 ! https://github.com/NanoMeow/QuickReports/issues/2244
 yahoo.com##.js-sidekick-item[data-ad-story-beacon]
 yahoo.com##.stream-ad
@@ -9486,7 +9495,7 @@ prostoporno.*##+js(aopr, ExoLoader.serve)
 prostoporno.*##.spot
 
 ! https://forums.lanik.us/viewtopic.php?f=103&t=41858
-muyinteresante.es##+js(set, ads, true)
+*$xhr,redirect-rule=nooptext,domain=muyinteresante.es
 
 ! https://github.com/uBlockOrigin/uAssets/issues/311
 9xbuddy.*##+js(acis, Object.defineProperty, XMLHttpRequest)
@@ -10934,7 +10943,6 @@ hpjav.tv##.home-featured-ad
 hpjav.tv##.poplayer
 hpjav.tv##.video-boxad
 hpjav.tv###preroll
-@@||cdn.tsyndicate.com/sdk/$script,domain=hpjav.tv
 asianclub.tv##+js(aeld, click, open)
 fileone.tv##+js(acis, document.querySelectorAll, popMagic)
 fileone.tv##+js(aopr, popjs)
@@ -19847,6 +19855,7 @@ gmx.*,web.de##+js(aeld, timeupdate)
 !#if env_firefox
 @@||akamaiedge.net^$media,domain=gmx.at|gmx.ch|gmx.net|web.de
 !#endif
+||zomap.de^$xhr,media,domain=player.glomex.com
 
 ! https://github.com/NanoMeow/QuickReports/issues/2265
 209.133.194.205##+js(acis, setTimeout, manageAntiBlock)
@@ -23243,7 +23252,6 @@ sekilastekno.com##+js(set, blurred, false)
 apk.sekilastekno.com##[href="https://www.tautan.pro/"]
 apk.sekilastekno.com##[href^="https://www.poptival.com/direct"]
 apk.sekilastekno.com##[width="200"][height="60"]
-*$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=sekilastekno.com
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/fhkx7s/theracecom_detecting_adblock/
 @@||the-race.com^$ghide
