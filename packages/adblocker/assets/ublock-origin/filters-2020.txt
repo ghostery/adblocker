@@ -799,6 +799,8 @@ sythe.org##+js(acis, document.getElementsByTagName, adblocker)
 @@||sythe.org/*.png|$image,1p
 @@||sythe.org/*.jpg?$image,1p
 ||i.imgur.com/*.mp4$media,domain=sythe.org
+sythe.org##div[style="width: 100%; display: block; text-align: center;"]
+sythe.org###topadplaceholder
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54747
 mangareddit.com##+js(nostif, visibility, 1500)
@@ -875,7 +877,9 @@ streamtape.*##+js(nowoif)
 streamtape.*#@#.google-ad
 streamtape.*##[class*="bn-container"], div[style*="z-index: 300000;"]
 streamtape.*##iframe[src^="data:"]
-||paishuno.net^$3p
+*$3p,denyallow=tapecontent.net|google.com|gstatic.com|hcaptcha.com|recaptcha.net,domain=streamtape.*
+||ptairtug.net^
+||tathitch.net^
 ||nortaumi.net^
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54846
@@ -4077,7 +4081,8 @@ zlink.xyz##b > h4
 responsivevoice.org##.cp-modal-popup-container:remove()
 
 ! https://github.com/NanoMeow/QuickReports/issues/4601
-manga1000.com##+js(aopr, onload)
+manga1000.com##+js(acis, $, height)
+*$frame,script,3p,denyallow=cloudflare.com|googleapis.com|hcaptcha.com,domain=manga1000.com
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62787
 *$xhr,redirect-rule=nooptext,domain=bitminer.biz
@@ -4995,7 +5000,7 @@ hhdstreams.club##[href^="http://www.streamshd.club/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/8001
 vpn-anbieter-vergleich-test.de##+js(nowoif)
 ||vpn-anbieter-vergleich-test.de/link/$frame,1p
-vpn-anbieter-vergleich-test.de##.popup-wrapper
+vpn-anbieter-vergleich-test.de##+js(nostif, openPopup)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65030
 @@||soccerlive.casa^$ghide
@@ -5165,6 +5170,7 @@ hdmovieplus.site##+js(acis, String.fromCharCode, btoa)
 ||bcfabscdt.com^
 ||bruvwmrxudd.com^
 ||lutcdiimmeze.com^
+||ishort.in^$script,3p
 
 ! https://github.com/NanoMeow/QuickReports/issues/4834
 *$script,redirect-rule=noopjs,domain=linuxgizmos.com
@@ -5176,3 +5182,19 @@ hdmovieplus.site##+js(acis, String.fromCharCode, btoa)
 *$script,3p,denyallow=wp.com|cdn77.org|facebook.com|facebook.net|fbcdn.net|instagram.com|disqus.com|disquscdn.com|jwpsrv.com|plyr.io|jsdelivr.net|twimg.com|twitter.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=hlscloud.stream
 hlscloud.stream,oniondrive.net,onionplay.cloud##+js(aopr, LieDetector)
 ||l8ea1nesmb0e.com^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65380
+wowtv.info##+js(acis, addEventListener, google_ad_client)
+wowtv.info##+js(aopw, _pop)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65438
+grab.tc##+js(aopr, NoAdBlock)
+grab.tc##[href^="https://youhodler.g2afse.com/"]
+grab.tc##.brave
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65511
+dota2freaks.com##+js(nosiif, visibility, 1000)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65563
+hlsplay.com##+js(aopr, absda)
+hlsplay.com##+js(aopw, _pop)
