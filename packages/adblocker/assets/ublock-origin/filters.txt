@@ -869,6 +869,27 @@ quora.com##.FeedStory.feed_item > div > div:has-text(/by Quora for Business/i)
 quora.com##.Toggle.SimpleToggle.ToggleAnswerFooterWrapper > div:has-text(/Promoted/i)
 quora.com##:xpath(//span[contains(text(), 'by')]/ancestor::*[contains(concat(' ', @class, ' '), ' external_link ')]/../../..)
 quora.com##:xpath(//p[(text()='d')]/../../../../..)
+! from abp cv list for https://github.com/uBlockOrigin/uAssets/issues/8032
+www.quora.com##.u-margin-top--lg+div[class="UnifiedAnswerPagedList PagedListFoo unified"][id$="_paged_list"]
+www.quora.com##.pagedlist_item > div[id$="_paged_list"]
+www.quora.com##.answer_auto_expanded_comments + div > div.feed_expand
+www.quora.com##.feedback_wrapper.hidden:not(.negative_action) + .FeedStory.HyperLinkFeedStory.feed_item
+www.quora.com##div[class="question_main_col"]  > div:nth-child(3) > div[class="UnifiedAnswerPagedList PagedListFoo unified"]
+www.quora.com##div[class="pagedlist_item"]  div[id*="paged_list"]
+www.quora.com##.q-box.qu-borderAll>.q-box>div>div[class^="Box-sc-"]>div:not([class])
+www.quora.com##.spacing_log_question_page_ad
+www.quora.com##.q-box.qu-borderTop>[class^="Box-sc-"]>div:not([class])
+www.quora.com##div > [class^="Box-"] > div > .q-box.qu-pb--tiny.qu-pt--medium.qu-px--medium
+www.quora.com##.qu-bg--white>[class^="Box-"] .qu-pt--medium
+www.quora.com##.q-box.qu-borderTop>[class^="Box-"] .q-box.qu-pt--medium.qu-pb--tiny
+www.quora.com##.q-box.qu-borderAll>.q-box>div:not([class="q-box"])>[class^="Box-"]
+www.quora.com##.q-box.qu-borderAll.qu-bg--white>.q-box>div>[class="q-box "]>[class="q-box"]
+www.quora.com##[class="q-box qu-borderTop"]>[class="q-box "]
+www.quora.com##[class="q-box qu-bg--white"]>[class="q-box "]>[class="q-box"]
+www.quora.com##.q-box.qu-bg--white > span[data-nosnippet="true"] > .q-box
+www.quora.com##.qu-mb--small.qu-bg--white > .q-box > div > span[data-nosnippet="true"] > .q-box
+www.quora.com##.q-box.qu-borderTop > span[data-nosnippet="true"] > .q-box
+www.quora.com##span[data-nosnippet="true"] .q-box.qu-pb--tiny.qu-pt--medium
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1835
 ||ptikeegno.com^
@@ -1666,14 +1687,17 @@ fmovies.*##+js(nowoif)
 @@||iamcdn.net/players/*ads$script,domain=playhydrax.com
 ||iamcdn.net/players/ads.watch.min.js$script,domain=playhydrax.com,important
 ||iamcdn.net/players/playera.dmins.js$script,domain=playhydrax.com
-hydrax.net,playhydrax.com##+js(aopr, AaDetector)
-hydrax.net,playhydrax.com##+js(nostif, debugger)
+hydracdn.*##+js(acis, String.fromCharCode, btoa)
+hydracdn.*,hydrax.net,playhydrax.com##+js(aopr, AaDetector)
+hydracdn.*,hydrax.net,playhydrax.com##+js(nostif, debugger)
 playhydrax.com##+js(nosiif, _0x)
-hydrax.net,playhydrax.com##+js(nowoif, /^/, 1)
+hydracdn.*,hydrax.net,playhydrax.com##+js(nowoif, /^/, 1)
 playhydrax.com,hydracdn.*,hydrax.net##div#over
+@@||hydracdn.*^$ghide
 @@||hydrax.net^$ghide
 @@||playhydrax.com^$ghide
 @@*$websocket,domain=hydracdn.*
+||rilelogicbuy.com^$3p
 jav.guru##.aligncenter
 jav.guru##.alignnone
 
@@ -3228,9 +3252,6 @@ letmewatchthis.*##+js(aopr, ExoLoader.serve)
 ||letmewatchthis.*^$csp=connect-src 'self' *.twitter.com *.disqus.com https://disqus.com
 letmewatchthis.*##.locklink
 letmewatchthis.*##table.movie_version:has-text(Promo)
-
-! https://github.com/uBlockOrigin/uAssets/issues/1147
-flightradar24.com##+js(aopw, googletag)
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/130
 dejure.org##+js(set, ad_allowed, true)
@@ -10684,8 +10705,10 @@ trueachievements.com##+js(set, String.fromCharCode, noopFunc)
 @@||asianclub.*^$ghide
 asianclub.*##+js(set, clientSide.adbDetect, null)
 asianclub.*##+js(aopr, AaDetector)
-asianclub.*##+js(aopw, _pop)
+asianclub.*##+js(aopr, jwplayer.utils.Timer)
+asianclub.*,javmost.com##+js(aopw, _pop)
 asianclub.*##+js(nowoif)
+javmost.com##center > div[style^="width:100%; height: 100px"]
 ||pornimg.xyz^$3p
 
 ! https://github.com/NanoMeow/QuickReports/issues/408
@@ -11780,14 +11803,8 @@ ancient-origins.es##+js(nostif, (), 1500)
 education-load.com##+js(nosiif, visibility, 1000)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4411
-sdmoviespoint.*##+js(acis, atob, decodeURIComponent)
-sdmoviespoint.*##+js(aopr, glxopen)
-sdmoviespoint.*##[href*=".php"]
-sdmoviespoint.*###adfont
-
-! https://github.com/uBlockOrigin/uAssets/issues/4412
-pagalmovies.*##+js(acis, atob, decodeURIComponent)
-pagalmovies.*##[href="https://bit.ly/jobmantra"]
+*$script,3p,denyallow=media-amazon.com|media-imdb.com|jwpcdn.com|wp.com|cdn77.org|facebook.com|facebook.net|fbcdn.net|instagram.com|disqus.com|disquscdn.com|jwpsrv.com|plyr.io|jsdelivr.net|twimg.com|twitter.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=1sdmoviespoint.*|sdmoviespoint.*
+||fjioh.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4414
 moviesrox.*##+js(aopr, AaDetector)
@@ -11848,10 +11865,6 @@ hxload.co##+js(acis, document.createElement, script)
 hxload.*##+js(set, iExist, true)
 ||hxload.*/*.gif$image
 hxload.*###fixedban
-
-! https://github.com/uBlockOrigin/uAssets/issues/4431
-filecupid.com##+js(aopr, AaDetector)
-filecupid.com##+js(acis, document.getElementById, undefined)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4436
 @@||audioplugin.net^$ghide
@@ -12393,6 +12406,8 @@ nyafilmer.*##[href^="https://go.affiliatexe.com/"]
 ||nyafilmer.*/branding/$image
 ||cadsanz.com^$all
 ||dudslubesviol.com^
+! https://github.com/uBlockOrigin/uAssets/issues/8025
+! [badfilter] ||nyafilmer.vip/u_a4fv7zck.js$badfilter
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4646
 bdsmporn.cc,cocoporn.net,dirtyporn.cc,faperplace.com,freeadultvideos.cc,freepornstream.cc,generalpornmovies.com,kinkyporn.cc,moviesxxx.cc,movstube.net,onlinefetishporn.cc,peetube.cc,pornonline.cc,porntube18.cc,streamextreme.cc,streamporn.cc,videoxxx.cc,watchporn.cc,x24.video,xxxonline.cc,xxxonlinefree.com,xxxopenload.com##+js(acis, decodeURI, decodeURIComponent)
@@ -12793,8 +12808,10 @@ allkindonline.com##+js(acis, Math, XMLHttpRequest)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4818
 hdfriday.*##+js(aopr, open)
-hdfriday.*##+js(acis, Math.sin, vocabulary)
+*$script,3p,denyallow=jwpcdn.com|wp.com|cdn77.org|facebook.com|facebook.net|fbcdn.net|instagram.com|disqus.com|disquscdn.com|jwpsrv.com|plyr.io|jsdelivr.net|twimg.com|twitter.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=hdfriday.*
+hdfriday.*##[href*="pop"]
 hdfriday.*##.btn_d:has-text(/high/i)
+||beakedpissod.com^
 ||lobmoprob.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4819
@@ -13066,7 +13083,7 @@ ooodesi.com##div[id^="ads300_250-widget"]
 ghanatvon.com##[href^="https://s.click.aliexpress.com/"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4910
-waaw.tv##+js(nowoif)
+waaw.*##+js(nowoif)
 ||rephartertonelin.info^
 ||eegookiz.com^
 
@@ -13490,10 +13507,11 @@ hdflix.net##[href*="/?file="]
 @@||hdflix.net^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5044
-bmovie.cc##+js(acis, Math, zfgloaded)
+*$script,3p,denyallow=wp.com|cdn77.org|facebook.com|facebook.net|fbcdn.net|instagram.com|disqus.com|disquscdn.com|jwpsrv.com|plyr.io|jsdelivr.net|twimg.com|twitter.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=bmovie.cc
 ||bmovie.cc/sw.js$script,1p
 googlvideo.com,serverf4.org##+js(nowoif)
 ||gobeerta.net^
+||implicationdownloadpercy.com^
 
 ! https://github.com/NanoMeow/QuickReports/issues/170
 @@||finobe.com^$ghide
@@ -13508,7 +13526,9 @@ vbox7.com##.vbox-cap-adw
 @@||convallariaslibrary.com^$ghide
 
 ! https://github.com/NanoMeow/QuickReports/issues/2795
-filmesonlinex.co##+js(acis, Math, zfgloaded)
+*$script,3p,denyallow=wp.com|cdn77.org|facebook.com|facebook.net|fbcdn.net|instagram.com|disqus.com|disquscdn.com|jwpsrv.com|plyr.io|jsdelivr.net|twimg.com|twitter.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=filmesonlinex.co|geradordeplayer.top
+||vid-adblocker.com^
+||pregnancydiscreditbee.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/744#issuecomment-469062646
 @@||ksta.de^$ghide
@@ -15024,9 +15044,6 @@ shemalepower.xyz##+js(nobab)
 shemalepower.xyz##+js(nowoif)
 ||shoporielder.pro^$3p
 
-! https://github.com/uBlockOrigin/uAssets/issues/5456
-besthdmovies.*##+js(acis, Math, zfgloaded)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/5457
 ssrmovies.*##+js(nowoif)
 ssrmovies.*##^script:has-text(vocabulary)
@@ -15064,9 +15081,10 @@ moviehustle.com##+js(aeld, , _0x)
 moviehustle.com##+js(aopr, Date.prototype.toUTCString)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5466
-desiremovies.*##+js(acis, puShown , /doOpen|popundr/)
-desiremovies.*##+js(acis, Math, zfgloaded)
+desiremovies.*##+js(acis, document.createElement, console)
+desiremovies.*##+js(aeld, , _0x)
 ||desiremovies.*/sw.js$script,1p
+||paddocsweek.com^$3p
 ||presdithas.pw^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5467
@@ -15148,9 +15166,6 @@ m4maths.com##+js(aopr, alert)
 ! https://github.com/uBlockOrigin/uAssets/issues/5477
 techfinda.com##+js(aopr, app_vars.force_disable_adblock)
 @@||techfinda.com^$ghide
-
-! https://github.com/uBlockOrigin/uAssets/issues/5478
-tumarcador.xyz##+js(acis, document.createElement, script)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1112
 dailycamera.com##+js(nostif, n.trigger, 1)
@@ -16850,8 +16865,8 @@ tusfiles.com,tusfiles.net##+js(aopw, Fingerprint2)
 tusfiles.com##+js(nowoif)
 tusfiles.com##+js(acis, Math, zfgloaded)
 ||tusfiles.com/sw.js$script,1p
-gdtot.com##+js(acis, Object.defineProperty, vocabulary)
-gdtot.com##^script:has-text(vocabulary)
+gdtot.com##+js(acis, String.fromCharCode, btoa)
+||doufoacu.net^
 !#if env_chromium
 *$xhr,3p,domain=gdtot.com
 !#endif
@@ -19081,6 +19096,7 @@ mondolunatico.org##+js(aopr, absda)
 imagetwist.com##+js(acis, document.getElementsByTagName, "script")
 imagenpic.com,imageshimage.com,imagetwist.com##+js(aeld, , checkTarget)
 imagenpic.com,imageshimage.com,imagetwist.com###rang2
+imagenpic.com,imageshimage.com,imagetwist.com##video
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6420
 audiozdownload.com##+js(nostif, getComputedStyle, 250)
@@ -19923,8 +19939,7 @@ allcalidad.*##+js(aeld, , 0x)
 allcalidad.*##+js(aopw, smrtSB)
 allcalidad.*##+js(set, btoa, null)
 allcalidad.*##.table-hover.table > tbody > tr:has-text(Descargar Premium)
-||onlink.live^$popunder
-||refme.xyz^$popunder
+*$script,3p,denyallow=cloudflare.com|cloudfront.net|googleapis.com|gstatic.com|heyoya.com,domain=allcalidad.*
 ||jsblom.com^$3p
 ||trv11.site^$3p
 
@@ -20712,8 +20727,9 @@ perveden.com##body > div:nth-of-type(2)
 ! https://github.com/uBlockOrigin/uAssets/issues/6713
 movieloversworld.com##+js(acis, Math, zfgloaded)
 
+! https://github.com/uBlockOrigin/uAssets/issues/8028
 ! https://github.com/NanoMeow/QuickReports/issues/2540
-@@||adverticum.net^$xhr,domain=indavideo.hu
+embed.indavideo.hu##+js(set, AdHandler.adBlocked, 0)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2536
 chikanime.net##+js(acis, Math, zfgloaded)
@@ -20850,7 +20866,6 @@ btcleets.xyz##[href^="https://faucetpay.io/"]
 ! plytv.me popups
 plytv.me##+js(acis, Math, XMLHttpRequest)
 plytv.me##+js(aopw, _pop)
-plytv.me##+js(nowebrtc)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2589
 qqcinema21.com##+js(aopw, puShown)
@@ -20978,6 +20993,7 @@ hexupload.net##+js(acis, Math, XMLHttpRequest)
 hexupload.net##+js(aopw, _pop)
 hexupload.net##+js(aopw, Fingerprint2)
 *$script,3p,denyallow=bootstrapcdn.com|cloudflare.net|google.com|gstatic.com|hwcdn.net|jsdelivr.net|tawk.to,domain=hexupload.net
+||linkedgraceless.com^$3p
 
 ! popups https://animetak .net/
 animetak.*##+js(acis, Math, zfgloaded)
@@ -21920,6 +21936,7 @@ gigaho.com##+js(aopr, onload)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/46430
 manga1001.com##+js(aopr, onload)
+*$frame,script,3p,denyallow=cloudflare.com|googleapis.com|hcaptcha.com,domain=manga1001.com
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/49340
 @@||teleboy.ch/assets/js/*&trackingserver=trackad$xhr,1p
@@ -22364,9 +22381,7 @@ bintangfilm21.com##+js(aopr, decodeURI)
 mobiletvshows.net##+js(aopr, open)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3096
-katmoviehd.nl##+js(aopr, parcelRequire)
-katmoviehd.nl##+js(aopr, glxopen)
-*$xhr,domain=katmoviehd.nl
+katmoviehd.*##+js(acis,Math.imul)
 ||aptantasp.site^$3p
 
 ! https://github.com/NanoMeow/QuickReports/issues/3100
