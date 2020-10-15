@@ -3308,6 +3308,7 @@ t-rocforum.de##+js(acis, $, prompt)
 ! https://forums.lanik.us/viewtopic.php?f=62&t=44972
 @@||starvid.xyz^$ghide
 starvid.xyz##+js(nosiif, visibility, 1000)
+starvid.xyz##+js(acis, XMLHttpRequest, null)
 
 ! 141tube.com popup
 141tube.com##+js(acis, document.querySelectorAll, popMagic)
@@ -4060,9 +4061,7 @@ dl.3dmodelshare.org##+js(acis, addEventListener, google_ad_client)
 3dmodelshare.org##.homeadv > span
 
 ! https://github.com/NanoMeow/QuickReports/issues/4598
-! https://github.com/AdguardTeam/AdguardFilters/issues/61102
 thingiverse.com##+js(nano-sib)
-thingiverse.com##+js(set, blockedElement.className, null)
 thingiverse.com##[class^="AdBlockDetect"]
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62686
@@ -5135,6 +5134,7 @@ streamabc.xyz##+js(nowoif)
 
 ! https://forums.lanik.us/viewtopic.php?p=156945#p156945
 newsiqra.com##+js(nosiif, visibility, 1000)
+newsiqra.com##+js(acis, XMLHttpRequest, null)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8020
 joska.xyz##+js(aopr, app_vars.force_disable_adblock)
@@ -5192,9 +5192,57 @@ grab.tc##+js(aopr, NoAdBlock)
 grab.tc##[href^="https://youhodler.g2afse.com/"]
 grab.tc##.brave
 
+! https://github.com/AdguardTeam/AdguardFilters/issues/65499
+livestreaming24.eu#@#.afs_ads
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65508
+ownurl.website##+js(aopr, app_vars.force_disable_adblock)
+ownurl.website##+js(aopr, open)
+ownurl.website##+js(aopw, _pop)
+||ownurl.site^$3p
+
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65511
 dota2freaks.com##+js(nosiif, visibility, 1000)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65563
 hlsplay.com##+js(aopr, absda)
 hlsplay.com##+js(aopw, _pop)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65605
+proshort.gq##+js(aopr, app_vars.force_disable_adblock)
+proshort.gq##+js(set, blurred, false)
+proshort.gq##.banner
+proshort.gq###FirstDiv:style(display:block !important)
+*$script,frame,3p,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=proshort.gq
+||claimbit.tk^$3p
+||getshort.cf^$3p
+||pay2clik.cf^$3p
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65608
+trinddz.com##+js(aopr, app_vars.force_disable_adblock)
+trinddz.com##+js(set, blurred, false)
+trinddz.com##.banner
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65609
+pro-deals.com##+js(nosiif, visibility, 1000)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65645
+4rl.ru##+js(aopr, absda)
+4rl.ru##+js(noeval-if, fab_alert)
+4rl.ru##+js(aopr, app_vars.force_disable_adblock)
+4rl.ru##+js(aopr, open)
+4rl.ru##.banner
+*$script,frame,3p,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=4rl.ru
+||ttgmjfgldgv9ed10.com^
+
+! https://github.com/NanoMeow/QuickReports/issues/4849
+vpnbrothers.com##+js(nostif, mdp)
+
+! https://github.com/NanoMeow/QuickReports/issues/4625#issuecomment-709527115
+getfile.mobi##+js(nowoif)
+
+! https://github.com/NanoMeow/QuickReports/issues/4845
+hitsebeats.eu##+js(nostif, mdp)
+
+! https://github.com/NanoMeow/QuickReports/issues/4846
+kurofansubs.xyz##+js(acis, eval, ignielAdBlock)

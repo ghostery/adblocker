@@ -247,7 +247,7 @@ chip.de##+js(damoh-defuser)
 chip.de##.video-wrapper > div.video-js
 chip.de##.video-wrapper > video[style]:style(display:block!important;padding-top:0!important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/6587
-||chip.de/installer/
+||chip.de/*&$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/7589
 chip.de##+js(json-prune, enabled, force_disabled)
 
@@ -1700,6 +1700,7 @@ playhydrax.com,hydracdn.*,hydrax.net##div#over
 ||rilelogicbuy.com^$3p
 jav.guru##.aligncenter
 jav.guru##.alignnone
+femax20.com##+js(nowoif)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/605
 ! https://forums.lanik.us/viewtopic.php?f=62&t=38997
@@ -6671,6 +6672,7 @@ androidaba.com##+js(aopw, adBlockDetected)
 ! https://github.com/uBlockOrigin/uAssets/issues/2446
 ! https://github.com/NanoAdblocker/NanoFilters/issues/229
 ilpuntotecnico.com##+js(aopw, anOptions)
+ilpuntotecnico.com##[style^="text-align:center; height:"][style$="px;"]
 @@||ilpuntotecnico.com^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2447
@@ -7298,13 +7300,13 @@ filecrypt.*##+js(popads-dummy)
 ||filecrypt.*^$popunder
 @@||cutcaptcha.com/captcha/*$script,domain=filecrypt.cc|filecrypt.co
 filecrypt.*###cform > .online.set2.protection.window > div > div > ul > li:nth-of-type(2)
-filecrypt.*##.buttons
 filecrypt.*###jvb
 filecrypt.*##li:has-text(100% Anonym)
 filecrypt.*##.bums
 filecrypt.*##.support
 filecrypt.*##[src^="https://filecrypt.cc/images/"]
 filecrypt.*##[src^="../../../images/"]
+filecrypt.*##[href^="/Link/"]:upward(1)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2655
 ||pornblade.com/*.php
@@ -18563,7 +18565,7 @@ adsafelink.com##+js(aopr, app_vars.force_disable_adblock)
 ||2go7v1nes8.com^$3p
 
 ! https://github.com/NanoMeow/QuickReports/issues/1878
-salerno.occhionotizie.it##+js(set, adblock, 1)
+occhionotizie.it##+js(set, $tieE3, true)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6327
 unyumerdeka.com##+js(aopr, app_vars.force_disable_adblock)
@@ -23107,7 +23109,7 @@ reddflix.com##+js(aopr, LieDetector)
 erospots.info##+js(aopr, Pub2)
 gameofporn.com##+js(aeld, , exopop)
 jemontremonminou.com,jemontremasextape.com,jemontremabite.com##+js(aopr, localStorage)
-porndollz.com,xnxxvideo.pro,xvideosxporn.com,onlyhgames.com##+js(aeld, getexoloader)
+porndollz.com,xnxxvideo.pro,xvideosxporn.com,onlyhgames.com,filmpornofrancais.fr,pictoa.com##+js(aeld, getexoloader)
 nackte.com##+js(aopr, jsUnda)
 older-mature.net##+js(aopr, doOpen)
 canalporno.com,dreamamateurs.com,eroxia.com,porndoe.com,pornozot.com##+js(aopr, ExoLoader)
@@ -23126,6 +23128,8 @@ fatwhitebutt.com##+js(acis, document.querySelectorAll, popMagic)
 fatwhitebutt.com##+js(aeld, , _blank)
 freepornrocks.com##+js(aeld, , open)
 tubev.sex##+js(acis, document.createElement, 'script')
+pictoa.com##+js(aeld, , 0x)
+*$script,3p,denyallow=fluidplayer.com|jwpcdn.com|wp.com|cdn77.org|facebook.com|facebook.net|fbcdn.net|instagram.com|disqus.com|disquscdn.com|jwpsrv.com|plyr.io|jsdelivr.net|twimg.com|twitter.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=filmpornofrancais.fr
 
 ||classicpornbest.com^$csp=script-src *
 *$script,xhr,3p,domain=lovelynudez.com
@@ -23184,6 +23188,8 @@ superbgays.com###CloseAd
 sextube-6.com##.full-ave-pl
 dreamamateurs.com##[href^="http://ezofferz.com/"]
 *$frame,domain=sexrura.pl
+pictoa.com###tab-gallery
+pictoa.com###tab-footer
 ||bo4news.biz^
 ||bobs-tube.com/sw$script,1p
 ||checking-your-browser.com^
@@ -23195,6 +23201,11 @@ dreamamateurs.com##[href^="http://ezofferz.com/"]
 ||psozyhotho.pro^
 ||redtub3xxx.com^$frame,1p
 ||startyourhome.business^
+||halveclause.com^
+||yapsetuptropical.com^
+||showmebars.com^
+||web-bars.com^
+||chicks4date.com^
 
 ##.imggif
 ##.bloc-pub
@@ -24110,11 +24121,11 @@ fiches-auto.fr##.adsbygoogle:style(visibility: collapse !important)
 ludigames.com##+js(nostif, ads)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7180
-imageking.xyz,imgblaze.net,imgxen.xyz,imgzer.net,venpix.xyz,vestimage.site##+js(aeld, , _0x)
-imageking.xyz,imgblaze.net,imgxen.xyz,imgzer.net,venpix.xyz,vestimage.site##+js(nano-sib, timer)
-imageking.xyz,imgblaze.net,imgxen.xyz,imgzer.net,venpix.xyz,vestimage.site##+js(set, hold_click, false)
-imageking.xyz,imgblaze.net,imgxen.xyz,imgzer.net,venpix.xyz,vestimage.site###pbe
-*$frame,script,3p,denyallow=googleapis.com,domain=imageking.xyz|imgblaze.net|imgxen.xyz|imgzer.net|venpix.xyz|vestimage.site
+imageking.xyz,imgblaze.net,imgxen.xyz,imgxn.xyz,imgzer.net,venpix.xyz,vestimage.site##+js(aeld, , _0x)
+imageking.xyz,imgblaze.net,imgxen.xyz,imgxn.xyz,imgzer.net,venpix.xyz,vestimage.site##+js(nano-sib, timer)
+imageking.xyz,imgblaze.net,imgxen.xyz,imgxn.xyz,imgzer.net,venpix.xyz,vestimage.site##+js(set, hold_click, false)
+imageking.xyz,imgblaze.net,imgxen.xyz,imgxn.xyz,imgzer.net,venpix.xyz,vestimage.site###pbe
+*$frame,script,3p,denyallow=googleapis.com,domain=imageking.xyz|imgblaze.net|imgxen.xyz|imgxn.xyz|imgzer.net|venpix.xyz|vestimage.site
 ||chaglihysty.pro^
 ||plantationthrillednoncommittal.com^
 
