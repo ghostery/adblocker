@@ -839,9 +839,9 @@ hdmp4mania1.net,mp4mania1.net##+js(aopr, LieDetector)
 @@*$xhr,domain=get.x-link.pl
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=get.x-link.pl
 
-! https://github.com/NanoMeow/QuickReports/issues/240
+! https://github.com/uBlockOrigin/uAssets/issues/8038
 mail.yahoo.com##+js(nostif, dispatchAdBlockDetected)
-mail.yahoo.com##:xpath(//*[contains(text(),"ad-blocker")]):upward(3)
+mail.yahoo.com##div#modal-outer[aria-labelledby="adblock-unblock-cue"]
 
 ! https://github.com/NanoMeow/QuickReports/issues/3747
 filmindo21.us##+js(nowoif)
@@ -1280,9 +1280,9 @@ animecomplet.*##.text-center
 ||fiorenetwork.com/*/hdg.php?
 ||fiorenetwork.com/*/YtVpaid*.php
 
-! isohunt2 .net popups ads
-isohunt2.net##+js(nowoif)
-||isohunt2.net/nordvpn/$subdocument
+! isohunt2 .net / isohunt. nz popups ads
+isohunt.*,isohunt2.net##+js(nowoif)
+||isohunt*.*/nordvpn/$frame
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7404
 @@||navi.z0i.net^$ghide
@@ -1859,7 +1859,7 @@ m.z1.fm##div[style^="position: absolute; z-index: 9999999;"]
 anitube.*##+js(aopr, AaDetector)
 ||anitubecz.uk^$script
 ||1uno1xkktau4.com^$3p
-*$script,xhr,frame,3p,denyallow=hwcdn.net|bootstrapcdn.com|googleapis.com|cloudflare.net|jwpcdn.com|jsdelivr.net|fastly.net|fontawesome.com|anitube.info,domain=anitube.cx
+*$script,xhr,frame,3p,denyallow=animesonline.cz|hwcdn.net|bootstrapcdn.com|googleapis.com|cloudflare.net|jwpcdn.com|jsdelivr.net|fastly.net|fontawesome.com|anitube.info,domain=anitube.cx
 anitube.*##+js(acis, document.createElement, 'script')
 anitube.*##+js(aeld, , encodeURIComponent)
 anitube.*##div[style^="pointer-events: none; position: absolute; "]
@@ -2730,6 +2730,9 @@ cardiagn.com##+js(nostif, mdp)
 ! https://github.com/NanoMeow/QuickReports/issues/4262
 @@||konstantinova.net^$ghide
 @@||cdnjs.cloudflare.com/ajax/libs/fuckadblock/*/fuckadblock.min.js$script,domain=konstantinova.net
+konstantinova.net##+js(aopw, _pop)
+konstantinova.net##+js(nano-sib)
+konstantinova.net##[href^="//mellowads.com/"]
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/58710
 lopteup.vip##+js(aeld, DOMContentLoaded, clientHeight)
@@ -5246,3 +5249,84 @@ hitsebeats.eu##+js(nostif, mdp)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4846
 kurofansubs.xyz##+js(acis, eval, ignielAdBlock)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65651
+sukatu.ru##+js(aopr, app_vars.force_disable_adblock)
+sukatu.ru##+js(nowoif)
+sukatu.ru##+js(set, blurred, false)
+sukatu.ru##.box-main > p
+sukatu.ru##.banner
+||noonraptnite.com^
+||agogdebitape.com^
+*$script,frame,3p,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=sukatu.ru
+
+! https://www.reddit.com/r/uBlockOrigin/comments/jbzc6g/ublock_not_getting_through_blockadblock/
+how2pc.com##+js(nosiif, visibility, 1000)
+
+! https://ibb.co/FKdQ6DZ ShadowRoot-ads
+ibb.co##pp
+||hgbasics.com^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65661
+ipb-board.ru##+js(nostif, .offsetHeight)
+ipb-board.ru##.ipsPad.ipsDataList_ciko.ipsWidget_inner
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65671
+livingincebuforums.com##+js(nostif, .offsetHeight)
+livingincebuforums.com##[id^="nbAdWidget"]
+livingincebuforums.com##li.ipsBox.ipsWidget_vertical.ipsWidget:nth-of-type(1)
+livingincebuforums.com##li.ipsBox.ipsWidget_vertical.ipsWidget:nth-of-type(5)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65700
+@@||ad.tio.ch^*/adblock$xhr,1p
+
+! shrinkhere.xyz anti adb popup
+shrinkhere.xyz##+js(acis, String.fromCharCode, atob)
+shrinkhere.xyz##+js(aopr, app_vars.force_disable_adblock)
+*$frame,script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=shrinkhere.xyz
+||shrinkhere.xyz/sw.js$script,1p
+||onepush.app^$3p
+
+! https://github.com/uBlockOrigin/uAssets/issues/8042
+javfull.net##+js(nosiif, _0x)
+javfull.net###wrapfabtest:style(height:1px !important;width:1px !important)
+
+! javout.co in-player ads, popup
+javout.co##+js(aeld, getexoloader)
+||javout.net/fo6.js
+||javout.net/videojs/anyhtm2.js
+javout.co###custom_html-2
+
+! nsfw xxgasm .com popups ads
+xxgasm.com##+js(aopw, _pop)
+xxgasm.com##+js(aopr, decodeURI)
+*$script,3p,denyallow=fluidplayer.com|jwpcdn.com|wp.com|cdn77.org|facebook.com|facebook.net|fbcdn.net|instagram.com|disqus.com|disquscdn.com|jwpsrv.com|plyr.io|jsdelivr.net|twimg.com|twitter.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=xxgasm.com
+||xiqgqftva.com^
+||dlfclcey.com^
+
+! nsfw kfapfakes .com popups ads
+kfapfakes.com##+js(aopr, decodeURI)
+kfapfakes.com##+js(acis, document.createElement, __htas)
+||jutyledu.pro^
+||shojovuptu.pro^
+
+! nsfw xsober .com ads popups
+xsober.com##+js(aopw, _pop)
+xsober.com##+js(aopr, decodeURI)
+xsober.com##+js(aopr, absda)
+*$script,3p,denyallow=fluidplayer.com|jwpcdn.com|wp.com|cdn77.org|facebook.com|facebook.net|fbcdn.net|instagram.com|disqus.com|disquscdn.com|jwpsrv.com|plyr.io|jsdelivr.net|twimg.com|twitter.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=xsober.com
+||pushebrod.com^
+
+! nsfw sexsaoy .com ads popups
+sexsaoy.com##+js(aopr, decodeURI)
+*$script,3p,denyallow=fluidplayer.com|jwpcdn.com|wp.com|cdn77.org|facebook.com|facebook.net|fbcdn.net|instagram.com|disqus.com|disquscdn.com|jwpsrv.com|plyr.io|jsdelivr.net|twimg.com|twitter.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=sexsaoy.com
+||sankaudacityrefine.com^
+##[href^="https://go.rdrjmp.com/"]
+
+! img4fap. club popups ads
+img4fap.*##+js(aopr, decodeURI)
+*$script,3p,denyallow=fluidplayer.com|jwpcdn.com|wp.com|cdn77.org|facebook.com|facebook.net|fbcdn.net|instagram.com|disqus.com|disquscdn.com|jwpsrv.com|plyr.io|jsdelivr.net|twimg.com|twitter.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=img4fap.*
+/tghr.js$script
+
+! https://github.com/uBlockOrigin/uAssets/issues/6628#issuecomment-711044359
+abandonmail.com##+js(aopr, indexedDB.open)
