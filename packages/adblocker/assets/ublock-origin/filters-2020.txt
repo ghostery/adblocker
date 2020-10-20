@@ -42,7 +42,7 @@ snowbeartranslation.com##+js(acis, jQuery, ai_adb)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53313
 javhub.pro##+js(aopw, _pop)
-javhub.pro##+js(set, clientSide.adbDetect, null)
+javhub.pro##+js(set, clientSide.adbDetect, noopFunc)
 javhub.*,javlove.club##+js(nowoif)
 jav1080.com##div.boxzilla, .boxzilla-overlay, [href^="https://adsxyz.com/"]
 javhub.*##+js(nosiif, _0x)
@@ -356,6 +356,8 @@ dropgalaxy.*##+js(nosiif, _0x)
 @@||pagead2.googlesyndication.com^$script,xhr,domain=dropgalaxy.com
 dropgalaxy.*##.adsbygoogle:style(max-height: 1px !important;)
 @@.png$image,domain=dropgalaxy.com
+@@||doubleclick.net^$frame,domain=dropgalaxy.com
+dropgalaxy.com##[id^="aswift"]:style(display:none!important;)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53896
 memoriadatv.com##+js(nano-stb)
@@ -1411,7 +1413,7 @@ themes-dl.com##+js(nosiif, visibility, 1000)
 freegetdownloader.com##+js(nosiif, visibility, 1000)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/55701
-th-jav.co##+js(set, clientSide.adbDetect, null)
+th-jav.co##+js(set, clientSide.adbDetect, noopFunc)
 th-jav.co##+js(nowoif)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/55705
@@ -1642,7 +1644,7 @@ tipsforce.com##+js(aopr, app_vars.force_disable_adblock)
 doxxan.club##+js(aopr, absda)
 doxxan.club##.HTML.widget
 altyazikutu.ml##+js(nowoif)
-altyazikutu.ml##+js(set, clientSide.adbDetect, null)
+altyazikutu.ml##+js(set, clientSide.adbDetect, noopFunc)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/56352
 zipi.com##.ad
@@ -1975,6 +1977,8 @@ linksly.co##.fixed-rightSd
 linksly.co##.fixed-leftSd
 linksly.co##[id*="ScriptRoot"]
 linksly.co##+js(nowoif)
+linksly.co##+js(set, blurred, false)
+*$script,3p,denyallow=cloudflare.com|google.com|gstatic.com|hwcdn.net|jquery.com|recaptcha.net,domain=linksly.co
 ||linksly.co/sw.js$script,1p
 
 ! linfoweb .com ads
@@ -3463,9 +3467,10 @@ w3schools.com##.trytopnav:style(top:0px !important;)
 w3schools.com###container:style(top:40px !important;)
 
 ! freestreams-live1 .com popups
-freestreams-live1.com##+js(aopr, LieDetector)
+area51deportiva.com,freestreams-live1.com##+js(aopr, LieDetector)
 freestreams-live1.com##+js(nowoif)
 ||browsobsolete.com^
+||timeruniversalreligious.com^
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/60693
 unionmanga.xyz##+js(nosiif, visibility, 1000)
@@ -4162,6 +4167,7 @@ gratispaste.com##.content > center
 
 ! glinks.co anti adb
 glinks.co,gobrowse.net##+js(nosiif, visibility, 1000)
+*$script,3p,denyallow=google.com|googleapis.com|gstatic.com|maxcdn.com|netdna-cdn.com|recaptcha.net,domain=glinks.co|gobrowse.net
 
 ! https://github.com/NanoMeow/QuickReports/issues/4612
 clipartmax.com##+js(nano-stb)
@@ -4195,7 +4201,7 @@ javgayplus.com##+js(aopw, _pop)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62948
 javhdporn.net###player_3x2_container
-javhdporn.net##+js(set, clientSide.adbDetect, null)
+javhdporn.net##+js(set, clientSide.adbDetect, noopFunc)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62959
 techinferno.com##+js(nostif, eabpDialog)
@@ -4689,7 +4695,7 @@ linuxhint.com,thekitchenmagpie.com##+js(acis, Math, adthrive)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/64199
 redanimedatabase.cloud##+js(nowoif)
-redanimedatabase.cloud##+js(set, clientSide.adbDetect, null)
+redanimedatabase.cloud##+js(set, clientSide.adbDetect, noopFunc)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/64204
 hboav.com##+js(aopw, onload)
@@ -4746,10 +4752,10 @@ camclips.tv##div.cbchat
 camclips.tv##.box.rltd
 camclips.tv##.table
 ||camclips.tv/player/html.php?aid=start_html$frame
-||potawe.com^$frame,3p
 ||promos.camsoda.com^
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/64318
+shortzzy.in##+js(nosiif, visibility, 1000)
 shortzzy.in##+js(aopr, app_vars.force_disable_adblock)
 shortzzy.in##+js(nowoif)
 shortzzy.in##+js(set, blurred, false)
@@ -4994,6 +5000,7 @@ downloadrepack.com###footer-widgets > .container-inner > .group.hu-pad
 channelstream.club###html3
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/j51md6/annoying_popup_embeded_in_stream/
+hhdstreams.club##+js(aeld, , 0x)
 hhdstreams.club##+js(acis, Math, XMLHttpRequest)
 hhdstreams.club##+js(aopw, _pop)
 hhdstreams.club##+js(aopr, open)
@@ -5330,3 +5337,52 @@ img4fap.*##+js(aopr, decodeURI)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6628#issuecomment-711044359
 abandonmail.com##+js(aopr, indexedDB.open)
+
+! kissanime. nz scammy 3p scripts
+kissanime.*##+js(acis, String.fromCharCode, btoa)
+embed.streamx.me##+js(noeval-if, debugger)
+||kissanime.nz/api/pop.php$xhr,1p
+||kissasian.nz/api/pop.php$xhr,1p
+||ad.kissasian.nz^
+||kisscartoon.nz/api/pop.php$xhr,1p
+||ad.kisscartoon.nz^
+||kisstvshow.ru/api/pop.php$xhr,1p
+||ad.kisstvshow.ru^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65798
+illink.net##+js(aopr, app_vars.force_disable_adblock)
+illink.net##+js(aopr, absda)
+illink.net##+js(aopw, _pop)
+illink.net##+js(set, blurred, false)
+illink.net##.banner
+*$3p,denyallow=google.com|gstatic.com|googleapis.com|ibb.co|recaptcha.net|hcaptcha.com,domain=illink.net
+||phooreew.net^
+
+! https://github.com/uBlockOrigin/uAssets/commit/ebc17ccb4d31c16f64ee9fb85e526babb9533d98#commitcomment-43341473
+filmyzilla.life##+js(acis, String.fromCharCode, btoa)
+filmyzilla.life##^script:has-text(btoa)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65864
+weviral.org##+js(nosiif, visibility, 1000)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65871
+*$script,redirect-rule=noopjs,domain=sydroid.co
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65891
+noonnu.cc##+js(aopr, noonnuCanRunAds)
+
+! play.webcric .com popups
+*$script,3p,domain=webcric.com,denyallow=ucplayer.xyz
+/.*[0-9a-f]{32}\/invoke\.js$/$script,3p
+
+! https://github.com/uBlockOrigin/uAssets/issues/8053
+paperzonevn.com##+js(acis, $, .test)
+
+! popups tits-guru .com
+tits-guru.com##+js(nowoif)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/jebak1/lomcn_detects_ublock/
+lomcn.org##+js(acis, $, samAdBlockAction)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/65963
+bestpresent1.blogspot.com##+js(acis, addEventListener, google_ad_client)
