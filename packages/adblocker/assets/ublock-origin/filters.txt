@@ -2539,13 +2539,18 @@ keezmovies.com##+js(aopw, raSettings)
 keezmovies.com##.ad-link
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2482
+tube8.*##+js(aeld, , _0x)
 tube8.*##+js(aopw, IS_ADBLOCK)
 tube8.*##+js(aopr, _goat)
 tube8.*##+js(nowoif)
-tube8.*##.footerBanner
+||t8cdn.com/catfishBanner/*$image,domain=tube8.*,important
+@@||t8cdn.com/assets_dev/js/plugins/jquery-2.1.3.js$script,domain=tube8.*
+tube8.*##.adsbytrafficjunky
 tube8.*##.cat-fish-banner-wrapper
+tube8.*##.footerBanner
 tube8.*##.grydb4nn3r
 tube8.*##.gridBanner
+tube8.*##.js-remove-ads-premium-link
 tube8.*##.ryghtc0lb4nn3r
 tube8.*##.rightColBanner
 
@@ -4334,7 +4339,7 @@ readcomiconline.to##+js(aopw, callExo)
 readcomiconline.to##+js(aeld, /^(?:click|mousedown)$/, _0x)
 readcomiconline.to##+js(nostif, .exo)
 readcomiconline.to##+js(nostif, callExo)
-readcomiconline.to##.adsbyvli:upward(div[style])
+readcomiconline.to##.adsbyvli:upward(div[style^="width: 300px; height: 250px"])
 ||fghtem.com^$xhr,redirect=nooptext,domain=readcomiconline.to
 ||readcomiconline.to/widgets/exo$frame,1p
 ||readcomiconline.to/Scripts/*.html$frame,1p
@@ -8368,13 +8373,6 @@ anysex.com###content > .naf_dd
 ! https://github.com/uBlockOrigin/uAssets/issues/3162
 ||nwch.az-cdn.ch^$script,domain=solothurnerzeitung.ch
 
-! Instart Logic fixes
-!#if env_chromium
-/g00/*$ping,1p
-*/ad?i10c.getabdurl=*&ad_channel=$media,1p,redirect=noop.txt
-*?&ad_$image,redirect-rule=1x1.gif
-!#endif
-
 ! https://github.com/uBlockOrigin/uAssets/issues/3165
 thirdsector.com.au##+js(aopr, anOptions)
 
@@ -8767,7 +8765,6 @@ javfinder.*##body > div[class="clearfix"] + div[style^="overflow"]
 ||abc.hostedbyfembed.com/freezone.js
 ##[href^="https://13vm73vbmp.com/"]
 ##a[href^="http://www.poweredbyliquidfire.mobi/"]
-||fstats.xyz^$3p
 ||adsubon.com^$3p
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/9argxo
@@ -8952,9 +8949,10 @@ rp-online.de,saarbruecker-zeitung.de,volksfreund.de##.park-portal
 intoupload.net##a[href*="/go.php?a_aid="]
 intoupload.net##+js(aopw, Fingerprint2)
 intoupload.net##+js(aopr, open)
-intoupload.net##+js(acis, Math, zfgloaded)
+intoupload.net##+js(acis, $, preventDefault)
 ||intoupload.net/sw.js
 intoupload.net##.downppi
+intoupload.net##.checkbox
 
 ! https://github.com/NanoMeow/QuickReports/issues/62
 hungama.com##+js(set, showAds, true)
@@ -13810,6 +13808,7 @@ safelinkunited.blogspot.com##.ADS
 @@||hit.stat24.com/$xhr,domain=polsatnews.pl
 
 ! https://github.com/NanoMeow/QuickReports/issues/3241
+lookmovie.ag##+js(aopr, adBlockDetected)
 lookmovie.ag##+js(acis, String.fromCharCode, btoa)
 lookmovie.ag##+js(aeld, , _0x)
 lookmovie.ag##+js(aopr, AaDetector)
@@ -15077,7 +15076,12 @@ pandafiles.com##+js(acis, Math, zfgloaded)
 pandafiles.com##+js(aopr, InstallTrigger)
 pandafiles.com##+js(aopw, _pop)
 @@||pandafiles.com^$ghide
+pandafiles.com##+js(acis, String.fromCharCode, btoa)
+*$script,3p,denyallow=bootstrapcdn.com|jwpcdn.com|wp.com|cdn77.org|facebook.com|facebook.net|fbcdn.net|instagram.com|disqus.com|disquscdn.com|jwpsrv.com|plyr.io|jsdelivr.net|twimg.com|twitter.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=pandafiles.com
+*$frame,xhr,3p,domain=pandafiles.com
 ||fbpopr.com^$3p
+||grumft.com^$3p
+||consultingeastrubber.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5469
 uploadbuzz.*##+js(acis, Object.defineProperty, XMLHttpRequest)
@@ -17740,7 +17744,6 @@ extremereportbot.com##+js(nosiif, /_0x|debug/)
 ||googleapis.com/discovery/$xhr,domain=extremereportbot.com
 @@||pagead2.googlesyndication.com^*/show_ads_impl.js$script,domain=extremereportbot.com
 @@||doubleclick.net/pagead/*$frame,domain=extremereportbot.com
-extremereportbot.com##[id^="aswift"]:not(iframe)
 extremereportbot.com##.adsbygoogle:style(max-height:1px!important)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1690
@@ -18634,6 +18637,8 @@ adcoinfly.com##.banner-inner
 uploader.link##a[href="https://www.dealsnbuy.com/"]
 *$script,3p,domain=uploader.link,denyallow=bootstrapcdn.com|disquscdn.com|disqus.com|fbcdn.net|facebook.net|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com|jwpcdn.com|jsdelivr.net
 ||cratertadcite.com^
+uploader.link##+js(nowoif)
+uploader.link##a[href^="https://shopcart4me.com"]
 
 ! https://github.com/NanoMeow/QuickReports/issues/1894
 superhd.me##+js(aopr, AaDetector)

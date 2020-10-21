@@ -375,10 +375,6 @@ earnsats.co##.tracking-wide
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53935
 @@||myzyia.com^$ghide
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/53948
-totalcar.hu##+js(acis, document.querySelector, await)
-@@||totalcar.hu^$ghide
-
 ! https://github.com/NanoMeow/QuickReports/issues/3616
 ! https://github.com/uBlockOrigin/uAssets/issues/7402
 mangahost.*,mangahost2.com##+js(acis, document.createElement, adblock)
@@ -2167,13 +2163,6 @@ tempatak.blogspot.com##+js(acis, addEventListener, google_ad_client)
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/517
 ||googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=iunlocked.org,redirect-rule=noopjs
-
-! https://github.com/uBlockOrigin/uAssets/issues/7564
-divany.hu##+js(acis, document.querySelector, await)
-@@||divany.hu^$ghide
-divany.hu##body:style(overflow: auto !important)
-divany.hu##.adbd-layer, iframe.lazy, .shopline-box
-divany.hu#@#.tctk
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/haekcc/farkcom_blocking_all_ad_blockers/
 @@||fark.com/js/$1p,script
@@ -5285,7 +5274,7 @@ livingincebuforums.com##li.ipsBox.ipsWidget_vertical.ipsWidget:nth-of-type(1)
 livingincebuforums.com##li.ipsBox.ipsWidget_vertical.ipsWidget:nth-of-type(5)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65700
-@@||ad.tio.ch^*/adblock$xhr,1p
+tio.ch##+js(set, app.adblockMessage, noopFunc)
 
 ! shrinkhere.xyz anti adb popup
 shrinkhere.xyz##+js(acis, String.fromCharCode, atob)
@@ -5386,3 +5375,28 @@ lomcn.org##+js(acis, $, samAdBlockAction)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65963
 bestpresent1.blogspot.com##+js(acis, addEventListener, google_ad_client)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66004
+hentaialtadefinizione.it##+js(acis, addEventListener, google_ad_client)
+hentaialtadefinizione.it##+js(aopw, _pop)
+hentaialtadefinizione.it##[id^="rn_ad_native"]
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66008
+popno-tour.net##+js(nostif, innerText, 2000)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8062
+mediashore.org##+js(nowoif)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66059
+humannootropicsindex.com##+js(set, adsbygoogle.loaded, true)
+*$script,redirect-rule=noopjs,domain=humannootropicsindex.com
+humannootropicsindex.com##.widget_custom_html
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66065
+darmowa-tv.ws##+js(aopr, mdpDeBlocker)
+darmowa-tv.ws##+js(aopw, _pop)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/jfj9fg/wwwasianbookiecom_shows_please_disable_your/
+asianbookie.com##+js(nosiif, visibility, 1000)
+||asianbookie.com/displaytable.cfm?tablename=cslodds$subdocument
+asianbookie.com##a[href^="/cgi-bin/to.cgi"]
