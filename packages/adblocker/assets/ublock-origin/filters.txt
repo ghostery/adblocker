@@ -116,8 +116,6 @@ youtube.com##ytd-video-masthead-ad-advertiser-info-renderer,ytm-promoted-sparkle
 youtube.com,youtube-nocookie.com##+js(json-prune, [].playerResponse.adPlacements [].playerResponse.playerAds playerResponse.adPlacements playerResponse.playerAds adPlacements playerAds)
 youtube.com,youtube-nocookie.com##+js(set, ytInitialPlayerResponse.adPlacements, undefined)
 youtube.com,youtube-nocookie.com##+js(set, playerResponse.adPlacements, undefined)
-! https://github.com/uBlockOrigin/uAssets/issues/7636#issuecomment-698949445
-youtube.com##ytd-display-ad-renderer:upward(2)
 
 ! https://github.com/gorhill/uBlock/issues/1100
 ! https://github.com/uBlockOrigin/uAssets/issues/588
@@ -985,6 +983,7 @@ filessharing.net##[href^="https://xexpertxsoftwarex.com/"]
 ! https://forums.lanik.us/viewtopic.php?p=124411#p124411
 ! https://www.reddit.com/r/uBlockOrigin/comments/70eyk1/help_ads_on_website/
 ! https://github.com/uBlockOrigin/uAssets/issues/4086
+! https://www.reddit.com/r/uBlockOrigin/comments/ji5xo7/antiadblock_on_this_page/
 watchcartoononline.*,wcostream.*##+js(nofab)
 watchcartoononline.*,wcostream.*##+js(noeval)
 watchcartoononline.*,watchcartoonsonline.*,wcostream.*##+js(acis, document.createElement, jsc.mgid.com)
@@ -996,7 +995,7 @@ watchcartoononline.*,watchcartoonsonline.*,wcostream.*##+js(acis, document.creat
 @@||wcoanimesub.tv^$ghide
 @@||wco.tv^$ghide
 thewatchcartoononline.tv,wco.tv,wcoanimesub.tv##+js(set, isAdBlockActive, false)
-wcostream.com##+js(nostif, google_jobrunner)
+wcostream.com,wcoanimedub.tv##+js(nostif, google_jobrunner)
 thewatchcartoononline.tv##.alert
 thewatchcartoononline.tv##.anti-ad
 thewatchcartoononline.tv###sidebar_r1
@@ -12368,9 +12367,12 @@ bingtor.com##+js(aopr, AaDetector)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4636
 ||cloudvideo.tv/sw.js$script,1p
-cloudvideo.tv##+js(acis, Math, XMLHttpRequest)
+cloudvideo.tv##+js(acis, String.fromCharCode, btoa)
+cloudvideo.tv##+js(aopr, LieDetector)
+||somedayanchovydepressing.com^
 cloudvideo.tv##+js(set, SubmitDownload1, noopFunc)
 dospelis.net##[href^="https://www.dospelis.net/ver-"], [href^="https://www.dospelis.net/descargar-"]
+/\.com\/[0-9a-z]{2}\/[0-9a-z]{2}\/[0-9a-z]{2}\/[0-9a-z]{32}\.js/$script,3p
 
 ! https://forums.lanik.us/viewtopic.php?p=144831#p144831
 @@||leptidigital.fr^$ghide
@@ -21171,8 +21173,9 @@ livenewsnow.com##+js(aopr, adblockDetector)
 ! https://github.com/NanoMeow/QuickReports/issues/2698
 dobrapogoda24.pl##+js(nostif, , 1)
 
-! 9hentai.com onclick popup/under
-9hentai.com##+js(set, _9HentaiPopJs, null)
+! 9hentai onclick popup/under
+9hentai.*##+js(set, _9HentaiPopJs, null)
+9hentai.*###ads
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6807
 @@||chuppito.fr^$ghide
