@@ -43,7 +43,7 @@ snowbeartranslation.com##+js(acis, jQuery, ai_adb)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53313
 javhub.pro##+js(aopw, _pop)
 javhub.pro##+js(set, clientSide.adbDetect, noopFunc)
-javhub.*,javlove.club##+js(nowoif)
+javhub.*##+js(nowoif)
 jav1080.com##div.boxzilla, .boxzilla-overlay, [href^="https://adsxyz.com/"]
 javhub.*##+js(nosiif, _0x)
 javhub.*##+js(nostif, _0x)
@@ -4197,7 +4197,10 @@ gibit.xyz##+js(aopr, open)
 *$3p,script,frame,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=gibit.xyz
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63011
-xup.in##+js(nostif, displayMessage, 2000)
+xup.in##+js(nostif, clientHeight)
+xup.in##div[style="width:728px; overflow:hidden; height:90px;"]
+xup.in##div[style="width:300px;height:250px;position:relative;overflow:hidden;"]
+xup.in##fieldset#option:nth-of-type(1) > [href^="https://www.xup.in/blog/"]
 ||sexei.net^$3p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63021
@@ -5270,8 +5273,7 @@ livingincebuforums.com##li.ipsBox.ipsWidget_vertical.ipsWidget:nth-of-type(5)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65700
 ! https://github.com/uBlockOrigin/uAssets/issues/8068
-tio.ch##+js(set, app.adblockMessage, noopFunc)
-tio.ch##+js(set, app.adbMsg, noopFunc)
+tio.ch##+js(aost, app.loadUrl, adblock)
 @@||tio.ch^$xhr,1p
 
 ! shrinkhere.xyz anti adb popup
@@ -5516,3 +5518,27 @@ greatanimation.it##+js(aopw, _pop)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8081
 ||adservice.google.com/adsid/integrator.js$script,redirect=noopjs,domain=ultimateclassicrock.com
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66372
+comprovendolibri.it##+js(nostif, google_jobrunner)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/ji295t/i_found_an_antiadblock/
+universegunz.net##+js(nostif, adb)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66387
+achrafha.com##+js(aopr, app_vars.force_disable_adblock)
+achrafha.com##+js(set, blurred, false)
+achrafha.com##.banner
+
+! https://www.reddit.com/r/uBlockOrigin/comments/jiah1w/jp_sites_detecting_ad_block/
+javlove.club##+js(set, clientSide.adbDetect, noopFunc)
+javlove.club##+js(nowoif)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/ji8yhy/citynewsca_anti_adblock/
+citynews.ca##body:style(padding-top:0px !important)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/jidhpq/i_found_an_antiadblock/
+miuiku.com##+js(acis, eval, ignielAdBlock)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8085
+forum.lolesporte.com##+js(aopr, onload)
