@@ -2365,7 +2365,10 @@ text2voice.org##+js(nosiif, visibility, 1000)
 galleryhd.art##+js(nostif, ai_adb)
 
 ! vidbem .com popups
-vidbem.com##+js(acis, Math, zfgloaded)
+! https://github.com/uBlockOrigin/uAssets/commit/9ae7394380228ea48dad2def4943d8e053fbd635#commitcomment-43586460
+vidbem.com##+js(acis, String.fromCharCode, btoa)
+||seephoak.net^
+vidbem.com###adbd
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57941
 umecourses.xyz##+js(nosiif, visibility, 1000)
@@ -3107,8 +3110,10 @@ malaysiastock.biz##.RightPanel_Rectangle1
 biopills.net##+js(acis, jQuery, ai_adb)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4364
+atozmath.com##+js(acis, alert, reCAPTCHA)
+atozmath.com##+js(acis, $, setInterval)
+atozmath.com###bottomAd:style(display:block !important)
 @@||atozmath.com/Scripts/advertisement.js$xhr,1p
-atozmath.com##+js(aopr, adbDetector)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4365
 divetogames.com##+js(aopr, adBlockDetected)
@@ -5273,7 +5278,7 @@ livingincebuforums.com##li.ipsBox.ipsWidget_vertical.ipsWidget:nth-of-type(5)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65700
 ! https://github.com/uBlockOrigin/uAssets/issues/8068
-tio.ch##+js(aost, app.loadUrl, adblock)
+tio.ch##+js(set, app.tioAnalyticsCall, noopFunc)
 @@||tio.ch^$xhr,1p
 
 ! shrinkhere.xyz anti adb popup
@@ -5542,3 +5547,42 @@ miuiku.com##+js(acis, eval, ignielAdBlock)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8085
 forum.lolesporte.com##+js(aopr, onload)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66420
+shoppinglys.blogspot.com##+js(nosiif, visibility, 1000)
+shoppinglys.blogspot.com##iframe[src^="data:"]
+||ayzwali.blogspot.com^$3p
+
+! https://github.com/uBlockOrigin/uAssets/issues/8089
+erinsakura.com##+js(nostif, mdpDeBlocker)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66439
+internewstv.com##+js(aopr, app_vars.force_disable_adblock)
+internewstv.com##+js(set, blurred, false)
+internewstv.com##.banner
+
+! https://github.com/uBlockOrigin/uAssets/issues/8091
+@@||fzmovies.*^$ghide
+@@||fzm.*^$ghide
+fzm.*,fzmovies.*##+js(ra, onclick, [onclick*="window.open"])
+
+! https://github.com/uBlockOrigin/uAssets/issues/8094
+*$image,redirect-rule=1x1.gif,domain=freesslvpn.us|receivedsms.com|robotvpn.com
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66457
+doge.giscr.ac.th##+js(aopr, app_vars.force_disable_adblock)
+doge.giscr.ac.th##+js(aopr, open)
+doge.giscr.ac.th##+js(set, blurred, false)
+*$3p,script,frame,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=doge.giscr.ac.th
+||xihucio.ru^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66468
+gpucheck.com##+js(nosiif, visibility, 1000)
+gpucheck.com##div.unitBox
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66474
+*$image,redirect-rule=1x1.gif,domain=maskinbladet.dk|fritidsmarkedet.dk
+fritidsmarkedet.dk,maskinbladet.dk##.skybanner, .megaboard-inner
+
+! https://github.com/uBlockOrigin/uAssets/issues/8096
+afly.pro##+js(aopr, app_vars.force_disable_adblock)
