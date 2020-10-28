@@ -356,7 +356,7 @@ dropgalaxy.*##[href^="https://bit.ly/"]
 *$image,redirect-rule=2x2.png,domain=dropgalaxy.com
 @@.jpg$image,domain=dropgalaxy.com
 dropgalaxy.*##+js(nosiif, _0x)
-@@||pagead2.googlesyndication.com^$script,xhr,domain=dropgalaxy.com
+@@||googlesyndication.com^$script,xhr,domain=dropgalaxy.com
 dropgalaxy.*##.adsbygoogle:style(max-height: 1px !important;)
 @@.png$image,domain=dropgalaxy.com
 @@||doubleclick.net^$frame,domain=dropgalaxy.com
@@ -387,6 +387,7 @@ mangahost.*##+js(set, google_osd_loaded, true)
 mangahost.*##+js(set, google_unique_id, true)
 mangahost.*,mangahost2.com##.clearfix.pull-right.sidebar > .clearfix > .new.newlateral.clearfix:has(.adsbygoogle)
 @@||mangahost.*^$ghide
+mangahosted.com##.adsbygoogle
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53966
 btcandalt.com##+js(set, show_ads_gr8_lite, true)
@@ -5586,3 +5587,48 @@ fritidsmarkedet.dk,maskinbladet.dk##.skybanner, .megaboard-inner
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8096
 afly.pro##+js(aopr, app_vars.force_disable_adblock)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8100
+bdlink.pw##+js(nano-sib)
+
+! yourtechnology.online/Download/MIqVV anti-adb
+yourtechnology.online##+js(aopr, app_vars.force_disable_adblock)
+yourtechnology.online##+js(set, blurred, false)
+yourtechnology.online##.banner
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66542
+savelink.site##+js(aopr, absda)
+savelink.site##+js(aopr, app_vars.force_disable_adblock)
+savelink.site##+js(nowoif)
+savelink.site##+js(acis, document.querySelectorAll, popMagic)
+savelink.site##+js(set, blurred, false)
+*$3p,frame,script,denyallow=google.com|gstatic.com|googleapis.com|recaptcha.net|hcaptcha.com,domain=savelink.site
+||362b643a66026e.com^
+||getpdaiddaily.com^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66543
+fxlap.com##+js(nosiif, visibility, 1000)
+fxlap.com##+js(aopr, app_vars.force_disable_adblock)
+fxlap.com##+js(set, blurred, false)
+fxlap.com##.banner
+
+! https://github.com/uBlockOrigin/uAssets/issues/8101
+onlinegamesx.com###yuidea-snp:style(display:block !important)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8102
+blog.linksfire.co##+js(aopr, app_vars.force_disable_adblock)
+blog.linksfire.co##[href^="https://b3stcond1tions.com/"]
+blog.linksfire.co##div.separator > b
+blog.linksfire.co##.banner
+blog.linksfire.co##.ex2
+blog.linksfire.co##.link-details
+
+! earnfasts.com/yOJ25OA ads/popups
+earnfasts.com##+js(aopr, open)
+earnfasts.com##+js(set, blurred, false)
+earnfasts.com##.ex2
+earnfasts.com##[href^="https://b3stcond1tions.com/"]
+
+! https://github.com/uBlockOrigin/uAssets/issues/8103
+komiktap.in##+js(nosiif, visibility, 1000)
+komiktap.in###teaser3
