@@ -387,6 +387,7 @@ mangahost.*##+js(set, google_osd_loaded, true)
 mangahost.*##+js(set, google_unique_id, true)
 mangahost.*,mangahost2.com##.clearfix.pull-right.sidebar > .clearfix > .new.newlateral.clearfix:has(.adsbygoogle)
 @@||mangahost.*^$ghide
+mangahosted.com##+js(acis, init)
 mangahosted.com##.adsbygoogle
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53966
@@ -5279,7 +5280,9 @@ livingincebuforums.com##li.ipsBox.ipsWidget_vertical.ipsWidget:nth-of-type(5)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65700
 ! https://github.com/uBlockOrigin/uAssets/issues/8068
-tio.ch##+js(set, app.tioAnalyticsCall, noopFunc)
+tio.ch##+js(set, app.myTio, undefined)
+@@||adbreak.ch^$domain=tio.ch
+||adbreak.ch^$csp=default-src 'none'
 @@||tio.ch^$xhr,1p
 
 ! shrinkhere.xyz anti adb popup
@@ -5587,6 +5590,9 @@ fritidsmarkedet.dk,maskinbladet.dk##.skybanner, .megaboard-inner
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8096
 afly.pro##+js(aopr, app_vars.force_disable_adblock)
+afly.pro##center > p:has-text(/Advertisement|ADVIRTISE/)
+afly.pro##[style="text-align: center;"]
+afly.pro##center > input, a.a
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8100
 bdlink.pw##+js(nano-sib)
@@ -5602,6 +5608,7 @@ savelink.site##+js(aopr, app_vars.force_disable_adblock)
 savelink.site##+js(nowoif)
 savelink.site##+js(acis, document.querySelectorAll, popMagic)
 savelink.site##+js(set, blurred, false)
+savelink.site##[href^="//"]
 *$3p,frame,script,denyallow=google.com|gstatic.com|googleapis.com|recaptcha.net|hcaptcha.com,domain=savelink.site
 ||362b643a66026e.com^
 ||getpdaiddaily.com^
@@ -5632,3 +5639,9 @@ earnfasts.com##[href^="https://b3stcond1tions.com/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/8103
 komiktap.in##+js(nosiif, visibility, 1000)
 komiktap.in###teaser3
+
+! https://www.reddit.com/r/uBlockOrigin/comments/jjz5fv/a_website_detects_ubo/
+torresette.news##+js(acis, document.addEventListener, adsBlocked)
+||torresette.news/img/banner/$image,1p
+torresette.news##.content-banner-right
+torresette.news###skinlink
