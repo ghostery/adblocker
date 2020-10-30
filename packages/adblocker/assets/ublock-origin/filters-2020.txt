@@ -874,9 +874,11 @@ tapetus.pl##+js(acis, $, setTimeout)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7308
 streamtape.*##+js(acis, document.createElement, 'script')
-streamtape.*##+js(acis, Math, XMLHttpRequest)
 streamtape.*##+js(aopw, _pop)
 streamtape.*##+js(nowoif)
+streamtape.*##+js(ra, target, #downloadvideo)
+streamtape.*##+js(set, btoa, null)
+streamtape.*##+js(set, towait, 0)
 streamtape.*#@#.google-ad
 streamtape.*##[class*="bn-container"], div[style*="z-index: 300000;"]
 streamtape.*##iframe[src^="data:"]
@@ -4094,7 +4096,7 @@ krposts.com,th-cam.com,trshow.info##+js(aopw, HTMLElement.prototype.insertAdjace
 jacksorrell.tv##+js(acis, jQuery, adblocker)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62833
-thechive.com##+js(aopr, RMPiano)
+||tinypass.com^$domain=thechive.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7820#issuecomment-683383589
 yandexcdn.com##+js(nowebrtc)
@@ -4217,10 +4219,7 @@ picgiraffe.com##+js(aopr, anOptions)
 adeth.cc##+js(nosiif, visibility, 1000)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7869
-playnow.to##+js(acis, Math, XMLHttpRequest)
-playnow.to##+js(aopr, AaDetector)
-playnow.to##+js(aopw, _pop)
-playnow.to##+js(aeld, , _0x)
+*$script,frame,xhr,3p,denyallow=bootstrapcdn.com|jwpcdn.com|wp.com|cdn77.org|facebook.com|facebook.net|fbcdn.net|instagram.com|disqus.com|disquscdn.com|jwpsrv.com|plyr.io|jsdelivr.net|twimg.com|twitter.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=playnow.*
 ||pawheatyous.com^
 ||agriculturaltherapist.com^$3p
 
@@ -5265,9 +5264,6 @@ sukatu.ru##.banner
 ! https://www.reddit.com/r/uBlockOrigin/comments/jbzc6g/ublock_not_getting_through_blockadblock/
 how2pc.com##+js(nosiif, visibility, 1000)
 
-! https://ibb.co/FKdQ6DZ ShadowRoot-ads
-ibb.co##pp
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65661
 ipb-board.ru##+js(nostif, .offsetHeight)
 ipb-board.ru##.ipsPad.ipsDataList_ciko.ipsWidget_inner
@@ -5645,3 +5641,21 @@ torresette.news##+js(acis, document.addEventListener, adsBlocked)
 ||torresette.news/img/banner/$image,1p
 torresette.news##.content-banner-right
 torresette.news###skinlink
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66614
+forum.lunarisx.com##+js(acis, $, .test)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8112
+hubstream.in##+js(nostif, mdpDeBlocker)
+downloadhub.*,hubstream.*##+js(nowoif)
+/wp-content/plugins/deblocker/js/deblocker.$script,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/8113
+playerdrive.icu##+js(nowoif)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8116
+vvc.vc##+js(aopr, app_vars.force_disable_adblock)
+vvc.vc##+js(aopw, _pop)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8117
+ultimasnoticias.com.ve##pp
