@@ -1254,13 +1254,13 @@ mind42.com###content.sidebar2:style(margin-right: 0 !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6947
 ! https://github.com/uBlockOrigin/uAssets/issues/8067#issuecomment-714781198
-xhamster.*,xhamster1.*##+js(aopr, wih-popunder)
-xhamster.*,xhamster1.*##+js(aeld, , pop)
-xhamster.*,xhamster1.*##.wit-sponsor-banner
-xhamster.*,xhamster1.*##.wig-spb
-xhamster.*,xhamster1.*##.no-popunder.wih-spb
-xhamster.*,xhamster1.*##.wih-spl
-*$popunder,domain=xhamster.*
+xhamster.*,xhamster5.*##+js(acis, Array.prototype.indexOf, popunder)
+xhamster.*,xhamster1.*,xhamster5.*##+js(aopr, wih-popunder)
+xhamster.*,xhamster1.*,xhamster5.*##+js(aeld, , pop)
+xhamster.*,xhamster1.*,xhamster5.*##.wit-sponsor-banner
+xhamster.*,xhamster1.*,xhamster5.*##.wig-spb
+xhamster.*,xhamster1.*,xhamster5.*##.no-popunder.wih-spb
+xhamster.*,xhamster1.*,xhamster5.*##.wih-spl
 !#if env_mobile
 xhamster.*##^script:has-text(window.initials)
 !#endif
@@ -2667,6 +2667,7 @@ txxx.*##+js(aeld, click, pop.beforeOpen)
 txxx.*##+js(aopr, localStorage)
 ||txxx.*^$csp=script-src  'self' 'unsafe-eval' 'unsafe-inline' blob:
 ||txxx.com/erbrightni/*$script,1p
+||txxx.com/*teo4$script,1p
 txxx.*##.header-blocked-ad
 txxx.*##.underplayer__ad, .chan_banner
 txxx.*##.video-page__content > .right
@@ -15250,7 +15251,7 @@ fcc.lc##+js(nano-sib)
 fcc.lc##+js(set, blurred, false)
 fcc.lc###overlay
 ||fcc.lc/sw.js$script,1p
-@@||cdnjs.cloudflare.com/ajax/libs/fuckadblock/*/fuckadblock.min.js$script,domain=fcc.lc|fcdot.lc
+@@||cdnjs.cloudflare.com/ajax/libs/fuckadblock/*/fuckadblock.min.js$script,domain=fcc.lc|fcdot.lc|fc-lc.com
 fc.lc##+js(nowoif, /^/, 1)
 @@||fcdot.lc^$ghide
 ||creamssicsite.com^$3p
@@ -15434,8 +15435,13 @@ jobhunterplg.xyz##+js(aeld, load, onload)
 hastingsobserver.co.uk##.leaderboard-ad
 
 ! https://github.com/NanoMeow/QuickReports/issues/1163
-! https://github.com/AdguardTeam/AdguardFilters/issues/49223
+! https://github.com/uBlockOrigin/uAssets/issues/5712
+! https://github.com/uBlockOrigin/uAssets/issues/5858
+tistory.com##+js(nostif, nextFunction, 250)
 @@||tistory.com^$ghide
+tistory.com##.adsbygoogle
+tistory.com##.tt_adsense_bottom
+@@||googlesyndication.com/pagead/js/adsbygoogle.js$script,domain=moroa.tistory.com
 
 ! https://github.com/NanoMeow/QuickReports/issues/1165
 ||googlesyndication.com/pagead/show_ads.js$script,redirect=noopjs,domain=24sms.net
@@ -16132,9 +16138,6 @@ windowsaplicaciones.com##+js(aopr, anOptions)
 @@||british-birdsongs.uk^$ghide
 british-birdsongs.uk##.adsbygoogle
 
-! https://github.com/uBlockOrigin/uAssets/issues/5712
-@@||googlesyndication.com/pagead/js/adsbygoogle.js$script,domain=moroa.tistory.com
-
 ! https://github.com/uBlockOrigin/uAssets/issues/5713
 japgay.com##+js(set, AlobaidiDetectAdBlock, true)
 
@@ -16351,12 +16354,12 @@ dreamdth.com##+js(acis, $, show)
 ! https://github.com/uBlockOrigin/uAssets/issues/5799
 pornhub.*,pornhubthbh7ap3u.onion##+js(set, HTMLElement.prototype.attachShadow, null)
 pornhub.*,pornhubthbh7ap3u.onion##+js(aopr, smpop)
-!pornhub.*,pornhubthbh7ap3u.onion##+js(set, atob, trueFunc)
 pornhub.*,pornhubthbh7ap3u.onion##+js(nowoif)
 ||smpop.icfcdn.com/smpop-stable.js$script
 ! https://github.com/uBlockOrigin/uAssets/issues/5799#issuecomment-599266182
 @@||static.trafficjunky.com/ab/ads_test.js$script,domain=pornhub.com|pornhub.net|pornhub.org|pornhubthbh7ap3u.onion
 pornhub.*##.adsbytrafficjunky
+pornhub.*,pornhubthbh7ap3u.onion##.premiumPromoBanner
 pornhub.*,pornhubthbh7ap3u.onion###pb_template
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5804
@@ -16518,9 +16521,6 @@ thecrazytourist.com##+js(acis, document.getElementsByTagName, appendChild)
 megatube.xxx##+js(aopr, BetterJsPop)
 ||megatube.xxx^$frame,1p
 ||megatube.xxx/atrm/*$script,1p
-
-! https://github.com/uBlockOrigin/uAssets/issues/5858
-tistory.com##+js(nostif, nextFunction, 250)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1399
 dailydemocrat.com,montereyherald.com,orovillemr.com,record-bee.com,redbluffdailynews.com,reporterherald.com,thereporter.com,timescall.com,timesheraldonline.com,ukiahdailyjournal.com##+js(set, CnnXt.Event.fire, noopFunc)
@@ -17642,10 +17642,10 @@ egovtjob.in##+js(aeld, click, trigger)
 
 ! exe.io shorteners
 ! https://github.com/uBlockOrigin/uAssets/issues/7574
-2xs.io,beastvila.info,cleft.xyz,cuts-url.com,dayy.site,exe.io,exee.io,fasshi.xyz,industiiz.com,landd.xyz,mediumarticles.com,muteseries.info,networkingz.xyz,parentingss.xyz,rohtasfitness.com,techbeast.xyz,techshine.xyz,trendfaq.com,waar.site,wealthh.xyz,wheeledu.com,readnnews.com##+js(aopr, app_vars.force_disable_adblock)
+2xs.io,beastvila.info,cleft.xyz,cuts-url.com,dayy.site,exe.io,exee.io,fasshi.xyz,industiiz.com,landd.xyz,mediumarticles.com,muteseries.info,networkingz.xyz,parentingss.xyz,rohtasfitness.com,techbeast.xyz,techshine.xyz,trendfaq.com,waar.site,wealthh.xyz,wheeledu.com,readnnews.com,pslfive.com,mealip.com##+js(aopr, app_vars.force_disable_adblock)
 2xs.io,beastvila.info,cleft.xyz,dayy.site,exe.io,fasshi.xyz,industiiz.com,landd.xyz,muteseries.info,networkingz.xyz,parentingss.xyz,rohtasfitness.com,techbeast.xyz,techshine.xyz,trendfaq.com,waar.site,wealthh.xyz##+js(nowoif)
-bolssc.com,cuts-url.com,pslfive.com##+js(set, blurred, false)
-*$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=bolssc.com|cuts-url.com|pslfive.com
+bolssc.com,cuts-url.com,pslfive.com,mealip.com##+js(set, blurred, false)
+*$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=bolssc.com|cuts-url.com|pslfive.com|mealip.com
 mediumarticles.com##+js(acis, Math, XMLHttpRequest)
 salee.xyz##+js(aopr, AaDetector)
 salee.xyz##+js(aopr, app_vars.force_disable_adblock)
@@ -23988,6 +23988,7 @@ pstream.net##body:has(.video-js) .video-js + div
 @@||pstream.net^$ghide
 @@||pstream.net^$xhr,1p
 @@||cdnjs.cloudflare.com/ajax/libs/fuckadblock/*/fuckadblock.min.js$script,domain=pstream.net
+*$script,1p,redirect-rule=noopjs,domain=pstream.net
 ||d22tbsuc3l1g4i.cloudfront.net^$all
 ||lologhfd.com^$all
 
