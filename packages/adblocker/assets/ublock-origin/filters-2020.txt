@@ -361,6 +361,10 @@ dropgalaxy.*##.adsbygoogle:style(max-height: 1px !important;)
 @@.png$image,domain=dropgalaxy.com
 @@||doubleclick.net^$frame,domain=dropgalaxy.com
 dropgalaxy.com##[id^="aswift"]:style(display:none!important;)
+@@||contextual.media.net/dmedianet.js?cid=$domain=dropgalaxy.com
+@@||contextual.media.net/*/fcmain.js$domain=dropgalaxy.com
+dropgalaxy.com##iframe[id*="_mN_main_"]
+dropgalaxy.com##[target="_blank"]:has-text(Download)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53896
 memoriadatv.com##+js(nano-stb)
@@ -4640,9 +4644,6 @@ dl.bfas237blog.info##+js(nosiif, visibility, 1000)
 ! https://www.reddit.com/r/uBlockOrigin/comments/iurlai/help_with_a_filter/
 *$script,3p,denyallow=disqus.com|disquscdn.com|jsdelivr.net|jwpcdn.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=mangatx.com
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/64101
-pslfive.com##+js(aopr, app_vars.force_disable_adblock)
-
 ! https://www.reddit.com/r/uBlockOrigin/comments/iutig2/is_it_possible_to_remove_this_paywall_blocking/
 recordonline.com##+js(set, _sp_.msg.displayMessage, noopFunc)
 
@@ -5276,10 +5277,11 @@ livingincebuforums.com##li.ipsBox.ipsWidget_vertical.ipsWidget:nth-of-type(5)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65700
 ! https://github.com/uBlockOrigin/uAssets/issues/8068
-tio.ch##+js(set, app.myTio, undefined)
-@@||adbreak.ch^$domain=tio.ch
-||adbreak.ch^$csp=default-src 'none'
-@@||tio.ch^$xhr,1p
+@@||ads.*.ch^$xhr,domain=tio.ch
+@@||tio.ch^$ghide
+tio.ch##.monsterboard.ad
+tio.ch##.tiny-box > div.home-small.bb.block
+tio.ch##.maxiboard.ad
 
 ! shrinkhere.xyz anti adb popup
 shrinkhere.xyz##+js(acis, String.fromCharCode, atob)
@@ -5648,7 +5650,6 @@ forum.lunarisx.com##+js(acis, $, .test)
 ! https://github.com/uBlockOrigin/uAssets/issues/8112
 hubstream.in##+js(nostif, mdpDeBlocker)
 downloadhub.*,hubstream.*##+js(nowoif)
-/wp-content/plugins/deblocker/js/deblocker.$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8113
 playerdrive.icu##+js(nowoif)
@@ -5656,6 +5657,33 @@ playerdrive.icu##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/8116
 vvc.vc##+js(aopr, app_vars.force_disable_adblock)
 vvc.vc##+js(aopw, _pop)
+vvc.vc##+js(nowoif)
+*$frame,denyallow=google.com,domain=vvc.vc
+*$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=vvc.vc
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8117
 ultimasnoticias.com.ve##pp
+
+! https://github.com/uBlockOrigin/uAssets/issues/8121
+janusnotes.com##+js(nosiif, visibility, 1000)
+janusnotes.com##+js(nostif, ai_adb)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66645
+||megaup.mobi/assets/scripts/$script,1p
+*$3p,denyallow=google.com|gstatic.com|googleapis.com|recaptcha.net|hcaptcha.com,domain=megaup.mobi
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66683
+primevideo.digital##+js(aopr, app_vars.force_disable_adblock)
+primevideo.digital##+js(set, blurred, false)
+
+! https://github.com/easylist/easylist/issues/6331
+adultasianporn.com##+js(aeld, getexoloader)
+adultasianporn.com##+js(cookie-remover, /^/)
+adultasianporn.com##[class^="abra"]
+adultasianporn.com##[href^="http://adultasianporn.com/out.php"]
+adultasianporn.com##.banner
+adultasianporn.com##[src*=".php"]
+||adultasianporn.com^$frame
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66713
+tekfame.com##+js(aopw, ai_front)
