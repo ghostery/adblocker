@@ -1,3 +1,27 @@
+# v1.18.4 (Sun Nov 01 2020)
+
+#### :bug: Bug Fix
+
+- build(deps): bump @types/chrome from 0.0.125 to 0.0.126 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-node-resolve from 9.0.0 to 10.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.124 to 0.0.125 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.123 to 0.0.124 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump @types/chrome from 0.0.125 to 0.0.126 [#1380](https://github.com/cliqz-oss/adblocker/pull/1380) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-node-resolve from 9.0.0 to 10.0.0 [#1373](https://github.com/cliqz-oss/adblocker/pull/1373) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/node from 14.11.8 to 14.11.10 [#1351](https://github.com/cliqz-oss/adblocker/pull/1351) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.124 to 0.0.125 [#1349](https://github.com/cliqz-oss/adblocker/pull/1349) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/sinon-chai from 3.2.4 to 3.2.5 [#1303](https://github.com/cliqz-oss/adblocker/pull/1303) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.123 to 0.0.124 [#1302](https://github.com/cliqz-oss/adblocker/pull/1302) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.18.3 (Tue Sep 15 2020)
 
 #### :bug: Bug Fix

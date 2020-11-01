@@ -1,3 +1,19 @@
+# v1.18.4 (Sun Nov 01 2020)
+
+#### :bug: Bug Fix
+
+- build(deps-dev): bump @rollup/plugin-node-resolve from 9.0.0 to 10.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump @rollup/plugin-node-resolve from 9.0.0 to 10.0.0 [#1373](https://github.com/cliqz-oss/adblocker/pull/1373) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.18.0 (Mon Aug 24 2020)
 
 #### :bug: Bug Fix

@@ -1,3 +1,23 @@
+# v1.18.4 (Sun Nov 01 2020)
+
+#### :bug: Bug Fix
+
+- build(deps): bump electron from 10.1.4 to 10.1.5 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.1.3 to 10.1.4 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.1.2 to 10.1.3 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump electron from 10.1.4 to 10.1.5 [#1363](https://github.com/cliqz-oss/adblocker/pull/1363) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.1.3 to 10.1.4 [#1354](https://github.com/cliqz-oss/adblocker/pull/1354) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.1.2 to 10.1.3 [#1307](https://github.com/cliqz-oss/adblocker/pull/1307) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.18.3 (Tue Sep 15 2020)
 
 #### :bug: Bug Fix
