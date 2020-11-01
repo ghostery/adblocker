@@ -79,6 +79,7 @@ export interface Caching {
 export default class FilterEngine extends EventEmitter<
   | 'csp-injected'
   | 'html-filtered'
+  | 'request-allowed'
   | 'request-blocked'
   | 'request-redirected'
   | 'request-whitelisted'
@@ -869,6 +870,8 @@ export default class FilterEngine extends EventEmitter<
       this.emit('request-redirected', request, result);
     } else if (result.filter !== undefined) {
       this.emit('request-blocked', request, result);
+    } else {
+      this.emit('request-allowed', request, result);
     }
 
     return result;
