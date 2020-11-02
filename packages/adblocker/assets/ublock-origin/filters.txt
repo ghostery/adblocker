@@ -1268,6 +1268,7 @@ xhamster.*,xhmaster1.*,xhamster5.*##.xplayer-banner
 xhamster.*,xhmaster1.*,xhamster5.*##.xplayer-banner-bottom
 xhamster.*,xhmaster1.*,xhamster5.*##div[class*="-spot-container"]
 xhamster.*,xhmaster1.*,xhamster5.*##.clipstore-bottom
+xhamster.*,xhmaster1.*,xhamster5.*##div[class*="-cams-thumb-widget"]
 ||xhamsterpremium.com^$3p
 ||xhamsterlive.com^$3p
 !#if env_mobile
@@ -3243,7 +3244,8 @@ bee.anime-loads.org##+js(adfly-defuser)
 anime-loads.org##+js(aopw, _pop)
 
 ! https://github.com/reek/anti-adblock-killer/issues/3825
-globalrph.com##+js(nobab)
+globalrph.com##+js(aopr, mdpDeBlocker)
+globalrph.com###mdp-deblocker-js-disabled
 
 ! https://github.com/jspenguin2017/uBlockProtector/issues/755
 onlinemschool.com##+js(aopr, oms.ads_detect)
@@ -19213,21 +19215,21 @@ bluemediafiles.com##.item:has(svg)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1977
 ! https://github.com/NanoMeow/QuickReports/issues/2234
-sports24.club##+js(nowoif)
-sports24.club##div[style*="z-index: 30000"]
-sports24.club##div[style^="width:300px;height:250px"]:upward(1)
-sports24.club##.adrespl
-sports24.club##.landscape_ad_pos
-sports24.club##[href*="/vpn"]
-sports24.club##[href^="https://brave.com/"]
-sports24.club##[src^="/tv/ol.php?"]
-sports24.club##div[data-player] > .container:style(max-width: 100% !important;)
-sports24.club###ao
-sports24.club##.sp24
-sports24.club##a.btn[href*="/a?live="]
-sports24.club##:xpath(//*[contains(text(),"Watch HD")])
-sports24.club###notice
-sports24.club##.btn-outline-primary:has-text(/HD$/)
+sports24.*##+js(nowoif)
+sports24.*##div[style*="z-index: 30000"]
+sports24.*##div[style^="width:300px;height:250px"]:upward(1)
+sports24.*##.adrespl
+sports24.*##.landscape_ad_pos
+sports24.*##[href*="/vpn"]
+sports24.*##[href^="https://brave.com/"]
+sports24.*##[src^="/tv/ol.php?"]
+sports24.*##div[data-player] > .container:style(max-width: 100% !important;)
+sports24.*###ao
+sports24.*##.sp24
+sports24.*##a.btn[href*="/a?live="]
+sports24.*##:xpath(//*[contains(text(),"Watch HD")])
+sports24.*###notice
+sports24.*##.btn-outline-primary:has-text(/HD$/)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2036
 nilopolisonline.com.br##+js(nostif, blocker)
@@ -19306,7 +19308,7 @@ kupujemprodajem.com##.bnrBox
 handsupwillneverdie.com##+js(aopr, anOptions)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/djxvm8/i_need_a_filter_for_realclearpolitics/
-||evolok.net^$3p
+||evolok.net/acd/api/*/authorize/$xhr,3p
 
 ! https://github.com/NanoMeow/QuickReports/issues/2069
 @@||tubehi.com^$ghide
@@ -22434,9 +22436,6 @@ limontorrents.com##+js(aopw, _pop)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3102
 maachanime.com##+js(aopr, anOptions)
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/50212
-520cc.cc##+js(noeval-if, adblockDetect)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/51427
 @@||luscious.net^$ghide

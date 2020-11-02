@@ -46,6 +46,7 @@ export default [
   "ga",
   "in",
   "on",
+  "op",
   "_",
   "-",
   ".",
