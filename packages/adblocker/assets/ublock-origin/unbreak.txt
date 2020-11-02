@@ -2457,17 +2457,23 @@ wallpaperset.com#@#.ads1
 ! https://github.com/uBlockOrigin/uAssets/issues/6490
 @@||dogtime.com/wp-content/plugins/bwp-minify/min/*-google-analytics-$script,1p
 
-! https://forums.lanik.us/viewtopic.php?f=103&t=43784
+! https://github.com/uBlockOrigin/uAssets/issues/8133
 @@||los40.com^$ghide
 @@||epimg.net^$image,domain=los40.com
-@@||epimg.net/js/pbs/slot_cs.min.js$script,domain=los40.com
+@@*/*slot*.js$script,xhr,domain=los40.com
 @@||epimg.net/js/pbs/prebid$script,domain=los40.com
+@@||epimg.net/js/comun/avisopcdidomi2.js$script,domain=los40.com
 @@||doubleclick.net/tag/js/gpt.js$script,domain=los40.com
 @@||doubleclick.net/gpt/pubads_impl_$script,domain=los40.com
 @@||doubleclick.net/gampad/ads?$xhr,domain=los40.com
+||googlesyndication.com/safeframe/*/container.html$frame,redirect-rule=noop.html,domain=los40.com
+||vod.playoncenter.com/videos/*.mp4$media,domain=los40.com
 ||streamtheworld.com/ondemand/creative?cat=cm-preroll$xhr,redirect=nooptext,domain=los40.com
+los40.com##+js(rc, publi_luto_horizontal)
+los40.com##amp-img, #cbb.cbb
 los40.com##iframe[id^="google_ads_iframe"]:style(max-height: 1px !important;)
 los40.com##div[id^="google_ads_iframe_"]:style(max-height: 1px !important;)
+los40.com##.estirar.envoltorio_publi
 los40.com##.publi_luto_horizontal:style(max-height: 1px !important;)
 los40.com##.publi_luto_vertical
 los40.com##.cont_webpush
@@ -3986,3 +3992,9 @@ hwupgrade.it#@#.wrapper-xyz
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8118
 @@||wow.zamimg.com/js/*/BlueTracker.js$script,domain=wowhead.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/8134
+waplog.com#@#.banner-bottom
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66801
+@@||serviceyock.me/api/advertise/$xhr,domain=yock.games
