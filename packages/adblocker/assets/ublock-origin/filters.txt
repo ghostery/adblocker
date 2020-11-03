@@ -1713,17 +1713,20 @@ femax20.com##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/2333
 ! https://github.com/uBlockOrigin/uAssets/issues/3764
 9anime.*##+js(acis, window.open, Cookie)
+9anime.*##+js(nosiif, break)
 9anime.*##+js(nowoif)
 9anime.*##+js(aopr, AaDetector)
-mcloud.to##+js(acis, Math, XMLHttpRequest)
-mcloud.to##+js(aopr, open)
 9anime.*##section.sda
 @@||9anime.*^$ghide
 ||9anime.*/sw.js$script
 ||9anime.*^$script,1p
 @@||9anime.*/assets/$script,1p
 @@||9anime.ru/cdn-cgi/scripts/hcaptcha$script
+mcloud.to##+js(acis, Math, XMLHttpRequest)
+mcloud.to,mcloud2.to##+js(nosiif, break)
+mcloud.to##+js(aopr, open)
 @@||mcloud.to^$ghide
+vidstream.pro##+js(nosiif, break)
 ||soujoobafoo.com^
 ||runnersgunpowder.com^
 
@@ -2568,6 +2571,16 @@ tube8.*##.gridBanner
 tube8.*##.js-remove-ads-premium-link
 tube8.*##.ryghtc0lb4nn3r
 tube8.*##.rightColBanner
+tube8.*###announcement_ticker
+tube8.*###footer-text
+tube8.*###result_container > div
+tube8.*###result_container_fake
+tube8.*##.hot-porn-videos-wrapper > .gridList > div:first-child
+tube8.*##a[href^="https://sexsimulator.game/"]
+tube8.*##div[data-esp-node="catfish"]
+tube8.*##div[data-esp-node="footer_ads_banner"]
+tube8.*##div[data-esp-node="under_player_ad"]
+tube8.*##main.row > aside.col-4 > div[class]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/921
 @@||corporacionwarez.com^$ghide
@@ -6894,6 +6907,8 @@ hulkshare.com##+js(nosiif, adblockerModal, 1000)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2505
 ! https://github.com/NanoMeow/QuickReports/issues/4583
+! https://github.com/uBlockOrigin/uAssets/issues/8137
+@@*$frame,domain=kickassanime.*,1p
 @@||kickassanime.*^$ghide
 kickassanime.*##.ax-toggle
 animo-pace-stream.io##+js(nowoif)
@@ -14054,7 +14069,9 @@ youtubemp4.biz##[href="/g-ban.php"]
 youtubemp4.biz##[href="/w.php"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5222
-keepvid.*##+js(acis, atob, decodeURIComponent)
+keepvid.works##+js(nowoif)
+keepvid.tube,keepvid.work##+js(acis, String.fromCharCode, btoa)
+||whimsoplynx.com^
 
 ! https://github.com/NanoMeow/QuickReports/issues/880
 ||player.ooyala.com/static/*/ad-plugin/*$script,redirect=noopjs,domain=dragons.com.au
@@ -17228,8 +17245,10 @@ vev.*##.vjs-overlay
 vev.*##body > div[style="position: fixed; display: block; width: 100%; height: 100%; inset: 0px; background-color: rgba(0, 0, 0, 0); z-index: 300000;"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6007
-okanime.com##+js(nowebrtc)
-okanime.com##+js(nowoif)
+okanime.*##+js(acis, $, getElementById)
+okanime.*##+js(nowebrtc)
+okanime.*##+js(nowoif)
+okanime.*###calque
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6009
 besthugecocks.com##+js(aopr, document.dispatchEvent)
