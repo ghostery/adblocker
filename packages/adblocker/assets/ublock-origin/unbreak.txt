@@ -2470,9 +2470,12 @@ wallpaperset.com#@#.ads1
 ||vod.playoncenter.com/videos/*.mp4$media,domain=los40.com
 ||streamtheworld.com/ondemand/creative?cat=cm-preroll$xhr,redirect=nooptext,domain=los40.com
 los40.com##+js(rc, publi_luto_horizontal)
+stories.los40.com##+js(json-prune, config.globalInteractions.[].bsData)
 los40.com##amp-img, #cbb.cbb
 los40.com##iframe[id^="google_ads_iframe"]:style(max-height: 1px !important;)
 los40.com##div[id^="google_ads_iframe_"]:style(max-height: 1px !important;)
+los40.com##[id^="los40_gpt-MPU"]:style(max-height: 1px !important;)
+los40.com##.amp-animate:remove()
 los40.com##.estirar.envoltorio_publi
 los40.com##.publi_luto_horizontal:style(max-height: 1px !important;)
 los40.com##.publi_luto_vertical
@@ -4010,3 +4013,15 @@ waplog.com#@#.banner-bottom
 lebigdata.fr##.background-cover
 ||lebigdata.fr/wp-content/uploads/*/cote.png$image
 @@||objetconnecte.net/detroitchicago/dayton.js$script,1p
+
+! https://www.reddit.com/r/uBlockOrigin/comments/jli3g7/workaround_vlivetv_update_infinite_loading_again/
+! https://www.vlive.tv/video/219020 broken video
+@@||naver.com/adcall?$xhr,domain=vlive.tv
+
+! https://www.reddit.com/r/uBlockOrigin/comments/j4s5e8/firefox_disqus_crooksandliarscom/
+@@||crooksandliars.com/*/admiral.js$script,1p
+
+! https://www.reddit.com/r/uBlockOrigin/comments/jnl7ka/tvnowde_videos_not_loading/
+@@||adalliance-a.akamaihd.net/live/tvnow.de/gujAd.js$script,domain=tvnow.de
+@@||bilder-a.akamaihd.net/ip/js/ipdvdc/ipdvdc.min.js$script,domain=tvnow.de
+@@||googletagmanager.com/gtm.js$script,domain=tvnow.de
