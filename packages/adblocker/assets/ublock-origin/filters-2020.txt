@@ -4915,8 +4915,8 @@ loveheaven.net##.topday
 loveheaven.net##.col-lg-4 > .panel-body:has([id^=bidadx_])
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/568
-linecad.com##+js(set, adsbygoogle.loaded, true)
-*$script,redirect-rule=noopjs,domain=linecad.com
+/wp-content/plugins/dh-anti-adblocker/*$script,1p
+linecad.com##[href^="https://fbs.com/"]
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/64800
 claimrbx.gg##+js(nostif, swal, 500)
@@ -5276,9 +5276,7 @@ livingincebuforums.com##li.ipsBox.ipsWidget_vertical.ipsWidget:nth-of-type(5)
 ! https://github.com/uBlockOrigin/uAssets/issues/8068
 @@||*.ch^$xhr,domain=tio.ch
 @@||tio.ch^$ghide
-tio.ch##.monsterboard.ad
-tio.ch##.tiny-box > div.home-small.bb.block
-tio.ch##.maxiboard.ad
+tio.ch##.monsterboard.ad, .tiny-box > div.home-small.bb.block, .maxiboard.ad:style(max-height:1px !important;max-width:1px !important)
 
 ! shrinkhere.xyz anti adb popup
 shrinkhere.xyz##+js(acis, String.fromCharCode, atob)
@@ -5766,3 +5764,61 @@ short-cash2.xyz##+js(aopr, app_vars.force_disable_adblock)
 short-cash2.xyz##+js(nowoif)
 short-cash2.xyz##+js(set, blurred, false)
 short-cash2.xyz##.banner
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/67069
+||googlesyndication.com/pagead/js/adsbygoogle.js^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=clockks.com
+clockks.com##.sticky_ad_desktop_footer_center
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/67070
+bdnewsx.com##+js(aopr, app_vars.force_disable_adblock)
+bdnewsx.com##+js(set, blurred, false)
+||bdnewsx.com/sahil.js^$script,1p
+bdnewsx.com##.banner
+
+! https://github.com/uBlockOrigin/uAssets/issues/8161
+proxybit.*##+js(aopw, _pop)
+proxybit.*##+js(nowoif)
+||cavewaxmalt.com^
+
+! https://github.com/abp-filters/abp-filters-anti-cv/issues/482
+hdss.to##+js(acis, String.fromCharCode, btoa)
+hdss.to##.homi
+
+! https://github.com/uBlockOrigin/uAssets/issues/8162
+@@||top.gg/js/$script,1p
+top.gg###vote-root:style(display:block !important)
+top.gg###video-root
+
+! https://github.com/uBlockOrigin/uAssets/issues/8163
+@@||arrowos.net/js/*$script,1p
+arrowos.net##body:style(visibility:visible !important)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8165
+aflamgulf.com##+js(nowoif)
+||truernewlywait.com^
+||mangelobsolden.cam^
+||aidbaronice.casa^
+
+! https://github.com/uBlockOrigin/uAssets/issues/8167
+hiidudemoviez.com##+js(aopw, _pop)
+||mpnjaifkchgw.com^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/66996
+realfilmizle1.com##+js(nowoif)
+*$script,redirect-rule=noopjs,domain=vidmoly.me|vidmoly.net|vidmoly.to
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/67094
+lite-link.com##+js(aopr, app_vars.force_disable_adblock)
+lite-link.com##+js(ra, target|href, a[href^="//"])
+lite-link.com##+js(set, blurred, false)
+lite-link.com##.banner
+||nellads.com^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/67095
+||googlesyndication.com/pagead/js/adsbygoogle.js^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=darmowa-tv.ws
+
+! https://github.com/uBlockOrigin/uAssets/commit/6bc0de4a260c4653d1c1d91a1ae118d87a88f89e#commitcomment-43943548
+filerio.in,whaturls.club,easyvid.in,moviesava.com,openloadmov.com,uploads.mobi,moviehubs.in,wifimovies.net,yifymovies.tv,oogly.io,evoload.io,putlocker1.to,123putlocker.is,new-solarmovie.com,downloadpirate.com,movies123.ltd,songspk3.*,hulu.to,tucmp3.com,yesmovies123.me,moviewr.com##+js(acis, String.fromCharCode, btoa)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8169
+evoload.io##+js(set, aloaded, true)
