@@ -1631,15 +1631,13 @@ supergoku.com##+js(ra, href, #clickfakeplayer)
 supergoku.com###link:style(display: block !important;)
 
 ! https://github.com/NanoMeow/QuickReports/issues/633
-2conv.com,flvto.biz,flv2mp3.by##.horizontal-ads
+2conv.com,flvto.biz,flv2mp3.by##.content-right-bar
+2conv.com,flvto.biz,flv2mp3.by##.horizontal-area
 2conv.com,flvto.biz,flv2mp3.by##.push-offer
-2conv.com,flvto.biz,flv2mp3.by##.square-ads
-2conv.com##.content-right-bar
-2conv.com##.horizontal-area
-flv2mp3.by##.push-in-page__item
 ||2conv.com^$csp=script-src *
 ||flvto.biz^$csp=script-src *
-2conv.com,flvto.biz##+js(nowoif)
+2conv.com,flvto.biz##+js(acis, String.fromCharCode, btoa)
+2conv.com,flvto.biz,flv2mp3.by##+js(nowoif)
 
 ! docker.events.cube365.net
 cube365.net##+js(set, mixpanel.get_distinct_id, true)
@@ -1863,15 +1861,6 @@ hightqualityshop.com##+js(nosiif, visibility, 1000)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/56849
 z1.fm##+js(nowoif)
 m.z1.fm##div[style^="position: absolute; z-index: 9999999;"]
-
-! https://github.com/uBlockOrigin/uAssets/issues/7520
-anitube.*##+js(aopr, AaDetector)
-||anitubecz.uk^$script
-||1uno1xkktau4.com^$3p
-*$script,xhr,frame,3p,denyallow=animesonline.cz|hwcdn.net|bootstrapcdn.com|googleapis.com|cloudflare.net|jwpcdn.com|jsdelivr.net|fastly.net|fontawesome.com|anitube.info,domain=anitube.cx
-anitube.*##+js(acis, document.createElement, 'script')
-anitube.*##+js(aeld, , encodeURIComponent)
-anitube.*##div[style^="pointer-events: none; position: absolute; "]
 
 ||tv1s4d6klh4n.com^
 
@@ -3225,6 +3214,7 @@ vudeo.net##+js(acis, Object.defineProperty, XMLHttpRequest)
 
 ! Foil blocker-sniffer code on Condé Nast sites.
 architecturaldigest.com,arstechnica.com,bonappetit.com,brides.com,cntraveler.com,epicurious.com,golfdigest.com,newyorker.com,pitchfork.com,self.com,teenvogue.com,vanityfair.com,vogue.com,wmagazine.com##+js(nofab)
+newyorker.com##+js(nosiif, r()||i(), 25)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/hwrk5l/getting_popup_when_click_on_vid_kavglecom/
 kavgle.com##[href^="https://go.vrbangers.com/"], [href^="https://asiafriendfinder.com/"]
@@ -4938,7 +4928,7 @@ gomaainfo.com##+js(acis, addEventListener, google_ad_client)
 javix.net##+js(acis, document.querySelectorAll, popMagic)
 
 https://github.com/NanoMeow/QuickReports/issues/4778
-*$frame,script,xhr,3p,denyallow=cloudflare.com|facebook.com|google.com|gstatic.com|loadloadingfreevideo.top|mycdn.me|ok.ru,domain=9tsu.net|miomio.us
+*$frame,script,xhr,3p,denyallow=cloudflare.com|facebook.com|google.com|gstatic.com|loadloadingfreevideo.top|mycdn.me|ok.ru,domain=9tsu.net|jshow.tv
 
 ! https://github.com/NanoMeow/QuickReports/issues/4776
 robot-forum.com##+js(acis, $, offsetHeight)
@@ -5276,7 +5266,7 @@ livingincebuforums.com##li.ipsBox.ipsWidget_vertical.ipsWidget:nth-of-type(5)
 ! https://github.com/uBlockOrigin/uAssets/issues/8068
 @@||*.ch^$xhr,domain=tio.ch
 @@||tio.ch^$ghide
-tio.ch##.monsterboard.ad, .tiny-box > div.home-small.bb.block, .maxiboard.ad:style(max-height:1px !important;max-width:1px !important)
+tio.ch##.tiny-box > div.home-small.bb.block, .ad:style(max-height:500px !important;max-width:500px !important;left: -3000px !important;position:absolute !important)
 
 ! shrinkhere.xyz anti adb popup
 shrinkhere.xyz##+js(acis, String.fromCharCode, atob)
@@ -5822,3 +5812,19 @@ filerio.in,whaturls.club,easyvid.in,moviesava.com,openloadmov.com,uploads.mobi,m
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8169
 evoload.io##+js(set, aloaded, true)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/jpgjd9/adblock_detected/
+*$script,redirect-rule=noopjs,domain=ufckhabib.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/8173
+wawacity.*##+js(acis, String.fromCharCode, btoa)
+
+! https://github.com/abp-filters/abp-filters-anti-cv/issues/485
+aegeanews.gr,batterypoweronline.com,brezovycukr.cz,centrocommercialevulcano.com,cieonline.co.uk,commsbusiness.co.uk,dailygrindonline.net,davincidiamondsslot.net,delo.bg,dynastyseries.com,fabmx1.com,fat-bike.com,fmj.co.uk,localemagazine.com,loveourweddingmag.com,metaforespress.gr,myvalley.it,niestatystyczny.pl,primapaginamarsala.it,ringelnatz.net,schoolsweek.co.uk,sikkenscolore.it,sportbet.gr,stadtstudenten.de,stagemilk.com,tautasdziesmas.lv,thetoneking.com,toplickevesti.com,zeroradio.co.uk##+js(aopr, wpsite_clickable_data)
+*/wp-content/plugins/wpsite-background-takeover*/js/wpsite_clickable.js$script
+
+! https://github.com/uBlockOrigin/uAssets/issues/8175
+musicpleer.tv##+js(set, ADS_ACTIVATED, false)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/67151
+adobeactivators.blogspot.com##+js(acis, addEventListener, google_ad_client)
