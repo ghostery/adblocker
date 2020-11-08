@@ -345,24 +345,23 @@ desktophut.com###loading-ad
 *$frame,redirect-rule=noopframe,domain=desktophut.com
 *$xhr,redirect-rule=nooptext,domain=desktophut.com
 
-! https://github.com/NanoMeow/QuickReports/issues/3606
 ! https://github.com/uBlockOrigin/uAssets/issues/7488
 dropgalaxy.*##+js(ra, onclick|target, .btn-primary.btn-lg.btn-block.btn)
-@@||dropgalaxy.*^$ghide
 dropgalaxy.*##[href^="https://bit.ly/"]
 *$script,redirect-rule=noopjs,domain=dropgalaxy.com
 *$image,redirect-rule=2x2.png,domain=dropgalaxy.com
-@@.jpg$image,domain=dropgalaxy.com
 dropgalaxy.*##+js(nosiif, _0x)
-@@||googlesyndication.com^$script,xhr,domain=dropgalaxy.com
 dropgalaxy.*##.adsbygoogle:style(max-height: 1px !important;)
-@@.png$image,domain=dropgalaxy.com
-@@||doubleclick.net^$frame,domain=dropgalaxy.com
 dropgalaxy.com##[id^="aswift"]:style(display:none!important;)
-@@||contextual.media.net/dmedianet.js?cid=$domain=dropgalaxy.com
-@@||contextual.media.net/*/fcmain.js$domain=dropgalaxy.com
 dropgalaxy.com##iframe[id*="_mN_main_"]
 dropgalaxy.com##[target="_blank"]:has-text(Download)
+@@.jpg$image,domain=dropgalaxy.com
+@@.png$image,domain=dropgalaxy.com
+@@||contextual.media.net/dmedianet.js?cid=$domain=dropgalaxy.com
+@@||contextual.media.net/*/fcmain.js$domain=dropgalaxy.com
+@@||googlesyndication.com^$script,xhr,domain=dropgalaxy.com
+@@||dropgalaxy.*^$ghide
+newsindi.com##+js(aopr, absda)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53896
 memoriadatv.com##+js(nano-stb)
@@ -1698,6 +1697,7 @@ pasteit.*##+js(noeval-if, AdBlock)
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/509
 nyaa.iss.one##+js(aopr, LieDetector)
+nyaa.iss.one##.servers-cost-money1
 
 ! https://github.com/NanoMeow/QuickReports/issues/3988
 @@||geekprank.com^$ghide
@@ -4788,6 +4788,7 @@ kizservice.info###sam
 
 ! https://github.com/NanoMeow/QuickReports/issues/4739
 poptimesuk.com##+js(acis, document.createElement, 'script')
+poptimesuk.com##+js(acis, String.fromCharCode, btoa)
 ||bolrookr.com^$3p
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/iy430z/site_is_popping_up_an_intrusive_disable_adblock/
@@ -5266,7 +5267,6 @@ livingincebuforums.com##li.ipsBox.ipsWidget_vertical.ipsWidget:nth-of-type(5)
 ! https://github.com/uBlockOrigin/uAssets/issues/8068
 @@||*.ch^$xhr,domain=tio.ch
 @@||tio.ch^$ghide
-tio.ch##.tiny-box > div.home-small.bb.block, .ad:style(max-height:500px !important;max-width:500px !important;left: -3000px !important;position:absolute !important)
 
 ! shrinkhere.xyz anti adb popup
 shrinkhere.xyz##+js(acis, String.fromCharCode, atob)
@@ -5828,3 +5828,22 @@ musicpleer.tv##+js(set, ADS_ACTIVATED, false)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67151
 adobeactivators.blogspot.com##+js(acis, addEventListener, google_ad_client)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8179
+certbyte.com##+js(nostif, ai_adb)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8180
+myhiddentech.com##+js(aopr, app_vars.force_disable_adblock)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8181
+||ads.exoclick.com/ads.js$script,redirect=noop.js
+/teo4.$script
+
+! https://github.com/uBlockOrigin/uAssets/issues/8182
+ondebaixo.com,torrentool.org##+js(ra, onclick, a[href^="magnet:"][onclick])
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/67243
+gocoo.co##+js(acis, addEventListener, google_ad_client)
+gocoo.co##+js(acis, String.fromCharCode, btoa)
+@@||gocoo.co^$ghide
+gocoo.co##.ads
