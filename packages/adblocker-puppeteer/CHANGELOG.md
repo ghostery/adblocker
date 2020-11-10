@@ -1,3 +1,16 @@
+# v1.18.5 (Tue Nov 10 2020)
+
+#### :bug: Bug Fix
+
+- Update puppeteer types to 5.x [#1427](https://github.com/cliqz-oss/adblocker/pull/1427) ([@Niek](https://github.com/Niek) [@remusao](https://github.com/remusao))
+
+#### Authors: 2
+
+- Niek van der Maas ([@Niek](https://github.com/Niek))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.18.0 (Mon Aug 24 2020)
 
 #### :bug: Bug Fix

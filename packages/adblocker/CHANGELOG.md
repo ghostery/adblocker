@@ -1,3 +1,32 @@
+# v1.18.5 (Tue Nov 10 2020)
+
+#### :bug: Bug Fix
+
+- build(deps): bump @types/firefox-webext-browser from 78.0.1 to 82.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :house: Internal
+
+- Update local assets [#1426](https://github.com/cliqz-oss/adblocker/pull/1426) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1422](https://github.com/cliqz-oss/adblocker/pull/1422) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1420](https://github.com/cliqz-oss/adblocker/pull/1420) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1417](https://github.com/cliqz-oss/adblocker/pull/1417) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1414](https://github.com/cliqz-oss/adblocker/pull/1414) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1411](https://github.com/cliqz-oss/adblocker/pull/1411) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1407](https://github.com/cliqz-oss/adblocker/pull/1407) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1398](https://github.com/cliqz-oss/adblocker/pull/1398) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1395](https://github.com/cliqz-oss/adblocker/pull/1395) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump @types/firefox-webext-browser from 78.0.1 to 82.0.0 [#1424](https://github.com/cliqz-oss/adblocker/pull/1424) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 2
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+
+---
+
 # v1.18.4 (Sun Nov 01 2020)
 
 #### :bug: Bug Fix
