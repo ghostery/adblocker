@@ -350,6 +350,7 @@ desktophut.com###loading-ad
 ! https://github.com/uBlockOrigin/uAssets/issues/7488
 dropgalaxy.*##+js(ra, onclick|target, .btn-primary.btn-lg.btn-block.btn)
 dropgalaxy.*##[href^="https://bit.ly/"]
+dropgalaxy.*###operadata + br + [href][target="_blank"]
 *$script,redirect-rule=noopjs,domain=dropgalaxy.com
 *$image,redirect-rule=2x2.png,domain=dropgalaxy.com
 dropgalaxy.*##+js(nosiif, _0x)
@@ -5117,6 +5118,11 @@ newsiqra.com##+js(acis, XMLHttpRequest, null)
 joska.xyz##+js(aopr, app_vars.force_disable_adblock)
 joska.xyz##+js(set, blurred, false)
 joska.xyz##[href^="https://petsched.website/"]
+partyhomedecor.com,teknomuda.com##+js(acis, addEventListener, google_ad_client)
+partyhomedecor.com,teknomuda.com##+js(nano-sib, timer, 1500)
+partyhomedecor.com,teknomuda.com##.box-main > p
+! [badfilter] ||onsafelink.com^$badfilter
+||onsafelink.com^$script,3p
 
 ! nsfw popups gayvidsclub .com
 gayvidsclub.com##+js(nowoif)
@@ -5414,6 +5420,7 @@ kamerafoto.net,kangapip.com##+js(acis, addEventListener, google_ad_client)
 link.kangapip.com##.box-main
 fedaro.me,s.kamerafoto.net##[href="https://s.kamerafoto.net/"]
 fedaro.me##+js(set, blurred, false)
+fedaro.me##.box-main > .row
 
 ! e-wok.tv anti-adb
 @@||e-wok.tv/js/new/advertisment.js$script,1p
@@ -5805,6 +5812,10 @@ certbyte.com##+js(nostif, ai_adb)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8180
 myhiddentech.com##+js(aopr, app_vars.force_disable_adblock)
+absolutesmmpanel.com,myhiddentech.com,thetechywizard.com##+js(nano-sib, timer, 1500)
+absolutesmmpanel.com,myhiddentech.com,thetechywizard.com##+js(set, blurred, false)
+absolutesmmpanel.com,myhiddentech.com,thetechywizard.com###wpsafe-snp:style(display: block !important;)
+absolutesmmpanel.com,myhiddentech.com,thetechywizard.com##.wmg-vb-container > div, p > span, h3, h2, h4, .custom-links
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8181
 ||ads.exoclick.com/ads.js$script,redirect=noop.js
@@ -5841,6 +5852,10 @@ vipr.im##+js(acis, document.addEventListener, initBCPopunder)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67323
 droplink.co##+js(aopr, app_vars.force_disable_adblock)
 droplink.co##+js(set, blurred, false)
+yoshare.net##+js(nano-sib, timer, 1500)
+yoshare.net##[id^="yoshare\."]
+yoshare.net##.close_ub-sticky-addesk
+yoshare.net##.site-inner > .wrap:has-text(Scroll down & click on)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67366
 @@||cdnjs.cloudflare.com/ajax/libs/fuckadblock^*/fuckadblock.min.js$script,domain=joinfaucet.com
@@ -5864,3 +5879,34 @@ remiz.co.kr##+js(acis, addEventListener, google_ad_client)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/jsec46/this_website_detects_my_adblock/
 hidefninja.com##+js(aopr, adBlockDetected)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/67430
+cyberleninka.ru##+js(norafif, getElementById)
+
+! egao.in popunder
+egao.in##+js(nano-sib, , 1500)
+egao.in##+js(ra, target, #SafelinkGenerate)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/67449
+recipestutorials.com##+js(aopr, app_vars.force_disable_adblock)
+recipestutorials.com##+js(set, blurred, false)
+recipestutorials.com##.banner
+
+! https://github.com/uBlockOrigin/uAssets/issues/8198
+hubdrive.xyz##+js(nowoif)
+hubdrive.xyz##+js(acis, Math.imul)
+||ejirytuw.xyz^
+||ytymetuw.xyz^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/67445
+exbulletin.com##+js(aopr, ai_front)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/jsvatw/request_anti_adblocker_detection_fix_please/
+hindisub.com##+js(nofab)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/jsvl14/news_site_bypassing_adblock_cant_block_it_by/
+15min.lt##+js(nostif, insertBefore)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/67488
+@@||multicoinads.com^$ghide
+multicoinads.com##.ads
