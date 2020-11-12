@@ -3030,7 +3030,7 @@ anyfreeporn.com##.rmedia
 ! https://github.com/uBlockOrigin/uAssets/issues/1051
 ! https://github.com/uBlockOrigin/uAssets/issues/2752
 ouo.press##+js(acis, decodeURI, HTMLIFrameElement)
-ouo.press##+js(acis, Math, zfgloaded)
+ouo.press##+js(acis, String.fromCharCode, btoa)
 ouo.press##+js(aopr, AaDetector)
 ouo.press##+js(aopr, jsPopunder)
 ouo.press##+js(aopw, _pop)
@@ -3042,6 +3042,7 @@ ouo.*##^script:has-text('shift')
 ||waframedia20.com^$script,domain=ouo.press
 ouo.press##[href^="https://dynamicadx.com/"]
 ouo.press##iframe:not([src])
+ouo.press##[id*="ScriptRoot"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1057
 ctui.in,cutwin.com,cutwin.pro##+js(aopw, adss)
@@ -6756,7 +6757,7 @@ cartoonporno.xxx##+js(nowoif)
 @@||solvettube.com^$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2482
-youporn.com##+js(acis, atob, decodeURIComponent)
+youporn.com##+js(aopr, page_params.holiday_promo)
 youporn.com##+js(aopr, _goat)
 youporn.com##+js(aopr, AdDelivery.prototype.requestTrafficJunkyAds)
 youporn.com##+js(aopr, zone_2547)
@@ -6764,6 +6765,12 @@ youporn.com##.ad-bottom-text
 youporn.com##.adLinkText
 youporn.com##.ad-remove
 youporn.com##ads
+youporn.com##.adsbytrafficjunky
+youporn.com##.channel-header
+youporn.com##.channelSideAd
+youporn.com##.full-row-thumbs > [class]:has(.adsbytrafficjunky)
+youporn.com###videoWrapper + [class]:has([data-zone^="underplayer"])
+youporn.com##[data-removelink="removeLink"]
 youporn.com##aside:has(a.ad-remove)
 youporn.com##.e8-column:has(.ad-remove.removeAdLink)
 youporn.com##.grid-sub-row-2.four-column > div:has([class^="ad"][class*="Link"])
@@ -12723,13 +12730,11 @@ iwalif.com##+js(set, global.waitAllTime, false)
 *$popunder,domain=acshort.site|drivelinks.me|hackshort.me|latinolinks.site|pclinks.site|pelislinks.me|pocoslinks.me
 acshort.site,drivelinks.me,hackshort.me,latinolinks.site,pclinks.site,pelislinks.me,pocoslinks.me##+js(acis, document.oncontextmenu)
 acshort.site,drivelinks.me,hackshort.me,latinolinks.site,pclinks.site,pelislinks.me,pocoslinks.me##+js(acis, document.onmousedown)
-acshort.site,drivelinks.me,hackshort.me,latinolinks.site,pclinks.site,pelislinks.me,pocoslinks.me##+js(nano-sib, , , 0)
-acshort.site,drivelinks.me,hackshort.me,latinolinks.site,pclinks.site,pelislinks.me,pocoslinks.me##+js(set, t, 0)
-@@*$ghide,domain=conceptosde.net|cozyasociados.com|freeserverhostingweb.club|me-encantas.com|mejorconfrutas.com|mexicogob.com|noticiascripto.site|tecnoaldia.net|todoandroid.live
-@@||cdnjs.cloudflare.com/ajax/libs/fuckadblock/3.2.1/fuckadblock.$script,domain=conceptosde.net|cozyasociados.com|freeserverhostingweb.club|me-encantas.com|mejorconfrutas.com|mexicogob.com|noticiascripto.site|tecnoaldia.net|todoandroid.live
-conceptosde.net,cozyasociados.com,freeserverhostingweb.club,me-encantas.com,mejorconfrutas.com,mexicogob.com,noticiascripto.site,tecnoaldia.net,todoandroid.live##+js(acis, document.oncontextmenu)
-conceptosde.net,cozyasociados.com,freeserverhostingweb.club,me-encantas.com,mejorconfrutas.com,mexicogob.com,noticiascripto.site,tecnoaldia.net,todoandroid.live##+js(acis, document.onkeydown)
-conceptosde.net,cozyasociados.com,freeserverhostingweb.club,me-encantas.com,mejorconfrutas.com,mexicogob.com,noticiascripto.site,tecnoaldia.net,todoandroid.live##+js(acis, document.onmousedown)
+@@*$ghide,domain=conceptosde.net|cozyasociados.com|freeserverhostingweb.club|me-encantas.com|mejorconfrutas.com|mexicogob.com|noticiascripto.site|tanfacil.net|tecnoaldia.net|todoandroid.live
+@@||cdnjs.cloudflare.com/ajax/libs/fuckadblock/3.2.1/fuckadblock.$script,domain=conceptosde.net|cozyasociados.com|freeserverhostingweb.club|me-encantas.com|mejorconfrutas.com|mexicogob.com|noticiascripto.site|tanfacil.net|tecnoaldia.net|todoandroid.live
+conceptosde.net,cozyasociados.com,freeserverhostingweb.club,me-encantas.com,mejorconfrutas.com,mexicogob.com,noticiascripto.site,tanfacil.net,tecnoaldia.net,todoandroid.live##+js(acis, document.oncontextmenu)
+conceptosde.net,cozyasociados.com,freeserverhostingweb.club,me-encantas.com,mejorconfrutas.com,mexicogob.com,noticiascripto.site,tanfacil.net,tecnoaldia.net,todoandroid.live##+js(acis, document.onkeydown)
+conceptosde.net,cozyasociados.com,freeserverhostingweb.club,me-encantas.com,mejorconfrutas.com,mexicogob.com,noticiascripto.site,tanfacil.net,tecnoaldia.net,todoandroid.live##+js(acis, document.onmousedown)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4799
 compucalitv.com##.onp-sl-content:style(display: block !important;)
@@ -18499,6 +18504,7 @@ aii.sh##+js(aopr, Date.prototype.toUTCString)
 aii.sh##+js(nowebrtc)
 aii.sh##+js(acis, String.prototype.charCodeAt)
 aii.sh##+js(set, blurred, false)
+aii.sh###link-view > center
 ||aii.sh/sw$script,1p
 aii.sh##[src^="https://i.imgur.com/"]
 ||aii.sh^$csp=script-src 'self' 'unsafe-inline' *.googletagmanager.com *.recaptcha.net *.gstatic.com *.google.com
@@ -21806,6 +21812,7 @@ kekolink.com##+js(set, blurred, false)
 *$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=kekolink.com
 forex-lab.xyz##+js(set, timeleft, 0)
 newsonthegotoday.com##+js(aopr, STREAM_CONFIGS)
+newsonthegotoday.com##+js(ra, target, .clickbutton)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/49261
 @@||bitearns.com^$ghide
