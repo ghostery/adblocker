@@ -3461,8 +3461,9 @@ w3schools.com###container:style(top:40px !important;)
 
 ! freestreams-live1 .com popups
 area51deportiva.com,freestreams-live1.com##+js(aopr, LieDetector)
-area51deportiva.com,freestreams-live1.com##+js(nowoif)
+freestreams-live1.com##+js(nowoif)
 area51deportiva.com##+js(aopw, _pop)
+sportscart.xyz##+js(aopr, open)
 *html?_=e1&*$script
 ||browsobsolete.com^
 
@@ -4224,8 +4225,9 @@ youvideoporno.mobi##+js(acis, document.querySelectorAll, popMagic)
 ||youvideoporno.mobi/sw.js$script,1p
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/in0gxn/voesx_aggressive_advertising_how_can_i_fix_it/
-*$3p,script,frame,denyallow=vjs.zencdn.net|voe-network.net|cdnjs.cloudflare.com|hcaptcha.com|recaptcha.net|googleapis.com|sharethis.com|fastly.net,domain=voe.sx
+*$3p,script,frame,denyallow=vjs.zencdn.net|voe-network.net|cdnjs.cloudflare.com|hcaptcha.com|recaptcha.net|googleapis.com|sharethis.com|fastly.net|jsdelivr.net|bootstrapcdn.com|jquery.com|hwcdn.net,domain=voe.sx
 voe.sx##+js(acis, String.fromCharCode, btoa)
+voe.sx##+js(nowebrtc)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4637
 ladsnbastands.com##+js(aopr, LieDetector)
@@ -4892,7 +4894,7 @@ loveheaven.net##.topday
 loveheaven.net##.col-lg-4 > .panel-body:has([id^=bidadx_])
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/568
-/wp-content/plugins/dh-anti-adblocker/*$script,1p
+linecad.com##+js(aopr, DHAntiAdBlocker)
 linecad.com##[href^="https://fbs.com/"]
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/64800
@@ -5460,7 +5462,7 @@ hunter-xhunter.com##+js(nostif, ai_adb)
 hunter-xhunter.com##.code-block
 
 ! iammagnus.com/dailyvideoreports.net anti-adb
-iammagnus.com,linecad.com,dailyvideoreports.net##+js(set, adsbygoogle.loaded, true)
+iammagnus.com,dailyvideoreports.net##+js(set, adsbygoogle.loaded, true)
 *$script,redirect-rule=noopjs,domain=iammagnus.com|dailyvideoreports.net
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/66268
@@ -5910,3 +5912,59 @@ hindisub.com##+js(nofab)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67488
 @@||multicoinads.com^$ghide
 multicoinads.com##.ads
+
+! muynegociosyeconomia.es anti-adb
+*$xhr,redirect-rule=nooptext,domain=muynegociosyeconomia.es
+
+! https://github.com/uBlockOrigin/uAssets/issues/8203
+br0wsers.com##+js(acis, document.getElementsByClassName, offsetParent)
+br0wsers.com###show_ag:style(display:block !important)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/67468
+ashort1a.xyz##+js(acis, document.createElement, adblock)
+ashort1a.xyz##+js(aopr, adBlockDetected)
+ashort1a.xyz##+js(aopr, app_vars.force_disable_adblock)
+ashort1a.xyz##+js(aopr, open)
+ashort1a.xyz##+js(aopw, _pop)
+ashort1a.xyz##+js(nowebrtc)
+ashort1a.xyz##+js(set, blurred, false)
+ashort1a.xyz##.banner
+*$frame,denyallow=google.com,domain=ashort1a.xyz
+*$script,3p,denyallow=cloudflare.com|chatbro.com|google.com|gstatic.com|recaptcha.net,domain=ashort1a.xyz
+||ashort1a.xyz/sw.js$script,1p
+
+! earncoin.site anti adb popup
+earncoin.site##+js(acis, Math, btoa)
+earncoin.site##+js(aopr, app_vars.force_disable_adblock)
+earncoin.site##+js(aopr, zfgformats)
+earncoin.site##+js(aopw, _pop)
+earncoin.site##+js(set, blurred, false)
+earncoin.site##.banner
+earncoin.site##.content
+*$frame,denyallow=google.com,domain=earncoin.site
+*$script,3p,denyallow=cloudflare.com|google.com|gstatic.com|recaptcha.net,domain=earncoin.site
+
+! 2shrt.com anti adb ads
+2shrt.com##+js(aopr, app_vars.force_disable_adblock)
+2shrt.com##+js(aopw, _pop)
+2shrt.com##+js(set, blurred, false)
+2shrt.com###ad
+*$script,3p,denyallow=cloudflare.com|google.com|gstatic.com|recaptcha.net,domain=2shrt.com
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/67511
+downloadcursos.net##+js(aopr, mdpDeBlocker)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/67517
+unityassets4free.com##+js(set, adsbygoogle.loaded, true)
+*$script,redirect-rule=noopjs,domain=unityassets4free.com
+
+! vlive.tv pre-roll ads
+vlive.tv##+js(json-prune, meta.advertise)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/jteijh/nsfw_adblock_detected_please_disable_your/
+*$xhr,redirect-rule=nooptext,domain=new.lewd.ninja
+new.lewd.ninja##div.star-trek-enterprise-is-pretty-good
+new.lewd.ninja##.video-overlay
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/67519
+hentaiporno.xxx##+js(acis, document.querySelectorAll, popMagic)
