@@ -7,7 +7,6 @@
  */
 /* tslint:disable quotemark */
 export default [
-  "quantcast.mgr.consensu.org",
   "googlesyndication",
   "imasdk.googleapis",
   "cdnjs.cloudflare",
@@ -219,6 +218,7 @@ export default [
   "vi",
   "vo",
   "we",
+  "wh",
   "wn",
   "xx",
   "yo",
