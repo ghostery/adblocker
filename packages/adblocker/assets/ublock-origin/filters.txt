@@ -729,6 +729,7 @@ golem.de##+js(nostif, show)
 golem.de##[href^="https://ads.golem.de/"]
 tweaktown.com##[id^="div-gpt-ad"]
 golem.de##.sp-article:has(span:matches-css-before(content:/Anzeige/i))
+golem.de##.list-articles>li:has(.icon-addy:matches-css-before(content: "Anzeige"))
 
 ! https://github.com/uBlockOrigin/uAssets/issues/206
 geektime.co.il##+js(nostif, adObjects)
@@ -2321,7 +2322,7 @@ sxyprn.*###vid_container_id > .tdn
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1197
 magesy.*,majesy.*##+js(nosiif, visibility, 1000)
-magesy.*,majesy.*##+js(aost, onload, inlineScript)
+lacuevadeguns.com,magesy.*,majesy.*##+js(aost, onload, inlineScript)
 @@||magesypro.com^$ghide
 ||googlesyndication.com/pagead/js/adsbygoogle.js$xhr,redirect=noopjs,domain=majesy.com
 magesy.*###adblockplus
@@ -2332,6 +2333,8 @@ majesy.*##.widget_execphp
 magesypro.com##+js(nostif, scroll)
 magesypro.com###lcswtiduf-blanket
 magesypro.com##.adsbygoogle
+! https://github.com/uBlockOrigin/uAssets/issues/1197#issuecomment-728646380
+mage.si##+js(aeld, load, nextFunction)
 
 ! https://forums.lanik.us/viewtopic.php?p=128630#p128630
 tohax.com##+js(aopw, Fingerprint2)
@@ -2814,9 +2817,8 @@ mypapercraft.net##+js(nofab)
 mypapercraft.net##.ezoic-ad
 
 ! https://github.com/uBlockOrigin/uAssets/issues/994
-beelink.in##+js(acis, $, adi_content)
-beelink.in##+js(set, adblockEnabled, false)
-beelink.in##+js(aeld, load, nextFunction)
+! https://github.com/uBlockOrigin/uAssets/issues/1197#issuecomment-728646380
+beelink.in##+js(aost, onload, inlineScript, 2)
 @@||beelink.in^$ghide
 beelink.in###adblockplus
 
@@ -4536,9 +4538,12 @@ imageweb.ws##+js(popads-dummy)
 imageweb.ws##a[href^="http://refer.ccbill.com/"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1614
-stream2watch.*##+js(aopw, Fingerprint2)
-stream2watch.*##+js(set, ab, false)
+stream2watch.*##+js(acis, atob)
+stream2watch.*##+js(aopr, AdservingModule)
+stream2watch.*##p[style="color:white;"]
+stream2watch.*##.min-test
 ! [badfilter] |http*://$3p,frame,domain=stream2watch.ws,badfilter
+*$script,redirect-rule=noopjs,domain=dubsports.to
 hindimean.com,streamcdn.*##+js(aopr, AaDetector)
 hindimean.com,streamcdn.*##+js(aopw, _pop)
 hindimean.com##+js(nowebrtc)
@@ -9935,7 +9940,7 @@ maddertranslates.com##+js(nostif, _creatBait)
 androidcure.com,bodytr.com,kasvekuvvet.net##+js(aopr, googletag)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3841
-chuksguide.com##+js(acis, jQuery, ai_adb)
+chuksguide.com##+js(nostif, ai_adb_detected)
 
 ! https://github.com/NanoMeow/QuickReports/issues/250
 ! https://github.com/NanoMeow/QuickReports/issues/603
@@ -18125,8 +18130,8 @@ jibfly.com##+js(aopr, open)
 jibfly.com##+js(aopr, rsrs_popunder)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1782
-filedown.org##+js(nowoif)
-@@||filedown.org^$ghide
+filedown.*##+js(nowoif)
+@@||filedown.*^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3419
 mexa.*##+js(acis, document.getElementById, adblockinfo)
