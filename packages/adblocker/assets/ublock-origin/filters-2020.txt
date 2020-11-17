@@ -1759,7 +1759,7 @@ popimed.com##+js(nowebrtc)
 ||35.232.188.118^$3p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/56572
-*$script,3p,redirect-rule=noopjs,domain=myviptuto.com
+myviptuto.com##+js(nosiif, visibility, 1000)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3999
 youlikeboys.com##+js(aopr, ExoLoader.serve)
@@ -1771,6 +1771,8 @@ uploadroot.com##.buttonDownload
 
 ! https://github.com/NanoMeow/QuickReports/issues/4001
 @@||key-hub.eu^$ghide
+key-hub.eu##.adsbygoogle
+@@||key-hub.eu/$1p,script
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/56603
 filmesviatorrents.gratis##+js(nosiif, visibility, 1000)
@@ -3222,7 +3224,8 @@ vudeo.net##+js(acis, Object.defineProperty, XMLHttpRequest)
 
 ! Foil blocker-sniffer code on Condé Nast sites.
 architecturaldigest.com,arstechnica.com,bonappetit.com,brides.com,cntraveler.com,epicurious.com,golfdigest.com,newyorker.com,pitchfork.com,self.com,teenvogue.com,vanityfair.com,vogue.com,wmagazine.com##+js(nofab)
-newyorker.com##+js(nosiif, r()||i(), 25)
+! https://www.reddit.com/r/uBlockOrigin/comments/jvh77m/ad_blocker_detection_on_newyorkercom/
+newyorker.com##+js(nosiif, ()||, 25)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/hwrk5l/getting_popup_when_click_on_vid_kavglecom/
 kavgle.com##[href^="https://go.vrbangers.com/"], [href^="https://asiafriendfinder.com/"]
@@ -4336,9 +4339,6 @@ realityblurb.com##+js(aopr, HTMLIFrameElement)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63414
 adzec.cc##+js(nosiif, visibility, 1000)
-
-! https://www.reddit.com/r/uBlockOrigin/comments/ioz4uq/imgur_tries_to_be_smart_and_blocks_uploading_of/
-imgur.com##+js(set, usesABP, false)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63438
 kimchi1.tv##+js(nosiif, visibility, 1000)
@@ -5975,8 +5975,8 @@ unityassets4free.com##img[src^="https://unityassets4free.com/wp-content/uploads/
 vlive.tv##+js(json-prune, meta.advertise)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/jteijh/nsfw_adblock_detected_please_disable_your/
-*$xhr,redirect-rule=nooptext,domain=new.lewd.ninja
-new.lewd.ninja##div.star-trek-enterprise-is-pretty-good
+@@||juicyads.com^$xhr,3p,domain=new.lewd.ninja
+new.lewd.ninja##iframe[src*="jads.co"]:upward(3)
 new.lewd.ninja##.video-overlay
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67519
@@ -6046,3 +6046,20 @@ channels247.net,goool7.ws,sport7.biz,sporting7.pw##+js(nowoif)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67691
 mytoolz.net##+js(aopr, onload)
+
+! pngtosvg.com anti-adb
+||googlesyndication.com^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=pngtosvg.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/8233
+pics4you.net##+js(aopr, absda)
+pics4you.net##+js(aopr, loadTool)
+pics4you.net##+js(aopw, _pop)
+||liliy9aydje10.com^$3p
+
+! https://github.com/uBlockOrigin/uAssets/issues/8237
+moozpussy.com,zoompussy.com##+js(aopr, loadTool)
+moozpussy.com,zoompussy.com##[href^="/go/desire"]
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/67853
+videa.hu#@#.adBanner
+videa.hu##.top-video-container-banner
