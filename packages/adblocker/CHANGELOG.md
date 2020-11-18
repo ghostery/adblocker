@@ -1,3 +1,29 @@
+# v1.18.6 (Wed Nov 18 2020)
+
+#### :house: Internal
+
+- Update local assets [#1448](https://github.com/cliqz-oss/adblocker/pull/1448) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1444](https://github.com/cliqz-oss/adblocker/pull/1444) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1443](https://github.com/cliqz-oss/adblocker/pull/1443) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1441](https://github.com/cliqz-oss/adblocker/pull/1441) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1440](https://github.com/cliqz-oss/adblocker/pull/1440) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1437](https://github.com/cliqz-oss/adblocker/pull/1437) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1433](https://github.com/cliqz-oss/adblocker/pull/1433) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1431](https://github.com/cliqz-oss/adblocker/pull/1431) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1428](https://github.com/cliqz-oss/adblocker/pull/1428) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump playwright from 1.6.1 to 1.6.2 [#1445](https://github.com/cliqz-oss/adblocker/pull/1445) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump webextension-polyfill-ts from 0.21.0 to 0.22.0 [#1438](https://github.com/cliqz-oss/adblocker/pull/1438) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 2
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+
+---
+
 # v1.18.5 (Tue Nov 10 2020)
 
 #### :bug: Bug Fix

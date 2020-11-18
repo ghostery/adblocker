@@ -1,3 +1,15 @@
+# v1.18.6 (Wed Nov 18 2020)
+
+#### :bug: Bug Fix
+
+- Fix memory leak by using a WeakMap to hold context information in blocker [#1451](https://github.com/cliqz-oss/adblocker/pull/1451) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.18.0 (Mon Aug 24 2020)
 
 #### :bug: Bug Fix

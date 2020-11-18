@@ -1,3 +1,21 @@
+# v1.18.6 (Wed Nov 18 2020)
+
+#### :bug: Bug Fix
+
+- Fix memory leak by using a WeakMap to hold context information in blocker [#1451](https://github.com/cliqz-oss/adblocker/pull/1451) ([@remusao](https://github.com/remusao))
+- build(deps): bump webextension-polyfill-ts from 0.21.0 to 0.22.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump webextension-polyfill-ts from 0.21.0 to 0.22.0 [#1438](https://github.com/cliqz-oss/adblocker/pull/1438) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 2
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.18.4 (Sun Nov 01 2020)
 
 #### :bug: Bug Fix
