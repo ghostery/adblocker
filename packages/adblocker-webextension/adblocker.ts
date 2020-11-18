@@ -212,7 +212,7 @@ export class BlockingContext {
  * methods to interface with WebExtension APIs needed to block ads.
  */
 export class WebExtensionBlocker extends FiltersEngine {
-  private readonly contexts: WeakMap<Browser, BlockingContext> = new Map();
+  private readonly contexts: WeakMap<Browser, BlockingContext> = new WeakMap();
 
   // ----------------------------------------------------------------------- //
   // Helpers to enable and disable blocking for 'browser'

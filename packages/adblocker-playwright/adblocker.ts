@@ -98,7 +98,7 @@ export class BlockingContext {
  * methods to interface with Playwright APIs needed to block ads.
  */
 export class PlaywrightBlocker extends FiltersEngine {
-  private readonly contexts: WeakMap<pw.Page, BlockingContext> = new Map();
+  private readonly contexts: WeakMap<pw.Page, BlockingContext> = new WeakMap();
 
   // ----------------------------------------------------------------------- //
   // Helpers to enable and disable blocking for 'browser'
@@ -314,10 +314,7 @@ export class PlaywrightBlocker extends FiltersEngine {
     }
   }
 
-  private async injectScriptletsIntoFrame(
-    frame: pw.Frame,
-    scripts: string[],
-  ): Promise<void> {
+  private async injectScriptletsIntoFrame(frame: pw.Frame, scripts: string[]): Promise<void> {
     const promises: Promise<any>[] = [];
 
     if (scripts.length !== 0) {

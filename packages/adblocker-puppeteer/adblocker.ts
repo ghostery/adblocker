@@ -103,7 +103,7 @@ export class BlockingContext {
  * methods to interface with Puppeteer APIs needed to block ads.
  */
 export class PuppeteerBlocker extends FiltersEngine {
-  private readonly contexts: WeakMap<puppeteer.Page, BlockingContext> = new Map();
+  private readonly contexts: WeakMap<puppeteer.Page, BlockingContext> = new WeakMap();
 
   // ----------------------------------------------------------------------- //
   // Helpers to enable and disable blocking for 'browser'
