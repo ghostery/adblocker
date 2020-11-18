@@ -2331,7 +2331,7 @@ ur-ly.xyz##+js(aopr, app_vars.force_disable_adblock)
 ur-ly.xyz##+js(aopr, open)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57788
-pcprogramasymas.com##+js(aopr, anOptions)
+*$script,redirect-rule=noopjs,domain=pcprogramasymas.net
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57797
 ! https://github.com/NanoMeow/QuickReports/issues/4492
@@ -5976,7 +5976,7 @@ vlive.tv##+js(json-prune, meta.advertise)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/jteijh/nsfw_adblock_detected_please_disable_your/
 @@||juicyads.com^$xhr,3p,domain=new.lewd.ninja
-new.lewd.ninja##iframe[src*="jads.co"]:upward(3)
+new.lewd.ninja##iframe[src*="jads.co"]:upward(1)
 new.lewd.ninja##.video-overlay
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67519
@@ -6063,3 +6063,11 @@ moozpussy.com,zoompussy.com##[href^="/go/desire"]
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67853
 videa.hu#@#.adBanner
 videa.hu##.top-video-container-banner
+
+! https://github.com/uBlockOrigin/uAssets/issues/8242
+systemnews24.com##+js(aeld, , /ads|Modal/)
+
+! sitarchive.com anti-adb/popups
+sitarchive.com##+js(set, adsbygoogle.loaded, true)
+sitarchive.com##+js(acis, document.querySelectorAll, popMagic)
+||googlesyndication.com^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=sitarchive.com
