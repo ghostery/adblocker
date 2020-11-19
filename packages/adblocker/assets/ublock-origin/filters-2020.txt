@@ -3106,6 +3106,7 @@ gamestorrents.*##+js(aopr, document.cookie)
 peacocktv.com##.adsbox:remove()
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/59772
+malaysiastock.biz##+js(aopr, google_ad_status)
 malaysiastock.biz##.RightPanel_Rectangle1
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/59779
@@ -5784,11 +5785,11 @@ realfilmizle1.com##+js(nowoif)
 *$script,redirect-rule=noopjs,domain=vidmoly.me|vidmoly.net|vidmoly.to
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67094
-lite-link.com##+js(aopr, app_vars.force_disable_adblock)
-lite-link.com##+js(ra, target|href, a[href^="//"])
-lite-link.com##+js(set, blurred, false)
-lite-link.com##.banner
-*$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=lite-link.com
+lite-link.*##+js(aopr, app_vars.force_disable_adblock)
+lite-link.*##+js(ra, target|href, a[href^="//"])
+lite-link.*##+js(set, blurred, false)
+lite-link.*##.banner
+*$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=lite-link.*
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67095
 ||googlesyndication.com/pagead/js/adsbygoogle.js^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=darmowa-tv.ws
@@ -6006,8 +6007,8 @@ discoveryplus.co.uk##+js(json-prune, data.attributes.config.freewheel data.attri
 @@||identity.mparticle.com/v1/login$xhr,domain=discoveryplus.co.uk
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67650
-pureshort.com##+js(aopr, app_vars.force_disable_adblock)
-pureshort.com##+js(aopr, open)
+pureshort.*##+js(aopr, app_vars.force_disable_adblock)
+pureshort.*##+js(aopr, open)
 ||speedynews.xyz^$3p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67651
@@ -6071,3 +6072,12 @@ systemnews24.com##+js(aeld, , /ads|Modal/)
 sitarchive.com##+js(set, adsbygoogle.loaded, true)
 sitarchive.com##+js(acis, document.querySelectorAll, popMagic)
 ||googlesyndication.com^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=sitarchive.com
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/67914
+share1223.com##+js(aopr, adBlockDetected)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/67983
+*$script,redirect-rule=noopjs,domain=telek.top
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/68005
+||googlesyndication.com^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=baddiehub.com
