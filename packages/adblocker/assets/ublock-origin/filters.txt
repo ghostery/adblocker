@@ -1417,6 +1417,8 @@ ign.com###king
 ignboards.com,ign.com##^script:has-text(g02.)
 !#if env_chromium
 ||au.ign.com^$inline-script
+! https://github.com/abp-filters/abp-filters-anti-cv/pull/455
+ignboards.com##+js(acis, JSON.stringify)
 !#endif
 *$xhr,redirect-rule=1x1.gif,domain=ign.com
 ! https://github.com/uBlockOrigin/uAssets/issues/7584
@@ -2545,7 +2547,7 @@ keezmovies.com##+js(aopw, raSettings)
 keezmovies.com##.ad-link
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2482
-tube8.*##+js(acis, atob, decodeURIComponent)
+tube8.*##+js(acis, String.fromCharCode, btoa)
 tube8.*##+js(aeld, , _0x)
 tube8.*##+js(aopw, IS_ADBLOCK)
 tube8.*##+js(aopr, _goat)
@@ -6809,7 +6811,7 @@ youporn.com##+js(nostif, jQuery)
 youporn.com##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/2482#issuecomment-395244585
 redtube.com,redtube.net##+js(aopr, _goat)
-redtube.*##+js(acis, atob, decodeURIComponent)
+redtube.*##+js(acis, String.fromCharCode, btoa)
 redtube.*##+js(nowoif)
 redtube.*##.abovePlayer
 redtube.*##.adsbytrafficjunky
@@ -11310,8 +11312,6 @@ allsituspokerqq.blogspot.com##+js(nobab)
 ! https://github.com/gorhill/uBO-Extra/issues/111
 mtlblog.com,narcity.com##+js(aopw, Ha)
 mtlblog.com,narcity.com##+js(aopr, btoa)
-/^https://www\.narcity\.com/assets/[0-9a-f]{24,}\.js/$script
-/^https://www\.mtlblog\.com/assets/[0-9a-f]{24,}\.js/$script
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4313
 @@||wholehk.com^$ghide
@@ -12359,8 +12359,6 @@ cloudvideo.tv##+js(aopr, LieDetector)
 ||somedayanchovydepressing.com^
 cloudvideo.tv##+js(set, SubmitDownload1, noopFunc)
 dospelis.net##[href^="https://www.dospelis.net/ver-"], [href^="https://www.dospelis.net/descargar-"]
-!/\.(click|co|com|bid|net|online|top|club)\/[0-9a-z]{2}\/[0-9a-z]{2}\/[0-9a-z]{2}\/[0-9a-z]{32}\.js\b/$script,3p
-/^https?:\/\/([a-z0-9]{8,10}\.)?[a-z0-9]{5,}\.(click|co|com|bid|net|online|top|club)\/([a-z0-9]{2}\/){3}[a-f0-9]{32}\.js$/$script,3p
 
 ! https://forums.lanik.us/viewtopic.php?p=144831#p144831
 @@||leptidigital.fr^$ghide
@@ -13579,13 +13577,10 @@ cambro.tv##[href^="https://t.grtya.com/"]
 *&offer_id=$frame
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5059
-jav789.com,javbuz.com,javhihi.com,letfap.com##+js(aopr, Date.prototype.toUTCString)
+jav789.com,javbuz.com,letfap.com##+js(aopr, Date.prototype.toUTCString)
+jav789.com,javbuz.com,letfap.com##+js(aeld, getexoloader)
 javkiki.com##+js(aopr, exoNoExternalUI38djdkjDDJsio96)
 jav789.com,javbuz.com,javkiki.com,letfap.com##div.container > .box[style^="margin-bottom"]
-@@||letfap.com^$ghide
-@@||jav789.com^$ghide
-@@||javhihi.com^$ghide
-@@||javbuz.com^$ghide
 anime789.com##+js(nowoif)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5060
@@ -16292,6 +16287,7 @@ dreamdth.com##+js(acis, $, show)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5799
 pornhub.*,pornhubthbh7ap3u.onion##+js(set, HTMLElement.prototype.attachShadow, null)
+pornhub.*,pornhubthbh7ap3u.onion##+js(acis, String.fromCharCode, btoa)
 pornhub.*,pornhubthbh7ap3u.onion##+js(aopr, smpop)
 pornhub.*,pornhubthbh7ap3u.onion##+js(nowoif)
 ||smpop.icfcdn.com/smpop-stable.js$script
@@ -24413,6 +24409,11 @@ techdracula.com##.adsbygoogle
 
 ! https://github.com/NanoMeow/QuickReports/issues/3491
 @@||vipto.de/assets/ads.js$script,1p
+
+! regex
+/[0-9a-f]{32}\/invoke\.js$/$script,3p
+/^https?:\/\/([a-z0-9]{8,10}\.)?[a-z0-9]{5,}\.(click|co|com|bid|net|online|top|club)\/([a-z0-9]{2}\/){3}[a-f0-9]{32}\.js$/$script,3p
+/^https?:\/\/[a-z]{7,15}\.(?:com|pw)\/[0-9a-zA-Z]{11,17}\/\d{4,5}$/$script,3p
 
 ! As of 2020-04-09 new domains for filters.txt will be added to filters-2020.txt sublist
 !#include filters-2020.txt
