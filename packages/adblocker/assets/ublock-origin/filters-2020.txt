@@ -5354,7 +5354,6 @@ noonnu.cc##+js(aopr, noonnuCanRunAds)
 
 ! play.webcric .com popups
 *$script,3p,domain=webcric.com,denyallow=ucplayer.xyz|ucweb.live
-/[0-9a-f]{32}\/invoke\.js$/$script,3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8053
 paperzonevn.com##+js(acis, $, .test)
@@ -5779,6 +5778,10 @@ top.gg###video-root
 ! https://github.com/uBlockOrigin/uAssets/issues/8163
 @@||arrowos.net/js/*$script,1p
 arrowos.net##body:style(visibility:visible !important)
+@@||arrowos.net^$ghide
+arrowos.net##.adsbygoogle
+arrowos.net###babasbmsgx
+arrowos.net##div.container:nth-of-type(8)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8165
 aflamgulf.com##+js(nowoif)
@@ -6192,3 +6195,17 @@ askquds.com##.ads
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/68069
 @@||itopmusic.net^$ghide
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/68071
+secretsdeepweb.blogspot.com##+js(nosiif, visibility, 1000)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/68073
+passgen.icu##+js(aopr, app_vars.force_disable_adblock)
+passgen.icu##+js(nowoif)
+*$3p,script,frame,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=passgen.icu
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/68019
+yeptube.com##+js(nowoif)
+yeptube.com##.puFloatLine
+yeptube.com##.spots[style$="height: 257px;"]
+yeptube.com##.thr-rcol
