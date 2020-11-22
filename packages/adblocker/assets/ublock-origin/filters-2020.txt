@@ -2204,6 +2204,7 @@ oxy.st##+js(acis, $, localStorage)
 
 ! popups https://github.com/NanoMeow/QuickReports/issues/4134
 javmvp.com##+js(aeld, , _blank)
+||aduterra.com^$3p
 ||hadsecs.com^
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/haekcc/farkcom_blocking_all_ad_blockers/fv4qlso/
@@ -4282,9 +4283,10 @@ hentaicloud.com###player_one > .vjs-fade.vjs-over
 ! javdoe.tv popup ads
 player.javdoe.tv##+js(aopr, AaDetector)
 player.javdoe.tv###poster
-player.javdoe.tv,player.javtc.tv###preroll
+player.javdoe.tv,player.javsun.net,player.javtc.tv###preroll
 javdoe.tv,javfree.la,javfree.sh,javtc.tv,javthe.com##[style^="height: 250px;overflow"]
 *$script,3p,denyallow=cloudflare.com|doecdn.me,domain=javdoe.tv|javfree.la|javfree.sh|javtc.tv|javthe.com
+||maphuahin.com^
 
 ! javbangers.com popup ads
 javbangers.com##+js(acis, document.addEventListener, initBCPopunder)
@@ -5985,9 +5987,11 @@ unityassets4free.com##img[src^="https://unityassets4free.com/wp-content/uploads/
 vlive.tv##+js(json-prune, meta.advertise)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/jteijh/nsfw_adblock_detected_please_disable_your/
-@@||juicyads.com^$xhr,3p,domain=new.lewd.ninja
-new.lewd.ninja##iframe[src*="jads.co"]:upward(1)
+new.lewd.ninja##+js(aeld, error)
+*$xhr,redirect-rule=nooptext,domain=new.lewd.ninja
+new.lewd.ninja##div[class]:matches-css(overflow:hidden):matches-css(text-align: center)
 new.lewd.ninja##.video-overlay
+new.lewd.ninja##div[id][style*="height:1px;display:inline-block;clear:none;position:absolute"]
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67519
 hentaienglish.com,hentaiporno.xxx##+js(acis, document.querySelectorAll, popMagic)
@@ -6030,9 +6034,9 @@ venge.io##+js(set, adsProvider.init, noopFunc)
 venge.io##+js(set, SDKLoaded, true)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8220
-@@||akwams.com^$ghide
-akwams.com##.adsbygoogle
-akwams.com##.ads
+@@||akwams.*^$ghide
+akwams.*##.adsbygoogle
+akwams.*##.ads
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/jum0s5/blockthrough/
 orangeptc.com##+js(aopr, adBlockDetected)
@@ -6209,3 +6213,18 @@ yeptube.com##+js(nowoif)
 yeptube.com##.puFloatLine
 yeptube.com##.spots[style$="height: 257px;"]
 yeptube.com##.thr-rcol
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/68177
+sssam.com##+js(set, ads, true)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/jyq4ls/how_to_tell_users_not_to_use_your_site/gd6in04/
+*$script,redirect-rule=noopjs,domain=codimth.com
+
+! fiyaplatform.com anti-adb
+*$script,redirect-rule=noopjs,domain=fiyaplatform.com
+
+! adultdeepfakes.com popunder
+adultdeepfakes.com##+js(nowoif)
+
+! downloadtwittervideo.com popup
+downloadtwittervideo.com##+js(nowoif)
