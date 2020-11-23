@@ -5140,6 +5140,8 @@ partyhomedecor.com,petsched.website,teknomuda.com##+js(acis, addEventListener, g
 partyhomedecor.com,petsched.website,teknomuda.com##+js(nano-sib, , 2000)
 partyhomedecor.com,petsched.website,teknomuda.com##+js(set, count, 0)
 joska.xyz,partyhomedecor.com,petsched.website,teknomuda.com##p > a[href][target="_blank"]
+petsched.website###wpsafe-snp:style(display: block !important;)
+petsched.website###wpsafe-generate:style(display: block !important;)
 ! [badfilter] ||onsafelink.com^$badfilter
 ||onsafelink.com^$script,3p
 
@@ -5709,7 +5711,7 @@ polska-ie.com##+js(set, adsbygoogle.loaded, true)
 
 ! https://forum.videohelp.com/ ad-reinsertion
 videohelp.com##+js(set, adsbygoogle.loaded, true)
-videohelp.com##div[style="text-align:center;"] > div[style*="max-width:970px"]
+videohelp.com##div[style="text-align:center;"] > div[style*="max-width"]
 
 ! hentaitube ads
 hentais.tube,hentaitube.online##+js(aopr, checkCookieClick)
@@ -6206,7 +6208,8 @@ secretsdeepweb.blogspot.com##+js(nosiif, visibility, 1000)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/68073
 passgen.icu##+js(aopr, app_vars.force_disable_adblock)
 passgen.icu##+js(nowoif)
-*$3p,script,frame,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=passgen.icu
+*$frame,denyallow=google.com,domain=passgen.icu
+*$3p,script,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=passgen.icu
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/68019
 yeptube.com##+js(nowoif)
@@ -6228,3 +6231,10 @@ adultdeepfakes.com##+js(nowoif)
 
 ! downloadtwittervideo.com popup
 downloadtwittervideo.com##+js(nowoif)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/jz12a7/cant_watch_videos_without_turning_off_ubo/
+@@||neulionms-a.akamaihd.net^$script,domain=nba.com
+! [badfilter] .net/ad/$script,badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/8262
+vidsaver.net##+js(acis, String.fromCharCode, btoa)
