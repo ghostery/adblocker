@@ -1,3 +1,25 @@
+# v1.18.7 (Tue Nov 24 2020)
+
+#### :nail_care: Polish
+
+- Fix with newer Typescript + cleanups [#1466](https://github.com/cliqz-oss/adblocker/pull/1466) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Update local assets [#1467](https://github.com/cliqz-oss/adblocker/pull/1467) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1463](https://github.com/cliqz-oss/adblocker/pull/1463) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1460](https://github.com/cliqz-oss/adblocker/pull/1460) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1459](https://github.com/cliqz-oss/adblocker/pull/1459) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1457](https://github.com/cliqz-oss/adblocker/pull/1457) ([@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1453](https://github.com/cliqz-oss/adblocker/pull/1453) ([@adblocker-bot](https://github.com/adblocker-bot))
+
+#### Authors: 2
+
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.18.6 (Wed Nov 18 2020)
 
 #### :house: Internal

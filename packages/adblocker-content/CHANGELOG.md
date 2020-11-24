@@ -1,3 +1,15 @@
+# v1.18.7 (Tue Nov 24 2020)
+
+#### :nail_care: Polish
+
+- Fix with newer Typescript + cleanups [#1466](https://github.com/cliqz-oss/adblocker/pull/1466) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.18.4 (Sun Nov 01 2020)
 
 #### :bug: Bug Fix
