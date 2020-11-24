@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        node: [12, 14]
+        node: [12, 14, 15]
         os: [ubuntu-latest]
 
     steps:
@@ -35,9 +35,6 @@ jobs:
 
       - name: Bootstrap
         run: yarn bootstrap
-
-      # - name: Metalint
-      #   run: yarn metalint
 
       - name: Build
         run: yarn build

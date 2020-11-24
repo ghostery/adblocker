@@ -33,9 +33,7 @@ export function fetchWithRetry(fetch: Fetch, url: string): Promise<FetchResponse
         retry -= 1;
         return new Promise((resolve, reject) => {
           setTimeout(() => {
-            fetchWrapper()
-              .then(resolve)
-              .catch(reject);
+            fetchWrapper().then(resolve).catch(reject);
           }, 500);
         });
       }
@@ -51,7 +49,8 @@ function fetchResource(fetch: Fetch, url: string): Promise<string> {
   return fetchWithRetry(fetch, url).then((response) => response.text());
 }
 
-const PREFIX = 'https://raw.githubusercontent.com/cliqz-oss/adblocker/master/packages/adblocker/assets';
+const PREFIX =
+  'https://raw.githubusercontent.com/cliqz-oss/adblocker/master/packages/adblocker/assets';
 
 export const adsLists = [
   `${PREFIX}/easylist/easylist.txt`,
@@ -71,10 +70,7 @@ export const adsAndTrackingLists = [
   `${PREFIX}/ublock-origin/privacy.txt`,
 ];
 
-export const fullLists = [
-  ...adsAndTrackingLists,
-  `${PREFIX}/easylist/easylist-cookie.txt`,
-];
+export const fullLists = [...adsAndTrackingLists, `${PREFIX}/easylist/easylist-cookie.txt`];
 
 /**
  * Fetch latest version of enabledByDefault blocking lists.

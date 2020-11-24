@@ -20,10 +20,7 @@ import NetworkFilter from '../src/filters/network';
 import { parseFilters } from '../src/lists';
 
 describe('Serialization', () => {
-  const { cosmeticFilters, networkFilters } = parseFilters(
-    allLists,
-    new Config({ debug: true }),
-  );
+  const { cosmeticFilters, networkFilters } = parseFilters(allLists, new Config({ debug: true }));
 
   describe('Config', () => {
     it('serializes with exact size', () => {
@@ -42,7 +39,10 @@ describe('Serialization', () => {
 
   describe('filters', () => {
     const buffer = StaticDataView.allocate(1000000, { enableCompression: false });
-    const checkFilterSerialization = (Filter: { deserialize(buffer: StaticDataView): IFilter }, filter: IFilter) => {
+    const checkFilterSerialization = (
+      Filter: { deserialize(buffer: StaticDataView): IFilter },
+      filter: IFilter,
+    ) => {
       // Keep track of original ID to make sure it's preserved after lazy
       // attributes are set and filter is serialized/deserialized.
       const originalId = filter.getId();

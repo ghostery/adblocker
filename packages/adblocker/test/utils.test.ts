@@ -16,7 +16,6 @@ import {
   HASH_SEED,
   binLookup,
   binSearch,
-  createFuzzySignature,
   fastHash,
   fastHashBetween,
   hasUnicode,
@@ -60,11 +59,7 @@ describe('utils.ts', () => {
     });
 
     it('does nothing on normalized', () => {
-      for (const filter of [
-        '/ads/',
-        '/ads/$css',
-        '/ads/$css,font',
-      ]) {
+      for (const filter of ['/ads/', '/ads/$css', '/ads/$css,font']) {
         expect(normalizeRawFilterOptions(filter), filter).to.equal(filter);
       }
     });
@@ -74,7 +69,9 @@ describe('utils.ts', () => {
     });
 
     it('ignores options from selector', () => {
-      expect(normalizeRawFilterOptions('/ads/$first-party/still/selector$css')).to.equal('/ads/$first-party/still/selector$css');
+      expect(normalizeRawFilterOptions('/ads/$first-party/still/selector$css')).to.equal(
+        '/ads/$first-party/still/selector$css',
+      );
     });
 
     it('returns lower-cased filter', () => {
@@ -93,7 +90,7 @@ describe('utils.ts', () => {
         parseFilters(allLists, {
           loadCosmeticFilters: false,
           debug: true,
-        }).networkFilters
+        }).networkFilters,
       );
     });
 
@@ -102,7 +99,7 @@ describe('utils.ts', () => {
         parseFilters(allLists, {
           loadNetworkFilters: false,
           debug: true,
-        }).cosmeticFilters
+        }).cosmeticFilters,
       );
     });
 
@@ -168,7 +165,6 @@ describe('utils.ts', () => {
     expect(tokenizeWithWildcards('foo/bar baz', true, true)).to.eql(t(['bar']));
     expect(tokenizeWithWildcards('foo/bar baz', false, true)).to.eql(t(['foo', 'bar']));
     expect(tokenizeWithWildcards('foo////bar  baz', false, true)).to.eql(t(['foo', 'bar']));
-
   });
 
   it('#tokenize', () => {
@@ -199,13 +195,6 @@ describe('utils.ts', () => {
     expect(tokenizeNoSkip('foo*.barƬ')).to.eql(t(['foo', 'barƬ']));
     expect(tokenizeNoSkip('foo.*barƬ')).to.eql(t(['foo', 'barƬ']));
     expect(tokenizeNoSkip('foo.barƬ*')).to.eql(t(['foo', 'barƬ']));
-  });
-
-  it('#createFuzzySignature', () => {
-    expect(createFuzzySignature('')).to.eql(t([]));
-    expect(createFuzzySignature('foo bar')).to.eql(t(['foo', 'bar']).sort());
-    expect(createFuzzySignature('bar foo')).to.eql(t(['foo', 'bar']).sort());
-    expect(createFuzzySignature('foo bar foo foo')).to.eql(t(['foo', 'bar']).sort());
   });
 
   it('#hasUnicode', () => {

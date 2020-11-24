@@ -18,8 +18,12 @@ export default {
     name: 'adblocker',
     sourcemap: true,
   },
-  plugins: [resolve(), sourcemaps(), compiler({
-    // language: 'ECMASCRIPT6_STRICT',
-    language_out: 'NO_TRANSPILE',
-  })],
+  plugins: [
+    resolve(),
+    sourcemaps(),
+    compiler({
+      // language: 'ECMASCRIPT6_STRICT',
+      language_out: 'NO_TRANSPILE',
+    }),
+  ],
 };

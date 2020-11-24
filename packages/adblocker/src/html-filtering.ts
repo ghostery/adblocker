@@ -139,13 +139,11 @@ type Patterns = readonly [readonly string[], readonly RegExp[]][];
 export function extractSelectorsFromRules(filter: HTMLSelector[]): Patterns {
   const patterns: [string[], RegExp[]][] = [];
 
-  for (let i = 0; i < filter.length; i += 1) {
-    const selectors = filter[i][1];
+  for (const [_, selectors] of filter) {
     const plainPatterns: string[] = [];
     const regexpPatterns: RegExp[] = [];
 
-    for (let j = 0; j < selectors.length; j += 1) {
-      const selector = selectors[j];
+    for (const selector of selectors) {
       if (selector.charCodeAt(0) === 47 /* '/' */) {
         if (selector.endsWith('/')) {
           regexpPatterns.push(new RegExp(selector.slice(1, -1)));
@@ -175,14 +173,14 @@ function tagShouldBeRemoved(
   plainPatterns: readonly string[],
   regexpPatterns: readonly RegExp[],
 ): boolean {
-  for (let i = 0; i < plainPatterns.length; i += 1) {
-    if (tag.indexOf(plainPatterns[i]) === -1) {
+  for (const pattern of plainPatterns) {
+    if (tag.indexOf(pattern) === -1) {
       return false;
     }
   }
 
-  for (let i = 0; i < regexpPatterns.length; i += 1) {
-    if (regexpPatterns[i].test(tag) === false) {
+  for (const pattern of regexpPatterns) {
+    if (pattern.test(tag) === false) {
       return false;
     }
   }
@@ -196,10 +194,9 @@ export function selectTagsToRemove(
 ): [number, string][] {
   const toRemove: [number, string][] = [];
 
-  for (let i = 0; i < tags.length; i += 1) {
-    const tag = tags[i];
-    for (let j = 0; j < patterns.length; j += 1) {
-      if (tagShouldBeRemoved(tag[1], patterns[j][0], patterns[j][1])) {
+  for (const tag of tags) {
+    for (const [plainPatterns, regexpPatterns] of patterns) {
+      if (tagShouldBeRemoved(tag[1], plainPatterns, regexpPatterns)) {
         toRemove.push(tag);
         break;
       }
@@ -216,8 +213,7 @@ export function removeTagsFromHtml(html: string, toRemove: [number, string][]): 
 
   let filteredHtml = html;
   toRemove.reverse(); // make sure to remove from last to first tag (preserve indices)
-  for (let i = 0; i < toRemove.length; i += 1) {
-    const [index, tag] = toRemove[i];
+  for (const [index, tag] of toRemove) {
     filteredHtml = filteredHtml.slice(0, index) + filteredHtml.slice(index + tag.length);
   }
 

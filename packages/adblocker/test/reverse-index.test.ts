@@ -217,14 +217,20 @@ describe('ReverseIndex', () => {
                     it('get all matches', () => {
                       matches.clear();
                       ret = true; // iterate on all filters
-                      exampleIndex.iterMatchingFilters(tokenize(input as string, false, false), cb);
+                      exampleIndex.iterMatchingFilters(
+                        tokenize(input as string, false, false),
+                        cb,
+                      );
                       expect(matches).to.eql(new Set(expected));
                     });
 
                     it('check early termination', () => {
                       matches.clear();
                       ret = false; // early termination on first filter
-                      exampleIndex.iterMatchingFilters(tokenize(input as string, false, false), cb);
+                      exampleIndex.iterMatchingFilters(
+                        tokenize(input as string, false, false),
+                        cb,
+                      );
                       expect(matches.size).to.equal(expected.length === 0 ? 0 : 1);
                     });
                   });

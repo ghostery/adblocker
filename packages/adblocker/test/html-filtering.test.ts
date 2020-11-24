@@ -27,16 +27,18 @@ describe('html-filtering', () => {
       expect(tags('foo')).to.eql([]);
       expect(tags('<script>bar</script>')).to.eql([[0, '<script>bar</script>']]);
       expect(tags('foo <script>bar</script>')).to.eql([[4, '<script>bar</script>']]);
-      expect(tags(`
+      expect(
+        tags(`
 <!DOCTYPE html> <html lang="en"> <head>
 <script>script1</script>
 <script id="_$cookiemonster"/>
 <script attr=321>console.log("<script>")</script>
-`)).to.eql([
-  [41, '<script>script1</script>'],
-  [66, '<script id="_$cookiemonster"/>'],
-  [97, '<script attr=321>console.log("<script>")</script>'],
-]);
+`),
+      ).to.eql([
+        [41, '<script>script1</script>'],
+        [66, '<script id="_$cookiemonster"/>'],
+        [97, '<script attr=321>console.log("<script>")</script>'],
+      ]);
     });
 
     it('extracts tags from streamed document', () => {
@@ -105,18 +107,23 @@ describe('html-filtering', () => {
     });
 
     it('parses patterns and regexps', () => {
-      expect(extractSelectorsFromRules([
-        ['script', ['foo']],
-        ['script', ['/foo/']],
-        ['script', ['(bar)']],
-        ['script', ['/(bar)/i']],
-        ['script', ['foo', '/(bar)/i', 'bar', '/baz/']],
-      ])).to.eql([
+      expect(
+        extractSelectorsFromRules([
+          ['script', ['foo']],
+          ['script', ['/foo/']],
+          ['script', ['(bar)']],
+          ['script', ['/(bar)/i']],
+          ['script', ['foo', '/(bar)/i', 'bar', '/baz/']],
+        ]),
+      ).to.eql([
         [['foo'], []],
         [[], [/foo/]],
         [['(bar)'], []],
         [[], [/(bar)/i]],
-        [['foo', 'bar'], [/(bar)/i, /baz/]],
+        [
+          ['foo', 'bar'],
+          [/(bar)/i, /baz/],
+        ],
       ]);
     });
   });
@@ -153,24 +160,26 @@ describe('html-filtering', () => {
       });
 
       it('RegExp pattern (full HTML)', () => {
-        expect(filter('<script>fOo</script>', [['script', ['/foo/']]])).to.equal('<script>fOo</script>');
+        expect(filter('<script>fOo</script>', [['script', ['/foo/']]])).to.equal(
+          '<script>fOo</script>',
+        );
         expect(filter('<script>foo</script>', [['script', ['/foo/']]])).to.equal('');
       });
 
       it('RegExp pattern (partial HTML)', () => {
-        expect(filter('foo <script>fOo</script>bar', [['script', ['/foo/']]])).to.equal('foo <script>fOo</script>bar');
+        expect(filter('foo <script>fOo</script>bar', [['script', ['/foo/']]])).to.equal(
+          'foo <script>fOo</script>bar',
+        );
       });
 
       it('case-insensitive RegExp', () => {
-        expect(filter('foo <script>fOo</script>bar', [['script', ['/foo/i']]])).to.equal('foo bar');
+        expect(filter('foo <script>fOo</script>bar', [['script', ['/foo/i']]])).to.equal(
+          'foo bar',
+        );
       });
 
       it('multi-pattern', () => {
-        const patterns: HTMLSelector[] = [['script', [
-          'foo',
-          'bar',
-          '/baz/i',
-        ]]];
+        const patterns: HTMLSelector[] = [['script', ['foo', 'bar', '/baz/i']]];
 
         const html1 = 'foo <script></script> bar baz';
         expect(filter(html1, patterns)).to.equal(html1);
@@ -191,20 +200,22 @@ describe('html-filtering', () => {
 
     it('handles streamed input', () => {
       expect(filter(doc, [['script', ['bar']]])).to.equal(doc);
-      expect(filter(doc, [
-        ['script', ['/supports_TIMING_API/i']], // removes first script
-        ['script', ['head_tag_start']], // removes second script
-        ['script', ['app_html_start']], // removes third script
-        ['script', ['ads_dot_js_fetch_start']], // removes fourth script
-        ['script', ["__perfMark('redux_json_start');"]],
-        ['script', ["__perfMark('js_deps_fetch_start'"]],
-      ])).to.equal(`
+      expect(
+        filter(doc, [
+          ['script', ['/supports_TIMING_API/i']], // removes first script
+          ['script', ['head_tag_start']], // removes second script
+          ['script', ['app_html_start']], // removes third script
+          ['script', ['ads_dot_js_fetch_start']], // removes fourth script
+          ['script', ["__perfMark('redux_json_start');"]],
+          ['script', ["__perfMark('js_deps_fetch_start'"]],
+        ]),
+      ).to.equal(`
 <!DOCTYPE html><html lang="en"><head><div id="2x-container"><<script src="https://www.redditstatic.com/desktop2x/js/ads.js"></script><script id="data">window.___r = {"accountManagerModalData":{}},;</script><script defer="" src="https://www.example.com/foo.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/RedesignContentFonts.509eef5d33306bd3b0d5.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/RedesignOldContentFonts.e450653685d17337cac6.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Chat~Governance~Reddit.503ee0c2d353daa60d6e.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Governance~Reddit.7e2adb288af56de67f65.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Poll~Reddit.5f77a82de48fbb3beb21.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~EconHelperActions~Reddit.ae3c9f7d5b30b3be7151.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Reddit.bb2ade21a865dbd52f3f.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/Chat~Governance~Reddit.19024d94a81678cf79e8.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/Governance~Reddit.98e55a3111b273b2f5dd.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/AdminCommunityTopics~Reddit.f091b12b417d6343dc18.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/Reddit.dc10f78afef6b219b26f.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~CollectionCommentsPage~CommentsPage~Explore~Frontpage~GovernanceReleaseNotesModal~ModListing~afc2720f.c6d86939d4bd0e144927.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Chat~ChatMessageInput~CollectionCommentsPage~CommentsPage~Frontpage~PostCreation~RedesignCha~0aefb917.e6923ac4e90b854a1995.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/ChatMessageInput~ChatPost~CollectionCommentsPage~CommentsPage~Explore~Frontpage~GovernanceReleaseNot~3a34166c.dab3a37bed364deddf0e.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/ChatPost~CollectionCommentsPage~CommentsPage~Explore~Frontpage~GovernanceReleaseNotesModal~ModListin~44a849ee.85ccf598d319cc749b92.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/CollectionCommentsPage~CommentsPage~Explore~Frontpage~ModListing~ModQueuePages~ModerationPages~Multi~33b955cc.9c1942fb8eb4378e467c.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/CollectionCommentsPage~CommentsPage~Explore~Frontpage~GovernanceReleaseNotesModal~ModListing~ModQueu~900871b8.509ec80000f4968bb546.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/ChatPost~CollectionCommentsPage~CommentsPage~Frontpage~ModListing~ModQueuePages~ModerationPages~Mult~8849df7b.067fda741fb3f181c83f.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/CollectionCommentsPage~CommentsPage~Explore~Frontpage~ModListing~ModQueuePages~ModerationPages~Multi~5f2f5c2a.9e1690590f39e0d92f45.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/ChatPost~CollectionCommentsPage~CommentsPage~Frontpage~ModListing~ModQueuePages~Multireddit~Original~029c3338.33a759111dafa848481d.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/CommentsPage.dce215cbd6a2ed7e9969.js"></script></body></html>`);
     });
   });
 });
 
-const doc = (`
+const doc = `
 <!DOCTYPE html><html lang="en"><head><script>
           var __SUPPORTS_TIMING_API = typeof performance === 'object' && !!performance.mark && !! performance.measure && !!performance.getEntriesByType;
           function __perfMark(name) { __SUPPORTS_TIMING_API && performance.mark(name); };
@@ -224,4 +235,4 @@ const doc = (`
           __perfMark('redux_json_start');
         </script><script id="data">window.___r = {"accountManagerModalData":{}},;</script><script>
           __perfMark('js_deps_fetch_start');
-        </script><script defer="" src="https://www.example.com/foo.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/RedesignContentFonts.509eef5d33306bd3b0d5.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/RedesignOldContentFonts.e450653685d17337cac6.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Chat~Governance~Reddit.503ee0c2d353daa60d6e.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Governance~Reddit.7e2adb288af56de67f65.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Poll~Reddit.5f77a82de48fbb3beb21.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~EconHelperActions~Reddit.ae3c9f7d5b30b3be7151.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Reddit.bb2ade21a865dbd52f3f.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/Chat~Governance~Reddit.19024d94a81678cf79e8.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/Governance~Reddit.98e55a3111b273b2f5dd.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/AdminCommunityTopics~Reddit.f091b12b417d6343dc18.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/Reddit.dc10f78afef6b219b26f.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~CollectionCommentsPage~CommentsPage~Explore~Frontpage~GovernanceReleaseNotesModal~ModListing~afc2720f.c6d86939d4bd0e144927.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Chat~ChatMessageInput~CollectionCommentsPage~CommentsPage~Frontpage~PostCreation~RedesignCha~0aefb917.e6923ac4e90b854a1995.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/ChatMessageInput~ChatPost~CollectionCommentsPage~CommentsPage~Explore~Frontpage~GovernanceReleaseNot~3a34166c.dab3a37bed364deddf0e.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/ChatPost~CollectionCommentsPage~CommentsPage~Explore~Frontpage~GovernanceReleaseNotesModal~ModListin~44a849ee.85ccf598d319cc749b92.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/CollectionCommentsPage~CommentsPage~Explore~Frontpage~ModListing~ModQueuePages~ModerationPages~Multi~33b955cc.9c1942fb8eb4378e467c.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/CollectionCommentsPage~CommentsPage~Explore~Frontpage~GovernanceReleaseNotesModal~ModListing~ModQueu~900871b8.509ec80000f4968bb546.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/ChatPost~CollectionCommentsPage~CommentsPage~Frontpage~ModListing~ModQueuePages~ModerationPages~Mult~8849df7b.067fda741fb3f181c83f.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/CollectionCommentsPage~CommentsPage~Explore~Frontpage~ModListing~ModQueuePages~ModerationPages~Multi~5f2f5c2a.9e1690590f39e0d92f45.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/ChatPost~CollectionCommentsPage~CommentsPage~Frontpage~ModListing~ModQueuePages~Multireddit~Original~029c3338.33a759111dafa848481d.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/CommentsPage.dce215cbd6a2ed7e9969.js"></script></body></html>`);
+        </script><script defer="" src="https://www.example.com/foo.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/RedesignContentFonts.509eef5d33306bd3b0d5.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/RedesignOldContentFonts.e450653685d17337cac6.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Chat~Governance~Reddit.503ee0c2d353daa60d6e.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Governance~Reddit.7e2adb288af56de67f65.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Poll~Reddit.5f77a82de48fbb3beb21.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~EconHelperActions~Reddit.ae3c9f7d5b30b3be7151.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Reddit.bb2ade21a865dbd52f3f.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/Chat~Governance~Reddit.19024d94a81678cf79e8.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/Governance~Reddit.98e55a3111b273b2f5dd.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/AdminCommunityTopics~Reddit.f091b12b417d6343dc18.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/Reddit.dc10f78afef6b219b26f.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~CollectionCommentsPage~CommentsPage~Explore~Frontpage~GovernanceReleaseNotesModal~ModListing~afc2720f.c6d86939d4bd0e144927.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Chat~ChatMessageInput~CollectionCommentsPage~CommentsPage~Frontpage~PostCreation~RedesignCha~0aefb917.e6923ac4e90b854a1995.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/ChatMessageInput~ChatPost~CollectionCommentsPage~CommentsPage~Explore~Frontpage~GovernanceReleaseNot~3a34166c.dab3a37bed364deddf0e.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/ChatPost~CollectionCommentsPage~CommentsPage~Explore~Frontpage~GovernanceReleaseNotesModal~ModListin~44a849ee.85ccf598d319cc749b92.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/CollectionCommentsPage~CommentsPage~Explore~Frontpage~ModListing~ModQueuePages~ModerationPages~Multi~33b955cc.9c1942fb8eb4378e467c.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/CollectionCommentsPage~CommentsPage~Explore~Frontpage~GovernanceReleaseNotesModal~ModListing~ModQueu~900871b8.509ec80000f4968bb546.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/ChatPost~CollectionCommentsPage~CommentsPage~Frontpage~ModListing~ModQueuePages~ModerationPages~Mult~8849df7b.067fda741fb3f181c83f.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/CollectionCommentsPage~CommentsPage~Explore~Frontpage~ModListing~ModQueuePages~ModerationPages~Multi~5f2f5c2a.9e1690590f39e0d92f45.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/ChatPost~CollectionCommentsPage~CommentsPage~Frontpage~ModListing~ModQueuePages~Multireddit~Original~029c3338.33a759111dafa848481d.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/CommentsPage.dce215cbd6a2ed7e9969.js"></script></body></html>`;

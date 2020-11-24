@@ -19,7 +19,6 @@ import Resources from '../../src/resources';
 import requests from '../data/requests';
 import { loadEasyListFilters, typedArrayEqual } from '../utils';
 
-
 /**
  * Helper function used in the Engine tests. All the assertions are performed by
  * this function. It will be called to tests the different configurations of
@@ -159,14 +158,12 @@ describe('#FiltersEngine', () => {
     const request = Request.fromRawDetails({ url: 'https://foo.com' });
 
     // Enabled
-    expect(
-      Engine.parse('||foo.com', { loadNetworkFilters: true }).match(request).match,
-    ).to.be.true;
+    expect(Engine.parse('||foo.com', { loadNetworkFilters: true }).match(request).match).to.be
+      .true;
 
     // Disabled
-    expect(
-      Engine.parse('||foo.com', { loadNetworkFilters: false }).match(request).match,
-    ).to.be.false;
+    expect(Engine.parse('||foo.com', { loadNetworkFilters: false }).match(request).match).to.be
+      .false;
   });
 
   it('cosmetic filters are disabled', () => {
@@ -341,6 +338,23 @@ $csp=baz,domain=bar.com
       ).to.be.true;
     });
 
+    it('cancels exceptions', () => {
+      expect(
+        createEngine(`
+@@||foo.com^
+||foo.com^
+`).match(request).match,
+      ).to.be.false;
+
+      expect(
+        createEngine(`
+@@||foo.com^
+@@||foo.com^$badfilter
+||foo.com^
+`).match(request).match,
+      ).to.be.true;
+    });
+
     it('works with update as well', () => {
       const badfilter = NetworkFilter.parse('||foo.com$domain=bar.com|foo.com,badfilter');
       expect(badfilter).not.to.be.null;
@@ -384,15 +398,14 @@ $csp=baz,domain=bar.com
     };
 
     it('normal redirect', () => {
-      const { filter, exception, match, redirect } = createEngineWithResource([
-        '||foo.com$image,redirect=foo.js',
-      ], 'foo.js').match(request);
+      const { filter, exception, match, redirect } = createEngineWithResource(
+        ['||foo.com$image,redirect=foo.js'],
+        'foo.js',
+      ).match(request);
       expect(match).to.be.true;
       expect(exception).to.be.undefined;
       expect(filter).not.to.be.undefined;
-      expect((filter as NetworkFilter).toString()).to.equal(
-        '||foo.com$image,redirect=foo.js',
-      );
+      expect((filter as NetworkFilter).toString()).to.equal('||foo.com$image,redirect=foo.js');
       expect(redirect).to.eql({
         body: 'foo.js',
         contentType: 'application/javascript',
@@ -401,9 +414,10 @@ $csp=baz,domain=bar.com
     });
 
     it('redirect-rule does not match on its own', () => {
-      const { filter, exception, match, redirect } = createEngineWithResource([
-        '||foo.com$image,redirect-rule=foo.js',
-      ], 'foo.js').match(request);
+      const { filter, exception, match, redirect } = createEngineWithResource(
+        ['||foo.com$image,redirect-rule=foo.js'],
+        'foo.js',
+      ).match(request);
       expect(match).to.be.false;
       expect(exception).to.be.undefined;
       expect(filter).to.be.undefined;
@@ -411,10 +425,10 @@ $csp=baz,domain=bar.com
     });
 
     it('redirect-rule matches if request was blocked', () => {
-      const { filter, exception, match, redirect } = createEngineWithResource([
-        '||foo.com$image,redirect-rule=foo.js',
-        '||foo.com$image',
-      ], 'foo.js').match(request);
+      const { filter, exception, match, redirect } = createEngineWithResource(
+        ['||foo.com$image,redirect-rule=foo.js', '||foo.com$image'],
+        'foo.js',
+      ).match(request);
       expect(match).to.be.true;
       expect(exception).to.be.undefined;
       expect(filter).not.to.be.undefined;
@@ -429,16 +443,17 @@ $csp=baz,domain=bar.com
     });
 
     it('redirect=none cancels redirect-rule', () => {
-      const { filter, exception, match, redirect } = createEngineWithResource([
-        '||foo.com$image,redirect-rule=foo.js',
-        '||foo.com$image',
-        '||foo.com$image,redirect=none',
-      ], 'foo.js').match(request);
+      const { filter, exception, match, redirect } = createEngineWithResource(
+        [
+          '||foo.com$image,redirect-rule=foo.js',
+          '||foo.com$image',
+          '||foo.com$image,redirect=none',
+        ],
+        'foo.js',
+      ).match(request);
       expect(match).to.be.false;
       expect(exception).not.to.be.undefined;
-      expect((exception as NetworkFilter).toString()).to.equal(
-        '||foo.com$image,redirect=none',
-      );
+      expect((exception as NetworkFilter).toString()).to.equal('||foo.com$image,redirect=none');
       expect(filter).not.to.be.undefined;
       expect((filter as NetworkFilter).toString()).to.equal(
         '||foo.com$image,redirect-rule=foo.js',
@@ -447,43 +462,31 @@ $csp=baz,domain=bar.com
     });
 
     it('redirect=none cancels redirect', () => {
-      const { filter, exception, match, redirect } = createEngineWithResource([
-        '||foo.com$image,redirect=foo.js',
-        '||foo.com$image',
-        '||foo.com$image,redirect=none',
-      ], 'foo.js').match(request);
+      const { filter, exception, match, redirect } = createEngineWithResource(
+        ['||foo.com$image,redirect=foo.js', '||foo.com$image', '||foo.com$image,redirect=none'],
+        'foo.js',
+      ).match(request);
       expect(match).to.be.false;
       expect(exception).not.to.be.undefined;
-      expect((exception as NetworkFilter).toString()).to.equal(
-        '||foo.com$image,redirect=none',
-      );
+      expect((exception as NetworkFilter).toString()).to.equal('||foo.com$image,redirect=none');
       expect(filter).not.to.be.undefined;
-      expect((filter as NetworkFilter).toString()).to.equal(
-        '||foo.com$image,redirect=foo.js',
-      );
+      expect((filter as NetworkFilter).toString()).to.equal('||foo.com$image,redirect=foo.js');
       expect(redirect).to.be.undefined;
     });
 
     it('exception rule also cancels redirect', () => {
-      const { filter, exception, match, redirect } = createEngineWithResource([
-        '||foo.com$image,redirect=foo.js',
-        '||foo.com$image',
-        '@@||foo.com$image',
-      ], 'foo.js').match(request);
+      const { filter, exception, match, redirect } = createEngineWithResource(
+        ['||foo.com$image,redirect=foo.js', '||foo.com$image', '@@||foo.com$image'],
+        'foo.js',
+      ).match(request);
 
       expect(match).to.be.false;
       expect(exception).not.to.be.undefined;
-      expect((exception as NetworkFilter).toString()).to.equal(
-        '@@||foo.com$image',
-      );
+      expect((exception as NetworkFilter).toString()).to.equal('@@||foo.com$image');
       expect(filter).not.to.be.undefined;
-      expect((filter as NetworkFilter).toString()).to.equal(
-        '||foo.com$image,redirect=foo.js',
-      );
+      expect((filter as NetworkFilter).toString()).to.equal('||foo.com$image,redirect=foo.js');
       expect(redirect).to.be.undefined;
     });
-
-
   });
 
   describe('network filters', () => {
@@ -644,7 +647,6 @@ foo.com##selector1
       });
     });
 
-
     describe('specifichide', () => {
       it('allows specific cosmetics by default', () => {
         expect(
@@ -710,16 +712,15 @@ foo.com###selector
       });
 
       it('disabling specific hides does not impact scriptlets', () => {
-        const engine = Engine.parse([
-          '@@||foo.com^$specifichide',
-          'foo.com##+js(foo)',
-        ].join('\n'));
+        const engine = Engine.parse(['@@||foo.com^$specifichide', 'foo.com##+js(foo)'].join('\n'));
         engine.resources.js.set('foo', '');
-        expect(engine.getCosmeticsFilters({
-          domain: 'foo.com',
-          hostname: 'foo.com',
-          url: 'https://foo.com',
-        }).scripts).to.have.lengthOf(1)
+        expect(
+          engine.getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+          }).scripts,
+        ).to.have.lengthOf(1);
       });
     });
 

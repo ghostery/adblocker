@@ -9,9 +9,7 @@
 import { compactTokens, concatTypedArrays } from '../../compact-set';
 import Config from '../../config';
 import { StaticDataView } from '../../data-view';
-import CosmeticFilter, {
-  DEFAULT_HIDDING_STYLE,
-} from '../../filters/cosmetic';
+import CosmeticFilter, { DEFAULT_HIDDING_STYLE } from '../../filters/cosmetic';
 import {
   getEntityHashesFromLabelsBackward,
   getHostnameHashesFromLabelsBackward,
@@ -51,7 +49,7 @@ export function createStylesheet(rules: string[], style: string): string {
     // Insert CSS after last selector (e.g.: `{ display: none }`)
     selector += styleStr;
 
-    // If `rules` has less then the limit, we can short-circuit here
+    // If `rules` has less than the limit, we can short-circuit here
     if (rules.length < maximumNumberOfSelectors) {
       return selector;
     }
@@ -67,13 +65,12 @@ export function createStylesheet(rules: string[], style: string): string {
 /**
  * If at least one filter from `rules` has a custom style (e.g.: `##.foo
  * :style(...)`) then we fallback to `createStylesheetFromRulesWithCustomStyles`
- * which is slower then `createStylesheetFromRules`.
+ * which is slower than `createStylesheetFromRules`.
  */
 function createStylesheetFromRulesWithCustomStyles(rules: CosmeticFilter[]): string {
   const selectorsPerStyle: Map<string, string[]> = new Map();
 
-  for (let i = 0; i < rules.length; i += 1) {
-    const rule = rules[i];
+  for (const rule of rules) {
     const style = rule.getStyle();
     const selectors = selectorsPerStyle.get(style);
     if (selectors === undefined) {
@@ -85,9 +82,7 @@ function createStylesheetFromRulesWithCustomStyles(rules: CosmeticFilter[]): str
 
   const stylesheets: string[] = [];
   const selectorsPerStyleArray = Array.from(selectorsPerStyle.entries());
-  for (let i = 0; i < selectorsPerStyleArray.length; i += 1) {
-    const style = selectorsPerStyleArray[i][0];
-    const selectors = selectorsPerStyleArray[i][1];
+  for (const [style, selectors] of selectorsPerStyleArray) {
     stylesheets.push(createStylesheet(selectors, style));
   }
 
@@ -102,9 +97,7 @@ function createStylesheetFromRulesWithCustomStyles(rules: CosmeticFilter[]): str
  */
 function createStylesheetFromRules(rules: CosmeticFilter[]): string {
   const selectors: string[] = [];
-  for (let i = 0; i < rules.length; i += 1) {
-    const rule = rules[i];
-
+  for (const rule of rules) {
     if (rule.hasCustomStyle()) {
       return createStylesheetFromRulesWithCustomStyles(rules);
     }
@@ -122,12 +115,12 @@ function createLookupTokens(hostname: string, domain: string): Uint32Array {
 
   let index = 0;
 
-  for (let i = 0; i < hostnamesHashes.length; i += 1) {
-    tokens[index++] = hostnamesHashes[i];
+  for (const hash of hostnamesHashes) {
+    tokens[index++] = hash;
   }
 
-  for (let i = 0; i < entitiesHashes.length; i += 1) {
-    tokens[index++] = entitiesHashes[i];
+  for (const hash of entitiesHashes) {
+    tokens[index++] = hash;
   }
 
   return tokens;
@@ -291,9 +284,7 @@ export default class CosmeticFilterBucket {
     const idSelectors: CosmeticFilter[] = [];
     const unHideRules: CosmeticFilter[] = [];
 
-    for (let i = 0; i < newFilters.length; i += 1) {
-      const rule = newFilters[i];
-
+    for (const rule of newFilters) {
       if (rule.isUnhide()) {
         unHideRules.push(rule);
       } else if (rule.isHtmlFiltering()) {
@@ -446,8 +437,7 @@ export default class CosmeticFilterBucket {
     // negated hostnames and entities (e.g.: ~foo.*##generic).
     if (allowGenericHides === true && getRulesFromHostname === true) {
       const genericRules = this.getGenericRules();
-      for (let i = 0; i < genericRules.length; i += 1) {
-        const rule = genericRules[i];
+      for (const rule of genericRules) {
         if (rule.match(hostname, domain) === true) {
           rules.push(rule);
         }
@@ -525,9 +515,7 @@ export default class CosmeticFilterBucket {
       });
 
       // Apply unhide rules + dispatch
-      for (let i = 0; i < rules.length; i += 1) {
-        const rule: CosmeticFilter = rules[i];
-
+      for (const rule of rules) {
         // Make sure `rule` is not un-hidden by a #@# filter
         if (disabledRules.size !== 0 && disabledRules.has(rule.getSelector())) {
           continue;
@@ -602,8 +590,8 @@ export default class CosmeticFilterBucket {
       // Collect all selectors which can be subjected to an unhide rule
       const unHideRules = this.unhideIndex.getFilters();
       const canBeHiddenSelectors: Set<string> = new Set();
-      for (let i = 0; i < unHideRules.length; i += 1) {
-        canBeHiddenSelectors.add(unHideRules[i].getSelector());
+      for (const rule of unHideRules) {
+        canBeHiddenSelectors.add(rule.getSelector());
       }
 
       // Split generic rules into two groups:
@@ -616,8 +604,7 @@ export default class CosmeticFilterBucket {
       const genericRules = this.genericRules.getFilters();
       const cannotBeHiddenRules: CosmeticFilter[] = [];
       const canBeHiddenRules: CosmeticFilter[] = [];
-      for (let i = 0; i < genericRules.length; i += 1) {
-        const rule = genericRules[i];
+      for (const rule of genericRules) {
         if (
           rule.hasCustomStyle() ||
           rule.isScriptInject() ||

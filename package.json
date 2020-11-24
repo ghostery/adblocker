@@ -53,17 +53,17 @@
   ],
   "scripts": {
     "bootstrap": "yarn install --frozen-lock && lerna bootstrap",
-    "metalint": "metalint",
     "lint": "lerna run --parallel lint",
     "watch": "tsc --build ./tsconfig.project.json --watch",
     "build": "tsc --build ./tsconfig.project.json && lerna run build",
-    "bundle": "lerna run --concurrency 2 bundle",
-    "test": "lerna run --concurrency 2 test",
+    "bundle": "lerna run --concurrency 4 bundle",
+    "test": "lerna run --concurrency 4 test",
     "clean": "lerna run --parallel clean && lerna clean --yes",
-    "release": "auto shipit"
+    "release": "auto shipit",
+    "format-check": "prettier './packages/**/*.ts' --check",
+    "format-fix": "prettier './packages/**/*.ts' --write"
   },
   "devDependencies": {
-    "@cliqz/metalint": "^0.2.0",
     "@remusao/auto-config": "^1.1.1",
     "@types/benchmark": "^2.1.0",
     "@types/node": "^14.0.23",

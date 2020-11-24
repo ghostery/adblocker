@@ -67,8 +67,8 @@ export default class Resources {
     const trimComments = (str: string) => str.replace(/^\s*#.*$/gm, '');
     const chunks = data.split('\n\n');
 
-    for (let i = 0; i < chunks.length; i += 1) {
-      const resource = trimComments(chunks[i]).trim();
+    for (const chunk of chunks) {
+      const resource = trimComments(chunk).trim();
       if (resource.length !== 0) {
         const firstNewLine = resource.indexOf('\n');
         const split = resource.slice(0, firstNewLine).split(/\s+/);
@@ -91,10 +91,7 @@ export default class Resources {
 
     // The resource containing javascirpts to be injected
     const js: Map<string, string> = typeToResource.get('application/javascript') || new Map();
-    const entries = Array.from(js.entries());
-    for (let i = 0; i < entries.length; i += 1) {
-      const key = entries[i][0];
-      const value = entries[i][1];
+    for (const [key, value] of js.entries()) {
       if (key.endsWith('.js')) {
         js.set(key.slice(0, -3), value);
       }
@@ -129,7 +126,7 @@ export default class Resources {
     this.resources = resources;
   }
 
-  public getResource(name: string): Resource & { dataUrl: string; } {
+  public getResource(name: string): Resource & { dataUrl: string } {
     const { body, contentType } = this.resources.get(name) || getResourceForMime(name);
 
     let dataUrl;
@@ -139,21 +136,14 @@ export default class Resources {
       dataUrl = `data:${contentType};base64,${btoaPolyfill(body)}`;
     }
 
-    return { body, contentType, dataUrl }
+    return { body, contentType, dataUrl };
   }
 
   public getSerializedSize(): number {
-    let estimatedSize = (
-      sizeOfASCII(this.checksum) +
-      (2 * sizeOfByte()) // resources.size
-    );
+    let estimatedSize = sizeOfASCII(this.checksum) + 2 * sizeOfByte(); // resources.size
 
-    this.resources.forEach(({ contentType, body}, name) => {
-      estimatedSize += (
-        sizeOfASCII(name) +
-        sizeOfASCII(contentType) +
-        sizeOfASCII(body)
-      );
+    this.resources.forEach(({ contentType, body }, name) => {
+      estimatedSize += sizeOfASCII(name) + sizeOfASCII(contentType) + sizeOfASCII(body);
     });
 
     return estimatedSize;

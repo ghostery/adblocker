@@ -33,8 +33,7 @@ function groupBy(
   criteria: (filter: NetworkFilter) => string,
 ): NetworkFilter[][] {
   const grouped: Map<string, NetworkFilter[]> = new Map();
-  for (let i = 0; i < filters.length; i += 1) {
-    const filter = filters[i];
+  for (const filter of filters) {
     setWithDefault(grouped, criteria(filter), filter);
   }
   return Array.from(grouped.values());
@@ -50,8 +49,7 @@ function splitBy(
   const positive: NetworkFilter[] = [];
   const negative: NetworkFilter[] = [];
 
-  for (let i = 0; i < filters.length; i += 1) {
-    const filter = filters[i];
+  for (const filter of filters) {
     if (condition(filter)) {
       positive.push(filter);
     } else {
@@ -87,8 +85,7 @@ const OPTIMIZATIONS: IOptimization[] = [
       const entities: Set<number> = new Set();
       const notEntities: Set<number> = new Set();
 
-      for (let i = 0; i < filters.length; i += 1) {
-        const { domains } = filters[i]
+      for (const { domains } of filters) {
         if (domains !== undefined) {
           if (domains.hostnames !== undefined) {
             for (const hash of domains.hostnames) {
@@ -121,7 +118,8 @@ const OPTIMIZATIONS: IOptimization[] = [
           domains: new Domains({
             hostnames: hostnames.size !== 0 ? new Uint32Array(hostnames).sort() : undefined,
             entities: entities.size !== 0 ? new Uint32Array(entities).sort() : undefined,
-            notHostnames: notHostnames.size !== 0 ? new Uint32Array(notHostnames).sort() : undefined,
+            notHostnames:
+              notHostnames.size !== 0 ? new Uint32Array(notHostnames).sort() : undefined,
             notEntities: notEntities.size !== 0 ? new Uint32Array(notEntities).sort() : undefined,
           }),
           rawLine:
@@ -134,17 +132,13 @@ const OPTIMIZATIONS: IOptimization[] = [
     groupByCriteria: (filter: NetworkFilter) =>
       filter.getHostname() + filter.getFilter() + filter.getMask() + filter.getRedirect(),
     select: (filter: NetworkFilter) =>
-      !filter.isFuzzy() &&
-      !filter.isCSP() &&
-      filter.denyallow === undefined &&
-      filter.domains !== undefined,
+      !filter.isCSP() && filter.denyallow === undefined && filter.domains !== undefined,
   },
   {
     description: 'Group simple patterns, into a single filter',
     fusion: (filters: NetworkFilter[]) => {
       const patterns: string[] = [];
-      for (let i = 0; i < filters.length; i += 1) {
-        const f = filters[i];
+      for (const f of filters) {
         if (f.isRegex()) {
           patterns.push(processRegex(f.getRegex()));
         } else if (f.isRightAnchor()) {
@@ -167,13 +161,9 @@ const OPTIMIZATIONS: IOptimization[] = [
         }),
       );
     },
-    groupByCriteria: (filter: NetworkFilter) => '' + (
-      filter.getMask() &
-      ~NETWORK_FILTER_MASK.isRegex &
-      ~NETWORK_FILTER_MASK.isFullRegex
-    ),
+    groupByCriteria: (filter: NetworkFilter) =>
+      '' + (filter.getMask() & ~NETWORK_FILTER_MASK.isRegex & ~NETWORK_FILTER_MASK.isFullRegex),
     select: (filter: NetworkFilter) =>
-      !filter.isFuzzy() &&
       filter.domains === undefined &&
       filter.denyallow === undefined &&
       !filter.isHostnameAnchor() &&
@@ -200,14 +190,12 @@ export function optimizeNetwork(filters: NetworkFilter[]): NetworkFilter[] {
   const fused: NetworkFilter[] = [];
   let toFuse = filters;
 
-  for (let i = 0; i < OPTIMIZATIONS.length; i += 1) {
-    const { select, fusion, groupByCriteria } = OPTIMIZATIONS[i];
+  for (const { select, fusion, groupByCriteria } of OPTIMIZATIONS) {
     const { positive, negative } = splitBy(toFuse, select);
     toFuse = negative;
 
     const groups = groupBy(positive, groupByCriteria);
-    for (let j = 0; j < groups.length; j += 1) {
-      const group = groups[j];
+    for (const group of groups) {
       if (group.length > 1) {
         fused.push(fusion(group));
       } else {
@@ -216,8 +204,8 @@ export function optimizeNetwork(filters: NetworkFilter[]): NetworkFilter[] {
     }
   }
 
-  for (let i = 0; i < toFuse.length; i += 1) {
-    fused.push(toFuse[i]);
+  for (const filter of toFuse) {
+    fused.push(filter);
   }
 
   return fused;
