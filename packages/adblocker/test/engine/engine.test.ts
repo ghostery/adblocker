@@ -338,6 +338,23 @@ $csp=baz,domain=bar.com
       ).to.be.true;
     });
 
+    it('cancels exceptions', () => {
+      expect(
+        createEngine(`
+@@||foo.com^
+||foo.com^
+`).match(request).match,
+      ).to.be.false;
+
+      expect(
+        createEngine(`
+@@||foo.com^
+@@||foo.com^$badfilter
+||foo.com^
+`).match(request).match,
+      ).to.be.true;
+    });
+
     it('works with update as well', () => {
       const badfilter = NetworkFilter.parse('||foo.com$domain=bar.com|foo.com,badfilter');
       expect(badfilter).not.to.be.null;

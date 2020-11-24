@@ -158,6 +158,33 @@ function computeFilterId(
   return hash >>> 0;
 }
 
+function parseProceduralFilter(line: string, indexAfterColon: number): null | string {
+  if (
+    fastStartsWithFrom(line, '-abp-', indexAfterColon) ||
+    fastStartsWithFrom(line, 'contains', indexAfterColon) ||
+    fastStartsWithFrom(line, 'has-text', indexAfterColon) ||
+    fastStartsWithFrom(line, 'has', indexAfterColon) ||
+    fastStartsWithFrom(line, 'if-not', indexAfterColon) ||
+    fastStartsWithFrom(line, 'if', indexAfterColon) ||
+    fastStartsWithFrom(line, 'matches-css-after', indexAfterColon) ||
+    fastStartsWithFrom(line, 'matches-css-before', indexAfterColon) ||
+    fastStartsWithFrom(line, 'matches-css', indexAfterColon) ||
+    fastStartsWithFrom(line, 'min-text-length', indexAfterColon) ||
+    fastStartsWithFrom(line, 'nth-ancestor', indexAfterColon) ||
+    fastStartsWithFrom(line, 'nth-of-type', indexAfterColon) ||
+    fastStartsWithFrom(line, 'remove', indexAfterColon) ||
+    fastStartsWithFrom(line, 'upward', indexAfterColon) ||
+    fastStartsWithFrom(line, 'watch-attrs', indexAfterColon) ||
+    fastStartsWithFrom(line, 'watch-attr', indexAfterColon) ||
+    fastStartsWithFrom(line, 'xpath', indexAfterColon)
+  ) {
+    return null;
+  }
+
+  // TODO - here we should parse the selector.
+  return line;
+}
+
 /***************************************************************************
  *  Cosmetic filters parsing
  * ************************************************************************ */
@@ -268,27 +295,13 @@ export default class CosmeticFilter implements IFilter {
           } else {
             return null;
           }
-        } else if (
-          fastStartsWithFrom(line, '-abp-', indexAfterColon) ||
-          fastStartsWithFrom(line, 'contains', indexAfterColon) ||
-          fastStartsWithFrom(line, 'has-text', indexAfterColon) ||
-          fastStartsWithFrom(line, 'has', indexAfterColon) ||
-          fastStartsWithFrom(line, 'if-not', indexAfterColon) ||
-          fastStartsWithFrom(line, 'if', indexAfterColon) ||
-          fastStartsWithFrom(line, 'matches-css-after', indexAfterColon) ||
-          fastStartsWithFrom(line, 'matches-css-before', indexAfterColon) ||
-          fastStartsWithFrom(line, 'matches-css', indexAfterColon) ||
-          fastStartsWithFrom(line, 'min-text-length', indexAfterColon) ||
-          fastStartsWithFrom(line, 'nth-ancestor', indexAfterColon) ||
-          fastStartsWithFrom(line, 'nth-of-type', indexAfterColon) ||
-          fastStartsWithFrom(line, 'remove', indexAfterColon) ||
-          fastStartsWithFrom(line, 'upward', indexAfterColon) ||
-          fastStartsWithFrom(line, 'watch-attrs', indexAfterColon) ||
-          fastStartsWithFrom(line, 'watch-attr', indexAfterColon) ||
-          fastStartsWithFrom(line, 'xpath', indexAfterColon)
-        ) {
-          return null;
+        } else {
+          const result = parseProceduralFilter(line, indexAfterColon);
+          if (result === null) {
+            return null;
+          }
         }
+
         indexOfColon = line.indexOf(':', indexAfterColon);
       }
 
