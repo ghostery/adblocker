@@ -1,4 +1,3 @@
-
 /*!
  * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
  *
@@ -27,25 +26,29 @@ function f(lines: string[]): NetworkFilter[] {
 
 describe('#optimizeNetwork', () => {
   it('combine into regexps', () => {
-    expect(optimizeNetwork(f([
-      '/stats/tracking.',
-      '/php-stats.php?',
-      '.php?stats=',
-      '/banner.stats?',
-      '/php/stats/*',
-      '_stats.js?',
-      '/stats-tracking.js',
-      '/b/stats?',
-      '/stats/impression',
-      '/php/stats.php?',
-      '/stats/visitors',
-      '/stats.gif?',
-      '/stats/?js',
-      '/stats.php?*http',
-      '/stats?object',
-      '.php?p=stats&',
-      '/php-stats.js',
-      '/php-stats.js/',
-    ])).map(filter => filter.toString())).to.have.lengthOf(1);
+    expect(
+      optimizeNetwork(
+        f([
+          '/stats/tracking.',
+          '/php-stats.php?',
+          '.php?stats=',
+          '/banner.stats?',
+          '/php/stats/*',
+          '_stats.js?',
+          '/stats-tracking.js',
+          '/b/stats?',
+          '/stats/impression',
+          '/php/stats.php?',
+          '/stats/visitors',
+          '/stats.gif?',
+          '/stats/?js',
+          '/stats.php?*http',
+          '/stats?object',
+          '.php?p=stats&',
+          '/php-stats.js',
+          '/php-stats.js/',
+        ]),
+      ).map((filter) => filter.toString()),
+    ).to.have.lengthOf(1);
   });
 });

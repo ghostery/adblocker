@@ -13,13 +13,18 @@ function getUrlToLoad(): string {
 }
 
 (async () => {
-  const blocker = await PuppeteerBlocker.fromLists(fetch, fullLists, {
-    enableCompression: true,
-  }, {
-    path: 'engine.bin',
-    read: fs.readFile,
-    write: fs.writeFile,
-  });
+  const blocker = await PuppeteerBlocker.fromLists(
+    fetch,
+    fullLists,
+    {
+      enableCompression: true,
+    },
+    {
+      path: 'engine.bin',
+      read: fs.readFile,
+      write: fs.writeFile,
+    },
+  );
 
   const browser = await puppeteer.launch({
     defaultViewport: null,

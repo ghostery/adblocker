@@ -26,35 +26,37 @@ import Request, {
 import requests from './data/requests';
 
 use((chai, utils) => {
-  utils.addMethod(chai.Assertion.prototype, 'matchRequest', function (
-    this: any,
-    req: Partial<Request>,
-  ) {
-    const filter = this._obj;
-    const request = Request.fromRawDetails(req);
+  utils.addMethod(
+    chai.Assertion.prototype,
+    'matchRequest',
+    function (this: any, req: Partial<Request>) {
+      const filter = this._obj;
+      const request = Request.fromRawDetails(req);
 
-    new chai.Assertion(filter).not.to.be.null;
+      new chai.Assertion(filter).not.to.be.null;
 
-    this.assert(
-      filter.match(request),
-      'expected #{this} to match #{exp}',
-      'expected #{this} to not match #{exp}',
-    );
-  });
+      this.assert(
+        filter.match(request),
+        'expected #{this} to match #{exp}',
+        'expected #{this} to not match #{exp}',
+      );
+    },
+  );
 
-  utils.addMethod(chai.Assertion.prototype, 'matchHostname', function (
-    this: any,
-    hostname: string,
-  ) {
-    const filter = this._obj;
-    new chai.Assertion(filter).not.to.be.null;
+  utils.addMethod(
+    chai.Assertion.prototype,
+    'matchHostname',
+    function (this: any, hostname: string) {
+      const filter = this._obj;
+      new chai.Assertion(filter).not.to.be.null;
 
-    this.assert(
-      filter.match(hostname, getDomain(hostname) || ''),
-      'expected #{this} to match #{exp}',
-      'expected #{this} to not match #{exp}',
-    );
-  });
+      this.assert(
+        filter.match(hostname, getDomain(hostname) || ''),
+        'expected #{this} to match #{exp}',
+        'expected #{this} to not match #{exp}',
+      );
+    },
+  );
 });
 
 declare global {

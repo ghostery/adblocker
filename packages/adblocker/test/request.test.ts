@@ -111,7 +111,10 @@ describe('#Request', () => {
           sourceUrl: 'https://sub.foo.com/bar',
         }),
       ).to.deep.include({
-        sourceHostnameHashes: getHostnameHashesFromLabelsBackward('hostname.provided.domain', 'provided.domain'),
+        sourceHostnameHashes: getHostnameHashesFromLabelsBackward(
+          'hostname.provided.domain',
+          'provided.domain',
+        ),
       });
     });
 
@@ -122,7 +125,10 @@ describe('#Request', () => {
           sourceUrl: 'https://sub.foo.com/bar',
         }),
       ).to.deep.include({
-        sourceHostnameHashes: getHostnameHashesFromLabelsBackward('hostname.provided.domain', 'provided.domain'),
+        sourceHostnameHashes: getHostnameHashesFromLabelsBackward(
+          'hostname.provided.domain',
+          'provided.domain',
+        ),
       });
     });
 
@@ -133,7 +139,10 @@ describe('#Request', () => {
           sourceUrl: 'https://sub.foo.com/bar',
         }),
       ).to.deep.include({
-        sourceHostnameHashes: getHostnameHashesFromLabelsBackward('provided.domain', 'provided.domain'),
+        sourceHostnameHashes: getHostnameHashesFromLabelsBackward(
+          'provided.domain',
+          'provided.domain',
+        ),
       });
     });
 
@@ -214,17 +223,10 @@ describe('#Request', () => {
         isSupported: false,
       };
 
-      for (const protocol of [
-        'foobar',
-        'ip',
-        'ftp',
-        'git',
-        'ssh',
-        'smtp',
-        'pop3',
-        'imap',
-      ]) {
-        expect(Request.fromRawDetails({ url: `${protocol}:///foo.com` })).to.deep.include(expected);
+      for (const protocol of ['foobar', 'ip', 'ftp', 'git', 'ssh', 'smtp', 'pop3', 'imap']) {
+        expect(Request.fromRawDetails({ url: `${protocol}:///foo.com` })).to.deep.include(
+          expected,
+        );
         expect(Request.fromRawDetails({ url: `${protocol}://foo.com` })).to.deep.include(expected);
         expect(Request.fromRawDetails({ url: `${protocol}:/foo.com` })).to.deep.include(expected);
       }

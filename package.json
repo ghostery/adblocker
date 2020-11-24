@@ -59,7 +59,9 @@
     "bundle": "lerna run --concurrency 4 bundle",
     "test": "lerna run --concurrency 4 test",
     "clean": "lerna run --parallel clean && lerna clean --yes",
-    "release": "auto shipit"
+    "release": "auto shipit",
+    "format-check": "prettier './packages/**/*.ts' --check",
+    "format-fix": "prettier './packages/**/*.ts' --write"
   },
   "devDependencies": {
     "@remusao/auto-config": "^1.1.1",

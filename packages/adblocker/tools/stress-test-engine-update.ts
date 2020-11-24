@@ -151,9 +151,11 @@ async function getMeta(url: string): Promise<any> {
   const meta = (await axios.get(url)).data;
   if (typeof meta === 'string') {
     const buffer = Buffer.from(
-      (await axios.get(url, {
-        responseType: 'arraybuffer',
-      })).data,
+      (
+        await axios.get(url, {
+          responseType: 'arraybuffer',
+        })
+      ).data,
     );
     return JSON.parse(brotliDecompressSync(buffer).toString('utf-8'));
   }
@@ -184,9 +186,11 @@ async function getRevision(url: string): Promise<string> {
   let data = (await axios.get(url)).data;
   if (!data.startsWith('[Ad')) {
     const buffer = Buffer.from(
-      (await axios.get(url, {
-        responseType: 'arraybuffer',
-      })).data,
+      (
+        await axios.get(url, {
+          responseType: 'arraybuffer',
+        })
+      ).data,
     );
 
     try {

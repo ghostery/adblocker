@@ -25,13 +25,18 @@ async function createWindow() {
     throw new Error('defaultSession is undefined');
   }
 
-  const blocker = await ElectronBlocker.fromLists(fetch, fullLists, {
-    enableCompression: true,
-  }, {
-    path: 'engine.bin',
-    read: fs.readFile,
-    write: fs.writeFile,
-  });
+  const blocker = await ElectronBlocker.fromLists(
+    fetch,
+    fullLists,
+    {
+      enableCompression: true,
+    },
+    {
+      path: 'engine.bin',
+      read: fs.readFile,
+      write: fs.writeFile,
+    },
+  );
 
   blocker.enableBlockingInSession(session.defaultSession);
 
@@ -67,14 +72,18 @@ async function createWindow() {
   });
 }
 
-app.allowRendererProcessReuse = false
+app.allowRendererProcessReuse = false;
 
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') { app.quit(); }
-})
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
 
 app.on('activate', () => {
-  if (mainWindow === null) { createWindow(); }
+  if (mainWindow === null) {
+    createWindow();
+  }
 });
