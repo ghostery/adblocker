@@ -112,12 +112,12 @@ export default class ReverseIndex<T extends IFilter> {
     const filtersIndexStart = view.pos;
     view.seekZero(); // not strictly needed but make sure reverse index can be compared with deep equal
 
-    return (new ReverseIndex({
+    return new ReverseIndex({
       config,
       deserialize,
       filters: [],
       optimize,
-    })).updateInternals({
+    }).updateInternals({
       bucketsIndex,
       filtersIndexStart,
       numberOfFilters,
@@ -283,8 +283,8 @@ export default class ReverseIndex<T extends IFilter> {
     // (which could happen if the same token appears more than once in the URL).
     const requestId = getNextId();
 
-    for (let i = 0; i < tokens.length; i += 1) {
-      if (this.iterBucket(tokens[i], requestId, cb) === false) {
+    for (const token of tokens) {
+      if (this.iterBucket(token, requestId, cb) === false) {
         return;
       }
     }
@@ -341,8 +341,7 @@ export default class ReverseIndex<T extends IFilter> {
       }
 
       // Add new filters to the list and also update estimated size
-      for (let i = 0; i < newFilters.length; i += 1) {
-        const filter = newFilters[i];
+      for (const filter of newFilters) {
         estimatedBufferSize += filter.getSerializedSize(compression);
         filters.push(filter);
       }
@@ -351,8 +350,8 @@ export default class ReverseIndex<T extends IFilter> {
       // initialization), then we can take a fast-path and not check removed
       // filters at all. There is also no need to copy the array of filters.
       filters = newFilters;
-      for (let i = 0; i < newFilters.length; i += 1) {
-        estimatedBufferSize += newFilters[i].getSerializedSize(compression);
+      for (const filter of newFilters) {
+        estimatedBufferSize += filter.getSerializedSize(compression);
       }
     }
 
@@ -379,9 +378,7 @@ export default class ReverseIndex<T extends IFilter> {
 
     // Tokenize all filters stored in this index. And compute a histogram of
     // tokens so that we can decide how to index each filter efficiently.
-    for (let i = 0; i < filters.length; i += 1) {
-      const filter = filters[i];
-
+    for (const filter of filters) {
       // Tokenize `filter` and store the result in `filtersTokens` which will
       // be used in the next step to select the best token for each filter.
       const multiTokens = filter.getTokens();
@@ -395,11 +392,10 @@ export default class ReverseIndex<T extends IFilter> {
       // Each filter can be indexed more than once, so `getTokens(...)` returns
       // multiple sets of tokens. We iterate on all of them and update the
       // histogram for each.
-      for (let j = 0; j < multiTokens.length; j += 1) {
-        const tokens = multiTokens[j];
+      for (const tokens of multiTokens) {
         totalNumberOfTokens += tokens.length;
-        for (let k = 0; k < tokens.length; k += 1) {
-          histogram[tokens[k] % histogram.length] += 1;
+        for (const token of tokens) {
+          histogram[token % histogram.length] += 1;
         }
       }
     }
@@ -440,17 +436,15 @@ export default class ReverseIndex<T extends IFilter> {
       filter.serialize(buffer);
 
       // Index the filter once per "tokens"
-      for (let j = 0; j < multiTokens.length; j += 1) {
-        const tokens: Uint32Array = multiTokens[j];
-
+      for (const tokens of multiTokens) {
         // Find best token (least seen) from `tokens` using `histogram`.
         let bestToken: number = 0; // default = wildcard bucket
         let minCount: number = totalNumberOfTokens + 1;
-        for (let k = 0; k < tokens.length; k += 1) {
-          const tokenCount = histogram[tokens[k] % histogram.length];
+        for (const token of tokens) {
+          const tokenCount: number = histogram[token % histogram.length];
           if (tokenCount < minCount) {
             minCount = tokenCount;
-            bestToken = tokens[k];
+            bestToken = token;
 
             // Fast path, if the current token has only been seen once, we can
             // stop iterating since we will not find a better alternarive!
@@ -469,11 +463,11 @@ export default class ReverseIndex<T extends IFilter> {
     // Populate "tokens index" and "buckets index" based on best token found for each filter.
     let indexInBucketsIndex = 0;
     for (let i = 0; i < tokensLookupIndexSize; i += 1) {
-      const filtersForMask = suffixes[i];
+      const filtersForMask: [number, number][] = suffixes[i];
       tokensLookupIndex[i] = indexInBucketsIndex;
-      for (let j = 0; j < filtersForMask.length; j += 1) {
-        bucketsIndex[indexInBucketsIndex++] = filtersForMask[j][0];
-        bucketsIndex[indexInBucketsIndex++] = filtersForMask[j][1];
+      for (const [token, filterIndex] of filtersForMask) {
+        bucketsIndex[indexInBucketsIndex++] = token;
+        bucketsIndex[indexInBucketsIndex++] = filterIndex;
       }
     }
 

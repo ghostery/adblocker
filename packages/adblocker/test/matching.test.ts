@@ -183,24 +183,6 @@ describe('#NetworkFilter.match', () => {
     expect(f`https://bar.com/bar/baz`).to.matchRequest({ url: 'https://bar.com/bar/baz' });
   });
 
-  it('pattern$fuzzy', () => {
-    expect(f`f$fuzzy`).to.matchRequest({ url: 'https://bar.com/f' });
-    expect(f`foo$fuzzy`).to.matchRequest({ url: 'https://bar.com/foo' });
-    expect(f`foo$fuzzy`).to.matchRequest({ url: 'https://bar.com/foo/baz' });
-    expect(f`foo/bar$fuzzy`).to.matchRequest({ url: 'https://bar.com/foo/baz' });
-    expect(f`foo bar$fuzzy`).to.matchRequest({ url: 'https://bar.com/foo/baz' });
-    expect(f`foo bar baz$fuzzy`).to.matchRequest({ url: 'http://bar.foo.baz' });
-
-    expect(f`foo bar baz 42$fuzzy`).not.to.matchRequest({ url: 'http://bar.foo.baz' });
-
-    // Fast-path for when pattern is longer than the URL
-    expect(f`foo bar baz 42 43$fuzzy`).not.to.matchRequest({ url: 'http://bar.foo.baz' });
-
-    // No fuzzy signature, matches every URL?
-    expect(f`+$fuzzy`).to.matchRequest({ url: 'http://bar.foo.baz' });
-    expect(f`$fuzzy`).to.matchRequest({ url: 'http://bar.foo.baz' });
-  });
-
   it('||pattern', () => {
     expect(f`||foo.com`).to.matchRequest({ url: 'https://foo.com/bar' });
     expect(f`||foo.com/bar`).to.matchRequest({ url: 'https://foo.com/bar' });
@@ -217,22 +199,6 @@ describe('#NetworkFilter.match', () => {
     expect(f`||foo`).not.to.matchRequest({ url: 'https://foo-bar.baz.com/bar' });
     expect(f`||foo.com`).not.to.matchRequest({ url: 'https://foo.de' });
     expect(f`||foo.com`).not.to.matchRequest({ url: 'https://bar.foo.de' });
-  });
-
-  it('||pattern$fuzzy', () => {
-    const filter = f`||bar.foo/baz$fuzzy`;
-    expect(filter).to.matchRequest({ url: 'http://bar.foo/baz' });
-    // Same result when fuzzy signature is cached
-    expect(filter).to.matchRequest({ url: 'http://bar.foo/baz' });
-
-    expect(f`||bar.foo/baz$fuzzy`).to.matchRequest({ url: 'http://bar.foo/id/baz' });
-    expect(f`||bar.foo/baz$fuzzy`).to.matchRequest({ url: 'http://bar.foo?id=42&baz=1' });
-    expect(f`||foo.com/id bar$fuzzy`).to.matchRequest({ url: 'http://foo.com?bar&id=42' });
-
-    expect(f`||bar.com/id bar$fuzzy`).not.to.matchRequest({ url: 'http://foo.com?bar&id=42' });
-    expect(f`||bar.com/id bar baz foo 42 id$fuzzy`).not.to.matchRequest({
-      url: 'http://foo.com?bar&id=42',
-    });
   });
 
   it('||pattern|', () => {

@@ -22,8 +22,7 @@ export class Domains {
     const hostnames: number[] = [];
     const notHostnames: number[] = [];
 
-    for (let i = 0; i < parts.length; i += 1) {
-      let hostname = parts[i];
+    for (let hostname of parts) {
       if (hasUnicode(hostname)) {
         hostname = toASCII(hostname);
       }
@@ -56,10 +55,10 @@ export class Domains {
     }
 
     return new Domains({
-      entities: (entities.length !== 0 ? new Uint32Array(entities).sort() : undefined),
-      hostnames: (hostnames.length !== 0 ? new Uint32Array(hostnames).sort() : undefined),
-      notEntities: (notEntities.length !== 0 ? new Uint32Array(notEntities).sort() : undefined),
-      notHostnames: (notHostnames.length !== 0 ? new Uint32Array(notHostnames).sort() : undefined),
+      entities: entities.length !== 0 ? new Uint32Array(entities).sort() : undefined,
+      hostnames: hostnames.length !== 0 ? new Uint32Array(hostnames).sort() : undefined,
+      notEntities: notEntities.length !== 0 ? new Uint32Array(notEntities).sort() : undefined,
+      notHostnames: notHostnames.length !== 0 ? new Uint32Array(notHostnames).sort() : undefined,
     });
   }
 
@@ -68,10 +67,10 @@ export class Domains {
 
     // The order of these fields should be the same as when we serialize them.
     return new Domains({
-      entities: ((optionalParts & 1) === 1 ? buffer.getUint32Array() : undefined),
-      hostnames: ((optionalParts & 2) === 2 ? buffer.getUint32Array() : undefined),
-      notEntities: ((optionalParts & 4) === 4 ? buffer.getUint32Array() : undefined),
-      notHostnames: ((optionalParts & 8) === 8 ? buffer.getUint32Array() : undefined),
+      entities: (optionalParts & 1) === 1 ? buffer.getUint32Array() : undefined,
+      hostnames: (optionalParts & 2) === 2 ? buffer.getUint32Array() : undefined,
+      notEntities: (optionalParts & 4) === 4 ? buffer.getUint32Array() : undefined,
+      notHostnames: (optionalParts & 8) === 8 ? buffer.getUint32Array() : undefined,
     });
   }
 
@@ -107,26 +106,26 @@ export class Domains {
     const { hostnames, entities, notHostnames, notEntities } = this;
 
     if (hostnames !== undefined) {
-      for (let i = 0; i < hostnames.length; i += 1) {
-        hash = (hash * 33) ^ hostnames[i];
+      for (const hostname of hostnames) {
+        hash = (hash * 33) ^ hostname;
       }
     }
 
     if (entities !== undefined) {
-      for (let i = 0; i < entities.length; i += 1) {
-        hash = (hash * 33) ^ entities[i];
+      for (const entity of entities) {
+        hash = (hash * 33) ^ entity;
       }
     }
 
     if (notHostnames !== undefined) {
-      for (let i = 0; i < notHostnames.length; i += 1) {
-        hash = (hash * 33) ^ notHostnames[i];
+      for (const notHostname of notHostnames) {
+        hash = (hash * 33) ^ notHostname;
       }
     }
 
     if (notEntities !== undefined) {
-      for (let i = 0; i < notEntities.length; i += 1) {
-        hash = (hash * 33) ^ notEntities[i];
+      for (const notEntity of notEntities) {
+        hash = (hash * 33) ^ notEntity;
       }
     }
 

@@ -67,17 +67,13 @@ export default class NetworkFilterBucket {
 
   public getFilters(): NetworkFilter[] {
     const filters: NetworkFilter[] = [];
-    return filters.concat(
-      this.badFilters.getFilters(),
-      this.index.getFilters(),
-    );
+    return filters.concat(this.badFilters.getFilters(), this.index.getFilters());
   }
 
   public update(newFilters: NetworkFilter[], removedFilters: Set<number> | undefined): void {
     const badFilters: NetworkFilter[] = [];
     const remaining: NetworkFilter[] = [];
-    for (let i = 0; i < newFilters.length; i += 1) {
-      const filter = newFilters[i];
+    for (const filter of newFilters) {
       if (filter.isBadFilter()) {
         badFilters.push(filter);
       } else {
@@ -91,10 +87,7 @@ export default class NetworkFilterBucket {
   }
 
   public getSerializedSize(): number {
-    return (
-      this.badFilters.getSerializedSize() +
-      this.index.getSerializedSize()
-    );
+    return this.badFilters.getSerializedSize() + this.index.getSerializedSize();
   }
 
   public serialize(buffer: StaticDataView): void {
@@ -147,8 +140,8 @@ export default class NetworkFilterBucket {
 
       // Create in-memory list of disabled filter IDs
       const badFiltersIds: Set<number> = new Set();
-      for (let i = 0; i < badFilters.length; i += 1) {
-        badFiltersIds.add(badFilters[i].getIdWithoutBadFilter());
+      for (const badFilter of badFilters) {
+        badFiltersIds.add(badFilter.getIdWithoutBadFilter());
       }
       this.badFiltersIds = badFiltersIds;
     }

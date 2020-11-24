@@ -59,9 +59,9 @@ function isSimpleSelector(selector: string): boolean {
           code === 58 /* ':' */ ||
           (code === 32 /* ' ' */ &&
             (nextCode === 62 /* '>' */ ||
-            nextCode === 43 /* '+' */ ||
-            nextCode === 126 /* '~' */ ||
-            nextCode === 46 /* '.' */ ||
+              nextCode === 43 /* '+' */ ||
+              nextCode === 126 /* '~' */ ||
+              nextCode === 46 /* '.' */ ||
               nextCode === 35)) /* '#' */
         ) {
           return true;
@@ -564,14 +564,14 @@ export default class CosmeticFilter implements IFilter {
       const { hostnames, entities } = this.domains;
 
       if (hostnames !== undefined) {
-        for (let i = 0; i < hostnames.length; i += 1) {
-          tokens.push(new Uint32Array([hostnames[i]]));
+        for (const hostname of hostnames) {
+          tokens.push(new Uint32Array([hostname]));
         }
       }
 
       if (entities !== undefined) {
-        for (let i = 0; i < entities.length; i += 1) {
-          tokens.push(new Uint32Array([entities[i]]));
+        for (const entity of entities) {
+          tokens.push(new Uint32Array([entity]));
         }
       }
     }
@@ -662,7 +662,16 @@ export default class CosmeticFilter implements IFilter {
     let scriptArguments: string[] = [];
     if (scriptName.indexOf(',') !== -1) {
       const parts = scriptName.split(',');
-      scriptName = parts[0];
+      if (parts.length === 0) {
+        return undefined;
+      }
+
+      const firstPart = parts[0];
+      if (firstPart === undefined) {
+        return undefined;
+      }
+
+      scriptName = firstPart;
       scriptArguments = parts.slice(1).map((s) => s.trim());
     }
 

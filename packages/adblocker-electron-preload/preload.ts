@@ -40,8 +40,8 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
         }
 
         ACTIVE = true;
-        for (let i = 0; i < scripts.length; i += 1) {
-          setTimeout(() => webFrame.executeJavaScript(scripts[i]), 1);
+        for (const script of scripts) {
+          setTimeout(() => webFrame.executeJavaScript(script), 1);
         }
       },
     );

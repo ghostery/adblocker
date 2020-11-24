@@ -138,7 +138,6 @@ describe('Network filters', () => {
       'ads$~xhr',
 
       // Options
-      'ads$fuzzy',
       'ads$image',
       'ads$media',
       'ads$object',
@@ -152,7 +151,6 @@ describe('Network filters', () => {
       'ads$xhr',
 
       'ads$important',
-      'ads$fuzzy',
       'ads$redirect=noop',
       'ads$redirect-rule=noop',
     ].forEach((line) => {
@@ -1844,19 +1842,6 @@ describe('Cosmetic filters', () => {
         });
       }
     });
-  });
-});
-
-describe('#getId', () => {
-  it('for fuzzy filter is insensitive to permutations', () => {
-    const f1 = NetworkFilter.parse('foo bar baz$fuzzy');
-    const f2 = NetworkFilter.parse('baz bar foo$fuzzy');
-    expect(f1).not.to.be.null;
-    expect(f2).not.to.be.null;
-    if (f1 !== null && f2 !== null) {
-      expect(f1.getId()).to.equal(f2.getId());
-      expect(f1.getIdWithoutBadFilter()).to.equal(f2.getIdWithoutBadFilter());
-    }
   });
 });
 

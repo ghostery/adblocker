@@ -11,7 +11,7 @@ import { parse } from 'tldts-experimental';
 
 import { EMPTY_UINT32_ARRAY } from './data-view';
 import { TOKENS_BUFFER } from './tokens-buffer';
-import { createFuzzySignature, fastHash, tokenizeNoSkipInPlace, HASH_SEED } from './utils';
+import { fastHash, tokenizeNoSkipInPlace, HASH_SEED } from './utils';
 
 const TLDTS_OPTIONS = {
   extractHostname: true,
@@ -71,7 +71,11 @@ export type WebRequestTypeFirefox = browser.webRequest.ResourceType;
 export type WebRequestType = WebRequestTypeChrome | WebRequestTypeFirefox;
 
 // The set of supported types is the union of WebRequest
-export type RequestType = WebRequestType | ElectronRequestType | PuppeteerRequestType | PlaywrightRequestType;
+export type RequestType =
+  | WebRequestType
+  | ElectronRequestType
+  | PuppeteerRequestType
+  | PlaywrightRequestType;
 
 export const NORMALIZED_TYPE_TOKEN: { [s in RequestType]: number } = {
   beacon: fastHash('type:beacon'),
@@ -283,7 +287,6 @@ export default class Request {
 
   // Lazy attributes
   private tokens: Uint32Array | undefined = undefined;
-  private fuzzySignature: Uint32Array | undefined = undefined;
   private hostnameHashes: Uint32Array | undefined = undefined;
   private entityHashes: Uint32Array | undefined = undefined;
 
@@ -356,9 +359,10 @@ export default class Request {
 
   public getHostnameHashes(): Uint32Array {
     if (this.hostnameHashes === undefined) {
-      this.hostnameHashes = this.hostname.length === 0
-        ? EMPTY_UINT32_ARRAY
-        : getHostnameHashesFromLabelsBackward(this.hostname, this.domain);
+      this.hostnameHashes =
+        this.hostname.length === 0
+          ? EMPTY_UINT32_ARRAY
+          : getHostnameHashesFromLabelsBackward(this.hostname, this.domain);
     }
 
     return this.hostnameHashes;
@@ -366,9 +370,10 @@ export default class Request {
 
   public getEntityHashes(): Uint32Array {
     if (this.entityHashes === undefined) {
-      this.entityHashes = this.hostname.length === 0
-        ? EMPTY_UINT32_ARRAY
-        : getEntityHashesFromLabelsBackward(this.hostname, this.domain);
+      this.entityHashes =
+        this.hostname.length === 0
+          ? EMPTY_UINT32_ARRAY
+          : getEntityHashesFromLabelsBackward(this.hostname, this.domain);
     }
 
     return this.entityHashes;
@@ -378,8 +383,8 @@ export default class Request {
     if (this.tokens === undefined) {
       TOKENS_BUFFER.reset();
 
-      for (let i = 0; i < this.sourceHostnameHashes.length; i += 1) {
-        TOKENS_BUFFER.push(this.sourceHostnameHashes[i]);
+      for (const hash of this.sourceHostnameHashes) {
+        TOKENS_BUFFER.push(hash);
       }
 
       // Add token corresponding to request type
@@ -391,13 +396,6 @@ export default class Request {
     }
 
     return this.tokens;
-  }
-
-  public getFuzzySignature(): Uint32Array {
-    if (this.fuzzySignature === undefined) {
-      this.fuzzySignature = createFuzzySignature(this.url);
-    }
-    return this.fuzzySignature;
   }
 
   public isMainFrame(): boolean {

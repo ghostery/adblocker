@@ -80,8 +80,7 @@ export default class FiltersContainer<T extends IFilter> {
       } else {
         // There might be some removed selected filters, so we iterate through
         // them and make sure we keep only the ones not having been deleted.
-        for (let i = 0; i < currentFilters.length; i += 1) {
-          const filter = currentFilters[i];
+        for (const filter of currentFilters) {
           if (removedFilters.has(filter.getId()) === false) {
             selected.push(filter);
           } else {
@@ -96,8 +95,7 @@ export default class FiltersContainer<T extends IFilter> {
 
     // Add new rules.
     const numberOfExistingFilters: number = selected.length;
-    for (let i = 0; i < newFilters.length; i += 1) {
-      const filter = newFilters[i];
+    for (const filter of newFilters) {
       bufferSizeEstimation += filter.getSerializedSize(compression);
       selected.push(filter);
     }
@@ -120,8 +118,8 @@ export default class FiltersContainer<T extends IFilter> {
         selected.sort((f1: T, f2: T): number => f1.getId() - f2.getId());
       }
 
-      for (let i = 0; i < selected.length; i += 1) {
-        selected[i].serialize(buffer);
+      for (const filter of selected) {
+        filter.serialize(buffer);
       }
 
       // Update internals

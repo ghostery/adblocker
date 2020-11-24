@@ -36,10 +36,9 @@ function shouldApplyHideException(filters: NetworkFilter[]): boolean {
 
   // Get $Xhide filter with highest priority:
   // $Xhide,important > $Xhide > @@$Xhide
-  let genericHideFilter: NetworkFilter = filters[0];
+  let genericHideFilter: NetworkFilter | undefined;
   let currentScore = 0;
-  for (let i = 0; i < filters.length; i += 1) {
-    const filter = filters[i];
+  for (const filter of filters) {
     // To encode priority between filters, we create a bitmask with the following:
     // $important,Xhide = 100 (takes precedence)
     // $Xhide           = 010 (exception to @@$Xhide)
@@ -51,6 +50,10 @@ function shouldApplyHideException(filters: NetworkFilter[]): boolean {
       currentScore = score;
       genericHideFilter = filter;
     }
+  }
+
+  if (genericHideFilter === undefined) {
+    return false;
   }
 
   // Check that there is at least one $generichide match and no exception
@@ -374,10 +377,9 @@ export default class FilterEngine extends EventEmitter<
 
     // Serialize the state of lists (names and checksums)
     buffer.pushUint16(this.lists.size);
-    const entries = Array.from(this.lists.entries()).sort();
-    for (let i = 0; i < entries.length; i += 1) {
-      buffer.pushASCII(entries[i][0]);
-      buffer.pushASCII(entries[i][1]);
+    for (const [name, value] of Array.from(this.lists.entries()).sort()) {
+      buffer.pushASCII(name);
+      buffer.pushASCII(value);
     }
 
     // Filters buckets
@@ -474,8 +476,7 @@ export default class FilterEngine extends EventEmitter<
       const redirects: NetworkFilter[] = [];
       const hideExceptions: NetworkFilter[] = [];
 
-      for (let i = 0; i < newNetworkFilters.length; i += 1) {
-        const filter = newNetworkFilters[i];
+      for (const filter of newNetworkFilters) {
         // NOTE: it's important to check for $generichide, $elemhide,
         // $specifichide and $csp before exceptions and important as we store
         // all of them in the same filter bucket. The check for exceptions is
@@ -560,8 +561,7 @@ export default class FilterEngine extends EventEmitter<
       hostname,
     });
 
-    for (let i = 0; i < rules.length; i += 1) {
-      const rule = rules[i];
+    for (const rule of rules) {
       const extended = rule.getExtendedSelector();
       if (extended !== undefined) {
         htmlSelectors.push(extended);
@@ -640,9 +640,7 @@ export default class FilterEngine extends EventEmitter<
 
     const genericHides: NetworkFilter[] = [];
     const specificHides: NetworkFilter[] = [];
-    for (let i = 0; i < exceptions.length; i += 1) {
-      const filter = exceptions[i];
-
+    for (const filter of exceptions) {
       if (filter.isElemHide()) {
         allowGenericHides = false;
         allowSpecificHides = false;
@@ -684,8 +682,8 @@ export default class FilterEngine extends EventEmitter<
 
     // Perform interpolation for injected scripts
     const scripts: string[] = [];
-    for (let i = 0; i < injections.length; i += 1) {
-      const script = injections[i].getScript(this.resources.js);
+    for (const injection of injections) {
+      const script = injection.getScript(this.resources.js);
       if (script !== undefined) {
         this.emit('script-injected', script, url);
         scripts.push(script);
@@ -745,8 +743,7 @@ export default class FilterEngine extends EventEmitter<
     // Collect all CSP directives and keep track of exceptions
     const disabledCsp = new Set();
     const enabledCsp = new Set();
-    for (let i = 0; i < matches.length; i += 1) {
-      const filter = matches[i];
+    for (const filter of matches) {
       if (filter.isException()) {
         if (filter.csp === undefined) {
           // All CSP directives are disabled for this site
@@ -810,8 +807,7 @@ export default class FilterEngine extends EventEmitter<
       if (result.filter === undefined) {
         const redirects = this.redirects.matchAll(request);
         if (redirects.length !== 0) {
-          for (let i = 0; i < redirects.length; i += 1) {
-            const filter = redirects[i];
+          for (const filter of redirects) {
             if (filter.getRedirect() === 'none') {
               redirectNone = filter;
             } else if (filter.isRedirectRule()) {

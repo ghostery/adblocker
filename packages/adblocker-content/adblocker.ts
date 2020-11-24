@@ -34,21 +34,16 @@ export interface DOMElement {
 export function getDOMElementsFromMutations(mutations: MutationRecord[]): DOMElement[] {
   // Accumulate all nodes which were updated in `nodes`
   const nodes: DOMElement[] = [];
-  for (let i = 0; i < mutations.length; i += 1) {
-    const mutation = mutations[i];
+  for (const mutation of mutations) {
     if (mutation.type === 'attributes') {
       nodes.push(mutation.target);
     } else if (mutation.type === 'childList') {
-      const addedNodes = mutation.addedNodes;
-      for (let j = 0; j < addedNodes.length; j += 1) {
-        const addedNode: DOMElement = addedNodes[j];
+      for (const addedNode of mutation.addedNodes) {
         nodes.push(addedNode);
 
-        if (addedNode.querySelectorAll !== undefined) {
-          const children = addedNode.querySelectorAll('[id],[class],[href]');
-          for (let k = 0; k < children.length; k += 1) {
-            nodes.push(children[k]);
-          }
+        const addedDOMElement: DOMElement = addedNode;
+        if (addedDOMElement.querySelectorAll !== undefined) {
+          nodes.push(...addedDOMElement.querySelectorAll('[id],[class],[href]'));
         }
       }
     }
@@ -74,9 +69,7 @@ export function extractFeaturesFromDOM(
   const hrefs: Set<string> = new Set();
   const ids: Set<string> = new Set();
 
-  for (let i = 0; i < elements.length; i += 1) {
-    const element = elements[i];
-
+  for (const element of elements) {
     if (element.nodeType !== 1 /* Node.ELEMENT_NODE */) {
       continue;
     }
@@ -94,8 +87,8 @@ export function extractFeaturesFromDOM(
     // Update classes
     const classList = element.classList;
     if (classList) {
-      for (let j = 0; j < classList.length; j += 1) {
-        classes.add(classList[j]);
+      for (const cls of classList) {
+        classes.add(cls);
       }
     }
 
@@ -127,7 +120,9 @@ export class DOMMonitor {
   public queryAll(window: Pick<Window, 'document'>): void {
     this.handleNewNodes(Array.from(window.document.querySelectorAll('[id],[class],[href]')));
   }
-  public start(window: Pick<Window, 'document'> & { MutationObserver?: typeof MutationObserver }): void {
+  public start(
+    window: Pick<Window, 'document'> & { MutationObserver?: typeof MutationObserver },
+  ): void {
     if (this.observer === null && window.MutationObserver !== undefined) {
       this.observer = new window.MutationObserver((mutations: MutationRecord[]) => {
         this.handleNewNodes(getDOMElementsFromMutations(mutations));
@@ -163,24 +158,21 @@ export class DOMMonitor {
     const newHrefs: string[] = [];
 
     // Update ids
-    for (let i = 0; i < ids.length; i += 1) {
-      const id = ids[i];
+    for (const id of ids) {
       if (this.knownIds.has(id) === false) {
         newIds.push(id);
         this.knownIds.add(id);
       }
     }
 
-    for (let i = 0; i < classes.length; i += 1) {
-      const cls = classes[i];
+    for (const cls of classes) {
       if (this.knownClasses.has(cls) === false) {
         newClasses.push(cls);
         this.knownClasses.add(cls);
       }
     }
 
-    for (let i = 0; i < hrefs.length; i += 1) {
-      const href = hrefs[i];
+    for (const href of hrefs) {
       if (this.knownHrefs.has(href) === false) {
         newHrefs.push(href);
         this.knownHrefs.add(href);

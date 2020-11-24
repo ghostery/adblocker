@@ -76,8 +76,8 @@ function handleResponseFromBackground(
 
   // Inject scripts
   if (scripts) {
-    for (let i = 0; i < scripts.length; i += 1) {
-      setTimeout(() => injectScript(scripts[i], window.document), 0);
+    for (const script of scripts) {
+      setTimeout(() => injectScript(script, window.document), 0);
     }
   }
 

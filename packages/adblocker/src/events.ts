@@ -72,8 +72,8 @@ function triggerCallback<EventNames>(
   const listenersForEvent = listeners.get(event);
   if (listenersForEvent !== undefined) {
     queueMicrotask(() => {
-      for (let i = 0; i < listenersForEvent.length; i += 1) {
-        listenersForEvent[i](...args);
+      for (const listener of listenersForEvent) {
+        listener(...args);
       }
     });
     return true;

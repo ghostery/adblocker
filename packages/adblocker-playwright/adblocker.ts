@@ -83,11 +83,10 @@ export class BlockingContext {
 
   public async disable(): Promise<void> {
     if (this.blocker.config.loadNetworkFilters === true) {
-      this.page.unroute('**/*', this.onRequest);
+      await this.page.unroute('**/*', this.onRequest);
     }
 
     if (this.blocker.config.loadCosmeticFilters === true) {
-      // @ts-ignore
       this.page.off('framenavigated', this.onFrameNavigated);
     }
   }
@@ -318,10 +317,10 @@ export class PlaywrightBlocker extends FiltersEngine {
     const promises: Promise<any>[] = [];
 
     if (scripts.length !== 0) {
-      for (let i = 0; i < scripts.length; i += 1) {
+      for (const script of scripts) {
         promises.push(
           frame.addScriptTag({
-            content: autoRemoveScript(scripts[i]),
+            content: autoRemoveScript(script),
           }),
         );
       }

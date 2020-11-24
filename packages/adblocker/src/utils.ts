@@ -6,7 +6,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { compactTokens } from './compact-set';
 import { TokensBuffer, TOKENS_BUFFER } from './tokens-buffer';
 
 export const HASH_SEED = 7877;
@@ -58,8 +57,9 @@ export function fastHash(str: string): number {
 
 export function hashStrings(strings: string[]): Uint32Array {
   const result = new Uint32Array(strings.length);
-  for (let i = 0; i < strings.length; i += 1) {
-    result[i] = fastHash(strings[i]);
+  let index = 0;
+  for (const str of strings) {
+    result[index++] = fastHash(str);
   }
   return result;
 }
@@ -374,12 +374,6 @@ export function tokenizeRegexInPlace(selector: string, tokens: TokensBuffer): vo
       );
     }
   }
-}
-
-export function createFuzzySignature(pattern: string): Uint32Array {
-  TOKENS_BUFFER.reset();
-  tokenizeNoSkipInPlace(pattern, TOKENS_BUFFER);
-  return compactTokens(new Uint32Array(TOKENS_BUFFER.slice()));
 }
 
 export function binSearch(arr: Uint32Array, elt: number): number {

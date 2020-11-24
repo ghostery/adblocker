@@ -355,8 +355,8 @@ export class StaticDataView {
   public pushUint32Array(arr: Uint32Array): void {
     this.pushLength(arr.length);
     // TODO - use `set` to push the full buffer at once?
-    for (let i = 0; i < arr.length; i += 1) {
-      this.pushUint32(arr[i]);
+    for (const n of arr) {
+      this.pushUint32(n);
     }
   }
 

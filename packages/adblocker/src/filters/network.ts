@@ -21,7 +21,6 @@ import { TOKENS_BUFFER } from '../tokens-buffer';
 import {
   bitCount,
   clearBit,
-  createFuzzySignature,
   fastHash,
   fastStartsWith,
   fastStartsWithFrom,
@@ -129,7 +128,7 @@ export const enum NETWORK_FILTER_MASK {
   thirdParty = 1 << 15,
 
   // Options
-  fuzzyMatch = 1 << 16,
+  // FREE - 1 << 16
   isBadFilter = 1 << 17,
   isCSP = 1 << 18,
   isGenericHide = 1 << 19,
@@ -317,7 +316,6 @@ function computeFilterId(
   domains: Domains | undefined,
   denyallow: Domains | undefined,
   redirect: string | undefined,
-  fuzzy: Uint32Array | undefined,
 ): number {
   let hash = (7907 * 33) ^ mask;
 
@@ -350,12 +348,6 @@ function computeFilterId(
   if (redirect !== undefined) {
     for (let i = 0; i < redirect.length; i += 1) {
       hash = (hash * 33) ^ redirect.charCodeAt(i);
-    }
-  }
-
-  if (fuzzy !== undefined) {
-    for (let i = 0; i < fuzzy.length; i += 1) {
-      hash = (hash * 33) ^ fuzzy[i];
     }
   }
 
@@ -398,7 +390,6 @@ function compileRegex(
   return new RegExp(filter);
 }
 
-const EMPTY_ARRAY = new Uint32Array([]);
 const MATCH_ALL = new RegExp('');
 
 export default class NetworkFilter implements IFilter {
@@ -444,9 +435,7 @@ export default class NetworkFilter implements IFilter {
       // --------------------------------------------------------------------- //
       // parseOptions
       // --------------------------------------------------------------------- //
-      const options = line.slice(optionsIndex + 1).split(',');
-      for (let i = 0; i < options.length; i += 1) {
-        const rawOption = options[i];
+      for (const rawOption of line.slice(optionsIndex + 1).split(',')) {
         const negation = rawOption.charCodeAt(0) === 126; /* '~' */
         let option = negation === true ? rawOption.slice(1) : rawOption;
 
@@ -513,9 +502,6 @@ export default class NetworkFilter implements IFilter {
               // first-party means ~third-party
               mask = clearBit(mask, NETWORK_FILTER_MASK.thirdParty);
             }
-            break;
-          case 'fuzzy':
-            mask = setBit(mask, NETWORK_FILTER_MASK.fuzzyMatch);
             break;
           case 'redirect-rule':
           case 'redirect':
@@ -918,7 +904,6 @@ export default class NetworkFilter implements IFilter {
   // Lazy attributes
   public id: number | undefined;
   public regex: RegExp | undefined;
-  private fuzzySignature: Uint32Array | undefined;
 
   constructor({
     csp,
@@ -952,7 +937,6 @@ export default class NetworkFilter implements IFilter {
     this.rawLine = rawLine;
 
     this.id = undefined;
-    this.fuzzySignature = undefined;
     this.regex = regex;
   }
 
@@ -1158,10 +1142,6 @@ export default class NetworkFilter implements IFilter {
       }
     }
 
-    if (this.isFuzzy()) {
-      options.push('fuzzy');
-    }
-
     if (this.isImportant()) {
       options.push('important');
     }
@@ -1225,12 +1205,11 @@ export default class NetworkFilter implements IFilter {
     return computeFilterId(
       this.csp,
       this.mask & ~NETWORK_FILTER_MASK.isBadFilter,
-      this.isFuzzy() ? undefined : this.filter,
+      this.filter,
       this.hostname,
       this.domains,
       this.denyallow,
       this.redirect,
-      this.isFuzzy() ? this.getFuzzySignature() : undefined,
     );
   }
 
@@ -1239,12 +1218,11 @@ export default class NetworkFilter implements IFilter {
       this.id = computeFilterId(
         this.csp,
         this.mask,
-        this.isFuzzy() ? undefined : this.filter,
+        this.filter,
         this.hostname,
         this.domains,
         this.denyallow,
         this.redirect,
-        this.isFuzzy() ? this.getFuzzySignature() : undefined,
       );
     }
     return this.id;
@@ -1306,16 +1284,6 @@ export default class NetworkFilter implements IFilter {
     return this.regex;
   }
 
-  public getFuzzySignature(): Uint32Array {
-    if (this.fuzzySignature === undefined) {
-      this.fuzzySignature =
-        this.filter !== undefined && this.isFuzzy()
-          ? createFuzzySignature(this.filter)
-          : EMPTY_ARRAY;
-    }
-    return this.fuzzySignature;
-  }
-
   public getTokens(): Uint32Array[] {
     TOKENS_BUFFER.reset();
 
@@ -1335,8 +1303,8 @@ export default class NetworkFilter implements IFilter {
     // Get tokens from filter
     if (this.isFullRegex() === false) {
       if (this.filter !== undefined) {
-        const skipLastToken = this.isPlain() && !this.isRightAnchor() && !this.isFuzzy();
-        const skipFirstToken = !this.isLeftAnchor() && !this.isFuzzy();
+        const skipLastToken = this.isPlain() && !this.isRightAnchor();
+        const skipFirstToken = !this.isLeftAnchor();
         tokenizeWithWildcardsInPlace(this.filter, skipFirstToken, skipLastToken, TOKENS_BUFFER);
       }
 
@@ -1364,9 +1332,9 @@ export default class NetworkFilter implements IFilter {
       this.domains.notEntities === undefined
     ) {
       const result: Uint32Array[] = [];
-      for (let i = 0; i < this.domains.hostnames.length; i += 1) {
+      for (const hostname of this.domains.hostnames) {
         const arr = new Uint32Array(1);
-        arr[0] = this.domains.hostnames[i];
+        arr[0] = hostname;
         result.push(arr);
       }
       return result;
@@ -1377,9 +1345,9 @@ export default class NetworkFilter implements IFilter {
       const types = getListOfRequestTypes(this);
       if (types.length !== 0) {
         const result: Uint32Array[] = [];
-        for (let i = 0; i < types.length; i += 1) {
+        for (const type of types) {
           const arr = new Uint32Array(1);
-          arr[0] = NORMALIZED_TYPE_TOKEN[types[i]];
+          arr[0] = NORMALIZED_TYPE_TOKEN[type];
           result.push(arr);
         }
         return result;
@@ -1408,10 +1376,6 @@ export default class NetworkFilter implements IFilter {
     // If content type is not supported (or not specified), we return `true`
     // only if the filter does not specify any resource type.
     return this.fromAny();
-  }
-
-  public isFuzzy() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fuzzyMatch);
   }
 
   public isException() {
@@ -1630,33 +1594,10 @@ export function isAnchoredByHostname(
   // `filterHostname` is infix of `hostname` and needs match full labels
   return (
     (isFollowedByWildcard === true ||
-    hostname.charCodeAt(filterHostname.length) === 46 /* '.' */ ||
+      hostname.charCodeAt(filterHostname.length) === 46 /* '.' */ ||
       filterHostname.charCodeAt(filterHostname.length - 1) === 46) /* '.' */ &&
     (hostname.charCodeAt(matchIndex - 1) === 46 || filterHostname.charCodeAt(0) === 46)
   );
-}
-
-// pattern$fuzzy
-function checkPatternFuzzyFilter(filter: NetworkFilter, request: Request) {
-  const signature = filter.getFuzzySignature();
-  const requestSignature = request.getFuzzySignature();
-
-  if (signature.length > requestSignature.length) {
-    return false;
-  }
-
-  let lastIndex = 0;
-  for (let i = 0; i < signature.length; i += 1) {
-    const c = signature[i];
-    // Find the occurrence of `c` in `requestSignature`
-    const j = requestSignature.indexOf(c, lastIndex);
-    if (j === -1) {
-      return false;
-    }
-    lastIndex = j + 1;
-  }
-
-  return true;
 }
 
 /**
@@ -1714,9 +1655,6 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
         // pattern|
         return request.url.endsWith(pattern);
       }
-    } else if (filter.isFuzzy()) {
-      // ||pattern$fuzzy
-      return checkPatternFuzzyFilter(filter, request);
     } else if (filter.isLeftAnchor()) {
       // ||pattern + left-anchor => This means that a plain pattern needs to appear
       // exactly after the hostname, with nothing in between.
@@ -1751,8 +1689,6 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
   } else if (filter.isRightAnchor()) {
     // pattern|
     return request.url.endsWith(pattern);
-  } else if (filter.isFuzzy()) {
-    return checkPatternFuzzyFilter(filter, request);
   }
 
   // pattern

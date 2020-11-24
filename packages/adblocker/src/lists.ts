@@ -150,21 +150,22 @@ export function parseFilters(
 
     // Handle continuations
     if (line.length > 2) {
-      while ((
+      while (
         i < lines.length - 1 &&
         line.charCodeAt(line.length - 1) === 92 &&
         line.charCodeAt(line.length - 2) === 32
-      )) {
+      ) {
         line = line.slice(0, -2);
 
         const nextLine = lines[i + 1];
-        if (nextLine.length > 4 && (
+        if (
+          nextLine.length > 4 &&
           nextLine.charCodeAt(0) === 32 &&
           nextLine.charCodeAt(1) === 32 &&
           nextLine.charCodeAt(2) === 32 &&
           nextLine.charCodeAt(3) === 32 &&
           nextLine.charCodeAt(4) !== 32
-        )) {
+        ) {
           line += nextLine.slice(4);
           i += 1;
         } else {
@@ -199,10 +200,7 @@ export function parseFilters(
   return { networkFilters, cosmeticFilters };
 }
 
-function getFilters(
-  list: string,
-  config?: Partial<Config>,
-): (NetworkFilter | CosmeticFilter)[] {
+function getFilters(list: string, config?: Partial<Config>): (NetworkFilter | CosmeticFilter)[] {
   const { networkFilters, cosmeticFilters } = parseFilters(list, config);
   const filters: (NetworkFilter | CosmeticFilter)[] = [];
   return filters.concat(networkFilters).concat(cosmeticFilters);
@@ -258,8 +256,7 @@ export function generateDiff(
 
   // Check which filters were added, based on ID
   const added: Set<string> = new Set();
-  for (let i = 0; i < newRevisionFilters.length; i += 1) {
-    const filter = newRevisionFilters[i];
+  for (const filter of newRevisionFilters) {
     if (!prevRevisionIds.has(filter.getId())) {
       added.add(filter.rawLine as string);
     }
@@ -267,8 +264,7 @@ export function generateDiff(
 
   // Check which filters were removed, based on ID
   const removed: Set<string> = new Set();
-  for (let i = 0; i < prevRevisionFilters.length; i += 1) {
-    const filter = prevRevisionFilters[i];
+  for (const filter of prevRevisionFilters) {
     if (!newRevisionIds.has(filter.getId())) {
       removed.add(filter.rawLine as string);
     }
@@ -285,12 +281,9 @@ export function mergeDiffs(diffs: Partial<IRawDiff>[]): IRawDiff {
   const addedCumul: Set<string> = new Set();
   const removedCumul: Set<string> = new Set();
 
-  for (let i = 0; i < diffs.length; i += 1) {
-    const { added, removed } = diffs[i];
-
+  for (const { added, removed } of diffs) {
     if (added !== undefined) {
-      for (let j = 0; j < added.length; j += 1) {
-        const str = added[j];
+      for (const str of added) {
         if (removedCumul.has(str)) {
           removedCumul.delete(str);
         }
@@ -299,8 +292,7 @@ export function mergeDiffs(diffs: Partial<IRawDiff>[]): IRawDiff {
     }
 
     if (removed !== undefined) {
-      for (let j = 0; j < removed.length; j += 1) {
-        const str = removed[j];
+      for (const str of removed) {
         if (addedCumul.has(str)) {
           addedCumul.delete(str);
         }
