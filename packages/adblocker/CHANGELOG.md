@@ -1,3 +1,20 @@
+# v1.18.8 (Wed Nov 25 2020)
+
+#### :bug: Bug Fix
+
+- Fix mathing of hostname filters with www. [#1471](https://github.com/cliqz-oss/adblocker/pull/1471) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Update local assets [#1470](https://github.com/cliqz-oss/adblocker/pull/1470) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### Authors: 2
+
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.18.7 (Tue Nov 24 2020)
 
 #### :nail_care: Polish
