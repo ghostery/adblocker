@@ -15608,8 +15608,7 @@ export default [
     url: 'https://cdne-static.yjcontentdelivery.com',
   },
   {
-    check: true,
-    filters: ['||www.youjizz.com^$image'],
+    filters: [],
     sourceUrl: 'https://foo.com',
     type: 'image',
     url: 'https://cdne-pics.youjizz.com',

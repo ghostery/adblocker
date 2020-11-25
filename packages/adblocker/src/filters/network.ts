@@ -829,12 +829,6 @@ export default class NetworkFilter implements IFilter {
       // - ignore hostname anchor is not hostname provided
 
       if (hostname !== undefined) {
-        if (
-          getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor) &&
-          fastStartsWith(hostname, 'www.')
-        ) {
-          hostname = hostname.slice(4);
-        }
         hostname = hostname.toLowerCase();
         if (hasUnicode(hostname)) {
           mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isUnicode, true);
