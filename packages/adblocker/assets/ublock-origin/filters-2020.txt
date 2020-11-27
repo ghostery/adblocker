@@ -3230,7 +3230,7 @@ vudeo.net##+js(acis, Object.defineProperty, XMLHttpRequest)
 architecturaldigest.com,arstechnica.com,bonappetit.com,brides.com,cntraveler.com,epicurious.com,golfdigest.com,newyorker.com,pitchfork.com,self.com,teenvogue.com,vanityfair.com,vogue.com,wmagazine.com##+js(nofab)
 ! https://www.reddit.com/r/uBlockOrigin/comments/jvh77m/ad_blocker_detection_on_newyorkercom/
 newyorker.com##+js(nosiif, ()||, 25)
-
+newyorker.com##.journey-unit
 ! https://www.reddit.com/r/uBlockOrigin/comments/hwrk5l/getting_popup_when_click_on_vid_kavglecom/
 kavgle.com##[href^="https://go.vrbangers.com/"], [href^="https://asiafriendfinder.com/"]
 
@@ -6292,8 +6292,36 @@ camthots.tv##.table
 javtrailers.com###cta
 javtrailers.com###popunderLink
 
+! Foxella Blockadblock
+@@||foxella.com^$ghide
+
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67798
 crockotube.com##+js(acis, document.querySelectorAll, popMagic)
 crockotube.com##div[class*="vision"]
 crockotube.com##div[class^="vis-"]
 ||bunnymediaserver.com^
+
+! wetpussy.sexy popunder, ads
+wetpussy.sexy##+js(acis, document.querySelectorAll, popMagic)
+wetpussy.sexy##.mansonry-item
+||wetpussy.sexy/js/index-nb.js
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/68575
+lootlinks.net,speedsatoshi.com##+js(set, canRunAds, true)
+lootlinks.net,speedsatoshi.com##+js(nano-sib)
+speedsatoshi.com##ins[style="display:inline-block;width:300px;height:250px;"]
+
+! jaysndees.com anti-adb
+jaysndees.com##+js(nosiif, visibility, 1000)
+jaysndees.com##+js(nofab)
+jaysndees.com##div[class][style^="width: 728px; height: 90px;"]
+jaysndees.com###topshow
+jaysndees.com##center:nth-of-type(3)
+jaysndees.com###cust_btn2_random
+jaysndees.com###block2
+jaysndees.com###block1
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/68616
+mr9soft.com##+js(nostif, /null|Error/, 10000)
+||googlesyndication.com^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=mr9soft.com
+||oudseroa.com^
