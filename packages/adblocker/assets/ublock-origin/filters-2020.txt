@@ -1049,10 +1049,6 @@ skidrowcodex.net##^script:has-text('shift')
 sportif.id##+js(nowoif)
 sportif.id##[href^="https://www.khasiat.id/"]
 
-! https://github.com/NanoMeow/QuickReports/issues/3788
-cuatrolatastv.blogspot.com##+js(acis, String.fromCharCode, 'shift')
-||sites.google.com/site/rvdmarcrailcatrain/home/tomber.js$script
-
 ! https://github.com/NanoMeow/QuickReports/issues/3791
 claimfreecoins.cc##+js(set, show_ads_gr8_lite, true)
 
@@ -4238,6 +4234,7 @@ chiasecongnghe.com###myDIVV
 
 ! youvideoporno .mobi popunder
 youvideoporno.mobi##+js(acis, document.querySelectorAll, popMagic)
+youvideoporno.mobi##+js(aopr, decodeURI)
 ||youvideoporno.mobi/sw.js$script,1p
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/in0gxn/voesx_aggressive_advertising_how_can_i_fix_it/
@@ -4960,7 +4957,7 @@ androidtunado.com.br##+js(nosiif, visibility, 1000)
 wristreview.com##+js(aopw, ai_front)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/64979
-bitfly.io##^script:has-text(/break;case $.|Math|btoa/)
+bitfly.io##+js(acis, addEventListener, nextFunction)
 bitfly.io##+js(acis, String.fromCharCode, btoa)
 bitfly.io##+js(aopr, app_vars.force_disable_adblock)
 bitfly.io##+js(aopr, open)
@@ -6294,6 +6291,7 @@ javtrailers.com###popunderLink
 
 ! Foxella Blockadblock
 @@||foxella.com^$ghide
+foxella.com##.adsbygoogle
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67798
 crockotube.com##+js(acis, document.querySelectorAll, popMagic)
@@ -6325,3 +6323,40 @@ jaysndees.com###block1
 mr9soft.com##+js(nostif, /null|Error/, 10000)
 ||googlesyndication.com^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=mr9soft.com
 ||oudseroa.com^
+
+! https://www.reddit.com/r/uBlockOrigin/comments/k2d7q8/i_have_a_blockadblock_annoyance_it_looks_like/
+@@||famfonts.com^$ghide
+famfonts.com##.adsbygoogle
+
+! egyanime. com popups
+egyanime.com##+js(aopw, _pop)
+egyanime.com##+js(acis, String.fromCharCode, btoa)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8283
+nifteam.info##+js(acis, document.getElementById, undefined)
+nifteam.info###wtf:style(visibility:visible!important;display:block!important;)
+
+! babeporn .net popunder
+babeporn.net##+js(aopr, decodeURI)
+||liantmartier.info^
+
+! tubexo .tv popunder
+tubexo.tv##+js(acis, document.querySelectorAll, popMagic)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/k2ssjt/broken_things/
+paidtomoney.com##+js(nosiif, visibility, 1000)
+paidtomoney.com##+js(aopr, app_vars.force_disable_adblock)
+paidtomoney.com##+js(aopr, open)
+paidtomoney.com##.banner
+||nepobedimiy2kot11jf.com^
+||migayush2lam1pa1.com^
+||leginsi2leopard1oviy1hf.com^
+doctor-groups.com##+js(nosiif, visibility, 1000)
+doctor-groups.com##+js(aopr, app_vars.force_disable_adblock)
+doctor-groups.com##+js(aopr, open)
+doctor-groups.com##.banner
+doctor-groups.com###float
+doctor-groups.com##.box-main > center > div
+doctor-groups.com##div[class][style="width:728px;height:90px;display: inline-block;margin: 0 auto"]
+doctor-groups.com##div[class][style="width:300px;height:250px;display: inline-block;margin: 0 auto"]
+doctor-groups.com##div[class][style="width:468px;height:60px;display: inline-block;margin: 0 auto"]
