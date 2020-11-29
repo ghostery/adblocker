@@ -8,7 +8,6 @@
 /* tslint:disable quotemark */
 export default [
   "[cellspacing=\"0\"][cellpadding=\"0\"][border=\"0\"]",
-  "acis, Object.defineProperty, XMLHttpRequest",
   "acis, document.querySelectorAll, popMagic",
   "acis, addEventListener, google_ad_client",
   "://paid.outbrain.com/network/redir?\"]",
@@ -19,7 +18,6 @@ export default [
   "acis, document.createElement, ",
   "aopr, document.dispatchEvent",
   "acis, String.fromCharCode, ",
-  "acis, Math, XMLHttpRequest",
   "Date.prototype.toUTCString",
   "nosiif, visibility, 1000",
   "acis, Math, zfgloaded",
@@ -32,6 +30,7 @@ export default [
   "advertisement",
   ":first-child",
   "[href^=\"http",
+  "XMLHttpReque",
   ":last-child",
   "[href=\"http",
   "contextmenu",
@@ -106,6 +105,7 @@ export default [
   "sense",
   "set, ",
   "Wrapp",
+  "0px;",
   "Bann",
   "body",
   "dfp-",
