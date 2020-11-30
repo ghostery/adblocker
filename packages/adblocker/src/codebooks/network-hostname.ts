@@ -7,7 +7,6 @@
  */
 /* tslint:disable quotemark */
 export default [
-  "quantcast.mgr.consensu.org",
   "googlesyndication",
   "imasdk.googleapis",
   "cdnjs.cloudflare",
@@ -53,13 +52,13 @@ export default [
   ".n",
   ".p",
   ".t",
-  "10",
   "24",
   "ab",
   "ac",
   "ad",
   "af",
   "ag",
+  "ai",
   "ak",
   "al",
   "am",
@@ -101,6 +100,7 @@ export default [
   "ec",
   "ed",
   "ef",
+  "eg",
   "ek",
   "el",
   "em",
