@@ -111,7 +111,7 @@ episodesthebadgirlsclub.com##+js(aopw, _pop)
 @@||notepad.pw^$ghide
 
 ! https://github.com/NanoMeow/QuickReports/issues/3553
-gosemut.xyz##+js(aeld, , open)
+gosemut.*##+js(nowoif)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7221
 rexdlfile.com##+js(aopr, require)
@@ -270,6 +270,7 @@ v2rayssr.com##+js(aopr, anOptions)
 ||blogspot.com/*.gif$image,domain=uhuseries.com
 uhuseries.com##[href^="https://www.ufa191.com/"]
 uhuseries.com###fix_footer > picture > .lazyloaded
+||uhuseries.com/banner/$image
 aplayer.xyz##+js(nowoif)
 aplayer.xyz##.popupfancy > div
 
@@ -931,6 +932,7 @@ abcvideo.cc##+js(set, cRAds, true)
 abcvideo.cc##+js(acis, Math, zfgloaded)
 abcvideo.cc##+js(aopw, _pop)
 abcvideo.cc##+js(aopr, AdservingModule)
+abcvideo.cc##+js(aopr, devtoolsDetector)
 ||abcvideo.cc/*/vast.js^$script
 
 ! https://github.com/uBlockOrigin/uAssets/commit/ea0f038f5bf9c80c4840f03317a10269e850a143#commitcomment-38932408
@@ -2379,6 +2381,8 @@ umecourses.xyz##+js(nosiif, visibility, 1000)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7590
 fulltube.online##+js(acis, String.fromCharCode, btoa)
+opencd.xyz##+js(nowoif)
+fulltube.online##.mvic-btn
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7591
 movidish2.*##+js(acis, Math, XMLHttpRequest)
@@ -4200,6 +4204,7 @@ adeth.cc##+js(nosiif, visibility, 1000)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7869
 *$script,frame,xhr,3p,denyallow=bootstrapcdn.com|jwpcdn.com|wp.com|cdn77.org|facebook.com|facebook.net|fbcdn.net|instagram.com|disqus.com|disquscdn.com|jwpsrv.com|plyr.io|jsdelivr.net|twimg.com|twitter.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=playnow.*|~playnow.com
+playnow.*##+js(acis, String.fromCharCode, btoa)
 ||agriculturaltherapist.com^$3p
 
 ! comicbook.com header-banner
@@ -6190,7 +6195,7 @@ secretsdeepweb.blogspot.com##+js(nosiif, visibility, 1000)
 passgen.icu##+js(aopr, app_vars.force_disable_adblock)
 passgen.icu##+js(nowoif)
 *$frame,denyallow=google.com,domain=passgen.icu
-*$3p,script,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=passgen.icu
+*$3p,script,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com|jsdelivr.net,domain=passgen.icu
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/68019
 yeptube.com##+js(nowoif)
@@ -6367,3 +6372,38 @@ srts.me##+js(aopw, _pop)
 ! https://github.com/uBlockOrigin/uAssets/issues/8292
 o2tvseries.website##+js(acis, String.fromCharCode, btoa)
 ||toukeedo.com^
+
+! pinayviralsexx.com popup
+pinayviralsexx.com##+js(acis, document.querySelectorAll, popMagic)
+
+! rapbhe.com popups
+rapbhe.com##+js(acis, String.fromCharCode, atob)
+
+! https://github.com/uBlockOrigin/uAssets/pull/8294
+niusdiario.es##+js(aeld, load, Adblock)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/68895
+viral-topics.com##+js(aopr, app_vars.force_disable_adblock)
+viral-topics.com##.banner
+
+! https://github.com/uBlockOrigin/uAssets/issues/8296
+jatt.net##+js(acis, String.fromCharCode, btoa)
+
+! iceporn.com cname issue, popup
+iceporn.com##+js(nowoif)
+@@||cdn13.com^$script,domain=iceporn.com
+iceporn.com##.puFloatLine
+iceporn.com###abmessage
+iceporn.com##.drt-spot-box
+
+! https://www.reddit.com/r/uBlockOrigin/comments/k3v0z9/adblocker_detected_on_multicseu/
+multics.eu##+js(acis, $, .test)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/k3x8ta/antiadblock_popup_on_proboards/
+forums.lostmediawiki.com###ad1
+forums.lostmediawiki.com###remove_ads_link
+forums.lostmediawiki.com##[id^="ad-"]
+
+! https://github.com/uBlockOrigin/uAssets/issues/8298
+thejournal.ie##+js(nowoif)
+thejournal.ie##html:style(background-image:none !important)
