@@ -978,6 +978,7 @@ exdb.net##+js(aeld, DOMContentLoaded, mdpDeBlocker)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3773
 ||oklivetv.com^$xhr,1p,redirect-rule=nooptext
+*$script,redirect-rule=noopjs,domain=oklivetv.com
 !#if env_firefox
 @@||oklivetv.com^$xhr,script,css,1p
 !#endif
@@ -1821,8 +1822,6 @@ animeworld.tv##+js(aopr, AaDetector)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/56763
 turkseed.com##+js(acis, addEventListener, google_ad_client)
 
-! https://github.com/NanoMeow/QuickReports/issues/4022
-nudesday.com##+js(aopr, LieDetector)
 ||2solo.biz^$all
 ||tracktraf.com^$all
 ||u29qnuav3i6p.com^
@@ -1837,11 +1836,6 @@ gametter.com##+js(acis, addEventListener, google_ad_client)
 ! https://github.com/NanoMeow/QuickReports/issues/4341
 animesanka.com##+js(acis, Math, zfgloaded)
 animesanka.com##+js(nosiif, visibility, 1000)
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/56829
-@@||mangawt.com^$ghide
-*$image,redirect-rule=1x1.gif,domain=mangawt.com
-mangawt.com##.adsbygoogle
 
 ! https://github.com/NanoMeow/QuickReports/issues/4030
 @@||napolitoday.it^$ghide
@@ -1872,8 +1866,8 @@ m.z1.fm##div[style^="position: absolute; z-index: 9999999;"]
 
 ||tv1s4d6klh4n.com^
 
-! https://github.com/uBlockOrigin/uAssets/issues/7523
-movies07.co##+js(aeld, , _0x)
+! movies07. cc anti adb
+movies07.*##+js(aopr, absda)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/gxud33/getting_pop_up_adds_on_this_website/
 hpaudiobooks.*##+js(acis, String.fromCharCode, 'shift')
@@ -2895,10 +2889,6 @@ ling.online##+js(acis, Math, XMLHttpRequest)
 ling.online##+js(set, String.fromCharCode, trueFunc)
 ling.online##^script:has-text(encodeURI)
 
-! https://github.com/NanoMeow/QuickReports/issues/4314
-dutafilm.red##+js(nowoif)
-dutafilm.red##[href^="https://rebrand.ly"]
-
 ! https://github.com/NanoMeow/QuickReports/issues/4318
 forumdz.com##+js(nostif, offsetHeight)
 
@@ -2926,8 +2916,6 @@ healthdelay.com##+js(nosiif, visibility, 1000)
 gdanstum.net##+js(adfly-defuser)
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=44912
-gomovies-online.me##+js(acis, Object.defineProperty, XMLHttpRequest)
-gomovies-online.me##+js(acis, Math, zfgloaded)
 gomovies-online.me##+js(aeld, , _0x)
 gomovies-online.me##+js(aopr, LieDetector)
 *$script,3p,denyallow=fastly.net|jwpcdn.com,domain=gomovies-online.me
@@ -6486,3 +6474,23 @@ playsexgames.xxx##.widget:not(#text-2)
 ||decorativemodels.com/images/decorativemodels.com/banners/
 ||decorativemodels.com/smallfr/
 ||decorativemodels.com/smallfr2/
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/68948
+okec.uk##+js(noeval-if, fab_alert)
+okec.uk##+js(aopr, app_vars.force_disable_adblock)
+okec.uk##+js(aopr, open)
+||storiespace.com^
+||radiusfellowship.com^
+
+! pelishouse.com popups
+pelishouse.com##+js(aopr, exoJsPop101)
+pelishouse.com,g-nula.top##+js(nowoif)
+pelishouse.com##+js(ra, href, #clickfakeplayer)
+
+! https://github.com/uBlockOrigin/uAssets/pull/8314
+zhihu.com##.Modal-wrapper
+zhihu.com##html:style(overflow:auto !important;margin-right:0px !important)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/69182
+uppic.xyz#@#.adsbygoogle
+uppic.xyz##.alert-danger

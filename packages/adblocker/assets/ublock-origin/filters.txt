@@ -7402,8 +7402,7 @@ galaxy.gala100.net##.metaRedirectWrapperTopAds
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2666
 ||netdna-ssl.com^$frame,domain=telerium.tv
-extremotvplay.com##+js(aopw, _pop)
-*$popup,domain=rojadirectaonlinetv.com,3p
+extremotvplay.com,rojadirectaenvivo.*##+js(aopw, _pop)
 *$popup,domain=extremotvplay.com,3p
 peer2cast.pro###ads
 /skipad.png$image
@@ -10819,6 +10818,7 @@ anitube.*##div[style^="pointer-events: none; position: absolute; "]
 ||megafilmeshd21.tk^$3p
 ||anitubecz.uk^$script
 ||1uno1xkktau4.com^$3p
+@@||anicdn.net/popads.js?$script,domain=anitube.cx
 
 ! https://github.com/NanoMeow/QuickReports/issues/367
 comtechies.com##+js(aopr, TL_Front)
@@ -15630,14 +15630,17 @@ freebcc.org##+js(aopr, adBlockDetected)
 
 ! https://github.com/DandelionSprout/adfilt/issues/7#issuecomment-493395377
 ! https://github.com/uBlockOrigin/uAssets/issues/6726
-pixiv.net###js-mount-point-header.with-ad:style(min-height:0!important;)
+pixiv.net###js-mount-point-header.with-ad:style(min-height: auto !important)
 pixiv.net##._illust-upload + div[style^="display:block;width:968px;height:170px;"]
-pixiv.net##div[class^="sc-"]:has(> div[style] > iframe[width="728"][height="90"])
-pixiv.net##iframe[name="dashboard_home"]:upward(div[span="1"])
-pixiv.net##iframe[name="infeed"]:upward(1)
-pixiv.net##iframe[width="300"][height="250"]:upward(2)
-pixiv.net##iframe[width="468"][height="60"]:upward(1)
+pixiv.net##div[class^="sc-"] > div[class^="sc-"] > div[style*="width: 728px;"]:only-child > iframe[name="footer"][width="728"][height="90"]:upward(2):matches-css(padding-bottom: 56px)
+pixiv.net##iframe[name="dashboard_home"]:upward(div[class^="sc-"][span="1"])
+pixiv.net##iframe[name="footer"][width="728"][height="90"]:upward(1)
+pixiv.net##iframe[name="header"][width="468"][height="60"]:upward(1)
+pixiv.net##iframe[name="rectangle"][width="300"][height="250"]:upward(1)
+pixiv.net##iframe[name="topbranding_rectangle"][width="300"][height="250"]:upward(li[size="2"][offset="1"])
+pixiv.net##iframe[name][width="184"][height="232"]:upward(1)
 pixiv.net##iframe[name][width="500"][height="520"]:upward(1)
+pixiv.net##section > div[class^="sc-"]:last-child > div[style*="width: 728px;"]:only-child > iframe[name="footer"][width="728"][height="90"]:upward(2):matches-css(margin-bottom: -16px)
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=43033
 ||nextclick.pl^$3p
@@ -17404,6 +17407,7 @@ lolinime.net##+js(set, showAds, true)
 @@||footprint.net^$xhr,domain=prod-player.tf1.fr
 @@||vendorlist.consensu.org/vendorlist.json$xhr,domain=tf1.fr
 @@||cdn.tagcommander.com/cmp-api/cmp.js$script,domain=tf1.fr
+||slpubmedias.tf1.fr^$media,1p,redirect=noopmp3-0.1s
 
 ! https://github.com/NanoMeow/QuickReports/issues/1653
 f1livegp.net##+js(nowebrtc)
@@ -18444,7 +18448,7 @@ adsafelink.com##+js(aopr, app_vars.force_disable_adblock)
 ||2go7v1nes8.com^$3p
 
 ! https://github.com/NanoMeow/QuickReports/issues/1878
-occhionotizie.it##+js(set, $tieE3, true)
+@@||cdnjs.cloudflare.com/ajax/libs/fuckadblock/*/fuckadblock.min.js$script,domain=occhionotizie.it
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6327
 unyumerdeka.com##+js(aopr, app_vars.force_disable_adblock)
@@ -19304,12 +19308,13 @@ photobucket.com##body:style(overflow: auto !important)
 @@||photobucket.com/resources/common/*$script,1p
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/k3xfke/ublock_gets_detected_on_vvvvid/
-@@||imasdk.googleapis.com/js/core/$subdocument,domain=vvvvid.it
-@@*ads.mperience.net/vast$xhr,domain=imasdk.googleapis.com
-preroll;$xhr,domain=imasdk.googleapis.com,important
-||akamaized.net/Roll/$media,redirect=noopmp3-0.1s
-*$media,redirect=noopmp3-0.1s,domain=vvvvid.it
-@@||bs.serving-sys.com/*&gdpr_consent$xhr,domain=imasdk.googleapis.com
+vvvvid.it##+js(set, vvvvid.models.PlayerObj.prototype.play4Ads, false)
+! @@||imasdk.googleapis.com/js/core/$subdocument,domain=vvvvid.it
+! @@*ads.mperience.net/vast$xhr,domain=imasdk.googleapis.com
+! preroll;$xhr,domain=imasdk.googleapis.com,important
+! ||akamaized.net/Roll/$media,redirect=noopmp3-0.1s
+! *$media,redirect=noopmp3-0.1s,domain=vvvvid.it
+! @@||bs.serving-sys.com/*&gdpr_consent$xhr,domain=imasdk.googleapis.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6475
 @@||litepaste.com^$ghide
@@ -21205,8 +21210,8 @@ nensaysubs.net###outerdiv
 ! gnula .se, .nu, gnula2. co
 zembed.to##+js(aopr, direct_link)
 gnula.*##+js(nowoif)
-gnula.*##+js(aopr, AaDetector)
-gnula.*##+js(acis, String.fromCharCode, btoa)
+gnula.*##+js(acis, String.fromCharCode, break)
+gnula2.co##.box-p
 ||best-cdn.pl^
 ||netflare.info^
 
@@ -21592,7 +21597,9 @@ fembed.live##+js(nowoif)
 
 ! pelis28.co ads
 pelis28.*##+js(nowoif)
+pelis28.*##+js(ra, href, #clickfakeplayer)
 pelis28.*##.buttons-p
+pelis28.*###options-0
 pelispub.info##+js(aopr, mejs)
 
 ! verpelistoday.com popup ads
@@ -23002,7 +23009,7 @@ bobs-tube.com##.sponsored_top
 dreamamateurs.com##+js(popads-dummy)
 pornforrelax.com##+js(aopr, adver.abFucker.serve)
 pornforrelax.com##+js(aeld, , _blank)
-fatwhitebutt.com,smplace.com,slaughtergays.com,sexiestpicture.com,sassytube.com,xh.video##+js(nowoif)
+fatwhitebutt.com,smplace.com,slaughtergays.com,sexiestpicture.com,sassytube.com,vipergirls.to,xh.video##+js(nowoif)
 sokobj.com,smplace.com##+js(aopw, _pop)
 tuberel.com##+js(aeld, , open)
 pornl.com##+js(aeld, , pop)
