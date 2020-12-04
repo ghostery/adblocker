@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202012031423
+! Version: 202012041824
 ! Title: EasyPrivacy
-! Last modified: 03 Dec 2020 14:23 UTC
+! Last modified: 04 Dec 2020 18:24 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -835,6 +835,7 @@
 /api/analytics/*
 /api/analytics?
 /api/analytics|
+/api/cmp_tracker
 /api/log?
 /api/lt/ref?
 /api/metrics$other
@@ -871,7 +872,6 @@
 /AppMeasurementCustom.
 /apTracker.
 /aptrk.js
-/apw.js
 /aqtag.
 /ard.png?
 /argtk.min.
@@ -12918,7 +12918,7 @@ _mongo_stats/
 ||otoshiana.com/ufo/
 ||pia.jp/akam/$script
 ||pia.jp/images/pt.gif$image
-||popin.cc/popin_discovery
+||popin.cc/td_js_
 ||quant.jp/track/
 ||rcm.shinobi.jp^
 ||rd.rakuten.co.jp^$script
@@ -13606,6 +13606,7 @@ _mongo_stats/
 ||cmstrendslog.indiatimes.com^
 ||cmstrendslog.timesnow.tv^
 ||cnn.com/analytics/
+||cnt.iceporn.com^
 ||cnt.nicemix.com^
 ||cnt.nuvid.com^
 ||cnt.vivatube.com^
@@ -14326,7 +14327,6 @@ _mongo_stats/
 ||local.ch/track/
 ||localads-statistics.maps.me^
 ||localmonero.co/static/ga.js
-||location.bloomberg.com^
 ||log.china.cn^
 ||log.go.com^
 ||log.hypebeast.com^
@@ -17476,6 +17476,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 ||log.ttbc-hcm.gov.vn^
 ||logsbin.dantri.com.vn^
 ! Indonesian
+||analytic20.detik.com^
 ||ktracker.kumparan.com^
 ! Specific blocking filters necessary for sites allowlisting with $genericblock filter option
 ! Gamestar.de
@@ -17981,6 +17982,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||zynga.com/current/iframe/track.php?$domain=apps.facebook.com
 ! Consent Fixes
 @@||sourcepoint.telegraph.co.uk^$~third-party,xmlhttprequest
+@@||sourcepointcmp.bloomberg.com/mms/get_site_data$xmlhttprequest,domain=bloomberg.com
 ! Stackoverflow-related. https://forums.lanik.us/viewtopic.php?f=64&t=44747
 @@||askubuntu.com/tags/$~third-party,xmlhttprequest
 @@||mathoverflow.net/tags/$~third-party,xmlhttprequest
@@ -18099,10 +18101,10 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||ksta.de^*/tracking/tracking.js$domain=ksta.de
 @@||orginio.de/api/analytics/$~third-party,xmlhttprequest
 @@||rtl.de^*/videotracking.min.js$domain=rtl.de
-@@||showheroes.com/playlist/vast3?$xmlhttprequest,domain=rtl.de
-@@||showheroes.com/publishertag.js$domain=rtl.de
-@@||showheroes.com/pubtag.js$domain=rtl.de
-@@||showheroes.com/spot/iframe?pageurl=$script,subdocument,domain=rtl.de
+@@||showheroes.com/playlist/vast3?$xmlhttprequest,domain=kochbar.de|rtl.de|rtl2.de
+@@||showheroes.com/publishertag.js$domain=kochbar.de|rtl.de|rtl2.de
+@@||showheroes.com/pubtag.js$domain=kochbar.de|rtl.de|rtl2.de
+@@||showheroes.com/spot/iframe?pageurl=$script,subdocument,domain=kochbar.de|rtl.de|rtl2.de
 @@||spatialbuzz.com/piwik/piwik.js$domain=spatialbuzz.com
 @@||spiegel.de/layout/js/http/netmind-$script
 @@||sunday.de/skin/*/googleanalytics.js$script
