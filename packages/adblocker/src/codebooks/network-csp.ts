@@ -8,8 +8,6 @@
 /* tslint:disable quotemark */
 export default [
   "sandbox allow-forms allow-same-origin allow-scripts allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-top-navigation",
-  "script-src 'self' *.leadpages.net *.gstatic.com *.google.com *.googleapis.com *.playwire.com *.facebook.com *.bootstrapcdn.com",
-  "script-src 'self' *.gstatic.com *.google.com *.googleapis.com *.facebook.com *.bootstrapcdn.com *.twitter.com *.spot.im",
   "script-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' data: ",
   "child-src 'none';frame-src *;worker-src 'none';",
@@ -24,7 +22,6 @@ export default [
   "script-src * 'unsafe-inline'",
   " *.gstatic.com *.google.com",
   ".com *.google-analytics.com",
-  " *.twitter.com *.spot.im",
   "-src 'self' *.google.com",
   ".googletagmanager.com",
   "*.googleapis.com *.",
