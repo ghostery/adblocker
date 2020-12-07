@@ -1521,6 +1521,7 @@ anonymousceviri.com##+js(acis, addEventListener, nextFunction)
 
 ! https://forums.lanik.us/viewtopic.php?f=91&t=44707
 ed-protect.org##+js(aopr, absda)
+ed-protect.org##+js(acis, String.fromCharCode, /btoa|break/)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3937
 pinayvids.com##+js(nosiif, visibility, 1000)
@@ -3052,8 +3053,8 @@ biopills.net##+js(acis, jQuery, ai_adb)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4364
 atozmath.com##+js(acis, alert, reCAPTCHA)
-atozmath.com##+js(acis, $, setInterval)
-atozmath.com###bottomAd:style(display:block !important)
+@@||atozmath.com^$ghide
+atozmath.com##div[style] > .adsbyvli:style(height:11px !important)
 @@||atozmath.com/Scripts/advertisement.js$xhr,1p
 
 ! https://github.com/NanoMeow/QuickReports/issues/4365
@@ -5365,6 +5366,9 @@ link.kangapip.com##.box-main
 fedaro.me,s.kamerafoto.net##[href="https://s.kamerafoto.net/"]
 fedaro.me##+js(set, blurred, false)
 fedaro.me##.box-main > .row
+litpets.website,nstnews.net##+js(set, count, 0)
+litpets.website,nstnews.net###wpsafe-snp:style(display: block !important;)
+litpets.website,nstnews.net###wpsafe-generate:style(display: block !important;)
 
 ! e-wok.tv anti-adb
 @@||e-wok.tv/js/new/advertisment.js$script,1p
@@ -5454,6 +5458,9 @@ citynews.ca##body:style(padding-top:0px !important)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/jidhpq/i_found_an_antiadblock/
 miuiku.com##+js(acis, eval, ignielAdBlock)
+miuiku.com##+js(nowoif)
+miuiku.com##+js(set, blurred, false)
+miuiku.com##[style="text-align: center;"] > a[href]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8085
 forum.lolesporte.com##+js(aopr, onload)
@@ -5633,8 +5640,7 @@ polska-ie.com##+js(set, adsbygoogle.loaded, true)
 
 ! https://forum.videohelp.com/ ad-reinsertion
 videohelp.com##+js(set, adsbygoogle.loaded, true)
-videohelp.com##div[style="text-align:center;"] > div[style*="border"]
-videohelp.com##.adsbygoogle:upward(1)
+videohelp.com##div[style*="text-align:center;"]:has(div > a[href][target=_blank])
 
 ! hentaitube ads
 hentais.tube,hentaitube.online##+js(aopr, checkCookieClick)
@@ -6479,3 +6485,52 @@ cocomanhua.com##+js(aeld, , popMagic)
 ! https://github.com/LiCybora/NanoDefenderFirefox/issues/195
 *$script,redirect-rule=noopjs,domain=anihub.tv
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=anihub.tv
+
+! cuturl.in anti adb ads
+cuturl.in##+js(aopr, app_vars.force_disable_adblock)
+cuturl.in##+js(aopw, atOptions)
+cuturl.in##+js(aopw, _pop)
+cuturl.in##+js(set, blurred, false)
+*$script,3p,denyallow=cloudfront.net|dmca.com|google.com|gstatic.com|recaptcha.net|stackpathdns.com|trustedsite.com|ywxi.net,domain=cuturl.in
+||sailcovertend.com^$3p
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/69447
+online2pdf.com##.avt_horizontal_box
+online2pdf.com##.avt_title_vertical
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/69449
+dulinks.*##+js(aopr, app_vars.force_disable_adblock)
+dulinks.*###__bgd_link
+dulinks.*##[href^="https://dropmms.com/"]
+dulinks.co##.text-center.box-body > center > p > .button
+dulinks.co##center > center > p > .button
+dulinks.in##.short > .container
+*$3p,script,denyallow=codepen.io|cloudflare.com|google.com|googleapis.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=dulinks.in
+||dropmms.com^$3p,domain=dulinks.in
+||fnrrm2fn1njl1.com^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/69450
+short88.com##+js(aopr, app_vars.force_disable_adblock)
+
+! https://github.com/abp-filters/abp-filters-anti-cv/issues/506
+dl-protect.*,dl-protect1.*##+js(acis, String.fromCharCode, /btoa|break/)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/k8crri/cryptowin/
+@@||cryptowin.io^$ghide
+cryptowin.io##.panel-body > p[style=" background-color: #fffdc4; text-align: center; font-size: 14px; border-radius: 2px; width: 320px; max-width: 100%; margin: auto; margin-top: 15px; "]
+cryptowin.io##.hidden-xs
+
+! zoo-tube8.com popunder, exit prevention
+zoo-tube8.com,xxxsexzoo.com,zoo-xnxx.com##+js(aeld, DOMContentLoaded, preventExit)
+hamsterzoo.com,zoo-tube8.com,xxxsexzoo.com,xxxtubezoo.com,xxxvideoszoo.com,zoo-xnxx.com,zoopornmd.com,zooxxxporn.com##+js(aopr, popunderSetup)
+
+! animalpornotube.gdn, dogsex.club popup, exit prevention
+animalpornotube.gdn,bestialityporn.fun,beastpics.club,dogsex.club,zoo-sex-free.net##+js(nowoif)
+animalpornotube.gdn,bestialityporn.fun,beastpics.club,dogsex.club,zoo-sex-free.net##+js(set, exit, 0)
+
+! https://github.com/uBlockOrigin/uAssets/issues/7702#issuecomment-739999658
+gotoons.org##+js(nowoif)
+/cdn-cgi/trace$xhr,1p,important
+
+! https://www.reddit.com/r/uBlockOrigin/comments/k8m63f/adblock_detected/
+plugincrack.com##+js(nostif, ai_adb)
