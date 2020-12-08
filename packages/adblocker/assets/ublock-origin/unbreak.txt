@@ -1287,7 +1287,7 @@ tubewolf.com##.bnnr
 
 ! fix broken functionality with some configuratons
 ! caused by the redirection
-||google-analytics.com/ga.js$script,redirect=none,domain=download-chromium.appspot.com
+@@||google-analytics.com/ga.js$script,redirect-rule,domain=download-chromium.appspot.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3995
 ||p.jwpcdn.com/*/vast.js$script,important,domain=timesnownews.com
@@ -1742,7 +1742,9 @@ boards.4chan.org,boards.4channel.org#@#.middlead
 
 ! https://github.com/easylist/easylist/issues/3261
 @@||adswizz.com/anon.npr-mp3/*$media,domain=podbay.fm|podbean.com
-@@||adswizz.com/anon.npr-podcasts/*$media,domain=player.fm|podbay.fm|podbean.com
+@@||adswizz.com/anon.npr-podcasts/*$media,domain=podbay.fm|podbean.com
+! https://www.reddit.com/r/uBlockOrigin/comments/k8xd8x/playerfm_certain_podcasts_unplayable_with_ubo/
+@@||player.fm^$cname
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1633#issuecomment-484331547
 @@||fileflares.com:$popup,1p
@@ -3479,9 +3481,6 @@ humanbenchmark.com##+js(set, pubg.unload, noopFunc)
 ! [badfilter] |https://$subdocument,3p,domain=moviesweb.info,badfilter
 ! [badfilter] |https://$image,3p,domain=moviesweb.info,badfilter
 
-! thememazing .com broken page
-||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,redirect-rule=nooptext
-
 ! https://github.com/uBlockOrigin/uAssets/issues/7723
 @@||message-fra.sp-prod.net^$script,xhr,domain=manager-magazin.de
 
@@ -3928,3 +3927,6 @@ hero-magazine.com###header:style(position: inherit !important;)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/k7saee/
 @@||ssl-images-amazon.com/*/satelliteLib-$script,domain=audible.*
+
+! unviewable subtitle https://github.com/easylist/easylist/commit/4282a904a8036cf8b7d81247ba910e99ddb063e7
+digg.com##.single-story > header:style(margin-top: 40px !important)
