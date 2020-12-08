@@ -143,6 +143,24 @@ export function sizeOfCosmeticSelector(str: string, compression: boolean): numbe
     : sizeOfASCII(str);
 }
 
+export function sizeOfRawNetwork(str: string, compression: boolean): number {
+  return compression === true
+    ? sizeOfBytesWithLength(
+        getCompressionSingleton().networkRaw.getCompressedSize(encode(str)),
+        false, // align
+      )
+    : sizeOfUTF8(str);
+}
+
+export function sizeOfRawCosmetic(str: string, compression: boolean): number {
+  return compression === true
+    ? sizeOfBytesWithLength(
+        getCompressionSingleton().cosmeticRaw.getCompressedSize(encode(str)),
+        false, // align
+      )
+    : sizeOfUTF8(str);
+}
+
 /**
  * This abstraction allows to serialize efficiently low-level values of types:
  * string, uint8, uint16, uint32, etc. while hiding the complexity of managing
@@ -480,6 +498,36 @@ export class StaticDataView {
       return this.compression.cosmeticSelector.decompress(this.getBytes());
     }
     return this.getASCII();
+  }
+
+  public pushRawCosmetic(str: string): void {
+    if (this.compression !== undefined) {
+      this.pushBytes(this.compression.cosmeticRaw.compress(encode(str)));
+    } else {
+      this.pushUTF8(str);
+    }
+  }
+
+  public getRawCosmetic(): string {
+    if (this.compression !== undefined) {
+      return decode(this.compression.cosmeticRaw.decompress(this.getBytes()));
+    }
+    return this.getUTF8();
+  }
+
+  public pushRawNetwork(str: string): void {
+    if (this.compression !== undefined) {
+      this.pushBytes(this.compression.networkRaw.compress(encode(str)));
+    } else {
+      this.pushUTF8(str);
+    }
+  }
+
+  public getRawNetwork(): string {
+    if (this.compression !== undefined) {
+      return decode(this.compression.networkRaw.decompress(this.getBytes()));
+    }
+    return this.getUTF8();
   }
 
   private checkSize() {

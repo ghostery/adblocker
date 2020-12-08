@@ -13,6 +13,8 @@ import networkCSPCodebook from './codebooks/network-csp';
 import networkFilterCodebook from './codebooks/network-filter';
 import networkHostnameCodebook from './codebooks/network-hostname';
 import networkRedirectCodebook from './codebooks/network-redirect';
+import networkRawCodebook from './codebooks/raw-network';
+import cosmeticRawCodebook from './codebooks/raw-cosmetic';
 
 export default class Compression {
   public readonly cosmeticSelector: Smaz = new Smaz(cosmeticSelectorCodebook);
@@ -20,4 +22,6 @@ export default class Compression {
   public readonly networkRedirect: Smaz = new Smaz(networkRedirectCodebook);
   public readonly networkHostname: Smaz = new Smaz(networkHostnameCodebook);
   public readonly networkFilter: Smaz = new Smaz(networkFilterCodebook);
+  public readonly networkRaw: Smaz = new Smaz(networkRawCodebook);
+  public readonly cosmeticRaw: Smaz = new Smaz(cosmeticRawCodebook);
 }

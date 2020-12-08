@@ -14,6 +14,7 @@ import {
   sizeOfNetworkHostname,
   sizeOfNetworkRedirect,
   sizeOfUTF8,
+  sizeOfRawNetwork,
 } from '../data-view';
 import { toASCII } from '../punycode';
 import Request, { RequestType, NORMALIZED_TYPE_TOKEN } from '../request';
@@ -877,7 +878,7 @@ export default class NetworkFilter implements IFilter {
           : undefined,
       hostname: (optionalParts & 4) === 4 ? buffer.getNetworkHostname() : undefined,
       domains: (optionalParts & 8) === 8 ? Domains.deserialize(buffer) : undefined,
-      rawLine: (optionalParts & 16) === 16 ? buffer.getUTF8() : undefined,
+      rawLine: (optionalParts & 16) === 16 ? buffer.getRawNetwork() : undefined,
       redirect: (optionalParts & 32) === 32 ? buffer.getNetworkRedirect() : undefined,
       denyallow: (optionalParts & 64) === 64 ? Domains.deserialize(buffer) : undefined,
       regex: undefined,
@@ -1016,7 +1017,7 @@ export default class NetworkFilter implements IFilter {
 
     if (this.rawLine !== undefined) {
       optionalParts |= 16;
-      buffer.pushUTF8(this.rawLine);
+      buffer.pushRawNetwork(this.rawLine);
     }
 
     if (this.redirect !== undefined) {
@@ -1056,7 +1057,7 @@ export default class NetworkFilter implements IFilter {
     }
 
     if (this.rawLine !== undefined) {
-      estimate += sizeOfUTF8(this.rawLine);
+      estimate += sizeOfRawNetwork(this.rawLine, compression);
     }
 
     if (this.redirect !== undefined) {

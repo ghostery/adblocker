@@ -13,6 +13,7 @@ import {
   sizeOfASCII,
   sizeOfCosmeticSelector,
   sizeOfUTF8,
+  sizeOfRawCosmetic,
 } from '../data-view';
 import {
   getHostnameHashesFromLabelsBackward,
@@ -381,7 +382,7 @@ export default class CosmeticFilter implements IFilter {
 
       // Optional fields
       domains: (optionalParts & 1) === 1 ? Domains.deserialize(buffer) : undefined,
-      rawLine: (optionalParts & 2) === 2 ? buffer.getUTF8() : undefined,
+      rawLine: (optionalParts & 2) === 2 ? buffer.getRawCosmetic() : undefined,
       style: (optionalParts & 4) === 4 ? buffer.getASCII() : undefined,
     });
   }
@@ -461,7 +462,7 @@ export default class CosmeticFilter implements IFilter {
 
     if (this.rawLine !== undefined) {
       optionalParts |= 2;
-      buffer.pushUTF8(this.rawLine);
+      buffer.pushRawCosmetic(this.rawLine);
     }
 
     if (this.style !== undefined) {
@@ -491,7 +492,7 @@ export default class CosmeticFilter implements IFilter {
     }
 
     if (this.rawLine !== undefined) {
-      estimate += sizeOfUTF8(this.rawLine);
+      estimate += sizeOfRawCosmetic(this.rawLine, compression);
     }
 
     if (this.style !== undefined) {
