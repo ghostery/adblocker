@@ -354,6 +354,7 @@ dropgalaxy.*##.adsbygoogle:style(max-height: 1px !important;)
 dropgalaxy.com##[id^="aswift"]:style(display:none!important;)
 dropgalaxy.com##iframe[id*="_mN_main_"]
 dropgalaxy.com##[target="_blank"]:has-text(Download)
+dropgalaxy.com###modalpop
 @@.jpg$image,domain=dropgalaxy.com
 @@.png$image,domain=dropgalaxy.com
 @@||contextual.media.net/dmedianet.js?cid=$domain=dropgalaxy.com
@@ -4448,6 +4449,9 @@ givemenbastreams.com##+js(aopr, AaDetector)
 crackstreams.net##+js(aopw, _pop)
 crackstreams.net,volokit.com##+js(nowebrtc)
 
+! giveme*streams console debugger freeze
+givememmastreams.com,givemenbastreams.com,givemenflstreams.com,givemeredditstreams.com##+js(noeval-if, debugger)
+
 ! crackstreams console debugger freeze & popups on click
 crackedstream.live,crackstreams.com##+js(noeval-if, debugger)
 crackedstream.live,crackstreams.com##+js(nostif, debugger)
@@ -5392,6 +5396,7 @@ ashemaletv.com###playerOverlay
 wpstream.tv##+js(acis, String.fromCharCode, /btoa|break/)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/66201
+huljjang.com##+js(set, adsbygoogle.length, undefined)
 ||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=huljjang.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8072
@@ -6586,9 +6591,22 @@ hentaihd.net##.active-item
 
 ! https://github.com/orgs/uBlockOrigin/teams/ublock-filters-volunteers/discussions/313
 !#if env_mobile
+*###video-ad
+*##.AdSense
+*##.ad-300x250
+*##.ad-banner
+*##.ad-block
+*##.ad-center
+*##.ad-slot
+*##.ad-text
+*##.ad_container
+*##.ads-wrapper
 *##.adsbygoogle
+*##.ezoic-ad
+*##.top-ad-container
 *##AMP-AD
 *##div[id^="div-gpt-ad"]
+*##[id*="ScriptRoot"]
 !#endif
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/k9va25/cashearncc/
@@ -6599,3 +6617,17 @@ cashearn.cc##+js(aopw, _pop)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/k9z5xm/adblock_detected_httpswwwlelscanvfme/
 lelscan-vf.me##+js(aopr, absda)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/69563
+*$script,redirect-rule=noopjs,domain=konnoznet.xyz
+
+! nypost.com PH
+nypost.com##img[src$="/knewz_300x250.png"]:upward(.widget_text)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/69639
+fappee.com##+js(nowoif)
+||googletagmanager.com/gtag/$script,redirect=googletagmanager_gtm.js,domain=fappee.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/8349
+||protectsubrev.com^
+||protectcrev.com^
