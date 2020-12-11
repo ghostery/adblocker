@@ -1339,6 +1339,8 @@ vidlox.*##+js(aopr, decodeURIComponent)
 vidlox.*##+js(nowebrtc)
 vidlox.*##+js(set, popns, true)
 vidlox.*##+js(set, popjs, true)
+vidlox.*##+js(set, xRds, false)
+vidlox.*##+js(set, tRds, true)
 
 ! https://forums.lanik.us/viewtopic.php?p=120875#p120875
 ! https://github.com/uBlockOrigin/uAssets/issues/548
@@ -3434,7 +3436,6 @@ imgmonkey.com##A[href$=".html"][rel="nofollow norefferer noopener"]
 imgmonkey.com##+js(popads-dummy)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1189
-1fichier.com##+js(acis, decodeURI, decodeURIComponent)
 1fichier.com##+js(nowebrtc)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1190
@@ -9727,6 +9728,10 @@ camseek.tv##div[style$="height: 240px; background: white"]
 ! [badfilter] ||wpnrtnmrewunrtok.xyz^$badfilter
 ||cambro.tv/popin-min.js
 cambay.tv##.rltdsldr
+cambay.tv##+js(set, flashvars.adv_pause_html, '')
+cambay.tv##+js(set, flashvars.adv_start_html, '')
+cambay.tv##+js(set, flashvars.popunder_url, '')
+cambay.tv##[href^="https://go.strpjmp.com"]
 
 ! https://github.com/jspenguin2017/uBlockProtector/issues/999
 ! https://github.com/uBlockOrigin/uAssets/issues/4176
@@ -16227,6 +16232,7 @@ cuatro.com,mitele.es,telecinco.es##+js(aopr, $REACTBASE_STATE.serverModules.push
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5816
 @@||wupfile.com^$ghide
+||adsx.online^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5817
 @@||world-of-facts.com^$ghide
@@ -16463,9 +16469,9 @@ uptomega.*##+js(aeld, , _0x)
 @@||vtpii.com^$ghide
 
 ! popups, ads https://github.com/AdguardTeam/AdguardFilters/issues/36091
-manhwa-manga34.bid,manhwa-manga35.bid,manhwa-manga36.bid,manhwa-manga37.bid##+js(aopr, loadRunative)
-manhwa-manga34.bid,manhwa-manga35.bid,manhwa-manga36.bid,manhwa-manga37.bid##.ai_widget
-manhwa-manga34.bid,manhwa-manga35.bid,manhwa-manga36.bid,manhwa-manga37.bid###custom_html-91
+manhwa-manga34.bid,manhwa-manga35.bid,manhwa-manga36.bid,manhwa-manga37.bid,manhwa-manga38.bid##+js(aopr, loadRunative)
+manhwa-manga34.bid,manhwa-manga35.bid,manhwa-manga36.bid,manhwa-manga37.bid,manhwa-manga38.bid##.ai_widget
+manhwa-manga34.bid,manhwa-manga35.bid,manhwa-manga36.bid,manhwa-manga37.bid,manhwa-manga38.bid###custom_html-91
 manhwa-manga.com##+js(acis, Math, zfgloaded)
 ||cdn.run-syndicate.com/sdk/v1/n.js$script,redirect=noopjs,domain=manhwa-manga.com
 *$script,redirect-rule=noopjs,domain=manhwa-manga18.bid
@@ -16861,9 +16867,6 @@ ftopx.com##+js(acis, document.querySelectorAll, popMagic)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5975
 news-tech.xyz##+js(aeld, load, 2000)
-
-! https://github.com/NanoMeow/QuickReports/issues/1521
-@@||static.teemo.gg/league-of-legends/models/*.wasm$xhr,1p
 
 ! https://github.com/NanoMeow/QuickReports/issues/1522
 @@||ifc.com^$ghide
@@ -18044,6 +18047,7 @@ waaw.tv,waaw1.tv,waaws.*##+js(aopr, adBlockDetected)
 ! https://github.com/uBlockOrigin/uAssets/issues/6242
 tmearn.*##+js(aopr, app_vars.force_disable_adblock)
 tmearn.*##+js(nowoif)
+tmearn.*##+js(aopw, _pop)
 tmearn.*##+js(set, blurred, false)
 cutpaid.com,tmearn.*##+js(aopr, AaDetector)
 *$script,3p,denyallow=cloudflare.com|google.com|gstatic.com|recaptcha.net,domain=tmearn.*
@@ -18376,9 +18380,12 @@ cpopchanelofficial.com##+js(nostif, check, 1)
 shahiid-anime.net##+js(acis, Math, zfgloaded)
 shahiid-anime.net##+js(aopw, _pop)
 
+! https://github.com/NanoMeow/QuickReports/issues/1521
 ! https://github.com/NanoMeow/QuickReports/issues/1871
-||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs,domain=teemo.gg
+! https://github.com/uBlockOrigin/uAssets/issues/8356
+||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=teemo.gg
 ||googlesyndication.com/pagead/js/adsbygoogle.js$xhr,redirect=noopjs,domain=teemo.gg
+@@||static.teemo.gg/league-of-legends/models/*.wasm$xhr,1p
 teemo.gg##.alert.info
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/d6vxzj/the_problem_is_on_the_page/
@@ -24269,7 +24276,7 @@ techdracula.com##.adsbygoogle
 
 ! regex
 /[0-9a-f]{32}\/invoke\.js$/$script,3p
-/^https?:\/\/([a-z0-9]{8,10}\.)?[a-z0-9]{5,}\.(click|co|com|bid|net|online|top|club)\/([a-z0-9]{2}\/){3}[a-f0-9]{32}\.js$/$script,3p
+/^https?:\/\/([a-z0-9]{8,10}\.)?[-a-z0-9]{5,}\.(click|co|com|bid|net|online|top|club)\/([a-z0-9]{2}\/){3}[a-f0-9]{32}\.js$/$script,3p
 
 ! As of 2020-04-09 new domains for filters.txt will be added to filters-2020.txt sublist
 !#include filters-2020.txt
