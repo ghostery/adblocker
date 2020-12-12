@@ -1,4 +1,4 @@
-! Title: uBlock filters -- Unbreak
+! Title: uBlock filters – Unbreak
 ! Expires: 4 days
 ! Description:
 !     Filters optimized for uBlock Origin, to unbreak sites broken as
@@ -835,12 +835,6 @@ mobile.twitter.com#@#._29ahSMvH section.rn-1oszu61 div[class][style*="padding-"]
 ! https://www.bikeforums.net/forum-suggestions-user-assistance/1144311-text-entry-box-doesn-t-show-up-unless-i-disable-ublock-origin.html
 @@||bikeforums.net/*/ckeditor/core/log.js$script,1p
 
-! https://github.com/uBlockOrigin/uAssets/issues/2313
-! https://github.com/uBlockOrigin/uAssets/issues/3094
-! https://github.com/uBlockOrigin/uAssets/issues/3659
-! [badfilter] .com/ad/$1p,domain=~blogs.technet.microsoft.com|~channel4.com|~cspace.com|~imgbox.com|~linkedin.com|~mediaplex.com|~namemc.com|~quiz-and-facts.com|~suicidegirlsfree.com,badfilter
-.com/ad/$1p,domain=~blogs.technet.microsoft.com|~channel4.com|~cspace.com|~imagebam.com|~imgbox.com|~japan-guide.com|~imgbox.com|~linkedin.com|~mediaplex.com|~namemc.com|~quiz-and-facts.com|~sitioswebmexi.com|~suicidegirlsfree.com
-
 ! https://github.com/uBlockOrigin/uAssets/issues/3094
 @@||imagebam.com/assets/js/image_bootstrap.js$script,1p
 
@@ -1253,13 +1247,6 @@ warszawawpigulce.pl##.eklama
 ||js.helltraffic.com/fluidplayer/scripts/webvtt.min.js$script,important,domain=tubewolf.com
 tubewolf.com##.bnnrs-player
 tubewolf.com##.bnnr
-
-! https://forums.lanik.us/viewtopic.php?f=64&t=42018
-@@||rd.rakuten.co.jp/*login$domain=rakuten.co.jp
-@@||rd.rakuten.co.jp/*logout$domain=rakuten.co.jp
-
-! https://github.com/uBlockOrigin/uAssets/issues/3800
-@@||wpgdadago.com/AD/$image,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3823
 @@||mm-syringe.com^$script,domain=mysanantonio.com
@@ -3942,3 +3929,13 @@ digg.com##.single-story > header:style(margin-top: 40px !important)
 
 ! https://github.com/easylist/easylist/pull/6075
 ! [badfilter] /^https?:\/\/.*\/(public|resources|static|assets)\/([a-f0-9]){28,30}$/$script,1p,xhr,domain=~cand.li,badfilter
+
+! https://forums.lanik.us/viewtopic.php?p=157853#p157853
+@@||d1m9xsywzv0elf.cloudfront.net/ad/$image,domain=activities.scolab.com
+
+! https://forums.lanik.us/viewtopic.php?p=157851#p157851
+! [badfilter] |https://$script,domain=rule34.xxx,badfilter
+
+! unlock biroads .com
+! [badfilter] ||biroads.com^$badfilter
+||biroads.com^$3p
