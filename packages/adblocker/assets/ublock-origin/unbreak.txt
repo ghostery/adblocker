@@ -3930,12 +3930,19 @@ digg.com##.single-story > header:style(margin-top: 40px !important)
 ! https://github.com/easylist/easylist/pull/6075
 ! [badfilter] /^https?:\/\/.*\/(public|resources|static|assets)\/([a-f0-9]){28,30}$/$script,1p,xhr,domain=~cand.li,badfilter
 
-! https://forums.lanik.us/viewtopic.php?p=157853#p157853
-@@||d1m9xsywzv0elf.cloudfront.net/ad/$image,domain=activities.scolab.com
-
 ! https://forums.lanik.us/viewtopic.php?p=157851#p157851
 ! [badfilter] |https://$script,domain=rule34.xxx,badfilter
 
 ! unlock biroads .com
 ! [badfilter] ||biroads.com^$badfilter
 ||biroads.com^$3p
+
+! https://github.com/uBlockOrigin/uAssets/issues/8366
+@@||tags.tiqcdn.com/utag/*/prod/utag.js$script,domain=coches.net
+
+! https://www.hessenschau.de/suche/index.nc.html?query=livestream broken livestreams
+@@||sensic.net/sui-connector.js$script,domain=hessenschau.de
+@@||sensic.net^$frame,domain=hessenschau.de
+
+! https://www.reddit.com/r/uBlockOrigin/comments/kc5ugq/
+businessinsider.com##+js(nosiif, setInterval)
