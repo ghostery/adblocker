@@ -22,10 +22,6 @@ twitch-videoad.js application/javascript
 (function(){if(false===/(^|\.)twitch\.tv$/.test(document.location.hostname))return;var t=window.fetch;window.fetch=function(e){if(arguments.length>=2&&"string"===typeof e&&e.includes("/access_token")){var n=new URL(arguments[0]);n.searchParams.delete("platform");arguments[0]=n.href}return t.apply(this,arguments)}})();
 
 
-std.js application/javascript
-(function(){let t="{{1}}";const e=parseInt("{{2}}",10);if(""===t||"{{1}}"===t)t=".?";else if(t.startsWith("/")&&t.endsWith("/"))t=t.slice(1,-1);else t=t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");t=new RegExp(t);window.setTimeout=new Proxy(window.setTimeout,{apply:function(n,i,s){const o=s[0];const c=s[1];if((isNaN(e)||c===e)&&t.test(o.toString()))s[0]=function(){};return n.apply(i,s)}})})();
-
-
 static.chartbeat.com/chartbeat.js application/javascript
 (function(){"use strict";const t=function(){};window.pSUPERFLY={activity:t,virtualPage:t}})();
 
@@ -38,16 +34,8 @@ silent-noeval.js application/javascript
 (function(){"use strict";window.eval=new Proxy(window.eval,{apply:function(){}})})();
 
 
-sid.js application/javascript
-(function(){let t="{{1}}";const e=parseInt("{{2}}",10);if(""===t||"{{1}}"===t)t=".?";else if(t.startsWith("/")&&t.endsWith("/"))t=t.slice(1,-1);else t=t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");t=new RegExp(t);window.setInterval=new Proxy(window.setInterval,{apply:function(n,s,i){const o=i[0];const l=i[1];if((isNaN(e)||l===e)&&t.test(o.toString()))i[0]=function(){};return n.apply(s,i)}})})();
-
-
 setTimeout-defuser.js application/javascript
-(function(){let t="{{1}}";const e=parseInt("{{2}}",10);if(""===t||"{{1}}"===t)t=".?";else if(t.startsWith("/")&&t.endsWith("/"))t=t.slice(1,-1);else t=t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");t=new RegExp(t);window.setTimeout=new Proxy(window.setTimeout,{apply:function(n,i,s){const o=s[0];const c=s[1];if((isNaN(e)||c===e)&&t.test(o.toString()))s[0]=function(){};return n.apply(i,s)}})})();
-
-
-setInterval-defuser.js application/javascript
-(function(){let t="{{1}}";const e=parseInt("{{2}}",10);if(""===t||"{{1}}"===t)t=".?";else if(t.startsWith("/")&&t.endsWith("/"))t=t.slice(1,-1);else t=t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");t=new RegExp(t);window.setInterval=new Proxy(window.setInterval,{apply:function(n,s,i){const o=i[0];const l=i[1];if((isNaN(e)||l===e)&&t.test(o.toString()))i[0]=function(){};return n.apply(s,i)}})})();
+(function(){let e="{{1}}";const i="!"===e.charAt(0);if(i)e=e.slice(1);let t="{{2}}";if("{{2}}"===t)t=void 0;let s=false;if(void 0!==t){s="!"===t.charAt(0);if(s)t=t.slice(1);t=parseInt(t,10)}if(""===e||"{{1}}"===e)e="";else if(e.startsWith("/")&&e.endsWith("/"))e=e.slice(1,-1);else e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");const o=false===i&&""===e&&void 0===t?console.log:void 0;const n=new RegExp(e);window.setTimeout=new Proxy(window.setTimeout,{apply:function(l,f,c){const a=String(c[0]);const d=c[1];if(void 0!==o)o('uBO: setTimeout("%s", %s)',a,d);else{let o;if(""!==e)o=n.test(a)!==i;if(false!==o&&void 0!==t)o=(d===t||isNaN(d)&&isNaN(t))!==s;if(o)c[0]=function(){}}return l.apply(f,c)}})})();
 
 
 set.js application/javascript
@@ -66,28 +54,20 @@ scorecardresearch.com/beacon.js application/javascript
 (function(){"use strict";window.COMSCORE={purge:function(){window._comscore=[]},beacon:function(){}}})();
 
 
-requestAnimationFrame-if.js application/javascript
-(function(){let e="{{1}}";const i="!"===e.charAt(0);if(i)e=e.slice(1);if(""===e||"{{1}}"===e)e=".?";else if(e.startsWith("/")&&e.endsWith("/"))e=e.slice(1,-1);else e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");const n=".?"===e&&false===i?console.log:void 0;e=new RegExp(e);window.requestAnimationFrame=new Proxy(window.requestAnimationFrame,{apply:function(t,s,o){const r=String(o[0]);if(void 0!==n)n('uBO: requestAnimationFrame("%s")',r);else if(e.test(r)===i)o[0]=function(){};return t.apply(s,o)}})})();
-
-
 remove-class.js application/javascript
 (function(){const t="{{1}}";if(""===t||"{{1}}"===t)return;const e=t.split(/\s*\|\s*/);let n="{{2}}";if(""===n||"{{2}}"===n)n="."+e.map((t=>CSS.escape(t))).join(",.");const o=function(){try{const t=document.querySelectorAll(n);for(const n of t)n.classList.remove(...e)}catch(t){}};if("loading"===document.readyState)window.addEventListener("DOMContentLoaded",o,{capture:true,once:true});else o()})();
 
 
 remove-attr.js application/javascript
-(function(){const t="{{1}}";if(""===t||"{{1}}"===t)return;const e=t.split(/\s*\|\s*/);let n="{{2}}";if(""===n||"{{2}}"===n)n=`[${e.join("],[")}]`;const o=function(t){if(t)window.removeEventListener(t.type,o,true);try{const t=document.querySelectorAll(n);for(const n of t)for(const t of e)n.removeAttribute(t)}catch(t){}};if("loading"===document.readyState)window.addEventListener("DOMContentLoaded",o,true);else o()})();
+(function(){const t="{{1}}";if(""===t||"{{1}}"===t)return;const o=t.split(/\s*\|\s*/);let e="{{2}}";if(""===e||"{{2}}"===e)e=`[${o.join("],[")}]`;const n=function(){try{const t=document.querySelectorAll(e);for(const e of t)for(const t of o)e.removeAttribute(t)}catch(t){}};if("loading"===document.readyState)window.addEventListener("DOMContentLoaded",n,{once:true});else n()})();
 
 
 rc.js application/javascript
 (function(){const t="{{1}}";if(""===t||"{{1}}"===t)return;const e=t.split(/\s*\|\s*/);let n="{{2}}";if(""===n||"{{2}}"===n)n="."+e.map((t=>CSS.escape(t))).join(",.");const o=function(){try{const t=document.querySelectorAll(n);for(const n of t)n.classList.remove(...e)}catch(t){}};if("loading"===document.readyState)window.addEventListener("DOMContentLoaded",o,{capture:true,once:true});else o()})();
 
 
-raf-if.js application/javascript
-(function(){let e="{{1}}";const i="!"===e.charAt(0);if(i)e=e.slice(1);if(""===e||"{{1}}"===e)e=".?";else if(e.startsWith("/")&&e.endsWith("/"))e=e.slice(1,-1);else e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");const n=".?"===e&&false===i?console.log:void 0;e=new RegExp(e);window.requestAnimationFrame=new Proxy(window.requestAnimationFrame,{apply:function(t,s,o){const r=String(o[0]);if(void 0!==n)n('uBO: requestAnimationFrame("%s")',r);else if(e.test(r)===i)o[0]=function(){};return t.apply(s,o)}})})();
-
-
 ra.js application/javascript
-(function(){const t="{{1}}";if(""===t||"{{1}}"===t)return;const e=t.split(/\s*\|\s*/);let n="{{2}}";if(""===n||"{{2}}"===n)n=`[${e.join("],[")}]`;const o=function(t){if(t)window.removeEventListener(t.type,o,true);try{const t=document.querySelectorAll(n);for(const n of t)for(const t of e)n.removeAttribute(t)}catch(t){}};if("loading"===document.readyState)window.addEventListener("DOMContentLoaded",o,true);else o()})();
+(function(){const t="{{1}}";if(""===t||"{{1}}"===t)return;const o=t.split(/\s*\|\s*/);let e="{{2}}";if(""===e||"{{2}}"===e)e=`[${o.join("],[")}]`;const n=function(){try{const t=document.querySelectorAll(e);for(const e of t)for(const t of o)e.removeAttribute(t)}catch(t){}};if("loading"===document.readyState)window.addEventListener("DOMContentLoaded",n,{once:true});else n()})();
 
 
 popads.net.js application/javascript
@@ -200,6 +180,10 @@ no-setInterval-if.js application/javascript
 
 no-requestAnimationFrame-if.js application/javascript
 (function(){let e="{{1}}";if("{{1}}"===e)e="";const i="!"===e.charAt(0);if(i)e=e.slice(1);if(e.startsWith("/")&&e.endsWith("/"))e=e.slice(1,-1);else if(""!==e)e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");const n=false===i&&""===e?console.log:void 0;const t=new RegExp(e);window.requestAnimationFrame=new Proxy(window.requestAnimationFrame,{apply:function(e,s,o){const a=String(o[0]);let l=false;if(void 0!==n)n('uBO: requestAnimationFrame("%s")',a);else l=t.test(a)!==i;if(l)o[0]=function(){};return e.apply(s,o)}})})();
+
+
+no-fetch-if.js application/javascript
+(function(){let e="{{1}}";if("{{1}}"===e)e="";const t=[];for(const s of e.split(/\s+/)){if(""===s)continue;const e=s.indexOf(":");let n,o;if(-1!==e){n=s.slice(0,e);o=s.slice(e+1)}else{n="url";o=s}if(""===o)o="^";else if(o.startsWith("/")&&o.endsWith("/"))o=o.slice(1,-1);else o=o.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");t.push({key:n,re:new RegExp(o)})}const s=0===t.length?console.log.bind(console):void 0;self.fetch=new Proxy(self.fetch,{apply:function(e,n,o){let f=true;try{const e=o[0]instanceof self.Request?o[0].url:o[0];const n=new Map([["url",e]]);const c=o[1];if(c instanceof Object)for(const e in c){if(false===c.hasOwnProperty(e))continue;n.set(e,c[e])}if(void 0!==s){const e=Array.from(n).map((e=>`${e[0]}:${e[1]}`)).join(" ");s(`uBO: fetch(${e})`)}f=0===t.length;for(const{key:e,re:s}of t)if(false===n.has(e)||false===s.test(n.get(e))){f=true;break}}catch(e){}return f?Reflect.apply(e,n,o):Promise.resolve(new Response)}})})();
 
 
 nano-stb.js application/javascript
