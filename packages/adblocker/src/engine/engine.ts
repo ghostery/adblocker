@@ -27,7 +27,7 @@ import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 
-export const ENGINE_VERSION = 330;
+export const ENGINE_VERSION = 331;
 
 function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   if (filters.length === 0) {
@@ -503,8 +503,15 @@ export default class FilterEngine extends EventEmitter<
       this.importants.update(importants, removedNetworkFiltersSet);
       this.redirects.update(redirects, removedNetworkFiltersSet);
       this.filters.update(filters, removedNetworkFiltersSet);
-      this.exceptions.update(exceptions, removedNetworkFiltersSet);
-      this.csp.update(csp, removedNetworkFiltersSet);
+
+      if (this.config.loadExceptionFilters === true) {
+        this.exceptions.update(exceptions, removedNetworkFiltersSet);
+      }
+
+      if (this.config.loadCSPFilters === true) {
+        this.csp.update(csp, removedNetworkFiltersSet);
+      }
+
       this.hideExceptions.update(hideExceptions, removedNetworkFiltersSet);
     }
 

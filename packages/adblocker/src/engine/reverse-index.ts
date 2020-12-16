@@ -509,7 +509,8 @@ export default class ReverseIndex<T extends IFilter> {
    * as soon as `false` is returned from the callback.
    */
   private iterBucket(token: number, requestId: number, cb: (f: T) => boolean): boolean {
-    let bucket: Bucket<T> | undefined = this.cache.get(token);
+    let bucket: Bucket<T> | undefined =
+      this.config.enableInMemoryCache === true ? this.cache.get(token) : undefined;
 
     // Lazily create bucket if it does not yet exist in memory. Lookup the
     // compact bucket representation and find all filters being associated with
@@ -562,7 +563,9 @@ export default class ReverseIndex<T extends IFilter> {
         lastRequestSeen: -1, // safe because all ids are positive
       };
 
-      this.cache.set(token, bucket);
+      if (this.config.enableInMemoryCache === true) {
+        this.cache.set(token, bucket);
+      }
     }
 
     // Look for matching filter in this bucket

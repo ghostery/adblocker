@@ -3,7 +3,7 @@ import { resolve, join } from 'path';
 import { generate } from '@remusao/smaz-generate';
 import { Smaz } from '@remusao/smaz';
 
-import { parseFilters, NetworkFilter, CosmeticFilter, fullLists } from '../adblocker';
+import { parseFilters, NetworkFilter, CosmeticFilter, fullLists, hasUnicode } from '../adblocker';
 
 const PREFIX =
   'https://raw.githubusercontent.com/cliqz-oss/adblocker/master/packages/adblocker/assets';
@@ -20,6 +20,7 @@ async function loadAllLists(): Promise<string> {
 
 async function getCosmeticFilters(): Promise<CosmeticFilter[]> {
   return parseFilters(await loadAllLists(), {
+    debug: true,
     loadCosmeticFilters: true,
     loadNetworkFilters: false,
   }).cosmeticFilters;
@@ -27,6 +28,7 @@ async function getCosmeticFilters(): Promise<CosmeticFilter[]> {
 
 async function getNetworkFilters(): Promise<NetworkFilter[]> {
   return parseFilters(await loadAllLists(), {
+    debug: true,
     loadCosmeticFilters: false,
     loadNetworkFilters: true,
   }).networkFilters;
@@ -59,6 +61,10 @@ async function getStrings(kind: string): Promise<string[]> {
         .filter((filter) => filter.isUnicode() === false)
         .map(({ selector }) => selector || '')
         .filter((selector) => selector.length !== 0);
+    case 'raw-cosmetic':
+      return (await getCosmeticFilters()).map((f) => f.toString()).filter((f) => !hasUnicode(f));
+    case 'raw-network':
+      return (await getNetworkFilters()).map((f) => f.toString()).filter((f) => !hasUnicode(f));
     default:
       throw new Error(`Unsupported codebook: ${kind}`);
   }
@@ -99,7 +105,8 @@ function validateCodebook(codebook: string[], strings: string[]): void {
 async function generateCodebook(kind: string): Promise<string[]> {
   const strings = await getStrings(kind);
   console.log(`Generate codebook ${kind} using ${strings.length} strings.`);
-  const codebook = generate(strings);
+  const options = kind.startsWith('raw-') ? { maxNgram: 30 } : {};
+  const codebook = generate(strings, options);
   validateCodebook(codebook, strings);
   return codebook;
 }
