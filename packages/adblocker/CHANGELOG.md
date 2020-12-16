@@ -1,3 +1,48 @@
+# v1.19.0 (Wed Dec 16 2020)
+
+#### :rocket: New Feature
+
+- More config options + compression of raw filters (debug mode) [#1523](https://github.com/cliqz-oss/adblocker/pull/1523) ([@remusao](https://github.com/remusao))
+
+#### :bug: Bug Fix
+
+- build(deps): bump @types/chrome from 0.0.126 to 0.0.127 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-node-resolve from 10.0.0 to 11.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :house: Internal
+
+- Update local assets [#1519](https://github.com/cliqz-oss/adblocker/pull/1519) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1515](https://github.com/cliqz-oss/adblocker/pull/1515) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1513](https://github.com/cliqz-oss/adblocker/pull/1513) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1508](https://github.com/cliqz-oss/adblocker/pull/1508) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1504](https://github.com/cliqz-oss/adblocker/pull/1504) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1500](https://github.com/cliqz-oss/adblocker/pull/1500) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1492](https://github.com/cliqz-oss/adblocker/pull/1492) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1490](https://github.com/cliqz-oss/adblocker/pull/1490) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1488](https://github.com/cliqz-oss/adblocker/pull/1488) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1487](https://github.com/cliqz-oss/adblocker/pull/1487) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1485](https://github.com/cliqz-oss/adblocker/pull/1485) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1481](https://github.com/cliqz-oss/adblocker/pull/1481) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1480](https://github.com/cliqz-oss/adblocker/pull/1480) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1477](https://github.com/cliqz-oss/adblocker/pull/1477) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1475](https://github.com/cliqz-oss/adblocker/pull/1475) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1473](https://github.com/cliqz-oss/adblocker/pull/1473) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1472](https://github.com/cliqz-oss/adblocker/pull/1472) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump tldts-experimental from 5.6.76 to 5.6.77 [#1521](https://github.com/cliqz-oss/adblocker/pull/1521) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.126 to 0.0.127 [#1506](https://github.com/cliqz-oss/adblocker/pull/1506) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-node-resolve from 10.0.0 to 11.0.0 [#1478](https://github.com/cliqz-oss/adblocker/pull/1478) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.18.8 (Wed Nov 25 2020)
 
 #### :bug: Bug Fix

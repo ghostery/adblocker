@@ -1,3 +1,23 @@
+# v1.19.0 (Wed Dec 16 2020)
+
+#### :bug: Bug Fix
+
+- build(deps): bump @types/chrome from 0.0.126 to 0.0.127 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-commonjs from 16.0.0 to 17.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-node-resolve from 10.0.0 to 11.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump @types/chrome from 0.0.126 to 0.0.127 [#1506](https://github.com/cliqz-oss/adblocker/pull/1506) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-commonjs from 16.0.0 to 17.0.0 [#1479](https://github.com/cliqz-oss/adblocker/pull/1479) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-node-resolve from 10.0.0 to 11.0.0 [#1478](https://github.com/cliqz-oss/adblocker/pull/1478) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.18.7 (Tue Nov 24 2020)
 
 #### :nail_care: Polish
