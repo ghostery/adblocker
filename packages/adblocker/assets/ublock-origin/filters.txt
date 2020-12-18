@@ -2719,10 +2719,6 @@ vjav.com##.bx-un:remove()
 vjav.com##.iRx9
 ||loadnot.online^
 
-! https://github.com/uBlockOrigin/uAssets/issues/960
-thegay.com##+js(aeld, , window.open)
-thegay.com##+js(nosiif, document.readyState)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/961
 ! https://github.com/uBlockOrigin/uAssets/issues/962
 extremetube.com##+js(aopr, exbl)
@@ -3588,13 +3584,6 @@ pornomovies.com##.twocolumns > .viewlist + .aside
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=39628
 bilasport.com##+js(popads-dummy)
-
-! https://github.com/uBlockOrigin/uAssets/issues/1234
-! https://www.reddit.com/r/uBlockOrigin/comments/8ikcyk/new_ads_in_httpsanimeflvnet/
-animeflv.net##+js(aopr, BBRaven)
-animeflv.net##+js(set, loadingAds, true)
-animeflv.net##a[href*="watch?key"]
-||hotideiasnetwork.ml^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1238
 urlcero.*##+js(aopr, open)
@@ -4783,8 +4772,10 @@ waybig.com##.content-aff
 waybig.com##.aside-adds-col
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1953
-animeflv.*##+js(noeval)
+! animeflv.net | animeflvnet.com | animeflv.ac | animeflv.cc | animeflv.la | animeflv.ru  ads/popup
+animeflv.*,animeflvnet.com##+js(acis, Math, btoa)
 *$script,3p,denyallow=disquscdn.com|disqus.com|fbcdn.net|facebook.net|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=animeflv.*
+||hotideiasnetwork.ml^$3p
 @@||animeflv.*/assets/vast/videojs$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/1953#issuecomment-516219786
 @@||cdnjs.cloudflare.com/ajax/libs/videojs-contrib-ads/*$script,css,domain=embed.streamx.live
@@ -5772,6 +5763,7 @@ xbabe.com##.bnnrs-bottom
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2082
 satcesc.com##+js(acis, anOptions)
+satcesc.com##+js(acis, sessionStorage, adsbygoogle)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/8eu975/embedded_twitter_posts_being_cropped/
 @@||deadspin.com^$ghide
@@ -17708,11 +17700,15 @@ pussyspot.net,wildpictures.net##[href^="https://easygamepromo.com/"]
 8boobs.com,babesinporn.com,bustybloom.com,hotstunners.com,nudebabes.sexy,pleasuregirl.net,rabbitsfun.com,silkengirl.*##+js(aopr, exoNoExternalUI38djdkjDDJsio96)
 ##[href*="https://trcklks.com/"]
 babesinporn.com##.topbanner
+nakedneighbour.com##.banner:upward(.block)
 /fload.js$script
-/images/*/banners/*.jpg$image,1p,domain=100bucksbabes.com|8boobs.com|babeimpact.com|babesandgirls.com|babesinporn.com|bustybloom.com|decorativemodels.com|fooxybabes.com|morazzia.com|rabbitsfun.com|silkengirl.*|thousandbabes.com
+/images/*/banners/*.jpg$image,1p,domain=100bucksbabes.com|8boobs.com|babeimpact.com|babesandgirls.com|babesinporn.com|bustybloom.com|chickteases.com|decorativemodels.com|fooxybabes.com|morazzia.com|nakedneighbour.com|rabbitsfun.com|silkengirl.*|thousandbabes.com
 /istripper/istripper_$image,1p,domain=8boobs.com|babesinporn.com|fooxybabes.com|rabbitsfun.com|silkengirl.*
 /smallfr/*$frame,1p,domain=babeimpact.com|decorativemodels.com
 /smallfr2/*$frame,1p,domain=babeimpact.com|decorativemodels.com
+||contenta.babeuniversum.com/images/babeuniversum.com/b/*.jpg
+babeuniversum.com##.aw
+babeuniversum.com##.galleryad
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6150
 ! https://github.com/uBlockOrigin/uAssets/issues/6152
@@ -19475,7 +19471,6 @@ macappdownload.com##+js(nosiif, visibility, 1000)
 @@||ytmp3.eu^$ghide
 ytmp3.eu##+js(aopr, open)
 ytmp3.eu##+js(aopw, _pop)
-ytmp3.eu##+js(aopr, AdservingModule)
 ||brydhoye.com^
 
 ! canalplus.com anti adb + ads
@@ -23987,6 +23982,7 @@ funzen.net##+js(nostif, mdpDeBlocker)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7186
 acessarlink.online,subdowns.com##+js(nano-stb, , , 0)
+subsvip.com##+js(nano-stb, , 10000)
 subsvip.com###botaoBloqueio
 subsvip.com###botaoLink:style(display: block !important;)
 

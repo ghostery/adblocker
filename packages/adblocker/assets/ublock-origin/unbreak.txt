@@ -1318,10 +1318,6 @@ pasteboard.co##+js(set, nads.createAd, trueFunc)
 ! https://www.reddit.com/r/uBlockOrigin/comments/9xm0ou/abccom_not_loading_not_solvable/
 go.com#@#.has-ad
 
-! https://github.com/easylist/easylist/issues/2256
-@@||voxmedia.com/pickup.js$script,domain=theverge.com
-@@||phonograph2.voxmedia.com/needle$image,domain=theverge.com
-
 ! https://forums.lanik.us/viewtopic.php?f=64&t=42189
 @@||googletagmanager.com/gtm.js$script,domain=mirror.co.uk
 
@@ -3954,5 +3950,12 @@ autoblog.com###ymm-sub-nav:style(top:0px !important)
 ! broken page https://www.beppegrillo.it/grilloteca/
 beppegrillo.it#@#a[href^="https://www.amazon."][href*="tag="]
 
-! incorrectly blocked by EL
-! [badfilter] ||dogemate.com^$badfilter
+! https://github.com/uBlockOrigin/uAssets/issues/8380
+@@||imasdk.googleapis.com/js/sdkloader/ima3$script,xhr,domain=venn.tv
+@@||doubleclick.net/ssai/*/streams$xhr,domain=venn.tv
+
+! https://forums.lanik.us/viewtopic.php?p=157928#p157928
+! [badfilter] *$script,3p,domain=coinmarketcap.com,badfilter
+
+! babesxworld site blocked by french list
+! [badfilter] *$script,domain=babesxworld.com,badfilter
