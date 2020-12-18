@@ -2169,9 +2169,6 @@ zagl.info##+js(set, blurred, false)
 zagl.info##.banner-inner
 @@||zagl.info^$ghide
 *$script,3p,denyallow=cloudflare.com|google.com|googleapis.com|gstatic.com|recaptcha.net,domain=zagl.info
-||midpopedge.com^
-||yqorexok.xyz^
-||zhulik2ne1voruy1d.com^
 
 ! As of 2016-12-02, found site uses WebRTC to deliver ads
 tomshardware.*##+js(aopw, tmnramp)
@@ -2237,6 +2234,7 @@ ur-ly.xyz##+js(aopr, app_vars.force_disable_adblock)
 ur-ly.xyz##+js(aopr, open)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57788
+pcprogramasymas.net##+js(acis, String.fromCharCode, .join(''))
 *$script,redirect-rule=noopjs,domain=pcprogramasymas.net
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57797
@@ -3166,7 +3164,7 @@ multporn.net##+js(acis, document.querySelectorAll, popMagic)
 cerdas.com##+js(acis, document.querySelectorAll, popMagic)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4390
-supreme-gamers.com##+js(nostif, show)
+*$script,redirect-rule=noopjs,domain=supreme-gamers.com
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/60200
 easytutoriel.com##+js(aopr, anOptions)
@@ -4090,6 +4088,8 @@ youvideoporno.mobi##+js(aopr, decodeURI)
 *$3p,script,frame,denyallow=zencdn.net|voe-network.net|cdnjs.cloudflare.com|hcaptcha.com|recaptcha.net|googleapis.com|sharethis.com|fastly.net|jsdelivr.net|bootstrapcdn.com|jquery.com|hwcdn.net,domain=voe.sx
 voe.sx##+js(acis, String.fromCharCode, /btoa|break/)
 voe.sx##+js(aeld, , _0x)
+voe.sx##+js(aeld, , -0x)
+voe.sx##+js(aopw, open)
 voe.sx##+js(aeld, , open)
 voe.sx##+js(nowebrtc)
 
@@ -5585,9 +5585,9 @@ polska-ie.com##+js(set, adsbygoogle.loaded, true)
 *$script,redirect-rule=noopjs,domain=polska-ie.com
 
 ! https://forum.videohelp.com/ ad-reinsertion
-videohelp.com##+js(acis, document.createElement, adsbygoogle)
-videohelp.com##div[style]:has(noscript):has(a[href$="?af=m767uti6sqh1dK4C"])
-videohelp.com##div[style=""] > .javascriptoff
+videohelp.com##+js(acis, document.createElement, adsbygoogle.loaded)
+videohelp.com##[style*="text-align:center;"]:has(a[href$="?af=m767uti6sqh1dK4C"])
+videohelp.com###headerbanner[style^="height:100px;width:100%;"]
 
 ! hentaitube ads
 hentais.tube,hentaitube.online##+js(aopr, checkCookieClick)
@@ -6017,6 +6017,7 @@ morritastube.xxx##+js(aopr, sites_urls_pops)
 ! besthentaitube.com ichineseporn.com popup ads
 besthentaitube.com,ichineseporn.com##+js(aeld, click, popMagic)
 besthentaitube.com,ichineseporn.com##+js(aopw, atOptions)
+besthentaitube.com,ichineseporn.com##+js(nowoif)
 besthentaitube.com,ichineseporn.com###playerOverlay
 besthentaitube.com,ichineseporn.com##.col.content-col > p[align="center"] > [href][target="_blank"]
 besthentaitube.com,ichineseporn.com##.-aff.col.item-col
@@ -6649,18 +6650,18 @@ boolwowgirls.com##+js(acis, document.querySelectorAll, popMagic)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/69916
 uplinks.in##+js(aopr, app_vars.force_disable_adblock)
+uplinks.in##+js(set, blurred, false)
 uplinks.in##.short
 uplinks.in##center > .separator
 uplinks.in##.row > .separator
-uplinks.in##+js(set, blurred, false)
+uplinks.in##[style$="text-align: center;"] > a[href]
 *$3p,script,denyallow=google.com|gstatic.com|recaptcha.net|cloudflare.com|hcaptcha.com|codepen.io,domain=uplinks.in
 cutlink.link##+js(acis, String.fromCharCode, /btoa|break/)
 cutlink.link##+js(aopr, app_vars.force_disable_adblock)
 cutlink.link##+js(set, blurred, false)
 cutlink.link##.banner
 cutlink.link###absuadd
-||armlyemoan.com^
-||snitswaspshaft.com^
+||d2sbzwmcg5amr3.cloudfront.net^
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67023
 k12reader.com##+js(aopr, rccbase_styles)
@@ -6799,4 +6800,23 @@ turk.pw##+js(set, count, 0)
 sammobile.com##.g
 
 ! https://github.com/easylist/easylist/pull/6720
-/9[a-g0-9]{21}\.online\/9[a-g0-9]{21}\.js$/$script,3p,domain=pornforrelax.com|tuberel.com
+/9[a-g0-9]{21}\.online\/9[a-g0-9]{21}\.js$/$script,3p
+! [badfilter] /poppy/*$domain=hclips.com|hdzog.com|hotmovs.com|shemalez.com|thegay.com|tubepornclassic.com|txxx.com|upornia.com|voyeurhit.com,badfilter
+/poppy/*$domain=hclips.com|hdzog.com|hotmovs.com|pornforrelax.com|shemalez.com|thegay.com|tubepornclassic.com|tuberel.com|txxx.com|upornia.com|voyeurhit.com
+
+! https://github.com/easylist/easylist/issues/6710
+@@||unilad.co.uk^$generichide
+unilad.co.uk##.dfp-ad-unit:upward(1)
+@@||adsafeprotected.com/vans-adapter-google-ima.js$domain=unilad.co.uk
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/70305
+topnewsshow.com##+js(aeld, load, showModal)
+*$script,redirect-rule=noopjs,domain=topnewsshow.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/8383
+mkvhouse.com##+js(acis, String.fromCharCode, break)
+mkvhouse.com##[href^="https://yts-mx.com/"]
+||zeejuthu.com^
+
+! https://github.com/LiCybora/NanoDefenderFirefox/issues/192
+panel.skynode.pro##+js(nostif, check)
