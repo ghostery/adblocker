@@ -1268,7 +1268,7 @@ xhamster.*,xhamster1.*,xhamster5.*,xhamster7.*##+js(aeld, , pop)
 xhamster.*,xhamster1.*,xhamster5.*,xhamster7.*##.wit-sponsor-banner
 xhamster.*,xhmaster1.*,xhamster5.*,xhamster7.*##.promo-message
 xhamster.*,xhmaster1.*,xhamster5.*,xhamster7.*##div[class$="-spb"]
-xhamster.*,xhmaster1.*,xhamster5.*,xhamster7.*##[class$="-spl"]
+xhamster.*,xhmaster1.*,xhamster5.*,xhamster7.*##[class$="-spl"], [class$="-aspl"]
 xhamster.*,xhmaster1.*,xhamster5.*,xhamster7.*##div[class$="-spa"]
 xhamster.*,xhmaster1.*,xhamster5.*,xhamster7.*##.xplayer-banner
 xhamster.*,xhmaster1.*,xhamster5.*,xhamster7.*##.xplayer-banner-bottom
@@ -1315,10 +1315,6 @@ wz.de##+js(aopr, jsABLoaded)
 
 ! https://adblockplus.org/forum/viewtopic.php?f=10&t=53374
 xstory-fr.com##+js(aopw, checkRealLoad)
-
-! https://github.com/gorhill/uBlock/issues/2759
-! https://github.com/uBlockOrigin/uAssets/issues/652
-slideplayer.*##+js(aopr, service.mode)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/497
 bitporno.com##+js(nowebrtc)
@@ -5083,13 +5079,17 @@ dupedornot.com##+js(acis, $, haveVisited)
 fileoops.com##+js(acis, String.fromCharCode, /btoa|break/)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2393
-pelisplus.*##+js(acis, Math, zfgloaded)
+pelisplus.*,pelisplus2.*##+js(acis, JSON.parse, atob)
+pelisplus.*##+js(aopr, AaDetector)
+pelisplus.*,pelisplushd.*##+js(aopw, adcashMacros)
 pelisplus.*##+js(aopw, smrtSP)
 pelisplus.*##+js(aopw, smrtSB)
-pelisplus.*##+js(aopw, Fingerprint2)
-pelisplus.*##+js(aopr, AaDetector)
-pelisplus.*##+js(nowoif)
+pelisplus.*##+js(aopw, _pop)
+pelisplus.*,pelispng.online,streampelis.club##+js(nowoif)
+pelisplus.*##+js(ra, href, #opfk)
 pelisplus.*##[class^="smartadtags"]
+pelisplus.*##.links > a.btn[class*="fa-"]
+pelisplus2.*##[style="display:flex"] > [style^="margin:-30px"] > [href][target="_blank"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1816
 hardsextube.com##+js(aopr, ExoLoader)
@@ -7980,9 +7980,9 @@ globe24.cz##.adsbygoogle
 @@||globaltv.com^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3019
-repelis.io,repelisgoo.*,repelisgooo.*,repelisgt.*,repelisxd.*,pelisplus2.*##+js(aopr, zfgformats)
-repelis.io,repelisgoo.*,repelisgooo.*,repelisgt.*,repelisxd.*,pelisplus2.*###ads
-repelis.io,repelisgoo.*,repelisgooo.*,repelisgt.*,repelisxd.*,pelisplus2.*##div[class]:has(:scope > div[class] > iframe[src*="/srv-pv/tag-"])
+repelis.io,repelisgoo.*,repelisgooo.*,repelisgt.*,repelisxd.*,pelisplus2.*,pelisplusxd.*##+js(aopr, zfgformats)
+repelis.io,repelisgoo.*,repelisgooo.*,repelisgt.*,repelisxd.*,pelisplus2.*,pelisplusxd.*###ads
+repelis.io,repelisgoo.*,repelisgooo.*,repelisgt.*,repelisxd.*,pelisplus2.*,pelisplusxd.*##div[class]:has(:scope > div[class] > iframe[src*="/srv-pv/tag-"])
 repelis.io##.lnk-ref
 kiripiliarload.com##+js(nowoif)
 firedge.com##+js(nano-sib, , , 0)
@@ -10155,12 +10155,12 @@ cricfree.stream##+js(popads-dummy)
 ||hdcast.me/ad.html$frame
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=42076
-cambabe.*,camgirlbay.net,caminspector.net,homewhores.net,hotbabes.tv,webcamsluts.net##+js(aopr, loadTool)
-cambabe.*,camgirlbay.net,caminspector.net,candid.tube,filesamba.*,homewhores.net,hotbabes.tv,purelyceleb.com,rare-videos.net,ukrainenude.eu,webcamsluts.net##+js(aopr, _wm)
+cambabe.*,camgirlbay.net,homewhores.net,hotbabes.tv,webcamsluts.net##+js(aopr, loadTool)
+cambabe.*,camgirlbay.net,candid.tube,filesamba.*,homewhores.net,hotbabes.tv,purelyceleb.com,rare-videos.net,ukrainenude.eu,webcamsluts.net##+js(aopr, _wm)
 camclips.cc##+js(aeld, , click)
 camclips.cc##+js(aeld, canplay)
 camclips.cc##[href="/upgrade"]:upward(1)
-cambabe.me,caminspector.net##.topad
+cambabe.me##.topad
 camclips.cc##.videobanner
 purelyceleb.com##.embed-container
 ##.exo-horizontal
@@ -15068,7 +15068,7 @@ freetutsdownload.net##[id^="modal-adbmon-"]
 10news.dk##.textwidget
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5495
-fc.lc##+js(aopr, AaDetector)
+fc.lc##+js(aopr, adBlockDetected)
 fc.lc,fcdot.lc##+js(aopr, app_vars.force_disable_adblock)
 fcdot.lc##+js(aopr, open)
 fcdot.lc##+js(nano-sib)
@@ -20287,7 +20287,7 @@ bde4.*##+js(nano-sib)
 ! https://forums.lanik.us/viewtopic.php?f=62&t=43979&p=151701#p151701
 dailysport.*##+js(acis, String.fromCharCode, atob)
 dailysport.*,eplsite.uk##+js(aopr, AaDetector)
-eplsite.uk,eplstream.xyz##+js(aopr, open)
+dailysport.*,eplsite.uk,eplstream.xyz##+js(aopr, open)
 eplsite.uk##[href="https://www.eplsite.uk/vm.html"]
 *$script,3p,denyallow=bootstrapcdn.com|cloudflare.com|cloudflare.net|googleapis.com|hwcdn.net|jsdelivr.net,domain=dailysport.*
 
@@ -21462,7 +21462,9 @@ dramakrsubindo.blogspot.com##+js(aopr, open)
 megacolecciones.net##+js(set, document.addEventListener, null)
 
 ! pelispedia.in popup
+pelispedia.*##+js(acis, allclick_Public)
 pelispedia.*##+js(nano-stb)
+pelispedia24.*,streamplusvip.xyz##+js(nowoif)
 pelispedia.*,pelispedia24.*##+js(ra, href, a#clickfakeplayer)
 pelispedia.*##+js(ra, href, #opfk)
 pelispedia.*##+js(ra, href, .fake_player > [href][target])
@@ -21476,6 +21478,7 @@ pelispedia.*##[class^="page_speed_"][href] > img[src$="app.png"]
 pelispedia24.*##.button
 pelispedia24.*##.asgdc
 pelispedia24.*##.preplayer
+pelispedia24.*##[href^="/acceso-total-sin-limite"]
 ||pelispedia.*/*sw.js$script,1p
 *$script,3p,denyallow=cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com|jsdelivr.net,domain=pelispedia.*
 fembed.live##+js(nowoif)
@@ -21492,9 +21495,6 @@ verpelistoday.com##+js(ra, href, [href*="/dowload/registro/"])
 verpelistoday.com##[href^="/dowload/"]
 verpelistoday.com##.ano_300
 verpelistoday.com##.textb
-
-! pelisplusgo.com popup
-pelisplusgo.com###ads
 
 ! pelis-gratis.com ads
 pelis-gratis.com##a.align_c.button
