@@ -8,6 +8,7 @@
 /* tslint:disable quotemark */
 export default [
   "-webkit-touch-callout: default",
+  "acis, decodeURI, decodeURIComp",
   "acis, disableSelection, reEnab",
   "acis, document.getElementById,",
   "acis, document.querySelectorAl",
@@ -123,7 +124,6 @@ export default [
   "ap",
   "ar",
   "at",
-  "au",
   "bo",
   "ce",
   "ch",
@@ -188,7 +188,6 @@ export default [
   "ta",
   "te",
   "ti",
-  "to",
   "ub",
   "ul",
   "um",
@@ -210,6 +209,7 @@ export default [
   "(",
   ")",
   "[",
+  "*",
   "/",
   "#",
   "0",
