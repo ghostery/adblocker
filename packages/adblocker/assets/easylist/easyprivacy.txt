@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202012211728
+! Version: 202012231325
 ! Title: EasyPrivacy
-! Last modified: 21 Dec 2020 17:28 UTC
+! Last modified: 23 Dec 2020 13:25 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -918,6 +918,7 @@
 /athena.gif?
 /athenastgbeacon.
 /atlas_track.
+/atr_events_
 /atrk.gif?
 /atrk.js
 /ats/lib/*
@@ -1626,6 +1627,7 @@
 /detm_adobe.
 /device-fingerprint.
 /dfp-gpt.
+/dfpsvc?
 /di-tealium.
 /Diagnostics?hit=
 /didna-pixel-
@@ -3370,7 +3372,7 @@
 /pixel_V2.
 /pixelappcollector.
 /pixelArticolo?
-/pixelcounter.
+/pixelcounter.$domain=~pixelcounter.com
 /pixelframe/*
 /PixelImg.asp
 /pixeljs/*
@@ -6067,7 +6069,6 @@ _mongo_stats/
 ||bouncepilot.com^$third-party
 ||bouncex.com^$third-party
 ||bpmonline.com^$third-party
-||branch.io^$third-party
 ||brandlock.io^$third-party
 ||brat-online.ro^$third-party
 ||brcdn.com^$third-party
@@ -7358,6 +7359,7 @@ _mongo_stats/
 ||opbandit.com^$third-party
 ||openclick.com^$third-party
 ||openhit.com^$third-party
+||openlog.in^$third-party
 ||openstat.net^$third-party
 ||opentracker.net^$third-party
 ||openvenue.com^$third-party
@@ -7537,6 +7539,7 @@ _mongo_stats/
 ||q-stats.nl^$third-party
 ||qbaka.net^$third-party
 ||qbop.com^$third-party
+||qflm.net^$third-party
 ||qlfsat.co.uk^$third-party
 ||qlitics.com^$third-party
 ||qlzn6i1l.com^$third-party
@@ -8176,8 +8179,7 @@ _mongo_stats/
 ||usabilitytools.com^$third-party
 ||usabilla.com^$third-party
 ||usablenet.com^$third-party
-! [dup] from ublock-origin/privacy.txt
-! ||usefathom.com^$third-party
+||usefathom.com^$third-party
 ||useinsider.com^$third-party
 ||useitbetter.com^$third-party
 ||useproof.com^$third-party
@@ -8192,8 +8194,7 @@ _mongo_stats/
 ||userreport.com^$third-party
 ||users-api.com^$third-party
 ||userzoom.com^$third-party
-! [dup] from ublock-origin/privacy.txt
-! ||usesfathom.com^$third-party
+||usesfathom.com^$third-party
 ||usuarios-online.com^$third-party
 ||uuxnwoevyb.com^$third-party
 ||v12group.com^$third-party
@@ -8499,8 +8500,7 @@ _mongo_stats/
 ! [dup] from ublock-origin/filters.txt
 ! ||olgtex.com^$third-party
 ||on-push.com^$third-party
-! [dup] from ublock-origin/filters-2020.txt
-! ||onepush.app^$third-party
+||onepush.app^$third-party
 ||onesignal.com^$third-party
 ||provesrc.com^$third-party
 ||psh.one^$third-party
@@ -10377,7 +10377,7 @@ _mongo_stats/
 ||api.wipmania.com^
 ||apm-engine.meteor.com^$third-party,xmlhttprequest
 ||app.cdn-cs.com/__t.png?
-||app.link^$third-party
+||app.link/_r?$script,third-party
 ||app.opmnstr.com/v2/geolocate/
 ||app.yesware.com/t/$third-party
 ||appdynamics.com/geo/$third-party
@@ -10507,6 +10507,7 @@ _mongo_stats/
 ||bonsai.internetbrands.com^
 ||bpath.com/count.dll?
 ||brain.foresee.com^
+||branch.io/branch-latest.min.js$script,third-party
 ||branch.io^*/pageview
 ||branch.io^*_fingerprint_id=$third-party
 ||brandaffinity.net/icetrack/
@@ -11199,6 +11200,7 @@ _mongo_stats/
 ||informer.yandex.ru^
 ||infosniper.net/locate-ip-on-map.php
 ||infusionsoft.com^*/getTrackingCode?
+||ingest.sentry.io^
 ||innogamescdn.com/media/js/metrics-
 ||inphonic.com/tracking/
 ||inq.com/tagserver/logging/
@@ -11534,6 +11536,7 @@ _mongo_stats/
 ||onet.pl^*/tags?
 ||onetrust.com^$ping
 ||onsugar.com/static/ck.php?
+||ontraport.com/track.php
 ||ooyala.com/3rdparty/comscore_
 ||ooyala.com/authorized?analytics
 ||ooyala.com/sas/analytics?
@@ -15587,6 +15590,7 @@ _mongo_stats/
 ||truste.com/common/js/ga.js
 ||truste.com/notice?*consent-track
 ||trx.smdatalabs.com^
+||trx3.famousfix.com^
 ||ts.delfi.
 ||tsn.ua/svc/video/stat/
 ||ttxm.co.uk^*/log.js
@@ -17783,7 +17787,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||cdn-ds.com/analytics/dfa.js$script,domain=tuttleclickgenesis.com
 @@||cdn-ds.com/analytics/sockjs.js$script,domain=tuttleclickgenesis.com
 @@||cdn-net.com/cc.js$script,domain=uber.com|ubereats.com
-@@||cdn.optimizely.com/js/*.js$domain=compassion.com|creditsesame.com|freeshipping.com|heroku.com|imageshack.com
+@@||cdn.optimizely.com/js/*.js$domain=compassion.com|creditsesame.com|freeshipping.com|heroku.com|historyvault.com|imageshack.com
 @@||certona.net^*/scripts/resonance.js$script,domain=canadiantire.ca
 @@||changenow.io/js/tracking.js$script
 @@||chasecdn.com^*/@ccb-blueanalytics/$script,domain=chase.com
