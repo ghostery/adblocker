@@ -3544,8 +3544,6 @@ informaxonline.com##+js(nostif, nextFunction)
 familyrenders.com##+js(aopr, adBlockDetected)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4502
-rjno1.com#@#+js(nostif, /^/)
-rjno1.com#@#+js(acis, setTimeout)
 ! [badfilter] _ads.js?$badfilter
 ! [badfilter] /show_ads.js$badfilter
 
@@ -4772,6 +4770,7 @@ bitfly.io##+js(acis, addEventListener, nextFunction)
 bitfly.io##+js(acis, Math, $,document)
 bitfly.io##+js(aopr, app_vars.force_disable_adblock)
 bitfly.io##+js(aopr, open)
+bitfly.io##+js(aost, Math.random, [$.)
 bitfly.io##+js(noeval)
 bitfly.io##+js(set, blurred, false)
 bitfly.io##.banner
@@ -4978,9 +4977,9 @@ madeintorrent.com##+js(aopw, _pop)
 stagesaga.xyz##+js(nosiif, visibility, 1000)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65459
-shorttey.*##+js(acis, JSON.parse, atob)
 shorttey.*##+js(aopr, app_vars.force_disable_adblock)
 shorttey.*##+js(aopr, open)
+shorttey.*##+js(aost, Math.random, t.pt)
 shorttey.*##+js(set, blurred, false)
 shorttey.*##+js(set, canRunAds, true)
 shorttey.*##.short
@@ -5404,6 +5403,7 @@ fritidsmarkedet.dk,maskinbladet.dk##.skybanner, .megaboard-inner
 afly.pro,adwork.us,onroid.com##+js(aopr, app_vars.force_disable_adblock)
 afly.pro,adwork.us,onroid.com##+js(set, blurred, false)
 afly.pro,adwork.us,onroid.com##center > p:has-text(/Advertisement|ADVIRTISE/)
+afly.pro,adwork.us,onroid.com##center > input, a.a
 afly.pro,adwork.us,onroid.com##[style="text-align: center;"]
 afly.pro,adwork.us,onroid.com##.banner-page > .container > .row > .col-md-offset-1.col-md-10 > div
 afly.pro,adwork.us,onroid.com##.banner-page > .container > .row > .col-md-offset-1.col-md-10:not(:has(.get-link))
@@ -5484,6 +5484,7 @@ ultimasnoticias.com.ve##pp
 ! https://github.com/uBlockOrigin/uAssets/issues/8121
 janusnotes.com##+js(nosiif, visibility, 1000)
 janusnotes.com##+js(nostif, ai_adb)
+janusnotes.com##+js(nowoif)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/66645
 ||megaup.mobi/assets/scripts/$script,1p
@@ -5603,6 +5604,7 @@ proxybit.*##+js(nowoif)
 ! https://github.com/abp-filters/abp-filters-anti-cv/issues/482
 hdss.*##+js(acis, String.fromCharCode, /btoa|break/)
 hdss.*##.homi
+hdss.*##.widget_media_image
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8162
 @@||top.gg/js/$script,1p
@@ -6929,6 +6931,8 @@ idfl.info##+js(aopr, open)
 idfl.info###fancybox-wrap
 idfl.info###fancybox-overlay
 *.gif$domain=idfl.info,image
+@@||idfl.info/customavatars/thumbs/avatar$image,1p
+@@||idfl.info/images/*$image,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3995#issuecomment-750903553
 @@*$ghide,domain=timesnownews.com|timesnowhindi.com|timesnowmarathi.com|zoomtventertainment.com
@@ -6937,8 +6941,26 @@ timesnownews.com,timesnowhindi.com,timesnowmarathi.com,zoomtventertainment.com##
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/kjfziv/adblock_detected/
 *$xhr,domain=foxsports.nl,redirect-rule=nooptext
+||imasdk.googleapis.com/js/sdkloader/ima3.js^$script,redirect-rule=noopjs,domain=foxsports.nl
 foxsports.nl##.dcm-section-advert
+foxsports.nl##.fadeInLeft.animated.dcm-main-content.col-md-12
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8402
 tormalayalam.*##+js(aopw, _pop)
 tormalayalam.*##+js(aopw, adcashMacros)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/70787
+blograffo.net##+js(acis, addEventListener, nextFunction)
+blograffo.net##[href^="https://amzn.to/"]
+
+! https://www.reddit.com/r/uBlockOrigin/comments/kjsro9/ublock_detected/
+aquiyahorajuegos.net##+js(aopr, adBlockDetected)
+
+! https://forums.lanik.us/viewtopic.php?f=62&t=45246
+@@||cc.com^$ghide
+
+! https://www.reddit.com/r/uBlockOrigin/comments/kjvva0/ublock_detected/
+imag-r.com##+js(aopr, adBlockerDetected)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/70763
+/block-adblock.js$script
