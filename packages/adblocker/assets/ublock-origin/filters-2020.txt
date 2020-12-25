@@ -5536,7 +5536,7 @@ walkthrough-indo.blogspot.com##+js(acis, addEventListener, google_ad_client)
 letmeread.net##.adsbygoogle
 
 ! polska-ie.com anti-adb
-polska-ie.com##+js(set, adsbygoogle.loaded, true)
+polska-ie.com##+js(aeld, load, isBlanketFound)
 *$script,redirect-rule=noopjs,domain=polska-ie.com
 
 ! https://forum.videohelp.com/ ad-reinsertion
@@ -5919,6 +5919,7 @@ systemnews24.com##+js(aeld, , /ads|Modal/)
 sitarchive.com##+js(set, adsbygoogle.loaded, true)
 sitarchive.com##+js(acis, document.querySelectorAll, popMagic)
 ||googlesyndication.com^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=sitarchive.com
+sitarchive.com##[id^="aswift_"]
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67914
 share1223.com##+js(aopr, adBlockDetected)
@@ -6662,9 +6663,6 @@ family-fuck.net##.plink
 ! https://github.com/AdguardTeam/AdguardFilters/issues/69954
 chillicams.net##+js(aopr, BetterJsPop)
 
-! sexynakeds.com popup
-sexynakeds.com##+js(acis, document.querySelectorAll, popMagic)
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/70038
 clicporn.com##+js(acis, document.querySelectorAll, popMagic)
 clicporn.com##.wps-player__happy-inside
@@ -6902,3 +6900,45 @@ erocool.com##+js(acis, document.querySelectorAll, popMagic)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/70634
 xxxhardcoretube.com##+js(acis, document.querySelectorAll, popMagic)
 xxxhardcoretube.com##+js(ra, onclick, .player > div[onclick])
+
+! windowmatters.com anti-adb
+windowsmatters.com##+js(aeld, load, isBlanketFound)
+*$script,redirect-rule=noopjs,domain=windowsmatters.com
+windowsmatters.com##div[class$="-quick-adsense"]
+
+! masbrooo.com/2ndrun.tv anti-adb
+masbrooo.com,2ndrun.tv##+js(aeld, load, showModal)
+*$script,redirect-rule=noopjs,domain=masbrooo.com|2ndrun.tv
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/70733
+*$xhr,redirect-rule=nooptext,domain=fr.de
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/70717
+toppixxx.com##+js(set, adblock, 0)
+||toppixxx.com/images/toppixxxshop-large.png
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/70723
+hdpicsx.com##+js(acis, document.querySelectorAll, popMagic)
+hdpicsx.com##.ads
+
+! https://www.reddit.com/r/uBlockOrigin/comments/kjd44v/ad_block_detected_on_httpstextbinnet/
+textbin.net##+js(set, isAdBlockActive, false)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/kjdmkq/ad_page_always_appeared_on_idfl/
+idfl.info##+js(aopr, open)
+idfl.info###fancybox-wrap
+idfl.info###fancybox-overlay
+*.gif$domain=idfl.info,image
+
+! https://github.com/uBlockOrigin/uAssets/issues/3995#issuecomment-750903553
+@@*$ghide,domain=timesnownews.com|timesnowhindi.com|timesnowmarathi.com|zoomtventertainment.com
+timesnownews.com,timesnowhindi.com,timesnowmarathi.com,zoomtventertainment.com##.adunit
+timesnownews.com,timesnowhindi.com,timesnowmarathi.com,zoomtventertainment.com##+js(nostif, Adblock)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/kjfziv/adblock_detected/
+*$xhr,domain=foxsports.nl,redirect-rule=nooptext
+foxsports.nl##.dcm-section-advert
+
+! https://github.com/uBlockOrigin/uAssets/issues/8402
+tormalayalam.*##+js(aopw, _pop)
+tormalayalam.*##+js(aopw, adcashMacros)
