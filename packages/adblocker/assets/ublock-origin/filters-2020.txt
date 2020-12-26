@@ -2731,8 +2731,8 @@ faucetcoins.org,dogecrypto.club,getdogecoins.com##[class^="bmadblock"]
 ahri-hentai.com##+js(acis, document.querySelectorAll, popMagic)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7661
+aparat.cam##+js(acis, $, adbd)
 aparat.cam##+js(acis, String.fromCharCode, /btoa|break/)
-aparat.cam##+js(aopr, absda)
 aparat.cam##+js(aopw, _pop)
 aparat.cam##+js(nowoif)
 
@@ -6302,14 +6302,17 @@ camhoes.tv##[href^="https://go.strpjmp.com"]
 ||awprt.com^$3p
 
 ! https://github.com/easylist/easylist/issues/6507
+! https://github.com/AdguardTeam/AdguardFilters/issues/70890
 ||saddlegirls.com/saddlegirls/ph/v/*_video.mp4$1p
 saddlegirls.com##.image-link[href^="//www.zagvee.com"]
 ||playporngames.com/*.gif|
 ||playporngames.com/life_selector.jpg
 playporngames.com##.sidebarcont > .widget_text:not(#text-2)
-/xxx\/([a-z]+_){1,2}[a-z]+\.gif$/$image,1p,domain=playsexgames.xxx
+/xxx\/([a-z]+[_-]){1,2}[a-z]+\.(?:gif|jpg)$/$image,1p,domain=playporngames.xxx|playsexgames.xxx
 playsexgames.xxx##.widget:not(#text-2)
 ||lifeselector.com/banners/js/banner-controller.
+playporngames.xxx##.ad
+playporngames.xxx##.widget_text:not(#text-4)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/68948
 okec.uk##+js(noeval-if, fab_alert)
@@ -6452,6 +6455,7 @@ pikkado.com###dest_rev
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8340
 hindustantimes.com##+js(acis, $, HEAD)
+hindustantimes.com##+js(acis, document.addEventListener, HEAD)
 
 ! popups https://elitegoltv. es/canal-1.php
 newdmn.*##+js(nowoif, !newdmn, 1)
@@ -6584,10 +6588,6 @@ freemagazines.*##+js(aeld, , adb)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/69827
 javfun.me##+js(acis, document.querySelectorAll, popMagic)
 javfun.me###invideo_wrapper
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/69868
-jumboporn.xyz##+js(acis, loadTool, popping)
-||jumboporn.xyz/images/eva.gif
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/69870
 tophentaicomics.com##+js(acis, pop_init)
@@ -6744,7 +6744,6 @@ turk.pw##+js(set, count, 0)
 sammobile.com##.g
 
 ! https://github.com/easylist/easylist/pull/6720
-! [badfilter] /poppy/*$domain=hclips.com|hdzog.com|hotmovs.com|shemalez.com|thegay.com|tubepornclassic.com|txxx.com|upornia.com|voyeurhit.com,badfilter
 /poppy/*$domain=hclips.com|hdzog.com|hotmovs.com|porn555.com|pornforrelax.com|pornl.com|pornq.com|puporn.com|see.xxx|shemalez.com|thegay.com|tubepornclassic.com|tuberel.com|txxx.com|upornia.com|voyeurhit.com
 ||pornj.com/gabril/
 ||sss.xxx/sw.js$script,1p
@@ -6964,3 +6963,68 @@ imag-r.com##+js(aopr, adBlockerDetected)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/70763
 /block-adblock.js$script
+
+! https://www.spielaffe.de/Spiel/Festliche-Mode-designen anti adb
+@@||bitent.com/lock_html5/adPlayer/*/adPlayer.js$script,1p
+
+! https://www.reddit.com/r/uBlockOrigin/comments/kkdltv/adblocker_detected_eropastecom/
+eropaste.com##+js(set, isAdBlockActive, false)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/70888
+||hwcdn.net/etc/$domain=porngameshd.com
+porngameshd.com##.alert-danger > .row
+porngameshd.com##.row > .a-th:first-child:has(video)
+||warumbistdusoarm.space^$3p
+
+! https://github.com/easylist/easylist/issues/6826
+thequint.com##.adunitContainer:upward(4)
+
+! yporn.tv popunder
+yporn.tv##+js(acis, document.querySelectorAll, popMagic)
+
+! d.pornxp.com popup
+pornxp.com##+js(aopr, exoNoExternalUI38djdkjDDJsio96)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/70850
+sexflashgame.org##+js(acis, ishop_codes)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/70849
+||porngames.com/*.gif$image,1p
+porngames.com##a[href="javascript:void(0);"]:upward(.contentbox)
+porngames.com##div[style^="display: block; position: fixed; z-index:"]
+porngames.com##iframe[src^="//"]:upward(.contentbox)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/kkg3sw/f2moviesto_ublock_origin_not_working/
+f2movies.to##+js(nostif, /0x|devtools/)
+f2movies.to##+js(nosiif, _0x)
+||jayhintcull.com^
+||mobcrummymow.com^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/70845
+||sexyfuckgames.com^$frame,1p
+sexyfuckgames.com###AutoNumber1[width="640"]:has(iframe[src$=".php"])
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/70843
+/images\/(?:Banner\d{1,2}\.|[a-z]{3}\/)/$image,1p,domain=thesquarshers.com
+thesquarshers.com##img[src*="/Banner"]:upward(a)
+thesquarshers.com##.table
+thesquarshers.com##.video-holder
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/70910
+osmanias.com##+js(acis, addEventListener, google_ad_client)
+osmanias.com##.Top_of_ad_box
+osmanias.com##.ad_boxz
+osmanias.com##.taboola_box
+
+! cutesexyteengirls.com exit prevention
+cutesexyteengirls.com##+js(aeld, beforeunload)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8405
+hinurls.cc##+js(acis, String.fromCharCode, break)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8406
+@@||fssquad.com^$ghide
+
+! https://github.com/uBlockOrigin/uAssets/issues/8407
+@@||cdnjs.cloudflare.com/ajax/libs/fuckadblock$script
+@@*$xhr,domain=canal.cablegratis.online
