@@ -9,7 +9,6 @@
 export default [
   "googlesyndication",
   "imasdk.googleapis",
-  "cdnjs.cloudflare",
   "googletagmanager",
   "doubleclick.net",
   "cloudfront.net",
@@ -221,6 +220,7 @@ export default [
   "ut",
   "ve",
   "vi",
+  "vo",
   "we",
   "yp",
   "-",
