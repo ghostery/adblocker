@@ -964,7 +964,7 @@ kbb.com##.ads__disclaimer
 kbb.com##[id^="kbbAds"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/305
-||ads.pro-market.net/ads/scripts/site-120903.js$script,redirect=silent-noeval,domain=destructoid.com
+||ads.pro-market.net/ads/scripts/site-120903.js$script,redirect=silent-noeval.js,domain=destructoid.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/308
 ! https://forums.lanik.us/viewtopic.php?p=145682#p145682
@@ -2291,9 +2291,10 @@ porntrex.com###exclusive-link
 pics.vc,sxyprn.*##+js(acis, decodeURI, decodeURIComponent)
 sxyprn.*##+js(acis, document.querySelectorAll, popMagic)
 sxyprn.*##+js(acis, vast_urls)
-sxyprn.*##+js(aopr, raSettings)
 sxyprn.*##.post_el_wrap > .tdn
 sxyprn.*###vid_container_id > .tdn
+*$3p,script,frame,denyallow=googleapis.com|google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=sxyprn.*
+||sskmnews.pro^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1197
 magesy.*,majesy.*##+js(nosiif, visibility, 1000)
@@ -2377,7 +2378,7 @@ adyou.co###bannerUrl
 
 ! https://github.com/uBlockOrigin/uAssets/issues/883
 ! AdFly
-activeation.com,activetect.net,adf.ly,atabencot.net,atharori.net,atomcurve.com,atominik.com,auto-login-xxx.com,ay.gy,babblecase.com,baymaleti.net,bitigee.com,bluenik.com,brightvar.bid,briskgram.net,brisktopia.com,casualient.com,cinebo.net,clearload.bid,coginator.com,cogismith.com,cowner.net,dl.android-zone.org,dl.underclassblog.com,dataurbia.com,download.replaymod.com,fiaharam.net,gatustox.net,gdanstum.net,gloyah.net,gusimp.net,j.gs,kaitect.com,kializer.com,kibuilder.com,kimechanic.com,larati.net,meriabub.net,microify.com,mmoity.com,picocurl.com,pintient.com,q.gs,quainator.com,quamiller.com,queuecosm.bid,rd.consoletarget.com,riffhold.com,scuseami.net,simizer.com,skamaker.com,skamason.com,sostieni.ilwebmaster21.com,swiftviz.net,thouth.net,threadsphere.bid,tinyical.com,tinyium.com,twineer.com,uclaut.net,viahold.com,vializer.com,viwright.com,xterca.net,yabuilder.com,yamechanic.com,yoalizer.com,yobuilder.com,yoineer.com,yoitect.com,zo.ee,zoee.xyz##+js(adfly-defuser)
+activeation.com,activetect.net,adf.ly,atabencot.net,atharori.net,atomcurve.com,atominik.com,auto-login-xxx.com,ay.gy,babblecase.com,baymaleti.net,bitigee.com,bluenik.com,brightvar.bid,briskgram.net,brisktopia.com,casualient.com,chinnica.net,cinebo.net,clearload.bid,coginator.com,cogismith.com,cowner.net,dl.android-zone.org,dl.underclassblog.com,dataurbia.com,download.replaymod.com,fiaharam.net,gatustox.net,gdanstum.net,gloyah.net,gusimp.net,j.gs,kaitect.com,kializer.com,kibuilder.com,kimechanic.com,larati.net,meriabub.net,microify.com,mmoity.com,picocurl.com,pintient.com,q.gs,quainator.com,quamiller.com,queuecosm.bid,rd.consoletarget.com,riffhold.com,scuseami.net,simizer.com,skamaker.com,skamason.com,sostieni.ilwebmaster21.com,swiftviz.net,thouth.net,threadsphere.bid,tinyical.com,tinyium.com,twineer.com,uclaut.net,viahold.com,vializer.com,viwright.com,xterca.net,yabuilder.com,yamechanic.com,yoalizer.com,yobuilder.com,yoineer.com,yoitect.com,zo.ee,zoee.xyz##+js(adfly-defuser)
 ||fbs.com^$3p
 ! https://github.com/uBlockOrigin/uAssets/issues/1009#issuecomment-352160776
 ! https://github.com/jspenguin2017/uBlockProtector/issues/791
@@ -2502,16 +2503,6 @@ up-4ever.*##+js(aopr, adsDisabled)
 up-4ever.*###hiddensection:style(display: block !important)
 ##[onclick*="postlnk.com"]
 ##[href*="postlnk.com"]
-
-! https://github.com/uBlockOrigin/uAssets/issues/2470
-keezmovies.com##+js(aopr, exbl)
-keezmovies.com##+js(aopw, ppAb)
-keezmovies.com##+js(aopw, raSettings)
-||api.freewebfonts.org/lib/*$script,domain=keezmovies.com
-||keezmovies.com/sw.js$script,1p
-@@||spankcdn.net/*/js/adblockdetect.js$script,domain=keezmovies.com
-@@||keezmovies.com^$ghide
-keezmovies.com##.ad-link
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2482
 tube8.*##+js(acis, String.fromCharCode, /btoa|break/)
@@ -2884,7 +2875,6 @@ amateurporn1.com##+js(aopw, popns)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1010
 pornxs.com##+js(acis, ExoLoader)
-pornxs.com##+js(aopr, raSettings)
 pornxs.com##+js(aopr, _abb)
 ||pornxs.com/*.php
 
@@ -3046,7 +3036,6 @@ x1337x.*##[href*=".php"]
 xiaopan.co##+js(aopw, AdBlockDetectorWorkaround)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1064
-shooshtime.com##+js(aopr, raSettings)
 shooshtime.com##+js(nowoif)
 ||monad.network^$script,domain=shooshtime.com
 
@@ -3164,7 +3153,6 @@ zmovs.com##+js(aopr, ALoader)
 ! https://github.com/uBlockOrigin/uAssets/issues/1122
 picturelol.com###rang2
 picturelol.com##+js(aopr, ExoLoader)
-picturelol.com##+js(aopr, raSettings)
 picturelol.com##+js(nowoif)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1123
@@ -3509,7 +3497,6 @@ imgcloud.pw##+js(popads-dummy)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1210
 xxxstreams.org##+js(popads-dummy)
-xxxstreams.org##+js(aopr, raSettings)
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=39613
 angrybirdsnest.com##+js(set, adblock, false)
@@ -3876,7 +3863,6 @@ pornomico.com##.vjs-overlay
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1356
 donkparty.com##+js(aopr, phantomPopunders)
-donkparty.com##+js(aopr, raSettings)
 donkparty.com##+js(nowoif)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1357
@@ -4845,6 +4831,7 @@ sourceforge.net##+js(nano-stb)
 ! https://github.com/uBlockOrigin/uAssets/issues/1705
 @@||seekingalpha.com^$ghide
 ||seekingalpha.com/boot_data.js$important
+seekingalpha.com##[id^="ad-slot-"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1714
 ! https://github.com/uBlockOrigin/uAssets/issues/4687
@@ -6125,8 +6112,6 @@ libertaddigital.com##body:style(overflow:auto !important)
 @@||storage.oraclecloud.com/*/smartclip-services/sc_player/$script,1p
 esradio.libertaddigital.com###mega-atf
 
-! https://www.reddit.com/r/uBlockOrigin/comments/8vg377/how_to_block_ads_that_change_names_all_the_time/
-dailydot.com##+js(set, oio, true)
 ! Fix navbar being stuck in the middle of the page
 dailydot.com##.dd-nav-global:style(top: 0 !important; transform: none !important;)
 
@@ -6639,7 +6624,6 @@ igg-games.com##[href^="https://tm-offers"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2458
 pornrabbit.com##+js(nowoif)
-pornrabbit.com##+js(aopr, raSettings)
 ||pornrabbit.com/sw.js$script,1p
 pornrabbit.com##.stage-promo
 pornrabbit.com###inPlayer
@@ -9473,7 +9457,6 @@ fapality.com##+js(aopr, open)
 ||yourlustmedia.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3702
-worldsex.com##+js(aopw, raSettings)
 worldsex.com##+js(acis, document.querySelectorAll, popMagic)
 worldsex.com##+js(aopr, Notification)
 worldsex.com##+js(aopr, document.dispatchEvent)
@@ -9506,22 +9489,17 @@ masteranime.es##+js(set, check_adblock, true)
 ! https://www.reddit.com/r/uBlockOrigin/comments/9o5lin/cant_browse_httpswwwtcpvpncom_without_disabling/
 @@||tcpvpn.com^$ghide
 
-! https://github.com/NanoMeow/QuickReports/issues/204
-linuxtopia.org##+js(aopr, raSettings)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/3713
 yutlink.co##+js(aopr, app_vars.force_disable_adblock)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3715
-otakuworldsite.*##+js(aeld, load, onload)
+otakuworldsite.blogspot.com##+js(aeld, load, onload)
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/192
 pornoman.pl##+js(aopr, decodeURI)
 pornoman.pl##+js(aopr, _0x311a)
 pornoman.pl##+js(acis, document.querySelectorAll, popMagic)
 pornoman.pl##[src*="bannery"]
-||pornoman.pl^$script,1p
-@@||pornoman.pl/javascript/javascript.js$script,1p
 pornoman.pl###porno_accept
 @@||pornoman.pl^$ghide
 
@@ -9551,21 +9529,12 @@ nhentai.net##+js(nowoif)
 ! https://adblockplus.org/forum/viewtopic.php?f=10&t=60372&start=0
 *.mp4$media,redirect=noopmp4-1s,domain=abc.go.com
 
-! https://github.com/uBlockOrigin/uAssets/issues/3728
-@@||zetabitco.com^$ghide
-
 ! https://github.com/uBlockOrigin/uAssets/issues/1553
 ! https://github.com/uBlockOrigin/uAssets/issues/3731
 ! https://github.com/uBlockOrigin/uAssets/issues/3745
 ! https://github.com/uBlockOrigin/uAssets/issues/5119
 @@||imasdk.googleapis.com/js/sdkloader/$script,domain=4029tv.com|kcci.com|kcra.com|ketv.com|kmbc.com|koat.com|koco.com|ksbw.com|player.listenlive.co|mynbc5.com|wapt.com|wbaltv.com|wcvb.com|wdsu.com|wesh.com|wgal.com|wisn.com|wjcl.com|wlky.com|wlwt.com|wmtw.com|wmur.com|wpbf.com|wtae.com|wvtm13.com|wxii12.com|wyff4.com
 4029tv.com,kcci.com,kcra.com,ketv.com,kmbc.com,koat.com,koco.com,mor-tv.com,mynbc5.com,wapt.com,wbaltv.com,wcvb.com,wdsu.com,wesh.com,wgal.com,wisn.com,wjcl.com,wlky.com,wlwt.com,wmtw.com,wmur.com,wpbf.com,wtae.com,wvtm13.com,wxii12.com,wyff4.com##+js(nostif, (), 500)
-
-! https://github.com/uBlockOrigin/uAssets/issues/3732
-pornley.com##+js(acis, zfgloadedpopup)
-
-! https://github.com/NanoMeow/QuickReports/issues/213
-dailydot.com##+js(aopr, SC)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3737
 canadianunderwriter.ca##+js(aopw, mockingbird)
@@ -12032,9 +12001,9 @@ kora-live.tv##+js(nostif, nextFunction, 2000)
 ! https://github.com/uBlockOrigin/uAssets/issues/4378#issuecomment-451783706
 latribunadelpaisvasco.com##+js(noeval)
 
-! https://github.com/uBlockOrigin/uAssets/issues/4080#issuecomment-451912130
+! https://github.com/uBlockOrigin/uAssets/issues/4080
 hanime.tv##+js(set, ABLK, false)
-hanime.tv##.active.desktop.htvad
+hanime.tv##.desktop.htvad
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/254
 apkdot.com##+js(nano-sib)
@@ -13575,11 +13544,9 @@ ciudadgamer.com##+js(acis, atob, encodeURIComponent)
 books4arab.com##+js(acis, parseInt, decodeURIComponent)
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/453
-ovagames.com##+js(aeld, load, /showModal|isBlanketFound/)
-ovagames.com##+js(set, adsbygoogle.length, undefined)
 ovagames.com##+js(aopw, _pop)
+ovagames.com##+js(set, DHAntiAdBlocker, true)
 ovagames.com###adter:upward(3)
-||googlesyndication.com^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=ovagames.com
 @@||ovagames.com^$ghide
 
 ! https://github.com/NanoMeow/QuickReports/issues/797
@@ -22251,6 +22218,9 @@ onlinetutorium.com##+js(acis, addEventListener, google_ad_client)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3121
 fontyukle.net##+js(nosiif, visibility, 1000)
+fontyukle.net##+js(nostif, innerHTML.replace, 1000)
+fontyukle.net##.sag-ust
+fontyukle.net##div.sponsor
 
 ! https://github.com/NanoMeow/QuickReports/issues/3084
 shiroyasha.me##+js(aopr, adBlockDetected)
@@ -23800,12 +23770,10 @@ rarlab.com##.tbar2:has-text(advert)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7343
 dood.*##+js(acis, String.fromCharCode, /btoa|break/)
-dood.*##+js(aeld, , _0x)
+dood.*##+js(acis, adcashMacros)
 dood.*##+js(aopw, _pop)
 dood.*##+js(aopw, DoodPop)
-dood.*##+js(nosiif, _0x)
 dood.*##+js(nostif, debugger)
-dood.*##+js(set, xPoPAdS, false)
 @@||dood.video^$xhr,domain=dood.watch
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7175
