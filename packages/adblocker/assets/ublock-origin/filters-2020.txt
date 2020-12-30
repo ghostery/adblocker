@@ -4965,6 +4965,7 @@ stagesaga.xyz##+js(nosiif, visibility, 1000)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65459
 shorttey.*##+js(aopr, app_vars.force_disable_adblock)
 shorttey.*##+js(aopr, open)
+shorttey.*##+js(aopw, _pop)
 shorttey.*##+js(aost, Math.random, t.pt)
 shorttey.*##+js(set, blurred, false)
 shorttey.*##+js(set, canRunAds, true)
@@ -5070,12 +5071,11 @@ livingincebuforums.com##[id^="nbAdWidget"]
 livingincebuforums.com##li.ipsBox.ipsWidget_vertical.ipsWidget:nth-of-type(1)
 livingincebuforums.com##li.ipsBox.ipsWidget_vertical.ipsWidget:nth-of-type(5)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/65700
 ! https://github.com/uBlockOrigin/uAssets/issues/8068
 tio.ch##+js(aeld, error)
 tio.ch##+js(ra, href, a[href*="/ads.php"][target="_blank"])
-@@||*.ch^$xhr,domain=tio.ch
 @@||tio.ch^$ghide
+tio.ch##.ad
 
 ! shrinkhere.xyz anti adb popup
 shrinkhere.xyz##+js(acis, String.fromCharCode, atob)
@@ -6956,11 +6956,11 @@ eropaste.com##+js(set, isAdBlockActive, false)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/70487
 ! https://github.com/AdguardTeam/AdguardFilters/issues/70888
-||hwcdn.net/etc/$domain=mysexgamer.com|porngameshd.com
-mysexgamer.com,porngameshd.com##.alert-danger > .row
-mysexgamer.com,porngameshd.com##.a-th:first-child:has(video)
+! https://github.com/AdguardTeam/AdguardFilters/issues/71223
+adult-sex-gamess.com,hentaigames.app,mobilesexgamesx.com,mysexgamer.com,porngameshd.com,sexgamescc.com##.a-th:first-child:has(iframe)
+adult-sex-gamess.com,hentaigames.app,mobilesexgamesx.com,mysexgamer.com,porngameshd.com,sexgamescc.com##.alert-danger > .row
+adult-sex-gamess.com,hentaigames.app,mobilesexgamesx.com,mysexgamer.com,porngameshd.com,sexgamescc.com##+js(nostif, "/out.php")
 ||warumbistdusoarm.space^$3p
-mysexgamer.com,porngameshd.com##+js(nostif, "/out.php")
 
 ! https://github.com/easylist/easylist/issues/6826
 thequint.com##.adunitContainer:upward(4)
@@ -7080,3 +7080,27 @@ ngelmat.net##+js(nosiif, DevToolsOpen)
 justandroid.net##+js(nostif, css_class.show)
 justandroid.net##.clearfix.entry
 justandroid.net##.stream-item.stream-item-mag.mag-box > .container-wrapper
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/71203
+*$script,redirect-rule=noopjs,domain=kursors.lv
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/71167
+javbel.com##+js(acis, decodeURI, decodeURIComponent)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/71177
+javbix.com##+js(acis, document.querySelectorAll, popMagic)
+javbix.com##.adsvideo
+javbix.com##.content_movie > div[style="padding:10px; margin-top:15px; text-align:center"]
+javbix.com##.letterLi:last-of-type
+
+! https://github.com/uBlockOrigin/uAssets/issues/8411
+kvador.com##+js(aopr, loadTool)
+##[src^="https://forum.picbaron.com/Banner"]
+
+! https://github.com/easylist/easylist/issues/6476#issuecomment-751258895
+dvdplay.run,rawmanga.top##+js(aost, Math, onreadystatechange)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/71232
+2adultflashgames.com##+js(aopr, loadTool)
+||2adultflashgames.com/img/$1p
+||sexsim2.com^$domain=2adultflashgames.com
