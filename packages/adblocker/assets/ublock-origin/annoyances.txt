@@ -5085,3 +5085,24 @@ economica.net##+js(aeld, copy)
 
 ! kuroko-analyze.com right-click
 kuroko-analyze.com##+js(ra, oncontextmenu, body)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/71225
+raqmedia.com##body:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! 69translations.blogspot .com anti select
+69translations.blogspot.com##+js(acis, document.onselectstart)
+
+! 2iptv .com warning anti adb
+2iptv.com##+js(nostif, google_jobrunner)
+
+! alphagirlreviews .com anti right click, anti select, anti drag
+alphagirlreviews.com##+js(acis, document.oncontextmenu)
+alphagirlreviews.com##+js(aopr, document.ondragstart)
+alphagirlreviews.com##+js(acis, disableSelection, reEnable)
+alphagirlreviews.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! archeboli .it anti right click, anti select, anti drag
+archeboli.it##+js(acis, document.oncontextmenu)
+archeboli.it##+js(aopr, document.ondragstart)
+archeboli.it##+js(acis, disableSelection, reEnable)
+archeboli.it##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)

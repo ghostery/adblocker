@@ -3214,6 +3214,7 @@ barristerbabu.net##+js(nostif, Promise)
 inews.co.uk##.inews__advert
 inews.co.uk##.inews__mpu
 inews.co.uk##div.box.widget:nth-of-type(5)
+inews.co.uk##.thanks-3xsWr
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/60443
 essek.gen.tr##+js(nano-sib)
@@ -3959,6 +3960,7 @@ shortenbuddy.com##.banner
 shortenbuddy.com##.cus-dalert
 shortenbuddy.com##.custom-adbox
 shortenbuddy.com##.custom-shadow.custom-border-color.alert-danger.alert
+shortenbuddy.com###nextBTNH:style(display: block !important;)
 *$script,3p,denyallow=bootstrapcdn.com|cloudflare.net|fontawesome.com|google.com|gstatic.com|hwcdn.net|jquery.com|jsdelivr.net|recaptcha.net,domain=shortenbuddy.com
 ||mylead.global^$3p,domain=shortenbuddy.com
 
@@ -6598,7 +6600,6 @@ cutlink.link##+js(aopr, app_vars.force_disable_adblock)
 cutlink.link##+js(set, blurred, false)
 cutlink.link##.banner
 cutlink.link###absuadd
-||d2sbzwmcg5amr3.cloudfront.net^
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67023
 k12reader.com##+js(aopr, rccbase_styles)
@@ -6671,7 +6672,6 @@ manganelo.link##+js(acis, String.fromCharCode, break)
 *$script,redirect-rule=noopjs,domain=manganelo.link
 manganelo.link##.wp-manga.c-top-sidebar.c-sidebar
 *$3p,denyallow=google.com|googleapis.com|gstatic.com|recaptcha.net|hcaptcha.com|dmca.com|stackpathdns.com,domain=manganelo.link
-||cragbrasyeps.com^
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/69828
 ohyeah1080.site##+js(nano-sib, timer, 1100)
@@ -7104,3 +7104,57 @@ dvdplay.run,rawmanga.top##+js(aost, Math, onreadystatechange)
 2adultflashgames.com##+js(aopr, loadTool)
 ||2adultflashgames.com/img/$1p
 ||sexsim2.com^$domain=2adultflashgames.com
+
+! https://www.reddit.com/r/uBlockOrigin/comments/knara8/need_help_with_anti_adblock/
+javnow.net##+js(aopw, ai_front)
+javnow.net##div[style$="width:300px;height:250px;"]
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/71217
+31-vakti.website##+js(acis, document.querySelectorAll, popMagic)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/71233
+||highwebmedia.com/ri/
+clubsarajay.com###mgb
+clubsarajay.com###mpc-container
+clubsarajay.com##iframe[src^="https://ads2."]:upward(.widget)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/71300
+gatcha.org##+js(nostif, css_class.show)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/71301
+zilinak.sk##+js(nostif, offsetHeight)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8413
+@@||loadout.tf^$ghide
+loadout.tf#@#.loadout-application-top > custom-panel:last-child
+loadout.tf##.adsbygoogle:upward(2):style(left-3000px !important;position:absolute !important)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/71225
+||raw.githack.com/Raqmedia/adblock/$script,3p
+raqmedia.com##[href^="https://www.englezz.com"]
+
+! hokatsu.mamastar.jp anti-adb
+hokatsu.mamastar.jp###tpModal
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/71316
+filtercams.com##+js(acis, $, #advVid)
+filtercams.com##.table
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/71339
+minilinks.in##+js(aopr, app_vars.force_disable_adblock)
+minilinks.in##+js(set, blurred, false)
+minilinks.in##.box-main center
+go.minilinks.in##.box-main > h5
+go.minilinks.in##.box-main > p
+minilinks.in###myDIV:style(display: block !important;)
+minilinks.in###plswait
+*$script,3p,denyallow=google.com|gstatic.com|hwcdn.net|jquery.com|recaptcha.net,domain=minilinks.in
+
+! a100 .radio anti adb
+a100.radio##+js(nosiif, visibility, 1000)
+
+! cryptofun .space anti adb
+cryptofun.space##+js(aopr, adBlockDetected)
+
+! anime47 .com popups
+anime47.com##+js(aopr, open)
