@@ -70,6 +70,7 @@ describe('#injectCosmetics', () => {
 
     expect(getCosmeticsFilters).to.have.been.calledTwice;
     expect(getCosmeticsFilters).to.have.been.calledWith({
+      type: 'features',
       classes: ['class1'],
       hrefs: ['https://foo.com/'],
       ids: ['id1'],
@@ -119,6 +120,7 @@ describe('#injectCosmetics', () => {
 
     expect(getCosmeticsFilters).to.have.been.calledThrice;
     expect(getCosmeticsFilters).to.have.been.calledWith({
+      type: 'features',
       classes: ['class2'],
       hrefs: ['https://bar.com/'],
       ids: ['id2'],
@@ -128,7 +130,7 @@ describe('#injectCosmetics', () => {
     // Mutate the DOM = change existing nodes
     div.classList.add('class3');
     span.classList.add('class4');
-    a.href = 'https://baz.com';
+    a.href = 'https://baz.com/';
     a.classList.add('class1');
 
     await tick();
@@ -136,6 +138,7 @@ describe('#injectCosmetics', () => {
 
     expect(getCosmeticsFilters.callCount).to.eql(4);
     expect(getCosmeticsFilters).to.have.been.calledWith({
+      type: 'features',
       classes: ['class3', 'class4'],
       hrefs: ['https://baz.com/'],
       ids: [],
@@ -174,35 +177,6 @@ describe('#injectCosmetics', () => {
 
     await tick(1000);
     expect(dom.window.document.getElementsByTagName('span')).to.have.lengthOf(1);
-  });
-
-  it('injects cosmetic', async () => {
-    const dom = new JSDOM(
-      `
-<!DOCTYPE html>
-<head></head>
-<body>
-  <div id="id1"></div>
-</body>
-`,
-      { pretendToBeVisual: true },
-    );
-
-    injectCosmetics(dom.window, true, async () => {
-      return {
-        active: true,
-        extended: [],
-        scripts: [],
-        styles: `
-        #id1 { display: none !important; }
-        `,
-      };
-    });
-
-    await tick(1000);
-
-    const div = dom.window.document.getElementById('cliqz-adblokcer-css-rules');
-    expect(div).not.to.be.null;
   });
 
   it('does nothing if not active', async () => {

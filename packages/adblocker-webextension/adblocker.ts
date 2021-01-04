@@ -330,6 +330,7 @@ export class WebExtensionBlocker extends FiltersEngine {
           // This needs to be done only once per tab
           getBaseRules: true,
           getInjectionRules: false,
+          getExtendedRules: false,
           getRulesFromDOM: false,
           getRulesFromHostname: false,
         });
@@ -352,7 +353,7 @@ export class WebExtensionBlocker extends FiltersEngine {
       // ids and hrefs observed in the DOM. MutationObserver is also used to
       // make sure we can react to changes.
       {
-        const { active, styles, scripts } = this.getCosmeticsFilters({
+        const { active, styles, scripts, extended } = this.getCosmeticsFilters({
           domain,
           hostname,
           url,
@@ -364,6 +365,7 @@ export class WebExtensionBlocker extends FiltersEngine {
           // This needs to be done only once per frame
           getBaseRules: false,
           getInjectionRules: msg.lifecycle === 'start',
+          getExtendedRules: msg.lifecycle === 'start',
           getRulesFromHostname: msg.lifecycle === 'start',
 
           // This will be done every time we get information about DOM mutation
@@ -382,7 +384,7 @@ export class WebExtensionBlocker extends FiltersEngine {
         if (scripts.length !== 0) {
           sendResponse({
             active,
-            extended: [],
+            extended,
             scripts,
             styles: '',
           });

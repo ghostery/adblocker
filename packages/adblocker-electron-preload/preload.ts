@@ -32,7 +32,11 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
 
     ipcRenderer.on(
       'get-cosmetic-filters-response',
-      (_: Electron.IpcRendererEvent, { active, scripts }: IMessageFromBackground) => {
+      // TODO - implement extended filtering for Electron
+      (
+        _: Electron.IpcRendererEvent,
+        { active, scripts /* , extended */ }: IMessageFromBackground,
+      ) => {
         if (active === false) {
           ACTIVE = false;
           unload();
@@ -56,13 +60,13 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
     window.addEventListener(
       'DOMContentLoaded',
       () => {
-        DOM_MONITOR = new DOMMonitor(({ classes, ids, hrefs }) => {
-          getCosmeticsFilters({
-            classes,
-            hrefs,
-            ids,
-            lifecycle: 'dom-update',
-          });
+        DOM_MONITOR = new DOMMonitor((update) => {
+          if (update.type === 'features') {
+            getCosmeticsFilters({
+              ...update,
+              lifecycle: 'dom-update',
+            });
+          }
         });
 
         DOM_MONITOR.queryAll(window);

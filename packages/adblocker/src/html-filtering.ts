@@ -13,16 +13,16 @@
 export type HTMLSelector = readonly ['script', readonly string[]];
 
 export function extractHTMLSelectorFromRule(rule: string): HTMLSelector | undefined {
-  if (rule.startsWith('script') === false) {
+  if (rule.startsWith('^script') === false) {
     return undefined;
   }
 
   const prefix = ':has-text(';
   const selectors: string[] = [];
 
-  let index = 6;
-  // script:has-text
-  //       ^ 6
+  let index = 7;
+  // ^script:has-text
+  //        ^ 7
 
   // Prepare for finding one or more ':has-text(' selectors in a row
   while (rule.startsWith(prefix, index)) {

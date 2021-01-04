@@ -6,6 +6,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import type { IMessageFromBackground } from '@cliqz/adblocker-content';
+
 import { compactTokens, concatTypedArrays } from '../../compact-set';
 import Config from '../../config';
 import { StaticDataView } from '../../data-view';
@@ -258,7 +260,7 @@ export default class CosmeticFilterBucket {
     this.extraGenericRules = null;
 
     if (filters.length !== 0) {
-      this.update(filters, undefined);
+      this.update(filters, undefined, config);
     }
   }
 
@@ -275,7 +277,11 @@ export default class CosmeticFilterBucket {
     );
   }
 
-  public update(newFilters: CosmeticFilter[], removedFilters: Set<number> | undefined): void {
+  public update(
+    newFilters: CosmeticFilter[],
+    removedFilters: Set<number> | undefined,
+    config: Config,
+  ): void {
     const classSelectors: CosmeticFilter[] = [];
     const genericHideRules: CosmeticFilter[] = [];
     const hostnameSpecificRules: CosmeticFilter[] = [];
@@ -299,7 +305,7 @@ export default class CosmeticFilterBucket {
         } else {
           genericHideRules.push(rule);
         }
-      } else {
+      } else if (rule.isExtended() === false || config.loadExtendedSelectors === true) {
         hostnameSpecificRules.push(rule);
       }
     }
@@ -387,6 +393,7 @@ export default class CosmeticFilterBucket {
     // Allows to specify which rules to return
     getBaseRules = true,
     getInjectionRules = true,
+    getExtendedRules = true,
     getRulesFromDOM = true,
     getRulesFromHostname = true,
   }: {
@@ -402,9 +409,14 @@ export default class CosmeticFilterBucket {
 
     getBaseRules?: boolean;
     getInjectionRules?: boolean;
+    getExtendedRules?: boolean;
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
-  }): { injections: CosmeticFilter[]; stylesheet: string } {
+  }): {
+    injections: CosmeticFilter[];
+    extended: IMessageFromBackground['extended'];
+    stylesheet: string;
+  } {
     // Tokens from `hostname` and `domain` which will be used to lookup filters
     // from the reverse index. The same tokens are re-used for multiple indices.
     const hostnameTokens = createLookupTokens(hostname, domain);
@@ -483,12 +495,13 @@ export default class CosmeticFilterBucket {
       );
     }
 
+    const extended: CosmeticFilter[] = [];
     const injections: CosmeticFilter[] = [];
     const styles: CosmeticFilter[] = [];
 
     // If we found at least one candidate, check if we have unhidden rules,
-    // apply them and dispatch rules into `injections` (i.e.: '+js(...)') and
-    // `styles` (i.e.: '##rule').
+    // apply them and dispatch rules into `injections` (i.e.: '+js(...)'),
+    // `extended` (i.e. :not(...)), and `styles` (i.e.: '##rule').
     if (rules.length !== 0) {
       // =======================================================================
       // Rules: unhide
@@ -526,6 +539,10 @@ export default class CosmeticFilterBucket {
           if (getInjectionRules === true && injectionsDisabled === false) {
             injections.push(rule);
           }
+        } else if (rule.isExtended()) {
+          if (getExtendedRules === true) {
+            extended.push(rule);
+          }
         } else {
           styles.push(rule);
         }
@@ -544,7 +561,39 @@ export default class CosmeticFilterBucket {
       stylesheet += createStylesheetFromRules(styles);
     }
 
+    const extendedProcessed: IMessageFromBackground['extended'] = [];
+    if (extended.length !== 0) {
+      const extendedStyles: Map<string, string> = new Map();
+      for (const rule of extended) {
+        const ast = rule.getSelectorAST();
+        if (ast !== undefined) {
+          const attribute = rule.isRemove() ? undefined : rule.getStyleAttributeHash();
+
+          if (attribute !== undefined) {
+            extendedStyles.set(rule.getStyle(), attribute);
+          }
+
+          extendedProcessed.push({
+            ast,
+            remove: rule.isRemove(),
+            attribute,
+          });
+        }
+      }
+
+      if (extendedStyles.size !== 0) {
+        if (stylesheet.length !== 0) {
+          stylesheet += '\n\n';
+        }
+
+        stylesheet += [...extendedStyles.entries()]
+          .map(([style, attribute]) => `[${attribute}] { ${style} }`)
+          .join('\n\n');
+      }
+    }
+
     return {
+      extended: extendedProcessed,
       injections,
       stylesheet,
     };
@@ -577,7 +626,7 @@ export default class CosmeticFilterBucket {
 
   /**
    * This is used to lazily generate both the list of generic rules which can
-   * *potentially be un-hidden* (i.e.: there exists at least once unhide rule
+   * *potentially be un-hidden* (i.e.: there exists at least one unhide rule
    * for the selector) and a stylesheet containing all selectors which cannot
    * be un-hidden. Since this list will not change between updates we can
    * generate once and use many times.

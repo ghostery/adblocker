@@ -161,7 +161,7 @@ export class ElectronBlocker extends FiltersEngine {
     const hostname = parsed.hostname || '';
     const domain = parsed.domain || '';
 
-    const { active, styles, scripts } = this.getCosmeticsFilters({
+    const { active, styles, scripts, extended } = this.getCosmeticsFilters({
       domain,
       hostname,
       url,
@@ -173,6 +173,7 @@ export class ElectronBlocker extends FiltersEngine {
       // This needs to be done only once per frame
       getBaseRules: msg.lifecycle === 'start',
       getInjectionRules: msg.lifecycle === 'start',
+      getExtendedRules: msg.lifecycle === 'start',
       getRulesFromHostname: msg.lifecycle === 'start',
 
       // This will be done every time we get information about DOM mutation
@@ -189,7 +190,7 @@ export class ElectronBlocker extends FiltersEngine {
     // Inject scripts from content script
     event.sender.send('get-cosmetic-filters-response', {
       active,
-      extended: [],
+      extended,
       scripts,
       styles: '',
     } as IMessageFromBackground);

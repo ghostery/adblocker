@@ -22,6 +22,7 @@ export default class Config {
       loadCSPFilters: buffer.getBool(),
       loadCosmeticFilters: buffer.getBool(),
       loadExceptionFilters: buffer.getBool(),
+      loadExtendedSelectors: buffer.getBool(),
       loadGenericCosmeticsFilters: buffer.getBool(),
       loadNetworkFilters: buffer.getBool(),
     });
@@ -38,6 +39,7 @@ export default class Config {
   public readonly loadCSPFilters: boolean;
   public readonly loadCosmeticFilters: boolean;
   public readonly loadExceptionFilters: boolean;
+  public readonly loadExtendedSelectors: boolean;
   public readonly loadGenericCosmeticsFilters: boolean;
   public readonly loadNetworkFilters: boolean;
 
@@ -53,6 +55,7 @@ export default class Config {
     loadCSPFilters = true,
     loadCosmeticFilters = true,
     loadExceptionFilters = true,
+    loadExtendedSelectors = false,
     loadGenericCosmeticsFilters = true,
     loadNetworkFilters = true,
   }: Partial<Config> = {}) {
@@ -67,6 +70,7 @@ export default class Config {
     this.loadCSPFilters = loadCSPFilters;
     this.loadCosmeticFilters = loadCosmeticFilters;
     this.loadExceptionFilters = loadExceptionFilters;
+    this.loadExtendedSelectors = loadExtendedSelectors;
     this.loadGenericCosmeticsFilters = loadGenericCosmeticsFilters;
     this.loadNetworkFilters = loadNetworkFilters;
   }
@@ -74,7 +78,7 @@ export default class Config {
   public getSerializedSize(): number {
     // NOTE: this should always be the number of attributes and needs to be
     // updated when `Config` changes.
-    return 13 * sizeOfBool();
+    return 14 * sizeOfBool();
   }
 
   public serialize(buffer: StaticDataView): void {
@@ -89,6 +93,7 @@ export default class Config {
     buffer.pushBool(this.loadCSPFilters);
     buffer.pushBool(this.loadCosmeticFilters);
     buffer.pushBool(this.loadExceptionFilters);
+    buffer.pushBool(this.loadExtendedSelectors);
     buffer.pushBool(this.loadGenericCosmeticsFilters);
     buffer.pushBool(this.loadNetworkFilters);
   }
