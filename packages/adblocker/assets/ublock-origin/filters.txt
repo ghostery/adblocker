@@ -2084,6 +2084,7 @@ mmorpg.com##.vhadb
 mylink.*,my1ink.*,myli3k.*##+js(acis, decodeURIComponent, 'shift')
 mylink.*,my1ink.*,myli3k.*##+js(nowoif)
 mylink.*,my1ink.*,myli3k.*##+js(nostif, nextFunction, 2000)
+mylink.*,my1ink.*,myli3k.*##+js(set, ad_slot, true)
 mylink.*,my1ink.*,myli3k.*##a[href^="https://go.nordvpn.net/"], [src^="/nordcode.php"]
 *$script,redirect-rule=noopjs,domain=mylink.*|my1ink.*|myli3k.*
 myl1nk.org,my1ink.*,myli3k.*##div[id][style^="width: 970px; height: 250px;"]
@@ -2455,7 +2456,6 @@ hclips.com##.adv-box-holder
 hclips.com##[class^="pl_"]
 hclips.com##iframe[src="javascript:false"]
 hclips.com##.jwplayer > .afs_ads + span[class]
-hclips.com##.footer-block
 hclips.com##.video-page__content > .right
 hclips.com##.video-page__item
 hclips.com##.content > div > .wrapper + div[class]:not(.wrapper)
@@ -2669,6 +2669,7 @@ voyeurhit.com##+js(acis, adver)
 voyeurhit.com##+js(acis, document.createElement, atob)
 voyeurhit.com##+js(aeld, , window.open)
 voyeurhit.com##+js(nosiif, document.readyState)
+voyeurhit.com##.content > div > .container + div
 voyeurhit.com##.videoplayer-wrapper > link + span[class]
 ##.__nat_link
 ||mysmokingmistress.com^$3p
@@ -2690,7 +2691,6 @@ hotmovs.com##+js(aopw, ads_priv)
 hotmovs.com##+js(aeld, , pop)
 hotmovs.com##.ntv-banners-container.sidebar
 hotmovs.com##+js(nowoif)
-hotmovs.com##.footer-banners
 hotmovs.com##.footer-block
 hotmovs.com##.player-holder > link + span[class]
 hotmovs.com##.player > .underplayer
@@ -2707,8 +2707,8 @@ vjav.com###in_v
 ##[src*="/dutti/"]
 vjav.com##.movable-top:remove()
 vjav.com##.bx-un:remove()
-vjav.com##.footer-block
 vjav.com##.iRx9
+vjav.com###list_videos_related_videos > .box + div
 ||loadnot.online^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/961
@@ -3135,7 +3135,6 @@ hdzog.com##+js(nosiif, document.readyState))
 hdzog.com###under-pl-ad
 hdzog.com##+js(aeld, , pop)
 hdzog.com##[target="_blank"][href=""]
-hdzog.com##.footer-block
 hdzog.com##.jwplayer > .afs_ads + span[class]
 hdzog.com##.video-page__banners
 hdzog.com##.content > div > .content-block + div[class]:not(.content-block)
@@ -12336,11 +12335,12 @@ tvguia.es##+js(acis, $, .height)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4697
 askhoow.com,lkop.me##+js(aopr, app_vars.force_disable_adblock)
-askhoow.com,lkop.me##+js(aopr, open)
+askhoow.com,lkop.me##+js(nowoif, !?safelink_redirect=)
 askhoow.com,lkop.me##+js(set, blurred, false)
+askhoow.com,lkop.me##form#go-popup:remove()
 ||lkop.me/sw.js$script,1p
 lkop.me##[href="https://techoverride.com/"]
-*$frame,denyallow=google.com|youtube.com,domain=lkop.me|askhoow.com
+*$frame,denyallow=facebook.com|google.com|youtube.com,domain=lkop.me|askhoow.com
 *$script,3p,denyallow=akamaiedge.net|cloudflare.com|facebook.net|fbcdn.net|google.com|gstatic.com|pinterest.com|recaptcha.net,domain=askhoow.com|lkop.me
 ||bloggybro.com^$3p
 
@@ -13645,7 +13645,7 @@ lookmovie.*##+js(aopr, AaDetector)
 lookmovie.*##.view-top-ab
 lookmovie.*##.notifyjs-corner
 lookmovie.*##.nord-vpn.home-banner
-*$script,3p,denyallow=google.com|googleapis.com|gstatic.com|lookmovie.io|hcaptcha.com|nflxext.com,domain=lookmovie.*
+*$script,3p,denyallow=google.com|googleapis.com|gstatic.com|lookmovie.io|hcaptcha.com|nflxext.com|cloudflare.com,domain=lookmovie.*
 
 ! https://github.com/NanoMeow/QuickReports/issues/822
 streamhentaimovies.com##+js(nostif, pum-open)
@@ -18242,14 +18242,14 @@ wstream.*##+js(aopr, AaDetector)
 wstream.*##+js(nostif, eval)
 wstream.*##+js(nowoif, /^/, 1)
 wstream.*##+js(ra, onclick)
-wstream.to##+js(aopw, _pop)
+wstream.to,wembed.site##+js(aopw, _pop)
 @@||wstream.*^$ghide
 @@||wstream.*^$script,1p
 nowagoal.stream##+js(nowebrtc)
 @@*$image,domain=wstream.video
 @@|*ads.$script,domain=wstream.video
 @@||4snip.pw^$script,domain=wstream.video
-@@||akvideo.stream^$script,domain=wstream.*
+@@||akvideo.stream^$script,domain=wstream.*|wembed.site
 @@||vstera.tech^$script,domain=wstream.video
 *$script,redirect-rule=noopjs,domain=wstream.video
 *$script,3p,denyallow=cloudflare.net|fastly.net|jsdelivr.net|jwpcdn.com|zencdn.net,domain=wstream.video
@@ -20800,6 +20800,8 @@ xanimeporn.com##+js(nowoif)
 ! sensualgirls .org exo stuff
 sensualgirls.org##+js(aopr, document.dispatchEvent)
 sensualgirls.org##.wide_boxcontent:has-text(/adb/i)
+sensualgirls.org##.cbox_cont > div[style="text-align: center;"]
+sensualgirls.org##div[data-width][style*="background-image: url"]:style(background: none !important)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2666
 edvok.com##+js(nowebrtc)
@@ -23864,7 +23866,7 @@ funzen.net##+js(nostif, mdpDeBlocker)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7186
 acessarlink.online,subdowns.com##+js(nano-stb, , , 0)
-subsvip.com##+js(nano-stb, , 10000)
+subsvip.com##+js(nano-stb, , 10000, 0)
 subsvip.com###botaoBloqueio
 subsvip.com###botaoLink:style(display: block !important;)
 
