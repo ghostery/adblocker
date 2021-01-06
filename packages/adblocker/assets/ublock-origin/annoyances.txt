@@ -5109,8 +5109,8 @@ archeboli.it##*:style(-webkit-touch-callout: default !important; -webkit-user-se
 ! anti ctrl-u my-code4you.blogspot .com
 my-code4you.blogspot.com##+js(aopr, document.onkeydown)
 
-! anti select business.dailynews.us.com
-business.dailynewsview.com,business.dailynews.us.com##+js(acis, document.onselectstart)
+! anti select dailynews.us.com
+dailynewsview.com,dailynews.us.com##+js(acis, document.onselectstart)
 
 ! certificationexamanswers.890m .com anti right click
 certificationexamanswers.890m.com##+js(acis, document.oncontextmenu)
@@ -5152,3 +5152,46 @@ dailynewsview.com##+js(aopr, document.onselectstart)
 ! drkrok .com anti select, anti drag, ctrl-u
 drkrok.com##+js(acis, disableSelection, reEnable)
 drkrok.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/71513
+miraculousladybug.cf##+js(set, console.clear, noopFunc)
+miraculousladybug.cf##+js(set, console.log, noopFunc)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/71686
+||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=couponbro.eu
+
+! e-sushi .fr anti right click, anti select
+e-sushi.fr##+js(aopr, document.oncontextmenu)
+e-sushi.fr##+js(acis, document.onselectstart)
+
+! evasion-online .com anti right click, anti select
+evasion-online.com##+js(aopr, document.oncontextmenu)
+evasion-online.com##+js(acis, document.onselectstart)
+
+! exclusifvoyages.com anti right click, anti select
+exclusifvoyages.com##+js(aopr, document.oncontextmenu)
+exclusifvoyages.com##+js(acis, document.onselectstart)
+exclusifvoyages.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! experciencia .com anti select
+experciencia.com##+js(aopr, disableSelection)
+
+! ejobcircular-24.blogspot .com anti select
+ejobcircular-24.blogspot.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! elijahwood.altervista .org anti select
+elijahwood.altervista.org##+js(aopr, document.write)
+
+! emploiads .com anti select
+emploiads.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! everydaynewinfo .com anti select
+everydaynewinfo.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! f1fastlap.blogspot .com anti right click, anti select
+f1fastlap.blogspot.com##+js(acis, document.oncontextmenu)
+f1fastlap.blogspot.com##+js(acis, document.onselectstart)
+
+! fraudnavi.com right click, text selection
+fraudnavi.com##+js(ra, oncontextmenu)
+fraudnavi.com##body:style(-moz-user-select: auto !important;-ms-user-select: auto !important;-webkit-user-select: auto !important;-webkit-touch-callout: default !important;)
