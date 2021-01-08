@@ -3233,6 +3233,9 @@ gocomics.com##.ad-leaderboard-container
 @@||anime-loads.org^$ghide
 bee.anime-loads.org##+js(adfly-defuser)
 anime-loads.org##+js(aopw, _pop)
+anime-loads.org###leaderwidget
+anime-loads.org##.skycontent
+/static/js/amvn.js
 
 ! https://github.com/reek/anti-adblock-killer/issues/3825
 globalrph.com##+js(aopr, mdpDeBlocker)
@@ -6681,15 +6684,15 @@ cartoonporno.xxx##+js(nowoif)
 @@||solvettube.com^$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2482
-youporn.com,youporngay.com##+js(aopr, page_params.holiday_promo)
-youporn.com,youporngay.com##+js(nostif, jQuery)
+youporn.com,youporngay.com##+js(set, page_params.holiday_promo, true)
+youporn.com,youporngay.com##+js(nostif, href, 0)
 youporn.com,youporngay.com###videoWrapper + [class]:has([data-zone^="underplayer"])
 youporn.com,youporngay.com##.ad-bottom-text
 youporn.com,youporngay.com##.adLinkText
 youporn.com,youporngay.com##.adsbytrafficjunky
 youporn.com,youporngay.com##.channel-header
 youporn.com,youporngay.com##.channelSideAd
-youporn.com,youporngay.com##.ad-bottom-text:upward(.float-right)
+youporn.com,youporngay.com##div[class*="-erotica-"] > .e8-column.float-right
 youporn.com,youporngay.com##.full-row-thumbs > [class]:has(.adsbytrafficjunky)
 youporn.com##[data-removelink="removeLink"]
 youporngay.com###pb_template
@@ -12211,8 +12214,7 @@ jawcloud.co##.banner
 jawcloud.co##.jawban
 jawcloud.co,nyafilmer.*##+js(aopr, console.clear)
 jawcloud.co##+js(aopr, AaDetector)
-jawcloud.co##+js(acis, Math, XMLHttpRequest)
-@@||nyafilmer.lol^$script,1p
+@@||nyafilmer.vip^$script,1p
 ||newyearads.com^
 nyafilmer.*##[href*=".html"]
 ||wp.com/nyafilmer.*/branding/$image
@@ -12221,6 +12223,8 @@ nyafilmer.*##[href^="https://go.affiliatexe.com/"]
 ||cadsanz.com^$all
 ! https://github.com/uBlockOrigin/uAssets/issues/8025
 ! [badfilter] ||nyafilmer.vip/u_a4fv7zck.js$badfilter
+||breathebuds.com^
+||frugalrushcap.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4646
 bdsmporn.cc,cocoporn.net,dirtyporn.cc,faperplace.com,freeadultvideos.cc,freepornstream.cc,generalpornmovies.com,kinkyporn.cc,moviesxxx.cc,movstube.net,onlinefetishporn.cc,peetube.cc,pornonline.cc,porntube18.cc,streamextreme.cc,streamporn.cc,videoxxx.cc,watchporn.cc,x24.video,xxxonline.cc,xxxonlinefree.com,xxxopenload.com##+js(acis, decodeURI, decodeURIComponent)
@@ -17610,7 +17614,7 @@ novojoy.com,novoporn.com##+js(acis, document.querySelectorAll, popMagic)
 babesinporn.com##.topbanner
 boobgirlz.com##.widget-column > center > [href="https://boobgirlz.com/istripper"]:upward(.widget-column)
 nakedneighbour.com##.banner:upward(.block)
-/11908.gif$domain=doseofporn.com|freyalist.com|jennylist.xyz
+/img\/1190\d\.gif$/$image,domain=doseofporn.com|freyalist.com|jennylist.xyz|lizardporn.com
 /eva.gif$domain=erotichdworld.com|guruofporn.com|jesseporn.xyz|jumboporn.xyz|kendralist.com
 /flr.js$domain=8boobs.com|angelgals.com|babesexy.com|babesinporn.com|fooxybabes.com|hotbabeswanted.com|hotstunners.com|mainbabes.com|nakedbabes.club|nakedgirlsroom.com|nudebabes.sexy|pleasuregirl.net|rabbitsfun.com|sexybabes.club|sexybabesart.com|silkengirl.*|wantedbabes.com
 /images/*/b/*.jpg$image,domain=babesbang.com|babeuniversum.com|grabpussy.com|pbabes.com|redpornblog.com|rossoporn.com|sexynakeds.com
@@ -19628,6 +19632,9 @@ tv2.no##+js(json-prune, enabled, testhide)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5463
 0gomovies.*##+js(aopr, open)
+0gomovies.*##+js(aost, Math.random, /\st.*\sinlineScript/)
+hindilinks4uto.com##+js(nowoif)
+||hindilinks4uto.com/cdn-cgi/trace$xhr,1p
 ||gambigambiwinwin.com^$all
 ||o3sndvzo25.com^$all
 
