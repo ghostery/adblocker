@@ -2305,6 +2305,7 @@ bogdankaminski.pl,serwer1695147.home.pl##*:style(-webkit-touch-callout: default 
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6206
 mtbtutoriales.com##+js(aopw, reEnable)
+mtbtutoriales.com##+js(acis, document.oncontextmenu)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1396
 @@||wired.com^$ghide
@@ -4486,6 +4487,8 @@ juezcoin.xyz##+js(aopw, document.onmousedown)
 ! https://github.com/uBlockOrigin/uAssets/issues/7734
 magnet-novels.com##+js(aeld, /blur|mousedown|mouseenter|mouseleave/)
 magnet-novels.com##+js(nosiif, pushAd)
+magnet-novels.com##+js(ra, oncontextmenu|onselectstart|ondragstart|oncut|oncopy, div.contentContainer, stay)
+magnet-novels.com##+js(set, document.onselectstart, noopFunc)
 
 ! https://github.com/easylist/easylist/issues/5903#issuecomment-669608003
 deseneledublate.com##+js(acis, document.oncontextmenu)
@@ -5200,3 +5203,28 @@ fraudnavi.com##body:style(-moz-user-select: auto !important;-ms-user-select: aut
 ! anti right-click
 javbest.xyz,javbix.com,javgrab.com##+js(acis, $, contextmenu)
 ||googleapis.com/loadermain.appspot.com/main.js$domain=javboys.com
+
+! https://www.reddit.com/r/uBlockOrigin/comments/ktkw6p/proboards_based_forums_deploying_antiadblock/
+*$script,redirect-rule=noopjs,domain=forum.gigabyte.us
+! https://www.reddit.com/r/uBlockOrigin/comments/ktkw6p/proboards_based_forums_deploying_antiadblock/
+! for legacy version
+||ads.proboards.com^$script,redirect=noopjs,domain=forum.gigabyte.us
+||bidfilter.com^$script,redirect=noopjs,domain=forum.gigabyte.us
+
+! fashion.noemoda .com anti right click / select
+fashion.noemoda.com##+js(acis, document.oncontextmenu)
+fashion.noemoda.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! flory4all .com anti right click
+flory4all.com##+js(acis, document.oncontextmenu)
+
+! funivie .org anti right click / select
+funivie.org##+js(acis, document.oncontextmenu)
+funivie.org##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! fv2freegifts .org anti right click
+fv2freegifts.org##+js(acis, document.oncontextmenu)
+
+! formatatmak .com anti right click / select
+formatatmak.com##+js(acis, document.oncontextmenu)
+formatatmak.com##+js(acis, disableSelection, reEnable)
