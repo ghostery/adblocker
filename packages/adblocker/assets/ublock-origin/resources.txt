@@ -59,7 +59,7 @@ remove-class.js application/javascript
 
 
 remove-attr.js application/javascript
-(function(){const t="{{1}}";if(""===t||"{{1}}"===t)return;const o=t.split(/\s*\|\s*/);let e="{{2}}";if(""===e||"{{2}}"===e)e=`[${o.join("],[")}]`;const n=function(){try{const t=document.querySelectorAll(e);for(const e of t)for(const t of o)e.removeAttribute(t)}catch(t){}};if("loading"===document.readyState)window.addEventListener("DOMContentLoaded",n,{once:true});else n()})();
+(function(){const e="{{1}}";if(""===e||"{{1}}"===e)return;const t=e.split(/\s*\|\s*/);let o="{{2}}";if(""===o||"{{2}}"===o)o=`[${t.join("],[")}]`;let r="{{3}}";let n;const s=()=>{n=void 0;try{const e=document.querySelectorAll(o);for(const o of e)for(const e of t)o.removeAttribute(e)}catch(e){}};const l=e=>{if(void 0!==n)return;let t=true;for(let o=0;o<e.length&&t;o++){const{type:r,addedNodes:n,removedNodes:s}=e[o];if("attributes"===r)t=false;for(let e=0;e<n.length&&t;e++)if(1===n[e].nodeType){t=false;break}for(let e=0;e<s.length&&t;e++)if(1===s[e].nodeType){t=false;break}}if(t)return;n=self.requestIdleCallback(s,{timeout:67})};const d=()=>{s();if(false===/\bstay\b/.test(r))return;const e=new MutationObserver(l);e.observe(document.documentElement,{attributes:true,attributeFilter:t,childList:true,subtree:true})};if("complete"!==document.readyState&&/\bcomplete\b/.test(r))self.addEventListener("load",d,{once:true});else if("loading"===document.readyState)self.addEventListener("DOMContentLoaded",d,{once:true});else d()})();
 
 
 rc.js application/javascript
@@ -67,7 +67,7 @@ rc.js application/javascript
 
 
 ra.js application/javascript
-(function(){const t="{{1}}";if(""===t||"{{1}}"===t)return;const o=t.split(/\s*\|\s*/);let e="{{2}}";if(""===e||"{{2}}"===e)e=`[${o.join("],[")}]`;const n=function(){try{const t=document.querySelectorAll(e);for(const e of t)for(const t of o)e.removeAttribute(t)}catch(t){}};if("loading"===document.readyState)window.addEventListener("DOMContentLoaded",n,{once:true});else n()})();
+(function(){const e="{{1}}";if(""===e||"{{1}}"===e)return;const t=e.split(/\s*\|\s*/);let o="{{2}}";if(""===o||"{{2}}"===o)o=`[${t.join("],[")}]`;let r="{{3}}";let n;const s=()=>{n=void 0;try{const e=document.querySelectorAll(o);for(const o of e)for(const e of t)o.removeAttribute(e)}catch(e){}};const l=e=>{if(void 0!==n)return;let t=true;for(let o=0;o<e.length&&t;o++){const{type:r,addedNodes:n,removedNodes:s}=e[o];if("attributes"===r)t=false;for(let e=0;e<n.length&&t;e++)if(1===n[e].nodeType){t=false;break}for(let e=0;e<s.length&&t;e++)if(1===s[e].nodeType){t=false;break}}if(t)return;n=self.requestIdleCallback(s,{timeout:67})};const d=()=>{s();if(false===/\bstay\b/.test(r))return;const e=new MutationObserver(l);e.observe(document.documentElement,{attributes:true,attributeFilter:t,childList:true,subtree:true})};if("complete"!==document.readyState&&/\bcomplete\b/.test(r))self.addEventListener("load",d,{once:true});else if("loading"===document.readyState)self.addEventListener("DOMContentLoaded",d,{once:true});else d()})();
 
 
 popads.net.js application/javascript

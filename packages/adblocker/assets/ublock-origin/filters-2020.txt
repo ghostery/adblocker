@@ -451,7 +451,8 @@ shrtbtc.com##+js(nano-sib)
 reifenrechner.at,tire-size-calculator.info##+js(aeld, load, nextFunction)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54186
-apkmb.com##+js(acis, jQuery, ai_adb)
+apkmb.com##+js(nano-sib, show_download_links)
+uploadking.net##+js(nano-stb, downloadbtn)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54189
 restplay.xyz##+js(aopr, mdpDeBlocker)
@@ -3949,11 +3950,13 @@ imagenesderopaparaperros.com##+js(set, blurred, false)
 shortenbuddy.com##+js(nosiif, visibility, 1000)
 shortenbuddy.com##+js(nano-sib, downloadTimer)
 shortenbuddy.com##+js(aopr, app_vars.force_disable_adblock)
+shortenbuddy.com##+js(nowoif)
 shortenbuddy.com##+js(set, blurred, false)
 shortenbuddy.com##.banner
 shortenbuddy.com##.cus-dalert
 shortenbuddy.com##.custom-adbox
 shortenbuddy.com##.custom-shadow.custom-border-color.alert-danger.alert
+shortenbuddy.com###noNeed,#noNeedTwo
 shortenbuddy.com###nextBTNH:style(display: block !important;)
 *$script,3p,denyallow=bootstrapcdn.com|cloudflare.net|fontawesome.com|google.com|gstatic.com|hwcdn.net|jquery.com|jsdelivr.net|recaptcha.net,domain=shortenbuddy.com
 ||mylead.global^$3p,domain=shortenbuddy.com
@@ -4936,7 +4939,7 @@ joska.xyz,partyhomedecor.com,petsched.website,teknomuda.com,tokosehatkita.xyz##+
 joska.xyz,partyhomedecor.com,petsched.website,teknomuda.com,tokosehatkita.xyz##p > a[href][target="_blank"]
 joska.xyz,lokerja.pw,momozain.com,partyhomedecor.com,petsched.website,teknomuda.com,tokosehatkita.xyz,upinipin.me###wpsafe-snp:style(display: block !important;)
 joska.xyz,lokerja.pw,momozain.com,partyhomedecor.com,petsched.website,teknomuda.com,tokosehatkita.xyz,upinipin.me###wpsafe-generate:style(display: block !important;)
-lokerja.pw,momozain.com,teknomuda.com,upinipin.me##*:has(#wpsafe-wait1):not(:has(#wpsafe-snp))
+lokerja.pw,momozain.com,petsched.website,teknomuda.com,upinipin.me##*:has(#wpsafe-wait1):not(:has(#wpsafe-snp))
 ! [badfilter] ||onsafelink.com^$badfilter
 ||onsafelink.com^$script,3p
 
@@ -5570,6 +5573,7 @@ userload.co##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/8157
 emovies.io##+js(nowoif)
 emovies.io###upgrade_pop
+||emovies.io/api/pop.php$xhr,1p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67036
 short-cash2.xyz##+js(aopr, app_vars.force_disable_adblock)
@@ -6393,6 +6397,8 @@ online2pdf.com##.avt_title_vertical
 dulinks.*##+js(aopr, app_vars.force_disable_adblock)
 dulinks.*##+js(set, blurred, false)
 dulinks.*###__bgd_link
+dulinks.*##.banner
+dulinks.*##.row > .col-md-offset-1 > .box > .box-body center > a[href]
 dulinks.*##[href^="https://dropmms.com/"]
 dulinks.*###btm_banner
 dulinks.co##.text-center.box-body > center > p > .button
@@ -6404,6 +6410,7 @@ dulinks.in##.short > .container
 ! https://github.com/AdguardTeam/AdguardFilters/issues/69450
 short88.com##+js(acis, JSON.parse, atob)
 short88.com##+js(aopr, app_vars.force_disable_adblock)
+short88.com##+js(aopw, _pop)
 short88.com##+js(set, blurred, false)
 
 ! https://github.com/abp-filters/abp-filters-anti-cv/issues/506
@@ -6440,8 +6447,13 @@ pikkado.com###dest_rev
 ||gartic.io/videos/*$media,1p,redirect=noopmp4-1s
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8340
-hindustantimes.com##+js(acis, $, HEAD)
-hindustantimes.com##+js(acis, document.addEventListener, HEAD)
+hindustantimes.com##+js(no-fetch-if, adsbygoogle.js)
+@@||hindustantimes.com^$ghide
+hindustantimes.com##div[id^="div-gpt-ad"]
+hindustantimes.com##.topAd
+hindustantimes.com##.storyAd
+hindustantimes.com##.desktopAd
+hindustantimes.com##.m_ads_unit
 
 ! popups https://elitegoltv. es/canal-1.php
 newdmn.*##+js(nowoif, !newdmn, 1)
@@ -7141,12 +7153,14 @@ filtercams.com##.table
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/71339
 minilinks.in##+js(aopr, app_vars.force_disable_adblock)
+minilinks.in##+js(aopr, absda)
 minilinks.in##+js(set, blurred, false)
 minilinks.in##.box-main center
 go.minilinks.in##.box-main > h5
 go.minilinks.in##.box-main > p
 minilinks.in###myDIV:style(display: block !important;)
 minilinks.in###plswait
+minilinks.in###secondtext:style(display: block !important;)
 *$script,3p,denyallow=google.com|gstatic.com|hwcdn.net|jquery.com|recaptcha.net,domain=minilinks.in
 
 ! a100 .radio anti adb
