@@ -2680,7 +2680,8 @@ mangadods.com##+js(set, blockAdBlock, trueFunc)
 vanis.io###player-data > div:nth-of-type(1)
 
 ! mdpDeBlocker
-dcleakers.com,esgeeks.com,pugliain.net,siamblockchain.com,tehnobzor.ru,uplod.net,worldfreeware.com##+js(nostif, mdp)
+dcleakers.com,esgeeks.com,pugliain.net,tehnobzor.ru,uplod.net,worldfreeware.com##+js(nostif, mdp)
+*$script,redirect-rule=noopjs,domain=siamblockchain.com
 ||pugliain.net/wp-content/uploads/*.gif$image
 
 ! pirlotv. live popups, anti adb
@@ -3327,8 +3328,7 @@ more.tv##+js(set, blockedElement, noopFunc)
 more.tv##[class^=Banner_]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7727
-mhdtvworld.live##+js(aopr, mdpDeBlocker)
-mhdtvworld.live###mdp-deblocker-js-disabled
+*$script,redirect-rule=noopjs,domain=mhdtvworld.live
 
 ! https://github.com/NanoMeow/QuickReports/issues/4441
 clubpenguinhq.net##+js(aopr, adBlockDetected)
@@ -4768,7 +4768,7 @@ bitfly.io###overlay
 *$frame,script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=bitfly.io
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7998
-standardmedia.co.ke##+js(set, canRunAds, true)
+standardmedia.co.ke##+js(aopr, canRunAds)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65006
 *$script,redirect-rule=noopjs,domain=downloadrepack.com
@@ -5498,10 +5498,10 @@ gamesrepacks.com##+js(nostif, mdpDeBlocker)
 @@||firenzetoday.it^$ghide
 
 ! SSAI Video ads on ABC Owned TV station sites https://github.com/uBlockOrigin/uBlock-issues/issues/760#issuecomment-715702997
-||content.uplynk.com/api/*&ad=$xhr,queryprune=|ad,domain=abc7ny.com|abc7.com|abc7chicago.com|6abc.com|abc7news.com|abc13.com|abc11.com|abc30.com
+||content.uplynk.com/api/*&ad=$xhr,queryprune=/^ad/,domain=abc7ny.com|abc7.com|abc7chicago.com|6abc.com|abc7news.com|abc13.com|abc11.com|abc30.com
 
 ! SSAI Video ads on Discovery TV sites https://github.com/uBlockOrigin/uBlock-issues/issues/760#issuecomment-715926907
-||api.discovery.com/v1/streaming/video/*&adNetworkId=$xhr,queryprune=|ad,domain=ahctv.com|animalplanet.com|cookingchanneltv.com|destinationamerica.com|discovery.com|discoverylife.com|diynetwork.com|foodnetwork.com|hgtv.com|investigationdiscovery.com|motortrend.com|sciencechannel.com|tlc.com|travelchannel.com
+||api.discovery.com/v1/streaming/video/*&adNetworkId=$xhr,queryprune=/^ad/,domain=ahctv.com|animalplanet.com|cookingchanneltv.com|destinationamerica.com|discovery.com|discoverylife.com|diynetwork.com|foodnetwork.com|hgtv.com|investigationdiscovery.com|motortrend.com|sciencechannel.com|tlc.com|travelchannel.com
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/66772
 @@||wo2viral.com^$ghide

@@ -8755,7 +8755,7 @@ totalsport.me##+js(aopw, _pop)
 salamanca24horas.com##+js(aopr, ReviveBannerInterstitial)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3688
-*$xhr,redirect-rule=noopjs,domain=scrapywar.com
+||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=scrapywar.com
 scrapywar.com##.stream-item-widget
 
 ! Videos disabled by anti-blocker:
@@ -10513,7 +10513,9 @@ methbox.com##+js(nostif, nextFunction, 250)
 ! https://forums.lanik.us/viewtopic.php?f=62&t=42181
 ! https://github.com/uBlockOrigin/uAssets/issues/4202
 gamecopyworld.*##+js(acis, document.createElement, Tool)
-gamecopyworld.*##td[align="center"] > a[target="_blank"] > img[src^="/"]
+dl.gamecopyworld.*##.t2 > tbody > tr:nth-of-type(1) > td
+dl.gamecopyworld.*##td:nth-of-type(2)
+dl.gamecopyworld.*##tr:nth-of-type(6) > td
 consoletarget.com##+js(aopr, loadTool)
 
 ! pch .com
@@ -15951,6 +15953,8 @@ filmlecteur.info##+js(nowoif)
 @@||playfinder.xyz^$ghide
 playvid.host#@#.afs_ads
 ||zyxzzz.xyz^$3p
+tvonlinex.com##+js(nowoif)
+tvonlinex.com##+js(set, clientSide.adbDetect, noopFunc)
 ! https://github.com/NanoMeow/QuickReports/issues/3511
 @@||playvideo.best^$ghide
 
@@ -19644,8 +19648,8 @@ adshrink.it##+js(aopr, open)
 @@||shrink-service.it^$frame,domain=adshrink.it
 ||adshrink.it^$csp=style-src *
 ||shrink-service.it^$csp=frame-src
-adshrink.it##+js(aopr, MutationObserver)
 shrink-service.it##+js(aopr, open)
+adshrink.it##.active.dimmer.ui
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/dvubaa/failed_to_load_content_please_disable_adblocker/
 @@||cdn.cdnfiles.site/js/loadjs.min.js$script,domain=vipstand.se
