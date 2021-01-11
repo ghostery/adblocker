@@ -2090,6 +2090,7 @@ mylink.*,my1ink.*,myli3k.*##a[href^="https://go.nordvpn.net/"], [src^="/nordcode
 myl1nk.org,my1ink.*,myli3k.*##div[id][style^="width: 970px; height: 250px;"]
 myl1nk.org,my1ink.*,myli3k.*##div[id][style="width: 300px; height: 250px;"]
 myl1nk.org,my1ink.*,myli3k.*##div[id][style="width: 728px; height: 90px;"]:upward(#pub1)
+@@*$script,1p,domain=myl1nk.*|my1ink.*|myli3k.*
 *$script,3p,denyallow=hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com|consensu.org,domain=myl1nk.*|my1ink.*|myli3k.*
 ||airairgu.com^
 
@@ -3194,22 +3195,25 @@ zlshorte.net##.banner-inner
 
 ! https://forums.lanik.us/viewtopic.php?p=138269#p138269
 ! https://github.com/NanoMeow/QuickReports/issues/324
-swatchseries.to,watch-series.*,wwvv.watchseries.*##+js(acis, Math, XMLHttpRequest)
-swatchseries.to,watch-series.*,wwvv.watchseries.*##+js(nowebrtc)
-swatchseries.to,watch-series.*,wwvv.watchseries.*##+js(nowoif)
-swatchseries.to,watch-series.*,wwvv.watchseries.*##+js(aopr, console.clear)
-swatchseries.to,watch-series.*,wwvv.watchseries.*##.freeEpisode
-swatchseries.to,watch-series.*,wwvv.watchseries.*##.sp-leader
-swatchseries.to,watch-series.*,wwvv.watchseries.*##.shd_button
-swatchseries.to,watch-series.*,wwvv.watchseries.*##.sp-leader-bottom
-swatchseries.to,watch-series.*,wwvv.watchseries.*##.category-item-ad
-swatchseries.to,watch-series.*,wwvv.watchseries.*###related
-swatchseries.to,watch-series.*,wwvv.watchseries.*###rotating-item-wrapper
-swatchseries.to,watch-series.*,wwvv.watchseries.*##div.block-left-home-inside[style^="height:252"]
-*$script,3p,denyallow=cloudflare.net|edgecastcdn.net|fastly.net|google.com|googleapis.com|gstatic.com|hwcdn.net|jquery.com|recaptcha.net|twitter.com|swatchseries.to|watch-series.la,domain=swatchseries.to|watch-series.*|wwvv.watchseries.*
+swatchseries.to,watch-series.*,watchseries.*##+js(acis, Math, XMLHttpRequest)
+swatchseries.to,watch-series.*,watchseries.*##+js(nowebrtc)
+swatchseries.to,watch-series.*,watchseries.*##+js(nowoif)
+swatchseries.to,watch-series.*,watchseries.*##+js(aopr, console.clear)
+swatchseries.to,watch-series.*,watchseries.*##.freeEpisode
+swatchseries.to,watch-series.*,watchseries.*##.sp-leader
+swatchseries.to,watch-series.*,watchseries.*##.shd_button
+swatchseries.to,watch-series.*,watchseries.*##.sp-leader-bottom
+swatchseries.to,watch-series.*,watchseries.*##.category-item-ad
+swatchseries.to,watch-series.*,watchseries.*###related
+swatchseries.to,watch-series.*,watchseries.*###rotating-item-wrapper
+swatchseries.to,watch-series.*,watchseries.*##div.block-left-home-inside[style^="height:252"]
+*$script,3p,denyallow=cloudflare.net|edgecastcdn.net|fastly.net|google.com|googleapis.com|gstatic.com|hwcdn.net|jquery.com|recaptcha.net|twitter.com|swatchseries.to|watch-series.la,domain=swatchseries.to|watch-series.*|watchseries.*
 ||swatchseries.to/sw.js$script
 ||watch-series.*/sw.js$script,1p
 ||phee1oci.com^
+||d18t35yyry2k49.cloudfront.net^
+||resumersvo.fun^
+||yiatelychur.top^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1132
 fetishshrine.com##+js(aopr, decodeURI)
@@ -7227,9 +7231,10 @@ asianxxxvideo.net##.play
 ! https://github.com/uBlockOrigin/uAssets/issues/2651
 ! https://github.com/NanoMeow/QuickReports/issues/502
 channel4.com##+js(set, Object.prototype.AdRequest, noopFunc)
+channel4.com##.advertsMpu
+channel4.com##.block--mpu
 @@||v.fwmrm.net/ad/g/1$xhr,domain=channel4.com
 ||v.fwmrm.net/ad/g/1?resp$xhr,domain=channel4.com,important
-channel4.com##.block--mpu
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/8tjnyg
 @@||getfreetutorial.com^$ghide
@@ -14007,6 +14012,7 @@ dausel.co##.adsbygoogle:style(max-height: 1px !important;)
 dausel.co##[id^="aswift"]
 
 ! https://github.com/NanoMeow/QuickReports/issues/1773
+animefever.tv##+js(no-fetch-if, method:HEAD)
 @@||animefever.tv^$ghide
 *$script,redirect-rule=noopjs,domain=animefever.tv
 
@@ -16730,7 +16736,7 @@ gonzoporn.cc,onlinexxx.cc,tvporn.cc##+js(aopr, exoJsPop101)
 @@||automobile-propre.com^$ghide
 
 ! https://github.com/NanoMeow/QuickReports/issues/1492
-kimochi.info##+js(aopr, adBlockDetected)
+kimochi.info##+js(nosiif, visibility, 1000)
 kimochi.info##+js(aopw, _pop)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1495
@@ -19649,7 +19655,9 @@ adshrink.it##+js(aopr, open)
 ||adshrink.it^$csp=style-src *
 ||shrink-service.it^$csp=frame-src
 shrink-service.it##+js(aopr, open)
-adshrink.it##.active.dimmer.ui
+adshrink.it##.active.dimmer.ui:has-text(/Wait|Skip/i)
+||offer.alibaba.com^$frame,domain=adshrink.it
+||mightreservoir.com^
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/dvubaa/failed_to_load_content_please_disable_adblocker/
 @@||cdn.cdnfiles.site/js/loadjs.min.js$script,domain=vipstand.se
@@ -21158,9 +21166,12 @@ dloady.com##+js(acis, $, show)
 nonton-movie21.com##+js(acis, decodeURI, decodeURIComponent)
 nonton-movie21.com##+js(aopr, wpsafelink)
 
-! hackintosh stuff
+! https://github.com/AdguardTeam/AdguardFilters/issues/72028
 hackintoshshop.com##style:has-text(animation:):remove()
 hackintoshshop.com##.adcontainer
+hackintoshshop.com##div[style="margin: auto;position: fixed;top: 0;left: 0;right: 0;bottom: 0;background-color: #ff6347;z-index: 999999;"]
+hackintoshshop.com##div.lazydiv
+hackintoshshop.com###fixedban
 
 ! https://github.com/NanoMeow/QuickReports/issues/2663#issuecomment-577278693
 doramaindo.id##+js(aopr, absda)
@@ -23408,7 +23419,6 @@ frkmusic.*##+js(aopw, _pop)
 frkmusic.*##+js(aopr, mdpDeBlocker)
 @@||frkmusic.*^$ghide
 ||frkmusic.*/sw.js$script,1p
-
 ||bitco220.co^$3p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/51985
@@ -23422,6 +23432,7 @@ faupto.com,dogemate.com##+js(nano-sib)
 *$3p,script,frame,denyallow=google.com|gstatic.com|googleapis.com|cloudflare.com|bootstrapcdn.com|recaptcha.net|hcaptcha.com|hwcdn.net|jquery.com,domain=dogemate.com
 faupto.com,dogemate.com##[href^="https://brave.com"]
 faupto.com,dogemate.com##.shadow.bg-dark
+dogemate.com##.my-1.overflow-hidden.text-center
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/51991
 dogemanager.com##.banner
@@ -23988,6 +23999,8 @@ paginadanoticia.com.br##.banner-img
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7198
 watchtvseries.video##+js(nosiif, visibility, 1000)
+watchtvseries.video##+js(acis, String.fromCharCode, /btoa|break/)
+watchtvseries.video##+js(acis, Math, zfgloaded)
 
 ! opportunitydesk.org anti-adb
 opportunitydesk.org##+js(aopr, anOptions)
