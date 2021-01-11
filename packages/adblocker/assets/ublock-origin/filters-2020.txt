@@ -204,6 +204,7 @@ freshnewproxies24.top##[href^="https://brave.com/"], [href^="http://www.linkev.c
 ||mangahub.io^$csp=frame-src *.facebook.com
 ##.adsbyrunactive
 mangahub.io###adblock-notice
+mangahub.io##+js(acis, document.querySelectorAll, popMagic)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3577
 videosection.com##+js(aopr, exoJsPop101)
@@ -2717,6 +2718,7 @@ aparat.cam##+js(acis, $, adbd)
 aparat.cam##+js(acis, String.fromCharCode, /btoa|break/)
 aparat.cam##+js(aopw, _pop)
 aparat.cam##+js(nowoif)
+aparat.cam##a[href$=".html"][target="_top"]
 
 ! https://github.com/NanoMeow/QuickReports/issues/4311
 highschooldxd-gamecards.blogspot.com##+js(aopw, adBlockDetected)
@@ -3446,8 +3448,8 @@ youtubetomp3.*##+js(nowoif)
 youtubetomp3.*##a[href="/button.php"]
 
 ! https://github.com/NanoMeow/QuickReports/issues/4471
-*$script,3p,denyallow=cloudflare.com|disqus.com|google.com|disquscdn.com|fastlylb.net|googleapis.com|gstatic.com,domain=veranime.*
-*$script,3p,denyallow=cloudflare.com|cloudflare.net|disqus.com|facebook.net|fbcdn.net|fluidplayer.com|google.com|disquscdn.com|googleapis.com|gravatar.com|gstatic.com|hwcdn.net|jsdelivr.net|wp.com,domain=verhentai.*
+*$script,3p,denyallow=cloudflare.com|cloudflare.net|disqus.com|disquscdn.com|facebook.net|fastlylb.net|fbcdn.net|fluidplayer.com|google.com|googleapis.com|gravatar.com|gstatic.com|hwcdn.net|jsdelivr.net|wp.com,domain=veranime.*|verhentai.*
+verhentai.top##+js(acis, document.querySelectorAll, popMagic)
 verhentai.top##+js(acis, String.fromCharCode, break)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7748
@@ -3813,7 +3815,7 @@ manikusa.com##+js(nowoif)
 manikusa.com###overlay
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62592
-ad-doge.com##+js(set, blockAdBlock._options.baitClass, null)
+ad-doge.com##+js(nosiif, visibility, 1000)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62602
 fshost.me##+js(set, fuckAdBlock, noopFunc)
@@ -4148,7 +4150,9 @@ drphil.com##.adBanner:style(height:1px !important)
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js^$script,domain=drphil.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7894
-*$script,3p,denyallow=bootstrapcdn.com|disqus.com|jsdelivr.net|jwpcdn.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com|wp.com,domain=downloadming3.com
+downloadming3.com##+js(acis, String.fromCharCode, /btoa|break/)
+||kaurouby.net^
+||ilinouck.net^
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63506
 abdeo8.com##+js(aopr, app_vars.force_disable_adblock)
@@ -5612,13 +5616,13 @@ arrowos.net##body:style(visibility:visible !important)
 arrowos.net##.adsbygoogle
 arrowos.net###babasbmsgx
 arrowos.net##div.container:nth-of-type(8)
-arrowos.net##div.card-content
+arrowos.net##div.offset-m2.offset-l2.l8.m8.s12.col > .radius.z-depth-3.card-theme-color.card > .card-content.center
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8165
 aflamgulf.com##+js(nowoif)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8167
-hiidudemoviez.com##+js(aopw, _pop)
+hiidudemoviez.*##+js(aopw, _pop)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/66996
 realfilmizle1.com##+js(nowoif)
@@ -6211,7 +6215,7 @@ viral-topics.com##+js(aopr, app_vars.force_disable_adblock)
 viral-topics.com##.banner
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8296
-jatt.net##+js(acis, String.fromCharCode, /btoa|break/)
+jatt.net,mr-jatt.in##+js(acis, String.fromCharCode, /btoa|break/)
 
 ! iceporn.com popup
 iceporn.com##+js(nowoif)
@@ -6459,8 +6463,9 @@ hindustantimes.com##.m_ads_unit
 newdmn.*##+js(nowoif, !newdmn, 1)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8342
-*$script,3p,denyallow=fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com|sharethis.com|stackpathcdn.com|blogger.com|googleusercontent.com|rawgit.com|rawgitcdn.b-cdn.net|githack.com,domain=moviesdaweb.blogspot.com|isaiminiweb.online
+*$script,3p,denyallow=fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com|sharethis.com|stackpathcdn.com|blogger.com|googleusercontent.com|rawgit.com|rawgitcdn.b-cdn.net|githack.com,domain=isaiminiweb.online
 ||tamilrockers.isaiminiweb.online/ads1.js$script
+isaiminiweb.online##^meta[http-equiv="refresh"]
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/k9duxq/white_popup_and_new_page_ad_on_soccer_stream/
 givemeredditstreams.com##+js(aopw, _pop)
@@ -6547,7 +6552,8 @@ hinlinks.*##+js(acis, String.fromCharCode, /btoa|break/)
 ||hinlinks.club/sw.js$1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8355
-moviehdf.fun##+js(aopr, popUp)
+moviehdf.*##+js(aopr, popUp)
+moviehdf.*##+js(nowoif)
 ||bitlk.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8358
