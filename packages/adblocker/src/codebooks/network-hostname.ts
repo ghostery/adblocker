@@ -7,6 +7,7 @@
  */
 /* tslint:disable quotemark */
 export default [
+  "quantcast.mgr.consensu.org",
   "googlesyndication",
   "imasdk.googleapis",
   "googletagmanager",
@@ -32,9 +33,11 @@ export default [
   ".com",
   ".net",
   ".xyz",
+  "ight",
   "news",
   "stat",
   ".de",
+  ".eu",
   ".io",
   ".jp",
   ".ru",
@@ -48,7 +51,6 @@ export default [
   ".m",
   ".n",
   ".p",
-  ".s",
   "10",
   "24",
   "ab",
@@ -97,7 +99,6 @@ export default [
   "dy",
   "e-",
   "eb",
-  "ec",
   "ed",
   "ef",
   "eg",
@@ -109,7 +110,6 @@ export default [
   "er",
   "es",
   "et",
-  "eu",
   "ev",
   "ew",
   "ex",
