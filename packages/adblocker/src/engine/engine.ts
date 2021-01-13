@@ -27,7 +27,7 @@ import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 
-export const ENGINE_VERSION = 356;
+export const ENGINE_VERSION = 357;
 
 function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   if (filters.length === 0) {
