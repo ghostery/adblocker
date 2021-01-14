@@ -11886,6 +11886,7 @@ gplinks.in##+js(acis, Math, zfgloaded)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4512
 dramacool.*##+js(acis, String.fromCharCode, break)
+dramacool.*##h2.widget-title:has-text(Advertisement)
 *$script,3p,denyallow=cloudflare.com|facebook.net|fbcdn.net|google.com|googleapis.com|gstatic.com|hcaptcha.com|recaptcha.net,domain=dramacool9.*
 ||thegamersdiary.us^$3p
 
@@ -12368,6 +12369,8 @@ twizporn.com##+js(acis, __htapop)
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=42496
 sypl.xyz##+js(aopr, AaDetector)
+sypl.xyz##+js(nowoif)
+sypl.xyz##+js(set, clientSide.adbDetect, noopFunc)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/aj27ua/redirect_on_couchtuner/
 couchtuner.*##+js(acis, RegExp, 0x)
@@ -14065,6 +14068,7 @@ elamigos-games.com,zona-leros.net##[href*="/tienda/"]:xpath(../..)
 player.animejl.net,player.zona-leros.net,zlplayer.net###dvr-vid
 zpaste.net,zlpaste.net##+js(aeld, DOMContentLoaded, adlinkfly)
 zplayer.live##+js(acis, String.fromCharCode, /btoa|break/)
+zplayer.live##.user
 zpaste.net,pixeldrain.com###sponsors
 zplayer.live##.banner
 ||zshorte.net/*.html$frame,3p
@@ -18605,9 +18609,15 @@ home-made-videos.com##+js(aopr, document.dispatchEvent)
 monsoonx.top##+js(aopr, document.dispatchEvent)
 monsoonx.top##+js(aopr, open)
 
-! nuvid .com popups
+! https://github.com/uBlockOrigin/uAssets/issues/8462
 nuvid.com##+js(aeld, click, open)
 nuvid.com##+js(nowoif)
+nuvid.com##div[style^="height:477px"]
+nuvid.com##footer > .rfix
+nuvid.com##.aside > h2
+nuvid.com##.download_adv_text_photo
+nuvid.com##.rel_right
+nuvid.com##.video-options
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6827
 shameless.com##+js(aopr, ExoLoader.addZone)
@@ -19494,7 +19504,6 @@ m.forocoches.com##div.title-forum-display-destacado
 m.forocoches.com##.page > div > ul > li[style^="word-wrap:break-word; word-break:break-word; background-color: #"]
 m.forocoches.com##.page > div > ul[style]:has(:scope > li > div[style] > a[style][href^="/foro/"] > strong)
 ||cdn.forocoches.com/lwa/forocoches/*_promo.html$frame,1p
-||scripts.static-od.com/setup
 
 ! https://github.com/NanoMeow/QuickReports/issues/2231
 @@||naruto-arena.net^$script,1p
@@ -20934,13 +20943,14 @@ exyi.net,myvido1.com##+js(acis, Math, zfgloaded)
 @@||rtl.it^$script,1p
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=rtl.it
 
-! https://github.com/uBlockOrigin/uAssets/issues/653
-! https://www.reddit.com/r/uBlockOrigin/comments/emteml/web20calc_anti_ad_block_and_third_cookies/
 ! https://github.com/uBlockOrigin/uAssets/issues/6814
+web2.0calc.*##+js(aopr, doads)
+||web2.0rechner.de/*/$subdocument
+||web2.0calc.*/*/$subdocument
 web2.0rechner.de,web2.0calc.*###abmodal, body > .in.modal-backdrop
 web2.0rechner.de,web2.0calc.*##body:style(overflow: auto !important)
 web2.0rechner.de,web2.0calc.*###nocreditsmodal
-web2.0calc.*##+js(aopr, doads)
+web2.0rechner.de,web2.0calc.*,##.first
 
 ! https://github.com/NanoMeow/QuickReports/issues/2711
 @@||narutoitalia.com^$ghide
@@ -21721,9 +21731,13 @@ see.xxx##+js(aeld, , pop)
 see.xxx##div.vda-x2.vda-item
 
 ! https://forums.lanik.us/viewtopic.php?p=153496#p153496
-ok.xxx,pornhat.com##+js(acis, document.querySelectorAll, popMagic)
-pornhat.com##+js(aopr, document.dispatchEvent)
-vr.pornhat.com#@#+js(aopr, document.dispatchEvent)
+ok.xxx,pornhat.*##+js(acis, document.querySelectorAll, popMagic)
+pornhat.*##+js(aopr, document.dispatchEvent)
+vr.pornhat.*#@#+js(aopr, document.dispatchEvent)
+pornhat.one##.bns-bl-new.bns-bl
+pornhat.one##div.player-bn
+pornhat.one##.video-block > .show.before-player
+pornhat.one##b
 ||doublepimpads.com^$3p
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=44297
