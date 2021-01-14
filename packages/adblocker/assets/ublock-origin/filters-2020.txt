@@ -2351,10 +2351,17 @@ blogarti.com##+js(nostif, anOptions)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7601
 ! .drt-spot-box only if navigated from other pages
-drtuber.com##+js(nowoif)
-drtuber.com##.drt-spot-box
-drtuber.com##.fh.heading
-drtuber.com##.livecams_main
+drtuber.*##+js(nowoif)
+drtuber.*###video_list_banner
+drtuber.*##.abtext
+drtuber.*##.drt-spot-box
+drtuber.*##.f_width.footer > .item_box
+drtuber.*##.fh.heading
+drtuber.*##.item_spots
+drtuber.*##.livecams_main
+drtuber.*##.puFloatLine
+drtuber.*##.title-sponsored
+||drtuber.*/footer_tiz.php
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7604
 atlaq.com##+js(aopr, zfgformats)
@@ -5241,17 +5248,17 @@ mysnip.xyz##.text-center.form-group > b > h3, br
 molll.mobi##+js(nostif, innerText, 2000)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/66177
-cypets.website,epetsure.website,kamerafoto.net,kangapip.com,leafpro.website,menulisonline.com,nstnews.net,petru.website##+js(acis, addEventListener, google_ad_client)
+cypets.website,epetsure.website,kamerafoto.net,kangapip.com,leafpro.website,menulisonline.com,nstnews.net,petru.website,plantqo.website##+js(acis, addEventListener, google_ad_client)
 link.kangapip.com##.box-main
 fedaro.me,s.kamerafoto.net##[href="https://s.kamerafoto.net/"]
 fedaro.me##+js(set, blurred, false)
 fedaro.me##p > a[href][target="_blank"]
 fedaro.me##.captcha-page > .container > .row > .col-md-offset-1 > .box-main > div:not(:has(#link-view))
 litpets.website,menulisonline.com,nstnews.net##+js(set, count, 0)
-epetsure.website,leafpro.website,litpets.website,menulisonline.com,nstnews.net,petru.website###wpsafe-snp:style(display: block !important;)
-epetsure.website,leafpro.website,litpets.website,menulisonline.com,nstnews.net,petru.website###wpsafe-generate:style(display: block !important;)
-cypets.website,epetsure.website,leafpro.website,petru.website##*:has(#wpsafe-wait1):not(:has(#wpsafe-snp))
-cypets.website###primary > .site-main:has(+ div[align="center"] > button)
+epetsure.website,leafpro.website,litpets.website,menulisonline.com,nstnews.net,petru.website,plantqo.website###wpsafe-snp:style(display: block !important;)
+epetsure.website,leafpro.website,litpets.website,menulisonline.com,nstnews.net,petru.website,plantqo.website###wpsafe-generate:style(display: block !important;)
+cypets.website,epetsure.website,leafpro.website,petru.website,plantqo.website##*:has(#wpsafe-wait1):not(:has(#wpsafe-snp))
+cypets.website,plantqo.website##*:has(+ div > button.btn):not(:has(button.btn))
 
 ! e-wok.tv anti-adb
 @@||e-wok.tv/js/new/advertisment.js$script,1p
@@ -6283,16 +6290,17 @@ adcorto.*##.box-main > table
 *$3p,script,denyallow=facebook.net|fbcdn.net|googleapis.com|google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=adcorto.*
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/69040
-camhoes.tv##+js(acis, onload, onclick)
-camhoes.tv##+js(set, flashvars.adv_pause_html, '')
-camhoes.tv##+js(set, flashvars.adv_start_html, '')
-camhoes.tv##+js(set, flashvars.logo_text, '')
-camhoes.tv##+js(set, flashvars.mlogo, '')
-camhoes.tv##+js(set, flashvars.popunder_url, '')
+! https://github.com/AdguardTeam/AdguardFilters/issues/72191
+camflow.tv,camhoes.tv##+js(acis, onload, onclick)
+camflow.tv,camhoes.tv##+js(set, flashvars.adv_pause_html, '')
+camflow.tv,camhoes.tv##+js(set, flashvars.adv_start_html, '')
+camflow.tv,camhoes.tv##+js(set, flashvars.logo_text, '')
+camflow.tv,camhoes.tv##+js(set, flashvars.mlogo, '')
+camflow.tv,camhoes.tv##+js(set, flashvars.popunder_url, '')
 camhoes.tv##+js(set, hasPoped, true)
-camhoes.tv##.box.rltd
-camhoes.tv##.table
-camhoes.tv##[href^="https://go.strpjmp.com"]
+camflow.tv,camhoes.tv##.box.rltd
+camflow.tv,camhoes.tv##.table
+camflow.tv,camhoes.tv##[href^="https://go.strpjmp.com"]
 ||pt.potwm.com^$3p
 ||awprt.com^$3p
 
@@ -6306,8 +6314,6 @@ playporngames.com##.sidebarcont > .widget_text:not(#text-2)
 /xxx\/([a-z]+[_-]){1,2}[a-z]+\.(?:gif|jpg)$/$image,1p,domain=playporngames.xxx|playsexgames.xxx
 playsexgames.xxx##.widget:not(#text-2)
 ||lifeselector.com/banners/js/banner-controller.
-playporngames.xxx##.ad
-playporngames.xxx##.widget_text:not(#text-4)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/68948
 okec.uk##+js(noeval-if, fab_alert)
