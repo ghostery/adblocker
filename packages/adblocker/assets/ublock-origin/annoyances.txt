@@ -5246,6 +5246,7 @@ world4.eu##+js(aopw, document.oncontextmenu)
 world4.eu##+js(acis, document.oncopy)
 world4.eu##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 world4.eu##*::selection:style(background-color:#338FFF!important)
+world4.eu##style:has-text(@media print):remove()
 
 ! ggulpass .com anti right click / select
 ggulpass.com##+js(aopw, document.oncontextmenu)
@@ -5278,6 +5279,22 @@ infodifesa.it##*:style(-webkit-touch-callout: default !important; -webkit-user-s
 ! irisbuddies. ml anti select
 irisbuddies.*##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 
+! Anti-adb keybr.com
+keybr.com##.Placeholder
+
 ! kijyomatome-ch.com anti right-click, select
 kijyomatome-ch.com##+js(ra, oncontextmenu|onselectstart, body)
 kijyomatome-ch.com##body:style(user-select:auto !important;-webkit-user-select:auto !important;-ms-user-select:auto !important;-moz-user-select:auto !important;-webkit-user-drag:auto !important)
+
+! juegosdetiempolibre .org anti right click / select
+juegosdetiempolibre.org##+js(acis, document.oncontextmenu)
+juegosdetiempolibre.org##+js(aopr, disableSelection)
+
+! kutub3lpdf .com anti right click, select, copy
+kutub3lpdf.com##+js(aeld, /contextmenu|copy|selectstart/)
+
+! ktm2day .com anti right click
+ktm2day.com##+js(acis, document.oncontextmenu)
+
+! https://forums.lanik.us/viewtopic.php?f=62&t=38298
+kitguru.net##+js(acis, addEventListener, adsbygoogle.length)
