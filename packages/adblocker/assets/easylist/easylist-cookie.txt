@@ -1,8 +1,8 @@
 [Adblock Plus 2.0]
-! Checksum: 2J6c13u9j9pibmP+7SmX0Q
-! Version: 202101152021
+! Checksum: IE9G4rRdCicn2tq5bZbNfA
+! Version: 202101162020
 ! Title: EasyList Cookie List
-! Last modified: 15 Jan 2021 20:21 UTC
+! Last modified: 16 Jan 2021 20:20 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 ! License: http://creativecommons.org/licenses/by/3.0/
@@ -19,6 +19,7 @@
 -consent-banner.
 -cookie-banner-
 -cookie-banner.
+-cookie-bar.
 -cookie-cnil.
 -cookie-consent-$~script
 -cookie-consent.$~script
@@ -51,6 +52,7 @@
 -eu-cookies/$script
 -eucookie.
 -gdpr-compliance/
+-gdpr-consents/
 -gdpr-cookie-$~script
 -gdpr-min.
 -gdpr-popup.
@@ -86,14 +88,16 @@
 .fscookieconsent.
 .gdpr-banner.
 .gdpr.js
+.gdpr.min
 .javascript.gdpr.
 .notificationCookies.
 .PrivacyDataNotice.
 /1_cookie.
-/2018-gdpr.js
+/2018-gdpr.
 /24cookiebar.
 /24cookiebarutils.
 /?spu_action=*spu_load&
+/?tx_z7cookiemanager
 /__cookie_js.php
 /ac_cookiesvalidation/*
 /accept-cookie.
@@ -111,6 +115,7 @@
 /ajw_gdpr.
 /alertcookie.
 /alertcookies.
+/am2-gdpr-public.
 /amCookieApproval.
 /amgdpr/*
 /amp-consent-
@@ -162,7 +167,9 @@
 /cmp.bundle.js
 /cmp.complete.bundle.js
 /cmp/cmp.js
+/cmp/cmp.min.js
 /cmp/cmpui-
+/cmp/consent-
 /cmp/int_cmp.
 /cmp/privacy_manager?
 /cmp/tmcookie.
@@ -186,6 +193,7 @@
 /coCookiesDisclaimer.
 /component-CookieConsent.
 /consent-banner-
+/consent-dialog.
 /consent-management.js
 /consent-manager.
 /consent-tracking-
@@ -194,6 +202,8 @@
 /consent/message.js
 /consent_non-eu.
 /consentcontroller.fallback/epaas.
+/consentcookie.js
+/consentcookie.min.js
 /ConsentTracking-
 /consentUI/*
 /coobann/*
@@ -201,6 +211,8 @@
 /cookie-alert.
 /cookie-bandeau.
 /cookie-banner
+/cookie-banner-
+/cookie-banner/*
 /cookie-banners.
 /cookie-bar-
 /cookie-bar.
@@ -214,6 +226,7 @@
 /cookie-consent-manager.
 /cookie-consent-modals.
 /cookie-consent-overlay.
+/cookie-consent-settings-
 /cookie-consent.
 /cookie-consent/*
 /cookie-consent?
@@ -231,6 +244,7 @@
 /cookie-law-$~script
 /cookie-law-info-public.js
 /cookie-law.js
+/cookie-layer-
 /cookie-madeincima.
 /cookie-madeincima/*
 /cookie-manager.
@@ -290,6 +304,7 @@
 /cookie/policy-
 /cookie/require-
 /cookie/support-
+/cookie/uccb-
 /cookie2.jsx
 /cookie_acceptance_
 /cookie_ack/*
@@ -389,8 +404,10 @@
 /cookieLaw-vanilla.js
 /cookielaw.$~stylesheet
 /cookielaw/*
+/cookielaw_mip.
 /cookielawinfo.$~script
 /CookieLawProduct/*
+/cookielayer/*
 /cookielegal.
 /cookiemanagement.js
 /cookieMention.
@@ -401,6 +418,7 @@
 /cookiemonster.mg
 /cookieMonster.min.js
 /cookiemsg.
+/cookieMunchr.
 /cookienote/*
 /cookienotice-
 /cookienotice.
@@ -412,6 +430,7 @@
 /CookieNotifier.
 /cookienotify-
 /cookieok.js
+/cookieopt-min.
 /cookieparty.
 /cookieplugin/cookie.
 /cookiepolicy-
@@ -499,7 +518,7 @@
 /CookieSettingsManager?
 /cookiesgdpr?
 /cookiesJS.
-/cookiesLayer.js
+/cookiesLayer.
 /cookieslegal.
 /cookiesLegales.
 /CookiesManager.
@@ -543,6 +562,7 @@
 /dx/cmpui.
 /dywc.js
 /easy-cookies-
+/echonetcookie.
 /ecookie_check/*
 /edcc.js
 /ee-cookies-min.
@@ -553,6 +573,7 @@
 /ercookiebar.
 /et_gdpr_
 /eu-cookie-$~script,~stylesheet
+/eu-cookie-law-
 /eu-cookie.
 /eu-cookie/*
 /EU-cookielaw.
@@ -561,7 +582,7 @@
 /eu_cookies.
 /eu_privacy.js
 /eu_rp_cookie.
-/euc_cookie.js
+/euc_cookie.
 /eucookie.
 /EUcookie/*
 /eucookiecompliance.
@@ -579,10 +600,13 @@
 /evidon-banner.
 /evidon-cmp.
 /evidon-sitenotice-tag.
+/ext/jscookieconsent
+/ext/kmacookies
 /eznovacookieconsent.
 /Flurrybox_EnhancedPrivacy/*
 /fp_cookie.
 /fxCookiesV3.
+/g361-cookies-
 /g4cookies.
 /gdpr-assets-
 /gdpr-banner.
@@ -598,15 +622,17 @@
 /gdpr-desc
 /gdpr-lfc.
 /gdpr-min.
+/gdpr-popup.
 /gdpr-public.
 /gdpr-transparency-
 /gdpr-v2.
 /gdpr.eu.htm
 /gdpr.htm
 /gdpr.js
-/gdpr.min.js
+/gdpr.min.
 /gdpr/assets/*
 /gdpr/bundle.
+/gdpr/cmp/*
 /GDPR/consentStorage.
 /gdpr/cookie-
 /gdpr/CookieConsent
@@ -614,16 +640,20 @@
 /gdpr/disp.js
 /gdpr/gdpr-
 /gdpr/gdpr.$script
+/gdpr/gdpr.js
 /gdpr/gdpr_
 /gdpr/img/*
 /gdpr/messaging.
 /gdpr/optInCookieSSR?
 /gdpr/script_
+/gdpr/spd.
+/gdpr/third-party-
 /gdpr_check.
 /gdpr_consent.
 /gdpr_css/*
 /gdpr_footer.
 /gdpr_js/*
+/gdpr_ncoi.
 /gdpr_notice.
 /gdpr_optout.
 /gdpr_plugin.
@@ -632,6 +662,7 @@
 /GDPRCard/*
 /gdprcompliance/*
 /gdprcookie.
+/gdprmain/*
 /GDPRModalCounter.
 /gdprnotice.
 /gdprpopup.
@@ -647,6 +678,7 @@
 /headerCookies_
 /hi-cookie-
 /homepage-cookie-
+/hw-cookie-
 /i_CookieConsent.
 /iab-vendorlist.
 /ibeugdpr.
@@ -656,6 +688,7 @@
 /icocookies.
 /icon/cookie-
 /idg-consent.
+/idxcookies/*
 /ig_cookie_
 /ik-rgpd.
 /im_eucookie.
@@ -697,6 +730,7 @@
 /legal/cookies/?
 /legal_cookie.
 /legalcookie.
+/leyCookies.
 /libraries/cookie.
 /ll_cookie_
 /lma-cookie.
@@ -711,6 +745,7 @@
 /mod_cookiesaccept/*$~stylesheet
 /mod_jbcookies/*
 /mpc_cookie_
+/mq_cookieconsent/*
 /msmCookieConsent.
 /mweb.cookie/*$script
 /mws-cookie-
@@ -721,6 +756,7 @@
 /nibirumail.cookie.min.js
 /nl-cookie-law.js
 /notification.js*browserId=$script
+/nsd-cookie-
 /o-cookielaw.
 /ocgcookie?
 /oil.*-RELEASE.min.js
@@ -738,6 +774,7 @@
 /plugins/cookie-$~script,~stylesheet
 /plugins/gdpr/*
 /pm_assets/privacy/*$script
+/policies/gdpr.
 /policy_cookie.
 /policy_cookieCMP.
 /policyaccept.
@@ -770,6 +807,7 @@
 /pum-site-scripts-
 /pum-site-scripts.
 /pwcookielaw.js
+/pxpcookies.
 /quantastCmp.js
 /rb/cookie/*
 /rbicookiepolicy.
@@ -799,6 +837,7 @@
 /scripts/cookiebar
 /Scripts/cookies.js
 /sdk-gdpr.
+/seopress-cookies.
 /SetConsentCookie.
 /SetCookieBanner.
 /setPrivacyCookie.
@@ -821,6 +860,7 @@
 /syncCookie/*
 /syno_cookie_
 /tarteaucitron.
+/tcf/cookie.
 /terms_of_service.js
 /thcookie.
 /tm.cookie.js
@@ -834,6 +874,7 @@
 /tracking/get?
 /trackingProtection/*
 /trustArcHelper.js
+/trwcookieconsent/*
 /ttCmpApi.min.js
 /ttgcookieconsent-
 /TWCCookies/*
@@ -904,6 +945,7 @@ _cookiebar.
 _cookiebar_
 _cookieCgu.
 _CookieConsent.js
+_cookieconsent/
 _cookielaw_mip.
 _CookieLegalNotice.
 _cookieMsgBox/
@@ -921,9 +963,11 @@ _europecookielaw.
 _gdpr_callback_
 _gdpr_consent.
 _gdpr_cookie_
+_hw_cookie_dialog.
 _js__cookie_functions.
 _logikamentecookielaw/
 _site_cookie_
+_vpcookieconsent/
 ! https://github.com/AdguardTeam/AdguardFilters/blob/master/AnnoyancesFilter/sections/cookies_specific.txt#L53
 /pp-t-a-c.js$script
 !------------------------General element hiding rules-------------------------!
@@ -2910,6 +2954,7 @@ _site_cookie_
 ###cookieAgeCheck
 ###cookieAgree
 ###cookieAgreeBar
+###cookieAgreeForm
 ###cookieAgreement
 ###cookieAgreementBar
 ###cookieAgreementBox
@@ -6652,6 +6697,7 @@ _site_cookie_
 ###privacybar
 ###privacycookie
 ###privacycookie-div-supertop
+###privacyhint
 ###privacymanager
 ###privacymessage
 ###privacynotice
@@ -11874,6 +11920,7 @@ _site_cookie_
 ##.padding_gdpr
 ##.page--cookie
 ##.page-banner__cookie
+##.page-consent
 ##.page-cookies
 ##.page-cookies-info
 ##.page-dialog-dsgvo
@@ -12297,6 +12344,7 @@ _site_cookie_
 ##.self-contain-cookie
 ##.sem-cookie-notice
 ##.sentence--cookie--container
+##.seopress-user-consent
 ##.seopress-user-consent-backdrop
 ##.setrappelcookies
 ##.sets-cookie
@@ -13406,7 +13454,7 @@ decathlon.co.uk###container-screen
 tinder.com###content > span > .App > div[class*="Start"]
 wotinfo.net###coo
 alcoholics-anonymous.org.uk,cryps.info###cook
-add0n.com,aflite.co.uk,aon.com,atom42.co.uk,bakersmall.co.uk,bbvonline.net,betradar.com,bookingsouthtyrol.com,boscolohotels.com,boxnation.com,e-doggy.com,eqavet.eu,essentraextrusion.eu,flexerasoftware.com,fremantlemedia.com,gulfstream.com,iadvize.com,keyboardco.com,kicc.org.uk,lonewolfonline.net,mouseprice.com,nspcc.org.uk,oilplusltd.com,onenessscotland.org,pentagon-group.co.uk,prestashop.com,pretix.eu,priorygroup.com,rodacciai.fr,sainsburysenergy.com,simmons-simmons.com,stiripesurse.ro,technutty.co.uk,thebmc.co.uk,toomeymotorgroup.co.uk,tutsandtips.com,tvcorner.com,unsee.cc,wheatley-group.com,zbmath.org###cookie
+add0n.com,aflite.co.uk,aon.com,atom42.co.uk,bakersmall.co.uk,bbvonline.net,betradar.com,bookingsouthtyrol.com,boscolohotels.com,boxnation.com,e-doggy.com,eqavet.eu,essentraextrusion.eu,flexerasoftware.com,fremantlemedia.com,gulfstream.com,iadvize.com,keyboardco.com,kicc.org.uk,lonewolfonline.net,mouseprice.com,nspcc.org.uk,oilplusltd.com,onenessscotland.org,pentagon-group.co.uk,prestashop.com,pretix.eu,priorygroup.com,rodacciai.fr,sainsburysenergy.com,simmons-simmons.com,stiripesurse.ro,tadeevo.com,technutty.co.uk,thebmc.co.uk,toomeymotorgroup.co.uk,tutsandtips.com,tvcorner.com,unsee.cc,wheatley-group.com,zbmath.org###cookie
 0calc.com###cookieconsentmodal
 anpost.ie,any.run,aquariumforums.co.uk,arag.com,atleticodemadrid.com,ayraviation.com,bl.uk,canadiansolar.com,celulares.com,cifas.org.uk,coinsofhope.eu,educalingo.com,eitb.eus,emrf.eu,emunewz.net,eporner.com,feyenoord.com,film-news.co.uk,forbiddenplanet.co.uk,freemeteo.ch,freemeteo.com,fulltilt.com,globalpetrolprices.com,gpstraining.co.uk,harper-adams.ac.uk,history.bnpparibas,homecinemachoice.com,humbersideairport.com,ibeesoft.com,imperiaonline.org,inmobi.com,irishjobs.ie,iso-chemie.eu,izikart.co.uk,jomast.co.uk,lloydsbankinggroup.com,mareespeche.com,metbiocat.eu,noisli.com,panfurware.com,phonearena.com,picload.org,playclassic.games,pokernews.com,police.uk,premiumcredit.co.uk,private.com,proteum.co.uk,puromarketing.com,radiocaroline.co.uk,rdnester.eu,rotterdam.info,scl.org,studentski.net,tablademareas.com,tellows-au.com,tellows-fi.com,tellows-ng.com,tellows-tr.com,tellows.asia,tellows.at,tellows.be,tellows.co,tellows.co.nz,tellows.co.uk,tellows.co.za,tellows.com,tellows.com.br,tellows.cz,tellows.de,tellows.dk,tellows.es,tellows.fr,tellows.gr,tellows.hu,tellows.in,tellows.it,tellows.jp,tellows.mx,tellows.net,tellows.nl,tellows.org,tellows.pl,tellows.pt,tellows.ru,tellows.se,tellows.tw,the-tls.co.uk,theatre-news.com,tsb.co.uk,wsws.org,xnostars.com###cookies
 patience-is-a-virtue.org###copy > p
@@ -13434,6 +13482,7 @@ fool.co.uk###dogfish
 aeriagames.com###dp2018dialog
 hetzner.com###dpi-banner
 drupal.org###drupalorg-crosssite-gdpr
+overunity.com###ecl_outer
 tor.com###entry-content__footer-popup
 live.com,microsoft.com,office.com,skype.com,visualstudio.com,windows.com,xbox.com###epb
 complex.com###eucn
@@ -13663,7 +13712,7 @@ sunweb.co.uk##.absolute-dialog
 greenfields.eu##.accept-alert
 akeebabackup.com,displays.agneovo.com,imunify360.com,luxos.com,reshade.me,v-tac.eu##.activebar-container
 ticketmaster.ca##.agree-terms
-adata.com,ahlulbayt.tv,altervista.org,askdifference.com,asklion.co.uk,bankid.com,cfainstitute.org,convert-my-image.com,costaclub.com,efinancialcareers.com,gambling-affiliation.com,hattrick.org,kenweego.com,lawyersonline.co.uk,lifescience.net,lonelyplanet.com,m-a.org.uk,nature.com,netweather.tv,norwegian.com,pozyx.io,streema.com,supercell.com,theonlinesurgery.co.uk,tindie.com,ukpressonline.co.uk,vernemq.com,viewsonic.com,viewsoniceurope.com,youngsseafood.co.uk##.alert
+adata.com,ahlulbayt.tv,altervista.org,askdifference.com,asklion.co.uk,bankid.com,cfainstitute.org,convert-my-image.com,costaclub.com,efinancialcareers.com,gambling-affiliation.com,hattrick.org,kenweego.com,lawyersonline.co.uk,lifescience.net,linuxcompatible.org,lonelyplanet.com,m-a.org.uk,nature.com,netweather.tv,norwegian.com,pozyx.io,streema.com,supercell.com,theonlinesurgery.co.uk,tindie.com,ukpressonline.co.uk,vernemq.com,viewsonic.com,viewsoniceurope.com,youngsseafood.co.uk##.alert
 espn.com##.alert--fixed
 goodmorningamerica.com,historicengland.org.uk##.alert-banner
 labour.org.uk##.alert-bar-footer
@@ -13892,7 +13941,7 @@ spotify.com##.mh-message-bar
 mitele.es##.mitele-consent
 transparency.org##.mk-c-modal
 amazon.com##.mo-wp
-airnewzealand.eu,przekroj.pl,qv.co.nz##.modal
+airnewzealand.eu,przekroj.pl,qv.co.nz,thelittleboxoffice.com##.modal
 airnewzealand.eu,arlingtoncemetery.mil,arthrex.com,axminster.co.uk,daf.be,daf.co.uk,daf.com,daf.fr,daf.global,daf.nl,daf.ru,daf.se,daftrucks.de,daftrucks.dk,daftrucks.it,daftrucks.pl,daftrucks.sk,ferratum.co.uk,fiveguys.co.uk,kon-boot.com,lam.co.mz,medtronic.com,primaresearch.org,qv.co.nz##.modal-backdrop
 myanimelist.net##.modal-container
 myanimelist.net##.modal-content
@@ -14625,6 +14674,7 @@ webzdarma.cz###fixedBar
 casopis-rozmaryna.cz###fucktheEU
 hpmarket.cz###hpmGmtT
 nacesty.cz###term-of-use
+marusik.cz##.CA
 therapia.cz##.CC_wrap
 valka.cz##.alert
 uni-max.cz##.bar-Info
@@ -15250,7 +15300,7 @@ domwroc24.pl##.ciacho-wrap-container
 forumrowerowe.org##.ckg
 scentre.pl##.consent
 poznan.pl##.content-head-information
-fum.info.pl,leroymerlin.pl,mazowieckie.com.pl,mmgastro.pl,otouczelnie.pl,technetium.pl,virtualtrucker.pl,wykop.pl,zdrofit.pl##.cookie
+fitnessclubs4.pl,fum.info.pl,leroymerlin.pl,mazowieckie.com.pl,mmgastro.pl,otouczelnie.pl,polstor.pl,technetium.pl,virtualtrucker.pl,wykop.pl,zdrofit.pl##.cookie
 alergia-allegra.pl,aliorbank.pl,angora.com.pl,bezux.pl,bigstar.pl,bitbay.pl,dhosting.pl,easycomp.pl,fitpatrol.pl,fly4free.pl,meczyki.pl,naszefutrzaki.eu,niedziela.pl,pkpcargo.com,polsatsport.pl,rozklad-pkp.pl,sprawdzonyfizjoterapeuta.pl,telepolis.pl,teletorium.pl,vistula.pl##.cookies
 chceauto.pl##.cookue
 genetico.pl##.coologo7
@@ -15566,6 +15616,7 @@ infiniti-vietnam.com.vn##.c_128
 !
 ||byom.de/js/cookie.de.js
 ||cmp.pcwelt.de^
+||cmp.tvspielfilm.de^
 ||consent.berliner-kurier.de^
 ||consent.gutefrage.net^
 ||henryschein.at^*/CookieList.aspx

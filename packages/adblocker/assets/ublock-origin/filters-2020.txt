@@ -893,6 +893,7 @@ abcvideo.cc##+js(aopr, devtoolsDetector)
 
 ! https://github.com/uBlockOrigin/uAssets/commit/ea0f038f5bf9c80c4840f03317a10269e850a143#commitcomment-38932408
 ouo.*,clicknupload.co,fullmaza.*,mirrorace.com,7starhd.*##+js(acis, String.fromCharCode, /'shift'|break;/)
+fullmaza.*##+js(aopr, absda)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8354
 khatrimazafull.*##+js(aopr, absda)
@@ -1360,6 +1361,7 @@ localizaagencia.com##+js(nosiif, visibility, 1000)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3884
 zdam.xyz##+js(aeld, DOMContentLoaded, show)
+zdam.xyz##+js(no-fetch-if, /^/)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3885
 tech-blogs.com##+js(nostif, mdp)
@@ -2708,6 +2710,7 @@ moviemaniac.org##+js(nowoif)
 moviemaniac.org##+js(set, clientSide.adbDetect, noopFunc)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/59201
+larvelfaucet.com##+js(acis, addEventListener, nextFunction)
 larvelfaucet.com##+js(nosiif, visibility, 1000)
 larvelfaucet.com##[class^="bmadblock"]
 larvelfaucet.com###bottomRightFloatingAd
@@ -6779,7 +6782,7 @@ mkvhouse.com##+js(acis, String.fromCharCode, break)
 mkvhouse.com##[href^="https://yts-mx.com/"]
 
 ! https://github.com/LiCybora/NanoDefenderFirefox/issues/192
-panel.skynode.pro##+js(nostif, check)
+panel.skynode.pro##+js(aopr, adBlockerDetected)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/70363
 rezkozpatch.xyz##+js(acis, eval, ignielAdBlock)
@@ -6902,8 +6905,7 @@ streamsport.*##+js(nowoif)
 @@||wigilive.com^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8396
-ladbible.com#@#div[class*="margin-Advert"]
-ladbible.com##.css-sc0vla-margin-Advert
+ladbible.com##div[class$="-margin-Advert"]:style(height:1px !important;width:1px !important;position:absolute !important;left:-3000px !important)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/kilzmv/adblock_detected/
 *$image,redirect-rule=1x1.gif,domain=rollercoin.com
