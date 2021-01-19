@@ -1960,9 +1960,10 @@ twinkietown.com##+js(nostif, adsBlocked)
 @@||hackingleaks.com^$ghide
 @@||hackingleaks.com/ad/*$xhr,1p
 
-! right click, select, copy https://github.com/uBlockOrigin/uAssets/issues/5450
+! right click, select, copy, devtools https://github.com/uBlockOrigin/uAssets/issues/5450
 javsubtitle.co##+js(aopw, nocontext)
 javsubtitle.co##+js(acis, disableSelection, reEnable)
+javsubtitle.co##^script:has-text(debugger)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5305#issuecomment-487302508
 statelibrary.us##+js(aopr, document.oncontextmenu)
@@ -5349,3 +5350,13 @@ nydailyquote.com##+js(acis, document.onselectstart)
 
 ! objectivequiz. com anti select
 objectivequiz.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! ouasafat. com anti select
+ouasafat.com##+js(acis, document.onselectstart)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/l0hz3l/website_uninteractive_presumably_due_to_gdpr/
+teamaretuza.com###consentModal,.modal-backdrop
+teamaretuza.com##body:style(overflow: auto!important)
+
+! https://github.com/uBlockOrigin/uAssets/issues/3288#issuecomment-763010836
+*/snowfall.jquery.js$script
