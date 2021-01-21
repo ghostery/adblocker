@@ -1,3 +1,77 @@
+# v1.20.0 (Thu Jan 21 2021)
+
+### Release Notes
+
+#### Initial support for extended CSS selectors (a.k.a. procedural filters) ([#1574](https://github.com/cliqz-oss/adblocker/pull/1574))
+
+Add initial support for extended CSS selectors (a.k.a. procedural filters) as well as the `:remove()` modifier for element hiding rules (note: the already supported `:style` modified now also works with extended CSS selectors). The following new pseudo-classes are implemented: `:has` (and its alias `:if`), `:has-text` (both string and RegExp literals), and `:not` (whenever its argument is also an extended selector, otherwise fallback to native implementation).
+
+Caveats:
+* Loading of extended css filters is disabled by default and needs to be toggled using the `loadExtendedSelectors` option while [initializing the blocker instance](https://github.com/cliqz-oss/adblocker/blob/3361723138f40c3cb96b4c6e611f2b030f75d891/packages/adblocker-webextension-example/background.ts#L61).
+* These news selectors are currently only supported by `WebExtensionBlocker` (support for Puppeteer, Electron and Playwright is not planned at this time but help from the community would be greatly appreciated).
+
+Miscellaneous changes:
+* Removal of unused `injectCSSRule` helper.
+* Replace Closure compiler by Terser.
+
+---
+
+#### :rocket: New Feature
+
+- Initial support for extended CSS selectors (a.k.a. procedural filters) [#1574](https://github.com/cliqz-oss/adblocker/pull/1574) ([@remusao](https://github.com/remusao))
+
+#### :bug: Bug Fix
+
+- build(deps): bump @types/chrome from 0.0.127 to 0.0.128 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :house: Internal
+
+- Update local assets [#1597](https://github.com/cliqz-oss/adblocker/pull/1597) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1593](https://github.com/cliqz-oss/adblocker/pull/1593) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1589](https://github.com/cliqz-oss/adblocker/pull/1589) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1588](https://github.com/cliqz-oss/adblocker/pull/1588) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1587](https://github.com/cliqz-oss/adblocker/pull/1587) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1584](https://github.com/cliqz-oss/adblocker/pull/1584) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1578](https://github.com/cliqz-oss/adblocker/pull/1578) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1575](https://github.com/cliqz-oss/adblocker/pull/1575) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1571](https://github.com/cliqz-oss/adblocker/pull/1571) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1568](https://github.com/cliqz-oss/adblocker/pull/1568) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1566](https://github.com/cliqz-oss/adblocker/pull/1566) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1565](https://github.com/cliqz-oss/adblocker/pull/1565) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1562](https://github.com/cliqz-oss/adblocker/pull/1562) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1560](https://github.com/cliqz-oss/adblocker/pull/1560) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1559](https://github.com/cliqz-oss/adblocker/pull/1559) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1556](https://github.com/cliqz-oss/adblocker/pull/1556) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1553](https://github.com/cliqz-oss/adblocker/pull/1553) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1552](https://github.com/cliqz-oss/adblocker/pull/1552) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1551](https://github.com/cliqz-oss/adblocker/pull/1551) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1548](https://github.com/cliqz-oss/adblocker/pull/1548) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1546](https://github.com/cliqz-oss/adblocker/pull/1546) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1545](https://github.com/cliqz-oss/adblocker/pull/1545) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1544](https://github.com/cliqz-oss/adblocker/pull/1544) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1543](https://github.com/cliqz-oss/adblocker/pull/1543) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1542](https://github.com/cliqz-oss/adblocker/pull/1542) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1541](https://github.com/cliqz-oss/adblocker/pull/1541) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1539](https://github.com/cliqz-oss/adblocker/pull/1539) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1536](https://github.com/cliqz-oss/adblocker/pull/1536) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1531](https://github.com/cliqz-oss/adblocker/pull/1531) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1530](https://github.com/cliqz-oss/adblocker/pull/1530) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1528](https://github.com/cliqz-oss/adblocker/pull/1528) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1526](https://github.com/cliqz-oss/adblocker/pull/1526) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1524](https://github.com/cliqz-oss/adblocker/pull/1524) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump @types/chrome from 0.0.127 to 0.0.128 [#1561](https://github.com/cliqz-oss/adblocker/pull/1561) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.19.0 (Wed Dec 16 2020)
 
 #### :rocket: New Feature
