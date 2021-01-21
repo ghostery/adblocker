@@ -23,6 +23,7 @@ async function getCosmeticFilters(): Promise<CosmeticFilter[]> {
     debug: true,
     loadCosmeticFilters: true,
     loadNetworkFilters: false,
+    enableHtmlFiltering: true,
   }).cosmeticFilters;
 }
 
@@ -31,6 +32,7 @@ async function getNetworkFilters(): Promise<NetworkFilter[]> {
     debug: true,
     loadCosmeticFilters: false,
     loadNetworkFilters: true,
+    loadExtendedSelectors: true,
   }).networkFilters;
 }
 

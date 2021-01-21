@@ -6,6 +6,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import type { IMessageFromBackground } from '@cliqz/adblocker-content';
+
 import Config from '../config';
 import { StaticDataView, sizeOfASCII, sizeOfByte } from '../data-view';
 import { EventEmitter } from '../events';
@@ -27,7 +29,7 @@ import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 
-export const ENGINE_VERSION = 364;
+export const ENGINE_VERSION = 365;
 
 function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   if (filters.length === 0) {
@@ -460,6 +462,7 @@ export default class FilterEngine extends EventEmitter<
       this.cosmetics.update(
         newCosmeticFilters,
         removedCosmeticFilters.length === 0 ? undefined : new Set(removedCosmeticFilters),
+        this.config,
       );
     }
 
@@ -600,6 +603,7 @@ export default class FilterEngine extends EventEmitter<
     // Allows to specify which rules to return
     getBaseRules = true,
     getInjectionRules = true,
+    getExtendedRules = true,
     getRulesFromDOM = true,
     getRulesFromHostname = true,
   }: {
@@ -613,14 +617,10 @@ export default class FilterEngine extends EventEmitter<
 
     getBaseRules?: boolean;
     getInjectionRules?: boolean;
+    getExtendedRules?: boolean;
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
-  }): {
-    active: boolean;
-    scripts: string[];
-    styles: string;
-    extended: string[];
-  } {
+  }): IMessageFromBackground {
     if (this.config.loadCosmeticFilters === false) {
       return {
         active: false,
@@ -670,7 +670,7 @@ export default class FilterEngine extends EventEmitter<
     }
 
     // Lookup injections as well as stylesheets
-    const { injections, stylesheet } = this.cosmetics.getCosmeticsFilters({
+    const { injections, stylesheet, extended } = this.cosmetics.getCosmeticsFilters({
       domain: domain || '',
       hostname,
 
@@ -683,6 +683,7 @@ export default class FilterEngine extends EventEmitter<
 
       getBaseRules,
       getInjectionRules,
+      getExtendedRules,
       getRulesFromDOM,
       getRulesFromHostname,
     });
@@ -704,7 +705,7 @@ export default class FilterEngine extends EventEmitter<
 
     return {
       active: true,
-      extended: [],
+      extended,
       scripts,
       styles: stylesheet,
     };

@@ -1371,9 +1371,11 @@ function cosmetic(filter: string, expected: any) {
 
       // Options
       isClassSelector: parsed.isClassSelector(),
+      isExtended: parsed.isExtended(),
       isHrefSelector: parsed.isHrefSelector(),
       isHtmlFiltering: parsed.isHtmlFiltering(),
       isIdSelector: parsed.isIdSelector(),
+      isRemove: parsed.isRemove(),
       isScriptInject: parsed.isScriptInject(),
       isUnhide: parsed.isUnhide(),
     };
@@ -1390,9 +1392,11 @@ const DEFAULT_COSMETIC_FILTER = {
 
   // Options
   isClassSelector: false,
+  isExtended: false,
   isHrefSelector: false,
   isHtmlFiltering: false,
   isIdSelector: false,
+  isRemove: false,
   isScriptInject: false,
   isUnhide: false,
 };
@@ -1650,12 +1654,70 @@ describe('Cosmetic filters', () => {
     });
   });
 
+  describe('parses remove filters', () => {
+    it('simple', () => {
+      cosmetic('example.com##.cls:remove()', {
+        ...DEFAULT_COSMETIC_FILTER,
+        selector: '.cls',
+        isRemove: true,
+        isExtended: true,
+      });
+    });
+
+    it('extended', () => {
+      cosmetic('example.com##.cls:has-text(/Foo/i):remove()', {
+        ...DEFAULT_COSMETIC_FILTER,
+        selector: '.cls:has-text(/Foo/i)',
+        isRemove: true,
+        isExtended: true,
+      });
+    });
+  });
+
+  describe('parses extended filters', () => {
+    for (const pseudo of [
+      '-abp-contains',
+      '-abp-has',
+      '-abp-properties',
+      'if-not',
+      'matches-css',
+      'matches-css-after',
+      'matches-css-before',
+      'min-text-length',
+      'nth-ancestor',
+      'upward',
+      'watch-attr',
+      'watch-attrs',
+      'xpath',
+    ]) {
+      it(`rejects unsupported: ${pseudo}`, () => {
+        cosmetic(`example.com##.cls:${pseudo}()`, null);
+      });
+    }
+
+    for (const pseudo of ['has', 'has-text', 'if']) {
+      it(`parse supported: ${pseudo}`, () => {
+        cosmetic(`example.com##.cls:${pseudo}()`, {
+          ...DEFAULT_COSMETIC_FILTER,
+          isExtended: true,
+          selector: `.cls:${pseudo}()`,
+          domains: {
+            hostnames: h(['example.com']),
+            entities: undefined,
+            notHostnames: undefined,
+            notEntities: undefined,
+          },
+        });
+      });
+    }
+  });
+
   describe('parses html filtering', () => {
     it('^script:has-text()', () => {
       cosmetic('##^script:has-text(foo bar)', {
         ...DEFAULT_COSMETIC_FILTER,
         isHtmlFiltering: true,
-        selector: 'script:has-text(foo bar)',
+        selector: '^script:has-text(foo bar)',
       });
     });
 
@@ -1669,7 +1731,7 @@ describe('Cosmetic filters', () => {
           notEntities: undefined,
         },
         isHtmlFiltering: true,
-        selector: 'script:has-text(foo bar)',
+        selector: '^script:has-text(foo bar)',
       });
     });
 

@@ -87,6 +87,9 @@ export function detectFilterType(line: string): FilterType {
       afterSharpCharCode === 35 /* '#'*/ ||
       (afterSharpCharCode === 64 /* '@' */ &&
         fastStartsWithFrom(line, /* #@# */ '@#', afterSharpIndex))
+      // TODO - support ADB/AdGuard extended css selectors
+      // || (afterSharpCharCode === 63 /* '?' */ &&
+      //   fastStartsWithFrom(line, /* #?# */ '?#', afterSharpIndex))
     ) {
       // Parse supported cosmetic filter
       // `##` `#@#`

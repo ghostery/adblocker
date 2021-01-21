@@ -58,6 +58,7 @@ chrome.tabs.onUpdated.addListener((tabId, { status, url }) => {
 WebExtensionBlocker.fromLists(fetch, fullLists, {
   enableCompression: true,
   enableHtmlFiltering: true,
+  loadExtendedSelectors: true,
 }).then((blocker: WebExtensionBlocker) => {
   blocker.enableBlockingInBrowser(browser);
 

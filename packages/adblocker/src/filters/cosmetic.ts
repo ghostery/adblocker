@@ -6,6 +6,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import {
+  AST,
+  classifySelector,
+  SelectorType,
+  parse as parseCssSelector,
+} from '@cliqz/adblocker-extended-selectors';
+
 import { Domains } from '../engine/domains';
 import {
   EMPTY_UINT32_ARRAY,
@@ -20,6 +27,7 @@ import {
   getEntityHashesFromLabelsBackward,
 } from '../request';
 import {
+  fastHash,
   fastHashBetween,
   fastStartsWithFrom,
   getBit,
@@ -129,7 +137,8 @@ const enum COSMETICS_MASK {
   isClassSelector = 1 << 3,
   isIdSelector = 1 << 4,
   isHrefSelector = 1 << 5,
-  htmlFiltering = 1 << 6,
+  remove = 1 << 6,
+  extended = 1 << 7,
 }
 
 function computeFilterId(
@@ -159,33 +168,6 @@ function computeFilterId(
   return hash >>> 0;
 }
 
-function parseProceduralFilter(line: string, indexAfterColon: number): null | string {
-  if (
-    fastStartsWithFrom(line, '-abp-', indexAfterColon) ||
-    fastStartsWithFrom(line, 'contains', indexAfterColon) ||
-    fastStartsWithFrom(line, 'has-text', indexAfterColon) ||
-    fastStartsWithFrom(line, 'has', indexAfterColon) ||
-    fastStartsWithFrom(line, 'if-not', indexAfterColon) ||
-    fastStartsWithFrom(line, 'if', indexAfterColon) ||
-    fastStartsWithFrom(line, 'matches-css-after', indexAfterColon) ||
-    fastStartsWithFrom(line, 'matches-css-before', indexAfterColon) ||
-    fastStartsWithFrom(line, 'matches-css', indexAfterColon) ||
-    fastStartsWithFrom(line, 'min-text-length', indexAfterColon) ||
-    fastStartsWithFrom(line, 'nth-ancestor', indexAfterColon) ||
-    fastStartsWithFrom(line, 'nth-of-type', indexAfterColon) ||
-    fastStartsWithFrom(line, 'remove', indexAfterColon) ||
-    fastStartsWithFrom(line, 'upward', indexAfterColon) ||
-    fastStartsWithFrom(line, 'watch-attrs', indexAfterColon) ||
-    fastStartsWithFrom(line, 'watch-attr', indexAfterColon) ||
-    fastStartsWithFrom(line, 'xpath', indexAfterColon)
-  ) {
-    return null;
-  }
-
-  // TODO - here we should parse the selector.
-  return line;
-}
-
 /***************************************************************************
  *  Cosmetic filters parsing
  * ************************************************************************ */
@@ -198,8 +180,8 @@ export default class CosmeticFilter implements IFilter {
    */
   public static parse(line: string, debug: boolean = false): CosmeticFilter | null {
     // Mask to store attributes. Each flag (unhide, scriptInject, etc.) takes
-    // only 1 bit at a specific offset defined in COSMETICS_MASK.  cf:
-    // COSMETICS_MASK for the offset of each property
+    // only 1 bit at a specific offset defined in COSMETICS_MASK.
+    // cf: COSMETICS_MASK for the offset of each property
     let mask = 0;
     let selector: string | undefined;
     let domains: Domains | undefined;
@@ -210,6 +192,7 @@ export default class CosmeticFilter implements IFilter {
     const afterSharpIndex = sharpIndex + 1;
     let suffixStartIndex = afterSharpIndex + 1;
 
+    // hostname1,hostname2#?#.selector
     // hostname1,hostname2#@#.selector
     //                    ^^ ^
     //                    || |
@@ -218,9 +201,17 @@ export default class CosmeticFilter implements IFilter {
     //                    sharpIndex
 
     // Check if unhide
-    if (line.length > afterSharpIndex && line[afterSharpIndex] === '@') {
-      mask = setBit(mask, COSMETICS_MASK.unhide);
-      suffixStartIndex += 1;
+    if (line.length > afterSharpIndex) {
+      if (line[afterSharpIndex] === '@') {
+        mask = setBit(mask, COSMETICS_MASK.unhide);
+        suffixStartIndex += 1;
+      } else if (line[afterSharpIndex] === '?') {
+        suffixStartIndex += 1;
+      }
+    }
+
+    if (suffixStartIndex >= line.length) {
+      return null;
     }
 
     // Parse hostnames and entitites as well as their negations.
@@ -237,26 +228,42 @@ export default class CosmeticFilter implements IFilter {
       domains = Domains.parse(line.slice(0, sharpIndex).split(','));
     }
 
-    // Deal with ^script:has-text(...)
-    if (
-      line.charCodeAt(suffixStartIndex) === 94 /* '^' */ &&
-      fastStartsWithFrom(line, 'script:has-text(', suffixStartIndex + 1) &&
-      line.charCodeAt(line.length - 1) === 41 /* ')' */
+    if (line.endsWith(':remove()')) {
+      // ##selector:remove()
+      mask = setBit(mask, COSMETICS_MASK.remove);
+      mask = setBit(mask, COSMETICS_MASK.extended);
+      line = line.slice(0, -9);
+    } else if (
+      line.length - suffixStartIndex >= 8 &&
+      line.endsWith(')') &&
+      line.indexOf(':style(', suffixStartIndex) !== -1
     ) {
-      //   ^script:has-text(selector)
-      //    ^                       ^
-      //    |                       |
-      //    |                       |
-      //    |                       scriptSelectorIndexEnd
-      //    |
-      //    scriptSelectorIndexStart
-      //
-      const scriptSelectorIndexStart = suffixStartIndex + 1;
-      const scriptSelectorIndexEnd = line.length;
-      mask = setBit(mask, COSMETICS_MASK.htmlFiltering);
-      selector = line.slice(scriptSelectorIndexStart, scriptSelectorIndexEnd);
+      // ##selector:style(...)
+      const indexOfStyle = line.indexOf(':style(', suffixStartIndex);
+      style = line.slice(indexOfStyle + 7, -1);
+      line = line.slice(0, indexOfStyle);
+    }
 
-      // Make sure this is a valid selector
+    // Deal with HTML filters
+    if (line.charCodeAt(suffixStartIndex) === 94 /* '^' */) {
+      if (
+        fastStartsWithFrom(line, 'script:has-text(', suffixStartIndex + 1) === false ||
+        line.charCodeAt(line.length - 1) !== 41 /* ')' */
+      ) {
+        return null;
+      }
+
+      // NOTE: currently only ^script:has-text(...) is supported.
+      //
+      //   ^script:has-text(selector)
+      //   ^                         ^
+      //   |                         |
+      //   |                         |
+      //   |                         line.length
+      //   |
+      //   suffixStartIndex
+      //
+      selector = line.slice(suffixStartIndex, line.length);
       if (extractHTMLSelectorFromRule(selector) === undefined) {
         return null;
       }
@@ -284,47 +291,35 @@ export default class CosmeticFilter implements IFilter {
         return null;
       }
     } else {
-      // Detect special syntax
-      let indexOfColon = line.indexOf(':', suffixStartIndex);
-      while (indexOfColon !== -1) {
-        const indexAfterColon = indexOfColon + 1;
-        if (fastStartsWithFrom(line, 'style', indexAfterColon)) {
-          // ##selector :style(...)
-          if (line[indexAfterColon + 5] === '(' && line[line.length - 1] === ')') {
-            selector = line.slice(suffixStartIndex, indexOfColon);
-            style = line.slice(indexAfterColon + 6, -1);
-          } else {
-            return null;
-          }
-        } else {
-          const result = parseProceduralFilter(line, indexAfterColon);
-          if (result === null) {
-            return null;
-          }
-        }
-
-        indexOfColon = line.indexOf(':', indexAfterColon);
-      }
-
-      // If we reach this point, filter is not extended syntax
-      if (selector === undefined && suffixStartIndex < line.length) {
-        selector = line.slice(suffixStartIndex);
-      }
-
-      if (selector === undefined || !isValidCss(selector)) {
-        // Not a valid selector
+      selector = line.slice(suffixStartIndex);
+      const selectorType = classifySelector(selector);
+      if (selectorType === SelectorType.Extended) {
+        mask = setBit(mask, COSMETICS_MASK.extended);
+      } else if (selectorType === SelectorType.Invalid || !isValidCss(selector)) {
+        // console.error('Invalid', line);
+        // TODO - maybe perform `isValidCss` from the other module.
         return null;
       }
     }
 
-    // Check if unicode appears in selector
+    // Extended selectors should always be specific to some domain.
+    if (domains === undefined && getBit(mask, COSMETICS_MASK.extended) === true) {
+      return null;
+    }
+
     if (selector !== undefined) {
+      // Check if unicode appears in selector
       if (hasUnicode(selector)) {
         mask = setBit(mask, COSMETICS_MASK.isUnicode);
       }
 
       // Classify selector
-      if (getBit(mask, COSMETICS_MASK.htmlFiltering) === false) {
+      if (
+        getBit(mask, COSMETICS_MASK.scriptInject) === false &&
+        getBit(mask, COSMETICS_MASK.remove) === false &&
+        getBit(mask, COSMETICS_MASK.extended) === false &&
+        selector.startsWith('^') === false
+      ) {
         const c0 = selector.charCodeAt(0);
         const c1 = selector.charCodeAt(1);
         const c2 = selector.charCodeAt(2);
@@ -720,12 +715,28 @@ export default class CosmeticFilter implements IFilter {
     return this.style || DEFAULT_HIDDING_STYLE;
   }
 
+  public getStyleAttributeHash(): string {
+    return `s${fastHash(this.getStyle())}`;
+  }
+
   public getSelector(): string {
     return this.selector;
   }
 
+  public getSelectorAST(): AST | undefined {
+    return parseCssSelector(this.getSelector());
+  }
+
   public getExtendedSelector(): HTMLSelector | undefined {
     return extractHTMLSelectorFromRule(this.selector);
+  }
+
+  public isExtended(): boolean {
+    return getBit(this.mask, COSMETICS_MASK.extended);
+  }
+
+  public isRemove(): boolean {
+    return getBit(this.mask, COSMETICS_MASK.remove);
   }
 
   public isUnhide(): boolean {
@@ -757,7 +768,7 @@ export default class CosmeticFilter implements IFilter {
   }
 
   public isHtmlFiltering(): boolean {
-    return getBit(this.mask, COSMETICS_MASK.htmlFiltering);
+    return this.getSelector().startsWith('^');
   }
 
   // A generic hide cosmetic filter is one that:

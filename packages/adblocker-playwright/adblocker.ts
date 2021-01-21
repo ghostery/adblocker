@@ -171,6 +171,7 @@ export class PlaywrightBlocker extends FiltersEngine {
         // Done once per frame.
         getBaseRules: true,
         getInjectionRules: true,
+        getExtendedRules: true,
         getRulesFromHostname: true,
 
         // Will handle DOM features (see below).
@@ -194,34 +195,35 @@ export class PlaywrightBlocker extends FiltersEngine {
     // nodes. We first query all of them, then monitor the DOM for a few
     // seconds (or until one of the stopping conditions is met, see below).
 
-    const observer = new DOMMonitor(({ ids, hrefs, classes }) => {
-      const { active, styles } = this.getCosmeticsFilters({
-        domain,
-        hostname,
-        url,
+    const observer = new DOMMonitor((update) => {
+      if (update.type === 'features') {
+        const { active, styles } = this.getCosmeticsFilters({
+          domain,
+          hostname,
+          url,
 
-        // DOM information
-        classes,
-        hrefs,
-        ids,
+          // DOM information
+          ...update,
 
-        // Only done once per frame (see above).
-        getBaseRules: false,
-        getInjectionRules: false,
-        getRulesFromHostname: false,
+          // Only done once per frame (see above).
+          getBaseRules: false,
+          getInjectionRules: false,
+          getExtendedRules: false,
+          getRulesFromHostname: false,
 
-        // Allows to get styles for updated DOM.
-        getRulesFromDOM: true,
-      });
+          // Allows to get styles for updated DOM.
+          getRulesFromDOM: true,
+        });
 
-      // Abort if cosmetics are disabled
-      if (active === false) {
-        return;
+        // Abort if cosmetics are disabled
+        if (active === false) {
+          return;
+        }
+
+        this.injectStylesIntoFrame(frame, styles).catch(() => {
+          /* ignore */
+        });
       }
-
-      this.injectStylesIntoFrame(frame, styles).catch(() => {
-        /* ignore */
-      });
     });
 
     // This loop will periodically check if any new custom styles should be
@@ -244,7 +246,7 @@ export class PlaywrightBlocker extends FiltersEngine {
 
       try {
         const foundNewFeatures = observer.handleNewFeatures(
-          await frame.$$eval('[id],[class],[href]', extractFeaturesFromDOM),
+          await frame.$$eval(':root', extractFeaturesFromDOM),
         );
         numberOfIterations += 1;
 
