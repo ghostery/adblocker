@@ -7,6 +7,7 @@
  */
 /* tslint:disable quotemark */
 export default [
+  "acis, decodeURI, decodeURIComp",
   "acis, disableSelection, reEnab",
   "acis, document.createElement, ",
   "acis, document.getElementById,",
@@ -23,7 +24,6 @@ export default [
   ":not(body):not(html)",
   "[target=\"_blank\"]",
   "acis, Math, zfglo",
-  "codeURIComponent)",
   "ra, oncontextmenu",
   "[href^=\"https://",
   "[href^=\"http://",
@@ -181,6 +181,7 @@ export default [
   "se",
   "sh",
   "si",
+  "sk",
   "sp",
   "ss",
   "st",
@@ -233,7 +234,6 @@ export default [
   "e",
   "E",
   "f",
-  "F",
   "g",
   "h",
   "i",
