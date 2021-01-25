@@ -187,19 +187,19 @@ no-fetch-if.js application/javascript
 
 
 nano-stb.js application/javascript
-(function(){let e="{{1}}";let i=parseInt("{{2}}",10);let t=parseFloat("{{3}}");if(""===e||"{{1}}"===e)e=".?";else if(e.startsWith("/")&&e.endsWith("/"))e=e.slice(1,-1);else e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");e=new RegExp(e);if(isNaN(i)||!isFinite(i))i=1e3;if(isNaN(t)||!isFinite(t))t=.05;if(t<.02)t=.02;if(t>50)t=50;window.setTimeout=new Proxy(window.setTimeout,{apply:function(s,n,o){const l=o[0];const a=o[1];if(a===i&&e.test(l.toString()))o[1]=a*t;return s.apply(n,o)}})})();
+(function(){let e="{{1}}";if("{{1}}"===e)e="";let t="{{2}}";if("{{2}}"===t)t="";let i="{{3}}";if("{{3}}"===i)i="";if(""===e)e=".?";else if("/"===e.charAt(0)&&"/"===e.slice(-1))e=e.slice(1,-1);else e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");const s=new RegExp(e);let l="*"!==t?parseInt(t,10):-1;if(isNaN(l)||false===isFinite(l))l=1e3;let a=parseFloat(i);a=false===isNaN(a)&&isFinite(a)?Math.min(Math.max(a,.02),50):.05;self.setTimeout=new Proxy(self.setTimeout,{apply:function(e,t,i){const[n,f]=i;if((-1===l||f===l)&&s.test(n.toString()))i[1]=f*a;return e.apply(t,i)}})})();
 
 
 nano-sib.js application/javascript
-(function(){let e="{{1}}";let i=parseInt("{{2}}",10);let t=parseFloat("{{3}}");if(""===e||"{{1}}"===e)e=".?";else if("/"===e.charAt(0)&&"/"===e.slice(-1))e=e.slice(1,-1);else e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");e=new RegExp(e);if(isNaN(i)||!isFinite(i))i=1e3;if(isNaN(t)||!isFinite(t))t=.05;if(t<.02)t=.02;if(t>50)t=50;window.setInterval=new Proxy(window.setInterval,{apply:function(n,s,l){const a=l[0];const r=l[1];if(r===i&&e.test(a.toString()))l[1]=r*t;return n.apply(s,l)}})})();
+(function(){let e="{{1}}";if("{{1}}"===e)e="";let t="{{2}}";if("{{2}}"===t)t="";let i="{{3}}";if("{{3}}"===i)i="";if(""===e)e=".?";else if("/"===e.charAt(0)&&"/"===e.slice(-1))e=e.slice(1,-1);else e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");const l=new RegExp(e);let s="*"!==t?parseInt(t,10):-1;if(isNaN(s)||false===isFinite(s))s=1e3;let a=parseFloat(i);a=false===isNaN(a)&&isFinite(a)?Math.min(Math.max(a,.02),50):.05;self.setInterval=new Proxy(self.setInterval,{apply:function(e,t,i){const[n,f]=i;if((-1===s||f===s)&&l.test(n.toString()))i[1]=f*a;return e.apply(t,i)}})})();
 
 
 nano-setTimeout-booster.js application/javascript
-(function(){let e="{{1}}";let i=parseInt("{{2}}",10);let t=parseFloat("{{3}}");if(""===e||"{{1}}"===e)e=".?";else if(e.startsWith("/")&&e.endsWith("/"))e=e.slice(1,-1);else e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");e=new RegExp(e);if(isNaN(i)||!isFinite(i))i=1e3;if(isNaN(t)||!isFinite(t))t=.05;if(t<.02)t=.02;if(t>50)t=50;window.setTimeout=new Proxy(window.setTimeout,{apply:function(s,n,o){const l=o[0];const a=o[1];if(a===i&&e.test(l.toString()))o[1]=a*t;return s.apply(n,o)}})})();
+(function(){let e="{{1}}";if("{{1}}"===e)e="";let t="{{2}}";if("{{2}}"===t)t="";let i="{{3}}";if("{{3}}"===i)i="";if(""===e)e=".?";else if("/"===e.charAt(0)&&"/"===e.slice(-1))e=e.slice(1,-1);else e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");const s=new RegExp(e);let l="*"!==t?parseInt(t,10):-1;if(isNaN(l)||false===isFinite(l))l=1e3;let a=parseFloat(i);a=false===isNaN(a)&&isFinite(a)?Math.min(Math.max(a,.02),50):.05;self.setTimeout=new Proxy(self.setTimeout,{apply:function(e,t,i){const[n,f]=i;if((-1===l||f===l)&&s.test(n.toString()))i[1]=f*a;return e.apply(t,i)}})})();
 
 
 nano-setInterval-booster.js application/javascript
-(function(){let e="{{1}}";let i=parseInt("{{2}}",10);let t=parseFloat("{{3}}");if(""===e||"{{1}}"===e)e=".?";else if("/"===e.charAt(0)&&"/"===e.slice(-1))e=e.slice(1,-1);else e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");e=new RegExp(e);if(isNaN(i)||!isFinite(i))i=1e3;if(isNaN(t)||!isFinite(t))t=.05;if(t<.02)t=.02;if(t>50)t=50;window.setInterval=new Proxy(window.setInterval,{apply:function(n,s,l){const a=l[0];const r=l[1];if(r===i&&e.test(a.toString()))l[1]=r*t;return n.apply(s,l)}})})();
+(function(){let e="{{1}}";if("{{1}}"===e)e="";let t="{{2}}";if("{{2}}"===t)t="";let i="{{3}}";if("{{3}}"===i)i="";if(""===e)e=".?";else if("/"===e.charAt(0)&&"/"===e.slice(-1))e=e.slice(1,-1);else e=e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");const l=new RegExp(e);let s="*"!==t?parseInt(t,10):-1;if(isNaN(s)||false===isFinite(s))s=1e3;let a=parseFloat(i);a=false===isNaN(a)&&isFinite(a)?Math.min(Math.max(a,.02),50):.05;self.setInterval=new Proxy(self.setInterval,{apply:function(e,t,i){const[n,f]=i;if((-1===s||f===s)&&l.test(n.toString()))i[1]=f*a;return e.apply(t,i)}})})();
 
 
 monkeybroker.js application/javascript
