@@ -2403,10 +2403,6 @@ begadistrictnews.com.au,bendigoadvertiser.com.au,goulburnpost.com.au,maitlandmer
 ! https://github.com/AdguardTeam/AdguardFilters/issues/46887
 ||googletagmanager.com/gtag/js$script,redirect=noopjs,domain=timparty.tim.it
 
-! https://github.com/NanoMeow/QuickReports/issues/2628
-! [badfilter] ||piano.io^$badfilter
-||piano.io^$3p
-
 ! https://github.com/uBlockOrigin/uAssets/issues/6784
 ! [badfilter] ||pega.com^$3p,badfilter
 
@@ -2985,9 +2981,6 @@ order-order.com#@#.tag-sponsored
 
 ! https://github.com/NanoMeow/QuickReports/issues/3943
 @@||wcs.naver.net/wcslog.js$script,domain=happymoney.co.kr
-
-! https://github.com/uBlockOrigin/uAssets/issues/7465
-! [badfilter] ||thepopularstuff.com^$badfilter
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7467
 *$script,redirect-rule=noopjs,domain=corriere.it
@@ -3800,5 +3793,14 @@ seazon.fr##+js(no-fetch-if, url:ipapi.co)
 druckerchannel.de#@##DCGA_CONTAINER
 druckerchannel.de###DCGA
 
-! idols69.com cname issue on sign up
-@@||idolbucks.com^$script,domain=idols69.com
+! cname issues on signup
+@@||idolbucks.com^$script,domain=idols69.com|ocreampies.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/8512
+@@||calcioefinanza.it^$cname
+
+! https://github.com/easylist/easylist/pull/7082
+! [badfilter] ||vrsmash.com/assets/script$badfilter
+
+! override Peter Lowe's filter
+! [badfilter] ||piano.io^$badfilter
