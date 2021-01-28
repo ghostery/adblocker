@@ -2197,7 +2197,8 @@ mp4upload.com###overlay, div.container
 mp4upload.com##.vjs-fade.vjs-over
 mp4upload.com###lay.lay
 *$script,redirect-rule=noopjs,domain=mp4upload.com
-*$script,3p,denyallow=fontawesome.com|cloudflare.com,domain=mp4upload.com
+*$script,3p,denyallow=fontawesome.com|cloudflare.com|jsdelivr.net,domain=mp4upload.com
+! [badfilter] |https://$script,stylesheet,third-party,xmlhttprequest,domain=mp4upload.com,badfilter
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=37976
 ! https://github.com/AdguardTeam/AdguardFilters/issues/52403
@@ -5787,6 +5788,7 @@ pornoreino.com##.banner
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4931
 atresplayer.com##+js(nostif, _creatBait)
+atresplayer.com##+js(no-fetch-if, /conversion_async.js)
 @@||adpass.atresmedia.com/*/adjs.js$xhr,domain=atresplayer.com
 @@||atresplayer.com^$ghide
 @@||assets.adobedtm.com^$xhr,domain=atresplayer.com
@@ -11911,7 +11913,7 @@ filmywaap.*##[href*="/supply"]
 ! https://github.com/uBlockOrigin/uAssets/issues/4512
 dramacool.*##+js(acis, String.fromCharCode, break)
 dramacool.*##h2.widget-title:has-text(Advertisement)
-*$frame,3p,denyallow=disqus.com|fastly.net|google.com|jwpsrv.com,domain=dramacool.*
+*$frame,3p,denyallow=disqus.com|dramacool.so|dramacool.vc|fastly.net|google.com|jwpsrv.com,domain=dramacool.*
 *$script,3p,denyallow=cloudflare.com|facebook.net|fbcdn.net|google.com|googleapis.com|gstatic.com|hcaptcha.com|recaptcha.net,domain=dramacool9.*
 ||thegamersdiary.us^$3p
 ||vatlodesim.com^
@@ -12996,7 +12998,7 @@ alantvsport.com,buffstream.tv,hulkstreams.com,hulkstreamx.com,jackstream.com,oli
 alantvsport.com,buffstream.tv,hulkstream.com,hulkstreams.com,hulkstreamx.com,jackstream.com,livesport.*,olivertv.com,totalsportek.xyz##+js(aopr, open)
 alantvsport.com,buffstream.tv,hulkstreams.com,hulkstreamx.com,jackstream.com,olivertv.com,totalsportek.xyz##+js(aopw, _pop)
 alantvsport.com,buffstream.tv,hulkstreamx.com,jackstream.com,olivertv.com,totalsportek.xyz##+js(nowebrtc)
-bfst.xyz,dubsstreamz.com,embedstream.me,live-golf.stream,live-stream365.com,sporting77.online,sport24hd.net,wstream.to##+js(nowoif)
+bfst.xyz,dubsstreamz.com,live-golf.stream,live-stream365.com,sporting77.online,sport24hd.net,wstream.to##+js(nowoif)
 ||betteradsystem.com^$3p,script,redirect=noopjs
 ||d2kk0o3fr7ed01.cloudfront.net^$script,redirect=noopjs
 hulkstream.com,mafiasport.com,mafiastream.com,mafiasport.*,livesport.*##^script:has-text('shift')
@@ -13986,7 +13988,7 @@ architetturaecosostenibile.it##.adsbygoogle
 
 ! https://github.com/NanoMeow/QuickReports/issues/888
 worldcupfootball.me##+js(aeld, , _0x)
-embedstream.me,worldcupfootball.me##+js(nowebrtc)
+worldcupfootball.me##+js(nowebrtc)
 ||allsports4free.online^$3p
 
 ! https://github.com/NanoMeow/QuickReports/issues/889
@@ -19300,7 +19302,6 @@ movienear.me##[href="https://www.tautan.pro/"]
 @@||brid.tv/player/build/plugins/adunit.js$script,domain=pluralist.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4582
-vup.to##+js(acis, Math, zfgloaded)
 vup.to##+js(aopr, AaDetector)
 vup.to##+js(nowebrtc)
 vup.to##+js(aopw, _pop)
