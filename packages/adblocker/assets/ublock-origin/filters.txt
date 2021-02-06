@@ -980,7 +980,7 @@ kbb.com##[id^="kbbAds"]
 ! https://github.com/uBlockOrigin/uAssets/issues/308
 ! https://forums.lanik.us/viewtopic.php?p=145682#p145682
 movie-blog.*##+js(acis, decodeURI, decodeURIComponent)
-movie-blog.*##+js(acis, puShown , /doOpen|popundr/)
+movie-blog.*##+js(acis, puShown, /doOpen|popundr/)
 movie-blog.*##+js(popads-dummy)
 movie-blog.*##+js(set, String.prototype.charCodeAt, trueFunc)
 
@@ -2017,8 +2017,7 @@ wunderground.com##+js(aopw, _sp_)
 wunderground.com##[class*="-ad-box-"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/841
-putlocker.*##+js(acis, Math, zfgloaded)
-putlocker.io##+js(nowebrtc)
+putlockerc.*##+js(nowoif)
 putlocker.*##[id*="ScriptRoot"]
 putlocker.*##.ep_buttons
 ||putlocker.*^*banner
@@ -2388,6 +2387,9 @@ adbull.*##[href^="https://www.cryptominingfarm.io/"]
 adbull.*##[src^="https://i.imgur.com/"]
 adbl.live##+js(aopr, app_vars.force_disable_adblock)
 adbl.live##+js(nowoif)
+deportealdia.live##+js(nano-sib, , 1200, 0)
+deportealdia.live##+js(nowoif)
+deportealdia.live###overlay
 adyou.me,srt.am##+js(nowebrtc)
 ! https://github.com/uBlockOrigin/uAssets/issues/6299
 srt.am##+js(aopr, RunAds)
@@ -4118,6 +4120,7 @@ imgdew.*,imgmaze.*,imgoutlet.*,imgtown.*,imgview.*##+js(nowoif)
 ||qbcpicrtdje.com^
 ||submissionspurtgleamed.com^
 ||tracot.com^$3p
+imgsen.com#@#.adsBox
 
 ! https://github.com/easylist/easylist/commit/8b6e6544f04b3ded98fbd70bd832dfcc4e61db52#commitcomment-27222476
 imgclick.net##+js(aopw, Fingerprint2)
@@ -4138,6 +4141,7 @@ boxasian.com##.inside-video
 boxasian.com##.inside-video-before
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1419
+streamsb.net##+js(aopr, DoodPop)
 *$script,3p,denyallow=fastly.net|gstatic.com|jwpcdn.com|streamsb.com,domain=streamsb.net
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1422
@@ -5128,7 +5132,7 @@ pelisplus.*,pelisplushd.*##+js(aopw, adcashMacros)
 pelisplus.*##+js(aopw, smrtSP)
 pelisplus.*##+js(aopw, smrtSB)
 pelisplus.*##+js(aopw, _pop)
-pelisplus.*,pelispng.online,streampelis.club##+js(nowoif)
+pelisplus.*,pelisplushd.*,pelispng.online,streampelis.club##+js(nowoif)
 pelisplus.*##+js(ra, href, #opfk)
 pelisplus.*##[class^="smartadtags"]
 pelisplus.*##.links > a.btn[class*="fa-"]
@@ -7742,7 +7746,8 @@ filesrom.com##+js(aopr, anOptions)
 ! https://forums.lanik.us/viewtopic.php?f=62&t=41177
 ! https://github.com/uBlockOrigin/uAssets/issues/4885
 movies123.*##+js(acis, decodeURI, getScriptFromCss)
-movies123.*##+js(acis, Math, zfgloaded)
+movies123.*##+js(acis, String.fromCharCode, break)
+movies123.*##+js(nowoif)
 ||dirdamid.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2853
@@ -11920,7 +11925,6 @@ dramacool.*##h2.widget-title:has-text(Advertisement)
 *$frame,3p,denyallow=disqus.com|dramacool.so|dramacool.vc|fastly.net|google.com|jwpsrv.com,domain=dramacool.*
 *$script,3p,denyallow=cloudflare.com|facebook.net|fbcdn.net|google.com|googleapis.com|gstatic.com|hcaptcha.com|recaptcha.net,domain=dramacool9.*|kissasians.fun
 ||thegamersdiary.us^$3p
-||vatlodesim.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4368#issuecomment-450945393
 dwl.cyberterminators.co,earnsurl.net,feeds.feedburner.com,fwd.ovh,getsearn.com,geturls.website##+js(aopr, app_vars.force_disable_adblock)
@@ -11943,7 +11947,7 @@ wsj.com##[class*="sponsored"]
 @@||vstorrent.org^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4534
-kat.tv##+js(acis, atob, decodeURIComponent)
+kat.tv##+js(acis, String.fromCharCode, break)
 
 ! https://github.com/NanoMeow/QuickReports/issues/520
 @@||c.amazon-adsystem.com/aax2/apstag.js$script,domain=mylifetime.com
@@ -15633,6 +15637,7 @@ udemycouponscode.com##+js(aopw, KillAdBlock)
 ! https://github.com/uBlockOrigin/uAssets/issues/5628
 @@||pasty.*^$ghide
 @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,domain=pasty.*
+@@||pagead2.googlesyndication.com/pagead/js/*/show_ads_impl$script,domain=pasty.*
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5629
 e7kelyana.com##+js(aopr, app_vars.force_disable_adblock)
@@ -16189,9 +16194,10 @@ stltoday.com##.dfp-ad
 stltoday.com##.tnt-ads-container
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/brisbv/help_with_this_site/
+subdivx.com##+js(acis, document.querySelectorAll, popMagic)
 subdivx.com##+js(cookie-remover, ref_cookie)
 subdivx.com###taboola-below-article-thumbnails
-karconsulting.us^$3p
+||karconsulting.us^$3p
 
 ! thevidhd popups
 thevidhd.*##+js(aopw, smrtSB)
@@ -17808,13 +17814,9 @@ myhdjav.net###preroll
 @@||javaguides.net^$ghide
 javaguides.net##+js(aeld, load, onload)
 
-! https://github.com/NanoMeow/QuickReports/issues/549#issuecomment-525098170
-@@||sonycrackle.com^$xhr,script,1p
-*$media,3p,domain=sonycrackle.com,redirect=noopmp3-0.1s
-@@||v.fwmrm.net/ad/$xhr,script,domain=sonycrackle.com
-@@||akamaiedge.net/vendor/AdManager.js$script,domain=sonycrackle.com
+! https://github.com/uBlockOrigin/uAssets/issues/1025
 ! https://github.com/NanoMeow/QuickReports/issues/2458
-@@||crackle.com/ad/g/1$xhr,script,1p
+@@||crackle.com^$cname
 @@||crackle.com/vendor/AdManager.js$script,1p
 *.mp4$media,domain=crackle.com
 ||media.truex.com/integration/vpaid/com.truex.TrueXRenderer.js$script,domain=crackle.com,redirect=noopjs
