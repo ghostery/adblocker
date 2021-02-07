@@ -7,6 +7,7 @@
  */
 /* tslint:disable quotemark */
 export default [
+  "quantcast.mgr.consensu.org",
   "googlesyndication",
   "imasdk.googleapis",
   "googletagmanager",
@@ -51,6 +52,7 @@ export default [
   ".p",
   ".s",
   ".t",
+  "10",
   "24",
   "ab",
   "ac",
@@ -125,10 +127,8 @@ export default [
   "gr",
   "gs",
   "gu",
-  "hd",
   "he",
   "ho",
-  "hu",
   "ia",
   "ib",
   "ic",
