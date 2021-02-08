@@ -2753,10 +2753,8 @@ metro.co.uk###taboola-below-article-thumbnails
 @@||twimg.twitter.map.fastly.net^$script
 
 ! https://github.com/NanoMeow/QuickReports/issues/418#issuecomment-612550068
-! [badfilter] |https://$stylesheet,3p,domain=thepiratebay.org,badfilter
-! [badfilter] *$xmlhttprequest,domain=thepiratebay.org,badfilter
-! [badfilter] |https://$xmlhttprequest,3p,domain=thepiratebay.org,badfilter
-! [badfilter] |https://$image,3p,domain=thepiratebay.org,badfilter
+! [badfilter] *$image,css,3p,xhr,domain=thepiratebay.org,badfilter
+! [badfilter] *$xhr,domain=thepiratebay.org,badfilter
 
 ! CNAME https://www.reddit.com/r/uBlockOrigin/comments/fzzua6/no_subtitle_on_uptostream_with_firefox/
 @@||uptobox.com^$xhr,domain=uptostream.com
@@ -3793,3 +3791,6 @@ javynow.com#@#.videos-ad
 ! https://github.com/uBlockOrigin/uAssets/issues/8538
 @@||widget-provider.production.ippen.space/widget-components/widget-quiz.bundle.js$script,domain=buzzfeed.de
 @@||widget-provider.production.ippen.space/api/widgets/*$xhr,domain=buzzfeed.de
+
+! verhentai.top broken images
+@@||a.realsrv.com/video-slider.js$script,domain=verhentai.top
