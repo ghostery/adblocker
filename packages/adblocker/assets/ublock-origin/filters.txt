@@ -763,6 +763,8 @@ bild.de#@#.ads
 ! https://www.reddit.com/r/uBlockOrigin/comments/jxrzda/
 ||tagger.opecloud.com^$xhr,redirect=noop.txt,domain=bild.de
 bild.de##+js(aopr, SmartAdServerASMI)
+bild.de##+js(json-prune, adBlockWallEnabled)
+bild.de##+js(set, __NUXT__.state.curation.page.config.ADBLOCKWALL, false)
 ! https://github.com/uBlockOrigin/uAssets/issues/8360
 gamesarkadium.bild.de##+js(nano-sib)
 @@||arkadiumhosted.com^$script,domain=gamesarkadium.bild.de
@@ -2195,6 +2197,8 @@ cooking.nytimes.com##html:style(height: auto !important; overflow: auto !importa
 ! https://github.com/uBlockOrigin/uAssets/issues/2973
 ||mp4upload.com/bd*.html$frame
 ||mp4upload.com/1x1.html^$frame
+mp4upload.com##+js(aopw, _pop)
+mp4upload.com##+js(aopw, adcashMacros)
 mp4upload.com##+js(popads-dummy)
 ||bitcoadz.io/display/items.php$xhr,redirect=noopjs,domain=mp4upload.com
 ||server.cpmstar.com^$xhr,redirect=nooptext,domain=mp4upload.com
@@ -2203,7 +2207,7 @@ mp4upload.com###overlay, div.container
 mp4upload.com##.vjs-fade.vjs-over
 mp4upload.com###lay.lay
 *$script,redirect-rule=noopjs,domain=mp4upload.com
-*$script,3p,denyallow=cloudflare.net|fontawesome.com|cloudflare.com|jsdelivr.net,domain=mp4upload.com
+*$script,3p,denyallow=cloudflare.com|cloudflare.net|fontawesome.com|hwcdn.net|jquery.com|jsdelivr.net,domain=mp4upload.com
 ! [badfilter] |https://$script,stylesheet,third-party,xmlhttprequest,domain=mp4upload.com,badfilter
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=37976
@@ -2284,9 +2288,12 @@ badtaste.it##+js(aeld, , Adblock)
 aofsoru.com##+js(acis, addEventListener, displayMessage)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5397
-yts.*##+js(nowoif)
+! https://github.com/uBlockOrigin/uAssets/issues/8295
+yts.*##+js(acis, String.fromCharCode, break)
 yts.*##+js(aeld, , _0x)
 yts.*##+js(aopr, runAdblock)
+yts.*##+js(aopw, _pop)
+yts.*##+js(nowoif)
 yts.*##[id*="container"][id^="id"]
 yts.*##html:style(overflow: auto !important;)
 yts.*##.vpn-link:upward(1)
@@ -4120,7 +4127,6 @@ imgdew.*,imgmaze.*,imgoutlet.*,imgtown.*,imgview.*##+js(nowoif)
 ||qbcpicrtdje.com^
 ||submissionspurtgleamed.com^
 ||tracot.com^$3p
-imgsen.com#@#.adsBox
 
 ! https://github.com/easylist/easylist/commit/8b6e6544f04b3ded98fbd70bd832dfcc4e61db52#commitcomment-27222476
 imgclick.net##+js(aopw, Fingerprint2)
@@ -13255,13 +13261,17 @@ radamel.icu##+js(nowoif)
 @@||aosmark.com^$script,domain=theappstore.org
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4999
-elil.cc##+js(acis, document.getElementById, tester)
-elil.cc##+js(aeld, load, _true)
 elil.cc##+js(popads-dummy)
+elil.cc##+js(acis, String.fromCharCode, break)
+elil.cc##+js(aopw, _pop)
+elil.cc##+js(ra, onmouseover|onclick|onmouseout, .save-btn.pull-right)
+elil.cc##+js(set, ads_blocked, 0)
+elil.cc##+js(nano-sib)
 |about:blank|$popup,domain=elil.cc
 *$frame,3p,domain=elil.cc
 @@||elil.cc^$script,1p
 ||rasius.pro^
+||elil.cc/reqa.js
 
 ! developerinsider.co anti adb
 developerinsider.co##+js(set, runAdBlocker, false)
@@ -18466,7 +18476,7 @@ checkz.net##.adsbygoogle
 ! https://www.reddit.com/r/uBlockOrigin/comments/kzceq3/adblock_detected/
 ff14angler.com##+js(set, local_mode, true)
 @@||ff14angler.com^$ghide
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js^$script,domain=ff14angler.com
+||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=googlesyndication_adsbygoogle.js,domain=ff14angler.com
 ff14angler.com##div > b
 ff14angler.com##ins.adsbygoogle:style(height:1px!important;width:120px)
 
