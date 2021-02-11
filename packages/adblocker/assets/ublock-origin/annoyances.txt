@@ -3235,9 +3235,6 @@ bestinforoom.com##+js(acis, disableSelection, reEnable)
 ! https://github.com/NanoMeow/QuickReports/issues/3924
 radarbox.com##+js(set, ads_enabled, true)
 
-! https://github.com/uBlockOrigin/uAssets/issues/7045
-loveheaven.net##+js(acis, $, #modal-1)
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/50797
 smoner.com##+js(aopr, absda)
 
@@ -5502,3 +5499,7 @@ pbinfo.ro##+js(set, pbi_analytics, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/8555
 ||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=hotcleaner.com
 hotcleaner.com##.adsbygoogle:upward(1):remove()
+hotcleaner.com##body > div[class]:matches-css(position: fixed)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8560
+||gmod-servers.com/assets/js/jquery.adblock-detector.js$script,1p

@@ -4521,16 +4521,6 @@ thebookee.net##+js(aeld, load, onload)
 ||updatetube.com^$csp=script-src 'self' 'unsafe-inline' *.updatetube.com
 updatetube.com##+js(acis, relateds_url_click)
 
-! https://github.com/uBlockOrigin/uAssets/issues/1595
-kustvaartforum.com##+js(nobab)
-
-! https://github.com/uBlockOrigin/uAssets/issues/1596
-uploadfiles.io##+js(nano-sib)
-uploadfiles.io##.ad-blocked
-
-! https://github.com/uBlockOrigin/uAssets/issues/1601
-allmyvideos.net##+js(aopw, SCrypt)
-
 ! https://github.com/gorhill/uBlock/issues/3539
 webdesigndev.com##+js(popads-dummy)
 webdesigndev.com##+js(nowoif)
@@ -4545,7 +4535,7 @@ dz4soft.*##+js(noeval)
 dz4soft.*##+js(aeld, load, 2000)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1607
-imageweb.ws##+js(popads-dummy)
+imageweb.ws##+js(nowoif)
 ||imageweb.ws/*.gif$image
 imageweb.ws##a[href^="http://refer.ccbill.com/"]
 
@@ -4612,9 +4602,6 @@ dirpy.com###dirpy-news
 
 ! https://github.com/jspenguin2017/uBlockProtector/issues/865
 clix4btc.com##+js(set, adblock, false)
-
-! https://forums.lanik.us/viewtopic.php?f=107&t=40076&p=133083#p133083
-mp3skull-tube.net##+js(aeld, click, trigger)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1626
 @@||win10.vn^$ghide
@@ -5092,9 +5079,9 @@ apurogol.net###fakeplayer
 ||ichlnk.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1802
-! https://github.com/NanoMeow/QuickReports/issues/2302
 jpopsingles.eu##+js(nosiif, clientHeight)
 jpopsingles.eu##+js(acis, jQuery, ai_adb)
+jpopsingles.eu##+js(aeld, , adb)
 @@||jpopsingles.eu^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1804
@@ -5238,11 +5225,10 @@ insidemarketing.it##+js(aopr, adblock)
 insidemarketing.it##.homeBannerMax
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1835
-300mbfree4u.org,upgrand.*,uploadbaz.*##+js(acis, decodeURI, decodeURIComponent)
+upgrand.*,uploadbaz.*##+js(acis, decodeURI, decodeURIComponent)
 uploadbaz.*##+js(aeld, /^(?:click|mousedown)$/, _0x)
 desiupload.*,upgrand.*,uploadbaz.*,9xupload.*##+js(nano-stb)
 uploadbaz.*##+js(nowoif)
-300mbfree4u.org##.code-block
 ||desiupload.*/sw.js
 desiupload.*##+js(nowoif)
 desiupload.*##[href^="http://www.healthcaremanagement.info/"]
@@ -5253,9 +5239,7 @@ upgrand.*##+js(acis, puShown , /doOpen|popundr/)
 upgrand.*##[src*="/watch-now"]
 upgrand.*##+js(aeld, click)
 ! https://github.com/uBlockOrigin/uAssets/issues/1835#issuecomment-482697079
-world4ufree.com.co##+js(aopr, Date.prototype.toUTCString)
 uploadbaz.*##+js(aopr, AaDetector)
-||world4ufree.com.co/sw.js$script,1p
 ||qiroris.pw^$3p
 ||bumampaid.club^
 /glx_*.js$script
@@ -11945,8 +11929,12 @@ fy.gl##+js(aopr, open)
 *$frame,domain=fy.gl
 
 ! simsdom.com anti-adb
-||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs,domain=simsdom.com
-||googlesyndication.com/pagead/js/adsbygoogle.js$xhr,redirect=noopjs,domain=simsdom.com
+||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect-rule=noopjs,domain=simsdom.com
+simsdom.com##._ad
+simsdom.com###ad860
+simsdom.com###adv840
+simsdom.com##._pubR
+simsdom.com##._pubL
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4526
 wsj.com##+js(acis, NREUM)
@@ -16242,6 +16230,7 @@ cuatro.com,mitele.es,telecinco.es##+js(aopr, $REACTBASE_STATE.serverModules.push
 ! https://github.com/uBlockOrigin/uAssets/issues/5816
 @@||wupfile.com^$ghide
 ||adsx.online^
+wupfile.com##[id*=ScriptRoot]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5817
 @@||world-of-facts.com^$ghide
@@ -22635,6 +22624,7 @@ techminto.com##+js(set, DHAntiAdBlocker, true)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3191
 @@||dynamicpapers.com^$ghide
+dynamicpapers.com##.adsbygoogle
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/50886
 s-url.xyz##.banner-inner
