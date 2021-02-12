@@ -7,8 +7,8 @@
  */
 /* tslint:disable quotemark */
 export default [
-  "quantcast.mgr.consensu.org",
   "securepubads.g.doubleclick",
+  ".mgr.consensu.org",
   "googlesyndication",
   "imasdk.googleapis",
   "googletagmanager",
@@ -50,6 +50,7 @@ export default [
   ".m",
   ".n",
   ".p",
+  ".s",
   ".t",
   "24",
   "ab",
@@ -97,6 +98,7 @@ export default [
   "dy",
   "e-",
   "eb",
+  "ec",
   "ed",
   "ef",
   "eg",
@@ -182,7 +184,6 @@ export default [
   "qu",
   "re",
   "ro",
-  "s-",
   "sc",
   "se",
   "sh",
@@ -192,7 +193,6 @@ export default [
   "sn",
   "so",
   "sp",
-  "sr",
   "ss",
   "st",
   "su",
