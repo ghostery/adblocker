@@ -36,9 +36,15 @@ function getTopLevelUrl(frame: puppeteer.Frame | null): string {
 /**
  * Create an instance of `Request` from `puppeteer.Request`.
  */
-export function fromPuppeteerDetails(details: puppeteer.Request): Request {
+export function fromPuppeteerDetails(details: puppeteer.HTTPRequest): Request {
   const sourceUrl = getTopLevelUrl(details.frame());
   const url = details.url();
+
+  // NOTE: this needed until the following is resolved: https://github.com/puppeteer/puppeteer/blob/49f25e2412fbe3ac43ebc6913a582718066486cc/src/common/HTTPRequest.ts#L162
+  // Current types exposed from puppeteer are strings instead of literals
+  // (like in @types/puppeteer). This check could be removed if the issue is
+  // fixed upstream.
+  // @ts-ignore
   const type: RequestType = details.resourceType();
 
   return Request.fromRawDetails({
@@ -55,7 +61,7 @@ export function fromPuppeteerDetails(details: puppeteer.Request): Request {
  */
 export class BlockingContext {
   private readonly onFrameNavigated: (frame: puppeteer.Frame) => Promise<void>;
-  private readonly onRequest: (details: puppeteer.Request) => void;
+  private readonly onRequest: (details: puppeteer.HTTPRequest) => void;
 
   constructor(private readonly page: puppeteer.Page, private readonly blocker: PuppeteerBlocker) {
     this.onFrameNavigated = (frame) => blocker.onFrameNavigated(frame);
@@ -276,7 +282,7 @@ export class PuppeteerBlocker extends FiltersEngine {
     } while (true);
   };
 
-  public onRequest = (details: puppeteer.Request): void => {
+  public onRequest = (details: puppeteer.HTTPRequest): void => {
     const request = fromPuppeteerDetails(details);
     if (this.config.guessRequestTypeFromUrl === true && request.type === 'other') {
       request.guessTypeOfRequest();
@@ -297,11 +303,15 @@ export class PuppeteerBlocker extends FiltersEngine {
     if (redirect !== undefined) {
       if (redirect.contentType.endsWith(';base64')) {
         details.respond({
+          status: 200,
+          headers: {},
           body: Buffer.from(redirect.body, 'base64'),
           contentType: redirect.contentType.slice(0, -7),
         });
       } else {
         details.respond({
+          status: 200,
+          headers: {},
           body: redirect.body,
           contentType: redirect.contentType,
         });
@@ -330,9 +340,13 @@ export class PuppeteerBlocker extends FiltersEngine {
     if (scripts.length !== 0) {
       for (let i = 0; i < scripts.length; i += 1) {
         promises.push(
-          frame.addScriptTag({
-            content: autoRemoveScript(scripts[i]),
-          }),
+          frame
+            .addScriptTag({
+              content: autoRemoveScript(scripts[i]),
+            })
+            .then(() => {
+              /* Ignore result */
+            }),
         );
       }
     }
