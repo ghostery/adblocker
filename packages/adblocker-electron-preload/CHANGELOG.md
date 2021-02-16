@@ -1,3 +1,21 @@
+# v1.20.1 (Tue Feb 16 2021)
+
+#### :bug: Bug Fix
+
+- build(deps): bump @types/chrome from 0.0.129 to 0.0.130 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.128 to 0.0.129 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump @types/chrome from 0.0.129 to 0.0.130 [#1671](https://github.com/cliqz-oss/adblocker/pull/1671) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.128 to 0.0.129 [#1621](https://github.com/cliqz-oss/adblocker/pull/1621) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.20.0 (Thu Jan 21 2021)
 
 ### Release Notes

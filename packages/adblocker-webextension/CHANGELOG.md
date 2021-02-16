@@ -1,3 +1,21 @@
+# v1.20.1 (Tue Feb 16 2021)
+
+#### :bug: Bug Fix
+
+- build(deps): bump webextension-polyfill-ts from 0.24.0 to 0.25.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump webextension-polyfill-ts from 0.22.0 to 0.24.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump webextension-polyfill-ts from 0.24.0 to 0.25.0 [#1681](https://github.com/cliqz-oss/adblocker/pull/1681) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump webextension-polyfill-ts from 0.22.0 to 0.24.0 [#1629](https://github.com/cliqz-oss/adblocker/pull/1629) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.20.0 (Thu Jan 21 2021)
 
 ### Release Notes

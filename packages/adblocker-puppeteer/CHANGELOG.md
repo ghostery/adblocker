@@ -1,3 +1,15 @@
+# v1.20.1 (Tue Feb 16 2021)
+
+#### :nail_care: Polish
+
+- Update puppeteer to v7.x [#1677](https://github.com/cliqz-oss/adblocker/pull/1677) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.20.0 (Thu Jan 21 2021)
 
 ### Release Notes

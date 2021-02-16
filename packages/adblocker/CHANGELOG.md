@@ -1,3 +1,55 @@
+# v1.20.1 (Tue Feb 16 2021)
+
+#### :bug: Bug Fix
+
+- build(deps): bump @types/chrome from 0.0.129 to 0.0.130 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.128 to 0.0.129 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :house: Internal
+
+- Update local assets [#1679](https://github.com/cliqz-oss/adblocker/pull/1679) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1676](https://github.com/cliqz-oss/adblocker/pull/1676) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1666](https://github.com/cliqz-oss/adblocker/pull/1666) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1659](https://github.com/cliqz-oss/adblocker/pull/1659) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1656](https://github.com/cliqz-oss/adblocker/pull/1656) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1654](https://github.com/cliqz-oss/adblocker/pull/1654) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1653](https://github.com/cliqz-oss/adblocker/pull/1653) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1652](https://github.com/cliqz-oss/adblocker/pull/1652) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1650](https://github.com/cliqz-oss/adblocker/pull/1650) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1647](https://github.com/cliqz-oss/adblocker/pull/1647) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1637](https://github.com/cliqz-oss/adblocker/pull/1637) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1635](https://github.com/cliqz-oss/adblocker/pull/1635) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1632](https://github.com/cliqz-oss/adblocker/pull/1632) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1630](https://github.com/cliqz-oss/adblocker/pull/1630) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1627](https://github.com/cliqz-oss/adblocker/pull/1627) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1626](https://github.com/cliqz-oss/adblocker/pull/1626) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1622](https://github.com/cliqz-oss/adblocker/pull/1622) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1618](https://github.com/cliqz-oss/adblocker/pull/1618) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1616](https://github.com/cliqz-oss/adblocker/pull/1616) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1614](https://github.com/cliqz-oss/adblocker/pull/1614) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1609](https://github.com/cliqz-oss/adblocker/pull/1609) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1606](https://github.com/cliqz-oss/adblocker/pull/1606) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1599](https://github.com/cliqz-oss/adblocker/pull/1599) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump @types/node from 14.14.26 to 14.14.27 [#1673](https://github.com/cliqz-oss/adblocker/pull/1673) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.129 to 0.0.130 [#1671](https://github.com/cliqz-oss/adblocker/pull/1671) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump typescript from 4.1.4 to 4.1.5 [#1660](https://github.com/cliqz-oss/adblocker/pull/1660) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump tldts-experimental from 5.7.2 to 5.7.3 [#1657](https://github.com/cliqz-oss/adblocker/pull/1657) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.15.0 to 10.16.0 [#1648](https://github.com/cliqz-oss/adblocker/pull/1648) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.38.2 to 2.38.3 [#1631](https://github.com/cliqz-oss/adblocker/pull/1631) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.38.1 to 2.38.2 [#1628](https://github.com/cliqz-oss/adblocker/pull/1628) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.128 to 0.0.129 [#1621](https://github.com/cliqz-oss/adblocker/pull/1621) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.20.0 (Thu Jan 21 2021)
 
 ### Release Notes
