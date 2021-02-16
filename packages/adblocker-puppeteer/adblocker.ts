@@ -15,31 +15,6 @@ import { FiltersEngine, Request, RequestType } from '@cliqz/adblocker';
 
 import { autoRemoveScript, extractFeaturesFromDOM, DOMMonitor } from '@cliqz/adblocker-content';
 
-const PUPPETEER_RESOURCE_TYPES: Set<RequestType> = new Set([
-  'document',
-  'eventsource',
-  'fetch',
-  'font',
-  'image',
-  'manifest',
-  'media',
-  'other',
-  'script',
-  'stylesheet',
-  'texttrack',
-  'websocket',
-  'xhr',
-]);
-
-function isRequestType(type: string): type is RequestType {
-  // NOTE: this needed until the following is resolved: https://github.com/puppeteer/puppeteer/blob/49f25e2412fbe3ac43ebc6913a582718066486cc/src/common/HTTPRequest.ts#L162
-  // Current types exposed from puppeteer are strings instead of literals
-  // (like in @types/puppeteer). This check could be removed if the issue is
-  // fixed upstream.
-  // @ts-ignore
-  return PUPPETEER_RESOURCE_TYPES.has(type);
-}
-
 function sleep(milliseconds: number): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(resolve, milliseconds);
@@ -64,8 +39,13 @@ function getTopLevelUrl(frame: puppeteer.Frame | null): string {
 export function fromPuppeteerDetails(details: puppeteer.HTTPRequest): Request {
   const sourceUrl = getTopLevelUrl(details.frame());
   const url = details.url();
-  const rawType = details.resourceType();
-  const type: RequestType = isRequestType(rawType) ? rawType : 'other';
+
+  // NOTE: this needed until the following is resolved: https://github.com/puppeteer/puppeteer/blob/49f25e2412fbe3ac43ebc6913a582718066486cc/src/common/HTTPRequest.ts#L162
+  // Current types exposed from puppeteer are strings instead of literals
+  // (like in @types/puppeteer). This check could be removed if the issue is
+  // fixed upstream.
+  // @ts-ignore
+  const type: RequestType = details.resourceType();
 
   return Request.fromRawDetails({
     _originalRequestDetails: details,

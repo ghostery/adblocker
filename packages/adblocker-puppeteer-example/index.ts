@@ -27,6 +27,7 @@ function getUrlToLoad(): string {
   );
 
   const browser = await puppeteer.launch({
+    // @ts-ignore
     defaultViewport: null,
     headless: false,
   });
