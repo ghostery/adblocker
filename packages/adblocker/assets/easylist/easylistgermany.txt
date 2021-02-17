@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202102151745
+! Version: 202102161752
 ! Title: EasyList Germany
-! Last modified: 15 Feb 2021 17:45 UTC
+! Last modified: 16 Feb 2021 17:52 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -1420,7 +1420,6 @@ kochbar.de#@#iframe[name^="google_ads_iframe"]
 ||6navi.ch/banners/
 ||abg-net.de/typo3temp/pics/f3f468fcef.png
 ||abg-net.de/uploads/tx_macinabanners/
-||abload.de/deals/teaser.php
 ||ad-hoc-news.de/js/aTraffic.js
 ||ad.dl.dewezet.de^
 ||ad.dslr-forum.de^
@@ -1550,7 +1549,6 @@ kochbar.de#@#iframe[name^="google_ads_iframe"]
 ||curt.de^*/gastrobanner/
 ||curt.de^*/petabanner.jpg
 ||daily-pia.de/wp-content/uploads/*/manitu_hostedby-
-||damoh.$media,domain=spiegel.de
 ||dasbewegtdiewelt.de/wp-content/banner/
 ||deinesexfilme.com/img/linklist2/
 ||delamar.de/wp-content/uploads/*/wallp_
@@ -2012,8 +2010,6 @@ kochbar.de#@#iframe[name^="google_ads_iframe"]
 ||soundportal.at/fileadmin/user_upload/werbung/
 ||spanienlive.com^*/Werbung/
 ||speedtorrent.com/usenet/
-||spiegel.de/gutenb/img/hoeflich-schokolade.gif
-||spiegel.de/gutenb/img/HuH-Banner.gif
 ||spielbox.de/images/banners/
 ||spiele-for-free.de/wp-content/uploads/*_1920x1200_$domain=spiele-for-free.de
 ||spielesite.com/am/$subdocument
@@ -2510,10 +2506,13 @@ chip.de###hp-aquamarin-1
 chip.de###hp-aquamarin-2
 immoauktionen.de###immowebAdCont
 bz-berlin.de###inpage
+abload.de###iphpbannerleft
 juraforum.de###jf-stroer-sky
 juraforum.de###jf-stroer-sky + div
 juraforum.de###jf-stroer-superbanner
 laborjournal.de###kratzer
+abload.de###layerleft
+abload.de###layerright
 tellows.de###lb_header
 1erforum.de,bauexpertenforum.de,dasheimwerkerforum.de,fitness-foren.de,lpgforum.de,mazda-forum.info,mercedes-forum.com,notebookforum.at,pkw-forum.de,skodacommunity.de,toyota-forum.de,vermieter-forum.com,windows-7-forum.net###leader_top_desk
 skiinfo.ch,skiinfo.com,skiinfo.de,spieletipps.de###leaderboard
@@ -2568,6 +2567,7 @@ bluray-disc.de###pricechange-box
 fanfiktion.de###qql
 einrichtungsbeispiele.de###rightcolumndiv
 h-bw.de###rothaus-aktion
+myself.de###sb1Wrapper
 uhrforum.de###shuffled-sponsored
 ! [dup] from ublock-origin/filters.txt
 ! madchensex.com###side-spot
@@ -2703,7 +2703,7 @@ arbeitszeugnisgenerator.de,autoscout24.ch,fischkopf.de,nachtkritik.de,regenbogen
 glarus24.ch,radiocentral.ch,sunshine.ch##.ads-container
 eatsmarter.de##.adsense
 hierspielen.com##.adtitle
-ibb-anzeiger.de,mobile.de##.adv
+ibb-anzeiger.de##.adv
 oberberg-aktuell.de##.adv-indicator
 oberberg-aktuell.de##.adv-link
 eurogamer.de,morningstar.de,suedkurier.de,weser-kurier.de##.advert
@@ -2979,6 +2979,7 @@ fussballdaten.de,modhoster.de,rheintaler.ch##.rectangle
 suche.freenet.de##.result-container > .container-right
 nydus.org##.right > .widgetbox2
 oberberg-aktuell.de##.right-leaderboard
+abload.de##.rightbanner
 apfeleimer.de##.rotslide-wrap
 ! [dup] from ublock-origin/filters.txt
 ! sport1.de##.s1-ad
@@ -2996,7 +2997,7 @@ gentleman-blog.de##.shoepassion_sidebar_banner
 gamesaktuell.de,gamezone.de,pcgames.de##.shopLinkFrameWrapper
 german-porno-deutsch.info##.sidebar
 ploetzblog.de##.sidebar > .imglinks
-giga.de##.sidebar-btn-affiliate
+giga.de##.sidebar-btn-affiliate[rel="nofollow noopener sponsored"]
 austriansoccerboard.at##.sidebar-partner
 kreativfieber.de##.sidebar-right > #text-11
 kreativfieber.de##.sidebar-right > #text-6
@@ -3168,6 +3169,8 @@ wallstreet-online.de##a[onclick*="'tableAd'"] + img
 kfz-steuer.de##a[style="position:relative; float:left; width:698px; height:63px; padding-left:28px; padding-right:0px; padding-top:14px; border:1pt solid #DADADC; background:#FFFFFF display:inline;"]
 ak-kurier.de##a[target="_new"][href^="inc/inc_link.php?id="]
 weristdeinfreund.de##aside[id^="banner"]
+ww3.cad.de##body > table[width="100%"][border="0"]:first-child
+abload.de##center > table > tbody > tr > td[valign="bottom"][align="center"][style="width: 100%;"]
 3dchip.de##div[align="center"][width="468px"] > table[height="60"][cellspacing="0"][cellpadding="0"][border="0"][align="center"]
 bitreporter.de##div[class$="-adlabel"]
 t-online.de##div[class^="Tsshopst"]
@@ -3192,6 +3195,7 @@ boerse.sx##div[id^="edit"][style="padding:0px 0px 6px 0px"] > table[id^="post"][
 handballecke.de##div[id^="promotionHeader"]
 metal-hammer.de##div[id^="sas_"]
 amazon.de##div[id^="sp_detail"]
+weristdeinfreund.de##div[style*="display: block ! important"]
 wirtschaftslexikon24.com##div[style="float:left;clear:left;height:620px;width:180px;padding-top:15px;"]
 breakpoint.untergrund.net##div[style="float:right; width: 110px; margin-left: 15px; margin-top: 12px; margin-bottom: 15px; padding: 2px 6px; text-align: center; border: 1px solid black; background:white; line-height: 2em; color: black;"]
 pixelio.de##div[style="float:right; width: 300px; height: 250px"]
@@ -3201,6 +3205,7 @@ shopanbieter.de##div[style="margin: 30px 0px 30px 0px;padding: 10px; border-widt
 gamereactor.de##div[style="min-height: 600px; margin-bottom: 20px;"]
 quoka.de##div[style="overflow:hidden;text-align:center;position:relative;height:300px;"]
 sprachnudel.de##div[style="padding:5px 0 5px 0;"][align="center"]
+weristdeinfreund.de##div[style="position:absolute; top:5px; left:0px; text-align:center; width:100%; max-width:1000px; height:90px; overflow:hidden;"]
 strafbuch.de##div[style="width: 468px;height: 60px;overflow: hidden;float: right"]
 psychic.de##div[style="width:160px;height:600px;"]
 korrekturen.de##div[style="width:300px; height:250px;float:left; margin-right:15px; margin-bottom:15px; border:0; background-color:#c0c0c0; overflow:hidden;"]
@@ -3237,6 +3242,7 @@ astronews.com##table[width="300px"][cellspacing="0"][cellpadding="0"][border="0"
 websingles.at##table[width="306"]
 grower.ch##table[width="468"]
 wetterbote.de##table[width="738"][height="90"]
+ww3.cad.de##table[width="95%"][cellspacing="1"][border="0"] > tbody > tr > td[valign="top"]:first-child + td[style="vertical-align: top;"]:last-child
 plz-postleitzahl.de##td[valign="top"][style="padding-left: 15px;"] > table[width="250"][cellspacing="0"][cellpadding="0"]:first-child
 astrotreff.de##td[width="100%"][align="center"] > hr[size="1"][color="#8482A5"] + table[cellspacing="0"][cellpadding="10"][border="0"][bgcolor="#000040"]
 dslr-forum.de##td[width="120"][valign="top"][align="center"]:last-child
@@ -3244,47 +3250,19 @@ astrotreff.de##td[width="33%"][valign="middle"][align="center"] > a[target="_bla
 land-der-traeume.de##td[width="730"] + td[align="center"]
 ibash.de##tr > td[valign="top"]:first-child + td[width="15"] + td[width="186"][valign="top"]:last-child
 favicon-generator.de##tr:first-child:last-child > td[align="left"][width="150"][valign="top"]:first-child + td[align="center"] + td[align="left"][width="150"][valign="top"]:last-child
+ww3.cad.de##tr:first-child:last-child > td[valign="top"]:first-child + td[width="152"][valign="top"][align="center"]:last-child
 !
-freenet.de###ext-frn-adtag-nativendo-1
-freenet.de###ext-frn-adtag-nativendo-2
-freenet.de###ext-frn-adtag-rectangle-1
-freenet.de###ext-frn-adtag-rectangle-2
-freenet.de###ext-frn-adtag-sky-1
 amazon.de###huc-first-upsell-row
-abload.de###iphpbannerleft
-abload.de###layerleft
-abload.de###layerright
 china.ahk.de###skyscraper
-spiegel.de##.asset-affiliatebox
 amazon.de##.aw-campaigns
-freenet.de##.frn_promoReisen
 raidrush.net##.funbox
 transfermarkt.de##.hide-for-small[style="height: 273px; text-align: center; overflow: hidden;"]
-spiegel.de##.nativead
-spiegel.de##.nativead + .headline-date
-freenet.de##.plistaList img[src^="https://blob.freent.de/image/"]
-abload.de##.rightbanner
 china.ahk.de##.tx-bannermanagement-pi1
 suche.1und1.de,suche.gmx.net,suche.web.de##COMPONENTS-SHOPPING-ONEBOX-LIST.l-display-block
 deutscher-sex.com##a[href*="/f.php?a=vpn"]
 raidrush.net##a[href^="/go/?//www.amazon.de/"]
-freenet.de##a[href^="http://media.mybet.com/redirect.aspx?pid="]
-ww3.cad.de##body > table[width="100%"][border="0"]:first-child
-abload.de##center > table > tbody > tr > td[valign="bottom"][align="center"][style="width: 100%;"]
 amazon.de##div[cel_widget_id="desktop-yo-shiptrack_SponsoredProductsRemoteShiptrackComplementT2"]
 amazon.de##div[id$="_adcontent"]
-weristdeinfreund.de##div[style*="display: block ! important"]
-abload.de##div[style="margin-top: 20px; margin-bottom: 10px; position: relative;"]
-weristdeinfreund.de##div[style="position:absolute; top:5px; left:0px; text-align:center; width:100%; max-width:1000px; height:90px; overflow:hidden;"]
-ww3.cad.de##table[width="95%"][cellspacing="1"][border="0"] > tbody > tr > td[valign="top"]:first-child + td[style="vertical-align: top;"]:last-child
-ww3.cad.de##td[valign="bottom"][align="center"][colspan="2"] > table[width="755"][height="95"][align="center"]
-ww3.cad.de##tr > td[align="CENTER"] > table[bgcolor="#e7deee"]
-ww3.cad.de##tr > td[align="center"][colspan="2"][style="vertical-align: bottom;"] > table[align="center"][width="755"][height="95"]
-ww3.cad.de##tr > td[valign="top"]:first-child + td[align="right"][width="160"][style="vertical-align: top;"]:last-child
-ww3.cad.de##tr > td[valign="top"]:first-child + td[width="161"][align="right"][style="vertical-align: top;"]
-ww3.cad.de##tr:first-child > td[valign="top"][align="left"]:first-child + td[valign="top"] + td[width="150"][valign="top"]:last-child
-ww3.cad.de##tr:first-child:last-child > td[valign="top"]:first-child + td[width="152"][valign="top"][align="center"]:last-child
-ww3.cad.de##tr:first-child:last-child > td[valign="top"]:first-child + td[width="160"][valign="top"][align="right"]:last-child
 ! Specific hiding filters necessary for sites using $generichide filter option
 finanzen.net###news-contentads
 focus.de##.adsBlock
@@ -3379,19 +3357,9 @@ winfuture-forum.de#?#div.ExtraPostBlock:-abp-has(div.post_block:-abp-contains(An
 @@||2mdn.net/instream/video/client.js$domain=welect.de
 @@||ad.doubleclick.net/ddm/$image,domain=welect.de
 @@||ad.zanox.com/ppc/?$subdocument,domain=eule.de|grossklein.de|preismafia.com
-@@||adition.com/banner?sid=$script,domain=ambellis.de|mirapodo.de|mytoys.de|yomonda.de
-@@||adition.com/banners/$image,domain=ambellis.de|dsl.freenet.de|mirapodo.de|mytoys.de|yomonda.de
-@@||adition.com/js/adition.js$domain=ambellis.de|mirapodo.de|mytoys.de|yomonda.de
-@@||adition.com/js/srp.js$domain=ambellis.de|mirapodo.de|mytoys.de|yomonda.de
-@@||adition.com/js?wp_id=$script,domain=ambellis.de|mirapodo.de|mytoys.de|yomonda.de
-@@||adition.com/s?t=$script,domain=ambellis.de|mirapodo.de|mytoys.de|yomonda.de
-@@||adlink.net/js?*&s=c&$script,domain=cinemaxx.de
 @@||admedia.adgemini.de^$~third-party
 @@||adnxs.com/p/creative-image/$image,domain=autobild.de
 @@||adnxs.com/ut/v3|$xmlhttprequest,domain=autobild.de
-@@||adserv.quality-channel.de/crossdomain.xml$object,domain=myself.de
-@@||adserv.quality-channel.de/realmedia/ads/*?videoad$object,domain=myself.de
-@@||adserver.gb4.motorpresse.de/www/delivery/ajs.php?zoneid=*&target=_blank&$script,domain=mountainbike-magazin.de
 @@||adservice.google.*/adsid/integrator.js$domain=welect.de
 @@||adservice.google.*^adsid/integrator.$script,domain=gofeminin.de|vip.de
 @@||affilinet-inside.de^*/affilinet/$stylesheet
@@ -3405,7 +3373,6 @@ winfuture-forum.de#?#div.ExtraPostBlock:-abp-has(div.post_block:-abp-contains(An
 @@||banner.electronic-arts.de/www/images/*.jpg$domain=ea.com
 @@||banners.webmasterplan.com/view.asp?ref=*&site=10830&$script
 @@||banners.webmasterplan.com/view.asp?ref=*&site=15264&$script
-@@||binarus.de/sonderangebote/adlink-$image,domain=binarus.de
 @@||bs.serving-sys.com/serving/adServer.bs?*&mc=imp&$image,domain=welect.de
 @@||cashdorado.de/track/click*.php?wm=*&wbm=*&pt=e$subdocument
 @@||cdn.spotxcdn.com^$domain=welect.de
@@ -3414,7 +3381,6 @@ winfuture-forum.de#?#div.ExtraPostBlock:-abp-has(div.post_block:-abp-contains(An
 @@||comdirect.de^*.html?ad=$subdocument
 @@||comdirect.de^*/advertising.do?$subdocument
 @@||commundia.de^*/affilinet/$~third-party
-@@||coolespiele.com/game.php?url=http://richmedia.coolespiele.com/$subdocument
 @@||creatives.sascdn.com^$image,domain=fitbook.de
 @@||d3con.de/data1/$image,~third-party
 @@||dawanda.com/ads?$xmlhttprequest
@@ -3433,11 +3399,9 @@ winfuture-forum.de#?#div.ExtraPostBlock:-abp-has(div.post_block:-abp-contains(An
 @@||eyewonder.com^*/wrapper.js$domain=edge.download.newmedia.nacamar.net|freestream.nmdn.net
 @@||familienbildung-hamburg.de/cgi-bin/adframe/$subdocument,domain=fbs-harburg.de
 @@||fh-muenster.de/leitbild/banner.php
-@@||firebaseapp.com^$script,domain=freenet.de
 @@||flashtalking.com^$domain=welect.de
 @@||fn-neon.de/javascript/adserver_banner.js
 @@||forum-duewupp.de/images/ad-gallery/$~third-party
-@@||forum.froxlor.org^*/adsense.css
 @@||fussball.sv-kehlen.de/werbepartner.htm
 @@||g.doubleclick.net/gampad/$xmlhttprequest,domain=kochbar.de|vip.de
 @@||g.doubleclick.net/gampad/ads?$script,xmlhttprequest,domain=11freunde.de|brigitte.de|eltern.de|n-tv.de|rtl.de
@@ -3493,11 +3457,9 @@ winfuture-forum.de#?#div.ExtraPostBlock:-abp-has(div.post_block:-abp-contains(An
 @@||media.laendleauto.at/topad/$image,~third-party
 @@||metzgerei-giering.de^*/advertising/$~third-party
 @@||milesandmore-aktionen.de^*://promo.$subdocument,domain=promo.milesandmore.com
-@@||mirapodo.de/ads?$script
 @@||mmcomputer.de^*&BannerID=$subdocument
 @@||mobilbranche.de/mobilbranche/wp-content/uploads/$image,domain=mobilbranche.de
 @@||monetenlos.com/components/com_marketplace/images/ads/$image
-@@||mstat.freent.de^*/sms_advertising/sms_teaser_$image,domain=webmail.freenet.de
 @@||nadann.de/small_ads/$~third-party
 @@||nordclick.de/js/colors/adsense_colors.js
 @@||notebookcheck.com^$generichide
@@ -3516,7 +3478,6 @@ winfuture-forum.de#?#div.ExtraPostBlock:-abp-has(div.post_block:-abp-contains(An
 @@||raumobil.de/js/advertise.js
 @@||reaktion-talentschule.de/tl_files/layout/rotation/banner
 @@||reimkultur-mv.de/9products/images/ad/$image,~third-party
-@@||richmedia.coolespiele.com^$~third-party
 @@||rtl.de^*/player_modul_onclick_300x250.jpg
 @@||rurweb.de/kleinanzeigen/adverts_image.php?$image
 @@||s357.mxcdn.net^$script,domain=welect.de
@@ -3576,7 +3537,6 @@ winfuture-forum.de#?#div.ExtraPostBlock:-abp-has(div.post_block:-abp-contains(An
 @@||talentiert.at^*/index_ads.php?$subdocument,third-party
 @@||tamedia.ch/tl_files/content/Icons/Advertising_$domain=tamedia.ch
 @@||tamedia.ch^*/advertising-$subdocument,domain=tamedia.ch
-@@||teufel-media.de/www/delivery/avw.php?zoneid=$image,domain=gewinnspiele.freenet.de
 @@||tfag.de/img/$domain=focus.de
 @@||thangkas.com/thangkas/thangkas/$image,~third-party
 @@||thomann.de^*/adv/adv_$image,~third-party
@@ -3616,7 +3576,6 @@ winfuture-forum.de#?#div.ExtraPostBlock:-abp-has(div.post_block:-abp-contains(An
 @@||welt.de/sites/default/files/rectangle-300x250-newsletter.jpg
 ! *** easylistgermany:easylistgermany/easylistgermany_allowlist_popup.txt ***
 @@||adclick.g.doubleclick.net^$popup,domain=marketing-a.akamaihd.net
-@@||ads.mybet.com/redirect.aspx?pid=$popup,domain=gewinnspiele.freenet.de
 @@||adspirit.de^$popup,domain=dealdoktor.de
 @@||doubleclick.net/ddm/$popup,domain=11freunde.de
 @@||g.doubleclick.net^$popup,domain=11freunde.de|kochbar.de
