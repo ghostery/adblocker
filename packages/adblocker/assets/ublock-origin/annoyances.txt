@@ -82,8 +82,9 @@ playstation.com##+js(acis, $, PopupManager)
 weather.com##+js(aopr, _sp_._networkListenerData)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1295
-chocolatey.org##+js(acis, $, chocolatey_hide_cookies_notice)
 chocolatey.org###package-disclaimer
+chocolatey.org##.show.fade.modal-backdrop
+chocolatey.org##body:style(overflow:auto !important)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1343
 ! https://github.com/uBlockOrigin/uAssets/issues/1879
@@ -3622,7 +3623,8 @@ fileandsharing.com##+js(aopr, document.onselectstart)
 playbill.com##+js(nostif, offsetHeight)
 
 ! twitter .com cookies notice
-twitter.com##[href*="/twitter-cookies"]:upward(3)
+! https://github.com/uBlockOrigin/uAssets/issues/8587
+twitter.com##[href*="/twitter-cookies"]:upward(2)
 
 ! pentruea .com right click, copy
 pentruea.com##+js(acis, document.oncontextmenu)
