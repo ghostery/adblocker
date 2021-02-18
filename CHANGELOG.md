@@ -1,3 +1,29 @@
+# v1.20.2 (Thu Feb 18 2021)
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker-content`
+  - Fix puppeteer regression when handling DOM mutations [#1688](https://github.com/cliqz-oss/adblocker/pull/1688) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#1687](https://github.com/cliqz-oss/adblocker/pull/1687) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1684](https://github.com/cliqz-oss/adblocker/pull/1684) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump @types/mocha from 8.2.0 to 8.2.1 [#1686](https://github.com/cliqz-oss/adblocker/pull/1686) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump tldts-experimental from 5.7.6 to 5.7.7 [#1685](https://github.com/cliqz-oss/adblocker/pull/1685) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.20.1 (Tue Feb 16 2021)
 
 #### :nail_care: Polish

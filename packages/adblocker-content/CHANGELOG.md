@@ -1,3 +1,15 @@
+# v1.20.2 (Thu Feb 18 2021)
+
+#### :bug: Bug Fix
+
+- Fix puppeteer regression when handling DOM mutations [#1688](https://github.com/cliqz-oss/adblocker/pull/1688) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.20.0 (Thu Jan 21 2021)
 
 ### Release Notes

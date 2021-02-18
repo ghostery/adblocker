@@ -1,3 +1,17 @@
+# v1.20.2 (Thu Feb 18 2021)
+
+#### :house: Internal
+
+- Update local assets [#1687](https://github.com/cliqz-oss/adblocker/pull/1687) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1684](https://github.com/cliqz-oss/adblocker/pull/1684) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### Authors: 2
+
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.20.1 (Tue Feb 16 2021)
 
 #### :bug: Bug Fix
