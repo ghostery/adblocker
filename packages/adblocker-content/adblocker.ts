@@ -36,10 +36,6 @@ function isElement(node: Node): node is Element {
   return node.nodeType === 1; // Node.ELEMENT_NODE;
 }
 
-function shouldIgnoreElement(element: Element): boolean {
-  return IGNORED_TAGS.has(element.nodeName.toLowerCase());
-}
-
 function getElementsFromMutations(mutations: MutationRecord[]): Element[] {
   // Accumulate all nodes which were updated in `nodes`
   const elements: Element[] = [];
@@ -74,13 +70,15 @@ export function extractFeaturesFromDOM(
   hrefs: string[];
   ids: string[];
 } {
+  // NOTE: This cannot be global as puppeteer needs to be able to serialize this function.
+  const ignoredTags = new Set(['br', 'head', 'link', 'meta', 'script', 'style', 's']);
   const classes: Set<string> = new Set();
   const hrefs: Set<string> = new Set();
   const ids: Set<string> = new Set();
 
   for (const root of roots) {
     for (const element of [root, ...root.querySelectorAll('[id],[class],[href]')]) {
-      if (shouldIgnoreElement(element)) {
+      if (ignoredTags.has(element.nodeName.toLowerCase())) {
         continue;
       }
 
@@ -218,7 +216,7 @@ export class DOMMonitor {
     if (elements.length !== 0) {
       this.cb({
         type: 'elements',
-        elements: elements.filter((e) => shouldIgnoreElement(e) === false),
+        elements: elements.filter((e) => IGNORED_TAGS.has(e.nodeName.toLowerCase()) === false),
       });
       return this.handleNewFeatures(extractFeaturesFromDOM(elements));
     }
