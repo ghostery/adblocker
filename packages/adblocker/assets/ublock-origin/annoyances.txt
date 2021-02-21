@@ -394,9 +394,6 @@ experts-exchange.com##.navigationWrapper:style(top: 0px !important;)
 digitalsynopsis.com##+js(aopr, disableSelection)
 digitalsynopsis.com##+js(aopr, document.oncontextmenu)
 
-! https://github.com/uBlockOrigin/uAssets/issues/2805
-crackwatch.com##.ab.row
-
 ! https://forums.lanik.us/viewtopic.php?f=62&t=41301
 filefox.cc##+js(aeld, blur)
 
@@ -5503,3 +5500,18 @@ clockks.com##+js(aopr, document.ondragstart)
 
 ! asiatv. online anti right click
 asiatv.*##+js(aeld, contextmenu)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/75181
+animeland.us##[src="/dontuse2.png"]
+
+! fmovies. mx right click, select, drag, f-keys
+fmovies.mx##+js(acis, document.oncontextmenu)
+fmovies.mx##+js(acis, disableSelection, reEnable)
+fmovies.mx##+js(aopr, document.ondragstart)
+fmovies.mx##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! japan-fans.com right click
+japan-fans.com##+js(acis, document.onmousedown)
+
+! LCPDFR.com anti adb annoyance
+lcpdfr.com##+js(acis, $, AdBlock)
