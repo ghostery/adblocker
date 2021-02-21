@@ -64,10 +64,7 @@ const adb = require('@cliqz/adblocker');
     // Easylist
     ['https://easylist.to/easylist/easyprivacy.txt', ['easylist', 'easyprivacy.txt']],
     ['https://easylist.to/easylist/easylist.txt', ['easylist', 'easylist.txt']],
-    [
-      'https://easylist-downloads.adblockplus.org/easylist-cookie.txt',
-      ['easylist', 'easylist-cookie.txt'],
-    ],
+    ['https://secure.fanboy.co.nz/fanboy-cookiemonster.txt', ['easylist', 'easylist-cookie.txt']],
     [
       'https://easylist.to/easylistgermany/easylistgermany.txt',
       ['easylist', 'easylistgermany.txt'],
