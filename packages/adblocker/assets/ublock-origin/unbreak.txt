@@ -2114,7 +2114,8 @@ arstechnica.com#@#a[href^="https://www.amazon."][href*="tag="]
 ! [badfilter] ||pushengage.com^$badfilter
 
 ! https://github.com/easylist/easylist/issues/4185
-||cbsistatic.com/*/dw-tracking$script,important,redirect=noopjs,domain=techrepublic.com
+! https://github.com/uBlockOrigin/uAssets/issues/8616
+*/dw-tracking$script,important,redirect=noopjs,domain=techrepublic.com
 
 ! https://github.com/easylist/easylist/issues/4187
 wallpaperset.com#@#.ads1
@@ -2731,6 +2732,8 @@ recensionihot.com#@#a[href^="https://www.moscarossa.biz/"]
 ||cmp.dmgmediaprivacy.co.uk^$3p
 @@||cmp.dmgmediaprivacy.co.uk^$frame,script,domain=metro.co.uk
 metro.co.uk###taboola-below-article-thumbnails
+https://forums.lanik.us/viewtopic.php?f=64&t=45775
+@@||cmp.dmgmediaprivacy.co.uk^$domain=inews.co.uk
 
 ! https://github.com/NanoMeow/QuickReports/issues/3448
 @@||downdetector.com/*/javascript/adscript.js$script
@@ -3821,3 +3824,7 @@ independent.co.uk##article > div > div > div[data-tile-name="top_banner"]:upward
 ! adssettings.google.com blocked by PL
 ! [badfilter] ||ads.youtube.com^$badfilter
 ||ads.youtube.com^$domain=~ads.youtube.com
+
+! up-load. io broken by french list
+! [badfilter] *$script,1p,domain=up-load.io,badfilter
+! [badfilter] *$xmlhttprequest,domain=up-load.io,badfilter
