@@ -39,12 +39,6 @@ function getTopLevelUrl(frame: puppeteer.Frame | null): string {
 export function fromPuppeteerDetails(details: puppeteer.HTTPRequest): Request {
   const sourceUrl = getTopLevelUrl(details.frame());
   const url = details.url();
-
-  // NOTE: this needed until the following is resolved: https://github.com/puppeteer/puppeteer/blob/49f25e2412fbe3ac43ebc6913a582718066486cc/src/common/HTTPRequest.ts#L162
-  // Current types exposed from puppeteer are strings instead of literals
-  // (like in @types/puppeteer). This check could be removed if the issue is
-  // fixed upstream.
-  // @ts-ignore
   const type: RequestType = details.resourceType();
 
   return Request.fromRawDetails({
