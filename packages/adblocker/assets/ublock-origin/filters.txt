@@ -1563,6 +1563,7 @@ torlock.*,torlock2.*##.extneed
 ! https://github.com/uBlockOrigin/uAssets/issues/582
 @@||inoreader.com^$ghide
 inoreader.com##.ad_title
+inoreader.com###sinner_container
 inoreader.com##+js(aopr, max_raids)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/590
@@ -4118,7 +4119,7 @@ streamsb.net##+js(aopr, DoodPop)
 @@||streamxxx.tv^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1423
-rojadirectatv.*,veopartidos.net,vdtgr.com##+js(acis, Math, break;case $.)
+dtefrc.online,rojadirectatv.*,veopartidos.net,vdtgr.com##+js(acis, Math, break;case $.)
 rojadirecta.fr,tarjetarojatvonline.com##+js(aopw, closeMyAd)
 rojadirecta.fr,rojadirectatv.*,tarjetarojatvonline.com,veopartidos.net##+js(aopw, smrtSP)
 tvrojadirectaonline.net##+js(aopr, smrtAdSySBanner)
@@ -4127,10 +4128,10 @@ sportzonline.to##+js(aopw, _pop)
 cloudstream.to,dpelota.com,sportzonline.to,streammart.club##+js(aopw, adcashMacros)
 veopartidos.net##+js(aopr, LieDetector)
 bundesliga-live.stream,veopartidos.net##+js(nowoif)
-bundesliga-live.stream,veopartidos.net###overlay
+bundesliga-live.stream,dtefrc.online,veopartidos.net###overlay
 ||tarjetaroja-tv.net/publicity/*$frame,1p
 ##a[href^="https://eawp2ra7.top/"]
-veopartidos.net##.advertisement
+dtefrc.online,veopartidos.net##.advertisement
 
 ||rathether.info^
 
@@ -5220,15 +5221,12 @@ cinedetodo.*##[id*="yellow"]
 ##a[href^="https://bj1110.online/"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4430
-megaup.net##+js(nowebrtc)
 @@||megaup.net^$ghide
-megaup.net##+js(nostif, getComputedStyle)
+megaup.net##.mgbox:style(visibility: hidden;)
+megaup.net##+js(nowoif)
 megaup.net##[src*=".jpg"]:upward(1)
-megaup.net##+js(nosiif, 0x)
-megaup.net##+js(nostif, 0x)
 @@||jsc.adskeeper.co.uk/*/megaup.net$script,domain=megaup.net
 @@||servicer.adskeeper.co.uk^$script,domain=megaup.net
-megaup.net##.mgbox
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1850
 aquipelis.*##+js(aopw, smrtSB)
@@ -18544,10 +18542,9 @@ bluemediafiles.com##+js(aopw, Fingerprint2)
 bluemediafiles.com##+js(nano-stb, , 990)
 bluemediafiles.com##.item:has(svg)
 
-! https://github.com/NanoMeow/QuickReports/issues/1977
-! https://github.com/NanoMeow/QuickReports/issues/2234
-sports24.*##+js(aost, String.fromCharCode, inlineScript:80)
-sports24.*##+js(nowoif)
+! https://github.com/AdguardTeam/AdguardFilters/issues/75495
+sports24.*##+js(acis, atob, decodeURIComponent)
+sports24.*##+js(acis, String.fromCharCode, break;case)
 sports24.*##div[style*="z-index: 30000"]
 sports24.*##div[style^="width:300px;height:250px"]:upward(1)
 sports24.*##.adrespl
@@ -18562,6 +18559,14 @@ sports24.*##a.btn[href*="/a?live="]
 sports24.*##:xpath(//*[contains(text(),"Watch HD")])
 sports24.*###notice
 sports24.*##.btn-outline-primary:has-text(/HD$/)
+sports24.*##.container > div.col[style^="height: 225px; width: 400px"]
+sports24.*##.container > div.row[style="margin-top: 20px;"] > div.col
+||amgtomdcxvm.com^
+||djzictsencwkf.com^
+||fpsekwpfk.com^
+||igvxnenqgu.com^
+||nktorpmpbhvb.com^
+||pkldrgupis.com^
 
 ! https://github.com/NanoMeow/QuickReports/issues/2036
 nilopolisonline.com.br##+js(nostif, blocker)
