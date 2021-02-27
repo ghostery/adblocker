@@ -1,3 +1,28 @@
+# v1.20.3 (Sat Feb 27 2021)
+
+#### :bug: Bug Fix
+
+- build(deps): bump @types/chrome from 0.0.132 to 0.0.133 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.131 to 0.0.132 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.130 to 0.0.131 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :house: Internal
+
+- Update copyright notices [#1715](https://github.com/cliqz-oss/adblocker/pull/1715) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump @types/chrome from 0.0.132 to 0.0.133 [#1703](https://github.com/cliqz-oss/adblocker/pull/1703) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.131 to 0.0.132 [#1694](https://github.com/cliqz-oss/adblocker/pull/1694) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.130 to 0.0.131 [#1689](https://github.com/cliqz-oss/adblocker/pull/1689) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 2
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.20.1 (Tue Feb 16 2021)
 
 #### :bug: Bug Fix

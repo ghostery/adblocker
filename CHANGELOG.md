@@ -1,3 +1,57 @@
+# v1.20.3 (Sat Feb 27 2021)
+
+#### :nail_care: Polish
+
+- `@cliqz/adblocker-puppeteer`, `@cliqz/adblocker`
+  - Add support for Puppeteer v8.x [#1716](https://github.com/cliqz-oss/adblocker/pull/1716) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#1718](https://github.com/cliqz-oss/adblocker/pull/1718) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1712](https://github.com/cliqz-oss/adblocker/pull/1712) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1708](https://github.com/cliqz-oss/adblocker/pull/1708) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1702](https://github.com/cliqz-oss/adblocker/pull/1702) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1700](https://github.com/cliqz-oss/adblocker/pull/1700) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Fix updater [#1699](https://github.com/cliqz-oss/adblocker/pull/1699) ([@remusao](https://github.com/remusao))
+- `@cliqz/adblocker-benchmarks`, `@cliqz/adblocker-content`, `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-electron`, `@cliqz/adblocker-playwright`, `@cliqz/adblocker-puppeteer`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension-example`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - Update copyright notices [#1715](https://github.com/cliqz-oss/adblocker/pull/1715) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump rollup from 2.39.1 to 2.40.0 [#1717](https://github.com/cliqz-oss/adblocker/pull/1717) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump got from 11.8.1 to 11.8.2 [#1714](https://github.com/cliqz-oss/adblocker/pull/1714) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump playwright from 1.9.0 to 1.9.1 [#1711](https://github.com/cliqz-oss/adblocker/pull/1711) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.16.7 to 10.16.8 [#1710](https://github.com/cliqz-oss/adblocker/pull/1710) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump tldts-experimental from 5.7.9 to 5.7.10 [#1709](https://github.com/cliqz-oss/adblocker/pull/1709) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump playwright from 1.8.1 to 1.9.0 [#1707](https://github.com/cliqz-oss/adblocker/pull/1707) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump typescript from 4.1.5 to 4.2.2 [#1706](https://github.com/cliqz-oss/adblocker/pull/1706) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.39.0 to 2.39.1 [#1704](https://github.com/cliqz-oss/adblocker/pull/1704) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump tldts-experimental from 5.7.8 to 5.7.9 [#1701](https://github.com/cliqz-oss/adblocker/pull/1701) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.16.6 to 10.16.7 [#1698](https://github.com/cliqz-oss/adblocker/pull/1698) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 11.2.3 to 11.3.0 [#1696](https://github.com/cliqz-oss/adblocker/pull/1696) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/node from 14.14.30 to 14.14.31 [#1695](https://github.com/cliqz-oss/adblocker/pull/1695) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/node from 14.14.29 to 14.14.30 [#1693](https://github.com/cliqz-oss/adblocker/pull/1693) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/node from 14.14.28 to 14.14.29 [#1692](https://github.com/cliqz-oss/adblocker/pull/1692) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump tldts-experimental from 5.7.7 to 5.7.8 [#1691](https://github.com/cliqz-oss/adblocker/pull/1691) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.16.5 to 10.16.6 [#1690](https://github.com/cliqz-oss/adblocker/pull/1690) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-puppeteer-example`, `@cliqz/adblocker-puppeteer`
+  - build(deps): bump puppeteer from 7.1.0 to 8.0.0 [#1713](https://github.com/cliqz-oss/adblocker/pull/1713) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension-example`, `@cliqz/adblocker`
+  - build(deps): bump @types/chrome from 0.0.132 to 0.0.133 [#1703](https://github.com/cliqz-oss/adblocker/pull/1703) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+  - build(deps): bump @types/chrome from 0.0.131 to 0.0.132 [#1694](https://github.com/cliqz-oss/adblocker/pull/1694) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+  - build(deps): bump @types/chrome from 0.0.130 to 0.0.131 [#1689](https://github.com/cliqz-oss/adblocker/pull/1689) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker`
+  - build(deps-dev): bump concurrently from 5.3.0 to 6.0.0 [#1697](https://github.com/cliqz-oss/adblocker/pull/1697) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.20.2 (Thu Feb 18 2021)
 
 #### :bug: Bug Fix

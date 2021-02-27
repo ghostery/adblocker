@@ -1,3 +1,41 @@
+# v1.20.3 (Sat Feb 27 2021)
+
+#### :bug: Bug Fix
+
+- build(deps): bump @types/chrome from 0.0.132 to 0.0.133 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump concurrently from 5.3.0 to 6.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.131 to 0.0.132 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.130 to 0.0.131 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nail_care: Polish
+
+- Add support for Puppeteer v8.x [#1716](https://github.com/cliqz-oss/adblocker/pull/1716) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Update local assets [#1718](https://github.com/cliqz-oss/adblocker/pull/1718) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update copyright notices [#1715](https://github.com/cliqz-oss/adblocker/pull/1715) ([@remusao](https://github.com/remusao))
+- Update local assets [#1712](https://github.com/cliqz-oss/adblocker/pull/1712) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1708](https://github.com/cliqz-oss/adblocker/pull/1708) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1702](https://github.com/cliqz-oss/adblocker/pull/1702) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1700](https://github.com/cliqz-oss/adblocker/pull/1700) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Fix updater [#1699](https://github.com/cliqz-oss/adblocker/pull/1699) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump @types/chrome from 0.0.132 to 0.0.133 [#1703](https://github.com/cliqz-oss/adblocker/pull/1703) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump concurrently from 5.3.0 to 6.0.0 [#1697](https://github.com/cliqz-oss/adblocker/pull/1697) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.131 to 0.0.132 [#1694](https://github.com/cliqz-oss/adblocker/pull/1694) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.130 to 0.0.131 [#1689](https://github.com/cliqz-oss/adblocker/pull/1689) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.20.2 (Thu Feb 18 2021)
 
 #### :house: Internal

@@ -1,3 +1,15 @@
+# v1.20.3 (Sat Feb 27 2021)
+
+#### :house: Internal
+
+- Update copyright notices [#1715](https://github.com/cliqz-oss/adblocker/pull/1715) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.20.0 (Thu Jan 21 2021)
 
 ### Release Notes

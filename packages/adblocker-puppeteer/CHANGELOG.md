@@ -1,3 +1,28 @@
+# v1.20.3 (Sat Feb 27 2021)
+
+#### :bug: Bug Fix
+
+- build(deps): bump puppeteer from 7.1.0 to 8.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nail_care: Polish
+
+- Add support for Puppeteer v8.x [#1716](https://github.com/cliqz-oss/adblocker/pull/1716) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Update copyright notices [#1715](https://github.com/cliqz-oss/adblocker/pull/1715) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump puppeteer from 7.1.0 to 8.0.0 [#1713](https://github.com/cliqz-oss/adblocker/pull/1713) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 2
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.20.1 (Tue Feb 16 2021)
 
 #### :nail_care: Polish
