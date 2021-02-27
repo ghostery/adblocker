@@ -32,6 +32,7 @@ export type ElectronRequestType =
 
 // From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/7f3549ed0050f2ca8d7fcc00c33eba21f0cbdd88/types/puppeteer/index.d.ts#L945
 export type PuppeteerRequestType =
+  | 'cspviolationreport'
   | 'document'
   | 'eventsource'
   | 'fetch'
@@ -40,7 +41,9 @@ export type PuppeteerRequestType =
   | 'manifest'
   | 'media'
   | 'other'
+  | 'preflight'
   | 'script'
+  | 'signedexchange'
   | 'stylesheet'
   | 'texttrack'
   | 'websocket'
@@ -80,6 +83,7 @@ export type RequestType =
 export const NORMALIZED_TYPE_TOKEN: { [s in RequestType]: number } = {
   beacon: fastHash('type:beacon'),
   csp_report: fastHash('type:csp'),
+  cspviolationreport: fastHash('type:cspviolationreport'),
   document: fastHash('type:document'),
   eventsource: fastHash('type:other'),
   fetch: fastHash('type:xhr'),
@@ -94,7 +98,9 @@ export const NORMALIZED_TYPE_TOKEN: { [s in RequestType]: number } = {
   object_subrequest: fastHash('type:object'),
   other: fastHash('type:other'),
   ping: fastHash('type:ping'),
+  preflight: fastHash('type:preflight'),
   script: fastHash('type:script'),
+  signedexchange: fastHash('type:signedexchange'),
   speculative: fastHash('type:other'),
   stylesheet: fastHash('type:stylesheet'),
   subFrame: fastHash('type:subdocument'),

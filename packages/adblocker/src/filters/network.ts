@@ -171,6 +171,7 @@ const FROM_ANY: number =
 const REQUEST_TYPE_TO_MASK: { [s in RequestType]: number | undefined } = {
   beacon: NETWORK_FILTER_MASK.fromPing, // fromOther?
   document: NETWORK_FILTER_MASK.fromDocument,
+  cspviolationreport: NETWORK_FILTER_MASK.fromOther,
   fetch: NETWORK_FILTER_MASK.fromXmlHttpRequest,
   font: NETWORK_FILTER_MASK.fromFont,
   image: NETWORK_FILTER_MASK.fromImage,
@@ -194,6 +195,8 @@ const REQUEST_TYPE_TO_MASK: { [s in RequestType]: number | undefined } = {
   eventsource: NETWORK_FILTER_MASK.fromOther,
   manifest: NETWORK_FILTER_MASK.fromOther,
   other: NETWORK_FILTER_MASK.fromOther,
+  preflight: NETWORK_FILTER_MASK.fromOther,
+  signedexchange: NETWORK_FILTER_MASK.fromOther,
   speculative: NETWORK_FILTER_MASK.fromOther,
   texttrack: NETWORK_FILTER_MASK.fromOther,
   web_manifest: NETWORK_FILTER_MASK.fromOther,
