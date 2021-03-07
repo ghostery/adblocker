@@ -436,7 +436,7 @@ cristoiublog.ro##+js(aopw, document.oncontextmenu)
 cristoiublog.ro##+js(aopw, document.onselectstart)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3204
-myfxbook.com##+js(set, adBlockerDetect, 1)
+myfxbook.com##+js(nostif, checkForAds)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3220
 planete-205.com###nonono
@@ -1996,9 +1996,6 @@ tabonitobrasil.*##+js(aopr, disableSelection)
 tabonitobrasil.*##+js(aopw, document.oncontextmenu)
 tabonitobrasil.*##+js(aeld, keydown, preventDefault)
 tabonitobrasil.*##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
-
-! blocking annoying foxpush notification
-||foxpush.net^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5538
 tunovelaligera.com##+js(acis, document.addEventListener, copy)
@@ -5532,3 +5529,23 @@ geekparfait.org##*:style(-webkit-touch-callout: default !important; -webkit-user
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8632
 stowarzyszenie-impuls.eu##+js(aeld, contextmenu)
+
+! iovivoatenerife. it anti right click, select
+iovivoatenerife.it##+js(aopr, document.oncontextmenu)
+iovivoatenerife.it##+js(aopr, disableSelection)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/76548
+bemiraculous.tk##+js(aeld, contextmenu)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/76660
+whatfontis.com##+js(acis, $, adBlock)
+
+! viveretenerife. com anti right click
+viveretenerife.com##+js(aeld, contextmenu)
+
+! discovermagazine.com articles limit
+discovermagazine.com##+js(cookie-remover, remaining_articles)
+discovermagazine.com###__next > div[class] > p.subscriber-auth:upward(1)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8677
+skandynawiainfo.pl##+js(aeld, , mdp)
