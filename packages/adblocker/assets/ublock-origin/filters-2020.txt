@@ -1711,9 +1711,10 @@ nightfallnews.com##+js(aopr, adBlockDetected)
 gametter.com##+js(acis, addEventListener, google_ad_client)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/56828
-! https://github.com/NanoMeow/QuickReports/issues/4341
-animesanka.com##+js(acis, Math, zfgloaded)
-animesanka.com##+js(nosiif, visibility, 1000)
+@@||animesanka.*^$ghide
+*$image,redirect-rule=1x1.gif,domain=animesanka.*
+@@||cdn.jsdelivr.net/npm/fuckadblock*/fuckadblock.min.js$script,domain=animesanka.*
+animesanka.*##[id*="-ads-"]
 
 ! https://github.com/NanoMeow/QuickReports/issues/4030
 @@||napolitoday.it^$ghide
@@ -5294,7 +5295,7 @@ shoppinglys.blogspot.com##iframe[src^="data:"]
 ||ayzwali.blogspot.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8089
-erinsakura.com##+js(nostif, mdpDeBlocker)
+erinsakura.com##+js(nostif, disableDeveloperTools)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/66439
 internewstv.com##+js(aopr, app_vars.force_disable_adblock)
@@ -5438,7 +5439,8 @@ adultasianporn.com##[src*=".php"]
 tekfame.com##+js(aopw, ai_front)
 
 ! gamesrepacks.com anti-adb
-gamesrepacks.com##+js(nostif, mdpDeBlocker)
+gamesrepacks.com##+js(aopw, _pop)
+gamesrepacks.com##+js(nostif, disableDeveloperTools)
 
 ! https://forums.lanik.us/viewtopic.php?p=157292#p157292
 @@||firenzetoday.it^$ghide
@@ -6036,10 +6038,6 @@ jockantv.com##+js(acis, String.fromCharCode, /btoa|break/)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8264
 vexmovies.*##+js(acis, String.fromCharCode, /btoa|break/)
-
-! https://github.com/uBlockOrigin/uAssets/issues/8267
-bollyholic.pw##+js(aopr, mdpDeBlocker)
-bollyholic.pw##div[class][style="float: none; margin:10px 0 10px 0; text-align:center;"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8268
 @@||gdrivelinks.me^$ghide
@@ -6739,7 +6737,7 @@ unilad.co.uk##.dfp-ad-unit:upward(1)
 ||adsafeprotected.com/vans-adapter-google-ima.js^$redirect-rule=noopjs,script,domain=unilad.co.uk
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/70305
-topnewsshow.com##+js(aeld, load, showModal)
+topnewsshow.com##+js(nostif, css_class.show)
 *$script,redirect-rule=noopjs,domain=topnewsshow.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8383

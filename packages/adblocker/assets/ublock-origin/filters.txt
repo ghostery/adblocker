@@ -1889,16 +1889,11 @@ syriancivilwarmap.com##+js(aopw, lockMap)
 ||cloudfront.net/ads/img/*$image,redirect=1x1.gif,domain=cbs.com
 ||fastly.net^$image,important,redirect=2x2.png,domain=cbs.com
 ||fastly.net^$script,important,redirect=noopjs,domain=cbs.com
+@@||paramountplus.com^$ghide
 @@||cbs.com^$ghide
-cbs.com##+js(set, cbsplayer.hasAdBlocker, false)
-*$3p,script,redirect-rule=noopjs,domain=cbs.com
-@@||vidtech.cbsinteractive.com^$script,domain=cbs.com
-@@||cbsi.com^$script,domain=cbs.com
-@@||cbsstatic.com^$script,domain=cbs.com
-@@||recurly.com/*/recurly.js$script,domain=cbs.com
-@@||gstatic.com/cv/js/sender/v1/cast_sender.js$script,domain=cbs.com
+cbs.com,paramountplus.com##+js(set, hasAdBlocker, false)
+*$3p,script,redirect-rule=noopjs,domain=cbs.com|paramountplus.com
 @@||s0.2mdn.net/instream/html5/ima3.js$script,domain=cbs.com|paramountplus.com
-@@||optimizely.com/js/geo2.js$script,domain=cbs.com
 ! CNAME
 !#if env_firefox
 ! [badfilter] ||fastly.net^$script,important,domain=cbs.com,badfilter
@@ -7271,7 +7266,9 @@ xrares.com##.nvheader
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2722
 adfloz.*##+js(aopr, app_vars.force_disable_adblock)
-adfloz.*##+js(nano-sib)
+adfloz.*##+js(nowoif)
+adfloz.*##+js(set, blurred, false)
+adfloz.*##.banner
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2724
 solo-link.*##+js(aopr, app_vars.force_disable_adblock)
@@ -8256,9 +8253,8 @@ mega-debrit.com##+js(nostif, nextFunction, 2000)
 ! https://github.com/NanoAdblocker/NanoFilters/issues/186
 ! https://github.com/NanoMeow/QuickReports/issues/196
 rmdown.com##+js(aopw, open)
-rmdown.com##+js(acis, $, visibility)
-rmdown.com##A[href][target="_blank"]:style(opacity: 0 !important;)
-rmdown.com##[style]:not(SPAN)
+rmdown.com##.container td[bgcolor="white"] > a[target="_blank"]
+*$image,3p,redirect=1x1.gif,domain=rmdown.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3226
 @@||tout-debrid.com^$ghide
@@ -13597,6 +13593,12 @@ ustream.to##.overlay
 @@||ustream.*^$script,1p
 *$script,redirect-rule=noopjs,domain=ustreamix.to|ustreamix.su|ustream.to
 @@||cdn-u.frustasi.org//src//check.js$script,domain=ustreamix.*
+! https://github.com/uBlockOrigin/uAssets/issues/8681
+*$script,redirect-rule=noopjs,domain=beef1999.blogspot.com
+@@||bestdisplayformats.com^$script,domain=beef1999.blogspot.com
+beef1999.blogspot.com##+js(aopr, console.clear)
+beef1999.blogspot.com##+js(aopr, LieDetector)
+beef1999.blogspot.com##.popup
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4332
 crisanimex.com##+js(aopw, _pop)
@@ -13683,10 +13685,11 @@ dausel.co##.adsbygoogle:style(max-height: 1px !important;)
 dausel.co##[id^="aswift"]
 
 ! https://github.com/NanoMeow/QuickReports/issues/1773
-animefever.tv##+js(no-fetch-if, /^/)
 @@||purpleads.io^$domain=animefever.tv
 @@||animefever.tv^$ghide
 *$script,redirect-rule=noopjs,domain=animefever.tv
+@@||arc.io/widget*$script,css,xhr,domain=animefever.tv
+animefever.tv###psadbox
 
 ! https://github.com/dhowe/AdNauseam/issues/1476
 @@||podstacja.com^$ghide
@@ -16367,9 +16370,6 @@ el3id.site,link48.net,txtgen.bid##+js(aopr, app_vars.force_disable_adblock)
 smwebs.xyz##+js(aopr, app_vars.force_disable_adblock)
 smwebs.xyz##+js(aopr, open)
 @@||smwebs.xyz^$ghide
-
-! https://github.com/NanoMeow/QuickReports/issues/839#issuecomment-511141737
-derstandard.*##+js(aopw, _sp_)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1511
 @@||blindhypnosis.com/adsbygoogle.js$script,1p
@@ -19208,9 +19208,6 @@ freshpelis.com,salaload.me##+js(set, Ok, 3)
 ! https://www.reddit.com/r/uBlockOrigin/comments/dmcm6b/how_to_disable_ublock_strict_blocking_popup/f4zfjji/
 123anime.*,123animes.*##+js(aopr, glxopen)
 ||askalbass.club^$3p
-
-! https://github.com/NanoMeow/QuickReports/issues/2282
-thehindubusinessline.com##+js(set, Adblock, false)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6562
 upfile.us##+js(nano-sib)
@@ -23222,6 +23219,7 @@ imageking.xyz,imgair.net,imgao.xyz,imgblaze.net,imgfl.xyz,imggoing.xyz,imgkes.xy
 ||wivamyno.pro^
 ||pedestrianneighbourly.com^
 ||thugitori.pro^
+||grainstucked.com^
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/fqjo82/pandora_just_started_detecting_ad_blocker_wont/
 @@||pandora.com/web-version/*/ads.json$1p
