@@ -1892,6 +1892,7 @@ syriancivilwarmap.com##+js(aopw, lockMap)
 cbs.com,paramountplus.com##+js(set, hasAdBlocker, false)
 *$3p,script,redirect-rule=noopjs,domain=cbs.com|paramountplus.com
 @@||s0.2mdn.net/instream/html5/ima3.js$script,domain=cbs.com|paramountplus.com
+||ad.doubleclick.net^$image,redirect=1x1.gif,domain=cbs.com|paramountplus.com
 ! CNAME
 !#if env_firefox
 ! [badfilter] ||fastly.net^$script,important,domain=cbs.com,badfilter
@@ -2423,7 +2424,9 @@ hclips.com##.content > div > .wrapper + div[class]:not(.wrapper)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/907
 clik.pw##+js(aopr, app_vars.force_disable_adblock)
+clik.pw##+js(aopw, _pop)
 *$frame,domain=clik.pw
+*$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=clik.pw
 @@||api-secure.solvemedia.com^$frame
 clik.pw##a[href^="https://href.li/"]
 clik.pw##body > div[style]:has(input[type="button"])
@@ -2561,6 +2564,9 @@ kinos.*,kinox.*##+js(aopr, eddOptions)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/938
 tui.click##+js(aopr, app_vars.force_disable_adblock)
+tui.click##+js(nowoif)
+tui.click##+js(set, blurred, false)
+tui.click##form#go-popup:remove()
 tui.click##.banner-inner
 
 ! https://github.com/uBlockOrigin/uAssets/issues/941#issuecomment-405022292
@@ -11703,7 +11709,7 @@ short-fly.com,shrtme.me##+js(aopr, app_vars.force_disable_adblock)
 ||ecotrackings.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4552
-||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs,domain=audiotag.info
+||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=audiotag.info
 @@||audiotag.info^$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4557
@@ -12518,8 +12524,9 @@ t-online.de##[href^="http://pubads.g.doubleclick.net"]
 ! https://github.com/uBlockOrigin/uAssets/issues/6337
 t-online.de##+js(set, CustomEvent, noopFunc)
 email.t-online.de#@#+js(set, CustomEvent, noopFunc)
+! https://www.reddit.com/r/uBlockOrigin/comments/m1zwji/
 !#if env_mobile
-t-online.de#@#+js(set, CustomEvent, noopFunc)
+pcgames.de,t-online.de#@#+js(set, CustomEvent, noopFunc)
 !#endif
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4893
@@ -13590,10 +13597,11 @@ ustream.to##.overlay
 @@||cdn-u.frustasi.org//src//check.js$script,domain=ustreamix.*
 ! https://github.com/uBlockOrigin/uAssets/issues/8681
 *$script,redirect-rule=noopjs,domain=beef1999.blogspot.com
-@@||bestdisplayformats.com^$script,domain=beef1999.blogspot.com
+beef1999.blogspot.com##+js(noeval-if, statcounter)
 beef1999.blogspot.com##+js(aopr, console.clear)
 beef1999.blogspot.com##+js(aopr, LieDetector)
 beef1999.blogspot.com##.popup
+beef1999.blogspot.com###banner_app
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4332
 crisanimex.com##+js(aopw, _pop)
@@ -18685,8 +18693,8 @@ nulledfree.pw##+js(set, adsbygoogle, null)
 ! https://github.com/NanoMeow/QuickReports/issues/1674
 ! https://github.com/uBlockOrigin/uAssets/issues/7086
 semawur.com##+js(aopr, open)
-semawur.com##+js(nano-sib, , 2500)
-semawur.com##center [src*=".png"]
+semawur.com##+js(nano-sib, , *, 0)
+semawur.com###main > .text-center > a[href] > img
 ||semawur.com/download$image
 
 ! https://github.com/NanoMeow/QuickReports/issues/2140
@@ -18863,7 +18871,6 @@ macappdownload.com##+js(nosiif, visibility, 1000)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2184
 @@||ytmp3.eu^$ghide
-ytmp3.eu##+js(aopr, open)
 ytmp3.eu##+js(aopw, _pop)
 ||brydhoye.com^
 ||ytmp3.eu/en45/pagead/js/adsbygoogle.js$xhr,1p,redirect-rule=noop.txt
@@ -19434,7 +19441,9 @@ shortgoo.blogspot.com##+js(set, showAds, true)
 @@||downloader.la^$ghide
 
 ! https://reddit.com/r/uBlockOrigin/comments/dzvpgc/
-ytmp3.cc##+js(nowoif)
+! ytmp3.mobi ad and popup
+ytmp3.*##+js(nowoif)
+||ytmp3.*/ad/$frame
 *$script,frame,3p,denyallow=dropbox.com|dropbox-dns.com|ijjiii.is,domain=ytmp3.cc
 
 ! cariskuy.com anti adb
