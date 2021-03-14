@@ -72,10 +72,6 @@
 ! To counter Peter Lowe's, hpHosts
 ! [badfilter] ||mixpanel.com^$badfilter
 
-! https://github.com/chrisaljoudi/uBlock/issues/570
-! To counter `yui.yahooapis.com` in hpHosts
-@@||yui.yahooapis.com^
-
 ! Chrome store feedback
 ! To counter `top.mail.ru` in Peter Lowe's
 ! [badfilter] ||top.mail.ru^$badfilter
@@ -1663,7 +1659,7 @@ kzstock.blogspot.com#@##ad-target
 ! https://www.reddit.com/r/uBlockOrigin/comments/blgisr/cannot_click_through_to_video_on_nhlcom/
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=nhl.com
 @@||doubleclick.net/gampad/ads*nhl.com$xhr,domain=imasdk.googleapis.com
-||static.adsafeprotected.com/vans-adapter-google-ima.js$script,redirect-rule=noopjs,domain=nhl.com
+@@||static.adsafeprotected.com/vans-adapter-google-ima.js$script,domain=nhl.com
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/323
 @@||d8rk54i4mohrb.cloudfront.net/js/video.js$script,domain=forbes.com
@@ -1754,9 +1750,6 @@ calgaryherald.com#@#.local-branding
 
 ! https://github.com/NanoMeow/QuickReports/issues/1321
 @@||cdn.cdn000.club/js/loadjs.min.js$script,domain=vipstand.se
-
-! player broken http://www. digi24. ro/live/digi24
-@@||scdn.cxense.com/cx.js$script,domain=digi24.ro
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5764
 @@||ebates.com/dist/static/*/analytics/*$script,1p
@@ -3858,3 +3851,18 @@ bing.com##.ins_exp.vsp
 ! https://www.reddit.com/r/uBlockOrigin/comments/m1thyx/cant_play_mahjong_games/
 @@||quantcast.mgr.consensu.org^$xhr,script,domain=mahjong.com
 ! [badfilter] ||consensu.org^$badfilter
+
+! https://jbbs.shitaraba.net/bbs/read.cgi/internet/25463/1598352715/101
+@@||tags.tiqcdn.com/utag/zurich-japan/main/prod/utag.js$script,domain=net.zurich.jp
+
+! go-links. net page broken
+@@||go-links.net/stylesheets/ads.css$stylesheet,1p
+
+! news38.de broken images
+||news38.de/resources/*$image,1p,redirect-rule=1x1.gif
+
+! histats. com unlock the site itself
+! [badfilter] ||histats.com^$badfilter
+
+! https://www.reddit.com/r/uBlockOrigin/comments/m4x8fr/is_there_a_way_to_report_sites/
+@@||tags.tiqcdn.com/utag/samsung/main/prod/utag.js^$script,domain=samsung.com
