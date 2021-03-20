@@ -344,6 +344,7 @@ dropgalaxy.com##[target="_blank"]:has-text(Download)
 dropgalaxy.com###modalpop
 @@.jpg$image,domain=dropgalaxy.com
 @@.png$image,domain=dropgalaxy.com
+@@||c.adsco.re^$script,domain=dropgalaxy.com
 @@||contextual.media.net/dmedianet.js?cid=$domain=dropgalaxy.com
 @@||contextual.media.net/*/fcmain.js$domain=dropgalaxy.com
 @@||googlesyndication.com^$script,xhr,domain=dropgalaxy.com
@@ -374,6 +375,7 @@ mangahost.*##+js(set, google_unique_id, true)
 mangahost.*,mangahost2.com##.clearfix.pull-right.sidebar > .clearfix > .new.newlateral.clearfix:has(.adsbygoogle)
 @@||mangahost.*^$ghide
 mangahosted.com,mangahostz.com##+js(acis, init)
+mangahostz.com##+js(acis, setTimeout, adsbygoogle)
 mangahostz.com##+js(nosiif, visibility, 1000)
 mangahosted.com##.adsbygoogle
 ||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs,domain=mangahostz.com,important
@@ -1657,7 +1659,7 @@ gtamaxprofit.com##+js(acis, $, wrapfabtest)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/56713
 @@||myuploadedpremium.de^$ghide
 myuploadedpremium.de##+js(aeld, mouseover)
-myuploadedpremium.de##+js(nostif, iframe, 1500)
+myuploadedpremium.de##+js(nostif, checkifr)
 myuploadedpremium.de##.adsbygoogle
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7499
@@ -2525,6 +2527,12 @@ konstantinova.net##[href^="//mellowads.com/"]
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/58765
 daviruzsystems.com##+js(nosiif, visibility, 1000)
+daviruzsystems.com###babasbmsgx
+daviruzsystems.com##[href^="https://codeyon.com/"]
+daviruzsystems.com##.pull-right > .bn-lg.col-xs-12.col-sm-12
+daviruzsystems.com##.p-b-30.bn-lg-sidebar.col-xs-12.col-sm-12
+daviruzsystems.com##[href^="https://www.sinhcoms.in"]:upward(3)
+daviruzsystems.com##div.bn-lg-sidebar.col-xs-12.col-sm-12:nth-of-type(14)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/58771
 baritoday.it##+js(nostif, bADBlock)
@@ -3760,6 +3768,8 @@ dl.3dmodelshare.org##+js(acis, addEventListener, google_ad_client)
 ! https://github.com/NanoMeow/QuickReports/issues/4598
 thingiverse.com##+js(nano-sib)
 thingiverse.com##[class^="AdBlockDetect"]
+thingiverse.com##div[class^="HomePageBanner__homePageBanner--"]
+thingiverse.com##div[class^="SearchControls__withBanner--"]:style(margin-top:0 !important)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62686
 surf-trx.com##+js(nosiif, visibility, 1000)
@@ -3806,7 +3816,10 @@ satoshiquiz.com##.ad
 satoshiquiz.com##.slideshow-container
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62854
-cgtips.org##+js(acis, addEventListener, google_ad_client)
+link.cgtips.org##+js(acis, addEventListener, google_ad_client)
+link.cgtips.org##+js(set, countdown, 0)
+||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=cgtips.org
+cgtips.org##div[class*="better-ads-listitemad"]:remove()
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7860
 saradahentai.com,hentaiarena.com##+js(aopr, document.dispatchEvent)
@@ -3935,6 +3948,7 @@ chiasecongnghe.com##+js(nano-sib)
 chiasecongnghe.com###myDIVV
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8527
+nulleb.com##+js(nano-sib, runDownload)
 *$script,redirect-rule=noopjs,domain=nulleb.com
 *$xhr,redirect-rule=nooptext,domain=nulleb.com
 
@@ -4675,12 +4689,14 @@ standardmedia.co.ke##+js(aopr, canRunAds)
 downloadrepack.com###footer-widgets > .container-inner > .group.hu-pad
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/j51md6/annoying_popup_embeded_in_stream/
+hdstreamss.club,hhdstreams.club,uhdstreams.club##+js(acis, Math, break;case $.)
 hdstreamss.club,hhdstreams.club##+js(aeld, , 0x)
-hdstreamss.club,hhdstreams.club##+js(acis, Math, XMLHttpRequest)
 hdstreamss.club,hhdstreams.club##+js(aopr, LieDetector)
 hdstreamss.club,hhdstreams.club,uhdstreams.club##+js(aopw, _pop)
 hdstreamss.club,hhdstreams.club##+js(aopr, open)
 hdstreamss.club,hhdstreams.club##[href^="http://www.streamshd.club/"]
+||krouekal.com^
+||ptoangir.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8001
 vpn-anbieter-vergleich-test.de##+js(nowoif)
@@ -4824,16 +4840,17 @@ newsiqra.com##+js(nosiif, visibility, 1000)
 newsiqra.com##+js(acis, XMLHttpRequest, null)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8020
-joska.xyz,partyhomedecor.com,petsched.website,teknomuda.com,tokosehatkita.xyz##+js(aopr, app_vars.force_disable_adblock)
+joska.xyz,partyhomedecor.com,petsched.website,skiped.me,teknomuda.com,tokosehatkita.xyz##+js(aopr, app_vars.force_disable_adblock)
 joska.xyz,partyhomedecor.com,petsched.website,skiped.me,teknomuda.com,tokosehatkita.xyz##+js(set, blurred, false)
 joska.xyz##[href^="https://petsched.website/"]
 enterha.com,helow.id,joska.xyz,lokerja.pw,momozain.com,partyhomedecor.com,petsched.website,skiped.me,teknomuda.com,tokosehatkita.xyz,upinipin.me##+js(acis, addEventListener, google_ad_client)
 joska.xyz,partyhomedecor.com,petsched.website,skiped.me,teknomuda.com,tokosehatkita.xyz##p > a[href][target="_blank"]
-helow.id,joska.xyz,lokerja.pw,momozain.com,partyhomedecor.com,petsched.website,teknomuda.com,tokosehatkita.xyz,upinipin.me###wpsafe-snp:style(display: block !important;)
-helow.id,joska.xyz,lokerja.pw,momozain.com,partyhomedecor.com,petsched.website,teknomuda.com,tokosehatkita.xyz,upinipin.me###wpsafe-generate:style(display: block !important;)
-helow.id,lokerja.pw,momozain.com,petsched.website,teknomuda.com,upinipin.me##*:has(#wpsafe-wait1):not(:has(#wpsafe-snp))
+enterha.com,helow.id,joska.xyz,lokerja.pw,momozain.com,partyhomedecor.com,petsched.website,teknomuda.com,tokosehatkita.xyz,upinipin.me###wpsafe-snp:style(display: block !important;)
+enterha.com,helow.id,joska.xyz,lokerja.pw,momozain.com,partyhomedecor.com,petsched.website,teknomuda.com,tokosehatkita.xyz,upinipin.me###wpsafe-generate:style(display: block !important;)
+enterha.com,helow.id,lokerja.pw,momozain.com,petsched.website,teknomuda.com,upinipin.me##*:has(#wpsafe-wait1):not(:has(#wpsafe-snp))
 enterha.com,joska.xyz,lokerja.pw,momozain.com,partyhomedecor.com,petsched.website,teknomuda.com,tokosehatkita.xyz,upinipin.me##*:has(+ div[align="center"] button.btn)
 enterha.com##div[align="center"]:not(:has(.btn))
+skiped.me##.banner-page iframe
 ! [badfilter] ||onsafelink.com^$badfilter
 ||onsafelink.com^$script,3p
 
@@ -5125,15 +5142,15 @@ mysnip.xyz##.text-center.form-group > b > h3, br
 molll.mobi##+js(nostif, innerText, 2000)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/66177
-amon.my.id,askpets.website,bacapedia.my.id,bams.my.id,cypets.website,enema.my.id,epetsure.website,healthypitt.website,jualminuman.xyz,kamerafoto.net,kangapip.com,leafpro.website,menulisonline.com,motorantik.store,nstnews.net,petru.website,plantqo.website,visly.my.id,xcvza.my.id##+js(acis, addEventListener, google_ad_client)
+amon.my.id,askpets.website,bacapedia.my.id,bams.my.id,cypets.website,enema.my.id,epetsure.website,healthypitt.website,jualminuman.xyz,kamerafoto.net,kangapip.com,leafpro.website,menulisonline.com,motorantik.store,nstnews.net,pakaiantrendi.xyz,petru.website,plantqo.website,visly.my.id,xcvza.my.id##+js(acis, addEventListener, google_ad_client)
 fedaro.me,s.kamerafoto.net##[href="https://s.kamerafoto.net/"]
 fedaro.me,kangapip.com,xcvza.my.id##+js(set, blurred, false)
 fedaro.me,kangapip.com,xcvza.my.id##p > a[href][target="_blank"]
 fedaro.me,kangapip.com##.captcha-page > .container > .row > .col-md-offset-1 > .box-main > div:not(:has(#link-view))
-askpets.website,enema.my.id,epetsure.website,healthypitt.website,jualminuman.xyz,leafpro.website,litpets.website,menulisonline.com,motorantik.store,nstnews.net,petru.website,plantqo.website###wpsafe-snp:style(display: block !important;)
-askpets.website,enema.my.id,epetsure.website,healthypitt.website,jualminuman.xyz,leafpro.website,litpets.website,menulisonline.com,motorantik.store,nstnews.net,petru.website,plantqo.website###wpsafe-generate:style(display: block !important;)
-askpets.website,enema.my.id,cypets.website,epetsure.website,healthypitt.website,jualminuman.xyz,leafpro.website,motorantik.store,petru.website,plantqo.website##*:has(#wpsafe-wait1):not(:has(#wpsafe-snp))
-amon.my.id,askpets.website,bacapedia.my.id,bams.my.id,cypets.website,epetsure.website,leafpro.website,litpets.website,menulisonline.com,nstnews.net,petru.website,plantqo.website,visly.my.id##*:has(+ div[align="center"] button.btn)
+askpets.website,enema.my.id,epetsure.website,healthypitt.website,jualminuman.xyz,leafpro.website,litpets.website,menulisonline.com,motorantik.store,nstnews.net,pakaiantrendi.xyz,petru.website,plantqo.website###wpsafe-snp:style(display: block !important;)
+askpets.website,enema.my.id,epetsure.website,healthypitt.website,jualminuman.xyz,leafpro.website,litpets.website,menulisonline.com,motorantik.store,nstnews.net,pakaiantrendi.xyz,petru.website,plantqo.website###wpsafe-generate:style(display: block !important;)
+askpets.website,enema.my.id,cypets.website,epetsure.website,healthypitt.website,jualminuman.xyz,leafpro.website,motorantik.store,pakaiantrendi.xyz,petru.website,plantqo.website##*:has(#wpsafe-wait1):not(:has(#wpsafe-snp))
+amon.my.id,askpets.website,bacapedia.my.id,bams.my.id,cypets.website,epetsure.website,leafpro.website,litpets.website,menulisonline.com,nstnews.net,pakaiantrendi.xyz,petru.website,plantqo.website,visly.my.id##*:has(+ div[align="center"] button.btn)
 xcvza.my.id##.box-main > .blog-item
 
 ! e-wok.tv anti-adb
@@ -6309,7 +6326,7 @@ dulinks.*,lyricsbot.pw###__bgd_link
 dulinks.*,lyricsbot.pw##.banner
 dulinks.*,lyricsbot.pw##.row > .col-md-offset-1 > .box > .box-body center > a[href]
 dulinks.*,lyricsbot.pw###btm_banner
-dulinks.*##.box-main center > p > button.button
+dulinks.*##.captcha-page center > p > button.button
 dulinks.*##.captcha-page > center h,.box-main h
 dulinks.*##[href^="https://dropmms.com/"]
 dulinks.co##.text-center.box-body > center > p > .button
@@ -6519,23 +6536,6 @@ milftoon.xxx##+js(acis, document.querySelectorAll, popMagic)
 boolwowgirls.com##+js(acis, document.querySelectorAll, popMagic)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/69916
-uplinks.in##+js(aopr, app_vars.force_disable_adblock)
-uplinks.in##+js(set, blurred, false)
-uplinks.in##.short
-uplinks.in##center > .separator
-uplinks.in##.row > .separator
-uplinks.in##[style$="text-align: center;"] > a[href]
-uplinks.in##.banner
-uplinks.in##.box-main > .blog-item
-uplinks.in##.box-main > h5,.box-main > p
-uplinks.in###__bgd_link
-uplinks.in###__bgd_link:upward(.button)
-uplinks.in###btm_banner
-uplinks.in###myDIV:style(display: block !important;)
-uplinks.in###secondtext:style(display: block !important;)
-uplinks.in###plswait
-*$frame,denyallow=google.com,domain=uplinks.in
-*$3p,script,denyallow=cloudflare.com|codepen.io|google.com|googleapis.com|gstatic.com|hcaptcha.com|hwcdn.net|jquery.com|recaptcha.net,domain=uplinks.in
 cutlink.link##+js(acis, String.fromCharCode, /btoa|break/)
 cutlink.link##+js(aopr, app_vars.force_disable_adblock)
 cutlink.link##+js(set, blurred, false)
