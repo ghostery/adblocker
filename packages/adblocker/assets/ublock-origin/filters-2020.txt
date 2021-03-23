@@ -455,7 +455,6 @@ restplay.xyz##+js(aopr, mdpDeBlocker)
 ! https://www.reddit.com/r/uBlockOrigin/comments/g64dma/blocking_popup_ads/
 cmovies.*,vidnext.net##+js(acis, String.fromCharCode, /btoa|break/)
 ihls.me,oniondrive.com,onionplay.cloud,onionplay.stream##+js(nowoif)
-||hostingcoupon.coupons^$3p
 
 ! https://github.com/NanoMeow/QuickReports/issues/3642
 paolitravelling.xyz##+js(aopr, mdpDeBlocker)
@@ -868,7 +867,6 @@ movierulz5.*##+js(aeld, , _0x)
 movierulz5.*##+js(aopw, _pop)
 movierulz5.*##+js(nowoif)
 movierulz5.*##[href^="https://atlasvpn.onelink.me"]
-||movierulzclub.com^$3p
 
 ! https://github.com/NanoMeow/QuickReports/issues/3759
 eroasmr.com##+js(acis, document.querySelectorAll, popMagic)
@@ -1763,12 +1761,6 @@ acn.vin##+js(aopr, app_vars.force_disable_adblock)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4049
 @@||viralfeed.*^$ghide
-
-! https://github.com/NanoMeow/QuickReports/issues/4050
-7hitmovies.*##+js(aopr, LieDetector)
-7hitmovies.*##+js(acis, Math, zfgloaded)
-7hitmovies.*##^script:has-text('shift')
-7hitmovies.*##+js(acis, String.fromCharCode, 'shift')
 
 ! https://github.com/NanoMeow/QuickReports/issues/4051
 gdstream.net##+js(aeld, , _blank)
@@ -3760,10 +3752,12 @@ royalkom.com##+js(nosiif, visibility, 1000)
 super-ethanol.com##+js(nosiif, visibility, 1000)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62656
-3dmodelshare.org##+js(aopr, anOptions)
+||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=3dmodelshare.org
 dl.3dmodelshare.org##+js(acis, addEventListener, google_ad_client)
 3dmodelshare.org##div.widget_anthemes_300px
 3dmodelshare.org##.homeadv > span
+3dmodelshare.org##.single-box
+3dmodelshare.org##.single-728
 
 ! https://github.com/NanoMeow/QuickReports/issues/4598
 thingiverse.com##+js(nano-sib)
@@ -3788,7 +3782,7 @@ responsivevoice.org##.cp-modal-popup-container:remove()
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/69603
 ! https://github.com/AdguardTeam/AdguardFilters/issues/76539
-*$frame,script,3p,denyallow=akamaiedge.net|cloudflare.com|facebook.com|fastly.net|googleapis.com|hatena.ne.jp|hcaptcha.com|line.me|twitter.com,domain=manga1000.com|manga1001.com
+*$frame,script,3p,denyallow=akamaiedge.net|cloudflare.com|edgecastcdn.net|facebook.com|fastly.net|googleapis.com|hatena.ne.jp|hcaptcha.com|line.me|twitter.com,domain=manga1000.com|manga1001.com
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62787
 *$xhr,redirect-rule=nooptext,domain=bitminer.biz
@@ -3958,14 +3952,10 @@ youvideoporno.mobi##+js(aopr, decodeURI)
 ||youvideoporno.mobi/sw.js$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8368#issuecomment-756504228
-voe.sx##+js(aost, String.fromCharCode, HTMLBodyElement)
-voe.sx##+js(aost, document.createElement, HTMLBodyElement)
-voe.sx##+js(aost, Math, /stackDepth:3.*EventListener/)
-voe.sx##+js(aost, Math, /inlineScript:9|inlineScript:8|inlineScript:7/)
 *$frame,script,3p,denyallow=zencdn.net|voe-network.net|cdnjs.cloudflare.com|hcaptcha.com|recaptcha.net|googleapis.com|sharethis.com|fastly.net|jsdelivr.net|bootstrapcdn.com|jquery.com|hwcdn.net|consensu.org|polyfill.io,domain=voe.sx
 voe.sx##+js(acis, String.fromCharCode, /btoa|break/)
 voe.sx##+js(nowebrtc)
-voe.sx##+js(aopr, stream)
+voe.sx##+js(acis, primaryVOD)
 ||badshores.com^$all
 ||best2020-games-web1.com^$all
 ||facesnotebook.com^$all
@@ -4928,7 +4918,6 @@ proshort.gq##+js(set, blurred, false)
 proshort.gq##.banner
 proshort.gq###FirstDiv:style(display:block !important)
 *$script,frame,3p,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=proshort.gq
-||getshort.cf^$3p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65608
 trinddz.com##+js(aopr, app_vars.force_disable_adblock)
@@ -5142,7 +5131,7 @@ mysnip.xyz##.text-center.form-group > b > h3, br
 molll.mobi##+js(nostif, innerText, 2000)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/66177
-amon.my.id,askpets.website,bacapedia.my.id,bams.my.id,cypets.website,enema.my.id,epetsure.website,healthypitt.website,jualminuman.xyz,kamerafoto.net,kangapip.com,leafpro.website,menulisonline.com,motorantik.store,nstnews.net,pakaiantrendi.xyz,petru.website,plantqo.website,visly.my.id,xcvza.my.id##+js(acis, addEventListener, google_ad_client)
+amon.my.id,askpets.website,bacapedia.my.id,bams.my.id,cypets.website,enema.my.id,epetsure.website,healthypitt.website,jualminuman.xyz,kamerafoto.net,kangapip.com,leafpro.website,litpets.website,menulisonline.com,motorantik.store,nstnews.net,pakaiantrendi.xyz,petru.website,plantqo.website,visly.my.id,xcvza.my.id##+js(acis, addEventListener, google_ad_client)
 fedaro.me,s.kamerafoto.net##[href="https://s.kamerafoto.net/"]
 fedaro.me,kangapip.com,xcvza.my.id##+js(set, blurred, false)
 fedaro.me,kangapip.com,xcvza.my.id##p > a[href][target="_blank"]
@@ -6970,6 +6959,7 @@ ehotpics.com,upicsz.com##figure[style^="width: 310px;"]
 down.mdiaload.com##div[style$="background-color:#ffffff; text-align:center"]
 down.mdiaload.com##div[style="width:336px; height:280px"]
 down.mdiaload.com##.btn-dow.btn[href$=".html"]
+down.mdiaload.com##a[href^="https://down.mdiaload.com/download"]:upward(2)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/70949
 ontiva.com##+js(set, canRunAds, true)
