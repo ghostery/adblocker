@@ -189,8 +189,11 @@ function isThirdParty(
   domain: string,
   sourceHostname: string,
   sourceDomain: string,
+  type: RequestType,
 ): boolean {
-  if (domain.length !== 0 && sourceDomain.length !== 0) {
+  if (type === 'main_frame' || type === 'mainFrame') {
+    return false;
+  } else if (domain.length !== 0 && sourceDomain.length !== 0) {
     return domain !== sourceDomain;
   } else if (domain.length !== 0 && sourceHostname.length !== 0) {
     return domain !== sourceHostname;
@@ -331,7 +334,7 @@ export default class Request {
         : getEntityHashesFromLabelsBackward(sourceHostname, sourceDomain);
 
     // Decide on partiness
-    this.isThirdParty = isThirdParty(hostname, domain, sourceHostname, sourceDomain);
+    this.isThirdParty = isThirdParty(hostname, domain, sourceHostname, sourceDomain, type);
     this.isFirstParty = !this.isThirdParty;
 
     // Check protocol
