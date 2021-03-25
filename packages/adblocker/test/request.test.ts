@@ -233,9 +233,26 @@ describe('#Request', () => {
     });
 
     describe('finds partyness', () => {
-      it('correctly uses domains when available', () => {
+      it('considers as first-party if type is main_frame', () => {
         expect(
-          Request.fromRawDetails({ url: 'https://foo.com', sourceUrl: 'https://foo.com' }),
+          Request.fromRawDetails({
+            sourceUrl: 'https://sub1.sub2.bar.com',
+            url: 'https://foo.com',
+          }),
+        ).to.deep.include({
+          isFirstParty: true,
+          isThirdParty: false,
+        });
+
+      });
+
+      it('correctly uses domains when available if type not main_frame', () => {
+        expect(
+          Request.fromRawDetails({
+            url: 'https://foo.com',
+            sourceUrl: 'https://foo.com',
+            type: 'script',
+          }),
         ).to.deep.include({
           isFirstParty: true,
           isThirdParty: false,
@@ -245,6 +262,7 @@ describe('#Request', () => {
           Request.fromRawDetails({
             sourceUrl: 'https://sub1.sub2.foo.com',
             url: 'https://foo.com',
+            type: 'script',
           }),
         ).to.deep.include({
           isFirstParty: true,
@@ -255,6 +273,7 @@ describe('#Request', () => {
           Request.fromRawDetails({
             sourceUrl: 'https://sub1.sub2.bar.com',
             url: 'https://foo.com',
+            type: 'script',
           }),
         ).to.deep.include({
           isFirstParty: false,
@@ -265,6 +284,7 @@ describe('#Request', () => {
           Request.fromRawDetails({
             sourceUrl: 'https://localhost:4242/',
             url: 'https://foo.com',
+            type: 'script',
           }),
         ).to.deep.include({
           isFirstParty: false,
@@ -272,10 +292,11 @@ describe('#Request', () => {
         });
       });
 
-      it('falls-back to first-party if no sourceUrl', () => {
+      it('falls-back to first-party if no sourceUrl and type not main_frame', () => {
         expect(
           Request.fromRawDetails({
             url: 'https://foo.com',
+            type: 'script',
           }),
         ).to.deep.include({
           isFirstParty: true,
@@ -283,10 +304,11 @@ describe('#Request', () => {
         });
       });
 
-      it('falls-back to first-party if no url', () => {
+      it('falls-back to first-party if no url and type not main_frame', () => {
         expect(
           Request.fromRawDetails({
             sourceUrl: 'null',
+            type: 'script',
           }),
         ).to.deep.include({
           isFirstParty: true,

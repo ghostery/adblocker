@@ -306,12 +306,14 @@ describe('#NetworkFilter.match', () => {
     expect(f`||foo$~third-party`).not.to.matchRequest({
       sourceUrl: 'http://baz.bar.com',
       url: 'https://foo.com/bar',
+      type: 'script',
     });
 
     // ~first-party
     expect(f`||foo$~first-party`).to.matchRequest({
       sourceUrl: 'http://baz.bar.com',
       url: 'https://foo.com/bar',
+      type: 'script',
     });
     expect(f`||foo$~first-party`).not.to.matchRequest({
       sourceUrl: 'http://baz.foo.com',
@@ -366,30 +368,37 @@ describe('#NetworkFilter.match', () => {
     expect(f`*$3p,denyallow=x.com|y.com,domain=a.com|b.com`).to.matchRequest({
       sourceUrl: 'https://a.com',
       url: 'https://z.com/bar',
+      type: 'script',
     });
     expect(f`*$3p,denyallow=x.com|y.com,domain=a.com|b.com`).to.matchRequest({
       sourceUrl: 'https://b.com',
       url: 'https://z.com/bar',
+      type: 'script',
     });
     expect(f`*$3p,denyallow=x.com|y.com,domain=a.com|b.com`).to.matchRequest({
       sourceUrl: 'https://sub.b.com',
       url: 'https://z.com/bar',
+      type: 'script',
     });
     expect(f`*$3p,denyallow=x.com|y.com,domain=a.com|b.com`).to.not.matchRequest({
       sourceUrl: 'https://a.com',
       url: 'https://x.com/bar',
+      type: 'script',
     });
     expect(f`*$3p,denyallow=x.com|y.com,domain=a.com|b.com`).to.not.matchRequest({
       sourceUrl: 'https://a.com',
       url: 'https://sub.y.com/bar',
+      type: 'script',
     });
     expect(f`*$3p,denyallow=x.com|y.com,domain=a.com|b.com`).to.not.matchRequest({
       sourceUrl: 'https://sub.b.com',
       url: 'https://sub.y.com/bar',
+      type: 'script',
     });
     expect(f`*$3p,denyallow=x.com|y.com,domain=a.com|b.com`).to.not.matchRequest({
       sourceUrl: 'https://c.com',
       url: 'https://sub.y.com/bar',
+      type: 'script',
     });
   });
 });
