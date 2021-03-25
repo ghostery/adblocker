@@ -7,7 +7,6 @@
  */
 /* tslint:disable quotemark */
 export default [
-  "acis, decodeURI, decodeURIComp",
   "acis, disableSelection, reEnab",
   "acis, document.createElement, ",
   "acis, document.getElementById,",
@@ -72,6 +71,7 @@ export default [
   ":has(",
   "block",
   "docum",
+  "width",
   "wrapp",
   ".au,",
   ".com",
@@ -119,6 +119,7 @@ export default [
   "ar",
   "at",
   "bo",
+  "ca",
   "ce",
   "ch",
   "ck",
@@ -184,7 +185,6 @@ export default [
   "t-",
   "ta",
   "te",
-  "th",
   "ti",
   "ub",
   "ul",
