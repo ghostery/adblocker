@@ -1,3 +1,106 @@
+# v1.20.4 (Thu Mar 25 2021)
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker`
+  - Fix request partiness identification when type is main_frame [#1805](https://github.com/cliqz-oss/adblocker/pull/1805) ([@eugenioemmolo](https://github.com/eugenioemmolo))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#1803](https://github.com/cliqz-oss/adblocker/pull/1803) ([@cliqz-oss](https://github.com/cliqz-oss) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1800](https://github.com/cliqz-oss/adblocker/pull/1800) ([@cliqz-oss](https://github.com/cliqz-oss) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1787](https://github.com/cliqz-oss/adblocker/pull/1787) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1775](https://github.com/cliqz-oss/adblocker/pull/1775) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1753](https://github.com/cliqz-oss/adblocker/pull/1753) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1750](https://github.com/cliqz-oss/adblocker/pull/1750) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1748](https://github.com/cliqz-oss/adblocker/pull/1748) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1743](https://github.com/cliqz-oss/adblocker/pull/1743) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1727](https://github.com/cliqz-oss/adblocker/pull/1727) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1722](https://github.com/cliqz-oss/adblocker/pull/1722) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1720](https://github.com/cliqz-oss/adblocker/pull/1720) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1719](https://github.com/cliqz-oss/adblocker/pull/1719) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump playwright from 1.9.2 to 1.10.0 [#1804](https://github.com/cliqz-oss/adblocker/pull/1804) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.42.3 to 2.42.4 [#1802](https://github.com/cliqz-oss/adblocker/pull/1802) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.22.0 to 10.22.1 [#1801](https://github.com/cliqz-oss/adblocker/pull/1801) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 11.4.0 to 11.4.1 [#1799](https://github.com/cliqz-oss/adblocker/pull/1799) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump sinon-chai from 3.5.0 to 3.6.0 [#1798](https://github.com/cliqz-oss/adblocker/pull/1798) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 11.3.0 to 11.4.0 [#1796](https://github.com/cliqz-oss/adblocker/pull/1796) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.21.3 to 10.22.0 [#1795](https://github.com/cliqz-oss/adblocker/pull/1795) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump tldts-experimental from 5.7.16 to 5.7.17 [#1794](https://github.com/cliqz-oss/adblocker/pull/1794) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.21.2 to 10.21.3 [#1793](https://github.com/cliqz-oss/adblocker/pull/1793) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.21.1 to 10.21.2 [#1792](https://github.com/cliqz-oss/adblocker/pull/1792) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.21.0 to 10.21.1 [#1791](https://github.com/cliqz-oss/adblocker/pull/1791) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.42.2 to 2.42.3 [#1789](https://github.com/cliqz-oss/adblocker/pull/1789) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.42.1 to 2.42.2 [#1788](https://github.com/cliqz-oss/adblocker/pull/1788) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.42.0 to 2.42.1 [#1785](https://github.com/cliqz-oss/adblocker/pull/1785) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/mocha from 8.2.1 to 8.2.2 [#1784](https://github.com/cliqz-oss/adblocker/pull/1784) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.20.6 to 10.21.0 [#1783](https://github.com/cliqz-oss/adblocker/pull/1783) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.41.5 to 2.42.0 [#1782](https://github.com/cliqz-oss/adblocker/pull/1782) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.20.5 to 10.20.6 [#1781](https://github.com/cliqz-oss/adblocker/pull/1781) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.20.4 to 10.20.5 [#1780](https://github.com/cliqz-oss/adblocker/pull/1780) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.41.4 to 2.41.5 [#1779](https://github.com/cliqz-oss/adblocker/pull/1779) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump tldts-experimental from 5.7.15 to 5.7.16 [#1778](https://github.com/cliqz-oss/adblocker/pull/1778) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.41.3 to 2.41.4 [#1777](https://github.com/cliqz-oss/adblocker/pull/1777) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.41.2 to 2.41.3 [#1776](https://github.com/cliqz-oss/adblocker/pull/1776) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.20.3 to 10.20.4 [#1774](https://github.com/cliqz-oss/adblocker/pull/1774) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/node from 14.14.34 to 14.14.35 [#1773](https://github.com/cliqz-oss/adblocker/pull/1773) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.20.2 to 10.20.3 [#1772](https://github.com/cliqz-oss/adblocker/pull/1772) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.20.1 to 10.20.2 [#1771](https://github.com/cliqz-oss/adblocker/pull/1771) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump tldts-experimental from 5.7.14 to 5.7.15 [#1770](https://github.com/cliqz-oss/adblocker/pull/1770) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.20.0 to 10.20.1 [#1769](https://github.com/cliqz-oss/adblocker/pull/1769) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.19.0 to 10.20.0 [#1768](https://github.com/cliqz-oss/adblocker/pull/1768) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.18.9 to 10.19.0 [#1767](https://github.com/cliqz-oss/adblocker/pull/1767) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump tldts-experimental from 5.7.13 to 5.7.14 [#1766](https://github.com/cliqz-oss/adblocker/pull/1766) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.18.8 to 10.18.9 [#1765](https://github.com/cliqz-oss/adblocker/pull/1765) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump jsdom from 16.5.0 to 16.5.1 [#1764](https://github.com/cliqz-oss/adblocker/pull/1764) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.18.7 to 10.18.8 [#1763](https://github.com/cliqz-oss/adblocker/pull/1763) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump chai from 4.3.3 to 4.3.4 [#1761](https://github.com/cliqz-oss/adblocker/pull/1761) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.41.1 to 2.41.2 [#1760](https://github.com/cliqz-oss/adblocker/pull/1760) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/node from 14.14.33 to 14.14.34 [#1759](https://github.com/cliqz-oss/adblocker/pull/1759) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump mocha from 8.3.1 to 8.3.2 [#1757](https://github.com/cliqz-oss/adblocker/pull/1757) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.18.6 to 10.18.7 [#1756](https://github.com/cliqz-oss/adblocker/pull/1756) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.18.5 to 10.18.6 [#1755](https://github.com/cliqz-oss/adblocker/pull/1755) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.18.4 to 10.18.5 [#1754](https://github.com/cliqz-oss/adblocker/pull/1754) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.41.0 to 2.41.1 [#1752](https://github.com/cliqz-oss/adblocker/pull/1752) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump tldts-experimental from 5.7.12 to 5.7.13 [#1751](https://github.com/cliqz-oss/adblocker/pull/1751) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump playwright from 1.9.1 to 1.9.2 [#1749](https://github.com/cliqz-oss/adblocker/pull/1749) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.18.3 to 10.18.4 [#1747](https://github.com/cliqz-oss/adblocker/pull/1747) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/jsdom from 16.2.6 to 16.2.7 [#1746](https://github.com/cliqz-oss/adblocker/pull/1746) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/node from 14.14.32 to 14.14.33 [#1745](https://github.com/cliqz-oss/adblocker/pull/1745) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.40.0 to 2.41.0 [#1744](https://github.com/cliqz-oss/adblocker/pull/1744) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump jsdom from 16.4.0 to 16.5.0 [#1742](https://github.com/cliqz-oss/adblocker/pull/1742) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/sinon from 9.0.10 to 9.0.11 [#1741](https://github.com/cliqz-oss/adblocker/pull/1741) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/node from 14.14.31 to 14.14.32 [#1740](https://github.com/cliqz-oss/adblocker/pull/1740) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump tldts-experimental from 5.7.11 to 5.7.12 [#1738](https://github.com/cliqz-oss/adblocker/pull/1738) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump mocha from 8.3.0 to 8.3.1 [#1737](https://github.com/cliqz-oss/adblocker/pull/1737) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump typescript from 4.2.2 to 4.2.3 [#1736](https://github.com/cliqz-oss/adblocker/pull/1736) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.18.2 to 10.18.3 [#1735](https://github.com/cliqz-oss/adblocker/pull/1735) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump tldts-experimental from 5.7.10 to 5.7.11 [#1734](https://github.com/cliqz-oss/adblocker/pull/1734) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.18.1 to 10.18.2 [#1733](https://github.com/cliqz-oss/adblocker/pull/1733) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump chai from 4.3.1 to 4.3.3 [#1732](https://github.com/cliqz-oss/adblocker/pull/1732) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.18.0 to 10.18.1 [#1729](https://github.com/cliqz-oss/adblocker/pull/1729) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.17.1 to 10.18.0 [#1728](https://github.com/cliqz-oss/adblocker/pull/1728) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.17.0 to 10.17.1 [#1726](https://github.com/cliqz-oss/adblocker/pull/1726) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump lerna from 3.22.1 to 4.0.0 [#1725](https://github.com/cliqz-oss/adblocker/pull/1725) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.16.8 to 10.17.0 [#1724](https://github.com/cliqz-oss/adblocker/pull/1724) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump chai from 4.3.0 to 4.3.1 [#1723](https://github.com/cliqz-oss/adblocker/pull/1723) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- `@cliqz/adblocker-webextension-cosmetics`
+  - build(deps-dev): bump sinon from 9.2.4 to 10.0.0 [#1790](https://github.com/cliqz-oss/adblocker/pull/1790) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 5
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- [@eugenioemmolo](https://github.com/eugenioemmolo)
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Cliqz Open Source ([@cliqz-oss](https://github.com/cliqz-oss))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.20.3 (Sat Feb 27 2021)
 
 #### :nail_care: Polish

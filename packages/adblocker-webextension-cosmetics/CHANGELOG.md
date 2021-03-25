@@ -1,3 +1,19 @@
+# v1.20.4 (Thu Mar 25 2021)
+
+#### :bug: Bug Fix
+
+- build(deps-dev): bump sinon from 9.2.4 to 10.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps-dev): bump sinon from 9.2.4 to 10.0.0 [#1790](https://github.com/cliqz-oss/adblocker/pull/1790) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 1
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+
+---
+
 # v1.20.3 (Sat Feb 27 2021)
 
 #### :bug: Bug Fix

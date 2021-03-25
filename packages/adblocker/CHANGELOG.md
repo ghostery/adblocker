@@ -1,3 +1,33 @@
+# v1.20.4 (Thu Mar 25 2021)
+
+#### :bug: Bug Fix
+
+- Fix request partiness identification when type is main_frame [#1805](https://github.com/cliqz-oss/adblocker/pull/1805) ([@eugenioemmolo](https://github.com/eugenioemmolo))
+
+#### :house: Internal
+
+- Update local assets [#1803](https://github.com/cliqz-oss/adblocker/pull/1803) ([@cliqz-oss](https://github.com/cliqz-oss) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1800](https://github.com/cliqz-oss/adblocker/pull/1800) ([@cliqz-oss](https://github.com/cliqz-oss) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1787](https://github.com/cliqz-oss/adblocker/pull/1787) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1775](https://github.com/cliqz-oss/adblocker/pull/1775) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1753](https://github.com/cliqz-oss/adblocker/pull/1753) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1750](https://github.com/cliqz-oss/adblocker/pull/1750) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1748](https://github.com/cliqz-oss/adblocker/pull/1748) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1743](https://github.com/cliqz-oss/adblocker/pull/1743) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1727](https://github.com/cliqz-oss/adblocker/pull/1727) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1722](https://github.com/cliqz-oss/adblocker/pull/1722) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1720](https://github.com/cliqz-oss/adblocker/pull/1720) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1719](https://github.com/cliqz-oss/adblocker/pull/1719) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### Authors: 4
+
+- [@eugenioemmolo](https://github.com/eugenioemmolo)
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Cliqz Open Source ([@cliqz-oss](https://github.com/cliqz-oss))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.20.3 (Sat Feb 27 2021)
 
 #### :bug: Bug Fix
