@@ -1667,7 +1667,6 @@ playhydrax.com,hydracdn.*,hydrax.net##div#over:remove()
 @@||hydracdn.*^$ghide
 @@||hydrax.net^$ghide
 @@||playhydrax.com^$ghide
-@@*$websocket,domain=hydracdn.*|redirect-ads.com
 jav.guru##.aligncenter
 jav.guru##.alignnone
 femax20.com##+js(nowoif)
@@ -2125,6 +2124,7 @@ dxb.to##+js(nowebrtc)
 ! https://news.ycombinator.com/item?id=12654591
 nytimes.com,nytimes3xbfgragh.onion##article.story:style(opacity: 1.0 !important;)
 nytimes.com,nytimes3xbfgragh.onion##:xpath(//div[starts-with(@id, "dfp-ad")]/../..)
+nytimes.com##div[id^="story-ad-"]
 ! https://github.com/uBlockOrigin/uAssets/issues/816
 ! https://github.com/uBlockOrigin/uAssets/issues/3708
 cooking.nytimes.com##.nytc---modal-window---isShown:not(:has(.nytc---largepicturemodal---contentBody > .nytc---x---x.nytc---largepicturemodal---xBtn[role="button"]))
@@ -2146,7 +2146,6 @@ mp4upload.com##.vjs-fade.vjs-over
 mp4upload.com###lay.lay
 *$script,redirect-rule=noopjs,domain=mp4upload.com
 *$script,3p,denyallow=cloudflare.com|cloudflare.net|fontawesome.com|hwcdn.net|jquery.com|jsdelivr.net,domain=mp4upload.com
-! [badfilter] |https://$script,stylesheet,third-party,xmlhttprequest,domain=mp4upload.com,badfilter
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/52403
 @@||userupload.net^$ghide
@@ -2245,7 +2244,6 @@ imgadult.com##+js(aopr, loadTool)
 porntrex.com##+js(popads-dummy)
 porntrex.com##.fake-player
 porntrex.com###exclusive-link
-||clickadu.com^$media,domain=porntrex.com
 *$script,3p,denyallow=cdntrex.com|fastly.net|google.com|googleapis.com|gstatic.com|h-cdn.com|stackpathcdn.com,domain=porntrex.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/870
@@ -5163,6 +5161,8 @@ siamfishing.com##+js(acis, is_noadblock, window.location)
 ! https://forums.lanik.us/viewtopic.php?f=62&t=40364
 hesgoal.com##+js(aeld, load, nextFunction)
 hesgoal.com##+js(nowebrtc)
+||m.huerty.live^$xhr
+hesgoal.com##pp
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1871
 loadurl.*##+js(aopr, app_vars.force_disable_adblock)
@@ -12575,13 +12575,13 @@ alantvsport.com,buffstream.tv,hulkstreams.com,hulkstreamx.com,jackstream.com,oli
 alantvsport.com,buffstream.tv,hulkstream.com,hulkstreams.com,hulkstreamx.com,jackstream.com,livesport.*,olivertv.com,totalsportek.xyz##+js(aopr, open)
 alantvsport.com,buffstream.tv,hulkstreams.com,hulkstreamx.com,jackstream.com,olivertv.com,totalsportek.xyz##+js(aopw, _pop)
 alantvsport.com,buffstream.tv,hulkstreamx.com,jackstream.com,olivertv.com,totalsportek.xyz##+js(nowebrtc)
-bfst.xyz,dubsstreamz.com,live-golf.stream,live-stream365.com,lowend.xyz,sporting77.*,sport24hd.net,sportustv4.ru,wstream.to##+js(nowoif)
+allfeeds.live,bfst.xyz,dubsstreamz.com,live-golf.stream,live-stream365.com,lowend.xyz,sporting77.*,sport24hd.net,sportustv4.ru,wstream.to##+js(nowoif)
 ||betteradsystem.com^$3p,script,redirect=noopjs
 ||d2kk0o3fr7ed01.cloudfront.net^$script,redirect=noopjs
 hulkstream.com,mafiasport.com,mafiastream.com,mafiasport.*,livesport.*##^script:has-text('shift')
 csport.xyz##[href^="https://kerumal.com/"]
 ###lads1
-box-live.stream###overlay
+allfeeds.live,box-live.stream###overlay
 ! https://www.reddit.com/r/uBlockOrigin/comments/e6ogyl/cannot_open_livesport_tab/
 livesport.cz#@#+js(aopr, open)
 hulkstreams.com##+js(nowebrtc)
@@ -17897,9 +17897,9 @@ gntai.*##+js(aeld, click, popMagic)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/d8meqw/adlinkfly_shrinkurlorg_detects_ubo_i_am_unable_to/
 shrinkurl.org##+js(aopr, adBlockDetected)
-shrinkurl.org##+js(nosiif, visibility, 1000)
 shrinkurl.org##+js(aopr, app_vars.force_disable_adblock)
-shrinkurl.org##+js(aeld, click, trigger)
+shrinkurl.org##+js(nosiif, visibility, 1000)
+shrinkurl.org##+js(set, blurred, false)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1912
 watchagathachristiespoirot.com##+js(aopr, AaDetector)
