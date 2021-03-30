@@ -138,7 +138,8 @@ lablue.*##+js(nostif, push, 500)
 ||doubleclick.net^$script,important,domain=auto-motor-und-sport.de
 !#endif
 osthessen-news.de##+js(nostif, .call(null))
-tweakers.net##+js(aost, String.prototype.charCodeAt, inlineScript)
+!tweakers.net##+js(aost, String.prototype.charCodeAt, inlineScript)
+tweakers.net##+js(aost, setTimeout, /HTMLDocument.*inlineScript/)
 freenet.de,hifi-forum.de,kicker.de,musiker-board.de,quoka.de,recording.de,transfermarkt.*##+js(nostif, .call(null), 10)
 airliners.de,auszeit.bio,autorevue.at,berliner-kurier.de,berliner-zeitung.de,boersennews.de,clever-tanken.de,dasgelbeblatt.de,deichstube.de,der-betze-brennt.de,desired.de,digitalfernsehen.de,express.de,fanfiktion.de,fehmarn24.de,finya.de,frankfurter-wochenblatt.de,frustfrei-lernen.de,funandnews.de,fussballdaten.de,gamepro.de,gameswelt.*,giessener-allgemeine.de,giga.de,heidelberg24.de,kino.de,gesund-vital.de,gruenderlexikon.de,kreisbote.de,kurierverlag.de,leinetal24.de,liga3-online.de,lokalo24.de,lz.de,meine-anzeigenzeitung.de,mt.de,news.de,nordbayern.de,nw.de,prad.de,psychic.de,reviersport.de,rimondo.com,sozialversicherung-kompetent.de,spielen.de,spieletipps.de,tichyseinblick.de,tvinfo.de,unicum.de,weltfussball.at,weristdeinfreund.de,ze.tt##+js(nostif, .call(null), 10)
 airliners.de,auszeit.bio,autorevue.at,bafoeg-aktuell.de,berliner-kurier.de,berliner-zeitung.de,bikerszene.de,boersennews.de,bonedo.de,chefkoch.de,clever-tanken.de,computerbild.de,deine-tierwelt.de,dhd24.com,digitalfernsehen.de,donnerwetter.de,e-hausaufgaben.de,express.de,fanfiktion.de,finya.de,formel1.de,freenet.de,fremdwort.de,frustfrei-lernen.de,gameswelt.*,gartendialog.de,gartenlexikon.de,gewinnspiele.tv,gut-erklaert.de,haus-garten-test.de,iban-rechner.de,inside-handy.de,kicker.de,kindergeld.org,kino.de,ksta.de,liga3-online.de,lz.de,messen.de,moviejones.de,mt.de,musiker-board.de,mz-web.de,naumburger-tageblatt.de,news.de,nickles.de,nordbayern.de,nw.de,oeffentlicher-dienst.info,onlinemarketing.de,prad.de,psychic.de,quoka.de,rennrad-news.de,rheinische-anzeigenblaetter.de,rimondo.com,rundschau-online.de,spielen.de,spieletipps.de,spielfilm.de,tichyseinblick.de,torgranate.de,transfermarkt.*,truckscout24.*,tvinfo.de,unicum.de,unsere-helden.com,webfail.com,weltfussball.at,weristdeinfreund.de,weser-kurier.de,wieistmeineip.*,wize.life##^script:has-text(===):has-text(/[\w\W]{16000}/)
@@ -663,6 +664,7 @@ money.cnn.com##section.column:has(:scope > #moneySponsors)
 ! https://github.com/uBlockOrigin/uAssets/issues/534
 ! https://github.com/uBlockOrigin/uAssets/issues/1286
 ! https://github.com/uBlockOrigin/uAssets/commit/ebbef70dba69e38946329793dc00d988d1cbb85e#commitcomment-34299631
+1337x.*##.stream-torrent
 1337x.*##.download-links-dontblock > LI:has-text(Anon)
 1337x.*##.download-links-dontblock > LI:has-text(Stream)
 1337x.*##a[href^="/redirectmusic.php"]
@@ -2251,6 +2253,7 @@ porntrex.com###exclusive-link
 pics.vc,sxyprn.*##+js(acis, decodeURI, decodeURIComponent)
 sxyprn.*##+js(acis, document.querySelectorAll, popMagic)
 sxyprn.*##+js(acis, vast_urls)
+sxyprn.*##+js(acis, document.createElement, 'script')
 sxyprn.*##.post_el_wrap > .tdn
 sxyprn.*###vid_container_id > .tdn
 *$3p,script,frame,denyallow=googleapis.com|google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=sxyprn.*
@@ -5123,11 +5126,10 @@ megaup.net##+js(nowoif)
 megaup.net##+js(ra, href|data-hash, .mgbox [href], stay)
 megaup.net##[src*=".jpg"]:upward(1)
 megaup.net##[id^="AdskeeperComposite"] style:remove()
-megaup.net##.mgbox [class*="_on_"] a:remove()
+megaup.net##.mgbox [class*="_"] :not(:has(a *))
 svg$image,redirect-rule=1x1.gif,domain=megaup.net
 @@||jsc.adskeeper.co.uk/*/megaup.net$script,domain=megaup.net
 @@||servicer.adskeeper.co.uk^$script,domain=megaup.net
-!@@*$image,3p,domain=megaup.net
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1850
 aquipelis.*##+js(aopw, smrtSB)
@@ -14331,7 +14333,7 @@ sendvid.com###vjs-logo-top-bar
 imgdawgknuttz.com##+js(aopw, atOptions)
 imgdawgknuttz.com##+js(acis, document.createElement, __htas)
 imgdawgknuttz.com##+js(acis, Math, break;case $.)
-imgdawgknuttz.com##+js(acis, atob, decodeURIComponent)
+imgdawgknuttz.com##+js(aopw, _pop)
 imgdawgknuttz.com##+js(aopr, absda)
 ||4y3vbu5bxql6177n.pro^
 ||autoizers.info^
@@ -16824,18 +16826,18 @@ egovtjob.in##+js(aeld, click, trigger)
 
 ! exe.io shorteners
 ! https://github.com/uBlockOrigin/uAssets/issues/7574
-2xs.io,beastvila.info,bolssc.com,cleft.xyz,cuts-url.com,dayy.site,eio.io,exe.io,exe.app,exee.io,exy.ai,fasshi.xyz,industiiz.com,landd.xyz,mediumarticles.com,muteseries.info,networkingz.xyz,parentingss.xyz,rohtasfitness.com,techbeast.xyz,trendfaq.com,waar.site,wealthh.xyz,wheeledu.com,readnnews.com,pslfive.com,mealip.com##+js(aopr, app_vars.force_disable_adblock)
+2xs.io,beastvila.info,bolssc.com,cleft.xyz,cuts-url.com,dayy.site,eio.io,exe.io,exe.app,exee.io,exy.ai,fasshi.xyz,freshi.site,industiiz.com,landd.xyz,mediumarticles.com,muteseries.info,networkingz.xyz,parentingss.xyz,rohtasfitness.com,techbeast.xyz,trendfaq.com,waar.site,wealthh.xyz,wheeledu.com,readnnews.com,pslfive.com,mealip.com##+js(aopr, app_vars.force_disable_adblock)
 2xs.io,beastvila.info,cleft.xyz,dayy.site,exe.io,exe.app,fasshi.xyz,industiiz.com,landd.xyz,muteseries.info,networkingz.xyz,parentingss.xyz,rohtasfitness.com,techbeast.xyz,trendfaq.com,waar.site,wealthh.xyz##+js(nowoif)
-bolssc.com,cuts-url.com,eio.io,exe.app,exee.io,exy.ai,pslfive.com,mealip.com##+js(set, blurred, false)
+bolssc.com,cuts-url.com,eio.io,exe.app,exee.io,exy.ai,freshi.site,pslfive.com,mealip.com##+js(set, blurred, false)
 *$script,3p,denyallow=cloudflare.com|google.com|gstatic.com|recaptcha.net,domain=bolssc.com|cuts-url.com|eio.io|exe.app|exee.io|exy.ai|pslfive.com|mealip.com|srek.net
 /sw.js$script,1p,domain=eio.io|exe.app|exee.io|exy.ai
-bolssc.com,eio.io,exe.app,exee.io,exy.ai,mediumarticles.com,srek.net##+js(acis, String.fromCharCode, /btoa|break/)
+bolssc.com,eio.io,exe.app,exee.io,exy.ai,freshi.site,mediumarticles.com,srek.net##+js(acis, String.fromCharCode, /btoa|break/)
 eio.io,exee.io,exy.ai,exe.app##+js(aopr, adBlockDetected)
 @@||exe.app^$ghide
 salee.xyz##+js(aopr, AaDetector)
 salee.xyz##+js(aopr, app_vars.force_disable_adblock)
 salee.xyz##+js(aopr, document.head.appendChild)
-exe.app##+js(no-fetch-if, google)
+exe.app,freshi.site##+js(no-fetch-if, google)
 salee.xyz##+js(nowoif)
 exe.io,wealthh.xyz##+js(aopr, parcelRequire)
 /ad-m.js$script,1p
@@ -17567,9 +17569,10 @@ xcafe.com##+js(popads-dummy)
 xcafe.com##+js(aeld, , bi())
 xcafe.com##.adtitle
 
-! https://github.com/NanoMeow/QuickReports/issues/1836
-! https://github.com/AdguardTeam/AdguardFilters/issues/65706
+! https://www.reddit.com/r/uBlockOrigin/comments/mghv7b/no_solution_for_coinlyhub/
 @@||coinlyhub.com^$ghide
+coinlyhub.com##+js(aost, Math.random, stackDepth:13)
+coinlyhub.com##+js(aopr, open)
 coinlyhub.com##+js(set, Fingerprint2, true)
 coinlyhub.com##+js(nano-sib, seconds)
 coinlyhub.com##+js(aopr, app_vars.force_disable_adblock)
@@ -17577,6 +17580,7 @@ coinlyhub.com##+js(set, blurred, false)
 coinlyhub.com##[class^="bmadblock"]
 coinlyhub.com##div.highlight
 coinlyhub.com##.banner
+||presearch.org^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6305
 zimabdko.com##+js(nowebrtc)
@@ -17851,6 +17855,8 @@ shrinkurl.org##+js(aopr, app_vars.force_disable_adblock)
 shrinkurl.org##+js(aopr, open)
 shrinkurl.org##+js(nosiif, visibility, 1000)
 shrinkurl.org##+js(set, blurred, false)
+! https://www.reddit.com/r/uBlockOrigin/comments/mffz09/
+||ladsatz.com^$empty,domain=shrinkurl.org
 
 ! https://github.com/NanoMeow/QuickReports/issues/1912
 watchagathachristiespoirot.com##+js(aopr, AaDetector)
