@@ -7,6 +7,7 @@
  */
 /* tslint:disable quotemark */
 export default [
+  "acis, decodeURI, decodeURIComp",
   "acis, disableSelection, reEnab",
   "acis, document.createElement, ",
   "acis, document.getElementById,",
@@ -140,7 +141,6 @@ export default [
   "ft",
   "g-",
   "ga",
-  "ge",
   "go",
   "he",
   "ho",
