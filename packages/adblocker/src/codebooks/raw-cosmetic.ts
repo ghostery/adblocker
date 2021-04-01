@@ -7,19 +7,18 @@
  */
 /* tslint:disable quotemark */
 export default [
-  "acis, decodeURI, decodeURIComp",
   "acis, disableSelection, reEnab",
   "acis, document.createElement, ",
   "acis, document.getElementById,",
   "acis, document.querySelectorAl",
   "app_vars.force_disable_adblock",
   "acis, String.fromCharCode, ",
+  "+js(acis, Math, zfgloaded)",
   ", document.oncontextmenu)",
   "nosiif, visibility, 1000)",
   "+js(set, blurred, false)",
   "acis, addEventListener, ",
   ":not(body):not(html)",
-  "acis, Math, zfglo",
   "ra, oncontextmenu",
   "[href^=\"https://",
   "##a[href^=\"http",
@@ -119,6 +118,7 @@ export default [
   "ar",
   "at",
   "bo",
+  "ca",
   "ce",
   "ch",
   "ck",
