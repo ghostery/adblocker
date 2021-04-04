@@ -682,14 +682,10 @@ x1337x.eu##.mgbox
 @@||torrage.info/torrent.php$popup,domain=1337x.to
 ||1337x.*/sw.js$script,1p
 
-! https://discourse.mozilla-community.org/t/support-ublock-origin/6746/224
 ! https://github.com/uBlockOrigin/uAssets/issues/1915
 ! https://github.com/uBlockOrigin/uAssets/issues/3142
-! https://github.com/NanoMeow/QuickReports/issues/6
-! https://github.com/NanoMeow/QuickReports/issues/2216
-linkneverdie.com##+js(nostif, _$_, 7000)
-linkneverdie.com##+js(nostif, remove, 4000)
-linkneverdie.com###adsqc
+linkneverdie.net##+js(acis, $, _$_)
+linkneverdie.net###adsqc
 
 ! https://github.com/uBlockOrigin/uAssets/issues/161
 ||uim.tifbs.net/js/*.js$script,redirect=noopjs,domain=gmx.at|gmx.ch|gmx.net|web.de
@@ -2365,6 +2361,7 @@ meulink.tk##+js(nobab)
 @@||static.adult.xyz^$script,domain=zoee.xyz
 coin.mg##+js(aopr, app_vars.force_disable_adblock)
 coin.mg##+js(aopr, open)
+coin.mg##+js(set, blurred, false)
 coin.mg##.col-md-12
 *$script,frame,3p,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=coin.mg
 ||danyhazo.xyz^
@@ -4624,6 +4621,7 @@ waybig.com##.aside-adds-col
 ! https://github.com/uBlockOrigin/uAssets/issues/1953
 ! animeflv.net | animeflvnet.com | animeflv.ac | animeflv.cc | animeflv.la | animeflv.ru  ads/popup
 animeflv.*,animeflvnet.com##+js(acis, Math, break;case $.)
+animeflv.*##+js(acis, jQuery, 'pp12')
 *$script,3p,denyallow=disquscdn.com|disqus.com|fbcdn.net|facebook.net|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=animeflv.*
 ||hotideiasnetwork.ml^$3p
 @@||animeflv.*/assets/vast/videojs$script,1p
@@ -5128,9 +5126,8 @@ cinedetodo.*##[id*="yellow"]
 megaup.net##+js(nowoif)
 megaup.net##+js(ra, href|data-hash, .mgbox [href], stay)
 megaup.net##[src*=".jpg"]:upward(1)
-megaup.net##[id^="AdskeeperComposite"] style:remove()
-megaup.net##.mgbox [class*="_"] :not(:has(a *))
-svg$image,redirect-rule=1x1.gif,domain=megaup.net
+megaup.net##[id^="AdskeeperComposite"]:style(visibility: hidden !important;)
+*$image,redirect-rule=1x1.gif,domain=megaup.net
 @@||jsc.adskeeper.co.uk/*/megaup.net$script,domain=megaup.net
 @@||servicer.adskeeper.co.uk^$script,domain=megaup.net
 
@@ -5168,7 +5165,7 @@ siamfishing.com##+js(acis, is_noadblock, window.location)
 ! https://forums.lanik.us/viewtopic.php?f=62&t=40364
 hesgoal.com##+js(aeld, load, nextFunction)
 hesgoal.com##+js(nowebrtc)
-||m.huerty.live^$xhr
+||huerty.*^
 hesgoal.com##pp
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1871
@@ -11908,8 +11905,11 @@ bdix.org##+js(acis, adBlockDetected)
 @@||getfreebit.xyz^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4666
+fautsy.com##+js(nano-sib, seconds)
 @@||fautsy.com^$ghide
 fautsy.com##.coinzilla
+fautsy.com##ins[class][style^="display:inline-block;width:"]
+@@||fautsy.com/libs/advertisement.js$script,1p
 
 ||installp.com^
 
@@ -12039,11 +12039,13 @@ dclinks.info##+js(aeld, DOMContentLoaded, adlinkfly)
 dutchycorp.*##+js(aopr, app_vars.force_disable_adblock)
 dutchycorp.*##+js(aopr, adBlockDetected)
 dutchycorp.*##+js(nano-sib, time.html, 1000)
+dutchycorp.*##+js(set, blurred, false)
 @@||cdnjs.cloudflare.com/ajax/libs/blockadblock/*/blockadblock.js$script,domain=dutchycorp.*
 @@||dutchycorp.*^$ghide
 dutchycorp.*##.adsbygoogle
-dutchycorp.*##.captcha-page > .hide-on-small-only
-dutchycorp.*##.captcha-page > .container > .row > .col-md-offset-1 > .text-left
+dutchycorp.*##[class$="-page"] > .hide-on-small-only
+dutchycorp.*##[class$="-page"] > .container > .row > .col-md-offset-1 .text-left
+dutchycorp.*##[class$="-page"] center > p
 dutchycorp.*##.box-main > .row > center
 dutchycorp.*##.nav-ad
 dutchycorp.*##.row > [style^="width:728px;height:90px"]
@@ -17746,7 +17748,8 @@ checkz.net##+js(aopw, console.log)
 checkz.net##.adsbygoogle
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/kzceq3/adblock_detected/
-ff14angler.com##+js(aeld, load, dispatch)
+||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js^$redirect-rule=googlesyndication_adsbygoogle.js,script,domain=ff14angler.com
+ff14angler.com##[id^="aswift_"]:style(position:absolute !important;left:-3000px !important)
 ff14angler.com##ins.adsbygoogle:style(height:1px!important;width:1px!important)
 @@||ff14angler.com^$ghide
 
@@ -18872,6 +18875,7 @@ gmx.*,web.de##+js(aeld, timeupdate)
 !#if env_firefox
 @@||akamaiedge.net^$media,domain=gmx.at|gmx.ch|gmx.net|web.de
 !#endif
+giga.de##+js(no-fetch-if, damoh)
 
 ! https://github.com/uBlockOrigin/uAssets/pull/6543
 cnx-software.com##+js(aopr, anOptions)
@@ -19823,8 +19827,11 @@ qqcinema21.com##+js(aopw, puShown)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6761
 ! https://github.com/uBlockOrigin/uAssets/issues/7190
+! https://github.com/uBlockOrigin/uAssets/issues/8842
 fandom.com##+js(set, wgAffiliateEnabled, false)
 kenshi.fandom.com##+js(set, ads, null)
+fandom.com###siderail_bindingofisaacre_gamepedia
+fandom.com###bodyContent:style(width:100% !important)
 
 ! https://github.com/DandelionSprout/adfilt/issues/7#issuecomment-569529562
 buscarfoto.com##+js(aopr, absda)
@@ -20289,7 +20296,7 @@ streamz.*##body > div:nth-of-type(3), [href^="http://deloplen.com"]
 ||inpagepush.com^$important
 *$script,redirect-rule=empty,domain=streamz.vg
 streamz.*##button:has(span:has-text(Skip))
-@@||streamz.vg/count.php^$xhr
+@@||streamz.*/count.php^$xhr
 
 ! https://github.com/NanoMeow/QuickReports/issues/2788
 ||fundingchoicesmessages.google.com^$3p
@@ -22235,7 +22242,6 @@ playtube.ws##+js(set, xRds, false)
 playtube.ws##+js(set, cRAds, true)
 *$script,3p,denyallow=googleapis.com|gstatic.com|fastly.net|jwpcdn.com,domain=playtube.ws
 @@||playtube.ws^$xhr,1p
-playtube.ws#@#.afs_ads
 playtube.ws##.overlay
 
 ! https://github.com/NanoMeow/QuickReports/issues/3312
@@ -23026,9 +23032,12 @@ fifaultimateteam.it##+js(acis, jQuery, ai_adb)
 fifaultimateteam.it##+js(nowoif)
 ||fifaultimateteam.it/*skin$image
 
-! https://github.com/NanoMeow/QuickReports/issues/3475
+! https://www.reddit.com/r/uBlockOrigin/comments/mk2kad/ublock_detected_again/
 apps2app.com##+js(nosiif, visibility, 1000)
 *$script,redirect-rule=noopjs,domain=apps2app.com
+@@||apps2app.com^$ghide
+@@||toolss.net^$ghide
+||toolss.net^$3p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/52825
 jav.sh##+js(aopr, AaDetector)
