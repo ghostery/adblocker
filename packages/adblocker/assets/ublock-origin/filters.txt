@@ -1430,32 +1430,27 @@ fux.com##+js(aeld, , /exopop|adb/)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/549
 ! https://forums.lanik.us/viewtopic.php?f=64&t=40089
-streamplay.*##+js(aopr, miner)
-streamplay.*##+js(aopw, Fingerprint2)
 steamplay.*##+js(aopr, btoa)
 steamplay.*,streamp1ay.*##+js(aopw, Fingerprint2)
 streamp1ay.*##+js(aopw, Fingerprent2)
 steamplay.*,streamp1ay.*##+js(aopr, console.clear)
-steamplay.*,streamp1ay.*,streamplay.*##+js(aopw, adcashMacros)
+steamplay.*,streamp1ay.*##+js(aopw, adcashMacros)
 steamplay.*##+js(nosiif, visibility, 1000)
 |about:$popup,domain=steamplay.me
 ||terdiparcalpe.info^
 ||*ontent.steamplay.*^$all
-||streamplay.to/proxy$websocket
 ||steamplay.*^$csp=worker-src 'none';
-||streamplay.*^$csp=child-src *.google.com
-@@||streamplay.*^$ghide
 @@||streamp1ay.*^$ghide
 *$xhr,frame,3p,domain=streamp1ay.cc,denyallow=spcdn.cc
 ! https://github.com/uBlockOrigin/uAssets/issues/8244
-steamplay.*,streamplay.*,streamp1ay.*,streanplay.*##+js(nowoif)
+steamplay.*,streamp1ay.*,streanplay.*##+js(nowoif)
 streanplay.*##+js(set, console.log, noopFunc)
 streanplay.*##+js(set, console.clear, noopFunc)
 streanplay.*##+js(aeld, , BACK)
 streanplay.*##+js(nowebrtc)
-steamplay.*,streamp1ay.*,streamplay.*,streanplay.*##+js(aopr, jwplayer.utils.Timer)
-steamplay.*,streamp1ay.*,streamplay.*,streanplay.*##.ad
-steamplay.*,streamp1ay.*,streamplay.*,streanplay.*###uverlay
+steamplay.*,streamp1ay.*,streanplay.*##+js(aopr, jwplayer.utils.Timer)
+steamplay.*,streamp1ay.*,streanplay.*##.ad
+steamplay.*,streamp1ay.*,streanplay.*###uverlay
 streanplay.*##div[style*="z-index: 2147483647;"][style*="position: fixed;"]
 *$xhr,frame,3p,domain=streanplay.cc,denyallow=spcdn.cc
 
@@ -4431,6 +4426,7 @@ daddylive.*##+js(nowebrtc)
 daddylive.*###floatLayer1
 daddylive.*###html1
 ||cadsats.com^
+||cdncqw.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1618
 cnnamador.com##+js(noeval)
@@ -5128,7 +5124,7 @@ megaup.net##+js(nowoif)
 megaup.net##+js(ra, href|data-hash, .mgbox [href], stay)
 megaup.net##[src*=".jpg"]:upward(1)
 megaup.net##[id^="AdskeeperComposite"]:style(visibility: hidden !important;)
-*$image,redirect-rule=1x1.gif,domain=megaup.net
+*$image,redirect-rule=32x32.png,domain=megaup.net
 @@||jsc.adskeeper.co.uk/*/megaup.net$script,domain=megaup.net
 @@||servicer.adskeeper.co.uk^$script,domain=megaup.net
 
@@ -11361,22 +11357,21 @@ allkpop.com##+js(set, isal, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/4438
 bdotools.xyz##+js(nostif, (), 3000)
 
-! https://github.com/uBlockOrigin/uAssets/issues/6778
-! https://github.com/AdguardTeam/AdguardFilters/issues/50112
-expertvn.com##+js(acis, $, 'show')
-downphanmem.com##+js(aopr, adBlockDetected)
-downfile.site##+js(nofab)
-@@||megaurl.*^$ghide
-@@||expertvn.com^$ghide
-expertvn.com##+js(aopr, adBlockDetected)
-expertvn.com##+js(nosiif, visibility, 1000)
+! https://github.com/uBlockOrigin/uAssets/issues/2495
+! https://github.com/AdguardTeam/AdguardFilters/issues/74653
+downfile.site,downphanmem.com,expertvn.com##+js(aopr, adBlockDetected)
+downfile.site,downphanmem.com,expertvn.com##+js(nosiif, visibility, 1000)
+downfile.site,downphanmem.com,expertvn.com###myModal
+downfile.site,downphanmem.com,expertvn.com##.show.fade.modal-backdrop
+downfile.site,downphanmem.com,expertvn.com##body:style(overflow:auto !important)
 expertvn.com##.float-ck
 expertvn.com##.td-adspot-title
-||expertvn.com/service-worker.js$script,1p
-*$script,3p,denyallow=bootstrapcdn.com|cloudflare.com|google.com|googleapis.com|gstatic.com|hwcdn.net|jquery.com,domain=expertvn.com
 megaurl.*##+js(aopr, app_vars.force_disable_adblock)
 megaurl.*##[id*="ScriptRoot"]
 megaurl.*##a[href^="//"]
+@@||megaurl.*^$ghide
+@@||expertvn.com^$ghide
+*$script,3p,denyallow=bootstrapcdn.com|cloudflare.com|google.com|googleapis.com|gstatic.com|hwcdn.net|jquery.com,domain=expertvn.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4448
 @@||ads.ck101.com/www/delivery/asyncjs.php$script,1p
@@ -22863,11 +22858,11 @@ fiches-auto.fr##.adsbygoogle:style(visibility: collapse !important)
 ludigames.com##+js(nostif, ads)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7180
-imageking.xyz,imgair.net,imgao.xyz,imgblaze.net,imgfl.xyz,imggoing.xyz,imgkes.xyz,imgkis.xyz,imgko.xyz,imgkoi.xyz,imglin.xyz,imglion.xyz,imgsupa.xyz,imgtigr.xyz,imgweng.xyz,imgwew.xyz,imgxen.xyz,imgxn.xyz,imgxx.xyz,imgzer.net,venpix.xyz,vestimage.site##+js(nano-sib, timer)
-imageking.xyz,imgair.net,imgao.xyz,imgblaze.net,imgfl.xyz,imggoing.xyz,imgkes.xyz,imgkis.xyz,imgko.xyz,imgkoi.xyz,imglin.xyz,imglion.xyz,imgsupa.xyz,imgtigr.xyz,imgweng.xyz,imgwew.xyz,imgxen.xyz,imgxn.xyz,imgxx.xyz,imgzer.net,venpix.xyz,vestimage.site##+js(nowoif, !/prcf.fiyar|themes|pixsense|.jpg/)
-imageking.xyz,imgair.net,imgao.xyz,imgblaze.net,imgfl.xyz,imggoing.xyz,imgkes.xyz,imgkis.xyz,imgko.xyz,imgkoi.xyz,imglin.xyz,imglion.xyz,imgsupa.xyz,imgtigr.xyz,imgweng.xyz,imgwew.xyz,imgxen.xyz,imgxn.xyz,imgxx.xyz,imgzer.net,venpix.xyz,vestimage.site##+js(set, hold_click, false)
-imageking.xyz,imgair.net,imgao.xyz,imgblaze.net,imgfl.xyz,imggoing.xyz,imgkes.xyz,imgkis.xyz,imgko.xyz,imgkoi.xyz,imglin.xyz,imglion.xyz,imgsupa.xyz,imgtigr.xyz,imgweng.xyz,imgwew.xyz,imgxen.xyz,imgxn.xyz,imgxx.xyz,imgzer.net,venpix.xyz,vestimage.site###pbe
-*$frame,script,3p,denyallow=googleapis.com,domain=imageking.xyz|imgair.net|imgao.xyz|imgblaze.net|imgfl.xyz|imggoing.xyz|imgkes.xyz|imgkis.xyz|imgko.xyz|imgkoi.xyz|imglin.xyz|imglion.xyz|imgsupa.xyz|imgtigr.xyz|imgweng.xyz|imgwew.xyz|imgxen.xyz|imgxn.xyz|imgxx.xyz|imgzer.net|venpix.xyz|vestimage.site
+imageking.xyz,imgair.net,imgao.xyz,imgblaze.net,imgfl.xyz,imggoing.xyz,imgkes.xyz,imgkis.xyz,imgko.xyz,imgkoi.xyz,imglin.xyz,imglion.xyz,imgsupa.xyz,imgtigr.xyz,imgviv.xyz,imgweng.xyz,imgwew.xyz,imgxen.xyz,imgxn.xyz,imgxx.xyz,imgzer.net,venpix.xyz,vestimage.site##+js(nano-sib, timer)
+imageking.xyz,imgair.net,imgao.xyz,imgblaze.net,imgfl.xyz,imggoing.xyz,imgkes.xyz,imgkis.xyz,imgko.xyz,imgkoi.xyz,imglin.xyz,imglion.xyz,imgsupa.xyz,imgtigr.xyz,imgviv.xyz,imgweng.xyz,imgwew.xyz,imgxen.xyz,imgxn.xyz,imgxx.xyz,imgzer.net,venpix.xyz,vestimage.site##+js(nowoif, !/prcf.fiyar|themes|pixsense|.jpg/)
+imageking.xyz,imgair.net,imgao.xyz,imgblaze.net,imgfl.xyz,imggoing.xyz,imgkes.xyz,imgkis.xyz,imgko.xyz,imgkoi.xyz,imglin.xyz,imglion.xyz,imgsupa.xyz,imgtigr.xyz,imgviv.xyz,imgweng.xyz,imgwew.xyz,imgxen.xyz,imgxn.xyz,imgxx.xyz,imgzer.net,venpix.xyz,vestimage.site##+js(set, hold_click, false)
+imageking.xyz,imgair.net,imgao.xyz,imgblaze.net,imgfl.xyz,imggoing.xyz,imgkes.xyz,imgkis.xyz,imgko.xyz,imgkoi.xyz,imglin.xyz,imglion.xyz,imgsupa.xyz,imgtigr.xyz,imgviv.xyz,imgweng.xyz,imgwew.xyz,imgxen.xyz,imgxn.xyz,imgxx.xyz,imgzer.net,venpix.xyz,vestimage.site###pbe
+*$frame,script,3p,denyallow=googleapis.com,domain=imageking.xyz|imgair.net|imgao.xyz|imgblaze.net|imgfl.xyz|imggoing.xyz|imgkes.xyz|imgkis.xyz|imgko.xyz|imgkoi.xyz|imglin.xyz|imglion.xyz|imgsupa.xyz|imgtigr.xyz|imgviv.xyz|imgweng.xyz|imgwew.xyz|imgxen.xyz|imgxn.xyz|imgxx.xyz|imgzer.net|venpix.xyz|vestimage.site
 ||chaglihysty.pro^
 ||aspirinelitistunderstood.com^
 ||gahapule.pro^
@@ -22881,6 +22876,8 @@ imageking.xyz,imgair.net,imgao.xyz,imgblaze.net,imgfl.xyz,imggoing.xyz,imgkes.xy
 ||thugitori.pro^
 ||kyfunahi.pro^
 ||falsemulticultural.com^$3p
+||ghostsinstance.com^
+||genishury.pro^$popup
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/fqjo82/pandora_just_started_detecting_ad_blocker_wont/
 @@||pandora.com/web-version/*/ads.json$1p
