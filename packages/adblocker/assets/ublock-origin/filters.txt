@@ -1255,17 +1255,17 @@ mind42.com###content.sidebar2:style(margin-right: 0 !important;)
 ||zdnet.com/*recommendation/
 
 ! xhamster
-fullxh.com,unlockxh4.com,xhamster.*,xhamster1.*,xhamster4.*,xhamster46.com,xhamster5.*,xhamster7.*##+js(acis, Array.prototype.indexOf, popunder)
+fullxh.com,unlockxh4.com,xhamster.*,xhamster1.*,xhamster4.*,xhamster46.com,xhamster5.*,xhamster7.*,xhamster8.*##+js(acis, Array.prototype.indexOf, popunder)
 xhamster.*,xhamster1.*,xhamster5.*,xhamster7.*##+js(aopr, wih-popunder)
 xhamster.*,xhamster1.*,xhamster5.*,xhamster7.*##+js(aeld, , pop)
 xhamster.*,xhamster1.*,xhamster5.*,xhamster7.*##.wit-sponsor-banner
 xhamster.*,xhamster1.*,xhamster5.*,xhamster7.*##.promo-message
 xhamster.*,xhamster1.*,xhamster5.*,xhamster7.*##.xplayer-banner-bottom
-fullxh.com,unlockxh4.com,xhamster.*,xhamster1.*,xhamster4.*,xhamster46.com,xhamster5.*,xhamster7.*##.clipstore-bottom
-fullxh.com,unlockxh4.com,xhamster.*,xhamster1.*,xhamster4.*,xhamster46.com,xhamster5.*,xhamster7.*##.xplayer-banner
-fullxh.com,unlockxh4.com,xhamster.*,xhamster1.*,xhamster4.*,xhamster46.com,xhamster5.*,xhamster7.*##div[class*="-vcams-thumb-widget"]
-fullxh.com,unlockxh4.com,xhamster.*,xhamster1.*,xhamster4.*,xhamster46.com,xhamster5.*,xhamster7.*##div[class*="-vspot-container"]
-fullxh.com,unlockxh4.com,xhamster.*,xhamster1.*,xhamster4.*,xhamster46.com,xhamster5.*,xhamster7.*##div[class*="-vspb"]
+fullxh.com,unlockxh4.com,xhamster.*,xhamster1.*,xhamster4.*,xhamster46.com,xhamster5.*,xhamster7.*,xhamster8.*##.clipstore-bottom
+fullxh.com,unlockxh4.com,xhamster.*,xhamster1.*,xhamster4.*,xhamster46.com,xhamster5.*,xhamster7.*,xhamster8.*##.xplayer-banner
+fullxh.com,unlockxh4.com,xhamster.*,xhamster1.*,xhamster4.*,xhamster46.com,xhamster5.*,xhamster7.*,xhamster8.*##div[class*="-vcams-thumb-widget"]
+fullxh.com,unlockxh4.com,xhamster.*,xhamster1.*,xhamster4.*,xhamster46.com,xhamster5.*,xhamster7.*,xhamster8.*##div[class*="-vspot-container"]
+fullxh.com,unlockxh4.com,xhamster.*,xhamster1.*,xhamster4.*,xhamster46.com,xhamster5.*,xhamster7.*,xhamster8.*##div[class*="-vspb"]
 ||xhamsterpremium.com^$3p
 ||xhamsterlive.com^$3p
 !#if env_mobile
@@ -3002,14 +3002,8 @@ xiaopan.co##+js(aopw, AdBlockDetectorWorkaround)
 shooshtime.com##+js(nowoif)
 ||monad.network^$script,domain=shooshtime.com
 
-! https://www.reddit.com/r/uBlockOrigin/comments/7l40lk/need_antiadblock_for_seattle_times/
 ! https://github.com/uBlockOrigin/uAssets/issues/1663
-seattletimes.com##+js(set, SEATIMESCO.browser.adBlock.baitLoaded, true)
-seattletimes.com##+js(nostif, SEATIMESCO.browser.adBlock.baitLoaded, 300)
-
-! https://forums.lanik.us/viewtopic.php?f=96&t=39414
-animeforce.org##+js(aopw, _pop)
-animeforce.org##+js(aeld, load, onload)
+seattletimes.com##+js(set, SEATIMESCO.browser.adBlock.detectionEnabled, false)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1068
 noticias.gospelmais.com.br##+js(set, blockAdBlock, true)
@@ -3036,12 +3030,6 @@ dailygeekshow.com##+js(aopr, jQuery.hello)
 ! https://github.com/uBlockOrigin/uAssets/issues/1093
 @@||seirsanduk.*^$ghide
 seirsanduk.*##+js(popads.net)
-
-! https://github.com/uBlockOrigin/uAssets/issues/1097
-mangashiro.*##+js(acis, $, popunder)
-mangashiro.*##+js(aopw, document.onclick)
-@@||mangashiro.*^$ghide
-.gif$domain=mangashiro.co|mangashiro.net|mangashiro.org
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1099
 yiv.com##+js(nostif, $)
@@ -3122,6 +3110,9 @@ imgspice.com##+js(nowoif)
 imgspice.com##+js(aopr, ExoLoader)
 imgspice.com##+js(aeld, mousedown, popundrInit)
 imgspice.com###widepage
+imgspice.com###interdiv
+||cam4tracking.com^
+||bestcontentaccess.top^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1124
 mrtechmyth.*##+js(nobab)
@@ -4593,9 +4584,6 @@ vsco.co##.page-wrap > section:has-text(Download the free)
 ! https://github.com/jspenguin2017/uBlockProtector/issues/873
 @@||bittube.me/*/js/ads2.js$xhr,1p
 
-! https://github.com/uBlockOrigin/uAssets/issues/1662
-tivocommunity.com##+js(aopw, AdBlockDetectorWorkaround)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/1669
 generacionretro.net##+js(aeld, load, 2000)
 
@@ -5126,9 +5114,9 @@ cinedetodo.*##[id*="yellow"]
 ! https://github.com/uBlockOrigin/uAssets/issues/4430
 @@||megaup.net^$ghide
 megaup.net##+js(nowoif)
-megaup.net##+js(ra, href|data-hash, .mgbox [href], stay)
 megaup.net##[src*=".jpg"]:upward(1)
-megaup.net##[id^="AdskeeperComposite"] *:style(visibility: hidden !important;)
+megaup.net##[id^="AdskeeperComposite"] > div:style(visibility: hidden !important;)
+webp$image,redirect-rule=32x32.png,domain=megaup.net
 @@||jsc.adskeeper.co.uk/*/megaup.net$script,domain=megaup.net
 @@||servicer.adskeeper.co.uk^$script,domain=megaup.net
 
@@ -9654,10 +9642,6 @@ addtobucketlist.com##+js(nostif, google_jobrunner)
 ! https://github.com/uBlockOrigin/uAssets/issues/3885
 syracusefan.com##+js(aopw, XF)
 
-! https://github.com/uBlockOrigin/uAssets/issues/3891
-rivosport.co##+js(aopw, Fingerprint2)
-rivosport.co##+js(nowebrtc)
-
 ! https://forums.lanik.us/viewtopic.php?f=62&t=42046
 @@||gamemod.mobi^$ghide
 gamemod.mobi##.adsbygoogle
@@ -9684,12 +9668,6 @@ mac-torrent-download.net###btn-container
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3909
 ||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs,domain=moongourd.com
-
-! https://github.com/uBlockOrigin/uAssets/issues/3914
-@@||livexscores.com/adsbygoogle.js$script,1p
-
-! https://github.com/uBlockOrigin/uAssets/issues/3915
-phpenter.net##+js(acis, document.getElementById, block)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3917
 argio-logic.net##+js(acis, document.getElementById, alert)
@@ -9866,7 +9844,8 @@ purelyceleb.com##.embed-container
 ##.exo-horizontal
 
 ! https://forums.lanik.us/viewtopic.php?f=96&t=28135
-worldcomputing.it##+js(aeld, load, onload)
+@@||worldcomputing.it^$ghide
+worldcomputing.it##.adsbygoogle
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=22759
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=cookinggames.com
@@ -9988,12 +9967,11 @@ oncehelp.com##[href*="?token"]
 @@||tionghoa.info^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4059
-viprow.net##+js(aopw, encodeURIComponent)
-viprow.net##[id^="container-0a11"]
+viprow.*##+js(acis, Math, break;case)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4060
 stream4free.live##+js(aeld, load, nextFunction)
-stream4free.live##+js(aopw, decodeURIComponent)
+stream4free.live##+js(acis, Math, break;case)
 stream4free.live##+js(nowebrtc)
 stream4free.live##+js(nosiif, visibility, 1000)
 stream4free.live##+js(aopr, LieDetector)
@@ -16623,8 +16601,11 @@ smutr.com##+js(set, flashvars.popunder_url, undefined)
 yuvutu.com##+js(acis, String.prototype.charAt)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1664
-lnk2.cc##+js(set, adblock, false)
+@@||lnk2.cc^$script,1p
+lnk2.cc##+js(acis, document.querySelectorAll, popMagic)
+lnk2.cc##+js(aeld, , \)
 lnk2.cc##+js(nano-stb)
+||iople.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6075
 ucptt.com##+js(aopw, _pop)
@@ -18472,9 +18453,10 @@ movienear.me##[href="https://www.tautan.pro/"]
 */assets.sidearmsports.com/$script,redirect-rule=noopjs
 @@/templates/dfp/dfp-component-template.html$xhr,1p
 ###sidearm-adblock-modal
-12thman.com,acusports.com,atlantic10.com,auburntigers.com,baylorbears.com,bceagles.com,bgsufalcons.com,big12sports.com,bigten.org,bradleybraves.com,butlersports.com,conferenceusa.com,cyclones.com,dartmouthsports.com,daytonflyers.com,dbupatriots.com,dbusports.com,denverpioneers.com,fduknights.com,fgcuathletics.com,fightinghawks.com,fightingillini.com,floridagators.com,friars.com,gamecocksonline.com,goarmywestpoint.com,gobison.com,goblueraiders.com,gobobcats.com,gocards.com,gocreighton.com,godeacs.com,goduke.com,goexplorers.com|gofrogs.com,gogriffs.com,gogriz.com,golobos.com,gomarquette.com,gopack.com,gophersports.com,goprincetontigers.com,gopsusports.com,goracers.com,goshockers.com,goterriers.com,gotigersgo.com,gousfbulls.com,govandals.com,gowyo.com,goxavier.com,gozags.com,gozips.com,guhoyas.com,gwusports.com,hailstate.com,hamptonpirates.com,hawaiiathletics.com,hokiesports.com,huskers.com,icgaels.com,iuhoosiers.com,jsugamecocksports.com,longbeachstate.com,loyolaramblers.com,lrtrojans.com,lsusports.net,msuspartans.com,mutigers.com,navysports.com,nevadawolfpack.com,niuhuskies.com,nkunorse.com,nuhuskies.com,nusports.com,okstate.com,olemisssports.com,omavs.com,ovcsports.com,owlsports.com,purduesports.com,redstormsports.com,richmondspiders.com,sfajacks.com,shupirates.com,siusalukis.com,smcgaels.com,smumustangs.com,soconsports.com,soonersports.com,tamu.soccer,themw.com,tulsahurricane.com,txst.com,txstatebobcats.com,ubbulls.com,ucfknights.com,ucirvinesports.com,uconnhuskies.com,uhcougars.com,uicflames.com,umterps.com,uncwsports.com,unipanthers.com,unlvrebels.com,uoflsports.com,usdtoreros.com,utahstateaggies.com,utepathletics.com,utrockets.com,uvmathletics.com,uwbadgers.com,villanova.com,wkusports.com,wmubroncos.com,woffordterriers.com,1pack1goal.com,bcuathletics.com,bubraves.com,goblackbears.com,golightsgo.com,gomcpanthers.com,goutsa.com,mercerbears.com,pirateblue.com,pirateblue.net,pirateblue.org,quinnipiacbobcats.com,towsontigers.com,tribeathletics.com,tribeclub.com,utepminermaniacs.com,utepminers.com,wkutickets.com,aopathletics.org,atlantichockeyonline.com,bigsouthnetwork.com,bigsouthsports.com,chawomenshockey.com,dbupatriots.org,drakerelays.org,ecac.org,ecacsports.com,emueagles.com,emugameday.com,gculopes.com,godrakebulldog.com,godrakebulldogs.com,godrakebulldogs.net,goeags.com,goislander.com,goislanders.com,gojacks.com,gomacsports.com,gseagles.com,hubison.com,iowaconference.com,ksuowls.com,lonestarconference.org,mascac.org,midwestconference.org,mountaineast.org,niu-pack.com,niuhuskies.com,oswegolakers.com,ovcdigitalnetwork.com,pacersports.com,rmacsports.org,rollrivers.com,samfordsports.com,uncpbraves.com,usfdons.com,wiacsports.com,alaskananooks.com,broncathleticfund.com,cameronaggies.com,columbiacougars.com,etownbluejays.com,gobadgers.ca,golancers.ca,gometrostate.com,gothunderbirds.ca,kentstatesports.com,lehighsports.com,lopers.com,lycoathletics.com,lycomingathletics.com,maraudersports.com,mauiinvitational.com,msumavericks.com,nueagles.com,nwusports.com,patriotathleticfund.com,pittband.com,principiaathletics.com,roadrunnersathletics.com,sidearmsocial.com,stablerarena.com,stoutbluedevils.com,uwlathletics.com,yumacs.com,collegefootballplayoff.com,csurams.com,cubuffs.com,gobearcats.com,gohuskies.com,mgoblue.com,osubeavers.com,pittsburghpanthers.com,rolltide.com,texassports.com,thesundevils.com,uclabruins.com,wvuathletics.com,wvusports.com,arizonawildcats.com,calbears.com,cuse.com,georgiadogs.com,goducks.com,goheels.com,gostanford.com,insidekstatesports.com,insidekstatesports.info,insidekstatesports.net,insidekstatesports.org,k-stateathletics.com,k-statefootball.net,k-statefootball.org,k-statesports.com,k-statesports.net,k-statesports.org,k-statewomenshoops.com,k-statewomenshoops.net,k-statewomenshoops.org,kstateathletics.com,kstatefootball.net,kstatefootball.org,kstatesports.com,kstatewomenshoops.com,kstatewomenshoops.net,kstatewomenshoops.org,ksuathletics.com,ksusports.com,scarletknights.com,showdownforrelief.com,texastech.com,theacc.com,ukathletics.com,usctrojans.com,utahutes.com,utsports.com,wsucougars.com##+js(set, blockAdBlock, trueFunc)
+12thman.com,acusports.com,atlantic10.com,auburntigers.com,baylorbears.com,bceagles.com,bgsufalcons.com,big12sports.com,bigten.org,bradleybraves.com,butlersports.com,conferenceusa.com,cyclones.com,dartmouthsports.com,daytonflyers.com,dbupatriots.com,dbusports.com,denverpioneers.com,fduknights.com,fgcuathletics.com,fightinghawks.com,fightingillini.com,floridagators.com,friars.com,gamecocksonline.com,goarmywestpoint.com,gobison.com,goblueraiders.com,gobobcats.com,gocards.com,gocreighton.com,godeacs.com,goduke.com,goexplorers.com,gofrogs.com,gogriffs.com,gogriz.com,golobos.com,gomarquette.com,gopack.com,gophersports.com,goprincetontigers.com,gopsusports.com,goracers.com,goshockers.com,goterriers.com,gotigersgo.com,gousfbulls.com,govandals.com,gowyo.com,goxavier.com,gozags.com,gozips.com,guhoyas.com,gwusports.com,hailstate.com,hamptonpirates.com,hawaiiathletics.com,hokiesports.com,huskers.com,icgaels.com,iuhoosiers.com,jsugamecocksports.com,longbeachstate.com,loyolaramblers.com,lrtrojans.com,lsusports.net,msuspartans.com,mutigers.com,navysports.com,nevadawolfpack.com,niuhuskies.com,nkunorse.com,nuhuskies.com,nusports.com,okstate.com,olemisssports.com,omavs.com,ovcsports.com,owlsports.com,purduesports.com,redstormsports.com,richmondspiders.com,sfajacks.com,shupirates.com,siusalukis.com,smcgaels.com,smumustangs.com,soconsports.com,soonersports.com,tamu.soccer,themw.com,tulsahurricane.com,txst.com,txstatebobcats.com,ubbulls.com,ucfknights.com,ucirvinesports.com,uconnhuskies.com,uhcougars.com,uicflames.com,umterps.com,uncwsports.com,unipanthers.com,unlvrebels.com,uoflsports.com,usdtoreros.com,utahstateaggies.com,utepathletics.com,utrockets.com,uvmathletics.com,uwbadgers.com,villanova.com,wkusports.com,wmubroncos.com,woffordterriers.com,1pack1goal.com,bcuathletics.com,bubraves.com,goblackbears.com,golightsgo.com,gomcpanthers.com,goutsa.com,mercerbears.com,pirateblue.com,pirateblue.net,pirateblue.org,quinnipiacbobcats.com,towsontigers.com,tribeathletics.com,tribeclub.com,utepminermaniacs.com,utepminers.com,wkutickets.com,aopathletics.org,atlantichockeyonline.com,bigsouthnetwork.com,bigsouthsports.com,chawomenshockey.com,dbupatriots.org,drakerelays.org,ecac.org,ecacsports.com,emueagles.com,emugameday.com,gculopes.com,godrakebulldog.com,godrakebulldogs.com,godrakebulldogs.net,goeags.com,goislander.com,goislanders.com,gojacks.com,gomacsports.com,gseagles.com,hubison.com,iowaconference.com,ksuowls.com,lonestarconference.org,mascac.org,midwestconference.org,mountaineast.org,niu-pack.com,niuhuskies.com,oswegolakers.com,ovcdigitalnetwork.com,pacersports.com,rmacsports.org,rollrivers.com,samfordsports.com,uncpbraves.com,usfdons.com,wiacsports.com,alaskananooks.com,broncathleticfund.com,cameronaggies.com,columbiacougars.com,etownbluejays.com,gobadgers.ca,golancers.ca,gometrostate.com,gothunderbirds.ca,kentstatesports.com,lehighsports.com,lopers.com,lycoathletics.com,lycomingathletics.com,maraudersports.com,mauiinvitational.com,msumavericks.com,nueagles.com,nwusports.com,patriotathleticfund.com,pittband.com,principiaathletics.com,roadrunnersathletics.com,sidearmsocial.com,stablerarena.com,stoutbluedevils.com,uwlathletics.com,yumacs.com,collegefootballplayoff.com,csurams.com,cubuffs.com,gobearcats.com,gohuskies.com,mgoblue.com,osubeavers.com,pittsburghpanthers.com,rolltide.com,texassports.com,thesundevils.com,uclabruins.com,wvuathletics.com,wvusports.com,arizonawildcats.com,calbears.com,cuse.com,georgiadogs.com,goducks.com,goheels.com,gostanford.com,insidekstatesports.com,insidekstatesports.info,insidekstatesports.net,insidekstatesports.org,k-stateathletics.com,k-statefootball.net,k-statefootball.org,k-statesports.com,k-statesports.net,k-statesports.org,k-statewomenshoops.com,k-statewomenshoops.net,k-statewomenshoops.org,kstateathletics.com,kstatefootball.net,kstatefootball.org,kstatesports.com,kstatewomenshoops.com,kstatewomenshoops.net,kstatewomenshoops.org,ksuathletics.com,ksusports.com,scarletknights.com,showdownforrelief.com,texastech.com,theacc.com,ukathletics.com,usctrojans.com,utahutes.com,utsports.com,wsucougars.com##+js(set, blockAdBlock, trueFunc)
 *$script,redirect-rule=noopjs,domain=12thman.com|acusports.com|atlantic10.com|auburntigers.com|baylorbears.com|bceagles.com|bgsufalcons.com|big12sports.com|bigten.org|bradleybraves.com|butlersports.com|conferenceusa.com|cyclones.com|dartmouthsports.com|daytonflyers.com|dbupatriots.com|dbusports.com|denverpioneers.com|fduknights.com|fgcuathletics.com|fightinghawks.com|fightingillini.com|floridagators.com|friars.com|gamecocksonline.com|goarmywestpoint.com|gobison.com|goblueraiders.com|gobobcats.com|gocards.com|gocreighton.com|godeacs.com|goduke.com|goexplorers.com|gofrogs.com|gogriffs.com|gogriz.com|golobos.com|gomarquette.com|gopack.com|gophersports.com|goprincetontigers.com|gopsusports.com|goracers.com|goshockers.com|goterriers.com|gotigersgo.com|gousfbulls.com|govandals.com|gowyo.com|goxavier.com|gozags.com|gozips.com|guhoyas.com|gwusports.com|hailstate.com|hamptonpirates.com|hawaiiathletics.com|hokiesports.com|huskers.com|icgaels.com|iuhoosiers.com|jsugamecocksports.com|longbeachstate.com|loyolaramblers.com|lrtrojans.com|lsusports.net|msuspartans.com|mutigers.com|navysports.com|nevadawolfpack.com|niuhuskies.com|nkunorse.com|nuhuskies.com|nusports.com|okstate.com|olemisssports.com|omavs.com|ovcsports.com|owlsports.com|purduesports.com|redstormsports.com|richmondspiders.com|sfajacks.com|shupirates.com|siusalukis.com|smcgaels.com|smumustangs.com|soconsports.com|soonersports.com|tamu.soccer|themw.com|tulsahurricane.com|txst.com|txstatebobcats.com|ubbulls.com|ucfknights.com|ucirvinesports.com|uconnhuskies.com|uhcougars.com|uicflames.com|umterps.com|uncwsports.com|unipanthers.com|unlvrebels.com|uoflsports.com|usdtoreros.com|utahstateaggies.com|utepathletics.com|utrockets.com|uvmathletics.com|uwbadgers.com|villanova.com|wkusports.com|wmubroncos.com|woffordterriers.com|1pack1goal.com|bcuathletics.com|bubraves.com|goblackbears.com|golightsgo.com|gomcpanthers.com|goutsa.com|mercerbears.com|pirateblue.com|pirateblue.net|pirateblue.org|quinnipiacbobcats.com|towsontigers.com|tribeathletics.com|tribeclub.com|utepminermaniacs.com|utepminers.com|wkutickets.com|aopathletics.org|atlantichockeyonline.com|bigsouthnetwork.com|bigsouthsports.com|chawomenshockey.com|dbupatriots.org|drakerelays.org|ecac.org|ecacsports.com|emueagles.com|emugameday.com|gculopes.com|godrakebulldog.com|godrakebulldogs.com|godrakebulldogs.net|goeags.com|goislander.com|goislanders.com|gojacks.com|gomacsports.com|gseagles.com|hubison.com|iowaconference.com|ksuowls.com|lonestarconference.org|mascac.org|midwestconference.org|mountaineast.org|niu-pack.com|niuhuskies.com|oswegolakers.com|ovcdigitalnetwork.com|pacersports.com|rmacsports.org|rollrivers.com|samfordsports.com|uncpbraves.com|usfdons.com|wiacsports.com|alaskananooks.com|broncathleticfund.com|cameronaggies.com|columbiacougars.com|etownbluejays.com|gobadgers.ca|golancers.ca|gometrostate.com|gothunderbirds.ca|kentstatesports.com|lehighsports.com|lopers.com|lycoathletics.com|lycomingathletics.com|maraudersports.com|mauiinvitational.com|msumavericks.com|nueagles.com|nwusports.com|patriotathleticfund.com|pittband.com|principiaathletics.com|roadrunnersathletics.com|sidearmsocial.com|stablerarena.com|stoutbluedevils.com|uwlathletics.com|yumacs.com|collegefootballplayoff.com|csurams.com|cubuffs.com|gobearcats.com|gohuskies.com|mgoblue.com|osubeavers.com|pittsburghpanthers.com|rolltide.com|texassports.com|thesundevils.com|uclabruins.com|wvuathletics.com|wvusports.com|arizonawildcats.com|calbears.com|cuse.com|georgiadogs.com|goducks.com|goheels.com|gostanford.com|insidekstatesports.com|insidekstatesports.info|insidekstatesports.net|insidekstatesports.org|k-stateathletics.com|k-statefootball.net|k-statefootball.org|k-statesports.com|k-statesports.net|k-statesports.org|k-statewomenshoops.com|k-statewomenshoops.net|k-statewomenshoops.org|kstateathletics.com|kstatefootball.net|kstatefootball.org|kstatesports.com|kstatewomenshoops.com|kstatewomenshoops.net|kstatewomenshoops.org|ksuathletics.com|ksusports.com|scarletknights.com|showdownforrelief.com|texastech.com|theacc.com|ukathletics.com|usctrojans.com|utahutes.com|utsports.com|wsucougars.com
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=12thman.com|acusports.com|atlantic10.com|auburntigers.com|baylorbears.com|bceagles.com|bgsufalcons.com|big12sports.com|bigten.org|bradleybraves.com|butlersports.com|conferenceusa.com|cyclones.com|dartmouthsports.com|daytonflyers.com|dbupatriots.com|dbusports.com|denverpioneers.com|fduknights.com|fgcuathletics.com|fightinghawks.com|fightingillini.com|floridagators.com|friars.com|gamecocksonline.com|goarmywestpoint.com|gobison.com|goblueraiders.com|gobobcats.com|gocards.com|gocreighton.com|godeacs.com|goduke.com|goexplorers.com|gofrogs.com|gogriffs.com|gogriz.com|golobos.com|gomarquette.com|gopack.com|gophersports.com|goprincetontigers.com|gopsusports.com|goracers.com|goshockers.com|goterriers.com|gotigersgo.com|gousfbulls.com|govandals.com|gowyo.com|goxavier.com|gozags.com|gozips.com|guhoyas.com|gwusports.com|hailstate.com|hamptonpirates.com|hawaiiathletics.com|hokiesports.com|huskers.com|icgaels.com|iuhoosiers.com|jsugamecocksports.com|longbeachstate.com|loyolaramblers.com|lrtrojans.com|lsusports.net|msuspartans.com|mutigers.com|navysports.com|nevadawolfpack.com|niuhuskies.com|nkunorse.com|nuhuskies.com|nusports.com|okstate.com|olemisssports.com|omavs.com|ovcsports.com|owlsports.com|purduesports.com|redstormsports.com|richmondspiders.com|sfajacks.com|shupirates.com|siusalukis.com|smcgaels.com|smumustangs.com|soconsports.com|soonersports.com|tamu.soccer|themw.com|tulsahurricane.com|txst.com|txstatebobcats.com|ubbulls.com|ucfknights.com|ucirvinesports.com|uconnhuskies.com|uhcougars.com|uicflames.com|umterps.com|uncwsports.com|unipanthers.com|unlvrebels.com|uoflsports.com|usdtoreros.com|utahstateaggies.com|utepathletics.com|utrockets.com|uvmathletics.com|uwbadgers.com|villanova.com|wkusports.com|wmubroncos.com|woffordterriers.com|1pack1goal.com|bcuathletics.com|bubraves.com|goblackbears.com|golightsgo.com|gomcpanthers.com|goutsa.com|mercerbears.com|pirateblue.com|pirateblue.net|pirateblue.org|quinnipiacbobcats.com|towsontigers.com|tribeathletics.com|tribeclub.com|utepminermaniacs.com|utepminers.com|wkutickets.com|aopathletics.org|atlantichockeyonline.com|bigsouthnetwork.com|bigsouthsports.com|chawomenshockey.com|dbupatriots.org|drakerelays.org|ecac.org|ecacsports.com|emueagles.com|emugameday.com|gculopes.com|godrakebulldog.com|godrakebulldogs.com|godrakebulldogs.net|goeags.com|goislander.com|goislanders.com|gojacks.com|gomacsports.com|gseagles.com|hubison.com|iowaconference.com|ksuowls.com|lonestarconference.org|mascac.org|midwestconference.org|mountaineast.org|niu-pack.com|niuhuskies.com|oswegolakers.com|ovcdigitalnetwork.com|pacersports.com|rmacsports.org|rollrivers.com|samfordsports.com|uncpbraves.com|usfdons.com|wiacsports.com|alaskananooks.com|broncathleticfund.com|cameronaggies.com|columbiacougars.com|etownbluejays.com|gobadgers.ca|golancers.ca|gometrostate.com|gothunderbirds.ca|kentstatesports.com|lehighsports.com|lopers.com|lycoathletics.com|lycomingathletics.com|maraudersports.com|mauiinvitational.com|msumavericks.com|nueagles.com|nwusports.com|patriotathleticfund.com|pittband.com|principiaathletics.com|roadrunnersathletics.com|sidearmsocial.com|stablerarena.com|stoutbluedevils.com|uwlathletics.com|yumacs.com|collegefootballplayoff.com|csurams.com|cubuffs.com|gobearcats.com|gohuskies.com|mgoblue.com|osubeavers.com|pittsburghpanthers.com|rolltide.com|texassports.com|thesundevils.com|uclabruins.com|wvuathletics.com|wvusports.com|arizonawildcats.com|calbears.com|cuse.com|georgiadogs.com|goducks.com|goheels.com|gostanford.com|insidekstatesports.com|insidekstatesports.info|insidekstatesports.net|insidekstatesports.org|k-stateathletics.com|k-statefootball.net|k-statefootball.org|k-statesports.com|k-statesports.net|k-statesports.org|k-statewomenshoops.com|k-statewomenshoops.net|k-statewomenshoops.org|kstateathletics.com|kstatefootball.net|kstatefootball.org|kstatesports.com|kstatewomenshoops.com|kstatewomenshoops.net|kstatewomenshoops.org|ksuathletics.com|ksusports.com|scarletknights.com|showdownforrelief.com|texastech.com|theacc.com|ukathletics.com|usctrojans.com|utahutes.com|utsports.com|wsucougars.com
+||sidearm-syndication.s3.amazonaws.com^
 
 ! https://github.com/NanoMeow/QuickReports/issues/2155
 @@||brid.tv/player/build/plugins/adunit.js$script,domain=pluralist.com
@@ -19411,7 +19393,6 @@ eplsite.uk##[href="https://www.eplsite.uk/vm.html"]
 ##.amp-unresolved
 ##.amp-ad-inner
 ###placeAds
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=noopjs,domain=ampproject.net
 @@||cdn.ampproject.org/*/amp-ad-*.js$script,domain=aajtak.intoday.in
 @@||taboola.com/*indiatoday$domain=ampproject.net
 @@||trc.taboola.com/indiatoday
@@ -19563,9 +19544,8 @@ androidonepro.com##+js(aopr, downloadJSAtOnload)
 @@||tagesanzeiger.ch^$ghide
 
 ! https://github.com/NanoMeow/QuickReports/issues/2518
-@@||rmcmv.us^$ghide
-rmcmv.us##[class*="banner"]
-*.gif$domain=rmcmv.us,image
+rmcmv.*##+js(nosiif, visibility)
+rmcmv.*##[class*="ads"]
 
 ! https://github.com/NanoMeow/QuickReports/issues/2521
 lecourrier-du-soir.com##+js(nosiif, iframe)
@@ -19589,10 +19569,6 @@ owllink.net##[src^="https://url-coin.com/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/6694
 9gag.com##.post-section:has-text(Promoted):upward(2)
 
-! https://github.com/uBlockOrigin/uAssets/issues/6700
-cinecalidad.to##+js(aopr, smrtSB)
-cinecalidad.to##+js(nowebrtc)
-cinecalidad.to###playerf
 ||kiyzb.27823.club^$3p
 
 ! https://github.com/NanoMeow/QuickReports/issues/2298
@@ -19620,9 +19596,6 @@ arcadepunks.com##[class*="ads"]
 arcadepunks.com##.header-banner
 arcadepunks.com##[href^="https://www.arcadepunks.com/go/"]
 
-! https://github.com/NanoMeow/QuickReports/issues/2533
-berkas.cloud##+js(acis, document.getElementById, undefined)
-
 ! https://github.com/NanoMeow/QuickReports/issues/2534
 osxinfo.net##+js(acis, $, btoa)
 
@@ -19635,9 +19608,6 @@ movieloversworld.com##+js(acis, Math, zfgloaded)
 ! https://www.reddit.com/r/uBlockOrigin/comments/edtpll/another_website_detecting_ublock/
 myneobuxportal.com##+js(set, jQuery.adblock, false)
 
-! https://github.com/uBlockOrigin/uAssets/issues/6719
-spiin.xyz##+js(aopr, app_vars.force_disable_adblock)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/6720
 wohnungsboerse.net##+js(aopr, Number.isNaN)
 @@||wohnungsboerse.net^$xhr,1p
@@ -19648,13 +19618,6 @@ digitalmusicnews.com##+js(aopr, googletag)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2548
 @@||football-lineups.com/dfp.js$script,1p
-
-! https://github.com/NanoMeow/QuickReports/issues/3490
-fraudstercrew.*##+js(nostif, prompt)
-fraudstercrew.*##+js(acis, $, ads)
-@@||fraudstercrew.*^$ghide
-fraudstercrew.*##.adsbygoogle
-fraudstercrew.*##.samBannerUnit
 
 ! https://github.com/NanoMeow/QuickReports/issues/2554
 negumo.com##+js(set, fabActive, false)
@@ -19681,10 +19644,6 @@ fir3.net##^meta[content*="ads.enrt.eu"]
 fir3.net##[href^="https://ads.enrt.eu/"]
 *$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=fir3.net
 
-! https://github.com/NanoMeow/QuickReports/issues/2563
-samehadaku.net.in##+js(aopr, glxopen)
-@@||samehadaku.net.in^$ghide
-
 ! inkagames.com anti adb
 @@||inkagames.com^$ghide
 
@@ -19703,9 +19662,6 @@ stayonline.pro##+js(set, adsLoaded, true)
 safetxt.*##+js(aopw, _pop)
 @@||safetxt.*^$ghide
 safetxt.*##.adsbygoogle
-
-! https://github.com/uBlockOrigin/uAssets/issues/6747
-jo2win.com##+js(aopr, app_vars.force_disable_adblock)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2572
 toledoblade.com##+js(aopr, __cmpGdprAppliesGlobally)
@@ -19742,11 +19698,6 @@ btcleets.xyz##[href^="https://faucetpay.io/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/6754
 @@||mixdrop.to^$script,1p
 
-! plytv.me popups
-plytv.me##+js(acis, String.fromCharCode, /btoa|break/)
-plytv.me##+js(aopw, _pop)
-plytv.me##+js(nowoif)
-
 ! https://github.com/NanoMeow/QuickReports/issues/2589
 qqcinema21.com##+js(aopw, puShown)
 
@@ -19766,8 +19717,6 @@ buscarfoto.com##+js(aopr, redirectConfirm)
 gdriveplayer.*##+js(acis, Math, XMLHttpRequest)
 gdriveplayer.*##+js(aopr, AaDetector)
 gdriveplayer.*##+js(nowoif)
-kawanfilm21.org##[href^="https://bit.ly/"]
-kawanfilm21.org##[src^="https://1.bp.blogspot.com/"]
 
 ! https://github.com/NanoMeow/QuickReports/issues/2593
 best-series.me##+js(aopr, Date.prototype.toUTCString)
@@ -19775,12 +19724,6 @@ best-series.me##+js(aopr, Date.prototype.toUTCString)
 ! https://github.com/realodix/AdBlockID/issues/163
 ! https://github.com/realodix/AdBlockID/issues/182
 kordramass.com,kshowsubindo.org,senimovie.co##+js(acis, document.onclick, popunder)
-
-! https://github.com/NanoMeow/QuickReports/issues/2598
-etiqueta.me##+js(aopr, app_vars.force_disable_adblock)
-etiqueta.me##+js(nowoif)
-etiqueta.me##.banner
-etiqueta.me##.blog-content
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/ehhmg4/cant_stop_the_anti_adblock_notification_or_access/
 alliptvlinks.com##+js(aeld, load, ads)
@@ -19836,9 +19779,6 @@ droidtamvan.me##[href="https://www.tautan.pro/"]
 droidtamvan.me##[href^="https://bit.ly/"]
 droidtamvan.me##[href^="https://www.poptival.com/"]
 
-! https://github.com/NanoMeow/QuickReports/issues/2613
-downloadmv.xyz##+js(acis, puShown , /doOpen|popundr/)
-
 ! https://github.com/NanoMeow/QuickReports/issues/2610
 lk21movie.online##+js(aopr, glxopen)
 lk21movie.online##.bm.overlay
@@ -19870,11 +19810,6 @@ hexupload.net##+js(nowoif)
 ! popups https://animetak .net/
 animetak.*##+js(acis, Math, zfgloaded)
 
-! https://github.com/NanoMeow/QuickReports/issues/2639
-shortbitsfree.net##+js(aopr, absda)
-shortbitsfree.net##+js(aopr, app_vars.force_disable_adblock)
-shortbitsfree.net##+js(aopr, open)
-shortbitsfree.net##.banner
 ||neobits.net^$3p
 ||mugaskems.com^
 
@@ -19945,10 +19880,6 @@ adslinkfly.online##+js(set, blurred, false)
 adslinkfly.online##.banner
 informaxonline.com##+js(nano-sib)
 
-! https://github.com/NanoMeow/QuickReports/issues/2611
-nobarfilm21.net##.mvic-btn
-nobarfilm21.net##[id^="tengah"]
-
 ! https://github.com/NanoMeow/QuickReports/issues/2676
 bladesalvador.com##+js(set, adblock, false)
 
@@ -19998,11 +19929,6 @@ ur-files.com##[href^="https://trkwdd.com/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/5305#issuecomment-572308826
 @@||wallpaperwaifu.com^$ghide
 wallpaperwaifu.com##.adsbygoogle
-
-! https://github.com/NanoMeow/QuickReports/issues/2692
-movieshdstreaming.com##+js(nowebrtc)
-movieshdstreaming.com##.entry-content > center
-movieshdstreaming.com##[href^="https://www.predictivdisplay.com/"]
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63856
 ! https://github.com/AdguardTeam/AdguardFilters/issues/72087
@@ -22826,12 +22752,11 @@ rarlab.com##.rshift:has(.adv):upward(1)
 rarlab.com##.tbar2:has-text(advert)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7343
-dood.*##+js(acis, String.fromCharCode, /btoa|break/)
+dood.*##+js(acis, Math, break;case)
 dood.*##+js(acis, adcashMacros)
 dood.*##+js(aopw, _pop)
 dood.*##+js(aopw, DoodPop)
 dood.*##+js(nostif, debugger)
-@@||dood.video^$xhr,domain=dood.watch
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7175
 androgamer.org##+js(acis, jQuery, ai_adb)
