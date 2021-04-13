@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202104121909
+! Version: 202104131702
 ! Title: EasyPrivacy
-! Last modified: 12 Apr 2021 19:09 UTC
+! Last modified: 13 Apr 2021 17:02 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -5580,6 +5580,7 @@ cgi-bin/counter
 /page.bsigroup.com/*
 /pixel-prod.
 /pixel?cid=
+/pqt.email/o/*$image
 /sendmail.backerupdate.com/t/*
 /sptracking.
 /ss/o/*.gif
@@ -5833,6 +5834,7 @@ _mongo_stats/
 ! -----------------Third-party tracking domains-----------------!
 ! *** easylist:easyprivacy/easyprivacy_trackingservers.txt ***
 ! Revolving trackers
+||apxl.io^
 ||g2178927685.co^
 ||g2377012020.co^
 ||g2575096355.co^
@@ -10728,6 +10730,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||chanalytics.merchantadvantage.com^
 ||chartaca.com.s3.amazonaws.com^
 ||check.ddos-guard.net^$third-party
+||check.deadlinefunnel.com^$third-party
 ||checkout.com/logger/
 ||chicoryapp.com/widget_v2/
 ||choicestream.com^*/pixel/
@@ -12312,6 +12315,8 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||tracking.g2crowd.com^
 ||tracking.godatafeed.com^
 ||tracking.hivecloud.net^
+! [dup] from peter-lowe/serverlist.txt
+! ||tracking.hyros.com^
 ||tracking.interweave.com^$third-party
 ||tracking.jotform.com^
 ||tracking.keywee.co^
@@ -12321,6 +12326,8 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||tracking.listhub.net^
 ||tracking.livingsocial.com^
 ||tracking.magnetmail.net^
+! [dup] from peter-lowe/serverlist.txt
+! ||tracking.markethero.io^
 ||tracking.maxcdn.com^$third-party
 ||tracking.menamarketplace.com^
 ||tracking.monsido.com^
@@ -21912,6 +21919,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=extratorrent.cd|sky
 @@||gettingpersonal.co.uk^*/scripts/app/shared/googleanalytics.js$script,~third-party
 @@||googleoptimize.com/optimize.js$script,domain=tentree.ca
 @@||lenovo.com/fea/js/adobeAnalytics/adobeAnalytics-searchComponent.js$xmlhttprequest,domain=lenovo.com
+@@||online.tivo.com/assets/tve/common/js/vendor/jsnlog/$script,~third-party
 @@||realtor.com/rentals/api/optimizely.js$script,~third-party
 @@||shop.bmw.com.au/assets/analytics-setup.js$~third-party
 @@||static.foxnews.com^*/VisitorAPI.js$domain=foxbusiness.com|foxnews.com
@@ -22522,7 +22530,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=extratorrent.cd|sky
 @@||olx.pl^*/js/tracking/ninja.js$domain=olx.pl
 @@||pataks.pl/core,_assets$script,~third-party
 @@||polfan.pl/*/fingerprint2.min.js$script,~third-party
-@@||sgqcvfjvr.onet.pl^$script,domain=kobieta.onet.pl
+@@||sgqcvfjvr.onet.pl^$script,domain=kobieta.onet.pl|newsweek.pl
 @@||stat24.com/crossdomain.xml$domain=ipla.tv
 @@||urbanowiczhaft.pl/wp-content/plugins/duracelltomi-google-tag-manager/$~third-party
 @@||wp.pl^*/dot.gif?$xmlhttprequest,domain=open.fm|wp.tv
