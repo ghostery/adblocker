@@ -467,7 +467,7 @@ racefans.net##.textwidget
 eca-anime.net##+js(acis, document.getElementById, advert-tester)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3325
-gazetadopovo.com.br##+js(aeld, copy, preventDefault)
+gazetadopovo.com.br##+js(aeld, copy)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3324
 filmgourmand.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
@@ -3082,9 +3082,6 @@ masyamsu.com##+js(acis, document.oncontextmenu)
 masyamsu.com##+js(acis, disableSelection, reEnable)
 masyamsu.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/49562
-boyfriendtv.com##+js(set, blockAdblockUser, null)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/6943
 itvn.pl,itvnextra.pl,kuchniaplus.pl,miniminiplus.pl,player.pl,ttv.pl,tvn.pl,tvn24.pl,tvn24bis.pl,tvn7.pl,tvnfabula.pl,tvnstyle.pl,tvnturbo.pl,x-link.pl,x-news.pl##+js(aeld, contextmenu, a)
 
@@ -4762,7 +4759,8 @@ fandomwire.com##html:style(overflow:auto !important)
 ! https://github.com/uBlockOrigin/uAssets/issues/8037
 observatoriodocinema.uol.com.br##+js(acis, document.addEventListener, preventDefault)
 
-! https://github.com/NanoMeow/QuickReports/issues/4844
+! https://github.com/AdguardTeam/AdguardFilters/issues/80714
+||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js^$redirect-rule=googlesyndication_adsbygoogle.js,script,domain=samfw.com
 @@||samfw.com^$ghide
 samfw.com##.adsbygoogle
 ||samfw.com/assets/*.gif$image
@@ -5471,6 +5469,7 @@ pbinfo.ro##+js(set, pbi_analytics, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/8555
 ||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=hotcleaner.com
 hotcleaner.com##.adsbygoogle:upward(1):remove()
+hotcleaner.com##body > div[id]:matches-css(position: fixed):style(visibility: hidden !important)
 hotcleaner.com##body > div[class]:matches-css(position: fixed)
 
 ! vedantu. com (Fix right click and select text)
@@ -5547,10 +5546,6 @@ whatfontis.com##+js(acis, $, adBlock)
 
 ! viveretenerife. com anti right click
 viveretenerife.com##+js(aeld, contextmenu)
-
-! discovermagazine.com articles limit
-discovermagazine.com##+js(cookie-remover, remaining_articles)
-discovermagazine.com###__next > div[class] > p.subscriber-auth:upward(1)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8677
 skandynawiainfo.pl##+js(aeld, , mdp)
@@ -5721,3 +5716,58 @@ novelism.jp##.select-none:style(-webkit-touch-callout: default !important; -webk
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/mqovyt
 bemoneyaware.com##html:style(overflow: auto !important)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8878
+@@||tpc.googlesyndication.com/safeframe/*/html/container.html$frame,domain=diep.io
+||cm.g.doubleclick.net/pixel$image,redirect-rule=1x1-transparent.gif,domain=tpc.googlesyndication.com
+||tpc.googlesyndication.com/pagead/images/x_button_blue2.svg$image,redirect-rule=1x1-transparent.gif,domain=tpc.googlesyndication.com
+||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$redirect-rule=googlesyndication_adsbygoogle.js,script,domain=diep.io
+||cm.g.doubleclick.net/pixel$image,redirect-rule=1x1-transparent.gif,domain=diep.io
+||tpc.googlesyndication.com/pagead/images/x_button_blue2.svg$image,redirect-rule=1x1-transparent.gif,domain=diep.io
+diep.io#@#iframe[src^="https://tpc.googlesyndication.com/"]
+
+! https://github.com/uBlockOrigin/uAssets/issues/8888
+girlscene.nl##+js(set, adblock, 0)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/80501
+||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js^$redirect-rule=googlesyndication_adsbygoogle.js,script,domain=mifirm.net
+
+! gnt24365.net anti right click, select
+gnt24365.net##+js(acis, document.oncontextmenu)
+gnt24365.net##+js(acis, document.onselectstart)
+gnt24365.net##*:style(-webkit-touch-callout: default!important;-webkit-user-select: auto!important;-moz-user-select: auto!important;user-select: auto!important;)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/80660
+cssreference.io##.menu-hello
+
+! https://www.reddit.com/r/uBlockOrigin/comments/mskp1p/sites_are_able_to_disable_scrolling_when_asking/
+technicpack.net##+js(acis, document.createElement, admiral)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8912
+zsti.zsti.civ.pl##+js(aeld, contextmenu, preventDefault)
+
+! camoero.com anti right click
+||camoero.com/wp-content/themes/luxech/luxech.js
+
+! this.kiji.is anti adb
+kiji.is##+js(acis, document.createElement, admiral)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/80929
+hardcoregames.ca##+js(aeld, /contextmenu|cut|copy|keydown/)
+hardcoregames.ca##+js(set, document.onkeydown, null)
+hardcoregames.ca##body * :not(input):not(textarea):style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/80934
+bikesell.co.kr##+js(ra, oncontextmenu, body)
+
+! truyenbanquyen.com anti right click, select, F12
+truyenbanquyen.com##+js(acis, document.oncontextmenu)
+truyenbanquyen.com##+js(aopw, disable_hot_keys)
+truyenbanquyen.com##*:style(-webkit-touch-callout: default!important; -webkit-user-select: auto!important; -moz-user-select: auto!important; -ms-user-select: auto!important;)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/81092
+globaledu.jp##+js(acis, document.oncontextmenu)
+globaledu.jp##+js(ra, oncontextmenu|onselectstart, body)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/81105
+@@||imagecolorpicker.com^$ghide

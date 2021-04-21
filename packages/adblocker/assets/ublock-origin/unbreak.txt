@@ -1701,7 +1701,9 @@ detroitnews.com###partner-poster-0
 @@||piasecznonews.pl/wp-content/plugins/wppas/$1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5623
-downloadsource.*##.date:not(dt):style(display: block !important;)
+downloadsource.*##dl > .date:not(dt):style(width: initial !important; height: initial !important; clip: unset !important; display: inline-block !important;)
+downloadsource.*##dl > .date:upward(dl):style(width: initial !important; height: initial !important; clip: unset !important; display: inline-block !important;)
+downloadsource.*##dl > dt:has-text(Data dodania)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/bqmliz/not_working_on_1movies_anymore/
 ! https://www.reddit.com/r/uBlockOrigin/comments/e85st9/www41moviesis_ads_arent_being_blocked/
@@ -3537,7 +3539,6 @@ lebigdata.fr##.background-cover
 
 ! https://uktvplay.uktv.co.uk/shows/les-miserables/watch-online - broken player controls
 uktvplay.uktv.co.uk##.video-overlay
-uktvplay.uktv.co.uk##.vjs-text-track-display
 uktvplay.uktv.co.uk##.vjs-ad-control-bar.vjs-control-bar
 
 ! https://github.com/uBlockOrigin/uAssets/pull/8206
@@ -3947,5 +3948,23 @@ ivoox.com##body:style(overflow:auto !important)
 @@||dev.visualwebsiteoptimizer.com/v.gif$domain=watch.impress.co.jp
 !#endif
 
-! https://github.com/uBlockOrigin/uAssets/issues/8885
-@@||sb.scorecardresearch.com^*/streamingtag_plugin_jwplayer.js$script,domain=lavanguardia.com
+! https://github.com/uBlockOrigin/uAssets/issues/8903
+crxextractor.com#@#.adsense-wrapper
+
+! https://github.com/uBlockOrigin/uAssets/issues/8913
+johnhardy.com##+js(acis, $, optimoveSDK)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8918
+@@||googletagmanager.com/gtm.js$script,redirect-rule,domain=academicwork.se
+
+! https://github.com/easylist/easylist/pull/7713
+@@||line-scdn.net/*/torimochi.js/$script,domain=demae-can.com
+
+! EP filters known to causes trouble
+! [badfilter] ||adm.tyg.jp^$badfilter
+! [badfilter] ||biz-sol.sony.jp^$badfilter
+! [badfilter] ||cs.cloudsign.jp^$badfilter
+! [badfilter] ||go.anets.co.jp^$badfilter
+! [badfilter] ||go.newton-consulting.co.jp^$badfilter
+! [badfilter] ||go.ndbb.jp^$badfilter
+! [badfilter] ||go.procommit.co.jp^$badfilter
