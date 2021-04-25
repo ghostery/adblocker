@@ -2758,9 +2758,6 @@ https://forums.lanik.us/viewtopic.php?f=64&t=45775
 ! CNAME unbreak airfrance.co.jp
 @@||cdx.cedexis.net^$3p,domain=airfrance.co.jp
 
-! CNAME https://forums.lanik.us/viewtopic.php?f=64&t=44570&p=154129#p154129
-@@||onelink-translations.com^$domain=delta.com
-
 ! https://github.com/NanoAdblocker/NanoFilters/issues/480
 ! [badfilter] |https://$subdocument,3p,domain=series9.to,badfilter
 
@@ -3612,9 +3609,6 @@ hero-magazine.com###header:style(position: inherit !important;)
 ! unviewable subtitle https://github.com/easylist/easylist/commit/4282a904a8036cf8b7d81247ba910e99ddb063e7
 digg.com##.single-story > header:style(margin-top: 40px !important)
 
-! CNAME broken site https://github.com/uBlockOrigin/uAssets/pull/8357
-@@||onelink-translations.com^$domain=de.steelseries.com
-
 ! https://www.reddit.com/r/uBlockOrigin/comments/kaarfm/
 @@||news.com.au/*/meta-analytics/$script,1p
 
@@ -3960,17 +3954,18 @@ johnhardy.com##+js(acis, $, optimoveSDK)
 ! https://github.com/easylist/easylist/pull/7713
 @@||line-scdn.net/*/torimochi.js/$script,domain=demae-can.com
 
-! EP filters known to causes trouble
-! [badfilter] ||adm.tyg.jp^$badfilter
-! [badfilter] ||biz-sol.sony.jp^$badfilter
-! [badfilter] ||cs.cloudsign.jp^$badfilter
-! [badfilter] ||go.anets.co.jp^$badfilter
-! [badfilter] ||go.newton-consulting.co.jp^$badfilter
-! [badfilter] ||go.ndbb.jp^$badfilter
-! [badfilter] ||go.procommit.co.jp^$badfilter
-
 ! https://github.com/uBlockOrigin/uAssets/issues/8947
 @@||googleads.g.doubleclick.net/ads/preferences/*/opt*?continue$doc
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4333#issuecomment-824591245
 ! [badfilter] ||thepiratebay.$script,domain=pirateproxy.live|thehiddenbay.com|thepiratebay.org,badfilter
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/81308
+||pagead2.googlesyndication.com/pagead/$script,redirect=noop.js,domain=youpouch.com
+@@||fundingchoicesmessages.google.com^$script,domain=youpouch.com
+@@||googletagmanager.com/gtm.js$domain=youpouch.com
+@@||youpouch.com^$ghide
+youpouch.com##.ad
+youpouch.com##.ad300x250
+youpouch.com##.ad728x90
+youpouch.com##.native-ad
