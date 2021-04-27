@@ -7,6 +7,7 @@
  */
 /* tslint:disable quotemark */
 export default [
+  "acis, decodeURI, decodeURIComp",
   "acis, disableSelection, reEnab",
   "acis, document.createElement, ",
   "acis, document.getElementById,",
@@ -65,7 +66,6 @@ export default [
   "cookie",
   "Cookie",
   "google",
-  "movies",
   "notice",
   "policy",
   "widget",

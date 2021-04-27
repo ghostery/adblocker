@@ -2115,11 +2115,11 @@ biqle.*##+js(aopr, Date.prototype.toUTCString)
 dxb.to##+js(nowebrtc)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/804
-! https://forums.lanik.us/viewtopic.php?f=62&t=43871&p=151185#p151178
 ||amazon-adsystem.com/*/apstag.js$script,redirect=noopjs,domain=aetv.com|aetnd.com|history.com
 ||mssl.fwmrm.net/*/AdManager.js$script,redirect=noopjs,domain=history.com
 @@||mavencoalition.io^$xhr,domain=history.com
 @@||aetnd.com^$ghide
+@@||aetv.com^$ghide
 @@||play.aetv.com^$script,1p
 @@||aetv.hb.omtrdc.net^$xhr,domain=play.aetv.com
 
@@ -5110,12 +5110,12 @@ cinedetodo.*##[id*="yellow"]
 ##a[href^="https://bj1110.online/"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4430
-@@||megaup.net^$ghide
-megaup.net##+js(nowoif)
-megaup.net##[src*=".jpg"]:upward(1)
+megaup.net##+js(acis, I833)
 megaup.net##[id^="AdskeeperComposite"]:style(transform:translate(-999999px,0))
+@@||megaup.net^$ghide
 @@||jsc.adskeeper.co.uk/*/megaup.net$script,domain=megaup.net
 @@||servicer.adskeeper.co.uk^$script,domain=megaup.net
+||rtbsystem.org^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1850
 aquipelis.*##+js(aopw, smrtSB)
@@ -11594,7 +11594,11 @@ latribunadelpaisvasco.com##+js(noeval)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4080
 hanime.tv##+js(set, ABLK, false)
+@@||hanime.tv^$ghide
+hanime.tv##a[href^="https://a.adtng.com/"]
+hanime.tv##a[href^="https://track.aftrk1.com/"]:upward(1)
 hanime.tv##.desktop.htvad
+||members.hanime.tv/*/preroll_ad_event$xhr
 ! https://www.reddit.com/r/uBlockOrigin/comments/mgu1v7/banner_ads_on_hanimetv_videos_on_firefox_mobile/
 !#if env_mobile
 hanime.tv##.htvad
@@ -23064,13 +23068,18 @@ kamerabudaya.com##.ads, div.adsadsense, #HTML1
 gbadamud.blogspot.com##+js(acis, addEventListener, blocker)
 gbadamud.blogspot.com##.pinterestjo, .googlejo
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/53106
+! https://github.com/AdguardTeam/AdguardFilters/issues/81005
 javtiful.com##+js(acis, document.addEventListener, adsBlocked)
 javtiful.com##+js(acis, String.fromCharCode, 'shift')
-javtiful.com##+js(aeld, /.?/, popMagic)
+javtiful.com##+js(aeld, click, popMagic)
 javtiful.com##+js(aopw, _pop)
+javtiful.com##+js(acis, decodeURI, decodeURIComponent)
 javtiful.com##.jtmoney-invideo
+javtiful.com##body > div[style*="z-index:"]
+javtiful.com##[href^="//"][rel="nofollow norefferer noopener"]
 ||javtiful.com/jtmoney/*.php^$1p
+||jav.si/js/zplay.js
+||jav.si/js/mMbVAA7.js
 fakyutube.com##+js(nowoif)
 supervideo.tv##+js(aopr, AaDetector)
 ||73s.xyz^$3p
