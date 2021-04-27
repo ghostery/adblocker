@@ -68,6 +68,14 @@ PuppeteerBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
 
 You are ready to block ads!
 
+By default, using the ad blocker disables the browser's built-in resource cache. Pass the `cacheSafe` option to `enableBlockingInPage` to enable the cache. Learn more in [puppeteer's documentation](https://github.com/puppeteer/puppeteer/blob/main/docs/api.md#pagesetrequestinterceptionvalue-cachesafe). Be careful when using the cache. You may have [problems loading some webpages](https://github.com/puppeteer/puppeteer/pull/6996).
+
+```javascript
+PuppeteerBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
+  blocker.enableBlockingInPage(page, { cacheSafe: true });
+});
+```
+
 There are other ways you can *create an instance of the blocking engine* to
 start blocking ads.
 

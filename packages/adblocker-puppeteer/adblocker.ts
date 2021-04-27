@@ -62,7 +62,7 @@ export class BlockingContext {
     this.onRequest = (request) => blocker.onRequest(request);
   }
 
-  public async enable(): Promise<void> {
+  public async enable({ cacheSafe }: { cacheSafe: boolean }): Promise<void> {
     if (this.blocker.config.loadCosmeticFilters === true) {
       // Register callback to cosmetics injection (CSS + scriptlets)
       this.page.on('frameattached', this.onFrameNavigated);
@@ -73,7 +73,7 @@ export class BlockingContext {
 
     if (this.blocker.config.loadNetworkFilters === true) {
       // Make sure request interception is enabled for `page` before proceeding
-      await this.page.setRequestInterception(true);
+      await this.page.setRequestInterception(true, cacheSafe);
       // NOTES:
       //  - page.setBypassCSP(enabled) might be needed to perform
       //  injections on some pages.
@@ -109,7 +109,10 @@ export class PuppeteerBlocker extends FiltersEngine {
   // Helpers to enable and disable blocking for 'browser'
   // ----------------------------------------------------------------------- //
 
-  public async enableBlockingInPage(page: puppeteer.Page): Promise<BlockingContext> {
+  /**
+   * The `cacheSafe` can be set to `true` to enable the browser's resource cache. By default, caching is disabled, which is puppeteer's default behavior when request interception is enabled. Learn more here: https://github.com/puppeteer/puppeteer/blob/main/docs/api.md#pagesetrequestinterceptionvalue-cachesafe
+   */
+  public async enableBlockingInPage(page: puppeteer.Page, { cacheSafe = false }: { cacheSafe?: boolean } = {}): Promise<BlockingContext> {
     let context: undefined | BlockingContext = this.contexts.get(page);
     if (context !== undefined) {
       return context;
@@ -117,7 +120,7 @@ export class PuppeteerBlocker extends FiltersEngine {
 
     context = new BlockingContext(page, this);
     this.contexts.set(page, context);
-    await context.enable();
+    await context.enable({ cacheSafe });
     return context;
   }
 
