@@ -1,0 +1,19 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 99
+  reviewers:
+  - remusao
+  labels:
+  - "PR: Dependencies :nut_and_bolt:"
+  ignore:
+  - dependency-name: sinon
+    versions:
+    - 10.0.1
+  - dependency-name: chai
+    versions:
+    - 4.3.2
