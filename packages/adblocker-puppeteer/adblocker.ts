@@ -55,23 +55,23 @@ export function fromPuppeteerDetails(details: puppeteer.HTTPRequest): Request {
  */
 export class BlockingContext {
   private readonly onFrameNavigated: (frame: puppeteer.Frame) => Promise<void>;
+  private readonly onDomContentLoaded: () => Promise<void>;
   private readonly onRequest: (details: puppeteer.HTTPRequest) => void;
 
   constructor(private readonly page: puppeteer.Page, private readonly blocker: PuppeteerBlocker) {
     this.onFrameNavigated = (frame) => blocker.onFrameNavigated(frame);
+    this.onDomContentLoaded = () => blocker.onFrameNavigated(this.page.mainFrame());
     this.onRequest = (request) => blocker.onRequest(request);
   }
 
   public async enable(): Promise<void> {
-    if (this.blocker.config.loadCosmeticFilters === true) {
-      // Register callback to cosmetics injection (CSS + scriptlets)
+    if (this.blocker.config.loadCosmeticFilters) {
+      // Register callbacks to cosmetics injection (CSS + scriptlets)
       this.page.on('frameattached', this.onFrameNavigated);
-      this.page.on('domcontentloaded', () => {
-        this.onFrameNavigated(this.page.mainFrame());
-      });
+      this.page.on('domcontentloaded', this.onDomContentLoaded);
     }
 
-    if (this.blocker.config.loadNetworkFilters === true) {
+    if (this.blocker.config.loadNetworkFilters) {
       // Make sure request interception is enabled for `page` before proceeding
       await this.page.setRequestInterception(true);
       // NOTES:
@@ -87,13 +87,14 @@ export class BlockingContext {
   }
 
   public async disable(): Promise<void> {
-    if (this.blocker.config.loadNetworkFilters === true) {
-      this.page.removeListener('request', this.onRequest);
+    if (this.blocker.config.loadNetworkFilters) {
+      this.page.off('request', this.onRequest);
       await this.page.setRequestInterception(false);
     }
 
-    if (this.blocker.config.loadCosmeticFilters === true) {
-      this.page.removeListener('frameattached', this.onFrameNavigated);
+    if (this.blocker.config.loadCosmeticFilters) {
+      this.page.off('frameattached', this.onFrameNavigated);
+      this.page.off('domcontentloaded', this.onDomContentLoaded);
     }
   }
 }
@@ -185,7 +186,7 @@ export class PuppeteerBlocker extends FiltersEngine {
         getRulesFromDOM: false,
       });
 
-      if (active === false) {
+      if (!active) {
         return;
       }
 
@@ -197,7 +198,7 @@ export class PuppeteerBlocker extends FiltersEngine {
       });
     }
 
-    // Seconde step is to start monitoring the DOM of the page in order to
+    // Second step is to start monitoring the DOM of the page in order to
     // inject more specific selectors based on `id`, `class`, or `href` found on
     // nodes. We first query all of them, then monitor the DOM for a few
     // seconds (or until one of the stopping conditions is met, see below).
@@ -223,7 +224,7 @@ export class PuppeteerBlocker extends FiltersEngine {
         });
 
         // Abort if cosmetics are disabled
-        if (active === false) {
+        if (!active) {
           return;
         }
 
@@ -261,14 +262,14 @@ export class PuppeteerBlocker extends FiltersEngine {
           break;
         }
 
-        if (foundNewFeatures === false) {
+        if (!foundNewFeatures) {
           break;
         }
       } catch (ex) {
         break;
       }
 
-      if (this.config.enableMutationObserver === false) {
+      if (!this.config.enableMutationObserver) {
         break;
       }
 
@@ -278,7 +279,7 @@ export class PuppeteerBlocker extends FiltersEngine {
 
   public onRequest = (details: puppeteer.HTTPRequest): void => {
     const request = fromPuppeteerDetails(details);
-    if (this.config.guessRequestTypeFromUrl === true && request.type === 'other') {
+    if (this.config.guessRequestTypeFromUrl && request.type === 'other') {
       request.guessTypeOfRequest();
     }
 
@@ -310,7 +311,7 @@ export class PuppeteerBlocker extends FiltersEngine {
           contentType: redirect.contentType,
         });
       }
-    } else if (match === true) {
+    } else if (match) {
       details.abort('blockedbyclient');
     } else {
       details.continue();
@@ -386,5 +387,5 @@ export class PuppeteerBlocker extends FiltersEngine {
   }
 }
 
-// Re-export symboles from @cliqz/adblocker for convenience
+// Re-export symbols from @cliqz/adblocker for convenience
 export * from '@cliqz/adblocker';
