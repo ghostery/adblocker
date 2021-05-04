@@ -186,7 +186,7 @@ export class PuppeteerBlocker extends FiltersEngine {
         getRulesFromDOM: false,
       });
 
-      if (!active) {
+      if (active === false) {
         return;
       }
 
@@ -198,7 +198,7 @@ export class PuppeteerBlocker extends FiltersEngine {
       });
     }
 
-    // Second step is to start monitoring the DOM of the page in order to
+    // Seconde step is to start monitoring the DOM of the page in order to
     // inject more specific selectors based on `id`, `class`, or `href` found on
     // nodes. We first query all of them, then monitor the DOM for a few
     // seconds (or until one of the stopping conditions is met, see below).
@@ -224,7 +224,7 @@ export class PuppeteerBlocker extends FiltersEngine {
         });
 
         // Abort if cosmetics are disabled
-        if (!active) {
+        if (active === false) {
           return;
         }
 
@@ -262,14 +262,14 @@ export class PuppeteerBlocker extends FiltersEngine {
           break;
         }
 
-        if (!foundNewFeatures) {
+        if (foundNewFeatures === false) {
           break;
         }
       } catch (ex) {
         break;
       }
 
-      if (!this.config.enableMutationObserver) {
+      if (this.config.enableMutationObserver === false) {
         break;
       }
 
@@ -279,7 +279,7 @@ export class PuppeteerBlocker extends FiltersEngine {
 
   public onRequest = (details: puppeteer.HTTPRequest): void => {
     const request = fromPuppeteerDetails(details);
-    if (this.config.guessRequestTypeFromUrl && request.type === 'other') {
+    if (this.config.guessRequestTypeFromUrl === true && request.type === 'other') {
       request.guessTypeOfRequest();
     }
 
@@ -311,7 +311,7 @@ export class PuppeteerBlocker extends FiltersEngine {
           contentType: redirect.contentType,
         });
       }
-    } else if (match) {
+    } else if (match === true) {
       details.abort('blockedbyclient');
     } else {
       details.continue();
@@ -387,5 +387,5 @@ export class PuppeteerBlocker extends FiltersEngine {
   }
 }
 
-// Re-export symbols from @cliqz/adblocker for convenience
+// Re-export symboles from @cliqz/adblocker for convenience
 export * from '@cliqz/adblocker';
