@@ -1,3 +1,27 @@
+# v1.20.5 (Tue May 04 2021)
+
+#### :bug: Bug Fix
+
+- Fix missing 'domcontentloaded' event listener removal from `disableBlockingInPage` [#1903](https://github.com/cliqz-oss/adblocker/pull/1903) (mosunov.konstantin@huawei.com [@kmosunoff](https://github.com/kmosunoff))
+- build(deps): bump puppeteer from 9.0.0 to 9.1.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump puppeteer from 8.0.0 to 9.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- build(deps): bump puppeteer from 9.0.0 to 9.1.0 [#1902](https://github.com/cliqz-oss/adblocker/pull/1902) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.25.0 to 10.25.1 [#1877](https://github.com/cliqz-oss/adblocker/pull/1877) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.134 to 0.0.135 [#1876](https://github.com/cliqz-oss/adblocker/pull/1876) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump chalk from 4.1.0 to 4.1.1 [#1878](https://github.com/cliqz-oss/adblocker/pull/1878) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump puppeteer from 8.0.0 to 9.0.0 [#1875](https://github.com/cliqz-oss/adblocker/pull/1875) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+
+#### Authors: 3
+
+- [@dependabot-preview[bot]](https://github.com/dependabot-preview[bot])
+- [@kmosunoff](https://github.com/kmosunoff)
+- Konstantin Mosunov (mosunov.konstantin@huawei.com)
+
+---
+
 # v1.20.3 (Sat Feb 27 2021)
 
 #### :bug: Bug Fix
