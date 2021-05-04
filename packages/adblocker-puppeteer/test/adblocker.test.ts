@@ -2,8 +2,11 @@ import { expect } from 'chai';
 import 'mocha';
 
 import * as puppeteer from 'puppeteer';
+import * as express from 'express';
+import { Server } from 'http';
 
-import { fromPuppeteerDetails, getHostnameHashesFromLabelsBackward } from '../adblocker';
+import { fromPuppeteerDetails, getHostnameHashesFromLabelsBackward, PuppeteerBlocker } from '../adblocker';
+import { AddressInfo } from 'net';
 
 describe('#fromPuppeteerDetails', () => {
   const baseFrame: Partial<puppeteer.Frame> = {
@@ -33,6 +36,56 @@ describe('#fromPuppeteerDetails', () => {
       domain: 'url.com',
       hostname: 'sub.url.com',
       url: 'https://sub.url.com',
+    });
+  });
+});
+
+describe('#stylesInjection', () => {
+  let server: Server;
+  let port: number;
+  let browser: puppeteer.Browser;
+  let page: puppeteer.Page;
+
+  before(async () => {
+    const app = express();
+    app.get('/', (_req: any, res: any) => {
+      res.send('<html><title>Empty test HTML</title></html>');
+    });
+    server = app.listen(0, () => {
+      const addressInfo = server.address() as AddressInfo;
+      port = addressInfo.port;
+      console.log('Test server listening on port', port);
+    });
+    browser = await puppeteer.launch();
+    console.log('Puppeteer browser launched.');
+    page = await browser.newPage();
+    console.log('Puppeteer page opened.');
+  });
+
+  it('does not inject styles into original content', async () => {
+    const url = `http://localhost:${port}`;
+    const stylesInjectionPrefix = '<style';
+    const blocker = await PuppeteerBlocker.parse('###Meebo\\:AdElement\\.Root');
+
+    await blocker.enableBlockingInPage(page);
+    await page.goto(url, {waitUntil: 'networkidle2'});
+    const contentWithoutAds = await page.content();
+
+    await blocker.disableBlockingInPage(page);
+    await page.goto(url, {waitUntil: 'networkidle2'});
+    const content = await page.content();
+
+    expect(contentWithoutAds).to.contain(stylesInjectionPrefix);
+    expect(content).not.to.contain(stylesInjectionPrefix);
+  });
+
+  after(async () => {
+    await page.close();
+    console.log('Puppeteer page closed.');
+    await browser.close();
+    console.log('Puppeteer browser closed.');
+    server.close(() => {
+      console.log('Test server closed.')
     });
   });
 });

@@ -55,23 +55,23 @@ export function fromPuppeteerDetails(details: puppeteer.HTTPRequest): Request {
  */
 export class BlockingContext {
   private readonly onFrameNavigated: (frame: puppeteer.Frame) => Promise<void>;
+  private readonly onDomContentLoaded: () => Promise<void>;
   private readonly onRequest: (details: puppeteer.HTTPRequest) => void;
 
   constructor(private readonly page: puppeteer.Page, private readonly blocker: PuppeteerBlocker) {
     this.onFrameNavigated = (frame) => blocker.onFrameNavigated(frame);
+    this.onDomContentLoaded = () => blocker.onFrameNavigated(this.page.mainFrame());
     this.onRequest = (request) => blocker.onRequest(request);
   }
 
   public async enable(): Promise<void> {
-    if (this.blocker.config.loadCosmeticFilters === true) {
-      // Register callback to cosmetics injection (CSS + scriptlets)
+    if (this.blocker.config.loadCosmeticFilters) {
+      // Register callbacks to cosmetics injection (CSS + scriptlets)
       this.page.on('frameattached', this.onFrameNavigated);
-      this.page.on('domcontentloaded', () => {
-        this.onFrameNavigated(this.page.mainFrame());
-      });
+      this.page.on('domcontentloaded', this.onDomContentLoaded);
     }
 
-    if (this.blocker.config.loadNetworkFilters === true) {
+    if (this.blocker.config.loadNetworkFilters) {
       // Make sure request interception is enabled for `page` before proceeding
       await this.page.setRequestInterception(true);
       // NOTES:
@@ -87,13 +87,14 @@ export class BlockingContext {
   }
 
   public async disable(): Promise<void> {
-    if (this.blocker.config.loadNetworkFilters === true) {
-      this.page.removeListener('request', this.onRequest);
+    if (this.blocker.config.loadNetworkFilters) {
+      this.page.off('request', this.onRequest);
       await this.page.setRequestInterception(false);
     }
 
-    if (this.blocker.config.loadCosmeticFilters === true) {
-      this.page.removeListener('frameattached', this.onFrameNavigated);
+    if (this.blocker.config.loadCosmeticFilters) {
+      this.page.off('frameattached', this.onFrameNavigated);
+      this.page.off('domcontentloaded', this.onDomContentLoaded);
     }
   }
 }
