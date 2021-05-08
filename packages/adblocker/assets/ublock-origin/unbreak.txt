@@ -320,7 +320,7 @@ kinopoisk.ru###image:style(opacity: 1 !important;)
 @@||sumome.com^$domain=shopify.com
 
 ! https://twitter.com/realjustinclift/status/871713451537821696
-@@||data.edinburghopendata.info^$document
+@@||data.edinburghopendata.info^$doc
 
 ! https://github.com/uBlockOrigin/uAssets/issues/441
 ! https://github.com/easylist/easylist/issues/2586
@@ -331,7 +331,7 @@ kinopoisk.ru###image:style(opacity: 1 !important;)
 ||googletagmanager.com/gtm.js$script,redirect=noopjs,domain=homes.co.nz
 
 ! https://github.com/uBlockOrigin/uAssets/issues/469
-@@||data.wetter.info^$document,popup
+@@||data.wetter.info^$doc,popup
 
 ! https://github.com/uBlockOrigin/uAssets/issues/478
 ! https://github.com/uBlockOrigin/uAssets/issues/1906
@@ -1675,7 +1675,7 @@ tele5.de##.break-ads
 
 ! https://forums.lanik.us/viewtopic.php?p=147357#p147357
 ! https://forums.lanik.us/viewtopic.php?p=150840#p150840
-! [badfilter] ||exoclick.com^$document,badfilter
+! [badfilter] ||exoclick.com^$doc,badfilter
 ! [badfilter] ||exoclick.com^$badfilter
 ||exoclick.com^$3p
 @@||exoclick.com/privacy-and-cookies-policy/*$popup
@@ -3271,6 +3271,8 @@ hubblespacetelescope.blogspot.com#@#.vertical-ads
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7784
 @@||track.rundschau-online.de/cre-1.0/tracking/$script,1p
+@@||track.rundschau-online.de/*/static/jssdk.js$script,1p
+@@||track.rundschau-online.de/*/api/$xhr,1p
 
 ! https://github.com/NanoMeow/QuickReports/issues/4540
 @@||officedepot.co.cr/*/js/analyticsmediator.js$script,1p
@@ -3988,3 +3990,30 @@ youpouch.com##.native-ad
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/n2fiiz/newscomau_embedded_video_wont_play/
 @@||tags.news.com.au/prod/heartbeat/v2.2.0/MediaSDK.min.js^$script,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/9015
+@@||cdn.segment.com/analytics.js/*/analytics.min.js$script,domain=outschool.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/9016
+@@||powr.io/powr.js$script,3p
+
+! https://community.brave.com/t/aaa-texas-insurance-is-unresponsive-on-brave/243303/2 (Page timeouts)
+@@||tags.tiqcdn.com/utag/aaa/main/prod/utag.sync.js$script,domain=aaa.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/9018
+@@||fluid.4strokemedia.com/www/delivery/asyncspc.php^$xhr,domain=formulapassion.it
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js^$script,domain=formulapassion.it
+@@||quantcast.mgr.consensu.org/tcfv2/cmp2.js^$script,domain=formulapassion.it
+@@||cdnb.4strokemedia.com/carousel/v4/comScore-JS-$script,domain=formulapassion.it
+formulapassion.it#@#.qc-cmp2-container
+formulapassion.it#@##qc-cmp2-main
+formulapassion.it#@#.qc-cmp2-main
+
+! https://github.com/uBlockOrigin/uAssets/issues/8940#issuecomment-834267785
+@@||movie.momo-net.com/_embed/video.php$frame
+
+! https://github.com/uBlockOrigin/uAssets/issues/7784#issuecomment-834300187
+@@||stuttgarter-zeitung.de/*/tracking/$script,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/9047
+@@||cdn.jsdelivr.net^*/js/analytics.min.js$script,domain=starfiles.co|starfiles.ml
