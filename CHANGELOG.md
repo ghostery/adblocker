@@ -1,3 +1,19 @@
+# v1.20.6 (Sat May 08 2021)
+
+#### :bug: Bug Fix
+
+- Add CODEOWNERS [#1919](https://github.com/cliqz-oss/adblocker/pull/1919) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Add auto-merge for dependabot [#1914](https://github.com/cliqz-oss/adblocker/pull/1914) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.20.5 (Tue May 04 2021)
 
 #### :bug: Bug Fix
