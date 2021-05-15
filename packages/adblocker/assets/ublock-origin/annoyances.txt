@@ -120,10 +120,6 @@ s0urce.io##+js(aeld, /^(contextmenu|copy)$/)
 ||shomershabes.com^$3p
 ||shomershabes.co.il^$3p
 
-! https://github.com/uBlockOrigin/uAssets/issues/1532
-! https://github.com/uBlockOrigin/uAssets/issues/4269
-fandom.com,wikia.com##.featured-video__wrapper
-
 ! dicionariocriativo.com.br anti-adblock messages
 dicionariocriativo.com.br##.usingblock
 
@@ -3928,8 +3924,8 @@ photobank.mainichi.co.jp##+js(set, commonUtil.openToast, null)
 ! key-hub cookie-notice
 key-hub.eu###cookieBanner
 
-! streamtape .com (.net) right click
-streamtape.*##+js(aeld, contextmenu)
+! https://github.com/uBlockOrigin/uAssets/issues/7308 right click annoyance
+strcloud.in,streamtape.*##+js(aeld, contextmenu)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/56652
 poedb.tw##+js(aopr, adBlockDetected)
@@ -5674,6 +5670,7 @@ bikesell.co.kr##+js(ra, oncontextmenu, body)
 ! truyenbanquyen.com anti right click, select, F12
 truyenbanquyen.com##+js(acis, document.oncontextmenu)
 truyenbanquyen.com##+js(aopw, disable_hot_keys)
+truyenbanquyen.com##+js(aopw, disable_copy)
 truyenbanquyen.com##*:style(-webkit-touch-callout: default!important; -webkit-user-select: auto!important; -moz-user-select: auto!important; -ms-user-select: auto!important;)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/81092
@@ -5729,3 +5726,39 @@ simplywall.st##+js(aeld, scroll, track)
 ! https://www.reddit.com/r/uBlockOrigin/comments/n93qlv/ublock_origin_keeps_getting_detected/gxmbk4n/
 coolsanime.org,toonvideos.me,toonvideos.net.in##+js(aopw, document.ondragstart)
 coolsanime.org,toonvideos.me,toonvideos.net.in##style:has-text(user-select:):remove()
+
+! https://www.reddit.com/r/uBlockOrigin/comments/n9i8tg/disable_wpcp_js_etc/
+barbarossaleather.com##+js(acis, disableSelection)
+barbarossaleather.com##+js(aopr, disable_copy)
+barbarossaleather.com##+js(aopw, document.ondragstart)
+barbarossaleather.com##*:style(-webkit-touch-callout:default!important; -webkit-user-select:text!important; -moz-user-select:text!important; -ms-user-select:text!important; user-select:text!important;)
+
+! sysnettechsolutions. com anti right click, select, f-keys
+||sysnettechsolutions.com^$csp=script-src * 'unsafe-inline'
+sysnettechsolutions.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! toppremiumpro. com amti select, copy, right click, drag, f-keys
+toppremiumpro.com##+js(aeld, /contextmenu|selectstart|copy|dragstart/)
+toppremiumpro.com##+js(aopr, cpp_loc)
+
+! https://github.com/NanoMeow/QuickReports/issues/4079
+bestofcomicbooks.com##+js(acis, disableSelection, reEnable)
+bestofcomicbooks.com##+js(aopr, document.oncontextmenu)
+bestofcomicbooks.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9088
+wirtualnyspac3r.pl##+js(aeld, contextmenu)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/nce0ex/ubo_user_filter_help_needed/
+androidacy.com##+js(nostif, 0x)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9089
+144.91.105.32##+js(acis, document.oncontextmenu)
+144.91.105.32##+js(ra, oncontextmenu)
+144.91.105.32##+js(acis, disableSelection, reEnable)
+144.91.105.32##+js(aopr, disableEnterKey)
+144.91.105.32##+js(aopr, document.ondragstart)
+144.91.105.32##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/83260
+47news.jp##+js(acis, $, contextmenu)
