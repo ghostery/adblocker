@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { ipcRenderer, webFrame } from 'electron';
+import { ipcRenderer } from 'electron';
 
 import { DOMMonitor, IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-content';
 
@@ -35,7 +35,7 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
       // TODO - implement extended filtering for Electron
       (
         _: Electron.IpcRendererEvent,
-        { active, scripts /* , extended */ }: IMessageFromBackground,
+        { active /* , scripts, extended */ }: IMessageFromBackground,
       ) => {
         if (active === false) {
           ACTIVE = false;
@@ -44,9 +44,6 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
         }
 
         ACTIVE = true;
-        for (const script of scripts) {
-          setTimeout(() => webFrame.executeJavaScript(script), 1);
-        }
       },
     );
 

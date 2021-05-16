@@ -1,11 +1,11 @@
-import { app, BrowserWindow, session } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import fetch from 'node-fetch';
-import { promises as fs } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 
 import { ElectronBlocker, fullLists, Request } from '@cliqz/adblocker-electron';
 
 function getUrlToLoad(): string {
-  let url = 'https://www.mangareader.net/';
+  let url = 'https://google.com';
   if (process.argv[process.argv.length - 1].endsWith('.js') === false) {
     url = process.argv[process.argv.length - 1];
   }
@@ -17,13 +17,14 @@ let mainWindow: BrowserWindow | null = null;
 
 async function createWindow() {
   mainWindow = new BrowserWindow({
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: false,
+      nodeIntegrationInSubFrames: true,
+    },
     height: 600,
     width: 800,
   });
-
-  if (session.defaultSession === undefined) {
-    throw new Error('defaultSession is undefined');
-  }
 
   const blocker = await ElectronBlocker.fromLists(
     fetch,
@@ -33,12 +34,11 @@ async function createWindow() {
     },
     {
       path: 'engine.bin',
-      read: fs.readFile,
-      write: fs.writeFile,
+      read: async (...args) => readFileSync(...args),
+      write: async (...args) => writeFileSync(...args),
     },
   );
-
-  blocker.enableBlockingInSession(session.defaultSession);
+  blocker.enableBlockingInSession(mainWindow.webContents.session);
 
   blocker.on('request-blocked', (request: Request) => {
     console.log('blocked', request.tabId, request.url);
