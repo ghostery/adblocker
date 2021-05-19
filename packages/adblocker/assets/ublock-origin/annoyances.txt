@@ -715,9 +715,6 @@ investmentnews.com###blocker
 ! https://github.com/uBlockOrigin/uAssets/issues/3855
 intramed.net##+js(set, adblock, false)
 
-! https://github.com/uBlockOrigin/uAssets/issues/3883
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=onphpid.com
-
 ! https://github.com/uBlockOrigin/uAssets/issues/3888
 protest.eu##+js(set, BIA.ADBLOCKER, false)
 
@@ -4670,7 +4667,6 @@ fandomwire.com##html:style(overflow:auto !important)
 observatoriodocinema.uol.com.br##+js(acis, document.addEventListener, preventDefault)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/80714
-||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js^$redirect-rule=googlesyndication_adsbygoogle.js,script,domain=samfw.com
 @@||samfw.com^$ghide
 samfw.com##.adsbygoogle
 ||samfw.com/assets/*.gif$image
@@ -5762,3 +5758,23 @@ androidacy.com##+js(nostif, 0x)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/83260
 47news.jp##+js(acis, $, contextmenu)
+
+! f.tabtter.jp anti-adb
+f.tabtter.jp###lightboxOuter h2.em:has-text(アドブロック):upward(#lightboxOuter)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/ndv0kb/antiright_click_on_hitproversioncom/
+hitproversion.com##+js(aopr, disableEnterKey)
+hitproversion.com##+js(aopw, document.ondragstart)
+hitproversion.com##style:has-text(user-select:):remove()
+
+! https://github.com/uBlockOrigin/uAssets/issues/9097
+/wp-content/plugins/image-watermark/*$script
+
+! https://github.com/uBlockOrigin/uAssets/issues/9119
+bestkpop.top##+js(acis, document.oncontextmenu)
+bestkpop.top##+js(aopw, stopPrntScr)
+bestkpop.top##:not(input):not(textarea),img:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+bestkpop.top##*::selection:style(background-color:#338FFF!important)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/83556
+news.dwango.jp##+js(ra, oncontextmenu, body)
