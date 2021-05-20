@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202105191605
+! Version: 202105201614
 ! Title: EasyList Germany
-! Last modified: 19 May 2021 16:05 UTC
+! Last modified: 20 May 2021 16:14 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -533,14 +533,10 @@ werbung.oebb.at#@#.werbung
 auto-motor-und-sport.de,hardwareluxx.de,wetter.com#@#[id^="div-gpt-ad"]
 11freunde.de,auto-motor-und-sport.de,kochbar.de,rtl.de,vip.de#@#[id^="google_ads_iframe"]
 11freunde.de,auto-motor-und-sport.de,gofeminin.de,kochbar.de,vip.de#@#[id^="google_ads_iframe_"]
+kochbar.de#@#[name^="google_ads_iframe"]
+kochbar.de#@#a[href^="https://adclick.g.doubleclick.net/"]
 gofeminin.de#@#a[href^="https://pubads.g.doubleclick.net/"]
 telekom.de#@#a[href^="https://track.adform.net/"]
-!
-1und1.de,gmx.at,gmx.net,web.de#@#.advertorial
-finanzen.at,rtl.de,vip.de#@#.ob-smartfeed-wrapper
-gofeminin.de#@#[id^="div-gpt-ad"]
-kochbar.de#@#[name^="google_ads_iframe"]
-gofeminin.de,kochbar.de#@#a[href^="https://adclick.g.doubleclick.net/"]
 ! ---------------------------Third-party Werbeserver---------------------------!
 ! *** easylistgermany:easylistgermany/easylistgermany_adservers.txt ***
 ||4adtf.com.^$third-party
@@ -586,7 +582,8 @@ gofeminin.de,kochbar.de#@#a[href^="https://adclick.g.doubleclick.net/"]
 ||adspectacle.net^$third-party
 ||adspirit.net^$third-party
 ||adsplash.de^$third-party
-||adsturn.com^$third-party
+! [dup] from easylist/easylist.txt
+! ||adsturn.com^$third-party
 ||adsushi.de^$third-party
 ||advendi.de^$third-party
 ||advert-layer.de^$third-party
@@ -2595,6 +2592,7 @@ computerbase.de##.adbox-outstream
 vaterland.li##.adcontainer
 nachtkritik.de##.adcontent
 suedtiroltv.it##.add
+computersm.com##.add-inner
 abg-net.de##.add_top
 laengengrad-breitengrad.de##.addtop
 gartenjournal.net##.adinj
@@ -2841,6 +2839,7 @@ blickpunkt-brandenburg.de,nh24.de,sunshine.it##.header-banner
 radzeit.de##.header-main
 taucher.net##.header-promo
 verlagshaus-jaumann.de##.header-right
+computersm.com##.header-top
 oxmoxhh.de##.header-widget-inner
 bankkaufmann.com##.headeradvert_
 fremdwort.de##.hinweisad
@@ -3414,10 +3413,14 @@ winfuture-forum.de#?#div.ExtraPostBlock:-abp-has(div.post_block:-abp-contains(An
 @@||g.doubleclick.net/gampad/$xmlhttprequest,domain=kochbar.de
 @@||g.doubleclick.net/gampad/ads?$script,xmlhttprequest,domain=11freunde.de|n-tv.de
 @@||g.doubleclick.net/gampad/ads?$xmlhttprequest,domain=auto-motor-und-sport.de|gala.de
+@@||g.doubleclick.net/gampad/ads?*&iu_parts=6032%2Ckochbar.de%2Chomepage&$domain=kochbar.de
 @@||g.doubleclick.net/gpt/pubads_impl_$script,domain=11freunde.de|auto-motor-und-sport.de|gala.de|kochbar.de|n-tv.de
 @@||g.doubleclick.net/tag/js/gpt.js$script,domain=11freunde.de|auto-motor-und-sport.de|gala.de|kochbar.de|n-tv.de
 @@||gamestar.de^$generichide
 @@||gofeminin.de^$genericblock
+@@||googlesyndication.com/pagead/imgad?id=$image,domain=kochbar.de
+@@||googlesyndication.com/safeframe/$subdocument,domain=kochbar.de
+@@||googlesyndication.com/simgad/$image,domain=kochbar.de
 @@||googlewatchblog.de^*/adsense.png
 @@||goolive.de/media/static/images/smileys/ad.gif
 @@||ib.adnxs.com/ut/v3^$xmlhttprequest,domain=stylebook.de
@@ -3465,31 +3468,17 @@ winfuture-forum.de#?#div.ExtraPostBlock:-abp-has(div.post_block:-abp-contains(An
 @@||werbebanner24.de/templates/_wb24/_assets/images/$image,domain=werbebanner24.de
 @@||xdate.ch/bundles/omsportal/img/footer_banner_ads_$image,domain=xdate.ch
 !
-@@||ad.71i.de/somtag/loader/loader.js$domain=gofeminin.de
-@@||adservice.google.*^adsid/integrator.$script,domain=gofeminin.de|vip.de
 @@||amazon-adsystem.com/aax2/amzn_ads.js$domain=autobild.de
-! [dup] from ublock-origin/filters.txt
-! @@||g.doubleclick.net/dbm/vast?dbm_c=$xmlhttprequest,domain=imasdk.googleapis.com
-@@||g.doubleclick.net/gampad/$xmlhttprequest,domain=vip.de
 @@||g.doubleclick.net/gampad/ads?$script,xmlhttprequest,domain=brigitte.de|eltern.de
 @@||g.doubleclick.net/gampad/ads?$xmlhttprequest,domain=geo.de
-@@||g.doubleclick.net/gampad/ads?*&iu_parts=5731%2CDE_GOFEMININ%2Corganic%2Chome&$domain=gofeminin.de
-@@||g.doubleclick.net/gampad/ads?*&iu_parts=6032%2Ckochbar.de%2Chomepage&$domain=kochbar.de
-@@||g.doubleclick.net/gampad/ads?slotname=*stern%2F*^sz=480x360^$xmlhttprequest,domain=imasdk.googleapis.com
 @@||g.doubleclick.net/gampad/adx?$script,domain=gala.de
 @@||g.doubleclick.net/gampad/adx?*/sparta/*&t=ad_type%3Dtoolbar%26$document,subdocument,domain=wetter.com
-@@||g.doubleclick.net/gpt/$script,domain=gofeminin.de|vip.de
 @@||g.doubleclick.net/gpt/pubads_$script,domain=wetter.com
 @@||g.doubleclick.net/gpt/pubads_impl_$script,domain=brigitte.de|eltern.de|geo.de
 @@||g.doubleclick.net/static/glade.js$domain=autobild.de
 @@||g.doubleclick.net/static/glade/extra_$script,domain=autobild.de
 @@||g.doubleclick.net/tag/js/gpt.js$domain=brigitte.de|eltern.de|geo.de
-@@||go-parc-hf.de^*.php?ad=$subdocument
 @@||googlesyndication.com/pagead/imgad?$image,domain=auto-motor-und-sport.de
-@@||googlesyndication.com/pagead/imgad?id=$image,domain=11freunde.de|gofeminin.de|kochbar.de|vip.de
-@@||googlesyndication.com/safeframe/$subdocument,domain=kochbar.de
-@@||googlesyndication.com/simgad/$image,domain=kochbar.de
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$domain=musikexpress.de|rollingstone.de
 @@||sascdn.com/diff/251/*/Abo-Teaser_fuer_ab.de-Home.png$image,domain=autobild.de
 @@||sascdn.com/diff/251/*/aktionen_191x108.jpg$image,domain=autobild.de
 @@||sascdn.com/diff/251/*/gebrauchtwagenmarkt.png$image,domain=autobild.de
