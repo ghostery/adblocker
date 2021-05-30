@@ -261,9 +261,6 @@ windguru.cz##.reklama
 ! https://github.com/NanoAdblocker/NanoFilters/issues/87
 realcleardefense.com##+js(set, warning_widget.check_ad_block_status, noopFunc)
 
-! https://github.com/uBlockOrigin/uAssets/issues/2443
-brainly.*##.brn-ab-detection-screening
-
 ! https://github.com/uBlockOrigin/uAssets/pull/2471
 flickr.com##.spaceball
 
@@ -4161,9 +4158,6 @@ order-order.com##+js(acis, document.createElement, admiral)
 ! luccisan .com anti copy
 ||cdn.bootcss.com^$script,domain=luccisan.com
 
-! https://www.quora.com/Is-it-hard-to-start-and-run-a-video-game-company
-quora.com##[class*="Banner_"]
-
 ! https://www.reddit.com/r/uBlockOrigin/comments/hr52xj/blocking_supporting_poeapp_is_as_easy_as/
 poeapp.com##.sponsor, div.wrapper
 
@@ -5483,6 +5477,7 @@ hulnews.top##.jw-reset.jw-error
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/73724
 quora.com##.qu-overflow--hidden[class*="qu-zIndex--modal_"]
+quora.com##.qu-zIndex--alert
 quora.com##.qu-overflow--hidden[style*="filter: blur"]:style(filter:none !important;overflow:auto !important)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8702
@@ -5695,7 +5690,7 @@ revistavanityfair.es##+js(aopr, initAdBlockerPanel)
 spielspiele.de##.is-blocked
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/81867
-charbelnemnom.com##+js(aeld, contextmenu)
+charbelnemnom.com##+js(aeld, /contextmenu|keydown/)
 
 ! img999. com anti right click
 img999.com##+js(ra, oncontextmenu)
@@ -5778,3 +5773,61 @@ bestkpop.top##*::selection:style(background-color:#338FFF!important)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/83556
 news.dwango.jp##+js(ra, oncontextmenu, body)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/83712
+lowkeytech.com##+js(acis, String.prototype.charCodeAt, ai_)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/83664
+@@||dmax.de^$ghide
+
+! https://www.reddit.com/r/uBlockOrigin/comments/ni5isp/edncom_uses_admiral_adblock_not_blocked_by_ubo/
+edn.com##+js(aopr, googletag)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9146#issuecomment-846390986
+techsini.com##+js(acis, jQuery, preventDefault)
+techsini.com##style:has-text(user-select:):remove()
+
+! https://www.reddit.com/r/uBlockOrigin/comments/niiytr/help_needed_filtering_wwwsporizle1pw/
+sporizle1.pw##+js(ra, oncontextmenu, body)
+sporizle1.pw##+js(set, document.oncontextmenu, null)
+sporizle1.pw##+js(aeld, contextmenu)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9159
+olarila.com##+js(nostif, offsetHeight)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9170
+blisseyhusband.in##+js(acis, jQuery, contextmenu)
+blisseyhusband.in##+js(acis, document.oncontextmenu)
+blisseyhusband.in##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! bloggerspice. com anti select
+bloggerspice.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9183
+drawasaurus.org##+js(nostif, forceRefresh)
+
+! openfinanza. it anti right click, select, drag, f-keys
+openfinanza.it##+js(acis, document.oncontextmenu)
+openfinanza.it##+js(acis, document.ondragstart)
+openfinanza.it##+js(aopw, disableEnterKey)
+
+! japanxxxmovie.com,sexpox.com anti right click
+japanxxxmovie.com,sexpox.com##+js(acis, $, contextmenu)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9204
+antena3.com,lasexta.com##+js(aeld, contextmenu)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9208
+nbcsports.com##+js(aopw, admrlWpJsonP)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/84060
+pashplus.jp##+js(aeld, contextmenu)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9212
+allsmo.com##+js(set, document.onkeydown, null)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9023
+upvideo.to##+js(aeld, contextmenu)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9291
+kpopsea.com##+js(aeld, contextmenu)
