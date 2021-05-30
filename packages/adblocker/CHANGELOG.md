@@ -1,3 +1,36 @@
+# v1.21.0 (Sun May 30 2021)
+
+#### :rocket: New Feature
+
+- Bump Electron to v13.x and Puppeteer to v9.x [#1967](https://github.com/cliqz-oss/adblocker/pull/1967) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Update local assets [#1945](https://github.com/cliqz-oss/adblocker/pull/1945) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1943](https://github.com/cliqz-oss/adblocker/pull/1943) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1933](https://github.com/cliqz-oss/adblocker/pull/1933) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1929](https://github.com/cliqz-oss/adblocker/pull/1929) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1926](https://github.com/cliqz-oss/adblocker/pull/1926) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1923](https://github.com/cliqz-oss/adblocker/pull/1923) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Bump lock file to fix some security issue [#1922](https://github.com/cliqz-oss/adblocker/pull/1922) ([@remusao](https://github.com/remusao))
+- Update local assets [#1907](https://github.com/cliqz-oss/adblocker/pull/1907) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump @types/chrome from 0.0.139 to 0.0.141 [#1939](https://github.com/cliqz-oss/adblocker/pull/1939) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chrome from 0.0.138 to 0.0.139 [#1927](https://github.com/cliqz-oss/adblocker/pull/1927) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chrome from 0.0.137 to 0.0.138 [#1925](https://github.com/cliqz-oss/adblocker/pull/1925) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @rollup/plugin-node-resolve from 11.2.1 to 13.0.0 [#1912](https://github.com/cliqz-oss/adblocker/pull/1912) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chrome from 0.0.136 to 0.0.137 [#1911](https://github.com/cliqz-oss/adblocker/pull/1911) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.20.5 (Tue May 04 2021)
 
 #### :bug: Bug Fix

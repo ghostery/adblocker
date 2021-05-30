@@ -1,3 +1,65 @@
+# v1.21.0 (Sun May 30 2021)
+
+#### :rocket: New Feature
+
+- `@cliqz/adblocker-content`, `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-electron`, `@cliqz/adblocker-extended-selectors`, `@cliqz/adblocker-puppeteer`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - Bump Electron to v13.x and Puppeteer to v9.x [#1967](https://github.com/cliqz-oss/adblocker/pull/1967) ([@remusao](https://github.com/remusao))
+
+#### :bug: Bug Fix
+
+- Add CODEOWNERS [#1919](https://github.com/cliqz-oss/adblocker/pull/1919) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Add auto-merge for dependabot [#1914](https://github.com/cliqz-oss/adblocker/pull/1914) ([@remusao](https://github.com/remusao))
+- `@cliqz/adblocker`
+  - Update local assets [#1945](https://github.com/cliqz-oss/adblocker/pull/1945) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1943](https://github.com/cliqz-oss/adblocker/pull/1943) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1933](https://github.com/cliqz-oss/adblocker/pull/1933) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1929](https://github.com/cliqz-oss/adblocker/pull/1929) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1926](https://github.com/cliqz-oss/adblocker/pull/1926) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1923](https://github.com/cliqz-oss/adblocker/pull/1923) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1907](https://github.com/cliqz-oss/adblocker/pull/1907) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-electron`, `@cliqz/adblocker-extended-selectors`, `@cliqz/adblocker-playwright`, `@cliqz/adblocker-puppeteer`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - Bump lock file to fix some security issue [#1922](https://github.com/cliqz-oss/adblocker/pull/1922) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump tldts-experimental from 5.7.35 to 5.7.36 [#1938](https://github.com/cliqz-oss/adblocker/pull/1938) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump electron from 11.4.6 to 11.4.7 [#1937](https://github.com/cliqz-oss/adblocker/pull/1937) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/node from 15.0.3 to 15.3.0 [#1936](https://github.com/cliqz-oss/adblocker/pull/1936) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump rollup from 2.47.0 to 2.48.0 [#1934](https://github.com/cliqz-oss/adblocker/pull/1934) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump tldts-experimental from 5.7.34 to 5.7.35 [#1931](https://github.com/cliqz-oss/adblocker/pull/1931) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/node from 15.0.2 to 15.0.3 [#1932](https://github.com/cliqz-oss/adblocker/pull/1932) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump auto from 10.27.0 to 10.27.1 [#1930](https://github.com/cliqz-oss/adblocker/pull/1930) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump playwright from 1.10.0 to 1.11.0 [#1928](https://github.com/cliqz-oss/adblocker/pull/1928) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump prettier from 2.2.1 to 2.3.0 [#1924](https://github.com/cliqz-oss/adblocker/pull/1924) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump electron from 11.4.4 to 11.4.6 [#1921](https://github.com/cliqz-oss/adblocker/pull/1921) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump hosted-git-info from 2.8.8 to 2.8.9 [#1920](https://github.com/cliqz-oss/adblocker/pull/1920) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump handlebars from 4.7.6 to 4.7.7 [#1917](https://github.com/cliqz-oss/adblocker/pull/1917) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump tldts-experimental from 5.7.33 to 5.7.34 [#1916](https://github.com/cliqz-oss/adblocker/pull/1916) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump electron from 11.4.4 to 11.4.5 [#1913](https://github.com/cliqz-oss/adblocker/pull/1913) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump rollup from 2.46.0 to 2.47.0 [#1910](https://github.com/cliqz-oss/adblocker/pull/1910) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @rollup/plugin-commonjs from 18.0.0 to 18.1.0 [#1909](https://github.com/cliqz-oss/adblocker/pull/1909) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/node from 15.0.1 to 15.0.2 [#1908](https://github.com/cliqz-oss/adblocker/pull/1908) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker`
+  - Bump @types/chrome from 0.0.139 to 0.0.141 [#1939](https://github.com/cliqz-oss/adblocker/pull/1939) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - Bump @types/chrome from 0.0.138 to 0.0.139 [#1927](https://github.com/cliqz-oss/adblocker/pull/1927) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - Bump @types/chrome from 0.0.137 to 0.0.138 [#1925](https://github.com/cliqz-oss/adblocker/pull/1925) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - Bump @types/chrome from 0.0.136 to 0.0.137 [#1911](https://github.com/cliqz-oss/adblocker/pull/1911) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-content`, `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - Bump @rollup/plugin-node-resolve from 11.2.1 to 13.0.0 [#1912](https://github.com/cliqz-oss/adblocker/pull/1912) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-puppeteer`
+  - Bump puppeteer from 9.1.0 to 9.1.1 [#1915](https://github.com/cliqz-oss/adblocker/pull/1915) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.20.5 (Tue May 04 2021)
 
 #### :bug: Bug Fix
