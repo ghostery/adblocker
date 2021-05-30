@@ -70,15 +70,15 @@ export class BlockingContext {
   }
 
   public enable(): void {
+    if (this.blocker.config.loadCosmeticFilters === true) {
+      this.session.setPreloads(this.session.getPreloads().concat([PRELOAD_PATH]));
+      ipcMain.on('get-cosmetic-filters', this.onGetCosmeticFilters);
+      ipcMain.on('is-mutation-observer-enabled', this.onIsMutationObserverEnabled);
+    }
+
     if (this.blocker.config.loadNetworkFilters === true) {
       this.session.webRequest.onHeadersReceived({ urls: ['<all_urls>'] }, this.onHeadersReceived);
       this.session.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onBeforeRequest);
-    }
-
-    if (this.blocker.config.loadCosmeticFilters === true) {
-      ipcMain.on('get-cosmetic-filters', this.onGetCosmeticFilters);
-      ipcMain.on('is-mutation-observer-enabled', this.onIsMutationObserverEnabled);
-      this.session.setPreloads(this.session.getPreloads().concat([PRELOAD_PATH]));
     }
   }
 
@@ -187,11 +187,16 @@ export class ElectronBlocker extends FiltersEngine {
     // Inject custom stylesheets
     this.injectStyles(event.sender, styles);
 
+    // Inject scriptlets
+    for (const script of scripts) {
+      this.injectScripts(event.sender, script);
+    }
+
     // Inject scripts from content script
     event.sender.send('get-cosmetic-filters-response', {
       active,
       extended,
-      scripts,
+      scripts: [],
       styles: '',
     } as IMessageFromBackground);
   };
@@ -251,6 +256,10 @@ export class ElectronBlocker extends FiltersEngine {
       callback({});
     }
   };
+
+  private injectScripts(sender: Electron.WebContents, script: string): void {
+    sender.executeJavaScript(script);
+  }
 
   private injectStyles(sender: Electron.WebContents, styles: string): void {
     if (styles.length > 0) {
