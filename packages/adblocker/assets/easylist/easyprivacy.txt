@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202105311743
+! Version: 202106011834
 ! Title: EasyPrivacy
-! Last modified: 31 May 2021 17:43 UTC
+! Last modified: 01 Jun 2021 18:34 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -2222,11 +2222,11 @@
 /google_analytics.$~image
 /google_analytics/*
 /google_analytics3_
-/google_analytics_$domain=~github.com
+/google_analytics_$script,domain=~github.com
 /google_page_track
 /google_tag.
 /google_tag/*
-/google_tag_
+/google_tag_$script
 /google_tracker.
 /GoogleAdnalyticsJs?
 /googleana.
@@ -5560,6 +5560,7 @@ cgi-bin/counter
 .ct.sendgrid.net/$image
 .delivery-status.com/open?
 .demdex.net/event?
+.doubleclick.net/$image
 .duolingo.com/open/
 .efeedbacktrk.com/$third-party
 .emltrk.com/
@@ -8230,8 +8231,10 @@ _mongo_stats/
 ||t-analytics.com^$third-party
 ||tag4arm.com^$third-party
 ||tagcommander.com^$third-party
+||tagdatax.com^$third-party
 ||tagmngrs.com^$third-party
 ||tagsrvcs.com^$third-party
+||tagstaticx.com^$third-party
 ||tagtray.com/api^$third-party
 ||tamgrt.com^$third-party
 ! [dup] from ublock-origin/unbreak.txt
@@ -9789,6 +9792,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||tyxo.bg^$third-party
 ! Chinese
 ||180.76.2.18^$third-party,domain=~baidu.ip
+||365dmp.com^$third-party
 ||50bang.org^$third-party
 ||51yes.com^$third-party
 ||99click.com^$third-party
@@ -10489,6 +10493,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||amazonaws.com/initialize/$third-party
 ||amazonaws.com/js/reach.js
 ||amazonaws.com/ki.js/
+||amazonaws.com/lp/js/tag.js?
 ||amazonaws.com/new.cetrk.com/
 ||amazonaws.com/prod/entities
 ||amazonaws.com/prod/main?ref=$image,third-party
