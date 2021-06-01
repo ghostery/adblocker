@@ -113,7 +113,7 @@ youtube.com##ytd-video-masthead-ad-advertiser-info-renderer,ytm-promoted-sparkle
 ! https://github.com/easylist/easylist/issues/5112
 ! @@||youtube.com/get_video_info?*timedtext_editor$xhr,1p
 ! https://redd.it/ggcmkp https://redd.it/gx03e0
-youtube.com,youtube-nocookie.com##+js(json-prune, [].playerResponse.adPlacements [].playerResponse.playerAds playerResponse.adPlacements playerResponse.playerAds adPlacements playerAds)
+youtube.com,youtube-nocookie.com##+js(json-prune, *.playerResponse.adPlacements *.playerResponse.playerAds [].playerResponse.adPlacements [].playerResponse.playerAds playerResponse.adPlacements playerResponse.playerAds adPlacements playerAds)
 youtube.com,youtube-nocookie.com##+js(set, ytInitialPlayerResponse.adPlacements, undefined)
 youtube.com,youtube-nocookie.com##+js(set, playerResponse.adPlacements, undefined)
 ! https://www.reddit.com/r/uBlockOrigin/comments/kg7224/
@@ -7442,7 +7442,7 @@ avgle.com###player_3x2_close:style(font-size: 250% !important;)
 avgle.com###ps32-container
 *$3p,popup,domain=avgle.com
 *$frame,script,3p,denyallow=cloudflare.com|cloudflare.net|google.com|gstatic.com|hcaptcha.com|jsdelivr.net|recaptcha.net|webflow.com,domain=avgle.com
-javher.com###popLink
+javher.com###popunderLink
 javher.com##.affiliate-card-container
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=41272
@@ -7709,6 +7709,10 @@ gomiblog.com##+js(nostif, instance.check, 1)
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=gentside.com.br
 @@||googletagservices.com/tag/js/gpt.js$script,domain=esgentside.com|gentside.*|maxisciences.com|ohmirevista.com|ohmymag.*
 @@*/assets/prebid/$script,xhr,1p,domain=esgentside.com|gentside.*|maxisciences.com|ohmirevista.com|ohmymag.*
+@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=gentside.*|ohmymag.*|maxisciences.com|esgentside.com|ohmirevista.com
+@@||securepubads.g.doubleclick.net/gpt/pubads_impl_$script,domain=gentside.*|ohmymag.*|maxisciences.com|esgentside.com|ohmirevista.com
+@@||cdn.adsafeprotected.com^$script,domain=gentside.*|ohmymag.*|maxisciences.com|esgentside.com|ohmirevista.com
+@@||pixel.adsafeprotected.com/services/pub$xhr,domain=gentside.*|ohmymag.*|maxisciences.com|esgentside.com|ohmirevista.com
 
 ! https://github.com/NanoAdblocker/NanoCore/issues/197
 antarvasnastories.com##+js(aopr, ExoLoader)
@@ -13754,7 +13758,7 @@ freetutsdownload.net##[id^="modal-adbmon-"]
 10news.dk##.textwidget
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5495
-! https://github.com/AdguardTeam/AdguardFilters/issues/80581
+fc.lc,fcc.lc##+js(acis, document.addEventListener, nextFunction)
 fc.lc##+js(aopr, adBlockDetected)
 fc.lc,fcdot.lc##+js(aopr, app_vars.force_disable_adblock)
 fcdot.lc##+js(aopr, open)
