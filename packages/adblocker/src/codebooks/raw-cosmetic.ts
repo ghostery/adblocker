@@ -7,7 +7,6 @@
  */
 /* tslint:disable quotemark */
 export default [
-  "acis, decodeURI, decodeURIComp",
   "acis, disableSelection, reEnab",
   "acis, document.createElement, ",
   "acis, document.getElementById,",
@@ -60,6 +59,7 @@ export default [
   "aopr, ",
   "banner",
   "bottom",
+  "Bottom",
   "cookie",
   "Cookie",
   "google",
@@ -117,7 +117,6 @@ export default [
   "ap",
   "ar",
   "at",
-  "bi",
   "bo",
   "ce",
   "ch",
@@ -129,6 +128,7 @@ export default [
   "de",
   "di",
   "do",
+  "e-",
   "ed",
   "el",
   "en",
@@ -146,6 +146,7 @@ export default [
   "ho",
   "ic",
   "id",
+  "ig",
   "il",
   "im",
   "in",
@@ -185,7 +186,6 @@ export default [
   "te",
   "th",
   "ti",
-  "to",
   "ub",
   "ul",
   "um",
