@@ -1,3 +1,34 @@
+# v1.22.1 (Thu Jun 03 2021)
+
+#### :nail_care: Polish
+
+- `@cliqz/adblocker-puppeteer`
+  - Add puppeteer 10.x to list of supported versions [#1977](https://github.com/cliqz-oss/adblocker/pull/1977) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#1971](https://github.com/cliqz-oss/adblocker/pull/1971) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1970](https://github.com/cliqz-oss/adblocker/pull/1970) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#1968](https://github.com/cliqz-oss/adblocker/pull/1968) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump electron from 13.0.1 to 13.1.0 [#1975](https://github.com/cliqz-oss/adblocker/pull/1975) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/sinon from 10.0.1 to 10.0.2 [#1973](https://github.com/cliqz-oss/adblocker/pull/1973) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-puppeteer`
+  - Bump puppeteer from 9.1.1 to 10.0.0 [#1969](https://github.com/cliqz-oss/adblocker/pull/1969) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker`
+  - Bump @types/chrome from 0.0.143 to 0.0.144 [#1972](https://github.com/cliqz-oss/adblocker/pull/1972) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.21.0 (Sun May 30 2021)
 
 #### :rocket: New Feature

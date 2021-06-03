@@ -1,3 +1,23 @@
+# v1.22.1 (Thu Jun 03 2021)
+
+#### :house: Internal
+
+- Update local assets [#1971](https://github.com/cliqz-oss/adblocker/pull/1971) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1970](https://github.com/cliqz-oss/adblocker/pull/1970) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1968](https://github.com/cliqz-oss/adblocker/pull/1968) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump @types/chrome from 0.0.143 to 0.0.144 [#1972](https://github.com/cliqz-oss/adblocker/pull/1972) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.21.0 (Sun May 30 2021)
 
 #### :rocket: New Feature

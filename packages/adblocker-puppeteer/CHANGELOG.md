@@ -1,3 +1,20 @@
+# v1.22.1 (Thu Jun 03 2021)
+
+#### :nail_care: Polish
+
+- Add puppeteer 10.x to list of supported versions [#1977](https://github.com/cliqz-oss/adblocker/pull/1977) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump puppeteer from 9.1.1 to 10.0.0 [#1969](https://github.com/cliqz-oss/adblocker/pull/1969) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.21.0 (Sun May 30 2021)
 
 #### :rocket: New Feature
