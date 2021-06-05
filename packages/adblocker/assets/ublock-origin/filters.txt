@@ -113,7 +113,8 @@ youtube.com##ytd-video-masthead-ad-advertiser-info-renderer,ytm-promoted-sparkle
 ! https://github.com/easylist/easylist/issues/5112
 ! @@||youtube.com/get_video_info?*timedtext_editor$xhr,1p
 ! https://redd.it/ggcmkp https://redd.it/gx03e0
-youtube.com,youtube-nocookie.com##+js(json-prune, *.playerResponse.adPlacements *.playerResponse.playerAds [].playerResponse.adPlacements [].playerResponse.playerAds playerResponse.adPlacements playerResponse.playerAds adPlacements playerAds)
+!youtube.com,youtube-nocookie.com##+js(json-prune, *.playerResponse.adPlacements *.playerResponse.playerAds [].playerResponse.adPlacements [].playerResponse.playerAds playerResponse.adPlacements playerResponse.playerAds adPlacements playerAds)
+youtube.com,youtube-nocookie.com##+js(json-prune, [].playerResponse.adPlacements [].playerResponse.playerAds playerResponse.adPlacements playerResponse.playerAds adPlacements playerAds)
 youtube.com,youtube-nocookie.com##+js(set, ytInitialPlayerResponse.adPlacements, undefined)
 youtube.com,youtube-nocookie.com##+js(set, playerResponse.adPlacements, undefined)
 ! https://www.reddit.com/r/uBlockOrigin/comments/kg7224/
@@ -3725,6 +3726,7 @@ linkshorts.*##.blog-item
 dz4link.com##+js(aopr, app_vars.force_disable_adblock)
 dz4link.com##+js(aopw, Fingerprint2)
 dz4link.com##+js(set, blurred, false)
+dz4link.com##+js(nowoif)
 dz4link.com##.banner
 dz4up.com##.container + div[style] > [title="Download Now"] > img
 *$frame,denyallow=google.com,domain=dz4link.com
@@ -4850,8 +4852,10 @@ uploadbaz.*##+js(aopr, AaDetector)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1839
 vermangasporno.com##+js(aopr, dataPopUnder)
-vermangasporno.com##[href^="http://bit.ly"]
-*$script,3p,denyallow=cloudflare.net|disqus.com|disquscdn.com|fastlylb.net,domain=vermangasporno.com
+vcp.xxx,vermangasporno.com##+js(acis, document.querySelectorAll, popMagic)
+vermangasporno.com##[href^="https://bit.ly"]
+vermangasporno.com##[href*="http://www.ciberhentai.net"]
+*$script,3p,denyallow=cloudflare.net|cloudfront.net|disqus.com|disquscdn.com|fastlylb.net,domain=vermangasporno.com
 ##a[href^="http://gamingadult.biz/"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1842
@@ -5635,6 +5639,7 @@ worldfreeware.com##+js(aopr, require)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2207
 tibiabr.com##+js(nosiif, visibility, 1000)
+||tibiabr.com/$frame,1p
 @@||tibiabr.com^$ghide
 tibiabr.com##div[id^="div-gpt-ad"]
 
@@ -10471,10 +10476,12 @@ thepiratebay.*##+js(aopw, _pop)
 ! https://github.com/NanoMeow/QuickReports/issues/459
 ||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs:10,domain=naminakiky.com
 
-! https://github.com/NanoMeow/QuickReports/issues/1468
+! https://github.com/AdguardTeam/AdguardFilters/issues/84965
+linksht.com##+js(nostif, _$_, 3000)
 linksht.com##+js(acis, $, bannerads)
 @@||static.doubleclick.net/instream/ad_status.js$xhr,domain=linksht.com
 @@||linksht.com^$ghide
+linksht.com###bannerads
 
 ! https://github.com/NanoMeow/QuickReports/issues/464
 @@||linkpunyaku.*^$ghide
@@ -21207,6 +21214,7 @@ mavanimes.co##+js(aopr, AaDetector)
 100count.net##+js(aopr, app_vars.force_disable_adblock)
 100count.net##+js(acis, Math, zfgloaded)
 100count.net##+js(nano-sib, /sec--|timedisplay--/)
+100count.net##+js(set, blurred, false)
 100count.net##.banner
 100count.net##div.banner1
 100count.net##div.banner2
@@ -21215,6 +21223,8 @@ mavanimes.co##+js(aopr, AaDetector)
 100count.net##.col-md-2
 100count.net##ins[class^="bmadblock-"]
 100count.net##[class^="_"]
+100count.net##[id^="div-gpt-ad"]
+100count.net###id-custom_banner
 *$3p,denyallow=google.com|gstatic.com|bootstrapcdn.com|googleapis.com|hwcdn.net|jquery.com|cloudflare.com|ibb.co|recaptcha.net|hcaptcha.com|consensu.org,domain=100count.net
 ||bmcdn1.com^
 
