@@ -4009,12 +4009,11 @@ givememmastreams.com,givemenbastreams.com,givemenflstreams.com,givemeredditstrea
 crackedstream.*,crackstreams.*##+js(noeval-if, debugger)
 crackedstream.*,crackstreams.*##+js(nostif, debugger)
 crackedstream.*,crackstreams.*##+js(set, runAdblock, noopFunc)
-||crackstreams.*^$script,1p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63847
 apkmaza.net##+js(aopr, ai_front)
 apkmaza.net##+js(nano-sib, downloadButton)
-*$3p,script,denyallow=wp.com|hcaptcha.com,domain=apkmaza.net
+*$script,3p,denyallow=wp.com|hcaptcha.com|cloudflare.com,domain=apkmaza.net
 
 ! 1337xhd .cc popups
 1337xhd.*##+js(nowebrtc)
@@ -4539,9 +4538,6 @@ moviessquad.com##+js(aopr, eddOptions)
 ! https://github.com/NanoMeow/QuickReports/issues/4809
 clampschoolholic.com##+js(acis, Math, break;case $.)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/65319
-onlyfoot.net##+js(acis, addEventListener, google_ad_client)
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65335
 epidemia-koronawirus.pl##+js(aopr, mdpDeBlocker)
 
@@ -4616,9 +4612,6 @@ madeintorrent.com##+js(aopw, _pop)
 @@||madeintorrent.com^$ghide
 *$script,3p,denyallow=cdn.cloudflare.net|google.com|gstatic.com|jsdelivr.net,domain=madeintorrent.com
 
-! stagesaga.xyz anti adb
-stagesaga.xyz##+js(nosiif, visibility, 1000)
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65459
 shorttey.*##+js(aopr, app_vars.force_disable_adblock)
 shorttey.*##+js(aopr, open)
@@ -4643,10 +4636,6 @@ hdmovieplus.*##+js(acis, String.fromCharCode, /btoa|break/)
 
 ! mioanime .com ads
 *$script,3p,denyallow=wp.com|cdn77.org|facebook.com|facebook.net|fbcdn.net|instagram.com|disqus.com|disquscdn.com|jwpsrv.com|plyr.io|jsdelivr.net|twimg.com|twitter.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=mioanime.com
-
-! https://github.com/NanoMeow/QuickReports/issues/4831
-*$script,3p,denyallow=wp.com|cdn77.org|facebook.com|facebook.net|fbcdn.net|instagram.com|disqus.com|disquscdn.com|jwpsrv.com|plyr.io|jsdelivr.net|twimg.com|twitter.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|hcaptcha.com|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=hlscloud.stream
-hlscloud.stream,oniondrive.net,onionplay.cloud##+js(aopr, LieDetector)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65438
 grab.tc##+js(aopr, NoAdBlock)
@@ -4884,15 +4873,14 @@ mysnip.xyz##.text-center.form-group > b > h3, br
 molll.mobi##+js(nostif, innerText, 2000)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/66177
-amon.my.id,askpets.website,bacapedia.my.id,bams.my.id,cypets.website,enema.my.id,epetsure.website,healthypitt.website,jualminuman.xyz,kamerafoto.net,kangapip.com,leafpro.website,litpets.website,menulisonline.com,motorantik.store,nstnews.net,pakaiantrendi.xyz,petru.website,plantqo.website,visly.my.id,xcvza.my.id##+js(acis, addEventListener, google_ad_client)
-fedaro.me,s.kamerafoto.net##[href="https://s.kamerafoto.net/"]
+epetsure.website,kangapip.com,litpets.website,menulisonline.com,motorantik.store,nstnews.net,pakaiantrendi.xyz,petru.website,plantqo.website,visly.my.id,xcvza.my.id##+js(acis, addEventListener, google_ad_client)
 fedaro.me,kangapip.com,xcvza.my.id##+js(set, blurred, false)
 fedaro.me,kangapip.com,xcvza.my.id##p > a[href][target="_blank"]
 fedaro.me,kangapip.com##.captcha-page > .container > .row > .col-md-offset-1 > .box-main > div:not(:has(#link-view))
-askpets.website,enema.my.id,epetsure.website,healthypitt.website,jualminuman.xyz,leafpro.website,litpets.website,menulisonline.com,motorantik.store,nstnews.net,pakaiantrendi.xyz,petru.website,plantqo.website###wpsafe-snp:style(display: block !important;)
-askpets.website,enema.my.id,epetsure.website,healthypitt.website,jualminuman.xyz,leafpro.website,litpets.website,menulisonline.com,motorantik.store,nstnews.net,pakaiantrendi.xyz,petru.website,plantqo.website###wpsafe-generate:style(display: block !important;)
-askpets.website,enema.my.id,cypets.website,epetsure.website,healthypitt.website,jualminuman.xyz,leafpro.website,motorantik.store,pakaiantrendi.xyz,petru.website,plantqo.website##*:has(#wpsafe-wait1):not(:has(#wpsafe-snp))
-amon.my.id,askpets.website,bacapedia.my.id,bams.my.id,cypets.website,epetsure.website,leafpro.website,litpets.website,menulisonline.com,nstnews.net,pakaiantrendi.xyz,petru.website,plantqo.website,visly.my.id##*:has(+ div[align="center"] button.btn)
+epetsure.website,litpets.website,menulisonline.com,motorantik.store,nstnews.net,pakaiantrendi.xyz,petru.website,plantqo.website###wpsafe-snp:style(display: block !important;)
+epetsure.website,litpets.website,menulisonline.com,motorantik.store,nstnews.net,pakaiantrendi.xyz,petru.website,plantqo.website###wpsafe-generate:style(display: block !important;)
+epetsure.website,motorantik.store,pakaiantrendi.xyz,petru.website,plantqo.website##*:has(#wpsafe-wait1):not(:has(#wpsafe-snp))
+epetsure.website,leafpro.website,litpets.website,menulisonline.com,nstnews.net,pakaiantrendi.xyz,petru.website,plantqo.website,visly.my.id##*:has(+ div[align="center"] button.btn)
 xcvza.my.id##.box-main > .blog-item
 
 ! e-wok.tv anti-adb
@@ -5295,9 +5283,6 @@ wawacity.*##+js(acis, Math, break;case $.)
 ! https://github.com/abp-filters/abp-filters-anti-cv/issues/485
 aegeanews.gr,batterypoweronline.com,brezovycukr.cz,centrocommercialevulcano.com,cieonline.co.uk,commsbusiness.co.uk,dailygrindonline.net,davincidiamondsslot.net,delo.bg,dynastyseries.com,fabmx1.com,fat-bike.com,fmj.co.uk,localemagazine.com,loveourweddingmag.com,metaforespress.gr,myvalley.it,niestatystyczny.pl,primapaginamarsala.it,ringelnatz.net,schoolsweek.co.uk,sikkenscolore.it,sportbet.gr,stadtstudenten.de,stagemilk.com,tautasdziesmas.lv,thetoneking.com,toplickevesti.com,zeroradio.co.uk##+js(aopr, wpsite_clickable_data)
 */wp-content/plugins/wpsite-background-takeover*/js/wpsite_clickable.js$script
-
-! https://github.com/uBlockOrigin/uAssets/issues/8175
-musicpleer.tv##+js(set, ADS_ACTIVATED, false)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67151
 adobeactivators.blogspot.com##+js(acis, addEventListener, google_ad_client)
@@ -5707,10 +5692,6 @@ downloadtwittervideo.com##+js(nowoif)
 @@||neulionms-a.akamaihd.net^$script,domain=nba.com
 ! [badfilter] .net/ad/$script,badfilter
 
-! https://github.com/uBlockOrigin/uAssets/issues/8262
-vidsaver.net##+js(acis, String.fromCharCode, /btoa|break/)
-||vidsaver.net^$csp=sandbox allow-forms allow-same-origin allow-scripts allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-top-navigation
-
 ! https://www.reddit.com/r/uBlockOrigin/comments/jzs64f/adblock_detected/
 mzupdate.com##+js(aopr, absda)
 mzupdate.com##+js(acis, atob)
@@ -5806,8 +5787,8 @@ egyanime.com##+js(acis, String.fromCharCode, /btoa|break/)
 nifteam.info##+js(acis, document.getElementById, undefined)
 nifteam.info###wtf:style(visibility:visible!important;display:block!important;)
 
-! babeporn .net popunder
-babeporn.net##+js(aopr, decodeURI)
+! babeporn .net popunder => .org
+babeporn.*##+js(aopr, decodeURI)
 
 ! tubexo .tv popunder
 tubexo.tv##+js(acis, document.querySelectorAll, popMagic)
@@ -6038,7 +6019,7 @@ kazanclilink.com##+js(nano-sib)
 kazanclilink.com##[id*="ScriptRoot"]
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/69378
-freemagazines.top##+js(acis, eval, replace)
+freemagazines.top##+js(aost, String.prototype.charCodeAt, ai_)
 *$xhr,redirect-rule=nooptext,domain=freemagazines.top
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/k6opvk/aggressive_ad_popup_locks_out_site_for_45seconds/
@@ -6301,15 +6282,8 @@ girlsofdesire.org###box_897
 ! https://www.reddit.com/r/uBlockOrigin/comments/kd3kh2/
 @@||mgkomik.my.id/wp-content/plugins/dh-anti-adblocker/$1p,script
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/69752
-lapagan.net##+js(set, adsbygoogle.length, undefined)
-lapagan.net##+js(aopw, _pop)
-||googlesyndication.com^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=lapagan.net
-lapagan.net##div.i_300
-lapagan.net###v-overlay
-lapagan.net##.refill.contain
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/69836
+tqanime.com##+js(aopr, absda)
 tqanime.com##+js(nosiif, visibility, 1000)
 eganime.com##+js(aopr, adBlockDetected)
 
@@ -6337,7 +6311,6 @@ clicporn.com##+js(acis, document.querySelectorAll, popMagic)
 clicporn.com##.wps-player__happy-inside
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/70040
-adultfun.net##+js(aopr, BetterJsPop)
 allpussynow.com##+js(acis, document.querySelectorAll, popMagic)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/70041
@@ -6712,9 +6685,6 @@ down.mdiaload.com##div.download-option-btn:nth-of-type(4)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/70949
 ontiva.com##+js(set, canRunAds, true)
 ontiva.com##+js(nowoif)
-
-! thefmovies .me => cineflixtv .net popups
-cineflixtv.net##+js(nowoif)
 
 ! popups torrentkingnow .com
 torrentkingnow.com##+js(nowoif)
