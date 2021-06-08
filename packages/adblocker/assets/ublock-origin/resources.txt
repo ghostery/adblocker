@@ -55,7 +55,7 @@ scorecardresearch.com/beacon.js application/javascript
 
 
 remove-class.js application/javascript
-(function(){const t="{{1}}";if(""===t||"{{1}}"===t)return;const e=t.split(/\s*\|\s*/);let n="{{2}}";if(""===n||"{{2}}"===n)n="."+e.map((t=>CSS.escape(t))).join(",.");const o=function(){try{const t=document.querySelectorAll(n);for(const n of t)n.classList.remove(...e)}catch(t){}};if("loading"===document.readyState)window.addEventListener("DOMContentLoaded",o,{capture:true,once:true});else o()})();
+(function(){const e="{{1}}";if(""===e||"{{1}}"===e)return;const t=e.split(/\s*\|\s*/);let o="{{2}}";if(""===o||"{{2}}"===o)o="."+t.map((e=>CSS.escape(e))).join(",.");let s="{{3}}";let n;const r=function(){n=void 0;try{const e=document.querySelectorAll(o);for(const o of e)o.classList.remove(...t)}catch(e){}};const l=e=>{if(void 0!==n)return;let t=true;for(let o=0;o<e.length&&t;o++){const{type:s,addedNodes:n,removedNodes:r}=e[o];if("attributes"===s)t=false;for(let e=0;e<n.length&&t;e++)if(1===n[e].nodeType){t=false;break}for(let e=0;e<r.length&&t;e++)if(1===r[e].nodeType){t=false;break}}if(t)return;n=self.requestIdleCallback(r,{timeout:67})};const a=()=>{r();if(false===/\bstay\b/.test(s))return;const e=new MutationObserver(l);e.observe(document.documentElement,{attributes:true,attributeFilter:["class"],childList:true,subtree:true})};if("complete"!==document.readyState&&/\bcomplete\b/.test(s))self.addEventListener("load",a,{once:true});else if("loading"===document.readyState)self.addEventListener("DOMContentLoaded",a,{once:true});else a()})();
 
 
 remove-attr.js application/javascript
@@ -63,7 +63,7 @@ remove-attr.js application/javascript
 
 
 rc.js application/javascript
-(function(){const t="{{1}}";if(""===t||"{{1}}"===t)return;const e=t.split(/\s*\|\s*/);let n="{{2}}";if(""===n||"{{2}}"===n)n="."+e.map((t=>CSS.escape(t))).join(",.");const o=function(){try{const t=document.querySelectorAll(n);for(const n of t)n.classList.remove(...e)}catch(t){}};if("loading"===document.readyState)window.addEventListener("DOMContentLoaded",o,{capture:true,once:true});else o()})();
+(function(){const e="{{1}}";if(""===e||"{{1}}"===e)return;const t=e.split(/\s*\|\s*/);let o="{{2}}";if(""===o||"{{2}}"===o)o="."+t.map((e=>CSS.escape(e))).join(",.");let s="{{3}}";let n;const r=function(){n=void 0;try{const e=document.querySelectorAll(o);for(const o of e)o.classList.remove(...t)}catch(e){}};const l=e=>{if(void 0!==n)return;let t=true;for(let o=0;o<e.length&&t;o++){const{type:s,addedNodes:n,removedNodes:r}=e[o];if("attributes"===s)t=false;for(let e=0;e<n.length&&t;e++)if(1===n[e].nodeType){t=false;break}for(let e=0;e<r.length&&t;e++)if(1===r[e].nodeType){t=false;break}}if(t)return;n=self.requestIdleCallback(r,{timeout:67})};const a=()=>{r();if(false===/\bstay\b/.test(s))return;const e=new MutationObserver(l);e.observe(document.documentElement,{attributes:true,attributeFilter:["class"],childList:true,subtree:true})};if("complete"!==document.readyState&&/\bcomplete\b/.test(s))self.addEventListener("load",a,{once:true});else if("loading"===document.readyState)self.addEventListener("DOMContentLoaded",a,{once:true});else a()})();
 
 
 ra.js application/javascript
