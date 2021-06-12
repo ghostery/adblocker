@@ -42,7 +42,6 @@ export default [
   "et",
   "ga",
   "in",
-  "le",
   "ng",
   "on",
   "oo",
