@@ -3768,7 +3768,7 @@ ggeguide.com##+js(aopr, disableSelection)
 ! tanya-tanya .com right click, select, ctrl-u etc
 tanya-tanya.com##+js(acis, document.oncontextmenu)
 tanya-tanya.com##+js(acis, disableSelection, reEnable)
-tanya-tanya.com##.unselectable:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+tanya-tanya.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 
 ! wpb.shueisha.co.jp right click
 wpb.shueisha.co.jp##+js(aeld, contextmenu, preventDefault)
@@ -3887,7 +3887,11 @@ thegearhunt.com##*:style(-webkit-touch-callout: default !important; -webkit-user
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/56457
 jootc.com##+js(aopr, disable_copy)
+jootc.com##+js(aopr, disable_hot_keys)
 jootc.com##+js(aopw, document.oncontextmenu)
+jootc.com##+js(set, document.onkeyup, null)
+jootc.com##+js(set, document.ondragstart, null)
+jootc.com##+js(aeld, keydown)
 jootc.com##body, div, p, span, a, h1, h2, h3, h4, h5, h6:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/56425
@@ -4379,9 +4383,6 @@ magnet-novels.com##+js(set, document.onselectstart, noopFunc)
 
 ! https://github.com/easylist/easylist/issues/5903#issuecomment-669608003
 deseneledublate.com##+js(acis, document.oncontextmenu)
-
-! https://github.com/uBlockOrigin/uAssets/issues/7742
-||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noop.js,domain=freefilesync.org
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/61166
 eduardo-monica.com##+js(acis, document.oncontextmenu)
@@ -5859,3 +5860,44 @@ nullphpscript.com##style:has-text(user-select:):remove()
 ! https://github.com/AdguardTeam/AdguardFilters/issues/85350
 @@||babiato.co^$ghide
 babiato.co##.adsbygoogle
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/81440
+lazytranslations.com##+js(aopw, disableEnterKey)
+lazytranslations.com##+js(aopw, document.ondragstart)
+lazytranslations.com##style:has-text(unselectable):remove()
+
+! starbene. it anti select, right click, drag, copy, f keys, ctrl
+starbene.it##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+starbene.it##+js(acis, document.oncontextmenu)
+starbene.it##+js(aeld, /copy|contextmenu/)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/85982
+||belezaedieta.com^
+
+! https://github.com/uBlockOrigin/uAssets/issues/9435
+operatorsekolahdbn.com##+js(aopr, document.onselectstart)
+operatorsekolahdbn.com##style:has-text(user-select:):remove()
+operatorsekolahdbn.com##+js(aeld, keydown)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9439
+! https://github.com/uBlockOrigin/uAssets/issues/975
+allmovie.com,sidereel.com##+js(acis, $, /getScript|error:/)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9440
+televisiongratishd.com##+js(set, document.oncontextmenu, null)
+televisiongratishd.com##+js(set, document.onkeydown, null)
+televisiongratishd.com##+js(set, document.onkeypress, null)
+
+! renditepassive. net anti right click / select / drag
+renditepassive.net##+js(acis, disableSelection, reEnable)
+renditepassive.net##+js(acis, document.ondragstart)
+
+! onlinecoursebay. com anti right click / select / f keys
+onlinecoursebay.com##+js(aeld, , mdp)
+
+! utorrentgamesps2.blogspot. com anti right click , select
+utorrentgamesps2.blogspot.com##+js(acis, document.onkeydown)
+utorrentgamesps2.blogspot.com##+js(ra, onselectstart)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/86269
+inquirer.net##+js(acis, document.createElement, admiral)
