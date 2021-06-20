@@ -1,3 +1,20 @@
+# v1.22.2 (Sun Jun 20 2021)
+
+#### :bug: Bug Fix
+
+- Fix to executing promises in adblocker-playwright [#2006](https://github.com/cliqz-oss/adblocker/pull/2006) ([@tommulkins](https://github.com/tommulkins))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump mocha from 8.4.0 to 9.0.0 [#1989](https://github.com/cliqz-oss/adblocker/pull/1989) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Tom Mulkins ([@tommulkins](https://github.com/tommulkins))
+
+---
+
 # v1.21.0 (Sun May 30 2021)
 
 #### :house: Internal

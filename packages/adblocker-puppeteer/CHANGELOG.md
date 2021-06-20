@@ -1,3 +1,15 @@
+# v1.22.2 (Sun Jun 20 2021)
+
+#### :nut_and_bolt: Dependencies
+
+- Bump mocha from 8.4.0 to 9.0.0 [#1989](https://github.com/cliqz-oss/adblocker/pull/1989) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.22.1 (Thu Jun 03 2021)
 
 #### :nail_care: Polish
