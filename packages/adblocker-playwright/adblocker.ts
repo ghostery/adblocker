@@ -328,7 +328,7 @@ export class PlaywrightBlocker extends FiltersEngine {
       }
     }
 
-    await promises;
+    await Promise.all(promises);
   }
 
   /**
