@@ -256,7 +256,6 @@ kinopoisk.ru###image:style(opacity: 1 !important;)
 ! https://twitter.com/nekbet/status/804387706520342529
 ! To counter Peter Lowe's `hotjar.com`
 ! [badfilter] ||hotjar.com^$badfilter
-||hotjar.com^$3p
 
 ! https://twitter.com/6pod4/status/806927623272022016
 @@||jimmyjohns.com/Scripts/angularytics*.js$1p,script
@@ -1627,9 +1626,6 @@ kzstock.blogspot.com#@##ad-target
 ! https://github.com/NanoMeow/QuickReports/issues/1059
 @@||kolumbus.fi/cgi-bin/counter.cgi$image,1p
 
-! https://github.com/uBlockOrigin/uAssets/issues/5455
-||uliza.jp/Player/js/*-google-analytics$script,redirect=noopjs,domain=tv-tokyo.co.jp
-
 ! https://forums.lanik.us/viewtopic.php?f=64&t=42965
 ! [badfilter] ||olx.com.br^*/lurker.$badfilter
 
@@ -2287,9 +2283,6 @@ pcgamer.com#@#.hawk-widget
 ||t.eloqua.com^$3p
 
 ! https://www.wilderssecurity.com/threads/ublock-a-lean-and-fast-blocker.365273/page-166#post-2878656
-||uliza.jp/Player/js/ulizahtml5-google-analytics$script,redirect=noopjs,domain=kobe-np.co.jp
-
-! https://www.wilderssecurity.com/threads/ublock-a-lean-and-fast-blocker.365273/page-166#post-2878656
 @@||google-analytics.com/ga.js$script,domain=bimi.jorudan.co.jp
 
 ! https://github.com/uBlockOrigin/uAssets/issues/707#issuecomment-565051652
@@ -2868,9 +2861,6 @@ order-order.com#@#.tag-sponsored
 ! [badfilter] ||treasuredata.com^$badfilter
 ||treasuredata.com^$3p
 
-! https://github.com/uBlockOrigin/uAssets/issues/7420
-||uliza.jp^*/ulizahtml5-google-analytics.min.js|$script,redirect-rule=noop.js,domain=yomiuri.co.jp
-
 ! https://github.com/uBlockOrigin/uAssets/issues/7424
 @@||log.mmstat.com/eg.js$script,domain=youku.com
 
@@ -3297,11 +3287,6 @@ hubblespacetelescope.blogspot.com#@#.vertical-ads
 ! https://github.com/uBlockOrigin/uAssets/issues/7856
 eslint.org#@#.sponsor-link
 
-! https://github.com/uBlockOrigin/uAssets/issues/7858
-!#if env_chromium
-@@||googletagmanager.com^$script,redirect-rule,domain=olx.*
-!#endif
-
 ! https://github.com/uBlockOrigin/uAssets/issues/2381#issuecomment-685824829
 ! [badfilter] |https://$xhr,3p,domain=zippyshare.com,badfilter
 
@@ -3339,9 +3324,6 @@ hentaiplay.net###video_overlays
 
 ! unbreak emedemujer.com images
 @@||emedemujer.com/wp-content/plugins/dfp-ads/assets/js/google-ads.min.js$script,1p
-
-! https://github.com/uBlockOrigin/uAssets/issues/7908
-@@||ads.blogherads.com/sk/*/header.js$script,domain=knowyourmeme.com
 
 ! cname handelsblatt .com broken
 @@||privacy-mgmt.com^$script,domain=handelsblatt.com
@@ -3870,16 +3852,6 @@ bing.com##+js(nosiif, logQueue, 10000)
 uschovna.cz#@#body:style(background:none !important;)
 uschovna.cz##body:style(background-image:none !important)
 
-! romanian list baits - https://github.com/tcptomato/ROad-Block/issues/75
-#@#.text_ad
-#@#.textAd
-#@#.text-ads
-#@#.text-ad-links
-#@#.text-ad
-#@#.pub_728x90
-#@#.pub_300x250m
-#@#.pub_300x250
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/78094
 ||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=googlesyndication_adsbygoogle.js,important,domain=real-sports.jp
 
@@ -4136,3 +4108,38 @@ demae-can.com##+js(ra, data-trm-action|data-trm-category|data-trm-label, .trm_ev
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9451
 @@||pluralsight.com/analytics/analytics-facade$script,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/9214
+! [badfilter] ||adjust.com^$badfilter
+||adjust.com^$3p
+
+! https://github.com/uBlockOrigin/uAssets/issues/9458
+@@||google-analytics.com/ga.js$script,redirect-rule,domain=daj.jp
+
+! unbreak rightside
+gameranbu.jp#@#.side_ad
+
+! https://github.com/uBlockOrigin/uAssets/issues/9470
+@@||plantuml.com^$cname
+
+! footer link on mobile view
+@@||worldvision.jp/img/topSP/topFootBana_ad.gif|
+
+! https://www.reddit.com/r/uBlockOrigin/comments/o9qoo8/videos_wont_play_on_etonlinecom/
+@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=etonline.com
+@@||pubads.g.doubleclick.net/ssai/event/*/streams$xmlhttprequest,domain=etonline.com
+@@||tags.tiqcdn.com/utag/cbsi/etonlinesite/*/utag.js$script,domain=etonline.com
+@@||media.amlg.io^$image,domain=etonline.com
+
+! https://github.com/easylist/easylist/pull/8200#issuecomment-870198471
+@@||google-analytics.com/analytics.js$script,redirect-rule,domain=okwave.jp
+
+! https://github.com/uBlockOrigin/uAssets/issues/9501
+togetter.com##+js(nostif, fixed_footer)
+
+! https://github.com/easylist/easylist/pull/7905
+@@||cloudfront.net/ad-navi/$css,image,domain=kinro.ntv.co.jp
+@@||minnanokaigo.com/img/page/ad-navi/parts/$image,1p
+
+! https://forums.lanik.us/viewtopic.php?p=160653#p160653
+@@||adtech.redventures.io/lib/$script,domain=gamespot.com

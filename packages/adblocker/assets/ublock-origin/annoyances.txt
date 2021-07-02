@@ -2155,6 +2155,7 @@ jokerplayer.net##+js(nostif, snackbar)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5911#issuecomment-511588571
 context.reverso.net##.blocked:style(filter: none !important;)
+context.reverso.net##.blocked .text:style(filter: none!important;-webkit-filter: none!important;)
 context.reverso.net###blocked-results-banner
 
 ! https://github.com/NanoMeow/QuickReports/issues/1508
@@ -4813,6 +4814,9 @@ loginhit.com.ng###ays_tooltip
 123movies.*##+js(acis, disableSelection, reEnable)
 123movies.*##+js(acis, document.oncontextmenu)
 123movies.*##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/9462
+123movies.*,2embed.ru##+js(nostif, _0x)
+123movies.*,2embed.ru##+js(set, console.clear, noopFunc)
 
 ! json2csharp.com anti-adb
 *$script,redirect-rule=noopjs,domain=json2csharp.com
@@ -4871,14 +4875,11 @@ eobuwie.com.pl,eobuv.cz,eobuv.sk,epantofi.ro,ecipo.hu,eobuv.com.ua,eobuv.com,obu
 ! liveroger.com anti-select
 liveroger.com##body:style(-webkit-touch-callout:text !important;-webkit-user-select:text !important;-khtml-user-select:text !important;-moz-user-select:text !important;-ms-user-select:text !important;user-select:text !important)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/69076
-freebulksmsonline.com##+js(aopw, ai_front)
-
 ! mediafax .ro anti copy
 mediafax.ro##+js(aeld, copy)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/69447
-online2pdf.com##+js(nostif, offsetWidth)
+online2pdf.com##+js(nostif, /offsetWidth|check_ads/)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8335
 bdb.com.pl##+js(ra, oncopy|oncontextmenu|onselectstart|onselect|ondragstart|ondrag|onbeforeprint|onafterprint, body)
@@ -5375,9 +5376,6 @@ vedantu.com##*:style(-webkit-touch-callout: default !important; -webkit-user-sel
 ! https://github.com/uBlockOrigin/uAssets/issues/8560
 ||gmod-servers.com/assets/js/jquery.adblock-detector.js$script,1p
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/74858
-stripes.com##+js(aopr, admrlWpJsonP)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/8575
 pcso-lottoresults.com##+js(acis, document.oncontextmenu)
 
@@ -5640,9 +5638,6 @@ zsti.zsti.civ.pl##+js(aeld, contextmenu, preventDefault)
 ! camoero.com anti right click
 ||camoero.com/wp-content/themes/luxech/luxech.js
 
-! this.kiji.is, nordot.app anti adb
-kiji.is,nordot.app##+js(acis, document.createElement, admiral)
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/80929
 hardcoregames.ca##+js(aeld, /contextmenu|cut|copy|keydown/)
 hardcoregames.ca##+js(set, document.onkeydown, null)
@@ -5901,3 +5896,82 @@ utorrentgamesps2.blogspot.com##+js(ra, onselectstart)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/86269
 inquirer.net##+js(acis, document.createElement, admiral)
+
+! sonnenverlauf/suncalc anti-adb
+sonnenverlauf.de,suncalc.org###adsGross1
+sonnenverlauf.de,suncalc.org###adsKlein
+
+! https://www.reddit.com/r/uBlockOrigin/comments/o6d0vs/how_to_stop_websites_from_detecting_ublock/
+themosvagas.com.br##+js(acis, addEventListener, keydown)
+themosvagas.com.br##+js(acis, onload)
+themosvagas.com.br##+js(set, document.onkeydown, null)
+themosvagas.com.br##style:has-text(user-select:):remove()
+
+! https://www.reddit.com/r/uBlockOrigin/comments/o7bhur/problem_ubo_detected_on_fauxid/
+fauxid.com##+js(aeld, error)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/57758
+audiostereo.pl##+js(nostif, adb)
+
+! tvstreampf. xyz anti right click / select / drag
+tvstreampf.xyz##+js(acis, document.ondragstart)
+tvstreampf.xyz##+js(acis, document.onselectstart)
+
+! fabioambrosi. it anti right click / select / drag
+fabioambrosi.it##+js(acis, document.oncontextmenu)
+
+! quicasting. it anti right click, select
+*/wp-content/cache/wpfc-minified/$script
+
+! gamezop. com anti select
+gamezop.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! articlesmania. me anti right click, copy
+articlesmania.me##+js(ra, oncontextmenu)
+articlesmania.me##+js(acis, document.onkeydown)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9467
+jobskaro.com##+js(aopr, disableEnterKey)
+jobskaro.com##+js(aopw, document.ondragstart)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/o8wr0g/antiadblock_ygoprodeckcom/
+ygoprodeck.com##+js(acis, jQuery, :empty)
+*$image,redirect-rule=1x1.gif,domain=ygoprodeck.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/9469
+gelomanias.blogspot.com##+js(set, history.pushState, noopFunc)
+
+! readm. org anti select
+readm.org##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! androidtvbox. eu anti select, right click, drag
+androidtvbox.eu##+js(aeld, dragstart)
+androidtvbox.eu##+js(aopr, nocontextmenu)
+androidtvbox.eu##+js(acis, document.ondragstart)
+androidtvbox.eu##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/2060
+nicematin.com##+js(aeld, , AdB)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9477
+myhtebooks.com##+js(ra, oncontextmenu|ondragstart|onselectstart|onselect|oncopy|onbeforecopy|onkeydown|onunload)
+myhtebooks.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9478
+votetw.com##div[style="width: 100%; height: 100%; top: 0;left: 0; position:fixed; z-index: 255;"]
+
+! gooyaabitemplates. com anti select
+gooyaabitemplates.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9496
+urbharat.xyz##+js(ra, oncontextmenu, body)
+urbharat.xyz##+js(set, document.onkeydown, null)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9502
+bilibili.com##+js(aeld, selectionchange, quill.emitter)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9503
+sogou.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/87250
+spanishdict.com##main > div[class*="-"] > div[class^="_"] > div[class^="_"] > div[class]:has(> div[class^="_"]:has-text(Do your part to support us))
