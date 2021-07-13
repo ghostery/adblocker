@@ -173,10 +173,6 @@ linkad.in##.banner
 ||madratesforall.com^$3p
 ||reingod.com^
 
-! https://github.com/uBlockOrigin/uAssets/issues/7235
-footballnews.jp##+js(acis, document.addEventListener, google_ad_client)
-footballnews.jp##^script:has-text(antiblock.org)
-
 ! rppk13baru.blogspot.com anti-adb
 rppk13baru.blogspot.com##+js(acis, addEventListener, blocker)
 
@@ -656,6 +652,7 @@ bg-gledai.co##+js(nosiif, visibility, 1000)
 @@||animexin.xyz^$ghide
 animexin.xyz###floatcenter
 ||wp.com/animexin.xyz/wp-content/uploads/*/Banner1.png$image
+||animexin.xyz/*.gif$image
 
 ! https://github.com/NanoMeow/QuickReports/issues/3718
 @@||lesechos.fr^$ghide
@@ -1258,6 +1255,7 @@ downloaderzone.com##+js(nosiif, visibility, 1000)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/55696
 themes-dl.com##+js(nosiif, visibility, 1000)
+themes-dl.com##+js(nostif, innerHTML)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/55697
 freegetdownloader.com##+js(nosiif, visibility, 1000)
@@ -1286,6 +1284,8 @@ punisoku.blogo.jp##+js(acis, url, Math.random)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/55784
 oncam.me##+js(nosiif, visibility, 1000)
+oncam.me##+js(acis, window.onload, open)
+oncam.me##.adv
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/55791
 resetoff.pl##+js(set, ads_unblocked, true)
@@ -1385,7 +1385,6 @@ breatheheavy.com##+js(nostif, eabdModal)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3959
 obaflix.com##+js(acis, String.fromCharCode, /btoa|break/)
-obafinancas.site##+js(nano-sib)
 megaflix.*##+js(nowoif)
 ||sexoland.net^
 
@@ -1518,7 +1517,7 @@ key-hub.eu##.adsbygoogle
 @@||key-hub.eu/$1p,script
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/56603
-filmesportorrents.com,filmesviatorrents.gratis##+js(nosiif, visibility, 1000)
+filmesportorrents.com##+js(nosiif, visibility, 1000)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4005
 *$script,redirect-rule=noopjs,domain=bandab.com.br
@@ -1559,9 +1558,6 @@ turkseed.com##+js(acis, addEventListener, google_ad_client)
 ! https://github.com/NanoMeow/QuickReports/issues/4027
 nightfallnews.com##+js(aopr, adBlockDetected)
 nightfallnews.com##.bottom_sticky_banner_container
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/56811
-gametter.com##+js(acis, addEventListener, google_ad_client)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/56828
 @@||animesanka.*^$ghide
@@ -1711,7 +1707,7 @@ gowatchseries.*##+js(acis, Math, break;case $.)
 
 ! https://forums.lanik.us/viewtopic.php?p=155071#p155071
 storieswatch.com##+js(acis, Math, zfgloaded)
-*$script,3p,domain=storieswatch.com
+*$script,3p,denyallow=cloudflare.com,domain=storieswatch.com
 
 ! https://github.com/NanoMeow/QuickReports/issues/4079
 bestofcomicbooks.com##+js(acis, Math, break;case $.)
@@ -1725,9 +1721,6 @@ miroir1.trackr.fr##+js(nostif, adsBlocked)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4089
 all3dp.com##.ad-container
-
-! https://github.com/NanoMeow/QuickReports/issues/4092
-tikitoks.com##+js(nostif, adblock)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/h7cm2s/sexodi_blocking_ublock_origin/
 sexodi.com##+js(set, ads_unblocked, true)
@@ -1795,10 +1788,6 @@ onlinemovie.one###fakeplayer
 grhls.stream##+js(aopr, absda)
 grhls.stream##+js(nostif, check, 100)
 ||h2ku87viwi.com^
-
-! https://github.com/NanoAdblocker/NanoFilters/issues/516
-@@||upmela.com^$ghide
-oms.upmela.com##.footerStickyBox
 
 ! https://github.com/NanoMeow/QuickReports/issues/4117
 @@||shinsori.com^$ghide
@@ -2308,8 +2297,8 @@ xiaomitools.com##+js(acis, addEventListener, google_ad_client)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/58833
 link1s.*##+js(aopr, app_vars.force_disable_adblock)
-aloass.com,alobyt.com,alogum.com,aloguy.com,alohdd.com,jncojeans.com,kiemlua.com,kingsleynyc.com,lucidcam.com,nousdecor.com,pennbookcenter.com,staaker.com,uebnews.online,thegoneapp.com##+js(nano-sib, counter, 2000)
-aloass.com,alobyt.com,alogum.com,aloguy.com,alohdd.com,jncojeans.com,kiemlua.com,kingsleynyc.com,link1s.*,lucidcam.com,nousdecor.com,pennbookcenter.com,staaker.com,thegoneapp.comuebnews.online##+js(nosiif, visibility, 1000)
+aloass.com,alobyt.com,alogum.com,aloguy.com,alohdd.com,byboe.com,jncojeans.com,kiemlua.com,kingsleynyc.com,lucidcam.com,nousdecor.com,pennbookcenter.com,staaker.com,uebnews.online,thegoneapp.com##+js(nano-sib, counter, 2000)
+aloass.com,alobyt.com,alogum.com,aloguy.com,alohdd.com,byboe.com,jncojeans.com,kiemlua.com,kingsleynyc.com,link1s.*,lucidcam.com,nousdecor.com,pennbookcenter.com,staaker.com,thegoneapp.com,uebnews.online##+js(nosiif, visibility, 1000)
 link1s.*##+js(set, blurred, false)
 *$3p,denyallow=bootstrapcdn.com|cloudflare.com|google.com|googleapis.com|gstatic.com|hcaptcha.com|jquery.com|jsdelivr.net|recaptcha.net,domain=link1s.*
 link1s.*##.banner
@@ -2721,6 +2710,7 @@ imdbstream.xyz##+js(acis, decodeURI, decodeURIComponent)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4384
 @@||townnews.com^*/tncms/*/ads/*/tnt.ads.advertisements.$script
+@@||townnews.com^*/tncms/*/ads/*/tnt.ads.adverts.$script
 
 ! 365movies .tv popups
 365movies.tv##+js(aeld, , launch)
@@ -4152,8 +4142,8 @@ buynorxviagraonline.com##.tm-menu
 buynorxviagraonline.com###HTML10
 buynorxviagraonline.com###HTML11
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/64691
-thepoorcoder.com##+js(nosiif, visibility, 1000)
+! https://github.com/AdguardTeam/AdguardFilters/issues/88037
+thepoorcoder.com##+js(aopr, adblockDetector)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7962
 @@||utility.rogersmedia.com/utility.js^$3p,domain=citytv.com
@@ -5922,6 +5912,7 @@ hindustantimes.com##.ht_outbrain
 hindustantimes.com##.ht-ad-v1
 hindustantimes.com##.widget-ad
 hindustantimes.com##.epaper-ad
+hindustantimes.com##[class^="adMinHeight"]
 
 ! popups https://elitegoltv. es/canal-1.php
 newdmn.*##+js(nowoif, !newdmn, 1)
@@ -5980,9 +5971,6 @@ cashearn.cc##+js(nostif, checkblockUser)
 cashearn.cc##+js(acis, String.fromCharCode, break)
 cashearn.cc##+js(aopw, _pop)
 cashearn.cc##+js(set, blurred, false)
-
-! https://www.reddit.com/r/uBlockOrigin/comments/k9z5xm/adblock_detected_httpswwwlelscanvfme/
-lelscan-vf.me##+js(aopr, absda)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/69563
 *$script,redirect-rule=noopjs,domain=konnoznet.xyz
