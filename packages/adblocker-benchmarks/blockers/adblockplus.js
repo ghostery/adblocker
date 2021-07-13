@@ -6,18 +6,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+const { contentTypes } = require('./adblockpluscore/lib/contentTypes.js');
 const { CombinedMatcher } = require('./adblockpluscore/lib/matcher.js');
-const { Filter, RegExpFilter } = require('./adblockpluscore/lib/filterClasses.js');
+const { Filter } = require('./adblockpluscore/lib/filterClasses.js');
 const { parseURL } = require('./adblockpluscore/lib/url.js');
 
 // Chrome can't distinguish between OBJECT_SUBREQUEST and OBJECT requests.
-RegExpFilter.typeMap.OBJECT_SUBREQUEST = RegExpFilter.typeMap.OBJECT;
+contentTypes.OBJECT_SUBREQUEST = contentTypes.OBJECT;
 
 // Map of content types reported by the browser to the respecitve content types
 // used by Adblock Plus. Other content types are simply mapped to OTHER.
 const resourceTypes = new Map(
   (function* resourceTypesGenerator() {
-    for (const type in RegExpFilter.typeMap) yield [type.toLowerCase(), type];
+    for (const type in contentTypes) yield [type.toLowerCase(), type];
 
     yield ['sub_frame', 'SUBDOCUMENT'];
 
@@ -41,7 +42,7 @@ module.exports = class AdBlockPlus {
       const line = lines[i].trim();
       if (line.length !== 0 && line[0] !== '!') {
         const filter = Filter.fromText(line);
-        if (filter.type === 'blocking' || filter.type === 'whitelist') {
+        if (filter.type === 'blocking' || filter.type === 'allowing') {
           filters.push(filter);
           matcher.add(filter);
         }
@@ -79,9 +80,9 @@ module.exports = class AdBlockPlus {
   match(request) {
     const url = parseURL(request.url);
     const sourceURL = parseURL(request.frameUrl);
-    const filter = this.matcher.matchesAny(
+    const filter = this.matcher.match(
       url,
-      RegExpFilter.typeMap[resourceTypes.get(request.type) || 'OTHER'],
+      contentTypes[resourceTypes.get(request.type) || 'OTHER'],
       sourceURL.hostname,
       null,
       false,
