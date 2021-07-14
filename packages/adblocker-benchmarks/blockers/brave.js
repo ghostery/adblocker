@@ -6,11 +6,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const { Engine } = require('adblock-rs');
+const { Engine, FilterSet } = require('adblock-rs');
 
 module.exports = class Brave {
   static parse(rawLists) {
-    return new Brave(new Engine(rawLists.split(/[\n\r]+/g)));
+    const filterSet = new FilterSet(false);
+    filterSet.addFilters(rawLists.split(/[\n\r]+/g));
+    return new Brave(new Engine(filterSet, true));
   }
 
   constructor(client) {
@@ -18,7 +20,7 @@ module.exports = class Brave {
   }
 
   serialize() {
-    return this.client.serialize();
+    return this.client.serializeCompressed();
   }
 
   deserialize(serialized) {
