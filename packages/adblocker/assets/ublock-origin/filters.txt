@@ -101,6 +101,10 @@ google.*##a[href*="/aclk?"][data-al]:upward(2)
 ! https://github.com/NanoMeow/QuickReports/issues/1375#issuecomment-503802350
 www.google.*##div.ellip > span:has-text(/^Ads?$/):upward(2)
 
+! https://github.com/uBlockOrigin/uAssets/issues/9597
+www.google.*##[href^="/aclk"][href$="adurl="]:not(:scope > :upward([class^="sh-sr__shop-result-group"])):upward(3)
+www.google.*##[href^="https://www.googleadservices.com/pagead/aclk?"][href$="adurl="]:upward(3)
+
 ! http://www.wilderssecurity.com/threads/ublock-a-lean-and-fast-blocker.365273/page-25#post-2461804
 ! Specific cosmetic filters for Youtube home page
 youtube.com##.masthead-ad-control,.ad-div,.pyv-afc-ads-container
@@ -2570,7 +2574,9 @@ imgshots.com###introOverlayBg
 
 ! https://github.com/uBlockOrigin/uAssets/issues/972
 imagefruit.com##+js(popads.net)
+imagefruit.com##+js(aopw, _pop)
 imagefruit.com###introOverlayBg
+imagefruit.com###layer
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1005
 porn.com##+js(nowoif)
@@ -7195,7 +7201,6 @@ tetris.com##+js(aopw, makeIFrameSrc)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2908
 girlsgogames.co.uk##+js(aopr, googletag)
-||mediamanager.softgames.de^$script,domain=softgames.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2905
 ! https://github.com/uBlockOrigin/uAssets/issues/2909
@@ -9345,6 +9350,7 @@ worldcomputing.it##.adsbygoogle
 
 ||t2lgo.com^$frame
 
+! https://www.reddit.com/r/uBlockOrigin/comments/olc7nh/ads_shortener_detecting_ublock/
 ! https://github.com/uBlockOrigin/uAssets/issues/3990
 stfly.*##+js(aopr, app_vars.force_disable_adblock)
 stfly.*##+js(aopw, Fingerprint2)
@@ -9358,6 +9364,8 @@ stfly.*##+js(set, blurred, false)
 stfly.*##.adsbygoogle
 stfly.*##.banner
 stfly.*##[href^="https://dawnupdate.xyz"]
+@@||nbyts.online^$ghide
+nbyts.online##[id^="div-gpt-ad"]
 *$3p,denyallow=ajax.cloudflare.com|google.com|googleapis.com|gstatic.com|hcaptcha.com|recaptcha.net,domain=stfly.*
 ||bulletprofit.com^$3p
 
@@ -21647,15 +21655,15 @@ imgtoyou.icu,nemenlake.*##+js(nowoif)
 ||hottracker.biz^
 ||influencedzerobelief.com^
 
-@@*$ghide,domain=imgalor.xyz|imgflyr.xyz|imggong.xyz|imgirx.xyz|imgjut.buzz|imgkaid.xyz|imgkaka.xyz|imgkane.buzz|imgkia.*|imgklx.xyz|imgkoka.buzz|imgoppo.xyz|imgtoyou.icu|imgweika.buzz
-imgalor.xyz,imgflyr.xyz,imggong.xyz,imgirx.xyz,imgjut.buzz,imgkaid.xyz,imgkaka.xyz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgoppo.xyz,imgweika.buzz##+js(aeld, , _0x)
-imgalor.xyz,imgflyr.xyz,imggong.xyz,imgirx.xyz,imgjut.buzz,imgkaid.xyz,imgkaka.xyz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgoppo.xyz,imgweika.buzz##+js(nosiif, _0x)
-imgalor.xyz,imgflyr.xyz,imggong.xyz,imgirx.xyz,imgjut.buzz,imgkaid.xyz,imgkaka.xyz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgoppo.xyz,imgtoyou.icu,imgweika.buzz##+js(aopr, console.clear)
-imgalor.xyz,imgflyr.xyz,imggong.xyz,imgirx.xyz,imgjut.buzz,imgkaid.xyz,imgkaka.xyz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgoppo.xyz##+js(nano-sib, timer)
-imgalor.xyz,imgflyr.xyz,imgirx.xyz,imgjut.buzz,imgkaid.xyz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgweika.buzz##[id*="ScriptRootC"]
-imgalor.xyz,imgflyr.xyz,imgirx.xyz,imgjut.buzz,imgkaid.xyz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgweika.buzz##div[style="position: fixed; display: block; width: 100%; height: 15%; top: 0; left: 0; background-color: rgba(0, 0, 0, 0); z-index: 300000;"]
-imgjut.buzz,imgkane.buzz,imgkia.*,imgkoka.buzz,imgweika.buzz##div[style="width:100%;height:110px"]
-imgalor.xyz,imgjut.buzz,imgkane.buzz,imgkia.*,imgkoka.buzz##+js(nowoif, !/prcf.fiyar|themes|pixsense|.jpg/)
+@@*$ghide,domain=imgalor.xyz|imgflyr.xyz|imggong.xyz|imgirx.xyz|imgjut.buzz|imgkaid.xyz|imgkaka.xyz|imgkane.buzz|imgkia.*|imgklx.xyz|imgkoka.buzz|imgoppo.xyz|imgtoyou.icu|imgtrw.buzz|imgweika.buzz
+imgalor.xyz,imgflyr.xyz,imggong.xyz,imgirx.xyz,imgjut.buzz,imgkaid.xyz,imgkaka.xyz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgoppo.xyz,imgtrw.buzz,imgweika.buzz##+js(aeld, , _0x)
+imgalor.xyz,imgflyr.xyz,imggong.xyz,imgirx.xyz,imgjut.buzz,imgkaid.xyz,imgkaka.xyz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgoppo.xyz,imgtrw.buzz,imgweika.buzz##+js(nosiif, _0x)
+imgalor.xyz,imgflyr.xyz,imggong.xyz,imgirx.xyz,imgjut.buzz,imgkaid.xyz,imgkaka.xyz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgoppo.xyz,imgtoyou.icu,imgtrw.buzz,imgweika.buzz##+js(aopr, console.clear)
+imgalor.xyz,imgflyr.xyz,imggong.xyz,imgirx.xyz,imgjut.buzz,imgkaid.xyz,imgkaka.xyz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgoppo.xyz,imgtrw.buzz##+js(nano-sib, timer)
+imgalor.xyz,imgflyr.xyz,imgirx.xyz,imgjut.buzz,imgkaid.xyz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgtrw.buzz,imgweika.buzz##[id*="ScriptRootC"]
+imgalor.xyz,imgflyr.xyz,imgirx.xyz,imgjut.buzz,imgkaid.xyz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgtrw.buzz,imgweika.buzz##div[style="position: fixed; display: block; width: 100%; height: 15%; top: 0; left: 0; background-color: rgba(0, 0, 0, 0); z-index: 300000;"]
+imgjut.buzz,imgkane.buzz,imgkia.*,imgkoka.buzz,imgtrw.buzz,imgweika.buzz##div[style="width:100%;height:110px"]
+imgalor.xyz,imgjut.buzz,imgkane.buzz,imgkia.*,imgkoka.buzz,imgtrw.buzz##+js(nowoif, !/prcf.fiyar|themes|pixsense|.jpg/)
 
 ||chaglihysty.pro^
 ||aspirinelitistunderstood.com^
