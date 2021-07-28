@@ -222,9 +222,6 @@
 ! [badfilter] ||emarketer.com^$badfilter
 ||emarketer.com^$3p
 
-! https://github.com/uBlockOrigin/uAssets/issues/86
-@@||snoobi.com^$script,domain=sato.fi
-
 ! https://twitter.com/bdarfler/status/768540430988378112
 ! To counter Peter Lowe's `tapad.com`
 ! [badfilter] ||tapad.com^$badfilter
@@ -4202,4 +4199,10 @@ thefamouspeople.com###left_sticky_ad
 thefamouspeople.com###content10 > .topmenu-cls
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/osht47/prisjaktnu_is_a_blank_page/
-@@||googletagmanager.com/gtm.js$script,redirect-rule,domain=prisjakt.nu|hintaopas.fi
+! to be removed once 1.37.2 reaches stores
+@@||googletagmanager.com/gtm.js$script,redirect-rule,domain=prisjakt.nu|hintaopas.fi|ledenicheur.fr|prisjagt.dk|prisjakt.no|pricespy.co.nz|pricespy.co.uk
+
+! https://github.com/uBlockOrigin/uAssets/issues/9659
+adyou.me##button.flleft.btn-lg.btn-warning.btn.skip:style(display:block !important)
+adyou.me#@#+js(addEventListener-defuser, /^(?:click|mousedown)$/, bypassEventsInProxies)
+adyou.me#@#+js(no-setInterval-if, (), 500)
