@@ -7,7 +7,7 @@ requests.json:
 # VERSION: e1222d16430d754e8a2499fd8c58f49880d6c283
 ./blockers/ublock:
 	git clone https://github.com/gorhill/ublock ./blockers/ublock
-	git clone https://github.com/uBlockOrigin/uAssets.git ./blockers/uAssets
+	git clone --depth 1 https://github.com/uBlockOrigin/uAssets.git ./blockers/uAssets
 	cd ./blockers/ublock && git checkout --quiet e1222d16430d754e8a2499fd8c58f49880d6c283 && ./tools/make-nodejs.sh
 	npm install --no-save ./blockers/ublock/dist/build/uBlock0.nodejs
 
