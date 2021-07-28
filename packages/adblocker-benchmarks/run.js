@@ -12,6 +12,9 @@ const path = require('path');
 const ENGINE = process.argv[process.argv.length - 2];
 const REQUESTS_PATH = process.argv[process.argv.length - 1];
 
+// Mute info-level output from uBlock Origin
+console.info = () => {};
+
 console.log(`* ${ENGINE}`);
 
 // This maps puppeteer types to WebRequest types
@@ -118,6 +121,11 @@ async function main() {
     default:
       console.error(`Unknown blocker ${ENGINE}`);
       process.exit(1);
+  }
+
+  // Initialize
+  if (Cls.initialize) {
+    await Cls.initialize();
   }
 
   // Parse rules

@@ -4,6 +4,14 @@ all: deps run
 requests.json:
 	curl https://cdn.cliqz.com/adblocking/requests_top500.json.gz | gunzip > requests.json
 
+# VERSION: e1222d16430d754e8a2499fd8c58f49880d6c283
+./blockers/ublock:
+	git clone https://github.com/gorhill/ublock ./blockers/ublock
+	git clone https://github.com/uBlockOrigin/uAssets.git ./blockers/uAssets
+	cd ./blockers/ublock && git checkout --quiet e1222d16430d754e8a2499fd8c58f49880d6c283 && ./tools/make-nodejs.sh
+
+ubo-snfe: ./blockers/ublock
+
 # VERSION: ebfc7b0300879ad44dba6a051c3c34b508b5a4f7
 ./blockers/adblockpluscore:
 	git clone https://github.com/adblockplus/adblockpluscore.git ./blockers/adblockpluscore
