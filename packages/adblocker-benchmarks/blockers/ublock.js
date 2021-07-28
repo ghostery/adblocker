@@ -9,7 +9,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const modulePromise = import('./ublock/dist/build/uBlock0.nodejs/main.js');
+const modulePromise = import('ubo-snfe');
 
 class MockStorage {
   constructor(serialized) {
