@@ -1,3 +1,4 @@
+.PHONY: all clean deps run ubo-snfe adblockpluscore adblock-rs brave cliqz cliqz-compression ublock adblockplus tldts url min
 
 all: deps run
 
@@ -54,3 +55,8 @@ deps:
 	npm run prepare
 
 run: deps url tldts cliqz ublock adblockplus brave adblockfast
+
+clean:
+	rm -f requests.json
+	npm uninstall uBO-snfe adblock-rs
+	git submodule deinit --all
