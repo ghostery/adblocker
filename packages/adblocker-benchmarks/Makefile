@@ -4,21 +4,19 @@ all: deps run
 requests.json:
 	curl https://cdn.cliqz.com/adblocking/requests_top500.json.gz | gunzip > requests.json
 
-# VERSION: e1222d16430d754e8a2499fd8c58f49880d6c283
-./blockers/ublock:
-	git clone https://github.com/gorhill/ublock ./blockers/ublock
-	git clone --depth 1 https://github.com/uBlockOrigin/uAssets.git ./blockers/uAssets
-	cd ./blockers/ublock && git checkout --quiet e1222d16430d754e8a2499fd8c58f49880d6c283 && ./tools/make-nodejs.sh
+./blockers/ublock/.git:
+	git submodule update --recursive --depth 1 --init blockers/ublock
+
+./node_modules/uBO-snfe:
+	cd ./blockers/ublock && ./tools/make-nodejs.sh
 	npm install --no-save ./blockers/ublock/dist/build/uBlock0.nodejs
 
-ubo-snfe: ./blockers/ublock
+ubo-snfe: ./blockers/ublock/.git ./node_modules/uBO-snfe
 
-# VERSION: ebfc7b0300879ad44dba6a051c3c34b508b5a4f7
-./blockers/adblockpluscore:
-	git clone https://github.com/adblockplus/adblockpluscore.git ./blockers/adblockpluscore
-	cd ./blockers/adblockpluscore && git reset --hard ebfc7b0300879ad44dba6a051c3c34b508b5a4f7
+./blockers/adblockpluscore/.git:
+	git submodule update --recursive --depth 1 --init blockers/adblockpluscore
 
-adblockpluscore: ./blockers/adblockpluscore
+adblockpluscore: ./blockers/adblockpluscore/.git
 
 ./node_modules/adblock-rs:
 	npm install --no-save adblock-rs
