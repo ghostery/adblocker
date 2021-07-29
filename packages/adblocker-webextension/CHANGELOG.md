@@ -1,3 +1,16 @@
+# v1.22.3 (Thu Jul 29 2021)
+
+#### :nut_and_bolt: Dependencies
+
+- Bump @types/mocha from 8.2.3 to 9.0.0 [#2062](https://github.com/cliqz-oss/adblocker/pull/2062) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump webextension-polyfill-ts from 0.25.0 to 0.26.0 [#2027](https://github.com/cliqz-oss/adblocker/pull/2027) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.22.2 (Sun Jun 20 2021)
 
 #### :nut_and_bolt: Dependencies

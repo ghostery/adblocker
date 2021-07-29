@@ -1,3 +1,32 @@
+# v1.22.3 (Thu Jul 29 2021)
+
+#### :house: Internal
+
+- Update local assets [#2077](https://github.com/cliqz-oss/adblocker/pull/2077) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2067](https://github.com/cliqz-oss/adblocker/pull/2067) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2056](https://github.com/cliqz-oss/adblocker/pull/2056) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2050](https://github.com/cliqz-oss/adblocker/pull/2050) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2048](https://github.com/cliqz-oss/adblocker/pull/2048) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2026](https://github.com/cliqz-oss/adblocker/pull/2026) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2013](https://github.com/cliqz-oss/adblocker/pull/2013) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2007](https://github.com/cliqz-oss/adblocker/pull/2007) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#1998](https://github.com/cliqz-oss/adblocker/pull/1998) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump @types/chrome from 0.0.148 to 0.0.149 [#2078](https://github.com/cliqz-oss/adblocker/pull/2078) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/mocha from 8.2.3 to 9.0.0 [#2062](https://github.com/cliqz-oss/adblocker/pull/2062) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chrome from 0.0.146 to 0.0.148 [#2058](https://github.com/cliqz-oss/adblocker/pull/2058) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chrome from 0.0.145 to 0.0.146 [#2037](https://github.com/cliqz-oss/adblocker/pull/2037) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.22.2 (Sun Jun 20 2021)
 
 #### :house: Internal
