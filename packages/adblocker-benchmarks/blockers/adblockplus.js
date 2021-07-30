@@ -31,16 +31,20 @@ const resourceTypes = new Map(
   }()),
 );
 
-module.exports = class AdBlockPlus {
+module.exports = class AdblockPlus {
   static parse(rawLists) {
+    // Clear internal cache
+    Filter.knownFilters.clear();
+
     const lines = rawLists.split(/\n/g);
 
     const filters = [];
     const matcher = new CombinedMatcher();
 
-    for (let i = 0; i < lines.length; i += 1) {
-      const line = lines[i].trim();
-      if (line.length !== 0 && line[0] !== '!') {
+    for (let line of lines) {
+      line = Filter.normalize(line);
+
+      if (line) {
         const filter = Filter.fromText(line);
         if (filter.type === 'blocking' || filter.type === 'allowing') {
           filters.push(filter);
@@ -49,7 +53,7 @@ module.exports = class AdBlockPlus {
       }
     }
 
-    return new AdBlockPlus(matcher, filters);
+    return new AdblockPlus(matcher, filters);
   }
 
   serialize() {
@@ -57,6 +61,9 @@ module.exports = class AdBlockPlus {
   }
 
   deserialize(serialized) {
+    // Clear internal cache
+    Filter.knownFilters.clear();
+
     const lines = JSON.parse(serialized);
     const filters = [];
     const matcher = new CombinedMatcher();
