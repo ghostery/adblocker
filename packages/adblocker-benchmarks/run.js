@@ -9,6 +9,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const { _N, _T, _S } = require('./string.js');
+
 const ENGINE = process.argv[process.argv.length - 2];
 const REQUESTS_PATH = process.argv[process.argv.length - 1];
 
@@ -40,7 +42,7 @@ const WEBREQUEST_OPTIONS = {
 };
 
 function min(arr) {
-  let acc = Number.MAX_VALUE;
+  let acc = Infinity;
   for (let i = 0; i < arr.length; i += 1) {
     acc = Math.min(acc, arr[i]);
   }
@@ -48,7 +50,7 @@ function min(arr) {
 }
 
 function max(arr) {
-  let acc = -1;
+  let acc = -Infinity;
   for (let i = 0; i < arr.length; i += 1) {
     acc = Math.max(acc, arr[i]);
   }
@@ -183,7 +185,7 @@ async function main() {
   let index = 0;
   for (const request of requests) {
     if (index !== 0 && index % 10000 === 0) {
-      console.log(`Processed ${index} requests`);
+      console.log(_N`Processed ${index} requests`);
     }
     index += 1;
 
@@ -215,36 +217,34 @@ async function main() {
 
   console.log();
   console.log(
-    `Avg serialization time (${serializationTimings.length} samples): ${avg(
-      serializationTimings,
-    )}`,
+    _N`Avg serialization time (${serializationTimings.length} samples): ` +
+    _T`${avg(serializationTimings)}`,
   );
   console.log(
-    `Avg deserialization time (${deserializationTimings.length} samples): ${avg(
-      deserializationTimings,
-    )}`,
+    _N`Avg deserialization time (${deserializationTimings.length} samples): ` +
+    _T`${avg(deserializationTimings)}`,
   );
-  console.log(`Serialized size: ${cacheSize}`);
-  console.log(`List parsing time: ${parsingTime}`);
+  console.log(_S`Serialized size: ${cacheSize}`);
+  console.log(_T`List parsing time: ${parsingTime}`);
   console.log();
-  console.log(`Total requests: ${all.length}`);
-  console.log(`Total match: ${matches.length}`);
-  console.log(`Total no match: ${noMatches.length}`);
+  console.log(_N`Total requests: ${all.length}`);
+  console.log(_N`Total match: ${matches.length}`);
+  console.log(_N`Total no match: ${noMatches.length}`);
   console.log();
-  console.log(`Number of samples: ${matches.length}`);
-  console.log(`Min match: ${min(matches)}`);
-  console.log(`Max match: ${max(matches)}`);
-  console.log(`Avg match: ${avg(matches)}`);
+  console.log(_N`Number of samples: ${matches.length}`);
+  console.log(_T`Min match: ${min(matches)}`);
+  console.log(_T`Max match: ${max(matches)}`);
+  console.log(_T`Avg match: ${avg(matches)}`);
   console.log();
-  console.log(`Number of samples: ${noMatches.length}`);
-  console.log(`Min no match: ${min(noMatches)}`);
-  console.log(`Max no match: ${max(noMatches)}`);
-  console.log(`Avg no match: ${avg(noMatches)}`);
+  console.log(_N`Number of samples: ${noMatches.length}`);
+  console.log(_T`Min no match: ${min(noMatches)}`);
+  console.log(_T`Max no match: ${max(noMatches)}`);
+  console.log(_T`Avg no match: ${avg(noMatches)}`);
   console.log();
-  console.log(`Number of samples: ${all.length}`);
-  console.log(`Min (total): ${min(all)}`);
-  console.log(`Max (total): ${max(all)}`);
-  console.log(`Avg (total): ${avg(all)}`);
+  console.log(_N`Number of samples: ${all.length}`);
+  console.log(_T`Min (total): ${min(all)}`);
+  console.log(_T`Max (total): ${max(all)}`);
+  console.log(_T`Avg (total): ${avg(all)}`);
 
   fs.writeFileSync(`./data/${ENGINE}_timings.json`, JSON.stringify(stats), { encoding: 'utf-8' });
 }
