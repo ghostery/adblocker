@@ -85,40 +85,40 @@ function loadLists() {
 async function main() {
   const rawLists = loadLists();
 
-  let Cls;
+  let moduleId;
   switch (ENGINE) {
     case 'adblockplus':
-      Cls = require('./blockers/adblockplus.js');
+      moduleId = './blockers/adblockplus.js';
       break;
     case 'brave':
-      Cls = require('./blockers/brave.js');
+      moduleId = './blockers/brave.js';
       break;
     case 'duckduckgo':
-      Cls = require('./blockers/duckduckgo.js');
+      moduleId = './blockers/duckduckgo.js';
       break;
     case 'cliqz':
-      Cls = require('./blockers/cliqz.js');
+      moduleId = './blockers/cliqz.js';
       break;
     case 'cliqzCompression':
-      Cls = require('./blockers/cliqz-compression.js');
+      moduleId = './blockers/cliqz-compression.js';
       break;
     case 're':
-      Cls = require('./blockers/re_baseline.js');
+      moduleId = './blockers/re_baseline.js';
       break;
     case 'tldts':
-      Cls = require('./blockers/tldts_baseline.js');
+      moduleId = './blockers/tldts_baseline.js';
       break;
     case 'ublock':
-      Cls = require('./blockers/ublock.js');
+      moduleId = './blockers/ublock.js';
       break;
     case 'url':
-      Cls = require('./blockers/url_baseline.js');
+      moduleId = './blockers/url_baseline.js';
       break;
     case 'adblockfast':
-      Cls = require('./blockers/adblockfast.js');
+      moduleId = './blockers/adblockfast.js';
       break;
     case 'min':
-      Cls = require('./blockers/minbrowser.js');
+      moduleId = './blockers/minbrowser.js';
       break;
     default:
       console.error(`Unknown blocker ${ENGINE}`);
@@ -126,14 +126,20 @@ async function main() {
   }
 
   // Initialize
+  let start = process.hrtime();
+  const Cls = require(moduleId);
+
   if (Cls.initialize) {
     await Cls.initialize();
   }
 
-  // Parse rules
-  let start = process.hrtime();
-  let engine = await Cls.parse(rawLists);
   let diff = process.hrtime(start);
+  const initializationTime = (diff[0] * 1000000000 + diff[1]) / 1000000;
+
+  // Parse rules
+  start = process.hrtime();
+  let engine = await Cls.parse(rawLists);
+  diff = process.hrtime(start);
   const parsingTime = (diff[0] * 1000000000 + diff[1]) / 1000000;
 
   // Bench serialization
@@ -226,6 +232,7 @@ async function main() {
   );
   console.log(_S`Serialized size: ${cacheSize}`);
   console.log(_T`List parsing time: ${parsingTime}`);
+  console.log(_T`Initialization time: ${initializationTime}`);
   console.log();
   console.log(_N`Total requests: ${all.length}`);
   console.log(_N`Total match: ${matches.length}`);
