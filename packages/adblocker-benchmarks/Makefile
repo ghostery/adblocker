@@ -9,8 +9,7 @@ requests.json:
 	git submodule update --recursive --depth 1 --init blockers/ublock
 
 ./node_modules/uBO-snfe:
-	cd ./blockers/ublock && ./tools/make-nodejs.sh
-	npm install --no-save ./blockers/ublock/dist/build/uBlock0.nodejs
+	make -C ./blockers/ublock install-nodejs clean
 
 ubo-snfe: ./blockers/ublock/.git ./node_modules/uBO-snfe
 
