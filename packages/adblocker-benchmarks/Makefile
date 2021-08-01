@@ -10,6 +10,7 @@ requests.json:
 
 ./node_modules/ubo-snfe:
 	make -C ./blockers/ublock install-nodejs clean
+	npx rollup ./node_modules/ubo-snfe/main.js --file ./node_modules/ubo-snfe/bundle.min.cjs --format cjs --context global --plugin terser
 
 ubo-snfe: ./blockers/ublock/.git ./node_modules/ubo-snfe
 

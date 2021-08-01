@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const modulePromise = import('ubo-snfe');
+const { FilteringContext, pslInit, restart } = require('ubo-snfe/bundle.min.cjs');
 
 class MockStorage {
   constructor(serialized) {
@@ -29,14 +29,10 @@ class MockStorage {
 
 module.exports = class UBlockOrigin {
   static async initialize() {
-    let { pslInit } = await modulePromise;
-
     pslInit();
   }
 
   static async parse(rawLists) {
-    let { FilteringContext, restart } = await modulePromise;
-
     return new UBlockOrigin(restart([ { name: 'easylist', raw: rawLists } ]),
                             new FilteringContext());
   }
