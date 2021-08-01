@@ -8,10 +8,10 @@ requests.json:
 ./blockers/ublock/.git:
 	git submodule update --recursive --depth 1 --init blockers/ublock
 
-./node_modules/uBO-snfe:
+./node_modules/ubo-snfe:
 	make -C ./blockers/ublock install-nodejs clean
 
-ubo-snfe: ./blockers/ublock/.git ./node_modules/uBO-snfe
+ubo-snfe: ./blockers/ublock/.git ./node_modules/ubo-snfe
 
 ./blockers/adblockpluscore/.git:
 	git submodule update --recursive --depth 1 --init blockers/adblockpluscore
@@ -57,5 +57,5 @@ run: deps url tldts cliqz ublock adblockplus brave adblockfast
 
 clean:
 	rm -f requests.json
-	npm uninstall uBO-snfe adblock-rs
+	npm uninstall ubo-snfe adblock-rs
 	git submodule deinit --all
