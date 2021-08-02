@@ -1,4 +1,4 @@
-.PHONY: all clean deps run ubo-snfe adblockpluscore adblock-rs brave cliqz cliqz-compression ublock adblockplus tldts url min
+.PHONY: all clean deps run ubo-core adblockpluscore adblock-rs brave cliqz cliqz-compression ublock adblockplus tldts url min
 
 all: deps run
 
@@ -8,11 +8,11 @@ requests.json:
 ./blockers/ublock/.git:
 	git submodule update --recursive --depth 1 --init blockers/ublock
 
-./node_modules/ubo-snfe:
+./node_modules/@gorhill/ubo-core:
 	make -C ./blockers/ublock install-nodejs clean
-	npx rollup ./node_modules/ubo-snfe/main.js --file ./node_modules/ubo-snfe/bundle.min.cjs --format cjs --context global --plugin terser
+	npx rollup ./node_modules/@gorhill/ubo-core/index.js --file ./node_modules/@gorhill/ubo-core/bundle.min.cjs --format cjs --context global --plugin terser
 
-ubo-snfe: ./blockers/ublock/.git ./node_modules/ubo-snfe
+ubo-core: ./blockers/ublock/.git ./node_modules/@gorhill/ubo-core
 
 ./blockers/adblockpluscore/.git:
 	git submodule update --recursive --depth 1 --init blockers/adblockpluscore
@@ -58,5 +58,5 @@ run: deps url tldts cliqz ublock adblockplus brave adblockfast
 
 clean:
 	rm -f requests.json
-	npm uninstall ubo-snfe adblock-rs
+	npm uninstall ubo-core adblock-rs
 	git submodule deinit --all

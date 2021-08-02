@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const { FilteringContext, pslInit, restart } = require('ubo-snfe/bundle.min.cjs');
+const { FilteringContext, pslInit, restart } = require('@gorhill/ubo-core/bundle.min.cjs');
 
 class MockStorage {
   constructor(serialized) {
