@@ -6,10 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const { contentTypes } = require('./adblockpluscore/lib/contentTypes.js');
-const { CombinedMatcher } = require('./adblockpluscore/lib/matcher.js');
-const { Filter } = require('./adblockpluscore/lib/filterClasses.js');
-const { parseURL } = require('./adblockpluscore/lib/url.js');
+const { contentTypes, CombinedMatcher, Filter, parseURL } = require('adblockpluscore/lib/bundle.min.cjs');
 
 // Chrome can't distinguish between OBJECT_SUBREQUEST and OBJECT requests.
 contentTypes.OBJECT_SUBREQUEST = contentTypes.OBJECT;
