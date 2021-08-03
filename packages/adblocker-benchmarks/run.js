@@ -11,8 +11,10 @@ const path = require('path');
 
 const { _N, _T, _S } = require('./string.js');
 
-const ENGINE = process.argv[process.argv.length - 2];
-const REQUESTS_PATH = process.argv[process.argv.length - 1];
+const requests = require('./requests.json');
+
+const ENGINE = process.argv[2];
+const FLAGS = process.argv.slice(3).filter(arg => arg.startsWith('--'));
 
 // Mute info-level output from uBlock Origin
 console.info = () => {};
@@ -82,6 +84,30 @@ function loadLists() {
   return fs.readFileSync(path.resolve(__dirname, './easylist.txt'), { encoding: 'utf-8' });
 }
 
+function wait(milliseconds) {
+  return new Promise(resolve => {
+    setTimeout(resolve, milliseconds);
+  });
+}
+
+async function memoryUsage(base = { heapUsed: 0, heapTotal: 0, }) {
+  if (!FLAGS.includes('--memory')) {
+    return ({ heapUsed: 0, heapTotal: 0, });
+  }
+
+  gc();
+
+  // Wait for 1 second for GC to run
+  await wait(1000);
+
+  let { heapUsed, heapTotal, } = process.memoryUsage();
+
+  heapUsed -= base.heapUsed;
+  heapTotal -= base.heapTotal;
+
+  return ({ heapUsed, heapTotal, });
+}
+
 async function main() {
   const rawLists = loadLists();
 
@@ -125,6 +151,8 @@ async function main() {
       process.exit(1);
   }
 
+  const baseMemory = await memoryUsage();
+
   // Initialize
   let start = process.hrtime();
   const Cls = require(moduleId);
@@ -136,11 +164,15 @@ async function main() {
   let diff = process.hrtime(start);
   const initializationTime = (diff[0] * 1000000000 + diff[1]) / 1000000;
 
+  const initializationMemory = await memoryUsage(baseMemory);
+
   // Parse rules
   start = process.hrtime();
   let engine = await Cls.parse(rawLists);
   diff = process.hrtime(start);
   const parsingTime = (diff[0] * 1000000000 + diff[1]) / 1000000;
+
+  const parsingMemory = await memoryUsage(baseMemory);
 
   // Bench serialization
   const serializationTimings = [];
@@ -187,7 +219,6 @@ async function main() {
     noMatches: [],
   };
 
-  const requests = fs.readFileSync(REQUESTS_PATH, 'utf8').split(/[\n\r]+/g).map(JSON.parse);
   let index = 0;
   for (const request of requests) {
     if (index !== 0 && index % 10000 === 0) {
@@ -219,8 +250,6 @@ async function main() {
   stats.noMatches.sort(cmp);
   stats.all = [...stats.matches, ...stats.noMatches].sort(cmp);
 
-  const { matches, noMatches, all } = stats;
-
   console.log();
   console.log(
     _N`Avg serialization time (${serializationTimings.length} samples): ` +
@@ -234,26 +263,50 @@ async function main() {
   console.log(_T`List parsing time: ${parsingTime}`);
   console.log(_T`Initialization time: ${initializationTime}`);
   console.log();
-  console.log(_N`Total requests: ${all.length}`);
-  console.log(_N`Total match: ${matches.length}`);
-  console.log(_N`Total no match: ${noMatches.length}`);
+  console.log(_N`Total requests: ${stats.all.length}`);
+  console.log(_N`Total match: ${stats.matches.length}`);
+  console.log(_N`Total no match: ${stats.noMatches.length}`);
   console.log();
-  console.log(_N`Number of samples: ${matches.length}`);
-  console.log(_T`Min match: ${min(matches)}`);
-  console.log(_T`Max match: ${max(matches)}`);
-  console.log(_T`Avg match: ${avg(matches)}`);
+  console.log(_N`Number of samples: ${stats.matches.length}`);
+  console.log(_T`Min match: ${min(stats.matches)}`);
+  console.log(_T`Max match: ${max(stats.matches)}`);
+  console.log(_T`Avg match: ${avg(stats.matches)}`);
   console.log();
-  console.log(_N`Number of samples: ${noMatches.length}`);
-  console.log(_T`Min no match: ${min(noMatches)}`);
-  console.log(_T`Max no match: ${max(noMatches)}`);
-  console.log(_T`Avg no match: ${avg(noMatches)}`);
+  console.log(_N`Number of samples: ${stats.noMatches.length}`);
+  console.log(_T`Min no match: ${min(stats.noMatches)}`);
+  console.log(_T`Max no match: ${max(stats.noMatches)}`);
+  console.log(_T`Avg no match: ${avg(stats.noMatches)}`);
   console.log();
-  console.log(_N`Number of samples: ${all.length}`);
-  console.log(_T`Min (total): ${min(all)}`);
-  console.log(_T`Max (total): ${max(all)}`);
-  console.log(_T`Avg (total): ${avg(all)}`);
+  console.log(_N`Number of samples: ${stats.all.length}`);
+  console.log(_T`Min (total): ${min(stats.all)}`);
+  console.log(_T`Max (total): ${max(stats.all)}`);
+  console.log(_T`Avg (total): ${avg(stats.all)}`);
+  console.log();
 
   fs.writeFileSync(`./data/${ENGINE}_timings.json`, JSON.stringify(stats), { encoding: 'utf-8' });
+
+  // [!] Important: Release references to objects so GC can free up the
+  //     associated memory.
+  stats.matches = [];
+  stats.noMatches = [];
+  stats.all = [];
+
+  const matchingMemory = await memoryUsage(baseMemory);
+
+  if (FLAGS.includes('--memory')) {
+    console.log('Memory on initialization');
+    console.log(_S`Heap used: ${initializationMemory.heapUsed}`);
+    console.log(_S`Heap total: ${initializationMemory.heapTotal}`);
+    console.log();
+    console.log(_N`Memory after parsing ${rawLists.split(/\n/g).length} lines`);
+    console.log(_S`Heap used: ${parsingMemory.heapUsed}`);
+    console.log(_S`Heap total: ${parsingMemory.heapTotal}`);
+    console.log();
+    console.log(_N`Memory after matching ${requests.length} requests`);
+    console.log(_S`Heap used: ${matchingMemory.heapUsed}`);
+    console.log(_S`Heap total: ${matchingMemory.heapTotal}`);
+    console.log();
+  }
 }
 
 main();

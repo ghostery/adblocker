@@ -1,9 +1,17 @@
+node_command := NODE_ENV=production node
+
+ifeq ($(SHOW_MEMORY), 1)
+	node_command := $(node_command) --expose-gc
+	run_options := $(run_options) --memory
+endif
+
 .PHONY: all clean deps run ubo-core adblockpluscore adblock-rs brave cliqz cliqz-compression ublock adblockplus tldts url min
 
 all: deps run
 
 requests.json:
-	curl https://cdn.cliqz.com/adblocking/requests_top500.json.gz | gunzip > requests.json
+	curl https://cdn.cliqz.com/adblocking/requests_top500.json.gz | gunzip \
+		| sed -e '$$ ! s/$$/,/; 1 s/^/\[/; $$ s/$$/]/' > requests.json
 
 ./blockers/ublock/.git:
 	git submodule update --recursive --depth 1 --init blockers/ublock
@@ -34,31 +42,31 @@ adblockpluscore: ./blockers/adblockpluscore/.git ./node_modules/adblockpluscore
 adblock-rs: ./node_modules/adblock-rs
 
 brave:
-	NODE_ENV=production node run.js brave requests.json
+	$(node_command) run.js brave $(run_options)
 
 cliqz:
-	NODE_ENV=production node run.js cliqz requests.json
+	$(node_command) run.js cliqz $(run_options)
 
 cliqz-compression:
-	NODE_ENV=production node run.js cliqzCompression requests.json
+	$(node_command) run.js cliqzCompression $(run_options)
 
 ublock:
-	NODE_ENV=production node run.js ublock requests.json
+	$(node_command) run.js ublock $(run_options)
 
 adblockplus:
-	NODE_ENV=production node run.js adblockplus requests.json
+	$(node_command) run.js adblockplus $(run_options)
 
 tldts:
-	NODE_ENV=production node run.js tldts requests.json
+	$(node_command) run.js tldts $(run_options)
 
 url:
-	NODE_ENV=production node run.js url requests.json
+	$(node_command) run.js url $(run_options)
 
 adblockfast:
-	NODE_ENV=production node run.js adblockfast requests.json
+	$(node_command) run.js adblockfast $(run_options)
 
 min:
-	NODE_ENV=production node run.js min requests.json
+	$(node_command) run.js min $(run_options)
 
 deps:
 	npm run prepare
