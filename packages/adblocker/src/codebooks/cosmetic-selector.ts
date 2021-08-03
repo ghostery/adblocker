@@ -7,6 +7,7 @@
  */
 /* tslint:disable quotemark */
 export default [
+  "div[style=\"position: fixed; display: block; width: 100%; height: 100%; inset: 0px; background-color: rgba(0, 0, 0, 0); z-index: 300000;\"]",
   "acis, document.querySelectorAll, popMagic",
   "acis, addEventListener, google_ad_client",
   "acis, String.fromCharCode, /btoa|break/",
@@ -17,7 +18,6 @@ export default [
   "acis, document.createElement, ",
   "aopr, document.dispatchEvent",
   "acis, String.fromCharCode, ",
-  "Date.prototype.toUTCString",
   "acis, Math, break;case $.",
   "nosiif, visibility, 1000",
   "document.onselectstart",
@@ -33,6 +33,7 @@ export default [
   "div[class^=\"",
   "nextFunction",
   "XMLHttpReque",
+  ".prototype.",
   "contextmenu",
   "otification",
   ", noopFunc",
@@ -40,7 +41,6 @@ export default [
   "AaDetector",
   "aopw, _pop",
   "background",
-  "compliance",
   "[href^=\"/",
   "affiliate",
   "container",
@@ -60,7 +60,6 @@ export default [
   "nowebrtc",
   "skyscrap",
   ".com/\"]",
-  "'shift'",
   "#ctl00_",
   "300x250",
   "article",
@@ -161,6 +160,7 @@ export default [
   "el",
   "en",
   "er",
+  "fi",
   "fo",
   "g-",
   "he",
