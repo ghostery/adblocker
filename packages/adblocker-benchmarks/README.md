@@ -49,6 +49,10 @@ extracting hostnames and domains from URLs).
 
 ## Running Benchmarks
 
+Install [Rust](https://www.rust-lang.org/tools/install) and [Node.js](https://nodejs.org/en/download/).
+
+Run `npm install` to install the dependencies.
+
 Run `make` to start benchmarking.
 
 ## Results Analysis
