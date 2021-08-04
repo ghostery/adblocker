@@ -146,6 +146,9 @@ async function main() {
     case 'min':
       moduleId = './blockers/minbrowser.js';
       break;
+    case 'tsurlfilter':
+      moduleId = './blockers/tsurlfilter.js';
+      break;
     default:
       console.error(`Unknown blocker ${ENGINE}`);
       process.exit(1);

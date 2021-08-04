@@ -5,7 +5,7 @@ ifeq ($(SHOW_MEMORY), 1)
 	run_options := $(run_options) --memory
 endif
 
-.PHONY: all clean deps run ubo-core adblockpluscore adblock-rs brave cliqz cliqz-compression ublock adblockplus tldts url min
+.PHONY: all clean deps run ubo-core adblockpluscore tsurlfilter-node adblock-rs brave cliqz cliqz-compression ublock adblockplus tsurlfilter tldts url min
 
 all: deps run
 
@@ -36,6 +36,14 @@ ubo-core: ./blockers/ublock/.git ./node_modules/@gorhill/ubo-core
 
 adblockpluscore: ./blockers/adblockpluscore/.git ./node_modules/adblockpluscore
 
+./node_modules/@adguard/tsurlfilter:
+	npm install --no-save @adguard/tsurlfilter
+	npx rollup ./node_modules/@adguard/tsurlfilter/dist/tsurlfilter.umd.js \
+		--file ./node_modules/@adguard/tsurlfilter/dist/bundle.min.cjs --format cjs \
+		--context global --plugin terser
+
+tsurlfilter-node: ./node_modules/@adguard/tsurlfilter
+
 ./node_modules/adblock-rs:
 	npm install --no-save adblock-rs
 
@@ -56,6 +64,9 @@ ublock:
 adblockplus:
 	$(node_command) run.js adblockplus $(run_options)
 
+tsurlfilter:
+	$(node_command) run.js tsurlfilter $(run_options)
+
 tldts:
 	$(node_command) run.js tldts $(run_options)
 
@@ -75,5 +86,5 @@ run: deps url tldts cliqz ublock adblockplus brave adblockfast
 
 clean:
 	rm -f requests.json
-	npm uninstall adblockpluscore ubo-core adblock-rs
+	npm uninstall tsurlfilter adblockpluscore ubo-core adblock-rs
 	git submodule deinit --all
