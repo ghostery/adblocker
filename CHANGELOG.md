@@ -1,3 +1,50 @@
+# v1.22.4 (Wed Aug 04 2021)
+
+#### :bug: Bug Fix
+
+- Integrate @adguard/tsurlfilter [#2109](https://github.com/cliqz-oss/adblocker/pull/2109) ([@mjethani](https://github.com/mjethani))
+
+#### :house: Internal
+
+- Update README.md with requirements [#2110](https://github.com/cliqz-oss/adblocker/pull/2110) ([@mjethani](https://github.com/mjethani))
+- Show memory usage [#2103](https://github.com/cliqz-oss/adblocker/pull/2103) ([@mjethani](https://github.com/mjethani))
+- Use bundle.min.cjs for adblockplus [#2101](https://github.com/cliqz-oss/adblocker/pull/2101) ([@mjethani](https://github.com/mjethani))
+- Switch to new @gorhill/ubo-core package [#2100](https://github.com/cliqz-oss/adblocker/pull/2100) ([@mjethani](https://github.com/mjethani))
+- Use ubo-snfe/bundle.min.cjs [#2095](https://github.com/cliqz-oss/adblocker/pull/2095) ([@mjethani](https://github.com/mjethani))
+- Use minified version of Cliqz [#2093](https://github.com/cliqz-oss/adblocker/pull/2093) ([@mjethani](https://github.com/mjethani))
+- Use lowercase name ubo-snfe [#2092](https://github.com/cliqz-oss/adblocker/pull/2092) ([@mjethani](https://github.com/mjethani))
+- Show initialization time [#2091](https://github.com/cliqz-oss/adblocker/pull/2091) ([@mjethani](https://github.com/mjethani))
+- Show human-friendly output [#2087](https://github.com/cliqz-oss/adblocker/pull/2087) ([@mjethani](https://github.com/mjethani))
+- Use ublock make targets [#2089](https://github.com/cliqz-oss/adblocker/pull/2089) ([@mjethani](https://github.com/mjethani))
+- Update adblockplus.js for more accuracy [#2086](https://github.com/cliqz-oss/adblocker/pull/2086) ([@mjethani](https://github.com/mjethani))
+- `@cliqz/adblocker`
+  - Update local assets [#2102](https://github.com/cliqz-oss/adblocker/pull/2102) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#2094](https://github.com/cliqz-oss/adblocker/pull/2094) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#2088](https://github.com/cliqz-oss/adblocker/pull/2088) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#2082](https://github.com/cliqz-oss/adblocker/pull/2082) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump tar from 4.4.13 to 4.4.15 [#2105](https://github.com/cliqz-oss/adblocker/pull/2105) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump electron from 13.1.7 to 13.1.8 [#2106](https://github.com/cliqz-oss/adblocker/pull/2106) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump jsdom from 16.6.0 to 16.7.0 [#2097](https://github.com/cliqz-oss/adblocker/pull/2097) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump chalk from 4.1.1 to 4.1.2 [#2098](https://github.com/cliqz-oss/adblocker/pull/2098) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump playwright from 1.13.0 to 1.13.1 [#2084](https://github.com/cliqz-oss/adblocker/pull/2084) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump rollup from 2.55.0 to 2.55.1 [#2085](https://github.com/cliqz-oss/adblocker/pull/2085) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker`
+  - Bump @types/chrome from 0.0.149 to 0.0.153 [#2107](https://github.com/cliqz-oss/adblocker/pull/2107) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-electron-preload`
+  - Bump @rollup/plugin-commonjs from 19.0.2 to 20.0.0 [#2099](https://github.com/cliqz-oss/adblocker/pull/2099) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Manish Jethani ([@mjethani](https://github.com/mjethani))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.22.3 (Thu Jul 29 2021)
 
 #### :bug: Bug Fix
