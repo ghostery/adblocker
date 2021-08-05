@@ -80,25 +80,9 @@ function isSupportedUrl(url) {
   );
 }
 
-function looksLikeHostFilter(raw) {
-  // https://en.wikipedia.org/wiki/Hostname#Syntax
-  // The colon is included for the port number. e.g. ||localhost:8080^ could
-  // also be a host filter. The brackets are included for IPv6 addresses.
-  // e.g. ||[::1]^ could be a host filter. This also covers filters like
-  // ||localhost/ and ||localhost:
-  return /^(@@)?\|\|[a-z0-9.:[\]-]+[/:^]$/i.test(raw);
-}
-
 function loadLists() {
-  return fs.readFileSync(path.resolve(__dirname, './easylist.txt'), { encoding: 'utf-8' });
-}
-
-function filterLists(rawLists) {
-  if (FLAGS.includes('--hosts-only')) {
-    rawLists = rawLists.split(/\n/g).filter(looksLikeHostFilter).join('\n');
-  }
-
-  return rawLists;
+  const file = FLAGS.includes('--hosts-only') ? 'hosts.txt' : 'easylist.txt';
+  return fs.readFileSync(path.resolve(__dirname, file), { encoding: 'utf-8' });
 }
 
 function wait(milliseconds) {
@@ -126,7 +110,7 @@ async function memoryUsage(base = { heapUsed: 0, heapTotal: 0, }) {
 }
 
 async function main() {
-  const rawLists = filterLists(loadLists());
+  const rawLists = loadLists();
 
   let moduleId;
   switch (ENGINE) {
