@@ -28,8 +28,10 @@ class MockStorage {
 }
 
 module.exports = class UBlockOrigin {
-  static async initialize() {
-    pslInit();
+  static async initialize({ hostsOnly = false } = {}) {
+    if (!hostsOnly) {
+      pslInit();
+    }
   }
 
   static async parse(rawLists) {
