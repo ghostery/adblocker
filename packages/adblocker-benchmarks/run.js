@@ -16,6 +16,8 @@ const requests = require('./requests.json');
 const ENGINE = process.argv[2];
 const FLAGS = process.argv.slice(3).filter(arg => arg.startsWith('--'));
 
+const HOSTS_ONLY = FLAGS.includes('--hosts-only');
+
 // Mute info-level output from uBlock Origin
 console.info = () => {};
 
@@ -81,8 +83,8 @@ function isSupportedUrl(url) {
 }
 
 function loadLists() {
-  const file = FLAGS.includes('--hosts-only') ? 'hosts.txt' : 'easylist.txt';
-  return fs.readFileSync(path.resolve(__dirname, file), { encoding: 'utf-8' });
+  const filename = HOSTS_ONLY ? 'hosts.txt' : 'easylist.txt';
+  return fs.readFileSync(path.resolve(__dirname, filename), { encoding: 'utf-8' });
 }
 
 function wait(milliseconds) {
@@ -162,7 +164,7 @@ async function main() {
   const Cls = require(moduleId);
 
   if (Cls.initialize) {
-    await Cls.initialize();
+    await Cls.initialize({ hostsOnly: HOSTS_ONLY });
   }
 
   let diff = process.hrtime(start);
