@@ -7,13 +7,12 @@
  */
 /* tslint:disable quotemark */
 export default [
-  "quantcast.mgr.consensu.org",
   "securepubads.g.doubleclick",
   "googlesyndication",
   "imasdk.googleapis",
   "googletagmanager",
+  ".cloudfront.net",
   ".hb-api.omtrdc",
-  "cloudfront.net",
   ".actonservice",
   "doubleclick",
   ".hb.omtrdc",
@@ -24,7 +23,6 @@ export default [
   "metrics.",
   "traffic",
   ".co.uk",
-  "affili",
   "google",
   "phncdn",
   "stats.",
@@ -47,6 +45,7 @@ export default [
   "pro",
   "web",
   ".b",
+  ".c",
   ".f",
   ".h",
   ".k",
@@ -122,6 +121,7 @@ export default [
   "fa",
   "fe",
   "ff",
+  "fi",
   "fl",
   "fo",
   "fr",
