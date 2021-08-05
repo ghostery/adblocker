@@ -81,7 +81,8 @@ function isSupportedUrl(url) {
 }
 
 function loadLists() {
-  return fs.readFileSync(path.resolve(__dirname, './easylist.txt'), { encoding: 'utf-8' });
+  const file = FLAGS.includes('--hosts-only') ? 'hosts.txt' : 'easylist.txt';
+  return fs.readFileSync(path.resolve(__dirname, file), { encoding: 'utf-8' });
 }
 
 function wait(milliseconds) {

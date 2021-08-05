@@ -5,6 +5,10 @@ ifeq ($(SHOW_MEMORY), 1)
 	run_options := $(run_options) --memory
 endif
 
+ifeq ($(HOSTS_ONLY), 1)
+	run_options := $(run_options) --hosts-only
+endif
+
 .PHONY: all clean deps run ubo-core adblockpluscore tsurlfilter-node adblock-rs brave cliqz cliqz-compression ublock adblockplus tsurlfilter tldts url min
 
 all: deps run
