@@ -8,11 +8,7 @@
 
 const { FastHostsLookup } = require('fast-hosts-lookup');
 
-const HOSTNAME_RE = /^[^:]+:(?:\/\/(?:[^\/]*@)?(\[[^\]]*\]|[^:\/]+))?/;
-function extractHostname(url) {
-  const [, hostname] = HOSTNAME_RE.exec(url) || [, ''];
-  return hostname;
-}
+const { extractHostname } = require('./utils.js');
 
 // This is an implementation of the most basic hosts-based blocking.
 module.exports = class HostsLookup {
