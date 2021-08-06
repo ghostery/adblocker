@@ -1,7 +1,7 @@
 [Adblock Plus 2.0]
-! Version: 202108051943
+! Version: 202108061320
 ! Title: EasyList
-! Last modified: 05 Aug 2021 19:43 UTC
+! Last modified: 06 Aug 2021 13:20 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -621,6 +621,8 @@
 .com/adlib/
 .com/adlib_
 .com/adpicture
+! [badfilter] from ublock-origin/filters-2020.txt
+! .com/ads-
 .com/ads.$~script,~xmlhttprequest
 .com/ads/$image,object,subdocument,domain=~developers.google.com|~sabotage-films.com
 .com/ads?
@@ -21675,6 +21677,7 @@ _popunder+$popup
 ##.ads__header
 ##.ads__horizontal
 ##.ads__hyperleaderboard--hyperleaderboard
+##.ads__inline
 ##.ads__interstitial
 ##.ads__leaderboard--footer
 ##.ads__leaderboard--header
@@ -21685,6 +21688,9 @@ _popunder+$popup
 ##.ads__listing--small_center
 ##.ads__listing--small_left
 ##.ads__listing--small_right
+##.ads__midpage-fullwidth
+##.ads__native
+##.ads__right-rail-ad
 ##.ads__sidebar
 ##.ads__sidebar--home_column
 ##.ads__sidebar--sidebar_first
@@ -23319,6 +23325,7 @@ _popunder+$popup
 ##.article-google-adsense
 ##.article-grid__item--advert
 ##.article-header-ad
+##.article-header__railAd
 ##.article-inline-ad
 ##.article-mid-ad
 ##.article-news-videoad
@@ -31841,6 +31848,7 @@ _popunder+$popup
 ##.taboola-item
 ##.taboola-left-rail-wrapper
 ##.taboola-partnerlinks-ad
+##.taboola-placeholder
 ##.taboola-placement
 ##.taboola-single-asset-ads
 ##.taboola-unit
@@ -34507,6 +34515,7 @@ menstennisforums.com#@#.top_ads
 ||bystfied.pro^
 ||byvngx98ssphwzkrrtsjhnbyz5zss81dxygxvlqd05.com^
 ||byvuleci.pro^
+||bzrmxfxu.com^
 ||c02o3mpych.com^
 ||c0594.com^
 ||c0c.xyz^
@@ -49470,6 +49479,7 @@ menstennisforums.com#@#.top_ads
 ||libedgolart.com^$popup
 ||lofv.xyz^$popup
 ||loltrk.com^$popup,third-party
+||lowtyroguer.com^$popup
 ||misspkl.com^$popup
 ||moradu.com^$popup
 ||mptentry.com^$popup
@@ -51489,6 +51499,7 @@ menstennisforums.com#@#.top_ads
 ||scoot.co.uk/delivery.php
 ||sdancelive.com/images/banners/
 ||sedo.cachefly.net^$domain=~sedoparking.com
+||seeklogo.com/img/partners/
 ||sermonaudio.com/images/sponsors/
 ||services.fandom.com/knowledge-graph/affiliates/$xmlhttprequest
 ||sgtreport.com/wp-content/uploads/*Banner
@@ -51587,6 +51598,7 @@ menstennisforums.com#@#.top_ads
 ||wheregoes.com/*/img/banners/
 ||whoismyisp.org/img/vpn/
 ||whoownsfacebook.com/images/topbanner.gif
+||whtop.com/photos2.
 ||wikihow.com/x/zscsucgm?
 ||windowsreport.com/rwIvq95hjpZa.js
 ||wlcr.org/banners/
@@ -51621,9 +51633,9 @@ menstennisforums.com#@#.top_ads
 ||overbuff.com/a.js
 ||speedrun.com/a.js
 ||tethered-realms.valorbuff.com^
-!
-/^https?:\/\/.*techpowerup\.com\/(?!.*images|img|gallery|review|forums)\/.*/$image,domain=techpowerup.com
-/^https?:\/\/.*tpucdn\.com\/(?!.*images|img|gallery|review|forums)\/.*/$image,domain=techpowerup.com
+! Techpowerup
+/^https?:\/\/.*techpowerup\.com\/(?!.*images\/|img\/|review\/|forums\/).*/$image,domain=techpowerup.com
+/^https?:\/\/.*tpucdn\.com\/(?!.*images\/|img\/|review\/|forums\/).*/$image,domain=techpowerup.com
 ! prebid specific
 ||bustle.com^*/prebid-
 ||dw.com/js/advertisement/
@@ -51805,7 +51817,7 @@ javascript:$popup,domain=pirateproxy.live|thehiddenbay.com|thepiratebay.org
 /^https?:\/\/(.+?\.)?writerscafe\.org\/[a-zA-Z]{7,18}\//
 /^https?:\/\/www\.newser\.com\/[a-zA-Z]{4,9}\/.*js/
 ! webrtc-ads
-$webrtc,domain=101greatgoals.com|ack.net|allkpop.com|allthetests.com|anime-loads.org|audioholics.com|azvideo.net|barnstablepatriot.com|boards2go.com|bolde.com|businessnewsdaily.com|buzzfil.net|cantonrep.com|capecodtimes.com|champion.gg|cheeseheadtv.com|clicknupload.link|colourlovers.com|columbiatribune.com|convertcase.net|csgolounge.com|ddlvalley.me|dispatch.com|dota2lounge.com|enterprisenews.com|eztv.io|eztv.tf|eztv.yt|fastplay.to|go4up.com|gounlimited.to|goupstate.com|heraldtribune.com|janjua.pw|janjua.tv|jpost.com|kinos.to|kinox.ai|kinox.am|kinox.cloud|kinox.club|kinox.digital|kinox.direct|kinox.express|kinox.fun|kinox.fyi|kinox.gratis|kinox.io|kinox.lol|kinox.mobi|kinox.nu|kinox.party|kinox.pub|kinox.sg|kinox.sh|kinox.si|kinox.space|kinox.sx|kinox.to|kinox.tube|kinox.wtf|laptopmag.com|mac-torrents.com|madamenoire.com|megaup.net|merriam-webster.com|netdna-storage.com|ouo.io|ouo.press|skidrowreloaded.com|sourceforge.net|space.com|spanishdict.com|telegram.com|teslacentral.com|topix.com|torlock.icu|torlock2.com|torrentdownload.info|uptobox.com|uticaod.com|videowood.tv|vidtodo.com|yts.gs|yts.mx
+$webrtc,domain=101greatgoals.com|ack.net|allkpop.com|allthetests.com|anime-loads.org|audioholics.com|azvideo.net|barnstablepatriot.com|boards2go.com|bolde.com|businessnewsdaily.com|buzzfil.net|cantonrep.com|capecodtimes.com|champion.gg|cheeseheadtv.com|clicknupload.link|colourlovers.com|columbiatribune.com|convertcase.net|csgolounge.com|ddlvalley.me|dispatch.com|dota2lounge.com|enterprisenews.com|eztv.io|eztv.tf|eztv.yt|fastplay.to|go4up.com|gounlimited.to|goupstate.com|heraldtribune.com|janjua.pw|janjua.tv|jpost.com|kinos.to|kinox.ai|kinox.am|kinox.cloud|kinox.club|kinox.digital|kinox.direct|kinox.express|kinox.fun|kinox.fyi|kinox.gratis|kinox.io|kinox.lol|kinox.mobi|kinox.nu|kinox.party|kinox.pub|kinox.sg|kinox.sh|kinox.si|kinox.space|kinox.sx|kinox.to|kinox.tube|kinox.wtf|laptopmag.com|mac-torrents.com|madamenoire.com|megaup.net|merriam-webster.com|netdna-storage.com|ouo.io|ouo.press|rlslog.net|skidrowreloaded.com|sourceforge.net|space.com|spanishdict.com|telegram.com|teslacentral.com|topix.com|torlock.icu|torlock2.com|torrentdownload.info|uptobox.com|uticaod.com|videowood.tv|vidtodo.com|yts.gs|yts.mx
 ! websocket-ads
 $websocket,domain=4archive.org|allthetests.com|boards2go.com|colourlovers.com|convertcase.net|fastpic.ru|fileone.tv|filmlinks4u.is|flashx.tv|fmovies.taxi|fmovies.world|gofirstrow.eu|imagefap.com|keepvid.com|megaup.net|merriam-webster.com|olympicstreams.me|pocketnow.com|pornhub.com|pornhubthbh7ap3u.onion|postimg.org|powvideo.net|roadracerunner.com|shorte.st|tribune.com.pk|tune.pk|uberhavoc.com|vcpost.com|vidmax.com|vidoza.net|vidtodo.com|webfirstrow.eu
 !
@@ -52292,6 +52304,7 @@ infoplease.com###block-ipabovethefold
 infoplease.com###block-ipbtfad
 infoplease.com###block-ipleaderboardad
 enca.com###block-views-block-sponsored-block-1
+ana-white.com###block-views-block-sponsors-block-1
 mbauniverse.com###block-views-home-page-banner-block
 picfont.com###block_a
 publish0x.com###bm-block
@@ -52569,6 +52582,7 @@ my.juno.com###newsCarousel
 livelaw.in###news_on_exit
 searchfiles.de###nextuse
 seroundtable.com###ninja_box
+pcgamesn.com###nn_bfa_wrapper
 techraptor.net###nn_lb1
 techraptor.net###nn_lb2
 techraptor.net###nn_lb3
@@ -52576,6 +52590,7 @@ techraptor.net###nn_lb4
 forums.somethingawful.com###notregistered
 onlinemschool.com###oms_left
 powvideo.net,streamplay.to###overlay
+seeklogo.com###panelAdShutterStockPromo
 hwbot.org###partner-tiles
 hbr.org###partnerCenter
 fastseduction.com,independent.co.uk###partners
@@ -53015,6 +53030,7 @@ allscrabblewords.com,mpog100.com##.ad3
 khaama.com##.ad8
 cvs.com,digitalartsonline.co.uk,economictimes.com,emarketer.com,flightradar24.com,globaltv.com,glosbe.com,hgtv.ca,newspakistan.pk,petagadget.com,yakimaherald.com##.adContainer
 interestingengineering.com##.adW
+auto-data.net##.ad_incar
 tellymix.co.uk##.adb_top
 wordfind.com##.adbl
 dataversity.net,sakshi.com,songlyrics.com##.adblock
@@ -53035,6 +53051,7 @@ edutourism.in##.add1
 muslimobserver.com##.add2
 projectorcentral.com##.addDiv2
 projectorcentral.com##.addDiv3
+auto-data.net##.adin
 animalfactguide.com,portlandmonthlymag.com,sportsmediawatch.com##.adlabel
 ebookbrowse.com##.adleft
 corona.help##.adlg
@@ -53896,6 +53913,7 @@ islamicfinder.org##.mobile-cards
 pcmacstore.com##.mobileHide
 thedailybeast.com##.mobiledoc-sizer
 livelaw.in##.modal_wrapper_frame
+autoevolution.com##.modeladmid
 webmd.com##.module-f-hs
 pcworld.idg.com.au##.module-rhs-brandpost
 thisismoney.co.uk##.mol-fe-vouchercodes-puff
@@ -54010,6 +54028,7 @@ advfn.com##.plus500
 freewebarcade.com##.pnum
 pedestrian.tv##.popular-jobs-widget
 wtop.com##.post--sponsored
+hackread.com##.post-review-li
 fastcompany.com##.post__promotion
 thetowner.com##.powered
 theportugalnews.com##.ppp-banner
@@ -55782,6 +55801,7 @@ youporn.com#?#aside:-abp-has(a.ad-remove)
 @@||googletagservices.com/tag/js/gpt.js$domain=epaper.timesgroup.com|k2radio.com|koel.com|kowb1290.com|nbcsports.com|uefa.com|vimeo.com|windalert.com
 @@||gpt-worldwide.com/js/gpt.js$~third-party
 @@||guim.co.uk/uploader/$image,~third-party
+@@||hackread.com/wp-content/uploads/$image,~third-party
 @@||hotstar.com/vs/getad.php$domain=hotstar.com
 @@||hp.com/in/*/ads/$script,stylesheet,~third-party
 @@||hulu.com/published/*.flv
@@ -56089,6 +56109,7 @@ youporn.com#?#aside:-abp-has(a.ad-remove)
 @@||googletagservices.com/tag/js/gpt.js$domain=farfeshplus.com|gentside.com|pccomponentes.com|tv-asahi.co.jp|vlive.tv|vogue.de|voici.fr
 @@||gunosy.co.jp/img/ad/$image,~third-party
 @@||hatenacorp.jp/_next/static/chunks/pages/ads-$script,~third-party
+@@||hinagiku-u.ed.jp/wp54/wp-content/themes/hinagiku/images/$image,~third-party
 @@||iejima.org/ad-banner/$image,~third-party
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=bloomberg.co.jp|farfeshplus.com|filmweb.pl|gamepix.com|klix.ba|locipo.jp|maharashtratimes.com|minigame.aeriagames.jp|nettavisen.no|niusdiario.es|rtlnieuws.nl|sportsport.ba|success-games.net|synk-casualgames.com|tbs.co.jp|tv-asahi.co.jp|tv.rakuten.co.jp|tver.jp|video.tv-tokyo.co.jp|vlive.tv|webdunia.com|wtk.pl
 @@||ingrossoprofumitester.it/img/ad-profumeria-$image,~third-party
@@ -56624,6 +56645,7 @@ youporn.com#?#aside:-abp-has(a.ad-remove)
 @@||pornhub.com/users/$xmlhttprequest
 @@||pornhub.com/video/$xmlhttprequest
 @@||pornhub.com/video_selector/$script,xmlhttprequest
+@@||pornhub.com/videocertify/paging$script,~third-party,xmlhttprequest
 @@||pornhub.com/videos/$media,other
 @@||pornhub.com/videouploading3/$xmlhttprequest
 @@||pornhub.com/www-static/flash/gate.swf$other
