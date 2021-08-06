@@ -89,10 +89,18 @@ function loadLists() {
   // We still use old versions of EasyList and EasyPrivacy whereas current
   // versions no longer use $object-subrequest
   // https://gitlab.com/eyeo/adblockplus/abc/adblockpluscore/-/issues/6
-  content = content.replace(/(?!$.*)\bobject-subrequest\b/g, 'object');
+  content = content.replace(/(?!$.*)\bobject-subrequest\b/gm, 'object');
 
+  // Cliqz considers a filter like /foo^$domain=|example.com to be invalid.
   // https://github.com/cliqz-oss/adblocker/discussions/2114#discussioncomment-1133958
-  content = content.replace(/(?!$.*)\bdomain=\|/g, 'domain=');
+  content = content.replace(/(?!$.*)\bdomain=\|/gm, 'domain=');
+
+  // Remove filters with regular expression patterns containing lookahead and
+  // lookbehind assertions.
+  // https://github.com/cliqz-oss/adblocker/discussions/2114#discussioncomment-1135161
+  //
+  // Note: The regular expression below is not right, but it does the job.
+  content = content.replace(/^(@@)?\/.*\(\?.*/gm, '');
 
   return content;
 }
