@@ -8,9 +8,6 @@
 
 const { contentTypes, CombinedMatcher, Filter, parseURL } = require('adblockpluscore/lib/bundle.min.cjs');
 
-// Chrome can't distinguish between OBJECT_SUBREQUEST and OBJECT requests.
-contentTypes.OBJECT_SUBREQUEST = contentTypes.OBJECT;
-
 // Map of content types reported by the browser to the respecitve content types
 // used by Adblock Plus. Other content types are simply mapped to OTHER.
 const resourceTypes = new Map(

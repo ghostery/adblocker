@@ -84,7 +84,17 @@ function isSupportedUrl(url) {
 
 function loadLists() {
   const filename = HOSTS_ONLY ? 'hosts.txt' : 'easylist.txt';
-  return fs.readFileSync(path.resolve(__dirname, filename), { encoding: 'utf-8' });
+  let content = fs.readFileSync(path.resolve(__dirname, filename), { encoding: 'utf-8' });
+
+  // We still use old versions of EasyList and EasyPrivacy whereas current
+  // versions no longer use $object-subrequest
+  // https://gitlab.com/eyeo/adblockplus/abc/adblockpluscore/-/issues/6
+  content = content.replace(/(?!$.*)\bobject-subrequest\b/g, 'object');
+
+  // https://github.com/cliqz-oss/adblocker/discussions/2114#discussioncomment-1133958
+  content = content.replace(/(?!$.*)\bdomain=\|/g, 'domain=');
+
+  return content;
 }
 
 function wait(milliseconds) {
