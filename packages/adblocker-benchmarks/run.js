@@ -149,6 +149,9 @@ async function main() {
     case 'min':
       moduleId = './blockers/minbrowser.js';
       break;
+    case 'hosts-lookup':
+      moduleId = './blockers/hosts-lookup.js';
+      break;
     case 'tsurlfilter':
       moduleId = './blockers/tsurlfilter.js';
       break;
