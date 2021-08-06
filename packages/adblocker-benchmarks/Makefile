@@ -9,7 +9,7 @@ ifeq ($(HOSTS_ONLY), 1)
 	run_options := $(run_options) --hosts-only
 endif
 
-.PHONY: all clean deps run ubo-core adblockpluscore tsurlfilter-node adblock-rs brave cliqz cliqz-compression ublock adblockplus tsurlfilter tldts url min hosts-lookup
+.PHONY: all clean deps run ubo-core adblockpluscore tsurlfilter-node adblock-rs brave cliqz cliqz-compression ublock adblockplus tsurlfilter tldts url min re hosts-lookup
 
 all: deps run
 
@@ -82,6 +82,9 @@ adblockfast:
 
 min:
 	$(node_command) run.js min $(run_options)
+
+re:
+	$(node_command) run.js re $(run_options)
 
 hosts-lookup:
 	$(node_command) run.js hosts-lookup $(run_options)
