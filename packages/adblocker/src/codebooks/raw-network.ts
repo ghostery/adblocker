@@ -7,6 +7,7 @@
  */
 /* tslint:disable quotemark */
 export default [
+  "\\/[a-zA-Z0-9]{3,7}\\/[a-zA-Z0-9",
   "||imasdk.googleapis.com/js/sdk",
   ",redirect-rule=noopjs,domain=",
   "*$xhr,redirect-rule=nooptext,",
@@ -60,7 +61,6 @@ export default [
   "media",
   "track",
   "video",
-  ".au^",
   ".com",
   ".fr^",
   ".gif",
