@@ -29,10 +29,6 @@
 !   this is just disguised tracking
 ||taboola.com^$3p
 
-! Spotted on <https://venturebeat.com/>: no www site, and no resource returned.
-! Belong to Amazon.com. The GET request is full of tracker-looking data.
-||silkenthreadiness.info^
-
 ! https://news.ycombinator.com/item?id=10662793
 ! Each client site has a specific id: this means the following information
 ! becomes available to adblockanalytics.com:
@@ -284,3 +280,8 @@ search.brave.com##+js(no-fetch-if, body:cohort)
 
 ! https://github.com/easylist/easylist/commit/6457d9a221b19bf6d011d314d0bf14476d18f428#commitcomment-54257940
 /p13n/batch/action/*$image
+
+! https://github.com/uBlockOrigin/uAssets/issues/9717
+ppss.kr##+js(aeld, DOMContentLoaded)
+ppss.kr##[href*="https://www.classo.me"]:remove()
+ppss.kr##.ppss-title-banner:remove()
