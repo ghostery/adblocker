@@ -17,16 +17,13 @@ requests.json:
 	curl https://cdn.cliqz.com/adblocking/requests_top500.json.gz | gunzip \
 		| sed -e '$$ ! s/$$/,/; 1 s/^/\[/; $$ s/$$/]/' > requests.json
 
-./blockers/ublock/.git:
-	git submodule update --recursive --depth 1 --init blockers/ublock
-
 ./node_modules/@gorhill/ubo-core:
-	make -C ./blockers/ublock install-nodejs clean
+	npm install --no-save @gorhill/ubo-core
 	npx rollup ./node_modules/@gorhill/ubo-core/index.js \
 		--file ./node_modules/@gorhill/ubo-core/bundle.min.cjs --format cjs \
 		--context global --plugin terser
 
-ubo-core: ./blockers/ublock/.git ./node_modules/@gorhill/ubo-core
+ubo-core: ./node_modules/@gorhill/ubo-core
 
 ./node_modules/adblockpluscore:
 	cp -R ./blockers/adblockpluscore ./node_modules

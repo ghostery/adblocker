@@ -6,60 +6,29 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const { FilteringContext, pslInit, restart } = require('@gorhill/ubo-core/bundle.min.cjs');
+const { StaticNetFilteringEngine } = require('@gorhill/ubo-core/bundle.min.cjs');
 
-class MockStorage {
-  constructor(serialized) {
-    this.map = new Map(serialized);
-  }
-
-  async put(assetKey, content) {
-    this.map.set(assetKey, content);
-    return ({ assetKey, content });
-  }
-
-  async get(assetKey) {
-    return ({ assetKey, content: this.map.get(assetKey) });
-  }
-
-  *[Symbol.iterator]() {
-    yield* this.map;
-  }
-}
+let engine = null;
 
 module.exports = class UBlockOrigin {
   static async initialize({ hostsOnly = false } = {}) {
-    if (!hostsOnly) {
-      pslInit();
-    }
+    engine = await StaticNetFilteringEngine.create({ noPSL: hostsOnly });
   }
 
   static async parse(rawLists) {
-    return new UBlockOrigin(restart([ { name: 'easylist', raw: rawLists } ]),
-                            new FilteringContext());
-  }
-
-  constructor(engine, context) {
-    this.engine = engine;
-    this.context = context;
+    await engine.useLists([ { name: 'easylist', raw: rawLists } ]);
+    return new UBlockOrigin();
   }
 
   async serialize() {
-    let storage = new MockStorage();
-    await this.engine.toSelfie(storage, 'path');
-    return JSON.stringify([...storage]);
+    return engine.serialize();
   }
 
   async deserialize(serialized) {
-    let storage = new MockStorage(JSON.parse(serialized));
-    await this.engine.fromSelfie(storage, 'path');
+    await engine.deserialize(serialized);
   }
 
   match({ url, frameUrl, type }) {
-    this.context.setDocOriginFromURL(frameUrl);
-    this.context.setURL(url);
-    this.context.setType(type);
-
-    return this.engine.matchRequest(this.context) === 1;
+    return engine.matchRequest({ url, originURL: frameUrl, type }) === 1;
   }
 };
