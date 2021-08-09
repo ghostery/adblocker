@@ -7,6 +7,7 @@
  */
 
 const {
+  DnsEngine,
   Engine,
   Request,
   RequestType,
@@ -14,6 +15,8 @@ const {
   StringRuleList,
   setConfiguration,
 } = require('@adguard/tsurlfilter/dist/bundle.min.cjs');
+
+const { extractHostname } = require('./utils.js');
 
 const requestTypes = new Map([
   [ 'sub_frame', RequestType.Subdocument ],
@@ -27,7 +30,11 @@ const requestTypes = new Map([
 ]);
 
 module.exports = class TSUrlFilter {
-  static async initialize() {
+  static hostsOnly = false;
+
+  static async initialize({ hostsOnly }) {
+    TSUrlFilter.hostsOnly = hostsOnly;
+
     setConfiguration({
       engine: 'extension',
       version: '1.0.0',
@@ -39,7 +46,10 @@ module.exports = class TSUrlFilter {
     // The first argument is the list ID and must be unique
     const list = new StringRuleList(1, rawLists);
     const ruleStorage = new RuleStorage([ list ]);
-    return new TSUrlFilter(new Engine(ruleStorage));
+    const engine = TSUrlFilter.hostsOnly ?
+                     new DnsEngine(ruleStorage) :
+                     new Engine(ruleStorage);
+    return new TSUrlFilter(engine);
   }
 
   constructor(engine) {
@@ -47,10 +57,22 @@ module.exports = class TSUrlFilter {
   }
 
   match({ url, frameUrl, type }) {
+    const result = TSUrlFilter.hostsOnly ?
+                     this.matchHostname(url) :
+                     this.matchRequest({ url, frameUrl, type });
+    return result !== null && !result.whitelist;
+  }
+
+  matchHostname(url) {
+    const hostname = extractHostname(url);
+    const result = this.engine.match(hostname);
+    return result.basicRule;
+  }
+
+  matchRequest({ url, frameUrl, type }) {
     const requestType = requestTypes.get(type) || RequestType.Other;
     const request = new Request(url, frameUrl, requestType);
     const result = this.engine.matchRequest(request);
-    const basicResult = result.getBasicResult();
-    return basicResult !== null && !basicResult.whitelist;
+    return result.getBasicResult();
   }
 };
