@@ -93,5 +93,5 @@ run: deps url tldts cliqz ublock adblockplus brave adblockfast
 
 clean:
 	rm -f requests.json
-	npm uninstall tsurlfilter adblockpluscore ubo-core adblock-rs
+	npm uninstall @adguard/tsurlfilter adblockpluscore @gorhill/ubo-core adblock-rs
 	git submodule deinit --all
