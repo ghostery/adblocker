@@ -9,6 +9,10 @@ ifeq ($(HOSTS_ONLY), 1)
 	run_options := $(run_options) --hosts-only
 endif
 
+ifeq ($(SKIP_SERIALIZATION), 1)
+	run_options := $(run_options) --skip-serialization
+endif
+
 .PHONY: all clean deps run ubo-core adblockpluscore tsurlfilter-node fast-hosts-lookup adblock-rs brave cliqz cliqz-compression ublock adblockplus tsurlfilter tldts url min re hosts-lookup
 
 all: deps run
