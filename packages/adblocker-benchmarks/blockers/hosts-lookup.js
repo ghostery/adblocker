@@ -20,8 +20,24 @@ module.exports = class HostsLookup {
     this.lookup = new FastHostsLookup();
 
     for (let line of rawLists.split(/\n/g)) {
-      if (line[0] === '|' && line[1] === '|' && line[line.length - 1] === '^') {
-        this.lookup.add(line.slice(2, -1));
+      line = line.trim();
+
+      if (line[line.length - 1] === '^') {
+        let exception = false;
+
+        if (line[0] === '@' && line[1] === '@') {
+          exception = true;
+          line = line.substr(2);
+        }
+
+        if (line[0] === '|' && line[1] === '|') {
+          const hostname = line.slice(2, -1);
+          if (exception) {
+            this.lookup.addException(hostname);
+          } else {
+            this.lookup.add(hostname);
+          }
+        }
       }
     }
   }
