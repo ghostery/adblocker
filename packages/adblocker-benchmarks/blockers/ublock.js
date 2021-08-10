@@ -25,7 +25,7 @@ module.exports = class UBlockOrigin {
   }
 
   async deserialize(serialized) {
-    await engine.deserialize(serialized);
+    return engine.deserialize(serialized);
   }
 
   match({ url, frameUrl, type }) {
