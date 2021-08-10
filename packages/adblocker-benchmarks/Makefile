@@ -42,6 +42,11 @@ adblockpluscore: ./node_modules/adblockpluscore
 
 tsurlfilter-node: ./node_modules/@adguard/tsurlfilter
 
+./node_modules/fast-hosts-lookup:
+	npm install --no-save mjethani/fast-hosts-lookup
+
+fast-hosts-lookup: ./node_modules/fast-hosts-lookup
+
 ./node_modules/adblock-rs:
 	npm install --no-save adblock-rs
 
@@ -90,4 +95,4 @@ run: deps url tldts cliqz ublock adblockplus brave adblockfast
 
 clean:
 	rm -f requests.json
-	npm uninstall @adguard/tsurlfilter adblockpluscore @gorhill/ubo-core adblock-rs
+	npm uninstall fast-hosts-lookup @adguard/tsurlfilter adblockpluscore @gorhill/ubo-core adblock-rs
