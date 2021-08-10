@@ -26,16 +26,13 @@ requests.json:
 ubo-core: ./node_modules/@gorhill/ubo-core
 
 ./node_modules/adblockpluscore:
-	cp -R ./blockers/adblockpluscore ./node_modules
+	npm install --no-save adblockpluscore
 	cp ./blockers/adblockpluscore-index.js ./node_modules/adblockpluscore/lib
 	npx rollup ./node_modules/adblockpluscore/lib/adblockpluscore-index.js \
 		--file ./node_modules/adblockpluscore/lib/bundle.min.cjs --format cjs \
 		--plugin commonjs --plugin json --plugin terser --output.exports named
 
-./blockers/adblockpluscore/.git:
-	git submodule update --recursive --depth 1 --init blockers/adblockpluscore
-
-adblockpluscore: ./blockers/adblockpluscore/.git ./node_modules/adblockpluscore
+adblockpluscore: ./node_modules/adblockpluscore
 
 ./node_modules/@adguard/tsurlfilter:
 	npm install --no-save @adguard/tsurlfilter
@@ -94,4 +91,3 @@ run: deps url tldts cliqz ublock adblockplus brave adblockfast
 clean:
 	rm -f requests.json
 	npm uninstall @adguard/tsurlfilter adblockpluscore @gorhill/ubo-core adblock-rs
-	git submodule deinit --all
