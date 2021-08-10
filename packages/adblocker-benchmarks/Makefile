@@ -9,7 +9,7 @@ ifeq ($(HOSTS_ONLY), 1)
 	run_options := $(run_options) --hosts-only
 endif
 
-.PHONY: all clean deps run ubo-core adblockpluscore tsurlfilter-node adblock-rs brave cliqz cliqz-compression ublock adblockplus tsurlfilter tldts url min re hosts-lookup
+.PHONY: all clean deps run ubo-core adblockpluscore tsurlfilter-node fast-hosts-lookup adblock-rs brave cliqz cliqz-compression ublock adblockplus tsurlfilter tldts url min re hosts-lookup
 
 all: deps run
 
@@ -18,7 +18,7 @@ requests.json:
 		| sed -e '$$ ! s/$$/,/; 1 s/^/\[/; $$ s/$$/]/' > requests.json
 
 ./node_modules/@gorhill/ubo-core:
-	npm install --no-save @gorhill/ubo-core
+	npm install --no-save @gorhill/ubo-core@0.1.7
 	npx rollup ./node_modules/@gorhill/ubo-core/index.js \
 		--file ./node_modules/@gorhill/ubo-core/bundle.min.cjs --format cjs \
 		--context global --plugin terser
@@ -26,7 +26,7 @@ requests.json:
 ubo-core: ./node_modules/@gorhill/ubo-core
 
 ./node_modules/adblockpluscore:
-	npm install --no-save adblockpluscore
+	npm install --no-save adblockpluscore@0.3.1
 	cp ./blockers/adblockpluscore-index.js ./node_modules/adblockpluscore/lib
 	npx rollup ./node_modules/adblockpluscore/lib/adblockpluscore-index.js \
 		--file ./node_modules/adblockpluscore/lib/bundle.min.cjs --format cjs \
@@ -35,7 +35,7 @@ ubo-core: ./node_modules/@gorhill/ubo-core
 adblockpluscore: ./node_modules/adblockpluscore
 
 ./node_modules/@adguard/tsurlfilter:
-	npm install --no-save @adguard/tsurlfilter
+	npm install --no-save @adguard/tsurlfilter@0.5.24
 	npx rollup ./node_modules/@adguard/tsurlfilter/dist/tsurlfilter.umd.js \
 		--file ./node_modules/@adguard/tsurlfilter/dist/bundle.min.cjs --format cjs \
 		--context global --plugin terser
@@ -43,12 +43,12 @@ adblockpluscore: ./node_modules/adblockpluscore
 tsurlfilter-node: ./node_modules/@adguard/tsurlfilter
 
 ./node_modules/fast-hosts-lookup:
-	npm install --no-save mjethani/fast-hosts-lookup
+	npm install --no-save mjethani/fast-hosts-lookup#9136bb8c331ee5dba8ac1a0018552cace11e2afa
 
 fast-hosts-lookup: ./node_modules/fast-hosts-lookup
 
 ./node_modules/adblock-rs:
-	npm install --no-save adblock-rs
+	npm install --no-save adblock-rs@0.3.15
 
 adblock-rs: ./node_modules/adblock-rs
 
