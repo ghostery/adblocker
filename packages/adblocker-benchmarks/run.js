@@ -37,6 +37,7 @@ const WEBREQUEST_OPTIONS = {
   xhr: 'xmlhttprequest',
   fetch: 'xmlhttprequest',
   websocket: 'websocket',
+  ping: 'ping',
 
   // other
   other: 'other',
@@ -257,6 +258,10 @@ async function main() {
 
     if (!isSupportedUrl(url) || !isSupportedUrl(frameUrl)) {
       continue;
+    }
+
+    if (!(cpt in WEBREQUEST_OPTIONS)) {
+      console.warn(`Warning: Unrecognized type '${cpt}'`);
     }
 
     start = process.hrtime();
