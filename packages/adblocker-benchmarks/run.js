@@ -205,7 +205,7 @@ async function main() {
   const serializationTimings = [];
   const deserializationTimings = [];
   let cacheSize = null;
-  if (engine.serialize) {
+  if (engine.serialize && !FLAGS.includes('--skip-serialization')) {
     // Serialize
     let serialized;
     for (let i = 0; i < 100; i += 1) {
