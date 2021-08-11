@@ -18,8 +18,7 @@ endif
 all: deps run
 
 requests.json:
-	curl https://cdn.cliqz.com/adblocking/requests_top500.json.gz | gunzip \
-		| sed -e '$$ ! s/$$/,/; 1 s/^/\[/; $$ s/$$/]/' > requests.json
+	curl -OH "Accept-Encoding: gzip" https://raw.githubusercontent.com/mjethani/scaling-palm-tree/06ef031aa3d2742dc7e6234f579e28a9b6d499b0/requests.json
 
 ./node_modules/@gorhill/ubo-core:
 	npm install --no-save @gorhill/ubo-core@0.1.7
