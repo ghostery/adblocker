@@ -85,16 +85,13 @@ function isSupportedUrl(url) {
 
 function loadLists() {
   const filename = HOSTS_ONLY ? 'hosts.txt' : 'easylist.txt';
-  let content = fs.readFileSync(path.resolve(__dirname, filename), { encoding: 'utf-8' });
+  let content = fs.readFileSync(path.resolve(__dirname, filename), { encoding: 'utf-8' })
+                .replace(/^\[Adblock\b.*\n/, '');
 
-  // We still use old versions of EasyList and EasyPrivacy whereas current
-  // versions no longer use $object-subrequest
-  // https://gitlab.com/eyeo/adblockplus/abc/adblockpluscore/-/issues/6
-  content = content.replace(/(?!$.*)\bobject-subrequest\b/gm, 'object');
-
-  // Cliqz considers a filter like /foo^$domain=|example.com to be invalid.
-  // https://github.com/cliqz-oss/adblocker/discussions/2114#discussioncomment-1133958
-  content = content.replace(/(?!$.*)\bdomain=\|/gm, 'domain=');
+  if (!HOSTS_ONLY) {
+    content += fs.readFileSync(path.resolve(__dirname, 'easyprivacy.txt'), { encoding: 'utf-8' })
+               .replace(/^\[Adblock\b.*\n/, '');
+  }
 
   // Remove filters with regular expression patterns containing lookahead and
   // lookbehind assertions.
