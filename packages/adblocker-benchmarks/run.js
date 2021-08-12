@@ -128,8 +128,22 @@ async function memoryUsage(base = { heapUsed: 0, heapTotal: 0, }) {
   return ({ heapUsed, heapTotal, });
 }
 
+function getCompare() {
+  const spec = FLAGS.find(f => f.startsWith('--compare='));
+
+  if (typeof spec !== 'undefined') {
+    const [ , filename ] = spec.split('=');
+    return require(path.resolve(filename));
+  }
+
+  return null;
+}
+
 async function debug(moduleId, rawLists) {
   const output = [];
+  const compare = getCompare();
+
+  const outputFilename = compare !== null ? `${ENGINE}.diff.json` : `${ENGINE}.debug.json`;
 
   const Cls = require(moduleId);
 
@@ -141,24 +155,47 @@ async function debug(moduleId, rawLists) {
 
   for (let index = 0; index < requests.length; index += 1) {
     const { url, frameUrl, cpt } = requests[index];
+    const info = { index, url, frameUrl, cpt };
 
     if (!isSupportedUrl(url) || !isSupportedUrl(frameUrl)) {
+      if (!compare) {
+        output.push(info);
+      }
+
       continue;
     }
 
-    const match = engine.match({ type: WEBREQUEST_OPTIONS[cpt], frameUrl, url });
+    info.match = engine.match({ type: WEBREQUEST_OPTIONS[cpt], frameUrl, url });
 
-    let matchDebug = null;
+    info.matchDebug = info.match;
     if (engine.matchDebug) {
-      matchDebug = engine.matchDebug({ type: WEBREQUEST_OPTIONS[cpt], frameUrl, url });
+      info.matchDebug = engine.matchDebug({ type: WEBREQUEST_OPTIONS[cpt], frameUrl, url });
     }
 
-    output.push({ index, url, frameUrl, cpt, match, matchDebug });
+    if (compare !== null) {
+      if (info.match) {
+        if (!compare[index].match) {
+          info.compareMatchDebug = compare[index].matchDebug;
+          info.kind = 'false +ve';
+
+          output.push(info);
+        }
+      } else {
+        if (compare[index].match) {
+          info.compareMatchDebug = compare[index].matchDebug;
+          info.kind = 'false -ve';
+
+          output.push(info);
+        }
+      }
+    } else {
+      output.push(info);
+    }
   }
 
-  fs.writeFileSync(`./${ENGINE}.debug.json`, JSON.stringify(output, null, 2));
+  fs.writeFileSync(path.resolve(outputFilename), JSON.stringify(output, null, 2));
 
-  console.log(`./${ENGINE}.debug.json`);
+  console.log(`./${outputFilename}`);
 }
 
 async function main() {
