@@ -86,11 +86,11 @@ function isSupportedUrl(url) {
 
 function loadLists() {
   const filename = HOSTS_ONLY ? 'hosts.txt' : 'easylist.txt';
-  let content = fs.readFileSync(path.resolve(__dirname, filename), { encoding: 'utf-8' })
+  let content = fs.readFileSync(path.resolve(__dirname, 'lists', filename), { encoding: 'utf-8' })
                 .replace(/^\[Adblock\b.*\n/, '');
 
   if (!HOSTS_ONLY) {
-    content += fs.readFileSync(path.resolve(__dirname, 'easyprivacy.txt'), { encoding: 'utf-8' })
+    content += fs.readFileSync(path.resolve(__dirname, 'lists', 'easyprivacy.txt'), { encoding: 'utf-8' })
                .replace(/^\[Adblock\b.*\n/, '');
   }
 
