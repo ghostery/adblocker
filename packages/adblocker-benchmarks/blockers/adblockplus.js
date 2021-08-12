@@ -79,6 +79,11 @@ module.exports = class AdblockPlus {
   }
 
   match(request) {
+    const text = this.matchDebug(request);
+    return text !== null && !text.startsWith('@@');
+  }
+
+  matchDebug(request) {
     const url = parseURL(request.url);
     const sourceURL = parseURL(request.frameUrl);
     const filter = this.matcher.match(
@@ -89,6 +94,6 @@ module.exports = class AdblockPlus {
       false,
     );
 
-    return filter !== null && !filter.text.startsWith('@@');
+    return filter === null ? null : filter.text;
   }
 };

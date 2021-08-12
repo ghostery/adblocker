@@ -16,6 +16,7 @@ const requests = require('./requests.json');
 const ENGINE = process.argv[2];
 const FLAGS = process.argv.slice(3).filter(arg => arg.startsWith('--'));
 
+const DEBUG = FLAGS.includes('--debug');
 const HOSTS_ONLY = FLAGS.includes('--hosts-only');
 
 // Mute info-level output from uBlock Origin
@@ -127,6 +128,39 @@ async function memoryUsage(base = { heapUsed: 0, heapTotal: 0, }) {
   return ({ heapUsed, heapTotal, });
 }
 
+async function debug(moduleId, rawLists) {
+  const output = [];
+
+  const Cls = require(moduleId);
+
+  if (Cls.initialize) {
+    await Cls.initialize({ hostsOnly: HOSTS_ONLY });
+  }
+
+  const engine = await Cls.parse(rawLists);
+
+  for (let index = 0; index < requests.length; index += 1) {
+    const { url, frameUrl, cpt } = requests[index];
+
+    if (!isSupportedUrl(url) || !isSupportedUrl(frameUrl)) {
+      continue;
+    }
+
+    const match = engine.match({ type: WEBREQUEST_OPTIONS[cpt], frameUrl, url });
+
+    let matchDebug = null;
+    if (engine.matchDebug) {
+      matchDebug = engine.matchDebug({ type: WEBREQUEST_OPTIONS[cpt], frameUrl, url });
+    }
+
+    output.push({ index, url, frameUrl, cpt, match, matchDebug });
+  }
+
+  fs.writeFileSync(`./${ENGINE}.debug.json`, JSON.stringify(output, null, 2));
+
+  console.log(`./${ENGINE}.debug.json`);
+}
+
 async function main() {
   const rawLists = loadLists();
 
@@ -174,6 +208,10 @@ async function main() {
     default:
       console.error(`Unknown blocker ${ENGINE}`);
       process.exit(1);
+  }
+
+  if (DEBUG) {
+    return debug(moduleId, rawLists);
   }
 
   const baseMemory = await memoryUsage();
