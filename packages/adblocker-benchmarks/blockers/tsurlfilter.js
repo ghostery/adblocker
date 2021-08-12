@@ -75,4 +75,11 @@ module.exports = class TSUrlFilter {
     const result = this.engine.matchRequest(request);
     return result.getBasicResult();
   }
+
+  matchDebug({ url, frameUrl, type }) {
+    const result = TSUrlFilter.hostsOnly ?
+                     this.matchHostname(url) :
+                     this.matchRequest({ url, frameUrl, type });
+    return result === null ? null : result.ruleText;
+  }
 };

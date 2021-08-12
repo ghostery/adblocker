@@ -1,5 +1,9 @@
 node_command := NODE_ENV=production node
 
+ifeq ($(DEBUG), 1)
+	run_options := $(run_options) --debug
+endif
+
 ifeq ($(SHOW_MEMORY), 1)
 	node_command := $(node_command) --expose-gc
 	run_options := $(run_options) --memory
