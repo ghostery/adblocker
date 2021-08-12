@@ -28,7 +28,15 @@ module.exports = class UBlockOrigin {
     return engine.deserialize(serialized);
   }
 
-  match({ url, frameUrl, type }) {
-    return engine.matchRequest({ url, originURL: frameUrl, type }) === 1;
+  matchRequest({ url, frameUrl, type }) {
+    return engine.matchRequest({ url, originURL: frameUrl, type });
+  }
+
+  match(details) {
+    return this.matchRequest(details) === 1;
+  }
+
+  matchDebug(details) {
+    return this.matchRequest(details) !== 0 ? engine.toLogData().raw : null;
   }
 };
