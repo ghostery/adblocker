@@ -198,59 +198,7 @@ async function debug(moduleId, rawLists) {
   console.log(`./${outputFilename}`);
 }
 
-async function main() {
-  const rawLists = loadLists();
-
-  let moduleId;
-  switch (ENGINE) {
-    case 'adblockplus':
-      moduleId = './blockers/adblockplus.js';
-      break;
-    case 'brave':
-      moduleId = './blockers/brave.js';
-      break;
-    case 'duckduckgo':
-      moduleId = './blockers/duckduckgo.js';
-      break;
-    case 'cliqz':
-      moduleId = './blockers/cliqz.js';
-      break;
-    case 'cliqzCompression':
-      moduleId = './blockers/cliqz-compression.js';
-      break;
-    case 're':
-      moduleId = './blockers/re_baseline.js';
-      break;
-    case 'tldts':
-      moduleId = './blockers/tldts_baseline.js';
-      break;
-    case 'ublock':
-      moduleId = './blockers/ublock.js';
-      break;
-    case 'url':
-      moduleId = './blockers/url_baseline.js';
-      break;
-    case 'adblockfast':
-      moduleId = './blockers/adblockfast.js';
-      break;
-    case 'min':
-      moduleId = './blockers/minbrowser.js';
-      break;
-    case 'hosts-lookup':
-      moduleId = './blockers/hosts-lookup.js';
-      break;
-    case 'tsurlfilter':
-      moduleId = './blockers/tsurlfilter.js';
-      break;
-    default:
-      console.error(`Unknown blocker ${ENGINE}`);
-      process.exit(1);
-  }
-
-  if (DEBUG) {
-    return debug(moduleId, rawLists);
-  }
-
+async function benchmark(moduleId, rawLists) {
   const baseMemory = await memoryUsage();
 
   // Initialize
@@ -411,6 +359,58 @@ async function main() {
     console.log(_S`Heap total: ${matchingMemory.heapTotal}`);
     console.log();
   }
+}
+
+async function main() {
+  const rawLists = loadLists();
+
+  let moduleId;
+  switch (ENGINE) {
+    case 'adblockplus':
+      moduleId = './blockers/adblockplus.js';
+      break;
+    case 'brave':
+      moduleId = './blockers/brave.js';
+      break;
+    case 'duckduckgo':
+      moduleId = './blockers/duckduckgo.js';
+      break;
+    case 'cliqz':
+      moduleId = './blockers/cliqz.js';
+      break;
+    case 'cliqzCompression':
+      moduleId = './blockers/cliqz-compression.js';
+      break;
+    case 're':
+      moduleId = './blockers/re_baseline.js';
+      break;
+    case 'tldts':
+      moduleId = './blockers/tldts_baseline.js';
+      break;
+    case 'ublock':
+      moduleId = './blockers/ublock.js';
+      break;
+    case 'url':
+      moduleId = './blockers/url_baseline.js';
+      break;
+    case 'adblockfast':
+      moduleId = './blockers/adblockfast.js';
+      break;
+    case 'min':
+      moduleId = './blockers/minbrowser.js';
+      break;
+    case 'hosts-lookup':
+      moduleId = './blockers/hosts-lookup.js';
+      break;
+    case 'tsurlfilter':
+      moduleId = './blockers/tsurlfilter.js';
+      break;
+    default:
+      console.error(`Unknown blocker ${ENGINE}`);
+      process.exit(1);
+  }
+
+  return DEBUG ? debug(moduleId, rawLists) : benchmark(moduleId, rawLists);
 }
 
 main();
