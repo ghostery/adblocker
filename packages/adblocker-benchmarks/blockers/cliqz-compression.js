@@ -9,7 +9,7 @@
 const CliqzBase = require('./cliqz-base');
 
 module.exports = class CliqzCompression extends CliqzBase {
-  static parse(rawLists) {
-    return super.parse(rawLists, true);
+  static parse(rawLists, { debug = false } = {}) {
+    return super.parse(rawLists, { enableCompression: true, debug });
   }
 };

@@ -151,7 +151,7 @@ async function debug(moduleId, rawLists) {
     await Cls.initialize({ hostsOnly: HOSTS_ONLY });
   }
 
-  const engine = await Cls.parse(rawLists);
+  const engine = await Cls.parse(rawLists, { debug: true });
 
   for (let index = 0; index < requests.length; index += 1) {
     const { url, frameUrl, cpt } = requests[index];
