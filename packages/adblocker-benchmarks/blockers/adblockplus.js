@@ -86,12 +86,32 @@ module.exports = class AdblockPlus {
   matchDebug(request) {
     const url = parseURL(request.url);
     const sourceURL = parseURL(request.frameUrl);
+
+    // The whitelisting logic is based on
+    // https://github.com/adblockplus/adblockpluschrome/blob/1affa87724a7334e589c9a7bb197da8d5e5bf878/lib/requestBlocker.js#L187
+    //
+    // Since the current request data set does not give us a frame hierarchy,
+    // we assume that the request is from a top-level frame.
+    const documentFilter = this.matcher.match(
+      sourceURL,
+      contentTypes.DOCUMENT,
+    );
+
+    if (documentFilter !== null) {
+      return documentFilter.text;
+    }
+
+    const specificOnly = this.matcher.match(
+      sourceURL,
+      contentTypes.GENERICBLOCK,
+    ) !== null;
+
     const filter = this.matcher.match(
       url,
       contentTypes[resourceTypes.get(request.type) || 'OTHER'],
       sourceURL.hostname,
       null,
-      false,
+      specificOnly,
     );
 
     return filter === null ? null : filter.text;
