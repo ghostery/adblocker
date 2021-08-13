@@ -26,6 +26,7 @@ const requestTypes = new Map([
   [ 'xmlhttprequest', RequestType.XmlHttpRequest ],
   [ 'media', RequestType.Media ],
   [ 'font', RequestType.Font ],
+  [ 'ping', RequestType.Ping ],
   [ 'other', RequestType.Other ],
 ]);
 
