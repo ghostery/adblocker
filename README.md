@@ -76,7 +76,7 @@ The library supports 99% of all filters from the Easylist and uBlock Origin proj
 This project makes use of [lerna](https://github.com/lerna/lerna) and [yarn workspaces](https://yarnpkg.com/lang/en/docs/workspaces/) under the hood. Quickly get started with:
 
 1. Fork and clone the repository,
-2. Install dependencies: `yarn bootrap`,
+2. Install dependencies: `yarn bootstrap`,
 3. Build: `yarn watch`,
 4. Test: `yarn test`,
 5. Bundle: `yarn bundle`.
