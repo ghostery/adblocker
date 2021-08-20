@@ -123,13 +123,6 @@ s0urce.io##+js(aeld, /^(contextmenu|copy)$/)
 ! dicionariocriativo.com.br anti-adblock messages
 dicionariocriativo.com.br##.usingblock
 
-! https://github.com/uBlockOrigin/uAssets/issues/1569
-! https://www.reddit.com/r/uBlockOrigin/comments/euwy10/spanishdictcom_has_a_lot_of_adblocker_popups/
-||fastly.net/js/prebid$script,redirect=noopjs,domain=spanishdict.com
-@@||freetls.fastly.net/js/_ads$script,domain=spanishdict.com
-spanishdict.com##.ad-wrapper, #adTopLarge, [id^="adSide"], [id^="adMiddle"]
-spanishdict.com##.ReactModalPortal
-
 ! https://github.com/uBlockOrigin/uAssets/issues/1582
 ! https://github.com/jspenguin2017/uBlockProtector/issues/974
 ! https://github.com/NanoMeow/QuickReports/issues/8
@@ -402,6 +395,8 @@ punto-informatico.it##+js(aopr, blazemedia_adBlock)
 uol.com.br##+js(aeld, copy)
 uol.com.br##+js(aopw, addLink)
 */lib.ucopy/ucopy.js$script,domain=uol.com.br
+! https://github.com/uBlockOrigin/uAssets/issues/6938#issuecomment-898859152
+ne10.uol.com.br##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3115
 @@||umterps.com^$ghide
@@ -1742,6 +1737,9 @@ breakingdefense.com##body:style(overflow-x: hidden !important; overflow-y: scrol
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5281
 theintercept.com###offer-0-lwmcg
+theintercept.com###third-party--viewport-takeover
+||prod.theintercept.com^$subdocument,1p
+theintercept.com##.Post-body--truncated:style(max-height: unset !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5282
 salary.com###sgpb-popup-dialog-main-div-wrapper, .sgpb-theme-1-overlay
@@ -3073,7 +3071,7 @@ nostracasa.com.br##+js(ra, oncontextmenu|onselectstart|ondragstart)
 oparana.com.br##+js(acis, document.oncontextmenu)
 
 ! ai_adb warning
-casertace.net,civildigital.com,lesmoutonsenrages.fr,udoyoshi.com,venusarchives.com,verpornocomic.com##+js(acis, jQuery, ai_adb)
+casertace.net,civildigital.com,lesmoutonsenrages.fr,venusarchives.com,verpornocomic.com##+js(acis, jQuery, ai_adb)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3095
 @@||frontpage.fok.nl^$ghide
@@ -6194,3 +6192,37 @@ qiangwaikan.com##*:style(-webkit-touch-callout: default !important; -webkit-user
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9745
 perangkatguruku.com##+js(ra, oncontextmenu|ondragstart|onkeydown|onmousedown|onselectstart|style, body)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/p4aj2k/selecting_and_copying_not_working_on/
+janvissersweer.nl##+js(aopw, stopPrntScr)
+janvissersweer.nl##style:has-text(/user-select|::selection/):remove()
+
+! https://github.com/uBlockOrigin/uAssets/issues/9766
+7fyd.com##+js(aopr, document.oncontextmenu)
+7fyd.com##+js(aopw, document.onselectstart)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9767
+shushan.zhangyue.net##+js(ra, oncontextmenu|ondragstart|onselectstart)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9770
+logonews.cn##+js(set, document.oncopy, null)
+
+! https://github.com/uBlockOrigin/uAssets/issues/9783
+spanishdict.com##+js(set, SD_BLOCKTHROUGH, true)
+spanishdict.com###removeAdsSidebar
+spanishdict.com##.ad-wrapper, #adTopLarge, [id^="adSide"], [id^="adMiddle"]
+spanishdict.com##.ReactModalPortal
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/90903
+moviesrush.one##+js(acis, document.ondragstart)
+moviesrush.one##+js(acis, document.onkeydown)
+moviesrush.one##+js(aopr, stopPrntScr)
+moviesrush.one##body style:has-text(/-webkit-tap-highlight-color:|::selection/):remove()
+
+! https://github.com/uBlockOrigin/uAssets/issues/9798
+megacatstudios.com##.mfp-inline-holder.mfp-s-ready.mfp-container
+megacatstudios.com##.mfp-ready.mfp-slideup.mfp-bg
+megacatstudios.com##html:style(overflow:auto !important)
+
+! https://github.com/uBlockOrigin/uAssets/issues/5964#issuecomment-902058918
+rule34hentai.net##+js(aeld, contextmenu)
