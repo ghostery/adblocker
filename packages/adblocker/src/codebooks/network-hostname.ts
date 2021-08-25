@@ -7,6 +7,7 @@
  */
 /* tslint:disable quotemark */
 export default [
+  "quantcast.mgr.consensu.org",
   "securepubads.g.doubleclick",
   "googlesyndication",
   "imasdk.googleapis",
@@ -89,7 +90,6 @@ export default [
   "cl",
   "cr",
   "ct",
-  "cu",
   "dc",
   "de",
   "di",
@@ -121,7 +121,6 @@ export default [
   "fa",
   "fe",
   "ff",
-  "fi",
   "fl",
   "fo",
   "fr",
@@ -156,6 +155,7 @@ export default [
   "ld",
   "le",
   "li",
+  "ll",
   "lo",
   "lu",
   "ly",
