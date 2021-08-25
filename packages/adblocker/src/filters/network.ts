@@ -1301,7 +1301,7 @@ export default class NetworkFilter implements IFilter {
     // Get tokens from filter
     if (this.isFullRegex() === false) {
       if (this.filter !== undefined) {
-        const skipLastToken = this.isPlain() && !this.isRightAnchor();
+        const skipLastToken = !this.isRightAnchor();
         const skipFirstToken = !this.isLeftAnchor();
         tokenizeWithWildcardsInPlace(this.filter, skipFirstToken, skipLastToken, TOKENS_BUFFER);
       }
