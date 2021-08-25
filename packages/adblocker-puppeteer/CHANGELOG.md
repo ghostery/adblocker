@@ -1,3 +1,15 @@
+# v1.22.5 (Wed Aug 25 2021)
+
+#### :nut_and_bolt: Dependencies
+
+- Bump puppeteer from 10.1.0 to 10.2.0 [#2116](https://github.com/cliqz-oss/adblocker/pull/2116) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.22.3 (Thu Jul 29 2021)
 
 #### :nut_and_bolt: Dependencies

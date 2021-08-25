@@ -1,3 +1,33 @@
+# v1.22.5 (Wed Aug 25 2021)
+
+#### :bug: Bug Fix
+
+- Always skip last token unless anchored [#2187](https://github.com/cliqz-oss/adblocker/pull/2187) ([@mjethani](https://github.com/mjethani))
+
+#### :house: Internal
+
+- Update local assets [#2173](https://github.com/cliqz-oss/adblocker/pull/2173) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2166](https://github.com/cliqz-oss/adblocker/pull/2166) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2155](https://github.com/cliqz-oss/adblocker/pull/2155) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2131](https://github.com/cliqz-oss/adblocker/pull/2131) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2130](https://github.com/cliqz-oss/adblocker/pull/2130) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2129](https://github.com/cliqz-oss/adblocker/pull/2129) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2120](https://github.com/cliqz-oss/adblocker/pull/2120) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2111](https://github.com/cliqz-oss/adblocker/pull/2111) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump @types/chrome from 0.0.153 to 0.0.154 [#2118](https://github.com/cliqz-oss/adblocker/pull/2118) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Manish Jethani ([@mjethani](https://github.com/mjethani))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.22.4 (Wed Aug 04 2021)
 
 #### :house: Internal

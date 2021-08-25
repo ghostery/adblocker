@@ -1,3 +1,15 @@
+# v1.22.5 (Wed Aug 25 2021)
+
+#### :nut_and_bolt: Dependencies
+
+- Bump jsdom from 16.7.0 to 17.0.0 [#2175](https://github.com/cliqz-oss/adblocker/pull/2175) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.22.3 (Thu Jul 29 2021)
 
 #### :nut_and_bolt: Dependencies

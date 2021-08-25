@@ -1,3 +1,86 @@
+# v1.22.5 (Wed Aug 25 2021)
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker`
+  - Always skip last token unless anchored [#2187](https://github.com/cliqz-oss/adblocker/pull/2187) ([@mjethani](https://github.com/mjethani))
+
+#### :house: Internal
+
+- Add Adblock Plus whitelisting logic [#2172](https://github.com/cliqz-oss/adblocker/pull/2172) ([@mjethani](https://github.com/mjethani))
+- Add 'ping' mapping in blockers/tsurlfilter.js [#2171](https://github.com/cliqz-oss/adblocker/pull/2171) ([@mjethani](https://github.com/mjethani))
+- Clean up file locations [#2164](https://github.com/cliqz-oss/adblocker/pull/2164) ([@mjethani](https://github.com/mjethani))
+- Move benchmarking to separate benchmark() function [#2163](https://github.com/cliqz-oss/adblocker/pull/2163) ([@mjethani](https://github.com/mjethani))
+- Add matchDebug() for Cliqz [#2162](https://github.com/cliqz-oss/adblocker/pull/2162) ([@mjethani](https://github.com/mjethani))
+- Add matchDebug() to uBO's proxy API [#2160](https://github.com/cliqz-oss/adblocker/pull/2160) ([@gorhill](https://github.com/gorhill))
+- Add local .gitignore [#2161](https://github.com/cliqz-oss/adblocker/pull/2161) ([@mjethani](https://github.com/mjethani))
+- Add COMPARE=<filename> option [#2159](https://github.com/cliqz-oss/adblocker/pull/2159) ([@mjethani](https://github.com/mjethani))
+- Add DEBUG=1 flag [#2156](https://github.com/cliqz-oss/adblocker/pull/2156) ([@mjethani](https://github.com/mjethani))
+- Update easylist.txt [#2154](https://github.com/cliqz-oss/adblocker/pull/2154) ([@mjethani](https://github.com/mjethani))
+- Pass --compressed to curl [#2153](https://github.com/cliqz-oss/adblocker/pull/2153) ([@mjethani](https://github.com/mjethani))
+- Update requests.json [#2152](https://github.com/cliqz-oss/adblocker/pull/2152) ([@mjethani](https://github.com/mjethani))
+- Handle 'ping' type from puppeteer [#2149](https://github.com/cliqz-oss/adblocker/pull/2149) ([@mjethani](https://github.com/mjethani))
+- Add SKIP_SERIALIZATION=1 flag [#2150](https://github.com/cliqz-oss/adblocker/pull/2150) ([@mjethani](https://github.com/mjethani))
+- Remove dependence on yarn [#2148](https://github.com/cliqz-oss/adblocker/pull/2148) ([@mjethani](https://github.com/mjethani))
+- Use specific versions of the engines [#2145](https://github.com/cliqz-oss/adblocker/pull/2145) ([@mjethani](https://github.com/mjethani))
+- Install fast-hosts-lookup like other engines [#2144](https://github.com/cliqz-oss/adblocker/pull/2144) ([@mjethani](https://github.com/mjethani))
+- Add support for exceptions to hosts-lookup [#2143](https://github.com/cliqz-oss/adblocker/pull/2143) ([@mjethani](https://github.com/mjethani))
+- Update Adblock Plus to use npm package [#2142](https://github.com/cliqz-oss/adblocker/pull/2142) ([@mjethani](https://github.com/mjethani))
+- Fix Node.js package names in make clean [#2141](https://github.com/cliqz-oss/adblocker/pull/2141) ([@mjethani](https://github.com/mjethani))
+- Make UBlockOrigin#deserialize() consistent [#2140](https://github.com/cliqz-oss/adblocker/pull/2140) ([@mjethani](https://github.com/mjethani))
+- Update uBlock Origin to use npm package [#2138](https://github.com/cliqz-oss/adblocker/pull/2138) ([@mjethani](https://github.com/mjethani))
+- Use tsurlfilter's DNS engine [#2136](https://github.com/cliqz-oss/adblocker/pull/2136) ([@mjethani](https://github.com/mjethani))
+- Drop filters with regular expression assertions [#2128](https://github.com/cliqz-oss/adblocker/pull/2128) ([@mjethani](https://github.com/mjethani))
+- Move extractHostname() to utils.js [#2127](https://github.com/cliqz-oss/adblocker/pull/2127) ([@mjethani](https://github.com/mjethani))
+- Fix easylist.txt at runtime [#2126](https://github.com/cliqz-oss/adblocker/pull/2126) ([@mjethani](https://github.com/mjethani))
+- Add hosts-lookup [#2124](https://github.com/cliqz-oss/adblocker/pull/2124) ([@mjethani](https://github.com/mjethani))
+- Do not initialize PSL in hosts-only mode [#2119](https://github.com/cliqz-oss/adblocker/pull/2119) ([@mjethani](https://github.com/mjethani))
+- Implement hosts-only mode [#2115](https://github.com/cliqz-oss/adblocker/pull/2115) ([@mjethani](https://github.com/mjethani))
+- `@cliqz/adblocker`
+  - Update local assets [#2173](https://github.com/cliqz-oss/adblocker/pull/2173) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#2166](https://github.com/cliqz-oss/adblocker/pull/2166) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#2155](https://github.com/cliqz-oss/adblocker/pull/2155) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#2131](https://github.com/cliqz-oss/adblocker/pull/2131) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#2130](https://github.com/cliqz-oss/adblocker/pull/2130) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#2129](https://github.com/cliqz-oss/adblocker/pull/2129) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#2120](https://github.com/cliqz-oss/adblocker/pull/2120) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#2111](https://github.com/cliqz-oss/adblocker/pull/2111) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :memo: Documentation
+
+- Fix "bootstrap" in README.md [#2180](https://github.com/cliqz-oss/adblocker/pull/2180) ([@mjethani](https://github.com/mjethani))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump ts-node from 10.2.0 to 10.2.1 [#2178](https://github.com/cliqz-oss/adblocker/pull/2178) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump electron from 13.1.9 to 13.2.1 [#2177](https://github.com/cliqz-oss/adblocker/pull/2177) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump playwright from 1.13.1 to 1.14.0 [#2174](https://github.com/cliqz-oss/adblocker/pull/2174) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump auto from 10.30.0 to 10.31.0 [#2168](https://github.com/cliqz-oss/adblocker/pull/2168) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump rollup from 2.56.1 to 2.56.2 [#2151](https://github.com/cliqz-oss/adblocker/pull/2151) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump electron from 13.1.8 to 13.1.9 [#2139](https://github.com/cliqz-oss/adblocker/pull/2139) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump tldts-experimental from 5.7.39 to 5.7.40 [#2135](https://github.com/cliqz-oss/adblocker/pull/2135) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump concurrently from 6.2.0 to 6.2.1 [#2134](https://github.com/cliqz-oss/adblocker/pull/2134) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump ts-node from 10.1.0 to 10.2.0 [#2133](https://github.com/cliqz-oss/adblocker/pull/2133) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump rollup from 2.56.0 to 2.56.1 [#2132](https://github.com/cliqz-oss/adblocker/pull/2132) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump rollup from 2.55.1 to 2.56.0 [#2123](https://github.com/cliqz-oss/adblocker/pull/2123) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump tldts-experimental from 5.7.38 to 5.7.39 [#2121](https://github.com/cliqz-oss/adblocker/pull/2121) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-extended-selectors`, `@cliqz/adblocker-webextension-cosmetics`
+  - Bump jsdom from 16.7.0 to 17.0.0 [#2175](https://github.com/cliqz-oss/adblocker/pull/2175) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-puppeteer`
+  - Bump puppeteer from 10.1.0 to 10.2.0 [#2116](https://github.com/cliqz-oss/adblocker/pull/2116) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker`
+  - Bump @types/chrome from 0.0.153 to 0.0.154 [#2118](https://github.com/cliqz-oss/adblocker/pull/2118) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Manish Jethani ([@mjethani](https://github.com/mjethani))
+- Raymond Hill ([@gorhill](https://github.com/gorhill))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.22.4 (Wed Aug 04 2021)
 
 #### :bug: Bug Fix
