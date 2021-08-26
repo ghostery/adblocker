@@ -1504,9 +1504,6 @@ thewirecutter.com#@#.deals-love
 ! https://forums.lanik.us/viewtopic.php?p=146878#p146878
 @@||adsynth-ofx-quotewidget-prod.herokuapp.com/api/$xhr,domain=widget-yahoo.ofx.com
 
-! https://www.si.com/mlb/2020/09/05/baseball-fake-crowd-nosie broken video
-@@||uid.mavencoalition.io^$xhr,domain=si.com
-
 ! https://github.com/uBlockOrigin/uAssets/issues/5295
 !#if !env_chromium
 @@||player.aniview.com/script/*/AVmanager.js$domain=inquirer.net
@@ -3732,6 +3729,8 @@ bing.com##a[href*="/aclick?ld="]:not(.vsp_ads)
 bing.com##.ins_exp.vsp
 ! https://github.com/uBlockOrigin/uAssets/issues/9093
 @@||bing.com/shop$shide
+! `$shide` replacement
+! bing.com##:matches-path(~/shop) a[href*="/aclick?"]:not(.vsp_ads)
 ! https://github.com/easylist/easylist/issues/7240
 !#if env_firefox
 bing.com##+js(nosiif, logQueue, 10000)
@@ -4201,3 +4200,20 @@ coolmathgames.com##+js(set, network_user_id, '')
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/p7i6fp/website_is_static_while_ublock_is_activated/
 @@||rmwilliams.com/on/demandware.static/Sites-rmwINTL-Site/*/modules/app/app.tealium.js$script,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/9802
+@@||player.avplayer.com/script/*/avcplayer.js$script,domain=bdnewszh.com
+@@||player.avplayer.com/script/*/libs/hls.min.js$script,domain=bdnewszh.com
+
+! https://github.com/uBlockOrigin/uAssets/pull/9811
+@@||www.googletagmanager.com/gtm.js$script,domain=iltalehti.fi
+
+! https://www.reddit.com/r/uBlockOrigin/comments/p88a5j/video_not_working_after_click_play_on_cbsnewscom/
+@@||v.fwmrm.net/ad/g/1?csid=vcbs_cbsnews_*&host=https%3a%2f%2fwww.cbsnews.com&$domain=imasdk.googleapis.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/9828
+@@||dez.ro/media/images/ads/$image,1p
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/92359
+@@||google-analytics.com/analytics.js$script,redirect-rule,domain=dengekionline.com
+@@||googletagmanager.com/gtm.js$script,domain=dengekionline.com
