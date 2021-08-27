@@ -149,6 +149,8 @@ export function tokenizeWithWildcardsInPlace(
   skipLastToken: boolean,
   buffer: TokensBuffer,
 ): void {
+  // TODO maybe better to check if buffer is full?
+  // Otherwise we are under-using the space.
   const len = Math.min(pattern.length, buffer.remaining() * 2);
   let inside = false;
   let precedingCh = 0;
