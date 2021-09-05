@@ -399,9 +399,6 @@ forumconstruire.com##.post_simple:has(.postsimple_pseudo:has-text(/promo/i))
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54079
 bleachmx.fr##+js(aopr, mdpDeBlocker)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/54097
-rutab.net##+js(nosiif, #adv, 20000)
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54109
 vstx.*##+js(nosiif, visibility, 1000)
 
@@ -555,7 +552,8 @@ smutty.com##+js(nowoif)
 coredp.com##+js(aopr, app_vars.force_disable_adblock)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54524
-why-tech.it##+js(aopr, adBlockDetected)
+! https://github.com/uBlockOrigin/uAssets/issues/9865
+why-tech.it##+js(nostif, fadeIn, 0)
 @@||why-tech.it^$ghide
 why-tech.it##.adsbygoogle
 
@@ -1513,7 +1511,8 @@ youlikeboys.com##+js(aopr, AdservingModule)
 uploadroot.com##+js(aopr, open)
 uploadroot.com##.buttonDownload
 
-! https://github.com/NanoMeow/QuickReports/issues/4001
+! https://www.reddit.com/r/uBlockOrigin/comments/phbq9n/can_someone_help_removing_adblock_warning_from/
+key-hub.eu##+js(nostif, gaData)
 @@||key-hub.eu^$ghide
 key-hub.eu##.adsbygoogle
 @@||key-hub.eu/$1p,script
@@ -2295,8 +2294,10 @@ xiaomitools.com##+js(acis, addEventListener, google_ad_client)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/92140
 link1s.*##+js(aopr, app_vars.force_disable_adblock)
 aemenstore.com,aloass.com,alobyt.com,alocd.com,alogum.com,aloguy.com,alohdd.com,byboe.com,cazzette.com,hookeaudio.com,jncojeans.com,kiemlua.com,kingsleynyc.com,lucidcam.com,nousdecor.com,pennbookcenter.com,restorbio.com,staaker.com,truebrandy.com,uebnews.online,thegoneapp.com##+js(nano-sib, counter, 2000)
-aemenstore.com,aloass.com,alobyt.com,alocd.com,alogum.com,aloguy.com,alohdd.com,byboe.com,cazzette.com,dataf.pro,hookeaudio.com,jncojeans.com,kiemlua.com,kingsleynyc.com,link1s.*,lucidcam.com,marharo.com,nousdecor.com,pennbookcenter.com,restorbio.com,staaker.com,thegoneapp.com,truebrandy.com,uebnews.online##+js(nosiif, visibility, 1000)
+aemenstore.com,aloass.com,alobyt.com,alocd.com,alogum.com,aloguy.com,alohdd.com,byboe.com,cazzette.com,dataf.pro,hookeaudio.com,jncojeans.com,kiemlua.com,kingsleynyc.com,link1s.*,lucidcam.com,marharo.com,medcpu.com,nousdecor.com,pennbookcenter.com,restorbio.com,staaker.com,thegoneapp.com,truebrandy.com,uebnews.online##+js(nosiif, visibility, 1000)
 link1s.*##+js(set, blurred, false)
+aemenstore.com,aloass.com,alobyt.com,alocd.com,alogum.com,aloguy.com,alohdd.com,byboe.com,cazzette.com,dataf.pro,hookeaudio.com,jncojeans.com,kiemlua.com,kingsleynyc.com,link1s.*,lucidcam.com,marharo.com,medcpu.com,nousdecor.com,pennbookcenter.com,restorbio.com,rodjulian.com,staaker.com,truebrandy.com,uebnews.online,thegoneapp.com###link1s-wait1
+aemenstore.com,aloass.com,alobyt.com,alocd.com,alogum.com,aloguy.com,alohdd.com,byboe.com,cazzette.com,dataf.pro,hookeaudio.com,jncojeans.com,kiemlua.com,kingsleynyc.com,link1s.*,lucidcam.com,marharo.com,medcpu.com,nousdecor.com,pennbookcenter.com,restorbio.com,rodjulian.com,staaker.com,truebrandy.com,uebnews.online,thegoneapp.com###link1s-snp:style(display:block!important)
 *$3p,denyallow=bootstrapcdn.com|cloudflare.com|google.com|googleapis.com|gstatic.com|hcaptcha.com|jquery.com|jsdelivr.net|recaptcha.net,domain=link1s.*
 link1s.*##.banner-inner
 rodjulian.com##+js(aopr, app_vars.force_disable_adblock)
@@ -5735,7 +5736,7 @@ saddlegirls.com##.image-link[href^="//www.zagvee.com"]
 ||playporngames.com/*.gif|
 ||playporngames.com/fuck_dolls_online.jpg
 playporngames.com##.sidebarcont > .widget_text:not(#text-2)
-/xxx\/([a-z]+[_-]){1,2}[a-z]+\.(?:gif|jpg)$/$image,1p,domain=playsexgames.xxx
+/xxx\/(?:[a-z]+[_-]){1,2}[a-z]+\.(?:gif|jpg)$/$image,1p,domain=playsexgames.xxx
 playsexgames.xxx##.widget:not(#text-2)
 ||lifeselector.com/banners/js/banner-controller.
 
