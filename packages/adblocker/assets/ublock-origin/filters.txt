@@ -1980,7 +1980,7 @@ anghami.com##anghami-ads
 anghami.com##+js(nostif, isDesktopApp, 1000)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5952
-player.glomex.com##+js(set, Object.prototype._getSalesHouseConfigurations, noopFunc)
+player.glomex.com,merkur.de,tz.de##+js(set, Object.prototype._getSalesHouseConfigurations, noopFunc)
 ||player-feedback*.glomex.*^
 ||d1miwkthq39xj8.cloudfront.net/t.gif$image,domain=player.glomex.com
 
@@ -4922,8 +4922,7 @@ megaup.net##+js(acis, I833)
 !megaup.net##[id^="AdskeeperComposite"]:style(transform:translate(-999999px,0))
 !megaup.net##.mgbox:style(transform:translate(-999999px,0))
 !megaup.net##.metaRedirectWrapperBottomAds:style(transform:translate(-999999px,0))
-!megaup.net##[id*="ScriptRootC"]:upward(1):style(position:absolute !important;left:-3000px !important)
-megaup.net##[id*="ScriptRootC"]:upward(1):style(position:absolute !important;transform:translate(-999999px,0) !important)
+megaup.net##.metaRedirectWrapperBottomAds:style(pointer-events: none !important;opacity: 0 !important)
 @@||megaup.net^$ghide
 @@||jsc.adskeeper.co.uk/*/megaup.net$script,domain=megaup.net
 @@||servicer.adskeeper.co.uk^$script,domain=megaup.net
@@ -13742,7 +13741,7 @@ freetutsdownload.net##[id^="modal-adbmon-"]
 10news.dk##.textwidget
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5495
-fc.lc,fcc.lc##+js(acis, document.addEventListener, nextFunction)
+fc.lc,fcc.lc,fc-lc.com##+js(acis, document.addEventListener, nextFunction)
 fc.lc##+js(aopr, adBlockDetected)
 fc.lc,fcdot.lc##+js(aopr, app_vars.force_disable_adblock)
 fcdot.lc##+js(aopr, open)
@@ -13847,9 +13846,6 @@ hqcelebcorner.net##+js(aopw, _pop)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5527
 ! https://github.com/uBlockOrigin/uAssets/issues/9710
-streameast.live##div[onmouseout="this.style.opacity=1;"]:upward(div[style=""])
-streameast.live##div[class=""][onclick="window.location.reload();"]:upward(div[style=""])
-! [badfilter] /adsnew.$badfilter
 streameast.live##+js(acis, $, adblocker)
 streameast.live##+js(aeld, /^/, 0x)
 streameast.live##+js(aeld, DOMContentLoaded, showModal)
@@ -13861,7 +13857,8 @@ streameast.live##+js(nowebrtc)
 streameast.live##[id^="Advertisement"]
 sportlive.*##+js(ra, onclick)
 hdstream365.com##+js(nowoif)
-@@||streameast.live/$script,1p
+streameast.live##div[class]:has-text(adblock)
+@@*$script,domain=streameast.live
 ||streameast.live/cdn-cgi/bm/cv/$script,important
 livesport4u.com,pcast.pw,sportlive.site###localpp
 pcast.pw###ads
@@ -14874,6 +14871,7 @@ pornult.com##.sexshp
 
 ! https://github.com/NanoMeow/QuickReports/issues/1406
 ! https://github.com/NanoMeow/QuickReports/issues/3929
+joyn.de##+js(no-fetch-if, zomap.de)
 @@||ad.71i.de/global_js/AppConfig/Joyn/desktop.json$xhr,domain=joyn.de
 @@||adition.com/1x1.gif$xhr,domain=joyn.de
 @@||aws.route71.net/ad-$script,domain=joyn.de
