@@ -1515,9 +1515,6 @@ thewirecutter.com#@#.deals-love
 ! https://github.com/NanoMeow/QuickReports/issues/5
 @@||browser.sentry-cdn.com/*/bundle.min.js$script,domain=blick.ch
 
-! https://forums.lanik.us/viewtopic.php?f=64&t=42810
-! [badfilter] ||azadify.com^$3p,badfilter
-
 ! https://forums.lanik.us/viewtopic.php?p=146915#p146915
 @@||eastprodcdn.azureedge.net/bundles/*velaro$script
 ! [badfilter] ||velaro.com^$3p,badfilter
@@ -3619,9 +3616,6 @@ seazon.fr##+js(no-fetch-if, url:ipapi.co)
 ! https://myaccount.chicagotribune.com/300/home
 ||myaccount.chicagotribune.com/assets/scripts/tag-manager/googleTag.js$script,redirect=googletagmanager.com/gtm.js,important
 
-! https://github.com/uBlockOrigin/uAssets/issues/1632#issuecomment-761010732
-@@||google.com^*recaptcha/$csp
-
 ! temporary fix https://forums.lanik.us/viewtopic.php?f=90&t=45628
 druckerchannel.de#@##DCGA_CONTAINER
 druckerchannel.de###DCGA
@@ -4177,12 +4171,6 @@ coolmathgames.com##+js(set, network_user_id, '')
 ! [badfilter] ||hb.afl.rakuten.co.jp^$badfilter
 ||hb.afl.rakuten.co.jp^$3p
 
-! https://github.com/uBlockOrigin/uAssets/issues/9642
-@@||www.google.*/search?q=*tbm=shop$shide
-
-! https://github.com/uBlockOrigin/uAssets/issues/9694
-@@||www.google.*/shopping/$shide
-
 ! https://www.reddit.com/r/uBlockOrigin/comments/oxcp5b/site_namesorg_broken/
 @@||names.org^$cname
 
@@ -4231,9 +4219,6 @@ coolmathgames.com##+js(set, network_user_id, '')
 ! https://github.com/uBlockOrigin/uAssets/issues/9873
 @@||go.pardot.com/$frame,domain=womensworldbanking.org
 
-! https://www.reddit.com/r/uBlockOrigin/comments/pfgrbf/foxnews_missing_images/
-@@||js.taplytics.com/jssdk/$script,domain=foxnews.com
-
 ! https://github.com/uBlockOrigin/uAssets/issues/9893
 @@||api.ipdata.co/?api-key=$script,domain=wttw.com
 
@@ -4242,3 +4227,47 @@ coolmathgames.com##+js(set, network_user_id, '')
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/pglvdm/
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=olympics.com
+
+! https://github.com/easylist/easylist/issues/8990
+://ads.$popup,badfilter
+://ads.$popup,domain=~kakaku.com
+
+! https://jbbs.shitaraba.net/bbs/read.cgi/internet/25463/1598352715/232
+!#if env_mobile
+@@||adcdn.goo.ne.jp/images/pix/2dwkwwau99.js$domain=news.goo.ne.jp
+@@||bwb101.goo.ne.jp/b.js$domain=news.goo.ne.jp
+@@||log000.goo.ne.jp/js/VLTraceDMD.js$domain=news.goo.ne.jp
+!#endif
+
+! https://github.com/uBlockOrigin/uAssets/issues/9642
+@@||www.google.*/search*tbm=shop$shide
+
+! https://github.com/uBlockOrigin/uAssets/issues/9694
+@@||www.google.*/shopping/$shide
+
+! https://forums.lanik.us/viewtopic.php?f=64&t=42810
+! [badfilter] ||azadify.com^$3p,badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/9983
+@@||googletagmanager.com/gtm.js$script,domain=giftcards.com
+
+! unbreak https://hentaihd.xyz/ver/jk-fuuzoku-gakuensai-1 embedded disqus comments and player
+@@||cdn.tubecorp.com/vs/vs.js$script,domain=hentaihd.xyz
+
+! https://github.com/Yuki2718/adblock/issues/33 blocked by PL
+! [badfilter] ||anrdoezrs.net^$badfilter
+||anrdoezrs.net^$3p
+
+! https://github.com/uBlockOrigin/uAssets/pull/10005 CNAME breakage by Peter Lowe's
+! [badfilter] ||smart-traffik.com^$badfilter
+
+! https://github.com/tofukko/filter/issues/46
+@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=firecross.jp
+@@||g.doubleclick.net/gpt/pubads_impl_$script,domain=firecross.jp
+@@||g.doubleclick.net/gampad/ads?*&url=https%3A%2F%2Ffirecross.jp$xhr,domain=firecross.jp
+||googlevideo.com/videoplayback?$media,redirect=noop-1s.mp4,domain=safeframe.googlesyndication.com
+safeframe.googlesyndication.com##.left-container
+
+! https://github.com/easylist/easylist/commit/c1e5cea211d41c5547f58321e5dae56ac834fce0
+! [badfilter] ||tercept.com^$badfilter
+||tercept.com^$3p
