@@ -47,10 +47,10 @@
 ! https://github.com/gorhill/uBlock/issues/1411
 ! https://www.reddit.com/r/firefox/comments/3pwcey/firefox_extension_download_manager_s3_asks_for/
 ! https://www.reddit.com/r/chrome/comments/473ves/help_how_to_remove_qipru_redirect_when_searching/
-||lnkr.us^$document
-||icontent.us^$document
-||qip.ng^$document
-||qip.ru^$document
+||lnkr.us^$doc
+||icontent.us^$doc
+||qip.ng^$doc
+||qip.ru^$doc
 ! https://github.com/gorhill/uBlock/issues/1411#issuecomment-201031771
 ||ratexchange.net^
 ||adnotbad.com^
@@ -267,8 +267,12 @@ search.brave.com##+js(no-fetch-if, body:cohort)
 ! https://github.com/uBlockOrigin/uAssets/issues/9596
 ||smallseo.tools/rainbow/track$xhr
 
-! https://woodbrass.com/ CNAME-proxy-tracking
+! https://github.com/uBlockOrigin/uAssets/issues/9932
+/^\w+://[\w.\-]+\.www\.woodbrass\.com//$1p,script
+/dataunlocker-prod.js$script,1p
+||creative-banana.tk^
 ||dataunlocker.com^$3p
+||welcoming-carpets.tk^
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/opoba7/washington_post_showing_ad_placeholders/
 ||washpost.nile.works^
@@ -291,9 +295,19 @@ ppss.kr##.ppss-title-banner:remove()
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9799
 ||collector.xhwebsite.com^
+||collector.hamsterix.cam^
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/p9lity/how_to_block_favicon_popups_on_these_websites/
 ||g.jwpsrv.com/g/gcid-*?notrack$frame
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9877
 ||instiengage.com^$3p
+
+! https://github.com/uBlockOrigin/uAssets/issues/10012
+fedex.com,tacobell.com##+js(set, bmak.js_post, false)
+
+! https://github.com/easylist/easylist/pull/9136
+||cloudflare.com/ajax/libs/fingerprintjs2/$script,redirect=fingerprint2.js,important,domain=gamebox.gesoten.com
+
+! https://github.com/easylist/easylist/pull/9137
+||gamerch.com/s3-assets/library/js/fingerprint2.min.js$script,redirect=fingerprint2.js,important
