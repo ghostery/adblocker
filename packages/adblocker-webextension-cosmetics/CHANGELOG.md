@@ -1,3 +1,16 @@
+# v1.22.6 (Sun Sep 19 2021)
+
+#### :nut_and_bolt: Dependencies
+
+- Bump @types/chrome from 0.0.155 to 0.0.157 [#2214](https://github.com/cliqz-oss/adblocker/pull/2214) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chrome from 0.0.154 to 0.0.155 [#2211](https://github.com/cliqz-oss/adblocker/pull/2211) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.22.5 (Wed Aug 25 2021)
 
 #### :nut_and_bolt: Dependencies

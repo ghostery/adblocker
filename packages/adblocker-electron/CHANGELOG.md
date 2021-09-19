@@ -1,3 +1,20 @@
+# v1.22.6 (Sun Sep 19 2021)
+
+#### :nail_care: Polish
+
+- Update peer dependency on Electron [#2228](https://github.com/cliqz-oss/adblocker/pull/2228) ([@Jelmerro](https://github.com/Jelmerro))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump electron from 13.2.2 to 14.0.0 [#2200](https://github.com/cliqz-oss/adblocker/pull/2200) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Jelmer van Arnhem ([@Jelmerro](https://github.com/Jelmerro))
+
+---
+
 # v1.22.3 (Thu Jul 29 2021)
 
 #### :nut_and_bolt: Dependencies

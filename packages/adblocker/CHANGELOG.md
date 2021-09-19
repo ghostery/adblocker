@@ -1,3 +1,30 @@
+# v1.22.6 (Sun Sep 19 2021)
+
+#### :house: Internal
+
+- Update local assets [#2227](https://github.com/cliqz-oss/adblocker/pull/2227) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2212](https://github.com/cliqz-oss/adblocker/pull/2212) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2209](https://github.com/cliqz-oss/adblocker/pull/2209) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2203](https://github.com/cliqz-oss/adblocker/pull/2203) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2195](https://github.com/cliqz-oss/adblocker/pull/2195) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2194](https://github.com/cliqz-oss/adblocker/pull/2194) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2191](https://github.com/cliqz-oss/adblocker/pull/2191) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Run benchmark on each PR [#2193](https://github.com/cliqz-oss/adblocker/pull/2193) ([@remusao](https://github.com/remusao))
+- Update local assets [#2181](https://github.com/cliqz-oss/adblocker/pull/2181) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump @types/chrome from 0.0.155 to 0.0.157 [#2214](https://github.com/cliqz-oss/adblocker/pull/2214) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chrome from 0.0.154 to 0.0.155 [#2211](https://github.com/cliqz-oss/adblocker/pull/2211) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.22.5 (Wed Aug 25 2021)
 
 #### :bug: Bug Fix
