@@ -1619,7 +1619,7 @@ fmovies.*##+js(acis, Math, /XMLHttpRequest|break/)
 fmovies.*##+js(aopr, AaDetector)
 fmovies.*##+js(nowoif)
 ||fmovies.*/sw.js
-fmovies.*##+js(nostif, f["mi"])
+fmovies.*##+js(nostif, return, 500)
 *$script,redirect-rule=noopjs,domain=playhydrax.com
 ! https://github.com/NanoMeow/QuickReports/issues/3311
 @@||iamcdn.net/players/*ads$script,domain=playhydrax.com
@@ -1651,7 +1651,7 @@ jav.guru##.alignnone
 ! https://github.com/uBlockOrigin/uAssets/issues/3764
 9anime.*##+js(acis, window.open, Cookie)
 9anime.*##+js(nowoif)
-9anime.*##+js(nostif, h["Fe"])
+9anime.*##+js(nostif, return, 250)
 9anime.*##section.sda
 @@||9anime.*^$ghide
 ||9anime.*/sw.js$script
@@ -2204,6 +2204,9 @@ hqq.*##div[style="position: fixed; display: block; width: 100%; height: 100%; in
 @@||hqq.*/sec/player/*$csp
 !#endif
 ||vkcdnservice.com^$script,redirect-rule=noopjs,3p
+! https://github.com/uBlockOrigin/uAssets/issues/10039
+||ebd.cda-hd.cc^
+||buyseoblog.com^
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=39244
 filescdn.com##+js(nowoif)
@@ -3165,7 +3168,7 @@ luxuretv.com##+js(popads-dummy)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1161
 sexu.com##+js(acis, ExoLoader)
-*$script,3p,domain=sexu.com
+*$script,3p,denyallow=gstatic.com|polyfill.io,domain=sexu.com
 ||sexu.com^$frame,1p
 sexu.com##.footerBanners
 sexu.com###jw_video_popup
@@ -3173,6 +3176,7 @@ sexu.com##.container > .info
 sexu.com##.player-related
 sexu.com##.player-block__line
 sexu.com##.title--sm
+sexu.com##.player-block__square
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3616
 pussyspace.*##+js(aopr, open)
@@ -3180,7 +3184,6 @@ pussyspace.*##+js(aopr, exoticdom)
 pussyspace.*##:xpath(//span[contains(text(),"PARTNER")]/..)
 pussyspace.*##div[id] > [class]:not(a):not(div) > img:only-child
 /^https:\/\/www\.pussyspace\.(?:com|net)\/(?!style\/).+/$image,1p,domain=pussyspace.*
-||pussyspace.*/lazyload.ads?
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1164
 adpop.me##+js(aopr, app_vars.force_disable_adblock)
@@ -4641,7 +4644,6 @@ alphaporno.com,zedporn.com##.block-banner
 alphaporno.com##.movies-block > div[style*="text-align:center;"]
 alphaporno.com,zedporn.com##.sponsor
 ||alphaporno.com/bravoplayer/custom/alphapornocom/scripts/inplaybn-
-||9v58v.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1769
 @@||eddirasa.com^$ghide
@@ -4668,7 +4670,6 @@ fcportables.com##+js(set, gsecs, 0)
 ! https://github.com/uBlockOrigin/uAssets/issues/1774
 porntube.com##.relatedContainer
 porntube.com##.col-md-3 > iframe[src^="/external"]:upward(1)
-porntube.com##.webcam-shelve
 ||porntube.com/external/
 ||porntube.com/nativeexternal/
 
@@ -9319,8 +9320,8 @@ globalssh.net##+js(acis, addEventListener, nextFunction)
 hulblog.com##+js(aopr, decodeURIComponent)
 hulblog.com##+js(aopr, Base64)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/66150
-sysnettechsolutions.com##+js(aopw, ai_front)
+! https://www.reddit.com/r/uBlockOrigin/comments/pqthf7/anti_adblocker_script_on_sysnettechsolutionscom/
+sysnettechsolutions.com##+js(nostif, ai_adb)
 sysnettechsolutions.com##a[href^="https://bit.ly/"]
 
 watchdoctorwhoonline.com###keeper2
@@ -10307,7 +10308,6 @@ xxxvideos.ink##.curiosity
 /quwet.js$script,1p
 ||a.cdn1.pro^
 ||all-usanomination.com^
-||handicappedfaceupside.com^
 ||jumpnews.pro^
 ||kiolim.com^
 ||mirnews.pro^
@@ -11084,7 +11084,7 @@ hanime.tv##a[href^="https://track.aftrk1.com/"]:upward(1)
 ! [badfilter] @@||adtng.com/get/$subdocument,domain=hanime.tv,badfilter
 ! https://www.reddit.com/r/uBlockOrigin/comments/mgu1v7/banner_ads_on_hanimetv_videos_on_firefox_mobile/
 !#if env_mobile
-hanime.tv##.htvad
+hanime.tv##.htvad[style^="width: 300px; display: block"]
 hanime.tv##.htvnad1
 hanime.tv##.htvnad
 !#endif
@@ -13846,9 +13846,8 @@ streameast.live##[id^="Advertisement"]
 sportlive.*##+js(ra, onclick)
 hdstream365.com##+js(nowoif)
 streameast.live##div[class]:has-text(adblock)
-@@||seast.xyz^$script,domain=streameast.live
+@@||xyz^$script,domain=streameast.live
 streameast.live##body > div > div > div:has-text(adblock)
-||streameast.live/cdn-cgi/bm/cv/$script,important
 livesport4u.com,pcast.pw,sportlive.site###localpp
 pcast.pw###ads
 
@@ -14539,13 +14538,13 @@ loskatchorros.com.br##.adsbygoogle:style(max-height: 1px !important;)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/92220
 ! https://github.com/AdguardTeam/AdguardFilters/issues/93328
 ! https://github.com/AdguardTeam/AdguardFilters/issues/94244
-avhost.xyz,cdn-myhdjav.info,animetw.*,bazavox.com,dutrag.com,embed.best,embed.casa,embed.media,embedsito.com,fembed.com,feurl.com,films5k.com,gaobook.review,gcloud.live,javcl.me,javideo.pw,javip.pro,javjav.top,javlove.club,luxubu.review,mavplay.*,mavplayer.xyz,mrdhan.com,openplayer.net,playfinder.xyz,playdoe.xyz,playvid.host,playvideo.best,qdembed.com,rubicstreaming.com,smartshare.tv,svpri.xyz,vaplayer.xyz,videobb.*,videogreen.xyz,watchgayporn.online,weirdmovies.xyz,xstreamcdn.com,youtnbe.xyz,zidiplay.com##+js(aopr, jwplayer.utils.Timer)
-avhost.xyz,cdn-myhdjav.info,animetw.*,bazavox.com,dutrag.com,embed.best,embed.casa,embed.media,embedsito.com,fembed.com,feurl.com,films5k.com,gaobook.review,gcloud.live,javcl.me,javideo.pw,javip.pro,javjav.top,javlove.club,luxubu.review,mavplay.*,mavplayer.xyz,mrdhan.com,openplayer.net,playdoe.xyz,playfinder.xyz,playvid.host,playvideo.best,qdembed.com,rubicstreaming.com,smartshare.tv,svpri.xyz,vaplayer.xyz,videobb.*,videogreen.xyz,watchgayporn.online,weirdmovies.xyz,xstreamcdn.com,youtnbe.xyz,zidiplay.com##+js(aopr, __Y)
+avhost.xyz,cdn-myhdjav.info,animetw.*,bazavox.com,dutrag.com,embed.best,embed.casa,embed.media,embedsito.com,fembed.com,feurl.com,films5k.com,gaobook.review,gcloud.live,javcl.me,javideo.pw,javip.pro,javjav.top,javlove.club,luxubu.review,mavplay.*,mavplayer.xyz,mrdhan.com,openplayer.net,playfinder.xyz,playdoe.xyz,playvid.host,playvideo.best,qdembed.com,rubicstreaming.com,smartshare.tv,svpri.xyz,ujav.me,vaplayer.xyz,videobb.*,videogreen.xyz,watchgayporn.online,weirdmovies.xyz,xstreamcdn.com,youtnbe.xyz,zidiplay.com##+js(aopr, jwplayer.utils.Timer)
+avhost.xyz,cdn-myhdjav.info,animetw.*,bazavox.com,dutrag.com,embed.best,embed.casa,embed.media,embedsito.com,fembed.com,feurl.com,films5k.com,gaobook.review,gcloud.live,javcl.me,javideo.pw,javip.pro,javjav.top,javlove.club,luxubu.review,mavplay.*,mavplayer.xyz,mrdhan.com,openplayer.net,playdoe.xyz,playfinder.xyz,playvid.host,playvideo.best,qdembed.com,rubicstreaming.com,smartshare.tv,svpri.xyz,ujav.me,vaplayer.xyz,videobb.*,videogreen.xyz,watchgayporn.online,weirdmovies.xyz,xstreamcdn.com,youtnbe.xyz,zidiplay.com##+js(aopr, __Y)
 cdn-myhdjav.info,embed.best,embed.media,embedsito.com,fembed.com,feurl.com,gaobook.review,gcloud.live,javcl.me,luxubu.review,mavplay.*,mavplayer.xyz,openplayer.net,playfinder.xyz,playvid.host,playvideo.best,qdembed.com,rubicstreaming.com,svpri.xyz,vaplayer.xyz,videobb.*,weirdmovies.xyz,xstreamcdn.com,zidiplay.com##+js(aopw, adcashMacros)
 cdn-myhdjav.info,embed.best,embed.media,embedsito.com,fembed.com,feurl.com,gaobook.review,gcloud.live,javcl.me,luxubu.review,mavplay.*,mavplayer.xyz,openplayer.net,playfinder.xyz,playvid.host,playvideo.best,qdembed.com,rubicstreaming.com,svpri.xyz,vaplayer.xyz,videobb.*,weirdmovies.xyz,xstreamcdn.com,zidiplay.com##+js(aopr, AaDetector)
 cdn-myhdjav.info,embed.best,embed.media,embedsito.com,fembed.com,feurl.com,gaobook.review,gcloud.live,javcl.me,luxubu.review,mavplayer.xyz,openplayer.net,playfinder.xyz,playvid.host,playvideo.best,qdembed.com,rubicstreaming.com,svpri.xyz,vaplayer.xyz,videobb.*,weirdmovies.xyz,xstreamcdn.com,zidiplay.com##+js(aopr, glxopen)
-avhost.xyz,bazavox.com,cdn-myhdjav.info,animetw.*,dutrag.com,embed.best,embed.casa,embed.media,embedsito.com,fembed.com,feurl.com,films5k.com,gaobook.review,gcloud.live,javcl.me,javideo.pw,javip.pro,javjav.top,javlove.club,luxubu.review,mavplay.*,mavplayer.xyz,mrdhan.com,openplayer.net,playdoe.xyz,playfinder.xyz,playvid.host,playvideo.best,qdembed.com,rubicstreaming.com,smartshare.tv,svpri.xyz,vaplayer.xyz,videobb.*,videogreen.xyz,watchgayporn.online,weirdmovies.xyz,xstreamcdn.com,youtnbe.xyz,zidiplay.com##+js(set, globalThis, null)
-avhost.xyz,bazavox.com,cdn-myhdjav.info,animetw.*,dutrag.com,embed.best,embed.casa,embed.media,embedsito.com,fembed.com,feurl.com,films5k.com,gaobook.review,gcloud.live,javcl.me,javip.pro,javlove.club,luxubu.review,mavplay.*,mavplayer.xyz,mrdhan.com,openplayer.net,playdoe.xyz,playfinder.xyz,playvid.host,playvideo.best,qdembed.com,rubicstreaming.com,smartshare.tv,svpri.xyz,vaplayer.xyz,videobb.*,videogreen.xyz,watchgayporn.online,weirdmovies.xyz,xstreamcdn.com,youtnbe.xyz,zidiplay.com##+js(nowoif)
+avhost.xyz,bazavox.com,cdn-myhdjav.info,animetw.*,dutrag.com,embed.best,embed.casa,embed.media,embedsito.com,fembed.com,feurl.com,films5k.com,gaobook.review,gcloud.live,javcl.me,javideo.pw,javip.pro,javjav.top,javlove.club,luxubu.review,mavplay.*,mavplayer.xyz,mrdhan.com,openplayer.net,playdoe.xyz,playfinder.xyz,playvid.host,playvideo.best,qdembed.com,rubicstreaming.com,smartshare.tv,svpri.xyz,ujav.me,vaplayer.xyz,videobb.*,videogreen.xyz,watchgayporn.online,weirdmovies.xyz,xstreamcdn.com,youtnbe.xyz,zidiplay.com##+js(set, globalThis, null)
+avhost.xyz,bazavox.com,cdn-myhdjav.info,animetw.*,dutrag.com,embed.best,embed.casa,embed.media,embedsito.com,fembed.com,feurl.com,films5k.com,gaobook.review,gcloud.live,javcl.me,javip.pro,javlove.club,luxubu.review,mavplay.*,mavplayer.xyz,mrdhan.com,openplayer.net,playdoe.xyz,playfinder.xyz,playvid.host,playvideo.best,qdembed.com,rubicstreaming.com,smartshare.tv,svpri.xyz,ujav.me,vaplayer.xyz,videobb.*,videogreen.xyz,watchgayporn.online,weirdmovies.xyz,xstreamcdn.com,youtnbe.xyz,zidiplay.com##+js(nowoif)
 cdn-myhdjav.info##+js(set, clientSide.adbDetect, noopFunc)
 filmlecteur.info,tpxanime.in,welovestream.xyz##+js(nowoif)
 welovestream.xyz##.video-fake
@@ -17857,8 +17856,9 @@ allcalidad.*##+js(aeld, click, popMagic)
 allcalidad.*##+js(aeld, , 0x)
 allcalidad.*##+js(aopw, smrtSB)
 allcalidad.*##+js(set, btoa, null)
+allcalidad.*##+js(ra, href, #clickfakeplayer)
 allcalidad.*##.table-hover.table > tbody > tr:has-text(Descargar Premium)
-*$script,3p,denyallow=cloudflare.com|cloudfront.net|googleapis.com|gstatic.com|heyoya.com,domain=allcalidad.*
+*$script,3p,denyallow=cloudflare.com|cloudfront.net|facebook.net|fbcdn.net|googleapis.com|gstatic.com|heyoya.com,domain=allcalidad.*
 freshpelis.com,salaload.me##+js(nostif, href)
 freshpelis.com,salaload.me##+js(set, como, true)
 freshpelis.com,salaload.me##+js(set, Ok, 3)
@@ -19696,7 +19696,7 @@ pcgamez-download.com##+js(acis, Math, break;case $.)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9145
 sektekomik.com##+js(aeld, , encodeURIComponent)
-*$script,3p,denyallow=chatango.com|cloudfront.net|cloudflare.com|cloudflare.net|disqus.com|disquscdn.com|dmca.com|facebook.net|fastly.net|fastlylb.net|fbcdn.net|googleapis.com|jsdelivr.net|optimole.com|statically.io|stackpathdns.com,domain=sektekomik.com
+*$script,3p,denyallow=chatango.com|cloudfront.net|cloudflare.com|cloudflare.net|disqus.com|disquscdn.com|dmca.com|facebook.net|fastly.net|fastlylb.net|fbcdn.net|firebaseio.com|googleapis.com|gstatic.com|jsdelivr.net|optimole.com|statically.io|stackpathdns.com,domain=sektekomik.com
 sektekomik.com##[href^="http://18.138.124.176/"]
 sektekomik.com##div.section.widget_text:first-child > .custom-html-widget
 
@@ -21908,7 +21908,7 @@ techdracula.com##.adsbygoogle
 ||googleads.g.doubleclick.net/$xhr,redirect-rule=nooptext
 
 ! regex
-/[0-9a-f]{32}\/invoke\.js$/$script,3p
+/[0-9a-f]{32}\/invoke\.js/$script,3p
 /^https?:\/\/(?:[a-z0-9]{8,10}\.)?[-a-z0-9]{5,}\.(?:com?|click|bid|link|net|online|top|club)\/(?:[a-z0-9]{2}\/){3}[a-f0-9]{32}\.js/$script,3p
 ! https://github.com/easylist/easylist/issues/6476
 /^https?:\/\/(?:[a-z]{2}\.)?[0-9a-z]{7,16}\.(?:com|pw|site)\/[a-z](?=[0-9a-z]{0,15}[A-Z])(?=[a-z]{0,14}[0-9A-Z])[0-9a-zA-Z]{10,16}\/(?:[1-4]\d{4}|[4-9]\d{3})(\?_=\d+)?$/$script,3p,match-case
