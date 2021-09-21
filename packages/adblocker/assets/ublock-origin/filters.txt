@@ -1636,7 +1636,6 @@ hydrax.to##+js(acis, Math, break;case $.)
 redirect-ads.com##+js(ra, style, #over)
 redirect-ads.com###playback-fake
 redirect-ads.com##+js(nowoif, /^/, 1)
-@@||cdn.jsdelivr.net/npm/fuckadblock@3.2.1/fuckadblock.min.js$script,domain=redirect-ads.com
 playhydrax.com,hydracdn.*,hydrax.net##div#over:remove()
 @@||hydracdn.*^$ghide
 @@||hydrax.net^$ghide
@@ -3054,7 +3053,6 @@ mitly.us##+js(aopw, atOptions)
 mitly.us##+js(aopw, _pop)
 mitly.us##+js(set, blurred, false)
 @@||mitly.us^$ghide
-@@||cdn.jsdelivr.net/npm/fuckadblock@*/fuckadblock.min.js$script,domain=mitly.us
 *$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=mitly.us
 ||googlesyndication.com/pagead/$script,redirect=noopjs,domain=mitly.us
 mitly.us##.adsbygoogle
@@ -3182,7 +3180,7 @@ sexu.com##.player-block__square
 pussyspace.*##+js(aopr, open)
 pussyspace.*##+js(aopr, exoticdom)
 pussyspace.*##:xpath(//span[contains(text(),"PARTNER")]/..)
-pussyspace.*##div[id] > [class]:not(a):not(div) > img:only-child
+pussyspace.*##div[id] > [class]:not(a):not(div) img:only-child
 /^https:\/\/www\.pussyspace\.(?:com|net)\/(?!style\/).+/$image,1p,domain=pussyspace.*
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1164
@@ -6218,18 +6216,22 @@ cartoonporno.xxx##+js(nowoif)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2482
 ! https://github.com/uBlockOrigin/uAssets/issues/4779
-you-porn.com,youporn.com,youporngay.com##+js(set, page_params.holiday_promo, true)
+! https://github.com/uBlockOrigin/uAssets/issues/10052
+you-porn.com,youporn.com,youporngay.com,youpornru.com##+js(set, page_params.holiday_promo, true)
 youporn.com,youporngay.com##+js(nostif, href, 0)
-you-porn.com,youporn.com,youporngay.com###videoWrapper + [class]:has([data-zone^="underplayer"])
-you-porn.com,youporn.com,youporngay.com##.ad-bottom-text
+youpornru.com##+js(nowoif)
+you-porn.com,youporn.com,youporngay.com,youpornru.com##[data-zone="underplayer_970x90"]:upward(1)
+you-porn.com,youporn.com,youporngay.com,youpornru.com##.ad-bottom-text:upward(3)
 you-porn.com,youporn.com,youporngay.com##.adLinkText
-you-porn.com,youporn.com,youporngay.com##.adsbytrafficjunky
+you-porn.com,youporn.com,youporngay.com,youpornru.com##.adsbytrafficjunky
 you-porn.com,youporn.com##.e8-column
 you-porn.com,youporn.com##[data-removelink="removeLink"]
-you-porn.com,youporngay.com###pb_template
+you-porn.com,youporngay.com,youpornru.com###pb_template
 youporn.com,youporngay.com##.channel-header
 youporn.com,youporngay.com##.channelSideAd
 you-porn.com##[id^="adblock"]
+youpornru.com##.adLinkText
+youpornru.com##[data-tracking="track-close-btn-ad"]
 ##.trafficjunky-float-right
 ! https://github.com/uBlockOrigin/uAssets/issues/2482#issuecomment-395244585
 redtube.com,redtube.net##+js(aopr, _goat)
@@ -12141,7 +12143,6 @@ elil.cc##+js(set, ads_blocked, 0)
 elil.cc##+js(nano-sib, timer, 1000, 0.6)
 |about:blank|$popup,domain=elil.cc
 *$frame,3p,domain=elil.cc
-@@||elil.cc/advertisement/$script,1p
 ||rasius.pro^
 ||elil.cc/reqa.js
 
@@ -13352,17 +13353,15 @@ cdna.tv##+js(nowoif)
 ||latoniankeen.pro^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5389
-enrt.eu##^meta[http-equiv="refresh"]
-enrt.eu##+js(aopr, app_vars.force_disable_adblock)
-enrt.eu##+js(set, blurred, false)
-enrt.eu##.banner-inner
+enrt.eu,seulink.*##^meta[http-equiv="refresh"]
+enrt.eu,seulink.*##+js(aopr, app_vars.force_disable_adblock)
+enrt.eu,seulink.*##+js(aost, absda)
+enrt.eu,seulink.*##+js(set, blurred, false)
+enrt.eu,seulink.*##.banner-inner
 enrt.eu##[href*="builderall.net/"]
-*$script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=enrt.eu
+*$frame,script,3p,denyallow=google.com|gstatic.com|recaptcha.net,domain=enrt.eu|seulink.*
+||ads.enrt.eu^
 ||bp.blogspot.com^$image,domain=enrt.eu
-seulink.online##+js(aopr, app_vars.force_disable_adblock)
-seulink.online##+js(set, blurred, false)
-seulink.online##.banner-inner
-seulink.online##^meta[http-equiv="refresh"]
 ##[href*="https://catastropheillusive.com/"]
 ##[href*="https://ads.enrt.eu/"]
 
@@ -18095,7 +18094,8 @@ shortgoo.blogspot.com##+js(set, showAds, true)
 ! ytmp3.mobi ad and popup
 ytmp3.*##+js(nowoif)
 ||ytmp3.*/ad/$frame
-*$script,frame,3p,denyallow=dropbox.com|dropbox-dns.com|ijjiii.is,domain=ytmp3.cc
+*$script,frame,3p,denyallow=cloudflare.net|dropbox.com|dropbox-dns.com|ijjiii.is|jsdelivr.net,domain=ytmp3.cc
+ytmp3.cc###a-320-50
 
 ! cariskuy.com anti adb
 cariskuy.com##+js(nostif, nextFunction, 450)
@@ -18523,10 +18523,12 @@ rmcmv.*##[class*="ads"]
 lecourrier-du-soir.com##+js(nosiif, iframe)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2524
+owllink.net##+js(acis, Math, break;case $.)
 owllink.net##+js(acis, String.fromCharCode, /btoa|break/)
 owllink.net##+js(aopr, app_vars.force_disable_adblock)
 owllink.net##+js(aopr, open)
 owllink.net##+js(aopr, absda)
+owllink.net##+js(aopw, _pop)
 owllink.net##+js(nowebrtc)
 owllink.net##+js(set, blurred, false)
 owllink.net##.box-main p
