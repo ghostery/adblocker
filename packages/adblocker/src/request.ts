@@ -21,14 +21,19 @@ const TLDTS_OPTIONS = {
 
 // From: https://github.com/electron/electron/blob/34c4c8d5088fa183f56baea28809de6f2a427e02/shell/browser/net/atom_network_delegate.cc#L30
 export type ElectronRequestType =
-  | 'image'
   | 'mainFrame'
-  | 'object'
-  | 'other'
-  | 'script'
-  | 'stylesheet'
   | 'subFrame'
-  | 'xhr';
+  | 'stylesheet'
+  | 'script'
+  | 'image'
+  | 'font'
+  | 'object'
+  | 'xhr'
+  | 'ping'
+  | 'cspReport'
+  | 'media'
+  | 'webSocket'
+  | 'other';
 
 // From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/7f3549ed0050f2ca8d7fcc00c33eba21f0cbdd88/types/puppeteer/index.d.ts#L945
 export type PuppeteerRequestType =
@@ -82,6 +87,7 @@ export type RequestType =
 
 export const NORMALIZED_TYPE_TOKEN: { [s in RequestType]: number } = {
   beacon: fastHash('type:beacon'),
+  cspReport: fastHash('type:csp'),
   csp_report: fastHash('type:csp'),
   cspviolationreport: fastHash('type:cspviolationreport'),
   document: fastHash('type:document'),
@@ -106,6 +112,7 @@ export const NORMALIZED_TYPE_TOKEN: { [s in RequestType]: number } = {
   subFrame: fastHash('type:subdocument'),
   sub_frame: fastHash('type:subdocument'),
   texttrack: fastHash('type:other'),
+  webSocket: fastHash('type:websocket'),
   web_manifest: fastHash('type:other'),
   websocket: fastHash('type:websocket'),
   xhr: fastHash('type:xhr'),

@@ -186,12 +186,14 @@ const REQUEST_TYPE_TO_MASK: { [s in RequestType]: number | undefined } = {
   stylesheet: NETWORK_FILTER_MASK.fromStylesheet,
   subFrame: NETWORK_FILTER_MASK.fromSubdocument,
   sub_frame: NETWORK_FILTER_MASK.fromSubdocument,
+  webSocket: NETWORK_FILTER_MASK.fromWebsocket,
   websocket: NETWORK_FILTER_MASK.fromWebsocket,
   xhr: NETWORK_FILTER_MASK.fromXmlHttpRequest,
   xmlhttprequest: NETWORK_FILTER_MASK.fromXmlHttpRequest,
 
   // Other
   csp_report: NETWORK_FILTER_MASK.fromOther,
+  cspReport: NETWORK_FILTER_MASK.fromOther,
   eventsource: NETWORK_FILTER_MASK.fromOther,
   manifest: NETWORK_FILTER_MASK.fromOther,
   other: NETWORK_FILTER_MASK.fromOther,
