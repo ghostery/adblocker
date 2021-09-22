@@ -400,9 +400,9 @@ export default class CosmeticFilterBucket {
     domain: string;
     hostname: string;
 
-    classes?: string[];
-    hrefs?: string[];
-    ids?: string[];
+    classes: string[] | undefined;
+    hrefs: string[] | undefined;
+    ids: string[] | undefined;
 
     allowGenericHides: boolean;
     allowSpecificHides: boolean;

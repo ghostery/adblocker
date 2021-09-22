@@ -41,14 +41,25 @@ type StreamFilter = WebRequest.StreamFilter & {
  * Create an instance of `Request` from WebRequest details.
  */
 export function fromWebRequestDetails(details: OnBeforeRequestDetailsType): Request {
-  return Request.fromRawDetails({
-    _originalRequestDetails: details,
-    requestId: details.requestId,
-    sourceUrl: details.initiator || details.originUrl || details.documentUrl,
-    tabId: details.tabId,
-    type: details.type,
-    url: details.url,
-  });
+  const sourceUrl = details.initiator || details.originUrl || details.documentUrl;
+  return Request.fromRawDetails(
+    sourceUrl
+      ? {
+          _originalRequestDetails: details,
+          requestId: details.requestId,
+          sourceUrl,
+          tabId: details.tabId,
+          type: details.type,
+          url: details.url,
+        }
+      : {
+          _originalRequestDetails: details,
+          requestId: details.requestId,
+          tabId: details.tabId,
+          type: details.type,
+          url: details.url,
+        },
+  );
 }
 
 /**
@@ -472,14 +483,25 @@ export class WebExtensionBlocker extends FiltersEngine {
     }
 
     // Proceed with stylesheet injection.
-    return browser.tabs.insertCSS(tabId, {
-      allFrames,
-      code: styles,
-      cssOrigin: 'user',
-      frameId,
-      matchAboutBlank: true,
-      runAt: 'document_start',
-    });
+    return browser.tabs.insertCSS(
+      tabId,
+      frameId
+        ? {
+            allFrames,
+            code: styles,
+            cssOrigin: 'user',
+            frameId,
+            matchAboutBlank: true,
+            runAt: 'document_start',
+          }
+        : {
+            allFrames,
+            code: styles,
+            cssOrigin: 'user',
+            matchAboutBlank: true,
+            runAt: 'document_start',
+          },
+    );
   }
 }
 
