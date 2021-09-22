@@ -1,3 +1,27 @@
+# v1.22.7 (Wed Sep 22 2021)
+
+#### :nail_care: Polish
+
+- electron: add missing types from https://github.com/electron/electron/pull/29902 [#2241](https://github.com/cliqz-oss/adblocker/pull/2241) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Bump typescript [#2243](https://github.com/cliqz-oss/adblocker/pull/2243) ([@remusao](https://github.com/remusao))
+- Update local assets [#2232](https://github.com/cliqz-oss/adblocker/pull/2232) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2229](https://github.com/cliqz-oss/adblocker/pull/2229) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump @types/node from 15.6.1 to 16.9.6 [#2235](https://github.com/cliqz-oss/adblocker/pull/2235) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.22.6 (Sun Sep 19 2021)
 
 #### :house: Internal

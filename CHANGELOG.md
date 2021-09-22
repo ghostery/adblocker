@@ -1,3 +1,43 @@
+# v1.22.7 (Wed Sep 22 2021)
+
+#### :nail_care: Polish
+
+- `@cliqz/adblocker`
+  - electron: add missing types from https://github.com/electron/electron/pull/29902 [#2241](https://github.com/cliqz-oss/adblocker/pull/2241) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- `@cliqz/adblocker-content`, `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-electron`, `@cliqz/adblocker-extended-selectors`, `@cliqz/adblocker-playwright`, `@cliqz/adblocker-puppeteer`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - Bump typescript [#2243](https://github.com/cliqz-oss/adblocker/pull/2243) ([@remusao](https://github.com/remusao))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-puppeteer`
+  - Remove express dependency [#2242](https://github.com/cliqz-oss/adblocker/pull/2242) ([@remusao](https://github.com/remusao))
+- `@cliqz/adblocker`
+  - Update local assets [#2232](https://github.com/cliqz-oss/adblocker/pull/2232) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+  - Update local assets [#2229](https://github.com/cliqz-oss/adblocker/pull/2229) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump tldts-experimental from 5.7.44 to 5.7.45 [#2238](https://github.com/cliqz-oss/adblocker/pull/2238) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @rollup/plugin-node-resolve from 13.0.4 to 13.0.5 [#2239](https://github.com/cliqz-oss/adblocker/pull/2239) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump playwright from 1.14.1 to 1.15.0 [#2240](https://github.com/cliqz-oss/adblocker/pull/2240) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump tldts-experimental from 5.7.43 to 5.7.44 [#2231](https://github.com/cliqz-oss/adblocker/pull/2231) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chai from 4.2.21 to 4.2.22 [#2233](https://github.com/cliqz-oss/adblocker/pull/2233) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/sinon from 10.0.2 to 10.0.3 [#2234](https://github.com/cliqz-oss/adblocker/pull/2234) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-content`, `@cliqz/adblocker-extended-selectors`, `@cliqz/adblocker`
+  - Bump @types/node from 15.6.1 to 16.9.6 [#2235](https://github.com/cliqz-oss/adblocker/pull/2235) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-electron`
+  - Bump electron from 14.0.1 to 15.0.0 [#2236](https://github.com/cliqz-oss/adblocker/pull/2236) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-puppeteer`
+  - Bump puppeteer from 10.2.0 to 10.4.0 [#2237](https://github.com/cliqz-oss/adblocker/pull/2237) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.22.6 (Sun Sep 19 2021)
 
 #### :nail_care: Polish

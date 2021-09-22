@@ -1,3 +1,15 @@
+# v1.22.7 (Wed Sep 22 2021)
+
+#### :house: Internal
+
+- Bump typescript [#2243](https://github.com/cliqz-oss/adblocker/pull/2243) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.22.3 (Thu Jul 29 2021)
 
 #### :nut_and_bolt: Dependencies

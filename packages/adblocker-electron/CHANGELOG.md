@@ -1,3 +1,20 @@
+# v1.22.7 (Wed Sep 22 2021)
+
+#### :house: Internal
+
+- Bump typescript [#2243](https://github.com/cliqz-oss/adblocker/pull/2243) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump electron from 14.0.1 to 15.0.0 [#2236](https://github.com/cliqz-oss/adblocker/pull/2236) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.22.6 (Sun Sep 19 2021)
 
 #### :nail_care: Polish

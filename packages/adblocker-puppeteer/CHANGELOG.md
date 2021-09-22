@@ -1,3 +1,21 @@
+# v1.22.7 (Wed Sep 22 2021)
+
+#### :house: Internal
+
+- Bump typescript [#2243](https://github.com/cliqz-oss/adblocker/pull/2243) ([@remusao](https://github.com/remusao))
+- Remove express dependency [#2242](https://github.com/cliqz-oss/adblocker/pull/2242) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump puppeteer from 10.2.0 to 10.4.0 [#2237](https://github.com/cliqz-oss/adblocker/pull/2237) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.22.5 (Wed Aug 25 2021)
 
 #### :nut_and_bolt: Dependencies
