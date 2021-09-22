@@ -34,8 +34,8 @@ export type Type = Base & {
 export type PseudoClass = Base & {
   type: 'pseudo-class';
   name: string;
-  argument?: string;
-  subtree?: AST;
+  argument: string | undefined;
+  subtree: AST | undefined;
 };
 
 export type PseudoElement = Base & {
@@ -93,7 +93,7 @@ export interface Complex {
   type: 'complex';
   combinator: ' ' | '+' | '~' | '>';
   right: AST;
-  left?: AST;
+  left: AST | undefined;
 }
 
 // Multiple selectors together

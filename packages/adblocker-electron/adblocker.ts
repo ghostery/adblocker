@@ -18,7 +18,8 @@ import type {
 const PRELOAD_PATH = require.resolve('@cliqz/adblocker-electron-preload');
 
 // https://stackoverflow.com/questions/48854265/why-do-i-see-an-electron-security-warning-after-updating-my-electron-project-t
-process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
+// tslint:disable no-string-literal
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
 /**
  * Create an instance of `Request` from `Electron.OnBeforeRequestDetails`.
@@ -27,14 +28,24 @@ export function fromElectronDetails(
   details: Electron.OnHeadersReceivedListenerDetails | Electron.OnBeforeRequestListenerDetails,
 ): Request {
   const { id, url, resourceType, referrer, webContentsId } = details;
-  return Request.fromRawDetails({
-    _originalRequestDetails: details,
-    requestId: `${id}`,
-    sourceUrl: referrer,
-    tabId: webContentsId,
-    type: (resourceType || 'other') as ElectronRequestType,
-    url,
-  });
+  return Request.fromRawDetails(
+    webContentsId
+      ? {
+          _originalRequestDetails: details,
+          requestId: `${id}`,
+          sourceUrl: referrer,
+          tabId: webContentsId,
+          type: (resourceType || 'other') as ElectronRequestType,
+          url,
+        }
+      : {
+          _originalRequestDetails: details,
+          requestId: `${id}`,
+          sourceUrl: referrer,
+          type: (resourceType || 'other') as ElectronRequestType,
+          url,
+        },
+  );
 }
 
 /**

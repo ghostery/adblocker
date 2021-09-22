@@ -611,9 +611,9 @@ export default class FilterEngine extends EventEmitter<
     hostname: string;
     domain: string | null | undefined;
 
-    classes?: string[];
-    hrefs?: string[];
-    ids?: string[];
+    classes?: string[] | undefined;
+    hrefs?: string[] | undefined;
+    ids?: string[] | undefined;
 
     getBaseRules?: boolean;
     getInjectionRules?: boolean;

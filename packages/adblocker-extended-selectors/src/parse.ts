@@ -272,6 +272,7 @@ const GRAMMAR = [
         pos: [],
         name,
         argument,
+        subtree: undefined,
       },
       after,
     ];
