@@ -230,6 +230,7 @@ describe('parse', () => {
             'length': 9,
             'name': 'remove',
             'pos': [4, 13],
+            'subtree': undefined,
             'type': 'pseudo-class',
           },
         ],
@@ -252,6 +253,7 @@ describe('parse', () => {
           },
           {
             'type': 'pseudo-class',
+            'subtree': undefined,
             'argument': '2',
             'content': ':has-text(2)',
             'length': 12,
@@ -260,6 +262,7 @@ describe('parse', () => {
           },
           {
             'type': 'pseudo-class',
+            'subtree': undefined,
             'argument': 'left-3000px !important;position:absolute !important',
             'content': ':style(left-3000px !important;position:absolute !important)',
             'length': 59,
@@ -287,6 +290,7 @@ describe('parse', () => {
             'length': 10,
             'name': 'xpath',
             'pos': [4, 14],
+            'subtree': undefined,
             'type': 'pseudo-class',
           },
         ],
@@ -356,6 +360,7 @@ describe('parse', () => {
                               'length': 6,
                               'name': 'scope',
                               'pos': [0, 6],
+                              'subtree': undefined,
                               'type': 'pseudo-class',
                             },
                             'right': {
@@ -690,6 +695,7 @@ describe('parse', () => {
               'content': ':has-text(/foo bar/i)',
               'length': 21,
               'name': 'has-text',
+              'subtree': undefined,
               'pos': [17, 38],
             },
           ],
