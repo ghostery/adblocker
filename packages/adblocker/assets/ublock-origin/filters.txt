@@ -184,8 +184,6 @@ newsbreak24.de##.aw-track-click
 newsbreak24.de###adup1
 transfermarkt.*##.noscript
 ! To counter unnecessary exception filters
-||focus.de^$ghide,important
-||pcwelt.de^$ghide,important
 ||adnxs.com^$important,domain=bz-berlin.de|metal-hammer.de|musikexpress.de|rollingstone.de|stylebook.de
 ||googlesyndication.com^$script,important,domain=autobild.de|metal-hammer.de|musikexpress.de|rollingstone.de
 ||sascdn.com^$script,important,domain=autobild.de|metal-hammer.de|musikexpress.de|rollingstone.de
@@ -1650,7 +1648,7 @@ jav.guru##.alignnone
 ! https://github.com/uBlockOrigin/uAssets/issues/3764
 9anime.*##+js(acis, window.open, Cookie)
 9anime.*##+js(nowoif)
-9anime.*##+js(nostif, return, 250)
+9anime.*##+js(set, console.clear, undefined)
 9anime.*##section.sda
 @@||9anime.*^$ghide
 ||9anime.*/sw.js$script
@@ -2493,7 +2491,8 @@ platinmods.*##+js(nano-sib)
 /(?:com|tube|xxx)\/[a-z]{8,12}\/[a-z]{8,12}\.js$/$script,1p,domain=see.xxx|upornia.*
 /afon7.$script,1p
 /barbar7.$script,1p
-/holly7.$script,1p
+! https://github.com/uBlockOrigin/uAssets/issues/10064
+/holly7.$script,1p,domain=~pornhits.com
 /huyass7.$script,1p
 /lemon7.$script,1p
 /rass7.$script,1p
@@ -2606,6 +2605,12 @@ vxxx.com##.video-page-content + div[class]
 vxxx.com##.video-page-content-left + div[class]:last-child
 vxxx.com##.videoplayer + div > div[class]
 vxxx.com##.wrapper-margin + div[class]:last-child
+! pornhits.com popup/under
+pornhits.com##+js(acis, ACtMan)
+||pornhits.com/magic/
+||mcpuwpush.com^
+||mrtbbnr.com^
+||red12flyw2.site^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/961
 ! https://github.com/uBlockOrigin/uAssets/issues/962
@@ -3178,9 +3183,9 @@ sexu.com##.player-block__square
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3616
 pussyspace.*##+js(aopr, open)
-pussyspace.*##+js(aopr, exoticdom)
+pussyspace.*##+js(aopr, ad_xidzone)
 pussyspace.*##:xpath(//span[contains(text(),"PARTNER")]/..)
-pussyspace.*##div[id] > [class]:not(a):not(div) img:only-child
+pussyspace.*##*:not(a):not(div):not(span) > div > img:only-child
 /^https:\/\/www\.pussyspace\.(?:com|net)\/(?!style\/).+/$image,1p,domain=pussyspace.*
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1164
@@ -4931,8 +4936,8 @@ megaup.net##+js(acis, Math, break;case)
 megaup.net##+js(acis, I833)
 !megaup.net##[id^="AdskeeperComposite"]:style(transform:translate(-999999px,0))
 !megaup.net##.mgbox:style(transform:translate(-999999px,0))
-!megaup.net##.metaRedirectWrapperBottomAds:style(pointer-events: none !important;opacity: 0 !important)
-megaup.net##[id*="ScriptRootC"]:upward(1):style(position:absolute !important;left:-99999px !important)
+megaup.net##.metaRedirectWrapperBottomAds:style(pointer-events: none !important;opacity: 0 !important)
+!megaup.net##[id*="ScriptRootC"]:upward(1):style(position:absolute !important;left:-99999px !important)
 @@||megaup.net^$ghide
 @@||jsc.adskeeper.co.uk/*/megaup.net$script,domain=megaup.net
 @@||servicer.adskeeper.co.uk^$script,domain=megaup.net
@@ -6224,7 +6229,7 @@ you-porn.com,youporn.com,youporngay.com,youpornru.com##[data-zone="underplayer_9
 you-porn.com,youporn.com,youporngay.com,youpornru.com##.ad-bottom-text:upward(3)
 you-porn.com,youporn.com,youporngay.com##.adLinkText
 you-porn.com,youporn.com,youporngay.com,youpornru.com##.adsbytrafficjunky
-you-porn.com,youporn.com##.e8-column
+you-porn.com,youporn.com,youpornru.com##.e8-column
 you-porn.com,youporn.com##[data-removelink="removeLink"]
 you-porn.com,youporngay.com,youpornru.com###pb_template
 youporn.com,youporngay.com##.channel-header
@@ -7776,11 +7781,11 @@ wowescape.com##+js(ra, target)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4476
 duellinksmeta.com##+js(noeval)
-duellinksmeta.com##+js(nostif, set(!0))
+duellinksmeta.com##.aadb-info-modal:upward(2)
+duellinksmeta.com##html.no-scroll,body.no-scroll:style(overflow:auto !important)
 *$script,redirect-rule=noopjs,domain=duellinksmeta.com
 @@||duellinksmeta.com^$1p
 @@||duellinksmeta.com^$ghide
-duellinksmeta.com##.show.fade.modal-backdrop
 duellinksmeta.com##.advertisement-box
 duellinksmeta.com##.ad-slot
 
@@ -9305,10 +9310,9 @@ skidrowfull.com##+js(aopw, _pop)
 4download.net##+js(nano-sib)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57320
-scat.gold##+js(aopr, mdpDeBlocker)
+! https://github.com/AdguardTeam/AdguardFilters/issues/94971
+scat.gold##+js(acis, eval, replace)
 scat.gold##+js(aopw, _pop)
-||googlesyndication.com^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=scat.gold
-scat.gold###mdp-deblocker-js-disabled
 videogreen.xyz##+js(nowoif)
 videogreen.xyz##+js(set, clientSide.adbDetect, noopFunc)
 
@@ -9631,7 +9635,7 @@ picbaron.com##.newsbar_blue
 picbaron.com###fadeinbox
 *$frame,domain=picbaron.com
 ||picbaron.com/*.gif$image
-##[href*="/redirect?tid="]
+picbaron.com##[href*="/redirect?tid="]
 ||directpaper.name^
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=42154
@@ -10309,7 +10313,7 @@ xxxvideos.ink##li.plate iframe[width="300"]:upward(.plate)
 xxxvideos.ink##.curiosity
 /quwet.js$script,1p
 ||a.cdn1.pro^
-||all-usanomination.com^
+||all-usanomination.com^$3p
 ||jumpnews.pro^
 ||kiolim.com^
 ||mirnews.pro^
@@ -11150,10 +11154,9 @@ nostalgie.fr##.pave
 @@||stadionowioprawcy.*^$ghide
 stadionowioprawcy.*##.adsbygoogle
 
-! anti-adb handball-deutschland.tv sportdeutschland.tv
-@@||handball-deutschland.tv^$xhr,1p
-@@||sportdeutschland.tv^$xhr,1p
-@@||71i.de/*/loader.js$script,domain=handball-deutschland.tv|sportdeutschland.tv
+! https://github.com/uBlockOrigin/uAssets/pull/10059
+@@||sportdeutschland.tv/assets/*$script,1p
+@@||71i.de/*/loader.js$script,domain=sportdeutschland.tv
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4616
 footballstream.tv,mlbstream.tv,nbastream.tv,nflstream.tv##+js(acis, decodeURI, decodeURIComponent)
@@ -18677,6 +18680,8 @@ fandom.com##+js(set, wgAffiliateEnabled, false)
 kenshi.fandom.com##+js(set, ads, null)
 fandom.com##[id^="siderail_"][id*="_gamepedia"]
 fandom.com###bodyContent:style(width:100% !important)
+fandom.com##.instant-suggestion
+||45tu1c0.com^
 
 ! https://github.com/DandelionSprout/adfilt/issues/7#issuecomment-569529562
 buscarfoto.com##+js(aopr, absda)
