@@ -339,6 +339,7 @@ dropgalaxy.*,financemonk.net,techssting.com###modalpop
 @@||dropgalaxy.*^$ghide
 @@||financemonk.net^$ghide
 @@||techssting.com^$ghide
+techssting.com###vipada
 newsindi.com,financemonk.net,techssting.com##+js(aopr, absda)
 @@||googletagmanager.com/gtag/js$xhr,domain=dropgalaxy.*|financemonk.net|techssting.com
 !#if env_firefox
@@ -883,9 +884,6 @@ sukidesuost.info##+js(nosiif, visibility, 1000)
 ! https://www.reddit.com/r/uBlockOrigin/comments/geoabd/how_to_block_aboutblank_popups_from_alphapixorg/
 alphapix.org##+js(nowoif)
 *$3p,script,denyallow=google.com|gstatic.com|googleapis.com|recaptcha.net|hcaptcha.com,domain=alphapix.org
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/55034
-biroads.com##+js(aopr, app_vars.force_disable_adblock)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/55038
 globes.co.il##+js(set, document.blocked_var, 1)
@@ -2205,11 +2203,6 @@ tattle.life##+js(nostif, prompt, 1000)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/58554
 itdplus.ru##+js(nosiif, visibility, 1000)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/58566
-freecoursenow.com##+js(nosiif, visibility, 1000)
-freecoursenow.com##[href^="https://bit.ly/"]
-cheappath.com##+js(aopr, app_vars.force_disable_adblock)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/7634
 berkas.co##+js(acis, addEventListener, google_ad_client)
 
@@ -3072,9 +3065,6 @@ bolly2tolly.net##+js(aopr, LieDetector)
 ! https://github.com/NanoMeow/QuickReports/issues/2530
 @@||bloomberght.com^$ghide
 
-! https://github.com/NanoMeow/QuickReports/issues/4490
-freeshrinker.com##+js(aopr, app_vars.force_disable_adblock)
-
 ! https://github.com/NanoMeow/QuickReports/issues/4494
 @@||overtakefans.com^$ghide
 
@@ -3126,6 +3116,7 @@ wordcounter.icu##+js(aopw, _pop)
 wordcounter.icu##+js(nowoif)
 @@||wordcounter.icu^$ghide
 wordcounter.icu##center
+wordcounter.icu##div[style*="z-index:999999"] > div[style*="width:300px"]
 *$frame,denyallow=google.com|hcaptcha.com,domain=wordcounter.icu
 *$script,3p,denyallow=google.com|gstatic.com|hcaptcha.com|jsdelivr.net|recaptcha.net,domain=wordcounter.icu
 ||uii.io^$3p
@@ -3549,6 +3540,7 @@ voe.sx##+js(acis, $, fadeIn)
 voe.sx##+js(nowebrtc)
 voe.sx##a[href^="https://glixaing.com/"]
 @@download=$popup,3p,domain=voe.sx
+@@?*=7417876c302ab06a36929e8$popup,domain=voe.sx
 !#if env_firefox
 @@?*=7417876c302ab06a36929e8$doc,1p
 !#endif
@@ -3661,12 +3653,6 @@ adzec.cc##+js(nosiif, visibility, 1000)
 drphil.com##+js(set, canRunAds, true)
 drphil.com##.adBanner:style(height:1px !important)
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js^$script,domain=drphil.com
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/63506
-abdeo8.com##+js(aopr, app_vars.force_disable_adblock)
-abdeo8.com##+js(set, blurred, false)
-abdeo8.com##.advert
-abdeo8.com##.banner
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63508
 addoge.cc##+js(nosiif, visibility, 1000)
@@ -5447,6 +5433,7 @@ secretsdeepweb.blogspot.com##+js(aeld, load, onload)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/68073
 passgen.icu##+js(aopr, app_vars.force_disable_adblock)
 passgen.icu##+js(nowoif)
+passgen.icu##div[style*="z-index:999999"] > div[style*="width:300px"]
 *$frame,denyallow=google.com,domain=passgen.icu
 *$script,3p,denyallow=google.com|gstatic.com|hcaptcha.com|jsdelivr.net|recaptcha.net|cloudflare.com,domain=genpas.icu
 
@@ -5610,7 +5597,7 @@ genpassword.top##+js(nowoif)
 genpassword.top##+js(set, blurred, false)
 *$frame,denyallow=google.com,domain=genpassword.top
 *$script,3p,denyallow=cloudflare.net|cloudflare.com|google.com|gstatic.com|hcaptcha.com|jsdelivr.net|recaptcha.net,domain=genpassword.top
-genpassword.top##[style="width:300px;text-align:center;"]
+genpassword.top##div[style*="z-index:999999"] > div[style*="width:300px"]
 ||genpassword.top/img/ai.png
 
 ! livemint anti-adblock
