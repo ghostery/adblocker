@@ -19,7 +19,7 @@ upmanager-defuser.js application/javascript
 
 
 twitch-videoad.js application/javascript
-(function(){if(false===/(^|\.)twitch\.tv$/.test(document.location.hostname))return;var t=window.fetch;window.fetch=function(e){if(arguments.length>=2&&"string"===typeof e&&e.includes("/access_token")){var n=new URL(arguments[0]);n.searchParams.delete("platform");arguments[0]=n.href}return t.apply(this,arguments)}})();
+(function(){if(false===/(^|\.)twitch\.tv$/.test(document.location.hostname))return;window.fetch=new Proxy(window.fetch,{apply:function(e,t,n){const[i,c]=n;if("string"===typeof i&&i.includes("gql")&&c instanceof Object&&c.headers instanceof Object){const{headers:e}=c;if("string"===typeof e["X-Device-Id"])e["X-Device-Id"]="twitch-web-wall-mason";if("string"===typeof e["Device-ID"])e["Device-ID"]="twitch-web-wall-mason"}return Reflect.apply(e,t,n)}})})();
 
 
 static.chartbeat.com/chartbeat.js application/javascript
@@ -60,6 +60,10 @@ remove-class.js application/javascript
 
 remove-attr.js application/javascript
 (function(){const e="{{1}}";if(""===e||"{{1}}"===e)return;const t=e.split(/\s*\|\s*/);let o="{{2}}";if(""===o||"{{2}}"===o)o=`[${t.join("],[")}]`;let r="{{3}}";let n;const s=()=>{n=void 0;try{const e=document.querySelectorAll(o);for(const o of e)for(const e of t)o.removeAttribute(e)}catch(e){}};const l=e=>{if(void 0!==n)return;let t=true;for(let o=0;o<e.length&&t;o++){const{type:r,addedNodes:n,removedNodes:s}=e[o];if("attributes"===r)t=false;for(let e=0;e<n.length&&t;e++)if(1===n[e].nodeType){t=false;break}for(let e=0;e<s.length&&t;e++)if(1===s[e].nodeType){t=false;break}}if(t)return;n=self.requestIdleCallback(s,{timeout:17})};const d=()=>{s();if(false===/\bstay\b/.test(r))return;const e=new MutationObserver(l);e.observe(document.documentElement,{attributes:true,attributeFilter:t,childList:true,subtree:true})};if("complete"!==document.readyState&&/\bcomplete\b/.test(r))self.addEventListener("load",d,{once:true});else if("loading"!==document.readyState||/\basap\b/.test(r))d();else self.addEventListener("DOMContentLoaded",d,{once:true})})();
+
+
+refresh-defuser.js application/javascript
+(function(){const t="{{1}}";const e=()=>{const e=document.querySelector('meta[http-equiv="refresh" i][content]');if(null===e)return;const n=""===t||"{{1}}"===t?e.getAttribute("content"):t;const o=1e3*Math.max(parseFloat(n)||0,0);setTimeout((()=>{window.stop()}),o)};if("loading"===document.readyState)document.addEventListener("DOMContentLoaded",e,{once:true});else e()})();
 
 
 rc.js application/javascript
