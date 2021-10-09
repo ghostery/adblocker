@@ -7,7 +7,6 @@
  */
 /* tslint:disable quotemark */
 export default [
-  "\\/[a-zA-Z0-9]{3,7}\\/[a-zA-Z0-9",
   "||imasdk.googleapis.com/js/sdk",
   ",redirect-rule=noopjs,domain=",
   "*$xhr,redirect-rule=nooptext,",
@@ -28,6 +27,7 @@ export default [
   "/^https?:\\/\\/",
   "^$third-party",
   "||smetrics.",
+  "a-zA-Z0-9]{",
   "doubleclick",
   "subdocument",
   "third-party",
@@ -119,7 +119,6 @@ export default [
   "ck",
   "cl",
   "ct",
-  "cu",
   "de",
   "di",
   "do",
@@ -186,6 +185,7 @@ export default [
   "qu",
   "re",
   "ro",
+  "s_",
   "s-",
   "s/",
   "sc",
