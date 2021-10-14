@@ -119,7 +119,7 @@ export default [
   "ck",
   "cl",
   "ct",
-  "de",
+  "cu",
   "di",
   "do",
   "e-",
