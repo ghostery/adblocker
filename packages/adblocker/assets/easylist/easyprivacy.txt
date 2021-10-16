@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202110141616
+! Version: 202110161632
 ! Title: EasyPrivacy
-! Last modified: 14 Oct 2021 16:16 UTC
+! Last modified: 16 Oct 2021 16:32 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -221,8 +221,7 @@
 .statData-eup.
 .stats?action=
 .svc/?tracking_id=
-! [badfilter] from ublock-origin/unbreak.txt
-! .tealium.
+.tealium.$domain=~tealium.com
 .track.actions.get?
 .track_Visit?
 .trackArticleAction&
@@ -1710,6 +1709,7 @@
 /end.gif?
 /endpoint/stats.
 /EndpointTracker/*
+/Engagement/TrackEventAsync
 /engine/ping?
 /ent_counter?
 /entry_stats?
@@ -4242,6 +4242,7 @@
 /trace-Update.php?
 /trace/link/*$image
 /trace/mail/*$image
+/trace/record?
 /trace?sessionid=
 /traces.php?
 /tracing?aspect=
@@ -5131,7 +5132,7 @@
 ://d.*/track.js
 ://email.*/blankpixel.gif
 ://ensighten.
-://fathom.$domain=~fathom.video|~fathomdelivers.com|~fathomseo.com|~usesfathom.com
+://fathom.$domain=~fathom.info|~fathom.video|~fathomdelivers.com|~fathomseo.com|~usesfathom.com
 ://geoip.*/country.json
 ://ivwextern.
 ://lightning.*/launch/
@@ -9654,11 +9655,13 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||reachmax.cn^$third-party
 ||sagetrc.com^$third-party
 ||scupio.com^$third-party
+||sdqoi2d.com^$third-party
 ||sitebot.cn^$third-party
 ||sjv.io^$third-party
 ||tagmanager.cn^$third-party
 ||tanx.com^$third-party
 ||tenmax.io^$third-party
+||threatbook.cn^$third-party
 ||tomonline-inc.com^$third-party
 ||top-bloggers.com^$third-party
 ||topsem.com^$third-party
@@ -11792,6 +11795,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||rum.nccgroup-webperf.com^
 ||rum.perfops.net^
 ||rum.uptime.com^
+||run.app/data.log?
 ||s-microsoft.com/mscc/$~stylesheet
 ||s.beop.io^
 ||s.clickability.com^
@@ -12820,6 +12824,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||cbsi.com.cn/js/dw.js
 ||cdn.hiido.cn^$third-party
 ||cdnmaster.com/sitemaster/sm360.js
+||chuzushijian.cn/c.php
 ||click.bokecc.com^
 ||click.taobao.com^$script
 ||cms.grandcloud.cn^$third-party
@@ -14577,6 +14582,8 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 !
 ||primate.dmarcdigests.com^
 !
+! CNAME https://github.com/easylist/easylist/issues/9383
+||kick-lake.ga^
 ! a8.net (https://github.com/AdguardTeam/cname-trackers/blob/master/trackers/a8_net.md)
 ||a8.01cloud.jp^
 ||a8.cyclemarket.jp^
@@ -24431,6 +24438,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 ||loginlog.sdo.com^
 ||logs.51cto.com^
 ||logstat.caixin.com^
+||logtake.weidian.com^
 ||logx.mtime.cn^
 ||logx.mtime.com^
 ||luobo.tv/staticts.html
@@ -24634,6 +24642,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 ||omataloyhtio.fi/statb.asp
 ||puutarha.net/ffsw-pushcrew.js
 ||puutarha.net/statb.asp
+||rakentaja.fi/kuvat/pi.gif$image
 ||stat.mtv3.fi^
 ||stats.fonecta.fi^
 ||tori.fi/img/none.gif$image
@@ -25668,6 +25677,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||google-analytics.com/analytics.js$domain=news.gamme.com.tw
 @@||gtimg.com/qqcdn/*/beacon.min.js$script,domain=qq.com
 @@||hk.on.cc/js/v4/urchin.js
+@@||hm.baidu.com/hm.gif$image,domain=clgod.com
 @@||tianxun.com^*/js/tracker.js
 @@||tianyancha.com^*/sensorsdata.$script,~third-party
 @@||uwants.com/include/*/swfaddress.js
@@ -25704,9 +25714,9 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||certona.net^*/resonance.js$domain=zooplus.fi
 @@||d2wzl9lnvjz3bh.cloudfront.net/frosmo.easy.js$domain=lippu.fi
 @@||dynamicyield.com/api/$script,domain=gigantti.fi
-@@||frosmo.com^$xmlhttprequest,domain=kauppahalli24.fi
+@@||frosmo.com/recoApi/$xmlhttprequest,domain=lily.fi|meillakotona.fi|terve.fi
 @@||googletagmanager.com/gtm.js$script,domain=cdon.fi|como.fi|episodi.fi|fum.fi|inferno.fi|rumba.fi|soundi.fi|tilt.fi|veho.fi
-@@||high.auriro.net/http/600x400/$image,domain=afterdawn.com|hardware.fi
+@@||high.auriro.net/http/600x400/$image,domain=afterdawn.com|dawn.fi|hardware.fi
 @@||images.sprinklecontent.com^$image,domain=como.fi|episodi.fi|fum.fi|inferno.fi|kaaoszine.fi|rumba.fi|soundi.fi|tilt.fi
 @@||inpref.s3.amazonaws.com/frosmo.easy.js$domain=elisa.fi|kauppahalli24.fi
 @@||inpref.s3.amazonaws.com/sites/$script,domain=kauppahalli24.fi
