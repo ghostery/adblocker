@@ -724,7 +724,9 @@ mm9841.com,mm9842.com##+js(nowoif)
 ! https://github.com/NanoMeow/QuickReports/issues/3738
 khatrimaza.*##+js(aeld, , 0x)
 khatrimaza.*##+js(acis, puShown, /doOpen|popundr/)
+khatrimaza.*##+js(no-xhr-if, ads)
 okhatrimaza.*##+js(acis, Object.defineProperty, XMLHttpRequest)
+khatrimaza.*##+js(nostif, showModal)
 @@||khlinks.buzz^$ghide
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/80222
@@ -1522,9 +1524,6 @@ animesanka.*##[id*="-ads-"]
 ! https://github.com/NanoMeow/QuickReports/issues/4030
 @@||napolitoday.it^$ghide
 
-! https://github.com/NanoMeow/QuickReports/issues/4031
-@@||theshortener.tk^$ghide
-
 ! jetanimes .com popups
 jetanimes.*##+js(acis, String.fromCharCode, /btoa|break/)
 jetanimes.*##+js(ra, href, #clickfakeplayer)
@@ -2257,9 +2256,6 @@ mynet.com##+js(nostif, googlefc)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4286
 dropshipin.id##+js(acis, $, ads)
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/59008
-soft4win.com##+js(nosiif, visibility, 1000)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/59026
 haddoz.net##+js(set, adBlockDetected, noopFunc)
@@ -3557,10 +3553,15 @@ softairbay.com##.xc449bad4854773ff
 softairbay.com##[class^="bmadblock"]
 softairbay.com##+js(aopw, _pop)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/63598
+! https://github.com/uBlockOrigin/uAssets/issues/10215
 swift4claim.com##+js(nosiif, visibility, 1000)
 swift4claim.com##.overlay2
 swift4claim.com##.overlay
+swift4claim.com##ins[class][style="display:inline-block;width:728px;height:90px;"]
+swift4claim.com##ins[class][style="display:inline-block;width:300px;height:250px;"]
+swift4claim.com##.text-center.login.col-sm-6 > .overflow > center
+swift4claim.com##div[style="width:300px; height: 250px;"]
+swift4claim.com##.overflow
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63599
 best-shopme.com##+js(nosiif, visibility, 1000)
@@ -3651,9 +3652,6 @@ crackedstream.*,crackstreams.*##+js(set, runAdblock, noopFunc)
 ! 1337xhd .cc popups
 1337xhd.*##+js(nowebrtc)
 1337xhd.*##+js(acis, String.fromCharCode, 'shift')
-
-! amznhd .com popups
-amznhd.com##+js(nowoif)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63869
 moviehousememories.com##+js(set, $tieE3, true)
@@ -3886,6 +3884,7 @@ highporn.net##.fel-playclose
 
 ! https://github.com/NanoMeow/QuickReports/issues/4745
 animeshouse.info##+js(acis, Math, break;case $.)
+animeshouse.info##^script:has-text(break;case $.)
 @@||animeshouse.info^$ghide
 
 ! adfoc.us ads
@@ -4252,18 +4251,6 @@ dota2freaks.com##+js(nosiif, visibility, 1000)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65563
 hlsplay.com##+js(aopr, absda)
 hlsplay.com##+js(aopw, _pop)
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/65605
-proshort.gq##+js(aopr, app_vars.force_disable_adblock)
-proshort.gq##+js(set, blurred, false)
-proshort.gq##.banner
-proshort.gq###FirstDiv:style(display:block !important)
-*$frame,script,3p,denyallow=google.com|gstatic.com|hcaptcha.com|recaptcha.net,domain=proshort.gq
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/65608
-trinddz.com##+js(aopr, app_vars.force_disable_adblock)
-trinddz.com##+js(set, blurred, false)
-trinddz.com##.banner
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65609
 pro-deals.com##+js(nosiif, visibility, 1000)
@@ -4720,7 +4707,7 @@ adultasianporn.com##[src*=".php"]
 
 ! gamesrepacks.com anti-adb
 gamesrepacks.com##+js(aopw, _pop)
-gamesrepacks.com##+js(nostif, disableDeveloperTools)
+gamesrepacks.com##+js(nostif, showModal)
 
 ! https://forums.lanik.us/viewtopic.php?p=157292#p157292
 @@||firenzetoday.it^$ghide
@@ -4988,7 +4975,7 @@ br0wsers.com###show_ag:style(display:block !important)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67468
 ashort1a.xyz,ashort1a-matik.tk,seg-ashort1a-ma.tk,topchort.tk##+js(acis, document.createElement, ignielAdBlock)
 ashort1a.xyz,ashort1a-matik.tk,seg-ashort1a-ma.tk,topchort.tk##+js(acis, adBlockDetected)
-ashort1a.xyz,ashort1a-matik.tk,seg-ashort1a-ma.tk,topchort.tk##+js(aopr, app_vars.force_disable_adblock)
+ashort2a-bro.tk,ashort1a.xyz,ashort1a-matik.tk,seg-ashort1a-ma.tk,topchort.tk##+js(aopr, app_vars.force_disable_adblock)
 ashort1a.xyz,ashort1a-matik.tk,seg-ashort1a-ma.tk,topchort.tk##+js(aopr, open)
 ashort1a.xyz,ashort1a-matik.tk,seg-ashort1a-ma.tk,topchort.tk##+js(aopw, _pop)
 ashort1a.xyz,ashort1a-matik.tk,seg-ashort1a-ma.tk,topchort.tk##+js(aopw, atOptions)
@@ -5003,6 +4990,8 @@ ashort1a.xyz,ashort1a-matik.tk,seg-ashort1a-ma.tk,topchort.tk###makingdifferentt
 *$frame,denyallow=google.com,domain=ashort1a.xyz|ashort1a-matik.tk|seg-ashort1a-ma.tk
 *$script,3p,denyallow=chatbro.com|cloudflare.com|google.com|googleapis.com|gstatic.com|hwcdn.net|jquery.com|jsdelivr.net|recaptcha.net,domain=ashort1a-matik.tk|ashort1a.xyz|seg-ashort1a-ma.tk
 /*sw.js$script,1p,domain=ashort1a.xyz|ashort1a-matik.tk|seg-ashort1a-ma.tk|topchort.tk
+ashort2a-bro.tk##[href^="https://gotbla.blogspot.com/"]
+ashort2a-bro.tk##.xc449bad4854773ff
 @@||topchort.tk^$ghide
 
 ! earncoin.site anti adb popup
