@@ -105,6 +105,8 @@ export class BlockingContext {
  */
 export class PuppeteerBlocker extends FiltersEngine {
   private readonly contexts: WeakMap<puppeteer.Page, BlockingContext> = new WeakMap();
+  // Defaults to undefined which preserves Legacy Mode behavior
+  private priority: number | undefined = undefined;
 
   // ----------------------------------------------------------------------- //
   // Helpers to enable and disable blocking for 'browser'
@@ -277,6 +279,9 @@ export class PuppeteerBlocker extends FiltersEngine {
     } while (true);
   };
 
+  public setRequestInterceptionPriority = (defaultPriority = 0) =>
+    (this.priority = defaultPriority);
+
   public onRequest = (details: puppeteer.HTTPRequest): void => {
     const request = fromPuppeteerDetails(details);
     if (this.config.guessRequestTypeFromUrl === true && request.type === 'other') {
@@ -289,7 +294,7 @@ export class PuppeteerBlocker extends FiltersEngine {
       request.isMainFrame() ||
       (request.type === 'document' && frame !== null && frame.parentFrame() === null)
     ) {
-      details.continue();
+      details.continue(details.continueRequestOverrides(), this.priority);
       return;
     }
 
@@ -297,24 +302,30 @@ export class PuppeteerBlocker extends FiltersEngine {
 
     if (redirect !== undefined) {
       if (redirect.contentType.endsWith(';base64')) {
-        details.respond({
-          status: 200,
-          headers: {},
-          body: Buffer.from(redirect.body, 'base64'),
-          contentType: redirect.contentType.slice(0, -7),
-        });
+        details.respond(
+          {
+            status: 200,
+            headers: {},
+            body: Buffer.from(redirect.body, 'base64'),
+            contentType: redirect.contentType.slice(0, -7),
+          },
+          this.priority,
+        );
       } else {
-        details.respond({
-          status: 200,
-          headers: {},
-          body: redirect.body,
-          contentType: redirect.contentType,
-        });
+        details.respond(
+          {
+            status: 200,
+            headers: {},
+            body: redirect.body,
+            contentType: redirect.contentType,
+          },
+          this.priority,
+        );
       }
     } else if (match === true) {
-      details.abort('blockedbyclient');
+      details.abort('blockedbyclient', this.priority);
     } else {
-      details.continue();
+      details.continue(details.continueRequestOverrides(), this.priority);
     }
   };
 
