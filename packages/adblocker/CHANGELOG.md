@@ -1,3 +1,28 @@
+# v1.23.0 (Mon Oct 18 2021)
+
+#### :house: Internal
+
+- Update local assets [#2278](https://github.com/cliqz-oss/adblocker/pull/2278) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2276](https://github.com/cliqz-oss/adblocker/pull/2276) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2265](https://github.com/cliqz-oss/adblocker/pull/2265) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2253](https://github.com/cliqz-oss/adblocker/pull/2253) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2246](https://github.com/cliqz-oss/adblocker/pull/2246) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2244](https://github.com/cliqz-oss/adblocker/pull/2244) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump @types/firefox-webext-browser from 82.0.1 to 94.0.0 [#2271](https://github.com/cliqz-oss/adblocker/pull/2271) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chrome from 0.0.158 to 0.0.159 [#2266](https://github.com/cliqz-oss/adblocker/pull/2266) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chrome from 0.0.157 to 0.0.158 [#2245](https://github.com/cliqz-oss/adblocker/pull/2245) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.22.7 (Wed Sep 22 2021)
 
 #### :nail_care: Polish

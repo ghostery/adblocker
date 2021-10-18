@@ -1,3 +1,17 @@
+# v1.23.0 (Mon Oct 18 2021)
+
+#### :nut_and_bolt: Dependencies
+
+- Bump @types/chrome from 0.0.158 to 0.0.159 [#2266](https://github.com/cliqz-oss/adblocker/pull/2266) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @rollup/plugin-commonjs from 20.0.0 to 21.0.0 [#2260](https://github.com/cliqz-oss/adblocker/pull/2260) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chrome from 0.0.157 to 0.0.158 [#2245](https://github.com/cliqz-oss/adblocker/pull/2245) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.22.7 (Wed Sep 22 2021)
 
 #### :house: Internal

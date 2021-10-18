@@ -1,3 +1,15 @@
+# v1.23.0 (Mon Oct 18 2021)
+
+#### :rocket: New Feature
+
+- puppeteer: added support for cooperative mode. [#2281](https://github.com/cliqz-oss/adblocker/pull/2281) ([@akornatskyy](https://github.com/akornatskyy))
+
+#### Authors: 1
+
+- Andriy Kornatskyy ([@akornatskyy](https://github.com/akornatskyy))
+
+---
+
 # v1.22.7 (Wed Sep 22 2021)
 
 #### :house: Internal
