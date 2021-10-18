@@ -103,12 +103,8 @@ google.*##a[href*="/aclk?"][data-al]:upward(2)
 www.google.*##div.ellip > span:has-text(/^Ads?$/):upward(2)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9597
-www.google.*##*:not([class^="sh-sr__shop-result-group"]) [href^="/aclk"][href$="adurl="]:upward(3)
-! remove "!" once $shide filters by #9642 and #9694 are removed
-!www.google.*##.sh-sr__shop-result-group .sh-sp__btn:matches-css(font-size: 13px):upward(.sh-sr__shop-result-group):has(a[href^="/aclk"][href$="adurl="])
 www.google.*##[href^="https://www.googleadservices.com/pagead/aclk?"][href$="adurl="]:upward(3)
-! `$shide` replacement
-! www.google.*##:not(:matches-path(/^/search\?.*tbm=shop|^/shopping/)) *:not([class^="sh-sr__shop-result-group"]) [href^="/aclk"][href$="adurl="]:upward(3)
+www.google.*##:not(:matches-path(/^/search\?.*tbm=shop|^/shopping/)) *:not([class^="sh-sr__shop-result-group"]) [href^="/aclk"][href$="adurl="]:upward(3)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/p94hv9/google_maps_booking_dot_com_ad/
 www.google.com##div[data-section-id] > a[href^="/aclk"][href*="placesheetAdFix="][href*="adurl="]:upward(1)
@@ -1333,7 +1329,7 @@ supforums.com##.sidebar-rcs
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7802
 ! primewire.mn ads
-primewire.*##+js(aopr, console.clear)
+primewire.*##+js(set, console.clear, noopFunc)
 primewire.*##+js(acis, Math, break;case $.)
 primewire.*##:xpath(//*[contains(text(),"Sponsored")]):upward(2)
 ||primewire.*/sw$script,1p
@@ -1804,7 +1800,7 @@ imgking.co,imgkings.com,imgprime.com##+js(aopr, document.createElement)
 imgkings.com##+js(acis, __htapop)
 imgkings.com##+js(aopr, ExoLoader)
 imgkings.com##+js(aopw, _pop)
-imgkings.com##+js(set, count, 2)
+imgkings.com##+js(nostif, location.href)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/708
 syriancivilwarmap.com##+js(nobab)
@@ -4519,7 +4515,7 @@ twitter.com##section:only-child > h1[id][aria-level="1"] + div[aria-label] > div
 popularmechanics.com##+js(nostif, addEventListener, 0)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/84l63s/filter_to_block_popunders_on_cliupconvertercc/
-clipconverter.cc##+js(acis, Math, break;case $.)
+clipconverter.cc##+js(acis, JSON.parse, break;case $.)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1725
 @@||azlink.xyz^$ghide
@@ -9452,11 +9448,9 @@ oncehelp.com##[href*="?token"]
 viprow.*##+js(acis, Math, break;case)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4060
-stream4free.live##+js(aeld, load, nextFunction)
-stream4free.live##+js(acis, Math, break;case)
-stream4free.live##+js(nowebrtc)
-stream4free.live##+js(nosiif, visibility, 1000)
-stream4free.live##+js(aopr, LieDetector)
+stream4free.live##+js(acis, JSON.parse, break;case $.)
+stream4free.live##+js(aopw, adcashMacros)
+stream4free.live##.closeButton
 ||tp1jcgl644jk.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4061
@@ -11403,9 +11397,6 @@ ronron-blog.com##.adsbygoogle
 ! https://github.com/uBlockOrigin/uAssets/issues/4755
 radikal-gamez.net##+js(set, adblock, null)
 
-! https://github.com/uBlockOrigin/uAssets/issues/4754
-amber-blk.cf,amber-btx.cf,amber-xpm.cf,amber-pot.cf,amber-ppc.cf,amber-zec.cf##+js(noeval)
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/28936
 @@||nonsensediamond.*^$ghide
 nonsensediamond.*##+js(aopr, decodeURI)
@@ -11906,7 +11897,7 @@ dilo.nu##+js(nowoif)
 ||doramasmp4.com/glx_$xhr,1p
 ||doramasmp4.com/propeller$script,xhr,1p
 /1clkn/*$xhr,domain=doramasmp4.com
-*$script,xhr,3p,denyallow=facebook.net|fastly.net|fbcdn.net|gstatic.com|jwpcdn.com|jwplatform.com|arc.io|googleapis.com|googleusercontent.com,domain=dilo.nu|doramasmp4.com
+*$script,xhr,3p,denyallow=arc.io|disqus.com|facebook.net|fastly.net|fastlylb.net|fbcdn.net|googleapis.com|googleusercontent.com|gstatic.com|jwpcdn.com|jwplatform.com,domain=dilo.nu|doramasmp4.com
 ||padsims.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4948
@@ -12797,6 +12788,7 @@ player.zona-leros.net,zlplayer.net###dvr-vid
 zona-leros.net##.Body > .Container > ul.Rows > li:first-child:has(:scope > article > a[href][target="_blank"])
 zpaste.net,zplayer.live,zplaycontent.to##+js(acis, Math, break;case $.)
 zpaste.net,zlpaste.net##+js(aeld, DOMContentLoaded, adlinkfly)
+zpaste.net##+js(aopr, absda)
 zpaste.net,zplayer.live##+js(aopw, _pop)
 zplayer.live##+js(aopr, I833)
 zplayer.live##+js(nowoif)
@@ -14795,10 +14787,10 @@ uptomega.*##+js(acis, Math, break;case $.)
 ! https://forums.lanik.us/viewtopic.php?f=62&t=43212
 @@||vtpii.com^$ghide
 
-! popups, ads https://github.com/AdguardTeam/AdguardFilters/issues/36091
-manhwa-manga52.bid##+js(acis, Math, break;case $.)
-manhwa-manga52.bid##^script:has-text(break;case $.)
-manhwa-manga52.bid##.ai_widget
+! popups, ads https://github.com/AdguardTeam/AdguardFilters/issues/83451
+manhwa-manga53.bid##+js(acis, Math, break;case $.)
+manhwa-manga53.bid##^script:has-text(break;case $.)
+manhwa-manga53.bid##.ai_widget
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/36043
 mac-torrents.io##+js(aopw, Fingerprint2)
@@ -15656,8 +15648,6 @@ exe.io,wealthh.xyz##+js(aopr, parcelRequire)
 /ad-m.js$script,1p
 ||lengejoberdak.pro^
 ||measur-d.com^$3p
-||tgpsew.com^
-||ndroip.com^
 exee.io,exe.app,srek.net##.banner-page > .short
 ! https://github.com/uBlockOrigin/uAssets/issues/8745
 srek.net##+js(aopw, disableItToContinue)
@@ -17923,6 +17913,7 @@ ytmp3.*##+js(nowoif)
 ||ytmp3.*/ad/$frame
 ! https://github.com/AdguardTeam/AdguardFilters/issues/96077
 ytmp3.cc##^script:has-text(window[$.)
+ytmp3.cc##+js(acis, JSON.parse, [$.)
 ytmp3.cc##+js(acis, Math, [$.)
 *$script,frame,3p,denyallow=cloudflare.net|dropbox.com|dropbox-dns.com|ijjiii.is|jsdelivr.net,domain=ytmp3.cc
 ytmp3.cc###a-320-50
@@ -18566,8 +18557,8 @@ usnovels.*##+js(nostif, mdp)
 @@||yoursavegames.com^$ghide
 yoursavegames.com##.adsbygoogle
 
-! popups http://hexupload .net/2w9alm9u0p14/Kare_Package_-_Single.zip.html?dl=PP3vM3wL
-hexupload.net##+js(acis, Math, XMLHttpRequest)
+! popups hexupload. net
+hexupload.net##+js(acis, JSON.parse, break;case $.)
 hexupload.net##+js(aopw, _pop)
 hexupload.net##+js(aopw, Fingerprint2)
 hexupload.net##+js(nowoif)
@@ -21648,9 +21639,8 @@ thejobsmovie.com##+js(nostif, adsBlocked)
 techdracula.com##.adsbygoogle
 
 ! thememazing .com broken page + other anti adb
-||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,redirect-rule=nooptext
 ! fix mdpDeBlocker + some other anti-adb
-||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect-rule=googlesyndication_adsbygoogle.js
+||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,xhr,redirect-rule=googlesyndication_adsbygoogle.js:10
 ||googleads.g.doubleclick.net/$xhr,redirect-rule=nooptext
 
 ! regex

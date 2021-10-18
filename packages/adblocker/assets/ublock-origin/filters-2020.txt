@@ -1516,10 +1516,16 @@ turkseed.com##+js(acis, addEventListener, google_ad_client)
 nightfallnews.com##+js(aopr, adBlockDetected)
 nightfallnews.com##.bottom_sticky_banner_container
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/56828
+! https://github.com/AdguardTeam/AdguardFilters/issues/97376
+! https://github.com/AdguardTeam/AdguardFilters/issues/97467
+animesanka.*##+js(acis, JSON.parse, break;case $.)
+animesanka.*##+js(aopw, _pop)
+animesanka.*##^script:has-text(h=decodeURIComponent)
 @@||animesanka.*^$ghide
 *$image,redirect-rule=1x1.gif,domain=animesanka.*
 animesanka.*##[id*="-ads-"]
+||akcrdstmn.xyz^
+||ugahutoa.com^
 
 ! https://github.com/NanoMeow/QuickReports/issues/4030
 @@||napolitoday.it^$ghide
@@ -1805,7 +1811,7 @@ oxy.st##[href*=".info"]
 oxy.st##+js(acis, $, localStorage)
 
 ! popups https://github.com/NanoMeow/QuickReports/issues/4134
-javmvp.com##+js(aeld, , _blank)
+javmvp.com##+js(aopr, __Y)
 ||aduterra.com^$3p
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/haekcc/farkcom_blocking_all_ad_blockers/fv4qlso/
@@ -2233,7 +2239,7 @@ xiaomitools.com##+js(acis, addEventListener, google_ad_client)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/92140
 link1s.*##+js(aopr, app_vars.force_disable_adblock)
-aemenstore.com,aloass.com,alobyt.com,alocd.com,alogum.com,aloguy.com,alohdd.com,byboe.com,cazzette.com,hookeaudio.com,jncojeans.com,kiemlua.com,kingsleynyc.com,lucidcam.com,nousdecor.com,pennbookcenter.com,restorbio.com,staaker.com,truebrandy.com,uebnews.online,thegoneapp.com##+js(nano-sib, counter, 2000)
+aemenstore.com,aloass.com,alobyt.com,alocd.com,alogum.com,aloguy.com,alohdd.com,byboe.com,cazzette.com,hookeaudio.com,jncojeans.com,kiemlua.com,kingsleynyc.com,lucidcam.com,nousdecor.com,pennbookcenter.com,restorbio.com,staaker.com,truebrandy.com,uebnews.online,thegoneapp.com##+js(nano-sib, counter, *)
 aemenstore.com,aloass.com,alobyt.com,alocd.com,alogum.com,aloguy.com,alohdd.com,anhdep24.com,byboe.com,cazzette.com,dataf.pro,hookeaudio.com,jncojeans.com,kiemlua.com,kingsleynyc.com,link1s.*,lucidcam.com,marharo.com,medcpu.com,nousdecor.com,pennbookcenter.com,restorbio.com,staaker.com,thegoneapp.com,truebrandy.com,uebnews.online##+js(nosiif, visibility, 1000)
 link1s.*##+js(set, blurred, false)
 aemenstore.com,aloass.com,alobyt.com,alocd.com,alogum.com,aloguy.com,alohdd.com,byboe.com,cazzette.com,dataf.pro,hookeaudio.com,jncojeans.com,kiemlua.com,kingsleynyc.com,link1s.*,lucidcam.com,marharo.com,medcpu.com,nousdecor.com,pennbookcenter.com,restorbio.com,rodjulian.com,staaker.com,truebrandy.com,uebnews.online,thegoneapp.com###link1s-wait1
@@ -4540,15 +4546,6 @@ comprovendolibri.it##+js(nostif, google_jobrunner)
 ! https://www.reddit.com/r/uBlockOrigin/comments/ji295t/i_found_an_antiadblock/
 universegunz.net##+js(nostif, adb)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/66387
-achrafha.com##+js(aopr, app_vars.force_disable_adblock)
-achrafha.com##+js(set, blurred, false)
-achrafha.com##.banner
-
-! https://www.reddit.com/r/uBlockOrigin/comments/jiah1w/jp_sites_detecting_ad_block/
-javlove.club##+js(set, clientSide.adbDetect, noopFunc)
-javlove.club##+js(nowoif)
-
 ! https://www.reddit.com/r/uBlockOrigin/comments/ji8yhy/citynewsca_anti_adblock/
 citynews.ca##body:style(padding-top:0px !important)
 
@@ -4570,11 +4567,7 @@ shoppinglys.blogspot.com##iframe[src^="data:"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8089
 erinsakura.com##+js(nostif, disableDeveloperTools)
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/66439
-internewstv.com##+js(aopr, app_vars.force_disable_adblock)
-internewstv.com##+js(set, blurred, false)
-internewstv.com##.banner
+erinsakura.com##.herald-fa-grid
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8091
 @@||fzmovies.*^$ghide
@@ -4598,6 +4591,7 @@ gpucheck.com##+js(nosiif, visibility, 1000)
 gpucheck.com##div.unitBox
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/66474
+fritidsmarkedet.dk,maskinbladet.dk##+js(nostif, Check)
 *$image,redirect-rule=1x1.gif,domain=maskinbladet.dk|fritidsmarkedet.dk
 fritidsmarkedet.dk,maskinbladet.dk##.skybanner, .megaboard-inner
 
