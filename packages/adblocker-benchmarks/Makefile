@@ -46,10 +46,7 @@ ubo-core: ./node_modules/@gorhill/ubo-core
 adblockpluscore: ./node_modules/adblockpluscore
 
 ./node_modules/@adguard/tsurlfilter:
-	npm install --no-save @adguard/tsurlfilter@0.5.24
-	npx rollup ./node_modules/@adguard/tsurlfilter/dist/tsurlfilter.umd.js \
-		--file ./node_modules/@adguard/tsurlfilter/dist/bundle.min.cjs --format cjs \
-		--context global --plugin terser
+	npm install --no-save @adguard/tsurlfilter@0.7.26
 
 tsurlfilter-node: ./node_modules/@adguard/tsurlfilter
 
