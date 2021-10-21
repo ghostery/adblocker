@@ -14,7 +14,7 @@ const {
   RuleStorage,
   StringRuleList,
   setConfiguration,
-} = require('@adguard/tsurlfilter/dist/bundle.min.cjs');
+} = require('@adguard/tsurlfilter/dist/tsurlfilter.umd.min.js');
 
 const { extractHostname } = require('./utils.js');
 
