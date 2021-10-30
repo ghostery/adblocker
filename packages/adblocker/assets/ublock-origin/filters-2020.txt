@@ -195,7 +195,7 @@ freshnewproxies24.top##[href^="https://brave.com/"], [href^="http://www.linkev.c
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10054
 mangahub.io##+js(acis, document.querySelectorAll, popMagic)
-mangahub.io##+js(acis, Math, break;case $.)
+mangahub.io##+js(acis, JSON.parse, break;case $.)
 ||mangahub.io^$csp=frame-src *.facebook.com
 ##.adsbyrunactive
 mangahub.io###adblock-notice
@@ -305,7 +305,7 @@ desktophut.com##.adsbygoogle:upward(1)
 desktophut.com###loading-ad
 *$frame,redirect-rule=noopframe,domain=desktophut.com
 *$xhr,redirect-rule=nooptext,domain=desktophut.com
-fanproj.net##+js(acis, Math, break;case $.)
+fanproj.net##+js(acis, JSON.parse, break;case $.)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7488
 ! https://github.com/uBlockOrigin/uAssets/issues/8373
@@ -388,9 +388,6 @@ gal-dem.com##+js(aopr, dsanity_ad_block_vars)
 ! https://github.com/NanoMeow/QuickReports/issues/3595
 *$xhr,3p,domain=gayforit.eu
 ||bestcontenttechnology.top^$3p
-
-! animepertutticdn.com popups
-animepertutticdn.com##+js(nowoif)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3626
 adslink.pw##+js(nosiif, visibility, 1000)
@@ -534,7 +531,8 @@ smutty.com##+js(nowoif)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3686
 123enjoy.net##+js(aopr, LieDetector)
-123enjoy.net##+js(acis, Math, break;case $.)
+123enjoy.net##+js(noeval)
+*$3p,domain=123enjoy.net,denyallow=googleapis.com|gstatic.com|eplayvid.com
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54519
 coredp.com##+js(aopr, app_vars.force_disable_adblock)
@@ -724,6 +722,7 @@ mail.yahoo.com##div#modal-outer[aria-labelledby="adblock-unblock-cue"]
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/76465
 mm9841.com,mm9842.com##+js(nowoif)
+mm9842.com##+js(aopr, __Y)
 @@||mm9841.com^$ghide
 
 ! https://github.com/NanoMeow/QuickReports/issues/3738
@@ -741,7 +740,6 @@ tapetus.pl##+js(acis, $, setTimeout)
 tapetus.pl##div[style="box-sizing: border-box; padding:0px 5px 0px 0px; text-align:center;"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7308
-strcloud.*,streamtape.*,streamta.pe,strtape.*,strtapeadblock.*##+js(acis, document.createElement, 'script')
 strcloud.*,streamtape.*,streamta.pe,strtape.*,strtapeadblock.*##+js(aopw, _pop)
 strcloud.*,streamtape.*,streamta.pe,strtape.*,strtapeadblock.*##+js(aost, Math.random, /\st\.[a-zA-Z]*\s/)
 strcloud.*,streamtape.*,streamta.pe,strtape.*,strtapeadblock.*##+js(nosiif, adblock)
@@ -1075,7 +1073,7 @@ prepostseo.com###sidebar_ad_big
 prepostseo.com###floorad-wrapper
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7399
-animetrick.com##+js(acis, Math, break;case $.)
+animetrick.com##+js(acis, JSON.parse, break;case $.)
 animetrick.com##+js(aopw, td_ad_background_click_link)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7400
@@ -1541,6 +1539,7 @@ jetanimes.*##+js(ra, href, #clickfakeplayer)
 jetanimes.*##+js(aost, XMLHttpRequest, _0x)
 down-paradise.com##+js(aopr, LieDetector)
 down-paradise.com##+js(nowoif)
+down-paradise.com##+js(aopr, __Y)
 ||bcd.h-l.icu^$3p
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/gxe9o4/help_with_ublock/
@@ -4025,9 +4024,6 @@ homedecoratione.com##.advertiser:style(position:absolute !important; left:-3000p
 liveonscore.tv##+js(nowoif)
 liveonscore.tv##+js(acis, Math, break;case $.)
 
-! https://github.com/NanoMeow/QuickReports/issues/4786
-mangayu.com##+js(aopr, adBlockDetected)
-
 ! https://github.com/NanoMeow/QuickReports/issues/4787
 androidtunado.com.br##+js(nosiif, visibility, 1000)
 
@@ -5103,9 +5099,11 @@ microtx.id##+js(aopr, adBlockDetected)
 microtx.id##+js(nano-sib)
 ||bitzad.com^$3p
 
-! streamingcommunity .net anti adb + popups
+! streamingcommunity .live anti adb + popups
+streamingcommunity.*##^script:has-text(break;case $.)
+streamingcommunity.*##+js(acis, JSON.parse, break;case $.)
 streamingcommunity.*##+js(nosiif, visibility, 1000)
-streamingcommunity.*##+js(acis, String.fromCharCode, /btoa|break/)
+! [badfilter] ||scws.xyz^$badfilter
 
 ! tvmd .info ads
 ##.fints-block__row
