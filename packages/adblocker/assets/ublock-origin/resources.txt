@@ -19,7 +19,7 @@ upmanager-defuser.js application/javascript
 
 
 twitch-videoad.js application/javascript
-(function(){if(false===/(^|\.)twitch\.tv$/.test(document.location.hostname))return;window.fetch=new Proxy(window.fetch,{apply:function(e,t,n){const[c,i]=n;if("string"===typeof c&&c.includes("gql")&&i instanceof Object&&i.headers instanceof Object&&"string"===typeof i.body&&i.body.includes("PlaybackAccessToken")){const{headers:e}=i;if("string"===typeof e["X-Device-Id"])e["X-Device-Id"]="twitch-web-wall-mason";if("string"===typeof e["Device-ID"])e["Device-ID"]="twitch-web-wall-mason"}return Reflect.apply(e,t,n)}})})();
+(function(){if(false===/(^|\.)twitch\.tv$/.test(document.location.hostname))return;window.fetch=new Proxy(window.fetch,{apply:function(t,e,i){const[n,o]=i;if("string"===typeof n&&n.includes("gql")&&o instanceof Object&&o.headers instanceof Object&&"string"===typeof o.body&&o.body.includes("PlaybackAccessToken")){const{headers:t}=o;if("string"===typeof t["Authorization"])t["Authorization"]="";if("string"===typeof t["X-Device-Id"])t["X-Device-Id"]="twitch-web-wall-mason";if("string"===typeof t["Device-ID"])t["Device-ID"]="twitch-web-wall-mason"}return Reflect.apply(t,e,i)}})})();
 
 
 static.chartbeat.com/chartbeat.js application/javascript
