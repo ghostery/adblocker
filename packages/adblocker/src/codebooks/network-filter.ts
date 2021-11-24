@@ -7,6 +7,7 @@
  */
 /* tslint:disable quotemark */
 export default [
+  ":style(width:1px!important;height:1px!important;min-height:1px!important",
   "/homad-global-configs.schneevonmorgen.com/global_config",
   "[\\/][\\/a-zA-Z0-9]{3,}\\/[a-zA-Z0-9]{6,}\\/.*/",
   "/pagead/js/adsbygoogle.js",
@@ -22,6 +23,7 @@ export default [
   "/wp-content/",
   "/^https:\\/\\",
   "impression",
+  "[0-9a-f]{",
   "affiliate",
   "analytics",
   "[0-9a-z]",
@@ -35,7 +37,6 @@ export default [
   "consent",
   "content",
   "counter",
-  "default",
   "sponsor",
   "visitor",
   ".aspx?",
@@ -112,6 +113,7 @@ export default [
   "sdk",
   "tag",
   "web",
+  "ync",
   "-p",
   ".m",
   "*/",
@@ -132,7 +134,6 @@ export default [
   "/w",
   "\\.",
   "00",
-  "2.",
   "a-",
   "ac",
   "ad",
@@ -148,7 +149,6 @@ export default [
   "ch",
   "co",
   "de",
-  "du",
   "e_",
   "e-",
   "e/",
