@@ -1575,11 +1575,6 @@ detroitnews.com###partner-poster-0
 ! https://github.com/NanoMeow/QuickReports/issues/1257
 @@||piasecznonews.pl/wp-content/plugins/wppas/$1p
 
-! https://github.com/uBlockOrigin/uAssets/issues/5623
-downloadsource.*##dl > .date:not(dt):style(width: initial !important; height: initial !important; clip: unset !important; display: inline-block !important;)
-downloadsource.*##dl > .date:upward(dl):style(width: initial !important; height: initial !important; clip: unset !important; display: inline-block !important;)
-downloadsource.*##dl > dt:has-text(Data dodania)
-
 ! https://www.reddit.com/r/uBlockOrigin/comments/bqmliz/not_working_on_1movies_anymore/
 ! https://www.reddit.com/r/uBlockOrigin/comments/e85st9/www41moviesis_ads_arent_being_blocked/
 @@*$media,domain=1movies.is
@@ -3427,12 +3422,6 @@ beppegrillo.it#@#a[href^="https://www.amazon."][href*="tag="]
 ! babesxworld site blocked by french list
 ! [badfilter] *$script,domain=babesxworld.com,badfilter
 
-! https://www.reddit.com/r/uBlockOrigin/comments/kgwxh7/mediaitecom_videos_hidden_by_ubo_looks_like/
-@@||adthrive.com/$script,domain=mediaite.com
-@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=mediaite.com
-@@||securepubads.g.doubleclick.net/gpt/pubads_impl_$script,domain=mediaite.com
-mediaite.com##.o-promo-unit
-
 ! https://github.com/uBlockOrigin/uAssets/issues/8408
 pioneer.eu##+js(ra, onclick, a[href][onclick^="trackOutboundLink"])
 
@@ -3598,12 +3587,9 @@ independent.co.uk##article > div > div > div[data-tile-name="top_banner"]:upward
 
 ! bing reverse image search broken by EL
 bing.com#@#a[href*="/aclick?ld="]
-bing.com##a[href*="/aclick?ld="]:not(.vsp_ads)
 bing.com##.ins_exp.vsp
 ! https://github.com/uBlockOrigin/uAssets/issues/9093
-@@||bing.com/shop$shide
-! `$shide` replacement
-! bing.com##:matches-path(~/shop) a[href*="/aclick?"]:not(.vsp_ads)
+bing.com##:matches-path(~/shop) a[href*="/aclick?"]:not(.vsp_ads)
 ! https://github.com/easylist/easylist/issues/7240
 !#if env_firefox
 bing.com##+js(nosiif, logQueue, 10000)
@@ -3956,6 +3942,8 @@ taiju-life.co.jp#@#.spLinks
 ! https://www.reddit.com/r/uBlockOrigin/comments/odbviy/svg_images_doesnt_load_when_ublock_enabled/
 @@||fundingchoicesmessages.google.com^$script,domain=soranews24.com
 @@||googletagmanager.com/gtm.js$script,redirect-rule,domain=soranews24.com
+! https://github.com/uBlockOrigin/uAssets/issues/10453
+||pagead2.googlesyndication.com/pagead/*$script,redirect-rule=noop.js,domain=soranews24.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9575
 @@||googletagmanager.com/gtm.js$script,redirect-rule,domain=lingvolive.com
@@ -4215,8 +4203,10 @@ myair2.resmed.com##+js(no-xhr-if, cloudflare.com/cdn-cgi/trace)
 
 ! https://github.com/easylist/easylist/issues/2436#issuecomment-946886270
 @@_advertisment.$image,domain=gorgeouspfeiffer.com
+@@_advertisement_$image,domain=jennifer-lawrence.com
+@@/advertising_$image,domain=timfahlbusch.com
 @@/ad_campaigns/*$image,domain=alicia-vikander.com
-@@/adverts/*$image,domain=emily-blunt.com|isla-fisher.net|islafisher.net
+@@/adverts/*$image,domain=emily-blunt.com|isla-fisher.net|islafisher.net|reese-witherspoon.org|reesewitherspoon.org
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10348
 @@||cloudflare.com/cdn-cgi/trace$xhr,domain=54647.io
@@ -4229,3 +4219,33 @@ travelerdoor.com##+js(no-xhr-if, cloudflare.com/cdn-cgi/trace)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/qnoufw/pop_ups/hji42s0/
 @@||wewon.to^$xhr,media,domain=soap2day.*
+
+! https://github.com/uBlockOrigin/uAssets/issues/10441
+pewresearch.org##+js(set, ga, noopFunc)
+
+! https://github.com/uBlockOrigin/uAssets/issues/10444
+@@||asset.fwcdn2.com/js/storyblock.js$script,domain=narcity.com
+
+! https://www.reddit.com/r/uBlockOrigin/comments/qstvpb/
+@@||quantcast.mgr.consensu.org^$script,domain=dailyrecord.co.uk
+
+! https://github.com/uBlockOrigin/uAssets/issues/7611#issuecomment-968186023
+@@||geoip.redirect-ads.com/?v=$frame,3p
+@@||geoip.redirect-ads.com/js/*$script,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/10491
+@@||quantcast.mgr.consensu.org^*tcfv2/*/cmp2.js?referer=$script
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/78676
+saitama-np.co.jp#@#[id^="div-gpt-ad"]:style(width:1px!important;height:1px!important;min-height:1px!important)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/qohky0/sfgatecom_images_blocked_when_using_the_ublock/hl92tpw/
+@@||aps.hearstnp.com/Scripts/loadAds.js$script,domain=sfgate.com
+
+! https://www.reddit.com/r/uBlockOrigin/comments/qyx7en/
+! Can be removed once 1.39.0 is widespread
+@@||amazon-adsystem.com/aax2/apstag.js$script,domain=sky.it
+
+! https://github.com/uBlockOrigin/uAssets/issues/10583
+@@||givingassistant.org/Advertisers/$image,xhr,1p
+@@||cdn.segment.com^$script,xhr,domain=givingassistant.org

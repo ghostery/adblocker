@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202111081848
+! Version: 202111241925
 ! Title: EasyPrivacy
-! Last modified: 08 Nov 2021 18:48 UTC
+! Last modified: 24 Nov 2021 19:25 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -19,7 +19,7 @@
 &event=view&
 &EventType=Impression&
 &hitType=pageview&
-&http_referer=$script,xmlhttprequest,domain=~facebook.com
+&http_referer=$script,xmlhttprequest,domain=~facebook.com|~jobscore.com
 &mf_referrer=
 &pageReferrer=
 &ref=*&tag=
@@ -69,6 +69,7 @@
 -imppix/
 -inview-tracker.
 -krux-tag/
+-landing-tracking-
 -log?referUrl=
 -logging/log?
 -lp-tracking.
@@ -206,6 +207,7 @@
 .php?self=
 .php?stats=
 .php?tracking=
+.pixel.archive.
 .pixel?*&event_
 .pixel?record_
 .PixelNedstatStatistic/
@@ -422,6 +424,7 @@
 /adstrack.
 /adtctr.
 /adtoniq-
+/adtrack-
 /adtrk/*
 /adv/tracking.
 /adv?pixel_
@@ -581,6 +584,7 @@
 /analytics.google.js
 /analytics.html?
 /analytics.init.js
+/analytics.js.gz
 /analytics.js/v1/*
 /analytics.js?
 /analytics.json?
@@ -686,6 +690,7 @@
 /analytics/visit/*
 /Analytics/Visitor.
 /analytics/web/*
+/analytics/wss?
 /analytics/yell-
 /analytics3.
 /analytics?body=
@@ -940,7 +945,9 @@
 /beacon/event/*
 /beacon/event?
 /beacon/get/*
+/beacon/init?
 /beacon/metrics
+/beacon/page?
 /beacon/perf
 /beacon/portal-lite?
 /beacon/stats
@@ -1436,6 +1443,7 @@
 /Counter.woa/*
 /counter/*?rnd=$image
 /counter/?*&referer=
+/counter/?type=
 /counter/action_
 /counter/article?
 /counter/ashow/*
@@ -2036,6 +2044,7 @@
 /gatrackwww.
 /gb-tracker-
 /gc?id=*&refurl=
+/gc?refurl=
 /gciAnalytics.
 /gClickTracking.
 /gcount.pl?
@@ -2425,6 +2434,7 @@
 /ists.tag?
 /item/tracking/*
 /ItemStats.ajax?
+/itgdtracksdk.
 /itmdp_code.
 /itrack.php?
 /iva_analytics.
@@ -3428,9 +3438,11 @@
 /ptrack.
 /pub/as?_ri_=$image
 /pub/imp?
+/pubexchange.
 /pubfooter/js/tracking-
 /pubimppixel/*
 /public/analytics.js
+/public/statsd
 /public/visitor.json?
 /public/visitor/create?
 /publisher:getClientId?key=
@@ -4029,6 +4041,7 @@
 /stats/add/*
 /stats/adonis_
 /stats/api/collect
+/stats/article?
 /stats/collect?
 /stats/collector.js
 /stats/common/*
@@ -4057,6 +4070,7 @@
 /stats/metrics/*
 /stats/mixpanel-
 /stats/page_view_
+/stats/pageview
 /stats/pgview.
 /stats/ping?
 /stats/pv.
@@ -4141,6 +4155,7 @@
 /t/event?
 /t?referer=
 /t?tcid=
+/tab_impression_logging/*
 /tablytics.
 /tacoda.
 /tacoda_
@@ -4203,6 +4218,7 @@
 /thbeacon/*
 /thcn_code.
 /thcn_code_
+/thd-new-relic/*
 ! [badfilter] from ublock-origin/unbreak.txt
 ! /thermostat.js
 /thetracker.js
@@ -5144,6 +5160,7 @@
 ://analytics.*/pageview/
 ://analytics.*/tracker.
 ://beacon.*/track
+://blue.*/script.js
 ://collect.*/pageview
 ://collector.*/event
 ://d.*/track.js
@@ -5198,6 +5215,7 @@
 ?eventtype=request&pid=
 ?local_ga_js=
 ?log=stats-
+?log_performance_metrics
 ?logType=impression&
 ?logType=trackEvent&
 ?pageviews=$third-party
@@ -5299,6 +5317,7 @@ cgi-bin/counter
 .doubleclick.net/$image
 .duolingo.com/open/
 .efeedbacktrk.com/$third-party
+.email.*/tr/op/$image
 .emltrk.com/
 .epicgames.com/O/
 .eventim.de/op/$image
@@ -5424,7 +5443,6 @@ _ad_impression.
 ! eventbrite tracking
 /search/log_requests/*
 ! Consent/GDPR tracking
-/ccpa.js
 /cmp-hello.
 /cmp/messaging.js
 /cmp3.js
@@ -5622,6 +5640,8 @@ _mongo_stats/
 ! ||agkn.com^
 ||altopd.com^
 ||analysis.fi^
+||apeagle.io^
+||apenterprise.io^
 ||apxl.io^
 ||auriro.net^
 ||ayc0zsm69431gfebd.info^
@@ -5636,8 +5656,11 @@ _mongo_stats/
 ! [dup] from peter-lowe/serverlist.txt
 ! ||bluekai.com^
 ||bmcdn2.com^
+||bonne-terre-data-layer.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||bounceexchange.com^
+||briskeagle.io^
+||briskpelican.io^
 ||bydst.com^
 ||cloudwp.io^
 ! [dup] from peter-lowe/serverlist.txt
@@ -5651,6 +5674,7 @@ _mongo_stats/
 ! [dup] from peter-lowe/serverlist.txt
 ! ||demdex.net^
 ||dispatchunique.com^
+||dispatchvegasplus.com^
 ||dm-event.net^
 ||dmpxs.com^
 ||e1e.io^
@@ -5660,42 +5684,18 @@ _mongo_stats/
 ! ||everesttech.net^
 ||experianmatch.info^
 ||ezodn.com^
+||fastemu.co^
 ||faster-trk.com^
+||fastfinch.co^
+||fastgull.io^
+||fasttiger.io^
 ||fn-pz.com^
+||g1584674682.co^
 ||g2178927685.co^
 ||g2377012020.co^
 ||g2575096355.co^
 ||g2773180690.co^
-||g2971265025.co^
-||g3169349360.co^
-||g3367433695.co^
-||g3565518030.co^
-||g3763602365.co^
-||g3961686700.co^
-||g4159771035.co^
-||g4357855370.co^
-||g4555939705.co^
-||g4754024040.co^
-||g4952108375.co^
-||g5150192710.co^
-||g5348277045.co^
-||g5546361380.co^
-||g5744445715.co^
-||g5942530050.co^
-||g6140614385.co^
-||g6338698720.co^
-||g6536783055.co^
-||g6734867390.co^
-||g6932951725.co^
-||g7131036060.co^
-||g7329120395.co^
-||g7527204730.co^
-||g7725289065.co^
 ||g792337340.co^
-||g7923373400.co^
-||g8121457735.co^
-||g8319542070.co^
-||g8517626405.co^
 ||g8715710740.co^
 ||g8913795075.co^
 ||g9111879410.co^
@@ -5718,6 +5718,7 @@ _mongo_stats/
 ! [dup] from peter-lowe/serverlist.txt
 ! ||imrworldwide.com^
 ||innerskinresearch.com^
+||instantfox.co^
 ||irs01.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||krxd.net^
@@ -5733,6 +5734,9 @@ _mongo_stats/
 ||mors22.com^
 ||mt48.net^
 ||n0909.com^
+||niblewren.co^
+||nimblebird.co^
+||nimbleswan.io^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||ns1p.net^
 ||nxakpj4ac8gkd53.info^
@@ -5747,10 +5751,15 @@ _mongo_stats/
 ||pixrealm.com^
 ||progmxs.com^
 ||propeller-tracking.com^
+||pubtm.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||quantserve.com^
 ||quickanalytics.ca^
+! [dup] from peter-lowe/serverlist.txt
+! ||quickkoala.io^
 ||r42tag.com^
+||rapidpanda.io^
+||rapidzebra.io^
 ||rezync.com^
 ||rkdms.com^
 ! [dup] from peter-lowe/serverlist.txt
@@ -5764,6 +5773,8 @@ _mongo_stats/
 ||site24x7rum.eu^
 ||sjpf.io^
 ||solutionshindsight.net^
+||speedyfox.io^
+||speedyrhino.co^
 ||stat.ovh^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||summerhamster.com^
@@ -5771,19 +5782,25 @@ _mongo_stats/
 ||tatpek.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||the-ozone-project.com^
+||thefontzone.com^
 ||trackclicks.info^
 ||trkbc.com^
 ||tru.am^
 ||truffle.bid^
 ! [dup] from ublock-origin/privacy.txt
 ! ||tryzens-analytics.com^
+||turboeagle.co^
+||turbolion.io^
 ||tvpixel.com^
 ||ugdturner.com^
 ||videoplayerhub.com^
 ||wknd.ai^
 ||wmgroup.us^
+||woodpeckerlog.com^
 ||z0uolej1qnxzub1.info^
 ||zdbb.net^
+||zhctrack.net^
+||zippyfrog.co^
 ||zoomhead.xyz^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||zqtk.net^
@@ -5818,7 +5835,6 @@ _mongo_stats/
 ||3dstats.com^$third-party
 ||3enm.com^$third-party
 ||3gl.net^$third-party
-||404tracker.com^$third-party
 ||40nuggets.com^$third-party
 ||4oney.com^$third-party
 ||55labs.com^$third-party
@@ -5876,7 +5892,6 @@ _mongo_stats/
 ||adchemix.com^$third-party
 ||adchemy-content.com^$third-party
 ||adchemy.com^$third-party
-||adclickstats.net^$third-party
 ||addfreestats.com^$third-party
 ||adelixir.com^$third-party
 ||adform.net^$third-party
@@ -5997,6 +6012,7 @@ _mongo_stats/
 ||antillephone.com^$third-party
 ||anura.io^$third-party
 ||anymind360.com^$third-party
+||anytrack.io^$third-party
 ||apexstats.com^$third-party
 ||apextag.com^$third-party
 ||apextwo.com^$third-party
@@ -6007,8 +6023,6 @@ _mongo_stats/
 ||appboycdn.com^$third-party
 ||appcast.io^$third-party
 ||appn.center^$third-party
-! [dup] from ublock-origin/unbreak.txt
-! ||appsflyer.com^$third-party
 ||aprtn.com^$third-party
 ||aprtx.com^$third-party
 ||apsis1.com^$third-party
@@ -6039,7 +6053,6 @@ _mongo_stats/
 ||attracta.com^$third-party
 ||attributionapp.com^$third-party
 ||audience.systems^$third-party
-||audienceamplify.com^$third-party
 ||audienceiq.com^$third-party
 ||audiencepixel.com^$third-party
 ||audienceplay.com^$third-party
@@ -6208,7 +6221,6 @@ _mongo_stats/
 ||canddi.com^$third-party
 ||canlytics.com^$third-party
 ||canopylabs.com^$third-party
-||caphyon-analytics.com^$third-party
 ||captify.co.uk^$third-party
 ||captivate.ai^$third-party
 ||captora.com^$third-party
@@ -6332,7 +6344,6 @@ _mongo_stats/
 ||confirmational.com^$third-party
 ||connectif.cloud^$third-party
 ||contactmonkey.com^$third-party
-||contemporaryceremonies.ca^$third-party
 ||content-square.net^$third-party
 ||contentinsights.com^$third-party
 ||contentspread.net^$third-party
@@ -6347,6 +6358,7 @@ _mongo_stats/
 ||convertexperiments.com^$third-party
 ||convertglobal.com^$third-party
 ||convertro.com^$third-party
+||cookieless-data.com^$third-party
 ||cooladata.com^$third-party
 ||copperegg.com^$third-party
 ||coralogix.com^$third-party
@@ -6521,7 +6533,6 @@ _mongo_stats/
 ||ec-track.com^$third-party
 ||ecn5.com^$third-party
 ||ecommstats.com^$third-party
-||ecsanalytics.com^$third-party
 ||ecustomeropinions.com^$third-party
 ||edgeadx.net^$third-party
 ||edigitalsurvey.com^$third-party
@@ -6530,7 +6541,6 @@ _mongo_stats/
 ||ekmpinpoint.com^$third-party
 ||ela-3-tnk.com^$third-party
 ||elastx.net^$third-party
-||electusdigital.com^$third-party
 ||elitics.com^$third-party
 ||eloqua.com^$~stylesheet,third-party
 ||eluxer.net^$third-party
@@ -6734,6 +6744,7 @@ _mongo_stats/
 ||geobytes.com^$third-party
 ||geoip-db.com^$third-party
 ||geoip-js.com^$third-party
+||geoiplookup.io^$third-party
 ||geojs.io^$third-party
 ||geolid.com^$third-party
 ||geolocation-db.com^$third-party
@@ -7014,7 +7025,6 @@ _mongo_stats/
 ||jirafe.com^$third-party
 ||jixie.io^$third-party
 ||journity.com^$third-party
-||jscounter.com^$third-party
 ||jsonip.com^$third-party
 ||jstracker.com^$third-party
 ||jump-time.net^$third-party
@@ -7184,7 +7194,6 @@ _mongo_stats/
 ||maxymiser.com^$third-party
 ||maxymiser.net^$third-party
 ||mb4a.com^$third-party
-||mbid.io^$third-party
 ||mbotvisit.com^$third-party
 ||mbsy.co^$third-party
 ||mbww.com^$third-party
@@ -7317,7 +7326,6 @@ _mongo_stats/
 ||nakanohito.jp^$third-party
 ||nalook.com^$third-party
 ||nanovisor.io^$third-party
-||narrativ.com^$third-party
 ||natero.com^$third-party
 ||native.ai^$third-party
 ||natpal.com^$third-party
@@ -7336,7 +7344,6 @@ _mongo_stats/
 ||nedstatpro.net^$third-party
 ||nejmqianyan.cn^$third-party
 ||neki.org^$third-party
-||nerfherdersolo.com^$third-party
 ||nero.live^$third-party
 ||net-filter.com^$third-party
 ||netaffiliation.com^$script,third-party
@@ -7725,7 +7732,6 @@ _mongo_stats/
 ||rollingcounters.com^$third-party
 ||roosterfirework.com^$third-party
 ||rp-rep.net^$third-party
-||rpdtrk.com^$third-party
 ||rqtrk.eu^$third-party
 ||rrimpl.com^$third-party
 ||rs0.co.uk^$third-party
@@ -7968,7 +7974,6 @@ _mongo_stats/
 ||stats4u.net^$third-party
 ||stats4you.com^$third-party
 ||statsbox.nl^$third-party
-||statsevent.com^$third-party
 ||statsinsight.com^$third-party
 ||statsit.com^$third-party
 ||statsmachine.com^$third-party
@@ -8066,7 +8071,6 @@ _mongo_stats/
 ||thebrighttag.com^$third-party
 ||thecounter.com^$third-party
 ||thefreehitcounter.com^$third-party
-||thehairofcaptainpicard.com^$third-party
 ||thermstats.com^$third-party
 ||thesearchagency.net^$third-party
 ||thespecialsearch.com^$third-party
@@ -8194,12 +8198,10 @@ _mongo_stats/
 ||turn.com^$third-party
 ||tw.cx^$third-party
 ||twcount.com^$third-party
-||twopointo.io^$third-party
 ||tynt.com^$third-party
 ||tyxo.com^$third-party
 ||tz284.com^$third-party
 ||u-on.eu^$third-party
-||u5c93.com^$third-party
 ||u5e.com^$third-party
 ||uadx.com^$third-party
 ||ub-analytics.com^$third-party
@@ -8244,11 +8246,9 @@ _mongo_stats/
 ||usuarios-online.com^$third-party
 ||uuxnwoevyb.com^$third-party
 ||v12group.com^$third-party
-||v1sts.me^$third-party
 ||v3cdn.net^$third-party
 ||va-endpoint.com^$third-party
 ||valuedopinions.co.uk^$third-party
-||vantage-media.net^$third-party
 ||vbanalytics.com^$third-party
 ||vdna-assets.com^$third-party
 ||veduy.com^$third-party
@@ -8487,12 +8487,9 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||lomeldeer.club^
 ||makedosupport.club^
 ||mandatebright.club^
-||migrati.xyz^
 ||morozhko.club^
 ||muatui.com^
 ||polobook.club^
-||supertraders.info^
-||tradesecretz.info^
 ||vicspendig.club^
 ! revprotect
 ||pphwrevr.com^$third-party
@@ -8595,7 +8592,6 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||push4site.com^$third-party
 ||ravelin.net^$third-party
 ||sabavision.com^$third-party
-||sealine.pro^$third-party
 ||simility.com^$third-party
 ||spideraf.com^$third-party
 ! Mining
@@ -8634,7 +8630,6 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||berserkpl.net.pl^$websocket
 ||besstahete.info^$third-party
 ||besti.ga^
-||bestsecurepractice.com^$third-party
 ||bewaslac.com^
 ||biberukalap.com^
 ||binarybusiness.de^
@@ -8653,7 +8648,6 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||browsermine.com^$third-party
 ||candid.zone^
 ||cashbeet.com^
-||cdn-code.host^
 ||chmproxy.bid^
 ||clgserv.pro^
 ||cloud-miner.de^
@@ -8662,7 +8656,6 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||cnhv.co^$third-party
 ||coin-have.com^$third-party
 ||coin-hive.com^$third-party
-||coin-service.com^$third-party
 ||coinerra.com^$third-party
 ||coinhive.com^$third-party
 ||coinhiveproxy.com^$third-party
@@ -8726,7 +8719,6 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||gramombird.com^
 ||greengaming.de^$third-party
 ||gus.host^$third-party
-||gxbrowser.net^
 ||hashcoin.co^$third-party
 ||hashing.win^$third-party
 ||hashnest.com^$third-party
@@ -8826,7 +8818,6 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||sourcecode.pro^$third-party
 ||spacepools.org^$third-party
 ||sparechange.io^$third-party
-||sparnove.com^$third-party
 ||srcip.com^$third-party
 ! [dup] from peter-lowe/serverlist.txt
 ! ||statdynamic.com^
@@ -8869,12 +8860,33 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||xfast.host^$third-party
 ||xmrpool.net^$third-party
 ||xy.nullrefexcep.com^$third-party
-||yrdrtzmsmt.com^$third-party
 ||yuebofa.cc^$third-party
 ||zlx.com.br^$third-party
 ||zminer.zaloapp.com^
 ! Admiral
+! [dup] from peter-lowe/serverlist.txt
+! ||2znp09oa.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||4jnzhl0d0.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||5mcwl.pw^
 ||6ldu6qa.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||82o9v830.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||abackchain.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||abandonedaction.com^
+||aboardamusement.com^
+||aboardfork.com^
+||aboardkettle.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||aboardlevel.com^
+||aboriginalboats.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||abruptroad.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||absentstream.com^
 ||absorbingband.com^$third-party
 ||absorbingcorn.com^$third-party
 ||absorbingprison.com^$third-party
@@ -8882,26 +8894,86 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ! [dup] from peter-lowe/serverlist.txt
 ! ||abstractedauthority.com^
 ||absurdapple.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||absurdwater.com^
 ||acidpigs.com^
+||acousticairplane.com^
+||acousticsapparel.com^
+||acquireattention.com^
 ||acridtwist.com^$third-party
+||actoramusement.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||actuallysheep.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||actuallysnake.com^
 ||additionant.com^$third-party
+||adorableanger.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||advertisementafterthought.com^
 ||afraidlanguage.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||agreeablestew.com^
 ||agreeabletouch.com^$third-party
 ||aheadday.com^$third-party
 ||aheadmachine.com^$third-party
+||ajaralarm.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||ak0gsh40.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||alertafterthought.com^
 ||alikeaddition.com^$third-party
+||alikearm.com^
 ||aliveachiever.com^$third-party
+||alleyskin.com^
 ||allowmailbox.com^$third-party
 ! [dup] from peter-lowe/serverlist.txt
 ! ||aloofmetal.com^
 ||aloofvest.com^$third-party
+||alpineactor.com^
 ||amazingairplane.com^$third-party
+||ambiguousalarm.com^
+||ambiguousanger.com^
+||ambiguousincome.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||ambiguousquilt.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||ambitiousagreement.com^
+||amusementmorning.com^
+||amusinggirls.com^
 ||ancientact.com^$third-party
 ||annoyedairport.com^$third-party
+||annoyedfifth.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||annoyingacoustics.com^
 ||anxiousapples.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||apathetictheory.com^
+||apparatuslip.com^
+||aquaticalarm.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||aquaticowl.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||ar1nvz5.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||archswimming.com^
+||arcticamber.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||argyresthia.com^
+||ariseboundary.com^
+||arithmeticadjustment.com^
+||arizonapuzzle.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||aromamirror.com^
+||aspiringattempt.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||attractiveafternoon.com^
 ||attractivecap.com^$third-party
 ||audioarctic.com^$third-party
+||auntants.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||automaticflock.com^
 ||automaticside.com^$third-party
+||averageamusement.com^
 ||awakebird.com^$third-party
 ||awarealley.com^$third-party
 ! [dup] from peter-lowe/serverlist.txt
@@ -8909,46 +8981,175 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||awzbijw.com^$third-party
 ||axiomaticalley.com^$third-party
 ||bagbeam.com^$third-party
+||balancemailbox.com^
+||balloonbit.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||balloontexture.com^
 ||bandborder.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||barbarousnerve.com^
 ||basketballbelieve.com^$third-party
 ||baskettexture.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||batbuilding.com^
+||battlebalance.com^
+||battlehope.com^
 ||bawdybalance.com^$third-party
 ! [dup] from peter-lowe/serverlist.txt
+! ||bawdybeast.com^
+||bawdypets.com^
+||beadbears.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||beamincrease.com^
+||beastbeef.com^
+||beautifulhobbies.com^
+||bedsberry.com^
+||begintrain.com^
+||beneficialbeef.com^
+||benthose.com^
+! [dup] from peter-lowe/serverlist.txt
 ! ||bestboundary.com^
+||bewilderedbattle.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||bewilderedblade.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||bhcumsc.com^
+||billowybead.com^
+||bitterbear.com^
+||blotburn.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||blushingbeast.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||blushingboundary.com^
+||blushingwar.com^
 ||boilingbeetle.com^$third-party
-||borderbrush.com^$third-party
+||boilingcredit.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||boilingumbrella.com^
+||boneregret.com^
+||boredborder.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||boredcrown.com^
+||boringberry.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||boringcoat.com^
+||bouncyfront.com^
+||bouncyproperty.com^
+||brandybison.com^
+||brashbead.com^
+||bravebone.com^
+||bravecalculator.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||breadbalance.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||breakableinsurance.com^
 ||breakfastboat.com^$third-party
+||briefbears.com^
+||briefstem.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||broadboundary.com^
 ||broadcastbed.com^$third-party
 ||broaddoor.com^$third-party
+||brothersbucket.com^
+||bruisebaseball.com^
+||brushdaughter.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||btez8.xyz^
+! [dup] from peter-lowe/serverlist.txt
+! ||bucketbean.com^
+||bulbbait.com^
+||bunchance.com^
+||burgerbrush.com^
 ||burnbubble.com^$third-party
+||burstblade.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||businessbells.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||bustlinganimal.com^
+||bustlingbath.com^
 ||butterbulb.com^$third-party
 ||butterburst.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||calculatingcircle.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||calculatingtoothbrush.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||calculatorcamera.com^
 ||calculatorstatement.com^$third-party
+||calendarrate.com^
 ||callousbrake.com^$third-party
 ||calmcactus.com^$third-party
+||calmcough.com^
+||cannonjudo.com^
 ||cannontwin.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||capablecows.com^
+||capablecup.com^
 ||capriciouscorn.com^$third-party
 ||capsquirrel.com^$third-party
+||carefuldolls.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||caringcast.com^
 ||caringzinc.com^$third-party
 ||carpentercomparison.com^$third-party
+||carriagecan.com^
 ||carscannon.com^$third-party
+||catalogdiscovery.com^
+||catschickens.com^
 ||causecherry.com^$third-party
 ||cautiouscrate.com^$third-party
 ||cautiouscredit.com^$third-party
 ! [dup] from peter-lowe/serverlist.txt
+! ||chairscrack.com^
+||channelcamp.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||cheerfulrange.com^
+||chemicalcoach.com^
+||chemicalsnake.com^
+! [dup] from peter-lowe/serverlist.txt
 ! ||cherriescare.com^
+||chesscherry.com^
+||chesscolor.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||chewcoat.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||chickensstation.com^
+||childlikecook.com^
+||childlikeform.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||chinsnakes.com^
+||chunkycactus.com^
+||circlelevel.com^
+||clamcelery.com^
+||clammytree.com^
+||clearcabbage.com^
 ||cloisteredcord.com^$third-party
 ! [dup] from peter-lowe/serverlist.txt
+! ||cloisteredhydrant.com^
+! [dup] from peter-lowe/serverlist.txt
 ! ||closedcows.com^
+||cloudsdestruction.com^
+||clumsyrock.com^
+||coachquartz.com^
+||coatfood.com^
 ||colorfulafterthought.com^$third-party
+||colossalchance.com^
+||colossalclouds.com^
 ||colossalcoat.com^$third-party
+||combativedetail.com^
+||combclover.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||comfortablecheese.com^
+||commonalmanac.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||commonswing.com^
+||competitionbeetle.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||completecabbage.com^
 ||complextoad.com^$third-party
+||conceptualizereading.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||concernedcondition.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||conditionchange.com^
 ||conditioncrush.com^$third-party
@@ -8957,298 +9158,1155 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ! [dup] from peter-lowe/serverlist.txt
 ! ||consciouscheese.com^
 ||consciousdirt.com^
+||consistpotato.com^
+||controlswim.com^
+||coordinatedbedroom.com^
 ||coordinatedcoat.com^$third-party
 ||coordinatedcub.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||copperchickens.com^
 ||copycarpenter.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||copyrightaccesscontrols.com^
+||copytitle.com^
+||correctchaos.com^
 ||cosmosjackson.com^$third-party
+||coverapparatus.com^
 ||crabbychin.com^$third-party
+||crafthenry.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||cratecamera.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||crawlclocks.com^
+||crayoncompetition.com^
 ||critictruck.com^$third-party
 ||cubchannel.com^$third-party
 ||culturedcrayon.com^$third-party
+||cumbersomecake.com^
+||cumbersomecar.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||cumbersomecloud.com^
+||currentcollar.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||curtaincows.com^
 ||curvycry.com^$third-party
 ||cushionpig.com^$third-party
+||cutecalculator.com^
 ||cutechin.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||cutecushion.com^
+||cutepopcorn.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||cuteturkey.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||damageddistance.com^
 ||damdoor.com^$third-party
 ||dampdock.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||dancemistake.com^
 ||dapperdiscussion.com^$third-party
 ! [dup] from peter-lowe/serverlist.txt
 ! ||dapperfloor.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||dashingdirt.com^
+||dashingdrop.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||dashingsweater.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||deadpantruck.com^
+||deafeningdock.com^
+||debonairdust.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||debonairway.com^
+||decidedrum.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||decisivebase.com^
 ||decisivedrawer.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||decisiveducks.com^
+||decoroustitle.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||decoycreation.com^
+||defectivedress.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||defectivesun.com^
+||defiantrice.com^
 ||delegatediscussion.com^$third-party
+||delightfulhour.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||desertedbreath.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||desertedrat.com^
+||desirebucket.com^
 ||desiredirt.com^$third-party
+||deskdecision.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||detailedglue.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||detailedgovernment.com^
+||detailedkitten.com^
+||detectdinner.com^
 ||detectdiscovery.com^$third-party
+||difficultfog.com^
 ||diplomahawaii.com^$third-party
 ||discreetfield.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||dispensablestranger.com^
 ||distinctday.com^$third-party
 ||distributiontomatoes.com^$third-party
 ||disturbedquiet.com^$third-party
 ||divehope.com^$third-party
+||divergentoffer.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||dk4ywix.com^
 ||dockdigestion.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||docksalmon.com^
 ||dogcollarfavourbluff.com^$third-party
+||dogsshoes.com^
 ||dollardelta.com^$third-party
+||dolldetail.com^
+||donkeyleaf.com^
+||doorbrazil.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||doubtfulrainstorm.com^
 ||dq95d35.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||drabsize.com^
+||draconiancurve.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||dragzebra.com^
+||dramaticcondition.com^
+||dramaticdirection.com^
+||drawermice.com^
+||drawservant.com^
+||dressexpansion.com^
+||dripappliance.com^
+||driverequest.com^
+||drivingdirt.com^
 ||drydrum.com^$third-party
+||dustyrabbits.com^
+||dustywave.com^
+||earthquakeend.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||earthquakescarf.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||earthycopy.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||economicpizzas.com^
+||educatedeggnog.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||efficaciouscactus.com^
 ||ejyymghi.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||elasticchange.com^
+||elderlyinsect.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||elderlyscissors.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||elderlytown.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||elephantqueue.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||emptyescort.com^
+||enchantedjudge.com^
+||enchantedtop.com^
+||encourageidea.com^
+||encouragingleaf.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||encouragingwilderness.com^
 ||endurablecrayon.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||endurableshop.com^
+||energeticexample.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||energeticladybug.com^
 ||enormousearth.com^$third-party
+||entertainingeyes.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||enthusiasticdad.com^
 ||enviousshape.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||enviousthread.com^
+||erraticreaction.com^
+||evaluateend.com^
+||evanescentedge.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||exclusivebrass.com^
+||expansioneggnog.com^
+||experienceeggs.com^
+||exuberanteyes.com^
+||exuberantsoda.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||facilitategrandfather.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||fadedprofit.com^
 ||fadedsnow.com^$third-party
 ||fadewaves.com^
 ||fallaciousfifth.com^$third-party
+||falsefeet.com^
 ||falseframe.com^$third-party
 ||familiarrod.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||famousquarter.com^
+||fancyactivity.com^
+||fangfeeling.com^
+||fantasticsmash.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||farethief.com^
 ||farmergoldfish.com^$third-party
 ||farshake.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||fascinatedfeather.com^
+||fastenfather.com^
 ||fatcoil.com^$third-party
 ||faultycanvas.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||faultyfowl.com^
+||fearfowl.com^
+||fearfulfish.com^
+||fearlessfaucet.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||feebleshock.com^
+||fifthborder.com^
+||finalizeforce.com^
 ||firstfrogs.com^$third-party
 ||flakyfeast.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||flimsycircle.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||flimsythought.com^
 ||flockflame.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||floodprincipal.com^
+||floweryoperation.com^
+||foamyfood.com^
 ||forecasttiger.com^$third-party
+||foregoingfowl.com^
+||forgetfulflowers.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||fourarithmetic.com^
+||fourfork.com^
+||frailflock.com^
+||frailfruit.com^
 ||frailoffer.com^$third-party
+||franticcarpenter.com^
+||frantictrail.com^
+||fretfulfurniture.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||friendwool.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||frightenedpotato.com^
+||fronttoad.com^
+||fujiladder.com^
+||fumblingform.com^
+||fumblingselection.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||functionalcrown.com^
+||funnyairplane.com^
+||furryhorses.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||futuristicapparatus.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||futuristicfairies.com^
 ||futuristicfifth.com^$third-party
+||futuristicfold.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||fuzzybasketball.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||fuzzyflavor.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||fuzzyweather.com^
 ||gammamaximum.com^$third-party
+||gaudybeginner.com^
 ||giddycoat.com^$third-party
+||giftedglue.com^
+||giftedthumb.com^
 ||giraffepiano.com^$third-party
+||gleamingtrade.com^
 ||glisteningguide.com^$third-party
 ||gloriousbeef.com^$third-party
+||gloriouscracker.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||glossysense.com^
+||godlygeese.com^
 ||gondolagnome.com^$third-party
 ||gorgeousground.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||gracefulsock.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||grandioseguide.com^
+||grandmotherunit.com^
+||grayreceipt.com^
+||greasegarden.com^
+||greasemotion.com^
 ||greasysquare.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||greetzebra.com^
 ||greyinstrument.com^$third-party
+||gripcorn.com^
+||grouchypush.com^
+||guaranteelamp.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||guardedschool.com^
 ||guiltlessbasketball.com^$third-party
+||guitargrandmother.com^
 ||gulliblecamp.com^$third-party
+||gullibleguitar.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||h78xb.pw^
+! [dup] from peter-lowe/serverlist.txt
+! ||habitualhumor.com^
 ||haltingbadge.com^$third-party
+||haltinggold.com^
 ||hammerhearing.com^$third-party
+||handleteeth.com^
+||handsomeindustry.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||handyfield.com^
 ||handyfireman.com^$third-party
+||happenhistory.com^
+||harborcub.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||hardtofindmilk.com^
+||hatefulrequest.com^
+||headyhook.com^
 ||hearthorn.com^$third-party
+||heavyplayground.com^
+||hesitanttoothpaste.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||hfc195b.com^
+||highfalutinbox.com^
+||highfalutinhoney.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||highfalutinroom.com^
 ||hilariouszinc.com^$third-party
 ||historicalbeam.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||historicalrequest.com^
 ||hocgeese.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||hollowafterthought.com^
 ||homelycrown.com^$third-party
+||honeybulb.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||honeygoldfish.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||honorablehall.com^
 ||honorableland.com^$third-party
 ||horsenectar.com^$third-party
+||hosenews.com^
+||humdrumhat.com^
+||hurtgrape.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||hurtteeth.com^
+||hypnoticwound.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||hystericalcloth.com^
+||hystericalfinger.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||hystericalhelp.com^
+||i9w8p.pw^
+||icebergindigo.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||illfatedsnail.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||illustriousoatmeal.com^
 ||immensehoney.com^$third-party
+||imperfectinstrument.com^
 ||importedincrease.com^$third-party
 ||importedinsect.com^$third-party
+||importedplay.com^
+||importedpolice.com^
+||importlocate.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||impossibleexpansion.com^
+||impossibleglue.com^
+||impossiblemove.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||impulsehands.com^
 ||impulsejewel.com^$third-party
+||infamousstream.com^
+||informengine.com^
 ||innocentinvention.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||innocentwax.com^
 ||inquisitiveinvention.com^$third-party
+||instrumentinsect.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||instrumentsponge.com^
 ||intelligentscissors.com^$third-party
+||interestsmoke.com^
+||internalsink.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||inventionpassenger.com^
+||investigatepin.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||invitesugar.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||ivykiosk.com^
 ||j93557g.com^$third-party
+||jadedjoke.com^
 ||jadeitite.com^$third-party
+||jailbulb.com^
 ||jamexistence.com^$third-party
+||joblessdrum.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||justicejudo.com^
+||k54nw.pw^
+||kitesquirrel.com^
+||knotkettle.com^
+||knottysticks.com^
+||lackadaisicalkite.com^
+||lagoonolivia.com^
 ||lameletters.com^$third-party
 ||lamplow.com^$third-party
+||languagelake.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||laughablecopper.com^
+||laughablelizards.com^
 ||laughcloth.com^$third-party
+||laughdrum.com^
+||leapfaucet.com^
 ||leaplunchroom.com^$third-party
+||learnedmarket.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||leftliquid.com^
+||lettucecopper.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||lettucelimit.com^
 ||levelbehavior.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||lightcushion.com^
+||literatelight.com^
+||livelumber.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||livelylaugh.com^
 ||lizardslaugh.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||longinglettuce.com^
 ||lorenzourban.com^$third-party
 ||loudlunch.com^$third-party
 ||lovelydrum.com^$third-party
 ||lowlocket.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||lp3tdqle.com^
 ||lumberamount.com^$third-party
 ||lumpylumber.com^$third-party
+||maddeningpowder.com^
 ||magnetairport.com^$third-party
+||magnificentmeasure.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||magnificentmist.com^
+||mailboxmeeting.com^
+||makeshiftmine.com^
+||maliciousmusic.com^
+||maniacalappliance.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||markedcrayon.com^
 ||markedmeasure.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||markedpail.com^
+||massivebasket.com^
 ||massivemark.com^$third-party
+||materialexample.com^
+||materialisticfan.com^
+||materialisticmark.com^
 ||materialmoon.com^$third-party
+||measurecaption.com^
 ||meatydime.com^$third-party
+||medusasailor.com^
+||melodicminute.com^
+||memopilot.com^
 ||memorizeneck.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||memorycobweb.com^
+||meremark.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||messagenovice.com^
+||messyoranges.com^
+||metroaverage.com^
+||mightyspiders.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||militaryverse.com^
+||mimosamajor.com^
+||mindlessmark.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||minormeeting.com^
+||miscreantmine.com^
+||miscreantmoon.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||mixedreading.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||modifyeyes.com^
+||modularmental.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||moldyicicle.com^
+||motionlessbag.com^
+||mountainouspear.com^
 ||movemeal.com^$third-party
 ||mowfruit.com^$third-party
+||muddledaftermath.com^
 ||mundanepollution.com^$third-party
+||murkymeeting.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||mysteriousmonth.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||nappyattack.com^
+||necessarywax.com^
+||negotiatetime.com^
 ||neighborlywatch.com^$third-party
 ||nervoussummer.com^$third-party
 ||niftyhospital.com^$third-party
+||niftyjelly.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||noiselessplough.com^
+||nonchalantnerve.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||nondescriptcrowd.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||nondescriptnote.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||nondescriptsmile.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||nondescriptstocking.com^
+||nostalgicknot.com^
+||nostalgicneed.com^
+||nothingmethod.com^
+||nulldiscussion.com^
+||nullnorth.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||nuttyorganization.com^
 ||oafishobservation.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||obscenesidewalk.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||observantice.com^
+||omniscientfeeling.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||omniscientspark.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||operationkettle.com^
+||opinionsurprise.com^
+||oppositeoperation.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||optimallimit.com^
+||orangeoperation.com^
+||outstandingincome.com^
+||outstandingsnails.com^
+||ovalweek.com^
 ||overconfidentfood.com^$third-party
+||overratedchalk.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||owlsr.us^
+||paddleangle.com^
+||paintplantation.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||paleleaf.com^
+||pamelarandom.com^
 ||panickycurtain.com^$third-party
 ! [dup] from peter-lowe/serverlist.txt
 ! ||panickypancake.com^
+||panoramicbutter.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||paradoxfactor.com^
 ||parcelcreature.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||parchedangle.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||parchedsofa.com^
 ||parsimoniouspolice.com^$third-party
 ||partplanes.com^$third-party
+||passengerpage.com^
+||pastepot.com^
+||pastoralcorn.com^
 ||pastoralroad.com^$third-party
 ||pedropanther.com^$third-party
+||pegasusplate.com^
 ||penspade.com^$third-party
 ||perceivequarter.com^$third-party
+||perpetualpail.com^
+||persuadesock.com^
+||persuadesupport.com^
 ||petiteumbrella.com^$third-party
 ||photographpan.com^$third-party
 ||pietexture.com^$third-party
+||pigspie.com^
+||pinpointpotato.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||piquantpigs.com^
+||piquantprice.com^
+||piquantstove.com^
+||pizzasnut.com^
 ||placidperson.com^$third-party
+||plainplayground.com^
+||plainrequest.com^
+||planesorder.com^
 ||plantdigestion.com^$third-party
+||plantpotato.com^
+||plantrelation.com^
 ||pleasantpump.com^$third-party
+||plotparent.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||plotrabbit.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||pluckypocket.com^
+||pocketsonic.com^
+||podiumpresto.com^
+||pointlessrifle.com^
+||poisedpig.com^
+||politegoldfish.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||possessivebucket.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||possibleboats.com^
+||powderprofit.com^
+||preciouseffect.com^
+||preciousyoke.com^
+||prefixpatriot.com^
 ||prepareplanes.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||presetrabbits.com^
+||presssensor.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||previousplayground.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||previouspotato.com^
 ||pricklydebt.com^
+||pricklyplastic.com^
+||printerplasma.com^
 ||producecopy.com^$third-party
+||productivepear.com^
 ||profitrumour.com^$third-party
 ||profusesupport.com^$third-party
+||promopassage.com^
+||propertypotato.com^
+||proudprose.com^
 ||puffyloss.com^$third-party
 ||puffypaste.com^$third-party
 ||puffypull.com^$third-party
 ||puffypurpose.com^$third-party
+||punyplant.com^
+||purchasesuggestion.com^
+||puzzlingproperty.com^
 ||q20jqurls0y7gk8.info^
+! [dup] from peter-lowe/serverlist.txt
+! ||quacksquirrel.com^
+||quaintborder.com^
 ||quaintcan.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||quarterbean.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||quicksandear.com^
 ||quietknowledge.com^$third-party
 ||quizzicalzephyr.com^$third-party
+||rabbitbreath.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||railwayrainstorm.com^
 ||railwayreason.com^$third-party
 ||raintwig.com^$third-party
+||rainydirt.com^
+||rainyhand.com^
+||rainyrule.com^
+||rainystretch.com^
+||rambunctiousvoyage.com^
 ||rangecake.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||rapidkittens.com^
 ||raresummer.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||readgoldfish.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||readingguilt.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||readingopera.com^
 ||readymoon.com^$third-party
+||readysnails.com^
 ||realizerecess.com^$third-party
 ||realizevacation.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||rebelsubway.com^
+||receptivebranch.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||receptiveink.com^
 ||receptivereaction.com^$third-party
+||recommenddoor.com^
+||reconditeprison.com^
 ||reconditerake.com^$third-party
+||reconditerespect.com^
+||referdriving.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||reflectivereward.com^
 ||regularplants.com^$third-party
 ||rejectfairies.com^$third-party
 ||repeatsweater.com^$third-party
+||replaceroute.com^
+||representativeray.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||resolutekey.com^
 ||resonantbrush.com^$third-party
 ||resonantrock.com^$third-party
+||respectrain.com^
 ||rhetoricalloss.com^$third-party
+||rhymezebra.com^
+||rhythmmoney.com^
+||richreceipt.com^
 ||richstring.com^$third-party
+||righteouscrayon.com^
+||rightfulfall.com^
+||rigidrobin.com^
 ||ringplayground.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||ringsrecord.com^
 ||ritzykey.com^$third-party
+||ritzyveil.com^
+||robustbelieve.com^
+||rodeopolice.com^
 ||roofrelation.com^$third-party
+||roomyreading.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||roughroll.com^
+||ruddycast.com^
+||ruddywash.com^
 ||rusticprice.com^
 ||ruthlessdegree.com^$third-party
+||ruthlessmilk.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||ruthlessrobin.com^
+||sablesmile.com^
 ||sablesong.com^$third-party
+||sailsuit.com^
+||samestretch.com^
 ||satisfycork.com^
+||satisfyingshow.com^
+||satisfyingspark.com^
 ||savoryorange.com^$third-party
+||savorystructure.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||saysidewalk.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||scarcesign.com^
+||scarecrowslip.com^
+||scarecrowslope.com^
+||scaredcomfort.com^
+||scaredsidewalk.com^
 ||scaredsnake.com^$third-party
+||scaredstory.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||scarfsmash.com^
+||scarfthought.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||scatteredheat.com^
+||scatteredstream.com^
 ||scientificshirt.com^
+||scientificsneeze.com^
 ||scintillatingscissors.com^$third-party
 ! [dup] from peter-lowe/serverlist.txt
 ! ||scintillatingsilver.com^
 ||scintillatingspace.com^$third-party
+||scratchsofa.com^
+||scrawnystart.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||screechingfurniture.com^
 ||screechingslip.com^$third-party
 ! [dup] from peter-lowe/serverlist.txt
 ! ||screechingstove.com^
+||scrollservice.com^
 ||scrubswim.com^$third-party
+||seashoresociety.com^
 ||seatsmoke.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||secretivecub.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||secretspiders.com^
 ||secretturtle.com^$third-party
+||seedscissors.com^
+||selectionship.com^
 ||selectivesummer.com^$third-party
 ||selfishsea.com^$third-party
 ||selfishsnake.com^$third-party
+||separateshow.com^
 ||separatesilver.com^$third-party
+||shaggytank.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||shakegoldfish.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||shakesuggestion.com^
+||shakysurprise.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||shakytaste.com^
+||shallowblade.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||shallowsmile.com^
 ||sharppatch.com^$third-party
 ||shesubscriptions.com^$third-party
+||shinesavage.com^
 ||shockinggrass.com^$third-party
 ||shockingship.com^$third-party
+||shopbreakfast.com^
+||showsteel.com^
+||showstranger.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||shrillspoon.com^
+||shutseashore.com^
 ||shyseed.com^$third-party
 ||sicksmash.com^$third-party
+||silentcredit.com^
+||silentwrench.com^
+||siliconslow.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||silkysquirrel.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||sillyscrew.com^
+||simplesidewalk.com^
+||simplisticstem.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||sincerebuffalo.com^
 ||sinceresubstance.com^$third-party
 ||singroot.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||sixscissors.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||sizesidewalk.com^
+||skillfuldrop.com^
+||slaysweater.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||sleepcartoon.com^
+||slimopinion.com^
+||slimyscarf.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||slipperysack.com^
+||sloppycalculator.com^
+||sloppyearthquake.com^
 ||smallbeginner.com^$third-party
+||smashshoe.com^
 ||smashsurprise.com^$third-party
+||smilingshake.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||smilingwaves.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||smoggysnakes.com^
 ||smoggystation.com^$third-party
+||snailsengine.com^
+||snakemineral.com^
+||snakesshop.com^
+||sneakystew.com^
+||snoresmile.com^
+||soaprange.com^
 ||soggysponge.com^$third-party
+||somberattack.com^
 ||somberscarecrow.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||sombersea.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||sombersquirrel.com^
+||somberstructure.com^
 ||sombersurprise.com^$third-party
+||songssmoke.com^
+||sootheside.com^
+||sophisticatedstory.com^
+||sophisticatedstove.com^
+||soresneeze.com^
+||sorethunder.com^
+||soretrain.com^
+||sortsail.com^
+||sortstructure.com^
 ||sortsummer.com^$third-party
+||sowlettuce.com^
+||sparklesleet.com^
+||sparklingnumber.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||sparklingshelf.com^
+||specialsnake.com^
+||specialstatement.com^
 ||spellsalsa.com^$third-party
+||spendpest.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||spidersboats.com^
 ||spiffymachine.com^$third-party
 ! [dup] from peter-lowe/serverlist.txt
+! ||spirebaboon.com^
+||spongesalt.com^
+! [dup] from peter-lowe/serverlist.txt
 ! ||spookysleet.com^
+||spookyslope.com^
+||spoonsilk.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||spotlessstamp.com^
+||spotstring.com^
 ||spottednoise.com^
+||spottedsmile.com^
+||spottedsnow.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||springaftermath.com^
+||springsister.com^
 ||spuriousbase.com^$third-party
 ||spurioussteam.com^$third-party
+||spuriousstranger.com^
+||spysubstance.com^
+||squashfriction.com^
 ||squeakzinc.com^$third-party
 ||squealingturn.com^$third-party
+||squeamishspot.com^
 ||squirrelhands.com^$third-party
 ! [dup] from peter-lowe/serverlist.txt
+! ||stakingscrew.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||stakingslope.com^
+! [dup] from peter-lowe/serverlist.txt
 ! ||stakingsmile.com^
+||staleseat.com^
 ||staleshow.com^$third-party
 ||stalesummer.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||standingnest.com^
+||standingsack.com^
+||standtrouble.com^
+||statementsweater.com^
+||statuesquebrush.com^
+||steadfastseat.com^
 ||steadfastsound.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||steadfastsystem.com^
+||steadycopper.com^
 ||steepsquirrel.com^$third-party
 ||stepplane.com^$third-party
+||stereoproxy.com^
+||stereotypedclub.com^
+||stereotypedsugar.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||stickssheep.com^
+||stickysheet.com^
 ||stiffgame.com^$third-party
 ||stiffstem.com^$third-party
+||stockingsneeze.com^
+||storescissors.com^
+||storeslope.com^
 ||storesurprise.com^$third-party
 ||stormyachiever.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||stoveseashore.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||straightnest.com^
+||strangesink.com^
+||stretchsister.com^
+||stringsmile.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||stripedburst.com^
 ||strivesidewalk.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||structurerod.com^
+||stupendousselection.com^
 ||stupendoussleet.com^$third-party
 ! [dup] from peter-lowe/serverlist.txt
 ! ||stupendoussnow.com^
+||stupidsnake.com^
+||subsequentsand.com^
+||subsequentstew.com^
 ||subsequentswim.com^$third-party
+||substantialcarpenter.com^
+||substantialstraw.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||succeedscene.com^
+||successfulscent.com^
 ||suddensidewalk.com^$third-party
+||suddensnake.com^
+||suddensoda.com^
+||suddenstructure.com^
 ||sugarcurtain.com^$third-party
 ! [dup] from peter-lowe/serverlist.txt
+! ||sulkybutter.com^
+! [dup] from peter-lowe/serverlist.txt
 ! ||sulkycook.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||summerobject.com^
+||superficialspring.com^
 ||superficialsquare.com^$third-party
+||supervisegoldfish.com^
+||suspendseed.com^
+||sweepsheep.com^
 ||sweetslope.com^$third-party
+||swellstocking.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||swimslope.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||swordgoose.com^
+||symbolizebeast.com^
+||synonymousrule.com^
+||synthesizespoon.com^
+||systemizecoat.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||talentedsteel.com^
 ||tangibleteam.com^$third-party
+||tarttendency.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||tastefulsongs.com^
+||tastelesstrees.com^
 ||tawdryson.com^$third-party
+||tdzvm.pw^
+! [dup] from peter-lowe/serverlist.txt
+! ||tedioustooth.com^
 ||teenytinycellar.com^$third-party
+||teenytinytongue.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||teenyvolcano.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||teethfan.com^
+||tempttalk.com^
+||tendersugar.com^
 ||tendertest.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||terriblethumb.com^
+||terrificgoose.com^
+||terrifictooth.com^
+||testedtouch.com^
+||texturetrick.com^
+||therapeuticcars.com^
+||thickticket.com^
+||thicktrucks.com^
+||thingsafterthought.com^
+||thinkablefloor.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||thinkablerice.com^
+||thinkabletrick.com^
 ||thirdrespect.com^$third-party
+||thirstylettuce.com^
+||thirstyswing.com^
 ||thirstytwig.com^$third-party
 ! [dup] from peter-lowe/serverlist.txt
 ! ||thomastorch.com^
 ! [dup] from peter-lowe/serverlist.txt
+! ||threechurch.com^
+||threetruck.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||throattrees.com^
+||thunderingrose.com^
+! [dup] from peter-lowe/serverlist.txt
 ! ||ticketaunt.com^
 ||ticklesign.com^$third-party
+||timeterritory.com^
+||timetwig.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||tinytendency.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||tiresomethunder.com^
 ||toecircle.com^$third-party
+||toedrawer.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||toothbrushnote.com^
+||toothpasterabbits.com^
+||topichawaii.com^
+||torpidtongue.com^
+||torpidtoothpaste.com^
+||toweringrun.com^
 ||tranquilside.com^$third-party
+||translateoatmeal.com^
+||trappush.com^
+||trapteaching.com^
+||treadbun.com^
+||tremendousplastic.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||tremendoustime.com^
+||tremendoustreatment.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||trickycelery.com^
 ||troubledtail.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||truckstomatoes.com^
+||tumblebirds.com^
+||tutorthing.com^
 ||typicalairplane.com^$third-party
 ||typicalteeth.com^$third-party
+||tzwaw.pw^
 ||ubiquitousyard.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||ultraoranges.com^
 ||unarmedindustry.com^$third-party
 ||unbecominghall.com^$third-party
+||uncoveredcircle.com^
+||uncoveredexpert.com^
 ||unequalbrake.com^$third-party
+||unevenstring.com^
+||unifyaddition.com^
 ||uninterestedquarter.com^$third-party
 ||unknowncrate.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||unknowntray.com^
+||unnaturalcaption.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||untidyquestion.com^
 ||untidyrice.com^$third-party
+||unusedquestion.com^
+||unusedstone.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||unusualtitle.com^
 ||unwieldyhealth.com^$third-party
+! [dup] from peter-lowe/serverlist.txt
+! ||unwrittenspot.com^
+||usedexample.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||uttermosthobbies.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||vanfireworks.com^
+||venusgloria.com^
+||verifyvegetable.com^
 ||verseballs.com^$third-party
+||virgoplato.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||voicevegetable.com^
+||vq1qi.pw^
+||waggishpig.com^
+||wakefulcook.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||warmafterthought.com^
+||warmquiver.com^
+||warnwing.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||waryfog.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||wateryvan.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||wearbasin.com^
+||wearywater.com^
+||wellgroomedbat.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||wellmadefrog.com^
+||whineattempt.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||whirlwealth.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||whiskyqueue.com^
+||whisperingbadge.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||whisperingcrib.com^
 ||whisperingflesh.com^$third-party
+||wigglygeese.com^
+||wigglyindustry.com^
+||wildernesscamera.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||wirecomic.com^
+||wistfulflight.com^
 ||womanear.com^$third-party
+||workableachiever.com^
+||workoperation.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||worriednumber.com^
+||wrapstretch.com^
+||wreckvolcano.com^
+||writewealth.com^
+||wrongpotato.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||wryfinger.com^
+||wtaccesscontrol.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||xovq5nemr.com^
+||youngmarble.com^
+||youthfulnoise.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||zbwp6ghm.com^
+! [dup] from peter-lowe/serverlist.txt
+! ||zealousfield.com^
+||zippywind.com^
 ||zlp6s.pw^$third-party
 ! -----------------International third-party tracking domains-----------------!
 ! *** easylist:easyprivacy/easyprivacy_trackingservers_international.txt ***
@@ -9768,6 +10826,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||netmonitor.fi^$third-party
 ||stat.www.fi^$third-party
 ||tracking*.euroads.fi^$third-party
+||userneeds.com^$third-party
 ||vihtori-analytics.fi^$third-party
 ! Greek
 ||linkwi.se^$third-party
@@ -10306,6 +11365,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||analytic.rollout.io^
 ||analytic.xingcloud.com^$third-party
 ||analyticcdn.globalmailer.com^
+||analytics-1.cavai.com^
 ||analytics-cms.whitebeard.me^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||analytics-production.hapyak.com^
@@ -10440,6 +11500,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||apester.com/event^
 ||api-iam.intercom.io/messenger/web/metrics
 ||api-location-prd.pelcro.com^$domain=newsweek.com
+||api.autopilothq.com^
 ||api.bit.ly/*/clicks?$third-party
 ||api.blink.net/a/
 ||api.carrottrack.io^$third-party
@@ -10486,6 +11547,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||audit.303br.net^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||audit.median.hu^
+||aurora-d3.herokuapp.com^
 ||autoline-top.com/counter.php?
 ||automate-prod.s3.amazonaws.com^$~script
 ||avo.app^*/track
@@ -10593,6 +11655,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||canvas-usage-v2.conduit-data.com^
 ||capi.connatix.com/rtb/
 ||capi.connatix.com/tr/
+||capture-api.ap3prod.com^
 ||capture.condenastdigital.com^
 ||capture.trackjs.com^$third-party
 ||carambo.la/analytics/
@@ -10756,6 +11819,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||contactatonce.com/VisitorContext.aspx?
 ||container.pepperjam.com^$third-party
 ||content.cpcache.com^*/js/ga.js
+||contentdriver.com/api/impression
 ||contentpass.net/stats?$third-party
 ||contents-tracking.beop.io^
 ||control.cityofcairns.com^$third-party
@@ -10904,6 +11968,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||d3mapax0c3izpi.cloudfront.net/lib/ajax/events.js
 ||d3mskfhorhi2fb.cloudfront.net^
 ||d3n6i6eorggdxk.cloudfront.net^
+||d3plfjw9uod7ab.cloudfront.net^
 ||d3q7vxy7usqoub.cloudfront.net^
 ||d3qfdthu9f51gu.cloudfront.net^
 ||d3qxef4rp70elm.cloudfront.net/m.js
@@ -11157,6 +12222,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||ga.webdigi.co.uk^
 ||gamegecko.com/gametrack?
 ||gannettdigital.com/capture_logger/
+||ganon.yahoo.com^
 ||gatehousemedia.com/wickedlocal/ip.js
 ||gateway.foresee.com^
 ||gcion.com/gcion.ashx?
@@ -11179,6 +12245,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||geobar.ziffdavisinternational.com^
 ||geoip.cookieyes.com^
 ||geoip.nekudo.com^
+||geoip.spotpass.io^
 ||geolocation.outreach.com^
 ||geoservice.curse.com^
 ||getglue.com^*/count?
@@ -11756,6 +12823,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||privacy-center.org^*/events
 ||privacy.outdoorsg.com^
 ||processor.asccommunications.com^
+||prod.ew.srp.navigacloud.com^
 ||proxy.dzeio.com^
 ||proxycheck.io/v2/
 ||pswec.com/px/$third-party
@@ -11806,6 +12874,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||rapidspike.com/rum/
 ||raygun.io/events?
 ||rbl.ms/res/users/tracking/
+||reach-id.orbit.tm-awx.com^
 ||readcube.com/assets/track_
 ||realm.hearst3pcc.com^
 ||recart.com/tracking/
@@ -11848,6 +12917,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||run.app/data.log?
 ||run.app/metrics/
 ||s-microsoft.com/mscc/$~stylesheet
+||s.autopilotapp.com^
 ||s.beop.io^
 ||s.clickability.com^
 ||s.clickiocdn.com^
@@ -11885,6 +12955,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||sendibm4.com^*/op/$third-party
 ||sendtonews.com/stn_trk.gif?
 ||sentry.arc.io^
+||sermoncloud.com/logger/
 ||session.timecommerce.net^
 ||sftrack.searchforce.net^
 ||share-online.biz/affiliate/$third-party
@@ -11921,6 +12992,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||sparklit.com/counter/
 ||speedtest.dailymotion.com/latencies.js
 ||speedtrap.shopdirect.com^
+||spotpass.com/api/log
 ||spread.ly^*/statistics.php
 ||squarespace.com/universal/scripts-compressed/performance-$script,third-party
 ||srvmath.com^*/analytics.js
@@ -12016,6 +13088,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||sunset.com/tia/
 ||survey.interquest.com^
 ||survey.io/log?
+||surveymonkey.com/resp/api/metrics
 ||surveywall-api.survata.com^$third-party
 ||svc.dynamics.com/f/m/$third-party
 ||svc.dynamics.com/t/w$third-party
@@ -12059,10 +13132,11 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||tag.brandcdn.com^
 ||tag.elevaate.io^
 ||tag.flagship.io^
+||tag.mtrcs.samba.tv^
 ||tag.myplay.com^
 ||tag.rightmessage.com^
 ||tag.rmp.rakuten.com^
-||tag.search.sensefuel.live^
+||tag.search.sensefuel.live^$script,third-party
 ||tag.sonymusic.com^
 ||tagcdn.com/pix/?
 ! [dup] from peter-lowe/serverlist.txt
@@ -12101,7 +13175,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||tinyurl.com/pixel.gif/
 ||tk.storetail.io^
 ||tl.tradetracker.net^
-||tm-awx.com/felix.min.js
+||tm-awx.com/pageview
 ||tm.tradetracker.net^
 ||tm.vendemore.com^
 ||tms.fmm.io^
@@ -12206,6 +13280,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||tracking.fits.me^$third-party
 ||tracking.g2crowd.com^
 ||tracking.godatafeed.com^
+||tracking.graphly.io^
 ||tracking.hivecloud.net^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||tracking.hyros.com^
@@ -12274,7 +13349,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||tru.webelapp.com^
 ||trustarc.com/log?
 ||trustcommander.net/iab-tcfapi/
-||trustcommander.net/privacy/
+||trustcommander.net/privacy/$third-party
 ||trustedform.com/trustedform.js?provide_referrer
 ||try.abtasty.com^
 ||ts.tradetracker.net^
@@ -12285,7 +13360,6 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||uc.cn/collect?
 ||ucounter.ucoz.net^
 ||uhit.eu/id/$third-party
-||uid.mavencoalition.io^
 ||uim.tifbs.net^
 ||unibet.de/stan/campaign.do?*&affiliateId=$subdocument,third-party
 ||units.knotch.it^
@@ -12367,6 +13441,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||webedia.fr/js/gs.js
 ||weblog.livesport.eu^
 ||weblogger-dynamic-lb.playdom.com^
+||websdk.appsflyer.com^
 ||webservices.websitepros.com^
 ||webstats.motigo.com^$third-party
 ||webstats.thaindian.com^
@@ -12395,6 +13470,8 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||wn.com/count.js
 ||wondershare.es/jslibs/track.js
 ||wordpress.com/geo/
+||workers.dev/api/event
+||workers.dev/js/script.js
 ||worldssl.net/reporting.js
 ||worldztool.com^*/dotraceuser.php
 ||wowza.com/v1/analytics
@@ -12407,6 +13484,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||x.weather.com^
 ||xt.persosa.com^
 ||yahoo.co.jp/js/s_retargeting.js
+||yahoo.com/sync/casale/
 ||yandex.*/data?referrer=
 ||yandex.ru/cycounter?
 ||yarpp.org/pixels/
@@ -12649,7 +13727,6 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||hittracker.org/counter.php
 ||house27.ch/counter/
 ||hyvyd.com/count$image,domain=mobile.de
-||idt.id-news.net^
 ||im.aol.de^
 ||info.elba.at^$third-party
 ||insene.de/tag/$third-party
@@ -12824,9 +13901,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||t.ofsys.com^
 ||tag.goldenbees.fr^
 ||tag.leadplace.fr^
-||testcddc.atclouddev.net^
 ||tim.nextinpact.com^
-||tmgr.ccmbg.com^
 ||track.byzon.swelen.net^$third-party
 ||track.kyoads.com^
 ||track.laredoute.fr^$image
@@ -13100,7 +14175,6 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||tourmake.it^*/stat/
 ||tourmake.it^*/stats?
 ||tr.bt.matrixspa.it^
-||track.adintend.com^
 ||track.cedsdigital.it^
 ||track.eadv.it^
 ||track.veedio.it^
@@ -13309,7 +14383,6 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||counter.photopulse.ru^
 ||counter.pr-cy.ru^
 ||counter.star.lg.ua^
-||counter.tovarro.com^
 ||counter.wapstart.ru^
 ||crm-analytics.imweb.ru^
 ||d.wi-fi.ru^
@@ -13534,6 +14607,8 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||analytics.plex.tv^
 ||analytics.productreview.com.au^
 ||analytics.realestate.com.au^
+! [dup] from ublock-origin/privacy.txt
+! ||analytics.send.cm^
 ||analytics.slashdotmedia.com^
 ||analytics.synedat.com^
 ||analytics.twitter.com^
@@ -13550,12 +14625,15 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||avitop.com/aviation/hitlist.asp
 ||baidu.com^*/mwb2.gif?
 ||baidu.com^*/wb.gif?
+||bandcamp.com/api/tracker/
 ||banggood.com/collectBanner?
 ||banggood.com/collectException
 ||bangkokpost.com/hits/
 ||bankofamerica.com/cookie-id.js
 ||bat.maydream.com^
 ||bats.video.yahoo.com^
+||bcbits.com/bundle/bundle/1/analytics-$domain=bandcamp.com
+||bcbits.com/bundle/bundle/1/impl-$domain=bandcamp.com
 ||bdt.123rf.com^
 ||beacon.shazam.com^
 ||beacon.shutterfly.com^
@@ -13567,7 +14645,6 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||bing.com/fd/ls/GLinkPing.aspx?
 ||binocule21c.merriam-webster.com^
 ||biomedcentral.com/track/
-||blue.abc27.com^
 ||booking.com/logo?
 ||boomerang.dell.com^
 ||brightside.me/metric-collector
@@ -13613,6 +14690,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||collect.alipay.com^
 ||collector-px0py5pczn.octopart.com^
 ||collector.githubapp.com^
+||collector.megaxh.com^
 ||collector.pi.spectrum.net^
 ||collector.prod.expedia.com^
 ||collector.statowl.com^
@@ -13622,18 +14700,19 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||colvk.viki.io^
 ||confiant.msn.com^
 ||consent.ghostery.com/v1.js
+||console-telemetry.oci.oraclecloud.com^
 ||contents2.00110.citi.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||count.rin.ru^
 ||coursehero.com/v1/data-tracking
 ||cpt.itv.com^
-||cr.org/etc/designs/electronics/clientlibs/tracking.js
 ||crayfish.thingelstad.com^
 ||creately.com/static/js/creately-analytics-
 ||crta.metro.co.uk^
 ||cstats.sankakucomplex.com^
 ||cultofmac.com/djrxqhzkbsgf.js
 ||d.cdngeek.com^$domain=edugeek.net
+||d.getpocket.com^
 ||d.skk.moe^
 ||dailymail.co.uk/geo/
 ||dailymail.co.uk/rta2/
@@ -13679,6 +14758,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||e.used.ca/event
 ||e.zg-api.com/event$domain=zillow.com
 ||e2ma.net/track/
+||e377.thestar.com^
 ||ebay.com^*/customer_image_service?
 ||ebaystatic.com/rs/c/9527tracking/configuration.js$script,domain=ebay.com
 ||ednetz.de/api/public/socialmediacounter.
@@ -13694,6 +14774,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||error.fc2.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||et.nytimes.com^
+||et.tidal.com^
 ||etsy.com/bcn/beacon
 ||etui.fs.ml.com^
 ||etx.indiatimes.com^
@@ -13701,7 +14782,8 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||euclid.kuula.co^
 ||event-api.reverb.com^
 ||eventlog.jackpot.de^
-||events.api.godaddy.com^$image
+||events-service.coinbase.com^
+||events.api.godaddy.com^
 ||events.practo.com^
 ||events.privy.com^
 ||events.reddit.com^
@@ -13799,6 +14881,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||hankookilbo.com/service/kt/trk.js$script,domain=koreatimes.co.kr
 ||harryrosen.com/analytics/
 ||healthline.com/api/metrics
+||heap.drop.com^
 ||hilton.com/zJbufaUX/
 ||hindustantimes.com/res/images/one-pixel.png
 ||hltv.org/scripts/hltv-tracking.js
@@ -13919,6 +15002,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||metacrawler.com/pingback
 ||metrics.bangbros.com^
 ||metrics.hackerrank.com^
+||metrics.roblox.com^
 ||metrics.spkt.io^
 ||metricsishare.rediff.com^
 ||metro.co.uk/base/rta/
@@ -13998,6 +15082,8 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||pixel.archive.is^
 ||pixel.archive.ph^
 ||pixel.archive.vn^
+||pixel.archivecaslytosk.onion^
+||pixel.archiveiya74codqgiixo33q62qlrqtkgmcitqx5u2oeqnmn5bpcbiyd.onion^
 ||pixel.convertize.io^
 ||pixel.digitalspy.co.uk^
 ||pixel.facebook.com^
@@ -14048,6 +15134,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||retargeting.vistaprint.com^
 ||rfk.biglots.com^
 ||roblox.com/www/e.png?
+||rps-p2.rockpapershotgun.com^
 ||rps-uk.rockpapershotgun.com^
 ||rs.mail.ru^
 ||rss-loader.com/track/
@@ -14236,6 +15323,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||streamta.pe/stat/
 ||streamtape.com/stat/
 ||strtapeadblock.club/stat/
+||strtpe.link/stat/
 ||stubhub.com/bfx/api/logging
 ||substack.com/api/v1/firehose?
 ||t.9gag.com^
@@ -14347,6 +15435,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||usmetric.rediff.com^
 ||usnews.com/static/esi/usn-geo.json
 ||vanityfair.com/user-context?referrer
+||views.arabnews.com^
 ||vimeo.com/ablincoln/
 ||vimeocdn.com/js_opt/logging_combined.min.js
 ||visit.theglobeandmail.com^
@@ -14511,6 +15600,7 @@ techxplore.com##.embed-responsive-trendmd
 ||therealreal.com/ev56mY37/init.js
 ||twentytwowords.com/static/clients/twentytwowords/3CVQBi14_init.js
 ||upwork.com/Ss13U803/init.js
+||walmart.ca/px/PXnp9B16Cq/init.js
 ||walmart.com/px/PXu6b0qd2S/init.js
 ||wine-searcher.com/K6S8okp3/init.js
 ||worthpoint.com/lIUjcOwl/init.js
@@ -14548,7 +15638,6 @@ techxplore.com##.embed-responsive-trendmd
 ||sourcepoint-mms.aetv.com^
 ||sourcepoint-mms.history.com^
 ||sourcepoint-mms.mylifetime.com^
-||sourcepoint.theguardian.com^
 ||telegraph.co.uk/telegraph-advertising/tmg-cmp.min.js
 ||trustarc.mgr.consensu.org/get?
 ||twus-mms.theweek.com^
@@ -24226,6 +25315,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 ||track.noz.de^
 ||track.rundschau-online.de^
 ||tracking.finanzen.net^
+||tracking.fupa.net^
 ||tracking.krone.at^
 ||tracking.noen.at^
 ||tracking.oe24.at^
@@ -24266,6 +25356,8 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 ||liberation.fr/newsite/js/cmp/
 ||ma-petite-recette.fr/visites
 ||neko-san.fr/stats
+||ouedkniss.com/static/alexa.js
+||ouedkniss.com/static/pixel.js
 ||p.kolplay.com^
 ||p.pagesjaunes.fr^
 ||pixel.ionos.fr^
@@ -24320,6 +25412,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 ||banana.le.com^
 ||bc.qunar.com^
 ||bdwblog.eastmoney.com^
+||beacon.qq.com/analytics/
 ||btrace.qq.com^
 ||cherry.le.com^
 ||click.gamersky.com^
@@ -24329,9 +25422,11 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 ||counter.people.cn^
 ||dcard.tw/v1/events
 ||dlswbr.baidu.com^
+||dolphin.deliver.ifeng.com^
 ||douyucdn.cn/fish3/1.gif
 ||eastmoney.com/web/prd/jump_tracker.js
 ||eclick.baidu.com^
+||err.ifengcloud.ifeng.com^
 ||event.csdn.net^
 ||flog.pressplay.cc^
 ||forum.zuvio.com.tw/api/article/finish
@@ -24374,6 +25469,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 ||logx.mtime.cn^
 ||logx.mtime.com^
 ||luobo.tv/staticts.html
+||mail.qq.com/cgi-bin/getinvestigate?
 ||map.baidu.com/newmap_test/static/common/images/transparent.gif
 ||mar.vip.com^
 ||monitor.music.qq.com^
@@ -24440,6 +25536,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 ||sogou.com/cl.gif?
 ||sogou.com/cl?
 ||sogou.com/pv?
+||sogoucdn.com/hhytrace/
 ||sohu.com.cn/hdpb.gif?
 ||sohu.com/adgtr/
 ||sohu.com/clk.gif?
@@ -25096,11 +26193,10 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||1trackapp.com/static/tracking/$script,stylesheet,~third-party
 @@||9cdn.net^*/js/tracking/$script,domain=nine.com.au
 @@||accounts.nintendo.com/account/js/pages/$script,~third-party
-@@||adobedtm.com/*-source.min.js$script,domain=atresplayer.com|backcountry.com|bt.com|dollargeneral.com|kroger.com|personal.natwest.com
+@@||adobedtm.com/*-source.min.js$script,domain=atresplayer.com|backcountry.com|bt.com|dollargeneral.com|kroger.com|personal.natwest.com|verizon.com
 @@||adobedtm.com/*_source.min.js$script,domain=backcountry.com|kroger.com
+@@||adobedtm.com/extensions/$script,domain=apple.com|foodnetwork.com|verizon.com
 @@||adobedtm.com/launch-$script,xmlhttprequest
-@@||adobedtm.com^*/AppMeasurement.min.js$script,domain=apple.com|foodnetwork.com
-@@||adobedtm.com^*/AppMeasurement_Module_$script,domain=foodnetwork.com
 @@||adobedtm.com^*/launch-$script,xmlhttprequest
 @@||adobedtm.com^*/mbox-contents-$script,domain=absa.co.za|americanexpress.com|backcountry.com|costco.com|fcbarcelona.com|firststatesuper.com.au|hgtv.com|lenovo.com|lowes.com|nfl.com|oprah.com|pnc.com|shoppersdrugmart.ca|usanetwork.com|vanityfair.com|wired.com|wowway.net
 @@||adobedtm.com^*/s-code-$script
@@ -25122,7 +26218,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||api.cxense.com/public/widget/data?$domain=bizjournals.com|marketwatch.com|wsj.com
 @@||api.getmakerlog.com/discussions/$~third-party,websocket,xmlhttprequest
 @@||api.ipify.org^$script,domain=right-on.co.jp
-@@||api.ipify.org^$xmlhttprequest,domain=account.pennytel.com.au|speedcheck.ky
+@@||api.ipify.org^$xmlhttprequest,domain=247sports.com|account.pennytel.com.au|speedcheck.ky
 @@||api.ipstack.com/check$domain=blockfi.com|withpersona.com
 @@||api.perfops.net^$script,xmlhttprequest,domain=cdnperf.com|dnsperf.com
 @@||appboycdn.com^*/appboy.min.js$script,domain=bakkt.com
@@ -25149,11 +26245,13 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||cdn.cxense.com^$script,domain=bizjournals.com|bloombergquint.com|marketwatch.com
 @@||cleverpush.com/channel/$script,domain=bsdex.de
 @@||community.brave.com/t/$xmlhttprequest
+@@||cpt-static.gannettdigital.com/universal-web-client/master/latest/elements/vendor/adobe/
 @@||d1km2unb2600pw.cloudfront.net/assets/tracking-history-popup-$script,domain=collectplus.yodel.co.uk
 @@||d2wy8f7a9ursnm.cloudfront.net^$script,domain=staples.ca
 @@||d41.co/tags/ff-2.min.js$domain=ads.spotify.com
 @@||daan.dev/wp-content/*/caos-supports-google-analytics-$image,~third-party
 @@||dashboard.unity3d.com/services/analytics/$~third-party
+@@||geo.gorillanation.com/geo.php$script,domain=sherdog.com
 @@||gettingpersonal.co.uk^*/scripts/app/shared/googleanalytics.js$script,~third-party
 @@||glenat.com^*/static/analytics.js$script,~third-party
 @@||gomokuworld.com/app/modules/analyze.js$~third-party
@@ -25183,6 +26281,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||toyota.com/recall/static/js/custom/facebookPixel.js$~third-party
 @@||travel-assets.com/platform-analytics-prime/$domain=chase.com
 @@||uniqlo.com^*/trackingservice/$~third-party
+@@||walmart.ca/assets/store-selector-page/js/analytics.$script,~third-party
 @@||webapp.simplisafe.com^*/angulartics-ga.min.js$script,~third-party
 @@||wsj.net/iweb/static_html_files/cxense-candy.js$script,domain=marketwatch.com
 @@||zoominfo.com/c/amplitude-js$script,~third-party
@@ -25371,7 +26470,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||q-examiner.online/api/Ping?
 @@||quantcast.com/wp-content/themes/quantcast/$domain=quantcast.com
 @@||quantcast.mgr.consensu.org/cmp.js$script,domain=cyclingnews.com|express.co.uk|independent.co.uk|ladbible.com
-@@||quantcast.mgr.consensu.org^*/cmp2.js$script,domain=bigodino.it|bikeperfect.com|centrometeoitaliano.it|cyclingnews.com|digitalcameraworld.com|donnaglamour.it|einthusan.tv|express.co.uk|f1aldia.com|fantacalcio.it|formulapassion.it|gamesradar.com|gianlucadimarzio.com|guitarplayer.com|independent.co.uk|indy100.com|kueez.com|ladbible.com|laptopmag.com|livescience.com|livingetc.com|mirror.co.uk|musicradar.com|pcgamer.com|porconocer.com|protothema.gr|realhomes.com|researchgate.net|space.com|t3.com|techradar.com|tomsguide.com|tomshardware.com|tumblr.com|whathifi.com|whattowatch.com
+@@||quantcast.mgr.consensu.org^*/cmp2.js$script,domain=bigodino.it|bikeperfect.com|centrometeoitaliano.it|cyclingnews.com|dailyrecord.co.uk|digitalcameraworld.com|donnaglamour.it|einthusan.tv|express.co.uk|f1aldia.com|fantacalcio.it|formulapassion.it|gamesradar.com|gianlucadimarzio.com|guitarplayer.com|independent.co.uk|indy100.com|kueez.com|ladbible.com|laptopmag.com|livescience.com|livingetc.com|mirror.co.uk|musicradar.com|pcgamer.com|porconocer.com|protothema.gr|realhomes.com|researchgate.net|space.com|t3.com|techradar.com|tomsguide.com|tomshardware.com|tumblr.com|whathifi.com|whattowatch.com
 @@||rasset.ie/dotie/js/tracker.js$domain=rte.ie
 @@||rba-screen.healthsafe-id.com/fp/tags.js$script,domain=myuhc.com
 @@||repairtrackingsite.nintendo.eu/Tracking/$subdocument,domain=nintendo.co.uk
@@ -25437,7 +26536,6 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||tw.cx/c?a=$xmlhttprequest,domain=justwatch.com
 @@||udottraffic.utah.gov/javascripts/Piwik.js
 @@||uefa.com/inc/js/core/projects/statistics/statistics.js?$script
-@@||uid.mavencoalition.io^$xmlhttprequest,domain=fashionista.com|maxim.com|mtonews.com|si.com|thestreet.com
 @@||ultimedia.com/js/common/jquery.gatracker.js
 @@||usbank.com^*/adrum.js?$script
 @@||varagesale.com/assets/analytics-$script,~third-party
@@ -25647,6 +26745,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||ad.crwdcntrl.net^$script,domain=rtl.nl
 @@||analytics.ooyala.com/static/analytics.js$script,domain=humo.be
 @@||centprod.com/nd/assets/js/analytics.js$script,domain=centprod.com
+@@||collectandgo.be^*/utag.sync.js
 @@||d2zv6vzmaqao5e.cloudfront.net/css/foodticket/*_google_analytics.js
 @@||googletagmanager.com/gtm.js$script,domain=beterbed.nl|finanzen.ch|mediamarkt.nl
 @@||optimizely.addmilk.nl^$image,domain=simyo.nl
@@ -25659,7 +26758,6 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||assets.adobedtm.com^$script,domain=mtvuutiset.fi
 @@||assets.strossle.com/strossle-widget-sdk/$script,domain=como.fi|episodi.fi|fum.fi|inferno.fi|rumba.fi|soundi.fi|tilt.fi
 @@||certona.net^*/resonance.js$domain=zooplus.fi
-@@||collectandgo.be^*/utag.sync.js
 @@||d2wzl9lnvjz3bh.cloudfront.net/frosmo.easy.js$domain=lippu.fi
 @@||dynamicyield.com/api/$script,domain=gigantti.fi
 @@||frosmo.com/recoApi/$xmlhttprequest,domain=lily.fi|meillakotona.fi|terve.fi
@@ -25694,6 +26792,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 !
 @@||argep.hu/googleanalytics.js
 @@||clicktale.net/WRc5.js$domain=telefonkonyv.hu
+@@||dtp.tv3cloud.com/amc/beacon?$domain=telekomtvgo.hu
 @@||ingest.sentry.io/api/$xmlhttprequest,domain=tesco.hu
 @@||rtl.hu/javascripts/UserTracking.js
 @@||rtl.hu^*/gemius_id.js?
@@ -25707,12 +26806,13 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||analytics.edgekey.net/ma_library/javascript/javascript_malibrary.js$domain=hbsmediasetit.deltatre.net
 @@||androidgalaxys.net/wp-content/plugins/*/google-analyticator/$script
 @@||beppegrillo.it/mt-static/js/ga_social_tracking.js
+@@||cdn.trustcommander.net/privacy$script,domain=enigaseluce.com
 @@||codicebusiness.shinystat.com/cgi-bin/getcod.cgi?$script,domain=grazia.it|panorama-auto.it|panorama.it
 @@||codicefl.shinystat.com/cgi-bin/getserver.cgi?$script,domain=3bmeteo.com|quotidiano.net|radioitalia.it
 @@||ensighten.com^*/Bootstrap.js$domain=williamhill.it
 @@||google-analytics.com/analytics.js$domain=carnesvizzera.ch
 @@||googletagmanager.com/gtag/js$script,domain=timparty.tim.it
-@@||googletagmanager.com/gtm.js$domain=eprice.it|iphoneitalia.com|la7.it|raiplayradio.it|savethechildren.it
+@@||googletagmanager.com/gtm.js$domain=eprice.it|euronics.it|iphoneitalia.com|la7.it|raiplayradio.it|savethechildren.it|unieuro.it
 @@||ilsole24ore.com^*/fingerprint2.min.js?
 @@||imrworldwide.com/novms/*/ggcm*.js$domain=la7.it|sky.it|video.corriere.it
 @@||imrworldwide.com/v60.js$domain=capital.it|corriereadriatico.it|fanpage.it|huffingtonpost.it|ilgazzettino.it|ilmattino.it|ilmessaggero.it|leggo.it|m2o.it|quotidianodipuglia.it|video.deejay.it|video.espresso.repubblica.it|video.ilsecoloxix.it|video.lanuovasardegna.it|video.lastampa.it|video.rep.repubblica.it|video.repubblica.it
@@ -25722,6 +26822,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||omtrdc.net^*/mbox/json?$xmlhttprequest,domain=vodafone.it
 @@||paginegialle.it/js/shinystat.js
 @@||panorama.it/wp-content/themes/panorama/js/google-nielsen-analytics.js?
+@@||quantcast.mgr.consensu.org^*/cmp2.js$script,domain=euronics.it
 @@||quattroruote.it^*/webtrekk_mediaTracking.min.js$script,~third-party
 @@||repstatic.it/minify/sites/common/config_webtrekk_$script,domain=video.repubblica.it
 @@||repstatic.it^*/Nielsen.js
@@ -25856,7 +26957,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||fastwhitecat.com/wp-content/plugins/duracelltomi-google-tag-manager/$script,domain=fastwhitecat.com
 @@||gemius.pl/gstream.js
 @@||gminazamosc.pl/wp-content/plugins/wp-google-analytics-events/js/ga-scroll-events.js?
-@@||hit.gemius.pl/redataredir?$domain=ing.pl
+@@||hit.gemius.pl/__/redataredir?$domain=ing.pl
 @@||iwa.iplsc.com/iwa.js$script
 @@||kropka.onet.pl^*/onet.js$domain=tvnwarszawa.pl
 @@||login.ingbank.pl^*/satelliteLib-$script
@@ -25967,9 +27068,11 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||adobedtm.com^*/satelliteLib-$script,domain=crackle.com.ar|crackle.com.ec|crackle.com.mx|crackle.com.pe|crackle.com.py|fcbarcelona.cat|fcbarcelona.es|laredoute.es|vtr.com
 @@||amplitude.com/libs/$script,domain=elconfidencial.com
 @@||ampproject.org/v0/amp-analytics-$script,domain=cnnespanol.cnn.com
+@@||api.cxense.com/public/widget/$domain=tn.com.ar
 @@||ara.cat/static/BB3Core/images/pixel.gif?hash=$image,domain=ara.cat
 @@||bancosantander.es/pagos-inmediatos/common/js/modules/tealium.js$~third-party
 @@||c5n.com^*/angulartics-google-analytics.min.js
+@@||cdn.cxense.com/cx.js$domain=tn.com.ar
 @@||cloudfront.net/libs/amplitude-$script,domain=elconfidencial.com
 @@||ecestaticos.com/build/js/common/statistics/engines/deepbieventadapter.$domain=elconfidencial.com
 @@||elconfidencial.com^*/AnalyticsEvent.js
@@ -25983,6 +27086,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||officedepot.com.mx/_ui/shared/js/analyticsmediator.js$~third-party
 @@||playty.com/bower_components/angulartics-google-analytics/dist/angulartics-ga.min.js
 @@||portalbici.es/lib/angulartics-google-analytics/dist/angulartics-ga.min.js
+@@||scdn.cxense.com/cx.cce.js$domain=tn.com.ar
 @@||segundamano.mx^*/tealium.js
 @@||tccrestify-dot-tcc-cloud.appspot.com/tracking/$domain=tcc.com.co
 @@||vodgc.net^*/genoa-event-tracking.min.js
@@ -26015,6 +27119,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||akamaized.net^*/js/tracking/ninja.js$script,domain=olx.ua
 @@||bemobile.ua/lib/lib.js$domain=tsn.ua
 @@||gemius.pl/gplayer.js$domain=tsn.ua
+@@||googletagmanager.com/gtm.js$script,domain=sport-wear.com.ua
 @@||ninja.onap.io/ninja-cee.js$script,domain=olx.ua
 @@||uaprom.net/image/blank.gif?$image
 @@||ukrposhta.ua/js/tracking.js
