@@ -1999,6 +1999,7 @@ biqle.*##+js(aopr, Date.prototype.toUTCString)
 dxb.to##+js(nowebrtc)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8967
+play.history.com##+js(json-prune, data.reg)
 @@||play.history.com^$ghide
 ||amazon-adsystem.com/*/apstag.js$script,redirect=noopjs,domain=aetv.com|aetnd.com|history.com
 ||mssl.fwmrm.net/*/AdManager.js$script,redirect=noopjs,domain=history.com
@@ -5985,9 +5986,9 @@ ganool.*##+js(nowebrtc)
 ||d0p21g2fep.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2380
-sportnews.to##+js(acis, decodeURIComponent, ai_)
-sportnews.to##+js(acis, document.addEventListener, adsBlocked)
-sportnews.to##+js(aopr, mdp_deblocker)
+@@||sportnews.to^$ghide
+sportnews.to##.clpr-emre1
+sportnews.to##.td-a-rec-id-custom_ad_1
 sportnews.to###custom_html-3
 sportnews.to###custom_html-5
 sportnews.to###custom_html-6
@@ -10649,7 +10650,10 @@ pandamovies.pw##.btn-lg.btn-block.btn
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4397
 pradjadj.com##+js(set, google_jobrunner, true)
-||pradjadj.com^$csp=child-src *.google.com *.gstatic.com
+||pradjadj.com^$csp=child-src *.google.com *.gstatic.com *.arc.io
+pradjadj.com##[href="/advertise"]
+pradjadj.com##.ABD_display
+||pradjadj.com/*banner$image
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4402
 siriusfiles.com##+js(nobab)
@@ -15243,6 +15247,7 @@ crunchyroll.com###template_skin_leaderboard
 spankbang.com##+js(nowoif)
 spankbang.com##a[class][href^="https://www.blacked.com/"]
 spankbang.com##.video-item:not([id]):not([data-id])
+spankbang.com###interstitial_div
 
 ! https://github.com/abp-filters/abp-filters-anti-cv/issues/236
 streaminfr.com##+js(aopr, FuckAdBlock)
