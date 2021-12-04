@@ -1,3 +1,16 @@
+# v1.23.1 (Sat Dec 04 2021)
+
+#### :nut_and_bolt: Dependencies
+
+- Bump puppeteer from 10.4.0 to 11.0.0 [#2311](https://github.com/ghostery/adblocker/pull/2311) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@remusao](https://github.com/remusao))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.23.0 (Mon Oct 18 2021)
 
 #### :rocket: New Feature

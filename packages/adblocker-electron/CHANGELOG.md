@@ -1,3 +1,15 @@
+# v1.23.1 (Sat Dec 04 2021)
+
+#### :nut_and_bolt: Dependencies
+
+- Bump electron from 15.3.1 to 16.0.2 [#2337](https://github.com/ghostery/adblocker/pull/2337) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.22.7 (Wed Sep 22 2021)
 
 #### :house: Internal

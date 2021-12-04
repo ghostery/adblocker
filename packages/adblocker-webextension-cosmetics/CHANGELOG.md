@@ -1,3 +1,19 @@
+# v1.23.1 (Sat Dec 04 2021)
+
+#### :nut_and_bolt: Dependencies
+
+- Bump @types/chrome from 0.0.163 to 0.0.164 [#2324](https://github.com/ghostery/adblocker/pull/2324) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump sinon from 11.1.2 to 12.0.1 [#2313](https://github.com/ghostery/adblocker/pull/2313) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chrome from 0.0.162 to 0.0.163 [#2314](https://github.com/ghostery/adblocker/pull/2314) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chrome from 0.0.161 to 0.0.162 [#2305](https://github.com/ghostery/adblocker/pull/2305) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chrome from 0.0.159 to 0.0.161 [#2294](https://github.com/ghostery/adblocker/pull/2294) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.23.0 (Mon Oct 18 2021)
 
 #### :nut_and_bolt: Dependencies

@@ -1,3 +1,35 @@
+# v1.23.1 (Sat Dec 04 2021)
+
+#### :nail_care: Polish
+
+- Add missing list [#2341](https://github.com/ghostery/adblocker/pull/2341) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Update local assets [#2338](https://github.com/ghostery/adblocker/pull/2338) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2319](https://github.com/ghostery/adblocker/pull/2319) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2312](https://github.com/ghostery/adblocker/pull/2312) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2306](https://github.com/ghostery/adblocker/pull/2306) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2303](https://github.com/ghostery/adblocker/pull/2303) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2300](https://github.com/ghostery/adblocker/pull/2300) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2288](https://github.com/ghostery/adblocker/pull/2288) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+- Update local assets [#2283](https://github.com/ghostery/adblocker/pull/2283) ([@remusao](https://github.com/remusao) [@adblocker-bot](https://github.com/adblocker-bot))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump @types/chrome from 0.0.163 to 0.0.164 [#2324](https://github.com/ghostery/adblocker/pull/2324) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chrome from 0.0.162 to 0.0.163 [#2314](https://github.com/ghostery/adblocker/pull/2314) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chrome from 0.0.161 to 0.0.162 [#2305](https://github.com/ghostery/adblocker/pull/2305) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chrome from 0.0.159 to 0.0.161 [#2294](https://github.com/ghostery/adblocker/pull/2294) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Adblocker Bot ([@adblocker-bot](https://github.com/adblocker-bot))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.23.0 (Mon Oct 18 2021)
 
 #### :house: Internal
