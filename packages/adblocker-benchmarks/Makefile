@@ -29,7 +29,7 @@ requests.json:
 	curl -O --compressed https://raw.githubusercontent.com/mjethani/scaling-palm-tree/06ef031aa3d2742dc7e6234f579e28a9b6d499b0/requests.json
 
 ./node_modules/@gorhill/ubo-core:
-	npm install --no-save @gorhill/ubo-core@0.1.7
+	npm install --no-save @gorhill/ubo-core@0.1.14
 	npx rollup ./node_modules/@gorhill/ubo-core/index.js \
 		--file ./node_modules/@gorhill/ubo-core/bundle.min.cjs --format cjs \
 		--context global --plugin terser
