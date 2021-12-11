@@ -1,3 +1,15 @@
+# v1.23.2 (Sat Dec 11 2021)
+
+#### :bug: Bug Fix
+
+- Update Puppeteer Cooperative Intercept Mode [#2343](https://github.com/ghostery/adblocker/pull/2343) ([@FdezRomero](https://github.com/FdezRomero))
+
+#### Authors: 1
+
+- Rodrigo Fernández ([@FdezRomero](https://github.com/FdezRomero))
+
+---
+
 # v1.23.1 (Sat Dec 04 2021)
 
 #### :nut_and_bolt: Dependencies

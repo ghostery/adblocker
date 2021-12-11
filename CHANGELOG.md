@@ -1,3 +1,21 @@
+# v1.23.2 (Sat Dec 11 2021)
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker-puppeteer`
+  - Update Puppeteer Cooperative Intercept Mode [#2343](https://github.com/ghostery/adblocker/pull/2343) ([@FdezRomero](https://github.com/FdezRomero))
+
+#### :house: Internal
+
+- Updated ubo-core to latest version [#2342](https://github.com/ghostery/adblocker/pull/2342) ([@gorhill](https://github.com/gorhill))
+
+#### Authors: 2
+
+- Raymond Hill ([@gorhill](https://github.com/gorhill))
+- Rodrigo Fernández ([@FdezRomero](https://github.com/FdezRomero))
+
+---
+
 # v1.23.1 (Sat Dec 04 2021)
 
 #### :bug: Bug Fix
