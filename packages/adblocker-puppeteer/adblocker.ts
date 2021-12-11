@@ -283,7 +283,12 @@ export class PuppeteerBlocker extends FiltersEngine {
     (this.priority = defaultPriority);
 
   public onRequest = (details: puppeteer.HTTPRequest): void => {
+    if (details.isInterceptResolutionHandled?.()) {
+      return;
+    }
+
     const request = fromPuppeteerDetails(details);
+
     if (this.config.guessRequestTypeFromUrl === true && request.type === 'other') {
       request.guessTypeOfRequest();
     }
@@ -294,7 +299,7 @@ export class PuppeteerBlocker extends FiltersEngine {
       request.isMainFrame() ||
       (request.type === 'document' && frame !== null && frame.parentFrame() === null)
     ) {
-      details.continue(details.continueRequestOverrides(), this.priority);
+      details.continue(details.continueRequestOverrides?.(), 0);
       return;
     }
 
@@ -325,7 +330,7 @@ export class PuppeteerBlocker extends FiltersEngine {
     } else if (match === true) {
       details.abort('blockedbyclient', this.priority);
     } else {
-      details.continue(details.continueRequestOverrides(), this.priority);
+      details.continue(details.continueRequestOverrides?.(), 0);
     }
   };
 
