@@ -1,3 +1,15 @@
+# v1.23.3 (Mon Jan 10 2022)
+
+#### :nut_and_bolt: Dependencies
+
+- Bump @types/chrome from 0.0.164 to 0.0.175 [#2348](https://github.com/ghostery/adblocker/pull/2348) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.23.1 (Sat Dec 04 2021)
 
 #### :nail_care: Polish

@@ -1,3 +1,27 @@
+# v1.23.3 (Mon Jan 10 2022)
+
+#### :bug: Bug Fix
+
+- CI: use default user for Assets job [#2367](https://github.com/ghostery/adblocker/pull/2367) ([@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- CI: use default GH access token [#2346](https://github.com/ghostery/adblocker/pull/2346) ([@chrmod](https://github.com/chrmod))
+- CI: fix dependabot [#2347](https://github.com/ghostery/adblocker/pull/2347) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump @types/firefox-webext-browser from 94.0.0 to 94.0.1 [#2349](https://github.com/ghostery/adblocker/pull/2349) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker`
+  - Bump @types/chrome from 0.0.164 to 0.0.175 [#2348](https://github.com/ghostery/adblocker/pull/2348) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.23.2 (Sat Dec 11 2021)
 
 #### :bug: Bug Fix
