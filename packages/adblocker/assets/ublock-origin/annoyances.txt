@@ -274,9 +274,6 @@ readcomiconline.to##+js(set, alb, false)
 ! remove anti-adblock nag from mangareader.net
 mangareader.net###warning
 
-! https://forums.lanik.us/viewtopic.php?p=138269#p138269
-swatchseries.to##+js(aopr, setAdblockerCookie)
-
 ! https://github.com/NanoAdblocker/NanoFilters/issues/118
 kimcartoon.me##.top_page_alert
 
@@ -287,9 +284,6 @@ kimcartoon.me##.top_page_alert
 mc-mod.net##+js(acis, document.oncontextmenu)
 mc-mod.net##+js(acis, image_save_msg, key)
 mc-mod.net##body:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important;-moz-user-select: text !important;-ms-user-select: text !important;user-select: text !important;)
-
-! https://forums.lanik.us/viewtopic.php?f=62&t=41150
-||api.live365.com/geocheck
 
 ! https://github.com/jspenguin2017/uBlockProtector/issues/963
 phillymag.com##.gtp-ad
@@ -1400,9 +1394,6 @@ curbed.com,eater.com,funnyordie.com,mmafighting.com,mmamania.com,polygon.com,rac
 
 ! right click https://github.com/uBlockOrigin/uAssets/issues/4822
 them4ufree.info##+js(acis, document.oncontextmenu)
-
-! anti adb warning #905
-fux.com##+js(set, adsEnabled, true)
 
 ! bdcraft
 @@||bdcraft.net^$ghide
@@ -2713,6 +2704,7 @@ pelismart.com##+js(aopr, document.oncontextmenu)
 pelismart.com##+js(aopr, disableSelection)
 pelismart.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 pelismart.com##+js(aopr, onload)
+/wp-content/plugins/wp-content-copy-protection/assets/js/script.min.js$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7811
 keybr.com##+js(nostif, [native code])
@@ -3677,9 +3669,6 @@ kwamkidhen.com##.unselectable:style(-webkit-touch-callout: default !important; -
 ! altranotizia .it anti select
 altranotizia.it##+js(acis, disableSelection)
 
-! https://github.com/uBlockOrigin/uAssets/issues/7377
-theguardian.com##.site-message--banner
-
 ! https://www.reddit.com/r/uBlockOrigin/comments/gig2vt/
 livemint.com##.subscription .paywall:style(height: unset !important; overflow: unset !important;)
 livemint.com##.subscription .paywall .subscriptionBox
@@ -4457,8 +4446,10 @@ fruit01.xyz##+js(set, document.onkeydown, noopFunc)
 ! cruisin.me cookie-notice(due to $ghide)
 cruisin.me##.notice--cookie
 
-! https://github.com/NanoMeow/QuickReports/issues/4609
+! https://github.com/uBlockOrigin/uAssets/issues/11242
 @@||dailyvoice.com^$ghide
+*$xhr,redirect-rule=nooptext,domain=dailyvoice.com
+dailyvoice.com###nativo_rightrail1
 
 ! https://github.com/NanoMeow/QuickReports/issues/4612
 clipartmax.com##+js(aopw, document.oncontextmenu)
@@ -4882,11 +4873,6 @@ tusubtitulo.com###bannerAdBlock
 ! cablegratis .online anti right click
 cablegratis.online##+js(acis, document.oncontextmenu)
 
-! pelismart .com anti right click, anti select
-! [dup] from ublock-origin/annoyances.txt
-! pelismart.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
-/wp-content/plugins/wp-content-copy-protection/assets/js/script.min.js$script,1p
-
 ! animeidhentai.com dev tools
 ||htstreaming.com/player/assets/debugger.js
 
@@ -5051,6 +5037,8 @@ world4.eu##+js(acis, document.oncopy)
 world4.eu##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 world4.eu##*::selection:style(background-color:#338FFF!important)
 world4.eu##style:has-text(body:after{content:):remove()
+world4.eu##+js(acis, disable_copy)
+world4.eu##+js(acis, disable_hot_keys)
 
 ! ggulpass .com anti right click / select
 ggulpass.com##+js(aopw, document.oncontextmenu)
@@ -5303,7 +5291,6 @@ pbinfo.ro##+js(set, pbi_analytics, true)
 ||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js^$script,redirect-rule=googlesyndication_adsbygoogle.js,domain=hotcleaner.com
 hotcleaner.com##.adsbygoogle:upward(1):remove()
 hotcleaner.com##body > div[id]:matches-css(position: fixed):style(visibility: hidden !important)
-hotcleaner.com##body > div[class]:matches-css(position: fixed)
 
 ! vedantu. com (Fix right click and select text)
 vedantu.com##+js(aeld, contextmenu, preventDefault)
@@ -5986,7 +5973,7 @@ moegirl.org.cn##+js(aeld, copy, jQuery!=="undefined")
 hentainhaven.com##body > .text-center[style="color:white; font-size:16px;"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9620
-zhihu.com##+js(aeld, copy, [native code])
+zhihu.com##+js(aeld, /contextmenu|copy/)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9622
 masuit.com##+js(aopr, document.oncontextmenu)
@@ -6251,8 +6238,7 @@ news24.jp##*:style(-webkit-touch-callout: default !important; -webkit-user-selec
 ptable.com##.Notice
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10038
-blog.csdn.net##.hljs:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
-blog.csdn.net##.prism:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+blog.csdn.net##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 blog.csdn.net##.hljs-button.signin
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10039
@@ -6304,11 +6290,14 @@ tekstowo.pl##+js(aopw, addLink)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10202
 arti-definisi-pengertian.info##+js(set, document.oncontextmenu, null)
+arti-definisi-pengertian.info##+js(aopw, document.onselectstart)
+arti-definisi-pengertian.info##+js(aopw, document.ondragstart)
+arti-definisi-pengertian.info###ouibounce-modal
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10224
 techtobo.com##.js-notices
 
-! libertatea. ro clipbiard manipulation
+! libertatea. ro clipboard manipulation
 libertatea.ro##+js(aeld, copy)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10226
@@ -6418,3 +6407,134 @@ sportnews.to##+js(acis, document.getElementById, isMoz)
 sportnews.to##+js(acis, jQuery, keydown)
 sportnews.to##+js(set, document.onkeydown, null)
 sportnews.to##+js(set, document.onkeypress, null)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/r2huhp/bypass_copypaste_restriction/
+pttws.ptt.gov.tr##+js(ra, onpaste, #tr_mesaj > td > .text-input.validate\[required\])
+
+! https://github.com/uBlockOrigin/uAssets/issues/10612
+leeyiding.com##+js(ra, oncontextmenu|onkeydown|onselectstart)
+
+! https://github.com/uBlockOrigin/uAssets/issues/10624
+city-data.com##+js(aopr, addLink)
+
+! https://github.com/uBlockOrigin/uAssets/issues/10636
+zwei-euro.com##+js(nostif, Delay)
+
+! yoyofilmeys. com anti right click
+yoyofilmeys.*##+js(acis, document.oncontextmenu)
+
+! voe right click other keys
+voe.sx##+js(aeld, /keydown|keyup/, keyCode)
+voe.sx##+js(aeld, contextmenu)
+
+! wpking. in f-keys
+wpking.in##+js(aeld, , Key)
+
+! ibomma. pw anti right click select copy
+ibomma.pw##+js(acis, $, contextmenu)
+
+! scrolller. com anti right click
+scrolller.com##+js(aeld, contextmenu)
+
+! https://github.com/uBlockOrigin/uAssets/issues/10781
+@@||coinpayu.com^$ghide
+
+! hollywoodmask. com anti select copy newsletter
+hollywoodmask.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+hollywoodmask.com##+js(aeld, /copy|cut|paste|selectstart/)
+hollywoodmask.com##+js(nostif, pop)
+
+! https://github.com/uBlockOrigin/uAssets/issues/10902
+arctic.de##.acris-cookie-consent
+arctic.de##body:style(overflow: auto !important;)
+arctic.de##.show.fade.modal-backdrop
+
+! https://github.com/uBlockOrigin/uAssets/issues/10938
+phimdinhcao.com##+js(acis, oncontextmenu, keydown)
+phimdinhcao.com##+js(aopr, devtoolsDetector)
+
+! cafago. com anti select
+cafago.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/10951
+tvzingvn.com##+js(acis, onload, contextmenu)
+
+! https://github.com/uBlockOrigin/uAssets/pull/10979
+||4399.com/antijs/Antiindulgence.js
+
+! https://github.com/uBlockOrigin/uAssets/pull/10987
+mbalib.com##+js(aeld, /copy|cut|paste|selectstart/)
+
+! https://github.com/uBlockOrigin/uAssets/issues/10988
+zgywyd.cn##+js(acis, document.oncontextmenu)
+
+! https://github.com/uBlockOrigin/uAssets/issues/10986
+wenku.baidu.com##+js(aeld, /contextmenu|dragstart|keydown/, event.dispatch.apply)
+||hm.baidu.com/hm.js
+
+! https://github.com/uBlockOrigin/uAssets/issues/10976
+dhd24.com#@#.adunit
+
+! https://github.com/uBlockOrigin/uAssets/issues/10982
+||jianbiaoku.com/content/js/copyFun.js$script,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/10984
+yuque.com##+js(aeld, copy)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/103536
+otomobilgunluklerim.com##.adblockalert
+otomobilgunluklerim.com##.ad_block_detected:style(overflow: auto !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/11017
+picallow.com##+js(acis, document.oncontextmenu, nocontextmenu)
+picallow.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/11023
+links.extralinks.casa##+js(acis, document.onselectstart, disableselect)
+
+! magesypro. pro anti select
+magesypro.*##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! psihologiadeazi. ro anti right click, select, copy, f-keys
+psihologiadeazi.ro##+js(aopr, nocontext)
+psihologiadeazi.ro##+js(aopr, disable_copy)
+psihologiadeazi.ro##+js(acis, jQuery, keydown)
+psihologiadeazi.ro##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/11129
+ssuathletics.com##+js(acis, document.querySelector, adblock)
+
+! https://github.com/cjx82630/cjxlist/commit/6529adc701822ea1467b9e5a38ad823d27cc1d1e
+52bdys.com##+js(aopr, onload)
+
+! https://github.com/uBlockOrigin/uAssets/issues/11140
+cocomanga.com##+js(aeld, contextmenu)
+
+! https://github.com/rxliuli/userjs/issues/50
+mooc.chaoxing.com##+js(aeld, beforepaste)
+
+! brownsboys. com anti select
+brownsboys.com##+js(aopr, document.onselectstart)
+
+! flashmasterbd.blogspot. com anti select
+flashmasterbd.blogspot.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/ru5yks/disabling_an_unnamed_javascript_that_disables/
+mercenaryenrollment.com##+js(acis, document.oncontextmenu)
+mercenaryenrollment.com##style:has-text(user-select):remove()
+
+! geektyper.com anti-adb
+geektyper.com###itemz[style^="position:fixed; top:10px"]
+
+! https://github.com/uBlockOrigin/uAssets/issues/11195
+fotofilter.de##.banner
+
+! https://github.com/uBlockOrigin/uAssets/issues/11219
+gadgets.usanewstoday.club##+js(set, blurred, false)
+
+! https://github.com/uBlockOrigin/uAssets/issues/11227
+freestreams-live1.com##+js(acis, document.oncontextmenu, nocontextmenu)
+freestreams-live1.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/11245
+social-unlock.com##form#link a.submit:style(opacity: 1 !important; pointer-events: auto !important;)
