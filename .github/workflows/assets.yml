@@ -1,10 +1,9 @@
 name: Assets
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 20 * * *'
-    
-permissions: write-all
 
 jobs:
   assets:
@@ -49,6 +48,8 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
+          token: ${{ secrets.ACCESS_TOKEN_BOT }}
+          committer: Ghostery Adblocker Bot <adblocker-bot@users.noreply.github.com>
           commit-message: "Update local assets and compression codebooks"
           title: "Update local assets"
           body: "Automated update of local assets and compression codebooks."
