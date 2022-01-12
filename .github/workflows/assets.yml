@@ -45,10 +45,16 @@ jobs:
         run: |
           yarn generate-codebooks
 
+      - uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.ADBLOCKERBOT_APP_ID }}
+          private_key: ${{ secrets.ADBLOCKERBOT_PRIVATE_KEY }}
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.ACCESS_TOKEN_BOT }}
+          token: ${{ steps.generate-token.outputs.token }}
           commit-message: "Update local assets and compression codebooks"
           title: "Update local assets"
           body: "Automated update of local assets and compression codebooks."
