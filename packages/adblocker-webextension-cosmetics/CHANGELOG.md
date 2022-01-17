@@ -1,3 +1,16 @@
+# v1.23.4 (Mon Jan 17 2022)
+
+#### :nut_and_bolt: Dependencies
+
+- Bump @types/chrome from 0.0.175 to 0.0.176 [#2371](https://github.com/ghostery/adblocker/pull/2371) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump jsdom from 18.1.1 to 19.0.0 [#2356](https://github.com/ghostery/adblocker/pull/2356) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.23.3 (Mon Jan 10 2022)
 
 #### :nut_and_bolt: Dependencies

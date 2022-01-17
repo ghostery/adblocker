@@ -1,3 +1,27 @@
+# v1.23.4 (Mon Jan 17 2022)
+
+#### :house: Internal
+
+- Update local assets [#2380](https://github.com/ghostery/adblocker/pull/2380) ([@remusao](https://github.com/remusao) [@ghosterey-adblocker-bot[bot]](https://github.com/ghosterey-adblocker-bot[bot]))
+- Update local assets [#2379](https://github.com/ghostery/adblocker/pull/2379) ([@remusao](https://github.com/remusao) [@ghosterey-adblocker-bot[bot]](https://github.com/ghosterey-adblocker-bot[bot]))
+- Update local assets [#2378](https://github.com/ghostery/adblocker/pull/2378) ([@remusao](https://github.com/remusao) [@ghosterey-adblocker-bot[bot]](https://github.com/ghosterey-adblocker-bot[bot]))
+- Update local assets [#2376](https://github.com/ghostery/adblocker/pull/2376) ([@chrmod](https://github.com/chrmod) [@ghosterey-adblocker-bot[bot]](https://github.com/ghosterey-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Bump @types/chrome from 0.0.175 to 0.0.176 [#2371](https://github.com/ghostery/adblocker/pull/2371) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/node from 16.11.10 to 17.0.8 [#2350](https://github.com/ghostery/adblocker/pull/2350) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump concurrently from 6.4.0 to 7.0.0 [#2363](https://github.com/ghostery/adblocker/pull/2363) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghosterey-adblocker-bot[bot]](https://github.com/ghosterey-adblocker-bot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.23.3 (Mon Jan 10 2022)
 
 #### :nut_and_bolt: Dependencies

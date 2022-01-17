@@ -1,3 +1,15 @@
+# v1.23.4 (Mon Jan 17 2022)
+
+#### :nut_and_bolt: Dependencies
+
+- Bump @types/node from 16.11.10 to 17.0.8 [#2350](https://github.com/ghostery/adblocker/pull/2350) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.22.7 (Wed Sep 22 2021)
 
 #### :house: Internal
