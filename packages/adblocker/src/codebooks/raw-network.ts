@@ -9,6 +9,7 @@
 export default [
   "||imasdk.googleapis.com/js/sdk",
   ",redirect-rule=noopjs,domain=",
+  "$media,redirect=noopmp3-0.1s,",
   "googlesyndication.com/pagead/",
   "$xhr,redirect-rule=nooptext,",
   "*$script,3p,denyallow=",
@@ -189,7 +190,6 @@ export default [
   "sc",
   "se",
   "sh",
-  "si",
   "so",
   "sp",
   "ss",
