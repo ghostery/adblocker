@@ -1983,6 +1983,8 @@ slader.com##section.solutions-list.loading:style(height: auto !important;)
 theoutline.com##.stack-embed
 
 ! https://github.com/uBlockOrigin/uAssets/issues/25
+wired.com##[class^="OutbrainGridColumn-"]
+wired.com##[class^="StickyHeroAdWrapper-"]
 wired.com###around-the-web
 ! https://github.com/uBlockOrigin/uAssets/issues/28
 ||googlesyndication.com/pagead/*$script,important,domain=wired.com
@@ -5578,11 +5580,12 @@ tibiabr.com##div[id^="div-gpt-ad"]
 dompl3.info##+js(nowebrtc)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8099
-einthusan.*##+js(nostif, AdBlocker, 1000)
+! https://github.com/uBlockOrigin/uAssets/issues/11351
+!einthusan.*##+js(no-xhr-if, /prebid|sharethrough|bugsnag|openx|ads/)
+einthusan.*##+js(no-xhr-if, /^(?!.*(einthusan\.io|yahoo|rtnotif|ajax))/)
 @@||einthusan.*/prebid.js$script,1p
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=einthusan.*
 @@||googletagmanager.com/gtm.js$xhr,domain=einthusan.tv
-@@||springserve.com/vast/*einthusan$xhr,domain=imasdk.googleapis.com
 einthusan.*##.adspace-lb
 einthusan.*##.adspace-lr
 
