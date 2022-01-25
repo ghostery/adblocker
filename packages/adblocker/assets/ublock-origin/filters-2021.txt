@@ -586,6 +586,7 @@ porndr.com##.we_are_sorry
 /s/s/supc.php
 /s/s/supv.php
 /s/su.php?t=
+/javascript/fropo.js
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8460
 deviants.com##+js(aopr, decodeURI)
@@ -780,7 +781,7 @@ pornachi.com##.sponsor
 1shorten.com##+js(aopr, app_vars.force_disable_adblock)
 1shorten.com,publicananker.com,rodjulian.com##+js(nosiif, visibility, 1000)
 1shorten.com##+js(set, blurred, false)
-publicananker.com,rodjulian.com##+js(nano-sib, counter, 2000)
+dreamcheeky.com,fidlarmusic.com,publicananker.com,rezence.com,rodjulian.com##+js(nano-sib, counter, 2000)
 rodjulian.com##+js(noeval)
 1shorten.com##.banner
 rodjulian.com###baolink1s
@@ -1409,6 +1410,8 @@ tvn.pl##+js(json-prune, movie.advertising.ad_server playlist.movie.advertising.a
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8605
 falixnodes.net##+js(nostif, [native code])
+! https://github.com/uBlockOrigin/uAssets/issues/8964#issuecomment-1021146988
+falixnodes.net##+js(no-xhr-if, securepubads)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8613
 thiruttuvcd.xyz##+js(aopw, _pop)
@@ -4406,13 +4409,11 @@ zetporn.com##+js(aopr, ExoLoader.serve)
 zetporn.com##+js(aeld, click, popMagic)
 zetporn.com##+js(acis, addEventListener, -0x)
 zetporn.com##.aside-itempage-col
-/\.com\/[a-z]{9,}\/[A-Za-z]{9,}\.js$/$script,1p,domain=zetporn.com
-||zetporn.com/sw.js
+/\.com\/[A-Za-z]{9,}\/[A-Za-z]{9,}\.js$/$script,1p,domain=zetporn.com
+||zetporn.com/*/custom_vast/$xhr
 ||eighing.space^$3p
 ||entsconsesi.top^$3p
 ||madehimn.xyz^
-||srsihavelearn.xyz^
-||yestedjgrs.xyz^
 *$script,3p,denyallow=googleapis.com,domain=zetporn.com
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/ohvw2n/adblock_detected_on_blackenterprisecom/
@@ -5692,9 +5693,10 @@ freereceivesms.com##a[href^="https://www.18sex.org/"]
 ||pobre.tv/wp-banners.js
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/93513
-coinsparty.com##+js(aopr, app_vars.force_disable_adblock)
 coinsparty.com##+js(nowoif)
 coinsparty.com##form[action$="/links/popad"]:remove()
+coinsparty.com##div[style="position: fixed; display: block; width: 100%; height: 100%; inset: 0px; background-color: rgba(0, 0, 0, 0); z-index: 300000;"]
+||ad4point.nyc3.digitaloceanspaces.com^
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/pxusw4/website_opens_ads_windows_nsfw/
 findjav.com##+js(aopr, __Y)
@@ -7632,12 +7634,11 @@ mangastream.mobi###myModal
 ###outbrain-paid:not([style^="position: absolute; left: -5000px"])
 ###sponsored_link:not([style^="position: absolute; left: -5000px"])
 ! https://github.com/orgs/uBlockOrigin/teams/ublock-filters-volunteers/discussions/377/comments/63
+! https://github.com/AdguardTeam/AdguardFilters/issues/107617
 #@##ad-banner
 #@#.ad-banner
 ###ad-banner:not([style="height: 5px; width: 5px; position: absolute; top: 0;"])
-##.ad-banner:not([style="height: 5px; width: 5px; position: absolute; top: 0;"])
-#@#div[class=ad-banner]
-##div[class=ad-banner]:not([style="height: 5px; width: 5px; position: absolute; top: 0;"])
+##.ad-banner:not([style="height: 5px; width: 5px; position: absolute; top: 0;"]):not(.blocker-tester + .ad-banner)
 ! generic absda fix
 #@#.adsBox
 ##.adsBox:not([style$="-99999px;"])
@@ -7823,7 +7824,9 @@ daihatsu-club.net##[class^="side_ad_left_"]
 daihatsu-club.net##[class^="side_ad_right_"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11094
-eevblog.com##a[target] > img:upward(a)
+eevblog.com##[href*="offers"]
+eevblog.com##[src*="banner"]
+||eevblog.com/images/*.gif$image
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11118
 vaa.jp,yonelabo.com###nankafix

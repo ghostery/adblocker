@@ -7,7 +7,7 @@
  */
 /* tslint:disable quotemark */
 export default [
-  "securepubads.g.doubleclick.net",
+  "securepubads.g.doubleclick",
   ".carte-gr.total.fr",
   "googlesyndication",
   "imasdk.googleapis",
