@@ -396,9 +396,6 @@ pythonjobshq.com##+js(aopr, Keen)
 ! https://github.com/uBlockOrigin/uAssets/issues/648
 @@/blockadblock.$script,domain=blockadblock.com
 
-! https://github.com/uBlockOrigin/uAssets/issues/649
-mejoratuescuela.org#@#.container-ads
-
 ! https://twitter.com/sebron/status/902145534588325888
 @@||secure.moneygram.com^$1p
 
@@ -411,14 +408,11 @@ mejoratuescuela.org#@#.container-ads
 ! https://twitter.com/aaronbauman/status/907332215582978050
 @@||cdn.optimizely.com/json/*$xhr,domain=dashboard.pantheon.io
 
-! https://github.com/uBlockOrigin/uAssets/issues/685
-@@||thekitchn.com/assets/comscore.streaming.min.js$script,1p
-
 ! https://forums.lanik.us/viewtopic.php?f=64&t=38221
 ||study.com/js/trcking/eventTracking*.js$script,1p,redirect=noopjs
 
 ! https://forums.lanik.us/viewtopic.php?f=64&t=38262
-||oakley.com/_ui/dist/scripts/vendor/tealium.js$script,1p,redirect=noopjs
+||oakley.com/_ui/dist/scripts/vendor/tealium.js$script,1p,redirect=noopjs,important
 
 ! Reported in Chrome store: "Orange portal http://www.orange.fr/portail is freezed"
 orange.fr#@##o_carrepub
@@ -747,10 +741,6 @@ mobile.twitter.com#@#._29ahSMvH section.rn-1oszu61 div[class][style*="padding-"]
 @@||imasdk.googleapis.com/js/sdkloader/ima3$script,domain=click2houston.com|clickondetroit.com|clickorlando.com|ksat.com|local10.com|news4jax.com|wsls.com
 @@||pubads.g.doubleclick.net/ssai/event/*/master.m3u8$xhr,domain=click2houston.com|clickondetroit.com|clickorlando.com|ksat.com|local10.com|news4jax.com|wsls.com
 
-! sites broken by EasyList csp-filter
-! https://forums.lanik.us/viewtopic.php?f=64&t=41101
-@@||convertcase.net^$csp=script-src 'self' * blob: data:
-
 ! https://forums.lanik.us/viewtopic.php?f=64&t=40769
 @@||flyertalk.com/forum/*/ckeditor/core/log.js$script,1p
 
@@ -921,6 +911,7 @@ techadvisor.co.uk#@#.adsbygoogle
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3115
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=umterps.com
+@@||google-analytics.com/analytics.js$script,domain=umterps.com
 
 ! https://github.com/easylist/easylist/issues/1668
 ! https://github.com/easylist/easylist/issues/1676
@@ -3562,8 +3553,11 @@ bing.com##+js(nosiif, logQueue, 10000)
 @@||warnermediacdn.com^$xhr,domain=ncaa.com
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/m8lp8a/broken_site/
+! https://github.com/uBlockOrigin/uAssets/issues/11435
 uschovna.cz#@#body:style(background:none !important;)
 uschovna.cz##body:style(background-image:none !important)
+@@||cz.mrezadosa.com^$xhr,domain=uschovna.cz
+uschovna.cz##.branding:upward([target="_blank"])
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/78094
 ||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=googlesyndication_adsbygoogle.js,important,domain=real-sports.jp
@@ -3986,9 +3980,6 @@ coolmathgames.com##+js(set, network_user_id, '')
 ! [badfilter] ||smart-traffik.com^$badfilter
 
 ! https://github.com/tofukko/filter/issues/46
-@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=firecross.jp
-@@||g.doubleclick.net/gpt/pubads_impl_$script,domain=firecross.jp
-@@||g.doubleclick.net/gampad/ads?*&url=https%3A%2F%2Ffirecross.jp$xhr,domain=firecross.jp
 ||googlevideo.com/videoplayback?$media,redirect=noop-1s.mp4,domain=safeframe.googlesyndication.com
 safeframe.googlesyndication.com##.left-container
 
@@ -4298,3 +4289,37 @@ gumtree.com.au#@#.header--is-new-sticky-behaviour
 ! https://forums.lanik.us/viewtopic.php?t=47165
 @@||aps.hearstnp.com/Scripts/loadAds.js$script,domain=timesunion.com
 timesunion.com##div.setHeight.stickyWrapper
+
+! https://github.com/uBlockOrigin/uAssets/issues/11398
+@@||delmarlearning.com^$1p,script
+
+! https://github.com/uBlockOrigin/uAssets/issues/11414
+||prebid.elespectador.com^$script,redirect-rule=googletagservices_gpt.js,1p,important
+
+! https://github.com/uBlockOrigin/uAssets/issues/11428
+||avito.st/*/0.gif$image,redirect-rule=1x1.gif,domain=avito.ru
+
+! https://github.com/uBlockOrigin/uAssets/issues/11422
+@@||googletagmanager.com/gtm.js$script,domain=blaklader.ca|blaklader.com|blaklader.uk
+
+! https://www.reddit.com/r/uBlockOrigin/comments/s9edog/
+@@||read.amazon.*/embed?$frame,3p,domain=goodreads.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/11450
+@@||c.zontera.com/adv/b.js$script,domain=profit.ro
+@@||core.zontera.com^$script,domain=profit.ro
+profit.ro##.zc_rectangle
+profit.ro##.zc_top
+
+! https://www.reddit.com/r/uBlockOrigin/comments/sbkktu/popup_ad_and_site_blocks_developer_tools/
+himovies.to#@#a[onclick]
+
+! https://github.com/uBlockOrigin/uAssets/issues/11456
+@@||googletagmanager.com/gtm.js$script,redirect-rule=googletagmanager.com/gtm.js,domain=woolworths.co.za
+
+! cname https://forums.lanik.us/viewtopic.php?t=47167
+@@||banner.customer.kyruus.com^$xhr,domain=doctors.bannerhealth.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/11457
+@@||ced.sascdn.com/tag/400/smart.js$script,domain=deezer.com
+@@||smartadserver.com/400/call$xhr,domain=deezer.com

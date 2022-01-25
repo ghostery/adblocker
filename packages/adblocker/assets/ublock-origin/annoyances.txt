@@ -1074,6 +1074,9 @@ gaypornwave.com##+js(aopw, document.oncontextmenu)
 
 ! https://github.com/NanoMeow/QuickReports/issues/422
 @@||topspeed.com^$ghide
+topspeed.com##.txt-ad
+topspeed.com##.daily-vid-ad
+topspeed.com##.top-horizontal-ad-content
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4268#issuecomment-445478692
 @@||mywrestling.com.pl^$ghide
@@ -5398,9 +5401,6 @@ nekomeowmeow.com###eu-cookie-law
 ! hatsukimanga.com right click
 hatsukimanga.com##+js(acis, $, contextmenu)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/78403
-@@||titulky.com/js/reklama.$script,1p
-
 ! https://github.com/uBlockOrigin/uAssets/issues/8816
 polagriparts.pl##+js(aeld, /^(?:contextmenu|copy)$/)
 polagriparts.pl##+js(aopr, document.onkeydown)
@@ -6493,7 +6493,7 @@ nusantararom.org##.elementor-popup-modal
 elpais.com##+js(nostif, run)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11330
-mail.tm##+js(nostif, init())
+mail.tm##:xpath(//*[contains(text(),"blockers")])
 
 ! wawlist. com anti right click, select, ctrl,f-keys
 wawlist.com##+js(acis, document.oncontextmenu)
@@ -6516,3 +6516,22 @@ theaircurrent.com##+js(acis, disableSelection, reEnable)
 a2zapk.com##+js(acis, document.oncontextmenu, nocontext)
 a2zapk.com##+js(acis, disableSelection, reEnable)
 a2zapk.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/11412
+realpython.com##+js(aeld, DOMContentLoaded, rprw)
+
+! https://github.com/uBlockOrigin/uAssets/issues/11413
+virpe.cc##+js(ra, onselectstart)
+virpe.cc##+js(aeld, contextmenu)
+virpe.cc##+js(set, document.oncontextmenu, noopFunc)
+
+! https://github.com/uBlockOrigin/uAssets/issues/11396
+! https://github.com/uBlockOrigin/uAssets/issues/10881
+northjersey.com,independentmail.com,usatoday.com##.gnt_mol_oy
+northjersey.com,independentmail.com,usatoday.com##html.gnt__mo:style(overflow-y:scroll !important;pointer-events: unset !important;user-select: unset !important;margin-right: unset !important;)
+
+! https://github.com/uBlockOrigin/uAssets/pull/11425
+*/wp-content/plugins/smio-push-notification
+
+! https://github.com/uBlockOrigin/uAssets/issues/11439
+titulky.com##+js(acis, $, "fade")
