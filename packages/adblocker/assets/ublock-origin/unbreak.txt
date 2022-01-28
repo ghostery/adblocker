@@ -319,9 +319,6 @@ kinopoisk.ru###image:style(opacity: 1 !important;)
 ! https://twitter.com/ensignricky/status/875484027297255424
 ||googletagmanager.com/gtm.js$script,redirect=noopjs,domain=homes.co.nz
 
-! https://github.com/uBlockOrigin/uAssets/issues/469
-@@||data.wetter.info^$doc,popup
-
 ! https://github.com/uBlockOrigin/uAssets/issues/478
 ! https://github.com/uBlockOrigin/uAssets/issues/1906
 ! https://www.reddit.com/r/uBlockOrigin/comments/9c6j8u/
@@ -352,9 +349,6 @@ kinopoisk.ru###image:style(opacity: 1 !important;)
 @@||sephora.com/js/ufe/isomorphic/thirdparty/VisitorAPI.js$script,1p
 @@||edge1.certona.net/*$script,domain=sephora.com
 
-! https://github.com/uBlockOrigin/uAssets/issues/524
-@@|blob:$domain=dailycaller.com
-
 ! https://github.com/uBlockOrigin/uAssets/issues/525
 @@||fls.doubleclick.net^$subdocument,domain=billpay.suntrust.com
 
@@ -377,10 +371,8 @@ pythonjobshq.com##+js(aopr, Keen)
 @@||myaccounts.capitalone.com^$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/631
-@@||cj.com^$1p
-
-! https://github.com/uBlockOrigin/uAssets/issues/641
-@@||rs-online.com/*/analytics.min.js$script,1p
+! [badfilter] ||cj.com^$badfilter
+||cj.com^$3p
 
 ! https://github.com/gorhill/uBlock/issues/2893
 @@||assets.adobedtm.com^$script,domain=linkinghub.elsevier.com
@@ -420,21 +412,6 @@ orange.fr###o_carrepub:style(height: 1px; margin: 0; min-height: auto; visibilit
 
 ! https://github.com/uBlockOrigin/uAssets/issues/715
 @@||mpsnare.iesnare.com/snare.js$script,domain=costco.com
-
-! https://github.com/uBlockOrigin/uAssets/issues/703
-! https://github.com/easylist/easylist/commit/e626b6840c4d6ab6dbc2c75466d6608c0266fd2e#commitcomment-24532319
-@@||realcam.me/emb*.min.js$script,domain=fbstream.io|mlbstream.io|nbastream.io|nflstream.io|nhlstream.io
-@@||livecamtv.me/emb*.min.js$script,domain=fbstream.io|mlbstream.io|nbastream.io|nflstream.io|nhlstream.io
-@@||seelive.me/emb*.min.js$script,domain=fbstream.io|mlbstream.io|nbastream.io|nflstream.io|nhlstream.io
-
-! https://github.com/uBlockOrigin/uAssets/issues/732
-@@/hello^$xhr,domain=speedtest.net
-@@/download^$xhr,domain=speedtest.net
-@@/upload^$xhr,domain=speedtest.net
-
-! https://github.com/uBlockOrigin/uAssets/issues/733
-@@||speedtest.net/*/*bundle$script,1p
-@@||mapbox.com^$xhr,domain=speedtest.net
 
 ! https://github.com/uBlockOrigin/uAssets/issues/737
 @@||thermofisher.com/*/analytics.sitecatalyst.js$script,1p
@@ -860,9 +837,6 @@ techadvisor.co.uk#@#.adsbygoogle
 ! [badfilter] ||optimizely.com^$badfilter
 ||optimizely.com^$3p
 
-! https://forums.lanik.us/viewtopic.php?p=138629#p138629
-@@||swatchseries.to/show/get-tracking-data$xhr,1p
-
 ! https://github.com/uBlockOrigin/uAssets/issues/2852
 @@||cc.naver.com/cc$frame,1p
 
@@ -1287,8 +1261,8 @@ tomsguide.com#@#.widget-ads
 @@||cdnjs.cloudflare.com/ajax/libs/*$script,domain=fckrasnodar.ru
 
 ! https://forums.lanik.us/viewtopic.php?p=145284#p145284
-! [badfilter] /adlead.$domain=~adlead.com|~adlead.ru,badfilter
-/adlead.$domain=~adlead.com|~adlead.immo|~adlead.ru
+! [badfilter] /adlead.$domain=~adlead.com|~adlead.pro|~adlead.ru,badfilter
+/adlead.$domain=~adlead.com|~adlead.pro|~adlead.ru|~adlead.immo
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4784#issuecomment-459778667
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=chicagotribune.com|mcall.com
@@ -4007,9 +3981,6 @@ safeframe.googlesyndication.com##.left-container
 ! https://www.reddit.com/r/uBlockOrigin/comments/pwi2p7/wondrium_what_am_i_doing_wrong/
 @@||wondrium.com/static/version1632408975/frontend/Wondrium/default/en_US/js/analytics.js$script,1p
 
-! https://github.com/uBlockOrigin/uBlock-issues/issues/1740
-mysmth.net#@#+js(no-floc)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/10093
 xunta.gal#@##anuncio
 
@@ -4323,3 +4294,8 @@ himovies.to#@#a[onclick]
 ! https://github.com/uBlockOrigin/uAssets/issues/11457
 @@||ced.sascdn.com/tag/400/smart.js$script,domain=deezer.com
 @@||smartadserver.com/400/call$xhr,domain=deezer.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/11472
+@@||load.sumo.com^$script,domain=gopractice.ru
+@@||sumo.com/api/$xhr,domain=gopractice.ru
+@@||sumo.com/services$xhr,domain=gopractice.ru
