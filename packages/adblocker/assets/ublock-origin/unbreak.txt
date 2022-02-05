@@ -1739,9 +1739,6 @@ indoxx1.center#@#.lazy
 @@||myreadingmanga.info/wp-content/uploads/*.jpg$image,1p
 ||myreadingmanga.info/wp-content/uploads/*.gif$image
 
-! https://github.com/NanoMeow/QuickReports/issues/1727
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=gazzetta.it
-
 ! https://github.com/uBlockOrigin/uAssets/issues/6198
 @@||2mdn.net/instream/html5/ima3.js$script,domain=geenstijl.nl
 
@@ -4299,3 +4296,47 @@ himovies.to#@#a[onclick]
 @@||load.sumo.com^$script,domain=gopractice.ru
 @@||sumo.com/api/$xhr,domain=gopractice.ru
 @@||sumo.com/services$xhr,domain=gopractice.ru
+
+! https://github.com/uBlockOrigin/uAssets/issues/11497
+@@||cdn.lib.getjad.io/library/*Gamepro$script,domain=gamepro.de
+@@||securepubads.g.doubleclick.net/gpt/pubads_impl$script,domain=gamepro.de
+@@||securepubads.g.doubleclick.net/gampad/ads$xhr,domain=gamepro.de
+@@||securepubads.g.doubleclick.net/pagead/ppub_config?ippd=www.gamepro.de$xhr,domain=gamepro.de
+@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=gamepro.de
+
+! https://forums.lanik.us/viewtopic.php?f=64&t=40469
+@@||google.com^*recaptcha/$frame
+@@||gstatic.com/recaptcha/*$css
+
+! breaking links https://kimcartoon.li/Cartoon/Doomlands
+! [badfilter] ||ghosthis.review^$badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/11533
+||rudaw.net/images/$image,1p,redirect-rule=1x1.gif,important
+
+! https://github.com/uBlockOrigin/uAssets/issues/11539
+@@||google-analytics.com/analytics.js$script,redirect-rule=google-analytics.com/analytics.js,domain=layrite.com
+
+! comment section broken by Peter Lowe’s list
+! https://www.tagesspiegel.de/politik/klima-siegel-fuer-gas-und-atomkraftwerke-die-oekologische-mogelpackung-beschaedigt-den-ruf-der-eu/28029446.html#kommentare
+@@||script.ioam.de/iam.js$script,domain=tagesspiegel.de
+
+! https://github.com/uBlockOrigin/uAssets/issues/11550
+@@||mpsnare.iesnare.com/snare.js$script,domain=rossmann.de
+
+! walletinvestor. com scrolling broken
+walletinvestor.com##body:style(overflow: auto !important;)
+walletinvestor.com###bio_ep_bg
+
+! https://github.com/uBlockOrigin/uAssets/issues/11580
+@@||sololearn.com/api/*/comments/*$xhr,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/11593
+@@||googletagmanager.com/gtm.js$script,redirect-rule=googletagmanager.com/gtm.js,domain=aeriagames.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/11592
+@@||ads.imprezzer.com/js/imprezzer2.min.js$script,domain=mgronline.com
+@@||ads.imprezzer.com/js/multisize_responsive.js$script,domain=mgronline.com
+@@||ads.imprezzer.com/js/multisize_bottompage_responsive.js$script,domain=mgronline.com
+@@||ads.imprezzer.com/js/imprezzer_vip2.js$script,domain=mgronline.com
+mgronline.com##[href^="https://www.hotelscombined.co.th/"]
