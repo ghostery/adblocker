@@ -7,7 +7,6 @@
  */
 /* tslint:disable quotemark */
 export default [
-  "div[style=\"position: absolute; inset: 0px; overflow: hidden; z-index: 160; background: transparent none repeat scroll 0% 0%; display: block;\"]",
   "div[style=\"position: fixed; display: block; width: 100%; height: 100%; inset: 0px; background-color: rgba(0, 0, 0, 0); z-index: 300000;\"]",
   ":not([style^=\"position: absolute; left: -5000px\"])",
   "acis, document.querySelectorAll, popMagic",
@@ -27,7 +26,6 @@ export default [
   "nosiif, visibility, 1000",
   "document.onselectstart",
   "set, blurred, false",
-  "decodeURIComponent",
   "[target=\"_blank\"]",
   "[href^=\"https://",
   "disableSelection",
@@ -36,6 +34,7 @@ export default [
   ":nth-of-type(",
   "#custom_html-",
   "advertisement",
+  "BlockDetected",
   "div[class^=\"",
   "nextFunction",
   ".prototype.",
@@ -65,7 +64,6 @@ export default [
   "nowebrtc",
   "skyscrap",
   ".com/\"]",
-  "#ctl00_",
   "300x250",
   "article",
   "consent",
@@ -158,6 +156,7 @@ export default [
   "an",
   "ar",
   "at",
+  "ct",
   "de",
   "e-",
   "ed",
@@ -180,6 +179,7 @@ export default [
   "ma",
   "mp",
   "ol",
+  "om",
   "on",
   "op",
   "or",
