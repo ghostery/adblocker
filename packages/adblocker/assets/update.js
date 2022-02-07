@@ -43,6 +43,10 @@ const adb = require('@cliqz/adblocker');
       ['ublock-origin', 'filters-2021.txt'],
     ],
     [
+      'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters-2022.txt',
+      ['ublock-origin', 'filters-2022.txt'],
+    ],
+    [
       'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/badware.txt',
       ['ublock-origin', 'badware.txt'],
     ],
