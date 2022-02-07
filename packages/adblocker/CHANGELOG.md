@@ -1,3 +1,31 @@
+# v1.23.5 (Mon Feb 07 2022)
+
+#### :nail_care: Polish
+
+- Add 2022 ubo list [#2428](https://github.com/ghostery/adblocker/pull/2428) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Update local assets [#2413](https://github.com/ghostery/adblocker/pull/2413) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2407](https://github.com/ghostery/adblocker/pull/2407) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2397](https://github.com/ghostery/adblocker/pull/2397) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2392](https://github.com/ghostery/adblocker/pull/2392) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2381](https://github.com/ghostery/adblocker/pull/2381) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.177 to 0.0.178 [#2421](https://github.com/ghostery/adblocker/pull/2421) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/chrome from 0.0.176 to 0.0.177 [#2402](https://github.com/ghostery/adblocker/pull/2402) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.23.4 (Mon Jan 17 2022)
 
 #### :house: Internal
