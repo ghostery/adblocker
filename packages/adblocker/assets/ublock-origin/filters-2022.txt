@@ -67,12 +67,12 @@ ac-illust.com,photo-ac.com##.modal-backdrop
 ac-illust.com,photo-ac.com##body.modal-open *:style(filter: none!important;)
 
 ! PopAds
-7hitmovies.bond,aotonline.org,flizmovies.*,kantotinyo.com,silverpic.com,solarseries.club,solartv.club,swatchhd.online,xfantasy.su,yayanimes.net,youjax.com,ytstvmovies.xyz##+js(aopw, _pop)
+7hitmovies.bond,animefrenzy.org,aotonline.org,flizmovies.*,kantotinyo.com,onepiece-mangaonline.com,silverpic.com,solarseries.club,solartv.club,swatchhd.online,xfantasy.su,yayanimes.net,youjax.com,ytstvmovies.xyz##+js(aopw, _pop)
 ||vgfutxwgq.com^
 ||mxyxgkuexjr.com^
 
 ! propeller crap/ads
-s4p2.shingekinokyojin.tv,sflix.to,vanime.co##+js(acis, JSON.parse, break;case $.)
+kimoitv.com,s4p2.shingekinokyojin.tv,sflix.to,vanime.co##+js(acis, JSON.parse, break;case $.)
 ||xfyyveifirnll.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11200
@@ -629,3 +629,26 @@ soap2dayto.org##+js(acis, JSON.parse, break;case $.)
 ! https://github.com/easylist/easylist/pull/10729
 123-movies.*##+js(acis, JSON.parse, break;case $.)
 ||wwlipxritaoo.com^
+
+! note.sieuthuthuat.com anti-adb
+note.sieuthuthuat.com##+js(set, isAdBlockActive, false)
+
+! popMagic sites
+! https://github.com/uBlockOrigin/uAssets/issues/11635
+allcelebs.club,finevids.xxx,gifcandy.net,pornwatchers.com,xnxx.party##+js(acis, document.querySelectorAll, popMagic)
+
+! https://github.com/uBlockOrigin/uAssets/issues/11637
+tutorialspots.com##+js(nowoif)
+||faststream.xyz^$3p
+
+! https://forums.lanik.us/viewtopic.php?t=47286
+myflixertv.to##+js(acis, JSON.parse, break;case $.)
+myflixertv.to##.modal
+myflixertv.to##.modal-backdrop
+
+! mp3juices. icu popups
+mp3juices.icu##+js(acis, $, open)
+
+! mp3juices. su popups
+mp3juices.su##+js(acis, JSON.parse, break;case $.)
+mp3juices.su##[href^="https://apkpure7.com/"]
