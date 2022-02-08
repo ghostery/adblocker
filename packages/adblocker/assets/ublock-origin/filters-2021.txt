@@ -1698,12 +1698,19 @@ elitepvpers.com##[href="https://www.skycheats.com/"]
 elitepvpers.com##[href^="https://funpay.com/"]
 elitepvpers.com##[href="https://proofcore.io/"]
 ||playorigin.com^$3p
-*$3p,image,domain=elitepvpers.com,denyallow=gstatic.com|ghostaim.com|imgur.com|imagebanana.com|imgbb.com|giphy.com|epvpimg.com|discord.com|discordapp.com|discordapp.net|postimages.org|directupload.net|imageupload.io|ibb.co|gyazo.com
+*$image,3p,denyallow=gstatic.com|ghostaim.com|imgur.com|imagebanana.com|imgbb.com|giphy.com|epvpimg.com|discord.com|discordapp.com|discordapp.net|postimages.org|directupload.net|imageupload.io|ibb.co|gyazo.com|imgbox.de|images.weserv.nl|ipv4.imgur.map.fastly.net|snipboard.io|netdna-cdn.com,domain=elitepvpers.com
 elitepvpers.com##[style*="margin"]:has-text(/Advertise/i) + a[href]
-||elitepvpers.com/iii/$image
-elitepvpers.com##a[rel*="ss"]
-elitepvpers.com##div[style="background-color:#ededed;padding:0"]
 elitepvpers.com#@#img[height="60"]
+elitepvpers.com##[style*="margin"]:has-text(/Ad/i) + a[rel]:has(img)
+elitepvpers.com##div[style]:has-text(/Advertise/i) + div[align="center"]
+elitepvpers.com##a[rel*="epvp"]
+||elitepvpers.com/iiii/$image
+||elitepvpers.com/*/aimex_*_*.gif$image
+||elitepvpers.com/*/*_general.gif$image
+||elitepvpers.com/*/funpay_poe_full_width.gif$image
+||elitepvpers.com/*/aimhelper_cod_lead.gif?1$image
+||elitepvpers.com/*/proofcore_*_ss.gif$image
+||elitepvpers.com/*/origin_*_pvp_*.gif$image
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8706
 send.cm##+js(aopw, decodeURIComponent)
@@ -4123,20 +4130,20 @@ techpowerup.com##body div[class]:has([id] > a):style(background-image: none !imp
 techpowerup.com##[id][class] > div[class]:has(label) + [class]:has(a):has(img)
 techpowerup.com##section[class] a[data-height] img
 techpowerup.com##.sidebar-item a[data-height] img
-techpowerup.com##+js(rc, mnnusjsddg)
 techpowerup.com##[src*=".jpg"]:not([src^="https://tpucdn.com/forums/data/avatars/"][loading][class]):not([src^="/gpu-specs/images/b/"][alt][height][width]):upward([href*="."][href*="jpeg"]:not([href*="attach"])
 techpowerup.com##:not(:matches-path(/forums/)) [class][target]:matches-css(background-image: /none/)
 techpowerup.com##body:style(background-color: whitesmoke !important)
 techpowerup.com###viewport > div a[href][target]
-techpowerup.com##:not(:matches-path(/forums/)) [src*="tpucdn.com"]:not([src^="https://tpucdn.com/images/news_featured/"][loading][width][height]):upward([href*="."]):not(a[href^="http"]):not(a[href^="/review"])
 techpowerup.com##:not(:matches-path(/forums/)) [src*="techpowerup.com"]:upward(a[href^="/"]):not([href^="http"])
-techpowerup.com##[href*="43d"]
-techpowerup.com##[href^="/images/46d/"]
 techpowerup.com##[src]:matches-css(margin-left:/12/)
 techpowerup.com##:not(:matches-path(/forums/)) [src]:not([src^="https://tpucdn.com/forums/data/avatars/"][loading][class]):not([src^="/gpu-specs/images/b/"][alt][height][width]):upward([href*="."]:not([href*=".jpg"]):not([href*=".png"]):not([href*="jpeg"])
 techpowerup.com##:not(:matches-path(/forums/)) [rel]:matches-css(position: /fixed/)
 techpowerup.com##:not(:matches-path(/forums/)) [src]:matches-css(position: /fixed/)
-techpowerup.com##+js(ra, wdrwgbethte)
+techpowerup.com##[href^="/images/4d6/"]
+techpowerup.com##a[href*="/images/"] > span > img
+techpowerup.com##u > a:has(img)
+techpowerup.com###top > span:not([class="site-hd__logo-wrapper"])
+techpowerup.com##aside[class]:has(label) > *:has(img)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/oah30a/antiadblock_easymc/
 *$image,redirect-rule=1x1.gif,domain=easymc.io
@@ -5960,7 +5967,7 @@ juazeiro.ba.gov.br###tie-block_3287
 rtilinks.com##+js(acis, eval, replace)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/97605
-mp3juices.cc##+js(aost, Math.random, computed, 2)
+mp3juices.cc##+js(aost, Math.random, computed)
 mp3juices.cc##[class^="result_two__"][target="_blank"]
 mp3juices.cc##^script:has-text(break;case)
 
@@ -6800,10 +6807,6 @@ bigyshare.com##+js(nowoif)
 
 ! https://github.com/uBlockOrigin/uAssets/pull/10589
 @@||dlink.mobilejsr.com^$ghide
-
-! https://github.com/uBlockOrigin/uAssets/issues/10592
-@@||isaiminiya.online^$ghide
-isaiminiya.online##+js(acis, JSON.parse, break;case $.)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10597
 @@||driveup.in^$ghide
