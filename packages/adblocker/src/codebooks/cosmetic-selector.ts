@@ -7,7 +7,6 @@
  */
 /* tslint:disable quotemark */
 export default [
-  "div[style=\"position: absolute; inset: 0px; overflow: hidden; z-index: 160; background: transparent none repeat scroll 0% 0%; display: block;\"]",
   "div[style=\"position: fixed; display: block; width: 100%; height: 100%; inset: 0px; background-color: rgba(0, 0, 0, 0); z-index: 300000;\"]",
   ":not([style^=\"position: absolute; left: -5000px\"])",
   "acis, document.querySelectorAll, popMagic",
@@ -135,6 +134,7 @@ export default [
   "div",
   "ent",
   "ide",
+  "img",
   "lay",
   "mod",
   "out",
@@ -164,7 +164,6 @@ export default [
   "el",
   "en",
   "er",
-  "et",
   "fo",
   "g-",
   "he",
@@ -194,6 +193,7 @@ export default [
   "st",
   "t_",
   "t-",
+  "te",
   "un",
   " ",
   "_",
