@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202202081733
+! Version: 202202091908
 ! Title: EasyList Germany
-! Last modified: 08 Feb 2022 17:33 UTC
+! Last modified: 09 Feb 2022 19:08 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -569,6 +569,7 @@ di.fm,kellertheater.at#@#.firstload
 11freunde.de#@#.house-ad
 hochzeitswahn.de#@#.internal-ad
 mietmobil-fuchs.ch#@#.jquery-script-ads
+11freunde.de#@#.js_deferred-ad
 wetter.de#@#.outbrain-ad-slot
 quoka.de#@#.related-ads
 wetter.de#@#.showheroes-ad-slot
@@ -585,9 +586,10 @@ auto-motor-und-sport.de,hardwareluxx.de,wetter.com#@#[id^="div-gpt-ad"]
 11freunde.de,auto-motor-und-sport.de,gofeminin.de,kochbar.de,vip.de#@#[id^="google_ads_iframe_"]
 kochbar.de#@#[name^="google_ads_iframe"]
 11freunde.de#@#a[href^="http://pubads.g.doubleclick.net/"]
-kochbar.de#@#a[href^="https://adclick.g.doubleclick.net/"]
+11freunde.de,kochbar.de#@#a[href^="https://adclick.g.doubleclick.net/"]
 11freunde.de,gofeminin.de#@#a[href^="https://pubads.g.doubleclick.net/"]
 telekom.de#@#a[href^="https://track.adform.net/"]
+11freunde.de#@#div[data-google-query-id]
 wetter.com#@#div[id^="div-gpt-"]
 ! ---------------------------Third-party Werbeserver---------------------------!
 ! *** easylistgermany:easylistgermany/easylistgermany_adservers.txt ***
@@ -2254,6 +2256,7 @@ wetter.com#@#div[id^="div-gpt-"]
 ||wetteronline.de/mdr/p_adplace/
 ||whocallsyou.de/files/*/rechtsch-baby.jpg
 ||whocallsyou.de/files/*/rechtsschutz011.jpg
+||windows-pro.net^*.php?uid=
 ||windowspower.de/banner/
 ||windowspower.de/wp-content/uploads/*/stromanbieter-vergleich.gif
 ||wir-leben-outdoor.de/wp-content/uploads/*/banner-
@@ -4007,6 +4010,7 @@ forum.golem.de##div[id^="csi_forum"][style="min-height: 100px; padding: 0px; dis
 boerse.sx##div[id^="edit"][style="padding:0px 0px 6px 0px"] > table[id^="post"][width="100%"][cellspacing="0"][cellpadding="6"][border="0"][align="center"] + br + .tborder[width="100%"][cellspacing="0"][cellpadding="6"][border="0"][align="center"]
 vrnerds.de##div[id^="findexp-"]
 foodwissen.de##div[id^="foodw-"]
+windowspro.de##div[id^="gWrapper-"]
 hardware-helden.de##div[id^="hardw-"]
 ibiza-heute.de##div[id^="ibiza-"]
 teltarif.de##div[id^="ideaload"]
@@ -4377,6 +4381,8 @@ zwischengas.com#?#.row.mt-0.mb-3.d-print-none:-abp-has(.fa-ad)
 @@||musikexpress.de^$generichide
 @@||myhomebook.de^$generichide
 @@||n-tv.de^$generichide
+@@||native.emsservice.de/images/teaser*_*.jpeg$domain=11freunde.de
+@@||native.emsservice.de/teasers/*.json$domain=11freunde.de
 @@||noizz.de^$generichide
 @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=windowspro.de
 @@||pagead2.googlesyndication.com/pagead/show_ads.js$domain=autobild.de

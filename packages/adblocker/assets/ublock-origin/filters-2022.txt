@@ -680,17 +680,23 @@ ffem.club##+js(aopr, __Y)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/109826
 jvembed.com##+js(aopr, __Y)
 
-! generic __Y filters
-! jav sites etc.
-!#if false
-/asset/angular.min.js?t=$xhr,1p
-/asset/jquery/slim-3.2.min.js?*&t=$xhr,1p
-! sbembed family
-##div[style^="position:fixed;inset:0px;z-index:2147483647;background:black;opacity:0.01"]
-!#endif
-
 ! https://github.com/uBlockOrigin/uAssets/issues/11657
 drydenwire.com##.modal
 drydenwire.com##.modal-backdrop
 drydenwire.com##[data-track-category="Sponsors"]
 drydenwire.com##.promogrid
+
+! https://github.com/uBlockOrigin/uAssets/pull/11666
+financeflix.in,studyranks.in,technoflip.in##+js(no-xhr-if, googlesyndication)
+financeflix.in,studyranks.in,technoflip.in##+js(nano-sib, timer)
+
+! https://github.com/uBlockOrigin/uAssets/issues/11667
+chillx.top###youcantseeme
+chillx.top##+js(nowoif)
+
+! https://github.com/easylist/easylist/commit/7a6130a149d0b832928bf5e8fc6d007aebce7ae6
+adinsurance.xyz,insurglobal.xyz##+js(set, blurred, false)
+adinsurance.xyz,insurglobal.xyz##div[id^="bsa-zone_"]
+
+! https://github.com/uBlockOrigin/uAssets/issues/1905#issuecomment-1033865488
+banned.video,freeworldnews.tv##+js(set, Object.prototype.ads, noopFunc)
