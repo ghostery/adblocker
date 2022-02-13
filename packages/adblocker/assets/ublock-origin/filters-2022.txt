@@ -67,9 +67,7 @@ ac-illust.com,photo-ac.com##.modal-backdrop
 ac-illust.com,photo-ac.com##body.modal-open *:style(filter: none!important;)
 
 ! PopAds
-7hitmovies.bond,animefrenzy.org,aotonline.org,flizmovies.*,kantotinyo.com,onepiece-mangaonline.com,silverpic.com,solarseries.club,solartv.club,swatchhd.online,xfantasy.su,yayanimes.net,youjax.com,ytstvmovies.xyz##+js(aopw, _pop)
-||vgfutxwgq.com^
-||mxyxgkuexjr.com^
+037jav.com,7hitmovies.bond,animefrenzy.org,aotonline.org,flizmovies.*,kantotinyo.com,onepiece-mangaonline.com,silverpic.com,solarseries.club,solartv.club,swatchhd.online,xfantasy.su,yayanimes.net,youjax.com,ytstvmovies.xyz##+js(aopw, _pop)
 
 ! propeller crap/ads
 kimoitv.com,s4p2.shingekinokyojin.tv,sflix.to,vanime.co##+js(acis, JSON.parse, break;case $.)
@@ -629,7 +627,7 @@ note.sieuthuthuat.com##+js(set, isAdBlockActive, false)
 
 ! popMagic-sites
 ! https://github.com/uBlockOrigin/uAssets/issues/11635
-allcelebs.club,beginningmanga.com,comicsvalley.com,finding-camellia.com,finevids.xxx,gifcandy.net,klmag.net,porn77.info,pornwatchers.com,xnxx.party,chopris.com,faptube.com,xsportshd.com##+js(acis, document.querySelectorAll, popMagic)
+allcelebs.club,beginningmanga.com,comicsvalley.com,finding-camellia.com,finevids.xxx,gifcandy.net,klmag.net,komisanwamanga.com,porn77.info,pornwatchers.com,xnxx.party,chopris.com,faptube.com,xsportshd.com##+js(acis, document.querySelectorAll, popMagic)
 ||xsportshd.com/bet.gif$image
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11637
@@ -713,3 +711,83 @@ skypng.com##+js(acis, $, undefined)
 
 ! hdmovie5.to fake player
 hdmovie5.to##+js(ra, href, #clickfakeplayer)
+
+! https://github.com/uBlockOrigin/uAssets/issues/11687
+manga.hiseku.com##+js(acis, eval, replace)
+
+! eztv.nocensor. biz popups ads
+nocensor.biz##+js(aopw, _pop)
+eztv.nocensor.biz##[id^="cookieConsentVPN"]
+
+! https://github.com/uBlockOrigin/uAssets/issues/11691
+radiowereld.nl##+js(nosiif, adb)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/spykj6/getcopynet_adblock_detected_and_ads/
+getcopy.link##+js(aopr, lck)
+getcopy.link##+js(refresh-defuser)
+||superfolder.net^
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/110128
+rule34porn.net##+js(acis, eval, replace)
+rule34porn.net##+js(aopr, decodeURI)
+
+! https://github.com/uBlockOrigin/uAssets/issues/11697
+largescaleforums.com##+js(nostif, ).show())
+
+! https://github.com/uBlockOrigin/uAssets/issues/11698
+crunchyscan.fr##+js(acis, eval, replace)
+crunchyscan.fr##.col-sm-8.col-md-8.main-col > .c-sidebar
+crunchyscan.fr##.widget_custom_html
+
+! voirseries. io popups
+voirseries.io##+js(aost, Math.random, /\st\.[a-zA-Z]*\s/)
+
+! lodynet. dev + player => popups
+lodynet.*,vidlo.us##+js(acis, JSON.parse, break;case $.)
+
+! https://github.com/uBlockOrigin/uAssets/issues/11704
+vatoscash.com##+js(acis, document.getElementById, 'body')
+
+! 4stream.*, streambee. to popups
+4stream.*,streambee.to##+js(nowoif)
+
+! https://github.com/uBlockOrigin/uAssets/issues/11706
+demonscripts.com##+js(acis, $, test)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/sqymqh/please_fix_those_if_possible/
+techgeek.digital##+js(aost, Math.random, /\st\.[a-zA-Z]*\s/)
+techgeek.digital##+js(nowoif)
+techgeek.digital##+js(set, blurred, false)
+techgeek.digital##.espaciodos
+urlily.com##+js(acis, eval, replace)
+||googletagmanager.com^$script,redirect-rule=noopjs,domain=gainbtc.click|multiclaim.net|proinfinity.fun
+multiclaim.net###wcfloatDiv4
+multiclaim.net##.home_banner
+gainbtc.click##ins[class][style="display:inline-block;width:728px;height:90px;"]
+||raw.githubusercontent.com/expertad^$3p
+||firebasestorage.googleapis.com/v0/b/gosyndication.appspot.com^
+||gainbtc.click^$3p
+
+! https://github.com/uBlockOrigin/uAssets/issues/11708
+wondervelocity.com##+js(nano-sib)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/110300
+bestpornflix.com##+js(acis, document.querySelectorAll, popMagic)
+bestpornflix.com##.table
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/110301
+4porn4.com##+js(acis, document.querySelectorAll, popMagic)
+4porn4.com##.table
+
+! querofilmehd. net popups
+querofilmehd.*##+js(acis, JSON.parse, break;case $.)
+
+! filmeseries. top popups
+filmeseries.*##+js(acis, JSON.parse, break;case $.)
+
+! megafilmeshd20. pro popup
+megafilmeshd20.*##+js(acis, JSON.parse, break;case $.)
+
+! megafilmeseseriesonline. com + player megafilmeshdonline. org popups
+megafilmeseseriesonline.com##+js(acis, JSON.parse, break;case $.)
+megafilmeshdonline.org##+js(aopr, __Y)

@@ -1129,6 +1129,7 @@ mma-core.*##+js(acis, $, undefined)
 mma-core.*###tlbrd
 mma-core.*##.rsky
 mma-core.*##.outVidAd
+mma-core.*##.banr
 ||webpartners.co^$3p
 
 ! https://forums.lanik.us/viewtopic.php?f=103&t=35513
@@ -1900,8 +1901,7 @@ citethisforme.com##.ads_top_middle
 ! https://github.com/uBlockOrigin/uAssets/issues/11102
 apkmirror.com##.gooWidget:style(width:1px!important;height:1px!important;min-width:1px!important;min-height:1px)
 apkmirror.com#@#.gooWidget
-apkmirror.com##+js(rc, disabled, .downloadButton, stay)
-apkmirror.com##+js(rc, hidden, #btnDismiss\, #btnSubmit, stay)
+apkmirror.com##+js(aost, document.querySelector, /(?=stackDepth:2\s)(?=^(?!.*(Object|HTMLInputElement|https)))/)
 apkmirror.com##.downloadCountdown
 apkmirror.com##.ains
 apkmirror.com##.OUTBRAIN
@@ -3261,7 +3261,6 @@ porndig.com##+js(set, tkn_popunder, null)
 ! https://github.com/uBlockOrigin/uAssets/issues/9611
 xxvids.net##a[href^="https://t.frtyi.com/"]
 xvideos.com,xvideos2.com##+js(nowoif)
-xvideos.com,xvideos2.com##+js(nowebrtc)
 xvideos.com,xvideos2.com,xnxx.com##.banner-game
 xvideos.com,xvideos2.com##.videoad-title
 xxvids.net##[href*="offer_id"]
@@ -4243,7 +4242,7 @@ vtm.be##+js(rc, pui__root--no-seekbar, .pui__root--no-seekbar, stay)
 vtm.be##.pe__container__ads
 vtm.be##.pui__adinfo
 vtm.be##div.pui__seekbar__cuepoints
-||spott.ai^
+||spott.ai^$domain=vtm.be
 ||freewheel-jitt.dpgmedia.be^
 ||fwmrm.net^$important,domain=vtm.be
 ||gemius.pl^$important,domain=vtm.be
@@ -7946,7 +7945,6 @@ xnxx-sexfilme.com##+js(aopw, SpecialUp)
 ||pushpad.xyz^$script,domain=xnxx-sexfilme.com
 xnxx-sexfilme.com##.img_box:has-text(Anzeige)
 xnxx-sexfilme.com###wa-banner
-xnxx.com,xvideos.com,xvideos2.com##+js(aopw, openpop)
 ||xnxx.com/cams/
 
 ! https://github.com/NanoMeow/QuickReports/issues/39
@@ -9404,10 +9402,6 @@ nandatrio.com##+js(aopw, adBlockDetected)
 ! 123movies.net popups
 123movies.*##+js(acis, Math, break;case $.)
 123movies.*##+js(aopr, AaDetector)
-! https://www.reddit.com/r/uBlockOrigin/comments/9w0sst/ublock_origin_not_stopping_new_popup_windows/
-eplayvid.com##+js(aopr, AaDetector)
-eplayvid.com##+js(acis, Math, break;case $.)
-eplayvid.com##a#ptc
 
 ! https://github.com/NanoMeow/QuickReports/issues/308
 @@||lenouvelliste.com^$ghide
@@ -10320,15 +10314,16 @@ thepiratebay.*##+js(aopw, _pop)
 ! https://github.com/NanoMeow/QuickReports/issues/459
 ||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs:10,domain=naminakiky.com
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/92639
+! https://github.com/AdguardTeam/AdguardFilters/issues/110324
 linksht.com##+js(nostif, /text()|0x/)
-linksht.com##+js(acis, $, bannerads)
 linksht.com##+js(set, counter, 0)
 linksht.com##+js(aopw, arrayAd)
 linksht.com##+js(nowoif)
-! @@||static.doubleclick.net/instream/ad_status.js$xhr,domain=linksht.com
+linksht.com##+js(set, window_focus, true)
 @@||linksht.com^$ghide
 linksht.com###bannerads
+linksht.com###getlink
+linksht.com###originalLink:style(display: block!important;)
 
 ! https://github.com/NanoMeow/QuickReports/issues/464
 @@||linkpunyaku.*^$ghide
@@ -13120,6 +13115,8 @@ lurdchinexgist.blogspot.com##+js(aeld, load, 2000)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5407
 sharemods.com##+js(nowebrtc)
+sharemods.com##iframe[data-id$="_DFP"]
+*$script,3p,denyallow=bootstrapcdn.com|cloudflare.com|cloudflare.net|cookieinfoscript.com|fastly.net|fastlylb.net|google.com|googleapis.com|gstatic.com|hcaptcha.com|hwcdn.net|jquery.com|recaptcha.net,domain=sharemods.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5408
 modsbase.com##+js(nowebrtc)
@@ -13207,12 +13204,14 @@ sendvid.com###vjs-logo-top-bar
 ! https://github.com/uBlockOrigin/uAssets/issues/5448
 imgdawgknuttz.com##+js(aopw, atOptions)
 imgdawgknuttz.com##+js(acis, document.createElement, __htas)
-imgdawgknuttz.com##+js(acis, Math, break;case $.)
+imgdawgknuttz.com##+js(acis, JSON.parse, break;case $.)
 imgdawgknuttz.com##+js(aopw, _pop)
-imgdawgknuttz.com##+js(aopr, absda)
 imgdawgknuttz.com##+js(aopr, Pub2a)
+imgdawgknuttz.com##^script[data-cfasync]:has-text(h=decodeURIComponent)
 ||imgdawgknuttz.com/*.php$script,1p
 ||autoizers.info^
+||proeroclips.pro^$3p
+||taunhhcx.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5452
 informazionefiscale.it##+js(acis, document.createElement, admiral)
@@ -16846,8 +16845,10 @@ jkrepublic.pro##+js(nano-sib, , 1200)
 gazetadopovo.com.br##.ads-desktop
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/dlljyn/ublock_is_not_working_on_this_website/
-beinmatch.*,beinmatchtv.tv##+js(acis, Math, break;case $.)
-beinmatch.*,beinmatchtv.tv##+js(nowoif)
+beinmatch.*##+js(acis, JSON.parse, break;case $.)
+beinmatch.*##+js(nowoif)
+beinmatch.*##+js(aopw, _pop)
+||kenmwqdfiq.com^
 
 ! cirokun.blogspot.com anti adb
 cirokun.blogspot.com##+js(aeld, load, 2000)
@@ -18976,6 +18977,8 @@ mynewsmedia.co##+js(aost, String.prototype.charCodeAt, https)
 ! https://github.com/uBlockOrigin/uAssets/issues/11278
 mynewsmedia.co##+js(disable-newtab-links)
 mynewsmedia.co##[href^="https://mauchopt.net"]
+! https://github.com/uBlockOrigin/uAssets/issues/11708
+mynewsmedia.co###download-ad-modal
 
 ! https://github.com/NanoMeow/QuickReports/issues/2941
 motohigh.pl##+js(nostif, , 1)
