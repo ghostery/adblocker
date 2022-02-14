@@ -1,3 +1,15 @@
+# v1.23.6 (Mon Feb 14 2022)
+
+#### :bug: Bug Fix
+
+- Stop removing is-mutation-observer-enabled [#2449](https://github.com/ghostery/adblocker/pull/2449) ([@kylegundersen](https://github.com/kylegundersen))
+
+#### Authors: 1
+
+- Kyle Gundersen ([@kylegundersen](https://github.com/kylegundersen))
+
+---
+
 # v1.23.5 (Mon Feb 07 2022)
 
 #### :nut_and_bolt: Dependencies

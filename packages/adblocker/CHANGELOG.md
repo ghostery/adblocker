@@ -1,3 +1,20 @@
+# v1.23.6 (Mon Feb 14 2022)
+
+#### :house: Internal
+
+- Update local assets [#2445](https://github.com/ghostery/adblocker/pull/2445) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2440](https://github.com/ghostery/adblocker/pull/2440) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2438](https://github.com/ghostery/adblocker/pull/2438) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2435](https://github.com/ghostery/adblocker/pull/2435) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2429](https://github.com/ghostery/adblocker/pull/2429) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 2
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+
+---
+
 # v1.23.5 (Mon Feb 07 2022)
 
 #### :nail_care: Polish
