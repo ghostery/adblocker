@@ -110,7 +110,6 @@ export class BlockingContext {
     if (this.blocker.config.loadCosmeticFilters === true) {
       this.session.setPreloads(this.session.getPreloads().filter((p) => p !== PRELOAD_PATH));
       ipcMain.removeListener('get-cosmetic-filters', this.onGetCosmeticFilters);
-      ipcMain.removeListener('is-mutation-observer-enabled', this.onIsMutationObserverEnabled);
     }
   }
 }
