@@ -681,8 +681,9 @@ wg-gesucht.de##+js(acis, $, detectAdBlocker)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54800
 hdmp4mania1.net##+js(nosiif, visibility, 1000)
-hdmp4mania1.net##[href^="http://bit.ly/"]
 mp4mania1.net##+js(aopr, LieDetector)
+mp4mania1.net##.advert
+mp4mania1.net,hdmp4mania1.net##.prop_native1
 
 ! https://github.com/NanoMeow/QuickReports/issues/3745
 @@*$xhr,domain=get.x-link.pl
@@ -1629,7 +1630,9 @@ mypussydischarge.com##+js(aopr, decodeURI)
 tvepg.eu##+js(nostif, google_jobrunner)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9950
-sms24.me##+js(set, $ado, trueFunc)
+sms24.me,sms24.info##+js(rc, preloader, .preloader)
+sms24.me,sms24.info##body > div[style^="position: fixed; z-index: 1000"]
+sms24.me,sms24.info##.spinner-border
 *$script,redirect-rule=noopjs,domain=sms24.me
 @@||sms24.me^$ghide
 
@@ -1987,14 +1990,8 @@ gsmfirmware.net##+js(acis, eval, ignielAdBlock)
 youav.com##^script:has-text('shift')
 youav.com##+js(acis, String.fromCharCode, 'shift')
 
-! https://github.com/NanoMeow/QuickReports/issues/4216
-uploadraja.com##+js(acis, document.createElement, 'script')
-uploadraja.com##+js(aopw, _pop)
+! uploadraja .com ads
 uploadraja.com##+js(nano-stb)
-uploadraja.com##+js(nowebrtc)
-uploadraja.com##+js(nowoif)
-uploadflix.org,uploadraja.com##center > a[target="_blank"] > img
-||bp.blogspot.com^*/s1600/prosis.png$3p
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/524
 @@||crackall.net^$ghide
@@ -2939,11 +2936,6 @@ tecnotutoshd.net##+js(aopw, adBlockDetected)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/61580
 @@||chiasenhac.vn/test_ads.html^$frame,1p
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/61596
-shorthub.co##+js(aopr, app_vars.force_disable_adblock)
-shorthub.co##+js(aopr, open)
-*$3p,script,frame,denyallow=google.com|gstatic.com|recaptcha.net|hcaptcha.com,domain=shorthub.co
-
 ! https://github.com/NanoMeow/QuickReports/issues/4525
 daburosubs.com##+js(aopr, adBlockDetected)
 
@@ -3854,13 +3846,6 @@ audizine.com##+js(acis, document.createElement, admiral)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/j0dy4q/
 sinfoniarossini.com##+js(nowoif)
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/64678
-buynorxviagraonline.com##+js(aopw, adcashMacros)
-buynorxviagraonline.com##+js(acis, addEventListener, google_ad_client)
-buynorxviagraonline.com##.tm-menu
-buynorxviagraonline.com###HTML10
-buynorxviagraonline.com###HTML11
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/88037
 thepoorcoder.com##+js(aopr, adblockDetector)
