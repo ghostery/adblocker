@@ -36,9 +36,6 @@ themeslide.com##+js(acis, $, preventDefault)
 themeslide.com##+js(aeld, contextmenu, preventDefault)
 ! https://github.com/uBlockOrigin/uAssets/issues/1480
 mimaletadepeliculas.*##+js(aopr, document.oncontextmenu)
-! https://www.reddit.com/r/uBlockOrigin/comments/82y5kn/how_to_block_this_nagger/
-radioaficion.com##+js(acis, document.oncontextmenu)
-radioaficion.com##+js(acis, disableSelection, reEnable)
 ! https://github.com/uBlockOrigin/uAssets/issues/1746
 pelispedia.*##+js(aopw, document.oncontextmenu)
 pelispedia.*##+js(ra, oncontextmenu)
@@ -258,8 +255,8 @@ flickr.com##.spaceball
 evz.ro##body:style(-moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 evz.ro##+js(acis, $, contextmenu)
 
-! https://github.com/uBlockOrigin/uAssets/issues/2513 re-enable select
-mcoc-guide.*##+js(acis, disableselect, reEnable)
+! https://github.com/uBlockOrigin/uAssets/issues/2513
+mcocguideblog.com##+js(acis, disableselect, reEnable)
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/104
 xxlmag.com##.brave-bling-overlay
@@ -940,8 +937,8 @@ numberempire.com##+js(nostif, w3ad, 1000)
 numberempire.com##.perm_ad
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4187 right click, select
-singingdalong.*##+js(ra, oncontextmenu|ondragstart|onselectstart)
-singingdalong.*##+js(acis, disableselect, reEnable)
+singingdalong.blogspot.com##+js(ra, oncontextmenu|ondragstart|onselectstart)
+singingdalong.blogspot.com##+js(acis, disableselect, reEnable)
 
 ! https://www.apksecured.com/2015/11/skin-trade-2014.html
 apksecured.com##+js(set, document.oncontextmenu, null)
@@ -991,9 +988,6 @@ filmesonlinex.co##+js(ra, oncontextmenu|ondragstart|onselectstart|onkeydown)
 ! booksmedicos . org right click, select, copy
 booksmedicos.org##+js(aopw, disableSelection)
 booksmedicos.org##+js(acis, jQuery, document)
-
-! books4arab . com select
-books4arab.com##+js(acis, disableselect, reEnable)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4207
 proxfree.com###pftop:style(height: auto !important;padding-bottom:5px !important)
@@ -1068,6 +1062,7 @@ ieltsliz.com##.unselectable:style(-webkit-touch-callout: default !important; -we
 kapitalis.com##+js(acis, disableSelection, reEnable)
 kapitalis.com##+js(aopw, nocontext)
 kapitalis.com##.unselectable:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+kapitalis.com##style:has-text(@media print):remove()
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4268#issuecomment-445405264
 gaypornwave.com##+js(aopw, document.oncontextmenu)
@@ -1104,6 +1099,7 @@ soft98.ir##+js(aeld, contextmenu)
 ! https://github.com/NanoMeow/QuickReports/issues/450
 overlordfree.web.id##+js(acis, disableselect, reEnable)
 overlordfree.web.id##body:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+overlordfree.web.id##style:has-text(@media print):remove()
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4325
 vpnmentor.com##+js(nostif, bioEp.showPopup)
@@ -1162,6 +1158,7 @@ animeunity.it##+js(ra, oncontextmenu)
 dvdporngay.com##+js(aopw, nocontext)
 dvdporngay.com##+js(acis, disableSelection, reEnable)
 dvdporngay.com##[class]:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+dvdporngay.com##style:has-text(@media print):remove()
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4368#issuecomment-449866993
 theartofnakedwoman.*##+js(aopw, intializemarquee)
@@ -1237,7 +1234,8 @@ wral.com##+js(aopr, Date.prototype.toUTCString)
 ! right click, copy, select tiempo . hn
 tiempo.hn##.unselectable:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 tiempo.hn##+js(acis, disableSelection, reEnable)
-tiempo.hn##+js(acis, document.oncontextmenu)
+tiempo.hn##style:has-text(@media print):remove()
+tiempo.hn##+js(aopr, nocontext)
 
 ! right click, copy kirannewsagency . com
 kirannewsagency.com##+js(aopw, disableSelection)
@@ -6599,3 +6597,22 @@ investorvillage.com##+js(acis, update_visit_count)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11698
 crunchyscan.fr##+js(acis, document.oncontextmenu)
+
+! https://github.com/uBlockOrigin/uAssets/issues/11732
+||coinzillatag.com^$script,redirect=noopjs,domain=viefaucet.com
+
+! visefierbinti. ro anti select, right click, drag, print, f-keys
+visefierbinti.ro##+js(aopr, nocontext)
+visefierbinti.ro##+js(acis, disableSelection, reEnable)
+visefierbinti.ro##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+visefierbinti.ro##style:has-text(@media print):remove()
+
+! https://github.com/uBlockOrigin/uAssets/issues/3068
+pornhub.*##+js(rc, hasAdAlert, header)
+pornhub.*###js-abContainterMain
+
+! https://github.com/uBlockOrigin/uAssets/issues/11762
+grandoldteam.com##+js(acis, $, test)
+
+! https://github.com/uBlockOrigin/uAssets/issues/11775
+gamingsinners.com##+js(acis, $, test)
