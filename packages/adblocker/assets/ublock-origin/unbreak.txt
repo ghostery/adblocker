@@ -4020,12 +4020,6 @@ myair2.resmed.com##+js(no-xhr-if, cloudflare.com/cdn-cgi/trace)
 @@||static-redesign.cnbcfm.com^$script,domain=cnbc.com
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/qde4r9/video_player_is_blocked_by_ublock/
-!#if env_mobile
-||imasdk.googleapis.com/js/sdkloader/ima3.js^$script,redirect-rule=noopjs,domain=sonyliv.com
-!#endif
-!#if !env_mobile
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=sonyliv.com
-!#endif
 ||d2r1yp2w7bby2u.cloudfront.net/js/localforage.min.js$script,redirect-rule=noopjs,domain=sonyliv.com
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/qeo32a/stooqpl_stooqcom_stopped_working_yesterday/
@@ -4370,3 +4364,6 @@ abczdrowie.pl#@#+js(aost, WP.prebid, onLoad)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11715
 @@||nexus.ensighten.com/easyjet/*/Bootstrap.js$script,domain=easyjet.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/11793
+@@||code.jquery.com^$script,domain=mixdrop.*
