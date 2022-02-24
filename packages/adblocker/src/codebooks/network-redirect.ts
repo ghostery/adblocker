@@ -45,6 +45,7 @@ export default [
   "et",
   "ga",
   "id",
+  "in",
   "ng",
   "re",
   "s.",
