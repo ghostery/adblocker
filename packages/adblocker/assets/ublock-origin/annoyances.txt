@@ -1718,15 +1718,6 @@ theintercept.com##.Post-body--truncated:style(max-height: unset !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/5282
 salary.com###sgpb-popup-dialog-main-div-wrapper, .sgpb-theme-1-overlay
 
-! https://github.com/uBlockOrigin/uAssets/issues/5283
-aliexpress.com,aliexpress.ru##.close-layer:xpath(..)
-aliexpress.com,aliexpress.ru##.ui-mask
-! https://github.com/uBlockOrigin/uAssets/issues/6184
-aliexpress.com,aliexpress.ru##.next-overlay-wrapper:has(.newuser-container)
-aliexpress.com,aliexpress.ru##body:style(overflow: auto !important; padding: 0 !important;)
-! https://github.com/uBlockOrigin/uAssets/issues/6551
-aliexpress.com,aliexpress.ru##.ui-newuser-layer-dialog.ui-window-transition.ui-window-normal.ui-window
-
 ! https://github.com/uBlockOrigin/uAssets/issues/5284
 mlbshop.com##.modal, .modal-backdrop, .modal-wrapper
 
@@ -2234,10 +2225,6 @@ pluspremieres.nz##+js(ra, oncontextmenu)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1832
 @@||flightaware.com^$ghide
-
-! https://github.com/NanoMeow/QuickReports/issues/1830
-@@||leo.org^$ghide
-leo.org###adv-text
 
 ! https://github.com/NanoMeow/QuickReports/issues/1052#issuecomment-531842608
 ancient.eu##+js(aopr, googletag)
@@ -6633,3 +6620,20 @@ eshentai.tv##.aviso
 
 ! vumoo.vip devtools
 ||vumoo.vip/js/safe.ob.min.js
+
+! https://github.com/uBlockOrigin/uAssets/issues/11815
+pushsquare.com##+js(aopr, _sp_._networkListenerData)
+
+! pobre. tv anti right click, f-keys
+pobre.tv##+js(aeld, contextmenu)
+pobre.tv##+js(aeld, , keyCode)
+
+! www-daftarharga.blogspot. com anti right click, select, f-keys
+www-daftarharga.blogspot.com##+js(acis, document.oncontextmenu)
+www-daftarharga.blogspot.com##+js(aeld, , keyCode)
+www-daftarharga.blogspot.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! rukim. id anti right click, select, f-keys
+rukim.id##+js(aeld, , keyCode)
+rukim.id##+js(aopr, nocontext)
+rukim.id##+js(acis, disableSelection, reEnable)
