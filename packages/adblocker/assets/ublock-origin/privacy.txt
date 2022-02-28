@@ -246,19 +246,17 @@ search.brave.com##+js(no-fetch-if, body:cohort)
 /^\w+://[0-9a-z]{12}\.dataunlocker\.com//$1p,script
 /^\w+://[\w.\-]+\.www\.cybernetman\.com//$1p,script
 /^\w+://[\w.\-]+\.www\.logology\.co//$1p,script
-/^\w+://[\w.\-]+\.www\.botcomics\.com//$1p,script
-/^\w+://[\w.\-]+\.www\.chandlerorchards\.com//$1p,script
 /^\w+://[\w.\-]+\.www\.atlaslane\.com//$1p,script
 /^\w+://[0-9a-z]{12}\.tapmyback\.com//$1p,script
 /^\w+://[\w.\-]+\.www\.cefirates\.com//$1p,script
-/^\w+://[0-9a-z]{12}\.nikita\.tk//$1p,script
 fjlaboratories.com##+js(aost, Math.floor, injectedScript)
 stoic.ai##^script:has-text(\x3c)
 stoic.ai##+js(aost, Math.floor, injectedScript)
 ||ampl.cinotes.com^
 ||data-saver-cindi.herokuapp.com^
 ||cdn.cindicator.com/$script,3p
-filmustage.com,freecodecamp.org,mailfloss.com##+js(acis, String.fromCharCode, join)
+botcomics.com,chandlerorchards.com,comicleaks.com,filmustage.com,freecodecamp.org,mailfloss.com,marketdata.app,nikita.tk##+js(acis, String.fromCharCode, join)
+botcomics.com,chandlerorchards.com,comicleaks.com,marketdata.app,nikita.tk##^script:has-text(join(''))
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/opoba7/washington_post_showing_ad_placeholders/
 ||washpost.nile.works^
@@ -380,3 +378,6 @@ endbasic.dev,jmmv.dev##+js(no-xhr-if, method:POST)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11885
 /log/*$xhr,domain=vizcloud.ru|vizcloud2.ru
+
+! https://github.com/uBlockOrigin/uAssets/issues/11895
+||serasaexperian.com.br/dist/scripts/fingerprint2.js^$redirect=fingerprint2.js,script,important

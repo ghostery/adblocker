@@ -715,18 +715,18 @@ tapetus.pl##+js(acis, $, setTimeout)
 tapetus.pl##div[style="box-sizing: border-box; padding:0px 5px 0px 0px; text-align:center;"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7308
-adblockstreamtape.*,stape.fun,strcloud.*,streamtape.*,streamta.*,strtape.*,strtpe.*,strtapeadblock.*##+js(aopw, _pop)
-adblockstreamtape.*,stape.fun,strcloud.*,streamtape.*,streamta.*,strtape.*,strtpe.*,strtapeadblock.*##+js(aost, Math.random, /\st\.[a-zA-Z]*\s/)
-adblockstreamtape.*,stape.fun,strcloud.*,streamtape.*,streamta.*,strtape.*,strtpe.*,strtapeadblock.*##+js(nosiif, adblock)
-adblockstreamtape.*,stape.fun,strcloud.*,streamtape.*,streamta.*,strtape.*,strtpe.*,strtapeadblock.*##+js(nowoif)
+adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,stape.fun,strcloud.*,streamtape.*,streamta.*,strtape.*,strtpe.*,strtapeadblock.*##+js(aopw, _pop)
+adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,stape.fun,strcloud.*,streamtape.*,streamta.*,strtape.*,strtpe.*,strtapeadblock.*##+js(aost, Math.random, /\st\.[a-zA-Z]*\s/)
+adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,stape.fun,strcloud.*,streamtape.*,streamta.*,strtape.*,strtpe.*,strtapeadblock.*##+js(nosiif, adblock)
+adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,stape.fun,strcloud.*,streamtape.*,streamta.*,strtape.*,strtpe.*,strtapeadblock.*##+js(nowoif)
 strcloud.*,streamtape.*,streamta.*,strtape.*,strtapeadblock.*##+js(ra, target, #downloadvideo)
 strcloud.*,streamtape.*,streamta.*,strtape.*,strtapeadblock.*##+js(set, towait, 0)
 strtapeadblock.*##+js(acis, Math, break;case $.)
-adblockstreamtape.*,stape.fun,strcloud.*,streamtape.*,streamta.*,strtape.*,strtpe.*,strtapeadblock.*#@#.google-ad
-adblockstreamtape.*,stape.fun,strcloud.*,streamtape.*,streamta.*,strtape.*,strtpe.*,strtapeadblock.*##[class*="bn-container"], div[style*="z-index: 300000;"]
+adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,stape.fun,strcloud.*,streamtape.*,streamta.*,strtape.*,strtpe.*,strtapeadblock.*#@#.google-ad
+adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,stape.fun,strcloud.*,streamtape.*,streamta.*,strtape.*,strtpe.*,strtapeadblock.*##[class*="bn-container"], div[style*="z-index: 300000;"]
 strcloud.*,streamtape.*,streamta.*,strtape.*,strtpe.*,strtapeadblock.*##iframe[src^="data:"]
 /sw.js$script,1p,domain=strcloud.*|streamtape.*|streamta.*|strtape.*|strtpe.*|strtapeadblock.*
-*$3p,denyallow=google.com|gstatic.com|hcaptcha.com|recaptcha.net|tapecontent.net,domain=adblockstreamtape.*|stape.fun|strcloud.*|streamtape.*|strtape.*|strtpe.*|strtapeadblock.*
+*$3p,denyallow=google.com|gstatic.com|hcaptcha.com|recaptcha.net|tapecontent.net,domain=adblockstreamtape.*|adblockstrtape.link|adblockstrtech.link|stape.fun|strcloud.*|streamtape.*|strtape.*|strtpe.*|strtapeadblock.*
 ||nonegrysu.pro^
 ||tstacyfubmyfrs.top^
 ||wqxnbtlvo.xyz^
@@ -3067,9 +3067,6 @@ thehacktoday.com##.adsbygoogle
 ! https://github.com/NanoMeow/QuickReports/issues/4588
 annabelle.ch##+js(aopr, _sp_._networkListenerData)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/62435
-@@||cdn-surfline.com/*/scripts/adsbox.js$script,domain=surfline.com
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62450
 csgo-ranks.com##+js(nosiif, visibility, 1000)
 
@@ -3493,7 +3490,8 @@ ibeconomist.com##+js(nostif, adsense)
 getitfree.cn##+js(acis, document.getElementById, .style)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7900
-*$script,3p,domain=webmusic.live
+*$script,3p,domain=webmusic.*
+/^https:\/\/aj\d{4}\.online\/[0-9a-z]{8}\.js$/$script,3p
 
 ! https://github.com/uBlockOrigin/uAssets/pull/7901
 smallpocketlibrary.com##+js(aopr, adBlockDetected)
@@ -4946,10 +4944,17 @@ microtx.id##+js(nano-sib)
 ||bitzad.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11347
+! https://github.com/uBlockOrigin/uAssets/issues/11892
 streamingcommunity.*##^script:has-text(break;case $.)
 streamingcommunity.*##+js(acis, JSON.parse, break;case $.)
 @@||scws.xyz^$xhr,domain=streamingcommunity.*
 @@||streamingcommunity.*/$xhr,1p
+!#if env_firefox
+@@||googletagmanager.com/gtag/js$xhr,domain=streamingcommunity.*
+!#endif
+!#if !env_firefox
+||googletagmanager.com^$xhr,domain=streamingcommunity.*,redirect-rule=noop.js
+!#endif
 
 ! tvmd .info ads
 ##.fints-block__row
@@ -5430,7 +5435,8 @@ mineiroloko.co##+js(adfly-defuser)
 streamonsport.*###iframe_preview
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/69378
-freemagazines.top##+js(aost, String.prototype.charCodeAt, ai_)
+freemagazines.top##+js(aopr, b2a)
+freemagazines.top##+js(nostif, showModal)
 freemagazines.top##+js(acis, eval, replace)
 *$xhr,redirect-rule=nooptext,domain=freemagazines.top
 
