@@ -63,9 +63,7 @@ function getElementsFromMutations(mutations: MutationRecord[]): Element[] {
  * potentially be injected in content-script (e.g.: see PuppeteerBlocker for
  * more details).
  */
-export function extractFeaturesFromDOM(
-  roots: Element[],
-): {
+export function extractFeaturesFromDOM(roots: Element[]): {
   classes: string[];
   hrefs: string[];
   ids: string[];
@@ -77,7 +75,12 @@ export function extractFeaturesFromDOM(
   const ids: Set<string> = new Set();
 
   for (const root of roots) {
-    for (const element of [root, ...root.querySelectorAll('[id],[class],[href]')]) {
+    for (const element of [
+      root,
+      ...root.querySelectorAll(
+        '[id]:not(html):not(body),[class]:not(html):not(body),[href]:not(html):not(body)',
+      ),
+    ]) {
       if (ignoredTags.has(element.nodeName.toLowerCase())) {
         continue;
       }
