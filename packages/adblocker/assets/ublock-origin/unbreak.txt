@@ -697,9 +697,6 @@ cyclingnews.com##.global-banner
 ! https://forums.lanik.us/viewtopic.php?p=136057#p136057
 @@|https://api-secure.solvemedia.com^$script
 
-! http://www.trilulilu.ro/ntv-culte-misa
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=trilulilu.ro
-
 ! https://twitter.com/andrewvijay/status/995297630371495941
 ! These Adguard Mobile procedural cosmetic filters are causing issues
 mobile.twitter.com#@#section[role="region"] > div > div[style^="padding-bottom"] > div[class] > div[class][-ext-has='div.rn-1uif7bo[dir="auto"]']
@@ -3488,8 +3485,8 @@ bing.com##+js(nosiif, logQueue, 10000)
 ||cdn.shopify.com/*assets/pixel.gif$image,redirect=1x1.gif,domain=metrovac.com,important
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/m1fzip/can_devs_please_unblock_this_legit_website/
+! https://github.com/uBlockOrigin/uAssets/issues/12046 cname breakage
 ! [badfilter] ||actonsoftware.com^$badfilter
-||actonsoftware.com^$3p
 
 ! watcho. com home page very slow loading
 @@||cdn.branch.io/branch-$script,xhr,domain=watcho.com
@@ -4098,7 +4095,8 @@ ilbianconero.com##.no-scroll:style(overflow:auto!important)
 @@||clj.valuecommerce.com/*/vcushion.min.js
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/r7ja04/
-||securegames.iwin.com/data/gtm.json$1p,xhr,redirect=noop.js
+! https://github.com/uBlockOrigin/uAssets/issues/12034
+@@||securegames.iwin.com/data/gtm.json$xhr,domain=securegames.iwin.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10731
 @@||googletagmanager.com/gtm.js$script,redirect-rule=googletagmanager.com/gtm.js,domain=midomi.com
@@ -4379,3 +4377,33 @@ cyberstumble.com##.td-animation-stack-type0-1:style(opacity:1 !important)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11959
 pearsonclinical.com##.aligner
+
+! https://www.tf1info.fr/politique/loi-anti-casseurs-sur-quels-textes-de-loi-s-appuie-edouard-philippe-et-que-disent-ils-exactement-2109497.html broken video
+@@||cdn.trustcommander.net/iab-tcfapi/tcfapi.js$script,domain=tf1info.fr
+@@||cdn.trustcommander.net/privacy/*/privacy$script,domain=tf1info.fr
+
+! liste ar https://github.com/uBlockOrigin/uAssets/issues/12033
+! [badfilter] *$xmlhttprequest,3p,domain=faselhd.top,badfilter
+! [badfilter] *$script,3p,domain=faselhd.top,badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/8629#issuecomment-1062033466
+*$image,domain=asfan.as.com,redirect-rule=1x1.gif
+
+! https://github.com/uBlockOrigin/uAssets/issues/12108
+#@##banner_ad
+
+! https://github.com/uBlockOrigin/uAssets/issues/12143
+! [badfilter] /adw.$domain=~adw.be|~adw.olsztyn.pl|~adw.org|~adw.org.pl|~valadoc.org,badfilter
+/adw.$domain=~adw.be|~adw.olsztyn.pl|~adw.org|~adw.org.pl|~valadoc.org|~adw.amsterdam.nl
+
+! mpsconline. gov.in breakage
+@@||mpsconline.gov.in^$ghide
+
+! https://github.com/uBlockOrigin/uAssets/issues/12118#issuecomment-1064221681
+*$popup,3p,domain=streamz.ws,badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/12159
+||booking.rm.dk/selvbooking/*/analytics/*$xhr,1p,redirect-rule=nooptext
+
+! https://github.com/uBlockOrigin/uAssets/issues/12179
+leboncoin.fr#@#div[class^="styles_ad__"]
