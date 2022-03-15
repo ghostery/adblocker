@@ -8,7 +8,6 @@
 /* tslint:disable quotemark */
 export default [
   "securepubads.g.doubleclick.net",
-  "quantcast.mgr.consensu.org",
   ".carte-gr.total.fr",
   "googlesyndication",
   "imasdk.googleapis",
@@ -39,6 +38,7 @@ export default [
   ".jp",
   ".ru",
   "cdn",
+  "mdw",
   "new",
   "pro",
   "web",
