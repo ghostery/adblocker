@@ -302,6 +302,12 @@ export class WebExtensionBlocker extends FiltersEngine {
   ): Promise<void> => {
     const promises: Promise<void>[] = [];
 
+    // Make sure we only listen to messages coming from our content-script
+    // based on the value of `action`.
+    if (msg.action !== 'getCosmeticsFilters') {
+      return;
+    }
+
     if (sender.tab === undefined) {
       throw new Error('required "sender.tab" information is not available');
     }
@@ -314,92 +320,88 @@ export class WebExtensionBlocker extends FiltersEngine {
       throw new Error('required "sender.frameId" information is not available');
     }
 
-    // Make sure we only listen to messages coming from our content-script
-    // based on the value of `action`.
-    if (msg.action === 'getCosmeticsFilters') {
-      // Extract hostname from sender's URL
-      const { url = '', frameId } = sender;
-      const parsed = parse(url);
-      const hostname = parsed.hostname || '';
-      const domain = parsed.domain || '';
+    // Extract hostname from sender's URL
+    const { url = '', frameId } = sender;
+    const parsed = parse(url);
+    const hostname = parsed.hostname || '';
+    const domain = parsed.domain || '';
 
-      // Once per tab/page load we inject base stylesheets. These are always
-      // the same for all frames of a given page because they do not depend on
-      // a particular domain and cannot be cancelled using unhide rules.
-      // Because of this, we specify `allFrames: true` when injecting them so
-      // that we do not need to perform this operation for sub-frames.
-      if (frameId === 0 && msg.lifecycle === 'start') {
-        const { active, styles } = this.getCosmeticsFilters({
-          domain,
-          hostname,
-          url,
+    // Once per tab/page load we inject base stylesheets. These are always
+    // the same for all frames of a given page because they do not depend on
+    // a particular domain and cannot be cancelled using unhide rules.
+    // Because of this, we specify `allFrames: true` when injecting them so
+    // that we do not need to perform this operation for sub-frames.
+    if (frameId === 0 && msg.lifecycle === 'start') {
+      const { active, styles } = this.getCosmeticsFilters({
+        domain,
+        hostname,
+        url,
 
-          classes: msg.classes,
-          hrefs: msg.hrefs,
-          ids: msg.ids,
+        classes: msg.classes,
+        hrefs: msg.hrefs,
+        ids: msg.ids,
 
-          // This needs to be done only once per tab
-          getBaseRules: true,
-          getInjectionRules: false,
-          getExtendedRules: false,
-          getRulesFromDOM: false,
-          getRulesFromHostname: false,
-        });
+        // This needs to be done only once per tab
+        getBaseRules: true,
+        getInjectionRules: false,
+        getExtendedRules: false,
+        getRulesFromDOM: false,
+        getRulesFromHostname: false,
+      });
 
-        if (active === false) {
-          return;
-        }
-
-        promises.push(
-          this.injectStylesWebExtension(browser, styles, {
-            tabId: sender.tab.id,
-            allFrames: true,
-          }),
-        );
+      if (active === false) {
+        return;
       }
 
-      // Separately, requests cosmetics which depend on the page it self
-      // (either because of the hostname or content of the DOM). Content script
-      // logic is responsible for returning information about lists of classes,
-      // ids and hrefs observed in the DOM. MutationObserver is also used to
-      // make sure we can react to changes.
-      {
-        const { active, styles, scripts, extended } = this.getCosmeticsFilters({
-          domain,
-          hostname,
-          url,
+      promises.push(
+        this.injectStylesWebExtension(browser, styles, {
+          tabId: sender.tab.id,
+          allFrames: true,
+        }),
+      );
+    }
 
-          classes: msg.classes,
-          hrefs: msg.hrefs,
-          ids: msg.ids,
+    // Separately, requests cosmetics which depend on the page it self
+    // (either because of the hostname or content of the DOM). Content script
+    // logic is responsible for returning information about lists of classes,
+    // ids and hrefs observed in the DOM. MutationObserver is also used to
+    // make sure we can react to changes.
+    {
+      const { active, styles, scripts, extended } = this.getCosmeticsFilters({
+        domain,
+        hostname,
+        url,
 
-          // This needs to be done only once per frame
-          getBaseRules: false,
-          getInjectionRules: msg.lifecycle === 'start',
-          getExtendedRules: msg.lifecycle === 'start',
-          getRulesFromHostname: msg.lifecycle === 'start',
+        classes: msg.classes,
+        hrefs: msg.hrefs,
+        ids: msg.ids,
 
-          // This will be done every time we get information about DOM mutation
-          getRulesFromDOM: msg.lifecycle === 'dom-update',
+        // This needs to be done only once per frame
+        getBaseRules: false,
+        getInjectionRules: msg.lifecycle === 'start',
+        getExtendedRules: msg.lifecycle === 'start',
+        getRulesFromHostname: msg.lifecycle === 'start',
+
+        // This will be done every time we get information about DOM mutation
+        getRulesFromDOM: msg.lifecycle === 'dom-update',
+      });
+
+      if (active === false) {
+        return;
+      }
+
+      promises.push(
+        this.injectStylesWebExtension(browser, styles, { tabId: sender.tab.id, frameId }),
+      );
+
+      // Inject scripts from content script
+      if (scripts.length !== 0) {
+        sendResponse({
+          active,
+          extended,
+          scripts,
+          styles: '',
         });
-
-        if (active === false) {
-          return;
-        }
-
-        promises.push(
-          this.injectStylesWebExtension(browser, styles, { tabId: sender.tab.id, frameId }),
-        );
-
-        // Inject scripts from content script
-        if (scripts.length !== 0) {
-          sendResponse({
-            active,
-            extended,
-            scripts,
-            styles: '',
-          });
-        }
       }
     }
 
