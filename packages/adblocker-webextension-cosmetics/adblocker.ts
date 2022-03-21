@@ -165,7 +165,7 @@ function updateExtended() {
 
 /**
  * Queue `elements` to be processed asynchronously in a batch way (for
- * efficiency).  This is important to not do more work than necessary, for
+ * efficiency). This is important to not do more work than necessary, for
  * example if the same set of nodes is updated multiple times in a raw on
  * user-interaction (e.g. a dropdown); this allows to only check these nodes
  * once, and to not block the UI.
