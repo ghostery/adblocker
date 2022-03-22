@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202203211931
+! Version: 202203221749
 ! Title: EasyPrivacy
-! Last modified: 21 Mar 2022 19:31 UTC
+! Last modified: 22 Mar 2022 17:49 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -2419,6 +2419,7 @@
 /in.php?*&referer=
 /in.php?p=
 /in.php?referer=
+/in/multy?*&event_id=
 /inboundAnalytics.
 /include/js/ga-
 /includes/analytics.
@@ -5789,11 +5790,9 @@ _mongo_stats/
 ! ||bounceexchange.com^
 ||briskeagle.io^
 ||briskpelican.io^
-! [dup] from peter-lowe/serverlist.txt
-! ||brontops.com^
+||brontops.com^
 ||bydst.com^
-! [dup] from peter-lowe/serverlist.txt
-! ||capturehighered.net^
+||capturehighered.net^
 ||click360.io^
 ||cloudwp.io^
 ! [dup] from peter-lowe/serverlist.txt
@@ -5803,8 +5802,7 @@ _mongo_stats/
 ! [dup] from peter-lowe/serverlist.txt
 ! ||crwdcntrl.net^
 ||cxt.ms^
-! [dup] from peter-lowe/serverlist.txt
-! ||cybba.solutions^
+||cybba.solutions^
 ||czx5eyk0exbhwp43ya.biz^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||demdex.net^
@@ -5868,8 +5866,7 @@ _mongo_stats/
 ||i218435.net^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||id5-sync.com^
-! [dup] from peter-lowe/serverlist.txt
-! ||idx.lat^
+||idx.lat^
 ||impactcdn.com^
 ||impactradius-event.com^
 ! [dup] from peter-lowe/serverlist.txt
@@ -5967,16 +5964,14 @@ _mongo_stats/
 ||v1sts.me^
 ||videoplayerhub.com^
 ||vkanalytics.net^
-! [dup] from peter-lowe/serverlist.txt
-! ||widgetbe.com^
+||widgetbe.com^
 ||wknd.ai^
 ||wmgroup.us^
 ||woodpeckerlog.com^
 ||z0uolej1qnxzub1.info^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||zdbb.net^
-! [dup] from peter-lowe/serverlist.txt
-! ||zenaps.com^
+||zenaps.com^
 ||zhctrack.net^
 ||zippyfrog.co^
 ||zononi.com^
@@ -11559,8 +11554,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||3p-udc.yahoo.com^
 ||51network.com^$third-party
 ||99widgets.com/counters/
-! [dup] from peter-lowe/serverlist.txt
-! ||9w2zed1szg.execute-api.us-east-1.amazonaws.com^
+||9w2zed1szg.execute-api.us-east-1.amazonaws.com^
 ||a.mobify.com^
 ||a2z.com/sping?
 ||aan.amazon.com^$third-party
@@ -11654,6 +11648,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||analytics.clickpathmedia.com^
 ||analytics.cmn.com^
 ||analytics.codigo.se^
+||analytics.contentexchange.me^
 ||analytics.convertlanguage.com^
 ||analytics.cynapse.com^
 ||analytics.datahc.com^
@@ -14822,6 +14817,8 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||zahodi-ka.ru^*/schet.cgi?
 ! Serbian
 ||contentexchange.me/static/tracker.js
+||hits.tf.rs^
+||w4m.rs/tracker.js
 ! Slovak
 ||stat.ringier.sk^
 ! Slovene
@@ -26689,11 +26686,10 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||cdn.cxense.com^$script,domain=bizjournals.com|bloombergquint.com|marketwatch.com
 @@||cdn.jsdelivr.net^*/fp.min.js$script,domain=cuevana2.io
 @@||cdn.optimizely.com/js/*.js$domain=compassion.com|creditsesame.com|freeshipping.com|heroku.com
-@@||cdn.segment.com/analytics-next/$domain=app.cryptotrader.tax|givingassistant.org
-@@||cdn.segment.com/analytics.js/$script,domain=app.cryptotrader.tax|fender.com|givingassistant.org|my.foxnews.com
-@@||cdn.segment.com/next-integrations/integrations/intercom/*/intercom.dynamic.js.gz$script,domain=app.cryptotrader.tax
-@@||cdn.segment.com/next-integrations/integrations/vendor/commons.$script,domain=app.cryptotrader.tax
-@@||cdn.segment.com/v1/projects/$domain=app.cryptotrader.tax|benchling.com|givingassistant.org
+@@||cdn.segment.com/analytics-next/
+@@||cdn.segment.com/analytics.js/$script,domain=app.cryptotrader.tax|fender.com|finerdesk.com|givingassistant.org|inxeption.io|my.foxnews.com
+@@||cdn.segment.com/next-integrations/integrations/
+@@||cdn.segment.com/v1/projects/
 @@||certona.net^*/scripts/resonance.js$script,domain=canadiantire.ca|finishline.com
 @@||chasecdn.com^*/@ccb-blueanalytics/$script,domain=chase.com
 @@||chat.conveyhs.com/chatadapter/clickstream/clickstream.js$script
@@ -26727,7 +26723,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||cvs.com/shop-assets/js/VisitorAPI.js$~third-party
 @@||d1igp3oop3iho5.cloudfront.net^*/zaius.js$script,domain=subscriptions.management
 @@||d1km2unb2600pw.cloudfront.net/assets/tracking-history-popup-$script,domain=collectplus.yodel.co.uk
-@@||d2wy8f7a9ursnm.cloudfront.net/v4/bugsnag.min.js$script,domain=einthusan.tv
+@@||d2wy8f7a9ursnm.cloudfront.net/v4/bugsnag.min.js$script,domain=einthusan.tv|tlk.io
 @@||d2wy8f7a9ursnm.cloudfront.net^$script,domain=staples.ca
 @@||d41.co/tags/ff-2.min.js$domain=ads.spotify.com
 @@||daan.dev/wp-content/*/caos-supports-google-analytics-$image,~third-party
