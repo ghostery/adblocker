@@ -44,6 +44,8 @@ jobs:
       - name: Create release
         run: |
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+          echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
+          echo "@cliqz:registry=https://registry.npmjs.org/" >> ~/.npmrc
           yarn release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
