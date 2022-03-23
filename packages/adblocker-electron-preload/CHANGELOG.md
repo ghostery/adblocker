@@ -1,3 +1,16 @@
+# v1.23.7 (Wed Mar 23 2022)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.179 to 0.0.180 [#2503](https://github.com/ghostery/adblocker/pull/2503) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.178 to 0.0.179 [#2473](https://github.com/ghostery/adblocker/pull/2473) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.23.5 (Mon Feb 07 2022)
 
 #### :nut_and_bolt: Dependencies

@@ -1,3 +1,15 @@
+# v1.23.7 (Wed Mar 23 2022)
+
+#### :nail_care: Polish
+
+- cosmetics: make sure we do not hide body or html elements [#2496](https://github.com/ghostery/adblocker/pull/2496) ([@remusao](https://github.com/remusao))
+
+#### Authors: 1
+
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.23.4 (Mon Jan 17 2022)
 
 #### :nut_and_bolt: Dependencies

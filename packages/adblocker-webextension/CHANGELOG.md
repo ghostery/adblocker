@@ -1,3 +1,15 @@
+# v1.23.7 (Wed Mar 23 2022)
+
+#### :bug: Bug Fix
+
+- Don't throw an error when receiving a message from popup [#2506](https://github.com/ghostery/adblocker/pull/2506) ([@private-face](https://github.com/private-face))
+
+#### Authors: 1
+
+- Vladimir Zhuravlev ([@private-face](https://github.com/private-face))
+
+---
+
 # v1.22.7 (Wed Sep 22 2021)
 
 #### :house: Internal
