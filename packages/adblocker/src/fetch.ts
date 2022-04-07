@@ -56,7 +56,6 @@ export const adsLists = [
   `${PREFIX}/easylist/easylist.txt`,
   `${PREFIX}/easylist/easylistgermany.txt`,
   `${PREFIX}/peter-lowe/serverlist.txt`,
-  `${PREFIX}/ublock-origin/annoyances.txt`,
   `${PREFIX}/ublock-origin/badware.txt`,
   `${PREFIX}/ublock-origin/filters.txt`,
   `${PREFIX}/ublock-origin/filters-2020.txt`,
@@ -72,7 +71,11 @@ export const adsAndTrackingLists = [
   `${PREFIX}/ublock-origin/privacy.txt`,
 ];
 
-export const fullLists = [...adsAndTrackingLists, `${PREFIX}/easylist/easylist-cookie.txt`];
+export const fullLists = [
+  ...adsAndTrackingLists,
+  `${PREFIX}/easylist/easylist-cookie.txt`,
+  `${PREFIX}/ublock-origin/annoyances.txt`,
+];
 
 /**
  * Fetch latest version of enabledByDefault blocking lists.
