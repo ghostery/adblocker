@@ -925,7 +925,7 @@ techadvisor.co.uk#@#.adsbygoogle
 ! https://www.hyundailongueuil.com/neufs/Hyundai-Elantra%20GT-2018.html
 ! https://www.complexekia.com/demonstrateurs/Kia-Soul-2018-id7101681.html
 ! [badfilter] ||d2cmedia.ca^$badfilter
-||d2cmedia.ca^$~image
+||d2cmedia.ca^$~image,~font
 
 ! https://forums.lanik.us/viewtopic.php?f=64&t=41563
 ! [badfilter] ||youbora.com^$3p,badfilter
@@ -2077,7 +2077,6 @@ pcgamer.com#@#.hawk-widget
 @@||google-analytics.com/ga.js$script,domain=bimi.jorudan.co.jp
 
 ! https://github.com/uBlockOrigin/uAssets/issues/707#issuecomment-565051652
-@@||static.telegraph.co.uk/telegraph-advertising/tmg-gpt.min.js$script,1p
 ! broken videos at telegraph.co.uk the videos are behind a paywall
 ! example https://www.telegraph.co.uk/news/2020/06/18/like-churchill-de-gaulle-1940-britain-france-united-against/
 @@||notice.sp-prod.net^$frame,domain=telegraph.co.uk
@@ -4263,7 +4262,7 @@ himovies.to#@#a[onclick]
 @@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=gamepro.de
 
 ! https://forums.lanik.us/viewtopic.php?f=64&t=40469
-@@||google.com^*recaptcha/$frame
+@@||google.com^*recaptcha/$frame,script
 @@||gstatic.com/recaptcha/*$css
 
 ! breaking links https://kimcartoon.li/Cartoon/Doomlands
@@ -4438,3 +4437,17 @@ united.no#@#.page-ads
 
 ! si.com breakage
 si.com#@#.is-below-header-ad
+
+! https://github.com/uBlockOrigin/uAssets/issues/12498
+@@||edge.permutive.app^$script,domain=watch.globaltv.com
+@@||api.permutive.com/v*/geoip$xhr,domain=watch.globaltv.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/12615#issuecomment-1090002131
+@@||googletagmanager.com/gtm.js$script,domain=oakandfort.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/12636
+@@/1.gif?$image,1p,domain=kanjiku.net
+@@/2.gif?$image,1p,domain=kanjiku.net
+
+! https://github.com/uBlockOrigin/uAssets/issues/12642
+@@||dealersite4.d2cmedia.ca^$domain=schlueterhyundai.com
