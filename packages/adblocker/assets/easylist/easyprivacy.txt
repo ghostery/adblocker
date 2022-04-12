@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202204081900
+! Version: 202204111702
 ! Title: EasyPrivacy
-! Last modified: 08 Apr 2022 19:00 UTC
+! Last modified: 11 Apr 2022 17:02 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -1127,6 +1127,7 @@
 /ccm_sj?
 /cct?
 /cdcVanity?
+/cdn-cgi/beacon/*
 /cdn-cgi/bm/cv/*
 /cdn-cgi/ping?$image
 /cdn-cgi/rum?
@@ -1375,6 +1376,7 @@
 /collector/pageview
 /collector?report=
 /collectStats;
+/collectsysteminfo?
 /com_joomla-visites/*
 /com_joomlawatch/*
 /common/analytics.js
@@ -1683,7 +1685,7 @@
 /DynamicAnalytics.
 /dynamictag.
 /dynamicyield/*
-/dynatrace-$domain=~dynatrace.com|~github.com
+/dynatrace-$~image,domain=~dynatrace.com|~github.com|~github.io
 /dynaTraceMonitor^
 /dynimpression?rkey=
 /e.gif?
@@ -4927,7 +4929,7 @@
 /vglnk.js
 /vgwort/*
 /video-ga.js
-/video.counters.js
+/video.counters.
 /video/tracking.js
 /video_count.php?
 /videoanalytic/*
@@ -5552,6 +5554,11 @@ cgi-bin/counter
 _ad_impression.
 ! Pinterest
 /_/trace/trace/*
+! real time web analytics
+/rrweb-script.
+/rrweb.js
+/rrweb.min.js
+/rrweb/*
 ! DNS checks
 /DNSCheck.js
 /DNSChecker.js
@@ -5822,6 +5829,7 @@ _mongo_stats/
 ||dm-event.net^
 ||dmpxs.com^
 ||dratingmaject.com^
+||dynatrace-managed.com^
 ||e1e.io^
 ||efreecode.com^
 ||emycewiw.xyz^
@@ -5969,6 +5977,7 @@ _mongo_stats/
 ||trkbc.com^
 ||tru.am^
 ||truffle.bid^
+||trx-hub.com^
 ||tryzens-analytics.com^
 ||turboeagle.co^
 ||turbolion.io^
@@ -7077,6 +7086,7 @@ _mongo_stats/
 ||hotjar.io^$third-party
 ||hotlog.ru^$third-party
 ||hscta.net^$third-party
+||hsleadflows.net^$third-party
 ||hubvisor.io^$third-party
 ||hudb.pl^$third-party
 ||humanclick.com^$third-party
@@ -11442,6 +11452,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||relap.io^$third-party
 ||retag.xyz^$third-party
 ||rnet.plus^$third-party
+||roistat.com^$third-party
 ||ru.net^$third-party
 ||rutarget.ru^$third-party
 ||sarov.ws^$third-party
@@ -12005,7 +12016,6 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||client.tahono.com^$third-party
 ||clinch.co/a_js/client_pixels/
 ||clipsyndicate.com/cs_api/cliplog?
-||cllctr.roistat.com^
 ||cloudapp.net/l/
 ||clouderrorreporting.googleapis.com^
 ||cloudflare.com/cdn-cgi/trace$third-party,domain=~isbgpsafeyet.com|~wyndhamdestinations.com
@@ -12084,7 +12094,6 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||collector.contentexchange.me^$third-party
 ||collector.getyourguide.com^
 ||collector.mazeberry.com^
-||collector.roistat.com^
 ||collector.sspinc.io^
 ||comeon.com/tracking.php
 ||comic-rocket.com/metrics.js
@@ -14829,12 +14838,14 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||top.elec.ru^
 ||track.recreativ.ru^
 ||track.spacepush.ru^
+||tracker.comagic.ru^
 ||tracking.gpm-rtv.ru^
 ||tracking.retailrocket.net^
 ||traktor.ru^*/counter.php?
 ||ulogin.ru/js/stats.js
 ||upstats.yadro.ru^
 ||uptolike.com/widgets/*/imp?
+||visitor-microservice.ext.p-a.im^
 ||webtrack.biz^$third-party
 ||xn--e1aaipcdgnfsn.su^*/counter.php
 ||yandeg.ru/count/
@@ -15551,6 +15562,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||qz.com/log
 ||r.bbci.co.uk^
 ||r.my.com^
+||ranker.com/api/tr?
 ||rankhit.china.com^
 ||realestate.com.au^*/p.js
 ||realitytvworld.com/images/pixel.gif
@@ -25684,6 +25696,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 ||fc.vodafone.de^
 ||froglytics.eventfrog.ch^
 ||geoip.finanzen.net^
+||gmx.net/monitoring/
 ||golem.de/staticrl/scripts/golem_cpxl_
 ||hartgeld.com/cgi-sys/Count.cgi?
 ||heise.de/ivw-bin/ivw/cp/
@@ -25706,6 +25719,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 ||px.derstandard.at^
 ||rem-track.bild.de^
 ||responder.wt.heise.de^
+||ricardo.ch/api/browser-statistics/
 ||rt.bunte.de^
 ||schnaeppchenfuchs.com/js/default-
 ||squirrel.cividi.ch^
@@ -26262,12 +26276,12 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 ||beacon.watch.impress.co.jp^
 ||bookoffonline.co.jp/files/inc_js/ac/
 ||bookoffonline.co.jp/files/tracking/
-||bookoffonline.co.jp/mbfiles/tracking/
 ||carview.co.jp/include_api/log/
 ||contx.net/collect.js
 ||count.upc.rakuten.co.jp^
 ||dmm.com/analytics/
 ||dmm.com/imp?
+||dxlive.com/js/dtrace.js
 ||fensi.plus^*/tracking/
 ||gizmodo.jp/api/SurveyCountCollection?
 ||goo.ne.jp^*/vltracedmd.js
@@ -26689,7 +26703,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||api.ipify.org^$script,domain=right-on.co.jp
 @@||api.ipify.org^$xmlhttprequest,domain=247sports.com|account.pennytel.com.au|equinoxplus.com|speedcheck.ky
 @@||api.ipinfodb.com^$xmlhttprequest,domain=management30.com
-@@||api.ipstack.com/check$domain=blockfi.com|withpersona.com
+@@||api.ipstack.com/check$domain=blockfi.com|get-in.com|withpersona.com
 @@||api.perfops.net^$script,xmlhttprequest,domain=cdnperf.com|dnsperf.com
 @@||appboycdn.com^*/appboy.min.js$script,domain=bakkt.com
 @@||appspot.com/static/js/tracker/$script,domain=bugs.avm99963.com
@@ -26944,6 +26958,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||pixel.quantserve.com/api/segments.xml?a=$domain=associatedcontent.com|cbs.com|cbsatlanta.com|centurylink.net|comedy.com|eurweb.com|fox5vegas.com|foxcarolina.com|grabnetworks.com|kctv5.com|kpho.com|kptv.com|theimproper.com|thenewsroom.com|tv.com|tvguide.com|wfsb.com|wnem.com|wsmv.com
 @@||pixelpressmedia.com/wp-content/plugins/duracelltomi-google-tag-manager/$script,domain=pixelpressmedia.com
 @@||plantyn.com/optiext/optiextension.dll$~third-party
+@@||plausible.io/js/plausible.js$script,domain=sammobile.com
 @@||playcanvas.com.*/keen.min.js
 @@||player.ooyala.com^*/analytics-plugin/$script,domain=formula1.com|nintendo.com
 @@||player.sundaysky.com^$subdocument
@@ -26972,7 +26987,6 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||s.thebrighttag.com/tag?site=$domain=sephora.com
 @@||s.yimg.com^*/advertisement/sponsor/promo/ad.png$image,domain=news.yahoo.com
 @@||sahibinden.com/assets/analytics*.js$script
-@@||sammobile.com/wp-content/themes/sammobile-6/assets/js/newrelic.js$~third-party
 @@||savjee.be/uploads/2020-10-27-effect-adblockers-on-google-analytics-vs-plausible/$~third-party
 @@||scorecardresearch.com/c2/plugins/streamsense_plugin_html5.js
 @@||scorecardresearch.com/c2/plugins/streamsense_plugin_theplatform.js
