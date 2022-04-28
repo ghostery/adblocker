@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron';
-import fetch from 'node-fetch';
+import fetch from 'cross-fetch';
 import { readFileSync, writeFileSync } from 'fs';
 
 import { ElectronBlocker, fullLists, Request } from '@cliqz/adblocker-electron';
@@ -71,8 +71,6 @@ async function createWindow() {
     mainWindow = null;
   });
 }
-
-app.allowRendererProcessReuse = false;
 
 app.on('ready', createWindow);
 
