@@ -2486,7 +2486,8 @@ txxx.*##.video-content > div > div + div + div:has-text(/Advertisement|Sponsored
 txxx.*##.video-content > div[class] > div.text > a[href="#"]:upward(2)
 txxx.*##.video-content > div[class]:first-child > div > div[class]:first-child:has(> div:not([class]) > div[id][class])
 txxx.*##.page-video > div.video-videos-slider ~ div[class]:matches-css(justify-content: center)
-txxx.*##.video-slider
+txxx.*##.video-videos-slider
+txxx.*##.video-content > div + div:last-child
 *$frame,3p,denyallow=google.com|gstatic.com,domain=txxx.*
 *$popunder,3p,domain=txxx.*
 ||easyjetset.online^$3p
@@ -2510,7 +2511,7 @@ upornia.*##.videoplayer-wrapper + div > div[class]:only-child
 upornia.*##.app-banners
 upornia.*##.video-ad-videos + div.aa_label
 upornia.*##div[class$="related"] + div.aa_label
-upornia.*##.video-slider
+upornia.*##.video-videos-slider
 upornia.*##.aa_label + div:not([class])
 upornia.*##.video-videos-slider + .aa_label
 pornzog.com###ntv_a
@@ -4756,8 +4757,7 @@ megaup.net##+js(nano-sib, display())
 megaup.net##+js(ra, href|target, a[href^="https://tm-offers.gamingadult.com/"])
 @@||megaup.net/*.gif$image,1p
 ! megaup.net##[src]:not([alt]):style(width: 10.2% !important)
-megaup.net##.metaRedirectWrapperBottomAds:style(opacity: 0 !important;)
-megaup.net##.metaRedirectWrapperBottomAds:upward(body):style(overflow: hidden !important)
+megaup.net##.metaRedirectWrapperBottomAds > div:style(opacity: 0 !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1850
 aquipelis.*##+js(aopw, smrtSB)
@@ -8229,6 +8229,7 @@ sp-today.com##+js(set, isAdBlockActive, false)
 ! https://github.com/uBlockOrigin/uAssets/issues/4075
 *$script,3p,denyallow=disqus.com|jsdelivr.net|jwpcdn.com|fastly.net|fastlylb.net|jquery.com|hwcdn.net|recaptcha.net|cloudflare.com|cloudflare.net|google.com|googleapis.com|gstatic.com,domain=downloadhub.*
 downloadhub.*##.alignnone
+||i.imgur.com$domain=downloadhub.ltd
 ||makuzeko.xyz^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3646
@@ -12409,7 +12410,7 @@ movieddl.to##+js(acis, Math, zfgloaded)
 ! https://github.com/easylist/easylist/pull/10399
 @@||upvid.*^$ghide
 upvid.*##+js(nowoif)
-upvid.*##+js(acis, JSON.parse, break;case $.)
+upvid.*##+js(acis, parseInt, break;case $.)
 *$3p,denyallow=addtoany.com|bootstrapcdn.com|cloudflare.com|google.com|googleapis.com|gstatic.com|hwcdn.net|upvid.co|upvid.org,domain=upvid.*
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5340
@@ -20006,6 +20007,7 @@ imgalor.xyz,imgjut.buzz,imgkane.buzz,imgkia.*,imgkoka.buzz,imgkuiw.xyz,imglina.x
 ! https://www.reddit.com/r/uBlockOrigin/comments/fqjo82/pandora_just_started_detecting_ad_blocker_wont/
 ! https://github.com/uBlockOrigin/uAssets/issues/12733
 @@||pandora.com/web-version/*.json$xhr,1p
+*$script,redirect-rule=noopjs,domain=pandora.com
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/52633
 zuketcreation.net##+js(nosiif, visibility, 1000)
@@ -20329,8 +20331,8 @@ techdracula.com##.adsbygoogle
 /[0-9a-f]{32}\/invoke\.js/$script,3p
 /^https?:\/\/(?:www\.|[0-9a-z]{7,10}\.)?[-0-9a-z]{5,}\.com\/(?:[0-9a-f]{2}\/){2,3}[0-9a-f]{32}\.js/$script,xhr,3p
 ! https://github.com/easylist/easylist/issues/6476
-/^https?:\/\/(?:[a-z]{2}\.)?[0-9a-z]{7,16}\.com\/[a-z](?=[a-z]{0,25}[0-9A-Z])[0-9a-zA-Z]{3,26}\/(?:[1-4]\d{4}|[3-9]\d{3})(?:\?(param)?_\d?=\d+)?$/$frame,script,xhr,popup,3p,match-case
-/^https?:\/\/(?:[a-z]{2}\.)?[0-9a-z]{7,16}\.website\/[a-z](?=[a-z]{0,25}[0-9A-Z])[0-9a-zA-Z]{3,26}\/(?:[1-4]\d{4}|[3-9]\d{3})(?:\?(param)?_\d?=\d+)?$/$frame,script,xhr,popup,3p,match-case
+/^https?:\/\/(?:[a-z]{2}\.)?[0-9a-z]{7,16}\.com\/[a-z](?=[a-z]{0,25}[0-9A-Z])[0-9a-zA-Z]{3,26}\/(?:[1-4]\d{4}|[3-9]\d{3})(?:\?_=\d+)?$/$frame,script,xhr,popup,3p,match-case
+/^https?:\/\/(?:[a-z]{2}\.)?[0-9a-z]{7,16}\.website\/[a-z](?=[a-z]{0,25}[0-9A-Z])[0-9a-zA-Z]{3,26}\/(?:[1-4]\d{4}|[3-9]\d{3})(?:\?_=\d+)?$/$frame,script,xhr,popup,3p,match-case
 ! https://github.com/easylist/easylist/issues/6471
 ! [badfilter] /^https?:\/\/js.*\/t\/[0-9]{3}\/[0-9]{3}\/[a-z0-9]{7,8}\.js/$script,3p,badfilter
 /\/t\/[0-9]{3}\/[0-9]{3}\/a[0-9]{4,9}\.js$/$script
