@@ -722,7 +722,6 @@ tastycookery.com##+js(aeld, DOMContentLoaded, .js-popup-adblock)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3935
 @@||resdz.com^$ghide
-/ad-blocking-advisor/*
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3940
 airlinercafe.com##+js(acis, jQuery, ads)
@@ -6372,3 +6371,33 @@ rawneix.in##+js(acis, document.ondragstart)
 rawneix.in##+js(acis, document.getElementsByTagName, 'unselectable')
 rawneix.in##body:style(cursor: auto !important)
 rawneix.in##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/12971 anti right click
+myoplay.club##+js(acis, document.oncontextmenu)
+
+! pvstreams.com anti right click
+pvstreams.com##+js(acis, document.oncontextmenu)
+pvstreams.com##+js(acis, document.onkeydown)
+pvstreams.com##+js(acis, document.onselectstart)
+pvstreams.com##+js(acis, jQuery, contextmenu)
+pvstreams.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/ud623s/
+@@||chronicle.com/dg/default/rest/$1p,xhr
+chronicle.com##.ArticleFullBleedLeadPage-summary
+chronicle.com##.ArticlePage-summary
+chronicle.com##[data-content-body]:style(height:initial!important;visibility:initial!important;overflow:initial!important;opacity:initial!important)
+
+! https://github.com/uBlockOrigin/uAssets/issues/12986
+ggwash.org##+js(set, Object.prototype.bgOverlay, noopFunc)
+ggwash.org##+js(set, Object.prototype.fixedContentPos, noopFunc)
+
+! https://github.com/uBlockOrigin/uAssets/issues/12989
+news.ntv.co.jp##+js(set, document.oncontextmenu, trueFunc)
+www.ntv.co.jp##+js(aeld, contextmenu, preventDefault)
+
+! https://github.com/uBlockOrigin/uAssets/issues/12991
+umk.co.jp##+js(ra, oncontextmenu, body)
+
+! https://github.com/uBlockOrigin/uAssets/issues/12992
+bpcj.or.jp##+js(acis, document.oncontextmenu)

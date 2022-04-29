@@ -893,7 +893,7 @@ embedstream.me##body > .position-absolute
 embedstream.me###aff-click
 ! https://www.reddit.com/r/uBlockOrigin/comments/qz4mw1/
 ! https://github.com/uBlockOrigin/uAssets/issues/12966
-||rtsts.me^$image,redirect-rule=1x1.gif,domain=embedstream.me
+||rtsts.me^$image,redirect-rule=1x1.gif
 @@||embedstream.me/cash.min.js$script,1p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/73375
@@ -1234,9 +1234,8 @@ afilmyhouse.blogspot.com##+js(acis, Math, break;case $.)
 hitmovies4u.com##+js(acis, parseInt, break;case $.)
 hitmovies4u.com##+js(ra, onclick, a.thumb.mvi-cover)
 cinema.cimatna.com,filmywap.*,filmyzilla2021.xyz,filmy-zilla.co.in,neomovies.net,pagalworld.kim,sharkfish.xyz##^script:has-text(break;case $.)
-hindilinks4u.*##+js(acis, JSON.parse, break;case $.)
-hindilinks4u.*##+js(acis, Math, zfgloaded)
 ||gracaiko.net^
+hindilinks4u.*##+js(acis, Math, zfgloaded)
 hindilinks4u.to##.btn.stream-hd
 uplinkto.*##+js(aost, Math.random, /\st\.[a-zA-Z]*\s/)
 ||shortlinkto.*^$csp=default-src 'self' *.favicon.cc *.google.com *.gstatic.com *.googleapis.com
@@ -4728,11 +4727,13 @@ enagato.com##+js(aopr, open)
 enagato.com##+js(set, blurred, false)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/91636
-fapnado.com##+js(acis, document.querySelectorAll, popMagic)
-fapnado.com###list_videos_related_videos > center
-fapnado.com###pause-ads
-fapnado.com##[class^="spot"]
-||fapnado.com/nb/
+! https://github.com/AdguardTeam/AdguardFilters/issues/116735
+fapnado.*##+js(acis, Math.floor, ExoLoader)
+fapnado.*###list_videos_related_videos > center
+fapnado.*###pause-ads
+fapnado.*##[class^="spot"]
+/zdoink/*$script
+||oi.fapnado.xxx^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9800
 pogolinks.*##+js(nostif, showModal)
@@ -4760,6 +4761,8 @@ pclicious.net###text-3
 85tube.com##+js(acis, document.querySelectorAll, popMagic)
 85tube.com##+js(aopw, _pop)
 85tube.com##+js(set, flashvars.protect_block, '')
+85tube.com##+js(set, console.clear, noopFunc)
+||cdncontentstorage.com/rtbfeed.php
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/93533
 pastebin.com##div[style]:not([class]):not([id]) > .adsbyvli:first-child:upward(1)
@@ -6787,8 +6790,16 @@ glotorrents.fr-proxy.com,glotorrents.theproxy.ws##+js(aopr, String.prototype.cha
 mikaraw.com##div[style*="width: 350px"][style*="height: 250px"]
 ||cdn.fedsy.xyz/app.js
 
-! https://github.com/uBlockOrigin/uAssets/issues/10649
+! https://github.com/uBlockOrigin/uAssets/issues/12971
 myoplay.club##+js(acis, parseInt, break;case $.)
+tutele.sx##+js(aopr, Overlayer)
+tutele.sx##+js(aopw, _pop)
+tutele.sx##+js(nostif, "admc")
+tutele.sx##^script[data-cfasync]:has-text(h=decodeURIComponent)
+/script/nasu.js$3p
+||vrqsvrnjrhdmek.com^
+||nndkukagmos.com^
+||nvmjdpbjgrh.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10650
 loticon.xyz##+js(acis, document.getElementById, 'OK')
@@ -7224,8 +7235,10 @@ mundotec.pro##+js(nano-sib, seconds)
 ! https://github.com/uBlockOrigin/uAssets/issues/10912
 epainfo.pl##+js(acis, document.addEventListener, adsBlocked)
 
-! freedownloadvideo.net anti-adb
-freedownloadvideo.net##+js(acis, eval, replace)
+! https://www.reddit.com/r/uBlockOrigin/comments/ucsg1g/adblock_detected_wont_allow_use/
+! https://github.com/uBlockOrigin/uAssets/issues/12980
+freedownloadvideo.net##+js(no-xhr-if, googlesyndication)
+freedownloadvideo.net##+js(aeld, DOMContentLoaded, adsBlocked)
 freedownloadvideo.net##a[href^="https://www.videoproc.com/"]:upward(1)
 
 ! raky. in antiadb
