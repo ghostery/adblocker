@@ -489,6 +489,8 @@ omr.com##body:style(overflow: auto !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3553
 indiatimes.com##+js(aeld, copy)
+! https://github.com/uBlockOrigin/uAssets/issues/4151#issuecomment-1116715077
+economictimes.indiatimes.com##+js(aeld, mouseout)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/911#issuecomment-423771909
 ||adsrt.com/assets/js/particles.min.js$script
@@ -3933,10 +3935,6 @@ clipartmax.com##+js(aopw, document.oncontextmenu)
 ! https://github.com/uBlockOrigin/uAssets/issues/7867
 anauk.net##+js(ra, oncontextmenu|onselectstart|onselect|ondragstart|ondrag, body)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/63020
-miniroyale2.io##+js(nofab)
-miniroyale2.io###miniroyale2-io_728x90
-
 ! https://github.com/uBlockOrigin/uAssets/issues/7871
 memorialrecord.jp##+js(aopw, document.oncontextmenu)
 memorialrecord.jp##+js(aopw, document.onselectstart)
@@ -5203,8 +5201,13 @@ televisiongratishd.com##+js(set, document.onkeydown, null)
 televisiongratishd.com##+js(set, document.onkeypress, null)
 
 ! renditepassive. net anti right click / select / drag
-renditepassive.net##+js(acis, disableSelection, reEnable)
+renditepassive.net##+js(set, document.oncontextmenu, '')
+renditepassive.net##+js(set, document.onselectstart, '')
+renditepassive.net##+js(set, document.onkeydown, '')
+renditepassive.net##+js(set, document.onmousedown, '')
+renditepassive.net##+js(set, document.onclick, '')
 renditepassive.net##+js(acis, document.ondragstart)
+renditepassive.net##+js(aopr, onload)
 
 ! onlinecoursebay. com anti right click / select / f keys
 onlinecoursebay.com##+js(aeld, , mdp)
@@ -5635,6 +5638,9 @@ blog.csdn.net##.hljs-button.signin
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10039
 cda-hd.cc,hqq.to##+js(set, document.oncontextmenu, null)
+hqq.to##+js(set, document.onkeydown, trueFunc)
+hqq.to##+js(nostif, debugger)
+hqq.to##+js(set, console.clear, undefined)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10040
 blogpascher.com##.CampaignFullscreen__bravoLayer
@@ -6056,6 +6062,8 @@ visefierbinti.ro##style:has-text(@media print):remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/3068
 pornhub.*##+js(rc, hasAdAlert, header)
 pornhub.*###js-abContainterMain
+! interstitial page
+pornhub.*##+js(cookie-remover, views)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11762
 grandoldteam.com##+js(acis, $, test)
@@ -6401,3 +6409,36 @@ umk.co.jp##+js(ra, oncontextmenu, body)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/12992
 bpcj.or.jp##+js(acis, document.oncontextmenu)
+
+! https://fmovies.to/series/law-order-lxnqm/4-4 clear console
+videovard.*##+js(set, console.clear, undefined)
+
+! https://github.com/uBlockOrigin/uAssets/issues/13037
+@@||ruyamanga.com^$ghide
+
+! https://github.com/uBlockOrigin/uAssets/pull/13040
+gmarket.co.kr##+js(set, document.oncontextmenu, noopFunc)
+gmarket.co.kr##+js(set, document.onmousedown, noopFunc)
+
+! https://digital.elmercurio.com/2022/05/02/A/SN44A2B9 private mode detection
+||digital.elmercurio.com/assets/js/detectPrivateMode.js$script,1p
+
+! https://www.thetodaypost.com/365-days-2020-hindi-dubbed/ anti right click + dev tools
+thetodaypost.com##+js(set, document.oncontextmenu, trueFunc)
+thetodaypost.com##+js(set, document.onkeydown, trueFunc)
+thetodaypost.com##+js(set, document.onselectstart, trueFunc)
+dlmovies.link##+js(acis, console.clear, contextmenu)
+
+! https://github.com/uBlockOrigin/uAssets/issues/13066
+celtadigital.com##+js(aeld, contextmenu)
+celtadigital.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://ask4movie.me/sonic-the-hedgehog-2-2022/ anti right click + devtools
+ask4movie.*##+js(ra, oncontextmenu, html)
+ask4movie.*##+js(set, console.dir, noopFunc)
+ask4movie.*##+js(set, navigator.userAgent, '')
+cinegrabber.com##+js(set, devtoolIsOpening, noopFunc)
+
+! revenue. land anti select, right click
+revenue.land##+js(aopr, nocontext)
+revenue.land##+js(acis, disableEnterKey)
