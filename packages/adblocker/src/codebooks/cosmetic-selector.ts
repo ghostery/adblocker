@@ -7,7 +7,6 @@
  */
 /* tslint:disable quotemark */
 export default [
-  "div[style=\"position: absolute; inset: 0px; overflow: hidden; z-index: 160; background: transparent none repeat scroll 0% 0%; display: block;\"]",
   "div[style=\"position: fixed; display: block; width: 100%; height: 100%; inset: 0px; background-color: rgba(0, 0, 0, 0); z-index: 300000;\"]",
   ":not([style^=\"position: absolute; left: -5000px\"])",
   "acis, document.querySelectorAll, popMagic",
@@ -17,7 +16,6 @@ export default [
   "addEventListener, google_ad_client",
   "paid.outbrain.com/network/redir?\"]",
   "acis, document.addEventListener, ",
-  "acis, disableSelection, reEnable",
   "^script:has-text(break;case $.)",
   "acis, document.getElementById, ",
   "acis, JSON.parse, break;case $.",
@@ -30,6 +28,7 @@ export default [
   "document.onselectstart",
   "aeld, , break;case $.",
   "set, blurred, false",
+  "aeld, DOMContentLo",
   "[target=\"_blank\"]",
   "[href^=\"https://",
   "disableSelection",
@@ -104,6 +103,7 @@ export default [
   "frame",
   "modal",
   "popup",
+  "promo",
   "sense",
   "set, ",
   "width",
@@ -127,7 +127,6 @@ export default [
   "wrap",
   "www.",
   " > ",
-  "250",
   "age",
   "box",
   "Box",
@@ -194,6 +193,7 @@ export default [
   "st",
   "t_",
   "t-",
+  "te",
   "un",
   " ",
   "_",
