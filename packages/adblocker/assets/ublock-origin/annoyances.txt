@@ -5819,8 +5819,9 @@ zwei-euro.com##+js(nostif, Delay)
 yoyofilmeys.*##+js(acis, document.oncontextmenu)
 
 ! voe right click other keys
-voe.sx##+js(aeld, /keydown|keyup/, keyCode)
-voe.sx##+js(aeld, contextmenu)
+voe.sx,voe-unblock.com##+js(aeld, /keydown|keyup/, keyCode)
+voe.sx,voe-unblock.com##+js(aeld, contextmenu)
+voe-unblock.com##+js(acis, console.clear)
 
 ! wpking. in f-keys
 wpking.in##+js(aeld, , Key)
@@ -6006,7 +6007,7 @@ atlas-geografic.net##+js(aopw, disableEnterKey)
 atlas-geografic.net##+js(aopw, document.ondragstart)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11517
-funnygames.eu##.is-blocked
+funnygames.*##.is-blocked
 
 ! farm-ro.desigusxpro. com clipboard manipulation
 farm-ro.desigusxpro.com##+js(aopr, document.oncopy)
@@ -6442,3 +6443,68 @@ cinegrabber.com##+js(set, devtoolIsOpening, noopFunc)
 ! revenue. land anti select, right click
 revenue.land##+js(aopr, nocontext)
 revenue.land##+js(acis, disableEnterKey)
+
+! https://github.com/uBlockOrigin/uAssets/issues/13096 clear console
+player.tabooporns.com##+js(set, console.clear, undefined)
+
+! https://github.com/uBlockOrigin/uAssets/issues/13094
+photopea.com##+js(no-fetch-if, /googlesyndication|uniconsent/)
+photopea.com##+js(set, console.clear, noopFunc)
+
+! https://github.com/uBlockOrigin/uAssets/issues/13092
+web.skype.com##[data-text-as-pseudo-element*=" push "]:upward([role]):upward([role])
+web.skype.com##.noFocusOutline > div > div > div > div > div[style^="position: relative; display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; overflow: hidden; align-items: stretch; align-self: stretch; background-color"][style$="border-style: solid;"]
+
+! http://dubznetwork.com/meet/racing/formula-1-miami-grand-prix-2022/ anti keydown
+dubznetwork.com##+js(acis, document.onkeypress)
+dubznetwork.com##+js(acis, jQuery, keydown)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/117803 clear console
+justswallows.net##+js(set, console.clear, undefined)
+
+! light.gg soft anti-adb
+light.gg##.items-right-square
+light.gg##.remove-turtles
+
+! sdewery. me anti right click, drag, f-keys
+sdewery.me##+js(aopw, document.ondragstart)
+sdewery.me##+js(aopw, disableEnterKey)
+sdewery.me##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important;-moz-user-select: text !important;-ms-user-select: text !important;user-select: text !important;)
+
+! convenienza. com anti select
+convenienza.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/118194
+panda-novel.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/13168 clear console
+layarkacaxxi.icu##+js(set, devtoolIsOpening, undefined)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/118407
+cdramalove.com##+js(acis, document.oncontextmenu)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/uo7w9g/clicking_on_the_play_button_of_the_video/ anti right click
+fucktube4k.com##+js(acis, document.addEventListener, contextmenu)
+
+! http://animevietsub.tv/phim/spy-x-family-a4402/tap-01-83381.html anti devtools
+||animevietsub.tv/statics/default/js/detect.dev.js$script
+
+! https://www.ssphim.net/p/spy-x-family-tap-1 anti right click
+ssphim.net##+js(acis, $, contextmenu)
+ssphim.net##+js(acis, document.onkeydown)
+
+! e-words.jp anti-adb
+e-words.jp###forvisitors
+
+! bigdatauni. com anti select, f-keys, print, snow
+/wp-content/plugins/wp-snow/*
+bigdatauni.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+bigdatauni.com##+js(acis, disableSelection, reEnable)
+bigdatauni.com##+js(acis, document.ondragstart)
+bigdatauni.com##style:has-text(@media print):remove()
+
+! https://github.com/uBlockOrigin/uAssets/issues/13228
+colegiosconcertados.info##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+colegiosconcertados.info##+js(acis, disableSelection, reEnable)
+colegiosconcertados.info##+js(acis, document.ondragstart)
+colegiosconcertados.info##style:has-text(@media print):remove()

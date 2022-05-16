@@ -1843,9 +1843,6 @@ twitter.com#@#article[role="article"]:has-text(Promoted)
 ! https://forums.lanik.us/viewtopic.php?f=64&t=43671&p=150291#p150286
 ||farnell.com/*tracking.js$script,1p,redirect=noopjs
 
-! https://www.reddit.com/r/uBlockOrigin/comments/dfjjbz/kimcartoon_bookmarks_dont_work_with_ublock_origin/
-@@||kimcartoon.to/Bookmark/$xhr,1p
-
 ! https://www.reddit.com/r/uBlockOrigin/comments/dg0679/load_more_comments_not_working/
 @@||x.kinja-static.com/assets/packaged-js/trackers$script
 
@@ -1864,9 +1861,6 @@ twitter.com#@#article[role="article"]:has-text(Promoted)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/diaoj6/comments_no_longer_loading_on_masslivecom/f3umxm9/?context=8&depth=9
 @@||viafoura.co^$domain=masslive.com
-
-! https://github.com/uBlockOrigin/uAssets/issues/6443
-@@||xtool.ru/js/analyze.js$script,1p
 
 ! https://github.com/gorhill/uBO-Extra/issues/119#issuecomment-543469244
 */videoplayback?expire$media,redirect=noopmp3-0.1s,domain=webmd.com
@@ -1938,9 +1932,6 @@ los40.com###adunit
 
 ! https://forums.lanik.us/viewtopic.php?f=64&p=150848#p150848
 @@||safecurr.g2afse.com/click?pid=*&offer_id$popup
-
-! https://github.com/NanoMeow/QuickReports/issues/2191
-@@||brid.tv/player/build/plugins/prebid/$script,domain=realhousemoms.com
 
 ! https://github.com/NanoMeow/QuickReports/issues/2199
 @@||tvtime.com/ga-assets/*$1p
@@ -2636,13 +2627,14 @@ order-order.com#@#.tag-sponsored
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/fini9h/subtitles_not_showing_up_on_solarmovieto/
 @@||fmovies.to/subtitles/*$xhr
-@@||ffmovies.ru/subtitles/*$xhr
 
 ! https://github.com/NanoMeow/QuickReports/issues/3925
 @@||googletagmanager.com/gtm.js$script,domain=movistar.es
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7454
-@@||ssl.kaptcha.com/collect/sdk$script,domain=cb2.com
+! https://github.com/uBlockOrigin/uAssets/issues/13156
+! cb2.com, balance.vanillagift.com
+@@||ssl.kaptcha.com/collect/sdk$script,xhr
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7456
 @@-ad0.$domain=azure.com
@@ -4449,9 +4441,9 @@ si.com#@#.is-below-header-ad
 @@||googletagmanager.com/gtag/js$script,domain=willandable.co.nz
 
 ! https://github.com/uBlockOrigin/uAssets/issues/12666
-@@||googletagmanager.com/gtm.js$script,domain=login.accor.com
-@@||googletagmanager.com/gtag/js$script,domain=login.accor.com
-@@||google-analytics.com/analytics.js$script,domain=login.accor.com
+@@||googletagmanager.com/gtm.js$script,domain=all.accor.com|login.accor.com
+@@||googletagmanager.com/gtag/js$script,domain=all.accor.com|login.accor.com
+@@||google-analytics.com/analytics.js$script,domain=all.accor.com|login.accor.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/12692
 @@||ipapi.co^*json$xhr
@@ -4516,14 +4508,38 @@ cadenadial.com##+js(aost, History, /(^(?!.*(Function|HTMLDocument).*))/)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/117014 blocked by PL
 @@||bongacash.com/js/videojs/video.js
 
-! https://www.reddit.com/r/uBlockOrigin/comments/ui0dvh/how_can_i_make_ublock_work_with_this_page/
-www.aol.com#@#.m-video-wafer
-
 ! cname breakage by AG Spanish ||cloudfront.net^$domain=pelisplushd.net|cuevana3.*
 @@||dsag3w1du2cu2.cloudfront.net^$image,domain=cuevana3.la
 
 ! https://github.com/uBlockOrigin/uAssets/issues/13083
 @@||gcdn.2mdn.net/videoplayback/$media,domain=app.plex.tv
 
-! https://www.reddit.com/r/uBlockOrigin/comments/uiaoii/page_damage_report/
-@@||na-library.klarnaservices.com/lib.js$script,domain=brooksrunning.com
+! https://github.com/uBlockOrigin/uAssets/issues/13095
+@@||hqq.to/e/*$csp,domain=gomo.to
+
+! https://github.com/uBlockOrigin/uAssets/issues/13094#issuecomment-1119503790
+@@||photopea.com/promo/no_ads.png$xhr,1p
+
+! https://github.com/easylist/easylist/commit/1789e141b5284d0eae5e59263802c2bdfbfac730#commitcomment-72922775
+duckduckgo.com#@#.js-sidebar-ads
+
+! https://github.com/uBlockOrigin/uAssets/issues/13136
+! [badfilter] ||cubics.com^$badfilter
+
+! www.divascam.com cname breakage
+@@||new.xlovecam.com^$xhr,domain=divascam.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/13161
+! [badfilter] ||go.usa.gov^$badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/13157
+@@||assets.adobedtm.com/extensions/*/AppMeasurement$script,domain=conad.it
+
+! override Peter Lowe's filter
+! [badfilter] ||t.co^$badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/13197
+! [badfilter] ||lacentrale.fr/static/fragment-layout/tracking-$badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/13222
+@@||postclickmarketing.com^$domain=adtspecials.com|befinanciallyfit.com|cursodemedicina.com.br|demandmetric.com|hootsuite.com|semipresencial.com.br|systemsprotect.com
