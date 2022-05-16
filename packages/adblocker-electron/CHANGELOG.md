@@ -1,3 +1,15 @@
+# v1.23.8 (Mon May 16 2022)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump electron from 17.2.0 to 18.1.0 [#2559](https://github.com/ghostery/adblocker/pull/2559) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.23.6 (Mon Feb 14 2022)
 
 #### :bug: Bug Fix
