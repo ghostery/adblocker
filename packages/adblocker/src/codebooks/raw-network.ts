@@ -9,7 +9,6 @@
 export default [
   "||imasdk.googleapis.com/js/sdk",
   ",redirect-rule=noopjs,domain=",
-  "$media,redirect=noopmp3-0.1s,",
   "googlesyndication.com/pagead/",
   "*$script,3p,denyallow=",
   "/wp-content/uploads/*",
@@ -170,6 +169,7 @@ export default [
   "mo",
   "mp",
   "no",
+  "ob",
   "od",
   "ok",
   "ol",
