@@ -1033,8 +1033,6 @@ warszawawpigulce.pl##.eklama
 @@||spotxcdn.com/integration/directsdk/$script,domain=bloomberg.*
 @@||search.spotxchange.com^$xhr,domain=bloomberg.*
 @@||sourcepointcmp.bloomberg.com/ccpa.js$script,domain=bloomberg.*
-! bloomberg.com CNAME
-@@||cdx.cedexis.net^$domain=bloomberg.*
 
 ! https://github.com/easylist/easylist/issues/2103
 @@||go.com/disneyid/responder$frame,1p
@@ -2295,7 +2293,6 @@ dziennikbaltycki.pl,dzienniklodzki.pl,dziennikpolski24.pl,dziennikzachodni.pl,ec
 ! https://github.com/uBlockOrigin/uAssets/issues/7005
 ! https://github.com/uBlockOrigin/uAssets/issues/7012#issuecomment-592815205
 ! [badfilter] ||cedexis.com^$3p,badfilter
-! [badfilter] ||cedexis.net^$3p,badfilter
 
 ! Conversation broken allthingsvegas .com
 @@||pix.spot.im/api/$xhr,domain=allthingsvegas.com
@@ -2485,9 +2482,6 @@ recensionihot.com#@#a[href^="https://www.moscarossa.biz/"]
 
 ! https://github.com/NanoMeow/QuickReports/issues/3580
 @@||assets.adobedtm.com/*/satelliteLib-$script,domain=mitelcel.com
-
-! CNAME unbreak airfrance.co.jp
-@@||cdx.cedexis.net^$3p,domain=airfrance.co.jp
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/480
 ! [badfilter] |https://$subdocument,3p,domain=series9.to,badfilter
@@ -4538,14 +4532,6 @@ duckduckgo.com#@#.js-sidebar-ads
 ! https://github.com/uBlockOrigin/uAssets/issues/13222
 @@||postclickmarketing.com^$domain=adtspecials.com|befinanciallyfit.com|cursodemedicina.com.br|demandmetric.com|hootsuite.com|semipresencial.com.br|systemsprotect.com
 
-! https://github.com/uBlockOrigin/uAssets/discussions/13259#discussion-4078224
-@@||ashoora.ir/images/banners/$image
-@@||bayanbox.ir/view/$image
-@@||cdn.asriran.com^$image
-
-! https://github.com/uBlockOrigin/uAssets/discussions/13259#discussioncomment-2784865
-tebyan.net#@#.theiaStickySidebar
-
 ! https://github.com/uBlockOrigin/uAssets/issues/13290
 @@||app.detrack.com/api/v2/tracking$xhr
 
@@ -4571,44 +4557,19 @@ tebyan.net#@#.theiaStickySidebar
 @@||location.api.useinsider.com^$xhr,domain=nontongp.xyz
 
 ! https://github.com/uBlockOrigin/uAssets/issues/13284
-@@||googletagmanager.com/gtm.js$script,domain=mumzworld.com
+! flix
+@@||googletagmanager.com/gtm.js$script,domain=lacuracao.pe|mumzworld.com
 
 ! https://github.com/uBlockOrigin/uAssets/pull/13443
 tamin.ir#@#.ads2
 @@||tamin.ir/content/ads/
-@@||zoomit.ir/assets/img/advertise-$image,1p
-@@||zoomg.ir/banners/demo/advertise-zoomg.jpg
-webii.ir#@#.ads-sidebar
-webii.ir#@#.ads-box
-@@||webii.ir/upload/ads/$image,1p
-@@||1000site.ir/asset/images/images/adpage/$image,1p
-@@||1000site.ir/home/ads/asset/favicon.ico
-sakhtafzar.com#@#.ads-title
-sakhtafzar.com#@#.ads-content
-sakhtafzar.com#@#.ads_box
-sakhtafzar.com#@#.tz_ad300_widget
-forum.p30world.com#@##ad_global_above_footer
-@@||persianv.com/wp-content/uploads/*/adv-$image,1p
-@@||parsiblog.com/Adv/imgs/
-@@||niksalehi.com/wp-content/uploads/*/adv
-nicmusic.net#@#.boxads
-@@||images.kojaro.com/assets/ad/advertise-$image,1p
-gooyait.com#@#.page-ads
-gooyait.com#@#.banner-ads
-gamesib.ir#@#.ads_2
-farsroid.com#@#.place-ads
-@@||beytoote.com/ads/images_$image,1p
-@@||beytoote.com/ads/js/$script,1p
-@@||ads.beytoote.com/live_chat
-@@||blogfa.com/static/ads/
-@@||asandl.com/ads/img/$image,1p
 
 ! voeunblock2.com break by EL regex filter
 @@||voeunblock2.com^$frame,3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/13489
-job.nw.de#@#^script:has-text(===):has-text(/[\w\W]{16000}/)
-job.nw.de#@#+js(nostif, .call(null), 10)
+job.mt.de,job.nw.de#@#^script:has-text(===):has-text(/[\w\W]{16000}/)
+job.mt.de,job.nw.de#@#+js(nostif, .call(null), 10)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/13499
 fontspace.com#@#.container-ads
@@ -4621,3 +4582,17 @@ fontspace.com#@#.container-ads
 
 ! https://github.com/uBlockOrigin/uAssets/issues/13512
 ! [badfilter] ||fwcdn2.com^$badfilter
+
+! https://forums.lanik.us/viewtopic.php?t=47586-minute-ly
+! [badfilter] ||minute.ly^$3p,badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/13538
+@@||cdn.branch.io/branch-latest.min.js$script,domain=ecwid.com
+@@||app.link/_r?sdk$script,domain=ecwid.com
+@@||api2.branch.io/v1/url$xhr,domain=ecwid.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/13615
+@@||cdn.appdynamics.com/adrum/adrum-*.js$domain=santander.cl
+
+! https://github.com/uBlockOrigin/uAssets/issues/13655
+! [badfilter] ||ads.tiktok.com^$badfilter
