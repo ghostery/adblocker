@@ -3124,8 +3124,8 @@ responsivevoice.org##.cp-modal-popup-container:remove()
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/69603
 ! https://github.com/AdguardTeam/AdguardFilters/issues/76539
-*$frame,script,3p,denyallow=akamaiedge.net|cloudflare.com|edgecastcdn.net|facebook.com|fastly.net|googleapis.com|hatena.ne.jp|hcaptcha.com|line.me|twitter.com,domain=comick.top|j9jp.com|manga1000.*|manga1001.*|syosetu.top
 ||js.mangapro.top^
+||abc.comick.top^
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62793
 samapkstore.com##+js(nosiif, visibility, 1000)
@@ -4909,19 +4909,6 @@ microtx.id##+js(aopr, adBlockDetected)
 microtx.id##+js(nano-sib)
 ||bitzad.com^$3p
 
-! https://github.com/uBlockOrigin/uAssets/issues/11347
-! https://github.com/uBlockOrigin/uAssets/issues/11892
-streamingcommunity.*##^script:has-text(break;case $.)
-streamingcommunity.*##+js(acis, parseInt, break;case $.)
-@@||scws.xyz^$xhr,domain=streamingcommunity.*
-@@||streamingcommunity.*/$xhr,1p
-!#if env_firefox
-@@||googletagmanager.com/gtag/js$xhr,domain=streamingcommunity.*
-!#endif
-!#if !env_firefox
-||googletagmanager.com^$xhr,domain=streamingcommunity.*,redirect-rule=noop.js
-!#endif
-
 ! tvmd .info ads
 ##.fints-block__row
 @@||cdn.trafficdok.com/libs/e.js$script,domain=tvmd.info
@@ -5018,7 +5005,7 @@ nightlifeporn.com##.wps-player__happy-inside--pause.wps-player__happy-inside
 incestvidz.com##+js(aeld, DOMContentLoaded, init)
 
 ! apkshrt.com popup ads
-apkshrt.com##+js(acis, Math, break;case $.)
+apkshrt.com##+js(acis, parseInt, break;case $.)
 apkshrt.com##+js(aopr, app_vars.force_disable_adblock)
 apkshrt.com##+js(set, blurred, false)
 *$script,3p,denyallow=consensu.org|google.com|gstatic.com|recaptcha.net,domain=apkshrt.com
@@ -5891,7 +5878,7 @@ streamsport.*##+js(aeld, , _0x)
 streamsport.*##+js(nowoif)
 wigistream.to##+js(aopw, adcashMacros)
 wigistream.to##+js(nowoif)
-*$script,3p,denyallow=jsdelivr.net|fastly.net|swarm.video,domain=wigistream.to
+*$script,3p,denyallow=cloudflare.net|fastly.net|jsdelivr.net|swarm.video,domain=wigistream.to
 ||addeby.com^
 ||caeory.com^
 ! [badfilter] ||wzcdn264.net^$badfilter

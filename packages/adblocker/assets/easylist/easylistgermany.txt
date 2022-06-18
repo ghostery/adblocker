@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202206101645
+! Version: 202206171652
 ! Title: EasyList Germany
-! Last modified: 10 Jun 2022 16:45 UTC
+! Last modified: 17 Jun 2022 16:52 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -545,8 +545,7 @@ _woz_banner_vote.
 ##a[href^="https://trk.imobtrk.com/"]
 ##a[href^="https://www.communicationads.net/tc.php"] > img
 ##a[href^="https://www.handy-sextreffen.info/?c="]
-##a[href^="https://www.tik-tok-date.com/?a="]
-##a[href^="https://www.tik-tok-date.com/?c="]
+##a[href^="https://www.tik-tok-date.com/"]
 ##a[href^="https://www.tipico.com/?affiliateId="]
 ##a[href^="https://www.vavoo.tv/promo/"] > img
 ! *** easylistgermany:easylistgermany/easylistgermany_allowlist_general_hide.txt ***
@@ -558,6 +557,7 @@ ad-tuning.de#@##ad_header
 ! [dup] from ublock-origin/unbreak.txt
 ! energy.de#@##ad_home
 golem.de#@##taboola-below-article-thumbnails
+viply.de#@##top-ad
 filmmakers.de#@##werbung
 cash.ch#@#.ad-enabled
 xdate.ch#@#.ad-item
@@ -569,6 +569,7 @@ rtl.de#@#.adslot
 az.com.na#@#.adverts
 wetter.de#@#.base-ad-slot
 finanzen.ch#@#.bc-ad__appnexus
+blog.notebooksbilliger.de#@#.category-advertorial
 openlimit.com#@#.content_ad
 di.fm,kellertheater.at#@#.firstload
 11freunde.de,gala.de,geo.de,kochbar.de,rtl.de,vip.de#@#.gujAd
@@ -577,6 +578,7 @@ hochzeitswahn.de#@#.internal-ad
 mietmobil-fuchs.ch#@#.jquery-script-ads
 11freunde.de#@#.js_deferred-ad
 wetter.de#@#.outbrain-ad-slot
+phytodoc.de#@#.plain-ad
 quoka.de#@#.related-ads
 wetter.de#@#.showheroes-ad-slot
 xdate.ch#@#.side-ads
@@ -1441,6 +1443,7 @@ $stylesheet,subdocument,third-party,xmlhttprequest,domain=canna-power.to|canna.t
 ||dnv-online.net/_data/Fullsize-Banner.gif
 ||docma.info/wp-content/banners/
 ||drachenbootfestival-hannover.de/grafik/partner/
+||dragonball-tube.com/templates/caprica/amzb/
 ||dreambox.info/banner/
 ||drehscheibe-online.de/ds_cms/banner/
 ||druckerchannel.de/script/dc/ofr_single.php
@@ -1544,6 +1547,7 @@ $stylesheet,subdocument,third-party,xmlhttprequest,domain=canna-power.to|canna.t
 ||football-aktuell.de/links/
 ||football-aktuell.de/rechts/
 ||forumprofi.de/fritz/$subdocument
+||freenet.de/amazonService/search/
 ||freenet.de/www/export/$script
 ||freenet.de^*/mail/ads/
 ||freiburgesports.de/assets/images/esports/partner_sponsoren/
@@ -2408,7 +2412,7 @@ $stylesheet,subdocument,third-party,xmlhttprequest,domain=canna-power.to|canna.t
 ! CSP filters
 $csp=script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: www.googletagmanager.com *.google.com *.gstatic.com www.google-analytics.com *.googleapis.com *.cloudflare.com *.twitter.com connect.facebook.net cdn.hdfilme.net cdn.hdfilme.cx ssl.p.jwpcdn.com,domain=hdfilme.cx
 !
-/^https?:\/\/.*\/[a-z0-9A-Z]{3,15}\.(php|jsx|1ph)/$image,script,subdocument,domain=beeg-pornos.com|deinesexfilme.com|deutsche-sexfilme.net|deutschsex.com|deutschsex.mobi|einfachtitten.com|german-porno-deutsch.info|gutesexfilme.com|hd-sexfilme.com|lesbenhd.com|meinyouporn.com|pornoaffe.com|pornoente.tv|pornofisch.com|pornohammer.com|pornohans.com|pornohirsch.net|pornojenny.com|pornoklinge.com|pornotom.com|pornotommy.com|pornozebra.com|reifporn.de|sexente.com|sexvideos-hd.com|tube8-pornos.com|xhamster-sexvideos.com|xnxx-porno.com
+/^https?:\/\/.*\/[a-z0-9A-Z]{3,15}\.(php|jsx|1ph)/$image,media,script,subdocument,domain=beeg-pornos.com|deinesexfilme.com|deutsche-sexfilme.net|deutschsex.com|deutschsex.mobi|einfachtitten.com|german-porno-deutsch.info|gutesexfilme.com|hd-pornos.info|hd-sexfilme.com|lesbenhd.com|meinyouporn.com|pornoaffe.com|pornoente.tv|pornofisch.com|pornohammer.com|pornohans.com|pornohirsch.net|pornojenny.com|pornoklinge.com|pornotom.com|pornotommy.com|pornozebra.com|reifporn.de|sexente.com|sexvideos-hd.com|tube8-pornos.com|xhamster-sexvideos.com|xnxx-porno.com
 ! (/sw.js)
 /^https?:\/\/.*\/.*(sw[0-9a-z._-]|\.notify\.).*/$script,domain=hammerporno.xxx
 !
@@ -2425,18 +2429,24 @@ musikexpress.de##iframe[src*="//fom.bildungscentrum.de/"]
 connextra.com##iframe[src^="https://ssl.connextra.com"]
 |http:$domain=adfarm1.adition.com
 |https:$domain=adfarm1.adition.com
-||2mdn.net^$domain=imasdk.googleapis.com|serving-sys.com
+||2mdn.net^$domain=autobild.de|imasdk.googleapis.com|serving-sys.com
+||a.df-srv.de^$domain=autobild.de
 ||ad.71i.de^$domain=autobild.de|gofeminin.de
+||ad.doubleclick.net^$domain=autobild.de
 ||ad.yieldlab.net^$domain=gofeminin.de
 ||ad4mat.de^$domain=googlesyndication.com
+||adcell.com^$domain=autobild.de
 ||adform.net^$domain=autobild.de|googlesyndication.com
-||adition.com^$domain=g.doubleclick.net
+||adition.com^$domain=autobild.de|g.doubleclick.net
+||adnxs-simple.com/creative/$domain=autobild.de
 ||adnxs.com^$domain=autobild.de|widgets.outbrain.com
 ||adrolays.de^$domain=autobild.de
 ||adsafeprotected.com^$domain=autobild.de|imasdk.googleapis.com
 ||adsnative.com^$domain=autobild.de
+||adsrvr.org^$domain=autobild.de
 ||amazon-adsystem.com^$domain=autobild.de|gofeminin.de
-||asadcdn.com/adlib/$domain=autobild.de
+||asadcdn.com/adlib/$~script,domain=autobild.de
+||auto-bild.de/js/rd/google.js$domain=autobild.de
 ||betrad.com^$domain=googlesyndication.com
 ||cas.*.criteo.com^$domain=autobild.de
 ||cas.criteo.com^$domain=autobild.de
@@ -2444,16 +2454,16 @@ connextra.com##iframe[src^="https://ssl.connextra.com"]
 ||criteo.net/js/ld/publishertag.prebid.js$domain=gofeminin.de
 ||f11-ads.com^$domain=gofeminin.de
 ||flashtalking.com^$domain=g.doubleclick.net
-||g.doubleclick.net^$domain=autobild.de
-||g.doubleclick.net^$domain=gofeminin.de|imasdk.googleapis.com
+||g.doubleclick.net^$domain=autobild.de|gofeminin.de|imasdk.googleapis.com
 ||google.com/adsense/$domain=autobild.de
 ||googlesyndication.com/daca_images/simgad/$domain=g.doubleclick.net
-||googlesyndication.com/pagead$domain=g.doubleclick.net
 ||googlesyndication.com/pagead/$domain=g.doubleclick.net|googlesyndication.com
 ||googlesyndication.com/sadbundle/$domain=g.doubleclick.net
 ||googlesyndication.com/safeframe/$domain=g.doubleclick.net|gofeminin.de|googlesyndication.com
 ||googlesyndication.com/sodar/$domain=googlesyndication.com
+||googletagservices.com/dcm/dcmads.js$domain=autobild.de
 ||googletagservices.com/tag/js/gpt.js$domain=gofeminin.de
+||imasdk.googleapis.com^$domain=autobild.de
 ||intellitxt.com^$domain=autobild.de
 ||moatads.com^$domain=autobild.de
 ||mookie1.com^$domain=autobild.de
@@ -2475,6 +2485,8 @@ connextra.com##iframe[src^="https://ssl.connextra.com"]
 ||static.criteo.net/js/ld/publishertag.prebid.js$domain=autobild.de
 ||teads.tv^$domain=autobild.de
 ||tmssl.akamaized.net//ads/ads.js$domain=transfermarkt.de
+||tpc.googlesyndication.com^$domain=autobild.de
+||track.webgains.com/link.html?wglinkid=$script,domain=autobild.de
 ||yieldlab.net^$domain=autobild.de
 ! *** easylistgermany:easylistgermany/easylistgermany_specific_block_popup.txt ***
 /^https?:\/\/.*\.(jpg|jpeg|gif|png|php|svg|ico|js|txt|css)/$popup,domain=190.115.18.20|aniworld.to|canna-power.to|canna.to|hdfilme.cx|kinoonline.net|s.to|serien.cam|serienstream.to
@@ -2661,6 +2673,7 @@ gruen-weiss.at###carousel
 urnerwochenblatt.ch###carouselInserate
 sexei.net###catfad
 polizei.news###centcon-side-inner
+hd-pornos.info,pornoente.tv###chati_frame
 deinesexfilme.com,einfachtitten.com,gutesexfilme.com,halloporno.net,hd-sexfilme.com,hdpornos.net,nursexfilme.com,pornoente.tv,pornofelix.com,pornofisch.com,pornohammer.com,pornohans.com,pornohirsch.net,pornojenny.com,pornoklinge.com,pornoschlange.com,pornotom.com,pornotommy.com,pornozebra.com,sexente.com,sexvideos-gratis.com,sexvideos-hd.com,tube8-pornos.com,xhamster-sexfilme.com,xnxx-porno.com,xnxx-sexfilme.com###chatinator_frame
 beliebtestewebseite.de###checkdiv
 godmode-trader.de###coba_trading_investment_news
@@ -2750,6 +2763,7 @@ americaurlaub.de,kremser-sc.at###footer-widgets
 b2run.de###footerpartners
 dforum.net###forumbanner
 mufa.de###freikarten
+freenet.de###frnBanner
 wallstreet-online.de###fullsizeBanner1
 tv-huettenberg.de###g-expanded
 tv-huettenberg.de###g-header
@@ -2770,6 +2784,7 @@ belgieninfo.net###head_banner
 mtb-news.de###header
 archiexpo.de,directindustry.de,medicalexpo.de,nauticexpo.de###header-banner
 mtb-news.de###header-banner-mobile
+preis.de###header-image-js
 diegrenzgaenger.lu###header-wrapper + div[class="row "]
 klamm.de###header_main
 amazon.de###heroQuickPromo_feature_div
@@ -2932,6 +2947,7 @@ smsgott.de###smsboxIframe
 factsverlag.de###sp-content-top
 wochenblitz.com###sp-sidebar1
 deinesexfilme.com,einfachtitten.com,gutesexfilme.com,halloporno.net,hd-sexfilme.com,hdpornos.net,herzporno.com,nursexfilme.com,pornoente.tv,pornofelix.com,pornofisch.com,pornohammer.com,pornohans.com,pornohirsch.net,pornojenny.com,pornoklinge.com,pornoschlange.com,pornotom.com,pornotommy.com,pornozebra.com,sexente.com,sexvideos-gratis.com,sexvideos-hd.com,tube8-pornos.com,xhamster-sexfilme.com,xnxx-porno.com,xnxx-sexfilme.com###special_column
+hd-pornos.info,pornoente.tv###spezial_column
 mv-spion.de###spion_content_container
 chemnitzerfc.de,deutsche-mittelstands-nachrichten.de,games.ch###sponsor
 vfl-gummersbach.de###sponsor-footer
@@ -3018,7 +3034,7 @@ hc-neumarkt.com###tr-contentbottom
 pornotim.com###tracking-url
 kinofilme.ucoz.com###trade
 biallo.de###tso-billboard-1
-sexvideos-gratis.com,sexvideos-hd.com,xnxx-sexfilme.com###tt_wrapper
+pornoente.tv,sexvideos-gratis.com,sexvideos-hd.com,xnxx-sexfilme.com###tt_wrapper
 finanzen.net###ubs-banner-fallback
 wildesporno.xxx###unten_anzeigen
 wetter-deutschland.com###urban-medrect1
@@ -3035,6 +3051,7 @@ sexfilmegratis.net,sexvideoskostenlos.net###wa_join_btn
 deinesexfilme.com,einfachtitten.com,gutesexfilme.com,halloporno.net,hd-sexfilme.com,hdpornos.net,herzporno.com,nursexfilme.com,pornoente.tv,pornofelix.com,pornofisch.com,pornohammer.com,pornohans.com,pornohirsch.net,pornojenny.com,pornoklinge.com,pornoschlange.com,pornotom.com,pornotommy.com,pornozebra.com,sexente.com,sexvideos-gratis.com,sexvideos-hd.com,tube8-pornos.com,xhamster-sexfilme.com,xnxx-porno.com,xnxx-sexfilme.com###wa_widget
 games.ch###wallpaper
 spielesnacks.de###wallpaper-link
+hd-pornos.info,pornoente.tv###wb_widget
 astronews.com###wcontent
 bayer04.de###web-trekk-pageupdate
 weekli.de###weekli-interstitial
@@ -3392,6 +3409,7 @@ saugen.to##.d_702212
 laden.to##.d_702232
 servus.com,terramatermagazin.com##.da__placeholder
 bergwelten.com##.da_placeholder
+bluewin.ch##.daydeal-container
 spox.com##.dazn
 dubisthalle.de##.dbh-widget
 sportbuzzer.de##.dcm-section-wrapper
@@ -3458,6 +3476,7 @@ oefb.at##.footer_partner
 scdhfk-handball.de##.footer_sponsor_row
 fruchtportal.de##.fp-banner
 arboe.at##.frame-type-mask_toolboxcontentad1
+freenet.de##.frn_contAmazon
 raidrush.net##.funbox
 99ers.at##.fusion-builder-row-14
 fcschweinfurt1905.de##.fusion-builder-row-3
@@ -3502,6 +3521,7 @@ budapester.hu##.hirdetes
 gebraucht-kaufen.de##.hitdb
 berlinmitkind.de##.hm_widget_banner
 b2run.de##.hmpartnersglobal
+spieletipps.de##.hockeystick
 emmikochteinfach.de##.holder-box-5
 intimesrevier.com##.home_rennab
 hallescherfc.de##.home_sponsor_slider
@@ -3790,6 +3810,7 @@ flugmodell-magazin.de,trucks-and-details.de##.sidebar_partners
 der-farang.com##.sideboard_conatainer
 automatentest.de##.sideinfo
 mytastedeu.com##.site-header__panorama
+hd-pornos.info,pornoente.tv##.size-300x250
 hifi.de##.sky1-outer-container
 frischauf-gp.de##.skyadd
 internet-sms.com##.skybg
@@ -3843,6 +3864,7 @@ sportclub-meran.it##.sponsorslider
 hceppan.it##.sportnews
 1milf.com,frauporn.com,wildesporno.xxx,xfilmen.com##.spot
 1milf.com,frauporn.com,xfilmen.com##.spot_bottom
+hd-pornos.info,pornoente.tv##.spz_height_60
 ebay.de##.srp-1p__banner
 mobile.de##.srp-placeholder
 bild.de##.stage-teaser__partner--advertorial
@@ -3864,7 +3886,7 @@ broncos.it##.supporter
 ntz.de,scdhfk-handball.de##.swiper-container
 swp.de##.swp-adbox
 frauporno.com##.sz_300_250
-quoka.net##.t-ctr
+quoka.de##.t-ctr
 duden.de##.tabloid__side-column-top
 selbstaendig-im-netz.de##.tad1
 golem.de##.tags
@@ -4306,7 +4328,7 @@ fcschweinfurt1905.de##img[width="280"][height="160"]
 buecher-magazin.de,fotoobjektiv.at,iplayapps.de,pi-news.net,radio-oldtimer.de,radiotirol.it,silentworld.eu,suedtirol1.it,tarnkappe.info##img[width="300"]
 mikanews.de##img[width="300"][height="150"]
 gamepro.de##img[width="300"][height="246"]
-arbeitsunrecht.de,boxen.de,fruchthandel.de,mygermantimes.com,pornofilm.zone,via-ferrata.de,wirsiegen.de##img[width="300"][height="250"]
+arbeitsunrecht.de,boxen.de,fruchthandel.de,mygermantimes.com,pornofilm.zone,stadt-bremerhaven.de,via-ferrata.de,wirsiegen.de##img[width="300"][height="250"]
 nh24.de##img[width="330"][height="220"]
 mikanews.de##img[width="400"][height="100"]
 teneriffa-aktuell.com##img[width="450"][height="300"]
@@ -4517,7 +4539,7 @@ zwischengas.com#?#.row.mt-0.mb-3.d-print-none:-abp-has(.fa-ad)
 @@||ads.julephosting.de/podcasts/$media,domain=gamestar.de
 @@||adsafeprotected.com/iasPET.$script,domain=gentside.de|ohmymag.de
 @@||adsafeprotected.com/services/pub?anId=$xmlhttprequest,domain=gentside.de|ohmymag.de
-@@||amazon-adsystem.com/aax2/apstag.js$domain=gamestar.de
+@@||amazon-adsystem.com/aax2/apstag.js$script,domain=gamestar.de
 @@||amazon-adsystem.com/widgets/q?*^ad_type=product_link^$subdocument,domain=fotoworkshop-stuttgart.de|kombi.de
 @@||asadcdn.com/adlib/$script,domain=sportbild.bild.de
 @@||asadcdn.com/adlib/adlib_seq.js$script,domain=stylebook.de
@@ -4544,8 +4566,7 @@ zwischengas.com#?#.row.mt-0.mb-3.d-print-none:-abp-has(.fa-ad)
 @@||g.doubleclick.net/gampad/ads?*&iu_parts=6032%2Ckochbar.de%2Chomepage&$domain=kochbar.de
 @@||g.doubleclick.net/gpt/pubads_impl_$script,domain=11freunde.de|auto-motor-und-sport.de|gala.de|gamepro.de|gamestar.de|gentside.de|kochbar.de|n-tv.de|ohmymag.de
 @@||g.doubleclick.net/pagead/ppub_config?ippd=$xmlhttprequest,domain=gamepro.de|gamestar.de
-@@||g.doubleclick.net/tag/js/gpt.js$domain=gentside.de|ohmymag.de
-@@||g.doubleclick.net/tag/js/gpt.js$script,domain=11freunde.de|auto-motor-und-sport.de|gala.de|gamepro.de|gamestar.de|kochbar.de|n-tv.de
+@@||g.doubleclick.net/tag/js/gpt.js$script,xmlhttprequest,domain=11freunde.de|auto-motor-und-sport.de|gala.de|gamepro.de|gamestar.de|gentside.de|kochbar.de|n-tv.de|ohmymag.de
 @@||gamestar.de^$generichide
 @@||getjad.io/library/$script,domain=gamepro.de|gamestar.de
 @@||getjad.io/prebid/$script,domain=gamepro.de|gamestar.de
