@@ -4611,7 +4611,27 @@ fontspace.com#@#.container-ads
 @@||last.fm/static/js-build/tracking/tealium-utag-set.js$script,1p
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/vf5dyc/cant_play_bubble_game/
+! https://github.com/uBlockOrigin/uAssets/issues/13814
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=html5.gamedistribution.com
 @@||hb.improvedigital.com/pbw/headerlift.min.js$script,domain=html5.gamedistribution.com
 @@||hb.improvedigital.com/pbw/prebid/*$script,domain=html5.gamedistribution.com
 ||tag.atom.gamedistribution.com^$xhr,redirect-rule=nooptext,1p
+gamedistribution.com##+js(no-fetch-if, /^/)
+
+! https://github.com/uBlockOrigin/uAssets/issues/13781
+! [badfilter] ||cdn.branch.io^$badfilter
+@@||cdn.branch.io/branch-latest.min.js$script
+
+! https://github.com/uBlockOrigin/uAssets/issues/13782
+@@||marketingautomation.services/client/ss.js$script,domain=leeuwerik.nl
+@@||marketingautomation.services/*login$script,domain=leeuwerik.nl
+
+! https://github.com/uBlockOrigin/uAssets/issues/13792
+||early-birds.fr^$script,redirect-rule=noopjs,domain=metmuseum.org
+
+! https://forums.lanik.us/viewtopic.php?p=164436#p164436
+@@||ad.doubleclick.net/clk*travel*&destinationURL=$doc
+
+! unlock legit page simpletraffic. co
+! [badfilter] ||simpletraffic.co^$badfilter
+||simpletraffic.co^$3p

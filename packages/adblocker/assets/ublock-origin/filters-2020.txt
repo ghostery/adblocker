@@ -382,9 +382,9 @@ btcandalt.com##+js(set, show_ads_gr8_lite, true)
 zone-annuaire.*##+js(aopr, mdpDeBlocker)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7268
-notube.net##+js(aopr, decodeURI)
-notube.net##+js(ra, onClick)
-notube.net##+js(nowoif)
+notube.net,notube.cc##+js(aopr, decodeURI)
+notube.net,notube.cc##+js(ra, onClick)
+notube.net,notube.cc##+js(nowoif)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3620
 *$script,redirect-rule=noopjs,domain=runmods.com
@@ -734,13 +734,13 @@ tapetus.pl##div[style="box-sizing: border-box; padding:0px 5px 0px 0px; text-ali
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7308
 ! https://github.com/uBlockOrigin/uAssets/issues/12468
-adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,shavetape.*,stape.fun,strcloud.*,streamadblockplus.com,streamta.*,streamtape.*,strtape.*,strtapeadblock.*,strtpe.*##+js(aopw, _pop)
-adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,stape.fun,strcloud.*,streamadblockplus.com,streamta.*,streamtape.*,streamtapeadblock.*,strtape.*,strtapeadblock.*,strtpe.*##+js(aost, Math.random, /\st\.[a-zA-Z]*\s/)
-adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,stape.fun,strcloud.*,streamadblockplus.com,streamta.*,streamtape.*,streamtapeadblock.*,strtape.*,strtapeadblock.*,strtpe.*##+js(acis, JSON.parse, Promise)
-adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,stape.fun,strcloud.*,streamadblockplus.com,streamta.*,streamtape.*,strtape.*,strtapeadblock.*,strtpe.*##+js(nosiif, adblock)
-adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,stape.fun,strcloud.*,streamadblockplus.com,streamta.*,streamtape.*,streamtapeadblock.*,strtape.*,strtapeadblock,strtpe.*##+js(nowoif)
+adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,shavetape.*,stape.fun,strcloud.*,streamadblockplus.*,streamta.*,streamtape.*,strtape.*,strtapeadblock.*,strtpe.*##+js(aopw, _pop)
+adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,stape.fun,strcloud.*,streamadblockplus.*,streamta.*,streamtape.*,streamtapeadblock.*,strtape.*,strtapeadblock.*,strtpe.*##+js(aost, Math.random, /\st\.[a-zA-Z]*\s/)
+adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,stape.fun,strcloud.*,streamadblockplus.*,streamta.*,streamtape.*,streamtapeadblock.*,strtape.*,strtapeadblock.*,strtpe.*##+js(acis, JSON.parse, Promise)
+adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,stape.fun,strcloud.*,streamadblockplus.*,streamta.*,streamtape.*,strtape.*,strtapeadblock.*,strtpe.*##+js(nosiif, adblock)
+adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,stape.fun,strcloud.*,streamadblockplus.*,streamta.*,streamtape.*,streamtapeadblock.*,strtape.*,strtapeadblock,strtpe.*##+js(nowoif)
 strcloud.*,streamtape.*,streamta.*,strtape.*,strtapeadblock.*##+js(ra, target, #downloadvideo)
-streamadblockplus.com,shavetape.*,strcloud.*,streamtape.*,streamta.*,strtape.*,strtapeadblock.*##+js(nano-stb, counter)
+streamadblockplus.*,shavetape.*,strcloud.*,streamtape.*,streamta.*,strtape.*,strtapeadblock.*##+js(nano-stb, counter)
 shavetape.*,strtapeadblock.*##+js(acis, Math, break;case $.)
 adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,stape.fun,strcloud.*,streamtape.*,streamta.*,strtape.*,strtpe.*,strtapeadblock.*#@#.google-ad
 adblockstreamtape.*,adblockstrtape.link,adblockstrtech.link,shavetape.*,stape.fun,strcloud.*,streamtape.*,streamta.*,strtape.*,strtpe.*,strtapeadblock.*##[class*="bn-container"], div[style*="z-index: 300000;"]
@@ -1536,7 +1536,7 @@ xxxmax.net##+js(acis, String.fromCharCode, 'shift')
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57027
 rahim-soft.com##+js(nosiif, visibility, 1000)
-rahim-soft.com##+js(acis, Math, break;case $.)
+rahim-soft.com##+js(acis, parseInt, break;case $.)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7242
 ! https://github.com/uBlockOrigin/uAssets/issues/7534
@@ -1624,16 +1624,17 @@ mypussydischarge.com##+js(aopr, decodeURI)
 tvepg.eu##+js(nostif, google_jobrunner)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9950
-sms24.me,sms24.info##+js(rc, preloader, .preloader)
-sms24.me,sms24.info##body > div[style^="position: fixed; z-index: 1000"]
-sms24.me,sms24.info##.spinner-border
-sms24.me,sms24.info##.placeholder
-sms24.me,sms24.info##.placeholder-glow
-sms24.me,sms24.info##.placeholder-content:style(display: inline-block !important)
-sms24.me,sms24.info##+js(rc, placeholder-content, h5)
-sms24.me,sms24.info##[class^="ado"]
-*$script,redirect-rule=noopjs,domain=sms24.me
-@@||sms24.me^$ghide
+sms24.*##+js(aeld, , show)
+sms24.*##+js(nostif, show)
+sms24.*##+js(rc, preloader, .preloader)
+sms24.*##body > div[style^="position: fixed; z-index: 1000"]
+sms24.*##.spinner-border
+sms24.*##.placeholder
+sms24.*##.placeholder-glow
+sms24.*##.placeholder-content:style(display: inline-block !important)
+sms24.*##+js(rc, placeholder-content, h5)
+sms24.*##[class^="ado"]
+*$script,redirect-rule=noopjs,domain=sms24.*
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57391
 timelessleaf.com##+js(acis, document.createElement, admiral)
@@ -2241,9 +2242,7 @@ highschooldxdcardevent.blogspot.com###HTML7
 youranshare.com##+js(acis, $, .init)
 
 ! https://github.com/abp-filters/abp-filters-anti-cv/issues/417
-ling.online##+js(acis, Math, XMLHttpRequest)
-ling.online##+js(set, String.fromCharCode, trueFunc)
-ling.online##^script:has-text(encodeURI)
+ling-online.com##+js(acis, parseInt, break;case $.)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4318
 forumdz.com##+js(nostif, offsetHeight)
@@ -2323,6 +2322,7 @@ faktykaliskie.pl##+js(nosiif, visibility, 1000)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4337
 watch-jav-english.live##+js(nowoif)
+watch-jav-english.live##+js(aopr, __Y)
 @@||watch-jav-english.live^$ghide
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/59468
@@ -3190,11 +3190,6 @@ gratispaste.com##.content > center
 9xlinks.site##+js(aeld, DOMContentLoaded, adlinkfly)
 ||za.gl^$script,3p
 *$script,3p,denyallow=googleapis.com,domain=gratispaste.com
-
-! glinks.co anti adb
-glinks.co,gobrowse.net##+js(nosiif, visibility, 1000)
-*$script,3p,denyallow=google.com|googleapis.com|gstatic.com|maxcdn.com|netdna-cdn.com|recaptcha.net,domain=glinks.co|gobrowse.net
-gobrowse.net##+js(acis, Math, break;case $.)
 
 ! https://github.com/NanoMeow/QuickReports/issues/4612
 clipartmax.com##+js(nano-stb)
@@ -5531,6 +5526,7 @@ fappee.com##+js(acis, doMyStuff)
 xmegadrive.com##+js(acis, document.createElement, __htas)
 xmegadrive.com##+js(set, flashvars.adv_pause_html, '')
 xmegadrive.com##.table
+xmegadrive.com##^script:has-text(__htas)
 
 ! nsfwmonster.com popup
 nsfwmonster.com##+js(aeld, getexoloader)
@@ -6105,6 +6101,7 @@ javbix.com##.letterLi:last-of-type
 
 ! https://github.com/easylist/easylist/issues/6476#issuecomment-751258895
 rawmanga.top##+js(aost, Math, onreadystatechange)
+rawmanga.top##+js(aopr, AaDetector)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/71232
 2adultflashgames.com##+js(aopr, loadTool)
