@@ -2215,8 +2215,8 @@ tekloggers.com##+js(ra, oncontextmenu|onkeydown|onmousedown)
 molineuxmix.co.uk##+js(acis, $, undefined)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6520
-defenseone.com,govexec.com,nextgov.com,routefifty.com##.conversion-module, .conversion-module-bootstrap, .gemg-interstitial
-defenseone.com,govexec.com,nextgov.com,routefifty.com##body:style(overflow-x: auto !important; overflow-y: scroll !important; margin-right: 0 !important;)
+defenseone.com,govexec.com,nextgov.com,route-fifty.com##.interstitial
+defenseone.com,govexec.com,nextgov.com,route-fifty.com##body:style(overflow-x: auto !important; overflow-y: scroll !important; margin-right: 0 !important;)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2240
 foxnews.com##:xpath(//*[contains(text(),"blocking software")]/../../..)
@@ -5164,9 +5164,6 @@ flipmsg.com##*:style(-webkit-touch-callout: default !important; -webkit-user-sel
 wattpad.com##+js(ra, oncontextmenu)
 wattpad.com##+js(aeld, /copy|dragstart/)
 
-! https://www.reddit.com/r/uBlockOrigin/comments/nu8tr3/adbloker_enable_and_website_not_accessible/
-nullphpscript.com##style:has-text(user-select:):remove()
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/85350
 babiato.co##+js(acis, $, test)
 
@@ -5640,7 +5637,7 @@ blog.csdn.net##.hljs-button.signin
 cda-hd.cc,hqq.to##+js(set, document.oncontextmenu, null)
 hqq.to##+js(set, document.onkeydown, trueFunc)
 hqq.to##+js(nostif, debugger)
-hqq.to##+js(set, console.clear, undefined)
+hqq.to##+js(set, console.clear, noopFunc)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10040
 blogpascher.com##.CampaignFullscreen__bravoLayer
@@ -6599,3 +6596,38 @@ nana-music.com##*:style(-webkit-touch-callout: default !important; -webkit-user-
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/122484
 iskandinavya.com##+js(aopr, kan_vars.adblock)
+
+! readawrite. com anti right click, select, print, f12
+readawrite.com##+js(set, securityTool.disableRightClick, noopFunc)
+readawrite.com##+js(set, securityTool.disableF12, noopFunc)
+readawrite.com##+js(set, securityTool.disableCtrlP, noopFunc)
+readawrite.com##+js(set, securityTool.disableCtrlS, noopFunc)
+readawrite.com##+js(set, securityTool.disablePrintScreen, noopFunc)
+readawrite.com##+js(set, securityTool.disablePrintThisPage, noopFunc)
+readawrite.com##+js(set, securityTool.disableElementForPrintThisPage, noopFunc)
+readawrite.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important;-moz-user-select: text !important;-ms-user-select: text !important;user-select: text !important;)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/122950
+wrestlezone.com##+js(acis, document.createElement, admiral)
+
+! http://tv.xemphimaz.com/xem-phim/luoi-hai-tu-than-2-tap-1-server-1/ anti right click
+xemphimaz.com##+js(acis, document.oncontextmenu)
+
+! langweiledich. net anti adblock
+langweiledich.net##+js(nostif, Delay)
+
+! nullphpscript. com anti select
+nullphpscript.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/8373
+||fastly.jsdelivr.net/npm/disable-devtool/disable-devtool.min.js$script
+dropgalaxy.com##+js(ra, oncontextmenu)
+dropgalaxy.com##+js(acis, document.onkeydown)
+dropgalaxy.com##+js(set, mousehandler, noopFunc)
+
+! viatasisanatate. com anti right click, select, ctrl-u, print
+viatasisanatate.com##+js(acis, document.ondragstart)
+viatasisanatate.com##+js(aeld, keydown)
+viatasisanatate.com##+js(acis, disableSelection, reEnable)
+viatasisanatate.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+viatasisanatate.com##style:has-text(@media print):remove()
