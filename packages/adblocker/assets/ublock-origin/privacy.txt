@@ -91,7 +91,7 @@ free18.net,gadgetlove.com,nrc.gov,onbeing.org,rapgenius.com,schonmagazine.com,te
 ! https://github.com/gorhill/uBlock/issues/1082
 ! https://github.com/gorhill/uBlock/issues/1250#issuecomment-173533894
 ! https://github.com/gorhill/uBlock/issues/2155
-||widgets.outbrain.com/outbrain.js$script,redirect=outbrain-widget.js:5
+||widgets.outbrain.com/outbrain.js$script,redirect=outbrain-widget.js:5,domain=~mainichi.jp|~vice.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/713
 ||google-analytics.com/analytics.js$important,script,redirect=google-analytics.com/analytics.js,domain=support.amd.com
@@ -232,9 +232,6 @@ search.brave.com##+js(no-fetch-if, body:browser)
 
 ! https://github.com/orgs/uBlockOrigin/teams/ublock-filters-volunteers/discussions/354
 ||civicscience.com^$3p
-
-! https://github.com/uBlockOrigin/uAssets/issues/9596
-||smallseo.tools/rainbow/track$xhr
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9932
 /^\w+://[\w.\-]+\.www\.woodbrass\.com//$1p,script
@@ -402,3 +399,10 @@ tarnkappe.info##+js(aopr, Matomo)
 
 ! https://assets.acdn.no/pkg/@amedia/browserid/1.1.6/index.js trackers
 salsaposten.no,steinkjer-avisa.no,hamar-dagblad.no,lofot-tidende.no,avisa-valdres.no,amta.no,firdaposten.no,ringblad.no##+js(nostif, waiting)
+
+! https://github.com/uBlockOrigin/uAssets/issues/13958
+||play.google.com/store/apps/*referrer$removeparam=referrer
+||apps.apple.com/*/app/*referrer$removeparam=referrer
+
+! https://github.com/uBlockOrigin/uAssets/issues/13970
+||securemetrics.apple.com/b/ss/*maps$image,important
