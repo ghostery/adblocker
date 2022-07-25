@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { Browser, Runtime, WebRequest } from 'webextension-polyfill-ts';
+import { Browser, Runtime, WebRequest, WebNavigation } from 'webextension-polyfill-ts';
 import { parse } from 'tldts-experimental';
 
 import {
@@ -36,6 +36,11 @@ type StreamFilter = WebRequest.StreamFilter & {
   onstop: (event: any) => void;
   onerror: (event: any) => void;
 };
+
+// TODO: this is only for testing; it is a switch to alternate between
+// pushing (tabs.executeScript) vs pulling (responding to messages
+// from the content script).
+const PUSH_INJECTIONS_ON_NAVIGATION_EVENTS = true;
 
 /**
  * Create an instance of `Request` from WebRequest details.
@@ -224,12 +229,18 @@ export class BlockingContext {
  */
 export class WebExtensionBlocker extends FiltersEngine {
   private readonly contexts: WeakMap<Browser, BlockingContext> = new WeakMap();
+  private _onCommittedHandler: ((details: WebNavigation.OnCommittedDetailsType) => void)|null = null;
 
   // ----------------------------------------------------------------------- //
   // Helpers to enable and disable blocking for 'browser'
   // ----------------------------------------------------------------------- //
 
   public enableBlockingInBrowser(browser: Browser): BlockingContext {
+    if (PUSH_INJECTIONS_ON_NAVIGATION_EVENTS && !this._onCommittedHandler) {
+      this._onCommittedHandler = this.onCommittedHandler.bind(this);
+      chrome.webNavigation.onCommitted.addListener(this._onCommittedHandler);
+    }
+
     let context: undefined | BlockingContext = this.contexts.get(browser);
     if (context !== undefined) {
       return context;
@@ -244,6 +255,11 @@ export class WebExtensionBlocker extends FiltersEngine {
   }
 
   public disableBlockingInBrowser(browser: Browser): void {
+    if (this._onCommittedHandler) {
+      chrome.webNavigation.onCommitted.removeListener(this._onCommittedHandler);
+      this._onCommittedHandler = null;
+    }
+
     const context: undefined | BlockingContext = this.contexts.get(browser);
     if (context === undefined) {
       throw new Error('Trying to disable blocking which was not enabled');
@@ -251,6 +267,32 @@ export class WebExtensionBlocker extends FiltersEngine {
 
     this.contexts.delete(browser);
     context.disable();
+  }
+
+  private onCommittedHandler(details : WebNavigation.OnCommittedDetailsType): void {
+    const { hostname, domain } = parse(details.url);
+
+    // Find the scriptlets to run and execute them as soon as possible.
+    //
+    // If possible, everything in this path should be kept synchronously,
+    // since the scriptlets will attempt to patch the website while it is
+    // already loading. Every additional asynchronous step increases the risk
+    // of losing the race (i.e. that the patching is too late to have an effect)
+    const { active, scripts } = this.getCosmeticsFilters({
+      url: details.url,
+      hostname: hostname || '',
+      domain: domain || '',
+
+      classes: [],
+      hrefs: [],
+      ids: [],
+    });
+    if (active === false) {
+      return;
+    }
+    if (scripts.length > 0) {
+      this.executeScriptlets(details.tabId, scripts);
+    }
   }
 
   public isBlockingEnabled(browser: Browser): boolean {
@@ -394,14 +436,18 @@ export class WebExtensionBlocker extends FiltersEngine {
         this.injectStylesWebExtension(browser, styles, { tabId: sender.tab.id, frameId }),
       );
 
-      // Inject scripts from content script
-      if (scripts.length !== 0) {
-        sendResponse({
-          active,
-          extended,
-          scripts,
-          styles: '',
-        });
+      // TODO: Redundant now, or still needed (e.g. what happens if there
+      // are DOM manipulations after the initial onCommitted?)
+      if (!PUSH_INJECTIONS_ON_NAVIGATION_EVENTS) {
+        // Inject scripts from content script
+        if (scripts.length !== 0) {
+          sendResponse({
+            active,
+            extended,
+            scripts,
+            styles: '',
+          });
+        }
       }
     }
 
@@ -504,6 +550,44 @@ export class WebExtensionBlocker extends FiltersEngine {
             runAt: 'document_start',
           },
     );
+  }
+
+  private executeScriptlets(tabId: number, scripts: string[]): void {
+    // the scriptlet code that contains patches for the website
+    const codeRunningInPage = `(function(){
+/* --- begin adblocker scriptlets --- */
+${scripts.join('\n')}
+/* --- end adblocker scriptlets --- */
+})()`;
+
+    // wrapper to break the "isolated world", to make the patching operate
+    // on the website, not on the content script's isolated environment.
+    const codeRunningInContentScript = `
+(function(code) {
+    let script;
+    try {
+      script = document.createElement('script');
+      script.appendChild(document.createTextNode(decodeURIComponent(code)));
+      (document.head || document.documentElement).appendChild(script);
+    } catch (ex) {
+      console.error('Failed to run script', ex);
+    }
+    if (script) {
+        if (script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
+        script.textContent = '';
+    }
+})(\`${encodeURIComponent(codeRunningInPage)}\`);`;
+
+     chrome.tabs.executeScript(tabId, {
+       code: codeRunningInContentScript,
+       runAt: 'document_start',
+       allFrames: true,
+       matchAboutBlank: true,
+     }).catch((err) => {
+       console.error('Failed to inject scriptlets', err);
+     });
   }
 }
 
