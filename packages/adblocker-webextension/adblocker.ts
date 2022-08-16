@@ -402,10 +402,12 @@ export class WebExtensionBlocker extends FiltersEngine {
           scripts,
           styles: '',
         });
+        return;
       }
     }
 
     await Promise.all(promises);
+    sendResponse();
   };
 
   /**
