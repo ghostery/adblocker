@@ -179,6 +179,8 @@ export default class CosmeticFilter implements IFilter {
    * used to parse tens of thousands of lines.
    */
   public static parse(line: string, debug: boolean = false): CosmeticFilter | null {
+    const rawLine = line;
+
     // Mask to store attributes. Each flag (unhide, scriptInject, etc.) takes
     // only 1 bit at a specific offset defined in COSMETICS_MASK.
     // cf: COSMETICS_MASK for the offset of each property
@@ -352,7 +354,7 @@ export default class CosmeticFilter implements IFilter {
 
     return new CosmeticFilter({
       mask,
-      rawLine: debug === true ? line : undefined,
+      rawLine: debug === true ? rawLine : undefined,
       selector,
       style,
       domains,
