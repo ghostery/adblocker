@@ -37,6 +37,41 @@ type StreamFilter = WebRequest.StreamFilter & {
   onerror: (event: any) => void;
 };
 
+function isFirefox() {
+  try {
+    return navigator.userAgent.indexOf('Firefox') !== -1;
+  } catch (e) {
+    return false;
+  }
+}
+
+/**
+ * There are different ways to inject scriptlets ("push" vs "pull").
+ * This function should decide based on the environment what to use:
+ *
+ * 1) "Pushing" means the adblocker will listen on "onCommitted" events
+ *    and then execute scripts by running the tabs.executeScript API.
+ * 2) "Pulling" means the adblocker will inject a content script, which
+ *    runs before the page loads (and on the DOM changes), fetches
+ *    scriplets from the background and runs them.
+ *
+ * Note:
+ * - the "push" model requires permission to the webNavigation API.
+ *   If that is not available, the implementation will fall back to the
+ *   "pull" model, which does not have this requirement.
+ */
+function usePushScriptsInjection() {
+  // There is no fundamental reason why it should not work on Firefox,
+  // but given that there are no known issues with Firefox, let's keep
+  // the old, proven technique until there is evidence that changes
+  // are needed.
+  //
+  // Take YouTube as an example: on Chrome (or forks like Edge), the adblocker
+  // will sometimes fail to block ads if you reload the page multiple times;
+  // on Firefox, the same steps do not seem to trigger any ads.
+  return !isFirefox();
+}
+
 /**
  * Create an instance of `Request` from WebRequest details.
  */
@@ -184,13 +219,16 @@ export class BlockingContext {
     this.onHeadersReceived = (details) => blocker.onHeadersReceived(browser, details);
     this.onRuntimeMessage = (msg, sender) => blocker.onRuntimeMessage(browser, msg, sender);
 
-    if (this.blocker.config.enablePushInjectionsOnNavigationEvents === true) {
+    if (
+      this.blocker.config.enablePushInjectionsOnNavigationEvents === true &&
+      usePushScriptsInjection()
+    ) {
       if (this.browser.webNavigation?.onCommitted) {
         this.onCommittedHandler = (details) => blocker.onCommittedHandler(browser, details);
       } else {
-        // TODO: eventually, this could become an error instead of a warning
         console.warn(
-          'enablePushInjectionsOnNavigationEvents option is set, but webNavigation.onCommited API not available. Falling back to the "pull model", where the content script requests scriptlets and injects them. On Firefox, this should work, but on Chrome it is known to cause problems. To fix it, you need to add the "webNavigation" permission in the manifest.',
+          'Consider adding the "webNavigation" permission in the manifest to improve the reliability of the adblocker. ' +
+          'If you do not want to see this warning, turn off the "enablePushInjectionsOnNavigationEvents" flag.',
         );
       }
     }
@@ -240,7 +278,7 @@ export class BlockingContext {
     }
   }
 
-  get pushInjectionsEnabled() {
+  get pushInjectionsActive() {
     return this.onCommittedHandler !== undefined;
   }
 }
@@ -300,9 +338,11 @@ export class WebExtensionBlocker extends FiltersEngine {
       hostname,
       domain: domain || '',
 
-      classes: [],
-      hrefs: [],
-      ids: [],
+      getBaseRules: false,
+      getInjectionRules: true,
+      getExtendedRules: false,
+      getRulesFromDOM: false,
+      getRulesFromHostname: true,
     });
     if (active === false) {
       return;
@@ -316,12 +356,14 @@ export class WebExtensionBlocker extends FiltersEngine {
     return this.contexts.has(browser);
   }
 
-  private pushInjectionsEnabled(browser: Browser): boolean {
+  private pushInjectionsActive(browser: Browser): boolean {
     const context = this.contexts.get(browser);
     if (!context) {
-      throw new Error('Illegal state: context vanished');
+      // This means the browser instance is not controlled by the library directly.
+      // For instance, if there is another wrapping layer on top (e.g. Ghostery).
+      return false;
     }
-    return context.pushInjectionsEnabled;
+    return context.pushInjectionsActive;
   }
 
   // ----------------------------------------------------------------------- //
@@ -462,7 +504,7 @@ export class WebExtensionBlocker extends FiltersEngine {
       );
 
       // Inject scripts from content script
-      if (scripts.length !== 0 && !this.pushInjectionsEnabled(browser)) {
+      if (scripts.length !== 0 && !this.pushInjectionsActive(browser)) {
         sendResponse({
           active,
           extended,

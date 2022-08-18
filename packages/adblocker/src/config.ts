@@ -52,7 +52,7 @@ export default class Config {
     enableInMemoryCache = true,
     enableMutationObserver = true,
     enableOptimizations = true,
-    enablePushInjectionsOnNavigationEvents = false,
+    enablePushInjectionsOnNavigationEvents = true,
     guessRequestTypeFromUrl = false,
     integrityCheck = true,
     loadCSPFilters = true,
