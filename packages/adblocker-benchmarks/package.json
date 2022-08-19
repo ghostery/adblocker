@@ -20,18 +20,12 @@
     "download-tsurlfilter": "make tsurlfilter-node",
     "download-brave": "make adblock-rs",
     "download-fast-hosts-lookup": "make fast-hosts-lookup",
-    "prepare": "npm run download-requests && npm run download-ubo && npm run download-abp && npm run download-tsurlfilter && npm run download-brave && npm run download-fast-hosts-lookup"
+    "download-deps": "yarn download-requests && yarn download-ubo && yarn download-abp && yarn download-tsurlfilter && yarn download-brave && yarn download-fast-hosts-lookup"
   },
   "bugs": {
     "url": "https://github.com/cliqz-oss/adblocker/issues"
   },
-  "peerDependencies": {
-    "@adguard/tsurlfilter": "0.7.26",
-    "@gorhill/ubo-core": "0.1.14",
-    "adblock-rs": "0.3.15",
-    "adblockpluscore": "0.3.1",
-    "fast-hosts-lookup": "github:mjethani/fast-hosts-lookup#9136bb8c331ee5dba8ac1a0018552cace11e2afa"
-  },
+  "peerDependencies": {},
   "dependencies": {
     "@cliqz/adblocker": "^1.23.9",
     "tldts-experimental": "^5.6.21"
