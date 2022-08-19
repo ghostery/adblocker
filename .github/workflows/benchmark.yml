@@ -6,7 +6,7 @@ jobs:
   test:
     name: Benchmark on node ${{ matrix.node }} and ${{ matrix.os }}
 
-    if: !startsWith(github.ref, 'dependabot/')
+    if: ${{ !startsWith(github.ref, 'dependabot/') }}
 
     runs-on: ${{ matrix.os }}
 
