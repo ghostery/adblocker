@@ -1,3 +1,19 @@
+# v1.23.9 (Fri Aug 19 2022)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.190 to 0.0.193 [#2691](https://github.com/ghostery/adblocker/pull/2691) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.188 to 0.0.190 [#2650](https://github.com/ghostery/adblocker/pull/2650) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump mocha from 9.2.2 to 10.0.0 [#2582](https://github.com/ghostery/adblocker/pull/2582) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump sinon from 13.0.2 to 14.0.0 [#2590](https://github.com/ghostery/adblocker/pull/2590) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.183 to 0.0.188 [#2611](https://github.com/ghostery/adblocker/pull/2611) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.23.8 (Mon May 16 2022)
 
 #### :nut_and_bolt: Dependencies

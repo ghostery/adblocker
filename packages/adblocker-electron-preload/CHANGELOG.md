@@ -1,3 +1,18 @@
+# v1.23.9 (Fri Aug 19 2022)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.190 to 0.0.193 [#2691](https://github.com/ghostery/adblocker/pull/2691) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.188 to 0.0.190 [#2650](https://github.com/ghostery/adblocker/pull/2650) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 18.2.4 to 19.0.1 [#2624](https://github.com/ghostery/adblocker/pull/2624) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.183 to 0.0.188 [#2611](https://github.com/ghostery/adblocker/pull/2611) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.23.8 (Mon May 16 2022)
 
 #### :nut_and_bolt: Dependencies

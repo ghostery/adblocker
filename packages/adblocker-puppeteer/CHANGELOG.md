@@ -1,3 +1,25 @@
+# v1.23.9 (Fri Aug 19 2022)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 15.5.0 to 16.1.1 [#2765](https://github.com/ghostery/adblocker/pull/2765) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 15.4.0 to 15.5.0 [#2718](https://github.com/ghostery/adblocker/pull/2718) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 15.3.2 to 15.4.0 [#2705](https://github.com/ghostery/adblocker/pull/2705) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 14.4.1 to 15.3.2 [#2701](https://github.com/ghostery/adblocker/pull/2701) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 14.4.0 to 14.4.1 [#2670](https://github.com/ghostery/adblocker/pull/2670) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 14.3.0 to 14.4.0 [#2659](https://github.com/ghostery/adblocker/pull/2659) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 14.2.1 to 14.3.0 [#2649](https://github.com/ghostery/adblocker/pull/2649) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 14.1.2 to 14.2.1 [#2640](https://github.com/ghostery/adblocker/pull/2640) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 14.1.1 to 14.1.2 [#2631](https://github.com/ghostery/adblocker/pull/2631) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump mocha from 9.2.2 to 10.0.0 [#2582](https://github.com/ghostery/adblocker/pull/2582) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 14.1.0 to 14.1.1 [#2612](https://github.com/ghostery/adblocker/pull/2612) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.23.8 (Mon May 16 2022)
 
 #### :nail_care: Polish

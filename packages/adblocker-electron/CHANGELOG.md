@@ -1,3 +1,16 @@
+# v1.23.9 (Fri Aug 19 2022)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump electron from 18.2.4 to 19.0.1 [#2624](https://github.com/ghostery/adblocker/pull/2624) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump mocha from 9.2.2 to 10.0.0 [#2582](https://github.com/ghostery/adblocker/pull/2582) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.23.8 (Mon May 16 2022)
 
 #### :nut_and_bolt: Dependencies

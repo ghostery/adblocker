@@ -1,3 +1,15 @@
+# v1.23.9 (Fri Aug 19 2022)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump mocha from 9.2.2 to 10.0.0 [#2582](https://github.com/ghostery/adblocker/pull/2582) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.23.7 (Wed Mar 23 2022)
 
 #### :bug: Bug Fix

@@ -1,3 +1,43 @@
+# v1.23.9 (Fri Aug 19 2022)
+
+#### :bug: Bug Fix
+
+- Preserve all information in rawLine (fix for the blank screen in YouTube full screen mode) [#2768](https://github.com/ghostery/adblocker/pull/2768) ([@philipp-classen](https://github.com/philipp-classen))
+
+#### :house: Internal
+
+- Update local assets [#2770](https://github.com/ghostery/adblocker/pull/2770) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Fix generation of compression codebooks [#2767](https://github.com/ghostery/adblocker/pull/2767) ([@remusao](https://github.com/remusao))
+- Update local assets [#2676](https://github.com/ghostery/adblocker/pull/2676) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2671](https://github.com/ghostery/adblocker/pull/2671) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2667](https://github.com/ghostery/adblocker/pull/2667) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2656](https://github.com/ghostery/adblocker/pull/2656) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2655](https://github.com/ghostery/adblocker/pull/2655) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2642](https://github.com/ghostery/adblocker/pull/2642) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2632](https://github.com/ghostery/adblocker/pull/2632) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2628](https://github.com/ghostery/adblocker/pull/2628) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Revert "Build(deps-dev): Bump got from 11.8.3 to 12.0.4" [#2627](https://github.com/ghostery/adblocker/pull/2627) ([@remusao](https://github.com/remusao))
+- Update local assets [#2604](https://github.com/ghostery/adblocker/pull/2604) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.190 to 0.0.193 [#2691](https://github.com/ghostery/adblocker/pull/2691) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 17.0.41 to 18.0.0 [#2664](https://github.com/ghostery/adblocker/pull/2664) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.188 to 0.0.190 [#2650](https://github.com/ghostery/adblocker/pull/2650) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump got from 11.8.3 to 12.0.4 [#2566](https://github.com/ghostery/adblocker/pull/2566) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump mocha from 9.2.2 to 10.0.0 [#2582](https://github.com/ghostery/adblocker/pull/2582) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.183 to 0.0.188 [#2611](https://github.com/ghostery/adblocker/pull/2611) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Philipp Claßen ([@philipp-classen](https://github.com/philipp-classen))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.23.8 (Mon May 16 2022)
 
 #### :house: Internal
