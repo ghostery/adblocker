@@ -987,7 +987,8 @@ kapitalis.com##.unselectable:style(-webkit-touch-callout: default !important; -w
 kapitalis.com##style:has-text(@media print):remove()
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4268#issuecomment-445405264
-gaypornwave.com##+js(aopw, document.oncontextmenu)
+||gaypornwave.com^$csp=script-src *
+gaypornwave.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 
 ! https://github.com/NanoMeow/QuickReports/issues/422
 @@||topspeed.com^$ghide
@@ -1014,9 +1015,6 @@ wholehk.com##+js(acis, document.onkeydown, keypress)
 
 ! https://github.com/NanoMeow/QuickReports/issues/446
 howjsay.com##+js(nostif, (), 1500)
-
-! https://github.com/NanoMeow/QuickReports/issues/437
-soft98.ir##+js(aeld, contextmenu)
 
 ! https://github.com/NanoMeow/QuickReports/issues/450
 overlordfree.web.id##+js(acis, disableselect, reEnable)
@@ -1502,6 +1500,11 @@ airfactsjournal.com,newmatilda.com###newsletter-popup-container, #newsletter-pop
 kqed.org##[class*="modal"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5136
+! https://github.com/uBlockOrigin/uAssets/issues/14337
+behance.net##[class*="ImageElement-blockPointerEvents-"]:style(pointer-events: auto !important)
+behance.net##[class*="Module-blockGridPointerEvents-"] .grid__item-image:style(pointer-events: auto !important)
+behance.net##[class*="Search-contentBlocker-"]
+behance.net###lightbox-wrap img:style(pointer-events: auto !important)
 behance.net##.Popup-popup-T3F
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5136
@@ -1591,9 +1594,10 @@ postandcourier.com##.tp-backdrop, .tp-modal
 ! https://github.com/uBlockOrigin/uAssets/issues/5953
 */bioep.js$script,domain=~tomshw.it
 tomshw.it,wizcase.com##+js(nostif, bioEp.showPopup)
-kei.pl##body:style(overflow: auto !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/7699
 ionos.de##body:style(overflow: auto !important)
+ionos.de###bio_ep
+ionos.de###bio_ep_bg
 
 ! https://github.com/NanoMeow/QuickReports/issues/852
 yoututosjeff.es##^script:has-text(oncontextmenu)
@@ -4665,6 +4669,7 @@ datadikdasmen.com##.post-body:style(-webkit-touch-callout: default !important; -
 zdravenportal.eu##+js(acis, document.oncontextmenu)
 zdravenportal.eu##+js(acis, document.addEventListener, document.onselectstart)
 zdravenportal.eu##+js(aopw, disable_hot_keys)
+zdravenportal.eu##+js(ra, oncontextmenu)
 zdravenportal.eu##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/lbnly5/can_i_use_ublock_origin_to_block_rightclick/
@@ -5164,9 +5169,6 @@ flipmsg.com##*:style(-webkit-touch-callout: default !important; -webkit-user-sel
 wattpad.com##+js(ra, oncontextmenu)
 wattpad.com##+js(aeld, /copy|dragstart/)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/85350
-babiato.co##+js(acis, $, test)
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/81440
 lazytranslations.com##+js(aopw, disableEnterKey)
 lazytranslations.com##+js(aopw, document.ondragstart)
@@ -5248,7 +5250,6 @@ jobskaro.com##+js(aopr, disableEnterKey)
 jobskaro.com##+js(aopw, document.ondragstart)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/o8wr0g/antiadblock_ygoprodeckcom/
-ygoprodeck.com##+js(acis, jQuery, :empty)
 *$image,redirect-rule=1x1.gif,domain=ygoprodeck.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9469
@@ -5727,9 +5728,6 @@ gardenia.net##+js(aeld, /copy|cut|selectstart/)
 ! https://github.com/uBlockOrigin/uAssets/commit/e6d649c38a8e
 ||piano.io^$domain=fastcompany.com
 
-! https://github.com/uBlockOrigin/uAssets/issues/10294
-||nitropay.com/1.gif?$image,3p,redirect-rule=1x1.gif
-
 ! https://github.com/uBlockOrigin/uAssets/issues/10295
 ! [badfilter] _google_ads.$badfilter
 
@@ -5845,7 +5843,7 @@ phimdinhcao.com##+js(aopr, devtoolsDetector)
 cafago.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10951
-zingvntv.*##+js(acis, onload, contextmenu)
+zingtvhd.*##+js(acis, onload, contextmenu)
 
 ! https://github.com/uBlockOrigin/uAssets/pull/10979
 ||4399.com/antijs/Antiindulgence.js
@@ -6303,8 +6301,8 @@ descargatepelis.com##+js(set, document.oncontextmenu, trueFunc)
 ||dl.gmx.*/uim/connector/live/v2/nonfriendlyiframe.html$frame,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9760#issuecomment-1100515397
-downfile.site,memangbau.com,trangchu.news##+js(acis, document.addEventListener, onkeydown)
-downfile.site,memangbau.com,trangchu.news##+js(ra, oncontextmenu, body)
+aztravels.net,downfile.site,memangbau.com,trangchu.news##+js(acis, document.addEventListener, onkeydown)
+aztravels.net,downfile.site,memangbau.com,trangchu.news##+js(ra, oncontextmenu, body)
 
 ! theblockcrypto newsletter
 theblockcrypto.com##.newsletterModal
@@ -6631,3 +6629,59 @@ viatasisanatate.com##+js(aeld, keydown)
 viatasisanatate.com##+js(acis, disableSelection, reEnable)
 viatasisanatate.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 viatasisanatate.com##style:has-text(@media print):remove()
+
+! newscon.net soft anti-adb
+newscon.net###adblock-warning
+
+! https://github.com/uBlockOrigin/uAssets/issues/14066
+projektowanie-wnetrz-online.pl##+js(aopr, disable_copy)
+projektowanie-wnetrz-online.pl##+js(aopw, document.ondragstart)
+projektowanie-wnetrz-online.pl##*:style(-webkit-touch-callout:default!important; -webkit-user-select:text!important; -moz-user-select:text!important; -ms-user-select:text!important; user-select:text!important;)
+
+! box-manga. com anti right click
+box-manga.com##+js(aeld, contextmenu)
+
+! https://go.rocklinks.net/ivrYmh anti right click
+disheye.com##+js(aopr, alert)
+
+! deepl.com: prevent link injection into the clipboard
+deepl.com##+js(aeld, copy)
+
+! https://github.com/uBlockOrigin/uAssets/issues/13705
+www.google.*##div[data-song-title] > div:style(user-select: auto !important;)
+www.google.*##div[data-song-title] [data-lyricid]:style(user-select: auto !important;)
+
+! gourmetscans. net right click, copy, keys
+gourmetscans.net##+js(aopw, disableEnterKey)
+gourmetscans.net##+js(acis, document.oncontextmenu)
+
+! https://github.com/uBlockOrigin/uAssets/issues/14170
+minimum-wage.org##.alert-dismissible
+
+! https://github.com/uBlockOrigin/uAssets/issues/14193
+oricon.co.jp##+js(ra, oncontextmenu|onmousedown|onselectstart, .all-lyrics)
+oricon.co.jp##.all-lyrics:style(-webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/14191
+morosedog.gitlab.io##+js(set, checkAds, noopFunc)
+
+! https://github.com/uBlockOrigin/uAssets/issues/14183
+awebstories.com##+js(acis, document.oncontextmenu)
+awebstories.com##+js(set, stopPrntScr, noopFunc)
+awebstories.com##+js(set, disableSelection, noopFunc)
+||awebstories.com/wp-content/plugins/secure-copy-content-protection^$all
+awebstories.com##*::selection:style(background-color:#338FFF !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/14233
+zgbk.com##+js(acis, document.oncontextmenu)
+
+! https://github.com/uBlockOrigin/uAssets/issues/14241
+cataz.net##.premodal-share
+cataz.net##.modal-backdrop
+cataz.net##body:style(overflow: auto !important; padding-right: 0 !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/14306
+htforum.net##.p-body-inner > div[class][style*="display: block;"]
+
+! https://github.com/uBlockOrigin/uAssets/issues/14392 anti right click
+maxstream.video##+js(acis, document.body.oncontextmenu)

@@ -189,11 +189,6 @@ beaumontenterprise.com,chron.com,ctinsider.com,ctpost.com,expressnews.com,housto
 ||playbrain.io/analytics/
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/80625
-tweakers.net##+js(set, WebTrekkClickMap, noopFunc)
-tweakers.net##+js(aopr, snowplow)
-tweakers.net##+js(acis, AbStats, trackId)
-tweakers.net##+js(aopr, GlobalSnowplowNamespace)
-tweakers.net##+js(set, tweakersConfig.wtConfig.scriptUrl, '')
 tweakers.net##+js(aost, btoa, send)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/81533
@@ -240,15 +235,14 @@ search.brave.com##+js(no-fetch-if, body:browser)
 /^\w+://[\w.\-]+\.www\.cybernetman\.com//$1p,script
 /^\w+://[\w.\-]+\.www\.logology\.co//$1p,script
 /^\w+://[\w.\-]+\.www\.atlaslane\.com//$1p,script
-/^\w+://[0-9a-z]{12}\.tapmyback\.com//$1p,script
 fjlaboratories.com##+js(aost, Math.floor, injectedScript)
 stoic.ai##^script:has-text(\x3c)
 stoic.ai##+js(aost, Math.floor, injectedScript)
 ||ampl.cinotes.com^
 ||data-saver-cindi.herokuapp.com^
 ||cdn.cindicator.com/$script,3p
-botcomics.com,chandlerorchards.com,comicleaks.com,filmustage.com,freecodecamp.org,mailfloss.com,marketdata.app,monumentmetals.com,nikita.tk,ping.gg,cefirates.com##+js(acis, String.fromCharCode, join)
-botcomics.com,chandlerorchards.com,comicleaks.com,marketdata.app,monumentmetals.com,nikita.tk,cefirates.com##^script:has-text(join)
+botcomics.com,cefirates.com,chandlerorchards.com,comicleaks.com,filmustage.com,freecodecamp.org,mailfloss.com,marketdata.app,monumentmetals.com,nikita.tk,nookgaming.com,ping.gg,tapmyback.com##+js(acis, String.fromCharCode, join)
+botcomics.com,cefirates.com,chandlerorchards.com,comicleaks.com,marketdata.app,monumentmetals.com,nikita.tk,tapmyback.com##^script:has-text(join)
 nikita.tk##+js(aost, document.cookie)
 ||nikita.tk/*-$script,1p
 
@@ -259,6 +253,8 @@ nikita.tk##+js(aost, document.cookie)
 /p13n/batch/action/*$image
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9717
+ppss.kr,ygosu.com,tgd.kr,inven.co.kr,loawa.com,feedclick.net,dailian.co.kr,algumon.com,sportalkorea.com##+js(aeld, DOMContentLoaded, _0x)
+ppss.kr,ygosu.com,tgd.kr,inven.co.kr,loawa.com,feedclick.net,dailian.co.kr,algumon.com,sportalkorea.com##^script:has-text(ad-shield)
 ||da29e6b8-f018-490f-b25f-39a887fc95e7.xyz^
 /^https:\/\/cdn\.jsdelivr\.net\/npm\/[-a-z_]{4,22}@latest\/dist\/script\.min\.js$/$script,3p,match-case
 ||1ee085aa-4c05-43a8-a4fe-fafedbedd062.xyz^
@@ -380,7 +376,6 @@ old.reddit.com##+js(ra, data-outbound-url, .outbound)
 reddit.com##+js(set, Object.prototype.allowClickTracking, false)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/u13isu/how_to_block_fathom_tracking
-||a2f41194651173ebf.awsglobalaccelerator.com^$3p
 /?p=%2F*&h=https%3A%2F%2F*&r=&sid=*&qs=*&cid=$image,1p
 /?h=https%3A%2F%2F*&r=&sid=*&qs=*&cid=$image,1p
 
@@ -406,3 +401,6 @@ salsaposten.no,steinkjer-avisa.no,hamar-dagblad.no,lofot-tidende.no,avisa-valdre
 
 ! https://github.com/uBlockOrigin/uAssets/issues/13970
 ||securemetrics.apple.com/b/ss/*maps$image,important
+
+! techpowerup. com ping
+||techpowerup.com/__botcheck$xhr
