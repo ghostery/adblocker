@@ -6,13 +6,13 @@ jobs:
   test:
     name: Benchmark on node ${{ matrix.node }} and ${{ matrix.os }}
 
-    if: !startsWith(github.ref, 'dependabot/')
+    if: ${{ !startsWith(github.ref, 'dependabot/') }}
 
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        node: [16]
+        node: [18]
         os: [ubuntu-latest]
 
     steps:
@@ -47,7 +47,7 @@ jobs:
       - name: Benchmark
         run: |
           cd ./packages/adblocker-benchmarks
-          make deps
+          make requests.json
           make cliqz 2>&1 | grep -v Processed > output.txt
 
       - uses: marocchino/sticky-pull-request-comment@v2

@@ -29,34 +29,38 @@ requests.json:
 	curl -O --compressed https://raw.githubusercontent.com/mjethani/scaling-palm-tree/06ef031aa3d2742dc7e6234f579e28a9b6d499b0/requests.json
 
 ./node_modules/@gorhill/ubo-core:
-	npm install --no-save @gorhill/ubo-core@0.1.14
+	yarn add @gorhill/ubo-core@0.1.14
+
+./node_modules/@gorhill/ubo-core/bundle.min.cjs:
 	npx rollup ./node_modules/@gorhill/ubo-core/index.js \
 		--file ./node_modules/@gorhill/ubo-core/bundle.min.cjs --format cjs \
 		--context global --plugin terser
 
-ubo-core: ./node_modules/@gorhill/ubo-core
+ubo-core: ./node_modules/@gorhill/ubo-core ./node_modules/@gorhill/ubo-core/bundle.min.cjs
 
 ./node_modules/adblockpluscore:
-	npm install --no-save adblockpluscore@0.3.1
+	yarn add adblockpluscore@0.3.1
+
+./node_modules/adblockpluscore/lib/bundle.min.cjs:
 	cp ./blockers/adblockpluscore-index.js ./node_modules/adblockpluscore/lib
 	npx rollup ./node_modules/adblockpluscore/lib/adblockpluscore-index.js \
 		--file ./node_modules/adblockpluscore/lib/bundle.min.cjs --format cjs \
 		--plugin commonjs --plugin json --plugin terser --output.exports named
 
-adblockpluscore: ./node_modules/adblockpluscore
+adblockpluscore: ./node_modules/adblockpluscore ./node_modules/adblockpluscore/lib/bundle.min.cjs
 
 ./node_modules/@adguard/tsurlfilter:
-	npm install --no-save @adguard/tsurlfilter@0.7.26
+	yarn add @adguard/tsurlfilter@0.7.26
 
 tsurlfilter-node: ./node_modules/@adguard/tsurlfilter
 
 ./node_modules/fast-hosts-lookup:
-	npm install --no-save mjethani/fast-hosts-lookup#9136bb8c331ee5dba8ac1a0018552cace11e2afa
+	yarn add mjethani/fast-hosts-lookup#9136bb8c331ee5dba8ac1a0018552cace11e2afa
 
 fast-hosts-lookup: ./node_modules/fast-hosts-lookup
 
 ./node_modules/adblock-rs:
-	npm install --no-save adblock-rs@0.3.15
+	yarn add adblock-rs@0.3.15
 
 adblock-rs: ./node_modules/adblock-rs
 
@@ -97,10 +101,10 @@ hosts-lookup:
 	$(node_command) run.js hosts-lookup $(run_options)
 
 deps:
-	npm run prepare
+	yarn download-deps
 
 run: deps url tldts cliqz ublock adblockplus brave adblockfast
 
 clean:
 	rm -f requests.json
-	npm uninstall fast-hosts-lookup @adguard/tsurlfilter adblockpluscore @gorhill/ubo-core adblock-rs
+	yarn remove fast-hosts-lookup @adguard/tsurlfilter adblockpluscore @gorhill/ubo-core adblock-rs
