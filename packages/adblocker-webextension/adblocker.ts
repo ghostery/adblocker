@@ -71,6 +71,7 @@ function usePushScriptsInjection() {
   // on Firefox, the same steps do not seem to trigger any ads.
   return !isFirefox();
 }
+const USE_PUSH_SCRIPTS_INJECTION = usePushScriptsInjection();
 
 /**
  * Create an instance of `Request` from WebRequest details.
@@ -221,7 +222,7 @@ export class BlockingContext {
 
     if (
       this.blocker.config.enablePushInjectionsOnNavigationEvents === true &&
-      usePushScriptsInjection()
+      USE_PUSH_SCRIPTS_INJECTION
     ) {
       if (this.browser.webNavigation?.onCommitted) {
         this.onCommittedHandler = (details) => blocker.onCommittedHandler(browser, details);
