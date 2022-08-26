@@ -291,5 +291,5 @@ export function injectCosmetics(
     { once: true, passive: true },
   );
 
-  window.addEventListener('unload', unload, { once: true, passive: true });
+  window.addEventListener('pagehide', unload, { once: true, passive: true });
 }
