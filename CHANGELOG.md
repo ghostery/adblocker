@@ -1,3 +1,31 @@
+# v1.24.0 (Fri Aug 26 2022)
+
+#### :running_woman: Performance
+
+- `@cliqz/adblocker-webextension-cosmetics`
+  - Use "pagehide" instead of "unload" [#2782](https://github.com/ghostery/adblocker/pull/2782) ([@philipp-classen](https://github.com/philipp-classen))
+
+#### :house: Internal
+
+- Fixing CI ("benchmark" action is failing) [#2771](https://github.com/ghostery/adblocker/pull/2771) ([@philipp-classen](https://github.com/philipp-classen) [@remusao](https://github.com/remusao))
+- `@cliqz/adblocker`
+  - Update local assets [#2783](https://github.com/ghostery/adblocker/pull/2783) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- `@cliqz/adblocker-extended-selectors`, `@cliqz/adblocker-webextension-cosmetics`
+  - Build(deps-dev): Bump jsdom and @types/jsdom [#2766](https://github.com/ghostery/adblocker/pull/2766) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Philipp Claßen ([@philipp-classen](https://github.com/philipp-classen))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.23.9 (Fri Aug 19 2022)
 
 #### :bug: Bug Fix

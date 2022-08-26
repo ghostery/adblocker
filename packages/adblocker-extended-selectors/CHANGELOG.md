@@ -1,3 +1,15 @@
+# v1.24.0 (Fri Aug 26 2022)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump jsdom and @types/jsdom [#2766](https://github.com/ghostery/adblocker/pull/2766) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.23.9 (Fri Aug 19 2022)
 
 #### :nut_and_bolt: Dependencies
