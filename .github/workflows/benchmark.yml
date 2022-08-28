@@ -1,10 +1,6 @@
 name: Benchmark
 
-on:
-  pull_request:
-    branches-ignore:
-      - 'dependabot/**'
-      - '**/dependabot/**'
+on: [pull_request]
 
 jobs:
   test:
@@ -55,3 +51,5 @@ jobs:
       - uses: marocchino/sticky-pull-request-comment@v2
         with:
           path: ./packages/adblocker-benchmarks/output.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
