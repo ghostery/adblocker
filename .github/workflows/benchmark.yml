@@ -7,6 +7,7 @@ jobs:
     name: Benchmark on node ${{ matrix.node }} and ${{ matrix.os }}
 
     runs-on: ${{ matrix.os }}
+    if: github.repository == 'ghostery/adblocker'
 
     strategy:
       matrix:
@@ -51,5 +52,3 @@ jobs:
       - uses: marocchino/sticky-pull-request-comment@v2
         with:
           path: ./packages/adblocker-benchmarks/output.txt
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
