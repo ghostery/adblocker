@@ -17,6 +17,7 @@ export default class Config {
       enableInMemoryCache: buffer.getBool(),
       enableMutationObserver: buffer.getBool(),
       enableOptimizations: buffer.getBool(),
+      enablePushInjectionsOnNavigationEvents: buffer.getBool(),
       guessRequestTypeFromUrl: buffer.getBool(),
       integrityCheck: buffer.getBool(),
       loadCSPFilters: buffer.getBool(),
@@ -34,6 +35,7 @@ export default class Config {
   public readonly enableInMemoryCache: boolean;
   public readonly enableMutationObserver: boolean;
   public readonly enableOptimizations: boolean;
+  public readonly enablePushInjectionsOnNavigationEvents: boolean;
   public readonly guessRequestTypeFromUrl: boolean;
   public readonly integrityCheck: boolean;
   public readonly loadCSPFilters: boolean;
@@ -50,6 +52,7 @@ export default class Config {
     enableInMemoryCache = true,
     enableMutationObserver = true,
     enableOptimizations = true,
+    enablePushInjectionsOnNavigationEvents = true,
     guessRequestTypeFromUrl = false,
     integrityCheck = true,
     loadCSPFilters = true,
@@ -65,6 +68,7 @@ export default class Config {
     this.enableInMemoryCache = enableInMemoryCache;
     this.enableMutationObserver = enableMutationObserver;
     this.enableOptimizations = enableOptimizations;
+    this.enablePushInjectionsOnNavigationEvents = enablePushInjectionsOnNavigationEvents;
     this.guessRequestTypeFromUrl = guessRequestTypeFromUrl;
     this.integrityCheck = integrityCheck;
     this.loadCSPFilters = loadCSPFilters;
@@ -78,7 +82,7 @@ export default class Config {
   public getSerializedSize(): number {
     // NOTE: this should always be the number of attributes and needs to be
     // updated when `Config` changes.
-    return 14 * sizeOfBool();
+    return 15 * sizeOfBool();
   }
 
   public serialize(buffer: StaticDataView): void {
@@ -88,6 +92,7 @@ export default class Config {
     buffer.pushBool(this.enableInMemoryCache);
     buffer.pushBool(this.enableMutationObserver);
     buffer.pushBool(this.enableOptimizations);
+    buffer.pushBool(this.enablePushInjectionsOnNavigationEvents);
     buffer.pushBool(this.guessRequestTypeFromUrl);
     buffer.pushBool(this.integrityCheck);
     buffer.pushBool(this.loadCSPFilters);
