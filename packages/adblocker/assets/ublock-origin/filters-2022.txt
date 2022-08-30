@@ -2674,7 +2674,6 @@ nikaraw.com##+js(acis, document.querySelectorAll, popMagic)
 nikaraw.com##+js(aopw, afStorage)
 nikaraw.com##+js(aopw, u_cfg)
 nikaraw.com##+js(aopr, popns)
-nikaraw.com##div[style*="width: 350px"][style*="height: 250px"]
 *$script,3p,denyallow=cloudflare.com|st-hatena.com|unpkg.com,domain=nikaraw.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/13223
@@ -2713,9 +2712,6 @@ fakazagods.com##[href^="https://www.northxclusive.com/"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/13249
 nintendolife.com##+js(aopr, _sp_._networkListenerData)
-
-! https://www.reddit.com/r/uBlockOrigin/comments/ur0aih/can_block_websites_using_ublockorigin/
-buffstreams.*##+js(aopw, _pop)
 
 ! freeomovie.co. in popunder
 freeomovie.co.in##+js(aopw, _pop)
@@ -3007,6 +3003,7 @@ ifenpaidy.com##body:style(overflow: auto !important;)
 /\/[0-9a-z]{8,10}\?shu=[0-9a-z]{150,}/$doc
 ?key=*&submetric=$popup,3p
 &key=*&adb=y$popup,3p
+?campaign-key=*&key=*&publisherKey=*&placementIdentifier=$popup,3p
 /watchnew?key=$frame,3p
 /watchnew?shu=$frame,3p
 /^https?:\/\/[-0-9a-z]{5,}\.com\/[0-9a-z]{8,10}\?key=[0-9a-f]{32}/$frame,3p
@@ -4100,3 +4097,35 @@ kpopjams.com##+js(acs, dataLayer, detectAdBlock)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/wz74po/
 @@||emailnator.com^$ghide
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/127824
+bluedollar.net##div[id^="aub"]
+bluedollar.net##.ads
+
+! https://github.com/uBlockOrigin/uAssets/issues/14567
+downloadudemy.com##+js(nostif, showModal)
+downloadudemy.com##+js(nano-stb, countdown)
+
+! javmix .top popup
+pornhubed.com##+js(aopr, __Y)
+
+! https://github.com/uBlockOrigin/uAssets/issues/4060
+! https://www.reddit.com/r/uBlockOrigin/comments/wz56hz/
+stream4free.live##+js(aopw, adcashMacros)
+stream4free.live##.closeButton
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/126628
+softcobra.*##+js(set, canRunAds, true)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/wzg750/
+||ngtv.io^$xhr,removeparam=ssaiProfile,domain=cnn.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/14566
+allpremium.net##+js(acis, eval, replace)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/127346
+komiklokal.me##+js(aopr, JuicyPop)
+komiklokal.me##+js(nowoif)
+komiklokal.me###teaser3
+||komiklokal.me/wp-content/uploads/*-1024x512.png
+||ductclickjl.com^
