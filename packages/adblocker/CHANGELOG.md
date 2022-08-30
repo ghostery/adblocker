@@ -1,3 +1,27 @@
+# v1.25.0 (Tue Aug 30 2022)
+
+#### :rocket: New Feature
+
+- New option "enablePushInjectionsOnNavigationEvents" [#2750](https://github.com/ghostery/adblocker/pull/2750) ([@philipp-classen](https://github.com/philipp-classen))
+
+#### :house: Internal
+
+- Update local assets [#2787](https://github.com/ghostery/adblocker/pull/2787) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2785](https://github.com/ghostery/adblocker/pull/2785) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.193 to 0.0.195 [#2773](https://github.com/ghostery/adblocker/pull/2773) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Philipp Claßen ([@philipp-classen](https://github.com/philipp-classen))
+
+---
+
 # v1.24.0 (Fri Aug 26 2022)
 
 #### :house: Internal

@@ -1,3 +1,40 @@
+# v1.25.0 (Tue Aug 30 2022)
+
+#### :rocket: New Feature
+
+- `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - New option "enablePushInjectionsOnNavigationEvents" [#2750](https://github.com/ghostery/adblocker/pull/2750) ([@philipp-classen](https://github.com/philipp-classen))
+
+#### :house: Internal
+
+- ci: do not run benchmarks on dependabot PRs [#2786](https://github.com/ghostery/adblocker/pull/2786) ([@remusao](https://github.com/remusao))
+- `@cliqz/adblocker`
+  - Update local assets [#2787](https://github.com/ghostery/adblocker/pull/2787) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#2785](https://github.com/ghostery/adblocker/pull/2785) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/node from 18.7.6 to 18.7.13 [#2780](https://github.com/ghostery/adblocker/pull/2780) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump playwright from 1.25.0 to 1.25.1 [#2779](https://github.com/ghostery/adblocker/pull/2779) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 2.78.0 to 2.78.1 [#2774](https://github.com/ghostery/adblocker/pull/2774) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript from 4.7.4 to 4.8.2 [#2784](https://github.com/ghostery/adblocker/pull/2784) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@remusao](https://github.com/remusao))
+- `@cliqz/adblocker-puppeteer`
+  - Build(deps): Bump puppeteer from 16.1.1 to 16.2.0 [#2775](https://github.com/ghostery/adblocker/pull/2775) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker`
+  - Build(deps): Bump @types/chrome from 0.0.193 to 0.0.195 [#2773](https://github.com/ghostery/adblocker/pull/2773) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-electron`
+  - Build(deps): Bump electron from 19.0.10 to 20.1.0 [#2781](https://github.com/ghostery/adblocker/pull/2781) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@remusao](https://github.com/remusao))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Philipp Claßen ([@philipp-classen](https://github.com/philipp-classen))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.24.0 (Fri Aug 26 2022)
 
 #### :running_woman: Performance

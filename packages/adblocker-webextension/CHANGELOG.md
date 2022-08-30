@@ -1,3 +1,15 @@
+# v1.25.0 (Tue Aug 30 2022)
+
+#### :rocket: New Feature
+
+- New option "enablePushInjectionsOnNavigationEvents" [#2750](https://github.com/ghostery/adblocker/pull/2750) ([@philipp-classen](https://github.com/philipp-classen))
+
+#### Authors: 1
+
+- Philipp Claßen ([@philipp-classen](https://github.com/philipp-classen))
+
+---
+
 # v1.23.9 (Fri Aug 19 2022)
 
 #### :nut_and_bolt: Dependencies
