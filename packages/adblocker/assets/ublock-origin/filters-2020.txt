@@ -714,7 +714,7 @@ tapetus.pl##div[style="box-sizing: border-box; padding:0px 5px 0px 0px; text-ali
 ! https://github.com/uBlockOrigin/uAssets/issues/12468
 adblockeronstape.*,adblockstreamtape.*,adblockstrtape.*,adblockstrtech.*,shavetape.*,stape.*,strcloud.*,streamadblockplus.*,streamta.*,streamtape.*,strtape.*,strtapeadblock.*,strtapeadblocker.*,strtpe.*##+js(aopw, _pop)
 adblockeronstape.*,adblockstreamtape.*,adblockstrtape.*,adblockstrtech.*,stape.*,strcloud.*,streamadblockplus.*,streamta.*,streamtape.*,strtape.*,strtapeadblock.*,strtapeadblocker.*,strtpe.*##+js(nosiif, adblock)
-adblockeronstape.*,adblockstreamtape.*,adblockstrtape.*,adblockstrtech.*,shavetape.*,stape.*,strcloud.*,streamadblockplus.*,streamta.*,streamtape.*,streamtapeadblock.*,strtape.*,strtapeadblock,strtapeadblocker.*,strtpe.*##+js(nowoif)
+adblockeronstape.*,adblockplustape.com,adblockstreamtape.*,adblockstrtape.*,adblockstrtech.*,shavetape.*,stape.*,strcloud.*,streamadblockplus.*,streamta.*,streamtape.*,streamtapeadblock.*,strtape.*,strtapeadblock,strtapeadblocker.*,strtpe.*##+js(nowoif)
 strcloud.*,streamtape.*,streamta.*,strtape.*,strtapeadblock.*##+js(ra, target, #downloadvideo)
 adblockeronstape.*,shavetape.*,strcloud.*,streamadblockplus.*,streamta.*,streamtape.*,strtape.*,strtapeadblock.*##+js(nano-stb, counter)
 adblockstreamtape.*,adblockstrtape.*,adblockstrtech.*,stape.*,strcloud.*,streamtape.*,streamta.*,strtape.*,strtpe.*,strtapeadblock.*#@#.google-ad
@@ -2617,8 +2617,10 @@ eroticmv.com###mdp-deblocker-js-disabled
 ! https://github.com/uBlockOrigin/uAssets/issues/12688
 w3schools.com###tryitLeaderboard
 !#if !env_mobile
-w3schools.com##.trytopnav:style(top: 36px!important;)
-w3schools.com###tryitLeaderboard ~ #container:style(top: 84px!important;)
+w3schools.com###breadcrumb + .trytopnav:style(top: 36px!important;)
+w3schools.com###tryitLeaderboard + .trytopnav:style(top: 0!important;)
+w3schools.com###tryitLeaderboard + #breadcrumb ~ #container:style(top: 84px!important;)
+w3schools.com###tryitLeaderboard ~ #dragbar + #container:style(top: 50px!important;)
 !#endif
 !#if env_mobile
 w3schools.com##.trytopnav:style(top: 0!important;)
@@ -3146,7 +3148,7 @@ javhdporn.net##+js(set, clientSide.adbDetect, noopFunc)
 techinferno.com##+js(nostif, eabpDialog)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9701
-duplichecker.com##+js(no-fetch-if, adsbygoogle)
+duplichecker.com##+js(no-fetch-if, /adsbygoogle|adpushup/)
 duplichecker.com##+js(no-xhr-if, ads)
 duplichecker.com##.adsbygoogle:upward(1)
 duplichecker.com##div[style="min-height:302px"]
@@ -3154,6 +3156,7 @@ duplichecker.com##[href^="https://www.duplichecker.com/link"]
 duplichecker.com##.dpn:upward(div[class])
 duplichecker.com##.p-2.mb20.p8.text-center.search-panel-sec
 duplichecker.com##.img4class.text-center.dhat
+duplichecker.com##div[class][style="text-align:center;"]
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63002
 gibit.xyz##+js(aopr, app_vars.force_disable_adblock)
