@@ -1340,7 +1340,7 @@ androidcentral.com##.swal-overlay
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4985
 ! https://github.com/uBlockOrigin/uAssets/issues/5030
-instagram.com##.ZUqME:has(a[href^="/accounts/emailsignup/"])
+instagram.com##.cugdjhsh > div[class*="_"][style="width: 100%;"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6481#issuecomment-615294565
 instagram.com##+js(set, _sharedData.is_whitelisted_crawl_bot, true)
@@ -1884,9 +1884,6 @@ elektro-plast.com.pl##+js(ra, oncontextmenu)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5911
 tumblr.com##.posts:style(margin-bottom: 0px !important)
-! https://github.com/uBlockOrigin/uAssets/issues/14606
-tumblr.com###glass-container:has-text(/You need clearance for that|おっと、この先に進むには認証が必要/)
-tumblr.com##body:style(overflow: auto !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5911
 fm.to##+js(nostif, popup_guest, 30000)
@@ -5846,7 +5843,7 @@ phimdinhcao.com##+js(aopr, devtoolsDetector)
 cafago.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10951
-zingtvhd.*##+js(acis, onload, contextmenu)
+tvzingvn.*,zingtvhd.*,zingvntv.*##+js(acis, onload, contextmenu)
 
 ! https://github.com/uBlockOrigin/uAssets/pull/10979
 ||4399.com/antijs/Antiindulgence.js
@@ -6731,9 +6728,34 @@ coub.com##body > .force-to-login-popup
 coub.com##body.disable-scroll:style(overflow: auto !important;)
 
 ! https://accgroup.vn/tra-cuu-ma-so-thue-ca-nhan-bang-cmnd/#1-ma-so-thue-ca-nhan-la-gi anti right click
-||accgroup.vn/wp-content/plugins/wp-extra/js/copy.min.js$script,1p
+/wp-content/plugins/wp-extra/js/copy.min.js$script
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/x0b79p/
 artstation.com##signup-modal-prompt-fullscreen
 artstation.com##.modal-backdrop
 artstation.com##.modal-open:style(overflow:initial!important)
+
+! https://github.com/uBlockOrigin/uAssets/issues/14625
+swiggy.com##a[class^="_"][href^="/restaurants"]:has(div[style="background: rgb(58, 60, 65) none repeat scroll 0% 0%; color: rgb(255, 255, 255); border-color: rgb(30, 32, 35) transparent;"])
+!#if env_mobile
+swiggy.com##[class^="styles_row"]:has([class^="styles_imgAd"])
+swiggy.com##a[id^="restaurant-card-"]:has([class^="styles_imgAd"])
+!#endif
+
+! https://gamehub.pw/buffer/dazn1de.php anti right click
+gamehub.pw##+js(aopr, alert)
+gamehub.pw##+js(ra, oncontextmenu, body)
+
+! digi24. ro remove copy crap addings
+digi24.ro##+js(aeld, copy)
+
+! https://github.com/uBlockOrigin/uAssets/issues/14674
+||georgiadogs.com/js/prebid-$xhr,1p,redirect=noop.txt
+
+! https://www.reddit.com/r/uBlockOrigin/comments/x5zwmw/filter_to_enable_right_click_on_website_in_chrome/
+stockpokeronline.com##+js(acs, document.oncontextmenu)
+
+! https://github.com/uBlockOrigin/uAssets/issues/14672
+law.com###reg-modal
+law.com##.show.fade.modal-backdrop
+law.com##body:style(overflow: auto !important;)

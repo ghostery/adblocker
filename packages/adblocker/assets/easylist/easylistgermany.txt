@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202208311218
+! Version: 202209061317
 ! Title: EasyList Germany
-! Last modified: 31 Aug 2022 12:18 UTC
+! Last modified: 06 Sep 2022 13:17 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -454,8 +454,7 @@ _woz_banner_vote.
 ##.userfunc-ad
 ##.videowerbung
 ##.werb_container
-! [dup] from easylist/easylist.txt
-! ##.werb_textlink
+##.werb_textlink
 ##.werbeadd_ueber
 ##.werbebanner
 ##.werbebanner-oben
@@ -1816,6 +1815,7 @@ $stylesheet,subdocument,third-party,xmlhttprequest,domain=canna-power.to|canna.t
 ||lite-magazin.de/wp-content/uploads/*/629x220.
 ||lite-magazin.de/wp-content/uploads/*_276x600-
 ||loipenpark.de/images/banners/
+||lokalo.de/wp-content/uploads/*.mp4
 ||lounge.fm^*/auto-doc.
 ||lounge.fm^*/topersatzteile.
 ||lowbeats.de/site/wp-content/banners/
@@ -2429,15 +2429,12 @@ $stylesheet,subdocument,third-party,xmlhttprequest,domain=canna-power.to|canna.t
 ||zurzeit.at/wp-content/uploads/*/Alm-Werbung-
 ||zurzeit.at/wp-content/uploads/*/Banner-
 ||zwerg-am-berg.de/wp-content/uploads/*/Banner_
-! CSP filters
-$csp=script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: www.googletagmanager.com *.google.com *.gstatic.com www.google-analytics.com *.googleapis.com *.cloudflare.com *.twitter.com connect.facebook.net cdn.hdfilme.net cdn.hdfilme.cx ssl.p.jwpcdn.com,domain=hdfilme.cx
-! ||mygully.com^$csp=default-src 'self' www.google.com www.gstatic.com ajax.googleapis.com https://mygully.com http://mygully.com https://i.mygully.com http://i.mygully.com 'unsafe-inline' 'unsafe-eval' data: blob:
 !
 /^https?:\/\/.*\/[a-z0-9A-Z]{3,15}\.(php|jsx|1ph)/$image,media,script,subdocument,domain=beeg-pornos.com|deinesexfilme.com|deutsche-sexfilme.net|deutschsex.com|deutschsex.mobi|einfachtitten.com|german-porno-deutsch.info|gutesexfilme.com|hd-pornos.info|hd-sexfilme.com|lesbenhd.com|meinyouporn.com|pornoaffe.com|pornoente.tv|pornofisch.com|pornohammer.com|pornohans.com|pornohirsch.net|pornojenny.com|pornoklinge.com|pornotom.com|pornotommy.com|pornozebra.com|reifporn.de|sexente.com|sexvideos-hd.com|tube8-pornos.com|xhamster-sexvideos.com|xnxx-porno.com
 ! (/sw.js)
 /^https?:\/\/.*\/.*(sw[0-9a-z._-]|\.notify\.).*/$script,domain=hammerporno.xxx
 !
-/^https?:\/\/[0-9a-z]{8,}\.com\/.*/$~media,~subdocument,third-party,domain=190.115.18.20|aniworld.to|bs.to|burningseries.ac|burningseries.cx|burningseries.nz|burningseries.se|burningseries.sx|burningseries.vc|kinox.top|s.to|serien.cam|serienstream.to|xcine.me
+/^https?:\/\/[0-9a-z]{8,}\.com\/.*/$~media,~subdocument,third-party,domain=190.115.18.20|aniworld.to|bs.to|burningseries.ac|burningseries.cx|burningseries.nz|burningseries.se|burningseries.sx|burningseries.vc|kinox.top|s.to|serien.cam|serienstream.to
 ! Specific filters necessary for sites using $genericblock filter option
 g.doubleclick.net###adunit
 transfermarkt.de##.OUTBRAIN .ob-p
@@ -2510,7 +2507,7 @@ connextra.com##iframe[src^="https://ssl.connextra.com"]
 ||track.webgains.com/link.html?wglinkid=$script,domain=autobild.de
 ||yieldlab.net^$domain=autobild.de
 ! *** easylistgermany:easylistgermany/easylistgermany_specific_block_popup.txt ***
-/^https?:\/\/.*\.(jpg|jpeg|gif|png|php|svg|ico|js|txt|css)/$popup,domain=190.115.18.20|aniworld.to|canna-power.to|canna.to|hdfilme.cx|kinoonline.net|s.to|serien.cam|serienstream.to
+/^https?:\/\/.*\.(jpg|jpeg|gif|png|php|svg|ico|js|txt|css)/$popup,domain=190.115.18.20|aniworld.to|canna-power.to|canna.to|kinoonline.net|s.to|serien.cam|serienstream.to
 ^utm_medium=popunder^$popup,domain=hilfreich.de
 ||amazon.de^*^tag=$popup,domain=rheinlandpfalz-news.de
 ||count.shopping.t-online.de/RE?ID=$popup,domain=t-online.de
@@ -3004,6 +3001,7 @@ suche.t-online.de###tMRM_billiger
 ddl-warez.cc###tab-1 p:nth-of-type(1),#tab-1 p:nth-of-type(2),#tab-1 p:nth-of-type(3),#tab-1 p:nth-of-type(4)
 liveticker.com###tab-live-odds
 marktindex.ch###td_uid_9_6141b5fdcbe72
+lokalo.de###tdi_67
 giga.de,kino.de,watson.de###teaserheld-header
 tennisnet.com###tennisnetWidget
 nh24.de###text-11
@@ -3169,7 +3167,7 @@ lust-auf-kroatien.de##.adlabel
 cash.ch##.adm-container
 kochbar.de##.admanager__ems__dmofooter-1
 kochbar.de##.admanager__ems__superbanner-1
-africa-positive.de,arbeitszeugnisgenerator.de,autoscout24.ch,badi-info.ch,eurotrainer.ndz.de,fischkopf.de,nachtkritik.de,raetselhilfe.net,regenbogen.de,stol.it,viamichelin.at,viamichelin.ch,viamichelin.de,wetter.at,xwords.de##.ads
+africa-positive.de,androidhow.eu,arbeitszeugnisgenerator.de,autoscout24.ch,badi-info.ch,eurotrainer.ndz.de,fischkopf.de,nachtkritik.de,raetselhilfe.net,regenbogen.de,stol.it,viamichelin.at,viamichelin.ch,viamichelin.de,wetter.at,xwords.de##.ads
 glarus24.ch,radiocentral.ch,sunshine.ch##.ads-container
 eatsmarter.de##.adsense
 stereo.de##.adserver
@@ -3642,6 +3640,15 @@ hausgeraete-test.de,heimwerker-test.de,hifitest.de##.med4
 hausgeraete-test.de,heimwerker-test.de,hifitest.de##.med5
 t-online.de,www-t--online-de.cdn.ampproject.org##.med_anz
 ligaportal.at##.media
+lokalo.de##.media_image-19
+lokalo.de##.media_image-22
+lokalo.de##.media_image-23
+lokalo.de##.media_image-24
+lokalo.de##.media_image-26
+lokalo.de##.media_image-28
+lokalo.de##.media_image-29
+lokalo.de##.media_image-30
+lokalo.de##.media_image-32
 fuersie.de,jolie.de,maedchen.de,petra.de,vital.de##.mediumrectangle
 ligaportal.at##.medrec
 comback.ch##.mega-banner-outer
@@ -4316,11 +4323,9 @@ breakpoint.untergrund.net##div[style="float:right; width: 110px; margin-left: 15
 pixelio.de##div[style="float:right; width: 300px; height: 250px"]
 scifiscene.de##div[style="height: 166px"]
 news.reiseuhu.de##div[style="height: 250px"]
-hdfilme.cx##div[style="height: 250px; width: 300px;"]
 n-mag.org##div[style="height: 280px; margin: 5px 0 5px 0;"]
 raptastisch.net##div[style="height: 300px;"]
 reiseuhu.de##div[style="height: 600px !important; max-width: 320px; margin: 15px auto;"]
-hdfilme.cx##div[style="height: 90px; width: 728px;"]
 boerse-social.com##div[style="height:80px;background-color:#fff"]
 photaq.com##div[style="height:90px"]
 nydus.org##div[style="height:90px;overflow:hidden;text-align:center;"]
