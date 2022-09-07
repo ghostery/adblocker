@@ -2552,6 +2552,7 @@ thegay.com##+js(acis, adver)
 thegay.com##.videoplayer-wrapper > span[class] > div[style]:only-child
 thegay.com##.wrapper + section
 thegay.*##.video-page__content > .right
+! [badfilter] ||thegay.com^$csp=default-src 'self' *.ahcdn.com fonts.gstatic.com fonts.googleapis.com https://thegay.com https://tn.thegay.com 'unsafe-inline' 'unsafe-eval' data: blob:,badfilter
 ! privatehomeclips.com
 privatehomeclips.com##.footer-banners
 privatehomeclips.com##div[style="display:flex !important"] > div
@@ -7398,9 +7399,11 @@ wowescape.com##+js(ra, target)
 @@||api.adinplay.com/libs/$script,domain=wowescape.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4476
+! https://github.com/uBlockOrigin/uAssets/issues/14708
 duellinksmeta.com##+js(noeval)
 *$script,redirect-rule=noopjs,domain=duellinksmeta.com
 @@||cdn.intergi.com/hera/*$xhr,domain=duellinksmeta.com
+@@||cdn.intergient.com^$script,xhr,domain=duellinksmeta.com
 @@||duellinksmeta.com^$1p
 @@||duellinksmeta.com^$ghide
 duellinksmeta.com##.advertisement-box
@@ -9080,12 +9083,13 @@ ani-stream.com##+js(no-fetch-if, damoh.ani-stream.com)
 @@||macbidouille.com^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9449
-smallseotools.com##.mx-auto:has(.adsbygoogle):style(height: 1px !important;min-height: 1px !important;)
+smallseotools.com##+js(no-fetch-if, /google|adpushup/)
 smallseotools.com##div.my-3.mx-auto
 smallseotools.com##.adsbygoogle:style(max-height: 1px !important;)
-||smallseotools.com/webimages/__$image,1p
+smallseotools.com##.px103
+smallseotools.com##.px303
+||smallseotools.com/webimages/b/_$image,1p
 *$image,redirect-rule=1x1.gif,domain=smallseotools.com
-@@||smallseotools.com/images/Popup2.png
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4102
 peeplink.in##+js(popads-dummy)
@@ -17068,8 +17072,7 @@ work.ink##.desc:upward([class*="adb"])
 ! https://zodhacks.com/pet-simulator-x-saza-hub-easter/ timer
 work.ink##+js(nowoif, youtu)
 work.ink##+js(set, linkOpenTime, 10000)
-! https://github.com/AdguardTeam/AdguardFilters/issues/128775
-||thisiswaldo.com^$script,redirect-rule=noopjs,domain=work.ink
+*$script,domain=work.ink,redirect-rule=noopjs
 work.ink##+js(nostif, adcheck)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2645
@@ -19136,7 +19139,6 @@ pdfkitapp.com##.clearfix.container.header-main
 promo-visits.site,satoshi-win.xyz,shorterall.com##+js(set, blurred, false)
 promo-visits.site,satoshi-win.xyz,shorterall.com##+js(set, google_ads, true)
 promo-visits.site,satoshi-win.xyz,shorterall.com##+js(set, window.adsEnd, true)
-promo-visits.site,satoshi-win.xyz,shorterall.com##+js(set, window.http, true)
 promo-visits.site,satoshi-win.xyz,shorterall.com###qc-cmp2-container + p
 shorterall.com##+js(aopr, disableButtonTimer)
 shorterall.com##+js(nosiif, visibility, 1000)
