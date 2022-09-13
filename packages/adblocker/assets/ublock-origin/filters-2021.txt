@@ -3254,9 +3254,11 @@ filmyhitlink.xyz###sidebar-secondary > .widget_custom_html
 ! https://github.com/uBlockOrigin/uAssets/issues/9340
 id45.cyou##+js(set, console.clear, noopFunc)
 
-! javtsunami.com popup
-||javtsunami.com/steep-heart-$script
+! https://github.com/AdguardTeam/AdguardFilters/issues/129120
 cloudrls.com##+js(nowoif)
+javtsunami.com##+js(acs, document.querySelectorAll, popMagic)
+javtsunami.com##+js(aeld, getexoloader)
+||javtsunami.com/crimson-unit-$script
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/84615
 descargaspcpro.net###AdSense1
@@ -3833,15 +3835,6 @@ unblocknow.*##+js(aopw, _pop)
 unblocknow.*##.adstg
 unblocknow.*##.alert
 unblocknow.*###cookieConsentVPN666
-
-! https://github.com/uBlockOrigin/uAssets/issues/9516
-igggames.unblocker.pro##+js(aeld, DOMContentLoaded, link.onclick)
-igggames.unblocker.pro##.adstg
-
-! https://github.com/uBlockOrigin/uAssets/issues/9531
-bluemediafiles.net##+js(acis, $, load)
-||bluemediafiles.net/sw.js$script,1p
-*$xhr,frame,3p,domain=bluemediafiles.net
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9528
 veoplanet.com##+js(ra, type, [src*="SPOT"], asap stay)
@@ -4636,7 +4629,7 @@ football256.com##.stream-item
 football256.com###stream-item-widget-5
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9864
-www.sainsburys.co.uk##li:has(.product-header):has-text(Sponsored)
+www.sainsburys.co.uk#?#li:has(.product-header):has-text(Sponsored)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/pf3idx/123movies_detects_ad_blocking/hb4a5hk/
 123moviesto.to###bar-player
@@ -4679,7 +4672,7 @@ tamilbrahmins.com##+js(acis, $, test)
 ! https://github.com/uBlockOrigin/uAssets/issues/9887
 ! https://github.com/uBlockOrigin/uAssets/issues/12695
 gab.com##div[class] > span[class]:has-text(Sponsored):upward(5)
-gab.com##:matches-path(/\/posts/) div[data-comment*="gab-ad"]:has(span[class]:has-text(Sponsored))
+gab.com#?#:matches-path(/\/posts/) div[data-comment*="gab-ad"]:has(span[class]:has-text(Sponsored))
 
 ! https://github.com/uBlockOrigin/uAssets/pull/9902/
 pandarticles.com##+js(aopr, app_vars.force_disable_adblock)
@@ -5303,9 +5296,8 @@ go.netfile.cc##+js(set, blurred, false)
 ! https://github.com/uBlockOrigin/uAssets/issues/10817
 claimclicks.com,try2link.com##+js(aopr, app_vars.force_disable_adblock)
 try2link.com##+js(set, blurred, false)
-newforex.online###devozon-snp:style(display: block !important)
-newforex.online##[id^="devozon-wait"]
-newforex.online##.demand-supply
+forex-gold.net,mobi2c.com,newforex.online,world-trips.net###go_d:style(display: inline-block !important)
+forex-gold.net,mobi2c.com,newforex.online,world-trips.net##a#go_d.submitBtn:others()
 forex-gold.net##+js(nano-sib, timeleft)
 world-trips.net##+js(nano-sib, timer)
 
@@ -6048,11 +6040,25 @@ googledrivelinks.com##+js(aopr, adBlockDetected)
 ! https://github.com/uBlockOrigin/uAssets/issues/10459
 coinsearns.com,luckydice.net##+js(acis, Math.imul, charCodeAt)
 coinsearns.com,luckydice.net,coinsurl.com##+js(nosiif, afStorage)
-coinsearns.com,luckydice.net##+js(nowoif)
+coinsearns.com,luckydice.net##+js(nowoif, !coinsearns.com)
 coinsearns.com,luckydice.net##div[style="position: fixed; display: block; width: 100%; height: 100%; inset: 0px; background-color: rgba(0, 0, 0, 0); z-index: 300000;"]
 coinsearns.com,luckydice.net##div[style="width:300px;height:250px;display: inline-block;margin: 0 auto"]
 coinsearns.com,luckydice.net##ins[class]
 coinsearns.com###promo3
+! https://www.reddit.com/r/uBlockOrigin/comments/xbjszd/
+||bambarmedia.com^$3p
+coinsearns.com,mcrypto.club###wpsafe-generate, #wpsafe-link:style(display: block !important;)
+coinsearns.com,mcrypto.club##.safelink-recatpcha:upward(div):style(display: block !important;)
+||wpadmngr.com^$script,redirect-rule=noopjs
+||pub.network^$script,redirect-rule=noopjs
+shinchu.*##.g-recaptcha:upward(form > div):style(display: block !important;)
+shinchu.*##button:upward(form > *):style(display: block !important;)
+blog-forall.com##+js(no-fetch-if, googlesyndication)
+blog-forall.com###wpsafe-generate, #wpsafe-link:style(display: block !important;)
+blog-forall.com##[id^="wpsafe-wait"]
+blog-forall.com###fixed-bot-ad2
+egfly.xyz,linka.click##+js(set, blurred, false)
+linka.click##+js(nowoif)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10460
 ! https://github.com/uBlockOrigin/uAssets/issues/10939
@@ -7031,6 +7037,7 @@ mangastream.mobi###myModal
 ||advice-ads.s3.amazonaws.com^$xhr,redirect-rule=noop.txt
 ||ads.youtube.com^$xhr,redirect-rule=noop.txt
 ||ads.reddit.com^$xhr,redirect-rule=noop.txt
+||ads-api.twitter.com^$xhr,redirect-rule=nooptext,domain=~twitter.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10964
 globfone.com##+js(no-xhr-if, ads)
