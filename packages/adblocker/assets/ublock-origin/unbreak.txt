@@ -4473,10 +4473,6 @@ fontspace.com#@#.container-ads
 ! https://github.com/uBlockOrigin/uAssets/issues/13679
 @@||api.enthusiastgaming.net/scripts/cdn.enthusiast.gg/script/eg-aps/release/*$xhr,domain=diep.io
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/121423
-! [badfilter] ||lfjack.com^$badfilter
-||lfjack.com^$domain=ecchi.iwara.tv
-
 ! https://www.reddit.com/r/uBlockOrigin/comments/vdl0mx/videos_fail_to_load_on_oe24at/
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=oe24.at
 
@@ -4669,9 +4665,21 @@ nybooks.com##.ad-spacing
 ! unlock Watch It section cnn.com
 @@||outbrain.com^$script,domain=cnn.com
 @@||outbrainimg.com^$image,domain=cnn.com
+cnn.com##.OB_AR_2
+cnn.com##.m-outbrain
 
 ! https://github.com/uBlockOrigin/uAssets/issues/14723
 tcsjerky.com##body.body-load:style(overflow: auto !important;)
 
 ! https://github.com/uBlockOrigin/uBlock-issues/issues/2158
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$3p,script,redirect-rule=google-ima.js:5
+
+! https://github.com/uBlockOrigin/uAssets/issues/14817
+filecrypt.co#@?#form > .protection.online ul > li:not(.buttons):-abp-has(> div:not(.circle_captcha))
+
+! https://github.com/uBlockOrigin/uBlock-issues/discussions/2264
+ehftv.com##.blackPlayer
+
+! https://github.com/uBlockOrigin/uAssets/discussions/14823
+thespruceeats.com#@#[data-ad-width]
+thespruceeats.com##.mntl-leaderboard-spacer
