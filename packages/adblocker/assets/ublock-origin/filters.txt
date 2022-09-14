@@ -294,7 +294,7 @@ kisscartoon.*###upgrade_pop
 
 ! https://forums.lanik.us/viewtopic.php?f=64&t=27908
 ! https://github.com/gorhill/uBlock/issues/1354
-freetimelearning.com,futeboltv.*,lustich.de,readheroacademia.com,pixelexperience.org,reqlinks.net,videoadept.com##+js(nobab)
+freetimelearning.com,futeboltv.*,lustich.de,readheroacademia.com,reqlinks.net,videoadept.com##+js(nobab)
 readheroacademia.com##strong:has-text(Adv)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7079
@@ -1782,6 +1782,8 @@ cbs.com,paramountplus.com##+js(set, hasAdBlocker, false)
 ! [badfilter] ||fastly.net^$image,important,domain=cbs.com,badfilter
 ! [badfilter] ||fastly.net^$script,important,domain=cbs.com,badfilter
 !#endif
+@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=cbs.com|paramountplus.com
+@@||pubads.g.doubleclick.net/ondemand/dash/content/*/streams$xhr,domain=cbs.com|paramountplus.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/718
 cs-fundamentals.com##+js(aopr, google_jobrunner)
@@ -2439,7 +2441,7 @@ platinmods.*##+js(nano-sib)
 ||whentai.com/*.gif$image
 
 ! Common rules for TXXX network
-/\/[a-z]{4,}\/(?!holly7)[a-z]{3,6}\d\.\d\.\d{1,2}\.[0-9a-f]{32}\.js$/$script,1p,domain=555.porn|hclips.com|hdzog.com|hotmovs.com|imzog.com|inporn.com|javdaddy.com|porn555.com|pornforrelax.com|porngo.tube|pornj.com|pornl.com|pornq.com|porntop.com|privatehomeclips.com|puporn.com|see.xxx|shemalez.com|sss.xxx|thegay.*|tubepornclassic.com|tuberel.com|txxx.*|txxxporn.tube|upornia.*|vjav.*|voyeurhit.com|vxxx.com
+/\/[a-z]{4,}\/(?!holly7)[0-9a-z]{3,}\d\.\d\.\d{1,2}\.[0-9a-f]{32}\.js$/$script,1p,domain=555.porn|hclips.com|hdzog.com|hotmovs.*|imzog.com|inporn.com|javdaddy.com|porn555.com|pornforrelax.com|porngo.tube|pornj.com|pornl.com|pornq.com|porntop.com|privatehomeclips.com|puporn.com|see.xxx|shemalez.com|sss.xxx|thegay.*|tubepornclassic.com|tuberel.com|txxx.*|txxxporn.tube|upornia.*|vjav.*|voyeurhit.com|vxxx.com
 /(?:com|porn|tube|xxx)\/[a-z]{8,12}\/[a-z]{8,12}\.js$/$script,1p,domain=555.porn|hclips.com|hdzog.com|hotmovs.com|imzog.com|inporn.com|javdaddy.com|porn555.com|pornforrelax.com|porngo.tube|pornj.com|pornl.com|pornq.com|porntop.com|pornzog.com|privatehomeclips.com|puporn.com|see.xxx|senzuri.tube|shemalez.com|sss.xxx|thegay.*|tubepornclassic.com|tuberel.com|txxx.*|txxxporn.tube|upornia.*|vjav.*|voyeurhit.com|vxxx.com
 /afon7.$script,1p
 /barbar7.$script,1p
@@ -2499,10 +2501,12 @@ hotmovs.com##+js(aopw, ads_priv)
 hotmovs.com##+js(aeld, , pop)
 hotmovs.com##.afs_ads + span[class] > div[style=""]:only-child > div:only-child
 hotmovs.com##.partners-wrap
-hotmovs.com##.video-page__related + section
 hotmovs.*##.app-banners__wrapper
 hotmovs.*##.video-page > .block_label > div:has(Advertisement)
-hotmovs.*##.video-right-top
+hotmovs.*##.block_label--last + div[class]
+hotmovs.*##.pagination + div.block_label--last
+hotmovs.*##.underplayer__info > div[class]:first-child
+hotmovs.*##.video-page__content > div.left + div[class]:last-child
 ||hotmovs.com/sw.js$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/959
 vjav.com##+js(acis, document.getElementById, pop)
@@ -2617,10 +2621,12 @@ hdzog.com###under-pl-ad
 hdzog.com##+js(aeld, , pop)
 hdzog.com##[target="_blank"][href=""]
 hdzog.com##.jwplayer > .afs_ads + span[class]
-hdzog.com##.video-page__banners
 hdzog.com##.content > div > .content-block + div[class]:not(.content-block)
 hdzog.com##.suggestions
 hdzog.com##.partners-wrap
+hdzog.com##.pagination +  div[class]:last-of-type
+hdzog.com##.video-page__left > div[class]:last-of-type
+hdzog.com##.video-page__row > div[class]:last-child
 
 ! https://github.com/uBlockOrigin/uAssets/issues/961
 ! https://github.com/uBlockOrigin/uAssets/issues/962
@@ -4061,7 +4067,7 @@ stream2watch.*##.min-test
 hindimean.com,streamcdn.*##+js(aopr, AaDetector)
 hindimean.com,streamcdn.*##+js(aopw, _pop)
 eplayer.to,hindimean.com##+js(nowebrtc)
-izlemac10.net,streamcdn.*##+js(aopr, open)
+streamcdn.*##+js(aopr, open)
 wizhdsports.fi##+js(nowebrtc)
 ||stream2watch.*/sw.js$script,1p
 ||steptaik.net^$3p
@@ -12265,7 +12271,10 @@ berliner-kurier.de,berliner-zeitung.de##.dm_ad-container
 eplfootballmatch.com##+js(set, document.bridCanRunAds, true)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1011
-email.it##+js(acis, $, document.getElementById)
+! https://github.com/uBlockOrigin/uAssets/issues/14827
+!#if env_firefox
+@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=webmail.email.it
+!#endif
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5364
 allacronyms.com##+js(nobab)
@@ -14612,7 +14621,7 @@ tubepornclassic.com##.jwplayer > .afs_ads + span[class]
 tubepornclassic.com##.video-page__adv
 tubepornclassic.com##.video-page__content > .right
 tubepornclassic.com##a[href^="http://www.theclassicporn.com/"]:upward(1)
-tubepornclassic.com##.video-page__content > div[class]:not(.left):last-child
+tubepornclassic.com##.video-page__content > div.left + div[class]:last-child
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6144
 flashingjungle.com##+js(aeld, /^(click|mousedown|mousemove|touchstart|touchend|touchmove)/, system.popunder)
@@ -15808,11 +15817,6 @@ anisubindo.*##+js(aeld, load, nextFunction)
 
 ! anibatch.me anti adb
 anibatch.me##+js(nostif, nextFunction, 2000)
-
-! https://github.com/NanoMeow/QuickReports/issues/2102
-@@||tranimeizle.com^$ghide
-tranimeizle.com##+js(acis, puShown, /doOpen|popundr/)
-tranimeizle.com##+js(aopr, jsPopunder)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2103
 famepaid.com##+js(acis, fuckAdBlock, importFAB)
