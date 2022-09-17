@@ -5,7 +5,7 @@
 ! Expires: 4 days
 ! Last modified: %timestamp%
 ! Homepage: https://github.com/uBlockOrigin/uAssets
-! Licence: https://github.com/uBlockOrigin/uAssets/blob/master/LICENSE
+! License: https://github.com/uBlockOrigin/uAssets/blob/master/LICENSE
 !
 ! GitHub issues: https://github.com/uBlockOrigin/uAssets/issues
 ! GitHub pull requests: https://github.com/uBlockOrigin/uAssets/pulls
@@ -1511,9 +1511,6 @@ detroitnews.com###partner-poster-0
 ! https://www.reddit.com/r/uBlockOrigin/comments/btf6os/add_exception_to_ublock_filters_request/
 ! https://github.com/uBlockOrigin/uAssets/issues/5900
 @@||googletagmanager.com/gtm.js$script,domain=beinsports.com
-
-! video broken antena3 .ro/live
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=antena3.ro
 
 ! https://forums.lanik.us/viewtopic.php?f=64&t=43073&p=147868#p147852
 ! [badfilter] ://adv.$domain=~adv.asahi.com|~adv.bet|~adv.cincsys.com|~adv.co.it|~adv.cpa-api.ru|~adv.cryptonetlabs.it|~adv.derfunke.at|~adv.design|~adv.digimatix.ru|~adv.ec|~adv.ee|~adv.gg|~adv.michaelgat.com|~adv.msk.ru|~adv.neosystem.co.uk|~adv.rest|~adv.ru|~adv.tools|~adv.trinet.ru|~adv.ua|~adv.vg|~adv.vn.ua|~adv.works|~adv.yomiuri.co.jp|~advids.co|~erti.se|~escreverdireito.com|~farapp.com|~forex-tv-online.com|~pracuj.pl|~r7.com|~typeform.com|~welaika.com,badfilter
@@ -3099,9 +3096,6 @@ hwupgrade.it#@#.wrapper-xyz
 ! https://github.com/uBlockOrigin/uAssets/issues/8115
 @@||das-bumerang-projekt.de/*/boomerang.js$script,1p
 
-! https://github.com/uBlockOrigin/uAssets/issues/8118
-@@||wow.zamimg.com/js/*/BlueTracker.js$script,domain=wowhead.com
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/66801
 @@||serviceyock.me/api/advertise/$xhr,domain=yock.games
 
@@ -4683,3 +4677,17 @@ ehftv.com##.blackPlayer
 ! https://github.com/uBlockOrigin/uAssets/discussions/14823
 thespruceeats.com#@#[data-ad-width]
 thespruceeats.com##.mntl-leaderboard-spacer
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/129795
+@@||baidu.com/api/bidder/$domain=jump2.bdimg.com
+||baidu.com/*/track.gif?$image,redirect=1x1.gif,important,domain=jump2.bdimg.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/14877
+@@||assets.evolutionadv.it/violations/comingsoon.it.violations.js$script,domain=comingsoon.it
+@@||ads.pubmatic.com/AdServer/js/pwt/*/3021/pwt.js$script,domain=comingsoon.it
+
+! https://github.com/uBlockOrigin/uAssets/issues/14878
+unrealengine.com##+js(no-xhr-if, /api/analytics)
+
+! https://github.com/uBlockOrigin/uAssets/issues/14891
+@@||smog.moja-ostroleka.pl/mapa/sensorsData.json$xhr,1p
