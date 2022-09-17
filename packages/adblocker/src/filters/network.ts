@@ -192,11 +192,12 @@ const REQUEST_TYPE_TO_MASK: { [s in RequestType]: number | undefined } = {
   xmlhttprequest: NETWORK_FILTER_MASK.fromXmlHttpRequest,
 
   // Other
-  csp_report: NETWORK_FILTER_MASK.fromOther,
   cspReport: NETWORK_FILTER_MASK.fromOther,
+  csp_report: NETWORK_FILTER_MASK.fromOther,
   eventsource: NETWORK_FILTER_MASK.fromOther,
   manifest: NETWORK_FILTER_MASK.fromOther,
   other: NETWORK_FILTER_MASK.fromOther,
+  prefetch: NETWORK_FILTER_MASK.fromOther,
   preflight: NETWORK_FILTER_MASK.fromOther,
   signedexchange: NETWORK_FILTER_MASK.fromOther,
   speculative: NETWORK_FILTER_MASK.fromOther,
