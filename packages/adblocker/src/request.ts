@@ -46,6 +46,7 @@ export type PuppeteerRequestType =
   | 'manifest'
   | 'media'
   | 'other'
+  | 'prefetch'
   | 'preflight'
   | 'script'
   | 'signedexchange'
@@ -104,6 +105,7 @@ export const NORMALIZED_TYPE_TOKEN: { [s in RequestType]: number } = {
   object_subrequest: fastHash('type:object'),
   other: fastHash('type:other'),
   ping: fastHash('type:ping'),
+  prefetch: fastHash('type:other'),
   preflight: fastHash('type:preflight'),
   script: fastHash('type:script'),
   signedexchange: fastHash('type:signedexchange'),
