@@ -1,3 +1,20 @@
+# v1.25.1 (Sat Sep 17 2022)
+
+#### :nail_care: Polish
+
+- Build(deps): Bump puppeteer from 17.0.0 to 17.1.3 [#2811](https://github.com/ghostery/adblocker/pull/2811) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 16.2.0 to 17.0.0 [#2790](https://github.com/ghostery/adblocker/pull/2790) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.25.0 (Tue Aug 30 2022)
 
 #### :nut_and_bolt: Dependencies

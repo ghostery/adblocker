@@ -1,3 +1,33 @@
+# v1.25.1 (Sat Sep 17 2022)
+
+#### :nail_care: Polish
+
+- Build(deps): Bump puppeteer from 17.0.0 to 17.1.3 [#2811](https://github.com/ghostery/adblocker/pull/2811) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Update local assets [#2822](https://github.com/ghostery/adblocker/pull/2822) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2818](https://github.com/ghostery/adblocker/pull/2818) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2810](https://github.com/ghostery/adblocker/pull/2810) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2804](https://github.com/ghostery/adblocker/pull/2804) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2797](https://github.com/ghostery/adblocker/pull/2797) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2793](https://github.com/ghostery/adblocker/pull/2793) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2792](https://github.com/ghostery/adblocker/pull/2792) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.195 to 0.0.197 [#2823](https://github.com/ghostery/adblocker/pull/2823) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @rollup/plugin-node-resolve from 13.3.0 to 14.1.0 [#2817](https://github.com/ghostery/adblocker/pull/2817) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.25.0 (Tue Aug 30 2022)
 
 #### :rocket: New Feature

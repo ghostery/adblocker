@@ -1,3 +1,53 @@
+# v1.25.1 (Sat Sep 17 2022)
+
+#### :nail_care: Polish
+
+- `@cliqz/adblocker-puppeteer`, `@cliqz/adblocker`
+  - Build(deps): Bump puppeteer from 17.0.0 to 17.1.3 [#2811](https://github.com/ghostery/adblocker/pull/2811) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#2822](https://github.com/ghostery/adblocker/pull/2822) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#2818](https://github.com/ghostery/adblocker/pull/2818) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#2810](https://github.com/ghostery/adblocker/pull/2810) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#2804](https://github.com/ghostery/adblocker/pull/2804) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#2797](https://github.com/ghostery/adblocker/pull/2797) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#2793](https://github.com/ghostery/adblocker/pull/2793) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#2792](https://github.com/ghostery/adblocker/pull/2792) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump tldts-experimental from 5.7.90 to 5.7.91 [#2802](https://github.com/ghostery/adblocker/pull/2802) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump concurrently from 7.3.0 to 7.4.0 [#2806](https://github.com/ghostery/adblocker/pull/2806) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump playwright from 1.25.1 to 1.25.2 [#2808](https://github.com/ghostery/adblocker/pull/2808) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript from 4.8.2 to 4.8.3 [#2812](https://github.com/ghostery/adblocker/pull/2812) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump lerna from 5.5.0 to 5.5.1 [#2815](https://github.com/ghostery/adblocker/pull/2815) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump auto from 10.37.4 to 10.37.6 [#2819](https://github.com/ghostery/adblocker/pull/2819) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 18.7.14 to 18.7.18 [#2820](https://github.com/ghostery/adblocker/pull/2820) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 20.1.1 to 20.1.4 [#2821](https://github.com/ghostery/adblocker/pull/2821) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 2.78.1 to 2.79.0 [#2795](https://github.com/ghostery/adblocker/pull/2795) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump lerna from 5.4.3 to 5.5.0 [#2794](https://github.com/ghostery/adblocker/pull/2794) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 20.1.0 to 20.1.1 [#2796](https://github.com/ghostery/adblocker/pull/2796) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/benchmark from 2.1.1 to 2.1.2 [#2788](https://github.com/ghostery/adblocker/pull/2788) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 5.7.89 to 5.7.90 [#2789](https://github.com/ghostery/adblocker/pull/2789) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 18.7.13 to 18.7.14 [#2791](https://github.com/ghostery/adblocker/pull/2791) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker`
+  - Build(deps): Bump @types/chrome from 0.0.195 to 0.0.197 [#2823](https://github.com/ghostery/adblocker/pull/2823) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-content`, `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - Build(deps-dev): Bump @rollup/plugin-node-resolve from 13.3.0 to 14.1.0 [#2817](https://github.com/ghostery/adblocker/pull/2817) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-puppeteer`
+  - Build(deps): Bump puppeteer from 16.2.0 to 17.0.0 [#2790](https://github.com/ghostery/adblocker/pull/2790) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.25.0 (Tue Aug 30 2022)
 
 #### :rocket: New Feature

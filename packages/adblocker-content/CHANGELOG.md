@@ -1,3 +1,15 @@
+# v1.25.1 (Sat Sep 17 2022)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @rollup/plugin-node-resolve from 13.3.0 to 14.1.0 [#2817](https://github.com/ghostery/adblocker/pull/2817) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.23.9 (Fri Aug 19 2022)
 
 #### :nut_and_bolt: Dependencies
