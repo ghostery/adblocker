@@ -1880,8 +1880,11 @@ uvnc.com##+js(acis, addEventListener, nextFunction)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10071
 thothub.*,thethothub.com##+js(aost, localStorage, inlineScript)
+thothub.*##+js(acs, decodeURI, decodeURIComponent)
 thothub.*,thethothub.com##.sponsor
 thothub.*,thethothub.com##.table
+||fla4n6ne7r8ydcohcojnnor.com^
+||ru6sapasgs8tror.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8789
 textovisia.com##+js(aopr, isAdBlockActive)
@@ -3101,8 +3104,8 @@ kisscartoon.info##.countdown
 ! newsinlevels.com/videosinlevels.com anti-adb
 newsinlevels.com,videosinlevels.com##+js(set, sgpbCanRunAds, true)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/84036
-knightnoscanlation.com##+js(acis, eval, replace)
+! https://github.com/uBlockOrigin/uAssets/issues/14901
+knightnoscanlation.com##+js(acis, document.getElementById, adsBlocked)
 knightnoscanlation.com##.c-sidebar
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/nlllo9/popups_getting_through_now/
@@ -3617,7 +3620,6 @@ javhdfree.icu##+js(nowoif)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/o44xwg/adblock_detected/
 lavanguardia.com##+js(aeld, error)
-lavanguardia.com##.module-box-ads
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/86360
 imeteo.sk##+js(aeld, scroll, detect)
@@ -4909,6 +4911,8 @@ gir.ist##form[action$="/links/popad"]:remove()
 ! https://github.com/AdguardTeam/AdguardFilters/issues/115524
 ||i.imgur.com^$image,domain=myflixer.*
 myflixer.*###gift-middle
+myflixer.*##.premodal.modal
+myflixer.*##.show.modal-backdrop
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10014
 apfelpatient.de##+js(nostif, css_class)
@@ -5358,7 +5362,6 @@ dealsfinders.blog##+js(nostif, show)
 olympusscanlation.com##+js(aopw, _pop)
 olympusscanlation.com##.sticky_ad_beta
 olympusscanlation.com##.adsbygoogle
-olympusscanlation.com###teaser1
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10192
 dirproxy.com##+js(aost, Math, )
@@ -5595,11 +5598,11 @@ moddedguru.com##div.banner
 crazytechgo.com##+js(acis, eval, replace)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10317
-imgbbd.buzz,imgizx.buzz,imgkoc.buzz,imgkorle.buzz,imglkju.buzz,imglqw.buzz,imgpekele.buzz,imgqte.buzz,imgwang.buzz,imgwer.buzz,imgxvd.buzz,imgyng.buzz,imgyvdw.buzz##+js(nowoif)
-imgbbd.buzz,imgizx.buzz,imgkoc.buzz,imgkorle.buzz,imglkju.buzz,imglqw.buzz,imgpekele.buzz,imgqte.buzz,imgwang.buzz,imgwer.buzz,imgxvd.buzz,imgyng.buzz,imgyvdw.buzz##+js(nano-sib, timer)
-imgbbd.buzz,imgizx.buzz,imgkoc.buzz,imgkorle.buzz,imglkju.buzz,imglqw.buzz,imgpekele.buzz,imgqte.buzz,imgwang.buzz,imgwer.buzz,imgxvd.buzz,imgyng.buzz,imgyvdw.buzz##+js(nosiif, 0x)
-imgbbd.buzz,imgizx.buzz,imgkoc.buzz,imgkorle.buzz,imglkju.buzz,imglqw.buzz,imgpekele.buzz,imgqte.buzz,imgwang.buzz,imgwer.buzz,imgxvd.buzz,imgyng.buzz,imgyvdw.buzz##+js(nostif, 0x)
-imgbbd.buzz,imgizx.buzz,imgkoc.buzz,imgkorle.buzz,imglkju.buzz,imglqw.buzz,imgpekele.buzz,imgqte.buzz,imgwang.buzz,imgwer.buzz,imgxvd.buzz,imgyng.buzz,imgyvdw.buzz##+js(set, hold_click, false)
+imgbbd.buzz,imgizx.buzz,imgkoc.buzz,imgkorle.buzz,imglkju.buzz,imgqte.buzz,imgwer.buzz,imgxvd.buzz,imgyng.buzz,imgyvdw.buzz##+js(nowoif)
+imgbbd.buzz,imgizx.buzz,imgkoc.buzz,imgkorle.buzz,imglkju.buzz,imgqte.buzz,imgwer.buzz,imgxvd.buzz,imgyng.buzz,imgyvdw.buzz##+js(nano-sib, timer)
+imgbbd.buzz,imgizx.buzz,imgkoc.buzz,imgkorle.buzz,imglkju.buzz,imgqte.buzz,imgwer.buzz,imgxvd.buzz,imgyng.buzz,imgyvdw.buzz##+js(nosiif, 0x)
+imgbbd.buzz,imgizx.buzz,imgkoc.buzz,imgkorle.buzz,imglkju.buzz,imgqte.buzz,imgwer.buzz,imgxvd.buzz,imgyng.buzz,imgyvdw.buzz##+js(nostif, 0x)
+imgbbd.buzz,imgizx.buzz,imgkoc.buzz,imgkorle.buzz,imglkju.buzz,imgqte.buzz,imgwer.buzz,imgxvd.buzz,imgyng.buzz,imgyvdw.buzz##+js(set, hold_click, false)
 imgwang.buzz##+js(acis, RegExp, debugger)
 ##div[style="position: fixed; display: block; width: 100%; height: 15%; top: 0; left: 0; background-color: rgba(0, 0, 0, 0); z-index: 300000;"]
 
@@ -5697,7 +5700,6 @@ pobre.tv##+js(acis, document.getElementById, false)
 pobre.tv##+js(nostif, debugger)
 pobre.tv##+js(set, console.clear, noopFunc)
 pobre.tv##+js(nowoif)
-pobre.tv##.generalModal
 pobre.tv##a[href^="https://btt-pt.toldmeroc.com"]
 ||cloclo11.cloud.mail.ru/weblink/$redirect=noopmp4-1s,media,domain=pobre.tv
 ||pobre.tv/videos/$redirect=noopmp4-1s,media
@@ -5738,18 +5740,6 @@ definitions.net##+js(set, canRunAds, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/10354
 1-2-3movies.com##+js(aopw, _pop)
 1-2-3movies.com##.mvic-btn
-
-! https://github.com/uBlockOrigin/uAssets/issues/10352
-imgmeno.buzz##+js(nowoif)
-@@||imgmeno.buzz^$ghide
-imgmeno.buzz##+js(set, counter, 5)
-imgmeno.buzz##+js(nosiif, 0x)
-imgmeno.buzz##+js(nano-sib, timer)
-imgmeno.buzz##.odlake
-imgmeno.buzz###ex4
-imgmeno.buzz###ex6
-imgmeno.buzz###ex5
-imgmeno.buzz##.qwrcb
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10355
 pixroute.com##+js(nowoif)
@@ -6829,7 +6819,6 @@ mangastream.mobi###myModal
 ||doubleclickbygoogle.com/favicon.ico$image,3p,redirect-rule=32x32.png
 ||google.com/adsense/start/images/favicon.ico$image,3p,redirect-rule=32x32.png
 ||gstatic.com/adx/doubleclick.ico$image,3p,redirect-rule=32x32.png
-#@##Ad300x145
 #@##Ad300x250
 #@##Ad728x90
 #@##AdArea
@@ -6843,16 +6832,9 @@ mangastream.mobi###myModal
 #@##AdLayer1
 #@##AdLayer2
 #@##DivAd
-#@##DivAd1
-#@##DivAd2
-#@##DivAd3
-#@##DivAdA
-#@##DivAdB
-#@##DivAdC
 #@##ad-container
 #@##ad-container-1
 #@##ad-container-2
-#@##ad-inner
 #@##ad-footer
 #@##ad-frame
 #@##ad-header
@@ -6884,12 +6866,9 @@ mangastream.mobi###myModal
 #@##adsquare
 #@##banner468
 #@##banner728x90
-#@##bannerad
-#@##glinkswrapper
 #@##google_ad
 #@##outbrain-paid
 #@##sponsored_link
-###Ad300x145:not([style^="position: absolute; left: -5000px"])
 ###Ad300x250:not([style^="position: absolute; left: -5000px"])
 ###Ad728x90:not([style^="position: absolute; left: -5000px"])
 ###AdArea:not([style^="position: absolute; left: -5000px"])
@@ -6903,16 +6882,9 @@ mangastream.mobi###myModal
 ###AdLayer1:not([style^="position: absolute; left: -5000px"])
 ###AdLayer2:not([style^="position: absolute; left: -5000px"])
 ###DivAd:not([style^="position: absolute; left: -5000px"])
-###DivAd1:not([style^="position: absolute; left: -5000px"])
-###DivAd2:not([style^="position: absolute; left: -5000px"])
-###DivAd3:not([style^="position: absolute; left: -5000px"])
-###DivAdA:not([style^="position: absolute; left: -5000px"])
-###DivAdB:not([style^="position: absolute; left: -5000px"])
-###DivAdC:not([style^="position: absolute; left: -5000px"])
 ###ad-container:not([style^="position: absolute; left: -5000px"])
 ###ad-container-1:not([style^="position: absolute; left: -5000px"])
 ###ad-container-2:not([style^="position: absolute; left: -5000px"])
-###ad-inner:not([style^="position: absolute; left: -5000px"])
 ###ad-footer:not([style^="position: absolute; left: -5000px"])
 ###ad-frame:not([style^="position: absolute; left: -5000px"])
 ~apnaohio.com,~miradiorumba.com###ad-header:not([style^="position: absolute; left: -5000px"])
@@ -6944,8 +6916,6 @@ mangastream.mobi###myModal
 ###adsquare:not([style^="position: absolute; left: -5000px"])
 ###banner468:not([style^="position: absolute; left: -5000px"])
 ###banner728x90:not([style^="position: absolute; left: -5000px"])
-###bannerad:not([style^="position: absolute; left: -5000px"])
-###glinkswrapper:not([style^="position: absolute; left: -5000px"])
 ###google_ad:not([style^="position: absolute; left: -5000px"])
 ###outbrain-paid:not([style^="position: absolute; left: -5000px"])
 ###sponsored_link:not([style^="position: absolute; left: -5000px"])
