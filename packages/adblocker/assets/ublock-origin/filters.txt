@@ -13046,7 +13046,7 @@ freebcc.org###Layer_1
 ! https://github.com/DandelionSprout/adfilt/issues/7#issuecomment-493395377
 ! https://github.com/uBlockOrigin/uAssets/issues/6726
 pixiv.net###js-mount-point-header.with-ad:style(min-height: auto !important)
-pixiv.net##._illust-upload + div[style^="display:block;width:968px;height:170px;"]
+pixiv.net##._illust-upload + div[style*="968px;"][style*="170px;"]
 pixiv.net##div[class^="sc-"] > div[class^="sc-"] > div[style*="width: 728px;"]:only-child > iframe[name="footer"][width="728"][height="90"]:upward(2):matches-css(padding-bottom: 56px)
 pixiv.net##iframe[name="dashboard_home"]:upward(div[class^="sc-"][span="1"])
 pixiv.net##iframe[name="footer"][width="728"][height="90"]:upward(1)
@@ -17054,7 +17054,6 @@ updown.link##+js(nano-stb, startDownload, 8000)
 work.ink##.desc:upward([class*="adb"])
 *$frame,redirect-rule=noopframe,domain=work.ink
 ! https://zodhacks.com/pet-simulator-x-saza-hub-easter/ timer
-work.ink##+js(nowoif, youtu)
 work.ink##+js(set, linkOpenTime, 10000)
 *$script,domain=work.ink,redirect-rule=noopjs
 work.ink##+js(nostif, adcheck)
@@ -18136,8 +18135,6 @@ tiz-cycling.io##+js(acis, jQuery, blocker)
 
 ! https://forums.lanik.us/viewtopic.php?f=103&p=149835&sid=b15db418238da7d16f4acd3ef81ffdf8#p149833
 @@||abc.es^$ghide
-abc.es##.publi-articulo
-abc.es##.creatividad
 
 ! azarplus.com ads
 ||azarplus.com/wp-content/uploads/*.gif$image,1p
@@ -19496,14 +19493,13 @@ ludigames.com##+js(nostif, ads)
 ! pixsera
 ! https://github.com/uBlockOrigin/uAssets/issues/7180
 ! https://github.com/uBlockOrigin/uAssets/issues/9123
-federleqa.icu,imgair.net,imgblaze.net,imgfrost.net,imguiwe.buzz,imgweika.buzz,imgyear.icu,opalekr.icu,pixsera.net,rtkenale.icu,vestimage.site,imgwia.buzz##+js(nano-sib, timer)
-federleqa.icu,imgair.net,imgblaze.net,imgfrost.net,imguiwe.buzz,imgweika.buzz,imgyear.icu,opalekr.icu,pixsera.net,rtkenale.icu,vestimage.site,imgwia.buzz##+js(nowoif, !/prcf.fiyar|themes|pixsense|.jpg/)
-federleqa.icu,imgair.net,imgblaze.net,imgfrost.net,imguiwe.buzz,imgweika.buzz,imgyear.icu,opalekr.icu,pixsera.net,rtkenale.icu,vestimage.site,imgwia.buzz##+js(set, hold_click, false)
-federleqa.icu,imgair.net,imgblaze.net,imgfrost.net,imguiwe.buzz,imgweika.buzz,imgyear.icu,opalekr.icu,pixsera.net,rtkenale.icu,vestimage.site,imgwia.buzz##div[id][style^="position: fixed; display: block; width: 100%;"]
-*$frame,script,3p,denyallow=googleapis.com,domain=federleqa.icu|imgair.net|imgblaze.net|imgfrost.net|imguiwe.buzz|imgweika.buzz|imgyear.icu|opalekr.icu|pixsera.net|rtkenale.icu|vestimage.site|imgwia.buzz|imgwex.buzz
+imgair.net,imgblaze.net,imgfrost.net,pixsera.net,vestimage.site,imgwia.buzz##+js(nano-sib, timer)
+imgair.net,imgblaze.net,imgfrost.net,pixsera.net,vestimage.site,imgwia.buzz##+js(nowoif, !/prcf.fiyar|themes|pixsense|.jpg/)
+imgair.net,imgblaze.net,imgfrost.net,pixsera.net,vestimage.site,imgwia.buzz##+js(set, hold_click, false)
+imgair.net,imgblaze.net,imgfrost.net,pixsera.net,vestimage.site,imgwia.buzz##div[id][style^="position: fixed; display: block; width: 100%;"]
+*$frame,script,3p,denyallow=googleapis.com,domain=imgair.net|imgblaze.net|imgfrost.net|pixsera.net|vestimage.site|imgwia.buzz|imgwex.buzz
 /^https?:\/\/[0-9a-z]{8,}\.com\/[0-9a-z]{8,}\?(?:key|shu)=[0-9a-z]+/$frame,3p,domain=buzz|xyz
 /^http:\/\/img[a-z]+\.(?:buzz|xyz)\/(?!shrinker).*/$script,1p,domain=buzz|xyz
-/\.icu(\/[a-z]{2,4}){2}\.js$/$script,1p,domain=federleqa.icu|imgyear.icu|opalekr.icu|rtkenale.icu
 /\.net(\/[a-z]{2,4}){2}\.js$/$script,1p,domain=pixsera.net
 /c-hive.min.js$script,1p
 /shrinker/js/h1j.js$script,1p
@@ -19514,7 +19510,7 @@ federleqa.icu,imgair.net,imgblaze.net,imgfrost.net,imguiwe.buzz,imgweika.buzz,im
 ?tb=http://$frame,popup,3p,domain=com|icu
 /pu.php?partnersCode=$popup,domain=com|icu|xyz
 .top/*=https://imgair.net/vip/*.html$popup,3p,domain=buzz
-federleqa.icu,imgwia.buzz,imgyear.icu,nemenlake.*,opalekr.icu,pixsera.net,rtkenale.icu##+js(nostif, _0x)
+imgwia.buzz,nemenlake.*,pixsera.net,rtkenale.icu##+js(nostif, _0x)
 imgtoyou.icu,nemenlake.*##+js(nowoif)
 ||hottracker.biz^
 ||influencedzerobelief.com^
@@ -19522,15 +19518,15 @@ imgtoyou.icu,nemenlake.*##+js(nowoif)
 
 @@/wp-content/plugins/agreeable-button/*$script,1p,domain=buzz
 @@/^https?:\/\/[a-z]{5,}\.buzz\/[0-9a-zA-Z]+$/$ghide
-imgalor.xyz,imgjut.buzz,imgkaka.xyz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgkuiw.xyz,imglina.xyz,imgtrw.buzz,imgveni.xyz,imgweika.buzz,imgwex.buzz,imgowk.buzz,imgokr.buzz,imgoiu.buzz,imgiut.buzz,imgizw.buzz,imguytx.buzz,imgxaqq.buzz,imgxbe.buzz,imgux.buzz,imgewe.buzz,imguebr.buzz,imgqew.buzz,imgbew.buzz,imguo.buzz,imgxxxx.buzz,imgeza.buzz,imgzzzz.buzz,imgkuz.buzz,imgxhfr.buzz,imgqwt.buzz,imgtwq.buzz,imgbjryy.buzz,imgjetr.buzz,imgxelz.buzz,imgmth.buzz,imgnfhr.buzz,imgytreq.buzz,hfneiott.buzz,lgjreelqq.buzz,mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,xmbme.buzz,velnibug.buzz##+js(aeld, , _0x)
-imgalor.xyz,imgjut.buzz,imgkaka.xyz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgkuiw.xyz,imglina.xyz,imgtrw.buzz,imgveni.xyz,imgweika.buzz,imgwex.buzz,imgowk.buzz,imgokr.buzz,imgoiu.buzz,imgiut.buzz,imgizw.buzz,imguytx.buzz,imgxaqq.buzz,imgxbe.buzz,imgux.buzz,imgewe.buzz,imguebr.buzz,imgqew.buzz,imgbew.buzz,imguo.buzz,imgxxxx.buzz,imgeza.buzz,imgzzzz.buzz,imgkuz.buzz,imgxhfr.buzz,imgqwt.buzz,imgtwq.buzz,imgbjryy.buzz,imgjetr.buzz,imgxelz.buzz,imgmth.buzz,imgnfhr.buzz,imgytreq.buzz,hfneiott.buzz,lgjreelqq.buzz,mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,xmbme.buzz,velnibug.buzz##+js(nosiif, _0x)
-imgalor.xyz,imgjut.buzz,imgkaka.xyz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgkuiw.xyz,imglina.xyz,imgtoyou.icu,imgtrw.buzz,imgveni.xyz,imgweika.buzz,imgwex.buzz,imgowk.buzz,imgokr.buzz,imgoiu.buzz,imgiut.buzz,imgizw.buzz,imguytx.buzz,imgxaqq.buzz,imgxbe.buzz,imgux.buzz,imgewe.buzz,imguebr.buzz,imgqew.buzz,imgbew.buzz,imguo.buzz,imgxxxx.buzz,imgeza.buzz,imgzzzz.buzz,imgkuz.buzz,imgxhfr.buzz,imgqwt.buzz,imgtwq.buzz,imgbjryy.buzz,imgjetr.buzz,imgxelz.buzz,imgmth.buzz,imgnfhr.buzz,imgytreq.buzz,hfneiott.buzz,lgjreelqq.buzz,mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,xmbme.buzz,velnibug.buzz##+js(aopr, console.clear)
-imgalor.xyz,imgjut.buzz,imgkaka.xyz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgkuiw.xyz,imglina.xyz,imgtrw.buzz,imgveni.xyz,imgwex.buzz,imgowk.buzz,imgokr.buzz,imgoiu.buzz,imgiut.buzz,imgizw.buzz,imguytx.buzz,imgxaqq.buzz,imgxbe.buzz,imgux.buzz,imgewe.buzz,imguebr.buzz,imgqew.buzz,imgbew.buzz,imguo.buzz,imgxxxx.buzz,imgeza.buzz,imgzzzz.buzz,imgkuz.buzz,imgxhfr.buzz,imgqwt.buzz,imgtwq.buzz,imgbjryy.buzz,imgjetr.buzz,imgxelz.buzz,imgmth.buzz,imgnfhr.buzz,imgytreq.buzz,hfneiott.buzz,lgjreelqq.buzz,mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,xmbme.buzz,velnibug.buzz##+js(nano-sib, timer)
-imgalor.xyz,imgjut.buzz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgkuiw.xyz,imglina.xyz,imgtrw.buzz,imgveni.xyz,imgweika.buzz,imgwex.buzz,imgowk.buzz,imgokr.buzz,imgoiu.buzz,imgiut.buzz,imgizw.buzz,imguytx.buzz,imgxaqq.buzz,imgxbe.buzz,imgux.buzz,imgewe.buzz,imguebr.buzz,imgqew.buzz,imgbew.buzz,imguo.buzz,imgxxxx.buzz,imgeza.buzz,imgzzzz.buzz,imgkuz.buzz,imgxhfr.buzz,imgqwt.buzz,imgtwq.buzz,imgbjryy.buzz,imgjetr.buzz,imgxelz.buzz,imgmth.buzz,imgnfhr.buzz,imgytreq.buzz,hfneiott.buzz,lgjreelqq.buzz,mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,xmbme.buzz,velnibug.buzz##[id*="ScriptRootC"]
-imgalor.xyz,imgjut.buzz,imgkane.buzz,imgkia.*,imgklx.xyz,imgkoka.buzz,imgkuiw.xyz,imglina.xyz,imgtrw.buzz,imgveni.xyz,imgweika.buzz,imgwex.buzz,imgowk.buzz,imgokr.buzz,imgoiu.buzz,imgiut.buzz,imgizw.buzz,imguytx.buzz,imgxaqq.buzz,imgxbe.buzz,imgux.buzz,imgewe.buzz,imguebr.buzz,imgqew.buzz,imgbew.buzz,imguo.buzz,imgxxxx.buzz,imgeza.buzz,imgzzzz.buzz,imgkuz.buzz,imgxhfr.buzz,imgqwt.buzz,imgtwq.buzz,imgbjryy.buzz,imgjetr.buzz,imgxelz.buzz,imgmth.buzz,imgnfhr.buzz,imgytreq.buzz,hfneiott.buzz,lgjreelqq.buzz,mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,xmbme.buzz,velnibug.buzz##div[id][style^="position: fixed; display: block; width: 100%;"]
-imgjut.buzz,imgkane.buzz,imgkia.*,imgkoka.buzz,imgkuiw.xyz,imglina.xyz,imgtrw.buzz,imgveni.xyz,imgweika.buzz,imgwex.buzz,imgowk.buzz,imgokr.buzz,imgoiu.buzz,imgiut.buzz,imgizw.buzz,imguytx.buzz,imgxaqq.buzz,imgxbe.buzz,imgux.buzz,imgewe.buzz,imguebr.buzz,imgqew.buzz,imgbew.buzz,imguo.buzz,imgxxxx.buzz,imgeza.buzz,imgzzzz.buzz,imgkuz.buzz,imgxhfr.buzz,imgqwt.buzz,imgtwq.buzz,imgbjryy.buzz,imgjetr.buzz,imgxelz.buzz,imgmth.buzz,imgnfhr.buzz,imgytreq.buzz,hfneiott.buzz,lgjreelqq.buzz,mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,xmbme.buzz,velnibug.buzz##div[style="width:100%;height:110px"]
-imgalor.xyz,imgjut.buzz,imgkane.buzz,imgkia.*,imgkoka.buzz,imgkuiw.xyz,imglina.xyz,imgtrw.buzz,imgveni.xyz,imgwex.buzz,imgowk.buzz,imgokr.buzz,imgoiu.buzz,imgiut.buzz,imgizw.buzz,imguytx.buzz,imgxaqq.buzz,imgxbe.buzz,imgux.buzz,imgewe.buzz,imguebr.buzz,imgqew.buzz,imgbew.buzz,imguo.buzz,imgxxxx.buzz,imgeza.buzz,imgzzzz.buzz,imgkuz.buzz,imgxhfr.buzz,imgqwt.buzz,imgtwq.buzz,imgbjryy.buzz,imgjetr.buzz,imgxelz.buzz,imgmth.buzz,imgnfhr.buzz,imgytreq.buzz,hfneiott.buzz,lgjreelqq.buzz,mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,xmbme.buzz,velnibug.buzz##+js(nowoif, !/prcf.fiyar|themes|pixsense|.jpg/)
-mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,xmbme.buzz,velnibug.buzz##div[class][style="display: block;"]
+imgkaka.xyz,imgkia.*,imglina.xyz,imgowk.buzz,imgokr.buzz,imgoiu.buzz,imgiut.buzz,imgizw.buzz,imgux.buzz,imgewe.buzz,imguebr.buzz,imgqew.buzz,imgbew.buzz,imguo.buzz,imgxxxx.buzz,imgeza.buzz,imgzzzz.buzz,imgkuz.buzz,imgxhfr.buzz,imgqwt.buzz,imgtwq.buzz,imgbjryy.buzz,imgjetr.buzz,imgxelz.buzz,imgytreq.buzz,hfneiott.buzz,mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,velnibug.buzz##+js(aeld, , _0x)
+imgkaka.xyz,imgkia.*,imglina.xyz,imgowk.buzz,imgokr.buzz,imgoiu.buzz,imgiut.buzz,imgizw.buzz,imgux.buzz,imgewe.buzz,imguebr.buzz,imgqew.buzz,imgbew.buzz,imguo.buzz,imgxxxx.buzz,imgeza.buzz,imgzzzz.buzz,imgkuz.buzz,imgxhfr.buzz,imgqwt.buzz,imgtwq.buzz,imgbjryy.buzz,imgjetr.buzz,imgxelz.buzz,imgytreq.buzz,hfneiott.buzz,mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,velnibug.buzz##+js(nosiif, _0x)
+imgkaka.xyz,imgkia.*,imglina.xyz,imgtoyou.icu,imgowk.buzz,imgokr.buzz,imgoiu.buzz,imgiut.buzz,imgizw.buzz,imgux.buzz,imgewe.buzz,imguebr.buzz,imgqew.buzz,imgbew.buzz,imguo.buzz,imgxxxx.buzz,imgeza.buzz,imgzzzz.buzz,imgkuz.buzz,imgxhfr.buzz,imgqwt.buzz,imgtwq.buzz,imgbjryy.buzz,imgjetr.buzz,imgxelz.buzz,imgytreq.buzz,hfneiott.buzz,mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,velnibug.buzz##+js(aopr, console.clear)
+imgkaka.xyz,imgkia.*,imglina.xyz,imgowk.buzz,imgokr.buzz,imgoiu.buzz,imgiut.buzz,imgizw.buzz,imgux.buzz,imgewe.buzz,imguebr.buzz,imgqew.buzz,imgbew.buzz,imguo.buzz,imgxxxx.buzz,imgeza.buzz,imgzzzz.buzz,imgkuz.buzz,imgxhfr.buzz,imgqwt.buzz,imgtwq.buzz,imgbjryy.buzz,imgjetr.buzz,imgxelz.buzz,imgytreq.buzz,hfneiott.buzz,mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,velnibug.buzz##+js(nano-sib, timer)
+imgkia.*,imglina.xyz,imgowk.buzz,imgokr.buzz,imgoiu.buzz,imgiut.buzz,imgizw.buzz,imgux.buzz,imgewe.buzz,imguebr.buzz,imgqew.buzz,imgbew.buzz,imguo.buzz,imgxxxx.buzz,imgeza.buzz,imgzzzz.buzz,imgkuz.buzz,imgxhfr.buzz,imgqwt.buzz,imgtwq.buzz,imgbjryy.buzz,imgjetr.buzz,imgxelz.buzz,imgytreq.buzz,hfneiott.buzz,mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,velnibug.buzz##[id*="ScriptRootC"]
+imgkia.*,imglina.xyz,imgowk.buzz,imgokr.buzz,imgoiu.buzz,imgiut.buzz,imgizw.buzz,imgux.buzz,imgewe.buzz,imguebr.buzz,imgqew.buzz,imgbew.buzz,imguo.buzz,imgxxxx.buzz,imgeza.buzz,imgzzzz.buzz,imgkuz.buzz,imgxhfr.buzz,imgqwt.buzz,imgtwq.buzz,imgbjryy.buzz,imgjetr.buzz,imgxelz.buzz,imgytreq.buzz,hfneiott.buzz,mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,velnibug.buzz##div[id][style^="position: fixed; display: block; width: 100%;"]
+imgkia.*,imglina.xyz,imgowk.buzz,imgokr.buzz,imgoiu.buzz,imgiut.buzz,imgizw.buzz,imgux.buzz,imgewe.buzz,imguebr.buzz,imgqew.buzz,imgbew.buzz,imguo.buzz,imgxxxx.buzz,imgeza.buzz,imgzzzz.buzz,imgkuz.buzz,imgxhfr.buzz,imgqwt.buzz,imgtwq.buzz,imgbjryy.buzz,imgjetr.buzz,imgxelz.buzz,imgytreq.buzz,hfneiott.buzz,mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,velnibug.buzz##div[style="width:100%;height:110px"]
+imgkia.*,imglina.xyz,imgowk.buzz,imgokr.buzz,imgoiu.buzz,imgiut.buzz,imgizw.buzz,imgux.buzz,imgewe.buzz,imguebr.buzz,imgqew.buzz,imgbew.buzz,imguo.buzz,imgxxxx.buzz,imgeza.buzz,imgzzzz.buzz,imgkuz.buzz,imgxhfr.buzz,imgqwt.buzz,imgtwq.buzz,imgbjryy.buzz,imgjetr.buzz,imgxelz.buzz,imgytreq.buzz,hfneiott.buzz,mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,velnibug.buzz##+js(nowoif, !/prcf.fiyar|themes|pixsense|.jpg/)
+mrlzqoe.buzz,utinwpqqui.buzz,pyotinle.buzz,velnibug.buzz##div[class][style="display: block;"]
 
 ||chaglihysty.pro^
 ||gahapule.pro^
