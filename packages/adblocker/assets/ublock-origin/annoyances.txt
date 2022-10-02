@@ -5649,11 +5649,6 @@ blogpascher.com##html.om-position-popup body:style(overflow:auto !important)
 ! https://github.com/uBlockOrigin/uAssets/issues/10050
 tv-tokyo.co.jp##+js(set, document.oncontextmenu, null)
 
-! https://github.com/uBlockOrigin/uAssets/pull/10062
-myradioonline.ro##+js(rc, _bannerTop1)
-myradioonline.ro##._horizontBanner
-myradioonline.ro##.pls-dis-blck
-
 ! https://forums.lanik.us/viewtopic.php?f=91&t=46783
 developpez.com##+js(acis, document.getElementById, cookie)
 
@@ -6187,9 +6182,6 @@ bumigemilang.com##::selection:style(background: Highlight !important; color: Hig
 ! https://github.com/uBlockOrigin/uAssets/issues/12496
 zerohedge.com##+js(aeld, mouseout)
 
-! https://github.com/uBlockOrigin/uAssets/issues/12502
-adanayi.ir,adanayi.blogfa.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
-
 ! https://bingotingo.com/what-is-ubersuggest/ anti right click
 bingotingo.com##+js(acis, document.oncontextmenu)
 bingotingo.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
@@ -6647,8 +6639,8 @@ disheye.com##+js(aopr, alert)
 deepl.com##+js(aeld, copy)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/13705
-www.google.*##div[data-song-title] > div:style(user-select: auto !important;)
-www.google.*##div[data-song-title] [data-lyricid]:style(user-select: auto !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/15084
+google.*##[data-lyricid]:style(user-select: text !important;)
 
 ! gourmetscans. net right click, copy, keys
 gourmetscans.net##+js(aopw, disableEnterKey)
@@ -6807,9 +6799,10 @@ epitesti.ro##*:style(-webkit-touch-callout: default !important; -webkit-user-sel
 allcryptoz.net,crewbase.net,crewus.net,shinbhu.net,shinchu.net,thumb8.net,thumb9.net,topcryptoz.net,uniqueten.net,ultraten.net##^script:has-text(document.onkeydown)
 
 ! https://tonnestreamz.xyz/en/live.cdnz.one-7452.php anti right click and dev tools
-eplayer.click##^script:has-text(document.oncontextmenu)
-eplayer.click##+js(acis, document.onkeypress)
-eplayer.click##+js(ra, oncontextmenu, body)
+! https://footyhunter3.xyz/papahd/stream-62.php
+eplayer.click,olacast.live##^script:has-text(document.oncontextmenu)
+eplayer.click,olacast.live##+js(acis, document.onkeypress)
+eplayer.click,olacast.live##+js(ra, oncontextmenu, body)
 
 ! https://knightnoscanlation.com/ anti right click
 knightnoscanlation.com##+js(acis, document.addEventListener, contextmenu)
@@ -6823,3 +6816,69 @@ immobiliaremia.com##+js(acs, disableSelection, reEnable)
 immobiliaremia.com##+js(acs, document.ondragstart)
 immobiliaremia.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 immobiliaremia.com##style:has-text(@media print):remove()
+
+! sweetslyrics. com clipboard manipulation
+sweetslyrics.com##+js(aeld, copy, preventDefault)
+
+! https://github.com/uBlockOrigin/uAssets/issues/14939
+portalcriatividade.com.br##+js(acis, disable_copy)
+portalcriatividade.com.br##+js(acis, nocontext)
+
+! www.anisearch.com ad reinjection
+||privacy-mgmt.com/unified/wrapperMessagingWithoutDetection.js$script,redirect-rule=noop.js,domain=anisearch.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/14961
+delicateseliterare.ro##+js(acs, jQuery, contextmenu)
+delicateseliterare.ro##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/AdguardTeam/AdguardFilters/pull/130309
+uwayapply.com##+js(ra, oncontextmenu|ondragstart|onselectstart)
+
+! https://github.com/uBlockOrigin/uAssets/issues/14864
+bianity.net##+js(aeld, contextmenu)
+bianity.net##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! csid. ro contextmenu drag select
+csid.ro##+js(aopw, document.oncontextmenu)
+csid.ro##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://v3.sportsonline.to/channels/pt/sporttv1.php anti dev tools
+smokelearned.net##+js(acis, runPageBugger)
+
+! https://github.com/AdguardTeam/AdguardFilters/pull/129615
+onna.kr##+js(aeld, copy)
+onna.kr##+js(aopw, document.oncontextmenu)
+onna.kr##+js(aopw, document.ondragstart)
+onna.kr##+js(aopw, document.onselectstart)
+
+! anti right click 10000recipe. com
+10000recipe.com##+js(acis, $, contextmenu)
+
+! https://github.com/uBlockOrigin/uAssets/issues/15083
+framu.world##+js(acs, disableSelection, reEnable)
+framu.world##+js(acs, document.ondragstart)
+framu.world##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+framu.world##style:has-text(@media print):remove()
+framu.world##+js(aopw, document.onkeydown)
+
+! frameboxxindore. com clipboard manipulation
+frameboxxindore.com##+js(aeld, copy, pagelink)
+
+! dtdc .in contextmenu
+dtdc.in##+js(aopr, document.oncontextmenu)
+
+! https://github.com/uBlockOrigin/uAssets/issues/15106
+*$script,domain=geotastic.net,redirect-rule=noopjs
+
+! https://github.com/uBlockOrigin/uAssets/issues/15120
+@@||api.adinplay.com/libs/aiptag/pub/CRF/curvefever.pro/tag.min.js$script,domain=curvefever.pro
+
+! https://faptiti.com/0ghuzjkttch4.html anti right click
+faptiti.com##+js(aeld, contextmenu, preventDefault)
+
+! https://www.vercalendario.info/en/how/convert-timestamp-date.html clipboard injection
+vercalendario.info##+js(aeld, copy, Source)
+
+! https://github.com/uBlockOrigin/uAssets/issues/15130
+getlatka.com##.MuiModal-root
+getlatka.com##[style^="filter: blur"]:style(filter: none !important)
