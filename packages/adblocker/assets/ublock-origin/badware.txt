@@ -860,6 +860,7 @@ okashimag.com,tech4yougadgets.com##+js(aopr, Notification)
 ||clearblueline.com^$all
 ||di5.biz^$all
 ||bettershitecolumn.com^$all
+||weatherplllatform.com^$all
 ! https://github.com/AdguardTeam/AdguardFilters/issues/114312
 /prize/luckyus-ad/*$doc
 ||mauptaub.com^$all
@@ -919,6 +920,11 @@ okashimag.com,tech4yougadgets.com##+js(aopr, Notification)
 ||benaughty.fun^$all
 ||fl1rtyparty.com^$all
 ||datingformeeting.com^$all
+||serving-passthrough.com^$all
+||soft-little.com^$all
+||week-tale.xyz^$all
+_dating1/index.html?aref=$doc
+||familysimulators.$all
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/68588
 ! https://github.com/uBlockOrigin/uAssets/issues/8869
@@ -933,7 +939,8 @@ okashimag.com,tech4yougadgets.com##+js(aopr, Notification)
 ! https://github.com/uBlockOrigin/uAssets/commit/df17084b4815e87d420e8adf19bf4959e828e6e5#commitcomment-66510549
 /^https?:\/\/((?!www)[a-z]{3,}|\d{2})?\.?[-0-9a-z]{6,}\.[a-z]{2,6}\/(?:[a-z]{6,8}\/)?\/?\?o=[0-9a-z]{7}&u=[0-9a-z]{7}/$doc,frame,match-case,domain=buzz|com|de|fun|guru|info|life|live|mobi|online|pw|site|space|top|us|xyz
 ! push notification scam
-/^https:\/\/(?:www\d\.)?[-a-z]{6,}\.(?:com|info|net|org)\/(?=[-_a-zA-Z]{0,42}\d)(?=[-_0-9a-z]{0,42}[A-Z])[-_0-9a-zA-Z]{43}\/\?cid=[-_0-9a-zA-Z]{16,36}&sid=[_0-9a-f]{1,32}$/$doc,match-case,domain=com|info|net|org
+/^https:\/\/(?:www\d\.)?[-a-z]{6,}\.(?:com|info|net|org)\/(?=[-_a-zA-Z]{0,42}\d)(?=[-_0-9a-z]{0,42}[A-Z])[-_0-9a-zA-Z]{43}\/\?cid=[-_0-9a-zA-Z]{16,36}(?:&qs\d=\S+)?&sid=[_0-9a-f]{1,32}$/$doc,match-case,domain=com|info|net|org
+/^https:\/\/(?:www\d\.)?[-a-z]{6,}\.(?:com|info|net|org)\/(?=[-_a-zA-Z]{0,42}\d)(?=[-_0-9a-z]{0,42}[A-Z])[-_0-9a-zA-Z]{43}\/\?sid=[_0-9a-f]{1,32}(?:&qs\d=\S+)?&cid=[-_0-9a-zA-Z]{16,36}$/$doc,match-case,domain=com|info|net|org
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8378
 ||ogtrk.net^
@@ -1006,6 +1013,8 @@ okashimag.com,tech4yougadgets.com##+js(aopr, Notification)
 ||adserveryo3.xyz^$all
 /index.php?uid=*&code=ad^$doc
 ||mcclick.online^$all
+||koitushinterneinnehmen.s3.eu-central-1.amazonaws.com^$all
+||ee-softs.com^$all
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9045
 ||securitydefender.xyz^$all
@@ -1112,13 +1121,7 @@ okashimag.com,tech4yougadgets.com##+js(aopr, Notification)
 ||hypixelskyblock.net^$doc
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10075
-||lady-datings-here.com^$doc
-||profit-worlds2u.life^$doc
-||yourbest-dating33.life^$doc
-||sexcontact-store1.com^$doc
 ||superdatenow3.com^$doc
-||new-lady-here12.com^$doc
-||hook-ups-here2.com^$doc
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10086
 ||b-time.site^$doc
@@ -1354,17 +1357,13 @@ cracksoftwaress.net##div[style="float: none; margin:10px 0 10px 0; text-align:ce
 ! https://reddit.com/r/FitGirlRepack/
 ! https://reddit.com/r/PiratedGames/comments/drlx3r/does_anyone_know_the_official_website_for_fitgirl/
 ! https://reddit.com/r/CrackWatch/comments/wl7nfb/dream_cycle_v209_release_fitgirl_repack_158_gb/?context=3
-||fitgirl-repack.com^$all
-||fitgirl-repacks.com^$all
-||fitgirls-repack.com^$all
-||fitgirl-repack.net^$all
-||fitgirl-repacks.website^$all
-||fitgirl-repacks.cc^$all
-||fitgirlrepacks.co^$all
-||fitgirlrepacks.pro^$all
-||fitgirlrepack.games^$all
-||fitgirl-repacks.info^$all
+||fitgirl-repacks.*^$all,domain=~fitgirl-repacks.site
+||fitgirl-repack.*^$all,domain=~fitgirl-repacks.site
+||fitgirlrepacks.*^$all,domain=~fitgirl-repacks.site
+||fitgirlrepack.*^$all,domain=~fitgirl-repacks.site
+||fitgirls-repack.*^$all,domain=~fitgirl-repacks.site
 ||fitgirl-repacks-site.org^$doc
+@@||fitgirl-repacks.site^$image
 
 ! https://xda-developers.com/psa-magiskmanager-com-not-official-website-magisk/
 ! The official site: https://github.com/topjohnwu/Magisk
@@ -1401,3 +1400,34 @@ cracksoftwaress.net##div[style="float: none; margin:10px 0 10px 0; text-align:ce
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/129493
 ||ucetnictvi-liberec.eu^$all
+
+! https://github.com/uBlockOrigin/uAssets/pull/14985
+||skymods.net^$all
+
+! https://github.com/uBlockOrigin/uAssets/pull/15061
+||hypixelstore.site^$all
+||gifting-hypixel.com^$all
+||hypixel-claim.net^$all
+||hypixelstorexyz.pages.dev^$all
+||hypixel-f4x.pages.dev^$all
+||hypixelstore.xyz^$all
+||hypixelnet.store^$all
+||hypixel-claims.net^$all
+||hypixel-claims.com^$all
+||redeem-hypixel.net^$all
+||hypixel-store.net^$all
+||tebex-hypixel.com^$all
+||hypixel-claim.store^$all
+||claims-hypixel.store^$all
+||claim.tebex-hypixel.com^$all
+||claims-hypixel.com^$all
+||store.rank-hypixel.com^$all
+||accept-hypixel.net^$all
+||claim-hypixel.com^$all
+||claim-hypixel.net^$all
+||gifts-hypixel.com^$all
+||store-hypixel.com^$all
+||store.hypixel-redeem.net^$all
+||redeem-hypixel.store^$all
+||hypixel-gifts.net^$all
+||claim.hypixel.gifts^$all
