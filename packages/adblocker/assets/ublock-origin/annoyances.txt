@@ -1954,9 +1954,6 @@ nzz.ch###adnz_maxiboard_1
 ! https://github.com/uBlockOrigin/uAssets/issues/6021
 watson.de##+js(set, bAdBlocker, false)
 
-! blurred trick
-adsafelink.net##+js(set, blurred, false)
-
 ! https://github.com/NanoMeow/QuickReports/issues/292
 babel.com##[id^=adReplacement]
 babel.com##.infopub
@@ -2824,7 +2821,7 @@ underconsideration.com##+js(nostif, test.remove)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7058
 !#if env_chromium
-newyorker.com##+js(acis, navigator.storage.estimate)
+!newyorker.com##+js(acis, navigator.storage.estimate)
 !#endif
 !#if env_firefox
 newyorker.com##+js(set, webkitRequestFileSystem, noopFunc)
@@ -4481,9 +4478,9 @@ world4.eu##+js(aopw, document.oncontextmenu)
 world4.eu##+js(acis, document.oncopy)
 world4.eu##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 world4.eu##*::selection:style(background-color:#338FFF!important)
-world4.eu##style:has-text(body:after{content:):remove()
 world4.eu##+js(acis, disable_copy)
 world4.eu##+js(acis, disable_hot_keys)
+world4.eu##+js(aopw, disable_ext_code)
 
 ! ggulpass .com anti right click / select
 ggulpass.com##+js(aopw, document.oncontextmenu)
@@ -6882,3 +6879,12 @@ vercalendario.info##+js(aeld, copy, Source)
 ! https://github.com/uBlockOrigin/uAssets/issues/15130
 getlatka.com##.MuiModal-root
 getlatka.com##[style^="filter: blur"]:style(filter: none !important)
+
+! https://github.com/uBlockOrigin/uAssets/issues/15142
+knowyourmeme.com##+js(acis, document.createElement, admiral)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/xy6lh0/
+pixwox.com##+js(nostif, length, 3000)
+
+! https://khohieu.com/ anti right click
+/wp-content/plugins/t42-content-protector/js/protector.min.js$script
