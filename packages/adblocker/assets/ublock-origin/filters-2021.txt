@@ -1438,8 +1438,8 @@ videowood.tv##+js(aopw, adcashMacros)
 hideandseek.world##+js(set, canRunAds, true)
 
 ! https://github.com/easylist/easylist/issues/7331#issuecomment-791886559
-speedostream.com##+js(aost, JSON.parse, computed)
-||s.speedostream.com^$script,1p
+speedostream.*##+js(aost, JSON.parse, computed)
+||s.speedostream.*^$script,1p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/76791
 @@||nnaa66.xyz^$ghide
@@ -2942,6 +2942,8 @@ watchmdh.to##+js(nostif, innerText, 2000)
 watchmdh.to##+js(acis, addEventListener, -0x)
 watchmdh.to##+js(aopr, decodeURI)
 watchmdh.to##a[style^="position: absolute; inset: 0px;"][target="_blank"]
+watchmdh.to##.sponsor
+||watchmdh.to/*.gif$image
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/83279
 173.249.49.204##.d-md-block.d-none.video-sidebar
@@ -3062,8 +3064,8 @@ watchmovierulz.*##+js(nowoif)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9155
 ! streamsb_galaxy
-anigogo.net,animepl.xyz,arslanrocky.xyz,cloudemb.com,dlmovies.link,embedsb.com,faptiti.com,gdpress.xyz,hlsplayer.xyz,javplaya.com,playersb.com,sblanh.com,sbcloud1.com,sbchip.*,sbembed.com,sbembed1.com,sbembed2.com,sbfast.com,sbflix.*,sbfull.com,sbplay1.com,sbplay2.*,sbspeed.com,sbthe.com,sbvideo.*,ssbstream.net,streamsb.*,streamsss.net,tubesb.com,viewsb.com,watchsb.com,oxl.one,sbembed3.com,sbembed4.com,sbplay.*,sbplay3.*,vidmovie.xyz,view345.com,xvideostream.net##+js(aopr, __Y)
-anigogo.net,arslanrocky.xyz,cloudemb.com,dlmovies.link,gdpress.xyz,hlsplayer.xyz,oxl.one,playersb.com,sblanh.com,sbchip.*,sbcloud1.com,sbembed.com,sbembed1.com,sbembed2.com,sbembed3.com,sbembed4.com,sbfast.com,sbflix.*,sbfull.com,sbplay.*,sbplay1.com,sbplay2.*,sbplay3.*,sbspeed.com,sbthe.com,sbvideo.net,ssbstream.net,streamsb.*,streamsss.net,tubesb.com,viewsb.com,watchsb.com,vidmovie.xyz,view345.com##+js(aopr, mm)
+anigogo.net,animepl.xyz,arslanrocky.xyz,cloudemb.com,dlmovies.link,embedsb.com,faptiti.com,gdpress.xyz,hlsplayer.xyz,javplaya.com,playersb.com,sbanh.com,sblanh.com,sbcloud1.com,sbchip.*,sbembed.com,sbembed1.com,sbembed2.com,sbfast.com,sbflix.*,sbfull.com,sbplay1.com,sbplay2.*,sbspeed.com,sbthe.com,sbvideo.*,ssbstream.net,streamsb.*,streamsss.net,tubesb.com,viewsb.com,watchsb.com,oxl.one,sbembed3.com,sbembed4.com,sbplay.*,sbplay3.*,vidmovie.xyz,view345.com,xvideostream.net##+js(aopr, __Y)
+anigogo.net,arslanrocky.xyz,cloudemb.com,dlmovies.link,gdpress.xyz,hlsplayer.xyz,oxl.one,playersb.com,sbanh.com,sblanh.com,sbchip.*,sbcloud1.com,sbembed.com,sbembed1.com,sbembed2.com,sbembed3.com,sbembed4.com,sbfast.com,sbflix.*,sbfull.com,sbplay.*,sbplay1.com,sbplay2.*,sbplay3.*,sbspeed.com,sbthe.com,sbvideo.net,ssbstream.net,streamsb.*,streamsss.net,tubesb.com,viewsb.com,watchsb.com,vidmovie.xyz,view345.com##+js(aopr, mm)
 sbembed1.com,sbvideo.*##+js(aopr, console.clear)
 cloudemb.com##+js(nowoif, !/^\/d\//)
 cloudemb.com##+js(set, console.clear, noopFunc)
@@ -3074,6 +3076,13 @@ sbplay.*,sbplay1.com##+js(set, console.clear, noopFunc)
 oxl.one,sbplay1.com,sbvideo.net##+js(nosiif, 0x)
 sbplay.*##^script:has-text(debugger)
 ||app.adjust.net.in^
+||abusageqh.com^
+||eisasbeau.buzz^
+||incasapritif.tech^
+||obstanceder.pro^
+||riolenproce.xyz^
+||linkspoint.xyz/sw.js$script,1p
+||weakermumrespect.com^
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/83853
 ! https://www.reddit.com/r/uBlockOrigin/comments/xsw9i4/
@@ -3613,10 +3622,6 @@ serialeonlinesubtitrate.ro###text-6
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9443
 @@/wp-content/plugins/dh-new-anti-adblocker$script,1p
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/86335
-||smartmediarep.com^$media,redirect=noop-0.1s.mp3,domain=sbs.co.kr
-sbs.co.kr##.ad_skip_area_w
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/86270
 javhd.icu##+js(acis, decodeURI, decodeURIComponent)
@@ -4403,11 +4408,11 @@ enagato.com##+js(set, blurred, false)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/91636
 ! https://github.com/AdguardTeam/AdguardFilters/issues/116735
 fapnado.*##+js(acis, Math.floor, ExoLoader)
-fapnado.*###list_videos_related_videos > center
-fapnado.*###pause-ads
-fapnado.*##[class^="spot"]
-/zdoink/*$script
+fapnado.*##.pause-ad-pullup
+fapnado.*##[class^="zpot"]
+||fapnado.*/bump/
 ||oi.fapnado.xxx^
+||io.fapnado.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9800
 pogolinks.*##+js(nostif, showModal)
@@ -5609,10 +5614,6 @@ imgbbd.buzz,imgizx.buzz,imgkoc.buzz,imgkorle.buzz,imglkju.buzz,imgqte.buzz,imgwe
 imgwang.buzz##+js(acis, RegExp, debugger)
 ##div[style="position: fixed; display: block; width: 100%; height: 15%; top: 0; left: 0; background-color: rgba(0, 0, 0, 0); z-index: 300000;"]
 
-! https://github.com/uBlockOrigin/uAssets/issues/10315
-fapster.xxx##+js(nowoif)
-fapster.xxx##.table
-
 ! https://github.com/uBlockOrigin/uAssets/issues/10321
 *$image,redirect-rule=1x1.gif,domain=freevpn4you.net
 freevpn4you.net##.adsbygoogle:upward(1)
@@ -5720,7 +5721,9 @@ shorte.anxcinema.com##+js(aopr, open)
 mejoresmodsminecraft.site##+js(acis, decodeURIComponent, ai_adb)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10346
+watchdoctorwhoonline.com##+js(aopr, mm)
 watchdoctorwhoonline.com##.custom-html-widget.textwidget > .close
+watchdoctorwhoonline.com##.sidebar_episodes2
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10344
 synonyms.com##+js(set, canRunAds, true)
@@ -5907,12 +5910,14 @@ thetruedefender.com###text-4
 asiaon.*,pornpaw.com##+js(acis, document.querySelectorAll, popMagic)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/104768
 asiaon.*##+js(no-xhr-if, googlesyndication)
+||cse.google.com/adsense/search/async-ads.js$xhr,redirect-rule=noop.txt,domain=asiaon.top
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/qnzkph/adblock_blocker/
 m4news.com##.demand-supply
 m4news.com###id-custom_banner
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/qoqiid/
+tv247.us##+js(aopw, _pop)
 @@||tv247.us^$ghide
 tv247.us##.afc_popup
 
@@ -6713,10 +6718,11 @@ dash-free.com,softairbay.com,urlfiles.com##+js(aopr, app_vars.force_disable_adbl
 autofaucet.dutchycorp.space##[href^="https://enicyvys.xyz/"]
 autofaucet.dutchycorp.space##[href*="banner"]
 autofaucet.dutchycorp.space##[src^="blob:https://autofaucet.dutchycorp.space/"]:remove()
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=coin-free.com|kienthucrangmieng.com|techmart4u.in
-*$script,3p,domain=coin-free.com|kienthucrangmieng.com,denyallow=iconify.design
+@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=coin-free.com|kienthucrangmieng.com|techmart4u.in|chinhnhacoban.com|chamcuuhoc.com|hocchannuoi.com|thuocdangian.net|hoclamdaubep.com|tremamnon.com|tai-mui-hong.com
+*$script,3p,domain=coin-free.com|kienthucrangmieng.com|techmart4u.in|chinhnhacoban.com|chamcuuhoc.com|hocchannuoi.com|thuocdangian.net|hoclamdaubep.com|tai-mui-hong.com,denyallow=iconify.design
 coin-free.com,kienthucrangmieng.com##[id^="wpsafe-wait"]
 coin-free.com,kienthucrangmieng.com###wpsafe-generate, #wpsafe-link:style(display: block !important)
+*$script,redirect-rule=noopjs,domain=coin-free.com|kienthucrangmieng.com|techmart4u.in|chinhnhacoban.com|chamcuuhoc.com|hocchannuoi.com|thuocdangian.net|hoclamdaubep.com|tai-mui-hong.com
 techmart4u.in##+js(nano-sib)
 techmart4u.in##+js(noeval)
 @@||ovlinks.com^$ghide
@@ -6725,6 +6731,7 @@ ovlinks.com##+js(aopr, open)
 ccsl.xyz,techmart4u.in,urlfiles.com##+js(nosiif, visibility, 1000)
 lootlinks.xyz##+js(nobab)
 ccsl.xyz##center > div.row
+||understatedworking.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10894
 actresstoday.com##+js(acis, eval, replace)
@@ -6921,8 +6928,9 @@ mangastream.mobi###myModal
 ###sponsored_link:not([style^="position: absolute; left: -5000px"])
 ! https://github.com/orgs/uBlockOrigin/teams/ublock-filters-volunteers/discussions/377/comments/63
 ! https://github.com/AdguardTeam/AdguardFilters/issues/107617
+! https://github.com/uBlockOrigin/uAssets/issues/15283
 #@##ad-banner
-~androidauthority.com#@#.ad-banner
+~androidauthority.com,~soundguys.com#@#.ad-banner
 ###ad-banner:not([style="height: 5px; width: 5px; position: absolute; top: 0;"])
 ~ananweb.jp##.ad-banner:not([style="height: 5px; width: 5px; position: absolute; top: 0;"]):not(.blocker-tester + .ad-banner):not(:empty)
 ! generic absda fix
