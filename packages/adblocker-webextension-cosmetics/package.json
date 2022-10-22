@@ -26,7 +26,7 @@
     "clean": "rimraf dist coverage",
     "lint": "tslint --config ../../tslint.json --project ./tsconfig.json",
     "build": "tsc --build ./tsconfig.json",
-    "bundle": "tsc --build ./tsconfig.bundle.json && rollup --config ./rollup.config.ts",
+    "bundle": "tsc --build ./tsconfig.bundle.json && rollup --config ./rollup.config.ts --configPlugin typescript",
     "prepack": "yarn run bundle",
     "test": "nyc mocha --config ../../.mocharc.js"
   },
@@ -68,7 +68,8 @@
     }
   ],
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^15.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-typescript": "^9.0.1",
     "@types/chai": "^4.2.18",
     "@types/chrome": "^0.0.199",
     "@types/jsdom": "^20.0.0",
@@ -77,10 +78,10 @@
     "@types/sinon-chai": "^3.2.3",
     "chai": "^4.2.0",
     "jsdom": "^20.0.0",
-    "mocha": "^10.0.0",
+    "mocha": "^10.1.0",
     "nyc": "^15.0.0",
     "rimraf": "^3.0.0",
-    "rollup": "^2.57.0",
+    "rollup": "^3.2.3",
     "rollup-plugin-sourcemaps": "^0.6.1",
     "rollup-plugin-terser": "^7.0.0",
     "sinon": "^14.0.0",
