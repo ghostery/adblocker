@@ -1445,6 +1445,8 @@ speedostream.*##+js(aost, JSON.parse, computed)
 @@||nnaa66.xyz^$ghide
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/lz60hw/block_download_wait_times/
+! https://github.com/uBlockOrigin/uAssets/issues/15365
+nexusmods.com##+js(acs, document.getElementById, true)
 nexusmods.com##+js(nano-stb, timer)
 nexusmods.com##.ad-section__skyscraper
 
@@ -5796,7 +5798,8 @@ ootech.vn##+js(acis, $, test)
 ||add.pics^$3p,script
 
 ! parked domains anti adb
-/px.gif?$image,redirect-rule=1x1.gif,1p
+! https://github.com/uBlockOrigin/uAssets/issues/14345
+/px.gif?$image,redirect-rule=1x1.gif
 
 ! buffstream. io/fun popups
 buffstream.*##+js(aopr, mm)
@@ -6826,7 +6829,6 @@ mangastream.mobi###myModal
 ||doubleclickbygoogle.com/favicon.ico$image,3p,redirect-rule=32x32.png
 ||google.com/adsense/start/images/favicon.ico$image,3p,redirect-rule=32x32.png
 ||gstatic.com/adx/doubleclick.ico$image,3p,redirect-rule=32x32.png
-#@##Ad300x250
 #@##Ad728x90
 #@##AdArea
 #@##AdBox160
@@ -6876,7 +6878,6 @@ mangastream.mobi###myModal
 #@##google_ad
 #@##outbrain-paid
 #@##sponsored_link
-###Ad300x250:not([style^="position: absolute; left: -5000px"])
 ###Ad728x90:not([style^="position: absolute; left: -5000px"])
 ###AdArea:not([style^="position: absolute; left: -5000px"])
 ###AdBox160:not([style^="position: absolute; left: -5000px"])
@@ -6931,7 +6932,7 @@ mangastream.mobi###myModal
 ! https://github.com/uBlockOrigin/uAssets/issues/15283
 #@##ad-banner
 ~androidauthority.com,~soundguys.com#@#.ad-banner
-###ad-banner:not([style="height: 5px; width: 5px; position: absolute; top: 0;"])
+###ad-banner:not([style="height: 5px; width: 5px; position: absolute; top: 0;"]):not([style*="width: 1px;"])
 ~ananweb.jp##.ad-banner:not([style="height: 5px; width: 5px; position: absolute; top: 0;"]):not(.blocker-tester + .ad-banner):not(:empty)
 ! generic absda fix
 #@#.adsBox

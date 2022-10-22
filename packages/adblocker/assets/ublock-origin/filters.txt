@@ -3408,7 +3408,6 @@ gogoanimetv.*##+js(aopr, AaDetector)
 gogoanimetv.*##+js(nosiif, _0x)
 ||gogoanime.*/api/pop.php$xhr,1p
 gogoanimetv.*##+js(nowoif)
-*$script,3p,denyallow=bootstrapcdn.com|bunnycdn.ru|cdn77.org|cloudflare.com|cloudflare.net|cloudfront.net|disqus.com|disquscdn.com|facebook.com|facebook.net|fastly.net|fastlylb.net|fbcdn.net|gogocdn.net|google.com|googleapis.com|gstatic.com|hcaptcha.com|hwcdn.net|instagram.com|jquery.com|jsdelivr.net|jwpcdn.com|jwpsrv.com|plyr.io|twimg.com|twitter.com|recaptcha.net|wp.com,domain=gogoanime.*
 /get/*?zoneid=$script
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1277
@@ -8223,7 +8222,6 @@ depedlps.*##+js(aopr, encodeURIComponent)
 animehd24.*##+js(nobab)
 @@||ostuninotizie.it^$ghide
 ostuninotizie.it##.adsbygoogle
-@@||ogznet.com^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3693
 pianokafe.com##+js(aopw, adBlockDetected)
@@ -9015,6 +9013,7 @@ smallseotools.com##+js(aeld, mouseleave, banner_css)
 smallseotools.com##.adsbygoogle:style(max-height: 1px !important;)
 *$image,redirect-rule=1x1.gif,domain=smallseotools.com
 ||smallseotools.com/*.gif$image
+||smallseotools.com/webimages/s1$image
 smallseotools.com#@#.b
 smallseotools.com##.m-auto.text-center:has(.adsbygoogle)
 
@@ -13378,13 +13377,15 @@ pornhub.*##.video-wrapper > #player ~ .hd.clear
 pornhub.*##.sniperModeEngaged
 pornhub.*##a[href^="http://ads.trafficjunky.net/"]
 pornhub.*##.realsex
-pornhub.*###pb_template
+pornhub.*###pb_block
 ! https://github.com/uBlockOrigin/uAssets/issues/11753
 pornhub.*##+js(set, page_params.holiday_promo, true)
 ! mobile interstitial
 !#if !env_mobile
 pornhub.*##^script:has-text(getCookieAdvanced)
 !#endif
+! https://github.com/AdguardTeam/AdguardFilters/issues/132379
+pornhub.*###relatedVideosCenter > .wrapVideoBlock
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5804
 ranker.com##+js(aopr, __eiPb)
@@ -14345,6 +14346,7 @@ fileshilez.com##+js(aopr, app_vars.force_disable_adblock)
 ! https://github.com/uBlockOrigin/uAssets/issues/7574
 cuts-url.com,eio.io,exe.io,exe.app,exee.io,freshi.site##+js(aopr, app_vars.force_disable_adblock)
 exe.io,exe.app##+js(nowoif)
+exee.app##+js(acs, globalThis, break;case)
 cuts-url.com,eio.io,exe.app,exee.io,freshi.site##+js(set, blurred, false)
 *$script,3p,denyallow=cloudflare.com|google.com|gstatic.com|recaptcha.net,domain=cuts-url.com|eio.io|exe.app|exee.io|srek.net
 /sw.js$script,1p,domain=eio.io|exe.app|exee.io
