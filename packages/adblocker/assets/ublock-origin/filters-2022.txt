@@ -161,11 +161,9 @@ gadgets.usanewstoday.club##+js(set, blurred, false)
 ! https://github.com/uBlockOrigin/uAssets/issues/11223
 @@||kuronime.tv^$ghide
 
-! https://github.com/uBlockOrigin/uAssets/issues/11210
-! https://github.com/uBlockOrigin/uAssets/issues/11455
-watchporn.to##+js(set, flashvars.popunder_url, '')
-watchporn.to##+js(set, flashvars.video_click_url, '')
-watchporn.to##+js(set, flashvars.protect_block, '')
+! https://github.com/AdguardTeam/AdguardFilters/issues/132871
+||watchporn.to/banners.php
+watchporn.to##.table
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9448#issuecomment-1006821975
 dotabuff.com##+js(no-fetch-if, ads)
@@ -675,7 +673,7 @@ mp3juices.su##[href^="https://apkpure7.com/"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11646
 ! https://github.com/uBlockOrigin/uAssets/issues/13928
-! etsy.com##.listing-link[href*="ref=listing_in_grid"]:upward(li)
+etsy.com##.listing-link[href*="ref=listing_in_grid"]:upward(li)
 etsy.com##.listing-link[href*="ref=sc_gallery"]:upward(li)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11648
@@ -3877,7 +3875,9 @@ empire-streaming.fr##.direct-lads
 @@||documaniatv.com^$script,1p
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/w6r2bx/having_trouble_blocking_an_adblock_detection/
+! https://github.com/uBlockOrigin/uAssets/issues/15367
 gourmetscans.net##+js(nostif, show)
+gourmetscans.net##+js(nosiif, daadb_get_data)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/14134
 @@||delicious-audio.com^$ghide
@@ -4062,6 +4062,8 @@ jpopsingles.eu##+js(aeld, load, Blanket)
 adslink.pw##+js(acs, document.createElement, /l\.parentNode\.insertBefore\(s/)
 adslink.pw##+js(aopw, _pop)
 adslink.pw##+js(set, blurred, false)
+! https://www.reddit.com/r/uBlockOrigin/comments/y91yer/
+jpopsingles.eu##style[id$="-css"]:remove()
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/wndk5f/how_do_you_bypass_deblocker/ik575ml/
 freedwnlds.com##+js(acis, eval, replace)
@@ -4181,6 +4183,9 @@ stream4free.live##.closeButton
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/126628
 softcobra.*##+js(set, canRunAds, true)
+! https://www.reddit.com/r/uBlockOrigin/comments/ya0wyc/
+softcobra.com#@#.adsbygoogle
+softcobra.com##.adsbygoogle:style(visibility: collapse !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/14566
 allpremium.net##+js(acis, eval, replace)
@@ -5071,3 +5076,17 @@ repelishd.com.ar##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/15366
 @@||vod.tvp.pl^$ghide
 vod.tvp.pl#@#[class^="ad-"]
+
+! https://github.com/uBlockOrigin/uAssets/issues/15372
+saint.to##+js(acs, document.querySelectorAll, popMagic)
+
+! https://github.com/uBlockOrigin/uAssets/issues/15374
+gedichte.ws##+js(nostif, .call(null), 10)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/132697
+oxy.st##+js(nosiif, .hide)
+oxy.st###divdownload > div[data-template][data-source_url]
+
+! infinitehentai.com ad, popup
+infinitehentai.com##+js(nowoif)
+||infinitehentai.com/uploads/banners/
