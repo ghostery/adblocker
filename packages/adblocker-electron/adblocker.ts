@@ -54,7 +54,7 @@ export function fromElectronDetails(
 export class BlockingContext {
   private readonly onBeforeRequest: (
     details: Electron.OnBeforeRequestListenerDetails,
-    callback: (a: Electron.Response) => void,
+    callback: (a: Electron.CallbackResponse) => void,
   ) => void;
 
   private readonly onGetCosmeticFilters: (
@@ -244,7 +244,7 @@ export class ElectronBlocker extends FiltersEngine {
 
   public onBeforeRequest = (
     details: Electron.OnBeforeRequestListenerDetails,
-    callback: (a: Electron.Response) => void,
+    callback: (a: Electron.CallbackResponse) => void,
   ): void => {
     const request = fromElectronDetails(details);
     if (this.config.guessRequestTypeFromUrl === true && request.type === 'other') {

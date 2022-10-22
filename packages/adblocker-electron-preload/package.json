@@ -28,7 +28,7 @@
   "scripts": {
     "clean": "rimraf dist coverage",
     "lint": "tslint --config ../../tslint.json --project ./tsconfig.json",
-    "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts",
+    "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript",
     "bundle": "yarn build",
     "prepack": "yarn run bundle"
   },
@@ -40,11 +40,12 @@
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^23.0.2",
-    "@rollup/plugin-node-resolve": "^15.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-typescript": "^9.0.1",
     "@types/chrome": "^0.0.199",
-    "electron": "^20.1.0",
+    "electron": "^21.2.0",
     "rimraf": "^3.0.0",
-    "rollup": "^2.57.0",
+    "rollup": "^3.2.3",
     "rollup-plugin-sourcemaps": "^0.6.1",
     "tslint": "^6.0.0",
     "tslint-config-prettier": "^1.18.0",
