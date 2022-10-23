@@ -3645,6 +3645,7 @@ demae-can.com##+js(ra, data-trm-action|data-trm-category|data-trm-label, .trm_ev
 ! https://www.reddit.com/r/uBlockOrigin/comments/odbviy/svg_images_doesnt_load_when_ublock_enabled/
 ! https://github.com/uBlockOrigin/uAssets/issues/15234
 *$script,redirect-rule=noop.js,domain=soranews24.com
+@@||googletagmanager.com/gtm.js$script,redirect-rule,domain=soranews24.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9575
 @@||googletagmanager.com/gtm.js$script,redirect-rule,domain=lingvolive.com
@@ -4465,6 +4466,8 @@ fontspace.com#@#.container-ads
 @@||hb.improvedigital.com/pbw/prebid/*$script,domain=html5.gamedistribution.com
 ||tag.atom.gamedistribution.com^$xhr,redirect-rule=nooptext,1p
 gamedistribution.com##+js(no-fetch-if, /^/)
+! https://github.com/uBlockOrigin/uAssets/issues/15382
+@@||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect-rule,domain=html5.gamedistribution.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/13781
 ! [badfilter] ||cdn.branch.io^$badfilter

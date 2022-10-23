@@ -5090,3 +5090,31 @@ oxy.st###divdownload > div[data-template][data-source_url]
 ! infinitehentai.com ad, popup
 infinitehentai.com##+js(nowoif)
 ||infinitehentai.com/uploads/banners/
+
+! https://github.com/uBlockOrigin/uAssets/issues/15380
+afk.guide##+js(nostif, display)
+
+! https://domainwheel.com popup
+/header-banner$image,domain=domainwheel.com
+domainwheel.com##+js(nowoif)
+domainwheel.com##.banner-advertising-section
+
+! https://github.com/uBlockOrigin/uAssets/issues/15386
+@@||hacoscripts.com^$ghide
+
+! https://github.com/uBlockOrigin/uAssets/issues/15387
+hax.co.id##+js(no-fetch-if, googlesyndication)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/ybbv5r/
+dirty.pink##+js(set, pop3getcookie, undefined)
+dirty.pink##+js(set, pop3setcookie1, undefined)
+dirty.pink##+js(set, pop3setCookie2, undefined)
+
+! https://sports.mynorthwest.com/ anti-adb
+||imasdk.googleapis.com^$script,redirect-rule=noopjs,domain=mynorthwest.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/15389
+manofadan.com##+js(no-fetch-if, adoto)
+
+! https://github.com/uBlockOrigin/uAssets/issues/10609
+karanpc.com##+js(no-xhr-if, googlesyndication)
