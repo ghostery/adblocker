@@ -36,6 +36,9 @@
 @@||akamaihd.net/player/*/akamai/amp/prebid/*$script,domain=static.foxnews.com
 @@||global.fncstatic.com^*/ads.js$script,domain=foxnews.com
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=insider.foxnews.com
+! https://github.com/uBlockOrigin/uAssets/issues/15383
+@@||analytics.nova.foxnews.com/analytics.js/v1/$script,domain=nation.foxnews.com
+@@||api.lab.amplitude.com/sdk/vardata$xhr,domain=nation.foxnews.com
 
 ! https://forums.lanik.us/viewtopic.php?f=64&t=17842&start=30#p59663
 ! To counter `statcounter.com` in Peter Lowe's, MVPS, Dan Pollock's and hpHosts
@@ -3466,16 +3469,6 @@ johnhardy.com##+js(acis, $, optimoveSDK)
 ! https://github.com/uBlockOrigin/uAssets/issues/4333#issuecomment-824591245
 ! [badfilter] ||thepiratebay.$script,domain=pirateproxy.live|thehiddenbay.com|thepiratebay.org,badfilter
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/81308
-||pagead2.googlesyndication.com/pagead/$script,redirect=noop.js,domain=youpouch.com
-@@||fundingchoicesmessages.google.com^$script,domain=youpouch.com
-@@||googletagmanager.com/gtm.js$domain=youpouch.com
-@@||youpouch.com^$ghide
-youpouch.com##.ad
-youpouch.com##.ad300x250
-youpouch.com##.ad728x90
-youpouch.com##.native-ad
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/81533
 @@||imasdk.googleapis.com/js/sdkloader/ima3$script,domain=rotana.net
 @@||pubads.g.doubleclick.net/ssai/event/*/streams$xhr,domain=rotana.net
@@ -4742,3 +4735,6 @@ dmzj.com##body:style(overflow: auto !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/15351
 @@||pnp.co.za/pnpstorefront/_ui/shared/js/analyticsmediator.js$script,1p
+
+! myscore.cibil.com signup/login broken
+||cdn.optimizely.com/js/$script,redirect=noopjs,domain=myscore.cibil.com
