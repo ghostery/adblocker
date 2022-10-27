@@ -630,9 +630,9 @@ web.de##.main [data-ac]:empty
 gmx.*##.main [data-ac]:empty
 ! https://github.com/uBlockOrigin/uAssets/issues/9083
 web.de##.iba-acceptable:has-text(/Anzeige|Info/)
-! https://github.com/uBlockOrigin/uAssets/issues/10401
+! https://github.com/uBlockOrigin/uAssets/issues/15422
 *$image,redirect-rule=1x1.gif,domain=web.de
-@@||web.de/fairplay/?section=$ghide
+@@*$ghide,domain=web.de|gmx.*
 web.de#@#.ad
 web.de##.ad:style(position:absolute !important;left:-3000px !important;display:block !important)
 
@@ -993,7 +993,7 @@ australianfrequentflyer.com.au##+js(nostif, prompt)
 ! https://github.com/uBlockOrigin/uAssets/issues/6897
 ! https://github.com/NanoMeow/QuickReports/issues/3083
 ! https://github.com/NanoMeow/QuickReports/issues/3104
-advocate.com,arobasenet.com,cultofmac.com,currentaffairs.gktoday.in,dailycaller.com,dogtime.com,fallbrook247.com,gamesgames.com,gazettenet.com,insidenova.com,jetztspielen.de,leitesculinaria.com,practicalpainmanagement.com,pwinsider.com,rawstory.com,ruinmyweek.com,sanangelolive.com,sanfoundry.com,selfhacked.com,sporcle.com,stylecaster.com,upi.com,viraliq.com##+js(aopr, googletag)
+advocate.com,arobasenet.com,cultofmac.com,currentaffairs.gktoday.in,dailycaller.com,dogtime.com,fallbrook247.com,gamesgames.com,gazettenet.com,insidenova.com,jetztspielen.de,leitesculinaria.com,practicalpainmanagement.com,pwinsider.com,ruinmyweek.com,sanangelolive.com,sanfoundry.com,selfhacked.com,sporcle.com,stylecaster.com,upi.com,viraliq.com##+js(aopr, googletag)
 onmsft.com##+js(acis, document.createElement, googletag)
 sanfoundry.com##.sf-desktop-ads
 ||succeedscene.com/ads_*/ads.load.js$script,redirect-rule=noop.js
@@ -1196,6 +1196,7 @@ hltv.org##[href*="&affid"]
 hltv.org##.featured-matches-top
 hltv.org##[class*="ASdvuasdr"]
 hltv.org##.skinport.sidebar-skin-small-1
+||igaming-service.io^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4149
 vidlox.*##+js(set, xRds, false)
@@ -1788,6 +1789,7 @@ apkmirror.com##.advertisement-text
 apkmirror.com##.ains:style(height: 0px !important; min-height: 0px !important; padding: 0px !important;)
 apkmirror.com##.downloadCountdown
 apkmirror.com##.OUTBRAIN
+apkmirror.com##+js(aost, document.querySelectorAll, /^(?=.*(inlineScript|#safeDownload))(?=.*onload).*/)
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=38653
 radio.at,radio.de,radio.dk,radio.es,radio.fr,radio.it,radio.net,radio.pl,radio.pt,radio.se##+js(nostif, .call(null), 10)
@@ -3119,15 +3121,6 @@ perfectgirls.*,perfektdamen.*##.promo
 ! https://github.com/uBlockOrigin/uAssets/issues/1182
 area51.porn##+js(aopr, document.dispatchEvent)
 area51.porn##.under-video-banner
-
-! https://github.com/uBlockOrigin/uAssets/issues/1184
-fakeporn.tv##+js(aopw, prPuShown)
-fakeporn.tv##+js(nostif, offsetWidth)
-fakeporn.tv##+js(set, flashvars.logo_url, '')
-||fakeporn.tv/*.gif$image
-fakeporn.tv##.bottom-adv
-fakeporn.tv##img[src^="/bb/fake"]
-@@||fakeporn.tv/player/$frame
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1186
 hentaipulse.com##+js(acis, ExoLoader)
@@ -5808,7 +5801,6 @@ hulkshare.com##+js(nosiif, adblockerModal, 1000)
 ! https://github.com/NanoMeow/QuickReports/issues/4583
 ! https://github.com/uBlockOrigin/uAssets/issues/8137
 ! https://github.com/notifications?query=
-kickassanime.*##+js(acs, document.documentElement, break;case $.)
 kickassanime.*##+js(set, ifmax, true)
 @@||kickassanime.*^$ghide
 kickassanime.*##.ka-axx-wr
@@ -9435,7 +9427,9 @@ tajemnice-swiata.pl##+js(nofab)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6205
 ||cibntv.net/youku/*$media,redirect=noopmp3-0.1s,domain=youku.com
+||valipl.cp31.ott.cibntv.net^$media,redirect=noopmp3-0.1s,domain=youku.com
 youku.com##+js(nano-stb, , ,0)
+@@||valipl.cp31.ott.cibntv.net^$xhr,domain=youku.com
 *$image,redirect-rule=1x1.gif,domain=youku.com
 
 ! popunder celebjihad . com nsfw
@@ -9484,7 +9478,6 @@ xxxvideos.ink##li.plate iframe[width="300"]:upward(.plate)
 xxxvideos.ink##.curiosity
 /quwet.js$script,1p
 ||all-usanomination.com^$3p
-||mirnews.pro^
 ||willalland.info^
 ! https://github.com/easylist/easylist/issues/8709
 ##.advboxemb
@@ -13541,6 +13534,8 @@ washingtonpost.com###mobile-footer-ad-wrapper
 !#endif
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/ccbpn2/
+! https://github.com/uBlockOrigin/uAssets/issues/15427
+rawstory.com##+js(aopr, setNptTechAdblockerCookie)
 @@||rawstory.com^$ghide
 rawstory.com##.rs_ad_block
 rawstory.com##.amp-unresolved
@@ -16392,8 +16387,6 @@ tr.savefrom.net##.second-btn-box
 ! https://github.com/NanoMeow/QuickReports/issues/2506
 @@||allvidview.com^$ghide
 
-||stmentaustr.info^
-
 ! https://github.com/NanoMeow/QuickReports/issues/2516
 letras.mus.br##+js(nostif, r(), 0)
 letras.mus.br##[id^="pub"]
@@ -18243,7 +18236,7 @@ comicxxx.eu###dclm_modal_screen
 ||be-well.es^
 blowjobgif.net##+js(aopr, ExoDetector)
 favefreeporn.com,onlygayvideo.com,peachytube.com,stepsisterfuck.me##+js(aopr, ExoLoader.addZone)
-decorativemodels.com,erowall.com,freyalist.com,ghostbabes.com,guruofporn.com,jesseporn.xyz,kendralist.com,vipergirls.to,lizardporn.com,wantedbabes.com,bustybloom.com,exgirlfriendmarket.com,nakedneighbour.com##+js(aopr, loadTool)
+decorativemodels.com,erowall.com,freyalist.com,guruofporn.com,jesseporn.xyz,kendralist.com,vipergirls.to,lizardporn.com,wantedbabes.com,bustybloom.com,exgirlfriendmarket.com,nakedneighbour.com##+js(aopr, loadTool)
 comicxxx.eu,mybestxtube.com,onlyhgames.com,pornobengala.com,pornicom.com,xecce.com,teensporn.tv,pornlift.com,reddflix.com,superbgays.com##+js(aopr, open)
 classicpornbest.com,desihoes.com,indianpornvideo.org,porn18sex.com,pervclips.com,slaughtergays.com,sexiestpicture.com##+js(aopr, decodeURI)
 classicpornbest.com##+js(aeld, popstate)
