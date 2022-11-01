@@ -2296,18 +2296,6 @@ imsolo.pro##.center.spacing.text
 ! https://github.com/uBlockOrigin/uAssets/issues/8899
 poebuilds.net##+js(nostif, [native code], 0)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/80687
-lewdninja.com##+js(aost, adnPopConfig.loaderDomain)
-lewdninja.com##+js(nostif, lewd)
-lewdninja.com##+js(aeld, error)
-*$xhr,redirect-rule=nooptext,domain=lewdninja.com
-lewdninja.com##a.is-hidden-desktop-only
-lewdninja.com#@#.stargate
-lewdninja.com##.stargate.box
-lewdninja.com##.video-overlay
-lewdninja.com##div[id][style*="height:1px;display:inline-block;clear:none;position:absolute"]
-@@||a.trk-imps.com/oauth2?$script,domain=lewdninja.com
-
 ! https://www.reddit.com/r/uBlockOrigin/comments/msloft/alright_ubo_do_your_thing_danish_website_link_in/
 mmm.dk##+js(set, adblockerAlert, noopFunc)
 
@@ -2696,8 +2684,10 @@ dubzstreams.com###id-custom_banner
 bleepingcomputer.com###bc-home-news-main-wrap > li a[href$="/deals/"]:upward(li)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/82339
+! https://github.com/uBlockOrigin/uAssets/issues/15501
 @@||getpaidstock.com^$ghide
 getpaidstock.com##.adsbygoogle
+||antiblock.b-cdn.net/banner_ad.png$image,redirect-rule=1x1.gif,domain=getpaidstock.com
 *$frame,redirect-rule=noopframe,domain=getpaidstock.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10083
@@ -3472,6 +3462,7 @@ lilymanga.com##body:not(.home) .c-sidebar:has(.ai-track)
 lilymanga.com##.body-wrap > .c-top-second-sidebar[style=""]
 lilymanga.com##.wp-manga.c-top-sidebar.c-sidebar[style=""]
 lilymanga.com##+js(aost, String.prototype.charCodeAt, ai_)
+lilymanga.com##+js(nostif, document.createElement)
 ! https://github.com/easylist/easylist/issues/9674
 lilymanga.com##.ad
 
@@ -4666,7 +4657,8 @@ ispazio.net##.stream-item
 ispazio.net##.stream-item-widget
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9967
-shineads.in##+js(acs, eval, replace, /^data:/)
+! https://github.com/uBlockOrigin/uAssets/issues/15496
+shineads.in##+js(nostif, ai_adb)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9962
 /nb/f_ls.js
@@ -6794,8 +6786,10 @@ plotaroute.com###Page:style(right: 0px !important;)
 ! https://forums.lanik.us/viewtopic.php?f=62&t=46456
 @@||newscon.net^$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/11010
-newscon.net##+js(set, clearInterval, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/15450
 newscon.net##+js(nano-sib, hard_work)
+newscon.net##+js(nosiif, checkads)
+newscon.net##+js(set, clearInterval, noopFunc)
 newscon.net##+js(set, initAds, noopFunc)
 
 ! https://github.com/easylist/easylist/pull/10184
