@@ -1348,8 +1348,10 @@ instagram.com##.xZ2Xk:has-text(/App/)
 imore.com##.adunit-wrap
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4987
-mobile.twitter.com###layers div[dir="auto"] > span:has-text(/在应用上更好|在應用程式上體驗更好的|better on the app|besser in der App|еще больше возможностей в приложении|mejor en la app|melhor no aplicativo|profiterez mieux de Twitter sur l'application|Twitterアプリをおすすめ/):upward(5)
-mobile.twitter.com##div[tabindex="0"]:matches-css(position:fixed):has([href="/signup"])
+! https://github.com/uBlockOrigin/uAssets/issues/15430
+twitter.com###layers div[dir="auto"] > span:has-text(/在应用上更好|在應用程式上體驗更好的|better on the app|besser in der App|еще больше возможностей в приложении|mejor en la app|melhor no aplicativo|profiterez mieux de Twitter sur l'application|Twitterアプリをおすすめ/):upward(5)
+twitter.com##div[tabindex="0"]:matches-css(position:fixed):has([href="/signup"])
+twitter.com##html:style(overflow:auto!important)
 ! https://github.com/uBlockOrigin/uAssets/issues/5911
 twitter.com##.js-signup-call-out
 mobile.twitter.com##div[data-testid="sidebarColumn"] section[aria-label][role="region"]:upward(1)
@@ -1624,7 +1626,6 @@ focus-bangla.com##+js(aeld, keydown)
 fmovies.*#@#.fa-rss
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5355
-software-on.com##+js(acis, jQuery, browser)
 software-on.com##*::selection:style(background-color:#338FFF!important)
 software-on.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 
@@ -3957,13 +3958,6 @@ segnidalcielo.it##+js(nostif, google_jobrunner)
 ! fangraphs.com anti adb annoyance
 @@||fangraphs.com/dfp.js$script,1p
 
-! https://www.reddit.com/r/uBlockOrigin/comments/jd57op/looking_for_more_intuitive_solutions_for_website/
-hulblog.com##+js(acis, document.oncontextmenu)
-hulblog.com##+js(aeld, contextmenu)
-hulblog.com##+js(aeld, /^(?:keyup|keydown)$/)
-hulblog.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
-hulblog.com##*::selection:style(background-color:#338FFF!important)
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/65879
 fosspost.org##+js(nostif, an_message, 500)
 
@@ -4943,12 +4937,6 @@ hitproversion.com##style:has-text(user-select:):remove()
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9097
 /wp-content/plugins/image-watermark/*$script
-
-! https://github.com/uBlockOrigin/uAssets/issues/9119
-bestkpop.top##+js(acis, document.oncontextmenu)
-bestkpop.top##+js(aopw, stopPrntScr)
-bestkpop.top##:not(input):not(textarea),img:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
-bestkpop.top##*::selection:style(background-color:#338FFF!important)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/83556
 news.dwango.jp##+js(ra, oncontextmenu, body)
@@ -6466,9 +6454,6 @@ viatasisanatate.com##+js(acis, disableSelection, reEnable)
 viatasisanatate.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 viatasisanatate.com##style:has-text(@media print):remove()
 
-! newscon.net soft anti-adb
-newscon.net###adblock-warning
-
 ! https://github.com/uBlockOrigin/uAssets/issues/14066
 projektowanie-wnetrz-online.pl##+js(aopr, disable_copy)
 projektowanie-wnetrz-online.pl##+js(aopw, document.ondragstart)
@@ -6528,7 +6513,7 @@ the-masters-voice.com##+js(acis, disableSelection, reEnable)
 the-masters-voice.com##+js(acis, document.ondragstart)
 the-masters-voice.com##+js(aeld, contextmenu)
 the-masters-voice.com##+js(aopw, stopPrntScr)
-the-masters-voice.com##.unselectable:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; cursor: auto !important)
+the-masters-voice.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; cursor: auto !important)
 the-masters-voice.com##*::selection:style(background-color: #338FFF !important)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/14420
@@ -6561,6 +6546,8 @@ coub.com##body.disable-scroll:style(overflow: auto !important;)
 
 ! https://accgroup.vn/tra-cuu-ma-so-thue-ca-nhan-bang-cmnd/#1-ma-so-thue-ca-nhan-la-gi anti right click
 /wp-content/plugins/wp-extra/js/copy.min.js$script
+accgroup.vn##+js(aeld, contextmenu)
+accgroup.vn##+js(aopr, document.oncopy)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/x0b79p/
 artstation.com##signup-modal-prompt-fullscreen
@@ -6643,6 +6630,8 @@ epitesti.ro##*:style(-webkit-touch-callout: default !important; -webkit-user-sel
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/xbjszd/ anti right click
 allcryptoz.net,crewbase.net,crewus.net,shinbhu.net,shinchu.net,thumb8.net,thumb9.net,topcryptoz.net,uniqueten.net,ultraten.net##^script:has-text(document.onkeydown)
+allcryptoz.net,crewbase.net,crewus.net,shinbhu.net,shinchu.net,thumb8.net,thumb9.net,topcryptoz.net,uniqueten.net,ultraten.net##+js(aeld, contextmenu)
+allcryptoz.net,crewbase.net,crewus.net,shinbhu.net,shinchu.net,thumb8.net,thumb9.net,topcryptoz.net,uniqueten.net,ultraten.net##+js(acis, document.onkeydown)
 /block-console.js$script,important,domain=allcryptoz.net|crewbase.net|crewus.net|shinbhu.net|shinchu.net|thumb8.net|thumb9.net|topcryptoz.net|uniqueten.net|ultraten.net
 /block-keys.js$script,important,domain=allcryptoz.net|crewbase.net|crewus.net|shinbhu.net|shinchu.net|thumb8.net|thumb9.net|topcryptoz.net|uniqueten.net|ultraten.net
 /block-right-click.js$script,important,domain=allcryptoz.net|crewbase.net|crewus.net|shinbhu.net|shinchu.net|thumb8.net|thumb9.net|topcryptoz.net|uniqueten.net|ultraten.net
@@ -6766,3 +6755,12 @@ gourmetscans.net##+js(acis, wccp_pro_iscontenteditable)
 
 ! https://profreehost.com/ anti-adb
 ||profreehost.com/includes/js/customBottom.js$script,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/15446
+||droetker.*/static/js/privacy-dialog/
+
+! https://nhentaihaven.org anti right click
+nhentaihaven.org##+js(acis, eval, contextmenu)
+
+! https://onscreensvideo.com/e/2680wgv38c9o.html anti dev tools
+onscreensvideo.com##+js(set, console.clear, undefined)

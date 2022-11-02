@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202210271916
+! Version: 202211011057
 ! Title: EasyPrivacy
-! Last modified: 27 Oct 2022 19:16 UTC
+! Last modified: 01 Nov 2022 10:57 UTC
 ! Expires: 6 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -246,6 +246,8 @@
 /0c.gif?
 /0pixel.php?
 /1.gif?
+! [badfilter] from ublock-origin/unbreak.txt
+! /1pixel.php
 /1px.gif?
 /1px.php?
 /1x1.a?
@@ -793,6 +795,7 @@
 /api/analytics|
 /api/cmp_tracker
 /api/ComScorePageView
+/api/drpStats
 /api/ipv4check?
 /api/log?
 /api/lt/ref?
@@ -2693,6 +2696,7 @@
 /ktag/*
 /LandingPageHitLog.aspx?
 /landings-pixel?
+/lasso-ga.js
 /LastClick/js?
 /layer_log.php?p=
 /lbi_ga.
@@ -4047,7 +4051,6 @@
 /sitestat_
 /sitestatforms.
 /sitestats.gif?
-/SiteTracker.
 /sitetracker21.
 /SiteTrackingGA.
 /sitetrek.js
@@ -5437,6 +5440,7 @@
 ;type=pixel;
 =comscoreAdobeDpvCall&
 =getSideStats&
+=getStats_
 =googleanalytics_
 =metrics_profile&
 =pageImpression&
@@ -5577,6 +5581,7 @@ cgi-bin/counter
 .eviq.org.au/CMSModules/$image
 .flipboard.com/usage?
 .getblueshift.com/q/
+.getsendmail.com/p/$image
 .gif?stat=open
 .goodwell18.com/track/
 .google-analytics.com/
@@ -5685,6 +5690,7 @@ cgi-bin/counter
 /mail-tracking/*$image
 /mail.sparksport.co.nz/forms/read/*
 /mail.sparksport.co.nz/mail/read/*
+/MailIsRead?$image
 /maillist.*/t/$image
 /media.sailthru.com/5ik/1k4/9/*.gif
 /newsletter/log/*$image
@@ -5694,6 +5700,7 @@ cgi-bin/counter
 /notifications/beacon/*
 /open.aspx?
 /open.html?$image
+/opens.jscrambler.com/*$image
 /p/rp/*?mi_u=*=&sap_id=$image
 /p1x1.gif
 /page.bsigroup.com/*
@@ -6059,6 +6066,7 @@ _mongo_stats/
 ||fastgull.io^
 ||fasttiger.io^
 ||ffbbbdc6d3c353211fe2ba39c9f744cd.com^
+||ffe390afd658c19dcbf707e0597b846d.de^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||fixel.ai^
 ||fleraprt.com^
@@ -6068,6 +6076,7 @@ _mongo_stats/
 ||fpavx.net^
 ||fpaxu.net^
 ||fpcdn.io^
+||fptls.com^
 ||fpxau.net^
 ||fzlnk.com^
 ||g11686975765.co^
@@ -6473,6 +6482,7 @@ _mongo_stats/
 ||analitycs.net^$third-party
 ||analoganalytics.com^$third-party
 ||analytically.net^$third-party
+||analytics-helper.com^$third-party
 ||analyticschecker.com^$third-party
 ||analyticson.com^$third-party
 ||analyticswizard.com^$third-party
@@ -8361,6 +8371,7 @@ _mongo_stats/
 ||simplycast.us^$third-party
 ||simplymeasured.com^$third-party
 ||singlefeed.com^$third-party
+||sirdata.eu^$third-party
 ||sirdata.io^$third-party
 ||site24x7rum.com^$third-party
 ||siteapps.com^$third-party
@@ -12558,6 +12569,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||cookie-guard-erdee.ey.r.appspot.com^
 ||cookies.livepartners.com^
 ||cookiex.ngd.yahoo.com^
+||count-server.sharethis.com^
 ||count.asnetworks.de^
 ||count.carrierzone.com^
 ||count.me.uk^
@@ -13728,6 +13740,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ! [dup] from peter-lowe/serverlist.txt
 ! ||statm.the-adult-company.com^
 ||stats-bq.stylight.net^
+||stats-dev.brid.tv^
 ||stats-messages.gifs.com^
 ||stats-newyork1.bloxcms.com^
 ||stats.big-boards.com^
@@ -13855,6 +13868,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||tag.rightmessage.com^
 ||tag.rmp.rakuten.com^
 ||tag.search.sensefuel.live^$script,third-party
+||tag.statshop.fr^
 ||tagcdn.com/pix/?
 ! [dup] from peter-lowe/serverlist.txt
 ! ||tagger.opecloud.com^
@@ -14997,6 +15011,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||almamedia.fi^*/scroll-monitor.min.js
 ||dnt-userreport.com^
 ||er.sanoma-sndp.fi/stats/
+||er.sanoma-sndp.fi/v2/stats/
 ||inpref.s3.amazonaws.com^$third-party
 ||insight.fonecta.fi^
 ||nelonenmedia.fi/logger/
@@ -31370,6 +31385,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 ||hs.fi/stats
 ||huuto.net/js/analytic/
 ||ilcdn.fi^*/Bootstrap.js
+||io-tech.fi/io/www/delvr/lokiz.php
 ||is.fi/stats/
 ||mha.fi/simple.gif?
 ||mtv3.fi/remarketing.js
@@ -31586,6 +31602,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 ||prism.pandora.tv^
 ||seoul.co.kr/weblog/
 ||sp.naver.com^
+||stat.i3.dmm.com^
 ||stat.tiara.daum.net^
 ||stat.tiara.kakao.com^
 ||toros.daum.net/toros/imp
@@ -32503,11 +32520,13 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||adobedtm.com^*/satelliteLib-$script,domain=dhl.de|sbb.ch
 @@||analytics.edgekey.net/html5/akamaihtml5-min.js$domain=br.de
 @@||api-v4.trbo.com/r.php?$script,domain=blau.de
-@@||api.cxense.com/public/widget/data?$script,domain=handelsblatt.com
+@@||api.cxense.com/public/widget/data?$script,domain=businessinsider.de|handelsblatt.com
 @@||apps.derstandard.at^*/TrackingCookieCheck?$subdocument
 @@||assets.adobedtm.com^*-source.min.js$domain=manager-magazin.de
 @@||bilder-a.akamaihd.net/ip/js/ipdvdc/ipdvdc.min.js$domain=n-tv.de|rtl.de|toggo.de|vip.de
 @@||businessclick.ch/index.js$domain=finanzen.ch
+@@||cdn.cxense.com/cx.cce.js$domain=businessinsider.de
+@@||cdn.cxense.com/cx.js$domain=businessinsider.de
 @@||cdn.cxense.com/cx.js$script,domain=handelsblatt.com
 @@||classic.comunio.de/clubImg.phtml/$image,~third-party
 @@||cleverpush.com/channel/loader/$domain=prosieben.de
@@ -32670,6 +32689,7 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=skyback.ru|szukajka
 @@||centprod.com/nd/assets/js/analytics.js$script,domain=centprod.com
 @@||collectandgo.be^*/utag.sync.js
 @@||d2zv6vzmaqao5e.cloudfront.net/css/foodticket/*_google_analytics.js
+@@||gls-info.nl/Scripts/tracking.js$~third-party
 @@||googletagmanager.com/gtag/js$script,domain=hostingvergelijker.nl
 @@||googletagmanager.com/gtm.js$script,domain=beterbed.nl|finanzen.ch|hostingvergelijker.nl|mediamarkt.nl
 @@||marketingautomation.services^$script,domain=leeuwerik.nl
