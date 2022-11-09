@@ -89,13 +89,6 @@
 ! [badfilter] ||clickbank.com^$badfilter
 ||clickbank.com^$3p
 
-! https://github.com/chrisaljoudi/uBlock/issues/614
-! To counter `awaps.yandex.ru` in hpHosts
-! To counter `mc.yandex.ru` in hpHosts, MVPS
-@@||awaps.yandex.ru^$domain=market.yandex.ru
-@@||mc.yandex.ru^$domain=market.yandex.ru
-@@||yastatic.net/market-export/*/advert.js$domain=market.yandex.ru
-
 ! https://github.com/chrisaljoudi/uBlock/issues/774
 ! To counter `carbonads.net` in Peter Lowe's
 ! [badfilter] ||carbonads.net^$badfilter
@@ -1118,9 +1111,6 @@ go.com#@#.has-ad
 ! https://github.com/uBlockOrigin/uAssets/issues/4226
 @@||computerworld.com/*/jquery$script,1p
 
-! m.avito.ru ublock issues 327
-@@||an.yandex.ru/system/context.js$script,domain=avito.ru
-
 ! https://www.reddit.com/r/uBlockOrigin/comments/a3r5e1/site_not_rendering_properly_with_ublockorigin/
 @@||adverts.ie/css/$css,1p
 
@@ -1780,9 +1770,6 @@ twitter.com#@#article[role="article"]:has-text(Promoted)
 ! https://github.com/NanoMeow/QuickReports/issues/1319
 @@||moatads.com/aolvidibleapi*$script,domain=bloombergquint.com
 
-! https://github.com/NanoMeow/QuickReports/issues/1949
-@@||pladform.ru/*/hls-vod/*$xhr,domain=rutube.ru
-
 ! https://github.com/easylist/easylist/issues/4114
 ! [badfilter] /thermostat.js$badfilter
 /thermostat.js$script,domain=royle.com
@@ -2013,9 +2000,6 @@ pcgamer.com#@#.hawk-widget
 @@||tgt.tamedia.ch/*/api/$xhr,domain=tagesanzeiger.ch
 ! https://github.com/uBlockOrigin/uAssets/issues/6729
 @@||tdn.da-services.ch/libs/prebid$script,domain=tagesanzeiger.ch
-
-! https://forums.lanik.us/viewtopic.php?f=64&t=43990&p=151746#p151745
-@@||livelib.ru/service/*captcha$xhr,image,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6673
 @@||amazon.jobs/assets/analytics-$script,1p
@@ -2455,9 +2439,6 @@ recensionihot.com#@#a[href^="https://www.moscarossa.biz/"]
 ! trafic .ro blocked Peter Lowe's
 ! [badfilter] ||trafic.ro^$badfilter
 ||trafic.ro^$3p
-
-! https://www.reddit.com/r/uBlockOrigin/comments/ga0veq/ubo_is_blocking_ads_and_popups_but_the_site_is/
-! [badfilter] |https://$image,other,script,css,3p,xhr,domain=01fmovies.com|ffmovies.ru|fmovies.mx|fmovies.taxi|fmovies.world|fmovies123.cc|fmovieson.com|thefmovies.me,badfilter
 
 ! https://github.com/NanoMeow/QuickReports/issues/3632#issuecomment-621503457
 ! [badfilter] |https://$script,3p,domain=thepiratebay.org,badfilter
@@ -3635,18 +3616,6 @@ demae-can.com##+js(ra, data-trm-action|data-trm-category|data-trm-label, .trm_ev
 ! girlsnews.tv - fix search
 @@||googletagmanager.com/gtm.js$script,domain=girlsnews.tv
 
-! https://www.reddit.com/r/uBlockOrigin/comments/odbviy/svg_images_doesnt_load_when_ublock_enabled/
-! https://github.com/uBlockOrigin/uAssets/issues/15234
-*$script,redirect-rule=noop.js,domain=soranews24.com
-@@||googletagmanager.com/gtm.js$script,redirect-rule,domain=soranews24.com
-@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=soranews24.com
-@@||securepubads.g.doubleclick.net/gpt/pubads_impl*$script,domain=soranews24.com
-@@||securepubads.g.doubleclick.net/gampad/ads$xhr,domain=soranews24.com
-@@||fundingchoicesmessages.google.com/i/pub-*$script,domain=soranews24.com
-@@||fundingchoicesmessages.google.com/f/$script,domain=soranews24.com
-soranews24.com#@#.ad
-soranews24.com##.ads-relatedbottom
-
 ! https://github.com/uBlockOrigin/uAssets/issues/9575
 @@||googletagmanager.com/gtm.js$script,redirect-rule,domain=lingvolive.com
 
@@ -3708,6 +3677,8 @@ adyou.me#@#+js(no-setInterval-if, (), 500)
 ||imasdk.googleapis.com/js/sdkloader/ima3.js^$script,redirect-rule=noopjs,domain=weather.com
 ! https://www.reddit.com/r/uBlockOrigin/comments/x3fskl/
 @@||jssdkcdns.mparticle.com/js/*/mparticle.js$script,domain=weather.com
+@@||micro.rubiconproject.com/prebid/dynamic/$script,domain=weather.com
+@@||ssl.p.jwpcdn.com/player/*/googima.js$script,domain=weather.com
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/ouu67c/full_screen_doesnt_work_on_coolmathgamescom/
 coolmathgames.com##+js(set, network_user_id, '')
@@ -4766,6 +4737,40 @@ dmzj.com##body:style(overflow: auto !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/15502
 @@||pearson.com/osbrowserchecker/prd/thirdPartyCookie.html$frame,1p
 
-! https://github.com/uBlockOrigin/uAssets/issues/15504
-port.hu#@##qc-cmp2-container
-port.hu#@#.qc-cmp2-container
+! https://github.com/uBlockOrigin/uAssets/issues/15402
+@@||xweb.instagram.com/ads/preferences/ad_topics/$frame,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/15408
+mail.google.com#@#div[aria-label="Ads"]
+
+! https://github.com/uBlockOrigin/uAssets/issues/15518
+@@||c950.chronicle.com/script.js$script,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/15531
+@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=gala.fr
+@@||securepubads.g.doubleclick.net/gpt/pubads_impl_$script,domain=gala.fr
+@@||tra.scds.pmdstatic.net/$xhr,domain=gala.fr
+gala.fr#@#[data-ads-core]
+gala.fr##+js(no-xhr-if, doubleclick)
+! https://github.com/uBlockOrigin/uAssets/issues/15531#issuecomment-1305952402
+@@||tra.scds.pmdstatic.net/sourcepoint/$script,domain=programme-tv.net
+@@||securepubads.g.doubleclick.net/gampad/ads$xhr,domain=programme-tv.net
+
+! https://forums.lanik.us/viewtopic.php?t=47859-lemonde-fr
+@@||cmp.huffingtonpost.fr/js/huffpost.min.js$script,1p
+@@||cmp.huffingtonpost.fr/html/huffpost/wall-large.html?css=/css/huffpost/wall-large.min.css$xhr,1p
+@@||cmp.huffingtonpost.fr/api/consent$xhr,1p
+@@||cmp.lemonde.fr/js/lemonde.min.js$script,1p
+@@||cmp.lemonde.fr/html/lemonde/wall-tunnel-abo-essential.html?css=/css/lemonde/wall.min.css$xhr,1p
+@@||cmp.lemonde.fr/api/consent$xhr,1p
+lemonde.fr#@#.gdpr-lmd-wall
+
+! https://th4-app.taximail.com/campaign-detail/3#overview UI breakage
+@@||taximail.com/js/analytics.js$script,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/15552
+@@||assets.adobedtm.com/*.js$script,domain=accounts.o2.co.uk
+||assets.adobedtm.com/*source.min.js$script,domain=accounts.o2.co.uk,important
+
+! https://github.com/uBlockOrigin/uAssets/issues/15561
+instagram.com#@#div[style="max-height: inherit; max-width: inherit;"]:has(span:has-text(Paid partnership with ))
