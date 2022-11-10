@@ -8,11 +8,10 @@
 /* tslint:disable quotemark */
 export default [
   ":style(width:1px!important;height:1px!important;min-width:1px!important;min-height:1px!important;margin:0!important;padding:0!important;overflow:hidden!important;opacity:0!important)",
-  "\\/[acd][-\\.\\/_A-Za-z][DHWm][-\\.\\/_A-Za-z][59FVZ][-\\.\\/_A-Za-z][6wyz][-\\.\\/_A-Za-z][-\\/_0-9a-zA-Z][-\\.\\/_A-Za-z][-\\/_0-9a-zA-Z]{22,162}$/",
+  "\\/[a-d][-\\.\\/_A-Za-z][DHWXm][-\\.\\/_A-Za-z][59FVZ][-\\.\\/_A-Za-z][6swyz][-\\.\\/_A-Za-z][-\\/_0-9a-zA-Z][-\\.\\/_A-Za-z][-\\/_0-9a-zA-Z]{22,162}$/",
   "/sites/all/libraries/adblockdetection/adblockdetector.min",
   "/homad-global-configs.schneevonmorgen.com/global_config",
   "[\\/][\\/a-zA-Z0-9]{3,}\\/[a-zA-Z0-9]{6,}\\/.*/",
-  "\\?aHR0c[\\/0-9a-zA-Z]{33,}=?=?$/",
   "\\.com[\\/]{1,}.*[a-zA-Z0-9]{",
   "/pagead/js/adsbygoogle.js",
   "/^https?:\\/\\/(.+?\\.)?",
@@ -64,6 +63,7 @@ export default [
   ".html",
   "/api/",
   "/file",
+  "/html",
   "/img/",
   "/java",
   "/page",

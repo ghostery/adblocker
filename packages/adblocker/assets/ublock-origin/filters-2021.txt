@@ -769,7 +769,7 @@ readyssh.net##+js(aeld, load, nextFunction)
 ! https://forums.lanik.us/viewtopic.php?f=64&t=45644
 akvi.icu##+js(acis, $, show)
 akvi.icu##[style='display: none;']:has(#vplayer):style(display:block!important;)
-akvi.icu##:xpath(//*[contains(text(),"Disable")])
+akvi.icu##:xpath('//*[contains(text(),"Disable")]')
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8507
 convert2mp3.club##+js(nowoif)
@@ -2974,7 +2974,6 @@ sbplay.*##^script:has-text(debugger)
 ||eisasbeau.buzz^
 ||incasapritif.tech^
 ||obstanceder.pro^
-||riolenproce.xyz^
 ||linkspoint.xyz/sw.js$script,1p
 ||weakermumrespect.com^
 
@@ -4288,6 +4287,12 @@ fapnado.*##[class^="zpot"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9800
 pogolinks.*##+js(nostif, showModal)
+pogolinks.*##+js(acs, setTimeout, admc)
+||cdn.applixir.com^$script,3p
+||check-update-today.me^doc
+||tech4town.com^$3p
+||track-ufocleaner.top^
+||37.1.213.100^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9807
 independent.co.uk##.jnzTeZ.sc-qYGWS.bSwWwA.sc-qQKeD:style(max-height:0px !important)
@@ -4530,6 +4535,7 @@ quizlet.com##.StickyAdz
 quizlet.com##+js(rc, has-sidebar-adz|DashboardPage-inner, div[class^="DashboardPage-inner"], stay)
 quizlet.com##+js(rc, hasStickyAd, div.hasStickyAd[class^="SetPage"], stay)
 quizlet.com##+js(rc, has-adz, div.has-adz, stay)
+quizlet.com##+js(nano-stb)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9911
 vivo.st##+js(aeld, , preventDefault)
@@ -5700,7 +5706,6 @@ tinyurl.is##.navbar-brand
 tinyurl.is##+js(acis, JSON, interactive)
 tinyurl.is##+js(no-fetch-if, xhr0)
 tinyurl.is##div[style="border-radius: 20px;padding: 25px;font-weight: bold;background-color: #452d38;color: #ffffff;"]
-||wrigin.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10399
 thienhatruyen.com##+js(nowoif)
@@ -5991,6 +5996,9 @@ thecustomrom.com##+js(acis, decodeURIComponent, ai_)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10518
 phsensei.com##+js(acis, String.fromCharCode, decodeURIComponent)
+! https://github.com/AdguardTeam/AdguardFilters/issues/134204
+homeairquality.org,techtrim.tech##+js(no-fetch-if, googlesyndication)
+homeairquality.org,techtrim.tech##+js(no-xhr-if, googlesyndication)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10519
 techsolveprac.com##+js(nostif, display, 5000)
@@ -6578,6 +6586,7 @@ raky.in##+js(nano-sib)
 titantv.com##+js(acis, document.createElement, admiral)
 titantv.com##+js(aeld, load, player)
 @@||ntv.io/serve/load.js$script,domain=titantv.com
+titantv.com###sidebox
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/rgs3zt/ublock_origin_detected/
 1apple.xyz##+js(no-xhr-if, mahimeta)
@@ -6669,12 +6678,6 @@ xnxx.com,xvideos.*###ad-footer
 retrostic.com,sickchirpse.com###ad-header
 chortle.co.uk,coloring.ws,dltk-holidays.com,dltk-kids.com,kidzone.ws,pcsteps.com,primeraescuela.com###adBanner
 ! https://github.com/orgs/uBlockOrigin/teams/ublock-filters-volunteers/discussions/377/comments/63
-! https://github.com/AdguardTeam/AdguardFilters/issues/107617
-! https://github.com/uBlockOrigin/uAssets/issues/15283
-#@##ad-banner
-~androidauthority.com,~soundguys.com#@#.ad-banner
-###ad-banner:not([style="height: 5px; width: 5px; position: absolute; top: 0;"]):not([style*="width: 1px;"])
-~ananweb.jp##.ad-banner:not([style="height: 5px; width: 5px; position: absolute; top: 0;"]):not(.blocker-tester + .ad-banner):not(:empty)
 ! generic absda fix
 #@#.adsBox
 ##.adsBox:not([style$="-99999px;"])
