@@ -802,14 +802,14 @@ taxidrivermovie.com##.thumb-holder[style="height:250px;"]:upward(1)
 taxidrivermovie.com##[href="/category/taxi-fares/"]:upward(.thumb)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8514
-embedstream.me##+js(aopw, _pop)
+! https://github.com/uBlockOrigin/uAssets/issues/15622
+embedstream.me,nolive.me##+js(aopw, _pop)
 embedstream.me##+js(nowebrtc)
 embedstream.me##+js(nowoif)
-*$script,3p,denyallow=plyjam.me,domain=embedstream.me
+*$script,3p,denyallow=nolive.me|plyjam.me,domain=embedstream.me
+*$script,3p,denyallow=fastly.net|jsdelivr.net,domain=nolive.me
 embedstream.me##body > .position-absolute
 embedstream.me###aff-click
-! https://www.reddit.com/r/uBlockOrigin/comments/qz4mw1/
-! https://github.com/uBlockOrigin/uAssets/issues/12966
 @@||embedstream.me/cash.min.js$script,1p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/73375
@@ -1974,14 +1974,14 @@ androidhexzone.blogspot.com##+js(aopr, absda)
 olympicstreams.me,vipboxtv.*##+js(nowoif, |)
 olympicstreams.me,vipboxtv.*##+js(aopw, _pop)
 ||raw.githubusercontent.com/*/just-detect-adblock/*$3p,xhr,redirect-rule=nooptext
-*$script,3p,denyallow=plyjam.me,domain=olympicstreams.me|vipboxtv.*
+*$script,3p,denyallow=nolive.me|plyjam.me,domain=olympicstreams.me|vipboxtv.*
 ||cdn.allsportsflix.xyz^$script
 olympicstreams.me##.position-absolute
 
 ! buffstreams. tv => sx popups
 buffstreams.*##+js(nowoif)
 buffstreams.*##+js(aopw, _pop)
-*$script,3p,denyallow=chatango.com|plyjam.me,domain=buffstreams.*
+buffstreams.*##+js(acis, setTimeout, admc)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8831
 @@||tritinia.com^$ghide
@@ -2015,6 +2015,8 @@ mcrypto.club##div[id^="promo"]
 mcrypto.club###wpsafelink-countdown
 ||jcbsrv.com/player/ad-units.
 @@||cryptocoinsad.com/ads/js/slider.js$script,domain=mcrypto.club
+mcrypto.club##+js(no-xhr-if, wpadmngr)
+mcrypto.club##table
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/79338
 crypto-faucet.xyz##+js(nosiif, visibility, 1000)
@@ -4992,7 +4994,10 @@ pobre.*##.generalModal
 ||cloclo60.datacloudmail.ru/public/view/*.mp4|$media,domain=pobre.*,redirect=noopmp3-0.1s
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/93513
+! https://github.com/uBlockOrigin/uAssets/issues/15588
 coinsparty.com##+js(nowoif)
+coinsparty.com##+js(no-xhr-if, wpadmngr)
+coinsparty.com###captchaShortlink:upward(form#coinsparty > div):style(display: block !important;)
 coinsparty.com##form[action$="/links/popad"]:remove()
 coinsparty.com##div[style="position: fixed; display: block; width: 100%; height: 100%; inset: 0px; background-color: rgba(0, 0, 0, 0); z-index: 300000;"]
 ||ad4point.nyc3.digitaloceanspaces.com^
@@ -5882,6 +5887,10 @@ gotxx.com##+js(aopw, _pop)
 gotxx.com##+js(aost, Element.prototype.matches, litespeed)
 sturls.com##+js(acis, decodeURI, decodeURIComponent)
 gotxx.com##div[class][style^="position: absolute; cursor: pointer; z-index: 2147483646"]
+! https://github.com/uBlockOrigin/uAssets/issues/15580 timer and focus detection
+sturls.com##+js(set, blurred, false)
+sturls.com###cc:style(display: block !important;)
+sturls.com###timer
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/qtvlfk/adblock_detected_on_edealinfocom/
 edealinfo.com##+js(acis, $, offsetHeight)

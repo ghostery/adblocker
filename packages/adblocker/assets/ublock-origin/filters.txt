@@ -1640,7 +1640,7 @@ f1stream.*,fbstream.*,mlbstream.*,motogpstream.*,nbastream.*,nflstream.*,nhlstre
 @@*$ghide,domain=f1stream.*|fbstream.*|mlbstream.*|motogpstream.*|nbastream.*|nflstream.*|nhlstream.*|plylive.*|plyvdo.*|rugbystreams.*|socceronline.*|tennisstreams.*|tvply.*|ufcstream.*|vipleague.*
 plylive.*,plyvdo.*##+js(nowoif)
 tutele.nl,vipleague.*##+js(acis, setTimeout, admc)
-*$script,3p,denyallow=facebook.net|fbcdn.net|google.com|googleapis.com|plyjam.me,domain=vipleague.*
+*$script,3p,denyallow=facebook.net|fbcdn.net|google.com|googleapis.com|nolive.me|plyjam.me,domain=vipleague.*
 ||gretaith.com^$3p
 ||mw19c3mi5a.com^$3p
 ||ryllae.com^$3p,important
@@ -1840,6 +1840,7 @@ anghami.com##+js(nostif, isDesktopApp, 1000)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5952
 player.glomex.com,merkur.de,tz.de##+js(set, Object.prototype._getSalesHouseConfigurations, noopFunc)
+player.glomex.com##+js(no-fetch-if, player-feedback)
 ||player-feedback*.glomex.*^
 ||d1miwkthq39xj8.cloudfront.net/t.gif$image,domain=player.glomex.com
 
@@ -4825,7 +4826,8 @@ crazyshit.com##+js(acis, jQuery, document.cookie)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1982
 strikeout.*##+js(nowoif, |)
-*$script,3p,denyallow=img.plyjam.me,domain=strikeout.*
+strikeout.*##+js(acis, setTimeout, admc)
+strikeout.*##+js(aopw, _pop)
 strikeout.*##.position-absolute:style(opacity: 0 !important;)
 strikeout.*##.d-none.d-lg-block.col-lg-3
 strikeout.*##+js(acis, String.fromCharCode, 'shift')
@@ -8782,7 +8784,7 @@ tionghoa.info##.adsbygoogle
 viprow.*##+js(acis, setTimeout, admc)
 viprow.*##+js(aopw, _pop)
 viprow.*##+js(nowoif, |)
-*$script,3p,denyallow=plyjam.me,domain=viprow.*
+*$script,3p,denyallow=nolive.me|plyjam.me,domain=viprow.*
 viprow.*##.position-absolute
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4064
@@ -8867,11 +8869,12 @@ smallseotools.com##+js(aeld, mouseleave, banner_css)
 smallseotools.com##.adsbygoogle:style(max-height: 1px !important;)
 *$image,redirect-rule=1x1.gif,domain=smallseotools.com
 ||smallseotools.com/*.gif$image
-||smallseotools.com/webimages/s1$image
+||smallseotools.com/webimages/a1$image,1p
 @@||smallseotools.com/webimages/process.gif
 smallseotools.com#@#.b
 smallseotools.com##.m-auto.text-center:has(.adsbygoogle)
 smallseotools.com##span[class="d-block mx-auto my-2 text-center"]
+smallseotools.com##div.side_area > a[onclick="tool_trigger('Grammarly sidebar banner')"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4102
 peeplink.in##+js(popads-dummy)
@@ -11978,10 +11981,9 @@ berliner-kurier.de,berliner-zeitung.de##.dm_ad-container
 ! https://github.com/NanoMeow/QuickReports/issues/1021
 eplfootballmatch.com##+js(set, document.bridCanRunAds, true)
 
-! https://github.com/NanoMeow/QuickReports/issues/1011
 ! https://github.com/uBlockOrigin/uAssets/issues/14827
 !#if env_firefox
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=webmail.email.it
+webmail.email.it##+js(no-fetch-if, googlesyndication)
 !#endif
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5364
@@ -13594,8 +13596,8 @@ biblestudytools.com##+js(aopr, googletag)
 egy.best,egybest.*##+js(acis, Math, XMLHttpRequest)
 egy.best,egybest.*,vidstream.*,~vidstream.pro##+js(nowoif, !api?call=, 10, obj)
 ! Workaround for https://github.com/uBlockOrigin/uAssets/issues/8319
-egybest.*##+js(nostif, /new|Bait|check|decoy|global|WinMsgHtml/)
-egybest.*##+js(nosiif, /^/)
+egy.best,egybest.*##+js(nostif, /new|Bait|check|decoy|global|WinMsgHtml/)
+egy.best,egybest.*##+js(nosiif, /^/)
 ||psaiceex.net^
 
 ! https://github.com/NanoMeow/QuickReports/issues/1538
@@ -14458,9 +14460,7 @@ secretsdujeu.com##+js(acis, document.getElementById, adsrefresh)
 @@||otakusave.com^$ghide
 
 ! https://github.com/NanoMeow/QuickReports/issues/3098
-cruisin.me##+js(nostif, show)
-@@||cruisin.me^$ghide
-cruisin.me##.adsbygoogle
+cruisingearth.com##+js(nostif, show)
 @@/wutime$script,1p
 
 ! https://github.com/NanoMeow/QuickReports/issues/1738
@@ -16014,8 +16014,10 @@ upzone.cc##+js(acis, document.getElementById, undefined)
 
 ! https://github.com/NanoMeow/QuickReports/issues/2453
 ! https://github.com/olegwukr/polish-privacy-filters/issues/67
-player.pl##+js(json-prune, movie.advertising.ad_server)
-@@||cdntvn.pl/*/advert.js$xhr,domain=player.pl
+!player.pl##+js(json-prune, movie.advertising.ad_server)
+@@||cdntvn.pl^$script,domain=player.pl
+@@||player.pl^$cname
+! [badfilter] /ad.xml$xhr,badfilter
 
 ! https://github.com/NanoMeow/QuickReports/issues/2318
 @@||jbzd.com.pl^$ghide
