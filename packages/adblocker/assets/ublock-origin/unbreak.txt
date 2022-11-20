@@ -4621,9 +4621,6 @@ nybooks.com##.ad-spacing
 ! https://github.com/uBlockOrigin/uAssets/issues/14723
 tcsjerky.com##body.body-load:style(overflow: auto !important;)
 
-! https://github.com/uBlockOrigin/uBlock-issues/issues/2158
-||imasdk.googleapis.com/js/sdkloader/ima3.js$3p,script,redirect-rule=google-ima.js:5
-
 ! https://github.com/uBlockOrigin/uAssets/issues/14817
 filecrypt.co#@?#form > .protection.online ul > li:not(.buttons):-abp-has(> div:not(.circle_captcha))
 
@@ -4743,9 +4740,6 @@ dmzj.com##body:style(overflow: auto !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/15408
 mail.google.com#@#div[aria-label="Ads"]
 
-! https://github.com/uBlockOrigin/uAssets/issues/15518
-@@||c950.chronicle.com/script.js$script,1p
-
 ! https://github.com/uBlockOrigin/uAssets/issues/15531
 @@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=gala.fr
 @@||securepubads.g.doubleclick.net/gpt/pubads_impl_$script,domain=gala.fr
@@ -4778,5 +4772,24 @@ instagram.com#@#div[style="max-height: inherit; max-width: inherit;"]:has(span:h
 ! hotfix https://github.com/uBlockOrigin/uAssets/issues/15608
 @@||video.qq.com/getvinfo$script,1p
 
-! https://github.com/uBlockOrigin/uAssets/issues/15595
-@@||cedaron.visualstudio.com/*TrackingData.cs$1p
+! https://github.com/uBlockOrigin/uAssets/issues/15647
+! [badfilter] ||wisepops.com^$badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/15635
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,domain=ici.tou.tv
+
+! https://github.com/uBlockOrigin/uAssets/issues/15661
+@@||aniview.com/api/$script,domain=gamingbible.co.uk
+@@||player.avplayer.com/script/*/avcplayer.js$script,domain=gamingbible.co.uk
+
+! shavetape. cash(streamtape alias) download blocked
+*$popup,3p,domain=shavetape.cash,badfilter
+
+! https://forums.lanik.us/viewtopic.php?t=47894-accuweather-com
+! [badfilter] ||connatix.com^$3p,domain=~accuweather.com,badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/15715
+gloucestershirelive.co.uk##+js(set, chameleonVideo.adDisabledRequested, true)
+
+! https://github.com/uBlockOrigin/uAssets/issues/15720
+! [badfilter] /^https?:\/\/[0-9a-z]{8,}\.xyz\/.*/$3p,~media,domain=apiyoutube.cc|clicknupload.to|daddyhd.com|poscitech.click|sportcast.life,badfilter

@@ -45,7 +45,6 @@ export default [
   "ar",
   "et",
   "ga",
-  "ma",
   "mp",
   "ng",
   "_",
