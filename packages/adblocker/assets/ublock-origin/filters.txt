@@ -663,6 +663,7 @@ golem.de##+js(nostif, show)
 golem.de##[href^="https://ads.golem.de/"]
 golem.de##.sp-article:has(span:matches-css-before(content:/Anzeige/i))
 golem.de##.list-articles>li:has(.icon-addy:matches-css-before(content: "Anzeige"))
+golem.de##[data-article-id]:has([class]:matches-css-before(content:/ANZEIGE/))
 
 ! https://github.com/uBlockOrigin/uAssets/issues/206
 geektime.co.il##+js(nostif, adObjects)
@@ -4440,6 +4441,7 @@ ext=$script,1p,domain=pouvideo.*|povvideo.*|povw1deo.*|povwideo.*|powv1deo.*|pow
 ||zontent.powvideo.net^
 ||rontent.powvibeo.me^
 ||powvibeo.*/ben/$frame,1p
+||povvldeo.*/js/epu3/pu3.min.js$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1827
 pcbolsa.com###ContenidoPubliCotiza
@@ -12226,11 +12228,8 @@ javsubtitle.co##.mid-ads
 iphonetweak.fr##.adsbygoogle
 iphonetweak.fr##.bigPub
 
-! https://github.com/uBlockOrigin/uAssets/issues/5453
-! https://github.com/uBlockOrigin/uAssets/issues/14540
 ! https://github.com/uBlockOrigin/uAssets/issues/15586
-duden.de##+js(aopr, showAABOverlay)
-duden.de##+js(aopr, showAdBlockerOverlay)
+! duden.de##+js(aost, document.getElementById,  https)
 duden.de##[id*="billboard"]
 duden.de##.tabloid__side-column
 
