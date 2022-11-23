@@ -3832,11 +3832,6 @@ empire-streaming.fr##.direct-lads
 ! https://github.com/uBlockOrigin/uAssets/issues/14115
 @@||documaniatv.com^$script,1p
 
-! https://www.reddit.com/r/uBlockOrigin/comments/w6r2bx/having_trouble_blocking_an_adblock_detection/
-! https://github.com/uBlockOrigin/uAssets/issues/15367
-gourmetscans.net##+js(nostif, show)
-gourmetscans.net##+js(nosiif, daadb_get_data)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/14134
 @@||delicious-audio.com^$ghide
 delicious-audio.com##.big-ads-show
@@ -3927,6 +3922,8 @@ ewrc-results.com##+js(set, canGetAds, true)
 @@||koushoku.org^$ghide
 *$3p,script,redirect-rule=noop.js,domain=koushoku.org
 *$popunder,domain=koushoku.org
+koushoku.org##.exo-native-widget,div[style*="250px"],div[style*="728px"],img[width="300px"],img[width="728px"],video,img[height="250px"]:style(height: 1px!important;)
+! [badfilter] ||koushoku.org/proxy?$badfilter
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/wephc1/
 @@||yt2save.com^$ghide
@@ -4774,7 +4771,7 @@ quicksounds.com##.ad-head
 
 ! https://github.com/uBlockOrigin/uAssets/issues/12884
 links.medipost.org##+js(set, blurred, false)
-kiktu.com,techcyan.com##+js(nostif, _0x)
+kiktu.com,techcyan.com##+js(nostif, /document|_0x/)
 kiktu.com,techcyan.com##.elementor-button-wrapper
 ! https://www.reddit.com/r/uBlockOrigin/comments/ynjx62/
 kiktu.com,techcyan.com###recap-btn:style(display: block !important;)
@@ -5410,3 +5407,26 @@ protege-liens.com##+js(nowoif)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/15754
 camwhorez.video##+js(aopr, TotemToolsObject)
+
+! cloud-computing-central.com anti adblock
+*$script,redirect-rule=noopjs,domain=cloud-computing-central.com
+
+! anti adb + ads rmweb.co. uk
+@@||rmweb.co.uk^$ghide
+||connatix.com^$script,domain=rmweb.co.uk
+rmweb.co.uk##.esPopupWrapper
+rmweb.co.uk##.b-modal
+||invisioncic.com/*.gif$image
+rmweb.co.uk##html:style(overflow: auto !important;)
+rmweb.co.uk##.ipsImage_thumbnailed.ipsImage
+rmweb.co.uk##.mpu-centre.ipsPad
+rmweb.co.uk##.ipsType_richText.ipsPad.ipsWidget_inner
+
+! https://github.com/uBlockOrigin/uAssets/issues/15776
+poplinks.*,shorttrick.in##+js(nostif, show)
+
+! https://github.com/uBlockOrigin/uAssets/issues/15779
+gourmetscans.net##+js(nostif, fn_ibf, 4000)
+
+! https://github.com/uBlockOrigin/uAssets/issues/15780
+noor-book.com##+js(no-fetch-if, ads)
