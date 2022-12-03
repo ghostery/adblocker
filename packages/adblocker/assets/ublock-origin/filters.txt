@@ -486,7 +486,7 @@ nmac.to##.adsbygoogle
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3573
 userscloud.com##^script:has-text(FingerprintJS)
-*$3p,denyallow=cdnjs.cloudflare.com|googleapis.com|gstatic.com|support.send.cm,domain=userscloud.com
+*$3p,denyallow=cdnjs.cloudflare.com|googleapis.com|gstatic.com|support.send.cm|userscloud.net,domain=userscloud.com
 @@||userscloud.com^$ghide
 userscloud.com##+js(aeld, /contextmenu|keydown/)
 userscloud.com##+js(set, console.clear, trueFunc)
@@ -11685,7 +11685,6 @@ elamigos-games.com##.row > .col-lg-2:first-child:has(> .card > a[href][target="_
 player.zona-leros.net,zlplayer.net###dvr-vid
 zona-leros.net##.Body > .Container > ul.Rows > li:first-child:has(> article > a[href][target="_blank"])
 zpaste.net,zlpaste.net##+js(aeld, DOMContentLoaded, adlinkfly)
-zpaste.net##+js(aopr, absda)
 zpaste.net,zplayer.live##+js(aopw, _pop)
 zplayer.live##+js(aopr, I833)
 zplayer.live##+js(nowoif)
@@ -11933,7 +11932,8 @@ imtranslator.net##+js(nostif, adsbox, 1000)
 ! https://github.com/easylist/easylist/pull/10399
 @@||upvid.*^$ghide
 upvid.*##+js(nowoif)
-*$3p,denyallow=addtoany.com|bootstrapcdn.com|cloudflare.com|google.com|googleapis.com|gstatic.com|hwcdn.net|upvid.co|upvid.org,domain=upvid.*
+*$3p,denyallow=bootstrapcdn.com|fastly.net|googleapis.com|gstatic.com|phncdn.com|upvid.co|zencdn.net,domain=upvid.*
+||upvid.*/sw.js$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5340
 upload.ac##.ads
@@ -12301,6 +12301,7 @@ notebookcheck-ru.com##+js(acis, document.getElementById, send)
 @@||notebookcheck-ru.com^$script,1p
 @@||notebook-check.com^$script,domain=notebookcheck.com|notebookcheck.net|notebookcheck-ru.com
 @@||notebookcheck-ru.com^$script,domain=notebookcheck.com|notebookcheck.net|notebookcheck-ru.com
+notebookcheck.*##+js(aopw, ab_cl)
 
 ! https://github.com/NanoMeow/QuickReports/issues/601
 @@||www-league.nhlstatic.com/nhl.com/builds/site-core/*/scripts/*$script,domain=nhl.com
@@ -13450,6 +13451,8 @@ bing.com##.ins_exp.tds
 bing.com#@##b_results > li:not(.b_algo):not(.b_ans):not(.b_pag):not(.aca_algo):not(.aca_algo_count):not(.b_msg)
 bing.com#@#li.b_adBottom
 bing.com#@#.b_adLastChild
+! https://github.com/AdguardTeam/AdguardFilters/issues/136118
+bing.com##.tob_calcontainer > .slide:has(.rtb_ad_caritem_mvtr)
 
 ! https://github.com/NanoMeow/QuickReports/issues/1475
 ! https://github.com/NanoMeow/QuickReports/issues/1686
