@@ -562,7 +562,7 @@ export class WebExtensionBlocker extends FiltersEngine {
     sender: Runtime.MessageSender,
   ): Promise<IMessageFromBackground | undefined> => {
     return new Promise((resolve, reject) => {
-      this.handleRuntimeMessage(browser, msg, sender, resolve).catch(reject);
+      this.handleRuntimeMessage(browser, msg, sender, resolve).catch(reject).finally(resolve);
     });
   };
 
