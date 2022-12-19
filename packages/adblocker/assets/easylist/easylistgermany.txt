@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202212021811
+! Version: 202212191724
 ! Title: EasyList Germany
-! Last modified: 02 Dec 2022 18:11 UTC
+! Last modified: 19 Dec 2022 17:24 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -99,7 +99,8 @@
 /werbe_banner/*
 /werbeanzeige/*
 /werbeanzeigen/*
-/werbebanner-
+! [badfilter] from ublock-origin/filters.txt
+! /werbebanner-
 /werbebanner.
 /werbebanner2.
 /werbebanner_
@@ -628,6 +629,7 @@ wetter.com#@#div[id^="div-gpt-"]
 ||ad.de.doubleclick.net^$third-party
 ||ad.netzquadrat.de^$third-party
 ||ad4cash.de^$third-party
+||ad4m.at^$third-party
 ||ad4mat.de^$third-party
 ||adalizer.com^$third-party
 ||adbutler.de^$third-party
@@ -649,6 +651,7 @@ wetter.com#@#div[id^="div-gpt-"]
 ||adreport.de^$third-party
 ||adrolays.de^$third-party
 ||ads-im-netz.de^$third-party
+||ads4allweb.de^$third-party
 ||adscads.de^$third-party
 ||adsister.com^$third-party
 ||adspectacle.net^$third-party
@@ -694,7 +697,6 @@ wetter.com#@#div[id^="div-gpt-"]
 ||biallo3.de^$third-party
 ||bitcoinpara.de^$third-party
 ||blogads.de^$third-party
-||bnamic.com^$third-party
 ||bsheute.de^$third-party
 ||buywords.de^$third-party
 ||bwads24.com^$third-party
@@ -1032,6 +1034,7 @@ wetter.com#@#div[id^="div-gpt-"]
 ||happyweekend-community.com/banner/
 ||heutenochficken.com/banner/$third-party
 ||hofmann.info^$subdocument,domain=sgf1903.de
+||hubu.cloud/vast/
 ||hurenkartei.com/teaser-$third-party
 ||hyp-tech.com/img/$third-party
 ||icq-love.de/show_icqt.php$third-party
@@ -1252,7 +1255,9 @@ $stylesheet,subdocument,third-party,xmlhttprequest,domain=canna-power.to|canna.t
 ||3druck.com/wp-content/uploads/*/doku-dez-2020.jpg
 ||3fach.ch/storage/app/uploads/public/*/thumb_18790_1380_0_0_0_auto.jpg
 ||6navi.ch/banners/
+||a.zdg.de^
 ||a2.zdg.de^$domain=zentrum-der-gesundheit.de
+||a3.zdg.de^
 ||abg-net.de/typo3temp/pics/f3f468fcef.png
 ||abg-net.de/uploads/tx_macinabanners/
 ||ad-hoc-news.de/js/aTraffic.js
@@ -2480,6 +2485,7 @@ connextra.com##iframe[src^="https://ssl.connextra.com"]
 ||adsafeprotected.com^$domain=autobild.de|imasdk.googleapis.com
 ||adsnative.com^$domain=autobild.de
 ||adsrvr.org^$domain=autobild.de
+||adup-tech.com^$domain=autobild.de
 ||amazon-adsystem.com^$domain=autobild.de|gofeminin.de
 ||asadcdn.com/adlib/$~script,~stylesheet,domain=autobild.de
 ||auto-bild.de/js/rd/google.js$domain=autobild.de
@@ -2528,6 +2534,7 @@ connextra.com##iframe[src^="https://ssl.connextra.com"]
 /^https?:\/\/.*\.(jpg|jpeg|gif|png|php|svg|ico|js|txt|css)/$popup,domain=190.115.18.20|aniworld.to|canna-power.to|canna.to|kinoger.com|kinoger.to|kinoonline.net|s.to|serien.cam|serienstream.to
 ^utm_medium=popunder^$popup,domain=hilfreich.de
 ||amazon.de^*^tag=$popup,domain=rheinlandpfalz-news.de
+||bitporno.to/api/direct/$popup
 ||count.shopping.t-online.de/RE?ID=$popup,domain=t-online.de
 ||delamar.de/out/$popup
 ||sexei.net/go.html$popup
@@ -2843,6 +2850,7 @@ local.ch###js-banner
 ostfriesischer-kurier.de###jsn-pos-user-top
 klamm.de###klamm\.de_forum_1
 klamm.de###klamm\.de_forum_3
+klamm.de###klamm\.de_incontent_1
 laborjournal.de###kratzer
 mein-wetter.com###labelpub
 abload.de###layerleft
@@ -3876,7 +3884,7 @@ popkultur.de##.sc-button[href^="https://www.amazon.de/"]
 servus.com,terramatermagazin.com##.sda
 sport.sky.de##.sdc-site-au__leaderboard
 sport.sky.de##.sdc-site-au__mpu-1
-t-online.de##.sdgSlotContainer
+golem.de,t-online.de,watson.de##.sdgSlotContainer
 sportdeutschland.tv##.sdtv-gothaer
 mytastedeu.com##.search-affiliate__part
 trvlcounter.de##.second_slot
@@ -4004,6 +4012,7 @@ bestattungen.de##.tdp
 bild.de##.tea-rectangle
 wort.lu##.teaser--sponsored
 watson.ch##.teaser_type_paid_content
+watson.de##.teaserheld-wrapper
 computerbase.de##.text-ad
 analsexporno.net,deutsche-sexfilme.net,pornomonster.com##.tf-de
 m.tvspielfilm.de##.tfm-banner
@@ -4518,8 +4527,14 @@ gmx.net,web.de##tr[data-component="MessageListAdRow"]
 gmx.ch,gmx.net,web.de##tr[data-component="MessageListSpecialRow"]
 ! Specific hiding filters necessary for sites using $generichide filter option
 focus.de###CT_DESKTOP_NATIVE_HOR_ANY_hor2
+autobild.de###billboard_btf_2Wrapper
+autobild.de###billboard_btf_rlWr
+autobild.de###billboard_rlWr
 finanzen.net###footer-ad
 finanzen.net###news-contentads
+autobild.de###sky_btf_rlWr
+autobild.de###sky_rlWr
+autobild.de###superbanner_rlWr
 focus.de###tfm_admanagerTeaser
 ran.de##.ad-component
 ran.de##.ad-slot-container
@@ -4538,6 +4553,7 @@ notebookchat.com,prosieben.de,tvspielfilm.de##.plistaList > .plista_widget_under
 focus.de##.ps-trackingposition_OrangerButton
 focus.de##.ps-trackingposition_PDFkasten
 focus.de##.shoppingcartctn
+autobild.de##.superbannerBtfContainer
 businessinsider.de,bz-berlin.de,giga.de,myhomebook.de,spieletipps.de,sport1.de,sueddeutsche.de,t-online.de,transfermarkt.de##.trc-content-sponsored
 businessinsider.de,giga.de,metal-hammer.de,myhomebook.de,spieletipps.de,sport1.de,sueddeutsche.de,t-online.de,transfermarkt.de##.trc-content-sponsoredUB
 computerbild.de##.trc_related_container .syndicatedItem:not(.inNetworkItem)
@@ -4705,6 +4721,7 @@ zwischengas.com#?#.row.mt-0.mb-3.d-print-none:-abp-has(.fa-ad)
 @@||amazon-adsystem.com/widgets/q?*^ad_type=product_link^$subdocument,domain=fotoworkshop-stuttgart.de|kombi.de
 @@||anyclip.com/main.js?$script,domain=videos.heute.at
 @@||anyclip.com/static/js/$script,domain=videos.heute.at
+@@||asadcdn.com/adlib/$domain=autobild.de
 @@||asadcdn.com/adlib/$script,domain=sportbild.bild.de
 @@||asadcdn.com/adlib/adlib_seq.js$script,domain=stylebook.de
 @@||asadcdn.com/adlib/libmodules/$script,domain=musikexpress.de
@@ -4750,7 +4767,7 @@ zwischengas.com#?#.row.mt-0.mb-3.d-print-none:-abp-has(.fa-ad)
 @@||ib.adnxs.com^$xmlhttprequest,domain=finanzen.ch
 @@||idealo.net/js/idealoWidget-$script,domain=travelbook.de
 @@||ikiosk.de/pdf/company/2/advertisement/$image,domain=ikiosk.de
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$domain=atv.at|chip.de|gentside.de|oe24.at|ohmymag.de|phonostar.de|schwaebische.de|wetteronline.de
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$domain=atv.at|autobild.de|chip.de|gentside.de|oe24.at|ohmymag.de|phonostar.de|schwaebische.de|wetteronline.de
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=videos.heute.at
 @@||img.welt.de/img/Advertorials/$image,domain=welt.de
 @@||improvedigital.com/pbw/headerlift.min.js$domain=jetztspielen.de
