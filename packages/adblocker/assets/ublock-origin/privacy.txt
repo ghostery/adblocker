@@ -31,7 +31,7 @@
 ||taboola.com^$3p
 
 ! Redirect to neutered Google Analytics
-||google-analytics.com/analytics.js$script,redirect=google-analytics.com/analytics.js:5
+||google-analytics.com/analytics.js$script,redirect=google-analytics_analytics.js:5
 
 ! Redirect to neutered Google Analytics Experiments
 ||google-analytics.com/cx/api.js$script,redirect=google-analytics.com/cx/api.js:5
@@ -334,7 +334,7 @@ reddit.com##+js(no-xhr-if, method:POST url:/^https:\/\/www\.reddit\.com$/)
 ! https://github.com/easylist/easylist/issues/6724#issuecomment-1003172754
 ! https://github.com/uBlockOrigin/uAssets/pull/15692#issuecomment-1321098072
 blog.skk.moe##+js(no-fetch-if, body:/[\w\W]{700}/)
-blog.skk.moe##+js(no-fetch-if, method:Post)
+skk.moe##+js(no-fetch-if, method:/post|posT|poSt|poST|pOst|pOsT|pOSt|pOST|Post|PosT|PoSt|PoST|POst|POsT|POSt|POST/)
 /cfga/jquery.js?$image
 /npm/sks@0.*/lazyload.js$script,3p
 
@@ -441,3 +441,10 @@ ericdraken.com##^script[async]
 
 ! brave.com analytics
 ||brave.com/static-assets/js/analysis.js
+
+! https://www.girlsofdesire.org/galleries/kana-kusakabe/00.html
+/images/*/analytics.js$domain=girlsofdesire.org
+
+! t3n.de tracking
+||cl.t3n.de^
+||c2shb.pubgw.yahoo.com/admax/bid/partners/PBJS

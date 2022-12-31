@@ -135,7 +135,7 @@ export default [
   "et",
   "ev",
   "ex",
-  "ff",
+  "fa",
   "fo",
   "fr",
   "ge",
