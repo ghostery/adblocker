@@ -209,7 +209,7 @@ export class BlockingContext {
   private readonly onRuntimeMessage: (
     msg: IBackgroundCallback & { action?: string },
     sender: Runtime.MessageSender,
-  ) => Promise<IMessageFromBackground | undefined>;
+  ) => Promise<IMessageFromBackground | {}>;
 
   private readonly onCommittedHandler:
     | ((details: WebNavigation.OnCommittedDetailsType) => void)
@@ -408,7 +408,7 @@ export class WebExtensionBlocker extends FiltersEngine {
     browser: Browser,
     msg: IBackgroundCallback & { action?: string },
     sender: Runtime.MessageSender,
-    sendResponse: (response?: IMessageFromBackground) => void,
+    sendResponse: (response: IMessageFromBackground) => void,
   ): Promise<void> => {
     const promises: Promise<void>[] = [];
 
@@ -560,9 +560,9 @@ export class WebExtensionBlocker extends FiltersEngine {
     browser: Browser,
     msg: IBackgroundCallback & { action?: string },
     sender: Runtime.MessageSender,
-  ): Promise<IMessageFromBackground | undefined> => {
+  ): Promise<IMessageFromBackground | {}> => {
     return new Promise((resolve, reject) => {
-      this.handleRuntimeMessage(browser, msg, sender, resolve).catch(reject);
+      this.handleRuntimeMessage(browser, msg, sender, resolve).catch(reject).finally(() => resolve({}));
     });
   };
 
