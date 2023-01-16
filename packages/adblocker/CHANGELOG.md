@@ -1,3 +1,53 @@
+# v1.25.2 (Mon Jan 16 2023)
+
+#### :house: Internal
+
+- Update local assets [#2997](https://github.com/ghostery/adblocker/pull/2997) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2988](https://github.com/ghostery/adblocker/pull/2988) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2962](https://github.com/ghostery/adblocker/pull/2962) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2960](https://github.com/ghostery/adblocker/pull/2960) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2956](https://github.com/ghostery/adblocker/pull/2956) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2945](https://github.com/ghostery/adblocker/pull/2945) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2944](https://github.com/ghostery/adblocker/pull/2944) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2943](https://github.com/ghostery/adblocker/pull/2943) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2936](https://github.com/ghostery/adblocker/pull/2936) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2934](https://github.com/ghostery/adblocker/pull/2934) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2933](https://github.com/ghostery/adblocker/pull/2933) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2921](https://github.com/ghostery/adblocker/pull/2921) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2919](https://github.com/ghostery/adblocker/pull/2919) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2908](https://github.com/ghostery/adblocker/pull/2908) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2901](https://github.com/ghostery/adblocker/pull/2901) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2900](https://github.com/ghostery/adblocker/pull/2900) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2893](https://github.com/ghostery/adblocker/pull/2893) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2891](https://github.com/ghostery/adblocker/pull/2891) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2890](https://github.com/ghostery/adblocker/pull/2890) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update deps and CI [#2889](https://github.com/ghostery/adblocker/pull/2889) ([@remusao](https://github.com/remusao))
+- Update local assets [#2882](https://github.com/ghostery/adblocker/pull/2882) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2874](https://github.com/ghostery/adblocker/pull/2874) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2847](https://github.com/ghostery/adblocker/pull/2847) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2825](https://github.com/ghostery/adblocker/pull/2825) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#2824](https://github.com/ghostery/adblocker/pull/2824) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.203 to 0.0.206 [#2990](https://github.com/ghostery/adblocker/pull/2990) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @rollup/plugin-typescript from 9.0.2 to 10.0.1 [#2952](https://github.com/ghostery/adblocker/pull/2952) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.202 to 0.0.203 [#2938](https://github.com/ghostery/adblocker/pull/2938) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.200 to 0.0.202 [#2925](https://github.com/ghostery/adblocker/pull/2925) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.199 to 0.0.200 [#2897](https://github.com/ghostery/adblocker/pull/2897) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.197 to 0.0.199 [#2883](https://github.com/ghostery/adblocker/pull/2883) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @rollup/plugin-node-resolve from 14.1.0 to 15.0.0 [#2864](https://github.com/ghostery/adblocker/pull/2864) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/mocha from 9.1.1 to 10.0.0 [#2843](https://github.com/ghostery/adblocker/pull/2843) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.25.1 (Sat Sep 17 2022)
 
 #### :nail_care: Polish

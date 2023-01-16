@@ -1,3 +1,20 @@
+# v1.25.2 (Mon Jan 16 2023)
+
+#### :house: Internal
+
+- Update deps and CI [#2889](https://github.com/ghostery/adblocker/pull/2889) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/mocha from 9.1.1 to 10.0.0 [#2843](https://github.com/ghostery/adblocker/pull/2843) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.23.9 (Fri Aug 19 2022)
 
 #### :nut_and_bolt: Dependencies

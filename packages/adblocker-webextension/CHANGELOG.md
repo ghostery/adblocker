@@ -1,3 +1,27 @@
+# v1.25.2 (Mon Jan 16 2023)
+
+#### :bug: Bug Fix
+
+- Always respond to getCosmeticFilters [#2980](https://github.com/ghostery/adblocker/pull/2980) ([@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- Update deps and CI [#2889](https://github.com/ghostery/adblocker/pull/2889) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @rollup/plugin-typescript from 9.0.2 to 10.0.1 [#2952](https://github.com/ghostery/adblocker/pull/2952) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @rollup/plugin-node-resolve from 14.1.0 to 15.0.0 [#2864](https://github.com/ghostery/adblocker/pull/2864) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/mocha from 9.1.1 to 10.0.0 [#2843](https://github.com/ghostery/adblocker/pull/2843) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.25.1 (Sat Sep 17 2022)
 
 #### :nut_and_bolt: Dependencies

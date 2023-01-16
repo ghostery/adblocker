@@ -1,3 +1,26 @@
+# v1.25.2 (Mon Jan 16 2023)
+
+#### :house: Internal
+
+- Update deps and CI [#2889](https://github.com/ghostery/adblocker/pull/2889) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 19.3.0 to 19.4.1 [#2985](https://github.com/ghostery/adblocker/pull/2985) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 19.2.2 to 19.3.0 [#2937](https://github.com/ghostery/adblocker/pull/2937) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 19.2.0 to 19.2.2 [#2911](https://github.com/ghostery/adblocker/pull/2911) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 19.1.2 to 19.2.0 [#2898](https://github.com/ghostery/adblocker/pull/2898) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 19.1.0 to 19.1.2 [#2896](https://github.com/ghostery/adblocker/pull/2896) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 17.1.3 to 19.1.0 [#2886](https://github.com/ghostery/adblocker/pull/2886) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/mocha from 9.1.1 to 10.0.0 [#2843](https://github.com/ghostery/adblocker/pull/2843) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.25.1 (Sat Sep 17 2022)
 
 #### :nail_care: Polish
