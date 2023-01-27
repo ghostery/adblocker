@@ -2258,6 +2258,7 @@ reddit.com##body.scroll-disabled:style(overflow: visible!important; position: st
 reddit.com##.XPromoInFeed
 amp.reddit.com##.AppSelectorModal__body
 amp.reddit.com##.upsell_banner
+reddit.com##body[style$="overflow: hidden;"]:style(overflow: auto !important;)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/42495#issuecomment-574761083
 @@||metropoles.com^$ghide
@@ -2687,9 +2688,6 @@ interviewgig.com##+js(acis, document.onselectstart)
 ! https://github.com/uBlockOrigin/uAssets/issues/7184
 tv-asahi.co.jp##+js(aeld, contextmenu)
 tv-asahi.co.jp##+js(ra, oncontextmenu, body)
-
-! https://github.com/NanoMeow/QuickReports/issues/3465
-nascar.com##+js(aopr, HTMLIFrameElement)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3472
 full-anime.fr##+js(acis, document.getElementById, adblock)
@@ -6207,7 +6205,8 @@ portalcriatividade.com.br##+js(acis, disable_copy)
 portalcriatividade.com.br##+js(acis, nocontext)
 
 ! www.anisearch.com ad reinjection
-||privacy-mgmt.com/unified/wrapperMessagingWithoutDetection.js$script,redirect-rule=noop.js,domain=anisearch.com
+@@||cdn.privacy-mgmt.com^$script,xhr,domain=anisearch.com
+||anisearch.com/*?p=1|$frame
 
 ! https://github.com/uBlockOrigin/uAssets/issues/14961
 delicateseliterare.ro##+js(acs, jQuery, contextmenu)
@@ -6590,3 +6589,19 @@ postcourier.com.pg##*::selection:style(background-color:#338FFF !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/16432
 lofter.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important;-moz-user-select: text !important;-ms-user-select: text !important;user-select: text !important;)
+
+! https://www3.pobre.wtf anti right click and devtools
+pobre.*##+js(aeld, , blockFuckingEverything)
+pobre.*##+js(aeld, contextmenu, preventDefault)
+pobre.*##+js(aost, eval, build.js)
+
+! https://github.com/uBlockOrigin/uAssets/issues/16486
+surreyhillsgrocer.sg###NewsletterPopup-newsletter-popup
+surreyhillsgrocer.sg##html:watch-attr(class):remove-class(modal-open)
+
+! https://github.com/uBlockOrigin/uAssets/issues/16507
+paidiatreio.gr##+js(acs, document.oncontextmenu)
+paidiatreio.gr##+js(acs, document.addEventListener, copy)
+
+! gmx.co.uk "Are you sure you want to leave?" overlay
+gmx.co.uk,gmx.com##+js(aeld, mouseout, openLayer)
