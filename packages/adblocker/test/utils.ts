@@ -8,6 +8,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import * as zlib from 'zlib';
 
 import { fullLists } from '../adblocker';
 
@@ -37,6 +38,34 @@ export function loadResources() {
 
 export function getNaughtyStrings(): string[] {
   return fs.readFileSync(path.resolve(__dirname, 'data', 'blns.txt'), 'utf-8').split('\n');
+}
+
+export function getRawTrackerDB(): any {
+  const trackerdb = JSON.parse(
+    zlib.unzipSync(
+      fs.readFileSync(path.resolve(__dirname, 'data', 'trackerdb_20221213.json.gz'))
+    ).toString('utf-8'),
+  );
+
+  for (const [key, tracker] of Object.entries(trackerdb.patterns)) {
+    if (tracker !== null && typeof tracker === 'object') {
+      Object.assign(tracker, { key });
+    }
+  }
+
+  for (const [key, category] of Object.entries(trackerdb.categories)) {
+    if (category !== null && typeof category === 'object') {
+      Object.assign(category, { key });
+    }
+  }
+
+  for (const [key, organization] of Object.entries(trackerdb.organizations)) {
+    if (organization !== null && typeof organization === 'object') {
+      Object.assign(organization, { key });
+    }
+  }
+
+  return trackerdb;
 }
 
 export function typedArrayDiff(arr1: Uint8Array, arr2: Uint8Array): string[] {

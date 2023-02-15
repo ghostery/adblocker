@@ -11,7 +11,7 @@ import { StaticDataView, EMPTY_UINT32_ARRAY, sizeOfBytes } from '../data-view';
 import IFilter from '../filters/interface';
 
 // https://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
-function nextPow2(v: number): number {
+export function nextPow2(v: number): number {
   v--;
   v |= v >> 1;
   v |= v >> 2;
@@ -230,6 +230,8 @@ export default class ReverseIndex<T extends IFilter> {
     for (let i = 0; i < this.numberOfFilters; i += 1) {
       filters.push(this.deserializeFilter(this.view));
     }
+
+    this.view.seekZero();
 
     return filters;
   }
@@ -500,6 +502,7 @@ export default class ReverseIndex<T extends IFilter> {
     this.numberOfFilters = numberOfFilters;
     this.tokensLookupIndex = tokensLookupIndex;
     this.view = view;
+    view.seekZero();
     return this;
   }
 

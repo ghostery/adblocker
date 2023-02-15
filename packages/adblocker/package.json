@@ -30,6 +30,7 @@
     "prepack": "yarn run bundle",
     "test": "nyc mocha --config ../../.mocharc.js",
     "dev": "mocha --config ../../.mocharc.js --watch",
+    "bench-metadata": "ts-node --project ./tools/tsconfig.json ./tools/bench-metadata.ts",
     "bump-internal-engine-version": "ts-node --project ./tools/tsconfig.json ./tools/auto-bump-engine-version.ts",
     "generate-codebooks": "concurrently -n build: yarn:codebook-* && yarn bump-internal-engine-version",
     "codebook-network-csp": "ts-node --project ./tools/tsconfig.json ./tools/generate_compression_codebooks.ts -- network-csp",

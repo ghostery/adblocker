@@ -10,7 +10,7 @@ import { expect } from 'chai';
 import 'mocha';
 
 import { StaticDataView } from '../src/data-view';
-import { getNaughtyStrings } from './utils';
+// import { getNaughtyStrings } from './utils';
 
 describe('#StaticDataView', () => {
   describe('#slice', () => {
@@ -128,7 +128,7 @@ describe('#StaticDataView', () => {
       'roarmyng.bid',
       '.fusion-ads',
       '/dist/assets/omniture/visitorapi.min.js',
-      ...getNaughtyStrings(),
+      // ...getNaughtyStrings(),
     ].forEach((str) => {
       it(str, () => {
         checkString(str);

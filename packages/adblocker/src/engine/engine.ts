@@ -9,7 +9,7 @@
 import type { IMessageFromBackground } from '@cliqz/adblocker-content';
 
 import Config from '../config';
-import { StaticDataView, sizeOfASCII, sizeOfByte } from '../data-view';
+import { StaticDataView, sizeOfASCII, sizeOfByte, sizeOfBool } from '../data-view';
 import { EventEmitter } from '../events';
 import {
   adsAndTrackingLists,
@@ -28,6 +28,7 @@ import Request from '../request';
 import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
+import { Metadata, ITrackerLookupResult } from './metadata';
 
 export const ENGINE_VERSION = 572;
 
@@ -73,6 +74,7 @@ export interface BlockingResponse {
       };
   exception: NetworkFilter | undefined;
   filter: NetworkFilter | undefined;
+  metadata: ITrackerLookupResult[] | undefined;
 }
 
 export interface Caching {
@@ -183,6 +185,28 @@ export default class FilterEngine extends EventEmitter<
     return this.fromLists(fetchImpl, fullLists, {}, caching);
   }
 
+  public static fromTrackerDB<T extends typeof FilterEngine>(
+    this: T,
+    rawJsonDump: any,
+    options: Partial<Config> = {},
+  ): InstanceType<T> {
+    const config = new Config(options);
+    const metadata = new Metadata(rawJsonDump);
+    const filters: string[] = [];
+
+    for (const tracker of metadata.getTrackers()) {
+      filters.push(...tracker.filters);
+      for (const domain of tracker.domains) {
+        filters.push(`||${domain}^`);
+      }
+    }
+
+    const engine = this.parse(filters.join('\n'), config);
+    engine.metadata = metadata;
+
+    return engine as InstanceType<T>;
+  }
+
   public static parse<T extends FilterEngine>(
     this: new (...args: any[]) => T,
     filters: string,
@@ -260,6 +284,14 @@ export default class FilterEngine extends EventEmitter<
     engine.cosmetics = CosmeticFilterBucket.deserialize(buffer, config);
     engine.hideExceptions = NetworkFilterBucket.deserialize(buffer, config);
 
+    // Optionally deserialize metadata
+    const hasMetadata = buffer.getBool();
+    if (hasMetadata) {
+      engine.metadata = Metadata.deserialize(buffer);
+    }
+
+    buffer.seekZero();
+
     return engine;
   }
 
@@ -273,6 +305,7 @@ export default class FilterEngine extends EventEmitter<
   public filters: NetworkFilterBucket;
   public cosmetics: CosmeticFilterBucket;
 
+  public metadata: Metadata | undefined;
   public resources: Resources;
   public readonly config: Config;
 
@@ -331,7 +364,7 @@ export default class FilterEngine extends EventEmitter<
    * not have to call it yourself most of the time.
    *
    * There are cases where we cannot estimate statically the exact size of the
-   * resulting buffer (due to alignement which need to be performed); this
+   * resulting buffer (due to alignement which needs to be performed); this
    * method will return a safe estimate which will always be at least equal to
    * the real number of bytes needed, or bigger (usually of a few bytes only:
    * ~20 bytes is to be expected).
@@ -353,6 +386,11 @@ export default class FilterEngine extends EventEmitter<
     // Estimate size of `this.lists` which stores information of checksum for each list.
     for (const [name, checksum] of this.lists) {
       estimatedSize += sizeOfASCII(name) + sizeOfASCII(checksum);
+    }
+
+    estimatedSize += sizeOfBool();
+    if (this.metadata !== undefined) {
+      estimatedSize += this.metadata.getSerializedSize();
     }
 
     return estimatedSize;
@@ -393,6 +431,12 @@ export default class FilterEngine extends EventEmitter<
     this.csp.serialize(buffer);
     this.cosmetics.serialize(buffer);
     this.hideExceptions.serialize(buffer);
+
+    // Optionally serialize metadata
+    buffer.pushBool(this.metadata !== undefined);
+    if (this.metadata !== undefined) {
+      this.metadata.serialize(buffer);
+    }
 
     // Optionally append a checksum at the end
     if (this.config.integrityCheck) {
@@ -781,12 +825,13 @@ export default class FilterEngine extends EventEmitter<
    * Decide if a network request (usually from WebRequest API) should be
    * blocked, redirected or allowed.
    */
-  public match(request: Request): BlockingResponse {
+  public match(request: Request, withMetadata: boolean | undefined = false): BlockingResponse {
     const result: BlockingResponse = {
       exception: undefined,
       filter: undefined,
       match: false,
       redirect: undefined,
+      metadata: undefined,
     };
 
     if (!this.config.loadNetworkFilters) {
@@ -878,7 +923,30 @@ export default class FilterEngine extends EventEmitter<
       this.emit('request-allowed', request, result);
     }
 
+    if (withMetadata === true && result.filter !== undefined && this.metadata) {
+      result.metadata = this.metadata.fromFilter(result.filter);
+    }
+
     return result;
+  }
+
+  public getTrackerMetadata(request: Request): ITrackerLookupResult[] {
+    if (this.metadata === undefined) {
+      return [];
+    }
+
+    const seenTrackers = new Set();
+    const trackers: ITrackerLookupResult[] = [];
+    for (const filter of this.matchAll(request)) {
+      for (const trackerInfo of this.metadata.fromFilter(filter)) {
+        if (!seenTrackers.has(trackerInfo.tracker.key)) {
+          seenTrackers.add(trackerInfo.tracker.key);
+          trackers.push(trackerInfo);
+        }
+      }
+    }
+
+    return trackers;
   }
 
   public blockScripts() {
