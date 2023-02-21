@@ -17,14 +17,14 @@ import { fastHash } from '../../src/utils';
 import { StaticDataView } from '../../src/data-view';
 import { Metadata } from '../../src/engine/metadata';
 import {
-  ITracker,
-  createMap as createTrackersMap,
-  deserialize as deserializeTracker,
-  getKeys as getTrackerKeys,
-  getSerializedSize as getTrackerSerializedSize,
-  isValid as isValidTracker,
-  serialize as serializeTracker,
-} from '../../src/engine/metadata/trackers';
+  IPattern,
+  createMap as createPatternMap,
+  deserialize as deserializePattern,
+  getKeys as getPatternKeys,
+  getSerializedSize as getPatternSerializedSize,
+  isValid as isValidPattern,
+  serialize as serializePattern,
+} from '../../src/engine/metadata/patterns';
 
 import {
   ICategory,
@@ -49,7 +49,7 @@ import {
 import { CompactMap } from '../../src/engine/map';
 import NetworkFilter from '../../src/filters/network';
 
-const ZYPMEDIA: ITracker = {
+const ZYPMEDIA: IPattern = {
   key: 'zypmedia',
   name: 'ZypMedia',
   category: 'advertising',
@@ -81,10 +81,10 @@ const ADVERTISING_CATEGORY: ICategory = {
     'Includes advertising services such as data collection, behavioral analysis or retargeting.',
 };
 
-function sortTrackers(trackers: ITracker[]): ITracker[] {
-  return trackers.sort(
-    (tracker1: ITracker, tracker2: ITracker): number =>
-      fastHash(tracker1.name) - fastHash(tracker2.name),
+function sortPatterns(pattenrs: IPattern[]): IPattern[] {
+  return pattenrs.sort(
+    (pattern1: IPattern, pattern2: IPattern): number =>
+      fastHash(pattern1.name) - fastHash(pattern2.name),
   );
 }
 
@@ -102,47 +102,47 @@ function sortOrganizations(organizations: IOrganization[]): IOrganization[] {
   );
 }
 
-describe('#ITracker', () => {
+describe('#IPattern', () => {
   const view: StaticDataView = StaticDataView.allocate(100000, { enableCompression: false });
 
   it('serialization', () => {
-    for (const [name, tracker] of Object.entries(getRawTrackerDB().patterns)) {
-      expect(isValidTracker(tracker), name).to.be.true;
-      if (isValidTracker(tracker)) {
+    for (const [name, pattern] of Object.entries(getRawTrackerDB().patterns)) {
+      expect(isValidPattern(pattern), name).to.be.true;
+      if (isValidPattern(pattern)) {
         view.setPos(0);
-        serializeTracker(tracker, view);
-        expect(view.getPos(), name).to.eql(getTrackerSerializedSize(tracker));
+        serializePattern(pattern, view);
+        expect(view.getPos(), name).to.eql(getPatternSerializedSize(pattern));
         view.setPos(0);
-        expect(deserializeTracker(view), name).to.eql(tracker);
+        expect(deserializePattern(view), name).to.eql(pattern);
       }
     }
   });
 
   it('stored in CompactMap', () => {
-    const inputTrackers = Object.values(getRawTrackerDB().patterns) as ITracker[];
+    const inputPatterns = Object.values(getRawTrackerDB().patterns) as IPattern[];
 
-    const map = createTrackersMap(inputTrackers);
+    const map = createPatternMap(inputPatterns);
 
     // Make sure we can serialize and deserialize `map`
     const mapView = StaticDataView.allocate(1000000, { enableCompression: false });
     map.serialize(mapView);
     expect(mapView.getPos()).to.eql(map.getSerializedSize());
     mapView.setPos(0);
-    const deserializedMap = CompactMap.deserialize(mapView, deserializeTracker);
+    const deserializedMap = CompactMap.deserialize(mapView, deserializePattern);
     expect(deserializedMap).to.eql(map);
 
     // Make sure we get the original values back
-    const trackers = map.getValues();
+    const patterns = map.getValues();
 
-    sortTrackers(inputTrackers);
-    sortTrackers(trackers);
+    sortPatterns(inputPatterns);
+    sortPatterns(patterns);
 
-    expect(trackers).to.eql(inputTrackers);
+    expect(patterns).to.eql(inputPatterns);
 
-    for (const tracker of inputTrackers) {
-      const keys = getTrackerKeys(tracker);
+    for (const pattern of inputPatterns) {
+      const keys = getPatternKeys(pattern);
       for (const key of keys) {
-        expect(map.get(key)).to.deep.include(tracker);
+        expect(map.get(key)).to.deep.include(pattern);
       }
     }
   });
@@ -251,7 +251,7 @@ describe('#Metadata', () => {
     it('retrieves existing metadata', () => {
       expect(metadata.fromDomain('extend.tv')).to.eql([
         {
-          tracker: ZYPMEDIA,
+          pattern: ZYPMEDIA,
           organization: ZYPMEDIA_ORGANIZATION,
           category: ADVERTISING_CATEGORY,
         },
@@ -289,7 +289,7 @@ describe('#Metadata', () => {
         metadata.fromFilter(NetworkFilter.parse('||sync.extend.tv^') as NetworkFilter),
       ).to.eql([
         {
-          tracker: ZYPMEDIA,
+          pattern: ZYPMEDIA,
           organization: ZYPMEDIA_ORGANIZATION,
           category: ADVERTISING_CATEGORY,
         },
@@ -317,7 +317,7 @@ describe('#Metadata', () => {
     it('retrieves existing metadata', () => {
       expect(metadata.fromId(NetworkFilter.parse('||sync.extend.tv^')?.getId() || 0)).to.eql([
         {
-          tracker: ZYPMEDIA,
+          pattern: ZYPMEDIA,
           organization: ZYPMEDIA_ORGANIZATION,
           category: ADVERTISING_CATEGORY,
         },
@@ -333,7 +333,7 @@ describe('#Metadata', () => {
     it('loads trackerdb dump', () => {
       const rawTrackerDB = getRawTrackerDB();
       const engine = Engine.fromTrackerDB(rawTrackerDB);
-      const trackers: ITracker[] = Object.values(rawTrackerDB.patterns);
+      const patterns: IPattern[] = Object.values(rawTrackerDB.patterns);
       const categories: ICategory[] = Object.values(rawTrackerDB.categories);
       const organizations: IOrganization[] = Object.values(rawTrackerDB.organizations);
 
@@ -346,7 +346,7 @@ describe('#Metadata', () => {
       // Make sure values stored can be retrieved
       expect(deserialized.metadata).to.not.be.undefined;
       if (deserialized.metadata !== undefined) {
-        expect(sortTrackers(deserialized.metadata.getTrackers())).to.eql(sortTrackers(trackers));
+        expect(sortPatterns(deserialized.metadata.getPatterns())).to.eql(sortPatterns(patterns));
         expect(sortCategories(deserialized.metadata.getCategories())).to.eql(
           sortCategories(categories),
         );
@@ -371,19 +371,19 @@ describe('#Metadata', () => {
           {
             'category': ADVERTISING_CATEGORY,
             'organization': ZYPMEDIA_ORGANIZATION,
-            'tracker': ZYPMEDIA,
+            'pattern': ZYPMEDIA,
           },
         ],
         redirect: undefined,
       });
 
       expect(
-        engine.getTrackerMetadata(Request.fromRawDetails({ url: 'https://extend.tv/' })),
+        engine.getPatternMetadata(Request.fromRawDetails({ url: 'https://extend.tv/' })),
       ).to.eql([
         {
           'category': ADVERTISING_CATEGORY,
           'organization': ZYPMEDIA_ORGANIZATION,
-          'tracker': ZYPMEDIA,
+          'pattern': ZYPMEDIA,
         },
       ]);
     });
@@ -392,7 +392,7 @@ describe('#Metadata', () => {
   describe('e2e', () => {
     it('loads trackerdb dump', () => {
       const rawTrackerDB = getRawTrackerDB();
-      const trackers: ITracker[] = Object.values(rawTrackerDB.patterns);
+      const patterns: IPattern[] = Object.values(rawTrackerDB.patterns);
       const categories: ICategory[] = Object.values(rawTrackerDB.categories);
       const organizations: IOrganization[] = Object.values(rawTrackerDB.organizations);
 
@@ -407,7 +407,7 @@ describe('#Metadata', () => {
       expect(deserializedMetadata).to.eql(metadata);
 
       // Make sure values stored can be retrieved
-      expect(sortTrackers(deserializedMetadata.getTrackers())).to.eql(sortTrackers(trackers));
+      expect(sortPatterns(deserializedMetadata.getPatterns())).to.eql(sortPatterns(patterns));
       expect(sortCategories(deserializedMetadata.getCategories())).to.eql(
         sortCategories(categories),
       );
@@ -415,25 +415,25 @@ describe('#Metadata', () => {
         sortOrganizations(organizations),
       );
 
-      for (const tracker of trackers) {
-        const organization: IOrganization | null = tracker.organization
-          ? rawTrackerDB.organizations[tracker.organization]
+      for (const pattern of patterns) {
+        const organization: IOrganization | null = pattern.organization
+          ? rawTrackerDB.organizations[pattern.organization]
           : null;
-        const category: ICategory = rawTrackerDB.categories[tracker.category];
+        const category: ICategory = rawTrackerDB.categories[pattern.category];
 
-        for (const domain of tracker.domains) {
+        for (const domain of pattern.domains) {
           expect(metadata.fromDomain(domain), domain).to.deep.include({
-            tracker,
+            pattern,
             organization,
             category,
           });
         }
 
-        for (const filter of tracker.filters) {
+        for (const filter of pattern.filters) {
           const parsedFilter = NetworkFilter.parse(filter);
           if (parsedFilter !== null) {
             expect(metadata.fromFilter(parsedFilter)).to.deep.include({
-              tracker,
+              pattern,
               organization,
               category,
             });

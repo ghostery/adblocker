@@ -28,7 +28,7 @@ import Request from '../request';
 import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
-import { Metadata, ITrackerLookupResult } from './metadata';
+import { Metadata, IPatternLookupResult } from './metadata';
 
 export const ENGINE_VERSION = 572;
 
@@ -74,7 +74,7 @@ export interface BlockingResponse {
       };
   exception: NetworkFilter | undefined;
   filter: NetworkFilter | undefined;
-  metadata: ITrackerLookupResult[] | undefined;
+  metadata: IPatternLookupResult[] | undefined;
 }
 
 export interface Caching {
@@ -194,9 +194,9 @@ export default class FilterEngine extends EventEmitter<
     const metadata = new Metadata(rawJsonDump);
     const filters: string[] = [];
 
-    for (const tracker of metadata.getTrackers()) {
-      filters.push(...tracker.filters);
-      for (const domain of tracker.domains) {
+    for (const pattern of metadata.getPatterns()) {
+      filters.push(...pattern.filters);
+      for (const domain of pattern.domains) {
         filters.push(`||${domain}^`);
       }
     }
@@ -930,23 +930,23 @@ export default class FilterEngine extends EventEmitter<
     return result;
   }
 
-  public getTrackerMetadata(request: Request): ITrackerLookupResult[] {
+  public getPatternMetadata(request: Request): IPatternLookupResult[] {
     if (this.metadata === undefined) {
       return [];
     }
 
-    const seenTrackers = new Set();
-    const trackers: ITrackerLookupResult[] = [];
+    const seenPatterns = new Set();
+    const patterns: IPatternLookupResult[] = [];
     for (const filter of this.matchAll(request)) {
-      for (const trackerInfo of this.metadata.fromFilter(filter)) {
-        if (!seenTrackers.has(trackerInfo.tracker.key)) {
-          seenTrackers.add(trackerInfo.tracker.key);
-          trackers.push(trackerInfo);
+      for (const patternInfo of this.metadata.fromFilter(filter)) {
+        if (!seenPatterns.has(patternInfo.pattern.key)) {
+          seenPatterns.add(patternInfo.pattern.key);
+          patterns.push(patternInfo);
         }
       }
     }
 
-    return trackers;
+    return patterns;
   }
 
   public blockScripts() {

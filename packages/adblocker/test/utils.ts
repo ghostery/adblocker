@@ -47,9 +47,9 @@ export function getRawTrackerDB(): any {
     ).toString('utf-8'),
   );
 
-  for (const [key, tracker] of Object.entries(trackerdb.patterns)) {
-    if (tracker !== null && typeof tracker === 'object') {
-      Object.assign(tracker, { key });
+  for (const [key, pattern] of Object.entries(trackerdb.patterns)) {
+    if (pattern !== null && typeof pattern === 'object') {
+      Object.assign(pattern, { key });
     }
   }
 

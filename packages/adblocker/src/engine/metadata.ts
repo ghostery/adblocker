@@ -27,14 +27,14 @@ import {
 } from './metadata/organizations';
 
 import {
-  ITracker,
-  createMap as createTrackersMap,
-  isValid as isValidTracker,
-  deserialize as deserializeTracker,
-} from './metadata/trackers';
+  IPattern,
+  createMap as createPatternsMap,
+  isValid as isValidPattern,
+  deserialize as deserializePattern,
+} from './metadata/patterns';
 
-export interface ITrackerLookupResult {
-  tracker: ITracker;
+export interface IPatternLookupResult {
+  pattern: IPattern;
   organization: IOrganization | null;
   category: ICategory | null;
 }
@@ -53,19 +53,19 @@ export class Metadata {
     const metadata = new Metadata(null);
     metadata.categories = CompactMap.deserialize(buffer, deserializeCategory);
     metadata.organizations = CompactMap.deserialize(buffer, deserializeOrganization);
-    metadata.trackers = CompactMap.deserialize(buffer, deserializeTracker);
+    metadata.patterns = CompactMap.deserialize(buffer, deserializePattern);
     return metadata;
   }
 
   public organizations: CompactMap<IOrganization>;
   public categories: CompactMap<ICategory>;
-  public trackers: CompactMap<ITracker>;
+  public patterns: CompactMap<IPattern>;
 
   constructor(rawTrackerDB: any) {
     if (!rawTrackerDB) {
       this.organizations = createOrganizationsMap([]);
       this.categories = createCategoriesMap([]);
-      this.trackers = createTrackersMap([]);
+      this.patterns = createPatternsMap([]);
       return;
     }
 
@@ -109,22 +109,22 @@ export class Metadata {
     }
     this.organizations = createOrganizationsMap(organizations);
 
-    // Type-check trackers
-    const trackers: ITracker[] = [];
+    // Type-check patterns
+    const patterns: IPattern[] = [];
     if (typeof rawPatterns === 'object') {
-      for (const [key, tracker] of Object.entries(rawPatterns)) {
-        if (typeof tracker !== 'object') {
+      for (const [key, pattern] of Object.entries(rawPatterns)) {
+        if (typeof pattern !== 'object') {
           continue;
         }
-        const trackerWithKey = { key, ...tracker };
-        if (isValidTracker(trackerWithKey)) {
-          trackers.push(trackerWithKey);
+        const patternWithKey = { key, ...pattern };
+        if (isValidPattern(patternWithKey)) {
+          patterns.push(patternWithKey);
         } else {
-          console.error('?? invalid tracker', trackerWithKey);
+          console.error('?? invalid pattern', patternWithKey);
         }
       }
     }
-    this.trackers = createTrackersMap(trackers);
+    this.patterns = createPatternsMap(patterns);
   }
 
   public getCategories(): ICategory[] {
@@ -135,8 +135,8 @@ export class Metadata {
     return this.organizations.getValues();
   }
 
-  public getTrackers(): ITracker[] {
-    return this.trackers.getValues();
+  public getPatterns(): IPattern[] {
+    return this.patterns.getValues();
   }
 
   /**
@@ -146,7 +146,7 @@ export class Metadata {
     return (
       this.categories.getSerializedSize() +
       this.organizations.getSerializedSize() +
-      this.trackers.getSerializedSize()
+      this.patterns.getSerializedSize()
     );
   }
 
@@ -156,21 +156,21 @@ export class Metadata {
   public serialize(buffer: StaticDataView): void {
     this.categories.serialize(buffer);
     this.organizations.serialize(buffer);
-    this.trackers.serialize(buffer);
+    this.patterns.serialize(buffer);
   }
 
   /**
-   * Given an instance of NetworkFilter, retrieve tracker, organization and
+   * Given an instance of NetworkFilter, retrieve pattern, organization and
    * category information.
    */
-  public fromFilter(filter: NetworkFilter): ITrackerLookupResult[] {
+  public fromFilter(filter: NetworkFilter): IPatternLookupResult[] {
     return this.fromId(filter.getId());
   }
 
   /**
-   * Given a domain, retrieve tracker, organization and category information.
+   * Given a domain, retrieve pattern, organization and category information.
    */
-  public fromDomain(domain: string): ITrackerLookupResult[] {
+  public fromDomain(domain: string): IPatternLookupResult[] {
     const parsedDomainFilter = NetworkFilter.parse(`||${domain}^`);
     if (parsedDomainFilter === null) {
       return [];
@@ -181,19 +181,19 @@ export class Metadata {
 
   /**
    * Given an `id` from filter, retrieve using the NetworkFilter.getId() method,
-   * lookup associated trackers (including organization and category) in an
+   * lookup associated patterns (including organization and category) in an
    * efficient way.
    */
-  public fromId(id: number): ITrackerLookupResult[] {
-    const results: ITrackerLookupResult[] = [];
+  public fromId(id: number): IPatternLookupResult[] {
+    const results: IPatternLookupResult[] = [];
 
-    for (const tracker of this.trackers.get(id)) {
+    for (const pattern of this.patterns.get(id)) {
       results.push({
-        tracker,
-        category: this.categories.get(getCategoryKey({ key: tracker.category }))?.[0],
+        pattern,
+        category: this.categories.get(getCategoryKey({ key: pattern.category }))?.[0],
         organization:
-          tracker.organization !== null
-            ? this.organizations.get(getOrganizationKey({ key: tracker.organization }))?.[0]
+          pattern.organization !== null
+            ? this.organizations.get(getOrganizationKey({ key: pattern.organization }))?.[0]
             : null,
       });
     }

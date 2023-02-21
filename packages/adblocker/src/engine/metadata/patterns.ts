@@ -12,7 +12,7 @@ import { CompactMap } from '../map';
 import { StaticDataView, sizeOfUTF8, sizeOfLength } from '../../data-view';
 import NetworkFilter from '../../filters/network';
 
-export interface ITracker {
+export interface IPattern {
   readonly key: string;
   readonly name: string;
   readonly category: string;
@@ -25,15 +25,15 @@ export interface ITracker {
 }
 
 /**
- * This function takes an object representing a tracker from TrackerDB dump
+ * This function takes an object representing a pattern from TrackerDB dump
  * and validates its shape. The result is the same object, but strongly typed.
  */
-export function isValid(tracker: any): tracker is ITracker {
-  if (tracker === null) {
+export function isValid(pattern: any): pattern is IPattern {
+  if (pattern === null) {
     return false;
   }
 
-  if (typeof tracker !== 'object') {
+  if (typeof pattern !== 'object') {
     return false;
   }
 
@@ -47,7 +47,7 @@ export function isValid(tracker: any): tracker is ITracker {
     ghostery_id: ghosteryId,
     domains,
     filters,
-  } = tracker;
+  } = pattern;
 
   if (typeof key !== 'string') {
     return false;
@@ -88,17 +88,17 @@ export function isValid(tracker: any): tracker is ITracker {
   return true;
 }
 
-export function getKeys(tracker: ITracker): number[] {
+export function getKeys(pattern: IPattern): number[] {
   const keys: number[] = [];
 
-  for (const filter of tracker.filters) {
+  for (const filter of pattern.filters) {
     const parsedFilter = NetworkFilter.parse(filter);
     if (parsedFilter !== null) {
       keys.push(parsedFilter.getId());
     }
   }
 
-  for (const domain of tracker.domains) {
+  for (const domain of pattern.domains) {
     const parsedFilter = NetworkFilter.parse(`||${domain}^`);
     if (parsedFilter !== null) {
       keys.push(parsedFilter.getId());
@@ -108,51 +108,51 @@ export function getKeys(tracker: ITracker): number[] {
   return [...new Set(keys)];
 }
 
-export function getSerializedSize(tracker: ITracker): number {
-  let sizeOfDomains = sizeOfLength(tracker.domains.length);
-  for (const domain of tracker.domains) {
+export function getSerializedSize(pattern: IPattern): number {
+  let sizeOfDomains = sizeOfLength(pattern.domains.length);
+  for (const domain of pattern.domains) {
     sizeOfDomains += sizeOfUTF8(domain);
   }
 
-  let sizeOfFilters = sizeOfLength(tracker.filters.length);
-  for (const filter of tracker.filters) {
+  let sizeOfFilters = sizeOfLength(pattern.filters.length);
+  for (const filter of pattern.filters) {
     sizeOfFilters += sizeOfUTF8(filter);
   }
 
   return (
-    sizeOfUTF8(tracker.key) +
-    sizeOfUTF8(tracker.name) +
-    sizeOfUTF8(tracker.category) +
-    sizeOfUTF8(tracker.organization || '') +
-    sizeOfUTF8(tracker.alias || '') +
-    sizeOfUTF8(tracker.website_url || '') +
-    sizeOfUTF8(tracker.ghostery_id) +
+    sizeOfUTF8(pattern.key) +
+    sizeOfUTF8(pattern.name) +
+    sizeOfUTF8(pattern.category) +
+    sizeOfUTF8(pattern.organization || '') +
+    sizeOfUTF8(pattern.alias || '') +
+    sizeOfUTF8(pattern.website_url || '') +
+    sizeOfUTF8(pattern.ghostery_id) +
     sizeOfDomains +
     sizeOfFilters
   );
 }
 
-export function serialize(tracker: ITracker, view: StaticDataView) {
-  view.pushUTF8(tracker.key);
-  view.pushUTF8(tracker.name);
-  view.pushUTF8(tracker.category);
-  view.pushUTF8(tracker.organization || '');
-  view.pushUTF8(tracker.alias || '');
-  view.pushUTF8(tracker.website_url || '');
-  view.pushUTF8(tracker.ghostery_id);
+export function serialize(pattern: IPattern, view: StaticDataView) {
+  view.pushUTF8(pattern.key);
+  view.pushUTF8(pattern.name);
+  view.pushUTF8(pattern.category);
+  view.pushUTF8(pattern.organization || '');
+  view.pushUTF8(pattern.alias || '');
+  view.pushUTF8(pattern.website_url || '');
+  view.pushUTF8(pattern.ghostery_id);
 
-  view.pushLength(tracker.domains.length);
-  for (const domain of tracker.domains) {
+  view.pushLength(pattern.domains.length);
+  for (const domain of pattern.domains) {
     view.pushUTF8(domain);
   }
 
-  view.pushLength(tracker.filters.length);
-  for (const filter of tracker.filters) {
+  view.pushLength(pattern.filters.length);
+  for (const filter of pattern.filters) {
     view.pushUTF8(filter);
   }
 }
 
-export function deserialize(view: StaticDataView): ITracker {
+export function deserialize(view: StaticDataView): IPattern {
   const key = view.getUTF8();
   const name = view.getUTF8();
   const category = view.getUTF8();
@@ -186,12 +186,12 @@ export function deserialize(view: StaticDataView): ITracker {
   };
 }
 
-export function createMap(trackers: ITracker[]): CompactMap<ITracker> {
+export function createMap(patterns: IPattern[]): CompactMap<IPattern> {
   return new CompactMap({
     getSerializedSize,
     getKeys,
     serialize,
     deserialize,
-    values: trackers,
+    values: patterns,
   });
 }

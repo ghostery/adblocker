@@ -59,7 +59,7 @@ export class CompactMap<T> {
 
   // In-memory cache used to keep track of metadata which has already been
   // loaded from the compact representation (i.e.: this.view). It is not
-  // strictly necessary but will speed-up retrival of popular trackers
+  // strictly necessary but will speed-up retrival of popular patterns
   // (since we do not have to perform the lookup again).
   private readonly cache: Map<number, T[]> = new Map();
 
@@ -89,7 +89,7 @@ export class CompactMap<T> {
     this.deserializeValue = deserialize;
 
     if (values.length !== 0) {
-      const trackersKeys: number[][] = [];
+      const patternsKeys: number[][] = [];
 
       // Keep track of the final size of the buckets index. `bucketsIndexSize`
       // is the number of indexed values, multiplied by 2 (since we store both
@@ -116,10 +116,10 @@ export class CompactMap<T> {
       }
 
       for (const value of values) {
-        // Get keys from `value` and store the result in `trackersKeys` which
+        // Get keys from `value` and store the result in `patternsKeys` which
         // will be used in the next step to select the best key for each value.
         const keys = getKeys(value);
-        trackersKeys.push(keys);
+        patternsKeys.push(keys);
         bucketsIndexSize += 2 * keys.length; // key + value index
       }
 
@@ -149,9 +149,9 @@ export class CompactMap<T> {
       // Since we are iterating again on the values, we populate "values index"
       // in the same loop and keep track of their indices so that we can later
       // populate "buckets index".
-      for (let i = 0; i < trackersKeys.length; i += 1) {
+      for (let i = 0; i < patternsKeys.length; i += 1) {
         const value: T = values[i];
-        const keys: number[] = trackersKeys[i];
+        const keys: number[] = patternsKeys[i];
 
         // Serialize this value and keep track of its index in the byte array;
         // it will be used in "buckets index" to point to this value.
@@ -180,7 +180,7 @@ export class CompactMap<T> {
       this.updateInternals({
         bucketsIndex,
         valuesIndexStart,
-        numberOfValues: trackersKeys.length,
+        numberOfValues: patternsKeys.length,
         tokensLookupIndex,
         view: buffer,
       });
