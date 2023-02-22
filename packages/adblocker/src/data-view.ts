@@ -539,7 +539,7 @@ export class StaticDataView {
   }
 
   // Serialiez `length` with variable encoding to save space
-  private pushLength(length: number): void {
+  public pushLength(length: number): void {
     if (length <= 127) {
       this.pushUint8(length);
     } else {
@@ -548,7 +548,7 @@ export class StaticDataView {
     }
   }
 
-  private getLength(): number {
+  public getLength(): number {
     const lengthShort = this.getUint8();
     return lengthShort === 128 ? this.getUint32() : lengthShort;
   }
