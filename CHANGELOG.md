@@ -1,3 +1,49 @@
+# v1.26.0 (Wed Feb 22 2023)
+
+#### :rocket: New Feature
+
+- `@cliqz/adblocker`
+  - Implement metadata abstraction [#3064](https://github.com/ghostery/adblocker/pull/3064) ([@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#3024](https://github.com/ghostery/adblocker/pull/3024) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#3002](https://github.com/ghostery/adblocker/pull/3002) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump rimraf from 4.1.0 to 4.1.1 [#3020](https://github.com/ghostery/adblocker/pull/3020) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 22.0.2 to 22.0.3 [#3021](https://github.com/ghostery/adblocker/pull/3021) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rimraf from 4.0.7 to 4.1.0 [#3019](https://github.com/ghostery/adblocker/pull/3019) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump playwright from 1.29.1 to 1.29.2 [#3006](https://github.com/ghostery/adblocker/pull/3006) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 3.9.1 to 3.10.0 [#3012](https://github.com/ghostery/adblocker/pull/3012) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump lerna from 6.4.0 to 6.4.1 [#3014](https://github.com/ghostery/adblocker/pull/3014) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump prettier from 2.8.1 to 2.8.3 [#3015](https://github.com/ghostery/adblocker/pull/3015) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 22.0.0 to 22.0.2 [#3016](https://github.com/ghostery/adblocker/pull/3016) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker`
+  - Build(deps): Bump @types/chrome from 0.0.208 to 0.0.209 [#3022](https://github.com/ghostery/adblocker/pull/3022) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - Build(deps): Bump @types/chrome from 0.0.206 to 0.0.208 [#3008](https://github.com/ghostery/adblocker/pull/3008) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-puppeteer`
+  - Build(deps): Bump puppeteer from 19.4.1 to 19.5.2 [#3011](https://github.com/ghostery/adblocker/pull/3011) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-content`, `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - Build(deps-dev): Bump @rollup/plugin-typescript from 10.0.1 to 11.0.0 [#3003](https://github.com/ghostery/adblocker/pull/3003) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-extended-selectors`, `@cliqz/adblocker-webextension-cosmetics`
+  - Build(deps-dev): Bump jsdom from 20.0.3 to 21.0.0 [#3005](https://github.com/ghostery/adblocker/pull/3005) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker`
+  - Build(deps): Bump @types/firefox-webext-browser from 94.0.1 to 109.0.0 [#3017](https://github.com/ghostery/adblocker/pull/3017) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-content`, `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-electron`, `@cliqz/adblocker-extended-selectors`, `@cliqz/adblocker-playwright`, `@cliqz/adblocker-puppeteer`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - Build(deps-dev): Bump rimraf from 3.0.2 to 4.0.7 [#3018](https://github.com/ghostery/adblocker/pull/3018) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.25.2 (Mon Jan 16 2023)
 
 #### :bug: Bug Fix

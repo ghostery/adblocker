@@ -1,3 +1,15 @@
+# v1.26.0 (Wed Feb 22 2023)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump rimraf from 3.0.2 to 4.0.7 [#3018](https://github.com/ghostery/adblocker/pull/3018) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.25.2 (Mon Jan 16 2023)
 
 #### :house: Internal
