@@ -1,3 +1,23 @@
+# v1.26.1 (Sun Feb 26 2023)
+
+#### :house: Internal
+
+- Fix codebooks generation [#3081](https://github.com/ghostery/adblocker/pull/3081) ([@remusao](https://github.com/remusao))
+- Update local assets [#3033](https://github.com/ghostery/adblocker/pull/3033) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.209 to 0.0.217 [#3070](https://github.com/ghostery/adblocker/pull/3070) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.26.0 (Wed Feb 22 2023)
 
 #### :rocket: New Feature

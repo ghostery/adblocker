@@ -1,3 +1,16 @@
+# v1.26.1 (Sun Feb 26 2023)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump electron from 22.0.3 to 23.1.1 [#3076](https://github.com/ghostery/adblocker/pull/3076) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.209 to 0.0.217 [#3070](https://github.com/ghostery/adblocker/pull/3070) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.26.0 (Wed Feb 22 2023)
 
 #### :nut_and_bolt: Dependencies
