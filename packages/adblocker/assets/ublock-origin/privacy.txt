@@ -257,8 +257,6 @@ ppss.kr,ygosu.com,tgd.kr,inven.co.kr,loawa.com,feedclick.net,dailian.co.kr,algum
 ppss.kr,ygosu.com,tgd.kr,inven.co.kr,loawa.com,feedclick.net,dailian.co.kr,algumon.com,sportalkorea.com##^script:has-text(ad-shield)
 ||da29e6b8-f018-490f-b25f-39a887fc95e7.xyz^
 /^https:\/\/cdn\.jsdelivr\.net\/npm\/[-a-z_]{4,22}@latest\/dist\/script\.min\.js$/$script,3p,match-case
-||1ee085aa-4c05-43a8-a4fe-fafedbedd062.xyz^
-||03c844c9-d265-4006-a39d-400e6cb40bb7.xyz^
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/p29y3w/these_guys_boast_combatting_all_adblocks/
 ||connectier.io^
@@ -409,6 +407,8 @@ tarnkappe.info##+js(aopr, Matomo)
 ! darkreader. org pings
 ||stats.darkreader.app^
 ||statistics.darkreader.app^
+||counter.darkreader.app^
+||herokudns.com^$xhr,domain=darkreader.org
 
 ! https://github.com/uBlockOrigin/uAssets/issues/14653
 ||hktvmall.com/yuicombo?$script,removeparam=/_ui/shared/common/js/analytics/with-intersection-track.js
@@ -453,4 +453,36 @@ ericdraken.com##^script[async]
 ||blozoo.info/js/inouttool/
 
 ! https://github.com/uBlockOrigin/uAssets/issues/16478
-||linkedin.com/li/track$xhr,1p
+!||linkedin.com/li/track$xhr,1p
+
+! jscrambler.com tracking
+||jscrambler.com/api/statistics
+||jscrambler.com/bc.js
+
+! https://github.com/AdguardTeam/AdguardFilters/commit/c996d0d98c6bc4f4542c258a44485f8868a8c8c7
+/oo/*/lsync.js$1p
+/oo/*/l.js|$1p
+! https://github.com/AdguardTeam/AdguardFilters/commit/dd15e29e10b0ad6f21c0451fa84aa0a041dfe68e
+/oo/cl*.js?rd=$1p
+! https://github.com/AdguardTeam/AdguardFilters/commit/e0033467716a3f4077adecb574da73861f663e76
+/acc/acctag.js
+! https://github.com/AdguardTeam/AdguardFilters/commit/b4ad45459bcd5e0a0c6711abec10a45dc35a5062
+.jp/static/js/track.js
+
+! heavyfetish.com tracking
+heavyfetish.com##+js(set, flashvars.event_reporting, '')
+heavyfetish.com##+js(cookie-remover, kt_qparams)
+heavyfetish.com##+js(cookie-remover, kt_ips)
+heavyfetish.com##+js(cookie-remover, kt_referer)
+
+! https://github.com/uBlockOrigin/uAssets/issues/16730#issuecomment-1427957300
+utreon.com##+js(no-xhr-if, utreon.com/pl/api/event method:POST)
+
+! https://github.com/uBlockOrigin/uAssets/issues/16731
+/^https:\/\/[0-9a-z]{7,25}\.com\/v2(?:\/0\/)?(?=[-_0-9a-z]{0,84}[A-Z])(?=[-_a-zA-Z]{0,84}[0-9])[-_0-9a-zA-Z]{54,85}(#\?v=[0-9a-f]{32})?$/$script,xhr,3p,match-case
+
+! https://github.com/uBlockOrigin/uAssets/issues/16751
+zhihu.com##+js(no-xhr-if, log-sdk.ksapisrv.com/rest/wd/common/log/collect method:POST)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/114908#issuecomment-1438714714
+||torimochi.line-apps.com^$image,redirect=1x1.gif
