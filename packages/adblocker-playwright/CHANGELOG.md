@@ -1,3 +1,15 @@
+# v1.26.2 (Thu Mar 02 2023)
+
+#### :bug: Bug Fix
+
+- [adblocker-playwright] Await route [#3096](https://github.com/ghostery/adblocker/pull/3096) ([@regseb](https://github.com/regseb))
+
+#### Authors: 1
+
+- Sébastien Règne ([@regseb](https://github.com/regseb))
+
+---
+
 # v1.26.0 (Wed Feb 22 2023)
 
 #### :nut_and_bolt: Dependencies
