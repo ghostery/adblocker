@@ -77,7 +77,7 @@ export class BlockingContext {
       //  easily be added if Playwright implements the required capability.
       //
       // Register callback for network requests filtering.
-      this.page.route('**/*', this.onRequest);
+      await this.page.route('**/*', this.onRequest);
     }
   }
 
