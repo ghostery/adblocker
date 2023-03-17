@@ -1,0 +1,32 @@
+module.exports = {
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'plugin:@typescript-eslint/strict',
+  ],
+  ignorePatterns: ['**/node_modules/**', '**/dist/**', '**/adblocker-benchmarks/**/*.js'],
+  parserOptions: {
+    project: 'tsconfig.json',
+    tsconfigRootDir: __dirname,
+  },
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint'],
+  env: { browser: true },
+  root: true,
+  rules: {
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-unsafe-assignment': 'off',
+    '@typescript-eslint/no-unsafe-argument': 'off',
+    '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'off',
+    '@typescript-eslint/prefer-nullish-coalescing': 'off',
+    '@typescript-eslint/no-unsafe-call': 'off',
+    '@typescript-eslint/non-nullable-type-assertion-style': 'off',
+    '@typescript-eslint/no-unsafe-member-access': 'off',
+    '@typescript-eslint/prefer-for-of': 'off',
+    '@typescript-eslint/prefer-literal-enum-member': 'off',
+    '@typescript-eslint/restrict-template-expressions': 'off',
+    '@typescript-eslint/restrict-plus-operand': 'off',
+    '@typescript-eslint/no-unsafe-return': 'off',
+  },
+};
