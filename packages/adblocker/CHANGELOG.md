@@ -1,3 +1,30 @@
+# v1.26.3 (Fri Mar 24 2023)
+
+#### :nail_care: Polish
+
+- TrackerDB: by default should not match domains [#3145](https://github.com/ghostery/adblocker/pull/3145) ([@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- Update local assets [#3103](https://github.com/ghostery/adblocker/pull/3103) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#3102](https://github.com/ghostery/adblocker/pull/3102) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#3097](https://github.com/ghostery/adblocker/pull/3097) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.219 to 0.0.224 [#3128](https://github.com/ghostery/adblocker/pull/3128) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/firefox-webext-browser from 109.0.0 to 111.0.0 [#3109](https://github.com/ghostery/adblocker/pull/3109) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.218 to 0.0.219 [#3098](https://github.com/ghostery/adblocker/pull/3098) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.26.2 (Thu Mar 02 2023)
 
 #### :house: Internal
