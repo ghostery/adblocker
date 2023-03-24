@@ -927,7 +927,10 @@ export default class FilterEngine extends EventEmitter<
     return result;
   }
 
-  public getPatternMetadata(request: Request, { getDomainMetadata = false } = {}): IPatternLookupResult[] {
+  public getPatternMetadata(
+    request: Request,
+    { getDomainMetadata = false } = {},
+  ): IPatternLookupResult[] {
     if (this.metadata === undefined) {
       return [];
     }

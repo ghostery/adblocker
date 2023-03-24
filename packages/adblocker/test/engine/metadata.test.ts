@@ -399,7 +399,9 @@ describe('#Metadata', () => {
       ).to.eql([]);
 
       expect(
-        engine.getPatternMetadata(Request.fromRawDetails({ url: 'https://sync.extend.tv/' }), { getDomainMetadata: true }),
+        engine.getPatternMetadata(Request.fromRawDetails({ url: 'https://sync.extend.tv/' }), {
+          getDomainMetadata: true,
+        }),
       ).to.eql([
         {
           'category': ADVERTISING_CATEGORY,

@@ -173,7 +173,7 @@ export class Metadata {
   public fromDomain(domain: string): IPatternLookupResult[] {
     const domainParts = domain.split('.');
 
-    for (;domainParts.length >= 2; domainParts.shift()) {
+    for (; domainParts.length >= 2; domainParts.shift()) {
       const subdomain = domainParts.join('.');
       const parsedDomainFilter = NetworkFilter.parse(`||${subdomain}^`);
 
