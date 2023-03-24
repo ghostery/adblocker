@@ -171,12 +171,22 @@ export class Metadata {
    * Given a domain, retrieve pattern, organization and category information.
    */
   public fromDomain(domain: string): IPatternLookupResult[] {
-    const parsedDomainFilter = NetworkFilter.parse(`||${domain}^`);
-    if (parsedDomainFilter === null) {
-      return [];
-    }
+    const domainParts = domain.split('.');
 
-    return this.fromId(parsedDomainFilter.getId());
+    for (; domainParts.length >= 2; domainParts.shift()) {
+      const subdomain = domainParts.join('.');
+      const parsedDomainFilter = NetworkFilter.parse(`||${subdomain}^`);
+
+      if (parsedDomainFilter === null) {
+        continue;
+      }
+
+      const patterns = this.fromId(parsedDomainFilter.getId());
+      if (patterns.length > 0) {
+        return patterns;
+      }
+    }
+    return [];
   }
 
   /**

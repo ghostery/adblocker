@@ -249,6 +249,13 @@ describe('#Metadata', () => {
     });
 
     it('retrieves existing metadata', () => {
+      expect(metadata.fromDomain('test.sync.extend.tv')).to.eql([
+        {
+          pattern: ZYPMEDIA,
+          organization: ZYPMEDIA_ORGANIZATION,
+          category: ADVERTISING_CATEGORY,
+        },
+      ]);
       expect(metadata.fromDomain('extend.tv')).to.eql([
         {
           pattern: ZYPMEDIA,
@@ -356,11 +363,11 @@ describe('#Metadata', () => {
       }
 
       // domains: ['extend.tv'],
-      const filter = NetworkFilter.parse('||extend.tv^');
+      const filter = NetworkFilter.parse('||sync.extend.tv^');
       filter?.getId();
       expect(
         engine.match(
-          Request.fromRawDetails({ url: 'https://extend.tv/' }),
+          Request.fromRawDetails({ url: 'https://sync.extend.tv/' }),
           true /* withMetadata */,
         ),
       ).to.eql({
@@ -378,7 +385,23 @@ describe('#Metadata', () => {
       });
 
       expect(
+        engine.getPatternMetadata(Request.fromRawDetails({ url: 'https://sync.extend.tv/' })),
+      ).to.eql([
+        {
+          'category': ADVERTISING_CATEGORY,
+          'organization': ZYPMEDIA_ORGANIZATION,
+          'pattern': ZYPMEDIA,
+        },
+      ]);
+
+      expect(
         engine.getPatternMetadata(Request.fromRawDetails({ url: 'https://extend.tv/' })),
+      ).to.eql([]);
+
+      expect(
+        engine.getPatternMetadata(Request.fromRawDetails({ url: 'https://sync.extend.tv/' }), {
+          getDomainMetadata: true,
+        }),
       ).to.eql([
         {
           'category': ADVERTISING_CATEGORY,

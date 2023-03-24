@@ -196,9 +196,6 @@ export default class FilterEngine extends EventEmitter<
 
     for (const pattern of metadata.getPatterns()) {
       filters.push(...pattern.filters);
-      for (const domain of pattern.domains) {
-        filters.push(`||${domain}^`);
-      }
     }
 
     const engine = this.parse(filters.join('\n'), config);
@@ -930,7 +927,10 @@ export default class FilterEngine extends EventEmitter<
     return result;
   }
 
-  public getPatternMetadata(request: Request): IPatternLookupResult[] {
+  public getPatternMetadata(
+    request: Request,
+    { getDomainMetadata = false } = {},
+  ): IPatternLookupResult[] {
     if (this.metadata === undefined) {
       return [];
     }
@@ -939,6 +939,15 @@ export default class FilterEngine extends EventEmitter<
     const patterns: IPatternLookupResult[] = [];
     for (const filter of this.matchAll(request)) {
       for (const patternInfo of this.metadata.fromFilter(filter)) {
+        if (!seenPatterns.has(patternInfo.pattern.key)) {
+          seenPatterns.add(patternInfo.pattern.key);
+          patterns.push(patternInfo);
+        }
+      }
+    }
+
+    if (getDomainMetadata) {
+      for (const patternInfo of this.metadata.fromDomain(request.hostname)) {
         if (!seenPatterns.has(patternInfo.pattern.key)) {
           seenPatterns.add(patternInfo.pattern.key);
           patterns.push(patternInfo);
