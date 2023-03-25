@@ -2005,11 +2005,14 @@ yts.*##+js(aopr, runAdblock)
 yts.*##+js(aopw, _pop)
 yts.*##+js(nowoif)
 yts.*##+js(nostif, "admc")
+yts.*##+js(acs, setTimeout, admc)
+*/script/clock.js$script,1p
 yts.*##[id*="container"][id^="id"]
 yts.*##html:style(overflow: auto !important;)
 yts.*##.vpn-link:upward(1)
 yts.*##.cborz-bordered
 yts.*##.madikf
+||empied.com^
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/7fr9jc/help_with_disabling_the_antiadbock_message_on/
 sarugbymag.co.za##+js(aopr, showAds)
@@ -4788,8 +4791,6 @@ audioz.cc,audioz.es##+js(set, detectAdBlock, noopFunc)
 twitch.tv##+js(nowoif, amazon-adsystem)
 ||amazon-adsystem.com/aax2/apstag.js$script,domain=twitch.tv,important
 ||ddacn6pr5v0tl.cloudfront.net^
-! https://github.com/uBlockOrigin/uAssets/issues/5184
-! twitch.tv##+js(twitch-videoad)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1977
 imx.to##+js(aopr, ExoLoader.serve)
@@ -4920,11 +4921,6 @@ satcesc.com##+js(nostif, css_class)
 pornoreino.com##+js(aopr, ExoLoader)
 pornoreino.com##+js(aopr, open)
 pornoreino.com##.banner
-
-! https://github.com/uBlockOrigin/uAssets/issues/4931
-@@||adpass.atresmedia.com/*/adjs.js$xhr,domain=atresplayer.com
-@@||atresplayer.com^$ghide
-@@||assets.adobedtm.com^$xhr,domain=atresplayer.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2097
 @@||dogefaucet.com^$ghide
@@ -12112,7 +12108,7 @@ fc.lc##+js(nowoif, /^/, 1)
 ! vocalley.com anti-adb
 #@#.ad-area
 #@#.ads_container
-~job.inshokuten.com##.ad-area:not(.text-ad)
+~job.inshokuten.com,~netmile.co.jp##.ad-area:not(.text-ad)
 ##.ads_container:not(.text-ad)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5496
@@ -13086,8 +13082,13 @@ bing.com#?#.b_algo:has(.b_caption>*:matches-css-before(display:inline-block))
 bing.com##.b_algo:has(.b_textAdTitleLink)
 bing.com##.ins_exp.tds
 bing.com#@#li.b_adBottom
+bing.com#@#.b_ad
 bing.com#@#.b_adLastChild
+bing.com#@#.pa_sb
 bing.com##.b_adLastChild:style(position: absolute !important; top: -9999px !important;)
+bing.com##.b_ad:style(position: absolute !important; top: -9999px !important;)
+bing.com##.pa_sb:style(position: absolute !important; top: -9999px !important;)
+bing.com##.b_restorableLink:remove()
 ! https://github.com/AdguardTeam/AdguardFilters/issues/136118
 bing.com##.tob_calcontainer > .slide:has(.rtb_ad_caritem_mvtr)
 ! https://github.com/uBlockOrigin/uAssets/issues/16791
@@ -14439,15 +14440,13 @@ avseesee.com##.textwidget:has(ins)
 juicywest.com##+js(aopr, __Y)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6329
-aii.sh##+js(aopr, app_vars.force_disable_adblock)
+@@||aii.sh^$ghide
 aii.sh##+js(nowoif)
-aii.sh##+js(aopr, Date.prototype.toUTCString)
 aii.sh##+js(nowebrtc)
 aii.sh##+js(set, blurred, false)
 aii.sh###link-view > center
 ||aii.sh/sw$script,1p
 aii.sh##[src^="https://i.imgur.com/"]
-||aii.sh^$csp=script-src 'self' 'unsafe-inline' *.googletagmanager.com *.recaptcha.net *.gstatic.com *.google.com
 ##.glx-watermark-container
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/novm3h/httpkisstvshowto_ublock_stopped_working_today_ad/
@@ -16704,6 +16703,10 @@ kompasiana.com##+js(aopr, initAdserver)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/minihc/filecrcom_detecting_ublockorigin/
 filecr.com##div.filec-widget
+! https://www.reddit.com/r/uBlockOrigin/comments/120a2zy/
+@@||filecr.com^$ghide
+filecr.com##.ishtehar
+filecr.com##.gigabyte
 
 ! https://github.com/NanoMeow/QuickReports/issues/2912
 publish0x.com###registerModal, .show.fade.modal-backdrop

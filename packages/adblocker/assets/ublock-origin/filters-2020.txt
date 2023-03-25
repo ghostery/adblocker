@@ -561,10 +561,13 @@ beermoneyforum.com##.samBackgroundItem.samItem
 beermoneyforum.com##body:style(overflow: auto !important)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54703
-bg-gledai.co##+js(nosiif, visibility, 1000)
+bg-gledai.*##+js(nosiif, visibility, 1000)
 ! https://www.reddit.com/r/uBlockOrigin/comments/11vtqib/
-bg-gledai.co##+js(aopr, chp_adblock_browser)
-@@||bg-gledai.co^$ghide
+bg-gledai.*##+js(aopr, chp_adblock_browser)
+@@||bg-gledai.*^$ghide
+/binance-banner.jpg$domain=bg-gledai.*
+bg-gledai.*##+js(acs, document.getElementById, adblock)
+bg-gledai.*###casing > center
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7302
 @@||animexin.xyz^$ghide
@@ -4172,7 +4175,10 @@ arrowos.net###babasbmsgx
 3hiidude.*##+js(aopr, String.fromCharCode)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/66996
+! https://github.com/uBlockOrigin/uAssets/issues/17289
 *$script,redirect-rule=noopjs,domain=vidmoly.me|vidmoly.net|vidmoly.to
+||vidmoly.to/static/vastAD.js$script
+||vastz.b-cdn.net/*.mp4$media,domain=vidmoly.to,redirect=noopmp3-0.1s
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67094
 lite-link.*##+js(aopr, app_vars.force_disable_adblock)

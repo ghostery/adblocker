@@ -509,9 +509,6 @@ searchenginewatch.com##+js(acis, jQuery, #sign-up-popup)
 facebook.com,facebookcorewwwi.onion,facebookwkhpilnemxj7asaniu7vnjjbiltxjqhye3mhbshg7kx5tfyd.onion##.fbUserStory:has-text(Popular Across Facebook)
 facebook.com,facebookcorewwwi.onion,facebookwkhpilnemxj7asaniu7vnjjbiltxjqhye3mhbshg7kx5tfyd.onion##.userContentWrapper:has-text(Popular Across Facebook)
 
-! https://github.com/NanoAdblocker/NanoFilters/issues/189
-@@||programiz.com^$xhr,1p
-
 ! right click, select, copy => http://www.oggiscuola.com/web/2018/09/22/alzarsi-in-piedi-quando-entra-il-professore-e-una-forma-di-saluto-che-va-recuperata/
 oggiscuola.com##+js(acis, jQuery, overlay)
 ||oggiscuola.com^$csp=style-src 'self' *
@@ -567,10 +564,6 @@ readlightnovel.org##.chapter-content3:style(-webkit-touch-callout: default !impo
 ! https://github.com/uBlockOrigin/uAssets/issues/3790
 kashmirobserver.net##+js(acis, document.getElementById, ad-blocker)
 
-! https://github.com/uBlockOrigin/uAssets/issues/3787
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=gamereactor.asia|gamereactor.de|gamereactor.es|gamereactor.eu|gamereactor.fi|gamereactor.it|gamereactor.nl|gamereactor.no|gamereactor.pt
-gamereactor.*##[href^="//openx.gamereactor.dk/adclick.php"]
-
 ! https://github.com/uBlockOrigin/uAssets/issues/3797
 allafinedelpalo.it##+js(aopr, ABDSettings)
 
@@ -617,9 +610,6 @@ intramed.net##+js(set, adblock, false)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3888
 protest.eu##+js(set, BIA.ADBLOCKER, false)
-
-! https://github.com/uBlockOrigin/uAssets/issues/3879
-@@||adserver.lumsearch.com^$xhr,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/3877
 /wp-content/plugins/simple-adblock-notice/*$~css
@@ -1050,10 +1040,6 @@ motogon.ru##+js(aopr, oSpPOptions)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4447
 @@||jrocknews.com^$ghide
-
-! https://github.com/uBlockOrigin/uAssets/issues/4453
-@@||akasoggybunz.website/wp-content/*/blockadblock.js$script,1p
-@@||akasoggybunz.website^$ghide
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/ab6jb0/help_with_an_inline_script_filter_i_cant_get_to/
 lensdump.com##+js(acis, document.getElementById, style.display)
@@ -1964,9 +1950,6 @@ gagetmatome.com##+js(aopr, document.oncontextmenu)
 gagetmatome.com##+js(acis, document.onselectstart)
 gagetmatome.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important;-moz-user-select: text !important;-ms-user-select: text !important;user-select: text !important;)
 
-! https://github.com/NanoMeow/QuickReports/issues/2087
-@@||bbombproxy.github.io^$script,1p
-
 ! https://github.com/uBlockOrigin/uAssets/issues/6461 + anti-adblock banner
 voxc.org##+js(aopw, document.oncontextmenu)
 voxc.org##.banner
@@ -2074,9 +2057,6 @@ ghanatvon.com##+js(acis, document.oncontextmenu)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4910#issuecomment-560158237
 waaw.tv##+js(set, console.clear, trueFunc)
-
-! https://github.com/uBlockOrigin/uAssets/issues/6642
-##foxfield-xmas
 
 ! fanprojseries .com anti adb warning
 fanprojseries.com##+js(aopw, ai_adb_overlay)
@@ -2211,16 +2191,6 @@ kurazone.net##.post-body:style(-webkit-touch-callout: default !important; -webki
 
 ! https://github.com/NanoMeow/QuickReports/issues/2707
 kurosave.com##+js(aopr, document.body.setAttribute)
-
-! pelismart .com right click - select - copy
-pelismart.com##+js(aopr, document.oncontextmenu)
-pelismart.com##+js(aopr, disableSelection)
-pelismart.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
-pelismart.com##+js(aopr, onload)
-pelismart.com##+js(aeld, /contextmenu|copy/)
-pelismart.com##+js(aeld, , keyCode)
-/wp-content/plugins/wp-content-copy-protection/assets/js/script.min.js$script,1p
-/wp-content/plugins/better-content-protector/*$script
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7811
 ! https://github.com/uBlockOrigin/uAssets/issues/11335
@@ -4457,8 +4427,11 @@ gnt24365.net##+js(acis, document.onselectstart)
 gnt24365.net##*:style(-webkit-touch-callout: default!important;-webkit-user-select: auto!important;-moz-user-select: auto!important;user-select: auto!important;)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/80660
-*$script,domain=cssreference.io,redirect-rule=noopjs
-cssreference.io##*:matches-css(border-radius:/5/)
+cssreference.io##^script:has-text(window.carbonLoaded)
+!#if !cap_html_filtering
+cssreference.io##+js(aopr, carbonLoaded)
+!#endif
+cssreference.io##.placeholder
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/mskp1p/sites_are_able_to_disable_scrolling_when_asking/
 technicpack.net##+js(acis, document.createElement, admiral)
@@ -6727,3 +6700,16 @@ phimlongtieng.net##+js(acs, navigator, devtools)
 phimlongtieng.net##+js(acs, setInterval, stateObject)
 phimlongtieng.net##+js(acs, setTimeout, debugger)
 phimlongtieng.net##+js(aopr, devtoolsDetector)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/144922
+ganohr.net##+js(nostif, showModal)
+
+! blog.verselemzes. hu anti: right click, select, f-keys
+verselemzes.hu##+js(acs, jQuery, contextmenu)
+verselemzes.hu##+js(acs, jQuery, keyCode)
+verselemzes.hu##+js(aopr, document.onselectstart)
+verselemzes.hu##+js(aopr, document.ondragstart)
+verselemzes.hu##+js(aopr, document.oncontextmenu)
+verselemzes.hu##+js(aopr, document.onkeydown)
+verselemzes.hu##+js(aopr, document.onkeypress)
+verselemzes.hu##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important;-moz-user-select: text !important;-ms-user-select: text !important;user-select: text !important;)
