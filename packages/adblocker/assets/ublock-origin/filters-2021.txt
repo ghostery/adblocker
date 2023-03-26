@@ -4225,6 +4225,8 @@ linkres.in##+js(set, blurred, false)
 @@||feyorra.top^$ghide
 ! https://www.reddit.com/r/uBlockOrigin/comments/xif3tf/
 feyorra.top##.ads
+! https://www.reddit.com/r/uBlockOrigin/comments/120aajw/
+feyorra.top##+js(aeld, load, 'block')
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/91911
 @@||temporarymail.com^$script,1p
@@ -6266,7 +6268,6 @@ burnbutt.com##+js(acis, document.addEventListener, google_ad_client)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10761
 ||filma24.*/*.gif$image
-||vidmoly.to/static/vastAD.js$script
 filma24.*###vidad
 filma24.*##[href^="https://bit.ly/"]
 filma24.*##[href="https://codeit.al/services/"]
@@ -6439,12 +6440,15 @@ pigeonburger.xyz##+js(no-xhr-if, googlesyndication)
 dl.apkmb.com##.btnDownload:has-text(SHARE)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10729
+! https://github.com/uBlockOrigin/uAssets/issues/17285
 ! https://short.dash-free.com/KPgrgU timer
 go.fire-link.net,yofaurls.com##+js(aopr, app_vars.force_disable_adblock)
 go.fire-link.net##+js(ra, onclick, [onclick^="window.open"])
 yofaurls.com##+js(nowoif)
 go.fire-link.net##.banner-inner
 coin-free.com##+js(aopw, _pop)
+cryptopaid.net##+js(no-fetch-if, googlesyndication)
+dash-free.com##+js(set, go_popup, {})
 dash-free.com##+js(aopr, absda)
 dash-free.com##+js(set, blurred, false)
 dash-free.com,softairbay.com,urlfiles.com##+js(aopr, app_vars.force_disable_adblock)
@@ -6625,13 +6629,11 @@ chortle.co.uk,coloring.ws,dltk-holidays.com,dltk-kids.com,kidzone.ws,pcsteps.com
 ! https://github.com/uBlockOrigin/uAssets/commit/036e13101ea60a14b4a416f47609793da7434b16
 @@/js/prebid-ads.js$script,1p
 ! CHP Ads Block Detector
-#@#.ad-left
 #@#.ad-link
-##.ad-left:not(.adsbox)
 ##.ad-link:not(.adsbox)
 #@#.ad-unit
 #@#.ad_unit
-##.ad-unit:not(.text-ad)
+~lamire.jp##.ad-unit:not(.text-ad)
 ##.ad_unit:not(.text-ad)
 ||doubleclick.net^$xhr,redirect=noop.txt
 ||com/|$xhr,3p,redirect-rule=noop.txt
