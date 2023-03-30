@@ -10,10 +10,13 @@ import { ipcRenderer } from 'electron';
 
 import { DOMMonitor, IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-content';
 
-function getCosmeticsFilters(data: IBackgroundCallback) {
-  setTimeout(() => {
+function getCosmeticsFiltersFirst(): string[] | null {
+  return ipcRenderer.sendSync('get-cosmetic-filters-first', window.location.href);
+}
+function getCosmeticsFiltersUpdate(data: Omit<IBackgroundCallback, 'lifecycle'>) {
+  setImmediate(() => {
     ipcRenderer.send('get-cosmetic-filters', window.location.href, data);
-  }, 1);
+  });
 }
 
 if (window === window.top && window.location.href.startsWith('devtools://') === false) {
@@ -47,7 +50,22 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
       },
     );
 
-    getCosmeticsFilters({ lifecycle: 'start', ids: [], classes: [], hrefs: [] });
+    const scripts = getCosmeticsFiltersFirst();
+    if (scripts) {
+      const elems: HTMLScriptElement[] = [];
+      try {
+        scripts.forEach((script) => {
+          const e = document.createElement('script');
+          e.appendChild(document.createTextNode(script));
+          (document.head || document.documentElement || document).appendChild(e);
+          elems.push(e);
+        });
+      } catch (ex) {}
+      elems.forEach((removeIt) => {
+        removeIt.remove();
+        removeIt.textContent = '';
+      });
+    }
 
     // On DOMContentLoaded, start monitoring the DOM. This means that we will
     // first check which ids and classes exist in the DOM as a one-off operation;
@@ -59,9 +77,8 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
       () => {
         DOM_MONITOR = new DOMMonitor((update) => {
           if (update.type === 'features') {
-            getCosmeticsFilters({
+            getCosmeticsFiltersUpdate({
               ...update,
-              lifecycle: 'dom-update',
             });
           }
         });

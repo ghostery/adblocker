@@ -57,11 +57,13 @@ export class BlockingContext {
     callback: (a: Electron.CallbackResponse) => void,
   ) => void;
 
-  private readonly onGetCosmeticFilters: (
+  private readonly onGetCosmeticFiltersUpdated: (
     event: Electron.IpcMainEvent,
     url: string,
     msg: IBackgroundCallback,
   ) => void;
+
+  private readonly onGetCosmeticFiltersFirst: (event: Electron.IpcMainEvent, url: string) => void;
 
   private readonly onHeadersReceived: (
     details: Electron.OnHeadersReceivedListenerDetails,
@@ -75,7 +77,10 @@ export class BlockingContext {
     private readonly blocker: ElectronBlocker,
   ) {
     this.onBeforeRequest = (details, callback) => blocker.onBeforeRequest(details, callback);
-    this.onGetCosmeticFilters = (event, url, msg) => blocker.onGetCosmeticFilters(event, url, msg);
+
+    this.onGetCosmeticFiltersFirst = (event, url) => blocker.onGetCosmeticFiltersFirst(event, url);
+    this.onGetCosmeticFiltersUpdated = (event, url, msg) =>
+      blocker.onGetCosmeticFiltersUpdated(event, url, msg);
     this.onHeadersReceived = (details, callback) => blocker.onHeadersReceived(details, callback);
     this.onIsMutationObserverEnabled = (event) => blocker.onIsMutationObserverEnabled(event);
   }
@@ -83,7 +88,8 @@ export class BlockingContext {
   public enable(): void {
     if (this.blocker.config.loadCosmeticFilters === true) {
       this.session.setPreloads(this.session.getPreloads().concat([PRELOAD_PATH]));
-      ipcMain.on('get-cosmetic-filters', this.onGetCosmeticFilters);
+      ipcMain.on('get-cosmetic-filters-first', this.onGetCosmeticFiltersFirst);
+      ipcMain.on('get-cosmetic-filters', this.onGetCosmeticFiltersUpdated);
       ipcMain.on('is-mutation-observer-enabled', this.onIsMutationObserverEnabled);
     }
 
@@ -109,7 +115,7 @@ export class BlockingContext {
 
     if (this.blocker.config.loadCosmeticFilters === true) {
       this.session.setPreloads(this.session.getPreloads().filter((p) => p !== PRELOAD_PATH));
-      ipcMain.removeListener('get-cosmetic-filters', this.onGetCosmeticFilters);
+      ipcMain.removeListener('get-cosmetic-filters', this.onGetCosmeticFiltersUpdated);
     }
   }
 }
@@ -161,11 +167,7 @@ export class ElectronBlocker extends FiltersEngine {
     event.returnValue = this.config.enableMutationObserver;
   };
 
-  public onGetCosmeticFilters = (
-    event: Electron.IpcMainEvent,
-    url: string,
-    msg: IBackgroundCallback,
-  ): void => {
+  public onGetCosmeticFiltersFirst = (event: Electron.IpcMainEvent, url: string) => {
     // Extract hostname from sender's URL
     const parsed = parse(url);
     const hostname = parsed.hostname || '';
@@ -176,18 +178,52 @@ export class ElectronBlocker extends FiltersEngine {
       hostname,
       url,
 
+      // This needs to be done only once per frame
+      getBaseRules: true,
+      getInjectionRules: true,
+      getExtendedRules: true,
+      getRulesFromHostname: true,
+    });
+
+    if (active === false) {
+      event.returnValue = null;
+      return;
+    }
+
+    // Inject custom stylesheets
+    this.injectStyles(event.sender, styles);
+
+    event.sender.send('get-cosmetic-filters-response', {
+      active,
+      extended,
+      styles: '',
+    } as IMessageFromBackground);
+
+    // to execute Inject scripts synchronously, simply return scripts to renderer.
+    event.returnValue = scripts;
+  };
+
+  public onGetCosmeticFiltersUpdated = (
+    event: Electron.IpcMainEvent,
+    url: string,
+    msg: IBackgroundCallback,
+  ): void => {
+    // Extract hostname from sender's URL
+    const parsed = parse(url);
+    const hostname = parsed.hostname || '';
+    const domain = parsed.domain || '';
+
+    const { active, styles, extended } = this.getCosmeticsFilters({
+      domain,
+      hostname,
+      url,
+
       classes: msg.classes,
       hrefs: msg.hrefs,
       ids: msg.ids,
 
-      // This needs to be done only once per frame
-      getBaseRules: msg.lifecycle === 'start',
-      getInjectionRules: msg.lifecycle === 'start',
-      getExtendedRules: msg.lifecycle === 'start',
-      getRulesFromHostname: msg.lifecycle === 'start',
-
       // This will be done every time we get information about DOM mutation
-      getRulesFromDOM: msg.lifecycle === 'dom-update',
+      getRulesFromDOM: true,
     });
 
     if (active === false) {
@@ -197,16 +233,10 @@ export class ElectronBlocker extends FiltersEngine {
     // Inject custom stylesheets
     this.injectStyles(event.sender, styles);
 
-    // Inject scriptlets
-    for (const script of scripts) {
-      this.injectScripts(event.sender, script);
-    }
-
     // Inject scripts from content script
     event.sender.send('get-cosmetic-filters-response', {
       active,
       extended,
-      scripts: [],
       styles: '',
     } as IMessageFromBackground);
   };
@@ -266,10 +296,6 @@ export class ElectronBlocker extends FiltersEngine {
       callback({});
     }
   };
-
-  private injectScripts(sender: Electron.WebContents, script: string): void {
-    sender.executeJavaScript(script);
-  }
 
   private injectStyles(sender: Electron.WebContents, styles: string): void {
     if (styles.length > 0) {
