@@ -60,7 +60,9 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
           (document.head || document.documentElement || document).appendChild(e);
           elems.push(e);
         });
-      } catch (ex) {}
+      } catch {
+        // continue regardless of error
+      }
       elems.forEach((removeIt) => {
         removeIt.remove();
         removeIt.textContent = '';
