@@ -14,9 +14,7 @@ function getCosmeticsFiltersFirst(): string[] | null {
   return ipcRenderer.sendSync('get-cosmetic-filters-first', window.location.href);
 }
 function getCosmeticsFiltersUpdate(data: Omit<IBackgroundCallback, 'lifecycle'>) {
-  setImmediate(() => {
-    ipcRenderer.send('get-cosmetic-filters', window.location.href, data);
-  });
+  ipcRenderer.send('get-cosmetic-filters', window.location.href, data);
 }
 
 if (window === window.top && window.location.href.startsWith('devtools://') === false) {
