@@ -97,7 +97,7 @@ export class BlockingContext {
  * methods to interface with Playwright APIs needed to block ads.
  */
 export class PlaywrightBlocker extends FiltersEngine {
-  private readonly contexts: WeakMap<pw.Page, BlockingContext> = new WeakMap();
+  private readonly contexts = new WeakMap<pw.Page, BlockingContext>();
 
   // ----------------------------------------------------------------------- //
   // Helpers to enable and disable blocking for 'browser'
@@ -355,7 +355,7 @@ export class PlaywrightBlocker extends FiltersEngine {
           frame
             .$$eval(`iframe[src="${url}"],iframe[href="${url}"]`, (iframes) => {
               for (const iframe of iframes) {
-                iframe?.parentNode?.removeChild(iframe);
+                iframe.parentNode?.removeChild(iframe);
               }
             })
             .catch(() => {

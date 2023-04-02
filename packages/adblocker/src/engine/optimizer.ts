@@ -32,7 +32,7 @@ function groupBy(
   filters: NetworkFilter[],
   criteria: (filter: NetworkFilter) => string,
 ): NetworkFilter[][] {
-  const grouped: Map<string, NetworkFilter[]> = new Map();
+  const grouped = new Map<string, NetworkFilter[]>();
   for (const filter of filters) {
     setWithDefault(grouped, criteria(filter), filter);
   }
@@ -80,10 +80,10 @@ const OPTIMIZATIONS: IOptimization[] = [
   {
     description: 'Group idential filter with same mask but different domains in single filters',
     fusion: (filters: NetworkFilter[]) => {
-      const hostnames: Set<number> = new Set();
-      const notHostnames: Set<number> = new Set();
-      const entities: Set<number> = new Set();
-      const notEntities: Set<number> = new Set();
+      const hostnames = new Set<number>();
+      const notHostnames = new Set<number>();
+      const entities = new Set<number>();
+      const notEntities = new Set<number>();
 
       for (const { domains } of filters) {
         if (domains !== undefined) {

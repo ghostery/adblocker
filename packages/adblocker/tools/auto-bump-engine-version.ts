@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
 import { resolve, join } from 'path';
 
-(async () => {
+void (async () => {
   const engineSourcePath = resolve(__dirname, join('..', 'src', 'engine', 'engine.ts'));
   const engineSource = await fs.readFile(engineSourcePath, 'utf-8');
 

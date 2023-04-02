@@ -14,7 +14,7 @@
  */
 export class TokensBuffer {
   private readonly buffer: Uint32Array;
-  public pos: number = 0;
+  public pos = 0;
 
   constructor(size: number) {
     this.buffer = new Uint32Array(size);

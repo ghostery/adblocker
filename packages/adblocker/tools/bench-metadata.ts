@@ -48,7 +48,7 @@ import { FiltersEngine, NetworkFilter } from '../adblocker';
     const matchingTimes = [];
 
     const inputs: NetworkFilter[] = [];
-    for (const pattern of FiltersEngine.fromTrackerDB(rawTrackerDB)?.metadata?.getPatterns() ||
+    for (const pattern of FiltersEngine.fromTrackerDB(rawTrackerDB).metadata?.getPatterns() ||
       []) {
       for (const domain of pattern.domains) {
         inputs.push(NetworkFilter.parse(`||${domain}^`) as NetworkFilter);

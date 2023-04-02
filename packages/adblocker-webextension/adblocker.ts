@@ -39,7 +39,7 @@ type StreamFilter = WebRequest.StreamFilter & {
 
 function isFirefox() {
   try {
-    return navigator.userAgent.indexOf('Firefox') !== -1;
+    return navigator.userAgent.includes('Firefox');
   } catch (e) {
     return false;
   }
@@ -209,7 +209,7 @@ export class BlockingContext {
   private readonly onRuntimeMessage: (
     msg: IBackgroundCallback & { action?: string },
     sender: Runtime.MessageSender,
-  ) => Promise<IMessageFromBackground | {}>;
+  ) => Promise<IMessageFromBackground | Record<string, never>>;
 
   private readonly onCommittedHandler:
     | ((details: WebNavigation.OnCommittedDetailsType) => void)
@@ -224,7 +224,7 @@ export class BlockingContext {
       this.blocker.config.enablePushInjectionsOnNavigationEvents === true &&
       USE_PUSH_SCRIPTS_INJECTION
     ) {
-      if (this.browser.webNavigation?.onCommitted) {
+      if (this.browser.webNavigation.onCommitted) {
         this.onCommittedHandler = (details) => blocker.onCommittedHandler(browser, details);
       } else {
         console.warn(
@@ -289,7 +289,7 @@ export class BlockingContext {
  * methods to interface with WebExtension APIs needed to block ads.
  */
 export class WebExtensionBlocker extends FiltersEngine {
-  private readonly contexts: WeakMap<Browser, BlockingContext> = new WeakMap();
+  private readonly contexts = new WeakMap<Browser, BlockingContext>();
 
   // ----------------------------------------------------------------------- //
   // Helpers to enable and disable blocking for 'browser'

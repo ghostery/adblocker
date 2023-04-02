@@ -104,7 +104,7 @@ export class BlockingContext {
  * methods to interface with Puppeteer APIs needed to block ads.
  */
 export class PuppeteerBlocker extends FiltersEngine {
-  private readonly contexts: WeakMap<puppeteer.Page, BlockingContext> = new WeakMap();
+  private readonly contexts = new WeakMap<puppeteer.Page, BlockingContext>();
   // Defaults to undefined which preserves Legacy Mode behavior
   private priority: number | undefined = undefined;
 
@@ -283,7 +283,7 @@ export class PuppeteerBlocker extends FiltersEngine {
     (this.priority = defaultPriority);
 
   public onRequest = (details: puppeteer.HTTPRequest): void => {
-    if (details.isInterceptResolutionHandled?.()) {
+    if (details.isInterceptResolutionHandled()) {
       return;
     }
 
@@ -299,7 +299,7 @@ export class PuppeteerBlocker extends FiltersEngine {
       request.isMainFrame() ||
       (request.type === 'document' && frame !== null && frame.parentFrame() === null)
     ) {
-      details.continue(details.continueRequestOverrides?.(), 0);
+      details.continue(details.continueRequestOverrides(), 0);
       return;
     }
 
@@ -330,7 +330,7 @@ export class PuppeteerBlocker extends FiltersEngine {
     } else if (match === true) {
       details.abort('blockedbyclient', this.priority);
     } else {
-      details.continue(details.continueRequestOverrides?.(), 0);
+      details.continue(details.continueRequestOverrides(), 0);
     }
   };
 
@@ -389,7 +389,7 @@ export class PuppeteerBlocker extends FiltersEngine {
           frame
             .$$eval(`iframe[src="${url}"],iframe[href="${url}"]`, (iframes) => {
               for (const iframe of iframes) {
-                iframe?.parentNode?.removeChild(iframe);
+                iframe.parentNode?.removeChild(iframe);
               }
             })
             .catch(() => {

@@ -20,7 +20,7 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
   (() => {
     const enableMutationObserver = ipcRenderer.sendSync('is-mutation-observer-enabled');
 
-    let ACTIVE: boolean = true;
+    let ACTIVE = true;
     let DOM_MONITOR: DOMMonitor | null = null;
 
     const unload = () => {

@@ -33,7 +33,7 @@ function testMatches(selector: string, html: string, target: string, expected: b
     // NOTE: here we need to ignore the type warnings so that we can pass a
     // `Document` argument to test some edge cases (e.g. textContent returns
     // null on document).
-    // @ts-ignore
+    // @ts-expect-error
     const result = matches(element, ast);
     expect(result).to.equal(expected);
   }

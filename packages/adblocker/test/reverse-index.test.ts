@@ -169,7 +169,7 @@ describe('ReverseIndex', () => {
 
               it('works on empty index', () => {
                 let matches = 0;
-                const cb = (_: NetworkFilter) => {
+                const cb = () => {
                   matches += 1;
                   return true;
                 };
@@ -186,7 +186,7 @@ describe('ReverseIndex', () => {
               it('handle no match', () => {
                 for (let i = 0; i < 100; i += 1) {
                   let matches = 0;
-                  const cb = (_: NetworkFilter) => {
+                  const cb = () => {
                     matches += 1;
                     return true;
                   };
@@ -198,8 +198,8 @@ describe('ReverseIndex', () => {
               });
 
               describe('finds matches', () => {
-                const matches: Set<string | undefined> = new Set();
-                let ret: boolean = true;
+                const matches = new Set<string | undefined>();
+                let ret = true;
                 const cb = (f: NetworkFilter) => {
                   matches.add(f.rawLine);
                   return ret;
@@ -251,7 +251,7 @@ wildcard
                   optimize,
                 });
 
-                const matches: Set<string | undefined> = new Set();
+                const matches = new Set<string | undefined>();
                 const cb = (f: NetworkFilter) => {
                   matches.add(f.rawLine);
                   return true;

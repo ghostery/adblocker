@@ -54,11 +54,11 @@ async function loadAllLists(): Promise<string> {
   ).join('\n');
 }
 
-(async () => {
+void (async () => {
   let numberOfFiltersSupported = 0;
   let numberOfFiltersUnsupported = 0;
 
-  const unsupported: Counter<string> = new Counter();
+  const unsupported = new Counter<string>();
   for (const line of (await loadAllLists()).split(/\s*[\r\n]+\s*/g)) {
     switch (detectFilterType(line)) {
       case FilterType.NETWORK: {
@@ -164,7 +164,7 @@ async function loadAllLists(): Promise<string> {
     }
   }
 
-  for (const [name, count] of unsupported.entries().sort(([_1, c1], [_2, c2]) => c2 - c1)) {
+  for (const [name, count] of unsupported.entries().sort(([, c1], [, c2]) => c2 - c1)) {
     console.log(`+ ${name} = ${count}`);
   }
 

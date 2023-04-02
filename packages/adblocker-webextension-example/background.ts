@@ -19,7 +19,7 @@ import {
 /**
  * Keep track of number of network requests altered for each tab
  */
-const counter: Map<number, number> = new Map();
+const counter = new Map<number, number>();
 
 /**
  * Helper function used to both reset, increment and show the current value of

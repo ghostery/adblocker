@@ -98,7 +98,7 @@ export enum SelectorType {
 
 export function classifySelector(selector: string): SelectorType {
   // In most cases there is no pseudo-anything so we can quickly exit.
-  if (selector.indexOf(':') === -1) {
+  if (!selector.includes(':')) {
     return SelectorType.Normal;
   }
 

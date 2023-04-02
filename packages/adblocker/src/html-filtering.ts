@@ -139,7 +139,7 @@ type Patterns = readonly [readonly string[], readonly RegExp[]][];
 export function extractSelectorsFromRules(filter: HTMLSelector[]): Patterns {
   const patterns: [string[], RegExp[]][] = [];
 
-  for (const [_, selectors] of filter) {
+  for (const [, selectors] of filter) {
     const plainPatterns: string[] = [];
     const regexpPatterns: RegExp[] = [];
 
@@ -174,7 +174,7 @@ function tagShouldBeRemoved(
   regexpPatterns: readonly RegExp[],
 ): boolean {
   for (const pattern of plainPatterns) {
-    if (tag.indexOf(pattern) === -1) {
+    if (!tag.includes(pattern)) {
       return false;
     }
   }

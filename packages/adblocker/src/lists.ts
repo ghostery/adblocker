@@ -258,7 +258,7 @@ export function generateDiff(
   const newRevisionIds = new Set(newRevisionFilters.map((filter) => filter.getId()));
 
   // Check which filters were added, based on ID
-  const added: Set<string> = new Set();
+  const added = new Set<string>();
   for (const filter of newRevisionFilters) {
     if (!prevRevisionIds.has(filter.getId())) {
       added.add(filter.rawLine as string);
@@ -266,7 +266,7 @@ export function generateDiff(
   }
 
   // Check which filters were removed, based on ID
-  const removed: Set<string> = new Set();
+  const removed = new Set<string>();
   for (const filter of prevRevisionFilters) {
     if (!newRevisionIds.has(filter.getId())) {
       removed.add(filter.rawLine as string);
@@ -281,8 +281,8 @@ export function generateDiff(
  * removed filters, even if several diffs add/remove the same ones.
  */
 export function mergeDiffs(diffs: Partial<IRawDiff>[]): IRawDiff {
-  const addedCumul: Set<string> = new Set();
-  const removedCumul: Set<string> = new Set();
+  const addedCumul = new Set<string>();
+  const removedCumul = new Set<string>();
 
   for (const { added, removed } of diffs) {
     if (added !== undefined) {

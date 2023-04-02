@@ -139,7 +139,7 @@ export default class NetworkFilterBucket {
       }
 
       // Create in-memory list of disabled filter IDs
-      const badFiltersIds: Set<number> = new Set();
+      const badFiltersIds = new Set<number>();
       for (const badFilter of badFilters) {
         badFiltersIds.add(badFilter.getIdWithoutBadFilter());
       }

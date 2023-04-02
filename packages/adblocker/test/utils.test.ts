@@ -35,7 +35,7 @@ function t(tokens: string[]): Uint32Array {
 }
 
 function checkCollisions(filters: IFilter[]): void {
-  const hashes: Map<number, string> = new Map();
+  const hashes = new Map<number, string>();
   for (const filter of filters) {
     const id = filter.getId();
     const found = hashes.get(id);
@@ -121,7 +121,7 @@ describe('utils.ts', () => {
       expect(fastHash('')).to.equal(HASH_SEED);
       expect(fastHashBetween('', 0, 0)).to.equal(HASH_SEED);
 
-      // @ts-ignore
+      // @ts-expect-error
       expect(fastHash([])).to.equal(HASH_SEED);
     });
   });

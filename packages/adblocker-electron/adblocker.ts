@@ -18,7 +18,6 @@ import type {
 const PRELOAD_PATH = require.resolve('@cliqz/adblocker-electron-preload');
 
 // https://stackoverflow.com/questions/48854265/why-do-i-see-an-electron-security-warning-after-updating-my-electron-project-t
-// tslint:disable no-string-literal
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
 /**
@@ -119,7 +118,7 @@ export class BlockingContext {
  * methods to interface with Electron APIs needed to block ads.
  */
 export class ElectronBlocker extends FiltersEngine {
-  private readonly contexts: WeakMap<Electron.Session, BlockingContext> = new WeakMap();
+  private readonly contexts = new WeakMap<Electron.Session, BlockingContext>();
 
   // ----------------------------------------------------------------------- //
   // Helpers to enable and disable blocking for 'browser'

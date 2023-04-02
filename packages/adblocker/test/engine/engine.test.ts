@@ -67,11 +67,7 @@ function test({
   if (filter.isImportant()) {
     const result = engine.match(request);
     expect(result.filter).not.to.be.undefined;
-    if (
-      result.filter !== undefined &&
-      result.filter.rawLine !== undefined &&
-      !result.filter.rawLine.includes('<+>')
-    ) {
+    if (!result.filter?.rawLine?.includes('<+>')) {
       expect(importants).to.include(result.filter.rawLine);
 
       // Handle case where important filter is also a redirect
@@ -95,11 +91,7 @@ function test({
   ) {
     const result = engine.match(request);
     expect(result.exception).not.to.be.undefined;
-    if (
-      result.exception !== undefined &&
-      result.exception.rawLine !== undefined &&
-      !result.exception.rawLine.includes('<+>')
-    ) {
+    if (!result.exception?.rawLine?.includes('<+>')) {
       expect(exceptions).to.include(result.exception.rawLine);
     }
 
@@ -109,11 +101,7 @@ function test({
   } else if (filter.isRedirect() && exceptions.length === 0 && importants.length === 0) {
     const result = engine.match(request);
     expect(result.filter).not.to.be.undefined;
-    if (
-      result.filter !== undefined &&
-      result.filter.rawLine !== undefined &&
-      !result.filter.rawLine.includes('<+>')
-    ) {
+    if (!result.filter?.rawLine?.includes('<+>')) {
       expect(redirects).to.include(result.filter.rawLine);
     }
 
@@ -146,7 +134,7 @@ function buildResourcesFromRequests(filters: NetworkFilter[]): Resources {
   return Resources.parse(resources.join('\n\n'), { checksum: '' });
 }
 
-function createEngine(filters: string, enableOptimizations: boolean = true) {
+function createEngine(filters: string, enableOptimizations = true) {
   return Engine.parse(filters, {
     debug: true,
     enableOptimizations,

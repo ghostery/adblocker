@@ -33,13 +33,13 @@ export function createStylesheet(rules: string[], style: string): string {
 
   const maximumNumberOfSelectors = 1024;
   const parts: string[] = [];
-  const styleStr: string = ` { ${style} }`;
+  const styleStr = ` { ${style} }`;
 
   for (let i = 0; i < rules.length; i += maximumNumberOfSelectors) {
     // Accumulate up to `maximumNumberOfSelectors` selectors into `selector`.
     // We use string concatenation here since it's faster than using
     // `Array.prototype.join`.
-    let selector = rules[i];
+    let selector = rules[i]!;
     for (
       let j = i + 1, end = Math.min(rules.length, i + maximumNumberOfSelectors);
       j < end;
@@ -70,7 +70,7 @@ export function createStylesheet(rules: string[], style: string): string {
  * which is slower than `createStylesheetFromRules`.
  */
 function createStylesheetFromRulesWithCustomStyles(rules: CosmeticFilter[]): string {
-  const selectorsPerStyle: Map<string, string[]> = new Map();
+  const selectorsPerStyle = new Map<string, string[]>();
 
   for (const rule of rules) {
     const style = rule.getStyle();
@@ -360,7 +360,7 @@ export default class CosmeticFilterBucket {
     });
 
     // If we found at least one candidate, check if we have unhidden rules.
-    const disabledRules: Set<string> = new Set();
+    const disabledRules = new Set<string>();
     if (rules.length !== 0) {
       this.unhideIndex.iterMatchingFilters(hostnameTokens, (rule: CosmeticFilter) => {
         if (rule.match(hostname, domain)) {
@@ -509,7 +509,7 @@ export default class CosmeticFilterBucket {
       // Collect unhidden selectors. They will be used to filter-out canceled
       // rules from other indices.
       let injectionsDisabled = false;
-      const disabledRules: Set<string> = new Set();
+      const disabledRules = new Set<string>();
       this.unhideIndex.iterMatchingFilters(hostnameTokens, (rule: CosmeticFilter) => {
         if (rule.match(hostname, domain)) {
           disabledRules.add(rule.getSelector());
@@ -563,7 +563,7 @@ export default class CosmeticFilterBucket {
 
     const extendedProcessed: IMessageFromBackground['extended'] = [];
     if (extended.length !== 0) {
-      const extendedStyles: Map<string, string> = new Map();
+      const extendedStyles = new Map<string, string>();
       for (const rule of extended) {
         const ast = rule.getSelectorAST();
         if (ast !== undefined) {
@@ -638,7 +638,7 @@ export default class CosmeticFilterBucket {
     if (this.baseStylesheet === null || this.extraGenericRules === null) {
       // Collect all selectors which can be subjected to an unhide rule
       const unHideRules = this.unhideIndex.getFilters();
-      const canBeHiddenSelectors: Set<string> = new Set();
+      const canBeHiddenSelectors = new Set<string>();
       for (const rule of unHideRules) {
         canBeHiddenSelectors.add(rule.getSelector());
       }

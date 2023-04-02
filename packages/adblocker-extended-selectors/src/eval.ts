@@ -122,8 +122,7 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
     } else if (selector.combinator === '~') {
       for (const element2 of elements2) {
         let sibling: Element | null = element2;
-        /* tslint:disable no-conditional-assignment */
-        while ((sibling = sibling.nextElementSibling) !== null) {
+               while ((sibling = sibling.nextElementSibling) !== null) {
           if (matches(sibling, selector.right) === true) {
             elements.push(sibling);
           }

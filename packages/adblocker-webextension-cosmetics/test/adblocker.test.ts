@@ -23,13 +23,13 @@ async function tick(timeout = 0) {
 describe('#injectCosmetics', () => {
   it('asks background for cosmetics when called', () => {
     const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>');
-    const getCosmeticsFilters = sinon.spy(async () => {
-      return {
+    const getCosmeticsFilters = sinon.spy(() => {
+      return Promise.resolve({
         active: true,
         extended: [],
         scripts: [],
         styles: '',
-      };
+      });
     });
 
     injectCosmetics(dom.window, true, getCosmeticsFilters);
@@ -55,13 +55,13 @@ describe('#injectCosmetics', () => {
   </div>
 </body>
 `);
-    const getCosmeticsFilters = sinon.spy(async () => {
-      return {
+    const getCosmeticsFilters = sinon.spy(() => {
+      return Promise.resolve({
         active: true,
         extended: [],
         scripts: [],
         styles: '',
-      };
+      });
     });
 
     injectCosmetics(dom.window, true, getCosmeticsFilters);
@@ -89,13 +89,13 @@ describe('#injectCosmetics', () => {
   </div>
 </body>
 `);
-    const getCosmeticsFilters = sinon.spy(async () => {
-      return {
+    const getCosmeticsFilters = sinon.spy(() => {
+      return Promise.resolve({
         active: true,
         extended: [],
         scripts: [],
         styles: '',
-      };
+      });
     });
 
     // Wait for DOMContentLoaded
@@ -159,8 +159,8 @@ describe('#injectCosmetics', () => {
       },
     );
 
-    injectCosmetics(dom.window, true, async () => {
-      return {
+    injectCosmetics(dom.window, true, () => {
+      return Promise.resolve({
         active: true,
         extended: [],
         scripts: [
@@ -172,7 +172,7 @@ describe('#injectCosmetics', () => {
         `,
         ],
         styles: '',
-      };
+      });
     });
 
     await tick(1000);
@@ -192,8 +192,8 @@ describe('#injectCosmetics', () => {
       },
     );
 
-    injectCosmetics(dom.window, true, async () => {
-      return {
+    injectCosmetics(dom.window, true, () => {
+      return Promise.resolve({
         active: false,
         extended: [],
         scripts: [
@@ -205,7 +205,7 @@ describe('#injectCosmetics', () => {
         `,
         ],
         styles: '',
-      };
+      });
     });
 
     await tick(1000);

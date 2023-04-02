@@ -37,7 +37,7 @@ function loadFullLists(): Promise<string> {
   return loadFromLocalAssets(fullLists);
 }
 
-(async () => {
+void (async () => {
   for (const [name, raw] of [
     ['ads', await loadAdsLists()],
     ['ads + trackers', await loadAdsAndTrackingLists()],

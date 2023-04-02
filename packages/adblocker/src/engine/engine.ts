@@ -136,7 +136,7 @@ export default class FilterEngine extends EventEmitter<
 
       return Promise.all([listsPromises, resourcesPromise]).then(([lists, resources]) => {
         const engine = this.parse(lists.join('\n'), config);
-        if (resources !== undefined) {
+        if (resources) {
           engine.updateResources(resources, '' + resources.length);
         }
 
@@ -495,7 +495,7 @@ export default class FilterEngine extends EventEmitter<
     removedCosmeticFilters = [],
     removedNetworkFilters = [],
   }: Partial<IListDiff>): boolean {
-    let updated: boolean = false;
+    let updated = false;
 
     // Update cosmetic filters
     if (

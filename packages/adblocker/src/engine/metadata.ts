@@ -190,10 +190,10 @@ export class Metadata {
     for (const pattern of this.patterns.get(id)) {
       results.push({
         pattern,
-        category: this.categories.get(getCategoryKey({ key: pattern.category }))?.[0],
+        category: this.categories.get(getCategoryKey({ key: pattern.category }))[0],
         organization:
           pattern.organization !== null
-            ? this.organizations.get(getOrganizationKey({ key: pattern.organization }))?.[0]
+            ? this.organizations.get(getOrganizationKey({ key: pattern.organization }))[0]
             : null,
       });
     }

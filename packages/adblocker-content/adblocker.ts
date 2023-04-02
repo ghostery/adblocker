@@ -70,9 +70,9 @@ export function extractFeaturesFromDOM(roots: Element[]): {
 } {
   // NOTE: This cannot be global as puppeteer needs to be able to serialize this function.
   const ignoredTags = new Set(['br', 'head', 'link', 'meta', 'script', 'style', 's']);
-  const classes: Set<string> = new Set();
-  const hrefs: Set<string> = new Set();
-  const ids: Set<string> = new Set();
+  const classes = new Set<string>();
+  const hrefs = new Set<string>();
+  const ids = new Set<string>();
 
   for (const root of roots) {
     for (const element of [
@@ -129,9 +129,9 @@ export interface ElementsUpdate {
 export type DOMUpdate = FeaturesUpdate | ElementsUpdate;
 
 export class DOMMonitor {
-  private knownIds: Set<string> = new Set();
-  private knownHrefs: Set<string> = new Set();
-  private knownClasses: Set<string> = new Set();
+  private knownIds = new Set<string>();
+  private knownHrefs = new Set<string>();
+  private knownClasses = new Set<string>();
 
   private observer: MutationObserver | null = null;
 
@@ -260,8 +260,8 @@ export function injectScript(s: string, doc: Document): void {
   script.appendChild(doc.createTextNode(autoRemoveScript(s)));
 
   // Insert node
-  const parent = doc.head || doc.documentElement;
-  if (parent !== null) {
+  const parent = doc.head || doc.documentElement || doc;
+  if (parent) {
     parent.appendChild(script);
   }
 }

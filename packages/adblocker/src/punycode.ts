@@ -40,9 +40,7 @@ const regexSeparators = /[\x2E\u3002\uFF0E\uFF61]/g; // RFC 3490 separators
 
 /** Error messages */
 type errorNames = 'overflow' | 'invalid-input' | 'not-basic';
-const errors: {
-  [name: string]: string;
-} = {
+const errors: Record<string, string> = {
   'invalid-input': 'Invalid input',
   'not-basic': 'Illegal input >= 0x80 (not a basic code point)',
   'overflow': 'Overflow: input needs wider integers to process',

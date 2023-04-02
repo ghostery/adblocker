@@ -19,11 +19,11 @@ const tokenTypes = [
 
 export type TokenType = typeof tokenTypes[number];
 
-export type Base = {
+export interface Base {
   length: number;
   content: string;
   pos: number[];
-};
+}
 
 export type Type = Base & {
   type: 'type';

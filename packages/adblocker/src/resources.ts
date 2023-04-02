@@ -38,7 +38,7 @@ export default class Resources {
     const checksum = buffer.getASCII();
 
     // Deserialize `resources`
-    const resources: Map<string, Resource> = new Map();
+    const resources = new Map<string, Resource>();
     const numberOfResources = buffer.getUint16();
     for (let i = 0; i < numberOfResources; i += 1) {
       resources.set(buffer.getASCII(), {
@@ -48,7 +48,7 @@ export default class Resources {
     }
 
     // Deserialize `js`
-    const js: Map<string, string> = new Map();
+    const js = new Map<string, string>();
     resources.forEach(({ contentType, body }, name) => {
       if (contentType === 'application/javascript') {
         js.set(name, body);
@@ -63,7 +63,7 @@ export default class Resources {
   }
 
   public static parse(data: string, { checksum }: { checksum: string }): Resources {
-    const typeToResource: Map<string, Map<string, string>> = new Map();
+    const typeToResource = new Map<string, Map<string, string>>();
     const trimComments = (str: string) => str.replace(/^\s*#.*$/gm, '');
     const chunks = data.split('\n\n');
 
@@ -76,7 +76,7 @@ export default class Resources {
         const type = split[1];
         const body = resource.slice(firstNewLine + 1);
 
-        if (name === undefined || type === undefined || body === undefined) {
+        if (!name || !type || !body) {
           continue;
         }
 
@@ -99,7 +99,7 @@ export default class Resources {
 
     // Create a mapping from resource name to { contentType, data }
     // used for request redirection.
-    const resourcesByName: Map<string, Resource> = new Map();
+    const resourcesByName = new Map<string, Resource>();
     typeToResource.forEach((resources, contentType) => {
       resources.forEach((resource: string, name: string) => {
         resourcesByName.set(name, {
@@ -130,7 +130,7 @@ export default class Resources {
     const { body, contentType } = this.resources.get(name) || getResourceForMime(name);
 
     let dataUrl;
-    if (contentType.indexOf(';') !== -1) {
+    if (contentType.includes(';')) {
       dataUrl = `data:${contentType},${body}`;
     } else {
       dataUrl = `data:${contentType};base64,${btoaPolyfill(body)}`;

@@ -288,7 +288,7 @@ export class StaticDataView {
     return this.getUint8();
   }
 
-  public pushBytes(bytes: Uint8Array, align: boolean = false): void {
+  public pushBytes(bytes: Uint8Array, align = false): void {
     this.pushLength(bytes.length);
 
     if (align === true) {
@@ -299,7 +299,7 @@ export class StaticDataView {
     this.pos += bytes.byteLength;
   }
 
-  public getBytes(align: boolean = false): Uint8Array {
+  public getBytes(align = false): Uint8Array {
     const numberOfBytes = this.getLength();
 
     if (align === true) {
@@ -403,7 +403,7 @@ export class StaticDataView {
     return decode(
       String.fromCharCode.apply(
         null,
-        // @ts-ignore
+        // @ts-expect-error
         this.buffer.subarray(this.pos - byteLength, this.pos),
       ),
     );
@@ -421,7 +421,7 @@ export class StaticDataView {
     const byteLength = this.getLength();
     this.pos += byteLength;
 
-    // @ts-ignore
+    // @ts-expect-error
     return String.fromCharCode.apply(null, this.buffer.subarray(this.pos - byteLength, this.pos));
   }
 

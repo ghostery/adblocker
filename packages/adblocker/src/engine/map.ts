@@ -61,12 +61,12 @@ export class CompactMap<T> {
   // loaded from the compact representation (i.e.: this.view). It is not
   // strictly necessary but will speed-up retrival of popular patterns
   // (since we do not have to perform the lookup again).
-  private readonly cache: Map<number, T[]> = new Map();
+  private readonly cache = new Map<number, T[]>();
 
   private bucketsIndex: Uint32Array = EMPTY_UINT32_ARRAY;
   private tokensLookupIndex: Uint32Array = EMPTY_UINT32_ARRAY;
-  private valuesIndexStart: number = 0;
-  private numberOfValues: number = 0;
+  private valuesIndexStart = 0;
+  private numberOfValues = 0;
   private view: StaticDataView;
 
   private readonly deserializeValue: (view: StaticDataView) => T;
@@ -199,7 +199,7 @@ export class CompactMap<T> {
     numberOfValues: number;
     tokensLookupIndex: Uint32Array;
     view: StaticDataView;
-  }): CompactMap<T> {
+  }): this {
     this.bucketsIndex = bucketsIndex;
     this.valuesIndexStart = valuesIndexStart;
     this.numberOfValues = numberOfValues;

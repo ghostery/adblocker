@@ -64,7 +64,8 @@ const NORMALIZE_OPTIONS: { [option: string]: string } = {
  * example `||foo.com$stylesheet,first-party,xhr` would be normalized to
  * `||foo.com$css,1p,xhr`.
  */
-const REGEX = /all|~third-party|~first-party|third-party|first-party|object-subrequest|stylesheet|subdocument|xmlhttprequest|document|generichide/g;
+const REGEX =
+  /all|~third-party|~first-party|third-party|first-party|object-subrequest|stylesheet|subdocument|xmlhttprequest|document|generichide/g;
 export function normalizeRawFilterOptions(rawFilter: string): string {
   rawFilter = rawFilter.toLowerCase();
 
@@ -400,7 +401,7 @@ function compileRegex(
 const MATCH_ALL = new RegExp('');
 
 export default class NetworkFilter implements IFilter {
-  public static parse(line: string, debug: boolean = false): NetworkFilter | null {
+  public static parse(line: string, debug = false): NetworkFilter | null {
     // Represent options as a bitmask
     let mask: number =
       NETWORK_FILTER_MASK.thirdParty |
@@ -410,7 +411,7 @@ export default class NetworkFilter implements IFilter {
 
     // Temporary masks for positive (e.g.: $script) and negative (e.g.: $~script)
     // content type options.
-    let cptMaskPositive: number = 0;
+    let cptMaskPositive = 0;
     let cptMaskNegative: number = FROM_ANY;
 
     let hostname: string | undefined;
@@ -420,7 +421,7 @@ export default class NetworkFilter implements IFilter {
     let csp: string | undefined;
 
     // Start parsing
-    let filterIndexStart: number = 0;
+    let filterIndexStart = 0;
     let filterIndexEnd: number = line.length;
 
     // @@filter == Exception
@@ -447,7 +448,7 @@ export default class NetworkFilter implements IFilter {
         let option = negation === true ? rawOption.slice(1) : rawOption;
 
         // Check for options: option=value1|value2
-        let optionValue: string = '';
+        let optionValue = '';
         const indexOfEqual: number = option.indexOf('=');
         if (indexOfEqual !== -1) {
           optionValue = option.slice(indexOfEqual + 1);
@@ -583,7 +584,7 @@ export default class NetworkFilter implements IFilter {
             break;
           default: {
             // Handle content type options separatly
-            let optionMask: number = 0;
+            let optionMask = 0;
             switch (option) {
               case 'all':
                 if (negation) {
@@ -861,7 +862,7 @@ export default class NetworkFilter implements IFilter {
    * Deserialize network filters. The code accessing the buffer should be
    * symetrical to the one in `serializeNetworkFilter`.
    */
-  public static deserialize(buffer: StaticDataView): NetworkFilter {
+  public static deserialize(this: void, buffer: StaticDataView): NetworkFilter {
     const mask = buffer.getUint32();
     const optionalParts = buffer.getUint8();
     const isUnicode = getBit(mask, NETWORK_FILTER_MASK.isUnicode);
@@ -1291,14 +1292,12 @@ export default class NetworkFilter implements IFilter {
     // If there is only one domain and no domain negation, we also use this
     // domain as a token.
     if (
-      this.domains !== undefined &&
-      this.domains.hostnames !== undefined &&
-      this.domains.entities === undefined &&
-      this.domains.notHostnames === undefined &&
-      this.domains.notEntities === undefined &&
-      this.domains.hostnames.length === 1
+      this.domains?.entities === undefined &&
+      this.domains?.notHostnames === undefined &&
+      this.domains?.notEntities === undefined &&
+      this.domains?.hostnames?.length === 1
     ) {
-      TOKENS_BUFFER.push(this.domains.hostnames[0]);
+      TOKENS_BUFFER.push(this.domains.hostnames[0]!);
     }
 
     // Get tokens from filter
@@ -1674,9 +1673,9 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
     }
 
     // We consider this a match if the plain patter (i.e.: filter) appears anywhere.
-    return (
-      request.url.indexOf(pattern, request.url.indexOf(filterHostname) + filterHostname.length) !==
-      -1
+    return request.url.includes(
+      pattern,
+      request.url.indexOf(filterHostname) + filterHostname.length,
     );
   } else if (filter.isRegex()) {
     // pattern*^
@@ -1697,7 +1696,7 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
     return true;
   }
 
-  return request.url.indexOf(pattern) !== -1;
+  return request.url.includes(pattern);
 }
 
 function checkOptions(filter: NetworkFilter, request: Request): boolean {

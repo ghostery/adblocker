@@ -26,7 +26,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 
 import * as Benchmark from 'benchmark';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 
 import {
   benchCosmeticsFiltersParsing,
@@ -43,15 +43,14 @@ import {
 import requests from './requests';
 import { createEngine, getFiltersFromLists, parseFilters } from './utils';
 
-const GREP = (process.env.GREP || '').toLowerCase();
+const GREP = (process.env['GREP'] || '').toLowerCase();
 
 function loadLists(): { lists: string[]; resources: string } {
   return {
     lists: [
-      readFileSync(
-        resolve(__dirname, '../packages/adblocker/assets/easylist/easylist.txt'),
-        { encoding: 'utf-8' },
-      ),
+      readFileSync(resolve(__dirname, '../packages/adblocker/assets/easylist/easylist.txt'), {
+        encoding: 'utf-8',
+      }),
     ],
     resources: readFileSync(
       resolve(__dirname, '../packages/adblocker/assets/ublock-origin/resources.txt'),

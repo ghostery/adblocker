@@ -164,7 +164,7 @@ export class Domains {
   }
 
   public getSerializedSize(): number {
-    let estimate: number = 1; // optional parts (1 byte)
+    let estimate = 1; // optional parts (1 byte)
 
     if (this.entities !== undefined) {
       estimate += sizeOfUint32Array(this.entities);

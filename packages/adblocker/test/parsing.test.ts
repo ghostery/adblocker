@@ -117,7 +117,7 @@ const DEFAULT_NETWORK_FILTER = {
 
 describe('Network filters', () => {
   describe('toString', () => {
-    const checkToString = (line: string, expected: string, debug: boolean = false) => {
+    const checkToString = (line: string, expected: string, debug = false) => {
       const parsed = NetworkFilter.parse(line, debug);
       expect(parsed).not.to.be.null;
       if (parsed !== null) {
@@ -1403,7 +1403,7 @@ const DEFAULT_COSMETIC_FILTER = {
 
 describe('Cosmetic filters', () => {
   describe('#toString', () => {
-    const checkToString = (line: string, expected: string, debug: boolean = false) => {
+    const checkToString = (line: string, expected: string, debug = false) => {
       const parsed = CosmeticFilter.parse(line, debug);
       expect(parsed).not.to.be.null;
       if (parsed !== null) {

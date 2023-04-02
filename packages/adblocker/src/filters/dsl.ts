@@ -6,12 +6,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-class HidingBuilder {}
-
 type RequestType = 'image' | 'script' | 'font' | 'frame' | 'media' | 'font' | 'css';
 
 class NetworkBuilder {
-  private options: Set<RequestType> = new Set();
+  private options = new Set<RequestType>();
 
   private prefix: string | undefined = undefined;
   private infix: string | undefined = undefined;
@@ -19,7 +17,7 @@ class NetworkBuilder {
 
   private redirect: string | undefined = undefined;
 
-  private blockRequestsWithType(t: RequestType): NetworkBuilder {
+  private blockRequestsWithType(t: RequestType): this {
     if (this.options.has(t)) {
       throw new Error(`Already blocking type ${t}`);
     }
@@ -28,31 +26,31 @@ class NetworkBuilder {
     return this;
   }
 
-  public images(): NetworkBuilder {
+  public images(): this {
     return this.blockRequestsWithType('image');
   }
 
-  public scripts(): NetworkBuilder {
+  public scripts(): this {
     return this.blockRequestsWithType('script');
   }
 
-  public frames(): NetworkBuilder {
+  public frames(): this {
     return this.blockRequestsWithType('frame');
   }
 
-  public fonts(): NetworkBuilder {
+  public fonts(): this {
     return this.blockRequestsWithType('font');
   }
 
-  public medias(): NetworkBuilder {
+  public medias(): this {
     return this.blockRequestsWithType('media');
   }
 
-  public styles(): NetworkBuilder {
+  public styles(): this {
     return this.blockRequestsWithType('css');
   }
 
-  public redirectTo(redirect: string): NetworkBuilder {
+  public redirectTo(redirect: string): this {
     if (this.redirect !== undefined) {
       throw new Error(`Already redirecting: ${this.redirect}`);
     }
@@ -60,7 +58,7 @@ class NetworkBuilder {
     return this;
   }
 
-  public urlContains(infix: string): NetworkBuilder {
+  public urlContains(infix: string): this {
     if (this.infix !== undefined) {
       throw new Error(`Already matching pattern: ${this.infix}`);
     }
@@ -68,7 +66,7 @@ class NetworkBuilder {
     return this;
   }
 
-  public urlStartsWith(prefix: string): NetworkBuilder {
+  public urlStartsWith(prefix: string): this {
     if (this.prefix !== undefined) {
       throw new Error(`Already matching prefix: ${this.prefix}`);
     }
@@ -76,7 +74,7 @@ class NetworkBuilder {
     return this;
   }
 
-  public urlEndsWith(suffix: string): NetworkBuilder {
+  public urlEndsWith(suffix: string): this {
     if (this.suffix !== undefined) {
       throw new Error(`Already matching suffix: ${this.suffix}`);
     }
@@ -84,7 +82,7 @@ class NetworkBuilder {
     return this;
   }
 
-  public withHostname(hostname: string): NetworkBuilder {
+  public withHostname(hostname: string): this {
     if (this.prefix !== undefined) {
       throw new Error(`Cannot match hostname if filter already has prefix: ${this.prefix}`);
     }
@@ -125,8 +123,4 @@ class NetworkBuilder {
 
 export function block(): NetworkBuilder {
   return new NetworkBuilder();
-}
-
-export function hide(): HidingBuilder {
-  return new HidingBuilder();
 }

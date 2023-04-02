@@ -110,7 +110,7 @@ export function benchRequestParsing({
     const { url, frameUrl, cpt } = requests[i];
     Request.fromRawDetails({
       sourceUrl: frameUrl,
-      // @ts-ignore
+      // @ts-expect-error
       type: cpt,
       url,
     });

@@ -39,7 +39,7 @@ import IFilter from './interface';
 import { HTMLSelector, extractHTMLSelectorFromRule } from '../html-filtering';
 
 const EMPTY_TOKENS: [Uint32Array] = [EMPTY_UINT32_ARRAY];
-export const DEFAULT_HIDDING_STYLE: string = 'display: none !important;';
+export const DEFAULT_HIDDING_STYLE = 'display: none !important;';
 
 /**
  * Given a `selector` starting with either '#' or '.' check if what follows is
@@ -109,7 +109,7 @@ const isValidCss = (() => {
             /* noop */
           },
         };
-  const matches = (selector: string): void | boolean => div.matches(selector);
+  const matches = (selector: string) => div.matches(selector);
   const validSelectorRe = /^[#.]?[\w-.]+$/;
 
   return function isValidCssImpl(selector: string): boolean {
@@ -178,7 +178,7 @@ export default class CosmeticFilter implements IFilter {
    * instance out of it. This function should be *very* efficient, as it will be
    * used to parse tens of thousands of lines.
    */
-  public static parse(line: string, debug: boolean = false): CosmeticFilter | null {
+  public static parse(line: string, debug = false): CosmeticFilter | null {
     const rawLine = line;
 
     // Mask to store attributes. Each flag (unhide, scriptInject, etc.) takes
@@ -238,7 +238,7 @@ export default class CosmeticFilter implements IFilter {
     } else if (
       line.length - suffixStartIndex >= 8 &&
       line.endsWith(')') &&
-      line.indexOf(':style(', suffixStartIndex) !== -1
+      line.includes(':style(', suffixStartIndex)
     ) {
       // ##selector:style(...)
       const indexOfStyle = line.indexOf(':style(', suffixStartIndex);
@@ -309,45 +309,43 @@ export default class CosmeticFilter implements IFilter {
       return null;
     }
 
-    if (selector !== undefined) {
-      // Check if unicode appears in selector
-      if (hasUnicode(selector)) {
-        mask = setBit(mask, COSMETICS_MASK.isUnicode);
-      }
+    // Check if unicode appears in selector
+    if (hasUnicode(selector)) {
+      mask = setBit(mask, COSMETICS_MASK.isUnicode);
+    }
 
-      // Classify selector
-      if (
-        getBit(mask, COSMETICS_MASK.scriptInject) === false &&
-        getBit(mask, COSMETICS_MASK.remove) === false &&
-        getBit(mask, COSMETICS_MASK.extended) === false &&
-        selector.startsWith('^') === false
-      ) {
-        const c0 = selector.charCodeAt(0);
-        const c1 = selector.charCodeAt(1);
-        const c2 = selector.charCodeAt(2);
+    // Classify selector
+    if (
+      getBit(mask, COSMETICS_MASK.scriptInject) === false &&
+      getBit(mask, COSMETICS_MASK.remove) === false &&
+      getBit(mask, COSMETICS_MASK.extended) === false &&
+      selector.startsWith('^') === false
+    ) {
+      const c0 = selector.charCodeAt(0);
+      const c1 = selector.charCodeAt(1);
+      const c2 = selector.charCodeAt(2);
 
-        // Check if we have a specific case of simple selector (id, class or
-        // href) These are the most common filters and will benefit greatly from
-        // a custom dispatch mechanism.
-        if (getBit(mask, COSMETICS_MASK.scriptInject) === false) {
-          if (c0 === 46 /* '.' */ && isSimpleSelector(selector)) {
-            mask = setBit(mask, COSMETICS_MASK.isClassSelector);
-          } else if (c0 === 35 /* '#' */ && isSimpleSelector(selector)) {
-            mask = setBit(mask, COSMETICS_MASK.isIdSelector);
-          } else if (
-            c0 === 97 /* a */ &&
-            c1 === 91 /* '[' */ &&
-            c2 === 104 /* 'h' */ &&
-            isSimpleHrefSelector(selector, 2)
-          ) {
-            mask = setBit(mask, COSMETICS_MASK.isHrefSelector);
-          } else if (
-            c0 === 91 /* '[' */ &&
-            c1 === 104 /* 'h' */ &&
-            isSimpleHrefSelector(selector, 1)
-          ) {
-            mask = setBit(mask, COSMETICS_MASK.isHrefSelector);
-          }
+      // Check if we have a specific case of simple selector (id, class or
+      // href) These are the most common filters and will benefit greatly from
+      // a custom dispatch mechanism.
+      if (getBit(mask, COSMETICS_MASK.scriptInject) === false) {
+        if (c0 === 46 /* '.' */ && isSimpleSelector(selector)) {
+          mask = setBit(mask, COSMETICS_MASK.isClassSelector);
+        } else if (c0 === 35 /* '#' */ && isSimpleSelector(selector)) {
+          mask = setBit(mask, COSMETICS_MASK.isIdSelector);
+        } else if (
+          c0 === 97 /* a */ &&
+          c1 === 91 /* '[' */ &&
+          c2 === 104 /* 'h' */ &&
+          isSimpleHrefSelector(selector, 2)
+        ) {
+          mask = setBit(mask, COSMETICS_MASK.isHrefSelector);
+        } else if (
+          c0 === 91 /* '[' */ &&
+          c1 === 104 /* 'h' */ &&
+          isSimpleHrefSelector(selector, 1)
+        ) {
+          mask = setBit(mask, COSMETICS_MASK.isHrefSelector);
         }
       }
     }
@@ -365,7 +363,7 @@ export default class CosmeticFilter implements IFilter {
    * Deserialize cosmetic filters. The code accessing the buffer should be
    * symetrical to the one in `serializeCosmeticFilter`.
    */
-  public static deserialize(buffer: StaticDataView): CosmeticFilter {
+  public static deserialize(this: void, buffer: StaticDataView): CosmeticFilter {
     const mask = buffer.getUint8();
     const isUnicode = getBit(mask, COSMETICS_MASK.isUnicode);
     const optionalParts = buffer.getUint8();
@@ -631,8 +629,8 @@ export default class CosmeticFilter implements IFilter {
 
         // Tokenize optimally depending on the kind of selector: 'href=',
         // 'href*=', 'href^='.
-        let skipFirstToken: boolean = false;
-        let skipLastToken: boolean = true;
+        let skipFirstToken = false;
+        let skipLastToken = true;
         if (selector.charCodeAt(hrefIndex) === 42 /* '*' */) {
           // skip: '*'
           skipFirstToken = true;
@@ -671,7 +669,7 @@ export default class CosmeticFilter implements IFilter {
   public getScript(js: Map<string, string>): string | undefined {
     let scriptName = this.getSelector();
     let scriptArguments: string[] = [];
-    if (scriptName.indexOf(',') !== -1) {
+    if (scriptName.includes(',')) {
       const parts = scriptName.split(',');
       if (parts.length === 0) {
         return undefined;
@@ -689,7 +687,7 @@ export default class CosmeticFilter implements IFilter {
     let script = js.get(scriptName);
     if (script !== undefined) {
       for (let i = 0; i < scriptArguments.length; i += 1) {
-        script = script.replace(`{{${i + 1}}}`, scriptArguments[i]);
+        script = script.replace(`{{${i + 1}}}`, scriptArguments[i]!);
       }
 
       return script;
@@ -780,6 +778,6 @@ export default class CosmeticFilter implements IFilter {
   //
   // For example: ~example.com##.ad  is a generic filter as well!
   public isGenericHide(): boolean {
-    return this?.domains?.hostnames === undefined && this?.domains?.entities === undefined;
+    return this.domains?.hostnames === undefined && this.domains?.entities === undefined;
   }
 }

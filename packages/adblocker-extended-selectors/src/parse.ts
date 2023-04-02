@@ -67,9 +67,9 @@ const TOKENS: { [T in TokenType]: RegExp } = {
   type: /(?:(?<namespace>\*|[-\w]*)\|)?(?<name>[-\w\u{0080}-\u{FFFF}]+)|\*/gu, // this must be last
 };
 
-const TOKENS_WITH_PARENS: Set<TokenType> = new Set(['pseudo-class', 'pseudo-element']);
-const TOKENS_WITH_STRINGS: Set<TokenType> = new Set([...TOKENS_WITH_PARENS, 'attribute']);
-const TRIM_TOKENS: Set<TokenType> = new Set(['combinator', 'comma']);
+const TOKENS_WITH_PARENS = new Set<TokenType>(['pseudo-class', 'pseudo-element']);
+const TOKENS_WITH_STRINGS = new Set<TokenType>([...TOKENS_WITH_PARENS, 'attribute']);
+const TRIM_TOKENS = new Set<TokenType>(['combinator', 'comma']);
 
 const TOKENS_FOR_RESTORE: { [T in TokenType]: RegExp } = Object.assign({}, TOKENS);
 TOKENS_FOR_RESTORE['pseudo-element'] = RegExp(
@@ -85,7 +85,7 @@ TOKENS_FOR_RESTORE['pseudo-class'] = RegExp(
 function splitOnMatch(
   pattern: RegExp,
   str: string,
-): [string, [string, { [name: string]: string }], string] | undefined {
+): [string, [string, Record<string, string>], string] | undefined {
   pattern.lastIndex = 0;
   const match = pattern.exec(str);
 
@@ -378,8 +378,7 @@ export function gobbleQuotes(text: string, quote: '"' | "'", start: number): str
   // Find end of quote, taking care of ignoring escaped quotes
   let end = start + 1;
 
-  /* tslint:disable no-conditional-assignment */
-  while ((end = text.indexOf(quote, end)) !== -1 && isEscaped(text, end) === true) {
+   while ((end = text.indexOf(quote, end)) !== -1 && isEscaped(text, end) === true) {
     end += 1;
   }
 
@@ -426,8 +425,7 @@ export function replace(
   const strings: Strings = [];
 
   let offset = 0;
-  /* tslint:disable no-conditional-assignment */
-  while ((offset = selector.indexOf(opening, offset)) !== -1) {
+   while ((offset = selector.indexOf(opening, offset)) !== -1) {
     const str = gobble(selector, offset);
     if (str === undefined) {
       break;

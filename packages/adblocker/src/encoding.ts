@@ -52,7 +52,7 @@ function isAscii(bytes: Uint8Array): boolean {
   }
 
   for (let i = 0; i < bytes.length; i += 1) {
-    if (bytes[i] > 127) {
+    if (bytes[i]! > 127) {
       return false;
     }
   }
@@ -69,9 +69,9 @@ export function isUTF8(bytes: Uint8Array): boolean {
     return true;
   }
 
-  let state: number = 0;
+  let state: number | undefined = 0;
   for (let i = 0; i < bytes.length; i += 1) {
-    const type = utf8d[bytes[i]];
+    const type = utf8d[bytes[i]!]!;
     state = utf8d[256 + state * 16 + type];
     if (state === 1 || state === undefined) {
       return false;

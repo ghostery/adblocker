@@ -105,7 +105,7 @@ const ENGINE_CONFIG = new Config({
 function checkIdCollisions(filters: Set<string>): string[] {
   const collisions: string[] = [];
 
-  const ids: Map<number, string> = new Map();
+  const ids = new Map<number, string>();
   for (const line of Array.from(filters)) {
     const filter = parseFilter(line);
     if (filter !== null) {
@@ -176,7 +176,7 @@ function urlOfRevision(list: string, rev: string): string {
  * (which was the case before; then we switched to gzip for broader
  * compatibility).
  */
-const REVISIONS_CACHE: Map<string, string> = new Map();
+const REVISIONS_CACHE = new Map<string, string>();
 async function getRevision(url: string): Promise<string> {
   const cached = REVISIONS_CACHE.get(url);
   if (cached !== undefined) {
@@ -231,7 +231,7 @@ function getFiltersFromEngine(engine: FiltersEngine): Set<string> {
  * return a copy of the serialized version to make sure no mutation is
  * possible.
  */
-const ENGINES_CACHE: Map<string, Uint8Array> = new Map();
+const ENGINES_CACHE = new Map<string, Uint8Array>();
 function getEngineFromList(list: string): Uint8Array {
   const cached = ENGINES_CACHE.get(list);
   if (cached !== undefined) {
@@ -269,7 +269,7 @@ async function collectTestCases(list: string): Promise<TestCase[]> {
     previousRevision: string;
   }[] = [];
   const meta = await getMeta(`https://cdn.cliqz.com/adblocker/resources/${list}/metadata.json`);
-  const revisions: Set<string> = new Set();
+  const revisions = new Set<string>();
 
   // Append current revision (the most recent one)
   const previousRevisions = [...meta.revisions];
@@ -425,4 +425,4 @@ async function run() {
   }
 }
 
-run();
+void run();

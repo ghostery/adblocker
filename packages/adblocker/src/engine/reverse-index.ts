@@ -162,8 +162,8 @@ export default class ReverseIndex<T extends IFilter> {
   // index".
 
   private bucketsIndex: Uint32Array = EMPTY_UINT32_ARRAY;
-  private filtersIndexStart: number = 0;
-  private numberOfFilters: number = 0;
+  private filtersIndexStart = 0;
+  private numberOfFilters = 0;
   private tokensLookupIndex: Uint32Array = EMPTY_UINT32_ARRAY;
   private view: StaticDataView;
 
@@ -171,7 +171,7 @@ export default class ReverseIndex<T extends IFilter> {
   // the compact representation (i.e.: this.view). It is not strictly necessary
   // but will speed-up retrival of popular filters (since we do not have to
   // perform the lookup in "tokens index" and "buckets index" everytime).
-  private readonly cache: Map<number, Bucket<T>> = new Map();
+  private readonly cache = new Map<number, Bucket<T>>();
 
   // Function used to load a filter (e.g.: CosmeticFilter or NetworkFilter)
   // from its compact representation in the "filters index" section of the
@@ -240,7 +240,7 @@ export default class ReverseIndex<T extends IFilter> {
    * Return an array of all the tokens currently used as keys of the "buckets index".
    */
   public getTokens(): Uint32Array {
-    const tokens: Set<number> = new Set();
+    const tokens = new Set<number>();
 
     for (let i = 0; i < this.bucketsIndex.length; i += 2) {
       tokens.add(this.bucketsIndex[i]);
@@ -440,7 +440,7 @@ export default class ReverseIndex<T extends IFilter> {
       // Index the filter once per "tokens"
       for (const tokens of multiTokens) {
         // Find best token (least seen) from `tokens` using `histogram`.
-        let bestToken: number = 0; // default = wildcard bucket
+        let bestToken = 0; // default = wildcard bucket
         let minCount: number = totalNumberOfTokens + 1;
         for (const token of tokens) {
           const tokenCount: number = histogram[token % histogram.length];
@@ -496,7 +496,7 @@ export default class ReverseIndex<T extends IFilter> {
     numberOfFilters: number;
     tokensLookupIndex: Uint32Array;
     view: StaticDataView;
-  }): ReverseIndex<T> {
+  }): this {
     this.bucketsIndex = bucketsIndex;
     this.filtersIndexStart = filtersIndexStart;
     this.numberOfFilters = numberOfFilters;

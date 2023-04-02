@@ -5,7 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-/* tslint:disable quotemark */
 export default [
   "google-analytics.com/analytics.js",
   "googlesyndication_adsbygoogle.js",

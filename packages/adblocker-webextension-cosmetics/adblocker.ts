@@ -18,19 +18,19 @@ import {
 
 type ExtendedSelector = IMessageFromBackground['extended'][number];
 
-let ACTIVE: boolean = true;
+let ACTIVE = true;
 let DOM_MONITOR: DOMMonitor | null = null;
 
 let UPDATE_EXTENDED_TIMEOUT: ReturnType<typeof setTimeout> | null = null;
-const PENDING: Set<Element> = new Set();
+const PENDING = new Set<Element>();
 const EXTENDED: ExtendedSelector[] = [];
-const HIDDEN: Map<
+const HIDDEN = new Map<
   Element,
   {
     selector: ExtendedSelector;
     root: Element;
   }
-> = new Map();
+>();
 
 function unload(): void {
   if (DOM_MONITOR !== null) {
@@ -111,15 +111,15 @@ function updateExtended() {
     return;
   }
 
-  const cache: Map<Element, Map<ExtendedSelector, Set<Element>>> = new Map();
+  const cache = new Map<Element, Map<ExtendedSelector, Set<Element>>>();
 
-  const elementsToHide: Map<
+  const elementsToHide = new Map<
     Element,
     {
       selector: IMessageFromBackground['extended'][number];
       root: Element;
     }
-  > = new Map();
+  >();
 
   // Since we are processing elements in a delayed fashion, it is possible
   // that some short-lived DOM nodes are already detached. Here we simply
@@ -218,7 +218,7 @@ function handleResponseFromBackground(
   }
 
   // Inject scripts
-  if (scripts) {
+  if (scripts.length !== 0) {
     setTimeout(() => {
       for (const script of scripts) {
         injectScript(script, window.document);
@@ -227,7 +227,7 @@ function handleResponseFromBackground(
   }
 
   // Extended CSS
-  if (extended && extended.length > 0) {
+  if (extended.length !== 0) {
     EXTENDED.push(...extended);
     delayedUpdateExtended([window.document.documentElement]);
   }
@@ -247,7 +247,7 @@ function handleResponseFromBackground(
  */
 export function injectCosmetics(
   window: Pick<Window, 'document' | 'addEventListener'>,
-  enableMutationObserver: boolean = true,
+  enableMutationObserver = true,
   getCosmeticsFilters: (
     _: IBackgroundCallback,
   ) => Promise<IMessageFromBackground> = getCosmeticsFiltersWithSendMessage,
@@ -256,7 +256,7 @@ export function injectCosmetics(
   // inject cosmetics and scripts as soon as possible. Some extra elements
   // might be inserted later whenever we know more about the content of the
   // page.
-  getCosmeticsFilters({ lifecycle: 'start', ids: [], classes: [], hrefs: [] }).then((response) =>
+  void getCosmeticsFilters({ lifecycle: 'start', ids: [], classes: [], hrefs: [] }).then((response) =>
     handleResponseFromBackground(window, response),
   );
 
@@ -274,7 +274,7 @@ export function injectCosmetics(
             delayedUpdateExtended(update.elements);
           }
         } else {
-          getCosmeticsFilters({ ...update, lifecycle: 'dom-update' }).then((response) =>
+          void getCosmeticsFilters({ ...update, lifecycle: 'dom-update' }).then((response) =>
             handleResponseFromBackground(window, response),
           );
         }

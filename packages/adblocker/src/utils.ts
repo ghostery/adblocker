@@ -293,7 +293,7 @@ export function tokenize(
 export function tokenizeRegexInPlace(selector: string, tokens: TokensBuffer): void {
   let end = selector.length - 1;
   let begin = 1;
-  let prev: number = 0;
+  let prev = 0;
 
   // Try to find the longest safe *prefix* that we can tokenize
   for (; begin < end; begin += 1) {
