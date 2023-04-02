@@ -7,6 +7,7 @@
  */
 /* tslint:disable quotemark */
 export default [
+  "div[style=\"position: absolute; inset: 0px; overflow: hidden; z-index: 160; background: transparent none repeat scroll 0% 0%; display: block;\"]",
   "div[style=\"position: fixed; display: block; width: 100%; height: 100%; inset: 0px; background-color: rgba(0, 0, 0, 0); z-index: 300000;\"]",
   "acs, document.createElement, /l\\.parentNode\\.insertBefore\\(s/",
   ":not([style^=\"position: absolute; left: -5000px\"])",
@@ -37,6 +38,7 @@ export default [
   "dvertisement",
   "nextFunction",
   "notification",
+  "Notification",
   "contextmenu",
   "no-xhr-if, ",
   ", noopFunc",
@@ -59,7 +61,6 @@ export default [
   "disclaim",
   "https://",
   "nostif, ",
-  "Notifica",
   "nowebrtc",
   ".com/\"]",
   "300x250",
@@ -129,10 +130,10 @@ export default [
   "out",
   "rap",
   "top",
+  "utt",
   "__",
   "--",
   ", ",
-  ": ",
   ".a",
   ".j",
   ".m",
@@ -186,7 +187,6 @@ export default [
   "s_",
   "s-",
   "se",
-  "si",
   "st",
   "t-",
   "te",

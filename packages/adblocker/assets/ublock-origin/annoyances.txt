@@ -6734,3 +6734,26 @@ workhouses.org.uk##body:style(-webkit-touch-callout: default !important; -webkit
 ! https://github.com/uBlockOrigin/uAssets/issues/17354
 geeksforgeeks.org##.ad-blocker-modal
 geeksforgeeks.org##body:style(overflow: auto !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/17045#issuecomment-1492975020
+weakstream.org##^script:has-text(debugger)
+!#if !cap_html_filtering
+weakstream.org##+js(acs, $, debugger)
+!#endif
+
+! https://github.com/MasterKia/PersianBlocker/issues/156
+public-psychology.ir##^script[src^="data:text/javascript;base64,ZG9jdW"][src$="hdWx0KCl9fQ=="]
+!#if !cap_html_filtering
+public-psychology.ir##+js(acis, document.oncontextmenu, , /^data:/)
+!#endif
+public-psychology.ir##body:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+
+! https://github.com/uBlockOrigin/uAssets/issues/17389
+4media.com,przegladpiaseczynski.pl##+js(aeld, contextmenu)
+
+! https://www.reddit.com/r/uBlockOrigin/comments/120jwwu/
+easyayurveda.com##+js(aopr, disable_copy)
+easyayurveda.com##+js(aopr, wccp_pro_iscontenteditable)
+easyayurveda.com##+js(aopr, disable_hot_keys)
+easyayurveda.com##+js(aopr, nocontext)
+easyayurveda.com##^script[id^="wccp_"]
