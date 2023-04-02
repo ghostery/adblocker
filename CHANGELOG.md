@@ -1,3 +1,47 @@
+# v1.26.4 (Sun Apr 02 2023)
+
+### Release Notes
+
+#### Adjust scriptlet injection timing ([#3162](https://github.com/ghostery/adblocker/pull/3162))
+
+Resolves https://github.com/ghostery/adblocker/issues/2757
+
+Changed the timing of scriptlet injection to before the DOMContentLoaded event fires. Also changed the injection method from using Electron.WebContents.executeJavaScript (which is effectively executed when the tab finishes loading) to dynamically adding a script element, similar to how μBlock Origin does it.
+
+---
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-electron`
+  - Adjust scriptlet injection timing [#3162](https://github.com/ghostery/adblocker/pull/3162) ([@DrRoot-github](https://github.com/DrRoot-github))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#3150](https://github.com/ghostery/adblocker/pull/3150) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#3149](https://github.com/ghostery/adblocker/pull/3149) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#3104](https://github.com/ghostery/adblocker/pull/3104) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump lerna from 6.5.1 to 6.6.0 [#3142](https://github.com/ghostery/adblocker/pull/3142) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump playwright from 1.31.2 to 1.32.0 [#3138](https://github.com/ghostery/adblocker/pull/3138) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rimraf from 4.4.0 to 4.4.1 [#3137](https://github.com/ghostery/adblocker/pull/3137) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump node-fetch from 3.3.0 to 3.3.1 [#3120](https://github.com/ghostery/adblocker/pull/3120) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump sinon from 15.0.1 to 15.0.2 [#3118](https://github.com/ghostery/adblocker/pull/3118) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 3.20.0 to 3.20.2 [#3147](https://github.com/ghostery/adblocker/pull/3147) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker`
+  - Build(deps): Bump @types/chrome from 0.0.224 to 0.0.225 [#3141](https://github.com/ghostery/adblocker/pull/3141) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@DrRoot-github](https://github.com/DrRoot-github)
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+
+---
+
 # v1.26.3 (Fri Mar 24 2023)
 
 #### :nail_care: Polish

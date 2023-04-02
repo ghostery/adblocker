@@ -1,3 +1,23 @@
+# v1.26.4 (Sun Apr 02 2023)
+
+#### :house: Internal
+
+- Update local assets [#3150](https://github.com/ghostery/adblocker/pull/3150) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#3149](https://github.com/ghostery/adblocker/pull/3149) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#3104](https://github.com/ghostery/adblocker/pull/3104) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.224 to 0.0.225 [#3141](https://github.com/ghostery/adblocker/pull/3141) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+
+---
+
 # v1.26.3 (Fri Mar 24 2023)
 
 #### :nail_care: Polish

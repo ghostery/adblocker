@@ -1,3 +1,30 @@
+# v1.26.4 (Sun Apr 02 2023)
+
+### Release Notes
+
+#### Adjust scriptlet injection timing ([#3162](https://github.com/ghostery/adblocker/pull/3162))
+
+Resolves https://github.com/ghostery/adblocker/issues/2757
+
+Changed the timing of scriptlet injection to before the DOMContentLoaded event fires. Also changed the injection method from using Electron.WebContents.executeJavaScript (which is effectively executed when the tab finishes loading) to dynamically adding a script element, similar to how μBlock Origin does it.
+
+---
+
+#### :bug: Bug Fix
+
+- Adjust scriptlet injection timing [#3162](https://github.com/ghostery/adblocker/pull/3162) ([@DrRoot-github](https://github.com/DrRoot-github))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.224 to 0.0.225 [#3141](https://github.com/ghostery/adblocker/pull/3141) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@DrRoot-github](https://github.com/DrRoot-github)
+
+---
+
 # v1.26.3 (Fri Mar 24 2023)
 
 #### :nut_and_bolt: Dependencies
