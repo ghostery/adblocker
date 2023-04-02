@@ -1,3 +1,16 @@
+# v1.26.5 (Sun Apr 02 2023)
+
+#### :house: Internal
+
+- Update local assets [#3156](https://github.com/ghostery/adblocker/pull/3156) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 2
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+
+---
+
 # v1.26.4 (Sun Apr 02 2023)
 
 #### :house: Internal

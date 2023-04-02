@@ -1,3 +1,23 @@
+# v1.26.5 (Sun Apr 02 2023)
+
+#### :nail_care: Polish
+
+- `@cliqz/adblocker-electron-preload`
+  - :bug: remove unnecessary setImmediate method [#3166](https://github.com/ghostery/adblocker/pull/3166) ([@DrRoot-github](https://github.com/DrRoot-github))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#3156](https://github.com/ghostery/adblocker/pull/3156) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- DrRoot ([@DrRoot-github](https://github.com/DrRoot-github))
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+
+---
+
 # v1.26.4 (Sun Apr 02 2023)
 
 ### Release Notes

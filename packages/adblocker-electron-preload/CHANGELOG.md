@@ -1,3 +1,15 @@
+# v1.26.5 (Sun Apr 02 2023)
+
+#### :nail_care: Polish
+
+- :bug: remove unnecessary setImmediate method [#3166](https://github.com/ghostery/adblocker/pull/3166) ([@DrRoot-github](https://github.com/DrRoot-github))
+
+#### Authors: 1
+
+- DrRoot ([@DrRoot-github](https://github.com/DrRoot-github))
+
+---
+
 # v1.26.4 (Sun Apr 02 2023)
 
 ### Release Notes
