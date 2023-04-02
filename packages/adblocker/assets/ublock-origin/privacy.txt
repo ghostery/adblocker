@@ -253,9 +253,10 @@ nikita.tk##+js(aost, document.cookie)
 /p13n/batch/action/*$image
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9717
-ppss.kr,ygosu.com,tgd.kr,inven.co.kr,loawa.com,feedclick.net,dailian.co.kr,algumon.com,sportalkorea.com##+js(aeld, DOMContentLoaded, _0x)
-ppss.kr,ygosu.com,tgd.kr,inven.co.kr,loawa.com,feedclick.net,dailian.co.kr,algumon.com,sportalkorea.com##^script:has-text(ad-shield)
+ppss.kr,ygosu.com,tgd.kr,inven.co.kr,loawa.com,feedclick.net,dailian.co.kr,algumon.com,sportalkorea.com,hancinema.net##+js(aeld, DOMContentLoaded, _0x)
+ppss.kr,ygosu.com,tgd.kr,inven.co.kr,loawa.com,feedclick.net,dailian.co.kr,algumon.com,sportalkorea.com,hancinema.net##^script:has-text(ad-shield)
 ||da29e6b8-f018-490f-b25f-39a887fc95e7.xyz^
+||31830fbc-adbf-11ed-afa1-0242ac120002.site^$xhr,ping
 ||15823f12-289e-4189-9e51-e2de1bf1a105.online^$xhr,ping
 /^https:\/\/cdn\.jsdelivr\.net\/npm\/[-a-z_]{4,22}@latest\/dist\/script\.min\.js$/$script,3p,match-case
 
@@ -368,7 +369,7 @@ endbasic.dev,jmmv.dev##+js(no-xhr-if, method:POST)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/tihpyw/oldredditcom_outbound_tracking_via_out_reddit_com/i1f290z/?context=3
 old.reddit.com##+js(ra, data-outbound-url, .outbound)
-reddit.com##+js(set, Object.prototype.allowClickTracking, false)
+!reddit.com##+js(set, Object.prototype.allowClickTracking, false)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/u13isu/how_to_block_fathom_tracking
 /?p=%2F*&h=https%3A%2F%2F*&r=&sid=*&qs=*&cid=$image,1p
@@ -468,6 +469,15 @@ ericdraken.com##^script[async]
 /acc/acctag.js
 ! https://github.com/AdguardTeam/AdguardFilters/commit/b4ad45459bcd5e0a0c6711abec10a45dc35a5062
 .jp/static/js/track.js
+! https://github.com/AdguardTeam/AdguardFilters/commit/3ee12854a9da5737259eb5b4cd9ce124d5260a8b
+/outLoging.js
+/outLoging2.js
+! https://github.com/AdguardTeam/AdguardFilters/commit/06b30e49b01ace6f36da016bf4d02ab2f4b15524
+||blozoo.info/js/ranktool/
+! https://github.com/AdguardTeam/AdguardFilters/commit/f9a82c08debe42b73950d4caf103aeafc8b12feb
+||odsyms15.com/impression?
+! https://github.com/AdguardTeam/AdguardFilters/commit/4cebf73b405ef76c4f32fee4d5229908245c45e0
+||rakuten.co.jp/com/js/omniture/
 
 ! heavyfetish.com tracking
 heavyfetish.com##+js(set, flashvars.event_reporting, '')
