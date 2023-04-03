@@ -881,6 +881,8 @@ h-flash.com##+js(set, ads_setted, 0)
 h-flash.com##+js(set, ads_updated, 0)
 h-flash.com###ads_a
 h-flash.com##.pagebody:style(height: auto !important;)
+h-flash.com##[onclick*="ADCLICK"]:upward(1)
+h-flash.com##[style*="url"]
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/ssvdg9/adblock_diagnosis/
 ||gratisbitcoin.my.id^$3p
@@ -3989,10 +3991,6 @@ idevicecentral.com##+js(nostif, ()=>)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/125763
 lib.hatenablog.com##+js(acs, document.addEventListener, google_ad_client)
 
-! https://github.com/uBlockOrigin/uAssets/issues/14142
-! [dup] from ublock-origin/filters-2021.txt
-! @@||global.ssl.fastly.net^$domain=10play.com.au
-
 ! bokeponlineterbaru.xyz popup
 bokeponlineterbaru.xyz##+js(nowoif)
 ||bokeponlineterbaru.xyz/exoclick.js
@@ -4399,7 +4397,7 @@ financerites.com,skincarie.com###orquidea-slideup
 enit.in,financerites.*,skincarie.com##+js(nano-stb, downloadBtn, *)
 enit.in,financerites.*,skincarie.com##.footerLink.hidden:style(display: block !important;)
 enit.in,financerites.*,skincarie.com##.getlink:others()
-financerites.*##p:has-text([ad_)
+financerites.*##p:has-text('[ad_')
 financerites.*##h4:has-text(Ads)
 ||push-sdk.$3p
 

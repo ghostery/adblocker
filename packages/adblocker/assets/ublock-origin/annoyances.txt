@@ -4051,9 +4051,11 @@ minecraftquiz.com##*:style(-webkit-touch-callout: default !important; -webkit-us
 magelang1337.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/72530#issuecomment-762209005
-streamsb.net##+js(acis, check, debugger)
+! https://github.com/uBlockOrigin/uAssets/issues/17399
 ! https://www.reddit.com/r/uBlockOrigin/comments/x7ogxi/
-sbspeed.com##+js(aopr, console.clear)
+sbface.com,sbspeed.com,streamsb.net##+js(acis, check, debugger)
+sbface.com,sbspeed.com,streamsb.net##^script:has-text(debugger)
+sbface.com,sbspeed.com,streamsb.net##+js(nosiif, _0x)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/72222
 ! https://github.com/AdguardTeam/AdguardFilters/issues/72225
@@ -6757,3 +6759,15 @@ easyayurveda.com##+js(aopr, wccp_pro_iscontenteditable)
 easyayurveda.com##+js(aopr, disable_hot_keys)
 easyayurveda.com##+js(aopr, nocontext)
 easyayurveda.com##^script[id^="wccp_"]
+
+! https://github.com/uBlockOrigin/uAssets/issues/17404
+dollarvr.com##+js(aopr, nocontextmenu)
+dollarvr.com##+js(acis, document.oncontextmenu)
+dollarvr.com##+js(acis, document.ondragstart)
+dollarvr.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important;-moz-user-select: text !important;-ms-user-select: text !important;user-select: text !important;)
+
+! romviet.com anti adblock annoyance
+romviet.com##+js(noeval-if, AdBlocker)
+
+! jk-market.com devtool
+jk-market.com##+js(acs, jQuery, devtool)
