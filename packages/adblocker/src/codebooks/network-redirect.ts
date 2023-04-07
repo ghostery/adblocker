@@ -47,7 +47,6 @@ export default [
   "cs",
   "et",
   "ga",
-  "mp",
   "ng",
   "_",
   "-",

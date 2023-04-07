@@ -2328,6 +2328,7 @@ pinayvids.com##+js(aopr, decodeURI)
 @@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=10play.com.au
 @@||pubads.g.doubleclick.net/ondemand/hls/content/*/streams$xhr,domain=10play.com.au
 10play.com.au##+js(m3u-prune, /^https?:\/\/redirector\.googlevideo\.com.*/, /.*m3u8/)
+10play.com.au##+js(json-prune, cuepoints, cuepoints.[].start cuepoints.[].end cuepoints.[].start_float cuepoints.[].end_float)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/80945
 ||sered.net^$3p
@@ -4929,7 +4930,8 @@ fifaultimateteam.it##.ai_widget
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10096
 ! https://www.reddit.com/r/uBlockOrigin/comments/11lxfy3/
-itopmusic.com,itopmusicx.com##+js(aopr, absda)
+itopmusic.com,itopmusicx.com##^script:has-text(chp_adblock)
+itopmusic.com,itopmusicx.com##+js(aopr, chp_adblock_browser)
 *$xhr,redirect-rule=noop.txt,domain=itopmusic.com|itopmusicx.com
 
 ! https://github.com/FastForwardTeam/FastForward/issues/98
@@ -6653,13 +6655,24 @@ chortle.co.uk,coloring.ws,dltk-holidays.com,dltk-kids.com,kidzone.ws,pcsteps.com
 #@#.ad_unit
 ~lamire.jp##.ad-unit:not(.text-ad):not(:empty)
 ##.ad_unit:not(.text-ad)
+#@#[data-ad-module]
+#@#[data-ad-width]
+#@#[data-adblockkey]
+#@#[data-advadstrackid]
+#@#[data-ad-manager-id]
+##[data-ad-module]:not([style$="left: -10000px !important; top: -1000px !important;"])
+##[data-ad-width]:not([style$="left: -10000px !important; top: -1000px !important;"])
+##[data-adblockkey]:not([style$="left: -10000px !important; top: -1000px !important;"])
+##[data-advadstrackid]:not([style$="left: -10000px !important; top: -1000px !important;"])
+##[data-ad-manager-id]:not([style$="left: -10000px !important; top: -1000px !important;"])
+#@#.ad-slot
+##.ad-slot:not(.adsbox)
 ||doubleclick.net^$xhr,redirect=noop.txt
 ||com/|$xhr,3p,redirect-rule=noop.txt
 ||net/|$xhr,3p,redirect-rule=noop.txt
 ||realsrv.com/popunder1000.js$xhr,redirect=noop.txt
 ||exdynsrv.com/video-slider.js$xhr,redirect=noop.txt
 mymusicreviews.com,thechat.cafe##+js(aopr, chp_adblock_browser)
-kenkou-maintenance.com##+js(aopr, adsBlocked)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10964
 globfone.com##+js(no-xhr-if, ads)

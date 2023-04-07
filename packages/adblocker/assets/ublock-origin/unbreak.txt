@@ -1316,9 +1316,6 @@ kzstock.blogspot.com#@##ad-target
 ! scrolling broken drstevenlin .com
 drstevenlin.com##html:style(overflow: auto !important;)
 
-! https://www.reddit.com/r/uBlockOrigin/comments/bmiul0/how_to_remove_a_domain_from_malware_domain_list/
-! [badfilter] ||womenslabour.org^$badfilter
-
 ! https://github.com/uBlockOrigin/uAssets/issues/5559
 tele5.de##.break-ads
 
@@ -1643,7 +1640,10 @@ twitter.com#@#article[role="article"]:has-text(Promoted)
 ||farnell.com/*tracking.js$script,1p,redirect=noopjs
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/dg0679/load_more_comments_not_working/
+! https://github.com/AdguardTeam/AdguardFilters/issues/147282
 @@||x.kinja-static.com/assets/packaged-js/trackers$script
+||x.kinja-static.com/assets/packaged-js/trackers$script,domain=avclub.com|clickhole.com|deadspin.com|gizmodo.com|jalopnik.com|jezebel.com|kotaku.com|lifehacker.com|splinternews.com|theinventory.com|theonion.com|theroot.com|thetakeout.com,important
+avclub.com,clickhole.com,deadspin.com,gizmodo.com,jalopnik.com,jezebel.com,kotaku.com,lifehacker.com,splinternews.com,theinventory.com,theonion.com,theroot.com,thetakeout.com##+js(set, ga, noopFunc)
 
 ! https://forums.lanik.us/viewtopic.php?f=64&t=43663#p150230
 ! [badfilter] ||ultimedia.com/api/widget/$xhr,badfilter
@@ -3393,13 +3393,6 @@ unito.life##+js(acis, KeenTracking)
 @@||googletagmanager.com^$redirect-rule,domain=invisibleoranges.com|nj1015.com|tasteofcountry.com|wyrk.com|xxlmag.com
 @@||google-analytics.com^$redirect-rule,domain=invisibleoranges.com|nj1015.com|tasteofcountry.com|wyrk.com|xxlmag.com
 
-! https://www.reddit.com/r/uBlockOrigin/comments/osgxh8/adblock_detected_and_some_elements_are_mistakenly/
-@@||thefamouspeople.com^$ghide
-thefamouspeople.com##.adsbygoogle
-thefamouspeople.com##.tfp_master_left_ad
-thefamouspeople.com###left_sticky_ad
-thefamouspeople.com###content10 > .topmenu-cls
-
 ! https://github.com/uBlockOrigin/uAssets/issues/9659
 adyou.me##button.flleft.btn-lg.btn-warning.btn.skip:style(display:block !important)
 adyou.me#@#+js(addEventListener-defuser, /^(?:click|mousedown)$/, bypassEventsInProxies)
@@ -3867,9 +3860,6 @@ pearsonclinical.com##.aligner
 
 ! mpsconline. gov.in breakage
 @@||mpsconline.gov.in^$ghide
-
-! https://github.com/uBlockOrigin/uAssets/issues/12118#issuecomment-1064221681
-*$popup,3p,domain=streamz.ws,badfilter
 
 ! https://github.com/uBlockOrigin/uAssets/issues/12159
 ||booking.rm.dk/selvbooking/*/analytics/*$xhr,1p,redirect-rule=nooptext
@@ -4851,3 +4841,19 @@ stylist.co.uk##+js(set, Object.prototype.isInitialLoadDisabled, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/17384
 hornoxe.com#@#div.post:has(a[href^="https://www.amazon.de/"])
 hornoxe.com##.ivycat-post:has(a[href^="https://www.amazon.de/"])
+
+! https://github.com/uBlockOrigin/uAssets/issues/17413
+outlook.live.com#@?#div.customScrollBar > div > div > div > div > div > div:-abp-has(div[class] > div[class] > div[class] > div[class] > i[data-icon-name="Delete"] + div[class])
+
+! fix DL https://www.undawn.game/en/download/community/
+@@||googletagmanager.com/gtag/js$script,domain=undawn.game
+
+! https://github.com/uBlockOrigin/uAssets/issues/17439
+@@||securepubads.g.doubleclick.net/pagead/managed/js/gpt/*/pubads_impl.js$script,domain=jn.pt
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/147510
+@@||securepubads.g.doubleclick.net/pagead/managed/js/gpt/*/pubads_impl.js$script,domain=scotsman.com
+scotsman.com##[class*="AdContainer"]
+scotsman.com##[class*="AdLoading"]
+scotsman.com##[class*="Ads__Container"]
+scotsman.com##[class*="Billboard__Root"]
