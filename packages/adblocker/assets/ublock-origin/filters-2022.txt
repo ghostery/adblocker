@@ -1902,7 +1902,6 @@ alycia-debnam-carey.com,christinaricci.net,emmy-rossum.com,natalie-portman.org,r
 !#endif
 watchomovies.*##^script:has-text(decodeURIComponent)
 ||a.streamoupload.$script
-/^https:\/\/a\.[-0-9a-z]{4,16}\.(?:club|com?|cyou|info|net|ru|site|top?|xxx|xyz)\/(?=[a-z]{0,6}[0-9A-Z])[0-9a-zA-Z]{7}\.js$/$script,match-case
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/114645
 animesonehd.xyz##+js(aopw, _pop)
@@ -3471,11 +3470,6 @@ tvpolan.ml##+js(aopw, _pop)
 90phut2.*##+js(ra, style, body, stay)
 90phut2.*##html:style(overflow: auto !important;)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/122381
-! https://github.com/uBlockOrigin/uAssets/issues/16081
-*$image,redirect-rule=1x1.gif,domain=easymc.io
-easymc.io##+js(aopr, Image)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/13812
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=worldledaily.com
 
@@ -4401,7 +4395,13 @@ enit.in,financerites.*,skincarie.com##.footerLink.hidden:style(display: block !i
 enit.in,financerites.*,skincarie.com##.getlink:others()
 financerites.*##p:has-text('[ad_')
 financerites.*##h4:has-text(Ads)
+financerites.*##+js(nowoif)
+financerites.*##+js(set, blurred, false)
+vocalley.com##+js(nano-sib, timeSec, *)
+vocalley.com##+js(nano-stb, getlink, *)
 ||push-sdk.$3p
+||a.labadena.com^$popup
+||feistyhelicopter.com^$popup
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/x5w2kt/adblock_detected_help/
 truyenaudiocv.net##+js(aopr, adblockDetect)
