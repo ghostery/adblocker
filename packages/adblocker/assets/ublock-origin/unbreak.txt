@@ -3462,16 +3462,8 @@ pewresearch.org##+js(set, ga, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/10444
 @@||asset.fwcdn2.com/js/storyblock.js$script,domain=narcity.com
 
-! https://github.com/uBlockOrigin/uAssets/issues/7611#issuecomment-968186023
-@@||geoip.redirect-ads.com/?v=$frame,3p
-@@||geoip.redirect-ads.com/js/*$script,1p
-
 ! https://github.com/uBlockOrigin/uAssets/issues/10491
 @@||quantcast.mgr.consensu.org^*tcfv2*cmp2.js?referer=$script
-
-! https://github.com/uBlockOrigin/uAssets/issues/10922
-! https://jbbs.shitaraba.net/bbs/read.cgi/internet/25463/1652115193/241
-kabutan.jp,saitama-np.co.jp#@#[id^="div-gpt-ad"]:style(width:1px!important;height:1px!important;min-width:1px!important;min-height:1px!important;margin:0!important;padding:0!important;overflow:hidden!important;opacity:0!important)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10594
 @@||cdn.questionpro.com^$css
@@ -4776,6 +4768,8 @@ doodle.com##.AdsLayout__top-container
 ! [badfilter] ||onesignal.com^$3p,badfilter
 ||onesignal.com/webPushAnalytics
 ||onesignal.com/api/v*/apps/
+||onesignal.com/sdks/OneSignalSDKStyles
+||onesignal.com/sdks/OneSignalSDKWorker
 
 ! sho.com broken search
 ||sho.com/www/sho/lib/omniture/AppMeasurement.js$xhr,1p,redirect-rule=noop.js
@@ -4816,14 +4810,6 @@ cerbahealthcare.it##+js(set, Object.prototype.setConfigurations, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/17733
 pcwelt.de#@#a[href^="https://pvn.mediamarkt.de/"]
 pcwelt.de#@#a[href^="https://pvn.saturn.de/"]
-
-! https://github.com/uBlockOrigin/uAssets/issues/17731
-@@||s0.2mdn.net/instream/html5/ima3.js$script,domain=playhub.com
-playhub.com##.ad-title-megaban
-playhub.com##.ad-title-pave
-playhub.com##.ad-title-sky
-playhub.com##.promo-game
-||play.turbommo.com^$3p
 
 ! wgplayer breakages
 ! https://github.com/AdguardTeam/AdguardFilters/issues/143493
@@ -4874,6 +4860,7 @@ delta.com#@#.adv-container
 ! [badfilter] ||statcounter.com^$badfilter
 ||statcounter.com^$domain=~gs.statcounter.com
 ||c.statcounter.com^
+||statcounter.com/counter/counter.js
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/142003
 vindobona.org#@#.ads_footer
@@ -4890,6 +4877,7 @@ vindobona.org##.sponsored
 ! https://github.com/uBlockOrigin/uAssets/issues/16128
 @@||kleinanzeigen.de^$ghide
 kleinanzeigen.de###liberty-vip-billboard
+! [badfilter] /images/ad/*$badfilter
 
 ! https://github.com/uBlockOrigin/uAssets/issues/17946
 decathlon.in##body:style(opacity: 1 !important;)
@@ -4906,3 +4894,23 @@ hihonor.com#@#.ad-wrap
 
 ! https://filelu.com/madwieowurdk incorrect hiding
 filelu.com#@#.banner_ads:not(:empty)
+
+! https://github.com/uBlockOrigin/uAssets/issues/18014
+@@||click.allkeyshop.com/*&source=www.allkeyshop.com$doc
+||click.allkeyshop.com^$inline-script
+click.allkeyshop.com##+js(refresh-defuser)
+
+! https://github.com/uBlockOrigin/uAssets/issues/17923
+@@||autocomplete.clearbit.com^$xhr
+
+! https://github.com/uBlockOrigin/uAssets/issues/18048
+neilpatel.com##+js(no-xhr-if, ip-api)
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/150818
+@@||cdn.logly.co.jp^$image,domain=www.asahi.com
+
+! https://jbbs.shitaraba.net/bbs/read.cgi/internet/25463/1618326670/156
+@@||dti.ne.jp/cgi-bin/Count.cgi?$image,1p
+
+! https://forums.lanik.us/viewtopic.php?p=166011-halifax-online-banking#p166011
+! [badfilter] /^https?:\/\/www\.halifax-online\.co\.uk\/[A-Za-z0-9]{4,6}\/[A-Za-z0-9]{2}\/[A-Za-z0-9]{2}\//$script,xmlhttprequest,domain=halifax-online.co.uk,badfilter

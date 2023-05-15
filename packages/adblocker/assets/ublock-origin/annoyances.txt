@@ -1,6 +1,7 @@
 ! Title: uBlock₀ filters – Annoyances
-! Description: Filters optimized for uBlock Origin, to be used with Fanboy's
-!              and/or Adguard's "Annoyances" list(s)
+! Description: |
+!   Filters optimized for uBlock Origin, to be used with Fanboy's
+!   and/or Adguard's "Annoyances" list(s)
 ! Expires: 7 days
 ! Last modified: %timestamp%
 ! License: https://github.com/uBlockOrigin/uAssets/blob/master/LICENSE
@@ -6240,7 +6241,9 @@ postype.com##+js(rc, disable-selection, body)
 golfdigest.com##+js(aost, document.createElement, admiral)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/15689
+! https://github.com/uBlockOrigin/uAssets/issues/18077
 lofter.com##+js(aeld, , login)
+lofter.com##+js(aeld, contextmenu)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/15701
 poipiku.com##+js(aeld, /contextmenu|copy|drag|dragstart/)
@@ -6821,3 +6824,23 @@ vtbe.net##+js(acs, RegExp, contextmenu)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/17967
 manhwahentai.me##+js(acs, document.oncontextmenu)
+
+! https://canalnatelinhaonline.blogspot.com/ anti right click
+canalnatelinhaonline.blogspot.com##^script:has-text(document.onmousedown)
+
+! https://github.com/uBlockOrigin/uAssets/issues/18034
+ph.ontools.net##+js(acs, document.oncontextmenu)
+
+! https://github.com/uBlockOrigin/uAssets/issues/18046
+@@||luckydesigner.space/adview_$xhr,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/18048
+neilpatel.com##+js(no-xhr-if, /hotjar|googletagmanager/)
+
+! https://github.com/uBlockOrigin/uAssets/issues/18040
+onlinetools.com##+js(nano-sib, downloadTimer)
+
+! https://github.com/uBlockOrigin/uAssets/issues/18073
+cool-etv.net##+js(aeld, contextmenu)
+cool-etv.net##+js(set, console.clear, noopFunc)
+||cool-etv.net/ch/suppy.js$script,1p
