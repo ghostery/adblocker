@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202305141726
+! Version: 202305231722
 ! Title: EasyList Germany
-! Last modified: 14 May 2023 17:26 UTC
+! Last modified: 23 May 2023 17:22 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -1045,7 +1045,6 @@ wetter.com#@#div[id^="div-gpt-"]
 ||fastad.beepworld.de^
 ||fettverbrennen.net/bilder/banner/
 ||files.kartenlegen.gratis^$third-party
-||financeads.net/tb.php$third-party
 ||finanzen.net/partner/$subdocument,third-party,domain=~finanzen.at
 ||fireradio.fm/img/banner/$third-party
 ||flirty.com/?pr=*&wm=$subdocument,third-party
@@ -2949,6 +2948,7 @@ bz-berlin.de###inpage
 abload.de###iphpbannerleft
 ! [dup] from ublock-origin/filters.txt
 ! ariva.de###iqd_mainAd
+rp-online.de###ir_rpd_lb
 finanzen.net###ishares_etf_variation
 juraforum.de###jf-stroer-sky
 juraforum.de###jf-stroer-superbanner
@@ -4395,6 +4395,7 @@ ddl-warez.cc,ostfussball.com##a[href*="/out/"]
 bild.de##a[href*="/partner/"]
 tarnkappe.info##a[href*="/prf.hn/click/"]
 emtb-news.de,ladies.de,mtb-news.de##a[href*="/redirect/"]
+ibooks.to##a[href*="/smland/?"]
 tarnkappe.info##a[href*="?sca_ref="]
 finanzen.net##a[href="#p500Werbehinweis"]
 areadvd.de##a[href="/panasonic_de"]
@@ -4571,6 +4572,7 @@ t-online.de,www-t--online-de.cdn.ampproject.org##div[data-dy*="Partner:"]
 apfelpage.de##div[data-embed-provider="rcm-eu-amazon-adsystem-com"]
 kleinanzeigen.de##div[data-liberty-ad-loaded="true"]
 t-online.de##div[data-testid="TaboolaFeeds.Feed"]
+sport1.de##div[data-testid="better-collective"]
 sportbild.bild.de##div[data-tr-doc-type="dt=InlineAd|st=BTOAdTag"]
 giga.de##div[data-trigger="sourcepoint-ad"]
 prosiebengames.de##div[data-url-link^="https://track-adspree.com/"]
@@ -4649,13 +4651,14 @@ amazon.de##div[id^="sp_detail"]
 20min.ch##div[id^="sport__inside-"]
 supertipp-online.de##div[id^="super-"]
 tippscout.de##div[id^="tipps-"]
-bbheute.de,berliner-zeitung.de,blick.de,donaukurier.de,frankenpost.de,mopo.de,pnp.de,schwarzwaelder-bote.de,stuttgarter-nachrichten.de,stuttgarter-zeitung.de##div[id^="traffective-ad-"]
+bbheute.de,berliner-zeitung.de,blick.de,donaukurier.de,frankenpost.de,krzbb.de,mopo.de,pnp.de,schwarzwaelder-bote.de,stuttgarter-nachrichten.de,stuttgarter-zeitung.de##div[id^="traffective-ad-"]
 20min.ch##div[id^="wettbewerbe__inside-"]
 20min.ch##div[id^="wirtschaft__inside-"]
 20min.ch##div[id^="wissen__inside-"]
 wochenblick.at##div[id^="woche-"]
 20min.ch##div[id^="zentralschweiz__inside-"]
 20min.ch##div[id^="zuerich__inside-"]
+chip.de##div[onclick*="bergdamm.de"]
 blitzrechner.de##div[onclick^="ga('send', 'event', 'Ad',"]
 android-hilfe.de##div[style$=";min-height:250px;min-width:300px;"]
 android-hilfe.de##div[style$=";min-height:250px;min-width:310px;"]
@@ -4836,7 +4839,7 @@ t-online.de##.css-1lb3bt5
 t-online.de##.css-2k2lok
 n-tv.de##.ems-slot
 focus.de##.fol_mew-flying-carpet-wrapper
-focus.de##.ob-ad-carousel-layout
+chip.de,focus.de##.ob-ad-carousel-layout
 chip.de##.ob-p
 jetzt.de,prosieben.de,transfermarkt.de,tvspielfilm.de##.plistaList > .itemLinkPET
 plista.com##.plistaList > .plista_widget_belowArticle_item[data-type="pet"]
@@ -4899,6 +4902,8 @@ chip.de#?#.mt-md > div:-abp-contains(Gesponserte Empfehlung)
 chip.de#?#a.secondary:-abp-has(.Badge__Content:-abp-contains(/anzeige|gesponsert/))
 chip.de#?#a[onclick]:-abp-has(path[d^="M92.456,64.241L66.18"])
 chip.de#?#article > a:-abp-contains(Anzeige)
+chip.de#?#div[id][style*="min-height:"]:-abp-has(div:-abp-contains(/Anzeige|WERBUNG/))
+chip.de#?#div[style^="min-width:"]:-abp-has(path[d$="92.456,64.241 z"])
 chip.de#?#section > div[id]:-abp-contains(Gesponserte Empfehlung)
 computerbase.de#?#div.text-asset.text-width:-abp-has(p.text-width:-abp-contains(Anzeige))
 computerbild.de#?#article.gridArea__teaserM:-abp-has(div.teaserBlock__label:-abp-contains(Anzeige))
@@ -4962,6 +4967,7 @@ hornoxe.com#?#h2.storytitle:-abp-has(a[href^="https://bit.ly/"]) + p + div.clear
 hornoxe.com#?#h2.storytitle:-abp-has(a[href^="https://www.amazon.de/"])
 hornoxe.com#?#h2.storytitle:-abp-has(a[href^="https://www.amazon.de/"]) + p
 hornoxe.com#?#h2.storytitle:-abp-has(a[href^="https://www.amazon.de/"]) + p + div.clear + div.infobox
+ibooks.to#?#form:-abp-has(i.fa-download)
 imsueden.de#?#.swiper:-abp-has(.headline:-abp-contains(Partner))
 inside-digital.de#?#.td_module_ih_current_news:-abp-has(.spo)
 jameda.de#?#li:-abp-has([data-testid="advertisementSign-flag"])
@@ -5083,6 +5089,7 @@ zwischengas.com#?#.row.mt-0.mb-3.d-print-none:-abp-has(.fa-ad)
 @@||g.doubleclick.net/gampad/ads?*&iu_parts=6032%2Ckochbar.de%2Chomepage&$domain=kochbar.de
 @@||g.doubleclick.net/gampad/ads?*&iu_parts=6032%3A22339103238%2Cmanma_dt%2Chomepage&$domain=manager-magazin.de
 @@||g.doubleclick.net/gpt/pubads_impl_$script,domain=11freunde.de|auto-motor-und-sport.de|gala.de|gamepro.de|gamestar.de|gentside.de|kochbar.de|manager-magazin.de|moviepilot.de|n-tv.de|ohmymag.de|stern.de
+@@||g.doubleclick.net/pagead/managed/js/gpt/*/pubads_impl.js$script,domain=gamepro.de|gamestar.de
 @@||g.doubleclick.net/pagead/ppub_config?$domain=manager-magazin.de
 @@||g.doubleclick.net/pagead/ppub_config?ippd=$xmlhttprequest,domain=gamepro.de|gamestar.de|moviepilot.de
 @@||g.doubleclick.net/tag/js/gpt.js$script,xmlhttprequest,domain=11freunde.de|auto-motor-und-sport.de|gala.de|gamepro.de|gamestar.de|gentside.de|kochbar.de|manager-magazin.de|moviepilot.de|n-tv.de|ohmymag.de|stern.de
