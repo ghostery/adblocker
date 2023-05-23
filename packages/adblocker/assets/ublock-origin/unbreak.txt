@@ -26,9 +26,6 @@
 @@||akamaihd.net/player/*/akamai/amp/prebid/*$script,domain=static.foxnews.com
 @@||global.fncstatic.com^*/ads.js$script,domain=foxnews.com
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=insider.foxnews.com
-! https://github.com/uBlockOrigin/uAssets/issues/15383
-@@||analytics.nova.foxnews.com/analytics.js/v1/$script,domain=nation.foxnews.com
-@@||api.lab.amplitude.com/sdk/vardata$xhr,domain=nation.foxnews.com
 
 ! cnet.com needs this for video players
 ! https://github.com/chrisaljoudi/uBlock/issues/227
@@ -270,9 +267,6 @@ orange.fr###o_carrepub:style(height: 1px; margin: 0; min-height: auto; visibilit
 ! https://forums.lanik.us/viewtopic.php?f=64&t=38922
 ||camping.info/*/fingerprint2.min.js$script,1p,redirect=noopjs
 
-! https://github.com/uBlockOrigin/uAssets/issues/820
-@@||google-analytics.com/analytics.js$script,domain=flipagram.com
-
 ! https://github.com/uBlockOrigin/uAssets/issues/823
 ||static.clmbtech.com^$script,redirect=noopjs,domain=businessinsider.in
 @@||businessinsider.in/analytics_js/*$script,1p
@@ -335,7 +329,7 @@ reyada.com#@#.ads_area
 @@||js.center.io^$domain=randpac.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1316
-||googletagservices.com/tag/js/gpt.js$script,redirect=noopjs,domain=playground.ru|radio-canada.ca|tvguide.com
+||googletagservices.com/tag/js/gpt.js$script,redirect=noopjs,domain=radio-canada.ca|tvguide.com
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/7rwh1a/ublock_preventing_clicks_to_buttons_on_firefox/
 ||iworkfor.nsw.gov.au/Scripts/ga.js$script,1p,redirect=noopjs
@@ -986,9 +980,6 @@ tomsguide.com#@#.widget-ads
 
 ! https://forums.lanik.us/viewtopic.php?f=64&t=42539
 @@||dev.visualwebsiteoptimizer.com^$script,domain=cars.usnews.com
-
-! https://github.com/uBlockOrigin/uAssets/issues/4766
-@@||cdnjs.cloudflare.com/ajax/libs/*$script,domain=fckrasnodar.ru
 
 ! https://forums.lanik.us/viewtopic.php?p=145284#p145284
 ! [badfilter] /adlead.$domain=~adlead.com|~adlead.pro|~adlead.ru,badfilter
@@ -4563,6 +4554,7 @@ meaww.com##+js(json-prune, country region ip)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/16931
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=doubtnut.com,redirect=google-ima.js,important
+||api.doubtnut.com/v2/web-landing/web-ads-info$xhr,redirect=nooptext
 
 ! Event manager
 @@||ads-api.twitter.com^$xhr,domain=analytics.twitter.com
@@ -4912,5 +4904,28 @@ neilpatel.com##+js(no-xhr-if, ip-api)
 ! https://jbbs.shitaraba.net/bbs/read.cgi/internet/25463/1618326670/156
 @@||dti.ne.jp/cgi-bin/Count.cgi?$image,1p
 
-! https://forums.lanik.us/viewtopic.php?p=166011-halifax-online-banking#p166011
-! [badfilter] /^https?:\/\/www\.halifax-online\.co\.uk\/[A-Za-z0-9]{4,6}\/[A-Za-z0-9]{2}\/[A-Za-z0-9]{2}\//$script,xmlhttprequest,domain=halifax-online.co.uk,badfilter
+! https://github.com/AdguardTeam/AdguardFilters/issues/150912
+@@||googletagmanager.com/gtm.js$script,domain=tele2.ee
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/138457
+@@||tags.tiqcdn.com/utag/aaa/main/prod/utag.sync.js$script,domain=apps.calif.aaa.com
+||tags.tiqcdn.com/utag/aaa/main/prod/utag.js$script,domain=aaa.com
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/138092
+iphoneincanada.ca#@#a[href^="https://click.linksynergy.com/fs-bin/"]
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/137631
+javgg.net#@#.home_iframead
+javgg.net##.home_iframead > iframe:upward(1)
+
+! https://github.com/uBlockOrigin/uAssets/issues/18188
+! [badfilter] ||braze.eu^$badfilter
+
+! https://github.com/easylist/easylist/issues/16004
+@@||support.microsoft.com/supportformslib/oneds/dist/ms.analytics-web-
+
+! https://github.com/uBlockOrigin/uAssets/issues/18196
+! [badfilter] ||success.act-on.com^$badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/18212
+! [badfilter] /tagcommander.$badfilter
