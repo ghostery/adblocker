@@ -1759,8 +1759,11 @@ dlpsgame.org##div.widget-content > .title
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8802
 @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=skmedix.pl
-@@||pagead2.googlesyndication.com/pagead/managed/js/adsense/*/show_ads_impl_with_ama_fy2021.js$script,domain=skmedix.pl
+@@||pagead2.googlesyndication.com/pagead/managed/js/adsense/*/show_ads_impl$script,domain=skmedix.pl
+@@||googleads.g.doubleclick.net/pagead/ads?*skmedix.pl&$subdocument,domain=skmedix.pl
 @@||skmedix.pl^$ghide
+skmedix.pl##.adsbygoogle, iframe[id^="aswift"]:style(height: 0px !important;)
+skmedix.pl##+js(nano-stb, runCounter, *, 0.2)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/78710
 yxoshort.com##+js(aopr, app_vars.force_disable_adblock)
@@ -1931,6 +1934,7 @@ garaveli.de##+js(acs, addEventListener, google_ad_client)
 ||publisher.linkvertise.com^$3p,domain=~linkvertise.*
 ! https://www.leakite.com/xiaomi-redmi-note-12s-fastboot-and-recovery-rom/
 /cdn/linkvertise.js$script,1p
+@@||linkvertise.*^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8848
 thumpertalk.com##+js(ra, href|target|data-ipshover-target|data-ipshover|data-autolink|rel, a[href^="https://thumpertalk.com/link/click/"][target="_blank"])
@@ -3154,7 +3158,7 @@ codingnepalweb.com##.adsbygoogle
 codingnepalweb.com##+js(no-fetch-if, googlesyndication)
 !#if ext_devbuild
 ||googlesyndication.com^$domain=codingnepalweb.com,important
-codingnepalweb.com##+js(sed, script, return showAdblockPopup)
+codingnepalweb.com##+js(rpnt, script, return showAdblockPopup)
 !#endif
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/85708
@@ -3185,9 +3189,6 @@ flightsim.to##+js(nano-sib, timer)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/85820
 moviemakeronline.com##+js(nosiif, adsbygoogle)
 moviemakeronline.com##.bbbOwner
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/85826
-||imasdk.googleapis.com/js/sdkloader/ima3.js^$script,redirect-rule=noopjs,domain=gbnews.uk
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/nzlim7/streaming_blocked_on_socceronin/
 oncast.xyz##+js(aopw, _pop)
@@ -3418,6 +3419,7 @@ link.technics-goods.info,mysafe.stisda.ac.id##.text-center > h3
 blogspot.com###fixedban
 ngprame.blogspot.com###AdsRyanAH
 ngprame.blogspot.com###tombol
+###fixedban
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/86998
 archpaper.com##+js(acs, fetch, result)
