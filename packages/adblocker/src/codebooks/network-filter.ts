@@ -9,7 +9,6 @@
 export default [
   "\\/[a-d][-\\.\\/_A-Za-z][DHWXm][-\\.\\/_A-Za-z][59FVZ][-\\.\\/_A-Za-z][6swyz][-\\.\\/_A-Za-z][-\\/_0-9a-zA-Z][-\\.\\/_A-Za-z][-\\/_0-9a-zA-Z]{22,162}$/",
   "/^https?:\\/\\/.*\\/[a-z0-9A-Z_]{2,15}\\.(php|jx|jsx|1ph|jsf|jz|jsm|j$)/",
-  "/templates/base_master/js/jquery.shows.min",
   "/pagead/managed/js/gpt/*/pubads_impl",
   "\\?aHR0c[\\/0-9a-zA-Z]{33,}=?=?$/",
   "/pagead/js/adsbygoogle.js",
@@ -123,6 +122,7 @@ export default [
   "ync",
   "-p",
   ".m",
+  "*/",
   "*^",
   "/_",
   "/?",
