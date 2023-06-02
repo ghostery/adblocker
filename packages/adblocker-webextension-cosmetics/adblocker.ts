@@ -219,11 +219,13 @@ function handleResponseFromBackground(
 
   // Inject scripts
   if (scripts) {
-    setTimeout(() => {
+    try {
       for (const script of scripts) {
         injectScript(script, window.document);
       }
-    }, 0);
+    } catch (e) {
+      // continue regardless of error
+    }
   }
 
   // Extended CSS
