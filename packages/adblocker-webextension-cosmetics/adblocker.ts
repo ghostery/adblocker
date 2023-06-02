@@ -219,12 +219,12 @@ function handleResponseFromBackground(
 
   // Inject scripts
   if (scripts) {
-    try {
-      for (const script of scripts) {
+    for (const script of scripts) {
+      try {
         injectScript(script, window.document);
+      } catch (e) {
+        // continue regardless of error
       }
-    } catch (e) {
-      // continue regardless of error
     }
   }
 
