@@ -1,3 +1,17 @@
+# v1.26.6 (Fri Jun 02 2023)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump typescript from 4.9.5 to 5.0.4 [#3180](https://github.com/ghostery/adblocker/pull/3180) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 23.2.1 to 24.0.0 [#3171](https://github.com/ghostery/adblocker/pull/3171) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 5.7.112 to 6.0.1 [#3168](https://github.com/ghostery/adblocker/pull/3168) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.26.4 (Sun Apr 02 2023)
 
 ### Release Notes

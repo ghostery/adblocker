@@ -1,3 +1,21 @@
+# v1.26.6 (Fri Jun 02 2023)
+
+#### :nail_care: Polish
+
+- Improve timing of scriptlet injection [#3286](https://github.com/ghostery/adblocker/pull/3286) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump typescript from 4.9.5 to 5.0.4 [#3180](https://github.com/ghostery/adblocker/pull/3180) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.225 to 0.0.228 [#3173](https://github.com/ghostery/adblocker/pull/3173) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.26.4 (Sun Apr 02 2023)
 
 #### :nut_and_bolt: Dependencies

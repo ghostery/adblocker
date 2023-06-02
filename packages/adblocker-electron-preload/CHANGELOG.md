@@ -1,3 +1,17 @@
+# v1.26.6 (Fri Jun 02 2023)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump typescript from 4.9.5 to 5.0.4 [#3180](https://github.com/ghostery/adblocker/pull/3180) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 23.2.1 to 24.0.0 [#3171](https://github.com/ghostery/adblocker/pull/3171) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.225 to 0.0.228 [#3173](https://github.com/ghostery/adblocker/pull/3173) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.26.5 (Sun Apr 02 2023)
 
 #### :nail_care: Polish
