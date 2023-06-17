@@ -92,11 +92,18 @@
 teamskeet.com##+js(set, $.tstracker, noopFunc)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4138
-rediff.com##+js(ra, onclick, [onclick^="track"])
-rediff.com##+js(ra, onmousedown, [onmousedown^="return enc(this,'https://track.rediff.com"])
+rediff.com##a[onclick^="trackURL"]:remove-attr(onclick)
+rediff.com##a[onmousedown^="return enc(this,'https://track.rediff.com"]:remove-attr(onmousedown)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/b9qsix/new_reddit_tracks_a_ton_more_data_someone_said/
-||reddit.com/api/jail/$xhr,1p
+! https://github.com/uBlockOrigin/uAssets/commit/5563840a319a26025290e17f4e9401b201ac2b99#commitcomment-118042265
+||reddit.com/api/jail^$xhr,1p
+! https://twitter.com/wongmjane/status/1446556836497264641
+reddit.com##+js(no-fetch-if, url:/^https:\/\/www\.reddit\.com$/ method:post)
+reddit.com##+js(no-xhr-if, method:POST url:/^https:\/\/www\.reddit\.com$/)
+! https://www.reddit.com/r/uBlockOrigin/comments/tihpyw/oldredditcom_outbound_tracking_via_out_reddit_com/i1f290z/?context=3
+old.reddit.com##a.outbound[data-outbound-url]:remove-attr(data-outbound-url)
+!reddit.com##+js(set, Object.prototype.allowClickTracking, false)
 
 ! https://github.com/uBlockOrigin/uAssets/pull/5578
 ||colpirio.com^$3p
@@ -281,10 +288,6 @@ tacobell.com##+js(set, bmak.js_post, false)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/95660
 ||ahentai.top/counter.php
 
-! https://twitter.com/wongmjane/status/1446556836497264641
-reddit.com##+js(no-fetch-if, url:/^https:\/\/www\.reddit\.com$/ method:post)
-reddit.com##+js(no-xhr-if, method:POST url:/^https:\/\/www\.reddit\.com$/)
-
 ! https://github.com/easylist/easylist/pull/9370
 ||tr.jianshu.com^
 
@@ -357,10 +360,6 @@ endbasic.dev,jmmv.dev##+js(no-xhr-if, method:POST)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11895
 ||serasaexperian.com.br/dist/scripts/fingerprint2.js^$redirect=fingerprint2.js,script,important
-
-! https://www.reddit.com/r/uBlockOrigin/comments/tihpyw/oldredditcom_outbound_tracking_via_out_reddit_com/i1f290z/?context=3
-old.reddit.com##+js(ra, data-outbound-url, .outbound)
-!reddit.com##+js(set, Object.prototype.allowClickTracking, false)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/u13isu/how_to_block_fathom_tracking
 /?p=%2F*&h=https%3A%2F%2F*&r=&sid=*&qs=*&cid=$image,1p
@@ -516,10 +515,7 @@ zhihu.com##+js(no-xhr-if, log-sdk.ksapisrv.com/rest/wd/common/log/collect method
 ! redirector
 ||cj.dotomi.com^
 ||contentads.click^
-||dpbolvw.net^
-||frdjs-2.co^
 ||new-twinks.com^
-||octopuspop.com^
 ||pingleflavor.xyz^
 ||suptrkdisplay.com^
 ||terperbelomo.info^
@@ -541,15 +537,62 @@ zhihu.com##+js(no-xhr-if, log-sdk.ksapisrv.com/rest/wd/common/log/collect method
 ||ketekbisokaliau.com^
 ||sarang77skuy.com^
 ||smartaccess.biz^
+||adonsonlyd.xyz^
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/12vx18z/
 ||top-staging.mail.ru^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/17786
-||adthrive.com^$removeparam
+||adthrive.com^$removeparam,domain=~mediaite.com
+
+! narrative.com sites
+||narrativ.com^$domain=androidauthority.com
 
 ! onesignal-sites
-||onesignal.com^$domain=iphoneincanada.ca
+||onesignal.com^$domain=androidauthority.com|iphoneincanada.ca|senpa.io|shineads.*
+
+! geoip.cdn.arkadiumhosted.com
+||geoip.cdn.arkadiumhosted.com^$domain=bestforpuzzles.com|charlotteobserver.com|independent.co.uk|standard.co.uk
+
+! https://github.com/uBlockOrigin/uBlock-issues/issues/2531#issuecomment-1512373333
+mozilla.org##+js(href-sanitizer, a[href^="https://app.adjust.com/"][href*="?redirect="], ?redirect)
+
+! sites with beacons
+*$ping,domain=webnovel.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/17652
+*$xhr,3p,denyallow=github.com|stripe.com|fpjs.pro,domain=fingerprint.com|~dev.fingerprint.com
+||fingerprint.com^$strict3p,domain=fingerprint.com|~dev.fingerprint.com|~dashboard.fingerprint.com
+||dashboard.fingerprint.com^$strict3p,xhr,domain=dashboard.fingerprint.com
+fingerprint.com,~dev.fingerprint.com##+js(no-xhr-if, method:POST)
+
+! https://www.androidauthority.com/third-party-reddit-apps-statement-3332238/ redirect links
+androidauthority.com##+js(href-sanitizer, a[href^="https://androidauth.wpengine.com/wp-json/api/advanced_redirect?ref="], ?ref)
+||androidauthority.com/api/locate/
+
+! lightboxcdn.com
+||lightboxcdn.com^$domain=androidauthority.com|variety.com
+||lightboxcdn.com/*/digibox.gif?
+||lightboxcdn.com/*/jsonp/z?
+
+! firebase analytics
+/firebase-analytics.js$script,domain=zefoy.com
+zefoy.com##+js(set, firebase.analytics, noopFunc)
+
+! https://www.pcgamingwiki.com/wiki/Grand_Theft_Auto_V
+pcgamingwiki.com##+js(href-sanitizer, a[href^="https://www.dpbolvw.net/click-"][href*="?url="], ?url)
+pcgamingwiki.com##+js(href-sanitizer, a[href^="https://greenmangaming.sjv.io/c/"][href*="?u="], ?u)
+
+! PMC-sites tracking
+/pmc-plugins/pmc-social-share-bar/*/tracking.js
+
+! McClatchy-sites tracking
+/ng.gif?s*&e=$image,strict3p
+||logging.pw.adn.cloud^
+
+! https://github.com/easylist/easylist/pull/16317#issuecomment-1593693211
+||analytics-sdk.yle.fi^$script,1p,important
+yle.fi##+js(set, window.yleAnalytics, noopFunc)
 
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt
