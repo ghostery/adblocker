@@ -3801,7 +3801,7 @@ seekingalpha.com##[id^="ad-slot-"]
 ! https://github.com/uBlockOrigin/uAssets/issues/4711
 ! https://github.com/uBlockOrigin/uAssets/issues/5919
 twitter.com,twitter3e4tixl4xyajtrzo62zg5vztmjuricljdp2c5kshju4avyoid.onion##[data-testid="trend"]:has-text(/Promoted|Gesponsert|Promocionado|Patrocinat|Sponsorisé|Sponsorizzato|Promowane|Promovido|Реклама|Uitgelicht|Sponsorlu|Promotert|Promoveret|Sponsrad|Mainostettu|Sponzorováno|Promovat|Ajánlott|Προωθημένο|Dipromosikan|Được quảng bá|推廣|推广|推薦|推荐|プロモーション|프로모션|ประชาสัมพันธ์|प्रचारित|বিজ্ঞাপিত|تشہیر شدہ|مُروَّج|تبلیغی|מקודם/):upward(1)
-twitter.com,twitter3e4tixl4xyajtrzo62zg5vztmjuricljdp2c5kshju4avyoid.onion##nav + section > div[aria-label] > div > div[style^="transform"] h2 > div[style^="-webkit-line-clamp"] > span:has-text(/^(?:Promoted Tweet|プロモツイート|Promowany Tweet|Tweet promovat)$/):upward(3)
+twitter.com,twitter3e4tixl4xyajtrzo62zg5vztmjuricljdp2c5kshju4avyoid.onion##div[style^="transform"] h2 > div[style^="-webkit-line-clamp"] > span:has-text(/^(?:Promoted Tweet|プロモツイート|Promowany Tweet|Tweet promovat)$/):upward(3)
 ! https://github.com/AdguardTeam/AdguardFilters/commit/b9e4a8dc042592f64b01d385415d6a80ffbb237b#commitcomment-97906383
 twitter3e4tixl4xyajtrzo62zg5vztmjuricljdp2c5kshju4avyoid.onion,twitter.com##div[data-testid="cellInnerDiv"] > div.css-1dbjc4n > div[class="css-1dbjc4n"] > div[class="css-1dbjc4n"][data-testid="placementTracking"]
 
@@ -5794,11 +5794,14 @@ cut-fly.com##form#go-popup:remove()
 ! https://github.com/NanoAdblocker/NanoFilters/issues/136
 gioialive.it##+js(nostif, rbm_block_active, 1000)
 
-! https://github.com/uBlockOrigin/uAssets/issues/10098
 ! https://github.com/uBlockOrigin/uAssets/issues/11009
+! https://github.com/uBlockOrigin/uAssets/issues/18577
+investing.com##+js(nostif, offsetHeight)
 investing.com##+js(no-fetch-if, ads)
 investing.com##+js(set, google_ad_status, 1)
 investing.com##[class^="outbrain_outbrain-wrapper"]
+! https://www.reddit.com/r/uBlockOrigin/comments/14djjud/
+||investing.com/js/n/ad-blocker-popup$script,domain=investing.com
 ! https://github.com/uBlockOrigin/uAssets/issues/12831
 investing.com##[class*="adBlock"]
 investing.com##[class*="overlay_overlay"]
@@ -7337,7 +7340,6 @@ duplichecker.com,plagiarismchecker.co,plagiarismdetector.net,smallseotools.com##
 duplichecker.com,plagiarismdetector.net,smallseotools.com##[href*="grammarly.com"]
 duplichecker.com,plagiarismchecker.co,plagiarismdetector.net,searchenginereports.net,smallseotools.com##a[href].set-anchor
 duplichecker.com,plagiarismchecker.co,plagiarismdetector.net,searchenginereports.net,smallseotools.com##[onclick*="rammarly"]
-duplichecker.com,plagiarismchecker.co,plagiarismdetector.net,searchenginereports.net,smallseotools.com##ins.adsbygoogle:style(max-height: 1.1px !important; visibility: collapse !important;)
 duplichecker.com,plagiarismchecker.co,plagiarismdetector.net,searchenginereports.net,smallseotools.com##div:not([id]) > div[class] > ._ap_apex_ad:upward(2)
 duplichecker.com,plagiarismchecker.co,plagiarismdetector.net,searchenginereports.net,smallseotools.com##div[class]:not([id]):not(.container):not(.main-content) > div[id] > ins.adsbygoogle:upward(2)
 duplichecker.com,plagiarismchecker.co,plagiarismdetector.net,searchenginereports.net,smallseotools.com##div[style]:not([class]) > div[class][style] > span[class] > ._ap_apex_ad:upward(3)
@@ -7354,19 +7356,14 @@ smallseotools.com##body:style(overflow: auto !important;)
 plagiarismchecker.co###top-ad:style(max-height: 2.1px !important;)
 searchenginereports.net,plagiarismdetector.net##+js(no-xhr-if, /googlesyndication|adpushup|adrecover/)
 searchenginereports.net##.adsbygoogle:upward(1)
-smallseotools.com##[onclick*="open"]
 searchenginereports.net##.grammarly-overall
 plagiarismchecker.co##form + section#after-ad + div[class][style]
 plagiarismchecker.co##.small_heading + section#top-ad + div[class][style]
 plagiarismchecker.co##div[class][style] > a[rel*="nofollow"]
 searchenginereports.net##a[href="https://searchenginereports.net/grammarly-url"]
 searchenginereports.net##.clearfix + div[id][style*="width:"]
-searchenginereports.net##div[id^="mnm_s_"]
-||searchenginereports.net/grammarly$image,1p
 ||searchenginereports.net/newassets/images/semrush-banner$image,1p
 plagiarismdetector.net##[style]:has([onclick*="open"])
-||plagiarismdetector.net/pd-imgs/Grammarly_Square$image,1p
-||plagiarismdetector.net/pd-imgs/Top_Grammarly_banner$image,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4104
 jagran.com##.ads
@@ -7971,8 +7968,9 @@ hulu.com##+js(set, Object.prototype.isAdPeriod, falseFunc)
 hulu.com###banner-ad-container
 hulu.com##.ad-choices
 ! https://github.com/uBlockOrigin/uAssets/issues/17382
-hulu.com##+js(json-prune, breaks pause_ads video_metadata.end_credits_time)
-hulu.com##+js(xml-prune, xpath(//*[name()="MPD"]/@mediaPresentationDuration | //*[name()="Period"][starts-with(@id\, "Ad")] | //*[name()="Period"]/@start), , .mpd)
+! https://www.reddit.com/r/uBlockOrigin/comments/14b5lbw/
+hulu.com##+js(json-prune, breaks pause_ads video_metadata.end_credits_time, pause_ads)
+hulu.com##+js(xml-prune, xpath(//*[name()="MPD"]/@mediaPresentationDuration | //*[name()="Period"][starts-with(@id\, "Ad")] | //*[name()="Period"]/@start), Period[id^="Ad"], .mpd)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4356
 @@||adserver.iprom.net/adserver7$xhr,domain=rtl.hr
@@ -8705,7 +8703,6 @@ daizurin.com##+js(nostif, nextFunction, 250)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/4840
 @@||animalessalvajes.wiki^$ghide
-animeyt.*##+js(acs, Promise)
 
 ! https://github.com/NanoMeow/QuickReports/issues/657
 @@||pencurimovie.*^$ghide
@@ -11366,11 +11363,7 @@ biblestudytools.com##+js(aopr, googletag)
 ||ekdj30.com^
 
 ! https://github.com/NanoAdblocker/NanoFilters/issues/373
-egy.best,egybest.*##+js(acs, Math, XMLHttpRequest)
-egy.best,egybest.*,vidstream.*,~vidstream.pro##+js(nowoif, !api?call=, 10, obj)
-! Workaround for https://github.com/uBlockOrigin/uAssets/issues/8319
-egy.best,egybest.*##+js(nostif, /new|Bait|check|decoy|global|WinMsgHtml/)
-egy.best,egybest.*##+js(nosiif, /^/)
+vidstream.*##+js(nowoif, !api?call=, 10, obj)
 ||psaiceex.net^
 
 ! https://github.com/NanoMeow/QuickReports/issues/1538
@@ -12644,12 +12637,6 @@ buffstream.to,buffstreamz.com##.btn
 buffstreamz.com##a[href*="//my-sports.club"]
 
 ##[href^="http://referrer.website/"]
-
-! https://www.reddit.com/r/uBlockOrigin/comments/d9j3gp/antiadblocker_13cl/
-@@||ssl.p.jwpcdn.com/player/plugins/googima/$script,domain=13.cl
-@@||imasdk.googleapis.com/js/sdkloader/ima3$script,domain=13.cl
-@@||pubads.g.doubleclick.net/ssai/$xhr,domain=13.cl
-@@||entitlements.jwplayer.com^$xhr,domain=13.cl
 
 ! https://github.com/NanoMeow/QuickReports/issues/1929
 @@||thisismoney.co.uk^$ghide
@@ -15634,7 +15621,7 @@ layarkaca21indo.com##+js(aopr, adBlockDetected)
 forbes.com##.vestpocket
 forbes.com##.top-ad-container
 forbes.com##fbs-ad
-forbes.com##.ad-unit:not(.text-ad)
+forbes.com##.ad-unit:not(.text-ad):not(:empty):not(.textads)
 forbes.com##.footer-ad-labeling
 forbes.com##.ad-rail
 

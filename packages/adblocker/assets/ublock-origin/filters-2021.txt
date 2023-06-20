@@ -1434,8 +1434,7 @@ goalup.live##+js(ra, onclick)
 
 ! https://github.com/easylist/easylist/issues/7395#issuecomment-796787384
 freeuseporn.com##+js(aopr, encodeURIComponent)
-*$script,domain=freeuseporn.com
-@@||freeuseporn.com/media/$script,1p
+*$script,3p,domain=freeuseporn.com
 freeuseporn.com##canvas
 
 ||adsyou.pro^$3p
@@ -1745,6 +1744,7 @@ dlpsgame.org##div.widget-content > .title
 @@||pagead2.googlesyndication.com/pagead/managed/js/adsense/*/show_ads_impl$script,domain=skmedix.pl
 @@||googleads.g.doubleclick.net/pagead/ads?*skmedix.pl&$frame,domain=skmedix.pl
 @@||skmedix.pl^$ghide
+*$frame,redirect-rule=noopframe,domain=skmedix.pl
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/78710
 yxoshort.com##+js(aopr, app_vars.force_disable_adblock)
@@ -4746,7 +4746,8 @@ bowfile.com##+js(nowoif)
 bowfile.com##+js(no-fetch-if, cloudfront.net/?)
 bowfile.com##+js(no-fetch-if, method:HEAD)
 bowfile.com##+js(ra, href|target|data-onclick, a[id="dl"][data-onclick^="window.open"], stay)
-bowfile.com##^script:has-text(globalThis)
+bowfile.com##+js(acs, JSON, break;case)
+bowfile.com##^script:has-text(FingerprintJS)
 *$xhr,redirect-rule=nooptext,domain=bowfile.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10147
@@ -5564,6 +5565,7 @@ nowtolove.com.au##.page__content-header:style(height: 50px !important)
 .com/script/document.js|$3p
 .com/script/asset.js|$3p
 .com/script/file.js|$3p
+.com/script/mui.js|$3p
 /deity.php?q=$xhr,3p
 ||flvpcdnb.com^
 ||bgcold.com^
@@ -5577,6 +5579,7 @@ nowtolove.com.au##.page__content-header:style(height: 50px !important)
 .php?s=su&r=*&sadbl=1&$xhr,3p
 ||eukova.com^
 ||diplic.com^
+||domith.com^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10506
 sexlist.tv##+js(disable-newtab-links)
@@ -6077,10 +6080,8 @@ boainformacao.com.br##+js(no-xhr-if, adsbygoogle)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/16721
 ! https://github.com/uBlockOrigin/uAssets/issues/18369
-!pinterest.*##:xpath('//*[(contains(text(),"Promoted") and contains(text(),"by")) or contains(text(),"広告") or contains(text(),"Sponsorizzato")]'):upward([data-grid-item])
-!pinterest.com##:xpath('//*[(contains(text(),"P") and contains(text(),"b") and contains(text(),"y")) ]'):upward([data-grid-item])
-pinterest.com#@#a[href*="&epik="]
-pinterest.com##a[href*="&epik="]:upward([data-grid-item])
+pinterest.at,pinterest.ca,pinterest.ch,pinterest.co.uk,pinterest.com,pinterest.com.au,pinterest.com.mx,pinterest.de,pinterest.es,pinterest.fr,pinterest.it,pinterest.pt#@#a[href*="&epik="]
+pinterest.*##:xpath('//*[(contains(text(),"P") and contains(text(),"b") and contains(text(),"y")) ]'):upward([data-grid-item])
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10848
 distrowatch.org##[href*="3cx"]:upward(tbody)
@@ -6336,6 +6337,9 @@ chortle.co.uk,coloring.ws,dltk-holidays.com,dltk-kids.com,kidzone.ws,pcsteps.com
 mymusicreviews.com,thechat.cafe##+js(aopr, chp_adblock_browser)
 ! https://www.nj.com/ .ad-unit
 nj.com##.ad-unit[id]
+kiplinger.com##.ad-unit, .fake
+! https://twitter.com/SeriousHoax/status/1670684212859400192
+livescience.com,space.com##div.ad-unit
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10964
 globfone.com##+js(no-xhr-if, ads)
