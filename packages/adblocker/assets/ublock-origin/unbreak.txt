@@ -4557,7 +4557,7 @@ elle.com.tr#@#[id^="div-gpt-ad"]:style(width:1px!important;height:1px!important;
 ! https://github.com/uBlockOrigin/uAssets/issues/17646
 @@||img.connatix.com/*.jpg$3p,image,domain=accuweather.com
 ! https://www.thestate.com/sports/college/university-of-south-carolina/usc-baseball/article276291411.html no need connatix
-bellinghamherald.com,bnd.com,miamiherald.com##^html:not(:has(video)) > head > script:has-text(connatix.com)
+bellinghamherald.com,bnd.com,bradenton.com,miamiherald.com##^html:not(:has(video)) > head > script:has-text(connatix.com)
 thestate.com##^html > head > script:has-text(connatix.id):upward(1) > script:has-text(window.cnx)
 variety.com##^html > head > link[rel="canonical"]:not([href*="/video/"]):upward(1) > script[src*="connatix"]
 
@@ -4775,6 +4775,7 @@ pcwelt.de#@#a[href^="https://pvn.saturn.de/"]
 @@||wgplayer.com/*/wgAds.$script,domain=brightygames.com|eminiclip.ro|sisigames.com|yoho.games
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=brightygames.com|eminiclip.ro|sisigames.com|yoho.games
 brightygames.com,yoho.games##^html > head > meta[property="og:url"]:not([content*="/games/"], [content*="/play/"]):upward(1) > script:has-text(wgplayer)
+eminiclip.ro##^html:not(:has(#thegame)) > head > script:has-text(wgplayer)
 sisigames.com##^#index-games:upward(html) > head > script:has-text(wgplayer)
 ! videos
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect-rule=google-ima.js,domain=canvids.com
@@ -4976,3 +4977,6 @@ goku.sx##.st-btn > img:style(margin: auto !important; display: block !important;
 
 ! https://github.com/uBlockOrigin/uAssets/issues/18512
 @@||cdn.pendo.io/agent/static/*$script,domain=recruiting.adp.com
+
+! https://github.com/AdguardTeam/AdguardFilters/issues/153977
+@@||bat.bing.com/bat.js$script,domain=northwell.edu

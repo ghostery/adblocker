@@ -549,7 +549,7 @@ zhihu.com##+js(no-xhr-if, log-sdk.ksapisrv.com/rest/wd/common/log/collect method
 ||narrativ.com^$domain=androidauthority.com
 
 ! onesignal-sites
-||onesignal.com^$domain=androidauthority.com|iphoneincanada.ca|senpa.io|shineads.*
+||onesignal.com^$domain=androidauthority.com|iphoneincanada.ca|rockpapershotgun.com|senpa.io|shineads.*
 
 ! geoip.cdn.arkadiumhosted.com
 ||geoip.cdn.arkadiumhosted.com^$domain=bestforpuzzles.com|charlotteobserver.com|independent.co.uk|standard.co.uk
@@ -591,8 +591,17 @@ pcgamingwiki.com##+js(href-sanitizer, a[href^="https://greenmangaming.sjv.io/c/"
 ||logging.pw.adn.cloud^
 
 ! https://github.com/easylist/easylist/pull/16317#issuecomment-1593693211
-||analytics-sdk.yle.fi^$script,1p,important
-yle.fi##+js(set, window.yleAnalytics, noopFunc)
+!||analytics-sdk.yle.fi^$script,1p,important
+!yle.fi##+js(set, yleAnalytics, noopFunc)
+||dax.yle.fi^
+
+! https://github.com/uBlockOrigin/uAssets/issues/18562
+bikesales.com.au##^html > head > :is([name="canonical"], [rel="canonical"]):not([content*="/details/"]):upward(1) > script[src*="optimizely"]
+
+! https://github.com/uBlockOrigin/uAssets/issues/18588
+! https://github.com/uBlockOrigin/uAssets/commit/bae8d13992b1c754f83dc268060a8079973d3253#commitcomment-118856194
+nypost.com,pagesix.com##+js(json-prune, dataLayer.trackingId user.trackingId)
+nypost.com,pagesix.com##+js(cookie-remover, blaize_tracking_id)
 
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt
