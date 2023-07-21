@@ -18,7 +18,6 @@ export default [
   "fingerprint2.js",
   "-transparent.",
   "google-ima.js",
-  "noop-0.1s.mp3",
   "prebid-ads.js",
   "nobab2.js:10",
   "noopmp3-0.1s",
