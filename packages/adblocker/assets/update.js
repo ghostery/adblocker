@@ -4,7 +4,6 @@ const adb = require('@cliqz/adblocker');
 
 (async () => {
   const { got } = await import("got");
-  console.log(got);
 
   // Update resources.txt
   fs.writeFileSync(
