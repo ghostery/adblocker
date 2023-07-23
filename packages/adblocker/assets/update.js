@@ -1,9 +1,10 @@
 const fs = require('fs');
 const path = require('path');
-const got = require('got');
 const adb = require('@cliqz/adblocker');
 
 (async () => {
+  const { got } = await import("got");
+
   // Update resources.txt
   fs.writeFileSync(
     path.join(__dirname, 'ublock-origin', 'resources.txt'),
