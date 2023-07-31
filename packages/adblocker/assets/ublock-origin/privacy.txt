@@ -542,14 +542,11 @@ zhihu.com##+js(no-xhr-if, log-sdk.ksapisrv.com/rest/wd/common/log/collect method
 ||smartaccess.biz^
 ||adonsonlyd.xyz^
 
-! https://www.reddit.com/r/uBlockOrigin/comments/12vx18z/
-||top-staging.mail.ru^
-
 ! https://github.com/uBlockOrigin/uAssets/issues/17786
 ||adthrive.com^$removeparam,domain=~mediaite.com
 
 ! branch.io sites
-||cdn.branch.io/branch-latest.min.js$important,domain=pac-12.com
+||cdn.branch.io/branch-latest.min.js$important,domain=nbc.com|pac-12.com
 
 ! onesignal-sites
 ||onesignal.com^$domain=freecoursesonline.me|ftuapps.dev|gamersdiscussionhub.com|onehack.us|xiaomitools.com
@@ -559,7 +556,13 @@ zhihu.com##+js(no-xhr-if, log-sdk.ksapisrv.com/rest/wd/common/log/collect method
 
 ! optimizely-sites
 ! https://github.com/uBlockOrigin/uAssets/issues/18787
-||optimizely.techtarget.com^
+! https://www.reddit.com/r/uBlockOrigin/comments/157utus/articles_on_mindbodygreencom_wont_load/
+||optimizely.com^$domain=mindbodygreen.com
+||mindbodygreen.com/js/optimizely-$script,1p
+mindbodygreen.com##+js(set-local-storage-item, segmentDeviceId, $remove$)
+
+! matomo-sites
+||pl.kukaj.to/kukac.js
 
 ! geoip.cdn.arkadiumhosted.com
 ||geoip.cdn.arkadiumhosted.com^$domain=bestforpuzzles.com|charlotteobserver.com|independent.co.uk|miamiherald.com|standard.co.uk|word.tips
@@ -588,6 +591,8 @@ androidauthority.com##+js(href-sanitizer, a[href^="https://androidauth.wpengine.
 ! firebase analytics
 /firebase-analytics.js$script,domain=zefoy.com
 zefoy.com##+js(set, firebase.analytics, noopFunc)
+! https://github.com/AdguardTeam/AdguardFilters/issues/156959
+||firebase.googleapis.com^$domain=hotmediahub.com
 
 ! https://www.pcgamingwiki.com/wiki/Grand_Theft_Auto_V
 pcgamingwiki.com##+js(href-sanitizer, a[href^="https://www.dpbolvw.net/click-"][href*="?url="], ?url)
@@ -603,7 +608,6 @@ pcgamingwiki.com##+js(href-sanitizer, a[href^="https://greenmangaming.sjv.io/c/"
 ! https://github.com/easylist/easylist/pull/16317#issuecomment-1593693211
 !||analytics-sdk.yle.fi^$script,1p,important
 !yle.fi##+js(set, yleAnalytics, noopFunc)
-||dax.yle.fi^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/18562
 bikesales.com.au##^html > head > :is([name="canonical"], [rel="canonical"]):not([content*="/details/"]):upward(1) > script[src*="optimizely"]
@@ -648,6 +652,7 @@ lite.duckduckgo.com##+js(href-sanitizer, a[href^="//duckduckgo.com/l/?uddg="], ?
 ! https://github.com/uBlockOrigin/uBlock-issues/discussions/2714#discussioncomment-6396384
 !#if env_chromium
 *$permissions=browsing-topics=()
+*$permissions=idle-detection=()
 !#endif
 
 ! https://github.com/uBlockOrigin/uAssets/issues/19100
@@ -656,6 +661,22 @@ lite.duckduckgo.com##+js(href-sanitizer, a[href^="//duckduckgo.com/l/?uddg="], ?
 ! https://www.reddit.com/r/uBlockOrigin/comments/1576b91/this_malicious_script_should_be_blocked/
 ||protesidenext.com^
 ||simonzody.com^
+
+! https://www.nickjr.com/video/n0d0md/gabby-s-dollhouse-gabby-s-dollhouse-official-trailer
+||tags.tiqcdn.com^$domain=nickjr.com
+||events.paramount.tech^$redirect=nooptext,domain=nickjr.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/17149#issuecomment-1651198474
+watchporn.to##+js(cookie-remover, kt_ips)
+
+! https://github.com/uBlockOrigin/uAssets/issues/19194
+||mps.nbcuni.com/images/MPS-STATISTIC-REPORTING.png
+
+! https://www.bing.com/ - Tracking cookie
+bing.com##+js(cookie-remover, MicrosoftApplicationsTelemetryDeviceId)
+
+! https://github.com/uBlockOrigin/uAssets/issues/19221
+||ab.blogs.es/abtest.png^$image,3p,domain=xataka.com|trendencias.com,redirect=1x1.gif,important
 
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt
