@@ -2985,6 +2985,7 @@ civilenggforall.com##+js(aopr, blockAdBlock)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/152396
 *$script,3p,denyallow=chatango.com|cloudflare.net|cloudfront.net|disqus.com|disquscdn.com|fastlylb.net,domain=rawkuma.com
 rawkuma.com##+js(aeld, readystatechange, document.removeEventListener)
+.com/btag.min.js|$3p
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/85343
 ||sentry-cdn.com^$script,redirect-rule=noopjs,domain=freebitz.xyz
@@ -3227,12 +3228,13 @@ novelmultiverse.com##+js(nostif, disableDeveloperTools)
 ! https://github.com/uBlockOrigin/uAssets/issues/14292
 ! https://github.com/uBlockOrigin/uAssets/issues/14392
 ! https://github.com/uBlockOrigin/uAssets/issues/18115
+! https://github.com/uBlockOrigin/uAssets/issues/19268
 maxstream.video##+js(nano-stb, .fadeIn(), 3000)
 maxstream.video##+js(nowoif)
 maxstream.video##+js(ra, style, div[style="display: none;"])
 @@||maxstream.video^$script,1p
 @@||linkonclick.com/*/display.php$script,frame,domain=maxstream.video
-@@||ads.host-cdn.net/stats.js$script,domain=maxstream.video
+@@||ads.host-cdn.net/*.js|$script,domain=maxstream.video
 host-cdn.net^$image,redirect-rule=32x32.png,domain=maxstream.video
 maxstream.video###adsads:style(height: 9px !important;)
 maxstream.video##h1:has-text(/adblock|supporter/)
@@ -3562,9 +3564,6 @@ msn.cn##.eastday-post-article-container
 club-opel.com##.side_ad_left_160
 club-opel.com##.side_ad_right_160
 club-opel.com##ins.adsbygoogle
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/89241
-xrares.com##+js(acs, gigaCS)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/89242
 ||nothingtoxic.com/aff/chaturbate/
@@ -5369,7 +5368,7 @@ nowtolove.com.au##.page__content-header:style(height: 50px !important)
 @@||anime-king.com^$ghide
 ! cdnondemand.org variants
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/790
-/^https?:\/\/[a-z]{5,6}\.com\/script\/[-0-9a-z]{1,11}(\.min)?\.js$/$script,3p,match-case,domain=~edu|~gov
+/^https?:\/\/[a-z]{5,7}\.com\/script\/[-_0-9a-z]+(\.min)?\.js$/$script,3p,match-case,domain=~edu|~gov
 /script/atg.js$3p
 /script/atga.js$3p
 /script/suv4r.js$3p
@@ -5392,9 +5391,7 @@ nowtolove.com.au##.page__content-header:style(height: 50px !important)
 .com/script/cdn.js|$script,3p
 .com/script/a.js|$3p
 .com/script/frustration.js|$3p
-/deity.php?*&ts=$xhr,3p
-.php?s=su&r=*&sadbl=1&$xhr,3p
-.php?s=sv&r=*&sadbl=1&$xhr,3p
+.php?*&sadbl=1&$xhr,3p
 ##a[dontfo=""][style$="position: absolute; z-index: 2147483647;"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10506
