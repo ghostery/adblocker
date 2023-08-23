@@ -113,6 +113,8 @@ reddit.com,~old.reddit.com##+js(json-prune, data.children.[].data.outbound_link)
 
 ! https://github.com/uBlockOrigin/uAssets/pull/5997
 docs.google.com##+js(no-xhr-if, method:POST url:/logImpressions)
+! https://github.com/uBlockOrigin/uAssets/issues/7960
+www.google.*##+js(set, rwt, noopFunc)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6538
 liberation.fr,officedepot.fr,oui.sncf##+js(acs, document.createElement, '.js')
@@ -547,7 +549,7 @@ zhihu.com##+js(no-xhr-if, log-sdk.ksapisrv.com/rest/wd/common/log/collect method
 ||cdn.branch.io/branch-latest.min.js$important,domain=nbc.com|pac-12.com
 
 ! onesignal-sites
-||onesignal.com^$domain=freecoursesonline.me|ftuapps.dev|gamersdiscussionhub.com|onehack.us|xiaomitools.com
+||onesignal.com^$domain=columbian.com|freecoursesonline.me|ftuapps.dev|gamersdiscussionhub.com|onehack.us|xiaomitools.com
 
 ! narrative.com sites
 ||narrativ.com^$domain=androidauthority.com
@@ -565,9 +567,6 @@ mindbodygreen.com##+js(set-local-storage-item, segmentDeviceId, $remove$)
 ! geoip.cdn.arkadiumhosted.com
 ||geoip.cdn.arkadiumhosted.com^$domain=bestforpuzzles.com|charlotteobserver.com|independent.co.uk|miamiherald.com|standard.co.uk|word.tips
 
-! https://github.com/uBlockOrigin/uBlock-issues/issues/2531#issuecomment-1512373333
-mozilla.org##+js(href-sanitizer, a[href^="https://app.adjust.com/"][href*="?redirect="], ?redirect)
-
 ! sites with beacons
 *$ping,domain=webnovel.com
 
@@ -576,10 +575,6 @@ mozilla.org##+js(href-sanitizer, a[href^="https://app.adjust.com/"][href*="?redi
 ||fingerprint.com^$strict3p,domain=fingerprint.com|~dev.fingerprint.com|~dashboard.fingerprint.com
 ||dashboard.fingerprint.com^$strict3p,xhr,domain=dashboard.fingerprint.com
 fingerprint.com,~dev.fingerprint.com##+js(no-xhr-if, method:POST)
-
-! https://www.androidauthority.com/third-party-reddit-apps-statement-3332238/ redirect links
-androidauthority.com##+js(href-sanitizer, a[href^="https://androidauth.wpengine.com/wp-json/api/advanced_redirect?ref="], ?ref)
-||androidauthority.com/api/locate/
 
 ! lightboxcdn.com
 ||lightboxcdn.com^$domain=androidauthority.com|variety.com
@@ -591,10 +586,6 @@ androidauthority.com##+js(href-sanitizer, a[href^="https://androidauth.wpengine.
 zefoy.com##+js(set, firebase.analytics, noopFunc)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/156959
 ||firebase.googleapis.com^$domain=hotmediahub.com
-
-! https://www.pcgamingwiki.com/wiki/Grand_Theft_Auto_V
-pcgamingwiki.com##+js(href-sanitizer, a[href^="https://www.dpbolvw.net/click-"][href*="?url="], ?url)
-pcgamingwiki.com##+js(href-sanitizer, a[href^="https://greenmangaming.sjv.io/c/"][href*="?u="], ?u)
 
 ! PMC-sites tracking
 /pmc-plugins/pmc-social-share-bar/*/tracking.js
@@ -613,7 +604,7 @@ bikesales.com.au##^html > head > :is([name="canonical"], [rel="canonical"]):not(
 ! https://github.com/uBlockOrigin/uAssets/issues/18588
 ! https://github.com/uBlockOrigin/uAssets/commit/bae8d13992b1c754f83dc268060a8079973d3253#commitcomment-118856194
 nypost.com,pagesix.com##+js(json-prune, dataLayer.trackingId user.trackingId)
-nypost.com,pagesix.com##+js(cookie-remover, blaize_tracking_id)
+columbian.com,nypost.com,pagesix.com##+js(cookie-remover, blaize_tracking_id)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7646
 ! https://github.com/AdguardTeam/AdguardFilters/issues/154632
@@ -637,9 +628,6 @@ factable.com##+js(cookie-remover, hive_geoloc)
 ||2cnt.net/j0=$image,domain=s4c.cymru
 ||player-api.s4c-cdn.co.uk/analytics/$domain=s4c.cymru
 
-! https://www.reddit.com/r/uBlockOrigin/comments/14t3y1d/
-lite.duckduckgo.com##+js(href-sanitizer, a[href^="//duckduckgo.com/l/?uddg="], ?uddg)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/18880
 ||aas.medialaben.no/a/
 
@@ -651,6 +639,8 @@ lite.duckduckgo.com##+js(href-sanitizer, a[href^="//duckduckgo.com/l/?uddg="], ?
 !#if env_chromium
 *$permissions=browsing-topics=(),from=~localhost
 *$permissions=idle-detection=(),from=~localhost
+*$permissions=join-ad-interest-group=(),from=~localhost
+*$permissions=run-ad-auction=(),from=~localhost
 !#endif
 
 ! https://github.com/uBlockOrigin/uAssets/issues/19100
@@ -676,19 +666,133 @@ bing.com##+js(cookie-remover, MicrosoftApplicationsTelemetryDeviceId)
 ! https://github.com/uBlockOrigin/uAssets/issues/19221
 ||ab.blogs.es/abtest.png^$image,3p,domain=xataka.com|trendencias.com,redirect=1x1.gif,important
 
-! https://nowinstock.net/computers/videocards/nvidia/rtx4090/ - Click tracking
-nowinstock.net##+js(href-sanitizer, a[href^="https://click.linksynergy.com/deeplink?id="][href*="&murl="], ?murl)
-nowinstock.net##+js(href-sanitizer, a[href^="http://go.redirectingat.com"][href*="&url="], ?url)
-nowinstock.net##+js(href-sanitizer, a[href*="?"][href*="&u=http"], ?u)
-
-! [NSFW] https://fap18.net/video/88120176/danny-d-2-milfs-and-that-big-cock?c=milf - Click tracking
-fap18.net##+js(href-sanitizer, a[href^="/vp/player/to/?u="], ?u)
-
-! https://insidehook.com/deals - Click tracking
+! Click Trackers
+! https://reddit.com/r/uBlockOrigin/comments/14t3y1d/
+lite.duckduckgo.com##+js(href-sanitizer, a[href^="//duckduckgo.com/l/?uddg="], ?uddg)
+! https://androidauthority.com/third-party-reddit-apps-statement-3332238/
+androidauthority.com##+js(href-sanitizer, a[href^="https://androidauth.wpengine.com/wp-json/api/advanced_redirect?ref="], ?ref)
+||androidauthority.com/api/locate/
+! https://github.com/uBlockOrigin/uBlock-issues/issues/2531#issuecomment-1512373333
+mozilla.org##+js(href-sanitizer, a[href^="https://app.adjust.com/"][href*="?redirect="], ?redirect)
+! https://pcgamingwiki.com/wiki/Grand_Theft_Auto_V
+pcgamingwiki.com##+js(href-sanitizer, a[href^="https://www.dpbolvw.net/click-"][href*="?url="], ?url)
+pcgamingwiki.com##+js(href-sanitizer, a[href^="https://greenmangaming.sjv.io/c/"][href*="?u="], ?u)
+! https://starstyle.com
+starstyle.com##+js(href-sanitizer, a[href^="https://go.skimresources.com/"][href*="&url=http"], ?url)
+! https://insidehook.com/deals
 insidehook.com##+js(href-sanitizer, a[href^="https://click.linksynergy.com/deeplink?id="][href*="&murl="], ?murl)
 insidehook.com##+js(href-sanitizer, a[href*="?"][href*="&url=http], ?url)
 insidehook.com##+js(href-sanitizer, a[href*="?"][href*="&u=http"], ?u)
+! [NSFW] https://fap18.net/video/88120176/danny-d-2-milfs-and-that-big-cock?c=milf & https://fap18.net/xid/45560506/
+fap18.net##+js(href-sanitizer, a[href^="/vp/player/to/?u=http"]\, a[href^="/vp/download/goto/?u=http"], ?u)
+! https://nowinstock.net/computers/videocards/nvidia/rtx4090/
+nowinstock.net##+js(href-sanitizer, a[href^="https://click.linksynergy.com/deeplink?id="][href*="&murl="], ?murl)
+nowinstock.net##+js(href-sanitizer, a[href^="http://go.redirectingat.com"][href*="&url="], ?url)
+nowinstock.net##+js(href-sanitizer, a[href*="?"][href*="&u=http"], ?u)
+! https://paypal.com/uk/home
+paypal.com##+js(href-sanitizer, a[href^="https://app.adjust.com/"][href*="?fallback=http"], ?fallback)
+! https://elotrolado.net/hilo_el-podcast-de-eol-episodio-43-e3-cronica-de-una-muerte-anunciada_2360079
+elotrolado.net##+js(href-sanitizer, a[href^="https://go.redirectingat.com?url=http"], ?url)
+! [NSFW] https://tube188.com/catalog/cheating/
+tube188.com##+js(href-sanitizer, a[href^="/check.php?"][href*="&url=http"], ?url)
 
+! https://chataigpt.org
+/detroitchicago/dpv.gif?$image
+/detroitchicago/imp.gif$ping
+
+! Query parameter stripping
+! Google ads/analytics
+$removeparam=gbraid
+$removeparam=wbraid
+$removeparam=gclsrc
+$removeparam=gclid
+! https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters
+$removeparam=dclid
+! Facebook analytics
+$removeparam=fbclid
+$removeparam=fb_action_ids
+$removeparam=fb_action_types
+$removeparam=fb_comment_id
+$removeparam=fb_ref
+$removeparam=fb_source
+! Yandex Metrika
+$removeparam=ysclid
+$removeparam=yclid
+! https://help.ads.microsoft.com/apex/index/3/en/60000
+$removeparam=msclkid
+! Wicked Reports click tracking
+$removeparam=wickedid
+! https://tsunen.team-lab.com/?twclid=2-3bhrj1ny7p11v5r9pap3anqge
+$removeparam=twclid
+! Hubspot tracking https://knowledge.hubspot.com/ads/ad-tracking-in-hubspot
+$removeparam=__hsfp
+$removeparam=__hssc
+$removeparam=__hstc
+$removeparam=_hsenc
+$removeparam=hsa_acc
+$removeparam=hsa_ad
+$removeparam=hsa_cam
+$removeparam=hsa_grp
+$removeparam=hsa_kw
+$removeparam=hsa_la
+$removeparam=hsa_mt
+$removeparam=hsa_net
+$removeparam=hsa_ol
+$removeparam=hsa_src
+$removeparam=hsa_tgt
+$removeparam=hsa_ver
+$removeparam=hsCtaTracking
+! MailChimp click tracking
+$removeparam=mc_eid
+! Adobe SiteCatalyst Campaign Tracking ID parameter
+$removeparam=s_cid
+! vero
+$removeparam=vero_conv
+$removeparam=vero_id
+! https://github.com/brave/brave-browser/issues/13644
+$removeparam=oly_anon_id
+$removeparam=oly_enc_id
+! https://github.com/brave/brave-browser/issues/11579
+$removeparam=_openstat
+! https://github.com/brave/brave-browser/issues/17451
+$removeparam=rb_clickid
+! https://github.com/brave/brave-browser/issues/17507
+$removeparam=ml_subscriber
+$removeparam=ml_subscriber_hash
+! https://github.com/brave/brave-browser/issues/22082
+$removeparam=oft_id
+$removeparam=oft_k
+$removeparam=oft_lk
+$removeparam=oft_d
+$removeparam=oft_c
+$removeparam=oft_ck
+$removeparam=oft_ids
+$removeparam=oft_sk
+! https://github.com/AdguardTeam/AdguardFilters/issues/89869
+! email subscriptions tracking
+$removeparam=bsft_clkid
+$removeparam=bsft_eid
+$removeparam=bsft_mid
+$removeparam=bsft_uid
+$removeparam=bsft_aaid
+$removeparam=bsft_ek
+! https://github.com/brave/brave-browser/issues/25691
+$removeparam=guce_referrer
+$removeparam=guce_referrer_sig
+! Matomo/Piwik
+$removeparam=mtm_campaign
+$removeparam=mtm_cid
+$removeparam=mtm_content
+$removeparam=mtm_group
+$removeparam=mtm_keyword
+$removeparam=mtm_medium
+$removeparam=mtm_placement
+$removeparam=mtm_source
+$removeparam=pk_campaign
+$removeparam=pk_medium
+$removeparam=pk_source
+! Exceptions
+@@||web.archive.org/*/http$removeparam
 
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt

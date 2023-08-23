@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202308121343
+! Version: 202308191118
 ! Title: EasyList Germany
-! Last modified: 12 Aug 2023 13:43 UTC
+! Last modified: 19 Aug 2023 11:18 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -125,7 +125,6 @@
 /werbetrenner_
 /werbezonen/*
 /werbung.$third-party
-/werbung.$~image,~stylesheet,domain=~berlin-airport.de|~qs-optiker.de|~werbung.oebb.at
 /werbung.gif
 /werbung/*$third-party
 /Werbung/*_banner_
@@ -596,6 +595,7 @@ di.fm,kellertheater.at#@#.firstload
 hochzeitswahn.de#@#.internal-ad
 mietmobil-fuchs.ch#@#.jquery-script-ads
 11freunde.de#@#.js_deferred-ad
+spox.com#@#.ob-feed-layout
 wetter.de#@#.outbrain-ad-slot
 phytodoc.de#@#.plain-ad
 quoka.de#@#.related-ads
@@ -1273,6 +1273,7 @@ wetter.com#@#div[id^="div-gpt-"]
 ||bigpoint.com^*?aid=*&aig=*&aip=$popup,third-party
 ||boerse.today^$popup,third-party
 ||china-gadgets.de^*&utm_medium=popdown&$popup,third-party
+||ddownload.com^$popup,domain=ddl-warez.cc
 ||dealdoktor.de^*&utm_medium=popdown&$popup,third-party
 ||deutscherflirtbook.com/landing*&aff_$popup,third-party
 ||escaria.com/public/static/teaser/?$popup
@@ -1282,6 +1283,7 @@ wetter.com#@#div[id^="div-gpt-"]
 ||ggbetcasino.de^$popup
 ||ilove.de^*/landing_pages/$popup
 ||ishelminger.de/ad/$popup
+||katfile.com^$popup,domain=ddl-warez.cc
 ||landing.sexkiste.com^$popup
 ||lp.amateurcommunity.com/index.php?cp=$popup,third-party
 ||lustagenten.de/?w=$popup,third-party
@@ -2127,7 +2129,7 @@ $stylesheet,subdocument,third-party,xmlhttprequest,domain=canna-power.to|canna.t
 ||quadjournal.eu/wp-content/uploads/*-Banner-
 ||queer.de/gfx/air-france-presented-by-
 ||queer.de/gfx/mein-kondom-
-||quoka.de/mages/public/
+||quoka.de/images/public/
 ||radio-oberland.de/images/banners/
 ||radio-oldtimer.de/fileadmin/Bilder/Banner/
 ||radio2000.it^*/banner_
@@ -2766,7 +2768,6 @@ ariva.de###ariva_de_d_300x250_2_filler
 pi-news.net###as2931
 raidrush.net###aside_left
 madchensex.com###au
-finanzen.ch###balken_top
 apotheken-umschau.de,gamekeyfinder.de,kultur-port.de,ok-weinstrasse.de,stroxley.de###banner
 donnerwetter.at,donnerwetter.ch,donnerwetter.de###banner-container
 macgadget.de###banner-floater
@@ -3311,6 +3312,7 @@ au-ja.de##.ADVBOX
 preissuchmaschine.de##.AFS_ADD
 onvista.de##.ANZEIGE
 finanzfrage.net,gutefrage.net,praxistipps.focus.de##.Ad
+chip.de##.Ad-hor-height:not([id^="advertisment-"])
 finanznachrichten.de##.Ad_FinativeHome
 finanznachrichten.de##.Ad_ImageTeaser
 finanznachrichten.de##.Ad_SmartAd
@@ -4634,6 +4636,7 @@ winfuture.de##div[align="center"][style="min-height: 320px;"]
 3dchip.de##div[align="center"][width="468px"] > table[height="60"][cellspacing="0"][cellpadding="0"][border="0"][align="center"]
 bitreporter.de##div[class$="-adlabel"]
 onvista.de##div[class*="InteractionTypeReference_ov-interaction-slot--fallback"]
+rewe.de##div[class*="Product_productSponsoredTile"]
 onlinehaendler-news.de##div[class*="adplacement_"]
 chartsurfer.de##div[class*="adszone-"]
 homegate.ch##div[class^="AdSlotContainer_"]
@@ -5004,8 +5007,6 @@ automotiveit.eu,instandhaltung.de,produktion.de,technik-einkauf.de#?#.ce_postlis
 avguide.ch#?#.avgrid_1_of_1.viewlet-bottom:-abp-has(h2:-abp-contains(Advertorials))
 avguide.ch#?#.gridteaser.gridteaser-m:-abp-has(h4:-abp-contains(Sponsored Post))
 az.com.na#?#aside:-abp-has(img[src*="/adverts/"])
-barfuss.it#?#.panels-flexible-region:-abp-has(span:-abp-contains(Gesponsert))
-barfuss.it#?#.views-row:-abp-has(.partner-label)
 baur.de#?#div[data-testid="card"]:-abp-has(span.MuiCardHeader-title:-abp-contains(Gesponserte Artikel))
 baur.de#?#div[data-testid="reco-wrapper"]:-abp-has(div[class^="indexesm__HeadlineElement-fragment-product-master__"]:-abp-contains(Gesponserte Artikel))
 bergsteiger.de#?#.eight.columns.alpha.content:-abp-has(span:-abp-contains(Advertorial))
@@ -5034,6 +5035,7 @@ dastelefonbuch.de#?#.entry.hitlistitem.balken:-abp-has(.flag2:-abp-contains(Anze
 ddl-warez.cc#?#p:-abp-has(button:-abp-contains(Highspeed-Download))
 diegrenzgaenger.lu#?#article[id^=post-]:-abp-has(.sponsored-indicator)
 dkamera.de#?#.node.teaser:-abp-has(a:-abp-contains(Anzeige))
+douglas.de#?#div.product-tile:-abp-has(span.product-tile__sponsored)
 ebay.at#?#.s-item:-abp-has(span.s-item__title--tagblock__SPONSORED)
 ebay.ch#?#.s-item:-abp-has(span.s-item__title--tagblock__SPONSORED)
 ebay.de#?#.b-module:-abp-has(h2:-abp-contains(Anzeigen))
