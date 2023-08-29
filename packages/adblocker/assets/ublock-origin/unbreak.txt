@@ -2669,9 +2669,6 @@ lebigdata.fr##.background-cover
 ||lebigdata.fr/wp-content/uploads/*/cote.png$image
 @@||objetconnecte.net/detroitchicago/dayton.js$script,1p
 
-! https://www.reddit.com/r/uBlockOrigin/comments/j4s5e8/firefox_disqus_crooksandliarscom/
-@@||crooksandliars.com/*/admiral.js$script,1p
-
 ! https://github.com/NanoAdblocker/NanoFilters/issues/432
 ! [badfilter] ||bde4.com^$csp=script-src 'self' * 'unsafe-inline',badfilter
 ! [badfilter] ||bde4.cc^$csp=script-src 'self' * 'unsafe-inline',badfilter
@@ -5117,3 +5114,10 @@ uol.com.br##+js(set, UOLPD.dataLayer, {})
 
 ! https://www.carmagazine.co.uk/car-reviews/smart/-1-suv/ - images breakage
 ||bauersecure.com/dist/js/prebid/$script,redirect=noopjs,important
+
+! https://github.com/uBlockOrigin/uAssets/issues/19438
+@@||googletagmanager.com/gtm.js$script,domain=abcam.com
+abcam.com##^link[rel="canonical"]:not([href*="pageconfig=contactus"]):upward(html) script.optanon-category-C0001
+
+! https://github.com/uBlockOrigin/uAssets/issues/19459
+@@||my.petinsurance.com/assets/js/new-relic.js$script,1p
