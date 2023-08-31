@@ -8,8 +8,8 @@
 /* tslint:disable quotemark */
 export default [
   "div[style=\"position: fixed; display: block; width: 100%; height: 100%; inset: 0px; background-color: rgba(0, 0, 0, 0); z-index: 300000;\"]",
-  "json-prune, playerResponse.adPlacements playerResponse.playerAds playerResponse.adSlots adPlacements playerAds adSlots",
   "acs, document.createElement, /l\\.parentNode\\.insertBefore\\(s/",
+  ":not([style^=\"position: absolute; left: -5000px\"])",
   "acs, document.querySelectorAll, popMagic",
   "aost, String.prototype.charCodeAt, ai_",
   "aopr, app_vars.force_disable_adblock",
