@@ -7,6 +7,8 @@
  */
 /* tslint:disable quotemark */
 export default [
+  "t json=JSON.parse(text);for(k of[\"playerAds\",\"adPlacements\",\"adSlots\"]){json[k]=[];}return JSON.stringify(json);};const urlFromArg=arg=>{if(typeof arg===\"string\"){return arg;}if(arg instanceof Request){return arg.url;}return String(arg);};const realFetch=window.fetch;window.fetch=new Proxy(window.fetch,{apply:function(target,thisArg,args){if(!(urlFromArg(args[0]).includes(\"player?key=\"))){return Reflect.apply(target,thisArg,args);}return realFetch(...args).then(realResponse=>realResponse.text().then(text=>new Response(pruner(text),{status:realResponse.status,statusText:realResponse.statusText,headers:realResponse.headers,})));}});",
+  ",function(){if(thisArg.readyState!==4){return;}const type=thisArg.responseType;if(type!==\"\"&&type!==\"text\"){return;}const textin=thisArg.responseText;const textout=pruner(textin);if(textout===textin){return;}Object.defineProperty(thisArg",
   "div[style=\"position: fixed; display: block; width: 100%; height: 100%; inset: 0px; background-color: rgba(0, 0, 0, 0); z-index: 300000;\"]",
   "acs, document.createElement, /l\\.parentNode\\.insertBefore\\(s/",
   "acs, document.querySelectorAll, popMagic",
@@ -38,7 +40,6 @@ export default [
   "no-xhr-if, ",
   ", noopFunc",
   ":has-text(",
-  ".prototype",
   "AaDetector",
   "aopw, _pop",
   "background",
@@ -110,6 +111,7 @@ export default [
   "Wrapp",
   "0px;",
   "body",
+  "down",
   "foot",
   "gdpr",
   "html",
@@ -123,7 +125,6 @@ export default [
   "box",
   "Box",
   "div",
-  "dow",
   "ent",
   "ide",
   "lay",
@@ -193,7 +194,6 @@ export default [
   "te",
   "ti",
   "un",
-  "xt",
   " ",
   "_",
   "-",
