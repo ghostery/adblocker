@@ -260,7 +260,7 @@ export function injectScript(s: string, doc: Document): void {
   script.appendChild(doc.createTextNode(autoRemoveScript(s)));
 
   // Insert node
-  const parent = doc.head || doc.documentElement;
+  const parent = doc.head || doc.documentElement || doc;
   if (parent !== null) {
     parent.appendChild(script);
   }

@@ -8,7 +8,12 @@
 
 import { ipcRenderer } from 'electron';
 
-import { DOMMonitor, IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-content';
+import {
+  DOMMonitor,
+  IBackgroundCallback,
+  IMessageFromBackground,
+  injectScript,
+} from '@cliqz/adblocker-content';
 
 function getCosmeticsFiltersFirst(): string[] | null {
   return ipcRenderer.sendSync('get-cosmetic-filters-first', window.location.href);
@@ -50,21 +55,9 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
 
     const scripts = getCosmeticsFiltersFirst();
     if (scripts) {
-      const elems: HTMLScriptElement[] = [];
-      try {
-        scripts.forEach((script) => {
-          const e = document.createElement('script');
-          e.appendChild(document.createTextNode(script));
-          (document.head || document.documentElement || document).appendChild(e);
-          elems.push(e);
-        });
-      } catch {
-        // continue regardless of error
+      for (const script of scripts) {
+        injectScript(script, document);
       }
-      elems.forEach((removeIt) => {
-        removeIt.remove();
-        removeIt.textContent = '';
-      });
     }
 
     // On DOMContentLoaded, start monitoring the DOM. This means that we will
