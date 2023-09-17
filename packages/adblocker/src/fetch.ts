@@ -62,6 +62,7 @@ export const adsLists = [
   `${PREFIX}/ublock-origin/filters-2020.txt`,
   `${PREFIX}/ublock-origin/filters-2021.txt`,
   `${PREFIX}/ublock-origin/filters-2022.txt`,
+  `${PREFIX}/ublock-origin/filters-2023.txt`,
   `${PREFIX}/ublock-origin/resource-abuse.txt`,
   `${PREFIX}/ublock-origin/unbreak.txt`,
 ];
