@@ -183,6 +183,7 @@ export class ElectronBlocker extends FiltersEngine {
       getInjectionRules: true,
       getExtendedRules: true,
       getRulesFromHostname: true,
+      getRulesFromDOM: false, // Only done on updates (see `onGetCosmeticFiltersUpdated`)
     });
 
     if (active === false) {
@@ -221,6 +222,12 @@ export class ElectronBlocker extends FiltersEngine {
       classes: msg.classes,
       hrefs: msg.hrefs,
       ids: msg.ids,
+
+      // Only done on first load in the frame, disable for updates
+      getBaseRules: false,
+      getInjectionRules: false,
+      getExtendedRules: false,
+      getRulesFromHostname: false,
 
       // This will be done every time we get information about DOM mutation
       getRulesFromDOM: true,
