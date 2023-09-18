@@ -58,7 +58,10 @@ export class BlockingContext {
   private readonly onDomContentLoaded: () => Promise<void>;
   private readonly onRequest: (details: puppeteer.HTTPRequest) => void;
 
-  constructor(private readonly page: puppeteer.Page, private readonly blocker: PuppeteerBlocker) {
+  constructor(
+    private readonly page: puppeteer.Page,
+    private readonly blocker: PuppeteerBlocker,
+  ) {
     this.onFrameNavigated = (frame) => blocker.onFrameNavigated(frame);
     this.onDomContentLoaded = () => blocker.onFrameNavigated(this.page.mainFrame());
     this.onRequest = (request) => blocker.onRequest(request);
@@ -276,7 +279,7 @@ export class PuppeteerBlocker extends FiltersEngine {
       }
 
       await sleep(500);
-    // eslint-disable-next-line no-constant-condition
+      // eslint-disable-next-line no-constant-condition
     } while (true);
   };
 

@@ -64,7 +64,8 @@ const NORMALIZE_OPTIONS: { [option: string]: string } = {
  * example `||foo.com$stylesheet,first-party,xhr` would be normalized to
  * `||foo.com$css,1p,xhr`.
  */
-const REGEX = /all|~third-party|~first-party|third-party|first-party|object-subrequest|stylesheet|subdocument|xmlhttprequest|document|generichide/g;
+const REGEX =
+  /all|~third-party|~first-party|third-party|first-party|object-subrequest|stylesheet|subdocument|xmlhttprequest|document|generichide/g;
 export function normalizeRawFilterOptions(rawFilter: string): string {
   rawFilter = rawFilter.toLowerCase();
 

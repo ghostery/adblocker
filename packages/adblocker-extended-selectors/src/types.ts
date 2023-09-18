@@ -17,7 +17,7 @@ const tokenTypes = [
   'type',
 ] as const;
 
-export type TokenType = typeof tokenTypes[number];
+export type TokenType = (typeof tokenTypes)[number];
 
 export type Base = {
   length: number;

@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-/* tslint:disable quotemark */
+/* eslint-disable prettier/prettier */
 export default [
   "\\/[a-d][-\\.\\/_A-Za-z][DHWXm][-\\.\\/_A-Za-z][59FVZ][-\\.\\/_A-Za-z][6swyz][-\\.\\/_A-Za-z][-\\/_0-9a-zA-Z][-\\.\\/_A-Za-z][-\\/_0-9a-zA-Z]{22,162}$/",
   "\\/(?=[\\/a-zA-Z]*[+0-9])(?=[+\\/0-9a-z]*[A-Z])[+\\/0-9a-zA-Z]{",

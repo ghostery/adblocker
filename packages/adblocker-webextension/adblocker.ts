@@ -215,7 +215,10 @@ export class BlockingContext {
     | ((details: WebNavigation.OnCommittedDetailsType) => void)
     | undefined;
 
-  constructor(private readonly browser: Browser, private readonly blocker: WebExtensionBlocker) {
+  constructor(
+    private readonly browser: Browser,
+    private readonly blocker: WebExtensionBlocker,
+  ) {
     this.onBeforeRequest = (details) => blocker.onBeforeRequest(browser, details);
     this.onHeadersReceived = (details) => blocker.onHeadersReceived(browser, details);
     this.onRuntimeMessage = (msg, sender) => blocker.onRuntimeMessage(browser, msg, sender);
@@ -229,7 +232,7 @@ export class BlockingContext {
       } else {
         console.warn(
           'Consider adding the "webNavigation" permission in the manifest to improve the reliability of the adblocker. ' +
-          'If you do not want to see this warning, turn off the "enablePushInjectionsOnNavigationEvents" flag.',
+            'If you do not want to see this warning, turn off the "enablePushInjectionsOnNavigationEvents" flag.',
         );
       }
     }
@@ -562,7 +565,9 @@ export class WebExtensionBlocker extends FiltersEngine {
     sender: Runtime.MessageSender,
   ): Promise<IMessageFromBackground | {}> => {
     return new Promise((resolve, reject) => {
-      this.handleRuntimeMessage(browser, msg, sender, resolve).catch(reject).finally(() => resolve({}));
+      this.handleRuntimeMessage(browser, msg, sender, resolve)
+        .catch(reject)
+        .finally(() => resolve({}));
     });
   };
 
@@ -654,14 +659,16 @@ ${scripts.join('\n\n')}}
     }
 })(\`${encodeURIComponent(codeRunningInPage)}\`);`;
 
-    browser.tabs.executeScript(tabId, {
-      code: codeRunningInContentScript,
-      runAt: 'document_start',
-      allFrames: true,
-      matchAboutBlank: true,
-    }).catch((err) => {
-      console.error('Failed to inject scriptlets', err);
-    });
+    browser.tabs
+      .executeScript(tabId, {
+        code: codeRunningInContentScript,
+        runAt: 'document_start',
+        allFrames: true,
+        matchAboutBlank: true,
+      })
+      .catch((err) => {
+        console.error('Failed to inject scriptlets', err);
+      });
   }
 }
 
