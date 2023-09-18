@@ -3,18 +3,23 @@ const path = require('path');
 const adb = require('@cliqz/adblocker');
 
 (async () => {
-  const { got } = await import("got");
+  const { revisions } = await fetch('https://cdn.cliqz.com/adblocker/resources/ublock-resources/metadata.json').then(result => {
+    if (!result.ok) {
+      throw new Error(`Failed to uBO resources metadata: ${result.status}: ${result.statusText}`);
+    }
+    return result.json();
+  });
+  const uBOResources = await fetch(`https://cdn.cliqz.com/adblocker/resources/ublock-resources/${revisions.pop()}/list.txt`).then(result => {
+    if (!result.ok) {
+      throw new Error(`Failed to uBO resources: ${result.status}: ${result.statusText}`);
+    }
+    return result.text();
+  })
 
   // Update resources.txt
   fs.writeFileSync(
     path.join(__dirname, 'ublock-origin', 'resources.txt'),
-    await got(
-      `https://cdn.cliqz.com/adblocker/resources/ublock-resources/${(
-        await got(
-          'https://cdn.cliqz.com/adblocker/resources/ublock-resources/metadata.json',
-        ).json()
-      ).revisions.pop()}/list.txt`,
-    ).text(),
+    uBOResources,
     'utf-8',
   );
 
@@ -89,7 +94,7 @@ const adb = require('@cliqz/adblocker');
     //   ['fanboy', 'annoyance.txt'],
     // ],
   ]) {
-    const lines = (await got(url).text())
+    const lines = (await fetch(url).then(r => r.text()))
       .split(/[\r\n]/g)
       .map((line) => line.trim())
       .map((line) => {
