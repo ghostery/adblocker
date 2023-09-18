@@ -1,3 +1,23 @@
+# v1.26.7 (Mon Sep 18 2023)
+
+#### :bug: Bug Fix
+
+- Attempt to fix publishing workflow [#3443](https://github.com/ghostery/adblocker/pull/3443) ([@remusao](https://github.com/remusao) [@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- Update local assets [#3355](https://github.com/ghostery/adblocker/pull/3355) (ghostery-adblocker-bot@users.noreply.github.com [@remusao](https://github.com/remusao) [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Updates of dependencies and CI [#3353](https://github.com/ghostery/adblocker/pull/3353) ([@remusao](https://github.com/remusao))
+
+#### Authors: 4
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.26.6 (Fri Jun 02 2023)
 
 #### :nut_and_bolt: Dependencies

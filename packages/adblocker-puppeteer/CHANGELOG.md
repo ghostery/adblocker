@@ -1,3 +1,29 @@
+# v1.26.7 (Mon Sep 18 2023)
+
+#### :bug: Bug Fix
+
+- Attempt to fix publishing workflow [#3443](https://github.com/ghostery/adblocker/pull/3443) ([@remusao](https://github.com/remusao) [@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- Update local assets [#3355](https://github.com/ghostery/adblocker/pull/3355) (ghostery-adblocker-bot@users.noreply.github.com [@remusao](https://github.com/remusao) [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Updates of dependencies and CI [#3353](https://github.com/ghostery/adblocker/pull/3353) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 21.1.1 to 21.2.1 [#3433](https://github.com/ghostery/adblocker/pull/3433) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 20.9.0 to 21.1.1 [#3412](https://github.com/ghostery/adblocker/pull/3412) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.26.6 (Fri Jun 02 2023)
 
 #### :nut_and_bolt: Dependencies

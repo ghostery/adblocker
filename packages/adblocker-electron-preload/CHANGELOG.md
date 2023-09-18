@@ -1,3 +1,29 @@
+# v1.26.7 (Mon Sep 18 2023)
+
+#### :bug: Bug Fix
+
+- Attempt to fix publishing workflow [#3443](https://github.com/ghostery/adblocker/pull/3443) ([@remusao](https://github.com/remusao) [@chrmod](https://github.com/chrmod))
+- Fix electron blocker performance regression [#3441](https://github.com/ghostery/adblocker/pull/3441) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Updates of dependencies and CI [#3353](https://github.com/ghostery/adblocker/pull/3353) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.244 to 0.0.246 [#3432](https://github.com/ghostery/adblocker/pull/3432) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.242 to 0.0.244 [#3409](https://github.com/ghostery/adblocker/pull/3409) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 25.3.1 to 26.1.0 [#3405](https://github.com/ghostery/adblocker/pull/3405) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.241 to 0.0.242 [#3360](https://github.com/ghostery/adblocker/pull/3360) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.26.6 (Fri Jun 02 2023)
 
 #### :nut_and_bolt: Dependencies

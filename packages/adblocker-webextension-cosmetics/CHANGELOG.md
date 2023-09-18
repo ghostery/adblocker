@@ -1,3 +1,28 @@
+# v1.26.7 (Mon Sep 18 2023)
+
+#### :bug: Bug Fix
+
+- Attempt to fix publishing workflow [#3443](https://github.com/ghostery/adblocker/pull/3443) ([@remusao](https://github.com/remusao) [@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- Updates of dependencies and CI [#3353](https://github.com/ghostery/adblocker/pull/3353) ([@remusao](https://github.com/remusao))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.244 to 0.0.246 [#3432](https://github.com/ghostery/adblocker/pull/3432) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump sinon from 15.2.0 to 16.0.0 [#3436](https://github.com/ghostery/adblocker/pull/3436) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.242 to 0.0.244 [#3409](https://github.com/ghostery/adblocker/pull/3409) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.241 to 0.0.242 [#3360](https://github.com/ghostery/adblocker/pull/3360) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.26.6 (Fri Jun 02 2023)
 
 #### :nail_care: Polish
