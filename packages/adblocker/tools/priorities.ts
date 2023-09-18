@@ -164,7 +164,7 @@ async function loadAllLists(): Promise<string> {
     }
   }
 
-  for (const [name, count] of unsupported.entries().sort(([_1, c1], [_2, c2]) => c2 - c1)) {
+  for (const [name, count] of unsupported.entries().sort(([, c1], [, c2]) => c2 - c1)) {
     console.log(`+ ${name} = ${count}`);
   }
 
