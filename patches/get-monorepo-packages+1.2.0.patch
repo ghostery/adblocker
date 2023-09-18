@@ -1,0 +1,13 @@
+diff --git a/node_modules/get-monorepo-packages/index.js b/node_modules/get-monorepo-packages/index.js
+index aacacb1..fea1161 100644
+--- a/node_modules/get-monorepo-packages/index.js
++++ b/node_modules/get-monorepo-packages/index.js
+@@ -33,7 +33,7 @@ const getPackages = directory => {
+   const lernaJsonPath = path.join(directory, 'lerna.json');
+   if (fs.existsSync(lernaJsonPath)) {
+     const lernaJson = loadJsonFile.sync(lernaJsonPath);
+-    if (!lernaJson.useWorkspaces) {
++    if (false) {
+       return findPackages(lernaJson.packages, directory);
+     }
+   }

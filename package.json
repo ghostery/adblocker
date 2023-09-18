@@ -1,7 +1,7 @@
 {
   "name": "adblocker",
   "author": {
-    "name": "Cliqz"
+    "name": "Ghostery"
   },
   "description": "Cliqz adblocker",
   "contributors": [
@@ -43,19 +43,20 @@
     }
   ],
   "license": "MPL-2.0",
-  "homepage": "https://github.com/cliqz-oss/adblocker#readme",
+  "homepage": "https://github.com/ghostery/adblocker#readme",
   "bugs": {
-    "url": "https://github.com/cliqz-oss/adblocker/issues"
+    "url": "https://github.com/ghostery/adblocker/issues"
   },
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/cliqz-oss/adblocker.git"
+    "url": "git+ssh://git@github.com/ghostery/adblocker.git"
   },
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
+    "postinstall": "patch-package",
     "bootstrap": "yarn install --immutable",
     "lint": "lerna run --parallel lint",
     "watch": "tsc --build ./tsconfig.project.json --watch",
@@ -63,7 +64,7 @@
     "bundle": "lerna run --concurrency 4 bundle",
     "test": "lerna run --concurrency 4 test",
     "clean": "lerna run --parallel clean && lerna clean --yes",
-    "release": "auto shipit --dry-run",
+    "release": "auto shipit",
     "format-check": "prettier './packages/**/*.ts' --check",
     "format-fix": "prettier './packages/**/*.ts' --write"
   },
@@ -75,6 +76,7 @@
     "benchmark": "^2.1.4",
     "chalk": "^5.3.0",
     "lerna": "^7.3.0",
+    "patch-package": "^8.0.0",
     "prettier": "^3.0.3",
     "tslint-no-unused-expression-chai": "^0.1.4",
     "typescript": "^5.2.2"
