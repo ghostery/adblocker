@@ -19,7 +19,7 @@ export interface IPattern {
   readonly organization: string | null;
   readonly alias: string | null;
   readonly website_url: string | null;
-  readonly ghostery_id: string;
+  readonly ghostery_id: string | null;
   readonly domains: string[];
   readonly filters: string[];
 }
@@ -44,7 +44,6 @@ export function isValid(pattern: any): pattern is IPattern {
     organization,
     alias,
     website_url: websiteUrl,
-    ghostery_id: ghosteryId,
     domains,
     filters,
   } = pattern;
@@ -70,10 +69,6 @@ export function isValid(pattern: any): pattern is IPattern {
   }
 
   if (websiteUrl !== null && typeof websiteUrl !== 'string') {
-    return false;
-  }
-
-  if (typeof ghosteryId !== 'string') {
     return false;
   }
 
@@ -126,7 +121,7 @@ export function getSerializedSize(pattern: IPattern): number {
     sizeOfUTF8(pattern.organization || '') +
     sizeOfUTF8(pattern.alias || '') +
     sizeOfUTF8(pattern.website_url || '') +
-    sizeOfUTF8(pattern.ghostery_id) +
+    sizeOfUTF8(pattern.ghostery_id || '') +
     sizeOfDomains +
     sizeOfFilters
   );
@@ -139,7 +134,7 @@ export function serialize(pattern: IPattern, view: StaticDataView) {
   view.pushUTF8(pattern.organization || '');
   view.pushUTF8(pattern.alias || '');
   view.pushUTF8(pattern.website_url || '');
-  view.pushUTF8(pattern.ghostery_id);
+  view.pushUTF8(pattern.ghostery_id || '');
 
   view.pushLength(pattern.domains.length);
   for (const domain of pattern.domains) {
@@ -159,7 +154,7 @@ export function deserialize(view: StaticDataView): IPattern {
   const organization = view.getUTF8() || null;
   const alias = view.getUTF8() || null;
   const website_url = view.getUTF8() || null;
-  const ghostery_id = view.getUTF8();
+  const ghostery_id = view.getUTF8() || null;
 
   const numberOfDomains = view.getLength();
   const domains = [];
