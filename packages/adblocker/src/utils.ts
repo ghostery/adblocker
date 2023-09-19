@@ -405,6 +405,7 @@ export function binLookup(arr: Uint32Array, elt: number): boolean {
   return binSearch(arr, elt) !== -1;
 }
 
+// eslint-disable-next-line no-control-regex
 const hasUnicodeRe = /[^\u0000-\u00ff]/;
 export function hasUnicode(str: string): boolean {
   return hasUnicodeRe.test(str);

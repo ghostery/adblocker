@@ -86,6 +86,7 @@ function validateCodebook(codebook: string[], strings: string[]): void {
     const compressed = smaz.compress(str);
     const original = smaz.decompress(compressed);
     if (original !== str) {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       throw new Error(`Mismatch: ${str} vs. ${original} (compressed: ${compressed})`);
     }
 

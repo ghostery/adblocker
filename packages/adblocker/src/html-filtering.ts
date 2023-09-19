@@ -139,7 +139,7 @@ type Patterns = readonly [readonly string[], readonly RegExp[]][];
 export function extractSelectorsFromRules(filter: HTMLSelector[]): Patterns {
   const patterns: [string[], RegExp[]][] = [];
 
-  for (const [_, selectors] of filter) {
+  for (const [, selectors] of filter) {
     const plainPatterns: string[] = [];
     const regexpPatterns: RegExp[] = [];
 

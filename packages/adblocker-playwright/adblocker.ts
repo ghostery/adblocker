@@ -54,7 +54,10 @@ export class BlockingContext {
   private readonly onFrameNavigated: (frame: pw.Frame) => Promise<void>;
   private readonly onRequest: (route: pw.Route) => void;
 
-  constructor(private readonly page: pw.Page, private readonly blocker: PlaywrightBlocker) {
+  constructor(
+    private readonly page: pw.Page,
+    private readonly blocker: PlaywrightBlocker,
+  ) {
     this.onFrameNavigated = (frame) => blocker.onFrameNavigated(frame);
     this.onRequest = (route: pw.Route) => blocker.onRequest(route);
   }
@@ -266,6 +269,7 @@ export class PlaywrightBlocker extends FiltersEngine {
       }
 
       await sleep(500);
+      // eslint-disable-next-line no-constant-condition
     } while (true);
   };
 

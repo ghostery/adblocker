@@ -70,7 +70,8 @@ function replacer(option: string): string {
  * example `||foo.com$stylesheet,first-party,xhr` would be normalized to
  * `||foo.com$css,1p,xhr`.
  */
-const REGEX = /third-party|first-party|object-subrequest|stylesheet|subdocument|xmlhttprequest|document/g;
+const REGEX =
+  /third-party|first-party|object-subrequest|stylesheet|subdocument|xmlhttprequest|document/g;
 function normalizeFilters(rawFilter: string): string {
   if (rawFilter.startsWith('|http*://$')) {
     rawFilter = rawFilter.slice(9);
@@ -183,7 +184,7 @@ async function getRevision(url: string): Promise<string> {
     return cached;
   }
 
-  let data = (await axios.get(url)).data;
+  let data: string = (await axios.get(url)).data;
   if (!data.startsWith('[Ad')) {
     const buffer = Buffer.from(
       (
@@ -272,6 +273,7 @@ async function collectTestCases(list: string): Promise<TestCase[]> {
   const revisions: Set<string> = new Set();
 
   // Append current revision (the most recent one)
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const previousRevisions = [...meta.revisions];
   console.log('revisions', previousRevisions);
 
