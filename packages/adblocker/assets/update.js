@@ -3,13 +3,13 @@ const path = require('path');
 const adb = require('@cliqz/adblocker');
 
 (async () => {
-  const { revisions } = await fetch('https://cdn.cliqz.com/adblocker/resources/ublock-resources/metadata.json').then(result => {
+  const { revisions } = await fetch('https://cdn.ghostery.com/adblocker/resources/ublock-resources/metadata.json').then(result => {
     if (!result.ok) {
       throw new Error(`Failed to uBO resources metadata: ${result.status}: ${result.statusText}`);
     }
     return result.json();
   });
-  const uBOResources = await fetch(`https://cdn.cliqz.com/adblocker/resources/ublock-resources/${revisions.pop()}/list.txt`).then(result => {
+  const uBOResources = await fetch(`https://cdn.ghostery.com/adblocker/resources/ublock-resources/${revisions.pop()}/list.txt`).then(result => {
     if (!result.ok) {
       throw new Error(`Failed to uBO resources: ${result.status}: ${result.statusText}`);
     }
