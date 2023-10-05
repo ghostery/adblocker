@@ -5,9 +5,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-/* eslint-disable prettier/prettier */
+/* tslint:disable quotemark */
 export default [
-  "securepubads.g.doubleclick.net",
+  "securepubads.g.doubleclick",
   "googlesyndication",
   "imasdk.googleapis",
   "googletagmanager",
@@ -25,6 +25,7 @@ export default [
   "stats.",
   "a8cv.",
   "media",
+  "space",
   "track",
   ".com",
   ".net",
@@ -48,7 +49,6 @@ export default [
   ".m",
   ".n",
   ".p",
-  ".s",
   ".t",
   ".v",
   ".w",
@@ -91,6 +91,7 @@ export default [
   "da",
   "de",
   "di",
+  "dn",
   "do",
   "dr",
   "ds",
@@ -149,7 +150,6 @@ export default [
   "jo",
   "ks",
   "la",
-  "ld",
   "le",
   "li",
   "lo",
@@ -174,7 +174,6 @@ export default [
   "or",
   "ot",
   "ou",
-  "ov",
   "ow",
   "ph",
   "pl",
@@ -223,6 +222,7 @@ export default [
   "ve",
   "vi",
   "we",
+  "wh",
   "-",
   ".",
   "0",

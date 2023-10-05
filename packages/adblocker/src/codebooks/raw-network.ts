@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-/* eslint-disable prettier/prettier */
+/* tslint:disable quotemark */
 export default [
   "||imasdk.googleapis.com/js",
   "image,redirect-rule=1x1.gi",
@@ -27,7 +27,9 @@ export default [
   "/^https?:\\/\\/",
   "^$third-party",
   "||smetrics.",
+  "|downdetect",
   "third-party",
+  "-9a-zA-Z]{",
   "marketing.",
   ".website^",
   "$subdocum",
@@ -60,6 +62,7 @@ export default [
   ".php",
   "/js/",
   "$doc",
+  "$xhr",
   "html",
   "ight",
   "stat",
@@ -75,7 +78,6 @@ export default [
   "new",
   "pro",
   "web",
-  "xhr",
   "-c",
   ".b",
   ".c",
@@ -124,7 +126,6 @@ export default [
   "eb",
   "ec",
   "ed",
-  "eg",
   "el",
   "em",
   "en",
@@ -133,7 +134,6 @@ export default [
   "es",
   "et",
   "ev",
-  "ew",
   "ex",
   "ff",
   "fi",
@@ -148,6 +148,7 @@ export default [
   "ib",
   "ic",
   "id",
+  "ie",
   "if",
   "ig",
   "ik",
@@ -185,7 +186,6 @@ export default [
   "re",
   "ro",
   "ru",
-  "s-",
   "s/",
   "sc",
   "se",
