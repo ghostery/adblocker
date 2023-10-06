@@ -23,11 +23,15 @@ youtube.com##ytd-video-masthead-ad-advertiser-info-renderer,ytm-promoted-sparkle
 ! https://github.com/uBlockOrigin/uAssets/pull/18106/
 youtube.com#@#+js(json-prune-fetch-response, [].playerResponse.adPlacements [].playerResponse.playerAds [].playerResponse.adSlots playerResponse.adPlacements playerResponse.playerAds playerResponse.adSlots adPlacements playerAds adSlots)
 youtube.com#@#+js(json-prune-fetch-response, [].playerResponse.adPlacements [].playerResponse.playerAds [].playerResponse.adSlots playerResponse.adPlacements playerResponse.playerAds playerResponse.adSlots adPlacements playerAds adSlots, , propsToMatch, url:player?key=)
-youtube.com##+js(json-prune-fetch-response, [].playerResponse.adPlacements [].playerResponse.playerAds [].playerResponse.adSlots playerResponse.adPlacements playerResponse.playerAds playerResponse.adSlots adPlacements playerAds adSlots, , propsToMatch, url:player?key= method:/post/i)
+youtube.com#@#+js(json-prune-fetch-response, [].playerResponse.adPlacements [].playerResponse.playerAds [].playerResponse.adSlots playerResponse.adPlacements playerResponse.playerAds playerResponse.adSlots adPlacements playerAds adSlots, , propsToMatch, url:player?key= method:/post/i)
+youtube.com##+js(json-prune-fetch-response, [].playerResponse.adPlacements [].playerResponse.playerAds [].playerResponse.adSlots playerResponse.adPlacements playerResponse.playerAds playerResponse.adSlots adPlacements playerAds adSlots, , propsToMatch, url:player?key= method:/post/i bodyUsed:true)
 youtube.com##+js(json-prune-xhr-response, [].playerResponse.adPlacements [].playerResponse.playerAds [].playerResponse.adSlots playerResponse.adPlacements playerResponse.playerAds playerResponse.adSlots adPlacements playerAds adSlots, , propsToMatch, url:/player\?key=|watch\?v=|youtubei\/v1\/player/)
-youtube.com##+js(trusted-replace-fetch-response, /\"adPlacements.*?\"\}\}\}\]\,/, , url:player?key= method:/post/i)
-youtube.com##+js(trusted-replace-fetch-response, /\"adSlots.*?\}\]\}\}\]\,/, , url:player?key= method:/post/i)
-youtube.com##+js(trusted-replace-fetch-response, /\"playerAds.*?\}\}\]\,/, , url:player?key= method:/post/i)
+youtube.com##+js(trusted-replace-fetch-response, /\"adPlacements.*?\"\}\}\}\]\,/, , url:player?key= method:/post/i bodyUsed:true)
+youtube.com##+js(trusted-replace-fetch-response, /\"adSlots.*?\}\]\}\}\]\,/, , url:player?key= method:/post/i bodyUsed:true)
+youtube.com##+js(trusted-replace-fetch-response, /\"playerAds.*?\}\}\]\,/, , url:player?key= method:/post/i bodyUsed:true)
+youtube.com#@#+js(trusted-replace-fetch-response, /\"adPlacements.*?\"\}\}\}\]\,/, , url:player?key= method:/post/i)
+youtube.com#@#+js(trusted-replace-fetch-response, /\"adSlots.*?\}\]\}\}\]\,/, , url:player?key= method:/post/i)
+youtube.com#@#+js(trusted-replace-fetch-response, /\"playerAds.*?\}\}\]\,/, , url:player?key= method:/post/i)
 youtube.com#@#+js(trusted-replace-fetch-response, /\"adPlacements.*?\"\}\}\}\]\,/, , player?key=)
 youtube.com#@#+js(trusted-replace-fetch-response, /\"adSlots.*?\}\]\}\}\]\,/, , player?key=)
 youtube.com#@#+js(trusted-replace-fetch-response, /\"playerAds.*?\}\}\]\,/, , player?key=)
@@ -3275,14 +3279,15 @@ readmng.com##.sideways
 ||readmng.com/dist/img/banner*$image,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10665
+! https://www.reddit.com/r/uBlockOrigin/comments/171bmjh/
 @@||next-episode.net^$ghide
 @@||next-episode.net^$script,1p
 *$script,redirect-rule=noopjs,domain=next-episode.net
 next-episode.net##.adsbygoogle
 next-episode.net##[id=""]
-next-episode.net##^script:has-text(/onerror|adsbygoogle|pop|function displayNotice/)
+next-episode.net##^script:has-text(/onerror|adsbygoogle|notice/)
 !#if !cap_html_filtering
-next-episode.net##+js(rmnt, script, /onerror|adsbygoogle|pop|function displayNotice/)
+next-episode.net##+js(rmnt, script, /onerror|adsbygoogle|notice/)
 !#endif
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1402
