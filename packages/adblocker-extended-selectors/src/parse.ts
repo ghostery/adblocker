@@ -379,7 +379,6 @@ export function gobbleQuotes(text: string, quote: '"' | "'", start: number): str
   // Find end of quote, taking care of ignoring escaped quotes
   let end = start + 1;
 
-  /* tslint:disable no-conditional-assignment */
   while ((end = text.indexOf(quote, end)) !== -1 && isEscaped(text, end) === true) {
     end += 1;
   }
@@ -427,7 +426,6 @@ export function replace(
   const strings: Strings = [];
 
   let offset = 0;
-  /* tslint:disable no-conditional-assignment */
   while ((offset = selector.indexOf(opening, offset)) !== -1) {
     const str = gobble(selector, offset);
     if (str === undefined) {
