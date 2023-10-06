@@ -6,8 +6,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/* tslint:disable variable-name */
-
 import { CompactMap } from '../map';
 import { StaticDataView, sizeOfUTF8, sizeOfLength } from '../../data-view';
 import NetworkFilter from '../../filters/network';
