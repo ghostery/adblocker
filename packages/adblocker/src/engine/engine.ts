@@ -30,7 +30,7 @@ import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 import { Metadata, IPatternLookupResult } from './metadata';
 
-export const ENGINE_VERSION = 610;
+export const ENGINE_VERSION = 611;
 
 function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   if (filters.length === 0) {
