@@ -38,6 +38,7 @@ async function createWindow() {
       write: async (...args) => writeFileSync(...args),
     },
   );
+
   blocker.enableBlockingInSession(mainWindow.webContents.session);
 
   blocker.on('request-blocked', (request: Request) => {

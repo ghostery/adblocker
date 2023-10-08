@@ -80,6 +80,7 @@ const OPTIMIZATIONS: IOptimization[] = [
   {
     description: 'Group idential filter with same mask but different domains in single filters',
     fusion: (filters: NetworkFilter[]) => {
+      const parts: string[] = [];
       const hostnames: Set<number> = new Set();
       const notHostnames: Set<number> = new Set();
       const entities: Set<number> = new Set();
@@ -87,6 +88,10 @@ const OPTIMIZATIONS: IOptimization[] = [
 
       for (const { domains } of filters) {
         if (domains !== undefined) {
+          if (domains.parts !== undefined) {
+            parts.push(domains.parts);
+          }
+
           if (domains.hostnames !== undefined) {
             for (const hash of domains.hostnames) {
               hostnames.add(hash);
@@ -121,6 +126,7 @@ const OPTIMIZATIONS: IOptimization[] = [
             notHostnames:
               notHostnames.size !== 0 ? new Uint32Array(notHostnames).sort() : undefined,
             notEntities: notEntities.size !== 0 ? new Uint32Array(notEntities).sort() : undefined,
+            parts: parts.length !== 0 ? parts.join(',') : undefined,
           }),
           rawLine:
             filters[0].rawLine !== undefined
