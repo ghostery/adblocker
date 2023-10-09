@@ -1,3 +1,33 @@
+# v1.26.8 (Mon Oct 09 2023)
+
+#### :bug: Bug Fix
+
+- Fix parsing of scriptlet arguments [#3501](https://github.com/ghostery/adblocker/pull/3501) ([@remusao](https://github.com/remusao))
+
+#### :house: Internal
+
+- Update local assets [#3502](https://github.com/ghostery/adblocker/pull/3502) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#3500](https://github.com/ghostery/adblocker/pull/3500) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#3499](https://github.com/ghostery/adblocker/pull/3499) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#3472](https://github.com/ghostery/adblocker/pull/3472) (ghostery-adblocker-bot@users.noreply.github.com [@remusao](https://github.com/remusao) [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Assets from Ghostery CDN [#3484](https://github.com/ghostery/adblocker/pull/3484) ([@chrmod](https://github.com/chrmod))
+- Fix codebooks [#3471](https://github.com/ghostery/adblocker/pull/3471) ([@chrmod](https://github.com/chrmod))
+- Replace tslint with eslint [#3450](https://github.com/ghostery/adblocker/pull/3450) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump rollup from 3.29.2 to 4.0.2 [#3497](https://github.com/ghostery/adblocker/pull/3497) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.26.7 (Mon Sep 18 2023)
 
 #### :bug: Bug Fix

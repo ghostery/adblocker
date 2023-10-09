@@ -1,3 +1,20 @@
+# v1.26.8 (Mon Oct 09 2023)
+
+#### :house: Internal
+
+- Replace tslint with eslint [#3450](https://github.com/ghostery/adblocker/pull/3450) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 21.2.1 to 21.3.8 [#3498](https://github.com/ghostery/adblocker/pull/3498) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.26.7 (Mon Sep 18 2023)
 
 #### :bug: Bug Fix

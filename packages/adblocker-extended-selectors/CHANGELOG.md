@@ -1,3 +1,19 @@
+# v1.26.8 (Mon Oct 09 2023)
+
+#### :house: Internal
+
+- Update local assets [#3472](https://github.com/ghostery/adblocker/pull/3472) (ghostery-adblocker-bot@users.noreply.github.com [@remusao](https://github.com/remusao) [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Replace tslint with eslint [#3450](https://github.com/ghostery/adblocker/pull/3450) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 4
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.26.7 (Mon Sep 18 2023)
 
 #### :bug: Bug Fix
