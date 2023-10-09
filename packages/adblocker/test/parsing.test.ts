@@ -597,6 +597,7 @@ describe('Network filters', () => {
             entities: undefined,
             notHostnames: undefined,
             notEntities: undefined,
+            parts: undefined,
           },
         });
 
@@ -606,6 +607,7 @@ describe('Network filters', () => {
             entities: undefined,
             notHostnames: undefined,
             notEntities: undefined,
+            parts: undefined,
           },
         });
       });
@@ -617,6 +619,7 @@ describe('Network filters', () => {
             entities: undefined,
             hostnames: undefined,
             notEntities: undefined,
+            parts: undefined,
           },
         });
 
@@ -626,6 +629,7 @@ describe('Network filters', () => {
             entities: undefined,
             hostnames: undefined,
             notEntities: undefined,
+            parts: undefined,
           },
         });
       });
@@ -637,6 +641,7 @@ describe('Network filters', () => {
             notHostnames: h(['bar.com']),
             entities: undefined,
             notEntities: undefined,
+            parts: undefined,
           },
         });
 
@@ -646,6 +651,7 @@ describe('Network filters', () => {
             notHostnames: h(['baz.com']),
             entities: undefined,
             notEntities: undefined,
+            parts: undefined,
           },
         });
 
@@ -655,6 +661,7 @@ describe('Network filters', () => {
             notHostnames: h(['bar']),
             entities: undefined,
             notEntities: undefined,
+            parts: undefined,
           },
         });
       });
@@ -666,6 +673,7 @@ describe('Network filters', () => {
             notHostnames: undefined,
             entities: h(['foo']),
             notEntities: h(['bar']),
+            parts: undefined,
           },
         });
       });
@@ -685,6 +693,7 @@ describe('Network filters', () => {
             entities: undefined,
             notHostnames: undefined,
             notEntities: undefined,
+            parts: undefined,
           },
         });
 
@@ -694,6 +703,7 @@ describe('Network filters', () => {
             entities: undefined,
             notHostnames: undefined,
             notEntities: undefined,
+            parts: undefined,
           },
         });
       });
@@ -705,6 +715,7 @@ describe('Network filters', () => {
             entities: undefined,
             hostnames: undefined,
             notEntities: undefined,
+            parts: undefined,
           },
         });
 
@@ -714,6 +725,7 @@ describe('Network filters', () => {
             entities: undefined,
             hostnames: undefined,
             notEntities: undefined,
+            parts: undefined,
           },
         });
       });
@@ -725,6 +737,7 @@ describe('Network filters', () => {
             notHostnames: h(['bar.com']),
             entities: undefined,
             notEntities: undefined,
+            parts: undefined,
           },
         });
 
@@ -734,6 +747,7 @@ describe('Network filters', () => {
             notHostnames: h(['baz.com']),
             entities: undefined,
             notEntities: undefined,
+            parts: undefined,
           },
         });
 
@@ -743,6 +757,7 @@ describe('Network filters', () => {
             notHostnames: h(['bar']),
             entities: undefined,
             notEntities: undefined,
+            parts: undefined,
           },
         });
       });
@@ -754,6 +769,7 @@ describe('Network filters', () => {
             notHostnames: undefined,
             entities: h(['foo']),
             notEntities: h(['bar']),
+            parts: undefined,
           },
         });
       });
@@ -1556,6 +1572,7 @@ describe('Cosmetic filters', () => {
         entities: undefined,
         notHostnames: undefined,
         notEntities: undefined,
+        parts: undefined,
       },
       selector: 'selector',
     });
@@ -1566,6 +1583,7 @@ describe('Cosmetic filters', () => {
         entities: undefined,
         notHostnames: undefined,
         notEntities: undefined,
+        parts: undefined,
       },
       selector: 'selector',
     });
@@ -1576,6 +1594,7 @@ describe('Cosmetic filters', () => {
         hostnames: h(['foo.com', 'bar.io']),
         notHostnames: undefined,
         notEntities: undefined,
+        parts: undefined,
       },
       selector: 'selector',
     });
@@ -1587,6 +1606,7 @@ describe('Cosmetic filters', () => {
         hostnames: h(['foo.com']),
         notEntities: h(['entity', 'entity2']),
         notHostnames: h(['bar.io']),
+        parts: undefined,
       },
       selector: 'selector',
     });
@@ -1600,6 +1620,7 @@ describe('Cosmetic filters', () => {
         entities: undefined,
         notHostnames: undefined,
         notEntities: undefined,
+        parts: undefined,
       },
       isUnhide: true,
       selector: 'selector',
@@ -1615,6 +1636,7 @@ describe('Cosmetic filters', () => {
           entities: undefined,
           notHostnames: undefined,
           notEntities: undefined,
+          parts: undefined,
         },
         isScriptInject: true,
         selector: 'script.js, argument',
@@ -1626,6 +1648,7 @@ describe('Cosmetic filters', () => {
           entities: undefined,
           notHostnames: undefined,
           notEntities: undefined,
+          parts: undefined,
         },
         isScriptInject: true,
         selector: 'script.js, arg1, arg2, arg3',
@@ -1706,6 +1729,7 @@ describe('Cosmetic filters', () => {
             entities: undefined,
             notHostnames: undefined,
             notEntities: undefined,
+            parts: undefined,
           },
         });
       });
@@ -1729,6 +1753,7 @@ describe('Cosmetic filters', () => {
           entities: undefined,
           notHostnames: undefined,
           notEntities: undefined,
+          parts: undefined,
         },
         isHtmlFiltering: true,
         selector: '^script:has-text(foo bar)',
@@ -1814,6 +1839,7 @@ describe('Cosmetic filters', () => {
         entities: undefined,
         notHostnames: undefined,
         notEntities: undefined,
+        parts: undefined,
       },
       selector: 'foo > bar >baz',
       style: 'display: none',
@@ -1966,5 +1992,294 @@ describe('Filters list', () => {
         ),
       ).to.eql(['||foo.com^', '*$3p,script,domain=x.com|y.com', '||bar.com^', '||baz.com^']);
     });
+  });
+});
+
+describe('scriptlets arguments parsing', () => {
+  it('parses empty argument list', () => {
+    const filter = CosmeticFilter.parse('foo.com#@#+js()');
+    expect(filter).to.not.be.null;
+    expect(filter?.isScriptInject()).to.be.true;
+    expect(filter?.parseScript()).to.be.undefined;
+  });
+
+  it('parses name without args', () => {
+    expect(CosmeticFilter.parse('foo.com##+js(script-name)')?.parseScript()).to.eql({
+      name: 'script-name',
+      args: [],
+    });
+  });
+
+  it('parses name with simple args', () => {
+    for (const [scriptlet, expected] of [
+      ['acs, $, adb', { name: 'acs', args: ['$', 'adb'] }],
+      [
+        'abort-current-script, document.createElement, break;case $.',
+        { name: 'abort-current-script', args: ['document.createElement', 'break;case $.'] },
+      ],
+      ['acs, $, /.fadeIn|.show(.?)/', { name: 'acs', args: ['$', '/.fadeIn|.show(.?)/'] }],
+      [
+        'acis, document.createElement, /break;case $.|popunder/',
+        { name: 'acis', args: ['document.createElement', '/break;case $.|popunder/'] },
+      ],
+      ['acs, atob, -0x1', { name: 'acs', args: ['atob', '-0x1'] }],
+      ["acs, atob, 'shift'", { name: 'acs', args: ['atob', "'shift'"] }],
+      ["acs, Date, ='\\x", { name: 'acs', args: ['Date', "='\\x"] }],
+      [
+        `acs, decodeURIComponent, "'shift'"`,
+        { name: 'acs', args: ['decodeURIComponent', `"'shift'"`] },
+      ],
+      [
+        `acs, document.getElementById, /\\$\\('body'\\)|\\$\\("body"\\)/`,
+        { name: 'acs', args: ['document.getElementById', `/\\$\\('body'\\)|\\$\\("body"\\)/`] },
+      ],
+      [
+        'acs, document.getElementById, showModal, /^data:text\\/javascript/',
+        {
+          name: 'acs',
+          args: ['document.getElementById', 'showModal', '/^data:text\\/javascript/'],
+        },
+      ],
+      ['aeld, mousedown, !!{});', { name: 'aeld', args: ['mousedown', '!!{});'] }],
+    ] as const) {
+      expect(CosmeticFilter.parse(`foo.com##+js(${scriptlet})`)?.parseScript(), scriptlet).to.eql(
+        expected,
+      );
+    }
+  });
+
+  it('parses name with empty args', () => {
+    expect(
+      CosmeticFilter.parse('foo.com##+js(script-name,, , foo,   ,     bar)')?.parseScript(),
+    ).to.eql({
+      name: 'script-name',
+      args: ['', '', 'foo', '', 'bar'],
+    });
+  });
+
+  it('handles escaping of comas', () => {
+    expect(CosmeticFilter.parse('foo.com##+js(script-name, foo \\,bar)')?.parseScript()).to.eql({
+      name: 'script-name',
+      args: ['foo \\,bar'],
+    });
+  });
+
+  describe('handles objects arguments', () => {
+    it('empty', () => {
+      expect(CosmeticFilter.parse('foo.com##+js(script-name, {})')?.parseScript()).to.eql({
+        name: 'script-name',
+        args: ['{}'],
+      });
+    });
+
+    it('single key', () => {
+      expect(CosmeticFilter.parse('foo.com##+js(script-name, {foo: 42})')?.parseScript()).to.eql({
+        name: 'script-name',
+        args: ['{foo: 42}'],
+      });
+    });
+
+    it('multiple keys', () => {
+      expect(
+        CosmeticFilter.parse('foo.com##+js(script-name, {foo: 1, bar: 2})')?.parseScript(),
+      ).to.eql({
+        name: 'script-name',
+        args: ['{foo: 1, bar: 2}'],
+      });
+
+      expect(
+        CosmeticFilter.parse(
+          'foo.com##+js(aeld, { "type": "click", "pattern": "popMagic", "runAt": "idle" })',
+        )?.parseScript(),
+      ).to.eql({
+        name: 'aeld',
+        args: ['{ "type": "click", "pattern": "popMagic", "runAt": "idle" }'],
+      });
+    });
+
+    it('nested', () => {
+      expect(
+        CosmeticFilter.parse(
+          'foo.com##+js(script-name, {foo: 1, bar: 2, baz: {a: 1, b: 2}}, arg2,)',
+        )?.parseScript(),
+      ).to.eql({
+        name: 'script-name',
+        args: ['{foo: 1, bar: 2, baz: {a: 1, b: 2}}', 'arg2', ''],
+      });
+    });
+
+    it('escaping', () => {
+      expect(
+        CosmeticFilter.parse(
+          'foo.com##+js(script-name, \\{foo: 1, bar: 2\\}, {baz: {a: 1, b: 2}})',
+        )?.parseScript(),
+      ).to.eql({
+        name: 'script-name',
+        args: ['\\{foo: 1', 'bar: 2\\}', '{baz: {a: 1, b: 2}}'],
+      });
+    });
+
+    it('nested quotes', () => {
+      expect(
+        CosmeticFilter.parse(`foo.com##+js(script-name, {foo: "}", bar: '{'})`)?.parseScript(),
+      ).to.eql({
+        name: 'script-name',
+        args: [`{foo: "}", bar: '{'}`],
+      });
+    });
+  });
+
+  describe('handles regexp arguments', () => {
+    it('empty', () => {
+      expect(CosmeticFilter.parse('foo.com##+js(script-name, //)')?.parseScript()).to.eql({
+        name: 'script-name',
+        args: ['//'],
+      });
+    });
+
+    it('simple', () => {
+      expect(CosmeticFilter.parse('foo.com##+js(script-name, /foo/)')?.parseScript()).to.eql({
+        name: 'script-name',
+        args: ['/foo/'],
+      });
+    });
+
+    it('complex', () => {
+      for (const [scriptlet, expected] of [
+        [
+          'acs, Math, /\\}\\s*\\(.*?\\b(self|this|window)\\b.*?\\)/',
+          {
+            name: 'acs',
+            args: ['Math', '/\\}\\s*\\(.*?\\b(self|this|window)\\b.*?\\)/'],
+          },
+        ],
+        [
+          'aeld, click, /event_callback=function\\(\\){window\\.location=t\\.getAttribute\\("href"\\)/',
+          {
+            name: 'aeld',
+            args: [
+              'click',
+              '/event_callback=function\\(\\){window\\.location=t\\.getAttribute\\("href"\\)/',
+            ],
+          },
+        ],
+        [
+          'm3u-prune, /\\,ad\n.+?(?=#UPLYNK-SEGMENT)/gm, .m3u8',
+          {
+            name: 'm3u-prune',
+            args: ['/\\,ad\n.+?(?=#UPLYNK-SEGMENT)/gm', '.m3u8'],
+          },
+        ],
+        // Also works without escaping the coma
+        [
+          'm3u-prune, /,ad\n.+?(?=#UPLYNK-SEGMENT)/gm, .m3u8',
+          {
+            name: 'm3u-prune',
+            args: ['/,ad\n.+?(?=#UPLYNK-SEGMENT)/gm', '.m3u8'],
+          },
+        ],
+      ] as const) {
+        expect(
+          CosmeticFilter.parse(`foo.com##+js(${scriptlet})`)?.parseScript(),
+          scriptlet,
+        ).to.eql(expected);
+      }
+    });
+
+    it('contains coma', () => {
+      expect(CosmeticFilter.parse('foo.com##+js(script-name, /foo,bar/)')?.parseScript()).to.eql({
+        name: 'script-name',
+        args: ['/foo,bar/'],
+      });
+    });
+
+    it('escaping', () => {
+      expect(
+        CosmeticFilter.parse('foo.com##+js(script-name, \\/foo, bar\\/)')?.parseScript(),
+      ).to.eql({
+        name: 'script-name',
+        args: ['\\/foo', 'bar\\/'],
+      });
+    });
+  });
+
+  it('complex patterns', () => {
+    for (const [scriptlet, expected] of [
+      [
+        'trusted-replace-fetch-response, /\\"adPlacements.*?\\"\\}\\}\\}\\]\\,/, , player?key=',
+        {
+          name: 'trusted-replace-fetch-response',
+          args: ['/\\"adPlacements.*?\\"\\}\\}\\}\\]\\,/', '', 'player?key='],
+        },
+      ],
+      [
+        'trusted-replace-fetch-response, /\\"adPlacements.*?true.*?\\"\\}\\}\\}\\]\\,/, , url:player?key= method:/post/i',
+        {
+          name: 'trusted-replace-fetch-response',
+          args: [
+            '/\\"adPlacements.*?true.*?\\"\\}\\}\\}\\]\\,/',
+            '',
+            'url:player?key= method:/post/i',
+          ],
+        },
+      ],
+      [
+        'trusted-replace-fetch-response, /\\"adPlacements.*?\\"\\}\\}\\}\\]\\,/, , url:player?key= method:/post/i bodyUsed:true',
+        {
+          name: 'trusted-replace-fetch-response',
+          args: ['/\\"adPlacements.*?\\"\\}\\}\\}\\]\\,/', '', 'url:player?key= method:/post/i bodyUsed:true'],
+        },
+      ],
+      [
+        'trusted-replace-fetch-response, /\\"adSlots.*?\\}\\]\\}\\}\\]\\,/, , player?key=',
+        {
+          name: 'trusted-replace-fetch-response',
+          args: ['/\\"adSlots.*?\\}\\]\\}\\}\\]\\,/', '', 'player?key='],
+        },
+      ],
+      [
+        'trusted-replace-fetch-response, /\\"adSlots.*?true.*?\\}\\]\\}\\}\\]\\,/, , url:player?key= method:/post/i',
+        {
+          name: 'trusted-replace-fetch-response',
+          args: ['/\\"adSlots.*?true.*?\\}\\]\\}\\}\\]\\,/', '', 'url:player?key= method:/post/i'],
+        },
+      ],
+      [
+        'trusted-replace-fetch-response, /\\"adSlots.*?\\}\\]\\}\\}\\]\\,/, , url:player?key= method:/post/i',
+        {
+          name: 'trusted-replace-fetch-response',
+          args: ['/\\"adSlots.*?\\}\\]\\}\\}\\]\\,/', '', 'url:player?key= method:/post/i'],
+        },
+      ],
+      [
+        'trusted-replace-fetch-response, /\\"adSlots.*?\\}\\]\\}\\}\\]\\,/, , url:player?key= method:/post/i bodyUsed:true',
+        {
+          name: 'trusted-replace-fetch-response',
+          args: [
+            '/\\"adSlots.*?\\}\\]\\}\\}\\]\\,/',
+            '',
+            'url:player?key= method:/post/i bodyUsed:true',
+          ],
+        },
+      ],
+      [
+        'trusted-replace-fetch-response, /\\"playerAds.*?\\}\\}\\]\\,/, , player?key=',
+        {
+          name: 'trusted-replace-fetch-response',
+          args: ['/\\"playerAds.*?\\}\\}\\]\\,/', '', 'player?key='],
+        },
+      ],
+      [
+        'trusted-replace-fetch-response, /\\"playerAds.*?true.*?\\}\\}\\]\\,/, , url:player?key= method:/post/i',
+        {
+          name: 'trusted-replace-fetch-response',
+          args: ['/\\"playerAds.*?true.*?\\}\\}\\]\\,/', '', 'url:player?key= method:/post/i'],
+        },
+      ],
+    ] as const) {
+      expect(CosmeticFilter.parse(`foo.com##+js(${scriptlet})`)?.parseScript(), scriptlet).to.eql(
+        expected,
+      );
+    }
   });
 });

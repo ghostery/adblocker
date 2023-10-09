@@ -227,7 +227,7 @@ export default class CosmeticFilter implements IFilter {
     // number of labels considered. This allows a compact representation of
     // hostnames and fast matching without any string copy.
     if (sharpIndex > 0) {
-      domains = Domains.parse(line.slice(0, sharpIndex).split(','));
+      domains = Domains.parse(line.slice(0, sharpIndex).split(','), debug);
     }
 
     if (line.endsWith(':remove()')) {
@@ -511,7 +511,11 @@ export default class CosmeticFilter implements IFilter {
     let filter = '';
 
     if (this.domains !== undefined) {
-      filter += '<hostnames>';
+      if (this.domains.parts !== undefined) {
+        filter += this.domains.parts;
+      } else {
+        filter += '<hostnames>';
+      }
     }
 
     if (this.isUnhide()) {
@@ -668,28 +672,88 @@ export default class CosmeticFilter implements IFilter {
     return tokens;
   }
 
-  public getScript(js: Map<string, string>): string | undefined {
-    let scriptName = this.getSelector();
-    let scriptArguments: string[] = [];
-    if (scriptName.indexOf(',') !== -1) {
-      const parts = scriptName.split(',');
-      if (parts.length === 0) {
-        return undefined;
-      }
-
-      const firstPart = parts[0];
-      if (firstPart === undefined) {
-        return undefined;
-      }
-
-      scriptName = firstPart;
-      scriptArguments = parts.slice(1).map((s) => s.trim());
+  public parseScript(): { name: string; args: string[] } | undefined {
+    const selector = this.getSelector();
+    if (selector.length === 0) {
+      return undefined;
     }
 
-    let script = js.get(scriptName);
+    const parts: string[] = [];
+
+    let index = 0;
+    let lastComaIndex = -1;
+    let inDoubleQuotes = false;
+    let inSingleQuotes = false;
+    let inRegexp = false;
+    let objectNesting = 0;
+    let lastCharIsBackslash = false;
+
+    for (; index < selector.length; index += 1) {
+      const char = selector[index];
+
+      if (lastCharIsBackslash === false) {
+        if (inDoubleQuotes === true) {
+          if (char === '"') {
+            inDoubleQuotes = false;
+          }
+        } else if (inSingleQuotes === true) {
+          if (char === "'") {
+            inSingleQuotes = false;
+          }
+        } else if (objectNesting !== 0) {
+          if (char === '{') {
+            objectNesting += 1;
+          } else if (char === '}') {
+            objectNesting -= 1;
+          } else if (char === '"') {
+            inDoubleQuotes = true;
+          } else if (char === "'") {
+            inSingleQuotes = true;
+          }
+        } else if (inRegexp === true) {
+          if (char === '/') {
+            inRegexp = false;
+          }
+        } else {
+          if (char === '"') {
+            inDoubleQuotes = true;
+          } else if (char === "'") {
+            inSingleQuotes = true;
+          } else if (char === '{') {
+            objectNesting += 1;
+          } else if (char === '/') {
+            inRegexp = true;
+          } else if (char === ',') {
+            parts.push(selector.slice(lastComaIndex + 1, index).trim());
+            lastComaIndex = index;
+          }
+        }
+      }
+
+      lastCharIsBackslash = char === '\\';
+    }
+
+    parts.push(selector.slice(lastComaIndex + 1).trim());
+
+    if (parts.length === 0) {
+      return undefined;
+    }
+
+    return { name: parts[0], args: parts.slice(1) };
+  }
+
+  public getScript(js: Map<string, string>): string | undefined {
+    const parsed = this.parseScript();
+    if (parsed === undefined) {
+      return undefined;
+    }
+
+    const { name, args } = parsed;
+
+    let script = js.get(name);
     if (script !== undefined) {
-      for (let i = 0; i < scriptArguments.length; i += 1) {
-        script = script.replace(`{{${i + 1}}}`, scriptArguments[i]);
+      for (let i = 0; i < args.length; i += 1) {
+        script = script.replace(`{{${i + 1}}}`, args[i]);
       }
 
       return script;
