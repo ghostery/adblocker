@@ -761,9 +761,6 @@ mittelhessen.de##[class*="banner"]
 mittelhessen.de##[class*="Banner"]
 mittelhessen.de##.adSlot
 
-! https://github.com/uBlockOrigin/uAssets/issues/11691
-radiowereld.nl##+js(nosiif, adb)
-
 ! https://www.reddit.com/r/uBlockOrigin/comments/spykj6/getcopynet_adblock_detected_and_ads/
 getcopy.link##+js(aopr, lck)
 getcopy.link##+js(refresh-defuser)
@@ -2138,7 +2135,7 @@ androidapks.biz,androidsite.net,animeonlinefree.org,animesite.net,computercrack.
 mat6tube.com##+js(set, ads, undefined)
 
 ! multiup. us popups
-multiup.us##+js(nowoif)
+multiup.us##+js(aeld, , pop)
 multiup.us##+js(set, adblockcheck, false)
 ||unpkg.com/videojs-vast-vpaid@2.0.2/bin/videojs_5.vast.vpaid.min.js$script,domain=multiup.us
 ||multiup.us/cdn-cgi/trace$xhr,1p
@@ -4200,7 +4197,7 @@ coinscap.info,cryptowidgets.net,greenenez.com,insurancegold.in,webfreetools.net,
 cryptowidgets.net##+js(nostif, check, 1)
 cryptowidgets.net##+js(rmnt, script, adBlockDetected)
 cryptowidgets.net##^script[data-script='CallAdBlock-script']:has-text(adBlockDetected)
-coinscap.info,cryptowidgets.net,greenenez.com,insurancegold.in,webfreetools.net,wiki-topia.com##+js(nostif, detected)
+coinscap.info,cryptowidgets.net,greenenez.com,insurancegold.in,webfreetools.net,wiki-topia.com##+js(nostif, /bait|detected/)
 coinscap.info,cryptowidgets.net,greenenez.com,insurancegold.in,webfreetools.net,wiki-topia.com##+js(set, navigator.brave, undefined)
 
 ! moddroid.co => .com ads and popups
@@ -4718,8 +4715,17 @@ miuiflash.com,thecubexguide.com##[href^="https://bit.ly/"]
 @@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=thecubexguide.com
 @@||securepubads.g.doubleclick.net/pagead/managed/js/gpt/*/pubads_impl$script,domain=thecubexguide.com
 @@||securepubads.g.doubleclick.net/gampad/ads$xhr,domain=thecubexguide.com
-djxmaza.in,miuiflash.com,thecubexguide.com###featuredimage:style(height:250px !important;left:-3000px !important;position:absolute !important)
 @@||adoto.net/dashboard/common/js/common.js$3p,script,domain=dev.miuiflash.com|djxmaza.in|thecubexguide.com
+@@*$ghide,domain=dev.miuiflash.com|djxmaza.in|thecubexguide.com
+*$image,redirect-rule=32x32.png:5,domain=djxmaza.in|thecubexguide.com|dev.miuiflash.com
+*$frame,redirect=noopframe,domain=djxmaza.in|dev.miuiflash.com|thecubexguide.com
+*$xhr,domain=djxmaza.in|dev.miuiflash.com|thecubexguide.com,redirect-rule=nooptext
+*$script,redirect-rule=noopjs,domain=djxmaza.in|thecubexguide.com|dev.miuiflash.com
+@@||devfiles.pages.dev/fonts/wp-content/plugins/best-ads-block-detector/main.js
+@@||googlesyndication.com^$script,xhr,domain=djxmaza.in|dev.miuiflash.com|thecubexguide.com
+@@||doubleclick.net^$script,xhr,domain=djxmaza.in|dev.miuiflash.com|thecubexguide.com
+dev.miuiflash.com,djxmaza.in,thecubexguide.com##+js(no-fetch-if, /adtrue\.com|eningspon\.com|freychang\.fun|orquideassp\.com|popunder/)
+dev.miuiflash.com,djxmaza.in,thecubexguide.com##+js(no-xhr-if, /a-mo\.net|adnxs\.com|prebid|creativecdn\.com|e-planning\.net|quantumdex\.io/)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/15126
 kledgeb.blogspot.com##body > div[style="visibility: hidden;"]:style(visibility: unset !important)
@@ -5569,13 +5575,17 @@ chip.de##.Ad-hor-height:not([id])
 chip.de##td[style][colspan] > a.js-antivirusclick[href]
 chip.de##.DetailPage__Right-Column > .app_nexus_banners_common[id]
 chip.de###contentad-top-adsense-1
+chip.de#@#.FC__Container.min-height-250px-mu
+chip.de#@##R1C3
+chip.de##.FC__Container.min-height-250px-mu:style(max-height: 0.1px !important; height: 0.1px !important; min-height: 0px !important;)
+chip.de###R1C3[role="complementary"]
 ||nah-versorger.de^$3p
 ||stopundstart.de^$3p
 ||mein-organizer.de^$3p
 ||schneesommer.de^$3p
+/im\.chip\.de\/ii\/[0-9\/]{14,17}\/[a-zA-Z0-9]{2,9}[\-_][a-zA-Z0-9]{3,8}[\-_]([a-zA-Z0-9]{3,8}[\-_])?([a-zA-Z0-9]{3,8}[\-_])?([a-zA-Z0-9]{3,6}[\-_])?[a-zA-Z0-9]{16}\..*\?im=Resize.*&hash=[a-z0-9]{64}/$image,xhr,match-case,1p,domain=chip.de
+@@/im\.chip\.de\/ii\/[0-9\/]{14,17}\/.*[\-_][a-z0-9]{16}\.[a-zA-Z]{3,5}\?im=Resize.*&hash=[a-z0-9]{64}/$image,xhr,match-case,1p,domain=chip.de
 ||im.chip.de/ii/*AspectCrop*gravity*&hash=*esi:vars%3E*(randomString)%3C/esi:vars$image,xhr,1p
-/im\.chip\.de\/ii\/[0-9\/]{14,17}\/[a-zA-Z0-9]{4,9}\-[a-zA-Z0-9]{3,6}\-([a-zA-Z0-9]{3,6}\-)?([a-zA-Z0-9]{3,6}\-)?([a-zA-Z0-9]{3,6}\-)?[a-zA-Z0-9]{16}\..*\?im=Resize.*&hash=[a-z0-9]{60,}/$image,xhr,match-case,1p,domain=chip.de
-@@/im\.chip\.de\/ii\/[0-9\/]{14,17}\/.*(logo|launcher|player|tool|messenger|game|microsoft|windows).*&hash=[a-z0-9]{64}/$image,xhr,1p,domain=chip.de
 ||free.webcompanion.com/minime/de/index.php?partner=*&campaign=$popup,doc
 ||bdu.bitdriverupdater.com/*&utm_source=$popup,doc
 chip.de##^script:has-text(/pushAdTag|link_click|getAds/)
