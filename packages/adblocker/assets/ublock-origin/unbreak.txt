@@ -2144,11 +2144,6 @@ getcoloringpages.com#@#.adsBlock
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57295
 @@||static.motortrader.com.my/advert/$image,domain=motortrader.com.my
 
-! https://forums.lanik.us/viewtopic.php?p=155106#p155106
-!#if env_firefox
-@@||markup.nieuwsblad.be/extra/assets/advertising/prebid.js$script,1p
-!#endif
-
 ! https://www.wilderssecurity.com/threads/ublock-a-lean-and-fast-blocker.365273/page-180#post-2922999
 @@||choice.faktor.io^$frame,script,xhr,domain=gids.tv
 
@@ -3326,13 +3321,6 @@ meteoetradar.com##+js(no-xhr-if, doubleclick)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10946
 @@||cloudflare.com/cdn-cgi/trace$xhr,redirect-rule=noop.txt,domain=benchmarkuniverse.com
-
-! https://github.com/uBlockOrigin/uAssets/issues/11039
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=dagelijksekost.een.be
-@@||shared.mediahuis.be/ka-ching/prebid.js$script,domain=dagelijksekost.een.be
-@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=dagelijksekost.een.be
-@@||securepubads.g.doubleclick.net/gpt/pubads_impl_$script,domain=dagelijksekost.een.be
-@@||assets.adobedtm.com/*-source.min.js$script,domain=dagelijksekost.een.be
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11077
 ||sammobile.com^*/newrelic.js$script,1p,redirect=noop.js,important
@@ -4950,6 +4938,7 @@ szbz.de##+js(set, iom, {})
 ! https://github.com/AdguardTeam/AdguardFilters/issues/158410
 @@||a.omappapi.com/app/campaign-views/*-optin.json$xhr,domain=app.monstercampaigns.com
 @@||a.omappapi.com/users/*/images/$image,domain=app.monstercampaigns.com
+@@||a.omappapi.com/app/campaign-views/*-success.json$xhr,domain=app.monstercampaigns.com
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/158351
 @@||googletagmanager.com/gtm.js$script,domain=villeroy-boch.fr
@@ -5103,3 +5092,12 @@ theonion.com##+js(nano-stb, ads, *)
 ! https://forums.lanik.us/viewtopic.php?t=48313-instapundit-com&p=166621#p166621
 instapundit.com#@#.postad
 instapundit.com#@#.ad-space:not(.textads)
+
+! https://github.com/uBlockOrigin/uAssets/issues/20013
+@@||adobedtm.com^*/satelliteLib-$script,domain=costco.*
+
+! https://github.com/uBlockOrigin/uAssets/issues/20045
+@@||googletagmanager.com/gtm.js$script,domain=aarhustech.dk
+
+! https://github.com/uBlockOrigin/uAssets/issues/20054
+||go.xlirdr.com^$xhr,removeparam
