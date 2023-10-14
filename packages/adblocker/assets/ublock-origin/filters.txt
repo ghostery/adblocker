@@ -25,8 +25,14 @@ youtube.com#@#+js(json-prune-fetch-response, [].playerResponse.adPlacements [].p
 youtube.com#@#+js(json-prune-fetch-response, [].playerResponse.adPlacements [].playerResponse.playerAds [].playerResponse.adSlots playerResponse.adPlacements playerResponse.playerAds playerResponse.adSlots adPlacements playerAds adSlots, , propsToMatch, url:player?key=)
 youtube.com#@#+js(json-prune-fetch-response, [].playerResponse.adPlacements [].playerResponse.playerAds [].playerResponse.adSlots playerResponse.adPlacements playerResponse.playerAds playerResponse.adSlots adPlacements playerAds adSlots, , propsToMatch, url:player?key= method:/post/i)
 youtube.com#@#+js(json-prune-fetch-response, [].playerResponse.adPlacements [].playerResponse.playerAds [].playerResponse.adSlots playerResponse.adPlacements playerResponse.playerAds playerResponse.adSlots adPlacements playerAds adSlots, , propsToMatch, url:player?key= method:/post/i bodyUsed:true)
-youtube.com##+js(json-prune-xhr-response, [].playerResponse.adPlacements [].playerResponse.playerAds [].playerResponse.adSlots playerResponse.adPlacements playerResponse.playerAds playerResponse.adSlots adPlacements playerAds adSlots, , propsToMatch, url:/player\?key=|watch\?v=|youtubei\/v1\/player/)
-youtube.com##+js(json-prune, playerResponse.adPlacements playerResponse.playerAds playerResponse.adSlots adPlacements playerAds adSlots)
+www.youtube.com##+js(json-prune-xhr-response, [].playerResponse.adPlacements [].playerResponse.playerAds [].playerResponse.adSlots playerResponse.adPlacements playerResponse.playerAds playerResponse.adSlots adPlacements playerAds adSlots, , propsToMatch, url:/player\?key=|watch\?v=|youtubei\/v1\/player/)
+www.youtube.com##+js(trusted-replace-fetch-response, /"adSlots.*?SLOT_TYPE_PLAYER_BYTES.*?\}\]\}\}\]\,/, , url:player?key=)
+www.youtube.com##+js(trusted-replace-fetch-response, /"adPlacements.*?AD_PLACEMENT_KIND_START.*?"\}\}\}\]\,/, , url:player?key=)
+www.youtube.com##+js(trusted-replace-fetch-response, /"playerAds.*?"enabledEngageTypes":"(\d{1,2},)+\d".*?\}\}\]\,/, , url:player?key=)
+youtube.com#@#+js(trusted-replace-fetch-response, /(GFEEDBACK.*?)"adSlots.*?\}\]\}\}\]\,/, $1, url:player?key=)
+youtube.com#@#+js(trusted-replace-fetch-response, /(GFEEDBACK.*?)"adPlacements.*?"\}\}\}\]\,/, $1, url:player?key=)
+youtube.com#@#+js(trusted-replace-fetch-response, /(GFEEDBACK.*?)"playerAds.*?\}\}\]\,/, $1, url:player?key=)
+youtube.com#@#+js(json-prune, playerResponse.adPlacements playerResponse.playerAds playerResponse.adSlots adPlacements playerAds adSlots)
 youtube.com#@#+js(trusted-replace-fetch-response, /(videoplayback.*?)"adSlots.*?\}\]\}\}\]\,/, $1, url:player?key=)
 youtube.com#@#+js(trusted-replace-fetch-response, /(videoplayback.*?)"adPlacements.*?"\}\}\}\]\,/, $1, url:player?key=)
 youtube.com#@#+js(trusted-replace-fetch-response, /(videoplayback.*?)"playerAds.*?\}\}\]\,/, $1, url:player?key=)
@@ -59,7 +65,7 @@ youtube.com,youtubekids.com,youtube-nocookie.com##+js(set, ytInitialPlayerRespon
 youtube.com,youtubekids.com,youtube-nocookie.com##+js(set, ytInitialPlayerResponse.adSlots, undefined)
 youtube.com,youtubekids.com,youtube-nocookie.com##+js(set, playerResponse.adPlacements, undefined)
 ! https://github.com/uBlockOrigin/uAssets/issues/7636#issuecomment-1674303331
-music.youtube.com,youtubekids.com,youtube-nocookie.com##+js(json-prune, playerResponse.adPlacements playerResponse.playerAds playerResponse.adSlots adPlacements playerAds adSlots important)
+m.youtube.com,music.youtube.com,youtubekids.com,youtube-nocookie.com##+js(json-prune, playerResponse.adPlacements playerResponse.playerAds playerResponse.adSlots adPlacements playerAds adSlots important)
 ! https://github.com/uBlockOrigin/uAssets/issues/15632
 youtube.com##.ytlr-horizontal-list-renderer__items > .yt-virtual-list__container > .yt-virtual-list__item--visible.yt-virtual-list__item--selected.yt-virtual-list__item:has-text(Ad)
 ! https://github.com/uBlockOrigin/uAssets/issues/7636#issuecomment-1453088841
@@ -266,14 +272,6 @@ g9g.eu##+js(aopr, adBlockDetected)
 ! https://github.com/uBlockOrigin/uAssets/issues/15820
 allmusic.com##+js(no-fetch-if, ads)
 allmusic.com##.advertising
-
-! Spotted on routine testing of opensubtitles.org
-! https://forums.lanik.us/viewtopic.php?f=62&t=32144
-||104.197.199.227^$all
-! https://github.com/uBlockOrigin/uAssets/issues/699
-opensubtitles.org##+js(acs, atob)
-opensubtitles.org###loginBoxSubs
-opensubtitles.org###network
 
 ! https://github.com/NanoMeow/QuickReports/issues/144
 redtube.*###paid_tabs_list
@@ -902,7 +900,7 @@ xbooru.com##a[href^="https://xbooru.com/c.html"]
 kbb.com##[id^="kbbAds"], [id^="kbbAds"] + p
 
 ! Fingerprint2 popups
-dfiles.eu,downsub.com,j.gs,macserial.com,microify.com,minecraft-forum.net,onmovies.*,opensubtitles.org,pirateproxy.*,psarips.*,solidfiles.com,thepiratebay.org,uptobox.com##+js(aopw, Fingerprint2)
+dfiles.eu,downsub.com,j.gs,macserial.com,microify.com,minecraft-forum.net,onmovies.*,pirateproxy.*,psarips.*,solidfiles.com,thepiratebay.org,uptobox.com##+js(aopw, Fingerprint2)
 ||livewidget.net^
 solidfiles.com##.remove
 thepiratebay.org##[href^="http://www.coiwqe.site/"]
@@ -4165,6 +4163,8 @@ aquipelis.net##[class^="adsbutt"]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/2081
 ! https://github.com/easylist/easylist/issues/7486
+! https://www.reddit.com/r/uBlockOrigin/comments/177nvxn/popup/
+eporner.com##+js(rmnt, script, /adb/i)
 eporner.com##+js(aopw, EPeventFire)
 eporner.com##+js(nostif, additional_src, 300)
 *.xml$xhr,3p,domain=eporner.com
@@ -12791,13 +12791,6 @@ semawur.com###main > .text-center > a[href] > img
 
 ! https://github.com/NanoMeow/QuickReports/issues/2140
 cuevana2.io##+js(aopr, decodeURI)
-
-! https://github.com/uBlockOrigin/uAssets/issues/6484
-opensubtitles.org##+js(nano-sib)
-opensubtitles.org##+js(ra, data-ff-code)
-opensubtitles.org##+js(nowoif)
-opensubtitles.org##.ui-dialog:has-text(extension)
-opensubtitles.org##.ui-front.ui-widget-overlay
 
 ! https://github.com/uBlockOrigin/uAssets/issues/6487
 @@||linkvertise.com^$ghide
