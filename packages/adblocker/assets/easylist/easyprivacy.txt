@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202310141809
+! Version: 202310151708
 ! Title: EasyPrivacy
-! Last modified: 14 Oct 2023 18:09 UTC
+! Last modified: 15 Oct 2023 17:08 UTC
 ! Expires: 4 days (update frequency)
 ! *** easylist:template_header.txt ***
 !
@@ -142,6 +142,7 @@
 /__wsm.gif
 /_blazor/*$ping
 /_ga?send&
+/_ga?sponsor_pixel=
 /_gz/counter.php?
 /_hcms/perf
 /_lib/ga.js
@@ -150,6 +151,7 @@
 /_stat/log/*
 /_stat/log_
 /_tracking/*
+/_vercel/insights/script.js
 /_visitcount?
 /a.gif?
 /a8c-analytics.
@@ -1094,6 +1096,7 @@
 /ga2.js
 /ga_anonym.js
 /ga_cookie_track
+/ga_event_tracking.js
 /ga_events.js
 /ga_external.
 /ga_footer.
@@ -3114,6 +3117,7 @@
 /wp-content/plugins/confection/bridge.php
 /wp-content/plugins/pageviews/*
 /wp-content/plugins/rm-gtm-google-analytics-for-wordpress/*
+/wp-content/plugins/s2f-referral-tracking/*
 /wp-content/tracker.
 /wp-counter.php
 /wp-js/analytics.
@@ -3230,52 +3234,32 @@
 ?event=pageview&
 ?event=performance&
 ?event=performancelogger:
-?event=tracking:ajax
-?eventtype=request&pid=
 ?local_ga_js=
 ?log=stats-
 ?log_performance_metrics
 ?logType=impression&
 ?logType=trackEvent&
 ?pageviews=$third-party
-?sponsor_pixel=
 ?statify_referrer=
 ?type=page&event=
 ?type=pageview&
-_adobe_analytics.
-_adobe_analytics_
-_analytics-tracking?
-_analytics.php?
-_analytics/lib/
 _beacon?
-_bnTracker.min.js?
 _c.gif?c=
 _chartbeat.js
 _Clicktale.
-_event_tracking-
-_event_tracking.
 _event_tracking?
-_ga-events_
 _gpt_bootstrap_
-_hitcount1.
 _hits_stat.
 _imp?Log=
-_impression_analytics/
-_impressions.gif?
-_interaction_analytics/
 _logHuman=
-_metric_collect.
-_mixpanel_events.
 _nedstat.js
 _newrelic_min.
 _nielsen.js
-_ntpagetag.
 _rpc/log?
 _social_tracking.js
 _stat.php?referer=
 _stat_counter.php?
 _trackWebtrekkEvents.
-_vercel/insights/
 _view_pixel&$image
 _webanalytics.
 _WebVitalsReporter_
@@ -3507,6 +3491,7 @@ _WebVitalsReporter_
 ://parcel-api.delivery-status.*/open/$image
 ://t.order.*/r/?id=$image
 _ad_impression.
+_adobe_analytics.js
 _track_pixel.gif?
 img.promio-connect.com$image
 omni.soundestlink.com$image
@@ -3803,6 +3788,7 @@ _mongo_stats/
 ||googleoptimize.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||googletagmanager.com^
+||gw-dv.vip^
 ||hdmtools.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||hs-analytics.net^
@@ -9878,6 +9864,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||a-counter.kiev.ua^$third-party
 ||adblockmetrics.ru^$third-party
 ||admile.ru^$third-party
+||adsmediator.com^$third-party
 ||adx.com.ru^$third-party
 ||airlogs.ru^$third-party
 ||announcement.ru^$third-party
@@ -11960,6 +11947,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||stats.big-boards.com^
 ||stats.bitgravity.com^
 ||stats.bluebillywig.com^
+||stats.bradmax.com^
 ||stats.callnowbutton.com^
 ||stats.cmcigroup.com^
 ||stats.curds.io^
@@ -14092,6 +14080,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||cstats.sankakucomplex.com^
 ||cultofmac.com/djrxqhzkbsgf.js
 ||cvs.com/tnadstlinj.js
+||cwt.citywire.info^
 ||d.skk.moe^
 ||dailymail.co.uk/geo/
 ||dailymail.co.uk/rta2/
@@ -14768,6 +14757,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||sharesies.com/v1/track
 ||shavetape.cash/stat/
 ||shazam.com/services/metrics/
+||shobiddak.com/logging/
 ||shopeemobile.com/*/tr/
 ||shopmetric.rediff.com^
 ||siberiantimes.com/counter/
@@ -14884,6 +14874,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||swarm.video/stats/
 ||t.3hentai.net^
 ||t.9gag.com^
+||t.airasia.com^
 ||t.allmodern.com^
 ! [dup] from peter-lowe/serverlist.txt
 ! ||t.appsflyer.com^
@@ -33405,6 +33396,7 @@ arketing.indianadunes.com^
 ||fb.ru/stat/
 ||fontanka.ru/api/metrics/
 ||fotostrana.ru/start/
+||goya.rutube.ru^
 ||hh.ru/analytics^
 ||hh.ru/stat?
 ||irecommend.ru/collect/
