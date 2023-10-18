@@ -57,9 +57,6 @@
 ! http://www.slideshare.net/aidanajoyce/adblocking-blocking-more-than-ads
 ||ggwebcast.com/*/kaltura/ga/urchin.js$script,redirect=noopjs
 
-! https://github.com/gorhill/uBlock/issues/1803
-@@||static.adf.ly^$image,script,css,domain=q.gs
-
 ! https://github.com/uBlockOrigin/uAssets/issues/148
 @@||media2.intoday.in/aajtak/$script,domain=aajtak.intoday.in|indiatoday.intoday.in
 
@@ -82,9 +79,6 @@
 @@||googleapis.com/js/sdkloader/ima3.js$script,domain=seattlepi.com|sfgate.com
 @@||spotxcdn.com/integration/directsdk/*$script,domain=seattlepi.com|sfgate.com
 @@||spotx.tv/directsdk/*$script,domain=seattlepi.com|sfgate.com
-
-! https://github.com/gorhill/uBlock/issues/1114
-@@||healthline.com/resources/base/js/util/ga-custom-vars.js$script,domain=healthline.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/314
 ! To counter `adobedtm.com` in EasyPrivacy
@@ -233,7 +227,6 @@ energy.de#@##ad_home
 
 ! https://github.com/uBlockOrigin/uAssets/issues/1007
 @@||rtl.be/videos/player/vp4_webanalytics.js$script,1p
-@@||videoplaza.tv/*/pulse-sdk-html5/*$script,domain=rtl.be
 
 ! https://github.com/jspenguin2017/uBlockProtector/issues/778
 reyada.com#@#.ads_area
@@ -298,12 +291,6 @@ hintergrundbild.org#@#.ads1
 ! https://github.com/uBlockOrigin/uAssets/issues/1564
 @@||cloudflare.com/ajax/libs/*$script,domain=androidcentral.com
 
-! https://github.com/uBlockOrigin/uAssets/issues/1592
-@@||geonames.org/flags/x/ad.gif$image
-
-! https://forums.lanik.us/viewtopic.php?f=64&t=40035
-vhacks.org#@#.sponsor-logo
-
 ! https://github.com/uBlockOrigin/uAssets/issues/1628
 ||player.ooyala.com/*/ad-plugin/pulse.min.js$script,redirect=noopjs,domain=lpga.com
 
@@ -336,11 +323,6 @@ vhacks.org#@#.sponsor-logo
 ! https://github.com/uBlockOrigin/uAssets/issues/1704#issuecomment-372543282
 ! https://forums.lanik.us/viewtopic.php?f=64&t=43860&p=151105#p151105
 @@||pages.bostonglobe.com/login/js/lib/AppMeasurement.js$script,1p
-
-! https://forums.lanik.us/viewtopic.php?p=133754#p133754
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js?$script,domain=dugout.com
-@@||dugout.com/boxsets/js/videojs.ads.js?$script,1p
-@@||dugout.com/boxsets/js/prebid_$script,1p
 
 ! https://forums.lanik.us/viewtopic.php?f=64&t=40233&p=133912#p133911
 ! https://github.com/NanoMeow/QuickReports/issues/4254
@@ -585,18 +567,11 @@ britannica.com###md-media-overlay-ad
 ! https://www.reddit.com/r/uBlockOrigin/comments/9634p5/ublock_origin_is_hiding_reddit_posts_and_making/
 @@||gateway.reddit.com/desktopapi/*$xhr,1p
 
-! https://forums.lanik.us/viewtopic.php?p=139656#p139656
-@@||cdn.fluidplayer.com/$script,domain=desixnxx.net
-
 ! https://forums.lanik.us/viewtopic.php?f=103&t=40699
 ||fuegodevida.com^$popup,3p,badfilter
 
 ! https://github.com/NanoAdblocker/NanoCore/issues/201
 @@||nxp.com/*/resources/scripts/analytics/webanalytics.js$script,1p
-
-! fix for issues caused by `EasyList` regex for anime sites
-! https://github.com/uBlockOrigin/uAssets/issues/2333#issuecomment-415652949
-@@||kimcartoon.cc/ajax-get-link-stream/*$xhr,1p
 
 ! https://forums.lanik.us/viewtopic.php?f=64&t=41502
 @@||apply.indeed.com/$frame,1p
@@ -2280,9 +2255,6 @@ saltspringexchange.com#@#.single-ad
 ! https://github.com/uBlockOrigin/uAssets/issues/7700
 @@||api.ipstack.com/check?access_key=$xhr
 ! [badfilter] ||ipstack.com^$badfilter
-
-! https://forums.lanik.us/viewtopic.php?p=155931#p155931
-@@||geoip-db.com/jsonp/*$script,domain=justinto.xyz
 
 ! sedoparking .com unbreak
 ! [badfilter] ||sedoparking.com^$badfilter
@@ -5101,3 +5073,6 @@ instapundit.com#@#.ad-space:not(.textads)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/20054
 ||go.xlirdr.com^$xhr,removeparam
+
+! https://github.com/uBlockOrigin/uAssets/issues/20128
+@@||googletagmanager.com/gtag/js$script,redirect-rule=googletagmanager_gtm.js:5,domain=trovvve.com

@@ -2376,9 +2376,7 @@ apkmaven.*###countdown
 apkmaven.*###download_link:style(display: block !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/13094
-photopea.com##+js(set, console.clear, noopFunc)
-||photopea.com/img/pp_tall.png^$image,1p
-photopea.com##a[href*="photopea.com"][href*="ads"]
+photopea.com##div[style] > a[href*="photopea.com"][href*="ads"]:upward(1)
 ! https://github.com/jared-schwalbe/remove-ads-from-photopea/blob/main/app.js
 ! https://github.com/uBlockOrigin/uAssets/issues/19697
 !photopea.com##+js(rpnt, script, /^.*?(function gtag).*$/, document.documentElement.setAttribute('onreset'\,(function addCustomEvent(){document.addEventListener('resizecanvas'\,()=>{window.innerWidth=document.documentElement.clientWidth+(window.screen.width<1600?180:320)})})());document.documentElement.dispatchEvent(new CustomEvent('reset'));document.documentElement.removeAttribute('onreset');function resize(event={}){if(!event.skip){document.dispatchEvent(new CustomEvent('resizecanvas'));const resizeEvent=new Event('resize');resizeEvent.skip=true;window.dispatchEvent(resizeEvent)}}let debounce;window.addEventListener('resize'\,event=>{clearTimeout(debounce);debounce=setTimeout(()=>resize(event)\,100)});resize();)
@@ -2400,11 +2398,10 @@ justswallows.net##+js(aopr, BetterJsPop)
 justswallows.net##[href="https://t.me/Russia_Vs_Ukraine_War3"]
 justswallows.net##a[onclick="openAuc();"]
 
-! https://github.com/uBlockOrigin/uAssets/issues/13110
 ! https://github.com/uBlockOrigin/uAssets/issues/15821
 1377x.*##+js(aopr, open)
 1377x.*###chatme-box
-1377x.*##[href="/register/index.html"]
+1377x.*##[href*="register"]
 ||fflink.net^$3p
 ||goojara.in^$3p
 ||bestmoviesflix.xyz^
@@ -3021,11 +3018,6 @@ adsup.lk##+js(nostif, show)
 ! https://github.com/uBlockOrigin/uAssets/issues/13577
 cryptomonitor.in##+js(nostif, show)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/120885
-cut-y.net##+js(set, blurred, false)
-cut-y.net##.adsbygoogle:style(position: absolute!important; left: -3000px!important;)
-cut-y.net#@#.adsbygoogle
-
 ! consoleroms.com,romspedia.com,romsgames.net,romsget.io timer, PH
 consoleroms.com,romspedia.com##+js(nano-sib, timeLeft)
 ! the rule below works only occasionary
@@ -3308,19 +3300,6 @@ javrank.com##.text-center > div.koukoku_1:upward(1)
 ! https://github.com/uBlockOrigin/uAssets/issues/13809
 palixi.net##+js(no-fetch-if, adsbygoogle)
 
-! beritabaru. news,solusi. cyou popunders
-beritabaru.news,solusi.cyou##+js(aeld, popstate)
-beritabaru.news,solusi.cyou##+js(nostif, href)
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/122509
-@@*$ghide,domain=tvpolen.ml
-
-! 90phut2 ads modal
-90phut2.*##.uk-modal
-90phut2.*##+js(ra, uk-sticky, header, stay)
-90phut2.*##+js(ra, style, body, stay)
-90phut2.*##html:style(overflow: auto !important;)
-
 ! https://forums.lanik.us/viewtopic.php?p=164429-nsfw-xxxxsx-com#p164429
 xxxxsx.com##^responseheader(location)
 xxxxsx.com##+js(cookie-remover)
@@ -3354,6 +3333,7 @@ moviesland.*##+js(aopr, AaDetector)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/13837
 *$script,domain=doge25.in,redirect-rule=noopjs
+doge25.in##+js(no-fetch-if, /ads|track/)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/13843
 rimworldbase.com##+js(aopr, ai_run_scripts)
@@ -5150,6 +5130,7 @@ businessnamegenerator.com##+js(nostif, gclid)
 ! https://github.com/uBlockOrigin/uAssets/issues/15404
 @@||derstandard.at^$ghide
 @@||npttech.com/advertising.js$script,domain=derstandard.at
+derstandard.at##ad-container
 
 ! https://github.com/uBlockOrigin/uAssets/issues/15407
 ||tirexo.*^$csp=default-src 'unsafe-inline' 'self' *.gstatic.com *.googleapis.com *.jquery.com
@@ -5566,7 +5547,7 @@ kpkuang.org###sterra-ad-onmid
 ! https://github.com/easylist/easylistgermany/issues/216
 chip.de###dlcharts-list + .mt-md > div > div > h2:has-text(/Gesponsert|Bezahlte Empfehlung/) + a[href^="https://www.chip.de/downloads/"]:upward(3)
 chip.de##div[class] > a:is(a[href*="https://x.chip.de/intern/dl/?url="], a[href*="https://www.chip.de/downloads/"]):has(div img[src*="https://im.chip.de/ii/"]):upward(1)
-chip.de###aabhor
+chip.de###aabhor:not([style^="display:block;"])
 chip.de###R1C2 > .Ad.align
 chip.de###CR:not(.Downloads-Detail) .app_nexus_banners_common
 chip.de###CR:not(.Downloads-Detail) .ob-ad-carousel-layout
@@ -5577,13 +5558,16 @@ chip.de##.DetailPage__Right-Column > .app_nexus_banners_common[id]
 chip.de###contentad-top-adsense-1
 chip.de#@#.FC__Container.min-height-250px-mu
 chip.de#@##R1C3
+chip.de#@##hp-aquamarin
 chip.de##.FC__Container.min-height-250px-mu:style(max-height: 0.1px !important; height: 0.1px !important; min-height: 0px !important;)
 chip.de###R1C3[role="complementary"]
+chip.de###hp-aquamarin:not([style^="display:block;"])
+chip.de##.app_nexus_banners_common[id]:not([style^="display:block;"])
 ||nah-versorger.de^$3p
 ||stopundstart.de^$3p
 ||mein-organizer.de^$3p
 ||schneesommer.de^$3p
-/im\.chip\.de\/ii\/[0-9\/]{14,17}\/[a-zA-Z0-9]{2,9}[\-_][a-zA-Z0-9]{3,8}[\-_]([a-zA-Z0-9]{3,8}[\-_])?([a-zA-Z0-9]{3,8}[\-_])?([a-zA-Z0-9]{3,6}[\-_])?[a-zA-Z0-9]{16}\..*\?im=Resize.*&hash=[a-z0-9]{64}/$image,xhr,match-case,1p,domain=chip.de
+/im\.chip\.de\/ii\/[0-9\/]{14,17}\/[a-zA-Z0-9]{2,13}[\-_][a-zA-Z0-9]{3,11}[\-_]([a-zA-Z0-9]{3,11}[\-_])?([a-zA-Z0-9]{3,8}[\-_])?([a-zA-Z0-9]{3,6}[\-_])?[a-zA-Z0-9]{16}\..*\?im=Resize.*&hash=[a-z0-9]{64}/$image,xhr,match-case,1p,domain=chip.de
 @@/im\.chip\.de\/ii\/[0-9\/]{14,17}\/.*[\-_][a-z0-9]{16}\.[a-zA-Z]{3,5}\?im=Resize.*&hash=[a-z0-9]{64}/$image,xhr,match-case,1p,domain=chip.de
 ||im.chip.de/ii/*AspectCrop*gravity*&hash=*esi:vars%3E*(randomString)%3C/esi:vars$image,xhr,1p
 ||free.webcompanion.com/minime/de/index.php?partner=*&campaign=$popup,doc
