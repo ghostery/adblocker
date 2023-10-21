@@ -1,9 +1,10 @@
 ! Title: uBlock₀ filters – Unbreak
+! Version: %version%
+! Last modified: %timestamp%
 ! Description:
 !     Filters optimized for uBlock Origin, to unbreak sites broken as
 !     a result of 3rd-party filter lists enabled by default.
 ! Expires: 5 days
-! Last modified: %timestamp%
 ! Homepage: https://github.com/uBlockOrigin/uAssets
 ! License: https://github.com/uBlockOrigin/uAssets/blob/master/LICENSE
 !
@@ -4317,6 +4318,8 @@ variety.com##^html > head > link[rel="canonical"]:not([href*="/video/"]):upward(
 @@||cds.connatix.com/p/*/connatix.playspace.css^$css,3p,domain=adweek.com
 @@||connatix.com/core/story^$xhr,method=post,3p,domain=adweek.com
 ||adweek.com^$removeparam=traffic_source
+! https://github.com/uBlockOrigin/uAssets/issues/20200
+@@||cds.connatix.com/*/cSyncRemoteEntry.js$script,domain=accuweather.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/17000
 mediaite.com#@#.adthrive-video-player
@@ -5076,3 +5079,9 @@ instapundit.com#@#.ad-space:not(.textads)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/20128
 @@||googletagmanager.com/gtag/js$script,redirect-rule=googletagmanager_gtm.js:5,domain=trovvve.com
+
+! https://forums.lanik.us/viewtopic.php?p=166657-video-player-blocked#p166657
+@@||sonar.viously.com^$script,domain=aufeminin.com|consoglobe.com|cuisineaz.com|deco.fr|demotivateur.fr|fourchette-et-bikini.fr|futura-sciences.com|passeportsante.net|rustica.fr|wamiz.com|turbo.fr
+
+! https://github.com/uBlockOrigin/uAssets/issues/20209
+@@||cmp.quantcast.com^$script,domain=formulatv.com
