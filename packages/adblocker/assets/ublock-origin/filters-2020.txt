@@ -882,7 +882,7 @@ xda-developers.com##+js(rc, twig-body)
 
 ! https://forums.lanik.us/viewtopic.php?f=62&t=44685
 @@||hiphopa.net^$ghide
-hiphopa.net##+js(acs, String.fromCharCode, 'shift')
+hiphopa.net##+js(aopw, _pop)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7416
 @@||imedikament.de^$ghide
@@ -1636,13 +1636,12 @@ usb-antivirus.com##+js(aopr, mdpDeBlocker)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/58446
 graphicdesignresources.net##+js(nosiif, visibility, 1000)
 
-! https://github.com/uBlockOrigin/uAssets/issues/448
-! https://github.com/uBlockOrigin/uAssets/issues/724
 ! https://github.com/uBlockOrigin/uAssets/issues/14231
 ! https://github.com/uBlockOrigin/uAssets/issues/18148
 ! ||spotify.com/storage-resolve/files/audio/interactive/*$xhr,domain=open.spotify.com
 ||akamaized.net/audio/$media,redirect=noop-1s.mp4:10,from=open.spotify.com
 ||scdn.co/audio/$media,redirect=noop-1s.mp4:10,domain=open.spotify.com
+||spotifycdn.com/audio/$media,redirect=noop-1s.mp4:10,domain=open.spotify.com
 open.spotify.com##[href^="https://adclick.g.doubleclick.net/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/7620
 open.spotify.com###leaderboard-ad-element
@@ -3998,7 +3997,7 @@ discoveryplus.*##+js(json-prune, data.attributes.config.freewheel data.attribute
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/18875
 discoveryplus.*,go.discovery.com##+js(json-prune, data.attributes.ssaiInfo.forecastTimeline data.attributes.ssaiInfo.vendorAttributes.nonLinearAds data.attributes.ssaiInfo.vendorAttributes.videoView data.attributes.ssaiInfo.vendorAttributes.breaks.[].ads.[].adMetadata data.attributes.ssaiInfo.vendorAttributes.breaks.[].ads.[].adParameters data.attributes.ssaiInfo.vendorAttributes.breaks.[].timeOffset)
-discoveryplus.*,go.discovery.com##+js(xml-prune, xpath(//*[name()="MPD"][.//*[name()="BaseURL" and contains(text()\,'dash_clear_fmp4') and contains(text()\,'/a/')]]/@mediaPresentationDuration | //*[name()="Period"][./*[name()="BaseURL" and contains(text()\,'dash_clear_fmp4') and contains(text()\,'/a/')]]), , .mpd)
+discoveryplus.*,go.discovery.com,go.tlc.com##+js(xml-prune, xpath(//*[name()="MPD"][.//*[name()="BaseURL" and contains(text()\,'dash_clear_fmp4') and contains(text()\,'/a/')]]/@mediaPresentationDuration | //*[name()="Period"][./*[name()="BaseURL" and contains(text()\,'dash_clear_fmp4') and contains(text()\,'/a/')]]), , .mpd)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67650
 pureshort.*##+js(aopr, app_vars.force_disable_adblock)
@@ -5115,7 +5114,7 @@ adblockstreamtape.*,adblockstrtape.*,adblockstrtech.*,komikcast.*,mavanimes.*,st
 ! ##+js(aost, Object, /(?=^(?!.*(https)))/)
 exego.app,foot2live.cc,buffstreams.*,criptologico.com,filmyworld.*,foreverwallpapers.com,hotstar.news,mcrypto.club,moviesda1.*,moviesda.*,olympicstreams.me,sockshare1.*,songspk.*,speedostream.*,t20cric.*,tnmusic.in,webcric.com,webseriesclub.com,yourtehzeeb.com,zone-telechargement.*##+js(aost, Object, /(?=^(?!.*(https)))/)
 ! ##+js(acs, document.documentElement, break;case $.)
-0123movie.*,123chill.*,123movies-free.*,123movies-org.*,123movies.*,123moviesfree.*,123movieshub.*,123movieweb.*,190.115.18.20,1hd.to,1todaypk.*,2kmovie.*,4movierulz.*,4movierulz1.*,5movies.*,9kmovies.*,a8ix.*,acn.vin,adblocktape.*,aflizmovies.com,ak4eg.*,anihdplay.com,animeonline.ninja,animeunity.*,animixplay.*,aniwatch.*,arc018.to,asianhdplay.*,atishmkv.*,backfirstwo.site,bolly2tolly.*,clickndownload.*,comedyshow.to,cool-etv.net,crackstreams.*,crackstreamshd.click,daddylivehd.*,direct-cloud.*,divicast.com,divxfilmeonline.net,dood.*,doods.pro,dooood.*,downloadhub.*,ds2play.com,dvdplay.*,embedplayer.*,embedstream.me,emovies.*,encurtandourl.com,ev01.sx,exee.app,f123movies.com,faselhd.*,file-upload.com,film4e.com,filmeserialeonline.org,filmyzilla2022.com,fmoviesfree.*,footyhunter.lol,freelivetvon.com,freemovies.*,french-streams.cc,fslinks.org,fstream365.com,gameshdlive.xyz,gdflix.*,gdtot.*,gembedhd.com,gocast2.com,gogohd.*,goku.*,gokutv.*,gomovies.*,goone.pro,gotaku1.com,hdfriday.*,hdhub4u.*,hdmoviehub.*,hdtoday.tv,hihihaha1.xyz,huboflink.in,iflixmovies.*,jockantv.com,kickassanime.*,kuttymovies1.com,ligaset.com,linkupload.xyz,luluvdo.com,mangaraw.*,medeberiyas.com,megadb.net,megafilmeshd50.com,megaupto.com,membed1.com,mkvcinemas.*,mlwbd.*,movembed.cc,movieplay.*,moviesda4.*,moviesjoy.*,moviesmeta.*,moviesrulz.*,moviestowatch.tv,mp4upload.com,mreader.co,mydownloadtube.*,myflixerz.*,mywatchseries.*,naijachoice.com.ng,naijanowell.com,netfilmes.org,nflstreams.me,niadd.com,noblocktape.*,nolive.me,odiasia.sbs,oii.io,olympicstreams.me,playgo1.cc,project-free-tv.*,projectfreetv.*,putlocker.*,s.to,send.cm,serienstream.*,series2watch.*,seriesonline.*,seriestv.org,shadowrangers.live,shahed4u.*,shaheed4u.*,sinvida.me,soap2day-online.com,ssoap2day.*,stakes100.xyz,streamadblocker.*,streamcloud.best,streamhub.*,streamnoads.com,streamonsport99.*,streamtape.*,strtapewithadblock.*,swatchseries.*,tapeblocker.com,tapewithadblock.org,taxielcima.live,tii.la,tnhitsda.net,todaypk.*,tvpclive.com,up-4ever.net,upbaam.com,uploadhub.*,uproxy.*,vadbam.net,vavada5com.com,vid-guard.com,vidcloud9.*,videoplayer.*,vido.*,vidspeed.cc,vidsrc.*,viidshar.com,vikistream.com,vixcloud.co,watch-free.tv,watchcartoononline.*,watchmovies.*,watchmovierulz.*,watchomovies.*,watchonlinemoviespk.*,watchop.live,watchseries1.*,watchtvchh.xyz,wecast.to,worldstreams.click,yesmovies4u.*,zamundatv.com##+js(acs, document.documentElement, break;case $.)
+0123movie.*,123chill.*,123movies-free.*,123movies-org.*,123movies.*,123moviesfree.*,123movieshub.*,123movieweb.*,190.115.18.20,1hd.to,1todaypk.*,2kmovie.*,4movierulz.*,4movierulz1.*,5movies.*,9kmovies.*,a8ix.*,acn.vin,adblocktape.*,aflizmovies.com,ak4eg.*,anihdplay.com,animeonline.ninja,animeunity.*,animixplay.*,aniwatch.*,arc018.to,asianhdplay.*,atishmkv.*,backfirstwo.site,bolly2tolly.*,clickndownload.*,comedyshow.to,cool-etv.net,crackstreams.*,crackstreamshd.click,daddylivehd.*,direct-cloud.*,divicast.com,divxfilmeonline.net,dood.*,doods.pro,dooood.*,downloadhub.*,ds2play.com,dvdplay.*,embed4u.xyz,embedplayer.*,embedstream.me,emovies.*,encurtandourl.com,ev01.sx,exee.app,f123movies.com,faselhd.*,file-upload.com,film4e.com,filmeserialeonline.org,filmyzilla2022.com,fmoviesfree.*,footyhunter.lol,freelivetvon.com,freemovies.*,french-streams.cc,fslinks.org,fstream365.com,gameshdlive.xyz,gdflix.*,gdtot.*,gembedhd.com,gocast2.com,gogohd.*,goku.*,gokutv.*,gomovies.*,goone.pro,gotaku1.com,hdfriday.*,hdhub4u.*,hdmoviehub.*,hdtoday.tv,hihihaha1.xyz,huboflink.in,iflixmovies.*,jockantv.com,kickassanime.*,kuttymovies1.com,ligaset.com,linkupload.xyz,luluvdo.com,mangaraw.*,medeberiyas.com,megadb.net,megafilmeshd50.com,megaupto.com,membed1.com,mkvcinemas.*,mlwbd.*,movembed.cc,movieplay.*,moviesda4.*,moviesjoy.*,moviesmeta.*,moviesrulz.*,moviestowatch.tv,mp4upload.com,mreader.co,mydownloadtube.*,myflixerz.*,mywatchseries.*,naijachoice.com.ng,naijanowell.com,netfilmes.org,nflstreams.me,niadd.com,noblocktape.*,nolive.me,odiasia.sbs,oii.io,olympicstreams.me,playgo1.cc,project-free-tv.*,projectfreetv.*,putlocker.*,s.to,send.cm,serienstream.*,series2watch.*,seriesonline.*,seriestv.org,shadowrangers.live,shahed4u.*,shaheed4u.*,sinvida.me,soap2day-online.com,ssoap2day.*,stakes100.xyz,streamadblocker.*,streamcloud.best,streamhub.*,streamnoads.com,streamonsport99.*,streamtape.*,strtapewithadblock.*,swatchseries.*,tapeblocker.com,tapewithadblock.org,taxielcima.live,tii.la,tnhitsda.net,todaypk.*,tvpclive.com,up-4ever.net,upbaam.com,uploadhub.*,uproxy.*,vadbam.net,vavada5com.com,vid-guard.com,vidcloud9.*,videoplayer.*,vido.*,vidspeed.cc,vidsrc.*,viidshar.com,vikistream.com,vixcloud.co,watch-free.tv,watchcartoononline.*,watchmovies.*,watchmovierulz.*,watchomovies.*,watchonlinemoviespk.*,watchop.live,watchseries1.*,watchtvchh.xyz,wecast.to,worldstreams.click,yesmovies4u.*,zamundatv.com##+js(acs, document.documentElement, break;case $.)
 
 atlaq.com,bolly4umovies.*,dietafitness.fun,douploads.net,moalm-qudwa.blogspot.com,redecanais.*,shurt.pw,topauto.fun##+js(aopr, zfgformats)
 123movieshub.*,animeunity.*,bflix.*,cima-club.*,flixhq.*,hindilinks4u.*,t7meel.*,theflixer.tv##+js(aopr, zfgstorage)
