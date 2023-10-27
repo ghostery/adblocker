@@ -2147,6 +2147,17 @@ describe('scriptlets arguments parsing', () => {
     it('complex', () => {
       for (const [scriptlet, expected] of [
         [
+          'www.amazon.de#@#+js(xml-prune, xpath(//*[name()="Period"][.//*[@value="Ad"]] | //*[name()="Period"]/@start), [value="Ad"], .mpd)',
+          {
+            name: 'xml-prune',
+            args: [
+              'xpath(//*[name()="Period"][.//*[@value="Ad"]] | //*[name()="Period"]/@start)',
+              '[value="Ad"]',
+              '.mpd',
+            ],
+          },
+        ],
+        [
           'acs, Math, /\\}\\s*\\(.*?\\b(self|this|window)\\b.*?\\)/',
           {
             name: 'acs',
@@ -2227,7 +2238,11 @@ describe('scriptlets arguments parsing', () => {
         'trusted-replace-fetch-response, /\\"adPlacements.*?\\"\\}\\}\\}\\]\\,/, , url:player?key= method:/post/i bodyUsed:true',
         {
           name: 'trusted-replace-fetch-response',
-          args: ['/\\"adPlacements.*?\\"\\}\\}\\}\\]\\,/', '', 'url:player?key= method:/post/i bodyUsed:true'],
+          args: [
+            '/\\"adPlacements.*?\\"\\}\\}\\}\\]\\,/',
+            '',
+            'url:player?key= method:/post/i bodyUsed:true',
+          ],
         },
       ],
       [
