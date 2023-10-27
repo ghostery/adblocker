@@ -2147,6 +2147,52 @@ describe('scriptlets arguments parsing', () => {
     it('complex', () => {
       for (const [scriptlet, expected] of [
         [
+          'script-name, {x, y',
+          {
+            name: 'script-name',
+            args: ['{x', 'y'],
+          },
+        ],
+        [
+          'script-name, "x, y',
+          {
+            name: 'script-name',
+            args: ['"x', 'y'],
+          },
+        ],
+        [
+          "script-name, 'x, y",
+          {
+            name: 'script-name',
+            args: ["'x", 'y'],
+          },
+        ],
+        [
+          'script-name, /x, y',
+          {
+            name: 'script-name',
+            args: ['/x', 'y'],
+          },
+        ],
+        [
+          'xml-prune,a/b,///,,c',
+          {
+            name: 'xml-prune',
+            args: ['a/b', '///', '', 'c'],
+          },
+        ],
+        [
+          `xml-prune, xpath(//*[name()="MPD"]/@mediaPresentationDuration | //*[name()="Period"][.//*[name()="BaseURL" and contains(text()\\,'/ads-')]] | //*[name()="Period"]/@start), Period[id^="Ad"i], .mpd`,
+          {
+            name: 'xml-prune',
+            args: [
+              `xpath(//*[name()="MPD"]/@mediaPresentationDuration | //*[name()="Period"][.//*[name()="BaseURL" and contains(text()\\,'/ads-')]] | //*[name()="Period"]/@start)`,
+              'Period[id^="Ad"i]',
+              '.mpd',
+            ],
+          },
+        ],
+        [
           'xml-prune,a/b,,c',
           {
             name: 'xml-prune',

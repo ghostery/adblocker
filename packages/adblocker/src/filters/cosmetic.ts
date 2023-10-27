@@ -719,13 +719,13 @@ export default class CosmeticFilter implements IFilter {
           if (inArgument === false) {
             if (char === ' ') {
               // ignore
-            } else if (char === '"') {
+            } else if (char === '"' && selector.indexOf('"', index + 1) > 0) {
               inDoubleQuotes = true;
-            } else if (char === "'") {
+            } else if (char === "'" && selector.indexOf("'", index + 1) > 0) {
               inSingleQuotes = true;
-            } else if (char === '{') {
+            } else if (char === '{' && selector.indexOf('}', index + 1) > 0) {
               objectNesting += 1;
-            } else if (char === '/') {
+            } else if (char === '/' && selector.indexOf('/', index + 1) > 0) {
               inRegexp = true;
             } else {
               inArgument = true;
