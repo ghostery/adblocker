@@ -2147,7 +2147,14 @@ describe('scriptlets arguments parsing', () => {
     it('complex', () => {
       for (const [scriptlet, expected] of [
         [
-          'www.amazon.de#@#+js(xml-prune, xpath(//*[name()="Period"][.//*[@value="Ad"]] | //*[name()="Period"]/@start), [value="Ad"], .mpd)',
+          'xml-prune,a/b,,c',
+          {
+            name: 'xml-prune',
+            args: ['a/b', '', 'c'],
+          },
+        ],
+        [
+          'xml-prune, xpath(//*[name()="Period"][.//*[@value="Ad"]] | //*[name()="Period"]/@start), [value="Ad"], .mpd',
           {
             name: 'xml-prune',
             args: [
