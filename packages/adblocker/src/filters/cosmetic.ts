@@ -687,6 +687,7 @@ export default class CosmeticFilter implements IFilter {
     let inRegexp = false;
     let objectNesting = 0;
     let lastCharIsBackslash = false;
+    let inArgument = false;
 
     for (; index < selector.length; index += 1) {
       const char = selector[index];
@@ -715,17 +716,25 @@ export default class CosmeticFilter implements IFilter {
             inRegexp = false;
           }
         } else {
-          if (char === '"') {
-            inDoubleQuotes = true;
-          } else if (char === "'") {
-            inSingleQuotes = true;
-          } else if (char === '{') {
-            objectNesting += 1;
-          } else if (char === '/') {
-            inRegexp = true;
-          } else if (char === ',') {
+          if (inArgument === false) {
+            if (char === ' ') {
+              // ignore
+            } else if (char === '"' && selector.indexOf('"', index + 1) > 0) {
+              inDoubleQuotes = true;
+            } else if (char === "'" && selector.indexOf("'", index + 1) > 0) {
+              inSingleQuotes = true;
+            } else if (char === '{' && selector.indexOf('}', index + 1) > 0) {
+              objectNesting += 1;
+            } else if (char === '/' && selector.indexOf('/', index + 1) > 0) {
+              inRegexp = true;
+            } else {
+              inArgument = true;
+            }
+          }
+          if (char === ',') {
             parts.push(selector.slice(lastComaIndex + 1, index).trim());
             lastComaIndex = index;
+            inArgument = false;
           }
         }
       }
