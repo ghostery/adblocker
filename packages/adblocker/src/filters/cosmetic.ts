@@ -748,7 +748,17 @@ export default class CosmeticFilter implements IFilter {
       return undefined;
     }
 
-    return { name: parts[0], args: parts.slice(1) };
+    const args = parts.slice(1).map((part) => {
+      if (
+        (part.startsWith(`'`) && part.endsWith(`'`)) ||
+        (part.startsWith(`"`) && part.endsWith(`"`))
+      ) {
+        return part.substring(1, part.length - 1);
+      }
+      return part;
+    });
+
+    return { name: parts[0], args };
   }
 
   public getScript(js: Map<string, string>): string | undefined {

@@ -2023,11 +2023,11 @@ describe('scriptlets arguments parsing', () => {
         { name: 'acis', args: ['document.createElement', '/break;case $.|popunder/'] },
       ],
       ['acs, atob, -0x1', { name: 'acs', args: ['atob', '-0x1'] }],
-      ["acs, atob, 'shift'", { name: 'acs', args: ['atob', "'shift'"] }],
+      ["acs, atob, 'shift'", { name: 'acs', args: ['atob', 'shift'] }],
       ["acs, Date, ='\\x", { name: 'acs', args: ['Date', "='\\x"] }],
       [
         `acs, decodeURIComponent, "'shift'"`,
-        { name: 'acs', args: ['decodeURIComponent', `"'shift'"`] },
+        { name: 'acs', args: ['decodeURIComponent', `'shift'`] },
       ],
       [
         `acs, document.getElementById, /\\$\\('body'\\)|\\$\\("body"\\)/`,
@@ -2054,6 +2054,17 @@ describe('scriptlets arguments parsing', () => {
     ).to.eql({
       name: 'script-name',
       args: ['', '', 'foo', '', 'bar'],
+    });
+  });
+
+  it('removes wrapping quotes', () => {
+    expect(CosmeticFilter.parse('foo.com##+js(script-name, "a")')?.parseScript()).to.eql({
+      name: 'script-name',
+      args: ['a'],
+    });
+    expect(CosmeticFilter.parse("foo.com##+js(script-name, 'a')")?.parseScript()).to.eql({
+      name: 'script-name',
+      args: ['a'],
     });
   });
 
