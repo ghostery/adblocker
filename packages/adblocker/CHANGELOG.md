@@ -1,3 +1,15 @@
+# v1.26.10 (Mon Oct 30 2023)
+
+#### :bug: Bug Fix
+
+- Scriptlets: inject quoted arguments without quotes [#3559](https://github.com/ghostery/adblocker/pull/3559) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 1
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.26.9 (Sat Oct 28 2023)
 
 #### :bug: Bug Fix
