@@ -352,7 +352,7 @@ export class WebExtensionBlocker extends FiltersEngine {
       return;
     }
     if (scripts.length > 0) {
-      this.executeScriptlets(browser, details.tabId, scripts);
+      this.executeScriptlets(browser, details, scripts);
     }
   }
 
@@ -621,7 +621,11 @@ export class WebExtensionBlocker extends FiltersEngine {
     );
   }
 
-  private executeScriptlets(browser: Browser, tabId: number, scripts: string[]): void {
+  private executeScriptlets(
+    browser: Browser,
+    details: WebNavigation.OnCommittedDetailsType,
+    scripts: string[],
+  ): void {
     // Dynamically injected scripts scripts can be difficult to find later in
     // the debugger. Console logs simplifies setting up breakpoints if needed.
     let debugMarker;
@@ -660,10 +664,10 @@ ${scripts.join('\n\n')}}
 })(\`${encodeURIComponent(codeRunningInPage)}\`);`;
 
     browser.tabs
-      .executeScript(tabId, {
+      .executeScript(details.tabId, {
         code: codeRunningInContentScript,
         runAt: 'document_start',
-        allFrames: true,
+        frameId: details.frameId,
         matchAboutBlank: true,
       })
       .catch((err) => {
