@@ -1,3 +1,16 @@
+# v1.26.11 (Fri Nov 03 2023)
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker-webextension`
+  - WebExtension: fix scriptlet push injections [#3571](https://github.com/ghostery/adblocker/pull/3571) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 1
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.26.10 (Mon Oct 30 2023)
 
 #### :bug: Bug Fix
