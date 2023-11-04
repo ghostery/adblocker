@@ -1,6 +1,6 @@
-! Title: uBlock₀ filters (2021)
-! Description: Filters optimized for uBlock, to be used along EasyList
+! Title: uBlock filters (2021)
 ! Last modified: %timestamp%
+! Description: Filters optimized for uBlock, to be used along EasyList
 ! Homepage: https://github.com/uBlockOrigin/uAssets
 ! License: https://github.com/uBlockOrigin/uAssets/blob/master/LICENSE
 ! New filters from January 2021 to ->
@@ -836,8 +836,8 @@ st23q.com##+js(aopr, app_vars.force_disable_adblock)
 st23q.com##+js(set, blurred, false)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/73689
-beautyram.info,gonety.com,viraloc.com##+js(aopr, app_vars.force_disable_adblock)
-beautyram.info,gonety.com,viraloc.com##+js(set, blurred, false)
+beautyram.info,viraloc.com##+js(aopr, app_vars.force_disable_adblock)
+beautyram.info,viraloc.com##+js(set, blurred, false)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/l9u38p/inline_script_blocking_syntax_wrong/
 @@||escapegames24.com^$ghide
@@ -1161,6 +1161,7 @@ rojadirectatvhd.*##+js(aeld, , _0x)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/75358
 tvn.pl##+js(json-prune, movie.advertising.ad_server playlist.movie.advertising.ad_server)
 @@||cdntvn.pl/*/advert.js$xhr,domain=tvn.pl
+tvn.pl##.on-top.ad-ph
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/75541
 @@||hcdn.online^$ghide
@@ -1412,9 +1413,6 @@ gats.io##+js(nosiif, 0x)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/77363
 ||foxhq.com/gabtab.webm$media,redirect=noop-1s.mp4
 
-! https://www.reddit.com/r/uBlockOrigin/comments/m42mcs/how_to_block_link_without_blocking_image/
-tipstertube.com##+js(ra, href|target, a[href^="https://tipstertube.com/bookmaker/"][target="_blank"], stay)
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/77453
 *$script,redirect-rule=noopjs,domain=cozinha.minhasdelicias.com
 
@@ -1423,9 +1421,6 @@ decomaniacos.es##+js(acs, addEventListener, google_ad_client)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/77424
 todoseriales1.blogspot.com##+js(nosiif, visibility, 1000)
-
-! https://github.com/uBlockOrigin/uAssets/issues/8716
-asiatv.online##+js(acs, $, /visible|adsEnabled/)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/lq141w/help_to_blocking_ad_spaces/gqbcft9/
 dbsmanga.com,read7deadlysins.com,readdrstone.com,readfairytail.com,readhxh.com,readkaguyasama.com,readkingdom.com,readmha.com,readnaruto.com,readnoblesse.com,readonepiece.com,readopm.com,readsnk.com,readtowerofgod.com,readvinlandsaga.com,watchgoblinslayer.com,watchoverlord2.com,watchsao.tv##.js-a-container
@@ -1476,6 +1471,11 @@ jattmate.com,saveshared.com,simpledownload.net##+js(aopr, String.fromCharCode)
 inextmovies.*##+js(nowoif)
 asianembed.io##+js(aeld, click, 0x)
 emb.apl236.me###ads
+||livesport24.net/*.gif$image
+||emb.apl284.me/*.php
+@@||emb.apl284.me/player/$frame
+emb.apl284.me##+js(nowoif, _blank)
+apl284.me###ads
 
 hd44.com##+js(nowoif)
 hwnaturkya.com##+js(aopw, _pop)
@@ -1562,15 +1562,8 @@ nepaliputi.net##+js(acs, document.createElement, /l\.parentNode\.insertBefore\(s
 ! https://www.reddit.com/r/uBlockOrigin/comments/ma5dih/how_can_i_bypass_this_horrid_red_thing/
 downloadcursos.top##+js(acs, eval, replace)
 
-! exhost.online popups
-exhost.online##+js(nowoif)
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/78136
 platform.adex.network##+js(no-fetch-if, moonicorn.network)
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/78202
-@@||linkhub.icu^$ghide
-linkhub.icu###rn_ad_native_f1hrx
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/78225
 @@||uploadshare.net^$ghide
@@ -1644,11 +1637,6 @@ pewgame.com##body.captcha-page > .short
 ||pewgame.com/sw.js^
 ||pewgame.com/js/hre.js^
 *$script,redirect-rule=noopjs,domain=pewgame.com
-
-! https://github.com/AdguardTeam/AdguardFilters/issues/78591
-mobileflasherbd.com##+js(nowoif)
-@@||mobileflasherbd.com^$ghide
-mobileflasherbd.com###ads-blog
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8798
 dndsearch.in##+js(acs, $, height)
@@ -1729,6 +1717,8 @@ files.fm##+js(aopr, canRunAds)
 
 ! https://forums.lanik.us/viewtopic.php?f=64&t=45963
 ||cdn.flashtalking.com^$media,redirect=noopmp3-0.1s,domain=app.plex.tv
+! https://github.com/uBlockOrigin/uAssets/issues/20357
+app.plex.tv##+js(json-prune, MediaContainer.Metadata.[].Ad)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/78973
 ||neonime.*/wp-content/themes/grifus/images/donate/yunita/
@@ -1744,8 +1734,8 @@ discoveryplus.in##+js(no-fetch-if, ads)
 olympicstreams.me,vipboxtv.*##+js(nowoif, //)
 olympicstreams.me,vipboxtv.*##+js(aopw, _pop)
 vipboxtv.*##+js(acs, navigator, FingerprintJS)
+vipboxtv.*##+js(aopr, Adcash)
 ||raw.githubusercontent.com/*/just-detect-adblock/*$3p,xhr,redirect-rule=nooptext
-*$script,3p,denyallow=nolive.me|plyjam.me|chatango.com,domain=vipboxtv.*
 olympicstreams.me##.position-absolute
 /vppdzdrw.js
 
@@ -2439,11 +2429,6 @@ netpornix.*##[href^="https://bit.ly/"]
 netpornix.*##.videoads
 netxwatch.*##+js(aopr, __Y)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/82887
-arab-chat.club##+js(aopr, app_vars.force_disable_adblock)
-arab-chat.club##+js(set, blurred, false)
-arab-chat.club##.banner
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/82888
 dz-linkk.com##+js(aopr, app_vars.force_disable_adblock)
 dz-linkk.com##+js(set, blurred, false)
@@ -2979,10 +2964,6 @@ paid4.link##.banner-inner
 paid4.link##.blog-content
 paid4.link##.box > div[align="center"] > .card
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/85932
-onlynudes.tv##+js(acs, document.addEventListener, adsbygoogle)
-onlynudes.tv##.wps-iframe-loader
-
 ! openloading.com popup fakeplayer
 openloading.com##+js(ra, href, #clickfakeplayer)
 openloading.com###clickfakeplayer
@@ -3054,11 +3035,6 @@ sixsave.com##+js(no-fetch-if, method:HEAD)
 ! https://www.reddit.com/r/uBlockOrigin/comments/o4vs5b/adblock_shown_on_url/
 fluttercampus.com##.widget > .card
 fluttercampus.com##div[id^="ezoic-pub-ad-"]
-
-! https://github.com/uBlockOrigin/uAssets/issues/9454
-! https://github.com/uBlockOrigin/uAssets/issues/13389
-zive.cz##+js(aeld, DOMContentLoaded, event)
-zive.cz##.cnc-ads--rectangle_480_1
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/86458
 freebulksmsonline.com##+js(aost, String.prototype.charCodeAt, ai_)
@@ -5419,6 +5395,9 @@ studyflix.de##.huge-notification
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10758
 camstreams.tv##div[style="position: absolute; inset: 0px; overflow: hidden; z-index: 160; background: transparent none repeat scroll 0% 0%; display: block;"]
+! https://github.com/uBlockOrigin/uAssets/issues/20409
+||camplethora.com^
+camstreams.tv###sliderBox
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/102018
 burnbutt.com##+js(acs, document.addEventListener, google_ad_client)

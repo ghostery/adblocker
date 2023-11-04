@@ -1,31 +1,15 @@
-! Title: uBlock₀ filters – Privacy
-! Version: %version%
+! Title: uBlock filters – Privacy
 ! Last modified: %timestamp%
+! Expires: 7 days
 ! Description: |
 !   Some of these filters make use of the `important` filter option,
 !   which purpose is to guarantee that a filter won't be overriden by
 !   exception filters.
-! Expires: 7 days
 ! License: https://github.com/uBlockOrigin/uAssets/blob/master/LICENSE
 ! Homepage: https://github.com/uBlockOrigin/uAssets
 !
 ! GitHub issues: https://github.com/uBlockOrigin/uAssets/issues
 ! GitHub pull requests: https://github.com/uBlockOrigin/uAssets/pulls
-!
-! I will use data from benchmarks to decide what to add here.
-! https://github.com/gorhill/uBlock/wiki/uBlock-and-others%3A-Blocking-ads%2C-trackers%2C-malwares
-
-! I think web sites can live without this
-! Commented out on 2014-10-03: I don't see it anymore in benchmarks. Will see.
-! Commenting it out allows me to enable this one out-of-the-box.
-! ||linkedin.com^$3p,important
-
-! https://github.com/chrisaljoudi/uBlock/issues/289
-! Commented out, breaks to many sites. See:
-!   https://hg.adblockplus.org/easylist/rev/9f6e928c258a#l2.12
-!   Users can still block this one through hpHosts, MVPS, Dan Pollock's or
-!   manually through custom filters, or 3rd-party scripts
-! ||www.googletagservices.com/tag/js/gpt.js
 
 ! https://adblockplus.org/forum/viewtopic.php?f=2&t=38703
 ! 1st-party "recommendations" should never depends on a 3rd-party doing the job:
@@ -234,23 +218,13 @@ search.brave.com##+js(no-fetch-if, body:browser)
 ||civicscience.com^$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9932
+/\/[a-z0-9]{12}\/(?=[a-zA-Z0-9\/\-]*\+)[a-zA-Z0-9\/\+\-]{97,106}$/$match-case,script,1p,strict1p
+/^https?:\/\/[0-9a-z]{12}\.[^\/]*\/[a-zA-Z0-9\/\+\-]{97,106}$/$match-case,script,1p,strict3p
 /dataunlocker$script,1p,domain=~dataunlocker.com
-/[a-z0-9]{12}(\.admin)?\.dataunlocker\.com\//$script,1p,domain=dataunlocker.com
-/^\w+://[\w.\-]+\.www\.cybernetman\.com//$1p,script
-/^\w+://[\w.\-]+\.www\.logology\.co//$1p,script
-/^\w+://[\w.\-]+\.www\.atlaslane\.com//$1p,script
-/^\w+://[0-9a-z]{12}\.adria\.gg//$1p,script
-/^\w+://[0-9a-z]{11}\.taxliencode\.com//$1p,script
-/^\w+://[0-9a-z]{12}\.www\.sidsplumbing\.ie//$1p,script
-/^\w+://[0-9a-z]{12}\.www\.kodalia\.com//$1p,script
-/^\w+://[0-9a-z]{12}\.quine\.sh//$1p,script
-/^\w+://[0-9a-z]{12}\.controlconceptsusa\.com//$1p,script
-/^\w+://[0-9a-z]{12}\.www\.emanualonline\.com//$1p,script
 /www\.eldorado\.gg\/[a-zA-Z]{10}\.js/$1p,script,domain=eldorado.gg
 ||ampl.cinotes.com^
 ||data-saver-cindi.herokuapp.com^
 ||cdn.cindicator.com/$script,3p
-cefirates.com,freecodecamp.org,monumentmetals.com,nookgaming.com,ping.gg,resourceya.com,camberlion.com,alpacafinance.org,groove.so,jaywilsonwebsolutions.com,bitdomain.biz,madrigalmaps.com,tapmyback.com,revistaferramental.com.br,kvest.ee,creatordrop.com,cybernetman.com,adaptive.marketing,future-fortune.com,panprices.com,adria.gg##+js(acs, String.fromCharCode, join)
 !#if cap_html_filtering
 botcomics.com,cefirates.com,chandlerorchards.com,comicleaks.com,marketdata.app,monumentmetals.com,tapmyback.com,ping.gg,revistaferramental.com.br,hawpar.com,alpacafinance.org,nookgaming.com,enkeleksamen.no,kvest.ee,creatordrop.com,panpots.com,cybernetman.com,bitdomain.biz,gerardbosch.xyz,fort-shop.kiev.ua,accuretawealth.com,resourceya.com,tracktheta.com,adaptive.marketing##^script:has-text("join('')")
 alpacafinance.org,tt.live,future-fortune.com,abhijith.page,furucombo.app,madrigalmaps.com,adventuretix.com##^script:has-text('join("")')
@@ -267,11 +241,15 @@ panprices.com,intercity.technology,freelancer.taxmachine.be,adria.gg,fjlaborator
 ! https://github.com/easylist/easylist/commit/6457d9a221b19bf6d011d314d0bf14476d18f428#commitcomment-54257940
 /p13n/batch/action/*$image
 
+! Ad-Shield
 ! https://github.com/uBlockOrigin/uAssets/issues/9717
 ||da29e6b8-f018-490f-b25f-39a887fc95e7.xyz^
 ||31830fbc-adbf-11ed-afa1-0242ac120002.site^$xhr,ping
 ||15823f12-289e-4189-9e51-e2de1bf1a105.online^$xhr,ping
 /^https:\/\/cdn\.jsdelivr\.net\/npm\/[-a-z_]{4,22}@latest\/dist\/script\.min\.js$/$script,3p,match-case
+loawa.com,ygosu.com,sportalkorea.com,algumon.com,hancinema.net,enetnews.co.kr,edaily.co.kr,economist.co.kr,etoday.co.kr,hankyung.com,isplus.com,hometownstation.com,kagit.kr,inven.co.kr,viva100.com,joongdo.co.kr,jjang0u.com,tenbizt.com,tvreport.co.kr,newautopost.co.kr,mememedia.co.kr,mobilitytv.co.kr,cboard.net,a-ha.io,interfootball.co.kr,fourfourtwo.co.kr,apkmirror.com,dotkeypress.kr,viewcash.co.kr,tripplus.co.kr,enterdiary.com,mtodayauto.com,genshinlab.com##+js(set-local-storage-item, adshield-analytics-uuid, $remove$)
+apkmirror.com,dotkeypress.kr,viewcash.co.kr,tripplus.co.kr,enterdiary.com,mtodayauto.com##+js(noeval-if, 07c225f3.online)
+apkmirror.com,dotkeypress.kr,viewcash.co.kr,tripplus.co.kr,enterdiary.com,mtodayauto.com##^script:has-text(KCgpPT57bGV0IGU)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/p29y3w/these_guys_boast_combatting_all_adblocks/
 ||connectier.io^
@@ -505,9 +483,6 @@ zhihu.com##+js(no-xhr-if, log-sdk.ksapisrv.com/rest/wd/common/log/collect method
 ! https://www.reddit.com/r/uBlockOrigin/comments/11rjv8n/
 ||kemono.party/js/script.js
 
-! https://github.com/uBlockOrigin/uAssets/issues/17204
-||subdl.net/statsLog
-
 ! AdSpyglass tracker
 /api/click/*?c=$image
 
@@ -661,8 +636,11 @@ starstyle.com##+js(href-sanitizer, a[href^="https://go.skimresources.com/"][href
 insidehook.com##+js(href-sanitizer, a[href^="https://click.linksynergy.com/deeplink?id="][href*="&murl="], ?murl)
 insidehook.com##+js(href-sanitizer, a[href*="?"][href*="&url=http], ?url)
 insidehook.com##+js(href-sanitizer, a[href*="?"][href*="&u=http"], ?u)
-! [NSFW] https://fap18.net/video/88120176/danny-d-2-milfs-and-that-big-cock?c=milf & https://fap18.net/xid/45560506/
-fap18.net##+js(href-sanitizer, a[href^="/vp/player/to/?u=http"]\, a[href^="/vp/download/goto/?u=http"], ?u)
+! [NSFW] https://fap18.net/video/88120176/danny-d-2-milfs-and-that-big-cock?c=milf & https://fap18.net/xid/45560506/ and similar
+fap18.net,xxxmom.net,fuck55.net,gofucker.com,sexu.tv,vid123.net,babe8.net,beeg.porn##+js(href-sanitizer, a[href^="/vp/player/to/?u=http"]\, a[href^="/vp/download/goto/?u=http"], ?u)
+! [NSFW] https://losporn.org/black-beautys-10-watch-online-free and similar
+! https://github.com/uBlockOrigin/uAssets/issues/20330
+losporn.org,streamporn.li,pandamovies.org,bananamovies.org,xopenload.net,adultdvdparadise.com,speedporn.net,mangoporn.net,pandamovie.info,mangoporn.co,mangoparody.com,xxxscenes.net,pornkino.cc,watchxxxfree.pw,pandamovie.in,speedporn.pw,watchfreexxx.net,youwatchporn.com,watchpornfree.info,pandamovies.me,xtapes.me,netflixporno.net,pornwish.org,freeomovie.info,fullxxxmovies.me,watchpornx.com,xxxparodyhd.net,xxxstream.me,pornwatch.ws,xopenload.pw,onstreams.net,playpornfree.xyz,pandamovies.pw,streamporn.pw,xopenload.me##+js(href-sanitizer, a[href^="https://drivevideo.xyz/link?link=http"], ?link)
 ! https://nowinstock.net/computers/videocards/nvidia/rtx4090/
 nowinstock.net##+js(href-sanitizer, a[href^="https://click.linksynergy.com/deeplink?id="][href*="&murl="], ?murl)
 nowinstock.net##+js(href-sanitizer, a[href^="http://go.redirectingat.com"][href*="&url="], ?url)
@@ -707,7 +685,8 @@ factable.com##+js(cookie-remover, hive_geoloc)
 ! https://github.com/uBlockOrigin/uAssets/issues/17149#issuecomment-1651198474
 watchporn.to##+js(cookie-remover, kt_ips)
 ! https://www.bing.com/
-bing.com##+js(cookie-remover, MicrosoftApplicationsTelemetryDeviceId)
+! https://www.msn.com/en-us/money/markets/elon-musk-s-outlook-on-our-future-turns-dour/ar-AA1iZxwn
+bing.com,msn.com##+js(cookie-remover, MicrosoftApplicationsTelemetryDeviceId)
 ! https://capcom.fandom.com/wiki/Gallery:Bishamon
 fandom.com##+js(set-cookie, tracking_session_id, OK, , reload, 1)
 fandom.com##+js(set-cookie, Geo, OK)
@@ -808,6 +787,9 @@ $removeparam=mtm_source
 $removeparam=pk_campaign
 $removeparam=pk_medium
 $removeparam=pk_source
+! ActiveCampaign
+! https://github.com/brave/brave-browser/issues/26295
+$removeparam=vgo_ee
 ! Cxense clickthrough tracking
 $removeparam=cx_click
 $removeparam=cx_recsOrder
@@ -820,10 +802,17 @@ $removeparam=adjust_tracker_limit
 $removeparam=adjust_tracker
 $removeparam=adjust_adgroup
 $removeparam=adjust_campaign
+! impact.com
+$removeparam=ir_campaignid
+$removeparam=ir_adid
+$removeparam=irclickid
+$removeparam=ir_partnerid
 ! https://github.com/DandelionSprout/adfilt/discussions/163#discussioncomment-5867802
 $removeparam=asc_campaign,domain=aboutamazon.com|amazon.*|amzn.to
 $removeparam=asc_refurl,domain=aboutamazon.com|amazon.*|amzn.to
 $removeparam=asc_source,domain=aboutamazon.com|amazon.*|amzn.to
+! youtube.com - Copy video URL at its search result via mouse right click.
+||youtube.com^$removeparam=pp
 ! https://www.wsj.com/livecoverage/tropical-storm-idalia-hurricane-florida?mod=hp_lead_pos7
 ||wsj.com^$removeparam=mod
 ! https://github.com/uBlockOrigin/uAssets/issues/18938#issuecomment-1693238481
@@ -856,7 +845,24 @@ www.lenovo.com##+js(aost, history.replaceState, injectedScript)
 
 ! https://developers.google.com/tag-platform/tag-manager/server-side/send-data
 ! https://simoahava.com/analytics/server-side-tagging-google-tag-manager
-*$1p,strict3p,script,header=via:1.1 google
+!*$1p,strict3p,script,header=via:1.1 google
+
+! PersianBlocker filters
+! web.bale.ai - Tracking (OS and browser)
+!#if !env_mobile
+web.bale.ai##+js(trusted-set, navigator.userAgent, Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/119.0.0.0 Safari/537.36)
+!#else
+web.bale.ai##+js(trusted-set, navigator.userAgent, Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/119.0.6045.66 Mobile Safari/537.36)
+!#endif
+
+! https://github.com/easylist/easylistgermany/issues/116
+||agma-analytics.de^
+
+! https://www.makeuseof.com/best-vs-code-chatgpt-extensions/ - Tracking cookies
+makeuseof.com##+js(cookie-remover, /articlesRead|previousPage/)
+
+! https://github.com/uBlockOrigin/uAssets/issues/20440
+/^https?:\/\/chat\.openai\.com\/ces\/v1\/[a-z]$/$xhr,1p,domain=chat.openai.com,method=post
 
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt

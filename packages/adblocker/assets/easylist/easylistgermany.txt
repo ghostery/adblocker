@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202310191813
+! Version: 202311041253
 ! Title: EasyList Germany
-! Last modified: 19 Oct 2023 18:13 UTC
+! Last modified: 04 Nov 2023 12:53 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -616,6 +616,7 @@ kochbar.de#@#[name^="google_ads_iframe"]
 11freunde.de,kochbar.de#@#a[href^="https://adclick.g.doubleclick.net/"]
 11freunde.de,gofeminin.de#@#a[href^="https://pubads.g.doubleclick.net/"]
 telekom.de#@#a[href^="https://track.adform.net/"]
+onvista.de#@#a[href^="https://www.financeads.net/tc.php?"]
 11freunde.de,manager-magazin.de#@#div[data-google-query-id]
 wetter.com#@#div[id^="div-gpt-"]
 ! ---------------------------Third-party Werbeserver---------------------------!
@@ -1308,6 +1309,7 @@ wetter.com#@#div[id^="div-gpt-"]
 ||vodafone.de^*&tsid=$popup,third-party
 ||vulkanbet.pro^$popup
 ||vulkanbetting.biz^$popup
+||vulkanvegas-de.com^$popup
 ! -------------Seitenspezifische Regeln zum Blockieren von Werbung-------------!
 ! *** easylistgermany:easylistgermany/easylistgermany_specific_block.txt ***
 $stylesheet,subdocument,third-party,xmlhttprequest,domain=canna-power.to|canna.to
@@ -1508,6 +1510,7 @@ $stylesheet,subdocument,third-party,xmlhttprequest,domain=canna-power.to|canna.t
 ||codecheck.info/i/CTA-banner.png
 ||coincierge.de/wp-content/plugins/floating-banner/
 ||com-magazin.de/img/*/Commerce-Week_450x94.jpeg
+||computerbase.de/creatives/
 ||computerschach.de^*/shredder_130x80.gif
 ||condor.cl/wp-content/uploads/*/aviso_condor-07.png
 ||condor.cl/wp-content/uploads/*/BANNERWEB_
@@ -2132,6 +2135,7 @@ $stylesheet,subdocument,third-party,xmlhttprequest,domain=canna-power.to|canna.t
 ||pornozebra.com/cpanel/
 ||pornozebra.com/img/linklist2/
 ||port01.com/uploads/banner/
+||portugalforum.org/data/ads/
 ||pragerzeitung.cz/wp-content/uploads/*_300x450px_
 ||prispi.de/images/bluvista-cam1.gif
 ||production-livingdocs-bluewin-ch.imgix.net^*/6f3cdbc0-2a58-4a7e-933f-9077769c899b.png$domain=bluewin.ch
@@ -2599,7 +2603,7 @@ $stylesheet,subdocument,third-party,xmlhttprequest,domain=canna-power.to|canna.t
 !
 /^https?:\/\/[0-9a-z]{8,}\.com\/.*/$~media,~subdocument,third-party,domain=190.115.18.20|aniworld.to|bs.to|burningseries.ac|burningseries.cx|burningseries.nz|burningseries.se|burningseries.sx|burningseries.vc|kinox.top|s.to|serien.cam|serienstream.to
 /^https?:\/\/[0-9a-z]{8,}\.xyz\/.*/$~media,third-party,domain=kinoger.com
-! ! Specific filters necessary for sites using $genericblock filter option
+! Specific filters necessary for sites using $genericblock filter option
 g.doubleclick.net###adunit
 transfermarkt.de##.OUTBRAIN .ob-p
 /googleads.$domain=g.doubleclick.net|googlesyndication.com
@@ -2816,7 +2820,6 @@ sonic-seducer.de###banner_oben
 dreingau-zeitung.de###banner_right
 juve.de###banner_sidebar
 dreingau-zeitung.de,linguee.de###banner_top
-chip.de###banner_top_table
 saiten.ch###banner_vertical
 queer.de###banneroben
 port01.com###bannerpos2
@@ -2916,7 +2919,7 @@ einkochen.info,ipadblog.de,leserbriefe.info,nh24.de,stimmt.at,wiener-online.at##
 popkultur.de###custom_html-21
 andalusien-aktuell.es###custom_html-22
 daily-pia.de,healthhelp.ch,likehifi.de,perbene.ch,prnet.at,signal-online.d,windowspower.de###custom_html-3
-ipadblog.de,presse-nachrichten.de,signal-online.d###custom_html-4
+ipadblog.de,presse-nachrichten.de,signal-online.d,urheberrecht.de###custom_html-4
 radsportjournaltourman.com###custom_html-42
 nachrichten.es,primavera24.de,radsportjournaltourman.com,signal-online.d###custom_html-5
 haus-garten-magazin.de,nachrichten.es###custom_html-6
@@ -3359,7 +3362,6 @@ mactechnews.de##.Content_1-minheight
 mactechnews.de##.Content_3-minheight
 chip.de##.FC.mt-md-so[role="complementary"]
 praxistipps.focus.de##.FC__Ad
-chip.de##.FC__Container.min-height-250px-mu
 swoodoo.com##.Flights-Results-FlightRightRail
 perspektive-mittelstand.de##.Laddbox
 perspektive-mittelstand.de##.Laddbox300
@@ -3467,7 +3469,8 @@ genialetricks.de,leckerschmecker.me,veggieboom.com##.ai-viewport-1
 blitzrechner.de##.ai_widget
 nextpit.de##.al-amazon
 ligaportal.at##.alert
-desired.de,familie.de,kino.de##.alice-adslot
+desired.de,familie.de,kino.de,spielaffe.de##.alice-adslot
+spielaffe.de##.alice-root-header-ads__ad--top
 notebookcheck.com##.am_el
 indirekter-freistoss.de##.amalink
 plattentests.de##.amazon
@@ -3477,6 +3480,7 @@ forum.worldofplayers.de##.amazon-search
 winfuture.de##.amazon_widget_w660
 fairytail-tube.org,naruto-tube.org,onepiece-tube.com##.amz
 suedtirol.de,tirol.de##.angebot-der-woche-slider
+bauernzeitung.ch##.anriss-item-advert
 musiker-board.de,recording.de##.anz
 musiker-board.de##.anzC
 112-magazin.de,drwindows.de,filmpost.de,gesetzlichekrankenkassen.de,helles-koepfchen.de,lehrerfreund.de,medizin-netz.de,ntg24.de,oekotest.de,oktoberfestportal.de,pharmazeutische-zeitung.de,radsport-news.com,sportal.de,touristik-aktuell.de,tweakpc.de,vhs-ol.de##.anzeige
@@ -3520,7 +3524,7 @@ hsc2000.de##.avia-slideshow-1
 nrwhits.de##.ax-medium-rectangle-n
 az.com.na##.az-adverts
 blitzrechner.de##.azimg
-abmahnung.org,arbeitslosenselbsthilfe.org,bussgeld-info.de,datenschutz.org,koerperverletzung.com,urheberrecht.de##.azk-native-responsive
+abmahnung.org,arbeitslosenselbsthilfe.org,bussgeld-info.de,bussgeldkatalog.net,bussgeldkatalog.org,datenschutz.org,koerperverletzung.com,urheberrecht.de##.azk-native-responsive
 sumikai.com##.b
 fcaugsburg.de##.b-logo-listing
 hardwareschotte.de##.ba-fullsize
@@ -3640,7 +3644,7 @@ msxfaq.de##.boxjob
 x-oo.com##.boxx
 radmarkt.de##.branchenberichte
 blick.ch##.brandstudio
-koerperverletzung.com##.brave_popup
+koerperverletzung.com,urheberrecht.de##.brave_popup
 idowa.de##.brick[data-b-title*="Traffective"]
 tri-mag.de##.bscb-23811
 btc-echo.de##.btc-sponsored
@@ -3959,6 +3963,7 @@ queer.de##.leistenbanner
 frischauf-gp.de##.ligaadd
 1000ps.ch##.links
 mydict.com,mydict.net##.list-group
+gmx.ch,gmx.net,web.de##.list-programmatic-inbox-ad-item__iframe
 queer.de##.listenbannerlinks
 liveticker.com##.live-betting-strip
 bibliomed-pflege.de##.lns-banners-zone
@@ -4245,6 +4250,7 @@ der-farang.com##.sideboard_conatainer
 automatentest.de##.sideinfo
 mytastedeu.com##.site-header__panorama
 beeg-pornos.com,deinesexfilme.com,einfachtitten.com,gutesexfilme.com,halloporno.net,hd-pornos.info,hd-sexfilme.com,hdpornos.net,herzporno.com,lesbenhd.com,meinyouporn.com,milffabrik.com,nursexfilme.com,pornhub-sexfilme.net,pornoaffe.net,pornodavid.com,pornoente.tv,pornofelix.com,pornofisch.com,pornohammer.com,pornohans.com,pornohelm.com,pornohirsch.net,pornojenny.com,pornoklinge.com,pornoleon.com,pornolisa.com,pornoritze.com,pornoschlange.com,pornosusi.com,pornotanja.com,pornotom.com,pornotommy.com,pornovideos-hd.com,pornozebra.com,sexente.com,sexfilme-gratis.com,sexvideos-gratis.com,sexvideos-hd.com,tube8-pornos.com,xnxx-porno.com,xnxx-pornos.xxx,xnxx-sexfilme.com##.size-300x250
+computerbase.de##.skin-ad
 gesundheit.de,onmeda.de##.sky-left
 gesundheit.de,onmeda.de##.sky-right
 hifi.de##.sky1-outer-container
@@ -4365,6 +4371,7 @@ watson.ch##.teaser_type_paid_content
 familie.de##.teaserheld-header-wrapper
 watson.de##.teaserheld-wrapper
 computerbase.de##.text-ad
+donaukurier.de##.text-center.container.d-none.d-sm-block.margin-bottom-10.bb-fixheight
 analsexporno.net,deutsche-sexfilme.net,pornomonster.com,scharfe-pornos.com##.tf-de
 analsexporno.net,fickverein.com##.tf-ho
 analsexporno.net,fickverein.com##.tf-sp
@@ -4930,6 +4937,7 @@ areadvd.de##img[referrerpolicy="unsafe-url"]
 aerotelegraph.com,clever-tanken.de,supremacy1914.de##img[referrerpolicy]
 data-load.in##img[style="width:270px;height:80px;"]
 data-load.in##img[style="width:700px;height:90px;"]
+ibooks.to##img[title="Usenet"]
 vfl.de##img[width="110"]
 fruchthandel.de,nh24.de##img[width="140"][height="140"]
 wirsiegen.de##img[width="140"][height="180"]
@@ -4963,7 +4971,7 @@ hallescherfc.de##img[width="605"][height="690"]
 lokalezeitung.de##img[width="640"][height="165"]
 lokalo.de##img[width="700"]
 stereo.de##img[width="728"]
-championstream.de,fruchthandel.de,online-gebuehrenrechner.de,vfl.de##img[width="728"][height="90"]
+championstream.de,fruchthandel.de,ibooks.to,online-gebuehrenrechner.de,vfl.de##img[width="728"][height="90"]
 sportradio-deutschland.de##img[width="768"][height="768"]
 lokalo.de##img[width="770"]
 teneriffa-aktuell.com##img[width="800"][height="230"]
@@ -4975,6 +4983,8 @@ vital.de##kas[type="placement"]
 restegourmet.de##li[data-content-type="ad"]
 quoka.de##li[data-m3ads]
 gmx.ch,gmx.net,web.de##list-inbox-ad-item
+gmx.ch,gmx.net,web.de##list-inbox-pga-ad-item
+gmx.ch,gmx.net,web.de##list-programmatic-inbox-ad-item
 chip.de##section.Subchapter > div.fb-trim > div.fb-col-12 > div.ButtonAuswahl + div
 ariva.de##span[onpointerdown^="countClickOnGAorEs("]
 ariva.de##span[onpointerup*="prgAnalyticsEvent("]
@@ -5090,7 +5100,7 @@ chip.de#?#.Subchapter div[id][class][style="display: flex;"]:-abp-contains(ANZEI
 chip.de#?#.mt-md > div:-abp-contains(Gesponserte Empfehlung)
 chip.de#?#.mt-md:-abp-has(path[d$="92.456,64.241 z"])
 chip.de#?#a.secondary:-abp-has(.Badge__Content:-abp-contains(/anzeige|gesponsert/))
-chip.de#?#a[href^="https://www.chip.de/downloads/"]:-abp-has(div:-abp-contains(Anzeige))
+chip.de#?#a[href^="https://www.chip.de/downloads/"]:-abp-has(img + div:-abp-contains(Anzeige))
 chip.de#?#a[href^="https://x.chip.de/"]:-abp-has(path[d$="92.456,64.241 z"])
 chip.de#?#a[onclick]:-abp-has(path[d^="M92.456,64.241L66.18"])
 chip.de#?#article > a:-abp-contains(Anzeige)
@@ -5219,6 +5229,7 @@ saechsische.de#?#.article-fill:-abp-has(.article-badge.article-badge--ad)
 satvision.de#?#.fc_bloglist_item:-abp-has(a:-abp-contains(Advertorial))
 satvision.de#?#.mod_flexicontent_standard_wrapper:-abp-has(span:-abp-contains(Advertorial))
 seo-suedwest.de#?#.moduletable:-abp-has(span:-abp-contains(Anzeige))
+shop-apotheke.com#?#article.o-CompactProductListItem:-abp-has(a[href^="https://retail-api.sa-tech.de/api/"])
 skodacommunity.de#?#article.message--post:-abp-has(a:-abp-contains(Anzeige))
 smartphonemag.de#?#.td_module_wrap:-abp-has(.td-post-author-name:-abp-contains(Werbung))
 sportdeutschland.tv#?#.text-right.text-white.col-6:-abp-contains(präsentiert von)
