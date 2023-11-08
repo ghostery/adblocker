@@ -748,15 +748,26 @@ export default class CosmeticFilter implements IFilter {
       return undefined;
     }
 
-    const args = parts.slice(1).map((part) => {
-      if (
-        (part.startsWith(`'`) && part.endsWith(`'`)) ||
-        (part.startsWith(`"`) && part.endsWith(`"`))
-      ) {
-        return part.substring(1, part.length - 1);
-      }
-      return part;
-    });
+    const args = parts
+      .slice(1)
+      .map((part) => {
+        if (
+          (part.startsWith(`'`) && part.endsWith(`'`)) ||
+          (part.startsWith(`"`) && part.endsWith(`"`))
+        ) {
+          return part.substring(1, part.length - 1);
+        }
+        return part;
+      })
+      .map((part: string) =>
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        part
+          .replaceAll(String.raw`\u002C`, ',')
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          .replaceAll(String.raw`\u005C`, '\\')
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          .replaceAll(/\\([^bfnrtvxu0])/g, String.raw`\\$1`),
+      );
 
     return { name: parts[0], args };
   }
