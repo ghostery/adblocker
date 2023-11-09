@@ -95,15 +95,6 @@ function isSimpleHrefSelector(selector: string, start: number): boolean {
   );
 }
 
-// source https://stackoverflow.com/a/1144788
-function escapeRegExp(string: string): string {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-}
-
-function replaceAll(str: string, find: string, replace: string): string {
-  return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
-}
-
 /**
  * Validate CSS selector. There is a fast path for simple selectors (e.g.: #foo
  * or .bar) which are the most common case. For complex ones, we rely on
@@ -769,13 +760,9 @@ export default class CosmeticFilter implements IFilter {
         return part;
       })
       .map((part: string) => {
-        const withoutUnicodeCommas = replaceAll(part, String.raw`\u002C`, ',');
-        const withoutUnicodeBackslashed = replaceAll(
-          withoutUnicodeCommas,
-          String.raw`\u005C`,
-          '\\',
-        );
-        return withoutUnicodeBackslashed;
+        return part
+          .replace(new RegExp(/\\u002C/, 'g'), ',')
+          .replace(new RegExp(/\\u005C/, 'g'), '\\');
       });
     return { name: parts[0], args };
   }
@@ -791,7 +778,7 @@ export default class CosmeticFilter implements IFilter {
     let script = js.get(name);
     if (script !== undefined) {
       for (let i = 0; i < args.length; i += 1) {
-        // escape some characters so they wont get evaluated with escape during script injection
+        // escape some characters so they wont get evaluated with escape characters during script injection
         const arg = args[i].replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         script = script.replace(`{{${i + 1}}}`, arg);
       }
