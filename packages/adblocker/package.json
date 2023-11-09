@@ -29,7 +29,7 @@
     "bundle": "tsc --build ./tsconfig.bundle.json && rollup --config ./rollup.config.ts --configPlugin typescript",
     "prepack": "yarn run bundle",
     "test": "nyc mocha --config ../../.mocharc.js",
-    "dev": "mocha --config ../../.mocharc.js --watch -f 'scriptlets arguments parsing'",
+    "dev": "mocha --config ../../.mocharc.js --watch",
     "bench-metadata": "ts-node --project ./tools/tsconfig.json ./tools/bench-metadata.ts",
     "bump-internal-engine-version": "ts-node --project ./tools/tsconfig.json ./tools/auto-bump-engine-version.ts",
     "generate-codebooks": "concurrently -n build: \"yarn:codebook-*\" && yarn bump-internal-engine-version",

@@ -791,7 +791,9 @@ export default class CosmeticFilter implements IFilter {
     let script = js.get(name);
     if (script !== undefined) {
       for (let i = 0; i < args.length; i += 1) {
-        script = script.replace(`{{${i + 1}}}`, args[i]);
+        // escape some characters so they wont get evaluated with escape during script injection
+        const arg = args[i].replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        script = script.replace(`{{${i + 1}}}`, arg);
       }
 
       return script;

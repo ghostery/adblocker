@@ -1855,16 +1855,58 @@ describe('Cosmetic filters', () => {
   //   expect(CosmeticFilter.parse('###.selector /invalid/')).to.be.null;
   // });
 
-  it('#getScript', () => {
-    const parsed = CosmeticFilter.parse('foo.com##+js(script.js, arg1, arg2, arg3)');
-    expect(parsed).not.to.be.null;
-    if (parsed !== null) {
-      expect(parsed.getScript(new Map([['script.js', '{{1}},{{2}},{{3}}']]))).to.equal(
-        'arg1,arg2,arg3',
-      );
+  describe('#getScript', () => {
+    const simpleScriptlet = CosmeticFilter.parse('foo.com##+js(script.js, arg1, arg2, arg3)');
 
-      expect(parsed.getScript(new Map())).to.be.undefined;
-    }
+    it('returns undefined if script does not exist', () => {
+      expect(simpleScriptlet?.getScript(new Map())).to.be.undefined;
+    });
+
+    it('returns a script if one exists', () => {
+      expect(simpleScriptlet?.getScript(new Map([['script.js', 'test']]))).to.equal('test');
+    });
+
+    context('with arguments', () => {
+      it('inject values', () => {
+        expect(simpleScriptlet?.getScript(new Map([['script.js', '{{1}},{{2}},{{3}}']]))).to.equal(
+          'arg1,arg2,arg3',
+        );
+      });
+
+      it('escapes special characters', () => {
+        for (const character of [
+          '.',
+          '*',
+          '+',
+          '?',
+          '^',
+          '$',
+          '{',
+          '}',
+          '(',
+          ')',
+          '|',
+          '[',
+          ']',
+          '\\',
+        ]) {
+          const scriptlet = CosmeticFilter.parse(`foo.com##+js(script.js, ${character})`);
+          expect(scriptlet?.getScript(new Map([['script.js', '{{1}}']]))).to.equal(
+            `\\${character}`,
+          );
+        }
+      });
+
+      it('handles complex cases', () => {
+        for (const example of [
+          [String.raw`'\(a\)'`, String.raw`\\\(a\\\)`],
+          [String.raw`foo\*`, String.raw`foo\\\*`],
+        ]) {
+          const scriptlet = CosmeticFilter.parse(`foo.com##+js(script.js, ${example[0]})`);
+          expect(scriptlet?.getScript(new Map([['script.js', '{{1}}']]))).to.equal(example[1]);
+        }
+      });
+    });
   });
 
   describe('#getTokens', () => {
