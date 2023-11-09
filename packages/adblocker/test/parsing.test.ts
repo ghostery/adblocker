@@ -2031,16 +2031,13 @@ describe('scriptlets arguments parsing', () => {
       ],
       [
         `acs, document.getElementById, /\\$\\('body'\\)|\\$\\("body"\\)/`,
-        {
-          name: 'acs',
-          args: ['document.getElementById', String.raw`/\\$\\('body'\\)|\\$\\("body"\\)/`],
-        },
+        { name: 'acs', args: ['document.getElementById', `/\\$\\('body'\\)|\\$\\("body"\\)/`] },
       ],
       [
         'acs, document.getElementById, showModal, /^data:text\\/javascript/',
         {
           name: 'acs',
-          args: ['document.getElementById', 'showModal', String.raw`/^data:text\\/javascript/`],
+          args: ['document.getElementById', 'showModal', '/^data:text\\/javascript/'],
         },
       ],
       ['aeld, mousedown, !!{});', { name: 'aeld', args: ['mousedown', '!!{});'] }],
@@ -2074,7 +2071,7 @@ describe('scriptlets arguments parsing', () => {
   it('handles escaping of comas', () => {
     expect(CosmeticFilter.parse('foo.com##+js(script-name, foo \\,bar)')?.parseScript()).to.eql({
       name: 'script-name',
-      args: [String.raw`foo \\,bar`],
+      args: ['foo \\,bar'],
     });
   });
 
@@ -2129,7 +2126,7 @@ describe('scriptlets arguments parsing', () => {
         )?.parseScript(),
       ).to.eql({
         name: 'script-name',
-        args: [String.raw`\\{foo: 1`, String.raw`bar: 2\\}`, '{baz: {a: 1, b: 2}}'],
+        args: ['\\{foo: 1', 'bar: 2\\}', '{baz: {a: 1, b: 2}}'],
       });
     });
 
@@ -2200,7 +2197,7 @@ describe('scriptlets arguments parsing', () => {
           {
             name: 'xml-prune',
             args: [
-              String.raw`xpath(//*[name()="MPD"]/@mediaPresentationDuration | //*[name()="Period"][.//*[name()="BaseURL" and contains(text()\\,'/ads-')]] | //*[name()="Period"]/@start)`,
+              `xpath(//*[name()="MPD"]/@mediaPresentationDuration | //*[name()="Period"][.//*[name()="BaseURL" and contains(text()\\,'/ads-')]] | //*[name()="Period"]/@start)`,
               'Period[id^="Ad"i]',
               '.mpd',
             ],
@@ -2228,7 +2225,7 @@ describe('scriptlets arguments parsing', () => {
           'acs, Math, /\\}\\s*\\(.*?\\b(self|this|window)\\b.*?\\)/',
           {
             name: 'acs',
-            args: ['Math', String.raw`/\\}\\s*\\(.*?\b(self|this|window)\b.*?\\)/`],
+            args: ['Math', '/\\}\\s*\\(.*?\\b(self|this|window)\\b.*?\\)/'],
           },
         ],
         [
@@ -2237,15 +2234,15 @@ describe('scriptlets arguments parsing', () => {
             name: 'aeld',
             args: [
               'click',
-              String.raw`/event_callback=function\\(\\){window\\.location=t\\.getAttribute\\("href"\\)/`,
+              '/event_callback=function\\(\\){window\\.location=t\\.getAttribute\\("href"\\)/',
             ],
           },
         ],
         [
-          String.raw`m3u-prune, /\,ad\n.+?(?=#UPLYNK-SEGMENT)/gm, .m3u8`,
+          'm3u-prune, /\\,ad\n.+?(?=#UPLYNK-SEGMENT)/gm, .m3u8',
           {
             name: 'm3u-prune',
-            args: [String.raw`/\\,ad\n.+?(?=#UPLYNK-SEGMENT)/gm`, '.m3u8'],
+            args: ['/\\,ad\n.+?(?=#UPLYNK-SEGMENT)/gm', '.m3u8'],
           },
         ],
         // Also works without escaping the coma
@@ -2276,51 +2273,8 @@ describe('scriptlets arguments parsing', () => {
         CosmeticFilter.parse('foo.com##+js(script-name, \\/foo, bar\\/)')?.parseScript(),
       ).to.eql({
         name: 'script-name',
-        args: [String.raw`\\/foo`, String.raw`bar\\/`],
+        args: ['\\/foo', 'bar\\/'],
       });
-    });
-  });
-
-  describe('handles argument escaping', () => {
-    it('for escape sequences', () => {
-      for (const [scriptlet, expected] of [
-        [
-          String.raw`script-name, \(a\)`,
-          {
-            name: 'script-name',
-            args: [String.raw`\\(a\\)`],
-          },
-        ],
-      ] as const) {
-        expect(
-          CosmeticFilter.parse(`foo.com##+js(${scriptlet})`)?.parseScript(),
-          scriptlet,
-        ).to.eql(expected);
-      }
-    });
-
-    it('unescapes escaped scriptlets', () => {
-      for (const [scriptlet, expected] of [
-        [
-          String.raw`script-name, \u005C(a\u005C)`,
-          {
-            name: 'script-name',
-            args: [String.raw`\\(a\\)`],
-          },
-        ],
-        [
-          String.raw`script-name, {"a":1\u002C"b":2}`,
-          {
-            name: 'script-name',
-            args: [String.raw`{"a":1,"b":2}`],
-          },
-        ],
-      ] as const) {
-        expect(
-          CosmeticFilter.parse(`foo.com##+js(${scriptlet})`)?.parseScript(),
-          scriptlet,
-        ).to.eql(expected);
-      }
     });
   });
 
@@ -2330,7 +2284,7 @@ describe('scriptlets arguments parsing', () => {
         'trusted-replace-fetch-response, /\\"adPlacements.*?\\"\\}\\}\\}\\]\\,/, , player?key=',
         {
           name: 'trusted-replace-fetch-response',
-          args: [String.raw`/\\"adPlacements.*?\\"\\}\\}\\}\\]\\,/`, '', 'player?key='],
+          args: ['/\\"adPlacements.*?\\"\\}\\}\\}\\]\\,/', '', 'player?key='],
         },
       ],
       [
@@ -2338,7 +2292,7 @@ describe('scriptlets arguments parsing', () => {
         {
           name: 'trusted-replace-fetch-response',
           args: [
-            String.raw`/\\"adPlacements.*?true.*?\\"\\}\\}\\}\\]\\,/`,
+            '/\\"adPlacements.*?true.*?\\"\\}\\}\\}\\]\\,/',
             '',
             'url:player?key= method:/post/i',
           ],
@@ -2349,7 +2303,7 @@ describe('scriptlets arguments parsing', () => {
         {
           name: 'trusted-replace-fetch-response',
           args: [
-            String.raw`/\\"adPlacements.*?\\"\\}\\}\\}\\]\\,/`,
+            '/\\"adPlacements.*?\\"\\}\\}\\}\\]\\,/',
             '',
             'url:player?key= method:/post/i bodyUsed:true',
           ],
@@ -2359,29 +2313,21 @@ describe('scriptlets arguments parsing', () => {
         'trusted-replace-fetch-response, /\\"adSlots.*?\\}\\]\\}\\}\\]\\,/, , player?key=',
         {
           name: 'trusted-replace-fetch-response',
-          args: [String.raw`/\\"adSlots.*?\\}\\]\\}\\}\\]\\,/`, '', 'player?key='],
+          args: ['/\\"adSlots.*?\\}\\]\\}\\}\\]\\,/', '', 'player?key='],
         },
       ],
       [
         'trusted-replace-fetch-response, /\\"adSlots.*?true.*?\\}\\]\\}\\}\\]\\,/, , url:player?key= method:/post/i',
         {
           name: 'trusted-replace-fetch-response',
-          args: [
-            String.raw`/\\"adSlots.*?true.*?\\}\\]\\}\\}\\]\\,/`,
-            '',
-            'url:player?key= method:/post/i',
-          ],
+          args: ['/\\"adSlots.*?true.*?\\}\\]\\}\\}\\]\\,/', '', 'url:player?key= method:/post/i'],
         },
       ],
       [
         'trusted-replace-fetch-response, /\\"adSlots.*?\\}\\]\\}\\}\\]\\,/, , url:player?key= method:/post/i',
         {
           name: 'trusted-replace-fetch-response',
-          args: [
-            String.raw`/\\"adSlots.*?\\}\\]\\}\\}\\]\\,/`,
-            '',
-            'url:player?key= method:/post/i',
-          ],
+          args: ['/\\"adSlots.*?\\}\\]\\}\\}\\]\\,/', '', 'url:player?key= method:/post/i'],
         },
       ],
       [
@@ -2389,7 +2335,7 @@ describe('scriptlets arguments parsing', () => {
         {
           name: 'trusted-replace-fetch-response',
           args: [
-            String.raw`/\\"adSlots.*?\\}\\]\\}\\}\\]\\,/`,
+            '/\\"adSlots.*?\\}\\]\\}\\}\\]\\,/',
             '',
             'url:player?key= method:/post/i bodyUsed:true',
           ],
@@ -2399,18 +2345,37 @@ describe('scriptlets arguments parsing', () => {
         'trusted-replace-fetch-response, /\\"playerAds.*?\\}\\}\\]\\,/, , player?key=',
         {
           name: 'trusted-replace-fetch-response',
-          args: [String.raw`/\\"playerAds.*?\\}\\}\\]\\,/`, '', 'player?key='],
+          args: ['/\\"playerAds.*?\\}\\}\\]\\,/', '', 'player?key='],
         },
       ],
       [
         'trusted-replace-fetch-response, /\\"playerAds.*?true.*?\\}\\}\\]\\,/, , url:player?key= method:/post/i',
         {
           name: 'trusted-replace-fetch-response',
-          args: [
-            String.raw`/\\"playerAds.*?true.*?\\}\\}\\]\\,/`,
-            '',
-            'url:player?key= method:/post/i',
-          ],
+          args: ['/\\"playerAds.*?true.*?\\}\\}\\]\\,/', '', 'url:player?key= method:/post/i'],
+        },
+      ],
+    ] as const) {
+      expect(CosmeticFilter.parse(`foo.com##+js(${scriptlet})`)?.parseScript(), scriptlet).to.eql(
+        expected,
+      );
+    }
+  });
+
+  it('unescapes escaped scriptlets', () => {
+    for (const [scriptlet, expected] of [
+      [
+        String.raw`script-name, \u005C(a\u005C)`,
+        {
+          name: 'script-name',
+          args: [String.raw`\(a\)`],
+        },
+      ],
+      [
+        String.raw`script-name, {"a":1\u002C"b":2}`,
+        {
+          name: 'script-name',
+          args: [String.raw`{"a":1,"b":2}`],
         },
       ],
     ] as const) {

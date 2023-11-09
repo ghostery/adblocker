@@ -775,11 +775,7 @@ export default class CosmeticFilter implements IFilter {
           String.raw`\u005C`,
           '\\',
         );
-        const withDoubleEscaping = withoutUnicodeBackslashed.replace(
-          /\\([^bfnrtvxu0])/g,
-          String.raw`\\$1`,
-        );
-        return withDoubleEscaping;
+        return withoutUnicodeBackslashed;
       });
     return { name: parts[0], args };
   }
