@@ -1,3 +1,23 @@
+# v1.26.12 (Fri Nov 10 2023)
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker`
+  - Scriptlet argument escaping [#3588](https://github.com/ghostery/adblocker/pull/3588) ([@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#3546](https://github.com/ghostery/adblocker/pull/3546) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.26.11 (Fri Nov 03 2023)
 
 #### :bug: Bug Fix
