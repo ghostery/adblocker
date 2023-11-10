@@ -41,6 +41,9 @@ import { HTMLSelector, extractHTMLSelectorFromRule } from '../html-filtering';
 const EMPTY_TOKENS: [Uint32Array] = [EMPTY_UINT32_ARRAY];
 export const DEFAULT_HIDDING_STYLE: string = 'display: none !important;';
 
+const REGEXP_UNICODE_COMMA = new RegExp(/\\u002C/, 'g');
+const REGEXP_UNICODE_BACKSLASH = new RegExp(/\\u005C/, 'g');
+
 /**
  * Given a `selector` starting with either '#' or '.' check if what follows is
  * a simple CSS selector: /^-?[_a-zA-Z]+[_a-zA-Z0-9-]*$/
@@ -748,16 +751,20 @@ export default class CosmeticFilter implements IFilter {
       return undefined;
     }
 
-    const args = parts.slice(1).map((part) => {
-      if (
-        (part.startsWith(`'`) && part.endsWith(`'`)) ||
-        (part.startsWith(`"`) && part.endsWith(`"`))
-      ) {
-        return part.substring(1, part.length - 1);
-      }
-      return part;
-    });
-
+    const args = parts
+      .slice(1)
+      .map((part) => {
+        if (
+          (part.startsWith(`'`) && part.endsWith(`'`)) ||
+          (part.startsWith(`"`) && part.endsWith(`"`))
+        ) {
+          return part.substring(1, part.length - 1);
+        }
+        return part;
+      })
+      .map((part) =>
+        part.replace(REGEXP_UNICODE_COMMA, ',').replace(REGEXP_UNICODE_BACKSLASH, '\\'),
+      );
     return { name: parts[0], args };
   }
 
@@ -772,7 +779,9 @@ export default class CosmeticFilter implements IFilter {
     let script = js.get(name);
     if (script !== undefined) {
       for (let i = 0; i < args.length; i += 1) {
-        script = script.replace(`{{${i + 1}}}`, args[i]);
+        // escape some characters so they wont get evaluated with escape characters during script injection
+        const arg = args[i].replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        script = script.replace(`{{${i + 1}}}`, arg);
       }
 
       return script;
