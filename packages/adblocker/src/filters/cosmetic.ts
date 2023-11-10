@@ -41,6 +41,9 @@ import { HTMLSelector, extractHTMLSelectorFromRule } from '../html-filtering';
 const EMPTY_TOKENS: [Uint32Array] = [EMPTY_UINT32_ARRAY];
 export const DEFAULT_HIDDING_STYLE: string = 'display: none !important;';
 
+const REGEXP_UNICODE_COMMA = new RegExp(/\\u002C/, 'g');
+const REGEXP_UNICODE_BACKSLASH = new RegExp(/\\u005C/, 'g');
+
 /**
  * Given a `selector` starting with either '#' or '.' check if what follows is
  * a simple CSS selector: /^-?[_a-zA-Z]+[_a-zA-Z0-9-]*$/
@@ -759,11 +762,9 @@ export default class CosmeticFilter implements IFilter {
         }
         return part;
       })
-      .map((part: string) => {
-        return part
-          .replace(new RegExp(/\\u002C/, 'g'), ',')
-          .replace(new RegExp(/\\u005C/, 'g'), '\\');
-      });
+      .map((part) =>
+        part.replace(REGEXP_UNICODE_COMMA, ',').replace(REGEXP_UNICODE_BACKSLASH, '\\'),
+      );
     return { name: parts[0], args };
   }
 
