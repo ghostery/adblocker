@@ -243,16 +243,13 @@ panprices.com,intercity.technology,freelancer.taxmachine.be,adria.gg,fjlaborator
 
 ! Ad-Shield
 ! https://github.com/uBlockOrigin/uAssets/issues/9717
-||da29e6b8-f018-490f-b25f-39a887fc95e7.xyz^
-||31830fbc-adbf-11ed-afa1-0242ac120002.site^$xhr,ping
-||15823f12-289e-4189-9e51-e2de1bf1a105.online^$xhr,ping
-/^https:\/\/cdn\.jsdelivr\.net\/npm\/[-a-z_]{4,22}@latest\/dist\/script\.min\.js$/$script,3p,match-case
-loawa.com,ygosu.com,sportalkorea.com,algumon.com,hancinema.net,enetnews.co.kr,edaily.co.kr,economist.co.kr,etoday.co.kr,hankyung.com,isplus.com,hometownstation.com,kagit.kr,inven.co.kr,viva100.com,joongdo.co.kr,jjang0u.com,tenbizt.com,tvreport.co.kr,newautopost.co.kr,mememedia.co.kr,mobilitytv.co.kr,cboard.net,a-ha.io,interfootball.co.kr,fourfourtwo.co.kr,apkmirror.com,dotkeypress.kr,viewcash.co.kr,tripplus.co.kr,enterdiary.com,mtodayauto.com,genshinlab.com##+js(set-local-storage-item, adshield-analytics-uuid, $remove$)
-apkmirror.com,dotkeypress.kr,viewcash.co.kr,tripplus.co.kr,enterdiary.com,mtodayauto.com##+js(noeval-if, 07c225f3.online)
-apkmirror.com,dotkeypress.kr,viewcash.co.kr,tripplus.co.kr,enterdiary.com,mtodayauto.com##^script:has-text(KCgpPT57bGV0IGU)
-
-! https://www.reddit.com/r/uBlockOrigin/comments/p29y3w/these_guys_boast_combatting_all_adblocks/
-||connectier.io^
+loawa.com,ygosu.com,sportalkorea.com,algumon.com,hancinema.net,enetnews.co.kr,edaily.co.kr,economist.co.kr,etoday.co.kr,hankyung.com,isplus.com,hometownstation.com,kagit.kr,inven.co.kr,viva100.com,joongdo.co.kr,jjang0u.com,tenbizt.com,tvreport.co.kr,newautopost.co.kr,mememedia.co.kr,mobilitytv.co.kr,cboard.net,a-ha.io,interfootball.co.kr,fourfourtwo.co.kr,apkmirror.com,dotkeypress.kr,viewcash.co.kr,tripplus.co.kr,enterdiary.com,mtodayauto.com,genshinlab.com,hotplacehunter.co.kr,mystylezip.com,majorgeeks.com,poro.gg,maple.gg,lolchess.gg,dak.gg##+js(set-local-storage-item, adshield-analytics-uuid, $remove$)
+apkmirror.com,dotkeypress.kr,viewcash.co.kr,tripplus.co.kr,enterdiary.com,mtodayauto.com,hotplacehunter.co.kr,mystylezip.com,majorgeeks.com,poro.gg,maple.gg,lolchess.gg,dak.gg##+js(noeval-if, /07c225f3\.online|content-loader\.com/)
+!#if cap_html_filtering
+apkmirror.com,dotkeypress.kr,viewcash.co.kr,tripplus.co.kr,enterdiary.com,mtodayauto.com,hotplacehunter.co.kr,mystylezip.com,majorgeeks.com,poro.gg,maple.gg,lolchess.gg,dak.gg##^script:has-text(KCgpPT57bGV0IGU)
+!#else
+apkmirror.com,dotkeypress.kr,viewcash.co.kr,tripplus.co.kr,enterdiary.com,mtodayauto.com,hotplacehunter.co.kr,mystylezip.com,majorgeeks.com,poro.gg,maple.gg,lolchess.gg,dak.gg##+js(rmnt, script, KCgpPT57bGV0IGU)
+!#endif
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/91230
 ||nsfw.xxx/vendor/fingerprint/fingerprint2.min.js$script,redirect=fingerprint2.js,important
@@ -320,6 +317,7 @@ tacobell.com##+js(set, bmak.js_post, false)
 ! https://github.com/uBlockOrigin/uAssets/pull/15692#issuecomment-1321098072
 blog.skk.moe##+js(no-fetch-if, body:/[\w\W]{700}/)
 skk.moe##+js(no-fetch-if, method:/post|posT|poSt|poST|pOst|pOsT|pOSt|pOST|Post|PosT|PoSt|PoST|POst|POsT|POSt|POST/)
+blog.skk.moe##+js(no-fetch-if, /\/post\/.*\.json/)
 /cfga/jquery.js?$image
 /npm/sks@0.*/lazyload.js$script,3p
 
@@ -514,7 +512,8 @@ zhihu.com##+js(no-xhr-if, log-sdk.ksapisrv.com/rest/wd/common/log/collect method
 ||adonsonlyd.xyz^
 
 ! https://github.com/uBlockOrigin/uAssets/issues/17786
-||adthrive.com^$removeparam,domain=~mediaite.com
+! https://github.com/uBlockOrigin/uAssets/issues/20569
+||adthrive.com^$removeparam,from=~mediaite.com|~a-z-animals.com
 
 ! branch.io sites
 ||cdn.branch.io/branch-latest.min.js$important,domain=nbc.com|pac-12.com
@@ -662,6 +661,11 @@ disqus.com##a[href][data-link-out]:remove-attr(data-link-out)
 steamcommunity.com##+js(href-sanitizer, a[href^="https://steamcommunity.com/linkfilter/?url=http"], ?url)
 ! https://colab.research.google.com/ - Needs sign-in
 colab.research.google.com##+js(href-sanitizer, a[href^="https://colab.research.google.com/corgiredirector?site=http"], ?site)
+! https://www.xda-developers.com/lenovo-yoga-7i-500-deal/
+xda-developers.com##+js(href-sanitizer, a[href^="https://shop-links.co/link/?"][href*="&url=http"], ?url)
+! https://www.reddit.com/r/uBlockOrigin/comments/17psek6/what_exactly_is_jdoqocycom_and_why_does_every/
+isthereanydeal.com##+js(href-sanitizer, a[href^="http://www.jdoqocy.com/click-"][href*="?URL=http"], ?URL)
+isthereanydeal.com##+js(href-sanitizer, a[href^="https://track.adtraction.com/t/t?"][href*="&url=http"], ?url)
 
 ! https://chataigpt.org
 /detroitchicago/dpv.gif?$image
@@ -813,8 +817,8 @@ $removeparam=asc_refurl,domain=aboutamazon.com|amazon.*|amzn.to
 $removeparam=asc_source,domain=aboutamazon.com|amazon.*|amzn.to
 ! youtube.com - Copy video URL at its search result via mouse right click.
 ||youtube.com^$removeparam=pp
-! https://www.wsj.com/livecoverage/tropical-storm-idalia-hurricane-florida?mod=hp_lead_pos7
-||wsj.com^$removeparam=mod
+! https://github.com/AdguardTeam/AdguardFilters/issues/159953
+||youtu.be^$removeparam=si
 ! https://github.com/uBlockOrigin/uAssets/issues/18938#issuecomment-1693238481
 ! https://community.brave.com/t/unable-to-open-reddit-com-urls-in-private-tabs/503125/4
 !#if env_firefox
@@ -854,15 +858,17 @@ web.bale.ai##+js(trusted-set, navigator.userAgent, Mozilla/5.0 (Windows NT 10.0;
 !#else
 web.bale.ai##+js(trusted-set, navigator.userAgent, Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML\, like Gecko) Chrome/119.0.6045.66 Mobile Safari/537.36)
 !#endif
-
-! https://github.com/easylist/easylistgermany/issues/116
-||agma-analytics.de^
+! https://www.halaldownload.com/%d8%af%d8%a7%d9%86%d9%84%d9%88%d8%af-%d9%82%d8%b3%d9%85%d8%aa-6-%d9%81%d8%b5%d9%84-2-%d8%b2%d8%ae%d9%85-%da%a9%d8%a7%d8%b1%db%8c-%d8%a8%d8%a7%d8%b2%da%af%d8%b4%d8%aa/ - Download links
+||upera.shop/ref/$doc,urltransform=/^\/ref\/[^\/]+//
 
 ! https://www.makeuseof.com/best-vs-code-chatgpt-extensions/ - Tracking cookies
-makeuseof.com##+js(cookie-remover, /articlesRead|previousPage/)
+androidpolice.com,makeuseof.com,movieweb.com,xda-developers.com##+js(cookie-remover, /articlesRead|previousPage/)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/20440
 /^https?:\/\/chat\.openai\.com\/ces\/v1\/[a-z]$/$xhr,1p,domain=chat.openai.com,method=post
+
+! https://github.com/uBlockOrigin/uAssets/issues/20530
+airtel.in##+js(no-xhr-if, analytics/bulk-pixel)
 
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt

@@ -54,8 +54,11 @@ vectogravic.com##+js(acs, eval, replace)
 pornorips.com##+js(acs, puShown, /doOpen|popundr/)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/kq7enz/adblock_detected_on_httpskusonimecom/
+kusonime.com##+js(rpnt, script, /\(\S+?window\.showAds\)/, (true), condition, showAds)
 kusonime.com##+js(nostif, css_class.show)
 kusonime.com##.iklanads
+! https://github.com/uBlockOrigin/uAssets/issues/18533
+@@||kusonime.com^$script,1p
 ! https://github.com/AdguardTeam/AdguardFilters/issues/104839
 cararegistrasi.com##+js(nano-sib, timer)
 cararegistrasi.com##+js(nowoif)
@@ -141,7 +144,7 @@ stvid.com##+js(noeval)
 hypnohub.net,oldies.name,xnxxporn.video,xxxdessert.com,xxxshake.com##+js(aopr, exoNoExternalUI38djdkjDDJsio96)
 freepornxxxhd.com##+js(acs, String.fromCharCode, constructor)
 hot-cartoon.com,richhioon.eu,wowstream.top##+js(aopr, BetterJsPop)
-123movies4u.site,123movieshd.*,anroll.net,bajarjuegospcgratis.com,balkanportal.net,bestporncomix.com,celebrity-leaks.net,comicsmanics.com,desivdo.com,directupload.net,doctormalay.com,dvdfullestrenos.com,ebookhunter.net,ekasiwap.com,electro-torrent.pl,femdom-joi.com,film1k.com,filmesonlinex.org,findav.*,findporn.*,gambarbogel.xyz,gaysex69.net,hentaistream.co,hollymoviehd.cc,hubgifs.info,javhd.win,javhun.com,jorpetz.com,kinemania.tv,lightdlmovies.blogspot.com,masahub.com,myonvideo.com,nuoga.eu,olarixas.xyz,palimas.org,pirateiro.com,pornez.net,pornhd720p.com,pornobr.ninja,pornofaps.com,pornorip.biz,pornotorrent.com.br,putlocker5movies.org,sakurafile.com,sexofilm.co,tensei-shitara-slime-datta-ken.com,thebussybandit.com,torrage.info,video.az,vikv.net,viveseries.com,vstorrent.org,watchjavidol.com,webcamrips.com,yifytv.top,youdbox.net,yourdailypornvideos.ws##+js(aopw, _pop)
+123movies4u.site,123movieshd.*,anroll.net,bajarjuegospcgratis.com,balkanportal.net,bestporncomix.com,celebrity-leaks.net,comicsmanics.com,desivdo.com,directupload.net,doctormalay.com,dvdfullestrenos.com,ebookhunter.net,ekasiwap.com,electro-torrent.pl,femdom-joi.com,film1k.com,filmesonlinex.org,findav.*,findporn.*,gambarbogel.xyz,gaysex69.net,hentaistream.co,hollymoviehd.cc,hubgifs.info,javhd.win,javhun.com,jorpetz.com,kinemania.tv,lightdlmovies.blogspot.com,masahub.com,myonvideo.com,nuoga.eu,olarixas.xyz,palimas.org,pirateiro.com,pornez.net,pornhd720p.com,pornobr.ninja,pornofaps.com,pornorip.biz,pornotorrent.com.br,putlocker5movies.org,sakurafile.com,sexofilm.co,tensei-shitara-slime-datta-ken.com,thebussybandit.com,torrage.info,video.az,vikv.net,viveseries.com,vstorrent.org,watchjavidol.com,webcamrips.com,yifytv.top,youdbox.*,yourdailypornvideos.ws##+js(aopw, _pop)
 123movieshd.*##+js(aopr, mm)
 123movieshd.*##+js(set, p18, undefined)
 cfake.com###over
@@ -400,7 +403,7 @@ viralxns.com###timeout, #tp-snp2:others()
 viralxns.com###timeout:remove-attr(disabled)
 viralxns.com,wp.uploadfiles.in,uploadsoon.com##+js(nano-sib, /.?/, *, 0.02)
 viralxns.com,wp.uploadfiles.in,uploadsoon.com##+js(trusted-click-element, #tp-snp2)
-viralsbaba1.blogspot.com##+js('trusted-click-element', 'button#btn-gotolink', '', '1000')
+viralsbaba1.blogspot.com##+js(trusted-click-element, button#btn-gotolink, , 1000)
 viralsbaba1.blogspot.com###btn-gotolink:style(display:block !important; margin-top: 410px !important; margin-left: 200px !important; height: 100px !important; width: 100px !important)
 viralsbaba1.blogspot.com###btn-gotolink:remove-attr(disabled)
 viralsbaba1.blogspot.com###btn-gotolink:others()
@@ -3404,9 +3407,6 @@ club-opel.com##ins.adsbygoogle
 ||painaltube.com/widget/chaturbate_cam.php?
 painaltube.com##.widget > div.widget
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/89385
-smsonline.cloud#@#.googlead
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/89344
 mangaalarab.com##+js(set, canRunAds, true)
 
@@ -3452,7 +3452,6 @@ send-anywhere.com###transfer-reward-ad
 @@||pharmacyreviewer.co/forum/js/$script,1p
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/ownid8/cant_block_admiral_ads/
-247sports.com##+js(aopr, admrlWpJsonP)
 247sports.com##body:not(.skybox-loaded) .topnav:style(margin-top:0px !important)
 247sports.com##.nav-bar:style(top:0px !important)
 
@@ -4723,9 +4722,8 @@ definitions.net##+js(set, canRunAds, true)
 pixroute.com##+js(nowoif)
 pixroute.com##+js(set, proclayer, noopFunc)
 
-! https://www.reddit.com/r/uBlockOrigin/comments/qiv6j4/req_uploadyio/
-uploady.io##+js(acs, document.addEventListener, nextFunction)
-||uploady.io/sw.js
+! https://github.com/uBlockOrigin/uAssets/issues/20557
+uploady.io##+js(set, timeleft, 0)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/qinnqo/adblock_detected/
 ravenmanga.xyz##+js(acs, addEventListener, onerror)
@@ -4743,15 +4741,16 @@ toxicwap.us##+js(aopr, mm)
 ||babup.com^$3p
 ||toxicwap.us/sw.js$script,1p
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/98494
+! https://github.com/uBlockOrigin/uAssets/issues/20614
+dvdgayonline.com##+js(aost, setTimeout, ads)
 ! https://github.com/uBlockOrigin/uAssets/issues/10367
-dotadostube.com,dvdgayonline.com,dvdgayporn.com,hotxfans.com,taradinhos.com##+js(aeld, DOMContentLoaded, adsBlocked)
+dotadostube.com,taradinhos.com##+js(noeval-if, ads)
+dvdgayporn.com##+js(aeld, DOMContentLoaded, adsBlocked)
 dvdgayporn.com##+js(ra, href, #clickfakeplayer)
-dotadostube.com,hotxfans.com,taradinhos.com##.video-block-happy:upward(1)
+dotadostube.com,taradinhos.com##.video-block-happy:upward(1)
 dotadostube.com##.happy-player-beside
 dvdgayporn.com,taradinhos.com##.widget_custom_html
 taradinhos.com##.under-player-ad
-||hotxfans.com^$3p
 ||dvdgayonline.com^$3p
 ||taradinhos.com^$3p
 
@@ -5054,6 +5053,7 @@ nowtolove.com.au##.page__content-header:style(height: 50px !important)
 .com/script/frustration.js|$3p
 .php?*&sadbl=1&$xhr,3p
 ##a[dontfo=""][style$="position: absolute; z-index: 2147483647;"]
+.com/script/utils.js|$3p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10506
 sexlist.tv##+js(disable-newtab-links)
@@ -5136,6 +5136,7 @@ flixmaza.*##+js(aopw, _pop)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10533
 cricstream.*##.w-100.position-absolute.h-100
+watch.cricstream.*##button:has-text(/Watch|🎟|👉/)
 
 ! meetdownload.com popups
 meetdownload.com##+js(acs, document.querySelectorAll, popMagic)
@@ -5506,9 +5507,8 @@ dirp.me##[id]:has-text(Provider)
 boainformacao.com.br##+js(no-xhr-if, adsbygoogle)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/18612
-!pinterest.*##:xpath('//*[(contains(text(),"P") and contains(text(),"r") and contains(text(),"m") and contains(text(),"o") and contains(text(),"t") and contains(text(),"e") and contains(text(),"d") and contains(text(),"b") and contains(text(),"y")) ]'):upward([data-grid-item])
-pinterest.*##+js(rpnt, script, /web_hide_epik_param_in_promoted_urls.*?enabled"/, web_hide_epik_param_in_promoted_urls":"disabled")
 pinterest.*##a[href*="&epik="]:upward([data-grid-item])
+pinterest.*##[data-grid-item]:has([aria-label]:not([aria-label*="pinterest"])[href]:not([href^="/pin"]))
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10848
 distrowatch.org##[href*="3cx"]:upward(tbody)
@@ -5536,21 +5536,20 @@ dash-free.com##+js(aopr, app_vars.force_disable_adblock)
 autofaucet.dutchycorp.space##[href^="https://enicyvys.xyz/"]
 autofaucet.dutchycorp.space##[href*="banner"]
 autofaucet.dutchycorp.space##[src^="blob:https://autofaucet.dutchycorp.space/"]:remove()
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=coin-free.com|kienthucrangmieng.com|chinhnhacoban.com|chamcuuhoc.com|hocchannuoi.com|thuocdangian.net|hoclamdaubep.com|tremamnon.com|tai-mui-hong.com|95news.com|vnpttelle.com|dhlgame.com|hynews.biz|fanclup.info
-*$script,3p,domain=coin-free.com|kienthucrangmieng.com|chinhnhacoban.com|chamcuuhoc.com|hocchannuoi.com|thuocdangian.net|hoclamdaubep.com|tai-mui-hong.com|95news.com|vnpttelle.com|dhlgame.com|hynews.biz|fanclup.info,denyallow=iconify.design|cloudflare.com
-coin-free.com,kienthucrangmieng.com,thuocdangian.net,fanclup.info##[id^="wpsafe-wait"]
-coin-free.com,kienthucrangmieng.com,thuocdangian.net,fanclup.info###wpsafe-generate, #wpsafe-link:style(display: block !important)
-*$script,redirect-rule=noopjs,domain=coin-free.com|kienthucrangmieng.com|chinhnhacoban.com|chamcuuhoc.com|hocchannuoi.com|thuocdangian.net|hoclamdaubep.com|tai-mui-hong.com|95news.com|vnpttelle.com|dhlgame.com|hynews.biz|fanclup.info
+@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=coin-free.com|kienthucrangmieng.com|chinhnhacoban.com|tremamnon.com|95news.com|vnpttelle.com
+*$script,3p,domain=coin-free.com|kienthucrangmieng.com|chinhnhacoban.com|95news.com|vnpttelle.com,denyallow=iconify.design|cloudflare.com
+coin-free.com,kienthucrangmieng.com##[id^="wpsafe-wait"]
+coin-free.com,kienthucrangmieng.com###wpsafe-generate, #wpsafe-link:style(display: block !important)
+*$script,redirect-rule=noopjs,domain=coin-free.com|kienthucrangmieng.com|chinhnhacoban.com|95news.com|vnpttelle.com
 ! https://github.com/uBlockOrigin/uAssets/issues/17166#issuecomment-1480653096
-rainurl.com,snowurl.com##+js(nowoif)
-rainurl.com,snowurl.com##+js(set, blurred, false)
-rainurl.com,snowurl.com##+js(set, go_popup, {})
-thuocdangian.net,tremamnon.com##+js(aeld, DOMContentLoaded, adsBlocked)
-chinhnhacoban.com,hynews.biz,tremamnon.com,vnpttelle.com##[id^="wpsafe-generate"], #continue:style(display: block !important;)
-chamcuuhoc.com###wpsafe-link:style(display: block !important;)
-kienthucrangmieng.com,coin-free.com##^script:has-text(htmls)
+snowurl.com##+js(nowoif)
+snowurl.com##+js(set, blurred, false)
+snowurl.com##+js(set, go_popup, {})
+tremamnon.com##+js(aeld, DOMContentLoaded, adsBlocked)
+chinhnhacoban.com,tremamnon.com,vnpttelle.com##[id^="wpsafe-generate"], #continue:style(display: block !important;)
+kienthucrangmieng.com,coin-free.com,tremamnon.com##^script:has-text(htmls)
 !#if !cap_html_filtering
-kienthucrangmieng.com,coin-free.com##+js(rmnt, script, htmls)
+kienthucrangmieng.com,coin-free.com,tremamnon.com##+js(rmnt, script, htmls)
 !#endif
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10894

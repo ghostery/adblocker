@@ -924,8 +924,8 @@ nypost.com,pagesix.com#@#.recirc
 ! breakage caused by Yavli-filters in EasyList
 @@||youtube.com/yts/jsbin/*$script,domain=breathecast.com|classicalite.com|crossmap.com|hallels.com|newseveryday.com|returnofkings.com
 
-! https://github.com/uBlockOrigin/uAssets/issues/1720#issuecomment-476358518
-@@||amazon.*/*uedata$image,1p
+! https://github.com/uBlockOrigin/uAssets/issues/1720
+@@||fls-na.amazon.*/1/batch/1/OP/$image,domain=amazon.*
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/b7dh6s/cant_change_stlyes_on_4chan_with_ubo_active/
 @@||4cdn.org^$script,domain=4chan.org
@@ -1299,9 +1299,6 @@ ebay.com#@#li.s-item:has(span:has-text(SPONSORED))
 
 ! https://github.com/uBlockOrigin/uAssets/commit/69bced5eba64f7960acaa5fa85df06958fb64a93#commitcomment-35179436
 twitter.com#@#article[role="article"]:has-text(Promoted)
-
-! https://github.com/uBlockOrigin/uAssets/issues/6331
-@@||ekstat.com/js/ek$script,domain=eksisozluk.com
 
 ! To counter the adswizz filter in Peter Lowe's list
 ! [badfilter] ||adswizz.com^$badfilter
@@ -2346,6 +2343,10 @@ hubblespacetelescope.blogspot.com#@#.vertical-ads
 ! https://github.com/NanoMeow/QuickReports/issues/4540
 officedepot.co.cr##+js(set, mediator, noopFunc)
 officedepot.co.cr##+js(set, Object.prototype.subscribe, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/20525
+||groupbycloud.com/gb-tracker-client-3.min.js$domain=officedepot.co.cr,important
+officedepot.co.cr##+js(set, gbTracker, {})
+officedepot.co.cr##+js(set, gbTracker.sendAutoSearchEvent, noopFunc)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/ifvbor/
 !#if env_firefox
@@ -2560,10 +2561,13 @@ hero-magazine.com###header:style(position: inherit !important;)
 !#endif
 
 ! https://github.com/uBlockOrigin/uAssets/issues/7766#issuecomment-731743962
-@@||ads.adthrive.com/sites/*/ads.min.js$script,domain=pimylifeup.com
-@@||ads.adthrive.com/builds/core/*/js/adthrive.min.js$script,domain=pimylifeup.com
+! https://github.com/uBlockOrigin/uAssets/issues/20569
+@@||ads.adthrive.com/sites/*/ads.min.js$script,domain=a-z-animals.com|pimylifeup.com
+@@||ads.adthrive.com/builds/core/*$script,domain=a-z-animals.com|pimylifeup.com
 pimylifeup.com##+js(no-fetch-if, marmalade)
 pimylifeup.com#@#.adthrive
+a-z-animals.com#@#.adthrive-video-player
+a-z-animals.com#@#.adthrive
 
 ! egy.best broken download buttons
 ! [badfilter] ||cdn-static.egybest.*/packed/$badfilter
@@ -3359,7 +3363,6 @@ himovies.to#@#a[onclick]
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11457
 ! https://github.com/uBlockOrigin/uAssets/issues/18932
-deezer.com##+js(set, smartLoaded, true)
 @@||streaming.adswizz.com^$3p,media,domain=deezer.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/11472
@@ -4648,7 +4651,7 @@ tieba.baidu.com##+js(set, passFingerPrint, noopFunc)
 @@||analytics-*.clickdimensions.com/*/pages/$frame,domain=crm.digital.nhs.uk
 
 ! https://github.com/uBlockOrigin/uAssets/issues/16440
-@@||h-microsoft.online-metrix.net^$xhr,domain=ave9858.github.io|massgrave.dev
+@@||h-microsoft.online-metrix.net^$xhr,domain=ave9858.github.io|massgrave.dev|docs.atlasos.net
 
 ! https://github.com/uBlockOrigin/uAssets/issues/17621#issuecomment-1567160350
 sofascore.com#@#[display^="block,none"]
@@ -4959,9 +4962,12 @@ poweredbycovermore.com##+js(set, _satellite.track, noopFunc)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/16axzwg/missing_table_of_contents_and_logo_at_the_top/
 neurotray.com##+js(nano-stb, /EzoIvent|TDELAY/, 5000)
-@@||sf.ezoiccdn.com/ezoimgfmt/$image,domain=neurotray.com
-@@||sf.ezoiccdn.com/ezossp/$script,domain=neurotray.com
-||sf.ezoiccdn.com/ezossp/https/neurotray.com/?local_ga_js=$script,domain=neurotray.com,important
+@@||sf.ezoiccdn.com/ezoimgfmt/$image,3p,domain=neurotray.com
+@@||sf.ezoiccdn.com/ezossp/$script,3p,domain=neurotray.com
+||sf.ezoiccdn.com/ezossp/https/neurotray.com/?local_ga_js=$script,3p,domain=neurotray.com,important
+! https://www.reddit.com/r/uBlockOrigin/comments/17wsdz5/some_content_missing_on_neurotraycom/
+@@||go.ezodn.com^$css,image,3p,domain=neurotray.com
+@@||go.ezodn.com/tardisrocinante/$script,3p,domain=neurotray.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/19658
 @@||receiita.xyz^$popup,domain=animexhd.com
@@ -5113,3 +5119,36 @@ help.cashctrl.com##+js(set, Origami.fastclick, noopFunc)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/20449
 @@||wurfl.io/wurfl.js$script,domain=keukenatlas.nl
+
+! https://github.com/uBlockOrigin/uAssets/issues/20457
+*.gif$image,redirect=1x1.gif,domain=holybooks.com,important
+
+! https://github.com/uBlockOrigin/uAssets/issues/20509
+@@||src.litix.io/videojs/$script,domain=nasa.gov
+
+! https://github.com/uBlockOrigin/uAssets/issues/20564
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect-rule=google-ima.js,domain=moviesandtv.myvi.in
+@@||moviesandtv.myvi.in/videojs/videojs-contrib-ads.min.js$script,domain=moviesandtv.myvi.in
+
+! https://github.com/uBlockOrigin/uAssets/issues/20579
+@@||cdn.lib.getjad.io^$script,domain=vidaextra.com
+@@||c.amazon-adsystem.com/aax2/apstag.js$script,domain=vidaextra.com
+@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=vidaextra.com
+@@||securepubads.g.doubleclick.net/pagead/managed/js/gpt/*/pubads_impl.js$script,domain=vidaextra.com
+@@||securepubads.g.doubleclick.net/gampad/ads$xhr,domain=vidaextra.com
+
+! https://mod.reddit.com/mail/perma/1rqklb/2iwe9l
+www.reddit.com,new.reddit.com##.subredditvars-r-ublockorigin [role="dialog"]>div:style(width: auto !important)
+
+! https://github.com/uBlockOrigin/uAssets/issues/20575
+@@||static.knowledgehub.com/global/images/ping.gif?$xhr,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/20667
+lumens.com##+js(set, _satellite, {})
+lumens.com##+js(set, _satellite.track, noopFunc)
+
+! https://github.com/uBlockOrigin/uAssets/issues/15697
+||analytics.skroutz.gr/analytics.min.js^$script,1p,redirect-rule=noop.js
+
+! https://github.com/uBlockOrigin/uAssets/issues/20723
+@@||hdblog.it/new_files/ajax/bf_new.php$frame,1p
