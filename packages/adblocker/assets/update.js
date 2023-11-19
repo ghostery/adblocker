@@ -37,6 +37,14 @@ const adb = require('@cliqz/adblocker');
       ['ublock-origin', 'unbreak.txt'],
     ],
     [
+      'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
+      ['ublock-origin', 'quick-fixes.txt'],
+    ],
+    [
+      'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/unbreak.txt',
+      ['ublock-origin', 'filters-mobile.txt'],
+    ],
+    [
       'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt',
       ['ublock-origin', 'filters.txt'],
     ],
@@ -63,6 +71,14 @@ const adb = require('@cliqz/adblocker');
     [
       'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/resource-abuse.txt',
       ['ublock-origin', 'resource-abuse.txt'],
+    ],
+    [
+      'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/annoyances-others.txt',
+      ['ublock-origin', 'annoyances-others.txt'],
+    ],
+    [
+      'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/annoyances-cookies.txt',
+      ['ublock-origin', 'annoyances-cookies.txt'],
     ],
     [
       'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/annoyances.txt',

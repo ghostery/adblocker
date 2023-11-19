@@ -108,7 +108,7 @@ function validateCodebook(codebook: string[], strings: string[]): void {
 async function generateCodebook(kind: string): Promise<string[]> {
   const strings = await getStrings(kind);
   console.log(`Generate codebook ${kind} using ${strings.length} strings.`);
-  const options = kind.startsWith('raw-') ? { maxNgram: 26 } : {};
+  const options = kind.startsWith('raw-') ? { maxNgram: 25 } : {};
   const codebook = generate(strings, options);
   validateCodebook(codebook, strings);
   return codebook;
