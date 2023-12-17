@@ -219,6 +219,16 @@ forums.tomsguide.com##+js(trusted-set-local-storage-item, _cmpRepromptHash, CP20
 forums.tomsguide.com##+js(trusted-set-local-storage-item, noniabvendorconsent, P21TmRP21TmRAKAaAB4AAAAA)
 ! https://www.walmart.ca/
 walmart.ca##+js(trusted-set-cookie, uxcon, enforce=false&p13n=false&ads=false, , , domain, walmart.ca)
+! festool
+!#if ext_devbuild
+! Waits for 1.55 to be widely available
+festool.*,festoolcanada.com##+js(trusted-click-element, #usercentrics-root >>> button[data-testid="uc-deny-all-button"])
+festool.*,festoolcanada.com##body.overflowHidden:style(overflow: auto !important)
+festool.*,festoolcanada.com###focus-lock-id
+!#endif
+! https://www.cc.com/
+cc.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, $currentDate$, 1year)
+
 
 !! Needs additional cookies
 
@@ -692,6 +702,7 @@ cmp-sp.vrt.be##+js(trusted-click-element, button.message-button[title="Mijn inst
 cmp-sp.vrt.be,cmp.dpgmedia.nl,cmp.dpgmedia.be,cmp.ad.nl,cmp.autoweek.nl,cmp.bd.nl,cmp.bndestem.nl,cmp.demorgen.be,cmp.deondernemer.nl,cmp.destentor.nl,cmp.ed.nl,cmp.gaspedaal.nl,cmp.gelderlander.nl,cmp.hln.be,cmp.humo.be,cmp.margriet.nl,cmp.nu.nl,cmp.qmusic.nl,cmp.stijlvol-wonen.com,cmp.trouw.nl,cmp.tubantia.nl,cmp.vtwonen.be,cmp.vtwonen.nl,cmp.pzc.nl,cmp.zozitdat.nl##+js(trusted-click-element, 'button[aria-checked="false"][aria-label^="Social"], button.sp_choice_type_SAVE_AND_EXIT', , 500)
 myprivacy.dpgmedia.nl,myprivacy.dpgmedia.be,ad.nl,autoweek.nl,bd.nl,bndestem.nl,demorgen.be,deondernemer.nl,destentor.nl,ed.nl,gaspedaal.nl,gelderlander.nl,hln.be,humo.be,margriet.nl,nu.nl,qmusic.nl,stijlvol-wonen.com,trouw.nl,tubantia.nl,vrt.be,vtwonen.be,vtwonen.nl,pzc.nl,zozitdat.nl##[title="SP Consent Message"]
 !#if ext_devbuild
+! Waits for 1.55 to be widely available
 ! Clicking doesn't work on myprivacy.dpgmediagroup.net, reloading the page once redirects to dpgmediagroup.com, where clicking works
 myprivacy.dpgmediagroup.net##+js(set-cookie, dummy, 1, , reload, 1)
 myprivacy.dpgmedia.nl,dpgmediagroup.com,story.nl,veronicasuperguide.nl##+js(trusted-click-element, '#pg-shadow-host >>> #pg-configure-btn, #pg-shadow-host >>> #purpose-row-SOCIAL_MEDIA input[type="checkbox"], #pg-shadow-host >>> button#pg-save-preferences-btn')
@@ -716,3 +727,12 @@ ilrestodelcarlino.it##+js(trusted-click-element, #pubtech-cmp #pt-close)
 
 ! https://www.lekarnaave.cz/ - Preference
 lekarnaave.cz##+js(trusted-set-cookie, cookiesSettings, %7B%22necessary%22%3Atrue%2C%22preferential%22%3Atrue%7D, , , reload, 1)
+
+! reject marketing/analytics
+algarvevacation.net##+js(set-cookie, acepta_cookie, acepta)
+algarvevacation.net##+js(trusted-set-cookie, acceptedCookies, '{"necessary":true,"functionallity":true,"analysis":false,"marketing":false}')
+! rejected third-party
+3sat.de##+js(trusted-set-cookie, 3sat_cmp_client, '{%22version%22:%22v1%22%2C%22iteration%22:1%2C%22consents%22:[{%22id%22:%22erforderlich%22%2C%22value%22:true}%2C{%22id%22:%22erfolgsmessung%22%2C%22value%22:true}%2C{%22id%22:%22personalisierung%22%2C%22value%22:false}%2C{%22id%22:%22socialMedia%22%2C%22value%22:false}%2C{%22id%22:%22twitter%22%2C%22value%22:false}%2C{%22id%22:%22instagram%22%2C%22value%22:false}%2C{%22id%22:%22facebook%22%2C%22value%22:false}%2C{%22id%22:%22drittsysteme%22%2C%22value%22:false}]}')
+3sat.de##+js(set-cookie, 3sat_cmp_configuration, true)
+! reject marketing/analytics
+crossnative.com##+js(trusted-set-cookie, cn-cc, %7B%22ccGoogleTagManager%22%3Afalse%2C%22ccGA4%22%3Afalse%2C%22ccSalesviewer%22%3Afalse%7D)
