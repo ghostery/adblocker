@@ -107,8 +107,22 @@ function validateCodebook(codebook: string[], strings: string[]): void {
 
 async function generateCodebook(kind: string): Promise<string[]> {
   const strings = await getStrings(kind);
+  let maxSize = 0;
+  for (const string of strings) {
+    if (string.length > maxSize) {
+      maxSize = string.length;
+    }
+  }
   console.log(`Generate codebook ${kind} using ${strings.length} strings.`);
-  const options = kind.startsWith('raw-') ? { maxNgram: 23 } : {};
+  const finetuneNgrams = [1];
+  const options = { finetuneNgrams, maxNgram: maxSize, maxRoundsWithNoImprovements: 10 };
+  if (kind === 'raw-cosmetic') {
+    options.maxNgram = 23;
+  } else if (kind === 'raw-network') {
+    options.maxNgram = 26;
+  } else if (kind === 'cosmetic-selector') {
+    options.maxNgram = 300;
+  }
   const codebook = generate(strings, options);
   validateCodebook(codebook, strings);
   return codebook;
