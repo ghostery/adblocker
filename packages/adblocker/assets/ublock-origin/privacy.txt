@@ -33,7 +33,6 @@
 ||ratexchange.net^
 ||adnotbad.com^
 ||serverads.net^
-||jsfuel.com^
 ||takethatad.com^
 ||tradeadsexchange.com^
 
@@ -441,7 +440,7 @@ utreon.com##+js(no-xhr-if, utreon.com/pl/api/event method:POST)
 /^https:\/\/[0-9a-z]{7,25}\.com\/v2(?:\/0\/)?(?=[-_0-9a-z]{0,84}[A-Z])(?=[-_a-zA-Z]{0,84}[0-9])[-_0-9a-zA-Z]{54,85}(#\?v=[0-9a-f]{32})?$/$script,xhr,3p,match-case
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/461
 !#if ext_devbuild
-/^https:\/\/[0-9a-z]{7,25}\.com\/(?:build|bundles|chunks|dist|j|public|scripts|static)\/[0-9a-f]{6,15}\/?[0-9a-f]{21,36}(?:[-.](?:ma?in|prod|index))?(?:\.js)?$/$script,3p,match-case
+/^https:\/\/[0-9a-z]{7,25}\.com\/(?:build|bundles|chunks|dist|j|public|scripts|static)?\/?[0-9a-f]{6,15}\/?[0-9a-f]{21,36}(?:[-.](?:ma?in|prod|index))?(?:\.js)?$/$script,3p,match-case
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/21508
 ://cmpworker.*/?pid=$script,1p,strict3p
@@ -493,11 +492,8 @@ zhihu.com##+js(no-xhr-if, log-sdk.ksapisrv.com/rest/wd/common/log/collect method
 ||tranderous.com^
 ||cjewz.com^
 ||chpok.site^
-||bundaxsandi.com^
 ||communityease.click^
 ||driversign.click^
-||ketekbisokaliau.com^
-||sarang77skuy.com^
 ||smartaccess.biz^
 ||adonsonlyd.xyz^
 
@@ -564,9 +560,6 @@ bikesales.com.au##^html > head > :is([name="canonical"], [rel="canonical"]):not(
 ! https://github.com/uBlockOrigin/uAssets/issues/7646
 ! https://github.com/AdguardTeam/AdguardFilters/issues/154632
 ||telemetry*.transcend.io^
-
-! https://github.com/uBlockOrigin/uAssets/issues/18794
-||mitself.net^
 
 ! https://www.eevblog.com/forum/buysellwanted/ fingerprint
 ||eevblog.com/forum/fp.php

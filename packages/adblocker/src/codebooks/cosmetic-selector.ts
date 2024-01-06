@@ -54,7 +54,6 @@ export default [
   "div[id^=\"",
   "div[style",
   "no-xhr-if",
-  "ompliance",
   "placehold",
   "rectangle",
   "[href*=\"",
@@ -78,6 +77,7 @@ export default [
   "sidebar",
   "sponsor",
   "wrapper",
+  "-child",
   "[class",
   "[data-",
   "%22%3A",
@@ -194,6 +194,7 @@ export default [
   ":",
   ".",
   "'",
+  "\"",
   ")",
   "[",
   "]",
@@ -259,6 +260,5 @@ export default [
   "W",
   "x",
   "y",
-  "Y",
   "z"
 ];

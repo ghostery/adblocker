@@ -4436,9 +4436,6 @@ uschovna.cz##.branding:upward([target="_blank"])
 ! [dup] from ublock-origin/unbreak.txt
 ! @@||google.com/recaptcha/$frame,script
 
-! breaking links https://kimcartoon.li/Cartoon/Doomlands
-! [badfilter] ||ghosthis.review^$badfilter
-
 ! https://github.com/uBlockOrigin/uAssets/issues/11533
 ! [dup] from ublock-origin/unbreak.txt
 ! ||rudaw.net/images/$image,1p,redirect-rule=1x1.gif,important
@@ -4719,11 +4716,6 @@ kingarthurbaking.com##^html > head > link[rel="canonical"]:not([href*="/recipes/
 
 ! unbreak video
 @@||ricasdelicias.online/social.php$popup,domain=animesonline.cz
-
-! reported to be a dropgalaxy alias
-! [badfilter] ||ruokareseptit.online^$badfilter
-! [dup] from ublock-origin/unbreak.txt
-! ||ruokareseptit.online^$3p
 
 ! fix slide images
 ! [dup] from ublock-origin/unbreak.txt
@@ -5701,7 +5693,11 @@ radiox.co.uk##^body:not(:has(#remixd-audio-player)) > script:has-text(googletagm
 ! ||connatix.com^$3p
 ||connatix.com^$3p,removeparam=cid
 ! [dup] from ublock-origin/unbreak.txt
-! @@||cd.connatix.com/connatix.player.js$3p,script,domain=accesousa.com|accuweather.com|adweek.com|bellinghamherald.com|bnd.com|bradenton.com|centredaily.com|charlotteobserver.com|easternstandardtimes.com|elnuevoherald.com|flkeysnews.com|fresnobee.com|heraldonline.com|heraldsun.com|idahostatesman.com|indiewire.com|islandpacket.com|interestingengineering.com|kansas.com|kansascity.com|kentucky.com|ledger-enquirer.com|loot.tv|macon.com|mahoningmatters.com|mcclatchydc.com|mercedsunstar.com|miamiherald.com|modbee.com|myrtlebeachonline.com|newsobserver.com|reuters.com|sacbee.com|sanluisobispo.com|star-telegram.com|sunherald.com|thenewstribune.com|theolympian.com|thestate.com|tri-cityherald.com|variety.com
+! @@||cd.connatix.com/connatix.player.js$3p,script,domain=accesousa.com|accuweather.com|adweek.com|bellinghamherald.com|bnd.com|bradenton.com|centredaily.com|charlotteobserver.com|easternstandardtimes.com|elnuevoherald.com|flkeysnews.com|fresnobee.com|heraldonline.com|heraldsun.com|hollywoodreporter.com|idahostatesman.com|indiewire.com|islandpacket.com|interestingengineering.com|kansas.com|kansascity.com|kentucky.com|ledger-enquirer.com|loot.tv|macon.com|mahoningmatters.com|mcclatchydc.com|mercedsunstar.com|miamiherald.com|modbee.com|myrtlebeachonline.com|newsobserver.com|reuters.com|sacbee.com|sanluisobispo.com|star-telegram.com|sunherald.com|thenewstribune.com|theolympian.com|thestate.com|tri-cityherald.com|variety.com
+! [dup] from ublock-origin/unbreak.txt
+! hollywoodreporter.com#@#.cnx-player-wrapper
+! [dup] from ublock-origin/unbreak.txt
+! hollywoodreporter.com#@#[id^="jwplayer"]
 ! [dup] from ublock-origin/unbreak.txt
 ! @@||cds.connatix.com/p/*/connatix.player.$3p,script
 ! [dup] from ublock-origin/unbreak.txt
@@ -6972,3 +6968,38 @@ buytesmart.com##body[style*="display: none"]:remove-attr(style)
 ! https://github.com/easylist/easylist/commit/a61d7fa546dfceab90b75d646622979d16122960 backup
 ! [dup] from ublock-origin/unbreak.txt
 ! @@||amazon.*/action-impressions/1/OP/$xhr,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/21731
+! [dup] from ublock-origin/unbreak.txt
+! msn.com#@#.intra-article-module
+
+! https://github.com/uBlockOrigin/uAssets/issues/21741
+! [dup] from ublock-origin/unbreak.txt
+! #@#[id^="adv-"]:not(#adv-settings)
+
+! https://github.com/uBlockOrigin/uAssets/issues/21750
+! [dup] from ublock-origin/unbreak.txt
+! commande.rhinov.pro##+js(set, Sentry, {})
+! [dup] from ublock-origin/unbreak.txt
+! commande.rhinov.pro##+js(set, Sentry.init, noopFunc)
+
+! https://www.thethings.com/winona-ryder-never-had-children-special-bond-stranger-things-kids/ broken video
+! [dup] from ublock-origin/unbreak.txt
+! ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect-rule=google-ima.js,domain=thethings.com
+! [dup] from ublock-origin/unbreak.txt
+! @@||cdn.adsninja.ca/adsninja_client$css,script,3p,domain=thethings.com
+! [dup] from ublock-origin/unbreak.txt
+! @@||thethings.com^$ghide
+! [dup] from ublock-origin/unbreak.txt
+! thethings.com##.adsninja-ad-zone:not(.adsninja-valstream)
+
+! https://github.com/uBlockOrigin/uAssets/issues/21780
+! [badfilter] ||awswaf.com^*/telemetry$badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/21787
+! [dup] from ublock-origin/unbreak.txt
+! @@||player.aniview.com/script/$script,domain=pogo.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/21761
+! [dup] from ublock-origin/unbreak.txt
+! @@||plugin.intuitcdn.net/vep-collab-smlk-ui/assets/vendor/glance/cobrowse/

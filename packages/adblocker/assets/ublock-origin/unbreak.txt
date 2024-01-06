@@ -3310,9 +3310,6 @@ himovies.to#@#a[onclick]
 ! https://forums.lanik.us/viewtopic.php?f=64&t=40469
 @@||google.com/recaptcha/$frame,script
 
-! breaking links https://kimcartoon.li/Cartoon/Doomlands
-! [badfilter] ||ghosthis.review^$badfilter
-
 ! https://github.com/uBlockOrigin/uAssets/issues/11533
 ||rudaw.net/images/$image,1p,redirect-rule=1x1.gif,important
 
@@ -3512,10 +3509,6 @@ cadenadial.com##+js(aost, History, /(^(?!.*(Function|HTMLDocument).*))/)
 
 ! unbreak video
 @@||ricasdelicias.online/social.php$popup,domain=animesonline.cz
-
-! reported to be a dropgalaxy alias
-! [badfilter] ||ruokareseptit.online^$badfilter
-||ruokareseptit.online^$3p
 
 ! fix slide images
 @@||laptopoutlet.co.uk/wysiwyg/asus/rise-up/popunder-$image,1p
@@ -4226,7 +4219,9 @@ jacksonguitars.com##+js(set, analytics, {})
 ! [badfilter] ||connatix.com^$badfilter
 ||connatix.com^$3p
 ||connatix.com^$3p,removeparam=cid
-@@||cd.connatix.com/connatix.player.js$3p,script,domain=accesousa.com|accuweather.com|adweek.com|bellinghamherald.com|bnd.com|bradenton.com|centredaily.com|charlotteobserver.com|easternstandardtimes.com|elnuevoherald.com|flkeysnews.com|fresnobee.com|heraldonline.com|heraldsun.com|idahostatesman.com|indiewire.com|islandpacket.com|interestingengineering.com|kansas.com|kansascity.com|kentucky.com|ledger-enquirer.com|loot.tv|macon.com|mahoningmatters.com|mcclatchydc.com|mercedsunstar.com|miamiherald.com|modbee.com|myrtlebeachonline.com|newsobserver.com|reuters.com|sacbee.com|sanluisobispo.com|star-telegram.com|sunherald.com|thenewstribune.com|theolympian.com|thestate.com|tri-cityherald.com|variety.com
+@@||cd.connatix.com/connatix.player.js$3p,script,domain=accesousa.com|accuweather.com|adweek.com|bellinghamherald.com|bnd.com|bradenton.com|centredaily.com|charlotteobserver.com|easternstandardtimes.com|elnuevoherald.com|flkeysnews.com|fresnobee.com|heraldonline.com|heraldsun.com|hollywoodreporter.com|idahostatesman.com|indiewire.com|islandpacket.com|interestingengineering.com|kansas.com|kansascity.com|kentucky.com|ledger-enquirer.com|loot.tv|macon.com|mahoningmatters.com|mcclatchydc.com|mercedsunstar.com|miamiherald.com|modbee.com|myrtlebeachonline.com|newsobserver.com|reuters.com|sacbee.com|sanluisobispo.com|star-telegram.com|sunherald.com|thenewstribune.com|theolympian.com|thestate.com|tri-cityherald.com|variety.com
+hollywoodreporter.com#@#.cnx-player-wrapper
+hollywoodreporter.com#@#[id^="jwplayer"]
 @@||cds.connatix.com/p/*/connatix.player.$3p,script
 @@||cds.connatix.com/p/*/player.css$3p,css
 @@||connatix.com/elements/*/cnx-lead-style.css$3p,css
@@ -5143,3 +5138,28 @@ meijer.com#@#.product-grid__product:has(.product-tile__sponsored)
 
 ! https://github.com/easylist/easylist/commit/a61d7fa546dfceab90b75d646622979d16122960 backup
 @@||amazon.*/action-impressions/1/OP/$xhr,1p
+
+! https://github.com/uBlockOrigin/uAssets/issues/21731
+msn.com#@#.intra-article-module
+
+! https://github.com/uBlockOrigin/uAssets/issues/21741
+#@#[id^="adv-"]:not(#adv-settings)
+
+! https://github.com/uBlockOrigin/uAssets/issues/21750
+commande.rhinov.pro##+js(set, Sentry, {})
+commande.rhinov.pro##+js(set, Sentry.init, noopFunc)
+
+! https://www.thethings.com/winona-ryder-never-had-children-special-bond-stranger-things-kids/ broken video
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect-rule=google-ima.js,domain=thethings.com
+@@||cdn.adsninja.ca/adsninja_client$css,script,3p,domain=thethings.com
+@@||thethings.com^$ghide
+thethings.com##.adsninja-ad-zone:not(.adsninja-valstream)
+
+! https://github.com/uBlockOrigin/uAssets/issues/21780
+! [badfilter] ||awswaf.com^*/telemetry$badfilter
+
+! https://github.com/uBlockOrigin/uAssets/issues/21787
+@@||player.aniview.com/script/$script,domain=pogo.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/21761
+@@||plugin.intuitcdn.net/vep-collab-smlk-ui/assets/vendor/glance/cobrowse/
