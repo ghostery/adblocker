@@ -117,9 +117,9 @@ async function generateCodebook(kind: string): Promise<string[]> {
   const finetuneNgrams = [1];
   const options = { finetuneNgrams, maxNgram: maxSize, maxRoundsWithNoImprovements: 10 };
   if (kind === 'raw-cosmetic') {
-    options.maxNgram = 23;
+    options.maxNgram = 22;
   } else if (kind === 'raw-network') {
-    options.maxNgram = 26;
+    options.maxNgram = 24;
   } else if (kind === 'cosmetic-selector') {
     options.maxNgram = 300;
   }
