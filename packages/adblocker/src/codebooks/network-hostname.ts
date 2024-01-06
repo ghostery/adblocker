@@ -7,7 +7,7 @@
  */
 /* eslint-disable prettier/prettier */
 export default [
-  "securepubads.g.doubleclick",
+  "securepubads.g.doubleclick.net",
   "googlesyndication",
   "imasdk.googleapis",
   "googletagmanager",
@@ -50,7 +50,6 @@ export default [
   ".n",
   ".p",
   ".t",
-  ".v",
   ".w",
   "a1",
   "a8",
@@ -127,7 +126,6 @@ export default [
   "gl",
   "go",
   "gr",
-  "gs",
   "gu",
   "he",
   "ho",
@@ -152,6 +150,7 @@ export default [
   "jo",
   "ks",
   "la",
+  "ld",
   "le",
   "li",
   "lo",
@@ -221,6 +220,7 @@ export default [
   "ut",
   "ve",
   "vi",
+  "vo",
   "we",
   "wh",
   "-",

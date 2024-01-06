@@ -228,7 +228,26 @@ festool.*,festoolcanada.com###focus-lock-id
 !#endif
 ! https://www.cc.com/
 cc.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, $currentDate$, 1year)
-
+! https://www.resursbank.fi/
+resursbank.fi##+js(trusted-set-cookie, cookie_consent, necessary%3A1%2Cstatistics%3A0%2Cmarketing%3A0)
+! LADbiblegroup, broken videos. Sample page: https://www.unilad.com/celebrity/news/big-bang-theory-kate-micucci-cancer-free-950283-20231218
+consent.ladbible.com,consent.unilad.com,consent.gamingbible.com,consent.sportbible.com,consent.tyla.com,consent.ladbiblegroup.com##+js(trusted-click-element, button.sp_choice_type_12[title$="Settings"])
+consent.ladbible.com,consent.unilad.com,consent.gamingbible.com,consent.sportbible.com,consent.tyla.com,consent.ladbiblegroup.com##+js(trusted-click-element, button[title="REJECT ALL"], , 1000)
+ladbible.com,unilad.com,gamingbible.com,sportbible.com,tyla.com,ladbiblegroup.com##html.sp-message-open:style(width: initial !important)
+ladbible.com,unilad.com,gamingbible.com,sportbible.com,tyla.com,ladbiblegroup.com##html.sp-message-open > body:style(position: unset !important; overflow: unset !important)
+ladbible.com,unilad.com,gamingbible.com,sportbible.com,tyla.com,ladbiblegroup.com##[title="SP Consent Message"]
+! Temp filters:
+! https://github.com/easylist/easylist/pull/18054
+sportbible.com#@#+js(remove-class, sp-message-open, html, stay)
+sportbible.com#@#div[id^="sp_message_container_"]
+@@||consent.sportbible.com^$domain=sportbible.com
+! https://github.com/uBlockOrigin/uAssets/issues/21485
+! https://github.com/uBlockOrigin/uAssets/issues/21526
+! https://github.com/uBlockOrigin/uAssets/pull/21510/
+m2o.it,deejay.it,capital.it,ilmattino.it,leggo.it,libero.it##+js(trusted-click-element, 'button.iubenda-cs-customize-btn, button.iub-cmp-reject-btn, button#iubFooterBtn')
+m2o.it,deejay.it,capital.it,ilmattino.it,leggo.it,libero.it##html[style="overflow: hidden;"]:style(overflow: auto !important)
+m2o.it,deejay.it,capital.it,ilmattino.it,leggo.it,libero.it##[id|="iubenda"]
+ilmattino.it,leggo.it##.banner:has([href="javascript:acceptAllCookies();void(0);"])
 
 !! Needs additional cookies
 
@@ -279,7 +298,7 @@ christianconcern.com##+js(trusted-set-cookie, STYXKEY_your_privacy_settings, %7B
 cdn.privacy-mgmt.com##+js(trusted-click-element, .sanoma-logo-container ~ .message-component.sticky-buttons button.sp_choice_type_12[title="Asetukset"])
 cdn.privacy-mgmt.com##+js(trusted-click-element, .sanoma-logo-container ~ .message-component.privacy-manager-tcfv2 .tcfv2-stack[title="Sanoman sisällönjakelukumppanit"] button.pm-switch[aria-checked="false"])
 cdn.privacy-mgmt.com##.sanoma-logo-container ~ .message-component.privacy-manager-tcfv2 .tcfv2-stack:not([title="Sanoman sisällönjakelukumppanit"]) button.pm-switch.checked:remove-class(checked)
-cdn.privacy-mgmt.com##+js(trusted-click-element, .sanoma-logo-container ~ .message-component.sticky-buttons button.sp_choice_type_SAVE_AND_EXIT[title="Tallenna"], , 1000)
+cdn.privacy-mgmt.com##+js(trusted-click-element, .sanoma-logo-container ~ .message-component.sticky-buttons button.sp_choice_type_SAVE_AND_EXIT[title="Tallenna"], , 1500)
 aamulehti.fi,etlehti.fi,gloria.fi,hs.fi,hyvaterveys.fi,is.fi,jamsanseutu.fi,janakkalansanomat.fi,kankaanpaanseutu.fi,kmvlehti.fi,kodinkuvalehti.fi,merikarvialehti.fi,nokianuutiset.fi,pelikone.fi,rannikkoseutu.fi,satakunnankansa.fi,soppa365.fi,suurkeuruu.fi,sydansatakunta.fi,tyrvaansanomat.fi,valkeakoskensanomat.fi,vauva.fi##[title="SP Consent Message"]
 aamulehti.fi,etlehti.fi,gloria.fi,hs.fi,hyvaterveys.fi,is.fi,jamsanseutu.fi,janakkalansanomat.fi,kankaanpaanseutu.fi,kmvlehti.fi,kodinkuvalehti.fi,merikarvialehti.fi,nokianuutiset.fi,pelikone.fi,rannikkoseutu.fi,satakunnankansa.fi,soppa365.fi,suurkeuruu.fi,sydansatakunta.fi,tiede.fi,tyrvaansanomat.fi,valkeakoskensanomat.fi,vauva.fi##html.sp-message-open:style(overflow: auto !important; width: initial !important)
 aamulehti.fi,etlehti.fi,gloria.fi,hs.fi,hyvaterveys.fi,is.fi,jamsanseutu.fi,janakkalansanomat.fi,kankaanpaanseutu.fi,kmvlehti.fi,kodinkuvalehti.fi,merikarvialehti.fi,nokianuutiset.fi,pelikone.fi,rannikkoseutu.fi,satakunnankansa.fi,soppa365.fi,suurkeuruu.fi,sydansatakunta.fi,tiede.fi,tyrvaansanomat.fi,valkeakoskensanomat.fi,vauva.fi##html.sp-message-open > body:style(position: unset !important; margin-top: 0 !important; overflow: visible !important)
@@ -504,14 +523,6 @@ formula1.com##+js(trusted-set-cookie, consentUUID, a87000c2-544c-4174-9e93-a15b7
 ! Necessary + Marketing - for maps, sample page: rhein-ruhr.stadtmobil.de
 stadtmobil.de##+js(trusted-set-cookie, CookieConsent, {stamp:%27Uv9YOAVP5djCBw71lxhE4rNAfTObaGck2Sn3rKWf9dPCYpqcWvAlpA==%27%2Cnecessary:true%2Cpreferences:false%2Cstatistics:false%2Cmarketing:true%2Cmethod:%27explicit%27%2Cver:1}, 1year)
 
-! https://github.com/uBlockOrigin/uAssets/issues/20234
-leggo.it##+js(trusted-set-cookie, euconsent-v2, CPtgasAPtgasAAGABCENDECgAAAAAAAAAApAAAAAAAAA.YAAAAAAAAAAA, 1year)
-leggo.it##+js(trusted-set-cookie, _iub_cs-88644770, %7B%22timestamp%22%3A%222023-10-23T06%3A16%3A56.750Z%22%2C%22version%22%3A%221.51.1%22%2C%22purposes%22%3A%7B%221%22%3Atrue%2C%222%22%3Atrue%2C%223%22%3Atrue%2C%224%22%3Atrue%2C%225%22%3Atrue%7D%2C%22id%22%3A88644770%2C%22cons%22%3A%7B%22rand%22%3A%22c904a1%22%7D%7D, 1year)
-leggo.it##.adv_banner
-leggo.it##.banner
-ilmattino.it##+js(trusted-set-cookie, euconsent-v2, CPtgasAPtgasAAGABCENDECgAAAAAAAAAApAAAAAAAAA.YAAAAAAAAAAA, 1year)
-ilmattino.it##+js(trusted-set-cookie, _iub_cs-59813847, %7B%22timestamp%22%3A%222023-10-25T07%3A55%3A58.826Z%22%2C%22version%22%3A%221.51.1%22%2C%22purposes%22%3A%7B%221%22%3Atrue%2C%222%22%3Atrue%2C%223%22%3Atrue%2C%224%22%3Atrue%2C%225%22%3Atrue%7D%2C%22id%22%3A59813847%2C%22cons%22%3A%7B%22rand%22%3A%22944830%22%7D%7D, 1year)
-
 ! https://www.coinbase.com/ - Functional
 coinbase.com##+js(trusted-set-cookie, cm_eu_preferences, {%22consent%22:[%22necessary%22%2C%22functional%22]%2C%22region%22:%22DEFAULT%22})
 
@@ -673,12 +684,6 @@ ab.gr##+js(trusted-set-cookie, CookieConsent, 1.0.0.0.0)
 tameteo.com,tempo.pt,yourweather.co.uk,meteored.cl,meteored.mx,tempo.com,ilmeteo.net,meteored.com.ar,daswetter.com##+js(trusted-set-cookie, euconsent-v2, CP2APYAP2APYADtACBDEAcEgAAAAAAAAACiQAAAAAAAA)
 tameteo.com,tempo.pt,yourweather.co.uk,meteored.cl,meteored.mx,tempo.com,ilmeteo.net,meteored.com.ar,daswetter.com##+js(set-cookie, euconsent-v2-addtl, 0)
 
-! quotidiano. net cookies + (FA / AA unbreaking videos https://www.quotidiano.net/video/parigi-arrestato-guru-di-atman-yoga-federation-e-altre-41-persone-jgbapomp)
-quotidiano.net##+js(trusted-click-element, button#pt-accept-all)
-@@||cmp-assets.pubtech.ai/*.json$xhr
-@@||cmp.pubtech.ai/*/pubtech-cmp-v2.js$script,domain=quotidiano.net
-quotidiano.net#@##pubtech-cmp
-
 ! https://www.glamour.com/story/cher-alexander-edwards-relationship-timeline ---- Functional for embeds
 glamour.com##+js(trusted-set-cookie, OptanonConsent, groups=C0003%3A0%2CC0002%3A0%2CC0004%3A1%2CC0001%3A1%2CC0009%3A0, 1year)
 
@@ -722,8 +727,9 @@ manta.net##+js(trusted-set-local-storage-item, cookie_setting, '{"analytical_coo
 chip.de##+js(trusted-set-cookie, consentUUID, 5b13fb0e-6264-4bfa-bd0c-20f35140a634_26)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/21412
-@@||cmp.pubtech.ai/*/pubtech-cmp-v2.js$script,from=ilrestodelcarlino.it
-ilrestodelcarlino.it##+js(trusted-click-element, #pubtech-cmp #pt-close)
+! quotidiano. net cookies + (FA / AA unbreaking videos https://www.quotidiano.net/video/parigi-arrestato-guru-di-atman-yoga-federation-e-altre-41-persone-jgbapomp)
+@@||cmp.pubtech.ai/*/pubtech-cmp-v2.js$script,from=ilrestodelcarlino.it|quotidiano.net|lanazione.it|ilgiorno.it|iltelegrafolivorno.it
+ilrestodelcarlino.it,quotidiano.net,lanazione.it,ilgiorno.it,iltelegrafolivorno.it##+js(trusted-click-element, #pubtech-cmp #pt-close)
 
 ! https://www.lekarnaave.cz/ - Preference
 lekarnaave.cz##+js(trusted-set-cookie, cookiesSettings, %7B%22necessary%22%3Atrue%2C%22preferential%22%3Atrue%7D, , , reload, 1)
@@ -736,3 +742,56 @@ algarvevacation.net##+js(trusted-set-cookie, acceptedCookies, '{"necessary":true
 3sat.de##+js(set-cookie, 3sat_cmp_configuration, true)
 ! reject marketing/analytics
 crossnative.com##+js(trusted-set-cookie, cn-cc, %7B%22ccGoogleTagManager%22%3Afalse%2C%22ccGA4%22%3Afalse%2C%22ccSalesviewer%22%3Afalse%7D)
+
+! Necessary + Functional || Stay signed-in function broken: https://zoom.us/signin#/login
+zoom.us##+js(trusted-set-cookie, OptanonConsent, groups=C0004%3A0%2CC0003%3A1%2CC0002%3A0%2CC0001%3A1, 1year)
+zoom.us##+js(trusted-set-cookie, OptanonAlertBoxClosed, $currentDate$, 1year)
+zoom.us##+js(trusted-set-cookie, OnetrustActiveGroups, C0003C0001, 1year)
+
+! https://github.com/uBlockOrigin/uAssets/issues/19785#issuecomment-1859656934
+gmx.*##+js(trusted-click-element, #onetrust-accept-btn-handler)
+
+! reject marketing/analytics
+trezor.io##+js(trusted-set-cookie, userConsent, %7B%22essential%22%3Atrue%2C%22analytical%22%3Afalse%2C%22preferential%22%3Atrue%7D)
+
+! rejected cookies
+rb.cz##+js(trusted-set-cookie, rwc, %7B%22data%22%3A%5B%7B%22code%22%3A%22analytics%22%2C%22permissions%22%3A%5B%5D%7D%2C%7B%22code%22%3A%22marketing%22%2C%22permissions%22%3A%5B%5D%7D%5D%2C%22common%22%3A%7B%22accepted%22%3A1703366235541%7D%7D)
+
+! Necessary + Marketing (to fix embedded content): https://mesta.net/selviytyjat-suomi-ohjelmasta-tutun-ramin-postaus-reissun-rankasta-luonteesta-nain-paljon-paino-putosi-vetaa-lahelle-painiuran-kovimpia-painonpudotuksia/
+mesta.net##+js(trusted-set-cookie, OptanonConsent, groups=C0001%3A1%2CC0005%3A1%2CC0002%3A0%2CC0004%3A0%2CC0003%3A0, 1year, , reload, 1, domain, mesta.net)
+mesta.net##+js(trusted-set-cookie, OptanonAlertBoxClosed, $currentDate$, 1year)
+
+! essential only
+mafu.de##+js(trusted-set-cookie, wmm-visitor_token, 4cb8860d-4194-4ab5-be04-10f9a26afaa8)
+! essential only
+paf.com##+js(trusted-set-cookie, cookieConsent, {%22essential%22:true%2C%22tracking%22:false%2C%22marketing%22:false})
+! Continue without agreeing, hide consent flash
+frandroid.com###didomi-host
+frandroid.com##+js(trusted-click-element, .didomi-continue-without-agreeing)
+! functional only, ad/analytics denied
+flip.gr##+js(trusted-set-cookie, consts, '{%22ad_storage%22:%22denied%22%2C%22analytics_storage%22:%22denied%22%2C%22functionality_storage%22:%22granted%22}')
+! necessarry
+andersiahotel.pl##+js(trusted-set-cookie, _CookiesPolicyAccepted, [%22necessary%22])
+! functional only (hide consent flash)
+nutri-plus.de##.acris-cookie-consent
+nutri-plus.de##.modal-backdrop
+nutri-plus.de##+js(trusted-click-element, #ccAcceptOnlyFunctional, , 4000)
+
+! necessary
+tether.to##+js(trusted-set-cookie, user_preferences, '{"necessary":"on","marketing":"off","analytics":"off","preferences":"off","unclassified":"off"}')
+
+! All cookies, can't type login credentials if cookies not accepted. Sample link: https://myapps.paychex.com/landing_remote/login.do?lang=en
+login.flex.paychex.com##+js(trusted-set-local-storage-item, cookieNotification, '{"value":"1"}')
+
+! essential only
+med.uni-rostock.de##+js(trusted-set-cookie, umr-data-consent, '{%22essential%22:true%2C%22functional%22:null%2C%22statistics%22:false%2C%22marketing%22:false}')
+
+! functional
+advalvas.vu.nl##+js(trusted-set-cookie, wpsaurus_cookie_banner_plugin, functional)
+
+! Don't allow 3rd-party sharing checkbox, hide popup
+aa.com,americanairlines.*##.aa_optoutmulti-cookie-policy:style(visibility: hidden !important;)
+aa.com,americanairlines.*##+js(trusted-click-element, button.optoutmulti_button, , 2000)
+
+! JW Player/Twitter
+chron.com,greenwichtime.com,houstonchronicle.com,mysanantonio.com,seattlepi.com,sfchronicle.com,sfgate.com,thetelegraph.com,timesunion.com##+js(trusted-set-cookie, _consent_cookie, '{"services":["jwp","twitter"]}')
