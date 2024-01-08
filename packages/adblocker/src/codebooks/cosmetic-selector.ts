@@ -144,6 +144,7 @@ export default [
   "ad",
   "Ad",
   "al",
+  "am",
   "an",
   "ar",
   "at",
@@ -259,6 +260,5 @@ export default [
   "W",
   "x",
   "y",
-  "Y",
   "z"
 ];
