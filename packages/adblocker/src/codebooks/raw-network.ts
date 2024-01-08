@@ -7,6 +7,7 @@
  */
 /* eslint-disable prettier/prettier */
 export default [
+  "/pagead/js/adsbygoogle.j",
   "imasdk.googleapis.com/js",
   "redirect-rule=google-ima",
   ",redirect-rule=1x1.gif",
@@ -43,6 +44,7 @@ export default [
   ".com^",
   ".top^",
   ".xyz^",
+  "$xhr,",
   "a8cv.",
   "image",
   "media",
@@ -56,7 +58,6 @@ export default [
   ".net",
   "/js/",
   "$doc",
-  "$xhr",
   "html",
   "ight",
   "stat",
@@ -193,7 +194,6 @@ export default [
   "sp",
   "ss",
   "st",
-  "te",
   "th",
   "ti",
   "to",
