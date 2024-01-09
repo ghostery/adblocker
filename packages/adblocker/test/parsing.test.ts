@@ -117,11 +117,16 @@ const DEFAULT_NETWORK_FILTER = {
 
 describe('Network filters', () => {
   describe('toString', () => {
-    const checkToString = (line: string, expected: string, debug: boolean = false) => {
+    const checkToString = (
+      line: string,
+      expected: string,
+      debug: boolean = false,
+      modifierReplacer = (modifier: string) => modifier,
+    ) => {
       const parsed = NetworkFilter.parse(line, debug);
       expect(parsed).not.to.be.null;
       if (parsed !== null) {
-        expect(parsed.toString()).to.equal(expected);
+        expect(parsed.toString(modifierReplacer)).to.equal(expected);
       }
     };
 
@@ -176,6 +181,16 @@ describe('Network filters', () => {
         'ads$domain=foo.com|bar.co.uk|~baz.io',
         true,
       );
+    });
+
+    it('pprint longer form of modifiers', () => {
+      checkToString('||foo.com^$3p', '||foo.com^$third-party', false, (modifier) => {
+        if (modifier === '3p') {
+          return 'third-party';
+        }
+
+        return modifier;
+      });
     });
   });
 
