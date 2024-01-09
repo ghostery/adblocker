@@ -1122,7 +1122,7 @@ export default class NetworkFilter implements IFilter {
       filter += this.getFilter();
     }
 
-    if (this.isRightAnchor()) {
+    if (this.isRightAnchor() && filter[filter.length - 1] !== '^') {
       filter += '|';
     }
 

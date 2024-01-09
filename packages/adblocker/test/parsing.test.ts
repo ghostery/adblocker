@@ -160,8 +160,9 @@ describe('Network filters', () => {
     });
 
     it('pprint anchored hostnames', () => {
+      checkToString('||foo.com^', '||foo.com^');
       checkToString('@@||foo.com', '@@||foo.com^');
-      checkToString('@@||foo.com|', '@@||foo.com^|');
+      checkToString('@@||foo.com|', '@@||foo.com^');
       checkToString('|foo.com|', '|foo.com|');
       checkToString('foo.com|', 'foo.com|');
     });
