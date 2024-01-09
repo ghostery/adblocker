@@ -591,91 +591,93 @@ describe('Network filters', () => {
     });
 
     describe('domain', () => {
-      it('parses domain', () => {
-        network('||foo.com$domain=bar.com', {
-          domains: {
-            hostnames: h(['bar.com']),
-            entities: undefined,
-            notHostnames: undefined,
-            notEntities: undefined,
-            parts: undefined,
-          },
+      ['domain', 'from'].forEach((option) => {
+        it(`parses domain`, () => {
+          network(`||foo.com$${option}=bar.com`, {
+            domains: {
+              hostnames: h(['bar.com']),
+              entities: undefined,
+              notHostnames: undefined,
+              notEntities: undefined,
+              parts: undefined,
+            },
+          });
+
+          network(`||foo.com$${option}=bar.com|baz.com`, {
+            domains: {
+              hostnames: h(['bar.com', 'baz.com']),
+              entities: undefined,
+              notHostnames: undefined,
+              notEntities: undefined,
+              parts: undefined,
+            },
+          });
         });
 
-        network('||foo.com$domain=bar.com|baz.com', {
-          domains: {
-            hostnames: h(['bar.com', 'baz.com']),
-            entities: undefined,
-            notHostnames: undefined,
-            notEntities: undefined,
-            parts: undefined,
-          },
-        });
-      });
+        it('parses ~domain', () => {
+          network(`||foo.com$${option}=~bar.com`, {
+            domains: {
+              notHostnames: h(['bar.com']),
+              entities: undefined,
+              hostnames: undefined,
+              notEntities: undefined,
+              parts: undefined,
+            },
+          });
 
-      it('parses ~domain', () => {
-        network('||foo.com$domain=~bar.com', {
-          domains: {
-            notHostnames: h(['bar.com']),
-            entities: undefined,
-            hostnames: undefined,
-            notEntities: undefined,
-            parts: undefined,
-          },
-        });
-
-        network('||foo.com$domain=~bar.com|~baz.com', {
-          domains: {
-            notHostnames: h(['bar.com', 'baz.com']),
-            entities: undefined,
-            hostnames: undefined,
-            notEntities: undefined,
-            parts: undefined,
-          },
-        });
-      });
-
-      it('parses domain and ~domain', () => {
-        network('||foo.com$domain=~bar.com|baz.com', {
-          domains: {
-            hostnames: h(['baz.com']),
-            notHostnames: h(['bar.com']),
-            entities: undefined,
-            notEntities: undefined,
-            parts: undefined,
-          },
+          network(`||foo.com$${option}=~bar.com|~baz.com`, {
+            domains: {
+              notHostnames: h(['bar.com', 'baz.com']),
+              entities: undefined,
+              hostnames: undefined,
+              notEntities: undefined,
+              parts: undefined,
+            },
+          });
         });
 
-        network('||foo.com$domain=bar.com|~baz.com', {
-          domains: {
-            hostnames: h(['bar.com']),
-            notHostnames: h(['baz.com']),
-            entities: undefined,
-            notEntities: undefined,
-            parts: undefined,
-          },
+        it('parses domain and ~domain', () => {
+          network(`||foo.com$${option}=~bar.com|baz.com`, {
+            domains: {
+              hostnames: h(['baz.com']),
+              notHostnames: h(['bar.com']),
+              entities: undefined,
+              notEntities: undefined,
+              parts: undefined,
+            },
+          });
+
+          network(`||foo.com$${option}=bar.com|~baz.com`, {
+            domains: {
+              hostnames: h(['bar.com']),
+              notHostnames: h(['baz.com']),
+              entities: undefined,
+              notEntities: undefined,
+              parts: undefined,
+            },
+          });
+
+          network(`||foo.com$${option}=foo|~bar|baz`, {
+            domains: {
+              hostnames: h(['foo', 'baz']),
+              notHostnames: h(['bar']),
+              entities: undefined,
+              notEntities: undefined,
+              parts: undefined,
+            },
+          });
         });
 
-        network('||foo.com$domain=foo|~bar|baz', {
-          domains: {
-            hostnames: h(['foo', 'baz']),
-            notHostnames: h(['bar']),
-            entities: undefined,
-            notEntities: undefined,
-            parts: undefined,
-          },
-        });
-      });
-
-      it('accepts entities', () => {
-        network('||foo.com$domain=foo.*|~bar.*|baz', {
-          domains: {
-            hostnames: h(['baz']),
-            notHostnames: undefined,
-            entities: h(['foo']),
-            notEntities: h(['bar']),
-            parts: undefined,
-          },
+        it('accepts entities', () => {
+          network(`||foo.com$${option}=foo.*|~bar.*|baz`, {
+            domains: {
+              hostnames: h(['baz']),
+              notHostnames: undefined,
+              entities: h(['foo']),
+              notEntities: h(['bar']),
+              parts: undefined,
+            },
+          });
         });
       });
 

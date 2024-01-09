@@ -460,7 +460,8 @@ export default class NetworkFilter implements IFilter {
             denyallow = Domains.parse(optionValue.split('|'), debug);
             break;
           }
-          case 'domain': {
+          case 'domain':
+          case 'from': {
             // domain list starting or ending with '|' is invalid
             if (
               optionValue.charCodeAt(0) === 124 /* '|' */ ||
