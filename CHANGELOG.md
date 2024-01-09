@@ -1,3 +1,21 @@
+# v1.26.14 (Tue Jan 09 2024)
+
+#### :nail_care: Polish
+
+- `@cliqz/adblocker`
+  - feat: support $from [#3700](https://github.com/ghostery/adblocker/pull/3700) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump follow-redirects from 1.15.3 to 1.15.4 [#3701](https://github.com/ghostery/adblocker/pull/3701) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v1.26.13 (Tue Jan 09 2024)
 
 #### :nail_care: Polish

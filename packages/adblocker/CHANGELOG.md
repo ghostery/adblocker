@@ -1,3 +1,15 @@
+# v1.26.14 (Tue Jan 09 2024)
+
+#### :nail_care: Polish
+
+- feat: support $from [#3700](https://github.com/ghostery/adblocker/pull/3700) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v1.26.13 (Tue Jan 09 2024)
 
 #### :nail_care: Polish
