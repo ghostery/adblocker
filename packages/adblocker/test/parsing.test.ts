@@ -1377,9 +1377,9 @@ describe('Network filters', () => {
         [new Uint32Array([NORMALIZED_TYPE_TOKEN.document])],
       ],
       ['@@/wp-content/themes/$script', [hashStrings(['content'])]],
-    ]) {
+    ] as const) {
       it(`get tokens for ${filter}`, () => {
-        const parsed = NetworkFilter.parse(filter as string, true);
+        const parsed = NetworkFilter.parse(filter, true);
         expect(parsed).not.to.be.null;
         if (parsed !== null) {
           expect(parsed.getTokens()).to.eql(regexTokens);
