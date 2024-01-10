@@ -185,7 +185,7 @@ describe('Network filters', () => {
     });
 
     it('pprint longer form of modifiers', () => {
-      checkToString('||foo.com^$3p', '||foo.com^|$third-party', false, (modifier) => {
+      checkToString('||foo.com^$3p', '||foo.com^$third-party', false, (modifier) => {
         if (modifier === '3p') {
           return 'third-party';
         }
