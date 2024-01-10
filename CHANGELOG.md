@@ -1,3 +1,16 @@
+# v1.26.15 (Wed Jan 10 2024)
+
+#### :nail_care: Polish
+
+- `@cliqz/adblocker`
+  - feat: modifier replacer for NetworkFilter.toString [#3699](https://github.com/ghostery/adblocker/pull/3699) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v1.26.14 (Tue Jan 09 2024)
 
 #### :nail_care: Polish
