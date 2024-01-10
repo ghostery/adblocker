@@ -360,7 +360,9 @@ rat.xxx##+js(acs, document.write, iframe)
 sourceforge.net##+js(set, SF.adblock, true)
 sourceforge.net##+js(nano-stb)
 sourceforge.net##.can-truncate
-sourceforge.net##.project-body > section[id]
+sourceforge.net###mirror
+sourceforge.net###nels
+sourceforge.net##.sterling
 ||a.slashdotmedia.com^
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/s7cjut/antiad_block_on_this_website/
@@ -2435,10 +2437,8 @@ gmx.*##html.can-have-sky .page-body > .section-content:style(margin-right: 0 !im
 gmx.*###container:style(width:100%!important)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/122322
-niraw.com##+js(acs, document.createElement, /l\.parentNode\.insertBefore\(s/)
-niraw.com##+js(aopr, detectAdBlock)
-niraw.com##+js(aopr, popns)
-*$script,3p,denyallow=cloudflare.com|st-hatena.com|unpkg.com,domain=niraw.com
+kuncomic.com##+js(aopr, detectAdBlock)
+*$script,3p,denyallow=cloudflare.com|st-hatena.com|unpkg.com,domain=kuncomic.com
 
 ! https://github.com/uBlockOrigin/uAssets/issues/13223
 *$script,domain=discuss.com.hk,redirect-rule=noopjs
@@ -3658,7 +3658,7 @@ canale.live##+js(nosiif, href)
 ||html-load.com^$domain=loawa.com|ygosu.com|sportalkorea.com|algumon.com|hancinema.net|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|kagit.kr|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com
 @@/loader.min.js$xhr,script,domain=loawa.com|ygosu.com|sportalkorea.com|algumon.com|hancinema.net|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|kagit.kr|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com
 /loader.min.js$xhr,script,domain=loawa.com|ygosu.com|sportalkorea.com|algumon.com|hancinema.net|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|kagit.kr|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com,replace=/\{\}return!1\}function [A-Za-z]{2}\([A-Za-z]{2}\)/{}return!1}function neutralized()/g
-/loader.min.js$xhr,script,domain=loawa.com|ygosu.com|sportalkorea.com|algumon.com|hancinema.net|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|kagit.kr|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com,replace=/[a-zA-Z]{2}=function\([a-zA-Z]{2}\)\{var N2=I4;Array/neutralized=function(){/g
+/loader.min.js$xhr,script,domain=loawa.com|ygosu.com|sportalkorea.com|algumon.com|hancinema.net|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|kagit.kr|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com,replace=/[a-zA-Z]{2}=function\([a-zA-Z]{2}\)\{var [a-zA-Z0-9]{2}=[a-zA-Z0-9]{2};Array/neutralized=function(){/g
 !#else
 @@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=loawa.com|ygosu.com|sportalkorea.com|algumon.com|hancinema.net|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|kagit.kr|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com
 !#if !ext_devbuild
@@ -4330,12 +4330,6 @@ quicksounds.com##.ad-head
 links.medipost.org##+js(set, blurred, false)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/ynjx62/
-mdn.lol##+js(nostif, /adblock|isRequestPresent/)
-mdn.lol##+js(no-fetch-if, bmcdn6)
-mdn.lol##form[id]:style(display: block !important;)
-mdn.lol##.form-group > div[style^="width:"]
-mdn.lol##div[style^="width:"][style$=" height: 90px;"]
-mdn.lol##+js(acs, window.onload, devtools)
 ||thisiswaldo.com/static/js$script,redirect-rule=noop.js
 ||cloudfront.net/prebid_$script,redirect-rule=noop.js
 ! https://github.com/uBlockOrigin/uAssets/issues/15139
@@ -4345,7 +4339,6 @@ haxina.com##+js(aeld, load, adblock)
 ! https://github.com/uBlockOrigin/uAssets/issues/15277
 ! https://github.com/uBlockOrigin/uAssets/issues/15278
 ||coinzillatag.com^$script,redirect-rule=noopjs
-bitcotasks.com##[class^="floating-banner"]
 ! https://github.com/uBlockOrigin/uAssets/issues/15428
 *$script,redirect-rule=noopjs,domain=bitcotasks.com
 bitcotasks.com##+js(acs, document.createElement, adsBlocked)
@@ -4356,8 +4349,6 @@ bitcotasks.com##^script:has-text(htmls)
 /files/banners/*.gif$image,domain=bitcotasks.com
 bitcotasks.com##+js(aopr, adBlockDetected)
 bitcotasks.com##+js(refresh-defuser)
-bitcotasks.com##+js(set, window_focus, true)
-bitcotasks.com##+js(set, window_paused, false)
 @@||cdn.bmcdn6.com/js/652919f176fed96a395737d0.js?v=1698803324956$script,domain=bitcotasks.com
 bitcotasks.com##+js(no-xhr-if, bmcdn6)
 bitcotasks.com##body > iframe#frame
@@ -5082,6 +5073,7 @@ praxistipps.chip.de,praxistipps.focus.de###G32:style(grid-template-rows: unset!i
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/135902
 ! https://github.com/uBlockOrigin/uAssets/issues/17579
+mega4upload.com##:is(.text-center, center):has(> div[style^="min-width: 3"][style*="min-height: "])
 mega4upload.com##center > [href], .text-center > [href]
 mega4upload.com##+js(ra, onclick, #direct_link > a[onclick])
 mega4upload.com##+js(nowoif)
@@ -5431,14 +5423,11 @@ xxxshake.com###headC
 xxxshake.com##.fluid-b
 ||xxxshake.com/*pop/|$script,1p
 
-! https://github.com/uBlockOrigin/uAssets/issues/16153
-btcbitco.in##+js(acs, window.onload, innerHTML)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/16154
 @@||emailn.de^$ghide
 
 ! https://github.com/uBlockOrigin/uAssets/issues/16159
-bravedown.com##+js(rmnt, script, AdBlock)
+bravedown.com##+js(no-fetch-if, adskeeper)
 bravedown.com##+js(set-local-storage-item, a_render, true)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/16166
