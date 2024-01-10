@@ -1,3 +1,17 @@
+# v1.26.13 (Tue Jan 09 2024)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 21.6.1 to 21.7.0 [#3680](https://github.com/ghostery/adblocker/pull/3680) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 21.5.2 to 21.6.1 [#3656](https://github.com/ghostery/adblocker/pull/3656) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 21.3.8 to 21.5.2 [#3597](https://github.com/ghostery/adblocker/pull/3597) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.26.8 (Mon Oct 09 2023)
 
 #### :house: Internal
