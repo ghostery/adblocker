@@ -1087,7 +1087,7 @@ export default class NetworkFilter implements IFilter {
    * there are things which cannot be recovered though, like domains options
    * of which only hashes are stored.
    */
-  public toString() {
+  public toString(modifierReplacer?: (modifier: string) => string) {
     if (this.rawLine !== undefined) {
       return this.rawLine;
     }
@@ -1201,7 +1201,11 @@ export default class NetworkFilter implements IFilter {
     }
 
     if (options.length > 0) {
-      filter += `$${options.join(',')}`;
+      if (typeof modifierReplacer === 'function') {
+        filter += `$${options.map(modifierReplacer).join(',')}`;
+      } else {
+        filter += `$${options.join(',')}`;
+      }
     }
 
     return filter;

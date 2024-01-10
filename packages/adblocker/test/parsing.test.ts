@@ -117,11 +117,16 @@ const DEFAULT_NETWORK_FILTER = {
 
 describe('Network filters', () => {
   describe('toString', () => {
-    const checkToString = (line: string, expected: string, debug: boolean = false) => {
+    const checkToString = (
+      line: string,
+      expected: string,
+      debug: boolean = false,
+      modifierReplacer = (modifier: string) => modifier,
+    ) => {
       const parsed = NetworkFilter.parse(line, debug);
       expect(parsed).not.to.be.null;
       if (parsed !== null) {
-        expect(parsed.toString()).to.equal(expected);
+        expect(parsed.toString(modifierReplacer)).to.equal(expected);
       }
     };
 
@@ -177,6 +182,16 @@ describe('Network filters', () => {
         'ads$domain=foo.com|bar.co.uk|~baz.io',
         true,
       );
+    });
+
+    it('pprint longer form of modifiers', () => {
+      checkToString('||foo.com^$3p', '||foo.com^$third-party', false, (modifier) => {
+        if (modifier === '3p') {
+          return 'third-party';
+        }
+
+        return modifier;
+      });
     });
   });
 
@@ -1365,9 +1380,9 @@ describe('Network filters', () => {
         [new Uint32Array([NORMALIZED_TYPE_TOKEN.document])],
       ],
       ['@@/wp-content/themes/$script', [hashStrings(['content'])]],
-    ]) {
+    ] as const) {
       it(`get tokens for ${filter}`, () => {
-        const parsed = NetworkFilter.parse(filter as string, true);
+        const parsed = NetworkFilter.parse(filter, true);
         expect(parsed).not.to.be.null;
         if (parsed !== null) {
           expect(parsed.getTokens()).to.eql(regexTokens);
