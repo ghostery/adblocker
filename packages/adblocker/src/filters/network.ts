@@ -402,11 +402,7 @@ function compileRegex(
 const MATCH_ALL = new RegExp('');
 
 export default class NetworkFilter implements IFilter {
-  public static parse(
-    line: string,
-    preprocessor: IPreprocessor | undefined = undefined,
-    debug: boolean = false,
-  ): NetworkFilter | null {
+  public static parse(line: string, debug: boolean = false): NetworkFilter | null {
     // Represent options as a bitmask
     let mask: number =
       NETWORK_FILTER_MASK.thirdParty |
@@ -861,7 +857,7 @@ export default class NetworkFilter implements IFilter {
       rawLine: debug === true ? line : undefined,
       redirect,
       regex: undefined,
-      preprocessor,
+      preprocessor: undefined,
     });
   }
 
@@ -907,7 +903,6 @@ export default class NetworkFilter implements IFilter {
   public readonly domains: Domains | undefined;
   public readonly denyallow: Domains | undefined;
   public readonly redirect: string | undefined;
-  public readonly preprocessor: IPreprocessor | undefined;
 
   // Set only in debug mode
   public readonly rawLine: string | undefined;
@@ -915,6 +910,7 @@ export default class NetworkFilter implements IFilter {
   // Lazy attributes
   public id: number | undefined;
   public regex: RegExp | undefined;
+  public preprocessor: IPreprocessor | undefined;
 
   constructor({
     csp,
@@ -963,6 +959,14 @@ export default class NetworkFilter implements IFilter {
 
   public match(request: Request): boolean {
     return checkOptions(this, request) && checkPattern(this, request);
+  }
+
+  public hasPreprocessor() {
+    return !!this.preprocessor;
+  }
+
+  public setPreprocessor(preprocessor: IPreprocessor) {
+    this.preprocessor = preprocessor;
   }
 
   public qualifiesEnv(env: number): boolean {

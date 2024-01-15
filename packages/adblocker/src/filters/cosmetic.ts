@@ -182,11 +182,7 @@ export default class CosmeticFilter implements IFilter {
    * instance out of it. This function should be *very* efficient, as it will be
    * used to parse tens of thousands of lines.
    */
-  public static parse(
-    line: string,
-    preprocessor: IPreprocessor | undefined = undefined,
-    debug: boolean = false,
-  ): CosmeticFilter | null {
+  public static parse(line: string, debug: boolean = false): CosmeticFilter | null {
     const rawLine = line;
 
     // Mask to store attributes. Each flag (unhide, scriptInject, etc.) takes
@@ -366,7 +362,7 @@ export default class CosmeticFilter implements IFilter {
       selector,
       style,
       domains,
-      preprocessor,
+      preprocessor: undefined,
     });
   }
 
@@ -403,9 +399,8 @@ export default class CosmeticFilter implements IFilter {
   public readonly style: string | undefined;
   public readonly rawLine: string | undefined;
 
-  public readonly preprocessor: IPreprocessor | undefined;
-
   private id: number | undefined;
+  private preprocessor: IPreprocessor | undefined;
 
   constructor({
     mask,
@@ -438,6 +433,14 @@ export default class CosmeticFilter implements IFilter {
 
   public isNetworkFilter(): boolean {
     return false;
+  }
+
+  public hasPreprocessor() {
+    return !!this.preprocessor;
+  }
+
+  public setPreprocessor(preprocessor: IPreprocessor) {
+    this.preprocessor = preprocessor;
   }
 
   public qualifiesEnv(env: number): boolean {

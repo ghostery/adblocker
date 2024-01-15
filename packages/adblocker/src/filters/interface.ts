@@ -7,11 +7,14 @@
  */
 
 import { StaticDataView } from '../data-view';
+import { IPreprocessor } from '../preprocessor';
 
 export default interface IFilter {
   mask: number;
   getId: () => number;
   getTokens: () => Uint32Array[];
+  hasPreprocessor: (preprocessor: IPreprocessor) => boolean;
+  setPreprocessor: (preprocessor: IPreprocessor) => void;
   qualifiesEnv: (env: number) => boolean;
   serialize: (buffer: StaticDataView) => void;
   getSerializedSize(compression: boolean): number;

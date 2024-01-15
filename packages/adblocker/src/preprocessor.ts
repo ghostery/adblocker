@@ -384,13 +384,13 @@ export class Preprocessor implements IPreprocessor {
 }
 
 export class NegatedPreprocessor implements IPreprocessor {
-  public static fromRef(ref: Preprocessor) {
+  public static fromRef(ref: IPreprocessor) {
     return new this({
       ref,
     });
   }
 
-  public static deserialize(view: StaticDataView, preprocessors: Map<number, Preprocessor>) {
+  public static deserialize(view: StaticDataView, preprocessors: Map<number, IPreprocessor>) {
     const referenceId = view.getUint32();
     // TODO: We need to decide the behavior if the referenced preprocessor was not found!
     const preprocessor = preprocessors.get(referenceId)!;
@@ -404,11 +404,11 @@ export class NegatedPreprocessor implements IPreprocessor {
 
   // The reference to preprocessor object helps us
   // to use less memory space.
-  public readonly ref: Preprocessor;
+  public readonly ref: IPreprocessor;
 
   private relations: number = 0;
 
-  constructor({ ref }: { ref: Preprocessor }) {
+  constructor({ ref }: { ref: IPreprocessor }) {
     this.ref = ref;
   }
 
