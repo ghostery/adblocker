@@ -174,6 +174,29 @@ export function evaluateTokens(env: number, tokens: PreprocessorToken[]) {
   return true;
 }
 
+export const enum PREPROCESSOR_TYPES {
+  BEGIF = 0,
+  ELSE = 1,
+  ENDIF = 2,
+  INVALID = 3,
+}
+
+export function detectPreprocessor(line: string) {
+  if (line.length > 5 /* '#!if '.length */ && fastStartsWith(line, '#!if ')) {
+    return PREPROCESSOR_TYPES.BEGIF;
+  }
+
+  if (line === '#!else') {
+    return PREPROCESSOR_TYPES.ELSE;
+  }
+
+  if (line === '#!endif') {
+    return PREPROCESSOR_TYPES.ENDIF;
+  }
+
+  return PREPROCESSOR_TYPES.INVALID;
+}
+
 export function computePreprocessorId() {
   return 0;
 }
@@ -192,10 +215,6 @@ export interface IPreprocessor {
 
 export class Preprocessor implements IPreprocessor {
   public static parse(line: string, debug = false): Preprocessor | null {
-    if (!fastStartsWith(line, '#!if ')) {
-      return null;
-    }
-
     const tokens: PreprocessorToken[] = [];
 
     let buffer = '';
