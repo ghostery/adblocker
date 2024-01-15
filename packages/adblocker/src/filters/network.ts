@@ -965,6 +965,14 @@ export default class NetworkFilter implements IFilter {
     return checkOptions(this, request) && checkPattern(this, request);
   }
 
+  public qualifiesEnv(env: number): boolean {
+    if (!this.preprocessor) {
+      return true;
+    }
+
+    return this.preprocessor.evaluate(env);
+  }
+
   /**
    * To allow for a more compact representation of network filters, the
    * representation is composed of a mandatory header, and some optional

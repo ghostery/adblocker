@@ -440,6 +440,14 @@ export default class CosmeticFilter implements IFilter {
     return false;
   }
 
+  public qualifiesEnv(env: number): boolean {
+    if (!this.preprocessor) {
+      return true;
+    }
+
+    return this.preprocessor.evaluate(env);
+  }
+
   /**
    * The format of a cosmetic filter is:
    *
