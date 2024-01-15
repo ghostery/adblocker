@@ -6,18 +6,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { Domains } from '../engine/domains';
 import {
   StaticDataView,
   sizeOfNetworkCSP,
   sizeOfNetworkFilter,
   sizeOfNetworkHostname,
   sizeOfNetworkRedirect,
-  sizeOfUTF8,
   sizeOfRawNetwork,
+  sizeOfUTF8,
 } from '../data-view';
+import { Domains } from '../engine/domains';
+import { IPreprocessor } from '../preprocessor';
 import { toASCII } from '../punycode';
-import Request, { RequestType, NORMALIZED_TYPE_TOKEN } from '../request';
+import Request, { NORMALIZED_TYPE_TOKEN, RequestType } from '../request';
 import { TOKENS_BUFFER } from '../tokens-buffer';
 import {
   bitCount,
@@ -401,7 +402,11 @@ function compileRegex(
 const MATCH_ALL = new RegExp('');
 
 export default class NetworkFilter implements IFilter {
-  public static parse(line: string, debug: boolean = false): NetworkFilter | null {
+  public static parse(
+    line: string,
+    preprocessor: IPreprocessor | undefined = undefined,
+    debug: boolean = false,
+  ): NetworkFilter | null {
     // Represent options as a bitmask
     let mask: number =
       NETWORK_FILTER_MASK.thirdParty |
@@ -856,6 +861,7 @@ export default class NetworkFilter implements IFilter {
       rawLine: debug === true ? line : undefined,
       redirect,
       regex: undefined,
+      preprocessor,
     });
   }
 
@@ -890,6 +896,7 @@ export default class NetworkFilter implements IFilter {
       redirect: (optionalParts & 32) === 32 ? buffer.getNetworkRedirect() : undefined,
       denyallow: (optionalParts & 64) === 64 ? Domains.deserialize(buffer) : undefined,
       regex: undefined,
+      preprocessor: undefined,
     });
   }
 
@@ -900,6 +907,7 @@ export default class NetworkFilter implements IFilter {
   public readonly domains: Domains | undefined;
   public readonly denyallow: Domains | undefined;
   public readonly redirect: string | undefined;
+  public readonly preprocessor: IPreprocessor | undefined;
 
   // Set only in debug mode
   public readonly rawLine: string | undefined;
@@ -918,6 +926,7 @@ export default class NetworkFilter implements IFilter {
     rawLine,
     redirect,
     regex,
+    preprocessor,
   }: {
     csp: string | undefined;
     filter: string | undefined;
@@ -928,6 +937,7 @@ export default class NetworkFilter implements IFilter {
     rawLine: string | undefined;
     redirect: string | undefined;
     regex: RegExp | undefined;
+    preprocessor: IPreprocessor | undefined;
   }) {
     this.csp = csp;
     this.filter = filter;
@@ -936,6 +946,7 @@ export default class NetworkFilter implements IFilter {
     this.domains = domains;
     this.denyallow = denyallow;
     this.redirect = redirect;
+    this.preprocessor = preprocessor;
 
     this.rawLine = rawLine;
 
