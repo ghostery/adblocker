@@ -7009,3 +7009,13 @@ buytesmart.com##body[style*="display: none"]:remove-attr(style)
 ! @@||apps.sophi.io/latest/al-syracuse.segments.min.js$script,3p,domain=syracuse.com
 ! [dup] from ublock-origin/unbreak.txt
 ! @@||syracuse.com/DG/DEFAULT/rest/rpc/$script,1p
+
+! https://github.com/uBlockOrigin/uBlock-issues/issues/3072
+!#if env_chromium
+! [dup] from ublock-origin/unbreak.txt
+! ||community.ipinfo.io^$csp=worker-src 'none'
+!#endif
+
+! https://github.com/gorhill/uBlock/commit/1cac61a9a4193801105e8586bc540e9ddcb00d51
+! remove once the above commit comes to stable
+@@||agoda.com/*/book/$removeparam

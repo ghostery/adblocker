@@ -360,6 +360,7 @@ cyberdefensemagazine.com###bsaIframe
 
 ! kisahdunia.com anti-adb
 kisahdunia.com##+js(aeld, DOMContentLoaded, adsBlocked)
+kisahdunia.com##+js(aost, setTimeout, adsBlocked)
 kisahdunia.com##.textwidget
 kisahdunia.com##[href^="https://mawaddahcinta.com/"]
 kisahdunia.com##[href^="https://www.samsung.com/"]
@@ -1299,9 +1300,9 @@ freevstplugins.net##+js(acs, document.getElementById, adsBlocked)
 freevstplugins.net##ins.adsbygoogle
 freevstplugins.net##.advert-wrap
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/77054
+! https://github.com/AdguardTeam/AdguardFilters/issues/170497
 haes.tech##+js(aopr, BetterJsPop)
-||haes.tech/js/script-
+haes.tech##+js(nowoif)
 ||haes.tech/cdn-cgi/trace
 
 ! https://github.com/uBlockOrigin/uAssets/issues/8699
@@ -1397,6 +1398,7 @@ emb.apl236.me###ads
 ||livesport24.net/*.gif$image
 emb.apl305.me##+js(nowoif, _blank)
 apl284.me###ads
+apl306.me###ads
 
 hd44.com##+js(nowoif)
 *$script,3p,domain=hwnaturkya.com,denyallow=gstatic.com|recaptcha.net
@@ -1562,6 +1564,8 @@ nudeof.com##div.happy-section
 @@||pagead2.googlesyndication.com/getconfig/sodar$xhr,domain=skmedix.pl
 @@||tpc.googlesyndication.com/sodar/sodar2.js$script,domain=skmedix.pl
 @@||googleads.g.doubleclick.net/pagead/ads?*skmedix.pl&$frame,domain=skmedix.pl
+@@||fundingchoicesmessages.google.com^$script,domain=skmedix.pl
+@@||googleads.g.doubleclick.net/pagead/ads?$frame,domain=skmedix.pl
 @@||skmedix.pl^$ghide
 *$frame,redirect-rule=noopframe,domain=skmedix.pl
 
@@ -1659,6 +1663,8 @@ mcrypto.club###wpsafelink-countdown
 mcrypto.club##+js(no-xhr-if, wpadmngr)
 mcrypto.club,coinsparty.com##+js(no-fetch-if, ad)
 mcrypto.club##table
+! https://github.com/uBlockOrigin/uAssets/discussions/17361#discussioncomment-8046361
+mcrypto.club##+js(rpnt, script, redirectToErrorPage)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/79350
 omgexploits.com##+js(nosiif, visibility, 1000)
@@ -3968,11 +3974,6 @@ reddit.com,reddittorjg6rue252oqsxryoxengawnmo46qy4kyii5wtqnwfj4ooad.onion##.adLi
 @@||xtremestream.co^$ghide
 xtremestream.co##.ad:style(height: 20px !important;)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/96109
-melodelaa.link##+js(nosiif, visibility, 1000)
-melodelaa.link###HTML7
-melodelaa.link###HTML20
-
 ! https://www.blick.ch/schweiz/prozess-um-tote-britin-22-in-lugano-es-gab-keinen-sex-nur-einen-femizid-id16849768.html video ads
 ! https://github.com/uBlockOrigin/uAssets/issues/12446
 blick.ch##+js(set, Object.prototype.isAdDisabled, true)
@@ -4297,9 +4298,6 @@ vevioz.com##+js(aopr, app_vars.force_disable_adblock)
 vevioz.com##+js(aopr, open)
 vevioz.com##+js(set, blurred, false)
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/98116
-watchtheofficetv.com###custom_html-4
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/98102
 pelis-online.net##.adv
 
@@ -4322,7 +4320,7 @@ milfnut.*##+js(acs, onload, onclick)
 milfnut.*##+js(nowoif)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10338
-serverf4.org,streamm4u.club##+js(aopr, __Y)
+streamm4u.club##+js(aopr, __Y)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/qhd2fi/zshort_detecting_adblocker_not_allowing_downloads/
 charexempire.com##+js(aopr, app_vars.please_disable_adblock)

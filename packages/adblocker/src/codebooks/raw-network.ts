@@ -7,7 +7,6 @@
  */
 /* eslint-disable prettier/prettier */
 export default [
-  "/pagead/js/adsbygoogle.j",
   "imasdk.googleapis.com/js",
   "redirect-rule=google-ima",
   ",redirect-rule=1x1.gif",
@@ -28,7 +27,6 @@ export default [
   "||smetrics.",
   "third-party",
   "marketing.",
-  "$subdocum",
   "analytics",
   "cloudfla",
   "metrics.",
@@ -129,6 +127,7 @@ export default [
   "et",
   "ev",
   "ex",
+  "fe",
   "ff",
   "fi",
   "fo",
@@ -194,6 +193,7 @@ export default [
   "sp",
   "ss",
   "st",
+  "te",
   "th",
   "ti",
   "to",
