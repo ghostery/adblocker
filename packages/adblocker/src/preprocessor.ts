@@ -174,7 +174,7 @@ export function evaluateTokens(env: number, tokens: PreprocessorToken[]) {
   return true;
 }
 
-export const enum PREPROCESSOR_TYPES {
+export const enum PreprocessorTypes {
   BEGIF = 0,
   ELSE = 1,
   ENDIF = 2,
@@ -183,18 +183,18 @@ export const enum PREPROCESSOR_TYPES {
 
 export function detectPreprocessor(line: string) {
   if (line.length > 5 /* '#!if '.length */ && fastStartsWith(line, '#!if ')) {
-    return PREPROCESSOR_TYPES.BEGIF;
+    return PreprocessorTypes.BEGIF;
   }
 
   if (line === '#!else') {
-    return PREPROCESSOR_TYPES.ELSE;
+    return PreprocessorTypes.ELSE;
   }
 
   if (line === '#!endif') {
-    return PREPROCESSOR_TYPES.ENDIF;
+    return PreprocessorTypes.ENDIF;
   }
 
-  return PREPROCESSOR_TYPES.INVALID;
+  return PreprocessorTypes.INVALID;
 }
 
 export function computePreprocessorId() {
