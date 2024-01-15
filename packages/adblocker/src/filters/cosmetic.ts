@@ -8,23 +8,24 @@
 
 import {
   AST,
-  classifySelector,
   SelectorType,
+  classifySelector,
   parse as parseCssSelector,
 } from '@cliqz/adblocker-extended-selectors';
 
-import { Domains } from '../engine/domains';
 import {
   EMPTY_UINT32_ARRAY,
   StaticDataView,
   sizeOfASCII,
   sizeOfCosmeticSelector,
-  sizeOfUTF8,
   sizeOfRawCosmetic,
+  sizeOfUTF8,
 } from '../data-view';
+import { Domains } from '../engine/domains';
+import { HTMLSelector, extractHTMLSelectorFromRule } from '../html-filtering';
 import {
-  getHostnameHashesFromLabelsBackward,
   getEntityHashesFromLabelsBackward,
+  getHostnameHashesFromLabelsBackward,
 } from '../request';
 import {
   fastHash,
@@ -36,8 +37,6 @@ import {
   tokenize,
 } from '../utils';
 import IFilter from './interface';
-import { HTMLSelector, extractHTMLSelectorFromRule } from '../html-filtering';
-import { IPreprocessor } from '../preprocessor';
 
 const EMPTY_TOKENS: [Uint32Array] = [EMPTY_UINT32_ARRAY];
 export const DEFAULT_HIDDING_STYLE: string = 'display: none !important;';
@@ -143,6 +142,9 @@ const enum COSMETICS_MASK {
   isHrefSelector = 1 << 5,
   remove = 1 << 6,
   extended = 1 << 7,
+
+  // Internals
+  hasPreprocessor = 1 << 30,
 }
 
 function computeFilterId(
@@ -362,7 +364,6 @@ export default class CosmeticFilter implements IFilter {
       selector,
       style,
       domains,
-      preprocessor: undefined,
     });
   }
 
@@ -386,7 +387,6 @@ export default class CosmeticFilter implements IFilter {
       domains: (optionalParts & 1) === 1 ? Domains.deserialize(buffer) : undefined,
       rawLine: (optionalParts & 2) === 2 ? buffer.getRawCosmetic() : undefined,
       style: (optionalParts & 4) === 4 ? buffer.getASCII() : undefined,
-      preprocessor: undefined,
     });
   }
 
@@ -400,7 +400,6 @@ export default class CosmeticFilter implements IFilter {
   public readonly rawLine: string | undefined;
 
   private id: number | undefined;
-  private preprocessor: IPreprocessor | undefined;
 
   constructor({
     mask,
@@ -408,20 +407,17 @@ export default class CosmeticFilter implements IFilter {
     domains,
     rawLine,
     style,
-    preprocessor,
   }: {
     mask: number;
     domains: Domains | undefined;
     rawLine: string | undefined;
     selector: string;
     style: string | undefined;
-    preprocessor: IPreprocessor | undefined;
   }) {
     this.mask = mask;
     this.selector = selector;
     this.domains = domains;
     this.style = style;
-    this.preprocessor = preprocessor;
 
     this.id = undefined;
     this.rawLine = rawLine;
@@ -433,22 +429,6 @@ export default class CosmeticFilter implements IFilter {
 
   public isNetworkFilter(): boolean {
     return false;
-  }
-
-  public hasPreprocessor() {
-    return !!this.preprocessor;
-  }
-
-  public setPreprocessor(preprocessor: IPreprocessor) {
-    this.preprocessor = preprocessor;
-  }
-
-  public qualifiesEnv(env: number): boolean {
-    if (!this.preprocessor) {
-      return true;
-    }
-
-    return this.preprocessor.evaluate(env);
   }
 
   /**

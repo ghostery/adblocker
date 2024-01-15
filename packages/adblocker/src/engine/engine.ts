@@ -9,26 +9,28 @@
 import type { IMessageFromBackground } from '@cliqz/adblocker-content';
 
 import Config from '../config';
-import { StaticDataView, sizeOfASCII, sizeOfByte, sizeOfBool } from '../data-view';
+import { StaticDataView, sizeOfASCII, sizeOfBool, sizeOfByte } from '../data-view';
 import { EventEmitter } from '../events';
 import {
+  Fetch,
   adsAndTrackingLists,
   adsLists,
-  Fetch,
   fetchLists,
   fetchResources,
   fullLists,
 } from '../fetch';
-import { HTMLSelector } from '../html-filtering';
 import CosmeticFilter from '../filters/cosmetic';
-import NetworkFilter from '../filters/network';
 import { block } from '../filters/dsl';
+import IFilter from '../filters/interface';
+import NetworkFilter from '../filters/network';
+import { HTMLSelector } from '../html-filtering';
 import { IListDiff, IRawDiff, parseFilters } from '../lists';
+import { IPreprocessor, PRECONFIGURED_ENVS } from '../preprocessor';
 import Request from '../request';
 import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
-import { Metadata, IPatternLookupResult } from './metadata';
+import { IPatternLookupResult, Metadata } from './metadata';
 
 export const ENGINE_VERSION = 627;
 
@@ -294,6 +296,9 @@ export default class FilterEngine extends EventEmitter<
 
   public lists: Map<string, string>;
 
+  public env: number;
+  public preprocessors: Map<ReturnType<IFilter['getId']>, IPreprocessor>;
+
   public csp: NetworkFilterBucket;
   public hideExceptions: NetworkFilterBucket;
   public exceptions: NetworkFilterBucket;
@@ -308,16 +313,20 @@ export default class FilterEngine extends EventEmitter<
 
   constructor({
     // Optionally initialize the engine with filters
+    preprocessors = new Map(),
     cosmeticFilters = [],
     networkFilters = [],
 
     config = new Config(),
     lists = new Map(),
+    env = PRECONFIGURED_ENVS.Full,
   }: {
+    preprocessors?: Map<number, IPreprocessor>;
     cosmeticFilters?: CosmeticFilter[];
     networkFilters?: NetworkFilter[];
     lists?: Map<string, string>;
     config?: Partial<Config>;
+    env?: number;
   } = {}) {
     super(); // init super-class EventEmitter
 
@@ -325,6 +334,9 @@ export default class FilterEngine extends EventEmitter<
 
     // Subscription management: disabled by default
     this.lists = lists;
+
+    this.env = env;
+    this.preprocessors = preprocessors;
 
     // $csp=
     this.csp = new NetworkFilterBucket({ config: this.config });

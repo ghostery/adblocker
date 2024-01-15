@@ -9,6 +9,12 @@
 import Config from './config';
 import CosmeticFilter from './filters/cosmetic';
 import NetworkFilter from './filters/network';
+import {
+  IPreprocessor,
+  Preprocessor,
+  PreprocessorTypes,
+  detectPreprocessor,
+} from './preprocessor';
 import { fastStartsWith, fastStartsWithFrom } from './utils';
 
 export const enum FilterType {
@@ -136,12 +142,19 @@ export function f(strings: TemplateStringsArray): NetworkFilter | CosmeticFilter
 export function parseFilters(
   list: string,
   config: Partial<Config> = new Config(),
-): { networkFilters: NetworkFilter[]; cosmeticFilters: CosmeticFilter[] } {
+): {
+  preprocessors: Map<number, IPreprocessor>;
+  networkFilters: NetworkFilter[];
+  cosmeticFilters: CosmeticFilter[];
+} {
   config = new Config(config);
 
+  const preprocessors: Map<number, IPreprocessor> = new Map();
   const networkFilters: NetworkFilter[] = [];
   const cosmeticFilters: CosmeticFilter[] = [];
   const lines = list.split('\n');
+
+  let preprocessor: IPreprocessor | null = null;
 
   for (let i = 0; i < lines.length; i += 1) {
     let line = lines[i];
@@ -188,19 +201,37 @@ export function parseFilters(
     if (filterType === FilterType.NETWORK && config.loadNetworkFilters === true) {
       const filter = NetworkFilter.parse(line, config.debug);
       if (filter !== null) {
+        if (preprocessor !== null) {
+          preprocessors.set(filter.getId(), preprocessor);
+        }
         networkFilters.push(filter);
       }
     } else if (filterType === FilterType.COSMETIC && config.loadCosmeticFilters === true) {
       const filter = CosmeticFilter.parse(line, config.debug);
       if (filter !== null) {
+        if (preprocessor !== null) {
+          preprocessors.set(filter.getId(), preprocessor);
+        }
         if (config.loadGenericCosmeticsFilters === true || filter.isGenericHide() === false) {
           cosmeticFilters.push(filter);
         }
       }
+    } else if (config.loadPreprocessors) {
+      // Detect preprocessors in low priority
+      const preprocessorType = detectPreprocessor(line);
+
+      if (preprocessor === null && preprocessorType === PreprocessorTypes.BEGIF) {
+        const instance = Preprocessor.parse(line, config.debug);
+        if (instance !== null) {
+          preprocessor = instance;
+        }
+      } else if (preprocessorType === PreprocessorTypes.ENDIF) {
+        preprocessor = null;
+      }
     }
   }
 
-  return { networkFilters, cosmeticFilters };
+  return { preprocessors, networkFilters, cosmeticFilters };
 }
 
 function getFilters(list: string, config?: Partial<Config>): (NetworkFilter | CosmeticFilter)[] {

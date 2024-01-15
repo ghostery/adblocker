@@ -1,6 +1,10 @@
 import { StaticDataView } from './data-view';
 import { clearBit, fastStartsWith, getBit, setBit } from './utils';
 
+export const enum PRECONFIGURED_ENVS {
+  Full = (1 << 30) - 1,
+}
+
 export const enum ENVIRONMENTAL_MASK {
   isUnsupportedPlatform = 1 << 0,
   isManifestV3 = 1 << 1,
@@ -23,9 +27,8 @@ export const enum ENVIRONMENTAL_MASK {
 }
 
 export const enum PREPROCESSOR_UTIL_MASK {
-  isNegated = 1 << 29,
-  isContinuedWithLogicalAndOperator = 1 << 30,
-  // RESERVE = 1 << 31
+  isNegated = 1 << 30,
+  isContinuedWithLogicalAndOperator = 1 << 31,
 }
 
 export function getTokenMask(token: string) {
@@ -216,18 +219,10 @@ export function detectPreprocessor(line: string) {
   return PreprocessorTypes.INVALID;
 }
 
-export function computePreprocessorId() {
-  return 0;
-}
-
 export interface IPreprocessor {
   rawLine: string | undefined;
-  getId: () => number;
   getTokens: () => PreprocessorToken[];
-  isNegated: () => boolean;
   evaluate: (env: number) => boolean;
-  relate: () => number;
-  unrelate: () => number;
   serialize: (view: StaticDataView) => void;
   getSerializedSize: () => number;
 }
@@ -325,25 +320,11 @@ export class Preprocessor implements IPreprocessor {
   public readonly rawLine: string | undefined;
 
   private readonly tokens: PreprocessorToken[];
-
-  private id: number | undefined;
   private result: boolean | undefined;
-
-  // This variable helps if we need to gc this preprocessor
-  // by expressing the current active relationships to
-  // filters implemented over `IFilter`.
-  private relations: number = 0;
 
   constructor({ tokens, rawLine }: { tokens: PreprocessorToken[]; rawLine: string | undefined }) {
     this.tokens = tokens;
     this.rawLine = rawLine;
-  }
-
-  public getId() {
-    if (!this.id) {
-      this.id = computePreprocessorId();
-    }
-    return this.id;
   }
 
   public getTokens() {
@@ -362,14 +343,6 @@ export class Preprocessor implements IPreprocessor {
     return this.result;
   }
 
-  public relate() {
-    return ++this.relations;
-  }
-
-  public unrelate() {
-    return --this.relations;
-  }
-
   public serialize(view: StaticDataView) {
     view.pushUint32(this.tokens.length);
 
@@ -380,67 +353,5 @@ export class Preprocessor implements IPreprocessor {
 
   public getSerializedSize() {
     return 4 + this.tokens.length * 4;
-  }
-}
-
-export class NegatedPreprocessor implements IPreprocessor {
-  public static fromRef(ref: IPreprocessor) {
-    return new this({
-      ref,
-    });
-  }
-
-  public static deserialize(view: StaticDataView, preprocessors: Map<number, IPreprocessor>) {
-    const referenceId = view.getUint32();
-    // TODO: We need to decide the behavior if the referenced preprocessor was not found!
-    const preprocessor = preprocessors.get(referenceId)!;
-
-    return new this({
-      ref: preprocessor,
-    });
-  }
-
-  public readonly rawLine = undefined;
-
-  // The reference to preprocessor object helps us
-  // to use less memory space.
-  public readonly ref: IPreprocessor;
-
-  private relations: number = 0;
-
-  constructor({ ref }: { ref: IPreprocessor }) {
-    this.ref = ref;
-  }
-
-  public getId() {
-    return -this.ref.getId();
-  }
-
-  public getTokens() {
-    return this.ref.getTokens();
-  }
-
-  public isNegated() {
-    return true;
-  }
-
-  public evaluate(env: number): boolean {
-    return !this.ref.evaluate(env);
-  }
-
-  public relate(): number {
-    return ++this.relations;
-  }
-
-  public unrelate(): number {
-    return --this.relations;
-  }
-
-  public serialize(view: StaticDataView) {
-    view.pushUint32(this.ref.getId());
-  }
-
-  public getSerializedSize() {
-    return 8;
   }
 }

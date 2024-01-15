@@ -16,7 +16,6 @@ import {
   sizeOfUTF8,
 } from '../data-view';
 import { Domains } from '../engine/domains';
-import { IPreprocessor } from '../preprocessor';
 import { toASCII } from '../punycode';
 import Request, { NORMALIZED_TYPE_TOKEN, RequestType } from '../request';
 import { TOKENS_BUFFER } from '../tokens-buffer';
@@ -147,6 +146,9 @@ export const enum NETWORK_FILTER_MASK {
   isException = 1 << 27,
   isHostnameAnchor = 1 << 28,
   isRedirectRule = 1 << 29,
+
+  // Internals
+  hasPreprocessor = 1 << 30,
 }
 
 /**
@@ -857,7 +859,6 @@ export default class NetworkFilter implements IFilter {
       rawLine: debug === true ? line : undefined,
       redirect,
       regex: undefined,
-      preprocessor: undefined,
     });
   }
 
@@ -892,7 +893,6 @@ export default class NetworkFilter implements IFilter {
       redirect: (optionalParts & 32) === 32 ? buffer.getNetworkRedirect() : undefined,
       denyallow: (optionalParts & 64) === 64 ? Domains.deserialize(buffer) : undefined,
       regex: undefined,
-      preprocessor: undefined,
     });
   }
 
@@ -910,7 +910,6 @@ export default class NetworkFilter implements IFilter {
   // Lazy attributes
   public id: number | undefined;
   public regex: RegExp | undefined;
-  public preprocessor: IPreprocessor | undefined;
 
   constructor({
     csp,
@@ -922,7 +921,6 @@ export default class NetworkFilter implements IFilter {
     rawLine,
     redirect,
     regex,
-    preprocessor,
   }: {
     csp: string | undefined;
     filter: string | undefined;
@@ -933,7 +931,6 @@ export default class NetworkFilter implements IFilter {
     rawLine: string | undefined;
     redirect: string | undefined;
     regex: RegExp | undefined;
-    preprocessor: IPreprocessor | undefined;
   }) {
     this.csp = csp;
     this.filter = filter;
@@ -942,7 +939,6 @@ export default class NetworkFilter implements IFilter {
     this.domains = domains;
     this.denyallow = denyallow;
     this.redirect = redirect;
-    this.preprocessor = preprocessor;
 
     this.rawLine = rawLine;
 
@@ -959,22 +955,6 @@ export default class NetworkFilter implements IFilter {
 
   public match(request: Request): boolean {
     return checkOptions(this, request) && checkPattern(this, request);
-  }
-
-  public hasPreprocessor() {
-    return !!this.preprocessor;
-  }
-
-  public setPreprocessor(preprocessor: IPreprocessor) {
-    this.preprocessor = preprocessor;
-  }
-
-  public qualifiesEnv(env: number): boolean {
-    if (!this.preprocessor) {
-      return true;
-    }
-
-    return this.preprocessor.evaluate(env);
   }
 
   /**
