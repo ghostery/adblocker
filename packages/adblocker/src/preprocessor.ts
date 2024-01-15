@@ -1,5 +1,5 @@
 import { StaticDataView } from './data-view';
-import { fastStartsWith, setBit } from './utils';
+import { clearBit, fastStartsWith, getBit, setBit } from './utils';
 
 export const enum ENVIRONMENTAL_MASK {
   isUnsupportedPlatform = 1 << 0,
@@ -117,6 +117,25 @@ export function getTokenMask(token: string) {
 }
 
 export class PreprocessorToken {
+  public static deserialize(view: StaticDataView) {
+    let mask = view.getUint32();
+
+    const isNegate = getBit(mask, PREPROCESSOR_UTIL_MASK.isNegated);
+    const isContinuedWithLogicalAndOperator = getBit(
+      mask,
+      PREPROCESSOR_UTIL_MASK.isContinuedWithLogicalAndOperator,
+    );
+
+    mask = clearBit(mask, PREPROCESSOR_UTIL_MASK.isNegated);
+    mask = clearBit(mask, PREPROCESSOR_UTIL_MASK.isContinuedWithLogicalAndOperator);
+
+    return new this({
+      mask,
+      isNegate,
+      isContinuedWithLogicalAndOperator,
+    });
+  }
+
   public readonly mask: number;
   public readonly isNegate: boolean;
   public readonly isContinuedWithLogicalAndOperator: boolean;
@@ -139,11 +158,11 @@ export class PreprocessorToken {
     let mask = this.mask;
 
     if (this.isNegate) {
-      mask |= PREPROCESSOR_UTIL_MASK.isNegated;
+      mask = setBit(mask, PREPROCESSOR_UTIL_MASK.isNegated);
     }
 
     if (this.isContinuedWithLogicalAndOperator) {
-      mask |= PREPROCESSOR_UTIL_MASK.isContinuedWithLogicalAndOperator;
+      mask = setBit(mask, PREPROCESSOR_UTIL_MASK.isContinuedWithLogicalAndOperator);
     }
 
     return mask;
@@ -209,7 +228,7 @@ export interface IPreprocessor {
   evaluate: (env: number) => boolean;
   relate: () => number;
   unrelate: () => number;
-  serialize: (buffer: StaticDataView) => void;
+  serialize: (view: StaticDataView) => void;
   getSerializedSize: () => number;
 }
 
@@ -290,6 +309,19 @@ export class Preprocessor implements IPreprocessor {
     });
   }
 
+  public static deserialize(view: StaticDataView) {
+    const tokens: PreprocessorToken[] = [];
+
+    for (let i = 0, l = view.getUint32(); i < l; i++) {
+      tokens.push(PreprocessorToken.deserialize(view));
+    }
+
+    return new this({
+      tokens,
+      rawLine: undefined,
+    });
+  }
+
   public readonly rawLine: string | undefined;
 
   private readonly tokens: PreprocessorToken[];
@@ -338,12 +370,11 @@ export class Preprocessor implements IPreprocessor {
     return --this.relations;
   }
 
-  public serialize(buffer: StaticDataView) {
-    buffer.pushUint16(0);
-    buffer.pushUint16(this.tokens.length);
+  public serialize(view: StaticDataView) {
+    view.pushUint32(this.tokens.length);
 
     for (const token of this.tokens) {
-      buffer.pushUint32(token.serialize());
+      view.pushUint32(token.serialize());
     }
   }
 
@@ -353,7 +384,23 @@ export class Preprocessor implements IPreprocessor {
 }
 
 export class NegatedPreprocessor implements IPreprocessor {
-  public readonly rawLine: string | undefined;
+  public static fromRef(ref: Preprocessor) {
+    return new this({
+      ref,
+    });
+  }
+
+  public static deserialize(view: StaticDataView, preprocessors: Map<number, Preprocessor>) {
+    const referenceId = view.getUint32();
+    // TODO: We need to decide the behavior if the referenced preprocessor was not found!
+    const preprocessor = preprocessors.get(referenceId)!;
+
+    return new this({
+      ref: preprocessor,
+    });
+  }
+
+  public readonly rawLine = undefined;
 
   // The reference to preprocessor object helps us
   // to use less memory space.
@@ -361,9 +408,8 @@ export class NegatedPreprocessor implements IPreprocessor {
 
   private relations: number = 0;
 
-  constructor({ ref, rawLine }: { ref: Preprocessor; rawLine: string | undefined }) {
+  constructor({ ref }: { ref: Preprocessor }) {
     this.ref = ref;
-    this.rawLine = rawLine;
   }
 
   public getId() {
@@ -390,10 +436,8 @@ export class NegatedPreprocessor implements IPreprocessor {
     return --this.relations;
   }
 
-  public serialize(buffer: StaticDataView) {
-    buffer.pushUint16(1);
-    buffer.pushUint16(0);
-    buffer.pushUint32(this.ref.getId());
+  public serialize(view: StaticDataView) {
+    view.pushUint32(this.ref.getId());
   }
 
   public getSerializedSize() {
