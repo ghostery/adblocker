@@ -1,3 +1,4 @@
+import { StaticDataView } from './data-view';
 import { fastStartsWith, setBit } from './utils';
 
 export const enum ENVIRONMENTAL_MASK {
@@ -185,6 +186,8 @@ export interface IPreprocessor {
   evaluate: (env: number) => boolean;
   relate: () => number;
   unrelate: () => number;
+  serialize: (buffer: StaticDataView) => void;
+  getSerializedSize: () => number;
 }
 
 export class Preprocessor implements IPreprocessor {
@@ -315,6 +318,19 @@ export class Preprocessor implements IPreprocessor {
   public unrelate() {
     return --this.relations;
   }
+
+  public serialize(buffer: StaticDataView) {
+    buffer.pushUint16(0);
+    buffer.pushUint16(this.tokens.length);
+
+    for (const token of this.tokens) {
+      buffer.pushUint32(token.serialize());
+    }
+  }
+
+  public getSerializedSize() {
+    return 4 + this.tokens.length * 4;
+  }
 }
 
 export class NegatedPreprocessor implements IPreprocessor {
@@ -353,5 +369,15 @@ export class NegatedPreprocessor implements IPreprocessor {
 
   public unrelate(): number {
     return --this.relations;
+  }
+
+  public serialize(buffer: StaticDataView) {
+    buffer.pushUint16(1);
+    buffer.pushUint16(0);
+    buffer.pushUint32(this.ref.getId());
+  }
+
+  public getSerializedSize() {
+    return 8;
   }
 }
