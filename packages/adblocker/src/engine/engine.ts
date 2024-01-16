@@ -333,7 +333,10 @@ export default class FilterEngine extends EventEmitter<
     this.lists = lists;
 
     this.env = env;
-    this.preprocessors = new PreprocessorBindings({ env });
+    this.preprocessors = new PreprocessorBindings({
+      env,
+      loadPreprocessors: this.config.loadPreprocessors,
+    });
 
     // $csp=
     this.csp = new NetworkFilterBucket({ config: this.config, preprocessors: this.preprocessors });
