@@ -1,4 +1,6 @@
 import { StaticDataView } from './data-view';
+import IFilter from './filters/interface';
+import { NETWORK_FILTER_MASK } from './filters/network';
 import { clearBit, fastStartsWith, getBit, setBit } from './utils';
 
 export const enum PRECONFIGURED_ENVS {
@@ -353,5 +355,36 @@ export class Preprocessor implements IPreprocessor {
 
   public getSerializedSize() {
     return 4 + this.tokens.length * 4;
+  }
+}
+
+export type PreprocessorEnvConditionMap = Map<number, IPreprocessor>;
+
+export class PreprocessorBindings {
+  public env: number;
+
+  public envConditionMap: PreprocessorEnvConditionMap;
+
+  constructor({
+    env = PRECONFIGURED_ENVS.Full,
+    envConditionMap = new Map(),
+  }: {
+    env: number;
+    envConditionMap?: Map<number, IPreprocessor> | undefined;
+  }) {
+    this.env = env;
+    this.envConditionMap = envConditionMap;
+  }
+
+  public update(envConditionMap: PreprocessorEnvConditionMap) {
+    this.envConditionMap = new Map([...this.envConditionMap, ...envConditionMap]);
+  }
+
+  public filterQualifiesEnv(filter: IFilter) {
+    if (!getBit(filter.mask, NETWORK_FILTER_MASK.hasPreprocessor)) {
+      return false;
+    }
+
+    return this.envConditionMap.get(filter.getId())!.evaluate(this.env);
   }
 }
