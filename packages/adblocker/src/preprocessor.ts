@@ -379,7 +379,7 @@ export class PreprocessorBindings {
 
     // Manually change the assessment flow.
     if (loadPreprocessors) {
-      this.update = this.alwaysTrue;
+      this.filterQualifiesEnv = this.alwaysTrue;
     }
   }
 
