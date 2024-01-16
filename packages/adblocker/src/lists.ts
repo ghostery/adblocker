@@ -12,6 +12,7 @@ import NetworkFilter from './filters/network';
 import {
   IPreprocessor,
   Preprocessor,
+  PreprocessorEnvConditionMap,
   PreprocessorTypes,
   detectPreprocessor,
 } from './preprocessor';
@@ -143,13 +144,13 @@ export function parseFilters(
   list: string,
   config: Partial<Config> = new Config(),
 ): {
-  preprocessors: Map<number, IPreprocessor>;
+  preprocessors: PreprocessorEnvConditionMap;
   networkFilters: NetworkFilter[];
   cosmeticFilters: CosmeticFilter[];
 } {
   config = new Config(config);
 
-  const preprocessors: Map<number, IPreprocessor> = new Map();
+  const preprocessors: PreprocessorEnvConditionMap = new Map();
   const networkFilters: NetworkFilter[] = [];
   const cosmeticFilters: CosmeticFilter[] = [];
   const lines = list.split('\n');
@@ -241,7 +242,7 @@ function getFilters(list: string, config?: Partial<Config>): (NetworkFilter | Co
 }
 
 export interface IListDiff {
-  newPreprocessors: Map<number, IPreprocessor>;
+  newPreprocessors: PreprocessorEnvConditionMap;
   newNetworkFilters: NetworkFilter[];
   newCosmeticFilters: CosmeticFilter[];
   removedCosmeticFilters: number[];
