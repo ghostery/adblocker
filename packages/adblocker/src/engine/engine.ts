@@ -24,7 +24,11 @@ import { block } from '../filters/dsl';
 import NetworkFilter from '../filters/network';
 import { HTMLSelector } from '../html-filtering';
 import { IListDiff, IRawDiff, parseFilters } from '../lists';
-import { PRECONFIGURED_ENVS, PreprocessorBindings } from '../preprocessor';
+import {
+  PRECONFIGURED_ENVS,
+  PreprocessorBindings,
+  PreprocessorEnvConditionMap,
+} from '../preprocessor';
 import Request from '../request';
 import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
@@ -368,7 +372,10 @@ export default class FilterEngine extends EventEmitter<
       preprocessors: this.preprocessors,
     });
     // Cosmetic filters
-    this.cosmetics = new CosmeticFilterBucket({ config: this.config });
+    this.cosmetics = new CosmeticFilterBucket({
+      config: this.config,
+      preprocessors: this.preprocessors,
+    });
 
     // Injections
     this.resources = new Resources();

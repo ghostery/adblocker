@@ -21,6 +21,7 @@ import { hashStrings, tokenizeNoSkip } from '../../utils';
 import { noopOptimizeCosmetic } from '../optimizer';
 import ReverseIndex from '../reverse-index';
 import FiltersContainer from './filters';
+import { PreprocessorBindings } from '../../preprocessor';
 
 /**
  * Given a list of CSS selectors, create a valid stylesheet ready to be
@@ -135,8 +136,12 @@ function createLookupTokens(hostname: string, domain: string): Uint32Array {
  * hostname/domain.
  */
 export default class CosmeticFilterBucket {
-  public static deserialize(buffer: StaticDataView, config: Config): CosmeticFilterBucket {
-    const bucket = new CosmeticFilterBucket({ config });
+  public static deserialize(
+    buffer: StaticDataView,
+    config: Config,
+    preprocessors: PreprocessorBindings,
+  ): CosmeticFilterBucket {
+    const bucket = new CosmeticFilterBucket({ config, preprocessors });
 
     bucket.genericRules = FiltersContainer.deserialize(buffer, CosmeticFilter.deserialize, config);
 
@@ -207,7 +212,17 @@ export default class CosmeticFilterBucket {
   public baseStylesheet: string | null;
   public extraGenericRules: CosmeticFilter[] | null;
 
-  constructor({ filters = [], config }: { filters?: CosmeticFilter[]; config: Config }) {
+  public preprocessors: PreprocessorBindings;
+
+  constructor({
+    filters = [],
+    config,
+    preprocessors,
+  }: {
+    filters?: CosmeticFilter[];
+    config: Config;
+    preprocessors: PreprocessorBindings;
+  }) {
     this.genericRules = new FiltersContainer({
       config,
       deserialize: CosmeticFilter.deserialize,
@@ -259,6 +274,8 @@ export default class CosmeticFilterBucket {
     // In-memory cache, lazily initialized
     this.baseStylesheet = null;
     this.extraGenericRules = null;
+
+    this.preprocessors = preprocessors;
 
     if (filters.length !== 0) {
       this.update(filters, undefined, config);
@@ -434,7 +451,8 @@ export default class CosmeticFilterBucket {
         // allowed.
         if (
           (allowSpecificHides === true || rule.isScriptInject() === true) &&
-          rule.match(hostname, domain)
+          rule.match(hostname, domain) &&
+          this.preprocessors.filterQualifiesEnv(rule)
         ) {
           rules.push(rule);
         }
@@ -451,7 +469,7 @@ export default class CosmeticFilterBucket {
     if (allowGenericHides === true && getRulesFromHostname === true) {
       const genericRules = this.getGenericRules();
       for (const rule of genericRules) {
-        if (rule.match(hostname, domain) === true) {
+        if (rule.match(hostname, domain) === true && this.preprocessors.filterQualifiesEnv(rule)) {
           rules.push(rule);
         }
       }
@@ -462,7 +480,7 @@ export default class CosmeticFilterBucket {
     // =======================================================================
     if (allowGenericHides === true && getRulesFromDOM === true && classes.length !== 0) {
       this.classesIndex.iterMatchingFilters(hashStrings(classes), (rule: CosmeticFilter) => {
-        if (rule.match(hostname, domain)) {
+        if (rule.match(hostname, domain) && this.preprocessors.filterQualifiesEnv(rule)) {
           rules.push(rule);
         }
         return true;
@@ -474,7 +492,7 @@ export default class CosmeticFilterBucket {
     // =======================================================================
     if (allowGenericHides === true && getRulesFromDOM === true && ids.length !== 0) {
       this.idsIndex.iterMatchingFilters(hashStrings(ids), (rule: CosmeticFilter) => {
-        if (rule.match(hostname, domain)) {
+        if (rule.match(hostname, domain) && this.preprocessors.filterQualifiesEnv(rule)) {
           rules.push(rule);
         }
         return true;
@@ -488,7 +506,7 @@ export default class CosmeticFilterBucket {
       this.hrefsIndex.iterMatchingFilters(
         compactTokens(concatTypedArrays(hrefs.map((href) => tokenizeNoSkip(href)))),
         (rule: CosmeticFilter) => {
-          if (rule.match(hostname, domain)) {
+          if (rule.match(hostname, domain) && this.preprocessors.filterQualifiesEnv(rule)) {
             rules.push(rule);
           }
           return true;
@@ -512,7 +530,7 @@ export default class CosmeticFilterBucket {
       let injectionsDisabled = false;
       const disabledRules: Set<string> = new Set();
       this.unhideIndex.iterMatchingFilters(hostnameTokens, (rule: CosmeticFilter) => {
-        if (rule.match(hostname, domain)) {
+        if (rule.match(hostname, domain) && this.preprocessors.filterQualifiesEnv(rule)) {
           disabledRules.add(rule.getSelector());
 
           // Detect special +js() rules to disable scriptlet injections
