@@ -977,6 +977,16 @@ export default class FilterEngine extends EventEmitter<
     return patterns;
   }
 
+  public filterQualifiesEnv(filter: IFilter) {
+    const id = filter.getId();
+
+    if (!this.preprocessors.has(id)) {
+      return true;
+    }
+
+    return this.preprocessors.get(id)!.evaluate(this.env);
+  }
+
   public blockScripts() {
     this.updateFromDiff({
       added: [block().scripts().redirectTo('javascript').toString()],
