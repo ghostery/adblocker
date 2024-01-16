@@ -366,14 +366,25 @@ export class PreprocessorBindings {
   public envConditionMap: PreprocessorEnvConditionMap;
 
   constructor({
-    env = PRECONFIGURED_ENVS.Full,
+    env,
+    loadPreprocessors,
     envConditionMap = new Map(),
   }: {
     env: number;
+    loadPreprocessors: boolean;
     envConditionMap?: Map<number, IPreprocessor> | undefined;
   }) {
     this.env = env;
     this.envConditionMap = envConditionMap;
+
+    // Manually change the assessment flow.
+    if (loadPreprocessors) {
+      this.update = this.alwaysTrue;
+    }
+  }
+
+  private alwaysTrue() {
+    return true;
   }
 
   public update(envConditionMap: PreprocessorEnvConditionMap) {
