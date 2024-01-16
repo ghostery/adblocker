@@ -241,6 +241,7 @@ function getFilters(list: string, config?: Partial<Config>): (NetworkFilter | Co
 }
 
 export interface IListDiff {
+  newPreprocessors: Map<number, IPreprocessor>;
   newNetworkFilters: NetworkFilter[];
   newCosmeticFilters: CosmeticFilter[];
   removedCosmeticFilters: number[];

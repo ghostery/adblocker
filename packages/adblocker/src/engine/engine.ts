@@ -499,12 +499,19 @@ export default class FilterEngine extends EventEmitter<
    * Update engine with new filters as well as optionally removed filters.
    */
   public update({
+    newPreprocessors = new Map(),
     newNetworkFilters = [],
     newCosmeticFilters = [],
     removedCosmeticFilters = [],
     removedNetworkFilters = [],
   }: Partial<IListDiff>): boolean {
     let updated: boolean = false;
+
+    // Update preprocessors
+    if (this.config.loadPreprocessors && newPreprocessors.size) {
+      updated = true;
+      this.preprocessors = new Map([...newPreprocessors, ...this.preprocessors]);
+    }
 
     // Update cosmetic filters
     if (
