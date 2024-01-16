@@ -315,9 +315,10 @@ export default class FilterEngine extends EventEmitter<
   public readonly config: Config;
 
   constructor({
-    // Optionally initialize the engine with filters
+    // Optionally initialize the engine with filters and preprocessors
     cosmeticFilters = [],
     networkFilters = [],
+    preprocessors = new Map(),
 
     config = new Config(),
     lists = new Map(),
@@ -325,6 +326,7 @@ export default class FilterEngine extends EventEmitter<
   }: {
     cosmeticFilters?: CosmeticFilter[];
     networkFilters?: NetworkFilter[];
+    preprocessors?: PreprocessorEnvConditionMap;
     lists?: Map<string, string>;
     config?: Partial<Config>;
     env?: number;
@@ -382,6 +384,7 @@ export default class FilterEngine extends EventEmitter<
 
     if (networkFilters.length !== 0 || cosmeticFilters.length !== 0) {
       this.update({
+        newPreprocessors: preprocessors,
         newCosmeticFilters: cosmeticFilters,
         newNetworkFilters: networkFilters,
       });
