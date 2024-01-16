@@ -9,6 +9,7 @@
 import Config from '../../config';
 import { StaticDataView } from '../../data-view';
 import NetworkFilter from '../../filters/network';
+import { PreprocessorBindings } from '../../preprocessor';
 import Request from '../../request';
 import { noopOptimizeNetwork, optimizeNetwork } from '../optimizer';
 import ReverseIndex from '../reverse-index';
@@ -18,8 +19,12 @@ import FiltersContainer from './filters';
  * Accelerating data structure for network filters matching.
  */
 export default class NetworkFilterBucket {
-  public static deserialize(buffer: StaticDataView, config: Config): NetworkFilterBucket {
-    const bucket = new NetworkFilterBucket({ config });
+  public static deserialize(
+    buffer: StaticDataView,
+    config: Config,
+    preprocessors: PreprocessorBindings,
+  ): NetworkFilterBucket {
+    const bucket = new NetworkFilterBucket({ config, preprocessors });
 
     bucket.index = ReverseIndex.deserialize(
       buffer,
@@ -45,7 +50,17 @@ export default class NetworkFilterBucket {
   // should be disabled (only one lookup is needed).
   private badFiltersIds: Set<number> | null;
 
-  constructor({ filters = [], config }: { filters?: NetworkFilter[]; config: Config }) {
+  private preprocessors: PreprocessorBindings;
+
+  constructor({
+    filters = [],
+    config,
+    preprocessors,
+  }: {
+    filters?: NetworkFilter[];
+    config: Config;
+    preprocessors: PreprocessorBindings;
+  }) {
     this.index = new ReverseIndex({
       config,
       deserialize: NetworkFilter.deserialize,
@@ -59,6 +74,8 @@ export default class NetworkFilterBucket {
       deserialize: NetworkFilter.deserialize,
       filters: [],
     });
+
+    this.preprocessors = preprocessors;
 
     if (filters.length !== 0) {
       this.update(filters, undefined);
@@ -123,7 +140,7 @@ export default class NetworkFilterBucket {
   }
 
   /**
-   * Given a matching filter, check if it is disabled by a $badfilter
+   * Given a matching filter, check if it is disabled by a $badfilter or a preprocessor
    */
   private isFilterDisabled(filter: NetworkFilter): boolean {
     // Lazily load information about bad filters in memory. The only thing we
@@ -144,6 +161,10 @@ export default class NetworkFilterBucket {
         badFiltersIds.add(badFilter.getIdWithoutBadFilter());
       }
       this.badFiltersIds = badFiltersIds;
+    }
+
+    if (!this.preprocessors.filterQualifiesEnv(filter)) {
+      return true;
     }
 
     return this.badFiltersIds.has(filter.getId());

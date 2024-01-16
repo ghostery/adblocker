@@ -21,11 +21,10 @@ import {
 } from '../fetch';
 import CosmeticFilter from '../filters/cosmetic';
 import { block } from '../filters/dsl';
-import IFilter from '../filters/interface';
 import NetworkFilter from '../filters/network';
 import { HTMLSelector } from '../html-filtering';
 import { IListDiff, IRawDiff, parseFilters } from '../lists';
-import { IPreprocessor, PRECONFIGURED_ENVS } from '../preprocessor';
+import { PRECONFIGURED_ENVS, PreprocessorBindings } from '../preprocessor';
 import Request from '../request';
 import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
@@ -297,7 +296,7 @@ export default class FilterEngine extends EventEmitter<
   public lists: Map<string, string>;
 
   public env: number;
-  public preprocessors: Map<ReturnType<IFilter['getId']>, IPreprocessor>;
+  public preprocessors: PreprocessorBindings;
 
   public csp: NetworkFilterBucket;
   public hideExceptions: NetworkFilterBucket;
@@ -313,7 +312,6 @@ export default class FilterEngine extends EventEmitter<
 
   constructor({
     // Optionally initialize the engine with filters
-    preprocessors = new Map(),
     cosmeticFilters = [],
     networkFilters = [],
 
@@ -321,7 +319,6 @@ export default class FilterEngine extends EventEmitter<
     lists = new Map(),
     env = PRECONFIGURED_ENVS.Full,
   }: {
-    preprocessors?: Map<number, IPreprocessor>;
     cosmeticFilters?: CosmeticFilter[];
     networkFilters?: NetworkFilter[];
     lists?: Map<string, string>;
@@ -336,22 +333,37 @@ export default class FilterEngine extends EventEmitter<
     this.lists = lists;
 
     this.env = env;
-    this.preprocessors = preprocessors;
+    this.preprocessors = new PreprocessorBindings({ env });
 
     // $csp=
-    this.csp = new NetworkFilterBucket({ config: this.config });
+    this.csp = new NetworkFilterBucket({ config: this.config, preprocessors: this.preprocessors });
     // $elemhide
     // $generichide
     // $specifichide
-    this.hideExceptions = new NetworkFilterBucket({ config: this.config });
+    this.hideExceptions = new NetworkFilterBucket({
+      config: this.config,
+      preprocessors: this.preprocessors,
+    });
     // @@filter
-    this.exceptions = new NetworkFilterBucket({ config: this.config });
+    this.exceptions = new NetworkFilterBucket({
+      config: this.config,
+      preprocessors: this.preprocessors,
+    });
     // $important
-    this.importants = new NetworkFilterBucket({ config: this.config });
+    this.importants = new NetworkFilterBucket({
+      config: this.config,
+      preprocessors: this.preprocessors,
+    });
     // $redirect
-    this.redirects = new NetworkFilterBucket({ config: this.config });
+    this.redirects = new NetworkFilterBucket({
+      config: this.config,
+      preprocessors: this.preprocessors,
+    });
     // All other filters
-    this.filters = new NetworkFilterBucket({ config: this.config });
+    this.filters = new NetworkFilterBucket({
+      config: this.config,
+      preprocessors: this.preprocessors,
+    });
     // Cosmetic filters
     this.cosmetics = new CosmeticFilterBucket({ config: this.config });
 
@@ -510,7 +522,7 @@ export default class FilterEngine extends EventEmitter<
     // Update preprocessors
     if (this.config.loadPreprocessors && newPreprocessors.size) {
       updated = true;
-      this.preprocessors = new Map([...newPreprocessors, ...this.preprocessors]);
+      this.preprocessors.update(newPreprocessors);
     }
 
     // Update cosmetic filters
@@ -975,16 +987,6 @@ export default class FilterEngine extends EventEmitter<
     }
 
     return patterns;
-  }
-
-  public filterQualifiesEnv(filter: IFilter) {
-    const id = filter.getId();
-
-    if (!this.preprocessors.has(id)) {
-      return true;
-    }
-
-    return this.preprocessors.get(id)!.evaluate(this.env);
   }
 
   public blockScripts() {
