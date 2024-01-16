@@ -379,7 +379,7 @@ export class PreprocessorBindings {
 
     // Manually change the assessment flow.
     if (loadPreprocessors) {
-      this.filterQualifiesEnv = this.alwaysTrue;
+      this.isEnvQualifiedFilter = this.alwaysTrue;
     }
   }
 
@@ -391,7 +391,7 @@ export class PreprocessorBindings {
     this.envConditionMap = new Map([...this.envConditionMap, ...envConditionMap]);
   }
 
-  public filterQualifiesEnv(filter: IFilter) {
+  public isEnvQualifiedFilter(filter: IFilter) {
     if (!getBit(filter.mask, NETWORK_FILTER_MASK.hasPreprocessor)) {
       return false;
     }

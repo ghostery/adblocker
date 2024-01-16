@@ -163,7 +163,7 @@ export default class NetworkFilterBucket {
       this.badFiltersIds = badFiltersIds;
     }
 
-    if (!this.preprocessors.filterQualifiesEnv(filter)) {
+    if (!this.preprocessors.isEnvQualifiedFilter(filter)) {
       return true;
     }
 
