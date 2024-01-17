@@ -1,3 +1,4 @@
+import { StaticDataView } from '../../data-view';
 import IFilter from '../../filters/interface';
 import { NETWORK_FILTER_MASK } from '../../filters/network';
 import { IPreprocessor, PreprocessorEnvConditionMap } from '../../preprocessor';
@@ -40,6 +41,7 @@ export default class PreprocessorBucket {
           existingPreprocessor.addCondition(condition);
         }
       } else {
+        // TODO: We need to remove duplicate preprocessors at this stage.
         this.envConditionMap.set(filterId, preprocessor);
       }
     }
@@ -51,5 +53,24 @@ export default class PreprocessorBucket {
     }
 
     return this.envConditionMap.get(filter.getId())!.evaluate(this.env);
+  }
+
+  public serialize(view: StaticDataView) {
+    view.pushUint32(this.envConditionMap.size);
+
+    for (const preprocessor of this.envConditionMap.values()) {
+      preprocessor.serialize(view);
+    }
+  }
+
+  public getSerializedSize() {
+    let estimatedSize = this.envConditionMap.size * 4;
+
+    // TODO: We need to filter out duplicates first.
+    for (const preprocessor of this.envConditionMap.values()) {
+      estimatedSize += preprocessor.getSerializedSize();
+    }
+
+    return estimatedSize;
   }
 }
