@@ -9,9 +9,8 @@
 import Config from './config';
 import CosmeticFilter from './filters/cosmetic';
 import NetworkFilter from './filters/network';
-import {
+import Preprocessor, {
   IPreprocessor,
-  Preprocessor,
   PreprocessorEnvConditionMap,
   PreprocessorTypes,
   detectPreprocessor,
