@@ -24,15 +24,12 @@ import { block } from '../filters/dsl';
 import NetworkFilter from '../filters/network';
 import { HTMLSelector } from '../html-filtering';
 import { IListDiff, IRawDiff, parseFilters } from '../lists';
-import {
-  PRECONFIGURED_ENVS,
-  PreprocessorBindings,
-  PreprocessorEnvConditionMap,
-} from '../preprocessor';
+import { PRECONFIGURED_ENVS, PreprocessorEnvConditionMap } from '../preprocessor';
 import Request from '../request';
 import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
+import PreprocessorBucket from './bucket/preprocessor';
 import { IPatternLookupResult, Metadata } from './metadata';
 
 export const ENGINE_VERSION = 627;
@@ -300,7 +297,7 @@ export default class FilterEngine extends EventEmitter<
   public lists: Map<string, string>;
 
   public env: number;
-  public preprocessors: PreprocessorBindings;
+  public preprocessors: PreprocessorBucket;
 
   public csp: NetworkFilterBucket;
   public hideExceptions: NetworkFilterBucket;
@@ -339,7 +336,7 @@ export default class FilterEngine extends EventEmitter<
     this.lists = lists;
 
     this.env = env;
-    this.preprocessors = new PreprocessorBindings({
+    this.preprocessors = new PreprocessorBucket({
       env,
       loadPreprocessors: this.config.loadPreprocessors,
     });

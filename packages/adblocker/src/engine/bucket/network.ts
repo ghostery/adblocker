@@ -9,11 +9,11 @@
 import Config from '../../config';
 import { StaticDataView } from '../../data-view';
 import NetworkFilter from '../../filters/network';
-import { PreprocessorBindings } from '../../preprocessor';
 import Request from '../../request';
 import { noopOptimizeNetwork, optimizeNetwork } from '../optimizer';
 import ReverseIndex from '../reverse-index';
 import FiltersContainer from './filters';
+import PreprocessorBucket from './preprocessor';
 
 /**
  * Accelerating data structure for network filters matching.
@@ -22,7 +22,7 @@ export default class NetworkFilterBucket {
   public static deserialize(
     buffer: StaticDataView,
     config: Config,
-    preprocessors: PreprocessorBindings,
+    preprocessors: PreprocessorBucket,
   ): NetworkFilterBucket {
     const bucket = new NetworkFilterBucket({ config, preprocessors });
 
@@ -50,7 +50,7 @@ export default class NetworkFilterBucket {
   // should be disabled (only one lookup is needed).
   private badFiltersIds: Set<number> | null;
 
-  private preprocessors: PreprocessorBindings;
+  private preprocessors: PreprocessorBucket;
 
   constructor({
     filters = [],
@@ -59,7 +59,7 @@ export default class NetworkFilterBucket {
   }: {
     filters?: NetworkFilter[];
     config: Config;
-    preprocessors: PreprocessorBindings;
+    preprocessors: PreprocessorBucket;
   }) {
     this.index = new ReverseIndex({
       config,

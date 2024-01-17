@@ -1,6 +1,4 @@
 import { StaticDataView } from './data-view';
-import IFilter from './filters/interface';
-import { NETWORK_FILTER_MASK } from './filters/network';
 import { clearBit, fastStartsWith, getBit, setBit } from './utils';
 
 export const enum PRECONFIGURED_ENVS {
@@ -159,8 +157,12 @@ export class PreprocessorToken {
     this.isContinuedWithLogicalAndOperator = isContinuedWithLogicalAndOperator;
   }
 
-  public serialize() {
+  public serialize(includeMetadata: boolean = false) {
     let mask = this.mask;
+
+    if (includeMetadata) {
+      return mask;
+    }
 
     if (this.isNegate) {
       mask = setBit(mask, PREPROCESSOR_UTIL_MASK.isNegated);
@@ -174,23 +176,43 @@ export class PreprocessorToken {
   }
 }
 
-export function evaluateTokens(env: number, tokens: PreprocessorToken[]) {
+export function evaluateConditions(env: number, conditions: PreprocessorToken[][]) {
   let result = false;
 
-  for (const token of tokens) {
-    let evaluated = (env & token.mask) === token.mask;
+  for (const condition of conditions) {
+    result = false;
 
-    if (token.isNegate) {
-      evaluated = !evaluated;
+    for (const token of condition) {
+      let evaluated = (env & token.mask) === token.mask;
+
+      if (token.isNegate) {
+        evaluated = !evaluated;
+      }
+
+      if (token.isContinuedWithLogicalAndOperator) {
+        result &&= evaluated;
+      } else {
+        result ||= evaluated;
+      }
+
+      if (result) {
+        return true;
+      }
     }
+  }
 
-    if (token.isContinuedWithLogicalAndOperator) {
-      result &&= evaluated;
-    } else {
-      result ||= evaluated;
-    }
+  return false;
+}
 
-    if (!result) {
+export function compareConditions(a: PreprocessorToken[], b: PreprocessorToken[]) {
+  const l = a.length;
+
+  if (l !== b.length) {
+    return false;
+  }
+
+  for (let i = 0; i < l; i++) {
+    if (a[i].serialize(true) !== b[i].serialize(true)) {
       return false;
     }
   }
@@ -223,13 +245,16 @@ export function detectPreprocessor(line: string) {
 
 export interface IPreprocessor {
   rawLine: string | undefined;
-  getTokens: () => PreprocessorToken[];
+  hasCondition: (condition: PreprocessorToken[]) => boolean;
+  getConditions: () => PreprocessorToken[][];
+  addCondition: (condition: PreprocessorToken[]) => void;
+  removeCondition: (condition: PreprocessorToken[]) => void;
   evaluate: (env: number) => boolean;
   serialize: (view: StaticDataView) => void;
   getSerializedSize: () => number;
 }
 
-export class Preprocessor implements IPreprocessor {
+export default class Preprocessor implements IPreprocessor {
   public static parse(line: string, debug = false): Preprocessor | null {
     const tokens: PreprocessorToken[] = [];
 
@@ -321,16 +346,42 @@ export class Preprocessor implements IPreprocessor {
 
   public readonly rawLine: string | undefined;
 
-  private readonly tokens: PreprocessorToken[];
+  private readonly conditions: PreprocessorToken[][];
   private result: boolean | undefined;
 
   constructor({ tokens, rawLine }: { tokens: PreprocessorToken[]; rawLine: string | undefined }) {
-    this.tokens = tokens;
+    this.conditions = [tokens];
     this.rawLine = rawLine;
   }
 
-  public getTokens() {
-    return this.tokens;
+  public hasCondition(target: PreprocessorToken[]) {
+    for (const condition of this.conditions) {
+      if (compareConditions(condition, target)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  public getConditions() {
+    return this.conditions;
+  }
+
+  public addCondition(condition: PreprocessorToken[]) {
+    if (this.hasCondition(condition)) {
+      return;
+    }
+
+    this.conditions.push(condition);
+  }
+
+  public removeCondition(target: PreprocessorToken[]) {
+    for (let i = 0; i < this.conditions.length; i++) {
+      if (compareConditions(this.conditions[i], target)) {
+        this.conditions.splice(i, 1);
+      }
+    }
   }
 
   public isNegated() {
@@ -339,63 +390,35 @@ export class Preprocessor implements IPreprocessor {
 
   public evaluate(env: number) {
     if (!this.result) {
-      this.result = evaluateTokens(env, this.tokens);
+      this.result = evaluateConditions(env, this.conditions);
     }
 
     return this.result;
   }
 
   public serialize(view: StaticDataView) {
-    view.pushUint32(this.tokens.length);
+    view.pushUint32(this.conditions.length);
 
-    for (const token of this.tokens) {
-      view.pushUint32(token.serialize());
+    for (const condition of this.conditions) {
+      view.pushUint32(condition.length);
+
+      for (const token of condition) {
+        view.pushUint32(token.serialize());
+      }
     }
   }
 
   public getSerializedSize() {
-    return 4 + this.tokens.length * 4;
+    let estimatedSize = 4;
+
+    estimatedSize += this.conditions.length * 4;
+
+    for (const condition of this.conditions) {
+      estimatedSize += condition.length * 4;
+    }
+
+    return estimatedSize;
   }
 }
 
 export type PreprocessorEnvConditionMap = Map<number, IPreprocessor>;
-
-export class PreprocessorBindings {
-  public env: number;
-
-  public envConditionMap: PreprocessorEnvConditionMap;
-
-  constructor({
-    env,
-    loadPreprocessors,
-    envConditionMap = new Map(),
-  }: {
-    env: number;
-    loadPreprocessors: boolean;
-    envConditionMap?: Map<number, IPreprocessor> | undefined;
-  }) {
-    this.env = env;
-    this.envConditionMap = envConditionMap;
-
-    // Manually change the assessment flow.
-    if (loadPreprocessors) {
-      this.isEnvQualifiedFilter = this.alwaysTrue;
-    }
-  }
-
-  private alwaysTrue() {
-    return true;
-  }
-
-  public update(envConditionMap: PreprocessorEnvConditionMap) {
-    this.envConditionMap = new Map([...this.envConditionMap, ...envConditionMap]);
-  }
-
-  public isEnvQualifiedFilter(filter: IFilter) {
-    if (!getBit(filter.mask, NETWORK_FILTER_MASK.hasPreprocessor)) {
-      return false;
-    }
-
-    return this.envConditionMap.get(filter.getId())!.evaluate(this.env);
-  }
-}

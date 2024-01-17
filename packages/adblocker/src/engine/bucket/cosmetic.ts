@@ -21,7 +21,7 @@ import { hashStrings, tokenizeNoSkip } from '../../utils';
 import { noopOptimizeCosmetic } from '../optimizer';
 import ReverseIndex from '../reverse-index';
 import FiltersContainer from './filters';
-import { PreprocessorBindings } from '../../preprocessor';
+import PreprocessorBucket from './preprocessor';
 
 /**
  * Given a list of CSS selectors, create a valid stylesheet ready to be
@@ -139,7 +139,7 @@ export default class CosmeticFilterBucket {
   public static deserialize(
     buffer: StaticDataView,
     config: Config,
-    preprocessors: PreprocessorBindings,
+    preprocessors: PreprocessorBucket,
   ): CosmeticFilterBucket {
     const bucket = new CosmeticFilterBucket({ config, preprocessors });
 
@@ -212,7 +212,7 @@ export default class CosmeticFilterBucket {
   public baseStylesheet: string | null;
   public extraGenericRules: CosmeticFilter[] | null;
 
-  public preprocessors: PreprocessorBindings;
+  public preprocessors: PreprocessorBucket;
 
   constructor({
     filters = [],
@@ -221,7 +221,7 @@ export default class CosmeticFilterBucket {
   }: {
     filters?: CosmeticFilter[];
     config: Config;
-    preprocessors: PreprocessorBindings;
+    preprocessors: PreprocessorBucket;
   }) {
     this.genericRules = new FiltersContainer({
       config,
