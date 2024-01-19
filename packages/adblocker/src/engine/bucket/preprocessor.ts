@@ -1,34 +1,47 @@
 import { StaticDataView } from '../../data-view';
 import IFilter from '../../filters/interface';
-import { NETWORK_FILTER_MASK } from '../../filters/network';
-import { IPreprocessor, PreprocessorEnvConditionMap } from '../../preprocessor';
-import { getBit } from '../../utils';
+import { IPreprocessor, PRECONFIGURED_ENV, PreprocessorEnvConditionMap } from '../../preprocessor';
 
 export default class PreprocessorBucket {
+  public static deserialize() {
+    // We don't want to take into serialization yet
+    return new this({
+      loadPreprocessors: true,
+    });
+  }
+
+  public readonly envConditionMap: PreprocessorEnvConditionMap;
+
   public env: number;
 
-  public envConditionMap: PreprocessorEnvConditionMap;
-
   constructor({
-    env,
     loadPreprocessors,
+    env = PRECONFIGURED_ENV,
     envConditionMap = new Map(),
   }: {
-    env: number;
     loadPreprocessors: boolean;
+    env?: number;
     envConditionMap?: Map<number, IPreprocessor> | undefined;
   }) {
-    this.env = env;
     this.envConditionMap = envConditionMap;
+    this.env = env;
 
     // Manually change the assessment flow.
-    if (loadPreprocessors) {
+    if (!loadPreprocessors) {
       this.isEnvQualifiedFilter = this.alwaysTrue;
     }
   }
 
   private alwaysTrue() {
     return true;
+  }
+
+  public getEnv() {
+    return this.env;
+  }
+
+  public setEnv(env: number) {
+    this.env = env;
   }
 
   public update(envConditionMap: PreprocessorEnvConditionMap) {
@@ -48,27 +61,30 @@ export default class PreprocessorBucket {
   }
 
   public isEnvQualifiedFilter(filter: IFilter) {
-    if (!getBit(filter.mask, NETWORK_FILTER_MASK.hasPreprocessor)) {
-      return false;
+    const preprocessor = this.envConditionMap.get(filter.getId());
+
+    if (!preprocessor) {
+      return true;
     }
 
-    return this.envConditionMap.get(filter.getId())!.evaluate(this.env);
+    return preprocessor.evaluate(this.env);
   }
 
   public serialize(view: StaticDataView) {
     view.pushUint32(this.envConditionMap.size);
 
-    for (const preprocessor of this.envConditionMap.values()) {
+    for (const [filterId, preprocessor] of this.envConditionMap.entries()) {
+      view.pushUint32(filterId);
       preprocessor.serialize(view);
     }
   }
 
   public getSerializedSize() {
-    let estimatedSize = this.envConditionMap.size * 4;
+    let estimatedSize = 4;
 
     // TODO: We need to filter out duplicates first.
     for (const preprocessor of this.envConditionMap.values()) {
-      estimatedSize += preprocessor.getSerializedSize();
+      estimatedSize += 4 + preprocessor.getSerializedSize();
     }
 
     return estimatedSize;

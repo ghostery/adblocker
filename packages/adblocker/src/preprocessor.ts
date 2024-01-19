@@ -1,15 +1,11 @@
 import { StaticDataView } from './data-view';
 import { clearBit, fastStartsWith, getBit, setBit } from './utils';
 
-export const enum PRECONFIGURED_ENVS {
-  Full = (1 << 30) - 1,
-}
-
 export const enum ENVIRONMENTAL_MASK {
-  isUnsupportedPlatform = 1 << 0,
-  isManifestV3 = 1 << 1,
-  isMobile = 1 << 2,
-  // RESERVE = 1 << 3,
+  isGhostery = 1 << 0,
+  isUnsupportedPlatform = 1 << 1,
+  isManifestV3 = 1 << 2,
+  isMobile = 1 << 3,
 
   // Browser specs
   isBrowserChromium = 1 << 4,
@@ -31,6 +27,11 @@ export const enum PREPROCESSOR_UTIL_MASK {
   isContinuedWithLogicalAndOperator = 1 << 31,
 }
 
+export const PRECONFIGURED_ENV =
+  (PREPROCESSOR_UTIL_MASK.isNegated - 1) &
+  ~ENVIRONMENTAL_MASK.isUnsupportedPlatform &
+  ~ENVIRONMENTAL_MASK.false;
+
 export function getTokenMask(token: string) {
   let mask = 0;
   let isNegate = false;
@@ -44,8 +45,11 @@ export function getTokenMask(token: string) {
   switch (token) {
     // Extensions
     case 'ext_ghostery': {
+      mask = setBit(mask, ENVIRONMENTAL_MASK.isGhostery);
+
       break;
     }
+
     case 'ext_ublock':
     case 'ext_abp':
     case 'adguard':
@@ -194,10 +198,10 @@ export function evaluateConditions(env: number, conditions: PreprocessorToken[][
       } else {
         result ||= evaluated;
       }
+    }
 
-      if (result) {
-        return true;
-      }
+    if (result) {
+      return true;
     }
   }
 
@@ -221,22 +225,28 @@ export function compareConditions(a: PreprocessorToken[], b: PreprocessorToken[]
 }
 
 export const enum PreprocessorTypes {
-  BEGIF = 0,
-  ELSE = 1,
-  ENDIF = 2,
-  INVALID = 3,
+  INVALID = 0,
+  BEGIF = 1,
+  ELSE = 2,
+  ENDIF = 3,
 }
 
 export function detectPreprocessor(line: string) {
-  if (line.length > 5 /* '#!if '.length */ && fastStartsWith(line, '#!if ')) {
+  if (line.charCodeAt(1) !== 35 /* '#' */) {
+    return PreprocessorTypes.INVALID;
+  }
+
+  const command = line.slice(2);
+
+  if (fastStartsWith(command, 'if ')) {
     return PreprocessorTypes.BEGIF;
   }
 
-  if (line === '#!else') {
+  if (command === 'else') {
     return PreprocessorTypes.ELSE;
   }
 
-  if (line === '#!endif') {
+  if (command === 'endif') {
     return PreprocessorTypes.ENDIF;
   }
 
@@ -347,7 +357,7 @@ export default class Preprocessor implements IPreprocessor {
   public readonly rawLine: string | undefined;
 
   private readonly conditions: PreprocessorToken[][];
-  private result: boolean | undefined;
+  private result: boolean | undefined = undefined;
 
   constructor({ tokens, rawLine }: { tokens: PreprocessorToken[]; rawLine: string | undefined }) {
     this.conditions = [tokens];
@@ -389,7 +399,7 @@ export default class Preprocessor implements IPreprocessor {
   }
 
   public evaluate(env: number) {
-    if (!this.result) {
+    if (this.result === undefined) {
       this.result = evaluateConditions(env, this.conditions);
     }
 

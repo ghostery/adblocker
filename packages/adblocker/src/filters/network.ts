@@ -146,9 +146,6 @@ export const enum NETWORK_FILTER_MASK {
   isException = 1 << 27,
   isHostnameAnchor = 1 << 28,
   isRedirectRule = 1 << 29,
-
-  // Internals
-  hasPreprocessor = 1 << 30,
 }
 
 /**

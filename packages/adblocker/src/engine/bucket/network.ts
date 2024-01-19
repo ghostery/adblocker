@@ -129,7 +129,11 @@ export default class NetworkFilterBucket {
     let match: NetworkFilter | undefined;
 
     this.index.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
-      if (filter.match(request) && this.isFilterDisabled(filter) === false) {
+      if (
+        filter.match(request) &&
+        this.isFilterDisabled(filter) === false &&
+        this.preprocessors.isEnvQualifiedFilter(filter) === true
+      ) {
         match = filter;
         return false;
       }
@@ -161,10 +165,6 @@ export default class NetworkFilterBucket {
         badFiltersIds.add(badFilter.getIdWithoutBadFilter());
       }
       this.badFiltersIds = badFiltersIds;
-    }
-
-    if (!this.preprocessors.isEnvQualifiedFilter(filter)) {
-      return true;
     }
 
     return this.badFiltersIds.has(filter.getId());

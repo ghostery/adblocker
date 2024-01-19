@@ -24,7 +24,7 @@ import { block } from '../filters/dsl';
 import NetworkFilter from '../filters/network';
 import { HTMLSelector } from '../html-filtering';
 import { IListDiff, IRawDiff, parseFilters } from '../lists';
-import { PRECONFIGURED_ENVS, PreprocessorEnvConditionMap } from '../preprocessor';
+import { PRECONFIGURED_ENV, PreprocessorEnvConditionMap } from '../preprocessor';
 import Request from '../request';
 import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
@@ -273,15 +273,18 @@ export default class FilterEngine extends EventEmitter<
     }
     engine.lists = lists;
 
-    // Deserialize buckets
-    engine.importants = NetworkFilterBucket.deserialize(buffer, config);
-    engine.redirects = NetworkFilterBucket.deserialize(buffer, config);
-    engine.filters = NetworkFilterBucket.deserialize(buffer, config);
-    engine.exceptions = NetworkFilterBucket.deserialize(buffer, config);
+    // Deserilaize preprocessors
+    engine.preprocessors = PreprocessorBucket.deserialize();
 
-    engine.csp = NetworkFilterBucket.deserialize(buffer, config);
-    engine.cosmetics = CosmeticFilterBucket.deserialize(buffer, config);
-    engine.hideExceptions = NetworkFilterBucket.deserialize(buffer, config);
+    // Deserialize buckets
+    engine.importants = NetworkFilterBucket.deserialize(buffer, config, engine.preprocessors);
+    engine.redirects = NetworkFilterBucket.deserialize(buffer, config, engine.preprocessors);
+    engine.filters = NetworkFilterBucket.deserialize(buffer, config, engine.preprocessors);
+    engine.exceptions = NetworkFilterBucket.deserialize(buffer, config, engine.preprocessors);
+
+    engine.csp = NetworkFilterBucket.deserialize(buffer, config, engine.preprocessors);
+    engine.cosmetics = CosmeticFilterBucket.deserialize(buffer, config, engine.preprocessors);
+    engine.hideExceptions = NetworkFilterBucket.deserialize(buffer, config, engine.preprocessors);
 
     // Optionally deserialize metadata
     const hasMetadata = buffer.getBool();
@@ -319,7 +322,7 @@ export default class FilterEngine extends EventEmitter<
 
     config = new Config(),
     lists = new Map(),
-    env = PRECONFIGURED_ENVS.Full,
+    env = PRECONFIGURED_ENV,
   }: {
     cosmeticFilters?: CosmeticFilter[];
     networkFilters?: NetworkFilter[];
@@ -608,6 +611,7 @@ export default class FilterEngine extends EventEmitter<
     const newNetworkFilters: NetworkFilter[] = [];
     const removedCosmeticFilters: CosmeticFilter[] = [];
     const removedNetworkFilters: NetworkFilter[] = [];
+    let newPreprocessors: PreprocessorEnvConditionMap = new Map();
 
     if (removed !== undefined && removed.length !== 0) {
       const { networkFilters, cosmeticFilters } = parseFilters(removed.join('\n'), this.config);
@@ -616,12 +620,17 @@ export default class FilterEngine extends EventEmitter<
     }
 
     if (added !== undefined && added.length !== 0) {
-      const { networkFilters, cosmeticFilters } = parseFilters(added.join('\n'), this.config);
+      const { preprocessors, networkFilters, cosmeticFilters } = parseFilters(
+        added.join('\n'),
+        this.config,
+      );
+      newPreprocessors = new Map([...preprocessors]);
       Array.prototype.push.apply(newCosmeticFilters, cosmeticFilters);
       Array.prototype.push.apply(newNetworkFilters, networkFilters);
     }
 
     return this.update({
+      newPreprocessors,
       newCosmeticFilters,
       newNetworkFilters,
       removedCosmeticFilters: removedCosmeticFilters.map((f) => f.getId()),
