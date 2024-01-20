@@ -79,8 +79,8 @@ independent.co.uk##html.sp-message-open:style(width: initial !important)
 sourcepoint.theguardian.com##+js(trusted-click-element, .sp_choice_type_12[title="Manage or reject cookies"])
 sourcepoint.theguardian.com##+js(trusted-click-element, [title="Reject all"], , 500)
 theguardian.com##[title="SP Consent Message"]
-! https://www.bbc.com/news/av/world-us-canada-58823812
-bbc.com##+js(trusted-set-cookie, consentUUID, 14ec7082-be8b-4b4c-a5b4-668972e0e04b_21)
+! https://github.com/uBlockOrigin/uAssets/issues/21974
+bbc.com##+js(trusted-click-element, #consentBanner > button[data-testid="banner-button"])
 ! https://video.lefigaro.fr/figaro/video/les-gestes-damour-prennent-plusieurs-formes-dans-une-video-humoristique-lukraine-demande-plus-de-caesar-a-la-france/
 lefigaro.fr##+js(trusted-set-cookie, fig_save_consent, iTTPgpSWqAGGcd3vV88zNDbHsABxE1hB, 1year)
 ! https://www.filmweb.pl/video/Zwiastun/Indiana+Jones+i+artefakt+przeznaczenia+Zwiastun+nr+2+polskie+napisy-64884
@@ -448,6 +448,8 @@ youtube.com##+js(trusted-set-cookie, SOCS, CAISNQgDEitib3FfaWRlbnRpdHlmcm9udGVuZ
 ! GDPR dialog when moving from Google to Youtube
 ! https://github.com/uBlockOrigin/uAssets/discussions/18598#discussioncomment-7362961
 consent.youtube.com##+js(trusted-click-element, form[action] button[jsname="tWT92d"])
+! https://github.com/DandelionSprout/adfilt/discussions/932#discussioncomment-8170867
+consent.youtube.com##[data-p*="/consent.youtube.com"]
 
 ! https://www.empik.com/ - Functional + Social
 empik.com##+js(trusted-set-cookie, cad, $now$)
@@ -503,7 +505,7 @@ ohra.nl##+js(trusted-set-cookie, consentCookie, %7B%22id%22%3A%22d28cc3d1-22a4-4
 
 ! https://github.com/uBlockOrigin/uAssets/issues/20065
 ||cdn.tinypass.com/api/piano.js$script,domain=corriere.it
-corriere.it,gazzetta.it##+js(trusted-click-element, .privacy-cp-wall #privacy-cp-wall-accept)
+corriere.it,gazzetta.it,oggi.it##+js(trusted-click-element, .privacy-cp-wall #privacy-cp-wall-accept)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/20077
 cmp.sky.it##+js(trusted-click-element, button[aria-label="Continua senza accettare"])
@@ -538,7 +540,8 @@ formula1.com##+js(trusted-set-cookie, consentUUID, b2d83b78-26f0-4f90-b370-03804
 stadtmobil.de##+js(trusted-set-cookie, CookieConsent, {stamp:%27Uv9YOAVP5djCBw71lxhE4rNAfTObaGck2Sn3rKWf9dPCYpqcWvAlpA==%27%2Cnecessary:true%2Cpreferences:false%2Cstatistics:false%2Cmarketing:true%2Cmethod:%27explicit%27%2Cver:1}, 1year)
 
 ! https://www.coinbase.com/ - Functional
-coinbase.com##+js(trusted-set-cookie, cm_eu_preferences, {%22consent%22:[%22necessary%22%2C%22functional%22]%2C%22region%22:%22DEFAULT%22})
+coinbase.com##+js(trusted-set-cookie, cm_default_preferences, {%22consent%22:[%22necessary%22%2C%22functional%22]%2C%22region%22:%22DEFAULT%22})
+coinbase.com##+js(trusted-set-cookie, cm_eu_preferences, {%22consent%22:[%22necessary%22%2C%22functional%22]%2C%22region%22:%22EU%22})
 
 ! https://github.com/uBlockOrigin/uAssets/issues/20274
 cmpv2.fanpage.it##+js(trusted-set-local-storage-item, euconsent, CP0N6vnP0N6wKA6AoBENDbCsAP_AAH_AABCYJtNV_H__bW9r8X7_aft0eY1P9_j77uQxBhfJE-4F3LvW_JwXx2E5NF36tqoKmRoEu3ZBIUNlHJHUTVmwaogVryHsakWcpTNKJ6BkkFMRM2dYCF5vm4tjeQKY5_p_d3fx2D-t_dv839zzz8VHn3c5f--0-PCdU5-9Dfn9fRfb-9IP9_78v8v8_l_rk2_eT13_pcvr_D--f_87_XW-9wTYAJMNC4gC7AgJCbQMIoEAIwrCAigUAAAAkDRAQAuDAp2BgEusBEAIEUABwQAhABRkACAAACABCIAJAigQAAQCAQAAgAQCAQAEDAAKACwEAgABAdAxTCgAUCwgSIyIhTAhCgSCAlsqEEoKhBXCAIssAKARGwUACAAARWAAICxeAwBICVCQQJdQbQAAEACAUUoVCCT0wADgkbLUHgiAAAAA.YAAAAAAAAAAA)
@@ -629,7 +632,7 @@ audioforum-berlin.de,salonydenon.cz##+js(trusted-set-cookie, _x13eucookie, '{"1"
 makemytrip.com##+js(trusted-set-session-storage-item, opd, '"1"')
 
 ! privacy-cp-wall sites - Accept
-sosfanta.com,corriere.it##+js(trusted-click-element, #privacy-cp-wall-accept)
+sosfanta.com##+js(trusted-click-element, #privacy-cp-wall-accept)
 
 ! https://alan.com/ - Accept
 alan.com##+js(trusted-set-local-storage-item, acceptedCookiesAt, $now$)
@@ -639,9 +642,9 @@ chrono24.*##+js(trusted-click-element, button[data-label="accept-button"], , 100
 chrono24.*##dialog.gdpr-layer
 
 ! https://github.com/uBlockOrigin/uAssets/issues/20744
-wetter.com##+js(trusted-click-element, #cmp-btn-accept, , 5000)
-wetter.com###cmp-style-reset
-wetter.com##body:style(overflow: auto !important)
+! wetter.com##+js(trusted-click-element, #cmp-btn-accept, , 5000)
+! wetter.com###cmp-style-reset
+! wetter.com##body:style(overflow: auto !important)
 
 ! sj.se cookies
 sj.se##+js(trusted-set-cookie, sj_consent_v1, '%7B%22consent%22%3A%7B%22PERSONALIZATION%22%3Afalse%2C%22MARKETING%22%3Afalse%7D%2C%22uuid%22%3A%22d599dc64-52b7-4dc7-bff3-1e18d5cebc1a%22%7D')
@@ -852,3 +855,33 @@ ilsecoloxix.it##+js(trusted-click-element, .iubenda-cs-visible .iubenda-cs-accep
 
 ! https://github.com/uBlockOrigin/uAssets/issues/20091#issuecomment-1890759168
 cdn.privacy-mgmt.com##+js(trusted-click-element, button[title="Accept all"])
+
+! refuse cookies
+oxxio.nl##+js(set-cookie, privacyConsent_version, 1, , reload, 1)
+oxxio.nl##+js(set-cookie, privacyConsent, false)
+oxxio.nl##+js(trusted-set-cookie, qubitconsent, Declined)
+oxxio.nl##+js(trusted-set-cookie, qubitconsent_version, 2.0.0)
+oxxio.nl##+js(trusted-set-cookie, privacyConsent_type, explicit)
+
+! https://github.com/uBlockOrigin/uAssets/issues/22002
+geopop.it,fanpage.it##+js(trusted-click-element, '.gdpr-btn.small-right, .thirdlayer .gdpr-btn-lbl')
+
+! reject pref/analsis/behavioral
+solvia.es##+js(trusted-set-local-storage-item, solvia-consents, '{"tec":true,"pers":false,"ana":false,"publi":false}')
+! reject marketing/person/stats
+krasa.cz##+js(set-local-storage-item, gdpr-done, true)
+krasa.cz##+js(trusted-set-local-storage-item, cookiesSettings, '{"remarketing":false,"personalisation":false,"statistics":false}')
+
+! removed version check, deny functional/marketing/advertising
+ouraring.com##+js(trusted-set-cookie, tracking-preferences, '{%22destinations%22:{%22Amplitude%22:false%2C%22Braze%20Cloud%20Mode%20(Actions)%22:false%2C%22Braze%20Web%20Mode%20(Actions)%22:false%2C%22FullStory%22:false%2C%22Hindsight%22:false%2C%22Impact%20Partnership%20Cloud%22:false%2C%22Oura%20Marketing%20Id%20Middleware%20(Oura)%22:false%2C%22Statsig%22:false%2C%22Visual%20Tagger%22:false%2C%22Webhooks%22:false%2C%22Facebook%20Conversions%20API%20(Actions)%22:false%2C%22Google%20Tag%20Manager%22:false%2C%22Snap%20Conversions%20Api%22:false}%2C%22custom%22:{%22functional%22:false%2C%22marketing%22:false%2C%22advertising%22:false}}')
+
+! essential only
+seb.lv,seb.lt,seb.ee##+js(trusted-set-cookie, SEBConsents, '%7B%22version%22%3A%222%22%2C%22consents%22%3A%7B%22mandatory%22%3Atrue%2C%22statistical%22%3Afalse%2C%22marketing%22%3Afalse%2C%22simplified_login%22%3Atrue%7D%7D')
+
+! https://github.com/uBlockOrigin/uAssets/issues/22075
+faz.net##+js(trusted-set-cookie, consentUUID, 8f037acf-4f70-48de-af04-de7380df79ce_27)
+
+! reject all
+uphold.com##+js(trusted-set-cookie, eupubconsent-v2, CP4mi7gP4mi7gAcABBENAjEgAAAAAAAAACiQAAAAAAAA.YAAAAAAAAAAA)
+uphold.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, $currentDate$, 1year)
+uphold.com##+js(trusted-set-cookie, OptanonConsent, groups=C0001%3A1%2CC0002%3A0%2CC0003%3A0%2CC0004%3A0%2CV2STACK42%3A0, 1year)
