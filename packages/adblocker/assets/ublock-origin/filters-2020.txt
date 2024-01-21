@@ -418,6 +418,8 @@ bg-gledai.*##+js(aopr, chp_adblock_browser)
 /binance-banner.jpg$domain=bg-gledai.*
 bg-gledai.*##+js(acs, document.getElementById, adblock)
 bg-gledai.*###casing > center
+! https://www.reddit.com/r/uBlockOrigin/comments/197760n/adblock_detected_httpswwwbggledailive/
+bg-gledai.*##+js(no-fetch-if, googlesyndication)
 
 ! https://github.com/NanoMeow/QuickReports/issues/3718
 @@||lesechos.fr^$ghide
@@ -1120,9 +1122,6 @@ wwwfotografgotlin.blogspot.com##+js(set, fuckAdBlock._options.baitClass, null)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/87245
 @@||viralfeed.*^$ghide
 viralfeed.*##.admania-widgettit
-
-! gdstream. net popups
-gdstream.net##+js(aopr, __Y)
 
 ! pornhail .com ads
 *$script,3p,denyallow=cloudflare.com,domain=pornhail.com
@@ -2240,9 +2239,6 @@ simkl.com##+js(aeld, load, head)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/61964
 catholic.com##+js(nostif, innerHTML.replace)
 
-! https://github.com/NanoMeow/QuickReports/issues/4552
-sayrodigital.com##+js(aeld, /error|load/, /onerror|showModal/)
-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62098
 trentotoday.it##+js(nostif, bADBlock)
 
@@ -2845,9 +2841,6 @@ conservativeus.com##+js(aopw, gothamBatAdblock)
 asiansex.life##+js(aopr, exoNoExternalUI38djdkjDDJsio96)
 asiansex.life###spot-holder
 
-! https://github.com/uBlockOrigin/uAssets/commit/bae2b07e1cac7d110f2a37c60104ed1c1ffeeaa4#commitcomment-42742393
-eztvtorrent.org##+js(aopr, exoJsPop101)
-
 ! manga-raw.club ads
 manga-raw.club##+js(acs, document.createElement, '+d+')
 
@@ -3130,11 +3123,6 @@ lomcn.org##+js(acs, $, samAdBlockAction)
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/66008
 popno-tour.net##+js(nostif, innerText, 2000)
-
-! https://github.com/uBlockOrigin/uAssets/issues/8062
-mediashore.org##+js(nowoif)
-! https://www.reddit.com/r/uBlockOrigin/comments/pqmtjp/popup/
-mediashore.org##+js(aopr, __Y)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10366
 @@||asianbookie.com^$script,1p
@@ -4558,6 +4546,9 @@ shahiid-anime.net##+js(aost, Object,  /(?=^(?!.*(https)))/)
 ||rghptoxhai.com^
 ||boatoamo.com^
 ||bwoqmqkhamcri.com^
+||qhehbmoddetfmw.com^
+||reechoat.com^
+||uiqbonkjet.com^
 
 !!! other filters for pp
 *$3p,denyallow=google.com|googleapis.com|gstatic.com,domain=moviesda1.*
