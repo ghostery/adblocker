@@ -255,13 +255,14 @@ export function detectPreprocessor(line: string) {
 
 export interface IPreprocessor {
   rawLine: string | undefined;
-  hasCondition: (condition: PreprocessorToken[]) => boolean;
-  getConditions: () => PreprocessorToken[][];
-  addCondition: (condition: PreprocessorToken[]) => void;
-  removeCondition: (condition: PreprocessorToken[]) => void;
-  evaluate: (env: number) => boolean;
-  serialize: (view: StaticDataView) => void;
-  getSerializedSize: () => number;
+  hasCondition(condition: PreprocessorToken[]): boolean;
+  getConditions(): PreprocessorToken[][];
+  addCondition(condition: PreprocessorToken[]): void;
+  removeCondition(condition: PreprocessorToken[]): void;
+  isNegated(): boolean;
+  evaluate(env: number): boolean;
+  serialize(view: StaticDataView): void;
+  getSerializedSize(): number;
 }
 
 export default class Preprocessor implements IPreprocessor {
@@ -428,6 +429,46 @@ export default class Preprocessor implements IPreprocessor {
     }
 
     return estimatedSize;
+  }
+}
+
+export class NegatedPreprocessor implements IPreprocessor {
+  public readonly ref: IPreprocessor;
+  public readonly rawLine: string | undefined;
+
+  constructor({ ref, rawLine }: { ref: IPreprocessor; rawLine?: string | undefined }) {
+    this.ref = ref;
+    this.rawLine = rawLine;
+  }
+
+  public hasCondition(condition: PreprocessorToken[]): boolean {
+    return this.ref.hasCondition(condition);
+  }
+
+  public getConditions(): PreprocessorToken[][] {
+    return this.ref.getConditions();
+  }
+
+  public addCondition(condition: PreprocessorToken[]): void {
+    return this.ref.addCondition(condition);
+  }
+
+  public removeCondition(condition: PreprocessorToken[]): void {
+    return this.ref.removeCondition(condition);
+  }
+
+  public isNegated(): boolean {
+    return true;
+  }
+
+  public evaluate(env: number): boolean {
+    return !this.ref.evaluate(env);
+  }
+
+  public serialize(): void {}
+
+  public getSerializedSize(): number {
+    return 0;
   }
 }
 

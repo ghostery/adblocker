@@ -4,7 +4,8 @@ import { FiltersEngine, Request } from '../../adblocker';
 import { PRECONFIGURED_ENV } from '../../src/preprocessor';
 
 describe('preprocessor', () => {
-  const request = Request.fromRawDetails({ url: 'https://foo.com' });
+  const fooRequest = Request.fromRawDetails({ url: 'https://foo.com' });
+  const barRequest = Request.fromRawDetails({ url: 'https://bar.com' });
 
   const createEngine = () =>
     new FiltersEngine({
@@ -21,16 +22,25 @@ describe('preprocessor', () => {
         `!#if ${condition}
 ||foo.com^
 foo.com###test
+!#else
+||bar.com^
+bar.com###test
 !#endif`,
       ],
     });
 
     if (result) {
-      expect(engine.match(request).match).to.be.true;
-      expect(engine.getCosmeticsFilters(request).styles).include('#test');
+      expect(engine.match(fooRequest).match).to.be.true;
+      expect(engine.getCosmeticsFilters(fooRequest).styles).include('#test');
+
+      expect(engine.match(barRequest).match).to.be.false;
+      expect(engine.getCosmeticsFilters(barRequest).styles).to.eql('');
     } else {
-      expect(engine.match(request).match).to.be.false;
-      expect(engine.getCosmeticsFilters(request).styles).to.eql('');
+      expect(engine.match(fooRequest).match).to.be.false;
+      expect(engine.getCosmeticsFilters(fooRequest).styles).to.eql('');
+
+      expect(engine.match(barRequest).match).to.be.true;
+      expect(engine.getCosmeticsFilters(barRequest).styles).include('#test');
     }
   };
 
@@ -49,7 +59,7 @@ foo.com###test
     ['adguard', 'false'].forEach((condition) => testCondition(condition, false));
   });
 
-  it('evalutes conditions', () => {
+  it('evaluates conditions', () => {
     ['ext_ghostery && adguard', 'ext_ghostery && false'].forEach((condition) =>
       testCondition(condition, false),
     );

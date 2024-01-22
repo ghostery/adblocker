@@ -11,6 +11,7 @@ import CosmeticFilter from './filters/cosmetic';
 import NetworkFilter from './filters/network';
 import Preprocessor, {
   IPreprocessor,
+  NegatedPreprocessor,
   PreprocessorEnvConditionMap,
   PreprocessorTypes,
   detectPreprocessor,
@@ -225,6 +226,11 @@ export function parseFilters(
         if (instance !== null) {
           preprocessor = instance;
         }
+      } else if (preprocessorType === PreprocessorTypes.ELSE) {
+        preprocessor = new NegatedPreprocessor({
+          ref: preprocessor as IPreprocessor,
+          rawLine: config.debug === true ? line : undefined,
+        });
       } else if (preprocessorType === PreprocessorTypes.ENDIF) {
         preprocessor = null;
       }
