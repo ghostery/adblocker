@@ -1,12 +1,38 @@
 import { StaticDataView } from '../../data-view';
 import IFilter from '../../filters/interface';
-import { IPreprocessor, PRECONFIGURED_ENV, PreprocessorEnvConditionMap } from '../../preprocessor';
+import Preprocessor, {
+  IPreprocessor,
+  NegatedPreprocessor,
+  PRECONFIGURED_ENV,
+  PreprocessorEnvConditionMap,
+} from '../../preprocessor';
 
 export default class PreprocessorBucket {
-  public static deserialize() {
-    // We don't want to take into serialization yet
+  public static deserialize(view: StaticDataView) {
+    const map: PreprocessorBucket['envConditionMap'] = new Map();
+
+    for (let i = 0, l = view.getUint32(); i < l; i++) {
+      const preprocessor = Preprocessor.deserialize(view);
+
+      const positives = view.getUint32Array();
+      const negatives = view.getUint32Array();
+
+      for (let k = 0; k < positives.length; k++) {
+        map.set(positives[k], preprocessor);
+      }
+
+      if (negatives.length) {
+        const negated = new NegatedPreprocessor({ ref: preprocessor });
+
+        for (let k = 0; k < positives.length; k++) {
+          map.set(positives[k], negated);
+        }
+      }
+    }
+
     return new this({
       loadPreprocessors: true,
+      envConditionMap: map,
     });
   }
 
@@ -70,21 +96,61 @@ export default class PreprocessorBucket {
     return preprocessor.evaluate(this.env);
   }
 
-  public serialize(view: StaticDataView) {
-    view.pushUint32(this.envConditionMap.size);
+  private invertMap() {
+    const map = new Map<Preprocessor, [number[], number[]]>();
 
     for (const [filterId, preprocessor] of this.envConditionMap.entries()) {
-      view.pushUint32(filterId);
+      let origin = preprocessor as Preprocessor;
+      let index: 0 | 1 = 0;
+
+      if (preprocessor instanceof NegatedPreprocessor) {
+        origin = preprocessor.ref;
+        index++;
+      }
+
+      if (map.has(origin)) {
+        map.get(origin)![index].push(filterId);
+      } else {
+        const arr: [number[], number[]] = [[], []];
+
+        arr[index].push(filterId);
+
+        map.set(origin, arr);
+      }
+    }
+
+    return map;
+  }
+
+  public serialize(view: StaticDataView) {
+    const map = this.invertMap();
+
+    view.pushUint32(map.size);
+
+    for (const [preprocessor, [positives, negatives]] of map) {
       preprocessor.serialize(view);
+
+      view.pushUint32(positives.length);
+
+      for (const positive of positives) {
+        view.pushUint32(positive);
+      }
+
+      view.pushUint32(negatives.length);
+
+      for (const negative of negatives) {
+        view.pushUint32(negative);
+      }
     }
   }
 
   public getSerializedSize() {
     let estimatedSize = 4;
 
-    // TODO: We need to filter out duplicates first.
-    for (const preprocessor of this.envConditionMap.values()) {
-      estimatedSize += 4 + preprocessor.getSerializedSize();
+    const map = this.invertMap();
+
+    for (const [preprocessor, [positives, negatives]] of map) {
+      estimatedSize += preprocessor.getSerializedSize() + 8 + positives.length + negatives.length;
     }
 
     return estimatedSize;

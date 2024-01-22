@@ -274,7 +274,7 @@ export default class FilterEngine extends EventEmitter<
     engine.lists = lists;
 
     // Deserilaize preprocessors
-    engine.preprocessors = PreprocessorBucket.deserialize();
+    engine.preprocessors = PreprocessorBucket.deserialize(buffer);
 
     // Deserialize buckets
     engine.importants = NetworkFilterBucket.deserialize(buffer, config, engine.preprocessors);
@@ -409,6 +409,7 @@ export default class FilterEngine extends EventEmitter<
       this.config.getSerializedSize() +
       this.resources.getSerializedSize() +
       this.filters.getSerializedSize() +
+      this.preprocessors.getSerializedSize() +
       this.exceptions.getSerializedSize() +
       this.importants.getSerializedSize() +
       this.redirects.getSerializedSize() +
@@ -455,6 +456,8 @@ export default class FilterEngine extends EventEmitter<
       buffer.pushASCII(name);
       buffer.pushASCII(value);
     }
+
+    this.preprocessors.serialize(buffer);
 
     // Filters buckets
     this.importants.serialize(buffer);

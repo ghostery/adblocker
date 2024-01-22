@@ -228,7 +228,7 @@ export function parseFilters(
         }
       } else if (preprocessorType === PreprocessorTypes.ELSE) {
         preprocessor = new NegatedPreprocessor({
-          ref: preprocessor as IPreprocessor,
+          ref: preprocessor as Preprocessor,
           rawLine: config.debug === true ? line : undefined,
         });
       } else if (preprocessorType === PreprocessorTypes.ENDIF) {

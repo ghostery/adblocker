@@ -1,4 +1,4 @@
-import { StaticDataView } from './data-view';
+import { StaticDataView, sizeOfBool } from './data-view';
 import { clearBit, fastStartsWith, getBit, setBit } from './utils';
 
 export const enum ENVIRONMENTAL_MASK {
@@ -259,7 +259,6 @@ export interface IPreprocessor {
   getConditions(): PreprocessorToken[][];
   addCondition(condition: PreprocessorToken[]): void;
   removeCondition(condition: PreprocessorToken[]): void;
-  isNegated(): boolean;
   evaluate(env: number): boolean;
   serialize(view: StaticDataView): void;
   getSerializedSize(): number;
@@ -358,6 +357,7 @@ export default class Preprocessor implements IPreprocessor {
   public readonly rawLine: string | undefined;
 
   private readonly conditions: PreprocessorToken[][];
+
   private result: boolean | undefined = undefined;
 
   constructor({ tokens, rawLine }: { tokens: PreprocessorToken[]; rawLine: string | undefined }) {
@@ -395,10 +395,6 @@ export default class Preprocessor implements IPreprocessor {
     }
   }
 
-  public isNegated() {
-    return false;
-  }
-
   public evaluate(env: number) {
     if (this.result === undefined) {
       this.result = evaluateConditions(env, this.conditions);
@@ -420,9 +416,10 @@ export default class Preprocessor implements IPreprocessor {
   }
 
   public getSerializedSize() {
-    let estimatedSize = 4;
+    let estimatedSize = sizeOfBool();
 
-    estimatedSize += this.conditions.length * 4;
+    estimatedSize += 4; // Uint32
+    estimatedSize += this.conditions.length * 4; // Uint32
 
     for (const condition of this.conditions) {
       estimatedSize += condition.length * 4;
@@ -433,10 +430,10 @@ export default class Preprocessor implements IPreprocessor {
 }
 
 export class NegatedPreprocessor implements IPreprocessor {
-  public readonly ref: IPreprocessor;
+  public readonly ref: Preprocessor;
   public readonly rawLine: string | undefined;
 
-  constructor({ ref, rawLine }: { ref: IPreprocessor; rawLine?: string | undefined }) {
+  constructor({ ref, rawLine }: { ref: Preprocessor; rawLine?: string | undefined }) {
     this.ref = ref;
     this.rawLine = rawLine;
   }
@@ -455,10 +452,6 @@ export class NegatedPreprocessor implements IPreprocessor {
 
   public removeCondition(condition: PreprocessorToken[]): void {
     return this.ref.removeCondition(condition);
-  }
-
-  public isNegated(): boolean {
-    return true;
   }
 
   public evaluate(env: number): boolean {
