@@ -70,8 +70,15 @@ export default class PreprocessorBucket {
     this.env = env;
   }
 
-  public update(envConditionMap: PreprocessorEnvConditionMap) {
-    for (const [filterId, preprocessor] of envConditionMap.entries()) {
+  public update(
+    newPreprocessors: PreprocessorEnvConditionMap,
+    removedPreprocessors: PreprocessorEnvConditionMap,
+  ) {
+    for (const filterId of removedPreprocessors.keys()) {
+      this.envConditionMap.delete(filterId);
+    }
+
+    for (const [filterId, preprocessor] of newPreprocessors.entries()) {
       // If we encounter the duplicate filter id, we will merge two preprocessors.
       // The duplicate check is done internally by Preprocessor object.
       if (this.envConditionMap.has(filterId)) {

@@ -527,18 +527,19 @@ export default class FilterEngine extends EventEmitter<
    * Update engine with new filters as well as optionally removed filters.
    */
   public update({
-    newPreprocessors = new Map(),
     newNetworkFilters = [],
     newCosmeticFilters = [],
+    newPreprocessors = new Map(),
     removedCosmeticFilters = [],
     removedNetworkFilters = [],
+    removedPreprocessors = new Map(),
   }: Partial<IListDiff>): boolean {
     let updated: boolean = false;
 
     // Update preprocessors
-    if (this.config.loadPreprocessors && newPreprocessors.size) {
+    if (this.config.loadPreprocessors && newPreprocessors.size + removedPreprocessors.size) {
       updated = true;
-      this.preprocessors.update(newPreprocessors);
+      this.preprocessors.update(newPreprocessors, removedPreprocessors);
     }
 
     // Update cosmetic filters
@@ -612,14 +613,19 @@ export default class FilterEngine extends EventEmitter<
   public updateFromDiff({ added, removed }: Partial<IRawDiff>): boolean {
     const newCosmeticFilters: CosmeticFilter[] = [];
     const newNetworkFilters: NetworkFilter[] = [];
+    let newPreprocessors: PreprocessorEnvConditionMap = new Map();
     const removedCosmeticFilters: CosmeticFilter[] = [];
     const removedNetworkFilters: NetworkFilter[] = [];
-    let newPreprocessors: PreprocessorEnvConditionMap = new Map();
+    let removedPreprocessors: PreprocessorEnvConditionMap = new Map();
 
     if (removed !== undefined && removed.length !== 0) {
-      const { networkFilters, cosmeticFilters } = parseFilters(removed.join('\n'), this.config);
+      const { preprocessors, networkFilters, cosmeticFilters } = parseFilters(
+        removed.join('\n'),
+        this.config,
+      );
       Array.prototype.push.apply(removedCosmeticFilters, cosmeticFilters);
       Array.prototype.push.apply(removedNetworkFilters, networkFilters);
+      removedPreprocessors = preprocessors;
     }
 
     if (added !== undefined && added.length !== 0) {
@@ -627,9 +633,9 @@ export default class FilterEngine extends EventEmitter<
         added.join('\n'),
         this.config,
       );
-      newPreprocessors = new Map([...preprocessors]);
       Array.prototype.push.apply(newCosmeticFilters, cosmeticFilters);
       Array.prototype.push.apply(newNetworkFilters, networkFilters);
+      newPreprocessors = preprocessors;
     }
 
     return this.update({
@@ -638,6 +644,7 @@ export default class FilterEngine extends EventEmitter<
       newNetworkFilters,
       removedCosmeticFilters: removedCosmeticFilters.map((f) => f.getId()),
       removedNetworkFilters: removedNetworkFilters.map((f) => f.getId()),
+      removedPreprocessors,
     });
   }
 

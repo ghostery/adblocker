@@ -247,11 +247,12 @@ function getFilters(list: string, config?: Partial<Config>): (NetworkFilter | Co
 }
 
 export interface IListDiff {
-  newPreprocessors: PreprocessorEnvConditionMap;
   newNetworkFilters: NetworkFilter[];
   newCosmeticFilters: CosmeticFilter[];
+  newPreprocessors: PreprocessorEnvConditionMap;
   removedCosmeticFilters: number[];
   removedNetworkFilters: number[];
+  removedPreprocessors: PreprocessorEnvConditionMap;
 }
 
 export interface IRawDiff {
