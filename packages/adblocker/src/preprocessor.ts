@@ -358,7 +358,13 @@ export default class Preprocessor implements IPreprocessor {
 
   private readonly conditions: PreprocessorToken[][];
 
-  private result: boolean | undefined = undefined;
+  private cache: {
+    env: number;
+    result: boolean;
+  } = {
+    env: -1,
+    result: false,
+  };
 
   constructor({ tokens, rawLine }: { tokens: PreprocessorToken[]; rawLine: string | undefined }) {
     this.conditions = [tokens];
@@ -385,6 +391,8 @@ export default class Preprocessor implements IPreprocessor {
     }
 
     this.conditions.push(condition);
+
+    this.flush();
   }
 
   public removeCondition(target: PreprocessorToken[]) {
@@ -393,14 +401,23 @@ export default class Preprocessor implements IPreprocessor {
         this.conditions.splice(i, 1);
       }
     }
+
+    this.flush();
   }
 
-  public evaluate(env: number) {
-    if (this.result === undefined) {
-      this.result = evaluateConditions(env, this.conditions);
+  public flush(env: number = this.cache.env) {
+    this.cache = {
+      env,
+      result: evaluateConditions(env, this.conditions),
+    };
+  }
+
+  public evaluate(env: number): boolean {
+    if (this.cache.env !== env) {
+      this.flush(env);
     }
 
-    return this.result;
+    return this.cache.result;
   }
 
   public serialize(view: StaticDataView) {
@@ -418,8 +435,8 @@ export default class Preprocessor implements IPreprocessor {
   public getSerializedSize() {
     let estimatedSize = sizeOfBool();
 
-    estimatedSize += 4; // Uint32
-    estimatedSize += this.conditions.length * 4; // Uint32
+    estimatedSize += 4;
+    estimatedSize += this.conditions.length * 4;
 
     for (const condition of this.conditions) {
       estimatedSize += condition.length * 4;

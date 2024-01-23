@@ -31,7 +31,6 @@ export default class PreprocessorBucket {
     }
 
     return new this({
-      loadPreprocessors: true,
       envConditionMap: map,
     });
   }
@@ -41,25 +40,14 @@ export default class PreprocessorBucket {
   public env: number;
 
   constructor({
-    loadPreprocessors,
     env = PRECONFIGURED_ENV,
     envConditionMap = new Map(),
   }: {
-    loadPreprocessors: boolean;
     env?: number;
     envConditionMap?: Map<number, IPreprocessor> | undefined;
   }) {
     this.envConditionMap = envConditionMap;
     this.env = env;
-
-    // Manually change the assessment flow.
-    if (!loadPreprocessors) {
-      this.isEnvQualifiedFilter = this.alwaysTrue;
-    }
-  }
-
-  private alwaysTrue() {
-    return true;
   }
 
   public getEnv() {
@@ -152,9 +140,9 @@ export default class PreprocessorBucket {
   }
 
   public getSerializedSize() {
-    let estimatedSize = 4;
-
     const map = this.invertMap();
+
+    let estimatedSize = 4;
 
     for (const [preprocessor, [positives, negatives]] of map) {
       estimatedSize += preprocessor.getSerializedSize() + 8 + positives.length + negatives.length;

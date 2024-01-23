@@ -341,7 +341,6 @@ export default class FilterEngine extends EventEmitter<
     this.env = env;
     this.preprocessors = new PreprocessorBucket({
       env,
-      loadPreprocessors: this.config.loadPreprocessors,
     });
 
     // $csp=
