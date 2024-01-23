@@ -358,14 +358,6 @@ export default class Preprocessor implements IPreprocessor {
 
   private readonly conditions: PreprocessorToken[][];
 
-  private cache: {
-    env: number;
-    result: boolean;
-  } = {
-    env: -1,
-    result: false,
-  };
-
   constructor({ tokens, rawLine }: { tokens: PreprocessorToken[]; rawLine: string | undefined }) {
     this.conditions = [tokens];
     this.rawLine = rawLine;
@@ -391,8 +383,6 @@ export default class Preprocessor implements IPreprocessor {
     }
 
     this.conditions.push(condition);
-
-    this.flush();
   }
 
   public removeCondition(target: PreprocessorToken[]) {
@@ -401,23 +391,10 @@ export default class Preprocessor implements IPreprocessor {
         this.conditions.splice(i, 1);
       }
     }
-
-    this.flush();
-  }
-
-  public flush(env: number = this.cache.env) {
-    this.cache = {
-      env,
-      result: evaluateConditions(env, this.conditions),
-    };
   }
 
   public evaluate(env: number): boolean {
-    if (this.cache.env !== env) {
-      this.flush(env);
-    }
-
-    return this.cache.result;
+    return evaluateConditions(env, this.conditions);
   }
 
   public serialize(view: StaticDataView) {

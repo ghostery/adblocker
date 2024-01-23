@@ -37,7 +37,9 @@ export default class PreprocessorBucket {
 
   public readonly envConditionMap: PreprocessorEnvConditionMap;
 
-  public env: number;
+  private cache: Map<IPreprocessor, boolean> = new Map();
+
+  private env: number;
 
   constructor({
     env = PRECONFIGURED_ENV,
@@ -56,6 +58,9 @@ export default class PreprocessorBucket {
 
   public setEnv(env: number) {
     this.env = env;
+
+    // Flush cache map
+    this.cache = new Map();
   }
 
   public update(
@@ -88,7 +93,11 @@ export default class PreprocessorBucket {
       return true;
     }
 
-    return preprocessor.evaluate(this.env);
+    if (!this.cache.has(preprocessor)) {
+      this.cache.set(preprocessor, preprocessor.evaluate(this.env));
+    }
+
+    return this.cache.get(preprocessor)!;
   }
 
   private invertMap() {
