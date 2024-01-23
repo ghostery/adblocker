@@ -2870,8 +2870,13 @@ uprot.net##*[style="display:none;"]:style(display:block !important)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/86746
 videoseyred.in##+js(nowoif)
 
+! https://github.com/uBlockOrigin/uAssets/issues/13556
 ! https://github.com/AdguardTeam/AdguardFilters/issues/86812
-listendata.com##+js(acs, onload)
+!#if !cap_html_filtering
+listendata.com##+js(rmnt, script, AdBlocker)
+!#else
+listendata.com##^script:has-text(AdBlocker)
+!#endif
 
 ! https://github.com/AdguardTeam/AdguardFilters/issues/86837
 spleaks.org##+js(acs, $, test)
@@ -3557,8 +3562,9 @@ gab.com#?#:matches-path(/\/posts/) div[data-comment*="gab-ad"]:has(span[class]:h
 quizlet.com##.StickyAdz
 quizlet.com##+js(rc, has-sidebar-adz|DashboardPage-inner, div[class^="DashboardPage-inner"], stay)
 quizlet.com##+js(rc, hasStickyAd, div.hasStickyAd[class^="SetPage"], stay)
-quizlet.com##+js(rc, has-adz, div.has-adz, stay)
 quizlet.com##+js(nano-stb)
+! https://github.com/uBlockOrigin/uAssets/issues/22151
+quizlet.com##div.has-adz:not(.SetPage):remove-class(has-adz)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/9911
 vivo.st##+js(aeld, , preventDefault)
@@ -3800,6 +3806,8 @@ za.gl##+js(set, blurred, false)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10041
 readytechflip.com##+js(aeld, DOMContentLoaded, adsBlocked)
+readytechflip.com##+js(aost, Math.round, inlineScript)
+readytechflip.com##^script:has-text(/eval[\s\S]*?decodeURIComponent/)
 readytechflip.com##.widget_custom_html
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10043
@@ -4218,7 +4226,7 @@ freetutorialsudemy.com##.freeu-sidebar
 freetutorialsudemy.com##.freeu-widget
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10304
-coursesghar.com##+js(acs, eval, replace)
+coursesghar.com##+js(rmnt, script, deblocker)
 coursesghar.com###custom_html-6
 
 ! https://github.com/uBlockOrigin/uAssets/issues/10301
@@ -4328,6 +4336,7 @@ pixroute.com##+js(set, proclayer, noopFunc)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/20557
 uploady.io##+js(set, timeleft, 0)
+uploady.io##+js(nowoif)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/qinnqo/adblock_detected/
 ravenmanga.xyz##+js(acs, addEventListener, onerror)

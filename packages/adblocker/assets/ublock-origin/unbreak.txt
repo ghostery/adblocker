@@ -3031,10 +3031,9 @@ coolmathgames.com##+js(set, network_user_id, '')
 ! https://github.com/uBlockOrigin/uAssets/issues/9903
 @@||cdn.ampproject.org/*/amp-geo-$script,domain=9to5google.com|9to5mac.com
 ! https://www.reddit.com/r/uBlockOrigin/comments/1265axi/
-@@||cdn.viglink.com/api/$script,domain=9to5google.com
 ! https://www.reddit.com/r/uBlockOrigin/comments/198to3q/comments_on_sites_dark_theme_unreadable/
-@@||googletagmanager.com/gtm.js?id=GTM-THGGVXB$script,domain=9to5google.com
-@@||fundingchoicesmessages.google.com/f/$script,domain=9to5google.com
+! https://github.com/uBlockOrigin/uAssets/issues/22103
+9to5google.com##+js(trusted-rpnt, script, (function($), '(function(){const a=document.createElement("div");document.documentElement.appendChild(a),setTimeout(()=>{a&&a.remove()},100)})(); (function($)')
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/pglvdm/
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect-rule=google-ima.js,domain=olympics.com
@@ -4705,7 +4704,7 @@ uqload.co#@#+js(abort-current-script, document.createElement, break;case $.)
 @@||areaclienti.generali.it/AreaClienti/plugins/dynatrace-cordova-plugin/$script,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/18722
-eksisozluk111.com##.ad-banner:remove()
+eksisozluk.com##.ad-banner:remove()
 
 ! Broken by Lowe's list
 ! https://github.com/uBlockOrigin/uAssets/issues/18734
@@ -5180,3 +5179,9 @@ thethings.com##.adsninja-ad-zone:not(.adsninja-valstream)
 
 ! https://github.com/easylist/easylistgermany/issues/340
 helpster.de#@##ad_sidebar_left_container
+
+! https://github.com/uBlockOrigin/uAssets/issues/22152
+sklep.trzynastkaplus.pl##^script[src^="https://www.googletagmanager.com/gtag/js"]
+!#if !cap_html_filtering
+@@||googletagmanager.com/gtag/js$script,3p,domain=sklep.trzynastkaplus.pl
+!#else
