@@ -1,4 +1,4 @@
-import { StaticDataView, sizeOfBool } from './data-view';
+import { StaticDataView } from './data-view';
 import { clearBit, fastStartsWith, getBit, setBit } from './utils';
 
 export const enum ENVIRONMENTAL_MASK {
@@ -410,9 +410,8 @@ export default class Preprocessor implements IPreprocessor {
   }
 
   public getSerializedSize() {
-    let estimatedSize = sizeOfBool();
+    let estimatedSize = 4;
 
-    estimatedSize += 4;
     estimatedSize += this.conditions.length * 4;
 
     for (const condition of this.conditions) {

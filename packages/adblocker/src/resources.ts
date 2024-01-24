@@ -40,6 +40,7 @@ export default class Resources {
     // Deserialize `resources`
     const resources: Map<string, Resource> = new Map();
     const numberOfResources = buffer.getUint16();
+
     for (let i = 0; i < numberOfResources; i += 1) {
       resources.set(buffer.getASCII(), {
         contentType: buffer.getASCII(),

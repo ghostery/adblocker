@@ -131,7 +131,7 @@ export default class PreprocessorBucket {
 
     view.pushUint32(map.size);
 
-    for (const [preprocessor, [positives, negatives]] of map) {
+    for (const [preprocessor, [positives, negatives]] of map.entries()) {
       preprocessor.serialize(view);
 
       view.pushUint32(positives.length);
@@ -153,8 +153,9 @@ export default class PreprocessorBucket {
 
     let estimatedSize = 4;
 
-    for (const [preprocessor, [positives, negatives]] of map) {
-      estimatedSize += preprocessor.getSerializedSize() + 8 + positives.length + negatives.length;
+    for (const [preprocessor, [positives, negatives]] of map.entries()) {
+      estimatedSize +=
+        preprocessor.getSerializedSize() + 8 + positives.length * 4 + negatives.length * 4;
     }
 
     return estimatedSize;

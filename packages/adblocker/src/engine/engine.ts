@@ -407,8 +407,8 @@ export default class FilterEngine extends EventEmitter<
       sizeOfByte() + // engine version
       this.config.getSerializedSize() +
       this.resources.getSerializedSize() +
-      this.filters.getSerializedSize() +
       this.preprocessors.getSerializedSize() +
+      this.filters.getSerializedSize() +
       this.exceptions.getSerializedSize() +
       this.importants.getSerializedSize() +
       this.redirects.getSerializedSize() +
@@ -456,6 +456,7 @@ export default class FilterEngine extends EventEmitter<
       buffer.pushASCII(value);
     }
 
+    // Preprocessors
     this.preprocessors.serialize(buffer);
 
     // Filters buckets
