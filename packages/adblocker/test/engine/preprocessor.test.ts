@@ -88,7 +88,7 @@ bar.com###test
 !#if ext_mv3
 ||bar.com^
 !#endif`);
-    expect(engine.preprocessors.envConditionMap.size).to.eql(2);
+    expect(engine.preprocessors.invertMap().size).to.eql(2);
   });
 
   it('handles duplicate preprocessors', () => {
@@ -99,6 +99,6 @@ bar.com###test
 !#if ext_ghostery
 ||bar.com^
 !#endif`);
-    expect(engine.preprocessors.envConditionMap.size).to.eql(1);
+    expect(engine.preprocessors.invertMap().size).to.eql(1);
   });
 });

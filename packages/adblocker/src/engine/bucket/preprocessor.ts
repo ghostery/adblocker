@@ -77,6 +77,13 @@ export default class PreprocessorBucket {
       // handling two conditions.
       if (this.envConditionMap.has(filterId)) {
         const existingPreprocessor = this.envConditionMap.get(filterId)!;
+
+        if (compare(preprocessor, existingPreprocessor)) {
+          this.envConditionMap.set(filterId, existingPreprocessor);
+
+          continue;
+        }
+
         const mergedPreprocessor = new Preprocessor({
           conditions: existingPreprocessor.getConditions(),
           rawLine: preprocessor.rawLine,
@@ -124,7 +131,7 @@ export default class PreprocessorBucket {
     return result;
   }
 
-  private invertMap() {
+  public invertMap() {
     const map = new Map<Preprocessor, [number[], number[]]>();
 
     for (const [filterId, preprocessor] of this.envConditionMap.entries()) {

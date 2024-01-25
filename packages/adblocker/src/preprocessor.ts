@@ -161,12 +161,8 @@ export class PreprocessorToken {
     this.isContinuedWithLogicalAndOperator = isContinuedWithLogicalAndOperator;
   }
 
-  public serialize(includeMetadata: boolean = false) {
+  public serialize() {
     let mask = this.mask;
-
-    if (includeMetadata) {
-      return mask;
-    }
 
     if (this.isNegate) {
       mask = setBit(mask, PREPROCESSOR_UTIL_MASK.isNegated);
@@ -216,7 +212,7 @@ export function compareCondition(a: PreprocessorToken[], b: PreprocessorToken[])
   }
 
   for (let i = 0; i < l; i++) {
-    if (a[i].serialize(true) !== b[i].serialize(true)) {
+    if (a[i].serialize() !== b[i].serialize()) {
       return false;
     }
   }
@@ -246,7 +242,7 @@ export function compare(pa: IPreprocessor, pb: IPreprocessor) {
     }
 
     for (let k = 0; k < a[i].length; k++) {
-      if (a[i][k] !== b[i][k]) {
+      if (a[i][k].serialize() !== b[i][k].serialize()) {
         return false;
       }
     }
