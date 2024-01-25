@@ -4060,13 +4060,10 @@ uschovna.cz##.branding:upward([target="_blank"])
 ! [dup] from ublock-origin/unbreak.txt
 ! @@||cdn.ampproject.org/*/amp-geo-$script,domain=9to5google.com|9to5mac.com
 ! https://www.reddit.com/r/uBlockOrigin/comments/1265axi/
-! [dup] from ublock-origin/unbreak.txt
-! @@||cdn.viglink.com/api/$script,domain=9to5google.com
 ! https://www.reddit.com/r/uBlockOrigin/comments/198to3q/comments_on_sites_dark_theme_unreadable/
+! https://github.com/uBlockOrigin/uAssets/issues/22103
 ! [dup] from ublock-origin/unbreak.txt
-! @@||googletagmanager.com/gtm.js?id=GTM-THGGVXB$script,domain=9to5google.com
-! [dup] from ublock-origin/unbreak.txt
-! @@||fundingchoicesmessages.google.com/f/$script,domain=9to5google.com
+! 9to5google.com##+js(trusted-rpnt, script, (function($), '(function(){const a=document.createElement("div");document.documentElement.appendChild(a),setTimeout(()=>{a&&a.remove()},100)})(); (function($)')
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/pglvdm/
 ! [dup] from ublock-origin/unbreak.txt
@@ -6368,7 +6365,7 @@ goku.sx##.st-hidden:remove-class(st-hidden)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/18722
 ! [dup] from ublock-origin/unbreak.txt
-! eksisozluk111.com##.ad-banner:remove()
+! eksisozluk.com##.ad-banner:remove()
 
 ! Broken by Lowe's list
 ! https://github.com/uBlockOrigin/uAssets/issues/18734
@@ -7028,3 +7025,10 @@ buytesmart.com##body[style*="display: none"]:remove-attr(style)
 ! https://github.com/easylist/easylistgermany/issues/340
 ! [dup] from ublock-origin/unbreak.txt
 ! helpster.de#@##ad_sidebar_left_container
+
+! https://github.com/uBlockOrigin/uAssets/issues/22152
+sklep.trzynastkaplus.pl##^script[src^="https://www.googletagmanager.com/gtag/js"]
+!#if !cap_html_filtering
+! [dup] from ublock-origin/unbreak.txt
+! @@||googletagmanager.com/gtag/js$script,3p,domain=sklep.trzynastkaplus.pl
+!#else

@@ -1362,9 +1362,6 @@ bithub.win,freeshib.biz##+js(acs, eval, replace)
 bithub.win###wcfloatDiv4
 bithub.win##ins
 
-! icongnghe.com timer
-icongnghe.com##+js(nano-stb, location.href, 18000)
-
 ! https://github.com/uBlockOrigin/uAssets/issues/12308
 dzeko11.net##+js(nostif, offsetHeight)
 
@@ -1492,8 +1489,11 @@ jardima.com##.g1-slideup-wrap
 fox.com##+js(no-xhr-if, googlesyndication)
 ! https://www.reddit.com/r/uBlockOrigin/comments/14cbznu/
 fox.com,foxsports.com##+js(json-prune, ads)
-fox.com,foxsports.com##+js(m3u-prune, /\,ad\n.+?(?=#UPLYNK-SEGMENT)/gm, .m3u8)
-fox.com,foxsports.com#@#+js(m3u-prune, /is_ad|ohash=\w{300}/, .m3u8)
+fox.com,foxsports.com##+js(m3u-prune, /\,ad\n.+?(?=#UPLYNK-SEGMENT)/gm, /uplynk\.com\/.*?\.m3u8/)
+! https://github.com/uBlockOrigin/uAssets/issues/16990
+||link.theplatform.com/s/*/media/*=m3u&*_webdesktop_vod*$xhr,domain=foxsports.com,removeparam=/^((?!formats|profile).)*$/
+! https://www.reddit.com/r/uBlockOrigin/comments/19bsssp/foxsports_video_interrupted_by_ads
+://foxvideo-sports$xhr,3p,removeparam=ad.prof,domain=foxsports.com
 
 ! movieswatch24.pk,watchonlinemovies15.pk popup
 movieswatch24.pk,watchonlinemovies15.pk##+js(nowoif)
@@ -3319,11 +3319,14 @@ pl#@#.advert
 elektroda.pl###topbb
 
 ! https://github.com/uBlockOrigin/uAssets/issues/13961
-link.paid4link.net##+js(disable-newtab-links)
-link.paid4link.net##+js(nowoif)
-link.paid4link.net##.blog-content
-link.paid4link.net##.card-body
-link.paid4link.net##.card-img-top
+*$media,domain=link.paid4file.com
+link.paid4file.com##+js(set, go_popup, {})
+link.paid4file.com##+js(nowoif)
+link.paid4file.com##.blog-content
+link.paid4file.com##.banner-inner
+link.paid4file.com##.page-header
+link.paid4file.com##.card-body
+link.paid4file.com##.card-img-top
 
 ! helmiau. com anti adb
 helmiau.com##+js(acs, document.createElement, open)
@@ -3894,6 +3897,7 @@ gisarea.com##+js(nostif, adblock)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/14626
 jeep-cj.com##+js(set, document.body.contains, trueFunc)
+jeep-cj.com##+js(nostif, show)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/14629
 comentariodetexto.com,wordpredia.com##+js(aeld, DOMContentLoaded, adsBlocked)
@@ -4065,8 +4069,8 @@ sexgayplus.com##.float-ck
 ||player.hdgay.net/cdn-cgi/trace
 
 ! https://github.com/uBlockOrigin/uAssets/issues/14790
-profitshort.com,courselinkfree.us,technorozen.com,hubdrive.me,bestadvise4u.com,newztalkies.com,10desires.org,theapknews.shop,aiotechnical.com,cryptonewzhub.com,trendzguruji.me,techvybes.com,wizitales.com,101desires.com###top_nav, .rd_btn, .soractrl:style(display: block !important;)
-profitshort.com,courselinkfree.us,technorozen.com,hubdrive.me,bestadvise4u.com,newztalkies.com,10desires.org,theapknews.shop,aiotechnical.com,cryptonewzhub.com,trendzguruji.me,techvybes.com,wizitales.com,101desires.com###top_nav, .rd_btn, .soractrl, .large:others()
+cybertyrant.com,gdspike.com,profitshort.com,courselinkfree.us,technorozen.com,hubdrive.me,bestadvise4u.com,newztalkies.com,10desires.org,theapknews.shop,aiotechnical.com,cryptonewzhub.com,trendzguruji.me,techvybes.com,wizitales.com,101desires.com###top_nav, .rd_btn, .soractrl:style(display: block !important;)
+cybertyrant.com,gdspike.com,profitshort.com,courselinkfree.us,technorozen.com,hubdrive.me,bestadvise4u.com,newztalkies.com,10desires.org,theapknews.shop,aiotechnical.com,cryptonewzhub.com,trendzguruji.me,techvybes.com,wizitales.com,101desires.com###top_nav, .rd_btn, .soractrl, .large:others()
 
 ! https://github.com/abp-filters/abp-filters-anti-cv/pull/1169
 hortonanderfarom.blogspot.com##+js(nostif, pop)
@@ -5319,6 +5323,7 @@ autosport.com,motorsport.com##+js(acs, document.querySelector, adblock)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/16019
 *$script,domain=rendimentibtp.it,redirect-rule=noopjs
+rendimentibtp.it##+js(no-fetch-if, googlesyndication)
 
 ! nflstreams .me ads/popups
 nflstreams.me##+js(acs, setTimeout, admc)
