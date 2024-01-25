@@ -5,6 +5,7 @@ import Preprocessor, {
   NegatedPreprocessor,
   PRECONFIGURED_ENV,
   PreprocessorEnvConditionMap,
+  compareConditions,
 } from '../../preprocessor';
 
 export default class PreprocessorBucket {
@@ -79,10 +80,25 @@ export default class PreprocessorBucket {
         for (const condition of preprocessor.getConditions()) {
           existingPreprocessor.addCondition(condition);
         }
-      } else {
-        // TODO: We need to remove duplicate preprocessors at this stage.
-        this.envConditionMap.set(filterId, preprocessor);
+
+        continue;
       }
+
+      // If we find duplicate preprocessor, we will use the existing one instead.
+      const conditions = preprocessor.getConditions();
+
+      let ref: IPreprocessor = preprocessor;
+
+      for (const existingPreprocessor of this.envConditionMap.values()) {
+        if (compareConditions(conditions, existingPreprocessor.getConditions())) {
+          ref = existingPreprocessor;
+
+          break;
+        }
+      }
+
+      // TODO: We need to remove duplicate preprocessors at this stage.
+      this.envConditionMap.set(filterId, ref);
     }
   }
 

@@ -208,7 +208,7 @@ export function evaluateConditions(env: number, conditions: PreprocessorToken[][
   return false;
 }
 
-export function compareConditions(a: PreprocessorToken[], b: PreprocessorToken[]) {
+export function compareCondition(a: PreprocessorToken[], b: PreprocessorToken[]) {
   const l = a.length;
 
   if (l !== b.length) {
@@ -218,6 +218,26 @@ export function compareConditions(a: PreprocessorToken[], b: PreprocessorToken[]
   for (let i = 0; i < l; i++) {
     if (a[i].serialize(true) !== b[i].serialize(true)) {
       return false;
+    }
+  }
+
+  return true;
+}
+
+export function compareConditions(a: PreprocessorToken[][], b: PreprocessorToken[][]) {
+  if (a.length !== b.length) {
+    return false;
+  }
+
+  for (let i = 0; i < a.length; i++) {
+    if (a[i].length !== b[i].length) {
+      return false;
+    }
+
+    for (let k = 0; k < a[i].length; k++) {
+      if (a[i][k] !== b[i][k]) {
+        return false;
+      }
     }
   }
 
@@ -365,7 +385,7 @@ export default class Preprocessor implements IPreprocessor {
 
   public hasCondition(target: PreprocessorToken[]) {
     for (const condition of this.conditions) {
-      if (compareConditions(condition, target)) {
+      if (compareCondition(condition, target)) {
         return true;
       }
     }
@@ -387,7 +407,7 @@ export default class Preprocessor implements IPreprocessor {
 
   public removeCondition(target: PreprocessorToken[]) {
     for (let i = 0; i < this.conditions.length; i++) {
-      if (compareConditions(this.conditions[i], target)) {
+      if (compareCondition(this.conditions[i], target)) {
         this.conditions.splice(i, 1);
       }
     }
