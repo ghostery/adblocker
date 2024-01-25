@@ -5,7 +5,7 @@ import Preprocessor, {
   NegatedPreprocessor,
   PRECONFIGURED_ENV,
   PreprocessorEnvConditionMap,
-  compareConditions,
+  compare,
 } from '../../preprocessor';
 
 export default class PreprocessorBucket {
@@ -73,31 +73,35 @@ export default class PreprocessorBucket {
     }
 
     for (const [filterId, preprocessor] of newPreprocessors.entries()) {
-      // If we encounter the duplicate filter id, we will merge two preprocessors.
-      // The duplicate check is done internally by Preprocessor object.
+      // If we encounter the duplicate filter id, we will assign new preprocessor
+      // handling two conditions.
       if (this.envConditionMap.has(filterId)) {
         const existingPreprocessor = this.envConditionMap.get(filterId)!;
+        const mergedPreprocessor = new Preprocessor({
+          conditions: existingPreprocessor.getConditions(),
+          rawLine: preprocessor.rawLine,
+        });
+
         for (const condition of preprocessor.getConditions()) {
-          existingPreprocessor.addCondition(condition);
+          mergedPreprocessor.addCondition(condition);
         }
+
+        this.envConditionMap.set(filterId, mergedPreprocessor);
 
         continue;
       }
 
-      // If we find duplicate preprocessor, we will use the existing one instead.
-      const conditions = preprocessor.getConditions();
-
+      // If we find a duplicate filter id, we will use the existing one instead.
       let ref: IPreprocessor = preprocessor;
 
       for (const existingPreprocessor of this.envConditionMap.values()) {
-        if (compareConditions(conditions, existingPreprocessor.getConditions())) {
+        if (compare(preprocessor, existingPreprocessor)) {
           ref = existingPreprocessor;
 
           break;
         }
       }
 
-      // TODO: We need to remove duplicate preprocessors at this stage.
       this.envConditionMap.set(filterId, ref);
     }
   }
@@ -109,11 +113,15 @@ export default class PreprocessorBucket {
       return true;
     }
 
-    if (!this.cache.has(preprocessor)) {
-      this.cache.set(preprocessor, preprocessor.evaluate(this.env));
+    let result = this.cache.get(preprocessor);
+
+    if (!result) {
+      result = preprocessor.evaluate(this.env);
+
+      this.cache.set(preprocessor, result);
     }
 
-    return this.cache.get(preprocessor)!;
+    return result;
   }
 
   private invertMap() {

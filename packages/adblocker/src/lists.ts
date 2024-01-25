@@ -202,33 +202,37 @@ export function parseFilters(
     if (filterType === FilterType.NETWORK && config.loadNetworkFilters === true) {
       const filter = NetworkFilter.parse(line, config.debug);
       if (filter !== null) {
+        networkFilters.push(filter);
         if (preprocessor !== null) {
           preprocessors.set(filter.getId(), preprocessor);
         }
-        networkFilters.push(filter);
       }
     } else if (filterType === FilterType.COSMETIC && config.loadCosmeticFilters === true) {
       const filter = CosmeticFilter.parse(line, config.debug);
-      if (filter !== null) {
+      if (
+        filter !== null &&
+        (config.loadGenericCosmeticsFilters === true || filter.isGenericHide() === false)
+      ) {
+        cosmeticFilters.push(filter);
         if (preprocessor !== null) {
           preprocessors.set(filter.getId(), preprocessor);
-        }
-        if (config.loadGenericCosmeticsFilters === true || filter.isGenericHide() === false) {
-          cosmeticFilters.push(filter);
         }
       }
     } else if (config.loadPreprocessors) {
       // Detect preprocessors in low priority
       const preprocessorType = detectPreprocessor(line);
 
-      if (preprocessor === null && preprocessorType === PreprocessorTypes.BEGIF) {
+      if (preprocessorType === PreprocessorTypes.BEGIF && preprocessor === null) {
         const instance = Preprocessor.parse(line, config.debug);
         if (instance !== null) {
           preprocessor = instance;
         }
-      } else if (preprocessorType === PreprocessorTypes.ELSE) {
+      } else if (
+        preprocessorType === PreprocessorTypes.ELSE &&
+        preprocessor instanceof Preprocessor
+      ) {
         preprocessor = new NegatedPreprocessor({
-          ref: preprocessor as Preprocessor,
+          ref: preprocessor,
           rawLine: config.debug === true ? line : undefined,
         });
       } else if (preprocessorType === PreprocessorTypes.ENDIF) {

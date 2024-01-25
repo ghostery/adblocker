@@ -116,7 +116,11 @@ export default class NetworkFilterBucket {
     const filters: NetworkFilter[] = [];
 
     this.index.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
-      if (filter.match(request) && this.isFilterDisabled(filter) === false) {
+      if (
+        filter.match(request) &&
+        this.isFilterDisabled(filter) === false &&
+        this.preprocessors.isEnvQualifiedFilter(filter)
+      ) {
         filters.push(filter);
       }
       return true;
@@ -132,7 +136,7 @@ export default class NetworkFilterBucket {
       if (
         filter.match(request) &&
         this.isFilterDisabled(filter) === false &&
-        this.preprocessors.isEnvQualifiedFilter(filter) === true
+        this.preprocessors.isEnvQualifiedFilter(filter)
       ) {
         match = filter;
         return false;

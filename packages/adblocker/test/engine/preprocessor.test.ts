@@ -7,27 +7,28 @@ describe('preprocessor', () => {
   const fooRequest = Request.fromRawDetails({ url: 'https://foo.com' });
   const barRequest = Request.fromRawDetails({ url: 'https://bar.com' });
 
-  const createEngine = () =>
-    new FiltersEngine({
+  const createEngine = (filters: string) => {
+    const engine = new FiltersEngine({
       config: {
+        debug: true,
         loadPreprocessors: true,
       },
       env: PRECONFIGURED_ENV,
     });
 
+    engine.updateFromDiff({ added: [filters] });
+
+    return engine;
+  };
+
   const testCondition = (condition: string, result: boolean) => {
-    const engine = createEngine();
-    engine.updateFromDiff({
-      added: [
-        `!#if ${condition}
+    const engine = createEngine(`!#if ${condition}
 ||foo.com^
 foo.com###test
 !#else
 ||bar.com^
 bar.com###test
-!#endif`,
-      ],
-    });
+!#endif`);
 
     if (result) {
       expect(engine.match(fooRequest).match).to.be.true;
@@ -74,6 +75,30 @@ bar.com###test
       testCondition(condition, true),
     );
 
+    // Complex condition mixing AND and OR conditions
     testCondition('false || ext_ghostery && cap_html_filtering || false && ext_mv3', true);
+    testCondition('ext_ghostery && ext_mv3 || false && cap_html_filtering || false', true);
+  });
+
+  it('handles multiple preprocessors', () => {
+    const engine = createEngine(`!#if ext_ghostery
+||foo.com^
+!#endif
+
+!#if ext_mv3
+||bar.com^
+!#endif`);
+    expect(engine.preprocessors.envConditionMap.size).to.eql(2);
+  });
+
+  it('handles duplicate preprocessors', () => {
+    const engine = createEngine(`!#if ext_ghostery
+||foo.com^
+!#endif
+
+!#if ext_ghostery
+||bar.com^
+!#endif`);
+    expect(engine.preprocessors.envConditionMap.size).to.eql(1);
   });
 });

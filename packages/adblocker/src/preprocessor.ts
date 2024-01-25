@@ -181,13 +181,13 @@ export class PreprocessorToken {
 }
 
 export function evaluateConditions(env: number, conditions: PreprocessorToken[][]) {
-  let result = false;
+  let result: boolean;
 
   for (const condition of conditions) {
     result = false;
 
     for (const token of condition) {
-      let evaluated = (env & token.mask) === token.mask;
+      let evaluated = getBit(env, token.mask);
 
       if (token.isNegate) {
         evaluated = !evaluated;
@@ -224,7 +224,18 @@ export function compareCondition(a: PreprocessorToken[], b: PreprocessorToken[])
   return true;
 }
 
-export function compareConditions(a: PreprocessorToken[][], b: PreprocessorToken[][]) {
+export function compare(pa: IPreprocessor, pb: IPreprocessor) {
+  if (pa instanceof Preprocessor) {
+    if (pb instanceof NegatedPreprocessor) {
+      return false;
+    }
+  } else if (pb instanceof Preprocessor) {
+    return false;
+  }
+
+  const a = pa.getConditions();
+  const b = pb.getConditions();
+
   if (a.length !== b.length) {
     return false;
   }
@@ -356,7 +367,7 @@ export default class Preprocessor implements IPreprocessor {
     );
 
     return new this({
-      tokens,
+      conditions: [tokens],
       rawLine: debug === true ? line : undefined,
     });
   }
@@ -369,7 +380,7 @@ export default class Preprocessor implements IPreprocessor {
     }
 
     return new this({
-      tokens,
+      conditions: [tokens],
       rawLine: undefined,
     });
   }
@@ -378,8 +389,14 @@ export default class Preprocessor implements IPreprocessor {
 
   private readonly conditions: PreprocessorToken[][];
 
-  constructor({ tokens, rawLine }: { tokens: PreprocessorToken[]; rawLine: string | undefined }) {
-    this.conditions = [tokens];
+  constructor({
+    conditions,
+    rawLine,
+  }: {
+    conditions: PreprocessorToken[][];
+    rawLine: string | undefined;
+  }) {
+    this.conditions = conditions;
     this.rawLine = rawLine;
   }
 
