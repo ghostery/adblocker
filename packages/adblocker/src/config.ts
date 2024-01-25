@@ -26,6 +26,7 @@ export default class Config {
       loadExtendedSelectors: buffer.getBool(),
       loadGenericCosmeticsFilters: buffer.getBool(),
       loadNetworkFilters: buffer.getBool(),
+      loadPreprocessors: buffer.getBool(),
     });
   }
 
