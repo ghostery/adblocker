@@ -539,7 +539,26 @@ export default class FilterEngine extends EventEmitter<
     // Update preprocessors
     if (this.config.loadPreprocessors && newPreprocessors.size + removedPreprocessors.size) {
       updated = true;
-      this.preprocessors.update(newPreprocessors, removedPreprocessors);
+      const { preserveFilterIds } = this.preprocessors.update(
+        newPreprocessors,
+        removedPreprocessors,
+      );
+
+      for (const id of preserveFilterIds.keys()) {
+        let index = removedCosmeticFilters.indexOf(id);
+
+        if (index >= 0) {
+          removedCosmeticFilters.splice(index, 1);
+
+          continue;
+        }
+
+        index = removedNetworkFilters.indexOf(id);
+
+        if (index >= 0) {
+          removedNetworkFilters.splice(index, 1);
+        }
+      }
     }
 
     // Update cosmetic filters

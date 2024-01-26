@@ -68,8 +68,55 @@ export default class PreprocessorBucket {
     newPreprocessors: PreprocessorEnvConditionMap,
     removedPreprocessors: PreprocessorEnvConditionMap,
   ) {
-    for (const filterId of removedPreprocessors.keys()) {
-      this.envConditionMap.delete(filterId);
+    const preserveFilterIds = new Set<number>();
+
+    for (const [filterId, preprocessor] of removedPreprocessors.entries()) {
+      const existingPreprocessor = this.envConditionMap.get(filterId);
+
+      if (!existingPreprocessor) {
+        continue;
+      }
+
+      if (compare(existingPreprocessor, preprocessor)) {
+        this.envConditionMap.delete(filterId);
+
+        continue;
+      }
+
+      let exclusivePreprocessor: IPreprocessor;
+
+      if (existingPreprocessor instanceof NegatedPreprocessor) {
+        exclusivePreprocessor = new NegatedPreprocessor({
+          ref: new Preprocessor({
+            conditions: existingPreprocessor.getConditions(),
+            rawLine: existingPreprocessor.ref.rawLine,
+          }),
+          rawLine: existingPreprocessor.rawLine,
+        });
+      } else {
+        exclusivePreprocessor = new Preprocessor({
+          conditions: existingPreprocessor.getConditions(),
+          rawLine: preprocessor.rawLine,
+        });
+      }
+
+      for (const condition of preprocessor.getConditions()) {
+        exclusivePreprocessor.removeCondition(condition);
+      }
+
+      if (exclusivePreprocessor.getConditions().length) {
+        // If we find a duplicate preprocessor, we will use the existing one instead.
+        for (const existingPreprocessor of this.envConditionMap.values()) {
+          if (compare(preprocessor, existingPreprocessor)) {
+            exclusivePreprocessor = existingPreprocessor;
+
+            break;
+          }
+        }
+
+        preserveFilterIds.add(filterId);
+        this.envConditionMap.set(filterId, exclusivePreprocessor);
+      }
     }
 
     for (const [filterId, preprocessor] of newPreprocessors.entries()) {
@@ -84,10 +131,22 @@ export default class PreprocessorBucket {
           continue;
         }
 
-        const mergedPreprocessor = new Preprocessor({
-          conditions: existingPreprocessor.getConditions(),
-          rawLine: preprocessor.rawLine,
-        });
+        let mergedPreprocessor: IPreprocessor;
+
+        if (existingPreprocessor instanceof NegatedPreprocessor) {
+          mergedPreprocessor = new NegatedPreprocessor({
+            ref: new Preprocessor({
+              conditions: existingPreprocessor.getConditions(),
+              rawLine: existingPreprocessor.ref.rawLine,
+            }),
+            rawLine: existingPreprocessor.rawLine,
+          });
+        } else {
+          mergedPreprocessor = new Preprocessor({
+            conditions: existingPreprocessor.getConditions(),
+            rawLine: preprocessor.rawLine,
+          });
+        }
 
         for (const condition of preprocessor.getConditions()) {
           mergedPreprocessor.addCondition(condition);
@@ -111,6 +170,10 @@ export default class PreprocessorBucket {
 
       this.envConditionMap.set(filterId, ref);
     }
+
+    return {
+      preserveFilterIds,
+    };
   }
 
   public isEnvQualifiedFilter(filter: IFilter) {

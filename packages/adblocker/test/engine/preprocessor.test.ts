@@ -101,4 +101,24 @@ bar.com###test
 !#endif`);
     expect(engine.preprocessors.invertMap().size).to.eql(1);
   });
+
+  it('preserves filter if assigned in other preprocessor', () => {
+    const engine = createEngine(`!#if ext_ghostery
+||foo.com^
+!#else
+||bar.com^
+!#endif`);
+
+    engine.updateFromDiff({
+      removed: [
+        `!#if ext_ghostery && false
+||foo.com^
+!#else
+||bar.com^
+!#endif`,
+      ],
+    });
+    expect(engine.preprocessors.invertMap().size).to.eql(2);
+    expect(engine.match(fooRequest).match).to.be.true;
+  });
 });
