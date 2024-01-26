@@ -55,9 +55,15 @@ bar.com###test
       'env_mobile',
       'cap_html_filtering',
       'cap_user_stylesheet',
-    ].forEach((condition) => testCondition(condition, true));
+    ].forEach((condition) => {
+      testCondition(condition, true);
+      testCondition('!' + condition, false);
+    });
 
-    ['adguard', 'false'].forEach((condition) => testCondition(condition, false));
+    ['adguard', 'false'].forEach((condition) => {
+      testCondition(condition, false);
+      testCondition('!' + condition, true);
+    });
   });
 
   it('evaluates conditions', () => {
