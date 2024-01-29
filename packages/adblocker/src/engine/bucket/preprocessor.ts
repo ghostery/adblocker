@@ -104,14 +104,18 @@ export default class PreprocessorBucket {
         exclusivePreprocessor.removeCondition(condition);
       }
 
+      const compared = new Set<IPreprocessor>();
+
       if (exclusivePreprocessor.getConditions().length) {
         // If we find a duplicate preprocessor, we will use the existing one instead.
         for (const existingPreprocessor of this.envConditionMap.values()) {
-          if (compare(preprocessor, existingPreprocessor)) {
+          if (!compared.has(existingPreprocessor) && compare(preprocessor, existingPreprocessor)) {
             exclusivePreprocessor = existingPreprocessor;
 
             break;
           }
+
+          compared.add(existingPreprocessor);
         }
 
         preserveFilterIds.add(filterId);
@@ -158,14 +162,18 @@ export default class PreprocessorBucket {
       }
 
       // If we find a duplicate filter id, we will use the existing one instead.
+      const compared = new Set<IPreprocessor>();
+
       let ref: IPreprocessor = preprocessor;
 
       for (const existingPreprocessor of this.envConditionMap.values()) {
-        if (compare(preprocessor, existingPreprocessor)) {
+        if (!compared.has(existingPreprocessor) && compare(preprocessor, existingPreprocessor)) {
           ref = existingPreprocessor;
 
           break;
         }
+
+        compared.add(existingPreprocessor);
       }
 
       this.envConditionMap.set(filterId, ref);
