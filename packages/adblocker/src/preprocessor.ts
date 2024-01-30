@@ -19,7 +19,7 @@ export const enum ENVIRONMENTAL_MASK {
   // RESERVE = 1 << {10...14}
 
   // Misc
-  false = 1 << 15,
+  False = 1 << 15,
 }
 
 export const enum PREPROCESSOR_UTIL_MASK {
@@ -27,10 +27,64 @@ export const enum PREPROCESSOR_UTIL_MASK {
   isContinuedWithLogicalAndOperator = 1 << 31,
 }
 
-export const PRECONFIGURED_ENV =
-  (PREPROCESSOR_UTIL_MASK.isNegated - 1) &
-  ~ENVIRONMENTAL_MASK.isUnsupportedPlatform &
-  ~ENVIRONMENTAL_MASK.false;
+export class Env {
+  public readonly mask: number;
+
+  public readonly isGhostery: boolean;
+  public readonly isUnsupportedPlatform: boolean;
+  public readonly isManifestV3: boolean;
+  public readonly isMobile: boolean;
+  public readonly isBrowserChromium: boolean;
+  public readonly isBrowserFirefox: boolean;
+  public readonly isBrowserSafari: boolean;
+  public readonly isBrowserOpera: boolean;
+  public readonly hasHtmlFilteringCapability: boolean;
+  public readonly hasUserStylesheetCapability: boolean;
+  public readonly False: boolean;
+
+  constructor({
+    isGhostery = true,
+    isUnsupportedPlatform = false,
+    isManifestV3 = true,
+    isMobile = true,
+    isBrowserChromium = true,
+    isBrowserFirefox = true,
+    isBrowserSafari = true,
+    isBrowserOpera = true,
+    hasHtmlFilteringCapability = true,
+    hasUserStylesheetCapability = true,
+    False = false,
+  }: Partial<Env> = {}) {
+    this.isGhostery = isGhostery;
+    this.isUnsupportedPlatform = isUnsupportedPlatform;
+    this.isManifestV3 = isManifestV3;
+    this.isMobile = isMobile;
+    this.isBrowserChromium = isBrowserChromium;
+    this.isBrowserFirefox = isBrowserFirefox;
+    this.isBrowserSafari = isBrowserSafari;
+    this.isBrowserOpera = isBrowserOpera;
+    this.hasHtmlFilteringCapability = hasHtmlFilteringCapability;
+    this.hasUserStylesheetCapability = hasUserStylesheetCapability;
+    this.False = False;
+
+    let mask = 0;
+
+    if (this.isGhostery) mask = setBit(mask, ENVIRONMENTAL_MASK.isGhostery);
+    if (this.isUnsupportedPlatform) mask = setBit(mask, ENVIRONMENTAL_MASK.isUnsupportedPlatform);
+    if (this.isManifestV3) mask = setBit(mask, ENVIRONMENTAL_MASK.isManifestV3);
+    if (this.isMobile) mask = setBit(mask, ENVIRONMENTAL_MASK.isMobile);
+    if (this.isBrowserChromium) mask = setBit(mask, ENVIRONMENTAL_MASK.isBrowserChromium);
+    if (this.isBrowserFirefox) mask = setBit(mask, ENVIRONMENTAL_MASK.isBrowserFirefox);
+    if (this.isBrowserSafari) mask = setBit(mask, ENVIRONMENTAL_MASK.isBrowserSafari);
+    if (this.isBrowserOpera) mask = setBit(mask, ENVIRONMENTAL_MASK.isBrowserOpera);
+    if (this.hasHtmlFilteringCapability)
+      mask = setBit(mask, ENVIRONMENTAL_MASK.hasHtmlFilteringCapability);
+    if (this.hasUserStylesheetCapability)
+      mask = setBit(mask, ENVIRONMENTAL_MASK.hasUserStylesheetCapability);
+
+    this.mask = mask;
+  }
+}
 
 export function getTokenMask(token: string) {
   let mask = 0;
@@ -98,7 +152,7 @@ export function getTokenMask(token: string) {
 
     // Capabilities & Misc
     case 'false': {
-      mask = setBit(mask, ENVIRONMENTAL_MASK.false);
+      mask = setBit(mask, ENVIRONMENTAL_MASK.False);
 
       break;
     }

@@ -1,9 +1,9 @@
 import { StaticDataView } from '../../data-view';
 import IFilter from '../../filters/interface';
 import Preprocessor, {
+  Env,
   IPreprocessor,
   NegatedPreprocessor,
-  PRECONFIGURED_ENV,
   PreprocessorEnvConditionMap,
   compare,
 } from '../../preprocessor';
@@ -40,13 +40,13 @@ export default class PreprocessorBucket {
 
   private cache: Map<IPreprocessor, boolean> = new Map();
 
-  private env: number;
+  private env: Env;
 
   constructor({
-    env = PRECONFIGURED_ENV,
+    env = new Env(),
     envConditionMap = new Map(),
   }: {
-    env?: number;
+    env?: Env;
     envConditionMap?: Map<number, IPreprocessor> | undefined;
   }) {
     this.envConditionMap = envConditionMap;
@@ -57,7 +57,7 @@ export default class PreprocessorBucket {
     return this.env;
   }
 
-  public setEnv(env: number) {
+  public setEnv(env: Env) {
     this.env = env;
 
     // Flush cache map
@@ -194,7 +194,7 @@ export default class PreprocessorBucket {
     let result = this.cache.get(preprocessor);
 
     if (!result) {
-      result = preprocessor.evaluate(this.env);
+      result = preprocessor.evaluate(this.env.mask);
 
       this.cache.set(preprocessor, result);
     }

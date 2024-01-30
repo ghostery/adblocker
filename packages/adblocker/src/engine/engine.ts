@@ -24,7 +24,7 @@ import { block } from '../filters/dsl';
 import NetworkFilter from '../filters/network';
 import { HTMLSelector } from '../html-filtering';
 import { IListDiff, IRawDiff, parseFilters } from '../lists';
-import { PRECONFIGURED_ENV, PreprocessorEnvConditionMap } from '../preprocessor';
+import { Env, PreprocessorEnvConditionMap } from '../preprocessor';
 import Request from '../request';
 import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
@@ -299,7 +299,7 @@ export default class FilterEngine extends EventEmitter<
 
   public lists: Map<string, string>;
 
-  public env: number;
+  public env: Env;
   public preprocessors: PreprocessorBucket;
 
   public csp: NetworkFilterBucket;
@@ -322,14 +322,14 @@ export default class FilterEngine extends EventEmitter<
 
     config = new Config(),
     lists = new Map(),
-    env = PRECONFIGURED_ENV,
+    env = new Env(),
   }: {
     cosmeticFilters?: CosmeticFilter[];
     networkFilters?: NetworkFilter[];
     preprocessors?: PreprocessorEnvConditionMap;
     lists?: Map<string, string>;
     config?: Partial<Config>;
-    env?: number;
+    env?: Env;
   } = {}) {
     super(); // init super-class EventEmitter
 

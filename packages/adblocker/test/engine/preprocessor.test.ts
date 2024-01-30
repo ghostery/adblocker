@@ -1,7 +1,6 @@
 import { expect } from 'chai';
 import 'mocha';
 import { FiltersEngine, Request } from '../../adblocker';
-import { PRECONFIGURED_ENV } from '../../src/preprocessor';
 
 describe('preprocessor', () => {
   const fooRequest = Request.fromRawDetails({ url: 'https://foo.com' });
@@ -13,7 +12,6 @@ describe('preprocessor', () => {
         debug: true,
         loadPreprocessors: true,
       },
-      env: PRECONFIGURED_ENV,
     });
 
     engine.updateFromDiff({ added: [filters] });
