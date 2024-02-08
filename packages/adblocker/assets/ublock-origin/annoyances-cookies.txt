@@ -46,6 +46,8 @@ blaklader.*##div#onetrust-consent-sdk
 www.google.*##+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyMzA2MTItMF9SQzIaAmZpIAEaBgiAzK6kBg, 1year)
 ! When moving from Google search to other Google services or opening them directly. E.G. https://translate.google.com/
 consent.google.*##+js(trusted-click-element, form[action] button[jsname="tWT92d"])
+! https://github.com/DandelionSprout/adfilt/discussions/932#discussioncomment-8260397
+consent.google.*##[data-p*="/consent.google."]
 facebook.com##+js(trusted-set-cookie, datr, __GMZCgwVF5BbyvAtfJojQwg, 1year, , reload, 1)
 instagram.com##+js(trusted-set-cookie, ig_did, 0C826C21-17C3-444A-ABB7-EBABD37214D7, 1year, , reload, 1)
 ! Sample page: https://www.bloomberg.com/live/europe || https://www.bloomberg.co.jp/live/asia
@@ -176,9 +178,8 @@ tumblr.com##+js(trusted-click-element, .cmp__dialog-footer-buttons > .is-seconda
 tumblr.com##.components-modal__screen-overlay
 ! https://ontinet.com/
 ontinet.com##+js(trusted-set-cookie, website_cookies_bar, '{"required": true, "optional": false}')
-! https://www.abc.es/espana/presidente-paraguayo-apuesta-mercados-mercosur-firma-acuerdo-20231127173317-vi.html
-abc.es##+js(trusted-set-cookie, euconsent-v2, CP15pgAP15pgAAHABBENAcEgAAAAAAAAAAiQAAAAAAAA.YAAAAAAAAAAA, 1year, , domain, abc.es)
-abc.es##+js(trusted-set-cookie, didomi_token, eyJ1c2VyX2lkIjoiMThjMTFmMGMtMzg2NC02Y2U2LThkN2ItNjk1Njk5MGRlZjk0IiwiY3JlYXRlZCI6IjIwMjMtMTEtMjdUMTg6MDA6NDAuNzMwWiIsInVwZGF0ZWQiOiIyMDIzLTExLTI3VDE4OjAxOjUzLjY3OFoiLCJ2ZW5kb3JzIjp7ImRpc2FibGVkIjpbImFtYXpvbiIsInR3aXR0ZXIiLCJnb29nbGUiLCJjOmluZGlnaXRhbGwtUDNGNGlmVzQiLCJjOnBlbmR1bGFyLU1mZ2tCZEFlIl19LCJwdXJwb3NlcyI6eyJkaXNhYmxlZCI6WyJnZW9sb2NhdGlvbl9kYXRhIiwiZGV2aWNlX2NoYXJhY3RlcmlzdGljcyJdfSwidmVuZG9yc19saSI6eyJkaXNhYmxlZCI6WyJnb29nbGUiXX0sInZlcnNpb24iOjIsImFjIjoiQUFBQS5BQUFBIn0, 1year, , domain, abc.es)
+! https://github.com/uBlockOrigin/uAssets/issues/22254
+abc.es##+js(trusted-click-element, button#didomi-notice-agree-button)
 ! https://www.20minutos.es/noticia/5193814/0/violencia-machista-detenido-un-hombre-24-anos-por-asesinato-una-mujer-25-hija-ambos/
 20minutos.es##+js(trusted-click-element, #didomi-notice-agree-button)
 ! fplstatistics.co.uk
@@ -312,10 +313,10 @@ christianconcern.com##+js(trusted-set-cookie, STYXKEY_your_privacy_settings, %7B
 cdn.privacy-mgmt.com##+js(trusted-click-element, .sanoma-logo-container ~ .message-component.sticky-buttons button.sp_choice_type_12[title="Asetukset"])
 cdn.privacy-mgmt.com##+js(trusted-click-element, .sanoma-logo-container ~ .message-component.privacy-manager-tcfv2 .tcfv2-stack[title="Sanoman sisällönjakelukumppanit"] button.pm-switch[aria-checked="false"])
 cdn.privacy-mgmt.com##.sanoma-logo-container ~ .message-component.privacy-manager-tcfv2 .tcfv2-stack:not([title="Sanoman sisällönjakelukumppanit"]) button.pm-switch.checked:remove-class(checked)
-cdn.privacy-mgmt.com##+js(trusted-click-element, .sanoma-logo-container ~ .message-component.sticky-buttons button.sp_choice_type_SAVE_AND_EXIT[title="Tallenna"], , 1500)
-aamulehti.fi,etlehti.fi,gloria.fi,hs.fi,hyvaterveys.fi,is.fi,jamsanseutu.fi,janakkalansanomat.fi,kankaanpaanseutu.fi,kmvlehti.fi,kodinkuvalehti.fi,merikarvialehti.fi,nokianuutiset.fi,pelikone.fi,rannikkoseutu.fi,satakunnankansa.fi,soppa365.fi,suurkeuruu.fi,sydansatakunta.fi,tyrvaansanomat.fi,valkeakoskensanomat.fi,vauva.fi##[title="SP Consent Message"]
-aamulehti.fi,etlehti.fi,gloria.fi,hs.fi,hyvaterveys.fi,is.fi,jamsanseutu.fi,janakkalansanomat.fi,kankaanpaanseutu.fi,kmvlehti.fi,kodinkuvalehti.fi,merikarvialehti.fi,nokianuutiset.fi,pelikone.fi,rannikkoseutu.fi,satakunnankansa.fi,soppa365.fi,suurkeuruu.fi,sydansatakunta.fi,tiede.fi,tyrvaansanomat.fi,valkeakoskensanomat.fi,vauva.fi##html.sp-message-open:style(overflow: auto !important; width: initial !important)
-aamulehti.fi,etlehti.fi,gloria.fi,hs.fi,hyvaterveys.fi,is.fi,jamsanseutu.fi,janakkalansanomat.fi,kankaanpaanseutu.fi,kmvlehti.fi,kodinkuvalehti.fi,merikarvialehti.fi,nokianuutiset.fi,pelikone.fi,rannikkoseutu.fi,satakunnankansa.fi,soppa365.fi,suurkeuruu.fi,sydansatakunta.fi,tiede.fi,tyrvaansanomat.fi,valkeakoskensanomat.fi,vauva.fi##html.sp-message-open > body:style(position: unset !important; margin-top: 0 !important; overflow: visible !important)
+cdn.privacy-mgmt.com##+js(trusted-click-element, .sanoma-logo-container ~ .message-component button.sp_choice_type_SAVE_AND_EXIT[title="Tallenna"], , 1500)
+aamulehti.fi,etlehti.fi,gloria.fi,hs.fi,hyvaterveys.fi,is.fi,jamsanseutu.fi,janakkalansanomat.fi,kankaanpaanseutu.fi,kmvlehti.fi,kodinkuvalehti.fi,merikarvialehti.fi,nokianuutiset.fi,pelikone.fi,rannikkoseutu.fi,ruutu.fi,satakunnankansa.fi,soppa365.fi,suurkeuruu.fi,sydansatakunta.fi,tyrvaansanomat.fi,valkeakoskensanomat.fi,vauva.fi##[title="SP Consent Message"]
+aamulehti.fi,etlehti.fi,gloria.fi,hs.fi,hyvaterveys.fi,is.fi,jamsanseutu.fi,janakkalansanomat.fi,kankaanpaanseutu.fi,kmvlehti.fi,kodinkuvalehti.fi,merikarvialehti.fi,nokianuutiset.fi,pelikone.fi,rannikkoseutu.fi,ruutu.fi,satakunnankansa.fi,soppa365.fi,suurkeuruu.fi,sydansatakunta.fi,tiede.fi,tyrvaansanomat.fi,valkeakoskensanomat.fi,vauva.fi##html.sp-message-open:style(overflow: auto !important; width: initial !important)
+aamulehti.fi,etlehti.fi,gloria.fi,hs.fi,hyvaterveys.fi,is.fi,jamsanseutu.fi,janakkalansanomat.fi,kankaanpaanseutu.fi,kmvlehti.fi,kodinkuvalehti.fi,merikarvialehti.fi,nokianuutiset.fi,pelikone.fi,rannikkoseutu.fi,ruutu.fi,satakunnankansa.fi,soppa365.fi,suurkeuruu.fi,sydansatakunta.fi,tiede.fi,tyrvaansanomat.fi,valkeakoskensanomat.fi,vauva.fi##html.sp-message-open > body:style(position: unset !important; margin-top: 0 !important; overflow: visible !important)
 
 ! https://www.wired.com/story/gadget-lab-podcast-573/
 ! https://www.vogue.co.uk/arts-and-lifestyle/article/grammy-awards-2023-best-social-reactions
@@ -833,10 +834,12 @@ tredz.co.uk##+js(trusted-set-cookie, OptanonConsent, groups=C0001%3A1%2CC0002%3A
 ! https://getdigitalradio.com/ - Functionality
 getdigitalradio.com##+js(trusted-set-cookie, dsm-cookie-preferences, {%221%22:true%2C%222%22:true})
 
-! https://github.com/AdguardTeam/AdguardFilters/issues/170285#issuecomment-1884952884
-vg.no##div[id^="sp_message_container_"]
-cmp.vg.no##+js(trusted-click-element, .btns-container > button[title="Tilpass"])
-cmp.vg.no##+js(trusted-click-element, .message-row > button[title="Avvis alle"], , 2000)
+! https://github.com/uBlockOrigin/uAssets/issues/22295
+e24.no,vg.no##div[id^="sp_message_container_"]
+cmp.e24.no,cmp.vg.no##+js(trusted-click-element, .btns-container > button[title="Tilpass"])
+cmp.e24.no,cmp.vg.no##+js(trusted-click-element, .message-row > button[title="Avvis alle"], , 2000)
+@@||cmp.*.no^$domain=e24.no|vg.no
+@@||privacy-mgmt.com/mms^$domain=e24.no|vg.no
 
 ! Allow everything so that page functions work properly, such as chat and commenting
 sap.com##+js(trusted-set-cookie, notice_gdpr_prefs, '0,1,2::implied')
@@ -903,3 +906,29 @@ butterflyshop.dk##+js(set-cookie, DDCookiePolicy-consent-statistics, false)
 ! functional_analytics (when using refuse)
 praxis.nl,brico.be##+js(trusted-set-cookie, CookieConsentLevel, functional_analytics)
 praxis.nl,brico.be##+js(set-cookie, CookieNotificationSeen, 1, , reload, 1)
+
+! technical only
+correos.es##+js(trusted-set-cookie, correosCookies, '{"tecnicas":"true","analiticas":"false","publicidad":"false"}')
+
+! https://www.bankinter.com/banca/en/home - personalization
+bankinter.com##+js(trusted-set-cookie, bkpolicy, aceptacion=selectiva//tecnicas=si//personalizacion=si//analiticas=no//publicitarias=no//version=0, , , domain, bankinter.com)
+
+! https://www.mishcon.com/ - Functionality
+mishcon.com##+js(trusted-set-cookie, CookieChoicesApr2021, %7B%22functionality%22%3Afalse%2C%22anonymousMeasurement%22%3Afalse%2C%22performance%22%3Afalse%2C%22advertising%22%3Afalse%7D)
+
+! https://github.com/uBlockOrigin/uAssets/issues/22297
+rainews.it##+js(trusted-click-element, span.as-oil__close-banner)
+
+! https://www.lufthansa.com/ - Personalization
+lufthansa.com##+js(trusted-set-cookie, CONSENTMGR, c1:1%7Cc2:0%7Cc3:1%7Cc4:0%7Cts:1706835520229%7Cconsent:true)
+
+! reject consent
+anwb.nl##+js(trusted-set-cookie, cookie-policy-agreement, %7B%22REVISION%22%3A20%2C%22consentLevel%22%3A1%7D)
+
+! technical only
+terviseportaal.ee##+js(trusted-set-local-storage-item, COOKIE_CONSENT, '"TECHNICAL_SELECTED"')
+! necessary
+fishingclash.game##+js(trusted-set-cookie, cookiesAccepted, %7B%22necessary%22%3Atrue%2C%22statistical%22%3Afalse%2C%22marketing%22%3Afalse%7D)
+
+! https://github.com/easylist/easylist/issues/18433#issuecomment-1932876520
+proffsmagasinet.se,staypro.*#@#.consent-content

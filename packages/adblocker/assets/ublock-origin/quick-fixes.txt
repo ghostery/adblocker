@@ -1423,11 +1423,6 @@
 ! [dup] from ublock-origin/unbreak.txt
 ! @@||nbc*.com/includes/AppMeasurement.js$script,1p
 
-! https://forums.lanik.us/viewtopic.php?f=64&t=43073&p=147868#p147852
-! [badfilter] ://adv.$domain=adv.asahi.com|~adv.bet|~adv.blue|~adv.cincsys.com|~adv.cryptonetlabs.it|~adv.derfunke.at|~adv.design|~adv.digimatix.ru|~adv.ec|~adv.ee|~adv.gg|~adv.lack-girl.com|~adv.michaelgat.com|~adv.msk.ru|~adv.neosystem.co.uk|~adv.rest|~adv.ru|~adv.tools|~adv.trinet.ru|~adv.ua|~adv.vg|~adv.vn.ua|~adv.works|~adv.yomiuri.co.jp|~advids.co|~farapp.com|~pracuj.pl|~r7.com|~typeform.com|~welaika.com,badfilter
-! [dup] from ublock-origin/unbreak.txt
-! ://adv.$domain=adv.asahi.com|~adv.bet|~adv.blue|~adv.chunichi.co.jp|~adv.cincsys.com|~adv.cryptonetlabs.it|~adv.derfunke.at|~adv.design|~adv.digimatix.ru|~adv.ec|~adv.ee|~adv.gg|~adv.hokkaido-np.co.jp|~adv.lack-girl.com|~adv.michaelgat.com|~adv.msk.ru|~adv.neosystem.co.uk|~adv.rest|~adv.ru|~adv.tools|~adv.trinet.ru|~adv.ua|~adv.vg|~adv.vn.ua|~adv.works|~adv.yomiuri.co.jp|~advids.co|~farapp.com|~pracuj.pl|~r7.com|~typeform.com|~welaika.com
-
 ! https://github.com/uBlockOrigin/uAssets/issues/5688
 ! [badfilter] ||amazonaws.com^*/funders-$domain=globalvoices.org,badfilter
 
@@ -3090,12 +3085,13 @@
 ! [dup] from ublock-origin/unbreak.txt
 ! officedepot.co.cr##+js(set, Object.prototype.subscribe, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/20525
+! https://github.com/uBlockOrigin/uAssets/issues/22331
 ! [dup] from ublock-origin/unbreak.txt
-! ||groupbycloud.com/gb-tracker-client-3.min.js$domain=officedepot.co.cr,important
+! ||groupbycloud.com/gb-tracker-client-3.min.js$domain=officedepot.*,important
 ! [dup] from ublock-origin/unbreak.txt
-! officedepot.co.cr##+js(set, gbTracker, {})
+! officedepot.*##+js(set, gbTracker, {})
 ! [dup] from ublock-origin/unbreak.txt
-! officedepot.co.cr##+js(set, gbTracker.sendAutoSearchEvent, noopFunc)
+! officedepot.*##+js(set, gbTracker.sendAutoSearchEvent, noopFunc)
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/ifvbor/
 !#if env_firefox
@@ -3372,15 +3368,15 @@ praxistipps.chip.de#@#a[target][href^="https://x.chip.de/"]:upward(div[id])
 ! https://github.com/uBlockOrigin/uAssets/issues/7766#issuecomment-731743962
 ! https://github.com/uBlockOrigin/uAssets/issues/20569
 ! [dup] from ublock-origin/unbreak.txt
-! @@||ads.adthrive.com/sites/*/ads.min.js$script,domain=a-z-animals.com|brewerfanatic.com|northsidebaseball.com|pimylifeup.com|twinsdaily.com
+! @@||ads.adthrive.com/sites/*/ads.min.js$script,domain=a-z-animals.com|brewerfanatic.com|fishonfirst.com|northsidebaseball.com|pimylifeup.com|twinsdaily.com
 ! [dup] from ublock-origin/unbreak.txt
-! @@||ads.adthrive.com/builds/core/*$script,domain=a-z-animals.com|brewerfanatic.com|northsidebaseball.com|pimylifeup.com|twinsdaily.com
+! @@||ads.adthrive.com/builds/core/*$script,domain=a-z-animals.com|brewerfanatic.com|fishonfirst.com|northsidebaseball.com|pimylifeup.com|twinsdaily.com
 ! [dup] from ublock-origin/unbreak.txt
 ! pimylifeup.com##+js(no-fetch-if, marmalade)
 ! [dup] from ublock-origin/unbreak.txt
-! a-z-animals.com,brewerfanatic.com,northsidebaseball.com,pimylifeup.com,twinsdaily.com#@#.adthrive
+! a-z-animals.com,brewerfanatic.com,fishonfirst.com,northsidebaseball.com,pimylifeup.com,twinsdaily.com#@#.adthrive
 ! [dup] from ublock-origin/unbreak.txt
-! a-z-animals.com,brewerfanatic.com,northsidebaseball.com,twinsdaily.com#@#.adthrive-video-player
+! a-z-animals.com,brewerfanatic.com,fishonfirst.com,northsidebaseball.com,twinsdaily.com#@#.adthrive-video-player
 
 ! egy.best broken download buttons
 ! [badfilter] ||cdn-static.egybest.*/packed/$badfilter
@@ -4062,8 +4058,13 @@ uschovna.cz##.branding:upward([target="_blank"])
 ! https://www.reddit.com/r/uBlockOrigin/comments/1265axi/
 ! https://www.reddit.com/r/uBlockOrigin/comments/198to3q/comments_on_sites_dark_theme_unreadable/
 ! https://github.com/uBlockOrigin/uAssets/issues/22103
+! https://github.com/uBlockOrigin/uAssets/issues/22202
 ! [dup] from ublock-origin/unbreak.txt
-! 9to5google.com##+js(trusted-rpnt, script, (function($), '(function(){const a=document.createElement("div");document.documentElement.appendChild(a),setTimeout(()=>{a&&a.remove()},100)})(); (function($)')
+! 9to5google.com,9to5mac.com##+js(trusted-rpnt, script, (function($), '(function(){const a=document.createElement("div");document.documentElement.appendChild(a),setTimeout(()=>{a&&a.remove()},100)})(); (function($)')
+! [dup] from ublock-origin/unbreak.txt
+! ||fundingchoicesmessages.google.com/i/$script,domain=9to5google.com|9to5mac.com,important
+! [dup] from ublock-origin/unbreak.txt
+! ||googletagmanager.com^$domain=9to5google.com|9to5mac.com,important
 
 ! https://www.reddit.com/r/uBlockOrigin/comments/pglvdm/
 ! [dup] from ublock-origin/unbreak.txt
@@ -5031,6 +5032,9 @@ kingarthurbaking.com##^html > head > link[rel="canonical"]:not([href*="/recipes/
 ! [badfilter] ||exponea.com^$badfilter
 ! [dup] from ublock-origin/unbreak.txt
 ! ||exponea.com^$3p
+! https://github.com/uBlockOrigin/uAssets/issues/22298
+! [dup] from ublock-origin/unbreak.txt
+! @@||cdn.*.exponea.com/production*/consent?$frame,domain=proffsmagasinet.se|staypro.dk|staypro.fi|staypro.no
 
 ! https://github.com/uBlockOrigin/uAssets/issues/14251
 ! [dup] from ublock-origin/unbreak.txt
@@ -5470,7 +5474,7 @@ gamingbible.com##div[id] > .dfp-ad-unit:upward(1)
 ! @@||img.kleinanzeigen.de/api/$image,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/12112#issuecomment-1366134900
-! [badfilter] *$script,3p,from=uqload.com,badfilter
+*$script,3p,from=uqload.com,badfilter
 ! [badfilter] ||opsktp.com^$badfilter
 
 ! https://github.com/uBlockOrigin/uAssets/issues/16137
@@ -6061,10 +6065,8 @@ pozirk.com##^html:not(:has(iframe#game)) > head > script[src*="yollamedia.com"]
 ! delta.com#@#.adv-container
 
 ! https://github.com/uBlockOrigin/uAssets/issues/17836
-! [dup] from ublock-origin/unbreak.txt
-! ||shop.motorolasolutions.com/msi-files/libs/dynatrace.js$script,redirect-rule=noopjs,from=shop.motorolasolutions.com
-! [dup] from ublock-origin/unbreak.txt
-! ||shop.motorolasolutions.com/msi-files/page-tags/head/dynatrace-loader.js$script,redirect-rule=noopjs,from=shop.motorolasolutions.com
+||shop.motorolasolutions.com/msi-files/libs/dynatrace.js$script,redirect-rule=noopjs,from=shop.motorolasolutions.com
+||shop.motorolasolutions.com/msi-files/page-tags/head/dynatrace-loader.js$script,redirect-rule=noopjs,from=shop.motorolasolutions.com
 
 ! To counter `statcounter.com` in Peter Lowe's
 ! https://github.com/uBlockOrigin/uAssets/commit/1142bef68ee287d27f6191c433ff8491570b6612
@@ -6758,8 +6760,6 @@ abcam.com##^link[rel="canonical"]:not([href*="pageconfig=contactus"]):upward(htm
 ! https://github.com/uBlockOrigin/uAssets/issues/19962
 ! [dup] from ublock-origin/unbreak.txt
 ! @@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=sonyliv.com
-! [dup] from ublock-origin/unbreak.txt
-! ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=sonyliv.com,important
 
 ! https://github.com/uBlockOrigin/uAssets/issues/19996
 ! [dup] from ublock-origin/unbreak.txt
@@ -7027,8 +7027,50 @@ buytesmart.com##body[style*="display: none"]:remove-attr(style)
 ! helpster.de#@##ad_sidebar_left_container
 
 ! https://github.com/uBlockOrigin/uAssets/issues/22152
-sklep.trzynastkaplus.pl##^script[src^="https://www.googletagmanager.com/gtag/js"]
-!#if !cap_html_filtering
+sklep.trzynastkaplus.pl##[onclick$="return !ga.loaded;"]:remove-attr(onclick)
+
+! https://github.com/uBlockOrigin/uAssets/issues/22172
 ! [dup] from ublock-origin/unbreak.txt
-! @@||googletagmanager.com/gtag/js$script,3p,domain=sklep.trzynastkaplus.pl
-!#else
+! @@||st.dynamicyield.com/st$script,3p,domain=thewarehouse.co.nz
+
+! https://github.com/uBlockOrigin/uAssets/issues/22160
+! https://github.com/uBlockOrigin/uAssets/issues/22385
+!#if env_firefox
+! [dup] from ublock-origin/unbreak.txt
+! foxbusiness.com,foxnews.com##+js(set, Taplytics, {})
+! [dup] from ublock-origin/unbreak.txt
+! foxbusiness.com,foxnews.com##+js(set, Taplytics.featureFlagEnabled, noopFunc)
+!#endif
+
+! https://github.com/uBlockOrigin/uAssets/issues/22204
+! [dup] from ublock-origin/unbreak.txt
+! @@||engine.monetate.net/api/$xhr,domain=dunelm.com
+
+! https://github.com/uBlockOrigin/uAssets/issues/22196
+! [dup] from ublock-origin/unbreak.txt
+! @@||trbo.com/plugin/trbo_$script,xhr,domain=o2online.de
+
+! https://www.tipranks.com/news/blurbs/kash-rangan-reaffirms-buy-rating-on-microsoft-citing-strong-q2-performance-and-azure-growth-prospects blank page
+! [dup] from ublock-origin/unbreak.txt
+! tipranks.com##+js(set, TRC, {})
+! [dup] from ublock-origin/unbreak.txt
+! tipranks.com##+js(set, TRC._taboolaClone, [])
+
+! https://github.com/uBlockOrigin/uAssets/issues/22281
+! [dup] from ublock-origin/unbreak.txt
+! iceland.co.uk##+js(set, fp, {})
+! [dup] from ublock-origin/unbreak.txt
+! iceland.co.uk##+js(set, fp.t, noopFunc)
+! [dup] from ublock-origin/unbreak.txt
+! iceland.co.uk##+js(set, fp.s, noopFunc)
+
+! https://github.com/uBlockOrigin/uAssets/issues/22371
+! [dup] from ublock-origin/unbreak.txt
+! socket.pearsoned.com##+js(set, initializeNewRelic, noopFunc)
+
+! https://github.com/uBlockOrigin/uAssets/issues/22373
+! [dup] from ublock-origin/unbreak.txt
+! @@||fwmrm.net^*/admanager.js$script,3p,domain=southpark.*|southparkstudios.*
+
+! https://github.com/uBlockOrigin/uAssets/issues/18516
+! [badfilter] ||click.discord.com^$badfilter

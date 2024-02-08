@@ -802,9 +802,6 @@ $removeparam=asc_refurl,domain=aboutamazon.com|amazon.*|amzn.to
 $removeparam=asc_source,domain=aboutamazon.com|amazon.*|amzn.to
 ! youtube.com - Copy video URL at its search result via mouse right click.
 ||youtube.com^$removeparam=pp
-! https://github.com/AdguardTeam/AdguardFilters/issues/159953
-! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-1898819333
-$removeparam=si,domain=youtu.be|youtube-nocookie.com|music.youtube.com|www.youtube.com
 ! Embedded tweets
 $removeparam=refsrc,domain=twitter.com|x.com
 $removeparam=ref_src,domain=twitter.com|x.com
@@ -824,6 +821,11 @@ $removeparam=s,domain=twitter.com|x.com
 ||www.ebay.$removeparam=amdata
 ||www.ebay.$removeparam=mkrid
 ||www.ebay.$removeparam=campid
+! https://github.com/brave/brave-browser/issues/35094
+! instagram.com - share tracking
+||instagram.com^$removeparam=ig_rid
+||instagram.com^$removeparam=igsh
+$removeparam=igshid,domain=instagram.com|threads.net
 ! https://github.com/uBlockOrigin/uAssets/issues/18938#issuecomment-1693238481
 ! https://community.brave.com/t/unable-to-open-reddit-com-urls-in-private-tabs/503125/4
 !#if env_firefox
@@ -919,8 +921,9 @@ proboards.com,winclassic.net##^script:has-text(vglnk)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/168248
 ||bi-tracker-cn.rivergame.net/event/tracker$xhr,redirect=noop.txt
 
-! https://baomoi.com/ - Tracking pixels
-||api.baomoi.com/*/n/images/su$xhr,1p
+! https://baomoi.com/ - znews.vn/zingnews.vn - Tracking pixels
+/n/images/su?info$xhr,1p
+://log.$image,1p,domain=znews.vn|zingnews.vn
 
 ! https://github.com/uBlockOrigin/uAssets/issues/22077
 coursera.org##+js(no-fetch-if, eventing)
@@ -928,6 +931,12 @@ coursera.org##+js(no-fetch-if, eventing)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/22076
 ||rambler.ru/*#rcmrclid=$uritransform=/#rcmrclid=.*//
+
+! https://github.com/uBlockOrigin/uAssets/issues/22295
+||cmp.*.no^*/metrics/$important
+
+! https://github.com/uBlockOrigin/uAssets/issues/22380
+||fsho.st/tracker.js^$script,domain=fshost.me
 
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt
