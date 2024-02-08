@@ -16,6 +16,7 @@ export default [
   "amazon_apstag.js",
   "google-analytics",
   "fingerprint2.js",
+  "noop-1s.mp4:10",
   "-transparent.",
   "google-ima.js",
   "prebid-ads.js",
