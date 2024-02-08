@@ -5474,7 +5474,7 @@ gamingbible.com##div[id] > .dfp-ad-unit:upward(1)
 ! @@||img.kleinanzeigen.de/api/$image,1p
 
 ! https://github.com/uBlockOrigin/uAssets/issues/12112#issuecomment-1366134900
-*$script,3p,from=uqload.com,badfilter
+! [badfilter] *$script,3p,from=uqload.com,badfilter
 ! [badfilter] ||opsktp.com^$badfilter
 
 ! https://github.com/uBlockOrigin/uAssets/issues/16137
@@ -6065,8 +6065,10 @@ pozirk.com##^html:not(:has(iframe#game)) > head > script[src*="yollamedia.com"]
 ! delta.com#@#.adv-container
 
 ! https://github.com/uBlockOrigin/uAssets/issues/17836
-||shop.motorolasolutions.com/msi-files/libs/dynatrace.js$script,redirect-rule=noopjs,from=shop.motorolasolutions.com
-||shop.motorolasolutions.com/msi-files/page-tags/head/dynatrace-loader.js$script,redirect-rule=noopjs,from=shop.motorolasolutions.com
+! [dup] from ublock-origin/unbreak.txt
+! ||shop.motorolasolutions.com/msi-files/libs/dynatrace.js$script,redirect-rule=noopjs,from=shop.motorolasolutions.com
+! [dup] from ublock-origin/unbreak.txt
+! ||shop.motorolasolutions.com/msi-files/page-tags/head/dynatrace-loader.js$script,redirect-rule=noopjs,from=shop.motorolasolutions.com
 
 ! To counter `statcounter.com` in Peter Lowe's
 ! https://github.com/uBlockOrigin/uAssets/commit/1142bef68ee287d27f6191c433ff8491570b6612
