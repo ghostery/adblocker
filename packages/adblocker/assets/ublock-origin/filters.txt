@@ -599,6 +599,7 @@ x1337x.*##+js(acs, setTimeout, admc)
 1337x.*##a[href^="/spyoff"]
 1337x.*##a[href*="//steepto.com/"]
 1337x.*##[href*="vpn"]
+1337x.*##[onclick*="vpn"]
 1337x.*##[href^="/anoy"]
 1337x.*,x1337x.*##.no-top-radius div > a[href]:has-text(VPN)
 /^https:\/\/x?1337x\.(?:[0-9a-z]{3,9}\.)?[a-z]{2,4}\/(?:css\/)?(?:images\/)?[0-9a-zA-Z]+\.(?:gif|jpe?g|png)/$image,1p,domain=1337x.*|1337x.g3g.*|x1337x.*|unblockit.*
@@ -763,7 +764,6 @@ familyhandyman.com##.cm-ad-unit-section
 
 ! https://github.com/uBlockOrigin/uAssets/issues/273
 cwseed.com##+js(aopr, admrlWpJsonP)
-cwtv.com##+js(noeval)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/278
 pocketnow.com##+js(aopr, InstallTrigger)
@@ -1555,6 +1555,9 @@ kisshentai.net##+js(aopr, adblock)
 ! https://github.com/gorhill/uBlock/issues/3114
 wunderground.com##+js(aopw, _sp_)
 wunderground.com##[class*="-ad-box-"]
+! https://github.com/uBlockOrigin/uAssets/issues/22408
+wunderground.com##.content-wrap #inner-wrap:style(height: 100vh !important;)
+wunderground.com##body wu-header:style(margin-top: 0px !important;)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/841
 putlockerc.*##+js(nowoif)
@@ -8049,7 +8052,6 @@ bdsmporn.cc,cocoporn.net,dirtyporn.cc,faperplace.com,freeadultvideos.cc,freeporn
 ! https://github.com/uBlockOrigin/uAssets/issues/7195
 eodev.com##+js(aeld, message, data.slice)
 brainly.*,eodev.com##+js(nostif, trigger, 0)
-eodev.com##+js(aopr, localStorage)
 @@*$ghide,domain=brainly.*|eodev.com
 brainly.*##[class^="BrainlyAdsPlaceholder"]
 brainly.*,eodev.com##.brn-ads-box
@@ -10469,10 +10471,6 @@ alemannia-aachen.de##.b-error
 01fmovies.com##[src^="/addons/"]
 01fmovies.com##.jw-logo
 01fmovies.com##.ico.close
-
-! https://github.com/uBlockOrigin/uAssets/issues/3026
-! https://github.com/uBlockOrigin/uAssets/issues/18815
-coolrom.com.au##+js(set, time, 0)
 
 ! https://github.com/uBlockOrigin/uAssets/issues/5928
 ! https://github.com/uBlockOrigin/uAssets/issues/5932
