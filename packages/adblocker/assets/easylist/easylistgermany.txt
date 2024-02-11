@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202402041616
+! Version: 202402111502
 ! Title: EasyList Germany
-! Last modified: 04 Feb 2024 16:16 UTC
+! Last modified: 11 Feb 2024 15:02 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -611,11 +611,10 @@ wieistmeineip.at,wieistmeineip.ch,wieistmeineip.de#@#.trc_rbox_div .syndicatedIt
 wieistmeineip.at,wieistmeineip.ch,wieistmeineip.de#@#.trc_related_container div[data-item-syndicated="true"]
 marketingportal.toyota.de,werbung.oebb.at,wetter.com#@#.werbung
 auto-motor-und-sport.de,hardwareluxx.de,wetter.com#@#[id^="div-gpt-ad"]
-11freunde.de,auto-motor-und-sport.de,kochbar.de,rtl.de,vip.de#@#[id^="google_ads_iframe"]
-11freunde.de,auto-motor-und-sport.de,gofeminin.de,kochbar.de,vip.de#@#[id^="google_ads_iframe_"]
-kochbar.de#@#[name^="google_ads_iframe"]
+11freunde.de,auto-motor-und-sport.de,rtl.de,vip.de#@#[id^="google_ads_iframe"]
+11freunde.de,auto-motor-und-sport.de,gofeminin.de,vip.de#@#[id^="google_ads_iframe_"]
 11freunde.de#@#a[href^="http://pubads.g.doubleclick.net/"]
-11freunde.de,kochbar.de#@#a[href^="https://adclick.g.doubleclick.net/"]
+11freunde.de#@#a[href^="https://adclick.g.doubleclick.net/"]
 11freunde.de,gofeminin.de#@#a[href^="https://pubads.g.doubleclick.net/"]
 telekom.de#@#a[href^="https://track.adform.net/"]
 onvista.de,topdepot24.de#@#a[href^="https://www.financeads.net/tc.php?"]
@@ -639,7 +638,7 @@ wetter.com#@#div[id^="div-gpt-"]
 ||wixnm.com^
 !
 ||4rm.de^$third-party
-! [badfilter] from ublock-origin/filters-mobile.txt
+! [badfilter] from ublock-origin/unbreak.txt
 ! ||4strokemedia.com^$third-party
 ||85.114.133.62^$third-party
 ||a.partner-versicherung.de^$third-party
@@ -1230,6 +1229,7 @@ wetter.com#@#div[id^="div-gpt-"]
 ||weekli.systems/www/widgets/$third-party
 ||werbemittel.adisfaction.de^$third-party
 ||wgfreiheit.de/fileadmin/web_banner/$third-party
+||widget.marktjagd.de^
 ||widget.s24.com^$third-party
 ||widgets.cam-content.com^$third-party
 ||wien-girls.at/img/ba/$third-party
@@ -1862,6 +1862,7 @@ $stylesheet,subdocument,third-party,xmlhttprequest,domain=canna-power.to|canna.t
 ||kitzanzeiger.at^*/sponsoren/
 ||klappeauf.de/images-banner/
 ||klexikon.de/banner/
+||kochbar.de/moltenbundle/
 ||koeln.de^*/werbung/
 ||kradblatt.de/wp-content/uploads/mediabanner/
 ||kriminalpolizei.de/fileadmin/user_upload/*-Skyscraper_
@@ -3964,6 +3965,8 @@ klartext-ne.de##.klartads-widget
 1000ps.de##.kleinueber > .row + div > .topzubehoeranzeige-berichte
 sexgeschichten.com##.kosmonaut_120x600
 sexgeschichten.com##.kosmonaut_300x250
+! [dup] from ublock-origin/filters.txt
+! kochbar.de##.ks-ad
 holstein-kiel.de##.ksv-sponsoren-footer
 medienwoche.ch##.kurator
 swissfunddata.ch##.l-partnerSlideContainer
@@ -4912,6 +4915,7 @@ weristdeinfreund.de##div[style="position:absolute; top:5px; left:0px; text-align
 autouncle.de##div[style="text-align: center; min-height: 180px;"]
 4fansites.de##div[style="text-align: center; min-height:260px;"]
 quoka.de##div[style="width: 100%; height: 250px; overflow: hidden; text-align: center; padding-top: 10px;"]
+quoka.de##div[style="width: 100%; height: 250px; overflow: hidden; text-align: center;"]
 quoka.de##div[style="width: 100%; height: 260px; overflow: hidden; text-align: center; padding-top: 10px;"]
 quoka.de##div[style="width: 100%; height: 90px; overflow: hidden; text-align: center;"]
 astroportal.com##div[style="width: 300px; height: 250px;"]
@@ -5311,27 +5315,20 @@ zentrum-der-gesundheit.de#?#span:-abp-contains(/ANZ|EIGE/) + div
 @@||ced.sascdn.com/tag/2161/smart.js$domain=metal-hammer.de|rollingstone.de
 @@||commundia.de^*/affilinet/$~third-party
 @@||creatives.sascdn.com^$image,domain=fitbook.de
-@@||emsservice.de/autoNative/$script,domain=kochbar.de
-@@||emsservice.de^$image,xmlhttprequest,domain=kochbar.de
 @@||feuerwehr-marchtrenk.at/homepage/banner.php$subdocument
 @@||football-aktuell.de/links/banner_oben.png
-@@||g.doubleclick.net/gampad/$xmlhttprequest,domain=kochbar.de
 @@||g.doubleclick.net/gampad/ads?$script,xmlhttprequest,domain=11freunde.de|n-tv.de|stern.de
 @@||g.doubleclick.net/gampad/ads?$xmlhttprequest,domain=auto-motor-und-sport.de|gala.de|gamepro.de|gamestar.de|moviepilot.de
 @@||g.doubleclick.net/gampad/ads?*&iu_parts=21917048853%2CTargetlink%2CBill-%2CLeaderboard%2CMedium-Rectangle%2CSkyscraper%2CHalfpage%2CShop%2CHalfpageLO%2CAffiPlatzierung&$script,xmlhttprequest,domain=teltarif.de
 @@||g.doubleclick.net/gampad/ads?*&iu_parts=27763518%3A21917048853%2Cteltarif-de_Onlineverlag_GmbH%2Cteltarif.de%2CParallax%2Chalfpagelu%2Chalfpageru%2Cnavisky&$script,xmlhttprequest,domain=teltarif.de
-@@||g.doubleclick.net/gampad/ads?*&iu_parts=6032%2Ckochbar.de%2Chomepage&$domain=kochbar.de
 @@||g.doubleclick.net/gampad/ads?*&iu_parts=6032%3A22339103238%2Cmanma_dt%2Chomepage&$domain=manager-magazin.de
-@@||g.doubleclick.net/gpt/pubads_impl_$script,domain=11freunde.de|auto-motor-und-sport.de|gala.de|gamepro.de|gamestar.de|gentside.de|kochbar.de|manager-magazin.de|moviepilot.de|n-tv.de|ohmymag.de|stern.de
+@@||g.doubleclick.net/gpt/pubads_impl_$script,domain=11freunde.de|auto-motor-und-sport.de|gala.de|gamepro.de|gamestar.de|gentside.de|manager-magazin.de|moviepilot.de|n-tv.de|ohmymag.de|stern.de
 @@||g.doubleclick.net/pagead/managed/js/gpt/*/pubads_impl.js$script,domain=gamepro.de|gamestar.de|teltarif.de
 @@||g.doubleclick.net/pagead/ppub_config?$domain=manager-magazin.de
 @@||g.doubleclick.net/pagead/ppub_config?ippd=$xmlhttprequest,domain=gamepro.de|gamestar.de|moviepilot.de
-@@||g.doubleclick.net/tag/js/gpt.js$script,xmlhttprequest,domain=11freunde.de|auto-motor-und-sport.de|gala.de|gamepro.de|gamestar.de|gentside.de|kochbar.de|manager-magazin.de|moviepilot.de|n-tv.de|ohmymag.de|stern.de|teltarif.de
+@@||g.doubleclick.net/tag/js/gpt.js$script,xmlhttprequest,domain=11freunde.de|auto-motor-und-sport.de|gala.de|gamepro.de|gamestar.de|gentside.de|manager-magazin.de|moviepilot.de|n-tv.de|ohmymag.de|stern.de|teltarif.de
 @@||getjad.io/library/$script,domain=gamepro.de|gamestar.de|moviepilot.de
 @@||getjad.io/prebid/$script,domain=gamepro.de|gamestar.de|moviepilot.de
-@@||googlesyndication.com/pagead/imgad?id=$image,domain=kochbar.de
-@@||googlesyndication.com/safeframe/$subdocument,domain=kochbar.de
-@@||googlesyndication.com/simgad/$image,domain=kochbar.de
 @@||googletagservices.com/tag/js/gpt.js$domain=windowspro.de
 @@||googlewatchblog.de^*/adsense.png
 @@||goolive.de/media/static/images/smileys/ad.gif
@@ -5439,6 +5436,6 @@ zentrum-der-gesundheit.de#?#span:-abp-contains(/ANZ|EIGE/) + div
 @@||canna-power.to/links.php?action=$popup,domain=canna-power.to
 @@||canna.to/links.php?action=$popup,domain=canna.to
 @@||doubleclick.net/ddm/$popup,domain=11freunde.de
-@@||g.doubleclick.net^$popup,domain=11freunde.de|kochbar.de
+@@||g.doubleclick.net^$popup,domain=11freunde.de
 @@||t.adcell.com/click.php?$popup,domain=comicschau.de
 @@||t.adcell.com/p/click?$popup,domain=jerseypoint.de
