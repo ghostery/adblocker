@@ -371,6 +371,11 @@ export default class FilterEngine extends EventEmitter<
     }
   }
 
+  public updateEnv(env: Env) {
+    this.env = env;
+    this.preprocessors.flush(env);
+  }
+
   /**
    * Estimate the number of bytes needed to serialize this instance of
    * `FiltersEngine` using the `serialize(...)` method. It is used internally

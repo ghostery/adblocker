@@ -86,7 +86,9 @@ export default class PreprocessorBucket {
     }
   }
 
-  public flush() {
+  public flush(env: Env) {
+    this.env = env;
+
     for (const preprocessor of this.conditions.values()) {
       // Tell preprocessor to delete cached evaluation result regarding env
       preprocessor.flush();
