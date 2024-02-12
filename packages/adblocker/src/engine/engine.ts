@@ -29,6 +29,8 @@ import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 import { Metadata, IPatternLookupResult } from './metadata';
+import Preprocessor, { Env } from '../preprocessor';
+import PreprocessorBucket from './bucket/preprocessor';
 
 export const ENGINE_VERSION = 634;
 
@@ -219,6 +221,7 @@ export default class FilterEngine extends EventEmitter<
   public static deserialize<T extends FilterEngine>(
     this: new (...args: any[]) => T,
     serialized: Uint8Array,
+    env: Env = new Env(),
   ): T {
     const buffer = StaticDataView.fromUint8Array(serialized, {
       enableCompression: false,
@@ -271,6 +274,9 @@ export default class FilterEngine extends EventEmitter<
     }
     engine.lists = lists;
 
+    // Deserialize preprocessors
+    engine.preprocessors = PreprocessorBucket.deserialize(buffer, env);
+
     // Deserialize buckets
     engine.importants = NetworkFilterBucket.deserialize(buffer, config);
     engine.redirects = NetworkFilterBucket.deserialize(buffer, config);
@@ -294,6 +300,9 @@ export default class FilterEngine extends EventEmitter<
 
   public lists: Map<string, string>;
 
+  public env: Env;
+  public preprocessors: PreprocessorBucket;
+
   public csp: NetworkFilterBucket;
   public hideExceptions: NetworkFilterBucket;
   public exceptions: NetworkFilterBucket;
@@ -310,14 +319,18 @@ export default class FilterEngine extends EventEmitter<
     // Optionally initialize the engine with filters
     cosmeticFilters = [],
     networkFilters = [],
+    preprocessors = [],
 
     config = new Config(),
     lists = new Map(),
+    env = new Env(),
   }: {
     cosmeticFilters?: CosmeticFilter[];
     networkFilters?: NetworkFilter[];
+    preprocessors?: Preprocessor[];
     lists?: Map<string, string>;
     config?: Partial<Config>;
+    env?: Env;
   } = {}) {
     super(); // init super-class EventEmitter
 
@@ -325,6 +338,10 @@ export default class FilterEngine extends EventEmitter<
 
     // Subscription management: disabled by default
     this.lists = lists;
+
+    // Preprocessors
+    this.env = env;
+    this.preprocessors = new PreprocessorBucket({ env, preprocessors });
 
     // $csp=
     this.csp = new NetworkFilterBucket({ config: this.config });
@@ -371,6 +388,7 @@ export default class FilterEngine extends EventEmitter<
       sizeOfByte() + // engine version
       this.config.getSerializedSize() +
       this.resources.getSerializedSize() +
+      this.preprocessors.getSerializedSize() +
       this.filters.getSerializedSize() +
       this.exceptions.getSerializedSize() +
       this.importants.getSerializedSize() +
@@ -418,6 +436,9 @@ export default class FilterEngine extends EventEmitter<
       buffer.pushASCII(name);
       buffer.pushASCII(value);
     }
+
+    // Preprocessors
+    this.preprocessors.serialize(buffer);
 
     // Filters buckets
     this.importants.serialize(buffer);
@@ -489,10 +510,17 @@ export default class FilterEngine extends EventEmitter<
   public update({
     newNetworkFilters = [],
     newCosmeticFilters = [],
+    newPreprocessors = [],
     removedCosmeticFilters = [],
     removedNetworkFilters = [],
+    removedPreprocessors = [],
   }: Partial<IListDiff>): boolean {
     let updated: boolean = false;
+
+    // Update preprocessors
+    if (newPreprocessors.length !== 0 || removedPreprocessors.length !== 0) {
+      updated = true;
+    }
 
     // Update cosmetic filters
     if (
@@ -565,26 +593,38 @@ export default class FilterEngine extends EventEmitter<
   public updateFromDiff({ added, removed }: Partial<IRawDiff>): boolean {
     const newCosmeticFilters: CosmeticFilter[] = [];
     const newNetworkFilters: NetworkFilter[] = [];
+    const newPreprocessors: Preprocessor[] = [];
     const removedCosmeticFilters: CosmeticFilter[] = [];
     const removedNetworkFilters: NetworkFilter[] = [];
+    const removedPreprocessors: Preprocessor[] = [];
 
     if (removed !== undefined && removed.length !== 0) {
-      const { networkFilters, cosmeticFilters } = parseFilters(removed.join('\n'), this.config);
+      const { networkFilters, cosmeticFilters, preprocessors } = parseFilters(
+        removed.join('\n'),
+        this.config,
+      );
       Array.prototype.push.apply(removedCosmeticFilters, cosmeticFilters);
       Array.prototype.push.apply(removedNetworkFilters, networkFilters);
+      Array.prototype.push.apply(removedPreprocessors, preprocessors);
     }
 
     if (added !== undefined && added.length !== 0) {
-      const { networkFilters, cosmeticFilters } = parseFilters(added.join('\n'), this.config);
+      const { networkFilters, cosmeticFilters, preprocessors } = parseFilters(
+        added.join('\n'),
+        this.config,
+      );
       Array.prototype.push.apply(newCosmeticFilters, cosmeticFilters);
       Array.prototype.push.apply(newNetworkFilters, networkFilters);
+      Array.prototype.push.apply(newPreprocessors, preprocessors);
     }
 
     return this.update({
       newCosmeticFilters,
       newNetworkFilters,
+      newPreprocessors,
       removedCosmeticFilters: removedCosmeticFilters.map((f) => f.getId()),
       removedNetworkFilters: removedNetworkFilters.map((f) => f.getId()),
+      removedPreprocessors,
     });
   }
 

@@ -29,7 +29,7 @@ export type EnvKeys =
   | 'adguard_ext_safari'
   | (string & {});
 
-export type Env = Map<EnvKeys, boolean>;
+export class Env extends Map<EnvKeys, boolean> {}
 
 export const enum PreprocessorTypes {
   INVALID = 0,
@@ -123,6 +123,11 @@ export default class Preprocessor {
   public static deserialize(view: StaticDataView): Preprocessor {
     const condition = view.getUTF8();
 
+    const positives = new Set<number>();
+    for (let i = 0, l = view.getUint32(); i < l; i++) {
+      positives.add(view.getUint32());
+    }
+
     const negatives = new Set<number>();
     for (let i = 0, l = view.getUint32(); i < l; i++) {
       negatives.add(view.getUint32());
@@ -130,27 +135,34 @@ export default class Preprocessor {
 
     return new this({
       condition,
+      positives,
       negatives,
     });
   }
 
   public readonly condition: string;
+
+  public readonly positives: Set<number>;
   public readonly negatives: Set<number>;
 
   public result: boolean | undefined;
 
   constructor({
     condition,
+    positives = new Set(),
     negatives = new Set(),
   }: {
     condition: string;
+    positives?: Set<number>;
     negatives?: Set<number>;
   }) {
     this.condition = condition;
+
+    this.positives = positives;
     this.negatives = negatives;
   }
 
-  evaluate(env: Env) {
+  public evaluate(env: Env) {
     if (!this.result) {
       this.result = evaluate(this.condition, env);
     }
@@ -158,20 +170,29 @@ export default class Preprocessor {
     return this.result;
   }
 
-  flush() {
+  public flush() {
     this.result = undefined;
   }
 
-  isEnvQualifiedFilter(env: Env, filter: number) {
+  public isEnvQualifiedFilter(env: Env, filter: number) {
     if (this.negatives.has(filter)) {
+      if (this.positives.has(filter)) {
+        return false;
+      }
+
       return !this.evaluate(env);
     }
 
     return this.evaluate(env);
   }
 
-  serialize(view: StaticDataView) {
+  public serialize(view: StaticDataView) {
     view.pushUTF8(this.condition);
+
+    view.pushUint32(this.positives.size);
+    for (const filter of this.positives) {
+      view.pushUint32(filter);
+    }
 
     view.pushUint32(this.negatives.size);
     for (const filter of this.negatives) {
@@ -179,9 +200,10 @@ export default class Preprocessor {
     }
   }
 
-  getSerializedSize() {
+  public getSerializedSize() {
     let estimatedSize = sizeOfUTF8(this.condition);
 
+    estimatedSize += (1 + this.positives.size) * 4;
     estimatedSize += (1 + this.negatives.size) * 4;
 
     return estimatedSize;

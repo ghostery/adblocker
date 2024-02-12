@@ -9,6 +9,7 @@
 import Config from './config';
 import CosmeticFilter from './filters/cosmetic';
 import NetworkFilter from './filters/network';
+import Preprocessor, { PreprocessorTypes, detectPreprocessor } from './preprocessor';
 import { fastStartsWith, fastStartsWithFrom } from './utils';
 
 export const enum FilterType {
@@ -136,12 +137,19 @@ export function f(strings: TemplateStringsArray): NetworkFilter | CosmeticFilter
 export function parseFilters(
   list: string,
   config: Partial<Config> = new Config(),
-): { networkFilters: NetworkFilter[]; cosmeticFilters: CosmeticFilter[] } {
+): {
+  networkFilters: NetworkFilter[];
+  cosmeticFilters: CosmeticFilter[];
+  preprocessors: Preprocessor[];
+} {
   config = new Config(config);
 
   const networkFilters: NetworkFilter[] = [];
   const cosmeticFilters: CosmeticFilter[] = [];
   const lines = list.split('\n');
+
+  const conditions: Map<string, Preprocessor> = new Map();
+  const preprocessors: { instance: Preprocessor; negated: boolean }[] = [];
 
   for (let i = 0; i < lines.length; i += 1) {
     let line = lines[i];
@@ -189,18 +197,53 @@ export function parseFilters(
       const filter = NetworkFilter.parse(line, config.debug);
       if (filter !== null) {
         networkFilters.push(filter);
+        // Push to applied preprocessors
+        for (const { instance, negated } of preprocessors) {
+          if (negated) {
+            instance.negatives.add(filter.getId());
+          } else {
+            instance.positives.add(filter.getId());
+          }
+        }
       }
     } else if (filterType === FilterType.COSMETIC && config.loadCosmeticFilters === true) {
       const filter = CosmeticFilter.parse(line, config.debug);
       if (filter !== null) {
         if (config.loadGenericCosmeticsFilters === true || filter.isGenericHide() === false) {
           cosmeticFilters.push(filter);
+          // Push to applied preprocessors
+          for (const { instance, negated } of preprocessors) {
+            if (negated) {
+              instance.negatives.add(filter.getId());
+            } else {
+              instance.positives.add(filter.getId());
+            }
+          }
         }
+      }
+    } else {
+      const preprocessorType = detectPreprocessor(line);
+
+      if (preprocessorType === PreprocessorTypes.BEGIF) {
+        const preprocessor = Preprocessor.parse(line);
+        if (preprocessor !== null) {
+          if (!conditions.has(preprocessor.condition)) {
+            conditions.set(preprocessor.condition, preprocessor);
+          }
+          preprocessors.push({
+            instance: conditions.get(preprocessor.condition)!,
+            negated: false,
+          });
+        }
+      } else if (preprocessorType === PreprocessorTypes.ELSE) {
+        preprocessors[preprocessors.length - 1].negated = true;
+      } else if (preprocessorType === PreprocessorTypes.ENDIF) {
+        preprocessors.slice(preprocessors.length - 1, 1);
       }
     }
   }
 
-  return { networkFilters, cosmeticFilters };
+  return { networkFilters, cosmeticFilters, preprocessors: Array.from(conditions.values()) };
 }
 
 function getFilters(list: string, config?: Partial<Config>): (NetworkFilter | CosmeticFilter)[] {
@@ -212,8 +255,10 @@ function getFilters(list: string, config?: Partial<Config>): (NetworkFilter | Co
 export interface IListDiff {
   newNetworkFilters: NetworkFilter[];
   newCosmeticFilters: CosmeticFilter[];
+  newPreprocessors: Preprocessor[];
   removedCosmeticFilters: number[];
   removedNetworkFilters: number[];
+  removedPreprocessors: Preprocessor[];
 }
 
 export interface IRawDiff {

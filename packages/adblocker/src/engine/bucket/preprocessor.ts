@@ -1,71 +1,172 @@
+import { StaticDataView } from '../../data-view';
 import Preprocessor, { Env } from '../../preprocessor';
 
-export type PreprocessorDiff = Map<number, Preprocessor[]>;
-
 export default class PreprocessorBucket {
-  public readonly conditions: Map<string, Preprocessor>;
+  public static deserialize(view: StaticDataView, env: Env): PreprocessorBucket {
+    const preprocessors: Preprocessor[] = [];
 
+    for (let i = 0, l = view.getUint32(); i < l; i++) {
+      preprocessors.push(Preprocessor.deserialize(view));
+    }
+
+    return new this({
+      env,
+      preprocessors,
+    });
+  }
+
+  public readonly conditions: Map<string, Preprocessor>;
   public readonly disabled: Set<number>;
-  public readonly bindings: Map<number, Preprocessor[]>;
 
   public env: Env;
 
-  constructor({
-    env,
-    disabled = new Set(),
-    bindings = new Map(),
-  }: {
-    env: Env;
-    disabled?: Set<number>;
-    bindings?: Map<number, Preprocessor[]>;
-  }) {
+  constructor({ env, preprocessors = [] }: { env: Env; preprocessors?: Preprocessor[] }) {
     this.env = env;
-    this.disabled = disabled;
-    this.bindings = bindings;
 
-    // Build conditions bindings
+    this.disabled = new Set();
     this.conditions = new Map();
 
-    for (const preprocessors of this.bindings.values()) {
-      for (const preprocessor of preprocessors) {
-        if (!this.conditions.has(preprocessor.condition)) {
-          this.conditions.set(preprocessor.condition, preprocessor);
+    for (const one of preprocessors) {
+      if (!this.conditions.has(one.condition)) {
+        this.conditions.set(one.condition, one);
+        continue;
+      }
+
+      const another = this.conditions.get(one.condition)!;
+
+      for (const positive of one.positives) {
+        another.positives.add(positive);
+      }
+
+      for (const negative of one.negatives) {
+        another.negatives.add(negative);
+      }
+    }
+
+    this.build();
+  }
+
+  private build() {
+    // Build filters to preprocessor set
+    // We'll use `Set` instead of `Array` to effectively remove duplicates
+    const bindings = new Map<number, Set<Preprocessor>>();
+
+    for (const preprocessor of this.conditions.values()) {
+      // Remove unused preprocessor anymore
+      if (!(preprocessor.positives.size + preprocessor.negatives.size)) {
+        this.conditions.delete(preprocessor.condition);
+        continue;
+      }
+
+      for (const positive of preprocessor.positives) {
+        const binding = bindings.get(positive) ?? new Set();
+
+        binding.add(preprocessor);
+        bindings.set(positive, binding);
+      }
+
+      for (const negative of preprocessor.negatives) {
+        const binding = bindings.get(negative) ?? new Set();
+
+        binding.add(preprocessor);
+        bindings.set(negative, binding);
+      }
+    }
+
+    // Update disabled based on bindings
+    this.disabled.clear();
+
+    for (const [filter, preprocessors] of bindings.entries()) {
+      for (const one of preprocessors) {
+        if (!one.isEnvQualifiedFilter(this.env, filter)) {
+          this.disabled.add(filter);
+          break;
         }
       }
     }
   }
 
-  public update({ added, removed }: { added?: PreprocessorDiff; removed?: PreprocessorDiff }) {
-    if (added) {
-      for (const [filter, preprocessors] of added.entries()) {
-        const bindings: Preprocessor[] = this.bindings.get(filter) ?? [];
-        let enabled = true;
+  public flush() {
+    for (const preprocessor of this.conditions.values()) {
+      // Tell preprocessor to delete cached evaluation result regarding env
+      preprocessor.flush();
+    }
 
-        // Find missing preprocessors and update `this.conditions`
-        for (const preprocessor of preprocessors) {
-          let local = this.conditions.get(preprocessor.condition);
+    this.build();
+  }
 
-          if (!local) {
-            local = preprocessor;
-            this.conditions.set(local.condition, local);
-          }
+  public update({ added, removed }: { added?: Preprocessor[]; removed?: Preprocessor[] }) {
+    const preservedFilters = new Set<number>();
+    let updated = false;
 
-          bindings.push(local);
+    if (removed) {
+      updated = true;
 
-          // Preprocesor.isEnvQualifiedFilter checks if the filter is in `else` block
-          if (enabled && !local.isEnvQualifiedFilter(this.env, filter)) {
-            enabled = false;
-          }
+      for (const one of removed) {
+        const another = this.conditions.get(one.condition);
+
+        // Skip if we don't have any preprocessor on local
+        if (!another) {
+          continue;
         }
 
-        if (enabled && this.disabled.has(filter)) {
-          this.disabled.delete(filter);
-        } else {
-          this.disabled.add(filter);
+        for (const positive of one.positives) {
+          another.positives.delete(positive);
         }
 
-        this.bindings.set(filter, bindings);
+        for (const negative of one.negatives) {
+          another.negatives.delete(negative);
+        }
       }
     }
+
+    if (added) {
+      updated = true;
+
+      for (const one of added) {
+        const another = this.conditions.get(one.condition);
+
+        if (!another) {
+          this.conditions.set(one.condition, one);
+
+          continue;
+        }
+
+        for (const positive of one.positives) {
+          another.positives.add(positive);
+          preservedFilters.add(positive);
+        }
+
+        for (const negative of one.negatives) {
+          another.positives.add(negative);
+          preservedFilters.add(negative);
+        }
+      }
+    }
+
+    if (updated) {
+      this.build();
+    }
+
+    return {
+      updated,
+      preservedFilters,
+    };
+  }
+
+  public serialize(view: StaticDataView) {
+    view.pushUint32(this.conditions.size);
+    for (const one of this.conditions.values()) {
+      one.serialize(view);
+    }
+  }
+
+  public getSerializedSize() {
+    let estimatedSize = 4;
+    for (const one of this.conditions.values()) {
+      estimatedSize += one.getSerializedSize();
+    }
+
+    return estimatedSize;
   }
 }
