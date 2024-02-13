@@ -62,6 +62,7 @@ describe('preprocessors', () => {
   const env = new Env();
 
   env.set('ext_ghostery', true);
+  env.set('ext_devbuild', true);
 
   const engine = new FilterEngine({ env });
 
@@ -84,6 +85,32 @@ describe('preprocessors', () => {
 ||bar.com^
 !#else
 ||foo.com^
+!#endif`);
+  });
+
+  it('resolves multiple conditions', () => {
+    doTest(`!#if ext_ghostery && ext_devbuild
+||foo.com^
+!#else
+||bar.com^
+!#endif`);
+    doTest(`!#if false || ext_devbuild
+||foo.com^
+!#else
+||bar.com^
+!#endif`);
+    doTest(`!#if ext_devbuild || false
+||foo.com^
+!#else
+||bar.com^
+!#endif`);
+  });
+
+  it('resolves conditions with spaces', () => {
+    doTest(`!#if ext_ghostery      && ext_devbuild
+||foo.com^
+!#else
+||bar.com^
 !#endif`);
   });
 
@@ -110,8 +137,6 @@ describe('preprocessors', () => {
 !#endif`);
   });
 
-  env.set('ext_devbuild', true);
-
   it('resolves spread conditions', () => {
     // If there're multiple conditions spread, the conditions will be merged
     doTest(`!#if ext_ghostery
@@ -125,6 +150,18 @@ describe('preprocessors', () => {
 !#endif
 !#if ext_ghostery
 ||bar.com^
+!#endif`);
+  });
+
+  it('cleans previous evaluation caches', () => {
+    env.set('ext_ghostery', false);
+    env.set('ext_devbuild', false);
+    engine.updateEnv(env);
+
+    doTest(`!#if ext_ghostery
+||bar.com^
+!#else
+||foo.com^
 !#endif`);
   });
 });
