@@ -226,7 +226,7 @@ export function parseFilters(
 
       if (preprocessorType === PreprocessorTypes.BEGIF) {
         const preprocessor = Preprocessor.parse(line);
-        if (preprocessor !== null) {
+        if (preprocessor) {
           if (!conditions.has(preprocessor.condition)) {
             conditions.set(preprocessor.condition, preprocessor);
           }
