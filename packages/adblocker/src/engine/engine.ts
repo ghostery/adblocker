@@ -377,29 +377,55 @@ export default class FilterEngine extends EventEmitter<
     this.preprocessors = new PreprocessorBucket({ env, preprocessors });
 
     // $csp=
-    this.csp = new NetworkFilterBucket({ config: this.config });
+    this.csp = new NetworkFilterBucket({
+      config: this.config,
+      ineligibleFilterIds: this.preprocessors.ineligible,
+    });
     // $elemhide
     // $generichide
     // $specifichide
-    this.hideExceptions = new NetworkFilterBucket({ config: this.config });
+    this.hideExceptions = new NetworkFilterBucket({
+      config: this.config,
+      ineligibleFilterIds: this.preprocessors.ineligible,
+    });
     // @@filter
-    this.exceptions = new NetworkFilterBucket({ config: this.config });
+    this.exceptions = new NetworkFilterBucket({
+      config: this.config,
+      ineligibleFilterIds: this.preprocessors.ineligible,
+    });
     // $important
-    this.importants = new NetworkFilterBucket({ config: this.config });
+    this.importants = new NetworkFilterBucket({
+      config: this.config,
+      ineligibleFilterIds: this.preprocessors.ineligible,
+    });
     // $redirect
-    this.redirects = new NetworkFilterBucket({ config: this.config });
+    this.redirects = new NetworkFilterBucket({
+      config: this.config,
+      ineligibleFilterIds: this.preprocessors.ineligible,
+    });
     // All other filters
-    this.filters = new NetworkFilterBucket({ config: this.config });
+    this.filters = new NetworkFilterBucket({
+      config: this.config,
+      ineligibleFilterIds: this.preprocessors.ineligible,
+    });
     // Cosmetic filters
-    this.cosmetics = new CosmeticFilterBucket({ config: this.config });
+    this.cosmetics = new CosmeticFilterBucket({
+      config: this.config,
+      ineligibleFilterIds: this.preprocessors.ineligible,
+    });
 
     // Injections
     this.resources = new Resources();
 
-    if (networkFilters.length !== 0 || cosmeticFilters.length !== 0) {
+    if (
+      networkFilters.length !== 0 ||
+      cosmeticFilters.length !== 0 ||
+      preprocessors.length !== 0
+    ) {
       this.update({
         newCosmeticFilters: cosmeticFilters,
         newNetworkFilters: networkFilters,
+        newPreprocessors: preprocessors,
       });
     }
   }
