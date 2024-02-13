@@ -16,34 +16,17 @@ export default class PreprocessorBucket {
   }
 
   public readonly conditions: Map<string, Preprocessor>;
-  public readonly disabled: Set<number>;
+  public readonly ineligible: Set<number>;
 
   public env: Env;
 
   constructor({ env, preprocessors = [] }: { env: Env; preprocessors?: Preprocessor[] }) {
     this.env = env;
 
-    this.disabled = new Set();
+    this.ineligible = new Set();
     this.conditions = new Map();
 
-    for (const one of preprocessors) {
-      if (!this.conditions.has(one.condition)) {
-        this.conditions.set(one.condition, one);
-        continue;
-      }
-
-      const another = this.conditions.get(one.condition)!;
-
-      for (const positive of one.positives) {
-        another.positives.add(positive);
-      }
-
-      for (const negative of one.negatives) {
-        another.negatives.add(negative);
-      }
-    }
-
-    this.build();
+    this.update({ added: preprocessors });
   }
 
   private build() {
@@ -52,7 +35,7 @@ export default class PreprocessorBucket {
     const bindings = new Map<number, Set<Preprocessor>>();
 
     for (const preprocessor of this.conditions.values()) {
-      // Remove unused preprocessor anymore
+      // Remove unused preprocessor
       if (!(preprocessor.positives.size + preprocessor.negatives.size)) {
         this.conditions.delete(preprocessor.condition);
         continue;
@@ -73,13 +56,13 @@ export default class PreprocessorBucket {
       }
     }
 
-    // Update disabled based on bindings
-    this.disabled.clear();
+    // Update ineligible based on bindings
+    this.ineligible.clear();
 
     for (const [filter, preprocessors] of bindings.entries()) {
       for (const one of preprocessors) {
         if (!one.isEnvQualifiedFilter(this.env, filter)) {
-          this.disabled.add(filter);
+          this.ineligible.add(filter);
           break;
         }
       }

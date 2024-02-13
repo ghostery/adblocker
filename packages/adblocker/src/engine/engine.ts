@@ -99,6 +99,7 @@ export default class FilterEngine extends EventEmitter<
     this: T,
     init: () => Promise<InstanceType<T>>,
     caching?: Caching,
+    env?: Env,
   ): Promise<InstanceType<T>> {
     if (caching === undefined) {
       return init();
@@ -106,15 +107,16 @@ export default class FilterEngine extends EventEmitter<
 
     const { path, read, write } = caching;
     return read(path)
-      .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
+      .then((buffer) => this.deserialize(buffer, env) as InstanceType<T>)
       .catch(() => init().then((engine) => write(path, engine.serialize()).then(() => engine)));
   }
 
   public static empty<T extends FilterEngine>(
     this: new (...args: any[]) => T,
     config: Partial<Config> = {},
+    env?: Env,
   ): T {
-    return new this({ config });
+    return new this({ config, env });
   }
 
   /**
@@ -131,13 +133,14 @@ export default class FilterEngine extends EventEmitter<
     urls: string[],
     config: Partial<Config> = {},
     caching?: Caching,
+    env?: Env,
   ): Promise<InstanceType<T>> {
     return this.fromCached(() => {
       const listsPromises = fetchLists(fetch, urls);
       const resourcesPromise = fetchResources(fetch);
 
       return Promise.all([listsPromises, resourcesPromise]).then(([lists, resources]) => {
-        const engine = this.parse(lists.join('\n'), config);
+        const engine = this.parse(lists.join('\n'), config, env);
         if (resources !== undefined) {
           engine.updateResources(resources, '' + resources.length);
         }
@@ -159,8 +162,9 @@ export default class FilterEngine extends EventEmitter<
     this: T,
     fetchImpl: Fetch = fetch,
     caching?: Caching,
+    env?: Env,
   ): Promise<InstanceType<T>> {
-    return this.fromLists(fetchImpl, adsLists, {}, caching);
+    return this.fromLists(fetchImpl, adsLists, {}, caching, env);
   }
 
   /**
@@ -171,8 +175,9 @@ export default class FilterEngine extends EventEmitter<
     this: T,
     fetchImpl: Fetch = fetch,
     caching?: Caching,
+    env?: Env,
   ): Promise<InstanceType<T>> {
-    return this.fromLists(fetchImpl, adsAndTrackingLists, {}, caching);
+    return this.fromLists(fetchImpl, adsAndTrackingLists, {}, caching, env);
   }
 
   /**
@@ -183,14 +188,16 @@ export default class FilterEngine extends EventEmitter<
     this: T,
     fetchImpl: Fetch = fetch,
     caching?: Caching,
+    env?: Env,
   ): Promise<InstanceType<T>> {
-    return this.fromLists(fetchImpl, fullLists, {}, caching);
+    return this.fromLists(fetchImpl, fullLists, {}, caching, env);
   }
 
   public static fromTrackerDB<T extends typeof FilterEngine>(
     this: T,
     rawJsonDump: any,
     options: Partial<Config> = {},
+    env?: Env,
   ): InstanceType<T> {
     const config = new Config(options);
     const metadata = new Metadata(rawJsonDump);
@@ -200,7 +207,7 @@ export default class FilterEngine extends EventEmitter<
       filters.push(...pattern.filters);
     }
 
-    const engine = this.parse(filters.join('\n'), config);
+    const engine = this.parse(filters.join('\n'), config, env);
     engine.metadata = metadata;
 
     return engine as InstanceType<T>;
@@ -210,11 +217,13 @@ export default class FilterEngine extends EventEmitter<
     this: new (...args: any[]) => T,
     filters: string,
     options: Partial<Config> = {},
+    env?: Env,
   ): T {
     const config = new Config(options);
     return new this({
       ...parseFilters(filters, config),
       config,
+      env,
     });
   }
 
@@ -278,14 +287,38 @@ export default class FilterEngine extends EventEmitter<
     engine.preprocessors = PreprocessorBucket.deserialize(buffer, env);
 
     // Deserialize buckets
-    engine.importants = NetworkFilterBucket.deserialize(buffer, config);
-    engine.redirects = NetworkFilterBucket.deserialize(buffer, config);
-    engine.filters = NetworkFilterBucket.deserialize(buffer, config);
-    engine.exceptions = NetworkFilterBucket.deserialize(buffer, config);
+    engine.importants = NetworkFilterBucket.deserialize(
+      buffer,
+      config,
+      engine.preprocessors.ineligible,
+    );
+    engine.redirects = NetworkFilterBucket.deserialize(
+      buffer,
+      config,
+      engine.preprocessors.ineligible,
+    );
+    engine.filters = NetworkFilterBucket.deserialize(
+      buffer,
+      config,
+      engine.preprocessors.ineligible,
+    );
+    engine.exceptions = NetworkFilterBucket.deserialize(
+      buffer,
+      config,
+      engine.preprocessors.ineligible,
+    );
 
-    engine.csp = NetworkFilterBucket.deserialize(buffer, config);
-    engine.cosmetics = CosmeticFilterBucket.deserialize(buffer, config);
-    engine.hideExceptions = NetworkFilterBucket.deserialize(buffer, config);
+    engine.csp = NetworkFilterBucket.deserialize(buffer, config, engine.preprocessors.ineligible);
+    engine.cosmetics = CosmeticFilterBucket.deserialize(
+      buffer,
+      config,
+      engine.preprocessors.ineligible,
+    );
+    engine.hideExceptions = NetworkFilterBucket.deserialize(
+      buffer,
+      config,
+      engine.preprocessors.ineligible,
+    );
 
     // Optionally deserialize metadata
     const hasMetadata = buffer.getBool();
@@ -525,6 +558,19 @@ export default class FilterEngine extends EventEmitter<
     // Update preprocessors
     if (newPreprocessors.length !== 0 || removedPreprocessors.length !== 0) {
       updated = true;
+      const preservedFilters = this.preprocessors.update({
+        added: newPreprocessors,
+        removed: removedPreprocessors,
+      }).preservedFilters;
+
+      if (removedCosmeticFilters) {
+        removedCosmeticFilters = removedCosmeticFilters.filter(
+          (one) => !preservedFilters.has(one),
+        );
+      }
+      if (removedNetworkFilters) {
+        removedNetworkFilters = removedNetworkFilters.filter((one) => !preservedFilters.has(one));
+      }
     }
 
     // Update cosmetic filters

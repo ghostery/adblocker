@@ -18,8 +18,12 @@ import FiltersContainer from './filters';
  * Accelerating data structure for network filters matching.
  */
 export default class NetworkFilterBucket {
-  public static deserialize(buffer: StaticDataView, config: Config): NetworkFilterBucket {
-    const bucket = new NetworkFilterBucket({ config });
+  public static deserialize(
+    buffer: StaticDataView,
+    config: Config,
+    ineligibleFilterIds: Set<number>,
+  ): NetworkFilterBucket {
+    const bucket = new NetworkFilterBucket({ ineligibleFilterIds, config });
 
     bucket.index = ReverseIndex.deserialize(
       buffer,
@@ -45,7 +49,19 @@ export default class NetworkFilterBucket {
   // should be disabled (only one lookup is needed).
   private badFiltersIds: Set<number> | null;
 
-  constructor({ filters = [], config }: { filters?: NetworkFilter[]; config: Config }) {
+  // This set of filter ids contains ineligible filters classified by
+  // preprocessors.
+  private ineligibleFilterIds: Set<number>;
+
+  constructor({
+    filters = [],
+    ineligibleFilterIds = new Set(),
+    config,
+  }: {
+    filters?: NetworkFilter[];
+    ineligibleFilterIds?: Set<number>;
+    config: Config;
+  }) {
     this.index = new ReverseIndex({
       config,
       deserialize: NetworkFilter.deserialize,
@@ -59,6 +75,8 @@ export default class NetworkFilterBucket {
       deserialize: NetworkFilter.deserialize,
       filters: [],
     });
+
+    this.ineligibleFilterIds = ineligibleFilterIds;
 
     if (filters.length !== 0) {
       this.update(filters, undefined);
@@ -123,9 +141,14 @@ export default class NetworkFilterBucket {
   }
 
   /**
-   * Given a matching filter, check if it is disabled by a $badfilter
+   * Given a matching filter, check if it is disabled by a $badfilter and
+   * preprocessor.
    */
   private isFilterDisabled(filter: NetworkFilter): boolean {
+    if (this.ineligibleFilterIds.has(filter.getId())) {
+      return true;
+    }
+
     // Lazily load information about bad filters in memory. The only thing we
     // keep in memory is the list of IDs from $badfilter (ignoring the
     // $badfilter option from mask). This allows to check if a matching filter
