@@ -149,7 +149,7 @@ export function parseFilters(
   const lines = list.split('\n');
 
   const conditions: Map<string, Preprocessor> = new Map();
-  const preprocessors: { instance: Preprocessor; negated: boolean }[] = [];
+  const preprocessorStack: { instance: Preprocessor; negated: boolean }[] = [];
 
   for (let i = 0; i < lines.length; i += 1) {
     let line = lines[i];
@@ -198,7 +198,7 @@ export function parseFilters(
       if (filter !== null) {
         networkFilters.push(filter);
         // Push to applied preprocessors
-        for (const { instance, negated } of preprocessors) {
+        for (const { instance, negated } of preprocessorStack) {
           if (negated) {
             instance.negatives.add(filter.getId());
           } else {
@@ -212,7 +212,7 @@ export function parseFilters(
         if (config.loadGenericCosmeticsFilters === true || filter.isGenericHide() === false) {
           cosmeticFilters.push(filter);
           // Push to applied preprocessors
-          for (const { instance, negated } of preprocessors) {
+          for (const { instance, negated } of preprocessorStack) {
             if (negated) {
               instance.negatives.add(filter.getId());
             } else {
@@ -230,15 +230,15 @@ export function parseFilters(
           if (!conditions.has(preprocessor.condition)) {
             conditions.set(preprocessor.condition, preprocessor);
           }
-          preprocessors.push({
+          preprocessorStack.push({
             instance: conditions.get(preprocessor.condition)!,
             negated: false,
           });
         }
       } else if (preprocessorType === PreprocessorTypes.ELSE) {
-        preprocessors[preprocessors.length - 1].negated = true;
+        preprocessorStack[preprocessorStack.length - 1].negated = true;
       } else if (preprocessorType === PreprocessorTypes.ENDIF) {
-        preprocessors.slice(preprocessors.length - 1, 1);
+        preprocessorStack.slice(preprocessorStack.length - 1, 1);
       }
     }
   }
