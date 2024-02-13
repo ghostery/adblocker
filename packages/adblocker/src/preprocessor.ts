@@ -66,7 +66,7 @@ const identifierPattern = /^(!?[a-z0-9_]+)$/;
 const tokenize = (expression: string) => expression.split(operatorPattern);
 const matchIdentifier = (identifier: string) => identifier.match(identifierPattern);
 
-const evaluate = (expression: string, env: Env) => {
+export const evaluate = (expression: string, env: Env) => {
   const tokens = tokenize(expression);
 
   let result = false;
