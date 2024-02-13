@@ -69,6 +69,10 @@ export default class PreprocessorBucket {
     }
   }
 
+  public get isFilterEligible() {
+    return (filterId: number) => !this.ineligible.has(filterId);
+  }
+
   public flush(env: Env) {
     this.env = env;
 
