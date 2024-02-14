@@ -1,4 +1,5 @@
 import { StaticDataView } from '../../data-view';
+import IFilter from '../../filters/interface';
 import Preprocessor, { Env } from '../../preprocessor';
 
 export default class PreprocessorBucket {
@@ -69,8 +70,8 @@ export default class PreprocessorBucket {
     }
   }
 
-  public isFilterEligible(filterId: number) {
-    return !this.ineligible.has(filterId);
+  public isFilterEligible(filter: IFilter) {
+    return !this.ineligible.has(filter.getId());
   }
 
   public flush(env: Env) {

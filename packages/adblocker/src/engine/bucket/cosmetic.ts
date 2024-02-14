@@ -13,6 +13,7 @@ import { compactTokens, concatTypedArrays } from '../../compact-set';
 import Config from '../../config';
 import { StaticDataView } from '../../data-view';
 import CosmeticFilter, { DEFAULT_HIDDING_STYLE } from '../../filters/cosmetic';
+import IFilter from '../../filters/interface';
 import {
   getEntityHashesFromLabelsBackward,
   getHostnameHashesFromLabelsBackward,
@@ -416,7 +417,7 @@ export default class CosmeticFilterBucket {
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
 
-    isFilterEligible?: (filter: number) => boolean;
+    isFilterEligible?: (filter: IFilter) => boolean;
   }): {
     injections: CosmeticFilter[];
     extended: IMessageFromBackground['extended'];
@@ -439,7 +440,7 @@ export default class CosmeticFilterBucket {
         if (
           (allowSpecificHides === true || rule.isScriptInject() === true) &&
           rule.match(hostname, domain) &&
-          isFilterEligible(rule.getId())
+          isFilterEligible(rule)
         ) {
           rules.push(rule);
         }
@@ -456,7 +457,7 @@ export default class CosmeticFilterBucket {
     if (allowGenericHides === true && getRulesFromHostname === true) {
       const genericRules = this.getGenericRules();
       for (const rule of genericRules) {
-        if (rule.match(hostname, domain) === true && isFilterEligible(rule.getId())) {
+        if (rule.match(hostname, domain) === true && isFilterEligible(rule)) {
           rules.push(rule);
         }
       }
@@ -467,7 +468,7 @@ export default class CosmeticFilterBucket {
     // =======================================================================
     if (allowGenericHides === true && getRulesFromDOM === true && classes.length !== 0) {
       this.classesIndex.iterMatchingFilters(hashStrings(classes), (rule: CosmeticFilter) => {
-        if (rule.match(hostname, domain) && isFilterEligible(rule.getId())) {
+        if (rule.match(hostname, domain) && isFilterEligible(rule)) {
           rules.push(rule);
         }
         return true;
@@ -479,7 +480,7 @@ export default class CosmeticFilterBucket {
     // =======================================================================
     if (allowGenericHides === true && getRulesFromDOM === true && ids.length !== 0) {
       this.idsIndex.iterMatchingFilters(hashStrings(ids), (rule: CosmeticFilter) => {
-        if (rule.match(hostname, domain) && isFilterEligible(rule.getId())) {
+        if (rule.match(hostname, domain) && isFilterEligible(rule)) {
           rules.push(rule);
         }
         return true;
@@ -493,7 +494,7 @@ export default class CosmeticFilterBucket {
       this.hrefsIndex.iterMatchingFilters(
         compactTokens(concatTypedArrays(hrefs.map((href) => tokenizeNoSkip(href)))),
         (rule: CosmeticFilter) => {
-          if (rule.match(hostname, domain) && isFilterEligible(rule.getId())) {
+          if (rule.match(hostname, domain) && isFilterEligible(rule)) {
             rules.push(rule);
           }
           return true;
@@ -517,7 +518,7 @@ export default class CosmeticFilterBucket {
       let injectionsDisabled = false;
       const disabledRules: Set<string> = new Set();
       this.unhideIndex.iterMatchingFilters(hostnameTokens, (rule: CosmeticFilter) => {
-        if (rule.match(hostname, domain) && isFilterEligible(rule.getId())) {
+        if (rule.match(hostname, domain) && isFilterEligible(rule)) {
           disabledRules.add(rule.getSelector());
 
           // Detect special +js() rules to disable scriptlet injections

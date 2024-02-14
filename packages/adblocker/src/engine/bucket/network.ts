@@ -8,6 +8,7 @@
 
 import Config from '../../config';
 import { StaticDataView } from '../../data-view';
+import IFilter from '../../filters/interface';
 import NetworkFilter from '../../filters/network';
 import Request from '../../request';
 import { noopOptimizeNetwork, optimizeNetwork } from '../optimizer';
@@ -97,7 +98,7 @@ export default class NetworkFilterBucket {
 
   public matchAll(
     request: Request,
-    isFilterEligible: (filter: number) => boolean = () => true,
+    isFilterEligible: (filter: IFilter) => boolean = () => true,
   ): NetworkFilter[] {
     const filters: NetworkFilter[] = [];
 
@@ -105,7 +106,7 @@ export default class NetworkFilterBucket {
       if (
         filter.match(request) &&
         this.isFilterDisabled(filter) === false &&
-        isFilterEligible(filter.getId())
+        isFilterEligible(filter)
       ) {
         filters.push(filter);
       }
@@ -117,7 +118,7 @@ export default class NetworkFilterBucket {
 
   public match(
     request: Request,
-    isFilterEligible: (filter: number) => boolean = () => true,
+    isFilterEligible: (filter: IFilter) => boolean = () => true,
   ): NetworkFilter | undefined {
     let match: NetworkFilter | undefined;
 
@@ -125,7 +126,7 @@ export default class NetworkFilterBucket {
       if (
         filter.match(request) &&
         this.isFilterDisabled(filter) === false &&
-        isFilterEligible(filter.getId())
+        isFilterEligible(filter)
       ) {
         match = filter;
         return false;

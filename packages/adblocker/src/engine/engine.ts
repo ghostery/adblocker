@@ -31,6 +31,7 @@ import NetworkFilterBucket from './bucket/network';
 import { Metadata, IPatternLookupResult } from './metadata';
 import Preprocessor, { Env } from '../preprocessor';
 import PreprocessorBucket from './bucket/preprocessor';
+import IFilter from '../filters/interface';
 
 export const ENGINE_VERSION = 634;
 
@@ -760,7 +761,7 @@ export default class FilterEngine extends EventEmitter<
     let allowGenericHides = true;
     let allowSpecificHides = true;
 
-    const isFilterEligible = (filterId: number) => this.preprocessors.isFilterEligible(filterId);
+    const isFilterEligible = (filter: IFilter) => this.preprocessors.isFilterEligible(filter);
 
     const exceptions = this.hideExceptions.matchAll(
       Request.fromRawDetails({
@@ -849,7 +850,7 @@ export default class FilterEngine extends EventEmitter<
   public matchAll(request: Request): Set<NetworkFilter> {
     const filters: NetworkFilter[] = [];
 
-    const isFilterEligible = (filterId: number) => this.preprocessors.isFilterEligible(filterId);
+    const isFilterEligible = (filter: IFilter) => this.preprocessors.isFilterEligible(filter);
 
     if (request.isSupported) {
       Array.prototype.push.apply(filters, this.importants.matchAll(request, isFilterEligible));
@@ -876,7 +877,7 @@ export default class FilterEngine extends EventEmitter<
       return undefined;
     }
 
-    const isFilterEligible = (filterId: number) => this.preprocessors.isFilterEligible(filterId);
+    const isFilterEligible = (filter: IFilter) => this.preprocessors.isFilterEligible(filter);
 
     const matches = this.csp.matchAll(request, isFilterEligible);
 
@@ -931,7 +932,7 @@ export default class FilterEngine extends EventEmitter<
       return result;
     }
 
-    const isFilterEligible = (filterId: number) => this.preprocessors.isFilterEligible(filterId);
+    const isFilterEligible = (filter: IFilter) => this.preprocessors.isFilterEligible(filter);
 
     if (request.isSupported) {
       // Check the filters in the following order:
