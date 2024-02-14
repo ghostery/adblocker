@@ -346,16 +346,20 @@ export default class CosmeticFilterBucket {
   public getHtmlRules({
     domain,
     hostname,
+
+    isFilterExcluded,
   }: {
     domain: string;
     hostname: string;
+
+    isFilterExcluded: (filter: IFilter) => boolean;
   }): CosmeticFilter[] {
     // Tokens from `hostname` and `domain` which will be used to lookup filters
     // from the reverse index. The same tokens are re-used for multiple indices.
     const hostnameTokens = createLookupTokens(hostname, domain);
     const rules: CosmeticFilter[] = [];
     this.htmlIndex.iterMatchingFilters(hostnameTokens, (rule: CosmeticFilter) => {
-      if (rule.match(hostname, domain)) {
+      if (rule.match(hostname, domain) && (!isFilterExcluded || !isFilterExcluded(rule))) {
         rules.push(rule);
       }
       return true;
@@ -365,7 +369,7 @@ export default class CosmeticFilterBucket {
     const disabledRules: Set<string> = new Set();
     if (rules.length !== 0) {
       this.unhideIndex.iterMatchingFilters(hostnameTokens, (rule: CosmeticFilter) => {
-        if (rule.match(hostname, domain)) {
+        if (rule.match(hostname, domain) && (!isFilterExcluded || !isFilterExcluded(rule))) {
           disabledRules.add(rule.getSelector());
         }
 
@@ -399,7 +403,7 @@ export default class CosmeticFilterBucket {
     getRulesFromDOM = true,
     getRulesFromHostname = true,
 
-    isFilterEligible = () => true,
+    isFilterExcluded,
   }: {
     domain: string;
     hostname: string;
@@ -417,7 +421,7 @@ export default class CosmeticFilterBucket {
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
 
-    isFilterEligible?: (filter: IFilter) => boolean;
+    isFilterExcluded?: (filter: IFilter) => boolean;
   }): {
     injections: CosmeticFilter[];
     extended: IMessageFromBackground['extended'];
@@ -440,7 +444,7 @@ export default class CosmeticFilterBucket {
         if (
           (allowSpecificHides === true || rule.isScriptInject() === true) &&
           rule.match(hostname, domain) &&
-          isFilterEligible(rule)
+          (!isFilterExcluded || !isFilterExcluded(rule))
         ) {
           rules.push(rule);
         }
@@ -457,7 +461,10 @@ export default class CosmeticFilterBucket {
     if (allowGenericHides === true && getRulesFromHostname === true) {
       const genericRules = this.getGenericRules();
       for (const rule of genericRules) {
-        if (rule.match(hostname, domain) === true && isFilterEligible(rule)) {
+        if (
+          rule.match(hostname, domain) === true &&
+          (!isFilterExcluded || !isFilterExcluded(rule))
+        ) {
           rules.push(rule);
         }
       }
@@ -468,7 +475,7 @@ export default class CosmeticFilterBucket {
     // =======================================================================
     if (allowGenericHides === true && getRulesFromDOM === true && classes.length !== 0) {
       this.classesIndex.iterMatchingFilters(hashStrings(classes), (rule: CosmeticFilter) => {
-        if (rule.match(hostname, domain) && isFilterEligible(rule)) {
+        if (rule.match(hostname, domain) && (!isFilterExcluded || !isFilterExcluded(rule))) {
           rules.push(rule);
         }
         return true;
@@ -480,7 +487,7 @@ export default class CosmeticFilterBucket {
     // =======================================================================
     if (allowGenericHides === true && getRulesFromDOM === true && ids.length !== 0) {
       this.idsIndex.iterMatchingFilters(hashStrings(ids), (rule: CosmeticFilter) => {
-        if (rule.match(hostname, domain) && isFilterEligible(rule)) {
+        if (rule.match(hostname, domain) && (!isFilterExcluded || !isFilterExcluded(rule))) {
           rules.push(rule);
         }
         return true;
@@ -494,7 +501,7 @@ export default class CosmeticFilterBucket {
       this.hrefsIndex.iterMatchingFilters(
         compactTokens(concatTypedArrays(hrefs.map((href) => tokenizeNoSkip(href)))),
         (rule: CosmeticFilter) => {
-          if (rule.match(hostname, domain) && isFilterEligible(rule)) {
+          if (rule.match(hostname, domain) && (!isFilterExcluded || !isFilterExcluded(rule))) {
             rules.push(rule);
           }
           return true;
@@ -518,7 +525,7 @@ export default class CosmeticFilterBucket {
       let injectionsDisabled = false;
       const disabledRules: Set<string> = new Set();
       this.unhideIndex.iterMatchingFilters(hostnameTokens, (rule: CosmeticFilter) => {
-        if (rule.match(hostname, domain) && isFilterEligible(rule)) {
+        if (rule.match(hostname, domain) && (!isFilterExcluded || !isFilterExcluded(rule))) {
           disabledRules.add(rule.getSelector());
 
           // Detect special +js() rules to disable scriptlet injections

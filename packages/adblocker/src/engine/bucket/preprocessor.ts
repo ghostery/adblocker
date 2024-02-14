@@ -70,8 +70,8 @@ export default class PreprocessorBucket {
     }
   }
 
-  public isFilterEligible(filter: IFilter) {
-    return !this.ineligible.has(filter.getId());
+  public isFilterExcluded(filter: IFilter) {
+    return this.ineligible.has(filter.getId());
   }
 
   public flush(env: Env) {
