@@ -17,14 +17,14 @@ export default class PreprocessorBucket {
   }
 
   public readonly conditions: Map<string, Preprocessor>;
-  public readonly ineligible: Set<number>;
+  public readonly excluded: Set<number>;
 
   public env: Env;
 
   constructor({ env, preprocessors = [] }: { env: Env; preprocessors?: Preprocessor[] }) {
     this.env = env;
 
-    this.ineligible = new Set();
+    this.excluded = new Set();
     this.conditions = new Map();
 
     this.update({ added: preprocessors });
@@ -57,13 +57,13 @@ export default class PreprocessorBucket {
       }
     }
 
-    // Update ineligible based on bindings
-    this.ineligible.clear();
+    // Update excluded filter ids based on bindings
+    this.excluded.clear();
 
     for (const [filter, preprocessors] of bindings.entries()) {
       for (const one of preprocessors) {
         if (!one.isEnvQualifiedFilter(this.env, filter)) {
-          this.ineligible.add(filter);
+          this.excluded.add(filter);
           break;
         }
       }
@@ -71,7 +71,7 @@ export default class PreprocessorBucket {
   }
 
   public isFilterExcluded(filter: IFilter) {
-    return this.ineligible.has(filter.getId());
+    return this.excluded.has(filter.getId());
   }
 
   public flush(env: Env) {
