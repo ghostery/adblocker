@@ -45,14 +45,7 @@ export default class NetworkFilterBucket {
   // should be disabled (only one lookup is needed).
   private badFiltersIds: Set<number> | null;
 
-  constructor({
-    filters = [],
-    config,
-  }: {
-    filters?: NetworkFilter[];
-    ineligibleFilterIds?: Set<number>;
-    config: Config;
-  }) {
+  constructor({ filters = [], config }: { filters?: NetworkFilter[]; config: Config }) {
     this.index = new ReverseIndex({
       config,
       deserialize: NetworkFilter.deserialize,

@@ -355,34 +355,28 @@ export default class FilterEngine extends EventEmitter<
     // $csp=
     this.csp = new NetworkFilterBucket({
       config: this.config,
-      ineligibleFilterIds: this.preprocessors.ineligible,
     });
     // $elemhide
     // $generichide
     // $specifichide
     this.hideExceptions = new NetworkFilterBucket({
       config: this.config,
-      ineligibleFilterIds: this.preprocessors.ineligible,
     });
     // @@filter
     this.exceptions = new NetworkFilterBucket({
       config: this.config,
-      ineligibleFilterIds: this.preprocessors.ineligible,
     });
     // $important
     this.importants = new NetworkFilterBucket({
       config: this.config,
-      ineligibleFilterIds: this.preprocessors.ineligible,
     });
     // $redirect
     this.redirects = new NetworkFilterBucket({
       config: this.config,
-      ineligibleFilterIds: this.preprocessors.ineligible,
     });
     // All other filters
     this.filters = new NetworkFilterBucket({
       config: this.config,
-      ineligibleFilterIds: this.preprocessors.ineligible,
     });
     // Cosmetic filters
     this.cosmetics = new CosmeticFilterBucket({
@@ -766,6 +760,8 @@ export default class FilterEngine extends EventEmitter<
     let allowGenericHides = true;
     let allowSpecificHides = true;
 
+    const isFilterEligible = (filterId: number) => this.preprocessors.isFilterEligible(filterId);
+
     const exceptions = this.hideExceptions.matchAll(
       Request.fromRawDetails({
         domain: domain || '',
@@ -776,7 +772,7 @@ export default class FilterEngine extends EventEmitter<
         sourceHostname: '',
         sourceUrl: '',
       }),
-      this.preprocessors.isFilterEligible,
+      isFilterEligible,
     );
 
     const genericHides: NetworkFilter[] = [];
@@ -821,7 +817,7 @@ export default class FilterEngine extends EventEmitter<
       getRulesFromDOM,
       getRulesFromHostname,
 
-      isFilterEligible: this.preprocessors.isFilterEligible,
+      isFilterEligible,
     });
 
     // Perform interpolation for injected scripts
@@ -852,31 +848,16 @@ export default class FilterEngine extends EventEmitter<
    */
   public matchAll(request: Request): Set<NetworkFilter> {
     const filters: NetworkFilter[] = [];
+
+    const isFilterEligible = (filterId: number) => this.preprocessors.isFilterEligible(filterId);
+
     if (request.isSupported) {
-      Array.prototype.push.apply(
-        filters,
-        this.importants.matchAll(request, this.preprocessors.isFilterEligible),
-      );
-      Array.prototype.push.apply(
-        filters,
-        this.filters.matchAll(request, this.preprocessors.isFilterEligible),
-      );
-      Array.prototype.push.apply(
-        filters,
-        this.exceptions.matchAll(request, this.preprocessors.isFilterEligible),
-      );
-      Array.prototype.push.apply(
-        filters,
-        this.csp.matchAll(request, this.preprocessors.isFilterEligible),
-      );
-      Array.prototype.push.apply(
-        filters,
-        this.hideExceptions.matchAll(request, this.preprocessors.isFilterEligible),
-      );
-      Array.prototype.push.apply(
-        filters,
-        this.redirects.matchAll(request, this.preprocessors.isFilterEligible),
-      );
+      Array.prototype.push.apply(filters, this.importants.matchAll(request, isFilterEligible));
+      Array.prototype.push.apply(filters, this.filters.matchAll(request, isFilterEligible));
+      Array.prototype.push.apply(filters, this.exceptions.matchAll(request, isFilterEligible));
+      Array.prototype.push.apply(filters, this.csp.matchAll(request, isFilterEligible));
+      Array.prototype.push.apply(filters, this.hideExceptions.matchAll(request, isFilterEligible));
+      Array.prototype.push.apply(filters, this.redirects.matchAll(request, isFilterEligible));
     }
 
     return new Set(filters);
@@ -895,7 +876,9 @@ export default class FilterEngine extends EventEmitter<
       return undefined;
     }
 
-    const matches = this.csp.matchAll(request, this.preprocessors.isFilterEligible);
+    const isFilterEligible = (filterId: number) => this.preprocessors.isFilterEligible(filterId);
+
+    const matches = this.csp.matchAll(request, isFilterEligible);
 
     // No $csp filter found
     if (matches.length === 0) {
@@ -948,13 +931,15 @@ export default class FilterEngine extends EventEmitter<
       return result;
     }
 
+    const isFilterEligible = (filterId: number) => this.preprocessors.isFilterEligible(filterId);
+
     if (request.isSupported) {
       // Check the filters in the following order:
       // 1. $important (not subject to exceptions)
       // 2. redirection ($redirect=resource)
       // 3. normal filters
       // 4. exceptions
-      result.filter = this.importants.match(request, this.preprocessors.isFilterEligible);
+      result.filter = this.importants.match(request, isFilterEligible);
 
       let redirectNone: NetworkFilter | undefined;
       let redirectRule: NetworkFilter | undefined;
@@ -968,7 +953,7 @@ export default class FilterEngine extends EventEmitter<
       // * Else if redirect-rule is found, only redirect if request would be blocked.
       // * Else if redirect is found, redirect.
       if (result.filter === undefined) {
-        const redirects = this.redirects.matchAll(request, this.preprocessors.isFilterEligible);
+        const redirects = this.redirects.matchAll(request, isFilterEligible);
         if (redirects.length !== 0) {
           for (const filter of redirects) {
             if (filter.getRedirect() === 'none') {
@@ -985,7 +970,7 @@ export default class FilterEngine extends EventEmitter<
         // redirection rule triggered for the request. We look for a normal
         // match.
         if (result.filter === undefined) {
-          result.filter = this.filters.match(request, this.preprocessors.isFilterEligible);
+          result.filter = this.filters.match(request, isFilterEligible);
 
           // If we found a match, and a `$redirect-rule` as found previously,
           // then we transform the match into a redirect, following the
@@ -998,7 +983,7 @@ export default class FilterEngine extends EventEmitter<
         // If we found either a redirection rule or a normal match, then check
         // for exceptions which could apply on the request and un-block it.
         if (result.filter !== undefined) {
-          result.exception = this.exceptions.match(request, this.preprocessors.isFilterEligible);
+          result.exception = this.exceptions.match(request, isFilterEligible);
         }
       }
 
