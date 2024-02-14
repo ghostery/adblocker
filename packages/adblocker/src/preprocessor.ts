@@ -114,9 +114,15 @@ export const evaluate = (expression: string, env: Env) => {
 };
 
 export default class Preprocessor {
-  public static parse(line: string): Preprocessor | null {
+  public static parse(
+    line: string,
+    positives?: Set<number>,
+    negatives?: Set<number>,
+  ): Preprocessor {
     return new this({
       condition: line.slice(5 /* '!#if '.length */).replace(/ /g, ''),
+      positives,
+      negatives,
     });
   }
 
@@ -153,8 +159,8 @@ export default class Preprocessor {
     negatives = new Set(),
   }: {
     condition: string;
-    positives?: Set<number>;
-    negatives?: Set<number>;
+    positives?: Set<number> | undefined;
+    negatives?: Set<number> | undefined;
   }) {
     this.condition = condition;
 

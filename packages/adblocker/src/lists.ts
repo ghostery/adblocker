@@ -148,8 +148,12 @@ export function parseFilters(
   const cosmeticFilters: CosmeticFilter[] = [];
   const lines = list.split('\n');
 
-  const conditions: Map<string, Preprocessor> = new Map();
-  const preprocessorStack: { instance: Preprocessor; negated: boolean }[] = [];
+  const preprocessors: Preprocessor[] = [];
+  // The filters affected by a preprocessor
+  const filtersInBlock: number[] = [];
+  // This defines the start index in `filtersInBlock` of each preprocessor block
+  // The highest level of block will have an index of zero
+  const blocks: { start: number; condition: string; negated: boolean }[] = [];
 
   for (let i = 0; i < lines.length; i += 1) {
     let line = lines[i];
@@ -197,13 +201,8 @@ export function parseFilters(
       const filter = NetworkFilter.parse(line, config.debug);
       if (filter !== null) {
         networkFilters.push(filter);
-        // Push to applied preprocessors
-        for (const { instance, negated } of preprocessorStack) {
-          if (negated) {
-            instance.negatives.add(filter.getId());
-          } else {
-            instance.positives.add(filter.getId());
-          }
+        if (blocks.length) {
+          filtersInBlock.push(filter.getId());
         }
       }
     } else if (filterType === FilterType.COSMETIC && config.loadCosmeticFilters === true) {
@@ -211,13 +210,8 @@ export function parseFilters(
       if (filter !== null) {
         if (config.loadGenericCosmeticsFilters === true || filter.isGenericHide() === false) {
           cosmeticFilters.push(filter);
-          // Push to applied preprocessors
-          for (const { instance, negated } of preprocessorStack) {
-            if (negated) {
-              instance.negatives.add(filter.getId());
-            } else {
-              instance.positives.add(filter.getId());
-            }
+          if (blocks.length) {
+            filtersInBlock.push(filter.getId());
           }
         }
       }
@@ -225,25 +219,52 @@ export function parseFilters(
       const preprocessorType = detectPreprocessor(line);
 
       if (preprocessorType === PreprocessorTypes.BEGIF) {
-        const preprocessor = Preprocessor.parse(line);
-        if (preprocessor) {
-          if (!conditions.has(preprocessor.condition)) {
-            conditions.set(preprocessor.condition, preprocessor);
-          }
-          preprocessorStack.push({
-            instance: conditions.get(preprocessor.condition)!,
-            negated: false,
+        blocks.push({
+          start: filtersInBlock.length,
+          condition: line,
+          negated: false,
+        });
+      } else if (preprocessorType === PreprocessorTypes.ELSE) {
+        const last = blocks[blocks.length - 1];
+
+        if (last) {
+          blocks.push({
+            start: filtersInBlock.length,
+            condition: last.condition,
+            negated: true,
           });
         }
-      } else if (preprocessorType === PreprocessorTypes.ELSE) {
-        preprocessorStack[preprocessorStack.length - 1].negated = true;
-      } else if (preprocessorType === PreprocessorTypes.ENDIF) {
-        preprocessorStack.slice(preprocessorStack.length - 1, 1);
+      } else if (preprocessorType === PreprocessorTypes.ENDIF && blocks.length) {
+        let last = blocks.pop()!;
+
+        const positives: Set<number> = new Set();
+        const negatives: Set<number> = new Set();
+
+        // If the last entry is negated, set the ending index of positive to the start of the last entry
+        if (last.negated) {
+          for (const filter of filtersInBlock.splice(
+            last.start,
+            filtersInBlock.length - last.start,
+          )) {
+            negatives.add(filter);
+          }
+
+          last = blocks.pop()!;
+        }
+
+        for (const filter of filtersInBlock.splice(
+          last.start,
+          filtersInBlock.length - last.start,
+        )) {
+          positives.add(filter);
+        }
+
+        preprocessors.push(Preprocessor.parse(last.condition, positives, negatives));
       }
     }
   }
 
-  return { networkFilters, cosmeticFilters, preprocessors: Array.from(conditions.values()) };
+  return { networkFilters, cosmeticFilters, preprocessors };
 }
 
 function getFilters(list: string, config?: Partial<Config>): (NetworkFilter | CosmeticFilter)[] {
