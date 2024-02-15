@@ -75,6 +75,7 @@ describe('preprocessors', () => {
     engine.updateFromDiff({ removed: [filters] });
   };
 
+  // Testing `!#else` means we already aware of parenthesis.
   it('resolves a condition', () => {
     doTest(`!#if ext_ghostery
 ||foo.com^
@@ -154,9 +155,9 @@ describe('preprocessors', () => {
   });
 
   it('cleans previous evaluation caches', () => {
-    env.set('ext_ghostery', false);
-    env.set('ext_devbuild', false);
-    engine.updateEnv(env);
+    const newEnv = new Env();
+
+    engine.updateEnv(newEnv);
 
     doTest(`!#if ext_ghostery
 ||bar.com^

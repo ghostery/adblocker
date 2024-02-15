@@ -31,40 +31,20 @@ export default class PreprocessorBucket {
   }
 
   private build() {
-    // Build filters to preprocessor set
-    // We'll use `Set` instead of `Array` to effectively remove duplicates
-    const bindings = new Map<number, Set<Preprocessor>>();
-
-    for (const preprocessor of this.conditions.values()) {
-      // Remove unused preprocessor
-      if (!(preprocessor.positives.size + preprocessor.negatives.size)) {
-        this.conditions.delete(preprocessor.condition);
-        continue;
-      }
-
-      for (const positive of preprocessor.positives) {
-        const binding = bindings.get(positive) ?? new Set();
-
-        binding.add(preprocessor);
-        bindings.set(positive, binding);
-      }
-
-      for (const negative of preprocessor.negatives) {
-        const binding = bindings.get(negative) ?? new Set();
-
-        binding.add(preprocessor);
-        bindings.set(negative, binding);
-      }
-    }
-
     // Update excluded filter ids based on bindings
     this.excluded.clear();
 
-    for (const [filter, preprocessors] of bindings.entries()) {
-      for (const one of preprocessors) {
-        if (!one.isEnvQualifiedFilter(this.env, filter)) {
+    for (const preprocessor of this.conditions.values()) {
+      // Remove unused preprocessor
+      if (!preprocessor.filters.size) {
+        this.conditions.delete(preprocessor.condition);
+
+        continue;
+      }
+
+      if (!preprocessor.evaluate(this.env)) {
+        for (const filter of preprocessor.filters) {
           this.excluded.add(filter);
-          break;
         }
       }
     }
@@ -100,12 +80,8 @@ export default class PreprocessorBucket {
           continue;
         }
 
-        for (const positive of one.positives) {
-          another.positives.delete(positive);
-        }
-
-        for (const negative of one.negatives) {
-          another.negatives.delete(negative);
+        for (const filter of one.filters) {
+          another.filters.delete(filter);
         }
       }
     }
@@ -122,14 +98,9 @@ export default class PreprocessorBucket {
           continue;
         }
 
-        for (const positive of one.positives) {
-          another.positives.add(positive);
-          preservedFilters.add(positive);
-        }
-
-        for (const negative of one.negatives) {
-          another.positives.add(negative);
-          preservedFilters.add(negative);
+        for (const filter of one.filters) {
+          another.filters.add(filter);
+          preservedFilters.add(filter);
         }
       }
     }
@@ -139,7 +110,6 @@ export default class PreprocessorBucket {
     }
 
     return {
-      updated,
       preservedFilters,
     };
   }

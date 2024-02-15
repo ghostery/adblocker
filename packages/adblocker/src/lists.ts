@@ -8,6 +8,7 @@
 
 import Config from './config';
 import CosmeticFilter from './filters/cosmetic';
+import IFilter from './filters/interface';
 import NetworkFilter from './filters/network';
 import Preprocessor, { PreprocessorTypes, detectPreprocessor } from './preprocessor';
 import { fastStartsWith, fastStartsWithFrom } from './utils';
@@ -150,10 +151,10 @@ export function parseFilters(
 
   const preprocessors: Preprocessor[] = [];
   // The filters affected by a preprocessor
-  const filtersInBlock: number[] = [];
+  const filterStack: IFilter[] = [];
   // This defines the start index in `filtersInBlock` of each preprocessor block
   // The highest level of block will have an index of zero
-  const blocks: { start: number; condition: string; negated: boolean }[] = [];
+  const preprocessorStack: { start: number; condition: string }[] = [];
 
   for (let i = 0; i < lines.length; i += 1) {
     let line = lines[i];
@@ -201,8 +202,8 @@ export function parseFilters(
       const filter = NetworkFilter.parse(line, config.debug);
       if (filter !== null) {
         networkFilters.push(filter);
-        if (blocks.length) {
-          filtersInBlock.push(filter.getId());
+        if (preprocessorStack.length) {
+          filterStack.push(filter);
         }
       }
     } else if (filterType === FilterType.COSMETIC && config.loadCosmeticFilters === true) {
@@ -210,8 +211,8 @@ export function parseFilters(
       if (filter !== null) {
         if (config.loadGenericCosmeticsFilters === true || filter.isGenericHide() === false) {
           cosmeticFilters.push(filter);
-          if (blocks.length) {
-            filtersInBlock.push(filter.getId());
+          if (preprocessorStack.length) {
+            filterStack.push(filter);
           }
         }
       }
@@ -219,47 +220,32 @@ export function parseFilters(
       const preprocessorType = detectPreprocessor(line);
 
       if (preprocessorType === PreprocessorTypes.BEGIF) {
-        blocks.push({
-          start: filtersInBlock.length,
-          condition: line,
-          negated: false,
+        preprocessorStack.push({
+          start: filterStack.length,
+          condition: Preprocessor.getCondition(line),
         });
-      } else if (preprocessorType === PreprocessorTypes.ELSE) {
-        const last = blocks[blocks.length - 1];
+      } else if (
+        (preprocessorType === PreprocessorTypes.ELSE ||
+          preprocessorType === PreprocessorTypes.ENDIF) &&
+        preprocessorStack.length
+      ) {
+        const last = preprocessorStack.pop()!;
+        const filters: Set<number> = new Set();
 
-        if (last) {
-          blocks.push({
-            start: filtersInBlock.length,
-            condition: last.condition,
-            negated: true,
+        const breakAt = last.start + 1;
+
+        while (filterStack.length === breakAt) {
+          filters.add(filterStack.pop()!.getId());
+        }
+
+        preprocessors.push(Preprocessor.parse(last.condition, filters));
+
+        if (preprocessorType === PreprocessorTypes.ELSE) {
+          preprocessorStack.push({
+            start: filterStack.length,
+            condition: `!(${last.condition})`,
           });
         }
-      } else if (preprocessorType === PreprocessorTypes.ENDIF && blocks.length) {
-        let last = blocks.pop()!;
-
-        const positives: Set<number> = new Set();
-        const negatives: Set<number> = new Set();
-
-        // If the last entry is negated, set the ending index of positive to the start of the last entry
-        if (last.negated) {
-          for (const filter of filtersInBlock.splice(
-            last.start,
-            filtersInBlock.length - last.start,
-          )) {
-            negatives.add(filter);
-          }
-
-          last = blocks.pop()!;
-        }
-
-        for (const filter of filtersInBlock.splice(
-          last.start,
-          filtersInBlock.length - last.start,
-        )) {
-          positives.add(filter);
-        }
-
-        preprocessors.push(Preprocessor.parse(last.condition, positives, negatives));
       }
     }
   }

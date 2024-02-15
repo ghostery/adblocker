@@ -60,112 +60,165 @@ export function detectPreprocessor(line: string) {
   return PreprocessorTypes.INVALID;
 }
 
-const operatorPattern = /(\|\||&&)/g;
-const identifierPattern = /^(!?[a-z0-9_]+)$/;
+const tokenizerPattern = /(!|&&|\|\||\(|\)|[a-zA-Z0-9_]+)/g;
 
-const tokenize = (expression: string) => expression.split(operatorPattern);
-const matchIdentifier = (identifier: string) => identifier.match(identifierPattern);
+const tokenize = (expression: string) => expression.match(tokenizerPattern);
 
+const precedence: Record<string, number> = {
+  '!': 2,
+  '&&': 1,
+  '||': 0,
+};
+
+const isOperator = (token: string) => Object.prototype.hasOwnProperty.call(precedence, token);
+
+/// The parsing is done using the [Shunting yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm).
+/// This function takes as input a string expression and an environment Map.
+/// The expression is made of constants (identifiers), logical operators
+/// (&&, ||), negations (!constant) and parentheses.
+///
+/// The environment is a simple Map that associates identifiers to boolean values.
+///
+/// The function should return the result of evaluating the expression using
+/// the values from `environment`. The return value of this function is
+/// either `true` or `false`.
 export const evaluate = (expression: string, env: Env) => {
+  const length = expression.length;
+
+  // Fast path for very simple conditions (which are at the moment 100% of all
+  // preprocessor conditions: either a single constant or a negated constant)
+  if (!length) {
+    return false;
+  }
+
   const tokens = tokenize(expression);
 
-  let result = false;
-  let isContinuedByAndOperator = false;
+  if (!tokens) {
+    return false;
+  }
 
-  for (let i = 0; i < tokens.length; i++) {
-    if (i % 2) {
-      if (tokens[i][0] === '|') {
-        isContinuedByAndOperator = false;
-      } else if (tokens[i][0] === '&') {
-        isContinuedByAndOperator = true;
-      } else {
-        // Invalid expression
+  const output: (boolean | string)[] = [];
+  const stack: (boolean | string)[] = [];
+
+  let size = 0;
+
+  for (const token of tokens) {
+    size += token.length;
+
+    if (token === '(') {
+      stack.push(token);
+    } else if (token === ')') {
+      const parenthesesOpenIndex = stack.lastIndexOf('(');
+
+      // If the opening parenthesis doesn't exist
+      if (parenthesesOpenIndex < 0) {
         return false;
       }
+
+      output.push(...stack.splice(parenthesesOpenIndex + 1, stack.length - parenthesesOpenIndex));
+      stack.pop();
+    } else if (isOperator(token)) {
+      while (
+        stack.length &&
+        isOperator(stack[stack.length - 1] as string) &&
+        precedence[token] <= precedence[stack[stack.length - 1] as string]
+      ) {
+        output.push(stack.pop()!);
+      }
+
+      stack.push(token);
+    } else if (token === 'true') {
+      output.push(true);
+    } else if (token === 'false') {
+      output.push(false);
     } else {
-      const match = matchIdentifier(tokens[i]);
+      output.push(!!env.get(token));
+    }
+  }
 
-      if (!match) {
-        // Invalid expression
-        return false;
+  // Exit if an unallowed character found.
+  // Since we're tokenizing via String.prototype.match function,
+  // the total length of matched tokens will be different in case
+  // unallowed characters were injected.
+  // However, we expect all spaces were already removed in prior step.
+  if (length !== size) {
+    return false;
+  }
+
+  while (stack.length) {
+    output.push(stack.pop()!);
+  }
+
+  for (const token of output) {
+    if (token === true || token === false) {
+      stack.push(token);
+    } else if (isOperator(token)) {
+      if (token === '!') {
+        stack.push(!stack.pop());
+
+        continue;
       }
 
-      let identifier = match[1];
+      const right = stack.pop()!;
+      const left = stack.pop()!;
 
-      const isNegated = identifier.charCodeAt(0) === 33; /* '!' */
-      let isPositive = false;
-
-      if (isNegated) {
-        identifier = identifier.slice(1);
-        isPositive = !env.get(identifier);
+      if (token[0] === '&') {
+        stack.push(left && right);
       } else {
-        isPositive = !!env.get(identifier);
-      }
-
-      if (isContinuedByAndOperator) {
-        result &&= isPositive;
-      } else {
-        result ||= isPositive;
+        stack.push(left || right);
       }
     }
   }
 
-  return result;
+  // Return false if we didn't see any identifiers.
+  if (!stack[0]) {
+    return false;
+  }
+
+  return stack[0] as boolean;
 };
 
 export default class Preprocessor {
-  public static parse(
-    line: string,
-    positives?: Set<number>,
-    negatives?: Set<number>,
-  ): Preprocessor {
+  public static getCondition(line: string) {
+    return line.slice(5 /* '!#if '.length */).replace(/ /g, '');
+  }
+
+  public static parse(condition: string, filters?: Set<number>): Preprocessor {
     return new this({
-      condition: line.slice(5 /* '!#if '.length */).replace(/ /g, ''),
-      positives,
-      negatives,
+      condition,
+      filters,
     });
   }
 
   public static deserialize(view: StaticDataView): Preprocessor {
     const condition = view.getUTF8();
 
-    const positives = new Set<number>();
+    const filters = new Set<number>();
     for (let i = 0, l = view.getUint32(); i < l; i++) {
-      positives.add(view.getUint32());
-    }
-
-    const negatives = new Set<number>();
-    for (let i = 0, l = view.getUint32(); i < l; i++) {
-      negatives.add(view.getUint32());
+      filters.add(view.getUint32());
     }
 
     return new this({
       condition,
-      positives,
-      negatives,
+      filters,
     });
   }
 
   public readonly condition: string;
-
-  public readonly positives: Set<number>;
-  public readonly negatives: Set<number>;
+  public readonly filters: Set<number>;
 
   public result: boolean | undefined;
 
   constructor({
     condition,
-    positives = new Set(),
-    negatives = new Set(),
+    filters = new Set(),
   }: {
     condition: string;
-    positives?: Set<number> | undefined;
-    negatives?: Set<number> | undefined;
+    filters?: Set<number> | undefined;
   }) {
     this.condition = condition;
 
-    this.positives = positives;
-    this.negatives = negatives;
+    this.filters = filters;
   }
 
   public evaluate(env: Env) {
@@ -180,28 +233,11 @@ export default class Preprocessor {
     this.result = undefined;
   }
 
-  public isEnvQualifiedFilter(env: Env, filter: number) {
-    if (this.negatives.has(filter)) {
-      if (this.positives.has(filter)) {
-        return false;
-      }
-
-      return !this.evaluate(env);
-    }
-
-    return this.evaluate(env);
-  }
-
   public serialize(view: StaticDataView) {
     view.pushUTF8(this.condition);
 
-    view.pushUint32(this.positives.size);
-    for (const filter of this.positives) {
-      view.pushUint32(filter);
-    }
-
-    view.pushUint32(this.negatives.size);
-    for (const filter of this.negatives) {
+    view.pushUint32(this.filters.size);
+    for (const filter of this.filters) {
       view.pushUint32(filter);
     }
   }
@@ -209,8 +245,7 @@ export default class Preprocessor {
   public getSerializedSize() {
     let estimatedSize = sizeOfUTF8(this.condition);
 
-    estimatedSize += (1 + this.positives.size) * 4;
-    estimatedSize += (1 + this.negatives.size) * 4;
+    estimatedSize += (1 + this.filters.size) * 4;
 
     return estimatedSize;
   }
