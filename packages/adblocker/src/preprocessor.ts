@@ -207,8 +207,6 @@ export default class Preprocessor {
   public readonly condition: string;
   public readonly filters: Set<number>;
 
-  public result: boolean | undefined;
-
   constructor({
     condition,
     filters = new Set(),
@@ -217,20 +215,11 @@ export default class Preprocessor {
     filters?: Set<number> | undefined;
   }) {
     this.condition = condition;
-
     this.filters = filters;
   }
 
   public evaluate(env: Env) {
-    if (!this.result) {
-      this.result = evaluate(this.condition, env);
-    }
-
-    return this.result;
-  }
-
-  public flush() {
-    this.result = undefined;
+    return evaluate(this.condition, env);
   }
 
   public serialize(view: StaticDataView) {
