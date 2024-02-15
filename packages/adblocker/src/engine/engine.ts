@@ -285,7 +285,8 @@ export default class FilterEngine extends EventEmitter<
     engine.lists = lists;
 
     // Deserialize preprocessors
-    engine.preprocessors = PreprocessorBucket.deserialize(buffer, env);
+    engine.preprocessors = PreprocessorBucket.deserialize(buffer);
+    engine.preprocessors.updateEnv(env);
 
     // Deserialize buckets
     engine.importants = NetworkFilterBucket.deserialize(buffer, config);

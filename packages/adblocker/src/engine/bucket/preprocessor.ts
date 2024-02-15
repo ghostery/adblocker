@@ -3,7 +3,7 @@ import IFilter from '../../filters/interface';
 import Preprocessor, { Env } from '../../preprocessor';
 
 export default class PreprocessorBucket {
-  public static deserialize(view: StaticDataView, env: Env): PreprocessorBucket {
+  public static deserialize(view: StaticDataView): PreprocessorBucket {
     const preprocessors: Preprocessor[] = [];
 
     for (let i = 0, l = view.getUint32(); i < l; i++) {
@@ -11,7 +11,6 @@ export default class PreprocessorBucket {
     }
 
     return new this({
-      env,
       preprocessors,
     });
   }
@@ -21,13 +20,20 @@ export default class PreprocessorBucket {
 
   public env: Env;
 
-  constructor({ env, preprocessors = [] }: { env: Env; preprocessors?: Preprocessor[] }) {
+  constructor({
+    env = new Env(),
+    preprocessors = [],
+  }: {
+    env?: Env;
+    preprocessors?: Preprocessor[];
+  }) {
     this.env = env;
-
     this.excluded = new Set();
     this.conditions = new Map();
 
-    this.update({ added: preprocessors });
+    if (preprocessors.length) {
+      this.update({ added: preprocessors });
+    }
   }
 
   private build() {
