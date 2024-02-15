@@ -54,7 +54,7 @@ export default class PreprocessorBucket {
     return this.excluded.has(filter.getId());
   }
 
-  public flush(env: Env) {
+  public updateEnv(env: Env) {
     this.env = env;
 
     this.build();
