@@ -222,8 +222,8 @@ export default class Preprocessor {
     view.pushUTF8(this.condition);
 
     view.pushUint32(this.filters.size);
-    for (const filter of this.filters) {
-      view.pushUint32(filter);
+    for (const filterID of this.filterIDs) {
+      view.pushUint32(filterID);
     }
   }
 
