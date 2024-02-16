@@ -352,7 +352,7 @@ export default class CosmeticFilterBucket {
     domain: string;
     hostname: string;
 
-    isFilterExcluded: (filter: IFilter) => boolean;
+    isFilterExcluded?: (filter: IFilter) => boolean;
   }): CosmeticFilter[] {
     // Tokens from `hostname` and `domain` which will be used to lookup filters
     // from the reverse index. The same tokens are re-used for multiple indices.
