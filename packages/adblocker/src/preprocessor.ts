@@ -88,11 +88,7 @@ const isOperator = (token: string) => Object.prototype.hasOwnProperty.call(prece
 /// the values from `environment`. The return value of this function is
 /// either `true` or `false`.
 export const evaluate = (expression: string, env: Env) => {
-  const length = expression.length;
-
-  // Fast path for very simple conditions (which are at the moment 100% of all
-  // preprocessor conditions: either a single constant or a negated constant)
-  if (!length) {
+  if (!expression.length) {
     return false;
   }
 
@@ -102,14 +98,19 @@ export const evaluate = (expression: string, env: Env) => {
     return false;
   }
 
+  // Exit if an unallowed character found.
+  // Since we're tokenizing via String.prototype.match function,
+  // the total length of matched tokens will be different in case
+  // unallowed characters were injected.
+  // However, we expect all spaces were already removed in prior step.
+  if (expression.length !== tokens.reduce((partialSum, token) => partialSum + token.length, 0)) {
+    return false;
+  }
+
   const output: (boolean | string)[] = [];
   const stack: (boolean | string)[] = [];
 
-  let size = 0;
-
   for (const token of tokens) {
-    size += token.length;
-
     if (token === '(') {
       stack.push(token);
     } else if (token === ')') {
@@ -139,15 +140,6 @@ export const evaluate = (expression: string, env: Env) => {
     } else {
       output.push(!!env.get(token));
     }
-  }
-
-  // Exit if an unallowed character found.
-  // Since we're tokenizing via String.prototype.match function,
-  // the total length of matched tokens will be different in case
-  // unallowed characters were injected.
-  // However, we expect all spaces were already removed in prior step.
-  if (length !== size) {
-    return false;
   }
 
   while (stack.length) {
