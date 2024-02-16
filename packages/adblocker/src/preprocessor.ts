@@ -152,17 +152,13 @@ export const evaluate = (expression: string, env: Env) => {
   for (const token of output) {
     if (token === true || token === false) {
       stack.push(token);
+    } else if (token === '!') {
+      stack.push(!stack.pop());
     } else if (isOperator(token)) {
-      if (token === '!') {
-        stack.push(!stack.pop());
+      const right = stack.pop();
+      const left = stack.pop();
 
-        continue;
-      }
-
-      const right = stack.pop()!;
-      const left = stack.pop()!;
-
-      if (token[0] === '&') {
+      if (token === '&&') {
         stack.push(left && right);
       } else {
         stack.push(left || right);
