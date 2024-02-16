@@ -114,14 +114,15 @@ export const evaluate = (expression: string, env: Env) => {
     if (token === '(') {
       stack.push(token);
     } else if (token === ')') {
-      const parenthesesOpenIndex = stack.lastIndexOf('(');
+      while (stack.length !== 0 && stack[stack.length - 1] !== '(') {
+        output.push(stack.pop()!);
+      }
 
       // If the opening parenthesis doesn't exist
-      if (parenthesesOpenIndex < 0) {
+      if (stack.length === 0) {
         return false;
       }
 
-      output.push(...stack.splice(parenthesesOpenIndex + 1, stack.length - parenthesesOpenIndex));
       stack.pop();
     } else if (isOperator(token)) {
       while (
