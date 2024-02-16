@@ -42,14 +42,14 @@ export default class PreprocessorBucket {
 
     for (const preprocessor of this.conditions.values()) {
       // Remove unused preprocessor
-      if (!preprocessor.filters.size) {
+      if (!preprocessor.filterIDs.size) {
         this.conditions.delete(preprocessor.condition);
 
         continue;
       }
 
       if (!preprocessor.evaluate(this.env)) {
-        for (const filter of preprocessor.filters) {
+        for (const filter of preprocessor.filterIDs) {
           this.excluded.add(filter);
         }
       }
@@ -81,8 +81,8 @@ export default class PreprocessorBucket {
           continue;
         }
 
-        for (const filter of one.filters) {
-          another.filters.delete(filter);
+        for (const filter of one.filterIDs) {
+          another.filterIDs.delete(filter);
         }
       }
     }
@@ -99,8 +99,8 @@ export default class PreprocessorBucket {
           continue;
         }
 
-        for (const filter of one.filters) {
-          another.filters.add(filter);
+        for (const filter of one.filterIDs) {
+          another.filterIDs.add(filter);
           preservedFilters.add(filter);
         }
       }

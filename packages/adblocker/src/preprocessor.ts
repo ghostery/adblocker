@@ -41,9 +41,9 @@ export const enum PreprocessorTypes {
 export function detectPreprocessor(line: string) {
   // Minimum size of a valid condition should be 6 for something like: "!#if x" or "!#else"
   if (
-    line.length < 6
-    || line.charCodeAt(0) !== 33 /* '!' */
-    || line.charCodeAt(1) !== 35 /* '#' */
+    line.length < 6 ||
+    line.charCodeAt(0) !== 33 /* '!' */ ||
+    line.charCodeAt(1) !== 35 /* '#' */
   ) {
     return PreprocessorTypes.INVALID;
   }
@@ -94,7 +94,7 @@ export const evaluate = (expression: string, env: Env) => {
 
   const tokens = tokenize(expression);
 
-  if (tokens.length === 0) {
+  if (!tokens || tokens.length === 0) {
     return false;
   }
 
@@ -152,8 +152,8 @@ export const evaluate = (expression: string, env: Env) => {
     } else if (token === '!') {
       stack.push(!stack.pop());
     } else if (isOperator(token)) {
-      const right = stack.pop();
-      const left = stack.pop();
+      const right = stack.pop()!;
+      const left = stack.pop()!;
 
       if (token === '&&') {
         stack.push(left && right);
@@ -176,39 +176,39 @@ export default class Preprocessor {
     return line.slice(5 /* '!#if '.length */).replace(/\s/g, '');
   }
 
-  public static parse(condition: string, filters?: Set<number>): Preprocessor {
+  public static parse(condition: string, filterIDs?: Set<number>): Preprocessor {
     return new this({
       condition,
-      filters,
+      filterIDs,
     });
   }
 
   public static deserialize(view: StaticDataView): Preprocessor {
     const condition = view.getUTF8();
 
-    const filters = new Set<number>();
+    const filterIDs = new Set<number>();
     for (let i = 0, l = view.getUint32(); i < l; i++) {
-      filters.add(view.getUint32());
+      filterIDs.add(view.getUint32());
     }
 
     return new this({
       condition,
-      filters,
+      filterIDs,
     });
   }
 
   public readonly condition: string;
-  public readonly filters: Set<number>;
+  public readonly filterIDs: Set<number>;
 
   constructor({
     condition,
-    filters = new Set(),
+    filterIDs = new Set(),
   }: {
     condition: string;
-    filters?: Set<number> | undefined;
+    filterIDs?: Set<number> | undefined;
   }) {
     this.condition = condition;
-    this.filters = filters;
+    this.filterIDs = filterIDs;
   }
 
   public evaluate(env: Env) {
@@ -218,7 +218,7 @@ export default class Preprocessor {
   public serialize(view: StaticDataView) {
     view.pushUTF8(this.condition);
 
-    view.pushUint32(this.filters.size);
+    view.pushUint32(this.filterIDs.size);
     for (const filterID of this.filterIDs) {
       view.pushUint32(filterID);
     }
@@ -227,7 +227,7 @@ export default class Preprocessor {
   public getSerializedSize() {
     let estimatedSize = sizeOfUTF8(this.condition);
 
-    estimatedSize += (1 + this.filters.size) * 4;
+    estimatedSize += (1 + this.filterIDs.size) * 4;
 
     return estimatedSize;
   }
