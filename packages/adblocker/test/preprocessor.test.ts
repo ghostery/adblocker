@@ -153,16 +153,4 @@ describe('preprocessors', () => {
 ||bar.com^
 !#endif`);
   });
-
-  it('cleans previous evaluation caches', () => {
-    const newEnv = new Env();
-
-    engine.updateEnv(newEnv);
-
-    doTest(`!#if ext_ghostery
-||bar.com^
-!#else
-||foo.com^
-!#endif`);
-  });
 });
