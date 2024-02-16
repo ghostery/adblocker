@@ -98,7 +98,7 @@ export const evaluate = (expression: string, env: Env) => {
 
   const tokens = tokenize(expression);
 
-  if (!tokens) {
+  if (tokens.length === 0) {
     return false;
   }
 
