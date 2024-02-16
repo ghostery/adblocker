@@ -176,7 +176,7 @@ export const evaluate = (expression: string, env: Env) => {
 
 export default class Preprocessor {
   public static getCondition(line: string) {
-    return line.slice(5 /* '!#if '.length */).replace(/ /g, '');
+    return line.slice(5 /* '!#if '.length */).replace(/\s/g, '');
   }
 
   public static parse(condition: string, filters?: Set<number>): Preprocessor {
