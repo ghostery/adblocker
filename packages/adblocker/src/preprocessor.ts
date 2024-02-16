@@ -39,7 +39,12 @@ export const enum PreprocessorTypes {
 }
 
 export function detectPreprocessor(line: string) {
-  if (line.charCodeAt(1) !== 35 /* '#' */) {
+  // Minimum size of a valid condition should be 6 for something like: "!#if x" or "!#else"
+  if (
+    line.length < 6
+    || line.charCodeAt(0) !== 33 /* '!' */
+    || line.charCodeAt(1) !== 35 /* '#' */
+  ) {
     return PreprocessorTypes.INVALID;
   }
 
