@@ -33,6 +33,7 @@ import {
   tokenizeInPlace,
   tokenizeRegexInPlace,
   tokenizeWithWildcardsInPlace,
+  HASH_SEED,
 } from '../utils';
 import IFilter from './interface';
 
@@ -325,7 +326,7 @@ function computeFilterId(
   denyallow: Domains | undefined,
   redirect: string | undefined,
 ): number {
-  let hash = (7907 * 33) ^ mask;
+  let hash = (HASH_SEED * 33) ^ mask;
 
   if (csp !== undefined) {
     for (let i = 0; i < csp.length; i += 1) {

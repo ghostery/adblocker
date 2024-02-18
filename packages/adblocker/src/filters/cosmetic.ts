@@ -34,6 +34,7 @@ import {
   hasUnicode,
   setBit,
   tokenize,
+  HASH_SEED,
 } from '../utils';
 import IFilter from './interface';
 import { HTMLSelector, extractHTMLSelectorFromRule } from '../html-filtering';
@@ -150,7 +151,7 @@ function computeFilterId(
   domains: Domains | undefined,
   style: string | undefined,
 ): number {
-  let hash = (5437 * 33) ^ mask;
+  let hash = (HASH_SEED * 33) ^ mask;
 
   if (selector !== undefined) {
     for (let i = 0; i < selector.length; i += 1) {

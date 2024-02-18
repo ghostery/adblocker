@@ -8,7 +8,7 @@
 
 import { TokensBuffer, TOKENS_BUFFER } from './tokens-buffer';
 
-export const HASH_SEED = 7877;
+export const HASH_SEED = 7883;
 
 /***************************************************************************
  *  Bitwise helpers

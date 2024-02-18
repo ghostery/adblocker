@@ -15,7 +15,7 @@ import { StaticDataView } from '../src/data-view';
 import Resources from '../src/resources';
 
 describe('#Resources', () => {
-  describe('#serialize', () => {
+  it('#serialize', () => {
     const resources = Resources.parse(loadResources(), { checksum: 'checksum' });
     expect(resources.checksum).to.equal('checksum');
     const buffer = StaticDataView.allocate(2000000, { enableCompression: false });

@@ -240,9 +240,9 @@ sportbible.com#@#div[id^="sp_message_container_"]
 ! https://github.com/uBlockOrigin/uAssets/issues/21485
 ! https://github.com/uBlockOrigin/uAssets/issues/21526
 ! https://github.com/uBlockOrigin/uAssets/pull/21510/
-m2o.it,deejay.it,capital.it,ilmattino.it,leggo.it,libero.it##+js(trusted-click-element, button.iubenda-cs-customize-btn%2C%20button.iub-cmp-reject-btn%2C%20button%23iubFooterBtn)
-m2o.it,deejay.it,capital.it,ilmattino.it,leggo.it,libero.it##html[style="overflow: hidden;"]:style(overflow: auto !important)
-m2o.it,deejay.it,capital.it,ilmattino.it,leggo.it,libero.it##[id|="iubenda"]
+m2o.it,deejay.it,capital.it,ilmattino.it,leggo.it,libero.it,tiscali.it##+js(trusted-click-element, button.iubenda-cs-customize-btn%2C%20button.iub-cmp-reject-btn%2C%20button%23iubFooterBtn)
+m2o.it,deejay.it,capital.it,ilmattino.it,leggo.it,libero.it,tiscali.it##html[style="overflow: hidden;"]:style(overflow: auto !important)
+m2o.it,deejay.it,capital.it,ilmattino.it,leggo.it,libero.it,tiscali.it##[id^="iubenda"]
 ilmattino.it,leggo.it##.banner:has([href="javascript:acceptAllCookies();void(0);"])
 ! https://lastmile.lt/
 lastmile.lt##+js(set-cookie, __consent, %255B%2522required%2522%255D)
@@ -462,8 +462,11 @@ saniweb.nl##+js(trusted-set-cookie, cookiepreferences, necessary%23true%7Cmarket
 uswitch.com##+js(trusted-set-cookie, cookie-preferences, %7B%22performance%22%3Afalse%2C%22marketing%22%3Afalse%2C%22functionality%22%3Atrue%2C%22social%22%3Atrue%2C%22essential%22%3Atrue%7D)
 ! Necessary + social
 ferienpiraten.ch,holidaypirates.com,piratinviaggio.it,travelpirates.com,urlaubspiraten.at,urlaubspiraten.de,vakantiepiraten.nl,viajerospiratas.es,voyagespirates.fr,wakacyjnipiraci.pl##+js(trusted-set-cookie, hp__gdpr_consent, !demographics%3Dfalse!googletagmanager%3Dfalse!facebook%3Dtrue!twitter%3Dtrue!instagram%3Dtrue!youtube%3Dtrue!optimize%3Dfalse!helphero%3Dfalse!fbpixel%3Dfalse!iterable%3Dfalse!kayakWidget%3Dfalse!vimeo%3Dtrue!lastminute%3Dfalse!apple%3Dtrue!google%3Dtrue!hotjar%3Dfalse!getYourGuide%3Dfalse!gad%3Dfalse, 1year)
-! https://www.formula1.com/en/latest/video.qualifying-highlights-2023-united-states-grand-prix.1780316731645839696.html - Functional for videos
-formula1.com##+js(trusted-set-cookie, consentUUID, b2d83b78-26f0-4f90-b370-0380404c660a_24_27)
+! https://www.formula1.com/en/latest/article.team-preview-an-all-new-car-and-a-new-name-but-will-kick-saubers-changes.6ahHtgC6kekGu0Y64lfhZh.html - For videos
+! hide popup
+formula1.com##[id^="sp_message_container_"]
+! reject consent
+formula1.com##+js(trusted-click-element, %5Baria-label%3D%22REJECT%20ALL%22%5D, , 500)
 ! Necessary + Marketing - for maps, sample page: rhein-ruhr.stadtmobil.de
 stadtmobil.de##+js(trusted-set-cookie, CookieConsent, %7Bstamp%3A%2527Uv9YOAVP5djCBw71lxhE4rNAfTObaGck2Sn3rKWf9dPCYpqcWvAlpA%3D%3D%2527%252Cnecessary%3Atrue%252Cpreferences%3Afalse%252Cstatistics%3Afalse%252Cmarketing%3Atrue%252Cmethod%3A%2527explicit%2527%252Cver%3A1%7D, 1year)
 ! https://www.coinbase.com/ - Functional
@@ -514,8 +517,8 @@ viss.nu##+js(trusted-set-cookie, sv-cookie-consent, true, , , reload, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/20620
 music.amazon.*##+js(trusted-click-element, %23dialogButton1)
 music.amazon.*###overlay:has([href*="privacyprefs/"])
-! digi24. ro cookies
-digi24.ro##+js(set-cookie, cmp_level, 15)
+! digi24.ro,digisport.ro cookies
+digi24.ro,digisport.ro##+js(trusted-click-element, button%5Bid%3D%22onetrust-accept-btn-handler%22%5D)
 ! https://github.com/uBlockOrigin/uAssets/issues/20551
 goed.at##+js(trusted-set-cookie, CookieConsent, %7Bnecessary%3Atrue%252Cpreferences%3Atrue%252Cstatistics%3Atrue%252Cmarketing%3Atrue%252Cmethod%3A%2527explicit%2527%252Cver%3A1%7D, 1year, , reload, 1)
 ! cookies managed by trustarc
@@ -762,10 +765,23 @@ fishingclash.game##+js(trusted-set-cookie, cookiesAccepted, %257B%2522necessary%
 proffsmagasinet.se,staypro.*#@#.consent-content
 ! reject 3rd-party cookies
 bancaditalia.it##+js(trusted-set-cookie, cookiepolicy, 1-1722973184631)
-! necessary / time set to "1"
-remarkable.com##+js(trusted-set-local-storage-item, rmCookieConsent, %7B%22consentAccepted%22%3Atrue%2C%22userTriggeredReconfiguration%22%3Afalse%2C%22cookieGroupsConsentState%22%3A%7B%22necessary%22%3Atrue%2C%22performance%22%3Afalse%2C%22marketing%22%3Afalse%7D%2C%22infoOnlyBarDismissed%22%3Atrue%7D)
-remarkable.com##+js(trusted-set-local-storage-item, cookie-settings-v1, %7B%22time%22%3A%221%22%2C%22level%22%3A%22necessary%22%7D)
+! necessary
+! https://github.com/uBlockOrigin/uAssets/issues/22471
+remarkable.com##+js(trusted-click-element, button%5Bdata-cy%3D%22cookie-banner-necessary%22%5D)
 ! functional, Necessary cookies only
 kent.gov.uk##+js(trusted-set-cookie, cookie-management-status, %7B%22analytics%22%3Afalse%2C%22functional%22%3Atrue%2C%22strictlyNecessary%22%3Atrue%7D)
 kent.gov.uk##+js(set-cookie, cookie-management-preferences-set, true)
 kent.gov.uk##+js(set-cookie, cookie-management-version, 1)
+! deny. wolfswinkel.de/wolfswinkel.fr/wolfswinkel.shop/..
+wolfswinkel.*##+js(trusted-set-cookie, CookieConsent, %257B%2522Mode%2522%253A0%257D, , , reload, 1)
+! functional cookies only
+vreden.de##+js(trusted-set-local-storage-item, persist%3Aprivacy, %7B%22allowExternalContent%22%3A%22false%22%2C%22allowTracking%22%3A%22false%22%2C%22allowFunctionalCookies%22%3A%22true%22%2C%22allowRequiredCookies%22%3A%22true%22%2C%22showConsentBanner%22%3A%22false%22%2C%22_persist%22%3A%22%7B%5C%22version%5C%22%3A-1%2C%5C%22rehydrated%5C%22%3Atrue%7D%22%7D)
+! https://github.com/uBlockOrigin/uAssets/issues/22474
+netzwelt.de##+js(trusted-click-element, h2%20~%20div%5Bclass%5E%3D%22_%22%5D%20%3E%20div%5Bclass%5E%3D%22_%22%5D%20%3E%20a%5Brel%3D%22noopener%20noreferrer%22%5D%5Btarget%3D%22_self%22%5D%5Bclass%5E%3D%22_%22%5D%3Aonly-child)
+! functional
+www.aok.de##+js(trusted-set-cookie, aok_cookie_settings, %7B%22functional%22%3A%7B%22key%22%3A%22functional%22%2C%22name%22%3A%22Funktionale%20Cookies%22%2C%22required%22%3Atrue%2C%22approved%22%3Atrue%7D%2C%22comfort%22%3A%7B%22key%22%3A%22comfort%22%2C%22name%22%3A%22Komfort-Cookies%22%2C%22required%22%3Afalse%2C%22approved%22%3Afalse%7D%2C%22tracking%22%3A%7B%22key%22%3A%22tracking%22%2C%22name%22%3A%22Marketing-Cookies%22%2C%22required%22%3Afalse%2C%22approved%22%3Afalse%7D%7D)
+meine.aok.de##+js(trusted-set-cookie, user_cookie_settings, WyJwcC1mdW5jdGlvbmFsIl0%3D, , , reload, 1)
+! https://github.com/uBlockOrigin/uAssets/issues/22509
+tomshw.it##+js(trusted-click-element, .iubenda-cs-visible%20.iubenda-cs-accept-btn)
+! https://github.com/AdguardTeam/AdguardFilters/issues/162486#issuecomment-1948402499
+! [badfilter] ||privacy-mgmt.com/mms^$badfilter
