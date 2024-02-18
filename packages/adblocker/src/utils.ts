@@ -8,7 +8,8 @@
 
 import { TokensBuffer, TOKENS_BUFFER } from './tokens-buffer';
 
-export const HASH_SEED = 7883;
+export const HASH_INTERNAL_MULT = 37;
+export const HASH_SEED = 5011;
 
 /***************************************************************************
  *  Bitwise helpers
@@ -37,7 +38,7 @@ export function fastHashBetween(str: string, begin: number, end: number): number
   let hash = HASH_SEED;
 
   for (let i = begin; i < end; i += 1) {
-    hash = (hash * 33) ^ str.charCodeAt(i);
+    hash = (hash * HASH_INTERNAL_MULT) ^ str.charCodeAt(i);
   }
 
   return hash >>> 0;
@@ -165,7 +166,7 @@ export function tokenizeWithWildcardsInPlace(
         inside = true;
         start = i;
       }
-      hash = (hash * 33) ^ ch;
+      hash = (hash * HASH_INTERNAL_MULT) ^ ch;
     } else {
       if (inside === true) {
         inside = false;
@@ -214,7 +215,7 @@ export function tokenizeInPlace(
         inside = true;
         start = i;
       }
-      hash = (hash * 33) ^ ch;
+      hash = (hash * HASH_INTERNAL_MULT) ^ ch;
     } else if (inside === true) {
       inside = false;
       if (
@@ -250,7 +251,7 @@ export function tokenizeNoSkipInPlace(pattern: string, buffer: TokensBuffer): vo
         inside = true;
         start = i;
       }
-      hash = (hash * 33) ^ ch;
+      hash = (hash * HASH_INTERNAL_MULT) ^ ch;
     } else if (inside === true) {
       inside = false;
       if (i - start > 1) {

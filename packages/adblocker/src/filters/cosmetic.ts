@@ -35,6 +35,7 @@ import {
   setBit,
   tokenize,
   HASH_SEED,
+  HASH_INTERNAL_MULT,
 } from '../utils';
 import IFilter from './interface';
 import { HTMLSelector, extractHTMLSelectorFromRule } from '../html-filtering';
@@ -151,11 +152,11 @@ function computeFilterId(
   domains: Domains | undefined,
   style: string | undefined,
 ): number {
-  let hash = (HASH_SEED * 33) ^ mask;
+  let hash = (HASH_SEED * HASH_INTERNAL_MULT) ^ mask;
 
   if (selector !== undefined) {
     for (let i = 0; i < selector.length; i += 1) {
-      hash = (hash * 33) ^ selector.charCodeAt(i);
+      hash = (hash * HASH_INTERNAL_MULT) ^ selector.charCodeAt(i);
     }
   }
 
@@ -165,7 +166,7 @@ function computeFilterId(
 
   if (style !== undefined) {
     for (let i = 0; i < style.length; i += 1) {
-      hash = (hash * 33) ^ style.charCodeAt(i);
+      hash = (hash * HASH_INTERNAL_MULT) ^ style.charCodeAt(i);
     }
   }
 

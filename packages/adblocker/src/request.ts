@@ -11,7 +11,7 @@ import { parse } from 'tldts-experimental';
 
 import { EMPTY_UINT32_ARRAY } from './data-view';
 import { TOKENS_BUFFER } from './tokens-buffer';
-import { fastHash, tokenizeNoSkipInPlace, HASH_SEED } from './utils';
+import { fastHash, tokenizeNoSkipInPlace, HASH_SEED, HASH_INTERNAL_MULT } from './utils';
 
 const TLDTS_OPTIONS = {
   extractHostname: true,
@@ -126,7 +126,7 @@ export const NORMALIZED_TYPE_TOKEN: { [s in RequestType]: number } = {
 export function hashHostnameBackward(hostname: string): number {
   let hash = HASH_SEED;
   for (let j = hostname.length - 1; j >= 0; j -= 1) {
-    hash = (hash * 33) ^ hostname.charCodeAt(j);
+    hash = (hash * HASH_INTERNAL_MULT) ^ hostname.charCodeAt(j);
   }
   return hash >>> 0;
 }
@@ -149,7 +149,7 @@ export function getHashesFromLabelsBackward(
     }
 
     // Update hash
-    hash = (hash * 33) ^ code;
+    hash = (hash * HASH_INTERNAL_MULT) ^ code;
   }
 
   TOKENS_BUFFER.push(hash >>> 0);

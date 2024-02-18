@@ -121,7 +121,7 @@ async function generateCodebook(kind: string): Promise<string[]> {
   } else if (kind === 'raw-network') {
     options.maxNgram = 22;
   } else if (kind === 'cosmetic-selector') {
-    options.maxNgram = 50;
+    options.maxNgram = 140;
   }
   const codebook = generate(strings, options);
   validateCodebook(codebook, strings);
