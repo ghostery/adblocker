@@ -54,14 +54,13 @@ const PREFIX =
 
 export const adsLists = [
   `${PREFIX}/easylist/easylist.txt`,
-  `${PREFIX}/easylist/easylistgermany.txt`,
   `${PREFIX}/peter-lowe/serverlist.txt`,
   `${PREFIX}/ublock-origin/badware.txt`,
   `${PREFIX}/ublock-origin/filters-2020.txt`,
   `${PREFIX}/ublock-origin/filters-2021.txt`,
   `${PREFIX}/ublock-origin/filters-2022.txt`,
   `${PREFIX}/ublock-origin/filters-2023.txt`,
-  `${PREFIX}/ublock-origin/filters-mobile.txt`,
+  `${PREFIX}/ublock-origin/filters-2024.txt`,
   `${PREFIX}/ublock-origin/filters.txt`,
   `${PREFIX}/ublock-origin/quick-fixes.txt`,
   `${PREFIX}/ublock-origin/resource-abuse.txt`,
@@ -77,7 +76,6 @@ export const adsAndTrackingLists = [
 export const fullLists = [
   ...adsAndTrackingLists,
   `${PREFIX}/easylist/easylist-cookie.txt`,
-  `${PREFIX}/ublock-origin/annoyances.txt`,
   `${PREFIX}/ublock-origin/annoyances-others.txt`,
   `${PREFIX}/ublock-origin/annoyances-cookies.txt`,
 ];

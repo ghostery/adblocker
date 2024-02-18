@@ -9,7 +9,7 @@
 import { hashHostnameBackward } from '../request';
 import { toASCII } from '../punycode';
 import { StaticDataView, sizeOfUint32Array, sizeOfUTF8 } from '../data-view';
-import { binLookup, hasUnicode } from '../utils';
+import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils';
 
 export class Domains {
   public static parse(parts: string[], debug: boolean = false): Domains | undefined {
@@ -117,25 +117,25 @@ export class Domains {
 
     if (hostnames !== undefined) {
       for (const hostname of hostnames) {
-        hash = (hash * 33) ^ hostname;
+        hash = (hash * HASH_INTERNAL_MULT) ^ hostname;
       }
     }
 
     if (entities !== undefined) {
       for (const entity of entities) {
-        hash = (hash * 33) ^ entity;
+        hash = (hash * HASH_INTERNAL_MULT) ^ entity;
       }
     }
 
     if (notHostnames !== undefined) {
       for (const notHostname of notHostnames) {
-        hash = (hash * 33) ^ notHostname;
+        hash = (hash * HASH_INTERNAL_MULT) ^ notHostname;
       }
     }
 
     if (notEntities !== undefined) {
       for (const notEntity of notEntities) {
-        hash = (hash * 33) ^ notEntity;
+        hash = (hash * HASH_INTERNAL_MULT) ^ notEntity;
       }
     }
 

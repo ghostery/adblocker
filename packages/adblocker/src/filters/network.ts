@@ -33,6 +33,8 @@ import {
   tokenizeInPlace,
   tokenizeRegexInPlace,
   tokenizeWithWildcardsInPlace,
+  HASH_SEED,
+  HASH_INTERNAL_MULT,
 } from '../utils';
 import IFilter from './interface';
 
@@ -325,11 +327,11 @@ function computeFilterId(
   denyallow: Domains | undefined,
   redirect: string | undefined,
 ): number {
-  let hash = (7907 * 33) ^ mask;
+  let hash = (HASH_SEED * HASH_INTERNAL_MULT) ^ mask;
 
   if (csp !== undefined) {
     for (let i = 0; i < csp.length; i += 1) {
-      hash = (hash * 33) ^ csp.charCodeAt(i);
+      hash = (hash * HASH_INTERNAL_MULT) ^ csp.charCodeAt(i);
     }
   }
 
@@ -343,19 +345,19 @@ function computeFilterId(
 
   if (filter !== undefined) {
     for (let i = 0; i < filter.length; i += 1) {
-      hash = (hash * 33) ^ filter.charCodeAt(i);
+      hash = (hash * HASH_INTERNAL_MULT) ^ filter.charCodeAt(i);
     }
   }
 
   if (hostname !== undefined) {
     for (let i = 0; i < hostname.length; i += 1) {
-      hash = (hash * 33) ^ hostname.charCodeAt(i);
+      hash = (hash * HASH_INTERNAL_MULT) ^ hostname.charCodeAt(i);
     }
   }
 
   if (redirect !== undefined) {
     for (let i = 0; i < redirect.length; i += 1) {
-      hash = (hash * 33) ^ redirect.charCodeAt(i);
+      hash = (hash * HASH_INTERNAL_MULT) ^ redirect.charCodeAt(i);
     }
   }
 

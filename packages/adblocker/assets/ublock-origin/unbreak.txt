@@ -1419,7 +1419,9 @@ order-order.com#@#.tag-sponsored
 ! unbreak cartoonth12.com player
 ! [badfilter] *$script,3p,domain=cartoonth12.com,badfilter
 ! amazon_apstag.js
-||amazon-adsystem.com/*/apstag.js$script,xhr,redirect-rule=amazon_apstag.js:5
+||amazon-adsystem.com/*/apstag.js$xhr,redirect-rule=amazon_apstag.js:5
+! https://github.com/uBlockOrigin/uAssets/issues/22486
+||amazon-adsystem.com/*/apstag.js$script,redirect-rule=amazon_apstag.js:5,domain=~republicbharat.com
 ! https://github.com/uBlockOrigin/uAssets/issues/7397
 @@||reference.medscape.com/public/vptrack_iframe.html$frame,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/7399
@@ -3279,10 +3281,6 @@ metastats.net###page-wrapper > div.row:nth-of-type(1)
 *$script,domain=abcya.com,redirect-rule=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/18441
 ||googletagmanager.com/gtag/js$script,redirect-rule=noop.js:10,domain=scobel.pasaz24.pl
-! https://www.nj.com/news/2023/06/scammed-swindled-or-mistreated-see-if-your-nj-county-will-take-on-your-consumer-problem.html paywall hidden
-@@||googletagmanager.com/gtm.js$script,domain=nj.com
-@@||apps.sophi.io/latest/al-nj.segments.min.js$script,domain=nj.com
-@@||nj.com/DG/DEFAULT/rest/rpc/$xhr,1p
 ! https://www.reddit.com/r/uBlockOrigin/comments/147jvgy
 goku.sx##.st-btn:not(.st-first):style(display: inline-block !important; min-width: 50px !important; width: 50px !important;)
 goku.sx##.st-btn > img:style(margin: auto !important; display: block !important;)
@@ -3628,11 +3626,6 @@ lumens.com##+js(set, _satellite.track, noopFunc)
 ! [badfilter] ||inmobi.com^$badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/21056
 @@||twinkie.xyz/cdn-cgi/apps/$script,1p
-! https://github.com/uBlockOrigin/uAssets/issues/20681#issuecomment-1842744953
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect-rule=google-ima.js,domain=androidpolice.com
-@@||cdn.adsninja.ca/adsninja_client$css,script,3p,domain=androidpolice.com
-@@||androidpolice.com^$ghide
-androidpolice.com##.adsninja-ad-zone:not(.adsninja-valstream)
 ! Override EasyList Germany exceptions
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,important,redirect=google-ima.js,domain=atv.at|autobild.de|chip.de|computerbild.de|gentside.de|oe24.at|ohmymag.de|phonostar.de|schwaebische.de|spielaffe.de|sport.sky.de|wetteronline.de
 ! https://github.com/uBlockOrigin/uAssets/issues/21286
@@ -3668,9 +3661,10 @@ thethings.com##.adsninja-ad-zone:not(.adsninja-valstream)
 ! https://github.com/uBlockOrigin/uAssets/issues/21773
 @@||cdn.pendo.io/agent/static/*/pendo.js$script,domain=netsecure.adp.com
 ! https://github.com/uBlockOrigin/uAssets/issues/21771#issuecomment-1877992060
-@@||googletagmanager.com/gtm.js$script,3p,domain=syracuse.com
-@@||apps.sophi.io/latest/al-syracuse.segments.min.js$script,3p,domain=syracuse.com
-@@||syracuse.com/DG/DEFAULT/rest/rpc/$script,1p
+! https://www.nj.com/news/2023/06/scammed-swindled-or-mistreated-see-if-your-nj-county-will-take-on-your-consumer-problem.html paywall hidden
+@@||googletagmanager.com/gtm.js$script,3p,domain=al.com|cleveland.com|lehighvalleylive.com|masslive.com|mlive.com|nj.com|oregonlive.com|pennlive.com|silive.com|syracuse.com
+@@||apps.sophi.io/latest/*.segments.min.js$script,3p,domain=al.com|cleveland.com|lehighvalleylive.com|masslive.com|mlive.com|nj.com|oregonlive.com|pennlive.com|silive.com|syracuse.com
+@@/DG/DEFAULT/rest/rpc/*$script,1p,domain=al.com|cleveland.com|lehighvalleylive.com|masslive.com|mlive.com|nj.com|oregonlive.com|pennlive.com|silive.com|syracuse.com
 ! https://github.com/uBlockOrigin/uBlock-issues/issues/3072
 !#if env_chromium
 ||community.ipinfo.io^$csp=worker-src 'none'
@@ -3717,3 +3711,10 @@ tntdrama.com##+js(set, turnerAnalyticsObj.setVideoObject4AnalyticsProperty, noop
 vuejs.org#@##sponsors
 vuejs.org#@##special-sponsor
 ! [badfilter] ||sponsors.vuejs.org^$badfilter
+! https://github.com/uBlockOrigin/uAssets/issues/22468
+ecom.wixapps.net##+js(set, Sentry, %7B%7D)
+ecom.wixapps.net##+js(set, Sentry.init, noopFunc)
+! sportskeeda. com blocked video
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect-rule=google-ima.js,domain=sportskeeda.com
+! https://github.com/uBlockOrigin/uAssets/issues/22520
+@@||googletagmanager.com/gtm.js$3p,script,domain=st-andrews.ac.uk
