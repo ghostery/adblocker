@@ -50,7 +50,7 @@ export function detectPreprocessor(line: string) {
 
   const command = line.slice(2);
 
-  if (fastStartsWith(command, 'if ')) {
+  if (line.startsWith('!#if ')) {
     return PreprocessorTypes.BEGIF;
   }
 
