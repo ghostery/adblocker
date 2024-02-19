@@ -287,7 +287,6 @@ export default class FilterEngine extends EventEmitter<
     // Deserialize preprocessors
     engine.preprocessors = PreprocessorBucket.deserialize(buffer);
     engine.preprocessors.updateEnv(env);
-    engine.isFilterExcluded = (filter) => engine.preprocessors.isFilterExcluded(filter);
 
     // Deserialize buckets
     engine.importants = NetworkFilterBucket.deserialize(buffer, config);
@@ -326,8 +325,6 @@ export default class FilterEngine extends EventEmitter<
   public resources: Resources;
   public readonly config: Config;
 
-  public isFilterExcluded: (filter: IFilter) => boolean;
-
   constructor({
     // Optionally initialize the engine with filters
     cosmeticFilters = [],
@@ -354,7 +351,19 @@ export default class FilterEngine extends EventEmitter<
 
     // Preprocessors
     this.preprocessors = new PreprocessorBucket({ env, preprocessors });
-    this.isFilterExcluded = (filter) => this.preprocessors.isFilterExcluded(filter);
+
+    // A hack to pass the serialization test calling diff on the `FiltersEngine`
+    // Instead of overriding the prototype of `FiltersEngine.prototype.isFiltersExcluded`,
+    // we go with Object.defineProperty.
+    // If you're going to improve this part in future, playing with `deep-object-diff`
+    // can help you.
+    const isFilterExcluded = (filter: IFilter) => {
+      return this.preprocessors.isFilterExcluded(filter);
+    };
+
+    Object.defineProperty(this, 'isFilterExcluded', {
+      value: isFilterExcluded,
+    });
 
     // $csp=
     this.csp = new NetworkFilterBucket({ config: this.config });
@@ -387,6 +396,11 @@ export default class FilterEngine extends EventEmitter<
         newPreprocessors: preprocessors,
       });
     }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private isFilterExcluded(_filter: IFilter): boolean {
+    return false;
   }
 
   public updateEnv(env: Env) {
