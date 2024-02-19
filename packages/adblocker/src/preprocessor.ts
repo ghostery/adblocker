@@ -1,5 +1,4 @@
 import { StaticDataView, sizeOfUTF8 } from './data-view';
-import { fastStartsWith } from './utils';
 
 export type EnvKeys =
   | 'ext_ghostery'
@@ -141,6 +140,11 @@ export const evaluate = (expression: string, env: Env) => {
     } else {
       output.push(!!env.get(token));
     }
+  }
+
+  // If there is incomplete parenthesis
+  if (stack[0] === '(' || stack[0] === ')') {
+    return false;
   }
 
   while (stack.length) {

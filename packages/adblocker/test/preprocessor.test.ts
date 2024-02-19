@@ -43,13 +43,27 @@ describe('conditions', () => {
     expect(evaluate('somethingcannotexiststring&&ext_ublock||false', env)).to.be.false;
   });
 
+  it('resolves parenthesis', () => {
+    expect(evaluate('(true)', env)).to.be.true;
+    expect(evaluate('((true))', env)).to.be.true;
+    expect(evaluate('(true||false)&&true', env)).to.be.true;
+  });
+
   it('drops invalid conditions', () => {
     expect(evaluate('', env)).to.be.false;
     expect(evaluate('||', env)).to.be.false;
-    expect(evaluate('false&&', env)).to.be.false;
-    expect(evaluate('&&false', env)).to.be.false;
-    expect(evaluate('&&false&&', env)).to.be.false;
+    expect(evaluate('true&&', env)).to.be.false;
+    expect(evaluate('&&true', env)).to.be.false;
+    expect(evaluate('&&true&&', env)).to.be.false;
     expect(evaluate('*', env)).to.be.false;
+    expect(evaluate('(', env)).to.be.false;
+    expect(evaluate(')', env)).to.be.false;
+    expect(evaluate('()', env)).to.be.false;
+    expect(evaluate('true&&()', env)).to.be.false;
+    expect(evaluate('true)', env)).to.be.false;
+    expect(evaluate('(true', env)).to.be.false;
+    expect(evaluate('((true)', env)).to.be.false;
+    expect(evaluate('true((true)', env)).to.be.false;
   });
 });
 
