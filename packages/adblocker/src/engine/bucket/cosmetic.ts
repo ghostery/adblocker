@@ -13,7 +13,6 @@ import { compactTokens, concatTypedArrays } from '../../compact-set';
 import Config from '../../config';
 import { StaticDataView } from '../../data-view';
 import CosmeticFilter, { DEFAULT_HIDDING_STYLE } from '../../filters/cosmetic';
-import IFilter from '../../filters/interface';
 import {
   getEntityHashesFromLabelsBackward,
   getHostnameHashesFromLabelsBackward,
@@ -352,7 +351,7 @@ export default class CosmeticFilterBucket {
     domain: string;
     hostname: string;
 
-    isFilterExcluded?: (filter: IFilter) => boolean;
+    isFilterExcluded?: (filter: CosmeticFilter) => boolean;
   }): CosmeticFilter[] {
     // Tokens from `hostname` and `domain` which will be used to lookup filters
     // from the reverse index. The same tokens are re-used for multiple indices.
@@ -421,7 +420,7 @@ export default class CosmeticFilterBucket {
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
 
-    isFilterExcluded?: (filter: IFilter) => boolean;
+    isFilterExcluded?: (filter: CosmeticFilter) => boolean;
   }): {
     injections: CosmeticFilter[];
     extended: IMessageFromBackground['extended'];
