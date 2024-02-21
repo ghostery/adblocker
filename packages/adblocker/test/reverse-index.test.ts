@@ -25,7 +25,10 @@ import { fastHash, tokenize } from '../src/utils';
 import { allLists } from './utils';
 
 describe('ReverseIndex', () => {
-  const { cosmeticFilters, networkFilters } = parseFilters(allLists, { debug: true });
+  const { cosmeticFilters, networkFilters } = parseFilters(allLists, {
+    loadPreprocessors: false,
+    debug: true,
+  });
 
   [new Config({ enableCompression: true }), new Config({ enableCompression: false })].forEach(
     (config) => {
@@ -115,8 +118,11 @@ describe('ReverseIndex', () => {
               const reverseIndex = new ReverseIndex({
                 config,
                 deserialize: NetworkFilter.deserialize,
-                filters: parseFilters('||foo.com', { loadCosmeticFilters: false, debug: true })
-                  .networkFilters,
+                filters: parseFilters('||foo.com', {
+                  loadCosmeticFilters: false,
+                  loadPreprocessors: false,
+                  debug: true,
+                }).networkFilters,
                 optimize,
               });
 
@@ -126,8 +132,11 @@ describe('ReverseIndex', () => {
 
               // Add one new filter
               reverseIndex.update(
-                parseFilters('||bar.com', { loadCosmeticFilters: false, debug: true })
-                  .networkFilters,
+                parseFilters('||bar.com', {
+                  loadCosmeticFilters: false,
+                  loadPreprocessors: false,
+                  debug: true,
+                }).networkFilters,
                 undefined,
               );
               filters = reverseIndex.getFilters();
@@ -135,8 +144,11 @@ describe('ReverseIndex', () => {
 
               // Add a third filter and remove the two others
               reverseIndex.update(
-                parseFilters('||baz.com', { loadCosmeticFilters: false, debug: true })
-                  .networkFilters,
+                parseFilters('||baz.com', {
+                  loadCosmeticFilters: false,
+                  loadPreprocessors: false,
+                  debug: true,
+                }).networkFilters,
                 new Set(filters.map((f) => f.getId())),
               );
               filters = reverseIndex.getFilters();
