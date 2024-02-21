@@ -357,9 +357,7 @@ export default class FilterEngine extends EventEmitter<
     // we go with Object.defineProperty.
     // If you're going to improve this part in future, playing with `deep-object-diff`
     // can help you.
-    const isFilterExcluded = (filter: IFilter) => {
-      return this.preprocessors.isFilterExcluded(filter);
-    };
+    const isFilterExcluded = this.preprocessors.isFilterExcluded.bind(this.preprocessors);
 
     Object.defineProperty(this, 'isFilterExcluded', {
       value: isFilterExcluded,
