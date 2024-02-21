@@ -216,7 +216,7 @@ export function parseFilters(
           }
         }
       }
-    } else {
+    } else if (config.loadPreprocessors) {
       const preprocessorType = detectPreprocessor(line);
 
       if (preprocessorType === PreprocessorTypes.BEGIF) {

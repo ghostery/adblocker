@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import 'mocha';
 import { Env, evaluate } from '../src/preprocessor';
 import FilterEngine from '../src/engine/engine';
-import { Request } from '../adblocker';
+import { Config, Request } from '../adblocker';
 
 describe('conditions', () => {
   const env = new Env();
@@ -73,12 +73,16 @@ describe('preprocessors', () => {
     bar: Request.fromRawDetails({ url: 'https://bar.com' }),
   };
 
+  const config = new Config({
+    loadPreprocessors: true,
+  });
+
   const env = new Env();
 
   env.set('ext_ghostery', true);
   env.set('ext_devbuild', true);
 
-  const engine = new FilterEngine({ env });
+  const engine = new FilterEngine({ env, config });
 
   const doTest = (filters: string) => {
     engine.updateFromDiff({ added: [filters] });
