@@ -15,10 +15,10 @@ export default class PreprocessorBucket {
     });
   }
 
-  public readonly conditions: Map<string, Preprocessor>;
-  public readonly excluded: Set<number>;
+  private readonly preprocessors: Preprocessor[];
+  private readonly excluded: Set<number>;
 
-  public env: Env;
+  private env: Env;
 
   constructor({
     env = new Env(),
@@ -29,7 +29,7 @@ export default class PreprocessorBucket {
   }) {
     this.env = env;
     this.excluded = new Set();
-    this.conditions = new Map();
+    this.preprocessors = preprocessors;
 
     if (preprocessors.length) {
       this.update({ added: preprocessors });
@@ -40,19 +40,20 @@ export default class PreprocessorBucket {
     // Update excluded filter ids based on bindings
     this.excluded.clear();
 
-    for (const preprocessor of this.conditions.values()) {
-      // Remove unused preprocessor
-      if (!preprocessor.filterIDs.size) {
-        this.conditions.delete(preprocessor.condition);
+    for (let i = 0; i < this.preprocessors.length; ) {
+      if (!this.preprocessors[i].filterIDs.size) {
+        this.preprocessors.splice(i, 1);
 
         continue;
       }
 
-      if (!preprocessor.evaluate(this.env)) {
-        for (const filter of preprocessor.filterIDs) {
+      if (!this.preprocessors[i].evaluate(this.env)) {
+        for (const filter of this.preprocessors[i].filterIDs) {
           this.excluded.add(filter);
         }
       }
+
+      i++;
     }
   }
 
@@ -74,7 +75,7 @@ export default class PreprocessorBucket {
       updated = true;
 
       for (const one of removed) {
-        const another = this.conditions.get(one.condition);
+        const another = this.preprocessors.find((another) => another.condition === one.condition);
 
         // Skip if we don't have any preprocessor on local
         if (!another) {
@@ -91,10 +92,10 @@ export default class PreprocessorBucket {
       updated = true;
 
       for (const one of added) {
-        const another = this.conditions.get(one.condition);
+        const another = this.preprocessors.find((another) => another.condition === one.condition);
 
         if (!another) {
-          this.conditions.set(one.condition, one);
+          this.preprocessors.push(one);
 
           continue;
         }
@@ -116,15 +117,15 @@ export default class PreprocessorBucket {
   }
 
   public serialize(view: StaticDataView) {
-    view.pushUint32(this.conditions.size);
-    for (const one of this.conditions.values()) {
+    view.pushUint32(this.preprocessors.length);
+    for (const one of this.preprocessors) {
       one.serialize(view);
     }
   }
 
   public getSerializedSize() {
     let estimatedSize = 4;
-    for (const one of this.conditions.values()) {
+    for (const one of this.preprocessors) {
       estimatedSize += one.getSerializedSize();
     }
 
