@@ -47,17 +47,15 @@ export function detectPreprocessor(line: string) {
     return PreprocessorTypes.INVALID;
   }
 
-  const command = line.slice(2);
-
   if (line.startsWith('!#if ')) {
     return PreprocessorTypes.BEGIF;
   }
 
-  if (command === 'else') {
+  if (line.startsWith('!#else')) {
     return PreprocessorTypes.ELSE;
   }
 
-  if (command === 'endif') {
+  if (line.startsWith('!#endif')) {
     return PreprocessorTypes.ENDIF;
   }
 
