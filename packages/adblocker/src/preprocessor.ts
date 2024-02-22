@@ -145,7 +145,7 @@ export const evaluate = (expression: string, env: Env): boolean => {
     return false;
   }
 
-  while (stack.length) {
+  while (stack.length !== 0) {
     output.push(stack.pop()!);
   }
 
