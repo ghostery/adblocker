@@ -5,19 +5,21 @@ import FilterEngine from '../src/engine/engine';
 import { Config, Request } from '../adblocker';
 
 describe('conditions', () => {
-  const env = new Env();
-
   it('resolves a condition', () => {
-    expect(evaluate('false', env), 'evaluates non-existing value to false').to.be.false;
+    const localEnv = new Env();
 
-    env.set('ext_ghostery', true);
+    expect(evaluate('false', localEnv), 'evaluates non-existing value to false').to.be.false;
 
-    expect(evaluate('ext_ghostery', env), 'evaluates existing value to true').to.be.true;
+    localEnv.set('ext_ghostery', true);
 
-    env.set('ext_ubol', false);
+    expect(evaluate('ext_ghostery', localEnv), 'evaluates existing value to true').to.be.true;
 
-    expect(evaluate('ext_ubol', env), 'evaluates falsy value to false').to.be.false;
+    localEnv.set('ext_ubol', false);
+
+    expect(evaluate('ext_ubol', localEnv), 'evaluates falsy value to false').to.be.false;
   });
+
+  const env = new Env();
 
   env.set('ext_ghostery', true);
   env.set('ext_ublock', true);
