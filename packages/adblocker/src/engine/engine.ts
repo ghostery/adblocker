@@ -329,7 +329,6 @@ export default class FilterEngine extends EventEmitter<
     // Optionally initialize the engine with filters
     cosmeticFilters = [],
     networkFilters = [],
-    preprocessors = [],
 
     config = new Config(),
     lists = new Map(),
@@ -337,7 +336,6 @@ export default class FilterEngine extends EventEmitter<
   }: {
     cosmeticFilters?: CosmeticFilter[];
     networkFilters?: NetworkFilter[];
-    preprocessors?: Preprocessor[];
     lists?: Map<string, string>;
     config?: Partial<Config>;
     env?: Env;
@@ -350,16 +348,7 @@ export default class FilterEngine extends EventEmitter<
     this.lists = lists;
 
     // Preprocessors
-    this.preprocessors = new PreprocessorBucket({ env, preprocessors });
-
-    // A hack to pass the serialization test calling diff on the `FiltersEngine`
-    // Instead of overriding the prototype of `FiltersEngine.prototype.isFiltersExcluded`,
-    // we go with Object.defineProperty.
-    // If you're going to improve this part in future, playing with `deep-object-diff`
-    // can help you.
-    Object.defineProperty(this, 'isFilterExcluded', {
-      value: this.preprocessors.isFilterExcluded.bind(this.preprocessors),
-    });
+    this.preprocessors = new PreprocessorBucket({ env });
 
     // $csp=
     this.csp = new NetworkFilterBucket({ config: this.config });
@@ -381,22 +370,16 @@ export default class FilterEngine extends EventEmitter<
     // Injections
     this.resources = new Resources();
 
-    if (
-      networkFilters.length !== 0 ||
-      cosmeticFilters.length !== 0 ||
-      preprocessors.length !== 0
-    ) {
+    if (networkFilters.length !== 0 || cosmeticFilters.length !== 0) {
       this.update({
         newCosmeticFilters: cosmeticFilters,
         newNetworkFilters: networkFilters,
-        newPreprocessors: preprocessors,
       });
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private isFilterExcluded(_filter: IFilter): boolean {
-    return false;
+  public isFilterExcluded(filter: IFilter): boolean {
+    return this.preprocessors.isFilterExcluded(filter);
   }
 
   public updateEnv(env: Env) {
@@ -695,7 +678,7 @@ export default class FilterEngine extends EventEmitter<
     const rules = this.cosmetics.getHtmlRules({
       domain: domain || '',
       hostname,
-      isFilterExcluded: this.isFilterExcluded,
+      isFilterExcluded: this.isFilterExcluded.bind(this),
     });
 
     for (const rule of rules) {
@@ -770,7 +753,7 @@ export default class FilterEngine extends EventEmitter<
         sourceHostname: '',
         sourceUrl: '',
       }),
-      this.isFilterExcluded,
+      this.isFilterExcluded.bind(this),
     );
 
     const genericHides: NetworkFilter[] = [];
@@ -815,7 +798,7 @@ export default class FilterEngine extends EventEmitter<
       getRulesFromDOM,
       getRulesFromHostname,
 
-      isFilterExcluded: this.isFilterExcluded,
+      isFilterExcluded: this.isFilterExcluded.bind(this),
     });
 
     // Perform interpolation for injected scripts
@@ -850,19 +833,28 @@ export default class FilterEngine extends EventEmitter<
     if (request.isSupported) {
       Array.prototype.push.apply(
         filters,
-        this.importants.matchAll(request, this.isFilterExcluded),
+        this.importants.matchAll(request, this.isFilterExcluded.bind(this)),
       );
-      Array.prototype.push.apply(filters, this.filters.matchAll(request, this.isFilterExcluded));
       Array.prototype.push.apply(
         filters,
-        this.exceptions.matchAll(request, this.isFilterExcluded),
+        this.filters.matchAll(request, this.isFilterExcluded.bind(this)),
       );
-      Array.prototype.push.apply(filters, this.csp.matchAll(request, this.isFilterExcluded));
       Array.prototype.push.apply(
         filters,
-        this.hideExceptions.matchAll(request, this.isFilterExcluded),
+        this.exceptions.matchAll(request, this.isFilterExcluded.bind(this)),
       );
-      Array.prototype.push.apply(filters, this.redirects.matchAll(request, this.isFilterExcluded));
+      Array.prototype.push.apply(
+        filters,
+        this.csp.matchAll(request, this.isFilterExcluded.bind(this)),
+      );
+      Array.prototype.push.apply(
+        filters,
+        this.hideExceptions.matchAll(request, this.isFilterExcluded.bind(this)),
+      );
+      Array.prototype.push.apply(
+        filters,
+        this.redirects.matchAll(request, this.isFilterExcluded.bind(this)),
+      );
     }
 
     return new Set(filters);
@@ -881,7 +873,7 @@ export default class FilterEngine extends EventEmitter<
       return undefined;
     }
 
-    const matches = this.csp.matchAll(request, this.isFilterExcluded);
+    const matches = this.csp.matchAll(request, this.isFilterExcluded.bind(this));
 
     // No $csp filter found
     if (matches.length === 0) {
@@ -940,7 +932,7 @@ export default class FilterEngine extends EventEmitter<
       // 2. redirection ($redirect=resource)
       // 3. normal filters
       // 4. exceptions
-      result.filter = this.importants.match(request, this.isFilterExcluded);
+      result.filter = this.importants.match(request, this.isFilterExcluded.bind(this));
 
       let redirectNone: NetworkFilter | undefined;
       let redirectRule: NetworkFilter | undefined;
@@ -954,7 +946,7 @@ export default class FilterEngine extends EventEmitter<
       // * Else if redirect-rule is found, only redirect if request would be blocked.
       // * Else if redirect is found, redirect.
       if (result.filter === undefined) {
-        const redirects = this.redirects.matchAll(request, this.isFilterExcluded);
+        const redirects = this.redirects.matchAll(request, this.isFilterExcluded.bind(this));
         if (redirects.length !== 0) {
           for (const filter of redirects) {
             if (filter.getRedirect() === 'none') {
@@ -971,7 +963,7 @@ export default class FilterEngine extends EventEmitter<
         // redirection rule triggered for the request. We look for a normal
         // match.
         if (result.filter === undefined) {
-          result.filter = this.filters.match(request, this.isFilterExcluded);
+          result.filter = this.filters.match(request, this.isFilterExcluded.bind(this));
 
           // If we found a match, and a `$redirect-rule` as found previously,
           // then we transform the match into a redirect, following the
@@ -984,7 +976,7 @@ export default class FilterEngine extends EventEmitter<
         // If we found either a redirection rule or a normal match, then check
         // for exceptions which could apply on the request and un-block it.
         if (result.filter !== undefined) {
-          result.exception = this.exceptions.match(request, this.isFilterExcluded);
+          result.exception = this.exceptions.match(request, this.isFilterExcluded.bind(this));
         }
       }
 
