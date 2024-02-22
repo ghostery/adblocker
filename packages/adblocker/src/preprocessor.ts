@@ -63,8 +63,10 @@ export function detectPreprocessor(line: string) {
 }
 
 const tokenizerPattern = /(!|&&|\|\||\(|\)|[a-zA-Z0-9_]+)/g;
+const identifierPattern = /^!?[a-zA-Z0-9_]+$/;
 
 const tokenize = (expression: string) => expression.match(tokenizerPattern);
+const isIdentifier = (expression: string) => identifierPattern.test(expression);
 
 const precedence: Record<string, number> = {
   '!': 2,
@@ -73,6 +75,18 @@ const precedence: Record<string, number> = {
 };
 
 const isOperator = (token: string) => Object.prototype.hasOwnProperty.call(precedence, token);
+
+const testIdentifier = (identifier: string, env: Env): boolean => {
+  if (identifier === 'true') {
+    return true;
+  }
+
+  if (identifier === 'false') {
+    return false;
+  }
+
+  return !!env.get(identifier);
+};
 
 /// The parsing is done using the [Shunting yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm).
 /// This function takes as input a string expression and an environment Map.
@@ -87,6 +101,14 @@ const isOperator = (token: string) => Object.prototype.hasOwnProperty.call(prece
 export const evaluate = (expression: string, env: Env): boolean => {
   if (!expression.length) {
     return false;
+  }
+
+  if (isIdentifier(expression)) {
+    if (expression[0] === '!') {
+      return !testIdentifier(expression.slice(1), env);
+    }
+
+    return testIdentifier(expression, env);
   }
 
   const tokens = tokenize(expression);
@@ -131,12 +153,8 @@ export const evaluate = (expression: string, env: Env): boolean => {
       }
 
       stack.push(token);
-    } else if (token === 'true') {
-      output.push(true);
-    } else if (token === 'false') {
-      output.push(false);
     } else {
-      output.push(!!env.get(token));
+      output.push(testIdentifier(token, env));
     }
   }
 
