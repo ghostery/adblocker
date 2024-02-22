@@ -166,12 +166,7 @@ export const evaluate = (expression: string, env: Env): boolean => {
     }
   }
 
-  // Return false if we didn't see any identifiers.
-  if (!stack[0]) {
-    return false;
-  }
-
-  return stack[0] as boolean;
+  return stack[0] === true;
 };
 
 export default class Preprocessor {
