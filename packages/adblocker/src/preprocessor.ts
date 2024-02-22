@@ -208,7 +208,7 @@ export default class Preprocessor {
     filterIDs = new Set(),
   }: {
     condition: string;
-    filterIDs?: Set<number>;
+    filterIDs?: Set<number> | undefined;
   }) {
     this.condition = condition;
     this.filterIDs = filterIDs;
