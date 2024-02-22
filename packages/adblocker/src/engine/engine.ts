@@ -695,7 +695,6 @@ export default class FilterEngine extends EventEmitter<
     const rules = this.cosmetics.getHtmlRules({
       domain: domain || '',
       hostname,
-
       isFilterExcluded: this.isFilterExcluded,
     });
 
