@@ -74,16 +74,18 @@ export default class PreprocessorBucket {
     if (removed) {
       updated = true;
 
-      for (const one of removed) {
-        const another = this.preprocessors.find((another) => another.condition === one.condition);
+      for (const preprocessor of removed) {
+        const local = this.preprocessors.find(
+          (local) => local.condition === preprocessor.condition,
+        );
 
         // Skip if we don't have any preprocessor on local
-        if (!another) {
+        if (!local) {
           continue;
         }
 
-        for (const filter of one.filterIDs) {
-          another.filterIDs.delete(filter);
+        for (const filterID of preprocessor.filterIDs) {
+          local.filterIDs.delete(filterID);
         }
       }
     }
@@ -91,18 +93,20 @@ export default class PreprocessorBucket {
     if (added) {
       updated = true;
 
-      for (const one of added) {
-        const another = this.preprocessors.find((another) => another.condition === one.condition);
+      for (const preprocessor of added) {
+        const local = this.preprocessors.find(
+          (local) => local.condition === preprocessor.condition,
+        );
 
-        if (!another) {
-          this.preprocessors.push(one);
+        if (!local) {
+          this.preprocessors.push(preprocessor);
 
           continue;
         }
 
-        for (const filter of one.filterIDs) {
-          another.filterIDs.add(filter);
-          preservedFilters.add(filter);
+        for (const filterID of preprocessor.filterIDs) {
+          local.filterIDs.add(filterID);
+          preservedFilters.add(filterID);
         }
       }
     }
@@ -118,15 +122,15 @@ export default class PreprocessorBucket {
 
   public serialize(view: StaticDataView) {
     view.pushUint32(this.preprocessors.length);
-    for (const one of this.preprocessors) {
-      one.serialize(view);
+    for (const preprocessor of this.preprocessors) {
+      preprocessor.serialize(view);
     }
   }
 
   public getSerializedSize() {
     let estimatedSize = 4;
-    for (const one of this.preprocessors) {
-      estimatedSize += one.getSerializedSize();
+    for (const preprocessor of this.preprocessors) {
+      estimatedSize += preprocessor.getSerializedSize();
     }
 
     return estimatedSize;
