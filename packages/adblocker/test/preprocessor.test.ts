@@ -143,7 +143,7 @@ describe('preprocessors', () => {
 !#endif
 !#endif`);
     doTest(`!#if ext_ghostery
-!#if ext_ghostery
+!#if ext_devbuild
 ||foo.com^
 !#else
 ||bar.com^
