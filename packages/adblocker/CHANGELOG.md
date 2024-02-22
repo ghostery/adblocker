@@ -1,3 +1,35 @@
+# v1.26.16 (Thu Feb 22 2024)
+
+#### :house: Internal
+
+- Fix breakage with deleted assets [#3792](https://github.com/ghostery/adblocker/pull/3792) ([@remusao](https://github.com/remusao))
+- Fix assets [#3788](https://github.com/ghostery/adblocker/pull/3788) ([@remusao](https://github.com/remusao))
+- Ghostery assets [#3777](https://github.com/ghostery/adblocker/pull/3777) ([@chrmod](https://github.com/chrmod))
+- chore: fix filters links + add missing [#3773](https://github.com/ghostery/adblocker/pull/3773) ([@remusao](https://github.com/remusao))
+- Update local assets [#3771](https://github.com/ghostery/adblocker/pull/3771) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#3769](https://github.com/ghostery/adblocker/pull/3769) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#3765](https://github.com/ghostery/adblocker/pull/3765) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update assets + fix codebooks generation [#3764](https://github.com/ghostery/adblocker/pull/3764) ([@remusao](https://github.com/remusao))
+- Update local assets [#3727](https://github.com/ghostery/adblocker/pull/3727) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#3715](https://github.com/ghostery/adblocker/pull/3715) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#3707](https://github.com/ghostery/adblocker/pull/3707) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#3702](https://github.com/ghostery/adblocker/pull/3702) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.258 to 0.0.260 [#3749](https://github.com/ghostery/adblocker/pull/3749) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.256 to 0.0.258 [#3724](https://github.com/ghostery/adblocker/pull/3724) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+- Rémi ([@remusao](https://github.com/remusao))
+
+---
+
 # v1.26.15 (Wed Jan 10 2024)
 
 #### :nail_care: Polish

@@ -1,3 +1,15 @@
+# v1.26.16 (Thu Feb 22 2024)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump jsdom from 23.2.0 to 24.0.0 [#3728](https://github.com/ghostery/adblocker/pull/3728) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.26.13 (Tue Jan 09 2024)
 
 #### :nut_and_bolt: Dependencies

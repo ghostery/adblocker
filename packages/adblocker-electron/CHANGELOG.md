@@ -1,3 +1,15 @@
+# v1.26.16 (Thu Feb 22 2024)
+
+#### :nail_care: Polish
+
+- fix: use absolute paths for preload, closes #2756 [#3798](https://github.com/ghostery/adblocker/pull/3798) ([@yocontra](https://github.com/yocontra))
+
+#### Authors: 1
+
+- contra ([@yocontra](https://github.com/yocontra))
+
+---
+
 # v1.26.13 (Tue Jan 09 2024)
 
 #### :nut_and_bolt: Dependencies
