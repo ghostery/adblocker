@@ -84,7 +84,7 @@ const isOperator = (token: string) => Object.prototype.hasOwnProperty.call(prece
 /// The function should return the result of evaluating the expression using
 /// the values from `environment`. The return value of this function is
 /// either `true` or `false`.
-export const evaluate = (expression: string, env: Env) => {
+export const evaluate = (expression: string, env: Env): boolean => {
   if (!expression.length) {
     return false;
   }
