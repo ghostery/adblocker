@@ -149,7 +149,7 @@ export function parseFilters(
   const cosmeticFilters: CosmeticFilter[] = [];
   const lines = list.split('\n');
 
-  const preprocessors: Map<string, Preprocessor> = new Map();
+  const preprocessors: Preprocessor[] = [];
   // The filters affected by a preprocessor
   const filterStack: IFilter[] = [];
   // This defines the start index in `filtersInBlock` of each preprocessor block
@@ -224,24 +224,22 @@ export function parseFilters(
           start: filterStack.length,
           condition: Preprocessor.getCondition(line),
         });
-      } else if (preprocessorType !== PreprocessorTypes.INVALID && preprocessorStack.length) {
-        for (const block of preprocessorStack) {
-          const filterIDs: Set<number> = new Set();
+      } else if (preprocessorType !== PreprocessorTypes.INVALID && preprocessorStack.length > 0) {
+        const condition =
+          preprocessorStack.length === 1
+            ? preprocessorStack[0].condition
+            : preprocessorStack.map((entry) => `(${entry.condition})`).join('&&');
+        const filterIDs: Set<number> = new Set();
 
-          for (let i = filterStack.length - 1; i >= block.start; i--) {
-            filterIDs.add(filterStack[i].getId());
-          }
-
-          if (preprocessors.has(block.condition)) {
-            const preprocessor = preprocessors.get(block.condition);
-
-            for (const filterID of filterIDs) {
-              preprocessor!.filterIDs.add(filterID);
-            }
-          } else {
-            preprocessors.set(block.condition, Preprocessor.parse(block.condition, filterIDs));
-          }
+        for (
+          let i = filterStack.length - 1;
+          i >= preprocessorStack[preprocessorStack.length - 1].start;
+          i--
+        ) {
+          filterIDs.add(filterStack.pop()!.getId());
         }
+
+        preprocessors.push(Preprocessor.parse(condition, filterIDs));
 
         const last = preprocessorStack.pop();
 
@@ -255,7 +253,7 @@ export function parseFilters(
     }
   }
 
-  return { networkFilters, cosmeticFilters, preprocessors: [...preprocessors.values()] };
+  return { networkFilters, cosmeticFilters, preprocessors };
 }
 
 function getFilters(list: string, config?: Partial<Config>): (NetworkFilter | CosmeticFilter)[] {

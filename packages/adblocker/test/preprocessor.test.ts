@@ -159,18 +159,13 @@ describe('preprocessors', () => {
   });
 
   it('resolves spread conditions', () => {
-    // If there're multiple conditions spread, the conditions will be merged
     doTest(`!#if ext_ghostery
-||foo.com^
+!#if false
+||bar.com^
 !#endif
 !#if ext_devbuild
 ||foo.com^
 !#endif
-!#if false
-||bar.com^
-!#endif
-!#if ext_ghostery
-||bar.com^
 !#endif`);
   });
 });
