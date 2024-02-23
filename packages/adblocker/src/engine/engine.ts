@@ -621,7 +621,7 @@ export default class FilterEngine extends EventEmitter<
     return updated;
   }
 
-  public updateFromDiff({ added, removed }: Partial<IRawDiff>, env?: Env): boolean {
+  public updateFromDiff({ added, removed, env }: Partial<IRawDiff> & { env?: Env }): boolean {
     const newCosmeticFilters: CosmeticFilter[] = [];
     const newNetworkFilters: NetworkFilter[] = [];
     const newPreprocessors: Preprocessor[] = [];

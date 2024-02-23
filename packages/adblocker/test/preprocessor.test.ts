@@ -87,12 +87,12 @@ describe('preprocessors', () => {
   const engine = new FilterEngine({ env, config });
 
   const doTest = (filters: string) => {
-    engine.updateFromDiff({ added: [filters] });
+    engine.updateFromDiff({ added: [filters], env });
 
     expect(engine.match(requests.foo).match).to.be.true;
     expect(engine.match(requests.bar).match).to.be.false;
 
-    engine.updateFromDiff({ removed: [filters] });
+    engine.updateFromDiff({ removed: [filters], env });
   };
 
   // Testing `!#else` means we already aware of parenthesis.
