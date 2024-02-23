@@ -374,11 +374,12 @@ export default class FilterEngine extends EventEmitter<
       this.update({
         newCosmeticFilters: cosmeticFilters,
         newNetworkFilters: networkFilters,
+        env,
       });
     }
   }
 
-  public isFilterExcluded(filter: IFilter): boolean {
+  private isFilterExcluded(filter: IFilter): boolean {
     return this.preprocessors.isFilterExcluded(filter);
   }
 
@@ -529,7 +530,8 @@ export default class FilterEngine extends EventEmitter<
     removedCosmeticFilters = [],
     removedNetworkFilters = [],
     removedPreprocessors = [],
-  }: Partial<IListDiff>): boolean {
+    env = new Env(),
+  }: Partial<IListDiff> & { env: Env | undefined }): boolean {
     let updated: boolean = false;
 
     // Update preprocessors
@@ -538,6 +540,7 @@ export default class FilterEngine extends EventEmitter<
       const preservedFilters = this.preprocessors.update({
         added: newPreprocessors,
         removed: removedPreprocessors,
+        env,
       }).preservedFilters;
 
       if (removedCosmeticFilters) {
@@ -618,7 +621,7 @@ export default class FilterEngine extends EventEmitter<
     return updated;
   }
 
-  public updateFromDiff({ added, removed }: Partial<IRawDiff>): boolean {
+  public updateFromDiff({ added, removed }: Partial<IRawDiff>, env?: Env): boolean {
     const newCosmeticFilters: CosmeticFilter[] = [];
     const newNetworkFilters: NetworkFilter[] = [];
     const newPreprocessors: Preprocessor[] = [];
@@ -653,6 +656,7 @@ export default class FilterEngine extends EventEmitter<
       removedCosmeticFilters: removedCosmeticFilters.map((f) => f.getId()),
       removedNetworkFilters: removedNetworkFilters.map((f) => f.getId()),
       removedPreprocessors,
+      env,
     });
   }
 
