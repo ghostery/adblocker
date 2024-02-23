@@ -229,17 +229,32 @@ export function parseFilters(
           preprocessorStack.length === 1
             ? preprocessorStack[0].condition
             : preprocessorStack.map((entry) => `(${entry.condition})`).join('&&');
-        const filterIDs: Set<number> = new Set();
 
-        for (
-          let i = filterStack.length - 1;
-          i >= preprocessorStack[preprocessorStack.length - 1].start;
-          i--
-        ) {
-          filterIDs.add(filterStack.pop()!.getId());
+        const existingPreprocessor = preprocessors.find(
+          (preprocessor) => preprocessor.condition === condition,
+        );
+
+        if (existingPreprocessor) {
+          for (
+            let i = filterStack.length - 1;
+            i >= preprocessorStack[preprocessorStack.length - 1].start;
+            i--
+          ) {
+            existingPreprocessor.filterIDs.add(filterStack.pop()!.getId());
+          }
+        } else {
+          const filterIDs: Set<number> = new Set();
+
+          for (
+            let i = filterStack.length - 1;
+            i >= preprocessorStack[preprocessorStack.length - 1].start;
+            i--
+          ) {
+            filterIDs.add(filterStack.pop()!.getId());
+          }
+
+          preprocessors.push(Preprocessor.parse(condition, filterIDs));
         }
-
-        preprocessors.push(Preprocessor.parse(condition, filterIDs));
 
         const last = preprocessorStack.pop();
 
