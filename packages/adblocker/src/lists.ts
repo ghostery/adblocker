@@ -296,7 +296,7 @@ export interface IListDiff {
   removedPreprocessors: Preprocessor[];
 }
 
-export interface IBaseDiff {
+interface IBaseDiff {
   added: string[];
   removed: string[];
 }
