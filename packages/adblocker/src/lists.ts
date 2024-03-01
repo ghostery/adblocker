@@ -424,9 +424,6 @@ export function generateDiff(
       // Remove all filters
       for (const filterID of preprocessor.filterIDs) {
         addedInScope.add(index.get(filterID)!);
-
-        // Drop the filter in the global scope
-        added.delete(index.get(filterID)!);
       }
 
       preprocessors[preprocessor.condition] = {
