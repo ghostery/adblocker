@@ -100,7 +100,6 @@ export default class FilterEngine extends EventEmitter<
     this: T,
     init: () => Promise<InstanceType<T>>,
     caching?: Caching,
-    env?: Env,
   ): Promise<InstanceType<T>> {
     if (caching === undefined) {
       return init();
@@ -108,16 +107,15 @@ export default class FilterEngine extends EventEmitter<
 
     const { path, read, write } = caching;
     return read(path)
-      .then((buffer) => this.deserialize(buffer, env) as InstanceType<T>)
+      .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
       .catch(() => init().then((engine) => write(path, engine.serialize()).then(() => engine)));
   }
 
   public static empty<T extends FilterEngine>(
     this: new (...args: any[]) => T,
     config: Partial<Config> = {},
-    env?: Env,
   ): T {
-    return new this({ config, env });
+    return new this({ config });
   }
 
   /**
@@ -134,14 +132,13 @@ export default class FilterEngine extends EventEmitter<
     urls: string[],
     config: Partial<Config> = {},
     caching?: Caching,
-    env?: Env,
   ): Promise<InstanceType<T>> {
     return this.fromCached(() => {
       const listsPromises = fetchLists(fetch, urls);
       const resourcesPromise = fetchResources(fetch);
 
       return Promise.all([listsPromises, resourcesPromise]).then(([lists, resources]) => {
-        const engine = this.parse(lists.join('\n'), config, env);
+        const engine = this.parse(lists.join('\n'), config);
         if (resources !== undefined) {
           engine.updateResources(resources, '' + resources.length);
         }
@@ -163,9 +160,8 @@ export default class FilterEngine extends EventEmitter<
     this: T,
     fetchImpl: Fetch = fetch,
     caching?: Caching,
-    env?: Env,
   ): Promise<InstanceType<T>> {
-    return this.fromLists(fetchImpl, adsLists, {}, caching, env);
+    return this.fromLists(fetchImpl, adsLists, {}, caching);
   }
 
   /**
@@ -176,9 +172,8 @@ export default class FilterEngine extends EventEmitter<
     this: T,
     fetchImpl: Fetch = fetch,
     caching?: Caching,
-    env?: Env,
   ): Promise<InstanceType<T>> {
-    return this.fromLists(fetchImpl, adsAndTrackingLists, {}, caching, env);
+    return this.fromLists(fetchImpl, adsAndTrackingLists, {}, caching);
   }
 
   /**
@@ -189,16 +184,14 @@ export default class FilterEngine extends EventEmitter<
     this: T,
     fetchImpl: Fetch = fetch,
     caching?: Caching,
-    env?: Env,
   ): Promise<InstanceType<T>> {
-    return this.fromLists(fetchImpl, fullLists, {}, caching, env);
+    return this.fromLists(fetchImpl, fullLists, {}, caching);
   }
 
   public static fromTrackerDB<T extends typeof FilterEngine>(
     this: T,
     rawJsonDump: any,
     options: Partial<Config> = {},
-    env?: Env,
   ): InstanceType<T> {
     const config = new Config(options);
     const metadata = new Metadata(rawJsonDump);
@@ -208,7 +201,7 @@ export default class FilterEngine extends EventEmitter<
       filters.push(...pattern.filters);
     }
 
-    const engine = this.parse(filters.join('\n'), config, env);
+    const engine = this.parse(filters.join('\n'), config);
     engine.metadata = metadata;
 
     return engine as InstanceType<T>;
@@ -218,20 +211,17 @@ export default class FilterEngine extends EventEmitter<
     this: new (...args: any[]) => T,
     filters: string,
     options: Partial<Config> = {},
-    env?: Env,
   ): T {
     const config = new Config(options);
     return new this({
       ...parseFilters(filters, config),
       config,
-      env,
     });
   }
 
   public static deserialize<T extends FilterEngine>(
     this: new (...args: any[]) => T,
     serialized: Uint8Array,
-    env: Env = new Env(),
   ): T {
     const buffer = StaticDataView.fromUint8Array(serialized, {
       enableCompression: false,
@@ -286,7 +276,6 @@ export default class FilterEngine extends EventEmitter<
 
     // Deserialize preprocessors
     engine.preprocessors = PreprocessorBucket.deserialize(buffer);
-    engine.preprocessors.updateEnv(env);
 
     // Deserialize buckets
     engine.importants = NetworkFilterBucket.deserialize(buffer, config);
@@ -332,13 +321,11 @@ export default class FilterEngine extends EventEmitter<
 
     config = new Config(),
     lists = new Map(),
-    env = new Env(),
   }: {
     cosmeticFilters?: CosmeticFilter[];
     networkFilters?: NetworkFilter[];
     lists?: Map<string, string>;
     config?: Partial<Config>;
-    env?: Env;
   } = {}) {
     super(); // init super-class EventEmitter
 
@@ -348,7 +335,7 @@ export default class FilterEngine extends EventEmitter<
     this.lists = lists;
 
     // Preprocessors
-    this.preprocessors = new PreprocessorBucket({ env });
+    this.preprocessors = new PreprocessorBucket({});
 
     // $csp=
     this.csp = new NetworkFilterBucket({ config: this.config });
@@ -374,7 +361,6 @@ export default class FilterEngine extends EventEmitter<
       this.update({
         newCosmeticFilters: cosmeticFilters,
         newNetworkFilters: networkFilters,
-        env,
       });
     }
   }
