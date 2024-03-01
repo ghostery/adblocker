@@ -4,13 +4,18 @@ import Preprocessor, { Env } from '../../preprocessor';
 
 export default class PreprocessorBucket {
   public static deserialize(view: StaticDataView): PreprocessorBucket {
-    const preprocessors: Preprocessor[] = [];
+    const excluded = new Set<number>();
+    for (let i = 0, l = view.getUint32(); i < l; i++) {
+      excluded.add(view.getUint32());
+    }
 
+    const preprocessors: Preprocessor[] = [];
     for (let i = 0, l = view.getUint32(); i < l; i++) {
       preprocessors.push(Preprocessor.deserialize(view));
     }
 
     return new this({
+      excluded,
       preprocessors,
     });
   }
@@ -19,18 +24,14 @@ export default class PreprocessorBucket {
   private readonly excluded: Set<number>;
 
   constructor({
-    env = new Env(),
+    excluded = new Set(),
     preprocessors = [],
   }: {
-    env?: Env;
+    excluded?: Set<number>;
     preprocessors?: Preprocessor[];
   }) {
-    this.excluded = new Set();
+    this.excluded = excluded;
     this.preprocessors = preprocessors;
-
-    if (preprocessors.length) {
-      this.update({ added: preprocessors, env });
-    }
   }
 
   private build(env: Env) {
@@ -132,6 +133,11 @@ export default class PreprocessorBucket {
   }
 
   public serialize(view: StaticDataView) {
+    view.pushUint32(this.excluded.size);
+    for (const filterID of this.excluded) {
+      view.pushUint32(filterID);
+    }
+
     view.pushUint32(this.preprocessors.length);
     for (const preprocessor of this.preprocessors) {
       preprocessor.serialize(view);
@@ -139,7 +145,9 @@ export default class PreprocessorBucket {
   }
 
   public getSerializedSize() {
-    let estimatedSize = 4;
+    let estimatedSize = (1 + this.excluded.size) * 4;
+
+    estimatedSize += 4;
     for (const preprocessor of this.preprocessors) {
       estimatedSize += preprocessor.getSerializedSize();
     }
