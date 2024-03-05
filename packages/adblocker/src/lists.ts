@@ -245,7 +245,7 @@ export function parseFilters(
             existingPreprocessor.filterIDs.add(filterId);
           } else {
             filterIDs.add(filterId);
-          } 
+          }
         }
         // ignore preprocessors without filters
         if (filterIDs.size > 0) {
