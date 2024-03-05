@@ -84,15 +84,15 @@ describe('preprocessors', () => {
   env.set('ext_ghostery', true);
   env.set('ext_devbuild', true);
 
-  const engine = new FilterEngine({ env, config });
+  const engine = new FilterEngine({ config });
 
   const doTest = (filters: string) => {
-    engine.updateFromDiff({ added: [filters], env });
+    engine.updateFromDiff({ added: [filters] }, env);
 
     expect(engine.match(requests.foo).match).to.be.true;
     expect(engine.match(requests.bar).match).to.be.false;
 
-    engine.updateFromDiff({ removed: [filters], env });
+    engine.updateFromDiff({ removed: [filters] }, env);
   };
 
   // Testing `!#else` means we already aware of parenthesis.

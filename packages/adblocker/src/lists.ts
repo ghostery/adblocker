@@ -276,9 +276,8 @@ function getFilters(
 } {
   const { networkFilters, cosmeticFilters, preprocessors } = parseFilters(list, config);
   const filters: (NetworkFilter | CosmeticFilter)[] = [];
-  filters.concat(networkFilters).concat(cosmeticFilters);
   return {
-    filters,
+    filters: filters.concat(networkFilters).concat(cosmeticFilters),
     preprocessors,
   };
 }

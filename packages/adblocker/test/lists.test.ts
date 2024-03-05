@@ -59,6 +59,7 @@ describe('#generateDiff', () => {
     expect(generateDiff('', '')).to.eql({
       added: [],
       removed: [],
+      preprocessors: {},
     });
   });
 
@@ -83,6 +84,7 @@ bar.baz
     ).to.eql({
       added: [],
       removed: [],
+      preprocessors: {},
     });
   });
 
@@ -90,6 +92,7 @@ bar.baz
     expect(generateDiff('', '||foo.com')).to.eql({
       added: ['||foo.com'],
       removed: [],
+      preprocessors: {},
     });
   });
 
@@ -97,6 +100,7 @@ bar.baz
     expect(generateDiff('||foo.com', '')).to.eql({
       added: [],
       removed: ['||foo.com'],
+      preprocessors: {},
     });
   });
 
@@ -106,6 +110,7 @@ bar.baz
     ).to.eql({
       added: [],
       removed: [],
+      preprocessors: {},
     });
   });
 });
@@ -137,6 +142,7 @@ describe('#mergeDiffs', () => {
     const diff = {
       added: ['||foo.com'],
       removed: ['||bar.com'],
+      preprocessors: {},
     };
 
     expect(mergeDiffs([diff])).to.eql(diff);
@@ -153,6 +159,7 @@ describe('#mergeDiffs', () => {
     ).to.eql({
       added: ['baz.com'],
       removed: ['foo.com', 'bar.com'],
+      preprocessors: {},
     });
   });
 });
