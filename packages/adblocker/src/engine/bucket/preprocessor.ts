@@ -34,7 +34,11 @@ export default class PreprocessorBucket {
     this.preprocessors = preprocessors;
   }
 
-  private build(env: Env) {
+  public isFilterExcluded(filter: IFilter) {
+    return this.excluded.has(filter.getId());
+  }
+
+  public updateEnv(env: Env) {
     // Update excluded filter ids based on bindings
     this.excluded.clear();
 
@@ -63,23 +67,16 @@ export default class PreprocessorBucket {
     }
   }
 
-  public isFilterExcluded(filter: IFilter) {
-    return this.excluded.has(filter.getId());
-  }
-
-  public updateEnv(env: Env) {
-    this.build(env);
-  }
-
-  public update({
-    added,
-    removed,
-    env,
-  }: {
-    added?: Preprocessor[];
-    removed?: Preprocessor[];
-    env: Env;
-  }) {
+  public update(
+    {
+      added,
+      removed,
+    }: {
+      added?: Preprocessor[];
+      removed?: Preprocessor[];
+    },
+    env: Env,
+  ) {
     const preservedFilters = new Set<number>();
     let updated = false;
 
@@ -124,7 +121,7 @@ export default class PreprocessorBucket {
     }
 
     if (updated) {
-      this.build(env);
+      this.updateEnv(env);
     }
 
     return {

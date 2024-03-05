@@ -509,25 +509,29 @@ export default class FilterEngine extends EventEmitter<
   /**
    * Update engine with new filters as well as optionally removed filters.
    */
-  public update({
-    newNetworkFilters = [],
-    newCosmeticFilters = [],
-    newPreprocessors = [],
-    removedCosmeticFilters = [],
-    removedNetworkFilters = [],
-    removedPreprocessors = [],
+  public update(
+    {
+      newNetworkFilters = [],
+      newCosmeticFilters = [],
+      newPreprocessors = [],
+      removedCosmeticFilters = [],
+      removedNetworkFilters = [],
+      removedPreprocessors = [],
+    }: Partial<IListDiff>,
     env = new Env(),
-  }: Partial<IListDiff> & { env?: Env | undefined }): boolean {
+  ): boolean {
     let updated: boolean = false;
 
     // Update preprocessors
     if (newPreprocessors.length !== 0 || removedPreprocessors.length !== 0) {
       updated = true;
-      const preservedFilters = this.preprocessors.update({
-        added: newPreprocessors,
-        removed: removedPreprocessors,
+      const preservedFilters = this.preprocessors.update(
+        {
+          added: newPreprocessors,
+          removed: removedPreprocessors,
+        },
         env,
-      }).preservedFilters;
+      ).preservedFilters;
 
       if (removedCosmeticFilters) {
         removedCosmeticFilters = removedCosmeticFilters.filter(
@@ -607,7 +611,7 @@ export default class FilterEngine extends EventEmitter<
     return updated;
   }
 
-  public updateFromDiff({ added, removed, env }: Partial<IRawDiff> & { env?: Env }): boolean {
+  public updateFromDiff({ added, removed }: Partial<IRawDiff>, env?: Env): boolean {
     const newCosmeticFilters: CosmeticFilter[] = [];
     const newNetworkFilters: NetworkFilter[] = [];
     const newPreprocessors: Preprocessor[] = [];
@@ -635,15 +639,17 @@ export default class FilterEngine extends EventEmitter<
       Array.prototype.push.apply(newPreprocessors, preprocessors);
     }
 
-    return this.update({
-      newCosmeticFilters,
-      newNetworkFilters,
-      newPreprocessors,
-      removedCosmeticFilters: removedCosmeticFilters.map((f) => f.getId()),
-      removedNetworkFilters: removedNetworkFilters.map((f) => f.getId()),
-      removedPreprocessors,
+    return this.update(
+      {
+        newCosmeticFilters,
+        newNetworkFilters,
+        newPreprocessors,
+        removedCosmeticFilters: removedCosmeticFilters.map((f) => f.getId()),
+        removedNetworkFilters: removedNetworkFilters.map((f) => f.getId()),
+        removedPreprocessors,
+      },
       env,
-    });
+    );
   }
 
   /**
