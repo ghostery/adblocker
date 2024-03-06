@@ -113,6 +113,69 @@ bar.baz
       preprocessors: {},
     });
   });
+
+  it('handle preprocessors', () => {
+    expect(
+      generateDiff(
+        '',
+        `!#if true
+||foo.com
+!#endif`,
+      ),
+    ).to.eql({
+      added: [],
+      removed: [],
+      preprocessors: {
+        true: {
+          added: ['||foo.com'],
+          removed: [],
+        },
+      },
+    });
+
+    expect(
+      generateDiff(
+        `!#if true
+||foo.com
+!#endif`,
+        '',
+      ),
+    ).to.eql({
+      added: [],
+      removed: [],
+      preprocessors: {
+        true: {
+          added: [],
+          removed: ['||foo.com'],
+        },
+      },
+    });
+
+    expect(
+      generateDiff(
+        `||bar.com
+!#if true
+||foo.com
+!#endif`,
+        `||foo.com
+!#if true
+||bar.com
+!#endif`,
+      ),
+    ).to.eql({
+      // We prioritize the filter with a condition over a filter in the global scope
+      // Therefore the duplicate filters with preprocessors in the global scope will be
+      // removed in the global scope and moved into the preprocessor block.
+      added: [],
+      removed: [],
+      preprocessors: {
+        true: {
+          added: ['||bar.com'],
+          removed: ['||foo.com'],
+        },
+      },
+    });
+  });
 });
 
 describe('#f', () => {
@@ -160,6 +223,34 @@ describe('#mergeDiffs', () => {
       added: ['baz.com'],
       removed: ['foo.com', 'bar.com'],
       preprocessors: {},
+    });
+
+    expect(
+      mergeDiffs([
+        {
+          preprocessors: {
+            true: {
+              added: ['||foo.com'],
+            },
+          },
+        },
+        {
+          preprocessors: {
+            true: {
+              added: ['||foo.com', '||bar.com'],
+            },
+          },
+        },
+      ]),
+    ).to.eql({
+      added: [],
+      removed: [],
+      preprocessors: {
+        true: {
+          added: ['||foo.com', '||bar.com'],
+          removed: [],
+        },
+      },
     });
   });
 });

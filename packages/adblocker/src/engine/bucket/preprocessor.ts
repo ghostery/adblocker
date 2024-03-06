@@ -77,7 +77,6 @@ export default class PreprocessorBucket {
     },
     env: Env,
   ) {
-    const preservedFilters = new Set<number>();
     let updated = false;
 
     if (removed) {
@@ -115,7 +114,6 @@ export default class PreprocessorBucket {
 
         for (const filterID of preprocessor.filterIDs) {
           local.filterIDs.add(filterID);
-          preservedFilters.add(filterID);
         }
       }
     }
@@ -123,10 +121,6 @@ export default class PreprocessorBucket {
     if (updated) {
       this.updateEnv(env);
     }
-
-    return {
-      preservedFilters,
-    };
   }
 
   public serialize(view: StaticDataView) {

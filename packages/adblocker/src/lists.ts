@@ -336,26 +336,56 @@ export function generateDiff(
 
   const prevRevisionData = getFilters(prevRevision, debugConfig);
   const prevRevisionIds = new Set(prevRevisionData.filters.map((filter) => filter.getId()));
+  const prevRevisionPreprocessorAffectedFilterIds = prevRevisionData.preprocessors.reduce(
+    (state, preprocessor) => {
+      for (const filterID of preprocessor.filterIDs) {
+        state.add(filterID);
+      }
+
+      return state;
+    },
+    new Set<number>(),
+  );
 
   const newRevisionData = getFilters(newRevision, debugConfig);
   const newRevisionIds = new Set(newRevisionData.filters.map((filter) => filter.getId()));
+  const newRevisionPreprocessorAffectedFilterIds = newRevisionData.preprocessors.reduce(
+    (state, preprocessor) => {
+      for (const filterID of preprocessor.filterIDs) {
+        state.add(filterID);
+      }
+
+      return state;
+    },
+    new Set<number>(),
+  );
 
   const index: Map<number, string> = new Map();
 
   // Check which filters were added, based on ID
   const added: Set<string> = new Set();
   for (const filter of newRevisionData.filters) {
-    if (!prevRevisionIds.has(filter.getId())) {
+    if (
+      !prevRevisionIds.has(filter.getId()) &&
+      !newRevisionPreprocessorAffectedFilterIds.has(filter.getId())
+    ) {
       added.add(filter.rawLine as string);
     }
+
+    index.set(filter.getId(), filter.rawLine as string);
   }
 
   // Check which filters were removed, based on ID
   const removed: Set<string> = new Set();
   for (const filter of prevRevisionData.filters) {
-    if (!newRevisionIds.has(filter.getId())) {
+    if (
+      !newRevisionIds.has(filter.getId()) &&
+      !prevRevisionPreprocessorAffectedFilterIds.has(filter.getId())
+    ) {
       removed.add(filter.rawLine as string);
     }
+
+    index.set(filter.getId(), filter.rawLine as string);
   }
 
   // Create preprocessor diffs

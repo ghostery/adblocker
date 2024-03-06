@@ -525,22 +525,13 @@ export default class FilterEngine extends EventEmitter<
     // Update preprocessors
     if (newPreprocessors.length !== 0 || removedPreprocessors.length !== 0) {
       updated = true;
-      const preservedFilters = this.preprocessors.update(
+      this.preprocessors.update(
         {
           added: newPreprocessors,
           removed: removedPreprocessors,
         },
         env,
-      ).preservedFilters;
-
-      if (removedCosmeticFilters) {
-        removedCosmeticFilters = removedCosmeticFilters.filter(
-          (one) => !preservedFilters.has(one),
-        );
-      }
-      if (removedNetworkFilters) {
-        removedNetworkFilters = removedNetworkFilters.filter((one) => !preservedFilters.has(one));
-      }
+      );
     }
 
     // Update cosmetic filters
@@ -611,7 +602,7 @@ export default class FilterEngine extends EventEmitter<
     return updated;
   }
 
-  public updateFromDiff({ added, removed }: Partial<IRawDiff>, env?: Env): boolean {
+  public updateFromDiff({ added, removed, preprocessors }: Partial<IRawDiff>, env?: Env): boolean {
     const newCosmeticFilters: CosmeticFilter[] = [];
     const newNetworkFilters: NetworkFilter[] = [];
     const newPreprocessors: Preprocessor[] = [];
@@ -626,6 +617,8 @@ export default class FilterEngine extends EventEmitter<
       );
       Array.prototype.push.apply(removedCosmeticFilters, cosmeticFilters);
       Array.prototype.push.apply(removedNetworkFilters, networkFilters);
+      // In the common sense, the diff should accept the preprocessors only from `preprocessors` property
+      // Handling preprocessors from the added raw lines are to provide a simple breakage prevention
       Array.prototype.push.apply(removedPreprocessors, preprocessors);
     }
 
@@ -637,6 +630,48 @@ export default class FilterEngine extends EventEmitter<
       Array.prototype.push.apply(newCosmeticFilters, cosmeticFilters);
       Array.prototype.push.apply(newNetworkFilters, networkFilters);
       Array.prototype.push.apply(newPreprocessors, preprocessors);
+    }
+
+    if (preprocessors !== undefined) {
+      for (const [condition, details] of Object.entries(preprocessors)) {
+        if (added !== undefined && added.length !== 0) {
+          const { networkFilters, cosmeticFilters } = parseFilters(
+            details.added.join('\n'),
+            this.config,
+          );
+          const filterIDs = new Set<number>(
+            ([] as number[])
+              .concat(cosmeticFilters.map((filter) => filter.getId()))
+              .concat(networkFilters.map((filter) => filter.getId())),
+          );
+
+          newPreprocessors.push(
+            new Preprocessor({
+              condition,
+              filterIDs,
+            }),
+          );
+        }
+
+        if (removed !== undefined && removed.length !== 0) {
+          const { networkFilters, cosmeticFilters } = parseFilters(
+            details.added.join('\n'),
+            this.config,
+          );
+          const filterIDs = new Set<number>(
+            ([] as number[])
+              .concat(cosmeticFilters.map((filter) => filter.getId()))
+              .concat(networkFilters.map((filter) => filter.getId())),
+          );
+
+          removedPreprocessors.push(
+            new Preprocessor({
+              condition,
+              filterIDs,
+            }),
+          );
+        }
+      }
     }
 
     return this.update(
