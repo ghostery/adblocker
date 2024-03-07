@@ -1104,8 +1104,6 @@ pcgamer.com#@#.hawk-widget
 ! example https://www.telegraph.co.uk/news/2020/06/18/like-churchill-de-gaulle-1940-britain-france-united-against/
 @@||notice.sp-prod.net^$frame,domain=telegraph.co.uk
 @@||tags.crwdcntrl.net/*/cc.js$script,domain=telegraph.co.uk
-! https://www.reddit.com/r/uBlockOrigin/comments/jg2gxq/videos_wont_load_on_telegraphcouk/
-@@||privacy-mgmt.com^$script,domain=telegraph.co.uk
 ! https://github.com/uBlockOrigin/uAssets/issues/12635
 ||adobedtm.com^*/satellitelib-$script,domain=telegraph.co.uk,important
 telegraph.co.uk##+js(set, _satellite, %7B%7D)
@@ -2880,6 +2878,7 @@ filelu.com#@#.banner_ads
 ! https://github.com/uBlockOrigin/uAssets/issues/16128
 @@||img.kleinanzeigen.de/api/$image,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/12112#issuecomment-1366134900
+*$script,3p,from=uqload.com,badfilter
 ! [badfilter] ||opsktp.com^$badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/16137
 @@||hub.docker.com/*/repositories/plausible/analytics/tags/$xhr,1p
@@ -3023,7 +3022,10 @@ hollywoodreporter.com#@#[id^="jwplayer"]
 @@||cds.connatix.com/p/*/connatix.playspace.dc.js^$script,3p,domain=adweek.com
 @@||cds.connatix.com/p/*/connatix.playspace.css^$css,3p,domain=adweek.com
 ! https://github.com/uBlockOrigin/uAssets/issues/20200
-@@||cds.connatix.com/*/cSyncRemoteEntry.js$script,domain=accuweather.com
+@@||connatix.com^$script,domain=accuweather.com
+! https://github.com/uBlockOrigin/uAssets/issues/21432#issuecomment-1971403010
+@@||connatix.com^$script,domain=deadline.com
+deadline.com#@#.cnx-player-wrapper
 ! https://github.com/uBlockOrigin/uAssets/issues/17000
 mediaite.com#@#.adthrive-video-player
 mediaite.com##.adthrive-video-player:style(padding-bottom: 0 !important;)
@@ -3185,6 +3187,8 @@ tiendaenlinea.claro.com.ni##+js(set, Object.prototype.bk_doJSTag, noopFunc)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/149499
 delta.com#@#.adv-container
 ! https://github.com/uBlockOrigin/uAssets/issues/17836
+||shop.motorolasolutions.com/msi-files/libs/dynatrace.js$script,redirect-rule=noopjs,from=shop.motorolasolutions.com
+||shop.motorolasolutions.com/msi-files/page-tags/head/dynatrace-loader.js$script,redirect-rule=noopjs,from=shop.motorolasolutions.com
 ! To counter `statcounter.com` in Peter Lowe's
 ! https://github.com/uBlockOrigin/uAssets/commit/1142bef68ee287d27f6191c433ff8491570b6612
 ! [badfilter] ||statcounter.com^$badfilter
@@ -3448,6 +3452,7 @@ api.dock.agacad.com##+js(rpnt, script, %2Fwindow%5C.dataLayer.%2B%3F(location%5C
 uol.com.br##+js(set, YT.ImaManager, noopFunc)
 uol.com.br##+js(set, UOLPD, %7B%7D)
 uol.com.br##+js(set, UOLPD.dataLayer, %7B%7D)
+uol.com.br##+js(set, __configuredDFPTags, %7B%7D)
 ! https://myspace.com/myspace/video/charles-bradley-the-ferris-wheel-interviews/109587715 - video breakage
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=myspace.com,important
 ! https://www.carmagazine.co.uk/car-reviews/smart/-1-suv/ - images breakage
@@ -3647,7 +3652,7 @@ meijer.com#@#.product-grid__product:has(.product-tile__sponsored)
 ! https://github.com/uBlockOrigin/uAssets/issues/21731
 msn.com#@#.intra-article-module
 ! https://github.com/uBlockOrigin/uAssets/issues/21741
-#@#[id^="adv-"]:not(#adv-settings)
+#@#[id^="adv-"]:not(#adv-settings):not(.adv-player-container)
 ! https://github.com/uBlockOrigin/uAssets/issues/21750
 commande.rhinov.pro##+js(set, Sentry, %7B%7D)
 commande.rhinov.pro##+js(set, Sentry.init, noopFunc)
@@ -3697,6 +3702,8 @@ iceland.co.uk##+js(set, fp.s, noopFunc)
 socket.pearsoned.com##+js(set, initializeNewRelic, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/22373
 @@||fwmrm.net^*/admanager.js$script,3p,domain=southpark.*|southparkstudios.*
+! https://github.com/uBlockOrigin/uAssets/issues/22687#issuecomment-1969035876
+! [badfilter] ||tiqcdn.com^$badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/18516
 ! [badfilter] ||click.discord.com^$badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/22398
@@ -3718,3 +3725,44 @@ ecom.wixapps.net##+js(set, Sentry.init, noopFunc)
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect-rule=google-ima.js,domain=sportskeeda.com
 ! https://github.com/uBlockOrigin/uAssets/issues/22520
 @@||googletagmanager.com/gtm.js$3p,script,domain=st-andrews.ac.uk
+! https://github.com/uBlockOrigin/uAssets/issues/22552
+mobile.de##+js(set, optimizelyDatafile, %7B%7D)
+mobile.de##+js(set, optimizelyDatafile.featureFlags, %5B%5D)
+||cdn.optimizely.com/public/*.json/tag.js$domain=mobile.de,important
+! https://github.com/uBlockOrigin/uAssets/issues/22580
+! [badfilter] ||cj.com^$badfilter
+! https://www.reddit.com/r/uBlockOrigin/comments/1axy3om/videos_from_the_site_httpswwwpurepeoplecom_do_not/
+! https://www.purepeople.com/article/kate-middleton-et-le-prince-harry-ont-ils-repris-contact-une-experte-en-est-persuadee_a520086/1
+@@||cdn.lib.getjad.io/library/*/purepeople_fr_web$script,3p,domain=purepeople.com
+@@||cdn.lib.getjad.io/prebid/$script,3p,domain=purepeople.com
+@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,3p,domain=purepeople.com
+@@||securepubads.g.doubleclick.net/pagead/managed/js/gpt/*/pubads_impl$script,3p,domain=purepeople.com
+@@||securepubads.g.doubleclick.net/gampad/ads$xhr,3p,domain=purepeople.com
+purepeople.com##+js(nano-stb, logEvent, *, 0.001)
+! https://github.com/uBlockOrigin/uAssets/issues/22604
+@@||web-assets.tapfiliate.com^$domain=affiliates.groovehq.com
+@@||groove.tapfiliate.com^$1p
+@@||web-assets.tapfiliate.com^$1p
+! https://github.com/uBlockOrigin/uAssets/issues/22628
+||googletagmanager.com^$script,redirect-rule=googletagmanager_gtm.js,domain=economictimes.com|eisamay.com|iamgujarat.com|indiatimes.com|samayam.com|vijaykarnataka.com
+! https://github.com/uBlockOrigin/uAssets/issues/22629
+ioe.vn##+js(set, fingerprint, %7B%7D)
+ioe.vn##+js(set, fingerprint.getCookie, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/22699
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect-rule=google-ima.js,domain=ufc.com
+! https://github.com/uBlockOrigin/uAssets/issues/22725
+bikeportland.org##+js(set, gform.utils, noopFunc)
+bikeportland.org##+js(set, gform.utils.trigger, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/22726
+geiriadur.ac.uk##+js(set, fingerprint, %7B%7D)
+geiriadur.ac.uk##+js(set, get_fingerprint, noopFunc)
+! https://github.com/AdguardTeam/AdguardFilters/commit/47e4e533ad47e1c09b2b0a81f4bb5d6532dc050c#diff-97c06fd34ce664c89282de03aed72f65fcd6faec4a63ca56052ac7bbb3467e13
+biologianet.com##+js(set-constant, UOLPD, %7B%7D)
+biologianet.com##+js(set-constant, UOLPD.dataLayer, %7B%7D)
+biologianet.com##+js(set-constant, __configuredDFPTags, %7B%7D)
+! https://github.com/uBlockOrigin/uAssets/issues/22740
+||my.goabode.com/assets/js/fp2.min.js$script,domain=my.goabode.com,redirect=fingerprint2.js,important
+! https://github.com/uBlockOrigin/uAssets/issues/22775
+@@||code.giraff.io/data/widget-vslv.js$script,domain=vs.lv
+@@||data.giraff.io/track/vslv.js$script,domain=vs.lv
+@@||a.giraff.io/data/*json$script,domain=vs.lv
