@@ -227,11 +227,11 @@ export default class Preprocessor {
     this.filterIDs = filterIDs;
   }
 
-  public evaluate(env: Env) {
+  public evaluate(env: Env): boolean {
     return evaluate(this.condition, env);
   }
 
-  public serialize(view: StaticDataView) {
+  public serialize(view: StaticDataView): void {
     view.pushUTF8(this.condition);
 
     view.pushUint32(this.filterIDs.size);
@@ -240,7 +240,7 @@ export default class Preprocessor {
     }
   }
 
-  public getSerializedSize() {
+  public getSerializedSize(): number {
     let estimatedSize = sizeOfUTF8(this.condition);
 
     estimatedSize += (1 + this.filterIDs.size) * 4;
