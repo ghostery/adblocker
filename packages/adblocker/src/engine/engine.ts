@@ -23,7 +23,7 @@ import { HTMLSelector } from '../html-filtering';
 import CosmeticFilter from '../filters/cosmetic';
 import NetworkFilter from '../filters/network';
 import { block } from '../filters/dsl';
-import { IListDiff, IRawDiff, parseFilters } from '../lists';
+import { IListDiff, IPartialRawDiff, parseFilters } from '../lists';
 import Request from '../request';
 import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
@@ -602,7 +602,7 @@ export default class FilterEngine extends EventEmitter<
     return updated;
   }
 
-  public updateFromDiff({ added, removed, preprocessors }: Partial<IRawDiff>, env?: Env): boolean {
+  public updateFromDiff({ added, removed, preprocessors }: IPartialRawDiff, env?: Env): boolean {
     const newCosmeticFilters: CosmeticFilter[] = [];
     const newNetworkFilters: NetworkFilter[] = [];
     const newPreprocessors: Preprocessor[] = [];
@@ -634,7 +634,7 @@ export default class FilterEngine extends EventEmitter<
 
     if (preprocessors !== undefined) {
       for (const [condition, details] of Object.entries(preprocessors)) {
-        if (added !== undefined && added.length !== 0) {
+        if (details.added !== undefined && details.added.length !== 0) {
           const { networkFilters, cosmeticFilters } = parseFilters(
             details.added.join('\n'),
             this.config,
@@ -653,9 +653,9 @@ export default class FilterEngine extends EventEmitter<
           );
         }
 
-        if (removed !== undefined && removed.length !== 0) {
+        if (details.removed !== undefined && details.removed.length !== 0) {
           const { networkFilters, cosmeticFilters } = parseFilters(
-            details.added.join('\n'),
+            details.removed.join('\n'),
             this.config,
           );
           const filterIDs = new Set<number>(

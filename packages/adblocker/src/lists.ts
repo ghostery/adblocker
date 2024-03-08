@@ -296,13 +296,17 @@ interface IBaseDiff {
   removed: string[];
 }
 
-export interface IPreprocessorDiff {
+interface IPreprocessorDiff {
   [key: string]: IBaseDiff;
 }
 
 export interface IRawDiff extends IBaseDiff {
   preprocessors?: IPreprocessorDiff;
 }
+
+export type IPartialRawDiff = Partial<IBaseDiff> & {
+  preprocessors?: { [key: string]: Partial<IBaseDiff> };
+};
 
 /**
  * Helper used to return a set of lines as strings where each line is
@@ -465,11 +469,7 @@ export function generateDiff(
  * Merge several raw diffs into one, taking care of accumulating added and
  * removed filters, even if several diffs add/remove the same ones.
  */
-export function mergeDiffs(
-  diffs: (Partial<IBaseDiff> & {
-    preprocessors?: { [key: string]: Partial<IBaseDiff> };
-  })[],
-): IRawDiff {
+export function mergeDiffs(diffs: IPartialRawDiff[]): IRawDiff {
   const addedCumul: Set<string> = new Set();
   const removedCumul: Set<string> = new Set();
   const preprocessorsCumul: { [key: string]: { added: Set<string>; removed: Set<string> } } = {};
