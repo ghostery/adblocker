@@ -64,9 +64,9 @@ m.youtube.com,music.youtube.com,www.youtube.com##+js(set, ytInitialPlayerRespons
 m.youtube.com,music.youtube.com,www.youtube.com##+js(json-prune, playerResponse.playerConfig.ssapConfig%20playerResponse.streamingData.serverAbrStreamingUrl%20playerConfig.ssapConfig%20streamingData.serverAbrStreamingUrl)
 ! https://github.com/uBlockOrigin/uAssets/issues/18476
 ! VOE sites
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=sharonwhiledemocratic.com
-sharonwhiledemocratic.com##+js(nowoif)
-sharonwhiledemocratic.com##+js(set, console.clear, undefined)
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=vincentincludesuccessful.com,important
+vincentincludesuccessful.com##+js(nowoif)
+vincentincludesuccessful.com##+js(set, console.clear, undefined)
 ! perchance - broken by its dev
 ||eu-1-id5-sync.com^
 ||perchance.org/api/count?key=abp$xhr,1p
@@ -95,16 +95,18 @@ sharonwhiledemocratic.com##+js(set, console.clear, undefined)
 @@||perchance.org^$ghide
 perchance.org##+js(no-fetch-if, google-analytics)
 perchance.org##+js(trusted-set, window.google_image_requests, %7B%20%22value%22%3A%20%5B%7B%20%22src%22%3A%20%22https%3A%2F%2Fundefined%22%20%7D%5D%7D)
-perchance.org##+js(trusted-set, window.gaData, %7B%20%22value%22%3A%20%7B%22UA-36798824-24%22%3A%7B%22hitcount%22%3A1%5C%2C%22first_hit%22%3A1709839111827%7D%7D%7D)
+perchance.org##+js(trusted-set, window.gaData, %7B%20%22value%22%3A%20%7B%22UA-36798824-24%22%3A%7B%22hitcount%22%3A1%5C%2C%22first_hit%22%3A1709%7D%7D%7D)
 perchance.org##+js(set, window.quantserve, noopFunc)
 perchance.org##+js(set, window.__halo_loaded__, true)
 ! ytlarge detection
 @@||ytlarge.com^$ghide
-@@||googlesyndication.com^$script,xhr,domain=ytlarge.com
-@@||fundingchoicesmessages.google.com^$script,xhr,domain=ytlarge.com
+!@@||googlesyndication.com^$script,xhr,domain=ytlarge.com
+!@@||fundingchoicesmessages.google.com^$script,xhr,domain=ytlarge.com
 @@||g.doubleclick.net/pagead/ads?$frame,domain=ytlarge.com
 @@||ytlarge.com^$script,1p
 ! [badfilter] .com/ad/$~image,third-party,domain=~mediaplex.com|~warpwire.com|~wsj.com,badfilter
+! [badfilter] .com/adz/$badfilter
+@@*$script,domain=ytlarge.com,denyallow=googletagmanager.com|googlesyndication.com
 ! https://github.com/uBlockOrigin/uAssets/issues/22067
 @@||free-mp3-download.net^$script,1p
 !#if cap_html_filtering
@@ -168,5 +170,11 @@ pinterest.*##[data-grid-item]:has([data-test-pin-id] [data-test-id^="one-tap-des
 pinterest.*##[data-grid-item]:has([data-test-pin-id] a[href^="http"][rel] [data-test-id="pincard-oneTap-with-link"])
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/22767
-10play.com.au##+js(set, moatPrebidApi, %7B%7D)
-10play.com.au##+js(set, moatPrebidApi.getMoatTargetingForPage, noopFunc)
+! [dup] from ublock-origin/unbreak.txt
+! 10play.com.au##+js(set, moatPrebidApi, %7B%7D)
+! [dup] from ublock-origin/unbreak.txt
+! 10play.com.au##+js(set, moatPrebidApi.getMoatTargetingForPage, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/22819
+! [badfilter] ||cloudfront.net/$domain=allegro.pl,badfilter
+! https://github.com/uBlockOrigin/uAssets/issues/22826
+google.*#@#div[jsaction^="mouseover:pane."]:has(span.jHLihd)

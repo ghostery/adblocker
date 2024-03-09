@@ -2455,23 +2455,25 @@ btcbunch.com##+js(rmnt, script, %2FdownloadJSAtOnload%7CObject.prototype.toStrin
 ! https://github.com/uBlockOrigin/uAssets/issues/13891
 ! https://github.com/uBlockOrigin/uAssets/issues/15308
 ! https://github.com/uBlockOrigin/uAssets/issues/21402
-filemoon.*,moonmov.pro##+js(nowoif)
+! https://github.com/uBlockOrigin/uAssets/issues/22829
+filemoon.*,kerapoxy.*,moonmov.pro##+js(nowoif)
 filemoon.*##+js(acs, navigator, popunder)
 filemoon.*##+js(nano-sib, seconds)
 filemoon.*##+js(aopr, FMPoopS)
 filemoon.*##^script:has-text(/Math.floor|FMPoopS/)
 filemooon.top##+js(noeval-if, popunder)
-filemoon.*##+js(acs, document.querySelectorAll, popMagic)
-filemoon.*##+js(acs, Math, %2Fwindow%5C%5B'(%3F%3A%5C%5Cx%5B0-9a-f%5D%7B2%7D)%7B2%7D%2F)
+filemoon.*,kerapoxy.*##+js(acs, document.querySelectorAll, popMagic)
+filemoon.*,kerapoxy.*##+js(acs, Math, %2Fwindow%5C%5B'(%3F%3A%5C%5Cx%5B0-9a-f%5D%7B2%7D)%7B2%7D%2F)
 ||filemoon.in/dl
 ||filemoon.in/js/custom_pop.js
 ||filemoon.*/player/jw8/vast.js$script,1p
 ||moonmov.pro/js/baf.js$script,1p
+||kerapoxy.*/js/baf.js$script
 ##div[style="position: fixed; display: block; width: 100%; height: 100%; inset: 0px; background-color: rgba(0, 0, 0, 0); z-index: 300000;"]
 ||luofinality.com^
 ||markedoneofth.com^
 ||oppoteammate.com^
-||selfservesenpai.*^
+||selfservesenpai.*^$all
 ||traffmgnt.com^
 ! nosteam popup
 nosteam.ro,nosteamgames.ro##+js(nowoif)
@@ -2864,13 +2866,13 @@ canale.live##+js(nosiif, href)
 ||html-load.com^$~css,domain=loawa.com|ygosu.com|sportalkorea.com|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com
 @@/loader.min.js$xhr,script,domain=loawa.com|ygosu.com|sportalkorea.com|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com
 !#else
-loawa.com,ygosu.com,sportalkorea.com,enetnews.co.kr,edaily.co.kr,economist.co.kr,etoday.co.kr,hankyung.com,isplus.com,hometownstation.com,inven.co.kr,honkailab.com,warcraftrumbledeck.com,genshinlab.com,thestockmarketwatch.com,thephoblographer.com,issuya.com##+js(no-fetch-if, %2Fstatic%5C.criteo%5C.net%7Cadsbygoogle%2F, length%3A150000-150200)
-@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=loawa.com|ygosu.com|sportalkorea.com|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com
-*$frame,redirect-rule=noopframe,domain=ygosu.com|loawa.com|sportalkorea.com|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com
-*$script,xhr,redirect-rule=noopjs,domain=ygosu.com|loawa.com|sportalkorea.com|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com
-*$image,redirect-rule=1x1.gif,domain=ygosu.com|loawa.com|sportalkorea.com|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com
-@@*$ghide,domain=ygosu.com|loawa.com|sportalkorea.com|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com
-thestockmarketwatch.com,issuya.com##ins.adsbygoogle:style(height: 1px !important; visibility: hidden !important;)
+loawa.com,ygosu.com,sportalkorea.com,enetnews.co.kr,edaily.co.kr,economist.co.kr,etoday.co.kr,hankyung.com,isplus.com,hometownstation.com,inven.co.kr,honkailab.com,warcraftrumbledeck.com,genshinlab.com,thestockmarketwatch.com,thephoblographer.com,issuya.com,meeco.kr##+js(no-fetch-if, %2Fstatic%5C.criteo%5C.net%7Cadsbygoogle%2F, length%3A150000-150200)
+@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=loawa.com|ygosu.com|sportalkorea.com|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|meeco.kr
+*$frame,redirect-rule=noopframe,domain=ygosu.com|loawa.com|sportalkorea.com|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|meeco.kr
+*$script,xhr,redirect-rule=noopjs,domain=ygosu.com|loawa.com|sportalkorea.com|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|meeco.kr
+*$image,redirect-rule=1x1.gif,domain=ygosu.com|loawa.com|sportalkorea.com|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|meeco.kr
+@@*$ghide,domain=ygosu.com|loawa.com|sportalkorea.com|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|meeco.kr
+thestockmarketwatch.com,issuya.com,meeco.kr##ins.adsbygoogle:style(height: 1px !important; visibility: hidden !important;)
 thestockmarketwatch.com#@#.adSpotPad
 thestockmarketwatch.com##.adSpotPad:style(height: 1px !important; min-height: 1px !important; visibility: hidden !important;)
 loawa.com##a[href^="https://mini.m-able.app/@mini/loawa?tracking_template"]:remove()
@@ -2881,13 +2883,21 @@ isplus.com##div[class="box banner"]
 hometownstation.com##.home-ads
 cboard.net###left-ba
 thephoblographer.com##[id^="vuukle-ad-"]
+meeco.kr#@#.adsbygoogle:remove()
+meeco.kr#@#.adsbygoogle
 !#endif
 loawa.com,ygosu.com,sportalkorea.com,enetnews.co.kr,edaily.co.kr,economist.co.kr,etoday.co.kr,hankyung.com,isplus.com,hometownstation.com,inven.co.kr,honkailab.com,warcraftrumbledeck.com,genshinlab.com,thestockmarketwatch.com,thephoblographer.com,issuya.com##ad-shield-inventory
 *$image,1p,domain=07c225f3.online|content-loader.com|css-load.com|html-load.com
+||07c225f3.online^$font,ping
+||content-loader.com^$font,ping
+||css-load.com^$font,ping
+||html-load.com^$font,ping
 ||07c225f3.online^$image,3p,redirect=1x1.gif
 ||content-loader.com^$image,3p,redirect=1x1.gif
 ||css-load.com^$image,3p,redirect=1x1.gif
 ||html-load.com^$image,3p,redirect=1x1.gif
+||f97ae142.online^$font,css,ping
+||22d2d4d9-0c15-4a3a-9562-384f2c100146.xyz^$font,css,ping
 genshinlab.com,a-ha.io,cboard.net,jjang0u.com,joongdo.co.kr,viva100.com,thephoblographer.com,newdaily.co.kr,dogdrip.net,gamingdeputy.com,thesaurus.net,tweaksforgeeks.com,alle-tests.nl,maketecheasier.com,automobile-catalog.com,motorbikecatalog.com##+js(noeval-if, %2F07c225f3%5C.online%7Ccontent-loader%5C.com%7Ccss-load%5C.com%7Chtml-load%5C.com%2F)
 !#if cap_html_filtering
 genshinlab.com,fourfourtwo.co.kr,interfootball.co.kr,a-ha.io,cboard.net,jjang0u.com,joongdo.co.kr,viva100.com,thephoblographer.com,newdaily.co.kr,dogdrip.net,gamingdeputy.com,thesaurus.net,tweaksforgeeks.com,alle-tests.nl,maketecheasier.com,automobile-catalog.com##^script:has-text(KCgpPT57bGV0IGU)
@@ -2897,6 +2907,7 @@ worldhistory.org##^script:has-text(adShieldScript)
 genshinlab.com,fourfourtwo.co.kr,interfootball.co.kr,a-ha.io,cboard.net,jjang0u.com,joongdo.co.kr,viva100.com,thephoblographer.com,newdaily.co.kr,dogdrip.net,gamingdeputy.com,thesaurus.net,tweaksforgeeks.com,alle-tests.nl,maketecheasier.com,automobile-catalog.com##+js(rmnt, script, KCgpPT57bGV0IGU)
 allthetests.com##+js(rmnt, script, error-report.com)
 worldhistory.org##+js(rmnt, script, adShieldScript)
+meeco.kr##+js(no-fetch-if, %2Fstatic%5C.criteo%5C.net%7Cadsbygoogle%2F, length%3A150000-150200)
 !#endif
 motorbikecatalog.com##+js(rmnt, script, KCgpPT57bGV0IGU)
 ! https://github.com/uBlockOrigin/uAssets/issues/21346
