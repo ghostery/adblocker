@@ -53,6 +53,20 @@ embed.smashystream.com###addiv
 *$script,3p,denyallow=gstatic.com,domain=streambucket.net
 ! https://github.com/uBlockOrigin/uAssets/issues/22762#issuecomment-1977984428
 player.smashy.stream##.react-responsive-modal-root
+! https://github.com/uBlockOrigin/uAssets/issues/22720
+*$script,domain=pch.com,redirect=noopjs,3p
+@@||pchassets.com^$script,domain=pch.com
+@@||ajax.googleapis.com/ajax/$script,domain=pch.com
+@@||gstatic.com^$script,domain=pch.com
+@@||imasdk.googleapis.com^$script,domain=pch.com
+@@||pch.com^$ghide
+@@||content.jwplatform.com^$script,domain=pch.com
+@@||pch.com/vendor/googleanalytics/js/googleanalytics.js$script,1p
+@@||code.jquery.com^$script,domain=pch.com
+@@||cdnjs.cloudflare.com/ajax/$script,domain=pch.com
+@@||sts.eccmp.com/sts/scripts/conversen-SDK.js$script,domain=pch.com
+@@||static.topixcdn.com^$script,domain=pch.com
+@@||tags.tiqcdn.com/utag/*/utag.js$script,domain=pch.com
 ! END: Rules from filters.txt
 ! https://github.com/AdguardTeam/AdguardFilters/issues/169660
 flixscans.org##+js(no-fetch-if, googlesyndication)
@@ -275,9 +289,9 @@ civitai.com##+js(no-fetch-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/22220
 ! https://github.com/uBlockOrigin/uAssets/issues/22492
 @@/^https:\/\/www\.puzzle-[a-z]+\.com\//$script,from=puzzle-loop.com|puzzle-words.com|puzzle-chess.com|puzzle-thermometers.com|puzzle-norinori.com|puzzle-minesweeper.com|puzzle-slant.com|puzzle-lits.com|puzzle-galaxies.com|puzzle-tents.com|puzzle-battleships.com|puzzle-pipes.com|puzzle-hitori.com|puzzle-heyawake.com|puzzle-shingoki.com|puzzle-masyu.com|puzzle-stitches.com|puzzle-aquarium.com|puzzle-tapa.com|puzzle-star-battle.com|puzzle-kakurasu.com|puzzle-skyscrapers.com|puzzle-futoshiki.com|puzzle-shakashaka.com|puzzle-kakuro.com|puzzle-jigsaw-sudoku.com|puzzle-killer-sudoku.com|puzzle-binairo.com|puzzle-nonograms.com|puzzle-sudoku.com|puzzle-light-up.com|puzzle-bridges.com|puzzle-shikaku.com|puzzle-nurikabe.com|puzzle-dominosa.com
-puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com###MainContainer > [id]:has(> [id^="btIn"] > #bannerTop):style(transform: translateX(10000px) !important;)
-puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com###MainContainer > [id^="bannerTopSpacer"]:style(transform: translateX(10000px) !important;)
-puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com###MainContainer + [id]:has(> #bannerSide):style(transform: translateX(10000px) !important;)
+puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com###MainContainer > [id]:has(> [id^="btIn"] > #bannerTop):style(visibility: collapse !important;)
+puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com###MainContainer > [id^="bannerTopSpacer"]:style(visibility: collapse !important;)
+puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com###MainContainer + [id]:has(> #bannerSide):style(visibility: collapse !important;)
 ||d3mw273ubcaiex.cloudfront.net/images/ad/$image
 ! https://github.com/uBlockOrigin/uAssets/issues/22221
 ||delivery.twentythree.com/*/video_medium?revision$media,redirect=noopmp3-0.1s
@@ -600,3 +614,15 @@ mrbenne.com##+js(rmnt, script, %2FfairAdblock%7CpopMagic%2F)
 tecnologiati.online###player:style(display: block !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/22806
 @@||d2zf5gu5e5mp87.cloudfront.net^$script,domain=ebaticalfel.com
+! https://github.com/AdguardTeam/AdguardFilters/issues/174290
+botrix.live##+js(set, Object.prototype.isAdblock, undefined)
+! https://github.com/AdguardTeam/AdguardFilters/issues/174371
+*$script,redirect-rule=noopjs,3p,domain=expressnews.com
+! https://github.com/AdguardTeam/AdguardFilters/issues/174382
+daotranslate.us##+js(acs, document.getElementById, deblocker, %2F%5Edata%3Atext%5C%2Fjavascript%2F)
+! https://github.com/AdguardTeam/AdguardFilters/issues/174393
+*$script,redirect-rule=noopjs,3p,domain=sfchronicle.com
+! https://github.com/uBlockOrigin/uAssets/issues/22821
+timesunion.com###modals
+timesunion.com##body:style(overflow: auto !important;)
+timesunion.com##.mb32:has-text(Advertisement)
