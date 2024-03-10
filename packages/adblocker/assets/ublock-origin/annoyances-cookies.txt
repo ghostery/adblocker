@@ -286,7 +286,11 @@ planningportal.co.uk##+js(trusted-set-cookie, cookie_preferences, %7B%2522perfor
 ! https://www.steuerbot.com/
 steuerbot.com##+js(trusted-set-local-storage-item, cookies, %7B%22essential%22%3Atrue%2C%22performance%22%3Afalse%2C%22marketing%22%3Afalse%7D)
 ! https://vadhander.hogakusten.com/
-vadhander.hogakusten.com##+js(trusted-set-local-storage-item, cookie_consent, %7B%22consent%22%3Atrue%2C%22necessary%22%3Atrue%2C%22preference%22%3Afalse%2C%22statistics%22%3Afalse%2C%22marketing%22%3Afalse%7D)
+! https://vadhander.kramfors.se/
+vadhander.hogakusten.com,vadhander.kramfors.se##+js(trusted-set-local-storage-item, cookie_consent, %7B%22consent%22%3Atrue%2C%22necessary%22%3Atrue%2C%22preference%22%3Afalse%2C%22statistics%22%3Afalse%2C%22marketing%22%3Afalse%7D)
+! https://www.veriff.com/
+veriff.com##+js(set-cookie, veriff_cookie_consent_completed, true)
+veriff.com##+js(trusted-set-cookie, veriff_cookie_consent, %257B%2522performance%2522%253Afalse%252C%2522functionality%2522%253Afalse%252C%2522targeting%2522%253Afalse%257D)
 !! Needs additional cookies
 ! Closing Optanon Alert Box
 1001games.com,1001hry.cz,1001jeux.fr,1001jocuri.ro,1001jogos.com.br,1001jogos.pt,1001pelit.com,1001spiele.de,elkspel.nl,gamespot.com,giochixl.it,glamour.com,grajteraz.pl,isladejuegos.com,jatekokxl.hu,mtvuutiset.fi,paixnidiaxl.gr,pushsquare.com,spelo.se,spillespill.no,spilxl.dk,thejournal.ie,thetrainline.com,vkmag.com,zdnet.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24, 1year)
@@ -882,3 +886,6 @@ transferxl.com##+js(trusted-set-cookie, txl_consent_status, functional, , , doma
 ! https://github.com/uBlockOrigin/uAssets/issues/22761#issuecomment-1981235989
 tuttoandroid.net,tuttotech.net##+js(trusted-click-element, .iubenda-cs-visible%20.iubenda-cs-accept-btn)
 tuttoandroid.net,tuttotech.net##html:style(overflow: auto !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/22837 - Functionality + Social
+20min.ch##+js(trusted-set-cookie, OptanonConsent, groups%3DC0001%253A1%252CC0002%253A0%252CC0003%253A1%252CC0004%253A0%252CC0005%253A1%252CV2STACK42%253A0, , , domain, 20min.ch)
+20min.ch##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24)
