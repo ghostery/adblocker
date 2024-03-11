@@ -614,48 +614,19 @@ export default class FilterEngine extends EventEmitter<
     const removedPreprocessors: Preprocessor[] = [];
 
     if (removed !== undefined && removed.length !== 0) {
-      const { networkFilters, cosmeticFilters, preprocessors } = parseFilters(
-        removed.join('\n'),
-        this.config,
-      );
+      const { networkFilters, cosmeticFilters } = parseFilters(removed.join('\n'), this.config);
       Array.prototype.push.apply(removedCosmeticFilters, cosmeticFilters);
       Array.prototype.push.apply(removedNetworkFilters, networkFilters);
-      // In the common sense, the diff should accept the preprocessors only from `preprocessors` property
-      // Handling preprocessors from the added raw lines are to provide a simple breakage prevention
-      Array.prototype.push.apply(removedPreprocessors, preprocessors);
     }
 
     if (added !== undefined && added.length !== 0) {
-      const { networkFilters, cosmeticFilters, preprocessors } = parseFilters(
-        added.join('\n'),
-        this.config,
-      );
+      const { networkFilters, cosmeticFilters } = parseFilters(added.join('\n'), this.config);
       Array.prototype.push.apply(newCosmeticFilters, cosmeticFilters);
       Array.prototype.push.apply(newNetworkFilters, networkFilters);
-      Array.prototype.push.apply(newPreprocessors, preprocessors);
     }
 
     if (preprocessors !== undefined) {
       for (const [condition, details] of Object.entries(preprocessors)) {
-        if (details.added !== undefined && details.added.length !== 0) {
-          const { networkFilters, cosmeticFilters } = parseFilters(
-            details.added.join('\n'),
-            this.config,
-          );
-          const filterIDs = new Set<number>(
-            ([] as number[])
-              .concat(cosmeticFilters.map((filter) => filter.getId()))
-              .concat(networkFilters.map((filter) => filter.getId())),
-          );
-
-          newPreprocessors.push(
-            new Preprocessor({
-              condition,
-              filterIDs,
-            }),
-          );
-        }
-
         if (details.removed !== undefined && details.removed.length !== 0) {
           const { networkFilters, cosmeticFilters } = parseFilters(
             details.removed.join('\n'),
@@ -667,7 +638,32 @@ export default class FilterEngine extends EventEmitter<
               .concat(networkFilters.map((filter) => filter.getId())),
           );
 
+          Array.prototype.push.apply(removedCosmeticFilters, cosmeticFilters);
+          Array.prototype.push.apply(removedNetworkFilters, networkFilters);
+
           removedPreprocessors.push(
+            new Preprocessor({
+              condition,
+              filterIDs,
+            }),
+          );
+        }
+
+        if (details.added !== undefined && details.added.length !== 0) {
+          const { networkFilters, cosmeticFilters } = parseFilters(
+            details.added.join('\n'),
+            this.config,
+          );
+          const filterIDs = new Set<number>(
+            ([] as number[])
+              .concat(cosmeticFilters.map((filter) => filter.getId()))
+              .concat(networkFilters.map((filter) => filter.getId())),
+          );
+
+          Array.prototype.push.apply(newCosmeticFilters, cosmeticFilters);
+          Array.prototype.push.apply(newNetworkFilters, networkFilters);
+
+          newPreprocessors.push(
             new Preprocessor({
               condition,
               filterIDs,
