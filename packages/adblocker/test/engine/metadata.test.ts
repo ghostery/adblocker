@@ -337,9 +337,14 @@ describe('#Metadata', () => {
   });
 
   describe('integration with FiltersEngine', () => {
+    const rawTrackerDB = getRawTrackerDB();
+    let engine: Engine;
+
+    beforeEach(() => {
+      engine = Engine.fromTrackerDB(rawTrackerDB);
+    });
+
     it('loads trackerdb dump', () => {
-      const rawTrackerDB = getRawTrackerDB();
-      const engine = Engine.fromTrackerDB(rawTrackerDB);
       const patterns: IPattern[] = Object.values(rawTrackerDB.patterns);
       const categories: ICategory[] = Object.values(rawTrackerDB.categories);
       const organizations: IOrganization[] = Object.values(rawTrackerDB.organizations);
@@ -361,54 +366,91 @@ describe('#Metadata', () => {
           sortOrganizations(organizations),
         );
       }
+    });
 
+    describe('extends #match with metadata lookup', () => {
       // domains: ['extend.tv'],
       const filter = NetworkFilter.parse('||sync.extend.tv^');
       filter?.getId();
-      expect(
-        engine.match(
-          Request.fromRawDetails({ url: 'https://sync.extend.tv/' }),
-          true /* withMetadata */,
-        ),
-      ).to.eql({
-        exception: undefined,
-        filter,
-        match: true,
-        metadata: [
+
+      it('returns metadata', () => {
+        expect(
+          engine.match(
+            Request.fromRawDetails({ url: 'https://sync.extend.tv/' }),
+            true /* withMetadata */,
+          ),
+        ).to.eql({
+          exception: undefined,
+          filter,
+          match: true,
+          metadata: [
+            {
+              'category': ADVERTISING_CATEGORY,
+              'organization': ZYPMEDIA_ORGANIZATION,
+              'pattern': ZYPMEDIA,
+            },
+          ],
+          redirect: undefined,
+        });
+      });
+
+      it('handles exceptions', () => {
+        const exception = '@@||extend.tv';
+        const exceptionFilter = NetworkFilter.parse(exception);
+        engine.updateFromDiff({ added: [exception] });
+        expect(
+          engine.match(
+            Request.fromRawDetails({ url: 'https://sync.extend.tv/' }),
+            true /* withMetadata */,
+          ),
+        ).to.eql({
+          exception: exceptionFilter,
+          filter,
+          match: false,
+          metadata: [
+            {
+              'category': ADVERTISING_CATEGORY,
+              'organization': ZYPMEDIA_ORGANIZATION,
+              'pattern': ZYPMEDIA,
+            },
+          ],
+          redirect: undefined,
+        });
+      });
+    });
+
+    describe('#getPatternMetadata', () => {
+      it('matches agaist network filters', () => {
+        expect(
+          engine.getPatternMetadata(Request.fromRawDetails({ url: 'https://sync.extend.tv/' })),
+        ).to.eql([
           {
             'category': ADVERTISING_CATEGORY,
             'organization': ZYPMEDIA_ORGANIZATION,
             'pattern': ZYPMEDIA,
           },
-        ],
-        redirect: undefined,
+        ]);
       });
 
-      expect(
-        engine.getPatternMetadata(Request.fromRawDetails({ url: 'https://sync.extend.tv/' })),
-      ).to.eql([
-        {
-          'category': ADVERTISING_CATEGORY,
-          'organization': ZYPMEDIA_ORGANIZATION,
-          'pattern': ZYPMEDIA,
-        },
-      ]);
+      it('by default does not match against domains', () => {
+        expect(
+          engine.getPatternMetadata(Request.fromRawDetails({ url: 'https://extend.tv/' })),
+        ).to.eql([]);
+      });
 
-      expect(
-        engine.getPatternMetadata(Request.fromRawDetails({ url: 'https://extend.tv/' })),
-      ).to.eql([]);
-
-      expect(
-        engine.getPatternMetadata(Request.fromRawDetails({ url: 'https://sync.extend.tv/' }), {
-          getDomainMetadata: true,
-        }),
-      ).to.eql([
-        {
-          'category': ADVERTISING_CATEGORY,
-          'organization': ZYPMEDIA_ORGANIZATION,
-          'pattern': ZYPMEDIA,
-        },
-      ]);
+      it('matches against domains with getDomainMetadata option', () => {
+        expect(
+          engine.getPatternMetadata(Request.fromRawDetails({ url: 'https://sync.extend.tv/' }), {
+            getDomainMetadata: true,
+          }),
+        ).to.eql([
+          {
+            'category': ADVERTISING_CATEGORY,
+            'organization': ZYPMEDIA_ORGANIZATION,
+            'pattern': ZYPMEDIA,
+          },
+        ]);
+      });
     });
   });
 
