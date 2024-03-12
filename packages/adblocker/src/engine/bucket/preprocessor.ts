@@ -54,6 +54,7 @@ export default class PreprocessorBucket {
       if (this.preprocessors[i].evaluate(env)) {
         for (const filterID of this.preprocessors[i].filterIDs) {
           included.add(filterID);
+          this.excluded.delete(filterID);
         }
       } else {
         for (const filterID of this.preprocessors[i].filterIDs) {
