@@ -77,10 +77,6 @@ const precedence: Record<string, number> = {
 const isOperator = (token: string) => Object.prototype.hasOwnProperty.call(precedence, token);
 
 const testIdentifier = (identifier: string, env: Env): boolean => {
-  if (identifier === 'true') {
-    return true;
-  }
-
   if (identifier === 'false') {
     return false;
   }

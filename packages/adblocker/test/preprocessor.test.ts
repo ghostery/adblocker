@@ -85,13 +85,13 @@ describe('preprocessors', () => {
   env.set('ext_ghostery', true);
   env.set('ext_devbuild', true);
 
-  const doTest = (filters: string) => {
-    engine.updateFromDiff(generateDiff('', filters), env);
+  const doTest = (filters: string, thisEnv = env) => {
+    engine.updateFromDiff(generateDiff('', filters), thisEnv);
 
     expect(engine.match(requests.foo).match).to.be.true;
     expect(engine.match(requests.bar).match).to.be.false;
 
-    engine.updateFromDiff(generateDiff(filters, ''), env);
+    engine.updateFromDiff(generateDiff(filters, ''), thisEnv);
   };
 
   // Testing `!#else` means we already aware of parenthesis.
@@ -166,5 +166,21 @@ describe('preprocessors', () => {
 ||foo.com^
 !#endif
 !#endif`);
+  });
+
+  it('ignores all conditions with empty env', () => {
+    doTest(
+      `||foo.com^
+!#if false
+||bar.com^
+!#endif
+!#if ext_devbuild
+@@||foo.com^
+!#endif
+!#if true
+@@||foo.com^
+!#endif`,
+      new Env(),
+    );
   });
 });

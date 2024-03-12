@@ -105,7 +105,7 @@ export default class NetworkFilterBucket {
       if (
         filter.match(request) &&
         this.isFilterDisabled(filter) === false &&
-        (!isFilterExcluded || !isFilterExcluded(filter))
+        !isFilterExcluded?.(filter)
       ) {
         filters.push(filter);
       }
@@ -125,7 +125,7 @@ export default class NetworkFilterBucket {
       if (
         filter.match(request) &&
         this.isFilterDisabled(filter) === false &&
-        (!isFilterExcluded || !isFilterExcluded(filter))
+        !isFilterExcluded?.(filter)
       ) {
         match = filter;
         return false;
