@@ -169,6 +169,10 @@ describe('preprocessors', () => {
   });
 
   it('ignores all conditions with empty env', () => {
+    const emptyEnv = new Env();
+
+    emptyEnv.set('true', false);
+
     doTest(
       `||foo.com^
 !#if false
@@ -180,7 +184,7 @@ describe('preprocessors', () => {
 !#if true
 @@||foo.com^
 !#endif`,
-      new Env(),
+      emptyEnv,
     );
   });
 });
