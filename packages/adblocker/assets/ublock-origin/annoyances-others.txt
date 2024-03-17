@@ -306,6 +306,11 @@ searchenginewatch.com##+js(acs, jQuery, %23sign-up-popup)
 ! popular on FB
 facebook.com,facebookcorewwwi.onion,facebookwkhpilnemxj7asaniu7vnjjbiltxjqhye3mhbshg7kx5tfyd.onion##.fbUserStory:has-text(Popular Across Facebook)
 facebook.com,facebookcorewwwi.onion,facebookwkhpilnemxj7asaniu7vnjjbiltxjqhye3mhbshg7kx5tfyd.onion##.userContentWrapper:has-text(Popular Across Facebook)
+! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-1993620105 - "Suggested for you" posts
+!#if cap_html_filtering
+!#else
+www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22brs_content_label%22%3A%5B%5E%2C%5D%2B%2C%22category%22%3A%22ENGAGEMENT%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
+!#endif
 ! right click, select, copy => http://www.oggiscuola.com/web/2018/09/22/alzarsi-in-piedi-quando-entra-il-professore-e-una-forma-di-saluto-che-va-recuperata/
 oggiscuola.com##+js(acs, jQuery, overlay)
 ||oggiscuola.com^$csp=style-src 'self' *
@@ -1255,8 +1260,6 @@ badzjeszczelepszy.pl##+js(aopr, ga_ExitPopup3339)
 androidweblog.com##+js(aeld, , t.preventDefault)
 ! https://github.com/NanoMeow/QuickReports/issues/1948
 pureinfotech.com##+js(acs, jQuery, ai_adb)
-! https://github.com/NanoMeow/QuickReports/issues/1938
-free-mp3-download.net##+js(aeld, %2F%5E(contextmenu%7Ckeydown)%24%2F)
 ! https://forums.lanik.us/viewtopic.php?f=62&t=43651
 fairyabc.com##+js(nostif, adblock)
 ! https://github.com/uBlockOrigin/uAssets/issues/6397
@@ -2418,6 +2421,8 @@ katosatoshi.jp##+js(ra, oncontextmenu, body)
 katosatoshi.jp##body:style(-webkit-user-select:text!important;-moz-user-select:text!important;-ms-user-select:text!important;user-select:text!important)
 ! https://www.phoronix.com/scan.php?page=news_item&px=Linux-5.9-AMDGPU-Stats
 phoronix.com##+js(acs, onload, setTimeout)
+! https://github.com/uBlockOrigin/uAssets/issues/16716#issuecomment-1998210794
+@@||phoronix.com^$ghide
 ! https://fandomwire.com/spider-man-3-tobey-maguire-andrew-garfield-signed-on/
 fandomwire.com##.g1-popup
 fandomwire.com##html:style(overflow:auto !important)
@@ -2482,9 +2487,6 @@ nytimes.com##body.ReactModal__Body--open:style(position: unset !important; overf
 poplinks.idolmaster-official.jp##+js(ra, oncontextmenu%7Conselectstart%7Conmousedown, body)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67621
 progameguides.com##+js(aopr, admrlWpJsonP)
-! https://github.com/uBlockOrigin/uAssets/issues/8222
-hikarinoakari.com##+js(aeld, keydown)
-hikarinoakari.com##style:has-text(::selection):remove()
 ! https://www.reddit.com/r/uBlockOrigin/comments/jurv15/httpswwwztzacom_detect_ublock_using_ztprotect/
 zt-protect.*##main.py-4 > p
 ! https://github.com/uBlockOrigin/uAssets/issues/8227
@@ -4678,7 +4680,7 @@ cool-etv.net##+js(aeld, contextmenu)
 cool-etv.net##+js(set, console.clear, noopFunc)
 ||cool-etv.net/ch/suppy.js$script,1p
 ! Soft Anti-Blocker
-jsfiddle.net##+js(nostif, support-jsfiddle)
+jsfiddle.net##+js(nostif, modal)
 regexr.com##div.hello
 ! https://freemcserver.net/ anti devtools
 freemcserver.net##+js(nosiif, potato)
@@ -4960,8 +4962,9 @@ edurev.in##+js(aopr, openOverlaySignup)
 edurev.in##+js(acs, %24, contextmenu)
 edurev.in##+js(aeld, copy)
 edurev.in##body:style(cursor: revert !important;)
-! https://store.kde.org/p/2068663 - timer
-store.kde.org##+js(nano-stb, count)
+! https://github.com/uBlockOrigin/uAssets/issues/21372
+appimagehub.com,gnome-look.org,store.kde.org,linux-apps.com,opendesktop.org,pling.com,xfce-look.org##+js(rmnt, script, btnHtml)
+appimagehub.com,gnome-look.org,store.kde.org,linux-apps.com,opendesktop.org,pling.com,xfce-look.org##+js(nano-stb, count)
 ! https://github.com/uBlockOrigin/uAssets/issues/19663
 haberiniz.com.tr##.kanews-banner
 ! https://github.com/uBlockOrigin/uAssets/issues/19798
@@ -5033,7 +5036,11 @@ marinetraffic.com##+js(set, mtGlobal.disabledAds, true)
 sportando.basketball##.select-none:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 ! https://www.reddit.com/r/uBlockOrigin/comments/17hcflr/ymoviesvip_devtools_detector_embedded_into_app/
 ! https://github.com/uBlockOrigin/uAssets/issues/20492
-ymovies.vip,aniwatch.to,megacloud.tv,hianime.to##+js(set, devtoolsDetector.launch, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/22899
+ymovies.vip,aniwatch.to,megacloud.tv,hianime.to,rapid-cloud.co,rabbitstream.net##+js(set, devtoolsDetector.launch, noopFunc)
+||9animetv.to/js/safe.ob.min.js$script
+myflixerz.to##+js(nostif, 0x)
+movie4kto.net##+js(nosiif, %2FDevTools%7C_0x%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/20341
 lethalpanda.com##+js(aopr, b2a)
 ! https://www.reddit.com/r/uBlockOrigin/comments/17iihqp/anime_news_network_rolled_out_antiadblocker/
@@ -5434,3 +5441,9 @@ mrbenne.com##+js(rmnt, style, %2F-webkit-user-select%7Cwebkit-appearance%2F)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1b906te/pop_up_that_says_to_not_use_adblockers_on/
 d4armory.io,helldivers.io##+js(aopr, nitroAds)
 helldivers.io###gwvideo
+! https://bongdaplus.vn/ - anti right click, select
+bongdaplus.vn##+js(aeld, mousedown, undefined, elements, body)
+bongdaplus.vn##+js(set, document.oncontextmenu, trueFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/22931
+vipstreams.in##+js(set, devtoolsDetector.launch, noopFunc)
+vipstreams.in##+js(nosiif, _0x)

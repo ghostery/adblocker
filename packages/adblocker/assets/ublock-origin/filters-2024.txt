@@ -67,6 +67,18 @@ player.smashy.stream##.react-responsive-modal-root
 @@||sts.eccmp.com/sts/scripts/conversen-SDK.js$script,domain=pch.com
 @@||static.topixcdn.com^$script,domain=pch.com
 @@||tags.tiqcdn.com/utag/*/utag.js$script,domain=pch.com
+! https://github.com/uBlockOrigin/uAssets/issues/709
+! https://github.com/uBlockOrigin/uAssets/issues/4651
+! https://github.com/uBlockOrigin/uAssets/issues/4908
+||cloudfront.net/ads/*$script,redirect=noopjs,domain=cbs.com
+||cloudfront.net/ads/img/*$image,redirect=1x1.gif,domain=cbs.com
+cbs.com,paramountplus.com##+js(set, hasAdBlocker, false)
+*$3p,script,redirect-rule=noopjs,domain=cbs.com|paramountplus.com
+@@||s0.2mdn.net/instream/html5/ima3.js$script,domain=cbs.com|paramountplus.com
+||ad.doubleclick.net^$image,redirect=1x1.gif,domain=cbs.com|paramountplus.com
+@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=cbs.com|paramountplus.com
+@@||pubads.g.doubleclick.net/ondemand/*/content/*/streams$xhr,domain=cbs.com|paramountplus.com
+||pubads.g.doubleclick.net/ondemand/*/content/*/vid/*/streams/*/time-events.json$important,domain=cbs.com|paramountplus.com
 ! END: Rules from filters.txt
 ! https://github.com/AdguardTeam/AdguardFilters/issues/169660
 flixscans.org##+js(no-fetch-if, googlesyndication)
@@ -89,8 +101,20 @@ bharathwick.com##+js(rmnt, script, deblocker)
 ||amazonaws.com/pubs/trib/aa_adb_modal$script,3p
 ||amazonaws.com/pubs/trib/triblive_$script,3p
 ! https://github.com/uBlockOrigin/uAssets/issues/21769
-aniwave.to,anix.to,fmoviesz.to##+js(nowoif, _blank)
-aniwave.to,anix.to,fmoviesz.to##+js(set-cookie, __pf, 1)
+! https://github.com/uBlockOrigin/uAssets/issues/22851
+! https://github.com/uBlockOrigin/uAssets/commit/b8ec336f4f3ea793750d553129b58df543cc338d#commitcomment-139593195
+animesuge.to,aniwave.to,anix.to,bflix.to,flixtorz.to,fmoviesz.to,hurawatch.bz,mangafire.to,soap2dayx.to##+js(nowoif, _blank)
+animesuge.to,aniwave.to,anix.to,bflix.to,flixtorz.to,fmoviesz.to,hurawatch.bz,mangafire.to,soap2dayx.to##+js(set-cookie, __pf, 1)
+! https://github.com/uBlockOrigin/uAssets/issues/22865
+! filemoon ads
+defienietlynotme.com,embedme.*,finfang.*,hellnaw.*,sbnmp.bar,sulleiman.com##+js(acs, JSON.parse, showTrkURL)
+defienietlynotme.com,embedme.*,finfang.*,hellnaw.*,sbnmp.bar,sulleiman.com##+js(acs, Math, %2Fwindow%5C%5B'(%3F%3A%5C%5Cx%5B0-9a-f%5D%7B2%7D)%7B2%7D%2F)
+defienietlynotme.com,embedme.*,finfang.*,hellnaw.*,sbnmp.bar,sulleiman.com##+js(nowoif)
+defienietlynotme.com,embedme.*,finfang.*,hellnaw.*,sbnmp.bar,sulleiman.com##+js(noeval-if, %2Fpopunder%2Fi)
+||ihavenewdomain.xyz^
+||ohmyanotherone.xyz^
+||shoulsos.com^
+||zxtuqpiu.skin^
 ! https://github.com/uBlockOrigin/uAssets/issues/21770
 *$image,domain=pmvhaven.com,redirect-rule=1x1.gif
 ! https://github.com/uBlockOrigin/uAssets/issues/21774
@@ -117,10 +141,11 @@ postermockup.com##+js(aost, setTimeout, adsBlocked)
 ! https://github.com/uBlockOrigin/uAssets/issues/21832
 @@||sidearm-syndication.s3.amazonaws.com/prod/web-push.bundle.js$script,domain=hokiesports.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/165624
+! https://github.com/uBlockOrigin/uAssets/issues/13594
 ||check-host.net/images/ondguard$image,1p
 ||check-host.net/images/alexqhost.png$image,1p
 ||check-host.net/images/aezaqlogo.png$image,1p
-check-host.net###hostazq, a[href^="/egtgo/"], a[href$="/prmetn"], a[href^="/egtgo/"], a[href$="/dk/en/web"], #sntkwbtchamsalexhost, .pr-e-lative, #sntkwbtchamspp-juiaryt, #sntkwbtchamspp-juiaryt2, .happy-new-year-to-all-adguard-and-ublock-volunteers
+check-host.net###hostazq, a[href^="/egtgo/"], a[href$="/prmetn"], a[href^="/egtgo/"], a[href$="/dk/en/web"], #sntkwbtchamsalexhost, .pr-e-lative, #sntkwbtchamspp-juiaryt, #sntkwbtchamspp-juiaryt2, .happy-new-year-to-all-adguard-and-ublock-volunteers, #sntkwbtchamsaeza-permnnt
 ! conceptartworld. com antiadb
 @@||conceptartworld.com^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/21859
@@ -289,7 +314,8 @@ civitai.com##+js(no-fetch-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/22220
 ! https://github.com/uBlockOrigin/uAssets/issues/22492
 @@/^https:\/\/www\.puzzle-[a-z]+\.com\//$script,from=puzzle-loop.com|puzzle-words.com|puzzle-chess.com|puzzle-thermometers.com|puzzle-norinori.com|puzzle-minesweeper.com|puzzle-slant.com|puzzle-lits.com|puzzle-galaxies.com|puzzle-tents.com|puzzle-battleships.com|puzzle-pipes.com|puzzle-hitori.com|puzzle-heyawake.com|puzzle-shingoki.com|puzzle-masyu.com|puzzle-stitches.com|puzzle-aquarium.com|puzzle-tapa.com|puzzle-star-battle.com|puzzle-kakurasu.com|puzzle-skyscrapers.com|puzzle-futoshiki.com|puzzle-shakashaka.com|puzzle-kakuro.com|puzzle-jigsaw-sudoku.com|puzzle-killer-sudoku.com|puzzle-binairo.com|puzzle-nonograms.com|puzzle-sudoku.com|puzzle-light-up.com|puzzle-bridges.com|puzzle-shikaku.com|puzzle-nurikabe.com|puzzle-dominosa.com
-puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com###MainContainer > [id]:has(> [id^="btIn"] > #bannerTop):style(filter: opacity(0) !important;)
+puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com###MainContainer > [id]:has(> [id^="btIn"] > #bannerTop):style(width: 0px !important; height: 0px !important;)
+puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com###MainContainer > [id]:has(> [id^="btIn"] > #bannerTop) *:style(visibility: hidden !important;)
 puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com###MainContainer > [id^="bannerTopSpacer"]
 puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com###MainContainer + [id]:has(> #bannerSide)
 ||d3mw273ubcaiex.cloudfront.net/images/ad/$image
@@ -532,8 +558,6 @@ deano.me,themehospital.co.uk,resplace.com##+js(acs, jQuery, this)
 ylilauta.org##div.card.bbb
 ylilauta.org##div.card.bbb + a[href="/user/gold"]
 !#endif
-! https://github.com/uBlockOrigin/uAssets/issues/22649
-||embedsito.net/static/vast$1p
 ! https://github.com/uBlockOrigin/uAssets/issues/22682
 eurotruck2.com.br##+js(aeld, load, nextFunction)
 ! https://www.redbullracing.com/int-en/2024-pre-season-testing-wrap-up-report
@@ -624,24 +648,29 @@ daotranslate.us##+js(acs, document.getElementById, deblocker, %2F%5Edata%3Atext%
 ! https://github.com/AdguardTeam/AdguardFilters/issues/174393
 *$script,redirect-rule=noopjs,3p,domain=sfchronicle.com
 ! https://github.com/uBlockOrigin/uAssets/issues/22821
-beaumontenterprise.com,bigrapidsnews.com,ctinsider.com,ctpost.com,darientimes.com,greenwichtime.com,houstonchronicle.com,lmtonline.com,manisteenews.com,michigansthumb.com,middletownpress.com,mrt.com,myjournalcourier.com,nhregister.com,ourmidland.com,registercitizen.com,sheltonherald.com,stamfordadvocate.com,theintelligencer.com,timesunion.com###modals
-beaumontenterprise.com,bigrapidsnews.com,ctinsider.com,ctpost.com,darientimes.com,greenwichtime.com,houstonchronicle.com,lmtonline.com,manisteenews.com,michigansthumb.com,middletownpress.com,mrt.com,myjournalcourier.com,nhregister.com,ourmidland.com,registercitizen.com,sheltonherald.com,stamfordadvocate.com,theintelligencer.com,timesunion.com##body:style(overflow: auto !important;)
-beaumontenterprise.com,bigrapidsnews.com,ctinsider.com,ctpost.com,darientimes.com,greenwichtime.com,houstonchronicle.com,lmtonline.com,manisteenews.com,michigansthumb.com,middletownpress.com,mrt.com,myjournalcourier.com,nhregister.com,ourmidland.com,registercitizen.com,sheltonherald.com,stamfordadvocate.com,theintelligencer.com,timesunion.com##.mb32:has-text(Advertisement)
+beaumontenterprise.com,bigrapidsnews.com,ctinsider.com,ctpost.com,darientimes.com,greenwichtime.com,houstonchronicle.com,lmtonline.com,manisteenews.com,michigansthumb.com,middletownpress.com,mrt.com,myjournalcourier.com,newstimes.com,nhregister.com,ourmidland.com,registercitizen.com,sheltonherald.com,stamfordadvocate.com,thehour.com,theintelligencer.com,timesunion.com,trumbulltimes.com###modals
+beaumontenterprise.com,bigrapidsnews.com,ctinsider.com,ctpost.com,darientimes.com,greenwichtime.com,houstonchronicle.com,lmtonline.com,manisteenews.com,michigansthumb.com,middletownpress.com,mrt.com,myjournalcourier.com,newstimes.com,nhregister.com,ourmidland.com,registercitizen.com,sheltonherald.com,stamfordadvocate.com,thehour.com,theintelligencer.com,timesunion.com,trumbulltimes.com##body:style(overflow: auto !important;)
+beaumontenterprise.com,bigrapidsnews.com,ctinsider.com,ctpost.com,darientimes.com,greenwichtime.com,houstonchronicle.com,lmtonline.com,manisteenews.com,michigansthumb.com,middletownpress.com,mrt.com,myjournalcourier.com,newstimes.com,nhregister.com,ourmidland.com,registercitizen.com,sheltonherald.com,stamfordadvocate.com,thehour.com,theintelligencer.com,timesunion.com,trumbulltimes.com##.mb32:has-text(Advertisement)
 ! https://github.com/uBlockOrigin/uAssets/issues/22847
 scenexe2.io##+js(no-fetch-if, googlesyndication)
 ||docs.google.com/forms/d/e/1FAIpQLSfQK0eGG1JJ2vRS267yFjTI4vAwJLQsM5rNhmMA0ks31luMtQ/formResponse?usp=pp_url&entry.670406098=*&submit=Submit$frame,3p,domain=scenexe2.io
-! https://github.com/uBlockOrigin/uAssets/issues/22851
-! https://github.com/uBlockOrigin/uAssets/commit/b8ec336f4f3ea793750d553129b58df543cc338d#commitcomment-139593195
-animesuge.to,bflix.to,flixtorz.to,hurawatch.bz,mangafire.to,soap2dayx.to##+js(nowoif)
-animesuge.to,bflix.to,flixtorz.to,hurawatch.bz,mangafire.to,soap2dayx.to##+js(set-cookie, __pf, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/22854
 jazbaat.in##+js(rmnt, script, deblocker)
-! https://github.com/uBlockOrigin/uAssets/issues/22839
-receitasdocheff.online###player:style(display: block !important;)
 ! https://github.com/uBlockOrigin/uAssets/discussions/17361#discussioncomment-8737583
 ||my.optikservers.com/assets/AdsenseInit.$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/22857
 tainguyenmienphi.com##+js(noeval-if, %2Fchp_%3Fad%2F)
 tainguyenmienphi.com##+js(acs, document.addEventListener, randomNumber)
-! https://github.com/AdguardTeam/AdguardFilters/issues/174484
-infodani.net##+js(noeval-if, %2Fchp_%3Fad%2F)
+! https://github.com/uBlockOrigin/uAssets/issues/22870
+lewdcorner.com##+js(acs, %24, btoa)
+! https://github.com/uBlockOrigin/uAssets/issues/22875
+statisticsanddata.org##+js(set-attr, iframe%5Bdata-src-cmplz%5D%5Bsrc%3D%22about%3Ablank%22%5D, src, %5Bdata-src-cmplz%5D)
+! https://getexploits.com/ - anti-adb
+getexploits.com##+js(nostif, current.children)
+getexploits.com##div.self-center
+! nsfw sex-empire.org popups
+sex-empire.org,sexempire.xyz##+js(nowoif)
+sexempire.xyz###video_player ~ div[id]:has(> div[style^="position:fixed;inset:0px;z-index"] > a[target="_blank"])
+||toughvariation.com^$doc
+! https://github.com/uBlockOrigin/uAssets/issues/22922
+poki.com##div[class]:has(> div > div[style*="height"][style*="width"][style$="px; overflow: hidden;"] > [id*="_gp_"])

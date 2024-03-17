@@ -12,7 +12,7 @@ export default [
   "/etc.clientlibs/logitech-common/clientlibs/onetrust.",
   "[\\/]{1,}.*[a-zA-Z0-9]{3,7}\\/[a-zA-Z0-9]{6,}\\/.*/",
   "/pagead/managed/js/adsense/*/show_ads_impl",
-  "/^https:\\/\\/[-a-z]{8,15}\\.(?:com|net)\\/",
+  "/^https?:\\/\\/[-a-z]{8,15}\\.(?:com|net)\\/",
   "/pagead/managed/js/gpt/*/pubads_impl",
   "/pagead/js/adsbygoogle.js",
   "/vans-adapter-google-ima",
