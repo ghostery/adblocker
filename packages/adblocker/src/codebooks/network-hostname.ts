@@ -7,7 +7,7 @@
  */
 /* eslint-disable prettier/prettier */
 export default [
-  "securepubads.g.doubleclick.net",
+  "securepubads.g.doubleclick",
   ".xx.fbcdn.net.iberostar",
   "googlesyndication",
   "imasdk.googleapis",

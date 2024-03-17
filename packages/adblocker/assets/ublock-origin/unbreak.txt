@@ -2937,7 +2937,8 @@ instagram.com#@?#article[role="presentation"] > div[style]:-abp-has(span:-abp-co
 ! https://github.com/uBlockOrigin/uAssets/issues/16606
 @@/akam/13/*$script,xhr,1p,domain=easyjet.com|ing.nl
 ! https://github.com/uBlockOrigin/uAssets/issues/16071#issuecomment-1418675044
-@@||collector-*.px-client.net/b/g$xhr,domain=www.crunchbase.com
+@@/init.js|$script,xhr,1p,domain=www.crunchbase.com
+@@||collector-*.px-cloud.net/b/$xhr,domain=www.crunchbase.com
 ! https://www.radiox.co.uk/festivals/parklife-2023-headliners-line-up-tickets-stage-times/ audio breakage
 @@||googletagmanager.com/gtm.js$script,domain=www.radiox.co.uk
 ! https://www.reddit.com/r/uBlockOrigin/comments/10x6sp8/
@@ -3324,7 +3325,7 @@ goku.sx##.st-btn > img:style(margin: auto !important; display: block !important;
 ! https://github.com/uBlockOrigin/uAssets/issues/18674
 ! [badfilter] /statspage.$badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/18684
-||sqrt-5041.de^$xhr,domain=joyn.de
+||sqrt-5041.de^$xhr,domain=joyn.at|joyn.de
 ! https://github.com/uBlockOrigin/uAssets/issues/18713
 ||yext-pixel.com/store_pagespixel^$xhr,redirect=1x1.gif,domain=vippetcare.com
 ! https://github.com/uBlockOrigin/uAssets/issues/18715
@@ -3597,12 +3598,17 @@ help.cashctrl.com##+js(set, Origami.fastclick, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/20564
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect-rule=google-ima.js,domain=moviesandtv.myvi.in
 @@||moviesandtv.myvi.in/videojs/videojs-contrib-ads.min.js$script,domain=moviesandtv.myvi.in
+! getjad-issue sites
 ! https://github.com/uBlockOrigin/uAssets/issues/20579
-@@||cdn.lib.getjad.io^$script,domain=vidaextra.com
-@@||c.amazon-adsystem.com/aax2/apstag.js$script,domain=vidaextra.com
-@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=vidaextra.com
-@@||securepubads.g.doubleclick.net/pagead/managed/js/gpt/*/pubads_impl.js$script,domain=vidaextra.com
-@@||securepubads.g.doubleclick.net/gampad/ads$xhr,domain=vidaextra.com
+! https://www.reddit.com/r/uBlockOrigin/comments/1bbhc60/videos_from_the_site_httpsle10sportcom_do_not/
+! https://www.reddit.com/r/uBlockOrigin/comments/1axy3om/videos_from_the_site_httpswwwpurepeoplecom_do_not/
+! https://www.purepeople.com/article/kate-middleton-et-le-prince-harry-ont-ils-repris-contact-une-experte-en-est-persuadee_a520086/1
+@@||cdn.lib.getjad.io/library/$script,3p,domain=le10sport.com|purepeople.com|vidaextra.com
+@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,3p,domain=le10sport.com|purepeople.com|vidaextra.com
+@@||securepubads.g.doubleclick.net/pagead/managed/js/gpt/*/pubads_impl$script,3p,domain=le10sport.com|purepeople.com|vidaextra.com
+@@||securepubads.g.doubleclick.net/gampad/ads$xhr,3p,domain=le10sport.com|purepeople.com|vidaextra.com
+@@||vidaextra.com^$ghide
+vidaextra.com##.ad
 ! https://mod.reddit.com/mail/perma/1rqklb/2iwe9l
 www.reddit.com,new.reddit.com##.subredditvars-r-ublockorigin [role="dialog"]>div:style(width: auto !important)
 ! https://github.com/uBlockOrigin/uAssets/issues/20575
@@ -3731,14 +3737,6 @@ mobile.de##+js(set, optimizelyDatafile.featureFlags, %5B%5D)
 ||cdn.optimizely.com/public/*.json/tag.js$domain=mobile.de,important
 ! https://github.com/uBlockOrigin/uAssets/issues/22580
 ! [badfilter] ||cj.com^$badfilter
-! https://www.reddit.com/r/uBlockOrigin/comments/1axy3om/videos_from_the_site_httpswwwpurepeoplecom_do_not/
-! https://www.purepeople.com/article/kate-middleton-et-le-prince-harry-ont-ils-repris-contact-une-experte-en-est-persuadee_a520086/1
-@@||cdn.lib.getjad.io/library/*/purepeople_fr_web$script,3p,domain=purepeople.com
-@@||cdn.lib.getjad.io/prebid/$script,3p,domain=purepeople.com
-@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,3p,domain=purepeople.com
-@@||securepubads.g.doubleclick.net/pagead/managed/js/gpt/*/pubads_impl$script,3p,domain=purepeople.com
-@@||securepubads.g.doubleclick.net/gampad/ads$xhr,3p,domain=purepeople.com
-purepeople.com##+js(nano-stb, logEvent, *, 0.001)
 ! https://github.com/uBlockOrigin/uAssets/issues/22604
 @@||web-assets.tapfiliate.com^$domain=affiliates.groovehq.com
 @@||groove.tapfiliate.com^$1p
@@ -3780,3 +3778,15 @@ filelu.com#@#.banner_ads:not(.textads)
 ! https://github.com/uBlockOrigin/uAssets/issues/22837
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect-rule=google-ima.js,domain=20min.ch
 20min.ch##+js(nano-stb, readyPromise, 5000, 0.001)
+! https://github.com/uBlockOrigin/uAssets/issues/22869
+realmadryt.pl#@#fieldset
+realmadryt.pl##.rmpl-adsense-desktop
+! https://github.com/uBlockOrigin/uAssets/issues/22903
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect-rule=google-ima.js,domain=qds.it,important
+! https://github.com/uBlockOrigin/uAssets/issues/22868
+||ccstatic.toggo.de/cc-static-files/bumper-video/$media,redirect-rule=noop-0.1s.mp3,domain=toggo.de
+||flashtalking.com^*.mp4$media,redirect-rule=noop-0.1s.mp3,domain=toggo.de
+! https://github.com/uBlockOrigin/uAssets/issues/22921
+*$image,domain=gouachebags.com,redirect-rule=1x1.gif
+! https://github.com/uBlockOrigin/uAssets/issues/22895
+@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=globoplay.globo.com
