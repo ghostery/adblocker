@@ -241,6 +241,7 @@ rbbtoday.com##.cx-top-news
 president.jp##.recommend
 kobe-np.co.jp##section.sec:has(> #piano_recs_inline_title)
 vivi.tv##.section__inner:has(> #recommended-posts-result)
+augsburger-allgemeine.de,nikkansports.com##div[id^="cx_"]
 ! ziyu.net
 jin115.com,livedoor.biz#?#.plugin-memo:has(> div.side > script[src*="ziyu.net/"])
 okutta.net##.article__footer > div[style="height:500px; overflow-y:scroll;"]
@@ -406,7 +407,7 @@ deezer.com##+js(set, smartLoaded, true)
 streamcheck.link##+js(rmnt, script, runPop)
 ! https://github.com/uBlockOrigin/uAssets/issues/16508
 ! https://github.com/uBlockOrigin/uAssets/issues/17383
-bestsolaris.com,daddylivehd.*,gameshdlive.xyz,tutelehd.*,unbiasedsenseevent.com,watchtvchh.*,weakstream.org##+js(acs, setTimeout, admc)
+bestsolaris.com,daddylivehd.*,tutelehd.*,unbiasedsenseevent.com,watchtvchh.*,weakstream.org##+js(acs, setTimeout, admc)
 crackstreamshd.click,daddylivehd.*,freelivetvon.com,tvpclive.com,worldstreams.click##+js(aopw, u_cfg)
 daddylivehd.*,earthquakecensus.com,footyhunter.lol,gamerarcades.com,poscitech.click,starlive.stream,utopianwilderness.com,wecast.to##+js(nostif, sadbl)
 dlhd.sx##+js(aost, document.createElement, onerror)
@@ -1193,6 +1194,7 @@ cdngee.com,fshd3.club,hd-streaming.net,streaming-french.org##+js(aopr, BetterJsP
 zedporn.com##+js(aopw, BetterJsPop)
 ! https://github.com/uBlockOrigin/uAssets/issues/17357
 ! https://github.com/uBlockOrigin/uAssets/issues/21528
+hiraethtranslation.com##+js(no-fetch-if, googlesyndication, length%3A10)
 hiraethtranslation.com##+js(no-xhr-if, %2Fad)
 hiraethtranslation.com##+js(acs, decodeURIComponent, String.fromCharCode)
 hiraethtranslation.com##.c-sidebar
@@ -2426,7 +2428,8 @@ needrom.com##+js(nostif, %2Fadsbygoogle%7Cadblock%2F)
 adelsfun.com,advantien.com,bailbondsfinder.com,bg-gledai.*,bigpiecreative.com,childrenslibrarylady.com,classifarms.com,comtasq.ca,crone.es,ctrmarketingsolutions.com,dropnudes.com,ftuapps.dev,genzsport.com,ghscanner.com,gledaitv.*,grsprotection.com,gruporafa.com.br,inmatefindcalifornia.com,inmatesearchidaho.com,itsonsitetv.com,mfmfinancials.com,myproplugins.com,onehack.us,ovester.com,paste.bin.sx,privatenudes.com,renoconcrete.ca,richieashbeck.com,sat.technology,short1ink.com,stpm.co.uk,wegotcookies.co##+js(aeld, load, abDetectorPro)
 adelsfun.com,advantien.com,bailbondsfinder.com,bg-gledai.*,bigpiecreative.com,childrenslibrarylady.com,classifarms.com,comtasq.ca,crone.es,ctrmarketingsolutions.com,dropnudes.com,ftuapps.dev,genzsport.com,gledaitv.*,grsprotection.com,gruporafa.com.br,inmatefindcalifornia.com,inmatesearchidaho.com,itsonsitetv.com,mfmfinancials.com,myproplugins.com,onehack.us,ovester.com,paste.bin.sx,privatenudes.com,renoconcrete.ca,richieashbeck.com,short1ink.com,stpm.co.uk,wegotcookies.co##+js(no-xhr-if, googlesyndication)
 ghscanner.com,sat.technology##+js(no-fetch-if, googlesyndication)
-ftuapps.dev,onehack.us##+js(nostif, modal)
+onehack.us##+js(nostif, modal)
+ftuapps.dev##+js(nostif, ai_)
 ! https://www.maps4heroes.com/forum/opinions.php?map_id=791&game=3 (can't dl maps)
 maps4heroes.com#@#ins.adsbygoogle
 ! https://github.com/uBlockOrigin/uAssets/issues/18695
@@ -2785,6 +2788,7 @@ skill4ltu.eu##+js(aeld, load, adsbygoogle)
 ! https://github.com/uBlockOrigin/uAssets/issues/20505
 *$frame,redirect-rule=noopframe,domain=megaup.net
 download.megaup.net##+js(spoof-css, a%20img%3Anot(%5Bsrc%3D%22images%2Fmain_logo_inverted.png%22%5D), visibility, visible)
+download.megaup.net##+js(rpnt, script, !%3D%3D'src', !%3D%3D'src'%20%26%26%20false)
 @@||megaup.net/imageads/$image,1p
 @@||download.megaup.net^$script,1p
 ! https://www.reddit.com/r/uBlockOrigin/comments/hxzp5h/ublock_fails_to_block_ads_after_clicking_video/
@@ -3726,8 +3730,8 @@ redd.tube##+js(aopr, config)
 ! https://github.com/uBlockOrigin/uAssets/issues/20364
 ! https://www.reddit.com/r/uBlockOrigin/comments/17ptimv/adblock_detection_pop_up_on_rbtv77com/
 ! https://github.com/uBlockOrigin/uAssets/issues/20694
-live-streamfootball.*,rbtv77.*,superabbit.*,superabbit67.*,superabbit77.*,superabbit777.*,superargo77.*,superb77.*,superb777.*,superbarca77.*,superbb77.*,superbt77.*,superdom77.*,superlee77.*,superleo77.*##+js(no-xhr-if, googlesyndication, length%3A10)
-live-streamfootball.*,rbtv77.*,superabbit.*,superabbit67.*,superabbit77.*,superabbit777.*,superargo77.*,superb77.*,superb777.*,superbarca77.*,superbb77.*,superbt77.*,superdom77.*,superlee77.*,superleo77.*##.d-l
+live-streamfootball.*,rbtv77.*,superabbit.*,/^[a-z0-9]{4,10}\.super[a-z]+77\.[a-z]{2,4}$/##+js(no-xhr-if, googlesyndication, length%3A10)
+live-streamfootball.*,rbtv77.*,superabbit.*,/^[a-z0-9]{4,10}\.super[a-z]+77\.[a-z]{2,4}$/##.d-l
 ! https://ggjav.com /.tv popunder
 ggjav.com,ggjav.tv##+js(acs, %24, popunder)
 ! https://github.com/uBlockOrigin/uAssets/issues/20373
@@ -3879,6 +3883,11 @@ akw.cam##+js(acs, document.addEventListener, google_ad_client)
 freeltc.online##+js(noeval-if, ads)
 ! https://github.com/uBlockOrigin/uAssets/issues/20792
 twitter.com##[data-testid="primaryColumn"] [data-testid="cellInnerDiv"] > div:has([data-testid$="-impression-pixel"]):remove()
+!#if ext_devbuild
+twitter.com##+js(json-prune-xhr-response, data.home.home_timeline_urt.instructions.%5B%5D.entries.%5B-%5D.content.itemContent.promotedMetadata, , propsToMatch, url%3A%2Fapi%2Fgraphql)
+twitter.com##+js(json-prune-xhr-response, data.search_by_raw_query.search_timeline.timeline.instructions.%5B%5D.entries.%5B-%5D.content.itemContent.promotedMetadata, , propsToMatch, url%3A%2Fapi%2Fgraphql)
+twitter.com##+js(json-prune-xhr-response, data.threaded_conversation_with_injections_v2.instructions.%5B%5D.entries.%5B-%5D.content.items.%5B%5D.item.itemContent.promotedMetadata, , propsToMatch, url%3A%2Fapi%2Fgraphql)
+!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/20794
 daotranslate.com##+js(aost, setTimeout, ads)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/166746
@@ -4182,7 +4191,8 @@ zealtyro.com##+js(aost, document.getElementsByTagName, adsBlocked)
 .gif$image,domain=bluemediadownload.*|bluemediafile.*|bluemedialink.*|bluemediastorage.*|bluemediaurls.*
 bluemediadownload.*,bluemediafile.*,bluemedialink.*,bluemediastorage.*,bluemediaurls.*##+js(aopr, decodeURI)
 bluemediadownload.*,bluemediafile.*,bluemedialink.*,bluemediastorage.*,bluemediaurls.*##+js(aopr, open)
-bluemediadownload.*,bluemediafile.*,bluemedialink.*,bluemediastorage.*,bluemediaurls.*###ads-center
+bluemediadownload.*,bluemediafile.*,bluemedialink.*,bluemediastorage.*,bluemediaurls.*###ads-centter
+||bluemediadownload.lat/fhbdhf.jpg$image
 ! tinyzonetv .se popups
 tinyzonetv.se##+js(nowoif)
 ! https://www.reddit.com/r/uBlockOrigin/comments/18jtgkj/how_i_block_hidden_links_from_opening_new_page/

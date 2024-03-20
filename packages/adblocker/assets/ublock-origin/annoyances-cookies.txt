@@ -245,7 +245,7 @@ sportbible.com#@#div[id^="sp_message_container_"]
 ! https://github.com/uBlockOrigin/uAssets/issues/21485
 ! https://github.com/uBlockOrigin/uAssets/issues/21526
 ! https://github.com/uBlockOrigin/uAssets/pull/21510/
-m2o.it,deejay.it,capital.it,ilmattino.it,leggo.it,libero.it,tiscali.it##+js(trusted-click-element, button.iubenda-cs-customize-btn%2C%20button.iub-cmp-reject-btn%2C%20button%23iubFooterBtn)
+m2o.it,deejay.it,capital.it,ilmattino.it,leggo.it,libero.it,tiscali.it##+js(trusted-click-element, button.iubenda-cs-customize-btn%2C%20button.iub-cmp-reject-btn%2C%20button%23iubFooterBtn, , 1000)
 m2o.it,deejay.it,capital.it,ilmattino.it,leggo.it,libero.it,tiscali.it##html[style="overflow: hidden;"]:style(overflow: auto !important)
 m2o.it,deejay.it,capital.it,ilmattino.it,leggo.it,libero.it,tiscali.it##[id^="iubenda"]
 ilmattino.it,leggo.it##.banner:has([href="javascript:acceptAllCookies();void(0);"])
@@ -300,6 +300,8 @@ monkeytype.com##+js(trusted-set-local-storage-item, acceptedCookies, %7B%22secur
 ! https://www.govirtuo.com/
 govirtuo.com##+js(trusted-set-cookie, cookieConsent, technical%3Dtrue%26analytics%3Dfalse%26advertising%3Dfalse)
 govirtuo.com##+js(trusted-set-cookie, acceptTracking, %7B%22technical%22%3Atrue%2C%22analytics%22%3Afalse%2C%22advertising%22%3Afalse%7D)
+! https://github.com/uBlockOrigin/uAssets/issues/22951
+deal.by##+js(trusted-set-cookie, gdprConsent, %257B%2522adv%2522%253Afalse%252C%2522func%2522%253Afalse%252C%2522tech%2522%253Afalse%257D, , , domain, deal.by)
 !! Needs additional cookies
 ! Closing Optanon Alert Box
 1001games.com,1001hry.cz,1001jeux.fr,1001jocuri.ro,1001jogos.com.br,1001jogos.pt,1001pelit.com,1001spiele.de,elkspel.nl,gamespot.com,giochixl.it,glamour.com,grajteraz.pl,isladejuegos.com,jatekokxl.hu,mtvuutiset.fi,paixnidiaxl.gr,pushsquare.com,spelo.se,spillespill.no,spilxl.dk,thejournal.ie,thetrainline.com,vkmag.com,zdnet.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24, 1year)
@@ -587,6 +589,7 @@ sosfanta.com##+js(trusted-click-element, %23privacy-cp-wall-accept)
 ! https://alan.com/ - Accept
 alan.com##+js(trusted-set-local-storage-item, acceptedCookiesAt, %24now%24)
 ! https://www.chrono24.com/magazine/ - Accept
+chrono24.*##+js(trusted-click-element, button.js-cookie-accept-all, , 2000)
 chrono24.*##+js(trusted-click-element, button%5Bdata-label%3D%22accept-button%22%5D, , 1000)
 chrono24.*##dialog.gdpr-layer
 ! https://github.com/uBlockOrigin/uAssets/issues/20744
@@ -918,3 +921,15 @@ my.smartpost.ee##+js(trusted-set-cookie, cookieConsent, %7B%22necessary%22%3A1%7
 extrudr.com##+js(trusted-set-cookie, cc_cookie, %7B%22categories%22%3A%5B%22necessary%22%5D%2C%22level%22%3A%5B%22necessary%22%5D%2C%22revision%22%3A1%2C%22data%22%3Anull%2C%22rfc_cookie%22%3Atrue%2C%22consent_date%22%3A%221%22%2C%22consent_uuid%22%3A%221%22%2C%22last_consent_update%22%3A%221%22%7D)
 ! marketing/stats=0, removed "id" variable.
 vilagitasok.hu##+js(trusted-set-cookie, UN_cookie_consent_v2, %7B%22marketing%22%3A0%2C%22statistics%22%3A0%2C%22personalization%22%3A0%2C%22time%22%3A1%7D, , , reload, 1)
+! refuse cookies
+eneco.nl##+js(trusted-click-element, button%5Bdata-label%3D%22Weigeren%22%5D, , 500)
+! necessary
+yazio.com##+js(trusted-set-cookie, cc_cookie, %7B%22level%22%3A%5B%22necessary%22%5D%2C%22revision%22%3A0%2C%22data%22%3Anull%2C%22rfc_cookie%22%3Afalse%7D)
+! functional only, date set="1"
+kosik.cz##+js(trusted-set-cookie, consentPreferences, %7B%22timestamp%22%3A%221%22%2C%22version%22%3A1%2C%22functional_storage%22%3A%22granted%22%2C%22analytics_storage%22%3A%22denied%22%2C%22personalization_storage%22%3A%22denied%22%2C%22ad_storage%22%3A%22denied%22%2C%22ad_user_data%22%3A%22denied%22%2C%22ad_personalization%22%3A%22denied%22%7D)
+! technical only
+inps.it##+js(trusted-set-cookie, cc_cookie, %7B%22level%22%3A%5B%22tecnici%22%5D%2C%22revision%22%3A0%2C%22data%22%3Anull%2C%22rfc_cookie%22%3Afalse%7D)
+! https://github.com/AdguardTeam/AdguardFilters/issues/175067
+marmiton.org##+js(trusted-click-element, %23didomi-notice-agree-button)
+! https://github.com/uBlockOrigin/uAssets/issues/21954#issuecomment-2007446535
+||sdk.privacy-center.org/*/loader.js$script,important,domain=huffingtonpost.es
