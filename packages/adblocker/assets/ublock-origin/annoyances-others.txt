@@ -269,6 +269,9 @@ descarga-animex.*##+js(aeld, %2F%5E(%3F%3Acontextmenu%7Ckeydown)%24%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/3447#issuecomment-422715065
 deezer.com##+js(aopr, onbeforeunload)
 ! https://github.com/uBlockOrigin/uAssets/issues/5030
+! https://github.com/uBlockOrigin/uAssets/issues/22961
+deezer.com##.chakra-portal:has(> [data-focus-lock-disabled] > .chakra-modal__content-container a.chakra-button[href^="https://www.deezer.com/payment/go.php?origin=paywall_pressure"])
+deezer.com##body.force-scrollbar:style(overflow-y: scroll !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/3535
 ! https://github.com/uBlockOrigin/uAssets/issues/4067
 tvtropes.org##+js(set, valid_user, true)
@@ -1069,6 +1072,8 @@ m.youtube.com,music.youtube.com,tv.youtube.com,www.youtube.com,youtubekids.com##
 m.youtube.com,music.youtube.com,tv.youtube.com,www.youtube.com,youtubekids.com##+js(json-prune, auxiliaryUi.messageRenderers.upsellDialogRenderer)
 ! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-1949649857
 m.youtube.com,music.youtube.com,tv.youtube.com,www.youtube.com,youtubekids.com,youtube-nocookie.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fwww.youtube.com%2Fredirect%3Fevent%3Dvideo_description%22%5D%5Bhref*%3D%22%26q%3Dhttp%22%5D, %3Fq)
+! https://github.com/easylist/easylist/issues/17753#issuecomment-1971418402
+!www.youtube.com##ytd-browse[page-subtype="home"] :is(ytd-rich-grid-row, #contents.ytd-rich-grid-row):style(display: contents !important)
 ! https://github.com/NanoMeow/QuickReports/issues/1338
 buienradar.nl##+js(set, hideBannerBlockedMessage, true)
 buienradar.nl###adholderContainerHeader
@@ -2420,9 +2425,8 @@ seotechman.com##*::selection:style(background-color:#338FFF!important)
 katosatoshi.jp##+js(ra, oncontextmenu, body)
 katosatoshi.jp##body:style(-webkit-user-select:text!important;-moz-user-select:text!important;-ms-user-select:text!important;user-select:text!important)
 ! https://www.phoronix.com/scan.php?page=news_item&px=Linux-5.9-AMDGPU-Stats
-phoronix.com##+js(acs, onload, setTimeout)
 ! https://github.com/uBlockOrigin/uAssets/issues/16716#issuecomment-1998210794
-@@||phoronix.com^$ghide
+phoronix.com#@#[data-freestar-ad]:not(:empty)
 ! https://fandomwire.com/spider-man-3-tobey-maguire-andrew-garfield-signed-on/
 fandomwire.com##.g1-popup
 fandomwire.com##html:style(overflow:auto !important)
@@ -3631,7 +3635,7 @@ northjersey.com,independentmail.com,usatoday.com##html.gnt__mo:style(overflow-y:
 ! https://github.com/uBlockOrigin/uAssets/pull/11425
 */wp-content/plugins/smio-push-notification
 ! https://github.com/uBlockOrigin/uAssets/issues/11439
-titulky.com##+js(acs, %24, fade)
+titulky.com##+js(acs, %24, %22input%22)
 ! https://github.com/uBlockOrigin/uAssets/issues/11483
 ||d3fkv551xkjrmm.cloudfront.net/js/detection.js$script,domain=denofgeek.com
 ! cintateknologi. com anti select
@@ -4674,7 +4678,7 @@ ph.ontools.net##+js(acs, document.oncontextmenu)
 ! https://github.com/uBlockOrigin/uAssets/issues/18048
 neilpatel.com##+js(no-xhr-if, %2Fhotjar%7Cgoogletagmanager%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/18040
-onlinegiftools.com,onlinejpgtools.com,onlinepngtools.com,onlinestringtools.com,onlinetexttools.com,onlinetools.com##+js(nano-sib)
+onlinegiftools.com,onlinejpgtools.com,onlinepngtools.com,onlinestringtools.com,onlinetexttools.com,onlinetools.com##+js(nano-sib, Clipboard, 1000, 0.001)
 ! https://github.com/uBlockOrigin/uAssets/issues/18073
 cool-etv.net##+js(aeld, contextmenu)
 cool-etv.net##+js(set, console.clear, noopFunc)
@@ -4711,7 +4715,7 @@ vgembed.com##+js(set, DD, trueFunc)
 ! https://www.reddit.com/r/uBlockOrigin/comments/13p72m4/
 ||static.wikia.nocookie.net/silversurfer/prod/latest/ageGateUnit-pathfinder.js^$script,3p
 ! https://github.com/uBlockOrigin/uAssets/issues/18216
-personality-database.com##.rc-dialog-root
+! personality-database.com##.rc-dialog-root
 personality-database.com##body:style(overflow: auto !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/18243
 colors.sonicthehedgehog.com##+js(set, document.oncontextmenu, null, 3)
@@ -5358,8 +5362,6 @@ op.gg##.adfree-td
 op.gg##.adfree-banner
 ! notificationsounds .com anti-adb banners
 notificationsounds.com##+js(nostif, adsbygoogle, 2000)
-! https://github.com/uBlockOrigin/uAssets/issues/22359
-decrypt.day##+js(nano-sib, update, 1000)
 ! ncrtsolutions .in anti select, context menu
 ncrtsolutions.in##+js(aopr, document.body.onselectstart)
 ncrtsolutions.in##body:style(cursor: revert !important;)
@@ -5447,3 +5449,6 @@ bongdaplus.vn##+js(set, document.oncontextmenu, trueFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/22931
 vipstreams.in##+js(set, devtoolsDetector.launch, noopFunc)
 vipstreams.in##+js(nosiif, _0x)
+! https://github.com/uBlockOrigin/uAssets/issues/22957
+3xyaoi.com##+js(acs, document.oncontextmenu)
+3xyaoi.com##+js(aeld, contextmenu, preventDefault)
