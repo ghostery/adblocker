@@ -45,6 +45,8 @@ export const enum PreprocessorTypes {
   ENDIF = 3,
 }
 
+type FilterId = number;
+
 export function detectPreprocessor(line: string) {
   // Minimum size of a valid condition should be 6 for something like: "!#if x" or "!#else"
   if (
@@ -190,7 +192,7 @@ export default class Preprocessor {
     return line.slice(5 /* '!#if '.length */).replace(/\s/g, '');
   }
 
-  public static parse(condition: string, filterIDs?: Set<number>): Preprocessor {
+  public static parse(condition: string, filterIDs?: Set<FilterId>): Preprocessor {
     return new this({
       condition,
       filterIDs,
@@ -200,7 +202,7 @@ export default class Preprocessor {
   public static deserialize(view: StaticDataView): Preprocessor {
     const condition = view.getUTF8();
 
-    const filterIDs = new Set<number>();
+    const filterIDs = new Set<FilterId>();
     for (let i = 0, l = view.getUint32(); i < l; i++) {
       filterIDs.add(view.getUint32());
     }
@@ -212,14 +214,14 @@ export default class Preprocessor {
   }
 
   public readonly condition: string;
-  public readonly filterIDs: Set<number>;
+  public readonly filterIDs: Set<FilterId>;
 
   constructor({
     condition,
     filterIDs = new Set(),
   }: {
     condition: string;
-    filterIDs?: Set<number> | undefined;
+    filterIDs?: Set<FilterId> | undefined;
   }) {
     this.condition = condition;
     this.filterIDs = filterIDs;

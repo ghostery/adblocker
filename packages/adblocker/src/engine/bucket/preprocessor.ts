@@ -2,9 +2,11 @@ import { StaticDataView } from '../../data-view';
 import IFilter from '../../filters/interface';
 import Preprocessor, { Env } from '../../preprocessor';
 
+type FilterId = number;
+
 export default class PreprocessorBucket {
   public static deserialize(view: StaticDataView): PreprocessorBucket {
-    const excluded = new Set<number>();
+    const excluded = new Set<FilterId>();
     for (let i = 0, l = view.getUint32(); i < l; i++) {
       excluded.add(view.getUint32());
     }
@@ -21,13 +23,13 @@ export default class PreprocessorBucket {
   }
 
   private readonly preprocessors: Preprocessor[];
-  private readonly excluded: Set<number>;
+  private readonly excluded: Set<FilterId>;
 
   constructor({
     excluded = new Set(),
     preprocessors = [],
   }: {
-    excluded?: Set<number>;
+    excluded?: Set<FilterId>;
     preprocessors?: Preprocessor[];
   }) {
     this.excluded = excluded;
