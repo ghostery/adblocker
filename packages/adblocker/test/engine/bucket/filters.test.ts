@@ -91,6 +91,7 @@ describe('#FiltersContainer', () => {
           const filters = parseFilters(allLists, {
             debug: true,
             loadCosmeticFilters: false,
+            loadPreprocessors: false,
           }).networkFilters;
 
           expect(
@@ -106,6 +107,7 @@ describe('#FiltersContainer', () => {
           const filters = parseFilters(allLists, {
             debug: true,
             loadNetworkFilters: false,
+            loadPreprocessors: false,
           }).cosmeticFilters;
 
           expect(
