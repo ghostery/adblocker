@@ -25,10 +25,35 @@ import { fastHash, tokenize } from '../src/utils';
 import { allLists } from './utils';
 
 describe('ReverseIndex', () => {
-  const { cosmeticFilters, networkFilters } = parseFilters(allLists, {
-    loadPreprocessors: false,
+  // The internal preprocessor handler calles `getId` property of each filter within a condition
+  // to register them into preprocessor objects.
+  // These correction prevents unintended diff to be generated because of internally created properties.
+
+  // For cosmetic filters, we create a new filter instance by referencing `rawLine` property as `debug` was given in `parseFilters`.
+  const correctCosmeticFilterIds = (filters: CosmeticFilter[]) => {
+    return filters.map((filter) => {
+      return CosmeticFilter.parse(filter.rawLine!, true)!;
+    });
+  };
+  // For network filters, we just unset the filter id property again.
+  const correctNetworkFilterIds = (filters: NetworkFilter[]) => {
+    return filters.map((filter) => {
+      if (filter.id) {
+        filter.id = undefined;
+      }
+
+      return filter;
+    });
+  };
+
+  const {
+    cosmeticFilters: cosmeticFiltersWithPartialProps,
+    networkFilters: networkFiltersWithPartialId,
+  } = parseFilters(allLists, {
     debug: true,
   });
+  const cosmeticFilters = correctCosmeticFilterIds(cosmeticFiltersWithPartialProps);
+  const networkFilters = correctNetworkFilterIds(networkFiltersWithPartialId);
 
   [new Config({ enableCompression: true }), new Config({ enableCompression: false })].forEach(
     (config) => {
@@ -120,7 +145,6 @@ describe('ReverseIndex', () => {
                 deserialize: NetworkFilter.deserialize,
                 filters: parseFilters('||foo.com', {
                   loadCosmeticFilters: false,
-                  loadPreprocessors: false,
                   debug: true,
                 }).networkFilters,
                 optimize,
@@ -134,7 +158,6 @@ describe('ReverseIndex', () => {
               reverseIndex.update(
                 parseFilters('||bar.com', {
                   loadCosmeticFilters: false,
-                  loadPreprocessors: false,
                   debug: true,
                 }).networkFilters,
                 undefined,
@@ -146,7 +169,6 @@ describe('ReverseIndex', () => {
               reverseIndex.update(
                 parseFilters('||baz.com', {
                   loadCosmeticFilters: false,
-                  loadPreprocessors: false,
                   debug: true,
                 }).networkFilters,
                 new Set(filters.map((f) => f.getId())),

@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import 'mocha';
-import { Env, evaluate } from '../src/preprocessor';
+import { Request, generateDiff } from '../adblocker';
 import FilterEngine from '../src/engine/engine';
-import { Config, Request, generateDiff } from '../adblocker';
+import { Env, evaluate } from '../src/preprocessor';
 
 describe('conditions', () => {
   it('resolves a condition', () => {
@@ -75,11 +75,7 @@ describe('preprocessors', () => {
     bar: Request.fromRawDetails({ url: 'https://bar.com' }),
   };
 
-  const config = new Config({
-    loadPreprocessors: true,
-  });
-  const engine = new FilterEngine({ config });
-
+  const engine = new FilterEngine();
   const env = new Env();
 
   env.set('ext_ghostery', true);

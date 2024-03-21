@@ -216,7 +216,7 @@ export function parseFilters(
           }
         }
       }
-    } else if (config.loadPreprocessors) {
+    } else {
       const preprocessorType = detectPreprocessor(line);
 
       if (preprocessorType === PreprocessorTypes.BEGIF) {
@@ -390,15 +390,6 @@ export function generateDiff(
     }
 
     index.set(filter.getId(), filter.rawLine as string);
-  }
-
-  // Fast exit if we don't want to handle preprocessors.
-  if (!config.loadPreprocessors) {
-    return {
-      added: Array.from(added),
-      removed: Array.from(removed),
-      preprocessors: {},
-    };
   }
 
   // Create preprocessor diffs

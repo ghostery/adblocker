@@ -523,10 +523,7 @@ export default class FilterEngine extends EventEmitter<
     let updated: boolean = false;
 
     // Update preprocessors
-    if (
-      this.config.loadPreprocessors &&
-      (newPreprocessors.length !== 0 || removedPreprocessors.length !== 0)
-    ) {
+    if (newPreprocessors.length !== 0 || removedPreprocessors.length !== 0) {
       updated = true;
       this.preprocessors.update(
         {
