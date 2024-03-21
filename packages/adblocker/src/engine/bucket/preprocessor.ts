@@ -80,11 +80,7 @@ export default class PreprocessorBucket {
     },
     env: Env,
   ) {
-    let updated = false;
-
     if (removed) {
-      updated = true;
-
       for (const preprocessor of removed) {
         const local = this.preprocessors.find(
           (local) => local.condition === preprocessor.condition,
@@ -102,8 +98,6 @@ export default class PreprocessorBucket {
     }
 
     if (added) {
-      updated = true;
-
       for (const preprocessor of added) {
         const local = this.preprocessors.find(
           (local) => local.condition === preprocessor.condition,
@@ -121,7 +115,7 @@ export default class PreprocessorBucket {
       }
     }
 
-    if (updated) {
+    if ((removed && removed.length !== 0) || (added && added.length !== 0)) {
       this.updateEnv(env);
     }
   }

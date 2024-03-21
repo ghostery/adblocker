@@ -38,7 +38,7 @@ export class Env extends Map<EnvKeys, boolean> {
   }
 }
 
-export const enum PreprocessorTypes {
+export const enum PreprocessorTokens {
   INVALID = 0,
   BEGIF = 1,
   ELSE = 2,
@@ -54,26 +54,26 @@ export function detectPreprocessor(line: string) {
     line.charCodeAt(0) !== 33 /* '!' */ ||
     line.charCodeAt(1) !== 35 /* '#' */
   ) {
-    return PreprocessorTypes.INVALID;
+    return PreprocessorTokens.INVALID;
   }
 
   if (line.startsWith('!#if ')) {
-    return PreprocessorTypes.BEGIF;
+    return PreprocessorTokens.BEGIF;
   }
 
   if (line.startsWith('!#else')) {
-    return PreprocessorTypes.ELSE;
+    return PreprocessorTokens.ELSE;
   }
 
   if (line.startsWith('!#endif')) {
-    return PreprocessorTypes.ENDIF;
+    return PreprocessorTokens.ENDIF;
   }
 
-  return PreprocessorTypes.INVALID;
+  return PreprocessorTokens.INVALID;
 }
 
 const tokenizerPattern = /(!|&&|\|\||\(|\)|[a-zA-Z0-9_]+)/g;
-const identifierPattern = /^!?[a-zA-Z0-9_]+$/;
+const identifierPattern = /^[a-zA-Z0-9_]+$/;
 
 const tokenize = (expression: string) => expression.match(tokenizerPattern);
 const isIdentifier = (expression: string) => identifierPattern.test(expression);
@@ -99,7 +99,7 @@ const testIdentifier = (identifier: string, env: Env): boolean => !!env.get(iden
 /// the values from `environment`. The return value of this function is
 /// either `true` or `false`.
 export const evaluate = (expression: string, env: Env): boolean => {
-  if (!expression.length) {
+  if (expression.length === 0) {
     return false;
   }
 

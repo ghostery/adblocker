@@ -518,7 +518,7 @@ export default class FilterEngine extends EventEmitter<
       removedNetworkFilters = [],
       removedPreprocessors = [],
     }: Partial<IListDiff>,
-    env = new Env(),
+    env: Env = new Env(),
   ): boolean {
     let updated: boolean = false;
 

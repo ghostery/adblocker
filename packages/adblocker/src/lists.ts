@@ -10,7 +10,7 @@ import Config from './config';
 import CosmeticFilter from './filters/cosmetic';
 import IFilter from './filters/interface';
 import NetworkFilter from './filters/network';
-import Preprocessor, { PreprocessorTypes, detectPreprocessor } from './preprocessor';
+import Preprocessor, { PreprocessorTokens, detectPreprocessor } from './preprocessor';
 import { fastStartsWith, fastStartsWithFrom } from './utils';
 
 export const enum FilterType {
@@ -217,14 +217,18 @@ export function parseFilters(
         }
       }
     } else if (config.loadPreprocessors) {
-      const preprocessorType = detectPreprocessor(line);
+      const preprocessorToken = detectPreprocessor(line);
 
-      if (preprocessorType === PreprocessorTypes.BEGIF) {
+      if (preprocessorToken === PreprocessorTokens.BEGIF) {
         preprocessorStack.push({
           start: filterStack.length,
           condition: Preprocessor.getCondition(line),
         });
-      } else if (preprocessorType !== PreprocessorTypes.INVALID && preprocessorStack.length > 0) {
+      } else if (
+        (preprocessorToken === PreprocessorTokens.ENDIF ||
+          preprocessorToken === PreprocessorTokens.ELSE) &&
+        preprocessorStack.length > 0
+      ) {
         const condition =
           preprocessorStack.length === 1
             ? preprocessorStack[0].condition
@@ -254,7 +258,7 @@ export function parseFilters(
 
         const last = preprocessorStack.pop();
 
-        if (preprocessorType === PreprocessorTypes.ELSE) {
+        if (preprocessorToken === PreprocessorTokens.ELSE) {
           preprocessorStack.push({
             start: filterStack.length,
             condition: `!(${last!.condition})`,
