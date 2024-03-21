@@ -1,7 +1,7 @@
 [Adblock Plus 2.0]
-! Version: 202403201703
+! Version: 202403210956
 ! Title: EasyList
-! Last modified: 20 Mar 2024 17:03 UTC
+! Last modified: 21 Mar 2024 09:56 UTC
 ! Expires: 4 days (update frequency)
 ! *** easylist:template_header.txt ***
 !
@@ -203,6 +203,7 @@
 ! [badfilter] from ublock-origin/filters-2023.txt
 ! /ad_code.
 /ad_common.
+/ad_counter.aspx
 /ad_display.
 /ad_engine?
 /ad_exo.
@@ -251,6 +252,7 @@
 /ad_wide_
 /ad_wrapper.
 /adanalytics.
+/adaptive_components.ashx?type=ads&
 /adaptvadplayer.
 /adasset/*$~script
 /adasync.
@@ -285,7 +287,6 @@
 /adfurikun/*$~image
 /adfx.loader.bind.js
 /adhandler/*$~subdocument
-/adheader.
 /adhelper.js
 /adiframe|*|adtech;
 /adimage.
@@ -305,18 +306,12 @@
 /adnet2.
 /adnetmedia.$domain=~adnetmedia.ee|~adnetmedia.hu|~adnetmedia.lt|~adnetmedia.lv
 /adocean.
-/adometry?
 /adops.$domain=~adops.co.il|~adops.gr
 /ados.js
-/adotube_adapter.
-/adotubeplugin.
-/adoverlay.
 /adpartner.min.js
-/adplacement.
 /adplayer.$script,domain=~adplayer.pro
 /adplugin.
 /adpopup.
-/adproxy.
 /adright.$domain=~adright.com
 /adriver.$~script,domain=~adriver.co
 /adriver_$~object
@@ -328,9 +323,7 @@
 /ads-footer.
 /ads-front.min.js
 /ads-frontend.min.js
-/ads-holder.
 /ads-home.js
-/ads-loader.
 /ads-rectangle.
 /ads-right.
 /ads-templateslist.
@@ -1145,6 +1138,8 @@
 /punder.php
 /pup-a9-header-bidder/*
 /purch-ad-
+! [dup] from ublock-origin/filters-2023.txt
+! /push/p.js?u=$third-party
 /pushdownAd.
 /pustrck.js
 /radioAdEmbed.
@@ -1336,13 +1331,8 @@
 /sponsoredlinks.
 /sponsoredlinks/*
 /sponsoredlinks?
-/sponsoredlisting.
 /sponsors-ads/*
-/sponsors/popunder.
 /sponsors_box.
-/spotx_adapter.
-/spotxchangeplugin.
-/spotxchangevpaid.
 /squaread.
 /squareads.
 /static-ad-
@@ -1357,42 +1347,28 @@
 /stickyad.
 /stickyads.
 /story_ad.
-/story_ads_
-/storyads.
-/style_ad.
-/subAd.
+/style_ad.css
+/suurl5.php
 /suv4.js
-/SWMAdPlayer.
-/sync2ad.
-/syndication/ad.
-/sys/ad/*
-/system/ad/*
+/suv5.js
+/sync2ad.js
 /taboola-footer.js
 /taboola-header.js
 /taboola_7.4.1.js
 /taboola_header.js
 /taboolaarticle.min.js
-/targetingAd.
-/targetpushad.
+/targetingAd.js
+/targetpushad.js
 /td-ads-
 /tds-ads-
-/technomedia.
-/template/ad.
-/templates/ad.
-/templates/ad/*
-/templates/ads/*
 /theologicalpresentation.com/*
-/third-party/dfp/*
-/thirdparty/ad/*
-/tikilink?
 /tncms/ads/*
 /tnt.ads.
 /top-ad.
 /top-ads.
 /top_ad.
 /top_ads.
-/tremoradrenderer.
-/triadshow.
+/triadshow.asp
 /ttj?id=
 /utx?cb=$third-party
 /v1/ads/*
@@ -1407,8 +1383,6 @@
 /v9/adv/*
 /valnet-header-ads.
 /vast/?zid=
-/VASTAdPlugin.
-/vclkads.
 /velvet_stack_cmp.js
 /vendor-ads-
 /vendors~ads.
@@ -17534,6 +17508,7 @@ _800x80_
 ##a[href^="https://tc.tradetracker.net/"] > img
 ##a[href^="https://tm-offers.gamingadult.com/"]
 ##a[href^="https://tour.mrskin.com/"]
+##a[href^="https://track.1234sd123.com/"]
 ##a[href^="https://track.adform.net/"]
 ##a[href^="https://track.afcpatrk.com/"]
 ##a[href^="https://track.totalav.com/"]
@@ -25072,6 +25047,7 @@ browsershots.org#@#.advert_area
 ||clockwiseleaderfilament.com^
 ||clodsplit.com^
 ||clodyields.com^
+||clognukes.com^
 ||clogstrollcastle.com^
 ||cloisonprecool.uno^
 ||cloisteroutdooragitate.com^
@@ -25617,6 +25593,7 @@ browsershots.org#@#.advert_area
 ||coolingstiffenlegend.com^
 ||cooljony.com^
 ||coollyadmissibleclack.com^
+||cooloffer.cfd^
 ||coolpornvids.com^
 ||coolserving.com^
 ||coolstreamsearch.com^
@@ -30755,6 +30732,7 @@ browsershots.org#@#.advert_area
 ||funcats.info^
 ||functionfreaklacerate.com^
 ||functionsprecision.com^
+||fundatingquest.fun^
 ||fundingexceptingarraignment.com^
 ||fundsbe.com^
 ||fungianjaggier.digital^
@@ -38196,6 +38174,7 @@ browsershots.org#@#.advert_area
 ||mhboxleky.com^
 ||mhdiaok.com^
 ||mhdprkwje.com^
+||mheniwwacl.com^
 ||mhgshawy.guru^
 ||mhkvktz.com^
 ||mhqjiaxpenfw.com^
@@ -40106,6 +40085,7 @@ browsershots.org#@#.advert_area
 ||nunnifybalize.website^
 ||nupdhyzetb.com^
 ||nuphizarrafw.com^
+||nupjzylhequ.com^
 ||nuqwe.com^
 ||nuraghireels.com^
 ||nurewsawan.org^
@@ -40604,6 +40584,7 @@ browsershots.org#@#.advert_area
 ||ojuhjcmhemvs.com^
 ||ojwapnolwa.com^
 ||ojwplnqmctys.com^
+||ojyggbl.com^
 ||ojygidujyn.com^
 ||ojzghaawlf.com^
 ||okaks.com^
@@ -47151,6 +47132,7 @@ browsershots.org#@#.advert_area
 ||sleptornament.com^
 ||slfsmf.com^
 ||slfznewdii.com^
+||slggskljoczt.com^
 ||slickerunderdo.com^
 ||slickgrapes.com^
 ||slidbecauseemerald.com^
@@ -48462,6 +48444,7 @@ browsershots.org#@#.advert_area
 ||susgrqsxo.com^
 ||suspectedadvisor.com^
 ||suspensionreconnectpig.com^
+||suspicionsmutter.com^
 ||suspicionsrespectivelycobbler.com^
 ||suspicionssmartstumbled.com^
 ||suspirenicolo.guru^
@@ -49657,6 +49640,7 @@ browsershots.org#@#.advert_area
 ||toothacheformer.com^
 ||toothbrushconceitedsemi.com^
 ||toothbrushlimbperformance.com^
+||toothcauldron.com^
 ||toothoverdone.com^
 ||toothpasteginnysorrow.com^
 ||toothstrike.com^
@@ -51151,6 +51135,7 @@ browsershots.org#@#.advert_area
 ||uwmlmhcjmjvuqy.xyz^
 ||uwoaptee.com^
 ||uwrzjgtnur.com^
+||uwzxukualwdkx.com^
 ||uxicgxqq.com^
 ||uxpascal.com^
 ||uxwnqppdma.com^
@@ -56640,6 +56625,7 @@ browsershots.org#@#.advert_area
 ||1080872514.rsc.cdn77.org^
 ||10945-2.s.cdn15.com^
 ||10945-5.s.cdn15.com^
+||1139477033.rsc.cdn77.org^
 ||1162248229.rsc.cdn77.org^
 ||1187531871.rsc.cdn77.org^
 ||1212588358.rsc.cdn77.org^
@@ -56654,6 +56640,7 @@ browsershots.org#@#.advert_area
 ||1736253261.rsc.cdn77.org^
 ||1737365450.rsc.cdn77.org^
 ||1838211237.rsc.cdn77.org^
+||1906920927.rsc.cdn77.org^
 ||26216.stunserver.net/a8.js
 ||360playvid.com^$third-party
 ||360playvid.info^$third-party
@@ -59428,6 +59415,7 @@ spiegel.de##a[onmousedown^="this.href='https://paid.outbrain.com/network/redir?"
 ||hdporn24.org/vcrtlrvw/
 ||hdpornfree.xxx/rek/
 ||hdpornmax.com/tmp/
+||hdtube.porn/fork/
 ||hdtube.porn/rods/
 ||hellporno.com/_a_xb/
 ||hellporno.com^$subdocument,~third-party
@@ -59699,6 +59687,7 @@ spiegel.de##a[onmousedown^="this.href='https://paid.outbrain.com/network/redir?"
 ||winporn.*/templates/base_master/js/jquery.shows2.min.js
 ||wwwxxx.uno/pop-code.js
 ||wwwxxx.uno/taco-code.js
+||x-hd.video/vcrtlrvw/
 ||x0r.urlgalleries.net^
 ||x1hub.com/alexia_anders_jm.gif
 ||xanimu.com/prerolls/
@@ -60903,6 +60892,7 @@ thescore.com##.Ad__container--2fhQb
 interestingengineering.com##.Ad_adContainer__ZlEzV
 charlieintel.com,dexerto.com##.Ad_ad__SqDQA
 therealdeal.com##.Ad_rootHomepage__mSzqh
+newspointapp.com##.Ad_wrapper
 greatandhra.com##.AdinHedare
 jagranjosh.com##.Ads
 coingape.com##.AdsMid
@@ -62243,6 +62233,7 @@ imgur.com##.fast-grid-ad
 thepointsguy.com##.favorite-cards
 futbin.com##.fb-ad-placement
 triangletribune.com##.fba_links
+newspointapp.com##.fbgooogle-wrapper
 forbes.com##.fbs-ad--mobile-medianet-wrapper
 forbes.com##.fbs-ad--ntv-deskchannel-wrapper
 forbes.com##.fbs-ad--ntv-home-wrapper
@@ -63630,7 +63621,7 @@ kit.co##.sidekit-banner
 linuxtopia.org##.sidelinks > .sidelinks
 atlasobscura.com##.siderail-bottom-affix-placeholder
 thespike.gg##.siderail_ad_right
-rockradio.com##.sidewall-ad-component
+classicalradio.com,jazzradio.com,radiotunes.com,rockradio.com,zenradio.com##.sidewall-ad-component
 sifted.eu##.sifted_advert_block
 wncv.com##.simple-image
 nanoreview.net##.sinad_only_desktop
@@ -64282,6 +64273,7 @@ cmswire.com##[class^="styles_article__top-ad-wrapper"]
 hancinema.net##[class^="wmls_"]
 torlock.com##[class^="wrn"]
 mydramalist.com##[class^="zrsx_"]
+newspointapp.com##[ctn-style]
 flatpanelshd.com##[data-aa-adunit]
 dribbble.com##[data-ad-data*="ad_link"]
 gamelevate.com##[data-adpath]
@@ -65086,6 +65078,7 @@ qwant.com##.is-sidebar:has(a[data-testid="advertiserAdsLink"])
 yovizag.com##.jeg_column:has(> .jeg_wrapper > .jeg_ad)
 chewy.com##.kib-carousel-item:has(.kib-product-sponsor)
 content.dictionary.com##.lp-code:has(> [class$="Ad"])
+euronews.com##.m-object:has(.m-object__sponsored-quote)
 acmemarkets.com,albertsons.com,andronicos.com,carrsqc.com,haggen.com,jewelosco.com,kingsfoodmarkets.com,pavilions.com,randalls.com,safeway.com,shaws.com,starmarket.com,tomthumb.com,vons.com##.master-product-carousel:has([data-carousel-driven="sponsored-products"])
 officedepot.com##.od-col:has(.od-product-card-region-colors-sponsored)
 pollunit.com##.owl-carousel:has(.carousel-ad)
@@ -65697,6 +65690,7 @@ eporner.com###deskadmiddle
 hentai-cosplays.com,hentai-img.com###display_image_detail > span
 javguard.xyz###dl > a[target="_blank"][id]
 thehun.net###dyk_right
+escortbook.com###ebsponAxDS
 youjizz.com###englishPr
 porntrex.com###exclusive-link
 namethatporn.com###fab_blacko
@@ -65725,6 +65719,7 @@ youngamateursporn.com###inplayer_block
 freebunker.com,imgcarry.com,pornbus.org###introOverlayBg
 hentaiprn.com###l_340
 postyourpuss.com###leaderboard
+escortbook.com###links
 xfantasy.su###listing-ba
 livecamrips.com###live-cam
 redtube.com###live_models_row_wrap
@@ -65809,6 +65804,7 @@ w3avenue.com###sponsorsbox
 pornfap.tv###spot-player
 hd21.com,winporn.com###spot_video_livecams
 hd21.com,winporn.com###spot_video_underplayer_livecams
+xnxxporn.video###spotholder
 maxjizztube.com,yteenporn.com###spotxt
 gotgayporn.com###ss_bar
 oldies.name###stop_ad2
@@ -66487,6 +66483,7 @@ ad69.com,risextube.com##.video-aside
 watchmygf.tv##.video-aside-spot
 sexseeimage.com##.video-block-happy
 pornfaia.com##.video-bnrz
+x-hd.video##.video-brs
 comicsxxxgratis.com,video.javdock.com##.video-container
 boyfriendtv.com##.video-extra-wrapper
 megatube.xxx##.video-filter-1

@@ -15,8 +15,6 @@ cine.to##+js(aopr, oncontextmenu)
 desbloqueador.*##+js(aopr, document.oncontextmenu)
 megapastes.com##+js(aopr, document.oncontextmenu)
 megapastes.com##+js(aopr, document.onselectstart)
-! https://github.com/uBlockOrigin/uAssets/issues/1171
-weather.com##+js(aopr, _sp_._networkListenerData)
 ! https://github.com/uBlockOrigin/uAssets/issues/1343
 ! https://github.com/uBlockOrigin/uAssets/issues/1879
 agar.io##+js(aopw, hasAdblock)
@@ -4417,8 +4415,10 @@ sneakernews.com##+js(aopr, sneakerGoogleTag)
 ! https://github.com/uBlockOrigin/uAssets/issues/16545
 socialcounts.org##+js(no-fetch-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/16570
-||cdn.intergient.com/*/ramp.js$script,redirect-rule=noopjs,domain=fflogs.com
+*$script,3p,redirect-rule=noopjs,domain=fflogs.com
 fflogs.com###bottom-banner, #top-banner
+fflogs.com##.ad-placement
+fflogs.com##.side-rail-ads
 ! https://github.com/uBlockOrigin/uAssets/issues/16576
 freestreams-live1.tv##+js(aopr, document.oncontextmenu)
 ! https://likey.me/ anti right click
@@ -5452,3 +5452,9 @@ vipstreams.in##+js(nosiif, _0x)
 ! https://github.com/uBlockOrigin/uAssets/issues/22957
 3xyaoi.com##+js(acs, document.oncontextmenu)
 3xyaoi.com##+js(aeld, contextmenu, preventDefault)
+! ipphone-warehouse.com anti contextmenu, f-keys, select, copy
+ipphone-warehouse.com##+js(aeld, contextmenu)
+ipphone-warehouse.com##+js(aeld, afterKeydown)
+ipphone-warehouse.com##+js(aeld, keydown, void)
+ipphone-warehouse.com##+js(aeld, copy, void)
+ipphone-warehouse.com##body:style(user-select: text !important; -ms-user-select: text !important; -moz-user-select: text !important; -khtml-user-select: text !important; -webkit-user-select: text !important; -webkit-touch-callout: default !important;)

@@ -416,7 +416,9 @@ facebook.com,facebookwkhpilnemxj7asaniu7vnjjbiltxjqhye3mhbshg7kx5tfyd.onion##div
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-1845256665
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-1993620105
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-1999029976
+! https://www.reddit.com/r/uBlockOrigin/comments/1bjfs9x/facebook_loading_slow/kvraphx/
 !#if cap_html_filtering
+! ||www.facebook.com^$doc,replace=/\{"brs_content_label":[^,]+,"category":"SPONSORED"[^\n]+"cursor":"[^"]+"\}/{}/
 !#else
 ! www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22brs_content_label%22%3A%5B%5E%2C%5D%2B%2C%22category%22%3A%22SPONSORED%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2F, %7B%7D, %2Fapi%2Fgraphql)
 !#endif
@@ -883,9 +885,6 @@ rule34hentai.net###commentlistimage ~ section[id$="main"]
 rule34hentai.net###imagelist ~ section[id$="main"]
 rule34hentai.net##section[id$="left"]:has(> .blockbody > script[type])
 rule34hentai.net##section[id$="main"]:has(> .blockbody > .adsbyexoclick)
-! https://www.wilderssecurity.com/threads/ublock-a-lean-and-fast-blocker.365273/page-112#post-2682251
-securityweek.com###simplemodal-container
-securityweek.com###simplemodal-overlay
 ! https://github.com/uBlockOrigin/uAssets/issues/444
 kingofdown.com##+js(aeld, load, onload)
 ! https://github.com/uBlockOrigin/uAssets/issues/446
@@ -2409,9 +2408,6 @@ porndig.com##+js(set, tkn_popunder, null)
 ! https://github.com/uBlockOrigin/uAssets/issues/4654
 @@||mamahd.*^$ghide
 ||mamahd.*/hd.php$frame
-! https://github.com/uBlockOrigin/uAssets/issues/1183
-! https://github.com/uBlockOrigin/uAssets/issues/9611
-xvideos.com,xvideos2.com##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/1185
 perfectgirls.*,perfektdamen.*##+js(acs, ExoLoader)
 perfectgirls.*,perfektdamen.*##+js(aopw, ads_priv)
