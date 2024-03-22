@@ -192,9 +192,9 @@ export default class Preprocessor {
     return line.slice(5 /* '!#if '.length */).replace(/\s/g, '');
   }
 
-  public static parse(condition: string, filterIDs?: Set<FilterId>): Preprocessor {
+  public static parse(line: string, filterIDs?: Set<FilterId>): Preprocessor {
     return new this({
-      condition,
+      condition: Preprocessor.getCondition(line),
       filterIDs,
     });
   }

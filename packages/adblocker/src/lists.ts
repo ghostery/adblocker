@@ -8,7 +8,6 @@
 
 import Config from './config';
 import CosmeticFilter from './filters/cosmetic';
-import IFilter from './filters/interface';
 import NetworkFilter from './filters/network';
 import Preprocessor, { PreprocessorTokens, detectPreprocessor } from './preprocessor';
 import { fastStartsWith, fastStartsWithFrom } from './utils';
@@ -150,11 +149,7 @@ export function parseFilters(
   const lines = list.split('\n');
 
   const preprocessors: Preprocessor[] = [];
-  // The filters affected by a preprocessor
-  const filterStack: IFilter[] = [];
-  // This defines the start index in `filtersInBlock` of each preprocessor block
-  // The highest level of block will have an index of zero
-  const preprocessorStack: { start: number; condition: string }[] = [];
+  const preprocessorStack: Preprocessor[] = [];
 
   for (let i = 0; i < lines.length; i += 1) {
     let line = lines[i];
@@ -202,8 +197,8 @@ export function parseFilters(
       const filter = NetworkFilter.parse(line, config.debug);
       if (filter !== null) {
         networkFilters.push(filter);
-        if (preprocessorStack.length) {
-          filterStack.push(filter);
+        if (preprocessorStack.length > 0) {
+          preprocessorStack[preprocessorStack.length - 1].filterIDs.add(filter.getId());
         }
       }
     } else if (filterType === FilterType.COSMETIC && config.loadCosmeticFilters === true) {
@@ -211,8 +206,8 @@ export function parseFilters(
       if (filter !== null) {
         if (config.loadGenericCosmeticsFilters === true || filter.isGenericHide() === false) {
           cosmeticFilters.push(filter);
-          if (preprocessorStack.length) {
-            filterStack.push(filter);
+          if (preprocessorStack.length > 0) {
+            preprocessorStack[preprocessorStack.length - 1].filterIDs.add(filter.getId());
           }
         }
       }
@@ -220,49 +215,30 @@ export function parseFilters(
       const preprocessorToken = detectPreprocessor(line);
 
       if (preprocessorToken === PreprocessorTokens.BEGIF) {
-        preprocessorStack.push({
-          start: filterStack.length,
-          condition: Preprocessor.getCondition(line),
-        });
+        if (preprocessorStack.length > 0) {
+          preprocessorStack.push(
+            new Preprocessor({
+              condition: `(${preprocessorStack[preprocessorStack.length - 1].condition})&&(${Preprocessor.getCondition(line)})`,
+            }),
+          );
+        } else {
+          preprocessorStack.push(Preprocessor.parse(line));
+        }
       } else if (
         (preprocessorToken === PreprocessorTokens.ENDIF ||
           preprocessorToken === PreprocessorTokens.ELSE) &&
         preprocessorStack.length > 0
       ) {
-        const condition =
-          preprocessorStack.length === 1
-            ? preprocessorStack[0].condition
-            : preprocessorStack.map((entry) => `(${entry.condition})`).join('&&');
+        const lastPreprocessor = preprocessorStack.pop()!;
 
-        const existingPreprocessor = preprocessors.find(
-          (preprocessor) => preprocessor.condition === condition,
-        );
-
-        const filterIDs: Set<number> = new Set();
-        for (
-          let i = filterStack.length - 1;
-          i >= preprocessorStack[preprocessorStack.length - 1].start;
-          i--
-        ) {
-          const filterId = filterStack.pop()!.getId();
-          if (existingPreprocessor) {
-            existingPreprocessor.filterIDs.add(filterId);
-          } else {
-            filterIDs.add(filterId);
-          }
-        }
-        // ignore preprocessors without filters
-        if (filterIDs.size > 0) {
-          preprocessors.push(Preprocessor.parse(condition, filterIDs));
-        }
-
-        const last = preprocessorStack.pop();
+        preprocessors.push(lastPreprocessor);
 
         if (preprocessorToken === PreprocessorTokens.ELSE) {
-          preprocessorStack.push({
-            start: filterStack.length,
-            condition: `!(${last!.condition})`,
-          });
+          preprocessorStack.push(
+            new Preprocessor({
+              condition: `!(${lastPreprocessor.condition})`,
+            }),
+          );
         }
       }
     }
