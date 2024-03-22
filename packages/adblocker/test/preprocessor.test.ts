@@ -187,4 +187,16 @@ describe('preprocessors', () => {
       emptyEnv,
     );
   });
+
+  it('rejects a filter even any of conditions fail', () => {
+    doTest(
+      `||foo.com^
+!#if ext_ghostery
+@@||foo.com^
+!#endif
+!#if false
+@@||foo.com^
+!#endif`,
+    );
+  });
 });

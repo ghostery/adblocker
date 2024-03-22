@@ -44,8 +44,6 @@ export default class PreprocessorBucket {
     // Update excluded filter ids based on bindings
     this.excluded.clear();
 
-    const included = new Set<number>();
-
     for (let i = 0; i < this.preprocessors.length; ) {
       if (this.preprocessors[i].filterIDs.size === 0) {
         this.preprocessors.splice(i, 1);
@@ -53,16 +51,9 @@ export default class PreprocessorBucket {
         continue;
       }
 
-      if (this.preprocessors[i].evaluate(env)) {
+      if (!this.preprocessors[i].evaluate(env)) {
         for (const filterID of this.preprocessors[i].filterIDs) {
-          included.add(filterID);
-          this.excluded.delete(filterID);
-        }
-      } else {
-        for (const filterID of this.preprocessors[i].filterIDs) {
-          if (!included.has(filterID)) {
-            this.excluded.add(filterID);
-          }
+          this.excluded.add(filterID);
         }
       }
 
