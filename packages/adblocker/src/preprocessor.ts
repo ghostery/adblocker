@@ -28,15 +28,7 @@ export type EnvKeys =
   | 'adguard_ext_safari'
   | (string & {});
 
-export class Env extends Map<EnvKeys, boolean> {
-  constructor() {
-    super();
-
-    // Control the default conditions via constructor
-    this.set('true', true);
-    this.set('false', false);
-  }
-}
+export class Env extends Map<EnvKeys, boolean> {}
 
 export const enum PreprocessorTokens {
   INVALID = 0,
@@ -86,7 +78,17 @@ const precedence: Record<string, number> = {
 
 const isOperator = (token: string) => Object.prototype.hasOwnProperty.call(precedence, token);
 
-const testIdentifier = (identifier: string, env: Env): boolean => !!env.get(identifier);
+const testIdentifier = (identifier: string, env: Env): boolean => {
+  if (identifier === 'true' && !env.has('true')) {
+    return true;
+  }
+
+  if (identifier === 'false' && !env.has('false')) {
+    return false;
+  }
+
+  return !!env.get(identifier);
+};
 
 /// The parsing is done using the [Shunting yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm).
 /// This function takes as input a string expression and an environment Map.
