@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import 'mocha';
 import { Env, evaluate } from '../src/preprocessor';
 import FilterEngine from '../src/engine/engine';
-import { Config, Request, generateDiff } from '../adblocker';
+import { Request, generateDiff } from '../adblocker';
 
 describe('conditions', () => {
   it('resolves a condition', () => {
@@ -75,23 +75,41 @@ describe('preprocessors', () => {
     bar: Request.fromRawDetails({ url: 'https://bar.com' }),
   };
 
-  const config = new Config({
-    loadPreprocessors: true,
-  });
-  const engine = new FilterEngine({ config });
-
   const env = new Env();
-
   env.set('ext_ghostery', true);
   env.set('ext_devbuild', true);
 
   const doTest = (filters: string, thisEnv = env) => {
-    engine.updateFromDiff(generateDiff('', filters), thisEnv);
+    const customErrorMessage = (request: Request, filters: string, env: Env) => {
+      return `Engine should match request ${request.url} for filters: \n\n${filters}\n\n with env \n\n${JSON.stringify(env, null, 2)}\n\n`;
+    };
 
-    expect(engine.match(requests.foo).match).to.be.true;
-    expect(engine.match(requests.bar).match).to.be.false;
+    const engine1 = FilterEngine.parse(filters, {
+      loadPreprocessors: true,
+    });
+    engine1.updateEnv(thisEnv);
 
-    engine.updateFromDiff(generateDiff(filters, ''), thisEnv);
+    expect(
+      engine1.match(requests.foo),
+      customErrorMessage(requests.foo, filters, thisEnv),
+    ).to.have.property('match', true);
+    expect(
+      engine1.match(requests.bar),
+      customErrorMessage(requests.bar, filters, thisEnv),
+    ).to.have.property('match', false);
+
+    const engine2 = new FilterEngine({ config: { loadPreprocessors: true } });
+    const diff = generateDiff('', filters, engine2.config);
+    engine2.updateFromDiff(diff, thisEnv);
+
+    expect(
+      engine2.match(requests.foo),
+      customErrorMessage(requests.foo, filters, thisEnv),
+    ).to.have.property('match', true);
+    expect(
+      engine2.match(requests.bar),
+      customErrorMessage(requests.bar, filters, thisEnv),
+    ).to.have.property('match', false);
   };
 
   // Testing `!#else` means we already aware of parenthesis.
