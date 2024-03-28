@@ -44,20 +44,12 @@ export default class PreprocessorBucket {
     // Update excluded filter ids based on bindings
     this.excluded.clear();
 
-    for (let i = 0; i < this.preprocessors.length; ) {
-      if (this.preprocessors[i].filterIDs.size === 0) {
-        this.preprocessors.splice(i, 1);
-
-        continue;
-      }
-
-      if (!this.preprocessors[i].evaluate(env)) {
-        for (const filterID of this.preprocessors[i].filterIDs) {
+    for (const preprocessor of this.preprocessors) {
+      if (!preprocessor.evaluate(env)) {
+        for (const filterID of preprocessor.filterIDs) {
           this.excluded.add(filterID);
         }
       }
-
-      i++;
     }
   }
 
@@ -78,6 +70,7 @@ export default class PreprocessorBucket {
         );
 
         // Skip if we don't have any preprocessor on local
+        // In the context of filters updates from CDN this should never happen.
         if (!local) {
           continue;
         }

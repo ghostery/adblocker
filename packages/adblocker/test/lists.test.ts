@@ -9,7 +9,8 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { f, generateDiff, getLinesWithFilters, mergeDiffs } from '../src/lists';
+import { f, generateDiff, getLinesWithFilters, mergeDiffs, parseFilters } from '../src/lists';
+import Config from '../src/config';
 
 describe('#getLinesWithFilters', () => {
   it('get not lines if empty', () => {
@@ -51,6 +52,57 @@ bar.co.uk^*baz
 
       `),
     ).to.eql(new Set(['||foo.com']));
+  });
+});
+
+describe('#parseFilters', () => {
+  it('handle network filters', () => {
+    expect(parseFilters('')).to.have.property('networkFilters').that.have.lengthOf(0);
+    expect(parseFilters('||foo.com')).to.have.property('networkFilters').that.have.lengthOf(1);
+  });
+
+  it('handle cosmetic filters', () => {
+    expect(parseFilters('')).to.have.property('cosmeticFilters').that.have.lengthOf(0);
+    expect(parseFilters('###foo')).to.have.property('cosmeticFilters').that.have.lengthOf(1);
+  });
+
+  it('ignores preprocessors', () => {
+    const result = parseFilters(
+      `!#if true
+    ||foo.com
+!#endif`,
+    );
+    expect(result).to.have.property('preprocessors').that.have.lengthOf(0);
+    expect(result).and.to.have.property('networkFilters').that.have.lengthOf(1);
+  });
+
+  context('with loadPreprocessors config', () => {
+    const config = new Config({
+      loadPreprocessors: true,
+    });
+
+    it('ignores empty preprocessors', () => {
+      expect(
+        parseFilters(
+          `!#if true
+  !#endif`,
+          config,
+        ),
+      )
+        .to.have.property('preprocessors')
+        .that.have.lengthOf(0);
+    });
+
+    it('handle preprocessors', () => {
+      const result = parseFilters(
+        `!#if true
+        ||foo.com
+!#endif`,
+        config,
+      );
+      expect(result).to.have.property('preprocessors').that.have.lengthOf(1);
+      expect(result).to.have.property('networkFilters').that.have.lengthOf(1);
+    });
   });
 });
 
@@ -115,12 +167,30 @@ bar.baz
   });
 
   it('handle preprocessors', () => {
+    const config = new Config({
+      loadPreprocessors: true,
+    });
+
+    expect(
+      generateDiff(
+        '',
+        `!#if true
+!#endif`,
+        config,
+      ),
+    ).to.eql({
+      added: [],
+      removed: [],
+      preprocessors: {},
+    });
+
     expect(
       generateDiff(
         '',
         `!#if true
 ||foo.com
 !#endif`,
+        config,
       ),
     ).to.eql({
       added: [],
@@ -139,6 +209,7 @@ bar.baz
 ||foo.com
 !#endif`,
         '',
+        config,
       ),
     ).to.eql({
       added: [],
@@ -161,6 +232,7 @@ bar.baz
 !#if true
 ||bar.com
 !#endif`,
+        config,
       ),
     ).to.eql({
       // We prioritize the filter with a condition over a filter in the global scope

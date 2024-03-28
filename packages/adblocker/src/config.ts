@@ -63,7 +63,7 @@ export default class Config {
     loadExtendedSelectors = false,
     loadGenericCosmeticsFilters = true,
     loadNetworkFilters = true,
-    loadPreprocessors = true,
+    loadPreprocessors = false,
   }: Partial<Config> = {}) {
     this.debug = debug;
     this.enableCompression = enableCompression;

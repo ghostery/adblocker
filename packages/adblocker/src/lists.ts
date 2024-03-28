@@ -244,7 +244,11 @@ export function parseFilters(
     }
   }
 
-  return { networkFilters, cosmeticFilters, preprocessors };
+  return {
+    networkFilters,
+    cosmeticFilters,
+    preprocessors: preprocessors.filter((preprocessor) => preprocessor.filterIDs.size > 0),
+  };
 }
 
 function getFilters(
@@ -320,65 +324,74 @@ export function generateDiff(
 
   const prevRevisionData = getFilters(prevRevision, debugConfig);
   const prevRevisionIds = new Set(prevRevisionData.filters.map((filter) => filter.getId()));
-  const prevRevisionPreprocessorAffectedFilterIds = prevRevisionData.preprocessors.reduce(
-    (state, preprocessor) => {
-      for (const filterID of preprocessor.filterIDs) {
-        state.add(filterID);
-      }
-
-      return state;
-    },
-    new Set<number>(),
-  );
 
   const newRevisionData = getFilters(newRevision, debugConfig);
   const newRevisionIds = new Set(newRevisionData.filters.map((filter) => filter.getId()));
-  const newRevisionPreprocessorAffectedFilterIds = newRevisionData.preprocessors.reduce(
-    (state, preprocessor) => {
-      for (const filterID of preprocessor.filterIDs) {
-        state.add(filterID);
-      }
-
-      return state;
-    },
-    new Set<number>(),
-  );
-
-  const index: Map<number, string> = new Map();
 
   // Check which filters were added, based on ID
-  const added: Set<string> = new Set();
+  const added: Set<NetworkFilter | CosmeticFilter> = new Set();
   for (const filter of newRevisionData.filters) {
-    if (
-      !prevRevisionIds.has(filter.getId()) &&
-      !newRevisionPreprocessorAffectedFilterIds.has(filter.getId())
-    ) {
-      added.add(filter.rawLine as string);
+    if (!prevRevisionIds.has(filter.getId())) {
+      added.add(filter);
     }
-
-    index.set(filter.getId(), filter.rawLine as string);
   }
 
   // Check which filters were removed, based on ID
-  const removed: Set<string> = new Set();
+  const removed: Set<NetworkFilter | CosmeticFilter> = new Set();
   for (const filter of prevRevisionData.filters) {
-    if (
-      !newRevisionIds.has(filter.getId()) &&
-      !prevRevisionPreprocessorAffectedFilterIds.has(filter.getId())
-    ) {
-      removed.add(filter.rawLine as string);
+    if (!newRevisionIds.has(filter.getId())) {
+      removed.add(filter);
     }
-
-    index.set(filter.getId(), filter.rawLine as string);
   }
 
   // Fast exit if we don't want to handle preprocessors.
   if (!config.loadPreprocessors) {
     return {
-      added: Array.from(added),
-      removed: Array.from(removed),
+      added: Array.from(added).map((filter) => filter.rawLine as string),
+      removed: Array.from(removed).map((filter) => filter.rawLine as string),
       preprocessors: {},
     };
+  }
+
+  const prevPreprocessorFilterIds = prevRevisionData.preprocessors.reduce(
+    (state, preprocessor) => {
+      for (const filterID of preprocessor.filterIDs) {
+        state.add(filterID);
+      }
+
+      return state;
+    },
+    new Set<number>(),
+  );
+
+  const newPreprocessorFilterIds = newRevisionData.preprocessors.reduce((state, preprocessor) => {
+    for (const filterID of preprocessor.filterIDs) {
+      state.add(filterID);
+    }
+
+    return state;
+  }, new Set<number>());
+
+  const index: Map<number, string> = new Map();
+
+  for (const filter of newRevisionData.filters) {
+    index.set(filter.getId(), filter.rawLine as string);
+  }
+
+  for (const filter of prevRevisionData.filters) {
+    index.set(filter.getId(), filter.rawLine as string);
+  }
+
+  for (const filter of added) {
+    if (newPreprocessorFilterIds.has(filter.getId())) {
+      added.delete(filter);
+    }
+  }
+
+  for (const filter of removed) {
+    if (prevPreprocessorFilterIds.has(filter.getId())) {
+      removed.delete(filter);
+    }
   }
 
   // Create preprocessor diffs
@@ -451,7 +464,17 @@ export function generateDiff(
     }
   }
 
-  return { added: Array.from(added), removed: Array.from(removed), preprocessors };
+  for (const [condition, { added, removed }] of Object.entries(preprocessors)) {
+    if (added.length === 0 && removed.length === 0) {
+      delete preprocessors[condition];
+    }
+  }
+
+  return {
+    added: Array.from(added).map((filter) => filter.rawLine as string),
+    removed: Array.from(removed).map((filter) => filter.rawLine as string),
+    preprocessors,
+  };
 }
 
 /**
