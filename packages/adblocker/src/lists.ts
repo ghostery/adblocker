@@ -329,26 +329,26 @@ export function generateDiff(
   const newRevisionIds = new Set(newRevisionData.filters.map((filter) => filter.getId()));
 
   // Check which filters were added, based on ID
-  const added: Set<NetworkFilter | CosmeticFilter> = new Set();
+  const added: Set<string> = new Set();
   for (const filter of newRevisionData.filters) {
     if (!prevRevisionIds.has(filter.getId())) {
-      added.add(filter);
+      added.add(filter.rawLine as string);
     }
   }
 
   // Check which filters were removed, based on ID
-  const removed: Set<NetworkFilter | CosmeticFilter> = new Set();
+  const removed: Set<string> = new Set();
   for (const filter of prevRevisionData.filters) {
     if (!newRevisionIds.has(filter.getId())) {
-      removed.add(filter);
+      removed.add(filter.rawLine as string);
     }
   }
 
   // Fast exit if we don't want to handle preprocessors.
   if (!config.loadPreprocessors) {
     return {
-      added: Array.from(added).map((filter) => filter.rawLine as string),
-      removed: Array.from(removed).map((filter) => filter.rawLine as string),
+      added: Array.from(added),
+      removed: Array.from(removed),
       preprocessors: {},
     };
   }
@@ -382,16 +382,14 @@ export function generateDiff(
     index.set(filter.getId(), filter.rawLine as string);
   }
 
-  for (const filter of added) {
-    if (newPreprocessorFilterIds.has(filter.getId())) {
-      added.delete(filter);
-    }
+  for (const filterId of newPreprocessorFilterIds) {
+    const filter = index.get(filterId);
+    added.delete(filter as string);
   }
 
-  for (const filter of removed) {
-    if (prevPreprocessorFilterIds.has(filter.getId())) {
-      removed.delete(filter);
-    }
+  for (const filterId of prevPreprocessorFilterIds) {
+    const filter = index.get(filterId);
+    removed.delete(filter as string);
   }
 
   // Create preprocessor diffs
@@ -471,8 +469,8 @@ export function generateDiff(
   }
 
   return {
-    added: Array.from(added).map((filter) => filter.rawLine as string),
-    removed: Array.from(removed).map((filter) => filter.rawLine as string),
+    added: Array.from(added),
+    removed: Array.from(removed),
     preprocessors,
   };
 }
