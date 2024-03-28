@@ -58,8 +58,6 @@
 ! https://github.com/uBlockOrigin/uAssets/issues/713
 ||google-analytics.com/analytics.js$important,script,redirect=google-analytics.com/analytics.js,domain=support.amd.com
 ||googletagmanager.com/gtm.js$important,script,redirect=googletagmanager.com/gtm.js,domain=support.amd.com
-! https://github.com/uBlockOrigin/uAssets/issues/3251
-teamskeet.com##+js(set, %24.tstracker, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/4138
 ! https://www.reddit.com/r/uBlockOrigin/comments/b9qsix/new_reddit_tracks_a_ton_more_data_someone_said/
 ! https://github.com/uBlockOrigin/uAssets/commit/5563840a319a26025290e17f4e9401b201ac2b99#commitcomment-118042265
@@ -75,12 +73,15 @@ www.reddit.com##+js(json-prune, data.children.%5B%5D.data.outbound_link)
 reddit.com##+js(aopw, STICKY_CANARY)
 ! reddit.com##+js(aost, fetch, Ee%2F%3C%2F%3C)
 reddit.com##reddit-breadcrumbs
-! https://github.com/uBlockOrigin/uAssets/pull/5578
-||colpirio.com^$3p
 ! https://github.com/uBlockOrigin/uAssets/pull/5997
 docs.google.com##+js(no-xhr-if, method%3APOST%20url%3A%2FlogImpressions)
 ! https://github.com/uBlockOrigin/uAssets/issues/7960
 www.google.*##+js(set, rwt, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/7960#issuecomment-2018914258
+!#if !env_mobile
+!#else
+www.google.*##+js(href-sanitizer, %23main%20a%5Bhref%5E%3D%22%2Furl%3Fq%3Dhttp%22%5D, %3Fq)
+!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/6538
 liberation.fr,officedepot.fr,oui.sncf##+js(acs, document.createElement, .js)
 sfr.fr##+js(aopr, _oEa)
@@ -109,8 +110,6 @@ brillen.de##+js(acs, document.createElement, script)
 ! https://github.com/uBlockOrigin/uAssets/issues/7833
 frogogo.ru##+js(aopw, ADMITAD)
 ||artfut.com/static/tagtag.$script,3p,redirect=noop.js
-! xhamster stats collection
-||collector.xhamster*.*^
 ! https://github.com/uBlockOrigin/uAssets/issues/8105
 ! block known tracking honeypots
 ||copyhomework.com^
@@ -140,9 +139,6 @@ tweakers.net##+js(aost, btoa, send)
 ||yuktamedia.com^$3p
 ! https://github.com/AdguardTeam/AdguardFilters/issues/81778
 ||gamedock.io^$3p
-! https://github.com/uBlockOrigin/uAssets/issues/9103
-*$script,redirect-rule=noopjs,domain=kruidvat.nl
-kruidvat.nl##.async-hide:style(opacity:1.0 !important)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/75098
 ||stats.webgames.io^
 ! https://www.reddit.com/r/uBlockOrigin/comments/niiytr/help_needed_filtering_wwwsporizle1pw/
@@ -182,10 +178,11 @@ panprices.com,intercity.technology,freelancer.taxmachine.be,adria.gg,fjlaborator
 /p13n/batch/action/*$image
 ! Ad-Shield
 ! https://github.com/uBlockOrigin/uAssets/issues/9717
-loawa.com,ygosu.com,sportalkorea.com,enetnews.co.kr,edaily.co.kr,economist.co.kr,etoday.co.kr,hankyung.com,isplus.com,hometownstation.com,inven.co.kr,honkailab.com,warcraftrumbledeck.com,genshinlab.com,thestockmarketwatch.com,thephoblographer.com,issuya.com,worldhistory.org,meeco.kr,etnews.com,iusm.co.kr,dogdrip.net,etoland.co.kr##+js(set-local-storage-item, adshield-analytics-uuid, %24remove%24)
-loawa.com,ygosu.com,sportalkorea.com,enetnews.co.kr,edaily.co.kr,economist.co.kr,etoday.co.kr,hankyung.com,isplus.com,hometownstation.com,inven.co.kr,honkailab.com,warcraftrumbledeck.com,genshinlab.com,thestockmarketwatch.com,thephoblographer.com,issuya.com,worldhistory.org,meeco.kr,etnews.com,iusm.co.kr,dogdrip.net,etoland.co.kr##+js(set-local-storage-item, %2F_fa_dXVpZA%3D%3D%24%2F, %24remove%24)
-loawa.com,ygosu.com,sportalkorea.com,enetnews.co.kr,edaily.co.kr,economist.co.kr,etoday.co.kr,hankyung.com,isplus.com,hometownstation.com,inven.co.kr,honkailab.com,warcraftrumbledeck.com,genshinlab.com,thestockmarketwatch.com,thephoblographer.com,issuya.com,worldhistory.org,meeco.kr,etnews.com,iusm.co.kr,dogdrip.net,etoland.co.kr##+js(set-local-storage-item, %2F_fa_Y2FjaGVfaXNfYmxvY2tpbmdfYWNjZXB0YWJsZV9hZHM%3D%24%2F, %24remove%24)
-loawa.com,ygosu.com,sportalkorea.com,enetnews.co.kr,edaily.co.kr,economist.co.kr,etoday.co.kr,hankyung.com,isplus.com,hometownstation.com,inven.co.kr,honkailab.com,warcraftrumbledeck.com,genshinlab.com,thestockmarketwatch.com,thephoblographer.com,issuya.com,worldhistory.org,meeco.kr,etnews.com,iusm.co.kr,dogdrip.net,etoland.co.kr##+js(set-local-storage-item, %2F_fa_Y2FjaGVfaXNfYmxvY2tpbmdfYWRz%24%2F, %24remove%24)
+||html-load.cc/script/$script
+loawa.com,ygosu.com,sportalkorea.com,enetnews.co.kr,edaily.co.kr,economist.co.kr,etoday.co.kr,hankyung.com,isplus.com,hometownstation.com,inven.co.kr,honkailab.com,warcraftrumbledeck.com,genshinlab.com,thestockmarketwatch.com,thephoblographer.com,issuya.com,worldhistory.org,meeco.kr,etnews.com,iusm.co.kr,dogdrip.net,etoland.co.kr,picrew.me,uttranews.com,text-compare.com,fntimes.com,javatpoint.com,vipotv.com##+js(set-local-storage-item, adshield-analytics-uuid, %24remove%24)
+loawa.com,ygosu.com,sportalkorea.com,enetnews.co.kr,edaily.co.kr,economist.co.kr,etoday.co.kr,hankyung.com,isplus.com,hometownstation.com,inven.co.kr,honkailab.com,warcraftrumbledeck.com,genshinlab.com,thestockmarketwatch.com,thephoblographer.com,issuya.com,worldhistory.org,meeco.kr,etnews.com,iusm.co.kr,dogdrip.net,etoland.co.kr,picrew.me,uttranews.com,text-compare.com,fntimes.com,javatpoint.com,vipotv.com##+js(set-local-storage-item, %2F_fa_dXVpZA%3D%3D%24%2F, %24remove%24)
+loawa.com,ygosu.com,sportalkorea.com,enetnews.co.kr,edaily.co.kr,economist.co.kr,etoday.co.kr,hankyung.com,isplus.com,hometownstation.com,inven.co.kr,honkailab.com,warcraftrumbledeck.com,genshinlab.com,thestockmarketwatch.com,thephoblographer.com,issuya.com,worldhistory.org,meeco.kr,etnews.com,iusm.co.kr,dogdrip.net,etoland.co.kr,picrew.me,uttranews.com,text-compare.com,fntimes.com,javatpoint.com,vipotv.com##+js(set-local-storage-item, %2F_fa_Y2FjaGVfaXNfYmxvY2tpbmdfYWNjZXB0YWJsZV9hZHM%3D%24%2F, %24remove%24)
+loawa.com,ygosu.com,sportalkorea.com,enetnews.co.kr,edaily.co.kr,economist.co.kr,etoday.co.kr,hankyung.com,isplus.com,hometownstation.com,inven.co.kr,honkailab.com,warcraftrumbledeck.com,genshinlab.com,thestockmarketwatch.com,thephoblographer.com,issuya.com,worldhistory.org,meeco.kr,etnews.com,iusm.co.kr,dogdrip.net,etoland.co.kr,picrew.me,uttranews.com,text-compare.com,fntimes.com,javatpoint.com,vipotv.com##+js(set-local-storage-item, %2F_fa_Y2FjaGVfaXNfYmxvY2tpbmdfYWRz%24%2F, %24remove%24)
 apkmirror.com,meconomynews.com,brandbrief.co.kr,mlbpark.donga.com,motorgraph.com,topstarnews.net,heraldcorp.com##+js(noeval-if, %2F07c225f3%5C.online%7Ccontent-loader%5C.com%7Ccss-load%5C.com%7Chtml-load%5C.com%2F)
 !#if cap_html_filtering
 apkmirror.com,meconomynews.com,brandbrief.co.kr,mlbpark.donga.com,motorgraph.com,heraldcorp.com##^script:has-text(KCgpPT57bGV0IGU)
@@ -196,11 +193,6 @@ issuya.com,topstarnews.net##+js(rmnt, script, error-report.com)
 !#endif
 ! https://github.com/AdguardTeam/AdguardFilters/issues/91230
 ||nsfw.xxx/vendor/fingerprint/fingerprint2.min.js$script,redirect=fingerprint2.js,important
-! https://github.com/uBlockOrigin/uAssets/issues/9799
-! https://github.com/AdguardTeam/AdguardFilters/issues/102311
-||collector.xhwebsite.com^
-||collector.hamsterix.*^
-||collector.xhwide1.com^
 ! https://www.reddit.com/r/uBlockOrigin/comments/p9lity/how_to_block_favicon_popups_on_these_websites/
 ||g.jwpsrv.com/g/gcid-*?notrack$frame
 ! https://github.com/uBlockOrigin/uAssets/issues/10012

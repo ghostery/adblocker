@@ -459,8 +459,6 @@ empik.com##+js(trusted-set-cookie, cva, W2.0)
 ubs.com##+js(trusted-set-cookie, ubs_cookie_settings_2.0.4, 0-2-1)
 ! https://github.com/uBlockOrigin/uAssets/issues/19717 - Functionality
 vicko.gr##+js(trusted-set-cookie, ConsentChecked, %7B%22userHasSetCookies%22%3Atrue%2C%22functionalityCookies%22%3Atrue%2C%22statisticCookies%22%3Afalse%2C%22marketingCookies%22%3Afalse%7D, , , reload, 1)
-! https://github.com/uBlockOrigin/uAssets/issues/19728 - Experience
-3bmeteo.com##+js(trusted-set-cookie, _iub_cs-817732, %257B%2522purposes%2522%253A%257B%25221%2522%253Atrue%252C%25223%2522%253Atrue%252C%25224%2522%253Afalse%252C%25225%2522%253Afalse%257D%252C%2522id%2522%253A817732%252C%2522cons%2522%253A%257B%2522rand%2522%253A%25223ec000%2522%257D%257D)
 ! https://www.call-a-pizza.de/ - Functional
 call-a-pizza.de##+js(trusted-set-cookie, allow_cookies, %7B%22essential%22%3A%221%22%2C%22functional%22%3A%7B%22all%22%3A%221%22%7D%2C%22marketing%22%3A%7B%22all%22%3A%220%22%7D%7D)
 ! https://www.jeuxvideo.com/
@@ -935,3 +933,20 @@ marmiton.org##+js(trusted-click-element, %23didomi-notice-agree-button)
 versorgungslandkarte.de##+js(trusted-set-cookie, dp_cookieconsent_status, %7B%22status%22%3A%22approved%22%2C%22checkboxes%22%3A%5B%7B%22name%22%3A%22statistics%22%2C%22checked%22%3Afalse%7D%2C%7B%22name%22%3A%22marketing%22%2C%22checked%22%3Afalse%7D%2C%7B%22name%22%3A%22functional%22%2C%22checked%22%3Atrue%7D%2C%7B%22name%22%3A%22read-speaker%22%2C%22checked%22%3Atrue%7D%5D%7D)
 ! https://www.hrlab.de/ - External media
 hrlab.de##+js(trusted-set-cookie, GDPR, %5B%22gdpr%22%2C%22youtube%22%5D)
+! Fix embeded map https://www.sazkamobil.cz/podpora/prodejny/
+sazkamobil.cz##+js(trusted-set-cookie, cookiesaccepted, %7B%2522marketing%2522%3Afalse%252C%2522statistic%2522%3Afalse%252C%2522thirdParty%2522%3Atrue%7D)
+! decline all (for de-de for example)
+deichmann.com##+js(trusted-click-element, button.decline-all, , 1000)
+! decline consent option
+salomon.com##+js(trusted-set-local-storage-item, dtm-cookie-banner, decline)
+! Allow consent, fixes embedded videos
+scotsman.com##+js(trusted-click-element, button%5Baria-label%3D%22I%20Accept%22%5D, , 1000)
+! necessary=true, set timestamp=1
+svepomoci.cz##+js(trusted-set-cookie, sve_cc_options, %7B%22values%22%3A%5B%7B%22key%22%3A%22necessary%22%2C%22checked%22%3Atrue%7D%2C%7B%22key%22%3A%22ad_storage%22%2C%22checked%22%3Afalse%7D%2C%7B%22key%22%3A%22analytics_storage%22%2C%22checked%22%3Afalse%7D%2C%7B%22key%22%3A%22functionality_storage%22%2C%22checked%22%3Afalse%7D%5D%2C%22version%22%3A%222023-1%22%2C%22timestamp%22%3A1%7D)
+! necessary/preference=true
+leabank.no##+js(trusted-set-cookie, CookieConsent, necessary%3Atrue%252C%2520preference%3Atrue%252C%2520statistics%3Afalse%252C%2520marketing%3Afalse)
+! https://github.com/uBlockOrigin/uAssets/issues/23054
+giga.de##+js(trusted-click-element, button.sp_choice_type_11)
+! https://github.com/uBlockOrigin/uAssets/issues/23053
+3bmeteo.com##+js(trusted-click-element, .iubenda-cs-accept-btn)
+3bmeteo.com##body:style(overflow: auto !important;)
