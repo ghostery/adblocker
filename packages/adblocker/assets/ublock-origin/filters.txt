@@ -417,6 +417,7 @@ facebook.com,facebookwkhpilnemxj7asaniu7vnjjbiltxjqhye3mhbshg7kx5tfyd.onion##div
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-1993620105
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-1999029976
 ! https://www.reddit.com/r/uBlockOrigin/comments/1bjfs9x/facebook_loading_slow/kvraphx/
+www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.%5B-%5D.__bbox.result.data.node.sponsored_data.ad_id)
 !#if cap_html_filtering
 ! ||www.facebook.com^$doc,replace=/\{"brs_content_label":[^,]+,"category":"SPONSORED"[^\n]+"cursor":"[^"]+"\}/{}/
 !#else
@@ -505,38 +506,6 @@ freethesaurus.com,thefreedictionary.com###sidebar > .widget:not([id]):has(> .hol
 ||googlesyndication.com^$script,important,domain=thefreedictionary.com
 ! https://news.ycombinator.com/item?id=12677179
 ||x.shopsavvy.com^$3p
-! https://github.com/uBlockOrigin/uAssets/issues/163
-! https://github.com/uBlockOrigin/uAssets/issues/534
-! https://github.com/uBlockOrigin/uAssets/issues/1286
-! https://github.com/uBlockOrigin/uAssets/commit/ebbef70dba69e38946329793dc00d988d1cbb85e#commitcomment-34299631
-1337x.*##+js(rmnt, script, style)
-1337x.*##+js(aost, document.createElement, _0x)
-1337x.*,x1337x.*##+js(nowoif)
-1337x.*##+js(aopr, afScript)
-1337x.*##+js(nostif, adb)
-1337x.*##^script:has-text(admc)
-x1337x.*##+js(acs, setTimeout, admc)
-1337x.*,x1337x.*##.stream-torrent
-1337x.*,x1337x.*##.link-info-stream
-1337x.*##.download-links-dontblock > LI:has-text(Anon)
-1337x.*##.download-links-dontblock > LI:has-text(Stream)
-1337x.*##a[href^="/redirectmusic.php"]
-1337x.*##a[href^="/spyoff"]
-1337x.*##a[href*="//steepto.com/"]
-1337x.*##[href*="vpn"]
-1337x.*##[onclick*="vpn"]
-1337x.*##[href^="/anoy"]
-1337x.*,x1337x.*##.no-top-radius div > a[href]:has-text(VPN)
-/^https:\/\/x?1337x\.(?:[0-9a-z]{3,9}\.)?[a-z]{2,4}\/(?:css\/)?(?:images\/)?[0-9a-zA-Z]+\.(?:gif|jpe?g|png)/$image,1p,domain=1337x.*|1337x.g3g.*|x1337x.*|unblockit.*
-||1337x.*/sw.js^
-! https://github.com/uBlockOrigin/uAssets/issues/635
-! https://www.reddit.com/r/uBlockOrigin/comments/81hcu5/1337xto_annoying_popup/
-! https://www.reddit.com/r/uBlockOrigin/comments/bpm1l9/trying_to_download_something_from_13377x_and_keep/
-13377x.*##+js(acs, decodeURI, decodeURIComponent)
-1337x.*,x1337x.*##+js(nowebrtc)
-x1337x.eu##.mgbox
-! https://github.com/uBlockOrigin/uAssets/issues/6606
-1337x.*##+js(aopr, AaDetector)
 ! https://github.com/uBlockOrigin/uAssets/issues/3142
 ! https://github.com/uBlockOrigin/uAssets/issues/12845
 *$script,redirect-rule=noopjs,domain=linkneverdie.net
@@ -888,13 +857,8 @@ rule34hentai.net##section[id$="main"]:has(> .blockbody > .adsbyexoclick)
 ! https://github.com/uBlockOrigin/uAssets/issues/444
 kingofdown.com##+js(aeld, load, onload)
 ! https://github.com/uBlockOrigin/uAssets/issues/446
-h5.fotor.com###main:style(right: 0 !important;)
-! https://github.com/uBlockOrigin/uAssets/issues/446
 mind42.com###sidebar
 mind42.com###content.sidebar2:style(margin-right: 0 !important;)
-! https://github.com/uBlockOrigin/uAssets/issues/452
-||zdnet.com/*promo$xhr,domain=zdnet.com
-||zdnet.com/*recommendation/
 ! https://github.com/uBlockOrigin/uAssets/issues/5352
 *$ping,domain=fullxh.com|hamsterix.*|megaxh.com|movingxh.world|taoxh.life|unlockxh4.com|xhadult2.com|xhadult3.com|xhadult4.com|xhadult5.com|xhamster.*|xhamster10.*|xhamster11.*|xhamster12.*|xhamster13.*|xhamster14.*|xhamster15.*|xhamster16.*|xhamster17.*|xhamster18.*|xhamster19.*|xhamster20.*|xhamster2.*|xhamster3.*|xhamster4.*|xhamster42.*|xhamster46.com|xhamster5.*|xhamster7.*|xhamster8.*|xhday.com|xhday1.com|xhmoon5.com|xhplanet1.com|xhplanet2.com|xhreal2.com|xhreal3.com|xhtab2.com|xhtree.com|xhvictory.com|xhwebsite.com|xhwebsite2.com|xhwide1.com
 ://collector.$domain=fullxh.com|hamsterix.*|megaxh.com|movingxh.world|taoxh.life|unlockxh4.com|xhadult2.com|xhadult3.com|xhadult4.com|xhadult5.com|xhamster.*|xhamster10.*|xhamster11.*|xhamster12.*|xhamster13.*|xhamster14.*|xhamster15.*|xhamster16.*|xhamster17.*|xhamster18.*|xhamster19.*|xhamster20.*|xhamster2.*|xhamster3.*|xhamster4.*|xhamster42.*|xhamster46.com|xhamster5.*|xhamster7.*|xhamster8.*|xhday.com|xhday1.com|xhmoon5.com|xhplanet1.com|xhplanet2.com|xhreal2.com|xhreal3.com|xhtab2.com|xhtree.com|xhvictory.com|xhwebsite.com|xhwebsite2.com|xhwide1.com
@@ -943,8 +907,6 @@ xhamster20.*##.player-add-overlay
 elmundo.es##.Bloque-anuncios-shadow
 elmundo.es##.Bloque-anuncios
 elmundo.es##.disabled-vscroll:style(overflow: auto !important; position: initial !important;)
-! https://adblockplus.org/forum/viewtopic.php?f=10&t=53351
-pornovore.fr##+js(aopw, popUrl)
 ! https://github.com/uBlockOrigin/uAssets/issues/492
 ||andreas-unterberger.at/includes/js/helperFunctions.js$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/498
@@ -961,35 +923,17 @@ hltv.org##body, body::before:style(background-image: unset !important;)
 hltv.org##:is(div, aside):has(> a[href^="/"][data-link-tracking-page="Widget"])
 hltv.org##.presented-by
 hltv.org##.thunderpick-firstcol-box
-! https://github.com/uBlockOrigin/uAssets/issues/4149
-vidlox.*##+js(set, xRds, false)
-vidlox.*##+js(set, tRds, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/516
 ! https://github.com/uBlockOrigin/uAssets/issues/18549
 thepiratebay.*,theproxyproxy.com,tpbay.*##+js(aopr, _wm)
-! https://github.com/uBlockOrigin/uAssets/issues/517
-! https://github.com/uBlockOrigin/uAssets/issues/2628
-! https://github.com/NanoMeow/QuickReports/issues/2035
-hollaforums.com##+js(nowoif)
-@@||hollaforums.com^$ghide
-||hollaforums.com/if/rc/ecigs/$frame,1p
-@@||hollaforums.com^$xhr,1p
-hollaforums.com##.sidebar-rcs
 ! https://github.com/uBlockOrigin/uAssets/issues/518
 wallpapershome.com##+js(nostif, .adsbygoogle)
-! https://github.com/uBlockOrigin/uAssets/issues/522
-supforums.com##+js(aopr, adsLoaded)
-@@||supforums.com^$ghide
-||supforums.com/if/rc/ecigs/$frame,1p
-supforums.com##.sidebar-rcs
 ! https://github.com/uBlockOrigin/uAssets/issues/7802
 ! primewire.mn ads
 primewire.*##+js(set, console.clear, noopFunc)
 ||primewire.*/sw$script,1p
 ||primewire.*/addons/*.gif$image
 primewire.*##.ico.close
-! https://github.com/uBlockOrigin/uAssets/issues/458#issuecomment-315818190
-metacritic.com##.ad_unit:not(.text-ad)
 ! https://github.com/uBlockOrigin/uAssets/issues/7113
 ! https://github.com/uBlockOrigin/uAssets/issues/9118
 !broken video ign.com##+js(aopr, __eiPb)
@@ -6811,7 +6755,6 @@ compucalitv.com##.onp-sl-social-locker
 compucalitv.com##+js(aeld, DOMContentLoaded, compupaste)
 compucalitv.com##+js(aopr, redirectURL)
 compucalitv.com##.botondescarga
-compupaste.com##+js(nowoif)
 *$script,3p,denyallow=chatango.com,domain=compucalitv.com
 ! https://github.com/uBlockOrigin/uAssets/issues/4807
 ||gigaleecher.com/templates/plugmod/giga.js$script,1p
@@ -8539,13 +8482,14 @@ washingtonpost.com##+js(acs, Promise, overlay)
 washingtonpost.com##+js(acs, document.createElement, overlay)
 washingtonpost.com##+js(rmnt, script, %2F%5Cbadblock%5Cb%2F)
 !#endif
-washingtonpost.com##^script:has-text(_0x)
 washingtonpost.com##.remainder-content .db-ns.dn
 washingtonpost.com##html[style="overflow: hidden;"]:style(overflow: auto !important;)
 washingtonpost.com##.outbrain-wrapper
 washingtonpost.com##.bb.pt-0
 washingtonpost.com##div.grey-bg
 washingtonpost.com##section > div:has-text(/^AD$/)
+washingtonpost.com##.w-100:has-text(Advertisement)
+washingtonpost.com##[data-testid="article-body-card"]:has-text(Advertisement)
 ! https://github.com/uBlockOrigin/uAssets/issues/9185#issuecomment-847835587
 !#if env_mobile
 washingtonpost.com##div.mb-lg.mt-lg.pb-lg.pt-lg.bc-gray-lighter.bh.b.justify-center.items-center.flex.dn-hp-sm-to-mx
@@ -8811,7 +8755,6 @@ cle0desktop.blogspot.com##+js(aeld, , pop)
 voyageforum.com##+js(nostif, AdBlock)
 ! wuxiaworld.com anti adb
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=wuxiaworld.com
-||pubads.g.doubleclick.net/gampad/ads$xhr,redirect=nooptext,domain=imasdk.googleapis.com
 @@||pubads.g.doubleclick.net/gampad/ads*wuxiaworld.com$xhr,domain=imasdk.googleapis.com
 ! https://forums.lanik.us/viewtopic.php?f=62&t=34830
 g5u.pw##A[href$=".html"][rel="nofollow norefferer noopener"]
@@ -10117,11 +10060,6 @@ adonisfansub.com##+js(nobab)
 agefi.fr##+js(nostif, %7Br(), 0)
 ! https://forums.lanik.us/viewtopic.php?p=151106#p151085
 horriblesubs.info##[class*="sponsor"]
-! https://github.com/uBlockOrigin/uAssets/issues/6577
-doomovie-hd.com##+js(json-prune, adParam)
-||doomovie-hd.com/assets/img/banner-new/*$image,1p
-*.gif$domain=doomovie-hd.com,image
-doomovie-hd.com##[src^="data:image/gif;base64,"]
 ! https://forums.lanik.us/viewtopic.php?f=91&t=43802
 ladepeche.fr##+js(aopr, localStorage)
 ! https://forums.lanik.us/viewtopic.php?f=62&t=43872
@@ -10567,34 +10505,6 @@ hexupload.net##+js(acs, document.createElement, rAb)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/6781
 @@||the-man.gr^$ghide
-! https://github.com/uBlockOrigin/uAssets/issues/7273
-cheatcloud.cc,cheater.ninja,cheatermad.com,cheatsquad.gg##+js(nano-sib, clearInterval)
-cheatsquad.gg##+js(nosiif, visibility, 1000)
-cheatermad.com##+js(nostif, offset)
-@@||cheatsquad.gg^$script,xhr,1p
-cheatsquad.gg##.tooltip::before
-cheatsquad.gg##.tooltip::after
-updown.link##+js(nano-stb, startDownload, 8000)
-! https://github.com/uBlockOrigin/uAssets/issues/7273#issuecomment-966551769
-@@||work.ink^$ghide
-*$frame,redirect-rule=noopframe,domain=work.ink
-! https://zodhacks.com/pet-simulator-x-saza-hub-easter/ timer
-*$script,domain=work.ink,redirect-rule=noopjs
-@@||work.ink^$xhr,1p
-! https://www.reddit.com/r/uBlockOrigin/comments/zu2myx/
-workink.click##+js(no-fetch-if, cloudfront)
-work.ink##.no-overlay
-! https://github.com/uBlockOrigin/uAssets/issues/14676
-work.ink##+js(ra, href, %5Bhref*%3D%22jump%22%5D, stay)
-@@||cdn.thisiswaldo.com/static/js/$script,domain=work.ink
-@@||doubleverify.com^$xhr,domain=work.ink
-||nextmillmedia.com^
-workink.click##+js(nowoif, !direct)
-work.ink##+js(nosiif, a0b)
-work.ink##+js(no-fetch-if, %2Foutbrain%7Ccriteo%7Cthisiswaldo%7Cmedia%5C.net%7Cohbayersbur%7Cadligature%7Cquantserve%7C%5C.js%2F)
-work.ink##body > div:has(> a#link)
-work.ink##.opera-container:style(visibility: collapse !important;)
-work.ink##img[alt="Buff Banner"]:style(visibility: collapse !important;)
 ! https://github.com/NanoMeow/QuickReports/issues/2645
 ||firefaucet.win/*.gif$image
 ||35.238.205.163^$all
