@@ -193,7 +193,7 @@ bar.baz
         config,
       ),
     ).to.eql({
-      added: [],
+      added: ['||foo.com'],
       removed: [],
       preprocessors: {
         true: {
@@ -213,7 +213,7 @@ bar.baz
       ),
     ).to.eql({
       added: [],
-      removed: [],
+      removed: ['||foo.com'],
       preprocessors: {
         true: {
           added: [],
@@ -235,9 +235,6 @@ bar.baz
         config,
       ),
     ).to.eql({
-      // We prioritize the filter with a condition over a filter in the global scope
-      // Therefore the duplicate filters with preprocessors in the global scope will be
-      // removed in the global scope and moved into the preprocessor block.
       added: [],
       removed: [],
       preprocessors: {

@@ -353,25 +353,6 @@ export function generateDiff(
     };
   }
 
-  const prevPreprocessorFilterIds = prevRevisionData.preprocessors.reduce(
-    (state, preprocessor) => {
-      for (const filterID of preprocessor.filterIDs) {
-        state.add(filterID);
-      }
-
-      return state;
-    },
-    new Set<number>(),
-  );
-
-  const newPreprocessorFilterIds = newRevisionData.preprocessors.reduce((state, preprocessor) => {
-    for (const filterID of preprocessor.filterIDs) {
-      state.add(filterID);
-    }
-
-    return state;
-  }, new Set<number>());
-
   const index: Map<number, string> = new Map();
 
   for (const filter of newRevisionData.filters) {
@@ -380,16 +361,6 @@ export function generateDiff(
 
   for (const filter of prevRevisionData.filters) {
     index.set(filter.getId(), filter.rawLine as string);
-  }
-
-  for (const filterId of newPreprocessorFilterIds) {
-    const filter = index.get(filterId);
-    added.delete(filter as string);
-  }
-
-  for (const filterId of prevPreprocessorFilterIds) {
-    const filter = index.get(filterId);
-    removed.delete(filter as string);
   }
 
   // Create preprocessor diffs
