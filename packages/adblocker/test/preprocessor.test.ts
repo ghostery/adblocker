@@ -217,4 +217,25 @@ describe('preprocessors', () => {
 !#endif`,
     );
   });
+
+  it('rejects filter with conflicting conditions', () => {
+    doTest(
+      `||foo.com^
+!#if ext_ghostery
+||bar.com^
+!#else
+||bar.com^
+!#endif`,
+    );
+
+    doTest(
+      `||foo.com^
+!#if !ext_ghostery
+||bar.com^
+!#endif
+!#if ext_ghostery
+||bar.com^
+!#endif`,
+    );
+  });
 });
