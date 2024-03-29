@@ -26,6 +26,7 @@ export default class Config {
       loadExtendedSelectors: buffer.getBool(),
       loadGenericCosmeticsFilters: buffer.getBool(),
       loadNetworkFilters: buffer.getBool(),
+      loadPreprocessors: buffer.getBool(),
     });
   }
 
@@ -44,6 +45,7 @@ export default class Config {
   public readonly loadExtendedSelectors: boolean;
   public readonly loadGenericCosmeticsFilters: boolean;
   public readonly loadNetworkFilters: boolean;
+  public readonly loadPreprocessors: boolean;
 
   constructor({
     debug = false,
@@ -61,6 +63,7 @@ export default class Config {
     loadExtendedSelectors = false,
     loadGenericCosmeticsFilters = true,
     loadNetworkFilters = true,
+    loadPreprocessors = false,
   }: Partial<Config> = {}) {
     this.debug = debug;
     this.enableCompression = enableCompression;
@@ -77,12 +80,13 @@ export default class Config {
     this.loadExtendedSelectors = loadExtendedSelectors;
     this.loadGenericCosmeticsFilters = loadGenericCosmeticsFilters;
     this.loadNetworkFilters = loadNetworkFilters;
+    this.loadPreprocessors = loadPreprocessors;
   }
 
   public getSerializedSize(): number {
     // NOTE: this should always be the number of attributes and needs to be
     // updated when `Config` changes.
-    return 15 * sizeOfBool();
+    return 16 * sizeOfBool();
   }
 
   public serialize(buffer: StaticDataView): void {
@@ -101,5 +105,6 @@ export default class Config {
     buffer.pushBool(this.loadExtendedSelectors);
     buffer.pushBool(this.loadGenericCosmeticsFilters);
     buffer.pushBool(this.loadNetworkFilters);
+    buffer.pushBool(this.loadPreprocessors);
   }
 }

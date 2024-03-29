@@ -9,6 +9,7 @@
 import Config from './config';
 import CosmeticFilter from './filters/cosmetic';
 import NetworkFilter from './filters/network';
+import Preprocessor, { PreprocessorTokens, detectPreprocessor } from './preprocessor';
 import { fastStartsWith, fastStartsWithFrom } from './utils';
 
 export const enum FilterType {
@@ -136,12 +137,19 @@ export function f(strings: TemplateStringsArray): NetworkFilter | CosmeticFilter
 export function parseFilters(
   list: string,
   config: Partial<Config> = new Config(),
-): { networkFilters: NetworkFilter[]; cosmeticFilters: CosmeticFilter[] } {
+): {
+  networkFilters: NetworkFilter[];
+  cosmeticFilters: CosmeticFilter[];
+  preprocessors: Preprocessor[];
+} {
   config = new Config(config);
 
   const networkFilters: NetworkFilter[] = [];
   const cosmeticFilters: CosmeticFilter[] = [];
   const lines = list.split('\n');
+
+  const preprocessors: Preprocessor[] = [];
+  const preprocessorStack: Preprocessor[] = [];
 
   for (let i = 0; i < lines.length; i += 1) {
     let line = lines[i];
@@ -189,37 +197,100 @@ export function parseFilters(
       const filter = NetworkFilter.parse(line, config.debug);
       if (filter !== null) {
         networkFilters.push(filter);
+        if (preprocessorStack.length > 0) {
+          preprocessorStack[preprocessorStack.length - 1].filterIDs.add(filter.getId());
+        }
       }
     } else if (filterType === FilterType.COSMETIC && config.loadCosmeticFilters === true) {
       const filter = CosmeticFilter.parse(line, config.debug);
       if (filter !== null) {
         if (config.loadGenericCosmeticsFilters === true || filter.isGenericHide() === false) {
           cosmeticFilters.push(filter);
+          if (preprocessorStack.length > 0) {
+            preprocessorStack[preprocessorStack.length - 1].filterIDs.add(filter.getId());
+          }
+        }
+      }
+    } else if (config.loadPreprocessors) {
+      const preprocessorToken = detectPreprocessor(line);
+
+      if (preprocessorToken === PreprocessorTokens.BEGIF) {
+        if (preprocessorStack.length > 0) {
+          preprocessorStack.push(
+            new Preprocessor({
+              condition: `(${preprocessorStack[preprocessorStack.length - 1].condition})&&(${Preprocessor.getCondition(line)})`,
+            }),
+          );
+        } else {
+          preprocessorStack.push(Preprocessor.parse(line));
+        }
+      } else if (
+        (preprocessorToken === PreprocessorTokens.ENDIF ||
+          preprocessorToken === PreprocessorTokens.ELSE) &&
+        preprocessorStack.length > 0
+      ) {
+        const lastPreprocessor = preprocessorStack.pop()!;
+
+        preprocessors.push(lastPreprocessor);
+
+        if (preprocessorToken === PreprocessorTokens.ELSE) {
+          preprocessorStack.push(
+            new Preprocessor({
+              condition: `!(${lastPreprocessor.condition})`,
+            }),
+          );
         }
       }
     }
   }
 
-  return { networkFilters, cosmeticFilters };
+  return {
+    networkFilters,
+    cosmeticFilters,
+    preprocessors: preprocessors.filter((preprocessor) => preprocessor.filterIDs.size > 0),
+  };
 }
 
-function getFilters(list: string, config?: Partial<Config>): (NetworkFilter | CosmeticFilter)[] {
-  const { networkFilters, cosmeticFilters } = parseFilters(list, config);
+function getFilters(
+  list: string,
+  config?: Partial<Config>,
+): {
+  filters: (NetworkFilter | CosmeticFilter)[];
+  preprocessors: Preprocessor[];
+} {
+  const { networkFilters, cosmeticFilters, preprocessors } = parseFilters(list, config);
   const filters: (NetworkFilter | CosmeticFilter)[] = [];
-  return filters.concat(networkFilters).concat(cosmeticFilters);
+  return {
+    filters: filters.concat(networkFilters).concat(cosmeticFilters),
+    preprocessors,
+  };
 }
 
 export interface IListDiff {
   newNetworkFilters: NetworkFilter[];
   newCosmeticFilters: CosmeticFilter[];
+  newPreprocessors: Preprocessor[];
   removedCosmeticFilters: number[];
   removedNetworkFilters: number[];
+  removedPreprocessors: Preprocessor[];
 }
 
-export interface IRawDiff {
+interface IBaseDiff {
   added: string[];
   removed: string[];
 }
+
+interface IPreprocessorDiff {
+  [key: string]: IBaseDiff;
+}
+
+export interface IRawDiff extends IBaseDiff {
+  preprocessors?: IPreprocessorDiff;
+}
+
+export type IPartialRawDiff = Partial<IBaseDiff> & {
+  preprocessors?: { [key: string]: Partial<IBaseDiff> };
+};
 
 /**
  * Helper used to return a set of lines as strings where each line is
@@ -232,7 +303,7 @@ export function getLinesWithFilters(
 ): Set<string> {
   // Set config to `debug` so that we keep track of raw lines for each filter
   return new Set(
-    getFilters(list, new Config(Object.assign({}, config, { debug: true }))).map(
+    getFilters(list, new Config(Object.assign({}, config, { debug: true }))).filters.map(
       ({ rawLine }) => rawLine as string,
     ),
   );
@@ -251,15 +322,15 @@ export function generateDiff(
   // Set config to `debug` so that we keep track of raw lines for each filter
   const debugConfig = new Config(Object.assign({}, config, { debug: true }));
 
-  const prevRevisionFilters = getFilters(prevRevision, debugConfig);
-  const prevRevisionIds = new Set(prevRevisionFilters.map((filter) => filter.getId()));
+  const prevRevisionData = getFilters(prevRevision, debugConfig);
+  const prevRevisionIds = new Set(prevRevisionData.filters.map((filter) => filter.getId()));
 
-  const newRevisionFilters = getFilters(newRevision, debugConfig);
-  const newRevisionIds = new Set(newRevisionFilters.map((filter) => filter.getId()));
+  const newRevisionData = getFilters(newRevision, debugConfig);
+  const newRevisionIds = new Set(newRevisionData.filters.map((filter) => filter.getId()));
 
   // Check which filters were added, based on ID
   const added: Set<string> = new Set();
-  for (const filter of newRevisionFilters) {
+  for (const filter of newRevisionData.filters) {
     if (!prevRevisionIds.has(filter.getId())) {
       added.add(filter.rawLine as string);
     }
@@ -267,24 +338,124 @@ export function generateDiff(
 
   // Check which filters were removed, based on ID
   const removed: Set<string> = new Set();
-  for (const filter of prevRevisionFilters) {
+  for (const filter of prevRevisionData.filters) {
     if (!newRevisionIds.has(filter.getId())) {
       removed.add(filter.rawLine as string);
     }
   }
 
-  return { added: Array.from(added), removed: Array.from(removed) };
+  // Fast exit if we don't want to handle preprocessors.
+  if (!config.loadPreprocessors) {
+    return {
+      added: Array.from(added),
+      removed: Array.from(removed),
+      preprocessors: {},
+    };
+  }
+
+  const index: Map<number, string> = new Map();
+
+  for (const filter of newRevisionData.filters) {
+    index.set(filter.getId(), filter.rawLine as string);
+  }
+
+  for (const filter of prevRevisionData.filters) {
+    index.set(filter.getId(), filter.rawLine as string);
+  }
+
+  // Create preprocessor diffs
+  const preprocessors: IPreprocessorDiff = {};
+
+  // Get the diff of preprocessors
+  for (const preprocessor of prevRevisionData.preprocessors) {
+    // Find the same preprocessor in `newRevisionData`
+    const newPreprocessor = newRevisionData.preprocessors.find(
+      (newPreprocessor) => newPreprocessor.condition === preprocessor.condition,
+    );
+
+    // If the preprocessor in the revision is not found, it means the whole block was removed
+    if (!newPreprocessor) {
+      const removedInScope = new Set<string>();
+
+      // Remove all filters
+      for (const filterID of preprocessor.filterIDs) {
+        removedInScope.add(index.get(filterID)!);
+      }
+
+      preprocessors[preprocessor.condition] = {
+        added: [],
+        removed: Array.from(removedInScope),
+      };
+
+      continue;
+    }
+
+    // If the preprocessor in the revision is found, it means the block was updated
+    // Create subsets
+    const scope = {
+      added: new Set<string>(),
+      removed: new Set<string>(),
+    };
+
+    for (const filterID of preprocessor.filterIDs) {
+      if (!newPreprocessor.filterIDs.has(filterID)) {
+        scope.removed.add(index.get(filterID)!);
+      }
+    }
+
+    for (const filterID of newPreprocessor.filterIDs) {
+      if (!preprocessor.filterIDs.has(filterID)) {
+        scope.added.add(index.get(filterID)!);
+      }
+    }
+
+    preprocessors[preprocessor.condition] = {
+      added: Array.from(scope.added),
+      removed: Array.from(scope.removed),
+    };
+  }
+
+  // Iterate over only "added" preprocessors
+  for (const preprocessor of newRevisionData.preprocessors) {
+    // If the preprocessor in the previous revision was not found, it means the whole block was added
+    if (!preprocessors[preprocessor.condition]) {
+      const addedInScope = new Set<string>();
+
+      // Remove all filters
+      for (const filterID of preprocessor.filterIDs) {
+        addedInScope.add(index.get(filterID)!);
+      }
+
+      preprocessors[preprocessor.condition] = {
+        added: Array.from(addedInScope),
+        removed: [],
+      };
+    }
+  }
+
+  for (const [condition, { added, removed }] of Object.entries(preprocessors)) {
+    if (added.length === 0 && removed.length === 0) {
+      delete preprocessors[condition];
+    }
+  }
+
+  return {
+    added: Array.from(added),
+    removed: Array.from(removed),
+    preprocessors,
+  };
 }
 
 /**
  * Merge several raw diffs into one, taking care of accumulating added and
  * removed filters, even if several diffs add/remove the same ones.
  */
-export function mergeDiffs(diffs: Partial<IRawDiff>[]): IRawDiff {
+export function mergeDiffs(diffs: IPartialRawDiff[]): IRawDiff {
   const addedCumul: Set<string> = new Set();
   const removedCumul: Set<string> = new Set();
+  const preprocessorsCumul: { [key: string]: { added: Set<string>; removed: Set<string> } } = {};
 
-  for (const { added, removed } of diffs) {
+  for (const { added, removed, preprocessors } of diffs) {
     if (added !== undefined) {
       for (const str of added) {
         if (removedCumul.has(str)) {
@@ -302,10 +473,50 @@ export function mergeDiffs(diffs: Partial<IRawDiff>[]): IRawDiff {
         removedCumul.add(str);
       }
     }
+
+    if (!preprocessors) {
+      continue;
+    }
+
+    for (const [condition, details] of Object.entries(preprocessors)) {
+      if (!preprocessorsCumul[condition]) {
+        preprocessorsCumul[condition] = {
+          added: details.added !== undefined ? new Set(details.added) : new Set(),
+          removed: details.removed !== undefined ? new Set(details.removed) : new Set(),
+        };
+      } else {
+        if (details.added !== undefined) {
+          for (const str of details.added) {
+            if (preprocessorsCumul[condition].removed.has(str)) {
+              preprocessorsCumul[condition].removed.delete(str);
+            }
+            preprocessorsCumul[condition].added.add(str);
+          }
+        }
+
+        if (details.removed !== undefined) {
+          for (const str of details.removed) {
+            if (preprocessorsCumul[condition].added.has(str)) {
+              preprocessorsCumul[condition].added.delete(str);
+            }
+            preprocessorsCumul[condition].removed.add(str);
+          }
+        }
+      }
+    }
   }
 
   return {
     added: Array.from(addedCumul),
     removed: Array.from(removedCumul),
+    preprocessors: Object.fromEntries(
+      Object.entries(preprocessorsCumul).map(([condition, details]) => [
+        condition,
+        {
+          added: Array.from(details.added),
+          removed: Array.from(details.removed),
+        },
+      ]),
+    ),
   };
 }

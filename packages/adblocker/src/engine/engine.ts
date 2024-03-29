@@ -23,12 +23,15 @@ import { HTMLSelector } from '../html-filtering';
 import CosmeticFilter from '../filters/cosmetic';
 import NetworkFilter from '../filters/network';
 import { block } from '../filters/dsl';
-import { IListDiff, IRawDiff, parseFilters } from '../lists';
+import { IListDiff, IPartialRawDiff, parseFilters } from '../lists';
 import Request from '../request';
 import Resources from '../resources';
 import CosmeticFilterBucket from './bucket/cosmetic';
 import NetworkFilterBucket from './bucket/network';
 import { Metadata, IPatternLookupResult } from './metadata';
+import Preprocessor, { Env } from '../preprocessor';
+import PreprocessorBucket from './bucket/preprocessor';
+import IFilter from '../filters/interface';
 
 export const ENGINE_VERSION = 643;
 
@@ -271,6 +274,9 @@ export default class FilterEngine extends EventEmitter<
     }
     engine.lists = lists;
 
+    // Deserialize preprocessors
+    engine.preprocessors = PreprocessorBucket.deserialize(buffer);
+
     // Deserialize buckets
     engine.importants = NetworkFilterBucket.deserialize(buffer, config);
     engine.redirects = NetworkFilterBucket.deserialize(buffer, config);
@@ -294,6 +300,8 @@ export default class FilterEngine extends EventEmitter<
 
   public lists: Map<string, string>;
 
+  public preprocessors: PreprocessorBucket;
+
   public csp: NetworkFilterBucket;
   public hideExceptions: NetworkFilterBucket;
   public exceptions: NetworkFilterBucket;
@@ -310,12 +318,14 @@ export default class FilterEngine extends EventEmitter<
     // Optionally initialize the engine with filters
     cosmeticFilters = [],
     networkFilters = [],
+    preprocessors = [],
 
     config = new Config(),
     lists = new Map(),
   }: {
     cosmeticFilters?: CosmeticFilter[];
     networkFilters?: NetworkFilter[];
+    preprocessors?: Preprocessor[];
     lists?: Map<string, string>;
     config?: Partial<Config>;
   } = {}) {
@@ -325,6 +335,9 @@ export default class FilterEngine extends EventEmitter<
 
     // Subscription management: disabled by default
     this.lists = lists;
+
+    // Preprocessors
+    this.preprocessors = new PreprocessorBucket({});
 
     // $csp=
     this.csp = new NetworkFilterBucket({ config: this.config });
@@ -350,8 +363,17 @@ export default class FilterEngine extends EventEmitter<
       this.update({
         newCosmeticFilters: cosmeticFilters,
         newNetworkFilters: networkFilters,
+        newPreprocessors: preprocessors,
       });
     }
+  }
+
+  private isFilterExcluded(filter: IFilter): boolean {
+    return this.preprocessors.isFilterExcluded(filter);
+  }
+
+  public updateEnv(env: Env) {
+    this.preprocessors.updateEnv(env);
   }
 
   /**
@@ -371,6 +393,7 @@ export default class FilterEngine extends EventEmitter<
       sizeOfByte() + // engine version
       this.config.getSerializedSize() +
       this.resources.getSerializedSize() +
+      this.preprocessors.getSerializedSize() +
       this.filters.getSerializedSize() +
       this.exceptions.getSerializedSize() +
       this.importants.getSerializedSize() +
@@ -418,6 +441,9 @@ export default class FilterEngine extends EventEmitter<
       buffer.pushASCII(name);
       buffer.pushASCII(value);
     }
+
+    // Preprocessors
+    this.preprocessors.serialize(buffer);
 
     // Filters buckets
     this.importants.serialize(buffer);
@@ -486,13 +512,33 @@ export default class FilterEngine extends EventEmitter<
   /**
    * Update engine with new filters as well as optionally removed filters.
    */
-  public update({
-    newNetworkFilters = [],
-    newCosmeticFilters = [],
-    removedCosmeticFilters = [],
-    removedNetworkFilters = [],
-  }: Partial<IListDiff>): boolean {
+  public update(
+    {
+      newNetworkFilters = [],
+      newCosmeticFilters = [],
+      newPreprocessors = [],
+      removedCosmeticFilters = [],
+      removedNetworkFilters = [],
+      removedPreprocessors = [],
+    }: Partial<IListDiff>,
+    env: Env = new Env(),
+  ): boolean {
     let updated: boolean = false;
+
+    // Update preprocessors
+    if (
+      this.config.loadPreprocessors &&
+      (newPreprocessors.length !== 0 || removedPreprocessors.length !== 0)
+    ) {
+      updated = true;
+      this.preprocessors.update(
+        {
+          added: newPreprocessors,
+          removed: removedPreprocessors,
+        },
+        env,
+      );
+    }
 
     // Update cosmetic filters
     if (
@@ -562,11 +608,13 @@ export default class FilterEngine extends EventEmitter<
     return updated;
   }
 
-  public updateFromDiff({ added, removed }: Partial<IRawDiff>): boolean {
+  public updateFromDiff({ added, removed, preprocessors }: IPartialRawDiff, env?: Env): boolean {
     const newCosmeticFilters: CosmeticFilter[] = [];
     const newNetworkFilters: NetworkFilter[] = [];
+    const newPreprocessors: Preprocessor[] = [];
     const removedCosmeticFilters: CosmeticFilter[] = [];
     const removedNetworkFilters: NetworkFilter[] = [];
+    const removedPreprocessors: Preprocessor[] = [];
 
     if (removed !== undefined && removed.length !== 0) {
       const { networkFilters, cosmeticFilters } = parseFilters(removed.join('\n'), this.config);
@@ -580,12 +628,65 @@ export default class FilterEngine extends EventEmitter<
       Array.prototype.push.apply(newNetworkFilters, networkFilters);
     }
 
-    return this.update({
-      newCosmeticFilters,
-      newNetworkFilters,
-      removedCosmeticFilters: removedCosmeticFilters.map((f) => f.getId()),
-      removedNetworkFilters: removedNetworkFilters.map((f) => f.getId()),
-    });
+    if (preprocessors !== undefined) {
+      for (const [condition, details] of Object.entries(preprocessors)) {
+        if (details.removed !== undefined && details.removed.length !== 0) {
+          const { networkFilters, cosmeticFilters } = parseFilters(
+            details.removed.join('\n'),
+            this.config,
+          );
+          const filterIDs = new Set<number>(
+            ([] as number[])
+              .concat(cosmeticFilters.map((filter) => filter.getId()))
+              .concat(networkFilters.map((filter) => filter.getId())),
+          );
+
+          Array.prototype.push.apply(removedCosmeticFilters, cosmeticFilters);
+          Array.prototype.push.apply(removedNetworkFilters, networkFilters);
+
+          removedPreprocessors.push(
+            new Preprocessor({
+              condition,
+              filterIDs,
+            }),
+          );
+        }
+
+        if (details.added !== undefined && details.added.length !== 0) {
+          const { networkFilters, cosmeticFilters } = parseFilters(
+            details.added.join('\n'),
+            this.config,
+          );
+          const filterIDs = new Set<number>(
+            ([] as number[])
+              .concat(cosmeticFilters.map((filter) => filter.getId()))
+              .concat(networkFilters.map((filter) => filter.getId())),
+          );
+
+          Array.prototype.push.apply(newCosmeticFilters, cosmeticFilters);
+          Array.prototype.push.apply(newNetworkFilters, networkFilters);
+
+          newPreprocessors.push(
+            new Preprocessor({
+              condition,
+              filterIDs,
+            }),
+          );
+        }
+      }
+    }
+
+    return this.update(
+      {
+        newCosmeticFilters,
+        newNetworkFilters,
+        newPreprocessors,
+        removedCosmeticFilters: removedCosmeticFilters.map((f) => f.getId()),
+        removedNetworkFilters: removedNetworkFilters.map((f) => f.getId()),
+        removedPreprocessors,
+      },
+      env,
+    );
   }
 
   /**
@@ -610,6 +711,7 @@ export default class FilterEngine extends EventEmitter<
     const rules = this.cosmetics.getHtmlRules({
       domain: domain || '',
       hostname,
+      isFilterExcluded: this.isFilterExcluded.bind(this),
     });
 
     for (const rule of rules) {
@@ -684,6 +786,7 @@ export default class FilterEngine extends EventEmitter<
         sourceHostname: '',
         sourceUrl: '',
       }),
+      this.isFilterExcluded.bind(this),
     );
 
     const genericHides: NetworkFilter[] = [];
@@ -727,6 +830,8 @@ export default class FilterEngine extends EventEmitter<
       getExtendedRules,
       getRulesFromDOM,
       getRulesFromHostname,
+
+      isFilterExcluded: this.isFilterExcluded.bind(this),
     });
 
     // Perform interpolation for injected scripts
@@ -757,13 +862,32 @@ export default class FilterEngine extends EventEmitter<
    */
   public matchAll(request: Request): Set<NetworkFilter> {
     const filters: NetworkFilter[] = [];
+
     if (request.isSupported) {
-      Array.prototype.push.apply(filters, this.importants.matchAll(request));
-      Array.prototype.push.apply(filters, this.filters.matchAll(request));
-      Array.prototype.push.apply(filters, this.exceptions.matchAll(request));
-      Array.prototype.push.apply(filters, this.csp.matchAll(request));
-      Array.prototype.push.apply(filters, this.hideExceptions.matchAll(request));
-      Array.prototype.push.apply(filters, this.redirects.matchAll(request));
+      Array.prototype.push.apply(
+        filters,
+        this.importants.matchAll(request, this.isFilterExcluded.bind(this)),
+      );
+      Array.prototype.push.apply(
+        filters,
+        this.filters.matchAll(request, this.isFilterExcluded.bind(this)),
+      );
+      Array.prototype.push.apply(
+        filters,
+        this.exceptions.matchAll(request, this.isFilterExcluded.bind(this)),
+      );
+      Array.prototype.push.apply(
+        filters,
+        this.csp.matchAll(request, this.isFilterExcluded.bind(this)),
+      );
+      Array.prototype.push.apply(
+        filters,
+        this.hideExceptions.matchAll(request, this.isFilterExcluded.bind(this)),
+      );
+      Array.prototype.push.apply(
+        filters,
+        this.redirects.matchAll(request, this.isFilterExcluded.bind(this)),
+      );
     }
 
     return new Set(filters);
@@ -782,7 +906,7 @@ export default class FilterEngine extends EventEmitter<
       return undefined;
     }
 
-    const matches = this.csp.matchAll(request);
+    const matches = this.csp.matchAll(request, this.isFilterExcluded.bind(this));
 
     // No $csp filter found
     if (matches.length === 0) {
@@ -841,7 +965,7 @@ export default class FilterEngine extends EventEmitter<
       // 2. redirection ($redirect=resource)
       // 3. normal filters
       // 4. exceptions
-      result.filter = this.importants.match(request);
+      result.filter = this.importants.match(request, this.isFilterExcluded.bind(this));
 
       let redirectNone: NetworkFilter | undefined;
       let redirectRule: NetworkFilter | undefined;
@@ -855,7 +979,7 @@ export default class FilterEngine extends EventEmitter<
       // * Else if redirect-rule is found, only redirect if request would be blocked.
       // * Else if redirect is found, redirect.
       if (result.filter === undefined) {
-        const redirects = this.redirects.matchAll(request);
+        const redirects = this.redirects.matchAll(request, this.isFilterExcluded.bind(this));
         if (redirects.length !== 0) {
           for (const filter of redirects) {
             if (filter.getRedirect() === 'none') {
@@ -872,7 +996,7 @@ export default class FilterEngine extends EventEmitter<
         // redirection rule triggered for the request. We look for a normal
         // match.
         if (result.filter === undefined) {
-          result.filter = this.filters.match(request);
+          result.filter = this.filters.match(request, this.isFilterExcluded.bind(this));
 
           // If we found a match, and a `$redirect-rule` as found previously,
           // then we transform the match into a redirect, following the
@@ -885,7 +1009,7 @@ export default class FilterEngine extends EventEmitter<
         // If we found either a redirection rule or a normal match, then check
         // for exceptions which could apply on the request and un-block it.
         if (result.filter !== undefined) {
-          result.exception = this.exceptions.match(request);
+          result.exception = this.exceptions.match(request, this.isFilterExcluded.bind(this));
         }
       }
 

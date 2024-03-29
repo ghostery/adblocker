@@ -9,7 +9,8 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { f, generateDiff, getLinesWithFilters, mergeDiffs } from '../src/lists';
+import { f, generateDiff, getLinesWithFilters, mergeDiffs, parseFilters } from '../src/lists';
+import Config from '../src/config';
 
 describe('#getLinesWithFilters', () => {
   it('get not lines if empty', () => {
@@ -54,11 +55,63 @@ bar.co.uk^*baz
   });
 });
 
+describe('#parseFilters', () => {
+  it('handle network filters', () => {
+    expect(parseFilters('')).to.have.property('networkFilters').that.have.lengthOf(0);
+    expect(parseFilters('||foo.com')).to.have.property('networkFilters').that.have.lengthOf(1);
+  });
+
+  it('handle cosmetic filters', () => {
+    expect(parseFilters('')).to.have.property('cosmeticFilters').that.have.lengthOf(0);
+    expect(parseFilters('###foo')).to.have.property('cosmeticFilters').that.have.lengthOf(1);
+  });
+
+  it('ignores preprocessors', () => {
+    const result = parseFilters(
+      `!#if true
+    ||foo.com
+!#endif`,
+    );
+    expect(result).to.have.property('preprocessors').that.have.lengthOf(0);
+    expect(result).and.to.have.property('networkFilters').that.have.lengthOf(1);
+  });
+
+  context('with loadPreprocessors config', () => {
+    const config = new Config({
+      loadPreprocessors: true,
+    });
+
+    it('ignores empty preprocessors', () => {
+      expect(
+        parseFilters(
+          `!#if true
+  !#endif`,
+          config,
+        ),
+      )
+        .to.have.property('preprocessors')
+        .that.have.lengthOf(0);
+    });
+
+    it('handle preprocessors', () => {
+      const result = parseFilters(
+        `!#if true
+        ||foo.com
+!#endif`,
+        config,
+      );
+      expect(result).to.have.property('preprocessors').that.have.lengthOf(1);
+      expect(result).to.have.property('networkFilters').that.have.lengthOf(1);
+    });
+  });
+});
+
 describe('#generateDiff', () => {
   it('diff between empty strings', () => {
     expect(generateDiff('', '')).to.eql({
       added: [],
       removed: [],
+      preprocessors: {},
     });
   });
 
@@ -83,6 +136,7 @@ bar.baz
     ).to.eql({
       added: [],
       removed: [],
+      preprocessors: {},
     });
   });
 
@@ -90,6 +144,7 @@ bar.baz
     expect(generateDiff('', '||foo.com')).to.eql({
       added: ['||foo.com'],
       removed: [],
+      preprocessors: {},
     });
   });
 
@@ -97,6 +152,7 @@ bar.baz
     expect(generateDiff('||foo.com', '')).to.eql({
       added: [],
       removed: ['||foo.com'],
+      preprocessors: {},
     });
   });
 
@@ -106,6 +162,87 @@ bar.baz
     ).to.eql({
       added: [],
       removed: [],
+      preprocessors: {},
+    });
+  });
+
+  it('handle preprocessors', () => {
+    const config = new Config({
+      loadPreprocessors: true,
+    });
+
+    expect(
+      generateDiff(
+        '',
+        `!#if true
+!#endif`,
+        config,
+      ),
+    ).to.eql({
+      added: [],
+      removed: [],
+      preprocessors: {},
+    });
+
+    expect(
+      generateDiff(
+        '',
+        `!#if true
+||foo.com
+!#endif`,
+        config,
+      ),
+    ).to.eql({
+      added: ['||foo.com'],
+      removed: [],
+      preprocessors: {
+        true: {
+          added: ['||foo.com'],
+          removed: [],
+        },
+      },
+    });
+
+    expect(
+      generateDiff(
+        `!#if true
+||foo.com
+!#endif`,
+        '',
+        config,
+      ),
+    ).to.eql({
+      added: [],
+      removed: ['||foo.com'],
+      preprocessors: {
+        true: {
+          added: [],
+          removed: ['||foo.com'],
+        },
+      },
+    });
+
+    expect(
+      generateDiff(
+        `||bar.com
+!#if true
+||foo.com
+!#endif`,
+        `||foo.com
+!#if true
+||bar.com
+!#endif`,
+        config,
+      ),
+    ).to.eql({
+      added: [],
+      removed: [],
+      preprocessors: {
+        true: {
+          added: ['||bar.com'],
+          removed: ['||foo.com'],
+        },
+      },
     });
   });
 });
@@ -137,6 +274,7 @@ describe('#mergeDiffs', () => {
     const diff = {
       added: ['||foo.com'],
       removed: ['||bar.com'],
+      preprocessors: {},
     };
 
     expect(mergeDiffs([diff])).to.eql(diff);
@@ -153,6 +291,35 @@ describe('#mergeDiffs', () => {
     ).to.eql({
       added: ['baz.com'],
       removed: ['foo.com', 'bar.com'],
+      preprocessors: {},
+    });
+
+    expect(
+      mergeDiffs([
+        {
+          preprocessors: {
+            true: {
+              added: ['||foo.com'],
+            },
+          },
+        },
+        {
+          preprocessors: {
+            true: {
+              added: ['||foo.com', '||bar.com'],
+            },
+          },
+        },
+      ]),
+    ).to.eql({
+      added: [],
+      removed: [],
+      preprocessors: {
+        true: {
+          added: ['||foo.com', '||bar.com'],
+          removed: [],
+        },
+      },
     });
   });
 });

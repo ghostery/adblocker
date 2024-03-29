@@ -95,11 +95,18 @@ export default class NetworkFilterBucket {
     this.badFilters.serialize(buffer);
   }
 
-  public matchAll(request: Request): NetworkFilter[] {
+  public matchAll(
+    request: Request,
+    isFilterExcluded?: (filter: NetworkFilter) => boolean,
+  ): NetworkFilter[] {
     const filters: NetworkFilter[] = [];
 
     this.index.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
-      if (filter.match(request) && this.isFilterDisabled(filter) === false) {
+      if (
+        filter.match(request) &&
+        this.isFilterDisabled(filter) === false &&
+        !isFilterExcluded?.(filter)
+      ) {
         filters.push(filter);
       }
       return true;
@@ -108,11 +115,18 @@ export default class NetworkFilterBucket {
     return filters;
   }
 
-  public match(request: Request): NetworkFilter | undefined {
+  public match(
+    request: Request,
+    isFilterExcluded?: (filter: NetworkFilter) => boolean,
+  ): NetworkFilter | undefined {
     let match: NetworkFilter | undefined;
 
     this.index.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
-      if (filter.match(request) && this.isFilterDisabled(filter) === false) {
+      if (
+        filter.match(request) &&
+        this.isFilterDisabled(filter) === false &&
+        !isFilterExcluded?.(filter)
+      ) {
         match = filter;
         return false;
       }
@@ -123,7 +137,7 @@ export default class NetworkFilterBucket {
   }
 
   /**
-   * Given a matching filter, check if it is disabled by a $badfilter
+   * Given a matching filter, check if it is disabled by a $badfilter.
    */
   private isFilterDisabled(filter: NetworkFilter): boolean {
     // Lazily load information about bad filters in memory. The only thing we
