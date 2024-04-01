@@ -170,6 +170,7 @@ describe('Network filters', () => {
       checkToString('@@||foo.com|', '@@||foo.com^');
       checkToString('|foo.com|', '|foo.com|');
       checkToString('foo.com|', 'foo.com|');
+      checkToString('foo.com^', 'foo.com^');
     });
 
     it('pprint domain', () => {

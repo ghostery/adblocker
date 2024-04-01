@@ -1541,7 +1541,7 @@ function setNetworkMask(mask: number, m: number, value: boolean): number {
  */
 function checkIsRegex(filter: string, start: number, end: number): boolean {
   const indexOfSeparator = filter.indexOf('^', start);
-  if (indexOfSeparator !== -1 && indexOfSeparator < end) {
+  if (indexOfSeparator !== -1 && indexOfSeparator < end - 1) {
     return true;
   }
 
