@@ -838,7 +838,6 @@ export default class NetworkFilter implements IFilter {
 
       // TODO
       // - ignore hostname anchor is not hostname provided
-
       if (hostname !== undefined) {
         hostname = hostname.toLowerCase();
         if (hasUnicode(hostname)) {
@@ -1540,8 +1539,17 @@ function setNetworkMask(mask: number, m: number, value: boolean): number {
  * regex filter (it contains a '*' or '^' char).
  */
 function checkIsRegex(filter: string, start: number, end: number): boolean {
+  // Check hostname-like format for simple ending hat sign
+  if (
+    filter.charCodeAt(0) !== 47 /* '/' */ &&
+    filter.charCodeAt(end - 1) !== 47 &&
+    filter.charCodeAt(end - 1) === 94 /* '^' */
+  ) {
+    return false;
+  }
+
   const indexOfSeparator = filter.indexOf('^', start);
-  if (indexOfSeparator !== -1 && indexOfSeparator < end - 1) {
+  if (indexOfSeparator !== -1 && indexOfSeparator < end) {
     return true;
   }
 
