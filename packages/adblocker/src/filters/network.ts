@@ -1534,17 +1534,61 @@ function setNetworkMask(mask: number, m: number, value: boolean): number {
   return clearBit(mask, m);
 }
 
+function checkIsAlphabet(charCode: number) {
+  return charCode >= 97 && charCode <= 122;
+}
+
+function checkIsHostnameToken(charCode: number) {
+  return (
+    checkIsAlphabet(charCode) ||
+    (charCode >= 48 && charCode <= 57) || // Numerics
+    charCode === 45 // Hyphen
+  );
+}
+
+function checkIsHostname(filter: string, start: number, end: number): boolean {
+  if (end - start === 1) {
+    return checkIsAlphabet(filter.charCodeAt(start));
+  }
+
+  if (!checkIsAlphabet(filter.charCodeAt(start))) {
+    return false;
+  }
+
+  const l = end - 1;
+
+  for (let i = start + 1; i < l; ) {
+    if (filter.charCodeAt(i) === 46 /* '.' */) {
+      if (filter.charCodeAt(i + 1) === 46) {
+        return false;
+      }
+
+      i += 2;
+
+      continue;
+    }
+
+    if (!checkIsHostnameToken(filter.charCodeAt(i))) {
+      return false;
+    }
+
+    i += 1;
+  }
+
+  if (!checkIsHostnameToken(filter.charCodeAt(l))) {
+    return false;
+  }
+
+  return true;
+}
+
 /**
  * Check if the sub-string contained between the indices start and end is a
  * regex filter (it contains a '*' or '^' char).
  */
 function checkIsRegex(filter: string, start: number, end: number): boolean {
-  // Check hostname-like format for simple ending hat sign
-  if (
-    filter.charCodeAt(0) !== 47 /* '/' */ &&
-    filter.charCodeAt(end - 1) !== 47 &&
-    filter.charCodeAt(end - 1) === 94 /* '^' */
-  ) {
+  // Check if the filter has a trailing hat without pathes (mostly for hostname) and then trim it
+  if (filter.charCodeAt(end - 1) === 94 /* '^' */ && checkIsHostname(filter, start, end - 1)) {
     return false;
   }
 
