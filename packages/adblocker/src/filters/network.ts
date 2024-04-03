@@ -775,16 +775,6 @@ export default class NetworkFilter implements IFilter {
         filterIndexEnd -= 1;
       }
 
-      // Remove leading '*' if the filter is not hostname anchored.
-      if (
-        getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor) === false &&
-        filterIndexEnd - filterIndexStart > 0 &&
-        line.charCodeAt(filterIndexStart) === 42 /* '*' */
-      ) {
-        mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-        filterIndexStart += 1;
-      }
-
       // Transform filters on protocol (http, https, ws)
       if (getBit(mask, NETWORK_FILTER_MASK.isLeftAnchor)) {
         if (

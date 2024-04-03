@@ -348,7 +348,7 @@ describe('Network filters', () => {
 
     network('*bar^', {
       ...base,
-      filter: 'bar^',
+      filter: '*bar^',
       hostname: '',
     });
     network('foo.com/*bar^', {
