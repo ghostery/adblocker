@@ -11,7 +11,7 @@ import 'mocha';
 
 import { getDomain } from 'tldts-experimental';
 
-import Engine from '../../src/engine/engine.js';
+import Engine, { EngineEventHandlers } from '../../src/engine/engine.js';
 import NetworkFilter from '../../src/filters/network.js';
 import Request, { RequestType } from '../../src/request.js';
 import Resources from '../../src/resources.js';
@@ -196,7 +196,7 @@ describe('#FiltersEngine', () => {
     });
   });
 
-  describe('cps policies', () => {
+  describe('csp policies', () => {
     it('no policy in engine', () => {
       expect(
         createEngine('this is not a csp').getCSPDirectives(
@@ -1400,4 +1400,78 @@ describe('diff updates', () => {
 
   testUpdates('empty engine', []);
   testUpdates('easylist engine', loadEasyListFilters());
+});
+
+describe('events', () => {
+  async function createEventAwaiter<
+    Name extends keyof EngineEventHandlers,
+    Handler extends EngineEventHandlers[Name],
+    Arguments extends Parameters<Handler>,
+  >(engine: Engine, name: Name, limit = 1) {
+    return new Promise<Arguments[]>((resolve, reject) => {
+      const callbacks: Arguments[] = [];
+
+      const timeout = setTimeout(() => {
+        engine.unsubscribe(name, handler);
+
+        if (callbacks.length === 0) {
+          reject(
+            new Error(
+              `Timeout reached before catching an event type of "${name}" within a second!`,
+            ),
+          );
+        }
+
+        resolve(callbacks);
+      }, 1000);
+
+      const handler = (...args: any) => {
+        callbacks.push(args as Arguments);
+
+        if (callbacks.length === limit) {
+          engine.unsubscribe(name, handler);
+
+          clearTimeout(timeout);
+          resolve(callbacks);
+        }
+      };
+
+      engine.on(name, handler);
+    });
+  }
+
+  it('emits filter-matched', async () => {
+    const engine = createEngine('||foo.com');
+    const awaiter = createEventAwaiter(engine, 'filter-matched');
+
+    engine.match(
+      Request.fromRawDetails({
+        url: 'http://foo.com',
+      }),
+    );
+
+    const [[{ filter, exception }]] = await awaiter;
+
+    expect(filter!.toString()).to.be.equal('||foo.com');
+    expect(exception).to.be.equal(undefined);
+  });
+
+  it('emits exception in filter-matched', async () => {
+    const engine = createEngine(`
+      ||bar.com
+      @@||bar.com
+    `);
+    const awaiter = createEventAwaiter(engine, 'filter-matched');
+
+    engine.match(
+      Request.fromRawDetails({
+        url: 'http://bar.com',
+      }),
+    );
+
+    const [[{ filter, exception }]] = await awaiter;
+
+    expect(filter!.toString()).to.be.equal('||bar.com');
+    expect(exception!.toString()).to.be.equal('@@||bar.com');
+  });
 });
