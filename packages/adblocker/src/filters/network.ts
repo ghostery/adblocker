@@ -400,6 +400,20 @@ function compileRegex(
   return new RegExp(filter);
 }
 
+function findLastIndexOfUnescapedCharacter(text: string, character: string) {
+  let lastIndex = text.lastIndexOf(character);
+
+  if (lastIndex === -1) {
+    return -1;
+  }
+
+  while (text.charCodeAt(lastIndex - 1) === 92 /* '\\' */) {
+    lastIndex = text.slice(0, lastIndex).lastIndexOf(character);
+  }
+
+  return lastIndex;
+}
+
 const MATCH_ALL = new RegExp('');
 
 export default class NetworkFilter implements IFilter {
@@ -437,7 +451,7 @@ export default class NetworkFilter implements IFilter {
     // |     |
     // |     optionsIndex
     // filterIndexStart
-    const optionsIndex: number = line.lastIndexOf('$');
+    const optionsIndex: number = findLastIndexOfUnescapedCharacter(line, '$');
     if (optionsIndex !== -1 && line.charCodeAt(optionsIndex + 1) !== 47 /* '/' */) {
       // Parse options and set flags
       filterIndexEnd = optionsIndex;
