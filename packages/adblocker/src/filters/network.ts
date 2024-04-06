@@ -400,7 +400,7 @@ function compileRegex(
   return new RegExp(filter);
 }
 
-function findLastIndexOfUnescapedCharacter(text: string, character: string) {
+export function findLastIndexOfUnescapedCharacter(text: string, character: string) {
   let lastIndex = text.lastIndexOf(character);
 
   if (lastIndex === -1) {
