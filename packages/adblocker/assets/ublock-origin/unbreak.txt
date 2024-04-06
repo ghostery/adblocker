@@ -154,13 +154,6 @@ energy.de#@##ad_home
 reyada.com#@#.ads_area
 ! https://github.com/uBlockOrigin/uAssets/issues/1152#issuecomment-354683032
 @@||ads.adaptv.advertising.com/*einthusan.tv*$xhr,domain=imasdk.googleapis.com
-! https://www.reddit.com/r/uBlockOrigin/comments/7seigr/video_not_showing_up_because_of_adblock/
-||agkn.com/*/tag.js$script,redirect=noopjs,domain=netd.com
-||dogannet.tv/*/third_party/comscore/*$script,redirect=noopjs,domain=netd.com
-||gemius.pl/gplayer.js$script,redirect=noopjs,domain=netd.com
-||netd.com/js/piwik-plugin.js$script,1p,redirect=noopjs
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,xhr,domain=netd.com
-@@||js.duhnet.tv/*/player/html5/*/comscore/streamsense$script,xhr,domain=netd.com
 ! http://forums.mozillazine.org/viewtopic.php?f=47&t=3037666
 @@||bom.gov.au/*/analytics.js$script,1p
 ! https://forums.lanik.us/viewtopic.php?f=64&p=131656
@@ -1046,6 +1039,8 @@ pcgamer.com#@#.hawk-widget
 ! https://github.com/uBlockOrigin/uAssets/issues/19382
 @@||try.abtasty.com^$script,domain=reuters.com
 ||try.abtasty.com/shared/analytics$script,domain=reuters.com,important
+! https://www.reddit.com/r/uBlockOrigin/comments/1bpu6ag/anyway_to_block_ads_on_reuters_on_android_firefox/
+reuters.com#@#[class^="primary-video__container_"]
 ! https://github.com/uBlockOrigin/uAssets/issues/6601
 @@||cdn.mxpnl.com/libs/mixpanel-*-latest.min.js$script,domain=groupme.com
 ! https://github.com/NanoMeow/QuickReports/issues/2328
@@ -1314,9 +1309,10 @@ recensionihot.com#@#a[href^="https://www.moscarossa.biz/"]
 ! [badfilter] ||onemanhua.com/js/dynamicjs.js$badfilter
 ! nascar .com videos broken
 ! https://www.reddit.com/r/uBlockOrigin/comments/10ir17a/
+! https://www.reddit.com/r/uBlockOrigin/comments/1bv0s4q/nascarcom_videos_wont_load/
+@@||nascar.com/*/ads/prebid8.$script,1p
 @@||nascar.com^$xhr,domain=imsa.com|nascar.com
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=imsa.com,redirect-rule=google-ima.js
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=nascar.com
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=imsa.com|nascar.com,redirect-rule=google-ima.js
 @@||moatads.com/nascar$script,domain=nascar.com
 @@||mb.moatads.com^$script,domain=nascar.com
 @@||nascar.com/tagmanager/*/prod/advertising-tags.js$script,1p
@@ -3784,3 +3780,13 @@ realmadryt.pl##.rmpl-adsense-desktop
 ! https://github.com/uBlockOrigin/uAssets/issues/23076
 reclameaqui.com.br##section#home > #hero.pinned:style(position: absolute !important;)
 reclameaqui.com.br###page-header > header:style(position: absolute !important;)
+! https://github.com/easylist/easylist/issues/18715
+! [badfilter] ||guinsters286nedril.com^$badfilter
+! https://github.com/uBlockOrigin/uAssets/issues/23080
+@@||cdn.pendo.io/agent/static/*/pendo.js$script,domain=achieve.macmillanlearning.com
+@@||data.pendo.io/data/guide.js/$script,domain=achieve.macmillanlearning.com
+! https://secure.backblaze.com/ - Help/Resource center not load
+@@||cdn.pendo.io/agent/static/*/pendo.js$script,domain=secure.backblaze.com
+@@||data.pendo.io/data/guide.js/*$script,domain=secure.backblaze.com
+! https://github.com/uBlockOrigin/uAssets/issues/23156
+! [badfilter] ||beforeitsnews.com/core/ajax/counter/count.php^$badfilter
