@@ -408,7 +408,7 @@ export function findLastIndexOfUnescapedCharacter(text: string, character: strin
   }
 
   while (text.charCodeAt(lastIndex - 1) === 92 /* '\\' */) {
-    lastIndex = text.slice(0, lastIndex).lastIndexOf(character);
+    lastIndex = text.lastIndexOf(character, lastIndex - 1);
   }
 
   return lastIndex;
