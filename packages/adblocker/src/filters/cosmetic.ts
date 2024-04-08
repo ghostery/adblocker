@@ -45,6 +45,7 @@ export const DEFAULT_HIDDING_STYLE: string = 'display: none !important;';
 
 const REGEXP_UNICODE_COMMA = new RegExp(/\\u002C/, 'g');
 const REGEXP_UNICODE_BACKSLASH = new RegExp(/\\u005C/, 'g');
+const REGEXP_ESCAPED_COMMA = new RegExp(/\\,/, 'g');
 
 /**
  * Given a `selector` starting with either '#' or '.' check if what follows is
@@ -765,7 +766,10 @@ export default class CosmeticFilter implements IFilter {
         return part;
       })
       .map((part) =>
-        part.replace(REGEXP_UNICODE_COMMA, ',').replace(REGEXP_UNICODE_BACKSLASH, '\\'),
+        part
+          .replace(REGEXP_UNICODE_COMMA, ',')
+          .replace(REGEXP_UNICODE_BACKSLASH, '\\')
+          .replace(REGEXP_ESCAPED_COMMA, ','),
       );
     return { name: parts[0], args };
   }
