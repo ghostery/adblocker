@@ -2131,7 +2131,7 @@ describe('scriptlets arguments parsing', () => {
   it('handles escaping of comas', () => {
     expect(CosmeticFilter.parse('foo.com##+js(script-name, foo \\,bar)')?.parseScript()).to.eql({
       name: 'script-name',
-      args: ['foo \\,bar'],
+      args: ['foo ,bar'],
     });
   });
 
@@ -2257,7 +2257,7 @@ describe('scriptlets arguments parsing', () => {
           {
             name: 'xml-prune',
             args: [
-              `xpath(//*[name()="MPD"]/@mediaPresentationDuration | //*[name()="Period"][.//*[name()="BaseURL" and contains(text()\\,'/ads-')]] | //*[name()="Period"]/@start)`,
+              `xpath(//*[name()="MPD"]/@mediaPresentationDuration | //*[name()="Period"][.//*[name()="BaseURL" and contains(text(),'/ads-')]] | //*[name()="Period"]/@start)`,
               'Period[id^="Ad"i]',
               '.mpd',
             ],
@@ -2302,7 +2302,7 @@ describe('scriptlets arguments parsing', () => {
           'm3u-prune, /\\,ad\n.+?(?=#UPLYNK-SEGMENT)/gm, .m3u8',
           {
             name: 'm3u-prune',
-            args: ['/\\,ad\n.+?(?=#UPLYNK-SEGMENT)/gm', '.m3u8'],
+            args: ['/,ad\n.+?(?=#UPLYNK-SEGMENT)/gm', '.m3u8'],
           },
         ],
         // Also works without escaping the coma
@@ -2341,10 +2341,21 @@ describe('scriptlets arguments parsing', () => {
   it('complex patterns', () => {
     for (const [scriptlet, expected] of [
       [
+        'ra, oncontextmenu|onselectstart|ondragstart|oncut|oncopy, div.contentContainer\\, div.content, stay',
+        {
+          name: 'ra',
+          args: [
+            'oncontextmenu|onselectstart|ondragstart|oncut|oncopy',
+            'div.contentContainer, div.content',
+            'stay',
+          ],
+        },
+      ],
+      [
         'trusted-replace-fetch-response, /\\"adPlacements.*?\\"\\}\\}\\}\\]\\,/, , player?key=',
         {
           name: 'trusted-replace-fetch-response',
-          args: ['/\\"adPlacements.*?\\"\\}\\}\\}\\]\\,/', '', 'player?key='],
+          args: ['/\\"adPlacements.*?\\"\\}\\}\\}\\],/', '', 'player?key='],
         },
       ],
       [
@@ -2352,7 +2363,7 @@ describe('scriptlets arguments parsing', () => {
         {
           name: 'trusted-replace-fetch-response',
           args: [
-            '/\\"adPlacements.*?true.*?\\"\\}\\}\\}\\]\\,/',
+            '/\\"adPlacements.*?true.*?\\"\\}\\}\\}\\],/',
             '',
             'url:player?key= method:/post/i',
           ],
@@ -2363,7 +2374,7 @@ describe('scriptlets arguments parsing', () => {
         {
           name: 'trusted-replace-fetch-response',
           args: [
-            '/\\"adPlacements.*?\\"\\}\\}\\}\\]\\,/',
+            '/\\"adPlacements.*?\\"\\}\\}\\}\\],/',
             '',
             'url:player?key= method:/post/i bodyUsed:true',
           ],
@@ -2373,21 +2384,21 @@ describe('scriptlets arguments parsing', () => {
         'trusted-replace-fetch-response, /\\"adSlots.*?\\}\\]\\}\\}\\]\\,/, , player?key=',
         {
           name: 'trusted-replace-fetch-response',
-          args: ['/\\"adSlots.*?\\}\\]\\}\\}\\]\\,/', '', 'player?key='],
+          args: ['/\\"adSlots.*?\\}\\]\\}\\}\\],/', '', 'player?key='],
         },
       ],
       [
         'trusted-replace-fetch-response, /\\"adSlots.*?true.*?\\}\\]\\}\\}\\]\\,/, , url:player?key= method:/post/i',
         {
           name: 'trusted-replace-fetch-response',
-          args: ['/\\"adSlots.*?true.*?\\}\\]\\}\\}\\]\\,/', '', 'url:player?key= method:/post/i'],
+          args: ['/\\"adSlots.*?true.*?\\}\\]\\}\\}\\],/', '', 'url:player?key= method:/post/i'],
         },
       ],
       [
         'trusted-replace-fetch-response, /\\"adSlots.*?\\}\\]\\}\\}\\]\\,/, , url:player?key= method:/post/i',
         {
           name: 'trusted-replace-fetch-response',
-          args: ['/\\"adSlots.*?\\}\\]\\}\\}\\]\\,/', '', 'url:player?key= method:/post/i'],
+          args: ['/\\"adSlots.*?\\}\\]\\}\\}\\],/', '', 'url:player?key= method:/post/i'],
         },
       ],
       [
@@ -2395,7 +2406,7 @@ describe('scriptlets arguments parsing', () => {
         {
           name: 'trusted-replace-fetch-response',
           args: [
-            '/\\"adSlots.*?\\}\\]\\}\\}\\]\\,/',
+            '/\\"adSlots.*?\\}\\]\\}\\}\\],/',
             '',
             'url:player?key= method:/post/i bodyUsed:true',
           ],
@@ -2405,14 +2416,14 @@ describe('scriptlets arguments parsing', () => {
         'trusted-replace-fetch-response, /\\"playerAds.*?\\}\\}\\]\\,/, , player?key=',
         {
           name: 'trusted-replace-fetch-response',
-          args: ['/\\"playerAds.*?\\}\\}\\]\\,/', '', 'player?key='],
+          args: ['/\\"playerAds.*?\\}\\}\\],/', '', 'player?key='],
         },
       ],
       [
         'trusted-replace-fetch-response, /\\"playerAds.*?true.*?\\}\\}\\]\\,/, , url:player?key= method:/post/i',
         {
           name: 'trusted-replace-fetch-response',
-          args: ['/\\"playerAds.*?true.*?\\}\\}\\]\\,/', '', 'url:player?key= method:/post/i'],
+          args: ['/\\"playerAds.*?true.*?\\}\\}\\],/', '', 'url:player?key= method:/post/i'],
         },
       ],
     ] as const) {
