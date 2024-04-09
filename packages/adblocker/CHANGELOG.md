@@ -1,3 +1,21 @@
+# v1.27.1 (Tue Apr 09 2024)
+
+#### :bug: Bug Fix
+
+- Scriptlets: unescape commas [#3893](https://github.com/ghostery/adblocker/pull/3893) ([@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- Update local assets [#3868](https://github.com/ghostery/adblocker/pull/3868) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.27.0 (Fri Mar 29 2024)
 
 #### :rocket: New Feature
