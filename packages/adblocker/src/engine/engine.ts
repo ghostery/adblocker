@@ -19,7 +19,7 @@ import {
   fetchResources,
   fullLists,
 } from '../fetch.js';
-import { HTMLSelector } from '../html-filtering.js';
+import { HTMLModifier, HTMLSelector } from '../html-filtering.js';
 import CosmeticFilter from '../filters/cosmetic.js';
 import NetworkFilter from '../filters/network.js';
 import { block } from '../filters/dsl.js';
@@ -720,6 +720,25 @@ export default class FilterEngine extends EventEmitter<
     }
 
     return htmlSelectors;
+  }
+
+  public getHtmlModifiers(request: Request): HTMLModifier[] {
+    const htmlModifiers: HTMLModifier[] = [];
+
+    if (this.config.enableHtmlFiltering === false || this.config.loadNetworkFilters === false) {
+      return htmlModifiers;
+    }
+
+    const filters = this.filters.getHtmlModifiers(request, this.isFilterExcluded.bind(this));
+
+    for (const filter of filters) {
+      const modifier = filter.getHtmlModifier();
+      if (modifier !== null) {
+        htmlModifiers.push(modifier);
+      }
+    }
+
+    return htmlModifiers;
   }
 
   /**

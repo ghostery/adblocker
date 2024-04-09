@@ -28,12 +28,20 @@ export default class NetworkFilterBucket {
       config,
     );
 
+    bucket.htmlIndex = ReverseIndex.deserialize(
+      buffer,
+      NetworkFilter.deserialize,
+      config.enableOptimizations ? optimizeNetwork : noopOptimizeNetwork,
+      config,
+    );
+
     bucket.badFilters = FiltersContainer.deserialize(buffer, NetworkFilter.deserialize, config);
 
     return bucket;
   }
 
   public index: ReverseIndex<NetworkFilter>;
+  public htmlIndex: ReverseIndex<NetworkFilter>;
 
   // `badFilters` are filters specifying a $badfilter option. They can be used
   // to disable completely another filter (usually to fix breakage). They are
@@ -47,6 +55,13 @@ export default class NetworkFilterBucket {
 
   constructor({ filters = [], config }: { filters?: NetworkFilter[]; config: Config }) {
     this.index = new ReverseIndex({
+      config,
+      deserialize: NetworkFilter.deserialize,
+      filters: [],
+      optimize: config.enableOptimizations ? optimizeNetwork : noopOptimizeNetwork,
+    });
+
+    this.htmlIndex = new ReverseIndex({
       config,
       deserialize: NetworkFilter.deserialize,
       filters: [],
@@ -72,26 +87,35 @@ export default class NetworkFilterBucket {
 
   public update(newFilters: NetworkFilter[], removedFilters: Set<number> | undefined): void {
     const badFilters: NetworkFilter[] = [];
+    const htmlFilters: NetworkFilter[] = [];
     const remaining: NetworkFilter[] = [];
     for (const filter of newFilters) {
       if (filter.isBadFilter()) {
         badFilters.push(filter);
+      } else if (filter.isHtmlFilteringRule()) {
+        htmlFilters.push(filter);
       } else {
         remaining.push(filter);
       }
     }
 
     this.badFilters.update(badFilters, removedFilters);
+    this.htmlIndex.update(htmlFilters, removedFilters);
     this.index.update(remaining, removedFilters);
     this.badFiltersIds = null;
   }
 
   public getSerializedSize(): number {
-    return this.badFilters.getSerializedSize() + this.index.getSerializedSize();
+    return (
+      this.badFilters.getSerializedSize() +
+      this.index.getSerializedSize() +
+      this.htmlIndex.getSerializedSize()
+    );
   }
 
   public serialize(buffer: StaticDataView): void {
     this.index.serialize(buffer);
+    this.htmlIndex.serialize(buffer);
     this.badFilters.serialize(buffer);
   }
 
@@ -161,5 +185,25 @@ export default class NetworkFilterBucket {
     }
 
     return this.badFiltersIds.has(filter.getId());
+  }
+
+  public getHtmlModifiers(
+    request: Request,
+    isFilterExcluded?: (filter: NetworkFilter) => boolean,
+  ): NetworkFilter[] {
+    const filters: NetworkFilter[] = [];
+
+    this.htmlIndex.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
+      if (
+        filter.match(request) &&
+        this.isFilterDisabled(filter) === false &&
+        !isFilterExcluded?.(filter)
+      ) {
+        filters.push(filter);
+      }
+      return true;
+    });
+
+    return filters;
   }
 }

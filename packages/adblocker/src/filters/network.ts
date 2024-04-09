@@ -9,12 +9,12 @@
 import { Domains } from '../engine/domains.js';
 import {
   StaticDataView,
-  sizeOfNetworkCSP,
   sizeOfNetworkFilter,
   sizeOfNetworkHostname,
-  sizeOfNetworkRedirect,
   sizeOfUTF8,
   sizeOfRawNetwork,
+  sizeOfNetworkCSP,
+  sizeOfNetworkRedirect,
 } from '../data-view.js';
 import { toASCII } from '../punycode.js';
 import Request, { RequestType, NORMALIZED_TYPE_TOKEN } from '../request.js';
@@ -35,8 +35,10 @@ import {
   tokenizeWithWildcardsInPlace,
   HASH_SEED,
   HASH_INTERNAL_MULT,
+  findLastIndexOfUnescapedCharacter,
 } from '../utils.js';
 import IFilter from './interface.js';
+import { HTMLModifier } from '../html-filtering.js';
 
 const HTTP_HASH = fastHash('http');
 const HTTPS_HASH = fastHash('https');
@@ -148,6 +150,8 @@ export const enum NETWORK_FILTER_MASK {
   isException = 1 << 27,
   isHostnameAnchor = 1 << 28,
   isRedirectRule = 1 << 29,
+  isRedirect = 1 << 30,
+  isReplace = 1 << 31,
 }
 
 /**
@@ -319,21 +323,14 @@ function getListOfRequestTypes(filter: NetworkFilter): RequestType[] {
 }
 
 function computeFilterId(
-  csp: string | undefined,
   mask: number,
   filter: string | undefined,
   hostname: string | undefined,
   domains: Domains | undefined,
   denyallow: Domains | undefined,
-  redirect: string | undefined,
+  optionValue: string | undefined,
 ): number {
   let hash = (HASH_SEED * HASH_INTERNAL_MULT) ^ mask;
-
-  if (csp !== undefined) {
-    for (let i = 0; i < csp.length; i += 1) {
-      hash = (hash * HASH_INTERNAL_MULT) ^ csp.charCodeAt(i);
-    }
-  }
 
   if (domains !== undefined) {
     hash = domains.updateId(hash);
@@ -355,9 +352,9 @@ function computeFilterId(
     }
   }
 
-  if (redirect !== undefined) {
-    for (let i = 0; i < redirect.length; i += 1) {
-      hash = (hash * HASH_INTERNAL_MULT) ^ redirect.charCodeAt(i);
+  if (optionValue !== undefined) {
+    for (let i = 0; i < optionValue.length; i += 1) {
+      hash = (hash * HASH_INTERNAL_MULT) ^ optionValue.charCodeAt(i);
     }
   }
 
@@ -400,18 +397,169 @@ function compileRegex(
   return new RegExp(filter);
 }
 
-export function findLastIndexOfUnescapedCharacter(text: string, character: string) {
-  let lastIndex = text.lastIndexOf(character);
+/**
+ * Collects a filter option key until the function sees the special character.
+ * This function will stop iterating over the given string if it sees equal sign or comma sign.
+ * If there's an equal sign, it means that we'll see the value.
+ * Otherwise, if there's a comma sign, it means that the option doesn't have any values.
+ * Note that this function doesn't respect the escaping sign.
+ */
+function getFilterOptionKey(line: string, pos: number, end: number) {
+  let code: number;
+  let value = '';
 
-  if (lastIndex === -1) {
-    return -1;
+  for (; pos < end; pos++) {
+    code = line.charCodeAt(pos);
+
+    if (code === 61 /* '=' */ || code === 44 /* ',' */) {
+      break;
+    }
+
+    value += line.charAt(pos);
   }
 
-  while (lastIndex > 0 && text.charCodeAt(lastIndex - 1) === 92 /* '\\' */) {
-    lastIndex = text.lastIndexOf(character, lastIndex - 1);
+  return [pos, value] as const;
+}
+
+/**
+ * Collects a filter option value until the function sees the special character.
+ * This function respects the escaping characters, so we can safely collect the full value
+ * including the special characters which are not allowed normally.
+ * This function will stop if it sees a comma sign.
+ */
+function getFilterOptionValue(line: string, pos: number, end: number): [number, string] {
+  let code: number;
+  let value = '';
+
+  for (; pos < end; pos++) {
+    code = line.charCodeAt(pos);
+
+    if (code === 92 /* '\\' */) {
+      value += line.charAt(++pos);
+    } else if (code === 44 /* ',' */) {
+      break;
+    } else {
+      value += line.charAt(pos);
+    }
   }
 
-  return lastIndex;
+  return [pos, value];
+}
+
+/**
+ * Collects a filter option value of the replace modifier.
+ * This function respects the escaping character with the allowed characters of the replace modifier.
+ * In the replace modifier, it can include the any sign allowed in the regular expression.
+ * Therefore, a comma sign can interfere the `getFilterOptionValue` function.
+ * This function will not stop unless it collects the all of parts of the replace modifier option value.
+ */
+export function getFilterReplaceOptionValue(
+  line: string,
+  pos: number,
+  end: number,
+): [number, string[]] {
+  // Try to fast exit if the first character is an unexpected character.
+  if (line.charCodeAt(pos++) !== 47 /* '/' */) {
+    return [end, []];
+  }
+
+  const parts = ['', '', ''];
+
+  let code: number;
+  let slashes = 0;
+
+  for (; pos < end; pos++) {
+    code = line.charCodeAt(pos);
+
+    if (code === 92 /* '\\' */) {
+      parts[slashes] += '\\' + line.charAt(++pos);
+    } else if (code === 47 /* '/' */) {
+      if (++slashes === 2) {
+        // Skip the last slash character
+        // Since we saw 3 slashes in total, it means that the option value should be closed here.
+        // Note that we already saw the first slash before the loop.
+        pos++;
+
+        break;
+      }
+    } else {
+      parts[slashes] += line.charAt(pos);
+    }
+  }
+
+  const valueEnd = line.indexOf(',', pos);
+
+  if (valueEnd !== -1) {
+    end = valueEnd;
+  }
+
+  if (pos - end !== 0) {
+    parts[2] = line.slice(pos, end);
+  }
+
+  pos = end;
+
+  return [pos, parts];
+}
+
+/**
+ * Collects an array of filter options from the given index.
+ * This function leverages `getFilterOptionKey`, `getFilterOptionValue`, and every extension functions.
+ * Depending on the filter option key, the function to collect filter option value can vary.
+ * For the generic filter option value, it'll use `getFilterOptionValue` function to get the value.
+ */
+function getFilterOptions(line: string, pos: number, end: number) {
+  const options: Array<[string, string]> = [];
+
+  let key: string | undefined;
+  let value: string;
+
+  for (; pos < end; pos++) {
+    [pos, key] = getFilterOptionKey(line, pos, end);
+
+    if (key !== undefined) {
+      if (line.charCodeAt(pos) === 61 /* '=' */) {
+        pos++;
+      }
+
+      if (key === 'replace') {
+        const result = getFilterReplaceOptionValue(line, pos, end);
+
+        pos = result[0];
+
+        if (result[1].length !== 0) {
+          value = '/' + result[1][0] + '/' + result[1][1] + '/' + result[1][2];
+        } else {
+          value = '';
+        }
+      } else {
+        [pos, value] = getFilterOptionValue(line, pos, end);
+      }
+
+      options.push([key, value]);
+    }
+  }
+
+  return options;
+}
+
+/**
+ * Transforms the replace modifier option value into the regular expression with its replacement.
+ * This function takes a fixed length array from `getFilterReplaceOptionValue`
+ * then try to build the regular expression.
+ * This function will return `null` if the array format or the given regular expression components are not valid.
+ */
+export function replaceOptionValueToRegexp(value: string): HTMLModifier | null {
+  const [, values] = getFilterReplaceOptionValue(value, 0, value.length);
+
+  // RegExp constructor can throw an error
+  try {
+    // We expect `/regexp/replacement/flags` to be [regexp, replacement, flags]
+    // The first slash should be removed in the early steps
+    return [new RegExp(values[0], values[2]), values[1]];
+  } catch (error) {
+    return null;
+  }
 }
 
 const MATCH_ALL = new RegExp('');
@@ -433,8 +581,7 @@ export default class NetworkFilter implements IFilter {
     let hostname: string | undefined;
     let domains: Domains | undefined;
     let denyallow: Domains | undefined;
-    let redirect: string | undefined;
-    let csp: string | undefined;
+    let optionValue: string | undefined;
 
     // Start parsing
     let filterIndexStart: number = 0;
@@ -459,34 +606,27 @@ export default class NetworkFilter implements IFilter {
       // --------------------------------------------------------------------- //
       // parseOptions
       // --------------------------------------------------------------------- //
-      for (const rawOption of line.slice(optionsIndex + 1).split(',')) {
-        const negation = rawOption.charCodeAt(0) === 126; /* '~' */
-        let option = negation === true ? rawOption.slice(1) : rawOption;
-
-        // Check for options: option=value1|value2
-        let optionValue: string = '';
-        const indexOfEqual: number = option.indexOf('=');
-        if (indexOfEqual !== -1) {
-          optionValue = option.slice(indexOfEqual + 1);
-          option = option.slice(0, indexOfEqual);
-        }
+      for (const rawOption of getFilterOptions(line, optionsIndex + 1, line.length)) {
+        const negation = rawOption[0].charCodeAt(0) === 126; /* '~' */
+        const option = negation === true ? rawOption[0].slice(1) : rawOption[0];
+        const value = rawOption[1];
 
         switch (option) {
           case 'denyallow': {
-            denyallow = Domains.parse(optionValue.split('|'), debug);
+            denyallow = Domains.parse(value.split('|'), debug);
             break;
           }
           case 'domain':
           case 'from': {
             // domain list starting or ending with '|' is invalid
             if (
-              optionValue.charCodeAt(0) === 124 /* '|' */ ||
-              optionValue.charCodeAt(optionValue.length - 1) === 124 /* '|' */
+              value.charCodeAt(0) === 124 /* '|' */ ||
+              value.charCodeAt(value.length - 1) === 124 /* '|' */
             ) {
               return null;
             }
 
-            domains = Domains.parse(optionValue.split('|'), debug);
+            domains = Domains.parse(value.split('|'), debug);
             break;
           }
           case 'badfilter':
@@ -536,15 +676,17 @@ export default class NetworkFilter implements IFilter {
             }
 
             // Ignore this filter if no redirection resource is specified
-            if (optionValue.length === 0) {
+            if (value.length === 0) {
               return null;
             }
+
+            mask = setBit(mask, NETWORK_FILTER_MASK.isRedirect);
 
             if (option === 'redirect-rule') {
               mask = setBit(mask, NETWORK_FILTER_MASK.isRedirectRule);
             }
 
-            redirect = optionValue;
+            optionValue = value;
             break;
           case 'csp':
             if (negation) {
@@ -552,8 +694,8 @@ export default class NetworkFilter implements IFilter {
             }
 
             mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
-            if (optionValue.length > 0) {
-              csp = optionValue;
+            if (value.length > 0) {
+              optionValue = value;
             }
             break;
           case 'ehide':
@@ -587,7 +729,7 @@ export default class NetworkFilter implements IFilter {
             }
 
             mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
-            csp =
+            optionValue =
               "script-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:";
             break;
           case 'inline-font':
@@ -596,8 +738,17 @@ export default class NetworkFilter implements IFilter {
             }
 
             mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
-            csp =
+            optionValue =
               "font-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:";
+            break;
+          case 'replace':
+            if (negation || replaceOptionValueToRegexp(value) === null) {
+              return null;
+            }
+
+            mask = setBit(mask, NETWORK_FILTER_MASK.isReplace);
+            optionValue = value;
+
             break;
           default: {
             // Handle content type options separatly
@@ -863,14 +1014,13 @@ export default class NetworkFilter implements IFilter {
     }
 
     return new NetworkFilter({
-      csp,
       filter,
       hostname,
       mask,
       domains,
       denyallow,
+      optionValue,
       rawLine: debug === true ? line : undefined,
-      redirect,
       regex: undefined,
     });
   }
@@ -893,29 +1043,34 @@ export default class NetworkFilter implements IFilter {
       mask,
 
       // Optional parts
-      csp: (optionalParts & 1) === 1 ? buffer.getNetworkCSP() : undefined,
       filter:
-        (optionalParts & 2) === 2
+        (optionalParts & 1) === 1
           ? isUnicode
             ? buffer.getUTF8()
             : buffer.getNetworkFilter()
           : undefined,
-      hostname: (optionalParts & 4) === 4 ? buffer.getNetworkHostname() : undefined,
-      domains: (optionalParts & 8) === 8 ? Domains.deserialize(buffer) : undefined,
-      rawLine: (optionalParts & 16) === 16 ? buffer.getRawNetwork() : undefined,
-      redirect: (optionalParts & 32) === 32 ? buffer.getNetworkRedirect() : undefined,
-      denyallow: (optionalParts & 64) === 64 ? Domains.deserialize(buffer) : undefined,
+      hostname: (optionalParts & 2) === 2 ? buffer.getNetworkHostname() : undefined,
+      domains: (optionalParts & 4) === 4 ? Domains.deserialize(buffer) : undefined,
+      rawLine: (optionalParts & 8) === 8 ? buffer.getRawNetwork() : undefined,
+      denyallow: (optionalParts & 16) === 16 ? Domains.deserialize(buffer) : undefined,
+      optionValue:
+        (optionalParts & 32) === 32
+          ? getBit(mask, NETWORK_FILTER_MASK.isCSP)
+            ? buffer.getNetworkCSP()
+            : getBit(mask, NETWORK_FILTER_MASK.isRedirect)
+              ? buffer.getNetworkRedirect()
+              : buffer.getUTF8()
+          : undefined,
       regex: undefined,
     });
   }
 
-  public readonly csp: string | undefined;
   public readonly filter: string | undefined;
   public readonly hostname: string | undefined;
   public readonly mask: number;
   public readonly domains: Domains | undefined;
   public readonly denyallow: Domains | undefined;
-  public readonly redirect: string | undefined;
+  public readonly optionValue: string | undefined;
 
   // Set only in debug mode
   public readonly rawLine: string | undefined;
@@ -925,38 +1080,51 @@ export default class NetworkFilter implements IFilter {
   public regex: RegExp | undefined;
 
   constructor({
-    csp,
     filter,
     hostname,
     mask,
     domains,
     denyallow,
+    optionValue,
     rawLine,
-    redirect,
     regex,
   }: {
-    csp: string | undefined;
     filter: string | undefined;
     hostname: string | undefined;
     mask: number;
     domains: Domains | undefined;
     denyallow: Domains | undefined;
+    optionValue: string | undefined;
     rawLine: string | undefined;
-    redirect: string | undefined;
     regex: RegExp | undefined;
   }) {
-    this.csp = csp;
     this.filter = filter;
     this.hostname = hostname;
     this.mask = mask;
     this.domains = domains;
     this.denyallow = denyallow;
-    this.redirect = redirect;
+    this.optionValue = optionValue;
 
     this.rawLine = rawLine;
 
     this.id = undefined;
     this.regex = regex;
+  }
+
+  public get csp(): string | undefined {
+    if (!this.isCSP()) {
+      return undefined;
+    }
+
+    return this.optionValue;
+  }
+
+  public get redirect(): string | undefined {
+    if (!this.isRedirect()) {
+      return undefined;
+    }
+
+    return this.optionValue;
   }
 
   public isCosmeticFilter() {
@@ -1015,13 +1183,8 @@ export default class NetworkFilter implements IFilter {
     // This bit-mask indicates which optional parts of the filter were serialized.
     let optionalParts = 0;
 
-    if (this.csp !== undefined) {
-      optionalParts |= 1;
-      buffer.pushNetworkCSP(this.csp);
-    }
-
     if (this.filter !== undefined) {
-      optionalParts |= 2;
+      optionalParts |= 1;
       if (this.isUnicode()) {
         buffer.pushUTF8(this.filter);
       } else {
@@ -1030,28 +1193,35 @@ export default class NetworkFilter implements IFilter {
     }
 
     if (this.hostname !== undefined) {
-      optionalParts |= 4;
+      optionalParts |= 2;
       buffer.pushNetworkHostname(this.hostname);
     }
 
     if (this.domains !== undefined) {
-      optionalParts |= 8;
+      optionalParts |= 4;
       this.domains.serialize(buffer);
     }
 
     if (this.rawLine !== undefined) {
-      optionalParts |= 16;
+      optionalParts |= 8;
       buffer.pushRawNetwork(this.rawLine);
     }
 
-    if (this.redirect !== undefined) {
-      optionalParts |= 32;
-      buffer.pushNetworkRedirect(this.redirect);
+    if (this.denyallow !== undefined) {
+      optionalParts |= 16;
+      this.denyallow.serialize(buffer);
     }
 
-    if (this.denyallow !== undefined) {
-      optionalParts |= 64;
-      this.denyallow.serialize(buffer);
+    if (this.optionValue !== undefined) {
+      optionalParts |= 32;
+
+      if (this.isCSP()) {
+        buffer.pushNetworkCSP(this.optionValue);
+      } else if (this.isRedirect()) {
+        buffer.pushNetworkRedirect(this.optionValue);
+      } else {
+        buffer.pushUTF8(this.optionValue);
+      }
     }
 
     buffer.setByte(index, optionalParts);
@@ -1059,10 +1229,6 @@ export default class NetworkFilter implements IFilter {
 
   public getSerializedSize(compression: boolean): number {
     let estimate: number = 4 + 1; // mask = 4 bytes // optional parts = 1 byte
-
-    if (this.csp !== undefined) {
-      estimate += sizeOfNetworkCSP(this.csp, compression);
-    }
 
     if (this.filter !== undefined) {
       if (this.isUnicode() === true) {
@@ -1084,12 +1250,18 @@ export default class NetworkFilter implements IFilter {
       estimate += sizeOfRawNetwork(this.rawLine, compression);
     }
 
-    if (this.redirect !== undefined) {
-      estimate += sizeOfNetworkRedirect(this.redirect, compression);
-    }
-
     if (this.denyallow !== undefined) {
       estimate += this.denyallow.getSerializedSize();
+    }
+
+    if (this.optionValue !== undefined) {
+      if (this.isCSP()) {
+        estimate += sizeOfNetworkCSP(this.optionValue, compression);
+      } else if (this.isRedirect()) {
+        estimate += sizeOfNetworkRedirect(this.optionValue, compression);
+      } else {
+        estimate += sizeOfUTF8(this.optionValue);
+      }
     }
 
     return estimate;
@@ -1172,7 +1344,7 @@ export default class NetworkFilter implements IFilter {
     }
 
     if (this.isCSP()) {
-      options.push(`csp=${this.csp}`);
+      options.push(`csp=${this.optionValue}`);
     }
 
     if (this.isElemHide()) {
@@ -1234,26 +1406,24 @@ export default class NetworkFilter implements IFilter {
     // eliminate bad filters by comparing IDs, which is more robust and faster
     // than string comparison.
     return computeFilterId(
-      this.csp,
       this.mask & ~NETWORK_FILTER_MASK.isBadFilter,
       this.filter,
       this.hostname,
       this.domains,
       this.denyallow,
-      this.redirect,
+      this.optionValue,
     );
   }
 
   public getId(): number {
     if (this.id === undefined) {
       this.id = computeFilterId(
-        this.csp,
         this.mask,
         this.filter,
         this.hostname,
         this.domains,
         this.denyallow,
-        this.redirect,
+        this.optionValue,
       );
     }
     return this.id;
@@ -1275,8 +1445,12 @@ export default class NetworkFilter implements IFilter {
     return this.getMask() & FROM_ANY;
   }
 
+  private getOptionValue() {
+    return this.optionValue || '';
+  }
+
   public isRedirect(): boolean {
-    return this.redirect !== undefined;
+    return getBit(this.getMask(), NETWORK_FILTER_MASK.isRedirect);
   }
 
   public isRedirectRule(): boolean {
@@ -1284,7 +1458,23 @@ export default class NetworkFilter implements IFilter {
   }
 
   public getRedirect(): string {
-    return this.redirect || '';
+    return this.getOptionValue();
+  }
+
+  public isReplace(): boolean {
+    return getBit(this.getMask(), NETWORK_FILTER_MASK.isReplace);
+  }
+
+  public getHtmlModifier(): HTMLModifier | null {
+    if (this.isReplace()) {
+      return replaceOptionValueToRegexp(this.getOptionValue());
+    }
+
+    return null;
+  }
+
+  public isHtmlFilteringRule(): boolean {
+    return this.isReplace();
   }
 
   public hasHostname(): boolean {

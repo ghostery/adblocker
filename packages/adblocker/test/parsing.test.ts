@@ -10,7 +10,7 @@ import { expect } from 'chai';
 import 'mocha';
 
 import CosmeticFilter, { DEFAULT_HIDDING_STYLE } from '../src/filters/cosmetic.js';
-import NetworkFilter, { findLastIndexOfUnescapedCharacter } from '../src/filters/network.js';
+import NetworkFilter from '../src/filters/network.js';
 import { parseFilters } from '../src/lists.js';
 import { hashStrings, tokenize } from '../src/utils.js';
 import { HTMLSelector } from '../src/html-filtering.js';
@@ -960,6 +960,109 @@ describe('Network filters', () => {
 
       network('||foo.com^$generichide,specifichide', { isElemHide: true });
       network('@@||foo.com^$generichide,specifichide', { isElemHide: true, isException: true });
+    });
+
+    describe('replace', () => {
+      it('parses known filters', () => {
+        const filters: string[] =
+          String.raw`||alliptvlinks.com/tktk-content/plugins/$script,1p,replace=/\bconst now.+?, 100/clearInterval(timer);resolve();}, 100/gms
+    /theme/002/js/application.js?2.0|$script,1p,replace=/video\.maxPop/0/
+    ||s3media.247sports.com/Scripts/Bundle/*/videoPlayer.js^$script,1p,replace=/;if\(!\([a-z]+\|\|\(null===[^{]+/;if(false)/
+    ||dehlinks.ir/link_download.php?Mozojadid_Id=$doc,replace=/content="15;/content="0;/
+    ||rekidai-info.github.io/_app/immutable/components/pages/index/_page.svelte-$script,replace=/try\{.*?catch.*?push\(\)\}catch\{//
+    ||rekidai-info.github.io/_app/immutable/components/pages/index/_page.svelte-$script,replace=/throw new Error\("Error Loading Rekidai Data."\)\}throw new Error\("Ad block detected."\)//
+    ||veev.to/assets/videoplayer/*.js$script,replace=/\bhttps:\/\/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/https:\/\/veev.to\/assets\/videoplayer\/17c088d.js/
+    ||theappstore.org/script.js?v=$script,1p,replace=/result\.length \> 10000/result.length < 10000/g
+    /loader.min.js$xhr,script,domain=loawa.com|ygosu.com|sportalkorea.com|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|dogdrip.net|worldhistory.org|bamgosu.site,replace=/\)\{var [a-z]{1,2},[a-z]{1,2},[a-z]{1,2},[a-z]{1,2}\=[a-z]{2};return [a-z]\(\)/){return;/g
+    /loader.min.js$xhr,script,domain=loawa.com|ygosu.com|sportalkorea.com|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|dogdrip.net|worldhistory.org|bamgosu.site,replace=/\)\{var [a-z]{1,2},[a-z]{1,2},[a-z]{1,2};.*?return [a-z]\(\)/){return; return c()/g
+    /loader.min.js$xhr,script,domain=loawa.com|ygosu.com|sportalkorea.com|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|dogdrip.net|worldhistory.org,replace=/\.mark\(\(function [a-z0-9]{1,2}\([a-z0-9]{1,2},[a-z0-9]{1,2}\){var.*\]\]\)\}\)\)\),/.mark((function neutralized(a,b){var none = false;}))),/g
+    ||bitcotasks.com/assets/js/mainjs.php$script,1p,replace=/entry.duration > 0/entry.duration < 10/
+    ||d3lj2s469wtjp0.cloudfront.net/build/js/public/$script,3p,replace=/\{try\{.*?clip-path.*?catch\(/{try{}catch(/,domain=puzzle-loop.com|puzzle-words.com|puzzle-chess.com|puzzle-thermometers.com|puzzle-norinori.com|puzzle-minesweeper.com|puzzle-slant.com|puzzle-lits.com|puzzle-galaxies.com|puzzle-tents.com|puzzle-battleships.com|puzzle-pipes.com|puzzle-hitori.com|puzzle-heyawake.com|puzzle-shingoki.com|puzzle-masyu.com|puzzle-stitches.com|puzzle-aquarium.com|puzzle-tapa.com|puzzle-star-battle.com|puzzle-kakurasu.com|puzzle-skyscrapers.com|puzzle-futoshiki.com|puzzle-shakashaka.com|puzzle-kakuro.com|puzzle-jigsaw-sudoku.com|puzzle-killer-sudoku.com|puzzle-binairo.com|puzzle-nonograms.com|puzzle-sudoku.com|puzzle-light-up.com|puzzle-bridges.com|puzzle-shikaku.com|puzzle-nurikabe.com|puzzle-dominosa.com
+    ||statics.1mv.xyz/statics/*.js|$script,3p,replace=/;return _0x[a-z0-9]+\['[_a-z]+'\]\['s'\]/;return false/
+    ||statics.1mv.xyz/statics/*.js|$script,3p,replace=/;if\(null!==\(_0x[a-z0-9]+=this\['[_a-z]+'\]\)[^)]+\)return;/;if(true)return;/
+    ||in-jpn.com^$script,replace=/var w_status[\s\S\n]+?doSakigake\(\);[\s\S\n]+?\}//,badfilter
+    ||in-jpn.com^$script,replace=/var w_\w+[\s\S\n]+?doSakigake\(\);[\s\S\n]+?\}//
+    ||www.facebook.com/api/graphql/$xhr,replace=/\{"brs_content_label":[^,]+,"category":"ENGAGEMENT[^\n]+"cursor":"[^"]+"\}/{}/g
+    ||solarmovie.vip/js/$script,1p,replace=/\(\{checkers\:.*?\]\}\)/({checkers:[]})/g
+    ||tver.jp/_next/static/chunks/$replace=/e\?(e\(\):\(n\.play\(\))/!1?\$1/,script
+    ||www.youtube.com/playlist?list=$xhr,1p,replace=/"adPlacements.*?([A-Z]"\}|"\}{2\,4})\}\]\,//
+    ||www.youtube.com/playlist?list=$xhr,1p,replace=/"adSlots.*?\}\]\}\}\]\,//
+    ||www.youtube.com/watch?v=$xhr,1p,replace=/"adPlacements.*?([A-Z]"\}|"\}{2\,4})\}\]\,//
+    ||www.youtube.com/watch?v=$xhr,1p,replace=/"adSlots.*?\}\]\}\}\]\,//
+    ||www.youtube.com/youtubei/v1/player?$xhr,1p,replace=/"adPlacements.*?([A-Z]"\}|"\}{2\,4})\}\]\,//
+    ||www.youtube.com/youtubei/v1/player?$xhr,1p,replace=/"adSlots.*?\}\]\}\}\]\,//
+    ||www.facebook.com/api/graphql/$xhr,replace=/\{"brs_content_label":[^,]+,"category":"SPONSORED"[^\n]+"cursor":"[^"]+"\}/{}/
+    ||www.facebook.com/api/graphql/$xhr,replace=/\{"node":\{"role":"SEARCH_ADS"[^\n]+?cursor":[^}]+\}/{}/g
+    ||www.facebook.com/api/graphql/$xhr,replace=/\{"node":\{"__typename":"MarketplaceFeedAdStory"[^\n]+?"cursor":(?:null|"\{[^\n]+?\}"|[^\n]+?MarketplaceSearchFeedStoriesEdge")\}/{}/g`.split(
+            '\n',
+          );
+        const filterExpressions: RegExp[] = [
+          new RegExp(String.raw`\bconst now.+?, 100`, 'gms'),
+          new RegExp(String.raw`video\.maxPop`),
+          new RegExp(String.raw`;if\(!\([a-z]+\|\|\(null===[^{]+`),
+          new RegExp('content="15;'),
+          new RegExp(String.raw`try\{.*?catch.*?push\(\)\}catch\{`),
+          new RegExp(
+            String.raw`throw new Error\("Error Loading Rekidai Data."\)\}throw new Error\("Ad block detected."\)`,
+          ),
+          new RegExp(
+            String.raw`\bhttps:\/\/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js`,
+          ),
+          new RegExp(String.raw`result\.length \> 10000`, 'g'),
+          new RegExp(
+            String.raw`\)\{var [a-z]{1,2},[a-z]{1,2},[a-z]{1,2},[a-z]{1,2}\=[a-z]{2};return [a-z]\(\)`,
+            'g',
+          ),
+          new RegExp(
+            String.raw`\)\{var [a-z]{1,2},[a-z]{1,2},[a-z]{1,2};.*?return [a-z]\(\)`,
+            'g',
+          ),
+          new RegExp(
+            String.raw`\.mark\(\(function [a-z0-9]{1,2}\([a-z0-9]{1,2},[a-z0-9]{1,2}\){var.*\]\]\)\}\)\)\),`,
+            'g',
+          ),
+          new RegExp(String.raw`entry.duration > 0`),
+          new RegExp(String.raw`\{try\{.*?clip-path.*?catch\(`),
+          new RegExp(String.raw`;return _0x[a-z0-9]+\['[_a-z]+'\]\['s'\]`),
+          new RegExp(String.raw`;if\(null!==\(_0x[a-z0-9]+=this\['[_a-z]+'\]\)[^)]+\)return;`),
+          new RegExp(String.raw`var w_status[\s\S\n]+?doSakigake\(\);[\s\S\n]+?\}`),
+          new RegExp(String.raw`var w_\w+[\s\S\n]+?doSakigake\(\);[\s\S\n]+?\}`),
+          new RegExp(
+            String.raw`\{"brs_content_label":[^,]+,"category":"ENGAGEMENT[^\n]+"cursor":"[^"]+"\}`,
+            'g',
+          ),
+          new RegExp(String.raw`\(\{checkers\:.*?\]\}\)`, 'g'),
+          new RegExp(String.raw`e\?(e\(\):\(n\.play\(\))`),
+          new RegExp(String.raw`"adPlacements.*?([A-Z]"\}|"\}{2\,4})\}\]\,`),
+          new RegExp(String.raw`"adSlots.*?\}\]\}\}\]\,`),
+          new RegExp(String.raw`"adPlacements.*?([A-Z]"\}|"\}{2\,4})\}\]\,`),
+          new RegExp(String.raw`"adSlots.*?\}\]\}\}\]\,`),
+          new RegExp(String.raw`"adPlacements.*?([A-Z]"\}|"\}{2\,4})\}\]\,`),
+          new RegExp(String.raw`"adSlots.*?\}\]\}\}\]\,`),
+          new RegExp(
+            String.raw`\{"brs_content_label":[^,]+,"category":"SPONSORED"[^\n]+"cursor":"[^"]+"\}`,
+          ),
+          new RegExp(String.raw`\{"node":\{"role":"SEARCH_ADS"[^\n]+?cursor":[^}]+\}`, 'g'),
+          new RegExp(
+            String.raw`\{"node":\{"__typename":"MarketplaceFeedAdStory"[^\n]+?"cursor":(?:null|"\{[^\n]+?\}"|[^\n]+?MarketplaceSearchFeedStoriesEdge")\}`,
+            'g',
+          ),
+        ];
+
+        for (let i = 0; i < filters.length; i++) {
+          it(filters[i], () => {
+            const filter = NetworkFilter.parse(filters[i]);
+
+            expect(filter).not.to.be.null;
+            expect(filter!.isReplace()).to.be.true;
+
+            const htmlModifier = filter!.getHtmlModifier();
+
+            expect(htmlModifier).not.to.be.null;
+            expect(htmlModifier![0].toString()).to.be.eql(filterExpressions[i].toString());
+          });
+        }
+      });
     });
 
     describe('un-supported options', () => {
@@ -2454,11 +2557,5 @@ describe('scriptlets arguments parsing', () => {
         expected,
       );
     }
-  });
-
-  it('ignores escaped dollar sign to find options index', () => {
-    const filter = String.raw`||www.youtube.com/playlist?list=$xhr,1p,replace=/("trackingParam":"kx_fmPxhoPZR)[-_0-9A-Za-z]{150}[-_0-9A-Za-z]+?([-_0-9A-Za-z]{55}lLKPQ-SS"\})/\$1\$2/`;
-
-    expect(findLastIndexOfUnescapedCharacter(filter, '$')).to.be.eql(32);
   });
 });

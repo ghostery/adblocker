@@ -220,27 +220,65 @@ export function removeTagsFromHtml(html: string, toRemove: [number, string][]): 
   return filteredHtml;
 }
 
+export type HTMLModifier = readonly [RegExp, string];
+
+function applyModifiersToHtml(html: string, modifiers: HTMLModifier[]): string {
+  if (modifiers.length === 0) {
+    return html;
+  }
+
+  for (const [regexp, replacement] of modifiers) {
+    html = html.replace(regexp, replacement);
+  }
+
+  return html;
+}
+
 export default class StreamingHtmlFilter {
   private buffer: string;
   private readonly patterns: Patterns;
+  private readonly modifiers: HTMLModifier[];
 
-  constructor(selectors: HTMLSelector[]) {
+  constructor(selectors: HTMLSelector[], modifiers: HTMLModifier[] = []) {
     this.buffer = '';
     this.patterns = extractSelectorsFromRules(selectors);
+    this.modifiers = modifiers;
   }
 
   public flush(): string {
-    return this.buffer;
+    let out = this.buffer;
+
+    // If there's a modifier
+    if (this.modifiers.length !== 0) {
+      // If there's a pattern, process in priority.
+      if (this.patterns.length !== 0) {
+        const [tags, parsed, rest] = extractTagsFromHtml(this.buffer, 'script');
+        out = removeTagsFromHtml(parsed, selectTagsToRemove(this.patterns, tags)) + rest;
+      }
+
+      out = applyModifiersToHtml(out, this.modifiers);
+    }
+
+    this.buffer = '';
+
+    return out;
   }
 
   public write(chunk: string): string {
-    // If there are no valid selectors, abort.
-    if (this.patterns.length === 0) {
+    // If given an empty string, abort.
+    if (chunk.length === 0) {
       return chunk;
     }
 
-    // If given an empty string, abort.
-    if (chunk.length === 0) {
+    // If there's a modifier, buffer all.
+    if (this.modifiers.length !== 0) {
+      this.buffer += chunk;
+
+      return '';
+    }
+
+    // If there's no pattern, proxy.
+    if (this.patterns.length === 0) {
       return chunk;
     }
 
@@ -249,6 +287,7 @@ export default class StreamingHtmlFilter {
 
     // Parse tags from `this.buffer`
     const [tags, parsed, rest] = extractTagsFromHtml(this.buffer, 'script');
+
     this.buffer = rest;
 
     // If no tags were found, just return the parsed version
