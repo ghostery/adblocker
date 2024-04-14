@@ -19,12 +19,14 @@
 @@||popads.net/js/adblock.js$script,domain=dropgalaxy.*|financemonk.net
 @@||cdn.jsdelivr.net/gh/prebid/*$script,domain=dropgalaxy.*|financemonk.net
 @@||fundingchoicesmessages.google.com^$script,domain=dropgalaxy.*|financemonk.net
-financemonk.net,dropgalaxy.*##+js(nowoif)
-financemonk.net,dropgalaxy.*##+js(trusted-set, document.visibilityState, visible)
-financemonk.net,dropgalaxy.com#@#+js(abort-current-script, document.onkeydown)
-financemonk.net,dropgalaxy.*##+js(set, supportedBrowsers, )
-financemonk.net,dropgalaxy.*##html.i-amphtml-inabox
-financemonk.net,dropgalaxy.*##[id^="TR-"][tr-id][style*="z-index: 9999"]
+@@||googlesyndication.com^$frame,image,domain=dropgalaxy.*|financemonk.net
+@@||s10.histats.com/js15_as.js$script,domain=dropgalaxy.*|financemonk.net
+dropgalaxy.*,financemonk.net##+js(nowoif)
+dropgalaxy.*,financemonk.net##+js(trusted-set, document.visibilityState, visible)
+dropgalaxy.*,financemonk.net#@#+js(abort-current-script, document.onkeydown)
+dropgalaxy.*,financemonk.net##+js(set, supportedBrowsers, )
+dropgalaxy.*,financemonk.net##html.i-amphtml-inabox
+dropgalaxy.*,financemonk.net##[id^="TR-"][tr-id][style*="z-index: 9999"]
 ! aternos anti adb
 @@||hb.vntsm.com/v3/live/ad-manager-bundle.min.js$script,domain=aternos.org
 @@||hb.vntsm.com/ab/live/fatum/ad-manager-bundle.min.js$script,domain=aternos.org
@@ -35,12 +37,12 @@ aternos.org###placement-takeover
 ! pixsera
 ! https://github.com/uBlockOrigin/uAssets/issues/9123
 ! https://github.com/orgs/uBlockOrigin/teams/ublock-filters-volunteers/discussions/423/comments/6
-imgoebn.sbs,picnwqez.sbs,imgjajhe.sbs,pixjnwe.sbs,pixkfjtrkf.shop,pixkfkf.shop,pixdfdjkkr.shop,pixdfdj.shop,picnft.shop,pixrqqz.shop,picngt.shop,picjgfjet.shop,picjbet.shop,imgkkabm.shop,imgxabm.shop,imgthbm.shop,imgmyqbm.shop##+js(aopr, console.clear)
-imgoebn.sbs,picnwqez.sbs,imgjajhe.sbs,pixjnwe.sbs,pixkfjtrkf.shop,pixkfkf.shop,pixdfdjkkr.shop,pixdfdj.shop,picnft.shop,pixrqqz.shop,picngt.shop,picjgfjet.shop,picjbet.shop,imgkkabm.shop,imgxabm.shop,imgthbm.shop,imgmyqbm.shop##+js(nano-sib, timer)
-imgoebn.sbs,picnwqez.sbs,imgjajhe.sbs,pixjnwe.sbs,pixkfjtrkf.shop,pixkfkf.shop,pixdfdjkkr.shop,pixdfdj.shop,picnft.shop,pixrqqz.shop,picngt.shop,picjgfjet.shop,picjbet.shop,imgkkabm.shop,imgxabm.shop,imgthbm.shop,imgmyqbm.shop##div[id][style^="position: fixed; display: block; width: 100%;"]
-imgoebn.sbs,picnwqez.sbs,imgjajhe.sbs,pixjnwe.sbs,pixkfjtrkf.shop,pixkfkf.shop,pixdfdjkkr.shop,pixdfdj.shop,picnft.shop,pixrqqz.shop,picngt.shop,picjgfjet.shop,picjbet.shop,imgkkabm.shop,imgxabm.shop,imgthbm.shop,imgmyqbm.shop##div[style="width:100%;height:110px"]
-imgoebn.sbs,picnwqez.sbs,imgjajhe.sbs,pixjnwe.sbs,pixkfjtrkf.shop,pixkfkf.shop,pixdfdjkkr.shop,pixdfdj.shop,picnft.shop,pixrqqz.shop,picngt.shop,picjgfjet.shop,picjbet.shop,imgkkabm.shop,imgxabm.shop,imgthbm.shop,imgmyqbm.shop##+js(nowoif, !%2Fprcf.fiyar%7Cthemes%7Cpixsense%7C.jpg%2F)
-imgoebn.sbs,picnwqez.sbs,imgjajhe.sbs,pixjnwe.sbs,pixkfjtrkf.shop,pixkfkf.shop,pixdfdjkkr.shop,pixdfdj.shop,picnft.shop,pixrqqz.shop,picngt.shop,picjgfjet.shop,picjbet.shop,imgkkabm.shop,imgxabm.shop,imgthbm.shop,imgmyqbm.shop##div[class][style="display: block;"]
+imgjbxzjv.shop##+js(aopr, console.clear)
+imgjbxzjv.shop##+js(nano-sib, timer)
+imgjbxzjv.shop##div[id][style^="position: fixed; display: block; width: 100%;"]
+imgjbxzjv.shop##div[style="width:100%;height:110px"]
+imgjbxzjv.shop##+js(nowoif, !%2Fprcf.fiyar%7Cthemes%7Cpixsense%7C.jpg%2F)
+imgjbxzjv.shop##div[class][style="display: block;"]
 ! https://www.reddit.com/r/uBlockOrigin/comments/16lmeri/youtube_antiadblock_and_ads_september_18_2023/k1wl8df/
 !#if !env_mv3
 !#if !cap_html_filtering
@@ -54,25 +56,14 @@ m.youtube.com,music.youtube.com,www.youtube.com##+js(trusted-rpnt, script, %2F%5
 m.youtube.com,music.youtube.com,www.youtube.com##+js(set, ytInitialPlayerResponse.playerConfig.ssapConfig, undefined)
 m.youtube.com,music.youtube.com,www.youtube.com##+js(set, ytInitialPlayerResponse.streamingData.serverAbrStreamingUrl, undefined)
 m.youtube.com,music.youtube.com,www.youtube.com##+js(json-prune, playerResponse.playerConfig.ssapConfig%20playerResponse.streamingData.serverAbrStreamingUrl%20playerConfig.ssapConfig%20streamingData.serverAbrStreamingUrl)
-!#if cap_html_filtering
-!#endif
+! Shorts Ad
+m.youtube.com,music.youtube.com,tv.youtube.com,www.youtube.com,youtubekids.com,youtube-nocookie.com##+js(json-prune-fetch-response, reelWatchSequenceResponse.entries.%5B-%5D.command.reelWatchEndpoint.adClientParams.isAd%20entries.%5B-%5D.command.reelWatchEndpoint.adClientParams.isAd, , propsToMatch, url%3A%2Freel_watch_sequence%3F)
+m.youtube.com,music.youtube.com,tv.youtube.com,www.youtube.com,youtubekids.com,youtube-nocookie.com##+js(json-prune-fetch-response, overlay, overlay.shortsAdsRenderer, propsToMatch, url%3A%2Freel_item_watch%3F)
 ! https://github.com/uBlockOrigin/uAssets/issues/18476
 ! VOE sites
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=jamesstartstudent.com,important
-jamesstartstudent.com##+js(nowoif)
-jamesstartstudent.com##+js(set, console.clear, undefined)
-! perchance - broken by its dev
-||eu-1-id5-sync.com^
-||perchance.org/api/count?key=abp$xhr,1p
-||perchance.org/api/count?key=abt$xhr,1p
-perchance.org##+js(rpnt, script, %2Fapi%2Fcount%3Fkey%3Dabt%22)%3B, %2Fapi%2Fcount%3Fkey%3Dabt%22)%3B%20return%3B)
-perchance.org##+js(rpnt, script, %2Fapi%2Fcount%3Fkey%3D%24%7B%22%22%7Dabpr%60%20%2B%20%22%22)%3B, %2Fapi%2Fcount%3Fkey%3D%24%7B%22%22%7Dabpr%60%20%2B%20%22%22)%3B%20return%3B)
-perchance.org##+js(rpnt, script, scri12pts%20%26%26%20ifra2mes%20%26%26%20coo1kies, true)
-perchance.org##+js(rpnt, script, %2FsessionToken%5Cs*%5C)%2F, sessionToken%20%7C%7C%20true))
-perchance.org##+js(rpnt, script, %2FsessionToken%5Cs*%5C%7C%5C%7C%2F, sessionToken%20%7C%7C%20true%20%7C%7C)
-perchance.org##+js(rpnt, script, %2F%5C%5D%5Cs*%5C%7C%5C%7C%5Cs*w%2F, %5D%20%7C%7C%20true%20%7C%7C%20w)
-perchance.org##+js(rpnt, script, %2F%5C(%3F%5Cs*%221%22%5Cs*%5C)%3F%5Cs*%3B%2F, %221%22%3B%20return%3B)
-perchance.org##div[style*="var"][style*="min-height"]:has([data-freestar-ad])
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=jasonresponsemeasure.com,important
+jasonresponsemeasure.com##+js(nowoif)
+jasonresponsemeasure.com##+js(set, console.clear, undefined)
 ! ytlarge detection
 @@||ytlarge.com^$ghide
 @@||googlesyndication.com^$script,xhr,domain=ytlarge.com
@@ -89,8 +80,8 @@ perchance.org##div[style*="var"][style*="min-height"]:has([data-freestar-ad])
 @@||pagead2.googlesyndication.com^$script,domain=next-episode.net
 ! https://github.com/uBlockOrigin/uAssets/issues/22840
 !#if env_chromium
-decrypt.day##ins.adsbygoogle:style(clip-path: circle(0) !important;)
-decrypt.day##+js(spoof-css, ins.adsbygoogle, clip-path, none)
+decrypt.day##+js(rpnt, script, G-69Q453PG98')%3B, G-69Q453PG98')%3B%20!function()%7B%22use%20strict%22%3Blet%20t%3D%7Blog%3Awindow.console.log.bind(console)%2CgetPropertyValue%3ACSSStyleDeclaration.prototype.getPropertyValue%2CsetAttribute%3AElement.prototype.setAttribute%2CgetAttribute%3AElement.prototype.getAttribute%2CappendChild%3AElement.prototype.appendChild%2Cremove%3AElement.prototype.remove%2CcloneNode%3AElement.prototype.cloneNode%2CElement_attributes%3AObject.getOwnPropertyDescriptor(Element.prototype%2C%22attributes%22).get%2CArray_splice%3AArray.prototype.splice%2CArray_join%3AArray.prototype.join%2CcreateElement%3Adocument.createElement%2CgetComputedStyle%3Awindow.getComputedStyle%2CReflect%3AReflect%2CProxy%3AProxy%2Ccrypto%3Awindow.crypto%2CUint8Array%3AUint8Array%2CObject_defineProperty%3AObject.defineProperty.bind(Object)%2CObject_getOwnPropertyDescriptor%3AObject.getOwnPropertyDescriptor.bind(Object)%2CString_replace%3AString.prototype.replace%7D%2Ce%3Dt.crypto.getRandomValues.bind(t.crypto)%2Cr%3Dfunction(e%2Cr%2Cl)%7Breturn%22toString%22%3D%3D%3Dr%3Fe.toString.bind(e)%3At.Reflect.get(e%2Cr%2Cl)%7D%2Cl%3Dfunction(r)%7Blet%20o%3Dfunction(t)%7Breturn%20t.toString(16).padStart(2%2C%220%22)%7D%2Cp%3Dnew%20t.Uint8Array((r%7C%7C40)%2F2)%3Be(p)%3Blet%20n%3Dt.String_replace.call(t.Array_join.call(Array.from(p%2Co)%2C%22%22)%2C%2F%5E%5Cd%2B%2Fg%2C%22%22)%3Breturn%20n.length%3C3%3Fl(r)%3An%7D%2Co%3Dl(15)%3Bwindow.MutationObserver%3Dnew%20t.Proxy(window.MutationObserver%2C%7Bconstruct%3Afunction(e%2Cr)%7Blet%20l%3Dr%5B0%5D%2Cp%3Dfunction(e%2Cr)%7Bfor(let%20p%3De.length%2Cn%3Dp-1%3Bn%3E%3D0%3B--n)%7Blet%20c%3De%5Bn%5D%3Bif(%22childList%22%3D%3D%3Dc.type%26%26c.addedNodes.length%3E0)%7Blet%20i%3Dc.addedNodes%3Bfor(let%20a%3D0%2Cy%3Di.length%3Ba%3Cy%3B%2B%2Ba)%7Blet%20u%3Di%5Ba%5D%3Bif(u.localName%3D%3D%3Do)%7Bt.Array_splice.call(e%2Cn%2C1)%3Bbreak%7D%7D%7D%7D0!%3D%3De.length%26%26l(e%2Cr)%7D%3Br%5B0%5D%3Dp%3Blet%20n%3Dt.Reflect.construct(e%2Cr)%3Breturn%20n%7D%2Cget%3Ar%7D)%2Cwindow.getComputedStyle%3Dnew%20t.Proxy(window.getComputedStyle%2C%7Bapply(e%2Cl%2Cp)%7Blet%20n%3Dt.Reflect.apply(e%2Cl%2Cp)%3Bif(%22none%22%3D%3D%3Dt.getPropertyValue.call(n%2C%22clip-path%22))return%20n%3Blet%20c%3Dp%5B0%5D%2Ci%3Dt.createElement.call(document%2Co)%3Bt.setAttribute.call(i%2C%22class%22%2Ct.getAttribute.call(c%2C%22class%22))%2Ct.setAttribute.call(i%2C%22id%22%2Ct.getAttribute.call(c%2C%22id%22))%2Ct.setAttribute.call(i%2C%22style%22%2Ct.getAttribute.call(c%2C%22style%22))%2Ct.appendChild.call(document.body%2Ci)%3Blet%20a%3Dt.getPropertyValue.call(t.getComputedStyle.call(window%2Ci)%2C%22clip-path%22)%3Breturn%20t.remove.call(i)%2Ct.Object_defineProperty(n%2C%22clipPath%22%2C%7Bget%3A(()%3D%3Ea).bind(null)%7D)%2Cn.getPropertyValue%3Dnew%20t.Proxy(n.getPropertyValue%2C%7Bapply%3A(e%2Cr%2Cl)%3D%3E%22clip-path%22!%3D%3Dl%5B0%5D%3Ft.Reflect.apply(e%2Cr%2Cl)%3Aa%2Cget%3Ar%7D)%2Cn%7D%2Cget%3Ar%7D)%7D()%3B)
+decrypt.day##ins.adsbygoogle:not(:empty):style(clip-path: circle(0) !important;)
 !#else
 decrypt.day##ins.adsbygoogle > *:style(position: relative !important; left: -10000px !important;)
 !#endif
@@ -109,29 +100,25 @@ decrypt.day##+js(no-fetch-if, adsbygoogle)
 ||fundingchoicesmessages.google.com^$xhr,important,domain=decrypt.day
 !#endif
 *$frame,redirect-rule=noopframe,domain=decrypt.day
-! https://github.com/uBlockOrigin/uAssets/issues/19729
-/\/common\/images\/[a-z0-9]+\-[a-z0-9]+\.png$/$image,1p,domain=torrentgalaxy.to|tgx.rs
-torrentgalaxy.to,tgx.rs##a[href^="/hx?r0ff3r="][href$="&tfh"], #stopad, .kdguszftmyrvenilh, a[onmouseout="#"][href], img[src^="/common/images/"][alt="wide"][data-src="bin"]
-torrentgalaxy.to,tgx.rs##body > [id] > div:first-child > div:first-child > div:first-child > div:first-child:has(a img[src^="/common/"]):not(.panel.txlight.panel-primary.outer)
-torrentgalaxy.to,tgx.rs##.panel.txlight.panel-primary.outer > [class*="slidingDivb-"] > *:not([class="panel panel-primary txlight"]):has(a img)
-torrentgalaxy.to,tgx.rs##.panel.txlight.panel-primary.outer > [class*="slidingDivf-"] > [position="relative"][align="center"][style*="margin"]:has(a img)
-torrentgalaxy.to,tgx.rs##.panel.txlight.panel-primary.outer > [class*="slidingDivf-"] > div[style="margin-bottom:10px;"]:has(a img)
-torrentgalaxy.to,tgx.rs##.confluids[style*="overflow"] > [class] > div:last-child > div[style*="padding"]:has(a img)
-torrentgalaxy.to,tgx.rs##legend.txlight[style*="margin"] + center > div[style*="margin"]:has(a img)
-! https://github.com/easylist/easylist/commit/bce6c1e9407e18de63cc49061617afdd8ad99b85
-! [badfilter] /adutils.$badfilter
-! https://github.com/easylist/easylist/commit/0f2390b0fe24d0f69c56e4b8ef5b8ec24ea6a03e
-pixiv.net##.ad-mobile-anchor
-! #23097 #23098
-! https://github.com/easylist/easylist/commit/4b8ee8252fdde8617694e22a35d9880606bcaed1
-@@||imasdk.googleapis.com/js/core/bridge*.html$frame
 ! https://github.com/uBlockOrigin/uAssets/issues/20505
-download.megaup.net##+js(rpnt, script, %2F%5C!%5C%3D%3D%3F%5Cs*_%2Fg, %3D%3D_)
+download.megaup.net##+js(rpnt, script, %2F%5C%5D%5Cs*%5C!%5Cs*%5C%3D%2Fg, %5D%3D%3D)
+download.megaup.net##+js(rpnt, script, %2F!%3D%5Cs*_%2F, %3D%3D_)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/157350#issuecomment-2031109964
 ! [badfilter] @@/^https:\/\/i\.pussyspace\.(?:com|net)\/sb\/t\/\d{6,8}\/\d\/\d\/w:300\/t\d{1,2}-enh\/(?:[0-9a-z]+-)*[0-9a-z]+\.jpg$/$image,1p,domain=pussyspace.*,badfilter
 @@/^https:\/\/[a-z]\.pussyspace\.(?:com|net)\/sb\/t\/\d{6,8}\/\d\/\d\/w:300\/t\d{1,2}-enh\/(?:[0-9a-z]+-)*[0-9a-z]+\.jpg$/$image,1p,domain=pussyspace.*
 ! [badfilter] *$image,3p,denyallow=cdn77.org|fpbns.net|others-cdn.com|rncdn7.com|sb-cd.com|stream.highwebmedia.com|upsiloncdn.net|xvideos-cdn.com|youjizz.com|ypncdn.com,from=pussyspace.com|pussyspace.net,badfilter
 *$image,3p,denyallow=cdn77.org|fpbns.net|globalcdn.co|others-cdn.com|rncdn7.com|sb-cd.com|stream.highwebmedia.com|upsiloncdn.net|xvideos-cdn.com|youjizz.com|ypncdn.com,from=pussyspace.com|pussyspace.net
-! https://github.com/uBlockOrigin/uAssets/issues/22175
-@@||qwant.com/apm/intake/v2/rum/events$xhr,1p
-@@||qwant.com/action/$ping,1p
+! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-2048528598
+!#if env_chromium
+www.facebook.com#@#+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.%5B-%5D.__bbox.result.data.node.sponsored_data.ad_id)
+!#endif
+! https://github.com/easylist/easylistgermany/issues/216
+www.chip.de##[class]:has(+ style + [class] + style:has-text(/aspect-ratio\s?:\s?auto/) + script:empty)
+www.chip.de###CR[class="Downloads-Detail"] > #G32 > #M1 > [class]:not([id="alternative-downloads"]) .ar-1-1.bg-gray-l[style*="width"]:has(a img[src*="https://im.chip.de/ii/"])
+www.chip.de###CR[class="Downloads-Detail"] > #G32 > #M1 > [class]:not([id="alternative-downloads"]) a[href^="https://www.chip.de/downloads/"][title]:has(img[src*="https://im.chip.de/ii/"][alt][width][data-was-processed])
+www.chip.de###CR[class="Downloads-Select"] > #G32 > #M1 > [class]:not([id="alternative-downloads"]) a[href^="https://www.chip.de/downloads/"][title]:has(img[src*="https://im.chip.de/ii/"][alt][width][data-was-processed])
+www.chip.de###CR[class="Downloads-Getfile"] > #G32 > #M1 > [class]:not([id="alternative-downloads"]) a[href^="https://www.chip.de/downloads/"][title]:has(img[src*="https://im.chip.de/ii/"][alt][width][data-was-processed])
+www.chip.de###CR[class="Downloads-Select"] > #G32 > #M1 > [class="wrapper-safe"] > [class^="fb mt-"] > [class] > div[class]:has(a img[src*="https://im.chip.de/ii/"])
+www.chip.de###CR[class="Downloads-Getfile"] > #G32 > #M1 > [class="wrapper-safe"] > [class^="fb mt-"] > [class] > div[class]:has(a img[src*="https://im.chip.de/ii/"])
+! Ad-Shield
+! https://www.facebook.com/watch flickering
