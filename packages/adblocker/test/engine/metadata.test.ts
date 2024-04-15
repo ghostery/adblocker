@@ -397,6 +397,7 @@ describe('#Metadata', () => {
       it('handles exceptions', () => {
         const exception = '@@||extend.tv';
         const exceptionFilter = NetworkFilter.parse(exception);
+        exceptionFilter?.getId();
         engine.updateFromDiff({ added: [exception] });
         expect(
           engine.match(
