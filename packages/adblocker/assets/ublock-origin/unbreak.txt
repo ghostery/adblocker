@@ -3346,6 +3346,9 @@ grasshopper.com##+js(set, google_optimize.get, noopFunc)
 ||epson.com.cn/common/new/js/tracking_code.js$1p,important
 epson.com.cn##+js(set, _gsq, %7B%7D)
 epson.com.cn##+js(set, _gsq.push, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/23233
+epson.com.cn##+js(set, stmCustomEvent, noopFunc)
+epson.com.cn##+js(set, _gsDevice, )
 ! https://github.com/uBlockOrigin/uAssets/issues/18859
 consali.com,topstreamfilm.io#@#a[href^="https://consali.com/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/18853
@@ -3790,3 +3793,10 @@ reclameaqui.com.br###page-header > header:style(position: absolute !important;)
 @@||data.pendo.io/data/guide.js/*$script,domain=secure.backblaze.com
 ! https://github.com/uBlockOrigin/uAssets/issues/23156
 ! [badfilter] ||beforeitsnews.com/core/ajax/counter/count.php^$badfilter
+! https://github.com/uBlockOrigin/uAssets/issues/23216
+||plausible.io^$xhr,3p,redirect-rule=nooptext,domain=you.com
+! https://accounts.mailerlite.com/ - cookie / captcha breakage
+@@||googletagmanager.com/gtm.js^$script,3p,domain=accounts.mailerlite.com
+! https://github.com/uBlockOrigin/uAssets/issues/23266
+sunshine-live.de##+js(set, cpd_configdata, %7B%7D)
+sunshine-live.de##+js(set, cpd_configdata.url, )

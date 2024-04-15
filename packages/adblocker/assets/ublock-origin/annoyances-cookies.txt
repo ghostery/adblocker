@@ -80,8 +80,6 @@ independent.co.uk##html.sp-message-open:style(width: initial !important)
 sourcepoint.theguardian.com##+js(trusted-click-element, .sp_choice_type_12%5Btitle%3D%22Manage%20or%20reject%20cookies%22%5D)
 sourcepoint.theguardian.com##+js(trusted-click-element, %5Btitle%3D%22Reject%20all%22%5D, , 500)
 theguardian.com##[title="SP Consent Message"]
-! https://github.com/uBlockOrigin/uAssets/issues/21974
-bbc.com##+js(trusted-click-element, %5Bdata-testid%3D%22consentBanner%22%5D%20%3E%20button%5Bdata-testid%3D%22banner-button%22%5D, , 1000)
 ! https://video.lefigaro.fr/figaro/video/les-gestes-damour-prennent-plusieurs-formes-dans-une-video-humoristique-lukraine-demande-plus-de-caesar-a-la-france/
 lefigaro.fr##+js(trusted-set-cookie, fig_save_consent, iTTPgpSWqAGGcd3vV88zNDbHsABxE1hB, 1year)
 ! https://www.filmweb.pl/video/Zwiastun/Indiana+Jones+i+artefakt+przeznaczenia+Zwiastun+nr+2+polskie+napisy-64884
@@ -155,7 +153,10 @@ onlinestempel.ch##+js(trusted-set-cookie, consent, %257B%2522level%2522%253A%255
 ! https://www.chase.co.uk/gb/en/
 chase.co.uk##+js(trusted-set-cookie, CookieConsents, %7B%22StrictlyNecessary%22%3Atrue%2C%22Analytical%22%3Afalse%2C%22Performance%22%3Afalse%2C%22AdvertisingAndTargeting%22%3Afalse%2C%22timestamp%22%3A%22%22%7D)
 ! https://www.svt.se/
+! https://github.com/uBlockOrigin/uAssets/issues/23234 - temp move to dev build
+!#if ext_devbuild
 svt.se##+js(trusted-set-cookie, cookie-consent-1, %7B%22optedIn%22%3Atrue%2C%22functionality%22%3Afalse%2C%22statistics%22%3Afalse%7D)
+!#endif
 ! https://www.komoot .com/.de
 komoot.com,komoot.de##+js(trusted-set-cookie, kmt_rd, no-consent, , , reload, 1)
 komoot.com,komoot.de##+js(trusted-set-local-storage-item, kmt_config_web, %7B%22created_at%22%3A%22%24currentDate%24%22%2C%22anonymous%22%3A%22%22%2C%22gdpr_ga%22%3Afalse%2C%22gdpr_exp%22%3Afalse%7D)
@@ -745,6 +746,8 @@ movieplayer.it##+js(trusted-click-element, button.iubenda-cs-accept-btn)
 @@||iubenda.com^$3p,domain=movieplayer.it
 ! https://github.com/uBlockOrigin/uAssets/issues/21954
 huffingtonpost.it,lastampa.it##+js(trusted-click-element, .iubenda-cs-visible%20.iubenda-cs-accept-btn)
+! https://forums.lanik.us/viewtopic.php?p=167093-huffingtonpost-fr#p167093
+huffingtonpost.fr##+js(trusted-click-element, button%5Bdata-gdpr-expression%3D%22acceptAll%22%5D)
 ! https://github.com/uBlockOrigin/uAssets/issues/21955
 ilsecoloxix.it##+js(trusted-click-element, .iubenda-cs-visible%20.iubenda-cs-accept-btn)
 ! https://github.com/uBlockOrigin/uAssets/issues/20091#issuecomment-1890759168
@@ -964,3 +967,5 @@ milwaukeetool.eu##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%
 milwaukeetool.eu##+js(trusted-set-cookie, OptanonConsent, groups%3DC1%253A1%252CC2%253A0%252CC3%253A0%252CC4%253A0%252CC5%253A0%252CC8%253A0%252CC9%253A0%26hosts%3DH184%253A1%252CH108%253A1%252CH109%253A1%252CH36%253A1%252CH58%253A1%252CH159%253A1%252CH37%253A1%252CH112%253A1%252CH331%253A1%252CH39%253A1%252CH348%253A1%252CH67%253A1%252CH115%253A1%252CH306%253A1%252CH63%253A1%252CH117%253A1%252CH118%253A1%252CH119%253A1%252CH120%253A1%252CH121%253A1%252CH122%253A1%252CH66%253A1%252CH304%253A0%252CH338%253A0%252CH40%253A0%252CH43%253A0%252CH183%253A0%252CH60%253A0%252CH274%253A0%252CH97%253A0%252CH142%253A0%252CH48%253A0%252CH49%253A0%252CH149%253A0%252CH83%253A0%252CH38%253A0%252CH176%253A0%252CH150%253A0%252CH330%253A0%252CH85%253A0%252CH151%253A0%252CH324%253A0%252CH402%253A0%252CH272%253A0%252CH14%253A0%252CH275%253A0%252CH23%253A0%252CH41%253A0%252CH101%253A0%252CH153%253A0%252CH6%253A0%252CH283%253A0%252CH42%253A0%252CH32%253A0%252CH145%253A0%252CH15%253A0%252CH322%253A0%252CH148%253A0%252CH333%253A0%252CH104%253A0%252CH55%253A0%252CH143%253A0%252CH17%253A0%252CH18%253A0%252CH57%253A0%252CH359%253A0%252CH129%253A0, 1year)
 ! only necessary, 4000 delay needed
 saseurobonusmastercard.se##+js(trusted-click-element, .button--necessary-approve, , 4000)
+! barrons.com cookie banner
+cdn.privacy-mgmt.com##+js(trusted-click-element, button.agree-btn, , 2000)
