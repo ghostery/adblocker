@@ -418,7 +418,10 @@ facebook.com,facebookwkhpilnemxj7asaniu7vnjjbiltxjqhye3mhbshg7kx5tfyd.onion##div
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-1999029976
 ! https://www.reddit.com/r/uBlockOrigin/comments/1bjfs9x/facebook_loading_slow/kvraphx/
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-2048528598
-!#if !env_chromium
+! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-2054573634
+!#if env_chromium
+www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.node, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.node.sponsored_data.ad_id)
+!#else
 www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.%5B-%5D.__bbox.result.data.node.sponsored_data.ad_id)
 !#endif
 !#if cap_html_filtering
@@ -1106,8 +1109,6 @@ mcloud.bz,vidplay.*,vidstream.pro,vizcloud.*##+js(ra, data-id%7Cdata-p, %5Bdata-
 vidstream.pro##.aslot
 /lazymolecule/*.js$script
 youtubedownloader.*##+js(nowoif)
-! https://github.com/uBlockOrigin/uAssets/issues/645
-computerbild.de##.startdownload > a[data-is-manager-usable="1"]
 ! https://github.com/uBlockOrigin/uAssets/issues/1286
 torrentdownloads.*##+js(nowebrtc)
 torrentdownload.*,torrentdownloads.*##+js(acs, adcashMacros)
@@ -4370,7 +4371,6 @@ uploadbank.com##+js(set, console.clear, noopFunc)
 !uploadbank.com##+js(nowoif)
 uploadbank.com###iframeCore____
 ||uploadbank.com/js/abcode.js
-@@||d1r3ddyrqrmcjv.cloudfront.net^$script,3p,domain=uploadbank.com
 ! https://github.com/uBlockOrigin/uAssets/issues/2652
 ! https://github.com/uBlockOrigin/uAssets/issues/2742
 filecrypt.*##+js(acs, decodeURIComponent, replace)
@@ -8217,6 +8217,8 @@ ebay.*##.sresult:has(.promoted-lv)
 ! https://github.com/uBlockOrigin/uAssets/issues/5828
 acefile.co##+js(aopw, popup_ads)
 acefile.co##.textwidget
+! https://github.com/realodix/AdBlockID/issues/1746
+acefile.co###btmx
 ! https://forums.lanik.us/viewtopic.php?f=103&t=43167
 lne.es##+js(nostif, ipod)
 ! https://github.com/uBlockOrigin/uAssets/issues/5624
@@ -12051,7 +12053,8 @@ javtiful.com##[href^="//"][rel="nofollow norefferer noopener"]
 fakyutube.com##+js(nowoif)
 fakyutube.com##+js(aopr, __Y)
 supervideo.*##+js(aopr, AaDetector)
-/tag*.js$script,domain=supervideo.tv|supervideo.one
+/tag*.js$script,domain=supervideo.tv|supervideo.one|supervideo.cc
+||oussouveem.com^
 ! nsfw thisav .com popups
 *$script,redirect-rule=noopjs,domain=thisav.com
 thisav.com##^script:has-text('shift')
