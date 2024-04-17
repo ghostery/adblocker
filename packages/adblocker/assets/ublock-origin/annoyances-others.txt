@@ -71,7 +71,6 @@ pinterest.*##.gridCentered:style(margin-top: auto !important;)
 pinterest.*##div[data-test-id="giftWrap"]
 pinterest.*##div[class="Closeup__wrapper"] > div > div[style^="cursor: default"]
 pinterest.*##div[class="GrowthUnauthPinImage__imageDim"]
-pinterest.*##div[style^="filter:"]:style(filter: none !important)
 pinterest.*##.GrowthUnauthPinImage > a > div[class^="Jea"]:has(button[class^="noButtonStyles "])
 pinterest.*##.Hsu.iyn.zI7:nth-of-type(2) > div > .FullPageModal__scroller
 ! https://github.com/uBlockOrigin/uAssets/issues/2185
@@ -5437,9 +5436,10 @@ teller.jp##+js(trusted-click-element, .z_share_popover%20div.gap_2%20%3E%20butto
 ! https://github.com/uBlockOrigin/uAssets/issues/21353
 raenonx.cc##div[class^="flex flex-row w-full h-full"]:has(.adsbygoogle)
 raenonx.cc##body > div[class] > [class="flex flex-col w-full"]:has(> button.button-clickable-bg-opaque > div > svg)
-raenonx.cc##body > div[id]:has(> [data-floating-ui-portal] .fixed[style*="transition-duration:"])
-raenonx.cc##.p-2 > .text-black.p-1.rounded-lg:has(a[href$="/ads-and-credits"])
-@@*$xhr,3p,domain=raenonx.cc
+raenonx.cc##[id^="headlessui-dialog-"][data-headlessui-state="open"]:has-text(/ad-blocker|広告ブロック/i)
+raenonx.cc##html[style]:style(overflow: auto !important; padding-right: unset !important;)
+raenonx.cc##.p-2 > .p-1.rounded-lg:has(a[href$="/ads-and-credits"])
+@@||googlesyndication.com/|$xhr,domain=raenonx.cc
 ! gdplayertv.top group anti-devtools, context menu
 freewatchtv.top,gdplayertv.top,mixstreams.top,tvfreemium.top##+js(set, devtoolsDetector.launch, noopFunc)
 freewatchtv.top,gdplayertv.top,mixstreams.top,tvfreemium.top##+js(aeld, contextmenu)
@@ -5457,9 +5457,13 @@ bilibili.com##+js(aeld, copy)
 patreon.com##+js(trusted-set-local-storage-item, halfSheetAppBannerDismissed, %7B%22halfSheetAppBannerDismissed%22%3A%7B%22expiration%22%3A2000000000000%2C%22data%22%3Atrue%7D%7D)
 ! liverpoolecho.co.uk anti proxy (google translator)
 www-liverpoolecho-co-uk.translate.goog##+js(rmnt, script, loc.hostname)
+! techcrunch.com anti proxy (google translator)
 ! https://github.com/uBlockOrigin/uAssets/pull/23279
 !#if cap_html_filtering
 xanimu.com,cosxplay.com##^script:has-text(adblock)
 !#else
 xanimu.com,cosxplay.com##+js(rmnt, script, adblock)
+!#endif
+! https://github.com/AdguardTeam/AdguardFilters/issues/154561
+!#if cap_html_filtering
 !#endif
