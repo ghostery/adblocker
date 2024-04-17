@@ -5434,11 +5434,6 @@ teller.jp##+js(trusted-click-element, .z_share_popover%20div.gap_2%20%3E%20butto
 ||site-config.com^$3p
 ||content-settings.com^$3p
 ! https://github.com/uBlockOrigin/uAssets/issues/21353
-raenonx.cc##div[class^="flex flex-row w-full h-full"]:has(.adsbygoogle)
-raenonx.cc##body > div[class] > [class="flex flex-col w-full"]:has(> button.button-clickable-bg-opaque > div > svg)
-raenonx.cc##[id^="headlessui-dialog-"][data-headlessui-state="open"]:has-text(/ad-blocker|広告ブロック/i)
-raenonx.cc##html[style]:style(overflow: auto !important; padding-right: unset !important;)
-raenonx.cc##.p-2 > .p-1.rounded-lg:has(a[href$="/ads-and-credits"])
 @@||googlesyndication.com/|$xhr,domain=raenonx.cc
 ! gdplayertv.top group anti-devtools, context menu
 freewatchtv.top,gdplayertv.top,mixstreams.top,tvfreemium.top##+js(set, devtoolsDetector.launch, noopFunc)
@@ -5467,3 +5462,7 @@ xanimu.com,cosxplay.com##+js(rmnt, script, adblock)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/154561
 !#if cap_html_filtering
 !#endif
+! https://github.com/EasyDutch-uBO/EasyDutch/issues/127
+solarmagazine.nl##+js(no-xhr-if, ads)
+! https://github.com/uBlockOrigin/uAssets/issues/23331 - anti select
+noicetranslations.blogspot.com##+js(rmnt, script, disableselect)
