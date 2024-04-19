@@ -207,8 +207,8 @@ bharathwick.com##+js(rmnt, script, deblocker)
 ! https://github.com/uBlockOrigin/uAssets/issues/21769
 ! https://github.com/uBlockOrigin/uAssets/issues/22851
 ! https://github.com/uBlockOrigin/uAssets/commit/b8ec336f4f3ea793750d553129b58df543cc338d#commitcomment-139593195
-animesuge.to,aniwave.to,anix.to,bflix.to,flixtorz.to,fmoviesz.to,hurawatch.bz,mangafire.to,soap2dayx.to##+js(nowoif, _blank)
-animesuge.to,aniwave.to,anix.to,bflix.to,flixtorz.to,fmoviesz.to,hurawatch.bz,mangafire.to,soap2dayx.to##+js(set-cookie, __pf, 1)
+animesuge.to,aniwave.to,anix.to,bflix.to,flixtorz.to,fmoviesz.to,hurawatch.bz,mangafire.to,moviestowatch.id,soap2dayx.to##+js(nowoif, _blank)
+animesuge.to,aniwave.to,anix.to,bflix.to,flixtorz.to,fmoviesz.to,hurawatch.bz,mangafire.to,moviestowatch.id,soap2dayx.to##+js(set-cookie, __pf, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/22865
 ! filemoon ads
 defienietlynotme.com,embedme.*,filemooon.top,finfang.*,fmembed.cc,fmoonembed.pro,hellnaw.*,moonembed.*,rgeyyddl.skin,sbnmp.bar,sulleiman.com,vpcxz19p.xyz,z12z0vla.*##+js(acs, JSON.parse, showTrkURL)
@@ -645,6 +645,12 @@ uiiumovies.net##+js(rmnt, script, deblocker)
 spontacts.com##+js(nostif, detectAdBlocker)
 ! https://github.com/uBlockOrigin/uAssets/issues/20173
 ! https://github.com/uBlockOrigin/uAssets/issues/22601
+thehackernews.com##body:has(article) .cf > a[href^="https://thehackernews.uk/"][target="_blank"]
+!#if cap_html_filtering
+thehackernews.com##^script:has-text(imgSrc)
+!#else
+thehackernews.com##+js(rmnt, script, imgSrc)
+!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/22624
 mielec.pl##+js(rmnt, script, document.createElement(%22script%22))
 ! https://github.com/uBlockOrigin/uAssets/issues/16691#issuecomment-1959352291
@@ -959,9 +965,8 @@ megacloud.tv###overlay-center
 hianime.to##[href="https://1flix.to/"]
 ||iili.io/JvfIu1a.gif$image
 ! https://github.com/uBlockOrigin/uAssets/issues/22877
-nextdoor.com##+js(json-prune, data.searchClassifiedFeed.searchResultView.%5B%5D.searchResultItemsV2.edges.%5B-%5D.node.item.content.creative.clickThroughEvent.adsTrackingMetadata.metadata.adRequestId)
+nextdoor.com##+js(json-prune, data.searchClassifiedFeed.searchResultView.0.searchResultItemsV2.edges.%5B-%5D.node.item.content.creative.clickThroughEvent.adsTrackingMetadata.metadata.adRequestId)
 nextdoor.com##.feed-container:not(.wide-layout-feed-container) > div:not([class]) > div[class^="blocks-"] > div[class^="blocks-"] > div[class^="blocks-"] > div:not([class]) > div[class^="blocks-"] > div[class]:has(> .fsf-gam-ad)
-nextdoor.com##.CNqDJAlH
 nextdoor.com##div.gam-ad-inner-container
 ! https://github.com/uBlockOrigin/uAssets/issues/23290
 buffsports.me##+js(no-fetch-if, pogo)
@@ -984,3 +989,16 @@ lemino.docomo.ne.jp##+js(no-fetch-if, doubleclick.net)
 ! [badfilter] ||h.seznam.cz^$badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/23331
 noicetranslations.blogspot.com##+js(aopr, checkAdsStatus)
+! https://github.com/uBlockOrigin/uAssets/issues/23333
+manwan.xyz##+js(nostif, alert)
+! https://www.reddit.com/r/uBlockOrigin/comments/1c66nnq/hiding_fake_ad_div_results_in_hiding_of_download/
+waploaded.com#@#.ad-slot:not(.adsbox):not(.adsbygoogle)
+! innateblogger. com detection
+innateblogger.com##+js(rmnt, script, adsbygoogle)
+! https://github.com/uBlockOrigin/uAssets/issues/23338
+breitbart.com##+js(nostif, BN_CAMPAIGNS)
+! https://github.com/uBlockOrigin/uAssets/issues/23349
+salidzini.lv##+js(nostif, media_place_list)
+salidzini.lv##div[id][style^="width"]:has([id^="media_place_"])
+! https://github.com/uBlockOrigin/uAssets/issues/23355
+@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,domain=mrnussbaum.com
