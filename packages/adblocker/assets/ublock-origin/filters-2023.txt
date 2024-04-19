@@ -1660,14 +1660,16 @@ bondagevalley.cc##+js(rmnt, script, innerHTML)
 ||bondagevalley.cc/upload/photos/kcs.webp
 ! https://github.com/uBlockOrigin/uAssets/issues/17744
 ||aucdn.net/library/*.mp4|$media,domain=clgt.one
-! in-jpn.com anti-adb
-in-jpn.com##+js(aopr, Element.prototype.insertAdjacentHTML)
-in-jpn.com##+js(aopr, Node.prototype.appendChild)
+! https://github.com/AdguardTeam/AdguardFilters/issues/177237
+in-jpn.com,oninet.ne.jp,xth.jp##+js(aopr, Element.prototype.insertAdjacentHTML)
 ||in-jpn.com^$script,redirect=noop.js
-||in-jpn.com^$inline-script
-*$script,3p,domain=in-jpn.com
+||xth.jp^$script,redirect=noop.js
+||oninet.ne.jp^$script,redirect=noop.js
+*$script,3p,domain=in-jpn.com|oninet.ne.jp|xth.jp
 @@||in-jpn.com^$ghide
-in-jpn.com##[style*="z-index"]:empty
+@@||oninet.ne.jp^$ghide
+@@||xth.jp^$ghide
+in-jpn.com##[style]:empty
 ! https://github.com/NanoMeow/QuickReports/issues/21
 ! https://github.com/uBlockOrigin/uAssets/issues/9578
 azaleasdolls.com##td[height="279"]
@@ -3764,9 +3766,8 @@ redd.tube##+js(aopr, config)
 ! https://github.com/uBlockOrigin/uAssets/issues/20364
 ! https://www.reddit.com/r/uBlockOrigin/comments/17ptimv/adblock_detection_pop_up_on_rbtv77com/
 ! https://github.com/uBlockOrigin/uAssets/issues/20694
-brotherfox91.*,customsfencei3.*,fencethoughgdrt.*,fencethroughout642.*,foxwent6ot.*,homebasis4d.*,linelocatemfsn.*,littlesound6c.*,live-streamfootball.*,mindmotion93y8.*,monkeynecktj4w.*,rbtv77.*,saddletopg3tk.*,superabbit.*,wintertold7nq.*##+js(no-xhr-if, googlesyndication, length%3A10)
-brotherfox91.*,customsfencei3.*,fencethoughgdrt.*,fencethroughout642.*,foxwent6ot.*,homebasis4d.*,linelocatemfsn.*,littlesound6c.*,live-streamfootball.*,mindmotion93y8.*,monkeynecktj4w.*,rbtv77.*,saddletopg3tk.*,superabbit.*,wintertold7nq.*##.d-l
-@@*$xhr,script,1p,domain=brotherfox91.*|customsfencei3.*|fencethoughgdrt.*|fencethroughout642.*|foxwent6ot.*|homebasis4d.*|linelocatemfsn.*|littlesound6c.*|live-streamfootball.*|mindmotion93y8.*|monkeynecktj4w.*|rbtv77.*|saddletopg3tk.*|superabbit.*|wintertold7nq.*
+brotherfox91.*,customsfencei3.*,fencethoughgdrt.*,fencethroughout642.*,foxwent6ot.*,homebasis4d.*,includingbreath5ku.*,linelocatemfsn.*,littlesound6c.*,live-streamfootball.*,mindmotion93y8.*,monkeynecktj4w.*,neighbormajorkex.*,rbtv77.*,saddletopg3tk.*,superabbit.*,wholecommonrrvp.*,wintertold7nq.*##+js(no-xhr-if, googlesyndication, length%3A10)
+brotherfox91.*,customsfencei3.*,fencethoughgdrt.*,fencethroughout642.*,foxwent6ot.*,homebasis4d.*,includingbreath5ku.*,linelocatemfsn.*,littlesound6c.*,live-streamfootball.*,mindmotion93y8.*,monkeynecktj4w.*,neighbormajorkex.*,rbtv77.*,saddletopg3tk.*,superabbit.*,wholecommonrrvp.*,wintertold7nq.*##.d-l
 ! https://ggjav.com /.tv popunder
 ggjav.com,ggjav.tv##+js(acs, %24, popunder)
 ! https://github.com/uBlockOrigin/uAssets/issues/20373
@@ -3781,8 +3782,8 @@ cl1ca.com,4br.me,fir3.net,seulink.*,encurtalink.*##+js(aopr, mm)
 cl1ca.com,4br.me,fir3.net,seulink.*,encurtalink.*##+js(set, blurred, false)
 cl1ca.com,4br.me,fir3.net,seulink.*,encurtalink.*##+js(refresh-defuser, 12)
 ! https://github.com/uBlockOrigin/uAssets/issues/20379
-@@||m.stripe.com$xhr,domain=app.axenthost.com
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=app.axenthost.com
+axenthost.com##+js(set, nitroAds.loaded, true)
+@@*$xhr,domain=app.axenthost.com,3p
 ! https://www.reddit.com/r/uBlockOrigin/comments/17lu2us/antiad_block_blocks_video_about_10_seconds_in/
 ||pornkinky.com^$image,1p,redirect-rule=1x1.gif
 ! https://github.com/uBlockOrigin/uAssets/issues/20417
@@ -3798,8 +3799,13 @@ freewsad.com##+js(set-local-storage-item, email, true)
 karaoketexty.cz##+js(nostif, %2Fnative%7C%5C%7Bn%5C(%5C)%2F)
 karaoketexty.cz##+js(ra, style, %5Bstyle%5E%3D%22background%22%5D, stay)
 karaoketexty.cz##+js(ra, href, %5Btarget%5E%3D%22_%22%5D, stay)
-! https://github.com/AdguardTeam/AdguardFilters/issues/159379
-lk21official.*##+js(set, adsPlay, false)
+! https://github.com/uBlockOrigin/uAssets/issues/23332
+*.gif$domain=lk21official.*|nontondrama.*,image
+lk21official.*,nontondrama.*##+js(rmnt, script, adsPlay)
+nontondrama.*,playeriframe.*###admad
+lapakbuah.site##.content
+lapakbuah.site##.bg-dark.bottom
+lk21static.xyz##+js(nano-sib)
 lk21official.*###overlay
 stream.hownetwork.xyz###donate
 ! https://github.com/uBlockOrigin/uAssets/issues/20448
@@ -3843,6 +3849,7 @@ app.vaia.com##aside > .ng-star-inserted
 */dyasds/$media,redirect=noopmp3-0.1s,domain=111.90.141.252
 ! wsj ads
 ! https://www.reddit.com/r/uBlockOrigin/comments/17rxlfr/block_randomlygenerated_class_with_specific/
+||cloudfront.net/o?fqdn=$xhr,3p,domain=marketwatch.com|wsj.com
 ! https://github.com/uBlockOrigin/uAssets/issues/20582
 ! https://github.com/uBlockOrigin/uAssets/issues/23171
 *$media,redirect=noopmp3-0.1s,domain=filmizlehdfilm.com|filmizletv.*
@@ -4327,13 +4334,13 @@ buxfaucet.com,faucetcaptcha.co.in,gameblog.in,needbux.com##+js(acs, eval, replac
 ! https://github.com/AdguardTeam/AdguardFilters/issues/169282
 chickenkarts.io##+js(aopw, blockedAds)
 ! https://github.com/uBlockOrigin/uAssets/issues/21595
-||blogger.googleusercontent.com/img/$image,domain=idlixofficials.com|idlixplus.com|idlixplus.net|idlixofficial.co
-idlixofficials.com,idlixplus.com,idlixplus.net,idlixofficial.co##+js(aost, document.getElementsByTagName, adsBlocked)
-idlixofficials.com,idlixplus.com,idlixplus.net,idlixofficial.co###repop
+||blogger.googleusercontent.com/img/$image,domain=idlixofficials.com|idlixplus.com|idlixplus.net|idlixofficial.co|idlixofficial.net
+idlixofficials.com,idlixplus.com,idlixplus.net,idlixofficial.co,idlixofficial.net##+js(aost, document.getElementsByTagName, adsBlocked)
+idlixofficials.com,idlixplus.com,idlixplus.net,idlixofficial.co,idlixofficial.net###repop
 ! https://github.com/uBlockOrigin/uAssets/issues/21779
-idlixofficials.com,idlixplus.com,idlixplus.net,idlixofficial.co##+js(aost, document.querySelector, %2F(%3F!%5Cbjquery%5Cb)%2F)
+idlixofficials.com,idlixplus.com,idlixplus.net,idlixofficial.co,idlixofficial.net##+js(aost, document.querySelector, %2F(%3F!%5Cbjquery%5Cb)%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/22374
-idlixofficials.com,idlixplus.com,idlixplus.net,idlixofficial.co#@#.module_single_ads
+idlixofficials.com,idlixplus.com,idlixplus.net,idlixofficial.co,idlixofficial.net#@#.module_single_ads
 ! https://github.com/uBlockOrigin/uAssets/issues/21600
 @@||choralia.net/popu.js$script
 ! https://github.com/uBlockOrigin/uAssets/issues/21601

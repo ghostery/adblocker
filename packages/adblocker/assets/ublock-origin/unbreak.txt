@@ -2188,6 +2188,7 @@ xunta.gal#@##anuncio
 ! [badfilter] @@tracking/ninja.js$script,domain=olx.ro,badfilter
 ! docs.tealium.com blocked by PL
 ! [badfilter] ||tealium.com^$badfilter
+||tealium.com^$3p
 ! https://github.com/tofukko/filter/issues/49
 ! https://github.com/easylist/easylist/issues/9412 cname blocked by PL
 @@||777partner.com^$image,media,domain=jetztlive.com
@@ -2636,6 +2637,7 @@ novelgames.com##div[id^="forums"][id*="Et"]
 scanurl.net##.adsbygoogle
 ! https://github.com/uBlockOrigin/uAssets/issues/14258
 ! [badfilter] ||exponea.com^$badfilter
+||exponea.com^$3p
 ! https://github.com/uBlockOrigin/uAssets/issues/22298
 @@||cdn.*.exponea.com/production*/consent?$frame,domain=proffsmagasinet.se|staypro.dk|staypro.fi|staypro.no
 ! https://github.com/uBlockOrigin/uAssets/issues/14251
@@ -3802,3 +3804,9 @@ sunshine-live.de##+js(set, cpd_configdata, %7B%7D)
 sunshine-live.de##+js(set, cpd_configdata.url, )
 ! https://github.com/easylist/easylist/commit/0fb837521ba8042c4635d9cbe2aff2c1293eafb6
 ||ladsp.com/script-sf/$script,redirect=noop.js,domain=str.toyokeizai.net,important
+! https://github.com/uBlockOrigin/uAssets/issues/23327
+fapeza.com#@#.azz_div
+fapeza.com##.azz_div:style(height: unset !important;)
+fapeza.com##.azz_iframe
+! https://github.com/uBlockOrigin/uAssets/issues/23360
+||stats.wp.com^$script,3p,redirect-rule=noopjs,domain=europeanspaceflight.com
