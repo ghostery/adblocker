@@ -37,12 +37,12 @@ aternos.org###placement-takeover
 ! pixsera
 ! https://github.com/uBlockOrigin/uAssets/issues/9123
 ! https://github.com/orgs/uBlockOrigin/teams/ublock-filters-volunteers/discussions/423/comments/6
-imgjbxzjv.shop,imgjmgfgm.shop,picxnkjkhdf.sbs##+js(aopr, console.clear)
-imgjbxzjv.shop,imgjmgfgm.shop,picxnkjkhdf.sbs##+js(nano-sib, timer)
-imgjbxzjv.shop,imgjmgfgm.shop,picxnkjkhdf.sbs##div[id][style^="position: fixed; display: block; width: 100%;"]
-imgjbxzjv.shop,imgjmgfgm.shop,picxnkjkhdf.sbs##div[style="width:100%;height:110px"]
-imgjbxzjv.shop,imgjmgfgm.shop,picxnkjkhdf.sbs##+js(nowoif, !%2Fprcf.fiyar%7Cthemes%7Cpixsense%7C.jpg%2F)
-imgjbxzjv.shop,imgjmgfgm.shop,picxnkjkhdf.sbs##div[class][style="display: block;"]
+imgjbxzjv.shop,imgjmgfgm.shop,picxnkjkhdf.sbs,imgxxbdf.sbs##+js(aopr, console.clear)
+imgjbxzjv.shop,imgjmgfgm.shop,picxnkjkhdf.sbs,imgxxbdf.sbs##+js(nano-sib, timer)
+imgjbxzjv.shop,imgjmgfgm.shop,picxnkjkhdf.sbs,imgxxbdf.sbs##div[id][style^="position: fixed; display: block; width: 100%;"]
+imgjbxzjv.shop,imgjmgfgm.shop,picxnkjkhdf.sbs,imgxxbdf.sbs##div[style="width:100%;height:110px"]
+imgjbxzjv.shop,imgjmgfgm.shop,picxnkjkhdf.sbs,imgxxbdf.sbs##+js(nowoif, !%2Fprcf.fiyar%7Cthemes%7Cpixsense%7C.jpg%2F)
+imgjbxzjv.shop,imgjmgfgm.shop,picxnkjkhdf.sbs,imgxxbdf.sbs##div[class][style="display: block;"]
 ! https://www.reddit.com/r/uBlockOrigin/comments/16lmeri/youtube_antiadblock_and_ads_september_18_2023/k1wl8df/
 !#if !env_mv3
 !#if !cap_html_filtering
@@ -106,10 +106,6 @@ download.megaup.net##+js(rpnt, script, %2F!%3D%5Cs*'%2F, %3D%3D')
 @@/^https:\/\/[a-z]\.pussyspace\.(?:com|net)\/sb\/t\/\d{6,8}\/\d\/\d\/w:300\/t\d{1,2}-enh\/(?:[0-9a-z]+-)*[0-9a-z]+\.jpg$/$image,1p,domain=pussyspace.*
 ! [badfilter] *$image,3p,denyallow=cdn77.org|fpbns.net|others-cdn.com|rncdn7.com|sb-cd.com|stream.highwebmedia.com|upsiloncdn.net|xvideos-cdn.com|youjizz.com|ypncdn.com,from=pussyspace.com|pussyspace.net,badfilter
 *$image,3p,denyallow=cdn77.org|fpbns.net|globalcdn.co|others-cdn.com|rncdn7.com|sb-cd.com|stream.highwebmedia.com|upsiloncdn.net|xvideos-cdn.com|youjizz.com|ypncdn.com,from=pussyspace.com|pussyspace.net
-! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-2048528598
-!#if env_chromium
-www.facebook.com#@#+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.%5B-%5D.__bbox.result.data.node.sponsored_data.ad_id)
-!#endif
 ! https://github.com/easylist/easylistgermany/issues/216
 www.chip.de##[class]:has(+ style + [class] + style:has-text(/aspect-ratio\s?:\s?auto/) + script:empty)
 www.chip.de###CR[class="Downloads-Detail"] > #G32 > #M1 > [class]:not([id="alternative-downloads"]) .ar-1-1.bg-gray-l[style*="width"]:has(a img[src*="https://im.chip.de/ii/"])
@@ -133,9 +129,9 @@ raenonx.cc##.w-full:has(> style + div > style + div .adsbygoogle)
 raenonx.cc##.w-full > style + div[tabindex]:has(> style + div > style + div > p:has-text(advertisements))
 raenonx.cc##.w-full > div:has(> style + div > style + div > p:has-text(/advertisements|広告/))
 raenonx.cc##[id^="headlessui-"] [role="dialog"]:has-text(/ad-blocker|ad blocker|adblocker|広告/i)
+raenonx.cc##.flex-col > style + div[class]:has(> p > a[href$="/ads-and-credits"])
 @@||googlesyndication.com/|$xhr,domain=raenonx.cc
 @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=raenonx.cc
-raenonx.cc##+js(trusted-replace-fetch-response, %2F.*%2F, , adsbygoogle.js%3F)
 ! https://github.com/uBlockOrigin/uAssets/issues/22220
 ! https://github.com/uBlockOrigin/uAssets/issues/22492
 !#if cap_html_filtering
@@ -148,13 +144,16 @@ puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle
 ! https://github.com/uBlockOrigin/uAssets/issues/23321
 nextdoor.com#@#.CNqDJAlH
 ! https://github.com/uBlockOrigin/uAssets/issues/20364
-@@*$xhr,script,1p,domain=announcedcatchix1t.*|brotherfox91.*|customsfencei3.*|fencethoughgdrt.*|fencethroughout642.*|foxwent6ot.*|homebasis4d.*|includingbreath5ku.*|ironwinter6m.*|leadmorning4ivn.*|linelocatemfsn.*|littlesound6c.*|mindmotion93y8.*|mightbadly4f.*|monkeynecktj4w.*|neighbormajorkex.*|nervousdoctor9bx.*|pantogether6jpi.*|saddletopg3tk.*|soldrubber5xrp.*|somehowrockyng.*|superabbit.*|studyinghuman6js.*|wholecommonrrvp.*|wintertold7nq.*
 ! in-jpn.com anti-adb
 ! [badfilter] ||in-jpn.com^$inline-script,badfilter
 ! [badfilter] ||xth.jp^$inline-script,badfilter
 in-jpn.com,oninet.ne.jp,xth.jp#@#+js(aopr, Node.prototype.appendChild)
 in-jpn.com,oninet.ne.jp,xth.jp#@#+js(aopr, Element.prototype.insertAdjacentHTML)
+in-jpn.com##+js(aost, Element.prototype.insertAdjacentHTML, %2Fonload.*%5C.js%2F)
+in-jpn.com##+js(aost, Node.prototype.appendChild, %2Fonload.%2B%5C.js%2F)
 ! https://github.com/AdguardTeam/AdguardFilters/commit/17cf2ab7c86c0efff6624f19d35cd024c9c42eb8
 @@||impact-ad.jp/fh/showad_$script,domain=famitsu.com
 ! https://github.com/uBlockOrigin/uAssets/issues/23366
 ! [badfilter] ||yimg.com/aaq/benji/$badfilter
+! https://github.com/easylist/easylist/commit/9ea6c40017f13ea64bdc4258723613aaa2b0ac19
+@@||googletagmanager.com/gtm.js$domain=online-shop.mb.softbank.jp
