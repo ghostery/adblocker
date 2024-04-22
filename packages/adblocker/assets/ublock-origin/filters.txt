@@ -35,10 +35,8 @@ youtube.com##.ytlr-horizontal-list-renderer__items > .yt-virtual-list__container
 ! https://www.reddit.com/r/uBlockOrigin/comments/163cy47/youtube_antiadblock_and_ads_weekly_thread_august/jyemgzo/
 ||googlevideo.com/initplayback?source=youtube*&c=TVHTML5&oad=$xhr,domain=youtube.com
 ! Shorts Ad
-! [dup] from ublock-origin/quick-fixes.txt
-! m.youtube.com,music.youtube.com,tv.youtube.com,www.youtube.com,youtubekids.com,youtube-nocookie.com##+js(json-prune-fetch-response, reelWatchSequenceResponse.entries.%5B-%5D.command.reelWatchEndpoint.adClientParams.isAd%20entries.%5B-%5D.command.reelWatchEndpoint.adClientParams.isAd, , propsToMatch, url%3A%2Freel_watch_sequence%3F)
-! [dup] from ublock-origin/quick-fixes.txt
-! m.youtube.com,music.youtube.com,tv.youtube.com,www.youtube.com,youtubekids.com,youtube-nocookie.com##+js(json-prune-fetch-response, overlay, overlay.shortsAdsRenderer, propsToMatch, url%3A%2Freel_item_watch%3F)
+m.youtube.com,music.youtube.com,tv.youtube.com,www.youtube.com,youtubekids.com,youtube-nocookie.com##+js(json-prune-fetch-response, reelWatchSequenceResponse.entries.%5B-%5D.command.reelWatchEndpoint.adClientParams.isAd%20entries.%5B-%5D.command.reelWatchEndpoint.adClientParams.isAd, , propsToMatch, url%3A%2Freel_watch_sequence%3F)
+m.youtube.com,music.youtube.com,tv.youtube.com,www.youtube.com,youtubekids.com,youtube-nocookie.com##+js(json-prune-fetch-response, overlay, overlay.shortsAdsRenderer, propsToMatch, url%3A%2Freel_item_watch%3F)
 ! AdDefend
 !#if env_chromium
 lablue.*##+js(nostif, push, 500)
@@ -8426,7 +8424,8 @@ washingtonpost.com##.bb.pt-0
 washingtonpost.com##div.grey-bg
 washingtonpost.com##section > div:has-text(/^AD$/)
 washingtonpost.com##.w-100:has-text(Advertisement)
-washingtonpost.com##[data-testid="article-body-card"]:has-text(Advertisement)
+! https://github.com/uBlockOrigin/uAssets/issues/23379
+washingtonpost.com##[data-testid="article-body-card"]:has(> [data-qa="article-body-ad"])
 ! https://github.com/uBlockOrigin/uAssets/issues/9185#issuecomment-847835587
 !#if env_mobile
 washingtonpost.com##div.mb-lg.mt-lg.pb-lg.pt-lg.bc-gray-lighter.bh.b.justify-center.items-center.flex.dn-hp-sm-to-mx
