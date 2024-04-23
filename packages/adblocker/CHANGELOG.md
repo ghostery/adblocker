@@ -1,3 +1,35 @@
+# v1.27.2 (Tue Apr 23 2024)
+
+#### :bug: Bug Fix
+
+- fix: properly find the filter options index [#3887](https://github.com/ghostery/adblocker/pull/3887) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#3920](https://github.com/ghostery/adblocker/pull/3920) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#3917](https://github.com/ghostery/adblocker/pull/3917) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#3915](https://github.com/ghostery/adblocker/pull/3915) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#3914](https://github.com/ghostery/adblocker/pull/3914) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#3907](https://github.com/ghostery/adblocker/pull/3907) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Tests: hidden/invisible mode after test [#3905](https://github.com/ghostery/adblocker/pull/3905) ([@chrmod](https://github.com/chrmod))
+- Tests: fix metadata test [#3906](https://github.com/ghostery/adblocker/pull/3906) ([@chrmod](https://github.com/chrmod))
+- Update local assets [#3889](https://github.com/ghostery/adblocker/pull/3889) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Adblocker: split metadata tests [#3763](https://github.com/ghostery/adblocker/pull/3763) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.263 to 0.0.266 [#3892](https://github.com/ghostery/adblocker/pull/3892) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.27.1 (Tue Apr 09 2024)
 
 #### :bug: Bug Fix
