@@ -6,13 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { expect, use } from 'chai';
+import { expect } from 'chai';
 import * as sinon from 'sinon';
-import * as sinonChai from 'sinon-chai';
 import 'mocha';
-
-use(sinonChai);
-
 import { JSDOM, ResourceLoader } from 'jsdom';
 import { injectCosmetics } from '../adblocker';
 
@@ -23,7 +19,7 @@ async function tick(timeout = 0) {
 describe('#injectCosmetics', () => {
   it('asks background for cosmetics when called', () => {
     const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>');
-    const getCosmeticsFilters = sinon.spy(async () => {
+    const getCosmeticsFilters = sinon.spy(async (_) => {
       return {
         active: true,
         extended: [],
@@ -35,8 +31,8 @@ describe('#injectCosmetics', () => {
     injectCosmetics(dom.window, true, getCosmeticsFilters);
     dom.window.close();
 
-    expect(getCosmeticsFilters).to.have.been.calledOnce;
-    expect(getCosmeticsFilters).to.have.been.calledWith({
+    sinon.assert.calledOnce(getCosmeticsFilters);
+    sinon.assert.calledWith(getCosmeticsFilters.firstCall, {
       classes: [],
       hrefs: [],
       ids: [],
@@ -55,7 +51,7 @@ describe('#injectCosmetics', () => {
   </div>
 </body>
 `);
-    const getCosmeticsFilters = sinon.spy(async () => {
+    const getCosmeticsFilters = sinon.spy(async (_) => {
       return {
         active: true,
         extended: [],
@@ -68,8 +64,8 @@ describe('#injectCosmetics', () => {
     await tick();
     dom.window.close();
 
-    expect(getCosmeticsFilters).to.have.been.calledTwice;
-    expect(getCosmeticsFilters).to.have.been.calledWith({
+    sinon.assert.calledTwice(getCosmeticsFilters);
+    sinon.assert.calledWith(getCosmeticsFilters.secondCall, {
       type: 'features',
       classes: ['class1'],
       hrefs: ['https://foo.com/'],
@@ -89,7 +85,7 @@ describe('#injectCosmetics', () => {
   </div>
 </body>
 `);
-    const getCosmeticsFilters = sinon.spy(async () => {
+    const getCosmeticsFilters = sinon.spy(async (_) => {
       return {
         active: true,
         extended: [],
@@ -118,8 +114,8 @@ describe('#injectCosmetics', () => {
     document.body.appendChild(div);
     await tick();
 
-    expect(getCosmeticsFilters).to.have.been.calledThrice;
-    expect(getCosmeticsFilters).to.have.been.calledWith({
+    sinon.assert.calledThrice(getCosmeticsFilters);
+    sinon.assert.calledWith(getCosmeticsFilters.thirdCall, {
       type: 'features',
       classes: ['class2'],
       hrefs: ['https://bar.com/'],
@@ -137,7 +133,7 @@ describe('#injectCosmetics', () => {
     dom.window.close();
 
     expect(getCosmeticsFilters.callCount).to.eql(4);
-    expect(getCosmeticsFilters).to.have.been.calledWith({
+    sinon.assert.calledWith(getCosmeticsFilters.getCall(3), {
       type: 'features',
       classes: ['class3', 'class4'],
       hrefs: ['https://baz.com/'],

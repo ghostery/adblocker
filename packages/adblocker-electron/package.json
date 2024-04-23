@@ -7,6 +7,7 @@
   },
   "homepage": "https://github.com/cliqz-oss/adblocker#readme",
   "license": "MPL-2.0",
+  "type": "module",
   "main": "dist/cjs/adblocker.js",
   "module": "dist/es6/adblocker.js",
   "types": "dist/types/adblocker.d.ts",
@@ -31,7 +32,7 @@
     "build": "tsc --build ./tsconfig.json",
     "bundle": "tsc --build ./tsconfig.bundle.json",
     "prepack": "yarn run bundle",
-    "test": "nyc mocha --config ../../.mocharc.js"
+    "test": "nyc mocha --config ../../.mocharc.json"
   },
   "peerDependencies": {
     "electron": ">11"
@@ -44,14 +45,14 @@
   "devDependencies": {
     "@types/chai": "^4.3.6",
     "@types/mocha": "^10.0.1",
-    "chai": "^4.3.8",
+    "chai": "^5.1.0",
     "electron": "^30.0.0",
     "eslint": "^8.49.0",
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
     "rimraf": "^5.0.1",
     "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.4.5"
   },
   "contributors": [
     {
