@@ -182,6 +182,43 @@ bing.com##.b_ans:has([class^="xm_"][class*="_ansCont"])
 ! https://github.com/uBlockOrigin/uAssets/issues/20867#issuecomment-2029823186
 ! https://github.com/uBlockOrigin/uAssets/issues/565
 ville-ideale.fr##+js(nostif, contrformpub)
+! https://github.com/uBlockOrigin/uAssets/issues/1025
+! https://github.com/NanoMeow/QuickReports/issues/2458
+*.mp4$media,domain=crackle.com
+||media.truex.com/integration/vpaid/com.truex.TrueXRenderer.js$script,domain=crackle.com,redirect=noopjs
+crackle.com##.vjs-ad-break-marker-adjustment
+! https://www.reddit.com/r/uBlockOrigin/comments/137arti/
+! https://github.com/uBlockOrigin/uAssets/issues/23390
+crackle.com##+js(json-prune-fetch-response, data.device.adsParams%20data.device.adSponsorshipTemplate, , propsToMatch, url%3A%2Fappconfig)
+||heartbeat.crackle.com/tp.png
+! https://github.com/uBlockOrigin/uAssets/issues/6738
+! https://github.com/uBlockOrigin/uAssets/issues/17145
+fmovies.*##+js(nowoif)
+fmovies.*##+js(aopr, mm)
+fmovies.*##+js(set, console.clear, undefined)
+! fmovies.ps popup
+fmovies.*,f2movies.to###modalshare
+fmovies.*,f2movies.to##.modal-backdrop
+fmovies.*,f2movies.to##body.modal-open:style(overflow: auto!important)
+fmovies.*###gift-middle
+fmovies.*###gift-top
+! https://fmovies.to ads
+fmovies.*##+js(acs, document.write, innerWidth)
+! https://github.com/NanoMeow/QuickReports/issues/3311
+||iamcdn.net/players/player*.*mins.js$script,domain=freeplayervideo.com|nazarickol.com|player-cdn.com
+! abysscdn.com,freeplayervideo.com,nazarickol.com,player-cdn.com##+js(set, detectAdBlockAll, noopFunc)
+*$image,redirect-rule=32x32.png,domain=freeplayervideo.com|nazarickol.com|player-cdn.com
+freeplayervideo.com,nazarickol.com,player-cdn.com##+js(set, console.clear, undefined)
+freeplayervideo.com,nazarickol.com,player-cdn.com##+js(ra, style, %23over)
+abysscdn.com,freeplayervideo.com,nazarickol.com,player-cdn.com##+js(nowoif, %2F%5E%2F, 1)
+jav.guru##.inside-right-sidebar > aside.widget_custom_html
+jav.guru###text-76
+jav.guru###text-92
+jav.guru###text-93
+||abysscdn.com/cdn-cgi/trace$xhr,1p
+! https://github.com/uBlockOrigin/uAssets/issues/23424
+abysscdn.com##div[style*="z-index:100000"]
+##div[style="width:100%;height:auto;position:absolute;z-index:100000;justify-content:center;align-items:center;display:flex;top:0px;bottom:0px;background:rgba(0, 0, 0, .6);user-select: none;"]
 ! END: Rules from filters.txt
 ! https://github.com/AdguardTeam/AdguardFilters/issues/169660
 flixscans.org##+js(no-fetch-if, googlesyndication)
@@ -416,7 +453,7 @@ qwant.com##.result__ext:has([data-testid="adResult"]):style(max-height: 1px !imp
 qwant.com#@#div[data-testid="pam.container"]
 qwant.com##div[data-testid="pam.container"]:style(max-height: 1px !important; opacity: 0 !important; pointer-events: none !important;)
 @@||qwant.com/apm/intake/v2/rum/events$xhr,1p
-@@||qwant.com/action/$ping,1p
+@@||qwant.com^$ping,1p
 ! https://github.com/AdguardTeam/AdguardFilters/issues/171502
 @@||spite.cz^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/22203
@@ -1007,6 +1044,11 @@ matrixserver.in##+js(acs, %24, samNotice)
 ! https://github.com/uBlockOrigin/uAssets/issues/23378
 vinstartheme.com##+js(no-fetch-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/23396
-free-sms-receive.com##+js(nostif, adb)
+free-sms-receive.com,sms-receive-online.com##+js(nostif, adb)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1c9d6mo/can_anyone_help_with_this_site/
-||pranmcpkx.com^$script,3p,redirect-rule=noopjs,domain=pressherald.com
+! https://www.reddit.com/r/uBlockOrigin/comments/1cabylu/httpswwwpressdemocratcom/
+||cdn.pranmcpkx.com^$script,3p,redirect-rule=noopjs
+! https://github.com/AdguardTeam/AdguardFilters/issues/177528
+fansubseries.com.br##+js(aopr, popUrl)
+! https://github.com/bogachenko/fuckfuckadblock/issues/484
+pandadevelopment.net##+js(no-fetch-if, adsbygoogle)

@@ -13,6 +13,7 @@
 ! @@||youtube.com/get_video_info?*timedtext_editor$xhr,1p
 ! https://redd.it/ggcmkp https://redd.it/gx03e0
 ! https://github.com/uBlockOrigin/uAssets/pull/18106/
+! https://www.reddit.com/r/uBlockOrigin/comments/1atwzem/comment/l06ayn9/
 tv.youtube.com##+js(trusted-replace-xhr-response, %22adPlacements%22, %22no_ads%22, %2Fplaylist%5C%3Flist%3D%7Cplayer%5C%3F%7Cwatch%5C%3Fv%3D%7Cyoutubei%5C%2Fv1%5C%2Fplayer%2F)
 !#if !cap_html_filtering
 www.youtube.com##+js(trusted-replace-xhr-response, %2F%22adPlacements.*%3F(%5BA-Z%5D%22%5C%7D%7C%22%5C%7D%7B2%2C4%7D)%5C%7D%5C%5D%2C%2F, , %2Fplaylist%5C%3Flist%3D%7Cplayer%5C%3F%7Cwatch%5C%3Fv%3D%7Cyoutubei%5C%2Fv1%5C%2Fplayer%2F)
@@ -57,7 +58,7 @@ kabeleins.de,kachelmannwetter.com,kamelle.de,kicker.de,kindergeld.org,klettern-m
 lachainemeteo.com,lampertheimer-zeitung.de,landwirt.com,laut.de,lauterbacher-anzeiger.de,leckerschmecker.me,leinetal24.de,lesfoodies.com,levif.be,lifeline.de,liga3-online.de,likemag.com,linux-community.de,linux-magazin.de,live.vodafone.de,ln-online.de,lokalo24.de,lustaufsleben.at,lustich.de,lvz.de,lz.de##+js(nostif, .call(null), 10)
 macwelt.de,macworld.co.uk,mail.de,main-spitze.de,manager-magazin.de,manga-tube.me,mathebibel.de,mathepower.com,maz-online.de,medisite.fr,mehr-tanken.de,mein-kummerkasten.de,mein-mmo.de,mein-wahres-ich.de,meine-anzeigenzeitung.de,meinestadt.de,menshealth.de,mercato365.com,merkur.de,messen.de,metal-hammer.de,metalflirt.de,meteologix.com,minecraft-serverlist.net,mittelbayerische.de,modhoster.de,moin.de,mopo.de,morgenpost.de,motor-talk.de,motorbasar.de,motorradonline.de,motorsport-total.com,motortests.de,mountainbike-magazin.de,moviejones.de,moviepilot.de,mt.de,mtb-news.de,musiker-board.de,musikexpress.de,musikradar.de,mz-web.de##+js(nostif, .call(null), 10)
 n-tv.de,naumburger-tageblatt.de,netzwelt.de,neuepresse.de,neueroeffnung.info,news.at,news.de,news38.de,newsbreak24.de,nickles.de,nicknight.de,nl.hardware.info,nn.de,nnn.de,nordbayern.de,notebookchat.com,notebookcheck-ru.com,notebookcheck-tr.com,notebookcheck.*,noz-cdn.de,noz.de,nrz.de,nw.de,nwzonline.de##+js(nostif, .call(null), 10)
-oberhessische-zeitung.de,oeffentlicher-dienst.info,onlinekosten.de,onvista.de,op-marburg.de,op-online.de,outdoor-magazin.com,outdoorchannel.de##+js(nostif, .call(null), 10)
+oberhessische-zeitung.de,och.to,oeffentlicher-dienst.info,onlinekosten.de,onvista.de,op-marburg.de,op-online.de,outdoor-magazin.com,outdoorchannel.de##+js(nostif, .call(null), 10)
 paradisi.de,pc-magazin.de,pcgames.de,pcgameshardware.de,pcwelt.de,pcworld.es,peiner-nachrichten.de,pferde.de,pietsmiet.de,pixelio.de,pkw-forum.de,playboy.de,playfront.de,pnn.de,pons.com,prad.de,prignitzer.de,profil.at,promipool.de,promobil.de,prosiebenmaxx.de,psychic.de##+js(nostif, .call(null), 10)
 quoka.de##+js(nostif, .call(null), 10)
 radio.at,radio.de,radio.dk,radio.es,radio.fr,radio.it,radio.net,radio.pl,radio.pt,radio.se,ran.de,readmore.de,rechtslupe.de,recording.de,rennrad-news.de,reuters.com,reviersport.de,rhein-main-presse.de,rheinische-anzeigenblaetter.de,rimondo.com,roadbike.de,roemische-zahlen.net,rollingstone.de,rot-blau.com,rp-online.de,rtl.de,rtv.de,rugby365.fr,ruhr24.de,rundschau-online.de,runnersworld.de##+js(nostif, .call(null), 10)
@@ -1062,31 +1063,6 @@ msn.com##msft-article-card:not(.contentCard)
 www.msn.com##+js(json-prune-fetch-response, properties.componentConfigs.slideshowConfigs.slideshowSettings.interstitialNativeAds, , propsToMatch, url%3Aconsumptionpage%2Fgallery_windows%2Fconfig.json)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/146823
 www.msn.com##+js(json-prune-fetch-response, *, list.*.link.ad%20list.*.link.kicker, propsToMatch, url%3Acontent%2Fv1%2Fcms%2Fapi%2Famp)
-! https://github.com/uBlockOrigin/uAssets/issues/6738
-! https://github.com/uBlockOrigin/uAssets/issues/17145
-fmovies.*##+js(nowoif)
-fmovies.*##+js(aopr, mm)
-fmovies.*##+js(set, console.clear, undefined)
-! fmovies.ps popup
-fmovies.*,f2movies.to###modalshare
-fmovies.*,f2movies.to##.modal-backdrop
-fmovies.*,f2movies.to##body.modal-open:style(overflow: auto!important)
-fmovies.*###gift-middle
-fmovies.*###gift-top
-! https://fmovies.to ads
-fmovies.*##+js(acs, document.write, innerWidth)
-! https://github.com/NanoMeow/QuickReports/issues/3311
-||iamcdn.net/players/player*.*mins.js$script,domain=freeplayervideo.com|nazarickol.com|player-cdn.com
-! abysscdn.com,freeplayervideo.com,nazarickol.com,player-cdn.com##+js(set, detectAdBlockAll, noopFunc)
-*$image,redirect-rule=32x32.png,domain=freeplayervideo.com|nazarickol.com|player-cdn.com
-freeplayervideo.com,nazarickol.com,player-cdn.com##+js(set, console.clear, undefined)
-freeplayervideo.com,nazarickol.com,player-cdn.com##+js(ra, style, %23over)
-abysscdn.com,freeplayervideo.com,nazarickol.com,player-cdn.com##+js(nowoif, %2F%5E%2F, 1)
-jav.guru##.inside-right-sidebar > aside.widget_custom_html
-jav.guru###text-76
-jav.guru###text-92
-jav.guru###text-93
-||abysscdn.com/cdn-cgi/trace$xhr,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/12058
 mcloud.bz##+js(acs, Math, XMLHttpRequest)
 mcloud.bz##+js(nosiif, break)
@@ -1665,7 +1641,7 @@ platinmods.*##+js(nano-sib)
 ! https://github.com/uBlockOrigin/uAssets/issues/949
 ||whentai.com/*.gif$image
 ! Common rules for TXXX network
-/\.[a-z]{3,5}\/[0-9a-z]{8,12}\/[0-9a-z]{8,12}\.js$/$script,domain=555.porn|abxxx.com|aniporn.com|asiantv.fun|blackporn.tube|bdsmx.tube|bigdick.tube|gaytxxx.com|hclips.com|hdzog.*|hotmovs.*|imzog.com|in-porn.com|inporn.com|javdaddy.com|manysex.com|mrgay.tube|onlyporn.tube|porn555.com|pornclassic.tube|pornforrelax.com|porngo.tube|pornhits.com|pornj.com|pornl.com|pornq.com|porntop.com|pornzog.com|privatehomeclips.com|puporn.com|see.xxx|senzuri.tube|sextu.com|shemalez.com|sss.xxx|teenorgy.video|thegay.*|tubepornclassic.com|tuberel.com|txxx.*|txxxporn.tube|upornia.*|vjav.*|voyeurhit.*|vxxx.com|xmilf.com
+/\.[a-z]{3,5}\/[0-9a-z]{8,12}\/[0-9a-z]{8,12}\.js$/$script,domain=555.porn|abxxx.com|aniporn.com|asiantv.fun|blackporn.tube|bdsmx.tube|bigdick.tube|gaytxxx.com|hclips.com|hdzog.*|hotmovs.*|imzog.com|in-porn.com|inporn.com|javdaddy.com|manysex.*|mrgay.tube|onlyporn.tube|porn555.com|pornclassic.tube|pornforrelax.com|porngo.tube|pornhits.com|pornj.com|pornl.com|pornq.com|porntop.com|pornzog.com|privatehomeclips.com|puporn.com|see.xxx|senzuri.tube|sextu.com|shemalez.com|sss.xxx|teenorgy.video|thegay.*|tubepornclassic.com|tuberel.com|txxx.*|txxxporn.tube|upornia.*|vjav.*|voyeurhit.*|vxxx.com|xjav.tube|xmilf.com
 /afon7.$script,1p
 /barbar7.$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/10064
@@ -1678,6 +1654,8 @@ platinmods.*##+js(nano-sib)
 /kzdh7.$script,1p
 /klesd7.$script,1p
 /leo7.$script,1p
+/howone7.$script,1p
+/duayn7.$script,1p
 /assets/jwplayer-*/vast.js$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/953
 txxx.*##+js(acs, setTimeout, hommy.mutation.mutation)
@@ -1740,6 +1718,8 @@ vjav.*##.video-tube-friends
 vjav.*##.video-tube-friends + div[class]:not(.pagination)
 vjav.*##.index-page > div.container + div[class]
 vjav.*##.jw-reset.jw-atitle.nopop
+vjav.*##.partners-wrap + div[class]
+vjav.*##div[class] > div[class] > section[style="padding: 10px;"]
 ! pornq .com popups
 ||bitupsss.com^$all
 ! pornj .com popups
@@ -1850,12 +1830,13 @@ sextu.com##.wrapper > article
 sextu.com##.wrapper > section
 sextu.com##div[id^="underplayer_"]
 ! https://github.com/AdguardTeam/AdguardFilters/issues/159495
-manysex.com##.suggestion-wrapper
-manysex.com##.right
-manysex.com##.video-page__related + .headline
-manysex.com##.videoplayer + section
-manysex.com##section[style="padding: 12px;"]
-manysex.com##span[style="display:flex !important"] > div > div:not(:last-child)
+manysex.com,manysex.tube##.suggestion-wrapper
+manysex.com,manysex.tube##.right
+manysex.com,manysex.tube##.video-page__related + .headline
+manysex.com,manysex.tube##.videoplayer + section
+manysex.com,manysex.tube##section[style="padding: 12px;"]
+manysex.com,manysex.tube##span[style="display:flex !important"] > div > div:not(:last-child)
+manysex.com,manysex.tube##.jw-reset.jw-atitle.nopop
 ! https://github.com/AdguardTeam/AdguardFilters/issues/169195
 abxxx.com##.video-page__content > div.left > section
 abxxx.com##.video__wrapper > div.wrapper > section
@@ -1877,6 +1858,14 @@ shemalez.com##.video-page__content > .left  + div[class]
 shemalez.com##.video-tube-friends + div[class]
 shemalez.com##.content > div > .wrapper + div[class]
 shemalez.com##div[style="display:flex !important"] > div
+! xjav.tube
+xjav.tube##.left > section
+xjav.tube##.right
+xjav.tube##.video-tube-friends + article
+xjav.tube##.wrapper > section[style="padding: 12px;"]
+xjav.tube##.wrapper.headline:has(+ .wrapper > section[style="padding: 12px;"])
+xjav.tube##span[style="display:flex !important"] > div > div:not(:last-child)
+xjav.tube##.jw-channel-btn.nopop
 ! https://github.com/uBlockOrigin/uAssets/issues/966
 mcfucker.com##+js(aopw, t4PP)
 sponsor=$domain=mcfucker.com
@@ -3923,6 +3912,7 @@ camwhores.*##+js(set, flashvars.video_click_url, )
 ||h-cdn.com/loader.js$script,domain=camwhores.tv
 ||lexozfldkklgvc.com^$3p
 ||virtwishmodels.com^$frame,3p
+||cemiocw.com^$3p
 camwhores.*,camwhorestv.*##.place
 camwhores.*,camwhorestv.*##[href^="https://go.schjmp.com"]
 camwhores.*,camwhorestv.*##.row-models
@@ -7384,15 +7374,6 @@ faucethero.com##[href^="https://qik.cc/"]
 faucethero.com##[href^="https://www.office.jocial.com/Affiliate/"]
 ||aruble.net^$3p
 ||qik.cc^$3p
-! https://github.com/uBlockOrigin/uAssets/issues/5333
-@@||chipverify.com^$ghide
-chipverify.com##ins.adsbygoogle
-! https://github.com/NanoMeow/QuickReports/issues/972
-imtranslator.net##+js(nostif, adsbox, 1000)
-! https://github.com/uBlockOrigin/uAssets/issues/5334
-@@||futbin.com^$ghide
-@@||futbin.com/ad/*$xhr,1p
-futbin.com##.full-top-ad-area
 ! https://github.com/uBlockOrigin/uAssets/issues/5338
 ! https://github.com/easylist/easylist/pull/10399
 @@||upvid.*^$ghide
@@ -9082,14 +9063,6 @@ linkshub.*##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/6189
 @@||javaguides.net^$ghide
 javaguides.net##+js(aeld, load, onload)
-! https://github.com/uBlockOrigin/uAssets/issues/1025
-! https://github.com/NanoMeow/QuickReports/issues/2458
-*.mp4$media,domain=crackle.com
-||media.truex.com/integration/vpaid/com.truex.TrueXRenderer.js$script,domain=crackle.com,redirect=noopjs
-crackle.com##.vjs-ad-break-marker-adjustment
-! https://www.reddit.com/r/uBlockOrigin/comments/137arti/
-crackle.com##+js(json-prune, data.device.adSponsorshipTemplate%20data.device.adsParams)
-||heartbeat.crackle.com/tp.png
 ! https://github.com/uBlockOrigin/uAssets/issues/6193
 hentaihere.com##+js(nowoif)
 hentaihere.com##[href^="https://goo.gl"]
@@ -10146,7 +10119,6 @@ hentaihaven.xxx##+js(nowoif)
 ! hentaihaven .com/icu ads, popup
 ||hentaihaven.icu/wp-content/plugins/sscript-manager/
 ||mult-imgs.cyou/images/*.gif$image,domain=hentaihaven.xxx
-hentaihaven.*##.main-sidebar[role="complementary"]
 ! interstitial page
 hentaihaven.xxx##+js(aopw, Script_Manager)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/43599#issuecomment-559967206
