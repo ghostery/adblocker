@@ -1536,7 +1536,16 @@ function setNetworkMask(mask: number, m: number, value: boolean): number {
 }
 
 function checkIsHostname(filter: string, start: number, end: number): boolean {
-  return parse(filter.slice(start, end)).hostname !== null;
+  const range = filter.slice(start, end);
+
+  return (
+    parse(range, {
+      extractHostname: false,
+    }).hostname ===
+    parse(range, {
+      extractHostname: true,
+    }).hostname
+  );
 }
 
 /**
