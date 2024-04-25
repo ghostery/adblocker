@@ -220,6 +220,12 @@ describe('Network filters', () => {
       filter: 'foo.com/ads',
       isImportant: true,
     });
+
+    network('*bar^', {
+      ...base,
+      filter: 'bar^',
+      hostname: '',
+    });
   });
 
   it('parses ||pattern', () => {
@@ -346,11 +352,6 @@ describe('Network filters', () => {
       isRegex: true,
     };
 
-    network('*bar^', {
-      ...base,
-      filter: '*bar^',
-      hostname: '',
-    });
     network('foo.com/*bar^', {
       ...base,
       filter: 'foo.com/*bar^',

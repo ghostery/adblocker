@@ -37,6 +37,7 @@ import {
   HASH_INTERNAL_MULT,
 } from '../utils';
 import IFilter from './interface';
+import { parse } from 'tldts-experimental';
 
 const HTTP_HASH = fastHash('http');
 const HTTPS_HASH = fastHash('https');
@@ -773,6 +774,16 @@ export default class NetworkFilter implements IFilter {
         line.charCodeAt(filterIndexEnd - 1) === 42 /* '*' */
       ) {
         filterIndexEnd -= 1;
+      }
+
+      // Remove leading '*' if the filter is not hostname anchored.
+      if (
+        getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor) === false &&
+        filterIndexEnd - filterIndexStart > 0 &&
+        line.charCodeAt(filterIndexStart) === 42 /* '*' */
+      ) {
+        mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+        filterIndexStart += 1;
       }
 
       // Transform filters on protocol (http, https, ws)
@@ -1524,52 +1535,8 @@ function setNetworkMask(mask: number, m: number, value: boolean): number {
   return clearBit(mask, m);
 }
 
-function checkIsAlphabet(charCode: number) {
-  return charCode >= 97 && charCode <= 122;
-}
-
-function checkIsHostnameToken(charCode: number) {
-  return (
-    checkIsAlphabet(charCode) ||
-    (charCode >= 48 && charCode <= 57) || // Numerics
-    charCode === 45 // Hyphen
-  );
-}
-
 function checkIsHostname(filter: string, start: number, end: number): boolean {
-  if (end - start === 1) {
-    return checkIsAlphabet(filter.charCodeAt(start));
-  }
-
-  if (!checkIsAlphabet(filter.charCodeAt(start))) {
-    return false;
-  }
-
-  const l = end - 1;
-
-  for (let i = start + 1; i < l; ) {
-    if (filter.charCodeAt(i) === 46 /* '.' */) {
-      if (filter.charCodeAt(i + 1) === 46) {
-        return false;
-      }
-
-      i += 2;
-
-      continue;
-    }
-
-    if (!checkIsHostnameToken(filter.charCodeAt(i))) {
-      return false;
-    }
-
-    i += 1;
-  }
-
-  if (!checkIsHostnameToken(filter.charCodeAt(l))) {
-    return false;
-  }
-
-  return true;
+  return parse(filter.slice(start, end)).hostname !== null;
 }
 
 /**
