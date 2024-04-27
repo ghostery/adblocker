@@ -306,9 +306,11 @@ deal.by##+js(trusted-set-cookie, gdprConsent, %257B%2522adv%2522%253Afalse%252C%
 ! https://www.zwenkwielen.net/
 zwenkwielen.net##+js(trusted-set-cookie, cookie_preference, functional, , , domain, zwenkwielen.net)
 ! https://github.com/uBlockOrigin/uAssets/discussions/23297
-! [dup] from ublock-origin/quick-fixes.txt
-! lastmile.lt#@#+js(set-cookie, __consent, %255B%2522required%2522%255D)
 lastmile.lt##+js(trusted-set-cookie, __consent, %255B%2522required%2522%255D)
+! https://www.reddit.com/r/uBlockOrigin/comments/1ccdzvx/cookie_banner_no_longer_blocked_on/
+biomedcentral.com##+js(trusted-set-cookie, sncc, P%253D15%253AV%253D33.0.0%2526C%253DC01%2526D%253Dtrue, , , domain, biomedcentral.com)
+! https://www.bol.com/nl/nl/
+bol.com##+js(trusted-set-cookie, bolConsentChoices, source%23OFC%7Cversion%236%7Cint-tran%23false%7Cext-tran%23false%7Cint-beh%23false%7Cext-beh%23false, , , domain, www.bol.com, reload, 1)
 !! Needs additional cookies
 ! Closing Optanon Alert Box
 1001games.com,1001hry.cz,1001jeux.fr,1001jocuri.ro,1001jogos.com.br,1001jogos.pt,1001pelit.com,1001spiele.de,elkspel.nl,gamespot.com,giochixl.it,glamour.com,grajteraz.pl,isladejuegos.com,jatekokxl.hu,mtvuutiset.fi,paixnidiaxl.gr,pushsquare.com,spelo.se,spillespill.no,spilxl.dk,thejournal.ie,thetrainline.com,vkmag.com,zdnet.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24, 1year)
@@ -986,3 +988,8 @@ canatura.com##+js(trusted-set-cookie, cookiesRules, %7B%22analytics%22%3Afalse%2
 elmundo.es##+js(trusted-click-element, button%5Bid%3D%22ue-accept-notice-button%22%5D, , 2000)
 ! https://github.com/uBlockOrigin/uAssets/issues/23044
 eurobaustoff.com##+js(trusted-set-local-storage-item, ccm_consent, %7B%22%2F%22%3A%7B%22gen%22%3A2%2C%22ucid%22%3A%221%22%2C%22consent%22%3Atrue%2C%22embeddings%22%3A%5B%221e76acf%22%2C%228ed8d9a%22%2C%22b429e86%22%2C%22f22e6ed%22%2C%220b25af3%22%2C%226079a42%22%5D%2C%22created%22%3A%22%24currentDate%24%22%2C%22updated%22%3A%22%24currentDate%24%22%2C%22clickedButton%22%3A%22acceptAll%22%2C%22iframeConsentDomains%22%3A%5B%5D%2C%22tcf%22%3A%7B%22p%22%3A%5B%5D%2C%22lip%22%3A%5B%5D%2C%22sf%22%3A%5B%5D%2C%22v%22%3A%5B%5D%2C%22liv%22%3A%5B%5D%2C%22gad%22%3A%5B%5D%7D%2C%22lang%22%3A%22de_DE%22%7D%7D)
+! deny, video playback/embedded tweeks = ok (EU IP)
+euronews.com##+js(trusted-set-local-storage-item, euconsent-v2, CP9oCIAP9oCIAAHABBENAwEgAAAAAAAAAAAAAAAAAAAA.YAAAAAAAAAAA)
+! https://github.com/uBlockOrigin/uAssets/issues/23454
+dr-beckmann.com##+js(trusted-click-element, %23usercentrics-root%20%3E%3E%3E%20button%5Bdata-testid%3D%22uc-deny-all-button%22%5D)
+@@||usercentrics.eu^$domain=dr-beckmann.com

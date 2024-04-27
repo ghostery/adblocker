@@ -317,6 +317,7 @@ maharashtratimes.com##.ads-open-close
 navbharattimes.indiatimes.com##.ads-open-close
 vijaykarnataka.com,telugu.samayam.com,malayalam.samayam.com,tamil.samayam.com,eisamay.indiatimes.com,navbharattimes.indiatimes.com,maharashtratimes.com##.minitv-container
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=indiatimes.com|iamgujarat.com|vijaykarnataka.com|tamil.samayam.com|telugu.samayam.com|malayalam.samayam.com,redirect-rule=google-ima.js
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect-rule=google-ima.js,domain=m.economictimes.com
 ||dealspakki.com^$frame,domain=eisamay.com|iamgujarat.com|indiatimes.com|maharashtratimes.com|samayam.com|vijaykarnataka.com
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=maharashtratimes.com,important
 ! ads placeholders
@@ -423,11 +424,19 @@ www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox
 !#else
 www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.%5B-%5D.__bbox.result.data.node.sponsored_data.ad_id)
 !#endif
+! https://www.facebook.com/marketplace/
 !#if cap_html_filtering
 !#else
 www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22brs_content_label%22%3A%5B%5E%2C%5D%2B%2C%22category%22%3A%22SPONSORED%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%7D%5D%2B%5C%7D%2F, %7B%7D, %2Fapi%2Fgraphql)
 www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22node%22%3A%5C%7B%22role%22%3A%22SEARCH_ADS%22%5B%5E%5Cn%5D%2B%3Fcursor%22%3A%5B%5E%7D%5D%2B%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
+www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22node%22%3A%5C%7B%22__typename%22%3A%22MarketplaceFeedAdStory%22%5B%5E%5Cn%5D%2B%3F%22cursor%22%3A(%3F%3Anull%7C%22%5C%7B%5B%5E%5Cn%5D%2B%3F%5C%7D%22%7C%5B%5E%5Cn%5D%2B%3FMarketplaceSearchFeedStoriesEdge%22)%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
 !#endif
+www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.node, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.node.story.sponsored_data.ad_id)
+! https://www.facebook.com/marketplace/category/home/
+www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.marketplace_search.feed_units.edges.%5B-%5D.node.story.sponsored_data.ad_id)
+! https://www.facebook.com/marketplace/category/vehicles
+www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.viewer.marketplace_feed_stories.edges.%5B-%5D.node.story.sponsored_data.ad_id)
+www.facebook.com###seo_pivots ~ div > div[style^="max-width"] > div[class] > div[style^="max-width"]:has(a[href^="/ads/about/?"])
 !facebook.com,facebookwkhpilnemxj7asaniu7vnjjbiltxjqhye3mhbshg7kx5tfyd.onion##div[role="feed"] > div[class]:has([data-ad-preview])
 ! mail.yahoo.com stuff
 mail.yahoo.com##[data-test-id="right-rail-ad"]
