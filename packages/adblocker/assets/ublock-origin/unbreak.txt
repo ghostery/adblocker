@@ -32,7 +32,7 @@
 ! - http://www.surfline.com/video/ (links not working)
 ! - https://github.com/gorhill/uBlock/issues/529
 ! - http://www.scotrail.co.uk/check-your-journey (via https://twitter.com/andy_pee_tho/status/710508529405263872)
-*/b/ss/*&aqe=$image,redirect=1x1-transparent.gif
+*/b/ss/*&aqe=$image,redirect=1x1.gif
 ! https://adblockplus.org/forum/viewtopic.php?f=1&t=44930
 ! https://github.com/uBlockOrigin/uAssets/issues/4353#issuecomment-449159137
 ! https://github.com/jspenguin2017/uBlockProtector/issues/1085
@@ -202,7 +202,7 @@ hintergrundbild.org#@#.ads1
 @@||streamplay.to^*.mp4$xhr
 @@||streamplay.to^*.m4s$xhr
 ! https://www.reddit.com/r/uBlockOrigin/comments/83odfj/ublock_breaking_sites_which_lists_should_i/
-||frog.wix.com/da-client$image,redirect=1x1-transparent.gif,domain=deviantart.com
+||frog.wix.com/da-client$image,redirect=1x1.gif,domain=deviantart.com
 ! https://github.com/uBlockOrigin/uAssets/issues/1704#issuecomment-372543282
 ! https://forums.lanik.us/viewtopic.php?f=64&t=43860&p=151105#p151105
 @@||pages.bostonglobe.com/login/js/lib/AppMeasurement.js$script,1p
@@ -880,7 +880,7 @@ techradar.com#@#a[href^="https://amazon."][href*="tag="]
 @@||d2wzl9lnvjz3bh.cloudfront.net/frosmo.easy.js$script,domain=tally-weijl.com
 @@||frosmo.com/tally-weijl-product-listing/$xhr,domain=tally-weijl.com
 ! https://github.com/uBlockOrigin/uAssets/issues/6288
-||clustrmaps.com^$image,redirect=32x32-transparent.png,domain=motls.blogspot.com
+||clustrmaps.com^$image,redirect=32x32.png,domain=motls.blogspot.com
 ! https://www.reddit.com/r/uBlockOrigin/comments/d3mrfr/how_to_unblock_ebay_sponsored_listings/
 ebay.com#@#li.s-item:has(span:has-text(SPONSORED))
 ! https://github.com/uBlockOrigin/uAssets/issues/6304
@@ -891,14 +891,10 @@ ebay.com#@#li.s-item:has(span:has-text(SPONSORED))
 @@||rcijeux.fr/game/20minutes/$frame,domain=20minutes.fr
 ! https://github.com/NanoMeow/QuickReports/issues/283
 @@||opgg-static.akamaized.net/*/tracker.js$script,domain=op.gg
-! https://github.com/uBlockOrigin/uAssets/commit/69bced5eba64f7960acaa5fa85df06958fb64a93#commitcomment-35179436
-twitter.com#@#article[role="article"]:has-text(Promoted)
 ! To counter the adswizz filter in Peter Lowe's list
 ! [badfilter] ||adswizz.com^$badfilter
 ||adswizz.com^$3p
 ! https://www.reddit.com/r/uBlockOrigin/comments/d6zbqv/login_popup_for_disqus_being_blocked/
-! whitelisting recaptcha .net
-@@||recaptcha.net/recaptcha/
 ! https://github.com/uBlockOrigin/uAssets/issues/6334
 ||rtl.de/pf/resources/js/videotracking.min.js$script,redirect=noopjs,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/6338
@@ -1044,6 +1040,7 @@ reuters.com#@#[class^="primary-video__container_"]
 ! https://github.com/uBlockOrigin/uAssets/issues/23365
 !#if !env_mobile
 reuters.com##ul[class^="cluster__stories"] > li[class^="cluster__cluster-basic"][class*="cluster__column-left"]:style(margin-left: 17.0418006431vw !important;)
+reuters.com##ul[class^="cluster__stories"] > li[class^="cluster__cluster-hub"][class*="cluster__column-middle"][class*="cluster__break-after"]:style(margin-bottom: 100px !important;)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/6601
 @@||cdn.mxpnl.com/libs/mixpanel-*-latest.min.js$script,domain=groupme.com
@@ -1056,8 +1053,6 @@ reuters.com##ul[class^="cluster__stories"] > li[class^="cluster__cluster-basic"]
 ! https://forums.lanik.us/viewtopic.php?f=64&t=43928
 @@||captcha.px-cdn.net^$script
 @@||perimeterx.net/api/v2/collector/ocaptcha$xhr
-! fix fembed.com download button
-! [badfilter] *$script,3p,domain=fembed.com,badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/4542#issuecomment-559369797
 @@||mixdrop.co^$frame
 ! https://forums.lanik.us/viewtopic.php?f=64&t=43926
@@ -1114,9 +1109,6 @@ yugioh.com##.cookie-policy-container-invisible.cookie-policy-container
 @@||static.goolive.de/media/static/images/smileys/ad.gif$image
 ! https://github.com/NanoMeow/QuickReports/issues/2526
 ||gratis.com/file/*/global/gtm.min.js$script,1p,redirect=noopjs
-! https://forums.lanik.us/viewtopic.php?f=64&t=44087
-! [badfilter] *$3p,image,domain=rd.com,badfilter
-! [badfilter] *$3p,xhr,domain=rd.com,badfilter
 ! https://github.com/NanoMeow/QuickReports/issues/1261
 @@||viu.com/*/tracking/$script,1p
 ||amazonaws.com^$xhr,redirect-rule=nooptext,domain=viu.com
@@ -1136,8 +1128,6 @@ qqcinema21.com##a[rel="nofollow"]:has(img)
 begadistrictnews.com.au,bendigoadvertiser.com.au,goulburnpost.com.au,maitlandmercury.com.au,newcastleherald.com.au##.subscribe-article .subscriber-hider:style(display:block!important)
 begadistrictnews.com.au,bendigoadvertiser.com.au,goulburnpost.com.au,maitlandmercury.com.au,newcastleherald.com.au##.subscribe-article .subscribe-truncate:style(max-height:unset!important;order:unset!important;)
 begadistrictnews.com.au,bendigoadvertiser.com.au,goulburnpost.com.au,maitlandmercury.com.au,newcastleherald.com.au##.subscribe-article .subscribe-truncate::before:style(background:none!important;)
-! https://github.com/uBlockOrigin/uAssets/issues/6784
-! [badfilter] ||pega.com^$3p,badfilter
 ! whentai .com broken pages
 @@||whentai.com/combine.js$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/6793
@@ -3450,6 +3440,9 @@ uol.com.br##+js(set, YT.ImaManager, noopFunc)
 uol.com.br##+js(set, UOLPD, %7B%7D)
 uol.com.br##+js(set, UOLPD.dataLayer, %7B%7D)
 uol.com.br##+js(set, __configuredDFPTags, %7B%7D)
+! https://github.com/AdguardTeam/AdguardFilters/issues/159573#issuecomment-2089027050
+@@||googleads.github.io/videojs-ima/node_modules/video.js/dist/video.min.js$script,domain=cultura.uol.com.br
+@@||googleads.github.io/videojs-ima/node_modules/video.js/dist/video-js.min.css$css,domain=cultura.uol.com.br
 ! https://myspace.com/myspace/video/charles-bradley-the-ferris-wheel-interviews/109587715 - video breakage
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=myspace.com,important
 ! https://www.carmagazine.co.uk/car-reviews/smart/-1-suv/ - images breakage
@@ -3831,3 +3824,7 @@ moneycontrol.com##.advSlotsGrayBox
 ||yieldlove.com/v2/yieldlove.js$script,domain=whatismyip.com,important
 whatismyip.com##+js(set, yieldlove_cmd, %7B%7D)
 whatismyip.com##+js(set, yieldlove_cmd.push, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/23507
+myfitnesspal.com##+js(set, dataLayer.push, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/23508
+myair.resmed.com##+js(no-xhr-if, 1.1.1.1%2Fcdn-cgi%2Ftrace)
