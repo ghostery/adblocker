@@ -17,7 +17,6 @@ export default [
   "google-analytics",
   "fingerprint2.js",
   "noop-1s.mp4:10",
-  "-transparent.",
   "google-ima.js",
   "noop-0.1s.mp3",
   "prebid-ads.js",
