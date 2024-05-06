@@ -252,16 +252,51 @@ export function autoRemoveScript(script: string): string {
   //    })();
 }
 
-export function injectScript(s: string, doc: Document): void {
+function insertNode(node: Node, document: Document) {
+  const parent = document.head || document.documentElement || document;
+  if (parent !== null) {
+    parent.appendChild(node);
+  }
+}
+
+function injectScriptlet(s: string, doc: Document): void {
   const script = doc.createElement('script');
   script.type = 'text/javascript';
   script.id = SCRIPT_ID;
   script.async = false;
   script.appendChild(doc.createTextNode(autoRemoveScript(s)));
 
-  // Insert node
-  const parent = doc.head || doc.documentElement || doc;
-  if (parent !== null) {
-    parent.appendChild(script);
+  insertNode(script, doc);
+}
+
+function isFirefox(doc: Document) {
+  try {
+    return doc.defaultView?.navigator?.userAgent?.indexOf('Firefox') !== -1;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function injectScriptletFirefox(s: string, doc: Document) {
+  const win = doc.defaultView!;
+  const script = doc.createElement('script');
+  script.async = false;
+  script.id = SCRIPT_ID;
+  const blob = new win.Blob([autoRemoveScript(s)], { type: 'text/javascript; charset=utf-8' });
+  const url = win.URL.createObjectURL(blob);
+
+  // a hack for tests to that allows for async URL.createObjectURL
+  // eslint-disable-next-line @typescript-eslint/await-thenable
+  script.src = await url;
+
+  insertNode(script, doc);
+  win.URL.revokeObjectURL(url);
+}
+
+export function injectScript(s: string, doc: Document): void {
+  if (isFirefox(doc)) {
+    injectScriptletFirefox(s, doc);
+  } else {
+    injectScriptlet(s, doc);
   }
 }
