@@ -13,7 +13,7 @@ import 'mocha';
 
 use(sinonChai);
 
-import { JSDOM } from 'jsdom';
+import { JSDOM, ResourceLoader } from 'jsdom';
 import { injectCosmetics } from '../adblocker';
 
 async function tick(timeout = 0) {
@@ -158,6 +158,53 @@ describe('#injectCosmetics', () => {
         runScripts: 'dangerously',
       },
     );
+
+    injectCosmetics(dom.window, true, async () => {
+      return {
+        active: true,
+        extended: [],
+        scripts: [
+          `
+          (function () {
+            const span = window.document.createElement('span');
+            window.document.body.appendChild(span);
+          })();
+        `,
+        ],
+        styles: '',
+      };
+    });
+
+    await tick(1000);
+    expect(dom.window.document.getElementsByTagName('span')).to.have.lengthOf(1);
+  });
+
+  it('injects scriptlet in Firefox', async () => {
+    const loader = new ResourceLoader({
+      userAgent: "Firefox"
+    });
+    const dom = new JSDOM(
+      `
+<!DOCTYPE html>
+<head></head>
+<body>
+</body>
+`,
+      {
+        resources: loader,
+        runScripts: 'dangerously',
+      },
+    );
+
+    // JSDOM does not support createObjectURL so we replace blobs with data urls
+    // @ts-ignore
+    dom.window.URL.createObjectURL = async (blob: Blob) => {
+      const text = await blob.text();
+      const base64 = Buffer.from(text).toString('base64');
+      return `data:text/javascript;base64,${base64}`;
+    };
+    dom.window.URL.revokeObjectURL = () => {};
+    dom.window.Blob = Blob;
 
     injectCosmetics(dom.window, true, async () => {
       return {
