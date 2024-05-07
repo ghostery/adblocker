@@ -1,3 +1,15 @@
+# v1.27.3 (Tue May 07 2024)
+
+#### :nail_care: Polish
+
+- Scriptlets: on Firefox bypass CSP by injecting blobs [#3942](https://github.com/ghostery/adblocker/pull/3942) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 1
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.26.8 (Mon Oct 09 2023)
 
 #### :house: Internal

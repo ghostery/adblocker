@@ -1,3 +1,20 @@
+# v1.27.3 (Tue May 07 2024)
+
+#### :nail_care: Polish
+
+- Scriptlets: on Firefox bypass CSP by injecting blobs [#3942](https://github.com/ghostery/adblocker/pull/3942) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.266 to 0.0.267 [#3931](https://github.com/ghostery/adblocker/pull/3931) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.27.2 (Tue Apr 23 2024)
 
 #### :nut_and_bolt: Dependencies
