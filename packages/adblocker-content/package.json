@@ -36,8 +36,8 @@
   "scripts": {
     "clean": "rimraf dist coverage",
     "lint": "eslint adblocker.ts",
-    "build": "tsc --build ./tsconfig.json",
-    "bundle": "tsc --build ./tsconfig.bundle.json && rollup --config ./rollup.config.ts --configPlugin typescript",
+    "build": "tsc --build ./tsconfig.json && tsc --build ./tsconfig.bundle.json",
+    "bundle": "rollup --config ./rollup.config.ts --configPlugin typescript",
     "prepack": "yarn run bundle"
   },
   "bugs": {
