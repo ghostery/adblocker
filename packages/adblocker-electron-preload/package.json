@@ -7,6 +7,17 @@
   },
   "homepage": "https://github.com/cliqz-oss/adblocker#readme",
   "license": "MPL-2.0",
+  "type": "module",
+  "exports": {
+    "import": {
+      "types": "./dist/types/preload.d.ts",
+      "default": "./dist/preload.es6.js"
+    },
+    "require": {
+      "types": "./dist/types/preload.d.ts",
+      "default": "./dist/preload.cjs.js"
+    }
+  },
   "main": "dist/preload.cjs.js",
   "module": "dist/preload.es6.js",
   "types": "dist/types/preload.d.ts",

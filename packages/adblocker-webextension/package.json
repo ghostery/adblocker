@@ -8,6 +8,16 @@
   "homepage": "https://github.com/cliqz-oss/adblocker#readme",
   "license": "MPL-2.0",
   "type": "module",
+  "exports": {
+    "import": {
+      "types": "./dist/types/adblocker.d.ts",
+      "default": "./dist/es6/adblocker.js"
+    },
+    "require": {
+      "types": "./dist/types/adblocker.d.ts",
+      "default": "./dist/cjs/adblocker.js"
+    }
+  },
   "main": "dist/cjs/adblocker.js",
   "module": "dist/es6/adblocker.js",
   "types": "dist/types/adblocker.d.ts",
