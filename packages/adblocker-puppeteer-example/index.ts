@@ -1,5 +1,5 @@
 import { fullLists, PuppeteerBlocker, Request } from '@cliqz/adblocker-puppeteer';
-import fetch from 'node-fetch';
+import fetch from 'cross-fetch';
 import * as puppeteer from 'puppeteer';
 import { promises as fs } from 'fs';
 

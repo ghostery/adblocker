@@ -1,5 +1,5 @@
 import { fullLists, PlaywrightBlocker, Request } from '@cliqz/adblocker-playwright';
-import fetch from 'node-fetch';
+import fetch from 'cross-fetch';
 
 import * as pw from 'playwright';
 
