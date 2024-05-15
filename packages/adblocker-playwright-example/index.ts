@@ -41,7 +41,7 @@ import * as pw from 'playwright';
     console.log('style', style.length, url);
   });
 
-  await page.goto('https://www.mangareader.net/');
+  await page.goto('https://www.mangareader.to/');
   await page.screenshot({ path: 'output.png' });
   await blocker.disableBlockingInPage(page);
   await browser.close();

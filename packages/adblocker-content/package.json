@@ -15,10 +15,10 @@
     },
     "require": {
       "types": "./dist/types/adblocker.d.ts",
-      "default": "./dist/cjs/adblocker.js"
+      "default": "./dist/cjs/adblocker.cjs"
     }
   },
-  "main": "dist/cjs/adblocker.js",
+  "main": "dist/cjs/adblocker.cjs",
   "module": "dist/es6/adblocker.js",
   "types": "dist/types/adblocker.d.ts",
   "files": [
@@ -36,9 +36,7 @@
   "scripts": {
     "clean": "rimraf dist coverage",
     "lint": "eslint adblocker.ts",
-    "build": "tsc --build ./tsconfig.json && tsc --build ./tsconfig.bundle.json",
-    "bundle": "rollup --config ./rollup.config.ts --configPlugin typescript",
-    "prepack": "yarn run bundle"
+    "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript"
   },
   "bugs": {
     "url": "https://github.com/cliqz-oss/adblocker/issues"

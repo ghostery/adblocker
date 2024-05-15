@@ -10,21 +10,32 @@ import resolve from '@rollup/plugin-node-resolve';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 import { terser } from 'rollup-plugin-terser';
 
-export default {
-  input: './dist/es6/adblocker.js',
-  output: {
-    file: './dist/adblocker.umd.min.js',
-    format: 'umd',
-    name: 'adblocker',
-    sourcemap: true,
+export default [
+  {
+    input: './dist/es6/adblocker.js',
+    output: {
+      file: './dist/adblocker.umd.min.js',
+      format: 'umd',
+      name: 'adblocker',
+      sourcemap: true,
+    },
+    plugins: [
+      resolve(),
+      sourcemaps(),
+      terser({
+        output: {
+          comments: false,
+        },
+      }),
+    ],
   },
-  plugins: [
-    resolve(),
-    sourcemaps(),
-    terser({
-      output: {
-        comments: false,
-      },
-    }),
-  ],
-};
+  {
+    input: './dist/es6/adblocker.js',
+    output: {
+      dir: './dist/cjs',
+      format: 'cjs',
+      preserveModules: true,
+      entryFileNames: '[name].cjs',
+    },
+  },
+];

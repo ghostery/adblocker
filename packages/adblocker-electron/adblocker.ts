@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import electron from 'electron';
+import * as electron from 'electron';
 import { parse } from 'tldts-experimental';
 import { createRequire } from 'node:module';
 

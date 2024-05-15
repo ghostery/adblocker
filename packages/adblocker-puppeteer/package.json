@@ -15,10 +15,10 @@
     },
     "require": {
       "types": "./dist/types/adblocker.d.ts",
-      "default": "./dist/cjs/adblocker.js"
+      "default": "./dist/cjs/adblocker.cjs"
     }
   },
-  "main": "dist/cjs/adblocker.js",
+  "main": "dist/cjs/adblocker.cjs",
   "module": "dist/es6/adblocker.js",
   "types": "dist/types/adblocker.d.ts",
   "files": [
@@ -36,9 +36,7 @@
   "scripts": {
     "clean": "rimraf dist coverage",
     "lint": "eslint adblocker.ts",
-    "build": "tsc --build ./tsconfig.json && tsc --build ./tsconfig.bundle.json",
-    "bundle": "yarn run build",
-    "prepack": "yarn run bundle",
+    "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript",
     "test": "nyc mocha --config ../../.mocharc.json"
   },
   "bugs": {
@@ -53,6 +51,7 @@
     "tldts-experimental": "^6.0.14"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "@types/chai": "^4.3.6",
     "@types/mocha": "^10.0.1",
     "chai": "^5.1.0",
@@ -61,6 +60,9 @@
     "nyc": "^15.1.0",
     "puppeteer": "22.7.1",
     "rimraf": "^5.0.1",
+    "rollup": "^4.17.2",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-terser": "^7.0.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.4.5"
   },

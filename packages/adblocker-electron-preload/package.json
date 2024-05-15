@@ -11,15 +11,15 @@
   "exports": {
     "import": {
       "types": "./dist/types/preload.d.ts",
-      "default": "./dist/preload.es6.js"
+      "default": "./dist/src/preload.js"
     },
     "require": {
       "types": "./dist/types/preload.d.ts",
-      "default": "./dist/preload.cjs.js"
+      "default": "./dist/preload.cjs"
     }
   },
-  "main": "dist/preload.cjs.js",
-  "module": "dist/preload.es6.js",
+  "main": "dist/preload.cjs",
+  "module": "dist/src/preload.js",
   "types": "dist/types/preload.d.ts",
   "files": [
     "LICENSE",
@@ -40,7 +40,6 @@
     "clean": "rimraf dist coverage",
     "lint": "eslint preload.ts",
     "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript",
-    "bundle": "yarn build",
     "prepack": "yarn run bundle"
   },
   "peerDependencies": {
