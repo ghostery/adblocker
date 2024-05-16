@@ -9,17 +9,12 @@
   "license": "MPL-2.0",
   "type": "module",
   "exports": {
-    "import": {
-      "types": "./dist/types/preload.d.ts",
-      "default": "./dist/src/preload.js"
-    },
-    "require": {
-      "types": "./dist/types/preload.d.ts",
-      "default": "./dist/preload.cjs"
-    }
+    "require": "./dist/cjs/preload.cjs",
+    "import": "./dist/esm/preload.js",
+    "types": "./dist/types/preload.d.ts"
   },
   "main": "dist/preload.cjs",
-  "module": "dist/src/preload.js",
+  "module": "dist/esm/preload.js",
   "types": "dist/types/preload.d.ts",
   "files": [
     "LICENSE",

@@ -12,7 +12,7 @@ import sourcemaps from 'rollup-plugin-sourcemaps';
 
 export default [
   {
-    input: './dist/cjs/background.js',
+    input: './dist/src/background.js',
     output: {
       file: './dist/background.iife.js',
       format: 'iife',
@@ -28,7 +28,7 @@ export default [
     ],
   },
   {
-    input: './dist/cjs/content-script.js',
+    input: './dist/src/content-script.js',
     output: {
       file: './dist/content-script.iife.js',
       format: 'iife',

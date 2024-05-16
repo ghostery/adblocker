@@ -12,7 +12,7 @@ import { terser } from 'rollup-plugin-terser';
 
 export default [
   {
-    input: './dist/es6/adblocker.js',
+    input: './dist/src/adblocker.js',
     output: {
       file: './dist/adblocker.umd.min.js',
       format: 'umd',
@@ -30,12 +30,20 @@ export default [
     ],
   },
   {
-    input: './dist/es6/adblocker.js',
-    output: {
-      dir: './dist/cjs',
-      format: 'cjs',
-      preserveModules: true,
-      entryFileNames: '[name].cjs',
-    },
+    input: './dist/src/adblocker.js',
+    output: [
+      {
+        dir: './dist/esm',
+        format: 'esm',
+        preserveModules: true,
+        entryFileNames: '[name].js',
+      },
+      {
+        dir: './dist/cjs',
+        format: 'cjs',
+        preserveModules: true,
+        entryFileNames: '[name].cjs',
+      },
+    ],
   },
 ];

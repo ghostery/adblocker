@@ -15,8 +15,13 @@ export default {
   external: ['electron'],
   output: [
     {
-      file: './dist/preload.cjs',
+      file: './dist/cjs/preload.cjs',
       format: 'commonjs',
+      sourcemap: true,
+    },
+    {
+      file: './dist/esm/preload.cjs',
+      format: 'esm',
       sourcemap: true,
     },
   ],
