@@ -319,18 +319,6 @@ hentaicomics.pro##+js(nowoif)
 hentai-party.com,xxx-comics.pro##figure.mix > .tac
 ! https://github.com/AdguardTeam/AdguardFilters/issues/71968
 withukor.com##+js(acs, document.addEventListener, google_ad_client)
-! https://github.com/AdguardTeam/AdguardFilters/issues/71991
-@@||doubleclick.net^$script,domain=shrinkforearn.in
-@@||googletagmanager.com^$script,domain=shrinkforearn.in
-shrinkforearn.in##+js(aopr, app_vars.force_disable_adblock)
-shrinkforearn.in,techyuth.xyz##+js(set, blurred, false)
-shrinkforearn.in##+js(rpnt, script, counter_value%22%3A%225%22, counter_value%22%3A%227%22)
-shrinkforearn.in##.box-main:style(font-size: 0px !important;)
-techyuth.xyz##+js(aopr, window.open)
-viralxns.com,wp.uploadfiles.in,uploadsoon.com###tp-snp2, #timeout:style(display:block !important; margin-top: 520px !important; height: 100px !important; width: 100px !important)
-viralxns.com,wp.uploadfiles.in,uploadsoon.com##+js(nano-sib, %2F.%3F%2F, *, 0.02)
-viralsbaba1.blogspot.com###btn-gotolink:style(display:block !important; margin-top: 410px !important; margin-left: 200px !important; height: 100px !important; width: 100px !important)
-viralsbaba1.blogspot.com##+js(rpnt, script, _blank, _self)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/72008
 aagmaal.xyz##+js(nostif, css_class.show)
 *.gif$domain=aagmaal.*,image
@@ -1384,7 +1372,7 @@ ipa-apps.me##+js(nano-sib, timer)
 ipa-apps.me##[src="https://ipa-apps.me/Download.GIF"]
 ! https://github.com/AdguardTeam/AdguardFilters/issues/80178
 jujmanga.com##.code-block
-*$script,3p,denyallow=disqus.com|edgecastcdn.net|fastlylb.net|kxcdn.com|twitcount.com|twitter.com|onesignal.com|buymeacoffee.com,domain=jujmanga.com
+*$script,3p,denyallow=disqus.com|edgecastcdn.net|fastlylb.net|kxcdn.com|twitcount.com|twitter.com|onesignal.com|buymeacoffee.com|x.com,domain=jujmanga.com
 ! https://www.reddit.com/r/uBlockOrigin/comments/mowltd/detected/
 coursewikia.com##+js(nostif, brave_load_popup)
 ! https://github.com/uBlockOrigin/uAssets/issues/8871
@@ -3824,7 +3812,9 @@ pinterest.*##[data-grid-item]:has([data-test-pin-id] [data-test-id^="one-tap-des
 pinterest.*##[data-grid-item]:has([data-test-pin-id] a[href^="http"][rel] [data-test-id="pincard-oneTap-with-link"])
 !#endif
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/887
-pinterest.*##+js(json-prune-xhr-response, resource_response.data.%5B-%5D.pin_promotion_id, , propsToMatch, url%3A%2Fresource%2FRelatedModulesResource)
+pinterest.*##+js(json-prune, resource_response.data.%5B-%5D.pin_promotion_id)
+! https://www.reddit.com/r/uBlockOrigin/comments/1cnhfyd/ublock_detected_on_pinterest_today_firefox/
+@@*$ghide,domain=pinterest.*
 ! https://github.com/uBlockOrigin/uAssets/issues/10848
 distrowatch.org##[href^="https://pbxinaflash.com/"]
 ! ubuntudde.com anti-adb
