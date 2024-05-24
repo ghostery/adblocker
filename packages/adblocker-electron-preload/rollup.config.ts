@@ -11,17 +11,17 @@ import sourcemaps from 'rollup-plugin-sourcemaps';
 import commonjs from '@rollup/plugin-commonjs';
 
 export default {
-  input: './dist/es6/preload.js',
+  input: './dist/src/preload.js',
   external: ['electron'],
   output: [
     {
-      file: './dist/preload.es6.js',
-      format: 'esm',
+      file: './dist/cjs/preload.cjs',
+      format: 'commonjs',
       sourcemap: true,
     },
     {
-      file: './dist/preload.cjs.js',
-      format: 'commonjs',
+      file: './dist/esm/preload.cjs',
+      format: 'esm',
       sourcemap: true,
     },
   ],

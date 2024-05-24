@@ -7,8 +7,14 @@
   },
   "homepage": "https://github.com/cliqz-oss/adblocker#readme",
   "license": "MPL-2.0",
-  "main": "dist/cjs/adblocker.js",
-  "module": "dist/es6/adblocker.js",
+  "type": "module",
+  "exports": {
+    "require": "./dist/cjs/adblocker.cjs",
+    "import": "./dist/esm/adblocker.js",
+    "types": "./dist/types/adblocker.d.ts"
+  },
+  "main": "dist/cjs/adblocker.cjs",
+  "module": "dist/esm/adblocker.js",
   "types": "dist/types/adblocker.d.ts",
   "files": [
     "LICENSE",
@@ -25,9 +31,7 @@
   "scripts": {
     "clean": "rimraf dist coverage",
     "lint": "eslint adblocker.ts",
-    "build": "tsc --build ./tsconfig.json",
-    "bundle": "tsc --build ./tsconfig.bundle.json && rollup --config ./rollup.config.ts --configPlugin typescript",
-    "prepack": "yarn run bundle"
+    "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript"
   },
   "bugs": {
     "url": "https://github.com/cliqz-oss/adblocker/issues"
@@ -44,7 +48,7 @@
     "rollup": "^4.0.2",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-terser": "^7.0.2",
-    "typescript": "^5.2.2"
+    "typescript": "^5.4.5"
   },
   "contributors": [
     {

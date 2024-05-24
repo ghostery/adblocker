@@ -3,6 +3,7 @@
   "author": {
     "name": "Ghostery"
   },
+  "type": "module",
   "description": "Cliqz adblocker",
   "contributors": [
     {
@@ -61,7 +62,6 @@
     "lint": "lerna run --parallel lint",
     "watch": "tsc --build ./tsconfig.project.json --watch",
     "build": "tsc --build ./tsconfig.project.json && lerna run build",
-    "bundle": "lerna run --concurrency 4 bundle",
     "test": "lerna run --concurrency 4 test",
     "clean": "lerna run --parallel clean && lerna clean --yes",
     "release": "auto shipit -v",
@@ -83,7 +83,7 @@
     "lerna": "^8.0.0",
     "patch-package": "^8.0.0",
     "prettier": "^3.0.3",
-    "typescript": "^5.2.2"
+    "typescript": "^5.4.5"
   },
   "auto": {
     "extends": "@remusao/auto-config",

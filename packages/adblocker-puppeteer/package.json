@@ -7,8 +7,14 @@
   },
   "homepage": "https://github.com/cliqz-oss/adblocker#readme",
   "license": "MPL-2.0",
-  "main": "dist/cjs/adblocker.js",
-  "module": "dist/es6/adblocker.js",
+  "type": "module",
+  "exports": {
+    "require": "./dist/cjs/adblocker.cjs",
+    "import": "./dist/esm/adblocker.js",
+    "types": "./dist/types/adblocker.d.ts"
+  },
+  "main": "dist/cjs/adblocker.cjs",
+  "module": "dist/esm/adblocker.js",
   "types": "dist/types/adblocker.d.ts",
   "files": [
     "LICENSE",
@@ -25,10 +31,8 @@
   "scripts": {
     "clean": "rimraf dist coverage",
     "lint": "eslint adblocker.ts",
-    "build": "tsc --build ./tsconfig.json",
-    "bundle": "tsc --build ./tsconfig.bundle.json",
-    "prepack": "yarn run bundle",
-    "test": "nyc mocha --config ../../.mocharc.js"
+    "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript",
+    "test": "nyc mocha --config ../../.mocharc.json"
   },
   "bugs": {
     "url": "https://github.com/cliqz-oss/adblocker/issues"
@@ -42,16 +46,20 @@
     "tldts-experimental": "^6.0.14"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "@types/chai": "^4.3.6",
     "@types/mocha": "^10.0.1",
-    "chai": "^4.3.8",
+    "chai": "^5.1.0",
     "eslint": "^8.49.0",
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
     "puppeteer": "22.7.1",
     "rimraf": "^5.0.1",
+    "rollup": "^4.17.2",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-terser": "^7.0.2",
     "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.4.5"
   },
   "contributors": [
     {

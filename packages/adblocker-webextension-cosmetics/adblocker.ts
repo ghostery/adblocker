@@ -82,7 +82,7 @@ function cachedQuerySelector(
     return cachedElements;
   }
 
-  const selected = new Set(querySelectorAll(root, selector.ast));
+  const selected = new Set<Element>(querySelectorAll(root, selector.ast));
 
   // Cache result for next time!
   if (selector.attribute !== undefined) {

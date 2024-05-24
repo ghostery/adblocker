@@ -6,11 +6,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import * as chaiAsPromised from 'chai-as-promised';
-import { expect, use } from 'chai';
+import { expect } from 'chai';
 import 'mocha';
-
-use(chaiAsPromised);
 
 import { Fetch, fetchWithRetry } from '../src/fetch';
 
@@ -51,9 +48,11 @@ describe('#fetchWithRetry', () => {
   });
 
   it('fails on fifth try', async () => {
-    await expect(fetchWithRetry(fakeFetchFactory(4), 'https://example.com')).to.be.rejectedWith(
-      Error,
-      'Failed: 1',
-    );
+    try {
+      await fetchWithRetry(fakeFetchFactory(4), 'https://example.com');
+      throw new Error('should not reach this point');
+    } catch (e) {
+      expect(e).to.have.property('message').that.eql('Failed: 1');
+    }
   });
 });

@@ -7,8 +7,14 @@
   },
   "homepage": "https://github.com/cliqz-oss/adblocker#readme",
   "license": "MPL-2.0",
-  "main": "dist/preload.cjs.js",
-  "module": "dist/preload.es6.js",
+  "type": "module",
+  "exports": {
+    "require": "./dist/cjs/preload.cjs",
+    "import": "./dist/esm/preload.js",
+    "types": "./dist/types/preload.d.ts"
+  },
+  "main": "dist/preload.cjs",
+  "module": "dist/esm/preload.js",
   "types": "dist/types/preload.d.ts",
   "files": [
     "LICENSE",
@@ -29,7 +35,6 @@
     "clean": "rimraf dist coverage",
     "lint": "eslint preload.ts",
     "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript",
-    "bundle": "yarn build",
     "prepack": "yarn run bundle"
   },
   "peerDependencies": {
@@ -48,7 +53,7 @@
     "rimraf": "^5.0.1",
     "rollup": "^4.0.2",
     "rollup-plugin-sourcemaps": "^0.6.3",
-    "typescript": "^5.2.2"
+    "typescript": "^5.4.5"
   },
   "contributors": [
     {

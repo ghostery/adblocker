@@ -1,10 +1,10 @@
 import { fullLists, PuppeteerBlocker, Request } from '@cliqz/adblocker-puppeteer';
-import fetch from 'node-fetch';
+import fetch from 'cross-fetch';
 import * as puppeteer from 'puppeteer';
 import { promises as fs } from 'fs';
 
 function getUrlToLoad(): string {
-  let url = 'https://www.mangareader.net/';
+  let url = 'https://www.mangareader.to/';
   if (process.argv[process.argv.length - 1].endsWith('.ts') === false) {
     url = process.argv[process.argv.length - 1];
   }
