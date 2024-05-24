@@ -1,3 +1,5 @@
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
@@ -10,7 +12,8 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: {
         project: ['./packages/*/tsconfig.json'],
-        tsconfigRootDir: import.meta.dirname,
+        // import.meta.dirname requires node 21
+        tsconfigRootDir: dirname(fileURLToPath(import.meta.url)),
       },
     },
     rules: {
