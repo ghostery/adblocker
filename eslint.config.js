@@ -5,13 +5,14 @@ import tseslint from 'typescript-eslint';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
 export default tseslint.config(
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   eslint.configs.recommended,
   eslintPluginPrettierRecommended,
   ...tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {
       parserOptions: {
-        project: ['./packages/*/tsconfig.json'],
+        project: ['./tsconfig.eslint.json', './packages/*/tsconfig.json'],
         // import.meta.dirname requires node 21
         tsconfigRootDir: dirname(fileURLToPath(import.meta.url)),
       },
