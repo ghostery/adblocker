@@ -58,7 +58,7 @@
   ],
   "scripts": {
     "postinstall": "patch-package",
-    "bootstrap": "yarn install --immutable",
+    "bootstrap": "corepack enable && yarn install --immutable",
     "lint": "lerna run --parallel lint",
     "watch": "tsc --build ./tsconfig.project.json --watch",
     "build": "tsc --build ./tsconfig.project.json && lerna run build",
@@ -90,5 +90,5 @@
     "name": "Adblocker Bot",
     "email": "adblocker-bot@users.noreply.github.com"
   },
-  "packageManager": "yarn@3.6.3"
+  "packageManager": "yarn@4.2.2"
 }
