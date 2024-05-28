@@ -12,7 +12,8 @@ jobs:
     if: github.repository_owner == 'ghostery'
     steps:
       - uses: actions/checkout@v3
-
+      - name: Enable Corepack
+        run: corepack enable
       - name: Use node
         uses: actions/setup-node@v3
         with:

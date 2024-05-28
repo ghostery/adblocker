@@ -17,7 +17,8 @@ jobs:
           git fetch --depth=1 origin +refs/tags/*:refs/tags/*
           git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
           git fetch --prune --unshallow
-
+      - name: Enable Corepack
+        run: corepack enable
       - name: Use node
         uses: actions/setup-node@v3
         with:
