@@ -85,8 +85,8 @@ For any question, feel free to [open an issue](https://github.com/ghostery/adblo
 
 This library is the building block technology used to power the adblockers from [Ghostery](https://www.ghostery.com/) and [Cliqz](https://cliqz.com/) on both *desktop* and *mobile* platforms. It is already running in production for millions of users and has been battle-tested to satisfy the following use-cases:
 
-  * Mobile-friendly adblocker in react-native, WebExtension, or custom JavaScript context: [Ghostery](https://github.com/ghostery/browser-android) and [Cliqz](https://github.com/cliqz-oss/browser-android).
-  * Ads and trackers blocker in [Electron](https://github.com/wexond/desktop) applications, [Puppeteer](https://github.com/Kikobeats/browserless) headless browsers, Cliqz browser, WebExtensions ([cliqz](https://github.com/cliqz-oss/browser-core), [ghostery](https://github.com/ghostery/ghostery-extension/) and [standalone](https://github.com/remusao/blockrz)).
+  * Mobile-friendly adblocker in react-native, WebExtension, or custom JavaScript context: [Ghostery for iOS](https://github.com/ghostery/user-agent-ios).
+  * Ads and trackers blocker in [Electron](https://github.com/wexond/desktop) applications, [Puppeteer](https://github.com/Kikobeats/browserless) headless browsers, Cliqz browser, [ghostery](https://github.com/ghostery/ghostery-extension/) and [standalone](https://github.com/remusao/blockrz)).
   * Batch requests processing in Node.js, HTML fuzzy keywork matcher, and more.
 
 The innovative algorithms and architecture designed and implemented in this project have been shown to be among the [most efficient](https://whotracks.me/blog/adblockers_performance_study.html) ways to implement ad-blockers and have been used in other projects to implement highly performant adblockers such as [Brave](https://github.com/brave/adblock-rust).

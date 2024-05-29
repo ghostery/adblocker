@@ -96,7 +96,7 @@ function loadLists() {
 
   // Remove filters with regular expression patterns containing lookahead and
   // lookbehind assertions.
-  // https://github.com/cliqz-oss/adblocker/discussions/2114#discussioncomment-1135161
+  // https://github.com/ghostery/adblocker/discussions/2114#discussioncomment-1135161
   //
   // Note: The regular expression below is not right, but it does the job.
   content = content.replace(/^(@@)?\/.*\(\?.*/gm, '');

@@ -13,7 +13,7 @@ import { gzipSync, brotliCompressSync } from 'zlib';
 import { FiltersEngine, adsLists, adsAndTrackingLists, fullLists } from '../adblocker';
 
 const PREFIX =
-  'https://raw.githubusercontent.com/cliqz-oss/adblocker/master/packages/adblocker/assets';
+  'https://raw.githubusercontent.com/ghostery/adblocker/master/packages/adblocker/assets';
 
 async function loadFromLocalAssets(lists: string[]): Promise<string> {
   return (
