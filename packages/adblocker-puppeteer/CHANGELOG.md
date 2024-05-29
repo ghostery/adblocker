@@ -342,7 +342,7 @@
 
 #### :rocket: New Feature
 
-- puppeteer: added support for cooperative mode. [#2281](https://github.com/cliqz-oss/adblocker/pull/2281) ([@akornatskyy](https://github.com/akornatskyy))
+- puppeteer: added support for cooperative mode. [#2281](https://github.com/ghostery/adblocker/pull/2281) ([@akornatskyy](https://github.com/akornatskyy))
 
 #### Authors: 1
 
@@ -354,12 +354,12 @@
 
 #### :house: Internal
 
-- Bump typescript [#2243](https://github.com/cliqz-oss/adblocker/pull/2243) ([@remusao](https://github.com/remusao))
-- Remove express dependency [#2242](https://github.com/cliqz-oss/adblocker/pull/2242) ([@remusao](https://github.com/remusao))
+- Bump typescript [#2243](https://github.com/ghostery/adblocker/pull/2243) ([@remusao](https://github.com/remusao))
+- Remove express dependency [#2242](https://github.com/ghostery/adblocker/pull/2242) ([@remusao](https://github.com/remusao))
 
 #### :nut_and_bolt: Dependencies
 
-- Bump puppeteer from 10.2.0 to 10.4.0 [#2237](https://github.com/cliqz-oss/adblocker/pull/2237) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump puppeteer from 10.2.0 to 10.4.0 [#2237](https://github.com/ghostery/adblocker/pull/2237) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -372,7 +372,7 @@
 
 #### :nut_and_bolt: Dependencies
 
-- Bump puppeteer from 10.1.0 to 10.2.0 [#2116](https://github.com/cliqz-oss/adblocker/pull/2116) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump puppeteer from 10.1.0 to 10.2.0 [#2116](https://github.com/ghostery/adblocker/pull/2116) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 1
 
@@ -384,8 +384,8 @@
 
 #### :nut_and_bolt: Dependencies
 
-- Bump @types/mocha from 8.2.3 to 9.0.0 [#2062](https://github.com/cliqz-oss/adblocker/pull/2062) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump puppeteer from 10.0.0 to 10.1.0 [#2020](https://github.com/cliqz-oss/adblocker/pull/2020) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/mocha from 8.2.3 to 9.0.0 [#2062](https://github.com/ghostery/adblocker/pull/2062) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump puppeteer from 10.0.0 to 10.1.0 [#2020](https://github.com/ghostery/adblocker/pull/2020) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 1
 
@@ -397,7 +397,7 @@
 
 #### :nut_and_bolt: Dependencies
 
-- Bump mocha from 8.4.0 to 9.0.0 [#1989](https://github.com/cliqz-oss/adblocker/pull/1989) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump mocha from 8.4.0 to 9.0.0 [#1989](https://github.com/ghostery/adblocker/pull/1989) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 1
 
@@ -409,11 +409,11 @@
 
 #### :nail_care: Polish
 
-- Add puppeteer 10.x to list of supported versions [#1977](https://github.com/cliqz-oss/adblocker/pull/1977) ([@remusao](https://github.com/remusao))
+- Add puppeteer 10.x to list of supported versions [#1977](https://github.com/ghostery/adblocker/pull/1977) ([@remusao](https://github.com/remusao))
 
 #### :nut_and_bolt: Dependencies
 
-- Bump puppeteer from 9.1.1 to 10.0.0 [#1969](https://github.com/cliqz-oss/adblocker/pull/1969) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump puppeteer from 9.1.1 to 10.0.0 [#1969](https://github.com/ghostery/adblocker/pull/1969) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -426,15 +426,15 @@
 
 #### :rocket: New Feature
 
-- Bump Electron to v13.x and Puppeteer to v9.x [#1967](https://github.com/cliqz-oss/adblocker/pull/1967) ([@remusao](https://github.com/remusao))
+- Bump Electron to v13.x and Puppeteer to v9.x [#1967](https://github.com/ghostery/adblocker/pull/1967) ([@remusao](https://github.com/remusao))
 
 #### :house: Internal
 
-- Bump lock file to fix some security issue [#1922](https://github.com/cliqz-oss/adblocker/pull/1922) ([@remusao](https://github.com/remusao))
+- Bump lock file to fix some security issue [#1922](https://github.com/ghostery/adblocker/pull/1922) ([@remusao](https://github.com/remusao))
 
 #### :nut_and_bolt: Dependencies
 
-- Bump puppeteer from 9.1.0 to 9.1.1 [#1915](https://github.com/cliqz-oss/adblocker/pull/1915) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump puppeteer from 9.1.0 to 9.1.1 [#1915](https://github.com/ghostery/adblocker/pull/1915) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -447,17 +447,17 @@
 
 #### :bug: Bug Fix
 
-- Fix missing 'domcontentloaded' event listener removal from `disableBlockingInPage` [#1903](https://github.com/cliqz-oss/adblocker/pull/1903) (mosunov.konstantin@huawei.com [@kmosunoff](https://github.com/kmosunoff))
+- Fix missing 'domcontentloaded' event listener removal from `disableBlockingInPage` [#1903](https://github.com/ghostery/adblocker/pull/1903) (mosunov.konstantin@huawei.com [@kmosunoff](https://github.com/kmosunoff))
 - build(deps): bump puppeteer from 9.0.0 to 9.1.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 - build(deps): bump puppeteer from 8.0.0 to 9.0.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps): bump puppeteer from 9.0.0 to 9.1.0 [#1902](https://github.com/cliqz-oss/adblocker/pull/1902) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps-dev): bump auto from 10.25.0 to 10.25.1 [#1877](https://github.com/cliqz-oss/adblocker/pull/1877) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump @types/chrome from 0.0.134 to 0.0.135 [#1876](https://github.com/cliqz-oss/adblocker/pull/1876) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps-dev): bump chalk from 4.1.0 to 4.1.1 [#1878](https://github.com/cliqz-oss/adblocker/pull/1878) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump puppeteer from 8.0.0 to 9.0.0 [#1875](https://github.com/cliqz-oss/adblocker/pull/1875) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump puppeteer from 9.0.0 to 9.1.0 [#1902](https://github.com/ghostery/adblocker/pull/1902) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump auto from 10.25.0 to 10.25.1 [#1877](https://github.com/ghostery/adblocker/pull/1877) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/chrome from 0.0.134 to 0.0.135 [#1876](https://github.com/ghostery/adblocker/pull/1876) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump chalk from 4.1.0 to 4.1.1 [#1878](https://github.com/ghostery/adblocker/pull/1878) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump puppeteer from 8.0.0 to 9.0.0 [#1875](https://github.com/ghostery/adblocker/pull/1875) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 3
 
@@ -475,15 +475,15 @@
 
 #### :nail_care: Polish
 
-- Add support for Puppeteer v8.x [#1716](https://github.com/cliqz-oss/adblocker/pull/1716) ([@remusao](https://github.com/remusao))
+- Add support for Puppeteer v8.x [#1716](https://github.com/ghostery/adblocker/pull/1716) ([@remusao](https://github.com/remusao))
 
 #### :house: Internal
 
-- Update copyright notices [#1715](https://github.com/cliqz-oss/adblocker/pull/1715) ([@remusao](https://github.com/remusao))
+- Update copyright notices [#1715](https://github.com/ghostery/adblocker/pull/1715) ([@remusao](https://github.com/remusao))
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps): bump puppeteer from 7.1.0 to 8.0.0 [#1713](https://github.com/cliqz-oss/adblocker/pull/1713) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump puppeteer from 7.1.0 to 8.0.0 [#1713](https://github.com/ghostery/adblocker/pull/1713) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 2
 
@@ -496,7 +496,7 @@
 
 #### :nail_care: Polish
 
-- Update puppeteer to v7.x [#1677](https://github.com/cliqz-oss/adblocker/pull/1677) ([@remusao](https://github.com/remusao))
+- Update puppeteer to v7.x [#1677](https://github.com/ghostery/adblocker/pull/1677) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -508,12 +508,12 @@
 
 ### Release Notes
 
-#### Initial support for extended CSS selectors (a.k.a. procedural filters) ([#1574](https://github.com/cliqz-oss/adblocker/pull/1574))
+#### Initial support for extended CSS selectors (a.k.a. procedural filters) ([#1574](https://github.com/ghostery/adblocker/pull/1574))
 
 Add initial support for extended CSS selectors (a.k.a. procedural filters) as well as the `:remove()` modifier for element hiding rules (note: the already supported `:style` modified now also works with extended CSS selectors). The following new pseudo-classes are implemented: `:has` (and its alias `:if`), `:has-text` (both string and RegExp literals), and `:not` (whenever its argument is also an extended selector, otherwise fallback to native implementation).
 
 Caveats:
-* Loading of extended css filters is disabled by default and needs to be toggled using the `loadExtendedSelectors` option while [initializing the blocker instance](https://github.com/cliqz-oss/adblocker/blob/3361723138f40c3cb96b4c6e611f2b030f75d891/packages/adblocker-webextension-example/background.ts#L61).
+* Loading of extended css filters is disabled by default and needs to be toggled using the `loadExtendedSelectors` option while [initializing the blocker instance](https://github.com/ghostery/adblocker/blob/3361723138f40c3cb96b4c6e611f2b030f75d891/packages/adblocker-webextension-example/background.ts#L61).
 * These news selectors are currently only supported by `WebExtensionBlocker` (support for Puppeteer, Electron and Playwright is not planned at this time but help from the community would be greatly appreciated).
 
 Miscellaneous changes:
@@ -524,7 +524,7 @@ Miscellaneous changes:
 
 #### :rocket: New Feature
 
-- Initial support for extended CSS selectors (a.k.a. procedural filters) [#1574](https://github.com/cliqz-oss/adblocker/pull/1574) ([@remusao](https://github.com/remusao))
+- Initial support for extended CSS selectors (a.k.a. procedural filters) [#1574](https://github.com/ghostery/adblocker/pull/1574) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -536,7 +536,7 @@ Miscellaneous changes:
 
 #### :nail_care: Polish
 
-- Fix with newer Typescript + cleanups [#1466](https://github.com/cliqz-oss/adblocker/pull/1466) ([@remusao](https://github.com/remusao))
+- Fix with newer Typescript + cleanups [#1466](https://github.com/ghostery/adblocker/pull/1466) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -548,7 +548,7 @@ Miscellaneous changes:
 
 #### :bug: Bug Fix
 
-- Fix memory leak by using a WeakMap to hold context information in blocker [#1451](https://github.com/cliqz-oss/adblocker/pull/1451) ([@remusao](https://github.com/remusao))
+- Fix memory leak by using a WeakMap to hold context information in blocker [#1451](https://github.com/ghostery/adblocker/pull/1451) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -560,7 +560,7 @@ Miscellaneous changes:
 
 #### :bug: Bug Fix
 
-- Update puppeteer types to 5.x [#1427](https://github.com/cliqz-oss/adblocker/pull/1427) ([@Niek](https://github.com/Niek) [@remusao](https://github.com/remusao))
+- Update puppeteer types to 5.x [#1427](https://github.com/ghostery/adblocker/pull/1427) ([@Niek](https://github.com/Niek) [@remusao](https://github.com/remusao))
 
 #### Authors: 2
 
@@ -578,8 +578,8 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps): bump ts-node from 8.10.2 to 9.0.0 [#1208](https://github.com/cliqz-oss/adblocker/pull/1208) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps-dev): bump typescript from 3.9.7 to 4.0.2 [#1202](https://github.com/cliqz-oss/adblocker/pull/1202) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump ts-node from 8.10.2 to 9.0.0 [#1208](https://github.com/ghostery/adblocker/pull/1208) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump typescript from 3.9.7 to 4.0.2 [#1202](https://github.com/ghostery/adblocker/pull/1202) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -595,7 +595,7 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps-dev): bump @types/mocha from 7.0.2 to 8.0.0 [#1079](https://github.com/cliqz-oss/adblocker/pull/1079) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/mocha from 7.0.2 to 8.0.0 [#1079](https://github.com/ghostery/adblocker/pull/1079) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -607,12 +607,12 @@ Miscellaneous changes:
 
 #### :bug: Bug Fix
 
-- Fix puppeteer package with correct promises handling. [#1067](https://github.com/cliqz-oss/adblocker/pull/1067) ([@remusao](https://github.com/remusao))
+- Fix puppeteer package with correct promises handling. [#1067](https://github.com/ghostery/adblocker/pull/1067) ([@remusao](https://github.com/remusao))
 - build(deps-dev): bump mocha from 7.2.0 to 8.0.1 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps-dev): bump mocha from 7.2.0 to 8.0.1 [#986](https://github.com/cliqz-oss/adblocker/pull/986) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump mocha from 7.2.0 to 8.0.1 [#986](https://github.com/ghostery/adblocker/pull/986) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 2
 
@@ -629,8 +629,8 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps-dev): bump @types/sinon from 9.0.1 to 9.0.3 [#901](https://github.com/cliqz-oss/adblocker/pull/901) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump @types/puppeteer from 2.1.0 to 3.0.0 [#899](https://github.com/cliqz-oss/adblocker/pull/899) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/sinon from 9.0.1 to 9.0.3 [#901](https://github.com/ghostery/adblocker/pull/901) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump @types/puppeteer from 2.1.0 to 3.0.0 [#899](https://github.com/ghostery/adblocker/pull/899) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -654,7 +654,7 @@ _From #746_
 
 #### :nail_care: Polish
 
-- Fix domain options with subdomains and more... [#746](https://github.com/cliqz-oss/adblocker/pull/746) ([@remusao](https://github.com/remusao))
+- Fix domain options with subdomains and more... [#746](https://github.com/ghostery/adblocker/pull/746) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -682,7 +682,7 @@ _From #738_
 
 #### :rocket: New Feature
 
-- Various improvements [#738](https://github.com/cliqz-oss/adblocker/pull/738) ([@remusao](https://github.com/remusao))
+- Various improvements [#738](https://github.com/ghostery/adblocker/pull/738) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -694,15 +694,15 @@ _From #738_
 
 #### :bug: Bug Fix
 
-- Correctly redirect to binary resources in puppeteer blocker [#715](https://github.com/cliqz-oss/adblocker/pull/715) ([@remusao](https://github.com/remusao))
+- Correctly redirect to binary resources in puppeteer blocker [#715](https://github.com/ghostery/adblocker/pull/715) ([@remusao](https://github.com/remusao))
 
 #### :house: Internal
 
-- Move from jest to mocha + chai [#682](https://github.com/cliqz-oss/adblocker/pull/682) ([@remusao](https://github.com/remusao))
+- Move from jest to mocha + chai [#682](https://github.com/ghostery/adblocker/pull/682) ([@remusao](https://github.com/remusao))
 
 #### :memo: Documentation
 
-- Fix line break in CHANGELOG.md [#691](https://github.com/cliqz-oss/adblocker/pull/691) ([@remusao](https://github.com/remusao))
+- Fix line break in CHANGELOG.md [#691](https://github.com/ghostery/adblocker/pull/691) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -722,7 +722,7 @@ PuppeteerBlocker is now more powerful and will be able to better block ads on mo
 
 #### :rocket: New Feature
 
-- Fix PuppeteerBlocker and enable blocking of frames and DOM monitoring. [#690](https://github.com/cliqz-oss/adblocker/pull/690) ([@remusao](https://github.com/remusao))
+- Fix PuppeteerBlocker and enable blocking of frames and DOM monitoring. [#690](https://github.com/ghostery/adblocker/pull/690) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -734,7 +734,7 @@ PuppeteerBlocker is now more powerful and will be able to better block ads on mo
 
 #### :house: Internal
 
-- Update README.md [#670](https://github.com/cliqz-oss/adblocker/pull/670) ([@remusao](https://github.com/remusao))
+- Update README.md [#670](https://github.com/ghostery/adblocker/pull/670) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -746,7 +746,7 @@ PuppeteerBlocker is now more powerful and will be able to better block ads on mo
 
 #### :nail_care: Polish
 
-- Move BlockingContext methods back into Blocker class. [#496](https://github.com/cliqz-oss/adblocker/pull/496) ([@remusao](https://github.com/remusao))
+- Move BlockingContext methods back into Blocker class. [#496](https://github.com/ghostery/adblocker/pull/496) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -758,7 +758,7 @@ PuppeteerBlocker is now more powerful and will be able to better block ads on mo
 
 #### :nail_care: Polish
 
-- Expose original request details through Request class [#490](https://github.com/cliqz-oss/adblocker/pull/490) ([@remusao](https://github.com/remusao))
+- Expose original request details through Request class [#490](https://github.com/ghostery/adblocker/pull/490) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -770,7 +770,7 @@ PuppeteerBlocker is now more powerful and will be able to better block ads on mo
 
 #### :running_woman: Performance
 
-- Target ES6 instead of ES3 [#489](https://github.com/cliqz-oss/adblocker/pull/489) ([@remusao](https://github.com/remusao))
+- Target ES6 instead of ES3 [#489](https://github.com/ghostery/adblocker/pull/489) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 

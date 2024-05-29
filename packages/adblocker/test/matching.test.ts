@@ -248,7 +248,7 @@ describe('#NetworkFilter.match', () => {
     expect(f`||com^*/bar`).not.to.matchRequest({ url: 'https://foo.com/bar' });
     expect(f`||foo^*/bar`).not.to.matchRequest({ url: 'https://foo.com/bar' });
 
-    // @see https://github.com/cliqz-oss/adblocker/issues/29
+    // @see https://github.com/ghostery/adblocker/issues/29
     expect(f`||foo.co^aaa/`).not.to.matchRequest({ url: 'https://bar.foo.com/bbb/aaa/' });
     expect(f`||foo.com^aaa/`).not.to.matchRequest({ url: 'https://bar.foo.com/bbb/aaa/' });
 

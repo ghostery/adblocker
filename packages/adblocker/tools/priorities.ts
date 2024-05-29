@@ -42,7 +42,7 @@ class Counter<K> {
 }
 
 const PREFIX =
-  'https://raw.githubusercontent.com/cliqz-oss/adblocker/master/packages/adblocker/assets';
+  'https://raw.githubusercontent.com/ghostery/adblocker/master/packages/adblocker/assets';
 
 async function loadAllLists(): Promise<string> {
   return (

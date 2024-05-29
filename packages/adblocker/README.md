@@ -10,18 +10,18 @@
   </em>
   <br />
   <em>
-    <a href="https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker">Node.js</a>
-    · <a href="https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-puppeteer">Puppeteer</a>
-    · <a href="https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-electron">Electron</a>
-    · <a href="https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-webextension">WebExtension</a>
+    <a href="https://github.com/ghostery/adblocker/tree/master/packages/adblocker">Node.js</a>
+    · <a href="https://github.com/ghostery/adblocker/tree/master/packages/adblocker-puppeteer">Puppeteer</a>
+    · <a href="https://github.com/ghostery/adblocker/tree/master/packages/adblocker-electron">Electron</a>
+    · <a href="https://github.com/ghostery/adblocker/tree/master/packages/adblocker-webextension">WebExtension</a>
   </em>
 </p>
 
 <p align="center">
-  <a href="https://github.com/cliqz-oss/adblocker/actions?query=workflow%3ATests">
-    <img alt="Github Actions Build Status" src="https://img.shields.io/github/workflow/status/cliqz-oss/adblocker/Tests?label=tests&style=flat-square"></a>
-  <a href="https://github.com/cliqz-oss/adblocker/actions?query=workflow%3Assets">
-    <img alt="Github Actions Assets Status" src="https://img.shields.io/github/workflow/status/cliqz-oss/adblocker/Assets?label=assets&style=flat-square"></a>
+  <a href="https://github.com/ghostery/adblocker/actions?query=workflow%3ATests">
+    <img alt="Github Actions Build Status" src="https://img.shields.io/github/workflow/status/ghostery/adblocker/Tests?label=tests&style=flat-square"></a>
+  <a href="https://github.com/ghostery/adblocker/actions?query=workflow%3Assets">
+    <img alt="Github Actions Assets Status" src="https://img.shields.io/github/workflow/status/ghostery/adblocker/Assets?label=assets&style=flat-square"></a>
   <a href="https://twitter.com/acdlite/status/974390255393505280">
     <img alt="Blazing Fast" src="https://img.shields.io/badge/speed-blazing%20%F0%9F%94%A5-brightgreen.svg?style=flat-square"></a>
   <a href="https://www.npmjs.com/package/@cliqz/adblocker">
@@ -33,12 +33,12 @@
     <img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square"></a>
   <a href="https://twitter.com/cliqz">
     <img alt="Follow Cliqz on Twitter" src="https://img.shields.io/twitter/follow/cliqz.svg?label=follow+cliqz&style=flat-square"></a>
-  <a href="https://github.com/cliqz-oss/adblocker">
+  <a href="https://github.com/ghostery/adblocker">
     <img alt="Dependabot" src="https://img.shields.io/badge/dependabot-enabled-brightgreen?logo=dependabot&style=flat-square"></a>
-  <a href="https://github.com/cliqz-oss/adblocker/blob/master/LICENSE">
-    <img alt="License Badge" src="https://img.shields.io/github/license/cliqz-oss/adblocker?style=flat-square"></a>
-  <a href="https://lgtm.com/projects/g/cliqz-oss/adblocker?mode=list">
-    <img alt="LGTM Badge" src="https://img.shields.io/lgtm/alerts/github/cliqz-oss/adblocker?style=flat-square"></a>
+  <a href="https://github.com/ghostery/adblocker/blob/master/LICENSE">
+    <img alt="License Badge" src="https://img.shields.io/github/license/ghostery/adblocker?style=flat-square"></a>
+  <a href="https://lgtm.com/projects/g/ghostery/adblocker?mode=list">
+    <img alt="LGTM Badge" src="https://img.shields.io/lgtm/alerts/github/ghostery/adblocker?style=flat-square"></a>
 </p>
 
 ---
@@ -115,7 +115,7 @@ elements or injecting scripts.
 #### Network Filters
 
 Here is how one can parse and match individual *network filters* using
-the [NetworkFilter](https://github.com/cliqz-oss/adblocker/blob/master/packages/adblocker/src/filters/network.ts) class. It offers multiple
+the [NetworkFilter](https://github.com/ghostery/adblocker/blob/master/packages/adblocker/src/filters/network.ts) class. It offers multiple
 accessors and helpers to parse, match and manipulate network filters.
 
 ```javascript
@@ -149,7 +149,7 @@ console.log(filter.match(request)); // true
 
 #### Cosmetic Filters
 
-Similarly, one can parse cosmetic filters using the [CosmeticFilter](https://github.com/cliqz-oss/adblocker/blob/master/packages/adblocker/src/filters/cosmetic.ts) class.
+Similarly, one can parse cosmetic filters using the [CosmeticFilter](https://github.com/ghostery/adblocker/blob/master/packages/adblocker/src/filters/cosmetic.ts) class.
 
 ```javascript
 const { CosmeticFilter } = require('@cliqz/adblocker');
@@ -172,7 +172,7 @@ Manipulating filters at a low level is useful to build tooling or
 debugging, but they are not appropriate for efficient blocking of
 requests (it would require iterating on all the filters to know if
 a request needs to be blocked). Instead, we can make use of the
-[FiltersEngine](https://github.com/cliqz-oss/adblocker/blob/master/packages/adblocker/src/engine/engine.ts) class which can be seen as a "container" for both
+[FiltersEngine](https://github.com/ghostery/adblocker/blob/master/packages/adblocker/src/engine/engine.ts) class which can be seen as a "container" for both
 network and cosmetic filters. The filters are organized in a very
 compact way which also enables fast matching.
 

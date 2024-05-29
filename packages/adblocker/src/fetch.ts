@@ -50,7 +50,7 @@ function fetchResource(fetch: Fetch, url: string): Promise<string> {
 }
 
 const PREFIX =
-  'https://raw.githubusercontent.com/cliqz-oss/adblocker/master/packages/adblocker/assets';
+  'https://raw.githubusercontent.com/ghostery/adblocker/master/packages/adblocker/assets';
 
 export const adsLists = [
   `${PREFIX}/easylist/easylist.txt`,

@@ -149,7 +149,7 @@
 
 #### :house: Internal
 
-- Bump typescript [#2243](https://github.com/cliqz-oss/adblocker/pull/2243) ([@remusao](https://github.com/remusao))
+- Bump typescript [#2243](https://github.com/ghostery/adblocker/pull/2243) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -161,8 +161,8 @@
 
 #### :nut_and_bolt: Dependencies
 
-- Bump @types/mocha from 8.2.3 to 9.0.0 [#2062](https://github.com/cliqz-oss/adblocker/pull/2062) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump webextension-polyfill-ts from 0.25.0 to 0.26.0 [#2027](https://github.com/cliqz-oss/adblocker/pull/2027) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/mocha from 8.2.3 to 9.0.0 [#2062](https://github.com/ghostery/adblocker/pull/2062) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump webextension-polyfill-ts from 0.25.0 to 0.26.0 [#2027](https://github.com/ghostery/adblocker/pull/2027) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 1
 
@@ -174,7 +174,7 @@
 
 #### :nut_and_bolt: Dependencies
 
-- Bump mocha from 8.4.0 to 9.0.0 [#1989](https://github.com/cliqz-oss/adblocker/pull/1989) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump mocha from 8.4.0 to 9.0.0 [#1989](https://github.com/ghostery/adblocker/pull/1989) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 1
 
@@ -186,15 +186,15 @@
 
 #### :rocket: New Feature
 
-- Bump Electron to v13.x and Puppeteer to v9.x [#1967](https://github.com/cliqz-oss/adblocker/pull/1967) ([@remusao](https://github.com/remusao))
+- Bump Electron to v13.x and Puppeteer to v9.x [#1967](https://github.com/ghostery/adblocker/pull/1967) ([@remusao](https://github.com/remusao))
 
 #### :house: Internal
 
-- Bump lock file to fix some security issue [#1922](https://github.com/cliqz-oss/adblocker/pull/1922) ([@remusao](https://github.com/remusao))
+- Bump lock file to fix some security issue [#1922](https://github.com/ghostery/adblocker/pull/1922) ([@remusao](https://github.com/remusao))
 
 #### :nut_and_bolt: Dependencies
 
-- Bump @rollup/plugin-node-resolve from 11.2.1 to 13.0.0 [#1912](https://github.com/cliqz-oss/adblocker/pull/1912) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @rollup/plugin-node-resolve from 11.2.1 to 13.0.0 [#1912](https://github.com/ghostery/adblocker/pull/1912) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -207,7 +207,7 @@
 
 #### :house: Internal
 
-- Update copyright notices [#1715](https://github.com/cliqz-oss/adblocker/pull/1715) ([@remusao](https://github.com/remusao))
+- Update copyright notices [#1715](https://github.com/ghostery/adblocker/pull/1715) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -224,8 +224,8 @@
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps): bump webextension-polyfill-ts from 0.24.0 to 0.25.0 [#1681](https://github.com/cliqz-oss/adblocker/pull/1681) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump webextension-polyfill-ts from 0.22.0 to 0.24.0 [#1629](https://github.com/cliqz-oss/adblocker/pull/1629) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump webextension-polyfill-ts from 0.24.0 to 0.25.0 [#1681](https://github.com/ghostery/adblocker/pull/1681) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump webextension-polyfill-ts from 0.22.0 to 0.24.0 [#1629](https://github.com/ghostery/adblocker/pull/1629) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -237,12 +237,12 @@
 
 ### Release Notes
 
-#### Initial support for extended CSS selectors (a.k.a. procedural filters) ([#1574](https://github.com/cliqz-oss/adblocker/pull/1574))
+#### Initial support for extended CSS selectors (a.k.a. procedural filters) ([#1574](https://github.com/ghostery/adblocker/pull/1574))
 
 Add initial support for extended CSS selectors (a.k.a. procedural filters) as well as the `:remove()` modifier for element hiding rules (note: the already supported `:style` modified now also works with extended CSS selectors). The following new pseudo-classes are implemented: `:has` (and its alias `:if`), `:has-text` (both string and RegExp literals), and `:not` (whenever its argument is also an extended selector, otherwise fallback to native implementation).
 
 Caveats:
-* Loading of extended css filters is disabled by default and needs to be toggled using the `loadExtendedSelectors` option while [initializing the blocker instance](https://github.com/cliqz-oss/adblocker/blob/3361723138f40c3cb96b4c6e611f2b030f75d891/packages/adblocker-webextension-example/background.ts#L61).
+* Loading of extended css filters is disabled by default and needs to be toggled using the `loadExtendedSelectors` option while [initializing the blocker instance](https://github.com/ghostery/adblocker/blob/3361723138f40c3cb96b4c6e611f2b030f75d891/packages/adblocker-webextension-example/background.ts#L61).
 * These news selectors are currently only supported by `WebExtensionBlocker` (support for Puppeteer, Electron and Playwright is not planned at this time but help from the community would be greatly appreciated).
 
 Miscellaneous changes:
@@ -253,7 +253,7 @@ Miscellaneous changes:
 
 #### :rocket: New Feature
 
-- Initial support for extended CSS selectors (a.k.a. procedural filters) [#1574](https://github.com/cliqz-oss/adblocker/pull/1574) ([@remusao](https://github.com/remusao))
+- Initial support for extended CSS selectors (a.k.a. procedural filters) [#1574](https://github.com/ghostery/adblocker/pull/1574) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -269,7 +269,7 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps-dev): bump @rollup/plugin-node-resolve from 10.0.0 to 11.0.0 [#1478](https://github.com/cliqz-oss/adblocker/pull/1478) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-node-resolve from 10.0.0 to 11.0.0 [#1478](https://github.com/ghostery/adblocker/pull/1478) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -281,7 +281,7 @@ Miscellaneous changes:
 
 #### :nail_care: Polish
 
-- Fix with newer Typescript + cleanups [#1466](https://github.com/cliqz-oss/adblocker/pull/1466) ([@remusao](https://github.com/remusao))
+- Fix with newer Typescript + cleanups [#1466](https://github.com/ghostery/adblocker/pull/1466) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -293,12 +293,12 @@ Miscellaneous changes:
 
 #### :bug: Bug Fix
 
-- Fix memory leak by using a WeakMap to hold context information in blocker [#1451](https://github.com/cliqz-oss/adblocker/pull/1451) ([@remusao](https://github.com/remusao))
+- Fix memory leak by using a WeakMap to hold context information in blocker [#1451](https://github.com/ghostery/adblocker/pull/1451) ([@remusao](https://github.com/remusao))
 - build(deps): bump webextension-polyfill-ts from 0.21.0 to 0.22.0 ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps): bump webextension-polyfill-ts from 0.21.0 to 0.22.0 [#1438](https://github.com/cliqz-oss/adblocker/pull/1438) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump webextension-polyfill-ts from 0.21.0 to 0.22.0 [#1438](https://github.com/ghostery/adblocker/pull/1438) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 2
 
@@ -316,8 +316,8 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps-dev): bump @rollup/plugin-node-resolve from 9.0.0 to 10.0.0 [#1373](https://github.com/cliqz-oss/adblocker/pull/1373) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump webextension-polyfill-ts from 0.20.0 to 0.21.0 [#1366](https://github.com/cliqz-oss/adblocker/pull/1366) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-node-resolve from 9.0.0 to 10.0.0 [#1373](https://github.com/ghostery/adblocker/pull/1373) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump webextension-polyfill-ts from 0.20.0 to 0.21.0 [#1366](https://github.com/ghostery/adblocker/pull/1366) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -333,7 +333,7 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps): bump webextension-polyfill-ts from 0.19.0 to 0.20.0 [#1270](https://github.com/cliqz-oss/adblocker/pull/1270) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump webextension-polyfill-ts from 0.19.0 to 0.20.0 [#1270](https://github.com/ghostery/adblocker/pull/1270) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -351,9 +351,9 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps): bump ts-node from 8.10.2 to 9.0.0 [#1208](https://github.com/cliqz-oss/adblocker/pull/1208) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps-dev): bump typescript from 3.9.7 to 4.0.2 [#1202](https://github.com/cliqz-oss/adblocker/pull/1202) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps-dev): bump @rollup/plugin-node-resolve from 8.4.0 to 9.0.0 [#1181](https://github.com/cliqz-oss/adblocker/pull/1181) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump ts-node from 8.10.2 to 9.0.0 [#1208](https://github.com/ghostery/adblocker/pull/1208) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump typescript from 3.9.7 to 4.0.2 [#1202](https://github.com/ghostery/adblocker/pull/1202) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-node-resolve from 8.4.0 to 9.0.0 [#1181](https://github.com/ghostery/adblocker/pull/1181) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -369,7 +369,7 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps-dev): bump @types/mocha from 7.0.2 to 8.0.0 [#1079](https://github.com/cliqz-oss/adblocker/pull/1079) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/mocha from 7.0.2 to 8.0.0 [#1079](https://github.com/ghostery/adblocker/pull/1079) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -387,9 +387,9 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps): bump webextension-polyfill-ts from 0.18.0 to 0.19.0 [#1037](https://github.com/cliqz-oss/adblocker/pull/1037) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump webextension-polyfill-ts from 0.17.0 to 0.18.0 [#1029](https://github.com/cliqz-oss/adblocker/pull/1029) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps-dev): bump mocha from 7.2.0 to 8.0.1 [#986](https://github.com/cliqz-oss/adblocker/pull/986) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump webextension-polyfill-ts from 0.18.0 to 0.19.0 [#1037](https://github.com/ghostery/adblocker/pull/1037) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump webextension-polyfill-ts from 0.17.0 to 0.18.0 [#1029](https://github.com/ghostery/adblocker/pull/1029) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump mocha from 7.2.0 to 8.0.1 [#986](https://github.com/ghostery/adblocker/pull/986) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -406,11 +406,11 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps-dev): bump @rollup/plugin-commonjs from 12.0.0 to 13.0.0 [#977](https://github.com/cliqz-oss/adblocker/pull/977) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps-dev): bump @rollup/plugin-node-resolve from 8.0.0 to 8.0.1 [#976](https://github.com/cliqz-oss/adblocker/pull/976) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps-dev): bump rollup from 2.13.1 to 2.14.0 [#975](https://github.com/cliqz-oss/adblocker/pull/975) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump webextension-polyfill-ts from 0.16.0 to 0.17.0 [#973](https://github.com/cliqz-oss/adblocker/pull/973) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps-dev): bump @ampproject/rollup-plugin-closure-compiler from 0.25.2 to 0.26.0 [#956](https://github.com/cliqz-oss/adblocker/pull/956) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-commonjs from 12.0.0 to 13.0.0 [#977](https://github.com/ghostery/adblocker/pull/977) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-node-resolve from 8.0.0 to 8.0.1 [#976](https://github.com/ghostery/adblocker/pull/976) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup from 2.13.1 to 2.14.0 [#975](https://github.com/ghostery/adblocker/pull/975) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump webextension-polyfill-ts from 0.16.0 to 0.17.0 [#973](https://github.com/ghostery/adblocker/pull/973) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @ampproject/rollup-plugin-closure-compiler from 0.25.2 to 0.26.0 [#956](https://github.com/ghostery/adblocker/pull/956) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -426,7 +426,7 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps): bump webextension-polyfill-ts from 0.15.0 to 0.16.0 [#925](https://github.com/cliqz-oss/adblocker/pull/925) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump webextension-polyfill-ts from 0.15.0 to 0.16.0 [#925](https://github.com/ghostery/adblocker/pull/925) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -442,7 +442,7 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps-dev): bump @rollup/plugin-node-resolve from 7.1.3 to 8.0.0 [#907](https://github.com/cliqz-oss/adblocker/pull/907) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @rollup/plugin-node-resolve from 7.1.3 to 8.0.0 [#907](https://github.com/ghostery/adblocker/pull/907) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -459,8 +459,8 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps): bump webextension-polyfill-ts from 0.14.0 to 0.15.0 [#833](https://github.com/cliqz-oss/adblocker/pull/833) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps-dev): bump rollup-plugin-sourcemaps from 0.5.0 to 0.6.1 [#830](https://github.com/cliqz-oss/adblocker/pull/830) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump webextension-polyfill-ts from 0.14.0 to 0.15.0 [#833](https://github.com/ghostery/adblocker/pull/833) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump rollup-plugin-sourcemaps from 0.5.0 to 0.6.1 [#830](https://github.com/ghostery/adblocker/pull/830) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -476,7 +476,7 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps-dev): bump @ampproject/rollup-plugin-closure-compiler from 0.24.0 to 0.25.0 [#766](https://github.com/cliqz-oss/adblocker/pull/766) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @ampproject/rollup-plugin-closure-compiler from 0.24.0 to 0.25.0 [#766](https://github.com/ghostery/adblocker/pull/766) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -500,7 +500,7 @@ _From #746_
 
 #### :nail_care: Polish
 
-- Fix domain options with subdomains and more... [#746](https://github.com/cliqz-oss/adblocker/pull/746) ([@remusao](https://github.com/remusao))
+- Fix domain options with subdomains and more... [#746](https://github.com/ghostery/adblocker/pull/746) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -528,7 +528,7 @@ _From #738_
 
 #### :rocket: New Feature
 
-- Various improvements [#738](https://github.com/cliqz-oss/adblocker/pull/738) ([@remusao](https://github.com/remusao))
+- Various improvements [#738](https://github.com/ghostery/adblocker/pull/738) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -540,7 +540,7 @@ _From #738_
 
 #### :house: Internal
 
-- Move from jest to mocha + chai [#682](https://github.com/cliqz-oss/adblocker/pull/682) ([@remusao](https://github.com/remusao))
+- Move from jest to mocha + chai [#682](https://github.com/ghostery/adblocker/pull/682) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -552,7 +552,7 @@ _From #738_
 
 #### :house: Internal
 
-- Update README.md [#670](https://github.com/cliqz-oss/adblocker/pull/670) ([@remusao](https://github.com/remusao))
+- Update README.md [#670](https://github.com/ghostery/adblocker/pull/670) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -564,7 +564,7 @@ _From #738_
 
 #### :nut_and_bolt: Dependencies
 
--  [#661](https://github.com/cliqz-oss/adblocker/pull/661) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#661](https://github.com/ghostery/adblocker/pull/661) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -576,10 +576,10 @@ _From #738_
 
 #### :nut_and_bolt: Dependencies
 
--  [#596](https://github.com/cliqz-oss/adblocker/pull/596) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
--  [#587](https://github.com/cliqz-oss/adblocker/pull/587) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
--  [#586](https://github.com/cliqz-oss/adblocker/pull/586) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
--  [#560](https://github.com/cliqz-oss/adblocker/pull/560) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#596](https://github.com/ghostery/adblocker/pull/596) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#587](https://github.com/ghostery/adblocker/pull/587) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#586](https://github.com/ghostery/adblocker/pull/586) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+-  [#560](https://github.com/ghostery/adblocker/pull/560) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -609,7 +609,7 @@ Signed-off-by: dependabot-preview[bot] <support@dependabot.com>  ([@dependabot-p
 
 #### :nail_care: Polish
 
-- Move BlockingContext methods back into Blocker class. [#496](https://github.com/cliqz-oss/adblocker/pull/496) ([@remusao](https://github.com/remusao))
+- Move BlockingContext methods back into Blocker class. [#496](https://github.com/ghostery/adblocker/pull/496) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -621,7 +621,7 @@ Signed-off-by: dependabot-preview[bot] <support@dependabot.com>  ([@dependabot-p
 
 #### :bug: Bug Fix
 
-- Fix implicit tslib dependency [#494](https://github.com/cliqz-oss/adblocker/pull/494) ([@remusao](https://github.com/remusao))
+- Fix implicit tslib dependency [#494](https://github.com/ghostery/adblocker/pull/494) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -633,7 +633,7 @@ Signed-off-by: dependabot-preview[bot] <support@dependabot.com>  ([@dependabot-p
 
 #### :nail_care: Polish
 
-- Expose original request details through Request class [#490](https://github.com/cliqz-oss/adblocker/pull/490) ([@remusao](https://github.com/remusao))
+- Expose original request details through Request class [#490](https://github.com/ghostery/adblocker/pull/490) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -645,7 +645,7 @@ Signed-off-by: dependabot-preview[bot] <support@dependabot.com>  ([@dependabot-p
 
 #### :running_woman: Performance
 
-- Target ES6 instead of ES3 [#489](https://github.com/cliqz-oss/adblocker/pull/489) ([@remusao](https://github.com/remusao))
+- Target ES6 instead of ES3 [#489](https://github.com/ghostery/adblocker/pull/489) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 

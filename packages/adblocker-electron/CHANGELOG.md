@@ -256,11 +256,11 @@ Changed the timing of scriptlet injection to before the DOMContentLoaded event f
 
 #### :house: Internal
 
-- Bump typescript [#2243](https://github.com/cliqz-oss/adblocker/pull/2243) ([@remusao](https://github.com/remusao))
+- Bump typescript [#2243](https://github.com/ghostery/adblocker/pull/2243) ([@remusao](https://github.com/remusao))
 
 #### :nut_and_bolt: Dependencies
 
-- Bump electron from 14.0.1 to 15.0.0 [#2236](https://github.com/cliqz-oss/adblocker/pull/2236) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump electron from 14.0.1 to 15.0.0 [#2236](https://github.com/ghostery/adblocker/pull/2236) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -273,11 +273,11 @@ Changed the timing of scriptlet injection to before the DOMContentLoaded event f
 
 #### :nail_care: Polish
 
-- Update peer dependency on Electron [#2228](https://github.com/cliqz-oss/adblocker/pull/2228) ([@Jelmerro](https://github.com/Jelmerro))
+- Update peer dependency on Electron [#2228](https://github.com/ghostery/adblocker/pull/2228) ([@Jelmerro](https://github.com/Jelmerro))
 
 #### :nut_and_bolt: Dependencies
 
-- Bump electron from 13.2.2 to 14.0.0 [#2200](https://github.com/cliqz-oss/adblocker/pull/2200) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump electron from 13.2.2 to 14.0.0 [#2200](https://github.com/ghostery/adblocker/pull/2200) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -290,7 +290,7 @@ Changed the timing of scriptlet injection to before the DOMContentLoaded event f
 
 #### :nut_and_bolt: Dependencies
 
-- Bump @types/mocha from 8.2.3 to 9.0.0 [#2062](https://github.com/cliqz-oss/adblocker/pull/2062) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @types/mocha from 8.2.3 to 9.0.0 [#2062](https://github.com/ghostery/adblocker/pull/2062) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 1
 
@@ -302,7 +302,7 @@ Changed the timing of scriptlet injection to before the DOMContentLoaded event f
 
 #### :nut_and_bolt: Dependencies
 
-- Bump mocha from 8.4.0 to 9.0.0 [#1989](https://github.com/cliqz-oss/adblocker/pull/1989) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump mocha from 8.4.0 to 9.0.0 [#1989](https://github.com/ghostery/adblocker/pull/1989) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 1
 
@@ -314,11 +314,11 @@ Changed the timing of scriptlet injection to before the DOMContentLoaded event f
 
 #### :rocket: New Feature
 
-- Bump Electron to v13.x and Puppeteer to v9.x [#1967](https://github.com/cliqz-oss/adblocker/pull/1967) ([@remusao](https://github.com/remusao))
+- Bump Electron to v13.x and Puppeteer to v9.x [#1967](https://github.com/ghostery/adblocker/pull/1967) ([@remusao](https://github.com/remusao))
 
 #### :house: Internal
 
-- Bump lock file to fix some security issue [#1922](https://github.com/cliqz-oss/adblocker/pull/1922) ([@remusao](https://github.com/remusao))
+- Bump lock file to fix some security issue [#1922](https://github.com/ghostery/adblocker/pull/1922) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -330,7 +330,7 @@ Changed the timing of scriptlet injection to before the DOMContentLoaded event f
 
 #### :house: Internal
 
-- Update copyright notices [#1715](https://github.com/cliqz-oss/adblocker/pull/1715) ([@remusao](https://github.com/remusao))
+- Update copyright notices [#1715](https://github.com/ghostery/adblocker/pull/1715) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -342,12 +342,12 @@ Changed the timing of scriptlet injection to before the DOMContentLoaded event f
 
 ### Release Notes
 
-#### Initial support for extended CSS selectors (a.k.a. procedural filters) ([#1574](https://github.com/cliqz-oss/adblocker/pull/1574))
+#### Initial support for extended CSS selectors (a.k.a. procedural filters) ([#1574](https://github.com/ghostery/adblocker/pull/1574))
 
 Add initial support for extended CSS selectors (a.k.a. procedural filters) as well as the `:remove()` modifier for element hiding rules (note: the already supported `:style` modified now also works with extended CSS selectors). The following new pseudo-classes are implemented: `:has` (and its alias `:if`), `:has-text` (both string and RegExp literals), and `:not` (whenever its argument is also an extended selector, otherwise fallback to native implementation).
 
 Caveats:
-* Loading of extended css filters is disabled by default and needs to be toggled using the `loadExtendedSelectors` option while [initializing the blocker instance](https://github.com/cliqz-oss/adblocker/blob/3361723138f40c3cb96b4c6e611f2b030f75d891/packages/adblocker-webextension-example/background.ts#L61).
+* Loading of extended css filters is disabled by default and needs to be toggled using the `loadExtendedSelectors` option while [initializing the blocker instance](https://github.com/ghostery/adblocker/blob/3361723138f40c3cb96b4c6e611f2b030f75d891/packages/adblocker-webextension-example/background.ts#L61).
 * These news selectors are currently only supported by `WebExtensionBlocker` (support for Puppeteer, Electron and Playwright is not planned at this time but help from the community would be greatly appreciated).
 
 Miscellaneous changes:
@@ -358,7 +358,7 @@ Miscellaneous changes:
 
 #### :rocket: New Feature
 
-- Initial support for extended CSS selectors (a.k.a. procedural filters) [#1574](https://github.com/cliqz-oss/adblocker/pull/1574) ([@remusao](https://github.com/remusao))
+- Initial support for extended CSS selectors (a.k.a. procedural filters) [#1574](https://github.com/ghostery/adblocker/pull/1574) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -370,7 +370,7 @@ Miscellaneous changes:
 
 #### :nail_care: Polish
 
-- Fix with newer Typescript + cleanups [#1466](https://github.com/cliqz-oss/adblocker/pull/1466) ([@remusao](https://github.com/remusao))
+- Fix with newer Typescript + cleanups [#1466](https://github.com/ghostery/adblocker/pull/1466) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -382,7 +382,7 @@ Miscellaneous changes:
 
 #### :bug: Bug Fix
 
-- Fix memory leak by using a WeakMap to hold context information in blocker [#1451](https://github.com/cliqz-oss/adblocker/pull/1451) ([@remusao](https://github.com/remusao))
+- Fix memory leak by using a WeakMap to hold context information in blocker [#1451](https://github.com/ghostery/adblocker/pull/1451) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -400,9 +400,9 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps): bump electron from 10.1.4 to 10.1.5 [#1363](https://github.com/cliqz-oss/adblocker/pull/1363) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump electron from 10.1.3 to 10.1.4 [#1354](https://github.com/cliqz-oss/adblocker/pull/1354) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump electron from 10.1.2 to 10.1.3 [#1307](https://github.com/cliqz-oss/adblocker/pull/1307) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.1.4 to 10.1.5 [#1363](https://github.com/ghostery/adblocker/pull/1363) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.1.3 to 10.1.4 [#1354](https://github.com/ghostery/adblocker/pull/1354) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.1.2 to 10.1.3 [#1307](https://github.com/ghostery/adblocker/pull/1307) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -419,8 +419,8 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps): bump electron from 10.1.1 to 10.1.2 [#1273](https://github.com/cliqz-oss/adblocker/pull/1273) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump electron from 10.1.0 to 10.1.1 [#1240](https://github.com/cliqz-oss/adblocker/pull/1240) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.1.1 to 10.1.2 [#1273](https://github.com/ghostery/adblocker/pull/1273) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.1.0 to 10.1.1 [#1240](https://github.com/ghostery/adblocker/pull/1240) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -437,8 +437,8 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps): bump electron from 10.0.1 to 10.1.0 [#1226](https://github.com/cliqz-oss/adblocker/pull/1226) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump electron from 10.0.0 to 10.0.1 [#1225](https://github.com/cliqz-oss/adblocker/pull/1225) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.1 to 10.1.0 [#1226](https://github.com/ghostery/adblocker/pull/1226) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0 to 10.0.1 [#1225](https://github.com/ghostery/adblocker/pull/1225) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -454,7 +454,7 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps): bump electron from 10.0.0-beta.25 to 10.0.0 [#1217](https://github.com/cliqz-oss/adblocker/pull/1217) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.25 to 10.0.0 [#1217](https://github.com/ghostery/adblocker/pull/1217) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -478,16 +478,16 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps): bump electron from 10.0.0-beta.23 to 10.0.0-beta.25 [#1212](https://github.com/cliqz-oss/adblocker/pull/1212) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump ts-node from 8.10.2 to 9.0.0 [#1208](https://github.com/cliqz-oss/adblocker/pull/1208) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps-dev): bump typescript from 3.9.7 to 4.0.2 [#1202](https://github.com/cliqz-oss/adblocker/pull/1202) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump electron from 10.0.0-beta.21 to 10.0.0-beta.23 [#1197](https://github.com/cliqz-oss/adblocker/pull/1197) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump electron from 10.0.0-beta.19 to 10.0.0-beta.21 [#1171](https://github.com/cliqz-oss/adblocker/pull/1171) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump electron from 10.0.0-beta.17 to 10.0.0-beta.19 [#1158](https://github.com/cliqz-oss/adblocker/pull/1158) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump electron from 10.0.0-beta.15 to 10.0.0-beta.17 [#1151](https://github.com/cliqz-oss/adblocker/pull/1151) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump electron from 10.0.0-beta.14 to 10.0.0-beta.15 [#1138](https://github.com/cliqz-oss/adblocker/pull/1138) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- build(deps): bump electron from 10.0.0-beta.12 to 10.0.0-beta.14 [#1130](https://github.com/cliqz-oss/adblocker/pull/1130) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
-- Update deps [#1107](https://github.com/cliqz-oss/adblocker/pull/1107) ([@remusao](https://github.com/remusao))
+- build(deps): bump electron from 10.0.0-beta.23 to 10.0.0-beta.25 [#1212](https://github.com/ghostery/adblocker/pull/1212) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump ts-node from 8.10.2 to 9.0.0 [#1208](https://github.com/ghostery/adblocker/pull/1208) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump typescript from 3.9.7 to 4.0.2 [#1202](https://github.com/ghostery/adblocker/pull/1202) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.21 to 10.0.0-beta.23 [#1197](https://github.com/ghostery/adblocker/pull/1197) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.19 to 10.0.0-beta.21 [#1171](https://github.com/ghostery/adblocker/pull/1171) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.17 to 10.0.0-beta.19 [#1158](https://github.com/ghostery/adblocker/pull/1158) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.15 to 10.0.0-beta.17 [#1151](https://github.com/ghostery/adblocker/pull/1151) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.14 to 10.0.0-beta.15 [#1138](https://github.com/ghostery/adblocker/pull/1138) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps): bump electron from 10.0.0-beta.12 to 10.0.0-beta.14 [#1130](https://github.com/ghostery/adblocker/pull/1130) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- Update deps [#1107](https://github.com/ghostery/adblocker/pull/1107) ([@remusao](https://github.com/remusao))
 
 #### Authors: 2
 
@@ -504,7 +504,7 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps-dev): bump @types/mocha from 7.0.2 to 8.0.0 [#1079](https://github.com/cliqz-oss/adblocker/pull/1079) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump @types/mocha from 7.0.2 to 8.0.0 [#1079](https://github.com/ghostery/adblocker/pull/1079) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -520,7 +520,7 @@ Miscellaneous changes:
 
 #### :nut_and_bolt: Dependencies
 
-- build(deps-dev): bump mocha from 7.2.0 to 8.0.1 [#986](https://github.com/cliqz-oss/adblocker/pull/986) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- build(deps-dev): bump mocha from 7.2.0 to 8.0.1 [#986](https://github.com/ghostery/adblocker/pull/986) ([@dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 
 #### Authors: 1
 
@@ -544,7 +544,7 @@ _From #746_
 
 #### :nail_care: Polish
 
-- Fix domain options with subdomains and more... [#746](https://github.com/cliqz-oss/adblocker/pull/746) ([@remusao](https://github.com/remusao))
+- Fix domain options with subdomains and more... [#746](https://github.com/ghostery/adblocker/pull/746) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -572,7 +572,7 @@ _From #738_
 
 #### :rocket: New Feature
 
-- Various improvements [#738](https://github.com/cliqz-oss/adblocker/pull/738) ([@remusao](https://github.com/remusao))
+- Various improvements [#738](https://github.com/ghostery/adblocker/pull/738) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -584,7 +584,7 @@ _From #738_
 
 #### :house: Internal
 
-- Move from jest to mocha + chai [#682](https://github.com/cliqz-oss/adblocker/pull/682) ([@remusao](https://github.com/remusao))
+- Move from jest to mocha + chai [#682](https://github.com/ghostery/adblocker/pull/682) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -596,7 +596,7 @@ _From #738_
 
 #### :house: Internal
 
-- Update README.md [#670](https://github.com/cliqz-oss/adblocker/pull/670) ([@remusao](https://github.com/remusao))
+- Update README.md [#670](https://github.com/ghostery/adblocker/pull/670) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -608,7 +608,7 @@ _From #738_
 
 #### :bug: Bug Fix
 
-- Abstract DOM monitoring away and fix #573 [#657](https://github.com/cliqz-oss/adblocker/pull/657) ([@remusao](https://github.com/remusao))
+- Abstract DOM monitoring away and fix #573 [#657](https://github.com/ghostery/adblocker/pull/657) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -620,7 +620,7 @@ _From #738_
 
 #### :nail_care: Polish
 
-- Move BlockingContext methods back into Blocker class. [#496](https://github.com/cliqz-oss/adblocker/pull/496) ([@remusao](https://github.com/remusao))
+- Move BlockingContext methods back into Blocker class. [#496](https://github.com/ghostery/adblocker/pull/496) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -632,7 +632,7 @@ _From #738_
 
 #### :bug: Bug Fix
 
-- Fix implicit tslib dependency [#494](https://github.com/cliqz-oss/adblocker/pull/494) ([@remusao](https://github.com/remusao))
+- Fix implicit tslib dependency [#494](https://github.com/ghostery/adblocker/pull/494) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -644,7 +644,7 @@ _From #738_
 
 #### :nail_care: Polish
 
-- Expose original request details through Request class [#490](https://github.com/cliqz-oss/adblocker/pull/490) ([@remusao](https://github.com/remusao))
+- Expose original request details through Request class [#490](https://github.com/ghostery/adblocker/pull/490) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
@@ -656,7 +656,7 @@ _From #738_
 
 #### :running_woman: Performance
 
-- Target ES6 instead of ES3 [#489](https://github.com/cliqz-oss/adblocker/pull/489) ([@remusao](https://github.com/remusao))
+- Target ES6 instead of ES3 [#489](https://github.com/ghostery/adblocker/pull/489) ([@remusao](https://github.com/remusao))
 
 #### Authors: 1
 
