@@ -7,8 +7,7 @@
  */
 
 import resolve from '@rollup/plugin-node-resolve';
-import sourcemaps from 'rollup-plugin-sourcemaps';
-import { terser } from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 
 export default [
   {
@@ -21,7 +20,6 @@ export default [
     },
     plugins: [
       resolve(),
-      sourcemaps(),
       terser({
         output: {
           comments: false,
@@ -37,12 +35,14 @@ export default [
         format: 'esm',
         preserveModules: true,
         entryFileNames: '[name].js',
+        sourcemap: true,
       },
       {
         dir: './dist/cjs',
         format: 'cjs',
         preserveModules: true,
         entryFileNames: '[name].cjs',
+        sourcemap: true,
       },
     ],
   },

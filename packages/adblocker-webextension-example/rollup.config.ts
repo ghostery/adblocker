@@ -8,7 +8,6 @@
 
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
-import sourcemaps from 'rollup-plugin-sourcemaps';
 
 export default [
   {
@@ -24,7 +23,6 @@ export default [
         mainFields: ['main'],
       }),
       commonjs(),
-      sourcemaps(),
     ],
   },
   {
@@ -40,7 +38,6 @@ export default [
         mainFields: ['main'],
       }),
       commonjs(),
-      sourcemaps(),
     ],
   },
 ];
