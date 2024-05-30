@@ -29,7 +29,7 @@ requests.json:
 	curl -O --compressed https://raw.githubusercontent.com/mjethani/scaling-palm-tree/06ef031aa3d2742dc7e6234f579e28a9b6d499b0/requests.json
 
 ./node_modules/@gorhill/ubo-core:
-	yarn add @gorhill/ubo-core@0.1.14
+	yarn add @gorhill/ubo-core@https://github.com/gorhill/uBlock/releases/download/1.58.0/uBlock0_1.58.0.npm.tgz
 
 ./node_modules/@gorhill/ubo-core/bundle.min.cjs:
 	npx rollup ./node_modules/@gorhill/ubo-core/index.js \
@@ -38,29 +38,23 @@ requests.json:
 
 ubo-core: ./node_modules/@gorhill/ubo-core ./node_modules/@gorhill/ubo-core/bundle.min.cjs
 
-./node_modules/adblockpluscore:
-	yarn add adblockpluscore@0.3.1
+./node_modules/@eyeo/webext-ad-filtering-solution
+	yarn add @eyeo/webext-ad-filtering-solution@1.7.0
 
-./node_modules/adblockpluscore/lib/bundle.min.cjs:
-	cp ./blockers/adblockpluscore-index.js ./node_modules/adblockpluscore/lib
-	npx rollup ./node_modules/adblockpluscore/lib/adblockpluscore-index.js \
-		--file ./node_modules/adblockpluscore/lib/bundle.min.cjs --format cjs \
-		--plugin commonjs --plugin json --plugin terser --output.exports named
-
-adblockpluscore: ./node_modules/adblockpluscore ./node_modules/adblockpluscore/lib/bundle.min.cjs
+adblockpluscore: ./node_modules/@eyeo/webext-ad-filtering-solution
 
 ./node_modules/@adguard/tsurlfilter:
-	yarn add @adguard/tsurlfilter@0.7.26
+	yarn add @adguard/tsurlfilter@2.2.19
 
 tsurlfilter-node: ./node_modules/@adguard/tsurlfilter
 
 ./node_modules/fast-hosts-lookup:
-	yarn add mjethani/fast-hosts-lookup#9136bb8c331ee5dba8ac1a0018552cace11e2afa
+	yarn add fast-hosts-lookup@https://github.com/mjethani/fast-hosts-lookup#9136bb8c331ee5dba8ac1a0018552cace11e2afa
 
 fast-hosts-lookup: ./node_modules/fast-hosts-lookup
 
 ./node_modules/adblock-rs:
-	yarn add adblock-rs@0.3.15
+	yarn add adblock-rs@0.8.10
 
 adblock-rs: ./node_modules/adblock-rs
 

@@ -6,7 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const { contentTypes, CombinedMatcher, Filter, parseURL } = require('adblockpluscore/lib/bundle.min.cjs');
+const { contentTypes } = require('@eyeo/webext-ad-filtering-solution/adblockpluscore/lib/contentTypes.js');
+const { CombinedMatcher } = require('@eyeo/webext-ad-filtering-solution/adblockpluscore/lib/matcher.js');
+const { Filter } = require('@eyeo/webext-ad-filtering-solution/adblockpluscore/lib/filterClasses.js');
+const { parseURL } = require('@eyeo/webext-ad-filtering-solution/adblockpluscore/lib/url.js');
+
 
 // Map of content types reported by the browser to the respecitve content types
 // used by Adblock Plus. Other content types are simply mapped to OTHER.
@@ -27,9 +31,6 @@ const resourceTypes = new Map(
 
 module.exports = class AdblockPlus {
   static parse(rawLists) {
-    // Clear internal cache
-    Filter.knownFilters.clear();
-
     const lines = rawLists.split(/\n/g);
 
     const filters = [];
@@ -55,9 +56,6 @@ module.exports = class AdblockPlus {
   }
 
   deserialize(serialized) {
-    // Clear internal cache
-    Filter.knownFilters.clear();
-
     const lines = JSON.parse(serialized);
     const filters = [];
     const matcher = new CombinedMatcher();
