@@ -1,3 +1,30 @@
+# v1.27.4 (Thu May 30 2024)
+
+#### :nail_care: Polish
+
+- Rename cliqz-oss to ghostery [#3986](https://github.com/ghostery/adblocker/pull/3986) ([@chrmod](https://github.com/chrmod))
+
+#### ⚠️ Pushed to `master`
+
+- Build system: update rollup plugins ([@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- CI: fix releases [#3985](https://github.com/ghostery/adblocker/pull/3985) ([@chrmod](https://github.com/chrmod))
+- ESLint update [#3977](https://github.com/ghostery/adblocker/pull/3977) ([@chrmod](https://github.com/chrmod))
+- ESM modules [#3924](https://github.com/ghostery/adblocker/pull/3924) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.267 to 0.0.268 [#3952](https://github.com/ghostery/adblocker/pull/3952) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.27.3 (Tue May 07 2024)
 
 #### :nut_and_bolt: Dependencies
