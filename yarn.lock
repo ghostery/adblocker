@@ -5,6 +5,35 @@ __metadata:
   version: 8
   cacheKey: 10
 
+"@adguard/scriptlets@npm:^1.10.25":
+  version: 1.10.25
+  resolution: "@adguard/scriptlets@npm:1.10.25"
+  dependencies:
+    "@babel/runtime": "npm:^7.20.13"
+    js-yaml: "npm:^3.13.1"
+  checksum: 10/7fb5a0a536a142c5f6d6f15d45abda9cc53d1776f2ca6170610759177093813305c2e1baa58d5de7a33ec9f33404b8f3db22ee15968b2ceab5ad8ace441ae9db
+  languageName: node
+  linkType: hard
+
+"@adguard/tsurlfilter@npm:2.2.19":
+  version: 2.2.19
+  resolution: "@adguard/tsurlfilter@npm:2.2.19"
+  dependencies:
+    "@adguard/scriptlets": "npm:^1.10.25"
+    cidr-tools: "npm:^6.4.1"
+    commander: "npm:9.4.1"
+    is-cidr: "npm:4.0.2"
+    is-ip: "npm:3.1.0"
+    lru_map: "npm:0.4.1"
+    punycode: "npm:2.1.1"
+    tldts: "npm:5.6.45"
+    zod: "npm:3.19.1"
+  bin:
+    tsurlfilter: dist/cli.js
+  checksum: 10/f01c5b280e6a0f4fee3909ea3351534cd82985f2d0b9ff0a5a836e0d7172c6d6a3b5c0a7555139775d979ab1b497bcba319d9467e1640bdf0cbb98a60fa2b55e
+  languageName: node
+  linkType: hard
+
 "@ampproject/remapping@npm:^2.2.0":
   version: 2.3.0
   resolution: "@ampproject/remapping@npm:2.3.0"
@@ -319,7 +348,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.21.0":
+"@babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.21.0":
   version: 7.24.6
   resolution: "@babel/runtime@npm:7.24.6"
   dependencies:
@@ -367,6 +396,23 @@ __metadata:
   checksum: 10/34552539cdc740513650cb3c7754f77a55cc5253dff9d45afd52292d366eb1c099939d5db066e458abcf4c9a7dedfe43467445f9c2208b3cb64866762dee5e9d
   languageName: node
   linkType: hard
+
+"@cliqz/adblocker-benchmarks@workspace:packages/adblocker-benchmarks":
+  version: 0.0.0-use.local
+  resolution: "@cliqz/adblocker-benchmarks@workspace:packages/adblocker-benchmarks"
+  dependencies:
+    "@adguard/tsurlfilter": "npm:2.2.19"
+    "@cliqz/adblocker": "npm:^1.27.3"
+    "@eyeo/webext-ad-filtering-solution": "npm:1.7.0"
+    "@gorhill/ubo-core": "https://github.com/gorhill/uBlock/releases/download/1.58.0/uBlock0_1.58.0.npm.tgz"
+    "@rollup/plugin-commonjs": "npm:^25.0.4"
+    "@rollup/plugin-json": "npm:^6.0.0"
+    adblock-rs: "npm:0.8.10"
+    fast-hosts-lookup: "https://github.com/mjethani/fast-hosts-lookup#9136bb8c331ee5dba8ac1a0018552cace11e2afa"
+    rollup: "npm:^4.0.2"
+    tldts-experimental: "npm:^6.0.14"
+  languageName: unknown
+  linkType: soft
 
 "@cliqz/adblocker-content@npm:^1.27.3, @cliqz/adblocker-content@workspace:packages/adblocker-content":
   version: 0.0.0-use.local
@@ -449,6 +495,28 @@ __metadata:
   checksum: 10/c3411a67801a9078887886f03528646dd83ce3445eb4db88d39c3c86ecc5a35bae5539a74a89aaba63ad21e3c490916bf6fcd06f9b61be28a59ed489cc840637
   languageName: node
   linkType: hard
+
+"@cliqz/adblocker-extended-selectors@workspace:packages/adblocker-extended-selectors":
+  version: 0.0.0-use.local
+  resolution: "@cliqz/adblocker-extended-selectors@workspace:packages/adblocker-extended-selectors"
+  dependencies:
+    "@rollup/plugin-node-resolve": "npm:^15.2.3"
+    "@rollup/plugin-terser": "npm:^0.4.4"
+    "@types/chai": "npm:^4.3.6"
+    "@types/jsdom": "npm:^21.1.3"
+    "@types/mocha": "npm:^10.0.1"
+    "@types/node": "npm:^20.6.2"
+    chai: "npm:^5.1.0"
+    eslint: "npm:^9.3.0"
+    jsdom: "npm:^24.0.0"
+    mocha: "npm:^10.2.0"
+    nyc: "npm:^15.1.0"
+    rimraf: "npm:^5.0.1"
+    rollup: "npm:^4.17.2"
+    ts-node: "npm:^10.9.1"
+    typescript: "npm:^5.4.5"
+  languageName: unknown
+  linkType: soft
 
 "@cliqz/adblocker-playwright-example@workspace:packages/adblocker-playwright-example":
   version: 0.0.0-use.local
@@ -709,6 +777,30 @@ __metadata:
   version: 9.3.0
   resolution: "@eslint/js@npm:9.3.0"
   checksum: 10/3fb4b30561c34b52e7c6c6b55ea61df1cead73a525e1ccd77b1454d893dcf06f99fe9c46bf410a044ef7d3339c455bc4f75769b40c4734343f5b46d2d76b89ef
+  languageName: node
+  linkType: hard
+
+"@eyeo/webext-ad-filtering-solution@npm:1.7.0":
+  version: 1.7.0
+  resolution: "@eyeo/webext-ad-filtering-solution@npm:1.7.0"
+  dependencies:
+    uuid: "npm:^9.0.0"
+    webextension-polyfill: "npm:^0.8.0"
+    yargs: "npm:^17.5.1"
+  bin:
+    subs-convert: scripts/convertSubscriptions.js
+    subs-fetch: scripts/fetchSubscriptions.js
+    subs-generate: scripts/generateSubscriptionsFragment.js
+    subs-init: scripts/initSubscriptions.js
+    subs-merge: scripts/mergeSubscriptions.js
+  checksum: 10/2d95155cbbfb30a67a91c7c134e3c72268c206db4fabbb0dfb4ad0d99184fd5b8daa7347f7b706510d5135ce15579eb39b26d10ae8f9e140d5e33734729910a1
+  languageName: node
+  linkType: hard
+
+"@gorhill/ubo-core@https://github.com/gorhill/uBlock/releases/download/1.58.0/uBlock0_1.58.0.npm.tgz":
+  version: 0.1.26
+  resolution: "@gorhill/ubo-core@https://github.com/gorhill/uBlock/releases/download/1.58.0/uBlock0_1.58.0.npm.tgz"
+  checksum: 10/1b3eef5b28770c58193a3c3c97065a74332839f220a9c4ea0dfd5aedced4c452240411ce6316432d6361e30ed1907a82773d7897a68e3e5b67fe7134233f8c0d
   languageName: node
   linkType: hard
 
@@ -1609,6 +1701,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rollup/plugin-json@npm:^6.0.0":
+  version: 6.1.0
+  resolution: "@rollup/plugin-json@npm:6.1.0"
+  dependencies:
+    "@rollup/pluginutils": "npm:^5.1.0"
+  peerDependencies:
+    rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
+  peerDependenciesMeta:
+    rollup:
+      optional: true
+  checksum: 10/cc018d20c80242a2b8b44fae61a968049cf31bb8406218187cc7cda35747616594e79452dd65722e7da6dd825b392e90d4599d43cd4461a02fefa2865945164e
+  languageName: node
+  linkType: hard
+
 "@rollup/plugin-node-resolve@npm:^15.2.1, @rollup/plugin-node-resolve@npm:^15.2.3":
   version: 15.2.3
   resolution: "@rollup/plugin-node-resolve@npm:15.2.3"
@@ -2424,6 +2530,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"adblock-rs@npm:0.8.10":
+  version: 0.8.10
+  resolution: "adblock-rs@npm:0.8.10"
+  dependencies:
+    cargo-cp-artifact: "npm:^0.1"
+  checksum: 10/bcc67fc075ee8e06416641d924bd6a7033acc4b0da3f2b8a38902bfa80f466e2b0b2165276dd0232402d9b567b8835ec8030a3f69806f56a2ad3485f86ecf5a8
+  languageName: node
+  linkType: hard
+
 "adblocker@workspace:.":
   version: 0.0.0-use.local
   resolution: "adblocker@workspace:."
@@ -3135,6 +3250,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cargo-cp-artifact@npm:^0.1":
+  version: 0.1.9
+  resolution: "cargo-cp-artifact@npm:0.1.9"
+  bin:
+    cargo-cp-artifact: bin/cargo-cp-artifact.js
+  checksum: 10/51fcb9641cc025b39384163dce97b82be6af494bc215a70e197af0a01e30dc30173a56a383dd5dbf5b4b76785ab4e91649455128b2ed7d2c3ed3c27c79c7b632
+  languageName: node
+  linkType: hard
+
 "chai@npm:^5.1.0":
   version: 5.1.1
   resolution: "chai@npm:5.1.1"
@@ -3243,6 +3367,36 @@ __metadata:
   version: 3.9.0
   resolution: "ci-info@npm:3.9.0"
   checksum: 10/75bc67902b4d1c7b435497adeb91598f6d52a3389398e44294f6601b20cfef32cf2176f7be0eb961d9e085bb333a8a5cae121cb22f81cf238ae7f58eb80e9397
+  languageName: node
+  linkType: hard
+
+"cidr-regex@npm:4.0.3":
+  version: 4.0.3
+  resolution: "cidr-regex@npm:4.0.3"
+  dependencies:
+    ip-regex: "npm:^5.0.0"
+  checksum: 10/d26f9168c2c380a136ac3af6379959d6140c61e08adafed276ed50e9e0d55c129c6ac7c1629e2c676bca9a030d927fbc4a45355e90d10ebcca30a97e8f17011d
+  languageName: node
+  linkType: hard
+
+"cidr-regex@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "cidr-regex@npm:3.1.1"
+  dependencies:
+    ip-regex: "npm:^4.1.0"
+  checksum: 10/ef9306d086928ee82b3f841b3bdab6e072230f3623a57cf19e06174946f2cbfeb70ca52bc106b127db27a628b9e84fb39284f5851003898ffdb957fe330478ee
+  languageName: node
+  linkType: hard
+
+"cidr-tools@npm:^6.4.1":
+  version: 6.4.2
+  resolution: "cidr-tools@npm:6.4.2"
+  dependencies:
+    cidr-regex: "npm:4.0.3"
+    ip-bigint: "npm:7.3.0"
+    ip-regex: "npm:5.0.0"
+    string-natural-compare: "npm:3.0.1"
+  checksum: 10/7f9687a1f0f0e61911621349eb85c32f09314cd096faf1c37295e9f5ef3fc092797792302b08534c9ed367a699b8672d8db47c89ebfcd362efd63b30c2d14268
   languageName: node
   linkType: hard
 
@@ -3447,6 +3601,13 @@ __metadata:
     table-layout: "npm:^1.0.2"
     typical: "npm:^5.2.0"
   checksum: 10/902901582a543b26f55f90fc0f266c08a603a92bfadd8d07c66679f3d9eea2c074a039404126b0c4b65ff8452153c5f2010ea2f4ec14b70be0c77241f6d5bd53
+  languageName: node
+  linkType: hard
+
+"commander@npm:9.4.1":
+  version: 9.4.1
+  resolution: "commander@npm:9.4.1"
+  checksum: 10/9d0d1d7e816545cf5ebf25e303533e45af2f941731063587d04917ac9fb6c81f59690aa8bda60d9b88d8aac018fdef6735ed953e72fdab08bb8b778bd4e0ef95
   languageName: node
   linkType: hard
 
@@ -4512,6 +4673,13 @@ __metadata:
     merge2: "npm:^1.3.0"
     micromatch: "npm:^4.0.4"
   checksum: 10/222512e9315a0efca1276af9adb2127f02105d7288fa746145bf45e2716383fb79eb983c89601a72a399a56b7c18d38ce70457c5466218c5f13fad957cee16df
+  languageName: node
+  linkType: hard
+
+"fast-hosts-lookup@https://github.com/mjethani/fast-hosts-lookup#9136bb8c331ee5dba8ac1a0018552cace11e2afa":
+  version: 0.1.0
+  resolution: "fast-hosts-lookup@https://github.com/mjethani/fast-hosts-lookup.git#commit=9136bb8c331ee5dba8ac1a0018552cace11e2afa"
+  checksum: 10/66ee8254da37bed3e57f44548064527be9eb344467f0ab1d76dbb6bfc46c111a9f03a573bc73f426dcdf46bb0b6b75737ad91ead25c289d820e34bd1ba4f6d2d
   languageName: node
   linkType: hard
 
@@ -5647,6 +5815,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ip-bigint@npm:7.3.0":
+  version: 7.3.0
+  resolution: "ip-bigint@npm:7.3.0"
+  checksum: 10/ad235be9ef9a2133aa40f1c91b573ecbefdaebcd8154e55ff03fa6882a3b3e9ad7ff37f20dcad29cab87179b6c0e652664802ce90f5aa6ab4fcf7a70160e7863
+  languageName: node
+  linkType: hard
+
+"ip-regex@npm:5.0.0, ip-regex@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "ip-regex@npm:5.0.0"
+  checksum: 10/4098b2df89c015f1484a5946e733ec126af8c1828719d90e09f04af23ce487e1a852670e4d3f51b0dc6dfbaf7d8bfab23fd7893ca60e69833da99b7b1ee3623b
+  languageName: node
+  linkType: hard
+
+"ip-regex@npm:^4.0.0, ip-regex@npm:^4.1.0":
+  version: 4.3.0
+  resolution: "ip-regex@npm:4.3.0"
+  checksum: 10/7ff904b891221b1847f3fdf3dbb3e6a8660dc39bc283f79eb7ed88f5338e1a3d1104b779bc83759159be266249c59c2160e779ee39446d79d4ed0890dfd06f08
+  languageName: node
+  linkType: hard
+
 "is-arrayish@npm:^0.2.1":
   version: 0.2.1
   resolution: "is-arrayish@npm:0.2.1"
@@ -5680,6 +5869,15 @@ __metadata:
   bin:
     is-ci: bin.js
   checksum: 10/192c66dc7826d58f803ecae624860dccf1899fc1f3ac5505284c0a5cf5f889046ffeb958fa651e5725d5705c5bcb14f055b79150ea5fcad7456a9569de60260e
+  languageName: node
+  linkType: hard
+
+"is-cidr@npm:4.0.2":
+  version: 4.0.2
+  resolution: "is-cidr@npm:4.0.2"
+  dependencies:
+    cidr-regex: "npm:^3.1.1"
+  checksum: 10/ee6e670e655a835710a7fa15268b428adbf80267114a494ce1c2ca2b09e1ca0b629fe1375aae621d4c093b32930d5ff7c4ee6da97eae14e3836bc7b3a07b171f
   languageName: node
   linkType: hard
 
@@ -5728,6 +5926,15 @@ __metadata:
   version: 1.0.0
   resolution: "is-interactive@npm:1.0.0"
   checksum: 10/824808776e2d468b2916cdd6c16acacebce060d844c35ca6d82267da692e92c3a16fdba624c50b54a63f38bdc4016055b6f443ce57d7147240de4f8cdabaf6f9
+  languageName: node
+  linkType: hard
+
+"is-ip@npm:3.1.0":
+  version: 3.1.0
+  resolution: "is-ip@npm:3.1.0"
+  dependencies:
+    ip-regex: "npm:^4.0.0"
+  checksum: 10/da2c2b282407194adf2320bade0bad94be9c9d0bdab85ff45b1b62d8185f31c65dff3884519d57bf270277e5ea2046c7916a6e5a6db22fe4b7ddcdd3760f23eb
   languageName: node
   linkType: hard
 
@@ -6554,6 +6761,13 @@ __metadata:
   version: 7.18.3
   resolution: "lru-cache@npm:7.18.3"
   checksum: 10/6029ca5aba3aacb554e919d7ef804fffd4adfc4c83db00fac8248c7c78811fb6d4b6f70f7fd9d55032b3823446546a007edaa66ad1f2377ae833bd983fac5d98
+  languageName: node
+  linkType: hard
+
+"lru_map@npm:0.4.1":
+  version: 0.4.1
+  resolution: "lru_map@npm:0.4.1"
+  checksum: 10/c399afdb959c1820ace33b253c307c00e39a8a63705037f9dd58bf489950265de347b1614642fcfde26e0ff613fba633ddfd7eb5814ffb0a360a7037cc8a4008
   languageName: node
   linkType: hard
 
@@ -8302,6 +8516,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"punycode@npm:2.1.1":
+  version: 2.1.1
+  resolution: "punycode@npm:2.1.1"
+  checksum: 10/939daa010c2cacebdb060c40ecb52fef0a739324a66f7fffe0f94353a1ee83e3b455e9032054c4a0c4977b0a28e27086f2171c392832b59a01bd948fd8e20914
+  languageName: node
+  linkType: hard
+
 "punycode@npm:^2.1.0, punycode@npm:^2.1.1, punycode@npm:^2.3.1":
   version: 2.3.1
   resolution: "punycode@npm:2.3.1"
@@ -9322,6 +9543,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"string-natural-compare@npm:3.0.1":
+  version: 3.0.1
+  resolution: "string-natural-compare@npm:3.0.1"
+  checksum: 10/bc1fd0ee196466489e121bbe11844094ddcdee5a687dca9dbb18ba2ace73b1f6c96c9b448df2dfed0879b781b6b12e329ca1c1fc0a86d70b00c7823b76109b1e
+  languageName: node
+  linkType: hard
+
 "string-width-cjs@npm:string-width@^4.2.0, string-width@npm:^1.0.2 || 2 || 3 || 4, string-width@npm:^4.1.0, string-width@npm:^4.2.0, string-width@npm:^4.2.3":
   version: 4.2.3
   resolution: "string-width@npm:4.2.3"
@@ -9661,6 +9889,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tldts-core@npm:^5.6.45":
+  version: 5.7.112
+  resolution: "tldts-core@npm:5.7.112"
+  checksum: 10/8be0a4bc0233755e8f1839c2ec5476e471d2bbc1c37d1b8c67b85ce4c0ebc11214e46efd508d377e4177516ab08fa08355f8adf4771cb9e23824045717eb08c3
+  languageName: node
+  linkType: hard
+
 "tldts-core@npm:^6.1.23":
   version: 6.1.23
   resolution: "tldts-core@npm:6.1.23"
@@ -9674,6 +9909,17 @@ __metadata:
   dependencies:
     tldts-core: "npm:^6.1.23"
   checksum: 10/1c668816fc0c69db7b716ce5e737990864d45ea5e4ef00e673fad801291d1a18866f58550856dae1e961c3895787281bc9d7067231a4f7219eafe5fa4836df25
+  languageName: node
+  linkType: hard
+
+"tldts@npm:5.6.45":
+  version: 5.6.45
+  resolution: "tldts@npm:5.6.45"
+  dependencies:
+    tldts-core: "npm:^5.6.45"
+  bin:
+    tldts: bin/cli.js
+  checksum: 10/9c9aa3648e96777e56fc1aeb695953f280d775190ee47ab01c94f959f5b41e41136ab5e4065d895bfe350ed29a4a4e758fbb35b70e1ecdf29c337ef09627255a
   languageName: node
   linkType: hard
 
@@ -10595,7 +10841,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:17.7.2, yargs@npm:^17.6.2, yargs@npm:^17.7.2":
+"yargs@npm:17.7.2, yargs@npm:^17.5.1, yargs@npm:^17.6.2, yargs@npm:^17.7.2":
   version: 17.7.2
   resolution: "yargs@npm:17.7.2"
   dependencies:
@@ -10650,6 +10896,13 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: 10/f77b3d8d00310def622123df93d4ee654fc6a0096182af8bd60679ddcdfb3474c56c6c7190817c84a2785648cdee9d721c0154eb45698c62176c322fb46fc700
+  languageName: node
+  linkType: hard
+
+"zod@npm:3.19.1":
+  version: 3.19.1
+  resolution: "zod@npm:3.19.1"
+  checksum: 10/e63e88f13598ae791d09959af9faf57d2cb21aeb98998785341d853667cf568306d880b18225b308ef78277716e0ff925dfdde94c0cf5ffa5b7df2e4e3e39515
   languageName: node
   linkType: hard
 
