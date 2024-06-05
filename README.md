@@ -77,7 +77,6 @@ This project makes use of [lerna](https://github.com/lerna/lerna) and [yarn work
 2. Install dependencies: `yarn bootstrap`,
 3. Build: `yarn watch`,
 4. Test: `yarn test`,
-5. Bundle: `yarn bundle`.
 
 For any question, feel free to [open an issue](https://github.com/ghostery/adblocker/issues/new) or a pull request to get some help!
 

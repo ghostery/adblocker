@@ -14,7 +14,9 @@
     "directory": "packages/adblocker-benchmarks"
   },
   "scripts": {
-    "postinstall": "make ubo-core"
+    "download-requests": "make requests.json",
+    "build-ubo": "make ubo-core",
+    "postinstall": "yarn run download-requests && yarn run build-ubo"
   },
   "bugs": {
     "url": "https://github.com/ghostery/adblocker/issues"

@@ -51,8 +51,6 @@ extracting hostnames and domains from URLs).
 
 Install [Rust](https://www.rust-lang.org/tools/install) and [Node.js](https://nodejs.org/en/download/).
 
-Run `yarn install --immutable` to install the dependencies.
-
 Run `make` to start benchmarking.
 
 ## Results Analysis

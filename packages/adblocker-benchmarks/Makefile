@@ -30,7 +30,7 @@ requests.json:
 
 ubo-core:
 	npx rollup ../../node_modules/@gorhill/ubo-core/index.js \
-		--file ../..//node_modules/@gorhill/ubo-core/bundle.min.cjs --format cjs \
+		--file ../../node_modules/@gorhill/ubo-core/bundle.min.cjs --format cjs \
 		--context global --plugin terser
 brave:
 	$(node_command) run.js brave $(run_options)
