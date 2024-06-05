@@ -44,7 +44,7 @@ jobs:
           private-key: ${{ secrets.ADBLOCKERBOT_PRIVATE_KEY }}
 
       - name: Create release
-        run: yarn release
+        run: yarn auto shipit -vv
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

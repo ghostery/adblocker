@@ -64,14 +64,12 @@
     "build": "tsc --build ./tsconfig.project.json && lerna run build",
     "test": "lerna run --concurrency 4 test",
     "clean": "lerna run --parallel clean && lerna clean --yes",
-    "release": "auto shipit -v",
     "format-check": "prettier './packages/**/*.ts' --check",
     "format-fix": "prettier './packages/**/*.ts' --write"
   },
   "devDependencies": {
     "@auto-it/protected-branch": "^11.1.6",
     "@eslint/js": "^9.3.0",
-    "@remusao/auto-config": "^1.1.2",
     "@types/benchmark": "^2.1.3",
     "@types/node": "^20.12.12",
     "auto": "^11.0.5",
@@ -85,14 +83,6 @@
     "prettier": "^3.0.3",
     "typescript": "^5.4.5",
     "typescript-eslint": "8.0.0-alpha.24"
-  },
-  "auto": {
-    "extends": "@remusao/auto-config",
-    "name": "Adblocker Bot",
-    "email": "adblocker-bot@users.noreply.github.com",
-    "plugins": [
-      "protected-branch"
-    ]
   },
   "packageManager": "yarn@4.2.2"
 }
