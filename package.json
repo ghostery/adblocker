@@ -57,12 +57,11 @@
     "packages/*"
   ],
   "scripts": {
-    "postinstall": "patch-package",
-    "lint": "lerna run --parallel lint",
+    "lint": "yarn workspaces foreach --all --parallel --topological run lint",
     "watch": "tsc --build ./tsconfig.project.json --watch",
-    "build": "tsc --build ./tsconfig.project.json && lerna run build",
-    "test": "lerna run --concurrency 4 test",
-    "clean": "lerna run --parallel clean && lerna clean --yes",
+    "build": "tsc --build ./tsconfig.project.json && yarn workspaces foreach --all --parallel --topological run build",
+    "test": "yarn workspaces foreach --jobs 4 --all --parallel --topological run test",
+    "clean": "yarn workspaces foreach --all --parallel --topological run clean",
     "release": "auto shipit -v",
     "format-check": "prettier './packages/**/*.ts' --check",
     "format-fix": "prettier './packages/**/*.ts' --write"
@@ -78,8 +77,6 @@
     "eslint": "^9.3.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
-    "lerna": "^8.0.0",
-    "patch-package": "^8.0.0",
     "prettier": "^3.0.3",
     "typescript": "^5.4.5",
     "typescript-eslint": "8.0.0-alpha.28"
