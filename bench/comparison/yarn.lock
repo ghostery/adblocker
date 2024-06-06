@@ -48,7 +48,6 @@ __metadata:
   resolution: "@cliqz/adblocker-benchmarks@workspace:."
   dependencies:
     "@adguard/tsurlfilter": "npm:2.2.19"
-    "@cliqz/adblocker": "npm:^1.27.9"
     "@eyeo/webext-ad-filtering-solution": "npm:1.7.0"
     "@gorhill/ubo-core": "https://github.com/gorhill/uBlock/releases/download/1.58.0/uBlock0_1.58.0.npm.tgz"
     "@rollup/plugin-commonjs": "npm:^25.0.4"
@@ -58,35 +57,6 @@ __metadata:
     rollup: "npm:^4.0.2"
     tldts-experimental: "npm:^6.0.14"
   languageName: unknown
-  linkType: soft
-
-"@cliqz/adblocker-content@portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-content::locator=%40cliqz%2Fadblocker-benchmarks%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "@cliqz/adblocker-content@portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-content::locator=%40cliqz%2Fadblocker-benchmarks%40workspace%3A."
-  dependencies:
-    "@cliqz/adblocker-extended-selectors": "npm:^1.27.7"
-  languageName: node
-  linkType: soft
-
-"@cliqz/adblocker-extended-selectors@portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-extended-selectors::locator=%40cliqz%2Fadblocker-benchmarks%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "@cliqz/adblocker-extended-selectors@portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-extended-selectors::locator=%40cliqz%2Fadblocker-benchmarks%40workspace%3A."
-  languageName: node
-  linkType: soft
-
-"@cliqz/adblocker@portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker::locator=%40cliqz%2Fadblocker-benchmarks%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "@cliqz/adblocker@portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker::locator=%40cliqz%2Fadblocker-benchmarks%40workspace%3A."
-  dependencies:
-    "@cliqz/adblocker-content": "npm:^1.27.7"
-    "@cliqz/adblocker-extended-selectors": "npm:^1.27.7"
-    "@remusao/guess-url-type": "npm:^1.2.1"
-    "@remusao/small": "npm:^1.2.1"
-    "@remusao/smaz": "npm:^1.9.1"
-    "@types/chrome": "npm:^0.0.268"
-    "@types/firefox-webext-browser": "npm:^120.0.0"
-    tldts-experimental: "npm:^6.0.14"
-  languageName: node
   linkType: soft
 
 "@eyeo/webext-ad-filtering-solution@npm:1.7.0":
@@ -160,53 +130,6 @@ __metadata:
   version: 0.11.0
   resolution: "@pkgjs/parseargs@npm:0.11.0"
   checksum: 10/115e8ceeec6bc69dff2048b35c0ab4f8bbee12d8bb6c1f4af758604586d802b6e669dcb02dda61d078de42c2b4ddce41b3d9e726d7daa6b4b850f4adbf7333ff
-  languageName: node
-  linkType: hard
-
-"@remusao/guess-url-type@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@remusao/guess-url-type@npm:1.2.1"
-  checksum: 10/2e57e1af5fbaccfe6b29287b6d3cc0903587497eededc5e5c97d3ba84d61bee5c7329821fa0542546587a2a65fe5e97dd409ae24db5dc2bff3c422c7b8c51d99
-  languageName: node
-  linkType: hard
-
-"@remusao/small@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@remusao/small@npm:1.2.1"
-  checksum: 10/60f823f794ddb7567df5bb8039569239ed61216b3a1605d2861b2459ca2421a72bb58f92e12788de36db83a9eccf6829f9d284d6ccca664853fa14b264574a2e
-  languageName: node
-  linkType: hard
-
-"@remusao/smaz-compress@npm:^1.9.1":
-  version: 1.9.1
-  resolution: "@remusao/smaz-compress@npm:1.9.1"
-  dependencies:
-    "@remusao/trie": "npm:^1.4.1"
-  checksum: 10/3da13d4004ffb07a73a5e41ff25a44273faa6f5ba7af9ba89ea150a3196eb8bc9057d88e2d9100c44b3b733b3bed187a5a480464ce5d2e719efcc890e194d56f
-  languageName: node
-  linkType: hard
-
-"@remusao/smaz-decompress@npm:^1.9.1":
-  version: 1.9.1
-  resolution: "@remusao/smaz-decompress@npm:1.9.1"
-  checksum: 10/5d0912731227a8d522faec6e4906c2b9553f7de16764878a4e3fb8529e5b86b7398d19d395123d4a7fbd6ac26c1a2355a5ad8103459e54211f5c82b6ef7c8873
-  languageName: node
-  linkType: hard
-
-"@remusao/smaz@npm:^1.9.1":
-  version: 1.9.1
-  resolution: "@remusao/smaz@npm:1.9.1"
-  dependencies:
-    "@remusao/smaz-compress": "npm:^1.9.1"
-    "@remusao/smaz-decompress": "npm:^1.9.1"
-  checksum: 10/fd1620efbe4bc2a3bc525f330a66a83d3c4bdd2e726c01c68073ba0a20fa7c4542223e507974508d103457bf93a0806abb3568957ce13bbd83933c04c2c9ff97
-  languageName: node
-  linkType: hard
-
-"@remusao/trie@npm:^1.4.1":
-  version: 1.4.1
-  resolution: "@remusao/trie@npm:1.4.1"
-  checksum: 10/17a35498f223c41bee9801b262b708e15ed159b178d76eae750761f5768e73cf13b8b0bfd2172c52987d58840892c155d12dce290a135c6f4e282d40a4940f7e
   languageName: node
   linkType: hard
 
@@ -371,50 +294,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/chrome@npm:^0.0.268":
-  version: 0.0.268
-  resolution: "@types/chrome@npm:0.0.268"
-  dependencies:
-    "@types/filesystem": "npm:*"
-    "@types/har-format": "npm:*"
-  checksum: 10/f03cf2f816f7c8f19319299af9399dd3eed8b46b3e4791bd7c1c70d982ae63634580a4c03509841cd65b91e99e6bc47f05358811d2c8b707968746d3d482b983
-  languageName: node
-  linkType: hard
-
 "@types/estree@npm:*, @types/estree@npm:1.0.5, @types/estree@npm:^1.0.0":
   version: 1.0.5
   resolution: "@types/estree@npm:1.0.5"
   checksum: 10/7de6d928dd4010b0e20c6919e1a6c27b61f8d4567befa89252055fad503d587ecb9a1e3eab1b1901f923964d7019796db810b7fd6430acb26c32866d126fd408
-  languageName: node
-  linkType: hard
-
-"@types/filesystem@npm:*":
-  version: 0.0.36
-  resolution: "@types/filesystem@npm:0.0.36"
-  dependencies:
-    "@types/filewriter": "npm:*"
-  checksum: 10/ec831040fe3aff066ffb7b7541e21a5dd59aa06e7175c61e592736e38b018b1d513551438254631e2a3fbc81ff671bf618401000f4c8ea79156934cbc7dcaeaa
-  languageName: node
-  linkType: hard
-
-"@types/filewriter@npm:*":
-  version: 0.0.33
-  resolution: "@types/filewriter@npm:0.0.33"
-  checksum: 10/495a4bb424c27eda967fe9ac3b8f7b781e6b3f9ce59403a991590cb1073022f9c5383d3c7d808ef6956b785550c36664c4fcd502dc0baf69e340bd481171e0ca
-  languageName: node
-  linkType: hard
-
-"@types/firefox-webext-browser@npm:^120.0.0":
-  version: 120.0.3
-  resolution: "@types/firefox-webext-browser@npm:120.0.3"
-  checksum: 10/c9050e75d9e26ef8b7ae8fe79136fd98b567b4ec7f41fb5cda052729b7672c574d7975ed99d47be5a24b3cb8b6ad73aca2ee20b072bbf612839b4065361cb580
-  languageName: node
-  linkType: hard
-
-"@types/har-format@npm:*":
-  version: 1.2.15
-  resolution: "@types/har-format@npm:1.2.15"
-  checksum: 10/fcb397741076ed1095ef8dcccd408c9ef4e20fcfeef0d3fe700f837cc015fe72ee2a3c081cc9c03d73c115005b38ba7b1c563d27e050fa612d60bc2049f309ca
   languageName: node
   linkType: hard
 
