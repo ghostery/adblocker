@@ -20,7 +20,7 @@ module.exports = class Brave {
   }
 
   serialize() {
-    return this.client.serializeCompressed();
+    return this.client.serializeRaw();
   }
 
   deserialize(serialized) {

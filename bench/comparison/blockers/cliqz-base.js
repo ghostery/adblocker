@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const { FiltersEngine, Request } = require('@cliqz/adblocker/dist/adblocker.umd.min.js');
+const { FiltersEngine, Request } = require('../../../packages/adblocker');
 
 module.exports = class Cliqz {
   static parse(rawLists, { enableCompression = false, debug = false } = {}) {

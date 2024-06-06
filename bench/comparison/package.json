@@ -1,0 +1,82 @@
+{
+  "name": "@cliqz/adblocker-benchmarks",
+  "private": true,
+  "version": "1.27.7",
+  "description": "Content blockers benchmark",
+  "author": {
+    "name": "Cliqz"
+  },
+  "homepage": "https://github.com/ghostery/adblocker#readme",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ghostery/adblocker.git",
+    "directory": "packages/adblocker-benchmarks"
+  },
+  "scripts": {
+    "download-requests": "make requests.json",
+    "build-ubo": "make ubo-core",
+    "postinstall": "yarn run download-requests && yarn run build-ubo"
+  },
+  "bugs": {
+    "url": "https://github.com/ghostery/adblocker/issues"
+  },
+  "dependencies": {
+    "@adguard/tsurlfilter": "2.2.19",
+    "@eyeo/webext-ad-filtering-solution": "1.7.0",
+    "@gorhill/ubo-core": "https://github.com/gorhill/uBlock/releases/download/1.58.0/uBlock0_1.58.0.npm.tgz",
+    "adblock-rs": "0.8.10",
+    "fast-hosts-lookup": "https://github.com/mjethani/fast-hosts-lookup#9136bb8c331ee5dba8ac1a0018552cace11e2afa",
+    "tldts-experimental": "^6.0.14"
+  },
+  "contributors": [
+    {
+      "name": "Rémi Berson",
+      "email": "remi@cliqz.com"
+    },
+    {
+      "name": "Zhonghao Yu",
+      "email": "zhonghao@cliqz.com"
+    },
+    {
+      "name": "Krzysztof Jan Modras",
+      "email": "chrmod@chrmod.net"
+    },
+    {
+      "name": "Raymond Hill",
+      "email": "gorhill@users.noreply.github.com"
+    },
+    {
+      "name": "Eleni",
+      "email": "eleni@cliqz.com"
+    },
+    {
+      "name": "ecnmst",
+      "email": "ecnmst@users.noreply.github.com"
+    },
+    {
+      "name": "Asif",
+      "email": "arshadasif0312@gmail.com"
+    },
+    {
+      "name": "Anton Lazarev",
+      "email": "antonok35@gmail.com"
+    }
+  ],
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-json": "^6.0.0",
+    "rollup": "^4.0.2"
+  },
+  "resolutions": {
+    "@cliqz/adblocker": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker",
+    "@cliqz/adblocker-content": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-content",
+    "@cliqz/adblocker-electron": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-electron",
+    "@cliqz/adblocker-electron-preload": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-electron-preload",
+    "@cliqz/adblocker-extended-selectors": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-extended-selectors",
+    "@cliqz/adblocker-playwright": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-playwright",
+    "@cliqz/adblocker-puppeteer": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-puppeteer",
+    "@cliqz/adblocker-webextension": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-webextension",
+    "@cliqz/adblocker-webextension-cosmetics": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-webextension-cosmetics"
+  }
+}
