@@ -75,7 +75,7 @@ This project makes use of [lerna](https://github.com/lerna/lerna) and [yarn work
 
 1. Fork and clone the repository,
 2. Enable corepack: `corepack enable`,
-3. Install dependencies: `yarn workspaces focus adblocker @cliqz/adblocker @cliqz/adblocker-webextension-example @cliqz/adblocker-puppeteer-example @cliqz/adblocker-playwright-example @cliqz/adblocker-electron-example`,
+3. Install dependencies: `yarn install --immutable`,
 4. Build: `yarn watch`,
 5. Test: `yarn test`,
 

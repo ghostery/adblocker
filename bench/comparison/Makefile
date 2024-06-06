@@ -29,8 +29,8 @@ requests.json:
 	curl -O --compressed https://raw.githubusercontent.com/mjethani/scaling-palm-tree/06ef031aa3d2742dc7e6234f579e28a9b6d499b0/requests.json
 
 ubo-core:
-	npx rollup ../../node_modules/@gorhill/ubo-core/index.js \
-		--file ../../node_modules/@gorhill/ubo-core/bundle.min.cjs --format cjs \
+	npx rollup ./node_modules/@gorhill/ubo-core/index.js \
+		--file ./node_modules/@gorhill/ubo-core/bundle.min.cjs --format cjs \
 		--context global --plugin terser
 brave:
 	$(node_command) run.js brave $(run_options)
@@ -69,6 +69,7 @@ hosts-lookup:
 	$(node_command) run.js hosts-lookup $(run_options)
 
 deps:
+	cd ../.. && yarn && yarn build
 	yarn install --immutable
 
 run: deps url tldts cliqz ublock adblockplus brave adblockfast
