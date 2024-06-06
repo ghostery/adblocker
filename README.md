@@ -74,9 +74,10 @@ The library supports 99% of all filters from the Easylist and uBlock Origin proj
 This project makes use of [lerna](https://github.com/lerna/lerna) and [yarn workspaces](https://yarnpkg.com/lang/en/docs/workspaces/) under the hood. Quickly get started with:
 
 1. Fork and clone the repository,
-2. Install dependencies: `yarn bootstrap`,
-3. Build: `yarn watch`,
-4. Test: `yarn test`,
+2. Enable corepack: `corepack enable`
+3. Install dependencies: `yarn workspaces focus @cliqz/adblocker @cliqz/adblocker-webextension-example @cliqz/adblocker-puppeteer-example @cliqz/adblocker-playwright-example @cliqz/adblocker-electron-example`,
+4. Build: `yarn watch`,
+5. Test: `yarn test`,
 
 For any question, feel free to [open an issue](https://github.com/ghostery/adblocker/issues/new) or a pull request to get some help!
 
