@@ -69,7 +69,7 @@ hosts-lookup:
 	$(node_command) run.js hosts-lookup $(run_options)
 
 deps:
-	cd ../.. && yarn && yarn build
+	cd ../.. && yarn install --immutable && yarn build
 	yarn install --immutable
 
 run: deps url tldts cliqz ublock adblockplus brave adblockfast

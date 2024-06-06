@@ -76,7 +76,7 @@ This project makes use of [lerna](https://github.com/lerna/lerna) and [yarn work
 1. Fork and clone the repository,
 2. Enable corepack: `corepack enable`,
 3. Install dependencies: `yarn install --immutable`,
-4. Build: `yarn watch`,
+4. Build: `yarn build`,
 5. Test: `yarn test`,
 
 For any question, feel free to [open an issue](https://github.com/ghostery/adblocker/issues/new) or a pull request to get some help!
