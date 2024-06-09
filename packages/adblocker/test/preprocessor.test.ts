@@ -238,4 +238,19 @@ describe('preprocessors', () => {
 !#endif`,
     );
   });
+
+  it.only('updates engine correcly', () => {
+    const filters = `
+      youtube.com##+js(test)
+      ||bar.com^
+    `;
+    const engine = new FilterEngine({ config: { loadPreprocessors: true } });
+    const diff = generateDiff('', filters, engine.config);
+    engine.updateFromDiff(diff, env);
+    expect(engine.cosmetics.getFilters()).to.have.length(1);
+    expect(engine.filters.getFilters()).to.have.length(1);
+    engine.updateFromDiff(diff, env);
+    expect(engine.cosmetics.getFilters()).to.have.length(1);
+    expect(engine.filters.getFilters()).to.have.length(1);
+  });
 });
