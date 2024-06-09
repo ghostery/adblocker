@@ -111,7 +111,7 @@ describe('ReverseIndex', () => {
 
         for (const optimize of [noopOptimizeNetwork, optimizeNetwork]) {
           describe(`optimize = ${optimize !== noopOptimizeNetwork}`, () => {
-            it('#update', () => {
+            it.only('#update', () => {
               const reverseIndex = new ReverseIndex({
                 config,
                 deserialize: NetworkFilter.deserialize,
@@ -125,6 +125,15 @@ describe('ReverseIndex', () => {
               expect(filters.map((f) => f.rawLine)).to.eql(['||foo.com']);
 
               // Add one new filter
+              reverseIndex.update(
+                parseFilters('||bar.com', { loadCosmeticFilters: false, debug: true })
+                  .networkFilters,
+                undefined,
+              );
+              filters = reverseIndex.getFilters();
+              expect(filters.map((f) => f.rawLine)).to.eql(['||foo.com', '||bar.com']);
+
+              // Add same filter
               reverseIndex.update(
                 parseFilters('||bar.com', { loadCosmeticFilters: false, debug: true })
                   .networkFilters,

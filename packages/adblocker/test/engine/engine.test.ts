@@ -1400,4 +1400,15 @@ describe('diff updates', () => {
 
   testUpdates('empty engine', []);
   testUpdates('easylist engine', loadEasyListFilters());
+
+  it.only('updates without duplicates', () => {
+    const filters = ['youtube.com##+js(test)', '||bar.com^'];
+    const engine = new Engine();
+    engine.updateFromDiff({ added: filters });
+    expect(engine.cosmetics.getFilters()).to.have.length(1);
+    expect(engine.filters.getFilters()).to.have.length(1);
+    engine.updateFromDiff({ added: filters });
+    expect(engine.cosmetics.getFilters()).to.have.length(1);
+    expect(engine.filters.getFilters()).to.have.length(1);
+  });
 });
