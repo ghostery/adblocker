@@ -265,5 +265,17 @@ describe('updating', () => {
     });
 
     expect(engine.getFilters().networkFilters.length).to.be.eql(1);
+
+    const youtubeFilter = 'youtube.com##+js(test)';
+    engine.updateFromDiff({
+      added: [youtubeFilter],
+      preprocessors: {
+        true: {
+          added: [youtubeFilter],
+        },
+      },
+    });
+
+    expect(engine.cosmetics.getFilters()).to.have.length(1);
   });
 });
