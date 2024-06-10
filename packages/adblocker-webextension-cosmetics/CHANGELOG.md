@@ -1,3 +1,15 @@
+# v1.27.11 (Mon Jun 10 2024)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump nyc from 15.1.0 to 17.0.0 [#4015](https://github.com/ghostery/adblocker/pull/4015) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.27.8 (Thu Jun 06 2024)
 
 #### :bug: Bug Fix

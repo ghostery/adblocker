@@ -1,3 +1,25 @@
+# v1.27.11 (Mon Jun 10 2024)
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker`
+  - fix: filters being duplicated by preprocessors [#4016](https://github.com/ghostery/adblocker/pull/4016) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump typescript-eslint from 8.0.0-alpha.28 to 8.0.0-alpha.29 [#4014](https://github.com/ghostery/adblocker/pull/4014) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-electron`, `@cliqz/adblocker-extended-selectors`, `@cliqz/adblocker-playwright`, `@cliqz/adblocker-puppeteer`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - Build(deps-dev): Bump nyc from 15.1.0 to 17.0.0 [#4015](https://github.com/ghostery/adblocker/pull/4015) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-electron-preload`
+  - Build(deps-dev): Bump @rollup/plugin-commonjs from 25.0.8 to 26.0.1 [#4009](https://github.com/ghostery/adblocker/pull/4009) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v1.27.4 (Thu Jun 06 2024)
 
 #### :nail_care: Polish

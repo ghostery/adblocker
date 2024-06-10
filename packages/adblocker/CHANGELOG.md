@@ -1,3 +1,20 @@
+# v1.27.11 (Mon Jun 10 2024)
+
+#### :bug: Bug Fix
+
+- fix: filters being duplicated by preprocessors [#4016](https://github.com/ghostery/adblocker/pull/4016) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump nyc from 15.1.0 to 17.0.0 [#4015](https://github.com/ghostery/adblocker/pull/4015) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v1.27.8 (Thu Jun 06 2024)
 
 #### :bug: Bug Fix

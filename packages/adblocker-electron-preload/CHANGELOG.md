@@ -1,3 +1,15 @@
+# v1.27.11 (Mon Jun 10 2024)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @rollup/plugin-commonjs from 25.0.8 to 26.0.1 [#4009](https://github.com/ghostery/adblocker/pull/4009) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.27.8 (Thu Jun 06 2024)
 
 #### :bug: Bug Fix
