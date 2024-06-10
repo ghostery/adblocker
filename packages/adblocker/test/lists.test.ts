@@ -244,6 +244,44 @@ bar.baz
         },
       },
     });
+
+    expect(
+      generateDiff(
+        `||foo.com^`,
+        `!#if true
+||foo.com^
+!#endif`,
+        config,
+      ),
+    ).to.eql({
+      added: [],
+      removed: [],
+      preprocessors: {
+        true: {
+          added: ['||foo.com^'],
+          removed: [],
+        },
+      },
+    });
+
+    expect(
+      generateDiff(
+        `!#if true
+||foo.com^
+!#endif`,
+        `||foo.com^`,
+        config,
+      ),
+    ).to.eql({
+      added: [],
+      removed: [],
+      preprocessors: {
+        true: {
+          added: [],
+          removed: ['||foo.com^'],
+        },
+      },
+    });
   });
 });
 

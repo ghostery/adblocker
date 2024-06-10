@@ -442,6 +442,11 @@ export function generateDiff(
   return {
     added: Array.from(added),
     removed: Array.from(removed),
+    // For the filters under `preprocessors` property, it doesn't mean those are "filters".
+    // Those are "a list of filters affected by preprocessors" not the "filters" itself.
+    // Therefore, they shouldn't be treated as filters.
+    // Instead, we put "filters" in `added` and `removed` properties.
+    // This provides backward-compatibility and simplicity.
     preprocessors,
   };
 }
