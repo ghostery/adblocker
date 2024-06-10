@@ -239,3 +239,31 @@ describe('preprocessors', () => {
     );
   });
 });
+
+describe('updating', () => {
+  it('correctly distinguishes filters and filters with conditions', () => {
+    const engine = FilterEngine.parse(`||foo.com^`, {
+      loadPreprocessors: true,
+    });
+
+    engine.updateFromDiff({
+      preprocessors: {
+        true: {
+          added: ['||foo.com^'],
+        },
+      },
+    });
+
+    expect(engine.getFilters().networkFilters.length).to.be.eql(1);
+
+    engine.updateFromDiff({
+      preprocessors: {
+        true: {
+          removed: ['||foo.com^'],
+        },
+      },
+    });
+
+    expect(engine.getFilters().networkFilters.length).to.be.eql(1);
+  });
+});
