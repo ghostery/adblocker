@@ -128,6 +128,23 @@ export interface ElementsUpdate {
 
 export type DOMUpdate = FeaturesUpdate | ElementsUpdate;
 
+/**
+ * Burst detector: mitigate the situation that significant CPU load is generated
+ * by repeatly scanning the DOM, even though there are no changes.
+ */
+const BURST_DETECTOR_MIN_CALLS = 10;
+const BURST_DETECTOR_MIN_ELEMENTS_PROCESSED_TO_BE_COSTLY = 1;
+const BURST_DECTOR_MIN_CALLS_TO_SKIP = 16;
+const BURST_DECTOR_MAX_CALLS_TO_SKIP = 1024;
+
+function logThrottleOn() {
+  console.warn('[ADBLOCKER] entering throttling mode');
+}
+
+function logThrottleOff() {
+  console.debug('[ADBLOCKER] leaving throttling mode');
+}
+
 export class DOMMonitor {
   private knownIds: Set<string> = new Set();
   private knownHrefs: Set<string> = new Set();
@@ -146,8 +163,69 @@ export class DOMMonitor {
     window: Pick<Window, 'document'> & { MutationObserver?: typeof MutationObserver },
   ): void {
     if (this.observer === null && window.MutationObserver !== undefined) {
+      // Book keeping to detect bursts:
+      // Modification event that did not result in any change, can be in
+      // retrospective considered save to skip. Detecting many of these in a
+      // row increase the likelihood that skipping the next one would be save.
+      let skippableCallsInARow = 0;
+
+      // throttling (reacting on confirmed bursts):
+      let burstDetectedAt = 0; // 0: burst mode off; >0: the Unix epoch (last confirmed)
+      let remainingCallsToSkip = 0;
+      let skipSteps = 0;
+      let elementsToIgnore: WeakSet<Node> | null = null;
+
       this.observer = new window.MutationObserver((mutations: MutationRecord[]) => {
-        this.handleUpdatedNodes(getElementsFromMutations(mutations));
+        let interruptingBurstMode = false;
+        if (burstDetectedAt !== 0) {
+          if (remainingCallsToSkip > 0) {
+            if (mutations.length === 1 && elementsToIgnore?.has(mutations[0].target)) {
+              remainingCallsToSkip -= 1;
+              return;
+            }
+          } else {
+            const now = Date.now();
+            if (now - burstDetectedAt <= 10000) {
+              skipSteps = Math.min(2 * skipSteps, BURST_DECTOR_MAX_CALLS_TO_SKIP);
+              remainingCallsToSkip = skipSteps;
+              burstDetectedAt = now;
+              interruptingBurstMode = true;
+            } else {
+              logThrottleOff();
+              burstDetectedAt = 0;
+              skippableCallsInARow = 0;
+              elementsToIgnore = null;
+            }
+          }
+        }
+
+        const affectedNodes = getElementsFromMutations(mutations);
+        const changed = this.handleUpdatedNodes(affectedNodes);
+        if (changed) {
+          if (interruptingBurstMode) {
+            logThrottleOff();
+            skippableCallsInARow = 0;
+            burstDetectedAt = 0;
+            elementsToIgnore = null;
+          }
+        } else {
+          skippableCallsInARow += 1;
+          if (
+            skippableCallsInARow >= BURST_DETECTOR_MIN_CALLS &&
+            mutations.length === 1 &&
+            affectedNodes.length >= BURST_DETECTOR_MIN_ELEMENTS_PROCESSED_TO_BE_COSTLY
+          ) {
+            if (burstDetectedAt === 0) {
+              logThrottleOn();
+            }
+            burstDetectedAt = Date.now();
+            skipSteps = Math.max(skipSteps, BURST_DECTOR_MIN_CALLS_TO_SKIP);
+            remainingCallsToSkip = Math.max(remainingCallsToSkip, skipSteps);
+            elementsToIgnore = elementsToIgnore || new WeakSet();
+            elementsToIgnore.add(mutations[0].target);
+            skippableCallsInARow = 0;
+          }
+        }
       });
 
       this.observer.observe(window.document.documentElement, {
