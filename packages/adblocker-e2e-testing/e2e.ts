@@ -1,8 +1,6 @@
-import { Stats, createReadStream, existsSync, readFileSync, statSync } from 'node:fs';
+import { Stats, createReadStream, existsSync, statSync } from 'node:fs';
 import * as http from 'node:http';
 import * as path from 'node:path';
-import * as crypto from 'node:crypto';
-import ts from 'typescript';
 import { minify } from 'terser';
 
 // Shared types
@@ -27,71 +25,17 @@ export type Result = {
 };
 
 // Server
-enum Extension {
-  TypeScript = 0,
-}
-
-type AssetPipeline = {
-  contentType: string;
-  extension?: Extension;
-};
-
-function getAssetPipeline(file: string): AssetPipeline {
-  const data: AssetPipeline = {
-    contentType: 'text/plain',
-  };
-
+function getContentType(file: string): string {
   switch (path.extname(file)) {
-    case '.ts':
-      data.contentType = 'text/javascript';
-      data.extension = Extension.TypeScript;
-      break;
     case '.js':
-      data.contentType = 'text/javascript';
-      break;
+      return 'text/javascript';
     case '.css':
-      data.contentType = 'text/css';
-      break;
+      return 'text/css';
     case '.html':
-      data.contentType = 'text/html';
-      break;
+      return 'text/html';
   }
 
-  return data;
-}
-
-// Cache compile results
-type TypeScriptCompliationCache = {
-  hash: string;
-  output: string;
-};
-
-const typescriptCompliationCache = new Map<string, TypeScriptCompliationCache>();
-
-function compileTypeScript(key: string, script: string): string {
-  const hash = crypto.createHash('md5').update(script).digest('hex');
-  const cache = typescriptCompliationCache.get(key);
-
-  // Check if cache exists and the origin hash is identical to given content
-  if (cache !== undefined && cache.hash === hash) {
-    return cache.output;
-  }
-
-  const result = ts.transpileModule(script, {
-    compilerOptions: {
-      target: ts.ScriptTarget.ES2018,
-      module: ts.ModuleKind.Preserve,
-      inlineSourceMap: true,
-      lib: ['dom'],
-    },
-  });
-
-  typescriptCompliationCache.set(key, {
-    hash,
-    output: result.outputText,
-  });
-
-  return result.outputText;
+  return 'text/pure';
 }
 
 export function createServer(): http.Server {
@@ -141,23 +85,9 @@ export function createServer(): http.Server {
       return;
     }
 
-    // Check if postprocessing is required for this asset
-    const assetPipeline = getAssetPipeline(assetPath);
-    switch (assetPipeline.extension) {
-      case Extension.TypeScript: {
-        const output = compileTypeScript(assetPath, readFileSync(assetPath, 'utf8'));
-        res.writeHead(200, {
-          'content-type': assetPipeline.contentType,
-          'content-length': output.length,
-        });
-        res.end(output);
-        return;
-      }
-    }
-
     // If postprocessing is not required, handle this as stream
     res.writeHead(200, {
-      'content-type': assetPipeline.contentType,
+      'content-type': getContentType(assetPath),
       'content-length': stats.size,
     });
 

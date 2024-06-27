@@ -40,7 +40,7 @@
     "clean": "rimraf dist coverage .tshy .tshy-build .nyc_output .rollup.cache",
     "lint": "eslint src test",
     "build": "tshy && rollup --config ./rollup.config.js",
-    "test": "nyc mocha"
+    "test": "yarn playwright install && nyc mocha"
   },
   "bugs": {
     "url": "https://github.com/ghostery/adblocker/issues"

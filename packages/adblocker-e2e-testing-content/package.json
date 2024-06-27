@@ -15,7 +15,8 @@
     "directory": "packages/adblocker-e2e-webpage"
   },
   "scripts": {
-    "lint": "eslint script.ts"
+    "lint": "eslint script.ts",
+    "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript"
   },
   "bugs": {
     "url": "https://github.com/ghostery/adblocker/issues"
