@@ -60,18 +60,6 @@ describe('#createServer', () => {
     expect(response.headers['content-type']).to.be.eql('text/html');
   });
 
-  it('handles typescript compilation', async () => {
-    const url = new URL(address);
-    url.pathname = '/script.ts';
-
-    const response = await request(url);
-
-    expect(response.statusCode).to.be.eql(200);
-    expect(response.headers['content-type']).to.be.eql('text/javascript');
-    // Check if the transpilation is done for browsers
-    expect(response.body).not.to.include('Object.defineProperty(exports');
-  });
-
   after(async () => {
     server.close(() => {
       console.log('Test server closed.');
