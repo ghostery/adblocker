@@ -1,72 +1,58 @@
 {
-  "name": "@cliqz/adblocker-playwright",
-  "version": "1.30.0",
-  "description": "Ghostery adblocker Playwright wrapper",
+  "name": "@cliqz/adblocker-e2e-testing",
+  "private": true,
+  "version": "1.27.11",
+  "description": "Cliqz adblocker e2e testing",
   "author": {
-    "name": "Ghostery"
+    "name": "Cliqz"
   },
   "homepage": "https://github.com/ghostery/adblocker#readme",
   "license": "MPL-2.0",
   "type": "module",
   "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "import": {
-        "types": "./dist/esm/index.d.ts",
-        "default": "./dist/esm/index.js"
-      },
-      "require": {
-        "types": "./dist/commonjs/index.d.ts",
-        "default": "./dist/commonjs/index.js"
-      }
-    }
+    "require": "./dist/cjs/e2e.cjs",
+    "import": "./dist/esm/e2e.js",
+    "types": "./dist/types/e2e.d.ts"
   },
-  "main": "./dist/commonjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/commonjs/index.d.ts",
+  "main": "dist/cjs/e2e.cjs",
+  "module": "dist/esm/e2e.js",
+  "types": "dist/types/e2e.d.ts",
   "files": [
     "LICENSE",
     "dist"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/ghostery/adblocker.git",
-    "directory": "packages/adblocker-playwright"
+    "directory": "packages/adblocker-e2e"
   },
   "scripts": {
-    "clean": "rimraf dist coverage .tshy .tshy-build .nyc_output .rollup.cache",
-    "lint": "eslint src test",
-    "build": "tshy && rollup --config ./rollup.config.js",
-    "test": "nyc mocha"
+    "dev": "node --loader ts-node/esm dev.ts",
+    "clean": "rimraf dist coverage",
+    "lint": "eslint e2e.ts dev.ts ./test/**/*.ts",
+    "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript",
+    "test": "nyc mocha --config ../../.mocharc.json"
   },
   "bugs": {
     "url": "https://github.com/ghostery/adblocker/issues"
   },
-  "peerDependencies": {
-    "playwright": "^1.x"
-  },
   "dependencies": {
-    "@cliqz/adblocker": "^1.30.0",
-    "@cliqz/adblocker-content": "^1.30.0",
-    "@cliqz/adblocker-e2e-testing": "workspace:^",
-    "tldts-experimental": "^6.0.14"
+    "terser": "^5.31.1",
+    "typescript": "^5.4.5"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",
     "@types/chai": "^4.3.6",
     "@types/mocha": "^10.0.1",
+    "@types/node": "^20.12.12",
     "chai": "^5.1.0",
     "eslint": "^9.3.0",
     "mocha": "^10.2.0",
     "nyc": "^17.0.0",
-    "playwright": "^1.38.0",
-    "rimraf": "^6.0.1",
+    "rimraf": "^5.0.7",
     "rollup": "^4.17.2",
-    "tshy": "^3.0.2",
-    "typescript": "^5.5.2"
+    "ts-node": "^10.9.1"
   },
   "contributors": [
     {
@@ -100,12 +86,14 @@
     {
       "name": "Anton Lazarev",
       "email": "antonok35@gmail.com"
+    },
+    {
+      "name": "Konstantin Mosunov",
+      "email": "mosunov.konstantin@huawei.com"
+    },
+    {
+      "name": "Rodrigo Fernández",
+      "email": "fdezromero@users.noreply.github.com"
     }
-  ],
-  "tshy": {
-    "exports": {
-      "./package.json": "./package.json",
-      ".": "./src/index.ts"
-    }
-  }
+  ]
 }

@@ -1,60 +1,30 @@
 {
-  "name": "@cliqz/adblocker-puppeteer",
-  "version": "1.30.0",
-  "description": "Ghostery adblocker Puppeteer wrapper",
+  "name": "@cliqz/adblocker-e2e-testing-content",
+  "private": true,
+  "version": "1.27.11",
+  "description": "Cliqz adblocker e2e testing resources",
   "author": {
-    "name": "Ghostery"
+    "name": "Cliqz"
   },
   "homepage": "https://github.com/ghostery/adblocker#readme",
   "license": "MPL-2.0",
   "type": "module",
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "import": {
-        "types": "./dist/esm/index.d.ts",
-        "default": "./dist/esm/index.js"
-      },
-      "require": {
-        "types": "./dist/commonjs/index.d.ts",
-        "default": "./dist/commonjs/index.js"
-      }
-    }
-  },
-  "main": "./dist/commonjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/commonjs/index.d.ts",
-  "files": [
-    "LICENSE",
-    "dist"
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/ghostery/adblocker.git",
-    "directory": "packages/adblocker-puppeteer"
+    "directory": "packages/adblocker-e2e-webpage"
   },
   "scripts": {
-    "clean": "rimraf dist coverage .tshy .tshy-build .nyc_output .rollup.cache",
-    "lint": "eslint src test",
-    "build": "tshy && rollup --config ./rollup.config.js",
-    "test": "nyc mocha"
+    "lint": "eslint script.ts"
   },
   "bugs": {
     "url": "https://github.com/ghostery/adblocker/issues"
   },
-  "peerDependencies": {
-    "puppeteer": ">5"
-  },
   "dependencies": {
-    "@cliqz/adblocker": "^1.30.0",
-    "@cliqz/adblocker-content": "^1.30.0",
-    "@cliqz/adblocker-e2e-testing": "workspace:^",
-    "tldts-experimental": "^6.0.14"
+    "@cliqz/adblocker-e2e-testing": "workspace:^"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",
     "@types/chai": "^4.3.6",
     "@types/mocha": "^10.0.1",
@@ -63,11 +33,9 @@
     "eslint": "^9.3.0",
     "mocha": "^10.2.0",
     "nyc": "^17.0.0",
-    "puppeteer": "22.13.0",
-    "rimraf": "^6.0.1",
     "rollup": "^4.17.2",
-    "tshy": "^3.0.2",
-    "typescript": "^5.5.2"
+    "ts-node": "^10.9.1",
+    "typescript": "^5.4.5"
   },
   "contributors": [
     {
@@ -110,11 +78,5 @@
       "name": "Rodrigo Fernández",
       "email": "fdezromero@users.noreply.github.com"
     }
-  ],
-  "tshy": {
-    "exports": {
-      "./package.json": "./package.json",
-      ".": "./src/index.ts"
-    }
-  }
+  ]
 }

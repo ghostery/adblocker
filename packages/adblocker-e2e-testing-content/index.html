@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ghostery/adblocker e2e testing page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>ghostery/adblocker</h1>
+            <h2>E2E Testing Page</h2>
+        </div>
+    </header>
+    <main>
+        <article class="container">
+            <section id="report">
+                <h3>Result</h3>
+                <pre>null</pre>
+            </section>
+        </article>
+        <article class="container">
+            <section id="network">
+                <h3>Network filtering</h3>
+                <p>Check if network filtering capability is working properly on this environment.</p>
+
+                <h4>Basic blocking</h4>
+                <div id="network0">
+                    <p>Blocking <code>/generate_200/block</code> <span class="is">failed</span></p>
+                </div>
+
+                <h4>HTML filtering</h4>
+                <div id="network1">
+                    <p>Replace modifier <span data-test="network1" class="is">failed</span></p>
+                </div>
+            </section>
+            <section id="cosmetic">
+                <h3>Cosmetic filtering</h3>
+                <p>
+                    Check if cosmetic filtering capability is working properly on this environment.
+                    You should not see any RED colored boxes in this section.
+                </p>
+
+                <h4>Basic hiding</h4>
+                <div id="cosmetic0" class="test">
+                    <div class="allow"></div>
+                    <div class="block"></div>
+                </div>
+
+                <h4>Scriptlet</h4>
+                <div id="cosmetic1">
+                    <p><code>##+js(test)</code> <span class="is">failed</span></p>
+                </div>
+            </section>
+        </article>
+    </main>
+
+    <script src="script.ts"></script>
+</body>
+</html>
