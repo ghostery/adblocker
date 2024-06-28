@@ -32,7 +32,7 @@
     "clean": "rimraf dist coverage",
     "lint": "eslint adblocker.ts",
     "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript",
-    "test": "nyc mocha --config ../../.mocharc.json"
+    "test": "yarn playwright install && nyc mocha --config ../../.mocharc.json"
   },
   "bugs": {
     "url": "https://github.com/ghostery/adblocker/issues"
@@ -41,8 +41,9 @@
     "playwright": "^1.x"
   },
   "dependencies": {
-    "@cliqz/adblocker": "^1.27.11",
-    "@cliqz/adblocker-content": "^1.27.11",
+    "@cliqz/adblocker": "^1.27.10",
+    "@cliqz/adblocker-content": "^1.27.10",
+    "@cliqz/adblocker-e2e-testing": "workspace:^",
     "tldts-experimental": "^6.0.14"
   },
   "devDependencies": {

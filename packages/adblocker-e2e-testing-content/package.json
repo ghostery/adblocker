@@ -1,50 +1,28 @@
 {
-  "name": "@cliqz/adblocker-puppeteer",
+  "name": "@cliqz/adblocker-e2e-testing-content",
+  "private": true,
   "version": "1.27.11",
-  "description": "Cliqz adblocker Puppeteer wrapper",
+  "description": "Cliqz adblocker e2e testing resources",
   "author": {
     "name": "Cliqz"
   },
   "homepage": "https://github.com/ghostery/adblocker#readme",
   "license": "MPL-2.0",
   "type": "module",
-  "exports": {
-    "require": "./dist/cjs/adblocker.cjs",
-    "import": "./dist/esm/adblocker.js",
-    "types": "./dist/types/adblocker.d.ts"
-  },
-  "main": "dist/cjs/adblocker.cjs",
-  "module": "dist/esm/adblocker.js",
-  "types": "dist/types/adblocker.d.ts",
-  "files": [
-    "LICENSE",
-    "dist"
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/ghostery/adblocker.git",
-    "directory": "packages/adblocker-puppeteer"
+    "directory": "packages/adblocker-e2e-webpage"
   },
   "scripts": {
-    "clean": "rimraf dist coverage",
-    "lint": "eslint adblocker.ts",
-    "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript",
-    "test": "nyc mocha --config ../../.mocharc.json"
+    "lint": "eslint script.ts",
+    "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript"
   },
   "bugs": {
     "url": "https://github.com/ghostery/adblocker/issues"
   },
-  "peerDependencies": {
-    "puppeteer": ">5"
-  },
   "dependencies": {
-    "@cliqz/adblocker": "^1.27.10",
-    "@cliqz/adblocker-content": "^1.27.10",
-    "@cliqz/adblocker-e2e-testing": "workspace:^",
-    "tldts-experimental": "^6.0.14"
+    "@cliqz/adblocker-e2e-testing": "workspace:^"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.2.3",
@@ -56,8 +34,6 @@
     "eslint": "^9.3.0",
     "mocha": "^10.2.0",
     "nyc": "^17.0.0",
-    "puppeteer": "22.12.1",
-    "rimraf": "^5.0.1",
     "rollup": "^4.17.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.4.5"
