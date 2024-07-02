@@ -37,4 +37,4 @@ export { hasUnicode, tokenizeNoSkip as tokenize } from './src/utils';
 export { isUTF8 } from './src/encoding';
 export { default as Config } from './src/config';
 export { default as Resources } from './src/resources';
-export { HTMLSelector, default as StreamingHtmlFilter } from './src/html-filtering';
+export { HTMLSelector, HTMLModifier, default as StreamingHtmlFilter } from './src/html-filtering';

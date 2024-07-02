@@ -10,6 +10,7 @@ import { expect } from 'chai';
 import 'mocha';
 
 import {
+  HTMLModifier,
   HTMLSelector,
   default as StreamingHtmlFilter,
   extractSelectorsFromRules,
@@ -129,8 +130,12 @@ describe('html-filtering', () => {
   });
 
   describe('#StreamingHtmlFilter', () => {
-    const filter = (html: string, filters: HTMLSelector[]): string => {
-      const stream = new StreamingHtmlFilter(filters);
+    const filter = (
+      html: string,
+      filters: HTMLSelector[] = [],
+      modifiers: HTMLModifier[] = [],
+    ): string => {
+      const stream = new StreamingHtmlFilter(filters, modifiers);
 
       // Feed `html` at once
       const res1 = stream.write(html) + stream.flush();
@@ -143,6 +148,7 @@ describe('html-filtering', () => {
       res2 += stream.flush();
 
       expect(res1).to.equal(res2);
+
       return res1;
     };
 
@@ -211,6 +217,62 @@ describe('html-filtering', () => {
         ]),
       ).to.equal(`
 <!DOCTYPE html><html lang="en"><head><div id="2x-container"><<script src="https://www.redditstatic.com/desktop2x/js/ads.js"></script><script id="data">window.___r = {"accountManagerModalData":{}},;</script><script defer="" src="https://www.example.com/foo.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/RedesignContentFonts.509eef5d33306bd3b0d5.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/RedesignOldContentFonts.e450653685d17337cac6.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Chat~Governance~Reddit.503ee0c2d353daa60d6e.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Governance~Reddit.7e2adb288af56de67f65.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Poll~Reddit.5f77a82de48fbb3beb21.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~EconHelperActions~Reddit.ae3c9f7d5b30b3be7151.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Reddit.bb2ade21a865dbd52f3f.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/Chat~Governance~Reddit.19024d94a81678cf79e8.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/Governance~Reddit.98e55a3111b273b2f5dd.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/AdminCommunityTopics~Reddit.f091b12b417d6343dc18.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/Reddit.dc10f78afef6b219b26f.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~CollectionCommentsPage~CommentsPage~Explore~Frontpage~GovernanceReleaseNotesModal~ModListing~afc2720f.c6d86939d4bd0e144927.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/vendors~Chat~ChatMessageInput~CollectionCommentsPage~CommentsPage~Frontpage~PostCreation~RedesignCha~0aefb917.e6923ac4e90b854a1995.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/ChatMessageInput~ChatPost~CollectionCommentsPage~CommentsPage~Explore~Frontpage~GovernanceReleaseNot~3a34166c.dab3a37bed364deddf0e.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/ChatPost~CollectionCommentsPage~CommentsPage~Explore~Frontpage~GovernanceReleaseNotesModal~ModListin~44a849ee.85ccf598d319cc749b92.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/CollectionCommentsPage~CommentsPage~Explore~Frontpage~ModListing~ModQueuePages~ModerationPages~Multi~33b955cc.9c1942fb8eb4378e467c.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/CollectionCommentsPage~CommentsPage~Explore~Frontpage~GovernanceReleaseNotesModal~ModListing~ModQueu~900871b8.509ec80000f4968bb546.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/ChatPost~CollectionCommentsPage~CommentsPage~Frontpage~ModListing~ModQueuePages~ModerationPages~Mult~8849df7b.067fda741fb3f181c83f.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/CollectionCommentsPage~CommentsPage~Explore~Frontpage~ModListing~ModQueuePages~ModerationPages~Multi~5f2f5c2a.9e1690590f39e0d92f45.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/ChatPost~CollectionCommentsPage~CommentsPage~Frontpage~ModListing~ModQueuePages~Multireddit~Original~029c3338.33a759111dafa848481d.js"></script><script defer="" src="https://www.redditstatic.com/desktop2x/CommentsPage.dce215cbd6a2ed7e9969.js"></script></body></html>`);
+    });
+
+    it('handles modifiers', () => {
+      // html modifiers basics
+      expect(
+        filter(`{"trackingParam":"a"}`, [], [[new RegExp('"trackingParam":"(\\w+)"'), '"$1":""']]),
+      ).to.be.eql(`{"a":""}`);
+
+      // -- html modifiers with global replace
+      expect(filter(doc, [], [[new RegExp("__perfMark\\('.+?'\\);", 'g'), '']])).not.to.include(
+        "__perfMark('",
+      );
+
+      expect(filter(doc, [], [[new RegExp('redditstatic\\.com', 'g'), 'domain.tld']]))
+        .to.include('https://www.domain.tld/desktop2x/js/ads.js')
+        .to.include(
+          'https://www.domain.tld/desktop2x/RedesignContentFonts.509eef5d33306bd3b0d5.js',
+        )
+        .to.include(
+          'https://www.domain.tld/desktop2x/RedesignOldContentFonts.e450653685d17337cac6.js',
+        )
+        .not.to.include('redditstatic.com');
+
+      // -- multiple modifiers
+      expect(
+        filter(
+          doc,
+          [],
+          [
+            [new RegExp('__SUPPORTS_TIMING_API &&'), 'false &&'],
+            [new RegExp('redditstatic\\.com', 'g'), 'domain.tld'],
+          ],
+        ),
+      )
+        .to.include('function __perfMark(name) { false && performance.mark(name); };')
+        .not.to.include('redditstatic.com');
+
+      // html modifiers with html selectors
+      expect(
+        filter(
+          doc,
+          [['script', ["__perfMark('"]]],
+          [[new RegExp('(__firstLoaded = )false'), '$1true']],
+        ),
+      )
+        .not.to.include("__perfMark('")
+        .not.to.include('__firstLoaded = false');
+
+      // -- html selector should not be inferenced by modifiers
+      expect(filter(doc, [['script', ["__perfMark('"]]], [[new RegExp('script', 'g'), 'pre']]))
+        .not.to.include("__perfMark('")
+        .not.to.include('script');
+
+      expect(
+        filter(doc, [['script', ['app_html_start']]], [[new RegExp('app_html_start', 'g'), '']]),
+      ).not.to.include('app_html_start');
     });
   });
 });
