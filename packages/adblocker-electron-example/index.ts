@@ -1,8 +1,15 @@
-import { app, BrowserWindow } from 'electron';
 import fetch from 'cross-fetch';
+import { app, BrowserWindow } from 'electron';
 import { readFileSync, writeFileSync } from 'fs';
 
-import { ElectronBlocker, fullLists, Request } from '@cliqz/adblocker-electron';
+import {
+  CosmeticFilter,
+  ElectronBlocker,
+  fullLists,
+  NetworkFilter,
+  Request,
+} from '@cliqz/adblocker-electron';
+import { MatchingContext } from '@cliqz/adblocker';
 
 function getUrlToLoad(): string {
   let url = 'https://google.com';
@@ -41,6 +48,10 @@ async function createWindow() {
 
   blocker.enableBlockingInSession(mainWindow.webContents.session);
 
+  blocker.on('request-allowed', (request: Request) => {
+    console.log('allow', request.tabId, request.url);
+  });
+
   blocker.on('request-blocked', (request: Request) => {
     console.log('blocked', request.tabId, request.url);
   });
@@ -53,8 +64,8 @@ async function createWindow() {
     console.log('whitelisted', request.tabId, request.url);
   });
 
-  blocker.on('csp-injected', (request: Request) => {
-    console.log('csp', request.url);
+  blocker.on('csp-injected', (csps: string, request: Request) => {
+    console.log('csp', csps, request.url);
   });
 
   blocker.on('script-injected', (script: string, url: string) => {
@@ -64,6 +75,13 @@ async function createWindow() {
   blocker.on('style-injected', (style: string, url: string) => {
     console.log('style', style.length, url);
   });
+
+  blocker.on(
+    'filter-matched',
+    (filter: CosmeticFilter | NetworkFilter, context: MatchingContext) => {
+      console.log('filter-matched', filter, context);
+    },
+  );
 
   mainWindow.loadURL(getUrlToLoad());
   mainWindow.webContents.openDevTools();

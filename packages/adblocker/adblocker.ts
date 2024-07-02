@@ -6,7 +6,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-export { default as FiltersEngine, ENGINE_VERSION, BlockingResponse } from './src/engine/engine';
+export {
+  default as FiltersEngine,
+  ENGINE_VERSION,
+  BlockingResponse,
+  MatchingContext,
+} from './src/engine/engine';
 export { default as ReverseIndex } from './src/engine/reverse-index';
 export {
   default as Request,

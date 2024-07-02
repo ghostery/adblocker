@@ -17,6 +17,10 @@ import * as pw from 'playwright';
 
   await blocker.enableBlockingInPage(page);
 
+  blocker.on('request-allowed', (request: Request) => {
+    console.log('allow', request.url);
+  });
+
   blocker.on('request-blocked', (request: Request) => {
     console.log('blocked', request.url);
   });
@@ -29,19 +33,26 @@ import * as pw from 'playwright';
     console.log('whitelisted', request.url);
   });
 
-  blocker.on('csp-injected', (request: Request) => {
-    console.log('csp', request.url);
+  blocker.on('csp-injected', (csps: string, request: Request) => {
+    console.log('csp', request.url, csps);
   });
 
   blocker.on('script-injected', (script: string, url: string) => {
-    console.log('script', script.length, url);
+    console.log('script', url, script.length);
   });
 
   blocker.on('style-injected', (style: string, url: string) => {
-    console.log('style', style.length, url);
+    console.log('style', url, style.length);
   });
 
-  await page.goto('https://www.mangareader.to/');
+  blocker.on(
+    'filter-matched',
+    (filter: CosmeticFilter | NetworkFilter, context: MatchingContext) => {
+      console.log('filter-matched', filter, context);
+    },
+  );
+
+  await page.goto('https://www.mangareader.net/');
   await page.screenshot({ path: 'output.png' });
   await blocker.disableBlockingInPage(page);
   await browser.close();

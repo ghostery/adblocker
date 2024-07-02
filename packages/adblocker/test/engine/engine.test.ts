@@ -11,7 +11,7 @@ import 'mocha';
 
 import { getDomain } from 'tldts-experimental';
 
-import Engine from '../../src/engine/engine';
+import Engine, { EngineEventHandlers } from '../../src/engine/engine';
 import NetworkFilter from '../../src/filters/network';
 import Request, { RequestType } from '../../src/request';
 import Resources from '../../src/resources';
@@ -1400,4 +1400,71 @@ describe('diff updates', () => {
 
   testUpdates('empty engine', []);
   testUpdates('easylist engine', loadEasyListFilters());
+});
+
+describe('events', () => {
+  async function createEventAwaiter<
+    Name extends keyof EngineEventHandlers,
+    Handler extends EngineEventHandlers[Name],
+    Arguments extends Parameters<Handler>,
+  >(engine: Engine, name: Name, limit = 1) {
+    return new Promise<Arguments[]>((resolve, reject) => {
+      const timeout: NodeJS.Timeout = setTimeout(() => {
+        engine.unsubscribe(name, handler);
+
+        if (callbacks.length === 0) {
+          reject(`Timeout reached before catching an event type of "${name}" within a second!`);
+        }
+
+        resolve(callbacks);
+      }, 1000);
+
+      const callbacks: Arguments[] = [];
+      const handler = (...args: any) => {
+        callbacks.push(args as Arguments);
+
+        if (callbacks.length === limit) {
+          engine.unsubscribe(name, handler);
+
+          clearTimeout(timeout);
+          resolve(callbacks);
+        }
+      };
+
+      engine.on(name, handler);
+    });
+  }
+
+  const engine = createEngine(`||foo.com
+||bar.com
+@@||bar.com`);
+
+  it('emits filter-matched', async () => {
+    const awaiter = createEventAwaiter(engine, 'filter-matched');
+
+    engine.match(
+      Request.fromRawDetails({
+        url: 'http://foo.com',
+      }),
+    );
+
+    const [[filter]] = await awaiter;
+
+    expect(filter.toString()).to.be.equal('||foo.com');
+  });
+
+  it('emits exception in filter-matched', async () => {
+    const awaiter = createEventAwaiter(engine, 'filter-matched', 2);
+
+    engine.match(
+      Request.fromRawDetails({
+        url: 'http://bar.com',
+      }),
+    );
+
+    const [[filter], [exception]] = await awaiter;
+
+    expect(filter.toString()).to.be.equal('||bar.com');
+    expect(exception.toString()).to.be.equal('@@||bar.com'); // The exception filter is always emitted later
+  });
 });

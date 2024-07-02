@@ -52,6 +52,9 @@ function unregisterCallback<EventNames>(
     if (indexOfCallback !== -1) {
       listenersForEvent.splice(indexOfCallback, 1);
     }
+    if (listenersForEvent.length === 0) {
+      listeners.delete(event);
+    }
   }
 }
 
@@ -87,14 +90,20 @@ function triggerCallback<EventNames>(
  * Node.js) allowing partially typed event emitting. The set of event names is
  * specified as a type parameter while instantiating the event emitter.
  */
-export class EventEmitter<EventNames> {
+export class EventEmitter<
+  EventHandlers extends Record<string, (...args: any[]) => any>,
+  EventNames extends keyof EventHandlers = keyof EventHandlers,
+> {
   private onceListeners: EventListeners<EventNames> = new Map();
   private onListeners: EventListeners<EventNames> = new Map();
 
   /**
    * Register an event listener for `event`.
    */
-  public on(event: EventNames, callback: EventListener): void {
+  public on<EventName extends EventNames>(
+    event: EventName,
+    callback: EventHandlers[EventName],
+  ): void {
     registerCallback(event, callback, this.onListeners);
   }
 
@@ -102,14 +111,20 @@ export class EventEmitter<EventNames> {
    * Register an event listener for `event`; but only listen to first instance
    * of this event. The listener is automatically deleted afterwards.
    */
-  public once(event: EventNames, callback: EventListener): void {
+  public once<EventName extends EventNames>(
+    event: EventName,
+    callback: EventHandlers[EventName],
+  ): void {
     registerCallback(event, callback, this.onceListeners);
   }
 
   /**
    * Remove `callback` from list of listeners for `event`.
    */
-  public unsubscribe(event: EventNames, callback: EventListener): void {
+  public unsubscribe<EventName extends EventNames>(
+    event: EventName,
+    callback: EventHandlers[EventName],
+  ): void {
     unregisterCallback(event, callback, this.onListeners);
     unregisterCallback(event, callback, this.onceListeners);
   }
@@ -117,10 +132,24 @@ export class EventEmitter<EventNames> {
   /**
    * Emit an event. Call all registered listeners to this event.
    */
-  public emit(event: EventNames, ...args: any[]): void {
+  public emit<EventName extends EventNames>(
+    event: EventName,
+    ...args: Parameters<EventHandlers[EventName]>
+  ): void {
     triggerCallback(event, args, this.onListeners);
     if (triggerCallback(event, args, this.onceListeners) === true) {
       this.onceListeners.delete(event);
     }
+  }
+
+  /**
+   * Check if there's at least one active listener.
+   */
+  public hasListeners(eventName?: EventNames): boolean {
+    if (eventName === undefined) {
+      return this.onListeners.size + this.onceListeners.size !== 0;
+    }
+
+    return this.onListeners.has(eventName) || this.onceListeners.has(eventName);
   }
 }

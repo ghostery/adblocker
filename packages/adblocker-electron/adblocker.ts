@@ -186,6 +186,11 @@ export class ElectronBlocker extends FiltersEngine {
       getExtendedRules: true,
       getRulesFromHostname: true,
       getRulesFromDOM: false, // Only done on updates (see `onGetCosmeticFiltersUpdated`)
+
+      callerContext: {
+        frameId: event.frameId,
+        processId: event.processId,
+      },
     });
 
     if (active === false) {
@@ -233,6 +238,13 @@ export class ElectronBlocker extends FiltersEngine {
 
       // This will be done every time we get information about DOM mutation
       getRulesFromDOM: true,
+
+      callerContext: {
+        frameId: event.frameId,
+        processId: event.processId,
+
+        lifecycle: msg.lifecycle,
+      },
     });
 
     if (active === false) {

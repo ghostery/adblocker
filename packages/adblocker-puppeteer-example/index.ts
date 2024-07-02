@@ -1,7 +1,7 @@
 import { fullLists, PuppeteerBlocker, Request } from '@cliqz/adblocker-puppeteer';
 import fetch from 'cross-fetch';
+import fs from 'fs/promises';
 import * as puppeteer from 'puppeteer';
-import { promises as fs } from 'fs';
 
 function getUrlToLoad(): string {
   let url = 'https://www.mangareader.to/';
@@ -35,6 +35,10 @@ function getUrlToLoad(): string {
   const page = await browser.newPage();
   await blocker.enableBlockingInPage(page);
 
+  blocker.on('request-allowed', (request: Request) => {
+    console.log('allow', request.url);
+  });
+
   blocker.on('request-blocked', (request: Request) => {
     console.log('blocked', request.url);
   });
@@ -47,17 +51,24 @@ function getUrlToLoad(): string {
     console.log('whitelisted', request.url);
   });
 
-  blocker.on('csp-injected', (request: Request) => {
-    console.log('csp', request.url);
+  blocker.on('csp-injected', (csps: string, request: Request) => {
+    console.log('csp', request.url, csps.length);
   });
 
   blocker.on('script-injected', (script: string, url: string) => {
-    console.log('script', script.length, url);
+    console.log('script', url, script.length);
   });
 
   blocker.on('style-injected', (style: string, url: string) => {
-    console.log('style', style.length, url);
+    console.log('style', url, style.length);
   });
+
+  blocker.on(
+    'filter-matched',
+    (filter: CosmeticFilter | NetworkFilter, context: MatchingContext) => {
+      console.log('filter-matched', filter, context);
+    },
+  );
 
   await page.goto(getUrlToLoad());
 })();

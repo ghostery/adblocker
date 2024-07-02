@@ -10,11 +10,14 @@ import { browser } from 'webextension-polyfill-ts';
 
 import {
   BlockingResponse,
+  CosmeticFilter,
   fullLists,
   HTMLSelector,
+  NetworkFilter,
   Request,
   WebExtensionBlocker,
 } from '@cliqz/adblocker-webextension';
+import { MatchingContext } from '@cliqz/adblocker';
 
 /**
  * Keep track of number of network requests altered for each tab
@@ -62,6 +65,11 @@ WebExtensionBlocker.fromLists(fetch, fullLists, {
 }).then((blocker: WebExtensionBlocker) => {
   blocker.enableBlockingInBrowser(browser);
 
+  blocker.on('request-allowed', (request: Request, result: BlockingResponse) => {
+    incrementBlockedCounter(request, result);
+    console.log('allow', request.url);
+  });
+
   blocker.on('request-blocked', (request: Request, result: BlockingResponse) => {
     incrementBlockedCounter(request, result);
     console.log('block', request.url);
@@ -72,21 +80,33 @@ WebExtensionBlocker.fromLists(fetch, fullLists, {
     console.log('redirect', request.url, result);
   });
 
-  blocker.on('csp-injected', (request: Request) => {
-    console.log('csp', request.url);
+  blocker.on('request-whitelisted', (request: Request, result: BlockingResponse) => {
+    incrementBlockedCounter(request, result);
+    console.log('whitelist', request.url, result);
+  });
+
+  blocker.on('html-filtered', (htmlSelectors: HTMLSelector[], url: string) => {
+    console.log('html selectors', url, htmlSelectors);
+  });
+
+  blocker.on('csp-injected', (csps: string, request: Request) => {
+    console.log('csp', request.url, csps.length);
   });
 
   blocker.on('script-injected', (script: string, url: string) => {
-    console.log('script', script.length, url);
+    console.log('script', url, script.length);
   });
 
   blocker.on('style-injected', (style: string, url: string) => {
     console.log('style', url, style.length);
   });
 
-  blocker.on('html-filtered', (htmlSelectors: HTMLSelector[]) => {
-    console.log('html selectors', htmlSelectors);
-  });
+  blocker.on(
+    'filter-matched',
+    (filter: CosmeticFilter | NetworkFilter, context: MatchingContext) => {
+      console.log('filter-matched', filter, context);
+    },
+  );
 
   console.log('Ready to roll!');
 });
