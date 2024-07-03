@@ -9,8 +9,7 @@
 import resolve from '@rollup/plugin-node-resolve';
 import terser from '@rollup/plugin-terser';
 import typescript from '@rollup/plugin-typescript';
-import { dts } from 'rollup-plugin-dts';
-
+import copy from 'rollup-plugin-copy';
 
 export default [
   {
@@ -52,17 +51,12 @@ export default [
     plugins: [
       // compilerOptions are here a workaround for @rollup/plugin-typescript not being able to emit declarations
       typescript({ compilerOptions: { declarationDir: './dist/types' } }),
+      copy({
+        targets: [
+          { src: 'dist/types/adblocker.d.ts', dest: 'dist/types', rename: 'adblocker.d.cts' },
+        ],
+        hook: 'writeBundle',
+      }),
     ],
   },
-  {
-    input: 'dist/types/adblocker.d.ts',
-    output: [
-      { file: `dist/adblocker.d.cts` },
-      { file: `dist/adblocker.d.mts` },
-      { file: `dist/adblocker.d.ts` },
-    ],
-    plugins: [
-      dts(),
-    ],
-  }
 ];
