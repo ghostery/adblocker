@@ -6,6 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { EXTENDED_PSEUDO_CLASSES, PSEUDO_CLASSES } from '@cliqz/adblocker-extended-selectors';
 import Config from './config';
 import CosmeticFilter from './filters/cosmetic';
 import NetworkFilter from './filters/network';
@@ -124,7 +125,9 @@ export function parseFilter(filter: string): NetworkFilter | CosmeticFilter | nu
   if (filterType === FilterType.NETWORK) {
     return NetworkFilter.parse(filter, true);
   } else if (filterType === FilterType.COSMETIC) {
-    return CosmeticFilter.parse(filter, true);
+    return CosmeticFilter.parse(filter, {
+      debug: true,
+    });
   }
 
   return null;
@@ -143,6 +146,14 @@ export function parseFilters(
   preprocessors: Preprocessor[];
 } {
   config = new Config(config);
+
+  const alternativeExtendedPseudoClasses = new Set(EXTENDED_PSEUDO_CLASSES);
+  const alternativePseudoClasses = new Set(PSEUDO_CLASSES);
+
+  if (config.useNativePseudoClassHas) {
+    alternativeExtendedPseudoClasses.delete('has');
+    alternativePseudoClasses.add('has');
+  }
 
   const networkFilters: NetworkFilter[] = [];
   const cosmeticFilters: CosmeticFilter[] = [];
@@ -202,7 +213,11 @@ export function parseFilters(
         }
       }
     } else if (filterType === FilterType.COSMETIC && config.loadCosmeticFilters === true) {
-      const filter = CosmeticFilter.parse(line, config.debug);
+      const filter = CosmeticFilter.parse(line, {
+        debug: config.debug,
+        alternativeExtendedPseudoClasses,
+        alternativePseudoClasses,
+      });
       if (filter !== null) {
         if (config.loadGenericCosmeticsFilters === true || filter.isGenericHide() === false) {
           cosmeticFilters.push(filter);

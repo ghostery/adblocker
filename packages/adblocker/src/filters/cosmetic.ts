@@ -11,6 +11,9 @@ import {
   classifySelector,
   SelectorType,
   parse as parseCssSelector,
+  PSEUDO_CLASSES,
+  EXTENDED_PSEUDO_CLASSES,
+  PSEUDO_ELEMENTS,
 } from '@cliqz/adblocker-extended-selectors';
 
 import { Domains } from '../engine/domains';
@@ -184,7 +187,25 @@ export default class CosmeticFilter implements IFilter {
    * instance out of it. This function should be *very* efficient, as it will be
    * used to parse tens of thousands of lines.
    */
-  public static parse(line: string, debug: boolean = false): CosmeticFilter | null {
+  public static parse(
+    line: string,
+    {
+      debug = false,
+      alternativeExtendedPseudoClasses = EXTENDED_PSEUDO_CLASSES,
+      alternativePseudoClasses = PSEUDO_CLASSES,
+      alternativePseudoElements = PSEUDO_ELEMENTS,
+    }: Partial<{
+      debug: boolean | undefined;
+      alternativeExtendedPseudoClasses: Set<string> | undefined;
+      alternativePseudoClasses: Set<string> | undefined;
+      alternativePseudoElements: Set<string> | undefined;
+    }> = {
+      debug: false,
+      alternativeExtendedPseudoClasses: EXTENDED_PSEUDO_CLASSES,
+      alternativePseudoClasses: PSEUDO_CLASSES,
+      alternativePseudoElements: PSEUDO_ELEMENTS,
+    },
+  ): CosmeticFilter | null {
     const rawLine = line;
 
     // Mask to store attributes. Each flag (unhide, scriptInject, etc.) takes
@@ -300,7 +321,11 @@ export default class CosmeticFilter implements IFilter {
       }
     } else {
       selector = line.slice(suffixStartIndex);
-      const selectorType = classifySelector(selector);
+      const selectorType = classifySelector(selector, {
+        extendedPseudoClasses: alternativeExtendedPseudoClasses,
+        pseudoClasses: alternativePseudoClasses,
+        pseudoElements: alternativePseudoElements,
+      });
       if (selectorType === SelectorType.Extended) {
         mask = setBit(mask, COSMETICS_MASK.extended);
       } else if (selectorType === SelectorType.Invalid || !isValidCss(selector)) {
