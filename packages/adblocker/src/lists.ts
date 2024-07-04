@@ -119,13 +119,21 @@ export function detectFilterType(line: string): FilterType {
   return FilterType.NETWORK;
 }
 
-export function parseFilter(filter: string): NetworkFilter | CosmeticFilter | null {
+export function parseFilter(
+  filter: string,
+  config?: Partial<{
+    alternativeExtendedPseudoClasses: Set<string>;
+    alternativePseudoClasses: Set<string>;
+    alternativePseudoElements: Set<string>;
+  }>,
+): NetworkFilter | CosmeticFilter | null {
   const filterType = detectFilterType(filter);
 
   if (filterType === FilterType.NETWORK) {
     return NetworkFilter.parse(filter, true);
   } else if (filterType === FilterType.COSMETIC) {
     return CosmeticFilter.parse(filter, {
+      ...config,
       debug: true,
     });
   }
