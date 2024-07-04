@@ -1438,7 +1438,9 @@ const DEFAULT_COSMETIC_FILTER = {
 describe('Cosmetic filters', () => {
   describe('#toString', () => {
     const checkToString = (line: string, expected: string, debug: boolean = false) => {
-      const parsed = CosmeticFilter.parse(line, debug);
+      const parsed = CosmeticFilter.parse(line, {
+        debug,
+      });
       expect(parsed).not.to.be.null;
       if (parsed !== null) {
         expect(parsed.toString()).to.equal(expected);

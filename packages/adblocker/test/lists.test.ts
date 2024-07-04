@@ -104,6 +104,24 @@ describe('#parseFilters', () => {
       expect(result).to.have.property('networkFilters').that.have.lengthOf(1);
     });
   });
+
+  context('with useNativePseudoClassHas config', () => {
+    const config = new Config({
+      useNativePseudoClassHas: true,
+    });
+
+    it('parses pseudo class has as non-extended', () => {
+      const result = parseFilters(
+        `domain.tld##div:has(a)
+domain.tld##div:has(a:has(div[class^="test"]))`,
+        config,
+      );
+
+      for (const filter of result.cosmeticFilters) {
+        expect(filter.isExtended()).to.be.false;
+      }
+    });
+  });
 });
 
 describe('#generateDiff', () => {
