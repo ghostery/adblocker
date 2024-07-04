@@ -96,7 +96,22 @@ export enum SelectorType {
   Invalid,
 }
 
-export function classifySelector(selector: string): SelectorType {
+export function classifySelector(
+  selector: string,
+  {
+    extendedPseudoClasses = EXTENDED_PSEUDO_CLASSES,
+    pseudoClasses = PSEUDO_CLASSES,
+    pseudoElements = PSEUDO_ELEMENTS,
+  }: {
+    extendedPseudoClasses: Set<string>;
+    pseudoClasses: Set<string>;
+    pseudoElements: Set<string>;
+  } = {
+    extendedPseudoClasses: EXTENDED_PSEUDO_CLASSES,
+    pseudoClasses: PSEUDO_CLASSES,
+    pseudoElements: PSEUDO_ELEMENTS,
+  },
+): SelectorType {
   // In most cases there is no pseudo-anything so we can quickly exit.
   if (selector.indexOf(':') === -1) {
     return SelectorType.Normal;
@@ -109,9 +124,9 @@ export function classifySelector(selector: string): SelectorType {
   for (const token of tokens) {
     if (token.type === 'pseudo-class') {
       const { name } = token;
-      if (EXTENDED_PSEUDO_CLASSES.has(name) === true) {
+      if (extendedPseudoClasses.has(name) === true) {
         foundSupportedExtendedSelector = true;
-      } else if (PSEUDO_CLASSES.has(name) === false && PSEUDO_ELEMENTS.has(name) === false) {
+      } else if (pseudoClasses.has(name) === false && pseudoElements.has(name) === false) {
         return SelectorType.Invalid;
       }
 
@@ -121,7 +136,11 @@ export function classifySelector(selector: string): SelectorType {
         token.argument !== undefined &&
         RECURSIVE_PSEUDO_CLASSES.has(name) === true
       ) {
-        const argumentType = classifySelector(token.argument);
+        const argumentType = classifySelector(token.argument, {
+          extendedPseudoClasses,
+          pseudoClasses,
+          pseudoElements,
+        });
         if (argumentType === SelectorType.Invalid) {
           return argumentType;
         } else if (argumentType === SelectorType.Extended) {
