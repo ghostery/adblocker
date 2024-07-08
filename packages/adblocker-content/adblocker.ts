@@ -99,8 +99,6 @@ export function extractFeaturesFromDOM(roots: Element[]): {
       if (processedElements.has(element)) {
         continue;
       }
-
-      // Add this element to the processed list.
       processedElements.add(element);
 
       // Any conditions to filter this element out should be placed under this line:
