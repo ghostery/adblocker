@@ -167,21 +167,22 @@ export class DOMMonitor {
       // This variable needs to be kept outside of mutation observer callback
       // because the role of this array is to keep and accumulate the elements
       // to be passed as an argument before debouncing completes its lifecycle.
-      let updatedNodes: Element[] = [];
+      const nodes: Set<Element> = new Set();
 
       const debouncedHandleUpdatedNodes = debounce(() => {
-        // Keep the reference to the object
-        const updatedNodesInSession = updatedNodes;
+        const nodesRef = Array.from(nodes);
 
         // Initialise and assign new object instead of modifying the existing one.
         // Modifying the existing one will impact to the function running after this onComplete callback.
-        updatedNodes = [];
+        nodes.clear();
 
-        this.handleUpdatedNodes(updatedNodesInSession);
+        this.handleUpdatedNodes(nodesRef);
       }, 25);
 
       this.observer = new window.MutationObserver((mutations: MutationRecord[]) => {
-        updatedNodes.push(...getElementsFromMutations(mutations));
+        for (const element of getElementsFromMutations(mutations)) {
+          nodes.add(element);
+        }
 
         debouncedHandleUpdatedNodes();
       });
