@@ -50,6 +50,8 @@ function debounce<F extends (...args: any[]) => any>(
 
       if (started > 0 && Date.now() - started >= maxWait) {
         fn(...args);
+        started = Date.now(); // or better reuse the timestamp that has been just computed
+        return;
       }
 
       started = Date.now();
