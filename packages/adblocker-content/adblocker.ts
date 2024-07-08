@@ -183,9 +183,7 @@ export class DOMMonitor {
       }, 25);
 
       this.observer = new window.MutationObserver((mutations: MutationRecord[]) => {
-        for (const element of getElementsFromMutations(mutations)) {
-          nodes.add(element);
-        }
+        getElementsFromMutations(mutations).forEach(nodes.add, nodes);
 
         debouncedHandleUpdatedNodes();
       });
