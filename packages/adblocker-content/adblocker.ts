@@ -87,6 +87,9 @@ export function extractFeaturesFromDOM(roots: Element[]): {
 } {
   // NOTE: This cannot be global as puppeteer needs to be able to serialize this function.
   const ignoredTags = new Set(['br', 'head', 'link', 'meta', 'script', 'style', 's']);
+  const classes: Set<string> = new Set();
+  const hrefs: Set<string> = new Set();
+  const ids: Set<string> = new Set();
   // Try to reduce duplicate entries by using Set instead of an array.
   const elements: Set<Element> = new Set();
 
@@ -104,23 +107,18 @@ export function extractFeaturesFromDOM(roots: Element[]): {
     }
   }
 
-  const classes: Set<string> = new Set();
-  const hrefs: Set<string> = new Set();
-  const ids: Set<string> = new Set();
-
   for (const element of elements) {
     if (element.id) {
       ids.add(element.id);
     }
 
-    if (element.classList) {
-      for (const classEntry of element.classList) {
-        classes.add(classEntry);
-      }
+    for (const classEntry of element.classList) {
+      classes.add(classEntry);
     }
 
-    if (element.hasAttribute('href')) {
-      hrefs.add(element.getAttribute('href')!);
+    const href = element.getAttribute('href');
+    if (typeof href === 'string') {
+      hrefs.add(href);
     }
   }
 
