@@ -166,10 +166,6 @@ export class DOMMonitor {
     window: Pick<Window, 'document'> & { MutationObserver?: typeof MutationObserver },
   ): void {
     if (this.observer === null && window.MutationObserver !== undefined) {
-      // An array of updated nodes in this timespan (or debounce session).
-      // This variable needs to be kept outside of mutation observer callback
-      // because the role of this array is to keep and accumulate the elements
-      // to be passed as an argument before debouncing completes its lifecycle.
       const nodes: Set<Element> = new Set();
 
       const debouncedHandleUpdatedNodes = debounce(() => {
