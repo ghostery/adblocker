@@ -86,7 +86,7 @@ export function extractFeaturesFromDOM(roots: Element[]): {
   const hrefs: Set<string> = new Set();
   const ids: Set<string> = new Set();
   // Try to reduce duplicate entries by using Set instead of an array.
-  const processedElements: Set<Element> = new Set();
+  const seenElements: Set<Element> = new Set();
 
   for (const root of roots) {
     for (const element of [
@@ -96,17 +96,16 @@ export function extractFeaturesFromDOM(roots: Element[]): {
       ),
     ]) {
       // Check if this object belongs to processedElements and skip if we already did the job on this object.
-      if (processedElements.has(element)) {
+      if (seenElements.has(element)) {
         continue;
       }
-      processedElements.add(element);
+      seenElements.add(element);
 
       // Any conditions to filter this element out should be placed under this line:
       if (ignoredTags.has(element.nodeName.toLowerCase())) {
         continue;
       }
 
-      // Extract features from this element:
       // Update ids
       const id = element.id;
       if (id) {
