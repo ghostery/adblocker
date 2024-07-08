@@ -183,8 +183,8 @@ export class DOMMonitor {
       this.observer = new window.MutationObserver((mutations: MutationRecord[]) => {
         getElementsFromMutations(mutations).forEach(nodes.add, nodes);
 
-        // Prevent website continously spamming mutations so it fills up the set
-        // before updatedNodesCallback called by setting a threshold.
+        // Set a threshold to prevent websites continuously
+        // causing DOM mutations making the set being filled up infinitely.
         if (nodes.size > 512) {
           cancelHandleUpdatedNodes();
           handleUpdatedNodesCallback();
