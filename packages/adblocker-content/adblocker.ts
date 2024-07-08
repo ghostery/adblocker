@@ -31,14 +31,31 @@ export interface IMessageFromBackground {
   }[];
 }
 
-function debounce<F extends (...args: any[]) => any>(fn: F, waitFor: number) {
+function debounce<F extends (...args: any[]) => any>(
+  fn: F,
+  {
+    waitFor,
+    maxWait,
+  }: {
+    waitFor: number;
+    maxWait: number;
+  },
+) {
   let timeout: NodeJS.Timeout | undefined;
+  let started = -1;
 
   return [
     (...args: Parameters<F>) => {
       clearTimeout(timeout);
 
+      if (started > 0 && Date.now() - started >= maxWait) {
+        fn(...args);
+      }
+
+      started = Date.now();
       timeout = setTimeout(() => {
+        started = -1;
+
         fn(...args);
       }, waitFor);
     },
@@ -177,7 +194,10 @@ export class DOMMonitor {
       };
       const [debouncedHandleUpdatedNodes, cancelHandleUpdatedNodes] = debounce(
         handleUpdatedNodesCallback,
-        25,
+        {
+          waitFor: 25,
+          maxWait: 5 * 1000,
+        },
       );
 
       this.observer = new window.MutationObserver((mutations: MutationRecord[]) => {
