@@ -31,6 +31,23 @@ export interface IMessageFromBackground {
   }[];
 }
 
+function debounce<F extends (...args: any[]) => any>(
+  fn: F,
+  onComplete: Function,
+  waitFor: number,
+) {
+  let timeout: NodeJS.Timeout;
+
+  return (...args: Parameters<F>) => {
+    clearTimeout(timeout);
+
+    timeout = setTimeout(() => {
+      fn(...args);
+      onComplete();
+    }, waitFor);
+  };
+}
+
 function isElement(node: Node): node is Element {
   // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType#node_type_constants
   return node.nodeType === 1; // Node.ELEMENT_NODE;
@@ -70,40 +87,40 @@ export function extractFeaturesFromDOM(roots: Element[]): {
 } {
   // NOTE: This cannot be global as puppeteer needs to be able to serialize this function.
   const ignoredTags = new Set(['br', 'head', 'link', 'meta', 'script', 'style', 's']);
-  const classes: Set<string> = new Set();
-  const hrefs: Set<string> = new Set();
-  const ids: Set<string> = new Set();
+  // Try to reduce duplicate entries by using Set instead of an array.
+  const elements: Set<Element> = new Set();
 
   for (const root of roots) {
-    for (const element of [
-      root,
-      ...root.querySelectorAll(
-        '[id]:not(html):not(body),[class]:not(html):not(body),[href]:not(html):not(body)',
-      ),
-    ]) {
+    elements.add(root);
+
+    for (const element of root.querySelectorAll(
+      '[id]:not(html):not(body),[class]:not(html):not(body),[href]:not(html):not(body)',
+    )) {
       if (ignoredTags.has(element.nodeName.toLowerCase())) {
         continue;
       }
 
-      // Update ids
-      const id = element.id;
-      if (id) {
-        ids.add(id);
-      }
+      elements.add(element);
+    }
+  }
 
-      // Update classes
-      const classList = element.classList;
-      if (classList) {
-        for (const cls of classList) {
-          classes.add(cls);
-        }
-      }
+  const classes: Set<string> = new Set();
+  const hrefs: Set<string> = new Set();
+  const ids: Set<string> = new Set();
 
-      // Update href
-      const href = element.getAttribute('href');
-      if (typeof href === 'string') {
-        hrefs.add(href);
+  for (const element of elements) {
+    if (element.id) {
+      ids.add(element.id);
+    }
+
+    if (element.classList) {
+      for (const classEntry of element.classList) {
+        classes.add(classEntry);
       }
+    }
+
+    if (element.hasAttribute('href')) {
+      hrefs.add(element.getAttribute('href')!);
     }
   }
 
@@ -146,8 +163,22 @@ export class DOMMonitor {
     window: Pick<Window, 'document'> & { MutationObserver?: typeof MutationObserver },
   ): void {
     if (this.observer === null && window.MutationObserver !== undefined) {
+      const elements: Set<Element> = new Set();
+      const callback = debounce(
+        this.handleUpdatedNodes.bind(this),
+        () => {
+          // Clear the elements set after processing them all.
+          elements.clear();
+        },
+        25,
+      );
+
       this.observer = new window.MutationObserver((mutations: MutationRecord[]) => {
-        this.handleUpdatedNodes(getElementsFromMutations(mutations));
+        for (const element of getElementsFromMutations(mutations)) {
+          elements.add(element);
+        }
+
+        callback(Array.from(elements));
       });
 
       this.observer.observe(window.document.documentElement, {
