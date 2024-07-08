@@ -110,12 +110,14 @@ export function extractFeaturesFromDOM(roots: Element[]): {
 
       // Extract features from this element:
       // Update ids
-      if (element.id) {
-        ids.add(element.id);
+      const id = element.id;
+      if (id) {
+        ids.add(id);
       }
 
       // Update classes
-      for (const classEntry of element.classList) {
+      const classList = element.classList;
+      for (const classEntry of classList) {
         classes.add(classEntry);
       }
 
