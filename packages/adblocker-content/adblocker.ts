@@ -31,11 +31,7 @@ export interface IMessageFromBackground {
   }[];
 }
 
-function debounce<F extends (...args: any[]) => any>(
-  fn: F,
-  onComplete: (...args: any[]) => any,
-  waitFor: number,
-) {
+function debounce<F extends (...args: any[]) => any>(fn: F, waitFor: number) {
   let timeout: NodeJS.Timeout;
 
   return (...args: Parameters<F>) => {
@@ -43,7 +39,6 @@ function debounce<F extends (...args: any[]) => any>(
 
     timeout = setTimeout(() => {
       fn(...args);
-      onComplete();
     }, waitFor);
   };
 }
@@ -91,34 +86,41 @@ export function extractFeaturesFromDOM(roots: Element[]): {
   const hrefs: Set<string> = new Set();
   const ids: Set<string> = new Set();
   // Try to reduce duplicate entries by using Set instead of an array.
-  const elements: Set<Element> = new Set();
+  const processedElements: Set<Element> = new Set();
 
   for (const root of roots) {
-    elements.add(root);
+    for (const element of [
+      root,
+      ...root.querySelectorAll(
+        '[id]:not(html):not(body),[class]:not(html):not(body),[href]:not(html):not(body)',
+      ),
+    ]) {
+      // Check if this object belongs to processedElements and skip if we already did the job on this object.
+      if (processedElements.has(element)) {
+        continue;
+      }
 
-    for (const element of root.querySelectorAll(
-      '[id]:not(html):not(body),[class]:not(html):not(body),[href]:not(html):not(body)',
-    )) {
+      // Add this element to the processed list.
+      processedElements.add(element);
+
+      // Any conditions to filter this element out should be placed under this line:
       if (ignoredTags.has(element.nodeName.toLowerCase())) {
         continue;
       }
 
-      elements.add(element);
-    }
-  }
+      // Extract features from this element.
+      if (element.id) {
+        ids.add(element.id);
+      }
 
-  for (const element of elements) {
-    if (element.id) {
-      ids.add(element.id);
-    }
+      for (const classEntry of element.classList) {
+        classes.add(classEntry);
+      }
 
-    for (const classEntry of element.classList) {
-      classes.add(classEntry);
-    }
-
-    const href = element.getAttribute('href');
-    if (typeof href === 'string') {
-      hrefs.add(href);
+      const href = element.getAttribute('href');
+      if (typeof href === 'string') {
+        hrefs.add(href);
+      }
     }
   }
 
@@ -161,22 +163,27 @@ export class DOMMonitor {
     window: Pick<Window, 'document'> & { MutationObserver?: typeof MutationObserver },
   ): void {
     if (this.observer === null && window.MutationObserver !== undefined) {
-      const elements: Set<Element> = new Set();
-      const callback = debounce(
-        this.handleUpdatedNodes.bind(this),
-        () => {
-          // Clear the elements set after processing them all.
-          elements.clear();
-        },
-        25,
-      );
+      // An array of updated nodes in this timespan (or debounce session).
+      // This variable needs to be kept outside of mutation observer callback
+      // because the role of this array is to keep and accumulate the elements
+      // to be passed as an argument before debouncing completes its lifecycle.
+      let updatedNodes: Element[] = [];
+
+      const debouncedHandleUpdatedNodes = debounce(() => {
+        // Keep the reference to the object
+        const updatedNodesInSession = updatedNodes;
+
+        // Initialise and assign new object instead of modifying the existing one.
+        // Modifying the existing one will impact to the function running after this onComplete callback.
+        updatedNodes = [];
+
+        this.handleUpdatedNodes(updatedNodesInSession);
+      }, 25);
 
       this.observer = new window.MutationObserver((mutations: MutationRecord[]) => {
-        for (const element of getElementsFromMutations(mutations)) {
-          elements.add(element);
-        }
+        updatedNodes.push(...getElementsFromMutations(mutations));
 
-        callback(Array.from(elements));
+        debouncedHandleUpdatedNodes();
       });
 
       this.observer.observe(window.document.documentElement, {
