@@ -34,13 +34,18 @@ export interface IMessageFromBackground {
 function debounce<F extends (...args: any[]) => any>(fn: F, waitFor: number) {
   let timeout: NodeJS.Timeout | undefined;
 
-  return (...args: Parameters<F>) => {
-    clearTimeout(timeout);
+  return [
+    (...args: Parameters<F>) => {
+      clearTimeout(timeout);
 
-    timeout = setTimeout(() => {
-      fn(...args);
-    }, waitFor);
-  };
+      timeout = setTimeout(() => {
+        fn(...args);
+      }, waitFor);
+    },
+    () => {
+      clearTimeout(timeout);
+    },
+  ];
 }
 
 function isElement(node: Node): node is Element {
@@ -166,15 +171,26 @@ export class DOMMonitor {
     if (this.observer === null && window.MutationObserver !== undefined) {
       const nodes: Set<Element> = new Set();
 
-      const debouncedHandleUpdatedNodes = debounce(() => {
+      const handleUpdatedNodesCallback = () => {
         this.handleUpdatedNodes(Array.from(nodes));
         nodes.clear();
-      }, 25);
+      };
+      const [debouncedHandleUpdatedNodes, cancelHandleUpdatedNodes] = debounce(
+        handleUpdatedNodesCallback,
+        25,
+      );
 
       this.observer = new window.MutationObserver((mutations: MutationRecord[]) => {
         getElementsFromMutations(mutations).forEach(nodes.add, nodes);
 
-        debouncedHandleUpdatedNodes();
+        // Prevent website continously spamming mutations so it fills up the set
+        // before updatedNodesCallback called by setting a threshold.
+        if (nodes.size > 512) {
+          cancelHandleUpdatedNodes();
+          handleUpdatedNodesCallback();
+        } else {
+          debouncedHandleUpdatedNodes();
+        }
       });
 
       this.observer.observe(window.document.documentElement, {
