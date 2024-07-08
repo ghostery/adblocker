@@ -85,7 +85,6 @@ export function extractFeaturesFromDOM(roots: Element[]): {
   const classes: Set<string> = new Set();
   const hrefs: Set<string> = new Set();
   const ids: Set<string> = new Set();
-  // Try to reduce duplicate entries by using Set instead of an array.
   const seenElements: Set<Element> = new Set();
 
   for (const root of roots) {
@@ -95,7 +94,7 @@ export function extractFeaturesFromDOM(roots: Element[]): {
         '[id]:not(html):not(body),[class]:not(html):not(body),[href]:not(html):not(body)',
       ),
     ]) {
-      // Check if this object belongs to processedElements and skip if we already did the job on this object.
+      // Check if this object belongs to seenElements and skip if we already did the job on this object.
       if (seenElements.has(element)) {
         continue;
       }
@@ -168,13 +167,8 @@ export class DOMMonitor {
       const nodes: Set<Element> = new Set();
 
       const debouncedHandleUpdatedNodes = debounce(() => {
-        const nodesRef = Array.from(nodes);
-
-        // Initialise and assign new object instead of modifying the existing one.
-        // Modifying the existing one will impact to the function running after this onComplete callback.
+        this.handleUpdatedNodes(Array.from(nodes));
         nodes.clear();
-
-        this.handleUpdatedNodes(nodesRef);
       }, 25);
 
       this.observer = new window.MutationObserver((mutations: MutationRecord[]) => {
