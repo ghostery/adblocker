@@ -33,7 +33,7 @@ export interface IMessageFromBackground {
 
 function debounce<F extends (...args: any[]) => any>(
   fn: F,
-  onComplete: Function,
+  onComplete: (...args: any[]) => any,
   waitFor: number,
 ) {
   let timeout: NodeJS.Timeout;
