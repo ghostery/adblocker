@@ -123,23 +123,8 @@ describe('#injectCosmetics', () => {
       lifecycle: 'dom-update',
     });
 
-    // Mutate the DOM = change existing nodes
-    div.classList.add('class3');
-    span.classList.add('class4');
-    a.href = 'https://baz.com/';
-    a.classList.add('class1');
 
-    await tick();
     dom.window.close();
-
-    expect(getCosmeticsFilters.callCount).to.eql(4);
-    sinon.assert.calledWith(getCosmeticsFilters.getCall(3), {
-      type: 'features',
-      classes: ['class3', 'class4'],
-      hrefs: ['https://baz.com/'],
-      ids: [],
-      lifecycle: 'dom-update',
-    });
   });
 
   it('injects scriptlet', async () => {

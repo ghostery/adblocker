@@ -41,15 +41,9 @@ function getElementsFromMutations(mutations: MutationRecord[]): Element[] {
   const elements: Element[] = [];
 
   for (const mutation of mutations) {
-    if (mutation.type === 'attributes') {
-      if (isElement(mutation.target)) {
-        elements.push(mutation.target);
-      }
-    } else if (mutation.type === 'childList') {
-      for (const addedNode of mutation.addedNodes) {
-        if (isElement(addedNode) && addedNode.id !== SCRIPT_ID) {
-          elements.push(addedNode);
-        }
+    for (const addedNode of mutation.addedNodes) {
+      if (isElement(addedNode) && addedNode.id !== SCRIPT_ID) {
+        elements.push(addedNode);
       }
     }
   }
@@ -151,9 +145,6 @@ export class DOMMonitor {
       });
 
       this.observer.observe(window.document.documentElement, {
-        // Monitor some attributes
-        attributes: true,
-        attributeFilter: ['class', 'id', 'href'],
         childList: true,
         subtree: true,
       });
