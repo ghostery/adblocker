@@ -94,7 +94,7 @@ export function extractFeaturesFromDOM(roots: Element[]): {
         '[id]:not(html):not(body),[class]:not(html):not(body),[href]:not(html):not(body)',
       ),
     ]) {
-      // Check if this object belongs to seenElements and skip if we already did the job on this object.
+      // If one of root belongs to another root which is parent node of the one, querySelectorAll can return duplicates.
       if (seenElements.has(element)) {
         continue;
       }
