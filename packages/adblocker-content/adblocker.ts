@@ -108,15 +108,18 @@ export function extractFeaturesFromDOM(roots: Element[]): {
         continue;
       }
 
-      // Extract features from this element.
+      // Extract features from this element:
+      // Update ids
       if (element.id) {
         ids.add(element.id);
       }
 
+      // Update classes
       for (const classEntry of element.classList) {
         classes.add(classEntry);
       }
 
+      // Update href
       const href = element.getAttribute('href');
       if (typeof href === 'string') {
         hrefs.add(href);
