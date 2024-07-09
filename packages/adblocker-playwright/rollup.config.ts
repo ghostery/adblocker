@@ -8,10 +8,12 @@
 
 import resolve from '@rollup/plugin-node-resolve';
 import terser from '@rollup/plugin-terser';
+import typescript from '@rollup/plugin-typescript';
+import copy from 'rollup-plugin-copy';
 
 export default [
   {
-    input: './dist/src/adblocker.js',
+    input: './adblocker.ts',
     output: {
       file: './dist/adblocker.umd.min.js',
       format: 'umd',
@@ -19,6 +21,7 @@ export default [
       sourcemap: true,
     },
     plugins: [
+      typescript(),
       resolve(),
       terser({
         output: {
@@ -28,22 +31,32 @@ export default [
     ],
   },
   {
-    input: './dist/src/adblocker.js',
+    input: './adblocker.ts',
     output: [
       {
-        dir: './dist/esm',
+        dir: './dist',
         format: 'esm',
         preserveModules: true,
         entryFileNames: '[name].js',
         sourcemap: true,
       },
       {
-        dir: './dist/cjs',
+        dir: './dist',
         format: 'cjs',
         preserveModules: true,
         entryFileNames: '[name].cjs',
         sourcemap: true,
       },
+    ],
+    plugins: [
+      // compilerOptions are here a workaround for @rollup/plugin-typescript not being able to emit declarations
+      typescript({ compilerOptions: { declarationDir: 'dist/types' } }),
+      copy({
+        targets: [
+          { src: 'dist/types/adblocker.d.ts', dest: 'dist/types', rename: 'adblocker.d.cts' },
+        ],
+        hook: 'writeBundle',
+      }),
     ],
   },
 ];
