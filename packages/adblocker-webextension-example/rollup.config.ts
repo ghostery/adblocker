@@ -8,10 +8,11 @@
 
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
+import typescript from '@rollup/plugin-typescript';
 
 export default [
   {
-    input: './dist/src/background.js',
+    input: './background.ts',
     output: {
       file: './dist/background.iife.js',
       format: 'iife',
@@ -23,10 +24,11 @@ export default [
         mainFields: ['main'],
       }),
       commonjs(),
+      typescript(),
     ],
   },
   {
-    input: './dist/src/content-script.js',
+    input: './content-script.ts',
     output: {
       file: './dist/content-script.iife.js',
       format: 'iife',
@@ -38,6 +40,7 @@ export default [
         mainFields: ['main'],
       }),
       commonjs(),
+      typescript(),
     ],
   },
 ];
