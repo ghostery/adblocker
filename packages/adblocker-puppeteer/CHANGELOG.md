@@ -1,3 +1,18 @@
+# v1.28.0 (Tue Jul 09 2024)
+
+#### :nut_and_bolt: Dependencies
+
+- Update typescript [#4053](https://github.com/ghostery/adblocker/pull/4053) ([@chrmod](https://github.com/chrmod))
+- Build(deps): Bump puppeteer from 22.11.0 to 22.12.1 [#4047](https://github.com/ghostery/adblocker/pull/4047) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 22.10.0 to 22.11.0 [#4024](https://github.com/ghostery/adblocker/pull/4024) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.27.11 (Mon Jun 10 2024)
 
 #### :nut_and_bolt: Dependencies

@@ -1,3 +1,15 @@
+# v1.28.0 (Tue Jul 09 2024)
+
+#### :nut_and_bolt: Dependencies
+
+- Update typescript [#4053](https://github.com/ghostery/adblocker/pull/4053) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 1
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.27.11 (Mon Jun 10 2024)
 
 #### :bug: Bug Fix

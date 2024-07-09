@@ -1,3 +1,57 @@
+# v1.28.0 (Tue Jul 09 2024)
+
+#### :rocket: New Feature
+
+- `@cliqz/adblocker-content`, `@cliqz/adblocker-webextension-cosmetics`
+  - Optimise DOM mutation handling in `DOMMonitor` [#4071](https://github.com/ghostery/adblocker/pull/4071) ([@seia-soto](https://github.com/seia-soto) [@chrmod](https://github.com/chrmod) [@philipp-classen](https://github.com/philipp-classen))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump typescript-eslint from 8.0.0-alpha.39 to 8.0.0-alpha.41 [#4073](https://github.com/ghostery/adblocker/pull/4073) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 4.18.0 to 4.18.1 [#4074](https://github.com/ghostery/adblocker/pull/4074) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rimraf from 5.0.7 to 5.0.8 [#4066](https://github.com/ghostery/adblocker/pull/4066) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump lerna from 8.1.5 to 8.1.6 [#4067](https://github.com/ghostery/adblocker/pull/4067) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.30 to 6.1.31 [#4068](https://github.com/ghostery/adblocker/pull/4068) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 20.14.9 to 20.14.10 [#4069](https://github.com/ghostery/adblocker/pull/4069) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump mocha from 10.5.2 to 10.6.0 [#4063](https://github.com/ghostery/adblocker/pull/4063) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump playwright from 1.45.0 to 1.45.1 [#4062](https://github.com/ghostery/adblocker/pull/4062) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript-eslint from 8.0.0-alpha.34 to 8.0.0-alpha.39 [#4059](https://github.com/ghostery/adblocker/pull/4059) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump eslint from 9.5.0 to 9.6.0 [#4056](https://github.com/ghostery/adblocker/pull/4056) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @eslint/js from 9.5.0 to 9.6.0 [#4057](https://github.com/ghostery/adblocker/pull/4057) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/firefox-webext-browser from 120.0.3 to 120.0.4 [#4028](https://github.com/ghostery/adblocker/pull/4028) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.29 to 6.1.30 [#4051](https://github.com/ghostery/adblocker/pull/4051) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump mocha from 10.4.0 to 10.5.2 [#4052](https://github.com/ghostery/adblocker/pull/4052) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.27 to 6.1.29 [#4040](https://github.com/ghostery/adblocker/pull/4040) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump lerna from 8.1.3 to 8.1.5 [#4042](https://github.com/ghostery/adblocker/pull/4042) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump ws from 8.17.0 to 8.17.1 [#4049](https://github.com/ghostery/adblocker/pull/4049) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/mocha from 10.0.6 to 10.0.7 [#4041](https://github.com/ghostery/adblocker/pull/4041) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump playwright from 1.44.1 to 1.45.0 [#4043](https://github.com/ghostery/adblocker/pull/4043) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 20.14.2 to 20.14.9 [#4045](https://github.com/ghostery/adblocker/pull/4045) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 31.0.1 to 31.1.0 [#4046](https://github.com/ghostery/adblocker/pull/4046) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript-eslint from 8.0.0-alpha.30 to 8.0.0-alpha.34 [#4048](https://github.com/ghostery/adblocker/pull/4048) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @eslint/js from 9.4.0 to 9.5.0 [#4025](https://github.com/ghostery/adblocker/pull/4025) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump eslint from 9.4.0 to 9.5.0 [#4026](https://github.com/ghostery/adblocker/pull/4026) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.25 to 6.1.27 [#4027](https://github.com/ghostery/adblocker/pull/4027) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump prettier from 3.3.1 to 3.3.2 [#4021](https://github.com/ghostery/adblocker/pull/4021) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 31.0.0 to 31.0.1 [#4023](https://github.com/ghostery/adblocker/pull/4023) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript-eslint from 8.0.0-alpha.29 to 8.0.0-alpha.30 [#4020](https://github.com/ghostery/adblocker/pull/4020) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-content`, `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-electron`, `@cliqz/adblocker-extended-selectors`, `@cliqz/adblocker-playwright`, `@cliqz/adblocker-puppeteer`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - Update typescript [#4053](https://github.com/ghostery/adblocker/pull/4053) ([@chrmod](https://github.com/chrmod))
+- `@cliqz/adblocker-puppeteer`
+  - Build(deps): Bump puppeteer from 22.11.0 to 22.12.1 [#4047](https://github.com/ghostery/adblocker/pull/4047) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - Build(deps): Bump puppeteer from 22.10.0 to 22.11.0 [#4024](https://github.com/ghostery/adblocker/pull/4024) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-electron`
+  - Build(deps): Bump electron from 30.1.0 to 31.0.0 [#4019](https://github.com/ghostery/adblocker/pull/4019) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+- Philipp Claßen ([@philipp-classen](https://github.com/philipp-classen))
+
+---
+
 # v1.27.11 (Mon Jun 10 2024)
 
 #### :bug: Bug Fix

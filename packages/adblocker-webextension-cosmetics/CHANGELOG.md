@@ -1,3 +1,21 @@
+# v1.28.0 (Tue Jul 09 2024)
+
+#### :rocket: New Feature
+
+- Optimise DOM mutation handling in `DOMMonitor` [#4071](https://github.com/ghostery/adblocker/pull/4071) ([@seia-soto](https://github.com/seia-soto) [@chrmod](https://github.com/chrmod) [@philipp-classen](https://github.com/philipp-classen))
+
+#### :nut_and_bolt: Dependencies
+
+- Update typescript [#4053](https://github.com/ghostery/adblocker/pull/4053) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 3
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+- Philipp Claßen ([@philipp-classen](https://github.com/philipp-classen))
+
+---
+
 # v1.27.11 (Mon Jun 10 2024)
 
 #### :nut_and_bolt: Dependencies

@@ -1,3 +1,17 @@
+# v1.28.0 (Tue Jul 09 2024)
+
+#### :nut_and_bolt: Dependencies
+
+- Update typescript [#4053](https://github.com/ghostery/adblocker/pull/4053) ([@chrmod](https://github.com/chrmod))
+- Build(deps): Bump electron from 30.1.0 to 31.0.0 [#4019](https://github.com/ghostery/adblocker/pull/4019) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.27.11 (Mon Jun 10 2024)
 
 #### :nut_and_bolt: Dependencies
