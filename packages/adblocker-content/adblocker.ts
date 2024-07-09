@@ -41,15 +41,15 @@ function debounce(
     maxWait: number;
   },
 ) {
-  let delayedTimer: NodeJS.Timeout | -1 = -1;
-  let maxWaitTimer: NodeJS.Timeout | -1 = -1;
+  let delayedTimer: NodeJS.Timeout | undefined;
+  let maxWaitTimer: NodeJS.Timeout | undefined;
 
   const clear = () => {
     clearTimeout(delayedTimer);
     clearTimeout(maxWaitTimer);
 
-    delayedTimer = -1;
-    maxWaitTimer = -1;
+    delayedTimer = undefined;
+    maxWaitTimer = undefined;
   };
 
   const run = () => {
@@ -59,7 +59,7 @@ function debounce(
 
   return [
     () => {
-      if (maxWait > 0 && maxWaitTimer === -1) {
+      if (maxWait > 0 && maxWaitTimer === undefined) {
         maxWaitTimer = setTimeout(run, maxWait);
       }
 
