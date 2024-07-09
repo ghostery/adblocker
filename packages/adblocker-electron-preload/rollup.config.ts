@@ -8,19 +8,21 @@
 
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import typescript from '@rollup/plugin-typescript';
+import copy from 'rollup-plugin-copy';
 
 export default {
-  input: './dist/src/preload.js',
+  input: './preload.ts',
   external: ['electron'],
   output: [
     {
-      file: './dist/cjs/preload.cjs',
-      format: 'commonjs',
+      file: './dist/preload.js',
+      format: 'esm',
       sourcemap: true,
     },
     {
-      file: './dist/esm/preload.cjs',
-      format: 'esm',
+      file: './dist/preload.cjs',
+      format: 'cjs',
       sourcemap: true,
     },
   ],
@@ -29,5 +31,13 @@ export default {
       mainFields: ['main'],
     }),
     commonjs(),
+    // compilerOptions are here a workaround for @rollup/plugin-typescript not being able to emit declarations
+    typescript({ compilerOptions: { declarationDir: 'dist/types' } }),
+    copy({
+      targets: [
+        { src: 'dist/types/preload.d.ts', dest: 'dist/types', rename: 'preload.d.cts' },
+      ],
+      hook: 'writeBundle',
+    }),
   ],
 };
