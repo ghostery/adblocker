@@ -9,12 +9,17 @@
   "license": "MPL-2.0",
   "type": "module",
   "exports": {
-    "require": "./dist/cjs/adblocker.cjs",
-    "import": "./dist/esm/adblocker.js",
-    "types": "./dist/types/adblocker.d.ts"
+    "require": {
+      "default": "./dist/adblocker.cjs",
+      "types": "./dist/types/adblocker.d.cts"
+    },
+    "import": {
+      "default": "./dist/adblocker.js",
+      "types": "./dist/types/adblocker.d.ts"
+    }
   },
-  "main": "dist/cjs/adblocker.cjs",
-  "module": "dist/esm/adblocker.js",
+  "main": "dist/adblocker.cjs",
+  "module": "dist/adblocker.js",
   "types": "dist/types/adblocker.d.ts",
   "files": [
     "LICENSE",
@@ -31,7 +36,7 @@
   "scripts": {
     "clean": "rimraf dist coverage",
     "lint": "eslint adblocker.ts",
-    "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript",
+    "build": "rollup --config ./rollup.config.ts --configPlugin typescript",
     "test": "nyc mocha --config ../../.mocharc.json"
   },
   "bugs": {
@@ -73,7 +78,7 @@
   ],
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-typescript": "^11.1.3",
+    "@rollup/plugin-typescript": "^11.1.6",
     "@types/chai": "^4.3.6",
     "@types/chrome": "^0.0.268",
     "@types/jsdom": "^21.1.3",
@@ -87,6 +92,7 @@
     "nyc": "^17.0.0",
     "rimraf": "^5.0.1",
     "rollup": "^4.0.2",
+    "rollup-plugin-copy": "^3.5.0",
     "sinon": "^18.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.5.2"
