@@ -31,16 +31,43 @@ export interface IMessageFromBackground {
   }[];
 }
 
-function debounce<F extends (...args: any[]) => any>(fn: F, waitFor: number) {
-  let timeout: NodeJS.Timeout | undefined;
+function debounce(
+  fn: () => void,
+  {
+    waitFor,
+    maxWait,
+  }: {
+    waitFor: number;
+    maxWait: number;
+  },
+) {
+  let delayedTimer: NodeJS.Timeout | -1 = -1;
+  let maxWaitTimer: NodeJS.Timeout | -1 = -1;
 
-  return (...args: Parameters<F>) => {
-    clearTimeout(timeout);
+  const clear = () => {
+    clearTimeout(delayedTimer);
+    clearTimeout(maxWaitTimer);
 
-    timeout = setTimeout(() => {
-      fn(...args);
-    }, waitFor);
+    delayedTimer = -1;
+    maxWaitTimer = -1;
   };
+
+  const run = () => {
+    clear();
+    fn();
+  };
+
+  return [
+    () => {
+      if (maxWait > 0 && maxWaitTimer === -1) {
+        maxWaitTimer = setTimeout(run, maxWait);
+      }
+
+      clearTimeout(delayedTimer);
+      delayedTimer = setTimeout(run, waitFor);
+    },
+    clear,
+  ];
 }
 
 function isElement(node: Node): node is Element {
@@ -166,15 +193,29 @@ export class DOMMonitor {
     if (this.observer === null && window.MutationObserver !== undefined) {
       const nodes: Set<Element> = new Set();
 
-      const debouncedHandleUpdatedNodes = debounce(() => {
+      const handleUpdatedNodesCallback = () => {
         this.handleUpdatedNodes(Array.from(nodes));
         nodes.clear();
-      }, 25);
+      };
+      const [debouncedHandleUpdatedNodes, cancelHandleUpdatedNodes] = debounce(
+        handleUpdatedNodesCallback,
+        {
+          waitFor: 25,
+          maxWait: 1000,
+        },
+      );
 
       this.observer = new window.MutationObserver((mutations: MutationRecord[]) => {
         getElementsFromMutations(mutations).forEach(nodes.add, nodes);
 
-        debouncedHandleUpdatedNodes();
+        // Set a threshold to prevent websites continuously
+        // causing DOM mutations making the set being filled up infinitely.
+        if (nodes.size > 512) {
+          cancelHandleUpdatedNodes();
+          handleUpdatedNodesCallback();
+        } else {
+          debouncedHandleUpdatedNodes();
+        }
       });
 
       this.observer.observe(window.document.documentElement, {
