@@ -50,10 +50,10 @@ export default [
     ],
     plugins: [
       // compilerOptions are here a workaround for @rollup/plugin-typescript not being able to emit declarations
-      typescript({ compilerOptions: { declarationDir: 'dist/types' } }),
+      typescript({ compilerOptions: { declarationDir: './dist/types' } }),
       copy({
         targets: [
-          { src: 'dist/types/adblocker.d.ts', dest: 'dist/types', rename: 'adblocker.d.cts' },
+          { src: './dist/types/adblocker.d.ts', dest: './dist/types', rename: 'adblocker.d.cts' },
         ],
         hook: 'writeBundle',
       }),

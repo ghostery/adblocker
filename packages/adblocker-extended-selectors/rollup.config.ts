@@ -53,7 +53,7 @@ export default [
       typescript({ compilerOptions: { declarationDir: './dist/types' } }),
       copy({
         targets: [
-          { src: 'dist/types/adblocker.d.ts', dest: 'dist/types', rename: 'adblocker.d.cts' },
+          { src: './dist/types/adblocker.d.ts', dest: './dist/types', rename: 'adblocker.d.cts' },
         ],
         hook: 'writeBundle',
       }),

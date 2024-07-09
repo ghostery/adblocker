@@ -32,10 +32,10 @@ export default {
     }),
     commonjs(),
     // compilerOptions are here a workaround for @rollup/plugin-typescript not being able to emit declarations
-    typescript({ compilerOptions: { declarationDir: 'dist/types' } }),
+    typescript({ compilerOptions: { declarationDir: './dist/types' } }),
     copy({
       targets: [
-        { src: 'dist/types/preload.d.ts', dest: 'dist/types', rename: 'preload.d.cts' },
+        { src: './dist/types/preload.d.ts', dest: './dist/types', rename: 'preload.d.cts' },
       ],
       hook: 'writeBundle',
     }),
