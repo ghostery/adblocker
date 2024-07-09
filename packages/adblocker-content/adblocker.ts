@@ -31,6 +31,45 @@ export interface IMessageFromBackground {
   }[];
 }
 
+function debounce(
+  fn: () => void,
+  {
+    waitFor,
+    maxWait,
+  }: {
+    waitFor: number;
+    maxWait: number;
+  },
+) {
+  let delayedTimer: NodeJS.Timeout | undefined;
+  let maxWaitTimer: NodeJS.Timeout | undefined;
+
+  const clear = () => {
+    clearTimeout(delayedTimer);
+    clearTimeout(maxWaitTimer);
+
+    delayedTimer = undefined;
+    maxWaitTimer = undefined;
+  };
+
+  const run = () => {
+    clear();
+    fn();
+  };
+
+  return [
+    () => {
+      if (maxWait > 0 && maxWaitTimer === undefined) {
+        maxWaitTimer = setTimeout(run, maxWait);
+      }
+
+      clearTimeout(delayedTimer);
+      delayedTimer = setTimeout(run, waitFor);
+    },
+    clear,
+  ];
+}
+
 function isElement(node: Node): node is Element {
   // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType#node_type_constants
   return node.nodeType === 1; // Node.ELEMENT_NODE;
@@ -73,6 +112,7 @@ export function extractFeaturesFromDOM(roots: Element[]): {
   const classes: Set<string> = new Set();
   const hrefs: Set<string> = new Set();
   const ids: Set<string> = new Set();
+  const seenElements: Set<Element> = new Set();
 
   for (const root of roots) {
     for (const element of [
@@ -81,6 +121,13 @@ export function extractFeaturesFromDOM(roots: Element[]): {
         '[id]:not(html):not(body),[class]:not(html):not(body),[href]:not(html):not(body)',
       ),
     ]) {
+      // If one of root belongs to another root which is parent node of the one, querySelectorAll can return duplicates.
+      if (seenElements.has(element)) {
+        continue;
+      }
+      seenElements.add(element);
+
+      // Any conditions to filter this element out should be placed under this line:
       if (ignoredTags.has(element.nodeName.toLowerCase())) {
         continue;
       }
@@ -93,10 +140,8 @@ export function extractFeaturesFromDOM(roots: Element[]): {
 
       // Update classes
       const classList = element.classList;
-      if (classList) {
-        for (const cls of classList) {
-          classes.add(cls);
-        }
+      for (const classEntry of classList) {
+        classes.add(classEntry);
       }
 
       // Update href
@@ -146,8 +191,31 @@ export class DOMMonitor {
     window: Pick<Window, 'document'> & { MutationObserver?: typeof MutationObserver },
   ): void {
     if (this.observer === null && window.MutationObserver !== undefined) {
+      const nodes: Set<Element> = new Set();
+
+      const handleUpdatedNodesCallback = () => {
+        this.handleUpdatedNodes(Array.from(nodes));
+        nodes.clear();
+      };
+      const [debouncedHandleUpdatedNodes, cancelHandleUpdatedNodes] = debounce(
+        handleUpdatedNodesCallback,
+        {
+          waitFor: 25,
+          maxWait: 1000,
+        },
+      );
+
       this.observer = new window.MutationObserver((mutations: MutationRecord[]) => {
-        this.handleUpdatedNodes(getElementsFromMutations(mutations));
+        getElementsFromMutations(mutations).forEach(nodes.add, nodes);
+
+        // Set a threshold to prevent websites continuously
+        // causing DOM mutations making the set being filled up infinitely.
+        if (nodes.size > 512) {
+          cancelHandleUpdatedNodes();
+          handleUpdatedNodesCallback();
+        } else {
+          debouncedHandleUpdatedNodes();
+        }
       });
 
       this.observer.observe(window.document.documentElement, {

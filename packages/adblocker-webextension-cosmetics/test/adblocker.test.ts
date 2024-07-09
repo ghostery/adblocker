@@ -112,7 +112,7 @@ describe('#injectCosmetics', () => {
     div.appendChild(a);
 
     document.body.appendChild(div);
-    await tick();
+    await tick(30);
 
     sinon.assert.calledThrice(getCosmeticsFilters);
     sinon.assert.calledWith(getCosmeticsFilters.thirdCall, {
@@ -129,7 +129,7 @@ describe('#injectCosmetics', () => {
     a.href = 'https://baz.com/';
     a.classList.add('class1');
 
-    await tick();
+    await tick(30);
     dom.window.close();
 
     expect(getCosmeticsFilters.callCount).to.eql(4);
