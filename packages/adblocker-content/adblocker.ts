@@ -201,7 +201,7 @@ export class DOMMonitor {
         handleUpdatedNodesCallback,
         {
           waitFor: 25,
-          maxWait: 5 * 1000,
+          maxWait: 1000,
         },
       );
 
