@@ -31,8 +31,8 @@ export interface IMessageFromBackground {
   }[];
 }
 
-function debounce<F extends (...args: any[]) => any>(
-  fn: F,
+function debounce(
+  fn: () => void,
   {
     waitFor,
     maxWait,
@@ -41,29 +41,32 @@ function debounce<F extends (...args: any[]) => any>(
     maxWait: number;
   },
 ) {
-  let timeout: NodeJS.Timeout | undefined;
-  let started = -1;
+  let delayedTimer: NodeJS.Timeout | -1 = -1;
+  let maxWaitTimer: NodeJS.Timeout | -1 = -1;
+
+  const clear = () => {
+    clearTimeout(delayedTimer);
+    clearTimeout(maxWaitTimer);
+
+    delayedTimer = -1;
+    maxWaitTimer = -1;
+  };
+
+  const run = () => {
+    clear();
+    fn();
+  };
 
   return [
-    (...args: Parameters<F>) => {
-      clearTimeout(timeout);
-
-      if (started > 0 && Date.now() - started >= maxWait) {
-        fn(...args);
-        started = Date.now(); // or better reuse the timestamp that has been just computed
-        return;
+    () => {
+      if (maxWait > 0 && maxWaitTimer === -1) {
+        maxWaitTimer = setTimeout(run, maxWait);
       }
 
-      started = Date.now();
-      timeout = setTimeout(() => {
-        started = -1;
-
-        fn(...args);
-      }, waitFor);
+      clearTimeout(delayedTimer);
+      delayedTimer = setTimeout(run, waitFor);
     },
-    () => {
-      clearTimeout(timeout);
-    },
+    clear,
   ];
 }
 
