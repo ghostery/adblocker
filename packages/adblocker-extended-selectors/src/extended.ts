@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { tokenize, RECURSIVE_PSEUDO_CLASSES } from './parse';
+import { tokenize, RECURSIVE_PSEUDO_CLASSES } from './parse.js';
 
 export const EXTENDED_PSEUDO_CLASSES = new Set([
   // '-abp-contains',

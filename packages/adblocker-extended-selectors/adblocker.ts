@@ -6,13 +6,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-export { parse, tokenize } from './src/parse';
-export { querySelectorAll, matches } from './src/eval';
-export * from './src/types';
+export { parse, tokenize } from './src/parse.js';
+export { querySelectorAll, matches } from './src/eval.js';
+export * from './src/types.js';
 export {
   EXTENDED_PSEUDO_CLASSES,
   PSEUDO_CLASSES,
   PSEUDO_ELEMENTS,
   SelectorType,
   classifySelector,
-} from './src/extended';
+} from './src/extended.js';

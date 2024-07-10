@@ -9,13 +9,13 @@
   "license": "MPL-2.0",
   "type": "module",
   "exports": {
-    "require": "./dist/cjs/adblocker.cjs",
-    "import": "./dist/esm/adblocker.js",
-    "types": "./dist/types/adblocker.d.ts"
+    ".": {
+      "require": "./dist/cjs/adblocker.cjs",
+      "import": "./dist/esm/adblocker.js"
+    }
   },
-  "main": "dist/cjs/adblocker.cjs",
-  "module": "dist/esm/adblocker.js",
-  "types": "dist/types/adblocker.d.ts",
+  "main": "dist/cjs/adblocker.js",
+  "types": "dist/cjs/adblocker.d.ts",
   "files": [
     "LICENSE",
     "dist"
@@ -31,7 +31,10 @@
   "scripts": {
     "clean": "rimraf dist coverage",
     "lint": "eslint src adblocker.ts",
-    "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript",
+    "build:esm": "tsc --build ./tsconfig.json && echo \"{ \\\"type\\\": \\\"module\\\" }\" > dist/esm/package.json",
+    "build:cjs": "tsc --build ./tsconfig.cjs.json && echo \"{ \\\"type\\\": \\\"commonjs\\\" }\" > dist/cjs/package.json",
+    "build:bundle": "rollup --config ./rollup.config.ts --configPlugin typescript",
+    "build": "npm run build:esm && npm run build:cjs && npm run build:bundle",
     "test": "nyc mocha --config ../../.mocharc.json"
   },
   "bugs": {

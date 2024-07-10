@@ -11,7 +11,7 @@ import terser from '@rollup/plugin-terser';
 
 export default [
   {
-    input: './dist/src/adblocker.js',
+    input: './dist/esm/adblocker.js',
     output: {
       file: './dist/adblocker.umd.min.js',
       format: 'umd',
@@ -19,31 +19,11 @@ export default [
       sourcemap: true,
     },
     plugins: [
-      resolve(),
       terser({
         output: {
           comments: false,
         },
       }),
     ],
-  },
-  {
-    input: './dist/src/adblocker.js',
-    output: [
-      {
-        dir: './dist/esm',
-        format: 'esm',
-        preserveModules: true,
-        entryFileNames: '[name].js',
-        sourcemap: true,
-      },
-      {
-        dir: './dist/cjs',
-        format: 'cjs',
-        preserveModules: true,
-        entryFileNames: '[name].cjs',
-        sourcemap: true,
-      },
-    ],
-  },
+  }
 ];
