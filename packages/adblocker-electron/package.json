@@ -8,14 +8,28 @@
   "homepage": "https://github.com/ghostery/adblocker#readme",
   "license": "MPL-2.0",
   "type": "module",
-  "exports": {
-    "require": "./dist/cjs/adblocker.cjs",
-    "import": "./dist/esm/adblocker.js",
-    "types": "./dist/types/adblocker.d.ts"
+  "tshy": {
+    "exports": {
+      "./package.json": "./package.json",
+      ".": "./src/index.ts"
+    }
   },
-  "main": "dist/cjs/adblocker.cjs",
-  "module": "dist/esm/adblocker.js",
-  "types": "dist/types/adblocker.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/index.d.ts",
+        "default": "./dist/commonjs/index.js"
+      }
+    }
+  },
+  "main": "./dist/commonjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/commonjs/index.d.ts",
   "files": [
     "LICENSE",
     "dist"
