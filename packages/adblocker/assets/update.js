@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const adb = require('@cliqz/adblocker');
+import fs from 'fs';
+import path from 'path';
+import adb from '@cliqz/adblocker';
 
 const FILTER_LISTS = [
   ['ublock-unbreak', 'ublock-origin', 'unbreak.txt'],
