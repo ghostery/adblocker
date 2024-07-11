@@ -14,7 +14,7 @@ import {
   IMessageFromBackground,
   DOMMonitor,
   injectScript,
-} from '../adblocker-content/dist/esm/index.d.js';
+} from '@cliqz/adblocker-content';
 
 type ExtendedSelector = IMessageFromBackground['extended'][number];
 

@@ -17,7 +17,6 @@ export default {
     sourcemap: true,
   },
   plugins: [
-    resolve(),
     terser({
       output: {
         comments: false,

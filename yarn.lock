@@ -424,6 +424,7 @@ __metadata:
     "@cliqz/adblocker": "npm:^1.28.0"
     "@cliqz/adblocker-electron-preload": "npm:^1.28.0"
     "@types/chai": "npm:^4.3.6"
+    "@types/electron": "npm:^1.6.10"
     "@types/mocha": "npm:^10.0.1"
     "@types/node": "npm:^20.12.12"
     chai: "npm:^5.1.0"
@@ -535,6 +536,7 @@ __metadata:
     rollup: "npm:^4.17.2"
     tldts-experimental: "npm:^6.0.14"
     ts-node: "npm:^10.9.1"
+    tshy: "npm:^3.0.2"
     typescript: "npm:^5.5.2"
   peerDependencies:
     puppeteer: ">5"
@@ -562,6 +564,7 @@ __metadata:
     rollup: "npm:^4.0.2"
     sinon: "npm:^18.0.0"
     ts-node: "npm:^10.9.1"
+    tshy: "npm:^3.0.2"
     typescript: "npm:^5.5.2"
   languageName: unknown
   linkType: soft
@@ -573,6 +576,8 @@ __metadata:
     "@cliqz/adblocker-webextension": "npm:^1.28.0"
     "@cliqz/adblocker-webextension-cosmetics": "npm:^1.28.0"
     "@rollup/plugin-commonjs": "npm:^26.0.1"
+    "@rollup/plugin-node-resolve": "npm:^15.2.3"
+    "@rollup/plugin-typescript": "npm:^11.1.6"
     "@types/chrome": "npm:^0.0.268"
     eslint: "npm:^9.3.0"
     rimraf: "npm:^5.0.1"
@@ -599,6 +604,7 @@ __metadata:
     rollup: "npm:^4.0.2"
     tldts-experimental: "npm:^6.0.14"
     ts-node: "npm:^10.9.1"
+    tshy: "npm:^3.0.2"
     typescript: "npm:^5.5.2"
     webextension-polyfill-ts: "npm:^0.26.0"
   languageName: unknown
@@ -1703,6 +1709,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rollup/plugin-node-resolve@npm:^15.2.3":
+  version: 15.2.3
+  resolution: "@rollup/plugin-node-resolve@npm:15.2.3"
+  dependencies:
+    "@rollup/pluginutils": "npm:^5.0.1"
+    "@types/resolve": "npm:1.20.2"
+    deepmerge: "npm:^4.2.2"
+    is-builtin-module: "npm:^3.2.1"
+    is-module: "npm:^1.0.0"
+    resolve: "npm:^1.22.1"
+  peerDependencies:
+    rollup: ^2.78.0||^3.0.0||^4.0.0
+  peerDependenciesMeta:
+    rollup:
+      optional: true
+  checksum: 10/d36a6792fbe9d8673d3a7c7dc88920be669ac54fba02ac0093d3c00fc9463fce2e87da1906a2651016742709c3d202b367fb49a62acd0d98f18409343f27b8b4
+  languageName: node
+  linkType: hard
+
 "@rollup/plugin-terser@npm:^0.4.4":
   version: 0.4.4
   resolution: "@rollup/plugin-terser@npm:0.4.4"
@@ -1719,7 +1744,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/pluginutils@npm:^5.0.1":
+"@rollup/plugin-typescript@npm:^11.1.6":
+  version: 11.1.6
+  resolution: "@rollup/plugin-typescript@npm:11.1.6"
+  dependencies:
+    "@rollup/pluginutils": "npm:^5.1.0"
+    resolve: "npm:^1.22.1"
+  peerDependencies:
+    rollup: ^2.14.0||^3.0.0||^4.0.0
+    tslib: "*"
+    typescript: ">=3.7.0"
+  peerDependenciesMeta:
+    rollup:
+      optional: true
+    tslib:
+      optional: true
+  checksum: 10/4ae4d6cfc929393171288df2f18b5eb837fa53d8689118d9661b3064567341f6f6cf8389af55f1d5f015e3682abf30a64ab609fdf75ecb5a84224505e407eb69
+  languageName: node
+  linkType: hard
+
+"@rollup/pluginutils@npm:^5.0.1, @rollup/pluginutils@npm:^5.1.0":
   version: 5.1.0
   resolution: "@rollup/pluginutils@npm:5.1.0"
   dependencies:
@@ -2075,6 +2119,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/electron@npm:^1.6.10":
+  version: 1.6.10
+  resolution: "@types/electron@npm:1.6.10"
+  dependencies:
+    electron: "npm:*"
+  checksum: 10/1194d023d425fad826d719b761c67022ef97a4d3bea40ce6a3ac36aa40f913e3714775ef816744ec61214ab49b0ca377a939b18a8c29bfd76285011c21e2de76
+  languageName: node
+  linkType: hard
+
 "@types/estree@npm:*, @types/estree@npm:1.0.5, @types/estree@npm:^1.0.0":
   version: 1.0.5
   resolution: "@types/estree@npm:1.0.5"
@@ -2180,6 +2233,13 @@ __metadata:
   version: 4.0.2
   resolution: "@types/parse-json@npm:4.0.2"
   checksum: 10/5bf62eec37c332ad10059252fc0dab7e7da730764869c980b0714777ad3d065e490627be9f40fc52f238ffa3ac4199b19de4127196910576c2fe34dd47c7a470
+  languageName: node
+  linkType: hard
+
+"@types/resolve@npm:1.20.2":
+  version: 1.20.2
+  resolution: "@types/resolve@npm:1.20.2"
+  checksum: 10/1bff0d3875e7e1557b6c030c465beca9bf3b1173ebc6937cac547654b0af3bb3ff0f16470e9c4d7c5dc308ad9ac8627c38dbff24ef698b66673ff5bd4ead7f7e
   languageName: node
   linkType: hard
 
@@ -2950,6 +3010,13 @@ __metadata:
     base64-js: "npm:^1.3.1"
     ieee754: "npm:^1.1.13"
   checksum: 10/997434d3c6e3b39e0be479a80288875f71cd1c07d75a3855e6f08ef848a3c966023f79534e22e415ff3a5112708ce06127277ab20e527146d55c84566405c7c6
+  languageName: node
+  linkType: hard
+
+"builtin-modules@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "builtin-modules@npm:3.3.0"
+  checksum: 10/62e063ab40c0c1efccbfa9ffa31873e4f9d57408cb396a2649981a0ecbce56aabc93c28feaccbc5658c95aab2703ad1d11980e62ec2e5e72637404e1eb60f39e
   languageName: node
   linkType: hard
 
@@ -3815,7 +3882,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deepmerge@npm:^4.0.0":
+"deepmerge@npm:^4.0.0, deepmerge@npm:^4.2.2":
   version: 4.3.1
   resolution: "deepmerge@npm:4.3.1"
   checksum: 10/058d9e1b0ff1a154468bf3837aea436abcfea1ba1d165ddaaf48ca93765fdd01a30d33c36173da8fbbed951dd0a267602bc782fe288b0fc4b7e1e7091afc4529
@@ -4020,6 +4087,19 @@ __metadata:
   version: 1.4.792
   resolution: "electron-to-chromium@npm:1.4.792"
   checksum: 10/0095256bd3b8665243863575487b706811fb3bbfb54afc670296022b57a1841545748792a5e4cdec82053c629fb465f84c67678e04f62a845a4102750597b1ee
+  languageName: node
+  linkType: hard
+
+"electron@npm:*":
+  version: 31.2.0
+  resolution: "electron@npm:31.2.0"
+  dependencies:
+    "@electron/get": "npm:^2.0.0"
+    "@types/node": "npm:^20.9.0"
+    extract-zip: "npm:^2.0.1"
+  bin:
+    electron: cli.js
+  checksum: 10/7d46c98e7338abe6eb26a1a0a6b65c0302cd4ed1720cfef7c60c6ba61979bf31e0cedbdd499059d2d15bc3720bfa80c49c229ea8b78780aa7a4ccfed1122f220
   languageName: node
   linkType: hard
 
@@ -5589,6 +5669,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"is-builtin-module@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "is-builtin-module@npm:3.2.1"
+  dependencies:
+    builtin-modules: "npm:^3.3.0"
+  checksum: 10/e8f0ffc19a98240bda9c7ada84d846486365af88d14616e737d280d378695c8c448a621dcafc8332dbf0fcd0a17b0763b845400709963fa9151ddffece90ae88
+  languageName: node
+  linkType: hard
+
 "is-ci@npm:3.0.1":
   version: 3.0.1
   resolution: "is-ci@npm:3.0.1"
@@ -5652,6 +5741,13 @@ __metadata:
   version: 1.0.1
   resolution: "is-lambda@npm:1.0.1"
   checksum: 10/93a32f01940220532e5948538699ad610d5924ac86093fcee83022252b363eb0cc99ba53ab084a04e4fb62bf7b5731f55496257a4c38adf87af9c4d352c71c35
+  languageName: node
+  linkType: hard
+
+"is-module@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "is-module@npm:1.0.0"
+  checksum: 10/8cd5390730c7976fb4e8546dd0b38865ee6f7bacfa08dfbb2cc07219606755f0b01709d9361e01f13009bbbd8099fa2927a8ed665118a6105d66e40f1b838c3f
   languageName: node
   linkType: hard
 
@@ -8525,7 +8621,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:^1.10.0":
+"resolve@npm:^1.10.0, resolve@npm:^1.22.1":
   version: 1.22.8
   resolution: "resolve@npm:1.22.8"
   dependencies:
@@ -8547,7 +8643,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@npm%3A^1.10.0#optional!builtin<compat/resolve>":
+"resolve@patch:resolve@npm%3A^1.10.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.1#optional!builtin<compat/resolve>":
   version: 1.22.8
   resolution: "resolve@patch:resolve@npm%3A1.22.8#optional!builtin<compat/resolve>::version=1.22.8&hash=c3c19d"
   dependencies:

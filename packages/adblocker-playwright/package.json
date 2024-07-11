@@ -38,8 +38,8 @@
   },
   "scripts": {
     "clean": "rimraf dist coverage .tshy .tshy-build .nyc_output .rollup.cache",
-    "lint": "eslint adblocker.ts",
-    "build": "tshy && rollup --config ./rollup.config.js --configPlugin typescript",
+    "lint": "eslint src test",
+    "build": "tshy && rollup --config ./rollup.config.js",
     "test": "nyc mocha"
   },
   "bugs": {

@@ -6,44 +6,21 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import resolve from '@rollup/plugin-node-resolve';
 import terser from '@rollup/plugin-terser';
 
-export default [
-  {
-    input: './dist/src/adblocker.js',
-    output: {
-      file: './dist/adblocker.umd.min.js',
-      format: 'umd',
-      name: 'adblocker',
-      sourcemap: true,
-    },
-    plugins: [
-      resolve(),
-      terser({
-        output: {
-          comments: false,
-        },
-      }),
-    ],
+export default {
+  input: './dist/esm/index.js',
+  output: {
+    file: './dist/adblocker.umd.min.js',
+    format: 'umd',
+    name: 'adblocker',
+    sourcemap: true,
   },
-  {
-    input: './dist/src/adblocker.js',
-    output: [
-      {
-        dir: './dist/esm',
-        format: 'esm',
-        preserveModules: true,
-        entryFileNames: '[name].js',
-        sourcemap: true,
+  plugins: [
+    terser({
+      output: {
+        comments: false,
       },
-      {
-        dir: './dist/cjs',
-        format: 'cjs',
-        preserveModules: true,
-        entryFileNames: '[name].cjs',
-        sourcemap: true,
-      },
-    ],
-  },
-];
+    }),
+  ],
+};

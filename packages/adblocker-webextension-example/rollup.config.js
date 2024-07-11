@@ -6,38 +6,29 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import commonjs from '@rollup/plugin-commonjs';
-import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs'
+import typescript from '@rollup/plugin-typescript';
+import nodeResolve from '@rollup/plugin-node-resolve';
 
 export default [
   {
-    input: './dist/src/background.js',
+    input: './background.ts',
     output: {
       file: './dist/background.iife.js',
       format: 'iife',
       name: 'adblocker',
       sourcemap: true,
     },
-    plugins: [
-      resolve({
-        mainFields: ['main'],
-      }),
-      commonjs(),
-    ],
+    plugins: [commonjs(), nodeResolve(), typescript()],
   },
   {
-    input: './dist/src/content-script.js',
+    input: './content-script.ts',
     output: {
       file: './dist/content-script.iife.js',
       format: 'iife',
       name: 'adblocker',
       sourcemap: true,
     },
-    plugins: [
-      resolve({
-        mainFields: ['main'],
-      }),
-      commonjs(),
-    ],
+    plugins: [commonjs(), nodeResolve(), typescript()],
   },
 ];

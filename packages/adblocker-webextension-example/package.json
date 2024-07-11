@@ -8,6 +8,7 @@
   },
   "homepage": "https://github.com/ghostery/adblocker#readme",
   "license": "MPL-2.0",
+  "type": "module",
   "files": [
     "LICENSE",
     "dist",
@@ -19,10 +20,10 @@
     "directory": "packages/adblocker-webextension-example"
   },
   "scripts": {
-    "clean": "rimraf dist coverage .tshy .tshy-build .nyc_output .rollup.cache",
+    "clean": "rimraf dist coverage .rollup.cache",
     "lint": "eslint background.ts content-script.ts",
-    "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript",
-    "watch": "rollup --config ./rollup.config.ts --configPlugin typescript --watch",
+    "build": "rollup --config ./rollup.config.js",
+    "watch": "rollup --config ./rollup.config.js --watch",
     "start:firefox": "npx web-ext run --source-dir='.'",
     "start:chromium": "npx web-ext run --source-dir='.' --target chromium"
   },
@@ -36,6 +37,8 @@
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
     "@types/chrome": "^0.0.268",
     "eslint": "^9.3.0",
     "rimraf": "^5.0.1",

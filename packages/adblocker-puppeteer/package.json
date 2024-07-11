@@ -9,13 +9,21 @@
   "license": "MPL-2.0",
   "type": "module",
   "exports": {
-    "require": "./dist/cjs/adblocker.cjs",
-    "import": "./dist/esm/adblocker.js",
-    "types": "./dist/types/adblocker.d.ts"
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/index.d.ts",
+        "default": "./dist/commonjs/index.js"
+      }
+    }
   },
-  "main": "dist/cjs/adblocker.cjs",
-  "module": "dist/esm/adblocker.js",
-  "types": "dist/types/adblocker.d.ts",
+  "main": "./dist/commonjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/commonjs/index.d.ts",
   "files": [
     "LICENSE",
     "dist"
@@ -30,7 +38,7 @@
   },
   "scripts": {
     "clean": "rimraf dist coverage .tshy .tshy-build .nyc_output .rollup.cache",
-    "lint": "eslint adblocker.ts",
+    "lint": "eslint src test",
     "build": "tshy && rollup --config ./rollup.config.js",
     "test": "nyc mocha"
   },
@@ -58,6 +66,7 @@
     "rimraf": "^5.0.1",
     "rollup": "^4.17.2",
     "ts-node": "^10.9.1",
+    "tshy": "^3.0.2",
     "typescript": "^5.5.2"
   },
   "contributors": [
@@ -101,5 +110,11 @@
       "name": "Rodrigo Fernández",
       "email": "fdezromero@users.noreply.github.com"
     }
-  ]
+  ],
+  "tshy": {
+    "exports": {
+      "./package.json": "./package.json",
+      ".": "./src/index.ts"
+    }
+  }
 }
