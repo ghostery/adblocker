@@ -8,7 +8,7 @@ import {
   fromPuppeteerDetails,
   getHostnameHashesFromLabelsBackward,
   PuppeteerBlocker,
-} from '../adblocker';
+} from '../adblocker.js';
 import { AddressInfo } from 'net';
 
 describe('#fromPuppeteerDetails', () => {

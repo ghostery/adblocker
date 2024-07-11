@@ -9,7 +9,7 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { toASCII, toUnicode } from '../src/punycode';
+import { toASCII, toUnicode } from '../src/punycode.js';
 
 describe('#punycode', () => {
   const checkString = (hostname: string): void => {

@@ -15,7 +15,7 @@ import {
   detectFilterType,
   NetworkFilter,
   FilterType,
-} from '../adblocker';
+} from '../src/index.js';
 
 class Counter<K> {
   private counter: Map<K, number>;

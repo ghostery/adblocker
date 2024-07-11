@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { TokensBuffer, TOKENS_BUFFER } from './tokens-buffer';
+import { TokensBuffer, TOKENS_BUFFER } from './tokens-buffer.js';
 
 export const HASH_INTERNAL_MULT = 37;
 export const HASH_SEED = 5011;

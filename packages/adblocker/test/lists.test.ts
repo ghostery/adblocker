@@ -9,8 +9,8 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { f, generateDiff, getLinesWithFilters, mergeDiffs, parseFilters } from '../src/lists';
-import Config from '../src/config';
+import { f, generateDiff, getLinesWithFilters, mergeDiffs, parseFilters } from '../src/lists.js';
+import Config from '../src/config.js';
 
 describe('#getLinesWithFilters', () => {
   it('get not lines if empty', () => {

@@ -8,7 +8,7 @@
 
 import { getResourceForMime } from '@remusao/small';
 
-import { StaticDataView, sizeOfUTF8, sizeOfASCII, sizeOfByte } from './data-view';
+import { StaticDataView, sizeOfUTF8, sizeOfASCII, sizeOfByte } from './data-view.js';
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {

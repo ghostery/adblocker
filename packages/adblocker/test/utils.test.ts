@@ -9,9 +9,9 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import IFilter from '../src/filters/interface';
-import { TokensBuffer } from '../src/tokens-buffer';
-import { parseFilters } from '../src/lists';
+import IFilter from '../src/filters/interface.js';
+import { TokensBuffer } from '../src/tokens-buffer.js';
+import { parseFilters } from '../src/lists.js';
 import {
   HASH_SEED,
   binLookup,
@@ -25,10 +25,10 @@ import {
   tokenizeNoSkipInPlace,
   tokenizeWithWildcards,
   tokenizeWithWildcardsInPlace,
-} from '../src/utils';
-import requests from './data/requests';
-import { allLists } from './utils';
-import NetworkFilter, { normalizeRawFilterOptions } from '../src/filters/network';
+} from '../src/utils.js';
+import requests from './data/requests.js';
+import { allLists } from './utils.js';
+import NetworkFilter, { normalizeRawFilterOptions } from '../src/filters/network.js';
 
 function t(tokens: string[]): Uint32Array {
   return new Uint32Array(tokens.map(fastHash));

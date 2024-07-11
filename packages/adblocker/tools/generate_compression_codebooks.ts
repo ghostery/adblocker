@@ -3,7 +3,13 @@ import { resolve, join } from 'path';
 import { generate } from '@remusao/smaz-generate';
 import { Smaz } from '@remusao/smaz';
 
-import { parseFilters, NetworkFilter, CosmeticFilter, fullLists, hasUnicode } from '../adblocker';
+import {
+  parseFilters,
+  NetworkFilter,
+  CosmeticFilter,
+  fullLists,
+  hasUnicode,
+} from '../src/index.js';
 
 const PREFIX =
   'https://raw.githubusercontent.com/ghostery/adblocker/master/packages/adblocker/assets';

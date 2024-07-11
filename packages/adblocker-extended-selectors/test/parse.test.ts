@@ -9,7 +9,7 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { parse, replace, isEscaped, gobbleParens, gobbleQuotes } from '../src/parse';
+import { parse, replace, isEscaped, gobbleParens, gobbleQuotes } from '../src/parse.js';
 
 describe('parse', () => {
   describe('#replace', () => {

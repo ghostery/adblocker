@@ -9,7 +9,7 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import Request, { getHostnameHashesFromLabelsBackward } from '../src/request';
+import Request, { getHostnameHashesFromLabelsBackward } from '../src/request.js';
 
 describe('#Request', () => {
   describe('#fromRawDetails', () => {

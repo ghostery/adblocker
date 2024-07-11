@@ -10,7 +10,7 @@ import { expect } from 'chai';
 import * as sinon from 'sinon';
 import 'mocha';
 import { JSDOM, ResourceLoader } from 'jsdom';
-import { injectCosmetics } from '../adblocker';
+import { injectCosmetics } from '../adblocker.js';
 
 async function tick(timeout = 0) {
   await new Promise((resolve) => setTimeout(resolve, timeout));

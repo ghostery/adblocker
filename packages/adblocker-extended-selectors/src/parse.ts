@@ -25,7 +25,7 @@
  * SOFTWARE.
  */
 
-import { isAST, isAtoms } from './types';
+import { isAST, isAtoms } from './types.js';
 import type {
   AST,
   Atoms,
@@ -41,7 +41,7 @@ import type {
   Strings,
   TokenType,
   Type,
-} from './types';
+} from './types.js';
 
 export const RECURSIVE_PSEUDO_CLASSES = new Set([
   'any',

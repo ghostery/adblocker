@@ -9,13 +9,13 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { getRawTrackerDB } from '../utils';
-import Request from '../../src/request';
+import { getRawTrackerDB } from '../utils.js';
+import Request from '../../src/request.js';
 
-import Engine from '../../src/engine/engine';
-import { fastHash } from '../../src/utils';
-import { StaticDataView } from '../../src/data-view';
-import { Metadata } from '../../src/engine/metadata';
+import Engine from '../../src/engine/engine.js';
+import { fastHash } from '../../src/utils.js';
+import { StaticDataView } from '../../src/data-view.js';
+import { Metadata } from '../../src/engine/metadata.js';
 import {
   IPattern,
   createMap as createPatternMap,
@@ -24,7 +24,7 @@ import {
   getSerializedSize as getPatternSerializedSize,
   isValid as isValidPattern,
   serialize as serializePattern,
-} from '../../src/engine/metadata/patterns';
+} from '../../src/engine/metadata/patterns.js';
 
 import {
   ICategory,
@@ -34,7 +34,7 @@ import {
   getSerializedSize as getCategorySerializedSize,
   isValid as isValidCategory,
   serialize as serializeCategory,
-} from '../../src/engine/metadata/categories';
+} from '../../src/engine/metadata/categories.js';
 
 import {
   IOrganization,
@@ -44,10 +44,10 @@ import {
   getSerializedSize as getOrganizationSerializedSize,
   isValid as isValidOrganization,
   serialize as serializeOrganization,
-} from '../../src/engine/metadata/organizations';
+} from '../../src/engine/metadata/organizations.js';
 
-import { CompactMap } from '../../src/engine/map';
-import NetworkFilter from '../../src/filters/network';
+import { CompactMap } from '../../src/engine/map.js';
+import NetworkFilter from '../../src/filters/network.js';
 
 const ZYPMEDIA: IPattern = {
   key: 'zypmedia',

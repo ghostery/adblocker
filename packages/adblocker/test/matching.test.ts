@@ -11,19 +11,19 @@ import 'mocha';
 
 import { getDomain } from 'tldts-experimental';
 
-import CosmeticFilter from '../src/filters/cosmetic';
-import NetworkFilter, { isAnchoredByHostname } from '../src/filters/network';
+import CosmeticFilter from '../src/filters/cosmetic.js';
+import NetworkFilter, { isAnchoredByHostname } from '../src/filters/network.js';
 
-import { f } from '../src/lists';
+import { f } from '../src/lists.js';
 import Request, {
   RequestInitialization,
   RequestType,
   getHashesFromLabelsBackward,
   getHostnameWithoutPublicSuffix,
   hashHostnameBackward,
-} from '../src/request';
+} from '../src/request.js';
 
-import requests from './data/requests';
+import requests from './data/requests.js';
 
 use((chai, utils) => {
   utils.addMethod(

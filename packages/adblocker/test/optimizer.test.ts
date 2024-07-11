@@ -9,8 +9,8 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { optimizeNetwork } from '../src/engine/optimizer';
-import NetworkFilter from '../src/filters/network';
+import { optimizeNetwork } from '../src/engine/optimizer.js';
+import NetworkFilter from '../src/filters/network.js';
 
 function f(lines: string[]): NetworkFilter[] {
   const filters: NetworkFilter[] = [];

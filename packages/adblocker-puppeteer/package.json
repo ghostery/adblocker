@@ -29,7 +29,7 @@
     "directory": "packages/adblocker-puppeteer"
   },
   "scripts": {
-    "clean": "rimraf dist coverage",
+    "clean": "rimraf dist coverage .tshy .tshy-build .nyc_output .rollup.cache",
     "lint": "eslint adblocker.ts",
     "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript",
     "test": "nyc mocha --config ../../.mocharc.json"

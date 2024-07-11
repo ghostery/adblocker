@@ -6,9 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import Config from '../../config';
-import { StaticDataView, sizeOfBytes } from '../../data-view';
-import IFilter from '../../filters/interface';
+import Config from '../../config.js';
+import { StaticDataView, sizeOfBytes } from '../../data-view.js';
+import IFilter from '../../filters/interface.js';
 
 // Empty filters is 4 bytes because we need at least one 32 bits number to keep
 // track of the number of filters in the container. If there is no filter then

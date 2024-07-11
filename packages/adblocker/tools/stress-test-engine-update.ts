@@ -27,8 +27,8 @@ import {
   generateDiff,
   getLinesWithFilters,
   parseFilter,
-} from '../adblocker';
-import { typedArrayEqual } from '../test/utils';
+} from '../src/index.js';
+import { typedArrayEqual } from '../test/utils.js';
 
 /**
  * Convert `option` into its normalized version, if any. Otherwise return the

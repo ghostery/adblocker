@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import type { AST } from './types';
+import type { AST } from './types.js';
 
 export function matchPattern(pattern: string, text: string): boolean {
   // TODO - support 'm' RegExp argument

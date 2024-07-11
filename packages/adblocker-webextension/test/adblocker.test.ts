@@ -6,7 +6,7 @@ import {
   updateResponseHeadersWithCSP,
   OnBeforeRequestDetailsType,
   getHostnameHashesFromLabelsBackward,
-} from '../adblocker';
+} from '../adblocker.js';
 
 describe('#updateResponseHeadersWithCSP', () => {
   const baseDetails: OnBeforeRequestDetailsType = {

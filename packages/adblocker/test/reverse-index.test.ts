@@ -9,20 +9,20 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import Config from '../src/config';
-import { StaticDataView } from '../src/data-view';
+import Config from '../src/config.js';
+import { StaticDataView } from '../src/data-view.js';
 import {
   noopOptimizeCosmetic,
   noopOptimizeNetwork,
   optimizeNetwork,
-} from '../src/engine/optimizer';
-import ReverseIndex from '../src/engine/reverse-index';
-import CosmeticFilter from '../src/filters/cosmetic';
-import IFilter from '../src/filters/interface';
-import NetworkFilter from '../src/filters/network';
-import { parseFilters } from '../src/lists';
-import { fastHash, tokenize } from '../src/utils';
-import { allLists } from './utils';
+} from '../src/engine/optimizer.js';
+import ReverseIndex from '../src/engine/reverse-index.js';
+import CosmeticFilter from '../src/filters/cosmetic.js';
+import IFilter from '../src/filters/interface.js';
+import NetworkFilter from '../src/filters/network.js';
+import { parseFilters } from '../src/lists.js';
+import { fastHash, tokenize } from '../src/utils.js';
+import { allLists } from './utils.js';
 
 describe('ReverseIndex', () => {
   const { cosmeticFilters, networkFilters } = parseFilters(allLists, { debug: true });

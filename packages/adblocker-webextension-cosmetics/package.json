@@ -29,7 +29,7 @@
     "directory": "packages/adblocker-webextension-cosmetics"
   },
   "scripts": {
-    "clean": "rimraf dist coverage",
+    "clean": "rimraf dist coverage .tshy .tshy-build .nyc_output .rollup.cache",
     "lint": "eslint adblocker.ts",
     "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript",
     "test": "nyc mocha --config ../../.mocharc.json"
@@ -73,7 +73,6 @@
   ],
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-typescript": "^11.1.3",
     "@types/chai": "^4.3.6",
     "@types/chrome": "^0.0.268",
     "@types/jsdom": "^21.1.3",

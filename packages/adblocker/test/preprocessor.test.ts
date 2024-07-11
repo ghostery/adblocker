@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import 'mocha';
-import { Env, evaluate } from '../src/preprocessor';
-import FilterEngine from '../src/engine/engine';
-import { Request, generateDiff } from '../adblocker';
+import { Env, evaluate } from '../src/preprocessor.js';
+import FilterEngine from '../src/engine/engine.js';
+import { Request, generateDiff } from '../src/index.js';
 
 describe('conditions', () => {
   it('resolves a condition', () => {

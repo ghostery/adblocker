@@ -9,12 +9,12 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { StaticDataView } from '../src/data-view';
-import CosmeticFilter from '../src/filters/cosmetic';
-import IFilter from '../src/filters/interface';
-import NetworkFilter from '../src/filters/network';
-import { parseFilters } from '../src/lists';
-import { allLists } from './utils';
+import { StaticDataView } from '../src/data-view.js';
+import CosmeticFilter from '../src/filters/cosmetic.js';
+import IFilter from '../src/filters/interface.js';
+import NetworkFilter from '../src/filters/network.js';
+import { parseFilters } from '../src/lists.js';
+import { allLists } from './utils.js';
 
 describe('Make sure size estimate is accurate', () => {
   const { cosmeticFilters, networkFilters } = parseFilters(allLists, { debug: true });

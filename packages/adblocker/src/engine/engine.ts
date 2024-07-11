@@ -8,9 +8,9 @@
 
 import type { IMessageFromBackground } from '@cliqz/adblocker-content';
 
-import Config from '../config';
-import { StaticDataView, sizeOfASCII, sizeOfByte, sizeOfBool } from '../data-view';
-import { EventEmitter } from '../events';
+import Config from '../config.js';
+import { StaticDataView, sizeOfASCII, sizeOfByte, sizeOfBool } from '../data-view.js';
+import { EventEmitter } from '../events.js';
 import {
   adsAndTrackingLists,
   adsLists,
@@ -18,20 +18,20 @@ import {
   fetchLists,
   fetchResources,
   fullLists,
-} from '../fetch';
-import { HTMLSelector } from '../html-filtering';
-import CosmeticFilter from '../filters/cosmetic';
-import NetworkFilter from '../filters/network';
-import { block } from '../filters/dsl';
-import { IListDiff, IPartialRawDiff, parseFilters } from '../lists';
-import Request from '../request';
-import Resources from '../resources';
-import CosmeticFilterBucket from './bucket/cosmetic';
-import NetworkFilterBucket from './bucket/network';
-import { Metadata, IPatternLookupResult } from './metadata';
-import Preprocessor, { Env } from '../preprocessor';
-import PreprocessorBucket from './bucket/preprocessor';
-import IFilter from '../filters/interface';
+} from '../fetch.js';
+import { HTMLSelector } from '../html-filtering.js';
+import CosmeticFilter from '../filters/cosmetic.js';
+import NetworkFilter from '../filters/network.js';
+import { block } from '../filters/dsl.js';
+import { IListDiff, IPartialRawDiff, parseFilters } from '../lists.js';
+import Request from '../request.js';
+import Resources from '../resources.js';
+import CosmeticFilterBucket from './bucket/cosmetic.js';
+import NetworkFilterBucket from './bucket/network.js';
+import { Metadata, IPatternLookupResult } from './metadata.js';
+import Preprocessor, { Env } from '../preprocessor.js';
+import PreprocessorBucket from './bucket/preprocessor.js';
+import IFilter from '../filters/interface.js';
 
 export const ENGINE_VERSION = 654;
 

@@ -9,7 +9,7 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { compactTokens, hasEmptyIntersection, mergeCompactSets } from '../src/compact-set';
+import { compactTokens, hasEmptyIntersection, mergeCompactSets } from '../src/compact-set.js';
 
 function a(strings: TemplateStringsArray): Uint32Array {
   const str = strings.raw[0];
