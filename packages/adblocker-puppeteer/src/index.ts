@@ -13,7 +13,7 @@ import { parse } from 'tldts-experimental';
 
 import { FiltersEngine, Request, RequestType } from '@cliqz/adblocker';
 
-import { autoRemoveScript, extractFeaturesFromDOM, DOMMonitor } from '@cliqz/adblocker-content';;
+import { autoRemoveScript, extractFeaturesFromDOM, DOMMonitor } from '@cliqz/adblocker-content';
 
 function sleep(milliseconds: number): Promise<void> {
   return new Promise((resolve) => {

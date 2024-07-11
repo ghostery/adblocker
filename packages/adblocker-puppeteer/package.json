@@ -31,8 +31,8 @@
   "scripts": {
     "clean": "rimraf dist coverage .tshy .tshy-build .nyc_output .rollup.cache",
     "lint": "eslint adblocker.ts",
-    "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript",
-    "test": "nyc mocha --config ../../.mocharc.json"
+    "build": "tshy && rollup --config ./rollup.config.js",
+    "test": "nyc mocha"
   },
   "bugs": {
     "url": "https://github.com/ghostery/adblocker/issues"
