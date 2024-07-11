@@ -59,8 +59,7 @@
   "scripts": {
     "postinstall": "patch-package",
     "lint": "lerna run --parallel lint",
-    "watch": "tsc --build ./tsconfig.project.json --watch",
-    "build": "tsc --build ./tsconfig.project.json && lerna run build",
+    "build": "lerna run build",
     "test": "lerna run --concurrency 4 test",
     "clean": "lerna run --parallel clean && lerna clean --yes",
     "release": "auto shipit -v",

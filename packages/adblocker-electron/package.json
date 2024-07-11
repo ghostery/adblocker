@@ -35,7 +35,7 @@
     "clean": "rimraf dist coverage .tshy .tshy-build .nyc_output .rollup.cache",
     "lint": "eslint src",
     "build": "tshy && rollup --config ./rollup.config.js",
-    "test": "nyc mocha --config ../../.mocharc.json"
+    "test": "nyc mocha"
   },
   "peerDependencies": {
     "electron": ">11"
@@ -46,7 +46,6 @@
     "tldts-experimental": "^6.0.14"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^15.2.3",
     "@types/chai": "^4.3.6",
     "@types/mocha": "^10.0.1",
     "@types/node": "^20.12.12",
