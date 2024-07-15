@@ -1,2 +1,2 @@
-require('ts-node').register();
-require('./index.ts');
+import { tsImport } from 'tsx/esm/api'
+await tsImport('./index.ts', import.meta.url)
