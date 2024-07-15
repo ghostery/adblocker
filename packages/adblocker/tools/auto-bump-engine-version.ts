@@ -1,26 +1,27 @@
-import { promises as fs } from 'fs';
-import { resolve, join } from 'path';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { resolve, join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-(async () => {
-  const engineSourcePath = resolve(__dirname, join('..', 'src', 'engine', 'engine.ts'));
-  const engineSource = await fs.readFile(engineSourcePath, 'utf-8');
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-  await fs.writeFile(
-    engineSourcePath,
-    engineSource.replace(
-      /(^export const ENGINE_VERSION =\s+)(\d+)(;$)/m,
-      (match, prefix, version, suffix, offset) => {
-        console.log('Match:', { match, prefix, version, suffix, offset });
+const engineSourcePath = resolve(__dirname, join('..', 'src', 'engine', 'engine.ts'));
+const engineSource = readFileSync(engineSourcePath, 'utf-8');
 
-        const currentVersion = Number(version);
-        console.log('Current version:', currentVersion);
+writeFileSync(
+  engineSourcePath,
+  engineSource.replace(
+    /(^export const ENGINE_VERSION =\s+)(\d+)(;$)/m,
+    (match, prefix, version, suffix, offset) => {
+      console.log('Match:', { match, prefix, version, suffix, offset });
 
-        const nextVersion = currentVersion + 1;
-        console.log('Next version:', nextVersion);
+      const currentVersion = Number(version);
+      console.log('Current version:', currentVersion);
 
-        return `${prefix}${nextVersion}${suffix}`;
-      },
-    ),
-    'utf-8',
-  );
-})();
+      const nextVersion = currentVersion + 1;
+      console.log('Next version:', nextVersion);
+
+      return `${prefix}${nextVersion}${suffix}`;
+    },
+  ),
+  'utf-8',
+);

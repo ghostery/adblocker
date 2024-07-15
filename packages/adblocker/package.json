@@ -49,16 +49,16 @@
     "build": "tshy && rollup --config ./rollup.config.js",
     "test": "nyc mocha",
     "dev": "mocha --watch",
-    "bench-metadata": "ts-node --project ./tools/tsconfig.json ./tools/bench-metadata.ts",
-    "bump-internal-engine-version": "ts-node --project ./tools/tsconfig.json ./tools/auto-bump-engine-version.ts",
-    "generate-codebooks": "concurrently -n build: \"yarn:codebook-*\" && yarn bump-internal-engine-version",
-    "codebook-network-csp": "ts-node --project ./tools/tsconfig.json ./tools/generate_compression_codebooks.ts -- network-csp",
-    "codebook-network-redirect": "ts-node --project ./tools/tsconfig.json ./tools/generate_compression_codebooks.ts -- network-redirect",
-    "codebook-network-filter": "ts-node --project ./tools/tsconfig.json ./tools/generate_compression_codebooks.ts -- network-filter",
-    "codebook-network-hostname": "ts-node --project ./tools/tsconfig.json ./tools/generate_compression_codebooks.ts -- network-hostname",
-    "codebook-cosmetic-selector": "ts-node --project ./tools/tsconfig.json ./tools/generate_compression_codebooks.ts -- cosmetic-selector",
-    "codebook-raw-network": "ts-node --project ./tools/tsconfig.json ./tools/generate_compression_codebooks.ts -- raw-network",
-    "codebook-raw-cosmetic": "ts-node --project ./tools/tsconfig.json ./tools/generate_compression_codebooks.ts -- raw-cosmetic"
+    "bench-metadata": "TS_NODE_PROJECT=./tools/tsconfig.json node --loader ts-node/esm ./tools/bench-metadata.ts",
+    "bump-internal-engine-version": "TS_NODE_PROJECT=./tools/tsconfig.json node --loader ts-node/esm ./tools/auto-bump-engine-version.ts",
+    "codebook-network-csp": "TS_NODE_PROJECT=./tools/tsconfig.json node --loader ts-node/esm ./tools/generate_compression_codebooks.ts -- network-csp",
+    "codebook-network-redirect": "TS_NODE_PROJECT=./tools/tsconfig.json node --loader ts-node/esm ./tools/generate_compression_codebooks.ts -- network-redirect",
+    "codebook-network-filter": "TS_NODE_PROJECT=./tools/tsconfig.json node --loader ts-node/esm ./tools/generate_compression_codebooks.ts -- network-filter",
+    "codebook-network-hostname": "TS_NODE_PROJECT=./tools/tsconfig.json node --loader ts-node/esm ./tools/generate_compression_codebooks.ts -- network-hostname",
+    "codebook-cosmetic-selector": "TS_NODE_PROJECT=./tools/tsconfig.json node --loader ts-node/esm ./tools/generate_compression_codebooks.ts -- cosmetic-selector",
+    "codebook-raw-network": "TS_NODE_PROJECT=./tools/tsconfig.json node --loader ts-node/esm ./tools/generate_compression_codebooks.ts -- raw-network",
+    "codebook-raw-cosmetic": "TS_NODE_PROJECT=./tools/tsconfig.json node --loader ts-node/esm ./tools/generate_compression_codebooks.ts -- raw-cosmetic",
+    "generate-codebooks": "concurrently -n build: \"yarn:codebook-*\" && yarn bump-internal-engine-version"
   },
   "bugs": {
     "url": "https://github.com/ghostery/adblocker/issues"
