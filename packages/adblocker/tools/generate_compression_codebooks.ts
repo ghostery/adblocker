@@ -1,5 +1,6 @@
-import { promises as fs } from 'fs';
-import { resolve, join } from 'path';
+import { promises as fs } from 'node:fs';
+import { resolve, join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { generate } from '@remusao/smaz-generate';
 import { Smaz } from '@remusao/smaz';
 
@@ -10,6 +11,8 @@ import {
   fullLists,
   hasUnicode,
 } from '../src/index.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const PREFIX =
   'https://raw.githubusercontent.com/ghostery/adblocker/master/packages/adblocker/assets';
