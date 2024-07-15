@@ -1,8 +1,9 @@
-/* global console, fetch */
+/* global fetch */
 
 import { writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { log } from 'node:console';
 import { NetworkFilter, parseFilter } from '@cliqz/adblocker';
 
 const FILTER_LISTS = [
@@ -65,7 +66,7 @@ const seen = new Map();
 
 // Update lists
 for (const [resourceName, outputPrefixPath, outputFileName] of FILTER_LISTS) {
-  console.log(`Fetching: ${resourceName}`);
+  log(`Fetching: ${resourceName}`);
 
   const lines = (await downloadResource(resourceName))
     .split(/[\r\n]/g)
@@ -105,4 +106,4 @@ for (const [resourceName, outputPrefixPath, outputFileName] of FILTER_LISTS) {
   writeFileSync(join(ASSETS_PATH, outputPrefixPath, outputFileName), lines.join('\n'), 'utf-8');
 }
 
-console.log({ duplicates: duplicatesCount, badfilters: badfiltersCount });
+log({ duplicates: duplicatesCount, badfilters: badfiltersCount });
