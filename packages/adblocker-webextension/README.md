@@ -31,8 +31,8 @@
   <br/>
   <a href="#badge">
     <img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square"></a>
-  <a href="https://twitter.com/cliqz">
-    <img alt="Follow Cliqz on Twitter" src="https://img.shields.io/twitter/follow/cliqz.svg?label=follow+cliqz&style=flat-square"></a>
+  <a href="https://twitter.com/ghostery">
+    <img alt="Follow Ghostery on Twitter" src="https://img.shields.io/twitter/follow/ghostery.svg?label=follow+ghostery&style=flat-square"></a>
   <a href="https://github.com/ghostery/adblocker">
     <img alt="Dependabot" src="https://img.shields.io/badge/dependabot-enabled-brightgreen?logo=dependabot&style=flat-square"></a>
   <a href="https://github.com/ghostery/adblocker/blob/master/LICENSE">

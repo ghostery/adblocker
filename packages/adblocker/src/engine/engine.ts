@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -152,7 +152,7 @@ export default class FilterEngine extends EventEmitter<
    * Initialize blocker of *ads only*.
    *
    * Attempt to initialize a blocking engine using a pre-built version served
-   * from Cliqz's CDN. If this fails (e.g.: if no pre-built engine is available
+   * from Ghostery's CDN. If this fails (e.g.: if no pre-built engine is available
    * for this version of the library), then falls-back to using `fromLists(...)`
    * method with the same subscriptions.
    */
