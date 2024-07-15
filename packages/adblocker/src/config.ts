@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { StaticDataView, sizeOfBool } from './data-view';
+import { StaticDataView, sizeOfBool } from './data-view.js';
 
 export default class Config {
   public static deserialize(buffer: StaticDataView): Config {

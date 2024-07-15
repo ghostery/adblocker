@@ -13,7 +13,7 @@ import {
   parse as parseCssSelector,
 } from '@cliqz/adblocker-extended-selectors';
 
-import { Domains } from '../engine/domains';
+import { Domains } from '../engine/domains.js';
 import {
   EMPTY_UINT32_ARRAY,
   StaticDataView,
@@ -21,11 +21,11 @@ import {
   sizeOfCosmeticSelector,
   sizeOfUTF8,
   sizeOfRawCosmetic,
-} from '../data-view';
+} from '../data-view.js';
 import {
   getHostnameHashesFromLabelsBackward,
   getEntityHashesFromLabelsBackward,
-} from '../request';
+} from '../request.js';
 import {
   fastHash,
   fastHashBetween,
@@ -36,9 +36,9 @@ import {
   tokenize,
   HASH_SEED,
   HASH_INTERNAL_MULT,
-} from '../utils';
-import IFilter from './interface';
-import { HTMLSelector, extractHTMLSelectorFromRule } from '../html-filtering';
+} from '../utils.js';
+import IFilter from './interface.js';
+import { HTMLSelector, extractHTMLSelectorFromRule } from '../html-filtering.js';
 
 const EMPTY_TOKENS: [Uint32Array] = [EMPTY_UINT32_ARRAY];
 export const DEFAULT_HIDDING_STYLE: string = 'display: none !important;';

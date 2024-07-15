@@ -10,7 +10,7 @@ import { promises as fs } from 'fs';
 import { join } from 'path';
 import { gzipSync, brotliCompressSync } from 'zlib';
 
-import { FiltersEngine, adsLists, adsAndTrackingLists, fullLists } from '../adblocker';
+import { FiltersEngine, adsLists, adsAndTrackingLists, fullLists } from '../src/index.js';
 
 const PREFIX =
   'https://raw.githubusercontent.com/ghostery/adblocker/master/packages/adblocker/assets';

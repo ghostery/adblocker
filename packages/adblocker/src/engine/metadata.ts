@@ -6,9 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { CompactMap } from './map';
-import { StaticDataView } from '../data-view';
-import NetworkFilter from '../filters/network';
+import { CompactMap } from './map.js';
+import { StaticDataView } from '../data-view.js';
+import NetworkFilter from '../filters/network.js';
 
 import {
   ICategory,
@@ -16,7 +16,7 @@ import {
   isValid as isValidCategory,
   deserialize as deserializeCategory,
   getKey as getCategoryKey,
-} from './metadata/categories';
+} from './metadata/categories.js';
 
 import {
   IOrganization,
@@ -24,14 +24,14 @@ import {
   isValid as isValidOrganization,
   deserialize as deserializeOrganization,
   getKey as getOrganizationKey,
-} from './metadata/organizations';
+} from './metadata/organizations.js';
 
 import {
   IPattern,
   createMap as createPatternsMap,
   isValid as isValidPattern,
   deserialize as deserializePattern,
-} from './metadata/patterns';
+} from './metadata/patterns.js';
 
 export interface IPatternLookupResult {
   pattern: IPattern;

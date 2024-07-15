@@ -6,10 +6,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { hashHostnameBackward } from '../request';
-import { toASCII } from '../punycode';
-import { StaticDataView, sizeOfUint32Array, sizeOfUTF8 } from '../data-view';
-import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils';
+import { hashHostnameBackward } from '../request.js';
+import { toASCII } from '../punycode.js';
+import { StaticDataView, sizeOfUint32Array, sizeOfUTF8 } from '../data-view.js';
+import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils.js';
 
 export class Domains {
   public static parse(parts: string[], debug: boolean = false): Domains | undefined {

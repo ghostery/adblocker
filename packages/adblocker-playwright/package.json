@@ -9,13 +9,21 @@
   "license": "MPL-2.0",
   "type": "module",
   "exports": {
-    "require": "./dist/cjs/adblocker.cjs",
-    "import": "./dist/esm/adblocker.js",
-    "types": "./dist/types/adblocker.d.ts"
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/index.d.ts",
+        "default": "./dist/commonjs/index.js"
+      }
+    }
   },
-  "main": "dist/cjs/adblocker.cjs",
-  "module": "dist/esm/adblocker.js",
-  "types": "dist/types/adblocker.d.ts",
+  "main": "./dist/commonjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/commonjs/index.d.ts",
   "files": [
     "LICENSE",
     "dist"
@@ -29,10 +37,10 @@
     "directory": "packages/adblocker-playwright"
   },
   "scripts": {
-    "clean": "rimraf dist coverage",
-    "lint": "eslint adblocker.ts",
-    "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript",
-    "test": "nyc mocha --config ../../.mocharc.json"
+    "clean": "rimraf dist coverage .tshy .tshy-build .nyc_output .rollup.cache",
+    "lint": "eslint src test",
+    "build": "tshy && rollup --config ./rollup.config.js",
+    "test": "nyc mocha"
   },
   "bugs": {
     "url": "https://github.com/ghostery/adblocker/issues"
@@ -46,7 +54,6 @@
     "tldts-experimental": "^6.0.14"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",
     "@types/chai": "^4.3.6",
     "@types/mocha": "^10.0.1",
@@ -57,6 +64,7 @@
     "playwright": "^1.38.0",
     "rimraf": "^5.0.1",
     "rollup": "^4.17.2",
+    "tshy": "^3.0.2",
     "typescript": "^5.5.2"
   },
   "contributors": [
@@ -92,5 +100,11 @@
       "name": "Anton Lazarev",
       "email": "antonok35@gmail.com"
     }
-  ]
+  ],
+  "tshy": {
+    "exports": {
+      "./package.json": "./package.json",
+      ".": "./src/index.ts"
+    }
+  }
 }

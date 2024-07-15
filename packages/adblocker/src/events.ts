@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { queueMicrotask } from './queue-microtask';
+import { queueMicrotask } from './queue-microtask.js';
 
 /**
  * Type of an event listener (i.e.: callback). It accepts arbitrary arguments

@@ -9,8 +9,8 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { StaticDataView } from '../src/data-view';
-import { getNaughtyStrings } from './utils';
+import { StaticDataView } from '../src/data-view.js';
+import { getNaughtyStrings } from './utils.js';
 
 describe('#StaticDataView', () => {
   describe('#slice', () => {

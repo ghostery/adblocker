@@ -9,7 +9,7 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { Fetch, fetchWithRetry } from '../src/fetch';
+import { Fetch, fetchWithRetry } from '../src/fetch.js';
 
 describe('#fetchWithRetry', () => {
   const fakeFetchFactory = (numberOfFailures: number): Fetch => {

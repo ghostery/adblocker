@@ -9,18 +9,18 @@
 
 import type { IMessageFromBackground } from '@cliqz/adblocker-content';
 
-import { compactTokens, concatTypedArrays } from '../../compact-set';
-import Config from '../../config';
-import { StaticDataView } from '../../data-view';
-import CosmeticFilter, { DEFAULT_HIDDING_STYLE } from '../../filters/cosmetic';
+import { compactTokens, concatTypedArrays } from '../../compact-set.js';
+import Config from '../../config.js';
+import { StaticDataView } from '../../data-view.js';
+import CosmeticFilter, { DEFAULT_HIDDING_STYLE } from '../../filters/cosmetic.js';
 import {
   getEntityHashesFromLabelsBackward,
   getHostnameHashesFromLabelsBackward,
-} from '../../request';
-import { hashStrings, tokenizeNoSkip } from '../../utils';
-import { noopOptimizeCosmetic } from '../optimizer';
-import ReverseIndex from '../reverse-index';
-import FiltersContainer from './filters';
+} from '../../request.js';
+import { hashStrings, tokenizeNoSkip } from '../../utils.js';
+import { noopOptimizeCosmetic } from '../optimizer.js';
+import ReverseIndex from '../reverse-index.js';
+import FiltersContainer from './filters.js';
 
 /**
  * Given a list of CSS selectors, create a valid stylesheet ready to be

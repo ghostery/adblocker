@@ -3,7 +3,7 @@ import 'mocha';
 
 import * as pw from 'playwright';
 
-import { fromPlaywrightDetails, getHostnameHashesFromLabelsBackward } from '../adblocker';
+import { fromPlaywrightDetails, getHostnameHashesFromLabelsBackward } from '../src/index.js';
 
 describe('#fromPlaywrightDetails', () => {
   const baseFrame: Partial<pw.Frame> = {

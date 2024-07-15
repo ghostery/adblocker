@@ -9,9 +9,9 @@
 import guessUrlType from '@remusao/guess-url-type';
 import { parse } from 'tldts-experimental';
 
-import { EMPTY_UINT32_ARRAY } from './data-view';
-import { TOKENS_BUFFER } from './tokens-buffer';
-import { fastHash, tokenizeNoSkipInPlace, HASH_SEED, HASH_INTERNAL_MULT } from './utils';
+import { EMPTY_UINT32_ARRAY } from './data-view.js';
+import { TOKENS_BUFFER } from './tokens-buffer.js';
+import { fastHash, tokenizeNoSkipInPlace, HASH_SEED, HASH_INTERNAL_MULT } from './utils.js';
 
 const TLDTS_OPTIONS = {
   extractHostname: true,

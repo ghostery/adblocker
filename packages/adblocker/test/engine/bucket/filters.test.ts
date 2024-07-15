@@ -9,12 +9,12 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import Config from '../../../src/config';
-import FiltersContainer from '../../../src/engine/bucket/filters';
-import CosmeticFilter from '../../../src/filters/cosmetic';
-import NetworkFilter from '../../../src/filters/network';
-import { parseFilters } from '../../../src/lists';
-import { allLists } from '../../utils';
+import Config from '../../../src/config.js';
+import FiltersContainer from '../../../src/engine/bucket/filters.js';
+import CosmeticFilter from '../../../src/filters/cosmetic.js';
+import NetworkFilter from '../../../src/filters/network.js';
+import { parseFilters } from '../../../src/lists.js';
+import { allLists } from '../../utils.js';
 
 describe('#FiltersContainer', () => {
   for (const config of [

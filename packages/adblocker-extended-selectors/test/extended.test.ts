@@ -14,7 +14,7 @@ import {
   SelectorType,
   PSEUDO_CLASSES,
   EXTENDED_PSEUDO_CLASSES,
-} from '../src/extended';
+} from '../src/extended.js';
 
 describe('extended', () => {
   describe('#classifySelector', () => {

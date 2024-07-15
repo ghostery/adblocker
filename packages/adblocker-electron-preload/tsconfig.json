@@ -1,13 +1,12 @@
 {
-  "extends": "../../tsconfig",
-  "compilerOptions": {
-    "outDir": "./dist/src",
-    "declarationDir": "./dist/types",
-  },
+  "extends": "../../tsconfig.json",
   "references": [
     { "path": "../adblocker-content/tsconfig.json" }
   ],
   "files": [
-    "./preload.ts"
-  ]
+    "./src/index.ts"
+  ],
+  "compilerOptions": {
+    "outDir": "./dist",
+  },
 }

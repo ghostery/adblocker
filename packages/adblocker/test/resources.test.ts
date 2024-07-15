@@ -9,10 +9,10 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { loadResources } from './utils';
+import { loadResources } from './utils.js';
 
-import { StaticDataView } from '../src/data-view';
-import Resources from '../src/resources';
+import { StaticDataView } from '../src/data-view.js';
+import Resources from '../src/resources.js';
 
 describe('#Resources', () => {
   it('#serialize', () => {

@@ -1,5 +1,5 @@
-import { getRawTrackerDB } from '../test/utils';
-import { FiltersEngine, NetworkFilter } from '../adblocker';
+import { getRawTrackerDB } from '../test/utils.js';
+import { FiltersEngine, NetworkFilter } from '../src/index.js';
 
 (() => {
   const rawTrackerDB = getRawTrackerDB();

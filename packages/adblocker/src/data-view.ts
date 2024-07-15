@@ -6,9 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import Compression from './compression';
-import crc32 from './crc32';
-import { decode, encode } from './punycode';
+import Compression from './compression.js';
+import crc32 from './crc32.js';
+import { decode, encode } from './punycode.js';
 
 interface IDataViewOptions {
   enableCompression: boolean;

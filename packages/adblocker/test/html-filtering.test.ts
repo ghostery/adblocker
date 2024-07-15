@@ -14,7 +14,7 @@ import {
   default as StreamingHtmlFilter,
   extractSelectorsFromRules,
   extractTagsFromHtml,
-} from '../src/html-filtering';
+} from '../src/html-filtering.js';
 
 // NOTE: `doc` is defined at the end of this file.
 

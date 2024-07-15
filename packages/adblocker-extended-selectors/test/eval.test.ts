@@ -11,8 +11,8 @@ import 'mocha';
 
 import { JSDOM } from 'jsdom';
 
-import { querySelectorAll, matchPattern, matches } from '../src/eval';
-import { parse } from '../src/parse';
+import { querySelectorAll, matchPattern, matches } from '../src/eval.js';
+import { parse } from '../src/parse.js';
 
 // TODO - check if style:has-text() works (can select style?)
 

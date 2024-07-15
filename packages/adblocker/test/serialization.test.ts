@@ -9,15 +9,15 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { allLists, loadResources, typedArrayEqual } from './utils';
+import { allLists, loadResources, typedArrayEqual } from './utils.js';
 
-import Config from '../src/config';
-import { StaticDataView } from '../src/data-view';
-import Engine from '../src/engine/engine';
-import CosmeticFilter from '../src/filters/cosmetic';
-import IFilter from '../src/filters/interface';
-import NetworkFilter from '../src/filters/network';
-import { parseFilters } from '../src/lists';
+import Config from '../src/config.js';
+import { StaticDataView } from '../src/data-view.js';
+import Engine from '../src/engine/engine.js';
+import CosmeticFilter from '../src/filters/cosmetic.js';
+import IFilter from '../src/filters/interface.js';
+import NetworkFilter from '../src/filters/network.js';
+import { parseFilters } from '../src/lists.js';
 
 describe('Serialization', () => {
   const { cosmeticFilters, networkFilters } = parseFilters(allLists, new Config({ debug: true }));

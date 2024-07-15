@@ -1,14 +1,12 @@
 {
-  "extends": "../../tsconfig",
-  "compilerOptions": {
-    "outDir": "./dist/src",
-    "declarationDir": "./dist/types",
-  },
+  "extends": "../../tsconfig.json",
   "references": [
     { "path": "../adblocker/tsconfig.json" },
     { "path": "../adblocker-electron-preload/tsconfig.json" }
   ],
-  "files": [
-    "./adblocker.ts"
+  "includes": [
+    "src/**/*.ts",
+    "src/**/*.cts",
+    "test/**/*.ts",
   ]
 }

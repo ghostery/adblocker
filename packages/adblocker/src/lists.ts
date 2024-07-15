@@ -6,11 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import Config from './config';
-import CosmeticFilter from './filters/cosmetic';
-import NetworkFilter from './filters/network';
-import Preprocessor, { PreprocessorTokens, detectPreprocessor } from './preprocessor';
-import { fastStartsWith, fastStartsWithFrom } from './utils';
+import Config from './config.js';
+import CosmeticFilter from './filters/cosmetic.js';
+import NetworkFilter from './filters/network.js';
+import Preprocessor, { PreprocessorTokens, detectPreprocessor } from './preprocessor.js';
+import { fastStartsWith, fastStartsWithFrom } from './utils.js';
 
 export const enum FilterType {
   NOT_SUPPORTED = 0,

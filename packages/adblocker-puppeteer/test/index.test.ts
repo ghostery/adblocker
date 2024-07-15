@@ -8,7 +8,7 @@ import {
   fromPuppeteerDetails,
   getHostnameHashesFromLabelsBackward,
   PuppeteerBlocker,
-} from '../adblocker';
+} from '../src/index.js';
 import { AddressInfo } from 'net';
 
 describe('#fromPuppeteerDetails', () => {
@@ -71,7 +71,7 @@ describe('#stylesInjection', () => {
   it('does not inject styles into original content', async () => {
     const url = `http://localhost:${port}`;
     const stylesInjectionPrefix = '<style';
-    const blocker = await PuppeteerBlocker.parse('###Meebo\\:AdElement\\.Root');
+    const blocker = PuppeteerBlocker.parse('###Meebo\\:AdElement\\.Root');
 
     await blocker.enableBlockingInPage(page);
     await page.goto(url, { waitUntil: 'networkidle2' });

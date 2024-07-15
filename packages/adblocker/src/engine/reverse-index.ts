@@ -6,9 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import Config from '../config';
-import { StaticDataView, EMPTY_UINT32_ARRAY, sizeOfBytes } from '../data-view';
-import IFilter from '../filters/interface';
+import Config from '../config.js';
+import { StaticDataView, EMPTY_UINT32_ARRAY, sizeOfBytes } from '../data-view.js';
+import IFilter from '../filters/interface.js';
 
 // https://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
 export function nextPow2(v: number): number {

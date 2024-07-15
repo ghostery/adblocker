@@ -6,9 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { CompactMap } from '../map';
-import { StaticDataView, sizeOfUTF8 } from '../../data-view';
-import { fastHash } from '../../utils';
+import { CompactMap } from '../map.js';
+import { StaticDataView, sizeOfUTF8 } from '../../data-view.js';
+import { fastHash } from '../../utils.js';
 
 export interface ICategory {
   key: string;

@@ -6,7 +6,7 @@ import {
   ElectronRequestType,
   fromElectronDetails,
   getHostnameHashesFromLabelsBackward,
-} from '../adblocker';
+} from '../src/index.js';
 
 describe('#fromElectronDetails', () => {
   const baseRequest: Electron.OnBeforeRequestListenerDetails = {

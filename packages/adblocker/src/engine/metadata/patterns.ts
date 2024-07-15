@@ -6,9 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { CompactMap } from '../map';
-import { StaticDataView, sizeOfUTF8, sizeOfLength } from '../../data-view';
-import NetworkFilter from '../../filters/network';
+import { CompactMap } from '../map.js';
+import { StaticDataView, sizeOfUTF8, sizeOfLength } from '../../data-view.js';
+import NetworkFilter from '../../filters/network.js';
 
 export interface IPattern {
   readonly key: string;

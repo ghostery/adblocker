@@ -1,4 +1,4 @@
-import { StaticDataView, sizeOfUTF8 } from './data-view';
+import { StaticDataView, sizeOfUTF8 } from './data-view.js';
 
 export type EnvKeys =
   | 'ext_ghostery'

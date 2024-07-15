@@ -10,7 +10,7 @@ import { expect } from 'chai';
 import * as sinon from 'sinon';
 import 'mocha';
 import { JSDOM, ResourceLoader } from 'jsdom';
-import { injectCosmetics } from '../adblocker';
+import { injectCosmetics } from '../src/index.js';
 
 async function tick(timeout = 0) {
   await new Promise((resolve) => setTimeout(resolve, timeout));
@@ -177,7 +177,7 @@ describe('#injectCosmetics', () => {
 
   it('injects scriptlet in Firefox', async () => {
     const loader = new ResourceLoader({
-      userAgent: "Firefox"
+      userAgent: 'Firefox',
     });
     const dom = new JSDOM(
       `
