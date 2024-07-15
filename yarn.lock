@@ -380,7 +380,7 @@ __metadata:
     "@rollup/plugin-terser": "npm:^0.4.4"
     "@types/node": "npm:^20.6.2"
     eslint: "npm:^9.3.0"
-    rimraf: "npm:^5.0.1"
+    rimraf: "npm:^6.0.1"
     rollup: "npm:^4.0.2"
     tshy: "npm:^3.0.2"
     typescript: "npm:^5.5.2"
@@ -412,7 +412,7 @@ __metadata:
     "@types/chrome": "npm:^0.0.268"
     electron: "npm:^31.0.0"
     eslint: "npm:^9.3.0"
-    rimraf: "npm:^5.0.1"
+    rimraf: "npm:^6.0.1"
     rollup: "npm:^4.18.1"
     typescript: "npm:^5.5.2"
   peerDependencies:
@@ -435,7 +435,7 @@ __metadata:
     eslint: "npm:^9.3.0"
     mocha: "npm:^10.2.0"
     nyc: "npm:^17.0.0"
-    rimraf: "npm:^5.0.1"
+    rimraf: "npm:^6.0.1"
     rollup: "npm:^4.17.2"
     tldts-experimental: "npm:^6.0.14"
     ts-node: "npm:^10.9.1"
@@ -460,7 +460,7 @@ __metadata:
     jsdom: "npm:^24.0.0"
     mocha: "npm:^10.2.0"
     nyc: "npm:^17.0.0"
-    rimraf: "npm:^5.0.1"
+    rimraf: "npm:^6.0.1"
     rollup: "npm:^4.17.2"
     ts-node: "npm:^10.9.1"
     tshy: "npm:^3.0.2"
@@ -496,7 +496,7 @@ __metadata:
     mocha: "npm:^10.2.0"
     nyc: "npm:^17.0.0"
     playwright: "npm:^1.38.0"
-    rimraf: "npm:^5.0.1"
+    rimraf: "npm:^6.0.1"
     rollup: "npm:^4.17.2"
     tldts-experimental: "npm:^6.0.14"
     tshy: "npm:^3.0.2"
@@ -535,7 +535,7 @@ __metadata:
     mocha: "npm:^10.2.0"
     nyc: "npm:^17.0.0"
     puppeteer: "npm:22.13.0"
-    rimraf: "npm:^5.0.1"
+    rimraf: "npm:^6.0.1"
     rollup: "npm:^4.17.2"
     tldts-experimental: "npm:^6.0.14"
     ts-node: "npm:^10.9.1"
@@ -563,7 +563,7 @@ __metadata:
     jsdom: "npm:^24.0.0"
     mocha: "npm:^10.2.0"
     nyc: "npm:^17.0.0"
-    rimraf: "npm:^5.0.1"
+    rimraf: "npm:^6.0.1"
     rollup: "npm:^4.0.2"
     sinon: "npm:^18.0.0"
     ts-node: "npm:^10.9.1"
@@ -583,7 +583,7 @@ __metadata:
     "@rollup/plugin-typescript": "npm:^11.1.6"
     "@types/chrome": "npm:^0.0.268"
     eslint: "npm:^9.3.0"
-    rimraf: "npm:^5.0.1"
+    rimraf: "npm:^6.0.1"
     rollup: "npm:^4.0.2"
     typescript: "npm:^5.5.2"
     webextension-polyfill-ts: "npm:^0.26.0"
@@ -603,7 +603,7 @@ __metadata:
     eslint: "npm:^9.3.0"
     mocha: "npm:^10.2.0"
     nyc: "npm:^17.0.0"
-    rimraf: "npm:^5.0.1"
+    rimraf: "npm:^6.0.1"
     rollup: "npm:^4.0.2"
     tldts-experimental: "npm:^6.0.14"
     ts-node: "npm:^10.9.1"
@@ -635,7 +635,7 @@ __metadata:
     eslint: "npm:^9.3.0"
     mocha: "npm:^10.2.0"
     nyc: "npm:^17.0.0"
-    rimraf: "npm:^5.0.1"
+    rimraf: "npm:^6.0.1"
     rollup: "npm:^4.0.2"
     tldts-experimental: "npm:^6.0.14"
     ts-node: "npm:^10.9.1"
@@ -5126,7 +5126,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^10.2.2, glob@npm:^10.3.10, glob@npm:^10.3.7, glob@npm:^10.4.1":
+"glob@npm:^10.2.2, glob@npm:^10.3.10, glob@npm:^10.4.1":
   version: 10.4.1
   resolution: "glob@npm:10.4.1"
   dependencies:
@@ -8757,17 +8757,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rimraf@npm:^5.0.1":
-  version: 5.0.8
-  resolution: "rimraf@npm:5.0.8"
-  dependencies:
-    glob: "npm:^10.3.7"
-  bin:
-    rimraf: dist/esm/bin.mjs
-  checksum: 10/ab8f1bcb49762d16120813a127f90773da657bb5c6f29d3865c1b3c1ceb0d2291cd3e7b439adb7571024be47dce8443b3ffd1b116ec78b6122fca0571da87a79
-  languageName: node
-  linkType: hard
-
 "rimraf@npm:^6.0.0":
   version: 6.0.0
   resolution: "rimraf@npm:6.0.0"
@@ -8776,6 +8765,18 @@ __metadata:
   bin:
     rimraf: dist/esm/bin.mjs
   checksum: 10/8a2e161f89b4fb8d7f3cab9bdea5360e9ab2ddc13d8120508b56eb93ba0c6f4506b799598900db6558628194b09f89705d1b98a591d7f727508e427e247befea
+  languageName: node
+  linkType: hard
+
+"rimraf@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "rimraf@npm:6.0.1"
+  dependencies:
+    glob: "npm:^11.0.0"
+    package-json-from-dist: "npm:^1.0.0"
+  bin:
+    rimraf: dist/esm/bin.mjs
+  checksum: 10/0eb7edf08aa39017496c99ba675552dda11a20811ba78f8232da2ba945308c91e9cd673f95998b1a8202bc7436d33390831d23ea38ae52751038d56373ad99e2
   languageName: node
   linkType: hard
 
