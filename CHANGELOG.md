@@ -1,3 +1,26 @@
+# v1.28.2 (Mon Jul 15 2024)
+
+#### :bug: Bug Fix
+
+- Drop unintended output files (#4087) [#4092](https://github.com/ghostery/adblocker/pull/4092) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump electron from 31.1.0 to 31.2.0 [#4076](https://github.com/ghostery/adblocker/pull/4076) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @remusao/smaz from 1.9.1 to 1.10.0 [#4085](https://github.com/ghostery/adblocker/pull/4085) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump eslint from 9.6.0 to 9.7.0 [#4088](https://github.com/ghostery/adblocker/pull/4088) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @remusao/smaz-generate from 1.9.1 to 1.10.0 [#4080](https://github.com/ghostery/adblocker/pull/4080) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @remusao/small from 1.2.1 to 1.3.0 [#4082](https://github.com/ghostery/adblocker/pull/4082) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-puppeteer`
+  - Build(deps): Bump puppeteer from 22.12.1 to 22.13.0 [#4081](https://github.com/ghostery/adblocker/pull/4081) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v1.28.1 (Mon Jul 15 2024)
 
 #### :bug: Bug Fix
