@@ -1,3 +1,16 @@
+# v1.28.1 (Mon Jul 15 2024)
+
+#### :bug: Bug Fix
+
+- Simplify build with tshy [#4079](https://github.com/ghostery/adblocker/pull/4079) ([@chrmod](https://github.com/chrmod) [@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 2
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.28.0 (Tue Jul 09 2024)
 
 #### :nut_and_bolt: Dependencies

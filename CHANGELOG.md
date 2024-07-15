@@ -1,3 +1,25 @@
+# v1.28.1 (Mon Jul 15 2024)
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker-content`, `@cliqz/adblocker-electron-preload`, `@cliqz/adblocker-electron`, `@cliqz/adblocker-extended-selectors`, `@cliqz/adblocker-playwright`, `@cliqz/adblocker-puppeteer`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - Simplify build with tshy [#4079](https://github.com/ghostery/adblocker/pull/4079) ([@chrmod](https://github.com/chrmod) [@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @remusao/auto-config from 1.1.2 to 1.2.0 [#4083](https://github.com/ghostery/adblocker/pull/4083) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @eslint/js from 9.6.0 to 9.7.0 [#4089](https://github.com/ghostery/adblocker/pull/4089) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump prettier from 3.3.2 to 3.3.3 [#4090](https://github.com/ghostery/adblocker/pull/4090) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript-eslint from 8.0.0-alpha.41 to 8.0.0-alpha.44 [#4091](https://github.com/ghostery/adblocker/pull/4091) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.28.0 (Tue Jul 09 2024)
 
 #### :rocket: New Feature
