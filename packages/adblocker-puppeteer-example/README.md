@@ -46,7 +46,9 @@
 Blocking ads in Puppeteer using [@cliqz/adblocker-puppeteer](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-puppeteer).
 
 ```sh
-$ yarn start
+$ yarn build
+$ yarn start:commonjs
+$ yarn start:esm
 ```
 
 Checkout [index.ts](./index.ts) for more details!

@@ -46,7 +46,9 @@
 Blocking ads in Electron using [@cliqz/adblocker-electron](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-electron).
 
 ```sh
-$ yarn start
+$ yarn build
+$ yarn start:commonjs
+$ yarn start:esm
 ```
 
 Checkout [index.ts](./index.ts) for more details!

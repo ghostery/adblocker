@@ -9,10 +9,31 @@
   "homepage": "https://github.com/ghostery/adblocker#readme",
   "license": "MPL-2.0",
   "type": "module",
+  "tshy": {
+    "exports": {
+      "./package.json": "./package.json",
+      ".": "./src/index.ts"
+    }
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/index.d.ts",
+        "default": "./dist/commonjs/index.js"
+      }
+    }
+  },
+  "main": "./dist/commonjs/index.js",
+  "types": "./dist/commonjs/index.d.ts",
+  "module": "./dist/esm/index.js",
   "files": [
     "LICENSE",
-    "index.ts",
-    "index.js"
+    "dist"
   ],
   "repository": {
     "type": "git",
@@ -20,8 +41,11 @@
     "directory": "packages/adblocker-electron-example"
   },
   "scripts": {
-    "start": "electron index.js",
-    "lint": "eslint index.ts"
+    "clean": "rimraf dist .tshy .tshy-build",
+    "start:commonjs": "electron dist/commonjs/index.js",
+    "start:esm": "electron dist/commonjs/index.js",
+    "build": "tshy",
+    "lint": "eslint src/index.ts"
   },
   "bugs": {
     "url": "https://github.com/ghostery/adblocker/issues"
@@ -63,12 +87,13 @@
   "dependencies": {
     "@cliqz/adblocker-electron": "^1.28.2",
     "cross-fetch": "^4.0.0",
-    "electron": "^31.0.0",
-    "tsx": "^4.16.2"
+    "electron": "^31.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.12.12",
     "eslint": "^9.3.0",
+    "rimraf": "^6.0.1",
+    "tshy": "^3.0.2",
     "typescript": "^5.5.2"
   }
 }
