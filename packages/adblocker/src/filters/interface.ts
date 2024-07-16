@@ -14,5 +14,4 @@ export default interface IFilter {
   getTokens: () => Uint32Array[];
   serialize: (buffer: StaticDataView) => void;
   getSerializedSize(compression: boolean): number;
-  toString(): string;
 }
