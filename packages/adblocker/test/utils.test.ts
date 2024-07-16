@@ -9,7 +9,6 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import IFilter from '../src/filters/interface.js';
 import { TokensBuffer } from '../src/tokens-buffer.js';
 import { parseFilters } from '../src/lists.js';
 import {
@@ -29,12 +28,13 @@ import {
 import requests from './data/requests.js';
 import { allLists } from './utils.js';
 import NetworkFilter, { normalizeRawFilterOptions } from '../src/filters/network.js';
+import CosmeticFilter from '../src/filters/cosmetic.js';
 
 function t(tokens: string[]): Uint32Array {
   return new Uint32Array(tokens.map(fastHash));
 }
 
-function checkCollisions(filters: IFilter[]): void {
+function checkCollisions(filters: (CosmeticFilter | NetworkFilter)[]): void {
   const hashes: Map<number, string> = new Map();
   for (const filter of filters) {
     const id = filter.getId();

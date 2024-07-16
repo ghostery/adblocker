@@ -205,14 +205,16 @@ describe('ReverseIndex', () => {
                   return ret;
                 };
 
-                [
-                  ['foo', ['||foo.com']],
-                  ['com', []], // filter was indexed using 'foo' and not 'com'
-                  ['ads', ['/ads/tracker.js$image']],
-                  ['foo.ads', ['||foo.com', '/ads/tracker.js$image']],
-                  ['woot', ['|woot|$redirect=noop.js']],
-                  ['https://bar.foo.com/ads/tracker.js', ['||foo.com', '/ads/tracker.js$image']],
-                ].forEach(([input, expected]) => {
+                (
+                  [
+                    ['foo', ['||foo.com']],
+                    ['com', []], // filter was indexed using 'foo' and not 'com'
+                    ['ads', ['/ads/tracker.js$image']],
+                    ['foo.ads', ['||foo.com', '/ads/tracker.js$image']],
+                    ['woot', ['|woot|$redirect=noop.js']],
+                    ['https://bar.foo.com/ads/tracker.js', ['||foo.com', '/ads/tracker.js$image']],
+                  ] as const
+                ).forEach(([input, expected]) => {
                   describe(`token=${input}, expected=${JSON.stringify(expected)}`, () => {
                     it('get all matches', () => {
                       matches.clear();

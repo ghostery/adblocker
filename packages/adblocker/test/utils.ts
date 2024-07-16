@@ -14,6 +14,9 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 import { fullLists } from '../src/index.js';
+import { IPattern } from '../src/engine/metadata/patterns.js';
+import { ICategory } from '../src/engine/metadata/categories.js';
+import { IOrganization } from '../src/engine/metadata/organizations.js';
 
 export function loadEasyListFilters(): string[] {
   return JSON.parse(
@@ -43,11 +46,17 @@ export function getNaughtyStrings(): string[] {
   return fs.readFileSync(path.resolve(__dirname, 'data', 'blns.txt'), 'utf-8').split('\n');
 }
 
-export function getRawTrackerDB(): any {
-  const trackerdb = JSON.parse(
-    zlib.unzipSync(
-      fs.readFileSync(path.resolve(__dirname, 'data', 'trackerdb_20221213.json.gz'))
-    ).toString('utf-8'),
+type TrackerDB = {
+  patterns: Record<string, IPattern>;
+  categories: Record<string, ICategory>;
+  organizations: Record<string, IOrganization>;
+};
+
+export function getRawTrackerDB(): TrackerDB {
+  const trackerdb: TrackerDB = JSON.parse(
+    zlib
+      .unzipSync(fs.readFileSync(path.resolve(__dirname, 'data', 'trackerdb_20221213.json.gz')))
+      .toString('utf-8'),
   );
 
   for (const [key, pattern] of Object.entries(trackerdb.patterns)) {
