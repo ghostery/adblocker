@@ -33,7 +33,7 @@ import Preprocessor, { Env } from '../preprocessor.js';
 import PreprocessorBucket from './bucket/preprocessor.js';
 import IFilter from '../filters/interface.js';
 
-export const ENGINE_VERSION = 656;
+export const ENGINE_VERSION = 657;
 
 function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   if (filters.length === 0) {
