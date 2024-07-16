@@ -5,7 +5,7 @@ import { promises as fs } from 'fs';
 
 function getUrlToLoad(): string {
   let url = 'https://www.mangareader.to/';
-  if (process.argv[process.argv.length - 1].endsWith('.ts') === false) {
+  if (process.argv[process.argv.length - 1].endsWith('.js') === false) {
     url = process.argv[process.argv.length - 1];
   }
 
