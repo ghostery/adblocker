@@ -243,7 +243,6 @@ describe('#Request', () => {
           isFirstParty: true,
           isThirdParty: false,
         });
-
       });
 
       it('correctly uses domains when available if type not main_frame', () => {

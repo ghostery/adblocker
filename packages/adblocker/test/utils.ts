@@ -43,11 +43,62 @@ export function getNaughtyStrings(): string[] {
   return fs.readFileSync(path.resolve(__dirname, 'data', 'blns.txt'), 'utf-8').split('\n');
 }
 
-export function getRawTrackerDB(): any {
-  const trackerdb = JSON.parse(
-    zlib.unzipSync(
-      fs.readFileSync(path.resolve(__dirname, 'data', 'trackerdb_20221213.json.gz'))
-    ).toString('utf-8'),
+export type NullableFields<T extends Record<string, unknown>, K extends keyof T = keyof T> = {
+  [key in K]: T[K] | null;
+};
+
+export type TrackerDBCategory = {
+  name: string;
+  color: string;
+  description: string;
+};
+
+export type TrackerDBPattern = {
+  name: string;
+} & NullableFields<{
+  category: string;
+  organization: string;
+  alias: any;
+  website_url: any;
+  ghostery_id: string;
+  domains: Array<string>;
+  filters: Array<string>;
+}>;
+
+export type TrackerDBOraganization = {
+  name: string;
+} & NullableFields<{
+  description: string;
+  website_url: string;
+  country: string;
+  privacy_policy_url: string;
+  privacy_contact: string;
+  ghostery_id: string;
+}>;
+
+export type TrackerDBSnapshot = {
+  categories: Record<string, TrackerDBCategory>;
+  organizations: Record<string, TrackerDBOraganization>;
+  patterns: Record<string, TrackerDBPattern>;
+  domains: Record<string, string>;
+  filters: Record<string, string>;
+};
+
+export type PropertyWithKey = {
+  key: string;
+};
+
+export type TrackerDB = TrackerDBSnapshot & {
+  categories: Record<string, TrackerDBCategory & PropertyWithKey>;
+  organizations: Record<string, TrackerDBOraganization & PropertyWithKey>;
+  patterns: Record<string, TrackerDBPattern & PropertyWithKey>;
+};
+
+export function getRawTrackerDB(): TrackerDB {
+  const trackerdb: TrackerDBSnapshot = JSON.parse(
+    zlib
+      .unzipSync(fs.readFileSync(path.resolve(__dirname, 'data', 'trackerdb_20221213.json.gz')))
+      .toString('utf-8'),
   );
 
   for (const [key, pattern] of Object.entries(trackerdb.patterns)) {
@@ -68,7 +119,7 @@ export function getRawTrackerDB(): any {
     }
   }
 
-  return trackerdb;
+  return trackerdb as TrackerDB;
 }
 
 export function typedArrayDiff(arr1: Uint8Array, arr2: Uint8Array): string[] {

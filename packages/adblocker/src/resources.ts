@@ -90,7 +90,6 @@ export default class Resources {
     }
 
     // The resource containing javascirpts to be injected
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const js: Map<string, string> = typeToResource.get('application/javascript') || new Map();
     for (const [key, value] of js.entries()) {
       if (key.endsWith('.js')) {

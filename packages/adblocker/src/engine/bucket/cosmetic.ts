@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 /*!
  * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
  *

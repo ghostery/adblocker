@@ -29,37 +29,33 @@ use((chai, utils) => {
   utils.addMethod(
     chai.Assertion.prototype,
     'matchRequest',
-    function (this: any, req: Partial<Request>) {
+    function (this: Chai.ChaiStatic & { _obj: NetworkFilter }, req: Partial<Request>) {
       const filter = this._obj;
       const request = Request.fromRawDetails(req);
 
       new chai.Assertion(filter).not.to.be.null;
 
-      this.assert(
-        filter.match(request),
-        'expected #{this} to match #{exp}',
-        'expected #{this} to not match #{exp}',
-      );
+      this.assert(filter.match(request), 'expected #{this} to match #{exp}');
     },
   );
 
   utils.addMethod(
     chai.Assertion.prototype,
     'matchHostname',
-    function (this: any, hostname: string) {
+    function (this: Chai.ChaiStatic & { _obj: CosmeticFilter }, hostname: string) {
       const filter = this._obj;
       new chai.Assertion(filter).not.to.be.null;
 
       this.assert(
         filter.match(hostname, getDomain(hostname) || ''),
         'expected #{this} to match #{exp}',
-        'expected #{this} to not match #{exp}',
       );
     },
   );
 });
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Chai {
     interface Assertion {
       matchRequest(req: Partial<RequestInitialization>): Assertion;
