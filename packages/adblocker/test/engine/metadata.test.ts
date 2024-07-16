@@ -119,7 +119,7 @@ describe('#IPattern', () => {
   });
 
   it('stored in CompactMap', () => {
-    const inputPatterns = Object.values(getRawTrackerDB().patterns) as IPattern[];
+    const inputPatterns = Object.values(getRawTrackerDB().patterns);
 
     const map = createPatternMap(inputPatterns);
 
@@ -165,7 +165,7 @@ describe('#ICategory', () => {
   });
 
   it('stored in CompactMap', () => {
-    const inputCategories = Object.values(getRawTrackerDB().categories) as ICategory[];
+    const inputCategories = Object.values(getRawTrackerDB().categories);
 
     const map = createCategoriesMap(inputCategories);
 
@@ -208,7 +208,7 @@ describe('#IOrganization', () => {
   });
 
   it('stored in CompactMap', () => {
-    const inputOrganization = Object.values(getRawTrackerDB().organizations) as IOrganization[];
+    const inputOrganization = Object.values(getRawTrackerDB().organizations);
 
     const map = createOrganizationsMap(inputOrganization);
 

@@ -14,6 +14,9 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 import { fullLists } from '../src/index.js';
+import { IPattern } from '../src/engine/metadata/patterns.js';
+import { ICategory } from '../src/engine/metadata/categories.js';
+import { IOrganization } from '../src/engine/metadata/organizations.js';
 
 export function loadEasyListFilters(): string[] {
   return JSON.parse(
@@ -43,59 +46,14 @@ export function getNaughtyStrings(): string[] {
   return fs.readFileSync(path.resolve(__dirname, 'data', 'blns.txt'), 'utf-8').split('\n');
 }
 
-export type NullableFields<T extends Record<string, unknown>, K extends keyof T = keyof T> = {
-  [key in K]: T[K] | null;
-};
-
-export type TrackerDBCategory = {
-  name: string;
-  color: string;
-  description: string;
-};
-
-export type TrackerDBPattern = {
-  name: string;
-} & NullableFields<{
-  category: string;
-  organization: string;
-  alias: any;
-  website_url: any;
-  ghostery_id: string;
-  domains: Array<string>;
-  filters: Array<string>;
-}>;
-
-export type TrackerDBOraganization = {
-  name: string;
-} & NullableFields<{
-  description: string;
-  website_url: string;
-  country: string;
-  privacy_policy_url: string;
-  privacy_contact: string;
-  ghostery_id: string;
-}>;
-
-export type TrackerDBSnapshot = {
-  categories: Record<string, TrackerDBCategory>;
-  organizations: Record<string, TrackerDBOraganization>;
-  patterns: Record<string, TrackerDBPattern>;
-  domains: Record<string, string>;
-  filters: Record<string, string>;
-};
-
-export type PropertyWithKey = {
-  key: string;
-};
-
-export type TrackerDB = TrackerDBSnapshot & {
-  categories: Record<string, TrackerDBCategory & PropertyWithKey>;
-  organizations: Record<string, TrackerDBOraganization & PropertyWithKey>;
-  patterns: Record<string, TrackerDBPattern & PropertyWithKey>;
+type TrackerDB = {
+  patterns: Record<string, IPattern>;
+  categories: Record<string, ICategory>;
+  organizations: Record<string, IOrganization>;
 };
 
 export function getRawTrackerDB(): TrackerDB {
-  const trackerdb: TrackerDBSnapshot = JSON.parse(
+  const trackerdb: TrackerDB = JSON.parse(
     zlib
       .unzipSync(fs.readFileSync(path.resolve(__dirname, 'data', 'trackerdb_20221213.json.gz')))
       .toString('utf-8'),
@@ -119,7 +77,7 @@ export function getRawTrackerDB(): TrackerDB {
     }
   }
 
-  return trackerdb as TrackerDB;
+  return trackerdb;
 }
 
 export function typedArrayDiff(arr1: Uint8Array, arr2: Uint8Array): string[] {
