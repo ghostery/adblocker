@@ -50,7 +50,7 @@ Ghostery' adblocker is a JavaScript library for *blocking ads, trackers, and ann
 
 ## Getting Started
 
-Ghostery' adblocker is the easiest and most efficient way to block ads and trackers in your project. Only a few lines of code are required to integrate smoothly with [Puppeteer](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-puppeteer-example), [Electron](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-electron-example), a  Chrome- and Firefox-compatible [browser extension](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-webextension-example), or any environment supporting [JavaScript](https://github.com/ghostery/adblocker/tree/master/packages/adblocker) (e.g. Node.js or React Native).
+Ghostery's adblocker is the easiest and most efficient way to block ads and trackers in your project. Only a few lines of code are required to integrate smoothly with [Puppeteer](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-puppeteer-example), [Electron](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-electron-example), a  Chrome- and Firefox-compatible [browser extension](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-webextension-example), or any environment supporting [JavaScript](https://github.com/ghostery/adblocker/tree/master/packages/adblocker) (e.g. Node.js or React Native).
 
 Here is how to do it in two steps for a Chrome- and Firefox-compatible WebExtension:
 1. Install: `npm install --save @cliqz/adblocker-webextension`
