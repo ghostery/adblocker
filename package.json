@@ -68,7 +68,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.3.0",
-    "@remusao/auto-config": "^1.1.2",
     "@types/benchmark": "^2.1.3",
     "@types/node": "^20.12.12",
     "auto": "^11.0.5",
@@ -85,9 +84,84 @@
     "typescript-eslint": "8.0.0-alpha.44"
   },
   "auto": {
-    "extends": "@remusao/auto-config",
     "name": "Ghostery Adblocker Bot",
-    "email": "ghostery-adblocker-bot@users.noreply.github.com"
+    "email": "ghostery-adblocker-bot@users.noreply.github.com",
+    "plugins": [
+      "npm"
+    ],
+    "labels": [
+      {
+        "name": "PR: Breaking Change :boom:",
+        "description": "Increment major version when merged",
+        "changelogTitle": ":boom: Breaking Change",
+        "releaseType": "major",
+        "overwrite": true,
+        "color": "#e2372b"
+      },
+      {
+        "name": "PR: New Feature :rocket:",
+        "description": "Increment minor version when merged",
+        "changelogTitle": ":rocket: New Feature",
+        "releaseType": "minor",
+        "overwrite": true,
+        "color": "#2e449b"
+      },
+      {
+        "name": "PR: Performance :running_woman:",
+        "description": "Increment minor version when merged",
+        "changelogTitle": ":running_woman: Performance",
+        "releaseType": "minor",
+        "overwrite": true,
+        "color": "#ead99f"
+      },
+      {
+        "name": "PR: Bug Fix :bug:",
+        "description": "Increment patch version when merged",
+        "changelogTitle": ":bug: Bug Fix",
+        "releaseType": "patch",
+        "overwrite": true,
+        "color": "#56dd97"
+      },
+      {
+        "name": "PR: Polish :nail_care:",
+        "description": "Increment patch version when merged",
+        "changelogTitle": ":nail_care: Polish",
+        "releaseType": "patch",
+        "overwrite": true,
+        "color": "#a9bbe8"
+      },
+      {
+        "name": "PR: Internal :house:",
+        "description": "Changes only affect internals",
+        "changelogTitle": ":house: Internal",
+        "releaseType": "none",
+        "overwrite": true,
+        "color": "#5b1482"
+      },
+      {
+        "name": "PR: Docs :memo:",
+        "description": "Changes only affect documentation",
+        "changelogTitle": ":memo: Documentation",
+        "releaseType": "none",
+        "overwrite": true,
+        "color": "#d2f28a"
+      },
+      {
+        "name": "skip-release",
+        "description": "Preserve the current version when merged",
+        "releaseType": "skip",
+        "overwrite": true,
+        "color": "#e069cf"
+      },
+      {
+        "name": "PR: Dependencies :nut_and_bolt:",
+        "description": "Changes only update dependencies",
+        "changelogTitle": ":nut_and_bolt: Dependencies",
+        "releaseType": "none",
+        "overwrite": true,
+        "color": "#5dbdcc"
+      }
+    ]
   },
   "packageManager": "yarn@4.2.2"
 }
