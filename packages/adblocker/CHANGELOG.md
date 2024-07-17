@@ -1,3 +1,15 @@
+# v1.30.0 (Wed Jul 17 2024)
+
+#### :rocket: New Feature
+
+- Feedback from not supported filters [#4108](https://github.com/ghostery/adblocker/pull/4108) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 1
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.29.0 (Wed Jul 17 2024)
 
 #### :rocket: New Feature
