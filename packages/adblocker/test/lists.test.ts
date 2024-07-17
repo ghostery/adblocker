@@ -9,8 +9,90 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { f, generateDiff, getLinesWithFilters, mergeDiffs, parseFilters } from '../src/lists.js';
+import {
+  f,
+  generateDiff,
+  getLinesWithFilters,
+  mergeDiffs,
+  parseFilters,
+  detectFilterType,
+  FilterType,
+} from '../src/lists.js';
 import Config from '../src/config.js';
+
+const ADGUARD_FILTERS = [
+  // https://adguard.com/kb/general/ad-filtering/create-own-filters/#html-filtering-rules
+  'example.org$$script[data-src="banner"]',
+  '$@$script[tag-content="banner"]',
+  // CSS https://adguard.com/kb/general/ad-filtering/create-own-filters/#cosmetic-css-rules
+  'example.com#$#body { background-color: #333!important; }',
+  'example.com#@$#.textad { visibility: hidden; }',
+  // JavaScript https://adguard.com/kb/general/ad-filtering/create-own-filters/#javascript-rules
+  '#%#window.__gaq = undefined;',
+  '#@%#window.__gaq = undefined;',
+  // Extended CSS https://adguard.com/kb/general/ad-filtering/create-own-filters/#extended-css-selectors
+  'example.org#?#div:has(> a[target="_blank"][rel="nofollow"])',
+  'example.com#$?#h3:contains(cookies) { display: none!important; }',
+  'example.net#@?#.banner:matches-css(width: 360px)',
+];
+
+describe('#detectFilterType', () => {
+  const networkFilter = 'foo.com';
+  const cosmeticFilter = '###test';
+
+  it('detects NETWORK filters', () => {
+    expect(detectFilterType(networkFilter)).to.equal(FilterType.NETWORK);
+  });
+
+  it('detects COSMETIC filters', () => {
+    expect(detectFilterType(cosmeticFilter)).to.equal(FilterType.COSMETIC);
+  });
+
+  it('detects NON_SUPPORTED filters', () => {
+    expect(detectFilterType('')).to.equal(FilterType.NOT_SUPPORTED);
+    expect(detectFilterType(`a`)).to.equal(FilterType.NOT_SUPPORTED);
+    expect(detectFilterType('! some comment')).to.equal(FilterType.NOT_SUPPORTED);
+    expect(detectFilterType(`!${networkFilter}`)).to.equal(FilterType.NOT_SUPPORTED);
+    expect(detectFilterType(`!${cosmeticFilter}`)).to.equal(FilterType.NOT_SUPPORTED);
+    expect(detectFilterType(`!${cosmeticFilter}`)).to.equal(FilterType.NOT_SUPPORTED);
+    expect(detectFilterType(`[Adblock]`)).to.equal(FilterType.NOT_SUPPORTED);
+    for (const adguardFilter of ADGUARD_FILTERS) {
+      expect(detectFilterType(adguardFilter)).to.equal(FilterType.NOT_SUPPORTED, adguardFilter);
+    }
+  });
+
+  context('with extendedNonSupportedTypes option', () => {
+    const subject = (filter: string) =>
+      detectFilterType(filter, { extendedNonSupportedTypes: true });
+
+    it('detects NETWORK filters', () => {
+      expect(subject(networkFilter)).to.equal(FilterType.NETWORK);
+    });
+
+    it('detects COSMETIC filters', () => {
+      expect(subject(cosmeticFilter)).to.equal(FilterType.COSMETIC);
+    });
+
+    it('detects NOT_SUPPORTED_EMPTY filters', () => {
+      expect(subject('')).to.equal(FilterType.NOT_SUPPORTED_EMPTY);
+      expect(subject(`a`)).to.equal(FilterType.NOT_SUPPORTED_EMPTY);
+    });
+
+    it('detects NOT_SUPPORTED_COMMENT filters', () => {
+      expect(subject('! some comment')).to.equal(FilterType.NOT_SUPPORTED_COMMENT);
+      expect(subject(`!${networkFilter}`)).to.equal(FilterType.NOT_SUPPORTED_COMMENT);
+      expect(subject(`!${cosmeticFilter}`)).to.equal(FilterType.NOT_SUPPORTED_COMMENT);
+      expect(subject(`!${cosmeticFilter}`)).to.equal(FilterType.NOT_SUPPORTED_COMMENT);
+      expect(subject(`[Adblock]`)).to.equal(FilterType.NOT_SUPPORTED_COMMENT);
+    });
+
+    it('detects NOT_SUPPORTED_ADGUARD filters', () => {
+      for (const adguardFilter of ADGUARD_FILTERS) {
+        expect(subject(adguardFilter)).to.equal(FilterType.NOT_SUPPORTED_ADGUARD, adguardFilter);
+      }
+    });
+  });
+});
 
 describe('#getLinesWithFilters', () => {
   it('get not lines if empty', () => {
@@ -56,6 +138,103 @@ bar.co.uk^*baz
 });
 
 describe('#parseFilters', () => {
+  function notSupportedFiltersTest(config?: Config) {
+    context('with not supported filters', () => {
+      it('ignores empty lines', () => {
+        expect(parseFilters('', config))
+          .to.have.property('notSupportedFilters')
+          .that.have.lengthOf(0);
+      });
+
+      it('ignores comments', () => {
+        expect(
+          parseFilters(
+            `
+            ! comment
+            [Adguard]
+            #
+          `,
+            config,
+          ),
+        )
+          .to.have.property('notSupportedFilters')
+          .that.have.lengthOf(0);
+      });
+
+      it('returns Adguard fitlers', () => {
+        for (const filter of ADGUARD_FILTERS) {
+          expect(parseFilters(filter, config))
+            .to.have.property('notSupportedFilters')
+            .that.deep.equal([
+              {
+                filter,
+                lineNumber: 0,
+                filterType: FilterType.NOT_SUPPORTED_ADGUARD,
+              },
+            ]);
+        }
+      });
+
+      it('returns invalid network filters', () => {
+        for (const filter of [
+          '$domain=|a',
+          '$domain=a|',
+          '$from=|a',
+          '$from=a|',
+          '$~important',
+          '$~match-case',
+          '$~redirect=x',
+          '$~redirect-rule=x',
+          '$redirect',
+          '$redirect-rule',
+          '$~csp',
+          '$~ehide',
+          '$~elementhide',
+          '$~shide',
+          '$~specifichide',
+          '$~ghide',
+          '$~generichide',
+          '$~inline-script',
+          '$~inline-font',
+          '$~all',
+          '$unknownOption',
+        ]) {
+          expect(parseFilters(filter, config))
+            .to.have.property('notSupportedFilters')
+            .that.deep.equal([
+              {
+                filter,
+                lineNumber: 0,
+                filterType: FilterType.NETWORK,
+              },
+            ]);
+        }
+      });
+
+      it('returns invalid cosmetic filters', () => {
+        for (const filter of [
+          '##',
+          '#@#',
+          '##^script:has-text(',
+          '##+js()',
+          'youtube.com##+js()',
+          '##:has()',
+          // TODO: add example for invalid CSS selector - currently those are not testable in nodejs
+        ]) {
+          expect(parseFilters(filter, config))
+            .to.have.property('notSupportedFilters')
+            .that.deep.equal([
+              {
+                filter,
+                lineNumber: 0,
+                filterType: FilterType.COSMETIC,
+              },
+            ]);
+        }
+      });
+    });
+  }
+
   it('handle network filters', () => {
     expect(parseFilters('')).to.have.property('networkFilters').that.have.lengthOf(0);
     expect(parseFilters('||foo.com')).to.have.property('networkFilters').that.have.lengthOf(1);
@@ -76,10 +255,14 @@ describe('#parseFilters', () => {
     expect(result).and.to.have.property('networkFilters').that.have.lengthOf(1);
   });
 
+  notSupportedFiltersTest();
+
   context('with loadPreprocessors config', () => {
     const config = new Config({
       loadPreprocessors: true,
     });
+
+    notSupportedFiltersTest(config);
 
     it('ignores empty preprocessors', () => {
       expect(
