@@ -29,8 +29,8 @@ import * as pw from 'playwright';
     console.log('whitelisted', request.url);
   });
 
-  blocker.on('csp-injected', (request: Request) => {
-    console.log('csp', request.url);
+  blocker.on('csp-injected', (request: Request, csps: string) => {
+    console.log('csp', request.url, csps);
   });
 
   blocker.on('script-injected', (script: string, url: string) => {
@@ -41,7 +41,11 @@ import * as pw from 'playwright';
     console.log('style', style.length, url);
   });
 
-  await page.goto('https://www.mangareader.to/');
+  blocker.on('filter-matched', ({ filter, exception }, context) => {
+    console.log('filter-matched', filter, exception, context);
+  });
+
+  await page.goto('https://www.mangareader.net/');
   await page.screenshot({ path: 'output.png' });
   await blocker.disableBlockingInPage(page);
   await browser.close();
