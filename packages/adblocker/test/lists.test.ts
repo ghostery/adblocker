@@ -40,55 +40,61 @@ describe('#detectFilterType', () => {
   const networkFilter = 'foo.com';
   const cosmeticFilter = '###test';
 
+  const expectType = (filter: string, filterType: FilterType) =>
+    expect(detectFilterType(filter)).to.equal(filterType, filter);
+
   it('detects NETWORK filters', () => {
-    expect(detectFilterType(networkFilter)).to.equal(FilterType.NETWORK);
+    expectType(networkFilter, FilterType.NETWORK);
   });
 
   it('detects COSMETIC filters', () => {
-    expect(detectFilterType(cosmeticFilter)).to.equal(FilterType.COSMETIC);
+    expectType(cosmeticFilter, FilterType.COSMETIC);
   });
 
   it('detects NON_SUPPORTED filters', () => {
-    expect(detectFilterType('')).to.equal(FilterType.NOT_SUPPORTED);
-    expect(detectFilterType(`a`)).to.equal(FilterType.NOT_SUPPORTED);
-    expect(detectFilterType('! some comment')).to.equal(FilterType.NOT_SUPPORTED);
-    expect(detectFilterType(`!${networkFilter}`)).to.equal(FilterType.NOT_SUPPORTED);
-    expect(detectFilterType(`!${cosmeticFilter}`)).to.equal(FilterType.NOT_SUPPORTED);
-    expect(detectFilterType(`!${cosmeticFilter}`)).to.equal(FilterType.NOT_SUPPORTED);
-    expect(detectFilterType(`[Adblock]`)).to.equal(FilterType.NOT_SUPPORTED);
+    expectType('', FilterType.NOT_SUPPORTED);
+    expectType(`a`, FilterType.NOT_SUPPORTED);
+    expectType('! some comment', FilterType.NOT_SUPPORTED);
+    expectType(`!${networkFilter}`, FilterType.NOT_SUPPORTED);
+    expectType(`!${cosmeticFilter}`, FilterType.NOT_SUPPORTED);
+    expectType(`!${cosmeticFilter}`, FilterType.NOT_SUPPORTED);
+    expectType(`[Adblock]`, FilterType.NOT_SUPPORTED);
     for (const adguardFilter of ADGUARD_FILTERS) {
-      expect(detectFilterType(adguardFilter)).to.equal(FilterType.NOT_SUPPORTED, adguardFilter);
+      expectType(adguardFilter, FilterType.NOT_SUPPORTED);
     }
   });
 
   context('with extendedNonSupportedTypes option', () => {
-    const subject = (filter: string) =>
-      detectFilterType(filter, { extendedNonSupportedTypes: true });
+    const expectType = (filter: string, filterType: FilterType) =>
+      expect(detectFilterType(filter, { extendedNonSupportedTypes: true })).to.equal(
+        filterType,
+        filter,
+      );
 
     it('detects NETWORK filters', () => {
-      expect(subject(networkFilter)).to.equal(FilterType.NETWORK);
+      expectType(networkFilter, FilterType.NETWORK);
     });
 
     it('detects COSMETIC filters', () => {
-      expect(subject(cosmeticFilter)).to.equal(FilterType.COSMETIC);
+      expectType(cosmeticFilter, FilterType.COSMETIC);
     });
 
     it('detects NOT_SUPPORTED_EMPTY filters', () => {
-      expect(subject('')).to.equal(FilterType.NOT_SUPPORTED_EMPTY);
-      expect(subject(`a`)).to.equal(FilterType.NOT_SUPPORTED_EMPTY);
+      expectType('', FilterType.NOT_SUPPORTED_EMPTY);
+      expectType(`a`, FilterType.NOT_SUPPORTED_EMPTY);
     });
 
     it('detects NOT_SUPPORTED_COMMENT filters', () => {
-      expect(subject('! some comment')).to.equal(FilterType.NOT_SUPPORTED_COMMENT);
-      expect(subject(`!${networkFilter}`)).to.equal(FilterType.NOT_SUPPORTED_COMMENT);
-      expect(subject(`!${cosmeticFilter}`)).to.equal(FilterType.NOT_SUPPORTED_COMMENT);
-      expect(subject(`!${cosmeticFilter}`)).to.equal(FilterType.NOT_SUPPORTED_COMMENT);
-      expect(subject(`[Adblock]`)).to.equal(FilterType.NOT_SUPPORTED_COMMENT);
+      expectType('! some comment', FilterType.NOT_SUPPORTED_COMMENT);
+      expectType(`!${networkFilter}`, FilterType.NOT_SUPPORTED_COMMENT);
+      expectType(`!${cosmeticFilter}`, FilterType.NOT_SUPPORTED_COMMENT);
+      expectType(`!${cosmeticFilter}`, FilterType.NOT_SUPPORTED_COMMENT);
+      expectType(`[Adblock]`, FilterType.NOT_SUPPORTED_COMMENT);
     });
 
     it('detects NOT_SUPPORTED_ADGUARD filters', () => {
       for (const adguardFilter of ADGUARD_FILTERS) {
-        expect(subject(adguardFilter)).to.equal(FilterType.NOT_SUPPORTED_ADGUARD, adguardFilter);
+        expectType(adguardFilter, FilterType.NOT_SUPPORTED_ADGUARD);
       }
     });
   });

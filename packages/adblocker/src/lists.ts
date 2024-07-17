@@ -30,7 +30,7 @@ export const enum FilterType {
  */
 export function detectFilterType(
   line: string,
-  { extendedNonSupportedTypes }: { extendedNonSupportedTypes?: boolean } = {},
+  { extendedNonSupportedTypes = false } = {},
 ): FilterType {
   // Ignore empty line
   if (line.length === 0 || line.length === 1) {
