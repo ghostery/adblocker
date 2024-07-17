@@ -166,13 +166,13 @@ export function parseFilters(
   networkFilters: NetworkFilter[];
   cosmeticFilters: CosmeticFilter[];
   preprocessors: Preprocessor[];
-  notSupportedFilters: nonSupportedFilter[];
+  notSupportedFilters: NonSupportedFilter[];
 } {
   config = new Config(config);
 
   const networkFilters: NetworkFilter[] = [];
   const cosmeticFilters: CosmeticFilter[] = [];
-  const notSupportedFilters: nonSupportedFilter[] = [];
+  const notSupportedFilters: NonSupportedFilter[] = [];
   const lines = list.split('\n');
 
   const preprocessors: Preprocessor[] = [];
