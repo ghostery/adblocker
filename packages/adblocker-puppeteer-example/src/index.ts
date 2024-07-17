@@ -59,7 +59,9 @@ function getUrlToLoad(): string {
     console.log('style', style.length, url);
   });
 
-  blocker.on('filter-matched', console.log.bind(console, 'filter-matched'));
+  blocker.on('filter-matched', ({ filter, exception }, context) => {
+    console.log('filter-matched', filter, exception, context);
+  });
 
   await page.goto(getUrlToLoad());
 })();

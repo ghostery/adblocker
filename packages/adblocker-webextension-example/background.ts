@@ -88,7 +88,9 @@ WebExtensionBlocker.fromLists(fetch, fullLists, {
     console.log('html selectors', htmlSelectors, url);
   });
 
-  blocker.on('filter-matched', console.log.bind(console, 'filter-matched'));
+  blocker.on('filter-matched', ({ filter, exception }, context) => {
+    console.log('filter-matched', filter, exception, context);
+  });
 
   console.log('Ready to roll!');
 });

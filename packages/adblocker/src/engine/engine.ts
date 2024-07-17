@@ -1023,8 +1023,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     }
 
     // Collect all CSP directives and keep track of exceptions
-    const exceptions: Map<string | undefined, NetworkFilter> = new Map();
-    const filters: NetworkFilter[] = [];
+    const cspExceptions: Map<string | undefined, NetworkFilter> = new Map();
+    const cspFilters: NetworkFilter[] = [];
 
     for (const filter of matches) {
       if (filter.isException()) {
@@ -1037,21 +1037,21 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           );
           return undefined;
         }
-        exceptions.set(filter.csp, filter);
+        cspExceptions.set(filter.csp, filter);
       } else {
-        filters.push(filter);
+        cspFilters.push(filter);
       }
     }
 
-    if (filters.length === 0) {
+    if (cspFilters.length === 0) {
       return undefined;
     }
 
     const enabledCsp = new Set();
 
     // Combine all CSPs (except the black-listed ones)
-    for (const filter of filters.values()) {
-      const exception = exceptions.get(filter.csp);
+    for (const filter of cspFilters.values()) {
+      const exception = cspExceptions.get(filter.csp);
       if (exception === undefined) {
         enabledCsp.add(filter.csp);
       }
@@ -1064,7 +1064,9 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
     const csps = Array.from(enabledCsp).join('; ');
 
-    this.emit('csp-injected', request, csps);
+    if (csps.length > 0) {
+      this.emit('csp-injected', request, csps);
+    }
 
     return csps;
   }
