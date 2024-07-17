@@ -292,7 +292,6 @@ export function parseFilters(
         filter: line,
         filterType,
       });
-      }
     }
   }
 
