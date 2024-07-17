@@ -153,7 +153,7 @@ export function f(strings: TemplateStringsArray): NetworkFilter | CosmeticFilter
   return parseFilter(strings[0]);
 }
 
-interface nonSupportedFilter {
+interface NonSupportedFilter {
   lineNumber: number;
   filter: string;
   filterType: FilterType;
