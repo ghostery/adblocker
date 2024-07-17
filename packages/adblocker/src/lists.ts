@@ -279,22 +279,19 @@ export function parseFilters(
             }),
           );
         }
-      } else {
-        if (filterType === FilterType.NOT_SUPPORTED_ADGUARD) {
-          notSupportedFilters.push({
-            lineNumber: i,
-            filter: line,
-            filterType,
-          });
-        }
-      }
-    } else {
-      if (filterType === FilterType.NOT_SUPPORTED_ADGUARD) {
+      } else if (filterType === FilterType.NOT_SUPPORTED_ADGUARD) {
         notSupportedFilters.push({
           lineNumber: i,
           filter: line,
           filterType,
         });
+      }
+    } else if (filterType === FilterType.NOT_SUPPORTED_ADGUARD) {
+      notSupportedFilters.push({
+        lineNumber: i,
+        filter: line,
+        filterType,
+      });
       }
     }
   }
