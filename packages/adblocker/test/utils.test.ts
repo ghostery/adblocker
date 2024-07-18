@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,9 +9,8 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import IFilter from '../src/filters/interface';
-import { TokensBuffer } from '../src/tokens-buffer';
-import { parseFilters } from '../src/lists';
+import { TokensBuffer } from '../src/tokens-buffer.js';
+import { parseFilters } from '../src/lists.js';
 import {
   HASH_SEED,
   binLookup,
@@ -25,16 +24,17 @@ import {
   tokenizeNoSkipInPlace,
   tokenizeWithWildcards,
   tokenizeWithWildcardsInPlace,
-} from '../src/utils';
-import requests from './data/requests';
-import { allLists } from './utils';
-import NetworkFilter, { normalizeRawFilterOptions } from '../src/filters/network';
+} from '../src/utils.js';
+import requests from './data/requests.js';
+import { allLists } from './utils.js';
+import NetworkFilter, { normalizeRawFilterOptions } from '../src/filters/network.js';
+import CosmeticFilter from '../src/filters/cosmetic.js';
 
 function t(tokens: string[]): Uint32Array {
   return new Uint32Array(tokens.map(fastHash));
 }
 
-function checkCollisions(filters: IFilter[]): void {
+function checkCollisions(filters: (CosmeticFilter | NetworkFilter)[]): void {
   const hashes: Map<number, string> = new Map();
   for (const filter of filters) {
     const id = filter.getId();

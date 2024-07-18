@@ -1,15 +1,15 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import CosmeticFilter from '../filters/cosmetic';
-import NetworkFilter, { NETWORK_FILTER_MASK } from '../filters/network';
-import { setBit } from '../utils';
-import { Domains } from '../engine/domains';
+import CosmeticFilter from '../filters/cosmetic.js';
+import NetworkFilter, { NETWORK_FILTER_MASK } from '../filters/network.js';
+import { setBit } from '../utils.js';
+import { Domains } from '../engine/domains.js';
 
 function processRegex(r: RegExp): string {
   return `(?:${r.source})`;

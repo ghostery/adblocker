@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,7 +14,7 @@ import {
   SelectorType,
   PSEUDO_CLASSES,
   EXTENDED_PSEUDO_CLASSES,
-} from '../src/extended';
+} from '../src/extended.js';
 
 describe('extended', () => {
   describe('#classifySelector', () => {

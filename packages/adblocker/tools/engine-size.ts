@@ -1,28 +1,28 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { promises as fs } from 'fs';
-import { join } from 'path';
-import { gzipSync, brotliCompressSync } from 'zlib';
+import { readFileSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { gzipSync, brotliCompressSync } from 'node:zlib';
 
-import { FiltersEngine, adsLists, adsAndTrackingLists, fullLists } from '../adblocker';
+import { FiltersEngine, adsLists, adsAndTrackingLists, fullLists } from '../src/index.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const PREFIX =
   'https://raw.githubusercontent.com/ghostery/adblocker/master/packages/adblocker/assets';
 
 async function loadFromLocalAssets(lists: string[]): Promise<string> {
-  return (
-    await Promise.all(
-      lists
-        .map((path) => join(__dirname, '..', 'assets', path.slice(PREFIX.length)))
-        .map((path) => fs.readFile(path, 'utf-8')),
-    )
-  ).join('\n');
+  return lists
+    .map((path) => join(__dirname, '..', 'assets', path.slice(PREFIX.length)))
+    .map((path) => readFileSync(path, 'utf-8'))
+    .join('\n');
 }
 
 function loadAdsLists(): Promise<string> {

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -27,8 +27,8 @@ import {
   generateDiff,
   getLinesWithFilters,
   parseFilter,
-} from '../adblocker';
-import { typedArrayEqual } from '../test/utils';
+} from '../src/index.js';
+import { typedArrayEqual } from '../test/utils.js';
 
 /**
  * Convert `option` into its normalized version, if any. Otherwise return the
@@ -168,7 +168,7 @@ async function getMeta(url: string): Promise<any> {
  * Return the CDN URL of a specific revision `rev` (a hash) of subscription `list` (e.g. 'easylist').
  */
 function urlOfRevision(list: string, rev: string): string {
-  return `https://cdn.cliqz.com/adblocker/resources/${list}/${rev}/list.txt`;
+  return `https://cdn.ghostery.com/adblocker/resources/${list}/${rev}/list.txt`;
 }
 
 /**
@@ -269,7 +269,7 @@ async function collectTestCases(list: string): Promise<TestCase[]> {
     currentRevision: string;
     previousRevision: string;
   }[] = [];
-  const meta = await getMeta(`https://cdn.cliqz.com/adblocker/resources/${list}/metadata.json`);
+  const meta = await getMeta(`https://cdn.ghostery.com/adblocker/resources/${list}/metadata.json`);
   const revisions: Set<string> = new Set();
 
   // Append current revision (the most recent one)
@@ -322,7 +322,6 @@ async function collectTestCases(list: string): Promise<TestCase[]> {
  */
 async function run() {
   for (const list of [
-    'cliqz-filters',
     'easylist',
     'easyprivacy',
     'plowe-0',
@@ -331,7 +330,6 @@ async function run() {
     'ublock-filters',
     'ublock-privacy',
     'ublock-unbreak',
-    'whotracksme-filters',
   ]) {
     console.log(`> ${list}`);
     const testCases = await collectTestCases(list);

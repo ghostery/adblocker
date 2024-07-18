@@ -1,15 +1,15 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { hashHostnameBackward } from '../request';
-import { toASCII } from '../punycode';
-import { StaticDataView, sizeOfUint32Array, sizeOfUTF8 } from '../data-view';
-import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils';
+import { hashHostnameBackward } from '../request.js';
+import { toASCII } from '../punycode.js';
+import { StaticDataView, sizeOfUint32Array, sizeOfUTF8 } from '../data-view.js';
+import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils.js';
 
 export class Domains {
   public static parse(parts: string[], debug: boolean = false): Domains | undefined {

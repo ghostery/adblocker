@@ -1,21 +1,35 @@
 {
   "name": "@cliqz/adblocker-electron",
-  "version": "1.27.11",
-  "description": "Cliqz adblocker Electron wrapper",
+  "version": "1.30.0",
+  "description": "Ghostery adblocker Electron wrapper",
   "author": {
-    "name": "Cliqz"
+    "name": "Ghostery"
   },
   "homepage": "https://github.com/ghostery/adblocker#readme",
   "license": "MPL-2.0",
   "type": "module",
-  "exports": {
-    "require": "./dist/cjs/adblocker.cjs",
-    "import": "./dist/esm/adblocker.js",
-    "types": "./dist/types/adblocker.d.ts"
+  "tshy": {
+    "exports": {
+      "./package.json": "./package.json",
+      ".": "./src/index.ts"
+    }
   },
-  "main": "dist/cjs/adblocker.cjs",
-  "module": "dist/esm/adblocker.js",
-  "types": "dist/types/adblocker.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/index.d.ts",
+        "default": "./dist/commonjs/index.js"
+      }
+    }
+  },
+  "main": "./dist/commonjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/commonjs/index.d.ts",
   "files": [
     "LICENSE",
     "dist"
@@ -32,23 +46,22 @@
     "url": "https://github.com/ghostery/adblocker/issues"
   },
   "scripts": {
-    "clean": "rimraf dist coverage",
-    "lint": "eslint adblocker.ts",
-    "build": "tsc --build ./tsconfig.json && rollup --config ./rollup.config.ts --configPlugin typescript",
-    "test": "nyc mocha --config ../../.mocharc.json"
+    "clean": "rimraf dist coverage .tshy .tshy-build .nyc_output .rollup.cache",
+    "lint": "eslint src test",
+    "build": "tshy && rollup --config ./rollup.config.js",
+    "test": "nyc mocha"
   },
   "peerDependencies": {
     "electron": ">11"
   },
   "dependencies": {
-    "@cliqz/adblocker": "^1.27.11",
-    "@cliqz/adblocker-electron-preload": "^1.27.11",
+    "@cliqz/adblocker": "^1.30.0",
+    "@cliqz/adblocker-electron-preload": "^1.30.0",
     "tldts-experimental": "^6.0.14"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-terser": "^0.4.4",
     "@types/chai": "^4.3.6",
+    "@types/electron": "^1.6.10",
     "@types/mocha": "^10.0.1",
     "@types/node": "^20.12.12",
     "chai": "^5.1.0",
@@ -56,9 +69,9 @@
     "eslint": "^9.3.0",
     "mocha": "^10.2.0",
     "nyc": "^17.0.0",
-    "rimraf": "^5.0.1",
+    "rimraf": "^6.0.1",
     "rollup": "^4.17.2",
-    "ts-node": "^10.9.1",
+    "tshy": "^3.0.2",
     "typescript": "^5.5.2"
   },
   "contributors": [

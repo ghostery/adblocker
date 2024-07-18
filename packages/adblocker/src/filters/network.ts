@@ -1,12 +1,12 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { Domains } from '../engine/domains';
+import { Domains } from '../engine/domains.js';
 import {
   StaticDataView,
   sizeOfNetworkCSP,
@@ -15,10 +15,10 @@ import {
   sizeOfNetworkRedirect,
   sizeOfUTF8,
   sizeOfRawNetwork,
-} from '../data-view';
-import { toASCII } from '../punycode';
-import Request, { RequestType, NORMALIZED_TYPE_TOKEN } from '../request';
-import { TOKENS_BUFFER } from '../tokens-buffer';
+} from '../data-view.js';
+import { toASCII } from '../punycode.js';
+import Request, { RequestType, NORMALIZED_TYPE_TOKEN } from '../request.js';
+import { TOKENS_BUFFER } from '../tokens-buffer.js';
 import {
   bitCount,
   clearBit,
@@ -35,8 +35,8 @@ import {
   tokenizeWithWildcardsInPlace,
   HASH_SEED,
   HASH_INTERNAL_MULT,
-} from '../utils';
-import IFilter from './interface';
+} from '../utils.js';
+import IFilter from './interface.js';
 
 const HTTP_HASH = fastHash('http');
 const HTTPS_HASH = fastHash('https');

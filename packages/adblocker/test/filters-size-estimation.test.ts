@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,17 +9,19 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { StaticDataView } from '../src/data-view';
-import CosmeticFilter from '../src/filters/cosmetic';
-import IFilter from '../src/filters/interface';
-import NetworkFilter from '../src/filters/network';
-import { parseFilters } from '../src/lists';
-import { allLists } from './utils';
+import { StaticDataView } from '../src/data-view.js';
+import CosmeticFilter from '../src/filters/cosmetic.js';
+import NetworkFilter from '../src/filters/network.js';
+import { parseFilters } from '../src/lists.js';
+import { allLists } from './utils.js';
 
 describe('Make sure size estimate is accurate', () => {
   const { cosmeticFilters, networkFilters } = parseFilters(allLists, { debug: true });
 
-  function testSizeEstimate<T extends IFilter>(filters: T[], compression: boolean): void {
+  function testSizeEstimate<T extends CosmeticFilter | NetworkFilter>(
+    filters: T[],
+    compression: boolean,
+  ): void {
     const buffer = StaticDataView.allocate(1000000, { enableCompression: compression });
 
     for (let i = 0; i < filters.length; i += 1) {

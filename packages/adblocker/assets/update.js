@@ -1,6 +1,10 @@
-const fs = require('fs');
-const path = require('path');
-const adb = require('@cliqz/adblocker');
+/* global fetch */
+
+import { writeFileSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { log } from 'node:console';
+import { NetworkFilter, parseFilter } from '@cliqz/adblocker';
 
 const FILTER_LISTS = [
   ['ublock-unbreak', 'ublock-origin', 'unbreak.txt'],
@@ -22,74 +26,84 @@ const FILTER_LISTS = [
   ['easylist-cookie', 'easylist', 'easylist-cookie.txt'],
 ];
 
+const ASSETS_PATH = dirname(fileURLToPath(import.meta.url));
+
 async function downloadResource(resourceName) {
-  const { revisions } = await fetch(`https://cdn.ghostery.com/adblocker/resources/${resourceName}/metadata.json`).then(result => {
+  const {
+    revisions: [, latestRevision],
+  } = await fetch(
+    `https://cdn.ghostery.com/adblocker/resources/${resourceName}/metadata.json`,
+  ).then((result) => {
     if (!result.ok) {
-      throw new Error(`Failed to fetch ${resourceName} metadata: ${result.status}: ${result.statusText}`);
+      throw new Error(
+        `Failed to fetch ${resourceName} metadata: ${result.status}: ${result.statusText}`,
+      );
     }
     return result.json();
   });
-  return fetch(`https://cdn.ghostery.com/adblocker/resources/${resourceName}/${revisions.pop()}/list.txt`).then(result => {
+  return fetch(
+    `https://cdn.ghostery.com/adblocker/resources/${resourceName}/${latestRevision}/list.txt`,
+  ).then((result) => {
     if (!result.ok) {
       throw new Error(`Failed to fetch ${resourceName}: ${result.status}: ${result.statusText}`);
     }
     return result.text();
-  })
+  });
 }
 
-(async () => {
-  // Update resources.txt
-  fs.writeFileSync(
-    path.join(__dirname, 'ublock-origin', 'resources.txt'),
-    await downloadResource('ublock-resources'),
-    'utf-8',
-  );
+// Update resources.txt
+writeFileSync(
+  join(ASSETS_PATH, 'ublock-origin', 'resources.txt'),
+  await downloadResource('ublock-resources'),
+  'utf-8',
+);
 
-  let duplicatesCount = 0;
-  let badfiltersCount = 0;
+let duplicatesCount = 0;
+let badfiltersCount = 0;
 
-  const badfilters = new Map();
-  const seen = new Map();
+const badfilters = new Map();
+const seen = new Map();
 
-  // Update lists
-  for (const [resourceName, outputPrefixPath, outputFileName] of FILTER_LISTS) {
-    console.log(`Fetching: ${resourceName}`);
+// Update lists
+for (const [resourceName, outputPrefixPath, outputFileName] of FILTER_LISTS) {
+  log(`Fetching: ${resourceName}`);
 
-    const lines = (await downloadResource(resourceName))
-      .split(/[\r\n]/g)
-      .map((line) => line.trim())
-      .map((line) => {
-        const filter = adb.parseFilter(line);
-        const outputPath = `${outputPrefixPath}/${outputFileName}`;
+  const lines = (await downloadResource(resourceName))
+    .split(/[\r\n]/g)
+    .map((line) => line.trim())
+    .map((line) => {
+      const filter = parseFilter(line);
+      const outputPath = `${outputPrefixPath}/${outputFileName}`;
 
-        if (filter === null) {
-          return line;
-        }
+      if (filter === null) {
+        return line;
+      }
 
-        // Count bad filters
-        if (filter.isBadFilter?.()) {
+      // Count bad filters
+      if (filter instanceof NetworkFilter) {
+        if (filter.isBadFilter()) {
           badfilters.set(filter.getIdWithoutBadFilter(), outputPath);
           return `! [badfilter] ${line}`;
         }
-        const badfilter = badfilters.get(filter.getIdWithoutBadFilter?.());
+        const badfilter = badfilters.get(filter.getIdWithoutBadFilter());
         if (badfilter !== undefined) {
           badfiltersCount += 1;
           return `! [badfilter] from ${badfilter}\n! ${line}`;
         }
+      }
 
-        // Count duplicates
-        const dup = seen.get(filter.getId());
-        if (dup !== undefined) {
-          duplicatesCount += 1;
-          return `! [dup] from ${dup}\n! ${line}`;
-        }
-        seen.set(filter.getId(), outputPath);
+      // Count duplicates
+      const dup = seen.get(filter.getId());
+      if (dup !== undefined) {
+        duplicatesCount += 1;
+        return `! [dup] from ${dup}\n! ${line}`;
+      }
+      seen.set(filter.getId(), outputPath);
 
-        return line;
-      });
+      return line;
+    });
 
-    fs.writeFileSync(path.join(__dirname, outputPrefixPath, outputFileName), lines.join('\n'), 'utf-8');
-  }
+  writeFileSync(join(ASSETS_PATH, outputPrefixPath, outputFileName), lines.join('\n'), 'utf-8');
+}
 
-  console.log({ duplicates: duplicatesCount, badfilters: badfiltersCount });
-})();
+log({ duplicates: duplicatesCount, badfilters: badfiltersCount });

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -72,8 +72,8 @@ WebExtensionBlocker.fromLists(fetch, fullLists, {
     console.log('redirect', request.url, result);
   });
 
-  blocker.on('csp-injected', (request: Request) => {
-    console.log('csp', request.url);
+  blocker.on('csp-injected', (request: Request, csps: string) => {
+    console.log('csp', request.url, csps);
   });
 
   blocker.on('script-injected', (script: string, url: string) => {
@@ -84,8 +84,12 @@ WebExtensionBlocker.fromLists(fetch, fullLists, {
     console.log('style', url, style.length);
   });
 
-  blocker.on('html-filtered', (htmlSelectors: HTMLSelector[]) => {
-    console.log('html selectors', htmlSelectors);
+  blocker.on('html-filtered', (htmlSelectors: HTMLSelector[], url: string) => {
+    console.log('html selectors', htmlSelectors, url);
+  });
+
+  blocker.on('filter-matched', ({ filter, exception }, context) => {
+    console.log('filter-matched', filter, exception, context);
   });
 
   console.log('Ready to roll!');

@@ -41,7 +41,7 @@
 
 ---
 
-Cliqz' adblocker is a JavaScript library for *blocking ads, trackers, and annoyances* with a strong focus on [efficiency](https://whotracks.me/blog/adblockers_performance_study.html). It was designed with compatibility in mind and integrates seamlessly with the following environments:
+The Ghostery adblocker is a JavaScript library for *blocking ads, trackers, and annoyances* with a strong focus on [efficiency](https://whotracks.me/blog/adblockers_performance_study.html). It was designed with compatibility in mind and integrates seamlessly with the following environments:
 
 * [Block ads in **Puppeteer**](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-puppeteer/README.md),
 * [Block ads in **Electron**](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-electron/README.md),
@@ -50,7 +50,7 @@ Cliqz' adblocker is a JavaScript library for *blocking ads, trackers, and annoya
 
 ## Getting Started
 
-Cliqz' adblocker is the easiest and most efficient way to block ads and trackers in your project. Only a few lines of code are required to integrate smoothly with [Puppeteer](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-puppeteer-example), [Electron](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-electron-example), a  Chrome- and Firefox-compatible [browser extension](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-webextension-example), or any environment supporting [JavaScript](https://github.com/ghostery/adblocker/tree/master/packages/adblocker) (e.g. Node.js or React Native).
+The Ghostery adblocker is the easiest and most efficient way to block ads and trackers in your project. Only a few lines of code are required to integrate smoothly with [Puppeteer](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-puppeteer-example), [Electron](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-electron-example), a  Chrome- and Firefox-compatible [browser extension](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-webextension-example), or any environment supporting [JavaScript](https://github.com/ghostery/adblocker/tree/master/packages/adblocker) (e.g. Node.js or React Native).
 
 Here is how to do it in two steps for a Chrome- and Firefox-compatible WebExtension:
 1. Install: `npm install --save @cliqz/adblocker-webextension`

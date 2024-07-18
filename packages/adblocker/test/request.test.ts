@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,7 +9,7 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import Request, { getHostnameHashesFromLabelsBackward } from '../src/request';
+import Request, { getHostnameHashesFromLabelsBackward } from '../src/request.js';
 
 describe('#Request', () => {
   describe('#fromRawDetails', () => {
@@ -243,7 +243,6 @@ describe('#Request', () => {
           isFirstParty: true,
           isThirdParty: false,
         });
-
       });
 
       it('correctly uses domains when available if type not main_frame', () => {

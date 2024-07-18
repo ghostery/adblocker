@@ -1,3 +1,61 @@
+# v1.29.0 (Wed Jul 17 2024)
+
+#### :house: Internal
+
+- Replace Cliqz references with Ghostery [#4095](https://github.com/ghostery/adblocker/pull/4095) ([@chrmod](https://github.com/chrmod))
+- tsx to run typescript [#4098](https://github.com/ghostery/adblocker/pull/4098) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump rimraf from 5.0.8 to 6.0.1 [#4078](https://github.com/ghostery/adblocker/pull/4078) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
+# v1.28.2 (Mon Jul 15 2024)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 22.12.1 to 22.13.0 [#4081](https://github.com/ghostery/adblocker/pull/4081) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
+# v1.28.1 (Mon Jul 15 2024)
+
+#### :bug: Bug Fix
+
+- Simplify build with tshy [#4079](https://github.com/ghostery/adblocker/pull/4079) ([@chrmod](https://github.com/chrmod) [@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 2
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
+# v1.28.0 (Tue Jul 09 2024)
+
+#### :nut_and_bolt: Dependencies
+
+- Update typescript [#4053](https://github.com/ghostery/adblocker/pull/4053) ([@chrmod](https://github.com/chrmod))
+- Build(deps): Bump puppeteer from 22.11.0 to 22.12.1 [#4047](https://github.com/ghostery/adblocker/pull/4047) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 22.10.0 to 22.11.0 [#4024](https://github.com/ghostery/adblocker/pull/4024) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.27.11 (Mon Jun 10 2024)
 
 #### :nut_and_bolt: Dependencies

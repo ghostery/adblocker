@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,7 +9,7 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { compactTokens, hasEmptyIntersection, mergeCompactSets } from '../src/compact-set';
+import { compactTokens, hasEmptyIntersection, mergeCompactSets } from '../src/compact-set.js';
 
 function a(strings: TemplateStringsArray): Uint32Array {
   const str = strings.raw[0];

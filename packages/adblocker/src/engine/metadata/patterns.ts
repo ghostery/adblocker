@@ -1,14 +1,14 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { CompactMap } from '../map';
-import { StaticDataView, sizeOfUTF8, sizeOfLength } from '../../data-view';
-import NetworkFilter from '../../filters/network';
+import { CompactMap } from '../map.js';
+import { StaticDataView, sizeOfUTF8, sizeOfLength } from '../../data-view.js';
+import NetworkFilter from '../../filters/network.js';
 
 export interface IPattern {
   readonly key: string;

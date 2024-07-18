@@ -1,14 +1,14 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import Config from '../../config';
-import { StaticDataView, sizeOfBytes } from '../../data-view';
-import IFilter from '../../filters/interface';
+import Config from '../../config.js';
+import { StaticDataView, sizeOfBytes } from '../../data-view.js';
+import IFilter from '../../filters/interface.js';
 
 // Empty filters is 4 bytes because we need at least one 32 bits number to keep
 // track of the number of filters in the container. If there is no filter then

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -11,8 +11,8 @@ import 'mocha';
 
 import { JSDOM } from 'jsdom';
 
-import { querySelectorAll, matchPattern, matches } from '../src/eval';
-import { parse } from '../src/parse';
+import { querySelectorAll, matchPattern, matches } from '../src/eval.js';
+import { parse } from '../src/parse.js';
 
 // TODO - check if style:has-text() works (can select style?)
 

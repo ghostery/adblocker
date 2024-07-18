@@ -1,13 +1,14 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { promises as fs } from 'fs';
-import { join } from 'path';
+import { promises as fs } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import {
   fullLists,
@@ -15,7 +16,7 @@ import {
   detectFilterType,
   NetworkFilter,
   FilterType,
-} from '../adblocker';
+} from '../src/index.js';
 
 class Counter<K> {
   private counter: Map<K, number>;
@@ -40,6 +41,8 @@ class Counter<K> {
     return Array.from(this.counter.entries());
   }
 }
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const PREFIX =
   'https://raw.githubusercontent.com/ghostery/adblocker/master/packages/adblocker/assets';

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,8 +9,8 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { optimizeNetwork } from '../src/engine/optimizer';
-import NetworkFilter from '../src/filters/network';
+import { optimizeNetwork } from '../src/engine/optimizer.js';
+import NetworkFilter from '../src/filters/network.js';
 
 function f(lines: string[]): NetworkFilter[] {
   const filters: NetworkFilter[] = [];

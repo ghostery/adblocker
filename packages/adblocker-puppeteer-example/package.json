@@ -1,16 +1,39 @@
 {
   "name": "@cliqz/adblocker-puppeteer-example",
   "private": true,
-  "version": "1.27.11",
-  "description": "Cliqz adblocker Puppeteer wrapper",
+  "version": "1.30.0",
+  "description": "Ghostery adblocker Puppeteer wrapper",
   "author": {
-    "name": "Cliqz"
+    "name": "Ghostery"
   },
   "homepage": "https://github.com/ghostery/adblocker#readme",
   "license": "MPL-2.0",
+  "type": "module",
+  "tshy": {
+    "exports": {
+      "./package.json": "./package.json",
+      ".": "./src/index.ts"
+    }
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/index.d.ts",
+        "default": "./dist/commonjs/index.js"
+      }
+    }
+  },
+  "main": "./dist/commonjs/index.js",
+  "types": "./dist/commonjs/index.d.ts",
+  "module": "./dist/esm/index.js",
   "files": [
     "LICENSE",
-    "index.ts"
+    "dist"
   ],
   "repository": {
     "type": "git",
@@ -18,21 +41,25 @@
     "directory": "packages/adblocker-puppeteer-example"
   },
   "scripts": {
-    "start": "ts-node --project ./tsconfig.json index.ts",
-    "lint": "eslint index.ts"
+    "clean": "rimraf dist .tshy .tshy-build",
+    "start:commonjs": "node dist/commonjs/index.js",
+    "start:esm": "node dist/esm/index.js",
+    "build": "tshy",
+    "lint": "eslint src/index.ts"
   },
   "bugs": {
     "url": "https://github.com/ghostery/adblocker/issues"
   },
   "dependencies": {
-    "@cliqz/adblocker-puppeteer": "^1.27.11",
+    "@cliqz/adblocker-puppeteer": "^1.30.0",
     "cross-fetch": "^4.0.0",
-    "puppeteer": "22.12.1",
-    "ts-node": "^10.9.1"
+    "puppeteer": "22.13.0"
   },
   "devDependencies": {
     "@types/node": "^20.12.12",
     "eslint": "^9.3.0",
+    "rimraf": "^6.0.1",
+    "tshy": "^3.0.2",
     "typescript": "^5.5.2"
   },
   "contributors": [

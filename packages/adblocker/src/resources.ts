@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,7 +8,7 @@
 
 import { getResourceForMime } from '@remusao/small';
 
-import { StaticDataView, sizeOfUTF8, sizeOfASCII, sizeOfByte } from './data-view';
+import { StaticDataView, sizeOfUTF8, sizeOfASCII, sizeOfByte } from './data-view.js';
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -90,7 +90,6 @@ export default class Resources {
     }
 
     // The resource containing javascirpts to be injected
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const js: Map<string, string> = typeToResource.get('application/javascript') || new Map();
     for (const [key, value] of js.entries()) {
       if (key.endsWith('.js')) {

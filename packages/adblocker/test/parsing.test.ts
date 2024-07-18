@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,12 +9,12 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import CosmeticFilter, { DEFAULT_HIDDING_STYLE } from '../src/filters/cosmetic';
-import NetworkFilter, { findLastIndexOfUnescapedCharacter } from '../src/filters/network';
-import { parseFilters } from '../src/lists';
-import { hashStrings, tokenize } from '../src/utils';
-import { HTMLSelector } from '../src/html-filtering';
-import { NORMALIZED_TYPE_TOKEN, hashHostnameBackward } from '../src/request';
+import CosmeticFilter, { DEFAULT_HIDDING_STYLE } from '../src/filters/cosmetic.js';
+import NetworkFilter, { findLastIndexOfUnescapedCharacter } from '../src/filters/network.js';
+import { parseFilters } from '../src/lists.js';
+import { hashStrings, tokenize } from '../src/utils.js';
+import { HTMLSelector } from '../src/html-filtering.js';
+import { NORMALIZED_TYPE_TOKEN, hashHostnameBackward } from '../src/request.js';
 
 function h(hostnames: string[]): Uint32Array {
   return new Uint32Array(hostnames.map(hashHostnameBackward)).sort();

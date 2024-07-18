@@ -1,14 +1,14 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import Config from '../config';
-import { StaticDataView, EMPTY_UINT32_ARRAY, sizeOfBytes } from '../data-view';
-import IFilter from '../filters/interface';
+import Config from '../config.js';
+import { StaticDataView, EMPTY_UINT32_ARRAY, sizeOfBytes } from '../data-view.js';
+import IFilter from '../filters/interface.js';
 
 // https://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
 export function nextPow2(v: number): number {

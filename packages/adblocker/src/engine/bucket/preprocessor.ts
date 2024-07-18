@@ -1,6 +1,6 @@
-import { StaticDataView } from '../../data-view';
-import IFilter from '../../filters/interface';
-import Preprocessor, { Env } from '../../preprocessor';
+import { StaticDataView } from '../../data-view.js';
+import IFilter from '../../filters/interface.js';
+import Preprocessor, { Env } from '../../preprocessor.js';
 
 type FilterId = number;
 

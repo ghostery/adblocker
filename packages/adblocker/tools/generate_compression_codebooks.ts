@@ -1,9 +1,18 @@
-import { promises as fs } from 'fs';
-import { resolve, join } from 'path';
+import { promises as fs } from 'node:fs';
+import { resolve, join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { generate } from '@remusao/smaz-generate';
 import { Smaz } from '@remusao/smaz';
 
-import { parseFilters, NetworkFilter, CosmeticFilter, fullLists, hasUnicode } from '../adblocker';
+import {
+  parseFilters,
+  NetworkFilter,
+  CosmeticFilter,
+  fullLists,
+  hasUnicode,
+} from '../src/index.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const PREFIX =
   'https://raw.githubusercontent.com/ghostery/adblocker/master/packages/adblocker/assets';
@@ -137,7 +146,7 @@ async function generateCodebook(kind: string): Promise<string[]> {
     output,
     [
       '/*!',
-      ' * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.',
+      ' * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.',
       ' *',
       ' * This Source Code Form is subject to the terms of the Mozilla Public',
       ' * License, v. 2.0. If a copy of the MPL was not distributed with this',

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -11,55 +11,51 @@ import 'mocha';
 
 import { getDomain } from 'tldts-experimental';
 
-import CosmeticFilter from '../src/filters/cosmetic';
-import NetworkFilter, { isAnchoredByHostname } from '../src/filters/network';
+import CosmeticFilter from '../src/filters/cosmetic.js';
+import NetworkFilter, { isAnchoredByHostname } from '../src/filters/network.js';
 
-import { f } from '../src/lists';
+import { f } from '../src/lists.js';
 import Request, {
   RequestInitialization,
   RequestType,
   getHashesFromLabelsBackward,
   getHostnameWithoutPublicSuffix,
   hashHostnameBackward,
-} from '../src/request';
+} from '../src/request.js';
 
-import requests from './data/requests';
+import requests from './data/requests.js';
 
 use((chai, utils) => {
   utils.addMethod(
     chai.Assertion.prototype,
     'matchRequest',
-    function (this: any, req: Partial<Request>) {
+    function (this: Chai.ChaiStatic & { _obj: NetworkFilter }, req: Partial<Request>) {
       const filter = this._obj;
       const request = Request.fromRawDetails(req);
 
       new chai.Assertion(filter).not.to.be.null;
 
-      this.assert(
-        filter.match(request),
-        'expected #{this} to match #{exp}',
-        'expected #{this} to not match #{exp}',
-      );
+      this.assert(filter.match(request), 'expected #{this} to match #{exp}');
     },
   );
 
   utils.addMethod(
     chai.Assertion.prototype,
     'matchHostname',
-    function (this: any, hostname: string) {
+    function (this: Chai.ChaiStatic & { _obj: CosmeticFilter }, hostname: string) {
       const filter = this._obj;
       new chai.Assertion(filter).not.to.be.null;
 
       this.assert(
         filter.match(hostname, getDomain(hostname) || ''),
         'expected #{this} to match #{exp}',
-        'expected #{this} to not match #{exp}',
       );
     },
   );
 });
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Chai {
     interface Assertion {
       matchRequest(req: Partial<RequestInitialization>): Assertion;

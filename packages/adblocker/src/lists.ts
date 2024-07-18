@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -7,16 +7,20 @@
  */
 
 import { EXTENDED_PSEUDO_CLASSES, PSEUDO_CLASSES } from '@cliqz/adblocker-extended-selectors';
-import Config from './config';
-import CosmeticFilter from './filters/cosmetic';
-import NetworkFilter from './filters/network';
-import Preprocessor, { PreprocessorTokens, detectPreprocessor } from './preprocessor';
-import { fastStartsWith, fastStartsWithFrom } from './utils';
+import Config from './config.js';
+import CosmeticFilter from './filters/cosmetic.js';
+import NetworkFilter from './filters/network.js';
+import Preprocessor, { PreprocessorTokens, detectPreprocessor } from './preprocessor.js';
+import { fastStartsWith, fastStartsWithFrom } from './utils.js';
 
 export const enum FilterType {
   NOT_SUPPORTED = 0,
   NETWORK = 1,
   COSMETIC = 2,
+  // available only with `extendedNonSupportedTypes` option for #detectFilterType
+  NOT_SUPPORTED_EMPTY = 100,
+  NOT_SUPPORTED_COMMENT = 101,
+  NOT_SUPPORTED_ADGUARD = 102,
 }
 
 /**
@@ -25,9 +29,15 @@ export const enum FilterType {
  * performed before calling a more specific parser to create an instance of
  * `NetworkFilter` or `CosmeticFilter`.
  */
-export function detectFilterType(line: string): FilterType {
+export function detectFilterType(
+  line: string,
+  { extendedNonSupportedTypes = false } = {},
+): FilterType {
   // Ignore empty line
   if (line.length === 0 || line.length === 1) {
+    if (extendedNonSupportedTypes) {
+      return FilterType.NOT_SUPPORTED_EMPTY;
+    }
     return FilterType.NOT_SUPPORTED;
   }
 
@@ -39,13 +49,18 @@ export function detectFilterType(line: string): FilterType {
     (firstCharCode === 35 /* '#' */ && secondCharCode <= 32) ||
     (firstCharCode === 91 /* '[' */ && fastStartsWith(line, '[Adblock'))
   ) {
+    if (extendedNonSupportedTypes) {
+      return FilterType.NOT_SUPPORTED_COMMENT;
+    }
     return FilterType.NOT_SUPPORTED;
   }
 
   // Fast heuristics to detect network filters
   const lastCharCode: number = line.charCodeAt(line.length - 1);
   if (
-    firstCharCode === 36 /* '$' */ ||
+    (firstCharCode === 36 /* '$' */ &&
+      secondCharCode !== 36 &&
+      secondCharCode !== 64) /* $$ and $@ as those may be Adguard HTML filtering rules */ ||
     firstCharCode === 38 /* '&' */ ||
     firstCharCode === 42 /* '*' */ ||
     firstCharCode === 45 /* '-' */ ||
@@ -75,6 +90,9 @@ export function detectFilterType(line: string): FilterType {
       (afterDollarCharCode === 64 /* '@' */ &&
         fastStartsWithFrom(line, /* $@$ */ '@$', afterDollarIndex))
     ) {
+      if (extendedNonSupportedTypes) {
+        return FilterType.NOT_SUPPORTED_ADGUARD;
+      }
       return FilterType.NOT_SUPPORTED;
     }
   }
@@ -99,18 +117,19 @@ export function detectFilterType(line: string): FilterType {
     } else if (
       (afterSharpCharCode === 64 /* '@'*/ &&
         (fastStartsWithFrom(line, /* #@$# */ '@$#', afterSharpIndex) ||
-          fastStartsWithFrom(line, /* #@%# */ '@%#', afterSharpIndex))) ||
+          fastStartsWithFrom(line, /* #@%# */ '@%#', afterSharpIndex) ||
+          fastStartsWithFrom(line, /* #@?# */ '@?#', afterSharpIndex))) ||
       (afterSharpCharCode === 37 /* '%' */ &&
         fastStartsWithFrom(line, /* #%# */ '%#', afterSharpIndex)) ||
       (afterSharpCharCode === 36 /* '$' */ &&
-        fastStartsWithFrom(line, /* #$# */ '$#', afterSharpIndex)) ||
+        (fastStartsWithFrom(line, /* #$# */ '$#', afterSharpIndex) ||
+          fastStartsWithFrom(line, /* #$?# */ '$?#', afterSharpIndex))) ||
       (afterSharpCharCode === 63 /* '?' */ &&
         fastStartsWithFrom(line, /* #?# */ '?#', afterSharpIndex))
     ) {
-      // Ignore Adguard cosmetics
-      // `#$#` `#@$#`
-      // `#%#` `#@%#`
-      // `#?#`
+      if (extendedNonSupportedTypes) {
+        return FilterType.NOT_SUPPORTED_ADGUARD;
+      }
       return FilterType.NOT_SUPPORTED;
     }
   }
@@ -145,6 +164,12 @@ export function f(strings: TemplateStringsArray): NetworkFilter | CosmeticFilter
   return parseFilter(strings[0]);
 }
 
+interface NonSupportedFilter {
+  lineNumber: number;
+  filter: string;
+  filterType: FilterType;
+}
+
 export function parseFilters(
   list: string,
   config: Partial<Config> = new Config(),
@@ -152,6 +177,7 @@ export function parseFilters(
   networkFilters: NetworkFilter[];
   cosmeticFilters: CosmeticFilter[];
   preprocessors: Preprocessor[];
+  notSupportedFilters: NonSupportedFilter[];
 } {
   config = new Config(config);
 
@@ -165,6 +191,7 @@ export function parseFilters(
 
   const networkFilters: NetworkFilter[] = [];
   const cosmeticFilters: CosmeticFilter[] = [];
+  const notSupportedFilters: NonSupportedFilter[] = [];
   const lines = list.split('\n');
 
   const preprocessors: Preprocessor[] = [];
@@ -210,7 +237,7 @@ export function parseFilters(
     }
 
     // Detect if filter is supported, network or cosmetic
-    const filterType = detectFilterType(line);
+    const filterType = detectFilterType(line, { extendedNonSupportedTypes: true });
 
     if (filterType === FilterType.NETWORK && config.loadNetworkFilters === true) {
       const filter = NetworkFilter.parse(line, config.debug);
@@ -219,6 +246,12 @@ export function parseFilters(
         if (preprocessorStack.length > 0) {
           preprocessorStack[preprocessorStack.length - 1].filterIDs.add(filter.getId());
         }
+      } else {
+        notSupportedFilters.push({
+          lineNumber: i,
+          filter: line,
+          filterType,
+        });
       }
     } else if (filterType === FilterType.COSMETIC && config.loadCosmeticFilters === true) {
       const filter = CosmeticFilter.parse(line, {
@@ -233,6 +266,12 @@ export function parseFilters(
             preprocessorStack[preprocessorStack.length - 1].filterIDs.add(filter.getId());
           }
         }
+      } else {
+        notSupportedFilters.push({
+          lineNumber: i,
+          filter: line,
+          filterType: FilterType.COSMETIC,
+        });
       }
     } else if (config.loadPreprocessors) {
       const preprocessorToken = detectPreprocessor(line);
@@ -263,7 +302,19 @@ export function parseFilters(
             }),
           );
         }
+      } else if (filterType === FilterType.NOT_SUPPORTED_ADGUARD) {
+        notSupportedFilters.push({
+          lineNumber: i,
+          filter: line,
+          filterType,
+        });
       }
+    } else if (filterType === FilterType.NOT_SUPPORTED_ADGUARD) {
+      notSupportedFilters.push({
+        lineNumber: i,
+        filter: line,
+        filterType,
+      });
     }
   }
 
@@ -271,6 +322,7 @@ export function parseFilters(
     networkFilters,
     cosmeticFilters,
     preprocessors: preprocessors.filter((preprocessor) => preprocessor.filterIDs.size > 0),
+    notSupportedFilters,
   };
 }
 

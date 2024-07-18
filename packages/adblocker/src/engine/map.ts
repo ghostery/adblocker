@@ -1,13 +1,13 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { StaticDataView, sizeOfBytes, EMPTY_UINT32_ARRAY } from '../data-view';
-import { nextPow2 } from './reverse-index';
+import { StaticDataView, sizeOfBytes, EMPTY_UINT32_ARRAY } from '../data-view.js';
+import { nextPow2 } from './reverse-index.js';
 
 const EMPTY_BUCKET: number = Number.MAX_SAFE_INTEGER >>> 0;
 

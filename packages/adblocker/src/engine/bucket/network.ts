@@ -1,18 +1,18 @@
 /*!
- * Copyright (c) 2017-present Cliqz GmbH. All rights reserved.
+ * Copyright (c) 2017-present Ghostery GmbH. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import Config from '../../config';
-import { StaticDataView } from '../../data-view';
-import NetworkFilter from '../../filters/network';
-import Request from '../../request';
-import { noopOptimizeNetwork, optimizeNetwork } from '../optimizer';
-import ReverseIndex from '../reverse-index';
-import FiltersContainer from './filters';
+import Config from '../../config.js';
+import { StaticDataView } from '../../data-view.js';
+import NetworkFilter from '../../filters/network.js';
+import Request from '../../request.js';
+import { noopOptimizeNetwork, optimizeNetwork } from '../optimizer.js';
+import ReverseIndex from '../reverse-index.js';
+import FiltersContainer from './filters.js';
 
 /**
  * Accelerating data structure for network filters matching.
