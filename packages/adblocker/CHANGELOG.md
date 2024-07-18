@@ -1,3 +1,47 @@
+# v1.30.0 (Wed Jul 17 2024)
+
+#### :rocket: New Feature
+
+- Feedback from not supported filters [#4108](https://github.com/ghostery/adblocker/pull/4108) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 1
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
+# v1.29.0 (Wed Jul 17 2024)
+
+#### :rocket: New Feature
+
+- Improve engine events to expose internal workflow [#3881](https://github.com/ghostery/adblocker/pull/3881) ([@seia-soto](https://github.com/seia-soto) [@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- Update local assets [#4105](https://github.com/ghostery/adblocker/pull/4105) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Replace Cliqz references with Ghostery [#4095](https://github.com/ghostery/adblocker/pull/4095) ([@chrmod](https://github.com/chrmod))
+- Update ESLint configuration for test files [#4102](https://github.com/ghostery/adblocker/pull/4102) ([@seia-soto](https://github.com/seia-soto))
+- Drop unused tsconfig.json by #4098 [#4104](https://github.com/ghostery/adblocker/pull/4104) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4099](https://github.com/ghostery/adblocker/pull/4099) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- tsx to run typescript [#4098](https://github.com/ghostery/adblocker/pull/4098) ([@chrmod](https://github.com/chrmod))
+- Update local assets [#4097](https://github.com/ghostery/adblocker/pull/4097) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Fix codebook generation [#4096](https://github.com/ghostery/adblocker/pull/4096) ([@chrmod](https://github.com/chrmod))
+- Fix asset update [#4094](https://github.com/ghostery/adblocker/pull/4094) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump rimraf from 5.0.8 to 6.0.1 [#4078](https://github.com/ghostery/adblocker/pull/4078) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.28.1 (Mon Jul 15 2024)
 
 #### :bug: Bug Fix

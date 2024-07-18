@@ -23,7 +23,7 @@ import { HTMLModifier, HTMLSelector } from '../html-filtering.js';
 import CosmeticFilter from '../filters/cosmetic.js';
 import NetworkFilter from '../filters/network.js';
 import { block } from '../filters/dsl.js';
-import { IListDiff, IPartialRawDiff, parseFilters } from '../lists.js';
+import { FilterType, IListDiff, IPartialRawDiff, parseFilters } from '../lists.js';
 import Request from '../request.js';
 import Resources from '../resources.js';
 import CosmeticFilterBucket from './bucket/cosmetic.js';
@@ -86,16 +86,38 @@ export interface Caching {
   write: (path: string, buffer: Uint8Array) => Promise<void>;
 }
 
-export default class FilterEngine extends EventEmitter<
-  | 'csp-injected'
-  | 'html-filtered'
-  | 'request-allowed'
-  | 'request-blocked'
-  | 'request-redirected'
-  | 'request-whitelisted'
-  | 'script-injected'
-  | 'style-injected'
-> {
+type NetworkFilterMatchingContext = {
+  request: Request;
+  filterType: FilterType.NETWORK;
+};
+
+type CosmeticFilterMatchingContext = {
+  url: string;
+  callerContext: any; // Additional context given from user
+  filterType: FilterType.COSMETIC;
+};
+
+type NetworkFilterMatchEvent = (request: Request, result: BlockingResponse) => void;
+
+export type EngineEventHandlers = {
+  'request-allowed': NetworkFilterMatchEvent;
+  'request-blocked': NetworkFilterMatchEvent;
+  'request-redirected': NetworkFilterMatchEvent;
+  'request-whitelisted': NetworkFilterMatchEvent;
+  'csp-injected': (request: Request, csps: string) => void;
+  'html-filtered': (htmlSelectors: HTMLSelector[], url: string) => void;
+  'script-injected': (script: string, url: string) => void;
+  'style-injected': (style: string, url: string) => void;
+  'filter-matched': (
+    match: {
+      filter?: CosmeticFilter | NetworkFilter | undefined;
+      exception?: CosmeticFilter | NetworkFilter | undefined;
+    },
+    context: CosmeticFilterMatchingContext | NetworkFilterMatchingContext,
+  ) => any;
+};
+
+export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
   private static fromCached<T extends typeof FilterEngine>(
     this: T,
     init: () => Promise<InstanceType<T>>,
@@ -691,10 +713,14 @@ export default class FilterEngine extends EventEmitter<
     url,
     hostname,
     domain,
+
+    callerContext,
   }: {
     url: string;
     hostname: string;
     domain: string | null | undefined;
+
+    callerContext?: any | undefined;
   }): HTMLSelector[] {
     const htmlSelectors: HTMLSelector[] = [];
 
@@ -702,17 +728,33 @@ export default class FilterEngine extends EventEmitter<
       return htmlSelectors;
     }
 
-    const rules = this.cosmetics.getHtmlRules({
-      domain: domain || '',
+    domain ||= '';
+
+    const { filters, unhides } = this.cosmetics.getHtmlFilters({
+      domain,
       hostname,
       isFilterExcluded: this.isFilterExcluded.bind(this),
     });
+    const exceptions = new Map(unhides.map((unhide) => [unhide.getSelector(), unhide]));
 
-    for (const rule of rules) {
-      const extended = rule.getExtendedSelector();
-      if (extended !== undefined) {
+    for (const filter of filters) {
+      const extended = filter.getExtendedSelector();
+      if (extended === undefined) {
+        continue;
+      }
+      const exception = exceptions.get(filter.getSelector());
+      if (exception !== undefined) {
         htmlSelectors.push(extended);
       }
+      this.emit(
+        'filter-matched',
+        { filter, exception },
+        {
+          url,
+          callerContext,
+          filterType: FilterType.COSMETIC,
+        },
+      );
     }
 
     if (htmlSelectors.length !== 0) {
@@ -762,6 +804,8 @@ export default class FilterEngine extends EventEmitter<
     getExtendedRules = true,
     getRulesFromDOM = true,
     getRulesFromHostname = true,
+
+    callerContext,
   }: {
     url: string;
     hostname: string;
@@ -776,6 +820,8 @@ export default class FilterEngine extends EventEmitter<
     getExtendedRules?: boolean;
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
+
+    callerContext?: any | undefined;
   }): IMessageFromBackground {
     if (this.config.loadCosmeticFilters === false) {
       return {
@@ -786,12 +832,14 @@ export default class FilterEngine extends EventEmitter<
       };
     }
 
+    domain ||= '';
+
     let allowGenericHides = true;
     let allowSpecificHides = true;
 
     const exceptions = this.hideExceptions.matchAll(
       Request.fromRawDetails({
-        domain: domain || '',
+        domain,
         hostname,
         url,
 
@@ -827,8 +875,8 @@ export default class FilterEngine extends EventEmitter<
     }
 
     // Lookup injections as well as stylesheets
-    const { injections, stylesheet, extended } = this.cosmetics.getCosmeticsFilters({
-      domain: domain || '',
+    const { filters, unhides } = this.cosmetics.getCosmeticsFilters({
+      domain,
       hostname,
 
       classes,
@@ -838,14 +886,73 @@ export default class FilterEngine extends EventEmitter<
       allowGenericHides,
       allowSpecificHides,
 
-      getBaseRules,
-      getInjectionRules,
-      getExtendedRules,
       getRulesFromDOM,
       getRulesFromHostname,
-
       isFilterExcluded: this.isFilterExcluded.bind(this),
     });
+
+    let injectionsDisabled = false;
+    const unhideExceptions: Map<string, CosmeticFilter> = new Map();
+
+    for (const unhide of unhides) {
+      if (
+        unhide.isScriptInject() === true &&
+        unhide.isUnhide() === true &&
+        unhide.getSelector().length === 0
+      ) {
+        injectionsDisabled = true;
+      }
+      unhideExceptions.set(unhide.getSelector(), unhide);
+    }
+
+    const injections: CosmeticFilter[] = [];
+    const styleFilters: CosmeticFilter[] = [];
+    const extendedFilters: CosmeticFilter[] = [];
+
+    if (filters.length !== 0) {
+      // Apply unhide rules + dispatch
+      for (const filter of filters) {
+        // Make sure `rule` is not un-hidden by a #@# filter
+        const exception = unhideExceptions.get(filter.getSelector());
+
+        if (exception !== undefined) {
+          continue;
+        }
+
+        let applied = false;
+
+        // Dispatch filters in `injections` or `styles` depending on type
+        if (filter.isScriptInject() === true) {
+          if (getInjectionRules === true && injectionsDisabled === false) {
+            injections.push(filter);
+            applied = true;
+          }
+        } else if (filter.isExtended()) {
+          if (getExtendedRules === true) {
+            extendedFilters.push(filter);
+            applied = true;
+          }
+        } else {
+          styleFilters.push(filter);
+          applied = true;
+        }
+
+        if (applied) {
+          this.emit(
+            'filter-matched',
+            {
+              filter,
+              exception,
+            },
+            {
+              url,
+              callerContext,
+              filterType: FilterType.COSMETIC,
+            },
+          );
+        }
+      }
+    }
 
     // Perform interpolation for injected scripts
     const scripts: string[] = [];
@@ -856,6 +963,14 @@ export default class FilterEngine extends EventEmitter<
         scripts.push(script);
       }
     }
+
+    const { stylesheet, extended } = this.cosmetics.getStylesheetsFromFilters(
+      {
+        filters: styleFilters,
+        extendedFilters,
+      },
+      { getBaseRules, allowGenericHides },
+    );
 
     // Emit events
     if (stylesheet.length !== 0) {
@@ -927,29 +1042,49 @@ export default class FilterEngine extends EventEmitter<
     }
 
     // Collect all CSP directives and keep track of exceptions
-    const disabledCsp = new Set();
-    const enabledCsp = new Set();
+    const cspExceptions: Map<string | undefined, NetworkFilter> = new Map();
+    const cspFilters: NetworkFilter[] = [];
+
     for (const filter of matches) {
       if (filter.isException()) {
         if (filter.csp === undefined) {
           // All CSP directives are disabled for this site
+          this.emit(
+            'filter-matched',
+            { exception: filter },
+            { request, filterType: FilterType.NETWORK },
+          );
           return undefined;
         }
-        disabledCsp.add(filter.csp);
+        cspExceptions.set(filter.csp, filter);
       } else {
-        enabledCsp.add(filter.csp);
+        cspFilters.push(filter);
       }
     }
 
-    // Combine all CSPs (except the black-listed ones)
-    const csps: string | undefined =
-      Array.from(enabledCsp)
-        .filter((csp) => !disabledCsp.has(csp))
-        .join('; ') || undefined;
+    if (cspFilters.length === 0) {
+      return undefined;
+    }
 
-    // Emit event
-    if (csps !== undefined) {
-      this.emit('csp-injected', csps, request);
+    const enabledCsp = new Set();
+
+    // Combine all CSPs (except the black-listed ones)
+    for (const filter of cspFilters.values()) {
+      const exception = cspExceptions.get(filter.csp);
+      if (exception === undefined) {
+        enabledCsp.add(filter.csp);
+      }
+      this.emit(
+        'filter-matched',
+        { filter, exception },
+        { request, filterType: FilterType.NETWORK },
+      );
+    }
+
+    const csps = Array.from(enabledCsp).join('; ');
+
+    if (csps.length > 0) {
+      this.emit('csp-injected', request, csps);
     }
 
     return csps;
@@ -1046,7 +1181,14 @@ export default class FilterEngine extends EventEmitter<
 
     result.match = result.exception === undefined && result.filter !== undefined;
 
-    // Emit events if we found a match
+    if (result.filter) {
+      this.emit(
+        'filter-matched',
+        { filter: result.filter, exception: result.exception },
+        { request, filterType: FilterType.NETWORK },
+      );
+    }
+
     if (result.exception !== undefined) {
       this.emit('request-whitelisted', request, result);
     } else if (result.redirect !== undefined) {

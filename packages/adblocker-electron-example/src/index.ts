@@ -53,8 +53,8 @@ async function createWindow() {
     console.log('whitelisted', request.tabId, request.url);
   });
 
-  blocker.on('csp-injected', (request: Request) => {
-    console.log('csp', request.url);
+  blocker.on('csp-injected', (request: Request, csps: string) => {
+    console.log('csp', request.url, csps);
   });
 
   blocker.on('script-injected', (script: string, url: string) => {
@@ -64,6 +64,8 @@ async function createWindow() {
   blocker.on('style-injected', (style: string, url: string) => {
     console.log('style', style.length, url);
   });
+
+  blocker.on('filter-matched', console.log.bind(console, 'filter-matched'));
 
   mainWindow.loadURL(getUrlToLoad());
   mainWindow.webContents.openDevTools();

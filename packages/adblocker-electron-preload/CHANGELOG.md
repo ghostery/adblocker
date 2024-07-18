@@ -1,3 +1,20 @@
+# v1.29.0 (Wed Jul 17 2024)
+
+#### :house: Internal
+
+- Replace Cliqz references with Ghostery [#4095](https://github.com/ghostery/adblocker/pull/4095) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump rimraf from 5.0.8 to 6.0.1 [#4078](https://github.com/ghostery/adblocker/pull/4078) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.28.1 (Mon Jul 15 2024)
 
 #### :bug: Bug Fix
