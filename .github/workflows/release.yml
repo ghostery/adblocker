@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Prepare repository
         run: |
@@ -21,7 +21,7 @@ jobs:
         run: corepack enable
 
       - name: Use node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           cache: yarn
           node-version-file: '.tool-versions'
