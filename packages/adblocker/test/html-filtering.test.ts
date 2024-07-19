@@ -16,7 +16,8 @@ import {
   extractSelectorsFromRules,
   extractTagsFromHtml,
 } from '../src/html-filtering.js';
-import { loadSampleRequests } from './utils.js';
+import { loadRequestSample } from './utils.js';
+import { replaceOptionValueToRegexp } from '../src/filters/network.js';
 
 // NOTE: `doc` is defined at the end of this file.
 
@@ -282,23 +283,34 @@ describe('html-filtering', () => {
         ).not.to.include('app_html_start');
       });
 
-      it('handles javascript resources', () => {
-        const url =
-          'https://alliptvlinks.com/tktk-content/plugins/rwaKVtBAQPrF!vFGebtUlLymZ)E45/gzwGRql+kTV!Svj-ITOh+YiJ)Av-9.js';
+      const urls = [
+        {
+          url: 'https://alliptvlinks.com/tktk-content/plugins/rwaKVtBAQPrF!vFGebtUlLymZ)E45/gzwGRql+kTV!Svj-ITOh+YiJ)Av-9.js',
+          filters: [String.raw`/\bconst now.+?, 100/clearInterval(timer);resolve();}, 100/gms`],
+        },
+        {
+          url: 'https://www.youtube.com/watch?v=4tPrAe4Wiyg.html',
+          filters: [
+            String.raw`/"adPlacements.*?([A-Z]"\}|"\}{2\,4})\}\]\,//`,
+            String.raw`/"adSlots.*?\}\]\}\}\]\,//`,
+          ],
+        },
+      ] as const;
 
-        expect(
-          filter(
-            requests[url],
-            [],
-            [[new RegExp('\\bconst now.+?, 100', 'gms'), 'clearInterval(timer);resolve();}, 100']],
-          ),
-        ).to.be.eql(requests[url + '::modified']);
-      });
+      for (const { url, filters } of urls) {
+        it(filters.join(','), () => {
+          expect(
+            filter(
+              loadRequestSample(url),
+              [],
+              filters.map((filter) => replaceOptionValueToRegexp(filter)!),
+            ),
+          ).to.be.eql(loadRequestSample(url + '.modified'));
+        });
+      }
     });
   });
 });
-
-const requests = loadSampleRequests();
 
 const doc = `
 <!DOCTYPE html><html lang="en"><head><script>

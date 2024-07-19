@@ -112,22 +112,12 @@ export function typedArrayEqual(arr1: Uint8Array, arr2: Uint8Array): boolean {
   return typedArrayDiff(arr1, arr2).length === 0;
 }
 
-export function loadSampleRequests(): Record<string, string> {
-  const file = fs.readFileSync(path.resolve(__dirname, 'data', 'requests.txt'), {
-    encoding: 'utf-8',
-  });
-  const lines = file.split('\n');
-
-  const data: Record<string, string> = {};
-  let key: string = lines[0].slice(3);
-
-  for (let i = 1; i < lines.length; i++) {
-    if (lines[i - 1].length === 0 && lines[i].startsWith('-- ')) {
-      key = lines[i].slice(3);
-    } else {
-      data[key] = lines[i];
-    }
-  }
-
-  return data;
+export function loadRequestSample(url: string): string {
+  return zlib
+    .brotliDecompressSync(
+      fs.readFileSync(
+        path.resolve(__dirname, 'data/samples', url.replace(/[^a-z0-9.]/g, '_') + '.br'),
+      ),
+    )
+    .toString('utf8');
 }
