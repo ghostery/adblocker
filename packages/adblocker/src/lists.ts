@@ -12,7 +12,7 @@ import NetworkFilter from './filters/network.js';
 import Preprocessor, { PreprocessorTokens, detectPreprocessor } from './preprocessor.js';
 import { fastStartsWith, fastStartsWithFrom } from './utils.js';
 
-export const enum FilterType {
+export enum FilterType {
   NOT_SUPPORTED = 0,
   NETWORK = 1,
   COSMETIC = 2,
