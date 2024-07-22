@@ -1,0 +1,98 @@
+/* shared styles */
+:root {
+    --white: rgb(255, 255, 255);
+    --black: rgb(0, 0, 0);
+    --ghostery-dark0: rgb(47, 49, 54);
+    --ghostery-dark1: rgb(136, 137, 140);
+    --ghostery-blue0: rgb(0, 174, 240);
+    --ghostery-red0: rgb(255, 55, 91);
+}
+
+body {
+    font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
+    margin: 0;
+    padding: 8px;
+    background-color: var(--ghostery-dark0);
+}
+
+pre {
+    white-space: pre-wrap;
+}
+
+.container {
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+/* header */
+header h1 {
+    color: var(--white);
+    font-size: 24px;
+    font-weight: 700;
+}
+
+header h2 {
+    color: var(--ghostery-blue0);
+    font-size: 54px;
+    font-weight: 700;
+    margin-top: 0;
+}
+
+/* main */
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+article {
+    background-color: var(--white);
+    width: 100%;
+    height: 100%;
+    min-height: 40px;
+    padding: 8px 16px;
+    border-radius: 12px;
+}
+
+/* section */
+section h3 {
+    color: var(--ghostery-dark0);
+    font-size: 20px;
+}
+
+section h4 {
+    color: var(--ghostery-dark1);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* tests */
+div.test {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+}
+
+div.test>div.allow {
+    width: 150px;
+    height: 40px;
+    background-color: var(--ghostery-blue0);
+}
+
+div.test>div.block {
+    width: 150px;
+    height: 40px;
+    background-color: var(--ghostery-red0);
+}
+
+span.is {
+    font-weight: 600;
+}
+
+span.is:not(.positive) {
+    color: var(--ghostery-red0);
+}
+
+span.is.positive {
+    color: var(--ghostery-blue0);
+}
