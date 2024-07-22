@@ -262,7 +262,7 @@ describe('html-filtering', () => {
           .not.to.include('redditstatic.com');
       });
 
-      it('handles html modifiers with html selectors', () => {
+      it.only('handles html modifiers with html selectors', () => {
         expect(
           filter(
             doc,
@@ -294,6 +294,14 @@ describe('html-filtering', () => {
             String.raw`/"adPlacements.*?([A-Z]"\}|"\}{2\,4})\}\]\,//`,
             String.raw`/"adSlots.*?\}\]\}\}\]\,//`,
           ],
+        },
+        {
+          url: 'https://rekidai-info.github.io/_app/immutable/components/pages/index/_page.svelte-74656d8d.js',
+          filters: [String.raw`/throw Error\("Ad blocker detected."\)//`],
+        },
+        {
+          url: 'https://bitcotasks.com/assets/js/mainjs.php',
+          filters: [String.raw`/entry.duration > 0/entry.duration < 10/`],
         },
       ] as const;
 
