@@ -20,6 +20,7 @@ import requests from '../data/requests.js';
 import { loadEasyListFilters, typedArrayEqual } from '../utils.js';
 import Config from '../../src/config.js';
 import IFilter from '../../src/filters/interface.js';
+import FilterEngine from '../../src/engine/engine.js';
 
 /**
  * Helper function used in the Engine tests. All the assertions are performed by
@@ -1340,101 +1341,145 @@ foo.com###selector
     );
   });
 
-  describe('#fromEngines', () => {
-    function isFilterDisabledWhenMerged(
-      exclusionFunctions: ((filter: IFilter) => boolean)[],
-      filter: IFilter,
-    ) {
-      for (const exclusionFunction of exclusionFunctions) {
-        if (exclusionFunction(filter) === true) {
-          return true;
-        }
-      }
+  describe('#merge', () => {
+    it('throws with no or one engine', () => {
+      const error = 'merging engines requires at least two engines';
+      expect(() => FilterEngine.merge()).to.throw(error);
+      expect(() => FilterEngine.merge([])).to.throw(error);
+      expect(() => FilterEngine.merge([FilterEngine.empty()])).to.throw(error);
+    });
 
-      return false;
-    }
-
-    function expectToBeMergedOptimally(
-      baseConfig: Config,
-      ...initialisations: { config?: Config; filters: string }[]
-    ) {
-      const enginesToBeMerged: Engine[] = [];
-      const enginesExcludedFilteringFunctions: ((filter: IFilter) => boolean)[] = [];
-      const deduplicatedFilterIds: Set<number> = new Set();
-
-      for (const initialisation of initialisations) {
-        const engine = Engine.parse(initialisation.filters, initialisation.config ?? baseConfig);
-        const filters = engine.getFilters();
-
-        enginesToBeMerged.push(engine);
-        enginesExcludedFilteringFunctions.push(
-          engine.preprocessors.isFilterExcluded.bind(engine.preprocessors),
-        );
-        [...filters.networkFilters, ...filters.cosmeticFilters].forEach((filter) =>
-          deduplicatedFilterIds.add(filter.getId()),
-        );
-      }
-
-      const mergedEngine = Engine.merge(enginesToBeMerged[0], ...enginesToBeMerged.slice(1));
-      const mergedFilters = mergedEngine.getFilters();
-
-      expect(deduplicatedFilterIds.size).to.be.eql(
-        mergedFilters.networkFilters.length + mergedFilters.cosmeticFilters.length,
+    it('throws for engines with different version', () => {
+      const engine1 = new FilterEngine({ engineVersion: 1 });
+      const engine2 = new FilterEngine({ engineVersion: 2 });
+      expect(engine1.engineVersion).to.not.equal(engine2.engineVersion);
+      expect(() => FilterEngine.merge([engine1, engine2])).to.throw(
+        `engine version mismatch during merge, expected ${engine1.engineVersion} but got ${engine2.engineVersion}`,
       );
+    });
 
-      if (baseConfig.loadPreprocessors === true) {
-        [...mergedFilters.networkFilters, ...mergedFilters.cosmeticFilters].forEach((filter) => {
-          expect(mergedEngine.preprocessors.isFilterExcluded(filter)).to.be.eql(
-            isFilterDisabledWhenMerged(enginesExcludedFilteringFunctions, filter),
+    it('megers empty engines', () => {
+      const fitlers = FilterEngine.merge([
+        FilterEngine.empty(),
+        FilterEngine.empty(),
+      ]).getFilters();
+      expect(fitlers).to.have.property('networkFilters').that.have.length(0);
+      expect(fitlers).to.have.property('cosmeticFilters').that.have.length(0);
+    });
+
+    context('with network filters', () => {
+      it('merges filters from both engines', () => {
+        const fitlers = FilterEngine.merge([
+          FilterEngine.parse('foo'),
+          FilterEngine.parse('bar'),
+        ]).getFilters();
+        expect(fitlers).to.have.property('networkFilters').that.have.length(2);
+      });
+
+      it('removes duplicates', () => {
+        const fitlers = FilterEngine.merge([
+          FilterEngine.parse('foo$third-party'),
+          FilterEngine.parse('foo$3p'),
+        ]).getFilters();
+        expect(fitlers).to.have.property('networkFilters').that.have.length(1);
+      });
+    });
+
+    context('with cosmetic filters', () => {
+      it('merges filters from both engines', () => {
+        const fitlers = FilterEngine.merge([
+          FilterEngine.parse('###foo'),
+          FilterEngine.parse('###bar'),
+        ]).getFilters();
+        expect(fitlers).to.have.property('cosmeticFilters').that.have.length(2);
+      });
+
+      it('removes duplicates', () => {
+        const fitlers = FilterEngine.merge([
+          FilterEngine.parse('###foo'),
+          FilterEngine.parse('###foo'),
+        ]).getFilters();
+        expect(fitlers).to.have.property('cosmeticFilters').that.have.length(1);
+      });
+    });
+
+    context('with lists', () => {
+      it('merges lists from both engines', () => {
+        const engine1 = new FilterEngine({ lists: new Map([['a', 'a']]) });
+        const engine2 = new FilterEngine({ lists: new Map([['b', 'b']]) });
+        expect(FilterEngine.merge([engine1, engine2]))
+          .to.have.property('lists')
+          .that.deep.equal(
+            new Map([
+              ['a', 'a'],
+              ['b', 'b'],
+            ]),
           );
-        });
-      }
-    }
+      });
 
-    const filters = `||foo.com^
-foo.com##div
-foo.com##+js(set)
-||bar.com^
-bar.com##div
-bar.com##+js(set)`;
-    const filtersWithPreprocessors = `!#if env_ghostery
-foo.com##a
-!#endif`;
-
-    it('merges two engines', () => {
-      expectToBeMergedOptimally(
-        new Config({}),
-        {
-          filters: filters.split('\n').slice(0, 3).join('\n'),
-        },
-        {
-          filters: filters.split('\n').slice(3).join('\n'),
-        },
-      );
+      it('removes duplicates', () => {
+        const engine1 = new FilterEngine({ lists: new Map([['a', 'a']]) });
+        const engine2 = new FilterEngine({ lists: new Map([['a', 'a']]) });
+        expect(FilterEngine.merge([engine1, engine2]))
+          .to.have.property('lists')
+          .that.deep.equal(new Map([['a', 'a']]));
+      });
     });
 
-    it('merges two engines with deduplication', () => {
-      expectToBeMergedOptimally(
-        new Config({}),
-        {
-          filters,
-        },
-        {
-          filters,
-        },
-      );
-    });
+    context('with preprocessors', () => {
+      it('merges preprocessors from both engines', () => {
+        const engine = FilterEngine.merge([
+          FilterEngine.parse(
+            `
+            ###foo
+            !#if env_test
+            bar
+            !#endif
+          `,
+            { loadPreprocessors: true },
+          ),
+          FilterEngine.parse(
+            `
+            !#if env_ghostery
+            ###foo
+            !#endif
+            bar
+          `,
+            { loadPreprocessors: true },
+          ),
+        ]);
+        const filters = engine.getFilters();
+        expect(filters).to.have.property('cosmeticFilters').that.have.length(1);
+        expect(filters).to.have.property('networkFilters').that.have.length(1);
+        expect(engine.preprocessors.getPreprocessors()).to.have.length(2);
+      });
 
-    it('merges two engines with preprocessor deduplication', () => {
-      expectToBeMergedOptimally(
-        new Config({ loadPreprocessors: true }),
-        {
-          filters: filtersWithPreprocessors,
-        },
-        {
-          filters: filtersWithPreprocessors,
-        },
-      );
+      it('removes duplicates', () => {
+        const engine = FilterEngine.merge([
+          FilterEngine.parse(
+            `
+            !#if env_ghostery
+            bar
+            !#endif
+          `,
+            { loadPreprocessors: true },
+          ),
+          FilterEngine.parse(
+            `
+            !#if env_ghostery
+            ###foo
+            !#endif
+          `,
+            { loadPreprocessors: true },
+          ),
+        ]);
+        const filters = engine.getFilters();
+        expect(filters).to.have.property('cosmeticFilters').that.have.length(1);
+        expect(filters).to.have.property('networkFilters').that.have.length(1);
+        const preprocessors = engine.preprocessors.getPreprocessors();
+        expect(preprocessors).to.have.length(1);
+        expect(preprocessors[0].filterIDs).to.have.property('size', 2);
+      });
     });
   });
 });

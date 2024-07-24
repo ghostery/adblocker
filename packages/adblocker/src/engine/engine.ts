@@ -229,11 +229,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     return engine as InstanceType<T>;
   }
 
-  public static merge<T extends FilterEngine>(
-    this: new (...args: any[]) => T,
-    ...engines: T[]
-  ): T {
-    if (engines.length === 0) {
+  public static merge<T extends FilterEngine>(this: new (...args: any[]) => T, engines: T[]): T {
+    if (!engines || engines.length < 2) {
       throw new Error('merging engines requires at least two engines');
     }
 
@@ -265,7 +262,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         );
       }
 
-      // Move objects
       const filters = engine.getFilters();
 
       if (config.loadNetworkFilters === true) {
