@@ -290,7 +290,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       }
     }
 
-    const output = new this({
+    return new this({
       networkFilters: networkFilters.values(),
       cosmeticFilters: cosmeticFilters.values(),
       preprocessors,
@@ -298,8 +298,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       lists,
       config,
     });
-
-    return output;
   }
 
   public static parse<T extends FilterEngine>(
