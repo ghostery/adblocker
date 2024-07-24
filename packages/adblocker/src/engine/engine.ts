@@ -229,6 +229,79 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     return engine as InstanceType<T>;
   }
 
+  public static fromEngines<T extends FilterEngine>(
+    this: new (...args: any[]) => T,
+    ...engines: T[]
+  ): T {
+    if (engines.length === 0) {
+      return new this();
+    }
+
+    const config = engines[0].config;
+    const lists = engines[0].lists;
+
+    const networkFilters: Map<number, NetworkFilter> = new Map();
+    const cosmeticFilters: Map<number, CosmeticFilter> = new Map();
+    const preprocessors: Preprocessor[] = [];
+
+    const configKeysMustMatch: Exclude<keyof Config, 'serialize' | 'getSerializedSize'>[] = [
+      'debug',
+      'enableCompression',
+      'enableOptimizations',
+    ];
+
+    for (const engine of engines) {
+      // Validate the config
+      for (const configKey of configKeysMustMatch) {
+        if (config[configKey] !== engine.config[configKey]) {
+          throw new Error(
+            `Config "${configKey}" is not compatible with base engine and cannot be converted!`,
+          );
+        }
+      }
+
+      // Move objects
+      const filters = engine.getFilters();
+
+      if (config.loadNetworkFilters === true) {
+        for (const networkFilter of filters.networkFilters) {
+          networkFilters.set(networkFilter.getId(), networkFilter);
+        }
+      }
+
+      if (config.loadCosmeticFilters === true) {
+        for (const cosmeticFilter of filters.cosmeticFilters) {
+          cosmeticFilters.set(cosmeticFilter.getId(), cosmeticFilter);
+        }
+      }
+
+      if (config.loadPreprocessors === true) {
+        for (const preprocessor of engine.preprocessors.getPreprocessors()) {
+          preprocessors.push(preprocessor);
+        }
+      }
+
+      for (const [key, value] of engine.lists) {
+        if (lists.has(key)) {
+          continue;
+        }
+
+        lists.set(key, value);
+      }
+    }
+
+    const output = new this({
+      networkFilters: networkFilters.values(),
+      cosmeticFilters: cosmeticFilters.values(),
+      preprocessors,
+
+      lists,
+      config,
+    });
+
+    return output;
+  }
+
   public static parse<T extends FilterEngine>(
     this: new (...args: any[]) => T,
     filters: string,

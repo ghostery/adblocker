@@ -18,6 +18,8 @@ import Resources from '../../src/resources.js';
 
 import requests from '../data/requests.js';
 import { loadEasyListFilters, typedArrayEqual } from '../utils.js';
+import Config from '../../src/config.js';
+import IFilter from '../../src/filters/interface.js';
 
 /**
  * Helper function used in the Engine tests. All the assertions are performed by
@@ -1336,6 +1338,104 @@ foo.com###selector
         });
       },
     );
+  });
+
+  describe('#fromEngines', () => {
+    function isFilterDisabledWhenMerged(
+      exclusionFunctions: ((filter: IFilter) => boolean)[],
+      filter: IFilter,
+    ) {
+      for (const exclusionFunction of exclusionFunctions) {
+        if (exclusionFunction(filter) === true) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    function expectToBeMergedOptimally(
+      baseConfig: Config,
+      ...initialisations: { config?: Config; filters: string }[]
+    ) {
+      const enginesToBeMerged: Engine[] = [];
+      const enginesExcludedFilteringFunctions: ((filter: IFilter) => boolean)[] = [];
+      const deduplicatedFilterIds: Set<number> = new Set();
+
+      for (const initialisation of initialisations) {
+        const engine = Engine.parse(initialisation.filters, initialisation.config ?? baseConfig);
+        const filters = engine.getFilters();
+
+        enginesToBeMerged.push(engine);
+        enginesExcludedFilteringFunctions.push(
+          engine.preprocessors.isFilterExcluded.bind(engine.preprocessors),
+        );
+        [...filters.networkFilters, ...filters.cosmeticFilters].forEach((filter) =>
+          deduplicatedFilterIds.add(filter.getId()),
+        );
+      }
+
+      const mergedEngine = Engine.fromEngines(enginesToBeMerged[0], ...enginesToBeMerged.slice(1));
+      const mergedFilters = mergedEngine.getFilters();
+
+      expect(deduplicatedFilterIds.size).to.be.eql(
+        mergedFilters.networkFilters.length + mergedFilters.cosmeticFilters.length,
+      );
+
+      if (baseConfig.loadPreprocessors === true) {
+        [...mergedFilters.networkFilters, ...mergedFilters.cosmeticFilters].forEach((filter) => {
+          expect(mergedEngine.preprocessors.isFilterExcluded(filter)).to.be.eql(
+            isFilterDisabledWhenMerged(enginesExcludedFilteringFunctions, filter),
+          );
+        });
+      }
+    }
+
+    const filters = `||foo.com^
+foo.com##div
+foo.com##+js(set)
+||bar.com^
+bar.com##div
+bar.com##+js(set)`;
+    const filtersWithPreprocessors = `!#if env_ghostery
+foo.com##a
+!#endif`;
+
+    it('merges two engines', () => {
+      expectToBeMergedOptimally(
+        new Config({}),
+        {
+          filters: filters.split('\n').slice(0, 3).join('\n'),
+        },
+        {
+          filters: filters.split('\n').slice(3).join('\n'),
+        },
+      );
+    });
+
+    it('merges two engines with deduplication', () => {
+      expectToBeMergedOptimally(
+        new Config({}),
+        {
+          filters,
+        },
+        {
+          filters,
+        },
+      );
+    });
+
+    it('merges two engines with preprocessor deduplication', () => {
+      expectToBeMergedOptimally(
+        new Config({ loadPreprocessors: true }),
+        {
+          filters: filtersWithPreprocessors,
+        },
+        {
+          filters: filtersWithPreprocessors,
+        },
+      );
+    });
   });
 });
 

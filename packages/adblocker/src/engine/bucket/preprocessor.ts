@@ -126,4 +126,8 @@ export default class PreprocessorBucket {
 
     return estimatedSize;
   }
+
+  public getPreprocessors() {
+    return this.preprocessors;
+  }
 }
