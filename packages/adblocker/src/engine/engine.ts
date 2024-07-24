@@ -234,9 +234,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     ...engines: T[]
   ): T {
     if (engines.length === 0) {
-      throw new Error(
-        `merging engine requires at least two engines, use ".empty()" instead`,
-      );
+      throw new Error(`merging engines requires at least two engines, use ".empty()" instead`);
     }
 
     const config = engines[0].config;
