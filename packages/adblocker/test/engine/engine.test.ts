@@ -1359,47 +1359,47 @@ foo.com###selector
     });
 
     it('megers empty engines', () => {
-      const fitlers = FilterEngine.merge([
+      const filters = FilterEngine.merge([
         FilterEngine.empty(),
         FilterEngine.empty(),
       ]).getFilters();
-      expect(fitlers).to.have.property('networkFilters').that.have.length(0);
-      expect(fitlers).to.have.property('cosmeticFilters').that.have.length(0);
+      expect(filters).to.have.property('networkFilters').that.have.length(0);
+      expect(filters).to.have.property('cosmeticFilters').that.have.length(0);
     });
 
     context('with network filters', () => {
       it('merges filters from both engines', () => {
-        const fitlers = FilterEngine.merge([
+        const filters = FilterEngine.merge([
           FilterEngine.parse('foo'),
           FilterEngine.parse('bar'),
         ]).getFilters();
-        expect(fitlers).to.have.property('networkFilters').that.have.length(2);
+        expect(filters).to.have.property('networkFilters').that.have.length(2);
       });
 
       it('removes duplicates', () => {
-        const fitlers = FilterEngine.merge([
+        const filters = FilterEngine.merge([
           FilterEngine.parse('foo$third-party'),
           FilterEngine.parse('foo$3p'),
         ]).getFilters();
-        expect(fitlers).to.have.property('networkFilters').that.have.length(1);
+        expect(filters).to.have.property('networkFilters').that.have.length(1);
       });
     });
 
     context('with cosmetic filters', () => {
       it('merges filters from both engines', () => {
-        const fitlers = FilterEngine.merge([
+        const filters = FilterEngine.merge([
           FilterEngine.parse('###foo'),
           FilterEngine.parse('###bar'),
         ]).getFilters();
-        expect(fitlers).to.have.property('cosmeticFilters').that.have.length(2);
+        expect(filters).to.have.property('cosmeticFilters').that.have.length(2);
       });
 
       it('removes duplicates', () => {
-        const fitlers = FilterEngine.merge([
+        const filters = FilterEngine.merge([
           FilterEngine.parse('###foo'),
           FilterEngine.parse('###foo'),
         ]).getFilters();
-        expect(fitlers).to.have.property('cosmeticFilters').that.have.length(1);
+        expect(filters).to.have.property('cosmeticFilters').that.have.length(1);
       });
     });
 
