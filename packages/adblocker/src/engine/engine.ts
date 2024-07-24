@@ -229,17 +229,17 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     return engine as InstanceType<T>;
   }
 
-  public static fromEngines<T extends FilterEngine>(
+  public static merge<T extends FilterEngine>(
     this: new (...args: any[]) => T,
     ...engines: T[]
   ): T {
     if (engines.length === 0) {
-      throw new Error(`merging engines requires at least two engines, use ".empty()" instead`);
+      throw new Error('merging engines requires at least two engines');
     }
 
     const config = engines[0].config;
     const lists = engines[0].lists;
-    const version = engines[0].version;
+    const engineVersion = engines[0].engineVersion;
 
     const networkFilters: Map<number, NetworkFilter> = new Map();
     const cosmeticFilters: Map<number, CosmeticFilter> = new Map();
@@ -255,15 +255,13 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       // Validate the config
       for (const configKey of configKeysMustMatch) {
         if (config[configKey] !== engine.config[configKey]) {
-          throw new Error(
-            `config "${configKey}" is not compatible with base engine and cannot be converted`,
-          );
+          throw new Error(`config "${configKey}" of all merged engines must be the same`);
         }
       }
 
-      if (version !== engine.version) {
+      if (engineVersion !== engine.engineVersion) {
         throw new Error(
-          `engine version mismatch during merge, expected ${version} but got ${engine.version}`,
+          `engine version mismatch during merge, expected ${engineVersion} but got ${engine.engineVersion}`,
         );
       }
 
@@ -304,7 +302,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
       lists,
       config,
-      version,
+      engineVersion,
     });
   }
 
@@ -414,7 +412,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
   public metadata: Metadata | undefined;
   public resources: Resources;
   public readonly config: Config;
-  public readonly version: number;
+  public readonly engineVersion: number;
 
   constructor({
     // Optionally initialize the engine with filters
@@ -424,19 +422,19 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
     config = new Config(),
     lists = new Map(),
-    version = ENGINE_VERSION,
+    engineVersion = ENGINE_VERSION,
   }: {
     cosmeticFilters?: CosmeticFilter[];
     networkFilters?: NetworkFilter[];
     preprocessors?: Preprocessor[];
     lists?: Map<string, string>;
     config?: Partial<Config>;
-    version?: number;
+    engineVersion?: number;
   } = {}) {
     super(); // init super-class EventEmitter
 
     this.config = new Config(config);
-    this.version = version;
+    this.engineVersion = engineVersion;
 
     // Subscription management: disabled by default
     this.lists = lists;

@@ -1375,7 +1375,7 @@ foo.com###selector
         );
       }
 
-      const mergedEngine = Engine.fromEngines(enginesToBeMerged[0], ...enginesToBeMerged.slice(1));
+      const mergedEngine = Engine.merge(enginesToBeMerged[0], ...enginesToBeMerged.slice(1));
       const mergedFilters = mergedEngine.getFilters();
 
       expect(deduplicatedFilterIds.size).to.be.eql(
