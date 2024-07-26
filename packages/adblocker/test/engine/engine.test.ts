@@ -14,7 +14,7 @@ import { getDomain } from 'tldts-experimental';
 import Engine, { EngineEventHandlers } from '../../src/engine/engine.js';
 import NetworkFilter from '../../src/filters/network.js';
 import Request, { RequestType } from '../../src/request.js';
-import Resources from '../../src/resources.js';
+import Resources, { Resource } from '../../src/resources.js';
 
 import requests from '../data/requests.js';
 import { loadEasyListFilters, typedArrayEqual } from '../utils.js';
@@ -1549,6 +1549,23 @@ foo.com###selector
     });
 
     context('with resources', () => {
+      function resourcesToText(mappings: Map<string, Resource>[]) {
+        const merged: Map<string, Resource> = new Map();
+        for (const resources of mappings) {
+          for (const [name, resource] of resources) {
+            if (!merged.has(name)) {
+              merged.set(name, resource);
+            }
+          }
+        }
+
+        return [...merged.entries()]
+          .reduce((state, [name, resource]) => {
+            return [...state, `${name} ${resource.contentType}\n${resource.body}`];
+          }, [] as string[])
+          .join('\n\n');
+      }
+
       const resources1 = `a.js application/javascript
 function () { console.log(1) }`;
       const resources2 = `b.js application/javascript
@@ -1557,26 +1574,28 @@ function () { console.log(2) }`;
       it('merges resources from both engines', () => {
         const engine1 = FilterEngine.empty();
         const engine2 = FilterEngine.empty();
-        engine1.updateResources(resources1, '');
-        engine2.updateResources(resources2, '');
+        engine1.updateResources(resources1, '1');
+        engine2.updateResources(resources2, '2');
 
         const engine = FilterEngine.merge([engine1, engine2]);
-        expect(engine.resources.js.size).to.be.eql(2);
+        expect(engine.resources.js.size).to.be.eql(4);
         expect(engine.resources.checksum).to.be.eql(
-          fastHash([resources1, resources2].join('\n\n')).toString(16),
+          fastHash(
+            resourcesToText([engine1.resources.resources, engine2.resources.resources]),
+          ).toString(16),
         );
       });
 
       it('removes duplicates', () => {
         const engine1 = FilterEngine.empty();
         const engine2 = FilterEngine.empty();
-        engine1.updateResources(resources1, '');
-        engine2.updateResources(resources1, '');
+        engine1.updateResources(resources1, '1');
+        engine2.updateResources(resources1, '2');
 
         const engine = FilterEngine.merge([engine1, engine2]);
-        expect(engine.resources.js.size).to.be.eql(1);
+        expect(engine.resources.js.size).to.be.eql(2);
         expect(engine.resources.checksum).to.be.eql(
-          fastHash([resources1].join('\n\n')).toString(16),
+          fastHash(resourcesToText([engine1.resources.resources])).toString(16),
         );
       });
     });
