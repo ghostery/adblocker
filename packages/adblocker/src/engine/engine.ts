@@ -25,13 +25,17 @@ import NetworkFilter from '../filters/network.js';
 import { block } from '../filters/dsl.js';
 import { FilterType, IListDiff, IPartialRawDiff, parseFilters } from '../lists.js';
 import Request from '../request.js';
-import Resources from '../resources.js';
+import Resources, { Resource } from '../resources.js';
 import CosmeticFilterBucket from './bucket/cosmetic.js';
 import NetworkFilterBucket from './bucket/network.js';
 import { Metadata, IPatternLookupResult } from './metadata.js';
 import Preprocessor, { Env } from '../preprocessor.js';
 import PreprocessorBucket from './bucket/preprocessor.js';
 import IFilter from '../filters/interface.js';
+import { ICategory } from './metadata/categories.js';
+import { IOrganization } from './metadata/organizations.js';
+import { IPattern } from './metadata/patterns.js';
+import crc32 from '../crc32.js';
 
 export const ENGINE_VERSION = 661;
 
@@ -229,7 +233,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     return engine as InstanceType<T>;
   }
 
-  public static merge<T extends FilterEngine>(this: new (...args: any[]) => T, engines: T[]): T {
+  public static merge<T extends typeof FilterEngine>(
+    this: T,
+    engines: InstanceType<T>[],
+  ): InstanceType<T> {
     if (!engines || engines.length < 2) {
       throw new Error('merging engines requires at least two engines');
     }
@@ -242,10 +249,34 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const cosmeticFilters: Map<number, CosmeticFilter> = new Map();
     const preprocessors: Preprocessor[] = [];
 
+    const metadata: {
+      organizations: Record<string, IOrganization>;
+      categories: Record<string, ICategory>;
+      patterns: Record<string, IPattern>;
+    } = {
+      organizations: {},
+      categories: {},
+      patterns: {},
+    };
+    const resources: Map<string, Resource> = new Map();
+
     const configKeysMustMatch: Exclude<keyof Config, 'serialize' | 'getSerializedSize'>[] = [
       'debug',
       'enableCompression',
+      'enableHtmlFiltering',
+      'enableInMemoryCache',
+      'enableMutationObserver',
       'enableOptimizations',
+      'enablePushInjectionsOnNavigationEvents',
+      'guessRequestTypeFromUrl',
+      'integrityCheck',
+      'loadCSPFilters',
+      'loadCosmeticFilters',
+      'loadExceptionFilters',
+      'loadExceptionFilters',
+      'loadGenericCosmeticsFilters',
+      'loadNetworkFilters',
+      'loadPreprocessors',
     ];
 
     for (const engine of engines) {
@@ -264,22 +295,16 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
       const filters = engine.getFilters();
 
-      if (config.loadNetworkFilters === true) {
-        for (const networkFilter of filters.networkFilters) {
-          networkFilters.set(networkFilter.getId(), networkFilter);
-        }
+      for (const networkFilter of filters.networkFilters) {
+        networkFilters.set(networkFilter.getId(), networkFilter);
       }
 
-      if (config.loadCosmeticFilters === true) {
-        for (const cosmeticFilter of filters.cosmeticFilters) {
-          cosmeticFilters.set(cosmeticFilter.getId(), cosmeticFilter);
-        }
+      for (const cosmeticFilter of filters.cosmeticFilters) {
+        cosmeticFilters.set(cosmeticFilter.getId(), cosmeticFilter);
       }
 
-      if (config.loadPreprocessors === true) {
-        for (const preprocessor of engine.preprocessors.getPreprocessors()) {
-          preprocessors.push(preprocessor);
-        }
+      for (const preprocessor of engine.preprocessors.preprocessors) {
+        preprocessors.push(preprocessor);
       }
 
       for (const [key, value] of engine.lists) {
@@ -289,17 +314,57 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
         lists.set(key, value);
       }
+
+      if (engine.metadata !== undefined) {
+        for (const organization of engine.metadata.organizations.getValues()) {
+          if (metadata.organizations[organization.key] === undefined) {
+            metadata.organizations[organization.key] = organization;
+          }
+        }
+        for (const category of engine.metadata.categories.getValues()) {
+          if (metadata.categories[category.key] === undefined) {
+            metadata.categories[category.key] = category;
+          }
+        }
+        for (const pattern of engine.metadata.patterns.getValues()) {
+          if (metadata.patterns[pattern.key] === undefined) {
+            metadata.patterns[pattern.key] = pattern;
+          }
+        }
+      }
+
+      for (const [name, resource] of engine.resources.resources) {
+        if (!resources.has(name)) {
+          resources.set(name, resource);
+        }
+      }
     }
 
-    return new this({
-      networkFilters: networkFilters.values(),
-      cosmeticFilters: cosmeticFilters.values(),
+    const resourcesText = [...resources.entries()]
+      .reduce((state, [name, resource]) => {
+        return [...state, `${name} ${resource.contentType}\n${resource.body}`];
+      }, [] as string[])
+      .join('\n\n');
+
+    const engine = new this({
+      networkFilters: Array.from(networkFilters.values()),
+      cosmeticFilters: Array.from(cosmeticFilters.values()),
       preprocessors,
 
       lists,
       config,
       engineVersion,
+    }) as InstanceType<T>;
+    engine.metadata = new Metadata(metadata);
+    engine.resources = Resources.parse(resourcesText, {
+      checksum: crc32(
+        Uint8Array.from(Array.from(resourcesText).map((char) => char.charCodeAt(0))),
+        0,
+        resourcesText.length,
+      ).toString(16),
     });
+
+    return engine;
   }
 
   public static parse<T extends FilterEngine>(

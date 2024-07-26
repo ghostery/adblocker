@@ -22,7 +22,7 @@ export default class PreprocessorBucket {
     });
   }
 
-  private readonly preprocessors: Preprocessor[];
+  public readonly preprocessors: Preprocessor[];
   private readonly excluded: Set<FilterId>;
 
   constructor({
@@ -125,9 +125,5 @@ export default class PreprocessorBucket {
     }
 
     return estimatedSize;
-  }
-
-  public getPreprocessors() {
-    return this.preprocessors;
   }
 }

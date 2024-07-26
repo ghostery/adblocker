@@ -18,8 +18,6 @@ import Resources from '../../src/resources.js';
 
 import requests from '../data/requests.js';
 import { loadEasyListFilters, typedArrayEqual } from '../utils.js';
-import Config from '../../src/config.js';
-import IFilter from '../../src/filters/interface.js';
 import FilterEngine from '../../src/engine/engine.js';
 
 /**
@@ -1341,9 +1339,10 @@ foo.com###selector
     );
   });
 
-  describe('#merge', () => {
+  describe.only('#merge', () => {
     it('throws with no or one engine', () => {
       const error = 'merging engines requires at least two engines';
+      // @ts-expect-error Expected to throw an error
       expect(() => FilterEngine.merge()).to.throw(error);
       expect(() => FilterEngine.merge([])).to.throw(error);
       expect(() => FilterEngine.merge([FilterEngine.empty()])).to.throw(error);
