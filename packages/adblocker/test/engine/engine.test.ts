@@ -19,6 +19,8 @@ import Resources from '../../src/resources.js';
 import requests from '../data/requests.js';
 import { loadEasyListFilters, typedArrayEqual } from '../utils.js';
 import FilterEngine from '../../src/engine/engine.js';
+import { fastHash } from '../../src/utils.js';
+import { Metadata } from '../../src/engine/metadata.js';
 
 /**
  * Helper function used in the Engine tests. All the assertions are performed by
@@ -1339,7 +1341,7 @@ foo.com###selector
     );
   });
 
-  describe.only('#merge', () => {
+  describe('#merge', () => {
     it('throws with no or one engine', () => {
       const error = 'merging engines requires at least two engines';
       // @ts-expect-error Expected to throw an error
@@ -1478,6 +1480,105 @@ foo.com###selector
         expect(engine.preprocessors.preprocessors).to.have.length(1);
         expect(engine.preprocessors.preprocessors[0].filterIDs).to.have.property('size', 2);
       });
+    });
+
+    context('with metadata', () => {
+      function createRawMetadata(key: string) {
+        return {
+          organizations: {
+            [key]: {
+              key,
+              name: key,
+              description: null,
+              website_url: null,
+              country: null,
+              privacy_policy_url: null,
+              privacy_contact: null,
+              ghostery_id: null,
+            },
+          },
+          categories: {
+            [key]: {
+              key,
+              name: key,
+              color: '#fff',
+              description: key,
+            },
+          },
+          patterns: {
+            [key]: {
+              key,
+              name: key,
+              category: key,
+              organization: null,
+              alias: null,
+              website_url: null,
+              ghostery_id: null,
+              domains: [key],
+              filters: [key],
+            },
+          },
+        };
+      }
+
+      it('merges metadata from both engines', () => {
+        const engine1 = FilterEngine.empty();
+        engine1.metadata = new Metadata(createRawMetadata('foo'));
+        const engine2 = FilterEngine.empty();
+        engine2.metadata = new Metadata(createRawMetadata('bar'));
+
+        const engine = FilterEngine.merge([engine1, engine2]);
+        expect(engine.metadata).not.to.be.undefined;
+        expect(engine.metadata!.getCategories()).to.have.length(2);
+        expect(engine.metadata!.getOrganizations()).to.have.length(2);
+        expect(engine.metadata!.getPatterns()).to.have.length(2);
+      });
+
+      it('removes duplicates', () => {
+        const engine1 = FilterEngine.empty();
+        engine1.metadata = new Metadata(createRawMetadata('foo'));
+        const engine2 = FilterEngine.empty();
+        engine2.metadata = new Metadata(createRawMetadata('foo'));
+
+        const engine = FilterEngine.merge([engine1, engine2]);
+        expect(engine.metadata).not.to.be.undefined;
+        expect(engine.metadata!.getCategories()).to.have.length(1);
+        expect(engine.metadata!.getOrganizations()).to.have.length(1);
+        expect(engine.metadata!.getPatterns()).to.have.length(1);
+      })
+    });
+
+    context('with resources', () => {
+      const resources1 = `a.js application/javascript
+function () { console.log(1) }`;
+      const resources2 = `b.js application/javascript
+function () { console.log(2) }`;
+
+      it('merges resources from both engines', () => {
+        const engine1 = FilterEngine.empty();
+        const engine2 = FilterEngine.empty();
+        engine1.updateResources(resources1, '');
+        engine2.updateResources(resources2, '');
+
+        const engine = FilterEngine.merge([engine1, engine2]);
+        expect(engine.resources.js.size).to.be.eql(2);
+        expect(engine.resources.checksum).to.be.eql(
+          fastHash([resources1, resources2].join('\n\n')).toString(16),
+        );
+      });
+
+      it('removes duplicates', () => {
+        const engine1 = FilterEngine.empty();
+        const engine2 = FilterEngine.empty();
+        engine1.updateResources(resources1, '');
+        engine2.updateResources(resources1, '');
+
+        const engine = FilterEngine.merge([engine1, engine2]);
+        expect(engine.resources.js.size).to.be.eql(1);
+        expect(engine.resources.checksum).to.be.eql(
+          fastHash([resources1].join('\n\n')).toString(16),
+        );
+      })
     });
   });
 });
