@@ -1545,7 +1545,7 @@ foo.com###selector
         expect(engine.metadata!.getCategories()).to.have.length(1);
         expect(engine.metadata!.getOrganizations()).to.have.length(1);
         expect(engine.metadata!.getPatterns()).to.have.length(1);
-      })
+      });
     });
 
     context('with resources', () => {
@@ -1578,7 +1578,7 @@ function () { console.log(2) }`;
         expect(engine.resources.checksum).to.be.eql(
           fastHash([resources1].join('\n\n')).toString(16),
         );
-      })
+      });
     });
   });
 });
