@@ -1450,7 +1450,7 @@ foo.com###selector
         const filters = engine.getFilters();
         expect(filters).to.have.property('cosmeticFilters').that.have.length(1);
         expect(filters).to.have.property('networkFilters').that.have.length(1);
-        expect(engine.preprocessors.getPreprocessors()).to.have.length(2);
+        expect(engine.preprocessors.preprocessors).to.have.length(2);
       });
 
       it('removes duplicates', () => {
@@ -1475,9 +1475,8 @@ foo.com###selector
         const filters = engine.getFilters();
         expect(filters).to.have.property('cosmeticFilters').that.have.length(1);
         expect(filters).to.have.property('networkFilters').that.have.length(1);
-        const preprocessors = engine.preprocessors.getPreprocessors();
-        expect(preprocessors).to.have.length(1);
-        expect(preprocessors[0].filterIDs).to.have.property('size', 2);
+        expect(engine.preprocessors.preprocessors).to.have.length(1);
+        expect(engine.preprocessors.preprocessors[0].filterIDs).to.have.property('size', 2);
       });
     });
   });
