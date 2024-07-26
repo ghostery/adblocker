@@ -35,7 +35,7 @@ import IFilter from '../filters/interface.js';
 import { ICategory } from './metadata/categories.js';
 import { IOrganization } from './metadata/organizations.js';
 import { IPattern } from './metadata/patterns.js';
-import crc32 from '../crc32.js';
+import { fastHash } from '../utils.js';
 
 export const ENGINE_VERSION = 661;
 
@@ -357,11 +357,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     }) as InstanceType<T>;
     engine.metadata = new Metadata(metadata);
     engine.resources = Resources.parse(resourcesText, {
-      checksum: crc32(
-        Uint8Array.from(Array.from(resourcesText).map((char) => char.charCodeAt(0))),
-        0,
-        resourcesText.length,
-      ).toString(16),
+      checksum: fastHash(resourcesText).toString(16),
     });
 
     return engine;
