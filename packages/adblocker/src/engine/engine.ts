@@ -243,7 +243,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
     const config = engines[0].config;
     const lists = engines[0].lists;
-    const engineVersion = engines[0].engineVersion;
 
     const networkFilters: Map<number, NetworkFilter> = new Map();
     const cosmeticFilters: Map<number, CosmeticFilter> = new Map();
@@ -285,12 +284,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         if (config[configKey] !== engine.config[configKey]) {
           throw new Error(`config "${configKey}" of all merged engines must be the same`);
         }
-      }
-
-      if (engineVersion !== engine.engineVersion) {
-        throw new Error(
-          `engine version mismatch during merge, expected ${engineVersion} but got ${engine.engineVersion}`,
-        );
       }
 
       const filters = engine.getFilters();
@@ -353,7 +346,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
       lists,
       config,
-      engineVersion,
     }) as InstanceType<T>;
     engine.metadata = new Metadata(metadata);
     engine.resources = Resources.parse(resourcesText, {
@@ -469,7 +461,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
   public metadata: Metadata | undefined;
   public resources: Resources;
   public readonly config: Config;
-  public readonly engineVersion: number;
 
   constructor({
     // Optionally initialize the engine with filters
@@ -479,7 +470,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
     config = new Config(),
     lists = new Map(),
-    engineVersion = ENGINE_VERSION,
   }: {
     cosmeticFilters?: CosmeticFilter[];
     networkFilters?: NetworkFilter[];
@@ -491,7 +481,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     super(); // init super-class EventEmitter
 
     this.config = new Config(config);
-    this.engineVersion = engineVersion;
 
     // Subscription management: disabled by default
     this.lists = lists;
