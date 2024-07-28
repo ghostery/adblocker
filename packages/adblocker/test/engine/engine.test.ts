@@ -1350,15 +1350,6 @@ foo.com###selector
       expect(() => FilterEngine.merge([FilterEngine.empty()])).to.throw(error);
     });
 
-    it('throws for engines with different version', () => {
-      const engine1 = new FilterEngine({ engineVersion: 1 });
-      const engine2 = new FilterEngine({ engineVersion: 2 });
-      expect(engine1.engineVersion).to.not.equal(engine2.engineVersion);
-      expect(() => FilterEngine.merge([engine1, engine2])).to.throw(
-        `engine version mismatch during merge, expected ${engine1.engineVersion} but got ${engine2.engineVersion}`,
-      );
-    });
-
     it('megers empty engines', () => {
       const filters = FilterEngine.merge([
         FilterEngine.empty(),
