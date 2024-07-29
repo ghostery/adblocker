@@ -39,6 +39,7 @@ import {
 } from '../utils.js';
 import IFilter from './interface.js';
 import { HTMLSelector, extractHTMLSelectorFromRule } from '../html-filtering.js';
+import { Resource } from '../resources.js';
 
 const EMPTY_TOKENS: [Uint32Array] = [EMPTY_UINT32_ARRAY];
 export const DEFAULT_HIDDING_STYLE: string = 'display: none !important;';
@@ -774,7 +775,7 @@ export default class CosmeticFilter implements IFilter {
     return { name: parts[0], args };
   }
 
-  public getScript(js: Map<string, string>): string | undefined {
+  public getScript(js: Map<string, Resource>): string | undefined {
     const parsed = this.parseScript();
     if (parsed === undefined) {
       return undefined;
@@ -782,8 +783,9 @@ export default class CosmeticFilter implements IFilter {
 
     const { name, args } = parsed;
 
-    let script = js.get(name);
-    if (script !== undefined) {
+    const resource = js.get(name);
+    if (resource !== undefined) {
+      let script = resource.body;
       for (let i = 0; i < args.length; i += 1) {
         // escape some characters so they wont get evaluated with escape characters during script injection
         const arg = args[i].replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -794,6 +796,26 @@ export default class CosmeticFilter implements IFilter {
     } // TODO - else throw an exception?
 
     return undefined;
+  }
+
+  public getNormalizedScriptInjectionSelector(js: Map<string, Resource>): string | undefined {
+    if (this.isScriptInject() === false) {
+      return undefined;
+    }
+
+    const selector = this.getSelector();
+
+    const firstCommaIndex = selector.indexOf(',');
+    if (firstCommaIndex === -1) {
+      return undefined;
+    }
+
+    const originResourceName = js.get(selector.slice(1, firstCommaIndex))?.aliasOf;
+    if (originResourceName === undefined) {
+      return undefined;
+    }
+
+    return '(' + originResourceName + selector.slice(firstCommaIndex);
   }
 
   public hasHostnameConstraint(): boolean {

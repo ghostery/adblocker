@@ -883,7 +883,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       ) {
         injectionsDisabled = true;
       }
-      unhideExceptions.set(unhide.getSelector(), unhide);
+      unhideExceptions.set(
+        unhide.getNormalizedScriptInjectionSelector(this.resources.js) ?? unhide.getSelector(),
+        unhide,
+      );
     }
 
     const injections: CosmeticFilter[] = [];
@@ -894,7 +897,9 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       // Apply unhide rules + dispatch
       for (const filter of filters) {
         // Make sure `rule` is not un-hidden by a #@# filter
-        const exception = unhideExceptions.get(filter.getSelector());
+        const exception = unhideExceptions.get(
+          filter.getNormalizedScriptInjectionSelector(this.resources.js) ?? filter.getSelector(),
+        );
 
         if (exception !== undefined) {
           continue;
