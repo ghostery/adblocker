@@ -8,7 +8,7 @@
 
 import { getResourceForMime } from '@remusao/small';
 
-import { StaticDataView, sizeOfUTF8, sizeOfASCII, sizeOfByte } from './data-view.js';
+import { StaticDataView, sizeOfUTF8, sizeOfASCII, sizeOfByte, sizeOfBool } from './data-view.js';
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -191,7 +191,7 @@ export default class Resources {
     let estimatedSize = sizeOfASCII(this.checksum) + 2 * sizeOfByte(); // resources.size
 
     this.resources.forEach(({ contentType, body, aliasOf }, name) => {
-      estimatedSize += sizeOfASCII(name);
+      estimatedSize += sizeOfASCII(name) + sizeOfBool();
       if (aliasOf === undefined) {
         estimatedSize += sizeOfASCII(contentType) + sizeOfUTF8(body);
       } else {
@@ -210,6 +210,7 @@ export default class Resources {
     buffer.pushUint16(this.resources.size);
     this.resources.forEach(({ contentType, body, aliasOf }, name) => {
       buffer.pushASCII(name);
+      buffer.pushBool(aliasOf === undefined);
       if (aliasOf === undefined) {
         buffer.pushASCII(contentType);
         buffer.pushUTF8(body);
