@@ -259,24 +259,18 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     };
     const resources: Map<string, Resource> = new Map();
 
-    const configKeysMustMatch: Exclude<keyof Config, 'serialize' | 'getSerializedSize'>[] = [
-      'debug',
-      'enableCompression',
-      'enableHtmlFiltering',
-      'enableInMemoryCache',
-      'enableMutationObserver',
-      'enableOptimizations',
-      'enablePushInjectionsOnNavigationEvents',
-      'guessRequestTypeFromUrl',
-      'integrityCheck',
-      'loadCSPFilters',
-      'loadCosmeticFilters',
-      'loadExceptionFilters',
-      'loadExceptionFilters',
-      'loadGenericCosmeticsFilters',
-      'loadNetworkFilters',
-      'loadPreprocessors',
-    ];
+    type ConfigKey = keyof {
+      [Key in keyof Config as Config[Key] extends boolean ? Key : never]: Config[Key];
+    };
+
+    const compatibleConfigKeys: ConfigKey[] = [];
+    const configKeysMustMatch: ConfigKey[] = (Object.keys(config) as (keyof Config)[]).filter(
+      function (key): key is ConfigKey {
+        return (
+          typeof config[key] === 'boolean' && !compatibleConfigKeys.includes(key as ConfigKey)
+        );
+      },
+    );
 
     for (const engine of engines) {
       // Validate the config
