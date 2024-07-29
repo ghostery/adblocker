@@ -409,7 +409,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       buffer.pos = currentPos;
     }
 
-    const engine = new this({ config, version: serializedEngineVersion });
+    const engine = new this({ config });
 
     // Deserialize resources
     engine.resources = Resources.deserialize(buffer);
@@ -476,7 +476,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     preprocessors?: Preprocessor[];
     lists?: Map<string, string>;
     config?: Partial<Config>;
-    engineVersion?: number;
   } = {}) {
     super(); // init super-class EventEmitter
 
