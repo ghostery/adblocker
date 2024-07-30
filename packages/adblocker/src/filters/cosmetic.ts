@@ -810,12 +810,12 @@ export default class CosmeticFilter implements IFilter {
       return undefined;
     }
 
-    const originResourceName = js.get(selector.slice(1, firstCommaIndex))?.aliasOf;
+    const originResourceName = js.get(selector.slice(0, firstCommaIndex))?.aliasOf;
     if (originResourceName === undefined) {
       return undefined;
     }
 
-    return '(' + originResourceName + selector.slice(firstCommaIndex);
+    return originResourceName + selector.slice(firstCommaIndex);
   }
 
   public hasHostnameConstraint(): boolean {

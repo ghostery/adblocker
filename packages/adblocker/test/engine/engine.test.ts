@@ -713,7 +713,10 @@ foo.com###selector
 
       it('disabling specific hides does not impact scriptlets', () => {
         const engine = Engine.parse(['@@||foo.com^$specifichide', 'foo.com##+js(foo)'].join('\n'));
-        engine.resources.js.set('foo', '');
+        engine.resources.js.set('foo', {
+          contentType: 'application/javascript',
+          body: '',
+        });
         expect(
           engine.getCosmeticsFilters({
             domain: 'foo.com',
@@ -1300,9 +1303,18 @@ foo.com###selector
         it(JSON.stringify({ filters, hostname, matches, injections }), () => {
           // Initialize engine with all rules from test case
           const engine = createEngine(filters.join('\n'));
-          engine.resources.js.set('scriptlet', 'scriptlet');
-          engine.resources.js.set('scriptlet1', 'scriptlet1');
-          engine.resources.js.set('scriptlet2', 'scriptlet2');
+          engine.resources.js.set('scriptlet', {
+            contentType: 'application/javascript',
+            body: 'scriptlet',
+          });
+          engine.resources.js.set('scriptlet1', {
+            contentType: 'application/javascript',
+            body: 'scriptlet1',
+          });
+          engine.resources.js.set('scriptlet2', {
+            contentType: 'application/javascript',
+            body: 'scriptlet2',
+          });
 
           // #getCosmeticsFilters
           const { styles, scripts } = engine.getCosmeticsFilters({
