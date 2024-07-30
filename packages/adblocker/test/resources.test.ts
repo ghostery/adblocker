@@ -37,7 +37,17 @@ describe('#Resources', () => {
         checksum: 'checksum',
       });
       expect(resources.checksum).to.equal('checksum');
-      expect(resources.js).to.eql(new Map([['foo', 'content']]));
+      expect(resources.js).to.eql(
+        new Map([
+          [
+            'foo',
+            {
+              contentType: 'application/javascript',
+              body: 'content',
+            },
+          ],
+        ]),
+      );
       expect(resources.resources).to.eql(
         new Map([['foo', { contentType: 'application/javascript', body: 'content' }]]),
       );
@@ -51,7 +61,17 @@ describe('#Resources', () => {
         { checksum: 'checksum' },
       );
       expect(resources.checksum).to.equal('checksum');
-      expect(resources.js).to.eql(new Map([['foo', 'content1']]));
+      expect(resources.js).to.eql(
+        new Map([
+          [
+            'foo',
+            {
+              contentType: 'application/javascript',
+              body: 'content1',
+            },
+          ],
+        ]),
+      );
       expect(resources.resources).to.eql(
         new Map([
           ['foo', { contentType: 'application/javascript', body: 'content1' }],
@@ -83,7 +103,17 @@ content2
         { checksum: 'checksum' },
       );
       expect(resources.checksum).to.equal('checksum');
-      expect(resources.js).to.eql(new Map([['foo', 'content1']]));
+      expect(resources.js).to.eql(
+        new Map([
+          [
+            'foo',
+            {
+              contentType: 'application/javascript',
+              body: 'content1',
+            },
+          ],
+        ]),
+      );
       expect(resources.resources).to.eql(
         new Map([
           ['foo', { contentType: 'application/javascript', body: 'content1' }],

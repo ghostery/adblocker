@@ -23,7 +23,7 @@ function btoaPolyfill(buffer: string): string {
 export interface Resource {
   contentType: string;
   body: string;
-  aliasOf?: string;
+  aliasOf?: string | undefined;
 }
 
 // TODO - support empty resource body
@@ -45,14 +45,14 @@ export default class Resources {
       const isAlias = buffer.getBool();
       if (isAlias === true) {
         resources.set(name, {
-          contentType: buffer.getASCII(),
-          body: buffer.getUTF8(),
-        });
-      } else {
-        resources.set(name, {
           contentType: '',
           body: '',
           aliasOf: buffer.getASCII(),
+        });
+      } else {
+        resources.set(name, {
+          contentType: buffer.getASCII(),
+          body: buffer.getUTF8(),
         });
       }
     }
@@ -88,7 +88,7 @@ export default class Resources {
   }
 
   public static parse(data: string, { checksum }: { checksum: string }): Resources {
-    const typeToResource: Map<string, Map<string, { body: string; aliasOf?: string }>> = new Map();
+    const resources: Map<string, Resource> = new Map();
     const trimComments = (str: string) => str.replace(/^\s*#.*$/gm, '');
     const chunks = data.split('\n\n');
 
@@ -108,16 +108,20 @@ export default class Resources {
           continue;
         }
 
-        let resources = typeToResource.get(type);
-        if (resources === undefined) {
-          resources = new Map();
-          typeToResource.set(type, resources);
-        }
         resources.set(name, {
+          contentType: type,
           body,
         });
         for (const alias of aliases) {
           resources.set(alias, {
+            contentType: type,
+            body,
+            aliasOf: name,
+          });
+        }
+        if (type === 'application/javascript' && name.endsWith('.js')) {
+          resources.set(name.slice(0, -3), {
+            contentType: type,
             body,
             aliasOf: name,
           });
@@ -126,41 +130,17 @@ export default class Resources {
     }
 
     // The resource containing javascirpts to be injected
-    const js: Map<string, Resource> = typeToResource.get('application/javascript') || new Map();
-    for (const [key, value] of js.entries()) {
-      if (key.endsWith('.js')) {
-        js.set(key.slice(0, -3), {
-          contentType: value.contentType,
-          body: value.body,
-          aliasOf: key,
-        });
+    const js: Map<string, Resource> = new Map();
+    for (const [name, resource] of resources.entries()) {
+      if (resource.contentType === 'application/javascript') {
+        js.set(name, resource);
       }
     }
-
-    // Create a mapping from resource name to { contentType, data }
-    // used for request redirection.
-    const resourcesByName: Map<string, Resource> = new Map();
-    typeToResource.forEach((resources, contentType) => {
-      resources.forEach((resource, name) => {
-        if (resource.aliasOf === undefined) {
-          resourcesByName.set(name, {
-            contentType,
-            body: resource.body,
-          });
-        } else {
-          resourcesByName.set(name, {
-            contentType,
-            body: resource.body,
-            aliasOf: resource.aliasOf,
-          });
-        }
-      });
-    });
 
     return new Resources({
       checksum,
       js,
-      resources: resourcesByName,
+      resources,
     });
   }
 
@@ -210,12 +190,13 @@ export default class Resources {
     buffer.pushUint16(this.resources.size);
     this.resources.forEach(({ contentType, body, aliasOf }, name) => {
       buffer.pushASCII(name);
-      buffer.pushBool(aliasOf === undefined);
-      if (aliasOf === undefined) {
+      const isAlias = aliasOf !== undefined;
+      buffer.pushBool(aliasOf !== undefined);
+      if (isAlias) {
+        buffer.pushASCII(aliasOf);
+      } else {
         buffer.pushASCII(contentType);
         buffer.pushUTF8(body);
-      } else {
-        buffer.pushASCII(aliasOf);
       }
     });
   }
