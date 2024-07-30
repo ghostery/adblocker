@@ -1,3 +1,24 @@
+# v1.30.1 (Tue Jul 30 2024)
+
+#### :house: Internal
+
+- Update local assets [#4129](https://github.com/ghostery/adblocker/pull/4129) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4121](https://github.com/ghostery/adblocker/pull/4121) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4115](https://github.com/ghostery/adblocker/pull/4115) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4109](https://github.com/ghostery/adblocker/pull/4109) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.268 to 0.0.269 [#4135](https://github.com/ghostery/adblocker/pull/4135) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+
+---
+
 # v1.30.0 (Wed Jul 17 2024)
 
 #### :rocket: New Feature
