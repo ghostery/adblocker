@@ -885,6 +885,20 @@ foo.com###selector
         injections: [],
         matches: [],
       },
+      {
+        filters: ['foo.com##+js(alias)', 'foo.com#@#+js(scriptlet)'],
+        hostname: 'foo.com',
+        hrefs: [],
+        injections: [],
+        matches: [],
+      },
+      {
+        filters: ['foo.com##+js(scriptlet)', 'foo.com#@#+js(alias)'],
+        hostname: 'foo.com',
+        hrefs: [],
+        injections: [],
+        matches: [],
+      },
 
       // = unhide +js() disable
       {
@@ -1314,6 +1328,12 @@ foo.com###selector
           engine.resources.js.set('scriptlet2', {
             contentType: 'application/javascript',
             body: 'scriptlet2',
+          });
+
+          engine.resources.js.set('alias', {
+            contentType: 'application/javascript',
+            body: 'scriptlet',
+            aliasOf: 'scriptlet',
           });
 
           // #getCosmeticsFilters

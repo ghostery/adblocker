@@ -883,12 +883,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       ) {
         injectionsDisabled = true;
       }
-      console.log(
-        'normalised',
-        unhide.getNormalizedScriptInjectionSelector(this.resources.js),
-        'normal',
-        unhide.getSelector(),
-      );
       unhideExceptions.set(
         unhide.getNormalizedScriptInjectionSelector(this.resources.js) ?? unhide.getSelector(),
         unhide,

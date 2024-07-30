@@ -805,9 +805,9 @@ export default class CosmeticFilter implements IFilter {
 
     const selector = this.getSelector();
 
-    const firstCommaIndex = selector.indexOf(',');
+    let firstCommaIndex = selector.indexOf(',');
     if (firstCommaIndex === -1) {
-      return undefined;
+      firstCommaIndex = selector.length;
     }
 
     const originResourceName = js.get(selector.slice(0, firstCommaIndex))?.aliasOf;
