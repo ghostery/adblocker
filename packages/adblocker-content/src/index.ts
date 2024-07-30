@@ -133,8 +133,8 @@ export function extractFeaturesFromDOM(roots: Element[]): {
       }
 
       // Update ids
-      const id = element.id;
-      if (id) {
+      const id = element.getAttribute('id');
+      if (typeof id === 'string') {
         ids.add(id);
       }
 
