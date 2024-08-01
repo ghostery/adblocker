@@ -1,3 +1,37 @@
+# v1.31.0 (Thu Aug 01 2024)
+
+#### :rocket: New Feature
+
+- `@cliqz/adblocker`
+  - feat: merge engines [#4138](https://github.com/ghostery/adblocker/pull/4138) ([@seia-soto](https://github.com/seia-soto) [@chrmod](https://github.com/chrmod) [@philipp-classen](https://github.com/philipp-classen))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#4140](https://github.com/ghostery/adblocker/pull/4140) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump eslint from 9.7.0 to 9.8.0 [#4150](https://github.com/ghostery/adblocker/pull/4150) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 4.19.0 to 4.19.1 [#4147](https://github.com/ghostery/adblocker/pull/4147) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript-eslint from 8.0.0-alpha.52 to 8.0.0 [#4164](https://github.com/ghostery/adblocker/pull/4164) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.34 to 6.1.37 [#4165](https://github.com/ghostery/adblocker/pull/4165) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-puppeteer`
+  - Build(deps): Bump puppeteer from 22.13.1 to 22.15.0 [#4163](https://github.com/ghostery/adblocker/pull/4163) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-content`, `@cliqz/adblocker-electron`, `@cliqz/adblocker-extended-selectors`, `@cliqz/adblocker-puppeteer`, `@cliqz/adblocker-webextension-cosmetics`, `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - Build(deps-dev): Bump @types/node from 20.14.12 to 22.0.2 [#4166](https://github.com/ghostery/adblocker/pull/4166) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 6
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+- Philipp Claßen ([@philipp-classen](https://github.com/philipp-classen))
+
+---
+
 # v1.30.1 (Tue Jul 30 2024)
 
 #### :nail_care: Polish

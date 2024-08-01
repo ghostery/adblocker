@@ -1,3 +1,15 @@
+# v1.31.0 (Thu Aug 01 2024)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/node from 20.14.12 to 22.0.2 [#4166](https://github.com/ghostery/adblocker/pull/4166) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.29.0 (Wed Jul 17 2024)
 
 #### :rocket: New Feature
