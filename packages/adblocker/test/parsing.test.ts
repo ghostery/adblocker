@@ -15,6 +15,7 @@ import { parseFilters } from '../src/lists.js';
 import { hashStrings, tokenize } from '../src/utils.js';
 import { HTMLSelector } from '../src/html-filtering.js';
 import { NORMALIZED_TYPE_TOKEN, hashHostnameBackward } from '../src/request.js';
+import { Resource } from '../src/resources.js';
 
 function h(hostnames: string[]): Uint32Array {
   return new Uint32Array(hostnames.map(hashHostnameBackward)).sort();
@@ -1834,6 +1835,38 @@ describe('Cosmetic filters', () => {
 
       // Compound
       test('script:has-text(===):has-text(/[wW]{14000}/)', ['script', ['===', '/[wW]{14000}/']]);
+
+      context('with normalization', () => {
+        const js = new Map<string, Resource>([
+          [
+            'scriptlet',
+            {
+              body: 'scriptlet',
+              contentType: 'application/javascript',
+            },
+          ],
+          [
+            'alias',
+            {
+              body: 'scriptlet',
+              contentType: 'application/javascript',
+              aliasOf: 'scriptlet',
+            },
+          ],
+        ]);
+
+        expect(CosmeticFilter.parse('##+js(scriptlet)')!.getNormalizedSelector(js)).to.be(
+          'scriptlet',
+        );
+        expect(CosmeticFilter.parse('##+js(alias)')!.getNormalizedSelector(js)).to.be('scriptlet');
+
+        expect(CosmeticFilter.parse('##+js(scriptlet, arg1)')!.getNormalizedSelector(js)).to.be(
+          'scriptlet, arg1',
+        );
+        expect(CosmeticFilter.parse('##+js(alias, arg1)')!.getNormalizedSelector(js)).to.be(
+          'scriptlet, arg1',
+        );
+      });
     });
   });
 

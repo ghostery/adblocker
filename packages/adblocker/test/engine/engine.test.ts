@@ -387,13 +387,14 @@ $csp=baz,domain=bar.com
       url: 'https://foo.com',
     });
 
-    const createEngineWithResource = (filters: string[], resource: string) => {
+    const createEngineWithResource = (filters: string[], resourceBody: string) => {
       const engine = createEngine(filters.join('\n'));
-      engine.resources.js.set(resource, resource);
-      engine.resources.resources.set(resource, {
-        body: resource,
+      const resource = {
+        body: resourceBody,
         contentType: 'application/javascript',
-      });
+      };
+      engine.resources.js.set(resourceBody, resource);
+      engine.resources.resources.set(resourceBody, resource);
       return engine;
     };
 

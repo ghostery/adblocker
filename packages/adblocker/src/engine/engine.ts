@@ -884,7 +884,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         injectionsDisabled = true;
       }
       unhideExceptions.set(
-        unhide.getNormalizedScriptInjectionSelector(this.resources.js) ?? unhide.getSelector(),
+        unhide.getNormalizedSelector(this.resources.js) ?? unhide.getSelector(),
         unhide,
       );
     }
@@ -898,7 +898,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       for (const filter of filters) {
         // Make sure `rule` is not un-hidden by a #@# filter
         const exception = unhideExceptions.get(
-          filter.getNormalizedScriptInjectionSelector(this.resources.js) ?? filter.getSelector(),
+          filter.getNormalizedSelector(this.resources.js) ?? filter.getSelector(),
         );
 
         if (exception !== undefined) {

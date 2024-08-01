@@ -798,7 +798,7 @@ export default class CosmeticFilter implements IFilter {
     return undefined;
   }
 
-  public getNormalizedScriptInjectionSelector(js: Map<string, Resource>): string | undefined {
+  public getNormalizedSelector(js: Map<string, Resource>): string | undefined {
     if (this.isScriptInject() === false) {
       return undefined;
     }
