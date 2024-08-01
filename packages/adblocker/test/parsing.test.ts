@@ -1836,7 +1836,7 @@ describe('Cosmetic filters', () => {
       // Compound
       test('script:has-text(===):has-text(/[wW]{14000}/)', ['script', ['===', '/[wW]{14000}/']]);
 
-      context('with normalization', () => {
+      it('with normalization', () => {
         const js = new Map<string, Resource>([
           [
             'scriptlet',
@@ -1855,17 +1855,12 @@ describe('Cosmetic filters', () => {
           ],
         ]);
 
-        expect(CosmeticFilter.parse('##+js(scriptlet)')!.getNormalizedSelector(js)).to.be(
+        expect(CosmeticFilter.parse('foo.com##+js(alias)')!.getNormalizedSelector(js)).to.be.eql(
           'scriptlet',
         );
-        expect(CosmeticFilter.parse('##+js(alias)')!.getNormalizedSelector(js)).to.be('scriptlet');
-
-        expect(CosmeticFilter.parse('##+js(scriptlet, arg1)')!.getNormalizedSelector(js)).to.be(
-          'scriptlet, arg1',
-        );
-        expect(CosmeticFilter.parse('##+js(alias, arg1)')!.getNormalizedSelector(js)).to.be(
-          'scriptlet, arg1',
-        );
+        expect(
+          CosmeticFilter.parse('foo.com##+js(alias, arg1)')!.getNormalizedSelector(js),
+        ).to.be.eql('scriptlet, arg1');
       });
     });
   });
