@@ -341,7 +341,14 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       lists,
       config,
     }) as InstanceType<T>;
-    engine.metadata = new Metadata(metadata);
+    if (
+      Object.keys(metadata.categories).length +
+        Object.keys(metadata.organizations).length +
+        Object.keys(metadata.patterns).length !==
+      0
+    ) {
+      engine.metadata = new Metadata(metadata);
+    }
     engine.resources = Resources.parse(resourcesText, {
       checksum: fastHash(resourcesText).toString(16),
     });
