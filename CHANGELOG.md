@@ -1,3 +1,24 @@
+# v1.31.1 (Thu Aug 01 2024)
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker-content`
+  - fix(adblocker-electron): `An object could not be cloned` [#4157](https://github.com/ghostery/adblocker/pull/4157) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @eslint/js from 9.7.0 to 9.8.0 [#4151](https://github.com/ghostery/adblocker/pull/4151) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 31.2.1 to 31.3.1 [#4154](https://github.com/ghostery/adblocker/pull/4154) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump tsx from 4.16.2 to 4.16.4 [#4161](https://github.com/ghostery/adblocker/pull/4161) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chai from 4.3.16 to 4.3.17 [#4162](https://github.com/ghostery/adblocker/pull/4162) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v1.31.0 (Thu Aug 01 2024)
 
 #### :rocket: New Feature

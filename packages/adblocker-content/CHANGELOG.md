@@ -1,3 +1,15 @@
+# v1.31.1 (Thu Aug 01 2024)
+
+#### :bug: Bug Fix
+
+- fix(adblocker-electron): `An object could not be cloned` [#4157](https://github.com/ghostery/adblocker/pull/4157) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v1.31.0 (Thu Aug 01 2024)
 
 #### :nut_and_bolt: Dependencies
