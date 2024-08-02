@@ -1,3 +1,28 @@
+# v1.31.0 (Thu Aug 01 2024)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 22.13.1 to 22.15.0 [#4163](https://github.com/ghostery/adblocker/pull/4163) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 20.14.12 to 22.0.2 [#4166](https://github.com/ghostery/adblocker/pull/4166) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
+# v1.30.1 (Tue Jul 30 2024)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 22.13.0 to 22.13.1 [#4112](https://github.com/ghostery/adblocker/pull/4112) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.29.0 (Wed Jul 17 2024)
 
 #### :house: Internal

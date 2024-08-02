@@ -1,3 +1,27 @@
+# v1.31.1 (Thu Aug 01 2024)
+
+#### :bug: Bug Fix
+
+- fix(adblocker-electron): `An object could not be cloned` [#4157](https://github.com/ghostery/adblocker/pull/4157) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
+# v1.31.0 (Thu Aug 01 2024)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/node from 20.14.12 to 22.0.2 [#4166](https://github.com/ghostery/adblocker/pull/4166) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.29.0 (Wed Jul 17 2024)
 
 #### :house: Internal

@@ -20,7 +20,7 @@ function btoaPolyfill(buffer: string): string {
   return buffer;
 }
 
-interface Resource {
+export interface Resource {
   contentType: string;
   body: string;
 }

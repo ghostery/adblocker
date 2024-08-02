@@ -25,15 +25,19 @@ import NetworkFilter from '../filters/network.js';
 import { block } from '../filters/dsl.js';
 import { FilterType, IListDiff, IPartialRawDiff, parseFilters } from '../lists.js';
 import Request from '../request.js';
-import Resources from '../resources.js';
+import Resources, { Resource } from '../resources.js';
 import CosmeticFilterBucket from './bucket/cosmetic.js';
 import NetworkFilterBucket from './bucket/network.js';
 import { Metadata, IPatternLookupResult } from './metadata.js';
 import Preprocessor, { Env } from '../preprocessor.js';
 import PreprocessorBucket from './bucket/preprocessor.js';
 import IFilter from '../filters/interface.js';
+import { ICategory } from './metadata/categories.js';
+import { IOrganization } from './metadata/organizations.js';
+import { IPattern } from './metadata/patterns.js';
+import { fastHash } from '../utils.js';
 
-export const ENGINE_VERSION = 658;
+export const ENGINE_VERSION = 662;
 
 function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   if (filters.length === 0) {
@@ -227,6 +231,129 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     engine.metadata = metadata;
 
     return engine as InstanceType<T>;
+  }
+
+  public static merge<T extends typeof FilterEngine>(
+    this: T,
+    engines: InstanceType<T>[],
+  ): InstanceType<T> {
+    if (!engines || engines.length < 2) {
+      throw new Error('merging engines requires at least two engines');
+    }
+
+    const config = engines[0].config;
+    const lists = engines[0].lists;
+
+    const networkFilters: Map<number, NetworkFilter> = new Map();
+    const cosmeticFilters: Map<number, CosmeticFilter> = new Map();
+    const preprocessors: Preprocessor[] = [];
+
+    const metadata: {
+      organizations: Record<string, IOrganization>;
+      categories: Record<string, ICategory>;
+      patterns: Record<string, IPattern>;
+    } = {
+      organizations: {},
+      categories: {},
+      patterns: {},
+    };
+    const resources: Map<string, Resource> = new Map();
+
+    type ConfigKey = keyof {
+      [Key in keyof Config as Config[Key] extends boolean ? Key : never]: Config[Key];
+    };
+
+    const compatibleConfigKeys: ConfigKey[] = [];
+    const configKeysMustMatch: ConfigKey[] = (Object.keys(config) as (keyof Config)[]).filter(
+      function (key): key is ConfigKey {
+        return (
+          typeof config[key] === 'boolean' && !compatibleConfigKeys.includes(key as ConfigKey)
+        );
+      },
+    );
+
+    for (const engine of engines) {
+      // Validate the config
+      for (const configKey of configKeysMustMatch) {
+        if (config[configKey] !== engine.config[configKey]) {
+          throw new Error(`config "${configKey}" of all merged engines must be the same`);
+        }
+      }
+
+      const filters = engine.getFilters();
+
+      for (const networkFilter of filters.networkFilters) {
+        networkFilters.set(networkFilter.getId(), networkFilter);
+      }
+
+      for (const cosmeticFilter of filters.cosmeticFilters) {
+        cosmeticFilters.set(cosmeticFilter.getId(), cosmeticFilter);
+      }
+
+      for (const preprocessor of engine.preprocessors.preprocessors) {
+        preprocessors.push(preprocessor);
+      }
+
+      for (const [key, value] of engine.lists) {
+        if (lists.has(key)) {
+          continue;
+        }
+
+        lists.set(key, value);
+      }
+
+      if (engine.metadata !== undefined) {
+        for (const organization of engine.metadata.organizations.getValues()) {
+          if (metadata.organizations[organization.key] === undefined) {
+            metadata.organizations[organization.key] = organization;
+          }
+        }
+        for (const category of engine.metadata.categories.getValues()) {
+          if (metadata.categories[category.key] === undefined) {
+            metadata.categories[category.key] = category;
+          }
+        }
+        for (const pattern of engine.metadata.patterns.getValues()) {
+          if (metadata.patterns[pattern.key] === undefined) {
+            metadata.patterns[pattern.key] = pattern;
+          }
+        }
+      }
+
+      for (const [name, resource] of engine.resources.resources) {
+        if (!resources.has(name)) {
+          resources.set(name, resource);
+        }
+      }
+    }
+
+    const resourcesText = [...resources.entries()]
+      .reduce((state, [name, resource]) => {
+        return [...state, `${name} ${resource.contentType}\n${resource.body}`];
+      }, [] as string[])
+      .join('\n\n');
+
+    const engine = new this({
+      networkFilters: Array.from(networkFilters.values()),
+      cosmeticFilters: Array.from(cosmeticFilters.values()),
+      preprocessors,
+
+      lists,
+      config,
+    }) as InstanceType<T>;
+    if (
+      Object.keys(metadata.categories).length +
+        Object.keys(metadata.organizations).length +
+        Object.keys(metadata.patterns).length !==
+      0
+    ) {
+      engine.metadata = new Metadata(metadata);
+    }
+    engine.resources = Resources.parse(resourcesText, {
+      checksum: fastHash(resourcesText).toString(16),
+    });
+
+    return engine;
   }
 
   public static parse<T extends FilterEngine>(
