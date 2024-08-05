@@ -262,7 +262,7 @@ describe('html-filtering', () => {
           .not.to.include('redditstatic.com');
       });
 
-      it.only('handles html modifiers with html selectors', () => {
+      it('handles html modifiers with html selectors', () => {
         expect(
           filter(
             doc,
