@@ -30,7 +30,7 @@ const ASSETS_PATH = dirname(fileURLToPath(import.meta.url));
 
 async function downloadResource(resourceName) {
   const {
-    revisions: [, latestRevision],
+    revisions
   } = await fetch(
     `https://cdn.ghostery.com/adblocker/resources/${resourceName}/metadata.json`,
   ).then((result) => {
@@ -41,6 +41,7 @@ async function downloadResource(resourceName) {
     }
     return result.json();
   });
+  const latestRevision = revisions.at(-1);
   return fetch(
     `https://cdn.ghostery.com/adblocker/resources/${resourceName}/${latestRevision}/list.txt`,
   ).then((result) => {
