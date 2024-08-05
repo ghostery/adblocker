@@ -306,14 +306,13 @@ describe('html-filtering', () => {
       ] as const;
 
       for (const { url, filters } of urls) {
-        it(filters.join(','), () => {
-          expect(
-            filter(
-              loadRequestSample(url),
-              [],
-              filters.map((filter) => replaceOptionValueToRegexp(filter)!),
-            ),
-          ).to.be.eql(loadRequestSample(url + '.modified'));
+        it(`fitlers: ${filters.join(',')}`, () => {
+          const modified = filter(
+            loadRequestSample(url),
+            [],
+            filters.map((filter) => replaceOptionValueToRegexp(filter)!),
+          );
+          expect(modified).to.be.eql(loadRequestSample(url + '.modified'));
         });
       }
     });
