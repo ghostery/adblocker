@@ -1,3 +1,21 @@
+# v1.31.2 (Mon Aug 05 2024)
+
+#### :bug: Bug Fix
+
+- Fix retrieval of latestRevision in assets update script [#4174](https://github.com/ghostery/adblocker/pull/4174) ([@romkaC](https://github.com/romkaC))
+
+#### :house: Internal
+
+- Update local assets [#4167](https://github.com/ghostery/adblocker/pull/4167) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- [@romkaC](https://github.com/romkaC)
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+
+---
+
 # v1.31.0 (Thu Aug 01 2024)
 
 #### :rocket: New Feature

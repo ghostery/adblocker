@@ -1,3 +1,32 @@
+# v1.31.2 (Mon Aug 05 2024)
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker`
+  - Fix retrieval of latestRevision in assets update script [#4174](https://github.com/ghostery/adblocker/pull/4174) ([@romkaC](https://github.com/romkaC))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#4167](https://github.com/ghostery/adblocker/pull/4167) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/node from 22.0.2 to 22.1.0 [#4173](https://github.com/ghostery/adblocker/pull/4173) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 4.19.2 to 4.20.0 [#4172](https://github.com/ghostery/adblocker/pull/4172) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump tsx from 4.16.4 to 4.16.5 [#4169](https://github.com/ghostery/adblocker/pull/4169) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump axios from 1.7.2 to 1.7.3 [#4168](https://github.com/ghostery/adblocker/pull/4168) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 4.19.1 to 4.19.2 [#4170](https://github.com/ghostery/adblocker/pull/4170) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- [@romkaC](https://github.com/romkaC)
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+
+---
+
 # v1.31.1 (Thu Aug 01 2024)
 
 #### :bug: Bug Fix
