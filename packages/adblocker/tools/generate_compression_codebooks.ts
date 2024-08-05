@@ -73,7 +73,13 @@ async function getStrings(kind: string): Promise<string[]> {
         .map(({ selector }) => selector || '')
         .filter((selector) => selector.length !== 0);
     case 'raw-cosmetic':
-      return (await getCosmeticFilters()).map((f) => f.toString()).filter((f) => !hasUnicode(f));
+      return (
+        (await getCosmeticFilters())
+          // ignore scriplets as their options can be very complex
+          .filter((filter) => !filter.isScriptInject())
+          .map((f) => f.toString())
+          .filter((f) => !hasUnicode(f))
+      );
     case 'raw-network':
       return (await getNetworkFilters()).map((f) => f.toString()).filter((f) => !hasUnicode(f));
     default:
