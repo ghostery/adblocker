@@ -19,7 +19,7 @@ import {
   fetchResources,
   fullLists,
 } from '../fetch.js';
-import { HTMLSelector } from '../html-filtering.js';
+import { HTMLModifier, HTMLSelector } from '../html-filtering.js';
 import CosmeticFilter from '../filters/cosmetic.js';
 import NetworkFilter from '../filters/network.js';
 import { block } from '../filters/dsl.js';
@@ -884,16 +884,23 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       );
 
       if (replaceFilters.length !== 0) {
-        const exception = this.exceptions.match(request, this.isFilterExcluded.bind(this));
-        let modifiers = [];
+        // TODO: is this needed?
+        let exception = this.exceptions.match(request, this.isFilterExcluded.bind(this));
+        const filtersWithModifiers: [NetworkFilter, HTMLModifier][] = [];
+
         for (const filter of replaceFilters) {
           const modifier = filter.getHtmlModifier();
 
           if (modifier !== null) {
-            if (!exception) {
-              modifiers.push(['replace', modifier]);
-            }
+            filtersWithModifiers.push([filter, modifier]);
+          } else {
+            // Disable all replace modifiers if empty replace modifier found
+            exception = filter;
+          }
+        }
 
+        if (filtersWithModifiers.length !== 0) {
+          for (const [filter, modifier] of filtersWithModifiers) {
             this.emit(
               'filter-matched',
               { filter, exception },
@@ -902,16 +909,9 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
                 filterType: FilterType.COSMETIC,
               },
             );
-          } else {
-            // Disable all replace modifiers if empty replace modifier found
-            modifiers = [];
-            break;
+            htmlSelectors.push(['replace', modifier]);
           }
         }
-      }
-      
-      if (modifiers.length !== 0) {
-        htmlSelectors.push(...modifiers.map((modifier) => ['replace', modifier]));
       }
     }
 
