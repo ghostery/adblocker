@@ -21,7 +21,7 @@ function compress(filepath: string) {
 
 function decompress(filepath: string) {
   const compressed = brotliDecompressSync(fs.readFileSync(filepath));
-  fs.writeFileSync(filepath.slice(0, -3), compressed, 'utf8'); // Remove .br suffix on save
+  fs.writeFileSync(filepath.slice(0, -3), compressed); // Remove .br suffix on save
 }
 
 // Cli utils
