@@ -740,7 +740,7 @@ export default class NetworkFilter implements IFilter {
               "font-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:";
             break;
           case 'replace':
-            if (negation || replaceOptionValueToRegexp(value) === null) {
+            if (negation || (value.length !== 0 && replaceOptionValueToRegexp(value) === null)) {
               return null;
             }
 
@@ -1463,12 +1463,14 @@ export default class NetworkFilter implements IFilter {
     return getBit(this.getMask(), NETWORK_FILTER_MASK.isReplace);
   }
 
+  // Expected to be called only with `$replace` modifiers
   public getHtmlModifier(): HTMLModifier | null {
-    if (this.isReplace()) {
-      return replaceOptionValueToRegexp(this.getOptionValue());
+    // Empty `$replace` modifier is to disable all replace modifiers
+    if (this.getOptionValue().length === 0) {
+      return null;
     }
 
-    return null;
+    return replaceOptionValueToRegexp(this.getOptionValue());
   }
 
   public isHtmlFilteringRule(): boolean {

@@ -993,10 +993,9 @@ describe('Network filters', () => {
     ||www.youtube.com/youtubei/v1/player?$xhr,1p,replace=/"adSlots.*?\}\]\}\}\]\,//
     ||www.facebook.com/api/graphql/$xhr,replace=/\{"brs_content_label":[^,]+,"category":"SPONSORED"[^\n]+"cursor":"[^"]+"\}/{}/
     ||www.facebook.com/api/graphql/$xhr,replace=/\{"node":\{"role":"SEARCH_ADS"[^\n]+?cursor":[^}]+\}/{}/g
-    ||www.facebook.com/api/graphql/$xhr,replace=/\{"node":\{"__typename":"MarketplaceFeedAdStory"[^\n]+?"cursor":(?:null|"\{[^\n]+?\}"|[^\n]+?MarketplaceSearchFeedStoriesEdge")\}/{}/g`.split(
-            '\n',
-          );
-        const filterExpressions: RegExp[] = [
+    ||www.facebook.com/api/graphql/$xhr,replace=/\{"node":\{"__typename":"MarketplaceFeedAdStory"[^\n]+?"cursor":(?:null|"\{[^\n]+?\}"|[^\n]+?MarketplaceSearchFeedStoriesEdge")\}/{}/g
+    ||domain.tld$replace`.split('\n');
+        const filterExpressions: (RegExp | null)[] = [
           new RegExp(String.raw`\bconst now.+?, 100`, 'gms'),
           new RegExp(String.raw`video\.maxPop`),
           new RegExp(String.raw`;if\(!\([a-z]+\|\|\(null===[^{]+`),
@@ -1047,6 +1046,7 @@ describe('Network filters', () => {
             String.raw`\{"node":\{"__typename":"MarketplaceFeedAdStory"[^\n]+?"cursor":(?:null|"\{[^\n]+?\}"|[^\n]+?MarketplaceSearchFeedStoriesEdge")\}`,
             'g',
           ),
+          null,
         ];
 
         for (let i = 0; i < filters.length; i++) {
@@ -1058,8 +1058,12 @@ describe('Network filters', () => {
 
             const htmlModifier = filter!.getHtmlModifier();
 
-            expect(htmlModifier).not.to.be.null;
-            expect(htmlModifier![0].toString()).to.be.eql(filterExpressions[i].toString());
+            if (filterExpressions[i] !== null) {
+              expect(htmlModifier).not.to.be.null;
+              expect(htmlModifier![0].toString()).to.be.eql(filterExpressions[i]!.toString());
+            } else {
+              expect(htmlModifier).to.be.eql(filterExpressions[i]);
+            }
           });
         }
       });

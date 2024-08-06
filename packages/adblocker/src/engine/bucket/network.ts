@@ -197,6 +197,7 @@ export default class NetworkFilterBucket {
       if (
         filter.match(request) &&
         this.isFilterDisabled(filter) === false &&
+        filter.isReplace() === true &&
         !isFilterExcluded?.(filter)
       ) {
         filters.push(filter);

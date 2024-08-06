@@ -902,9 +902,11 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
     for (const filter of filters) {
       const modifier = filter.getHtmlModifier();
-      if (modifier !== null) {
-        htmlModifiers.push(modifier);
+      // Disable all replace modifiers if empty replace modifier found
+      if (modifier === null) {
+        return [];
       }
+      htmlModifiers.push(modifier);
     }
 
     return htmlModifiers;
