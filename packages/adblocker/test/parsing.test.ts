@@ -1067,6 +1067,21 @@ describe('Network filters', () => {
           });
         }
       });
+
+      it('rejects invalid filters', () => {
+        const filters: string[] = [
+          // Empty option value without exception
+          '||foo.com$replace',
+          // Empty regexp matcher
+          '||foo.com$replace=///'
+        ];
+
+        for (const filter of filters) {
+          it(filter, () => {
+            expect(NetworkFilter.parse(filter)).to.be.null;
+          });
+        }
+      });
     });
 
     describe('un-supported options', () => {

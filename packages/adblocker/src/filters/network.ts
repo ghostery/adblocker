@@ -550,6 +550,10 @@ function getFilterOptions(line: string, pos: number, end: number) {
 export function replaceOptionValueToRegexp(value: string): HTMLModifier | null {
   const [, values] = getFilterReplaceOptionValue(value, 0, value.length);
 
+  if (values[0].length === 0) {
+    return null;
+  }
+
   // RegExp constructor can throw an error
   try {
     // We expect `/regexp/replacement/flags` to be [regexp, replacement, flags]
@@ -740,7 +744,12 @@ export default class NetworkFilter implements IFilter {
               "font-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:";
             break;
           case 'replace':
-            if (negation || (value.length !== 0 && replaceOptionValueToRegexp(value) === null)) {
+            if (
+              negation ||
+              (value.length === 0
+                ? getBit(mask, NETWORK_FILTER_MASK.isException) === false
+                : replaceOptionValueToRegexp(value) === null)
+            ) {
               return null;
             }
 
@@ -1465,7 +1474,8 @@ export default class NetworkFilter implements IFilter {
 
   // Expected to be called only with `$replace` modifiers
   public getHtmlModifier(): HTMLModifier | null {
-    // Empty `$replace` modifier is to disable all replace modifiers
+    // Empty `$replace` modifier is to disable all replace modifiers on exception
+    // This is checked on the parse time
     if (this.getOptionValue().length === 0) {
       return null;
     }
