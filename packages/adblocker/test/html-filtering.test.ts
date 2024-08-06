@@ -306,7 +306,7 @@ describe('html-filtering', () => {
       ] as const;
 
       for (const { url, filters } of urls) {
-        it(`fitlers: ${filters.join(',')}`, () => {
+        it(`filters: ${filters.join(',')}`, () => {
           const modified = filter(
             loadRequestSample(url),
             [],
