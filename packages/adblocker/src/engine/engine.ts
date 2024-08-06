@@ -19,7 +19,7 @@ import {
   fetchResources,
   fullLists,
 } from '../fetch.js';
-import { HTMLModifier, HTMLSelector } from '../html-filtering.js';
+import { HTMLSelector } from '../html-filtering.js';
 import CosmeticFilter from '../filters/cosmetic.js';
 import NetworkFilter from '../filters/network.js';
 import { block } from '../filters/dsl.js';
@@ -95,11 +95,16 @@ type NetworkFilterMatchingContext = {
   filterType: FilterType.NETWORK;
 };
 
-type CosmeticFilterMatchingContext = {
-  url: string;
-  callerContext: any; // Additional context given from user
-  filterType: FilterType.COSMETIC;
-};
+type CosmeticFilterMatchingContext =
+  | {
+      url: string;
+      callerContext: any; // Additional context given from user
+      filterType: FilterType.COSMETIC;
+    }
+  | {
+      request: Request; // For HTML Filters
+      filterType: FilterType.COSMETIC;
+    };
 
 type NetworkFilterMatchEvent = (request: Request, result: BlockingResponse) => void;
 
@@ -835,81 +840,86 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
   /**
    * Return a list of HTML filtering rules.
    */
-  public getHtmlFilters({
-    // Page information
-    url,
-    hostname,
-    domain,
-
-    callerContext,
-  }: {
-    url: string;
-    hostname: string;
-    domain: string | null | undefined;
-
-    callerContext?: any | undefined;
-  }): HTMLSelector[] {
+  public getHtmlFilters(request: Request): HTMLSelector[] {
     const htmlSelectors: HTMLSelector[] = [];
 
-    if (this.config.enableHtmlFiltering === false || this.config.loadCosmeticFilters === false) {
+    if (this.config.enableHtmlFiltering === false) {
       return htmlSelectors;
     }
 
-    domain ||= '';
+    if (this.config.loadCosmeticFilters === true) {
+      const domain = request.domain || '';
 
-    const { filters, unhides } = this.cosmetics.getHtmlFilters({
-      domain,
-      hostname,
-      isFilterExcluded: this.isFilterExcluded.bind(this),
-    });
-    const exceptions = new Map(unhides.map((unhide) => [unhide.getSelector(), unhide]));
+      const { filters, unhides } = this.cosmetics.getHtmlFilters({
+        domain,
+        hostname: request.hostname,
+        isFilterExcluded: this.isFilterExcluded.bind(this),
+      });
+      const exceptions = new Map(unhides.map((unhide) => [unhide.getSelector(), unhide]));
 
-    for (const filter of filters) {
-      const extended = filter.getExtendedSelector();
-      if (extended === undefined) {
-        continue;
+      for (const filter of filters) {
+        const extended = filter.getExtendedSelector();
+        if (extended === undefined) {
+          continue;
+        }
+        const exception = exceptions.get(filter.getSelector());
+        if (exception !== undefined) {
+          htmlSelectors.push(extended);
+        }
+        this.emit(
+          'filter-matched',
+          { filter, exception },
+          {
+            request,
+            filterType: FilterType.COSMETIC,
+          },
+        );
       }
-      const exception = exceptions.get(filter.getSelector());
-      if (exception !== undefined) {
-        htmlSelectors.push(extended);
-      }
-      this.emit(
-        'filter-matched',
-        { filter, exception },
-        {
-          url,
-          callerContext,
-          filterType: FilterType.COSMETIC,
-        },
+    }
+
+    if (this.config.loadNetworkFilters === true) {
+      const replaceFilters = this.filters.getHTMLFilters(
+        request,
+        this.isFilterExcluded.bind(this),
       );
+
+      if (replaceFilters.length !== 0) {
+        const exception = this.exceptions.match(request, this.isFilterExcluded.bind(this));
+        let modifiers = [];
+        for (const filter of replaceFilters) {
+          const modifier = filter.getHtmlModifier();
+
+          if (modifier !== null) {
+            if (!exception) {
+              modifiers.push(['replace', modifier]);
+            }
+
+            this.emit(
+              'filter-matched',
+              { filter, exception },
+              {
+                request,
+                filterType: FilterType.COSMETIC,
+              },
+            );
+          } else {
+            // Disable all replace modifiers if empty replace modifier found
+            modifiers = [];
+            break;
+          }
+        }
+      }
+      
+      if (modifiers.length !== 0) {
+        htmlSelectors.push(...modifiers.map((modifier) => ['replace', modifier]));
+      }
     }
 
     if (htmlSelectors.length !== 0) {
-      this.emit('html-filtered', htmlSelectors, url);
+      this.emit('html-filtered', htmlSelectors, request.url);
     }
 
     return htmlSelectors;
-  }
-
-  public getHtmlModifiers(request: Request): HTMLModifier[] {
-    const htmlModifiers: HTMLModifier[] = [];
-
-    if (this.config.enableHtmlFiltering === false || this.config.loadNetworkFilters === false) {
-      return htmlModifiers;
-    }
-
-    const filters = this.filters.getHtmlModifiers(request, this.isFilterExcluded.bind(this));
-
-    for (const filter of filters) {
-      const modifier = filter.getHtmlModifier();
-      // Disable all replace modifiers if empty replace modifier found
-      if (modifier === null) {
-        return [];
-      }
-      htmlModifiers.push(modifier);
-    }
-
-    return htmlModifiers;
   }
 
   /**

@@ -10,7 +10,6 @@ import { expect } from 'chai';
 import 'mocha';
 
 import {
-  HTMLModifier,
   HTMLSelector,
   default as StreamingHtmlFilter,
   extractSelectorsFromRules,
@@ -132,12 +131,8 @@ describe('html-filtering', () => {
   });
 
   describe('#StreamingHtmlFilter', () => {
-    const filter = (
-      html: string,
-      filters: HTMLSelector[] = [],
-      modifiers: HTMLModifier[] = [],
-    ): string => {
-      const stream = new StreamingHtmlFilter(filters, modifiers);
+    const filter = (html: string, filters: HTMLSelector[] = []): string => {
+      const stream = new StreamingHtmlFilter(filters);
 
       // Feed `html` at once
       const res1 = stream.write(html) + stream.flush();
@@ -224,19 +219,17 @@ describe('html-filtering', () => {
     describe('handles modifiers', () => {
       it('handles simple forms', () => {
         expect(
-          filter(
-            `{"trackingParam":"a"}`,
-            [],
-            [[new RegExp('"trackingParam":"(\\w+)"'), '"$1":""']],
-          ),
+          filter(`{"trackingParam":"a"}`, [
+            ['replace', [new RegExp('"trackingParam":"(\\w+)"'), '"$1":""']],
+          ]),
         ).to.be.eql(`{"a":""}`);
       });
 
       it('handles html modifiers with global replaces', () => {
-        expect(filter(doc, [], [[new RegExp("__perfMark\\('.+?'\\);", 'g'), '']])).not.to.include(
-          "__perfMark('",
-        );
-        expect(filter(doc, [], [[new RegExp('redditstatic\\.com', 'g'), 'domain.tld']]))
+        expect(
+          filter(doc, [['replace', [new RegExp("__perfMark\\('.+?'\\);", 'g'), '']]]),
+        ).not.to.include("__perfMark('");
+        expect(filter(doc, [['replace', [new RegExp('redditstatic\\.com', 'g'), 'domain.tld']]]))
           .to.include('https://www.domain.tld/desktop2x/js/ads.js')
           .to.include(
             'https://www.domain.tld/desktop2x/RedesignContentFonts.509eef5d33306bd3b0d5.js',
@@ -249,14 +242,10 @@ describe('html-filtering', () => {
 
       it('handles multiple modifiers', () => {
         expect(
-          filter(
-            doc,
-            [],
-            [
-              [new RegExp('__SUPPORTS_TIMING_API &&'), 'false &&'],
-              [new RegExp('redditstatic\\.com', 'g'), 'domain.tld'],
-            ],
-          ),
+          filter(doc, [
+            ['replace', [new RegExp('__SUPPORTS_TIMING_API &&'), 'false &&']],
+            ['replace', [new RegExp('redditstatic\\.com', 'g'), 'domain.tld']],
+          ]),
         )
           .to.include('function __perfMark(name) { false && performance.mark(name); };')
           .not.to.include('redditstatic.com');
@@ -264,22 +253,29 @@ describe('html-filtering', () => {
 
       it('handles html modifiers with html selectors', () => {
         expect(
-          filter(
-            doc,
-            [['script', ["__perfMark('"]]],
-            [[new RegExp('(__firstLoaded = )false'), '$1true']],
-          ),
+          filter(doc, [
+            ['script', ["__perfMark('"]],
+            ['replace', [new RegExp('(__firstLoaded = )false'), '$1true']],
+          ]),
         )
           .not.to.include("__perfMark('")
           .not.to.include('__firstLoaded = false');
 
         // -- html selector should not be inferenced by modifiers
-        expect(filter(doc, [['script', ["__perfMark('"]]], [[new RegExp('script', 'g'), 'pre']]))
+        expect(
+          filter(doc, [
+            ['script', ["__perfMark('"]],
+            ['replace', [new RegExp('script', 'g'), 'pre']],
+          ]),
+        )
           .not.to.include("__perfMark('")
           .not.to.include('script');
 
         expect(
-          filter(doc, [['script', ['app_html_start']]], [[new RegExp('app_html_start', 'g'), '']]),
+          filter(doc, [
+            ['script', ['app_html_start']],
+            ['replace', [new RegExp('app_html_start', 'g'), '']],
+          ]),
         ).not.to.include('app_html_start');
       });
 
@@ -309,8 +305,7 @@ describe('html-filtering', () => {
         it(`filters: ${filters.join(',')}`, () => {
           const modified = filter(
             loadRequestSample(getRequestSamplePath(url)),
-            [],
-            filters.map((filter) => replaceOptionValueToRegexp(filter)!),
+            filters.map((filter) => ['replace', replaceOptionValueToRegexp(filter)!]),
           );
           expect(modified).to.be.eql(loadRequestSample(getRequestSamplePath(url + '.modified')));
         });

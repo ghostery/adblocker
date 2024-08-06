@@ -40,4 +40,4 @@ export { isUTF8 } from './encoding.js';
 export { default as Config } from './config.js';
 export { default as Resources } from './resources.js';
 export { default as StreamingHtmlFilter } from './html-filtering.js';
-export type { HTMLModifier, HTMLSelector } from './html-filtering.js';
+export type { HTMLSelector } from './html-filtering.js';

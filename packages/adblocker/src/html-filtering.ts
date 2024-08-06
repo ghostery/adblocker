@@ -10,7 +10,11 @@
 // which is able to consume an HTML document over time and filter part of it
 // using adblocker selectors.
 
-export type HTMLSelector = readonly ['script', readonly string[]];
+export type HTMLModifier = readonly [RegExp, string];
+
+export type HTMLSelector =
+  | readonly ['script', readonly string[]]
+  | readonly ['replace', HTMLModifier];
 
 export function extractHTMLSelectorFromRule(rule: string): HTMLSelector | undefined {
   if (rule.startsWith('^script') === false) {
@@ -139,7 +143,10 @@ type Patterns = readonly [readonly string[], readonly RegExp[]][];
 export function extractSelectorsFromRules(filter: HTMLSelector[]): Patterns {
   const patterns: [string[], RegExp[]][] = [];
 
-  for (const [, selectors] of filter) {
+  for (const [type, selectors] of filter) {
+    if (type !== 'script') {
+      continue;
+    }
     const plainPatterns: string[] = [];
     const regexpPatterns: RegExp[] = [];
 
@@ -220,8 +227,6 @@ export function removeTagsFromHtml(html: string, toRemove: [number, string][]): 
   return filteredHtml;
 }
 
-export type HTMLModifier = readonly [RegExp, string];
-
 function applyModifiersToHtml(html: string, modifiers: HTMLModifier[]): string {
   if (modifiers.length === 0) {
     return html;
@@ -239,9 +244,18 @@ export default class StreamingHtmlFilter {
   private readonly patterns: Patterns;
   private readonly modifiers: HTMLModifier[];
 
-  constructor(selectors: HTMLSelector[], modifiers: HTMLModifier[] = []) {
+  constructor(selectors: HTMLSelector[]) {
     this.buffer = '';
-    this.patterns = extractSelectorsFromRules(selectors);
+    const modifiers = [];
+    const rules = [];
+    for (const selector of selectors) {
+      if (selector[0] === 'replace') {
+        modifiers.push(selector[1]);
+      } else if (selector[0] === 'script') {
+        rules.push(selector);
+      }
+    }
+    this.patterns = extractSelectorsFromRules(rules);
     this.modifiers = modifiers;
   }
 

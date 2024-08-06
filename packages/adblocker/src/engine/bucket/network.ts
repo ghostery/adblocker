@@ -187,7 +187,7 @@ export default class NetworkFilterBucket {
     return this.badFiltersIds.has(filter.getId());
   }
 
-  public getHtmlModifiers(
+  public getHTMLFilters(
     request: Request,
     isFilterExcluded?: (filter: NetworkFilter) => boolean,
   ): NetworkFilter[] {

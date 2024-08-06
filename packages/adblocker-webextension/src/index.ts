@@ -12,7 +12,6 @@ import { parse } from 'tldts-experimental';
 import {
   FiltersEngine,
   HTMLSelector,
-  HTMLModifier,
   isUTF8,
   Request,
   StreamingHtmlFilter,
@@ -136,13 +135,12 @@ export function filterRequestHTML(
   filterResponseData: Browser['webRequest']['filterResponseData'],
   { id }: { id: string },
   rules: HTMLSelector[],
-  modifiers: HTMLModifier[],
 ): void {
   // Create filter to observe loading of resource
   const filter = filterResponseData(id) as StreamFilter;
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
-  const htmlFilter = new StreamingHtmlFilter(rules, modifiers);
+  const htmlFilter = new StreamingHtmlFilter(rules);
 
   const teardown = (event: { data?: ArrayBuffer }) => {
     // Before disconnecting our streaming filter, we need to be extra careful
@@ -408,14 +406,8 @@ export class WebExtensionBlocker extends FiltersEngine {
       typeof TextEncoder !== 'undefined'
     ) {
       const htmlFilters = this.getHtmlFilters(request);
-      const htmlModifiers = this.getHtmlModifiers(request);
-      if (htmlFilters.length !== 0 && htmlModifiers.length !== 0) {
-        filterRequestHTML(
-          browser.webRequest.filterResponseData,
-          request,
-          htmlFilters,
-          htmlModifiers,
-        );
+      if (htmlFilters.length !== 0) {
+        filterRequestHTML(browser.webRequest.filterResponseData, request, htmlFilters);
       }
     }
   }
