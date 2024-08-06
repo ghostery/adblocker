@@ -1073,7 +1073,7 @@ describe('Network filters', () => {
           // Empty option value without exception
           '||foo.com$replace',
           // Empty regexp matcher
-          '||foo.com$replace=///'
+          '||foo.com$replace=///',
         ];
 
         for (const filter of filters) {
