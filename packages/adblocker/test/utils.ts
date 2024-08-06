@@ -117,5 +117,5 @@ export function getRequestSamplePath(url: string): string {
 }
 
 export function loadRequestSample(path: string): string {
-  return zlib.brotliDecompressSync(path).toString('utf8');
+  return zlib.brotliDecompressSync(fs.readFileSync(path)).toString('utf8');
 }
