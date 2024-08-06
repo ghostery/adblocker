@@ -405,20 +405,19 @@ function compileRegex(
  * Note that this function doesn't respect the escaping sign.
  */
 function getFilterOptionKey(line: string, pos: number, end: number) {
-  let code: number;
-  let value = '';
+  const start = pos;
 
-  for (; pos < end; pos++) {
+  for (let code: number; pos < end; pos++) {
     code = line.charCodeAt(pos);
 
     if (code === 61 /* '=' */ || code === 44 /* ',' */) {
+      end = pos;
+
       break;
     }
-
-    value += line.charAt(pos);
   }
 
-  return [pos, value] as const;
+  return [pos, line.slice(start, end)] as const;
 }
 
 /**
@@ -428,19 +427,22 @@ function getFilterOptionKey(line: string, pos: number, end: number) {
  * This function will stop if it sees a comma sign.
  */
 function getFilterOptionValue(line: string, pos: number, end: number): [number, string] {
-  let code: number;
+  let start = pos;
   let value = '';
 
-  for (; pos < end; pos++) {
+  for (let code: number; pos < end; pos++) {
     code = line.charCodeAt(pos);
 
     if (code === 92 /* '\\' */) {
-      value += line.charAt(++pos);
+      value += line.slice(start, pos);
+      start = ++pos;
     } else if (code === 44 /* ',' */) {
       break;
-    } else {
-      value += line.charAt(pos);
     }
+  }
+
+  if (start - pos !== 0) {
+    value += line.slice(start, pos);
   }
 
   return [pos, value];
@@ -453,11 +455,7 @@ function getFilterOptionValue(line: string, pos: number, end: number): [number, 
  * Therefore, a comma sign can interfere the `getFilterOptionValue` function.
  * This function will not stop unless it collects the all of parts of the replace modifier option value.
  */
-export function getFilterReplaceOptionValue(
-  line: string,
-  pos: number,
-  end: number,
-): [number, string[]] {
+function getFilterReplaceOptionValue(line: string, pos: number, end: number): [number, string[]] {
   // Try to fast exit if the first character is an unexpected character.
   if (line.charCodeAt(pos++) !== 47 /* '/' */) {
     return [end, []];
@@ -465,25 +463,27 @@ export function getFilterReplaceOptionValue(
 
   const parts = ['', '', ''];
 
-  let code: number;
+  let start = pos;
   let slashes = 0;
 
-  for (; pos < end; pos++) {
+  for (let code: number; pos < end; pos++) {
     code = line.charCodeAt(pos);
 
     if (code === 92 /* '\\' */) {
-      parts[slashes] += '\\' + line.charAt(++pos);
+      parts[slashes] += line.slice(start, pos);
+      start = pos;
     } else if (code === 47 /* '/' */) {
+      if (pos - start !== 0) {
+        parts[slashes] += line.slice(start, pos);
+      }
+
+      start = pos + 1;
+
       if (++slashes === 2) {
-        // Skip the last slash character
         // Since we saw 3 slashes in total, it means that the option value should be closed here.
         // Note that we already saw the first slash before the loop.
-        pos++;
-
         break;
       }
-    } else {
-      parts[slashes] += line.charAt(pos);
     }
   }
 
@@ -493,9 +493,7 @@ export function getFilterReplaceOptionValue(
     end = valueEnd;
   }
 
-  if (pos - end !== 0) {
-    parts[2] = line.slice(pos, end);
-  }
+  parts[2] = line.slice(start, end);
 
   pos = end;
 
@@ -525,13 +523,13 @@ function getFilterOptions(line: string, pos: number, end: number) {
       if (key === 'replace') {
         const result = getFilterReplaceOptionValue(line, pos, end);
 
-        pos = result[0];
-
         if (result[1].length !== 0) {
-          value = '/' + result[1][0] + '/' + result[1][1] + '/' + result[1][2];
+          value = line.slice(pos, result[0]);
         } else {
           value = '';
         }
+
+        pos = result[0];
       } else {
         [pos, value] = getFilterOptionValue(line, pos, end);
       }
