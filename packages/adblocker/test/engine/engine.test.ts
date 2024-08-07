@@ -1350,7 +1350,7 @@ foo.com###selector
       expect(() => FilterEngine.merge([FilterEngine.empty()])).to.throw(error);
     });
 
-    it('megers empty engines', () => {
+    it('merges empty engines', () => {
       const filters = FilterEngine.merge([
         FilterEngine.empty(),
         FilterEngine.empty(),
@@ -1407,6 +1407,15 @@ foo.com###selector
               ['b', 'b'],
             ]),
           );
+        // Check that the original engines are not modified
+
+        expect(engine1)
+          .to.have.property('lists')
+          .that.deep.equal(new Map([['a', 'a']]));
+
+        expect(engine2)
+          .to.have.property('lists')
+          .that.deep.equal(new Map([['b', 'b']]));
       });
 
       it('removes duplicates', () => {
