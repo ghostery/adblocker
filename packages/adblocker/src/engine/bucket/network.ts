@@ -82,7 +82,11 @@ export default class NetworkFilterBucket {
 
   public getFilters(): NetworkFilter[] {
     const filters: NetworkFilter[] = [];
-    return filters.concat(this.badFilters.getFilters(), this.index.getFilters());
+    return filters.concat(
+      this.badFilters.getFilters(),
+      this.index.getFilters(),
+      this.htmlIndex.getFilters(),
+    );
   }
 
   public update(newFilters: NetworkFilter[], removedFilters: Set<number> | undefined): void {
