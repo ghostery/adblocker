@@ -1,3 +1,35 @@
+# v1.31.3 (Wed Aug 07 2024)
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker`
+  - Fix FilterEngine static merge method [#4186](https://github.com/ghostery/adblocker/pull/4186) ([@smalluban](https://github.com/smalluban))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#4180](https://github.com/ghostery/adblocker/pull/4180) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#4179](https://github.com/ghostery/adblocker/pull/4179) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Fix cosmetic-selector codebook generation [#4177](https://github.com/ghostery/adblocker/pull/4177) ([@chrmod](https://github.com/chrmod))
+  - Fix raw-cosmetic codebook generation [#4176](https://github.com/ghostery/adblocker/pull/4176) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump tldts-experimental from 6.1.37 to 6.1.38 [#4181](https://github.com/ghostery/adblocker/pull/4181) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump lerna from 8.1.7 to 8.1.8 [#4182](https://github.com/ghostery/adblocker/pull/4182) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript-eslint from 8.0.0 to 8.0.1 [#4183](https://github.com/ghostery/adblocker/pull/4183) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump playwright from 1.45.3 to 1.46.0 [#4184](https://github.com/ghostery/adblocker/pull/4184) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Dominik Lubański ([@smalluban](https://github.com/smalluban))
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.31.2 (Mon Aug 05 2024)
 
 #### :bug: Bug Fix
