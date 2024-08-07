@@ -15,6 +15,7 @@ import { parseFilters } from '../src/lists.js';
 import { hashStrings, tokenize } from '../src/utils.js';
 import { HTMLSelector } from '../src/html-filtering.js';
 import { NORMALIZED_TYPE_TOKEN, hashHostnameBackward } from '../src/request.js';
+import { Resource } from '../src/resources.js';
 
 function h(hostnames: string[]): Uint32Array {
   return new Uint32Array(hostnames.map(hashHostnameBackward)).sort();
@@ -1834,6 +1835,33 @@ describe('Cosmetic filters', () => {
 
       // Compound
       test('script:has-text(===):has-text(/[wW]{14000}/)', ['script', ['===', '/[wW]{14000}/']]);
+
+      it('with normalization', () => {
+        const js = new Map<string, Resource>([
+          [
+            'scriptlet',
+            {
+              body: 'scriptlet',
+              contentType: 'application/javascript',
+            },
+          ],
+          [
+            'alias',
+            {
+              body: 'scriptlet',
+              contentType: 'application/javascript',
+              aliasOf: 'scriptlet',
+            },
+          ],
+        ]);
+
+        expect(CosmeticFilter.parse('foo.com##+js(alias)')!.getNormalizedSelector(js)).to.be.eql(
+          'scriptlet',
+        );
+        expect(
+          CosmeticFilter.parse('foo.com##+js(alias, arg1)')!.getNormalizedSelector(js),
+        ).to.be.eql('scriptlet, arg1');
+      });
     });
   });
 
@@ -1881,14 +1909,36 @@ describe('Cosmetic filters', () => {
     });
 
     it('returns a script if one exists', () => {
-      expect(simpleScriptlet?.getScript(new Map([['script.js', 'test']]))).to.equal('test');
+      expect(
+        simpleScriptlet?.getScript(
+          new Map([
+            [
+              'script.js',
+              {
+                contentType: 'application/javascript',
+                body: 'test',
+              },
+            ],
+          ]),
+        ),
+      ).to.equal('test');
     });
 
     context('with arguments', () => {
       it('inject values', () => {
-        expect(simpleScriptlet?.getScript(new Map([['script.js', '{{1}},{{2}},{{3}}']]))).to.equal(
-          'arg1,arg2,arg3',
-        );
+        expect(
+          simpleScriptlet?.getScript(
+            new Map([
+              [
+                'script.js',
+                {
+                  contentType: 'application/javascript',
+                  body: '{{1}},{{2}},{{3}}',
+                },
+              ],
+            ]),
+          ),
+        ).to.equal('arg1,arg2,arg3');
       });
 
       it('escapes special characters', () => {
@@ -1909,9 +1959,19 @@ describe('Cosmetic filters', () => {
           '\\',
         ]) {
           const scriptlet = CosmeticFilter.parse(`foo.com##+js(script.js, ${character})`);
-          expect(scriptlet?.getScript(new Map([['script.js', '{{1}}']]))).to.equal(
-            `\\${character}`,
-          );
+          expect(
+            scriptlet?.getScript(
+              new Map([
+                [
+                  'script.js',
+                  {
+                    contentType: 'application/javascript',
+                    body: '{{1}}',
+                  },
+                ],
+              ]),
+            ),
+          ).to.equal(`\\${character}`);
         }
       });
 
@@ -1921,7 +1981,19 @@ describe('Cosmetic filters', () => {
           [String.raw`foo\*`, String.raw`foo\\\*`],
         ]) {
           const scriptlet = CosmeticFilter.parse(`foo.com##+js(script.js, ${example[0]})`);
-          expect(scriptlet?.getScript(new Map([['script.js', '{{1}}']]))).to.equal(example[1]);
+          expect(
+            scriptlet?.getScript(
+              new Map([
+                [
+                  'script.js',
+                  {
+                    contentType: 'application/javascript',
+                    body: '{{1}}',
+                  },
+                ],
+              ]),
+            ),
+          ).to.equal(example[1]);
         }
       });
     });

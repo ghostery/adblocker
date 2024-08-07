@@ -8,7 +8,7 @@
 
 import { getResourceForMime } from '@remusao/small';
 
-import { StaticDataView, sizeOfUTF8, sizeOfASCII, sizeOfByte } from './data-view.js';
+import { StaticDataView, sizeOfUTF8, sizeOfASCII, sizeOfByte, sizeOfBool } from './data-view.js';
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -23,9 +23,9 @@ function btoaPolyfill(buffer: string): string {
 export interface Resource {
   contentType: string;
   body: string;
+  aliasOf?: string | undefined;
 }
 
-// TODO - support # alias
 // TODO - support empty resource body
 
 /**
@@ -41,17 +41,42 @@ export default class Resources {
     const resources: Map<string, Resource> = new Map();
     const numberOfResources = buffer.getUint16();
     for (let i = 0; i < numberOfResources; i += 1) {
-      resources.set(buffer.getASCII(), {
-        contentType: buffer.getASCII(),
-        body: buffer.getUTF8(),
-      });
+      const name = buffer.getASCII();
+      const isAlias = buffer.getBool();
+      if (isAlias === true) {
+        resources.set(name, {
+          contentType: '',
+          body: '',
+          aliasOf: buffer.getASCII(),
+        });
+      } else {
+        resources.set(name, {
+          contentType: buffer.getASCII(),
+          body: buffer.getUTF8(),
+        });
+      }
+    }
+
+    // Fill aliases after deserializing everything
+    for (const resource of resources.values()) {
+      if (resource.aliasOf === undefined) {
+        continue;
+      }
+
+      const origin = resources.get(resource.aliasOf);
+      if (origin === undefined) {
+        continue;
+      }
+
+      resource.body = origin.body;
+      resource.contentType = origin.contentType;
     }
 
     // Deserialize `js`
-    const js: Map<string, string> = new Map();
-    resources.forEach(({ contentType, body }, name) => {
-      if (contentType === 'application/javascript') {
-        js.set(name, body);
+    const js: Map<string, Resource> = new Map();
+    resources.forEach((resource, name) => {
+      if (resource.contentType === 'application/javascript') {
+        js.set(name, resource);
       }
     });
 
@@ -63,7 +88,7 @@ export default class Resources {
   }
 
   public static parse(data: string, { checksum }: { checksum: string }): Resources {
-    const typeToResource: Map<string, Map<string, string>> = new Map();
+    const resources: Map<string, Resource> = new Map();
     const trimComments = (str: string) => str.replace(/^\s*#.*$/gm, '');
     const chunks = data.split('\n\n');
 
@@ -72,52 +97,55 @@ export default class Resources {
       if (resource.length !== 0) {
         const firstNewLine = resource.indexOf('\n');
         const split = resource.slice(0, firstNewLine).split(/\s+/);
-        const name = split[0];
-        const type = split[1];
+        const [name, type] = split;
+        const aliases = (split[2] || '')
+          .split(',')
+          .map((alias) => alias.trim())
+          .filter((alias) => alias.length !== 0);
         const body = resource.slice(firstNewLine + 1);
 
         if (name === undefined || type === undefined || body === undefined) {
           continue;
         }
 
-        let resources = typeToResource.get(type);
-        if (resources === undefined) {
-          resources = new Map();
-          typeToResource.set(type, resources);
+        resources.set(name, {
+          contentType: type,
+          body,
+        });
+        for (const alias of aliases) {
+          resources.set(alias, {
+            contentType: type,
+            body,
+            aliasOf: name,
+          });
         }
-        resources.set(name, body);
+        if (type === 'application/javascript' && name.endsWith('.js')) {
+          resources.set(name.slice(0, -3), {
+            contentType: type,
+            body,
+            aliasOf: name,
+          });
+        }
       }
     }
 
     // The resource containing javascirpts to be injected
-    const js: Map<string, string> = typeToResource.get('application/javascript') || new Map();
-    for (const [key, value] of js.entries()) {
-      if (key.endsWith('.js')) {
-        js.set(key.slice(0, -3), value);
+    const js: Map<string, Resource> = new Map();
+    for (const [name, resource] of resources.entries()) {
+      if (resource.contentType === 'application/javascript') {
+        js.set(name, resource);
       }
     }
-
-    // Create a mapping from resource name to { contentType, data }
-    // used for request redirection.
-    const resourcesByName: Map<string, Resource> = new Map();
-    typeToResource.forEach((resources, contentType) => {
-      resources.forEach((resource: string, name: string) => {
-        resourcesByName.set(name, {
-          contentType,
-          body: resource,
-        });
-      });
-    });
 
     return new Resources({
       checksum,
       js,
-      resources: resourcesByName,
+      resources,
     });
   }
 
   public readonly checksum: string;
-  public readonly js: Map<string, string>;
+  public readonly js: Map<string, Resource>;
   public readonly resources: Map<string, Resource>;
 
   constructor({ checksum = '', js = new Map(), resources = new Map() }: Partial<Resources> = {}) {
@@ -142,8 +170,13 @@ export default class Resources {
   public getSerializedSize(): number {
     let estimatedSize = sizeOfASCII(this.checksum) + 2 * sizeOfByte(); // resources.size
 
-    this.resources.forEach(({ contentType, body }, name) => {
-      estimatedSize += sizeOfASCII(name) + sizeOfASCII(contentType) + sizeOfUTF8(body);
+    this.resources.forEach(({ contentType, body, aliasOf }, name) => {
+      estimatedSize += sizeOfASCII(name) + sizeOfBool();
+      if (aliasOf === undefined) {
+        estimatedSize += sizeOfASCII(contentType) + sizeOfUTF8(body);
+      } else {
+        estimatedSize += sizeOfASCII(aliasOf);
+      }
     });
 
     return estimatedSize;
@@ -155,10 +188,16 @@ export default class Resources {
 
     // Serialize `resources`
     buffer.pushUint16(this.resources.size);
-    this.resources.forEach(({ contentType, body }, name) => {
+    this.resources.forEach(({ contentType, body, aliasOf }, name) => {
       buffer.pushASCII(name);
-      buffer.pushASCII(contentType);
-      buffer.pushUTF8(body);
+      const isAlias = aliasOf !== undefined;
+      buffer.pushBool(aliasOf !== undefined);
+      if (isAlias) {
+        buffer.pushASCII(aliasOf);
+      } else {
+        buffer.pushASCII(contentType);
+        buffer.pushUTF8(body);
+      }
     });
   }
 }
