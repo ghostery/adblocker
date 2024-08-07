@@ -401,11 +401,12 @@ export class WebExtensionBlocker extends FiltersEngine {
       this.config.enableHtmlFiltering === true &&
       browser.webRequest !== undefined &&
       browser.webRequest.filterResponseData !== undefined &&
-      request.isMainFrame() === true &&
       typeof TextDecoder !== 'undefined' &&
       typeof TextEncoder !== 'undefined'
     ) {
-      const htmlFilters = this.getHtmlFilters(request);
+      const htmlFilters = this.getHtmlFilters(request, {
+        selectors: request.isMainFrame() === true ? ['script'] : undefined,
+      });
       if (htmlFilters.length !== 0) {
         filterRequestHTML(browser.webRequest.filterResponseData, request, htmlFilters);
       }
