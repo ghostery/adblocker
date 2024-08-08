@@ -22,6 +22,7 @@ filelions.*,guccihide.com,streamhide.to,streamwish.*,vidhidevip.com##+js(aopr, _
 /assets/jquery/api.js?type=adult$1p
 /assets/jquery/api.js?type=mainstream$1p
 /assets/jquery/app100.js?type=$1p
+/assets/jquery/app0.js?type=$1p
 ! https://www.parents. at anti adb
 parents.at##+js(aopw, AdBlockDetectorWorkaround)
 ! https://github.com/uBlockOrigin/uAssets/issues/16198
@@ -148,6 +149,7 @@ sportshub.to,sportnews.to##+js(no-fetch-if, googlesyndication)
 sportshub.to,sportnews.to##+js(no-xhr-if, googlesyndication)
 ||sportshub.to/fox/plugins/block/js/$script
 ||sportnews.to/fox/plugins/block/js/$script
+sportfacts.net,sportnews.to##+js(aopr, antiAdBlockerHandler)
 ! https://github.com/uBlockOrigin/uAssets/issues/16320
 seznam.cz##[data-draggable-target]:has-text(Rekl):not(*:has([href*="radio"]))
 seznam.cz##.sticky-content:has-text(Reklama)
@@ -565,7 +567,7 @@ esopress.com##.adsbyvli:style(height: 0px !important;)
 /\/assets\/jquery\/jquery-\d\.\d\.(?:\d\.)?min\.js\?(?:v=2)?&?type=(?:adult|mainstream)$/$script,1p
 /asset/angular.min.js?t=$xhr,1p
 /asset/jquery/slim-3.2.min.js?*&t=$xhr,1p
-cloudrls.com,embedwish.com,fc2stream.tv,javhahaha.us,javlion.xyz,javibe.net,jvideo.xyz,streamvid.top,vidgo.top##+js(aopr, __Y)
+cloudrls.com,embedwish.com,fc2stream.tv,javhahaha.us,javlion.xyz,javibe.net,jvideo.xyz,kissmovies.net,streamvid.top,vidgo.top##+js(aopr, __Y)
 ! heavyfetish.com ads and pre-roll
 heavyfetish.com##+js(set, flashvars.adv_pre_src, )
 heavyfetish.com##.banner
@@ -2134,9 +2136,9 @@ idoitmyself.xyz##+js(rpnt, script, %2FdevtoolsDetector%5C.launch%5C(%5C)%5C%3B%2
 ! https://listeamed.net/v/kKJVORW4oAw53XD
 ! vidguard
 ||acacdn.com^$script,redirect-rule=noopjs
-bembed.net,elbailedeltroleo.site,embedv.net,fslinks.org,listeamed.net,v6embed.xyz,vembed.*,vgplayer.xyz,vid-guard.com##+js(nostif, afterOpen)
-bembed.net,elbailedeltroleo.site,embedv.net,fslinks.org,listeamed.net,v6embed.xyz,vembed.*,vgplayer.xyz,vid-guard.com##+js(nowoif)
-bembed.net,elbailedeltroleo.site,embedv.net,fslinks.org,listeamed.net,v6embed.xyz,vembed.*,vgplayer.xyz,vid-guard.com##+js(set, PlayerConfig.config.CustomAdSetting, %5B%5D)
+bembed.net,elbailedeltroleo.site,embedv.net,fslinks.org,listeamed.net,v6embed.xyz,vembed.*,vgplayer.xyz,vid-guard.com,vidguard.online##+js(nostif, afterOpen)
+bembed.net,elbailedeltroleo.site,embedv.net,fslinks.org,listeamed.net,v6embed.xyz,vembed.*,vgplayer.xyz,vid-guard.com,vidguard.online##+js(nowoif)
+bembed.net,elbailedeltroleo.site,embedv.net,fslinks.org,listeamed.net,v6embed.xyz,vembed.*,vgplayer.xyz,vid-guard.com,vidguard.online##+js(set, PlayerConfig.config.CustomAdSetting, %5B%5D)
 bembed.net,embedv.net,fslinks.org,listeamed.net,v6embed.xyz,vembed.*,vgplayer.xyz,vid-guard.com##body > div[class]:empty
 *$script,3p,redirect-rule=noopjs,domain=bembed.net|embedv.net
 ||oaphoace.net^$script,3p,redirect-rule=noopjs
@@ -2246,6 +2248,7 @@ hotstar.com##div [data-testid^="bbtype-video"]
 streamporn.co.uk##+js(aost, localStorage, window.onload)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/152222
 hentaipaw.com##div[id^="ts_ad_native_"]
+hentaipaw.com##.min-h-\[250px\]:style(min-height: 0 !important;)
 &height=250&width=300&format=iframe^$frame,3p
 ?width=728&height=90&format=iframe^$frame,3p
 ! https://github.com/uBlockOrigin/uAssets/issues/18358
@@ -2364,8 +2367,10 @@ truyentranhfull.net##+js(rmnt, script, ai_adb)
 ! https://github.com/uBlockOrigin/uAssets/issues/18840
 ! https://github.com/uBlockOrigin/uAssets/issues/24083
 ! https://github.com/uBlockOrigin/uAssets/issues/24113
+! https://github.com/uBlockOrigin/uAssets/issues/24820
 ! https://www.reddit.com/r/uBlockOrigin/comments/1drwhzu/detected_on_a_streaming_site/
 @@||endowmentoverhangutmost.com/*/code.js^$script,3p,domain=empire-stream.*|empire-streaming.*|empire-streamz.*
+@@||brittlesturdyunlovable.com/*/code.js^$script,3p,domain=empire-stream.*|empire-streaming.*|empire-streamz.*
 @@*$ghide,domain=empire-stream.*|empire-streaming.*|empire-streamz.*
 empire-stream.*,empire-streaming.*,empire-streamz.*##.direct-lads
 empire-stream.*,empire-streaming.*,empire-streamz.*##+js(set, empire.pop, undefined)
@@ -4132,7 +4137,7 @@ mirroshu.top##[id^="div-gpt-ad-"]
 ! https://github.com/uBlockOrigin/uAssets/issues/21064
 ! https://github.com/uBlockOrigin/uAssets/issues/24220
 veev.to##+js(nowoif)
-!veev.to##+js(aopr, XMLHttpRequest.prototype.onreadystatechange)
+veev.to##+js(set, fapit.check, noopFunc)
 veev.to##+js(aost, document.createElement, eval)
 ||adcharriot.com^
 *$script,domain=veev.to,redirect-rule=noopjs
