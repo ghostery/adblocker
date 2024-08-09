@@ -111,3 +111,11 @@ export function typedArrayDiff(arr1: Uint8Array, arr2: Uint8Array): string[] {
 export function typedArrayEqual(arr1: Uint8Array, arr2: Uint8Array): boolean {
   return typedArrayDiff(arr1, arr2).length === 0;
 }
+
+export function getRequestSamplePath(url: string): string {
+  return path.resolve(__dirname, 'data/samples', url.replace(/[^a-z0-9.]/g, '_') + '.br');
+}
+
+export function loadRequestSample(path: string): string {
+  return zlib.brotliDecompressSync(fs.readFileSync(path)).toString('utf8');
+}

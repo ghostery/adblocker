@@ -95,11 +95,16 @@ type NetworkFilterMatchingContext = {
   filterType: FilterType.NETWORK;
 };
 
-type CosmeticFilterMatchingContext = {
-  url: string;
-  callerContext: any; // Additional context given from user
-  filterType: FilterType.COSMETIC;
-};
+type CosmeticFilterMatchingContext =
+  | {
+      url: string;
+      callerContext: any; // Additional context given from user
+      filterType: FilterType.COSMETIC;
+    }
+  | {
+      request: Request; // For HTML Filters
+      filterType: FilterType.COSMETIC;
+    };
 
 type NetworkFilterMatchEvent = (request: Request, result: BlockingResponse) => void;
 
@@ -835,57 +840,101 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
   /**
    * Return a list of HTML filtering rules.
    */
-  public getHtmlFilters({
-    // Page information
-    url,
-    hostname,
-    domain,
-
-    callerContext,
-  }: {
-    url: string;
-    hostname: string;
-    domain: string | null | undefined;
-
-    callerContext?: any | undefined;
-  }): HTMLSelector[] {
+  public getHtmlFilters(
+    request: Request,
+    { selectors = [] }: { selectors?: HTMLSelector[0][] | undefined } = {},
+  ): HTMLSelector[] {
     const htmlSelectors: HTMLSelector[] = [];
 
-    if (this.config.enableHtmlFiltering === false || this.config.loadCosmeticFilters === false) {
+    if (this.config.enableHtmlFiltering === false) {
       return htmlSelectors;
     }
 
-    domain ||= '';
+    if (
+      this.config.loadCosmeticFilters === true &&
+      (selectors.length === 0 || selectors.includes('script'))
+    ) {
+      const domain = request.domain || '';
 
-    const { filters, unhides } = this.cosmetics.getHtmlFilters({
-      domain,
-      hostname,
-      isFilterExcluded: this.isFilterExcluded.bind(this),
-    });
-    const exceptions = new Map(unhides.map((unhide) => [unhide.getSelector(), unhide]));
+      const { filters, unhides } = this.cosmetics.getHtmlFilters({
+        domain,
+        hostname: request.hostname,
+        isFilterExcluded: this.isFilterExcluded.bind(this),
+      });
+      const exceptions = new Map(unhides.map((unhide) => [unhide.getSelector(), unhide]));
 
-    for (const filter of filters) {
-      const extended = filter.getExtendedSelector();
-      if (extended === undefined) {
-        continue;
+      for (const filter of filters) {
+        const extended = filter.getExtendedSelector();
+        if (extended === undefined) {
+          continue;
+        }
+        const exception = exceptions.get(filter.getSelector());
+        if (exception === undefined) {
+          htmlSelectors.push(extended);
+        }
+        this.emit(
+          'filter-matched',
+          { filter, exception },
+          {
+            request,
+            filterType: FilterType.COSMETIC,
+          },
+        );
       }
-      const exception = exceptions.get(filter.getSelector());
-      if (exception !== undefined) {
-        htmlSelectors.push(extended);
-      }
-      this.emit(
-        'filter-matched',
-        { filter, exception },
-        {
-          url,
-          callerContext,
-          filterType: FilterType.COSMETIC,
-        },
+    }
+
+    if (
+      this.config.loadNetworkFilters === true &&
+      (selectors.length === 0 || selectors.includes('replace'))
+    ) {
+      const replaceFilters = this.filters.getHTMLFilters(
+        request,
+        this.isFilterExcluded.bind(this),
       );
+
+      if (replaceFilters.length !== 0) {
+        const exceptions = this.exceptions.getHTMLFilters(
+          request,
+          this.isFilterExcluded.bind(this),
+        );
+        const exceptionsMap = new Map();
+        let totalException;
+        for (const exception of exceptions) {
+          const modifier = exception.optionValue;
+          if (modifier === '') {
+            totalException = exception;
+            break;
+          }
+          exceptionsMap.set(modifier, exception);
+        }
+
+        for (const filter of replaceFilters) {
+          const modifier = filter.getHtmlModifier();
+
+          if (modifier === null) {
+            continue;
+          }
+
+          const exception = totalException || exceptionsMap.get(filter.optionValue);
+
+          this.emit(
+            'filter-matched',
+            { filter, exception },
+            {
+              request,
+              filterType: FilterType.NETWORK,
+            },
+          );
+
+          if (exception === undefined) {
+            htmlSelectors.push(['replace', modifier]);
+          }
+        }
+      }
     }
 
     if (htmlSelectors.length !== 0) {
-      this.emit('html-filtered', htmlSelectors, url);
+      this.emit('html-filtered', htmlSelectors, request.url);
     }
 
     return htmlSelectors;
