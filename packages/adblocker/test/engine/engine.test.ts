@@ -1347,6 +1347,100 @@ foo.com###selector
     );
   });
 
+  describe('#getHtmlFilters', () => {
+    const config = {
+      enableHtmlFiltering: true,
+    };
+
+    it('with no filters returns empty html selector lists', () => {
+      const engine = FilterEngine.empty(config);
+      const request = Request.fromRawDetails({});
+      expect(engine.getHtmlFilters(request)).to.deep.equal([]);
+    });
+
+    context('with cosmetic filters', () => {
+      it('returns script selectors', () => {
+        const engine = FilterEngine.parse('example.com##^script:has-text(alert)', config);
+        const request = Request.fromRawDetails({ url: 'https://example.com' });
+        expect(engine.getHtmlFilters(request)).to.deep.equal([['script', ['alert']]]);
+      });
+
+      it('respects unhides', () => {
+        const engine = FilterEngine.parse(
+          `
+          example.com##^script:has-text(alert)
+          example.com#@#^script:has-text(alert)
+        `,
+          config,
+        );
+        const request = Request.fromRawDetails({ url: 'https://example.com' });
+        expect(engine.getHtmlFilters(request)).to.deep.equal([]);
+      });
+
+      it('ignores filters when disabled', () => {
+        const engine = FilterEngine.parse('example.com##^script:has-text(alert)', {
+          ...config,
+          loadCosmeticFilters: false,
+        });
+        const request = Request.fromRawDetails({ url: 'https://example.com' });
+        expect(engine.getHtmlFilters(request)).to.deep.equal([]);
+      });
+
+      it('respects selectors allowlist', () => {
+        const engine = FilterEngine.parse('example.com##^script:has-text(alert)', config);
+        const request = Request.fromRawDetails({ url: 'https://example.com' });
+        expect(engine.getHtmlFilters(request, { selectors: ['replace'] })).to.deep.equal([]);
+      });
+    });
+
+    context('with network filters', () => {
+      it('returns replace selectors', () => {
+        const engine = FilterEngine.parse('example.com$replace=/a/a/', config);
+        const request = Request.fromRawDetails({ url: 'https://example.com' });
+        expect(engine.getHtmlFilters(request)).to.deep.equal([['replace', [/a/, 'a']]]);
+      });
+
+      it('respects expections', () => {
+        const engine = FilterEngine.parse(
+          `
+          ||example.com^$replace=/a/a/
+          @@||example.com^$replace=/a/a/
+        `,
+          config,
+        );
+        const request = Request.fromRawDetails({ url: 'https://example.com/' });
+        expect(engine.getHtmlFilters(request)).to.deep.equal([]);
+      });
+
+      it('respects total expections', () => {
+        const engine = FilterEngine.parse(
+          `
+          ||example.com^$replace=/a/a/
+          @@||example.com^$replace
+        `,
+          config,
+        );
+        const request = Request.fromRawDetails({ url: 'https://example.com/' });
+        expect(engine.getHtmlFilters(request)).to.deep.equal([]);
+      });
+
+      it('ignores filters when disabled', () => {
+        const engine = FilterEngine.parse('||example.com^$replace=/a/a/', {
+          ...config,
+          loadNetworkFilters: false,
+        });
+        const request = Request.fromRawDetails({ url: 'https://example.com' });
+        expect(engine.getHtmlFilters(request)).to.deep.equal([]);
+      });
+
+      it('respects selectors allowlist', () => {
+        const engine = FilterEngine.parse('||example.com^$replace=/a/a/', config);
+        const request = Request.fromRawDetails({ url: 'https://example.com' });
+        expect(engine.getHtmlFilters(request, { selectors: ['script'] })).to.deep.equal([]);
+      });
+    });
+  });
+
   describe('#merge', () => {
     it('throws with no or one engine', () => {
       const error = 'merging engines requires at least two engines';

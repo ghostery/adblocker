@@ -19,7 +19,7 @@ import {
   fetchResources,
   fullLists,
 } from '../fetch.js';
-import { HTMLModifier, HTMLSelector } from '../html-filtering.js';
+import { HTMLSelector } from '../html-filtering.js';
 import CosmeticFilter from '../filters/cosmetic.js';
 import NetworkFilter from '../filters/network.js';
 import { block } from '../filters/dsl.js';
@@ -869,7 +869,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           continue;
         }
         const exception = exceptions.get(filter.getSelector());
-        if (exception !== undefined) {
+        if (exception === undefined) {
           htmlSelectors.push(extended);
         }
         this.emit(
@@ -893,31 +893,40 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       );
 
       if (replaceFilters.length !== 0) {
-        // TODO: is this needed?
-        let exception = this.exceptions.match(request, this.isFilterExcluded.bind(this));
-        const filtersWithModifiers: [NetworkFilter, HTMLModifier][] = [];
+        const exceptions = this.exceptions.getHTMLFilters(
+          request,
+          this.isFilterExcluded.bind(this),
+        );
+        const exceptionsMap = new Map();
+        let totalException;
+        for (const exception of exceptions) {
+          const modifier = exception.optionValue;
+          if (modifier === '') {
+            totalException = exception;
+            break;
+          }
+          exceptionsMap.set(modifier, exception);
+        }
 
         for (const filter of replaceFilters) {
           const modifier = filter.getHtmlModifier();
 
-          if (modifier !== null) {
-            filtersWithModifiers.push([filter, modifier]);
-          } else {
-            // Disable all replace modifiers if empty replace modifier found
-            exception = filter;
+          if (modifier === null) {
+            continue;
           }
-        }
 
-        if (filtersWithModifiers.length !== 0) {
-          for (const [filter, modifier] of filtersWithModifiers) {
-            this.emit(
-              'filter-matched',
-              { filter, exception },
-              {
-                request,
-                filterType: FilterType.COSMETIC,
-              },
-            );
+          const exception = totalException || exceptionsMap.get(filter.optionValue);
+
+          this.emit(
+            'filter-matched',
+            { filter, exception },
+            {
+              request,
+              filterType: FilterType.NETWORK,
+            },
+          );
+
+          if (exception === undefined) {
             htmlSelectors.push(['replace', modifier]);
           }
         }
