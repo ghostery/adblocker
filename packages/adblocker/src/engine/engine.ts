@@ -842,7 +842,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
    */
   public getHtmlFilters(
     request: Request,
-    { selectors = [] }: { selectors?: HTMLSelector[0][] | undefined } = {},
+    { selectors = ['script'] }: { selectors?: HTMLSelector[0][] | undefined } = {},
   ): HTMLSelector[] {
     const htmlSelectors: HTMLSelector[] = [];
 
@@ -850,10 +850,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       return htmlSelectors;
     }
 
-    if (
-      this.config.loadCosmeticFilters === true &&
-      (selectors.length === 0 || selectors.includes('script'))
-    ) {
+    if (this.config.loadCosmeticFilters === true && selectors.includes('script')) {
       const domain = request.domain || '';
 
       const { filters, unhides } = this.cosmetics.getHtmlFilters({
@@ -883,10 +880,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       }
     }
 
-    if (
-      this.config.loadNetworkFilters === true &&
-      (selectors.length === 0 || selectors.includes('replace'))
-    ) {
+    if (this.config.loadNetworkFilters === true && selectors.includes('replace')) {
       const replaceFilters = this.filters.getHTMLFilters(
         request,
         this.isFilterExcluded.bind(this),

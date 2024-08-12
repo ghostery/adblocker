@@ -1358,6 +1358,18 @@ foo.com###selector
       expect(engine.getHtmlFilters(request)).to.deep.equal([]);
     });
 
+    it('with no second arguments return only script selectors', () => {
+      const engine = FilterEngine.parse(
+        `
+        example.com##^script:has-text(alert)
+        example.com$replace=/a/a/
+      `,
+        config,
+      );
+      const request = Request.fromRawDetails({ url: 'https://example.com' });
+      expect(engine.getHtmlFilters(request)).to.deep.equal([['script', ['alert']]]);
+    });
+
     context('with cosmetic filters', () => {
       it('returns script selectors', () => {
         const engine = FilterEngine.parse('example.com##^script:has-text(alert)', config);
@@ -1397,7 +1409,9 @@ foo.com###selector
       it('returns replace selectors', () => {
         const engine = FilterEngine.parse('example.com$replace=/a/a/', config);
         const request = Request.fromRawDetails({ url: 'https://example.com' });
-        expect(engine.getHtmlFilters(request)).to.deep.equal([['replace', [/a/, 'a']]]);
+        expect(engine.getHtmlFilters(request, { selectors: ['replace'] })).to.deep.equal([
+          ['replace', [/a/, 'a']],
+        ]);
       });
 
       it('respects expections', () => {
@@ -1409,7 +1423,7 @@ foo.com###selector
           config,
         );
         const request = Request.fromRawDetails({ url: 'https://example.com/' });
-        expect(engine.getHtmlFilters(request)).to.deep.equal([]);
+        expect(engine.getHtmlFilters(request, { selectors: ['replace'] })).to.deep.equal([]);
       });
 
       it('respects total expections', () => {
@@ -1421,7 +1435,7 @@ foo.com###selector
           config,
         );
         const request = Request.fromRawDetails({ url: 'https://example.com/' });
-        expect(engine.getHtmlFilters(request)).to.deep.equal([]);
+        expect(engine.getHtmlFilters(request, { selectors: ['replace'] })).to.deep.equal([]);
       });
 
       it('ignores filters when disabled', () => {
@@ -1430,7 +1444,7 @@ foo.com###selector
           loadNetworkFilters: false,
         });
         const request = Request.fromRawDetails({ url: 'https://example.com' });
-        expect(engine.getHtmlFilters(request)).to.deep.equal([]);
+        expect(engine.getHtmlFilters(request, { selectors: ['replace'] })).to.deep.equal([]);
       });
 
       it('respects selectors allowlist', () => {
