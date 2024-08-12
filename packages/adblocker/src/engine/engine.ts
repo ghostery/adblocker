@@ -892,11 +892,11 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           this.isFilterExcluded.bind(this),
         );
         const exceptionsMap = new Map();
-        let totalException;
+        let replaceDisabledException;
         for (const exception of exceptions) {
           const modifier = exception.optionValue;
           if (modifier === '') {
-            totalException = exception;
+            replaceDisabledException = exception;
             break;
           }
           exceptionsMap.set(modifier, exception);
@@ -909,7 +909,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
             continue;
           }
 
-          const exception = totalException || exceptionsMap.get(filter.optionValue);
+          const exception = replaceDisabledException || exceptionsMap.get(filter.optionValue);
 
           this.emit(
             'filter-matched',

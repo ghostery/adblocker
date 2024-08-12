@@ -1438,7 +1438,7 @@ foo.com###selector
         expect(engine.getHtmlFilters(request, { selectors: ['replace'] })).to.deep.equal([]);
       });
 
-      it('respects total expections', () => {
+      it('respects disabling with no options value', () => {
         const engine = FilterEngine.parse(
           `
           ||example.com^$replace=/a/a/
