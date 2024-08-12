@@ -744,6 +744,7 @@ export default class NetworkFilter implements IFilter {
               "font-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:";
             break;
           case 'replace':
+          case 'content':
             if (
               negation ||
               (value.length === 0

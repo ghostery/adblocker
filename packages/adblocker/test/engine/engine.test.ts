@@ -1450,6 +1450,18 @@ foo.com###selector
         expect(engine.getHtmlFilters(request, { selectors: ['replace'] })).to.deep.equal([]);
       });
 
+      it('respects $content', () => {
+        const engine = FilterEngine.parse(
+          `
+          ||example.com^$replace=/a/a/
+          @@||example.com^$content
+        `,
+          config,
+        );
+        const request = Request.fromRawDetails({ url: 'https://example.com/' });
+        expect(engine.getHtmlFilters(request, { selectors: ['replace'] })).to.deep.equal([]);
+      });
+
       it('ignores filters when disabled', () => {
         const engine = FilterEngine.parse('||example.com^$replace=/a/a/', {
           ...config,
