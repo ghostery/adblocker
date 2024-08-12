@@ -139,6 +139,17 @@ export default class NetworkFilterBucket {
       return true;
     });
 
+    this.htmlIndex.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
+      if (
+        filter.match(request) &&
+        this.isFilterDisabled(filter) === false &&
+        !isFilterExcluded?.(filter)
+      ) {
+        filters.push(filter);
+      }
+      return true;
+    });
+
     return filters;
   }
 
