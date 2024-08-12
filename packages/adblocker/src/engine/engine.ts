@@ -894,12 +894,12 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         const exceptionsMap = new Map();
         let replaceDisabledException;
         for (const exception of exceptions) {
-          const modifier = exception.optionValue;
-          if (modifier === '') {
+          const optionValue = exception.optionValue;
+          if (optionValue === '') {
             replaceDisabledException = exception;
             break;
           }
-          exceptionsMap.set(modifier, exception);
+          exceptionsMap.set(optionValue, exception);
         }
 
         for (const filter of replaceFilters) {
