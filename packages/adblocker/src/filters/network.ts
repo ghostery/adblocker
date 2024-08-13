@@ -402,7 +402,6 @@ function compileRegex(
  * This function will stop iterating over the given string if it sees equal sign or comma sign.
  * If there's an equal sign, it means that we'll see the value.
  * Otherwise, if there's a comma sign, it means that the option doesn't have any values.
- * Note that this function doesn't respect the escaping sign.
  */
 function getFilterOptionName(line: string, pos: number, end: number): [number, string] {
   const start = pos;
