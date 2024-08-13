@@ -1346,9 +1346,17 @@ export default class NetworkFilter implements IFilter {
     }
 
     if (this.isRedirectRule()) {
-      options.push(`redirect-rule=${this.getRedirect()}`);
+      if (this.optionValue === '') {
+        options.push('redirect-rule');
+      } else {
+        options.push(`redirect-rule=${this.optionValue}`);
+      }
     } else if (this.isRedirect()) {
-      options.push(`redirect=${this.getRedirect()}`);
+      if (this.optionValue === '') {
+        options.push('redirect');
+      } else {
+        options.push(`redirect=${this.optionValue}`);
+      }
     }
 
     if (this.isCSP()) {
@@ -1453,10 +1461,6 @@ export default class NetworkFilter implements IFilter {
     return this.getMask() & FROM_ANY;
   }
 
-  private getOptionValue() {
-    return this.optionValue || '';
-  }
-
   public isRedirect(): boolean {
     return getBit(this.getMask(), NETWORK_FILTER_MASK.isRedirect);
   }
@@ -1466,7 +1470,7 @@ export default class NetworkFilter implements IFilter {
   }
 
   public getRedirect(): string {
-    return this.getOptionValue();
+    return this.optionValue ?? '';
   }
 
   public isReplace(): boolean {
@@ -1477,11 +1481,11 @@ export default class NetworkFilter implements IFilter {
   public getHtmlModifier(): HTMLModifier | null {
     // Empty `$replace` modifier is to disable all replace modifiers on exception
     // This is checked on the parse time
-    if (this.getOptionValue().length === 0) {
+    if (this.optionValue?.length === 0) {
       return null;
     }
 
-    return replaceOptionValueToRegexp(this.getOptionValue());
+    return replaceOptionValueToRegexp(this.optionValue!);
   }
 
   public isHtmlFilteringRule(): boolean {

@@ -136,7 +136,7 @@ const OPTIMIZATIONS: IOptimization[] = [
       );
     },
     groupByCriteria: (filter: NetworkFilter) =>
-      filter.getHostname() + filter.getFilter() + filter.getMask() + filter.getRedirect(),
+      filter.getHostname() + filter.getFilter() + filter.getMask() + (filter.optionValue ?? ''),
     select: (filter: NetworkFilter) =>
       !filter.isCSP() && filter.denyallow === undefined && filter.domains !== undefined,
   },
