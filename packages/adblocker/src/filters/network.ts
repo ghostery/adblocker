@@ -453,7 +453,7 @@ function getFilterOptionValue(line: string, pos: number, end: number): [number, 
  * This function respects the escaping character with the allowed characters of the replace modifier.
  * In the replace modifier, it can include the any sign allowed in the regular expression.
  * Therefore, a comma sign can interfere the `getFilterOptionValue` function.
- * This function will not stop unless it collects the all of parts of the replace modifier option value.
+ * This function will not stop unless it collects all the parts of the replace modifier option value.
  */
 function getFilterReplaceOptionValue(
   line: string,
