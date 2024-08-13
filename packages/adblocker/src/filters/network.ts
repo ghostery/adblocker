@@ -550,7 +550,7 @@ function getFilterOptions(line: string, pos: number, end: number): Array<[string
 export function replaceOptionValueToRegexp(value: string): HTMLModifier | null {
   const [, values] = getFilterReplaceOptionValue(value, 0, value.length);
 
-  if (values[0].length === 0) {
+  if (values === undefined) {
     return null;
   }
 
