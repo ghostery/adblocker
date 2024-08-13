@@ -407,8 +407,8 @@ function compileRegex(
 function getFilterOptionName(line: string, pos: number, end: number) {
   const start = pos;
 
-  for (let code: number; pos < end; pos++) {
-    code = line.charCodeAt(pos);
+  for (; pos < end; pos++) {
+    const code = line.charCodeAt(pos);
 
     if (code === 61 /* '=' */ || code === 44 /* ',' */) {
       end = pos;
@@ -430,8 +430,8 @@ function getFilterOptionValue(line: string, pos: number, end: number): [number, 
   let start = pos;
   let value = '';
 
-  for (let code: number; pos < end; pos++) {
-    code = line.charCodeAt(pos);
+  for (; pos < end; pos++) {
+    const code = line.charCodeAt(pos);
 
     if (code === 92 /* '\\' */) {
       value += line.slice(start, pos);
@@ -466,8 +466,8 @@ function getFilterReplaceOptionValue(line: string, pos: number, end: number): [n
   let start = pos;
   let slashes = 0;
 
-  for (let code: number; pos < end; pos++) {
-    code = line.charCodeAt(pos);
+  for (; pos < end; pos++) {
+    const code = line.charCodeAt(pos);
 
     if (code === 92 /* '\\' */) {
       parts[slashes] += line.slice(start, pos);
