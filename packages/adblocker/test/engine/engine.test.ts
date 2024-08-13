@@ -1358,18 +1358,6 @@ foo.com###selector
       expect(engine.getHtmlFilters(request)).to.deep.equal([]);
     });
 
-    it('with no second arguments return only script selectors', () => {
-      const engine = FilterEngine.parse(
-        `
-        example.com##^script:has-text(alert)
-        example.com$replace=/a/a/
-      `,
-        config,
-      );
-      const request = Request.fromRawDetails({ url: 'https://example.com' });
-      expect(engine.getHtmlFilters(request)).to.deep.equal([['script', ['alert']]]);
-    });
-
     context('with cosmetic filters', () => {
       it('returns script selectors', () => {
         const engine = FilterEngine.parse('example.com##^script:has-text(alert)', config);
@@ -1398,10 +1386,10 @@ foo.com###selector
         expect(engine.getHtmlFilters(request)).to.deep.equal([]);
       });
 
-      it('respects selectors allowlist', () => {
+      it('ignores filters when not main frame', () => {
         const engine = FilterEngine.parse('example.com##^script:has-text(alert)', config);
-        const request = Request.fromRawDetails({ url: 'https://example.com' });
-        expect(engine.getHtmlFilters(request, { selectors: ['replace'] })).to.deep.equal([]);
+        const request = Request.fromRawDetails({ url: 'https://example.com', type: 'sub_frame' });
+        expect(engine.getHtmlFilters(request)).to.deep.equal([]);
       });
     });
 
@@ -1409,9 +1397,7 @@ foo.com###selector
       it('returns replace selectors', () => {
         const engine = FilterEngine.parse('example.com$replace=/a/a/', config);
         const request = Request.fromRawDetails({ url: 'https://example.com' });
-        expect(engine.getHtmlFilters(request, { selectors: ['replace'] })).to.deep.equal([
-          ['replace', [/a/, 'a']],
-        ]);
+        expect(engine.getHtmlFilters(request)).to.deep.equal([['replace', [/a/, 'a']]]);
       });
 
       it('respects expections', () => {
@@ -1423,19 +1409,7 @@ foo.com###selector
           config,
         );
         const request = Request.fromRawDetails({ url: 'https://example.com/' });
-        expect(engine.getHtmlFilters(request, { selectors: ['replace'] })).to.deep.equal([]);
-      });
-
-      it('respects badfilter', () => {
-        const engine = FilterEngine.parse(
-          `
-          ||example.com^$replace=/a/a/
-          ||example.com^$replace=/a/a/,badfilter
-        `,
-          config,
-        );
-        const request = Request.fromRawDetails({ url: 'https://example.com/' });
-        expect(engine.getHtmlFilters(request, { selectors: ['replace'] })).to.deep.equal([]);
+        expect(engine.getHtmlFilters(request)).to.deep.equal([]);
       });
 
       it('respects disabling with no options value', () => {
@@ -1447,7 +1421,7 @@ foo.com###selector
           config,
         );
         const request = Request.fromRawDetails({ url: 'https://example.com/' });
-        expect(engine.getHtmlFilters(request, { selectors: ['replace'] })).to.deep.equal([]);
+        expect(engine.getHtmlFilters(request)).to.deep.equal([]);
       });
 
       it('respects $content', () => {
@@ -1459,7 +1433,7 @@ foo.com###selector
           config,
         );
         const request = Request.fromRawDetails({ url: 'https://example.com/' });
-        expect(engine.getHtmlFilters(request, { selectors: ['replace'] })).to.deep.equal([]);
+        expect(engine.getHtmlFilters(request)).to.deep.equal([]);
       });
 
       it('ignores filters when disabled', () => {
@@ -1468,13 +1442,7 @@ foo.com###selector
           loadNetworkFilters: false,
         });
         const request = Request.fromRawDetails({ url: 'https://example.com' });
-        expect(engine.getHtmlFilters(request, { selectors: ['replace'] })).to.deep.equal([]);
-      });
-
-      it('respects selectors allowlist', () => {
-        const engine = FilterEngine.parse('||example.com^$replace=/a/a/', config);
-        const request = Request.fromRawDetails({ url: 'https://example.com' });
-        expect(engine.getHtmlFilters(request, { selectors: ['script'] })).to.deep.equal([]);
+        expect(engine.getHtmlFilters(request)).to.deep.equal([]);
       });
     });
   });

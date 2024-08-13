@@ -404,9 +404,7 @@ export class WebExtensionBlocker extends FiltersEngine {
       typeof TextDecoder !== 'undefined' &&
       typeof TextEncoder !== 'undefined'
     ) {
-      const htmlFilters = this.getHtmlFilters(request, {
-        selectors: request.isMainFrame() === true ? ['script', 'replace'] : undefined,
-      });
+      const htmlFilters = this.getHtmlFilters(request);
       if (htmlFilters.length !== 0) {
         filterRequestHTML(browser.webRequest.filterResponseData, request, htmlFilters);
       }
