@@ -404,7 +404,7 @@ function compileRegex(
  * Otherwise, if there's a comma sign, it means that the option doesn't have any values.
  * Note that this function doesn't respect the escaping sign.
  */
-function getFilterOptionName(line: string, pos: number, end: number) {
+function getFilterOptionName(line: string, pos: number, end: number): [number, string] {
   const start = pos;
 
   for (; pos < end; pos++) {
@@ -506,7 +506,7 @@ function getFilterReplaceOptionValue(line: string, pos: number, end: number): [n
  * Depending on the filter option key, the function to collect filter option value can vary.
  * For the generic filter option value, it'll use `getFilterOptionValue` function to get the value.
  */
-function getFilterOptions(line: string, pos: number, end: number) {
+function getFilterOptions(line: string, pos: number, end: number): Array<[string, string]> {
   const options: Array<[string, string]> = [];
 
   let name: string | undefined;
