@@ -455,13 +455,17 @@ function getFilterOptionValue(line: string, pos: number, end: number): [number, 
  * Therefore, a comma sign can interfere the `getFilterOptionValue` function.
  * This function will not stop unless it collects the all of parts of the replace modifier option value.
  */
-function getFilterReplaceOptionValue(line: string, pos: number, end: number): [number, string[]] {
+function getFilterReplaceOptionValue(
+  line: string,
+  pos: number,
+  end: number,
+): [number, [string, string, string] | undefined] {
   // Try to fast exit if the first character is an unexpected character.
   if (line.charCodeAt(pos++) !== 47 /* '/' */) {
-    return [end, []];
+    return [end, undefined];
   }
 
-  const parts = ['', '', ''];
+  const parts: [string, string, string] = ['', '', ''];
 
   let start = pos;
   let slashes = 0;
@@ -523,10 +527,10 @@ function getFilterOptions(line: string, pos: number, end: number): Array<[string
       if (name === 'replace') {
         const result = getFilterReplaceOptionValue(line, pos, end);
 
-        if (result[1].length !== 0) {
-          value = line.slice(pos, result[0]);
-        } else {
+        if (result[1] === undefined) {
           value = '';
+        } else {
+          value = line.slice(pos, result[0]);
         }
 
         pos = result[0];
