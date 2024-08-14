@@ -39,6 +39,7 @@ import {
 } from '../utils.js';
 import IFilter from './interface.js';
 import { HTMLModifier } from '../html-filtering.js';
+import CosmeticFilter from './cosmetic.js';
 
 const HTTP_HASH = fastHash('http');
 const HTTPS_HASH = fastHash('https');
@@ -1138,10 +1139,11 @@ export default class NetworkFilter implements IFilter {
     return this.optionValue;
   }
 
-  public isCosmeticFilter() {
+  public isCosmeticFilter(): this is CosmeticFilter {
     return false;
   }
-  public isNetworkFilter() {
+
+  public isNetworkFilter(): this is NetworkFilter {
     return true;
   }
 

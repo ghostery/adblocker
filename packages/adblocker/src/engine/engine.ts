@@ -667,10 +667,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
     for (const filter of this.htmlFilters.getFilters()) {
       if (filter.isNetworkFilter()) {
-        networkFilters.push(filter as NetworkFilter);
+        networkFilters.push(filter);
       }
       if (filter.isCosmeticFilter()) {
-        cosmeticFilters.push(filter as CosmeticFilter);
+        cosmeticFilters.push(filter);
       }
     }
 

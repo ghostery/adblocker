@@ -105,18 +105,16 @@ export default class HTMLBucket {
 
     for (const filter of newFilters) {
       if (filter.isNetworkFilter()) {
-        const networkFilter = filter as NetworkFilter;
-        if (networkFilter.isException()) {
-          exceptionFilters.push(networkFilter);
+        if (filter.isException()) {
+          exceptionFilters.push(filter);
         } else {
-          networkFilters.push(networkFilter);
+          networkFilters.push(filter);
         }
       } else if (filter.isCosmeticFilter()) {
-        const cosmeticFilter = filter as CosmeticFilter;
-        if (cosmeticFilter.isUnhide()) {
-          unhideFilters.push(cosmeticFilter);
+        if (filter.isUnhide()) {
+          unhideFilters.push(filter);
         } else {
-          cosmeticFilters.push(cosmeticFilter);
+          cosmeticFilters.push(filter);
         }
       }
     }
