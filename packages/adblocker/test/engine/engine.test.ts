@@ -493,24 +493,28 @@ $csp=baz,domain=bar.com
   });
 
   describe('network filters', () => {
-    // Collect all filters from all requests in the dataset. Each test case
-    // contains one request as well as a list of filters matching this request
-    // (exceptions, normal filters, etc.). We create a big list of filters out
-    // of them.
-    const allRequestFilters = requests.map(({ filters }) => filters.join('\n')).join('\n');
+    let engineFullOptimized: Engine;
+    let engineFull: Engine;
+    before(() => {
+      // Collect all filters from all requests in the dataset. Each test case
+      // contains one request as well as a list of filters matching this request
+      // (exceptions, normal filters, etc.). We create a big list of filters out
+      // of them.
+      const allRequestFilters = requests.map(({ filters }) => filters.join('\n')).join('\n');
 
-    // Create several base engines to be used in different scenarii:
-    // - Engine with *no filter* optimizations *enabled*
-    // - Engine with *no filter* optimizations *disabled*
-    // - Engine with *all filters* optimizations *enabled*
-    // - Engine with *all filters* optimizations *disabled*
-    const engineFullOptimized = Engine.parse(allRequestFilters, {
-      debug: true,
-      enableOptimizations: true,
-    });
-    const engineFull = Engine.parse(allRequestFilters, {
-      debug: true,
-      enableOptimizations: false,
+      // Create several base engines to be used in different scenarii:
+      // - Engine with *no filter* optimizations *enabled*
+      // - Engine with *no filter* optimizations *disabled*
+      // - Engine with *all filters* optimizations *enabled*
+      // - Engine with *all filters* optimizations *disabled*
+      engineFullOptimized = Engine.parse(allRequestFilters, {
+        debug: true,
+        enableOptimizations: true,
+      });
+      engineFull = Engine.parse(allRequestFilters, {
+        debug: true,
+        enableOptimizations: false,
+      });
     });
 
     // For each request, make sure that we get the correct match in 4 different
@@ -520,90 +524,92 @@ $csp=baz,domain=bar.com
     // - Engine with optimizations enabled
     // - Engine with optimizations disabled
     for (let i = 0; i < requests.length; i += 1) {
-      const { filters, type, url, sourceUrl } = requests[i];
+      context(requests[i].filters.join(', '), () => {
+        const { filters, type, url, sourceUrl } = requests[i];
 
-      // Dispatch `filters` into the following categories: exception, important,
-      // redirects or normal filters. This will be used later to check the
-      // output of Engine.match. Additionally, we keep the list of NetworkFilter
-      // instances.
-      const exceptions: string[] = [];
-      const importants: string[] = [];
-      const redirects: string[] = [];
-      const normalFilters: string[] = [];
-      const parsedFilters: NetworkFilter[] = [];
-      for (let j = 0; j < filters.length; j += 1) {
-        const filter = filters[j];
-        const parsed = NetworkFilter.parse(filter, true);
-        expect(parsed).not.to.be.null;
-        if (parsed !== null) {
-          parsedFilters.push(parsed);
+        // Dispatch `filters` into the following categories: exception, important,
+        // redirects or normal filters. This will be used later to check the
+        // output of Engine.match. Additionally, we keep the list of NetworkFilter
+        // instances.
+        const exceptions: string[] = [];
+        const importants: string[] = [];
+        const redirects: string[] = [];
+        const normalFilters: string[] = [];
+        const parsedFilters: NetworkFilter[] = [];
+        for (let j = 0; j < filters.length; j += 1) {
+          const filter = filters[j];
+          const parsed = NetworkFilter.parse(filter, true);
+          expect(parsed).not.to.be.null;
+          if (parsed !== null) {
+            parsedFilters.push(parsed);
 
-          if (parsed.isException()) {
-            exceptions.push(filter);
-          }
+            if (parsed.isException()) {
+              exceptions.push(filter);
+            }
 
-          if (parsed.isImportant()) {
-            importants.push(filter);
-          }
+            if (parsed.isImportant()) {
+              importants.push(filter);
+            }
 
-          if (parsed.isRedirect()) {
-            redirects.push(filter);
-          }
+            if (parsed.isRedirect()) {
+              redirects.push(filter);
+            }
 
-          if (!parsed.isRedirect() && !parsed.isException() && !parsed.isImportant()) {
-            normalFilters.push(filter);
+            if (!parsed.isRedirect() && !parsed.isException() && !parsed.isImportant()) {
+              normalFilters.push(filter);
+            }
           }
         }
-      }
 
-      // Prepare a fake `resources.txt` created from the list of filters of type
-      // `redirect` in `filters`. A resource of the right name will be created
-      // for each of them.
-      const resources = buildResourcesFromRequests(parsedFilters);
+        // Prepare a fake `resources.txt` created from the list of filters of type
+        // `redirect` in `filters`. A resource of the right name will be created
+        // for each of them.
+        const resources = buildResourcesFromRequests(parsedFilters);
 
-      // Create an instance of `Request` to be shared for all the calls to
-      // `Engine.match` or `Engine.matchAll`.
-      const request = Request.fromRawDetails({
-        sourceUrl,
-        type: type as RequestType,
-        url,
-      });
+        // Create an instance of `Request` to be shared for all the calls to
+        // `Engine.match` or `Engine.matchAll`.
+        const request = Request.fromRawDetails({
+          sourceUrl,
+          type: type as RequestType,
+          url,
+        });
 
-      it(`[request] type=${type} url=${url}, sourceUrl=${sourceUrl}`, () => {
-        // Check each filter individually
-        for (let j = 0; j < parsedFilters.length; j += 1) {
-          const filter = parsedFilters[j];
-          const baseConfig = {
-            exceptions,
-            filter,
-            importants,
-            normalFilters,
-            redirects,
-            request,
-            resources,
-          };
+        it(`[request] type=${type} url=${url}, sourceUrl=${sourceUrl}`, () => {
+          // Check each filter individually
+          for (let j = 0; j < parsedFilters.length; j += 1) {
+            const filter = parsedFilters[j];
+            const baseConfig = {
+              exceptions,
+              filter,
+              importants,
+              normalFilters,
+              redirects,
+              request,
+              resources,
+            };
 
-          // Engine with only this filter
-          test({
-            ...baseConfig,
-            engine: new Engine({ networkFilters: [filter] }),
-            testFiltersInIsolation: true,
-          });
+            // Engine with only this filter
+            test({
+              ...baseConfig,
+              engine: new Engine({ networkFilters: [filter] }),
+              testFiltersInIsolation: true,
+            });
 
-          // All filters with optimizations enabled
-          test({
-            ...baseConfig,
-            engine: engineFullOptimized,
-            testFiltersInIsolation: false,
-          });
+            // All filters with optimizations enabled
+            test({
+              ...baseConfig,
+              engine: engineFullOptimized,
+              testFiltersInIsolation: false,
+            });
 
-          // All filters with optimizations disabled
-          test({
-            ...baseConfig,
-            engine: engineFull,
-            testFiltersInIsolation: false,
-          });
-        }
+            // All filters with optimizations disabled
+            test({
+              ...baseConfig,
+              engine: engineFull,
+              testFiltersInIsolation: false,
+            });
+          }
+        });
       });
     }
   });
@@ -1603,21 +1609,24 @@ function () { console.log(2) }`;
 });
 
 describe('diff updates', () => {
-  function testUpdates(name: string, baseFilters: string[]): void {
+  function testUpdates(name: string, baseFilters: () => string[]): void {
     describe(name, () => {
-      const base = Engine.parse(baseFilters.join('\n'), {
-        debug: false,
-        enableCompression: false,
-        enableOptimizations: false,
-        integrityCheck: false,
-        loadCosmeticFilters: false,
-        loadGenericCosmeticsFilters: false,
-        loadNetworkFilters: true,
-      });
-      const baseSerialized = base.serialize();
-
+      let base: Engine;
+      let baseSerialized: Uint8Array;
       const getSerialized = () => baseSerialized.slice();
       const getEngine = () => Engine.deserialize(getSerialized());
+      before(() => {
+        base = Engine.parse(baseFilters().join('\n'), {
+          debug: false,
+          enableCompression: false,
+          enableOptimizations: false,
+          integrityCheck: false,
+          loadCosmeticFilters: false,
+          loadGenericCosmeticsFilters: false,
+          loadNetworkFilters: true,
+        });
+        baseSerialized = base.serialize();
+      });
 
       it('stays the same with empty update', () => {
         const engine = getEngine();
@@ -1661,8 +1670,8 @@ describe('diff updates', () => {
     });
   }
 
-  testUpdates('empty engine', []);
-  testUpdates('easylist engine', loadEasyListFilters());
+  testUpdates('empty engine', () => []);
+  testUpdates('easylist engine', () => loadEasyListFilters());
 });
 
 describe('events', () => {
