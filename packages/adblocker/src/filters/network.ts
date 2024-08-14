@@ -135,7 +135,8 @@ export const enum NETWORK_FILTER_MASK {
   thirdParty = 1 << 15,
 
   // Options
-  // FREE - 1 << 16
+  // isReplace does not fit to the options, but is here from a lack of empty MASK slots
+  isReplace = 1 << 16,
   isBadFilter = 1 << 17,
   isCSP = 1 << 18,
   isGenericHide = 1 << 19,
@@ -152,7 +153,9 @@ export const enum NETWORK_FILTER_MASK {
   isHostnameAnchor = 1 << 28,
   isRedirectRule = 1 << 29,
   isRedirect = 1 << 30,
-  isReplace = 1 << 31,
+  // IMPORTANT: the mask is now full, no more options can be added
+  // Consider creating a separate fitler type for isReplace if a new
+  // network filter option is needed.
 }
 
 /**
