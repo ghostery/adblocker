@@ -1142,6 +1142,7 @@ export default class NetworkFilter implements IFilter {
     return this.optionValue;
   }
 
+
   public isCosmeticFilter(): this is CosmeticFilter {
     return false;
   }
