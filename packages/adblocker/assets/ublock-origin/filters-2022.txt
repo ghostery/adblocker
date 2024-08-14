@@ -2221,6 +2221,11 @@ javct.net##+js(aopr, asgPopScript)
 ! https://github.com/easylist/easylist/pull/12322
 anisearch.com###rightA
 anisearch.com###content > #start + .pagewidth[style^="margin-left: 11px;"]
+! https://github.com/uBlockOrigin/uAssets/issues/24764
+@@||anisearch.com^$ghide
+!#if !env_mobile
+anisearch.com##.pagewidth:style(max-width: 100% !important;)
+!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/13762
 veryfreeporn.com##+js(aopr, Object)
 veryfreeporn.com##+js(nowoif)
@@ -2735,34 +2740,30 @@ canale.live##+js(nosiif, href)
 ! Ad-Shield
 ! https://github.com/uBlockOrigin/uAssets/issues/21385
 !#if cap_html_filtering
-||07c225f3.online^$~css,domain=etoday.co.kr|inven.co.kr|honkailab.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|dogdrip.net|worldhistory.org|thestar.co.uk|yorkshirepost.co.uk|raenonx.cc|indiatimes.com
-||content-loader.com^$~css,domain=etoday.co.kr|inven.co.kr|honkailab.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|dogdrip.net|worldhistory.org|thestar.co.uk|yorkshirepost.co.uk|raenonx.cc|indiatimes.com
-||css-load.com^$~css,domain=etoday.co.kr|inven.co.kr|honkailab.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|dogdrip.net|worldhistory.org|thestar.co.uk|yorkshirepost.co.uk|raenonx.cc|indiatimes.com
-||html-load.com^$~css,domain=etoday.co.kr|inven.co.kr|honkailab.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|dogdrip.net|worldhistory.org|thestar.co.uk|yorkshirepost.co.uk|raenonx.cc|indiatimes.com
-||img-load.com^$~css,domain=etoday.co.kr|inven.co.kr|honkailab.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|dogdrip.net|worldhistory.org|thestar.co.uk|yorkshirepost.co.uk|raenonx.cc|indiatimes.com
-@@/loader.min.js$xhr,script,domain=etoday.co.kr|inven.co.kr|honkailab.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|dogdrip.net|worldhistory.org|thestar.co.uk|yorkshirepost.co.uk|raenonx.cc|indiatimes.com
+||07c225f3.online^$~css,domain=etoday.co.kr|honkailab.com|genshinlab.com|thephoblographer.com|issuya.com|dogdrip.net|worldhistory.org|thestar.co.uk|yorkshirepost.co.uk|raenonx.cc|indiatimes.com
+||content-loader.com^$~css,domain=etoday.co.kr|honkailab.com|genshinlab.com|thephoblographer.com|issuya.com|dogdrip.net|worldhistory.org|thestar.co.uk|yorkshirepost.co.uk|raenonx.cc|indiatimes.com
+||css-load.com^$~css,domain=etoday.co.kr|honkailab.com|genshinlab.com|thephoblographer.com|issuya.com|dogdrip.net|worldhistory.org|thestar.co.uk|yorkshirepost.co.uk|raenonx.cc|indiatimes.com
+||html-load.com^$~css,domain=etoday.co.kr|honkailab.com|genshinlab.com|thephoblographer.com|issuya.com|dogdrip.net|worldhistory.org|thestar.co.uk|yorkshirepost.co.uk|raenonx.cc|indiatimes.com
+||img-load.com^$~css,domain=etoday.co.kr|honkailab.com|genshinlab.com|thephoblographer.com|issuya.com|dogdrip.net|worldhistory.org|thestar.co.uk|yorkshirepost.co.uk|raenonx.cc|indiatimes.com
+@@/loader.min.js$xhr,script,domain=etoday.co.kr|honkailab.com|genshinlab.com|thephoblographer.com|issuya.com|dogdrip.net|worldhistory.org|thestar.co.uk|yorkshirepost.co.uk|raenonx.cc|indiatimes.com
 !#else
-||html-load.com/loader.min.js$domain=badmouth1.com|carscoops.com|dziennik.pl|eurointegration.com.ua|flatpanelshd.com|fourfourtwo.co.kr|jin115.com|lamire.jp|logicieleducatif.fr|mydaily.co.kr|picrew.me|reportera.co.kr|sportsrec.com|taxguru.in|thestar.co.uk|tweaksforgeeks.com|videogamemods.com|wfmz.com|yorkshirepost.co.uk
-etoday.co.kr,inven.co.kr,honkailab.com,genshinlab.com,thestockmarketwatch.com,thephoblographer.com,issuya.com,etnews.com,iusm.co.kr,dogdrip.net,worldhistory.org,text-compare.com,etnewskorea.com,automobile-catalog.com,maketecheasier.com,gadgets360.com,motorbikecatalog.com,jjang0u.com,raenonx.cc##+js(no-fetch-if, %2Fad%5C.doubleclick%5C.net%7Cstatic%5C.dable%5C.io%2F)
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js|$xhr,domain=etoday.co.kr|inven.co.kr|honkailab.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|etnews.com|iusm.co.kr|dogdrip.net|worldhistory.org|text-compare.com|etnewskorea.com|automobile-catalog.com|maketecheasier.com|gadgets360.com|motorbikecatalog.com|jjang0u.com|raenonx.cc
-@@||static.criteo.net/js/ld/publishertag.prebid.js|$xhr,domain=etoday.co.kr|inven.co.kr|honkailab.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|etnews.com|iusm.co.kr|dogdrip.net|worldhistory.org|text-compare.com|etnewskorea.com|automobile-catalog.com|maketecheasier.com|gadgets360.com|motorbikecatalog.com|jjang0u.com|raenonx.cc
-@@||securepubads.g.doubleclick.net/tag/js/gpt.js|$script,domain=etoday.co.kr|inven.co.kr|honkailab.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|etnews.com|iusm.co.kr|dogdrip.net|worldhistory.org|text-compare.com|etnewskorea.com|automobile-catalog.com|maketecheasier.com|gadgets360.com|motorbikecatalog.com|jjang0u.com|raenonx.cc
-*$frame,redirect-rule=noopframe,domain=etoday.co.kr|inven.co.kr|honkailab.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|etnews.com|iusm.co.kr|dogdrip.net|worldhistory.org|text-compare.com|etnewskorea.com|automobile-catalog.com|maketecheasier.com|gadgets360.com|motorbikecatalog.com|jjang0u.com|raenonx.cc
-*$script,xhr,redirect-rule=noopjs,domain=etoday.co.kr|honkailab.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|etnews.com|iusm.co.kr|dogdrip.net|worldhistory.org|text-compare.com|etnewskorea.com|maketecheasier.com|gadgets360.com|motorbikecatalog.com|jjang0u.com|raenonx.cc
-*$image,redirect-rule=1x1.gif,domain=etoday.co.kr|inven.co.kr|honkailab.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|etnews.com|iusm.co.kr|dogdrip.net|worldhistory.org|etnewskorea.com|automobile-catalog.com|maketecheasier.com|gadgets360.com|motorbikecatalog.com|jjang0u.com|raenonx.cc
-@@*$ghide,domain=etoday.co.kr|inven.co.kr|honkailab.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|etnews.com|iusm.co.kr|dogdrip.net|worldhistory.org|text-compare.com|etnewskorea.com|automobile-catalog.com|maketecheasier.com|gadgets360.com|motorbikecatalog.com|jjang0u.com|raenonx.cc
-*$script,xhr,3p,redirect-rule=noopjs,domain=inven.co.kr
+||html-load.com/loader.min.js$domain=badmouth1.com|carscoops.com|dziennik.pl|eurointegration.com.ua|flatpanelshd.com|fourfourtwo.co.kr|jin115.com|lamire.jp|logicieleducatif.fr|mydaily.co.kr|picrew.me|reportera.co.kr|sportsrec.com|taxguru.in|thestar.co.uk|tweaksforgeeks.com|videogamemods.com|wfmz.com|yorkshirepost.co.uk|onlinegdb.com|text-compare.com
+etoday.co.kr,honkailab.com,genshinlab.com,thephoblographer.com,issuya.com,etnews.com,iusm.co.kr,dogdrip.net,worldhistory.org,etnewskorea.com,automobile-catalog.com,maketecheasier.com,gadgets360.com,motorbikecatalog.com,jjang0u.com,raenonx.cc##+js(no-fetch-if, %2Fad%5C.doubleclick%5C.net%7Cstatic%5C.dable%5C.io%2F)
+@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js|$xhr,domain=etoday.co.kr|honkailab.com|genshinlab.com|thephoblographer.com|issuya.com|etnews.com|iusm.co.kr|dogdrip.net|worldhistory.org|etnewskorea.com|automobile-catalog.com|maketecheasier.com|gadgets360.com|motorbikecatalog.com|jjang0u.com|raenonx.cc
+@@||static.criteo.net/js/ld/publishertag.prebid.js|$xhr,domain=etoday.co.kr|honkailab.com|genshinlab.com|thephoblographer.com|issuya.com|etnews.com|iusm.co.kr|dogdrip.net|worldhistory.org|etnewskorea.com|automobile-catalog.com|maketecheasier.com|gadgets360.com|motorbikecatalog.com|jjang0u.com|raenonx.cc
+@@||securepubads.g.doubleclick.net/tag/js/gpt.js|$script,domain=etoday.co.kr|honkailab.com|genshinlab.com|thephoblographer.com|issuya.com|etnews.com|iusm.co.kr|dogdrip.net|worldhistory.org|etnewskorea.com|automobile-catalog.com|maketecheasier.com|gadgets360.com|motorbikecatalog.com|jjang0u.com|raenonx.cc
+*$frame,redirect-rule=noopframe,domain=etoday.co.kr|honkailab.com|genshinlab.com|thephoblographer.com|issuya.com|etnews.com|iusm.co.kr|dogdrip.net|worldhistory.org|etnewskorea.com|automobile-catalog.com|maketecheasier.com|gadgets360.com|motorbikecatalog.com|jjang0u.com|raenonx.cc
+*$script,xhr,redirect-rule=noopjs,domain=etoday.co.kr|honkailab.com|genshinlab.com|thephoblographer.com|issuya.com|etnews.com|iusm.co.kr|dogdrip.net|worldhistory.org|etnewskorea.com|maketecheasier.com|gadgets360.com|motorbikecatalog.com|jjang0u.com|raenonx.cc
+*$image,redirect-rule=1x1.gif,domain=etoday.co.kr|honkailab.com|genshinlab.com|thephoblographer.com|issuya.com|etnews.com|iusm.co.kr|dogdrip.net|worldhistory.org|etnewskorea.com|automobile-catalog.com|maketecheasier.com|gadgets360.com|motorbikecatalog.com|jjang0u.com|raenonx.cc
+@@*$ghide,domain=etoday.co.kr|honkailab.com|genshinlab.com|thephoblographer.com|issuya.com|etnews.com|iusm.co.kr|dogdrip.net|worldhistory.org|etnewskorea.com|automobile-catalog.com|maketecheasier.com|gadgets360.com|motorbikecatalog.com|jjang0u.com|raenonx.cc
 @@||securepubads.g.doubleclick.net/tag/js/gpt.js$xhr,domain=raenonx.cc
 ||html-load.com^$redirect=noopjs,domain=thesaurus.net
 thesaurus.net##+js(nostif, loader.min.js)
 dogdrip.net##+js(trusted-replace-argument, String.prototype.endsWith, 0, '', condition, translate.goog)
-thestockmarketwatch.com,issuya.com,dogdrip.net,automobile-catalog.com,maketecheasier.com,gadgets360.com,motorbikecatalog.com,jjang0u.com,raenonx.cc##ins.adsbygoogle:style(height: 1px !important; visibility: hidden !important;)
-thestockmarketwatch.com#@#.adSpotPad
-thestockmarketwatch.com##.adSpotPad:style(height: 1px !important; min-height: 1px !important; visibility: hidden !important;)
+issuya.com,dogdrip.net,automobile-catalog.com,maketecheasier.com,gadgets360.com,motorbikecatalog.com,jjang0u.com,raenonx.cc##ins.adsbygoogle:style(height: 1px !important; visibility: hidden !important;)
 cboard.net###left-ba
 thephoblographer.com##[id^="vuukle-ad-"]
 worldhistory.org##.ahe-ad
-text-compare.com##span[data-ez-ph-id]
 ygosu.com,bamgosu.site##iframe[src^="https://tab2.clickmon.co.kr/"]
 ygosu.com,bamgosu.site##iframe[src^="https://cdn.nhnace.com/"]
 ygosu.com,bamgosu.site##div[style="text-align:center"]:has(> iframe[src])
@@ -2786,19 +2787,20 @@ gadgets360.com###adslot300x250ATF
 ||html-load.com/loader.min.js$domain=ndtvprofit.com|javatpoint.com
 ygosu.com,bamgosu.site##+js(trusted-replace-argument, HTMLScriptElement.prototype.setAttribute, 1, %7B%22value%22%3A%20%22(function()%7Blet%20link%3Ddocument.createElement('link')%3Blink.rel%3D'stylesheet'%3Blink.href%3D'%2F%2Fimage.ygosu.com%2Fstyle%2Fmain.css'%3Bdocument.head.appendChild(link)%7D)()%22%7D, condition, error-report)
 loawa.com##+js(trusted-replace-argument, HTMLScriptElement.prototype.setAttribute, 1, %7B%22value%22%3A%20%22(function()%7Blet%20link%3Ddocument.createElement('link')%3Blink.rel%3D'stylesheet'%3Blink.href%3D'https%3A%2F%2Floawa.com%2Fassets%2Fcss%2Floawa.min.css'%3Bdocument.head.appendChild(link)%7D)()%22%7D, condition, error-report)
-||css-load.com^$domain=ygosu.com|loawa.com|bamgosu.site
+||css-load.com^$domain=ygosu.com|loawa.com|bamgosu.site|thestockmarketwatch.com
 economist.co.kr##+js(rpnt, script, _paq.push, %2F*start*%2F(function()%7Blet%20link%3Ddocument.createElement(%22link%22)%3Blink.rel%3D%22stylesheet%22%3Blink.href%3D%22%2Fcss%2Fpc%2Fecn_common.min.css%22%3Bdocument.head.appendChild(link)%7D)()%3Bdocument.currentScript.textContent%3Ddocument.currentScript.textContent.replace(%2F%5C%2F%5C*start%5C*%5C%2F(.*)%5C%2F%5C*end%5C*%5C%2F%2Fg%2C%22%22)%3B%2F*end*%2F_paq.push)
 hometownstation.com##+js(rpnt, script, window.dataLayer%20%3D, %2F*start*%2F(function()%7Blet%20link%3Ddocument.createElement(%22link%22)%3Blink.rel%3D%22stylesheet%22%3Blink.href%3D%22%2Fwp-content%2Fthemes%2Fhts_v2%2Fstyle.css%22%3Bdocument.head.appendChild(link)%7D)()%3Bdocument.currentScript.textContent%3Ddocument.currentScript.textContent.replace(%2F%5C%2F%5C*start%5C*%5C%2F(.*)%5C%2F%5C*end%5C*%5C%2F%2Fg%2C%22%22)%3B%2F*end*%2Fwindow.dataLayer%20%3D)
 sportalkorea.com##+js(rpnt, script, window.dataLayer%20%3D, %2F*start*%2F(function()%7Blet%20link%3Ddocument.createElement(%22link%22)%3Blink.rel%3D%22stylesheet%22%3Blink.href%3D%22%2F_css%2Fcss.css%22%3Bdocument.head.appendChild(link)%7D)()%3Bdocument.currentScript.textContent%3Ddocument.currentScript.textContent.replace(%2F%5C%2F%5C*start%5C*%5C%2F(.*)%5C%2F%5C*end%5C*%5C%2F%2Fg%2C%22%22)%3B%2F*end*%2Fwindow.dataLayer%20%3D)
 isplus.com##+js(rpnt, script, window.dataLayer%20%3D, %2F*start*%2F(function()%7Blet%20link%3Ddocument.createElement(%22link%22)%3Blink.rel%3D%22stylesheet%22%3Blink.href%3D%22%2Fcss_renew%2Fpc%2Fcommon.css%22%3Bdocument.head.appendChild(link)%7D)()%3Bdocument.currentScript.textContent%3Ddocument.currentScript.textContent.replace(%2F%5C%2F%5C*start%5C*%5C%2F(.*)%5C%2F%5C*end%5C*%5C%2F%2Fg%2C%22%22)%3B%2F*end*%2Fwindow.dataLayer%20%3D)
+thestockmarketwatch.com##+js(rpnt, script, document.getElementById(%22divRecentQuotes%22), %2F*start*%2F(function()%7Blet%20link%3Ddocument.createElement(%22link%22)%3Blink.rel%3D%22stylesheet%22%3Blink.href%3D%22%2Fcss%2Fso-clean.css%22%3Bdocument.head.appendChild(link)%7D)()%3Bdocument.currentScript.textContent%3Ddocument.currentScript.textContent.replace(%2F%5C%2F%5C*start%5C*%5C%2F(.*)%5C%2F%5C*end%5C*%5C%2F%2Fg%2C%22%22)%3B%2F*end*%2Fdocument.getElementById(%22divRecentQuotes%22))
 ||07c225f3.online^$domain=economist.co.kr|hometownstation.com|sportalkorea.com|edaily.co.kr|isplus.com
 a-ha.io,cboard.net,jjang0u.com,joongdo.co.kr,viva100.com,thephoblographer.com,gamingdeputy.com,alle-tests.nl,maketecheasier.com,automobile-catalog.com,motorbikecatalog.com##+js(noeval-if, %2F07c225f3%5C.online%7Ccontent-loader%5C.com%7Ccss-load%5C.com%7Chtml-load%5C.com%2F)
 !#if cap_html_filtering
-interfootball.co.kr,a-ha.io,cboard.net,jjang0u.com,joongdo.co.kr,viva100.com,thephoblographer.com,gamingdeputy.com,thesaurus.net,alle-tests.nl,maketecheasier.com,automobile-catalog.com,allthekingz.com,motorbikecatalog.com,tweaksforgeeks.com##^script:has-text(KCgpPT57bGV0IGU)
+interfootball.co.kr,a-ha.io,cboard.net,jjang0u.com,joongdo.co.kr,viva100.com,thephoblographer.com,gamingdeputy.com,thesaurus.net,alle-tests.nl,maketecheasier.com,automobile-catalog.com,allthekingz.com,motorbikecatalog.com,tweaksforgeeks.com,m.inven.co.kr##^script:has-text(KCgpPT57bGV0IGU)
 allthetests.com,javatpoint.com,globalrph.com,carscoops.com,indiatimes.com##^script:has-text(error-report.com)
 worldhistory.org##^script:has-text(adShield)
 !#else
-interfootball.co.kr,a-ha.io,cboard.net,jjang0u.com,joongdo.co.kr,viva100.com,thephoblographer.com,gamingdeputy.com,thesaurus.net,alle-tests.nl,maketecheasier.com,automobile-catalog.com,allthekingz.com,motorbikecatalog.com,tweaksforgeeks.com##+js(rmnt, script, KCgpPT57bGV0IGU)
+interfootball.co.kr,a-ha.io,cboard.net,jjang0u.com,joongdo.co.kr,viva100.com,thephoblographer.com,gamingdeputy.com,thesaurus.net,alle-tests.nl,maketecheasier.com,automobile-catalog.com,allthekingz.com,motorbikecatalog.com,tweaksforgeeks.com,m.inven.co.kr##+js(rmnt, script, KCgpPT57bGV0IGU)
 allthetests.com,javatpoint.com,globalrph.com,carscoops.com,indiatimes.com##+js(rmnt, script, error-report.com)
 worldhistory.org##+js(rmnt, script, adShield)
 !#endif
@@ -4163,9 +4165,3 @@ euro2024direct.ru##+js(acs, document.documentElement, break%3Bcase%20%24.)
 ! https://github.com/uBlockOrigin/uAssets/issues/24377
 ||mrmnd.com^
 ||ss-mndsrv.b-cdn.net^
-! https://www.reddit.com/r/uBlockOrigin/comments/1ejgdkb/how_do_i_block_dynamically_appearing_ads_on/
-text-compare.com##+js(trusted-replace-argument, HTMLScriptElement.prototype.setAttribute, 1, noopFunc, condition, error-report)
-||html-load.com/loader.min.js^$domain=text-compare.com,important
-! https://github.com/AdguardTeam/AdguardFilters/issues/185327
-||html-load.com/loader.min.js^$domain=onlinegdb.com
-onlinegdb.com##+js(trusted-replace-argument, HTMLScriptElement.prototype.setAttribute, 1, noopFunc, condition, error-report)

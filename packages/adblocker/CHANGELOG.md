@@ -1,3 +1,25 @@
+# v1.31.3 (Wed Aug 07 2024)
+
+#### :bug: Bug Fix
+
+- Fix FilterEngine static merge method [#4186](https://github.com/ghostery/adblocker/pull/4186) ([@smalluban](https://github.com/smalluban))
+
+#### :house: Internal
+
+- Update local assets [#4180](https://github.com/ghostery/adblocker/pull/4180) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4179](https://github.com/ghostery/adblocker/pull/4179) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Fix cosmetic-selector codebook generation [#4177](https://github.com/ghostery/adblocker/pull/4177) ([@chrmod](https://github.com/chrmod))
+- Fix raw-cosmetic codebook generation [#4176](https://github.com/ghostery/adblocker/pull/4176) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 4
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Dominik Lubański ([@smalluban](https://github.com/smalluban))
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.31.2 (Mon Aug 05 2024)
 
 #### :bug: Bug Fix

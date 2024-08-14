@@ -38,7 +38,7 @@ import { IOrganization } from './metadata/organizations.js';
 import { IPattern } from './metadata/patterns.js';
 import { fastHash } from '../utils.js';
 
-export const ENGINE_VERSION = 664;
+export const ENGINE_VERSION = 665;
 
 function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   if (filters.length === 0) {
@@ -248,7 +248,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     }
 
     const config = engines[0].config;
-    const lists = engines[0].lists;
+    const lists = new Map();
 
     const networkFilters: Map<number, NetworkFilter> = new Map();
     const cosmeticFilters: Map<number, CosmeticFilter> = new Map();
