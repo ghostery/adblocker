@@ -1715,6 +1715,18 @@ describe('diff updates', () => {
       let baseSerialized: Uint8Array;
       const getSerialized = () => baseSerialized.slice();
       const getEngine = () => Engine.deserialize(getSerialized());
+      before(() => {
+        base = Engine.parse(baseFilters().join('\n'), {
+          debug: false,
+          enableCompression: false,
+          enableOptimizations: false,
+          integrityCheck: false,
+          loadCosmeticFilters: false,
+          loadGenericCosmeticsFilters: false,
+          loadNetworkFilters: true,
+        });
+        baseSerialized = base.serialize();
+      });
 
       before(() => {
         base = Engine.parse(baseFilters().join('\n'), {
