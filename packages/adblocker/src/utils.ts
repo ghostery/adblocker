@@ -430,4 +430,3 @@ export function findLastIndexOfUnescapedCharacter(text: string, character: strin
 
   return lastIndex;
 }
-
