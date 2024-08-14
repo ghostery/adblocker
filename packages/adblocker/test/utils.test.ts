@@ -17,7 +17,6 @@ import {
   binSearch,
   fastHash,
   fastHashBetween,
-  findIndexOfUnescapedCharacter,
   findLastIndexOfUnescapedCharacter,
   hasUnicode,
   tokenize,
@@ -268,10 +267,5 @@ describe('utils.ts', () => {
   it('#findLastIndexOfUnescapedCharacter', () => {
     const line = String.raw`||www.youtube.com/playlist?list=$xhr,1p,replace=/("trackingParam":"kx_fmPxhoPZR)[-_0-9A-Za-z]{150}[-_0-9A-Za-z]+?([-_0-9A-Za-z]{55}lLKPQ-SS"\})/\$1\$2/`;
     expect(findLastIndexOfUnescapedCharacter(line, '$')).to.be.eql(32);
-  });
-
-  it('#findIndexOfUnescapedCharacter', () => {
-    const line = String.raw`||www.youtube.com/playlist?list=$xhr,1p,replace=/("trackingParam":"kx_fmPxhoPZR)[-_0-9A-Za-z]{150}[-_0-9A-Za-z]+?([-_0-9A-Za-z]{55}lLKPQ-SS"\})/\$1\$2/`;
-    expect(findIndexOfUnescapedCharacter(line, '$')).to.be.eql(32);
   });
 });

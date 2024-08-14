@@ -430,27 +430,3 @@ export function findLastIndexOfUnescapedCharacter(text: string, character: strin
 
   return lastIndex;
 }
-
-/**
- * Finds the first index of an unescaped character in the given string.
- * This function tries to find the match from the forward.
- * When this function sees an escaping character before the match, it will jump to the next index.
- */
-export function findIndexOfUnescapedCharacter(
-  text: string,
-  character: string,
-  position: number = 0,
-) {
-  const end = text.length;
-  let nextIndex = text.indexOf(character, position);
-
-  if (nextIndex === -1) {
-    return -1;
-  }
-
-  while (nextIndex < end && text.charCodeAt(nextIndex - 1) === 92 /* '\\' */) {
-    nextIndex = text.indexOf(character, nextIndex + 1);
-  }
-
-  return nextIndex;
-}
