@@ -446,61 +446,6 @@ function getFilterOptionValue(line: string, pos: number, end: number): [number, 
 }
 
 /**
- * Collects a filter option value of the replace modifier.
- * This function respects the escaping character with the allowed characters of the replace modifier.
- * In the replace modifier, it can include the any sign allowed in the regular expression.
- * Therefore, a comma sign can interfere the `getFilterOptionValue` function.
- * This function will not stop unless it collects all the parts of the replace modifier option value.
- */
-function getFilterReplaceOptionValue(
-  line: string,
-  pos: number,
-  end: number,
-): [number, [string, string, string] | undefined] {
-  // Try to fast exit if the first character is an unexpected character.
-  if (line.charCodeAt(pos++) !== 47 /* '/' */) {
-    return [end, undefined];
-  }
-  const parts: [string, string, string] = ['', '', ''];
-
-  let start = pos;
-  let slashes = 0;
-
-  for (; pos < end; pos++) {
-    const code = line.charCodeAt(pos);
-
-    if (code === 92 /* '\\' */) {
-      parts[slashes] += line.slice(start, pos);
-      start = pos;
-    } else if (code === 47 /* '/' */) {
-      if (pos - start !== 0) {
-        parts[slashes] += line.slice(start, pos);
-      }
-
-      start = pos + 1;
-
-      if (++slashes === 2) {
-        // Since we saw 3 slashes in total, it means that the option value should be closed here.
-        // Note that we already saw the first slash before the loop.
-        break;
-      }
-    }
-  }
-
-  const valueEnd = line.indexOf(',', pos);
-
-  if (valueEnd !== -1) {
-    end = valueEnd;
-  }
-
-  parts[2] = line.slice(start, end);
-
-  pos = end;
-
-  return [pos, parts];
-}
-
-/**
  * Collects an array of filter options from the given index.
  * This function leverages `getFilterOptionKey`, `getFilterOptionValue`, and every extension functions.
  * Depending on the filter option key, the function to collect filter option value can vary.
@@ -520,19 +465,7 @@ function getFilterOptions(line: string, pos: number, end: number): Array<[string
         pos++;
       }
 
-      if (name === 'replace') {
-        const result = getFilterReplaceOptionValue(line, pos, end);
-
-        if (result[1] === undefined) {
-          value = '';
-        } else {
-          value = line.slice(pos, result[0]);
-        }
-
-        pos = result[0];
-      } else {
-        [pos, value] = getFilterOptionValue(line, pos, end);
-      }
+      [pos, value] = getFilterOptionValue(line, pos, end);
 
       options.push([name, value]);
     }
