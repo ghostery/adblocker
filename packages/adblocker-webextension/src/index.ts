@@ -148,7 +148,7 @@ const READABLE_MIME_TYPES = new Set([
 ]);
 const MAXIMUM_RESPONSE_BUFFER_SIZE = 10 * 1024 * 1024;
 
-export function isRequestHTMLFilterable(
+export function shouldApplyReplaceSelectors(
   request: Request,
   details: OnHeadersReceivedDetailsType,
 ): boolean {
@@ -177,13 +177,8 @@ export function filterRequestHTML(
   request: Request,
   rules: HTMLSelector[],
 ): void {
-  const replaceFilterIndex = rules.findIndex(([type]) => type === 'replace');
-  // If `replace` filters are not supported
-  if (
-    isRequestHTMLFilterable(request, request._originalRequestDetails) === false &&
-    replaceFilterIndex !== -1
-  ) {
-    rules.splice(replaceFilterIndex);
+  if (shouldApplyReplaceSelectors(request, request._originalRequestDetails) === false) {
+    rules = rules.filter(([type]) => type !== 'replace');
   }
   if (rules.length === 0) {
     return;
