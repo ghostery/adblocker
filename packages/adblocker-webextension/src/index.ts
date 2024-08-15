@@ -174,11 +174,23 @@ export function isRequestHTMLFilterable(
  */
 export function filterRequestHTML(
   filterResponseData: Browser['webRequest']['filterResponseData'],
-  { id }: { id: string },
+  request: Request,
   rules: HTMLSelector[],
 ): void {
+  const replaceFilterIndex = rules.findIndex(([type]) => type === 'replace');
+  // If `replace` filters are not supported
+  if (
+    isRequestHTMLFilterable(request, request._originalRequestDetails) === false &&
+    replaceFilterIndex !== -1
+  ) {
+    rules.splice(replaceFilterIndex);
+  }
+  if (rules.length === 0) {
+    return;
+  }
+
   // Create filter to observe loading of resource
-  const filter = filterResponseData(id) as StreamFilter;
+  const filter = filterResponseData(request.id) as StreamFilter;
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
   const htmlFilter = new StreamingHtmlFilter(rules);
@@ -452,17 +464,6 @@ export class WebExtensionBlocker extends FiltersEngine {
       typeof TextEncoder !== 'undefined'
     ) {
       const htmlFilters = this.getHtmlFilters(request);
-      if (htmlFilters.length === 0) {
-        return;
-      }
-      const replaceFilterIndex = htmlFilters.findIndex(([type]) => type === 'replace');
-      // If `replace` filters are not supported
-      if (
-        isRequestHTMLFilterable(request, request._originalRequestDetails) === false &&
-        replaceFilterIndex !== -1
-      ) {
-        htmlFilters.splice(replaceFilterIndex);
-      }
       if (htmlFilters.length === 0) {
         return;
       }
