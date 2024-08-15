@@ -442,11 +442,7 @@ export class WebExtensionBlocker extends FiltersEngine {
    * 3. `browser.webRequest.filterResponseData` (Firefox only!).
    * 4. `TextEncoder` and `TextDecoder` are available.
    */
-  public performHTMLFiltering(
-    browser: Browser,
-    request: Request,
-    details: OnHeadersReceivedDetailsType,
-  ): void {
+  public performHTMLFiltering(browser: Browser, request: Request): void {
     if (
       this.config.enableHtmlFiltering === true &&
       browser.webRequest !== undefined &&
@@ -460,7 +456,10 @@ export class WebExtensionBlocker extends FiltersEngine {
       }
       const replaceFilterIndex = htmlFilters.findIndex(([type]) => type === 'replace');
       // If `replace` filters are not supported
-      if (isRequestHTMLFilterable(request, details) === false && replaceFilterIndex !== -1) {
+      if (
+        isRequestHTMLFilterable(request, request._originalRequestDetails) === false &&
+        replaceFilterIndex !== -1
+      ) {
         htmlFilters.splice(replaceFilterIndex);
       }
       if (htmlFilters.length === 0) {
@@ -621,12 +620,9 @@ export class WebExtensionBlocker extends FiltersEngine {
     browser: Browser,
     details: OnHeadersReceivedDetailsType,
   ): WebRequest.BlockingResponse => {
-    this.performHTMLFiltering(browser, fromWebRequestDetails(details), details);
-
-    return updateResponseHeadersWithCSP(
-      details,
-      this.getCSPDirectives(fromWebRequestDetails(details)),
-    );
+    const request = fromWebRequestDetails(details);
+    this.performHTMLFiltering(browser, request);
+    return updateResponseHeadersWithCSP(details, this.getCSPDirectives(request));
   };
 
   public onRuntimeMessage = (
