@@ -1368,6 +1368,14 @@ export default class NetworkFilter implements IFilter {
     return this.optionValue ?? '';
   }
 
+  public getRedirectResource(): string {
+    return this.getRedirect().split(':')[0];
+  }
+
+  public getRedirectPriority(): number {
+    return parseInt(this.getRedirect().split(':')[1] || '0', 10);
+  }
+
   public hasHostname(): boolean {
     return this.hostname !== undefined;
   }

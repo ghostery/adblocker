@@ -1235,14 +1235,16 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       // * Else if redirect-rule is found, only redirect if request would be blocked.
       // * Else if redirect is found, redirect.
       if (result.filter === undefined) {
-        const redirects = this.redirects.matchAll(request, this.isFilterExcluded.bind(this));
+        const redirects = this.redirects
+          .matchAll(request, this.isFilterExcluded.bind(this))
+          .sort((a, b) => a.getRedirectPriority() - b.getRedirectPriority());
         if (redirects.length !== 0) {
           for (const filter of redirects) {
             if (filter.getRedirect() === 'none') {
               redirectNone = filter;
-            } else if (filter.isRedirectRule()) {
+            } else if (redirectRule === undefined && filter.isRedirectRule()) {
               redirectRule = filter;
-            } else {
+            } else if (result.filter === undefined) {
               result.filter = filter;
             }
           }
@@ -1282,7 +1284,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         if (redirectNone !== undefined) {
           result.exception = redirectNone;
         } else {
-          result.redirect = this.resources.getResource(result.filter.getRedirect());
+          result.redirect = this.resources.getResource(result.filter.getRedirectResource());
         }
       }
     }
