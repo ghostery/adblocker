@@ -416,6 +416,46 @@ $csp=baz,domain=bar.com
       });
     });
 
+    it('redirect with priority', () => {
+      const { redirect } = createEngineWithResource(
+        ['||foo.com$image,redirect=foo.js:5'],
+        'foo.js',
+      ).match(request);
+      expect(redirect).to.eql({
+        body: 'foo.js',
+        contentType: 'application/javascript',
+        dataUrl: 'data:application/javascript;base64,Zm9vLmpz',
+      });
+    });
+
+    it('redirect with with no priority wins', () => {
+      const { redirect } = createEngineWithResource(
+        [
+          '||foo.com$image,redirect=a.js:10',
+          '||foo.com$image,redirect=zod.js',
+          '||foo.com$image,redirect=b.js:5',
+        ],
+        'zod.js',
+      ).match(request);
+      expect(redirect).to.eql({
+        body: 'zod.js',
+        contentType: 'application/javascript',
+        dataUrl: 'data:application/javascript;base64,em9kLmpz',
+      });
+    });
+
+    it('redirect with with lowest priority', () => {
+      const { redirect } = createEngineWithResource(
+        ['||foo.com$image,redirect=a.js:10', '||foo.com$image,redirect=bar.js:5'],
+        'bar.js',
+      ).match(request);
+      expect(redirect).to.eql({
+        body: 'bar.js',
+        contentType: 'application/javascript',
+        dataUrl: 'data:application/javascript;base64,YmFyLmpz',
+      });
+    });
+
     it('redirect-rule does not match on its own', () => {
       const { filter, exception, match, redirect } = createEngineWithResource(
         ['||foo.com$image,redirect-rule=foo.js'],
@@ -442,6 +482,51 @@ $csp=baz,domain=bar.com
         body: 'foo.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,Zm9vLmpz',
+      });
+    });
+
+    it('redirect-rule with priority', () => {
+      const { redirect } = createEngineWithResource(
+        ['||foo.com$image,redirect-rule=foo.js:10', '||foo.com$image'],
+        'foo.js',
+      ).match(request);
+      expect(redirect).to.eql({
+        body: 'foo.js',
+        contentType: 'application/javascript',
+        dataUrl: 'data:application/javascript;base64,Zm9vLmpz',
+      });
+    });
+
+    it('redirect-rule with with no priority wins', () => {
+      const { redirect } = createEngineWithResource(
+        [
+          '||foo.com$image,redirect-rule=a.js:10',
+          '||foo.com$image,redirect-rule=zod.js',
+          '||foo.com$image,redirect-rule=b.js:5',
+          '||foo.com$image',
+        ],
+        'zod.js',
+      ).match(request);
+      expect(redirect).to.eql({
+        body: 'zod.js',
+        contentType: 'application/javascript',
+        dataUrl: 'data:application/javascript;base64,em9kLmpz',
+      });
+    });
+
+    it('redirect-rule with with lowest priority', () => {
+      const { redirect } = createEngineWithResource(
+        [
+          '||foo.com$image,redirect=a.js:10',
+          '||foo.com$image,redirect=bar.js:5',
+          '||foo.com$image',
+        ],
+        'bar.js',
+      ).match(request);
+      expect(redirect).to.eql({
+        body: 'bar.js',
+        contentType: 'application/javascript',
+        dataUrl: 'data:application/javascript;base64,YmFyLmpz',
       });
     });
 

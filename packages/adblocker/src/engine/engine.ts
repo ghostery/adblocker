@@ -1238,12 +1238,15 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         const redirects = this.redirects
           .matchAll(request, this.isFilterExcluded.bind(this))
           .sort((a, b) => a.getRedirectPriority() - b.getRedirectPriority());
+
         if (redirects.length !== 0) {
           for (const filter of redirects) {
-            if (filter.getRedirect() === 'none') {
+            if (filter.getRedirectResource() === 'none') {
               redirectNone = filter;
-            } else if (redirectRule === undefined && filter.isRedirectRule()) {
-              redirectRule = filter;
+            } else if (filter.isRedirectRule()) {
+              if (redirectRule === undefined) {
+                redirectRule = filter;
+              }
             } else if (result.filter === undefined) {
               result.filter = filter;
             }
