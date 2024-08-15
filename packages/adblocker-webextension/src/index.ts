@@ -459,14 +459,6 @@ export class WebExtensionBlocker extends FiltersEngine {
         return;
       }
       const replaceFilterIndex = htmlFilters.findIndex(([type]) => type === 'replace');
-      // If `script:has-text` filters are not supported
-      if (request.isMainFrame() === false) {
-        if (replaceFilterIndex === -1) {
-          return;
-        } else {
-          htmlFilters.splice(0, replaceFilterIndex);
-        }
-      }
       // If `replace` filters are not supported
       if (isRequestHTMLFilterable(request, details) === false && replaceFilterIndex !== -1) {
         htmlFilters.splice(replaceFilterIndex);
