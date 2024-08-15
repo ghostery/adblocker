@@ -464,10 +464,9 @@ export class WebExtensionBlocker extends FiltersEngine {
       typeof TextEncoder !== 'undefined'
     ) {
       const htmlFilters = this.getHtmlFilters(request);
-      if (htmlFilters.length === 0) {
-        return;
+      if (htmlFilters.length !== 0) {
+        filterRequestHTML(browser.webRequest.filterResponseData, request, htmlFilters);
       }
-      filterRequestHTML(browser.webRequest.filterResponseData, request, htmlFilters);
     }
   }
 
