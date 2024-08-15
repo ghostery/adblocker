@@ -131,7 +131,7 @@ export function updateResponseHeadersWithCSP(
   return { responseHeaders };
 }
 
-const readableMimeTypes = new Set([
+const READABLE_MIME_TYPES = new Set([
   'application/javascript',
   'application/json',
   'application/mpegurl',
@@ -162,7 +162,7 @@ export function isRequestHTMLFilterable(
     }
   } else if (contentTypeFromHeader.startsWith('text')) {
     return true;
-  } else if (readableMimeTypes.has(contentTypeFromHeader)) {
+  } else if (READABLE_MIME_TYPES.has(contentTypeFromHeader)) {
     return true;
   }
   return false;
