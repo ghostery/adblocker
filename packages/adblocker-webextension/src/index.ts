@@ -25,10 +25,12 @@ export type OnBeforeRequestDetailsType = Pick<
   initiator?: string; // Chromium only
 };
 
-type OnHeadersReceivedDetailsType = Pick<
+export type OnHeadersReceivedDetailsType = Pick<
   WebRequest.OnHeadersReceivedDetailsType,
-  'responseHeaders' | 'url' | 'type' | 'tabId' | 'requestId'
->;
+  'responseHeaders' | 'url' | 'type' | 'tabId' | 'requestId' | 'originUrl' | 'documentUrl'
+> & {
+  initiator?: string; // Chromium only
+};
 
 type StreamFilter = WebRequest.StreamFilter & {
   onstart: (event: any) => void;
@@ -79,7 +81,6 @@ const USE_PUSH_SCRIPTS_INJECTION = usePushScriptsInjection();
 export function fromWebRequestDetails(
   details: OnBeforeRequestDetailsType | OnHeadersReceivedDetailsType,
 ): Request {
-  // @ts-expect-error
   const sourceUrl = details.initiator || details.originUrl || details.documentUrl;
   return Request.fromRawDetails(
     sourceUrl
