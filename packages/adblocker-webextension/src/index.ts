@@ -76,7 +76,10 @@ const USE_PUSH_SCRIPTS_INJECTION = usePushScriptsInjection();
 /**
  * Create an instance of `Request` from WebRequest details.
  */
-export function fromWebRequestDetails(details: OnBeforeRequestDetailsType): Request {
+export function fromWebRequestDetails(
+  details: OnBeforeRequestDetailsType | OnHeadersReceivedDetailsType,
+): Request {
+  // @ts-expect-error
   const sourceUrl = details.initiator || details.originUrl || details.documentUrl;
   return Request.fromRawDetails(
     sourceUrl
@@ -128,6 +131,43 @@ export function updateResponseHeadersWithCSP(
   return { responseHeaders };
 }
 
+const readableMimeTypes = new Set([
+  'application/javascript',
+  'application/json',
+  'application/mpegurl',
+  'application/vnd.api+json',
+  'application/vnd.apple.mpegurl',
+  'application/vnd.apple.mpegurl.audio',
+  'application/x-javascript',
+  'application/x-mpegurl',
+  'application/xhtml+xml',
+  'application/xml',
+  'audio/mpegurl',
+  'audio/x-mpegurl',
+]);
+const MAXIMUM_RESPONSE_BUFFER_SIZE = 10 * 1024 * 1024;
+
+export function isRequestHTMLFilterable(
+  request: Request,
+  details: OnHeadersReceivedDetailsType,
+): boolean {
+  const contentTypeFromHeader = details.responseHeaders?.find(
+    (header) => header.name.toLowerCase() === 'content-type',
+  )?.value;
+  if (contentTypeFromHeader === undefined) {
+    if (request.type === 'stylesheet' || request.type === 'script') {
+      return true;
+    } else {
+      return false;
+    }
+  } else if (contentTypeFromHeader.startsWith('text')) {
+    return true;
+  } else if (readableMimeTypes.has(contentTypeFromHeader)) {
+    return true;
+  }
+  return false;
+}
+
 /**
  * Enable stream HTML filter on request `id` using `rules`.
  */
@@ -141,6 +181,7 @@ export function filterRequestHTML(
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
   const htmlFilter = new StreamingHtmlFilter(rules);
+  let accumulatedBufferSize = 0;
 
   const teardown = (event: { data?: ArrayBuffer }) => {
     // Before disconnecting our streaming filter, we need to be extra careful
@@ -174,6 +215,11 @@ export function filterRequestHTML(
     // possible that a chunk ends on the boundary of a multi-byte UTF-8 code and
     // this check would fail?
     if (isUTF8(new Uint8Array(event.data)) === false) {
+      return teardown(event);
+    }
+
+    accumulatedBufferSize += event.data.byteLength;
+    if (accumulatedBufferSize > MAXIMUM_RESPONSE_BUFFER_SIZE) {
       return teardown(event);
     }
 
@@ -396,7 +442,11 @@ export class WebExtensionBlocker extends FiltersEngine {
    * 3. `browser.webRequest.filterResponseData` (Firefox only!).
    * 4. `TextEncoder` and `TextDecoder` are available.
    */
-  public performHTMLFiltering(browser: Browser, request: Request): void {
+  public performHTMLFiltering(
+    browser: Browser,
+    request: Request,
+    details: OnHeadersReceivedDetailsType,
+  ): void {
     if (
       this.config.enableHtmlFiltering === true &&
       browser.webRequest !== undefined &&
@@ -405,9 +455,26 @@ export class WebExtensionBlocker extends FiltersEngine {
       typeof TextEncoder !== 'undefined'
     ) {
       const htmlFilters = this.getHtmlFilters(request);
-      if (htmlFilters.length !== 0) {
-        filterRequestHTML(browser.webRequest.filterResponseData, request, htmlFilters);
+      if (htmlFilters.length === 0) {
+        return;
       }
+      const replaceFilterIndex = htmlFilters.findIndex(([type]) => type === 'replace');
+      // If `script:has-text` filters are not supported
+      if (request.isMainFrame() === false) {
+        if (replaceFilterIndex === -1) {
+          return;
+        } else {
+          htmlFilters.splice(0, replaceFilterIndex);
+        }
+      }
+      // If `replace` filters are not supported
+      if (isRequestHTMLFilterable(request, details) === false && replaceFilterIndex !== -1) {
+        htmlFilters.splice(replaceFilterIndex);
+      }
+      if (htmlFilters.length === 0) {
+        return;
+      }
+      filterRequestHTML(browser.webRequest.filterResponseData, request, htmlFilters);
     }
   }
 
@@ -539,17 +606,12 @@ export class WebExtensionBlocker extends FiltersEngine {
    * Deal with request cancellation (`{ cancel: true }`) and redirection (`{ redirectUrl: '...' }`).
    */
   public onBeforeRequest = (
-    browser: Browser,
+    _: Browser,
     details: OnBeforeRequestDetailsType,
   ): WebRequest.BlockingResponse => {
     const request = fromWebRequestDetails(details);
     if (this.config.guessRequestTypeFromUrl === true && request.type === 'other') {
       request.guessTypeOfRequest();
-    }
-
-    if (request.isMainFrame()) {
-      this.performHTMLFiltering(browser, request);
-      return {};
     }
 
     const { redirect, match } = this.match(request);
@@ -564,9 +626,11 @@ export class WebExtensionBlocker extends FiltersEngine {
   };
 
   public onHeadersReceived = (
-    _: Browser,
+    browser: Browser,
     details: OnHeadersReceivedDetailsType,
   ): WebRequest.BlockingResponse => {
+    this.performHTMLFiltering(browser, fromWebRequestDetails(details), details);
+
     return updateResponseHeadersWithCSP(
       details,
       this.getCSPDirectives(fromWebRequestDetails(details)),
