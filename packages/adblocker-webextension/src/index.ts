@@ -152,18 +152,28 @@ export function shouldApplyReplaceSelectors(
   request: Request,
   details: OnHeadersReceivedDetailsType,
 ): boolean {
-  const contentTypeFromHeader = details.responseHeaders?.find(
+  const contentTypeHeader = details.responseHeaders?.find(
     (header) => header.name.toLowerCase() === 'content-type',
   )?.value;
-  if (contentTypeFromHeader === undefined) {
+  // Content-Length includes the length of octets which is consisted of 8 bytes with endianness
+  const contentLengthHeader = details.responseHeaders?.find(
+    (header) => header.name.toLowerCase() === 'content-length',
+  )?.value;
+  if (
+    contentLengthHeader !== undefined &&
+    parseInt(contentLengthHeader, 10) >= MAXIMUM_RESPONSE_BUFFER_SIZE
+  ) {
+    return false;
+  }
+  if (contentTypeHeader === undefined) {
     if (request.type === 'stylesheet' || request.type === 'script') {
       return true;
     } else {
       return false;
     }
-  } else if (contentTypeFromHeader.startsWith('text')) {
+  } else if (contentTypeHeader.startsWith('text')) {
     return true;
-  } else if (READABLE_MIME_TYPES.has(contentTypeFromHeader)) {
+  } else if (READABLE_MIME_TYPES.has(contentTypeHeader)) {
     return true;
   }
   return false;
