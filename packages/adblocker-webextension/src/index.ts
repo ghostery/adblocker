@@ -78,9 +78,9 @@ const USE_PUSH_SCRIPTS_INJECTION = usePushScriptsInjection();
 /**
  * Create an instance of `Request` from WebRequest details.
  */
-export function fromWebRequestDetails(
-  details: OnBeforeRequestDetailsType | OnHeadersReceivedDetailsType,
-): Request {
+export function fromWebRequestDetails<
+  T extends OnBeforeRequestDetailsType | OnHeadersReceivedDetailsType,
+>(details: T): Request<T> {
   const sourceUrl = details.initiator || details.originUrl || details.documentUrl;
   return Request.fromRawDetails(
     sourceUrl
@@ -132,7 +132,7 @@ export function updateResponseHeadersWithCSP(
   return { responseHeaders };
 }
 
-const READABLE_MIME_TYPES = new Set([
+const HTML_FILTERABLE_MIME_TYPES = new Set([
   'application/javascript',
   'application/json',
   'application/mpegurl',
@@ -149,22 +149,21 @@ const READABLE_MIME_TYPES = new Set([
 export const MAXIMUM_RESPONSE_BUFFER_SIZE = 10 * 1024 * 1024;
 
 export function shouldApplyReplaceSelectors(
-  request: Request,
-  details: OnHeadersReceivedDetailsType,
+  request: Request<OnHeadersReceivedDetailsType>,
 ): boolean {
-  const contentTypeHeader = details.responseHeaders?.find(
-    (header) => header.name.toLowerCase() === 'content-type',
-  )?.value;
-  // Content-Length includes the length of octets which is consisted of 8 bytes with endianness
-  const contentLengthHeader = details.responseHeaders?.find(
-    (header) => header.name.toLowerCase() === 'content-length',
-  )?.value;
   if (
-    contentLengthHeader !== undefined &&
-    parseInt(contentLengthHeader, 10) >= MAXIMUM_RESPONSE_BUFFER_SIZE
+    parseInt(
+      request._originalRequestDetails!.responseHeaders?.find(
+        (header) => header.name.toLowerCase() === 'content-length',
+      )?.value ?? '0',
+      10,
+    ) >= MAXIMUM_RESPONSE_BUFFER_SIZE
   ) {
     return false;
   }
+  const contentTypeHeader = request._originalRequestDetails!.responseHeaders?.find(
+    (header) => header.name.toLowerCase() === 'content-type',
+  )?.value;
   if (contentTypeHeader === undefined) {
     if (request.type === 'stylesheet' || request.type === 'script') {
       return true;
@@ -173,7 +172,7 @@ export function shouldApplyReplaceSelectors(
     }
   } else if (contentTypeHeader.startsWith('text')) {
     return true;
-  } else if (READABLE_MIME_TYPES.has(contentTypeHeader)) {
+  } else if (HTML_FILTERABLE_MIME_TYPES.has(contentTypeHeader)) {
     return true;
   }
   return false;
@@ -184,10 +183,10 @@ export function shouldApplyReplaceSelectors(
  */
 export function filterRequestHTML(
   filterResponseData: Browser['webRequest']['filterResponseData'],
-  request: Request,
+  request: Request<OnHeadersReceivedDetailsType>,
   rules: HTMLSelector[],
 ): void {
-  if (shouldApplyReplaceSelectors(request, request._originalRequestDetails) === false) {
+  if (shouldApplyReplaceSelectors(request) === false) {
     rules = rules.filter(([type]) => type !== 'replace');
   }
   if (rules.length === 0) {

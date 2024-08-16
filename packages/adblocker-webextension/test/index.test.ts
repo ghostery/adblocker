@@ -8,7 +8,6 @@ import {
   updateResponseHeadersWithCSP,
   OnBeforeRequestDetailsType,
   getHostnameHashesFromLabelsBackward,
-  OnHeadersReceivedDetailsType,
   shouldApplyReplaceSelectors,
   filterRequestHTML,
   MAXIMUM_RESPONSE_BUFFER_SIZE,
@@ -159,7 +158,7 @@ describe('html-filtering', () => {
           'content-type': 'text/html',
         },
       });
-      expect(shouldApplyReplaceSelectors(request, request._originalRequestDetails)).to.be.true;
+      expect(shouldApplyReplaceSelectors(request)).to.be.true;
     });
 
     it('accepts script response with content-type header of application/javascript', () => {
@@ -169,7 +168,7 @@ describe('html-filtering', () => {
           'content-type': 'application/javascript',
         },
       });
-      expect(shouldApplyReplaceSelectors(request, request._originalRequestDetails)).to.be.true;
+      expect(shouldApplyReplaceSelectors(request)).to.be.true;
     });
 
     it('accepts stylesheet response without additional context', () => {
@@ -177,7 +176,7 @@ describe('html-filtering', () => {
         type: 'stylesheet',
         headers: {},
       });
-      expect(shouldApplyReplaceSelectors(request, request._originalRequestDetails)).to.be.true;
+      expect(shouldApplyReplaceSelectors(request)).to.be.true;
     });
 
     it('rejects script response larger than MAXIMUM_RESPONSE_BUFFER_SIZE', () => {
@@ -188,7 +187,7 @@ describe('html-filtering', () => {
           'content-length': (MAXIMUM_RESPONSE_BUFFER_SIZE + 1).toString(),
         },
       });
-      expect(shouldApplyReplaceSelectors(request, request._originalRequestDetails)).to.be.false;
+      expect(shouldApplyReplaceSelectors(request)).to.be.false;
     });
   });
 
@@ -288,7 +287,7 @@ describe('html-filtering', () => {
         originUrl: 'https://foo.com/',
         tabId: 0,
         requestId: 'req-00',
-      } as OnHeadersReceivedDetailsType);
+      });
 
       function filterResponseData(_requestId: string): WebRequest.StreamFilter {
         return streamFilter;
