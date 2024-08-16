@@ -260,11 +260,7 @@ describe('html-filtering', () => {
       public _noop() {}
 
       public _push(data: ArrayBuffer | Uint8Array, isLast: boolean = false) {
-        if (
-          this.status !== 'transferringdata' &&
-          this.status !== 'uninitialized' &&
-          this.status !== 'disconnected'
-        ) {
+        if (this.status !== 'transferringdata' && this.status !== 'uninitialized') {
           this.error = 'Further data transfer cannot be done since the stream is already closed!';
           this.onerror({
             data: Uint8Array.from([]),
