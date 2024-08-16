@@ -204,7 +204,7 @@ describe('html-filtering', () => {
       public status: WebRequest.StreamFilterStatus = 'uninitialized';
       public error: string = '';
 
-      private isResumable() {
+      private isResumable(): boolean {
         return (
           this.status !== 'closed' && this.status !== 'failed' && this.status !== 'disconnected'
         );
@@ -246,13 +246,13 @@ describe('html-filtering', () => {
         this._pulled = next;
       }
 
-      public _ondata(event: WebRequest.StreamFilterEventData) {
+      public _ondata(event: WebRequest.StreamFilterEventData): void {
         this.write(event.data);
       }
 
-      public _noop() {}
+      public _noop(): void {}
 
-      public _push(data: ArrayBuffer | Uint8Array, isLast: boolean = false) {
+      public _push(data: ArrayBuffer | Uint8Array, isLast: boolean = false): void {
         if (this.status !== 'transferringdata' && this.status !== 'uninitialized') {
           this.error = 'Further data transfer cannot be done since the stream is already closed!';
           this.onerror({
