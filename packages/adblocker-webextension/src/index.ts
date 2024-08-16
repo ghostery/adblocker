@@ -158,7 +158,7 @@ function isResponseHeadersAvailable(
 export function shouldApplyReplaceSelectors(
   request: Request<OnBeforeRequestDetailsType | OnHeadersReceivedDetailsType>,
 ): boolean {
-  if (isResponseHeadersAvailable(request._originalRequestDetails!)) {
+  if (isResponseHeadersAvailable(request._originalRequestDetails)) {
     if (
       parseInt(
         request._originalRequestDetails.responseHeaders?.find(
