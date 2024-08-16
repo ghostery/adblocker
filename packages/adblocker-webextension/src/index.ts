@@ -82,7 +82,7 @@ export function fromWebRequestDetails<
   T extends OnBeforeRequestDetailsType | OnHeadersReceivedDetailsType,
 >(details: T): Request<T> {
   const sourceUrl = details.initiator || details.originUrl || details.documentUrl;
-  return Request.fromRawDetails(
+  return Request.fromRawDetails<T>(
     sourceUrl
       ? {
           _originalRequestDetails: details,
@@ -148,34 +148,45 @@ const HTML_FILTERABLE_MIME_TYPES = new Set([
 ]);
 export const MAXIMUM_RESPONSE_BUFFER_SIZE = 10 * 1024 * 1024;
 
+function isResponseHeadersAvailable(
+  details: OnBeforeRequestDetailsType | OnHeadersReceivedDetailsType,
+): details is OnHeadersReceivedDetailsType {
+  // @ts-expect-error `responseHeaders` is only available for OnHeadersReceivedDetailsType
+  return details.responseHeaders !== undefined;
+}
+
 export function shouldApplyReplaceSelectors(
-  request: Request<OnHeadersReceivedDetailsType>,
+  request: Request<OnBeforeRequestDetailsType | OnHeadersReceivedDetailsType>,
 ): boolean {
-  if (
-    parseInt(
-      request._originalRequestDetails!.responseHeaders?.find(
-        (header) => header.name.toLowerCase() === 'content-length',
-      )?.value ?? '0',
-      10,
-    ) >= MAXIMUM_RESPONSE_BUFFER_SIZE
-  ) {
-    return false;
-  }
-  const contentTypeHeader = request._originalRequestDetails!.responseHeaders?.find(
-    (header) => header.name.toLowerCase() === 'content-type',
-  )?.value;
-  if (contentTypeHeader === undefined) {
-    if (request.type === 'stylesheet' || request.type === 'script') {
-      return true;
-    } else {
+  if (isResponseHeadersAvailable(request._originalRequestDetails!)) {
+    if (
+      parseInt(
+        request._originalRequestDetails.responseHeaders?.find(
+          (header) => header.name.toLowerCase() === 'content-length',
+        )?.value ?? '0',
+        10,
+      ) >= MAXIMUM_RESPONSE_BUFFER_SIZE
+    ) {
       return false;
     }
-  } else if (contentTypeHeader.startsWith('text')) {
-    return true;
-  } else if (HTML_FILTERABLE_MIME_TYPES.has(contentTypeHeader)) {
-    return true;
+    const contentTypeHeader = request._originalRequestDetails.responseHeaders?.find(
+      (header) => header.name.toLowerCase() === 'content-type',
+    )?.value;
+    if (contentTypeHeader !== undefined) {
+      if (contentTypeHeader.startsWith('text')) {
+        return true;
+      } else if (HTML_FILTERABLE_MIME_TYPES.has(contentTypeHeader)) {
+        return true;
+      }
+    }
   }
-  return false;
+
+  return (
+    !request.type.startsWith('image') &&
+    request.type !== 'font' &&
+    request.type !== 'websocket' &&
+    request.type !== 'media'
+  );
 }
 
 /**
@@ -183,7 +194,7 @@ export function shouldApplyReplaceSelectors(
  */
 export function filterRequestHTML(
   filterResponseData: Browser['webRequest']['filterResponseData'],
-  request: Request<OnHeadersReceivedDetailsType>,
+  request: Request<OnBeforeRequestDetailsType | OnHeadersReceivedDetailsType>,
   rules: HTMLSelector[],
 ): void {
   if (shouldApplyReplaceSelectors(request) === false) {

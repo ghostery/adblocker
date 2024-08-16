@@ -213,7 +213,7 @@ function isThirdParty(
   return false;
 }
 
-export interface RequestInitialization<T = any> {
+export interface RequestInitialization<T = any | undefined> {
   requestId: string;
   tabId: number;
 
@@ -233,14 +233,14 @@ export interface RequestInitialization<T = any> {
   // * Electron.OnBeforeRequestListenerDetails
   // * puppeteer.Request
   // * webRequest details
-  _originalRequestDetails: T | undefined;
+  _originalRequestDetails: T;
 }
 
-export default class Request<T = any> {
+export default class Request<T = any | undefined> {
   /**
    * Create an instance of `Request` from raw request details.
    */
-  public static fromRawDetails<T = any>({
+  public static fromRawDetails<T = any | undefined>({
     requestId = '0',
     tabId = 0,
     url = '',
@@ -285,7 +285,7 @@ export default class Request<T = any> {
     });
   }
 
-  public readonly _originalRequestDetails: T | undefined;
+  public readonly _originalRequestDetails: T;
 
   public type: RequestType;
   public readonly isHttp: boolean;
