@@ -134,67 +134,61 @@ describe('#fromWebRequestDetails', () => {
 
 describe('html-filtering', () => {
   context('#shouldApplyReplaceSelectors', () => {
-    function createWebRequestDetails({
-      responseType,
+    const createRequestWithDetails = ({
+      type,
       headers,
     }: {
-      responseType: WebRequest.ResourceType;
+      type: WebRequest.ResourceType;
       headers: Record<string, string>;
-    }) {
-      const url = 'https://foo.com/';
-      const requestId = 'req-01';
-      const tabId = 1;
-      const details: OnHeadersReceivedDetailsType = {
-        requestId,
-        tabId,
-        url,
+    }) =>
+      fromWebRequestDetails({
+        requestId: 'req-01',
+        tabId: 1,
+        url: 'https://foo.com/',
+        type,
         responseHeaders: Object.entries(headers).map(([name, value]) => ({
           name,
           value,
         })),
-        type: responseType,
-      };
+      });
 
-      return details;
-    }
-
-    const sets: Array<Parameters<typeof createWebRequestDetails>[0] & { result: boolean }> = [
-      {
-        responseType: 'main_frame',
+    it('accepts main_frame resposne with text/html', () => {
+      const request = createRequestWithDetails({
+        type: 'main_frame',
         headers: {
           'content-type': 'text/html',
         },
-        result: true,
-      },
-      {
-        responseType: 'script',
+      });
+      expect(shouldApplyReplaceSelectors(request, request._originalRequestDetails)).to.be.true;
+    });
+
+    it('accepts script response with content-type header of application/javascript', () => {
+      const request = createRequestWithDetails({
+        type: 'script',
         headers: {
           'content-type': 'application/javascript',
         },
-        result: true,
-      },
-      {
-        responseType: 'stylesheet',
+      });
+      expect(shouldApplyReplaceSelectors(request, request._originalRequestDetails)).to.be.true;
+    });
+
+    it('accepts stylesheet response without additional context', () => {
+      const request = createRequestWithDetails({
+        type: 'stylesheet',
         headers: {},
-        result: true,
-      },
-      {
-        responseType: 'script',
+      });
+      expect(shouldApplyReplaceSelectors(request, request._originalRequestDetails)).to.be.true;
+    });
+
+    it('rejects script response larger than MAXIMUM_RESPONSE_BUFFER_SIZE', () => {
+      const request = createRequestWithDetails({
+        type: 'script',
         headers: {
           'content-type': 'application/javascript',
           'content-length': (MAXIMUM_RESPONSE_BUFFER_SIZE + 1).toString(),
         },
-        result: false,
-      },
-    ];
-
-    sets.forEach((set) => {
-      const details = createWebRequestDetails(set);
-      const request = fromWebRequestDetails(details);
-
-      it(`${set.result ? 'allows' : 'rejects'} filtering ${set.responseType} type of ${set.headers['content-type']}`, () => {
-        expect(shouldApplyReplaceSelectors(request, details)).to.be.eql(set.result);
       });
+      expect(shouldApplyReplaceSelectors(request, request._originalRequestDetails)).to.be.false;
     });
   });
 
@@ -278,22 +272,11 @@ describe('html-filtering', () => {
           this.status = 'finishedtransferringdata';
         }
       }
-
-      public _reset() {
-        this._pulled = new Uint8Array();
-        this._pushed = 0;
-        this.status = 'uninitialized';
-        this.error = '';
-        this.ondata = this._ondata;
-        this.onstart = this._noop;
-        this.onstop = this._ondata;
-        this.onerror = this._noop;
-      }
     }
 
     it('stops processing more than MAXIMUM_RESPONSE_BUFFER_SIZE', () => {
       const streamFilter = new StreamFilter();
-      const details: OnHeadersReceivedDetailsType = {
+      const request = fromWebRequestDetails({
         responseHeaders: [
           {
             name: 'content-type',
@@ -305,16 +288,16 @@ describe('html-filtering', () => {
         originUrl: 'https://foo.com/',
         tabId: 0,
         requestId: 'req-00',
-      };
-      const request = fromWebRequestDetails(details);
+      } as OnHeadersReceivedDetailsType);
 
       function filterResponseData(_requestId: string): WebRequest.StreamFilter {
         return streamFilter;
       }
 
+      // A filter aims to replace every instance of letter `a` with letter `b` in the entire response body
       filterRequestHTML(filterResponseData, request, [['replace', [new RegExp('a', 'g'), 'b']]]);
 
-      // Fill MAXIMUM_RESPONSE_BUFFER_SIZE
+      // Fill MAXIMUM_RESPONSE_BUFFER_SIZE with letter 'a'
       const NOISE_BUFFER_SIZE = 1024 * 1024;
       for (
         let i = 0, noise = Uint8Array.from(new Array(NOISE_BUFFER_SIZE).fill('a'.charCodeAt(0)));
@@ -324,16 +307,17 @@ describe('html-filtering', () => {
         streamFilter._push(noise);
       }
 
-      streamFilter._push(Uint8Array.from(['b'.charCodeAt(0)]), true);
+      streamFilter._push(Uint8Array.from(['c'.charCodeAt(0)]), true);
 
+      // Validate the response from StreamingHtmlFilter by checking the sum of character codes
       let sum = 0;
       for (const octet of streamFilter._pulled) {
         sum += octet;
       }
 
-      streamFilter._reset();
-
-      expect(sum).to.be.eql('b'.charCodeAt(0) * (MAXIMUM_RESPONSE_BUFFER_SIZE + 1));
+      // We'll have NOISE_BUFFER_SIZE length of chunks which is replaced from letter 'a' to letter 'b'
+      // Then one letter 'c' which should not be replaced to letter 'a' or anything
+      expect(sum).to.be.eql('b'.charCodeAt(0) * MAXIMUM_RESPONSE_BUFFER_SIZE + 'c'.charCodeAt(0));
     });
   });
 });
