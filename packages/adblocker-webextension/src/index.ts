@@ -146,7 +146,7 @@ const READABLE_MIME_TYPES = new Set([
   'audio/mpegurl',
   'audio/x-mpegurl',
 ]);
-const MAXIMUM_RESPONSE_BUFFER_SIZE = 10 * 1024 * 1024;
+export const MAXIMUM_RESPONSE_BUFFER_SIZE = 10 * 1024 * 1024;
 
 export function shouldApplyReplaceSelectors(
   request: Request,
