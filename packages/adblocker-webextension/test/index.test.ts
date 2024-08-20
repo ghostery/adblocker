@@ -11,7 +11,9 @@ import {
   shouldApplyReplaceSelectors,
   filterRequestHTML,
   MAXIMUM_RESPONSE_BUFFER_SIZE,
+  HTMLSelector,
 } from '../src/index.js';
+import { NetworkFilter } from '../../adblocker/dist/commonjs/index.js';
 
 describe('#updateResponseHeadersWithCSP', () => {
   const baseDetails: OnBeforeRequestDetailsType = {
@@ -191,8 +193,8 @@ describe('html-filtering', () => {
     });
   });
 
-  describe('#MAXIMUM_RESPONSE_BUFFER_SIZE', () => {
-    class StreamFilter implements WebRequest.StreamFilter {
+  context('respects MAXIMUM_RESPONSE_BUFFER_SIZE', () => {
+    class StreamFilterMock implements WebRequest.StreamFilter {
       public _pushed: number = 0;
       public _pulled: Uint8Array = new Uint8Array();
 
@@ -203,6 +205,12 @@ describe('html-filtering', () => {
 
       public status: WebRequest.StreamFilterStatus = 'uninitialized';
       public error: string = '';
+
+      get content() {
+        return this._pulled;
+      }
+
+      private _noop(): void {}
 
       private isResumable(): boolean {
         return (
@@ -250,8 +258,6 @@ describe('html-filtering', () => {
         this.write(event.data);
       }
 
-      public _noop(): void {}
-
       public _push(data: ArrayBuffer | Uint8Array, isLast: boolean = false): void {
         if (this.status !== 'transferringdata' && this.status !== 'uninitialized') {
           this.error = 'Further data transfer cannot be done since the stream is already closed!';
@@ -271,52 +277,63 @@ describe('html-filtering', () => {
           this.status = 'finishedtransferringdata';
         }
       }
+
+      public _fill({
+        char,
+        chunks,
+        chunkSize,
+      }: {
+        char: string;
+        chunks: number;
+        chunkSize: number;
+      }) {
+        for (let i = 0; i < chunks; i += 1) {
+          const noise = Uint8Array.from(new Array(chunkSize).fill(char.charCodeAt(0)));
+          this._push(noise, i === chunks - 1);
+        }
+      }
     }
 
-    it('stops processing more than MAXIMUM_RESPONSE_BUFFER_SIZE', () => {
-      const streamFilter = new StreamFilter();
-      const request = fromWebRequestDetails({
-        responseHeaders: [
-          {
-            name: 'content-type',
-            value: 'text/text',
-          },
-        ],
-        url: 'https://foo.com/script.js',
-        type: 'main_frame',
-        originUrl: 'https://foo.com/',
-        tabId: 0,
-        requestId: 'req-00',
-      });
+    const request = fromWebRequestDetails({
+      responseHeaders: [
+        {
+          name: 'content-type',
+          value: 'text/text',
+        },
+      ],
+      url: 'https://foo.com/script.js',
+      type: 'main_frame',
+      originUrl: 'https://foo.com/',
+      tabId: 0,
+      requestId: 'req-00',
+    });
 
-      function filterResponseData(_requestId: string): WebRequest.StreamFilter {
-        return streamFilter;
-      }
+    it('replaces stream content when smaller than MAXIMUM_RESPONSE_BUFFER_SIZE', () => {
+      const filter = NetworkFilter.parse('foo.com$replace=/a/b/g')!;
+      const htmlSelector: HTMLSelector = ['replace', filter.getHtmlModifier()!];
+      const streamFilterMock = new StreamFilterMock();
+      filterRequestHTML(() => streamFilterMock, request, [htmlSelector]);
+      // fill the stream below the MAXIMUM_RESPONSE_BUFFER_SIZE
+      streamFilterMock._fill({ char: 'a', chunks: 9, chunkSize: 1024 * 1024 });
+      // checking only first and last character for a sake of test performance
+      expect(String.fromCharCode(streamFilterMock.content.at(0)!)).to.be.eql('b');
+      expect(
+        String.fromCharCode(streamFilterMock.content.at(streamFilterMock.content.length - 1)!),
+      ).to.be.eql('b');
+    });
 
-      // A filter aims to replace every instance of letter `a` with letter `b` in the entire response body
-      filterRequestHTML(filterResponseData, request, [['replace', [new RegExp('a', 'g'), 'b']]]);
-
-      // Fill MAXIMUM_RESPONSE_BUFFER_SIZE with letter 'a'
-      const NOISE_BUFFER_SIZE = 1024 * 1024;
-      for (
-        let i = 0, noise = Uint8Array.from(new Array(NOISE_BUFFER_SIZE).fill('a'.charCodeAt(0)));
-        i < MAXIMUM_RESPONSE_BUFFER_SIZE;
-        i += NOISE_BUFFER_SIZE
-      ) {
-        streamFilter._push(noise);
-      }
-
-      streamFilter._push(Uint8Array.from(['c'.charCodeAt(0)]), true);
-
-      // Validate the response from StreamingHtmlFilter by checking the sum of character codes
-      let sum = 0;
-      for (const octet of streamFilter._pulled) {
-        sum += octet;
-      }
-
-      // We'll have NOISE_BUFFER_SIZE length of chunks which is replaced from letter 'a' to letter 'b'
-      // Then one letter 'c' which should not be replaced to letter 'a' or anything
-      expect(sum).to.be.eql('b'.charCodeAt(0) * MAXIMUM_RESPONSE_BUFFER_SIZE + 'c'.charCodeAt(0));
+    it('does not affect steams larger than MAXIMUM_RESPONSE_BUFFER_SIZE', () => {
+      const filter = NetworkFilter.parse('foo.com$replace=/a/b/g')!;
+      const htmlSelector: HTMLSelector = ['replace', filter.getHtmlModifier()!];
+      const streamFilterMock = new StreamFilterMock();
+      filterRequestHTML(() => streamFilterMock, request, [htmlSelector]);
+      // fill the stream above the MAXIMUM_RESPONSE_BUFFER_SIZE
+      streamFilterMock._fill({ char: 'a', chunks: 10, chunkSize: 1024 * 1024 });
+      // checking only first and last character for a sake of test performance
+      expect(String.fromCharCode(streamFilterMock.content.at(0)!)).to.be.eql('a');
+      expect(
+        String.fromCharCode(streamFilterMock.content.at(streamFilterMock.content.length - 1)!),
+      ).to.be.eql('a');
     });
   });
 });

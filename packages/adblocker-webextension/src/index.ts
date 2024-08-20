@@ -209,7 +209,9 @@ export function filterRequestHTML(
     //
     // In case any data remains, we write it to filter.
     try {
-      const remaining = htmlFilter.write(decoder.decode()) + htmlFilter.flush();
+      const remaining =
+        htmlFilter.write(decoder.decode()) +
+        htmlFilter.flush(accumulatedBufferSize < MAXIMUM_RESPONSE_BUFFER_SIZE);
       if (remaining.length !== 0) {
         filter.write(encoder.encode(remaining));
       }
