@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import 'mocha';
 
 import { WebRequest } from 'webextension-polyfill-ts';
+import { NetworkFilter } from '@cliqz/adblocker';
 
 import {
   fromWebRequestDetails,
@@ -13,7 +14,6 @@ import {
   MAXIMUM_RESPONSE_BUFFER_SIZE,
   HTMLSelector,
 } from '../src/index.js';
-import { NetworkFilter } from '../../adblocker/dist/commonjs/index.js';
 
 describe('#updateResponseHeadersWithCSP', () => {
   const baseDetails: OnBeforeRequestDetailsType = {
