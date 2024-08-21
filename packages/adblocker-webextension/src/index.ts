@@ -153,6 +153,13 @@ export function shouldApplyReplaceSelectors(
 ): boolean {
   const details = request._originalRequestDetails as OnHeadersReceivedDetailsType;
   if (
+    details.responseHeaders
+      ?.find((header) => header.name.toLowerCase() === 'content-disposition')
+      ?.value?.startsWith('inline') === true
+  ) {
+    return false;
+  }
+  if (
     parseInt(
       details.responseHeaders?.find((header) => header.name.toLowerCase() === 'content-length')
         ?.value ?? '0',
