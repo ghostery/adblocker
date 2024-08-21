@@ -9,7 +9,7 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import CosmeticFilter, { DEFAULT_HIDDING_STYLE } from '../src/filters/cosmetic.js';
+import CosmeticFilter, { DEFAULT_HIDING_STYLE } from '../src/filters/cosmetic.js';
 import NetworkFilter from '../src/filters/network.js';
 import { parseFilters } from '../src/lists.js';
 import { hashStrings, tokenize } from '../src/utils.js';
@@ -1422,7 +1422,7 @@ function cosmetic(filter: string, expected: any) {
 const DEFAULT_COSMETIC_FILTER = {
   // Attributes
   selector: '',
-  style: DEFAULT_HIDDING_STYLE,
+  style: DEFAULT_HIDING_STYLE,
 
   // Options
   isClassSelector: false,
