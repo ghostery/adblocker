@@ -212,12 +212,6 @@ describe('html-filtering', () => {
 
       private _noop(): void {}
 
-      private isResumable(): boolean {
-        return (
-          this.status !== 'closed' && this.status !== 'failed' && this.status !== 'disconnected'
-        );
-      }
-
       public create(_requestId: number, _addonId: string): void {
         throw new Error('StreamFilter.create() is not implemented!');
       }
@@ -227,7 +221,11 @@ describe('html-filtering', () => {
       }
 
       public resume(): void {
-        if (this.isResumable() === false) {
+        if (
+          this.status !== 'closed' &&
+          this.status !== 'failed' &&
+          (this.status !== 'disconnected') === false
+        ) {
           this.error = 'This instance is not resumable!';
           this.onerror({
             data: Uint8Array.from([]),
