@@ -155,7 +155,7 @@ export function shouldApplyReplaceSelectors(
   if (
     details.responseHeaders
       ?.find((header) => header.name.toLowerCase() === 'content-disposition')
-      ?.value?.startsWith('inline') === true
+      ?.value?.startsWith('inline') === false
   ) {
     return false;
   }

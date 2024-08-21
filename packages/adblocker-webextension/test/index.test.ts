@@ -191,6 +191,16 @@ describe('html-filtering', () => {
       });
       expect(shouldApplyReplaceSelectors(request)).to.be.false;
     });
+
+    it('rejects requests with content-disposition headers without the value of inline', () => {
+      const request = createRequestWithDetails({
+        type: 'script',
+        headers: {
+          'content-disposition': 'attachment',
+        },
+      });
+      expect(shouldApplyReplaceSelectors(request)).to.be.false;
+    });
   });
 
   context('respects MAXIMUM_RESPONSE_BUFFER_SIZE', () => {
