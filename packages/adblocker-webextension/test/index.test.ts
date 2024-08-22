@@ -7,20 +7,21 @@ import { NetworkFilter } from '@cliqz/adblocker';
 import {
   fromWebRequestDetails,
   updateResponseHeadersWithCSP,
-  OnBeforeRequestDetailsType,
   getHostnameHashesFromLabelsBackward,
   shouldApplyReplaceSelectors,
   filterRequestHTML,
   MAXIMUM_RESPONSE_BUFFER_SIZE,
   HTMLSelector,
+  OnHeadersReceivedDetailsType,
 } from '../src/index.js';
 
 describe('#updateResponseHeadersWithCSP', () => {
-  const baseDetails: OnBeforeRequestDetailsType = {
+  const baseDetails: OnHeadersReceivedDetailsType = {
     requestId: '42',
     tabId: 42,
     type: 'main_frame',
     url: 'https://foo.com',
+    statusCode: 200,
   };
 
   it('does not update if no policies', () => {
@@ -34,7 +35,12 @@ describe('#updateResponseHeadersWithCSP', () => {
   });
 
   it('create csp header if not exist', () => {
-    expect(updateResponseHeadersWithCSP({ ...baseDetails, responseHeaders: [] }, 'CSP')).to.eql({
+    expect(
+      updateResponseHeadersWithCSP(
+        { ...baseDetails, responseHeaders: [], statusCode: 200 },
+        'CSP',
+      ),
+    ).to.eql({
       responseHeaders: [{ name: 'content-security-policy', value: 'CSP' }],
     });
   });
@@ -42,7 +48,11 @@ describe('#updateResponseHeadersWithCSP', () => {
   it('leaves other headers unchanged', () => {
     expect(
       updateResponseHeadersWithCSP(
-        { ...baseDetails, responseHeaders: [{ name: 'header1', value: 'value1' }] },
+        {
+          ...baseDetails,
+          responseHeaders: [{ name: 'header1', value: 'value1' }],
+          statusCode: 200,
+        },
         'CSP',
       ),
     ).to.eql({

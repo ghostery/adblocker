@@ -27,7 +27,14 @@ export type OnBeforeRequestDetailsType = Pick<
 
 export type OnHeadersReceivedDetailsType = Pick<
   WebRequest.OnHeadersReceivedDetailsType,
-  'responseHeaders' | 'url' | 'type' | 'tabId' | 'requestId' | 'originUrl' | 'documentUrl'
+  | 'responseHeaders'
+  | 'url'
+  | 'type'
+  | 'tabId'
+  | 'requestId'
+  | 'originUrl'
+  | 'documentUrl'
+  | 'statusCode'
 > & {
   initiator?: string; // Chromium only
 };
@@ -152,6 +159,15 @@ export function shouldApplyReplaceSelectors(
   request: Request<OnBeforeRequestDetailsType | OnHeadersReceivedDetailsType>,
 ): boolean {
   const details = request._originalRequestDetails as OnHeadersReceivedDetailsType;
+  // In case of undefined error of xhr/fetch and any kind of network activities
+  if (details.statusCode === 0) {
+    return false;
+  }
+  // If status code is non 2xx or 4xx, 5xx
+  const statusCodeScope = (details.statusCode / 100) >>> 0;
+  if (statusCodeScope !== 2 && statusCodeScope < 4) {
+    return false;
+  }
   if (
     details.responseHeaders
       ?.find((header) => header.name.toLowerCase() === 'content-disposition')
