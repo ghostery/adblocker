@@ -588,7 +588,7 @@ export default class NetworkFilter implements IFilter {
             }
 
             // Ignore this filter if no redirection resource is specified
-            if (value.length === 0) {
+            if (value.length === 0 || value.startsWith(':') || value.endsWith(':')) {
               return null;
             }
 
