@@ -823,6 +823,7 @@ describe('Network filters', () => {
         network('||foo.com$redirect=', null);
         network('||foo.com$redirect=:1', null);
         network('||foo.com$redirect=name:', null);
+        network('||foo.com$redirect=name:c0ffe', null);
       });
 
       it('defaults to false', () => {

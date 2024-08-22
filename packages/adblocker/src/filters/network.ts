@@ -581,14 +581,25 @@ export default class NetworkFilter implements IFilter {
             }
             break;
           case 'redirect-rule':
-          case 'redirect':
+          case 'redirect': {
             // Negation of redirection doesn't make sense
             if (negation) {
               return null;
             }
 
             // Ignore this filter if no redirection resource is specified
-            if (value.length === 0 || value.startsWith(':') || value.endsWith(':')) {
+            if (value.length === 0) {
+              return null;
+            }
+
+            // Ignore this filter if wrong priority is given
+            const priorityIndex = value.lastIndexOf(':');
+            if (priorityIndex === 0) {
+              return null;
+            } else if (
+              priorityIndex !== -1 &&
+              isNaN(parseInt(value.slice(priorityIndex + 1), 10)) === true
+            ) {
               return null;
             }
 
@@ -600,6 +611,7 @@ export default class NetworkFilter implements IFilter {
 
             optionValue = value;
             break;
+          }
           case 'csp':
             if (negation) {
               return null;
