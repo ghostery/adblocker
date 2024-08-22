@@ -35,12 +35,7 @@ describe('#updateResponseHeadersWithCSP', () => {
   });
 
   it('create csp header if not exist', () => {
-    expect(
-      updateResponseHeadersWithCSP(
-        { ...baseDetails, responseHeaders: [], statusCode: 200 },
-        'CSP',
-      ),
-    ).to.eql({
+    expect(updateResponseHeadersWithCSP({ ...baseDetails, responseHeaders: [] }, 'CSP')).to.eql({
       responseHeaders: [{ name: 'content-security-policy', value: 'CSP' }],
     });
   });
@@ -51,7 +46,6 @@ describe('#updateResponseHeadersWithCSP', () => {
         {
           ...baseDetails,
           responseHeaders: [{ name: 'header1', value: 'value1' }],
-          statusCode: 200,
         },
         'CSP',
       ),
@@ -157,6 +151,7 @@ describe('html-filtering', () => {
         tabId: 1,
         url: 'https://foo.com/',
         type,
+        statusCode: 200,
         responseHeaders: Object.entries(headers).map(([name, value]) => ({
           name,
           value,
@@ -323,6 +318,7 @@ describe('html-filtering', () => {
       type: 'main_frame',
       originUrl: 'https://foo.com/',
       tabId: 0,
+      statusCode: 200,
       requestId: 'req-00',
     });
 

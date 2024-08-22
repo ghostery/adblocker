@@ -155,52 +155,59 @@ const HTML_FILTERABLE_MIME_TYPES = new Set([
 ]);
 export const MAXIMUM_RESPONSE_BUFFER_SIZE = 10 * 1024 * 1024;
 
+function getHeaderFromDetails(
+  details: OnHeadersReceivedDetailsType,
+  headerName: WebRequest.HttpHeadersItemType['name'],
+): string | undefined {
+  return details.responseHeaders?.find((header) => header.name.toLowerCase() === headerName)
+    ?.value;
+}
+
 export function shouldApplyReplaceSelectors(
   request: Request<OnBeforeRequestDetailsType | OnHeadersReceivedDetailsType>,
 ): boolean {
   const details = request._originalRequestDetails as OnHeadersReceivedDetailsType;
+
   // In case of undefined error of xhr/fetch and any kind of network activities
   if (details.statusCode === 0) {
     return false;
   }
+
   // If status code is non 2xx or 4xx, 5xx
   const statusCodeScope = (details.statusCode / 100) >>> 0;
   if (statusCodeScope !== 2 && statusCodeScope < 4) {
     return false;
   }
-  if (
-    details.responseHeaders
-      ?.find((header) => header.name.toLowerCase() === 'content-disposition')
-      ?.value?.startsWith('inline') === false
-  ) {
+
+  if (getHeaderFromDetails(details, 'content-disposition')?.startsWith('inline') === false) {
     return false;
-  }
-  if (
-    parseInt(
-      details.responseHeaders?.find((header) => header.name.toLowerCase() === 'content-length')
-        ?.value ?? '0',
-      10,
-    ) >= MAXIMUM_RESPONSE_BUFFER_SIZE
-  ) {
-    return false;
-  }
-  const contentTypeHeader = details.responseHeaders?.find(
-    (header) => header.name.toLowerCase() === 'content-type',
-  )?.value;
-  if (contentTypeHeader !== undefined) {
-    if (contentTypeHeader.startsWith('text')) {
-      return true;
-    } else if (HTML_FILTERABLE_MIME_TYPES.has(contentTypeHeader)) {
-      return true;
-    }
   }
 
-  return (
+  if (
+    parseInt(getHeaderFromDetails(details, 'content-length') ?? '0', 10) >=
+    MAXIMUM_RESPONSE_BUFFER_SIZE
+  ) {
+    return false;
+  }
+
+  const contentTypeHeader = getHeaderFromDetails(details, 'content-type');
+  if (
+    contentTypeHeader !== undefined &&
+    (contentTypeHeader?.startsWith('text') || HTML_FILTERABLE_MIME_TYPES.has(contentTypeHeader))
+  ) {
+    return true;
+  }
+
+  if (
     !request.type.startsWith('image') &&
     request.type !== 'font' &&
     request.type !== 'websocket' &&
     request.type !== 'media'
-  );
+  ) {
+    return true;
+  }
+
+  return false;
 }
 
 /**
