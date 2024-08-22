@@ -1369,11 +1369,19 @@ export default class NetworkFilter implements IFilter {
   }
 
   public getRedirectResource(): string {
-    return this.getRedirect().split(':')[0];
+    const priorityIndex = this.getRedirect().lastIndexOf(':');
+    if (priorityIndex === -1) {
+      return this.getRedirect();
+    }
+    return this.getRedirect().slice(0, priorityIndex);
   }
 
   public getRedirectPriority(): number {
-    return parseInt(this.getRedirect().split(':')[1] || '0', 10);
+    const priorityIndex = this.getRedirect().lastIndexOf(':');
+    if (priorityIndex === -1) {
+      return 0;
+    }
+    return parseInt(this.getRedirect().slice(priorityIndex + 1), 10);
   }
 
   public hasHostname(): boolean {
