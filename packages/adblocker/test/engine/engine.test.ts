@@ -428,31 +428,31 @@ $csp=baz,domain=bar.com
       });
     });
 
-    it('redirect with with no priority wins', () => {
+    it('redirect with highest priority wins', () => {
       const { redirect } = createEngineWithResource(
         [
-          '||foo.com$image,redirect=a.js:10',
           '||foo.com$image,redirect=zod.js',
-          '||foo.com$image,redirect=b.js:5',
+          '||foo.com$image,redirect=a.js:10',
+          '||foo.com$image,redirect=bar.js:5',
         ],
-        'zod.js',
+        'a.js',
       ).match(request);
       expect(redirect).to.eql({
-        body: 'zod.js',
+        body: 'a.js',
         contentType: 'application/javascript',
-        dataUrl: 'data:application/javascript;base64,em9kLmpz',
+        dataUrl: 'data:application/javascript;base64,YS5qcw==',
       });
     });
 
-    it('redirect with with lowest priority', () => {
+    it('redirect supports negative priorities', () => {
       const { redirect } = createEngineWithResource(
-        ['||foo.com$image,redirect=a.js:10', '||foo.com$image,redirect=bar.js:5'],
-        'bar.js',
+        ['||foo.com$image,redirect=a.js:-1', '||foo.com$image,redirect=c.js:-2'],
+        'a.js',
       ).match(request);
       expect(redirect).to.eql({
-        body: 'bar.js',
+        body: 'a.js',
         contentType: 'application/javascript',
-        dataUrl: 'data:application/javascript;base64,YmFyLmpz',
+        dataUrl: 'data:application/javascript;base64,YS5qcw==',
       });
     });
 
@@ -497,36 +497,36 @@ $csp=baz,domain=bar.com
       });
     });
 
-    it('redirect-rule with with no priority wins', () => {
+    it('redirect-rule with highest priority wins', () => {
       const { redirect } = createEngineWithResource(
         [
+          '||foo.com$image,redirect-rule=bar.js:5',
           '||foo.com$image,redirect-rule=a.js:10',
-          '||foo.com$image,redirect-rule=zod.js',
-          '||foo.com$image,redirect-rule=b.js:5',
+          '||foo.com$image,redirect-rule=c.js',
           '||foo.com$image',
         ],
-        'zod.js',
+        'a.js',
       ).match(request);
       expect(redirect).to.eql({
-        body: 'zod.js',
+        body: 'a.js',
         contentType: 'application/javascript',
-        dataUrl: 'data:application/javascript;base64,em9kLmpz',
+        dataUrl: 'data:application/javascript;base64,YS5qcw==',
       });
     });
 
-    it('redirect-rule with with lowest priority', () => {
+    it('redirect-rule supports negative priorities', () => {
       const { redirect } = createEngineWithResource(
         [
-          '||foo.com$image,redirect=a.js:10',
-          '||foo.com$image,redirect=bar.js:5',
+          '||foo.com$image,redirect-rule=a.js:-1',
+          '||foo.com$image,redirect-rule=c.js:-2',
           '||foo.com$image',
         ],
-        'bar.js',
+        'a.js',
       ).match(request);
       expect(redirect).to.eql({
-        body: 'bar.js',
+        body: 'a.js',
         contentType: 'application/javascript',
-        dataUrl: 'data:application/javascript;base64,YmFyLmpz',
+        dataUrl: 'data:application/javascript;base64,YS5qcw==',
       });
     });
 

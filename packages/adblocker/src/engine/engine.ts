@@ -1237,7 +1237,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       if (result.filter === undefined) {
         const redirects = this.redirects
           .matchAll(request, this.isFilterExcluded.bind(this))
-          .sort((a, b) => a.getRedirectPriority() - b.getRedirectPriority());
+          // highest priorty wins
+          .sort((a, b) => b.getRedirectPriority() - a.getRedirectPriority());
 
         if (redirects.length !== 0) {
           for (const filter of redirects) {

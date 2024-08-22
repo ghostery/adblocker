@@ -821,6 +821,8 @@ describe('Network filters', () => {
         // Not valid
         network('||foo.com$redirect', null);
         network('||foo.com$redirect=', null);
+        network('||foo.com$redirect=:1', null);
+        network('||foo.com$redirect=name:', null);
       });
 
       it('defaults to false', () => {
@@ -855,6 +857,8 @@ describe('Network filters', () => {
         // Not valid
         network('||foo.com$redirect-rule', null);
         network('||foo.com$redirect-rule=', null);
+        network('||foo.com$redirect-rule=:1', null);
+        network('||foo.com$redirect-rule=name:', null);
       });
 
       it('defaults to false', () => {
