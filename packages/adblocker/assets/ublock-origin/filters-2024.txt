@@ -574,6 +574,11 @@ jacquieetmicheltv.net,jacquieetmicheltv2.net##.main__section--swame
 jacquieetmicheltv.net,jacquieetmicheltv2.net##.contents-list--zeder-home_top
 jacquieetmicheltv.net,jacquieetmicheltv2.net##.contents-list--zeder-detail-middle-2
 jacquieetmicheltv.net,jacquieetmicheltv2.net##.contents-list--zeder-detail-bottom
+! https://forums.lanik.us/viewtopic.php?f=62&t=40741
+! https://github.com/uBlockOrigin/uAssets/issues/25005
+mangaku.*,~mangaku.win##+js(nowebrtc)
+mangaku.*,~mangaku.win##+js(acs, %24, onclick)
+.gif^$image,domain=mangaku.*|~mangaku.win
 ! END: Rules from filters.txt
 ! START: Regional lists
 ! <<<<< czech slovak filters >>>>>
@@ -1617,7 +1622,7 @@ sharing.wtf##.metaRedirectWrapperTopAds
 ! https://kimetsujbn.blogspot.com/ popup
 kimetsujbn.blogspot.com##+js(nowoif, !blogspot)
 ! https://github.com/uBlockOrigin/uAssets/issues/23724
-||gviet.vn/public/js/player/ads/ima3.js^$script,redirect-rule=google-ima.js,domain=vtvcab.vn
+||gviet.vn/public/js/player/ads/ima3.js^$script,redirect=google-ima.js,domain=vtvcab.vn
 ! https://github.com/uBlockOrigin/uAssets/issues/23734
 ! https://github.com/uBlockOrigin/uAssets/issues/23804
 ! https://github.com/uBlockOrigin/uAssets/issues/23980
@@ -1625,7 +1630,7 @@ th.gl##+js(nostif, error)
 th.gl##+js(aeld, load, .call(this)
 th.gl##.text-gray-400.justify-center
 ! https://github.com/uBlockOrigin/uAssets/issues/23928
-||s.nitropay.com/ads-*.js^$script,3p,redirect-rule=noopjs
+||s.nitropay.com/ads-*.js^$script,3p,redirect=noopjs
 ! https://young-machine.com/
 ||fewcents.co^$3p
 ! https://github.com/uBlockOrigin/uAssets/issues/23737
@@ -2184,7 +2189,7 @@ pawastreams.info###dismiss-btn
 ! https://community.brave.com/t/video-streamer-doesnt-work-only-on-brave/562140 - ads
 autoembed.cc,whisperingauroras.com##+js(aopr, AaDetector)
 oaaxpgp3.xyz##+js(nowoif)
-oaaxpgp3.xyz##+js(acs, Math, localStorage)
+oaaxpgp3.xyz##+js(acs, Math, localStorage%5B'%5Cx)
 ||lashahib.net^
 ||s0-greate.net^$3p
 ||track.torarymor.world^$doc
@@ -2237,3 +2242,11 @@ codec.kyiv.ua##+js(rmnt, script, mdpDeblocker)
 oaaxpgp3.xyz##+js(rmnt, script, Math.floor)
 ! https://github.com/uBlockOrigin/uAssets/issues/24982
 online-filmek.ac##+js(no-fetch-if, adligature)
+! https://github.com/uBlockOrigin/uAssets/issues/25002
+livexscores.com##+js(no-fetch-if, googlesyndication)
+! https://www.m9.news/ - ad modal
+m9.news##.m9-ad-modal
+m9.news##+js(rmnt, script, m9-ad-modal)
+!#if env_firefox
+m9.news##body:style(display: block !important;)
+!#endif
