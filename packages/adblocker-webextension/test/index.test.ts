@@ -139,19 +139,21 @@ describe('#fromWebRequestDetails', () => {
 
 describe('html-filtering', () => {
   context('#shouldApplyReplaceSelectors', () => {
-    const createRequestWithDetails = ({
-      type,
-      headers,
+    const createRequestFromDetails = ({
+      type = 'main_frame',
+      headers = {},
+      statusCode = 200,
     }: {
-      type: WebRequest.ResourceType;
-      headers: Record<string, string>;
+      type?: WebRequest.ResourceType;
+      headers?: Record<string, string>;
+      statusCode?: number;
     }) =>
       fromWebRequestDetails({
         requestId: 'req-01',
         tabId: 1,
         url: 'https://foo.com/',
         type,
-        statusCode: 200,
+        statusCode,
         responseHeaders: Object.entries(headers).map(([name, value]) => ({
           name,
           value,
@@ -159,7 +161,7 @@ describe('html-filtering', () => {
       });
 
     it('accepts main_frame resposne with text/html', () => {
-      const request = createRequestWithDetails({
+      const request = createRequestFromDetails({
         type: 'main_frame',
         headers: {
           'content-type': 'text/html',
@@ -168,8 +170,23 @@ describe('html-filtering', () => {
       expect(shouldApplyReplaceSelectors(request)).to.be.true;
     });
 
+    it('ignores non 2xx responses', () => {
+      for (const statusCode of [200, 299]) {
+        expect(
+          shouldApplyReplaceSelectors(createRequestFromDetails({ statusCode })),
+          `allows ${statusCode}`,
+        ).to.be.true;
+      }
+      for (const statusCode of [100, 300, 301, 400, 404, 500, 510]) {
+        expect(
+          shouldApplyReplaceSelectors(createRequestFromDetails({ statusCode })),
+          `denies ${statusCode}`,
+        ).to.be.false;
+      }
+    });
+
     it('accepts script response with content-type header of application/javascript', () => {
-      const request = createRequestWithDetails({
+      const request = createRequestFromDetails({
         type: 'script',
         headers: {
           'content-type': 'application/javascript',
@@ -179,15 +196,14 @@ describe('html-filtering', () => {
     });
 
     it('accepts stylesheet response without additional context', () => {
-      const request = createRequestWithDetails({
+      const request = createRequestFromDetails({
         type: 'stylesheet',
-        headers: {},
       });
       expect(shouldApplyReplaceSelectors(request)).to.be.true;
     });
 
     it('rejects script response larger than MAXIMUM_RESPONSE_BUFFER_SIZE', () => {
-      const request = createRequestWithDetails({
+      const request = createRequestFromDetails({
         type: 'script',
         headers: {
           'content-type': 'application/javascript',
@@ -198,7 +214,7 @@ describe('html-filtering', () => {
     });
 
     it('rejects requests with content-disposition headers without the value of inline', () => {
-      const request = createRequestWithDetails({
+      const request = createRequestFromDetails({
         type: 'script',
         headers: {
           'content-disposition': 'attachment',

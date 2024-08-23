@@ -14,6 +14,7 @@ import {
   HTMLSelector,
   isUTF8,
   Request,
+  RequestType,
   StreamingHtmlFilter,
 } from '@cliqz/adblocker';
 import { IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-content';
@@ -139,6 +140,21 @@ export function updateResponseHeadersWithCSP(
   return { responseHeaders };
 }
 
+const HTML_FILTERABLE_REQUEST_TYPES = new Set<RequestType>([
+  'main_frame',
+  'mainFrame',
+  'sub_frame',
+  'subFrame',
+  'stylesheet',
+  'script',
+  'document',
+  'fetch',
+  'prefetch',
+  'preflight',
+  'xhr',
+  'xmlhttprequest',
+]);
+
 // html filters are applied to text/* and those additional mime types
 const HTML_FILTERABLE_NON_TEXT_MIME_TYPES = new Set([
   'application/javascript',
@@ -181,11 +197,10 @@ export function shouldApplyReplaceSelectors(
   }
 
   // ignore file downloads
-  if (
-    (getHeaderFromDetails(details, 'content-disposition') || '')
-      .toLowerCase()
-      .startsWith('attachment') === true
-  ) {
+  const contentDisposition = (
+    getHeaderFromDetails(details, 'content-disposition') || ''
+  ).toLowerCase();
+  if (contentDisposition !== '' && contentDisposition.startsWith('inline') === false) {
     return false;
   }
 
@@ -202,7 +217,7 @@ export function shouldApplyReplaceSelectors(
     return true;
   }
 
-  if (request.type === 'document' || request.type === 'script' || request.type === 'stylesheet') {
+  if (HTML_FILTERABLE_REQUEST_TYPES.has(request.type)) {
     return true;
   }
 
