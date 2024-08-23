@@ -69,9 +69,15 @@ function network(filter: string, expected: any) {
       isImportant: parsed.isImportant(),
       thirdParty: parsed.thirdParty(),
     };
-    expect(verbose).to.deep.include(expected);
+    expect(verbose).to.deep.include(
+      expected,
+      `filter: ${filter} does not match ${JSON.stringify(expected)}`,
+    );
   } else {
-    expect(parsed).to.equal(expected);
+    expect(parsed).to.equal(
+      expected,
+      `filter: ${filter} does not match ${JSON.stringify(expected)}`,
+    );
   }
 }
 
@@ -823,6 +829,7 @@ describe('Network filters', () => {
         network('||foo.com$redirect=', null);
         network('||foo.com$redirect=:1', null);
         network('||foo.com$redirect=name:', null);
+        network('||foo.com$redirect=name:c0ffe', null);
       });
 
       it('defaults to false', () => {
