@@ -581,7 +581,7 @@ export default class NetworkFilter implements IFilter {
             }
             break;
           case 'redirect-rule':
-          case 'redirect':
+          case 'redirect': {
             // Negation of redirection doesn't make sense
             if (negation) {
               return null;
@@ -589,6 +589,18 @@ export default class NetworkFilter implements IFilter {
 
             // Ignore this filter if no redirection resource is specified
             if (value.length === 0) {
+              return null;
+            }
+
+            // Ignore this filter if wrong priority is given
+            const priorityIndex = value.lastIndexOf(':');
+            if (priorityIndex === 0) {
+              return null;
+            } else if (
+              priorityIndex !== -1 &&
+              (isNaN(Number(value.slice(priorityIndex + 1))) === true ||
+                priorityIndex + 1 === value.length)
+            ) {
               return null;
             }
 
@@ -600,6 +612,7 @@ export default class NetworkFilter implements IFilter {
 
             optionValue = value;
             break;
+          }
           case 'csp':
             if (negation) {
               return null;
@@ -1366,6 +1379,24 @@ export default class NetworkFilter implements IFilter {
 
   public getRedirect(): string {
     return this.optionValue ?? '';
+  }
+
+  public getRedirectResource(): string {
+    const redirect = this.getRedirect();
+    const priorityIndex = redirect.lastIndexOf(':');
+    if (priorityIndex === -1) {
+      return redirect;
+    }
+    return redirect.slice(0, priorityIndex);
+  }
+
+  public getRedirectPriority(): number {
+    const redirect = this.getRedirect();
+    const priorityIndex = redirect.lastIndexOf(':');
+    if (priorityIndex === -1) {
+      return 0;
+    }
+    return Number(redirect.slice(priorityIndex + 1));
   }
 
   public hasHostname(): boolean {

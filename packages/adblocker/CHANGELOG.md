@@ -1,3 +1,29 @@
+# v1.31.4 (Fri Aug 23 2024)
+
+#### :bug: Bug Fix
+
+- $redirect priority [#4205](https://github.com/ghostery/adblocker/pull/4205) ([@chrmod](https://github.com/chrmod) [@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#4185](https://github.com/ghostery/adblocker/pull/4185) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Network filters options value [#4200](https://github.com/ghostery/adblocker/pull/4200) ([@chrmod](https://github.com/chrmod))
+- Lazy initialise adblocker engine tests [#4199](https://github.com/ghostery/adblocker/pull/4199) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.269 to 0.0.270 [#4197](https://github.com/ghostery/adblocker/pull/4197) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.31.3 (Wed Aug 07 2024)
 
 #### :bug: Bug Fix

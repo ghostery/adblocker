@@ -1,3 +1,15 @@
+# v1.31.4 (Fri Aug 23 2024)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump electron from 31.4.0 to 32.0.1 [#4214](https://github.com/ghostery/adblocker/pull/4214) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.31.0 (Thu Aug 01 2024)
 
 #### :nut_and_bolt: Dependencies
