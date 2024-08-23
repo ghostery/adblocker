@@ -359,7 +359,7 @@ describe('html-filtering', () => {
       filterRequestHTML(() => streamFilterMock, request, [htmlSelector]);
       // fill the stream above the MAXIMUM_RESPONSE_BUFFER_SIZE
       streamFilterMock._fill({ char: 'a', chunks: 10, chunkSize: 1024 * 1024 });
-      // checking only first and last character for a sake of test performance
+      // checking only first and last character for the sake of test performance
       expect(String.fromCharCode(streamFilterMock.content.at(0)!)).to.be.eql('a');
       expect(
         String.fromCharCode(streamFilterMock.content.at(streamFilterMock.content.length - 1)!),
