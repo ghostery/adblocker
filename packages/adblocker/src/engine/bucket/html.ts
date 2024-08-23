@@ -53,6 +53,7 @@ export default class HTMLBucket {
   public exceptionsIndex: ReverseIndex<NetworkFilter>;
   public cosmeticIndex: ReverseIndex<CosmeticFilter>;
   public unhideIndex: ReverseIndex<CosmeticFilter>;
+  private config: Config;
 
   constructor({
     filters = [],
@@ -61,6 +62,8 @@ export default class HTMLBucket {
     filters?: (CosmeticFilter | NetworkFilter)[];
     config: Config;
   }) {
+    this.config = config;
+
     this.networkIndex = new ReverseIndex({
       config,
       deserialize: NetworkFilter.deserialize,
@@ -155,12 +158,14 @@ export default class HTMLBucket {
     const exceptions: NetworkFilter[] = [];
     const unhides: CosmeticFilter[] = [];
 
-    this.networkIndex.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
-      if (filter.match(request) && !isFilterExcluded?.(filter)) {
-        networkFilters.push(filter);
-      }
-      return true;
-    });
+    if (this.config.loadNetworkFilters === true) {
+      this.networkIndex.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
+        if (filter.match(request) && !isFilterExcluded?.(filter)) {
+          networkFilters.push(filter);
+        }
+        return true;
+      });
+    }
 
     // If we found at least one candidate, check if we have exceptions.
     if (networkFilters.length !== 0) {
@@ -172,7 +177,7 @@ export default class HTMLBucket {
       });
     }
 
-    if (request.isMainFrame()) {
+    if (this.config.loadCosmeticFilters === true && request.isMainFrame()) {
       const { hostname, domain = '' } = request;
       const hostnameTokens = createLookupTokens(hostname, domain);
       this.cosmeticIndex.iterMatchingFilters(hostnameTokens, (filter: CosmeticFilter) => {
