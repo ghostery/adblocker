@@ -139,7 +139,8 @@ export function updateResponseHeadersWithCSP(
   return { responseHeaders };
 }
 
-const HTML_FILTERABLE_MIME_TYPES = new Set([
+// html filters are applied to text/* and those additional mime types
+const HTML_FILTERABLE_NON_TEXT_MIME_TYPES = new Set([
   'application/javascript',
   'application/json',
   'application/mpegurl',
@@ -163,6 +164,8 @@ function getHeaderFromDetails(
     ?.value;
 }
 
+// $replace filters are applied to complete response bodies
+// To avoid performance problem we should ignore large request or binary data
 export function shouldApplyReplaceSelectors(
   request: Request<OnBeforeRequestDetailsType | OnHeadersReceivedDetailsType>,
 ): boolean {
@@ -173,36 +176,33 @@ export function shouldApplyReplaceSelectors(
     return false;
   }
 
-  // If status code is non 2xx or 4xx, 5xx
   if (details.statusCode < 200 || details.statusCode > 299) {
     return false;
   }
 
-  if (getHeaderFromDetails(details, 'content-disposition')?.startsWith('inline') === false) {
-    return false;
-  }
-
+  // ignore file downloads
   if (
-    parseInt(getHeaderFromDetails(details, 'content-length') ?? '0', 10) >=
-    MAXIMUM_RESPONSE_BUFFER_SIZE
+    (getHeaderFromDetails(details, 'content-disposition') || '')
+      .toLowerCase()
+      .startsWith('attachment') === true
   ) {
     return false;
   }
 
-  const contentTypeHeader = getHeaderFromDetails(details, 'content-type');
+  const contentLength = Number(getHeaderFromDetails(details, 'content-length'));
+  if (contentLength !== 0 && contentLength >= MAXIMUM_RESPONSE_BUFFER_SIZE) {
+    return false;
+  }
+
+  const contentTypeHeader = (getHeaderFromDetails(details, 'content-type') || '').toLowerCase();
   if (
-    contentTypeHeader !== undefined &&
-    (contentTypeHeader?.startsWith('text') || HTML_FILTERABLE_MIME_TYPES.has(contentTypeHeader))
+    contentTypeHeader.startsWith('text') ||
+    HTML_FILTERABLE_NON_TEXT_MIME_TYPES.has(contentTypeHeader)
   ) {
     return true;
   }
 
-  if (
-    !request.type.startsWith('image') &&
-    request.type !== 'font' &&
-    request.type !== 'websocket' &&
-    request.type !== 'media'
-  ) {
+  if (request.type === 'document' || request.type === 'script' || request.type === 'stylesheet') {
     return true;
   }
 
