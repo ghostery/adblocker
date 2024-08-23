@@ -1381,7 +1381,7 @@ export default class NetworkFilter implements IFilter {
   }
 
   public getRedirectResource(): string {
-    cons redirect = this.getRedirect();
+    const redirect = this.getRedirect();
     const priorityIndex = redirect.lastIndexOf(':');
     if (priorityIndex === -1) {
       return redirect;
