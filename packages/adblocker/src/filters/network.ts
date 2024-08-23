@@ -598,7 +598,7 @@ export default class NetworkFilter implements IFilter {
               return null;
             } else if (
               priorityIndex !== -1 &&
-              isNaN(parseInt(value.slice(priorityIndex + 1), 10)) === true
+              isNaN(Number(value.slice(priorityIndex + 1))) === true
             ) {
               return null;
             }
