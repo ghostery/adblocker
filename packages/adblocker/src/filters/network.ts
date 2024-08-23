@@ -1381,11 +1381,12 @@ export default class NetworkFilter implements IFilter {
   }
 
   public getRedirectResource(): string {
-    const priorityIndex = this.getRedirect().lastIndexOf(':');
+    cons redirect = this.getRedirect();
+    const priorityIndex = redirect.lastIndexOf(':');
     if (priorityIndex === -1) {
-      return this.getRedirect();
+      return redirect;
     }
-    return this.getRedirect().slice(0, priorityIndex);
+    return redirect.slice(0, priorityIndex);
   }
 
   public getRedirectPriority(): number {
