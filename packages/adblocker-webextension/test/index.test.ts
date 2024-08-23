@@ -352,7 +352,7 @@ describe('html-filtering', () => {
       ).to.be.eql('b');
     });
 
-    it('does not affect steams larger than MAXIMUM_RESPONSE_BUFFER_SIZE', () => {
+    it('does not affect streams larger than MAXIMUM_RESPONSE_BUFFER_SIZE', () => {
       const filter = NetworkFilter.parse('foo.com$replace=/a/b/g')!;
       const htmlSelector: HTMLSelector = ['replace', filter.getHtmlModifier()!];
       const streamFilterMock = new StreamFilterMock();
