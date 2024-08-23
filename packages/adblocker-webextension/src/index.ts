@@ -174,8 +174,7 @@ export function shouldApplyReplaceSelectors(
   }
 
   // If status code is non 2xx or 4xx, 5xx
-  const statusCodeScope = (details.statusCode / 100) >>> 0;
-  if (statusCodeScope !== 2 && statusCodeScope < 4) {
+  if (details.statusCode < 200 || details.statusCode > 299) {
     return false;
   }
 
