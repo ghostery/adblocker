@@ -162,12 +162,15 @@ export default class HTMLBucket {
       return true;
     });
 
-    this.exceptionsIndex.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
-      if (filter.match(request) && !isFilterExcluded?.(filter)) {
-        exceptions.push(filter);
-      }
-      return true;
-    });
+    // If we found at least one candidate, check if we have exceptions.
+    if (networkFilters.length !== 0) {
+      this.exceptionsIndex.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
+        if (filter.match(request) && !isFilterExcluded?.(filter)) {
+          exceptions.push(filter);
+        }
+        return true;
+      });
+    }
 
     if (request.isMainFrame()) {
       const { hostname, domain = '' } = request;
