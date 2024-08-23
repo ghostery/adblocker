@@ -1512,7 +1512,7 @@ export default class NetworkFilter implements IFilter {
   public isHtmlFilteringRule(): boolean {
     return this.isReplace();
   }
-    
+
   public getRedirectResource(): string {
     const redirect = this.getRedirect();
     const priorityIndex = redirect.lastIndexOf(':');
