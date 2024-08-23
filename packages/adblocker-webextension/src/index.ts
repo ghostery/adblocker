@@ -176,8 +176,7 @@ function getHeaderFromDetails(
   details: OnHeadersReceivedDetailsType,
   headerName: WebRequest.HttpHeadersItemType['name'],
 ): string | undefined {
-  return details.responseHeaders?.find((header) => header.name.toLowerCase() === headerName)
-    ?.value;
+  return details.responseHeaders?.find((header) => header.name === headerName)?.value;
 }
 
 // $replace filters are applied to complete response bodies
