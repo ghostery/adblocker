@@ -1216,6 +1216,10 @@ nudeof.com##div.happy-section
 @@||skmedix.pl^$ghide,script,1p
 ||skmedix.pl/cdn-cgi/zaraz/$script,1p,important
 *$frame,redirect-rule=noopframe,domain=skmedix.pl
+skmedix.pl##+js(cookie-remover)
+skmedix.pl##+js(trusted-click-element, button.fc-button)
+skmedix.pl##.adsbygoogle:style(height: 3px !important; display: block !important;)
+skmedix.pl###aswift_4_host
 ! https://github.com/AdguardTeam/AdguardFilters/issues/78710
 yxoshort.com##+js(aopr, app_vars.force_disable_adblock)
 yxoshort.com##+js(set, blurred, false)
@@ -2669,8 +2673,6 @@ convert2mp3.cx##+js(nowoif)
 isgfrm.com##+js(acs, %24, test)
 ! https://github.com/uBlockOrigin/uAssets/issues/9870
 megawypas.com##+js(acs, document.addEventListener, google_ad_client)
-! https://github.com/uBlockOrigin/uAssets/issues/9864
-sainsburys.co.uk#?#li:has(.product-header):has-text(Sponsored)
 ! https://www.reddit.com/r/uBlockOrigin/comments/pf3idx/123movies_detects_ad_blocking/hb4a5hk/
 123moviesto.to###bar-player
 123moviesto.to##.mvic-bmt
@@ -2994,8 +2996,15 @@ michaelemad.com##+js(nano-sib, timer)
 @@||xtremestream.co^$ghide
 ! https://www.blick.ch/schweiz/prozess-um-tote-britin-22-in-lugano-es-gab-keinen-sex-nur-einen-femizid-id16849768.html video ads
 ! https://github.com/uBlockOrigin/uAssets/issues/12446
+! https://github.com/uBlockOrigin/uAssets/issues/24977
 blick.ch##+js(set, Object.prototype.isAdDisabled, true)
 blick.ch##.fKZLNI:style(width:120% !important)
+!#if cap_html_filtering
+blick.ch##^script:has-text(setNptTechAdblockerCookie)
+!#else
+blick.ch##+js(rmnt, script, setNptTechAdblockerCookie)
+!#endif
+blick.ch##+js(cookie-remover, __adblocker)
 ! https://github.com/adsbypasser/adsbypasser/issues/3708
 bblink.com##+js(set, blurred, false)
 bblink.com##.banner-img-promotion
@@ -3364,6 +3373,7 @@ kinas.tv##+js(nowoif)
 stocktwits.com##div[class*="AdBanner_"]
 stocktwits.com##.LazyLoad.is-visible:has([data-aa-adunit])
 stocktwits.com##p[class^="Disclosure_disclosure"]:has(a[href="https://stocktwits.com/about/legal/disclosures/3rd-party-ads/"])
+stocktwits.com##[class^="FooterAd_container"]
 ! genius.com PH
 genius.com##div:has(> div[class^="TopContentdesktop__PromoContainer-"])
 ! https://github.com/AdguardTeam/AdguardFilters/issues/98990
