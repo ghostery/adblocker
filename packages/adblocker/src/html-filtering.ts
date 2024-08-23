@@ -259,18 +259,20 @@ export default class StreamingHtmlFilter {
     this.modifiers = modifiers;
   }
 
-  public flush(): string {
+  public flush(applyHTMLFiltering: boolean = true): string {
     let out = this.buffer;
 
-    // If there's a modifier
-    if (this.modifiers.length !== 0) {
-      // If there's a pattern, process in priority.
-      if (this.patterns.length !== 0) {
-        const [tags, parsed, rest] = extractTagsFromHtml(this.buffer, 'script');
-        out = removeTagsFromHtml(parsed, selectTagsToRemove(this.patterns, tags)) + rest;
-      }
+    if (applyHTMLFiltering === true) {
+      // If there's a modifier
+      if (this.modifiers.length !== 0) {
+        // If there's a pattern, process in priority.
+        if (this.patterns.length !== 0) {
+          const [tags, parsed, rest] = extractTagsFromHtml(this.buffer, 'script');
+          out = removeTagsFromHtml(parsed, selectTagsToRemove(this.patterns, tags)) + rest;
+        }
 
-      out = applyModifiersToHtml(out, this.modifiers);
+        out = applyModifiersToHtml(out, this.modifiers);
+      }
     }
 
     this.buffer = '';

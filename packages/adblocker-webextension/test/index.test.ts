@@ -1,19 +1,27 @@
 import { expect } from 'chai';
 import 'mocha';
 
+import { WebRequest } from 'webextension-polyfill-ts';
+import { NetworkFilter } from '@cliqz/adblocker';
+
 import {
   fromWebRequestDetails,
   updateResponseHeadersWithCSP,
-  OnBeforeRequestDetailsType,
   getHostnameHashesFromLabelsBackward,
+  shouldApplyReplaceSelectors,
+  filterRequestHTML,
+  MAXIMUM_RESPONSE_BUFFER_SIZE,
+  HTMLSelector,
+  OnHeadersReceivedDetailsType,
 } from '../src/index.js';
 
 describe('#updateResponseHeadersWithCSP', () => {
-  const baseDetails: OnBeforeRequestDetailsType = {
+  const baseDetails: OnHeadersReceivedDetailsType = {
     requestId: '42',
     tabId: 42,
     type: 'main_frame',
     url: 'https://foo.com',
+    statusCode: 200,
   };
 
   it('does not update if no policies', () => {
@@ -35,7 +43,10 @@ describe('#updateResponseHeadersWithCSP', () => {
   it('leaves other headers unchanged', () => {
     expect(
       updateResponseHeadersWithCSP(
-        { ...baseDetails, responseHeaders: [{ name: 'header1', value: 'value1' }] },
+        {
+          ...baseDetails,
+          responseHeaders: [{ name: 'header1', value: 'value1' }],
+        },
         'CSP',
       ),
     ).to.eql({
@@ -122,6 +133,237 @@ describe('#fromWebRequestDetails', () => {
       sourceHostnameHashes: getHostnameHashesFromLabelsBackward('sub.source.com', 'source.com'),
 
       type: 'script',
+    });
+  });
+});
+
+describe('html-filtering', () => {
+  context('#shouldApplyReplaceSelectors', () => {
+    const createRequestFromDetails = ({
+      type = 'main_frame',
+      headers = {},
+      statusCode = 200,
+    }: {
+      type?: WebRequest.ResourceType;
+      headers?: Record<string, string>;
+      statusCode?: number;
+    }) =>
+      fromWebRequestDetails({
+        requestId: 'req-01',
+        tabId: 1,
+        url: 'https://foo.com/',
+        type,
+        statusCode,
+        responseHeaders: Object.entries(headers).map(([name, value]) => ({
+          name,
+          value,
+        })),
+      });
+
+    it('accepts main_frame resposne with text/html', () => {
+      const request = createRequestFromDetails({
+        type: 'main_frame',
+        headers: {
+          'content-type': 'text/html',
+        },
+      });
+      expect(shouldApplyReplaceSelectors(request)).to.be.true;
+    });
+
+    it('ignores non 2xx responses', () => {
+      for (const statusCode of [200, 299]) {
+        expect(
+          shouldApplyReplaceSelectors(createRequestFromDetails({ statusCode })),
+          `allows ${statusCode}`,
+        ).to.be.true;
+      }
+      for (const statusCode of [100, 300, 301, 400, 404, 500, 510]) {
+        expect(
+          shouldApplyReplaceSelectors(createRequestFromDetails({ statusCode })),
+          `denies ${statusCode}`,
+        ).to.be.false;
+      }
+    });
+
+    it('accepts script response with content-type header of application/javascript', () => {
+      const request = createRequestFromDetails({
+        type: 'script',
+        headers: {
+          'content-type': 'application/javascript',
+        },
+      });
+      expect(shouldApplyReplaceSelectors(request)).to.be.true;
+    });
+
+    it('accepts stylesheet response without additional context', () => {
+      const request = createRequestFromDetails({
+        type: 'stylesheet',
+      });
+      expect(shouldApplyReplaceSelectors(request)).to.be.true;
+    });
+
+    it('rejects script response larger than MAXIMUM_RESPONSE_BUFFER_SIZE', () => {
+      const request = createRequestFromDetails({
+        type: 'script',
+        headers: {
+          'content-type': 'application/javascript',
+          'content-length': (MAXIMUM_RESPONSE_BUFFER_SIZE + 1).toString(),
+        },
+      });
+      expect(shouldApplyReplaceSelectors(request)).to.be.false;
+    });
+
+    it('rejects requests with content-disposition headers without the value of inline', () => {
+      const request = createRequestFromDetails({
+        type: 'script',
+        headers: {
+          'content-disposition': 'attachment',
+        },
+      });
+      expect(shouldApplyReplaceSelectors(request)).to.be.false;
+    });
+  });
+
+  context('respects MAXIMUM_RESPONSE_BUFFER_SIZE', () => {
+    class StreamFilterMock implements WebRequest.StreamFilter {
+      public _pushed: number = 0;
+      public _pulled: Uint8Array = new Uint8Array();
+
+      public ondata: (data: WebRequest.StreamFilterEventData) => void = this._ondata;
+      public onstart: (data: WebRequest.StreamFilterEventData) => void = this._noop;
+      public onstop: (data: WebRequest.StreamFilterEventData) => void = this._ondata;
+      public onerror: (data: WebRequest.StreamFilterEventData) => void = this._noop;
+
+      public status: WebRequest.StreamFilterStatus = 'uninitialized';
+      public error: string = '';
+
+      get content() {
+        return this._pulled;
+      }
+
+      private _noop(): void {}
+
+      public create(_requestId: number, _addonId: string): void {
+        throw new Error('StreamFilter.create() is not implemented!');
+      }
+
+      public suspend(): void {
+        this.status = 'suspended';
+      }
+
+      public resume(): void {
+        if (
+          this.status !== 'closed' &&
+          this.status !== 'failed' &&
+          (this.status !== 'disconnected') === false
+        ) {
+          this.error = 'This instance is not resumable!';
+          this.onerror({
+            data: Uint8Array.from([]),
+          });
+          return;
+        }
+        this.status = 'transferringdata';
+      }
+
+      public close(): void {
+        this.status = 'closed';
+      }
+
+      public disconnect(): void {
+        this.status = 'disconnected';
+        this.ondata = this._ondata;
+        this.onstop = this._noop;
+      }
+
+      public write(data: ArrayBuffer | Uint8Array): void {
+        const next = new Uint8Array(this._pulled.byteLength + data.byteLength);
+        next.set(this._pulled);
+        next.set(new Uint8Array(data), this._pulled.byteLength);
+        this._pulled = next;
+      }
+
+      public _ondata(event: WebRequest.StreamFilterEventData): void {
+        this.write(event.data);
+      }
+
+      public _push(data: ArrayBuffer | Uint8Array, isLast: boolean = false): void {
+        if (this.status !== 'transferringdata' && this.status !== 'uninitialized') {
+          this.error = 'Further data transfer cannot be done since the stream is already closed!';
+          this.onerror({
+            data: Uint8Array.from([]),
+          });
+          return;
+        }
+
+        if (this._pushed === 0) {
+          this.status = 'transferringdata';
+        }
+
+        this.ondata({ data });
+        if (isLast === true) {
+          this.onstop({ data: Uint8Array.from([]) });
+          this.status = 'finishedtransferringdata';
+        }
+      }
+
+      public _fill({
+        char,
+        chunks,
+        chunkSize,
+      }: {
+        char: string;
+        chunks: number;
+        chunkSize: number;
+      }) {
+        for (let i = 0; i < chunks; i += 1) {
+          const noise = Uint8Array.from(new Array(chunkSize).fill(char.charCodeAt(0)));
+          this._push(noise, i === chunks - 1);
+        }
+      }
+    }
+
+    const request = fromWebRequestDetails({
+      responseHeaders: [
+        {
+          name: 'content-type',
+          value: 'text/text',
+        },
+      ],
+      url: 'https://foo.com/script.js',
+      type: 'main_frame',
+      originUrl: 'https://foo.com/',
+      tabId: 0,
+      statusCode: 200,
+      requestId: 'req-00',
+    });
+
+    it('replaces stream content when smaller than MAXIMUM_RESPONSE_BUFFER_SIZE', () => {
+      const filter = NetworkFilter.parse('foo.com$replace=/a/b/g')!;
+      const htmlSelector: HTMLSelector = ['replace', filter.getHtmlModifier()!];
+      const streamFilterMock = new StreamFilterMock();
+      filterRequestHTML(() => streamFilterMock, request, [htmlSelector]);
+      // fill the stream below the MAXIMUM_RESPONSE_BUFFER_SIZE
+      streamFilterMock._fill({ char: 'a', chunks: 9, chunkSize: 1024 * 1024 });
+      // checking only first and last character for a sake of test performance
+      expect(String.fromCharCode(streamFilterMock.content.at(0)!)).to.be.eql('b');
+      expect(
+        String.fromCharCode(streamFilterMock.content.at(streamFilterMock.content.length - 1)!),
+      ).to.be.eql('b');
+    });
+
+    it('does not affect steams larger than MAXIMUM_RESPONSE_BUFFER_SIZE', () => {
+      const filter = NetworkFilter.parse('foo.com$replace=/a/b/g')!;
+      const htmlSelector: HTMLSelector = ['replace', filter.getHtmlModifier()!];
+      const streamFilterMock = new StreamFilterMock();
+      filterRequestHTML(() => streamFilterMock, request, [htmlSelector]);
+      // fill the stream above the MAXIMUM_RESPONSE_BUFFER_SIZE
+      streamFilterMock._fill({ char: 'a', chunks: 10, chunkSize: 1024 * 1024 });
+      // checking only first and last character for a sake of test performance
+      expect(String.fromCharCode(streamFilterMock.content.at(0)!)).to.be.eql('a');
+      expect(
+        String.fromCharCode(streamFilterMock.content.at(streamFilterMock.content.length - 1)!),
+      ).to.be.eql('a');
     });
   });
 });
