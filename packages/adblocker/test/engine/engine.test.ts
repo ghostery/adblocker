@@ -799,7 +799,7 @@ foo.com###selector
       });
     });
 
-    it.only('handles custom default hiding styles', () => {
+    it('handles custom default hiding styles', () => {
       expect(
         Engine.parse('foo.com###id').getCosmeticsFilters({
           domain: 'foo.com',
