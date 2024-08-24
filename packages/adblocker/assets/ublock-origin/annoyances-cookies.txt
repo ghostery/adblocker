@@ -1286,9 +1286,14 @@ hetzner.com##+js(trusted-set-cookie, __Secure-HO_Cookie_Consent_Declined, 1)
 ! reject all
 wedding.pl##+js(trusted-set-local-storage-item, gtagConsents, %7B%22ad_personalization%22%3A%22denied%22%2C%22analytics_storage%22%3A%22denied%22%2C%22ad_user_data%22%3A%22denied%22%2C%22ad_storage%22%3A%22denied%22%7D)
 ! https://github.com/easylist/easylist/issues/19399
-dailystar.co.uk,mirror.co.uk##.qc-cmp2-container
+! UK IP
+dailystar.co.uk,mirror.co.uk##.qc-cmp2-container:style(visibility: hidden !important;)
 dailystar.co.uk,mirror.co.uk##+js(trusted-click-element, .qc-cmp2-summary-buttons%20%3E%20button%5Bmode%3D%22secondary%22%5D)
 dailystar.co.uk,mirror.co.uk##+js(trusted-click-element, %5Bclass%5E%3D%22qc-cmp2-buttons%22%5D%20%3E%20%5Bdata-tmdatatrack%3D%22privacy-other-save%22%5D, , 1000)
+dailystar.co.uk,mirror.co.uk##+js(trusted-click-element, button%5Bmode%3D%22primary%22%5D%5Bdata-tmdatatrack%3D%22privacy-cookie%22%5D, , 1000)
+! US IP
+dailystar.co.uk,mirror.co.uk###CIPAConsentNotice:style(visibility: hidden !important;)
+dailystar.co.uk,mirror.co.uk##+js(trusted-click-element, button%5Bclass*%3D%22cipa-accept-btn%22%5D, , 1000)
 ! https://www.redbull.com/ - third party content
 redbull.com##+js(trusted-set-cookie, OptanonConsent, groups%3DC0001%253A1%252CC0002%253A0%252CC0003%253A1, , , domain, www.redbull.com)
 redbull.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24, , , domain, www.redbull.com)
@@ -1353,3 +1358,5 @@ vidal.fr##+js(trusted-set-cookie, vidal_consent, tracking%3D0%26content%3D0%26co
 1und1.de##+js(trusted-click-element, button%23consent_wall_optin)
 1und1.de##+js(trusted-set-cookie, CONSENTMGR, c1%3A0%257Cc10%3A0%257Cc11%3A0%257Cc12%3A0%257Cc13%3A0%257Cc14%3A0%257Cc15%3A0%257Cc2%3A0%257Cc3%3A0%257Cc4%3A0%257Cc5%3A0%257Cc6%3A0%257Cc7%3A0%257Cc8%3A1%257Cc9%3A0%257Cconsent%3Atrue%257Cts%3A%24now%24, , , domain, 1und1.de)
 1und1.de###__tealiumGDPRcpPrefs:style(visibility: hidden !important;)
+! infranken cookies
+infranken.de##+js(trusted-click-element, span%23cmpbntyestxt, , 1000)
