@@ -39,7 +39,7 @@ import {
 } from '../utils.js';
 import IFilter from './interface.js';
 import { HTMLModifier } from '../html-filtering.js';
-import CosmeticFilter from './cosmetic.js';
+import type CosmeticFilter from './cosmetic.js';
 
 const HTTP_HASH = fastHash('http');
 const HTTPS_HASH = fastHash('https');
