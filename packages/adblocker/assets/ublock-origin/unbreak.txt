@@ -3300,12 +3300,6 @@ goku.sx##.st-btn > img:style(margin: auto !important; display: block !important;
 @@||cdn.pendo.io/agent/static/*/pendo.js$script,domain=adp.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/153977
 @@||bat.bing.com/bat.js$script,domain=northwell.edu
-! https://github.com/AdguardTeam/AdguardFilters/issues/154110
-@@||cdn.segmentify.com^$css,image,script,domain=mediamarkt.com.tr
-@@||img.segmentify.com^$image,domain=mediamarkt.com.tr
-@@||per2.segmentify.com^$xhr,domain=mediamarkt.com.tr
-@@||googletagmanager.com/gtm.js$script,domain=mediamarkt.com.tr
-||googletagmanager.com/gtm.js?*&l=dataLayer$script,domain=mediamarkt.com.tr,important
 ! https://github.com/AdguardTeam/AdguardFilters/issues/154297
 @@||vbt.io^$css,image,domain=landing.davidho.sg
 ! https://www.reddit.com/r/uBlockOrigin/comments/14er5u6/
@@ -3493,8 +3487,10 @@ neurotray.com##+js(nano-stb, %2FEzoIvent%7CTDELAY%2F, 5000)
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,important,redirect=google-ima.js:5,domain=abczdrowie.pl|animezone.pl|chillizet.pl|claudia.pl|echirurgia.pl|elevensports.pl|elle.pl|elleman.pl|fm.tuba.pl|focusnauka.pl|games.cdn.famobi.com|glamour.pl|grydladzieci.pl|ipla.tv|ipla.tv|kobieta.pl|meloradio.pl|mojegotowanie.pl|mojpieknyogrod.pl|money.pl|national-geographic.pl|parenting.pl|partner.redefine.pl|playpuls.pl|pluscdn.pl|polsatgo.pl|polsatnews.pl|polsatsport.pl|przyslijprzepis.pl|radioplus.pl|radiozet.pl|sadeczanin.info|tvokazje.pl|tvp.pl|twojapogoda.pl|video.onnetwork.tv|videotarget.pl|wp.pl|wtk.pl|interia.pl|www.polsatnews.pl|autocentrum.pl
 ! https://www.reddit.com/r/uBlockOrigin/comments/16gwdpd/virgin_media_player_not_visible_with_ublock/
 virginmediatelevision.ie##+js(set, google.ima.dai, %7B%7D)
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=virginmediatelevision.ie
-@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=virginmediatelevision.ie
+||imasdk.googleapis.com/js/sdkloader/ima3.js^$script,redirect=google-ima.js,domain=virginmediatelevision.ie
+@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js^$script,domain=virginmediatelevision.ie
+! https://github.com/uBlockOrigin/uAssets/issues/25010
+virginmediatelevision.ie##+js(no-xhr-if, %2Ffroloa.js)
 ! https://www.3bmeteo.com/meteo/italia/video - Video breakage
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=3bmeteo.com,important
 3bmeteo.com##+js(nano-sib, adv, *)
@@ -3889,8 +3885,8 @@ optimum.net##+js(set, s.tl, noopFunc)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/179845
 @@||jssdkcdns.mparticle.com/js/*/mparticle.js^$script,3p,domain=syfy.com
 ! https://www.reddit.com/r/uBlockOrigin/comments/1d4j9is/ub0_only_extension_and_default_filters_but_still/
-pvrcinemas.com##+js(set, SalesforceInteractions, %7B%7D)
-pvrcinemas.com##+js(set, SalesforceInteractions.CatalogObjectInteractionName)
+! https://www.reddit.com/r/uBlockOrigin/comments/1ezu2kn/ub0_only_extension_and_default_filters_but_still/
+@@/evergage.min.js^$script,domain=pvrcinemas.com
 ! https://github.com/uBlockOrigin/uAssets/issues/23921
 ! https://github.com/easylist/easylist/commit/05088ebeca21e346dc73c08b45e4eab2041a414d
 @@||fundingchoicesmessages.google.com/i/$script,domain=sudokugame.org
@@ -4082,3 +4078,8 @@ code.world##+js(set, WURFL, %7B%7D)
 ||services.haaretz.co.il^$from=~haaretz.co.il|~haaretz.com
 ! https://www.reddit.com/r/uBlockOrigin/comments/1eygvj3/application_error_on_topgearcom_crossorigin/
 topgear.com##+js(set, _sp_.config.events.onSPPMObjectReady, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/25014
+@@||worldsurfleague.com/js/videojs8/nuevo/plugins/videojs-contrib-ads.min.js^$script,1p
+@@||micro.rubiconproject.com/prebid/dynamic/$script,domain=worldsurfleague.com
+@@||securepubads.g.doubleclick.net/pagead/ima_ppub_config$xhr,domain=worldsurfleague.com
+@@||pubads.g.doubleclick.net/gampad/ads?*www.worldsurfleague.com$xhr,domain=imasdk.googleapis.com

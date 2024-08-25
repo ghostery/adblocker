@@ -47,6 +47,11 @@ www.youtube.com##+js(json-prune-xhr-response, playerAds%20adPlacements%20adSlots
 ! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-2276846484
 ! https://github.com/easylist/easylist/commit/ff6cf6a17bfd5f9f3d5233c364d05f48f187b9b7
 ! [badfilter] ||youtube.com/youtubei/v1/player/heartbeat?$badfilter
+! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-2307514494
+!#if cap_html_filtering
+!#else
+web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22cnt_lbl_brs%22%5B%5E%5Cn%5D%2B%3F%22SponsoredData%22%2C%22ad_id%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
+!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/18476
 ! VOE sites
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=donaldlineelse.com,important
@@ -85,8 +90,6 @@ japscan.lol##+js(acs, addEventListener, Function(_0x)
 japscan.lol#@##blur-inter
 japscan.lol#@##interstitial
 japscan.lol#@#.copineess
-japscan.lol#@#[class^="copine"]
-japscan.lol#@#.tangoai
 japscan.lol#@##stickyBanner
 japscan.lol#@#a[target="_blank"].donate
 japscan.lol#@#a.donate[target="_blank"][rel="noopener noreferrer nofollow"] img
@@ -96,7 +99,10 @@ japscan.lol#@#.container.text-center > div.mt-3 > a.Aikoi.donate
 japscan.lol#@#.Aikoi.donate
 japscan.lol#@#.aikoi.donate
 japscan.lol#@#.container.text-center > div.mt-3 > a.Aikoi.donate > img
-japscan.lol##.container.text-center > div.mt-3 > a.Aikoi.donate[href^="http"] > img
+japscan.lol#@#.container.text-center > div.mt-3 > a.Aikoi.donate[href^="http"] > img
+japscan.lol#@#.container.text-center > div.mt-3 > a.Aikoi.donate[href^="http"] > img.img-fluid
+japscan.lol#@#.container.text-center > div.mt-3 > a.Aikoi.donate[href^="http"] > img.img-fluid[src^="/imgs/onc/"]
+japscan.lol##body > .container.text-center > div.mt-3 > a.Aikoi.donate[href^="http"] > img.img-fluid[src^="/imgs/onc/"]
 ! ads
 japscan.lol##+js(no-fetch-if, www.japscan.lol%2Fimgs%2F)
 ||japscan.lol^$csp=sandbox allow-forms allow-same-origin allow-scripts allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-top-navigation
@@ -135,6 +141,18 @@ panel.freemcserver.net##div[style^="min-height:"]:has(> div[id^="stpd-"])
 ||hbopenbid.pubmatic.com/translator?source=prebid-client|$xhr,important,domain=panel.freemcserver.net
 ||adx.adform.net/adx/openrtb|$xhr,important,domain=panel.freemcserver.net
 !#endif
+! paste.fo ads
+paste.fo##.wrapper > [class] > a[href*="https://bit.ly/3vKxLhC"], a[href*="https://bit.ly/4aDbAcb"], a[href*="https://bit.ly/4cL4Jz2"], a[href*="https://bit.ly/3VEkIbL"], a[href*="https://goldenaccounts.cc/?r=pastefo"], a[href*="https://discord.gg/R5pN8ZvBVW"], a[href*="https://spadone.cc/"], a[href*="https://orion.hydrolmn.com/"], a[href*="https://anonsmm.com/?utm_source"], a[href*="https://cryptochanger.to/"], a[href*="https://sellsn.io/"], a[href*="https://astralproxies.sellpass.io/"], a[href*="https://discord.gg/GeDqHNzyEh"], a[href*="https://proxylist.to/?ref=pfo"], a[href*="https://themario.sellpass.io/"], a[href*="sigmaproxies.com"], a[href*="notokyc.com"], a[href="https://adultslayer.shop/"]
+||paste.fo^$image,1p
+@@||paste.fo/assets/svg/*.php$image,1p
+@@||paste.fo/assets/svg/*.svg$image,1p
+@@||paste.fo/favicon.ico|$image,1p
+@@||paste.fo/assets/img/$image,1p
+||paste.fo/*?as=*&tkn=$xhr
+paste.fo##.lolimg
+paste.fo##.wrapper > *:has(> a > * > * > * [class])
+paste.fo##.wrapper > [class]:has(> a[href^="https://paste.fo/"][id] > * > *)
+paste.fo##style:has-text(background-image:):remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/24217
 ! kimcartoon.*,kisscartoon.se,kc.linksgen.com##+js(aost, jQuery.fn.html, %2F%5E(%3F!.*jquery).*(Scripts%7CinlineScript)%2Fi)
 @@*$xhr,1p,domain=kimcartoon.*|kisscartoon.se|kc.linksgen.com
@@ -149,7 +167,7 @@ kimcartoon.li,kc.linksgen.com,kisscartoon.se##+js(no-fetch-if, bidgear)
 ! @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,domain=kimcartoon.li
 ! kimcartoon.li,kc.linksgen.com,kisscartoon.se##+js(nostif, navigator.userAgent)
 kimcartoon.li,kc.linksgen.com,kisscartoon.se##+js(set, _btcCheck, false)
-kimcartoon.li,kc.linksgen.com,kisscartoon.se##+js(rmnt, script, %2Fdocument%5C.getElementById%5C(%5C'divContentVideo%5C'%5C)%5C.innerHTML%7Cvar%20cpe%20%3D%20true%3B%7Cfunction%20dcmarvel%5C(prm%5C)%2F)
+kimcartoon.li,kc.linksgen.com,kisscartoon.se##+js(rmnt, script, %2Fdocument%5C.getElementById%5C(%5C'divContentVideo%5C'%5C)%5C.innerHTML%7Cvar%20cpe%20%3D%20true%3B%5B%5CS%5Cs%5Cn%5D%2B%3FFunc%5C(%5C)%5B%5CS%5Cs%5Cn%5D%2B%3Fcpe%20%3D%20false%3B%7Cfunction%20dcmarvel%5C(prm%5C)%2F)
 kimcartoon.li,kc.linksgen.com,kisscartoon.se##+js(set, isAdb, false)
 kimcartoon.li,kc.linksgen.com,kisscartoon.se###divContentVideo:style(display: block !important;)
 kimcartoon.li,kc.linksgen.com,kisscartoon.se###centerDivVideo > div[id]:has(> img[src^="https://i.imgur.com"])
@@ -160,13 +178,7 @@ kimcartoon.li,kc.linksgen.com,kisscartoon.se#@##hideAds
 @@||platform.bidgear.com/pubbidgear-ad.js$xhr,domain=kimcartoon.li|kisscartoon.se|kc.linksgen.com
 @@||whatsnew247.net^$script,xhr,domain=kimcartoon.li|kisscartoon.se|kc.linksgen.com
 ! https://github.com/uBlockOrigin/uAssets/issues/24220
-!veev.to##+js(trusted-set, __abburi, %7B%22value%22%3A%20%22https%3A%2F%2Fveev.to%2Fassets%2Fvideoplayer%2Fdf8fdb9.js%22%7D)
-!#if cap_html_filtering
-!#else
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=veev.to
-@@||a.pemsrv.com/ad-provider.js|$xhr,domain=veev.to
-veev.to##+js(trusted-suppress-native-method, XMLHttpRequest.prototype.open, %7C%20%22adsbygoogle%22, prevent)
-!#endif
+veev.to##+js(rpnt, script, window.__VEEVPLAYER__, %2F*start*%2F%20!function()%7B%22use%20strict%22%3Blet%20t%3DObject.keys%3BObject.keys%3Dfunction(n)%7Breturn%20n%26%26n.html%26%26n.html.instance%26%26n.html.instance.start%26%26n.env%26%26n.env.instance%26%26n.env.instance.start%26%26n.http%26%26n.http.instance%26%26n.http.instance.start%26%26(n.html.instance.start%3Dfunction()%7B%7D%2Cn.env.instance.start%3Dfunction()%7B%7D%2Cn.http.instance.start%3Dfunction()%7B%7D)%2Ct(n)%7D%7D()%3B%2F*end*%2Fwindow.__VEEVPLAYER__)
 ! Better to counter the old filter for a while... https://github.com/uBlockOrigin/uAssets/commit/f44ac328b718bab3118f759880128fe420afb906
 ! https://www.reddit.com/r/uBlockOrigin/comments/1ekkkp1/google_constantly_reverting_to_light_mode_and/
 www.google.*#@#+js(trusted-set-cookie, SOCS, CAISNQgQEitib3FfaWRlbnRpdHlmcm9udGVuZHVpc2VydmVyXzIwMjQwNTE0LjA2X3AwGgJmaSADGgYIgOu0sgY, 1year)
@@ -174,8 +186,8 @@ www.google.*#@#+js(trusted-set-cookie, SOCS, CAISNQgQEitib3FfaWRlbnRpdHlmcm9udGV
 @@||ads.anitube.vip^$xhr,domain=animefire.info|animesonlinecc.us|animesup.info|animeyabu.net|animeyabu.org|anitube.vip|dattebayo-br.com|drstonebr.com|goanimes.vip|goyabu.us|hinatasoul.com|isekaibrasil.com|meuanime.info|otakuanimess.net
 @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=animefire.info|animesonlinecc.us|animesup.info|animeyabu.net|animeyabu.org|anitube.vip|dattebayo-br.com|drstonebr.com|goanimes.vip|goyabu.us|hinatasoul.com|isekaibrasil.com|meuanime.info|otakuanimess.net
 @@||www.popads.net/js/adblock.js$xhr,domain=animefire.info|animesonlinecc.us|animesup.info|animeyabu.net|animeyabu.org|anitube.vip|dattebayo-br.com|drstonebr.com|goanimes.vip|goyabu.us|hinatasoul.com|isekaibrasil.com|meuanime.info|otakuanimess.net
-caroloportunidades.com.br###player:style(display: block !important;)
-caroloportunidades.com.br##+js(nostif, hasAdblock)
+caroloportunidades.com.br,connectionbrazilusa.com###player:style(display: block !important;)
+caroloportunidades.com.br,connectionbrazilusa.com##+js(nostif, hasAdblock)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1etpj7m/michigan_news_site_mlive_is_preventing_me_from/
 al.com,cleveland.com,mlive.com,nj.com,oregonlive.com#@#+js(rmnt, script, admiral)
 ! https://motimoti3d.jp/ circumvention
@@ -201,3 +213,5 @@ tvpworld.com#@#+js(set-cookie, TVPtcs22ver, 64)
 ! [badfilter] ||chatgpt.com/ces/$badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/25003
 lifehacker.jp#@#div[class^="article_pArticle_Embed"]
+! https://github.com/uBlockOrigin/uAssets/issues/22648
+@@||flashvps.xyz^$script,domain=sonixgvn.net
