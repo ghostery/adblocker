@@ -28,6 +28,7 @@ import Request from '../request.js';
 import Resources, { Resource } from '../resources.js';
 import CosmeticFilterBucket from './bucket/cosmetic.js';
 import NetworkFilterBucket from './bucket/network.js';
+import HTMLBucket from './bucket/html.js';
 import { Metadata, IPatternLookupResult } from './metadata.js';
 import Preprocessor, { Env } from '../preprocessor.js';
 import PreprocessorBucket from './bucket/preprocessor.js';
@@ -95,11 +96,16 @@ type NetworkFilterMatchingContext = {
   filterType: FilterType.NETWORK;
 };
 
-type CosmeticFilterMatchingContext = {
-  url: string;
-  callerContext: any; // Additional context given from user
-  filterType: FilterType.COSMETIC;
-};
+type CosmeticFilterMatchingContext =
+  | {
+      url: string;
+      callerContext: any; // Additional context given from user
+      filterType: FilterType.COSMETIC;
+    }
+  | {
+      request: Request; // For HTML Filters
+      filterType: FilterType.COSMETIC;
+    };
 
 type NetworkFilterMatchEvent = (request: Request, result: BlockingResponse) => void;
 
@@ -436,6 +442,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     engine.cosmetics = CosmeticFilterBucket.deserialize(buffer, config);
     engine.hideExceptions = NetworkFilterBucket.deserialize(buffer, config);
 
+    engine.htmlFilters = HTMLBucket.deserialize(buffer, config);
+
     // Optionally deserialize metadata
     const hasMetadata = buffer.getBool();
     if (hasMetadata) {
@@ -458,6 +466,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
   public redirects: NetworkFilterBucket;
   public filters: NetworkFilterBucket;
   public cosmetics: CosmeticFilterBucket;
+  public htmlFilters: HTMLBucket;
 
   public metadata: Metadata | undefined;
   public resources: Resources;
@@ -504,6 +513,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     this.filters = new NetworkFilterBucket({ config: this.config });
     // Cosmetic filters
     this.cosmetics = new CosmeticFilterBucket({ config: this.config });
+    // HTML filters
+    this.htmlFilters = new HTMLBucket({ config: this.config });
 
     // Injections
     this.resources = new Resources();
@@ -550,6 +561,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       this.csp.getSerializedSize() +
       this.cosmetics.getSerializedSize() +
       this.hideExceptions.getSerializedSize() +
+      this.htmlFilters.getSerializedSize() +
       4; // checksum
 
     // Estimate size of `this.lists` which stores information of checksum for each list.
@@ -603,6 +615,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     this.csp.serialize(buffer);
     this.cosmetics.serialize(buffer);
     this.hideExceptions.serialize(buffer);
+    this.htmlFilters.serialize(buffer);
 
     // Optionally serialize metadata
     buffer.pushBool(this.metadata !== undefined);
@@ -642,19 +655,27 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
   }
 
   public getFilters(): { networkFilters: NetworkFilter[]; cosmeticFilters: CosmeticFilter[] } {
-    const cosmeticFilters: CosmeticFilter[] = [];
-    const networkFilters: NetworkFilter[] = [];
+    const cosmeticFilters: CosmeticFilter[] = this.cosmetics.getFilters();
+    const networkFilters: NetworkFilter[] = [
+      ...this.filters.getFilters(),
+      ...this.exceptions.getFilters(),
+      ...this.importants.getFilters(),
+      ...this.redirects.getFilters(),
+      ...this.csp.getFilters(),
+      ...this.hideExceptions.getFilters(),
+    ];
+
+    for (const filter of this.htmlFilters.getFilters()) {
+      if (filter.isNetworkFilter()) {
+        networkFilters.push(filter);
+      } else if (filter.isCosmeticFilter()) {
+        cosmeticFilters.push(filter);
+      }
+    }
 
     return {
-      cosmeticFilters: cosmeticFilters.concat(this.cosmetics.getFilters()),
-      networkFilters: networkFilters.concat(
-        this.filters.getFilters(),
-        this.exceptions.getFilters(),
-        this.importants.getFilters(),
-        this.redirects.getFilters(),
-        this.csp.getFilters(),
-        this.hideExceptions.getFilters(),
-      ),
+      cosmeticFilters,
+      networkFilters,
     };
   }
 
@@ -689,14 +710,26 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       );
     }
 
+    const htmlFilters: (CosmeticFilter | NetworkFilter)[] = [];
+
     // Update cosmetic filters
     if (
       this.config.loadCosmeticFilters &&
       (newCosmeticFilters.length !== 0 || removedCosmeticFilters.length !== 0)
     ) {
       updated = true;
+      const cosmeticFitlers: CosmeticFilter[] = [];
+
+      for (const filter of newCosmeticFilters) {
+        if (filter.isHtmlFiltering()) {
+          htmlFilters.push(filter);
+        } else {
+          cosmeticFitlers.push(filter);
+        }
+      }
+
       this.cosmetics.update(
-        newCosmeticFilters,
+        cosmeticFitlers,
         removedCosmeticFilters.length === 0 ? undefined : new Set(removedCosmeticFilters),
         this.config,
       );
@@ -722,6 +755,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         // done at match-time directly.
         if (filter.isCSP()) {
           csp.push(filter);
+        } else if (filter.isHtmlFilteringRule()) {
+          htmlFilters.push(filter);
         } else if (filter.isGenericHide() || filter.isSpecificHide()) {
           hideExceptions.push(filter);
         } else if (filter.isException()) {
@@ -752,6 +787,16 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       }
 
       this.hideExceptions.update(hideExceptions, removedNetworkFiltersSet);
+    }
+
+    if (
+      this.config.enableHtmlFiltering &&
+      (htmlFilters.length !== 0 ||
+        removedNetworkFilters.length !== 0 ||
+        removedCosmeticFilters.length !== 0)
+    ) {
+      const removeFilters = new Set([...removedNetworkFilters, ...removedCosmeticFilters]);
+      this.htmlFilters.update(htmlFilters, removeFilters);
     }
 
     return updated;
@@ -835,57 +880,77 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
   /**
    * Return a list of HTML filtering rules.
    */
-  public getHtmlFilters({
-    // Page information
-    url,
-    hostname,
-    domain,
-
-    callerContext,
-  }: {
-    url: string;
-    hostname: string;
-    domain: string | null | undefined;
-
-    callerContext?: any | undefined;
-  }): HTMLSelector[] {
+  public getHtmlFilters(request: Request): HTMLSelector[] {
     const htmlSelectors: HTMLSelector[] = [];
 
-    if (this.config.enableHtmlFiltering === false || this.config.loadCosmeticFilters === false) {
+    if (this.config.enableHtmlFiltering === false) {
       return htmlSelectors;
     }
 
-    domain ||= '';
+    const { networkFilters, exceptions, cosmeticFilters, unhides } =
+      this.htmlFilters.getHTMLFilters(request, this.isFilterExcluded.bind(this));
 
-    const { filters, unhides } = this.cosmetics.getHtmlFilters({
-      domain,
-      hostname,
-      isFilterExcluded: this.isFilterExcluded.bind(this),
-    });
-    const exceptions = new Map(unhides.map((unhide) => [unhide.getSelector(), unhide]));
+    if (cosmeticFilters.length !== 0) {
+      const unhideMap = new Map(unhides.map((unhide) => [unhide.getSelector(), unhide]));
 
-    for (const filter of filters) {
-      const extended = filter.getExtendedSelector();
-      if (extended === undefined) {
-        continue;
+      for (const filter of cosmeticFilters) {
+        const extended = filter.getExtendedSelector();
+        if (extended === undefined) {
+          continue;
+        }
+        const unhide = unhideMap.get(filter.getSelector());
+        if (unhide === undefined) {
+          htmlSelectors.push(extended);
+        }
+        this.emit(
+          'filter-matched',
+          { filter, exception: unhide },
+          {
+            request,
+            filterType: FilterType.COSMETIC,
+          },
+        );
       }
-      const exception = exceptions.get(filter.getSelector());
-      if (exception !== undefined) {
-        htmlSelectors.push(extended);
+    }
+
+    if (networkFilters.length !== 0) {
+      const exceptionsMap = new Map();
+      let replaceDisabledException;
+      for (const exception of exceptions) {
+        const optionValue = exception.optionValue;
+        if (optionValue === '') {
+          replaceDisabledException = exception;
+          break;
+        }
+        exceptionsMap.set(optionValue, exception);
       }
-      this.emit(
-        'filter-matched',
-        { filter, exception },
-        {
-          url,
-          callerContext,
-          filterType: FilterType.COSMETIC,
-        },
-      );
+
+      for (const filter of networkFilters) {
+        const modifier = filter.getHtmlModifier();
+
+        if (modifier === null) {
+          continue;
+        }
+
+        const exception = replaceDisabledException || exceptionsMap.get(filter.optionValue);
+
+        this.emit(
+          'filter-matched',
+          { filter, exception },
+          {
+            request,
+            filterType: FilterType.NETWORK,
+          },
+        );
+
+        if (exception === undefined) {
+          htmlSelectors.push(['replace', modifier]);
+        }
+      }
     }
 
     if (htmlSelectors.length !== 0) {
-      this.emit('html-filtered', htmlSelectors, url);
+      this.emit('html-filtered', htmlSelectors, request.url);
     }
 
     return htmlSelectors;
