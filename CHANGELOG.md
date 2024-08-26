@@ -1,3 +1,35 @@
+# v1.32.0 (Mon Aug 26 2024)
+
+#### :rocket: New Feature
+
+- `@cliqz/adblocker-webextension`, `@cliqz/adblocker`
+  - feat: implement `$replace` modifier, improve option parsing [#3897](https://github.com/ghostery/adblocker/pull/3897) ([@seia-soto](https://github.com/seia-soto) [@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- `@cliqz/adblocker`
+  - Update local assets [#4220](https://github.com/ghostery/adblocker/pull/4220) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @eslint/js from 9.9.0 to 9.9.1 [#4225](https://github.com/ghostery/adblocker/pull/4225) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump micromatch from 4.0.7 to 4.0.8 [#4228](https://github.com/ghostery/adblocker/pull/4228) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump tsx from 4.17.0 to 4.18.0 [#4224](https://github.com/ghostery/adblocker/pull/4224) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump axios from 1.7.4 to 1.7.5 [#4226](https://github.com/ghostery/adblocker/pull/4226) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump eslint from 9.9.0 to 9.9.1 [#4227](https://github.com/ghostery/adblocker/pull/4227) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-extended-selectors`, `@cliqz/adblocker-webextension-cosmetics`
+  - Build(deps-dev): Bump jsdom from 24.1.1 to 25.0.0 [#4223](https://github.com/ghostery/adblocker/pull/4223) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.31.4 (Fri Aug 23 2024)
 
 #### :bug: Bug Fix

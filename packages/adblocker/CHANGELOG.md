@@ -1,3 +1,22 @@
+# v1.32.0 (Mon Aug 26 2024)
+
+#### :rocket: New Feature
+
+- feat: implement `$replace` modifier, improve option parsing [#3897](https://github.com/ghostery/adblocker/pull/3897) ([@seia-soto](https://github.com/seia-soto) [@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- Update local assets [#4220](https://github.com/ghostery/adblocker/pull/4220) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 4
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.31.4 (Fri Aug 23 2024)
 
 #### :bug: Bug Fix
