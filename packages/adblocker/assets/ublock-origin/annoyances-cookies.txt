@@ -37,6 +37,10 @@ askubuntu.com,mathoverflow.net,serverfault.com,stackapps.com,stackexchange.com,s
 blaklader.*##div#onetrust-consent-sdk
 !!! Trusted scriptlets------------------------------------------------------------
 !! Accept mandatory cookies / reject all additional cookies
+! Didomi - Continue without agreeing
+auto.it##+js(trusted-click-element, .didomi-continue-without-agreeing, , 1000)
+auto.it###didomi-host:style(visibility: hidden !important;)
+auto.it##body.didomi-popup-open:style(overflow: auto !important;)
 ! When moving from Google search to other Google services or opening them directly. E.G. https://translate.google.com/
 consent.google.*##+js(trusted-click-element, form%5Baction%5D%20button%5Bjsname%3D%22tWT92d%22%5D)
 ! https://github.com/DandelionSprout/adfilt/discussions/932#discussioncomment-8260397
@@ -58,7 +62,7 @@ fandom.com##+js(trusted-set-cookie, euconsent-v2, CPt3fQAPt3fQACNAFAENDLCgAAAAAA
 fandom.com##+js(trusted-set-cookie, tracking-opt-in-status, rejected, 1year)
 fandom.com##+js(trusted-set-cookie, addtl_consent, 1~, 1year)
 ! Sample page: https://www.dailymotion.com/video/x8lzxby
-dailymotion.com##+js(trusted-set-cookie, dm-euconsent-v2, CPt6yMAPt6yMABpAGAENDECgAAAAAH_AAAqIAAAS3AJMNW4gC7MocGbQMIoEQIwrCQigUAEFAMLRAQAODgp2VgE-sIkAKAUARgRAhwBRkQCAAASAJCIAJAiwQAAAiAQAAgAQCIQAMDAIKACwEAgABAdAxRCgAECQgSIiIhTAgKgSCAlsqEEoLpDTCAKssAKARGwUACIJARWAAICwcAwRICViwQJMQbRAAMAKAUSoVqKT00BCxmQAAAAA, 1year)
+dailymotion.com##+js(trusted-set-cookie, consentUUID, 4828f4be-a6c6-46d4-b46a-5a812a8c0f81_35)
 ! Sample page: https://www.express.co.uk/celebrity-news/1553859/meat-loaf-how-did-he-die-covid-death-cause-age-health-bat-out-of-hell-news-latest-update
 express.co.uk##+js(set, flagTcfLoaded, true)
 express.co.uk##+js(trusted-set-local-storage-item, CMPList, %24currentDate%24)
@@ -361,6 +365,13 @@ vm.co.mz##+js(trusted-set-cookie, cookiePolicyAcceptedDate, %24currentISODate%24
 ! https://www.blick.ch/
 blick.ch##+js(trusted-set-cookie, OptanonConsent, groups%3DC0004%253A0%252CC0005%253A0%252CC0003%253A1%252CC0002%253A0%252CC0001%253A1%252CV2STACK42%253A1, , , domain, blick.ch)
 blick.ch##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24)
+! https://olympics.com/en/video/highlights-sport-climbing-olympic-qualifier-series-2024-boulder-qualification-rounds-shanghai?uxreference=playlist
+olympics.com##+js(trusted-set-cookie, OptanonConsent, groups%3DC0001%253A1%252CC0002%253A0%252CC0003%253A0%252CC0004%253A0%252CC0005%253A0, , , domain, olympics.com)
+olympics.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24)
+! https://github.com/easylist/easylist/issues/19876
+tf1info.fr##+js(trusted-click-element, button%5Btitle%5E%3D%22Continuer%20sans%20accepter%22%5D)
+tf1info.fr###tc-privacy-wrapper:style(visibility: hidden !important;)
+tf1info.fr##body.tc-modal-open:style(overflow: auto !important;)
 !! Needs additional cookies
 ! https://github.com/uBlockOrigin/uAssets/issues/23701
 ! Enable search customization
@@ -1203,9 +1214,6 @@ costcobusinessdelivery.com##+js(trusted-set-cookie, OptanonConsent, groups%3DBG1
 costcobusinessdelivery.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24)
 ! https://github.com/uBlockOrigin/uAssets/issues/23727
 seznam.cz##+js(trusted-set-cookie, euconsent-v2, CP-wiwAP-wiwAD3ACLCSA1EsAP_gAEPgAATIJVwQgAAwAKAAsACAAFQALgAZAA6ACAAFAAKgAWgAyABoADmAIgAigBHACSAEwAJwAVQAtgBfgDCAMUAgACEgEQARQAjoBOAE6AL4AaQA4gB3ADxAH6AQgAkwBOACegFIAKyAWYAuoBgQDTgG0APkAjUBHQCaQE2gJ0AVIAtQBbgC8wGMgMkAZcA0oBqYDugHfgQHAhcBGYCTQEqwQugRQAKAAsACoAFwAQAAyABoAEQAI4ATAAqgBiAD8AISARABEgCOAE4AMsAZoA7gB-gEIAIsAXUA2gCbQFSALUAW4AvMBggDJAGXANTAhcAA.YAAAAAAAAWAA, , , domain, seznam.cz)
-! https://olympics.com/en/video/highlights-sport-climbing-olympic-qualifier-series-2024-boulder-qualification-rounds-shanghai?uxreference=playlist - functional + social media
-olympics.com##+js(trusted-set-cookie, OptanonConsent, groups%3DC0001%253A1%252CC0002%253A0%252CC0003%253A1%252CC0004%253A0%252CC0005%253A1, , , domain, olympics.com)
-olympics.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24)
 ! https://github.com/uBlockOrigin/uAssets/issues/23809 - multimedia player
 issue-council.robertsspaceindustries.com##+js(trusted-set-cookie, pleaseFix.privacy, %7B%2522analyticsCookie%2522%3Afalse%252C%2522personalisationCookie%2522%3Afalse%252C%2522targetedAdvertisingCookie%2522%3Afalse%252C%2522multimediaPlayerCookie%2522%3Atrue%7D)
 ! deny advertisers, authorize to allow rest
@@ -1300,9 +1308,11 @@ redbull.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24, ,
 ! Didomi consent popups
 ! https://github.com/uBlockOrigin/uAssets/issues/24725
 ! https://github.com/uBlockOrigin/uAssets/pull/24840
-20minutos.es,abc.es,actu.fr,actu.fr,bonniernews.se,cadenaser.com,cope.es,diepresse.com,dnevnik.hr,elcomercio.es,elconfidencial.com,elconfidencial.com,elpais.com,elpais.es,euronews.com,expressen.se,france24.com,gva.be,hbvl.be,krone.at,ledauphine.com,marmiton.org,metronieuws.nl,nicematin.com,nieuwsblad.be,rfi.fr,rossmann.pl,rtl.lu,rtl.lu,sensacine.com,silicon.es##+js(trusted-click-element, %23didomi-notice-agree-button, , 1000)
-20minutos.es,abc.es,actu.fr,actu.fr,bonniernews.se,cadenaser.com,cope.es,diepresse.com,dnevnik.hr,elcomercio.es,elconfidencial.com,elconfidencial.com,elpais.com,elpais.es,euronews.com,expressen.se,france24.com,gva.be,hbvl.be,krone.at,ledauphine.com,marmiton.org,metronieuws.nl,nicematin.com,nieuwsblad.be,rfi.fr,rossmann.pl,rtl.lu,rtl.lu,sensacine.com,silicon.es###didomi-host:style(visibility: hidden !important;)
-20minutos.es,abc.es,actu.fr,actu.fr,bonniernews.se,cadenaser.com,cope.es,diepresse.com,dnevnik.hr,elcomercio.es,elconfidencial.com,elconfidencial.com,elpais.com,elpais.es,euronews.com,expressen.se,france24.com,gva.be,hbvl.be,krone.at,ledauphine.com,marmiton.org,metronieuws.nl,nicematin.com,nieuwsblad.be,rfi.fr,rossmann.pl,rtl.lu,rtl.lu,sensacine.com,silicon.es##body.didomi-popup-open:style(overflow: auto !important;)
+! https://www.jeuxvideo.com/
+jeuxvideo.com##+js(trusted-click-element, button%5Bonclick%3D%22Didomi.setUserAgreeToAll()%3B%22%5D, , 1000)
+20minutos.es,abc.es,actu.fr,actu.fr,autopista.es,belfasttelegraph.co.uk,bonduelle.it,bonniernews.se,cadenaser.com,ciclismoafondo.es,cnews.fr,cope.es,decathlon.pl,diepresse.com,dnevnik.hr,dumpert.nl,ebuyclub.com,edreams.de,edreams.net,elcomercio.es,elconfidencial.com,elconfidencial.com,elpais.com,elpais.es,euronews.com,expressen.se,france24.com,gva.be,hbvl.be,krone.at,ledauphine.com,marmiton.org,metronieuws.nl,nicematin.com,nieuwsblad.be,rfi.fr,rossmann.pl,rtbf.be,rtl.lu,rtl.lu,sensacine.com,silicon.es##+js(trusted-click-element, %23didomi-notice-agree-button, , 1000)
+20minutos.es,abc.es,actu.fr,actu.fr,autopista.es,belfasttelegraph.co.uk,bonduelle.it,bonniernews.se,cadenaser.com,ciclismoafondo.es,cnews.fr,cope.es,decathlon.pl,diepresse.com,dnevnik.hr,dumpert.nl,ebuyclub.com,edreams.de,edreams.net,elcomercio.es,elconfidencial.com,elconfidencial.com,elpais.com,elpais.es,euronews.com,expressen.se,france24.com,gva.be,hbvl.be,jeuxvideo.com,krone.at,ledauphine.com,marmiton.org,metronieuws.nl,nicematin.com,nieuwsblad.be,rfi.fr,rossmann.pl,rtbf.be,rtl.lu,rtl.lu,sensacine.com,silicon.es###didomi-host:style(visibility: hidden !important;)
+20minutos.es,abc.es,actu.fr,actu.fr,autopista.es,belfasttelegraph.co.uk,bonduelle.it,bonniernews.se,cadenaser.com,ciclismoafondo.es,cnews.fr,cope.es,decathlon.pl,diepresse.com,dnevnik.hr,dumpert.nl,ebuyclub.com,edreams.de,edreams.net,elcomercio.es,elconfidencial.com,elconfidencial.com,elpais.com,elpais.es,euronews.com,expressen.se,france24.com,gva.be,hbvl.be,jeuxvideo.com,krone.at,ledauphine.com,marmiton.org,metronieuws.nl,nicematin.com,nieuwsblad.be,rfi.fr,rossmann.pl,rtbf.be,rtl.lu,rtl.lu,sensacine.com,silicon.es##body.didomi-popup-open:style(overflow: auto !important;)
 @@||sdk.privacy-center.org^$script,domain=dnevnik.hr|actu.fr|ledauphine.com
 ! https://de.euronews.com/next/2024/07/04/kohlenstoffarme-forderung-aserbaidschan-mochte-diversifizierung-des-traditionellen-energie video broken, decline tracking
 euronews.com###poool-fullscreen-widget
@@ -1360,3 +1370,5 @@ vidal.fr##+js(trusted-set-cookie, vidal_consent, tracking%3D0%26content%3D0%26co
 1und1.de###__tealiumGDPRcpPrefs:style(visibility: hidden !important;)
 ! infranken cookies
 infranken.de##+js(trusted-click-element, span%23cmpbntyestxt, , 1000)
+! https://www.tvsyd.dk/syd-og-soenderjylland/politiet-opfordrer-til-at-blive-indendors - marketing
+tvsyd.dk##+js(trusted-set-cookie, tv2reg_cookie_consent, %7B%22revision%22%3A1%2C%22consent%22%3A%5B%7B%22handle%22%3A%22necessary%22%2C%22value%22%3Atrue%7D%2C%7B%22handle%22%3A%22functional%22%2C%22value%22%3Afalse%7D%2C%7B%22handle%22%3A%22statistics%22%2C%22value%22%3Afalse%7D%2C%7B%22handle%22%3A%22preferences%22%2C%22value%22%3Afalse%7D%2C%7B%22handle%22%3A%22marketing%22%2C%22value%22%3Atrue%7D%5D%7D)

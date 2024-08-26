@@ -15,10 +15,11 @@ export default [
   "acs, atob, %2FpopundersPerIP%5B%5Cs%5CS%5D*%3FDate%5B%5Cs%5CS%5D*%3FgetElementsByTagName%5B%5Cs%5CS%5D*%3FinsertBefore%2F",
   "\"]:not([style^=\"width: 1px; height: 1px; position: absolute; left: -10000px; top: -\"])",
   "acs, document.createElement, %2Fl%5C.parentNode%5C.insertBefore%5C(s%2F",
+  ", OptanonConsent, groups%3DC0001%253A1%252CC0002%253A0%252CC0003%253A",
   "%2Fvisit%2F%22%5D%5Btitle%5E%3D%22https%3A%2F%2F%22%5D, %5Btitle%5D",
   "rmnt, script, %2Fh%3DdecodeURIComponent%7CpopundersPerIP%2F",
+  ".project-description [href^=\"/linkout?remoteUrl=\"][href*=\"",
   ":not([style^=\"position: absolute; left: -5000px\"])",
-  ", OptanonConsent, groups%3DC0001%253A1%252CC000",
   "href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2F",
   "ra, oncontextmenu%7Condragstart%7Conselectstart",
   ", OptanonAlertBoxClosed, %24currentDate%24",
@@ -36,6 +37,7 @@ export default [
   "acs, String.fromCharCode, ",
   "%2522%253Afalse%252C%2522",
   ", document.oncontextmenu",
+  "%2522%253Atrue%252C%2522",
   "aeld, DOMContentLoaded, ",
   "nosiif, visibility, 1000",
   "set-local-storage-item, ",
@@ -99,7 +101,6 @@ export default [
   "sponsor",
   "wrapper",
   "[data-",
-  "728x90",
   "accept",
   "Accept",
   "aopr, ",
@@ -259,6 +260,5 @@ export default [
   "x",
   "y",
   "Y",
-  "z",
-  "Z"
+  "z"
 ];

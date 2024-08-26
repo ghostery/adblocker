@@ -579,6 +579,16 @@ jacquieetmicheltv.net,jacquieetmicheltv2.net##.contents-list--zeder-detail-botto
 mangaku.*,~mangaku.win##+js(nowebrtc)
 mangaku.*,~mangaku.win##+js(acs, %24, onclick)
 .gif^$image,domain=mangaku.*|~mangaku.win
+! https://github.com/uBlockOrigin/uAssets/issues/2484
+! https://mkvcinemas.cat/
+/\/data\/cache\/min\/1\/[a-f0-9]+\.js\b/$script,1p,domain=mkvcinemas.*
+mkvcinemas.*##a[title="mkvAnime"]
+mkvcinemas.*##+js(rmnt, script, shown_at)
+mkvcinemas.*##+js(nowoif)
+*$script,3p,denyallow=googleapis.com,domain=mkvcinemas.*
+! https://github.com/uBlockOrigin/uAssets/issues/6114
+! https://github.com/uBlockOrigin/uAssets/issues/25026
+erogen.su##+js(aopr, document.dispatchEvent)
 ! END: Rules from filters.txt
 ! START: Regional lists
 ! <<<<< czech slovak filters >>>>>
@@ -599,6 +609,11 @@ wiflix-catalogue.pro#@#a[href*=".php"]
 ! <<<<< Oficjalne polskie filtry przeciwko alertom o Adblocku >>>>>
 ! https://www.reddit.com/r/uBlockOrigin/comments/1e6cknh/website_slow_my_down/
 dziennik.pl#@#+js(abort-current-script, parseInt, adblock)
+! <<<<< Oficjalne Polskie Filtry do uBlocka Origin >>>>>
+! https://github.com/uBlockOrigin/uAssets/issues/24996
+fxmag.pl##+js(no-xhr-if, googlesyndication)
+fxmag.pl##[class^="Ad_text"]
+fxmag.pl##[class*="Container_header_ad"] > div[style^="min-height:90px"]
 ! END: Regional lists
 ! https://github.com/AdguardTeam/AdguardFilters/issues/169660
 flixscans.org##+js(no-fetch-if, googlesyndication)
@@ -607,13 +622,6 @@ mhn.quest##+js(nostif, adblock)
 @@||mhn.quest^$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/21720
 bonsaiprolink.shop##+js(noeval-if, ads)
-! paste. fo ads
-paste.fo##.wrapper > [class] > a[href*="https://bit.ly/3vKxLhC"], a[href*="https://bit.ly/4aDbAcb"], a[href*="https://bit.ly/4cL4Jz2"], a[href*="https://bit.ly/3VEkIbL"], a[href*="https://goldenaccounts.cc/?r=pastefo"], a[href*="https://discord.gg/R5pN8ZvBVW"], a[href*="https://spadone.cc/"], a[href*="https://orion.hydrolmn.com/"], a[href*="https://anonsmm.com/?utm_source"], a[href*="https://cryptochanger.to/"], a[href*="https://sellsn.io/"], a[href*="https://astralproxies.sellpass.io/"], a[href*="https://discord.gg/GeDqHNzyEh"], a[href*="https://proxylist.to/?ref=pfo"], a[href*="https://themario.sellpass.io/"], a[href*="sigmaproxies.com"], a[href*="notokyc.com"], a[href="https://adultslayer.shop/"]
-paste.fo##.wrapper > *:has(a [style^="height: "][style*="background-"])
-||paste.fo/*?as=*&tkn=$xhr
-paste.fo##a[href]:has([style^="height: 110px;width: 440px;background-repeat: no-repeat;background-size: contain;"])
-paste.fo##.wrapper > [class]:has(> a > *:first-child:empty)
-paste.fo##style:has-text(background-image:):remove()
 ! bharathwick .com anti-adb
 bharathwick.com##+js(rmnt, script, deblocker)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/169319
@@ -892,7 +900,8 @@ madaradex.org##+js(rmnt, script, deblocker)
 vanillatweaks.net##.banner-spot
 vanillatweaks.net##+js(nano-sib, downloadTimer)
 ! https://github.com/uBlockOrigin/uAssets/issues/20401
-infinityscans.xyz,infinityscans.net##+js(rpnt, script, %2Ffunction%20%5Ba-z%5D.*%3F%5C)%5C%5D%5C(%5C)%5C)%5C%3B%5C%7D%5C(%5C)%5C)%5C)%5C%3B%2F, , condition, throw)
+infinityscans.xyz,infinityscans.net##+js(rpnt, script, %2F%5E.*window%5C%5B'stop'%5C%5D%5C(%5C)%5C)%3B%7D%5C(%5C)%5C)%3B%24%2Fm)
+infinityscans.xyz,infinityscans.net##+js(nowoif)
 ! linkos. info/photogen. hair/sharedrive. yachts popups
 linkos.info,photogen.hair,sharedrive.*##+js(nowoif)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/171677
@@ -1183,9 +1192,10 @@ daotranslate.*##+js(acs, document.getElementById, deblocker, %2F%5Edata%3Atext%5
 sfchronicle.com##+js(set-session-storage-item, realm.Oidc.3pc, %24remove%24)
 ! https://github.com/uBlockOrigin/uAssets/issues/23190
 ! https://github.com/uBlockOrigin/uAssets/issues/22821
-beaumontenterprise.com,bigrapidsnews.com,ctinsider.com,ctpost.com,darientimes.com,greenwichtime.com,houstonchronicle.com,lmtonline.com,manisteenews.com,michigansthumb.com,middletownpress.com,milfordmirror.com,mrt.com,myjournalcourier.com,ncadvertiser.com,newstimes.com,nhregister.com,ourmidland.com,registercitizen.com,sfchronicle.com,sheltonherald.com,stamfordadvocate.com,theheraldreview.com,thehour.com,theintelligencer.com,theridgefieldpress.com,timesunion.com,trumbulltimes.com,wiltonbulletin.com,yourconroenews.com###modals
-beaumontenterprise.com,bigrapidsnews.com,ctinsider.com,ctpost.com,darientimes.com,greenwichtime.com,houstonchronicle.com,lmtonline.com,manisteenews.com,michigansthumb.com,middletownpress.com,milfordmirror.com,mrt.com,myjournalcourier.com,ncadvertiser.com,newstimes.com,nhregister.com,ourmidland.com,registercitizen.com,sfchronicle.com,sheltonherald.com,stamfordadvocate.com,theheraldreview.com,thehour.com,theintelligencer.com,theridgefieldpress.com,timesunion.com,trumbulltimes.com,wiltonbulletin.com,yourconroenews.com##body:style(overflow: auto !important;)
-beaumontenterprise.com,bigrapidsnews.com,ctinsider.com,ctpost.com,darientimes.com,greenwichtime.com,houstonchronicle.com,lmtonline.com,manisteenews.com,michigansthumb.com,middletownpress.com,milfordmirror.com,mrt.com,myjournalcourier.com,ncadvertiser.com,newstimes.com,nhregister.com,ourmidland.com,registercitizen.com,sfchronicle.com,sheltonherald.com,stamfordadvocate.com,theheraldreview.com,thehour.com,theintelligencer.com,theridgefieldpress.com,timesunion.com,trumbulltimes.com,wiltonbulletin.com,yourconroenews.com##.mb32:has-text(Advertisement)
+beaumontenterprise.com,bigrapidsnews.com,ctinsider.com,ctpost.com,darientimes.com,greenwichtime.com,houstonchronicle.com,lmtonline.com,manisteenews.com,michigansthumb.com,middletownpress.com,milfordmirror.com,mrt.com,myjournalcourier.com,ncadvertiser.com,newstimes.com,nhregister.com,ourmidland.com,registercitizen.com,sfchronicle.com,sheltonherald.com,stamfordadvocate.com,theheraldreview.com,thehour.com,theintelligencer.com,theridgefieldpress.com,thetelegraph.com,timesunion.com,trumbulltimes.com,wiltonbulletin.com,yourconroenews.com###modals
+beaumontenterprise.com,bigrapidsnews.com,ctinsider.com,ctpost.com,darientimes.com,greenwichtime.com,houstonchronicle.com,lmtonline.com,manisteenews.com,michigansthumb.com,middletownpress.com,milfordmirror.com,mrt.com,myjournalcourier.com,ncadvertiser.com,newstimes.com,nhregister.com,ourmidland.com,registercitizen.com,sfchronicle.com,sheltonherald.com,stamfordadvocate.com,theheraldreview.com,thehour.com,theintelligencer.com,theridgefieldpress.com,thetelegraph.com,timesunion.com,trumbulltimes.com,wiltonbulletin.com,yourconroenews.com##body:style(overflow: auto !important;)
+beaumontenterprise.com,bigrapidsnews.com,ctinsider.com,ctpost.com,darientimes.com,greenwichtime.com,houstonchronicle.com,lmtonline.com,manisteenews.com,michigansthumb.com,middletownpress.com,milfordmirror.com,mrt.com,myjournalcourier.com,ncadvertiser.com,newstimes.com,nhregister.com,ourmidland.com,registercitizen.com,sfchronicle.com,sheltonherald.com,stamfordadvocate.com,theheraldreview.com,thehour.com,theintelligencer.com,theridgefieldpress.com,thetelegraph.com,timesunion.com,trumbulltimes.com,wiltonbulletin.com,yourconroenews.com##.mb32:has-text(Advertisement)
+@@/sites/jquery.adx.js^$script,1p,domain=beaumontenterprise.com|bigrapidsnews.com|ctinsider.com|ctpost.com|darientimes.com|greenwichtime.com|houstonchronicle.com|lmtonline.com|manisteenews.com|michigansthumb.com|middletownpress.com|milfordmirror.com|mrt.com|myjournalcourier.com|ncadvertiser.com|newstimes.com|nhregister.com|ourmidland.com|registercitizen.com|sfchronicle.com|sheltonherald.com|stamfordadvocate.com|theheraldreview.com|thehour.com|theintelligencer.com|theridgefieldpress.com|thetelegraph.com|timesunion.com|trumbulltimes.com|wiltonbulletin.com|yourconroenews.com
 ! https://github.com/uBlockOrigin/uAssets/issues/22847
 scenexe2.io##+js(no-fetch-if, googlesyndication)
 ||docs.google.com/forms/d/e/1FAIpQLSfQK0eGG1JJ2vRS267yFjTI4vAwJLQsM5rNhmMA0ks31luMtQ/formResponse?usp=pp_url&entry.670406098=*&submit=Submit$frame,3p,domain=scenexe2.io
@@ -1867,8 +1877,8 @@ game8.co##.js-side-ads-movie-container:remove()
 ! https://github.com/uBlockOrigin/uAssets/discussions/24177#discussioncomment-9821526
 modrinth.com##section.normal-page__content a[href*="/redirect/"] img
 ! https://github.com/uBlockOrigin/uAssets/issues/24130
-modrinth.com##section.normal-page__content :is([href^="https://ModdersAgainstBlockers.github.io"],[href^="https://billing.bloom.host/"],[href^="https://minefort.com/"],[href^="https://www.ocean-hosting.top/"],[href^="https://billing.apexminecrafthosting.com/"],[href^="https://mcph.info/"], [href*="/kinetic/"], [href*="/creeperhost"], [href^="https://www.akliz.net/"], [href^="http://bloom.amymialee.xyz"], [href^="https://fxco.ca/assets/"]) > img
-curseforge.com##:is(.project-description,div.project-detail__content) [href^="/linkout?remoteUrl=http"]:is([href*="fxco.ca"],[href*="billing.bloom.host"],[href*="minefort.com"],[href*="www.ocean-hosting.top"],[href*="billing.apexminecrafthosting.com"],[href*="mcph.info"]) > img
+modrinth.com##section.normal-page__content :is([href^="https://ModdersAgainstBlockers.github.io"],[href*="/kinetic/"],[href*="/creeperhost"],[href^="https://fxco.ca/assets/"]) > img
+curseforge.com##:is(.project-description,div.project-detail__content) [href^="/linkout?remoteUrl=http"]:is([href*="fxco.ca"]) > img
 ||i.imgur.com/h4556XW.gif$image,3p
 ! https://arenascan.com/ anti-adb
 arenascan.com##+js(aost, document.getElementById, adsBlocked)
@@ -2250,3 +2260,18 @@ m9.news##+js(rmnt, script, m9-ad-modal)
 !#if env_firefox
 m9.news##body:style(display: block !important;)
 !#endif
+! https://honghotduongpho.com/2024/08/20/quan-ao-dau-het-roi/ (NSFW) - popup
+/wp-content/uploads/pum/pum-site-scripts.js^
+! https://github.com/uBlockOrigin/uAssets/issues/25015
+!#if cap_html_filtering
+cineb.rs##^script:has-text(shown_at)
+!#else
+cineb.rs##+js(rmnt, script, shown_at)
+!#endif
+cineb.rs##+js(aeld, mousedown, shown_at)
+cineb.rs##+js(nowoif)
+! https://github.com/uBlockOrigin/uAssets/issues/25023
+hancinema.net##+js(no-fetch-if, %2Fclarity%7Cgooglesyndication%2F)
+hancinema.net##.ad_300x600_300x250
+! https://github.com/uBlockOrigin/uAssets/issues/24991
+webnovelworld.org##:is(#chapter-container, .comment-list, .container, .rank-novels) > div[class]:has(> [id^="pf-"])
