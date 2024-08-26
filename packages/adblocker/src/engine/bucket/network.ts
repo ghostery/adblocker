@@ -100,7 +100,6 @@ export default class NetworkFilterBucket {
     isFilterExcluded?: (filter: NetworkFilter) => boolean,
   ): NetworkFilter[] {
     const filters: NetworkFilter[] = [];
-
     this.index.iterMatchingFilters(request.getTokens(), (filter: NetworkFilter) => {
       if (
         filter.match(request) &&

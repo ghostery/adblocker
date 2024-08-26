@@ -10,7 +10,11 @@
 // which is able to consume an HTML document over time and filter part of it
 // using adblocker selectors.
 
-export type HTMLSelector = readonly ['script', readonly string[]];
+export type HTMLModifier = readonly [RegExp, string];
+
+export type HTMLSelector =
+  | readonly ['script', readonly string[]]
+  | readonly ['replace', HTMLModifier];
 
 export function extractHTMLSelectorFromRule(rule: string): HTMLSelector | undefined {
   if (rule.startsWith('^script') === false) {
@@ -139,7 +143,10 @@ type Patterns = readonly [readonly string[], readonly RegExp[]][];
 export function extractSelectorsFromRules(filter: HTMLSelector[]): Patterns {
   const patterns: [string[], RegExp[]][] = [];
 
-  for (const [, selectors] of filter) {
+  for (const [type, selectors] of filter) {
+    if (type !== 'script') {
+      continue;
+    }
     const plainPatterns: string[] = [];
     const regexpPatterns: RegExp[] = [];
 
@@ -220,27 +227,74 @@ export function removeTagsFromHtml(html: string, toRemove: [number, string][]): 
   return filteredHtml;
 }
 
+function applyModifiersToHtml(html: string, modifiers: HTMLModifier[]): string {
+  if (modifiers.length === 0) {
+    return html;
+  }
+
+  for (const [regexp, replacement] of modifiers) {
+    html = html.replace(regexp, replacement);
+  }
+
+  return html;
+}
+
 export default class StreamingHtmlFilter {
   private buffer: string;
   private readonly patterns: Patterns;
+  private readonly modifiers: HTMLModifier[];
 
   constructor(selectors: HTMLSelector[]) {
     this.buffer = '';
-    this.patterns = extractSelectorsFromRules(selectors);
+    const modifiers = [];
+    const rules = [];
+    for (const selector of selectors) {
+      if (selector[0] === 'replace') {
+        modifiers.push(selector[1]);
+      } else if (selector[0] === 'script') {
+        rules.push(selector);
+      }
+    }
+    this.patterns = extractSelectorsFromRules(rules);
+    this.modifiers = modifiers;
   }
 
-  public flush(): string {
-    return this.buffer;
+  public flush(applyHTMLFiltering: boolean = true): string {
+    let out = this.buffer;
+
+    if (applyHTMLFiltering === true) {
+      // If there's a modifier
+      if (this.modifiers.length !== 0) {
+        // If there's a pattern, process in priority.
+        if (this.patterns.length !== 0) {
+          const [tags, parsed, rest] = extractTagsFromHtml(this.buffer, 'script');
+          out = removeTagsFromHtml(parsed, selectTagsToRemove(this.patterns, tags)) + rest;
+        }
+
+        out = applyModifiersToHtml(out, this.modifiers);
+      }
+    }
+
+    this.buffer = '';
+
+    return out;
   }
 
   public write(chunk: string): string {
-    // If there are no valid selectors, abort.
-    if (this.patterns.length === 0) {
+    // If given an empty string, abort.
+    if (chunk.length === 0) {
       return chunk;
     }
 
-    // If given an empty string, abort.
-    if (chunk.length === 0) {
+    // If there's a modifier, buffer all.
+    if (this.modifiers.length !== 0) {
+      this.buffer += chunk;
+
+      return '';
+    }
+
+    // If there's no pattern, proxy.
+    if (this.patterns.length === 0) {
       return chunk;
     }
 
@@ -249,6 +303,7 @@ export default class StreamingHtmlFilter {
 
     // Parse tags from `this.buffer`
     const [tags, parsed, rest] = extractTagsFromHtml(this.buffer, 'script');
+
     this.buffer = rest;
 
     // If no tags were found, just return the parsed version

@@ -9,12 +9,12 @@
 import { Domains } from '../engine/domains.js';
 import {
   StaticDataView,
-  sizeOfNetworkCSP,
   sizeOfNetworkFilter,
   sizeOfNetworkHostname,
-  sizeOfNetworkRedirect,
   sizeOfUTF8,
   sizeOfRawNetwork,
+  sizeOfNetworkCSP,
+  sizeOfNetworkRedirect,
 } from '../data-view.js';
 import { toASCII } from '../punycode.js';
 import Request, { RequestType, NORMALIZED_TYPE_TOKEN } from '../request.js';
@@ -38,6 +38,8 @@ import {
   findLastIndexOfUnescapedCharacter,
 } from '../utils.js';
 import IFilter from './interface.js';
+import { HTMLModifier } from '../html-filtering.js';
+import type CosmeticFilter from './cosmetic.js';
 
 const HTTP_HASH = fastHash('http');
 const HTTPS_HASH = fastHash('https');
@@ -133,7 +135,8 @@ export const enum NETWORK_FILTER_MASK {
   thirdParty = 1 << 15,
 
   // Options
-  // FREE - 1 << 16
+  // isReplace does not fit to the options, but is here from a lack of empty MASK slots
+  isReplace = 1 << 16,
   isBadFilter = 1 << 17,
   isCSP = 1 << 18,
   isGenericHide = 1 << 19,
@@ -150,6 +153,9 @@ export const enum NETWORK_FILTER_MASK {
   isHostnameAnchor = 1 << 28,
   isRedirectRule = 1 << 29,
   isRedirect = 1 << 30,
+  // IMPORTANT: the mask is now full, no more options can be added
+  // Consider creating a separate fitler type for isReplace if a new
+  // network filter option is needed.
 }
 
 /**
@@ -446,6 +452,62 @@ function getFilterOptionValue(line: string, pos: number, end: number): [number, 
 }
 
 /**
+ * Collects a filter option value of the replace modifier.
+ * This function respects the escaping character with the allowed characters of the replace modifier.
+ * In the replace modifier, it can include the any sign allowed in the regular expression.
+ * Therefore, a comma sign can interfere the `getFilterOptionValue` function.
+ * This function will not stop unless it collects all the parts of the replace modifier option value.
+ */
+function getFilterReplaceOptionValue(
+  line: string,
+  pos: number,
+  end: number,
+): [number, [string, string, string] | undefined] {
+  // Try to fast exit if the first character is an unexpected character.
+  if (line.charCodeAt(pos++) !== 47 /* '/' */) {
+    return [end, undefined];
+  }
+
+  const parts: [string, string, string] = ['', '', ''];
+
+  let start = pos;
+  let slashes = 0;
+
+  for (; pos < end; pos++) {
+    const code = line.charCodeAt(pos);
+
+    if (code === 92 /* '\\' */) {
+      parts[slashes] += line.slice(start, pos);
+      start = pos;
+    } else if (code === 47 /* '/' */) {
+      if (pos - start !== 0) {
+        parts[slashes] += line.slice(start, pos);
+      }
+
+      start = pos + 1;
+
+      if (++slashes === 2) {
+        // Since we saw 3 slashes in total, it means that the option value should be closed here.
+        // Note that we already saw the first slash before the loop.
+        break;
+      }
+    }
+  }
+
+  const valueEnd = line.indexOf(',', pos);
+
+  if (valueEnd !== -1) {
+    end = valueEnd;
+  }
+
+  parts[2] = line.slice(start, end);
+
+  pos = end;
+
+  return [pos, parts];
+}
+
+/**
  * Collects an array of filter options from the given index.
  * This function leverages `getFilterOptionKey`, `getFilterOptionValue`, and every extension functions.
  * Depending on the filter option key, the function to collect filter option value can vary.
@@ -465,13 +527,48 @@ function getFilterOptions(line: string, pos: number, end: number): Array<[string
         pos++;
       }
 
-      [pos, value] = getFilterOptionValue(line, pos, end);
+      if (name === 'replace') {
+        const result = getFilterReplaceOptionValue(line, pos, end);
+
+        if (result[1] === undefined) {
+          value = '';
+        } else {
+          value = line.slice(pos, result[0]);
+        }
+
+        pos = result[0];
+      } else {
+        [pos, value] = getFilterOptionValue(line, pos, end);
+      }
 
       options.push([name, value]);
     }
   }
 
   return options;
+}
+
+/**
+ * Transforms the replace modifier option value into the regular expression with its replacement.
+ * This function takes a fixed length array from `getFilterReplaceOptionValue`
+ * then try to build the regular expression.
+ * This function will return `null` if the array format or the given regular expression components are not valid.
+ */
+export function replaceOptionValueToRegexp(value: string): HTMLModifier | null {
+  const [, values] = getFilterReplaceOptionValue(value, 0, value.length);
+
+  if (values === undefined) {
+    return null;
+  }
+
+  // RegExp constructor can throw an error
+  try {
+    // We expect `/regexp/replacement/flags` to be [regexp, replacement, flags]
+    // The first slash should be removed in the early steps
+    return [new RegExp(values[0], values[2]), values[1]];
+  } catch (error) {
+    return null;
+  }
 }
 
 const MATCH_ALL = new RegExp('');
@@ -665,6 +762,21 @@ export default class NetworkFilter implements IFilter {
             mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
             optionValue =
               "font-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:";
+            break;
+          case 'replace':
+          case 'content':
+            if (
+              negation ||
+              (value.length === 0
+                ? getBit(mask, NETWORK_FILTER_MASK.isException) === false
+                : replaceOptionValueToRegexp(value) === null)
+            ) {
+              return null;
+            }
+
+            mask = setBit(mask, NETWORK_FILTER_MASK.isReplace);
+            optionValue = value;
+
             break;
           default: {
             // Handle content type options separatly
@@ -1043,10 +1155,11 @@ export default class NetworkFilter implements IFilter {
     return this.optionValue;
   }
 
-  public isCosmeticFilter() {
+  public isCosmeticFilter(): this is CosmeticFilter {
     return false;
   }
-  public isNetworkFilter() {
+
+  public isNetworkFilter(): this is NetworkFilter {
     return true;
   }
 
@@ -1379,6 +1492,25 @@ export default class NetworkFilter implements IFilter {
 
   public getRedirect(): string {
     return this.optionValue ?? '';
+  }
+
+  public isReplace(): boolean {
+    return getBit(this.getMask(), NETWORK_FILTER_MASK.isReplace);
+  }
+
+  // Expected to be called only with `$replace` modifiers
+  public getHtmlModifier(): HTMLModifier | null {
+    // Empty `$replace` modifier is to disable all replace modifiers on exception
+    // This is checked on the parse time
+    if (this.optionValue?.length === 0) {
+      return null;
+    }
+
+    return replaceOptionValueToRegexp(this.optionValue!);
+  }
+
+  public isHtmlFilteringRule(): boolean {
+    return this.isReplace();
   }
 
   public getRedirectResource(): string {

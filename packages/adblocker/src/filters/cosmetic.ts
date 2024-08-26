@@ -39,6 +39,7 @@ import {
 } from '../utils.js';
 import IFilter from './interface.js';
 import { HTMLSelector, extractHTMLSelectorFromRule } from '../html-filtering.js';
+import NetworkFilter from './network.js';
 
 const EMPTY_TOKENS: [Uint32Array] = [EMPTY_UINT32_ARRAY];
 export const DEFAULT_HIDING_STYLE: string = 'display: none !important;';
@@ -423,11 +424,11 @@ export default class CosmeticFilter implements IFilter {
     this.rawLine = rawLine;
   }
 
-  public isCosmeticFilter(): boolean {
+  public isCosmeticFilter(): this is CosmeticFilter {
     return true;
   }
 
-  public isNetworkFilter(): boolean {
+  public isNetworkFilter(): this is NetworkFilter {
     return false;
   }
 

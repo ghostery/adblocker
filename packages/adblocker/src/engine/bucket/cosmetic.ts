@@ -116,7 +116,7 @@ function createStylesheetFromRules(
   return createStylesheet(selectors, hidingStyle);
 }
 
-function createLookupTokens(hostname: string, domain: string): Uint32Array {
+export function createLookupTokens(hostname: string, domain: string): Uint32Array {
   const hostnamesHashes = getHostnameHashesFromLabelsBackward(hostname, domain);
   const entitiesHashes = getEntityHashesFromLabelsBackward(hostname, domain);
   const tokens = new Uint32Array(hostnamesHashes.length + entitiesHashes.length);
@@ -166,13 +166,6 @@ export default class CosmeticFilterBucket {
       config,
     );
 
-    bucket.htmlIndex = ReverseIndex.deserialize(
-      buffer,
-      CosmeticFilter.deserialize,
-      noopOptimizeCosmetic,
-      config,
-    );
-
     bucket.idsIndex = ReverseIndex.deserialize(
       buffer,
       CosmeticFilter.deserialize,
@@ -204,7 +197,6 @@ export default class CosmeticFilterBucket {
   public classesIndex: ReverseIndex<CosmeticFilter>;
   public hostnameIndex: ReverseIndex<CosmeticFilter>;
   public hrefsIndex: ReverseIndex<CosmeticFilter>;
-  public htmlIndex: ReverseIndex<CosmeticFilter>;
   public idsIndex: ReverseIndex<CosmeticFilter>;
   public unhideIndex: ReverseIndex<CosmeticFilter>;
 
@@ -234,13 +226,6 @@ export default class CosmeticFilterBucket {
     });
 
     this.hrefsIndex = new ReverseIndex({
-      config,
-      deserialize: CosmeticFilter.deserialize,
-      filters: [],
-      optimize: noopOptimizeCosmetic,
-    });
-
-    this.htmlIndex = new ReverseIndex({
       config,
       deserialize: CosmeticFilter.deserialize,
       filters: [],
@@ -277,7 +262,6 @@ export default class CosmeticFilterBucket {
       this.classesIndex.getFilters(),
       this.hostnameIndex.getFilters(),
       this.hrefsIndex.getFilters(),
-      this.htmlIndex.getFilters(),
       this.idsIndex.getFilters(),
       this.unhideIndex.getFilters(),
     );
@@ -292,15 +276,12 @@ export default class CosmeticFilterBucket {
     const genericHideRules: CosmeticFilter[] = [];
     const hostnameSpecificRules: CosmeticFilter[] = [];
     const hrefSelectors: CosmeticFilter[] = [];
-    const htmlRules: CosmeticFilter[] = [];
     const idSelectors: CosmeticFilter[] = [];
     const unHideRules: CosmeticFilter[] = [];
 
     for (const rule of newFilters) {
       if (rule.isUnhide()) {
         unHideRules.push(rule);
-      } else if (rule.isHtmlFiltering()) {
-        htmlRules.push(rule);
       } else if (rule.isGenericHide()) {
         if (rule.isClassSelector()) {
           classSelectors.push(rule);
@@ -320,7 +301,6 @@ export default class CosmeticFilterBucket {
     this.classesIndex.update(classSelectors, removedFilters);
     this.hostnameIndex.update(hostnameSpecificRules, removedFilters);
     this.hrefsIndex.update(hrefSelectors, removedFilters);
-    this.htmlIndex.update(htmlRules, removedFilters);
     this.idsIndex.update(idSelectors, removedFilters);
     this.unhideIndex.update(unHideRules, removedFilters);
   }
@@ -331,7 +311,6 @@ export default class CosmeticFilterBucket {
       this.classesIndex.getSerializedSize() +
       this.hostnameIndex.getSerializedSize() +
       this.hrefsIndex.getSerializedSize() +
-      this.htmlIndex.getSerializedSize() +
       this.idsIndex.getSerializedSize() +
       this.unhideIndex.getSerializedSize()
     );
@@ -342,48 +321,8 @@ export default class CosmeticFilterBucket {
     this.classesIndex.serialize(buffer);
     this.hostnameIndex.serialize(buffer);
     this.hrefsIndex.serialize(buffer);
-    this.htmlIndex.serialize(buffer);
     this.idsIndex.serialize(buffer);
     this.unhideIndex.serialize(buffer);
-  }
-
-  public getHtmlFilters({
-    domain,
-    hostname,
-
-    isFilterExcluded,
-  }: {
-    domain: string;
-    hostname: string;
-
-    isFilterExcluded?: (filter: CosmeticFilter) => boolean;
-  }): { filters: CosmeticFilter[]; unhides: CosmeticFilter[] } {
-    const filters: CosmeticFilter[] = [];
-
-    // Tokens from `hostname` and `domain` which will be used to lookup filters
-    // from the reverse index. The same tokens are re-used for multiple indices.
-    const hostnameTokens = createLookupTokens(hostname, domain);
-    this.htmlIndex.iterMatchingFilters(hostnameTokens, (rule: CosmeticFilter) => {
-      if (rule.match(hostname, domain) && !isFilterExcluded?.(rule)) {
-        filters.push(rule);
-      }
-      return true;
-    });
-
-    const unhides: CosmeticFilter[] = [];
-
-    // If we found at least one candidate, check if we have unhidden rules.
-    if (filters.length !== 0) {
-      this.unhideIndex.iterMatchingFilters(hostnameTokens, (rule: CosmeticFilter) => {
-        if (rule.match(hostname, domain) && !isFilterExcluded?.(rule)) {
-          unhides.push(rule);
-        }
-
-        return true;
-      });
-    }
-
-    return { filters, unhides };
   }
 
   /**

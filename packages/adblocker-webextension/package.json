@@ -1,6 +1,6 @@
 {
   "name": "@cliqz/adblocker-webextension",
-  "version": "1.31.4",
+  "version": "1.32.0",
   "description": "Ghostery adblocker WebExtension wrapper",
   "author": {
     "name": "Ghostery"
@@ -37,7 +37,8 @@
     "clean": "rimraf dist coverage .tshy .tshy-build .nyc_output .rollup.cache",
     "lint": "eslint src test",
     "build": "tshy && rollup --config ./rollup.config.js",
-    "test": "nyc mocha"
+    "test": "nyc mocha",
+    "dev": "mocha --watch"
   },
   "publishConfig": {
     "access": "public"
@@ -59,8 +60,8 @@
     "typescript": "^5.5.2"
   },
   "dependencies": {
-    "@cliqz/adblocker": "^1.31.4",
-    "@cliqz/adblocker-content": "^1.31.4",
+    "@cliqz/adblocker": "^1.32.0",
+    "@cliqz/adblocker-content": "^1.32.0",
     "tldts-experimental": "^6.0.14",
     "webextension-polyfill-ts": "^0.26.0"
   },
