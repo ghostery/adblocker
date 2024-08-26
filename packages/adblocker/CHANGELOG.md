@@ -1,3 +1,21 @@
+# v1.33.0 (Mon Aug 26 2024)
+
+#### :rocket: New Feature
+
+- feat: allow overriding `DEFAULT_HIDING_STYLE` [#4215](https://github.com/ghostery/adblocker/pull/4215) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#4222](https://github.com/ghostery/adblocker/pull/4222) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v1.32.0 (Mon Aug 26 2024)
 
 #### :rocket: New Feature
