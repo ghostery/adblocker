@@ -978,6 +978,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromDOM = true,
     getRulesFromHostname = true,
 
+    hidingStyle,
     callerContext,
   }: {
     url: string;
@@ -994,6 +995,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
 
+    hidingStyle?: string | undefined;
     callerContext?: any | undefined;
   }): IMessageFromBackground {
     if (this.config.loadCosmeticFilters === false) {
@@ -1142,7 +1144,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         filters: styleFilters,
         extendedFilters,
       },
-      { getBaseRules, allowGenericHides },
+      { getBaseRules, allowGenericHides, hidingStyle },
     );
 
     // Emit events

@@ -42,7 +42,7 @@ import { HTMLSelector, extractHTMLSelectorFromRule } from '../html-filtering.js'
 import NetworkFilter from './network.js';
 
 const EMPTY_TOKENS: [Uint32Array] = [EMPTY_UINT32_ARRAY];
-export const DEFAULT_HIDDING_STYLE: string = 'display: none !important;';
+export const DEFAULT_HIDING_STYLE: string = 'display: none !important;';
 
 const REGEXP_UNICODE_COMMA = new RegExp(/\\u002C/, 'g');
 const REGEXP_UNICODE_BACKSLASH = new RegExp(/\\u005C/, 'g');
@@ -812,8 +812,8 @@ export default class CosmeticFilter implements IFilter {
     return this.style !== undefined;
   }
 
-  public getStyle(): string {
-    return this.style || DEFAULT_HIDDING_STYLE;
+  public getStyle(defaultStyle: string = DEFAULT_HIDING_STYLE): string {
+    return this.style || defaultStyle;
   }
 
   public getStyleAttributeHash(): string {

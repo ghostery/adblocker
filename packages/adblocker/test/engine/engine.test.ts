@@ -884,6 +884,17 @@ foo.com###selector
       });
     });
 
+    it('handles custom default hiding styles', () => {
+      expect(
+        Engine.parse('foo.com###id').getCosmeticsFilters({
+          domain: 'foo.com',
+          hostname: 'foo.com',
+          url: 'https://foo.com',
+          hidingStyle: 'visibility: none;',
+        }).styles,
+      ).to.be.eql(`#id { visibility: none; }`);
+    });
+
     it('handles custom :styles', () => {
       expect(
         Engine.parse(

@@ -11,7 +11,7 @@ import type { IMessageFromBackground } from '@cliqz/adblocker-content';
 import { compactTokens, concatTypedArrays } from '../../compact-set.js';
 import Config from '../../config.js';
 import { StaticDataView } from '../../data-view.js';
-import CosmeticFilter, { DEFAULT_HIDDING_STYLE } from '../../filters/cosmetic.js';
+import CosmeticFilter, { DEFAULT_HIDING_STYLE } from '../../filters/cosmetic.js';
 import {
   getEntityHashesFromLabelsBackward,
   getHostnameHashesFromLabelsBackward,
@@ -69,11 +69,14 @@ export function createStylesheet(rules: string[], style: string): string {
  * :style(...)`) then we fallback to `createStylesheetFromRulesWithCustomStyles`
  * which is slower than `createStylesheetFromRules`.
  */
-function createStylesheetFromRulesWithCustomStyles(rules: CosmeticFilter[]): string {
+function createStylesheetFromRulesWithCustomStyles(
+  rules: CosmeticFilter[],
+  hidingStyle: string = DEFAULT_HIDING_STYLE,
+): string {
   const selectorsPerStyle: Map<string, string[]> = new Map();
 
   for (const rule of rules) {
-    const style = rule.getStyle();
+    const style = rule.getStyle(hidingStyle);
     const selectors = selectorsPerStyle.get(style);
     if (selectors === undefined) {
       selectorsPerStyle.set(style, [rule.getSelector()]);
@@ -97,17 +100,20 @@ function createStylesheetFromRulesWithCustomStyles(rules: CosmeticFilter[]): str
  * `rules`. In case one is found on the way, we fallback to the slower
  * `createStylesheetFromRulesWithCustomStyles` function.
  */
-function createStylesheetFromRules(rules: CosmeticFilter[]): string {
+function createStylesheetFromRules(
+  rules: CosmeticFilter[],
+  hidingStyle: string = DEFAULT_HIDING_STYLE,
+): string {
   const selectors: string[] = [];
   for (const rule of rules) {
     if (rule.hasCustomStyle()) {
-      return createStylesheetFromRulesWithCustomStyles(rules);
+      return createStylesheetFromRulesWithCustomStyles(rules, hidingStyle);
     }
 
     selectors.push(rule.selector);
   }
 
-  return createStylesheet(selectors, DEFAULT_HIDDING_STYLE);
+  return createStylesheet(selectors, hidingStyle);
 }
 
 export function createLookupTokens(hostname: string, domain: string): Uint32Array {
@@ -473,9 +479,11 @@ export default class CosmeticFilterBucket {
     {
       getBaseRules,
       allowGenericHides,
+      hidingStyle = DEFAULT_HIDING_STYLE,
     }: {
       getBaseRules: any;
       allowGenericHides: any;
+      hidingStyle?: string | undefined;
     },
   ): {
     stylesheet: string;
@@ -489,7 +497,7 @@ export default class CosmeticFilterBucket {
         stylesheet += '\n\n';
       }
 
-      stylesheet += createStylesheetFromRules(filters);
+      stylesheet += createStylesheetFromRules(filters, hidingStyle);
     }
 
     const extended: IMessageFromBackground['extended'] = [];
@@ -501,7 +509,7 @@ export default class CosmeticFilterBucket {
           const attribute = filter.isRemove() ? undefined : filter.getStyleAttributeHash();
 
           if (attribute !== undefined) {
-            extendedStyles.set(filter.getStyle(), attribute);
+            extendedStyles.set(filter.getStyle(hidingStyle), attribute);
           }
 
           extended.push({
