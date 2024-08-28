@@ -1063,6 +1063,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
       getRulesFromDOM,
       getRulesFromHostname,
+
+      hidingStyle,
       isFilterExcluded: this.isFilterExcluded.bind(this),
     });
 
