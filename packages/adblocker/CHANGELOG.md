@@ -1,3 +1,15 @@
+# v1.33.1 (Wed Aug 28 2024)
+
+#### :bug: Bug Fix
+
+- Override hiding style in `CosmeticBucket.getCosmeticsFilters` [#4238](https://github.com/ghostery/adblocker/pull/4238) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v1.33.0 (Mon Aug 26 2024)
 
 #### :rocket: New Feature

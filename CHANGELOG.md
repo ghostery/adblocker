@@ -1,3 +1,27 @@
+# v1.33.1 (Wed Aug 28 2024)
+
+#### :bug: Bug Fix
+
+- `@cliqz/adblocker`
+  - Override hiding style in `CosmeticBucket.getCosmeticsFilters` [#4238](https://github.com/ghostery/adblocker/pull/4238) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump typescript-eslint from 8.2.0 to 8.3.0 [#4230](https://github.com/ghostery/adblocker/pull/4230) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 4.21.0 to 4.21.1 [#4231](https://github.com/ghostery/adblocker/pull/4231) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 22.5.0 to 22.5.1 [#4235](https://github.com/ghostery/adblocker/pull/4235) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chai from 4.3.17 to 4.3.19 [#4236](https://github.com/ghostery/adblocker/pull/4236) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump tsx from 4.18.0 to 4.19.0 [#4237](https://github.com/ghostery/adblocker/pull/4237) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@cliqz/adblocker-puppeteer`
+  - Build(deps): Bump puppeteer from 23.1.1 to 23.2.0 [#4233](https://github.com/ghostery/adblocker/pull/4233) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v1.33.0 (Mon Aug 26 2024)
 
 #### :rocket: New Feature
