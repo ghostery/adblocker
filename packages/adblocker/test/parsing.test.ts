@@ -974,7 +974,7 @@ describe('Network filters', () => {
     });
 
     describe('replace', () => {
-      it('parses known filters', () => {
+      it.only('parses known filters', () => {
         const filters: [string, HTMLModifier][] = [
           [
             String.raw`||alliptvlinks.com/tktk-content/plugins/$script,1p,replace=/\bconst now.+?, 100/clearInterval(timer);resolve();}, 100/gms`,
@@ -1003,18 +1003,18 @@ describe('Network filters', () => {
               '',
             ],
           ],
-          // [
-          //   String.raw`||veev.to/assets/videoplayer/*.js$script,replace=/\bhttps:\/\/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/https:\/\/veev.to\/assets\/videoplayer\/17c088d.js/`,
-          //   [/content="15;/, ''],
-          // ],
+          [
+            String.raw`||veev.to/assets/videoplayer/*.js$script,replace=/\bhttps:\/\/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/https:\/\/veev.to\/assets\/videoplayer\/17c088d.js/`,
+            [/content="15;/, ''],
+          ],
           [
             String.raw`||theappstore.org/script.js?v=$script,1p,replace=/result\.length \> 10000/result.length < 10000/g`,
-            [/result\.length \> 10000/g, 'result.length < 10000'],
+            [/result\.length > 10000/g, 'result.length < 10000'],
           ],
           [
             String.raw`/loader.min.js$xhr,script,domain=loawa.com|ygosu.com|sportalkorea.com|enetnews.co.kr|edaily.co.kr|economist.co.kr|etoday.co.kr|hankyung.com|isplus.com|hometownstation.com|inven.co.kr|honkailab.com|warcraftrumbledeck.com|genshinlab.com|thestockmarketwatch.com|thephoblographer.com|issuya.com|dogdrip.net|worldhistory.org|bamgosu.site,replace=/\)\{var [a-z]{1,2},[a-z]{1,2},[a-z]{1,2},[a-z]{1,2}\=[a-z]{2};return [a-z]\(\)/){return;/g`,
             [
-              /\)\{var [a-z]{1,2},[a-z]{1,2},[a-z]{1,2},[a-z]{1,2}\=[a-z]{2};return [a-z]\(\)/g,
+              /\)\{var [a-z]{1,2},[a-z]{1,2},[a-z]{1,2},[a-z]{1,2}=[a-z]{2};return [a-z]\(\)/g,
               '){return;',
             ],
           ],
@@ -1062,7 +1062,7 @@ describe('Network filters', () => {
           ],
           [
             String.raw`||solarmovie.vip/js/$script,1p,replace=/\(\{checkers\:.*?\]\}\)/({checkers:[]})/g`,
-            [/\(\{checkers\:.*?\]\}\)/g, '({checkers:[]})'],
+            [/\(\{checkers:.*?\]\}\)/g, '({checkers:[]})'],
           ],
           [
             String.raw`||tver.jp/_next/static/chunks/$replace=/e\?(e\(\):\(n\.play\(\))/!1?\$1/,script`,
@@ -1070,27 +1070,27 @@ describe('Network filters', () => {
           ],
           [
             String.raw`||www.youtube.com/playlist?list=$xhr,1p,replace=/"adPlacements.*?([A-Z]"\}|"\}{2\,4})\}\]\,//`,
-            [/"adPlacements.*?([A-Z]"\}|"\}{2\,4})\}\]\,/, ''],
+            [/"adPlacements.*?([A-Z]"\}|"\}{2,4})\}\],/, ''],
           ],
           [
             String.raw`||www.youtube.com/playlist?list=$xhr,1p,replace=/"adSlots.*?\}\]\}\}\]\,//`,
-            [/"adSlots.*?\}\]\}\}\]\,/, ''],
+            [/"adSlots.*?\}\]\}\}\],/, ''],
           ],
           [
             String.raw`||www.youtube.com/watch?v=$xhr,1p,replace=/"adPlacements.*?([A-Z]"\}|"\}{2\,4})\}\]\,//`,
-            [/"adPlacements.*?([A-Z]"\}|"\}{2\,4})\}\]\,/, ''],
+            [/"adPlacements.*?([A-Z]"\}|"\}{2,4})\}\],/, ''],
           ],
           [
             String.raw`||www.youtube.com/watch?v=$xhr,1p,replace=/"adSlots.*?\}\]\}\}\]\,//`,
-            [/"adSlots.*?\}\]\}\}\]\,/, ''],
+            [/"adSlots.*?\}\]\}\}\],/, ''],
           ],
           [
             String.raw`||www.youtube.com/youtubei/v1/player?$xhr,1p,replace=/"adPlacements.*?([A-Z]"\}|"\}{2\,4})\}\]\,//`,
-            [/"adPlacements.*?([A-Z]"\}|"\}{2\,4})\}\]\,/, ''],
+            [/"adPlacements.*?([A-Z]"\}|"\}{2,4})\}\],/, ''],
           ],
           [
             String.raw`||www.youtube.com/youtubei/v1/player?$xhr,1p,replace=/"adSlots.*?\}\]\}\}\]\,//`,
-            [/"adSlots.*?\}\]\}\}\]\,/, ''],
+            [/"adSlots.*?\}\]\}\}\],/, ''],
           ],
           [
             String.raw`||www.facebook.com/api/graphql/$xhr,replace=/\{"brs_content_label":[^,]+,"category":"SPONSORED"[^\n]+"cursor":"[^"]+"\}/{}/`,
