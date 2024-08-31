@@ -452,6 +452,17 @@ function getFilterOptionValue(line: string, pos: number, end: number): [number, 
 }
 
 /**
+ * Checks if the character(s) after the escape character should be preserved.
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_escape
+ * Also, comma and slash are expected to come with escape character by the spec.
+ * https://adguard.com/kb/general/ad-filtering/create-own-filters/#replace-modifier
+ */
+function isCharacterEscapeInRegExp(line: string, pos: number, _end: number) {
+  // TODO impl proper regexp detector
+  return line.charCodeAt(pos + 1) !== 44 && line.charCodeAt(pos + 1) !== 47;
+}
+
+/**
  * Collects a filter option value of the replace modifier.
  * This function respects the escaping character with the allowed characters of the replace modifier.
  * In the replace modifier, it can include the any sign allowed in the regular expression.
@@ -478,6 +489,9 @@ function getFilterReplaceOptionValue(
 
     if (code === 92 /* '\\' */) {
       parts[slashes] += line.slice(start, pos);
+      if (isCharacterEscapeInRegExp(line, pos, end) === false) {
+        pos++;
+      }
       start = pos;
     } else if (code === 47 /* '/' */) {
       if (pos - start !== 0) {

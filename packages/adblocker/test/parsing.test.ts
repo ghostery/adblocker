@@ -1005,7 +1005,10 @@ describe('Network filters', () => {
           ],
           [
             String.raw`||veev.to/assets/videoplayer/*.js$script,replace=/\bhttps:\/\/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/https:\/\/veev.to\/assets\/videoplayer\/17c088d.js/`,
-            [/content="15;/, ''],
+            [
+              /\bhttps:\/\/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/,
+              'https://veev.to/assets/videoplayer/17c088d.js',
+            ],
           ],
           [
             String.raw`||theappstore.org/script.js?v=$script,1p,replace=/result\.length \> 10000/result.length < 10000/g`,
