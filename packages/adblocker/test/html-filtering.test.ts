@@ -134,8 +134,8 @@ describe('html-filtering', () => {
     it('unescapes non special characters', () => {
       expect(replaceOptionValueToRegexp(String.raw`/\,//`)).to.deep.equal([/,/, '']);
       expect(replaceOptionValueToRegexp(String.raw`/\>//`)).to.deep.equal([/>/, '']);
-      expect(replaceOptionValueToRegexp(String.raw`/=,//`)).to.deep.equal([/=/, '']);
-      expect(replaceOptionValueToRegexp(String.raw`/:>//`)).to.deep.equal([/:/, '']);
+      expect(replaceOptionValueToRegexp(String.raw`/\=//`)).to.deep.equal([/=/, '']);
+      expect(replaceOptionValueToRegexp(String.raw`/\://`)).to.deep.equal([/>/, '']);
     });
 
     it('allows escaped slashes', () => {
