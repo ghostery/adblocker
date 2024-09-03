@@ -452,14 +452,80 @@ function getFilterOptionValue(line: string, pos: number, end: number): [number, 
 }
 
 /**
- * Checks if the character(s) after the escape character should be preserved.
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_escape
- * Also, comma and slash are expected to come with escape character by the spec.
- * https://adguard.com/kb/general/ad-filtering/create-own-filters/#replace-modifier
+ * \f, \n, \r, \t, \v, \0, \^, \$, \\, \., \*, \+, \?, \(, \), \[, \], \{, \}, \|, \/
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_class_escape
+ * \d, \D, \s, \S, \w, \W
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Word_boundary_assertion
+ * \b, \B
  */
-function isCharacterEscapeInRegExp(line: string, pos: number, _end: number) {
-  // TODO impl proper regexp detector
-  return line.charCodeAt(pos + 1) !== 44 && line.charCodeAt(pos + 1) !== 47;
+const REGEXP_CHARACTER_ESCAPES = new Set([
+  102, 110, 114, 116, 118, 48, 94, 36, 92, 46, 42, 43, 63, 40, 41, 91, 93, 123, 125, 124, 47, 100,
+  68, 119, 87, 115, 83, 98, 66,
+]);
+
+function isHexLiteral(code: number) {
+  return (code >= 48 && code <= 57) || (code <= 65 && code <= 70) || (code >= 97 && code <= 102);
+}
+
+/**
+ * Checks if the character(s) after the escape character should be preserved.
+ */
+function isCharacterEscapeInRegExp(line: string, pos: number, _end: number): [number, boolean] {
+  const code = line.charCodeAt(pos + 1);
+  if (REGEXP_CHARACTER_ESCAPES.has(code) || code === 44 /* ',' */) {
+    return [pos + 1, true];
+  }
+  // \cA, \cB, …, \cz
+  if (code === 99 /* 'c' */) {
+    const next = line.charCodeAt(pos + 2);
+    if ((next >= 65 && next <= 90) || (next >= 97 && next <= 122)) {
+      return [pos + 2, true];
+    }
+  }
+  // \xHH
+  if (
+    code === 120 /* 'x' */ &&
+    isHexLiteral(line.charCodeAt(pos + 2)) &&
+    isHexLiteral(line.charCodeAt(pos + 3))
+  ) {
+    return [pos + 3, true];
+  }
+  if (code === 117 /* 'u' */) {
+    // \u{HHH}
+    if (line.charCodeAt(pos + 2) === 123 /* '{' */) {
+      const close = line.indexOf('}', pos + 3);
+      const hexLiteralLength = close - pos + 3;
+      if (hexLiteralLength >= 1 && hexLiteralLength <= 6) {
+        return [close, true];
+      }
+    } else if (
+      // \uHHHH
+      isHexLiteral(line.charCodeAt(pos + 2)) &&
+      isHexLiteral(line.charCodeAt(pos + 3)) &&
+      isHexLiteral(line.charCodeAt(pos + 4)) &&
+      isHexLiteral(line.charCodeAt(pos + 5))
+    ) {
+      return [pos + 5, true];
+    }
+  }
+  return [pos + 1, false];
+}
+
+/**
+ * https://adguard.com/kb/general/ad-filtering/create-own-filters/#replace-modifier
+ * \,, \/
+ */
+const REPLACE_CHARACTER_UNESCAPES = new Set([44, 47]);
+
+/**
+ * Comma and slash are expected to come with escape character by the spec.
+ */
+function isCharacterEscapeInReplace(line: string, pos: number, end: number): [number, boolean] {
+  if (REPLACE_CHARACTER_UNESCAPES.has(line.charCodeAt(pos + 1))) {
+    return [pos + 1, false];
+  }
+  return isCharacterEscapeInRegExp(line, pos, end);
 }
 
 /**
@@ -489,10 +555,17 @@ function getFilterReplaceOptionValue(
 
     if (code === 92 /* '\\' */) {
       parts[slashes] += line.slice(start, pos);
-      if (isCharacterEscapeInRegExp(line, pos, end) === false) {
-        pos++;
+      const [posAfterCharacterEscape, isCharacterEscape] = isCharacterEscapeInReplace(
+        line,
+        pos,
+        end,
+      );
+      if (isCharacterEscape === false) {
+        // Unescape
+        ++pos;
       }
       start = pos;
+      pos = posAfterCharacterEscape;
     } else if (code === 47 /* '/' */) {
       if (pos - start !== 0) {
         parts[slashes] += line.slice(start, pos);
