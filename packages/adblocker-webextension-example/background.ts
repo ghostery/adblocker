@@ -15,6 +15,7 @@ import {
   Request,
   WebExtensionBlocker,
 } from '@cliqz/adblocker-webextension';
+import { FiltersEngine } from '../adblocker/dist/commonjs/index.js';
 
 /**
  * Keep track of number of network requests altered for each tab
@@ -55,11 +56,20 @@ chrome.tabs.onUpdated.addListener((tabId, { status, url }) => {
   }
 });
 
+declare global {
+  interface Window {
+    adblocker: WebExtensionBlocker;
+  }
+}
+
 WebExtensionBlocker.fromLists(fetch, fullLists, {
   enableCompression: true,
   enableHtmlFiltering: true,
   loadExtendedSelectors: true,
+  loadPreprocessors: true,
 }).then((blocker: WebExtensionBlocker) => {
+  window.adblocker = blocker;
+
   blocker.enableBlockingInBrowser(browser);
 
   blocker.on('request-blocked', (request: Request, result: BlockingResponse) => {
