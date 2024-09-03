@@ -475,7 +475,7 @@ function isHexLiteral(code: number) {
  */
 function isCharacterEscapeInRegExp(line: string, pos: number, _end: number): [number, boolean] {
   const code = line.charCodeAt(pos + 1);
-  if (REGEXP_CHARACTER_ESCAPES.has(code) || code === 44 /* ',' */) {
+  if (code === 44 /* ',' */ || REGEXP_CHARACTER_ESCAPES.has(code)) {
     return [pos + 1, true];
   }
   // \cA, \cB, …, \cz
