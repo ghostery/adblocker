@@ -135,7 +135,7 @@ describe('html-filtering', () => {
       expect(replaceOptionValueToRegexp(String.raw`/\,//`)).to.deep.equal([/,/, '']);
       expect(replaceOptionValueToRegexp(String.raw`/\>//`)).to.deep.equal([/>/, '']);
       expect(replaceOptionValueToRegexp(String.raw`/\=//`)).to.deep.equal([/=/, '']);
-      expect(replaceOptionValueToRegexp(String.raw`/\://`)).to.deep.equal([/>/, '']);
+      expect(replaceOptionValueToRegexp(String.raw`/\://`)).to.deep.equal([/:/, '']);
     });
 
     it('allows escaped slashes', () => {
