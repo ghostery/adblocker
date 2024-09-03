@@ -130,7 +130,7 @@ describe('html-filtering', () => {
     });
   });
 
-  describe.only('#replaceOptionValueToRegexp', () => {
+  describe('#replaceOptionValueToRegexp', () => {
     it('unescapes non special characters', () => {
       expect(replaceOptionValueToRegexp(String.raw`/\,//`)).to.deep.equal([/,/, '']);
       expect(replaceOptionValueToRegexp(String.raw`/\>//`)).to.deep.equal([/>/, '']);
