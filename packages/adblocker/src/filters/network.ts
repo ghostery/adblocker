@@ -539,17 +539,13 @@ function isCharacterEscapeInRegExp(line: string, pos: number, _end: number): [nu
   return [pos + 1, false];
 }
 
-const REPLACE_CHARACTER_UNESCAPES = new Set([
-  // https://adguard.com/kb/general/ad-filtering/create-own-filters/#replace-modifier
-  44, // ,
-  47, // /
-]);
-
 /**
  * Comma and slash are expected to come with escape character by the spec.
+ * https://adguard.com/kb/general/ad-filtering/create-own-filters/#replace-modifier
  */
 function isCharacterEscapeInReplace(line: string, pos: number, end: number): [number, boolean] {
-  if (REPLACE_CHARACTER_UNESCAPES.has(line.charCodeAt(pos + 1))) {
+  const code = line.charCodeAt(pos + 1);
+  if (code === 44 /* ',' */ || code === 47 /* '/' */) {
     return [pos + 1, false];
   }
   return isCharacterEscapeInRegExp(line, pos, end);
