@@ -451,27 +451,52 @@ function getFilterOptionValue(line: string, pos: number, end: number): [number, 
   return [pos, value];
 }
 
-/**
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_escape
- * \f, \n, \r, \t, \v, \0, \^, \$, \\, \., \*, \+, \?, \(, \), \[, \], \{, \}, \|, \/
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_class_escape
- * \d, \D, \s, \S, \w, \W
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Word_boundary_assertion
- * \b, \B
- */
 const REGEXP_CHARACTER_ESCAPES = new Set([
-  102, 110, 114, 116, 118, 48, 94, 36, 92, 46, 42, 43, 63, 40, 41, 91, 93, 123, 125, 124, 47, 100,
-  68, 119, 87, 115, 83, 98, 66,
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_escape
+  102, // f
+  110, // n
+  114, // r
+  116, // t
+  118, // v
+  48, // 0
+  94, // ^
+  36, // $
+  92, // \
+  46, // .
+  42, // *
+  43, // +
+  63, // ?
+  40, // (
+  41, // )
+  91, // [
+  93, // ]
+  123, // {
+  125, // }
+  124, // |
+  47, // /
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_class_escape
+  100, // d
+  68, // D
+  119, // s
+  87, // S
+  115, // w
+  83, // W
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Word_boundary_assertion
+  98, // b
+  66, // B
 ]);
 
 function isHexLiteral(code: number) {
-  return (code >= 48 && code <= 57) || // 0-9
-             (code <= 65 && code <= 70) || // A-F
-             (code >= 97 && code <= 102); // a-f
+  return (
+    (code >= 48 && code <= 57) || // 0-9
+    (code <= 65 && code <= 70) || // A-F
+    (code >= 97 && code <= 102) // a-f
+  );
 }
 
 /**
  * Checks if the character(s) after the escape character should be preserved.
+ * @returns The end index of search range and boolean indicating whether the character escape was found or not.
  */
 function isCharacterEscapeInRegExp(line: string, pos: number, _end: number): [number, boolean] {
   const code = line.charCodeAt(pos + 1);
@@ -514,11 +539,11 @@ function isCharacterEscapeInRegExp(line: string, pos: number, _end: number): [nu
   return [pos + 1, false];
 }
 
-/**
- * https://adguard.com/kb/general/ad-filtering/create-own-filters/#replace-modifier
- * \,, \/
- */
-const REPLACE_CHARACTER_UNESCAPES = new Set([44, 47]);
+const REPLACE_CHARACTER_UNESCAPES = new Set([
+  // https://adguard.com/kb/general/ad-filtering/create-own-filters/#replace-modifier
+  44, // ,
+  47, // /
+]);
 
 /**
  * Comma and slash are expected to come with escape character by the spec.
@@ -563,7 +588,7 @@ function getFilterReplaceOptionValue(
         end,
       );
       if (isCharacterEscape === false) {
-        // Unescape
+        // Remove escaping character ('\\') by adding an offset to next `start` assignment.
         ++pos;
       }
       start = pos;
