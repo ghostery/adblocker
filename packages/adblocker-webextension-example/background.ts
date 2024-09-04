@@ -55,7 +55,6 @@ chrome.tabs.onUpdated.addListener((tabId, { status, url }) => {
   }
 });
 
-
 declare global {
   interface Window {
     adblocker: WebExtensionBlocker;
