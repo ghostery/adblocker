@@ -55,11 +55,19 @@ chrome.tabs.onUpdated.addListener((tabId, { status, url }) => {
   }
 });
 
+declare global {
+  interface Window {
+    adblocker: WebExtensionBlocker;
+  }
+}
+
 WebExtensionBlocker.fromLists(fetch, fullLists, {
   enableCompression: true,
   enableHtmlFiltering: true,
   loadExtendedSelectors: true,
 }).then((blocker: WebExtensionBlocker) => {
+  window.adblocker = blocker;
+
   blocker.enableBlockingInBrowser(browser);
 
   blocker.on('request-blocked', (request: Request, result: BlockingResponse) => {

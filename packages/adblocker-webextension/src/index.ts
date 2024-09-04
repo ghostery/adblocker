@@ -352,13 +352,13 @@ export class BlockingContext {
     if (this.blocker.config.loadNetworkFilters === true && this.browser.webRequest !== undefined) {
       this.browser.webRequest.onBeforeRequest.addListener(
         this.onBeforeRequest,
-        { urls: ['<all_urls>'] },
+        { urls: ['http://*/*', 'https://*/*'] },
         ['blocking'],
       );
 
       this.browser.webRequest.onHeadersReceived.addListener(
         this.onHeadersReceived,
-        { urls: ['<all_urls>'], types: ['main_frame'] },
+        { urls: ['http://*/*', 'https://*/*'] },
         ['blocking', 'responseHeaders'],
       );
     }

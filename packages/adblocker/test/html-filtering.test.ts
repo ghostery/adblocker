@@ -130,6 +130,19 @@ describe('html-filtering', () => {
     });
   });
 
+  describe('#replaceOptionValueToRegexp', () => {
+    it('unescapes non special characters', () => {
+      expect(replaceOptionValueToRegexp(String.raw`/\,//`)).to.deep.equal([/,/, '']);
+      expect(replaceOptionValueToRegexp(String.raw`/\>//`)).to.deep.equal([/>/, '']);
+      expect(replaceOptionValueToRegexp(String.raw`/\=//`)).to.deep.equal([/=/, '']);
+      expect(replaceOptionValueToRegexp(String.raw`/\://`)).to.deep.equal([/:/, '']);
+    });
+
+    it('allows escaped slashes', () => {
+      expect(replaceOptionValueToRegexp(String.raw`/\///`)).to.deep.equal([/\//, '']);
+    });
+  });
+
   describe('#StreamingHtmlFilter', () => {
     const filter = (html: string, filters: HTMLSelector[] = []): string => {
       const stream = new StreamingHtmlFilter(filters);
