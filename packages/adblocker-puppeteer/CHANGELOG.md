@@ -1,3 +1,16 @@
+# v1.33.2 (Wed Sep 04 2024)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 23.2.1 to 23.2.2 [#4248](https://github.com/ghostery/adblocker/pull/4248) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.2.0 to 23.2.1 [#4240](https://github.com/ghostery/adblocker/pull/4240) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.33.1 (Wed Aug 28 2024)
 
 #### :nut_and_bolt: Dependencies

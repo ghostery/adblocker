@@ -1,3 +1,22 @@
+# v1.33.2 (Wed Sep 04 2024)
+
+#### :bug: Bug Fix
+
+- Fix $replace option parsing [#4241](https://github.com/ghostery/adblocker/pull/4241) ([@chrmod](https://github.com/chrmod) [@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#4229](https://github.com/ghostery/adblocker/pull/4229) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 4
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.33.1 (Wed Aug 28 2024)
 
 #### :bug: Bug Fix

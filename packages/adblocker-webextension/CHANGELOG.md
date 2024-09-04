@@ -1,3 +1,16 @@
+# v1.33.2 (Wed Sep 04 2024)
+
+#### :bug: Bug Fix
+
+- Fix $replace option parsing [#4241](https://github.com/ghostery/adblocker/pull/4241) ([@chrmod](https://github.com/chrmod) [@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 2
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.32.0 (Mon Aug 26 2024)
 
 #### :rocket: New Feature
