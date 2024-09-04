@@ -6517,11 +6517,9 @@ pingit.*,~pingit.com,~pingit.me,pngit.live##+js(set, blurred, false)
 ||pingit.*/sw.js$script,1p,domain=~pingit.com|~pingit.me
 *$frame,3p,domain=pingit.im|pngit.live
 *$script,3p,denyallow=cdn77.org|google.com|gstatic.com|pingit.im|recaptcha.net|smartsuppcdn.com|smartsuppchat.com,domain=pingit.*|pngit.live|~pingit.com|~pingit.me
-noticiasesports.live,noweconomy.live##+js(nano-sib, , 1200, 0)
-noticiasesports.live,noweconomy.live##+js(nowoif)
-noticiasesports.live,noweconomy.live###overlay
-noweconomy.live##+js(set, adblockDetector, noopFunc)
-noweconomy.live##+js(ra, disabled, button%5Bid%3D%22invisibleCaptchaShortlink%22%5D)
+noticiasesports.live##+js(nano-sib, , 1200, 0)
+noticiasesports.live##+js(nowoif)
+noticiasesports.live###overlay
 ! https://github.com/uBlockOrigin/uAssets/issues/4983
 pelisplay.*##+js(aopw, smrtSB)
 pelisplay.*##+js(aopw, smrtSP)
@@ -6615,6 +6613,7 @@ cambro.tv##[href^="https://t.grtya.com/"]
 ||widgets.skyprivate.com/promo/$frame
 cambro.tv##+js(set, flashvars.logo_url, )
 cambro.tv##+js(set, flashvars.logo_text, )
+cambro.tv##+js(acs, document.querySelectorAll, popMagic)
 ! https://github.com/uBlockOrigin/uAssets/issues/5061
 ! https://github.com/uBlockOrigin/uAssets/issues/7043
 nibelungen-kurier.de##+js(set, nlf.custom.userCapabilities, false)
@@ -6707,9 +6706,6 @@ streamhentaimovies.com##+js(nostif, pum-open)
 ||soundcloud.com/audio-ad$1p,xhr
 ||soundcloud.com/promoted$1p,xhr
 soundcloud.com##.soundList__item:has(.sc-promoted-icon-medium)
-! https://github.com/uBlockOrigin/uAssets/issues/5141
-@@||virginmediatelevision.ie/player/$xhr,1p
-@@||virginmediatelevision.ie/includes/js/cookienotice.js.pagespeed.$script,1p
 ! as suggested https://github.com/uBlockOrigin/uAssets/issues/5153
 ! https://github.com/uBlockOrigin/uAssets/issues/5157
 *expires$media,redirect=noopmp3-0.1s,domain=kabeleins.de
@@ -9005,8 +9001,6 @@ unfriend-app.com##+js(nobab)
 *$script,redirect-rule=noopjs,domain=unfriend-app.com
 ! https://github.com/NanoMeow/QuickReports/issues/1964
 adn.com##+js(aopr, MG2Loader)
-! https://github.com/NanoMeow/QuickReports/issues/1965
-@@||jbzdy.cc^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/6385
 technews.tw##+js(acs, jQuery, adblock)
 technews.tw##.AD_wrapper
@@ -9084,10 +9078,6 @@ how2electronics.com##.adsbygoogle:style(max-height: 1px !important;)
 freesoftpdfdownload.blogspot.com##+js(acs, decodeURI, decodeURIComponent)
 freesoftpdfdownload.blogspot.com##+js(aeld, load, 2000)
 ||wap4dollar.com^$3p
-! https://forums.lanik.us/viewtopic.php?f=62&t=43689
-@@||upclips.*^$ghide
-upclips.*##[id*="ScriptRoot"]
-||upclips.online*^$csp=script-src 'self' 'unsafe-inline' blob: *.cloudflare.com *.google-analytics.com *.googleapis.com *.gstatic.com *.radiantmediatechs.com
 ! https://github.com/uBlockOrigin/uAssets/issues/6024#issuecomment-541228625
 ||mediapass.com^$3p
 ! https://github.com/NanoMeow/QuickReports/issues/2027
@@ -9801,10 +9791,7 @@ tr.savefrom.net##.second-btn-box
 @@||cdn.jsdelivr.net/npm/videojs-contrib-ads/$domain=meucdn.vip
 @@||meucdn.*^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/6686
-##a[href^="http://adtrack"]
 ##a[href*="/go.php?a_aid="]
-! https://github.com/NanoMeow/QuickReports/issues/2506
-@@||allvidview.com^$ghide
 ! https://github.com/NanoMeow/QuickReports/issues/2516
 letras.mus.br##+js(nostif, r(), 0)
 letras.mus.br##[id^="pub"]
@@ -10385,8 +10372,6 @@ napi.hu##+js(acs, %24, show)
 ! https://github.com/NanoMeow/QuickReports/issues/2997
 *$xhr,frame,3p,domain=pcgamez-download.com
 pcgamez-download.com##+js(aost, Math, inlineScript)
-! https://github.com/AdguardTeam/AdguardFilters/issues/49559
-av-uncen.com##+js(aopr, adBlockDetected)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/49560
 spaziogames.it##+js(acs, %24, .test)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/147745
@@ -11263,17 +11248,7 @@ sunbtc.space##+js(set, adBlock, false)
 ! ero18.cc anti-adb/popups/ads
 @@||ero18.cc^$ghide
 ero18.cc##[href^="https://rapidgator.net/"]
-! pstream .net anti adb / example: https://www.pstream .net/e/KJxQ2W0P91WW00L
 ! https://github.com/NanoMeow/QuickReports/issues/3815
-pstream.net##+js(acs, String.fromCharCode, atob)
-pstream.net##+js(nosiif, length)
-pstream.net##+js(nostif, length)
-pstream.net##+js(nowebrtc)
-pstream.net##+js(nowoif)
-pstream.net##head:has(style[id*="videojs"]) + body > *:not(.video-js)
-@@||pstream.net^$ghide
-@@||pstream.net^$xhr,1p
-*$script,1p,redirect-rule=noopjs,domain=pstream.net
 ||lologhfd.com^$all
 ! https://github.com/uBlockOrigin/uAssets/issues/7163
 suanoticia.online##+js(nano-sib)
