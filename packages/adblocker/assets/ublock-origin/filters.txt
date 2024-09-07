@@ -4292,14 +4292,6 @@ undeniable.info##+js(acs, document.getElementById, testadblock)
 transparentcalifornia.com##+js(set, %24.magnificPopup.open, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/2832
 klartext-ne.de##+js(acs, document.addEventListener, google_ad_client)
-! https://github.com/uBlockOrigin/uAssets/issues/2812
-! https://github.com/NanoMeow/QuickReports/issues/353
-titsbox.com##+js(aeld, click, exopop)
-titsbox.com##+js(nowoif)
-*$script,3p,domain=titsbox.com
-titsbox.com##[class*="banners"]
-||titsbox.com/iframe/*_NTV_
-||titsbox.com/js/pns.min.js
 ! https://github.com/uBlockOrigin/uAssets/issues/1121
 zmovs.com##+js(nowoif)
 zmovs.com##+js(aopr, ALoader)
@@ -7183,14 +7175,6 @@ imgdawgknuttz.com##+js(aopr, Pub2a)
 *$frame,3p,domain=imgdawgknuttz.com
 *$script,3p,domain=imgdawgknuttz.com
 ||trifms.com^
-! https://github.com/uBlockOrigin/uAssets/issues/5450
-@@||javsubtitle.co^$ghide
-javsubtitle.co###impanel
-javsubtitle.co###mimpanel
-javsubtitle.co##.boxAds
-javsubtitle.co##.boxAds2
-javsubtitle.co##.header-ads
-javsubtitle.co##.mid-ads
 ! https://github.com/uBlockOrigin/uAssets/issues/5454
 @@||iphonetweak.fr^$ghide
 iphonetweak.fr##ins.adsbygoogle
@@ -9384,12 +9368,13 @@ desired.de##+js(ra, data-ivad-preroll-adtag, video, stay)
 ||stern.de/__assets/homad
 ||static.kicker.de/content/js/vendor/homad
 spiegel.de##^script:has-text(homad)
-welt.de,~dutyfarm.welt.de##+js(json-prune, vastUrl)
-welt.de,~dutyfarm.welt.de##div[id][style^="z-index: 2"][style*="margin"][style*="auto"][style*="top"][style$="px; position: absolute;"]:remove()
 giga.de,kino.de,spieletipps.de##+js(rpnt, script, %2F%5C%22homad%5C%22%2C%2F)
 t-online.de##+js(rpnt, script, %2F%5C%22homad%5C%22%3A%5C%7B%5C%22state%5C%22%3A%5C%22enabled%5C%22%5C%7D%2F, %22homad%22%3A%7B%22state%22%3A%22disabled%22%7D)
 !#if !cap_html_filtering
+welt.de,~dutyfarm.welt.de##div[id][style^="z-index: 2"][style*="margin"][style*="auto"][style*="top"][style$="px; position: absolute;"]:remove()
 spiegel.de##+js(rmnt, script, homad)
+!#else
+||welt.de/homadConfigEnabled.json$xhr,replace=/"enabled":true/"enabled":false/
 !#endif
 plus.rtl.de##+js(json-prune, adReinsertion)
 tvspielfilm.de,tvtoday.de,chip.de,focus.de##+js(set, DL8_GLOBALS.enableAdSupport, false)
