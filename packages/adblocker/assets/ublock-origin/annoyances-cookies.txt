@@ -145,7 +145,7 @@ windhager.eu##+js(trusted-set-cookie, viucom-cookie-accept, %5B%22technical_nece
 ! https://www.banknorwegian.no/
 banknorwegian.no##+js(trusted-set-cookie, BN.User.CookieConsent, CAE%253D)
 ! cookiebot
-biomarkt.de,plaion.com##+js(trusted-set-cookie, CookieConsent, %7Bstamp%3A%2527BvqlZ34xqOpzSOaxY1VgwOy5CZ1lfC4Xs2JNiDqz9M4rNuyyAY56Jg%3D%3D%2527%252Cnecessary%3Atrue%252Cpreferences%3Afalse%252Cstatistics%3Afalse%252Cmarketing%3Afalse%252Cmethod%3A%2527explicit%2527%252Cver%3A1%252Cutc%3A1697932000537%7D, 1year)
+plaion.com##+js(trusted-set-cookie, CookieConsent, %7Bstamp%3A%2527BvqlZ34xqOpzSOaxY1VgwOy5CZ1lfC4Xs2JNiDqz9M4rNuyyAY56Jg%3D%3D%2527%252Cnecessary%3Atrue%252Cpreferences%3Afalse%252Cstatistics%3Afalse%252Cmarketing%3Afalse%252Cmethod%3A%2527explicit%2527%252Cver%3A1%252Cutc%3A1697932000537%7D, 1year)
 apetro.pt,apoteket.se,bergbauernmilch.de,berlingske.dk,cineplex.de,danbolig.dk,egmont.com,euroatla.pt,finanzmarktwelt.de,harzwasserwerke.de,hoyavision.com,nos.pt,neue.at,nngroup.com,nordiskfilm.com,storyhouseegmont.dk,storyhouseegmont.no,storyhouseegmont.se,toyota-forklifts.se,vn.at,werder.de,werkenbijlidl.nl,wwf.fi##+js(trusted-set-cookie, CookieConsent, %7Bstamp%3A%2527Uv9YOAVP5djCBw71lxhE4rNAfTObaGck2Sn3rKWf9dPCYpqcWvAlpA%3D%3D%2527%252Cnecessary%3Atrue%252Cpreferences%3Afalse%252Cstatistics%3Afalse%252Cmarketing%3Afalse%252Cmethod%3A%2527explicit%2527%252Cver%3A2%7D, 1year)
 refinery29.com,dasinvestment.com,fof.se,mein-grundeinkommen.de##+js(trusted-set-cookie, CookieConsent, %7Bstamp%3A%2527Uv9YOAVP5djCBw71lxhE4rNAfTObaGck2Sn3rKWf9dPCYpqcWvAlpA%3D%3D%2527%252Cnecessary%3Atrue%252Cpreferences%3Afalse%252Cstatistics%3Afalse%252Cmarketing%3Afalse%252Cmethod%3A%2527explicit%2527%252Cver%3A3%7D, 1year)
 ekstrabladet.dk##+js(trusted-set-cookie, CookieConsent, %7Bstamp%3A%2527fbbiPQWa8SRQm47Ge8hRVOAPAgw2jXlG8o%2F%2Bhp1euVVi1qtFQj1O3w%3D%3D%2527%252Cnecessary%3Atrue%252Cpreferences%3Atrue%252Cstatistics%3Atrue%252Cmarketing%3Atrue%252Cmethod%3A%2527explicit%2527%252Cver%3A4%7D, 1year)
@@ -374,6 +374,9 @@ tf1info.fr##body.tc-modal-open:style(overflow: auto !important;)
 ! https://www.ubereats.com/
 ubereats.com##+js(trusted-click-element, button%5Bdata-tracking-name%3D%22cookie-preferences-mloi-initial-opt-out%22%5D)
 ubereats.com##div[role="dialog"]:has(button[data-tracking-name="cookie-preferences-mloi-initial-opt-out"]):style(visibility: hidden !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/25238
+visme.co##+js(trusted-set-cookie, visme_cookies_settings, %7B%22analytics%22%3Afalse%2C%22advertisement%22%3Afalse%2C%22functionality%22%3Afalse%7D, , , domain, visme.co)
+visme.co##+js(trusted-set-cookie, visme_cookies_use, no, , , domain, visme.co)
 !! Needs additional cookies
 ! https://github.com/uBlockOrigin/uAssets/issues/23701
 ! Enable search customization
@@ -1386,3 +1389,12 @@ posti.fi##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24, 1yea
 posti.fi##+js(trusted-set-cookie, OptanonConsent, groups%3DC0001%253A1%252CC0003%253A1%252CC0002%253A0%252CC0004%253A0%252CC0005%253A0, 1year, , domain, posti.fi)
 ! https://github.com/uBlockOrigin/uAssets/issues/25187
 mail.com##+js(trusted-click-element, %23onetrust-accept-btn-handler)
+! https://github.com/uBlockOrigin/uAssets/issues/25246
+biomarkt.de##+js(trusted-set-cookie, CookieConsent, %7Bstamp%3A%2527WpKgN4qzUCpEZsz6QOUxyXrv30fnb7GdP7uhCS2%2BtW4zpN9MSRfCig%3D%3D%2527%252Cnecessary%3Atrue%252Cpreferences%3Atrue%252Cstatistics%3Afalse%252Cmarketing%3Afalse%252Cmethod%3A%2527explicit%2527%252Cver%3A1%252Cutc%3A%24now%24%7D)
+! essential cookies only
+doordash.com##+js(trusted-set-cookie, cookie_tracking_enabled, 4-false)
+! https://github.com/easylist/easylist/issues/19970 - accept cookies
+cmp.petbook.de##+js(trusted-click-element, button%5Btitle%3D%22Alle%20akzeptieren%22%5D, , 1000)
+petbook.de##div[id^="sp_message_container_"]:style(visibility: hidden !important;)
+petbook.de##.sp-message-open:style(width: auto !important;)
+petbook.de##.sp-message-open > body:style(overflow: auto !important; position: inherit !important;)
