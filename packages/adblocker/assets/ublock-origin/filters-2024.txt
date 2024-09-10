@@ -608,6 +608,19 @@ a2zapk.*,educatiocenter.online##+js(acs, %24, alertmsg)
 ! https://github.com/uBlockOrigin/uAssets/issues/25164
 play.virginmediatelevision.ie##+js(json-prune, avails)
 play.virginmediatelevision.ie##+js(json-prune-fetch-response, response.ads, , propsToMatch, %2Fstreams)
+! serialy.bombuj.tv | .si anti adb
+! https://github.com/uBlockOrigin/uAssets/issues/22253
+@@||bombuj.*^$ghide
+bombuj.*##.ad_banner
+bombuj.*##[id*="ekla"]
+! https://github.com/uBlockOrigin/uAssets/issues/25239
+bombuj.*##[id^="ad_banner"] ~ a
+||wurfl.io/wurfl.js$script,3p
+waaaw.*,waaw1.*##+js(aopr, doSecondPop)
+waaaw.*,waaw.*,waaw1.*##+js(aopr, BetterJsPop)
+/cdn-cgi/trace$xhr,domain=waaw.*|waaaw.*
+bombuj.*##+js(no-fetch-if, ads)
+bombuj.*##+js(nobab)
 ! END: Rules from filters.txt
 ! START: Regional lists
 ! <<<<< czech slovak filters >>>>>
@@ -689,7 +702,10 @@ rgeyyddl.skin##+js(acs, document.createElement, adblock)
 tubereader.me##+js(aeld, %2Fadblock%2Fi)
 tubereader.me##+js(nostif, %2Fadblock%2Fi)
 ! https://github.com/uBlockOrigin/uAssets/pull/21777
+! https://www.reddit.com/r/uBlockOrigin/comments/1fblnh1/prevents_adsluarmornet_to_load/
 ! [badfilter] ://ads.$~image,domain=~ads.8designers.com|~ads.ac.uk|~ads.adstream.com.ro|~ads.allegro.pl|~ads.am|~ads.amazon|~ads.apple.com|~ads.atmosphere.copernicus.eu|~ads.band|~ads.bestprints.biz|~ads.bikepump.com|~ads.brave.com|~ads.buscaempresas.co|~ads.business.bell.ca|~ads.cafebazaar.ir|~ads.colombiaonline.com|~ads.comeon.com|~ads.cvut.cz|~ads.doordash.com|~ads.dosocial.ge|~ads.dosocial.me|~ads.elevateplatform.co.uk|~ads.finance|~ads.google.cn|~ads.google.com|~ads.gree.net|~ads.gurkerl.at|~ads.harvard.edu|~ads.instacart.com|~ads.jiosaavn.com|~ads.kaipoke.biz|~ads.kazakh-zerno.net|~ads.kifli.hu|~ads.knuspr.de|~ads.listonic.com|~ads.magalu.com|~ads.mercadolivre.com.br|~ads.mgid.com|~ads.microsoft.com|~ads.midwayusa.com|~ads.mobilebet.com|~ads.mojagazetka.com|~ads.msstate.edu|~ads.mst.dk|~ads.mt|~ads.nc|~ads.nipr.ac.jp|~ads.olx.pl|~ads.pinterest.com|~ads.red|~ads.rohlik.cz|~ads.route.cc|~ads.safi-gmbh.ch|~ads.scotiabank.com|~ads.selfip.com|~ads.shopee.cn|~ads.shopee.co.th|~ads.shopee.com.br|~ads.shopee.com.mx|~ads.shopee.com.my|~ads.shopee.kr|~ads.shopee.ph|~ads.shopee.pl|~ads.shopee.sg|~ads.shopee.tw|~ads.shopee.vn|~ads.smartnews.com|~ads.snapchat.com|~ads.socialtheater.com|~ads.spotify.com|~ads.studyplus.co.jp|~ads.taboola.com|~ads.tiktok.com|~ads.typepad.jp|~ads.us.tiktok.com|~ads.viksaffiliates.com|~ads.vk.com|~ads.watson.ch|~ads.x.com|~ads.yandex|~badassembly.com|~caravansforsale.co.uk|~fusac.fr|~memo2.nl|~reempresa.org|~satmetrix.com|~seriouswheels.com,badfilter
+! https://github.com/easylist/easylist/commit/2edb87958c982d030c5e5f56080a34f55f092fe5
+! [badfilter] ://ads.$~image,domain=~ads.8designers.com|~ads.ac.uk|~ads.adstream.com.ro|~ads.allegro.pl|~ads.am|~ads.amazon|~ads.apple.com|~ads.atmosphere.copernicus.eu|~ads.band|~ads.bestprints.biz|~ads.bikepump.com|~ads.brave.com|~ads.buscaempresas.co|~ads.business.bell.ca|~ads.cafebazaar.ir|~ads.colombiaonline.com|~ads.comeon.com|~ads.cvut.cz|~ads.doordash.com|~ads.dosocial.ge|~ads.dosocial.me|~ads.elevateplatform.co.uk|~ads.finance|~ads.google.cn|~ads.google.com|~ads.gree.net|~ads.gurkerl.at|~ads.harvard.edu|~ads.instacart.com|~ads.jiosaavn.com|~ads.kaipoke.biz|~ads.kazakh-zerno.net|~ads.kifli.hu|~ads.knuspr.de|~ads.listonic.com|~ads.luarmor.net|~ads.magalu.com|~ads.mercadolivre.com.br|~ads.mgid.com|~ads.microsoft.com|~ads.midwayusa.com|~ads.mobilebet.com|~ads.mojagazetka.com|~ads.msstate.edu|~ads.mst.dk|~ads.mt|~ads.nc|~ads.nipr.ac.jp|~ads.olx.pl|~ads.pinterest.com|~ads.red|~ads.rohlik.cz|~ads.route.cc|~ads.safi-gmbh.ch|~ads.scotiabank.com|~ads.selfip.com|~ads.shopee.cn|~ads.shopee.co.th|~ads.shopee.com.br|~ads.shopee.com.mx|~ads.shopee.com.my|~ads.shopee.kr|~ads.shopee.ph|~ads.shopee.pl|~ads.shopee.sg|~ads.shopee.tw|~ads.shopee.vn|~ads.smartnews.com|~ads.snapchat.com|~ads.socialtheater.com|~ads.spotify.com|~ads.studyplus.co.jp|~ads.taboola.com|~ads.tiktok.com|~ads.typepad.jp|~ads.us.tiktok.com|~ads.viksaffiliates.com|~ads.vk.com|~ads.watson.ch|~ads.x.com|~ads.yandex|~badassembly.com|~caravansforsale.co.uk|~fusac.fr|~memo2.nl|~reempresa.org|~satmetrix.com|~seriouswheels.com,badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/21775
 counterstrike-hack.leforum.eu,ajt.xooit.org##+js(aopr, document.body.style.backgroundPosition)
 ! ludwig-van .com anti-adb
@@ -713,7 +729,7 @@ postermockup.com##+js(aost, setTimeout, adsBlocked)
 ||check-host.net/images/rondguarg$image,1p
 ||check-host.net/images/alexwhost.png$image,1p
 ||check-host.net/images/aezawlogo.$image,1p
-check-host.net###hostacq, .hostavq, #antkeatvhawaprivatealps, .specgo, #antkeatvhawaaeza-permnnt, #antkeatvhaqaalexhost, #antkeatvhawapp-juiaryt, #antkeatvhawapp-juiaryt2, .rw-elative, [href*="?utm_"], a[href*="privatealps.net"], [onclick*="https://go.aez"]
+check-host.net###hostacq, .hostavq, #antkeatvhaeaprivatealps, .specho, #antkeatvhaeaaeza-permnnt, #antkeatvhaqaalexhost, #antkeatvhaeapp-juiaryt, #antkeatvhaeapp-juiaryt2, .re-elative, [href*="?utm_"], a[href*="privatealps.net"], [onclick*="https://privatealps.net/"], [onclick*="https://aeza.net/"], a[href^="https://aeza.net/"]
 ! conceptartworld. com antiadb
 @@||conceptartworld.com^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/21859
@@ -885,7 +901,6 @@ qwant.com##div[data-testid="pam.container"]:style(max-height: 1px !important; op
 @@||spite.cz^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/22203
 civitai.com##+js(no-fetch-if, googlesyndication)
-civitai.com##div.shadow:has(a[href="/pricing"] img[alt="Please support civitai and creators by disabling adblock"])
 ||ads.civitai.com^$script,1p,redirect-rule=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/22220
 ! https://github.com/uBlockOrigin/uAssets/issues/22492
@@ -1852,7 +1867,8 @@ lowcygier.pl##.content-wrapper > div[id]:has(> a[target="_blank"])
 lowcygier.pl##.tile-container-small:has(> a[href*="/?utm_term=index&utm_source=mainpage-tile-"] > img)
 lowcygier.pl##header.intro:style(margin-bottom: 0px !important;)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1dglzes/any_solution_to_bypass_adblock_detection_on/
-hartvannederland.nl,vandaaginside.nl##+js(set, Object.prototype.ADBLOCK_DETECTION, )
+! https://github.com/uBlockOrigin/uAssets/issues/25254
+hartvannederland.nl,shownieuws.nl,vandaaginside.nl##+js(set, Object.prototype.ADBLOCK_DETECTION, )
 ||assets.prod.webx.talpa.digital/ad/banner.gif?$xhr
 ! https://github.com/uBlockOrigin/uAssets/issues/24128
 uhdmovies.*##+js(nowoif)
@@ -2161,8 +2177,6 @@ hiraethtranslation.com##+js(rmnt, script, adsSrc)
 chasingthedonkey.com##+js(nowoif)
 ! https://www.taste.com.au/food-news/arnotts-told-us-secret-recipe-their-discontinued-honey-jumbles-biscuits/y036sar4 - top placeholder
 taste.com.au##.main-header:style(top: 0 !important)
-! https://github.com/uBlockOrigin/uAssets/issues/24677#issuecomment-2262916020
-tvline.com##+js(rmnt, script, %2Fadm%7Cadb%2Fi)
 ! https://github.com/uBlockOrigin/uAssets/issues/24714
 @@||decompiler.com/javascripts/*$script,1p
 ! ytlarge detection
@@ -2472,3 +2486,20 @@ drakecomic.com##+js(set, checkAdBlocker, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/25229
 freedrivemovie.com##+js(no-fetch-if, googlesyndication)
 ||freedrivemovie.com/wp-content/themes/dooplay/js/anti-adblock.js
+! https://hentaitube.icu popup
+lovetofu.cyou##+js(nowoif)
+! https://udw88666.com popup
+alldeepfake.ink##+js(nowoif)
+! https://www.reddit.com/r/uBlockOrigin/comments/1fbrkmy/ad_blocker_detected_on_the_following_website/
+@@||lolcalhost.ru^$script,1p
+||lolcalhost.ru/aclib.js$important
+crichdplays.ru,player102.top###floated
+crichd-player.top,crichdplays.ru,lolcalhost.ru##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
+stitichsports.com##+js(rmnt, script, antiAdBlockerHandler)
+! https://github.com/uBlockOrigin/uAssets/issues/25250
+@@||api.adinplay.com/libs/aiptag/pub/LBS/littlebigsnake.com/tag.min.js$script,domain=littlebigsnake.com
+! https://metin2lobby.com anti-adb
+@@||metin2lobby.com^$ghide
+@@||metin2lobby.com/js/*/apw-$script,1p
+! https://github.com/easylist/easylist/issues/19978
+multi.xxx##+js(set, flashvars.video_click_url, )
