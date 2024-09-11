@@ -72,14 +72,12 @@ japscan.lol#@##blur-inter
 japscan.lol#@##interstitial
 japscan.lol##body > .container.text-center > div.mt-3[style="margin: 0px auto; display: block;"] > a.Aikoi.donate[target="_blank"][href^="https://www."][href*="/?utm_source=manga&utm_"]:not([href^="https://www.google"]):not([href^="https://www.japscan"]):not([href^="https://www.example"]) > img.img-fluid[src^="/imgs/onc/"]
 japscan.lol#@#.navbar-nav > li.nav-item > a[href^="https://www.origoclick.com/manga/?type=nav&"]
-japscan.lol##.navbar-nav > li.nav-item > a[href^="https://www.origoclick.com"]
-japscan.lol##+js(spoof-css, .navbar-nav%20%3E%20li.nav-item%20%3E%20a%5Bhref%5E%3D%22https%3A%2F%2Fwww.origoclick.com%22%5D, display, block)
+japscan.lol##.navbar-nav > li.nav-item > a[href^="https://www.origoclick.com"]:remove()
 japscan.lol#@#body > .container > .row > #main + #sidebar.col-md-3 > .card.mt-1 > .card[style="margin: 0px auto; display: block;"] > a.aikoi.donate[href^="http"][href*="/?utm_source=index&utm_"][target="_blank"][rel="noopener noreferrer nofollow"] img
 japscan.lol#@#body > .container > .row > #main + #sidebar.col-md-3 > .card.mt-1 > .card[style="margin: 0px auto; display: block;"] > a.aikoi.donate[href^="http"][href*="/?utm_source=index&utm_"][target="_blank"][rel="noopener noreferrer nofollow"]:not([href^="http://japscan.lol"]) > img
-japscan.lol#@#+js(spoof-css, body%20%3E%20.container%20%3E%20.row%20%3E%20%23main%20%2B%20%23sidebar.col-md-3%20%3E%20.card.mt-1%20%3E%20.card%5Bstyle%3D%22margin%3A%200px%20auto%3B%20display%3A%20block%3B%22%5D%20%3E%20a.aikoi.donate%5Bhref%5E%3D%22http%22%5D%5Bhref*%3D%22%2F%3Futm_source%3Dindex%26utm_%22%5D%5Btarget%3D%22_blank%22%5D%5Brel%3D%22noopener%20noreferrer%20nofollow%22%5D%3Anot(%5Bhref%5E%3D%22http%3A%2F%2Fjapscan.lol%22%5D)%20%3E%20img, display, inline)
 japscan.lol#@#.card.copines
 japscan.lol#@#+js(no-fetch-if, method%3A%2FHEAD%7CGET%2F)
-!japscan.lol##+js(prevent-fetch, %2F%5C%2F%5Cd%7B3%7D%5B-x%5D%5Cd%7B2%7D%2F)
+japscan.lol##div[style="position: fixed; inset: 0px; z-index: 2147483647; pointer-events: auto;"]:empty
 @@*$image,xhr,script,domain=japscan.lol
 ||googletagmanager.com^$script,domain=japscan.lol,important
 /^https?:\/\/[a-z]{8,15}\.[a-z]{2,3}\/5\/\d{6,7}(?:\?_=\d+)?$/$script,3p,domain=japscan.lol,important
@@ -109,7 +107,9 @@ panel.freemcserver.net##+js(set, apstag.fetchBids.name, )
 ||prebid-stag.setupad.net/openrtb2/auction|$xhr,important,domain=panel.freemcserver.net
 ||prebid.a-mo.net/a/c|$xhr,important,domain=panel.freemcserver.net
 ||ib.adnxs.com/ut/v3/prebid|$xhr,important,domain=panel.freemcserver.net
+||mp.4dex.io/prebid|$xhr,important,domain=panel.freemcserver.net
 ||fastlane.rubiconproject.com/a/api/fastlane.json?$xhr,important,domain=panel.freemcserver.net
+||tlx.3lift.com/header/auction?lib=prebid&v=*&referrer=https%3A%2F%2Fpanel.freemcserver.net%2Fserver%2F*&tmax=*&gdpr=true&cmp_cs=*AAAAA$xhr,important,domain=panel.freemcserver.net
 ||rtb.openx.net/openrtbb/prebidjs|$xhr,important,domain=panel.freemcserver.net
 ||hbopenbid.pubmatic.com/translator?source=prebid-client|$xhr,important,domain=panel.freemcserver.net
 ||adx.adform.net/adx/openrtb|$xhr,important,domain=panel.freemcserver.net
