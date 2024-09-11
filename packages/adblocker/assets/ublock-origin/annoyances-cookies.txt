@@ -377,6 +377,14 @@ ubereats.com##div[role="dialog"]:has(button[data-tracking-name="cookie-preferenc
 ! https://github.com/uBlockOrigin/uAssets/issues/25238
 visme.co##+js(trusted-set-cookie, visme_cookies_settings, %7B%22analytics%22%3Afalse%2C%22advertisement%22%3Afalse%2C%22functionality%22%3Afalse%7D, , , domain, visme.co)
 visme.co##+js(trusted-set-cookie, visme_cookies_use, no, , , domain, visme.co)
+! https://www.uber.com/
+uber.com##+js(trusted-click-element, button%5Bdata-baseweb%3D%22button%22%5D%5Bdata-tracking-name%3D%22cookie-preferences-sloo-opt-out%22%5D, , 1000)
+uber.com##div[role="dialog"]:has(button[data-baseweb="button"][data-tracking-name="cookie-preferences-sloo-opt-out"]):style(visibility: hidden !important;)
+! https://www.ted.com/
+ted.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24)
+ted.com##+js(trusted-set-cookie, OptanonConsent, groups%3DC0001%253A1%252CC0002%253A0%252CC0004%253A0%252CC0003%253A0, , , domain, ted.com)
+! https://www.xing.com/
+xing.com##+js(trusted-set-cookie, userConsent, %257B%2522marketing%2522%253Afalse%252C%2522version%2522%253A%25225%2522%257D, , , domain, xing.com)
 !! Needs additional cookies
 ! https://github.com/uBlockOrigin/uAssets/issues/23701
 ! Enable search customization
