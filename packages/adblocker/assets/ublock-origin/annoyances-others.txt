@@ -4366,9 +4366,6 @@ memoryhackers.org##+js(acs, RegExp, googlebot)
 ! technologyreview.jp soft paywall
 technologyreview.jp##+js(cookie-remover, kpwc)
 technologyreview.jp##.meter
-! https://www.reddit.com/r/uBlockOrigin/comments/106oc11/
-turkbettv154.com##^script:has-text(/debugger/i)
-turkbettv154.com##+js(acs, globalThis, DisableDevtool)
 ! https://github.com/uBlockOrigin/uAssets/issues/16296
 */wp-content/plugins/content-copy-protection-disable-right-click/$script
 ! https://github.com/uBlockOrigin/uAssets/issues/16297
@@ -5661,3 +5658,7 @@ cnn.com##+js(aeld, visibilitychange, dispatch)
 kentucky.com##+js(aeld, copy, linkPrefixMessage)
 ! https://github.com/uBlockOrigin/uAssets/issues/25268
 curseforge.com##+js(no-fetch-if, googlesyndication)
+! https://lowfuelmotorsport.com/statistics/ratings - auto redirect
+!#if !env_mv3
+lowfuelmotorsport.com##+js(set, Object.prototype.auth.redirectToLogin, noopFunc)
+!#endif

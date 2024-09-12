@@ -2868,8 +2868,6 @@ skill4ltu.eu##+js(aeld, load, adsbygoogle)
 ! https://github.com/uBlockOrigin/uAssets/issues/20505
 *$frame,redirect-rule=noopframe,domain=megaup.net
 download.megaup.net##+js(spoof-css, a%20img%3Anot(%5Bsrc%3D%22images%2Fmain_logo_inverted.png%22%5D), visibility, visible)
-! [dup] from ublock-origin/quick-fixes.txt
-! download.megaup.net##+js(rpnt, script, %2Ffor%5Cs*%5C(%5Cs*(const%7Clet%7Cvar).*%3F%3Breturn%3B%5C%7D%5C%7D.*%3F%3Breturn%3B.*%3F%3Breturn%3B%5C%7D%2Fg, , condition, attribute)
 @@||megaup.net/imageads/$image,1p
 @@||download.megaup.net^$script,1p
 ! https://www.reddit.com/r/uBlockOrigin/comments/hxzp5h/ublock_fails_to_block_ads_after_clicking_video/
@@ -3180,10 +3178,7 @@ filmisub.cc##+js(aost, setTimeout, adsBlocked)
 ! https://github.com/uBlockOrigin/uAssets/issues/19455
 ! https://www.reddit.com/r/uBlockOrigin/comments/1bjq73a/adblock_detection_in_jazzradiocom_difm_etc/
 ! https://github.com/uBlockOrigin/uAssets/commit/559bef48dd5cde353c6f2d83e127593a0462bb1a#commitcomment-142849479
-classicalradio.com,di.fm,jazzradio.com,radiotunes.com,rockradio.com,zenradio.com##+js(set, di.VAST.XHRURLHandler, noopFunc)
-classicalradio.com,di.fm,jazzradio.com,radiotunes.com,rockradio.com,zenradio.com##+js(no-xhr-if, googlesyndication)
-classicalradio.com,di.fm,jazzradio.com,radiotunes.com,rockradio.com,zenradio.com##+js(set, di.app.WebplayerApp.Ads.Supervisor.eligibleForPreroll, trueFunc)
-classicalradio.com,di.fm,jazzradio.com,radiotunes.com,rockradio.com,zenradio.com##+js(set, di.app.WebplayerApp.Ads.Supervisor.eligibleForMidroll, trueFunc)
+classicalradio.com,di.fm,jazzradio.com,radiotunes.com,rockradio.com,zenradio.com##+js(set, di.app.WebplayerApp.Ads.Adblocks.app.AdBlockDetectApp.startWithParent, false)
 ! https://github.com/uBlockOrigin/uAssets/issues/19430
 ||cdn77.org^$3p,domain=pricebefore.com
 ! admiral
@@ -3562,11 +3557,13 @@ google.com##.D1fz0e
 00m.in###h4title
 ! Fineshop Design anti-adb sites
 ! https://github.com/uBlockOrigin/uAssets/discussions/17361#discussioncomment-7098041
+! https://github.com/uBlockOrigin/uAssets/issues/24803
 !#if cap_html_filtering
-answerpython.com,gsm-solution.com,h-donghua.com,hindisubbedacademy.com,mydverse.*,pkgovjobz.com,ripexbooster.xyz,serial4.com,serial412.blogspot.com,sigmalinks.in,tutorgaming.com,everydaytechvams.com,dipsnp.com,cccam4sat.com##^script:has-text(antiAdBlockerHandler)
+answerpython.com,gsm-solution.com,h-donghua.com,hindisubbedacademy.com,linksdramas2.blogspot.com,mydverse.*,pkgovjobz.com,ripexbooster.xyz,serial4.com,serial412.blogspot.com,sigmalinks.in,tutorgaming.com,everydaytechvams.com,dipsnp.com,cccam4sat.com##^script:has-text(antiAdBlockerHandler)
 !#else
-answerpython.com,gsm-solution.com,h-donghua.com,hindisubbedacademy.com,mydverse.*,pkgovjobz.com,ripexbooster.xyz,serial4.com,serial412.blogspot.com,sigmalinks.in,tutorgaming.com,everydaytechvams.com,dipsnp.com,cccam4sat.com##+js(rmnt, script, antiAdBlockerHandler)
+answerpython.com,gsm-solution.com,h-donghua.com,hindisubbedacademy.com,linksdramas2.blogspot.com,mydverse.*,pkgovjobz.com,ripexbooster.xyz,serial4.com,serial412.blogspot.com,sigmalinks.in,tutorgaming.com,everydaytechvams.com,dipsnp.com,cccam4sat.com##+js(rmnt, script, antiAdBlockerHandler)
 !#endif
+! ##.popSc
 ! https://github.com/easylist/easylist/issues/17377
 !#if !env_mobile
 screenhub.com.au##header#masthead:style(top: -110px !important;)
@@ -4166,10 +4163,14 @@ mirroshu.top##[id^="div-gpt-ad-"]
 poophq.com,veev.to##+js(aopr, VEEVPop)
 poophq.com,veev.to##+js(nowoif)
 poophq.com,veev.to##+js(set, fapit.check, noopFunc)
-poophq.com,veev.to##+js(rpnt, script, window.__VEEVPLAYER__, %2F*start*%2F%20!function()%7B%22use%20strict%22%3Blet%20t%3DObject.keys%3BObject.keys%3Dfunction(n)%7Breturn%20n%26%26n.html%26%26n.html.instance%26%26n.html.instance.start%26%26n.env%26%26n.env.instance%26%26n.env.instance.start%26%26n.http%26%26n.http.instance%26%26n.http.instance.start%26%26(n.html.instance.start%3Dfunction()%7B%7D%2Cn.env.instance.start%3Dfunction()%7B%7D%2Cn.http.instance.start%3Dfunction()%7B%7D)%2Ct(n)%7D%7D()%3B%2F*end*%2Fwindow.__VEEVPLAYER__)
 *$script,3p,domain=poophq.com|veev.to,redirect-rule=noopjs
 @@*$ghide,domain=poophq.com|veev.to
 veev.to#@#.avb-active
+!#if ext_devbuild
+poophq.com,veev.to##+js(no-xhr-if, %2F%5C%2Fad-provider%5C.js%24%2F, length%3A35000)
+!#else
+@@*.js|$xhr,domain=veev.to|poophq.com
+!#endif
 ! filmydown .site/fast-dl .co popups
 fast-dl.co,filmydown.*##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/21077
