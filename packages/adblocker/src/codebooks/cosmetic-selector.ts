@@ -101,6 +101,7 @@ export default [
   "sidebar",
   "sponsor",
   "wrapper",
+  "-child",
   "[data-",
   "accept",
   "Accept",
@@ -259,6 +260,5 @@ export default [
   "x",
   "y",
   "Y",
-  "z",
-  "Z"
+  "z"
 ];
