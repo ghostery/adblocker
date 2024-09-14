@@ -293,9 +293,9 @@ facebook.com,facebookcorewwwi.onion,facebookwkhpilnemxj7asaniu7vnjjbiltxjqhye3mh
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-1993620105 - "Suggested for you" posts
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-2248409212
 !#if cap_html_filtering
-! ||www.facebook.com/api/graphql/$xhr,replace=/\{"brs_content_label":[^\n]+?"category":"ENGAGEMENT[^\n]+?"cursor":"[^"]+"\}/{}/g
+||facebook.com/api/graphql/$xhr,replace=/\{"brs_content_label":[^\n]+?"follow_button":\{"__typename":"CometFeedStoryFollowButtonStrategy"[^\n]+"cursor":"[^"]+"\}/{}/g,domain=web.facebook.com|www.facebook.com
 !#else
-! www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22brs_content_label%22%3A%5B%5E%5Cn%5D%2B%3F%22category%22%3A%22ENGAGEMENT%5B%5E%5Cn%5D%2B%3F%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
+web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22brs_content_label%22%3A%5B%5E%5Cn%5D%2B%3F%22follow_button%22%3A%5C%7B%22__typename%22%3A%22CometFeedStoryFollowButtonStrategy%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
 !#endif
 ! FB link redirection
 www.facebook.com##+js(json-prune, require.0.3.0.__bbox.define.%5B%5D.2.is_linkshim_supported%20require.0.3.0.__bbox.define.%5B%5D.2.click_ids)
