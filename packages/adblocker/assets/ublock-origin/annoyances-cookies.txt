@@ -385,6 +385,8 @@ ted.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24)
 ted.com##+js(trusted-set-cookie, OptanonConsent, groups%3DC0001%253A1%252CC0002%253A0%252CC0004%253A0%252CC0003%253A0, , , domain, ted.com)
 ! https://www.xing.com/
 xing.com##+js(trusted-set-cookie, userConsent, %257B%2522marketing%2522%253Afalse%252C%2522version%2522%253A%25225%2522%257D, , , domain, xing.com)
+! https://www.webnode.com/
+webnode.com##+js(trusted-set-cookie, ac, %7B%22essential%22%3Atrue%2C%22functional%22%3Afalse%7D)
 !! Needs additional cookies
 ! https://github.com/uBlockOrigin/uAssets/issues/23701
 ! Enable search customization
@@ -688,7 +690,7 @@ telekom.com##+js(trusted-set-cookie, cookie-optin, %7B%2522version%2522%3A1%252C
 hemmersbach.com##+js(trusted-set-cookie, cookiefirst-consent, %257B%2522cookiefirst%2522%253Atrue%252C%2522google_analytics%2522%253Atrue%252C%2522google_tag_manager%2522%253Atrue%252C%2522linkedin_ads%2522%253Afalse%252C%2522hubspot%2522%253Atrue%252C%2522twitter%2522%253Afalse%252C%2522active-campaign%2522%253Atrue%252C%2522email-marketing%2522%253Atrue%252C%2522bing_ads%2522%253Afalse%252C%2522type%2522%253A%2522granular%2522%257D)
 ! https://github.com/uBlockOrigin/uAssets/issues/20523
 ! https://github.com/uBlockOrigin/uAssets/issues/20595
-digitalfoundry.net,egx.net,eurogamer.it,mcmcomiccon.com,nintendolife.com,paxsite.com,purexbox.com,pushsquare.com,starwarscelebration.com,thehaul.com,timeextension.com##+js(trusted-click-element, %23onetrust-accept-btn-handler)
+digi24.ro,digisport.ro,digitalfoundry.net,egx.net,eurogamer.it,gmx.*,mail.com,mcmcomiccon.com,nintendolife.com,oe24.at,paxsite.com,player.pl,purexbox.com,pushsquare.com,starwarscelebration.com,thehaul.com,timeextension.com##+js(trusted-click-element, %23onetrust-accept-btn-handler)
 dicebreaker.com,eurogamer.cz,eurogamer.es,eurogamer.net,eurogamer.nl,eurogamer.pl,eurogamer.pt,gamesindustry.biz,jelly.deals,reedpop.com,rockpapershotgun.com,thepopverse.com,vg247.com,videogameschronicle.com##+js(trusted-click-element, button%5Btitle%3D%22Accept%20and%20continue%22%5D)
 dicebreaker.com,eurogamer.cz,eurogamer.es,eurogamer.net,eurogamer.nl,eurogamer.pl,eurogamer.pt,gamesindustry.biz,jelly.deals,reedpop.com,rockpapershotgun.com,thepopverse.com,vg247.com,videogameschronicle.com##+js(trusted-click-element, button%5Btitle%3D%22Accept%20All%20Cookies%22%5D)
 eurogamer.de##+js(trusted-click-element, .accept-all)
@@ -823,8 +825,6 @@ viss.nu##+js(trusted-set-cookie, sv-cookie-consent, true, , , reload, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/20620
 music.amazon.*##+js(trusted-click-element, %23dialogButton1)
 music.amazon.*###overlay:has([href*="privacyprefs/"])
-! digi24.ro,digisport.ro cookies
-digi24.ro,digisport.ro##+js(trusted-click-element, button%5Bid%3D%22onetrust-accept-btn-handler%22%5D)
 ! https://github.com/uBlockOrigin/uAssets/issues/20551
 goed.at##+js(trusted-set-cookie, CookieConsent, %7Bnecessary%3Atrue%252Cpreferences%3Atrue%252Cstatistics%3Atrue%252Cmarketing%3Atrue%252Cmethod%3A%2527explicit%2527%252Cver%3A1%7D, 1year, , reload, 1)
 ! cookies managed by trustarc
@@ -930,8 +930,6 @@ crossnative.com##+js(trusted-set-cookie, cn-cc, %257B%2522ccGoogleTagManager%252
 zoom.us##+js(trusted-set-cookie, OptanonConsent, groups%3DC0004%253A0%252CC0003%253A1%252CC0002%253A0%252CC0001%253A1, 1year)
 zoom.us##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24, 1year)
 zoom.us##+js(trusted-set-cookie, OnetrustActiveGroups, C0003C0001, 1year)
-! https://github.com/uBlockOrigin/uAssets/issues/19785#issuecomment-1859656934
-gmx.*##+js(trusted-click-element, %23onetrust-accept-btn-handler)
 ! reject marketing/analytics
 trezor.io##+js(trusted-set-cookie, userConsent, %257B%2522essential%2522%253Atrue%252C%2522analytical%2522%253Afalse%252C%2522preferential%2522%253Atrue%257D)
 ! rejected cookies
@@ -1346,8 +1344,6 @@ sportiva.shueisha.co.jp,wpb.shueisha.co.jp##+js(trusted-set-cookie, OptanonAlert
 !#else
 sportiva.shueisha.co.jp,wpb.shueisha.co.jp##+js(trusted-click-element, %23onetrust-accept-btn-handler)
 !#endif
-! https://github.com/uBlockOrigin/uAssets/issues/24437#issuecomment-2225175379
-player.pl##+js(trusted-click-element, button%23onetrust-accept-btn-handler)
 ! https://github.com/uBlockOrigin/uAssets/issues/24402
 tvn24.pl##+js(set, __tcfapi_user_acctepted, true)
 tvn24.pl###onetrust-consent-sdk
@@ -1395,8 +1391,6 @@ cmp.chip.de##+js(trusted-click-element, button%5Btitle%3D%22Alle%20Akzeptieren%2
 ! Mandatory + Functional - for customer service chat
 posti.fi##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24, 1year, , domain, posti.fi)
 posti.fi##+js(trusted-set-cookie, OptanonConsent, groups%3DC0001%253A1%252CC0003%253A1%252CC0002%253A0%252CC0004%253A0%252CC0005%253A0, 1year, , domain, posti.fi)
-! https://github.com/uBlockOrigin/uAssets/issues/25187
-mail.com##+js(trusted-click-element, %23onetrust-accept-btn-handler)
 ! https://github.com/uBlockOrigin/uAssets/issues/25246
 biomarkt.de##+js(trusted-set-cookie, CookieConsent, %7Bstamp%3A%2527WpKgN4qzUCpEZsz6QOUxyXrv30fnb7GdP7uhCS2%2BtW4zpN9MSRfCig%3D%3D%2527%252Cnecessary%3Atrue%252Cpreferences%3Atrue%252Cstatistics%3Afalse%252Cmarketing%3Afalse%252Cmethod%3A%2527explicit%2527%252Cver%3A1%252Cutc%3A%24now%24%7D)
 ! essential cookies only

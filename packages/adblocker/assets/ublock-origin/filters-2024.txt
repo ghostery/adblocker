@@ -405,13 +405,15 @@ readcomiconline.*##.divCloseBut
 ! https://www.reddit.com/r/uBlockOrigin/comments/18h450p/redirects_and_popups/
 readcomiconline.*##+js(aeld, mousedown, localStorage)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/50762
-lightnovelworld.com##+js(set, importFAB, undefined)
 @@||lightnovelworld.com^$ghide
+lightnovelworld.com##+js(set, importFAB, undefined)
 lightnovelworld.com##.adsbox
 lightnovelworld.com##ins.adsbygoogle
 lightnovelworld.com##.vl-ad
 ! https://www.lightnovelworld.co/home
 lightnovelworld.*##.uaxcKxir
+! https://www.reddit.com/r/uBlockOrigin/comments/1fg31wv/ad_window_not_being_blocked/
+lightnovelworld.*##div[data-mobid]
 ! https://www.reddit.com/r/uBlockOrigin/comments/1dp9el3/ad_window_keeps_appearing_even_when_i_use_the/
 lightnovelcave.com##[data-defid]
 lightnovelcave.com###lnvidcontainer
@@ -655,6 +657,15 @@ fxmag.pl##[class*="Container_header_ad"] > div[style^="min-height:90px"]
 okiemrolnika.pl##+js(no-fetch-if, adsbygoogle)
 ! https://github.com/uBlockOrigin/uAssets/issues/25185
 megane.com.pl##+js(no-fetch-if, googlesyndication)
+! <<<<< RU AdList >>>>>
+! https://github.com/uBlockOrigin/uAssets/issues/25014#issuecomment-2346541996
+!#if cap_html_filtering
+@@||plrjs.org/*.xml^$3p,xhr
+||plrjs.org/*.xml^$3p,xhr,replace=/^.+$/<VAST version="3.0"><\/VAST>/s
+||cdn.plrjs.com/player/*.js^$3p,script,replace=/preroll/nopreroll/g
+!#else
+||plrjs.org/*.xml^$3p,xhr,redirect=noopvast-3.0
+!#endif
 ! END: Regional lists
 ! https://github.com/AdguardTeam/AdguardFilters/issues/169660
 flixscans.org##+js(no-fetch-if, googlesyndication)
@@ -2364,8 +2375,10 @@ androidpolice.com,cbr.com,collider.com,dualshockers.com,gamerant.com,howtogeek.c
 androidpolice.com,cbr.com,collider.com,dualshockers.com,gamerant.com,howtogeek.com,makeuseof.com,movieweb.com,screenrant.com,thegamer.com,xda-developers.com##.adsninja-ad-zone-container-with-set-height
 movieweb.com,screenrant.com,thegamer.com#@#.video
 ! https://github.com/uBlockOrigin/uBOL-home/issues/202
-!#if !env_mv3
 androidpolice.com,cbr.com,collider.com,dualshockers.com,gamerant.com,howtogeek.com,makeuseof.com,movieweb.com,screenrant.com,thegamer.com,xda-developers.com##+js(set, Object.prototype.ads.nopreroll_, true)
+! https://github.com/uBlockOrigin/uBOL-home/issues/202#issuecomment-2348429297
+!#if env_chromium
+*$csp=worker-src 'none',domain=androidpolice.com|cbr.com|collider.com|dualshockers.com|gamerant.com|howtogeek.com|makeuseof.com|movieweb.com|screenrant.com|thegamer.com|xda-developers.com
 !#endif
 ! https://www.reddit.com/r/uBlockOrigin/comments/1fcbvum/what_would_cause_a_surge_in_ublock_origin_blocked/
 ||adsninja.ca^$media,3p,redirect=noopmp3-0.1s
@@ -2520,3 +2533,14 @@ ttsfree.com##+js(acs, document.getElementById, adblock)
 ||soft98.ir/templates/*/js/application.min.packed.js$script,1p,replace=/visibility/backfaceVisibility/
 soft98.ir,~forum.soft98.ir###abddh > *, div:has(> header + div > [data-href="https://cdn.hostdl.com/goto/soft98"]), section:has(> header + div > div > div > a[href*="utm_"]), [data-href^="https://padvish.com/"]:style(visibility: hidden !important;)
 !#endif
+! https://github.com/uBlockOrigin/uAssets/issues/25302
+swiftuploads.com##+js(ra, onclick, button%5Bonclick*%3D%22open%22%5D)
+swiftuploads.com##+js(nowoif)
+||ajrkm3.com^
+||hrmdw8da.net^
+||yyceztc8.click^
+! https://en-thunderscans.com/ detection
+en-thunderscans.com##+js(nostif, getComputedStyle(testAd))
+! https://github.com/uBlockOrigin/uAssets/issues/25297
+onlinesoccermanager.com##+js(set, adBlockerDetected, false)
+onlinesoccermanager.com###advertisement-leaderboard-container

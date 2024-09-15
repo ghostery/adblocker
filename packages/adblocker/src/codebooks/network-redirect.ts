@@ -43,6 +43,7 @@ export default [
   "bea",
   "_a",
   ":5",
+  ".0",
   "ar",
   "ch",
   "ic",
