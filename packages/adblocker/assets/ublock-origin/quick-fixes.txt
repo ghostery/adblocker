@@ -53,9 +53,9 @@ web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%2
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/18476
 ! VOE sites
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=jessicaglassauthor.com,important
-jessicaglassauthor.com##+js(nowoif)
-jessicaglassauthor.com##+js(set, console.clear, undefined)
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=evelynthankregion.com|jessicaglassauthor.com,important
+evelynthankregion.com,jessicaglassauthor.com##+js(nowoif)
+evelynthankregion.com,jessicaglassauthor.com##+js(set, console.clear, undefined)
 ! next-episode .net
 !next-episode.net##+js(rmnt, script, %2F%5B%5Cs%5CS%5D%7B0%2C%7Dhead%5B%5Cs%5CS%5D%7B1900%2C%7D%2F)
 !next-episode.net##+js(rpnt, script, %2F.then%5B%5Cs%5CS%5D%7B0%2C%7D%3F%3B%2Fg)
@@ -77,7 +77,9 @@ japscan.lol#@#.navbar-nav > li.nav-item > a[href^="https://www.origoclick.com"]:
 japscan.lol#@#.navbar-nav > li.nav-item > a[href^="https://www.origoclick.com"]:style(position: absolute !important; right: 4000px !important;)
 japscan.lol#@#.navbar-nav > li.nav-item > a[href^="https://www.origoclick.com"]:style(position: absolute !important; top: -4000px !important;)
 japscan.lol#@#+js(spoof-css, .navbar-nav%20%3E%20li.nav-item%20%3E%20a%5Bhref%5E%3D%22https%3A%2F%2Fwww.origoclick.com%22%5D, top, auto)
-japscan.lol##.navbar-nav > li.nav-item:has(> a[href^="https://www.origoclick.com"]):style(position: absolute !important; bottom: 5000px !important;)
+japscan.lol#@#.navbar-nav > li.nav-item:has(> a[href^="https://www.origoclick.com"]):style(position: absolute !important; bottom: 5000px !important;)
+japscan.lol#@#.navbar-nav > li.nav-item > a[href^="https://www.origoclick.com"]:style(position: absolute !important; top: -3000px !important;)
+japscan.lol##.navbar-nav > li.nav-item > a[href^="https://www.origoclick.com"]:style(position: absolute !important; left: -3000px !important;)
 /^https?:\/\/[-a-z]{8,15}\.(?:com|net)\/401\/\d{7}(?:\?v=\d+)?$/$script,3p,domain=japscan.lol,important
 @@*$image,xhr,script,domain=japscan.lol
 ||googletagmanager.com^$script,domain=japscan.lol,important
@@ -98,7 +100,7 @@ japscan.lol##.navbar-nav > li.nav-item:has(> a[href^="https://www.origoclick.com
 *$script,redirect-rule=noopjs,domain=panel.freemcserver.net
 freemcserver.net,~panel.freemcserver.net##+js(nostif, 0x)
 panel.freemcserver.net##body > #main-wrapper > .page-wrapper > .container-fluid > .row > .col-md-10 > [class] > .row > .col > ul:first-child + [class="row justify-content-center mb-3 billboard_responsive text-center"]
-panel.freemcserver.net##body > #main-wrapper > .page-wrapper > .container-fluid > .row > .col-md-10 > [class] > .row > [class^="col-"] > [style="min-height: 336px; display:flex; justify-content: space-between; text-align: center;"]:has(> [id^="stpd-"][style="position:sticky; top:0px"]:first-child + div + div:last-child)
+panel.freemcserver.net##body > #main-wrapper > .page-wrapper > .container-fluid > .row > .col-md-10 > [class] > .row > [class^="col-"] > [style="min-height: 336px; display: flex; justify-content: space-between; text-align: center;"]:has(> [id^="stpd-"][style^="position:"]:first-child + div + div:last-child)
 panel.freemcserver.net##+js(set, apstag.fetchBids.name, )
 !#if env_firefox
 *$xhr,redirect-rule=nooptext,domain=panel.freemcserver.net
@@ -120,6 +122,28 @@ panel.freemcserver.net##+js(set, apstag.fetchBids.name, )
 download.megaup.net#@#+js(rpnt, script, %2Ffor%5Cs*%5C(%5Cs*(const%7Clet%7Cvar).*%3F%3Breturn%3B%5C%7D%5C%7D.*%3F%3Breturn%3B.*%3F%3Breturn%3B%5C%7D%2Fg, , condition, attribute)
 download.megaup.net##+js(rpnt, script, %2Ffor%5Cs*%5C(%5Cs*(const%7Clet%7Cvar).*%3F%5C)%5C%3Breturn%5C%3B%5C%7D_%2Fg, _, condition, attribute)
 download.megaup.net##a:has(img[src*="/download"]):style(width: 300px !important; height: 300px !important; display: block !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/21064
+! https://github.com/uBlockOrigin/uAssets/issues/24220
+! https://github.com/uBlockOrigin/uAssets/issues/25121#issuecomment-2325357098
+poophq.com,veev.to##+js(nowoif)
+poophq.com,veev.to##+js(set, fapit.check, noopFunc)
+*$script,3p,domain=poophq.com|veev.to,redirect-rule=noopjs
+*$other,3p,denyallow=veevcdn.co,domain=poophq.com|veev.to
+||ptupsewo.net^
+@@*$ghide,domain=poophq.com|veev.to
+veev.to#@#.avb-active
+!#if ext_devbuild
+poophq.com,veev.to##+js(no-xhr-if, %2F%5C%2Fad-provider%5C.js%24%2F, length%3A35000)
+poophq.com,veev.to##+js(no-xhr-if, twinrdsyn.com)
+!#else
+!#if cap_html_filtering
+||static.veevcdn.co/assets/videoplayer/$script,replace=/'cdv'/'cu'/
+!#else
+@@.js|$xhr,domain=veev.to|poophq.com
+@@||twinrdsyn.com^$xhr,other,domain=poophq.com|veev.to
+||c.adsco.re/|$script,redirect=none:5,domain=poophq.com|veev.to
+!#endif
+!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/24575
 @@||ads.anitube.vip^$xhr,domain=animefire.info|animesonlinecc.us|animesup.info|animeyabu.net|animeyabu.org|anitube.us|anitube.vip|caroloportunidades.com.br|dattebayo-br.com|drstonebr.com|flyanimes.cloud|goanimes.vip|goyabu.us|hinatasoul.com|isekaibrasil.com|meuanime.info|otakuanimess.net
 @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=animefire.info|animesonlinecc.us|animesup.info|animeyabu.net|animeyabu.org|anitube.us|anitube.vip|caroloportunidades.com.br|dattebayo-br.com|drstonebr.com|flyanimes.cloud|goanimes.vip|goyabu.us|hinatasoul.com|isekaibrasil.com|meuanime.info|otakuanimess.net
@@ -131,9 +155,14 @@ anitube.us,anitube.vip,caroloportunidades.com.br##+js(no-fetch-if, mode%3Ano-cor
 ! [badfilter] /wp-content/uploads/pum/pum-site-scripts.js^$badfilter
 ||honghotduongpho.com/*/pum/pum-site-scripts.js$script
 ! https://github.com/uBlockOrigin/uAssets/issues/20401
-infinityscans.xyz,infinityscans.net##+js(rpnt, script, %2F%20function%20%5Ba-z%5D%5C(.*%3F%5C)%5C%5D%5C(%5C)%5C)%5C%3B%5C%7D%5C(%5C)%5C)%5C%3B%2F, , condition, throw)
+infinityscans.xyz,infinityscans.net##+js(rpnt, script, %2F%20function%20_0x.*%3F%5C%3B%5C%7D%5C%3Breturn%20_0x%5B0-9%5D%7B4%7D%5C(%5C)%5C%3B%5C%7D%2F, , condition, throw)
+@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js|$xhr,domain=infinityscans.xyz|infinityscans.net
+infinityscans.xyz,infinityscans.net##+js(rpnt, script, %2F%5C(.%2BmatchMedia%5B%5E%7B%5D%2B%2F, (true))
+||quackupsilon.com^$all
 ! https://github.com/easylist/easylist/commit/de9f2496abde1eddca06f3f80a25dc57b22b67ca
 @@||d.socdm.com/adsv/*/tver_splive$xhr,domain=imasdk.googleapis.com
 ||i.socdm.com^$media,redirect=noop-1s.mp4
 ! https://github.com/uBlockOrigin/uAssets/issues/25260
 civitai.com#@#div.shadow:has(a[href="/pricing"] img[alt="Please support civitai and creators by disabling adblock"])
+! https://github.com/AdguardTeam/AdguardFilters/commit/15448e043f46777e6bc30eaacb148b54fc955314
+poipiku.com#@##DetailOverlay
