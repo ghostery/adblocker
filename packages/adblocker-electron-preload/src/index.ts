@@ -11,20 +11,28 @@ import { ipcRenderer } from 'electron';
 import {
   DOMMonitor,
   IBackgroundCallback,
-  IMessageFromBackground,
-  injectScript,
 } from '@ghostery/adblocker-content';
 
-function getCosmeticsFiltersFirst(): string[] | null {
-  return ipcRenderer.sendSync('get-cosmetic-filters-first', window.location.href);
-}
-function getCosmeticsFiltersUpdate(data: Omit<IBackgroundCallback, 'lifecycle'>) {
-  ipcRenderer.send('get-cosmetic-filters', window.location.href, data);
+interface ICosmeticFiltersResponse = {
+  active: boolean;
+  error?: string;
+};
+
+function injectCosmeticFilters(
+  data?: Omit<IBackgroundCallback, 'lifecycle'>,
+): Promise<CosmeticFiltersResponse> {
+  return ipcRenderer.invoke(
+    '@ghostery/adblocker/inject-cosmetic-filters',
+    window.location.href,
+    data,
+  );
 }
 
 if (window === window.top && window.location.href.startsWith('devtools://') === false) {
-  (() => {
-    const enableMutationObserver = ipcRenderer.sendSync('is-mutation-observer-enabled');
+  (async () => {
+    const enableMutationObserver = await ipcRenderer.invoke(
+      '@ghostery/adblocker/is-mutation-observer-enabled',
+    );
 
     let ACTIVE: boolean = true;
     let DOM_MONITOR: DOMMonitor | null = null;
@@ -36,29 +44,10 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
       }
     };
 
-    ipcRenderer.on(
-      'get-cosmetic-filters-response',
-      // TODO - implement extended filtering for Electron
-      (
-        _: Electron.IpcRendererEvent,
-        { active /* , scripts, extended */ }: IMessageFromBackground,
-      ) => {
-        if (active === false) {
-          ACTIVE = false;
-          unload();
-          return;
-        }
-
-        ACTIVE = true;
-      },
-    );
-
-    const scripts = getCosmeticsFiltersFirst();
-    if (scripts) {
-      for (const script of scripts) {
-        injectScript(script, document);
-      }
-    }
+    const response = await injectCosmeticFilters();
+    if (response.error)
+      throw new Error(`error injecting initial cosmetic filters: ${response.error}`);
+    if (!(ACTIVE = response.active)) return;
 
     // On DOMContentLoaded, start monitoring the DOM. This means that we will
     // first check which ids and classes exist in the DOM as a one-off operation;
@@ -70,8 +59,10 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
       () => {
         DOM_MONITOR = new DOMMonitor((update) => {
           if (update.type === 'features') {
-            getCosmeticsFiltersUpdate({
-              ...update,
+            injectCosmeticFilters().then((response) => {
+              if (response.error) {
+                console.error(`error injecting updated cosmetic filters: ${response.error}`);
+              }
             });
           }
         });
@@ -91,5 +82,4 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
   })();
 }
 
-// Re-export symbols for convenience
-export type { IBackgroundCallback, IMessageFromBackground } from '@ghostery/adblocker-content';
+export type { CosmeticFiltersResponse, IBackgroundCallback };
