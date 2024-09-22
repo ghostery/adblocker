@@ -268,6 +268,8 @@ jetpunk.com##+js(no-xhr-if, prebid)
 jetpunk.com##+js(cookie-remover, PageCount)
 jetpunk.com##+js(set-local-storage-item, PageCount, %24remove%24)
 jetpunk.com##+js(set, asc, 2)
+! https://github.com/uBlockOrigin/uAssets/issues/25387
+jetpunk.com##+js(set, google_tag_manager, %7B%7D)
 @@||jetpunk.com^$script,1p
 @@||jetpunk.com^$ghide
 jetpunk.com##.banner-ad-outer
@@ -280,6 +282,8 @@ imgur.com##+js(set, ADBLOCKED, false)
 ! https://www.reddit.com/r/uBlockOrigin/comments/m1iib6/imgur_ads_still_making_it_through/
 ! reported
 imgur.com,imgur-com.translate.goog##+js(set-cookie, WHITELISTED_CLOSED, 1)
+! https://github.com/uBlockOrigin/uAssets/issues/22684#issuecomment-2362676257
+imgur.com##a[href].Post-item:has(.Post-item-external-ad):style(opacity: 0 !important; cursor: unset !important; pointer-events: none !important;)
 ! thodkyaat.com ad-reinsertion
 thodkyaat.com##pp
 ! https://github.com/uBlockOrigin/uAssets/issues/12933
@@ -1496,12 +1500,15 @@ pythonmatplotlibtips.blogspot.com##+js(acs, addEventListener, nextFunction)
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=10play.com.au
 10play.com.au##.content__ad__content
 ! https://github.com/uBlockOrigin/uAssets/issues/14142
+! https://github.com/uBlockOrigin/uAssets/issues/22964
 @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=10play.com.au
 @@||global.ssl.fastly.net^$domain=10play.com.au
 @@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=10play.com.au
 @@||pubads.g.doubleclick.net/ondemand/hls/content/*/streams$xhr,domain=10play.com.au
 10play.com.au##+js(m3u-prune, %2F%5Ehttps%3F%3A%5C%2F%5C%2Fredirector%5C.googlevideo%5C.com.*%2F, %2F.*m3u8%2F)
 10play.com.au##+js(json-prune, cuepoints, cuepoints.%5B%5D.start%20cuepoints.%5B%5D.end%20cuepoints.%5B%5D.start_float%20cuepoints.%5B%5D.end_float)
+@@||pubads.g.doubleclick.net/ondemand/dash/content/*/streams$xhr,domain=10play.com.au
+10play.com.au##+js(xml-prune, Period%5Bid*%3D%22-roll-%22%5D%5Bid*%3D%22-ad-%22%5D, , pubads.g.doubleclick.net%2Fondemand)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/80945
 ||sered.net^$3p
 ||grab.tc^$3p
@@ -2138,6 +2145,8 @@ sixsave.com##+js(no-fetch-if, method%3AHEAD)
 ! https://www.reddit.com/r/uBlockOrigin/comments/o4vs5b/adblock_shown_on_url/
 fluttercampus.com##.widget > .card
 fluttercampus.com##div[id^="ezoic-pub-ad-"]
+! https://github.com/uBlockOrigin/uAssets/issues/25335
+fluttercampus.com##+js(nosiif, visibility, 1000)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/86458
 freebulksmsonline.com##+js(aost, String.prototype.charCodeAt, ai_)
 ! https://forums.lanik.us/viewtopic.php?p=160442#p160442
@@ -2396,6 +2405,7 @@ mylinkconverter.com##a[href^="https://go.nordvpn.net/aff"] > img
 ! https://github.com/orgs/uBlockOrigin/teams/ublock-filters-volunteers/discussions/356
 asyadrama.com,bitcoinegypt.news,citychilli.com,talkjarvis.com##+js(nostif, css_class.show)
 cardiagn.com,routech.ro##+js(acs, eval, replace)
+@@||cardiagn.com^$script,1p
 privatemoviez.*##+js(aeld, DOMContentLoaded, adsBlocked)
 privatemoviez.*##+js(nostif, magnificPopup)
 routech.ro##+js(nostif, blur)
@@ -3313,6 +3323,8 @@ uploady.io##+js(set, timeleft, 0)
 uploady.io##+js(nowoif)
 uploady.io##+js(noeval-if, replace)
 uploady.io###downloadbtn[style$="z-index: 99999;"]
+uploady.io###dlnk
+uploady.io###iframe_id
 ! https://www.reddit.com/r/uBlockOrigin/comments/qinnqo/adblock_detected/
 ravenmanga.xyz##+js(acs, addEventListener, onerror)
 ravenmanga.xyz##[href^="https://a-ads.com"]

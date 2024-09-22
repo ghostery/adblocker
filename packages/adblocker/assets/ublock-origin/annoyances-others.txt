@@ -293,12 +293,20 @@ facebook.com,facebookcorewwwi.onion,facebookwkhpilnemxj7asaniu7vnjjbiltxjqhye3mh
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-1993620105 - "Suggested for you" posts
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-2248409212
 !#if cap_html_filtering
-||facebook.com/api/graphql/$xhr,replace=/\{"brs_content_label":[^\n]+?"follow_button":\{"__typename":"CometFeedStoryFollowButtonStrategy"[^\n]+"cursor":"[^"]+"\}/{}/g,domain=web.facebook.com|www.facebook.com
+! ||facebook.com/api/graphql/$xhr,replace=/\{"brs_content_label":[^\n]+?"follow_button":\{"__typename":"CometFeedStoryFollowButtonStrategy"[^\n]+"cursor":"[^"]+"\}/{}/g,domain=web.facebook.com|www.facebook.com
+! ||facebook.com/api/graphql/$xhr,replace=/\{"label_field_for_brs":[^\n]+?"follow_button":\{"__typename":"CometFeedStoryFollowButtonStrategy"[^\n]+"cursor":"[^"]+"\}/{}/g,domain=web.facebook.com|www.facebook.com
+! ||facebook.com/api/graphql/$xhr,replace=/\{"the_cnt_lbl_for_brs":[^\n]+?"follow_button":\{"__typename":"CometFeedStoryFollowButtonStrategy"[^\n]+"cursor":"[^"]+"\}/{}/g,domain=web.facebook.com|www.facebook.com
+||facebook.com/api/graphql/$xhr,replace=/\{"newest_lbl_for_brs"[^\n]+?"follow_button":\{"__typename":"CometFeedStoryFollowButtonStrategy"[^\n]+"cursor":"[^"]+"\}/{}/g,domain=web.facebook.com|www.facebook.com
 !#else
-web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22brs_content_label%22%3A%5B%5E%5Cn%5D%2B%3F%22follow_button%22%3A%5C%7B%22__typename%22%3A%22CometFeedStoryFollowButtonStrategy%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
+! web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22brs_content_label%22%3A%5B%5E%5Cn%5D%2B%3F%22follow_button%22%3A%5C%7B%22__typename%22%3A%22CometFeedStoryFollowButtonStrategy%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
+! web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22label_field_for_brs%22%3A%5B%5E%5Cn%5D%2B%3F%22follow_button%22%3A%5C%7B%22__typename%22%3A%22CometFeedStoryFollowButtonStrategy%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
+! web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22the_cnt_lbl_for_brs%22%3A%5B%5E%5Cn%5D%2B%3F%22follow_button%22%3A%5C%7B%22__typename%22%3A%22CometFeedStoryFollowButtonStrategy%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
+web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22newest_lbl_for_brs%22%3A%5B%5E%5Cn%5D%2B%3F%22follow_button%22%3A%5C%7B%22__typename%22%3A%22CometFeedStoryFollowButtonStrategy%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
 !#endif
 ! FB link redirection
 www.facebook.com##+js(json-prune, require.0.3.0.__bbox.define.%5B%5D.2.is_linkshim_supported%20require.0.3.0.__bbox.define.%5B%5D.2.click_ids)
+!#if ext_devbuild
+!#endif
 ! right click, select, copy => http://www.oggiscuola.com/web/2018/09/22/alzarsi-in-piedi-quando-entra-il-professore-e-una-forma-di-saluto-che-va-recuperata/
 oggiscuola.com##+js(acs, jQuery, overlay)
 ||oggiscuola.com^$csp=style-src 'self' *
@@ -3781,9 +3789,6 @@ brainly.*##+js(set-local-storage-item, simple-funnel-name, %24remove%24)
 ! enable context menu
 viewsb.com##+js(acs, console.clear, contextmenu)
 sbfast.com,sbflix.*##+js(acs, onload, contextmenu)
-! https://dizipal213.com/film/the-bubble/ anti right click
-dizipal210.com,dizipal211.com,dizipal222.com,dizipal223.com,dizipal229.com,dizipal232.com,dizipal233.com,dizipal234.com,dizipal235.com,dizipal236.com,dizipal237.com,dizipal238.com,dizipal239.com,dizipal240.com,dizipal241.com,dizipal242.com,dizipal243.com,dizipal244.com,dizipal246.com,dizipal247.com,dizipal248.com,dizipal249.com##+js(acs, console.clear, contextmenu)
-dizipal210.com,dizipal211.com,dizipal222.com,dizipal223.com,dizipal229.com,dizipal232.com,dizipal233.com,dizipal234.com,dizipal235.com,dizipal236.com,dizipal237.com,dizipal238.com,dizipal239.com,dizipal240.com,dizipal241.com,dizipal242.com,dizipal243.com,dizipal244.com,dizipal246.com,dizipal247.com,dizipal248.com,dizipal249.com##+js(acs, devtoolsDetector)
 ! https://github.com/uBlockOrigin/uAssets/issues/12612
 1mg.com##+js(aeld, mouseout)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/114557
@@ -4992,7 +4997,7 @@ thejakartapost.com##+js(rmnt, script, %2F%24.*ready.*setInterval%2F)
 ! oreilly. com leaving screen => pop-up
 oreilly.com##+js(aeld, mouseout, cookie)
 ! https://github.com/uBlockOrigin/uAssets/issues/20027
-buktube.com,fullxh.com,galleryxh.site,hamsterix.*,megaxh.com,movingxh.world,seexh.com,taoxh.life,unlockxh4.com,valuexh.life,xhaccess.com,xhadult2.com,xhadult3.com,xhadult4.com,xhadult5.com,xhamster.*,xhamster1.*,xhamster10.*,xhamster11.*,xhamster12.*,xhamster13.*,xhamster14.*,xhamster15.*,xhamster16.*,xhamster17.*,xhamster18.*,xhamster19.*,xhamster20.*,xhamster2.*,xhamster3.*,xhamster4.*,xhamster42.*,xhamster46.com,xhamster5.*,xhamster7.*,xhamster8.*,xhamsterporno.mx,xhbig.com,xhbranch5.com,xhdate.world,xhday.com,xhday1.com,xhmoon5.com,xhofficial.com,xhplanet1.com,xhplanet2.com,xhreal2.com,xhreal3.com,xhtab2.com,xhtab4.com,xhtree.com,xhvictory.com,xhwebsite.com,xhwebsite2.com,xhwide1.com,xhxh3.xyz##+js(set, initials.urls.bannerCheckUrl, )
+buktube.com,fullxh.com,galleryxh.site,hamsterix.*,megaxh.com,movingxh.world,seexh.com,taoxh.life,unlockxh4.com,valuexh.life,xhaccess.com,xhadult2.com,xhadult3.com,xhadult4.com,xhadult5.com,xhamster.*,xhamster1.*,xhamster10.*,xhamster11.*,xhamster12.*,xhamster13.*,xhamster14.*,xhamster15.*,xhamster16.*,xhamster17.*,xhamster18.*,xhamster19.*,xhamster20.*,xhamster2.*,xhamster3.*,xhamster4.*,xhamster42.*,xhamster46.com,xhamster5.*,xhamster7.*,xhamster8.*,xhamsterporno.mx,xhbig.com,xhbranch5.com,xhchannel.com,xhchannel2.com,xhdate.world,xhday.com,xhday1.com,xhlease.world,xhmoon5.com,xhofficial.com,xhopen.com,xhplanet1.com,xhplanet2.com,xhreal2.com,xhreal3.com,xhspot.com,xhtab2.com,xhtab4.com,xhtotal.com,xhtree.com,xhvictory.com,xhwebsite.com,xhwebsite2.com,xhwebsite5.com,xhwide1.com,xhwide2.com,xhwide5.com,xhxh3.xyz##+js(set, initials.urls.bannerCheckUrl, )
 ! https://github.com/uBlockOrigin/uAssets/issues/4747#issuecomment-1691485028
 ! https://github.com/uBlockOrigin/uAssets/issues/20084
 270towin.com##+js(set-session-storage-item, fs.adb.dis, 1)
@@ -5064,7 +5069,7 @@ brokensilenze.net##*:style(cursor:unset!important;user-select:unset!important)
 ! https://seriesperu.com/2023/11/la-banda-del-chino-programa-03-11-23.html - anti right click
 seriesperu.com##+js(aeld, contextmenu, preventDefault)
 ! https://www.concertarchives.org/concerts/queens-of-the-stone-age-39b3e73b-f1e1-4c2b-9f29-d1aa157b452d - anti-adb
-||pub.network^$script,3p,redirect-rule=noopjs,domain=concertarchives.org
+||pub.network^$script,3p,redirect=noopjs,domain=concertarchives.org
 concertarchives.org#@#[data-freestar-ad]
 concertarchives.org##.freestar-placement
 ! https://github.com/uBlockOrigin/uAssets/issues/20526
@@ -5662,3 +5667,5 @@ curseforge.com##+js(no-fetch-if, googlesyndication)
 !#if !env_mv3
 lowfuelmotorsport.com##+js(set, Object.prototype.auth.redirectToLogin, noopFunc)
 !#endif
+! https://github.com/uBlockOrigin/uAssets/issues/25360
+redecanais.*,redecanaistv.*##+js(set-cookie, modalVisited, true)

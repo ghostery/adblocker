@@ -292,9 +292,11 @@ steuerbot.com##+js(trusted-set-local-storage-item, cookies, %7B%22essential%22%3
 ! https://vadhander.hogakusten.com/
 ! https://vadhander.kramfors.se/
 vadhander.hogakusten.com,vadhander.kramfors.se##+js(trusted-set-local-storage-item, cookie_consent, %7B%22consent%22%3Atrue%2C%22necessary%22%3Atrue%2C%22preference%22%3Afalse%2C%22statistics%22%3Afalse%2C%22marketing%22%3Afalse%7D)
-! https://www.veriff.com/
+! https://www.veriff.com/ - EU IP
 veriff.com##+js(set-cookie, veriff_cookie_consent_completed, true)
 veriff.com##+js(trusted-set-cookie, veriff_cookie_consent, %257B%2522performance%2522%253Afalse%252C%2522functionality%2522%253Afalse%252C%2522targeting%2522%253Afalse%257D)
+! https://www.veriff.com/ - US IP
+veriff.com##+js(trusted-set-cookie, veriff_cookie_notice, %257B%2522dismisssed%2522%253Atrue%257D)
 ! https://programme.conventus.de/en
 programme.conventus.de##+js(trusted-set-cookie, USE_COOKIE_CONSENT_STATE, %7B%2522necessary%2522%3Atrue%7D)
 ! https://arena.pl/
@@ -398,6 +400,10 @@ bitget.com##+js(trusted-set-cookie, OptanonConsent, isMarketing%3D0%26isStatisti
 bitget.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24)
 ! https://www.buywholefoodsonline.co.uk/
 buywholefoodsonline.co.uk##+js(trusted-set-cookie, cookiesSettingsData, %7B%221%22%3A2%2C%222%22%3A0%2C%223%22%3A0%2C%224%22%3A0%7D)
+! https://github.com/AdguardTeam/AdguardFilters/issues/188823
+unka.bilecik.edu.tr##+js(set-cookie, .AspNet.Consent, yes, , reload, 1)
+! https://github.com/uBlockOrigin/uAssets/issues/25362
+mediapart.fr##+js(trusted-set-cookie, cc, %7B%2522disagreement%2522%3A%5B%2522ad%2522%252C%2522visit%2522%5D%252C%2522creation%2522%3A%24now%24%252C%2522update%2522%3A%24now%24%7D, , , domain, mediapart.fr)
 !! Needs additional cookies
 ! https://github.com/uBlockOrigin/uAssets/issues/23701
 ! Enable search customization
@@ -733,15 +739,17 @@ constantin.film##+js(set-cookie, external-data-spotify-is-enabled, true)
 ! https://twitter.com/ - Functional cookie
 twitter.com,x.com##+js(trusted-set-cookie, d_prefs, MjoxLGNvbnNlbnRfdmVyc2lvbjoyLHRleHRfdmVyc2lvbjoxMDAw)
 ! https://www.mundodeportivo.com/ - Embed social media content
-mundodeportivo.com#@#+js(trusted-set-cookie, didomi_token, eyJ1c2VyX2lkIjoiIiwiY3JlYXRlZCI6IjIwMjMtMDktMDJUMTI6NDM6NDAuMzY4WiIsInVwZGF0ZWQiOiIyMDIzLTA5LTAyVDEyOjQzOjQwLjM2OFoiLCJ2ZW5kb3JzIjp7ImVuYWJsZWQiOlsiZ29vZ2xlIiwiYzpwaWFuby1ic1hwclg4dyIsImM6bHVjaWRob2xkLXlmdGJXVGY3IiwiYzpzYWxlc2ZvcmNlLUI0WEI1UU5aIiwiYzpsaXZlZnlyZS00Y2JOV1lFeiIsImM6eW91dHViZS1EV3RqQ1VLYiIsImM6YWNjZW5nYWdlLUVXRUx4MzRnIiwiYzpjaGFydGJlYXQtaHhLaEZiQXciLCJjOmFtYXpvbmFkcy05YzVUTkdhaiIsImM6dHdpdHRlcndpLXdVbUJubkt5IiwiYzpmYWNlYm9va3ctMmthN1Z3UTgiLCJjOmdvb2dsZW9wdC1RaGlBZG1WYSIsImM6Z2djcm9sbHVwLW5OSGVpMmFXIiwiYzpmYWNlYm9va2EtZnJVOU01SlkiLCJjOmdvb2dsZWFuYS1HMmJzRUp5VCIsImM6Z29vZ2xlYXVkLUxEalZZa2VhIiwiYzppbnN0YWdyYW0tdFdtSmdKcHEiLCJjOm5ldHF1ZXN0LU4yblc0ZnBHIiwiYzpwcm9jdGVyYW4tSzROdzh4TUMiLCJjOmNvbXNjb3JlLWpVRmM5aWNZIiwiYzpzcG90aW0tM0ZLSDYyeUMiLCJjOnl1c3AtejhOaTQ0Wk0iLCJjOndlbWFzc21lZC1QR1o2M0Z4WSIsImM6ZXZvbG9rLWl6S3o3QVlWIiwiYzpnb29nbGVmaXItSDhrY2lGSkciLCJjOmxhbGlnYS1ZNllRMjJSUiIsImM6YWRzdml1LVZUMjZtM1FiIl19LCJwdXJwb3NlcyI6eyJkaXNhYmxlZCI6WyJnZW9sb2NhdGlvbl9kYXRhIiwiY29tcGFydGlyLWRwSGdKRUphIiwia0VlRHNMQ3AiLCJkZXZpY2VfY2hhcmFjdGVyaXN0aWNzIl19LCJ2ZW5kb3JzX2xpIjp7ImVuYWJsZWQiOlsiZ29vZ2xlIl19LCJ2ZXJzaW9uIjoyLCJhYyI6IiJ9)
-mundodeportivo.com#@#+js(trusted-set-cookie, euconsent-v2, CPxeM4APxeM4AAHABBENDUCgAP8AAE4AAAiQIkNf_X_fb2vj-_p99_t0eY1P9_6_t6wzjheNk-8NyZ_X_J4Xp2M6rB34pqIKuR4kunLBIQdlHGHcTUgg4IkFqSPsYk2MizNKJ7JEmlMbE2dYGG9vn8TT-ZKY70__f__zvn-r___97oAAhCAABAAAAAgAAIAAAgAIAAAAAAAAAAAAAAAAAAAAAAAADA4tAsy1bqaFsHT0Lpo4igRGjCuJWoBQGUQCwtkBhmTPCnZHAR-wnUAAxAADBByGAFEaAICCIIAkKgIkEOBAqJAIdAACgAUIBAFRIgEoiLAQCAA0B8PAKKAJSLGDKhIidcCMKxIPu-QAAEAQAAIAAQAAAABAJCgAYAAgmiGgAwABBNERABgACCaIqADAAEE0RkAGAAIJojwAMAAQTRIQAYAAgmiTAAwABBNEqABgACCaIAAA.f-AACcAAAAAA)
-mundodeportivo.com##+js(trusted-set-cookie, didomi_token, eyJ1c2VyX2lkIjoiMThhNmQyZGEtOGNmOC02YTE0LWI3OWQtNzViOGU4ZjA2YmYyIiwiY3JlYXRlZCI6IjIwMjMtMDktMDdUMDE6MDc6MTQuNTIwWiIsInVwZGF0ZWQiOiIyMDIzLTA5LTA3VDAxOjA3OjE0LjUyMFoiLCJ2ZW5kb3JzIjp7ImVuYWJsZWQiOlsiZ29vZ2xlIiwiYzpwaWFuby1ic1hwclg4dyIsImM6bHVjaWRob2xkLXlmdGJXVGY3IiwiYzpzYWxlc2ZvcmNlLUI0WEI1UU5aIiwiYzpsaXZlZnlyZS00Y2JOV1lFeiIsImM6eW91dHViZS1EV3RqQ1VLYiIsImM6YWNjZW5nYWdlLUVXRUx4MzRnIiwiYzpjaGFydGJlYXQtaHhLaEZiQXciLCJjOmFtYXpvbmFkcy05YzVUTkdhaiIsImM6dHdpdHRlcndpLXdVbUJubkt5IiwiYzpmYWNlYm9va3ctMmthN1Z3UTgiLCJjOmdvb2dsZW9wdC1RaGlBZG1WYSIsImM6Z2djcm9sbHVwLW5OSGVpMmFXIiwiYzpmYWNlYm9va2EtZnJVOU01SlkiLCJjOmdvb2dsZWFuYS1HMmJzRUp5VCIsImM6Z29vZ2xlYXVkLUxEalZZa2VhIiwiYzppbnN0YWdyYW0tdFdtSmdKcHEiLCJjOm5ldHF1ZXN0LU4yblc0ZnBHIiwiYzpwcm9jdGVyYW4tSzROdzh4TUMiLCJjOmNvbXNjb3JlLWpVRmM5aWNZIiwiYzpzcG90aW0tM0ZLSDYyeUMiLCJjOnl1c3AtejhOaTQ0Wk0iLCJjOndlbWFzc21lZC1QR1o2M0Z4WSIsImM6ZXZvbG9rLWl6S3o3QVlWIiwiYzpnb29nbGVmaXItSDhrY2lGSkciLCJjOmxhbGlnYS1ZNllRMjJSUiIsImM6YWRzdml1LVZUMjZtM1FiIl19LCJwdXJwb3NlcyI6eyJkaXNhYmxlZCI6WyJnZW9sb2NhdGlvbl9kYXRhIiwiY29tcGFydGlyLWRwSGdKRUphIiwia0VlRHNMQ3AiLCJkZXZpY2VfY2hhcmFjdGVyaXN0aWNzIl19LCJ2ZW5kb3JzX2xpIjp7ImVuYWJsZWQiOlsiZ29vZ2xlIl19LCJ2ZXJzaW9uIjoyLCJhYyI6IkRIYUNJQUVJQUl3QVdRQXVnQnNBRDBBSlVBWWdBOFFCLWdFM0FLTUFZb0F6NEI0Z0R6UUh1QWU4QkRnQ1N3R1lnTTFBZXFCQWtDRFlFUkFJamdSSkFpbUJHY0NVUUVzUUphZ1M3QW40QlJVQ3FvRmh3TFVnWWlBem1CcWNEaUFIS0FPbkFkV0E3Q0I3RURfd0lHQVJtZ2tNQkwyQ2M0RTd3S0NBVUhncFNCVHFDczhGb0FMUmdXeUF1ZEJlU0Mtb0dIUU1iZ1k3QUFBQS5ESGFDSUFFSUFJd0FXUUF1Z0JzQUQwQUpVQVlnQThRQi1nRTNBS01BWW9BejRCNGdEelFIdUFlOEJEZ0NTd0dZZ00xQWVxQkFrQ0RZRVJBSWpnUkpBaW1CR2NDVVFFc1FKYWdTN0FuNEJSVUNxb0Zod0xVZ1lpQXptQnFjRGlBSEtBT25BZFdBN0NCN0VEX3dJR0FSbWdrTUJMMkNjNEU3d0tDQVVIZ3BTQlRxQ3M4Rm9BTFJnV3lBdWRCZVNDLW9HSFFNYmdZN0FBQUEifQ%3D%3D)
-mundodeportivo.com##+js(trusted-set-cookie, euconsent-v2, CPxurkAPxurkAAHABBENDVCgAP8AAE4AAAiQIkNf_X_fb2vj-_p99_t0eY1P9_6_t6wzjheNk-8NyZ_X_J4Xp2M6rB34pqIKuR4kunLBIQdlHGHcTUgg4IkFoSPsYk2MizJKJ7JEmlMbE2dYGG9vn8TT-ZKY70__f__zvn-r___97oAAhCAABAAAAAgAAIAAAgAIAAAAAAAAAAAAAAAAAAAAAAAADA4tAsy0bqaFsHT0Lpo4igRGjCuJWoBQGUQCwtkBhmTPCnZHAR-wnUAAxAADBByGAFEaAICCIIAkKgIkEOBAqJAIdAACgAUIBAFRIgEoiLAQCAA0B8PAKKAJSLGDKhIidcCMKxIPu-QAAEAQAAIAAQAAAABAJCgAYAAiCgGgAwABEFARABgACIKAqADAAEQUBkAGAAIgoDwAMAARBQIQAYAAiCgTAAwABEFAqABgACIKAAAA.f-AACcAAAAAA)
+! https://www.mundodeportivo.com/futbol/internacional/20240917/1002317092/muere-futbolista-15-anos-pelea-partido.html - accept
+mundodeportivo.com##+js(trusted-set-cookie, euconsent-v2, CPxurkAPxurkAAHABBENDVCgAP8AAE4AAAiQIkNf_X_fb2vj-_p99_t0eY1P9_6_t6wzjheNk-8NyZ_X_J4Xp2M6rB34pqIKuR4kunLBIQdlHGHcTUgg4IkFoSPsYk2MizJKJ7JEmlMbE2dYGG9vn8TT-ZKY70__f__zvn-r___97oAAhCAABAAAAAgAAIAAAgAIAAAAAAAAAAAAAAAAAAAAAAAADA4tAsy0bqaFsHT0Lpo4igRGjCuJWoBQGUQCwtkBhmTPCnZHAR-wnUAAxAADBByGAFEaAICCIIAkKgIkEOBAqJAIdAACgAUIBAFRIgEoiLAQCAA0B8PAKKAJSLGDKhIidcCMKxIPu-QAAEAQAAIAAQAAAABAJCgAYAAiCgGgAwABEFARABgACIKAqADAAEQUBkAGAAIgoDwAMAARBQIQAYAAiCgTAAwABEFAqABgACIKAAAA.f-AACcAAAAAA, , , domain, mundodeportivo.com)
+mundodeportivo.com##+js(trusted-click-element, %5Bdata-paywall-notifier%3D%22consent-agreetoall%22%5D, , 1000)
+mundodeportivo.com##.ev-modals div[class*="ev-open-modal-notifier"], .ev-modals-notifier div[class*="ev-open-modal-notifier"]:style(visibility: hidden !important;)
 ! https://www.nordax.com/ - Functional cookie
 nordax.com##+js(trusted-set-cookie, cookie_consent, %257B%2522allowEssentials%2522%253Atrue%252C%2522allowFunctional%2522%253Atrue%252C%2522allowAnalytics%2522%253Afalse%252C%2522allowMarketing%2522%253Afalse%257D)
 ! https://www.youtube.com/ - Video recommendations
 ! https://www.reddit.com/r/uBlockOrigin/comments/1693mka/
-youtube.com##+js(trusted-set-cookie, SOCS, CAISNQgDEitib3FfaWRlbnRpdHlmcm9udGVuZHVpc2VydmVyXzIwMjMwODI5LjA3X3AxGgJlbiADGgYIgJnPpwY, , , reload, 1, domain, youtube.com)
+! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-2357294152
+! youtube.com##+js(trusted-set-cookie, SOCS, CAISNQgDEitib3FfaWRlbnRpdHlmcm9udGVuZHVpc2VydmVyXzIwMjMwODI5LjA3X3AxGgJlbiADGgYIgJnPpwY, , , reload, 1, domain, youtube.com)
+m.youtube.com,www.youtube.com##+js(trusted-click-element, button%5Baria-label*%3D%22Accept%20the%20use%20of%20cookie%22%5D, , 1000)
 ! GDPR dialog when moving from Google to Youtube
 ! https://github.com/uBlockOrigin/uAssets/discussions/18598#discussioncomment-7362961
 consent.youtube.com##+js(trusted-click-element, form%5Baction%5D%20button%5Bjsname%3D%22tWT92d%22%5D)
@@ -1334,10 +1342,14 @@ redbull.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24, ,
 ! https://www.jeuxvideo.com/
 jeuxvideo.com##+js(trusted-click-element, button%5Bonclick%3D%22Didomi.setUserAgreeToAll()%3B%22%5D, , 1000)
 idnes.cz##+js(trusted-click-element, a%5Bhref%3D%22javascript%3ADidomi.setUserAgreeToAll()%3B%22%5D, , 1000)
-20minutos.es,abc.es,actu.fr,actu.fr,autopista.es,belfasttelegraph.co.uk,bonduelle.it,bonniernews.se,cadenaser.com,ciclismoafondo.es,cnews.fr,cope.es,decathlon.nl,decathlon.pl,diepresse.com,dnevnik.hr,dumpert.nl,ebuyclub.com,edreams.de,edreams.net,elcomercio.es,elconfidencial.com,elconfidencial.com,eldesmarque.com,elespanol.com,elpais.com,elpais.es,euronews.com,expressen.se,france24.com,ghacks.net,gva.be,hbvl.be,krone.at,lalibre.be,ledauphine.com,lejdd.fr,libremercado.com,marmiton.org,metronieuws.nl,nicematin.com,nieuwsblad.be,numerama.com,radiofrance.fr,rankia.com,rfi.fr,rossmann.pl,rtbf.be,rtl.lu,rtl.lu,science-et-vie.com,sensacine.com,silicon.es,telegraaf.nl,trailrun.es##+js(trusted-click-element, %23didomi-notice-agree-button, , 1000)
+20minutos.es,24sata.hr,abc.es,actu.fr,actu.fr,autopista.es,belfasttelegraph.co.uk,bonduelle.it,bonniernews.se,cadenaser.com,ciclismoafondo.es,cnews.fr,cope.es,decathlon.nl,decathlon.pl,diepresse.com,dnevnik.hr,dumpert.nl,ebuyclub.com,edreams.de,edreams.net,elcomercio.es,elconfidencial.com,elconfidencial.com,eldesmarque.com,elespanol.com,elpais.com,elpais.es,euronews.com,expressen.se,france24.com,ghacks.net,gva.be,hbvl.be,krone.at,lalibre.be,ledauphine.com,lejdd.fr,libremercado.com,marmiton.org,metronieuws.nl,nicematin.com,nieuwsblad.be,numerama.com,radiofrance.fr,rankia.com,rfi.fr,rossmann.pl,rtbf.be,rtl.lu,rtl.lu,science-et-vie.com,sensacine.com,silicon.es,telegraaf.nl,trailrun.es##+js(trusted-click-element, %23didomi-notice-agree-button, , 1000)
 20minutos.es,abc.es,actu.fr,actu.fr,autopista.es,belfasttelegraph.co.uk,bonduelle.it,bonniernews.se,cadenaser.com,ciclismoafondo.es,cnews.fr,cope.es,decathlon.nl,decathlon.pl,diepresse.com,dnevnik.hr,dumpert.nl,ebuyclub.com,edreams.de,edreams.net,elcomercio.es,elconfidencial.com,elconfidencial.com,eldesmarque.com,elespanol.com,elpais.com,elpais.es,euronews.com,expressen.se,france24.com,ghacks.net,gva.be,hbvl.be,jeuxvideo.com,krone.at,lalibre.be,ledauphine.com,lejdd.fr,libremercado.com,marmiton.org,metronieuws.nl,nicematin.com,nieuwsblad.be,numerama.com,radiofrance.fr,rankia.com,rfi.fr,rossmann.pl,rtbf.be,rtl.lu,rtl.lu,science-et-vie.com,sensacine.com,silicon.es,telegraaf.nl,trailrun.es###didomi-host:style(visibility: hidden !important;)
 20minutos.es,abc.es,actu.fr,actu.fr,autopista.es,belfasttelegraph.co.uk,bonduelle.it,bonniernews.se,cadenaser.com,ciclismoafondo.es,cnews.fr,cope.es,decathlon.nl,decathlon.pl,diepresse.com,dnevnik.hr,dumpert.nl,ebuyclub.com,edreams.de,edreams.net,elcomercio.es,elconfidencial.com,elconfidencial.com,eldesmarque.com,elespanol.com,elpais.com,elpais.es,euronews.com,expressen.se,france24.com,ghacks.net,gva.be,hbvl.be,jeuxvideo.com,krone.at,lalibre.be,ledauphine.com,lejdd.fr,libremercado.com,marmiton.org,metronieuws.nl,nicematin.com,nieuwsblad.be,numerama.com,radiofrance.fr,rankia.com,rfi.fr,rossmann.pl,rtbf.be,rtl.lu,rtl.lu,science-et-vie.com,sensacine.com,silicon.es,telegraaf.nl,trailrun.es##body.didomi-popup-open:style(overflow: auto !important;)
 @@||sdk.privacy-center.org^$script,domain=dnevnik.hr|actu.fr|ledauphine.com
+! didomi-continue-without-agreeing
+meteofrance.com##+js(trusted-click-element, span.didomi-continue-without-agreeing, , 1000)
+meteofrance.com###didomi-host:style(visibility: hidden !important;)
+meteofrance.com##body.didomi-popup-open:style(overflow: auto !important;)
 ! https://de.euronews.com/next/2024/07/04/kohlenstoffarme-forderung-aserbaidschan-mochte-diversifizierung-des-traditionellen-energie video broken, decline tracking
 euronews.com###poool-fullscreen-widget
 ! just nessary
@@ -1422,3 +1434,16 @@ estadiodeportivo.com##.body_fixed:style(overflow: auto !important;)
 ! https://www.kicker.de/ - accept
 kicker.de##+js(trusted-click-element, a%5Bhref%5D%5Bonclick%3D%22ov.cmp.acceptAllConsents()%22%5D, , 1000)
 kicker.de###kick__pur__layer:has(a[href][onclick="ov.cmp.acceptAllConsents()"]):style(visibility: hidden !important;)
+! https://www.formulatv.com/videos/ken-leung-sagar-radia-industry-masculinidad-28372/ - accept
+formulatv.com##+js(trusted-click-element, button.fc-primary-button, , 1000)
+formulatv.com##.fc-consent-root:style(opacity: 0 !important;)
+formulatv.com##body[style="overflow: hidden;"]:style(overflow: auto !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/25347
+ignboards.com##+js(trusted-set-cookie, boards-eu-gdpr, eu, , , domain, ignboards.com, reload, 1)
+! https://web.de/ - accept
+web.de##+js(trusted-click-element, button%5Bdata-id%3D%22save-all-pur%22%5D, , 1000)
+! https://github.com/uBlockOrigin/uAssets/issues/25366
+! https://www.linternaute.com/hightech/jeux-video/5995467-inzoi-quel-est-ce-jeu-aux-graphismes-hyper-realistes-qui-entend-concurrencer-les-sims/
+linternaute.com##+js(trusted-click-element, button.button__acceptAll)
+linternaute.com###appconsent:style(visibility: hidden !important;)
+linternaute.com##body.appconsent_noscroll:style(overflow: auto !important;)

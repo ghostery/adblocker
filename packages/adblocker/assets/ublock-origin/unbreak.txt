@@ -2939,9 +2939,14 @@ instagram.com#@?#article[role="presentation"] > div[style]:-abp-has(span:-abp-co
 ! https://github.com/uBlockOrigin/uAssets/issues/16694
 @@||app.link^$script,domain=fluz.app
 @@||api2.branch.io/v1/open$xhr,domain=fluz.app
-! https://wnynewsnow.com/2023/02/10/substance-abuse-obesity-concerns-top-chautauqua-county-health-assessment/ video breakage
+! https://wnynewsnow.com/2023/02/10/substance-abuse-obesity-concerns-top-chautauqua-county-health-assessment/ - video breakage
 wnynewsnow.com#@#.ez-video-wrap
 @@||videosvc.ezoic.com/play$xhr,domain=wnynewsnow.com
+@@||g.ezoic.net/ezais/analytics^$xhr,domain=wnynewsnow.com
+@@||go.ezodn.com/beardeddragon/$script,domain=wnynewsnow.com
+wnynewsnow.com##+js(set-attr, %3Ais(.watch-on-link-logo%2C%20li.post)%20img.ezlazyload%5Bsrc%5E%3D%22data%3Aimage%22%5D%5Bdata-ezsrc%5D, src, %5Bdata-ezsrc%5D)
+wnynewsnow.com##aside.wp-block-template-part > .wp-block-group-is-layout-constrained > figure
+wnynewsnow.com##aside.wp-block-template-part > .wp-block-group-is-layout-constrained > .wp-block-group-is-layout-constrained > figure
 ! https://www.reddit.com/r/uBlockOrigin/comments/112yprq/
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=mathgames.com,redirect=google-ima.js
 ! https://github.com/uBlockOrigin/uAssets/issues/16765
@@ -3191,9 +3196,6 @@ kleinanzeigen.de###liberty-vip-billboard
 ! [badfilter] /images/ad/*$badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/17946
 decathlon.in##body:style(opacity: 1 !important;)
-! https://github.com/AdguardTeam/AdguardFilters/issues/150232
-hihonor.com#@#.ad-section
-hihonor.com#@#.ad-wrap
 ! https://github.com/uBlockOrigin/uAssets/issues/17976
 @@||cacheorcheck.mopinion.com/survey/public/json-config$xhr,domain=findmystreet.co.uk
 @@||collect.mopinion.com/assets/surveys/*/js/survey.min.js$script,domain=findmystreet.co.uk
@@ -3219,7 +3221,7 @@ neilpatel.com##+js(no-xhr-if, ip-api)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/138092
 iphoneincanada.ca#@#a[href^="https://click.linksynergy.com/fs-bin/"]
 ! https://github.com/AdguardTeam/AdguardFilters/issues/137631
-javgg.net#@#.home_iframead
+javgg.net##.home_iframead:has(> iframe)
 ! https://github.com/uBlockOrigin/uAssets/issues/18188
 ! [badfilter] ||braze.eu^$badfilter
 ! https://github.com/easylist/easylist/issues/16004
@@ -3239,8 +3241,6 @@ tieba.baidu.com##+js(set, passFingerPrint, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/16440
 @@||h-microsoft.online-metrix.net^$xhr,domain=ave9858.github.io|docs.atlasos.net|massgrave.dev|msdl.gravesoft.dev
 ! https://github.com/uBlockOrigin/uAssets/issues/17621#issuecomment-1567160350
-sofascore.com#@#[display^="block,none"]
-sofascore.com#@#[display^="none,none"]
 sofascore.com##.adUnitBox
 ! https://github.com/uBlockOrigin/uAssets/issues/18322
 ! too broad
@@ -3340,7 +3340,7 @@ epson.com.cn##+js(set, _gsq.push, noopFunc)
 epson.com.cn##+js(set, stmCustomEvent, noopFunc)
 epson.com.cn##+js(set, _gsDevice, )
 ! https://github.com/uBlockOrigin/uAssets/issues/18859
-consali.com,topstreamfilm.io#@#a[href^="https://consali.com/"]
+consali.com#@#a[href^="https://consali.com/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/18853
 yandex.*#@#+js(aopr, Object.prototype.renderDirect)%3Amatches-path(%2F%5C%2F(%3F%3Aweather%5C%2F%7Cpogoda%5C%2F%7Chava%5C%2F)%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/18873
@@ -3975,6 +3975,7 @@ sosovalue.com##+js(set, sensors.track, noopFunc)
 apfeltalk.de#@#.samCodeUnit
 ! https://github.com/uBlockOrigin/uAssets/issues/24652
 lastampa.it##+js(nostif, googleFC)
+lastampa.it##gdwc-recommendations.is-hidden:style(display: block !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/24679
 ! https://github.com/uBlockOrigin/uAssets/issues/24695
 nytimes.com##[data-testid="connection-toast"]:style(margin-top: 330px !important;)
@@ -4052,3 +4053,4 @@ eservice.directauto.com##+js(set, gtm.trackEvent, noopFunc)
 ||wpfc.ml^$image,redirect=1x1.gif,domain=ht-instruments.de
 ! https://github.com/easylist/easylist/issues/19913
 ! [badfilter] ||trycloudflare.com^$badfilter
+! https://github.com/uBlockOrigin/uAssets/issues/25388
