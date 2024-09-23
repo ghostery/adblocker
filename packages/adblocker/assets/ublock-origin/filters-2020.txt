@@ -830,8 +830,12 @@ reamporn.com###bnclose
 xxxmax.net##^script:has-text('shift')
 xxxmax.net##^script:has-text(\'shift\')
 xxxmax.net##+js(acs, String.fromCharCode, shift)
+! https://github.com/uBlockOrigin/uAssets/issues/5674
+get.getpczone.com,rahim-soft.com,uploadrar.*###commonId > a[target="_blank"]
+||pixeltrey.com^
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57027
 rahim-soft.com##+js(nosiif, visibility, 1000)
+rahim-soft.com##+js(rmnt, script, wpadmngr.com)
 ! https://github.com/uBlockOrigin/uAssets/issues/7242
 ! https://github.com/uBlockOrigin/uAssets/issues/7534
 damndelicious.net,simplywhisked.com##+js(aopr, __eiPb)
@@ -3382,7 +3386,7 @@ songspk.*##+js(aost, Object, %2F(%3F%3D%5E(%3F!.*(https)))%2F)
 ! ##+js(acs, document.createElement, %3B%7D%7D%7D%3Bbreak%3Bcase%20%24.)
 moviesnation.*##+js(acs, document.createElement, %3B%7D%7D%7D%3Bbreak%3Bcase%20%24.)
 ! ##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
-9animetv.to,advertisertape.com,animeunity.to,animeyabu.org,anitube.*,file4go.*,lulustream.com,movieshubweb.com,player.smashy.stream,putlocker.*,sflix.*,streamtape.*,swiftload.io,subtitlecat.com,vidsrc.*,viprow.*,vixcloud.co,ythd.org##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
+9animetv.to,advertisertape.com,animeunity.to,animeyabu.org,anitube.*,ate60vs7zcjhsjo5qgv8.com,file4go.*,lulustream.com,movieshubweb.com,player.smashy.stream,putlocker.*,sflix.*,soap2day.*,streamtape.*,swiftload.io,subtitlecat.com,vidsrc.*,viprow.*,vixcloud.co,ythd.org##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 atlaq.com,bolly4umovies.*,douploads.net,moalm-qudwa.blogspot.com,shurt.pw##+js(aopr, zfgformats)
 123movieshub.*,animeunity.*,bflix.*,cima-club.*,flixhq.*,hindilinks4u.*,mcloud.bz,t7meel.*,theflixer.tv,vidstream.pro##+js(aopr, zfgstorage)
 01fmovies.com,123moviesfun.is,bmovies.*,bolly4umovies.*,putlocker.*##+js(acs, Math, XMLHttpRequest)
@@ -3403,6 +3407,8 @@ file4go.net##+js(no-xhr-if, outbrain)
 ||serijefilmovi.com^$csp=script-src * 'unsafe-inline'
 ! pp server
 ! https://github.com/uBlockOrigin/uAssets/issues/24547
+!#if ext_devbuild
+!#endif
 /^https?:\/\/[a-z]{8,15}\.[a-z]{2,3}\/5\/\d{6,7}(?:\?_=\d+)?$/$script,xhr,3p
 /^https?:\/\/[a-z]{8,15}\.[a-z]{3}\/5\/\d{7}\/\?/$xhr,3p
 /^https?:\/\/[-a-z]{8,15}\.(?:com|net)\/400\/\d{7}(?:\?v=\d+)?$/$script,3p

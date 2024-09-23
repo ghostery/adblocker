@@ -21,7 +21,7 @@ youtube.com##+js(json-prune, playerResponse.adPlacements%20playerResponse.player
 !#endif
 !#endif
 ||googlevideo.com/videoplayback*&ctier=L&*%2Cctier%2C$xhr,3p,domain=m.youtube.com|music.youtube.com|www.youtube.com
-www.youtube.com##+js(trusted-rpnt, script, (function%20serverContract(), (()%3D%3E%7Blet%20e%3D%22%22%3Bdocument.addEventListener(%22DOMContentLoaded%22%2C(function()%7Bif(!window.yt%3F.config_%3F.EXPERIMENT_FLAGS%3F.html5_enable_ssap_entity_id)return%3Bconst%20t%3D()%3D%3E%7Bconst%20t%3Ddocument.getElementById(%22movie_player%22)%3Bif(!t)return%3Bconst%20n%3Dt.querySelector(%22video%22)%3Bif(!n)return%3Bconst%20o%3Dt.getVideoStats%3F.()%3F.ssap%3Bif(n.duration%26%26o%26%26o.includes(%22vid.nvd%22))%7Bconst%20i%3DparseInt(o.split(%22st.%22).at(-1).split(%22%3B%22)%5B0%5D)%2F1e3%3Blet%20r%3D%5B%5D%3Bfor(const%20e%20of%20o.matchAll(%2F%5Cbcpn%5C.(%5B-%5Cw%5D%2B)%2Fg))r.push(e%5B1%5D)%3Bconst%20s%3Dr.join(%22%2C%22)%3B(!1%3D%3D%3Dn.loop%26%26e!%3D%3Ds%26%26n.currentTime%3Ci%7C%7C!0%3D%3D%3Dn.loop%26%26n.currentTime%3Ci%7C%7C.001%3D%3D%3Dn.currentTime%26%26n.currentTime%3Ci)%26%26(t.seekTo(i)%2Ce%3Ds)%7D%7D%3Bt()%3Bnew%20MutationObserver((()%3D%3E%7Bt()%7D)).observe(document%2C%7BchildList%3A!0%2Csubtree%3A!0%7D)%7D))%7D)()%3B(function%20serverContract(), sedCount, 1)
+www.youtube.com##+js(trusted-rpnt, script, (function%20serverContract(), %22YOUTUBE_PREMIUM_LOGO%22!%3D%3DytInitialData%3F.topbar%3F.desktopTopbarRenderer%3F.logo%3F.topbarLogoRenderer%3F.iconImage%3F.iconType%26%26(location.href.startsWith(%22https%3A%2F%2Fwww.youtube.com%2Ftv%23%2F%22)%7C%7Clocation.href.startsWith(%22https%3A%2F%2Fwww.youtube.com%2Fembed%2F%22)%7C%7Cdocument.addEventListener(%22DOMContentLoaded%22%2C(function()%7Bconst%20t%3D()%3D%3E%7Bconst%20t%3Ddocument.getElementById(%22movie_player%22)%3Bif(!t)return%3Bif(!t.getStatsForNerds%3F.()%3F.debug_info%3F.startsWith%3F.(%22SSAP%2C%20AD%22))return%3Bconst%20e%3Dt.getProgressState%3F.()%3Be%26%26e.duration%3E0%26%26e.loaded%3Ce.duration%26%26t.seekTo%3F.(e.duration)%7D%3Bt()%2Cnew%20MutationObserver((()%3D%3E%7Bt()%7D)).observe(document%2C%7BchildList%3A!0%2Csubtree%3A!0%7D)%7D)))%3B(function%20serverContract(), sedCount, 1)
 www.youtube.com##+js(nano-stb, %5Bnative%20code%5D, 17000, 0.001)
 !#if cap_html_filtering
 ||www.youtube.com/s/player/*/base.js$script,xhr,replace=/if\(e===""\)/if(0)/
@@ -48,17 +48,17 @@ www.youtube.com##+js(trusted-replace-xhr-response, %2F%22adPlacements.*%3F(%22ad
 ||www.youtube-nocookie.com/youtubei/v1/player?$xhr,1p,replace=/"adSlots.*?\}\}\]\,"adBreakHeartbeatParams/"adBreakHeartbeatParams/
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-2307514494
 !#if cap_html_filtering
-||facebook.com/api/graphql/$xhr,replace=/\{"brs_c[^\n]+?"SponsoredData","ad_id"[^\n]+"cursor":"[^"]+"\}/{}/g,domain=web.facebook.com|www.facebook.com
-||facebook.com/api/graphql/$xhr,replace=/\{"cnt_lbl_brs"[^\n]+?"SponsoredData","ad_id"[^\n]+"cursor":"[^"]+"\}/{}/g,domain=web.facebook.com|www.facebook.com
+||facebook.com/api/graphql/$xhr,replace=/\{"newest_lbl_for_brs"[^\n]+?"SponsoredData","ad_id"[^\n]+"cursor":"[^"]+"\}/{}/g,domain=web.facebook.com|www.facebook.com
+||facebook.com/api/graphql/$xhr,replace=/null,"category_sensitive"[^\n]+?"SponsoredData","ad_id"[^\n]+"cursor":"[^"]+"\}/null}/g,domain=web.facebook.com|www.facebook.com
 !#else
-web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22brs_c%5B%5E%5Cn%5D%2B%3F%22SponsoredData%22%2C%22ad_id%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
-web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22cnt_lbl_brs%22%5B%5E%5Cn%5D%2B%3F%22SponsoredData%22%2C%22ad_id%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
+web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22newest_lbl_for_brs%22%5B%5E%5Cn%5D%2B%3F%22SponsoredData%22%2C%22ad_id%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
+web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2Fnull%2C%22category_sensitive%22%5B%5E%5Cn%5D%2B%3F%22SponsoredData%22%2C%22ad_id%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, null%7D, %2Fapi%2Fgraphql)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/18476
 ! VOE sites
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=evelynthankregion.com|jessicaglassauthor.com,important
-evelynthankregion.com,jessicaglassauthor.com##+js(nowoif)
-evelynthankregion.com,jessicaglassauthor.com##+js(set, console.clear, undefined)
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=evelynthankregion.com|jessicaglassauthor.com|lorimuchbenefit.com,important
+evelynthankregion.com,jessicaglassauthor.com,lorimuchbenefit.com##+js(nowoif)
+evelynthankregion.com,jessicaglassauthor.com,lorimuchbenefit.com##+js(set, console.clear, undefined)
 ! next-episode .net
 !next-episode.net##+js(rmnt, script, %2F%5B%5Cs%5CS%5D%7B0%2C%7Dhead%5B%5Cs%5CS%5D%7B1900%2C%7D%2F)
 !next-episode.net##+js(rpnt, script, %2F.then%5B%5Cs%5CS%5D%7B0%2C%7D%3F%3B%2Fg)
@@ -74,20 +74,30 @@ japscan.lol#@#+js(acs, addEventListener, String.fromCharCode)
 japscan.lol#@##blur-inter
 japscan.lol#@##interstitial
 japscan.lol##body > .container.text-center > div.mt-3[style="margin: 0px auto; display: block;"] > a.Aikoi.donate[target="_blank"][href^="https://www."][href*="/?utm_source=manga&utm_"]:not([href^="https://www.google"]):not([href^="https://www.japscan"]):not([href^="https://www.example"]) > img.img-fluid[src^="/imgs/onc/"]
-japscan.lol#@#.navbar-nav > li.nav-item > a[href^="https://www.origoclick.com"]:remove()
-japscan.lol#@#.navbar-nav > li.nav-item > a[href^="https://www.origoclick.com"]:style(position: absolute !important; left: -4000px !important;)
-japscan.lol#@#.navbar-nav > li.nav-item > a[href^="https://www.origoclick.com"]:style(position: absolute !important; right: 4000px !important;)
-japscan.lol#@#.navbar-nav > li.nav-item > a[href^="https://www.origoclick.com"]:style(position: absolute !important; top: -4000px !important;)
-japscan.lol#@#+js(spoof-css, .navbar-nav%20%3E%20li.nav-item%20%3E%20a%5Bhref%5E%3D%22https%3A%2F%2Fwww.origoclick.com%22%5D, top, auto)
-japscan.lol#@#.navbar-nav > li.nav-item:has(> a[href^="https://www.origoclick.com"]):style(position: absolute !important; bottom: 5000px !important;)
-japscan.lol#@#.navbar-nav > li.nav-item > a[href^="https://www.origoclick.com"]:style(position: absolute !important; top: -3000px !important;)
-japscan.lol#@#.navbar-nav > li.nav-item > a[href^="https://www.origoclick.com"]:style(position: absolute !important; left: -3000px !important;)
-japscan.lol#@#+js(rmnt, script, newDiv)
-japscan.lol##+js(rmnt, script, newImg)
-japscan.lol##.navbar-nav > li.nav-item > a[href^="https://www.origoclick.com"]:style(visibility: hidden !important;)
+japscan.lol#@#+js(rmnt, script, newImg)
+japscan.lol#@#.navbar-nav > li.nav-item > a[href^="https://www.origoclick.com"]:style(visibility: hidden !important;)
+japscan.lol#@#+js(rmnt, script, imgNew)
+japscan.lol#@#+js(rmnt, script, imgGood)
+japscan.lol#@#+js(rmnt, script, imgHola)
+japscan.lol##+js(aeld, DOMContentLoaded, %2F%5E_.%2B%5C%2B'%5C)%3B'%5C)%5C(%20%3F%5C)%3B%5C%7Dcatch%2F)
+japscan.lol#@#+js(rmnt, script, %2FholaImg%7Cjso%5C%24%7Cspliteraf%7C%5BA-z%5D%2B%3B%5C(function%5C(%5C)%5C%7Bfunction%20%7Cwindow%5C%5B%5C'document%5C'%5C%5D%7Creturn%20doc%3B%7C%22innerHTML%22%7C%5C._%5C%5B%7Creturn%20eval%2F)
+japscan.lol#@#.navbar-nav > li#navpromo2.nav-item > a[href^="https://www.origoclick.com"]
+japscan.lol#@#+js(ra, href, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a%5Bhref%5E%3D%22https%3A%2F%2Fwww.origoclick.com%22%5D)
+japscan.lol#@#+js(ra, href, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a%5Bhref%5E%3D%22https%3A%2F%2Fwww.origoclick.com%22%5D, complete)
+japscan.lol##body > style + .container:first-of-type > .row > #main + #sidebar.col-md-3 > .card.mt-1 > .card[style="margin: 0px auto; display: block;"] > a.aikoi.donate[href^="http"][target="_blank"][rel="noopener noreferrer nofollow"]:not([href^="http://japscan.lol"]) > img
+japscan.lol##body > style + .container:first-of-type > .row > #main.col-md-9 > .card > #chapters.tab-content > .row.justify-content-center.align-items-center > a.image-box.donate[href^="http"][target="_blank"][rel="noopener noreferrer nofollow"]:not([href^="http://japscan.lol"]) > img
+japscan.lol#@#.navbar-nav > li#navpromo2.nav-item > a[href^="https://www.origoclick.com"]:style(pointer-events: none !important;)
+japscan.lol#@#.navbar-nav > li#navpromo2.nav-item > a[href^="https://www.origoclick.com"]:style(margin-left: -5000px !important;)
+japscan.lol##body > .sticky-top + .container.text-center > .mb-2.mt-2[style="margin: 0px auto; display: block;"] > .text-center > a.donate[href^="http"][target="_blank"][rel="noopener noreferrer nofollow"]:not([href^="http://japscan.lol"]) > img
+japscan.lol#@#+js(ra, id, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a%5Bhref%5E%3D%22https%3A%2F%2Fwww.origoclick.com%22%5D, complete)
+japscan.lol#@#.navbar-nav > li#navpromo2.nav-item > a[href^="https://www.origoclick.com"]:not([id])
+japscan.lol#@#+js(set-attr, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a%5Bhref%5E%3D%22https%3A%2F%2Fwww.origoclick.com%22%5D%3Anot(%5Bid%5D), href, false)
+japscan.lol##.navbar-nav > li#navpromo2.nav-item > a[href^="https://www.origoclick.com"]:style(font-size: 0 !important;)
 /^https?:\/\/[-a-z]{8,15}\.(?:com|net)\/401\/\d{7}(?:\?v=\d+)?$/$script,3p,domain=japscan.lol,important
 @@*$image,xhr,script,domain=japscan.lol
-||googletagmanager.com^$script,domain=japscan.lol,important
+!||googletagmanager.com^$script,domain=japscan.lol,important
+||cloudflareinsights.com/beacon.min.js/$script,domain=japscan.lol,important
+||google-analytics.com^$xhr,domain=japscan.lol,important
 /^https?:\/\/[a-z]{8,15}\.[a-z]{2,3}\/5\/\d{6,7}(?:\?_=\d+)?$/$script,3p,domain=japscan.lol,important
 /^https?:\/\/[-a-z]{8,15}\.(?:com|net)\/401\/\d{7}$/$script,3p,domain=japscan.lol,important
 ! ads
@@ -96,18 +106,18 @@ japscan.lol##.navbar-nav > li.nav-item > a[href^="https://www.origoclick.com"]:s
 @@||freemcserver.net^$script,1p
 @@||freemcserver.net^$ghide
 @@||cdn.jsdelivr.net/gh/Levii22/$domain=freemcserver.net
-@@||pagead2.googlesyndication.com/getconfig/sodar?$xhr,domain=freemcserver.net
-@@||stpd.cloud/saas/$script,domain=panel.freemcserver.net
+!@@||pagead2.googlesyndication.com/getconfig/sodar?$xhr,domain=freemcserver.net
+!@@||stpd.cloud/saas/$script,domain=panel.freemcserver.net
 @@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=panel.freemcserver.net
-@@||googletagmanager.com/gtag/js?$script,domain=panel.freemcserver.net
-@@||securepubads.g.doubleclick.net/pagead/managed/js/gpt/$script,domain=panel.freemcserver.net
+!@@||googletagmanager.com/gtag/js?$script,domain=panel.freemcserver.net
+!@@||securepubads.g.doubleclick.net/pagead/managed/js/gpt/$script,domain=panel.freemcserver.net
 /cdn-cgi/challenge-platform/scripts/jsd/main.js$script,important,1p,domain=freemcserver.net
 *$script,redirect-rule=noopjs,domain=panel.freemcserver.net
 freemcserver.net,~panel.freemcserver.net##+js(nostif, 0x)
 panel.freemcserver.net##body > #main-wrapper > .page-wrapper > .container-fluid > .row > .col-md-10 > [class] > .row > .col > ul:first-child + [class="row justify-content-center mb-3 billboard_responsive text-center"]
-panel.freemcserver.net##body > #main-wrapper > .page-wrapper > .container-fluid > .row > .col-md-10 > [class] > .row > [class^="col-"] > [style="min-height: 336px; display:flex; justify-content: space-between; text-align: center;"]:has(> [id^="stpd-"][style^="position:"]:first-child + div + div:last-child)
+panel.freemcserver.net##body > #main-wrapper > .page-wrapper > .container-fluid > .row > .col-md-10 > [class] > .row > [class^="col-"] > [style*="min-height"][style*="flex"]:has(> [id^="stpd-"][style^="position:"]:first-child + div + div:last-child)
 panel.freemcserver.net##+js(set, apstag.fetchBids.name, )
-panel.freemcserver.net##+js(set, Object.getOwnPropertyDescriptor, noopFunc)
+panel.freemcserver.net##+js(set, Object.getOwnPropertyDescriptor, falseFunc)
 !#if env_firefox
 *$xhr,redirect-rule=nooptext,domain=panel.freemcserver.net
 !#else
@@ -140,13 +150,13 @@ poophq.com,veev.to##+js(set, fapit.check, noopFunc)
 veev.to#@#.avb-active
 !#if ext_devbuild
 poophq.com,veev.to##+js(no-xhr-if, %2F%5C%2Fad-provider%5C.js%24%2F, length%3A35000)
-poophq.com,veev.to##+js(no-xhr-if, twinrdsyn.com)
+poophq.com,veev.to##+js(no-xhr-if, %2F%5C%2Fpreroll%5C.engine%24%2F)
+poophq.com,veev.to##+js(no-xhr-if, url%3A!%2Fcdn%5C.plyr%5C.io%7Cveev%5C.to%7C%5C%2Fdl%5C%3Fop%3Dplayer_api%2F%20method%3AGET)
 !#else
 !#if cap_html_filtering
 ||static.veevcdn.co/assets/videoplayer/$script,replace=/'cdv'/'cu'/
 !#else
-@@.js|$xhr,domain=veev.to|poophq.com
-@@||twinrdsyn.com^$xhr,other,domain=poophq.com|veev.to
+@@||magsrv.com^$xhr,domain=poophq.com|veev.to
 ||c.adsco.re/|$script,redirect=none:5,domain=poophq.com|veev.to
 !#endif
 !#endif
@@ -161,14 +171,33 @@ anitube.us,anitube.vip,caroloportunidades.com.br##+js(no-fetch-if, mode%3Ano-cor
 ! [badfilter] /wp-content/uploads/pum/pum-site-scripts.js^$badfilter
 ||honghotduongpho.com/*/pum/pum-site-scripts.js$script
 ! https://github.com/uBlockOrigin/uAssets/issues/20401
-infinityscans.xyz,infinityscans.net##+js(rpnt, script, %2F%20function%20_0x.*%5C%3B%5C%7D%5C%3Breturn%20_0x%5Ba-z0-9%5D%7B4%7D%5C(%5C)%5C%3B%5C%7D%2Fs, , condition, throw)
+infinityscans.xyz,infinityscans.net##+js(rpnt, script, %2F%20%5C(%3Ffunction%5C(.*catch.*%20%5C%24%5C.ajax%5C(%5C%7B%2Fs, %24.ajax(%7B, condition, throw)
 @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js|$xhr,domain=infinityscans.xyz|infinityscans.net
 *$script,redirect-rule=noopjs,domain=infinityscans.xyz|infinityscans.net
-infinityscans.xyz,infinityscans.net##+js(rpnt, script, %2F%5C(.%2BmatchMedia%5B%5E%7B%5D%2B%2F, (true))
+infinityscans.xyz,infinityscans.net##+js(no-fetch-if, api%2Fcollect)
+infinityscans.xyz,infinityscans.net#@#+js(nowoif)
+infinityscans.xyz,infinityscans.net##+js(rpnt, script, %2F%22%5C%5Cx68%5C%5Cx74%5C%5Cx74%5C%5Cx70.*%3F%22%2F, false)
+infinityscans.xyz,infinityscans.net##+js(rpnt, script, %3D%3D0xc8, %3D%3D0, condition, throw)
+||enigmaswhereas.com^$all
 ! https://github.com/easylist/easylist/commit/de9f2496abde1eddca06f3f80a25dc57b22b67ca
 @@||d.socdm.com/adsv/*/tver_splive$xhr,domain=imasdk.googleapis.com
 ||i.socdm.com^$media,redirect=noop-1s.mp4
-! https://github.com/uBlockOrigin/uAssets/issues/25260
-civitai.com#@#div.shadow:has(a[href="/pricing"] img[alt="Please support civitai and creators by disabling adblock"])
 ! https://github.com/AdguardTeam/AdguardFilters/commit/15448e043f46777e6bc30eaacb148b54fc955314
 poipiku.com#@##DetailOverlay
+! https://www.youtube.com/ - page constantly reloading
+youtube.com#@#+js(trusted-set-cookie, SOCS, CAISNQgDEitib3FfaWRlbnRpdHlmcm9udGVuZHVpc2VydmVyXzIwMjMwODI5LjA3X3AxGgJlbiADGgYIgJnPpwY, , , reload, 1, domain, youtube.com)
+! https://github.com/AdguardTeam/AdguardFilters/issues/188544
+! [badfilter] /js/acmsd/*$badfilter
+! [badfilter] /banimg/*$badfilter
+@@||wiki.yjsnpi.nu^$image,1p
+! https://github.com/uBlockOrigin/uAssets/issues/19935
+sportnews.to##+js(aeld, DOMContentLoaded, adsSrc)
+! https://github.com/uBlockOrigin/uAssets/issues/25371
+@@||static.adsafeprotected.com/vans-adapter-google-ima.js^$script,domain=wsj.com
+@@||static.adsafeprotected.com/iasPET.1.js^$script,domain=wsj.com
+! https://github.com/AdguardTeam/AdguardFilters/issues/183252
+exploader.net#@#article > div[style="margin-left: -63px;width: 1120px;height: 450px;margin-bottom: 5px;display: flex;align-items: center;"]:style(position: absolute !important; left: -3000px !important;)
+exploader.net#@#+js(spoof-css, article%20%3E%20div%5Bstyle%3D%22margin-left%3A%20-63px%3Bwidth%3A%201120px%3Bheight%3A%20450px%3Bmargin-bottom%3A%205px%3Bdisplay%3A%20flex%3Balign-items%3A%20center%3B%22%5D%20%3E%20div, left, auto)
+exploader.net##article > div[style="margin-left: -63px;width: 1120px;height: 450px;margin-bottom: 5px;display: flex;align-items: center;"]:remove()
+! https://github.com/AdguardTeam/AdguardFilters/issues/189208
+0115765.com##+js(set, use, false)
