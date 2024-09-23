@@ -974,7 +974,7 @@ describe('Network filters', () => {
     });
 
     describe('replace', () => {
-      it.only('parses known filters', () => {
+      it('parses known filters', () => {
         const filters: [string, HTMLModifier][] = [
           [
             String.raw`||alliptvlinks.com/tktk-content/plugins/$script,1p,replace=/\bconst now.+?, 100/clearInterval(timer);resolve();}, 100/gms`,
