@@ -7,7 +7,7 @@
  */
 /* eslint-disable prettier/prettier */
 export default [
-  "securepubads.g.doubleclick",
+  "securepubads.g.doubleclick.net",
   "pagead2.googlesyndication",
   ".actonservice.com",
   "googlesyndication",
@@ -115,7 +115,6 @@ export default [
   "ew",
   "ex",
   "ey",
-  "fa",
   "fe",
   "ff",
   "fi",
@@ -210,6 +209,7 @@ export default [
   "tr",
   "ts",
   "tu",
+  "tw",
   "ty",
   "ub",
   "ul",

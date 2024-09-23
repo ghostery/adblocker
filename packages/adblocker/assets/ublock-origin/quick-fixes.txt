@@ -93,6 +93,8 @@ japscan.lol#@#+js(ra, id, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a%
 japscan.lol#@#.navbar-nav > li#navpromo2.nav-item > a[href^="https://www.origoclick.com"]:not([id])
 japscan.lol#@#+js(set-attr, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a%5Bhref%5E%3D%22https%3A%2F%2Fwww.origoclick.com%22%5D%3Anot(%5Bid%5D), href, false)
 japscan.lol##.navbar-nav > li#navpromo2.nav-item > a[href^="https://www.origoclick.com"]:style(font-size: 0 !important;)
+japscan.lol##+js(aost, eval, stackDepth%3A4)
+japscan.lol##+js(aost, eval, stackDepth%3A2)
 /^https?:\/\/[-a-z]{8,15}\.(?:com|net)\/401\/\d{7}(?:\?v=\d+)?$/$script,3p,domain=japscan.lol,important
 @@*$image,xhr,script,domain=japscan.lol
 !||googletagmanager.com^$script,domain=japscan.lol,important
@@ -103,37 +105,16 @@ japscan.lol##.navbar-nav > li#navpromo2.nav-item > a[href^="https://www.origocli
 ! ads
 ||japscan.lol^$csp=sandbox allow-forms allow-same-origin allow-scripts allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-top-navigation
 ! https://github.com/uBlockOrigin/uAssets/issues/2320
-@@||freemcserver.net^$script,1p
 @@||freemcserver.net^$ghide
 @@||cdn.jsdelivr.net/gh/Levii22/$domain=freemcserver.net
-!@@||pagead2.googlesyndication.com/getconfig/sodar?$xhr,domain=freemcserver.net
-!@@||stpd.cloud/saas/$script,domain=panel.freemcserver.net
 @@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=panel.freemcserver.net
-!@@||googletagmanager.com/gtag/js?$script,domain=panel.freemcserver.net
-!@@||securepubads.g.doubleclick.net/pagead/managed/js/gpt/$script,domain=panel.freemcserver.net
 /cdn-cgi/challenge-platform/scripts/jsd/main.js$script,important,1p,domain=freemcserver.net
+panel.freemcserver.net##+js(rpnt, script, 'G-1B4LC0KT6C')%3B, 'G-1B4LC0KT6C')%3B%20window.setTimeout(function()%7BblockPing()%7D%2C200)%3B)
+||panel.freemcserver.net/bs4/bs4$script,1p
 *$script,redirect-rule=noopjs,domain=panel.freemcserver.net
-freemcserver.net,~panel.freemcserver.net##+js(nostif, 0x)
+freemcserver.net##+js(nostif, 0x)
 panel.freemcserver.net##body > #main-wrapper > .page-wrapper > .container-fluid > .row > .col-md-10 > [class] > .row > .col > ul:first-child + [class="row justify-content-center mb-3 billboard_responsive text-center"]
 panel.freemcserver.net##body > #main-wrapper > .page-wrapper > .container-fluid > .row > .col-md-10 > [class] > .row > [class^="col-"] > [style*="min-height"][style*="flex"]:has(> [id^="stpd-"][style^="position:"]:first-child + div + div:last-child)
-panel.freemcserver.net##+js(set, apstag.fetchBids.name, )
-panel.freemcserver.net##+js(set, Object.getOwnPropertyDescriptor, falseFunc)
-!#if env_firefox
-*$xhr,redirect-rule=nooptext,domain=panel.freemcserver.net
-!#else
-@@*$xhr,domain=panel.freemcserver.net
-||region1.google-analytics.com/g/collect?$xhr,important,domain=panel.freemcserver.net
-||gum.criteo.com/sid/json?origin=prebid&topUrl=https*&gdpr=1|$xhr,important,domain=panel.freemcserver.net
-||prebid-stag.setupad.net/openrtb2/auction|$xhr,important,domain=panel.freemcserver.net
-||prebid.a-mo.net/a/c|$xhr,important,domain=panel.freemcserver.net
-||ib.adnxs.com/ut/v3/prebid|$xhr,important,domain=panel.freemcserver.net
-||mp.4dex.io/prebid|$xhr,important,domain=panel.freemcserver.net
-||fastlane.rubiconproject.com/a/api/fastlane.json?$xhr,important,domain=panel.freemcserver.net
-||tlx.3lift.com/header/auction?lib=prebid&v=*&referrer=https%3A%2F%2Fpanel.freemcserver.net%2Fserver%2F*&tmax=*&gdpr=true&cmp_cs=*AAAAA$xhr,important,domain=panel.freemcserver.net
-||rtb.openx.net/openrtbb/prebidjs|$xhr,important,domain=panel.freemcserver.net
-||hbopenbid.pubmatic.com/translator?source=prebid-client|$xhr,important,domain=panel.freemcserver.net
-||adx.adform.net/adx/openrtb|$xhr,important,domain=panel.freemcserver.net
-!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/20505
 download.megaup.net#@#+js(rpnt, script, %2Ffor%5Cs*%5C(%5Cs*(const%7Clet%7Cvar).*%3F%3Breturn%3B%5C%7D%5C%7D.*%3F%3Breturn%3B.*%3F%3Breturn%3B%5C%7D%2Fg, , condition, attribute)
 download.megaup.net##+js(rpnt, script, %2Ffor%5Cs*%5C(%5Cs*(const%7Clet%7Cvar).*%3F%5C)%5C%3Breturn%5C%3B%5C%7D_%2Fg, _, condition, attribute)
@@ -201,3 +182,4 @@ exploader.net#@#+js(spoof-css, article%20%3E%20div%5Bstyle%3D%22margin-left%3A%2
 exploader.net##article > div[style="margin-left: -63px;width: 1120px;height: 450px;margin-bottom: 5px;display: flex;align-items: center;"]:remove()
 ! https://github.com/AdguardTeam/AdguardFilters/issues/189208
 0115765.com##+js(set, use, false)
+@@||0115765.com/assets/ads/main.js
