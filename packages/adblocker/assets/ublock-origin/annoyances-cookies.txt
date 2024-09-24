@@ -320,9 +320,7 @@ bol.com##+js(trusted-set-cookie, bolConsentChoices, source%23OFC%7Cversion%236%7
 wesendit.com##+js(trusted-set-local-storage-item, cookieManagement, %7B%22googleAnalytics%22%3Afalse%2C%22facebook%22%3Afalse%7D)
 wesendit.com##+js(set-local-storage-item, legalsAccepted, true)
 ! https://github.com/easylist/easylist/issues/19226
-!#if ext_devbuild
 abw.by##+js(trusted-set-cookie, cookiePolicy, %7B%22accepted%22%3Atrue%2C%22technical%22%3Atrue%2C%22statistics%22%3Afalse%2C%22marketing%22%3Afalse%2C%22expire%22%3A%24now%24%7D, , , domain, abw.by)
-!#endif
 ! https://www.fotografiska.com/
 fotografiska.com##+js(trusted-set-cookie, cookie_consent, %7B%22purposes%22%3A%7B%22marketing%22%3Afalse%2C%22analytics%22%3Afalse%7D%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/24141
@@ -1362,11 +1360,7 @@ ryobitools.eu###onetrust-consent-sdk
 njspotlightnews.org,wliw.org,thirteen.org,njpbs.org,allarts.org##+js(trusted-set-cookie, wnet_vppa_assent, %7B%22choice%22%3A%22decline%22%2C%22expires%22%3A1%7D)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/177378
 ! https://github.com/AdguardTeam/AdguardFilters/issues/183077
-!#if ext_devbuild
 sportiva.shueisha.co.jp,wpb.shueisha.co.jp##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentISODate%24)
-!#else
-sportiva.shueisha.co.jp,wpb.shueisha.co.jp##+js(trusted-click-element, %23onetrust-accept-btn-handler)
-!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/24402
 tvn24.pl##+js(set, __tcfapi_user_acctepted, true)
 tvn24.pl###onetrust-consent-sdk
