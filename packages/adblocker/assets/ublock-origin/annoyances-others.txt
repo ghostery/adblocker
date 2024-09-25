@@ -3221,11 +3221,7 @@ masuit.com##+js(nosiif, debugger)
 juejin.cn##+js(aeld, copy, preventDefault)
 ! https://github.com/uBlockOrigin/uAssets/issues/9626
 bbs.mihoyo.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
-!#if ext_devbuild
 bbs.mihoyo.com##+js(aeld, copy, throw)
-!#else
-bbs.mihoyo.com##+js(aeld, copy, %5Bnative%20code%5D)
-!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/9627
 book.zhulang.com##+js(aeld, %2Fcontextmenu%7Cselectstart%2F)
 zhulang.com##.idx-bg
@@ -5667,3 +5663,5 @@ curseforge.com##+js(no-fetch-if, googlesyndication)
 !#if !env_mv3
 lowfuelmotorsport.com##+js(set, Object.prototype.auth.redirectToLogin, noopFunc)
 !#endif
+! https://www.reddit.com/r/uBlockOrigin/comments/1fnvf02/camspider_adblock_notice/
+camspider.com##+js(set-local-storage-item, adblockNoticePermaDismiss, true)

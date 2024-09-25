@@ -21,7 +21,7 @@ youtube.com##+js(json-prune, playerResponse.adPlacements%20playerResponse.player
 !#endif
 !#endif
 ||googlevideo.com/videoplayback*&ctier=L&*%2Cctier%2C$xhr,3p,domain=m.youtube.com|music.youtube.com|www.youtube.com
-www.youtube.com##+js(trusted-rpnt, script, (function%20serverContract(), %22YOUTUBE_PREMIUM_LOGO%22!%3D%3DytInitialData%3F.topbar%3F.desktopTopbarRenderer%3F.logo%3F.topbarLogoRenderer%3F.iconImage%3F.iconType%26%26(location.href.startsWith(%22https%3A%2F%2Fwww.youtube.com%2Ftv%23%2F%22)%7C%7Clocation.href.startsWith(%22https%3A%2F%2Fwww.youtube.com%2Fembed%2F%22)%7C%7Cdocument.addEventListener(%22DOMContentLoaded%22%2C(function()%7Bconst%20t%3D()%3D%3E%7Bconst%20t%3Ddocument.getElementById(%22movie_player%22)%3Bif(!t)return%3Bif(!t.getStatsForNerds%3F.()%3F.debug_info%3F.startsWith%3F.(%22SSAP%2C%20AD%22))return%3Bconst%20e%3Dt.getProgressState%3F.()%3Be%26%26e.duration%3E0%26%26e.loaded%3Ce.duration%26%26t.seekTo%3F.(e.duration)%7D%3Bt()%2Cnew%20MutationObserver((()%3D%3E%7Bt()%7D)).observe(document%2C%7BchildList%3A!0%2Csubtree%3A!0%7D)%7D)))%3B(function%20serverContract(), sedCount, 1)
+www.youtube.com##+js(trusted-rpnt, script, (function%20serverContract(), %22YOUTUBE_PREMIUM_LOGO%22!%3D%3DytInitialData%3F.topbar%3F.desktopTopbarRenderer%3F.logo%3F.topbarLogoRenderer%3F.iconImage%3F.iconType%26%26(location.href.startsWith(%22https%3A%2F%2Fwww.youtube.com%2Ftv%23%2F%22)%7C%7Clocation.href.startsWith(%22https%3A%2F%2Fwww.youtube.com%2Fembed%2F%22)%7C%7Cdocument.addEventListener(%22DOMContentLoaded%22%2C(function()%7Bconst%20t%3D()%3D%3E%7Bconst%20t%3Ddocument.getElementById(%22movie_player%22)%3Bif(!t)return%3Bif(!t.getStatsForNerds%3F.()%3F.debug_info%3F.startsWith%3F.(%22SSAP%2C%20AD%22))return%3Bconst%20e%3Dt.getProgressState%3F.()%3Be%26%26e.duration%3E0%26%26(e.loaded%3Ce.duration%7C%7Ce.duration-e.current%3E1)%26%26t.seekTo%3F.(e.duration)%7D%3Bt()%2Cnew%20MutationObserver((()%3D%3E%7Bt()%7D)).observe(document%2C%7BchildList%3A!0%2Csubtree%3A!0%7D)%7D)))%3B(function%20serverContract(), sedCount, 1)
 www.youtube.com##+js(nano-stb, %5Bnative%20code%5D, 17000, 0.001)
 !#if cap_html_filtering
 ||www.youtube.com/s/player/*/base.js$script,xhr,replace=/if\(e===""\)/if(0)/
@@ -93,8 +93,9 @@ japscan.lol#@#+js(ra, id, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a%
 japscan.lol#@#.navbar-nav > li#navpromo2.nav-item > a[href^="https://www.origoclick.com"]:not([id])
 japscan.lol#@#+js(set-attr, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a%5Bhref%5E%3D%22https%3A%2F%2Fwww.origoclick.com%22%5D%3Anot(%5Bid%5D), href, false)
 japscan.lol##.navbar-nav > li#navpromo2.nav-item > a[href^="https://www.origoclick.com"]:style(font-size: 0 !important;)
-japscan.lol##+js(aost, eval, stackDepth%3A4)
-japscan.lol##+js(aost, eval, stackDepth%3A2)
+japscan.lol#@#+js(acs, RegExp, japscan)
+japscan.lol#@#+js(acs, RegExp, www.japscan.lol)
+japscan.lol##+js(rmnt, script, www.japscan.lol)
 /^https?:\/\/[-a-z]{8,15}\.(?:com|net)\/401\/\d{7}(?:\?v=\d+)?$/$script,3p,domain=japscan.lol,important
 @@*$image,xhr,script,domain=japscan.lol
 !||googletagmanager.com^$script,domain=japscan.lol,important
@@ -135,9 +136,9 @@ poophq.com,veev.to##+js(no-xhr-if, %2F%5C%2Fpreroll%5C.engine%24%2F)
 poophq.com,veev.to##+js(no-xhr-if, url%3A!%2Fcdn%5C.plyr%5C.io%7Cveev%5C.to%7C%5C%2Fdl%5C%3Fop%3Dplayer_api%2F%20method%3AGET)
 !#else
 !#if cap_html_filtering
-||static.veevcdn.co/assets/videoplayer/$script,replace=/'cdv'/'cu'/
+||static.veevcdn.co/assets/videoplayer/$script,replace=/return void _0x[a-z0-9]+\(\!0x0\)//g
 !#else
-@@||magsrv.com^$xhr,domain=poophq.com|veev.to
+@@||pemsrv.com^$xhr,domain=poophq.com|veev.to
 ||c.adsco.re/|$script,redirect=none:5,domain=poophq.com|veev.to
 !#endif
 !#endif

@@ -2073,13 +2073,7 @@ thepoorcoder.com##+js(aopr, adblockDetector)
 ! https://github.com/uBlockOrigin/uAssets/issues/7962
 ! https://www.reddit.com/r/uBlockOrigin/comments/15uh8g0/city_tv_being_blocked_again/
 @@||citytv.com^$ghide
-@@||citytv.com/wp-json/rsm-adutil/v1/get_ad_targets_by_url/$xhr,1p
-citytv.com##+js(json-prune, *, ad_unit_path)
-!#if ext_devbuild
-||citytv.com/wp-json/rsm-adutil/v1/get_ad_targets_by_url/$xhr,1p,important
-citytv.com#@#+js(json-prune, *, ad_unit_path)
 citytv.com##+js(no-xhr-if, wp-json%2Frsm-adutil, true)
-!#endif
 ! brave issue google funding
 globo.com,latimes.com##+js(nostif, f.parentNode.removeChild(f), 100)
 ! https://github.com/uBlockOrigin/uAssets/issues/23957
@@ -3386,7 +3380,7 @@ songspk.*##+js(aost, Object, %2F(%3F%3D%5E(%3F!.*(https)))%2F)
 ! ##+js(acs, document.createElement, %3B%7D%7D%7D%3Bbreak%3Bcase%20%24.)
 moviesnation.*##+js(acs, document.createElement, %3B%7D%7D%7D%3Bbreak%3Bcase%20%24.)
 ! ##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
-9animetv.to,advertisertape.com,animeunity.to,animeyabu.org,anitube.*,ate60vs7zcjhsjo5qgv8.com,file4go.*,lulustream.com,movieshubweb.com,player.smashy.stream,putlocker.*,sflix.*,soap2day.*,streamtape.*,swiftload.io,subtitlecat.com,vidsrc.*,viprow.*,vixcloud.co,ythd.org##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
+9animetv.to,advertisertape.com,animeunity.to,animeyabu.org,anitube.*,ate60vs7zcjhsjo5qgv8.com,file4go.*,linkz.wiki,lulustream.com,movies4u.*,movieshubweb.com,player.smashy.stream,putlocker.*,sflix.*,soap2day.*,streamtape.*,swiftload.io,subtitlecat.com,vidsrc.*,viprow.*,vixcloud.co,ythd.org##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 atlaq.com,bolly4umovies.*,douploads.net,moalm-qudwa.blogspot.com,shurt.pw##+js(aopr, zfgformats)
 123movieshub.*,animeunity.*,bflix.*,cima-club.*,flixhq.*,hindilinks4u.*,mcloud.bz,t7meel.*,theflixer.tv,vidstream.pro##+js(aopr, zfgstorage)
 01fmovies.com,123moviesfun.is,bmovies.*,bolly4umovies.*,putlocker.*##+js(acs, Math, XMLHttpRequest)
@@ -3399,6 +3393,7 @@ filmywap.*##+js(acs, Object, XMLHttpRequest)
 coinfaucet.io##+js(acs, decodeURI, zfgloadedpopup)
 bitfly.io,pelisplus.*,pelisplus2.*##+js(aost, Math.random, %2F%5Cst%5C.%5Ba-zA-Z%5D*%5CsinlineScript%2F)
 shahiid-anime.net##+js(aost, Object, %2F(%3F%3D%5E(%3F!.*(https)))%2F)
+nsw2u.*##+js(trusted-replace-argument, document.createElement, 0, '', condition, iframe)
 ||flixhq.*/loadme/
 ! https://www.reddit.com/r/uBlockOrigin/comments/1feyh47/wwwanitubeus_detected/
 file4go.net##+js(no-xhr-if, outbrain)
