@@ -38,7 +38,7 @@ import { IOrganization } from './metadata/organizations.js';
 import { IPattern } from './metadata/patterns.js';
 import { fastHash } from '../utils.js';
 
-export const ENGINE_VERSION = 682;
+export const ENGINE_VERSION = 683;
 
 function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   if (filters.length === 0) {

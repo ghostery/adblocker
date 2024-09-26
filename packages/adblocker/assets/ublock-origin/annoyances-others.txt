@@ -293,15 +293,11 @@ facebook.com,facebookcorewwwi.onion,facebookwkhpilnemxj7asaniu7vnjjbiltxjqhye3mh
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-1993620105 - "Suggested for you" posts
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-2248409212
 !#if cap_html_filtering
-! ||facebook.com/api/graphql/$xhr,replace=/\{"brs_content_label":[^\n]+?"follow_button":\{"__typename":"CometFeedStoryFollowButtonStrategy"[^\n]+"cursor":"[^"]+"\}/{}/g,domain=web.facebook.com|www.facebook.com
-! ||facebook.com/api/graphql/$xhr,replace=/\{"label_field_for_brs":[^\n]+?"follow_button":\{"__typename":"CometFeedStoryFollowButtonStrategy"[^\n]+"cursor":"[^"]+"\}/{}/g,domain=web.facebook.com|www.facebook.com
-! ||facebook.com/api/graphql/$xhr,replace=/\{"the_cnt_lbl_for_brs":[^\n]+?"follow_button":\{"__typename":"CometFeedStoryFollowButtonStrategy"[^\n]+"cursor":"[^"]+"\}/{}/g,domain=web.facebook.com|www.facebook.com
-||facebook.com/api/graphql/$xhr,replace=/\{"newest_lbl_for_brs"[^\n]+?"follow_button":\{"__typename":"CometFeedStoryFollowButtonStrategy"[^\n]+"cursor":"[^"]+"\}/{}/g,domain=web.facebook.com|www.facebook.com
+! ||facebook.com/api/graphql/$xhr,replace=/\{"newest_lbl_for_brs"[^\n]+?"follow_button":\{"__typename":"CometFeedStoryFollowButtonStrategy"[^\n]+"cursor":"[^"]+"\}/{}/g,domain=web.facebook.com|www.facebook.com
+||facebook.com/api/graphql/$xhr,1p,replace=/,"category_sensitive"[^\n]+?"follow_button":\{"__typename":"CometFeedStoryFollowButtonStrategy"[^\n]+"cursor":"[^"]+"\}/}/g,domain=web.facebook.com|www.facebook.com
 !#else
-! web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22brs_content_label%22%3A%5B%5E%5Cn%5D%2B%3F%22follow_button%22%3A%5C%7B%22__typename%22%3A%22CometFeedStoryFollowButtonStrategy%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
-! web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22label_field_for_brs%22%3A%5B%5E%5Cn%5D%2B%3F%22follow_button%22%3A%5C%7B%22__typename%22%3A%22CometFeedStoryFollowButtonStrategy%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
-! web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22the_cnt_lbl_for_brs%22%3A%5B%5E%5Cn%5D%2B%3F%22follow_button%22%3A%5C%7B%22__typename%22%3A%22CometFeedStoryFollowButtonStrategy%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
-web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22newest_lbl_for_brs%22%3A%5B%5E%5Cn%5D%2B%3F%22follow_button%22%3A%5C%7B%22__typename%22%3A%22CometFeedStoryFollowButtonStrategy%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
+! web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22newest_lbl_for_brs%22%3A%5B%5E%5Cn%5D%2B%3F%22follow_button%22%3A%5C%7B%22__typename%22%3A%22CometFeedStoryFollowButtonStrategy%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
+web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%2C%22category_sensitive%22%5B%5E%5Cn%5D%2B%3F%22follow_button%22%3A%5C%7B%22__typename%22%3A%22CometFeedStoryFollowButtonStrategy%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, %7D, %2Fapi%2Fgraphql)
 !#endif
 ! FB link redirection
 www.facebook.com##+js(json-prune, require.0.3.0.__bbox.define.%5B%5D.2.is_linkshim_supported%20require.0.3.0.__bbox.define.%5B%5D.2.click_ids)
@@ -5042,8 +5038,6 @@ myflixerz.to##+js(nostif, 0x)
 movie4kto.net##+js(nosiif, %2FDevTools%7C_0x%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/20341
 lethalpanda.com##+js(aopr, b2a)
-! https://www.reddit.com/r/uBlockOrigin/comments/17iihqp/anime_news_network_rolled_out_antiadblocker/
-animenewsnetwork.com##+js(set, ANN.ads.adblocked, false)
 ! https://www.reddit.com/r/uBlockOrigin/comments/17mifyx/adblocker_detected_on_hackthebox_website/
 ||hackthebox.com/build/assets/just-detect-adblock-$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/20423

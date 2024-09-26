@@ -2932,6 +2932,10 @@ money.cnn.com##section.column:has(> #moneySponsors)
 ! https://www.reddit.com/r/uBlockOrigin/comments/144h6i5/cnnespanolcnncom_videoad/jngep7z/
 ! https://www.reddit.com/r/uBlockOrigin/comments/15dcw8o/how_to_block_new_cnn_video_ads/
 ! https://github.com/uBlockOrigin/uAssets/issues/17071
+! https://github.com/uBlockOrigin/uBOL-home/issues/208
+cnn.com##+js(set, FAVE.settings.ads.ssai.prod.clips.enabled, false)
+cnn.com##+js(set, FAVE.settings.ads.ssai.prod.liveAuth.enabled, false)
+cnn.com##+js(set, FAVE.settings.ads.ssai.prod.liveUnauth.enabled, false)
 ! cnn top ads
 cnn.com##.ad-slot-header__wrapper:style(display: none !important; top: 0 !important)
 ! https://github.com/bogachenko/fuckfuckadblock/issues/446
@@ -3204,7 +3208,7 @@ audiotools.pro,audizine.com,blackenterprise.com,cheatsheet.com,cwtv.com,esportst
 familyminded.com,foxvalleyfoodie.com,merriam-webster.com,news.com.au,playstationlifestyle.net,sportsnaut.com,tempumail.com,toledoblade.com##+js(aopr, __cmpGdprAppliesGlobally)
 pc-builds.com,qtoptens.com,reuters.com,today.com,videogamer.com,wrestlinginc.com##+js(set, admiral, noopFunc)
 !#if cap_html_filtering
-abc17news.com,bailiwickexpress.com,barnsleychronicle.com,bluegraygal.com,briefeguru.de##^script:has-text('"v4ac1eiZr0"')
+abc17news.com,bailiwickexpress.com,barnsleychronicle.com,briefeguru.de##^script:has-text('"v4ac1eiZr0"')
 carmagazine.co.uk,cattime.com,cbr.com,celiacandthebeast.com,chaptercheats.com,collider.com,comingsoon.net,commercialobserver.com,competentedigitale.ro,crafty.house##^script:has-text('"v4ac1eiZr0"')
 dailyvoice.com,decider.com,didyouknowfacts.com,dogtime.com,dustyoldthing.com##^script:has-text('"v4ac1eiZr0"')
 faithhub.net,femestella.com,footwearnews.com,freeconvert.com,frogsandsnailsandpuppydogtail.com,fsm-media.com,funtasticlife.com,fwmadebycarli.com##^script:has-text('"v4ac1eiZr0"')
@@ -3224,7 +3228,7 @@ wannacomewith.com,wimp.com,windsorexpress.co.uk,woojr.com,worldoftravelswithkids
 cheatsheet.com,pwinsider.com##^script:has-text(admiral)
 ! https://github.com/uBlockOrigin/uAssets/issues/24721
 !#else
-abc17news.com,bailiwickexpress.com,barnsleychronicle.com,bluegraygal.com,briefeguru.de##+js(rmnt, script, %22v4ac1eiZr0%22)
+abc17news.com,bailiwickexpress.com,barnsleychronicle.com,briefeguru.de##+js(rmnt, script, %22v4ac1eiZr0%22)
 carmagazine.co.uk,cattime.com,cbr.com,celiacandthebeast.com,chaptercheats.com,collider.com,comingsoon.net,commercialobserver.com,competentedigitale.ro,crafty.house##+js(rmnt, script, %22v4ac1eiZr0%22)
 dailyvoice.com,decider.com,didyouknowfacts.com,dogtime.com,dustyoldthing.com##+js(rmnt, script, %22v4ac1eiZr0%22)
 faithhub.net,femestella.com,footwearnews.com,freeconvert.com,frogsandsnailsandpuppydogtail.com,fsm-media.com,funtasticlife.com,fwmadebycarli.com##+js(rmnt, script, %22v4ac1eiZr0%22)
@@ -3247,7 +3251,7 @@ cheatsheet.com,pwinsider.com##+js(rmnt, script, admiral)
 ! https://www.reddit.com/#reddit/r/uBlockOrigin/comments/1efcm93/247_sports_is_detecting_ubo/
 ! https://github.com/uBlockOrigin/uAssets/issues/24721
 247sports.com,agrodigital.com,al.com,aliontherunblog.com,allaboutthetea.com,allmovie.com,allmusic.com,allthingsthrifty.com,amessagewithabottle.com,artforum.com,artnews.com,awkward.com,awkwardmom.com##+js(rmnt, script, %22%22).split(%22%2C%22)%5B4%5D)
-bethcakes.com,betweenenglandandiowa.com,bgr.com,blogher.com,blu-ray.com,cbsnews.com,cbssports.com,cleveland.com,dailykos.com,eater.com,eldiariony.com,inc.com,indiewire.com,kentucky.com,knowyourmeme.com,last.fm,masslive.com,mlive.com,nbcsports.com,news.com.au,nj.com,nypost.com,oregonlive.com,pagesix.com,pennlive.com,rollingstone.com,sbnation.com,sheknows.com,sport-fm.gr,syracuse.com,themarysue.com,tvline.com,usmagazine.com##+js(rmnt, script, %22%22).split(%22%2C%22)%5B4%5D)
+bethcakes.com,betweenenglandandiowa.com,bgr.com,blogher.com,blu-ray.com,bluegraygal.com,cbsnews.com,cbssports.com,cleveland.com,dailykos.com,eater.com,eldiariony.com,inc.com,indiewire.com,kentucky.com,knowyourmeme.com,last.fm,masslive.com,mlive.com,nbcsports.com,news.com.au,nj.com,nypost.com,oregonlive.com,pagesix.com,pennlive.com,rollingstone.com,sbnation.com,sheknows.com,sport-fm.gr,syracuse.com,themarysue.com,tvline.com,usmagazine.com,wimp.com##+js(rmnt, script, %22%22).split(%22%2C%22)%5B4%5D)
 !#endif
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$domain=givemesport.com,important
 superherohype.com##a.wp-block-button__link:is([href^="https://amzn.to/"], [href^="https://www.amazon.com/"])
@@ -4036,11 +4040,11 @@ freeltc.online##+js(noeval-if, ads)
 ! https://github.com/uBlockOrigin/uAssets/issues/20792
 ! https://www.reddit.com/r/uBlockOrigin/comments/1crkyyz/
 ! https://www.reddit.com/r/uBlockOrigin/comments/1c2eq9o/ads_are_appearing_again_on_twitter/
-twitter.com,x.com##[data-testid="primaryColumn"] [data-testid="cellInnerDiv"] > div:has([data-testid$="-impression-pixel"]):remove()
-twitter.com,x.com##+js(json-prune-xhr-response, data.home.home_timeline_urt.instructions.%5B%5D.entries.%5B-%5D.content.itemContent.promotedMetadata, , propsToMatch, url%3A%2FHome)
-twitter.com,x.com##+js(json-prune-xhr-response, data.search_by_raw_query.search_timeline.timeline.instructions.%5B%5D.entries.%5B-%5D.content.itemContent.promotedMetadata, , propsToMatch, url%3A%2FSearchTimeline)
-twitter.com,x.com##+js(json-prune-xhr-response, data.threaded_conversation_with_injections_v2.instructions.%5B%5D.entries.%5B-%5D.content.items.%5B%5D.item.itemContent.promotedMetadata, , propsToMatch, url%3A%2FTweetDetail)
-twitter.com,x.com##+js(json-prune-xhr-response, data.user.result.timeline_v2.timeline.instructions.%5B%5D.entries.%5B-%5D.content.itemContent.promotedMetadata, , propsToMatch, url%3A%2FUserTweets)
+x.com##[data-testid="primaryColumn"] [data-testid="cellInnerDiv"] > div:has([data-testid$="-impression-pixel"]):remove()
+x.com##+js(json-prune-xhr-response, data.home.home_timeline_urt.instructions.%5B%5D.entries.%5B-%5D.content.itemContent.promotedMetadata, , propsToMatch, url%3A%2FHome)
+x.com##+js(json-prune-xhr-response, data.search_by_raw_query.search_timeline.timeline.instructions.%5B%5D.entries.%5B-%5D.content.itemContent.promotedMetadata, , propsToMatch, url%3A%2FSearchTimeline)
+x.com##+js(json-prune-xhr-response, data.threaded_conversation_with_injections_v2.instructions.%5B%5D.entries.%5B-%5D.content.items.%5B%5D.item.itemContent.promotedMetadata, , propsToMatch, url%3A%2FTweetDetail)
+x.com##+js(json-prune-xhr-response, data.user.result.timeline_v2.timeline.instructions.%5B%5D.entries.%5B-%5D.content.itemContent.promotedMetadata, , propsToMatch, url%3A%2FUserTweets)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/166746
 chartstream.net##+js(acs, document.addEventListener, google_ad_client)
 ! https://github.com/uBlockOrigin/uAssets/issues/20800
