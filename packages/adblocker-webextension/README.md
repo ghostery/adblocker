@@ -67,7 +67,7 @@ On Chromium-based browsers you will need a polyfill such as
 `webextension-polyfill` to get this working:
 
 ```javascript
-import { browser } from 'webextension-polyfill-ts';
+import { browser } from 'webextension-polyfill';
 import { WebExtensionBlocker } from '@cliqz/adblocker-webextension';
 
 WebExtensionBlocker.fromPrebuiltAdsAndTracking().then((blocker) => {

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { WebRequest } from 'webextension-polyfill-ts';
+import { WebRequest } from 'webextension-polyfill';
 import { NetworkFilter } from '@cliqz/adblocker';
 
 import {

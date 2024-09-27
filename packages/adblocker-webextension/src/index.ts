@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { Browser, Runtime, WebRequest, WebNavigation } from 'webextension-polyfill-ts';
+import { Browser, Runtime, WebRequest, WebNavigation } from 'webextension-polyfill';
 import { parse } from 'tldts-experimental';
 
 import {
