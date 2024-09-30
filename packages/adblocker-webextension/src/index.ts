@@ -369,7 +369,13 @@ export class BlockingContext {
       this.browser.runtime !== undefined &&
       this.browser.runtime.onMessage !== undefined
     ) {
-      this.browser.runtime.onMessage.addListener(this.onRuntimeMessage);
+      this.browser.runtime.onMessage.addListener(
+        this.onRuntimeMessage as (
+          message: unknown,
+          sender: Runtime.MessageSender,
+          sendResponse: (response: unknown) => void,
+        ) => Promise<unknown>,
+      );
     }
 
     if (this.onCommittedHandler) {
@@ -384,7 +390,13 @@ export class BlockingContext {
     }
 
     if (this.browser.runtime !== undefined && this.browser.runtime.onMessage !== undefined) {
-      this.browser.runtime.onMessage.removeListener(this.onRuntimeMessage);
+      this.browser.runtime.onMessage.removeListener(
+        this.onRuntimeMessage as (
+          message: unknown,
+          sender: Runtime.MessageSender,
+          sendResponse: (response: unknown) => void,
+        ) => Promise<unknown>,
+      );
     }
 
     if (this.onCommittedHandler) {
