@@ -301,8 +301,6 @@ web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%2C%22ca
 !#endif
 ! FB link redirection
 www.facebook.com##+js(json-prune, require.0.3.0.__bbox.define.%5B%5D.2.is_linkshim_supported%20require.0.3.0.__bbox.define.%5B%5D.2.click_ids)
-!#if ext_devbuild
-!#endif
 ! right click, select, copy => http://www.oggiscuola.com/web/2018/09/22/alzarsi-in-piedi-quando-entra-il-professore-e-una-forma-di-saluto-che-va-recuperata/
 oggiscuola.com##+js(acs, jQuery, overlay)
 ||oggiscuola.com^$csp=style-src 'self' *
@@ -3776,7 +3774,8 @@ brainly.*##+js(set, jsData.hasVideoMeteringUnlogEnabled, undefined)
 ! https://github.com/uBlockOrigin/uAssets/issues/9632
 brainly.*##+js(set-local-storage-item, social-qa%2FmachineId, %24remove%24)
 ! https://github.com/uBlockOrigin/uAssets/issues/24398
-brainly.*##+js(set-local-storage-item, simple-funnel-name, %24remove%24)
+! https://github.com/uBlockOrigin/uAssets/issues/25457
+brainly.*,nosdevoirs.fr##+js(set-local-storage-item, simple-funnel-name, %24remove%24)
 ! https://github.com/uBlockOrigin/uAssets/issues/12571
 ! enable context menu
 viewsb.com##+js(acs, console.clear, contextmenu)
@@ -5662,3 +5661,11 @@ lowfuelmotorsport.com##+js(set, Object.prototype.auth.redirectToLogin, noopFunc)
 !#endif
 ! https://www.reddit.com/r/uBlockOrigin/comments/1fnvf02/camspider_adblock_notice/
 camspider.com##+js(set-local-storage-item, adblockNoticePermaDismiss, true)
+! https://github.com/uBlockOrigin/uAssets/issues/25442
+||jetv.xyz/assets/js/devtools-detector.js$script,1p
+jetv.xyz##+js(trusted-suppress-native-method, Function.prototype.constructor, %22debugger%22, abort)
+jetv.xyz##+js(nosiif, devtoolsDetector)
+! https://github.com/uBlockOrigin/uAssets/issues/25437
+html5.gamedistribution.com###gd__adblocker__overlay
+! https://github.com/uBlockOrigin/uAssets/issues/25465
+nullforums.net##+js(rmnt, script, contextmenu)
