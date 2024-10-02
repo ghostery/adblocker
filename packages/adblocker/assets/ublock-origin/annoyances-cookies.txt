@@ -383,6 +383,8 @@ uber.com##div[role="dialog"]:has(button[data-baseweb="button"][data-tracking-nam
 ! https://www.ted.com/
 ted.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24)
 ted.com##+js(trusted-set-cookie, OptanonConsent, groups%3DC0001%253A1%252CC0002%253A0%252CC0004%253A0%252CC0003%253A0, , , domain, ted.com)
+! https://www.lebenslauf.com/
+lebenslauf.com##+js(trusted-set-cookie, userConsent, %257B%2522marketing%2522%253Afalse%252C%2522version%2522%253A%25225%2522%257D, , , domain, lebenslauf.com)
 ! https://www.xing.com/
 xing.com##+js(trusted-set-cookie, userConsent, %257B%2522marketing%2522%253Afalse%252C%2522version%2522%253A%25225%2522%257D, , , domain, xing.com)
 ! https://www.webnode.com/
@@ -415,6 +417,11 @@ ai.meta.com##[data-testid="cookie-policy-manage-dialog"]:style(visibility: hidde
 www.saal-digital.de##+js(trusted-set-cookie, OptanonConsent, groups%3DC0003%253A0%252CC0004%253A0%252CC0002%253A0%252CC0001%253A1, , , domain, www.saal-digital.de)
 www.saal-digital.de##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24, , , domain, www.saal-digital.de)
 @@/otBannerSdk.js$domain=saal-digital.de
+! https://www.linasmatkasse.se/
+linasmatkasse.se##+js(trusted-set-local-storage-item, reduxStore, %7B%22tracking%22%3A%7B%22consents%22%3A%7B%22All%22%3Afalse%2C%22functional%22%3Afalse%2C%22Segment.io%22%3Atrue%7D%2C%22dialog%22%3A%7B%22open%22%3Afalse%2C%22dirty%22%3Afalse%7D%2C%22isConfigured%22%3Atrue%7D%2C%22loyalty%22%3A%7B%22hasSeenLoyaltyPage%22%3Afalse%7D%7D)
+! https://gamearena.pl/
+gamearena.pl##+js(trusted-set-cookie, cookieOptions, %7B%22analitics%22%3Afalse%2C%22marketing%22%3Afalse%7D)
+gamearena.pl##+js(set-cookie, cookieVer, 1, , reload, 1)
 !! Needs additional cookies
 ! https://github.com/uBlockOrigin/uAssets/issues/23701
 ! Enable search customization
@@ -1398,6 +1405,8 @@ cdn.privacy-mgmt.com##+js(trusted-click-element, button%5Baria-label*%3D%22Acept
 ! beteve.cat (accept)
 ! https://www.whatcar.com/reviews
 cdn.privacy-mgmt.com##+js(trusted-click-element, button%5Btitle*%3D%22Accept%22%5D, , 1000)
+! bloodyelbow.com (accept)
+cdn.privacy-mgmt.com##+js(trusted-click-element, button%5Btitle*%3D%22AGREE%22%5D, , 1000)
 ! just Use necessary cookies only
 degiro.*##+js(trusted-click-element, %23CybotCookiebotDialogBodyButtonDecline)
 ! Necessary + functional cookies
