@@ -45,6 +45,8 @@ apkmirror.com##+js(rmnt, script, document.createTextNode)
 ! https://forums.lanik.us/viewtopic.php?f=62&t=41466
 ! https://github.com/uBlockOrigin/uAssets/issues/7884
 ! https://github.com/uBlockOrigin/uAssets/issues/22769
+! https://github.com/uBlockOrigin/uAssets/issues/25495
+vidsrc.*##+js(acs, document.write)
 vidsrc.*##+js(nosiif, %2F0x%7CsandCheck%2F)
 vidsrc.*##+js(nowoif)
 vidsrc.*##+js(aopr, __Y)
@@ -52,7 +54,10 @@ vidsrc.*##+js(aopr, AaDetector)
 vidsrc.*##+js(rmnt, script, adserverDomain)
 vidsrc.*##^script:has-text(/\{delete window\[/)
 vidsrc.*###pop_asdf
+||vidsrc.net/*.js?_=$script,1p
 ||vidsrc.pro/uwu-js^$script
+||annotationsincereexistence.com^
+||reminderasking.com^$all
 embed.smashystream.com###addiv
 ! https://github.com/uBlockOrigin/uAssets/issues/23610
 streambucket.net##+js(acs, EventTarget.prototype.addEventListener, %2FrunPop%7Caclib%7Cwindow%5C.open%2F)
@@ -550,7 +555,9 @@ cbssports.com##.Skybox--minHeight, .Skybox--minHeightBoth:style(--global-nav-v2-
 ! https://github.com/uBlockOrigin/uAssets/issues/5700
 supertelevisionhd.com##+js(aopr, AaDetector)
 ! https://github.com/uBlockOrigin/uAssets/issues/24822
-~chavesnamao.com.br,~dip-badajoz.es###anuncio
+###anuncio
+chavesnamao.com.br#@##anuncio
+dip-badajoz.es#@##anuncio
 ! https://github.com/uBlockOrigin/uAssets/issues/1090
 jacquieetmicheltv.net##+js(set, is_adblocked, false)
 jacquieetmicheltv.net##+js(set, showPopunder, noopFunc)
@@ -1651,6 +1658,7 @@ thejakartapost.com##.tjp-single__content-ads:remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/23965
 ! https://github.com/uBlockOrigin/uAssets/issues/24013
 ! https://github.com/uBlockOrigin/uAssets/issues/24812#issuecomment-2289648269
+! https://github.com/uBlockOrigin/uAssets/issues/25495
 !#if env_firefox
 !#endif
 euro2024direct.ru##+js(acs, document.createElement, break%3Bcase)
@@ -2648,3 +2656,7 @@ callofwar.com##+js(rmnt, script, Anzeige)
 ! https://github.com/uBlockOrigin/uAssets/issues/25483
 ! [dup] from ublock-origin/quick-fixes.txt
 ! picrew.me##.play-Imagemaker:style(height: 100% !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/58
+deadline.com##+js(rmnt, script, admbenefits)
+! https://webdexscans.com/ detection
+||cdn.pubfuture-ad.com/v2/unit/pt.js$script,redirect-rule=noopjs,domain=webdexscans.com
