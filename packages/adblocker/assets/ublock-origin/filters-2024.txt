@@ -1411,8 +1411,11 @@ aliezstream.pro,mylivestream.pro###openLinks:remove()
 dichvureviewmap.com##+js(no-fetch-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/21353
 raenonx.cc##body > div[class] > style:first-child + .w-full:has(> .button-clickable-bg-opaque > .transform-smooth > svg)
-! https://gunauc.net anti-adb
-gunauc.net##+js(no-fetch-if, adsbygoogle)
+! https://github.com/AdguardTeam/AdguardFilters/issues/190021
+! [dup] from ublock-origin/quick-fixes.txt
+! @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=gunauc.net
+! [dup] from ublock-origin/quick-fixes.txt
+! gunauc.net#@#+js(prevent-fetch, pagead2.googlesyndication.com)
 ! https://sportsonline.si/channels/bra/br4.php
 ! https://sportsonline.si/channels/hd/hd10.php
 absentescape.net,forgepattern.net##+js(aopr, aclib)
@@ -1798,6 +1801,7 @@ soccerinhd.com##+js(no-fetch-if, %2Fdoubleclick%7Cgooglesyndication%2F)
 soccerinhd.com##+js(acs, document.documentElement, break%3Bcase%20%24.)
 soccerinhd.com##+js(rpnt, script, adblockDetected%20%3D%20true, adblockDetected%20%3D%20false)
 @@||soccerinhd.com^$ghide
+@@||soccerinhd.com^$xhr,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/23905
 molbiotools.com##+js(nostif, inner-ad)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/180454
