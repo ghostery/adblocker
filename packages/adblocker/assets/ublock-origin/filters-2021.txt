@@ -1258,6 +1258,12 @@ files.fm##+js(aopr, canRunAds)
 ||cdn.flashtalking.com^$media,redirect=noopmp3-0.1s,domain=app.plex.tv
 ! https://github.com/uBlockOrigin/uAssets/issues/20357
 app.plex.tv##+js(json-prune, MediaContainer.Metadata.%5B%5D.Ad)
+! https://www.reddit.com/r/uBlockOrigin/comments/1fwizi0/plex_free_tvmovies_ad_block/
+!#if env_firefox
+imasdk.googleapis.com##+js(no-xhr-if, vod.provider.plex.tv%2Fad%3F, war%3Anoop-vast3.xml)
+!#else
+||vod.provider.plex.tv/ad?$xhr,redirect=noopvast-3.0
+!#endif
 ! https://github.com/AdguardTeam/AdguardFilters/issues/78973
 ||neonime.*/wp-content/themes/grifus/images/donate/yunita/
 ! https://github.com/uBlockOrigin/uAssets/issues/8823
@@ -3077,16 +3083,20 @@ ustream.click##+js(acs, RegExp, shift)
 ustream.click##^script:has-text('shift')
 ustream.click##^script:has-text(\'shift\')
 ! https://github.com/uBlockOrigin/uBlock-issues/discussions/3096#discussioncomment-8273443
-! performance slowndown by site's antiadb code
+! https://1cloudfile.com/I7
+1cloudfile.com##+js(no-xhr-if, pagead2.googlesyndication.com)
+!#if !env_devbuild
+1cloudfile.com##+js(rpnt, script, 200%3D%3D%3Dr.status, 0%3D%3D%3Dr.status, condition, getNextDownloadPageLink)
+!#endif
+1cloudfile.com##+js(rpnt, script, return%20r.responseText, return%20%60a.getAttribute(%22data-ad-client%22)%7C%7C%22%22%60, condition, getNextDownloadPageLink)
 1cloudfile.com##+js(nosiif, !display)
 ! https://github.com/uBlockOrigin/uAssets/issues/22329
 1cloudfile.com##+js(nowoif)
-1cloudfile.com##+js(no-fetch-if, %2Fgooglesyndication%7Cnerveheels%2F)
+1cloudfile.com##+js(no-fetch-if, %2Fnerveheels%2F)
 1cloudfile.com##+js(acs, navigator, FingerprintJS)
 ||1cloudfile.com/sw.js$script
 1cloudfile.com#@#.advert-wrapper
 1cloudfile.com##.advert-wrapper:style(clip-path: circle(0) !important;)
-1cloudfile.com##.uk-text-center
 1cloudfile.com##.preview-download-wrapper
 1cloudfile.com##.content-preview-wrapper
 ||browsingcontredir.com^
