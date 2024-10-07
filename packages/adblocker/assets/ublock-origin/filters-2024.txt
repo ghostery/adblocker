@@ -443,7 +443,6 @@ pixiv.net##section ul > li:has(> iframe[name="infeed"])
 ! https://github.com/uBlockOrigin/uAssets/issues/4523
 mercurynews.com##+js(set, CnnXt.Event.fire, noopFunc)
 mercurynews.com##.dfp-ad
-@@||mercurynews.com^$ghide
 /wp-content/client-mu-plugins/src/Paywall/static/js/connext-paywall-analytics.min.js
 ! https://github.com/easylist/easylist/issues/3796
 ! https://github.com/uBlockOrigin/uAssets/issues/14168
@@ -482,6 +481,8 @@ yahoo.com###HPSPON-ad
 www.yahoo.com##.sticky[class*="top-"]:has(style)
 www.yahoo.com##[id^="mid-center-ad"]
 www.yahoo.com##body#news-content-app li:has(.inset-0)
+! https://github.com/uBlockOrigin/uAssets/issues/25532
+www.yahoo.com##body.font-yahoobeta > div.items-center:has(style)
 ! https://github.com/uBlockOrigin/uAssets/issues/1802
 jpopsingles.eu##+js(nano-sib, downloadTimer)
 jpopsingles.eu##+js(acs, document.createElement, %2Fl%5C.parentNode%5C.insertBefore%5C(s%2F)
@@ -654,6 +655,27 @@ fcportables.com##+js(rmnt, script, ai_adb)
 1001tracklists.com##div[class=""][style]
 1001tracklists.com##+js(alert-buster)
 1001tracklists.com##+js(no-fetch-if, method%3AHEAD)
+! https://github.com/uBlockOrigin/uAssets/issues/7343
+dood.*,doods.pro,dooood.*,ds2play.com##+js(aopw, DoodPop)
+d0o0d.com,do0od.com,dood.*,ds2video.com##+js(acs, decodeURI, decodeURIComponent)
+dood.*##+js(aopr, __aaZoneid)
+d0000d.com,d000d.com,d0o0d.com,do0od.com,dood.*,doods.pro,dooood.*,ds2play.com,ds2video.com##+js(nowoif)
+d0000d.com,d000d.com,d0o0d.com,do0od.com,dood.*,doods.pro,doodstream.*,dooood.*,ds2play.com,ds2video.com##+js(rmnt, script, %2Fadblock%7Cpopunder%2F)
+d0000d.com,d000d.com,d0o0d.com,do0od.com,dood.*,doods.pro,doodstream.*,dooood.*,ds2play.com,ds2video.com##^script:has-text(/adblock|popunder/)
+d0000d.com,d000d.com,d0o0d.com,do0od.com,dood.*,doods.pro,doodstream.*,dooood.*,ds2play.com,ds2video.com##+js(acs, WebAssembly, _0x)
+/sw.js$script,domain=d0000d.com|d000d.com|d0o0d.com|do0od.com|dood.*|doods.pro|dooood.*|ds2play.com|ds2video.com
+||dexchangegenius.com^
+||rfsjuxlip.com^
+! https://github.com/uBlockOrigin/uAssets/issues/23268
+! https://github.com/uBlockOrigin/uAssets/issues/25511
+! https://github.com/uBlockOrigin/uAssets/issues/25516
+! https://megacloud.tube/embed-1/e-1/jBK66v0MXBoa?z= / megacloud.tv
+! https://www.reddit.com/r/Piracy/comments/1fwlxsq/anyone_knows_how_to_remove_this_pop_up_ad_on/
+hianime.to##[href="https://1flix.to/"]
+###vidcloud-player > #overlay-container
+||iili.io/JvfIu1a.gif$image
+||i.ibb.co/wyDmK31/Banner.png^$image,3p
+||psausoay.net^
 ! END: Rules from filters.txt
 ! START: Regional lists
 ! <<<<< czech slovak filters >>>>>
@@ -1413,7 +1435,7 @@ dichvureviewmap.com##+js(no-fetch-if, googlesyndication)
 raenonx.cc##body > div[class] > style:first-child + .w-full:has(> .button-clickable-bg-opaque > .transform-smooth > svg)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/190021
 ! [dup] from ublock-origin/quick-fixes.txt
-! @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=gunauc.net
+! gunauc.net##+js(no-fetch-if, googlesyndication, , %7B%22type%22%3A%22cors%22%7D)
 ! [dup] from ublock-origin/quick-fixes.txt
 ! gunauc.net#@#+js(prevent-fetch, pagead2.googlesyndication.com)
 ! https://sportsonline.si/channels/bra/br4.php
@@ -1464,10 +1486,6 @@ woxmax.net##+js(acs, %24, btoa)
 woxmax.net##+js(nowoif, _blank)
 ! https://github.com/uBlockOrigin/uAssets/issues/23270
 differenceprimitive85p.shop##+js(no-xhr-if, ads)
-! https://github.com/uBlockOrigin/uAssets/issues/23268
-megacloud.tv###overlay-center
-hianime.to##[href="https://1flix.to/"]
-||iili.io/JvfIu1a.gif$image
 ! https://github.com/uBlockOrigin/uAssets/issues/22877
 nextdoor.com##+js(json-prune, data.searchClassifiedFeed.searchResultView.0.searchResultItemsV2.edges.%5B-%5D.node.item.content.creative.clickThroughEvent.adsTrackingMetadata.metadata.adRequestId)
 nextdoor.com##.feed-container:not(.wide-layout-feed-container) > div:not([class]) > div[class^="blocks-"] > div[class^="blocks-"] > div[class^="blocks-"] > div:not([class]) > div[class^="blocks-"] > div[class]:has(> .fsf-gam-ad)
@@ -2652,7 +2670,12 @@ smailpro.com##+js(set, adsbygoogle_ama_fc_has_run, true)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1fr8hkq/httpswwwautoparericom_ubo_is_detected/
 autopareri.com##+js(acs, jQuery, adblock)
 ! https://koramaup.com/Up5
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=koramaup.com
+! https://github.com/AdguardTeam/AdguardFilters/commit/6d38642c12
+koramaup.com##+js(no-xhr-if, pagead2.googlesyndication.com)
+!#if !env_devbuild
+koramaup.com##+js(rpnt, script, 200%3D%3D%3Dr.status, 0%3D%3D%3Dr.status, condition, getNextDownloadPageLink)
+!#endif
+koramaup.com##+js(rpnt, script, return%20r.responseText, return%20%60a.getAttribute(%22data-ad-client%22)%7C%7C%22%22%60, condition, getNextDownloadPageLink)
 ! https://github.com/uBlockOrigin/uAssets/issues/25464
 callofwar.com##+js(rmnt, script, Anzeige)
 ! https://github.com/uBlockOrigin/uAssets/issues/25469
@@ -2663,4 +2686,27 @@ callofwar.com##+js(rmnt, script, Anzeige)
 ! https://github.com/uBlockOrigin/uAssets/issues/58
 deadline.com##+js(rmnt, script, admbenefits)
 ! https://webdexscans.com/ detection
-||cdn.pubfuture-ad.com/v2/unit/pt.js$script,redirect-rule=noopjs,domain=webdexscans.com
+||cdn.pubfuture-ad.com/v2/unit/pt.js$script,redirect=noopjs,domain=webdexscans.com
+! https://github.com/uBlockOrigin/uAssets/issues/25508
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=animationdigitalnetwork.com
+! yonder. fr detection
+@@||yonder.fr^$script,1p
+! https://www.reddit.com/r/uBlockOrigin/comments/1bbhc60/videos_from_the_site_httpsle10sportcom_do_not/
+! videos are ads, static playlist is played across different articles, real contents are in twitter embeds
+||dailymotion.com^$domain=le10sport.com
+! https://github.com/uBlockOrigin/uAssets/issues/25518
+||mosqueventure.com^
+||taprippier.com^
+! https://github.com/uBlockOrigin/uAssets/issues/25520
+javfc2.xyz##+js(aeld, click, doThePop)
+javfc2.xyz##+js(nowoif)
+javfc2.xyz##+js(acs, globalThis, break%3Bcase)
+javfc2.xyz##+js(no-fetch-if, thanksgivingdelights)
+javfc2.xyz##+js(aost, document.createElement, yes.onclick)
+! https://github.com/uBlockOrigin/uAssets/issues/25536
+ruidrive.com##+js(no-fetch-if, method%3AGET)
+! xcinema. ro => embed.hideiframe. com player popups
+embed.hideiframe.com##+js(nowoif)
+! https://github.com/uBlockOrigin/uAssets/issues/25537
+gamatotv.info,gmtcloud.best###ads5
+||zqvee2re50mr.com^$all
