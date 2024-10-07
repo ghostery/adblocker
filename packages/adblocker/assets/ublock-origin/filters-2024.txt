@@ -593,12 +593,7 @@ erogen.su##+js(aopr, document.dispatchEvent)
 @@||api.production.k8s.y3o.tv/*/video-ads$xhr,domain=yallo.tv
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=yallo.tv
 ||adservice.google.com^$script,redirect-rule=noopjs,domain=yallo.tv
-!#if ext_devbuild
 imasdk.googleapis.com##+js(no-fetch-if, secure.adnxs.com%2Fptv, war%3Anoop-vast4.xml)
-!#else
-@@||secure.adnxs.com/ptv$xhr,domain=imasdk.googleapis.com
-imasdk.googleapis.com##+js(xml-prune, VAST, , adnxs)
-!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/2449
 ! https://github.com/AdguardTeam/AdguardFilters/issues/147765
 ! https://github.com/uBlockOrigin/uAssets/issues/13169
@@ -676,6 +671,12 @@ hianime.to##[href="https://1flix.to/"]
 ||iili.io/JvfIu1a.gif$image
 ||i.ibb.co/wyDmK31/Banner.png^$image,3p
 ||psausoay.net^
+! https://forums.lanik.us/viewtopic.php?f=90&t=40441
+! https://github.com/uBlockOrigin/uAssets/issues/5223
+winfuture.de##+js(json-prune, adtagparameter, enabled)
+winfuture.de##[id$="_adContainer"]
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,from=winfuture.de
+@@||widget.spoods.io/loader.js$script,domain=winfuture.de
 ! END: Rules from filters.txt
 ! START: Regional lists
 ! <<<<< czech slovak filters >>>>>
@@ -1680,6 +1681,7 @@ thejakartapost.com##.tjp-single__content-ads:remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/24013
 ! https://github.com/uBlockOrigin/uAssets/issues/24812#issuecomment-2289648269
 ! https://github.com/uBlockOrigin/uAssets/issues/25495
+! https://vidsrc.xyz/embed/movie/tt11315808
 !#if env_firefox
 !#endif
 euro2024direct.ru##+js(acs, document.createElement, break%3Bcase)
@@ -2672,7 +2674,7 @@ autopareri.com##+js(acs, jQuery, adblock)
 ! https://koramaup.com/Up5
 ! https://github.com/AdguardTeam/AdguardFilters/commit/6d38642c12
 koramaup.com##+js(no-xhr-if, pagead2.googlesyndication.com)
-!#if !env_devbuild
+!#if !ext_devbuild
 koramaup.com##+js(rpnt, script, 200%3D%3D%3Dr.status, 0%3D%3D%3Dr.status, condition, getNextDownloadPageLink)
 !#endif
 koramaup.com##+js(rpnt, script, return%20r.responseText, return%20%60a.getAttribute(%22data-ad-client%22)%7C%7C%22%22%60, condition, getNextDownloadPageLink)
@@ -2710,3 +2712,7 @@ embed.hideiframe.com##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/25537
 gamatotv.info,gmtcloud.best###ads5
 ||zqvee2re50mr.com^$all
+! https://vidsrc.xyz/embed/movie/tt11315808 popup
+ate60vs7zcjhsjo5qgv8.com##+js(nowoif, !vidsrc.)
+! https://github.com/AdguardTeam/AdguardFilters/issues/189518#issuecomment-2395510540
+blog.livedoor.jp##+js(acs, document.addEventListener, google_ad_client)

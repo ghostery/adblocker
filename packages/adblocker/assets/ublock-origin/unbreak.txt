@@ -7,10 +7,12 @@
 !
 ! GitHub issues: https://github.com/uBlockOrigin/uAssets/issues
 ! GitHub pull requests: https://github.com/uBlockOrigin/uAssets/pulls
-! START: Email trackings
+! START: Click trackings
 ! password reset link broken on coindesk.com
 ! swagbucks.com - restore inactive
-! END: Email trackings
+! https://github.com/uBlockOrigin/uAssets/issues/24153
+! https://github.com/uBlockOrigin/uAssets/issues/25388
+! END: Click trackings
 ! https://github.com/uBlockOrigin/uAssets/issues/729
 ! https://github.com/NanoMeow/QuickReports/issues/1636
 ||2mdn.net/instream/video/client.js$script,redirect=noopjs,domain=video.foxnews.com
@@ -3877,7 +3879,6 @@ emailnator.com##[style^="width: 15px; height: 15px; overflow: scroll; visibility
 ! https://github.com/AdguardTeam/AdguardFilters/issues/111245
 ! https://github.com/easylist/easylist/issues/19352
 mediaite.com##+js(set-cookie, am-sub, 1)
-! https://github.com/uBlockOrigin/uAssets/issues/24153
 ! https://github.com/uBlockOrigin/uAssets/issues/24136
 @@||netshoes.com.br/webanalytics/*$xhr,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/24176
@@ -4034,7 +4035,11 @@ topgear.com##+js(set, _sp_.config.events.onSPPMObjectReady, noopFunc)
 @@||worldsurfleague.com/js/videojs8/nuevo/plugins/videojs-contrib-ads.min.js^$script,1p
 @@||micro.rubiconproject.com/prebid/dynamic/$script,domain=worldsurfleague.com
 @@||securepubads.g.doubleclick.net/pagead/ima_ppub_config$xhr,domain=worldsurfleague.com
+!#if env_firefox
+imasdk.googleapis.com##+js(no-xhr-if, worldsurfleague.com, war%3Anoop-vmap1.0.xml)
+!#else
 ||pubads.g.doubleclick.net/gampad/ads?*www.worldsurfleague.com$xhr,redirect=noop-vmap1.0.xml:5,domain=imasdk.googleapis.com
+!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/25049
 eservice.directauto.com##+js(set, gtm, %7B%7D)
 eservice.directauto.com##+js(set, gtm.trackEvent, noopFunc)
@@ -4044,10 +4049,12 @@ eservice.directauto.com##+js(set, gtm.trackEvent, noopFunc)
 ||wpfc.ml^$image,redirect=1x1.gif,domain=ht-instruments.de
 ! https://github.com/easylist/easylist/issues/19913
 ! [badfilter] ||trycloudflare.com^$badfilter
-! https://github.com/uBlockOrigin/uAssets/issues/25388
 ! https://github.com/uBlockOrigin/uAssets/issues/25402
 gazzetta.gr###comment-section:style(display: block !important;)
 ! https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/browns-are-only-team-without-300-yards-of-offense-in-a-game-this-season
 ! https://github.com/easylist/easylist/commit/857d88d10657ba8b8e1ef2d2a406c8d799382d1c
 ||mparticle.com/js/v2/*/mparticle.js$script,domain=nbcsports.com,important
 nbcsports.com##+js(set, mParticle.Identity.getCurrentUser, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/25504
+||api.omappapi.com/v3/geolocate/json$domain=seclore.com,important
+seclore.com##+js(trusted-set, _omapp.scripts.geolocation, %7B%22value%22%3A%20%7B%22status%22%3A%22loaded%22%2C%22object%22%3Anull%2C%22data%22%3A%7B%22country%22%3A%7B%22shortName%22%3A%22%22%2C%22longName%22%3A%22%22%7D%2C%22administrative_area_level_1%22%3A%7B%22shortName%22%3A%22%22%2C%22longName%22%3A%22%22%7D%2C%22administrative_area_level_2%22%3A%7B%22shortName%22%3A%22%22%2C%22longName%22%3A%22%22%7D%2C%22locality%22%3A%7B%22shortName%22%3A%22%22%2C%22longName%22%3A%22%22%7D%2C%22original%22%3A%7B%22ip%22%3A%22%22%2C%22ip_decimal%22%3Anull%2C%22country%22%3A%22%22%2C%22country_eu%22%3Afalse%2C%22country_iso%22%3A%22%22%2C%22city%22%3A%22%22%2C%22latitude%22%3Anull%2C%22longitude%22%3Anull%2C%22user_agent%22%3A%7B%22product%22%3A%22%22%2C%22version%22%3A%22%22%2C%22comment%22%3A%22%22%2C%22raw_value%22%3A%22%22%7D%2C%22zip_code%22%3A%22%22%2C%22time_zone%22%3A%22%22%7D%7D%2C%22error%22%3A%22%22%7D%7D)

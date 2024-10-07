@@ -688,5 +688,10 @@ nytimes.com##+js(no-fetch-if, api.theathletic.com%2Fgraphql%20body%3A%2FPostEven
 blog.cloudflare.com##+js(no-fetch-if, method%3APOST%20body%3Azaraz)
 ! https://github.com/uBlockOrigin/uAssets/issues/25532
 ||s.yimg.com/ss/analytics
+! https://github.com/uBlockOrigin/uAssets/issues/25552
+yahoo.com,~mail.yahoo.com##+js(set-attr, img.caas-lazy%5Bdata-src%5D%3Anot(%5Bsrc%5D), src, %5Bdata-src%5D)
+yahoo.com,~mail.yahoo.com##.caas-img-container.caas-img-loader .caas-img:style(opacity: 1 !important;)
+yahoo.com,~mail.yahoo.com##.caas-img-container.caas-img-loader:style(background-color: transparent !important;)
+yahoo.com,~mail.yahoo.com##.caas-img-container.caas-img-loader::after:style(background: unset !important;)
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt
