@@ -55,9 +55,11 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
       () => {
         DOM_MONITOR = new DOMMonitor(async (update) => {
           if (update.type === 'features') {
-            const response = await injectCosmeticFilters();
-            if (response.error)
-              throw new Error(`error injecting updated cosmetic filters: ${response.error}`);
+            injectCosmeticFilters().then((response) => {
+              if (response.error) {
+                console.error(`error injecting updated cosmetic filters: ${response.error}`);
+              }
+            });
           }
         });
 

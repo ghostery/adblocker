@@ -215,14 +215,7 @@ export class ElectronBlocker extends FiltersEngine {
     }
 
     if (styles.length > 0) {
-      try {
-        await event.sender.insertCSS(styles, { cssOrigin: 'user' });
-      } catch (error) {
-        return {
-          active: false,
-          error: `CSS insertion failed: ${error instanceof Error ? error.message : String(error)}`,
-        };
-      }
+      event.sender.insertCSS(styles, { cssOrigin: 'user' });
     }
 
     const scriptResults = await Promise.allSettled(
