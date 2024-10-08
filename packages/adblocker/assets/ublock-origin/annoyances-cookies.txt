@@ -1262,7 +1262,9 @@ cdn.privacy-mgmt.com##+js(trusted-click-element, button.accept-all, 1000)
 costcobusinessdelivery.com##+js(trusted-set-cookie, OptanonConsent, groups%3DBG117%253A1%252CC0001%253A1%252CC0003%253A1%252CC0002%253A1%252CSPD_BG%253A1%252CC0004%253A1)
 costcobusinessdelivery.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24)
 ! https://github.com/uBlockOrigin/uAssets/issues/23727
+! https://github.com/uBlockOrigin/uAssets/issues/25509
 seznam.cz##+js(trusted-set-cookie, euconsent-v2, CP-wiwAP-wiwAD3ACLCSA1EsAP_gAEPgAATIJVwQgAAwAKAAsACAAFQALgAZAA6ACAAFAAKgAWgAyABoADmAIgAigBHACSAEwAJwAVQAtgBfgDCAMUAgACEgEQARQAjoBOAE6AL4AaQA4gB3ADxAH6AQgAkwBOACegFIAKyAWYAuoBgQDTgG0APkAjUBHQCaQE2gJ0AVIAtQBbgC8wGMgMkAZcA0oBqYDugHfgQHAhcBGYCTQEqwQugRQAKAAsACoAFwAQAAyABoAEQAI4ATAAqgBiAD8AISARABEgCOAE4AMsAZoA7gB-gEIAIsAXUA2gCbQFSALUAW4AvMBggDJAGXANTAhcAA.YAAAAAAAAWAA, , , domain, seznam.cz)
+cmp.seznam.cz##+js(trusted-click-element, .szn-cmp-dialog-container%20%3E%3E%3E%20button%5Bdata-testid%3D%22cw-button-non-targeted-ad%22%5D, , 1000)
 ! https://github.com/uBlockOrigin/uAssets/issues/23809 - multimedia player
 issue-council.robertsspaceindustries.com##+js(trusted-set-cookie, pleaseFix.privacy, %7B%2522analyticsCookie%2522%3Afalse%252C%2522personalisationCookie%2522%3Afalse%252C%2522targetedAdvertisingCookie%2522%3Afalse%252C%2522multimediaPlayerCookie%2522%3Atrue%7D)
 ! deny advertisers, authorize to allow rest
@@ -1464,8 +1466,20 @@ ignboards.com##+js(trusted-set-cookie, boards-eu-gdpr, eu, , , domain, ignboards
 web.de##+js(trusted-click-element, button%5Bdata-id%3D%22save-all-pur%22%5D, , 1000)
 ! https://github.com/uBlockOrigin/uAssets/issues/25366
 ! https://www.linternaute.com/hightech/jeux-video/5995467-inzoi-quel-est-ce-jeu-aux-graphismes-hyper-realistes-qui-entend-concurrencer-les-sims/
-linternaute.com##+js(trusted-click-element, button.button__acceptAll)
-linternaute.com###appconsent:style(visibility: hidden !important;)
+linternaute.com##+js(trusted-click-element, button.button__skip)
+linternaute.com##+js(rpnt, script, typeof%20jQuery%20!%3D%3D, (()%3D%3E%7Bwindow.addEventListener(%22load%22%2C(function()%7Bif(window.localStorage.appconsent)%7Bconst%20consents%3Dwindow.JSON.parse(window.localStorage.appconsent)%3Bif(consents%26%26consents.consents%26%26consents.consents.vendors)%7Bfor(vendor%20of%20consents.consents.vendors)%7Bif(vendor.name%3D%3D%3D%22Facebook%22%26%26vendor.status%3D%3D%3D1)return%7D%7D%7Dlet%20i%3D0%3Bvar%20intervalId%3Dwindow.setInterval((function()%7Btry%7Bi%2B%3D1%3Bif(typeof%20_gtm%3F.consent%3F.cm%3F.strategy%3F.updateExtraVendorStatus!%3D%3D%22function%22)return%3B%5B%22facebook%22%2C%22instagram%22%2C%22pinterest%22%2C%22twitter%22%2C%22youtube%22%5D.forEach((vendor%3D%3E%7B_gtm.consent.cm.strategy.updateExtraVendorStatus(vendor%2C!0)%7D))%7Dcatch(_)%7Breturn%7Dif(i%3D%3D%3D5)clearInterval(intervalId)%7D)%2C1e3)%7D))%7D)()%3Btypeof%20jQuery%20!%3D%3D)
+linternaute.com##+js(set, _gtm.consent.cm.strategy.options.cmpay.enabled, false)
 linternaute.com##body.appconsent_noscroll:style(overflow: auto !important;)
+linternaute.com###appconsent:style(visibility: hidden !important;)
+linternaute.com##.ccminsert > .jEmbedTagPlaceholder.pending > .jEmbedTagPlaceholder__content
 ! essential only
 visionapartments.com##+js(trusted-set-cookie, ota_ga_consent, eyJkYXRlIjoiMjAyNC0wOS0yOFQxODoyNToxMy40MjlaIiwibmVzY2Vzc2FyeSI6dHJ1ZSwicGVyZm9ybWFuY2UiOmZhbHNlLCJtYXJrZXRpbmciOmZhbHNlfQ%3D%3D)
+! https://github.com/uBlockOrigin/uAssets/issues/25544
+dw.com##+js(set, Object.prototype.hasConsent, trueFunc)
+dw.com##+js(set, cmp_autoreject, true)
+! https://winfuture.de/videos/Spiele/New-World-Aeternum-Der-Launch-Trailer-laeutet-eine-neue-Aera-ein-26728.html
+winfuture.de##+js(set, Object.prototype.hasConsent, trueFunc)
+winfuture.de##+js(set, cmp_autoreject, true)
+winfuture.de##+js(nostif, checkPURLayerMustBeShown)
+winfuture.de##.videop em:not([data-video-src]):remove()
+winfuture.de##.videop em[data-video-src]:style(display: block !important;)
