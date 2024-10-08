@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { browser } from 'webextension-polyfill-ts';
+import { browser } from 'webextension-polyfill';
 
 import {
   BlockingResponse,
