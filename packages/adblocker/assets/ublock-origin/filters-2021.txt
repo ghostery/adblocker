@@ -461,10 +461,8 @@ jav720.net##.video-player-area > center
 @@||jetseotools.com^$ghide
 jetseotools.com##ins.adsbygoogle
 ! https://www.reddit.com/r/uBlockOrigin/comments/kyg7zo/annoying_popups_everywhere/
-assia1.tv,usagoals.*##+js(nowoif)
+usagoals.*##+js(nowoif)
 ||cdn777.net/site/binance-banner.jpg$image
-||assia1.tv/*.html$frame,1p
-assia1.tv##[class^="ban"]
 ! https://www.reddit.com/r/uBlockOrigin/comments/kyjq3u/adblock_detectionmessage_shows_up_after_you_solve/
 @@||foxgreat.com^$ghide
 ! https://github.com/AdguardTeam/AdguardFilters/issues/72413
@@ -1260,6 +1258,12 @@ files.fm##+js(aopr, canRunAds)
 ||cdn.flashtalking.com^$media,redirect=noopmp3-0.1s,domain=app.plex.tv
 ! https://github.com/uBlockOrigin/uAssets/issues/20357
 app.plex.tv##+js(json-prune, MediaContainer.Metadata.%5B%5D.Ad)
+! https://www.reddit.com/r/uBlockOrigin/comments/1fwizi0/plex_free_tvmovies_ad_block/
+!#if env_firefox
+imasdk.googleapis.com##+js(no-xhr-if, vod.provider.plex.tv%2Fad%3F, war%3Anoop-vast3.xml)
+!#else
+||vod.provider.plex.tv/ad?$xhr,redirect=noopvast-3.0
+!#endif
 ! https://github.com/AdguardTeam/AdguardFilters/issues/78973
 ||neonime.*/wp-content/themes/grifus/images/donate/yunita/
 ! https://github.com/uBlockOrigin/uAssets/issues/8823
@@ -1827,7 +1831,6 @@ edn.com###custom_html-5
 edn.com###footerAdWrap
 ||omeda.com^$3p
 ! https://github.com/uBlockOrigin/uAssets/issues/10916
-||youtubex.top^$3p
 ||badana.me^
 ! https://github.com/AdguardTeam/AdguardFilters/issues/83758
 sexywomeninlingerie.com##+js(aopr, exoNoExternalUI38djdkjDDJsio96)
@@ -1858,7 +1861,6 @@ sbplay.*##^script:has-text(debugger)
 ! https://github.com/uBlockOrigin/uAssets/issues/17141
 cloudemb.com##+js(set, isadb, false)
 ||app.adjust.net.in^
-||abusageqh.com^
 ||eisasbeau.buzz^
 ||linkspoint.xyz/sw.js$script,1p
 ||weakermumrespect.com^
@@ -2325,7 +2327,6 @@ zetporn.com##+js(acs, addEventListener, -0x)
 zetporn.com##.aside-itempage-col
 /\.com\/[A-Za-z]{9,}\/[A-Za-z]{9,}\.js$/$script,1p,domain=zetporn.com
 ||zetporn.com/*/custom_vast/$xhr
-||eighing.space^$3p
 *$script,3p,denyallow=googleapis.com,domain=zetporn.com
 ! https://www.reddit.com/r/uBlockOrigin/comments/ohvw2n/adblock_detected_on_blackenterprisecom/
 blackenterprise.com##.penci-sidebar-widgets.penci-sticky-sidebar.widget-area-1.widget-area > .theiaStickySidebar
@@ -2581,7 +2582,6 @@ fapnado.*##.pause-ad-pullup
 fapnado.*##[class^="zpot"]
 ||fapnado.*/bump/
 ||oi.fapnado.xxx^
-||io.fapnado.com^
 ! https://github.com/uBlockOrigin/uAssets/issues/9800
 pogolinks.*##+js(nostif, showModal)
 pogolinks.*##+js(acs, setTimeout, admc)
@@ -3083,16 +3083,20 @@ ustream.click##+js(acs, RegExp, shift)
 ustream.click##^script:has-text('shift')
 ustream.click##^script:has-text(\'shift\')
 ! https://github.com/uBlockOrigin/uBlock-issues/discussions/3096#discussioncomment-8273443
-! performance slowndown by site's antiadb code
+! https://1cloudfile.com/I7
+1cloudfile.com##+js(no-xhr-if, pagead2.googlesyndication.com)
+!#if !env_devbuild
+1cloudfile.com##+js(rpnt, script, 200%3D%3D%3Dr.status, 0%3D%3D%3Dr.status, condition, getNextDownloadPageLink)
+!#endif
+1cloudfile.com##+js(rpnt, script, return%20r.responseText, return%20%60a.getAttribute(%22data-ad-client%22)%7C%7C%22%22%60, condition, getNextDownloadPageLink)
 1cloudfile.com##+js(nosiif, !display)
 ! https://github.com/uBlockOrigin/uAssets/issues/22329
 1cloudfile.com##+js(nowoif)
-1cloudfile.com##+js(no-fetch-if, %2Fgooglesyndication%7Cnerveheels%2F)
+1cloudfile.com##+js(no-fetch-if, %2Fnerveheels%2F)
 1cloudfile.com##+js(acs, navigator, FingerprintJS)
 ||1cloudfile.com/sw.js$script
 1cloudfile.com#@#.advert-wrapper
 1cloudfile.com##.advert-wrapper:style(clip-path: circle(0) !important;)
-1cloudfile.com##.uk-text-center
 1cloudfile.com##.preview-download-wrapper
 1cloudfile.com##.content-preview-wrapper
 ||browsingcontredir.com^

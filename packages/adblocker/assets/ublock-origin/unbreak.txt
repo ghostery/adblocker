@@ -7,10 +7,12 @@
 !
 ! GitHub issues: https://github.com/uBlockOrigin/uAssets/issues
 ! GitHub pull requests: https://github.com/uBlockOrigin/uAssets/pulls
-! START: Email trackings
+! START: Click trackings
 ! password reset link broken on coindesk.com
 ! swagbucks.com - restore inactive
-! END: Email trackings
+! https://github.com/uBlockOrigin/uAssets/issues/24153
+! https://github.com/uBlockOrigin/uAssets/issues/25388
+! END: Click trackings
 ! https://github.com/uBlockOrigin/uAssets/issues/729
 ! https://github.com/NanoMeow/QuickReports/issues/1636
 ||2mdn.net/instream/video/client.js$script,redirect=noopjs,domain=video.foxnews.com
@@ -2642,8 +2644,6 @@ scanurl.net##.adsbygoogle
 ! https://github.com/uBlockOrigin/uAssets/issues/14382
 @@||holidaypark.de/sites/default/files/public/google_tag/*$script,1p
 @@||googletagmanager.com/gtm.js$script,domain=holidaypark.de
-! https://github.com/uBlockOrigin/uAssets/issues/14400
-mitula.com.br#@#.adsList
 ! https://github.com/uBlockOrigin/uAssets/issues/14393
 @@||mpsnare.iesnare.com/snare.js$script,domain=lenovo.com
 ! https://github.com/uBlockOrigin/uAssets/issues/14399
@@ -3367,13 +3367,6 @@ kcra.com,wcvb.com##+js(set, google.ima.settings.setDisableFlashAds, noopFunc)
 @@||ads.pubmatic.com/AdServer/js/pwt/*/pwt.js$script,domain=wionews.com
 ! https://github.com/uBlockOrigin/uAssets/issues/14619#issuecomment-1640036726
 @@||securepubads.g.doubleclick.net/pagead/managed/js/gpt/*$script,domain=moviepilot.de
-! https://github.com/uBlockOrigin/uAssets/issues/19067
-@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=filmstarts.de
-@@||securepubads.g.doubleclick.net/pagead/managed/js/gpt/*/pubads_impl.js$script,domain=filmstarts.de
-@@||securepubads.g.doubleclick.net/gampad/ads$xhr,domain=filmstarts.de
-@@||cdn.lib.getjad.io/library/*$script,domain=filmstarts.de
-@@||cdn.lib.getjad.io/prebid/*$script,domain=filmstarts.de
-@@||amazon-adsystem.com/*/apstag.js$script,redirect-rule=amazon_apstag.js:5,domain=filmstarts.de
 ! https://github.com/AdguardTeam/AdguardFilters/issues/156669
 @@||hs.eloqua.com^$frame,domain=anthology.com
 ! https://www.reddit.com/r/uBlockOrigin/comments/157utus/articles_on_mindbodygreencom_wont_load/
@@ -3582,17 +3575,16 @@ help.cashctrl.com##+js(set, Origami.fastclick, noopFunc)
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=moviesandtv.myvi.in
 @@||moviesandtv.myvi.in/videojs/videojs-contrib-ads.min.js$script,domain=moviesandtv.myvi.in
 ! getjad-issue sites
-! https://github.com/uBlockOrigin/uAssets/issues/20579
-! https://www.reddit.com/r/uBlockOrigin/comments/1bbhc60/videos_from_the_site_httpsle10sportcom_do_not/
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=dailymotion.com,important
 ! https://www.reddit.com/r/uBlockOrigin/comments/1axy3om/videos_from_the_site_httpswwwpurepeoplecom_do_not/
 ! https://www.purepeople.com/article/kate-middleton-et-le-prince-harry-ont-ils-repris-contact-une-experte-en-est-persuadee_a520086/1
+purepeople.com##+js(trusted-replace-argument, document.querySelector, 0, %7B%22value%22%3A%20%22.ad-placement-interstitial%22%7D, condition, .easyAdsBox)
+! https://github.com/uBlockOrigin/uAssets/issues/25439
+gry-online.pl##+js(set, jad, undefined)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1dci4g4/videos_from_the_site_httpswwwozapcom_do_not_launch/
-@@||cdn.lib.getjad.io/library/$script,3p,domain=le10sport.com|ozap.com|purepeople.com|vidaextra.com
-@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,3p,domain=le10sport.com|ozap.com|purepeople.com|vidaextra.com
-@@||securepubads.g.doubleclick.net/pagead/managed/js/gpt/*/pubads_impl$script,3p,domain=le10sport.com|ozap.com|purepeople.com|vidaextra.com
-@@||securepubads.g.doubleclick.net/gampad/ads$xhr,3p,domain=le10sport.com|ozap.com|purepeople.com|vidaextra.com
-@@||vidaextra.com^$ghide
-vidaextra.com##.ad
+ozap.com##+js(rpnt, script, WB.defer, window.wbads%3D%7Bpublic%3A%7BgetDailymotionAdsParamsForScript%3Afunction(a%2Cb)%7Bb(%22%22)%7D%2CsetTargetingOnPosition%3Afunction(a%2Cb)%7Breturn%7D%7D%7D%3BWB.defer, condition, wbads.public.setTargetingOnPosition)
+! https://github.com/uBlockOrigin/uAssets/issues/20579
+vidaextra.com##+js(set, hasAdblocker, true)
 ! https://mod.reddit.com/mail/perma/1rqklb/2iwe9l + sub fixes
 www.reddit.com,new.reddit.com##.subredditvars-r-ublockorigin [role="dialog"]>div:style(width: auto !important)
 ! https://github.com/uBlockOrigin/uAssets/issues/20575
@@ -3622,7 +3614,8 @@ lumens.com##+js(set, _satellite.track, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/21056
 @@||twinkie.xyz/cdn-cgi/apps/$script,1p
 ! Override EasyList Germany exceptions
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,important,redirect=google-ima.js,domain=atv.at|autobild.de|chip.de|computerbild.de|gentside.de|oe24.at|ohmymag.de|phonostar.de|schwaebische.de|spielaffe.de|sport.sky.de|wetteronline.de
+! https://github.com/uBlockOrigin/uAssets/issues/25543
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,important,redirect=google-ima.js,domain=atv.at|autobild.de|chip.de|computerbild.de|gentside.de|kibagames.com|oe24.at|ohmymag.de|phonostar.de|schwaebische.de|spielaffe.de|sport.sky.de|wetteronline.de
 ! https://github.com/uBlockOrigin/uAssets/issues/21286
 ! [badfilter] ||jsrdn.com^$badfilter
 ! cname https://github.com/uBlockOrigin/uAssets/issues/21297#issuecomment-1848938391
@@ -3886,7 +3879,6 @@ emailnator.com##[style^="width: 15px; height: 15px; overflow: scroll; visibility
 ! https://github.com/AdguardTeam/AdguardFilters/issues/111245
 ! https://github.com/easylist/easylist/issues/19352
 mediaite.com##+js(set-cookie, am-sub, 1)
-! https://github.com/uBlockOrigin/uAssets/issues/24153
 ! https://github.com/uBlockOrigin/uAssets/issues/24136
 @@||netshoes.com.br/webanalytics/*$xhr,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/24176
@@ -4043,7 +4035,11 @@ topgear.com##+js(set, _sp_.config.events.onSPPMObjectReady, noopFunc)
 @@||worldsurfleague.com/js/videojs8/nuevo/plugins/videojs-contrib-ads.min.js^$script,1p
 @@||micro.rubiconproject.com/prebid/dynamic/$script,domain=worldsurfleague.com
 @@||securepubads.g.doubleclick.net/pagead/ima_ppub_config$xhr,domain=worldsurfleague.com
+!#if env_firefox
+imasdk.googleapis.com##+js(no-xhr-if, worldsurfleague.com, war%3Anoop-vmap1.0.xml)
+!#else
 ||pubads.g.doubleclick.net/gampad/ads?*www.worldsurfleague.com$xhr,redirect=noop-vmap1.0.xml:5,domain=imasdk.googleapis.com
+!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/25049
 eservice.directauto.com##+js(set, gtm, %7B%7D)
 eservice.directauto.com##+js(set, gtm.trackEvent, noopFunc)
@@ -4053,6 +4049,12 @@ eservice.directauto.com##+js(set, gtm.trackEvent, noopFunc)
 ||wpfc.ml^$image,redirect=1x1.gif,domain=ht-instruments.de
 ! https://github.com/easylist/easylist/issues/19913
 ! [badfilter] ||trycloudflare.com^$badfilter
-! https://github.com/uBlockOrigin/uAssets/issues/25388
 ! https://github.com/uBlockOrigin/uAssets/issues/25402
 gazzetta.gr###comment-section:style(display: block !important;)
+! https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/browns-are-only-team-without-300-yards-of-offense-in-a-game-this-season
+! https://github.com/easylist/easylist/commit/857d88d10657ba8b8e1ef2d2a406c8d799382d1c
+||mparticle.com/js/v2/*/mparticle.js$script,domain=nbcsports.com,important
+nbcsports.com##+js(set, mParticle.Identity.getCurrentUser, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/25504
+||api.omappapi.com/v3/geolocate/json$domain=seclore.com,important
+seclore.com##+js(trusted-set, _omapp.scripts.geolocation, %7B%22value%22%3A%20%7B%22status%22%3A%22loaded%22%2C%22object%22%3Anull%2C%22data%22%3A%7B%22country%22%3A%7B%22shortName%22%3A%22%22%2C%22longName%22%3A%22%22%7D%2C%22administrative_area_level_1%22%3A%7B%22shortName%22%3A%22%22%2C%22longName%22%3A%22%22%7D%2C%22administrative_area_level_2%22%3A%7B%22shortName%22%3A%22%22%2C%22longName%22%3A%22%22%7D%2C%22locality%22%3A%7B%22shortName%22%3A%22%22%2C%22longName%22%3A%22%22%7D%2C%22original%22%3A%7B%22ip%22%3A%22%22%2C%22ip_decimal%22%3Anull%2C%22country%22%3A%22%22%2C%22country_eu%22%3Afalse%2C%22country_iso%22%3A%22%22%2C%22city%22%3A%22%22%2C%22latitude%22%3Anull%2C%22longitude%22%3Anull%2C%22user_agent%22%3A%7B%22product%22%3A%22%22%2C%22version%22%3A%22%22%2C%22comment%22%3A%22%22%2C%22raw_value%22%3A%22%22%7D%2C%22zip_code%22%3A%22%22%2C%22time_zone%22%3A%22%22%7D%7D%2C%22error%22%3A%22%22%7D%7D)
