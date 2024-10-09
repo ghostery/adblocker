@@ -1707,6 +1707,10 @@ apkmaven.*###download_link:style(display: block !important;)
 photopea.com##div[style]:has(> a[href*="photopea.com"][href*="ads"])
 ! https://github.com/jared-schwalbe/remove-ads-from-photopea/blob/main/app.js
 ! https://github.com/uBlockOrigin/uAssets/issues/19697
+!#if cap_html_filtering
+!#else
+photopea.com##+js(rpnt, script, added%3Dfalse%3B, added%3Dfalse%3BObject.defineProperty(window%2C%20'innerWidth'%2C%20%7Bget()%20%7B%20return%20document.documentElement.offsetWidth%20%2B%20320%20%7D%2C%7D))
+!#endif
 !photopea.com##+js(rpnt, script, %2F%5E.*%3F(function%20gtag).*%24%2F, document.documentElement.setAttribute('onreset'%2C(function%20addCustomEvent()%7Bdocument.addEventListener('resizecanvas'%2C()%3D%3E%7Bwindow.innerWidth%3Ddocument.documentElement.clientWidth%2B(window.screen.width%3C1600%3F180%3A320)%7D)%7D)())%3Bdocument.documentElement.dispatchEvent(new%20CustomEvent('reset'))%3Bdocument.documentElement.removeAttribute('onreset')%3Bfunction%20resize(event%3D%7B%7D)%7Bif(!event.skip)%7Bdocument.dispatchEvent(new%20CustomEvent('resizecanvas'))%3Bconst%20resizeEvent%3Dnew%20Event('resize')%3BresizeEvent.skip%3Dtrue%3Bwindow.dispatchEvent(resizeEvent)%7D%7Dlet%20debounce%3Bwindow.addEventListener('resize'%2Cevent%3D%3E%7BclearTimeout(debounce)%3Bdebounce%3DsetTimeout(()%3D%3Eresize(event)%2C100)%7D)%3Bresize()%3B)
 ! https://github.com/uBlockOrigin/uAssets/issues/20232
 @@||cmp.uniconsent.com^$3p,xhr,domain=photopea.com
@@ -2188,6 +2192,8 @@ utopiascans.com##+js(ra, href, %5Bhref*%3D%22discord%22%5D)
 @@/popup*$script,1p,domain=streamingcommunity.*
 streamingcommunity.*##+js(no-xhr-if, %2Fthaudray%5C.com%7Cputchumt%5C.com%2F)
 streamingcommunity.*##+js(set, adBlockDetected, noopFunc)
+streamingcommunity.*##+js(alert-buster)
+streamingcommunity.*##^script:has-text(/adblock/i)
 !#if env_firefox
 @@||googletagmanager.com/gtag/js$xhr,domain=streamingcommunity.*
 !#endif
