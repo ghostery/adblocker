@@ -51,18 +51,12 @@ export type ResourcesDistribution = {
 
 // TODO - support empty resource body
 
-const SCRIPTLET_BODY_PREFIX = `if (typeof scriptletGlobals === 'undefined') {
+export function wrapScriptletBody(body: string, fnName: string) {
+  return `if (typeof scriptletGlobals === 'undefined') {
   var scriptletGlobals = {};
 }
-`;
-const SCRIPTLET_BODY_SUFFIX = `(...['{{1}}','{{2}}','{{3}}','{{4}}','{{5}}','{{6}}','{{7}}','{{8}}','{{9}}','{{10}}'].filter((a,i) => a !== '{{'+(i+1)+'}}').map((a) => decodeURIComponent(a)));`;
-
-export function wrapScriptletBody(
-  script: string,
-  prefix: string = SCRIPTLET_BODY_PREFIX,
-  suffix: string = SCRIPTLET_BODY_SUFFIX,
-) {
-  return prefix + script + suffix;
+${body}
+${fnName}(...['{{1}}','{{2}}','{{3}}','{{4}}','{{5}}','{{6}}','{{7}}','{{8}}','{{9}}','{{10}}'].filter((a,i) => a !== '{{'+(i+1)+'}}').map((a) => decodeURIComponent(a)));`;
 }
 
 function assembleScriptlet(scriptlet: Scriptlet, scriptlets: Map<string, Scriptlet>) {
@@ -87,7 +81,7 @@ function assembleScriptlet(scriptlet: Scriptlet, scriptlets: Map<string, Scriptl
     body += dependency.content + '\n';
   }
 
-  return wrapScriptletBody(body + scriptlet.fnName);
+  return wrapScriptletBody(body, scriptlet.fnName);
 }
 
 function scriptletsToJsMapping(scriptlets: Map<string, Scriptlet>) {

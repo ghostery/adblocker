@@ -57,13 +57,14 @@ describe('#Resources', () => {
       const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
 
       expect(resources.scriptletCaches.get('a')).to.be.eql(
-        wrapScriptletBody(`function a() { b() }
-function b() {}
-a`),
+        wrapScriptletBody(
+          `function a() { b() }
+function b() {}`,
+          'a',
+        ),
       );
       expect(resources.scriptletCaches.get('b')).to.be.eql(
-        wrapScriptletBody(`function b() {}
-b`),
+        wrapScriptletBody('function b() {}', 'b'),
       );
     });
 
@@ -92,13 +93,14 @@ b`),
       const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
 
       expect(resources.scriptletCaches.get('a')).to.be.eql(
-        wrapScriptletBody(`function a() {}
-function b() {}
-a`),
+        wrapScriptletBody(
+          `function a() {}
+function b() {}`,
+          'a',
+        ),
       );
       expect(resources.scriptletCaches.get('b')).to.be.eql(
-        wrapScriptletBody(`function b() {}
-b`),
+        wrapScriptletBody('function b() {}', 'b'),
       );
     });
 
@@ -127,14 +129,18 @@ b`),
       const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
 
       expect(resources.scriptletCaches.get('a')).to.be.eql(
-        wrapScriptletBody(`function a() {}
-function b() {}
-a`),
+        wrapScriptletBody(
+          `function a() {}
+function b() {}`,
+          'a',
+        ),
       );
       expect(resources.scriptletCaches.get('b')).to.be.eql(
-        wrapScriptletBody(`function b() {}
-function a() {}
-b`),
+        wrapScriptletBody(
+          `function b() {}
+function a() {}`,
+          'b',
+        ),
       );
     });
 
@@ -155,8 +161,7 @@ b`),
       const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
 
       expect(resources.scriptletCaches.get('a')).to.be.eql(
-        wrapScriptletBody(`function a() {}
-a`),
+        wrapScriptletBody('function a() {}', 'a'),
       );
     });
   });
