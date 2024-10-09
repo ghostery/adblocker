@@ -6,8 +6,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import type { Scripting } from 'webextension-polyfill';
+
 import { getResourceForMime } from '@remusao/small';
-import { Scripting } from 'webextension-polyfill';
+
 import { StaticDataView, sizeOfUTF8, sizeOfASCII, sizeOfByte, sizeOfBool } from './data-view.js';
 
 // Polyfill for `btoa`
