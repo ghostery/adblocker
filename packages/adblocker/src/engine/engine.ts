@@ -25,7 +25,7 @@ import NetworkFilter from '../filters/network.js';
 import { block } from '../filters/dsl.js';
 import { FilterType, IListDiff, IPartialRawDiff, parseFilters } from '../lists.js';
 import Request from '../request.js';
-import Resources, { Resource } from '../resources.js';
+import Resources from '../resources.js';
 import CosmeticFilterBucket from './bucket/cosmetic.js';
 import NetworkFilterBucket from './bucket/network.js';
 import HTMLBucket from './bucket/html.js';
@@ -36,7 +36,6 @@ import IFilter from '../filters/interface.js';
 import { ICategory } from './metadata/categories.js';
 import { IOrganization } from './metadata/organizations.js';
 import { IPattern } from './metadata/patterns.js';
-import { fastHash } from '../utils.js';
 
 export const ENGINE_VERSION = 690;
 
@@ -239,9 +238,26 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     return engine as InstanceType<T>;
   }
 
+  /**
+   * Merges compatible engines into one.
+   *
+   * This action references objects from the source engines,including
+   * network filters,cosmetic filters, preprocessors, metadata, and lists.
+   * These objects are not deep-copied, so modifying them directly can have
+   * unintended side effects.
+   * However, resources are deep-copied from the first engine.
+   *
+   * Optionally, you can specify a second parameter to skip merging specific resources.
+   * If resource merging is skipped, the resulting engine will be assigned empty resources.
+   */
   public static merge<T extends typeof FilterEngine>(
     this: T,
     engines: InstanceType<T>[],
+    {
+      skipResources = false,
+    }: {
+      skipResources?: boolean;
+    } = {},
   ): InstanceType<T> {
     if (!engines || engines.length < 2) {
       throw new Error('merging engines requires at least two engines');
@@ -263,7 +279,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       categories: {},
       patterns: {},
     };
-    const resources: Map<string, Resource> = new Map();
+
+    let resources: Resources;
 
     type ConfigKey = keyof {
       [Key in keyof Config as Config[Key] extends boolean ? Key : never]: Config[Key];
@@ -325,19 +342,18 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           }
         }
       }
-
-      for (const [name, resource] of engine.resources.resources) {
-        if (!resources.has(name)) {
-          resources.set(name, resource);
-        }
-      }
     }
 
-    const resourcesText = [...resources.entries()]
-      .reduce((state, [name, resource]) => {
-        return [...state, `${name} ${resource.contentType}\n${resource.body}`];
-      }, [] as string[])
-      .join('\n\n');
+    if (skipResources === true) {
+      resources = new Resources();
+    } else {
+      const resourcesBuffer = StaticDataView.allocate(engines[0].resources.getSerializedSize(), {
+        enableCompression: false,
+      });
+      engines[0].resources.serialize(resourcesBuffer);
+      resourcesBuffer.seekZero();
+      resources = Resources.deserialize(resourcesBuffer);
+    }
 
     const engine = new this({
       networkFilters: Array.from(networkFilters.values()),
@@ -355,9 +371,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     ) {
       engine.metadata = new Metadata(metadata);
     }
-    engine.resources = Resources.parse(resourcesText, {
-      checksum: fastHash(resourcesText).toString(16),
-    });
+    engine.resources = resources;
 
     return engine;
   }
@@ -1134,7 +1148,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     // Perform interpolation for injected scripts
     const scripts: string[] = [];
     for (const injection of injections) {
-      const script = injection.getScript(this.resources.js);
+      const script = injection.getScript(this.resources.getScriptlet.bind(this.resources));
       if (script !== undefined) {
         this.emit('script-injected', script, url);
         scripts.push(script);

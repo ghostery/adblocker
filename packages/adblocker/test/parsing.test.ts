@@ -2059,18 +2059,22 @@ describe('Cosmetic filters', () => {
     const simpleScriptlet = CosmeticFilter.parse('foo.com##+js(script.js, arg1, arg2, arg3)');
 
     it('returns undefined if script does not exist', () => {
-      expect(simpleScriptlet?.getScript(new Map())).to.be.undefined;
+      expect(simpleScriptlet?.getScript(Map.prototype.get.bind(new Map()))).to.be.undefined;
     });
 
     it('returns a script if one exists', () => {
-      expect(simpleScriptlet?.getScript(new Map([['script.js', 'test']]))).to.equal('test');
+      expect(
+        simpleScriptlet?.getScript(Map.prototype.get.bind(new Map([['script.js', 'test']]))),
+      ).to.equal('test');
     });
 
     context('with arguments', () => {
       it('inject values', () => {
-        expect(simpleScriptlet?.getScript(new Map([['script.js', '{{1}},{{2}},{{3}}']]))).to.equal(
-          'arg1,arg2,arg3',
-        );
+        expect(
+          simpleScriptlet?.getScript(
+            Map.prototype.get.bind(new Map([['script.js', '{{1}},{{2}},{{3}}']])),
+          ),
+        ).to.equal('arg1,arg2,arg3');
       });
 
       it('escapes special characters', () => {
@@ -2091,9 +2095,9 @@ describe('Cosmetic filters', () => {
           '\\',
         ]) {
           const scriptlet = CosmeticFilter.parse(`foo.com##+js(script.js, ${character})`);
-          expect(scriptlet?.getScript(new Map([['script.js', '{{1}}']]))).to.equal(
-            `\\${character}`,
-          );
+          expect(
+            scriptlet?.getScript(Map.prototype.get.bind(new Map([['script.js', '{{1}}']]))),
+          ).to.equal(`\\${character}`);
         }
       });
 
@@ -2103,7 +2107,9 @@ describe('Cosmetic filters', () => {
           [String.raw`foo\*`, String.raw`foo\\\*`],
         ]) {
           const scriptlet = CosmeticFilter.parse(`foo.com##+js(script.js, ${example[0]})`);
-          expect(scriptlet?.getScript(new Map([['script.js', '{{1}}']]))).to.equal(example[1]);
+          expect(
+            scriptlet?.getScript(Map.prototype.get.bind(new Map([['script.js', '{{1}}']]))),
+          ).to.equal(example[1]);
         }
       });
     });

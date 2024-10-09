@@ -14,12 +14,11 @@ import { getDomain } from 'tldts-experimental';
 import Engine, { EngineEventHandlers } from '../../src/engine/engine.js';
 import NetworkFilter from '../../src/filters/network.js';
 import Request, { RequestType } from '../../src/request.js';
-import Resources, { Resource } from '../../src/resources.js';
+import Resources, { ResourcesDistribution, wrapScriptletBody } from '../../src/resources.js';
 
 import requests from '../data/requests.js';
 import { loadEasyListFilters, typedArrayEqual } from '../utils.js';
 import FilterEngine from '../../src/engine/engine.js';
-import { fastHash } from '../../src/utils.js';
 import { Metadata } from '../../src/engine/metadata.js';
 
 /**
@@ -130,23 +129,35 @@ function test({
 }
 
 function buildResourcesFromRequests(filters: NetworkFilter[]): Resources {
-  const resources: string[] = [];
+  const resources: ResourcesDistribution = {
+    redirects: [],
+    scriptlets: [],
+  };
 
   filters.forEach((filter) => {
     if (filter.redirect !== undefined) {
       const redirect = filter.redirect;
 
       // Guess resource type
-      let type = 'application/javascript';
+      const contentType = 'application/javascript';
       if (redirect.endsWith('.gif')) {
-        type = 'image/gif;base64';
+        resources.redirects.push({
+          names: [redirect],
+          content: '',
+          contentType,
+          encoding: 'base64',
+        });
+      } else {
+        resources.redirects.push({
+          names: [redirect],
+          content: '',
+          contentType,
+        });
       }
-
-      resources.push(`${redirect} ${type}\n${redirect}`);
     }
   });
 
-  return Resources.parse(resources.join('\n\n'), { checksum: '' });
+  return Resources.parse(JSON.stringify(resources), { checksum: '' });
 }
 
 function createEngine(filters: string, enableOptimizations: boolean = true) {
@@ -390,13 +401,29 @@ $csp=baz,domain=bar.com
       url: 'https://foo.com',
     });
 
-    const createEngineWithResource = (filters: string[], resource: string) => {
+    const createEngineWithResource = (filters: string[], content: string) => {
       const engine = createEngine(filters.join('\n'));
-      engine.resources.js.set(resource, resource);
-      engine.resources.resources.set(resource, {
-        body: resource,
-        contentType: 'application/javascript',
-      });
+      engine.resources = Resources.parse(
+        JSON.stringify({
+          redirects: [
+            {
+              names: [content],
+              content: content,
+              contentType: 'application/javascript',
+            },
+          ],
+          scriptlets: [
+            {
+              names: [content],
+              content,
+              dependencies: [],
+            },
+          ],
+        } as ResourcesDistribution),
+        {
+          checksum: '',
+        },
+      );
       return engine;
     };
 
@@ -703,16 +730,30 @@ $csp=baz,domain=bar.com
     describe('script injections', () => {
       it('injects script', () => {
         const engine = Engine.parse('foo.com##+js(script.js,arg1)');
-        engine.resources = Resources.parse('script.js application/javascript\n{{1}}', {
-          checksum: '',
-        });
+        engine.resources = Resources.parse(
+          JSON.stringify({
+            redirects: [],
+            scriptlets: [
+              {
+                names: ['script.js'],
+                content: 'function script() {}',
+                dependencies: [],
+                executionWorld: 'MAIN',
+                requiresTrust: false,
+              },
+            ],
+          } as ResourcesDistribution),
+          {
+            checksum: '',
+          },
+        );
         expect(
           engine.getCosmeticsFilters({
             domain: 'foo.com',
             hostname: 'foo.com',
             url: 'https://foo.com',
           }).scripts,
-        ).to.eql(['arg1']);
+        ).to.eql([wrapScriptletBody('function script() {}', []).replace('{{1}}', 'arg1')]);
       });
 
       it('script missing', () => {
@@ -807,7 +848,21 @@ foo.com###selector
 
       it('disabling specific hides does not impact scriptlets', () => {
         const engine = Engine.parse(['@@||foo.com^$specifichide', 'foo.com##+js(foo)'].join('\n'));
-        engine.resources.js.set('foo', '');
+        engine.resources = Resources.parse(
+          JSON.stringify({
+            redirects: [],
+            scriptlets: [
+              {
+                names: ['foo'],
+                content: '',
+                dependencies: [],
+              },
+            ],
+          } as ResourcesDistribution),
+          {
+            checksum: '',
+          },
+        );
         expect(
           engine.getCosmeticsFilters({
             domain: 'foo.com',
@@ -977,7 +1032,7 @@ foo.com###selector
         filters: ['foo.com##+js(scriptlet)'],
         hostname: 'foo.com',
         hrefs: [],
-        injections: ['scriptlet'],
+        injections: [wrapScriptletBody('function scriptlet() {}', [])],
         matches: [],
       },
       {
@@ -997,7 +1052,10 @@ foo.com###selector
         ],
         hostname: 'foo.com',
         hrefs: [],
-        injections: ['scriptlet1', 'scriptlet2'],
+        injections: [
+          wrapScriptletBody('function scriptlet1() {}', []),
+          wrapScriptletBody('function scriptlet2() {}', []),
+        ],
         matches: [],
       },
       {
@@ -1405,9 +1463,31 @@ foo.com###selector
         it(JSON.stringify({ filters, hostname, matches, injections }), () => {
           // Initialize engine with all rules from test case
           const engine = createEngine(filters.join('\n'));
-          engine.resources.js.set('scriptlet', 'scriptlet');
-          engine.resources.js.set('scriptlet1', 'scriptlet1');
-          engine.resources.js.set('scriptlet2', 'scriptlet2');
+          engine.resources = Resources.parse(
+            JSON.stringify({
+              redirects: [],
+              scriptlets: [
+                {
+                  names: ['scriptlet'],
+                  content: 'function scriptlet() {}',
+                  dependencies: [],
+                },
+                {
+                  names: ['scriptlet1'],
+                  content: 'function scriptlet1() {}',
+                  dependencies: [],
+                },
+                {
+                  names: ['scriptlet2'],
+                  content: 'function scriptlet2() {}',
+                  dependencies: [],
+                },
+              ],
+            } as ResourcesDistribution),
+            {
+              checksum: '',
+            },
+          );
 
           // #getCosmeticsFilters
           const { styles, scripts } = engine.getCosmeticsFilters({
@@ -1751,54 +1831,36 @@ foo.com###selector
     });
 
     context('with resources', () => {
-      function resourcesToText(mappings: Map<string, Resource>[]) {
-        const merged: Map<string, Resource> = new Map();
-        for (const resources of mappings) {
-          for (const [name, resource] of resources) {
-            if (!merged.has(name)) {
-              merged.set(name, resource);
-            }
-          }
-        }
+      const resources1: ResourcesDistribution = {
+        redirects: [],
+        scriptlets: [
+          {
+            names: ['a.js'],
+            content: 'function a() { console.log(1) }',
+            dependencies: [],
+          },
+        ],
+      };
+      const resources2: ResourcesDistribution = {
+        redirects: [],
+        scriptlets: [
+          {
+            names: ['b.js'],
+            content: 'function b() { console.log(2) }',
+            dependencies: [],
+          },
+        ],
+      };
 
-        return [...merged.entries()]
-          .reduce((state, [name, resource]) => {
-            return [...state, `${name} ${resource.contentType}\n${resource.body}`];
-          }, [] as string[])
-          .join('\n\n');
-      }
-
-      const resources1 = `a.js application/javascript
-function () { console.log(1) }`;
-      const resources2 = `b.js application/javascript
-function () { console.log(2) }`;
-
-      it('merges resources from both engines', () => {
+      it('merge engines only with first resource', () => {
         const engine1 = FilterEngine.empty();
         const engine2 = FilterEngine.empty();
-        engine1.updateResources(resources1, '1');
-        engine2.updateResources(resources2, '2');
+        engine1.updateResources(JSON.stringify(resources1), '1');
+        engine2.updateResources(JSON.stringify(resources2), '2');
 
         const engine = FilterEngine.merge([engine1, engine2]);
-        expect(engine.resources.js.size).to.be.eql(4);
-        expect(engine.resources.checksum).to.be.eql(
-          fastHash(
-            resourcesToText([engine1.resources.resources, engine2.resources.resources]),
-          ).toString(16),
-        );
-      });
-
-      it('removes duplicates', () => {
-        const engine1 = FilterEngine.empty();
-        const engine2 = FilterEngine.empty();
-        engine1.updateResources(resources1, '1');
-        engine2.updateResources(resources1, '2');
-
-        const engine = FilterEngine.merge([engine1, engine2]);
-        expect(engine.resources.js.size).to.be.eql(2);
-        expect(engine.resources.checksum).to.be.eql(
-          fastHash(resourcesToText([engine1.resources.resources])).toString(16),
-        );
+        expect(engine.resources.scriptlets.length).to.be.eql(1);
+        expect(engine.resources.checksum).to.be.eql(engine1.resources.checksum);
       });
     });
   });

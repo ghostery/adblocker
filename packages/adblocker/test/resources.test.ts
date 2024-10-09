@@ -12,7 +12,7 @@ import 'mocha';
 import { loadResources } from './utils.js';
 
 import { StaticDataView } from '../src/data-view.js';
-import Resources from '../src/resources.js';
+import Resources, { ResourcesDistribution, wrapScriptletBody } from '../src/resources.js';
 
 describe('#Resources', () => {
   it('#serialize', () => {
@@ -24,70 +24,97 @@ describe('#Resources', () => {
     expect(Resources.deserialize(buffer)).to.eql(resources);
   });
 
-  describe('#parse', () => {
-    it('parses empty resources', () => {
-      const resources = Resources.parse('', { checksum: 'checksum' });
-      expect(resources.checksum).to.equal('checksum');
-      expect(resources.js).to.eql(new Map());
-      expect(resources.resources).to.eql(new Map());
+  context('#parse', () => {
+    it('parses dependencies', () => {
+      const distribution: ResourcesDistribution = {
+        redirects: [],
+        scriptlets: [
+          {
+            names: ['a'],
+            content: 'function a() { b() }',
+            dependencies: ['b'],
+          },
+          {
+            names: ['b'],
+            content: 'function b() {}',
+            dependencies: [],
+          },
+        ],
+      };
+      const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
+
+      expect(resources.getScriptlet('a')).to.be.eql(
+        wrapScriptletBody('function a() { b() }', ['function b() {}']),
+      );
+      expect(resources.getScriptlet('b')).to.be.eql(wrapScriptletBody('function b() {}', []));
     });
 
-    it('parses one resource', () => {
-      const resources = Resources.parse('foo application/javascript\ncontent', {
-        checksum: 'checksum',
-      });
-      expect(resources.checksum).to.equal('checksum');
-      expect(resources.js).to.eql(new Map([['foo', 'content']]));
-      expect(resources.resources).to.eql(
-        new Map([['foo', { contentType: 'application/javascript', body: 'content' }]]),
+    it('parses dependencies without function wrapper', () => {
+      const distribution: ResourcesDistribution = {
+        redirects: [],
+        scriptlets: [
+          {
+            names: ['a'],
+            content: 'function a() {}',
+            dependencies: ['b'],
+          },
+          {
+            names: ['b'],
+            content: 'function b() {}',
+            dependencies: [],
+          },
+        ],
+      };
+      const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
+
+      expect(resources.getScriptlet('a')).to.be.eql(
+        wrapScriptletBody('function a() {}', ['function b() {}']),
+      );
+      expect(resources.getScriptlet('b')).to.be.eql(wrapScriptletBody('function b() {}', []));
+    });
+
+    it('return safe circular dependencies', () => {
+      const distribution: ResourcesDistribution = {
+        redirects: [],
+        scriptlets: [
+          {
+            names: ['a'],
+            content: 'function a() {}',
+            dependencies: ['b'],
+          },
+          {
+            names: ['b'],
+            content: 'function b() {}',
+            dependencies: ['a'],
+          },
+        ],
+      };
+      const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
+
+      expect(resources.getScriptlet('a')).to.be.eql(
+        wrapScriptletBody('function a() {}', ['function b() {}', 'function a() {}']),
+      );
+      expect(resources.getScriptlet('b')).to.be.eql(
+        wrapScriptletBody('function b() {}', ['function a() {}', 'function b() {}']),
       );
     });
 
-    it('parses two resources', () => {
-      const resources = Resources.parse(
-        ['foo application/javascript\ncontent1', 'pixel.png image/png;base64\ncontent2'].join(
-          '\n\n',
-        ),
-        { checksum: 'checksum' },
-      );
-      expect(resources.checksum).to.equal('checksum');
-      expect(resources.js).to.eql(new Map([['foo', 'content1']]));
-      expect(resources.resources).to.eql(
-        new Map([
-          ['foo', { contentType: 'application/javascript', body: 'content1' }],
-          ['pixel.png', { contentType: 'image/png;base64', body: 'content2' }],
-        ]),
-      );
-    });
+    it('detects unlocated dependencies', () => {
+      const distribution: ResourcesDistribution = {
+        redirects: [],
+        scriptlets: [
+          {
+            names: ['a'],
+            content: 'function a() {}',
+            dependencies: ['b'],
+          },
+        ],
+      };
+      const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
 
-    it('robust to weird format', () => {
-      const resources = Resources.parse(
-        `
-# Comment
-   # Comment 2
-foo application/javascript
-content1
-# Comment 3
-
-# Type missing
-pixel.png
-content
-
-# Content missing
-pixel.png image/png;base64
-
-# This one is good!
-pixel.png   image/png;base64
-content2
-`,
-        { checksum: 'checksum' },
-      );
-      expect(resources.checksum).to.equal('checksum');
-      expect(resources.js).to.eql(new Map([['foo', 'content1']]));
-      expect(resources.resources).to.eql(
-        new Map([
-          ['foo', { contentType: 'application/javascript', body: 'content1' }],
-          ['pixel.png', { contentType: 'image/png;base64', body: 'content2' }],
+      expect(resources.getScriptlet('a')).to.be.eql(
+        wrapScriptletBody('function a() {}', [
+          `console.warn('@ghostery/adblocker: cannot find dependency: "b" for scriptlet: "a"')`,
         ]),
       );
     });

@@ -92,5 +92,5 @@ export function fetchLists(fetch: Fetch, urls: string[]): Promise<string[]> {
  * the page or redirect request to data URLs.
  */
 export function fetchResources(fetch: Fetch): Promise<string> {
-  return fetchResource(fetch, `${PREFIX}/ublock-origin/resources.txt`);
+  return fetchResource(fetch, `${PREFIX}/ublock-origin/resources.json`);
 }

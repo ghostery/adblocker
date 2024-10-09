@@ -775,7 +775,7 @@ export default class CosmeticFilter implements IFilter {
     return { name: parts[0], args };
   }
 
-  public getScript(js: Map<string, string>): string | undefined {
+  public getScript(getScriptlet: (_: string) => string | undefined): string | undefined {
     const parsed = this.parseScript();
     if (parsed === undefined) {
       return undefined;
@@ -783,7 +783,7 @@ export default class CosmeticFilter implements IFilter {
 
     const { name, args } = parsed;
 
-    let script = js.get(name);
+    let script = getScriptlet(name);
     if (script !== undefined) {
       for (let i = 0; i < args.length; i += 1) {
         // escape some characters so they wont get evaluated with escape characters during script injection
