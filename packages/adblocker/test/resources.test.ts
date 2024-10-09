@@ -12,9 +12,16 @@ import 'mocha';
 import { loadResources } from './utils.js';
 
 import { StaticDataView } from '../src/data-view.js';
-import Resources from '../src/resources.js';
+import Resources, { ResourcesDistribution, wrapScriptletBody } from '../src/resources.js';
 
 describe('#Resources', () => {
+  it('parses empty resources', () => {
+    const resources = Resources.parse('', { checksum: 'checksum' });
+    expect(resources.checksum).to.equal('checksum');
+    expect(resources.scriptletCaches).to.eql(new Map());
+    expect(resources.resources).to.eql(new Map());
+  });
+
   it('#serialize', () => {
     const resources = Resources.parse(loadResources(), { checksum: 'checksum' });
     expect(resources.checksum).to.equal('checksum');
@@ -24,71 +31,132 @@ describe('#Resources', () => {
     expect(Resources.deserialize(buffer)).to.eql(resources);
   });
 
-  describe('#parse', () => {
-    it('parses empty resources', () => {
-      const resources = Resources.parse('', { checksum: 'checksum' });
-      expect(resources.checksum).to.equal('checksum');
-      expect(resources.js).to.eql(new Map());
-      expect(resources.resources).to.eql(new Map());
-    });
+  context('#parse', () => {
+    it('parses dependencies', () => {
+      const distribution: ResourcesDistribution = {
+        redirects: [],
+        scriptlets: [
+          {
+            names: ['a'],
+            content: 'function a() { b() }',
+            fnName: 'a',
+            dependencies: ['b'],
+            executionWorld: 'MAIN',
+            requiresTrust: false,
+          },
+          {
+            names: ['b'],
+            content: 'function b() {}',
+            fnName: 'b',
+            dependencies: [],
+            executionWorld: 'MAIN',
+            requiresTrust: false,
+          },
+        ],
+      };
+      const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
 
-    it('parses one resource', () => {
-      const resources = Resources.parse('foo application/javascript\ncontent', {
-        checksum: 'checksum',
-      });
-      expect(resources.checksum).to.equal('checksum');
-      expect(resources.js).to.eql(new Map([['foo', 'content']]));
-      expect(resources.resources).to.eql(
-        new Map([['foo', { contentType: 'application/javascript', body: 'content' }]]),
+      expect(resources.scriptletCaches.get('a')).to.be.eql(
+        wrapScriptletBody(`function a() { b() }
+function b() {}
+a`),
+      );
+      expect(resources.scriptletCaches.get('b')).to.be.eql(
+        wrapScriptletBody(`function b() {}
+b`),
       );
     });
 
-    it('parses two resources', () => {
-      const resources = Resources.parse(
-        ['foo application/javascript\ncontent1', 'pixel.png image/png;base64\ncontent2'].join(
-          '\n\n',
-        ),
-        { checksum: 'checksum' },
+    it('parses dependencies without function wrapper', () => {
+      const distribution: ResourcesDistribution = {
+        redirects: [],
+        scriptlets: [
+          {
+            names: ['a'],
+            content: 'function a() {}',
+            fnName: 'a',
+            dependencies: ['b'],
+            executionWorld: 'MAIN',
+            requiresTrust: false,
+          },
+          {
+            names: ['b'],
+            content: 'function b() {}',
+            fnName: 'b',
+            dependencies: [],
+            executionWorld: 'MAIN',
+            requiresTrust: false,
+          },
+        ],
+      };
+      const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
+
+      expect(resources.scriptletCaches.get('a')).to.be.eql(
+        wrapScriptletBody(`function a() {}
+function b() {}
+a`),
       );
-      expect(resources.checksum).to.equal('checksum');
-      expect(resources.js).to.eql(new Map([['foo', 'content1']]));
-      expect(resources.resources).to.eql(
-        new Map([
-          ['foo', { contentType: 'application/javascript', body: 'content1' }],
-          ['pixel.png', { contentType: 'image/png;base64', body: 'content2' }],
-        ]),
+      expect(resources.scriptletCaches.get('b')).to.be.eql(
+        wrapScriptletBody(`function b() {}
+b`),
       );
     });
 
-    it('robust to weird format', () => {
-      const resources = Resources.parse(
-        `
-# Comment
-   # Comment 2
-foo application/javascript
-content1
-# Comment 3
+    it('return safe circular dependencies', () => {
+      const distribution: ResourcesDistribution = {
+        redirects: [],
+        scriptlets: [
+          {
+            names: ['a'],
+            content: 'function a() {}',
+            fnName: 'a',
+            dependencies: ['b'],
+            executionWorld: 'MAIN',
+            requiresTrust: false,
+          },
+          {
+            names: ['b'],
+            content: 'function b() {}',
+            fnName: 'b',
+            dependencies: ['a'],
+            executionWorld: 'MAIN',
+            requiresTrust: false,
+          },
+        ],
+      };
+      const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
 
-# Type missing
-pixel.png
-content
-
-# Content missing
-pixel.png image/png;base64
-
-# This one is good!
-pixel.png   image/png;base64
-content2
-`,
-        { checksum: 'checksum' },
+      expect(resources.scriptletCaches.get('a')).to.be.eql(
+        wrapScriptletBody(`function a() {}
+function b() {}
+a`),
       );
-      expect(resources.checksum).to.equal('checksum');
-      expect(resources.js).to.eql(new Map([['foo', 'content1']]));
-      expect(resources.resources).to.eql(
-        new Map([
-          ['foo', { contentType: 'application/javascript', body: 'content1' }],
-          ['pixel.png', { contentType: 'image/png;base64', body: 'content2' }],
-        ]),
+      expect(resources.scriptletCaches.get('b')).to.be.eql(
+        wrapScriptletBody(`function b() {}
+function a() {}
+b`),
+      );
+    });
+
+    it('detects unlocated dependencies', () => {
+      const distribution: ResourcesDistribution = {
+        redirects: [],
+        scriptlets: [
+          {
+            names: ['a'],
+            content: 'function a() {}',
+            fnName: 'a',
+            dependencies: ['b'],
+            executionWorld: 'MAIN',
+            requiresTrust: false,
+          },
+        ],
+      };
+      const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
+
+      expect(resources.scriptletCaches.get('a')).to.be.eql(
+        wrapScriptletBody(`function a() {}
+a`),
       );
     });
   });

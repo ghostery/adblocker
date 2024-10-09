@@ -29,9 +29,7 @@ const FILTER_LISTS = [
 const ASSETS_PATH = dirname(fileURLToPath(import.meta.url));
 
 async function downloadResource(resourceName) {
-  const {
-    revisions
-  } = await fetch(
+  const { revisions } = await fetch(
     `https://cdn.ghostery.com/adblocker/resources/${resourceName}/metadata.json`,
   ).then((result) => {
     if (!result.ok) {
@@ -54,8 +52,8 @@ async function downloadResource(resourceName) {
 
 // Update resources.txt
 writeFileSync(
-  join(ASSETS_PATH, 'ublock-origin', 'resources.txt'),
-  await downloadResource('ublock-resources'),
+  join(ASSETS_PATH, 'ublock-origin', 'resources.json'),
+  await downloadResource('ublock-resources-json'),
   'utf-8',
 );
 
