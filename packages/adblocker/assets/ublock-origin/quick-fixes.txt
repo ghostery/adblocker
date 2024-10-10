@@ -48,10 +48,12 @@ www.youtube.com##+js(set, yt.config_.EXPERIMENT_FLAGS.web_bind_fetch, false)
 ||www.youtube-nocookie.com/youtubei/v1/player?$xhr,1p,replace=/"adPlacements.*?([A-Z]"\}|"\}{2\,4})\}\]\,//
 ||www.youtube-nocookie.com/youtubei/v1/player?$xhr,1p,replace=/"adSlots.*?\}\}\]\,"adBreakHeartbeatParams/"adBreakHeartbeatParams/
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-2307514494
+web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.node.sponsored_data.id_for_advertisement)
 !#if cap_html_filtering
 ||facebook.com/api/graphql/$xhr,replace=/null,"category_sensitive"[^\n]+?,"__typename":"SponsoredData"[^\n]+"cursor":"[^"]+"\}/null}/g,domain=web.facebook.com|www.facebook.com
 !#else
 web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2Fnull%2C%22category_sensitive%22%5B%5E%5Cn%5D%2B%3F%2C%22__typename%22%3A%22SponsoredData%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, null%7D, %2Fapi%2Fgraphql)
+web.facebook.com,www.facebook.com##+js(rpnt, script, %2Fnull%2C%22category_sensitive%22%5B%5E%5Cn%5D%2B%3F%2C%22__typename%22%3A%22SponsoredData%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, null%7D)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/18476
 ! VOE sites
@@ -91,8 +93,9 @@ japscan.lol#@#+js(aeld, DOMContentLoaded, %2F%5E%5B-%240-9A-Z_a-z%5D%2B%3D%3E%5C
 japscan.lol#@#+js(aeld, DOMContentLoaded, %2F%5E%5B-%240-9A-Z_a-z%5D%2B%3D%3E%5C%7B%5Ba-z%5D%7B3%2C5%7D%20.%7B400%2C500%7D%5C)%3B%5C%7D%24%2F)
 japscan.lol##+js(aeld, DOMContentLoaded, (e)%3D%3E)
 japscan.lol#@#+js(rmnt, script, %3Ddocument%5B%5C'createElement%5C'%5D(%5C'img%5C')%3B)
-japscan.lol##+js(acs, document.querySelectorAll, ('img)
-japscan.lol##+js(rmnt, script, un'%2B'de)
+japscan.lol#@#+js(rmnt, script, un%5C'%2B%5C'de)
+japscan.lol#@#+js(acs, document.querySelectorAll, (%5C'img)
+japscan.lol##+js(rmnt, script, %3B%7Delse%7Bif(typeof)
 /^https?:\/\/[-a-z]{8,15}\.(?:com|net)\/401\/\d{7}(?:\?v=\d+)?$/$script,3p,domain=japscan.lol,important
 @@*$image,xhr,script,domain=japscan.lol
 !||googletagmanager.com^$script,domain=japscan.lol,important
@@ -126,7 +129,7 @@ poophq.com,veev.to##+js(set, fapit.check, noopFunc)
 !poophq.com,veev.to##+js(no-xhr-if, url%3A!%2Fcdn%5C.plyr%5C.io%7Cveev%5C.to%7C%5C%2Fdl%5C%3Fop%3Dplayer_api%2F%20method%3AGET)
 poophq.com,veev.to##+js(no-xhr-if, %2Fvast.php%3F)
 poophq.com,veev.to##+js(no-xhr-if, adsbygoogle, length%3A35000-55000)
-poophq.com,veev.to##+js(no-xhr-if, %2F%5C%2Fad-provider%5C.js%24%2F, length%3A35000-40000)
+poophq.com,veev.to##+js(no-xhr-if, %2F%5C%2Fad-provider%5C.js%24%2F, length%3A35000-200000)
 poophq.com,veev.to##+js(no-xhr-if, %2F%5C%2Fpreroll%5C.engine%24%2F)
 *$script,3p,domain=poophq.com|veev.to,redirect-rule=noopjs
 *$other,3p,denyallow=veevcdn.co,domain=poophq.com|veev.to
