@@ -10,7 +10,7 @@ import type { Scripting } from 'webextension-polyfill';
 
 import { getResourceForMime } from '@remusao/small';
 
-import { StaticDataView, sizeOfUTF8, sizeOfASCII, sizeOfByte, sizeOfBool } from './data-view.js';
+import { StaticDataView, sizeOfUTF8, sizeOfASCII, sizeOfBool } from './data-view.js';
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -22,85 +22,44 @@ function btoaPolyfill(buffer: string): string {
   return buffer;
 }
 
-export interface Redirect {
-  contentType: string;
+export interface Resource {
+  names: string[];
   body: string;
+  contentType: string;
 }
 
-type ResourceBase = {
+interface Scriptlet {
   names: string[];
-  content: string;
-};
-
-export type Resource = ResourceBase & {
-  contentType: string;
-  encoding?: 'base64';
-};
-
-export type Scriptlet = ResourceBase & {
+  body: string;
   dependencies: string[];
-  fnName: string;
-  executionWorld: Scripting.ExecutionWorld;
-  requiresTrust: boolean;
-};
+  executionWorld?: Scripting.ExecutionWorld;
+  requiresTrust?: boolean;
+}
 
-type PartialBy<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
-
-export type ResourcesDistribution = {
-  redirects: Resource[];
-  scriptlets: PartialBy<Scriptlet, 'executionWorld' | 'requiresTrust'>[];
-};
+export interface ResourcesDistribution {
+  redirects: Array<{
+    names: string[];
+    content: string;
+    contentType: string;
+    encoding?: 'base64';
+  }>;
+  scriptlets: Array<{
+    names: string[];
+    content: string;
+    dependencies: string[];
+    executionWorld?: Scripting.ExecutionWorld;
+    requiresTrust?: boolean;
+  }>;
+}
 
 // TODO - support empty resource body
 
-export function wrapScriptletBody(body: string, fnName: string) {
-  return `if (typeof scriptletGlobals === 'undefined') {
-  var scriptletGlobals = {};
-}
-${body}
-${fnName}(...['{{1}}','{{2}}','{{3}}','{{4}}','{{5}}','{{6}}','{{7}}','{{8}}','{{9}}','{{10}}'].filter((a,i) => a !== '{{'+(i+1)+'}}').map((a) => decodeURIComponent(a)));`;
-}
-
-function assembleScriptlet(scriptlet: Scriptlet, scriptlets: Map<string, Scriptlet>) {
-  const dependencies: Set<Scriptlet> = new Set();
-  const queue: Scriptlet[] = [scriptlet];
-
-  while (queue.length > 0) {
-    const current = queue.pop()!;
-    dependencies.add(current);
-
-    for (const dependencyName of current.dependencies) {
-      const dependency = scriptlets.get(dependencyName);
-      if (dependency !== undefined && dependencies.has(dependency) === false) {
-        queue.push(dependency);
-        dependencies.add(dependency);
-      }
-    }
-  }
-
-  let body = '';
-  for (const dependency of dependencies) {
-    body += dependency.content + '\n';
-  }
-
-  return wrapScriptletBody(body, scriptlet.fnName);
-}
-
-function scriptletsToJsMapping(scriptlets: Map<string, Scriptlet>) {
-  const js: Map<string, string> = new Map();
-
-  for (const scriptlet of new Set(scriptlets.values())) {
-    const content = assembleScriptlet(scriptlet, scriptlets);
-    for (const name of scriptlet.names) {
-      js.set(name, content);
-      if (name.endsWith('.js')) {
-        js.set(name.slice(0, -3), content);
-      }
-    }
-  }
-
-  return js;
-}
+export const wrapScriptletBody = (script: string, dependencies: string[]): string =>
+  [
+    `if (typeof scriptletGlobals === 'undefined') { var scriptletGlobals = {}; }`,
+    ...dependencies,
+    `(${script})(...['{{1}}','{{2}}','{{3}}','{{4}}','{{5}}','{{6}}','{{7}}','{{8}}','{{9}}','{{10}}'].filter((a,i) => a !== '{{'+(i+1)+'}}').map((a) => decodeURIComponent(a)))`,
+  ].join(';');
 
 /**
  * Abstraction on top of resources.txt used for redirections as well as script
@@ -112,8 +71,8 @@ export default class Resources {
     const checksum = buffer.getASCII();
 
     // Deserialize `resources`
-    const resources: Map<string, Resource> = new Map();
-    const scriptlets: Map<string, Scriptlet> = new Map();
+    const resources: Resource[] = [];
+    const scriptlets: Scriptlet[] = [];
 
     for (let i = 0, l = buffer.getUint16(); i < l; i++) {
       const names: string[] = [];
@@ -123,18 +82,11 @@ export default class Resources {
       const content = buffer.getUTF8();
       const contentType = buffer.getASCII();
 
-      const redirect: Resource = {
+      resources.push({
         names,
-        content,
+        body: content,
         contentType,
-      };
-      if (buffer.getBool() === true) {
-        redirect.encoding = buffer.getASCII() as 'base64';
-      }
-
-      for (const name of names) {
-        resources.set(name, redirect);
-      }
+      });
     }
 
     for (let i = 0, l = buffer.getUint16(); i < l; i++) {
@@ -143,8 +95,7 @@ export default class Resources {
         names.push(buffer.getASCII());
       }
       const content = buffer.getUTF8();
-      const fnName = buffer.getASCII();
-      const executionWorld = buffer.getASCII() as Scriptlet['executionWorld'];
+      const isExecutionWorldIsolated = buffer.getBool();
       const requiresTrust = buffer.getBool();
       const dependencies: string[] = [];
       for (
@@ -155,17 +106,13 @@ export default class Resources {
         dependencies.push(buffer.getASCII());
       }
 
-      const scriptlet: Scriptlet = {
+      scriptlets.push({
         names,
-        content,
-        fnName,
-        executionWorld,
+        body: content,
+        executionWorld: isExecutionWorldIsolated === true ? 'ISOLATED' : 'MAIN',
         requiresTrust,
         dependencies,
-      };
-      for (const name of names) {
-        scriptlets.set(name, scriptlet);
-      }
+      });
     }
 
     return new Resources({
@@ -181,21 +128,30 @@ export default class Resources {
     }
 
     const distribution: ResourcesDistribution = JSON.parse(data);
-    const resources: Map<string, Resource> = new Map();
 
+    const resources: Resource[] = [];
     for (const redirect of distribution.redirects) {
-      for (const name of redirect.names) {
-        resources.set(name, redirect);
-      }
+      resources.push({
+        names: redirect.names,
+        body: redirect.content,
+        contentType: redirect.contentType + redirect.encoding ? `;${redirect.encoding}` : '',
+      });
     }
 
-    const scriptlets: Map<string, Scriptlet> = new Map();
-    for (const scriptlet of distribution.scriptlets) {
-      scriptlet.executionWorld ??= 'MAIN';
-      scriptlet.requiresTrust ??= false;
-      for (const name of scriptlet.names) {
-        scriptlets.set(name, scriptlet as Scriptlet);
+    const scriptlets: Scriptlet[] = [];
+    for (const distributionScriptlet of distribution.scriptlets) {
+      const scriptlet: Scriptlet = {
+        names: distributionScriptlet.names,
+        body: distributionScriptlet.content,
+        dependencies: distributionScriptlet.dependencies,
+      };
+      if (distributionScriptlet.executionWorld !== undefined) {
+        scriptlet.executionWorld = distributionScriptlet.executionWorld;
       }
+      if (distributionScriptlet.requiresTrust !== undefined) {
+        scriptlet.requiresTrust = distributionScriptlet.requiresTrust;
+      }
+      scriptlets.push(scriptlet);
     }
 
     return new Resources({
@@ -206,37 +162,33 @@ export default class Resources {
   }
 
   public readonly checksum: string;
-  public readonly scriptlets: Map<string, Scriptlet>;
-  public readonly resources: Map<string, Resource>;
-  public readonly scriptletCaches: Map<string, string>;
+  public readonly scriptlets: Scriptlet[];
+  public readonly resources: Resource[];
+  private readonly scriptletsByName: Map<string, Scriptlet>;
+  private readonly resourcesByName: Map<string, Resource>;
+  private readonly scriptletsCache: Map<string, string>;
 
-  constructor({
-    checksum = '',
-    resources = new Map(),
-    scriptlets = new Map(),
-  }: Partial<Resources> = {}) {
+  constructor({ checksum = '', resources = [], scriptlets = [] }: Partial<Resources> = {}) {
     this.checksum = checksum;
     this.resources = resources;
     this.scriptlets = scriptlets;
-    this.scriptletCaches = scriptletsToJsMapping(scriptlets);
-  }
-
-  public getResource(name: string): Redirect & { dataUrl: string } {
-    let body: string;
-    let contentType: string;
-
-    const resource = this.resources.get(name);
-    if (resource === undefined) {
-      const fallback = getResourceForMime(name);
-      body = fallback.body;
-      contentType = fallback.contentType;
-    } else {
-      body = resource.content;
-      contentType = resource.contentType;
-      if (resource.encoding !== undefined) {
-        contentType += ';' + resource.encoding;
+    this.scriptletsCache = new Map();
+    this.resourcesByName = new Map();
+    this.scriptletsByName = new Map();
+    for (const resource of resources) {
+      for (const name of resource.names) {
+        this.resourcesByName.set(name, resource);
       }
     }
+    for (const scriptlet of scriptlets) {
+      for (const name of scriptlet.names) {
+        this.scriptletsByName.set(name, scriptlet);
+      }
+    }
+  }
+
+  public getResource(name: string): { body: string; contentType: string; dataUrl: string } {
+    const { body, contentType } = this.resourcesByName.get(name) || getResourceForMime(name);
 
     let dataUrl;
     if (contentType.indexOf(';') !== -1) {
@@ -247,24 +199,56 @@ export default class Resources {
     return { body, contentType, dataUrl };
   }
 
-  public getSerializedSize(): number {
-    let estimatedSize = sizeOfASCII(this.checksum) + 2 * sizeOfByte(); // resources.size
+  public getScriptlet(name: string): string {
+    let script = this.scriptletsCache.get(name);
+    if (script) {
+      return script;
+    }
 
-    this.resources.forEach(({ names, content, contentType, encoding }) => {
+    const scriptletName = name.endsWith('.js') === false ? name.slice(0, -3) : name;
+    const scriptlet = this.scriptletsByName.get(scriptletName);
+    if (scriptlet === undefined) {
+      this.scriptletsCache.set(name, '');
+      return '';
+    }
+
+    const dependencies = this.getScriptletDepenencies(scriptlet);
+    script = wrapScriptletBody(scriptlet.body, dependencies);
+    this.scriptletsCache.set(name, script);
+
+    return script;
+  }
+
+  private getScriptletDepenencies(scriptlet: Scriptlet): string[] {
+    const dependencies: Map<string, string> = new Map();
+    const queue: string[] = [...scriptlet.dependencies];
+
+    while (queue.length > 0) {
+      const dependencyName = queue.pop()!;
+      if (dependencies.has(dependencyName)) {
+        continue;
+      }
+      const dependency = this.scriptletsByName.get(dependencyName)!;
+      dependencies.set(dependencyName, dependency.body);
+      queue.push(...dependency.dependencies);
+    }
+
+    return Array.from(dependencies.values());
+  }
+
+  public getSerializedSize(): number {
+    let estimatedSize = sizeOfASCII(this.checksum) + 2; // resources.size
+
+    this.resources.forEach(({ names, body: content, contentType }) => {
       estimatedSize += names.reduce((state, name) => state + sizeOfASCII(name), 2);
       estimatedSize += sizeOfUTF8(content);
       estimatedSize += sizeOfASCII(contentType);
-      estimatedSize += sizeOfBool();
-      if (encoding !== undefined) {
-        estimatedSize += sizeOfASCII(encoding);
-      }
     });
 
-    this.scriptlets.forEach(({ names, content, dependencies, executionWorld }) => {
+    this.scriptlets.forEach(({ names, body: content, dependencies }) => {
       estimatedSize += names.reduce((state, name) => state + sizeOfASCII(name), 2);
       estimatedSize += sizeOfUTF8(content);
-      estimatedSize += sizeOfASCII(executionWorld);
-      estimatedSize += sizeOfBool();
+      estimatedSize += 2 * sizeOfBool(); // executionWorld, requiresTrust
       estimatedSize += dependencies.reduce(
         (state, dependency) => state + sizeOfASCII(dependency),
         2,
@@ -279,36 +263,27 @@ export default class Resources {
     buffer.pushASCII(this.checksum);
 
     // Serialize `resources`
-    const resources: Set<Resource> = new Set(this.resources.values());
-    buffer.pushUint16(resources.size);
-    resources.forEach(({ names, content, contentType, encoding }) => {
+    buffer.pushUint16(this.resources.length);
+    this.resources.forEach(({ names, body: content, contentType }) => {
       buffer.pushUint16(names.length);
       for (const name of names) {
         buffer.pushASCII(name);
       }
       buffer.pushUTF8(content);
       buffer.pushASCII(contentType);
-      if (encoding === undefined) {
-        buffer.pushBool(false);
-      } else {
-        buffer.pushBool(true);
-        buffer.pushASCII(encoding);
-      }
     });
 
     // Serialize `scriptlets`
-    const scriptlets: Set<Scriptlet> = new Set(this.scriptlets.values());
-    buffer.pushUint16(scriptlets.size);
-    scriptlets.forEach(
-      ({ names, content, fnName, dependencies, executionWorld, requiresTrust }) => {
+    buffer.pushUint16(this.scriptlets.length);
+    this.scriptlets.forEach(
+      ({ names, body: content, dependencies, executionWorld, requiresTrust }) => {
         buffer.pushUint16(names.length);
         for (const name of names) {
           buffer.pushASCII(name);
         }
         buffer.pushUTF8(content);
-        buffer.pushASCII(fnName);
-        buffer.pushASCII(executionWorld);
-        buffer.pushBool(requiresTrust);
+        buffer.pushBool(executionWorld === 'ISOLATED');
+        buffer.pushBool(requiresTrust === true);
         buffer.pushUint16(dependencies.length);
         dependencies.forEach((dependency) => buffer.pushASCII(dependency));
       },

@@ -143,14 +143,14 @@ function buildResourcesFromRequests(filters: NetworkFilter[]): Resources {
       if (redirect.endsWith('.gif')) {
         resources.redirects.push({
           names: [redirect],
-          content: '',
+          body: '',
           contentType,
           encoding: 'base64',
         });
       } else {
         resources.redirects.push({
           names: [redirect],
-          content: '',
+          body: '',
           contentType,
         });
       }
@@ -406,7 +406,7 @@ $csp=baz,domain=bar.com
       engine.resources.scriptletCaches.set(content, content);
       engine.resources.resources.set(content, {
         names: [content],
-        content,
+        body: content,
         contentType: 'application/javascript',
       });
       return engine;
@@ -721,7 +721,7 @@ $csp=baz,domain=bar.com
             scriptlets: [
               {
                 names: ['script.js'],
-                content: 'function script() {}',
+                body: 'function script() {}',
                 fnName: 'script',
                 dependencies: [],
                 executionWorld: 'MAIN',
@@ -1783,7 +1783,7 @@ foo.com###selector
         scriptlets: [
           {
             names: ['a.js'],
-            content: 'function a() { console.log(1) }',
+            body: 'function a() { console.log(1) }',
             fnName: 'a',
             dependencies: [],
             executionWorld: 'MAIN',
@@ -1796,7 +1796,7 @@ foo.com###selector
         scriptlets: [
           {
             names: ['b.js'],
-            content: 'function b() { console.log(2) }',
+            body: 'function b() { console.log(2) }',
             fnName: 'b',
             dependencies: [],
             executionWorld: 'MAIN',

@@ -18,7 +18,7 @@ describe('#Resources', () => {
   it('parses empty resources', () => {
     const resources = Resources.parse('', { checksum: 'checksum' });
     expect(resources.checksum).to.equal('checksum');
-    expect(resources.scriptletCaches).to.eql(new Map());
+    expect(resources.scriptlets).to.eql(new Map());
     expect(resources.resources).to.eql(new Map());
   });
 
@@ -38,7 +38,7 @@ describe('#Resources', () => {
         scriptlets: [
           {
             names: ['a'],
-            content: 'function a() { b() }',
+            body: 'function a() { b() }',
             fnName: 'a',
             dependencies: ['b'],
             executionWorld: 'MAIN',
@@ -46,7 +46,7 @@ describe('#Resources', () => {
           },
           {
             names: ['b'],
-            content: 'function b() {}',
+            body: 'function b() {}',
             fnName: 'b',
             dependencies: [],
             executionWorld: 'MAIN',
@@ -56,16 +56,14 @@ describe('#Resources', () => {
       };
       const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
 
-      expect(resources.scriptletCaches.get('a')).to.be.eql(
+      expect(resources.getScriptlet('a')).to.be.eql(
         wrapScriptletBody(
           `function a() { b() }
 function b() {}`,
           'a',
         ),
       );
-      expect(resources.scriptletCaches.get('b')).to.be.eql(
-        wrapScriptletBody('function b() {}', 'b'),
-      );
+      expect(resources.getScriptlet('b')).to.be.eql(wrapScriptletBody('function b() {}', 'b'));
     });
 
     it('parses dependencies without function wrapper', () => {
@@ -74,7 +72,7 @@ function b() {}`,
         scriptlets: [
           {
             names: ['a'],
-            content: 'function a() {}',
+            body: 'function a() {}',
             fnName: 'a',
             dependencies: ['b'],
             executionWorld: 'MAIN',
@@ -82,7 +80,7 @@ function b() {}`,
           },
           {
             names: ['b'],
-            content: 'function b() {}',
+            body: 'function b() {}',
             fnName: 'b',
             dependencies: [],
             executionWorld: 'MAIN',
@@ -92,16 +90,14 @@ function b() {}`,
       };
       const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
 
-      expect(resources.scriptletCaches.get('a')).to.be.eql(
+      expect(resources.getScriptlet('a')).to.be.eql(
         wrapScriptletBody(
           `function a() {}
 function b() {}`,
           'a',
         ),
       );
-      expect(resources.scriptletCaches.get('b')).to.be.eql(
-        wrapScriptletBody('function b() {}', 'b'),
-      );
+      expect(resources.getScriptlet('b')).to.be.eql(wrapScriptletBody('function b() {}', 'b'));
     });
 
     it('return safe circular dependencies', () => {
@@ -110,7 +106,7 @@ function b() {}`,
         scriptlets: [
           {
             names: ['a'],
-            content: 'function a() {}',
+            body: 'function a() {}',
             fnName: 'a',
             dependencies: ['b'],
             executionWorld: 'MAIN',
@@ -118,7 +114,7 @@ function b() {}`,
           },
           {
             names: ['b'],
-            content: 'function b() {}',
+            body: 'function b() {}',
             fnName: 'b',
             dependencies: ['a'],
             executionWorld: 'MAIN',
@@ -128,14 +124,14 @@ function b() {}`,
       };
       const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
 
-      expect(resources.scriptletCaches.get('a')).to.be.eql(
+      expect(resources.getScriptlet('a')).to.be.eql(
         wrapScriptletBody(
           `function a() {}
 function b() {}`,
           'a',
         ),
       );
-      expect(resources.scriptletCaches.get('b')).to.be.eql(
+      expect(resources.getScriptlet('b')).to.be.eql(
         wrapScriptletBody(
           `function b() {}
 function a() {}`,
@@ -150,7 +146,7 @@ function a() {}`,
         scriptlets: [
           {
             names: ['a'],
-            content: 'function a() {}',
+            body: 'function a() {}',
             fnName: 'a',
             dependencies: ['b'],
             executionWorld: 'MAIN',
@@ -160,9 +156,7 @@ function a() {}`,
       };
       const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
 
-      expect(resources.scriptletCaches.get('a')).to.be.eql(
-        wrapScriptletBody('function a() {}', 'a'),
-      );
+      expect(resources.getScriptlet('a')).to.be.eql(wrapScriptletBody('function a() {}', 'a'));
     });
   });
 });

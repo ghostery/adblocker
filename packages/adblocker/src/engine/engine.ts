@@ -1153,7 +1153,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     // Perform interpolation for injected scripts
     const scripts: string[] = [];
     for (const injection of injections) {
-      const script = injection.getScript(this.resources.scriptletCaches);
+      const script = injection.getScript(this.resources.getScriptlet);
       if (script !== undefined) {
         this.emit('script-injected', script, url);
         scripts.push(script);
