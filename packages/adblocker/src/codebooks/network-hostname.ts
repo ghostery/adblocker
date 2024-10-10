@@ -8,7 +8,6 @@
 /* eslint-disable prettier/prettier */
 export default [
   "securepubads.g.doubleclick",
-  "pagead2.googlesyndication",
   ".actonservice.com",
   "googlesyndication",
   "imasdk.googleapis",
@@ -40,7 +39,6 @@ export default [
   ".c",
   ".d",
   ".f",
-  ".g",
   ".h",
   ".k",
   ".m",
@@ -50,6 +48,7 @@ export default [
   ".t",
   ".v",
   ".w",
+  "24",
   "a1",
   "a2",
   "a4",
@@ -210,6 +209,7 @@ export default [
   "tr",
   "ts",
   "tu",
+  "tw",
   "ty",
   "ub",
   "ul",
