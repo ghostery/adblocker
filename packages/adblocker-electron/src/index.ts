@@ -11,8 +11,8 @@ import { parse } from 'tldts-experimental';
 
 import { ElectronRequestType, FiltersEngine, Request } from '@cliqz/adblocker';
 import type {
+  CosmeticFiltersResponse,
   IBackgroundCallback,
-  IMessageFromBackground,
 } from '@cliqz/adblocker-electron-preload';
 
 import { PRELOAD_PATH } from './preload_path.js';
@@ -58,20 +58,20 @@ export class BlockingContext {
     callback: (a: Electron.CallbackResponse) => void,
   ) => void;
 
-  private readonly onGetCosmeticFiltersUpdated: (
-    event: Electron.IpcMainEvent,
+  private readonly onInjectCosmeticFilters: (
+    event: Electron.IpcMainInvokeEvent,
     url: string,
-    msg: IBackgroundCallback,
-  ) => void;
-
-  private readonly onGetCosmeticFiltersFirst: (event: Electron.IpcMainEvent, url: string) => void;
+    msg?: IBackgroundCallback,
+  ) => Promise<CosmeticFiltersResponse>;
 
   private readonly onHeadersReceived: (
     details: Electron.OnHeadersReceivedListenerDetails,
     callback: (a: Electron.HeadersReceivedResponse) => void,
   ) => void;
 
-  private readonly onIsMutationObserverEnabled: (event: Electron.IpcMainEvent) => void;
+  private readonly onIsMutationObserverEnabled: (
+    event: Electron.IpcMainInvokeEvent,
+  ) => Promise<boolean>;
 
   constructor(
     private readonly session: Electron.Session,
@@ -79,9 +79,8 @@ export class BlockingContext {
   ) {
     this.onBeforeRequest = (details, callback) => blocker.onBeforeRequest(details, callback);
 
-    this.onGetCosmeticFiltersFirst = (event, url) => blocker.onGetCosmeticFiltersFirst(event, url);
-    this.onGetCosmeticFiltersUpdated = (event, url, msg) =>
-      blocker.onGetCosmeticFiltersUpdated(event, url, msg);
+    this.onInjectCosmeticFilters = (event, url, msg) =>
+      blocker.onInjectCosmeticFilters(event, url, msg);
     this.onHeadersReceived = (details, callback) => blocker.onHeadersReceived(details, callback);
     this.onIsMutationObserverEnabled = (event) => blocker.onIsMutationObserverEnabled(event);
   }
@@ -89,9 +88,11 @@ export class BlockingContext {
   public enable(): void {
     if (this.blocker.config.loadCosmeticFilters === true) {
       this.session.setPreloads(this.session.getPreloads().concat([PRELOAD_PATH]));
-      ipcMain.on('get-cosmetic-filters-first', this.onGetCosmeticFiltersFirst);
-      ipcMain.on('get-cosmetic-filters', this.onGetCosmeticFiltersUpdated);
-      ipcMain.on('is-mutation-observer-enabled', this.onIsMutationObserverEnabled);
+      ipcMain.handle('@ghostery/adblocker/inject-cosmetic-filters', this.onInjectCosmeticFilters);
+      ipcMain.handle(
+        '@ghostery/adblocker/is-mutation-observer-enabled',
+        this.onIsMutationObserverEnabled,
+      );
     }
 
     if (this.blocker.config.loadNetworkFilters === true) {
@@ -116,7 +117,8 @@ export class BlockingContext {
 
     if (this.blocker.config.loadCosmeticFilters === true) {
       this.session.setPreloads(this.session.getPreloads().filter((p) => p !== PRELOAD_PATH));
-      ipcMain.removeListener('get-cosmetic-filters', this.onGetCosmeticFiltersUpdated);
+      ipcMain.removeHandler('@ghostery/adblocker/inject-cosmetic-filters');
+      ipcMain.removeHandler('@ghostery/adblocker/is-mutation-observer-enabled');
     }
   }
 }
@@ -164,101 +166,73 @@ export class ElectronBlocker extends FiltersEngine {
   // ElectronBlocker-specific additions to FiltersEngine
   // ----------------------------------------------------------------------- //
 
-  public onIsMutationObserverEnabled = (event: Electron.IpcMainEvent): void => {
-    event.returnValue = this.config.enableMutationObserver;
+  public onIsMutationObserverEnabled = async (
+    _: Electron.IpcMainInvokeEvent,
+  ): Promise<boolean> => {
+    return this.config.enableMutationObserver;
   };
 
-  public onGetCosmeticFiltersFirst = (event: Electron.IpcMainEvent, url: string) => {
-    // Extract hostname from sender's URL
-    const parsed = parse(url);
-    const hostname = parsed.hostname || '';
-    const domain = parsed.domain || '';
-
-    const { active, styles, scripts, extended } = this.getCosmeticsFilters({
-      domain,
-      hostname,
-      url,
-
-      // This needs to be done only once per frame
-      getBaseRules: true,
-      getInjectionRules: true,
-      getExtendedRules: true,
-      getRulesFromHostname: true,
-      getRulesFromDOM: false, // Only done on updates (see `onGetCosmeticFiltersUpdated`)
-
-      callerContext: {
-        frameId: event.frameId,
-        processId: event.processId,
-      },
-    });
-
-    if (active === false) {
-      event.returnValue = null;
-      return;
-    }
-
-    // Inject custom stylesheets
-    this.injectStyles(event.sender, styles);
-
-    event.sender.send('get-cosmetic-filters-response', {
-      active,
-      extended,
-      styles: '',
-    } as IMessageFromBackground);
-
-    // to execute Inject scripts synchronously, simply return scripts to renderer.
-    event.returnValue = scripts;
-  };
-
-  public onGetCosmeticFiltersUpdated = (
-    event: Electron.IpcMainEvent,
+  public onInjectCosmeticFilters = async (
+    event: Electron.IpcMainInvokeEvent,
     url: string,
-    msg: IBackgroundCallback,
-  ): void => {
-    // Extract hostname from sender's URL
+    msg?: IBackgroundCallback,
+  ): Promise<CosmeticFiltersResponse> => {
     const parsed = parse(url);
     const hostname = parsed.hostname || '';
     const domain = parsed.domain || '';
 
-    const { active, styles, extended } = this.getCosmeticsFilters({
+    // `msg` is undefined for the initial call and present for subsequent updates
+    const isFirstRun = msg === undefined;
+
+    const { active, styles, scripts } = this.getCosmeticsFilters({
       domain,
       hostname,
       url,
 
-      classes: msg.classes,
-      hrefs: msg.hrefs,
-      ids: msg.ids,
+      // DOM information, only available for updates
+      classes: msg?.classes,
+      hrefs: msg?.hrefs,
+      ids: msg?.ids,
 
-      // Only done on first load in the frame, disable for updates
-      getBaseRules: false,
-      getInjectionRules: false,
+      // Rules to fetch: true for initial call, false for updates
+      getBaseRules: isFirstRun,
+      getInjectionRules: isFirstRun,
       getExtendedRules: false,
-      getRulesFromHostname: false,
+      getRulesFromHostname: isFirstRun,
 
-      // This will be done every time we get information about DOM mutation
-      getRulesFromDOM: true,
+      // Only true for update calls when we have DOM information
+      getRulesFromDOM: !isFirstRun,
 
       callerContext: {
         frameId: event.frameId,
         processId: event.processId,
-
-        lifecycle: msg.lifecycle,
+        lifecycle: msg?.lifecycle,
       },
     });
 
     if (active === false) {
-      return;
+      return { active: false };
     }
 
-    // Inject custom stylesheets
-    this.injectStyles(event.sender, styles);
+    if (styles.length > 0) {
+      event.sender.insertCSS(styles, { cssOrigin: 'user' });
+    }
 
-    // Inject scripts from content script
-    event.sender.send('get-cosmetic-filters-response', {
-      active,
-      extended,
-      styles: '',
-    } as IMessageFromBackground);
+    const scriptResults = await Promise.allSettled(
+      scripts.map((script) => event.sender.executeJavaScript(script, true)),
+    );
+    const scriptErrors = scriptResults
+      .filter((result) => result.status === 'rejected')
+      .map((result) => result.reason);
+
+    if (scriptErrors.length > 0) {
+      return {
+        active: false,
+        error: `Some scripts failed to execute: ${scriptErrors.join(', ')}`,
+      };
+    }
+
+    return { active: true };
   };
 
   public onHeadersReceived = (
@@ -316,14 +290,6 @@ export class ElectronBlocker extends FiltersEngine {
       callback({});
     }
   };
-
-  private injectStyles(sender: Electron.WebContents, styles: string): void {
-    if (styles.length > 0) {
-      sender.insertCSS(styles, {
-        cssOrigin: 'user',
-      });
-    }
-  }
 }
 
 // re-export @cliqz/adblocker symbols for convenience
