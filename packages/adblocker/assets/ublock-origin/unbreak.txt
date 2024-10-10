@@ -1086,6 +1086,9 @@ reuters.com##ul[class^="cluster__stories"] > li[class^="cluster__cluster-hub"][c
 ||t.eloqua.com^$3p
 ! https://github.com/uBlockOrigin/uAssets/issues/23370
 @@||t.eloqua.com^$xhr,domain=natera.com
+! https://www.fortinet.com/resources/reports/fortirecon-threat-intelligence-report-summer-olympics - form submission breakage
+! https://github.com/uBlockOrigin/uAssets/issues/25601
+@@||t.eloqua.com/e/$xhr,frame,3p
 ! https://www.wilderssecurity.com/threads/ublock-a-lean-and-fast-blocker.365273/page-166#post-2878656
 @@||google-analytics.com/ga.js$script,domain=bimi.jorudan.co.jp
 ! https://github.com/uBlockOrigin/uAssets/issues/707#issuecomment-565051652
@@ -3934,8 +3937,6 @@ jprime.jp##+js(trusted-rpnt, script, var%20ISMLIB, !function()%7Bconst%20o%3D%7B
 @@||fundingchoicesmessages.google.com^$script,domain=hurriyet.com.tr
 ! https://github.com/uBlockOrigin/uAssets/issues/24597
 @@||googletagmanager.com/gtm.js$script,3p,domain=eu.community.samsung.com
-! https://www.fortinet.com/resources/reports/fortirecon-threat-intelligence-report-summer-olympics - form submission breakage
-@@||t.eloqua.com/e/$xhr,domain=fortinet.com
 ! https://www.wunderground.com/video/top-stories/will-meteorology-help-bring-home-us-olympic-sailing-gold - video breakage
 ! https://github.com/easylist/easylist/commit/27b9bde5f50059ffc93581ae70e109891266c42a
 ||g.doubleclick.net/gampad/ads?env=$xmlhttprequest,domain=wunderground.com,important
@@ -4069,3 +4070,7 @@ standard.co.uk##+js(nano-stb, i%7C%7C(e()%2Ci%3D!0), 2500, 0.001)
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=cnnbrasil.com.br,redirect=google-ima.js,important
 ! https://github.com/uBlockOrigin/uAssets/issues/25585
 @@||wurfl.io/wurfl.js$script,domain=cram.com
+! https://github.com/uBlockOrigin/uAssets/issues/25594
+||pruefernavi.de/vendor/elasticsearch/elastic-apm-rum.umd.min.js$1p,important
+pruefernavi.de##+js(set, elasticApm, %7B%7D)
+pruefernavi.de##+js(set, elasticApm.init, noopFunc)
