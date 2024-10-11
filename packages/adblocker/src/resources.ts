@@ -117,8 +117,8 @@ export default class Resources {
 
     return new Resources({
       checksum,
-      resources,
       scriptlets,
+      resources,
     });
   }
 
@@ -198,6 +198,7 @@ export default class Resources {
     } else {
       dataUrl = `data:${contentType};base64,${btoaPolyfill(body)}`;
     }
+
     return { body, contentType, dataUrl };
   }
 

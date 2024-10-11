@@ -242,7 +242,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
    * Merges compatible engines into one.
    *
    * This action references objects from the source engines,including
-   * network filters,cosmetic filters, preprocessors, metadata, and lists.
+   * network filters, cosmetic filters, preprocessors, metadata, and lists.
    * These objects are not deep-copied, so modifying them directly can have
    * unintended side effects.
    * However, resources are deep-copied from the first engine.
