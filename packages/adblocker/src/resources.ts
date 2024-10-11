@@ -203,24 +203,27 @@ export default class Resources {
   }
 
   public getScriptlet(name: string): string | undefined {
-    let script = this.scriptletsCache.get(name);
+    const scriptlet = this.scriptletsByName.get(name) || this.scriptletsByName.get(name + '.js');
+    
+    if (scriptlet === undefined) {
+      this.scriptletsCache.set(name, '');
+      return undefined;
+    }
+    
+    const [scriptletName] = scriptlet.names;
+    let script = this.scriptletsCache.get(scriptletName);
+    
     if (script !== undefined) {
       if (script.length === 0) {
         return undefined;
       }
       return script;
     }
-
-    const scriptlet = this.scriptletsByName.get(name) || this.scriptletsByName.get(name + '.js');
-    if (scriptlet === undefined) {
-      this.scriptletsCache.set(name, '');
-      return undefined;
-    }
-
+    
     const dependencies = this.getScriptletDepenencies(scriptlet);
     script = wrapScriptletBody(scriptlet.body, dependencies);
-    this.scriptletsCache.set(name, script);
-
+    
+    this.scriptletsCache.set(scriptletName, script);
     return script;
   }
 
