@@ -203,6 +203,10 @@ export default class Resources {
   }
 
   public getScriptlet(name: string): string | undefined {
+    if (name.endsWith('.fn')) {
+      return undefined;
+    }
+
     const scriptlet = this.scriptletsByName.get(name) || this.scriptletsByName.get(name + '.js');
 
     if (scriptlet === undefined) {

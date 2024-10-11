@@ -14,8 +14,8 @@ import { loadResources } from './utils.js';
 import { StaticDataView } from '../src/data-view.js';
 import Resources, { ResourcesDistribution, wrapScriptletBody } from '../src/resources.js';
 
-describe('#Resources', () => {
-  it('#serialize', () => {
+describe('#Resources', function () {
+  it('#serialize', function () {
     const resources = Resources.parse(loadResources(), { checksum: 'checksum' });
     expect(resources.checksum).to.equal('checksum');
     const buffer = StaticDataView.allocate(2000000, { enableCompression: false });
@@ -24,10 +24,16 @@ describe('#Resources', () => {
     expect(Resources.deserialize(buffer)).to.eql(resources);
   });
 
-  context('#parse', () => {
-    it('parses dependencies', () => {
+  context('#parse', function () {
+    it('parses dependencies', function () {
       const distribution: ResourcesDistribution = {
-        redirects: [],
+        redirects: [
+          {
+            names: ['x'],
+            content: '',
+            contentType: '',
+          },
+        ],
         scriptlets: [
           {
             names: ['a'],
@@ -42,81 +48,143 @@ describe('#Resources', () => {
         ],
       };
       const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
+      expect(resources.resources).to.lengthOf(1);
+      expect(resources.scriptlets).to.lengthOf(2);
+    });
+  });
 
-      expect(resources.getScriptlet('a')).to.be.eql(
-        wrapScriptletBody('function a() { b() }', ['function b() {}']),
-      );
-      expect(resources.getScriptlet('b')).to.be.eql(wrapScriptletBody('function b() {}'));
+  context('#wrapScriptletBody', function () {
+    it('includes scriptlet body', function () {
+      const scriptlet = 'function test(){}';
+      expect(wrapScriptletBody(scriptlet)).to.include(scriptlet);
     });
 
-    it('parses dependencies without function wrapper', () => {
+    it('includes dependencies', function () {
+      const dependency = 'function dependency() {}';
+      expect(wrapScriptletBody('function test(){}', [dependency])).to.include(dependency);
+    });
+
+    it('prepares scriptlet for argument injection', function () {
+      expect(wrapScriptletBody('function test(){}')).to.include('{{1}}');
+    });
+
+    it('includes setup for scritplet globals', function () {
+      expect(wrapScriptletBody('function test(){}')).to.include('var scriptletGlobals = {};');
+    });
+  });
+
+  context('#getScriptlet', function () {
+    let resources: Resources;
+
+    before(function () {
       const distribution: ResourcesDistribution = {
         redirects: [],
         scriptlets: [
-          {
-            names: ['a'],
-            content: 'function a() {}',
-            dependencies: ['b'],
-          },
           {
             names: ['b'],
             content: 'function b() {}',
             dependencies: [],
           },
+          {
+            names: ['c'],
+            content: 'function c() {}',
+            dependencies: ['b'],
+          },
+          {
+            names: ['a', 'alias'],
+            content: 'function a() {}',
+            dependencies: ['b', 'b', 'c', 'missing'],
+          },
+          {
+            names: ['d.js'],
+            content: 'function d() {}',
+            dependencies: [],
+          },
+          {
+            names: ['e.fn'],
+            content: 'function e() {}',
+            dependencies: [],
+          },
         ],
       };
-      const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
-
-      expect(resources.getScriptlet('a')).to.be.eql(
-        wrapScriptletBody('function a() {}', ['function b() {}']),
-      );
-      expect(resources.getScriptlet('b')).to.be.eql(wrapScriptletBody('function b() {}'));
+      resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
     });
 
-    it('return safe circular dependencies', () => {
+    it('does not return scriptlets with .fn extension', function () {
+      expect(resources.getScriptlet('e.fn')).to.equal(undefined);
+    });
+
+    it('supports .js extension', function () {
+      expect(resources.getScriptlet('d')).to.exist;
+      expect(resources.getScriptlet('d.js')).to.equal(resources.getScriptlet('d'));
+    });
+
+    it('helps detect missing dependencies', function () {
+      expect(resources.getScriptlet('a')).to.be.include(
+        `console.warn('@ghostery/adblocker: cannot find dependency: "missing" for scriptlet: "a"')`,
+      );
+    });
+
+    it('includes scriptlet body', function () {
+      const scriptlet = resources.scriptlets.find((r) => r.names.includes('a'))!;
+      expect(resources.getScriptlet('a')).to.include(scriptlet.body);
+    });
+
+    it('includes dependencies', function () {
+      const dependency = resources.scriptlets.find((r) => r.names.includes('b'))!;
+      expect(resources.getScriptlet('a')).to.include(dependency.body);
+    });
+
+    it('handles aliases', function () {
+      expect(resources.getScriptlet('a')).to.equal(resources.getScriptlet('alias'));
+    });
+
+    it('ignore duplicated depenecies', function () {
+      const dependency = resources.scriptlets.find((r) => r.names.includes('b'))!;
+      // if a string is present in other string exactly once then it splits that other string into two parts
+      expect(resources.getScriptlet('a')?.split(dependency.body)).to.have.lengthOf(2);
+    });
+  });
+
+  context('#getResource', function () {
+    let resources: Resources;
+
+    before(function () {
       const distribution: ResourcesDistribution = {
-        redirects: [],
-        scriptlets: [
+        redirects: [
           {
-            names: ['a'],
-            content: 'function a() {}',
-            dependencies: ['b'],
+            names: ['a', 'alias'],
+            contentType: 'text/plain',
+            encoding: 'base64',
+            content: '',
           },
           {
             names: ['b'],
-            content: 'function b() {}',
-            dependencies: ['a'],
+            contentType: 'text/plain',
+            content: '',
           },
         ],
+        scriptlets: [],
       };
-      const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
-
-      expect(resources.getScriptlet('a')).to.be.eql(
-        wrapScriptletBody('function a() {}', ['function b() {}', 'function a() {}']),
-      );
-      expect(resources.getScriptlet('b')).to.be.eql(
-        wrapScriptletBody('function b() {}', ['function a() {}', 'function b() {}']),
-      );
+      resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
     });
 
-    it('detects unlocated dependencies', () => {
-      const distribution: ResourcesDistribution = {
-        redirects: [],
-        scriptlets: [
-          {
-            names: ['a'],
-            content: 'function a() {}',
-            dependencies: ['b'],
-          },
-        ],
-      };
-      const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
+    it('handles encoding', function () {
+      expect(resources.getResource('a')).to.have.property('contentType').that.include('base64');
+      expect(resources.getResource('b'))
+        .to.have.property('contentType')
+        .that.not.include('base64');
+    });
 
-      expect(resources.getScriptlet('a')).to.be.eql(
-        wrapScriptletBody('function a() {}', [
-          `console.warn('@ghostery/adblocker: cannot find dependency: "b" for scriptlet: "a"')`,
-        ]),
-      );
+    it('handles aliases', function () {
+      expect(resources.getResource('a')).to.deep.equal(resources.getResource('alias'));
+    });
+
+    it('provides stubs for mime types', function () {
+      const contentType = 'application/json';
+      expect(resources.getResource(contentType))
+        .to.have.property('contentType')
+        .that.equals(contentType);
     });
   });
 });
