@@ -1831,13 +1831,13 @@ foo.com###selector
 
     context('with resources', () => {
       it('throws with different checksums', () => {
-        const error =
-          'resource checksum of all merged engines must match with the first one: "1" but got: "2"';
         const engine1 = FilterEngine.empty();
         const engine2 = FilterEngine.empty();
         engine1.resources = new Resources({ checksum: '1' });
         engine2.resources = new Resources({ checksum: '2' });
-        expect(() => FilterEngine.merge([engine1, engine2])).to.throw(error);
+        expect(() => FilterEngine.merge([engine1, engine2])).to.throw(
+          'resource checksum of all merged engines must match with the first one: "1" but got: "2"',
+        );
       });
     });
   });
