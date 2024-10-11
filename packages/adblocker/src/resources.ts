@@ -54,7 +54,7 @@ export interface ResourcesDistribution {
 
 // TODO - support empty resource body
 
-export const wrapScriptletBody = (script: string, dependencies: string[] = []): string =>
+const assembleScript = (script: string, dependencies: string[] = []): string =>
   [
     `if (typeof scriptletGlobals === 'undefined') { var scriptletGlobals = {}; }`,
     ...dependencies,
@@ -225,7 +225,7 @@ export default class Resources {
     }
 
     const dependencies = this.getScriptletDepenencies(scriptlet);
-    script = wrapScriptletBody(scriptlet.body, dependencies);
+    script = assembleScript(scriptlet.body, dependencies);
 
     this.scriptletsCache.set(scriptletName, script);
     return script;

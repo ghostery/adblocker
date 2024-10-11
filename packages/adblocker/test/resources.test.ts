@@ -12,7 +12,7 @@ import 'mocha';
 import { loadResources } from './utils.js';
 
 import { StaticDataView } from '../src/data-view.js';
-import Resources, { ResourcesDistribution, wrapScriptletBody } from '../src/resources.js';
+import Resources, { ResourcesDistribution } from '../src/resources.js';
 
 describe('#Resources', function () {
   it('#serialize', function () {
@@ -50,26 +50,6 @@ describe('#Resources', function () {
       const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
       expect(resources.resources).to.lengthOf(1);
       expect(resources.scriptlets).to.lengthOf(2);
-    });
-  });
-
-  context('#wrapScriptletBody', function () {
-    it('includes scriptlet body', function () {
-      const scriptlet = 'function test(){}';
-      expect(wrapScriptletBody(scriptlet)).to.include(scriptlet);
-    });
-
-    it('includes dependencies', function () {
-      const dependency = 'function dependency() {}';
-      expect(wrapScriptletBody('function test(){}', [dependency])).to.include(dependency);
-    });
-
-    it('prepares scriptlet for argument injection', function () {
-      expect(wrapScriptletBody('function test(){}')).to.include('{{1}}');
-    });
-
-    it('includes setup for scritplet globals', function () {
-      expect(wrapScriptletBody('function test(){}')).to.include('var scriptletGlobals = {};');
     });
   });
 
@@ -143,6 +123,14 @@ describe('#Resources', function () {
       const dependency = resources.scriptlets.find((r) => r.names.includes('b'))!;
       // if a string is present in other string exactly once then it splits that other string into two parts
       expect(resources.getScriptlet('a')?.split(dependency.body)).to.have.lengthOf(2);
+    });
+
+    it('prepares scriptlet for argument injection', function () {
+      expect(resources.getScriptlet('a')).to.include('{{1}}');
+    });
+
+    it('includes setup for scritplet globals', function () {
+      expect(resources.getScriptlet('a')).to.include('var scriptletGlobals = {};');
     });
   });
 
