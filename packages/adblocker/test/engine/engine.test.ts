@@ -17,7 +17,7 @@ import Request, { RequestType } from '../../src/request.js';
 import Resources, { ResourcesDistribution, wrapScriptletBody } from '../../src/resources.js';
 
 import requests from '../data/requests.js';
-import { loadEasyListFilters, stringifyResource, typedArrayEqual } from '../utils.js';
+import { loadEasyListFilters, typedArrayEqual } from '../utils.js';
 import FilterEngine from '../../src/engine/engine.js';
 import { Metadata } from '../../src/engine/metadata.js';
 
@@ -402,27 +402,24 @@ $csp=baz,domain=bar.com
 
     const createEngineWithResource = (filters: string[], content: string) => {
       const engine = createEngine(filters.join('\n'));
-      engine.resources = Resources.parse(
-        stringifyResource({
-          redirects: [
-            {
-              names: [content],
-              content: content,
-              contentType: 'application/javascript',
-            },
-          ],
-          scriptlets: [
-            {
-              names: [content],
-              content,
-              dependencies: [],
-            },
-          ],
-        }),
-        {
-          checksum: '',
-        },
-      );
+      engine.resources = new Resources({
+        resources: [
+          {
+            names: [content],
+            body: content,
+            contentType: 'application/javascript',
+          },
+        ],
+        scriptlets: [
+          {
+            names: [content],
+            body: content,
+            dependencies: [],
+            executionWorld: 'MAIN',
+            requiresTrust: false,
+          },
+        ],
+      });
       return engine;
     };
 
@@ -729,23 +726,17 @@ $csp=baz,domain=bar.com
     describe('script injections', () => {
       it('injects script', () => {
         const engine = Engine.parse('foo.com##+js(script.js,arg1)');
-        engine.resources = Resources.parse(
-          stringifyResource({
-            redirects: [],
-            scriptlets: [
-              {
-                names: ['script.js'],
-                content: 'function script() {}',
-                dependencies: [],
-                executionWorld: 'MAIN',
-                requiresTrust: false,
-              },
-            ],
-          }),
-          {
-            checksum: '',
-          },
-        );
+        engine.resources = new Resources({
+          scriptlets: [
+            {
+              names: ['script.js'],
+              body: 'function script() {}',
+              dependencies: [],
+              executionWorld: 'MAIN',
+              requiresTrust: false,
+            },
+          ],
+        });
         expect(
           engine.getCosmeticsFilters({
             domain: 'foo.com',
@@ -847,21 +838,17 @@ foo.com###selector
 
       it('disabling specific hides does not impact scriptlets', () => {
         const engine = Engine.parse(['@@||foo.com^$specifichide', 'foo.com##+js(foo)'].join('\n'));
-        engine.resources = Resources.parse(
-          stringifyResource({
-            redirects: [],
-            scriptlets: [
-              {
-                names: ['foo'],
-                content: '',
-                dependencies: [],
-              },
-            ],
-          }),
-          {
-            checksum: '',
-          },
-        );
+        engine.resources = new Resources({
+          scriptlets: [
+            {
+              names: ['foo'],
+              body: '',
+              dependencies: [],
+              executionWorld: 'MAIN',
+              requiresTrust: false,
+            },
+          ],
+        });
         expect(
           engine.getCosmeticsFilters({
             domain: 'foo.com',
@@ -1462,31 +1449,31 @@ foo.com###selector
         it(JSON.stringify({ filters, hostname, matches, injections }), () => {
           // Initialize engine with all rules from test case
           const engine = createEngine(filters.join('\n'));
-          engine.resources = Resources.parse(
-            stringifyResource({
-              redirects: [],
-              scriptlets: [
-                {
-                  names: ['scriptlet'],
-                  content: 'function scriptlet() {}',
-                  dependencies: [],
-                },
-                {
-                  names: ['scriptlet1'],
-                  content: 'function scriptlet1() {}',
-                  dependencies: [],
-                },
-                {
-                  names: ['scriptlet2'],
-                  content: 'function scriptlet2() {}',
-                  dependencies: [],
-                },
-              ],
-            }),
-            {
-              checksum: '',
-            },
-          );
+          engine.resources = new Resources({
+            scriptlets: [
+              {
+                names: ['scriptlet'],
+                body: 'function scriptlet() {}',
+                dependencies: [],
+                executionWorld: 'MAIN',
+                requiresTrust: false,
+              },
+              {
+                names: ['scriptlet1'],
+                body: 'function scriptlet1() {}',
+                dependencies: [],
+                executionWorld: 'MAIN',
+                requiresTrust: false,
+              },
+              {
+                names: ['scriptlet2'],
+                body: 'function scriptlet2() {}',
+                dependencies: [],
+                executionWorld: 'MAIN',
+                requiresTrust: false,
+              },
+            ],
+          });
 
           // #getCosmeticsFilters
           const { styles, scripts } = engine.getCosmeticsFilters({
