@@ -46,7 +46,7 @@ describe('#Resources', () => {
       expect(resources.getScriptlet('a')).to.be.eql(
         wrapScriptletBody('function a() { b() }', ['function b() {}']),
       );
-      expect(resources.getScriptlet('b')).to.be.eql(wrapScriptletBody('function b() {}', []));
+      expect(resources.getScriptlet('b')).to.be.eql(wrapScriptletBody('function b() {}'));
     });
 
     it('parses dependencies without function wrapper', () => {
@@ -70,7 +70,7 @@ describe('#Resources', () => {
       expect(resources.getScriptlet('a')).to.be.eql(
         wrapScriptletBody('function a() {}', ['function b() {}']),
       );
-      expect(resources.getScriptlet('b')).to.be.eql(wrapScriptletBody('function b() {}', []));
+      expect(resources.getScriptlet('b')).to.be.eql(wrapScriptletBody('function b() {}'));
     });
 
     it('return safe circular dependencies', () => {

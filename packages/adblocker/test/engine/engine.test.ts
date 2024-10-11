@@ -753,7 +753,7 @@ $csp=baz,domain=bar.com
             hostname: 'foo.com',
             url: 'https://foo.com',
           }).scripts,
-        ).to.eql([wrapScriptletBody('function script() {}', []).replace('{{1}}', 'arg1')]);
+        ).to.eql([wrapScriptletBody('function script() {}').replace('{{1}}', 'arg1')]);
       });
 
       it('script missing', () => {
@@ -1032,7 +1032,7 @@ foo.com###selector
         filters: ['foo.com##+js(scriptlet)'],
         hostname: 'foo.com',
         hrefs: [],
-        injections: [wrapScriptletBody('function scriptlet() {}', [])],
+        injections: [wrapScriptletBody('function scriptlet() {}')],
         matches: [],
       },
       {
@@ -1053,8 +1053,8 @@ foo.com###selector
         hostname: 'foo.com',
         hrefs: [],
         injections: [
-          wrapScriptletBody('function scriptlet1() {}', []),
-          wrapScriptletBody('function scriptlet2() {}', []),
+          wrapScriptletBody('function scriptlet1() {}'),
+          wrapScriptletBody('function scriptlet2() {}'),
         ],
         matches: [],
       },

@@ -54,7 +54,7 @@ export interface ResourcesDistribution {
 
 // TODO - support empty resource body
 
-export const wrapScriptletBody = (script: string, dependencies: string[]): string =>
+export const wrapScriptletBody = (script: string, dependencies: string[] = []): string =>
   [
     `if (typeof scriptletGlobals === 'undefined') { var scriptletGlobals = {}; }`,
     ...dependencies,
