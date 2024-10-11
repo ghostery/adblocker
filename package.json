@@ -60,7 +60,7 @@
     "postinstall": "patch-package",
     "lint": "lerna run --parallel lint",
     "build": "lerna run build",
-    "test": "lerna run --concurrency 4 test",
+    "test": "yarn workspaces foreach -A run test",
     "clean": "lerna run --parallel clean && lerna clean --yes",
     "release": "auto shipit -v",
     "format-check": "prettier './packages/**/*.ts' --check",
