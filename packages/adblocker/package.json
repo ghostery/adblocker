@@ -47,7 +47,7 @@
     "clean": "rimraf dist coverage .tshy .tshy-build .nyc_output .rollup.cache",
     "lint": "eslint src test tools",
     "build": "tshy && rollup --config ./rollup.config.js",
-    "test": "mocha",
+    "test": "nyc mocha",
     "dev": "mocha --watch",
     "bench-metadata": "tsx ./tools/bench-metadata.ts",
     "bump-internal-engine-version": "tsx ./tools/auto-bump-engine-version.ts",
