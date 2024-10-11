@@ -728,7 +728,6 @@ nagpurtoday.in##.shrcladv
 nagpurtoday.in##div[style^="text-align:"]:has(> video > source[src*="kukreja-video"])
 nagpurtoday.in##.middle-contbox
 ! https://github.com/mediumkreation/IndianList/issues/10188
-sinhasannews.com##+js(rmnt, script, %2FClipboard%7Concontextmenu%7Cwpcp%7CkeyCode%2F)
 sinhasannews.com##.entry-content > figure.wp-block-image:has(> img[class^="wp-image-"][src^="https://www.sinhasannews.com/"]:is([alt^="Img "], [alt^="Fb img "]):not([width="1024"]))
 sinhasannews.com##.entry-content > figure.wp-block-image:has(> img[class^="wp-image-"][src^="https://www.sinhasannews.com/"][width="1024"][height="1024"]:is([alt^="Img "], [alt^="Fb img "]))
 sinhasannews.com##.entry-content > figure.wp-block-image:has(> img[class^="wp-image-"][src^="https://www.sinhasannews.com/"][width="1024"][height="682"]:not([alt^="Cm"]))
@@ -1445,7 +1444,8 @@ aliezstream.pro,mylivestream.pro###openLinks:remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/23187
 dichvureviewmap.com##+js(no-fetch-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/21353
-raenonx.cc##body > div[class] > style:first-child + .w-full:has(> .button-clickable-bg-opaque > .transform-smooth > svg)
+raenonx.cc##div[class="flex flex-col place-content-center place-items-center items-center text-center w-full h-[100px]"]:has(> div[id^="nitro-"])
+raenonx.cc##+js(nostif, Ads)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/190021
 ! [dup] from ublock-origin/quick-fixes.txt
 ! gunauc.net##+js(no-fetch-if, googlesyndication, , %7B%22type%22%3A%22cors%22%7D)
@@ -2739,3 +2739,7 @@ playtube.tv##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 ||boostaubeehy.net^
 ! https://github.com/uBlockOrigin/uAssets/issues/25593
 ||hentalk.pw/public/hentalk-loader.js
+! https://github.com/uBlockOrigin/uAssets/issues/25598
+||85po.com/player/stats.php?$1p,image,redirect=1x1.gif
+! https://github.com/uBlockOrigin/uAssets/issues/25602
+||oxhoftarius.com^
