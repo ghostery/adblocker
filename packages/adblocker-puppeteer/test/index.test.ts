@@ -62,7 +62,14 @@ describe('#stylesInjection', () => {
         port = addressInfo.port;
         console.log('Test server listening on port', port);
       });
-    browser = await puppeteer.launch();
+    browser = await puppeteer.launch({
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-accelerated-2d-canvas',
+        '--disable-gpu',
+      ],
+    });
     console.log('Puppeteer browser launched.');
     page = await browser.newPage();
     console.log('Puppeteer page opened.');
