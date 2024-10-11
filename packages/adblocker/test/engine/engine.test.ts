@@ -143,7 +143,7 @@ function buildResourcesFromRequests(filters: NetworkFilter[]): Resources {
         resources.redirects.push({
           names: [redirect],
           content: '',
-          contentType: 'image/gif;base64',
+          contentType: 'image/gif',
           encoding: 'base64',
         });
       } else {
