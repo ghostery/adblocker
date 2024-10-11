@@ -139,19 +139,18 @@ function buildResourcesFromRequests(filters: NetworkFilter[]): Resources {
       const redirect = filter.redirect;
 
       // Guess resource type
-      const contentType = 'application/javascript';
       if (redirect.endsWith('.gif')) {
         resources.redirects.push({
           names: [redirect],
           content: '',
-          contentType,
+          contentType: 'image/gif;base64',
           encoding: 'base64',
         });
       } else {
         resources.redirects.push({
           names: [redirect],
           content: '',
-          contentType,
+          contentType: 'application/javascript',
         });
       }
     }
