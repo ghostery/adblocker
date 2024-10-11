@@ -1086,6 +1086,9 @@ reuters.com##ul[class^="cluster__stories"] > li[class^="cluster__cluster-hub"][c
 ||t.eloqua.com^$3p
 ! https://github.com/uBlockOrigin/uAssets/issues/23370
 @@||t.eloqua.com^$xhr,domain=natera.com
+! https://www.fortinet.com/resources/reports/fortirecon-threat-intelligence-report-summer-olympics - form submission breakage
+! https://github.com/uBlockOrigin/uAssets/issues/25601
+@@||t.eloqua.com/e/$xhr,frame,3p
 ! https://www.wilderssecurity.com/threads/ublock-a-lean-and-fast-blocker.365273/page-166#post-2878656
 @@||google-analytics.com/ga.js$script,domain=bimi.jorudan.co.jp
 ! https://github.com/uBlockOrigin/uAssets/issues/707#issuecomment-565051652
@@ -1124,9 +1127,6 @@ viu.com##+js(no-xhr-if, mobileanalytics)
 ! https://github.com/uBlockOrigin/uAssets/issues/6723
 @@||ak.sail-horizon.com/spm/spm$script,domain=watch.wwe.com
 ! https://github.com/uBlockOrigin/uAssets/issues/6744
-! https://github.com/NanoMeow/QuickReports/issues/2589
-qqcinema21.com#@#.headads
-qqcinema21.com##a[rel="nofollow"]:has(img)
 ! https://github.com/uBlockOrigin/uAssets/issues/6769
 ! https://github.com/NanoMeow/QuickReports/issues/2628
 ! https://github.com/AdguardTeam/AdguardFilters/issues/70398
@@ -1516,8 +1516,6 @@ nfmovies.com#@#+js(aopr, %24myui)
 ! [badfilter] |https://$css,3p,domain=cloudvideo.tv,badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/7330#issuecomment-649186403
 @@||cdn.plyr.io/*/plyr.svg$xhr,domain=mp4upload.com
-! https://github.com/NanoMeow/QuickReports/issues/4192
-arthromed.de#@##ad_3
 ! broken video on cookinggames .com
 @@||bitent.com/lock_html5/adPlayer/v*/adPlayer.js$script,domain=cookinggames.com
 ! unbreak saltspringexchange .com
@@ -3939,8 +3937,6 @@ jprime.jp##+js(trusted-rpnt, script, var%20ISMLIB, !function()%7Bconst%20o%3D%7B
 @@||fundingchoicesmessages.google.com^$script,domain=hurriyet.com.tr
 ! https://github.com/uBlockOrigin/uAssets/issues/24597
 @@||googletagmanager.com/gtm.js$script,3p,domain=eu.community.samsung.com
-! https://www.fortinet.com/resources/reports/fortirecon-threat-intelligence-report-summer-olympics - form submission breakage
-@@||t.eloqua.com/e/$xhr,domain=fortinet.com
 ! https://www.wunderground.com/video/top-stories/will-meteorology-help-bring-home-us-olympic-sailing-gold - video breakage
 ! https://github.com/easylist/easylist/commit/27b9bde5f50059ffc93581ae70e109891266c42a
 ||g.doubleclick.net/gampad/ads?env=$xmlhttprequest,domain=wunderground.com,important
@@ -4058,3 +4054,23 @@ nbcsports.com##+js(set, mParticle.Identity.getCurrentUser, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/25504
 ||api.omappapi.com/v3/geolocate/json$domain=seclore.com,important
 seclore.com##+js(trusted-set, _omapp.scripts.geolocation, %7B%22value%22%3A%20%7B%22status%22%3A%22loaded%22%2C%22object%22%3Anull%2C%22data%22%3A%7B%22country%22%3A%7B%22shortName%22%3A%22%22%2C%22longName%22%3A%22%22%7D%2C%22administrative_area_level_1%22%3A%7B%22shortName%22%3A%22%22%2C%22longName%22%3A%22%22%7D%2C%22administrative_area_level_2%22%3A%7B%22shortName%22%3A%22%22%2C%22longName%22%3A%22%22%7D%2C%22locality%22%3A%7B%22shortName%22%3A%22%22%2C%22longName%22%3A%22%22%7D%2C%22original%22%3A%7B%22ip%22%3A%22%22%2C%22ip_decimal%22%3Anull%2C%22country%22%3A%22%22%2C%22country_eu%22%3Afalse%2C%22country_iso%22%3A%22%22%2C%22city%22%3A%22%22%2C%22latitude%22%3Anull%2C%22longitude%22%3Anull%2C%22user_agent%22%3A%7B%22product%22%3A%22%22%2C%22version%22%3A%22%22%2C%22comment%22%3A%22%22%2C%22raw_value%22%3A%22%22%7D%2C%22zip_code%22%3A%22%22%2C%22time_zone%22%3A%22%22%7D%7D%2C%22error%22%3A%22%22%7D%7D)
+! https://github.com/easylist/easylist/issues/18793
+||marketing.unionpayintl.com/offer-promote/static/sensorsdata.min.js$script,1p,important
+unionpayintl.com##+js(set, sensorsDataAnalytic201505, %7B%7D)
+unionpayintl.com##+js(set, sensorsDataAnalytic201505.quick, noopFunc)
+! https://qds.it/video-gorilla-infuriato-guardiani-paura-zoo/
+! https://github.com/easylist/easylist/commit/6bd60df1f625adaef6583122f00f16dc241cbaea
+||qds.it/wp-content/plugins/digistream/digiplayer/js/videojs.ga.js?$script,1p,redirect=noopjs,important
+||qds.it^$script,1p,redirect-rule=noopjs
+! https://github.com/easylist/easylist/issues/19346
+standard.co.uk##+js(set, JSGlobals.prebidEnabled, false)
+standard.co.uk##+js(nano-stb, %5Bnative%20code%5D, 3000, 0.001)
+standard.co.uk##+js(nano-stb, i%7C%7C(e()%2Ci%3D!0), 2500, 0.001)
+! https://github.com/uBlockOrigin/uAssets/issues/25578
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=cnnbrasil.com.br,redirect=google-ima.js,important
+! https://github.com/uBlockOrigin/uAssets/issues/25585
+@@||wurfl.io/wurfl.js$script,domain=cram.com
+! https://github.com/uBlockOrigin/uAssets/issues/25594
+||pruefernavi.de/vendor/elasticsearch/elastic-apm-rum.umd.min.js$1p,important
+pruefernavi.de##+js(set, elasticApm, %7B%7D)
+pruefernavi.de##+js(set, elasticApm.init, noopFunc)

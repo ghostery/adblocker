@@ -727,6 +727,17 @@ nagpurtoday.in##aside[id^="custom_html-"][class*="widget"]:has(img + .popup)
 nagpurtoday.in##.shrcladv
 nagpurtoday.in##div[style^="text-align:"]:has(> video > source[src*="kukreja-video"])
 nagpurtoday.in##.middle-contbox
+! https://github.com/mediumkreation/IndianList/issues/10188
+sinhasannews.com##.entry-content > figure.wp-block-image:has(> img[class^="wp-image-"][src^="https://www.sinhasannews.com/"]:is([alt^="Img "], [alt^="Fb img "]):not([width="1024"]))
+sinhasannews.com##.entry-content > figure.wp-block-image:has(> img[class^="wp-image-"][src^="https://www.sinhasannews.com/"][width="1024"][height="1024"]:is([alt^="Img "], [alt^="Fb img "]))
+sinhasannews.com##.entry-content > figure.wp-block-image:has(> img[class^="wp-image-"][src^="https://www.sinhasannews.com/"][width="1024"][height="682"]:not([alt^="Cm"]))
+sinhasannews.com##.entry-content > figure.wp-block-image:has(> img[class^="wp-image-"][src^="https://www.sinhasannews.com/"][width="720"][height="706"])
+sinhasannews.com##.entry-content > figure.wp-block-image:has(> img[class^="wp-image-"][src^="https://www.sinhasannews.com/"][width="1024"][height="819"])
+sinhasannews.com##.entry-content > figure.wp-block-image:has(> img[class^="wp-image-"][src^="https://www.sinhasannews.com/"][width="646"][height="1024"][alt^="Screenshot "])
+sinhasannews.com##.entry-content > figure.wp-block-image:has(> img[class^="wp-image-"][src^="https://www.sinhasannews.com/"][width="1024"][height="785"][alt^="Screenshot "])
+sinhasannews.com##.entry-content > figure.wp-block-image:has(> img[class^="wp-image-"][src^="https://www.sinhasannews.com/"][width="1024"][height="770"][alt^="Screenshot "])
+sinhasannews.com##.entry-content > figure.wp-block-image:has(> img[class^="wp-image-"][src^="https://www.sinhasannews.com/"][width="1022"][height="1024"][alt^="Screenshot "])
+sinhasannews.com##.entry-content > figure.wp-block-image:has(> img[class^="wp-image-"][src^="https://www.sinhasannews.com/"][width="1024"][height="800"][alt^="Img "])
 ! END: Regional lists
 ! https://github.com/AdguardTeam/AdguardFilters/issues/169660
 flixscans.org##+js(no-fetch-if, googlesyndication)
@@ -1433,7 +1444,8 @@ aliezstream.pro,mylivestream.pro###openLinks:remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/23187
 dichvureviewmap.com##+js(no-fetch-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/21353
-raenonx.cc##body > div[class] > style:first-child + .w-full:has(> .button-clickable-bg-opaque > .transform-smooth > svg)
+raenonx.cc##div[class="flex flex-col place-content-center place-items-center items-center text-center w-full h-[100px]"]:has(> div[id^="nitro-"])
+raenonx.cc##+js(nostif, Ads)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/190021
 ! [dup] from ublock-origin/quick-fixes.txt
 ! gunauc.net##+js(no-fetch-if, googlesyndication, , %7B%22type%22%3A%22cors%22%7D)
@@ -1682,6 +1694,7 @@ thejakartapost.com##.tjp-single__content-ads:remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/24812#issuecomment-2289648269
 ! https://github.com/uBlockOrigin/uAssets/issues/25495
 ! https://vidsrc.xyz/embed/movie/tt11315808
+! https://movie3k.net/movies/joker-folie-a-deux/
 !#if env_firefox
 !#endif
 euro2024direct.ru##+js(acs, document.createElement, break%3Bcase)
@@ -2423,6 +2436,7 @@ myhindigk.com##+js(noeval-if, ads)
 ! https://movieweb.com/video/the-line-trailer-2024-movie/
 ! https://www.thegamer.com/video/our-favorite-moments-from-gamescom-2024/
 ||cdn.adsninja.ca/biddertypelibrary/$script,domain=xda-developers.com,important
+||cdn.adsninja.ca/adsninja_worker.js^$domain=xda-developers.com,important
 ||imasdk.googleapis.com/js/sdkloader/ima3.js^$script,redirect=google-ima.js,domain=androidpolice.com|cbr.com|collider.com|dualshockers.com|gamerant.com|howtogeek.com|makeuseof.com|movieweb.com|screenrant.com|thegamer.com|xda-developers.com,important
 @@||cdn.adsninja.ca/adsninja_worker_caller.js$script,domain=androidpolice.com|cbr.com|collider.com|dualshockers.com|gamerant.com|howtogeek.com|makeuseof.com|movieweb.com|screenrant.com|thegamer.com|xda-developers.com
 @@||cdn.adsninja.ca/adsninja_client$script,css,domain=androidpolice.com|cbr.com|collider.com|dualshockers.com|gamerant.com|howtogeek.com|movieweb.com|makeuseof.com|screenrant.com|thegamer.com|xda-developers.com
@@ -2678,13 +2692,13 @@ koramaup.com##+js(no-xhr-if, pagead2.googlesyndication.com)
 koramaup.com##+js(rpnt, script, 200%3D%3D%3Dr.status, 0%3D%3D%3Dr.status, condition, getNextDownloadPageLink)
 !#endif
 koramaup.com##+js(rpnt, script, return%20r.responseText, return%20%60a.getAttribute(%22data-ad-client%22)%7C%7C%22%22%60, condition, getNextDownloadPageLink)
+koramaup.com##[href^="http://u87yuo9ojh.world/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/25464
 callofwar.com##+js(rmnt, script, Anzeige)
 ! https://github.com/uBlockOrigin/uAssets/issues/25469
 4edtcixl.xyz##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/25483
-! [dup] from ublock-origin/quick-fixes.txt
-! picrew.me##.play-Imagemaker:style(height: 100% !important;)
+picrew.me##.play-Imagemaker:style(height: 100% !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/58
 deadline.com##+js(rmnt, script, admbenefits)
 ! https://webdexscans.com/ detection
@@ -2716,3 +2730,16 @@ gamatotv.info,gmtcloud.best###ads5
 ate60vs7zcjhsjo5qgv8.com##+js(nowoif, !vidsrc.)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/189518#issuecomment-2395510540
 blog.livedoor.jp##+js(acs, document.addEventListener, google_ad_client)
+! https://www.reddit.com/r/uBlockOrigin/comments/1fy1gjk/getting_ads_on_novelfull/
+||imagedelivery.net^$domain=novelfull.com
+novelfull.com##a[rel="nofollow noopener sponsored"]
+! https://github.com/uBlockOrigin/uAssets/issues/25591
+playtube.tv##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=playtube.tv|upns.live
+||boostaubeehy.net^
+! https://github.com/uBlockOrigin/uAssets/issues/25593
+||hentalk.pw/public/hentalk-loader.js
+! https://github.com/uBlockOrigin/uAssets/issues/25598
+||85po.com/player/stats.php?$1p,image,redirect=1x1.gif
+! https://github.com/uBlockOrigin/uAssets/issues/25602
+||oxhoftarius.com^
