@@ -1831,36 +1831,14 @@ foo.com###selector
     });
 
     context('with resources', () => {
-      const resources1: ResourcesDistribution = {
-        redirects: [],
-        scriptlets: [
-          {
-            names: ['a.js'],
-            content: 'function a() { console.log(1) }',
-            dependencies: [],
-          },
-        ],
-      };
-      const resources2: ResourcesDistribution = {
-        redirects: [],
-        scriptlets: [
-          {
-            names: ['b.js'],
-            content: 'function b() { console.log(2) }',
-            dependencies: [],
-          },
-        ],
-      };
-
-      it('merge engines only with first resource', () => {
+      it('throws with different checksums', () => {
+        const error =
+          'resource checksum of all merged engines must match with the first one: "1" but got: "2"';
         const engine1 = FilterEngine.empty();
         const engine2 = FilterEngine.empty();
-        engine1.updateResources(JSON.stringify(resources1), '1');
-        engine2.updateResources(JSON.stringify(resources2), '2');
-
-        const engine = FilterEngine.merge([engine1, engine2]);
-        expect(engine.resources.scriptlets.length).to.be.eql(1);
-        expect(engine.resources.checksum).to.be.eql(engine1.resources.checksum);
+        engine1.resources = new Resources({ checksum: '1' });
+        engine2.resources = new Resources({ checksum: '2' });
+        expect(() => FilterEngine.merge([engine1, engine2])).to.throw(error);
       });
     });
   });
