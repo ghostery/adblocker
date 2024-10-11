@@ -14,7 +14,7 @@ import { getDomain } from 'tldts-experimental';
 import Engine, { EngineEventHandlers } from '../../src/engine/engine.js';
 import NetworkFilter from '../../src/filters/network.js';
 import Request, { RequestType } from '../../src/request.js';
-import Resources, { ResourcesDistribution, wrapScriptletBody } from '../../src/resources.js';
+import Resources, { ResourcesDistribution } from '../../src/resources.js';
 
 import requests from '../data/requests.js';
 import { loadEasyListFilters, typedArrayEqual } from '../utils.js';
@@ -742,8 +742,10 @@ $csp=baz,domain=bar.com
             domain: 'foo.com',
             hostname: 'foo.com',
             url: 'https://foo.com',
-          }).scripts,
-        ).to.eql([wrapScriptletBody('function script() {}').replace('{{1}}', 'arg1')]);
+          }).scripts[0],
+        ).to.equal(
+          `if (typeof scriptletGlobals === 'undefined') { var scriptletGlobals = {}; };(function script() {})(...['arg1','{{2}}','{{3}}','{{4}}','{{5}}','{{6}}','{{7}}','{{8}}','{{9}}','{{10}}'].filter((a,i) => a !== '{{'+(i+1)+'}}').map((a) => decodeURIComponent(a)))`,
+        );
       });
 
       it('script missing', () => {
@@ -1018,7 +1020,7 @@ foo.com###selector
         filters: ['foo.com##+js(scriptlet)'],
         hostname: 'foo.com',
         hrefs: [],
-        injections: [wrapScriptletBody('function scriptlet() {}')],
+        injections: ['scriptlet'],
         matches: [],
       },
       {
@@ -1038,10 +1040,7 @@ foo.com###selector
         ],
         hostname: 'foo.com',
         hrefs: [],
-        injections: [
-          wrapScriptletBody('function scriptlet1() {}'),
-          wrapScriptletBody('function scriptlet2() {}'),
-        ],
+        injections: ['scriptlet1', 'scriptlet2'],
         matches: [],
       },
       {
@@ -1487,7 +1486,9 @@ foo.com###selector
           });
 
           expect(scripts).to.have.lengthOf(injections.length);
-          expect(scripts.sort()).to.eql(injections.sort());
+          expect(scripts.sort()).to.eql(
+            injections.map((i) => engine.resources.getScriptlet(i)).sort(),
+          );
 
           // Parse stylesheets to get selectors back
           const selectors: string[] = [];
