@@ -17,7 +17,7 @@ import Request, { RequestType } from '../../src/request.js';
 import Resources, { ResourcesDistribution, wrapScriptletBody } from '../../src/resources.js';
 
 import requests from '../data/requests.js';
-import { loadEasyListFilters, typedArrayEqual } from '../utils.js';
+import { loadEasyListFilters, stringifyResource, typedArrayEqual } from '../utils.js';
 import FilterEngine from '../../src/engine/engine.js';
 import { Metadata } from '../../src/engine/metadata.js';
 
@@ -403,7 +403,7 @@ $csp=baz,domain=bar.com
     const createEngineWithResource = (filters: string[], content: string) => {
       const engine = createEngine(filters.join('\n'));
       engine.resources = Resources.parse(
-        JSON.stringify({
+        stringifyResource({
           redirects: [
             {
               names: [content],
@@ -418,7 +418,7 @@ $csp=baz,domain=bar.com
               dependencies: [],
             },
           ],
-        } as ResourcesDistribution),
+        }),
         {
           checksum: '',
         },
@@ -730,7 +730,7 @@ $csp=baz,domain=bar.com
       it('injects script', () => {
         const engine = Engine.parse('foo.com##+js(script.js,arg1)');
         engine.resources = Resources.parse(
-          JSON.stringify({
+          stringifyResource({
             redirects: [],
             scriptlets: [
               {
@@ -741,7 +741,7 @@ $csp=baz,domain=bar.com
                 requiresTrust: false,
               },
             ],
-          } as ResourcesDistribution),
+          }),
           {
             checksum: '',
           },
@@ -848,7 +848,7 @@ foo.com###selector
       it('disabling specific hides does not impact scriptlets', () => {
         const engine = Engine.parse(['@@||foo.com^$specifichide', 'foo.com##+js(foo)'].join('\n'));
         engine.resources = Resources.parse(
-          JSON.stringify({
+          stringifyResource({
             redirects: [],
             scriptlets: [
               {
@@ -857,7 +857,7 @@ foo.com###selector
                 dependencies: [],
               },
             ],
-          } as ResourcesDistribution),
+          }),
           {
             checksum: '',
           },
@@ -1463,7 +1463,7 @@ foo.com###selector
           // Initialize engine with all rules from test case
           const engine = createEngine(filters.join('\n'));
           engine.resources = Resources.parse(
-            JSON.stringify({
+            stringifyResource({
               redirects: [],
               scriptlets: [
                 {
@@ -1482,7 +1482,7 @@ foo.com###selector
                   dependencies: [],
                 },
               ],
-            } as ResourcesDistribution),
+            }),
             {
               checksum: '',
             },

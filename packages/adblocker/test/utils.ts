@@ -17,6 +17,7 @@ import { fullLists } from '../src/index.js';
 import { IPattern } from '../src/engine/metadata/patterns.js';
 import { ICategory } from '../src/engine/metadata/categories.js';
 import { IOrganization } from '../src/engine/metadata/organizations.js';
+import { ResourcesDistribution } from '../src/resources.js';
 
 export function loadEasyListFilters(): string[] {
   return JSON.parse(
@@ -118,4 +119,8 @@ export function getRequestSamplePath(url: string): string {
 
 export function loadRequestSample(path: string): string {
   return zlib.brotliDecompressSync(fs.readFileSync(path)).toString('utf8');
+}
+
+export function stringifyResource(distribution: ResourcesDistribution): string {
+  return JSON.stringify(distribution);
 }
