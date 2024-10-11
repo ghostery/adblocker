@@ -62,7 +62,14 @@ describe('#stylesInjection', () => {
         port = addressInfo.port;
         console.log('Test server listening on port', port);
       });
-    browser = await puppeteer.launch();
+    browser = await puppeteer.launch({
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-accelerated-2d-canvas',
+        '--disable-gpu',
+      ],
+    });
     console.log('Puppeteer browser launched.');
     page = await browser.newPage();
     console.log('Puppeteer page opened.');
@@ -86,10 +93,16 @@ describe('#stylesInjection', () => {
   });
 
   after(async () => {
-    await page.close();
-    console.log('Puppeteer page closed.');
-    await browser.close();
-    console.log('Puppeteer browser closed.');
+    try {
+      await page.close();
+      console.log('Puppeteer page closed.');
+      await browser.close();
+      console.log('Puppeteer browser closed.');
+    } catch (e) {
+      // it may be that puppetter have not started, so it cannot be closed
+      // those exception would prevent server to be closed and make tests hang
+      console.error(e);
+    }
     server.close(() => {
       console.log('Test server closed.');
     });
