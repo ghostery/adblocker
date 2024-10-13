@@ -12,6 +12,7 @@
 ! swagbucks.com - restore inactive
 ! https://github.com/uBlockOrigin/uAssets/issues/24153
 ! https://github.com/uBlockOrigin/uAssets/issues/25388
+! https://github.com/uBlockOrigin/uAssets/issues/25609
 ! END: Click trackings
 ! https://github.com/uBlockOrigin/uAssets/issues/729
 ! https://github.com/NanoMeow/QuickReports/issues/1636
@@ -599,8 +600,6 @@ hawaiitribune-herald.com,thegardenisland.com,westhawaiitoday.com#@#.header-ad
 ! https://github.com/uBlockOrigin/uAssets/issues/4674#issuecomment-463743899
 ! https://github.com/uBlockOrigin/uAssets/issues/4909
 @@||adobedtm.com^*/satellitelib-$script,domain=virginmobile.ca
-! https://forums.lanik.us/viewtopic.php?p=145834#p145834
-dday.it#@#.sponsored
 ! https://twitter.com/RyuTechGaming/status/1098525246687248384
 @@||europarl.europa.eu/website/webanalytics/*$script,1p
 ! https://github.com/NanoMeow/QuickReports/issues/714
@@ -2825,7 +2824,10 @@ gloucestershirelive.co.uk##+js(set, chameleonVideo.adDisabledRequested, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/15608
 @@||video.qq.com/getvinfo$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/15880
-||arcgis.com/apps/instant/node_modules/templates-common-library/structuralFunctionality/telemetry/AppMeasurement.js$script,1p,redirect-rule=noopjs
+||arcgis.com/apps/instant/node_modules/templates-common-library/structuralFunctionality/telemetry/AppMeasurement.js^$script,1p,redirect=noopjs
+! https://www.nesdis.noaa.gov/imagery/hurricanes/live-hurricane-tracker
+! https://github.com/easylist/easylist/commit/92f06ff6f7cc5fd257ce53aafe9bd304c2e37bf7
+||noaa.maps.arcgis.com/apps/instant/*/AppMeasurement.js$1p,important
 ! https://github.com/uBlockOrigin/uAssets/issues/15876
 /google-tag-manager.min.js$script,domain=511tactical.com,redirect-rule=googletagmanager_gtm.js
 ! herz-fuer-tiere.de images hidden
@@ -4074,3 +4076,8 @@ standard.co.uk##+js(nano-stb, i%7C%7C(e()%2Ci%3D!0), 2500, 0.001)
 ||pruefernavi.de/vendor/elasticsearch/elastic-apm-rum.umd.min.js$1p,important
 pruefernavi.de##+js(set, elasticApm, %7B%7D)
 pruefernavi.de##+js(set, elasticApm.init, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/25610
+/analytics/analytics.js^$1p,script,redirect=noop.js
+||assets.fyers.in/Lib/analytics/Analytics.js$1p,important
+! https://github.com/uBlockOrigin/uAssets/issues/25626
+||lamycosphere.com/cdn/shop/*/assets/pixel.gif$image,1p,redirect=1x1.gif,important
