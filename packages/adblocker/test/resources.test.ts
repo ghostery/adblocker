@@ -119,7 +119,7 @@ describe('#Resources', function () {
       expect(resources.getScriptlet('a')).to.equal(resources.getScriptlet('alias'));
     });
 
-    it('ignore duplicated depenecies', function () {
+    it('ignore duplicated dependencies', function () {
       const dependency = resources.scriptlets.find((r) => r.names.includes('b'))!;
       // if a string is present in other string exactly once then it splits that other string into two parts
       expect(resources.getScriptlet('a')?.split(dependency.body)).to.have.lengthOf(2);
