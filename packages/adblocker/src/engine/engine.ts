@@ -280,7 +280,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       patterns: {},
     };
 
-    let resources: Resources;
+    let resources: Resources | undefined;
 
     type ConfigKey = keyof {
       [Key in keyof Config as Config[Key] extends boolean ? Key : never]: Config[Key];
