@@ -141,15 +141,16 @@ function buildResourcesFromRequests(filters: NetworkFilter[]): Resources {
       // Guess resource type
       if (redirect.endsWith('.gif')) {
         resources.redirects.push({
-          names: [redirect],
-          content: '',
-          contentType: 'image/gif',
-          encoding: 'base64',
+          name: redirect,
+          aliases: [],
+          body: '',
+          contentType: 'image/gif;base64',
         });
       } else {
         resources.redirects.push({
-          names: [redirect],
-          content: '',
+          name: redirect,
+          aliases: [],
+          body: '',
           contentType: 'application/javascript',
         });
       }
@@ -405,14 +406,16 @@ $csp=baz,domain=bar.com
       engine.resources = new Resources({
         resources: [
           {
-            names: [content],
+            name: content,
+            aliases: [],
             body: content,
             contentType: 'application/javascript',
           },
         ],
         scriptlets: [
           {
-            names: [content],
+            name: content,
+            aliases: [],
             body: content,
             dependencies: [],
             executionWorld: 'MAIN',
@@ -729,7 +732,8 @@ $csp=baz,domain=bar.com
         engine.resources = new Resources({
           scriptlets: [
             {
-              names: ['script.js'],
+              name: 'script.js',
+              aliases: [],
               body: 'function script() {}',
               dependencies: [],
               executionWorld: 'MAIN',
@@ -843,7 +847,8 @@ foo.com###selector
         engine.resources = new Resources({
           scriptlets: [
             {
-              names: ['foo'],
+              name: 'foo',
+              aliases: [],
               body: '',
               dependencies: [],
               executionWorld: 'MAIN',
@@ -1451,21 +1456,24 @@ foo.com###selector
           engine.resources = new Resources({
             scriptlets: [
               {
-                names: ['scriptlet'],
+                name: 'scriptlet',
+                aliases: [],
                 body: 'function scriptlet() {}',
                 dependencies: [],
                 executionWorld: 'MAIN',
                 requiresTrust: false,
               },
               {
-                names: ['scriptlet1'],
+                name: 'scriptlet1',
+                aliases: [],
                 body: 'function scriptlet1() {}',
                 dependencies: [],
                 executionWorld: 'MAIN',
                 requiresTrust: false,
               },
               {
-                names: ['scriptlet2'],
+                name: 'scriptlet2',
+                aliases: [],
                 body: 'function scriptlet2() {}',
                 dependencies: [],
                 executionWorld: 'MAIN',

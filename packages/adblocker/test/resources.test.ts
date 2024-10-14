@@ -29,20 +29,23 @@ describe('#Resources', function () {
       const distribution: ResourcesDistribution = {
         redirects: [
           {
-            names: ['x'],
-            content: '',
+            name: 'x',
+            aliases: [],
+            body: '',
             contentType: '',
           },
         ],
         scriptlets: [
           {
-            names: ['a'],
-            content: 'function a() { b() }',
+            name: 'a',
+            aliases: [],
+            body: 'function a() { b() }',
             dependencies: ['b'],
           },
           {
-            names: ['b'],
-            content: 'function b() {}',
+            name: 'b',
+            aliases: [],
+            body: 'function b() {}',
             dependencies: [],
           },
         ],
@@ -61,28 +64,33 @@ describe('#Resources', function () {
         redirects: [],
         scriptlets: [
           {
-            names: ['b'],
-            content: 'function b() {}',
+            name: 'b',
+            aliases: [],
+            body: 'function b() {}',
             dependencies: [],
           },
           {
-            names: ['c'],
-            content: 'function c() {}',
+            name: 'c',
+            aliases: [],
+            body: 'function c() {}',
             dependencies: ['b'],
           },
           {
-            names: ['a', 'alias'],
-            content: 'function a() {}',
+            name: 'a',
+            aliases: ['alias'],
+            body: 'function a() {}',
             dependencies: ['b', 'b', 'c', 'missing'],
           },
           {
-            names: ['d.js'],
-            content: 'function d() {}',
+            name: 'd',
+            aliases: [],
+            body: 'function d() {}',
             dependencies: [],
           },
           {
-            names: ['e.fn'],
-            content: 'function e() {}',
+            name: 'e.fn',
+            aliases: [],
+            body: 'function e() {}',
             dependencies: [],
           },
         ],
@@ -106,12 +114,16 @@ describe('#Resources', function () {
     });
 
     it('includes scriptlet body', function () {
-      const scriptlet = resources.scriptlets.find((r) => r.names.includes('a'))!;
+      const scriptlet = resources.scriptlets.find(
+        (r) => r.name === 'a' || r.aliases.includes('a'),
+      )!;
       expect(resources.getScriptlet('a')).to.include(scriptlet.body);
     });
 
     it('includes dependencies', function () {
-      const dependency = resources.scriptlets.find((r) => r.names.includes('b'))!;
+      const dependency = resources.scriptlets.find(
+        (r) => r.name === 'b' || r.aliases.includes('b'),
+      )!;
       expect(resources.getScriptlet('a')).to.include(dependency.body);
     });
 
@@ -120,7 +132,9 @@ describe('#Resources', function () {
     });
 
     it('ignore duplicated dependencies', function () {
-      const dependency = resources.scriptlets.find((r) => r.names.includes('b'))!;
+      const dependency = resources.scriptlets.find(
+        (r) => r.name === 'b' || r.aliases.includes('b'),
+      )!;
       // if a string is present in other string exactly once then it splits that other string into two parts
       expect(resources.getScriptlet('a')?.split(dependency.body)).to.have.lengthOf(2);
     });
@@ -141,15 +155,16 @@ describe('#Resources', function () {
       const distribution: ResourcesDistribution = {
         redirects: [
           {
-            names: ['a', 'alias'],
+            name: 'a',
+            aliases: ['alias'],
             contentType: 'text/plain',
-            encoding: 'base64',
-            content: '',
+            body: '',
           },
           {
-            names: ['b'],
+            name: 'b',
+            aliases: [],
             contentType: 'text/plain',
-            content: '',
+            body: '',
           },
         ],
         scriptlets: [],

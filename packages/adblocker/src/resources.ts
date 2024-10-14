@@ -23,13 +23,15 @@ function btoaPolyfill(buffer: string): string {
 }
 
 export interface Resource {
-  names: string[];
+  name: string;
+  aliases: string[];
   body: string;
   contentType: string;
 }
 
 interface Scriptlet {
-  names: string[];
+  name: string;
+  aliases: string[];
   body: string;
   dependencies: string[];
   executionWorld: Scripting.ExecutionWorld;
@@ -38,14 +40,15 @@ interface Scriptlet {
 
 export interface ResourcesDistribution {
   redirects: Array<{
-    names: string[];
-    content: string;
+    name: string;
+    aliases: string[];
+    body: string;
     contentType: string;
-    encoding?: 'base64';
   }>;
   scriptlets: Array<{
-    names: string[];
-    content: string;
+    name: string;
+    aliases: string[];
+    body: string;
     dependencies: string[];
     executionWorld?: Scripting.ExecutionWorld;
     requiresTrust?: boolean;
@@ -75,21 +78,24 @@ export default class Resources {
     const scriptlets: Scriptlet[] = [];
 
     for (let i = 0, numberOfResources = buffer.getUint16(); i < numberOfResources; i++) {
-      const names: string[] = [];
-      for (let i = 0, numberOfNames = buffer.getUint16(); i < numberOfNames; i++) {
-        names.push(buffer.getASCII());
+      const name = buffer.getASCII();
+      const aliases: string[] = [];
+      for (let i = 0, numberOfAliases = buffer.getUint16(); i < numberOfAliases; i++) {
+        aliases.push(buffer.getASCII());
       }
       resources.push({
-        names,
+        name,
+        aliases,
         body: buffer.getUTF8(),
         contentType: buffer.getASCII(),
       });
     }
 
     for (let i = 0, numberOfScriptlets = buffer.getUint16(); i < numberOfScriptlets; i++) {
-      const names: string[] = [];
-      for (let i = 0, numberOfNames = buffer.getUint16(); i < numberOfNames; i++) {
-        names.push(buffer.getASCII());
+      const name = buffer.getASCII();
+      const aliases: string[] = [];
+      for (let i = 0, numberOfAliases = buffer.getUint16(); i < numberOfAliases; i++) {
+        aliases.push(buffer.getASCII());
       }
       const body = buffer.getUTF8();
       const isExecutionWorldIsolated = buffer.getBool();
@@ -100,7 +106,8 @@ export default class Resources {
       }
 
       scriptlets.push({
-        names,
+        name,
+        aliases,
         body,
         executionWorld: isExecutionWorldIsolated === true ? 'ISOLATED' : 'MAIN',
         requiresTrust,
@@ -119,23 +126,31 @@ export default class Resources {
     const distribution: ResourcesDistribution = JSON.parse(data);
 
     const resources: Resource[] = [];
-    for (const redirect of distribution.redirects) {
+    for (const { name, aliases, body, contentType } of distribution.redirects) {
       resources.push({
-        names: redirect.names,
-        body: redirect.content,
-        contentType:
-          redirect.contentType + (redirect.encoding !== undefined ? `;${redirect.encoding}` : ''),
+        name,
+        aliases,
+        body,
+        contentType,
       });
     }
 
     const scriptlets: Scriptlet[] = [];
-    for (const scriptlet of distribution.scriptlets) {
+    for (const {
+      name,
+      aliases,
+      body,
+      dependencies,
+      executionWorld = 'MAIN',
+      requiresTrust = false,
+    } of distribution.scriptlets) {
       scriptlets.push({
-        names: scriptlet.names,
-        body: scriptlet.content,
-        dependencies: scriptlet.dependencies,
-        executionWorld: scriptlet.executionWorld ?? 'MAIN',
-        requiresTrust: scriptlet.requiresTrust ?? false,
+        name,
+        aliases,
+        body,
+        dependencies,
+        executionWorld,
+        requiresTrust,
       });
     }
 
@@ -171,13 +186,13 @@ export default class Resources {
     this.resourcesByName.clear();
     this.scriptletsByName.clear();
     for (const resource of this.resources) {
-      for (const name of resource.names) {
-        this.resourcesByName.set(name, resource);
+      for (const alias of resource.aliases) {
+        this.resourcesByName.set(alias, resource);
       }
     }
     for (const scriptlet of this.scriptlets) {
-      for (const name of scriptlet.names) {
-        this.scriptletsByName.set(name, scriptlet);
+      for (const alias of scriptlet.aliases) {
+        this.scriptletsByName.set(alias, scriptlet);
       }
     }
   }
@@ -207,8 +222,7 @@ export default class Resources {
       return undefined;
     }
 
-    const [scriptletName] = scriptlet.names;
-    let script = this.scriptletsCache.get(scriptletName);
+    let script = this.scriptletsCache.get(scriptlet.name);
 
     if (script !== undefined) {
       if (script.length === 0) {
@@ -220,7 +234,7 @@ export default class Resources {
     const dependencies = this.getScriptletDependencies(scriptlet);
     script = assembleScript(scriptlet.body, dependencies);
 
-    this.scriptletsCache.set(scriptletName, script);
+    this.scriptletsCache.set(scriptlet.name, script);
     return script;
   }
 
@@ -237,7 +251,7 @@ export default class Resources {
       if (dependency === undefined) {
         dependencies.set(
           dependencyName,
-          `console.warn('@ghostery/adblocker: cannot find dependency: "${dependencyName}" for scriptlet: "${scriptlet.names[0]}"')`,
+          `console.warn('@ghostery/adblocker: cannot find dependency: "${dependencyName}" for scriptlet: "${scriptlet.name}"')`,
         );
         continue;
       }
@@ -252,15 +266,23 @@ export default class Resources {
     let estimatedSize = sizeOfASCII(this.checksum); // resources.size
 
     estimatedSize += 2 * sizeOfByte();
-    for (const { names, body: content, contentType } of this.resources) {
-      estimatedSize += names.reduce((state, name) => state + sizeOfASCII(name), 2 * sizeOfByte());
+    for (const { name, aliases, body: content, contentType } of this.resources) {
+      estimatedSize += sizeOfASCII(name);
+      estimatedSize += aliases.reduce(
+        (state, alias) => state + sizeOfASCII(alias),
+        2 * sizeOfByte(),
+      );
       estimatedSize += sizeOfUTF8(content);
       estimatedSize += sizeOfASCII(contentType);
     }
 
     estimatedSize += 2 * sizeOfByte();
-    for (const { names, body: content, dependencies } of this.scriptlets) {
-      estimatedSize += names.reduce((state, name) => state + sizeOfASCII(name), 2 * sizeOfByte());
+    for (const { name, aliases, body: content, dependencies } of this.scriptlets) {
+      estimatedSize += sizeOfASCII(name);
+      estimatedSize += aliases.reduce(
+        (state, alias) => state + sizeOfASCII(alias),
+        2 * sizeOfByte(),
+      );
       estimatedSize += sizeOfUTF8(content);
       estimatedSize += sizeOfBool(); // executionWorld
       estimatedSize += sizeOfBool(); // requiresTrust
@@ -279,10 +301,11 @@ export default class Resources {
 
     // Serialize `resources`
     buffer.pushUint16(this.resources.length);
-    for (const { names, body: content, contentType } of this.resources) {
-      buffer.pushUint16(names.length);
-      for (const name of names) {
-        buffer.pushASCII(name);
+    for (const { name, aliases, body: content, contentType } of this.resources) {
+      buffer.pushASCII(name);
+      buffer.pushUint16(aliases.length);
+      for (const alias of aliases) {
+        buffer.pushASCII(alias);
       }
       buffer.pushUTF8(content);
       buffer.pushASCII(contentType);
@@ -290,11 +313,18 @@ export default class Resources {
 
     // Serialize `scriptlets`
     buffer.pushUint16(this.scriptlets.length);
-    for (const { names, body: content, dependencies, executionWorld, requiresTrust } of this
-      .scriptlets) {
-      buffer.pushUint16(names.length);
-      for (const name of names) {
-        buffer.pushASCII(name);
+    for (const {
+      name,
+      aliases,
+      body: content,
+      dependencies,
+      executionWorld,
+      requiresTrust,
+    } of this.scriptlets) {
+      buffer.pushASCII(name);
+      buffer.pushUint16(aliases.length);
+      for (const alias of aliases) {
+        buffer.pushASCII(alias);
       }
       buffer.pushUTF8(content);
       buffer.pushBool(executionWorld === 'ISOLATED');
