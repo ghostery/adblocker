@@ -79,13 +79,10 @@ export default class Resources {
       for (let i = 0, numberOfNames = buffer.getUint16() /* Read length of `names` array */; i < numberOfNames; i++) {
         names.push(buffer.getASCII());
       }
-      const content = buffer.getUTF8();
-      const contentType = buffer.getASCII();
-
       resources.push({
         names,
-        body: content,
-        contentType,
+        body:buffer.getUTF8(),
+        contentType: buffer.getASCII(),
       });
     }
 
