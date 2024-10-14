@@ -7,6 +7,7 @@
  */
 
 import { expect } from 'chai';
+import sinon from 'sinon';
 import 'mocha';
 
 import { loadResources } from './utils.js';
@@ -53,6 +54,110 @@ describe('#Resources', function () {
       const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
       expect(resources.resources).to.lengthOf(1);
       expect(resources.scriptlets).to.lengthOf(2);
+    });
+  });
+
+  context('#updateAliases', function () {
+    it('is called by the constructor', function () {
+      const stub = sinon.stub(Resources.prototype, 'updateAliases');
+      try {
+        new Resources();
+        sinon.assert.calledOnce(stub);
+      } finally {
+        stub.restore();
+      }
+    });
+
+    it('throws error on duplicates', function () {
+      expect(
+        () =>
+          new Resources({
+            resources: [
+              {
+                name: 'test',
+                aliases: [],
+                body: '',
+                contentType: '',
+              },
+              {
+                name: 'test',
+                aliases: [],
+                body: '',
+                contentType: '',
+              },
+            ],
+          }),
+      ).to.throw('Resource with a name or alias "test" already exists');
+
+      expect(
+        () =>
+          new Resources({
+            scriptlets: [
+              {
+                name: 'test',
+                aliases: [],
+                body: '',
+                dependencies: [],
+                executionWorld: 'ISOLATED',
+                requiresTrust: false,
+              },
+              {
+                name: 'test',
+                aliases: [],
+                body: '',
+                dependencies: [],
+                executionWorld: 'ISOLATED',
+                requiresTrust: false,
+              },
+            ],
+          }),
+      ).to.throw('Scriptlet with a name or alias "test" already exists');
+    });
+
+    it('throws error missing dependencies', function () {
+      expect(
+        () =>
+          new Resources({
+            scriptlets: [
+              {
+                name: 'test',
+                aliases: [],
+                body: '',
+                dependencies: ['dependency.fn'],
+                executionWorld: 'ISOLATED',
+                requiresTrust: false,
+              },
+            ],
+          }),
+      ).to.throw('Scriptlet with a name or alias "test" has a missing depencency "dependency.fn"');
+    });
+
+    it('ignores dependency order', function () {
+      expect(
+        () =>
+          new Resources({
+            scriptlets: [
+              {
+                name: 'test',
+                aliases: [],
+                body: '',
+                dependencies: ['dependency.fn'],
+                executionWorld: 'ISOLATED',
+                requiresTrust: false,
+              },
+              {
+                name: 'dependency.fn',
+                aliases: [],
+                body: '',
+                dependencies: [],
+                executionWorld: 'ISOLATED',
+                requiresTrust: false,
+              },
+            ],
+          }),
+      ).to.not.throw(
+        'Scriptlet with a name or alias "test" has a missing depencency "dependency.fn"',
+      );
     });
   });
 
@@ -105,12 +210,6 @@ describe('#Resources', function () {
     it('supports .js extension', function () {
       expect(resources.getScriptlet('d')).to.exist;
       expect(resources.getScriptlet('d.js')).to.equal(resources.getScriptlet('d'));
-    });
-
-    it('helps detect missing dependencies', function () {
-      expect(resources.getScriptlet('a')).to.be.include(
-        `console.warn('@ghostery/adblocker: cannot find dependency: "missing" for scriptlet: "a"')`,
-      );
     });
 
     it('includes scriptlet body', function () {

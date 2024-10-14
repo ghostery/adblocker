@@ -186,13 +186,30 @@ export default class Resources {
     this.resourcesByName.clear();
     this.scriptletsByName.clear();
     for (const resource of this.resources) {
-      for (const alias of resource.aliases) {
-        this.resourcesByName.set(alias, resource);
+      for (const name of [resource.name, ...resource.aliases]) {
+        if (this.resourcesByName.has(name)) {
+          throw new Error(`Resource with a name or alias "${name}" already exists`);
+        }
+        this.resourcesByName.set(name, resource);
       }
     }
     for (const scriptlet of this.scriptlets) {
-      for (const alias of scriptlet.aliases) {
-        this.scriptletsByName.set(alias, scriptlet);
+      for (const name of [scriptlet.name, ...scriptlet.aliases]) {
+        if (this.scriptletsByName.has(name)) {
+          throw new Error(`Scriptlet with a name or alias "${name}" already exists`);
+        }
+        this.scriptletsByName.set(name, scriptlet);
+      }
+    }
+
+    // iterate the scriptlets again once all dependencies are present in scriptletsByName
+    for (const scriptlet of this.scriptlets) {
+      for (const dependencyName of scriptlet.dependencies) {
+        if (!this.scriptletsByName.has(dependencyName)) {
+          throw new Error(
+            `Scriptlet with a name or alias "${scriptlet.name}" has a missing depencency "${dependencyName}"`,
+          );
+        }
       }
     }
   }
@@ -247,14 +264,8 @@ export default class Resources {
       if (dependencies.has(dependencyName)) {
         continue;
       }
-      const dependency = this.scriptletsByName.get(dependencyName);
-      if (dependency === undefined) {
-        dependencies.set(
-          dependencyName,
-          `console.warn('@ghostery/adblocker: cannot find dependency: "${dependencyName}" for scriptlet: "${scriptlet.name}"')`,
-        );
-        continue;
-      }
+      // dependecy is there as presence is enforced by the updateAliases
+      const dependency = this.scriptletsByName.get(dependencyName)!;
       dependencies.set(dependencyName, dependency.body);
       queue.push(...dependency.dependencies);
     }
