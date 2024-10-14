@@ -91,13 +91,13 @@ export default class Resources {
       for (let i = 0, numberOfNames = buffer.getUint16() /* Read length of `names` array */; i < numberOfNames; i++) {
         names.push(buffer.getASCII());
       }
-      const content = buffer.getUTF8();
+      const body = buffer.getUTF8();
       const isExecutionWorldIsolated = buffer.getBool();
       const requiresTrust = buffer.getBool();
       const dependencies: string[] = [];
       for (
-        let i = 0, l = buffer.getUint16() /* Read length of `dependencies` array */;
-        i < l;
+        let i = 0, numberOfDependencies = buffer.getUint16() /* Read length of `dependencies` array */;
+        i < numberOfDependencies;
         i++
       ) {
         dependencies.push(buffer.getASCII());
@@ -105,7 +105,7 @@ export default class Resources {
 
       scriptlets.push({
         names,
-        body: content,
+        body,
         executionWorld: isExecutionWorldIsolated === true ? 'ISOLATED' : 'MAIN',
         requiresTrust,
         dependencies,
