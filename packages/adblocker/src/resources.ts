@@ -10,7 +10,7 @@ import type { Scripting } from 'webextension-polyfill';
 
 import { getResourceForMime } from '@remusao/small';
 
-import { StaticDataView, sizeOfUTF8, sizeOfASCII, sizeOfBool } from './data-view.js';
+import { StaticDataView, sizeOfUTF8, sizeOfASCII, sizeOfBool, sizeOfByte } from './data-view.js';
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -76,30 +76,26 @@ export default class Resources {
 
     for (let i = 0, numberOfResources = buffer.getUint16(); i < numberOfResources; i++) {
       const names: string[] = [];
-      for (let i = 0, numberOfNames = buffer.getUint16() /* Read length of `names` array */; i < numberOfNames; i++) {
+      for (let i = 0, numberOfNames = buffer.getUint16(); i < numberOfNames; i++) {
         names.push(buffer.getASCII());
       }
       resources.push({
         names,
-        body:buffer.getUTF8(),
+        body: buffer.getUTF8(),
         contentType: buffer.getASCII(),
       });
     }
 
     for (let i = 0, numberOfScriptlets = buffer.getUint16(); i < numberOfScriptlets; i++) {
       const names: string[] = [];
-      for (let i = 0, numberOfNames = buffer.getUint16() /* Read length of `names` array */; i < numberOfNames; i++) {
+      for (let i = 0, numberOfNames = buffer.getUint16(); i < numberOfNames; i++) {
         names.push(buffer.getASCII());
       }
       const body = buffer.getUTF8();
       const isExecutionWorldIsolated = buffer.getBool();
       const requiresTrust = buffer.getBool();
       const dependencies: string[] = [];
-      for (
-        let i = 0, numberOfDependencies = buffer.getUint16() /* Read length of `dependencies` array */;
-        i < numberOfDependencies;
-        i++
-      ) {
+      for (let i = 0, numberOfDependencies = buffer.getUint16(); i < numberOfDependencies; i++) {
         dependencies.push(buffer.getASCII());
       }
 
@@ -200,14 +196,14 @@ export default class Resources {
   }
 
   public getScriptlet(name: string): string | undefined {
+    // Scriptlets with names ending with `.fn` is always treated as dependencies
     if (name.endsWith('.fn')) {
       return undefined;
     }
 
-    const scriptlet = this.scriptletsByName.get(name) || this.scriptletsByName.get(name + '.js');
+    const scriptlet = this.scriptletsByName.get(name) ?? this.scriptletsByName.get(name + '.js');
 
     if (scriptlet === undefined) {
-      this.scriptletsCache.set(name, '');
       return undefined;
     }
 
@@ -221,14 +217,14 @@ export default class Resources {
       return script;
     }
 
-    const dependencies = this.getScriptletDepenencies(scriptlet);
+    const dependencies = this.getScriptletDependencies(scriptlet);
     script = assembleScript(scriptlet.body, dependencies);
 
     this.scriptletsCache.set(scriptletName, script);
     return script;
   }
 
-  private getScriptletDepenencies(scriptlet: Scriptlet): string[] {
+  private getScriptletDependencies(scriptlet: Scriptlet): string[] {
     const dependencies: Map<string, string> = new Map();
     const queue: string[] = [...scriptlet.dependencies];
 
@@ -253,24 +249,26 @@ export default class Resources {
   }
 
   public getSerializedSize(): number {
-    let estimatedSize = sizeOfASCII(this.checksum) + 2; // resources.size
+    let estimatedSize = sizeOfASCII(this.checksum); // resources.size
 
-    this.resources.forEach(({ names, body: content, contentType }) => {
-      estimatedSize += names.reduce((state, name) => state + sizeOfASCII(name), 2);
+    estimatedSize += 2 * sizeOfByte();
+    for (const { names, body: content, contentType } of this.resources) {
+      estimatedSize += names.reduce((state, name) => state + sizeOfASCII(name), 2 * sizeOfByte());
       estimatedSize += sizeOfUTF8(content);
       estimatedSize += sizeOfASCII(contentType);
-    });
+    }
 
-    this.scriptlets.forEach(({ names, body: content, dependencies }) => {
-      estimatedSize += names.reduce((state, name) => state + sizeOfASCII(name), 2);
+    estimatedSize += 2 * sizeOfByte();
+    for (const { names, body: content, dependencies } of this.scriptlets) {
+      estimatedSize += names.reduce((state, name) => state + sizeOfASCII(name), 2 * sizeOfByte());
       estimatedSize += sizeOfUTF8(content);
       estimatedSize += sizeOfBool(); // executionWorld
       estimatedSize += sizeOfBool(); // requiresTrust
       estimatedSize += dependencies.reduce(
         (state, dependency) => state + sizeOfASCII(dependency),
-        2,
+        2 * sizeOfByte(),
       );
-    });
+    }
 
     return estimatedSize;
   }
@@ -281,29 +279,28 @@ export default class Resources {
 
     // Serialize `resources`
     buffer.pushUint16(this.resources.length);
-    this.resources.forEach(({ names, body: content, contentType }) => {
+    for (const { names, body: content, contentType } of this.resources) {
       buffer.pushUint16(names.length);
       for (const name of names) {
         buffer.pushASCII(name);
       }
       buffer.pushUTF8(content);
       buffer.pushASCII(contentType);
-    });
+    }
 
     // Serialize `scriptlets`
     buffer.pushUint16(this.scriptlets.length);
-    this.scriptlets.forEach(
-      ({ names, body: content, dependencies, executionWorld, requiresTrust }) => {
-        buffer.pushUint16(names.length);
-        for (const name of names) {
-          buffer.pushASCII(name);
-        }
-        buffer.pushUTF8(content);
-        buffer.pushBool(executionWorld === 'ISOLATED');
-        buffer.pushBool(requiresTrust === true);
-        buffer.pushUint16(dependencies.length);
-        dependencies.forEach((dependency) => buffer.pushASCII(dependency));
-      },
-    );
+    for (const { names, body: content, dependencies, executionWorld, requiresTrust } of this
+      .scriptlets) {
+      buffer.pushUint16(names.length);
+      for (const name of names) {
+        buffer.pushASCII(name);
+      }
+      buffer.pushUTF8(content);
+      buffer.pushBool(executionWorld === 'ISOLATED');
+      buffer.pushBool(requiresTrust === true);
+      buffer.pushUint16(dependencies.length);
+      dependencies.forEach((dependency) => buffer.pushASCII(dependency));
+    }
   }
 }
