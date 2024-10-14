@@ -88,7 +88,7 @@ export default class Resources {
 
     for (let i = 0, numberOfScriptlets = buffer.getUint16(); i < numberOfScriptlets; i++) {
       const names: string[] = [];
-      for (let i = 0, l = buffer.getUint16() /* Read length of `names` array */; i < l; i++) {
+      for (let i = 0, numberOfNames = buffer.getUint16() /* Read length of `names` array */; i < numberOfNames; i++) {
         names.push(buffer.getASCII());
       }
       const content = buffer.getUTF8();
