@@ -352,6 +352,7 @@ daemonanime.net##+js(acs, eval, replace)
 daemonanime.net##+js(acs, document.addEventListener, google_ad_client)
 daemon-hentai.com##+js(aopr, b2a)
 daemonanime.net,daemon-hentai.com##+js(nostif, adbl)
+daemon-hentai.com##+js(nostif, nextFunction)
 daemonanime.net,daemon-hentai.com##+js(acs, document.querySelectorAll, popMagic)
 daemonanime.net#@#div[id^="div-gpt-"]:not([style^="width: 1px; height: 1px; position: absolute; left: -10000px; top: -"])
 daemonanime.net#@#[id^="div-gpt-ad"]:not([style^="width: 1px; height: 1px; position: absolute; left: -10000px; top: -"])
@@ -1510,6 +1511,7 @@ www.wp.pl##div[data-st-area] + div > div > div:has(> div > div > div[id^="div-gp
 www.wp.pl##aside > div > div[data-st-area="Wiadomosci"] ~ div[class]:has(div[style^="transform:"] > a[style="text-decoration: none;"])
 www.wp.pl,pudelek.pl,o2.pl##body > div[class]:has(> div + div + div > .spinner)
 !#if env_mobile
+www.wp.pl##.max-w-mobile > div[class]:has(> div > div > iframe)
 www.wp.pl##.max-w-mobile > div:has(> div:first-child > div:only-child > div > span:has-text(Przewijaj w dół, by kontynuować))
 www.wp.pl##div[data-bdc="section-celebrities"] > .wp-inner-content > div:has(> div:first-child > a[href^="https://www.wp.pl/"]:only-child > img:only-child)
 www.wp.pl##.app-container > div:has(> div > div > div + img[src^="https://v.wpimg.pl/"] + div:empty)
@@ -1541,11 +1543,13 @@ turystyka.wp.pl##div:has(> div:only-child > * > div > .border > .container > .la
 turystyka.wp.pl##div[class]:has(> div > div > span > div > .border > .container > [class] > a.w_contentLink[target="_blank"][rel="noreferrer noopener"] > img[width="100%"])
 wp.pl##body > [data-container] > div[class]:empty
 wp.pl###comments > div > div > div:has(> div:first-child > div:only-child > div:only-child > div:last-child > div:first-child > div > a > img[src^="https://v.wpimg.pl/"][alt="null"])
+wp.pl##a[href="https://www.wp.pl"][data-st-area="goToSG"] + div:has(> div > div > div:has-text(REKLAMA))
 forum.parenting.pl##aside > div:has(> div:first-child + div:empty + script:last-child)
 ! against blinking ads
 wp.pl,money.pl##div:has(> a:first-child:has(> div:empty:only-child) + div:empty:last-child):remove()
 wp.pl##div:has(> div:first-child:has(> div:only-child > a > div:empty:only-child) + div:last-child:empty)
-wp.pl,abczdrowie.pl,parenting.pl##div:has(> div:first-child:has(> a:first-child > img[src^="https://v.wpimg.pl/"]) + div:empty:last-child)
+wp.pl##div:has(> div:first-child:has(> iframe:only-child) + div:last-child:empty)
+wp.pl,abczdrowie.pl,parenting.pl,o2.pl##div:has(> div:first-child:has(> a:first-child > img[src^="https://v.wpimg.pl/"]) + div:empty:last-child)
 ! https://github.com/uBlockOrigin/uAssets/issues/16909
 @@||googletagmanager.com/gtm.js$script,domain=abczdrowie.pl
 ! https://github.com/uBlockOrigin/uAssets/issues/12214#issuecomment-2299131571
@@ -1840,13 +1844,13 @@ kayifamilytv.com##+js(aeld, DOMContentLoaded, adsBlocked)
 fakaza.*,fakaza2018.com,fakazavibes.com,hiphopde.com##a[data-wpel-link="external"] > *
 fakaza.*,fakaza2018.com,fakazahouse.com,fakazamusic.co,samsonghiphop.org,zamusic.org##[href*="//bit.ly/"], [href*="//thaudray.com/"], [href*="//tinkerwidth.com/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/17909
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=rtl.be,redirect-rule=google-ima.js
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=rtl.be,redirect=google-ima.js
 ! https://github.com/uBlockOrigin/uAssets/issues/21458
 reshare.pm#@#.showads
 reshare.pm##+js(nowoif)
 @@||a.magsrv.com/ad-provider.js$script,domain=reshare.pm
 ! https://github.com/AdguardTeam/AdguardFilters/issues/149922
-||googlesyndication.com^$script,redirect-rule=noopjs,domain=flysas.com
+||googlesyndication.com^$script,redirect=noopjs,domain=flysas.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/137898
 maxt.church##+js(no-xhr-if, googletagmanager)
 ! https://github.com/uBlockOrigin/uAssets/issues/21553
@@ -2090,7 +2094,7 @@ windowslite.net##+js(set, go_popup, %7B%7D)
 newscon.org##+js(acs, setInterval, adblock)
 newscon.org##+js(aopw, pbjs)
 newscon.org##+js(nosiif, ads)
-newscon.org##+js(nostif, %2Fadblock%7Cgoogletag%7C%3D%3D%2F)
+newscon.org##+js(nostif, %2Fadblock%7Cgoogletag%7C%3D%3D%7C%5C.length%2F)
 newscon.org##+js(set, window.runningAdsAllowed, true)
 newscon.org##+js(set, tOS1, 150)
 @@||newscon.org^$ghide
@@ -3120,12 +3124,13 @@ crictracker.com##article > div[style="height:270px"]
 ! https://github.com/uBlockOrigin/uAssets/issues/18260
 *$script,redirect-rule=noopjs,domain=client.falixnodes.net
 !#if cap_html_filtering
-client.falixnodes.net##^script:has-text(/detectAdBlock|\(typeof [a-z]{10,25} \=\=\=? ("undefined"|"function")\)|_0x|'\/func'/)
+client.falixnodes.net##^script:has-text(verifyAdEngine)
 !#else
-client.falixnodes.net##+js(rmnt, script, %2FdetectAdBlock%7C%5C(typeof%20%5Ba-z%5D%7B10%2C25%7D%20%5C%3D%5C%3D%5C%3D%3F%20(%22undefined%22%7C%22function%22)%5C)%7C_0x%7C'%5C%2Ffunc'%2F)
+client.falixnodes.net##+js(rmnt, script, verifyAdEngine)
 !#endif
-client.falixnodes.net##+js(rpnt, script, typeof%20window.loadscript, typeof%20window.loadscript%20%3D%3D%3D%20true%20%26%26%20typeof%20window.googlescriptloaded)
-client.falixnodes.net##+js(rpnt, script, (window.loadscript, (window.loadscript%20%3D%3D%3D%20undefined%20%7C%7C%20true%20%7C%7C%20window.googlescriptloaded)
+client.falixnodes.net##+js(rpnt, script, typeof%20window.loadtwo, typeof%20window.loadtwo%20%3D%3D%3D%20true)
+client.falixnodes.net##+js(rpnt, script, (window.loadtwo, (window.loadtwo%20%3D%3D%3D%20undefined%20%7C%7C%20true%20%7C%7C%20window.googlescriptloaded)
+client.falixnodes.net##+js(set, window.adngin, %7B%7D)
 ! https://www.reddit.com/r/uBlockOrigin/comments/15wqphp/anti_ad_block_needed/
 ||shroomers.app/static/modules/base/js/shr-ads-enforcer.js
 shroomers.app##+js(set, isAdBlockerActive, noopFunc)
@@ -3211,7 +3216,7 @@ decider.com,didyouknowfacts.com,dogtime.com,dustyoldthing.com##^script:has-text(
 faithhub.net,femestella.com,footwearnews.com,freeconvert.com,frogsandsnailsandpuppydogtail.com,fsm-media.com,funtasticlife.com,fwmadebycarli.com##^script:has-text('"v4ac1eiZr0"')
 gamerant.com,gfinityesports.com,givemesport.com,gulflive.com##^script:has-text('"v4ac1eiZr0"')
 helloflo.com,homeglowdesign.com,honeygirlsworld.com,hotcars.com,howtogeek.com##^script:has-text('"v4ac1eiZr0"')
-insider-gaming.com,insurancejournal.com##^script:has-text('"v4ac1eiZr0"')
+imgur.com,insider-gaming.com,insurancejournal.com##^script:has-text('"v4ac1eiZr0"')
 jasminemaria.com,kion546.com,lehighvalleylive.com,lettyskitchen.com,lifeinleggings.com,liveandletsfly.com,lizzieinlace.com,localnews8.com,lonestarlive.com##^script:has-text('"v4ac1eiZr0"')
 madeeveryday.com,maidenhead-advertiser.co.uk,makeuseof.com,mardomreport.net,melangery.com,milestomemories.com,modernmom.com,momtastic.com,mostlymorgan.com,motherwellmag.com,movieweb.com,muddybootsanddiamonds.com,musicfeeds.com.au,mylifefromhome.com##^script:has-text('"v4ac1eiZr0"')
 nationalreview.com,neoskosmos.com,nordot.app,nothingbutnewcastle.com,nsjonline.com##^script:has-text('"v4ac1eiZr0"')
@@ -3230,7 +3235,7 @@ decider.com,didyouknowfacts.com,dogtime.com,dustyoldthing.com##+js(rmnt, script,
 faithhub.net,femestella.com,footwearnews.com,freeconvert.com,frogsandsnailsandpuppydogtail.com,fsm-media.com,funtasticlife.com,fwmadebycarli.com##+js(rmnt, script, %22v4ac1eiZr0%22)
 gamerant.com,gfinityesports.com,givemesport.com,gulflive.com##+js(rmnt, script, %22v4ac1eiZr0%22)
 helloflo.com,homeglowdesign.com,honeygirlsworld.com,hotcars.com,howtogeek.com##+js(rmnt, script, %22v4ac1eiZr0%22)
-insider-gaming.com,insurancejournal.com##+js(rmnt, script, %22v4ac1eiZr0%22)
+imgur.com,insider-gaming.com,insurancejournal.com##+js(rmnt, script, %22v4ac1eiZr0%22)
 jasminemaria.com,kion546.com,lehighvalleylive.com,lettyskitchen.com,lifeinleggings.com,liveandletsfly.com,lizzieinlace.com,localnews8.com,lonestarlive.com##+js(rmnt, script, %22v4ac1eiZr0%22)
 madeeveryday.com,maidenhead-advertiser.co.uk,makeuseof.com,mardomreport.net,melangery.com,milestomemories.com,modernmom.com,momtastic.com,mostlymorgan.com,motherwellmag.com,movieweb.com,muddybootsanddiamonds.com,musicfeeds.com.au,mylifefromhome.com##+js(rmnt, script, %22v4ac1eiZr0%22)
 nationalreview.com,neoskosmos.com,nordot.app,nothingbutnewcastle.com,nsjonline.com##+js(rmnt, script, %22v4ac1eiZr0%22)

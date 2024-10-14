@@ -299,7 +299,9 @@ xhamster20.*##.player-add-overlay
 ! https://github.com/uBlockOrigin/uAssets/issues/17237
 ||xhamster20.*/api/*/vast
 ! https://github.com/uBlockOrigin/uAssets/issues/23749
+! https://github.com/uBlockOrigin/uAssets/issues/25611
 play.nova.bg##+js(no-xhr-if, googlesyndication)
+play.nova.bg##+js(no-xhr-if, %2Fgoogima.js)
 ! https://github.com/NanoMeow/QuickReports/issues/3256
 @@||thehouseofportable.com^$ghide
 @@||thehouseofportable.com^$script,1p
@@ -1447,10 +1449,8 @@ dichvureviewmap.com##+js(no-fetch-if, googlesyndication)
 raenonx.cc##div[class="flex flex-col place-content-center place-items-center items-center text-center w-full h-[100px]"]:has(> div[id^="nitro-"])
 raenonx.cc##+js(nostif, Ads)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/190021
-! [dup] from ublock-origin/quick-fixes.txt
-! gunauc.net##+js(no-fetch-if, googlesyndication, , %7B%22type%22%3A%22cors%22%7D)
-! [dup] from ublock-origin/quick-fixes.txt
-! gunauc.net#@#+js(prevent-fetch, pagead2.googlesyndication.com)
+gunauc.net##+js(no-fetch-if, googlesyndication, , %7B%22type%22%3A%22cors%22%7D)
+gunauc.net#@#+js(prevent-fetch, pagead2.googlesyndication.com)
 ! https://sportsonline.si/channels/bra/br4.php
 ! https://sportsonline.si/channels/hd/hd10.php
 absentescape.net,forgepattern.net##+js(aopr, aclib)
@@ -1554,6 +1554,7 @@ fansubseries.com.br##+js(aopr, popUrl)
 pandadevelopment.net##+js(no-fetch-if, adsbygoogle)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/177530
 megacanais.com##+js(aopr, Adcash)
+! https://github.com/uBlockOrigin/uBlock-discussions/discussions/790#discussioncomment-10316655
 ! https://cracksports.me/ - popups
 ! https://soccerworldcup.me/ - popups
 ! https://github.com/uBlockOrigin/uAssets/issues/23443
@@ -1562,11 +1563,14 @@ megacanais.com##+js(aopr, Adcash)
 ! https://github.com/uBlockOrigin/uAssets/issues/24737
 ! https://github.com/uBlockOrigin/uAssets/issues/24816
 ! https://github.com/uBlockOrigin/uAssets/issues/24831
+! https://icelz.to/tv/channel.php?id=YWI1MDhjMDk3YzViNDFjYmIwNjI2ZGNjM2ZjOTQ3MGE=&channel=Cartoon%20Network%20%26%20Adult%20Swim
+! https://gogoanime.co.in/videos/mahou-shoujo-ni-akogarete-episode-1
 !#if cap_html_filtering
-1stream.eu,4kwebplay.xyz,antennasports.ru,buffsports.me,buffstreams.app,claplivehdplay.ru,cracksports.me,euro2024direct.ru,ext.to,eztv.tf,eztvx.to,kenitv.me,lewblivehdplay.ru,mixdrop.*,mlbbite.net,mlbstreams.ai,qatarstreams.me,qqwebplay.xyz,rnbastreams.com,soccerworldcup.me,topstreams.info,totalsportek.to,viwlivehdplay.ru##^script:has-text(adserverDomain)
+1stream.eu,4kwebplay.xyz,antennasports.ru,buffsports.me,buffstreams.app,claplivehdplay.ru,cracksports.me,euro2024direct.ru,ext.to,eztv.tf,eztvx.to,kenitv.me,lewblivehdplay.ru,mixdrop.*,mlbbite.net,mlbstreams.ai,qatarstreams.me,qqwebplay.xyz,rnbastreams.com,sanet.*,soccerworldcup.me,topstreams.info,totalsportek.to,viwlivehdplay.ru##^script:has-text(adserverDomain)
 !#else
-1stream.eu,4kwebplay.xyz,antennasports.ru,buffsports.me,buffstreams.app,claplivehdplay.ru,cracksports.me,euro2024direct.ru,ext.to,eztv.tf,eztvx.to,kenitv.me,lewblivehdplay.ru,mixdrop.*,mlbbite.net,mlbstreams.ai,qatarstreams.me,qqwebplay.xyz,rnbastreams.com,soccerworldcup.me,topstreams.info,totalsportek.to,viwlivehdplay.ru##+js(rmnt, script, adserverDomain)
+1stream.eu,4kwebplay.xyz,antennasports.ru,buffsports.me,buffstreams.app,claplivehdplay.ru,cracksports.me,euro2024direct.ru,ext.to,eztv.tf,eztvx.to,kenitv.me,lewblivehdplay.ru,mixdrop.*,mlbbite.net,mlbstreams.ai,qatarstreams.me,qqwebplay.xyz,rnbastreams.com,sanet.*,soccerworldcup.me,topstreams.info,totalsportek.to,viwlivehdplay.ru##+js(rmnt, script, adserverDomain)
 !#endif
+gogoanime.co.in,icelz.to##+js(aopw, Adcash)
 ###dontfoid
 ##div[style="top: 0px; left: 0px; width: 1287px; height: 500px; position: fixed; z-index: 2147483647;"]
 ##div[style="position: fixed; inset: 0px; z-index: 2147483647; pointer-events: auto;"]
@@ -1576,6 +1580,8 @@ cracksports.me##+js(acs, JSON.parse, atob)
 ! https://github.com/uBlockOrigin/uAssets/issues/23459
 ! https://www.reddit.com/r/uBlockOrigin/comments/1cyfbpa/ad_block_stopped_working_on_sports_streaming/
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/790#discussioncomment-9534899
+||icelz.to/lib.js
+||api.gogoanime.zip/promo
 ! cricket sites popups
 factorp.xyz##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/23473
@@ -2326,7 +2332,6 @@ playmod24.com##div[download-process-box]
 playmod24.com##a[download-button]:style(display: block !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/24877
 euronews.com###o-site-hr__leaderboard-wallpaper.u-show-for-xlarge:remove()
-! https://github.com/uBlockOrigin/uBlock-discussions/discussions/790#discussioncomment-10316655
 ! https://github.com/uBlockOrigin/uAssets/issues/24888
 x265rips.xyz##+js(no-fetch-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/24884
@@ -2674,6 +2679,7 @@ roselife.site##a[href][onclick="this.remove()"]
 ||juneauempire.com/wp-content/plugins/incognito_dectector/
 ! https://github.com/AdguardTeam/AdguardFilters/issues/189490
 uploadmall.com#@#.AdSense
+uploadmall.com#@#.advblock
 uploadmall.com##+js(set, navigator.brave, undefined)
 uploadmall.com##+js(nowoif, zigi_tag_id, 10, obj)
 @@||dcbbwymp1bhlf.cloudfront.net^$script,domain=uploadmall.com
@@ -2743,3 +2749,28 @@ playtube.tv##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 ||85po.com/player/stats.php?$1p,image,redirect=1x1.gif
 ! https://github.com/uBlockOrigin/uAssets/issues/25602
 ||oxhoftarius.com^
+! https://github.com/uBlockOrigin/uAssets/issues/25603
+||vidlink.pro/api/adcash
+vidlink.pro##+js(aopw, Adcash)
+vidlink.pro##+js(aopr, aclib)
+||eyewondermedia.com^$all
+^clickid=*&sourceid=$doc
+*$script,3p,denyallow=jwplatform.com,domain=vidlink.pro
+! https://www.ilgazzettino.it/nordest/rovigo/rissa_minorenni_bottiglia_faccia-8407348.html - waiting time for ads
+ilgazzettino.it##+js(set, jwDefaults.advertising, %7B%7D)
+! https://github.com/uBlockOrigin/uAssets/issues/25627
+!#if cap_html_filtering
+secondhandsongs.com##^script:has-text(ad_block)
+!#else
+secondhandsongs.com##+js(rmnt, script, blocking)
+secondhandsongs.com##+js(aost, document.getElementById, inlineScript)
+!#endif
+! https://www.3bmeteo.com/meteo/italia/video/domani
+3bmeteo.com##+js(set, elimina_profilazione, 1)
+3bmeteo.com##+js(set, elimina_pubblicita, 1)
+! https://www.reddit.com/r/uBlockOrigin/comments/1g1uqng/adblock_detected_on_two_sites/
+@@||seirsanduk.*?loader.js^$script,domain=seirsanduk.*
+! https://github.com/uBlockOrigin/uAssets/issues/25640
+textreverse.com##+js(no-fetch-if, snigelweb.com)
+textreverse.com##.clearfix
+textreverse.com##.moretooladd
