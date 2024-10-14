@@ -74,7 +74,7 @@ export default class Resources {
     const resources: Resource[] = [];
     const scriptlets: Scriptlet[] = [];
 
-    for (let i = 0, l = buffer.getUint16(); i < l; i++) {
+    for (let i = 0, numberOfResources = buffer.getUint16(); i < numberOfResources; i++) {
       const names: string[] = [];
       for (let i = 0, l = buffer.getUint16() /* Read length of `names` array */; i < l; i++) {
         names.push(buffer.getASCII());
