@@ -64,7 +64,9 @@ interface Scriptlet {
   aliases: string[];
   body: string;
   dependencies: string[];
+  // TODO: add support for scritplet injection in ISOLATED worlds
   executionWorld?: Scripting.ExecutionWorld;
+  // TODO: add support for trusted scritplet
   requiresTrust?: boolean;
 }
 
