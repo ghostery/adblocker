@@ -29,6 +29,36 @@ export interface Resource {
   contentType: string;
 }
 
+function isResourceValid(resource: any): resource is Resource {
+  if (resource === null) {
+    return false;
+  }
+
+  if (typeof resource !== 'object') {
+    return false;
+  }
+
+  const { name, aliases, body, contentType } = resource;
+
+  if (typeof name !== 'string') {
+    return false;
+  }
+
+  if (!Array.isArray(aliases) || !aliases.every((alias) => typeof alias === 'string')) {
+    return false;
+  }
+
+  if (typeof body !== 'string') {
+    return false;
+  }
+
+  if (typeof contentType !== 'string') {
+    return false;
+  }
+
+  return true;
+}
+
 interface Scriptlet {
   name: string;
   aliases: string[];
@@ -38,117 +68,59 @@ interface Scriptlet {
   requiresTrust: boolean;
 }
 
-export interface ResourcesDistribution {
-  redirects: Array<{
-    name: string;
-    aliases: string[];
-    body: string;
-    contentType: string;
-  }>;
-  scriptlets: Array<{
-    name: string;
-    aliases: string[];
-    body: string;
-    dependencies: string[];
-    executionWorld?: Scripting.ExecutionWorld;
-    requiresTrust?: boolean;
-  }>;
+function createScriptlet(scriptlet: any): Scriptlet | undefined {
+  if (scriptlet === null) {
+    return undefined;
+  }
+
+  if (typeof scriptlet !== 'object') {
+    return undefined;
+  }
+
+  const { name, aliases, body, dependencies, executionWorld, requiresTrust } = scriptlet;
+
+  if (typeof name !== 'string') {
+    return undefined;
+  }
+
+  if (!Array.isArray(aliases) || !aliases.every((alias) => typeof alias === 'string')) {
+    return undefined;
+  }
+
+  if (typeof body !== 'string') {
+    return undefined;
+  }
+
+  if (
+    !Array.isArray(dependencies) ||
+    !dependencies.every((depencency) => typeof depencency === 'string')
+  ) {
+    return undefined;
+  }
+
+  if (
+    typeof executionWorld !== 'undefined' &&
+    typeof executionWorld !== 'string' &&
+    (executionWorld !== 'MAIN' || executionWorld !== 'ISOLATED')
+  ) {
+    return undefined;
+  }
+
+  if (typeof requiresTrust !== 'undefined' && typeof requiresTrust !== 'boolean') {
+    return undefined;
+  }
+
+  return {
+    name,
+    aliases,
+    body,
+    dependencies,
+    executionWorld: executionWorld || 'MAIN',
+    requiresTrust: requiresTrust || false,
+  };
 }
 
 // TODO - support empty resource body
-
-class ResourceValidationError extends Error {
-  public static expectString(location: string, value: unknown) {
-    if (typeof value !== 'string') {
-      throw new this(`Expected string for "${location}" but got "${typeof value}"`);
-    }
-  }
-
-  public static expectNonEmptyString(location: string, value: unknown) {
-    this.expectString(location, value);
-    if ((value as string).length === 0) {
-      throw new this(`Expected non-empty string for "${location}" but got an empty string`);
-    }
-  }
-
-  public static expectArray(location: string, value: unknown) {
-    if (Array.isArray(value) === false) {
-      throw new ResourceValidationError(
-        `Expected type of array for "${location}" but got "${typeof value}"`,
-      );
-    }
-  }
-
-  constructor(message: string) {
-    super(message);
-    this.name = 'ResourceValidationError';
-  }
-}
-
-function validateResource(data: string): void {
-  let resources: ResourcesDistribution;
-  try {
-    resources = JSON.parse(data);
-  } catch (_error) {
-    throw new ResourceValidationError('Failed to parse the payload as JSON');
-  }
-
-  ResourceValidationError.expectArray('.redirects', resources.redirects);
-
-  const redirectNames: Set<string> = new Set();
-  for (const redirect of resources.redirects) {
-    ResourceValidationError.expectNonEmptyString('.redirects.[].name', redirect.name);
-    ResourceValidationError.expectNonEmptyString(
-      '.redirects.[].contentType',
-      redirect.contentType,
-    );
-    ResourceValidationError.expectString('.redirects.[].body', redirect.body);
-    ResourceValidationError.expectArray('.redirects.[].aliases', redirect.aliases);
-    for (const alias of new Set([redirect.name, ...redirect.aliases])) {
-      ResourceValidationError.expectNonEmptyString('.redirects.[].aliases.[]', alias);
-      if (redirectNames.has(alias)) {
-        throw new ResourceValidationError(
-          `Naming conflicts in the redirects names and aliases were found: "${alias}"`,
-        );
-      }
-      redirectNames.add(alias);
-    }
-  }
-
-  if (Array.isArray(resources.scriptlets) === false) {
-    ResourceValidationError.expectArray('.scriptlets', resources.scriptlets);
-  }
-
-  const scriptletNames: Set<string> = new Set();
-  for (const scriptlet of resources.scriptlets) {
-    ResourceValidationError.expectString('.scriptlets.[].name', scriptlet.name);
-    ResourceValidationError.expectString('.scriptlets.[].body', scriptlet.body);
-    ResourceValidationError.expectArray('.scriptlets.[].aliases', scriptlet.aliases);
-    for (const alias of new Set([scriptlet.name, ...scriptlet.aliases])) {
-      ResourceValidationError.expectNonEmptyString('.scriptlets.[].aliases.[]', alias);
-      if (scriptletNames.has(alias)) {
-        throw new ResourceValidationError(
-          `Naming conflicts in the redirects names and aliases were found: "${alias}"`,
-        );
-      }
-      scriptletNames.add(alias);
-    }
-    if (
-      scriptlet.executionWorld !== undefined &&
-      scriptlet.executionWorld !== 'ISOLATED' &&
-      scriptlet.executionWorld !== 'MAIN'
-    ) {
-      throw new ResourceValidationError(
-        `Expected undefined, "MAIN", or "ISOLATED" for ".scriptlets.[].executionWorld" but got "${typeof scriptlet.executionWorld}"`,
-      );
-    }
-    if (scriptlet.requiresTrust !== undefined && typeof scriptlet.requiresTrust !== 'boolean') {
-      throw new ResourceValidationError(
-        `Expected undefined, "MAIN", or "ISOLATED" for ".scriptlets.[].requiresTrust" but got "${typeof scriptlet.requiresTrust}"`,
-      );
-    }
-  }
-}
 
 const assembleScript = (script: string, dependencies: string[] = []): string =>
   [
@@ -216,36 +188,35 @@ export default class Resources {
   }
 
   public static parse(data: string, { checksum }: { checksum: string }): Resources {
-    validateResource(data);
-    const distribution: ResourcesDistribution = JSON.parse(data);
+    const distribution = JSON.parse(data);
+
+    if (distribution === null || typeof distribution !== 'object') {
+      throw new Error(`Cannot parse resources.json`);
+    }
+
+    const { scriptlets: rawScriplets, redirects: rawResources } = distribution;
 
     const resources: Resource[] = [];
-    for (const { name, aliases, body, contentType } of distribution.redirects) {
-      resources.push({
-        name,
-        aliases,
-        body,
-        contentType,
-      });
+    if (Array.isArray(rawResources)) {
+      for (const redirect of rawResources) {
+        if (isResourceValid(redirect)) {
+          resources.push(redirect);
+        } else {
+          throw new Error(`Cannot parse redirect resource: ${JSON.stringify(redirect)}`);
+        }
+      }
     }
 
     const scriptlets: Scriptlet[] = [];
-    for (const {
-      name,
-      aliases,
-      body,
-      dependencies,
-      executionWorld = 'MAIN',
-      requiresTrust = false,
-    } of distribution.scriptlets) {
-      scriptlets.push({
-        name,
-        aliases,
-        body,
-        dependencies,
-        executionWorld,
-        requiresTrust,
-      });
+    if (Array.isArray(rawScriplets)) {
+      for (const rawScriplet of rawScriplets) {
+        const scriptlet = createScriptlet(rawScriplet);
+        if (scriptlet !== undefined) {
+          scriptlets.push(scriptlet);
+        } else {
+          throw new Error(`Cannot parse scriptlet: ${JSON.stringify(rawScriplet)}`);
+        }
+      }
     }
 
     return new Resources({

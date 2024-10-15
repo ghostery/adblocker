@@ -14,7 +14,7 @@ import { getDomain } from 'tldts-experimental';
 import Engine, { EngineEventHandlers } from '../../src/engine/engine.js';
 import NetworkFilter from '../../src/filters/network.js';
 import Request, { RequestType } from '../../src/request.js';
-import Resources, { ResourcesDistribution } from '../../src/resources.js';
+import Resources, { Resource } from '../../src/resources.js';
 
 import requests from '../data/requests.js';
 import { loadEasyListFilters, typedArrayEqual } from '../utils.js';
@@ -129,10 +129,7 @@ function test({
 }
 
 function buildResourcesFromRequests(filters: NetworkFilter[]): Resources {
-  const resources: ResourcesDistribution = {
-    redirects: [],
-    scriptlets: [],
-  };
+  const resources: Resource[] = [];
 
   filters.forEach((filter) => {
     if (filter.redirect !== undefined) {
@@ -140,14 +137,14 @@ function buildResourcesFromRequests(filters: NetworkFilter[]): Resources {
 
       // Guess resource type
       if (redirect.endsWith('.gif')) {
-        resources.redirects.push({
+        resources.push({
           name: redirect,
           aliases: [],
           body: '',
           contentType: 'image/gif;base64',
         });
       } else {
-        resources.redirects.push({
+        resources.push({
           name: redirect,
           aliases: [],
           body: '',
@@ -157,7 +154,9 @@ function buildResourcesFromRequests(filters: NetworkFilter[]): Resources {
     }
   });
 
-  return Resources.parse(JSON.stringify(resources), { checksum: '' });
+  return new Resources({
+    resources,
+  });
 }
 
 function createEngine(filters: string, enableOptimizations: boolean = true) {

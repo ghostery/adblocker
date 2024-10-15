@@ -13,7 +13,7 @@ import 'mocha';
 import { loadResources } from './utils.js';
 
 import { StaticDataView } from '../src/data-view.js';
-import Resources, { ResourcesDistribution } from '../src/resources.js';
+import Resources from '../src/resources.js';
 
 describe('#Resources', function () {
   it('#serialize', function () {
@@ -27,33 +27,70 @@ describe('#Resources', function () {
 
   context('#parse', function () {
     it('parses dependencies', function () {
-      const distribution: ResourcesDistribution = {
-        redirects: [
-          {
-            name: 'x',
-            aliases: [],
-            body: '',
-            contentType: 'text/plain',
-          },
-        ],
-        scriptlets: [
-          {
-            name: 'a',
-            aliases: [],
-            body: 'function a() { b() }',
-            dependencies: ['b'],
-          },
-          {
-            name: 'b',
-            aliases: [],
-            body: 'function b() {}',
-            dependencies: [],
-          },
-        ],
-      };
-      const resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
+      const resources = Resources.parse(
+        JSON.stringify({
+          redirects: [
+            {
+              name: 'x',
+              aliases: [],
+              body: '',
+              contentType: 'text/plain',
+            },
+          ],
+          scriptlets: [
+            {
+              name: 'a',
+              aliases: [],
+              body: 'function a() { b() }',
+              dependencies: ['b'],
+              executionWorld: 'ISOLATED',
+              requiresTrust: false,
+            },
+            {
+              name: 'b',
+              aliases: [],
+              body: 'function b() {}',
+              dependencies: [],
+              executionWorld: 'ISOLATED',
+              requiresTrust: false,
+            },
+          ],
+        }),
+        { checksum: '' },
+      );
       expect(resources.resources).to.lengthOf(1);
       expect(resources.scriptlets).to.lengthOf(2);
+    });
+
+    it('throws on missing or invalid data', function () {
+      const subject = (resources: any) => () =>
+        Resources.parse(JSON.stringify(resources), { checksum: '' });
+      expect(subject(''), 'resources must be a valid json').to.throw(
+        'Cannot parse resources.json',
+      );
+      expect(subject(null), 'resources must be a valid json').to.throw(
+        'Cannot parse resources.json',
+      );
+      expect(subject({ scriptlets: [{}] })).to.throw('Cannot parse scriptlet: {}');
+      expect(subject({ redirects: [{}] })).to.throw('Cannot parse redirect resource: {}');
+    });
+
+    it('provides default values for scriptlet optional properties', function () {
+      const resources = Resources.parse(
+        JSON.stringify({
+          scriptlets: [
+            {
+              name: 'a',
+              aliases: [],
+              body: 'function a() { }',
+              dependencies: [],
+            },
+          ],
+        }),
+        { checksum: '' },
+      );
+      expect(resources.scriptlets[0]).to.have.property('executionWorld').that.equals('MAIN');
+      expect(resources.scriptlets[0]).to.have.property('requiresTrust').that.equals(false);
     });
   });
 
@@ -165,42 +202,50 @@ describe('#Resources', function () {
     let resources: Resources;
 
     before(function () {
-      const distribution: ResourcesDistribution = {
-        redirects: [],
+      resources = new Resources({
         scriptlets: [
           {
             name: 'a',
             aliases: ['alias'],
             body: 'function a() {}',
             dependencies: ['b', 'b', 'c'],
+            executionWorld: 'ISOLATED',
+            requiresTrust: false,
           },
           {
             name: 'b',
             aliases: [],
             body: 'function b() {}',
             dependencies: [],
+            executionWorld: 'ISOLATED',
+            requiresTrust: false,
           },
           {
             name: 'c',
             aliases: [],
             body: 'function c() {}',
             dependencies: ['b'],
+            executionWorld: 'ISOLATED',
+            requiresTrust: false,
           },
           {
             name: 'd',
             aliases: [],
             body: 'function d() {}',
             dependencies: [],
+            executionWorld: 'ISOLATED',
+            requiresTrust: false,
           },
           {
             name: 'e.fn',
             aliases: [],
             body: 'function e() {}',
             dependencies: [],
+            executionWorld: 'ISOLATED',
+            requiresTrust: false,
           },
         ],
-      };
-      resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
+      });
     });
 
     it('does not return scriptlets with .fn extension', function () {
@@ -251,8 +296,8 @@ describe('#Resources', function () {
     let resources: Resources;
 
     before(function () {
-      const distribution: ResourcesDistribution = {
-        redirects: [
+      resources = new Resources({
+        resources: [
           {
             name: 'a',
             aliases: ['alias'],
@@ -272,9 +317,7 @@ describe('#Resources', function () {
             body: 'YWJj',
           },
         ],
-        scriptlets: [],
-      };
-      resources = Resources.parse(JSON.stringify(distribution), { checksum: '' });
+      });
     });
 
     it('handles encoding', function () {
