@@ -57,6 +57,99 @@ export interface ResourcesDistribution {
 
 // TODO - support empty resource body
 
+class ResourceValidationError extends Error {
+  public static expectString(location: string, value: unknown) {
+    if (typeof value !== 'string') {
+      throw new this(`Expected string for "${location}" but got "${typeof value}"`);
+    }
+  }
+
+  public static expectNonEmptyString(location: string, value: unknown) {
+    this.expectString(location, value);
+    if ((value as string).length === 0) {
+      throw new this(`Expected non-empty string for "${location}" but got an empty string`);
+    }
+  }
+
+  public static expectArray(location: string, value: unknown) {
+    if (Array.isArray(value) === false) {
+      throw new ResourceValidationError(
+        `Expected type of array for "${location}" but got "${typeof value}"`,
+      );
+    }
+  }
+
+  constructor(message: string) {
+    super(message);
+    this.name = 'ResourceValidationError';
+  }
+}
+
+function validateResource(data: string): void {
+  let resources: ResourcesDistribution;
+  try {
+    resources = JSON.parse(data);
+  } catch (_error) {
+    throw new ResourceValidationError('Failed to parse the payload as JSON');
+  }
+
+  ResourceValidationError.expectArray('.redirects', resources.redirects);
+
+  const redirectNames: Set<string> = new Set();
+  for (const redirect of resources.redirects) {
+    ResourceValidationError.expectNonEmptyString('.redirects.[].name', redirect.name);
+    ResourceValidationError.expectNonEmptyString(
+      '.redirects.[].contentType',
+      redirect.contentType,
+    );
+    ResourceValidationError.expectString('.redirects.[].body', redirect.body);
+    ResourceValidationError.expectArray('.redirects.[].aliases', redirect.aliases);
+    for (const alias of new Set([redirect.name, ...redirect.aliases])) {
+      ResourceValidationError.expectNonEmptyString('.redirects.[].aliases.[]', alias);
+      if (redirectNames.has(alias)) {
+        throw new ResourceValidationError(
+          `Naming conflicts in the redirects names and aliases were found: "${alias}"`,
+        );
+      }
+      redirectNames.add(alias);
+    }
+  }
+
+  if (Array.isArray(resources.scriptlets) === false) {
+    ResourceValidationError.expectArray('.scriptlets', resources.scriptlets);
+  }
+
+  const scriptletNames: Set<string> = new Set();
+  for (const scriptlet of resources.scriptlets) {
+    ResourceValidationError.expectString('.scriptlets.[].name', scriptlet.name);
+    ResourceValidationError.expectString('.scriptlets.[].body', scriptlet.body);
+    ResourceValidationError.expectArray('.scriptlets.[].aliases', scriptlet.aliases);
+    for (const alias of new Set([scriptlet.name, ...scriptlet.aliases])) {
+      ResourceValidationError.expectNonEmptyString('.scriptlets.[].aliases.[]', alias);
+      if (scriptletNames.has(alias)) {
+        throw new ResourceValidationError(
+          `Naming conflicts in the redirects names and aliases were found: "${alias}"`,
+        );
+      }
+      scriptletNames.add(alias);
+    }
+    if (
+      scriptlet.executionWorld !== undefined &&
+      scriptlet.executionWorld !== 'ISOLATED' &&
+      scriptlet.executionWorld !== 'MAIN'
+    ) {
+      throw new ResourceValidationError(
+        `Expected undefined, "MAIN", or "ISOLATED" for ".scriptlets.[].executionWorld" but got "${typeof scriptlet.executionWorld}"`,
+      );
+    }
+    if (scriptlet.requiresTrust !== undefined && typeof scriptlet.requiresTrust !== 'boolean') {
+      throw new ResourceValidationError(
+        `Expected undefined, "MAIN", or "ISOLATED" for ".scriptlets.[].requiresTrust" but got "${typeof scriptlet.requiresTrust}"`,
+      );
+    }
+  }
+}
+
 const assembleScript = (script: string, dependencies: string[] = []): string =>
   [
     `if (typeof scriptletGlobals === 'undefined') { var scriptletGlobals = {}; }`,
@@ -123,6 +216,7 @@ export default class Resources {
   }
 
   public static parse(data: string, { checksum }: { checksum: string }): Resources {
+    validateResource(data);
     const distribution: ResourcesDistribution = JSON.parse(data);
 
     const resources: Resource[] = [];
