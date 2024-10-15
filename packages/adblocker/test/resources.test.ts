@@ -74,24 +74,6 @@ describe('#Resources', function () {
       expect(subject({ scriptlets: [{}] })).to.throw('Cannot parse scriptlet: {}');
       expect(subject({ redirects: [{}] })).to.throw('Cannot parse redirect resource: {}');
     });
-
-    it('provides default values for scriptlet optional properties', function () {
-      const resources = Resources.parse(
-        JSON.stringify({
-          scriptlets: [
-            {
-              name: 'a',
-              aliases: [],
-              body: 'function a() { }',
-              dependencies: [],
-            },
-          ],
-        }),
-        { checksum: '' },
-      );
-      expect(resources.scriptlets[0]).to.have.property('executionWorld').that.equals('MAIN');
-      expect(resources.scriptlets[0]).to.have.property('requiresTrust').that.equals(false);
-    });
   });
 
   context('#updateAliases', function () {

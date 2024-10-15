@@ -64,60 +64,53 @@ interface Scriptlet {
   aliases: string[];
   body: string;
   dependencies: string[];
-  executionWorld: Scripting.ExecutionWorld;
-  requiresTrust: boolean;
+  executionWorld?: Scripting.ExecutionWorld;
+  requiresTrust?: boolean;
 }
 
-function createScriptlet(scriptlet: any): Scriptlet | undefined {
+function isScriptletValid(scriptlet: any): scriptlet is Scriptlet {
   if (scriptlet === null) {
-    return undefined;
+    return false;
   }
 
   if (typeof scriptlet !== 'object') {
-    return undefined;
+    return false;
   }
 
   const { name, aliases, body, dependencies, executionWorld, requiresTrust } = scriptlet;
 
   if (typeof name !== 'string') {
-    return undefined;
+    return false;
   }
 
   if (!Array.isArray(aliases) || !aliases.every((alias) => typeof alias === 'string')) {
-    return undefined;
+    return false;
   }
 
   if (typeof body !== 'string') {
-    return undefined;
+    return false;
   }
 
   if (
     !Array.isArray(dependencies) ||
     !dependencies.every((depencency) => typeof depencency === 'string')
   ) {
-    return undefined;
+    return false;
   }
 
   if (
     typeof executionWorld !== 'undefined' &&
-    typeof executionWorld !== 'string' &&
-    (executionWorld !== 'MAIN' || executionWorld !== 'ISOLATED')
+    executionWorld !== 'MAIN' &&
+    executionWorld !== 'ISOLATED'
   ) {
-    return undefined;
+    return false;
   }
 
   if (typeof requiresTrust !== 'undefined' && typeof requiresTrust !== 'boolean') {
-    return undefined;
+    return false;
   }
 
-  return {
-    name,
-    aliases,
-    body,
-    dependencies,
-    executionWorld: executionWorld || 'MAIN',
-    requiresTrust: requiresTrust || false,
-  };
+  return true;
 }
 
 // TODO - support empty resource body
@@ -163,21 +156,27 @@ export default class Resources {
         aliases.push(buffer.getASCII());
       }
       const body = buffer.getUTF8();
+      const hasExecutionWorld = buffer.getBool();
       const isExecutionWorldIsolated = buffer.getBool();
+      const hasRequiresTrust = buffer.getBool();
       const requiresTrust = buffer.getBool();
       const dependencies: string[] = [];
       for (let i = 0, numberOfDependencies = buffer.getUint16(); i < numberOfDependencies; i++) {
         dependencies.push(buffer.getASCII());
       }
-
-      scriptlets.push({
+      const scriptlet: Scriptlet = {
         name,
         aliases,
         body,
-        executionWorld: isExecutionWorldIsolated === true ? 'ISOLATED' : 'MAIN',
-        requiresTrust,
         dependencies,
-      });
+      };
+      if (hasExecutionWorld) {
+        scriptlet.executionWorld = isExecutionWorldIsolated === true ? 'ISOLATED' : 'MAIN';
+      }
+      if (hasRequiresTrust) {
+        scriptlet.requiresTrust = requiresTrust;
+      }
+      scriptlets.push(scriptlet);
     }
 
     return new Resources({
@@ -209,12 +208,11 @@ export default class Resources {
 
     const scriptlets: Scriptlet[] = [];
     if (Array.isArray(rawScriplets)) {
-      for (const rawScriplet of rawScriplets) {
-        const scriptlet = createScriptlet(rawScriplet);
-        if (scriptlet !== undefined) {
+      for (const scriptlet of rawScriplets) {
+        if (isScriptletValid(scriptlet)) {
           scriptlets.push(scriptlet);
         } else {
-          throw new Error(`Cannot parse scriptlet: ${JSON.stringify(rawScriplet)}`);
+          throw new Error(`Cannot parse scriptlet: ${JSON.stringify(scriptlet)}`);
         }
       }
     }
@@ -364,7 +362,9 @@ export default class Resources {
         2 * sizeOfByte(),
       );
       estimatedSize += sizeOfUTF8(content);
+      estimatedSize += sizeOfBool(); // executionWorld present
       estimatedSize += sizeOfBool(); // executionWorld
+      estimatedSize += sizeOfBool(); // requiresTrust present
       estimatedSize += sizeOfBool(); // requiresTrust
       estimatedSize += dependencies.reduce(
         (state, dependency) => state + sizeOfASCII(dependency),
@@ -407,7 +407,9 @@ export default class Resources {
         buffer.pushASCII(alias);
       }
       buffer.pushUTF8(content);
+      buffer.pushBool(executionWorld !== undefined);
       buffer.pushBool(executionWorld === 'ISOLATED');
+      buffer.pushBool(requiresTrust !== undefined);
       buffer.pushBool(requiresTrust === true);
       buffer.pushUint16(dependencies.length);
       dependencies.forEach((dependency) => buffer.pushASCII(dependency));
