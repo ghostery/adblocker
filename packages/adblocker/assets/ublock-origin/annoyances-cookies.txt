@@ -1333,9 +1333,18 @@ aftonbladet.se,omniekonomi.se,bt.no,vg.no##+js(trusted-set-cookie, consentUUID, 
 derstandard.at,derstandard.de##+js(trusted-click-element, button%5Btitle%3D%22Einverstanden%22%5D, , 1000)
 ! iubenda-cs-accept-btn
 ! https://github.com/uBlockOrigin/uAssets/pull/24738
-3bmeteo.com,ansa.it,huffingtonpost.it,ilgazzettino.it,ilmessaggero.it,ilsecoloxix.it,lastampa.it,movieplayer.it,multiplayer.it,repubblica.it,tomshw.it,tuttoandroid.net,tuttotech.net##+js(trusted-click-element, button.iubenda-cs-accept-btn, , 1000)
-3bmeteo.com,ansa.it,huffingtonpost.it,ilgazzettino.it,ilmessaggero.it,ilsecoloxix.it,lastampa.it,movieplayer.it,multiplayer.it,repubblica.it,tomshw.it,tuttoandroid.net,tuttotech.net###iubenda-cs-banner:style(visibility: hidden !important;)
-3bmeteo.com,ansa.it,huffingtonpost.it,ilgazzettino.it,ilmessaggero.it,ilsecoloxix.it,lastampa.it,movieplayer.it,multiplayer.it,repubblica.it,tomshw.it,tuttoandroid.net,tuttotech.net##html:style(overflow: auto !important;)
+ansa.it,delladio.it,huffingtonpost.it,ilmessaggero.it,ilsecoloxix.it,lastampa.it,movieplayer.it,multiplayer.it,repubblica.it,tomshw.it,tuttoandroid.net,tuttotech.net##+js(trusted-click-element, button.iubenda-cs-accept-btn, , 1000)
+ansa.it,delladio.it,huffingtonpost.it,ilmessaggero.it,ilsecoloxix.it,lastampa.it,movieplayer.it,multiplayer.it,repubblica.it,tomshw.it,tuttoandroid.net,tuttotech.net###iubenda-cs-banner:style(visibility: hidden !important;)
+ansa.it,delladio.it,huffingtonpost.it,ilmessaggero.it,ilsecoloxix.it,lastampa.it,movieplayer.it,multiplayer.it,repubblica.it,tomshw.it,tuttoandroid.net,tuttotech.net##html:style(overflow: auto !important;)
+! https://github.com/uBlockOrigin/uAssets/pull/25606
+! https://github.com/uBlockOrigin/uAssets/pull/25324
+ilgazzettino.it###iubenda-cs-banner:style(visibility: hidden !important;)
+ilgazzettino.it##html:style(overflow: auto !important;)
+ilgazzettino.it##+js(set, _iub.cs.options.callback.onConsentRejected, noopFunc)
+ilgazzettino.it##+js(set, _iub.cs.options.callback.onConsentFirstRejected, noopFunc)
+ilgazzettino.it##+js(trusted-click-element, button.iubenda-cs-close-btn)
+||utils.cedsdigital.it/src/js/cmpConsentWall.js^$domain=ilgazzettino.it
+||iubenda.com^$domain=3bmeteo.com,important
 ! https://github.com/uBlockOrigin/uAssets/issues/24366
 ! https://www.reddit.com/r/uBlockOrigin/comments/1eb0wlg/weathercom_cannot_load/
 ! weather.com##+js(trusted-set-cookie, consentUUID, df843851-527a-4aec-8dab-5ba35e570618_32_33)
@@ -1469,12 +1478,14 @@ ignboards.com##+js(trusted-set-cookie, boards-eu-gdpr, eu, , , domain, ignboards
 ! https://web.de/ - accept
 web.de##+js(trusted-click-element, button%5Bdata-id%3D%22save-all-pur%22%5D, , 1000)
 ! https://github.com/uBlockOrigin/uAssets/issues/25366
+! https://github.com/uBlockOrigin/uAssets/issues/25608
 ! https://www.linternaute.com/hightech/jeux-video/5995467-inzoi-quel-est-ce-jeu-aux-graphismes-hyper-realistes-qui-entend-concurrencer-les-sims/
+lefigaro.fr,linternaute.com##body.appconsent_noscroll:style(overflow: auto !important;)
+lefigaro.fr,linternaute.com###appconsent:style(visibility: hidden !important;)
+lefigaro.fr##+js(trusted-click-element, button.button__acceptAll)
 linternaute.com##+js(trusted-click-element, button.button__skip)
 linternaute.com##+js(rpnt, script, typeof%20jQuery%20!%3D%3D, (()%3D%3E%7Bwindow.addEventListener(%22load%22%2C(function()%7Bif(window.localStorage.appconsent)%7Bconst%20consents%3Dwindow.JSON.parse(window.localStorage.appconsent)%3Bif(consents%26%26consents.consents%26%26consents.consents.vendors)%7Bfor(vendor%20of%20consents.consents.vendors)%7Bif(vendor.name%3D%3D%3D%22Facebook%22%26%26vendor.status%3D%3D%3D1)return%7D%7D%7Dlet%20i%3D0%3Bvar%20intervalId%3Dwindow.setInterval((function()%7Btry%7Bi%2B%3D1%3Bif(typeof%20_gtm%3F.consent%3F.cm%3F.strategy%3F.updateExtraVendorStatus!%3D%3D%22function%22)return%3B%5B%22facebook%22%2C%22instagram%22%2C%22pinterest%22%2C%22twitter%22%2C%22youtube%22%5D.forEach((vendor%3D%3E%7B_gtm.consent.cm.strategy.updateExtraVendorStatus(vendor%2C!0)%7D))%7Dcatch(_)%7Breturn%7Dif(i%3D%3D%3D5)clearInterval(intervalId)%7D)%2C1e3)%7D))%7D)()%3Btypeof%20jQuery%20!%3D%3D)
 linternaute.com##+js(set, _gtm.consent.cm.strategy.options.cmpay.enabled, false)
-linternaute.com##body.appconsent_noscroll:style(overflow: auto !important;)
-linternaute.com###appconsent:style(visibility: hidden !important;)
 linternaute.com##.ccminsert > .jEmbedTagPlaceholder.pending > .jEmbedTagPlaceholder__content
 ! essential only
 visionapartments.com##+js(trusted-set-cookie, ota_ga_consent, eyJkYXRlIjoiMjAyNC0wOS0yOFQxODoyNToxMy40MjlaIiwibmVzY2Vzc2FyeSI6dHJ1ZSwicGVyZm9ybWFuY2UiOmZhbHNlLCJtYXJrZXRpbmciOmZhbHNlfQ%3D%3D)
@@ -1491,3 +1502,10 @@ winfuture.de##.videop em[data-video-src]:style(display: block !important;)
 consent.caminteresse.fr##+js(trusted-click-element, button.accept-button)
 caminteresse.fr##[id^="sp_message_container"]:style(visibility: hidden !important;)
 caminteresse.fr##.sp-message-open body:style(overflow: auto !important;)
+! statistical=false, chat/reivews=true
+lush.com##+js(trusted-set-cookie, lush-commerce-cookies, %257B%2522necessary%2522%253Atrue%252C%2522statistical%2522%253Afalse%252C%2522chat%2522%253Atrue%252C%2522reviews%2522%253Atrue%257D, , , domain, lush.com)
+! https://github.com/uBlockOrigin/uAssets/issues/25629
+florence.com.tr##+js(trusted-set-local-storage-item, cookieConsent, %7B%22requiredCookies%22%3Atrue%2C%22functionality%22%3Atrue%2C%22advertisingAndRetargeting%22%3Afalse%2C%22analytics%22%3Afalse%7D)
+! idagio.com cookies
+app.idagio.com##+js(trusted-set-cookie, cookie-preferences, %7B%2522necessary%2522%3Atrue%252C%2522marketingAndAnalytics%2522%3Afalse%252C%2522functional%2522%3Afalse%252C%2522advertising%2522%3Afalse%7D, , , reload, 1, domain, app.idagio.com)
+www.idagio.com##+js(trusted-set-cookie, cookie-preferences, %7B%2522necessary%2522%3Atrue%252C%2522marketingAndAnalytics%2522%3Afalse%252C%2522functional%2522%3Afalse%252C%2522advertising%2522%3Afalse%7D, , , reload, 1, domain, www.idagio.com)
