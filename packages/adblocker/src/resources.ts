@@ -316,11 +316,7 @@ export default class Resources {
       return undefined;
     }
 
-    const scriptlet =
-      this.scriptletsByName.get(name) ??
-      (name.endsWith('.js')
-        ? this.scriptletsByName.get(name.slice(0, -3))
-        : this.scriptletsByName.get(name + '.js'));
+    const scriptlet = this.scriptletsByName.get(name.endsWith('.js') ? name : `${name}.js`);
 
     if (scriptlet === undefined) {
       return undefined;

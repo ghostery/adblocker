@@ -39,15 +39,15 @@ describe('#Resources', function () {
           ],
           scriptlets: [
             {
-              name: 'a',
+              name: 'a.js',
               aliases: [],
               body: 'function a() { b() }',
-              dependencies: ['b'],
+              dependencies: ['b.js'],
               executionWorld: 'ISOLATED',
               requiresTrust: false,
             },
             {
-              name: 'b',
+              name: 'b.js',
               aliases: [],
               body: 'function b() {}',
               dependencies: [],
@@ -187,15 +187,15 @@ describe('#Resources', function () {
       resources = new Resources({
         scriptlets: [
           {
-            name: 'a',
-            aliases: ['alias'],
+            name: 'a.js',
+            aliases: ['alias.js'],
             body: 'function a() {}',
-            dependencies: ['b', 'b', 'c'],
+            dependencies: ['b.fn', 'b.fn', 'c.fn'],
             executionWorld: 'ISOLATED',
             requiresTrust: false,
           },
           {
-            name: 'b',
+            name: 'b.fn',
             aliases: [],
             body: 'function b() {}',
             dependencies: [],
@@ -203,15 +203,15 @@ describe('#Resources', function () {
             requiresTrust: false,
           },
           {
-            name: 'c',
+            name: 'c.fn',
             aliases: [],
             body: 'function c() {}',
-            dependencies: ['b'],
+            dependencies: ['b.fn'],
             executionWorld: 'ISOLATED',
             requiresTrust: false,
           },
           {
-            name: 'd',
+            name: 'd.js',
             aliases: [],
             body: 'function d() {}',
             dependencies: [],
@@ -241,14 +241,14 @@ describe('#Resources', function () {
 
     it('includes scriptlet body', function () {
       const scriptlet = resources.scriptlets.find(
-        (r) => r.name === 'a' || r.aliases.includes('a'),
+        (r) => r.name === 'a.js' || r.aliases.includes('a.js'),
       )!;
       expect(resources.getScriptlet('a')).to.include(scriptlet.body);
     });
 
     it('includes dependencies', function () {
       const dependency = resources.scriptlets.find(
-        (r) => r.name === 'b' || r.aliases.includes('b'),
+        (r) => r.name === 'b.fn' || r.aliases.includes('b.fn'),
       )!;
       expect(resources.getScriptlet('a')).to.include(dependency.body);
     });
@@ -259,7 +259,7 @@ describe('#Resources', function () {
 
     it('ignore duplicated dependencies', function () {
       const dependency = resources.scriptlets.find(
-        (r) => r.name === 'b' || r.aliases.includes('b'),
+        (r) => r.name === 'b.fn' || r.aliases.includes('b.fn'),
       )!;
       // if a string is present in other string exactly once then it splits that other string into two parts
       expect(resources.getScriptlet('a')?.split(dependency.body)).to.have.lengthOf(2);
