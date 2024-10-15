@@ -361,6 +361,13 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     }
 
     if (skipResources !== true) {
+      for (const engine of engines.slice(1)) {
+        if (engine.resources.checksum !== engines[0].resources.checksum) {
+          throw new Error(
+            `resource checksum of all merged engines must match with the first one: "${engines[0].resources.checksum}" but got: "${engine.resources.checksum}"`,
+          );
+        }
+      }
       engine.resources = Resources.copy(engines[0].resources);
     }
 

@@ -846,7 +846,7 @@ foo.com###selector
         engine.resources = new Resources({
           scriptlets: [
             {
-              name: 'foo',
+              name: 'foo.js',
               aliases: [],
               body: '',
               dependencies: [],
@@ -1455,7 +1455,7 @@ foo.com###selector
           engine.resources = new Resources({
             scriptlets: [
               {
-                name: 'scriptlet',
+                name: 'scriptlet.js',
                 aliases: [],
                 body: 'function scriptlet() {}',
                 dependencies: [],
@@ -1463,7 +1463,7 @@ foo.com###selector
                 requiresTrust: false,
               },
               {
-                name: 'scriptlet1',
+                name: 'scriptlet1.js',
                 aliases: [],
                 body: 'function scriptlet1() {}',
                 dependencies: [],
@@ -1471,7 +1471,7 @@ foo.com###selector
                 requiresTrust: false,
               },
               {
-                name: 'scriptlet2',
+                name: 'scriptlet2.js',
                 aliases: [],
                 body: 'function scriptlet2() {}',
                 dependencies: [],
