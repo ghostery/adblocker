@@ -280,8 +280,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       patterns: {},
     };
 
-    let resources: Resources | undefined;
-
     type ConfigKey = keyof {
       [Key in keyof Config as Config[Key] extends boolean ? Key : never]: Config[Key];
     };
@@ -344,24 +342,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       }
     }
 
-    if (skipResources === true) {
-      resources = new Resources();
-    } else {
-      for (const engine of engines.slice(1)) {
-        if (engine.resources.checksum !== engines[0].resources.checksum) {
-          throw new Error(
-            `resource checksum of all merged engines must match with the first one: "${engines[0].resources.checksum}" but got: "${engine.resources.checksum}"`,
-          );
-        }
-      }
-      const resourcesBuffer = StaticDataView.allocate(engines[0].resources.getSerializedSize(), {
-        enableCompression: false,
-      });
-      engines[0].resources.serialize(resourcesBuffer);
-      resourcesBuffer.seekZero();
-      resources = Resources.deserialize(resourcesBuffer);
-    }
-
     const engine = new this({
       networkFilters: Array.from(networkFilters.values()),
       cosmeticFilters: Array.from(cosmeticFilters.values()),
@@ -370,6 +350,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       lists,
       config,
     }) as InstanceType<T>;
+
     if (
       Object.keys(metadata.categories).length +
         Object.keys(metadata.organizations).length +
@@ -378,7 +359,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     ) {
       engine.metadata = new Metadata(metadata);
     }
-    engine.resources = resources;
+
+    if (skipResources !== true) {
+      engine.resources = Resources.copy(engines[0].resources);
+    }
 
     return engine;
   }

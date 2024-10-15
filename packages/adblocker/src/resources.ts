@@ -224,6 +224,26 @@ export default class Resources {
     });
   }
 
+  public static copy(sourceResources: Resources) {
+    const checksum = sourceResources.checksum;
+    const resources: Resource[] = [];
+    const scriptlets: Scriptlet[] = [];
+
+    for (const resource of sourceResources.resources) {
+      resources.push(structuredClone(resource));
+    }
+
+    for (const scriptlet of sourceResources.scriptlets) {
+      scriptlets.push(structuredClone(scriptlet));
+    }
+
+    return new this({
+      checksum,
+      resources,
+      scriptlets,
+    });
+  }
+
   public readonly checksum: string;
   public readonly scriptlets: Scriptlet[];
   public readonly resources: Resource[];
