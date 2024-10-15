@@ -33,7 +33,7 @@ describe('#Resources', function () {
             name: 'x',
             aliases: [],
             body: '',
-            contentType: '',
+            contentType: 'text/plain',
           },
         ],
         scriptlets: [
@@ -169,6 +169,12 @@ describe('#Resources', function () {
         redirects: [],
         scriptlets: [
           {
+            name: 'a',
+            aliases: ['alias'],
+            body: 'function a() {}',
+            dependencies: ['b', 'b', 'c'],
+          },
+          {
             name: 'b',
             aliases: [],
             body: 'function b() {}',
@@ -179,12 +185,6 @@ describe('#Resources', function () {
             aliases: [],
             body: 'function c() {}',
             dependencies: ['b'],
-          },
-          {
-            name: 'a',
-            aliases: ['alias'],
-            body: 'function a() {}',
-            dependencies: ['b', 'b', 'c', 'missing'],
           },
           {
             name: 'd',
@@ -265,6 +265,12 @@ describe('#Resources', function () {
             contentType: 'text/plain',
             body: '',
           },
+          {
+            name: 'c',
+            aliases: [],
+            contentType: 'text/plain;base64',
+            body: 'YWJj',
+          },
         ],
         scriptlets: [],
       };
@@ -272,10 +278,7 @@ describe('#Resources', function () {
     });
 
     it('handles encoding', function () {
-      expect(resources.getResource('a')).to.have.property('contentType').that.include('base64');
-      expect(resources.getResource('b'))
-        .to.have.property('contentType')
-        .that.not.include('base64');
+      expect(resources.getResource('c')).to.have.property('contentType').that.include('base64');
     });
 
     it('handles aliases', function () {
