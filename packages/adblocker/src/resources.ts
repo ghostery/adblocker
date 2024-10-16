@@ -6,8 +6,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import type { Scripting } from 'webextension-polyfill';
-
 import { getResourceForMime } from '@remusao/small';
 
 import { StaticDataView, sizeOfUTF8, sizeOfASCII, sizeOfBool, sizeOfByte } from './data-view.js';
