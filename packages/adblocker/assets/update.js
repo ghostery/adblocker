@@ -50,10 +50,17 @@ async function downloadResource(resourceName) {
   });
 }
 
-// Update resources.txt
+// Update resources.json
 writeFileSync(
   join(ASSETS_PATH, 'ublock-origin', 'resources.json'),
   await downloadResource('ublock-resources-json'),
+  'utf-8',
+);
+
+// Update resources.txt
+writeFileSync(
+  join(ASSETS_PATH, 'ublock-origin', 'resources.txt'),
+  await downloadResource('ublock-resources'),
   'utf-8',
 );
 
