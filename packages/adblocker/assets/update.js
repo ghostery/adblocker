@@ -53,7 +53,7 @@ async function downloadResource(resourceName) {
 // Update resources.json
 writeFileSync(
   join(ASSETS_PATH, 'ublock-origin', 'resources.json'),
-  await downloadResource('ublock-resources-json'),
+  JSON.stringify(JSON.parse(await downloadResource('ublock-resources-json')), null, 2),
   'utf-8',
 );
 
