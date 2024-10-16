@@ -19,7 +19,6 @@ import Resources, { Resource } from '../../src/resources.js';
 import requests from '../data/requests.js';
 import { loadEasyListFilters, typedArrayEqual } from '../utils.js';
 import FilterEngine from '../../src/engine/engine.js';
-import { fastHash } from '../../src/utils.js';
 import { Metadata } from '../../src/engine/metadata.js';
 
 /**
@@ -130,23 +129,34 @@ function test({
 }
 
 function buildResourcesFromRequests(filters: NetworkFilter[]): Resources {
-  const resources: string[] = [];
+  const resources: Resource[] = [];
 
   filters.forEach((filter) => {
     if (filter.redirect !== undefined) {
       const redirect = filter.redirect;
 
       // Guess resource type
-      let type = 'application/javascript';
       if (redirect.endsWith('.gif')) {
-        type = 'image/gif;base64';
+        resources.push({
+          name: redirect,
+          aliases: [],
+          body: '',
+          contentType: 'image/gif;base64',
+        });
+      } else {
+        resources.push({
+          name: redirect,
+          aliases: [],
+          body: '',
+          contentType: 'application/javascript',
+        });
       }
-
-      resources.push(`${redirect} ${type}\n${redirect}`);
     }
   });
 
-  return Resources.parse(resources.join('\n\n'), { checksum: '' });
+  return new Resources({
+    resources,
+  });
 }
 
 function createEngine(filters: string, enableOptimizations: boolean = true) {
@@ -390,12 +400,27 @@ $csp=baz,domain=bar.com
       url: 'https://foo.com',
     });
 
-    const createEngineWithResource = (filters: string[], resource: string) => {
+    const createEngineWithResource = (filters: string[], content: string) => {
       const engine = createEngine(filters.join('\n'));
-      engine.resources.js.set(resource, resource);
-      engine.resources.resources.set(resource, {
-        body: resource,
-        contentType: 'application/javascript',
+      engine.resources = new Resources({
+        resources: [
+          {
+            name: content,
+            aliases: [],
+            body: content,
+            contentType: 'application/javascript',
+          },
+        ],
+        scriptlets: [
+          {
+            name: content,
+            aliases: [],
+            body: content,
+            dependencies: [],
+            executionWorld: 'MAIN',
+            requiresTrust: false,
+          },
+        ],
       });
       return engine;
     };
@@ -703,16 +728,27 @@ $csp=baz,domain=bar.com
     describe('script injections', () => {
       it('injects script', () => {
         const engine = Engine.parse('foo.com##+js(script.js,arg1)');
-        engine.resources = Resources.parse('script.js application/javascript\n{{1}}', {
-          checksum: '',
+        engine.resources = new Resources({
+          scriptlets: [
+            {
+              name: 'script.js',
+              aliases: [],
+              body: 'function script() {}',
+              dependencies: [],
+              executionWorld: 'MAIN',
+              requiresTrust: false,
+            },
+          ],
         });
         expect(
           engine.getCosmeticsFilters({
             domain: 'foo.com',
             hostname: 'foo.com',
             url: 'https://foo.com',
-          }).scripts,
-        ).to.eql(['arg1']);
+          }).scripts[0],
+        ).to.equal(
+          `if (typeof scriptletGlobals === 'undefined') { var scriptletGlobals = {}; };(function script() {})(...['arg1','{{2}}','{{3}}','{{4}}','{{5}}','{{6}}','{{7}}','{{8}}','{{9}}','{{10}}'].filter((a,i) => a !== '{{'+(i+1)+'}}').map((a) => decodeURIComponent(a)))`,
+        );
       });
 
       it('script missing', () => {
@@ -807,7 +843,18 @@ foo.com###selector
 
       it('disabling specific hides does not impact scriptlets', () => {
         const engine = Engine.parse(['@@||foo.com^$specifichide', 'foo.com##+js(foo)'].join('\n'));
-        engine.resources.js.set('foo', '');
+        engine.resources = new Resources({
+          scriptlets: [
+            {
+              name: 'foo.js',
+              aliases: [],
+              body: '',
+              dependencies: [],
+              executionWorld: 'MAIN',
+              requiresTrust: false,
+            },
+          ],
+        });
         expect(
           engine.getCosmeticsFilters({
             domain: 'foo.com',
@@ -1405,9 +1452,34 @@ foo.com###selector
         it(JSON.stringify({ filters, hostname, matches, injections }), () => {
           // Initialize engine with all rules from test case
           const engine = createEngine(filters.join('\n'));
-          engine.resources.js.set('scriptlet', 'scriptlet');
-          engine.resources.js.set('scriptlet1', 'scriptlet1');
-          engine.resources.js.set('scriptlet2', 'scriptlet2');
+          engine.resources = new Resources({
+            scriptlets: [
+              {
+                name: 'scriptlet.js',
+                aliases: [],
+                body: 'function scriptlet() {}',
+                dependencies: [],
+                executionWorld: 'MAIN',
+                requiresTrust: false,
+              },
+              {
+                name: 'scriptlet1.js',
+                aliases: [],
+                body: 'function scriptlet1() {}',
+                dependencies: [],
+                executionWorld: 'MAIN',
+                requiresTrust: false,
+              },
+              {
+                name: 'scriptlet2.js',
+                aliases: [],
+                body: 'function scriptlet2() {}',
+                dependencies: [],
+                executionWorld: 'MAIN',
+                requiresTrust: false,
+              },
+            ],
+          });
 
           // #getCosmeticsFilters
           const { styles, scripts } = engine.getCosmeticsFilters({
@@ -1421,7 +1493,9 @@ foo.com###selector
           });
 
           expect(scripts).to.have.lengthOf(injections.length);
-          expect(scripts.sort()).to.eql(injections.sort());
+          expect(scripts.sort()).to.eql(
+            injections.map((i) => engine.resources.getScriptlet(i)).sort(),
+          );
 
           // Parse stylesheets to get selectors back
           const selectors: string[] = [];
@@ -1751,53 +1825,13 @@ foo.com###selector
     });
 
     context('with resources', () => {
-      function resourcesToText(mappings: Map<string, Resource>[]) {
-        const merged: Map<string, Resource> = new Map();
-        for (const resources of mappings) {
-          for (const [name, resource] of resources) {
-            if (!merged.has(name)) {
-              merged.set(name, resource);
-            }
-          }
-        }
-
-        return [...merged.entries()]
-          .reduce((state, [name, resource]) => {
-            return [...state, `${name} ${resource.contentType}\n${resource.body}`];
-          }, [] as string[])
-          .join('\n\n');
-      }
-
-      const resources1 = `a.js application/javascript
-function () { console.log(1) }`;
-      const resources2 = `b.js application/javascript
-function () { console.log(2) }`;
-
-      it('merges resources from both engines', () => {
+      it('throws with different checksums', () => {
         const engine1 = FilterEngine.empty();
         const engine2 = FilterEngine.empty();
-        engine1.updateResources(resources1, '1');
-        engine2.updateResources(resources2, '2');
-
-        const engine = FilterEngine.merge([engine1, engine2]);
-        expect(engine.resources.js.size).to.be.eql(4);
-        expect(engine.resources.checksum).to.be.eql(
-          fastHash(
-            resourcesToText([engine1.resources.resources, engine2.resources.resources]),
-          ).toString(16),
-        );
-      });
-
-      it('removes duplicates', () => {
-        const engine1 = FilterEngine.empty();
-        const engine2 = FilterEngine.empty();
-        engine1.updateResources(resources1, '1');
-        engine2.updateResources(resources1, '2');
-
-        const engine = FilterEngine.merge([engine1, engine2]);
-        expect(engine.resources.js.size).to.be.eql(2);
-        expect(engine.resources.checksum).to.be.eql(
-          fastHash(resourcesToText([engine1.resources.resources])).toString(16),
+        engine1.resources = new Resources({ checksum: '1' });
+        engine2.resources = new Resources({ checksum: '2' });
+        expect(() => FilterEngine.merge([engine1, engine2])).to.throw(
+          'resource checksum of all merged engines must match with the first one: "1" but got: "2"',
         );
       });
     });

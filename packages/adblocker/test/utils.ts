@@ -39,7 +39,7 @@ export const allLists = (() => {
 })();
 
 export function loadResources() {
-  return readAsset('assets/ublock-origin/resources.txt');
+  return readAsset('assets/ublock-origin/resources.json');
 }
 
 export function getNaughtyStrings(): string[] {
