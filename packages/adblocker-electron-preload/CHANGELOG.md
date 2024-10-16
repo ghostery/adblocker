@@ -1,3 +1,46 @@
+# v1.34.0 (Wed Oct 16 2024)
+
+#### :bug: Bug Fix
+
+- Build(deps): Bump electron from 32.2.0 to 33.0.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.277 to 0.0.278 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.276 to 0.0.277 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.275 to 0.0.276 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.273 to 0.0.275 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.271 to 0.0.272 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @rollup/plugin-typescript from 11.1.6 to 12.1.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.270 to 0.0.271 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### :house: Internal
+
+- Update local assets [#4288](https://github.com/ghostery/adblocker/pull/4288) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump electron from 32.2.0 to 33.0.0 [#4361](https://github.com/ghostery/adblocker/pull/4361) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.277 to 0.0.278 [#4360](https://github.com/ghostery/adblocker/pull/4360) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.276 to 0.0.277 [#4341](https://github.com/ghostery/adblocker/pull/4341) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.275 to 0.0.276 [#4337](https://github.com/ghostery/adblocker/pull/4337) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.48 to 6.1.49 [#4334](https://github.com/ghostery/adblocker/pull/4334) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.273 to 0.0.275 [#4333](https://github.com/ghostery/adblocker/pull/4333) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.272 to 0.0.273 [#4324](https://github.com/ghostery/adblocker/pull/4324) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 22.6.1 to 22.7.0 [#4313](https://github.com/ghostery/adblocker/pull/4313) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.271 to 0.0.272 [#4312](https://github.com/ghostery/adblocker/pull/4312) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @rollup/plugin-commonjs from 26.0.1 to 28.0.0 [#4308](https://github.com/ghostery/adblocker/pull/4308) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 4.21.3 to 4.22.4 [#4301](https://github.com/ghostery/adblocker/pull/4301) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @rollup/plugin-node-resolve from 15.2.3 to 15.2.4 [#4300](https://github.com/ghostery/adblocker/pull/4300) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @rollup/plugin-typescript from 11.1.6 to 12.1.0 [#4299](https://github.com/ghostery/adblocker/pull/4299) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 22.5.4 to 22.5.5 [#4284](https://github.com/ghostery/adblocker/pull/4284) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.270 to 0.0.271 [#4283](https://github.com/ghostery/adblocker/pull/4283) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+
+---
+
 # v1.31.4 (Fri Aug 23 2024)
 
 #### :nut_and_bolt: Dependencies

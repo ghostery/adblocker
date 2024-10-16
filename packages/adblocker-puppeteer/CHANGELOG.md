@@ -1,3 +1,41 @@
+# v1.34.0 (Wed Oct 16 2024)
+
+#### :bug: Bug Fix
+
+- Build(deps): Bump puppeteer from 23.5.0 to 23.5.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.4.1 to 23.5.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.4.0 to 23.4.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chai from 4.3.19 to 5.0.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.3.0 to 23.3.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.2.2 to 23.3.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### :house: Internal
+
+- CI: fix puppeteer + run tests one after another [#4355](https://github.com/ghostery/adblocker/pull/4355) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 23.5.1 to 23.5.3 [#4354](https://github.com/ghostery/adblocker/pull/4354) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@chrmod](https://github.com/chrmod))
+- Build(deps-dev): Bump typescript-eslint from 8.8.0 to 8.8.1 [#4346](https://github.com/ghostery/adblocker/pull/4346) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.5.0 to 23.5.1 [#4345](https://github.com/ghostery/adblocker/pull/4345) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.48 to 6.1.49 [#4334](https://github.com/ghostery/adblocker/pull/4334) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.273 to 0.0.275 [#4333](https://github.com/ghostery/adblocker/pull/4333) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 4.23.0 to 4.24.0 [#4332](https://github.com/ghostery/adblocker/pull/4332) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.4.1 to 23.5.0 [#4331](https://github.com/ghostery/adblocker/pull/4331) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.4.0 to 23.4.1 [#4317](https://github.com/ghostery/adblocker/pull/4317) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chai from 4.3.19 to 5.0.0 [#4314](https://github.com/ghostery/adblocker/pull/4314) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.3.1 to 23.4.0 [#4290](https://github.com/ghostery/adblocker/pull/4290) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.3.0 to 23.3.1 [#4287](https://github.com/ghostery/adblocker/pull/4287) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 32.0.1 to 32.0.2 [#4250](https://github.com/ghostery/adblocker/pull/4250) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.2.2 to 23.3.0 [#4251](https://github.com/ghostery/adblocker/pull/4251) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.33.2 (Wed Sep 04 2024)
 
 #### :nut_and_bolt: Dependencies

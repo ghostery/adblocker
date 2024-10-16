@@ -1,3 +1,36 @@
+# v1.34.0 (Wed Oct 16 2024)
+
+#### :bug: Bug Fix
+
+- Build(deps): Bump @types/chrome from 0.0.277 to 0.0.278 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.276 to 0.0.277 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.275 to 0.0.276 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.273 to 0.0.275 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chai from 4.3.19 to 5.0.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.271 to 0.0.272 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.270 to 0.0.271 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @types/chrome from 0.0.277 to 0.0.278 [#4360](https://github.com/ghostery/adblocker/pull/4360) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.276 to 0.0.277 [#4341](https://github.com/ghostery/adblocker/pull/4341) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.275 to 0.0.276 [#4337](https://github.com/ghostery/adblocker/pull/4337) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.48 to 6.1.49 [#4334](https://github.com/ghostery/adblocker/pull/4334) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.273 to 0.0.275 [#4333](https://github.com/ghostery/adblocker/pull/4333) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.272 to 0.0.273 [#4324](https://github.com/ghostery/adblocker/pull/4324) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chai from 4.3.19 to 5.0.0 [#4314](https://github.com/ghostery/adblocker/pull/4314) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 22.6.1 to 22.7.0 [#4313](https://github.com/ghostery/adblocker/pull/4313) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.271 to 0.0.272 [#4312](https://github.com/ghostery/adblocker/pull/4312) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 22.5.4 to 22.5.5 [#4284](https://github.com/ghostery/adblocker/pull/4284) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.270 to 0.0.271 [#4283](https://github.com/ghostery/adblocker/pull/4283) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump sinon from 18.0.1 to 19.0.0 [#4275](https://github.com/ghostery/adblocker/pull/4275) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.32.0 (Mon Aug 26 2024)
 
 #### :nut_and_bolt: Dependencies

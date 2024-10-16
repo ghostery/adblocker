@@ -1,3 +1,24 @@
+# v1.34.0 (Wed Oct 16 2024)
+
+#### :bug: Bug Fix
+
+- Build(deps-dev): Bump @types/chai from 4.3.19 to 5.0.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### :house: Internal
+
+- Update webextension-polyfill [#4320](https://github.com/ghostery/adblocker/pull/4320) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/chai from 4.3.19 to 5.0.0 [#4314](https://github.com/ghostery/adblocker/pull/4314) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.33.2 (Wed Sep 04 2024)
 
 #### :bug: Bug Fix

@@ -1,3 +1,19 @@
+# v1.34.0 (Wed Oct 16 2024)
+
+#### :bug: Bug Fix
+
+- Build(deps-dev): Bump @types/chai from 4.3.19 to 5.0.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/chai from 4.3.19 to 5.0.0 [#4314](https://github.com/ghostery/adblocker/pull/4314) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v1.29.0 (Wed Jul 17 2024)
 
 #### :house: Internal
