@@ -12,7 +12,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import { copyFile, rm } from 'fs/promises';
 import { existsSync } from 'fs';
 
-const dtsPath = './dist/types/src/index.d.ts'
+const dtsPath = './dist/src/index.d.ts'
 
 export default
   {
@@ -39,7 +39,7 @@ export default
       commonjs(),
       typescript({
         compilerOptions: {
-          declarationDir: './dist/types',
+          declarationDir: './dist',
         },
       }),
       {
