@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import type { IMessageFromBackground } from '@cliqz/adblocker-content';
+import type { IMessageFromBackground } from '@ghostery/adblocker-content';
 
 import { compactTokens, concatTypedArrays } from '../../compact-set.js';
 import Config from '../../config.js';

@@ -9,8 +9,8 @@
 import * as pw from 'playwright';
 import { parse } from 'tldts-experimental';
 
-import { FiltersEngine, PlaywrightRequestType, Request, RequestType } from '@cliqz/adblocker';
-import { autoRemoveScript, extractFeaturesFromDOM, DOMMonitor } from '@cliqz/adblocker-content';
+import { FiltersEngine, PlaywrightRequestType, Request, RequestType } from '@ghostery/adblocker';
+import { autoRemoveScript, extractFeaturesFromDOM, DOMMonitor } from '@ghostery/adblocker-content';
 
 function sleep(milliseconds: number): Promise<void> {
   return new Promise((resolve) => {
@@ -373,5 +373,5 @@ export class PlaywrightBlocker extends FiltersEngine {
   }
 }
 
-// Re-export symboles from @cliqz/adblocker for convenience
-export * from '@cliqz/adblocker';
+// Re-export symboles from @ghostery/adblocker for convenience
+export * from '@ghostery/adblocker';

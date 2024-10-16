@@ -24,10 +24,10 @@
     <img alt="Github Actions Assets Status" src="https://img.shields.io/github/workflow/status/ghostery/adblocker/Assets?label=assets&style=flat-square"></a>
   <a href="https://twitter.com/acdlite/status/974390255393505280">
     <img alt="Blazing Fast" src="https://img.shields.io/badge/speed-blazing%20%F0%9F%94%A5-brightgreen.svg?style=flat-square"></a>
-  <a href="https://www.npmjs.com/package/@cliqz/adblocker">
-    <img alt="npm version" src="https://img.shields.io/npm/v/@cliqz/adblocker.svg?style=flat-square"></a>
-  <a href="https://www.npmjs.com/package/@cliqz/adblocker">
-    <img alt="weekly downloads from npm" src="https://img.shields.io/npm/dw/@cliqz/adblocker.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/@ghostery/adblocker">
+    <img alt="npm version" src="https://img.shields.io/npm/v/@ghostery/adblocker.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/@ghostery/adblocker">
+    <img alt="weekly downloads from npm" src="https://img.shields.io/npm/dw/@ghostery/adblocker.svg?style=flat-square"></a>
   <br/>
   <a href="#badge">
     <img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square"></a>
@@ -45,7 +45,7 @@
 
 ## Getting Started
 
-Install: `npm install --save @cliqz/adblocker`.
+Install: `npm install --save @ghostery/adblocker`.
 
 ## Usage
 
@@ -54,13 +54,13 @@ start blocking ads:
 
 If you already have filters locally:
 ```javascript
-import { FiltersEngine } from '@cliqz/adblocker';
+import { FiltersEngine } from '@ghostery/adblocker';
 const engine = FiltersEngine.parse(fs.readFileSync('easylist.txt', 'utf-8'));
 ```
 
 Fetching lists from URLs:
 ```javascript
-import { FiltersEngine } from '@cliqz/adblocker';
+import { FiltersEngine } from '@ghostery/adblocker';
 engine = await FiltersEngine.fromLists(fetch, [
  'https://easylist.to/easylist/easylist.txt'
 ]);
@@ -68,7 +68,7 @@ engine = await FiltersEngine.fromLists(fetch, [
 
 Use ready-made configs to block ads and optionally trackers:
 ```javascript
-import { FiltersEngine } from '@cliqz/adblocker';
+import { FiltersEngine } from '@ghostery/adblocker';
 engine = await FiltersEngine.fromPrebuiltAdsOnly(fetch); // ads only
 engine = await FiltersEngine.fromPrebuiltAdsAndTracking(fetch); // ads and tracking
 ```
@@ -76,7 +76,7 @@ engine = await FiltersEngine.fromPrebuiltAdsAndTracking(fetch); // ads and track
 Once you have your `engine`, start matching requests and block ads:
 
 ```javascript
-import { Request } from '@cliqz/adblocker';
+import { Request } from '@ghostery/adblocker';
 
 const { match } = engine.match(Request.fromRawDetails({
   type: 'script',
@@ -91,7 +91,7 @@ WebExtension, etc.), the `Request` provides a unified APIs and helpers functions
 for initialization on different platforms:
 
 ```javascript
-import { Request } from '@cliqz/adblocker';
+import { Request } from '@ghostery/adblocker';
 
 const request = Request.fromRawDetails({
   url: 'https://sub.example.com',
@@ -119,7 +119,7 @@ the [NetworkFilter](https://github.com/ghostery/adblocker/blob/master/packages/a
 accessors and helpers to parse, match and manipulate network filters.
 
 ```javascript
-import { NetworkFilter } from '@cliqz/adblocker';
+import { NetworkFilter } from '@ghostery/adblocker';
 
 // Parse filter from string
 const filter = NetworkFilter.parse('||domain.com/ads.js$script');
@@ -136,7 +136,7 @@ console.log(filter.fromImage()); // false = cannot match 'image' requests
 
 Matching network filter against requests:
 ```javascript
-import { Request } from '@cliqz/adblocker';
+import { Request } from '@ghostery/adblocker';
 
 const request = Request.fromRawDetails({
   type: 'script',
@@ -152,7 +152,7 @@ console.log(filter.match(request)); // true
 Similarly, one can parse cosmetic filters using the [CosmeticFilter](https://github.com/ghostery/adblocker/blob/master/packages/adblocker/src/filters/cosmetic.ts) class.
 
 ```javascript
-const { CosmeticFilter } = require('@cliqz/adblocker');
+const { CosmeticFilter } = require('@ghostery/adblocker');
 
 // Parsing filter from string
 const filter = CosmeticFilter.parse('domain.*,domain2.com###selector');
@@ -177,7 +177,7 @@ network and cosmetic filters. The filters are organized in a very
 compact way which also enables fast matching.
 
 ```javascript
-import { FiltersEngine, NetworkFilter, CosmeticFilter, Request } from '@cliqz/adblocker';
+import { FiltersEngine, NetworkFilter, CosmeticFilter, Request } from '@ghostery/adblocker';
 
 // Parse multiple filters at once
 let engine = FiltersEngine.parse(`

@@ -24,10 +24,10 @@
     <img alt="Github Actions Assets Status" src="https://img.shields.io/github/workflow/status/ghostery/adblocker/Assets?label=assets&style=flat-square"></a>
   <a href="https://twitter.com/acdlite/status/974390255393505280">
     <img alt="Blazing Fast" src="https://img.shields.io/badge/speed-blazing%20%F0%9F%94%A5-brightgreen.svg?style=flat-square"></a>
-  <a href="https://www.npmjs.com/package/@cliqz/adblocker">
-    <img alt="npm version" src="https://img.shields.io/npm/v/@cliqz/adblocker.svg?style=flat-square"></a>
-  <a href="https://www.npmjs.com/package/@cliqz/adblocker">
-    <img alt="weekly downloads from npm" src="https://img.shields.io/npm/dw/@cliqz/adblocker.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/@ghostery/adblocker">
+    <img alt="npm version" src="https://img.shields.io/npm/v/@ghostery/adblocker.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/@ghostery/adblocker">
+    <img alt="weekly downloads from npm" src="https://img.shields.io/npm/dw/@ghostery/adblocker.svg?style=flat-square"></a>
   <br/>
   <a href="#badge">
     <img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square"></a>
@@ -45,17 +45,17 @@
 
 ## Getting Started
 
-Install: `npm install --save @cliqz/adblocker-playwright`.
+Install: `npm install --save @ghostery/adblocker-playwright`.
 
 ## Usage
 
-For a *complete example* check-out: [@cliqz/adblocker-playwright-example](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-playwright-example).
+For a *complete example* check-out: [@ghostery/adblocker-playwright-example](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-playwright-example).
 
 Creating an instance of `PlaywrightBlocker` and start blocking ads!
 
 ```javascript
 import * as pw from 'playwright';
-import { PlaywrightBlocker } from '@cliqz/adblocker-playwright';
+import { PlaywrightBlocker } from '@ghostery/adblocker-playwright';
 import fetch from 'cross-fetch'; // required 'fetch'
 
 const browser = await pw.firefox.launch({ headless: false });
@@ -73,14 +73,14 @@ start blocking ads.
 
 If you already have filters locally:
 ```javascript
-import { PlaywrightBlocker } from '@cliqz/adblocker-playwright';
+import { PlaywrightBlocker } from '@ghostery/adblocker-playwright';
 
 const blocker = PlaywrightBlocker.parse(fs.readFileSync('easylist.txt', 'utf-8'));
 ```
 
 Fetching lists from URLs:
 ```javascript
-import { PlaywrightBlocker } from '@cliqz/adblocker-playwright';
+import { PlaywrightBlocker } from '@ghostery/adblocker-playwright';
 import fetch from 'cross-fetch'; // required 'fetch'
 
 const blocker = await PlaywrightBlocker.fromLists(fetch, [
@@ -90,7 +90,7 @@ const blocker = await PlaywrightBlocker.fromLists(fetch, [
 
 Use ready-made configs to block ads and optionally trackers:
 ```javascript
-import { PlaywrightBlocker } from '@cliqz/adblocker-playwright';
+import { PlaywrightBlocker } from '@ghostery/adblocker-playwright';
 import fetch from 'cross-fetch'; // required 'fetch'
 
 let blocker = await PlaywrightBlocker.fromPrebuiltAdsOnly(fetch); // ads only
@@ -113,7 +113,7 @@ loading.
 
 ```javascript
 import * as pw from 'playwright';
-import { PlaywrightBlocker } from '@cliqz/adblocker-playwright';
+import { PlaywrightBlocker } from '@ghostery/adblocker-playwright';
 import fetch from 'cross-fetch'; // required 'fetch'
 import { promises as fs } from 'fs'; // used for caching
 
@@ -132,7 +132,7 @@ PlaywrightBlocker.fromPrebuiltAdsAndTracking(fetch, {
 Or you can do this manually to control the way caching is done:
 
 ```javascript
-import { PlaywrightBlocker } from '@cliqz/adblocker-playwright';
+import { PlaywrightBlocker } from '@ghostery/adblocker-playwright';
 import fetch from 'cross-fetch'; // required 'fetch'
 
 PlaywrightBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {

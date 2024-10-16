@@ -24,10 +24,10 @@
     <img alt="Github Actions Assets Status" src="https://img.shields.io/github/workflow/status/ghostery/adblocker/Assets?label=assets&style=flat-square"></a>
   <a href="https://twitter.com/acdlite/status/974390255393505280">
     <img alt="Blazing Fast" src="https://img.shields.io/badge/speed-blazing%20%F0%9F%94%A5-brightgreen.svg?style=flat-square"></a>
-  <a href="https://www.npmjs.com/package/@cliqz/adblocker">
-    <img alt="npm version" src="https://img.shields.io/npm/v/@cliqz/adblocker.svg?style=flat-square"></a>
-  <a href="https://www.npmjs.com/package/@cliqz/adblocker">
-    <img alt="weekly downloads from npm" src="https://img.shields.io/npm/dw/@cliqz/adblocker.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/@ghostery/adblocker">
+    <img alt="npm version" src="https://img.shields.io/npm/v/@ghostery/adblocker.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/@ghostery/adblocker">
+    <img alt="weekly downloads from npm" src="https://img.shields.io/npm/dw/@ghostery/adblocker.svg?style=flat-square"></a>
   <br/>
   <a href="#badge">
     <img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square"></a>
@@ -45,18 +45,18 @@
 
 ## Getting Started
 
-Install: `npm install --save @cliqz/adblocker-webextension`.
+Install: `npm install --save @ghostery/adblocker-webextension`.
 
 ## Usage
 
-For a *complete example* check-out: [@cliqz/adblocker-webextension-example](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-webextension-example).
+For a *complete example* check-out: [@ghostery/adblocker-webextension-example](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-webextension-example).
 
 Creating an instance of `WebExtensionBlocker` and start blocking ads!
 
 From the *background page* of your extension:
 
 ```javascript
-import { WebExtensionBlocker } from '@cliqz/adblocker-webextension';
+import { WebExtensionBlocker } from '@ghostery/adblocker-webextension';
 
 WebExtensionBlocker.fromPrebuiltAdsAndTracking().then((blocker) => {
   blocker.enableBlockingInBrowser(browser);
@@ -68,7 +68,7 @@ On Chromium-based browsers you will need a polyfill such as
 
 ```javascript
 import { browser } from 'webextension-polyfill';
-import { WebExtensionBlocker } from '@cliqz/adblocker-webextension';
+import { WebExtensionBlocker } from '@ghostery/adblocker-webextension';
 
 WebExtensionBlocker.fromPrebuiltAdsAndTracking().then((blocker) => {
   blocker.enableBlockingInBrowser(browser);
@@ -82,14 +82,14 @@ start blocking ads.
 
 If you already have filters locally:
 ```javascript
-import { WebExtensionBlocker } from '@cliqz/adblocker-webextension';
+import { WebExtensionBlocker } from '@ghostery/adblocker-webextension';
 
 const blocker = WebExtensionBlocker.parse(fs.readFileSync('easylist.txt', 'utf-8'));
 ```
 
 Fetching lists from URLs:
 ```javascript
-import { WebExtensionBlocker } from '@cliqz/adblocker-webextension';
+import { WebExtensionBlocker } from '@ghostery/adblocker-webextension';
 
 const blocker = await WebExtensionBlocker.fromLists(fetch, [
   'https://easylist.to/easylist/easylist.txt'
@@ -98,7 +98,7 @@ const blocker = await WebExtensionBlocker.fromLists(fetch, [
 
 Use ready-made configs to block ads and optionally trackers:
 ```javascript
-import { WebExtensionBlocker } from '@cliqz/adblocker-webextension';
+import { WebExtensionBlocker } from '@ghostery/adblocker-webextension';
 
 let blocker = await WebExtensionBlocker.fromPrebuiltAdsOnly(); // ads only
 blocker = await WebExtensionBlocker.fromPrebuiltAdsAndTracking(); // ads and tracking
@@ -119,7 +119,7 @@ you can serialize it to a byte-array which you can store on disk for faster
 loading.
 
 ```javascript
-import { WebExtensionBlocker } from '@cliqz/adblocker-webextension';
+import { WebExtensionBlocker } from '@ghostery/adblocker-webextension';
 
 WebExtensionBlocker.fromPrebuiltAdsAndTracking().then((blocker) => {
   const buffer = blocker.serialize();

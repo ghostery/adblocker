@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import type { AST } from '@cliqz/adblocker-extended-selectors';
+import type { AST } from '@ghostery/adblocker-extended-selectors';
 
 const SCRIPT_ID = 'cliqz-adblocker-script';
 const IGNORED_TAGS = new Set(['br', 'head', 'link', 'meta', 'script', 'style', 's']);

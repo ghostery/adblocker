@@ -14,7 +14,7 @@ import {
   parseFilters,
   Request,
   tokenize,
-} from '@cliqz/adblocker';
+} from '@ghostery/adblocker';
 import { createEngine, domains500 } from './utils';
 
 export function benchEngineCreation({ lists, resources }: { lists: string[]; resources: string }) {

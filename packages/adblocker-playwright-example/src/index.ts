@@ -1,4 +1,4 @@
-import { fullLists, PlaywrightBlocker, Request } from '@cliqz/adblocker-playwright';
+import { fullLists, PlaywrightBlocker, Request } from '@ghostery/adblocker-playwright';
 import fetch from 'cross-fetch';
 
 import * as pw from 'playwright';

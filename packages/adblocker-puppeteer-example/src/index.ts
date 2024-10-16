@@ -1,4 +1,4 @@
-import { fullLists, PuppeteerBlocker, Request } from '@cliqz/adblocker-puppeteer';
+import { fullLists, PuppeteerBlocker, Request } from '@ghostery/adblocker-puppeteer';
 import fetch from 'cross-fetch';
 import * as puppeteer from 'puppeteer';
 import { promises as fs } from 'fs';

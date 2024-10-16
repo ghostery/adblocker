@@ -9,11 +9,11 @@
 import * as electron from 'electron';
 import { parse } from 'tldts-experimental';
 
-import { ElectronRequestType, FiltersEngine, Request } from '@cliqz/adblocker';
+import { ElectronRequestType, FiltersEngine, Request } from '@ghostery/adblocker';
 import type {
   IBackgroundCallback,
   IMessageFromBackground,
-} from '@cliqz/adblocker-electron-preload';
+} from '@ghostery/adblocker-electron-preload';
 
 import { PRELOAD_PATH } from './preload_path.js';
 
@@ -326,5 +326,5 @@ export class ElectronBlocker extends FiltersEngine {
   }
 }
 
-// re-export @cliqz/adblocker symbols for convenience
-export * from '@cliqz/adblocker';
+// re-export @ghostery/adblocker symbols for convenience
+export * from '@ghostery/adblocker';
