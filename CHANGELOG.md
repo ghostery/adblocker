@@ -1,3 +1,28 @@
+# v2.0.0 (Thu Oct 17 2024)
+
+#### :boom: Breaking Change
+
+- `@ghostery/adblocker-content`, `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-electron`, `@ghostery/adblocker-extended-selectors`, `@ghostery/adblocker-playwright`, `@ghostery/adblocker-puppeteer`, `@ghostery/adblocker-webextension-cosmetics`, `@ghostery/adblocker-webextension`, `@ghostery/adblocker`
+  - Rename from @cliqz/adblocker to @ghostery/adblocker [#4366](https://github.com/ghostery/adblocker/pull/4366) ([@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- `@ghostery/adblocker`
+  - Update local assets [#4367](https://github.com/ghostery/adblocker/pull/4367) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Fix: bring back resources.txt [#4365](https://github.com/ghostery/adblocker/pull/4365) ([@chrmod](https://github.com/chrmod))
+- `@ghostery/adblocker-electron-preload`
+  - Build(deps-dev): Bump @rollup/plugin-typescript from 12.1.0 to 12.1.1 [#4364](https://github.com/ghostery/adblocker/pull/4364) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.34.0 (Wed Oct 16 2024)
 
 #### :rocket: New Feature

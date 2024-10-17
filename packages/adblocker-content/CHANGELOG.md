@@ -1,3 +1,15 @@
+# v2.0.0 (Thu Oct 17 2024)
+
+#### :boom: Breaking Change
+
+- Rename from @cliqz/adblocker to @ghostery/adblocker [#4366](https://github.com/ghostery/adblocker/pull/4366) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 1
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v1.31.1 (Thu Aug 01 2024)
 
 #### :bug: Bug Fix
