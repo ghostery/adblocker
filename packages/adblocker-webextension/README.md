@@ -1,4 +1,4 @@
-<h1 align="center">WebExtenstion Adblocker</h2>
+<h1 align="center">WebExtension Adblocker</h2>
 
 <p align="center">
   <em>
