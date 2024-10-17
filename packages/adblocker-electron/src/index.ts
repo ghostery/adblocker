@@ -10,10 +10,7 @@ import * as electron from 'electron';
 import { parse } from 'tldts-experimental';
 
 import { ElectronRequestType, FiltersEngine, Request } from '@ghostery/adblocker';
-import type {
-  CosmeticFiltersResponse,
-  IBackgroundCallback,
-} from '@ghostery/adblocker-electron-preload';
+import type { IBackgroundCallback } from '@ghostery/adblocker-electron-preload';
 
 import { PRELOAD_PATH } from './preload_path.js';
 
@@ -62,7 +59,7 @@ export class BlockingContext {
     event: Electron.IpcMainInvokeEvent,
     url: string,
     msg?: IBackgroundCallback,
-  ) => Promise<CosmeticFiltersResponse>;
+  ) => Promise<void>;
 
   private readonly onHeadersReceived: (
     details: Electron.OnHeadersReceivedListenerDetails,
@@ -176,7 +173,7 @@ export class ElectronBlocker extends FiltersEngine {
     event: Electron.IpcMainInvokeEvent,
     url: string,
     msg?: IBackgroundCallback,
-  ): Promise<CosmeticFiltersResponse> => {
+  ): Promise<void> => {
     const parsed = parse(url);
     const hostname = parsed.hostname || '';
     const domain = parsed.domain || '';
@@ -211,28 +208,20 @@ export class ElectronBlocker extends FiltersEngine {
     });
 
     if (active === false) {
-      return { active: false };
+      return;
     }
 
     if (styles.length > 0) {
       event.sender.insertCSS(styles, { cssOrigin: 'user' });
     }
 
-    const scriptResults = await Promise.allSettled(
-      scripts.map((script) => event.sender.executeJavaScript(script, true)),
-    );
-    const scriptErrors = scriptResults
-      .filter((result) => result.status === 'rejected')
-      .map((result) => result.reason);
-
-    if (scriptErrors.length > 0) {
-      return {
-        active: false,
-        error: `Some scripts failed to execute: ${scriptErrors.join(', ')}`,
-      };
+    for (const script of scripts) {
+      try {
+        event.sender.executeJavaScript(script, true);
+      } catch (e) {
+        console.error('@ghostery/adblocker scriptlet crashed', e);
+      }
     }
-
-    return { active: true };
   };
 
   public onHeadersReceived = (

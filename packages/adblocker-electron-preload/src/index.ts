@@ -8,19 +8,9 @@
 
 import { ipcRenderer } from 'electron';
 
-import {
-  DOMMonitor,
-  IBackgroundCallback,
-} from '@ghostery/adblocker-content';
+import { DOMMonitor, IBackgroundCallback } from '@ghostery/adblocker-content';
 
-interface ICosmeticFiltersResponse = {
-  active: boolean;
-  error?: string;
-};
-
-function injectCosmeticFilters(
-  data?: Omit<IBackgroundCallback, 'lifecycle'>,
-): Promise<CosmeticFiltersResponse> {
+function injectCosmeticFilters(data?: Omit<IBackgroundCallback, 'lifecycle'>): Promise<void> {
   return ipcRenderer.invoke(
     '@ghostery/adblocker/inject-cosmetic-filters',
     window.location.href,
@@ -29,12 +19,7 @@ function injectCosmeticFilters(
 }
 
 if (window === window.top && window.location.href.startsWith('devtools://') === false) {
-  (async () => {
-    const enableMutationObserver = await ipcRenderer.invoke(
-      '@ghostery/adblocker/is-mutation-observer-enabled',
-    );
-
-    let ACTIVE: boolean = true;
+  (() => {
     let DOM_MONITOR: DOMMonitor | null = null;
 
     const unload = () => {
@@ -44,10 +29,7 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
       }
     };
 
-    const response = await injectCosmeticFilters();
-    if (response.error)
-      throw new Error(`error injecting initial cosmetic filters: ${response.error}`);
-    if (!(ACTIVE = response.active)) return;
+    injectCosmeticFilters();
 
     // On DOMContentLoaded, start monitoring the DOM. This means that we will
     // first check which ids and classes exist in the DOM as a one-off operation;
@@ -59,11 +41,7 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
       () => {
         DOM_MONITOR = new DOMMonitor((update) => {
           if (update.type === 'features') {
-            injectCosmeticFilters().then((response) => {
-              if (response.error) {
-                console.error(`error injecting updated cosmetic filters: ${response.error}`);
-              }
-            });
+            injectCosmeticFilters();
           }
         });
 
@@ -71,9 +49,9 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
 
         // Start observing mutations to detect new ids and classes which would
         // need to be hidden.
-        if (ACTIVE && enableMutationObserver) {
-          DOM_MONITOR.start(window);
-        }
+        ipcRenderer
+          .invoke('@ghostery/adblocker/is-mutation-observer-enabled')
+          .then((enableMutationObserver) => enableMutationObserver && DOM_MONITOR?.start(window));
       },
       { once: true, passive: true },
     );
@@ -82,4 +60,4 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
   })();
 }
 
-export type { CosmeticFiltersResponse, IBackgroundCallback };
+export type { IBackgroundCallback };
