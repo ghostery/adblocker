@@ -532,8 +532,6 @@ go.com#@#.has-ad
 @@||adverts.ie/css/$css,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/4275
 riderplanet-usa.com#@##ad_1
-! https://github.com/uBlockOrigin/uAssets/issues/4268#issuecomment-445490940
-adproceed.com#@#.single-ad
 ! https://www.winboard.org/threads/interaktion-auf-website-nicht-moeglich-wwm-trainigslager.250843/
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=wwm.rtl.de
 ! https://forums.lanik.us/viewtopic.php?p=144166#p144166
@@ -4081,3 +4079,8 @@ pruefernavi.de##+js(set, elasticApm.init, noopFunc)
 ||assets.fyers.in/Lib/analytics/Analytics.js$1p,important
 ! https://github.com/uBlockOrigin/uAssets/issues/25626
 ||lamycosphere.com/cdn/shop/*/assets/pixel.gif$image,1p,redirect=1x1.gif,important
+! https://github.com/uBlockOrigin/uAssets/issues/25661
+!#if !env_mobile
+steamidfinder.com###nn_bfa_wrapper + .container:style(margin-top: 50px !important;)
+!#endif
+steamidfinder.com##.section-advert-banner--top:remove()
