@@ -13,7 +13,7 @@ import {
   IBackgroundCallback,
   IMessageFromBackground,
   injectScript,
-} from '@cliqz/adblocker-content';
+} from '@ghostery/adblocker-content';
 
 function getCosmeticsFiltersFirst(): string[] | null {
   return ipcRenderer.sendSync('get-cosmetic-filters-first', window.location.href);
@@ -92,4 +92,4 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
 }
 
 // Re-export symbols for convenience
-export type { IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-content';
+export type { IBackgroundCallback, IMessageFromBackground } from '@ghostery/adblocker-content';

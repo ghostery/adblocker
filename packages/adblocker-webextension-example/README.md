@@ -1,4 +1,4 @@
-Blocking ads in WebExtension (Chrome and Firefox support) using [@cliqz/adblocker-webextension](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-webextension).
+Blocking ads in WebExtension (Chrome and Firefox support) using [@ghostery/adblocker-webextension](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-webextension).
 
 1. `yarn build` will build the extension
 2. Open your browser and load "unpacked extension" from this folder

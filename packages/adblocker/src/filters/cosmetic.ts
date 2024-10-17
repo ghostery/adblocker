@@ -11,7 +11,7 @@ import {
   classifySelector,
   SelectorType,
   parse as parseCssSelector,
-} from '@cliqz/adblocker-extended-selectors';
+} from '@ghostery/adblocker-extended-selectors';
 
 import { Domains } from '../engine/domains.js';
 import {

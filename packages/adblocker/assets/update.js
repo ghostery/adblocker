@@ -4,7 +4,7 @@ import { writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { log } from 'node:console';
-import { NetworkFilter, parseFilter } from '@cliqz/adblocker';
+import { NetworkFilter, parseFilter } from '@ghostery/adblocker';
 
 const FILTER_LISTS = [
   ['ublock-unbreak', 'ublock-origin', 'unbreak.txt'],

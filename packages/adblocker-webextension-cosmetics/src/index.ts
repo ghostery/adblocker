@@ -6,15 +6,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-// TODO - move to @cliqz/adblocker-content
-import { querySelectorAll } from '@cliqz/adblocker-extended-selectors';
+// TODO - move to @ghostery/adblocker-content
+import { querySelectorAll } from '@ghostery/adblocker-extended-selectors';
 
 import {
   IBackgroundCallback,
   IMessageFromBackground,
   DOMMonitor,
   injectScript,
-} from '@cliqz/adblocker-content';
+} from '@ghostery/adblocker-content';
 
 type ExtendedSelector = IMessageFromBackground['extended'][number];
 

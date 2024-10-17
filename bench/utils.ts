@@ -6,8 +6,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { FiltersEngine } from '@cliqz/adblocker';
-export { parseFilters } from '@cliqz/adblocker';
+import { FiltersEngine } from '@ghostery/adblocker';
+export { parseFilters } from '@ghostery/adblocker';
 
 export function createEngine(lists: string[], resources: string, options = {}, serialize = false) {
   const engine = FiltersEngine.parse(lists.join('\n'), options);

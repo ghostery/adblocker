@@ -11,9 +11,9 @@ import * as puppeteer from 'puppeteer';
 
 import { parse } from 'tldts-experimental';
 
-import { FiltersEngine, Request, RequestType } from '@cliqz/adblocker';
+import { FiltersEngine, Request, RequestType } from '@ghostery/adblocker';
 
-import { autoRemoveScript, extractFeaturesFromDOM, DOMMonitor } from '@cliqz/adblocker-content';
+import { autoRemoveScript, extractFeaturesFromDOM, DOMMonitor } from '@ghostery/adblocker-content';
 
 function sleep(milliseconds: number): Promise<void> {
   return new Promise((resolve) => {
@@ -407,5 +407,5 @@ export class PuppeteerBlocker extends FiltersEngine {
   }
 }
 
-// Re-export symboles from @cliqz/adblocker for convenience
-export * from '@cliqz/adblocker';
+// Re-export symboles from @ghostery/adblocker for convenience
+export * from '@ghostery/adblocker';

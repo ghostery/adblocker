@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { injectCosmetics } from '@cliqz/adblocker-webextension-cosmetics';
+import { injectCosmetics } from '@ghostery/adblocker-webextension-cosmetics';
 
 /**
  * `injectCosmetics` is in charge of all ad-blocking logic on the content-script

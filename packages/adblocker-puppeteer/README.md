@@ -24,10 +24,10 @@
     <img alt="Github Actions Assets Status" src="https://img.shields.io/github/workflow/status/ghostery/adblocker/Assets?label=assets&style=flat-square"></a>
   <a href="https://twitter.com/acdlite/status/974390255393505280">
     <img alt="Blazing Fast" src="https://img.shields.io/badge/speed-blazing%20%F0%9F%94%A5-brightgreen.svg?style=flat-square"></a>
-  <a href="https://www.npmjs.com/package/@cliqz/adblocker">
-    <img alt="npm version" src="https://img.shields.io/npm/v/@cliqz/adblocker.svg?style=flat-square"></a>
-  <a href="https://www.npmjs.com/package/@cliqz/adblocker">
-    <img alt="weekly downloads from npm" src="https://img.shields.io/npm/dw/@cliqz/adblocker.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/@ghostery/adblocker">
+    <img alt="npm version" src="https://img.shields.io/npm/v/@ghostery/adblocker.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/@ghostery/adblocker">
+    <img alt="weekly downloads from npm" src="https://img.shields.io/npm/dw/@ghostery/adblocker.svg?style=flat-square"></a>
   <br/>
   <a href="#badge">
     <img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square"></a>
@@ -45,17 +45,17 @@
 
 ## Getting Started
 
-Install: `npm install --save @cliqz/adblocker-puppeteer`.
+Install: `npm install --save @ghostery/adblocker-puppeteer`.
 
 ## Usage
 
-For a *complete example* check-out: [@cliqz/adblocker-puppeteer-example](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-puppeteer-example).
+For a *complete example* check-out: [@ghostery/adblocker-puppeteer-example](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-puppeteer-example).
 
 Creating an instance of `PuppeteerBlocker` and start blocking ads!
 
 ```javascript
 import puppeteer from 'puppeteer';
-import { PuppeteerBlocker } from '@cliqz/adblocker-puppeteer';
+import { PuppeteerBlocker } from '@ghostery/adblocker-puppeteer';
 import fetch from 'cross-fetch'; // required 'fetch'
 
 const browser = await puppeteer.launch();
@@ -73,14 +73,14 @@ start blocking ads.
 
 If you already have filters locally:
 ```javascript
-import { PuppeteerBlocker } from '@cliqz/adblocker-puppeteer';
+import { PuppeteerBlocker } from '@ghostery/adblocker-puppeteer';
 
 const blocker = PuppeteerBlocker.parse(fs.readFileSync('easylist.txt', 'utf-8'));
 ```
 
 Fetching lists from URLs:
 ```javascript
-import { PuppeteerBlocker } from '@cliqz/adblocker-puppeteer';
+import { PuppeteerBlocker } from '@ghostery/adblocker-puppeteer';
 import fetch from 'cross-fetch'; // required 'fetch'
 
 const blocker = await PuppeteerBlocker.fromLists(fetch, [
@@ -90,7 +90,7 @@ const blocker = await PuppeteerBlocker.fromLists(fetch, [
 
 Use ready-made configs to block ads and optionally trackers:
 ```javascript
-import { PuppeteerBlocker } from '@cliqz/adblocker-puppeteer';
+import { PuppeteerBlocker } from '@ghostery/adblocker-puppeteer';
 import fetch from 'cross-fetch'; // required 'fetch'
 
 let blocker = await PuppeteerBlocker.fromPrebuiltAdsOnly(fetch); // ads only
@@ -113,7 +113,7 @@ loading.
 
 ```javascript
 import puppeteer from 'puppeteer';
-import { PuppeteerBlocker } from '@cliqz/adblocker-puppeteer';
+import { PuppeteerBlocker } from '@ghostery/adblocker-puppeteer';
 import fetch from 'cross-fetch'; // required 'fetch'
 import { promises as fs } from 'fs'; // used for caching
 
@@ -132,7 +132,7 @@ PuppeteerBlocker.fromPrebuiltAdsAndTracking(fetch, {
 Or you can do this manually to control the way caching is done:
 
 ```javascript
-import { PuppeteerBlocker } from '@cliqz/adblocker-puppeteer';
+import { PuppeteerBlocker } from '@ghostery/adblocker-puppeteer';
 import fetch from 'cross-fetch'; // required 'fetch'
 
 PuppeteerBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {

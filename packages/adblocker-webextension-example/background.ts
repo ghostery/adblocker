@@ -14,7 +14,7 @@ import {
   HTMLSelector,
   Request,
   WebExtensionBlocker,
-} from '@cliqz/adblocker-webextension';
+} from '@ghostery/adblocker-webextension';
 
 /**
  * Keep track of number of network requests altered for each tab

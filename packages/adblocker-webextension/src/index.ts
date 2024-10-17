@@ -16,8 +16,8 @@ import {
   Request,
   RequestType,
   StreamingHtmlFilter,
-} from '@cliqz/adblocker';
-import { IBackgroundCallback, IMessageFromBackground } from '@cliqz/adblocker-content';
+} from '@ghostery/adblocker';
+import { IBackgroundCallback, IMessageFromBackground } from '@ghostery/adblocker-content';
 
 export type OnBeforeRequestDetailsType = Pick<
   WebRequest.OnBeforeRequestDetailsType,
@@ -806,5 +806,5 @@ ${scripts.join('\n\n')}}
   }
 }
 
-// Re-export symbols from @cliqz/adblocker
-export * from '@cliqz/adblocker';
+// Re-export symbols from @ghostery/adblocker
+export * from '@ghostery/adblocker';

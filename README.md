@@ -24,10 +24,10 @@
     <img alt="Github Actions Assets Status" src="https://img.shields.io/github/actions/workflow/status/ghostery/adblocker/assets.yml?label=assets&style=flat-square"></a>
   <a href="https://twitter.com/acdlite/status/974390255393505280">
     <img alt="Blazing Fast" src="https://img.shields.io/badge/speed-blazing%20%F0%9F%94%A5-brightgreen.svg?style=flat-square"></a>
-  <a href="https://www.npmjs.com/package/@cliqz/adblocker">
-    <img alt="npm version" src="https://img.shields.io/npm/v/@cliqz/adblocker.svg?style=flat-square"></a>
-  <a href="https://www.npmjs.com/package/@cliqz/adblocker">
-    <img alt="weekly downloads from npm" src="https://img.shields.io/npm/dw/@cliqz/adblocker.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/@ghostery/adblocker">
+    <img alt="npm version" src="https://img.shields.io/npm/v/@ghostery/adblocker.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/@ghostery/adblocker">
+    <img alt="weekly downloads from npm" src="https://img.shields.io/npm/dw/@ghostery/adblocker.svg?style=flat-square"></a>
   <br/>
   <a href="#badge">
     <img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square"></a>
@@ -53,10 +53,10 @@ The Ghostery adblocker is a JavaScript library for *blocking ads, trackers, and 
 The Ghostery adblocker is the easiest and most efficient way to block ads and trackers in your project. Only a few lines of code are required to integrate smoothly with [Puppeteer](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-puppeteer-example), [Electron](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-electron-example), a  Chrome- and Firefox-compatible [browser extension](https://github.com/ghostery/adblocker/tree/master/packages/adblocker-webextension-example), or any environment supporting [JavaScript](https://github.com/ghostery/adblocker/tree/master/packages/adblocker) (e.g. Node.js or React Native).
 
 Here is how to do it in two steps for a Chrome- and Firefox-compatible WebExtension:
-1. Install: `npm install --save @cliqz/adblocker-webextension`
+1. Install: `npm install --save @ghostery/adblocker-webextension`
 2. Add the following in your background script:
 ```js
-import { WebExtensionBlocker } from '@cliqz/adblocker-webextension';
+import { WebExtensionBlocker } from '@ghostery/adblocker-webextension';
 
 WebExtensionBlocker.fromPrebuiltAdsAndTracking().then((blocker) => {
   blocker.enableBlockingInBrowser(browser);
