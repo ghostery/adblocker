@@ -1084,14 +1084,19 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const unhideExceptions: Map<string, CosmeticFilter> = new Map();
 
     for (const unhide of unhides) {
-      if (
-        unhide.isScriptInject() === true &&
-        unhide.isUnhide() === true &&
-        unhide.getSelector().length === 0
-      ) {
-        injectionsDisabled = true;
+      let selector = unhide.getSelector();
+      if (unhide.isScriptInject() === true && unhide.isUnhide() === true) {
+        // #@#+js()
+        if (selector.length === 0) {
+          injectionsDisabled = true;
+        } else {
+          selector = unhide.getScriptletSelector(
+            (name) => this.resources.resolveScriptlet(name)?.name,
+          );
+          console.log(selector);
+        }
       }
-      unhideExceptions.set(unhide.getSelector(), unhide);
+      unhideExceptions.set(selector, unhide);
     }
 
     const injections: CosmeticFilter[] = [];
@@ -1101,8 +1106,13 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     if (filters.length !== 0) {
       // Apply unhide rules + dispatch
       for (const filter of filters) {
+        const selector =
+          filter.isScriptInject() === true
+            ? filter.getScriptletSelector((name) => this.resources.resolveScriptlet(name)?.name)
+            : filter.getSelector();
+
         // Make sure `rule` is not un-hidden by a #@# filter
-        const exception = unhideExceptions.get(filter.getSelector());
+        const exception = unhideExceptions.get(selector);
 
         if (exception !== undefined) {
           continue;

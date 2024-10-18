@@ -338,6 +338,10 @@ export default class Resources {
     return script;
   }
 
+  public resolveScriptlet(name: string): Scriptlet | undefined {
+    return this.scriptletsByName.get(name.endsWith('.js') ? name : `${name}.js`);
+  }
+
   private getScriptletDependencies(scriptlet: Scriptlet): string[] {
     const dependencies: Map<string, string> = new Map();
     const queue: string[] = [...scriptlet.dependencies];
