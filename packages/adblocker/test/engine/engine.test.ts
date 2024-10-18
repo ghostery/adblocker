@@ -1052,7 +1052,7 @@ foo.com###selector
       },
       {
         filters: [
-          'foo.com##+js(scriptlet  ,  malformed)',
+          'foo.com##+js(scriptlet ,  malformed)',
           'foo.com#@#+js(scriptlet0 ,  malformed)',
         ],
         hostname: 'foo.com',

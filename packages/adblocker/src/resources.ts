@@ -338,7 +338,7 @@ export default class Resources {
   }
 
   private getRawScriptlet(name: string): Scriptlet | undefined {
-    // Scriptlets with names ending with `.fn` is always treated as dependencies
+    // Scriptlets with names ending with `.fn` are always treated as dependencies
     if (name.endsWith('.fn')) {
       return undefined;
     }
