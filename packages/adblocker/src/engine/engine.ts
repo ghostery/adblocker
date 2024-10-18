@@ -545,24 +545,23 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
   }
 
   private normalizeSelector(filter: CosmeticFilter): string {
-    if (filter.isScriptInject() === true) {
-      const parsed = filter.parseScript();
-      const selector = filter.getSelector();
-      if (parsed === undefined) {
-        return selector;
-      }
-      const origin = this.resources.getRawScriptlet(parsed.name)?.name;
-      if (origin === undefined) {
-        return selector;
-      }
-      const separatorIndex = selector.indexOf(',');
-      if (separatorIndex === -1) {
-        return origin;
-      }
-      return origin + selector.slice(separatorIndex);
+    const selector = filter.getSelector();
+
+    if (filter.isScriptInject() === false) {
+      return selector;
     }
 
-    return filter.getSelector();
+    const parsed = filter.parseScript();
+    if (parsed === undefined) {
+      return selector;
+    }
+
+    const canonicalName = this.resources.getRawScriptlet(parsed.name)?.name;
+    if (canonicalName === undefined) {
+      return selector;
+    }
+
+    return selector.replace(parsed.name, canonicalName);
   }
 
   public updateEnv(env: Env) {
