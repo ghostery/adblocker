@@ -544,6 +544,27 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     return this.preprocessors.isFilterExcluded(filter);
   }
 
+  private normalizeSelector(filter: CosmeticFilter): string {
+    if (filter.isScriptInject() === true) {
+      const parsed = filter.parseScript();
+      const selector = filter.getSelector();
+      if (parsed === undefined) {
+        return selector;
+      }
+      const origin = this.resources.getRawScriptlet(parsed.name)?.name;
+      if (origin === undefined) {
+        return selector;
+      }
+      const separatorIndex = selector.indexOf(',');
+      if (separatorIndex === -1) {
+        return origin;
+      }
+      return origin + selector.slice(separatorIndex);
+    }
+
+    return filter.getSelector();
+  }
+
   public updateEnv(env: Env) {
     this.preprocessors.updateEnv(env);
   }
@@ -1090,12 +1111,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         unhide.getSelector().length === 0
       ) {
         injectionsDisabled = true;
-      } else {
-        const selector = unhide.isScriptInject()
-          ? unhide.getScriptletSelector((name) => this.resources.getRawScriptlet(name)?.name)
-          : unhide.getSelector();
-        unhideExceptions.set(selector, unhide);
       }
+      unhideExceptions.set(this.normalizeSelector(unhide), unhide);
     }
 
     const injections: CosmeticFilter[] = [];
@@ -1106,10 +1123,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       // Apply unhide rules + dispatch
       for (const filter of filters) {
         // Make sure `rule` is not un-hidden by a #@# filter
-        const selector = filter.isScriptInject()
-          ? filter.getScriptletSelector((name) => this.resources.getRawScriptlet(name)?.name)
-          : filter.getSelector();
-        const exception = unhideExceptions.get(selector);
+        const exception = unhideExceptions.get(this.normalizeSelector(filter));
 
         if (exception !== undefined) {
           continue;

@@ -841,23 +841,6 @@ export default class CosmeticFilter implements IFilter {
     return extractHTMLSelectorFromRule(this.selector);
   }
 
-  public getScriptletSelector(resolver: (name: string) => string | undefined): string {
-    const parsed = this.parseScript();
-    const selector = this.getSelector();
-    if (parsed === undefined) {
-      return selector;
-    }
-    const origin = resolver(parsed.name);
-    if (origin === undefined) {
-      return selector;
-    }
-    const separatorIndex = selector.indexOf(',');
-    if (separatorIndex === -1) {
-      return origin;
-    }
-    return origin + selector.slice(separatorIndex);
-  }
-
   public isExtended(): boolean {
     return getBit(this.mask, COSMETICS_MASK.extended);
   }
