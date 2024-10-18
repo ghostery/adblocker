@@ -797,17 +797,6 @@ export default class CosmeticFilter implements IFilter {
     return undefined;
   }
 
-  public parseScriptletName(): string | undefined {
-    const selector = this.getSelector();
-    if (selector.length === 0) {
-      return undefined;
-    }
-    // `selector.indexOf(',', 5)` will result '-1' in case of comma index not found
-    // This can extract the scriptlet name fast as possible since we have trailing ')' at the end
-    // e.g. +js(scriptlet)
-    return selector.slice(4 /* '+js('.length */, selector.indexOf(',', 4));
-  }
-
   public hasHostnameConstraint(): boolean {
     return this.domains !== undefined;
   }
@@ -849,12 +838,7 @@ export default class CosmeticFilter implements IFilter {
       return selector;
     }
     const separatorIndex = selector.indexOf(',');
-    let parsed: string;
-    if (separatorIndex === -1) {
-      parsed = selector;
-    } else {
-      parsed = selector.slice(0, separatorIndex);
-    }
+    const parsed = separatorIndex === -1 ? selector : selector.slice(0, separatorIndex);
     const origin = resolver(parsed.trim());
     if (origin === undefined) {
       return selector;
