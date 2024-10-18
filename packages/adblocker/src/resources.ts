@@ -333,7 +333,11 @@ export default class Resources {
     return script;
   }
 
-  public getRawScriptlet(name: string): Scriptlet | undefined {
+  public getScriptletCanonicalName(name: string): string | undefined {
+    return this.getRawScriptlet(name)?.name;
+  }
+
+  private getRawScriptlet(name: string): Scriptlet | undefined {
     // Scriptlets with names ending with `.fn` is always treated as dependencies
     if (name.endsWith('.fn')) {
       return undefined;

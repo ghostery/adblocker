@@ -556,7 +556,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       return selector;
     }
 
-    const canonicalName = this.resources.getRawScriptlet(parsed.name)?.name;
+    const canonicalName = this.resources.getScriptletCanonicalName(parsed.name);
     if (canonicalName === undefined) {
       return selector;
     }
