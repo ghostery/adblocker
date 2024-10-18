@@ -311,12 +311,7 @@ export default class Resources {
   }
 
   public getScriptlet(name: string): string | undefined {
-    // Scriptlets with names ending with `.fn` is always treated as dependencies
-    if (name.endsWith('.fn')) {
-      return undefined;
-    }
-
-    const scriptlet = this.scriptletsByName.get(name.endsWith('.js') ? name : `${name}.js`);
+    const scriptlet = this.getRawScriptlet(name);
 
     if (scriptlet === undefined) {
       return undefined;
@@ -338,7 +333,12 @@ export default class Resources {
     return script;
   }
 
-  public resolveScriptlet(name: string): Scriptlet | undefined {
+  public getRawScriptlet(name: string): Scriptlet | undefined {
+    // Scriptlets with names ending with `.fn` is always treated as dependencies
+    if (name.endsWith('.fn')) {
+      return undefined;
+    }
+
     return this.scriptletsByName.get(name.endsWith('.js') ? name : `${name}.js`);
   }
 

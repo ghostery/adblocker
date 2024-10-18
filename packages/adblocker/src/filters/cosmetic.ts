@@ -401,6 +401,7 @@ export default class CosmeticFilter implements IFilter {
   public readonly rawLine: string | undefined;
 
   private id: number | undefined;
+  private scriptletDetails: { name: string; args: string[] } | undefined;
 
   constructor({
     mask,
@@ -422,6 +423,7 @@ export default class CosmeticFilter implements IFilter {
 
     this.id = undefined;
     this.rawLine = rawLine;
+    this.scriptletDetails = undefined;
   }
 
   public isCosmeticFilter(): this is CosmeticFilter {
@@ -680,6 +682,10 @@ export default class CosmeticFilter implements IFilter {
   }
 
   public parseScript(): { name: string; args: string[] } | undefined {
+    if (this.scriptletDetails !== undefined) {
+      return this.scriptletDetails;
+    }
+
     const selector = this.getSelector();
     if (selector.length === 0) {
       return undefined;
@@ -772,7 +778,10 @@ export default class CosmeticFilter implements IFilter {
           .replace(REGEXP_UNICODE_BACKSLASH, '\\')
           .replace(REGEXP_ESCAPED_COMMA, ','),
       );
-    return { name: parts[0], args };
+
+    this.scriptletDetails = { name: parts[0], args };
+
+    return this.scriptletDetails;
   }
 
   public getScript(getScriptlet: (_: string) => string | undefined): string | undefined {
@@ -833,14 +842,20 @@ export default class CosmeticFilter implements IFilter {
   }
 
   public getScriptletSelector(resolver: (name: string) => string | undefined): string {
+    const parsed = this.parseScript();
     const selector = this.getSelector();
-    const separatorIndex = selector.indexOf(',');
-    const parsed = separatorIndex === -1 ? selector : selector.slice(0, separatorIndex);
-    const origin = resolver(parsed.trim());
+    if (parsed === undefined) {
+      return selector;
+    }
+    const origin = resolver(parsed.name);
     if (origin === undefined) {
       return selector;
     }
-    return origin + selector.slice(parsed.length);
+    const separatorIndex = selector.indexOf(',');
+    if (separatorIndex === -1) {
+      return origin;
+    }
+    return origin + selector.slice(separatorIndex);
   }
 
   public isExtended(): boolean {
