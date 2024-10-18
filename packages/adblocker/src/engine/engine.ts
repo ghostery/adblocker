@@ -1093,7 +1093,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           selector = unhide.getScriptletSelector(
             (name) => this.resources.resolveScriptlet(name)?.name,
           );
-          console.log(selector);
         }
       }
       unhideExceptions.set(selector, unhide);
@@ -1108,7 +1107,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       for (const filter of filters) {
         // Make sure `rule` is not un-hidden by a #@# filter
         const exception = unhideExceptions.get(
-          filter.isScriptInject() === true
+          filter.isScriptInject() === true && filter.getSelector().length !== 0
             ? filter.getScriptletSelector((name) => this.resources.resolveScriptlet(name)?.name)
             : filter.getSelector(),
         );

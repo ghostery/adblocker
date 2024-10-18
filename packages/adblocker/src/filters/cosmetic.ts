@@ -834,9 +834,6 @@ export default class CosmeticFilter implements IFilter {
 
   public getScriptletSelector(resolver: (name: string) => string | undefined): string {
     const selector = this.getSelector();
-    if (selector.length === 0) {
-      return selector;
-    }
     const separatorIndex = selector.indexOf(',');
     const parsed = separatorIndex === -1 ? selector : selector.slice(0, separatorIndex);
     const origin = resolver(parsed.trim());
