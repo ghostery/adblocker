@@ -1106,13 +1106,12 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     if (filters.length !== 0) {
       // Apply unhide rules + dispatch
       for (const filter of filters) {
-        const selector =
+        // Make sure `rule` is not un-hidden by a #@# filter
+        const exception = unhideExceptions.get(
           filter.isScriptInject() === true
             ? filter.getScriptletSelector((name) => this.resources.resolveScriptlet(name)?.name)
-            : filter.getSelector();
-
-        // Make sure `rule` is not un-hidden by a #@# filter
-        const exception = unhideExceptions.get(selector);
+            : filter.getSelector(),
+        );
 
         if (exception !== undefined) {
           continue;
