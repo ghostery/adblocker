@@ -175,6 +175,29 @@ function computeFilterId(
   return hash >>> 0;
 }
 
+export function normalizeSelector(
+  filter: CosmeticFilter,
+  getScriptletCanonicalName: (name: string) => string | undefined,
+): string {
+  const selector = filter.getSelector();
+
+  if (filter.isScriptInject() === false) {
+    return selector;
+  }
+
+  const parsed = filter.parseScript();
+  if (parsed === undefined) {
+    return selector;
+  }
+
+  const canonicalName = getScriptletCanonicalName(parsed.name);
+  if (canonicalName === undefined) {
+    return selector;
+  }
+
+  return selector.replace(parsed.name, canonicalName);
+}
+
 /***************************************************************************
  *  Cosmetic filters parsing
  * ************************************************************************ */
