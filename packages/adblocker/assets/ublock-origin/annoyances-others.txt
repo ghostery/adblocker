@@ -18,6 +18,12 @@ megapastes.com##+js(aopr, document.onselectstart)
 s0urce.io##+js(aeld, %2F%5E(contextmenu%7Ccopy)%24%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/3620
 dicionariocriativo.com.br##+js(aopr, getSelection)
+! https://github.com/uBlockOrigin/uAssets/issues/1976
+gay69.stream##+js(aopr, disableSelection)
+gay69.stream##+js(aopw, nocontext)
+gay69.stream##.unselectable:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+! https://forums.lanik.us/viewtopic.php?p=136255#p136255
+m4ufree.com##+js(aopw, document.oncontextmenu)
 ! END: Anti copy, right-click etc.
 ! START: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/1343
@@ -46,6 +52,15 @@ surviv.io###ad-block-left
 ! https://github.com/uBlockOrigin/uAssets/issues/6517
 ! https://github.com/NanoMeow/QuickReports/issues/3246
 al.com,allkpop.com,calendarpedia.co.uk,ccn.com,cleveland.com,comicsands.com,duffelblog.com,gamepur.com,gamerevolution.com,interestingengineering.com,keengamer.com,listenonrepeat.com,mandatory.com,mlive.com,musicfeeds.com.au,newatlas.com,pgatour.com,readlightnovel.org,secondnexus.com,sevenforums.com,sport24.co.za,superherohype.com,thefashionspot.com,theodysseyonline.com,totalbeauty.com,westernjournal.com##+js(aopr, __cmpGdprAppliesGlobally)
+! techonthenet warning anti adb
+techonthenet.com##+js(set-cookie, sabl, 1)
+! https://github.com/uBlockOrigin/uAssets/issues/2185
+@@||socialblade.com^$ghide
+socialblade.com##.cas-container
+socialblade.com##.cas-wide-container
+socialblade.com##div[style^="width: 300px; height: 250px;"][style*="background: #fff;"]
+socialblade.com##div[style^="width: 860px; min-height: 90px"]
+socialblade.com###bottomAd:style(position: absolute !important; left: -4000px !important;)
 ! END: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/933
 ! https://github.com/easylist/EasyListHebrew/issues/332
@@ -54,12 +69,6 @@ al.com,allkpop.com,calendarpedia.co.uk,ccn.com,cleveland.com,comicsands.com,duff
 ||shomershabes.co.il^$3p
 ! https://forums.lanik.us/viewtopic.php?f=91&t=40459
 impots.gouv.fr##+js(set, PASSER_videoPAS_apres, 0)
-! https://github.com/uBlockOrigin/uAssets/issues/1976
-gay69.stream##+js(aopr, disableSelection)
-gay69.stream##+js(aopw, nocontext)
-gay69.stream##.unselectable:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
-! techonthenet warning anti adb
-techonthenet.com##+js(set-cookie, sabl, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/2044
 pinterest.*##[data-test-giftwrap]
 pinterest.*###desktopWrapper:style(position: static !important;)
@@ -70,15 +79,6 @@ pinterest.*##div[class="Closeup__wrapper"] > div > div[style^="cursor: default"]
 pinterest.*##div[class="GrowthUnauthPinImage__imageDim"]
 pinterest.*##.GrowthUnauthPinImage > a > div[class^="Jea"]:has(button[class^="noButtonStyles "])
 pinterest.*##.Hsu.iyn.zI7:nth-of-type(2) > div > .FullPageModal__scroller
-! https://github.com/uBlockOrigin/uAssets/issues/2185
-@@||socialblade.com^$ghide
-socialblade.com##.cas-container
-socialblade.com##.cas-wide-container
-socialblade.com##div[style^="width: 300px; height: 250px;"][style*="background: #fff;"]
-socialblade.com##div[style^="width: 860px; min-height: 90px"]
-socialblade.com###bottomAd:style(position: absolute !important; left: -4000px !important;)
-! https://forums.lanik.us/viewtopic.php?p=136255#p136255
-m4ufree.com##+js(aopw, document.oncontextmenu)
 ! https://github.com/NanoAdblocker/NanoFilters/issues/63
 sportsnet.ca##+js(aopr, uxGuid)
 ! https://github.com/uBlockOrigin/uAssets/issues/2343
@@ -5656,6 +5656,9 @@ yugenanime.sx##+js(set, devtoolsDetector, %7B%7D)
 cu.tbs.co.jp##+js(trusted-set-local-storage-item, lastViewTime, %24currentDate%24)
 ! https://github.com/DandelionSprout/adfilt/discussions/163#discussioncomment-10269579
 ! https://github.com/uBlockOrigin/uAssets/issues/25667
+! https://www.reddit.com/r/uBlockOrigin/comments/1g50usk/amazon_similar_items_link_resolving_to_bad_url/
 ! https://indahonline.com/ anti right click, devtools
 ||indahonline.com/js/disable-devtool.js$script,1p
 indahonline.com##+js(aost, %24, %2Fmainseto.js%3A286%3A1)
+! videocardz.com anti select
+videocardz.com##*:style(user-select: text !important; -ms-user-select: text !important; -moz-user-select: text !important; -khtml-user-select: text !important; -webkit-user-select: text !important; -webkit-touch-callout: default !important;)
