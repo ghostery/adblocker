@@ -1,3 +1,15 @@
+# v2.0.1 (Mon Oct 21 2024)
+
+#### :memo: Documentation
+
+- Fixed a typo in the title [#4373](https://github.com/ghostery/adblocker/pull/4373) ([@philipp-classen](https://github.com/philipp-classen))
+
+#### Authors: 1
+
+- Philipp Claßen ([@philipp-classen](https://github.com/philipp-classen))
+
+---
+
 # v2.0.0 (Thu Oct 17 2024)
 
 #### :boom: Breaking Change

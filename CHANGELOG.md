@@ -1,3 +1,44 @@
+# v2.0.1 (Mon Oct 21 2024)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-electron`
+  - packages: adblocker-electron{-preload}: make use of `executeJavaScript` [#4278](https://github.com/ghostery/adblocker/pull/4278) ([@nullptropy](https://github.com/nullptropy))
+
+#### :house: Internal
+
+- `@ghostery/adblocker`
+  - Update local assets [#4377](https://github.com/ghostery/adblocker/pull/4377) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#4374](https://github.com/ghostery/adblocker/pull/4374) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :memo: Documentation
+
+- `@ghostery/adblocker-webextension`
+  - Fixed a typo in the title [#4373](https://github.com/ghostery/adblocker/pull/4373) ([@philipp-classen](https://github.com/philipp-classen))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump eslint from 9.12.0 to 9.13.0 [#4380](https://github.com/ghostery/adblocker/pull/4380) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 22.7.6 to 22.7.7 [#4379](https://github.com/ghostery/adblocker/pull/4379) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @eslint/js from 9.12.0 to 9.13.0 [#4378](https://github.com/ghostery/adblocker/pull/4378) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript-eslint from 8.9.0 to 8.10.0 [#4375](https://github.com/ghostery/adblocker/pull/4375) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.51 to 6.1.52 [#4368](https://github.com/ghostery/adblocker/pull/4368) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 33.0.0 to 33.0.1 [#4369](https://github.com/ghostery/adblocker/pull/4369) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 22.7.5 to 22.7.6 [#4371](https://github.com/ghostery/adblocker/pull/4371) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump playwright from 1.48.0 to 1.48.1 [#4372](https://github.com/ghostery/adblocker/pull/4372) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-puppeteer`
+  - Build(deps): Bump puppeteer from 23.5.3 to 23.6.0 [#4370](https://github.com/ghostery/adblocker/pull/4370) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- [@nullptropy](https://github.com/nullptropy)
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Philipp Claßen ([@philipp-classen](https://github.com/philipp-classen))
+
+---
+
 # v2.0.0 (Thu Oct 17 2024)
 
 #### :boom: Breaking Change

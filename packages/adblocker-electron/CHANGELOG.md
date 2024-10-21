@@ -1,3 +1,15 @@
+# v2.0.1 (Mon Oct 21 2024)
+
+#### :bug: Bug Fix
+
+- packages: adblocker-electron{-preload}: make use of `executeJavaScript` [#4278](https://github.com/ghostery/adblocker/pull/4278) ([@nullptropy](https://github.com/nullptropy))
+
+#### Authors: 1
+
+- [@nullptropy](https://github.com/nullptropy)
+
+---
+
 # v2.0.0 (Thu Oct 17 2024)
 
 #### :boom: Breaking Change

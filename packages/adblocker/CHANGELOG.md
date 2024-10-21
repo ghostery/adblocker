@@ -1,3 +1,21 @@
+# v2.0.1 (Mon Oct 21 2024)
+
+#### :bug: Bug Fix
+
+- Update local assets and compression codebooks (ghostery-adblocker-bot@users.noreply.github.com)
+
+#### :house: Internal
+
+- Update local assets [#4377](https://github.com/ghostery/adblocker/pull/4377) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4374](https://github.com/ghostery/adblocker/pull/4374) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 2
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+
+---
+
 # v2.0.0 (Thu Oct 17 2024)
 
 #### :boom: Breaking Change
