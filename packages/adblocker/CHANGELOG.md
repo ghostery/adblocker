@@ -1,3 +1,21 @@
+# v2.0.2 (Fri Oct 25 2024)
+
+#### :bug: Bug Fix
+
+- fix: exception of script injection not respecting aliases [#4376](https://github.com/ghostery/adblocker/pull/4376) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/node from 22.7.7 to 22.7.8 [#4383](https://github.com/ghostery/adblocker/pull/4383) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.278 to 0.0.279 [#4382](https://github.com/ghostery/adblocker/pull/4382) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.0.1 (Mon Oct 21 2024)
 
 #### :bug: Bug Fix

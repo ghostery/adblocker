@@ -1,3 +1,31 @@
+# v2.0.2 (Fri Oct 25 2024)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker`
+  - fix: exception of script injection not respecting aliases [#4376](https://github.com/ghostery/adblocker/pull/4376) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump auto from 11.2.1 to 11.3.0 [#4390](https://github.com/ghostery/adblocker/pull/4390) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.54 to 6.1.55 [#4389](https://github.com/ghostery/adblocker/pull/4389) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump chai from 5.1.1 to 5.1.2 [#4388](https://github.com/ghostery/adblocker/pull/4388) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/electron from 1.6.10 to 1.6.12 [#4387](https://github.com/ghostery/adblocker/pull/4387) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 33.0.1 to 33.0.2 [#4386](https://github.com/ghostery/adblocker/pull/4386) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.52 to 6.1.54 [#4385](https://github.com/ghostery/adblocker/pull/4385) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 22.7.8 to 22.7.9 [#4384](https://github.com/ghostery/adblocker/pull/4384) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 22.7.7 to 22.7.8 [#4383](https://github.com/ghostery/adblocker/pull/4383) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript-eslint from 8.10.0 to 8.11.0 [#4381](https://github.com/ghostery/adblocker/pull/4381) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-webextension-cosmetics`, `@ghostery/adblocker-webextension-example`, `@ghostery/adblocker`
+  - Build(deps): Bump @types/chrome from 0.0.278 to 0.0.279 [#4382](https://github.com/ghostery/adblocker/pull/4382) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.0.1 (Mon Oct 21 2024)
 
 #### :bug: Bug Fix
