@@ -1035,6 +1035,32 @@ foo.com###selector
         matches: [],
       },
 
+      // = unhide +js() exception with aliasing
+      {
+        filters: ['foo.com##+js(scriptlet)', 'foo.com#@#+js(scriptlet0)'],
+        hostname: 'foo.com',
+        hrefs: [],
+        injections: [],
+        matches: [],
+      },
+      {
+        filters: ['foo.com##+js(scriptlet, arg0, arg1)', 'foo.com#@#+js(scriptlet0, arg0, arg1)'],
+        hostname: 'foo.com',
+        hrefs: [],
+        injections: [],
+        matches: [],
+      },
+      {
+        filters: [
+          'foo.com##+js(scriptlet ,  malformed)',
+          'foo.com#@#+js(scriptlet0 ,  malformed)',
+        ],
+        hostname: 'foo.com',
+        hrefs: [],
+        injections: [],
+        matches: [],
+      },
+
       // = unhide +js() disable
       {
         filters: [
@@ -1456,7 +1482,7 @@ foo.com###selector
             scriptlets: [
               {
                 name: 'scriptlet.js',
-                aliases: [],
+                aliases: ['scriptlet0.js'],
                 body: 'function scriptlet() {}',
                 dependencies: [],
                 executionWorld: 'MAIN',

@@ -175,6 +175,29 @@ function computeFilterId(
   return hash >>> 0;
 }
 
+export function normalizeSelector(
+  filter: CosmeticFilter,
+  getScriptletCanonicalName: (name: string) => string | undefined,
+): string {
+  const selector = filter.getSelector();
+
+  if (filter.isScriptInject() === false) {
+    return selector;
+  }
+
+  const parsed = filter.parseScript();
+  if (parsed === undefined) {
+    return selector;
+  }
+
+  const canonicalName = getScriptletCanonicalName(parsed.name);
+  if (canonicalName === undefined) {
+    return selector;
+  }
+
+  return selector.replace(parsed.name, canonicalName);
+}
+
 /***************************************************************************
  *  Cosmetic filters parsing
  * ************************************************************************ */
@@ -401,6 +424,7 @@ export default class CosmeticFilter implements IFilter {
   public readonly rawLine: string | undefined;
 
   private id: number | undefined;
+  private scriptletDetails: { name: string; args: string[] } | undefined;
 
   constructor({
     mask,
@@ -422,6 +446,7 @@ export default class CosmeticFilter implements IFilter {
 
     this.id = undefined;
     this.rawLine = rawLine;
+    this.scriptletDetails = undefined;
   }
 
   public isCosmeticFilter(): this is CosmeticFilter {
@@ -680,6 +705,10 @@ export default class CosmeticFilter implements IFilter {
   }
 
   public parseScript(): { name: string; args: string[] } | undefined {
+    if (this.scriptletDetails !== undefined) {
+      return this.scriptletDetails;
+    }
+
     const selector = this.getSelector();
     if (selector.length === 0) {
       return undefined;
@@ -772,7 +801,10 @@ export default class CosmeticFilter implements IFilter {
           .replace(REGEXP_UNICODE_BACKSLASH, '\\')
           .replace(REGEXP_ESCAPED_COMMA, ','),
       );
-    return { name: parts[0], args };
+
+    this.scriptletDetails = { name: parts[0], args };
+
+    return this.scriptletDetails;
   }
 
   public getScript(getScriptlet: (_: string) => string | undefined): string | undefined {

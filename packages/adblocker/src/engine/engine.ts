@@ -20,7 +20,7 @@ import {
   fullLists,
 } from '../fetch.js';
 import { HTMLSelector } from '../html-filtering.js';
-import CosmeticFilter from '../filters/cosmetic.js';
+import CosmeticFilter, { normalizeSelector } from '../filters/cosmetic.js';
 import NetworkFilter from '../filters/network.js';
 import { block } from '../filters/dsl.js';
 import { FilterType, IListDiff, IPartialRawDiff, parseFilters } from '../lists.js';
@@ -1091,7 +1091,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       ) {
         injectionsDisabled = true;
       }
-      unhideExceptions.set(unhide.getSelector(), unhide);
+      unhideExceptions.set(
+        normalizeSelector(unhide, this.resources.getScriptletCanonicalName.bind(this.resources)),
+        unhide,
+      );
     }
 
     const injections: CosmeticFilter[] = [];
@@ -1102,7 +1105,9 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       // Apply unhide rules + dispatch
       for (const filter of filters) {
         // Make sure `rule` is not un-hidden by a #@# filter
-        const exception = unhideExceptions.get(filter.getSelector());
+        const exception = unhideExceptions.get(
+          normalizeSelector(filter, this.resources.getScriptletCanonicalName.bind(this.resources)),
+        );
 
         if (exception !== undefined) {
           continue;
