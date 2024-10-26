@@ -227,6 +227,14 @@ describe('#Resources', function () {
             requiresTrust: false,
           },
         ],
+        resources: [
+          {
+            name: 'surrogate.js',
+            aliases: [],
+            body: 'function resource() {}',
+            contentType: 'application/javascript',
+          },
+        ],
       });
     });
 
@@ -271,6 +279,10 @@ describe('#Resources', function () {
 
     it('includes setup for scritplet globals', function () {
       expect(resources.getScriptlet('a')).to.include('var scriptletGlobals = {};');
+    });
+
+    it('allows resources surrogate', function () {
+      expect(resources.getScriptlet('surrogate')).to.include('resource');
     });
   });
 
