@@ -15,4 +15,4 @@ Or, start as esm
 $ yarn start:esm
 ```
 
-Checkout [index.ts](https://github.com/ghostery/adblocker/blob/master/packages/adblocker-playwright-example/index.ts) for more details!
+Checkout [src/index.ts](https://github.com/ghostery/adblocker/blob/master/packages/adblocker-playwright-example/src/index.ts) for more details!

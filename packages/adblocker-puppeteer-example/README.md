@@ -60,4 +60,4 @@ Or, start example as esm module
 $ yarn start:esm
 ```
 
-Checkout [index.ts](./index.ts) for more details!
+Checkout [src/index.ts](https://github.com/ghostery/adblocker/blob/master/packages/adblocker-puppeteer-example/src/index.ts) for more details!
