@@ -314,11 +314,7 @@ export default class Resources {
     const scriptlet = this.getRawScriptlet(name);
 
     if (scriptlet === undefined) {
-      const surrogate = this.getResourceAsScriptlet(name);
-      if (surrogate !== undefined) {
-        return surrogate.body;
-      }
-      return undefined;
+      return this.getResourceAsScriptlet(name)?.body;
     }
 
     let script = this.scriptletsCache.get(scriptlet.name);
