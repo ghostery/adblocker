@@ -311,9 +311,13 @@ export default class Resources {
   }
 
   public getScriptlet(name: string): string | undefined {
-    const scriptlet = this.getRawScriptlet(name) || this.getResourceAsScriptlet(name);
+    const scriptlet = this.getRawScriptlet(name);
 
     if (scriptlet === undefined) {
+      const surrogate = this.getResourceAsScriptlet(name);
+      if (surrogate !== undefined) {
+        return surrogate.body;
+      }
       return undefined;
     }
 
