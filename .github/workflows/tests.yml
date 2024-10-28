@@ -33,6 +33,12 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Generate compression codebooks
+        id: codebooks
+        working-directory: ./packages/adblocker/
+        run: |
+          yarn generate-codebooks
+
       - name: Lint
         run: yarn lint
 
