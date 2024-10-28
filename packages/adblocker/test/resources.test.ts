@@ -282,7 +282,9 @@ describe('#Resources', function () {
     });
 
     it('allows resources surrogate', function () {
-      expect(resources.getScriptlet('surrogate')).to.include('resource');
+      expect(resources.getScriptlet('surrogate'))
+        .to.include('resource')
+        .not.to.include('scriptletGlobals');
     });
   });
 
