@@ -8,6 +8,8 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
+    timeout-minutes: 10
+
     strategy:
       matrix:
         node: [18, 20, 22]
@@ -30,12 +32,6 @@ jobs:
 
       - name: Build
         run: yarn build
-
-      - name: Generate compression codebooks
-        id: codebooks
-        working-directory: ./packages/adblocker/
-        run: |
-          yarn codebook-raw-cosmetic
 
       - name: Lint
         run: yarn lint
