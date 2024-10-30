@@ -334,11 +334,7 @@ export default class Resources {
   }
 
   private getSurrogate(name: string): string | undefined {
-    if (name.endsWith('.js') === true) {
-      return undefined;
-    }
-
-    const resource = this.resourcesByName.get(name + '.js');
+    const resource = this.resourcesByName.get(name.endsWith('.js') ? name : `${name}.js`);
     if (resource === undefined || resource.contentType !== 'application/javascript') {
       return undefined;
     }
