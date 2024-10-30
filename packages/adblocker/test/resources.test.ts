@@ -227,6 +227,14 @@ describe('#Resources', function () {
             requiresTrust: false,
           },
         ],
+        resources: [
+          {
+            name: 'surrogate.js',
+            aliases: [],
+            body: '(function resource() {})()',
+            contentType: 'application/javascript',
+          },
+        ],
       });
     });
 
@@ -271,6 +279,13 @@ describe('#Resources', function () {
 
     it('includes setup for scritplet globals', function () {
       expect(resources.getScriptlet('a')).to.include('var scriptletGlobals = {};');
+    });
+
+    it('allows resources surrogate', function () {
+      // Also, they don't need to be wrapped with scriptlet suppliments like `scriptletGlobals` to avoid possible conflicts.
+      expect(resources.getScriptlet('surrogate')).to.be.equal('(function resource() {})()');
+      // Allow calling surrogate with `.js`.
+      expect(resources.getScriptlet('surrogate.js')).to.be.equal('(function resource() {})()');
     });
   });
 
