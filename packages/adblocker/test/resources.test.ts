@@ -231,7 +231,7 @@ describe('#Resources', function () {
           {
             name: 'surrogate.js',
             aliases: [],
-            body: 'function resource() {}',
+            body: '(function resource() {})()',
             contentType: 'application/javascript',
           },
         ],
@@ -282,9 +282,9 @@ describe('#Resources', function () {
     });
 
     it('allows resources surrogate', function () {
-      expect(resources.getScriptlet('surrogate'))
-        .to.include('resource')
-        .not.to.include('scriptletGlobals');
+      // Resource surrogates should be called without `.js` suffix or file extension.
+      // Also, they don't need to be wrapped with scriptlet suppliments like `scriptletGlobals` to avoid possible conflicts.
+      expect(resources.getScriptlet('surrogate')).to.be.equal('(function resource() {})()');
     });
   });
 
