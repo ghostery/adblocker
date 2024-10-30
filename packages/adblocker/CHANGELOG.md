@@ -1,3 +1,20 @@
+# v2.0.3 (Wed Oct 30 2024)
+
+#### :bug: Bug Fix
+
+- fix: allow resources surrogates [#4394](https://github.com/ghostery/adblocker/pull/4394) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Fix codebook generation ngram size [#4403](https://github.com/ghostery/adblocker/pull/4403) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 2
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.0.2 (Fri Oct 25 2024)
 
 #### :bug: Bug Fix
