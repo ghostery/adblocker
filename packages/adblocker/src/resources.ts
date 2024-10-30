@@ -314,7 +314,7 @@ export default class Resources {
     const scriptlet = this.getRawScriptlet(name);
 
     if (scriptlet === undefined) {
-      return this.getResourceAsScriptletSurrogate(name);
+      return this.getSurrogate(name);
     }
 
     let script = this.scriptletsCache.get(scriptlet.name);
@@ -333,7 +333,7 @@ export default class Resources {
     return script;
   }
 
-  private getResourceAsScriptletSurrogate(name: string): string | undefined {
+  private getSurrogate(name: string): string | undefined {
     if (name.endsWith('.js') === true) {
       return undefined;
     }
