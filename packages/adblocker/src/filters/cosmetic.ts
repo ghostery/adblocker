@@ -716,93 +716,46 @@ export default class CosmeticFilter implements IFilter {
 
     const parts: string[] = [];
 
-    let index = 0;
-    let lastComaIndex = -1;
-    let inDoubleQuotes = false;
-    let inSingleQuotes = false;
-    let inRegexp = false;
-    let objectNesting = 0;
-    let lastCharIsBackslash = false;
-    let inArgument = false;
+    let pos = 0;
+    let start = 0;
+    let value = '';
 
-    for (; index < selector.length; index += 1) {
-      const char = selector[index];
+    for (; pos < selector.length; pos++) {
+      const code = selector.charCodeAt(pos);
 
-      if (lastCharIsBackslash === false) {
-        if (inDoubleQuotes === true) {
-          if (char === '"') {
-            inDoubleQuotes = false;
-          }
-        } else if (inSingleQuotes === true) {
-          if (char === "'") {
-            inSingleQuotes = false;
-          }
-        } else if (objectNesting !== 0) {
-          if (char === '{') {
-            objectNesting += 1;
-          } else if (char === '}') {
-            objectNesting -= 1;
-          } else if (char === '"') {
-            inDoubleQuotes = true;
-          } else if (char === "'") {
-            inSingleQuotes = true;
-          }
-        } else if (inRegexp === true) {
-          if (char === '/') {
-            inRegexp = false;
-          }
-        } else {
-          if (inArgument === false) {
-            if (char === ' ') {
-              // ignore
-            } else if (char === '"' && selector.indexOf('"', index + 1) > 0) {
-              inDoubleQuotes = true;
-            } else if (char === "'" && selector.indexOf("'", index + 1) > 0) {
-              inSingleQuotes = true;
-            } else if (char === '{' && selector.indexOf('}', index + 1) > 0) {
-              objectNesting += 1;
-            } else if (char === '/' && selector.indexOf('/', index + 1) > 0) {
-              inRegexp = true;
-            } else {
-              inArgument = true;
-            }
-          }
-          if (char === ',') {
-            parts.push(selector.slice(lastComaIndex + 1, index).trim());
-            lastComaIndex = index;
-            inArgument = false;
-          }
-        }
+      if (code === 92 /* '\\' */ && selector.charCodeAt(pos + 1) === 44 /* ',' */) {
+        value += selector.slice(start, pos);
+        start = ++pos;
+      } else if (code === 44 /* ',' */) {
+        parts.push(value + selector.slice(start, pos));
+        start = pos + 1;
+        value = '';
       }
-
-      lastCharIsBackslash = char === '\\';
     }
 
-    parts.push(selector.slice(lastComaIndex + 1).trim());
-
-    if (parts.length === 0) {
-      return undefined;
+    if (start - pos !== 0) {
+      parts.push(value + selector.slice(start, pos));
     }
 
-    const args = parts
-      .slice(1)
-      .map((part) => {
+    this.scriptletDetails = {
+      name: parts[0],
+      args: parts.slice(1).map((part) => {
+        part = part.trim();
+
         if (
           (part.startsWith(`'`) && part.endsWith(`'`)) ||
-          (part.startsWith(`"`) && part.endsWith(`"`))
+          (part.endsWith(`"`) && part.endsWith(`"`))
         ) {
-          return part.substring(1, part.length - 1);
+          return part.slice(1, -1);
         }
-        return part;
-      })
-      .map((part) =>
-        part
-          .replace(REGEXP_UNICODE_COMMA, ',')
-          .replace(REGEXP_UNICODE_BACKSLASH, '\\')
-          .replace(REGEXP_ESCAPED_COMMA, ','),
-      );
 
-    this.scriptletDetails = { name: parts[0], args };
+        if (part.startsWith('/') && part.endsWith('/')) {
+          return part.replace(REGEXP_UNICODE_COMMA, ',').replace(REGEXP_UNICODE_BACKSLASH, '\\');
+        }
+
+        return part;
+      }),
+    };
 
     return this.scriptletDetails;
   }
