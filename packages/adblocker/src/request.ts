@@ -70,7 +70,7 @@ export type PlaywrightRequestType =
   | 'websocket'
   | 'xhr';
 
-// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/chrome/index.d.ts#L11989
+// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/3867576ef95d769409f777091b29b4ea05f0b89a/types/chrome/index.d.ts#L11989
 export type WebRequestTypeChrome =
   | 'main_frame'
   | 'sub_frame'
