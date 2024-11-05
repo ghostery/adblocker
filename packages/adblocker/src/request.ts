@@ -86,7 +86,7 @@ export type WebRequestTypeChrome =
   | 'websocket'
   | 'other';
 
-// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/firefox-webext-browser/index.d.ts#L2126
+// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/3867576ef95d769409f777091b29b4ea05f0b89a/types/firefox-webext-browser/index.d.ts#L2126
 export type WebRequestTypeFirefox =
   | 'main_frame'
   | 'sub_frame'
