@@ -1,3 +1,39 @@
+# v2.0.4 (Tue Nov 05 2024)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker`
+  - fix: unexported global namespaces `chrome` and `browser` [#4430](https://github.com/ghostery/adblocker/pull/4430) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- CI: increast time limit for assets update [#4431](https://github.com/ghostery/adblocker/pull/4431) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/node from 22.8.7 to 22.9.0 [#4429](https://github.com/ghostery/adblocker/pull/4429) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 4.24.3 to 4.24.4 [#4428](https://github.com/ghostery/adblocker/pull/4428) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript-eslint from 8.12.2 to 8.13.0 [#4427](https://github.com/ghostery/adblocker/pull/4427) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump concurrently from 9.0.1 to 9.1.0 [#4426](https://github.com/ghostery/adblocker/pull/4426) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump lerna from 8.1.8 to 8.1.9 [#4418](https://github.com/ghostery/adblocker/pull/4418) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @eslint/js from 9.13.0 to 9.14.0 [#4423](https://github.com/ghostery/adblocker/pull/4423) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump eslint from 9.13.0 to 9.14.0 [#4422](https://github.com/ghostery/adblocker/pull/4422) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.57 to 6.1.58 [#4421](https://github.com/ghostery/adblocker/pull/4421) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 22.8.4 to 22.8.7 [#4419](https://github.com/ghostery/adblocker/pull/4419) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump mocha from 10.8.1 to 10.8.2 [#4414](https://github.com/ghostery/adblocker/pull/4414) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`
+  - Build(deps): Bump puppeteer from 23.6.1 to 23.7.0 [#4425](https://github.com/ghostery/adblocker/pull/4425) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-webextension-cosmetics`, `@ghostery/adblocker-webextension-example`, `@ghostery/adblocker`
+  - Build(deps): Bump @types/chrome from 0.0.279 to 0.0.280 [#4420](https://github.com/ghostery/adblocker/pull/4420) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.0.3 (Wed Oct 30 2024)
 
 #### :bug: Bug Fix

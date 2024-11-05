@@ -1,3 +1,23 @@
+# v2.0.4 (Tue Nov 05 2024)
+
+#### :bug: Bug Fix
+
+- Build(deps): Bump puppeteer from 23.6.1 to 23.7.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/node from 22.8.7 to 22.9.0 [#4429](https://github.com/ghostery/adblocker/pull/4429) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 4.24.3 to 4.24.4 [#4428](https://github.com/ghostery/adblocker/pull/4428) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript-eslint from 8.12.2 to 8.13.0 [#4427](https://github.com/ghostery/adblocker/pull/4427) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump concurrently from 9.0.1 to 9.1.0 [#4426](https://github.com/ghostery/adblocker/pull/4426) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.6.1 to 23.7.0 [#4425](https://github.com/ghostery/adblocker/pull/4425) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v2.0.3 (Wed Oct 30 2024)
 
 #### :nut_and_bolt: Dependencies

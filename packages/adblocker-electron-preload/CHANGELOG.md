@@ -1,3 +1,22 @@
+# v2.0.4 (Tue Nov 05 2024)
+
+#### :bug: Bug Fix
+
+- Build(deps): Bump @types/chrome from 0.0.279 to 0.0.280 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump lerna from 8.1.8 to 8.1.9 [#4418](https://github.com/ghostery/adblocker/pull/4418) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump eslint from 9.13.0 to 9.14.0 [#4422](https://github.com/ghostery/adblocker/pull/4422) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.57 to 6.1.58 [#4421](https://github.com/ghostery/adblocker/pull/4421) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/chrome from 0.0.279 to 0.0.280 [#4420](https://github.com/ghostery/adblocker/pull/4420) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v2.0.2 (Fri Oct 25 2024)
 
 #### :nut_and_bolt: Dependencies
