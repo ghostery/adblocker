@@ -19,9 +19,9 @@
 
 <p align="center">
   <a href="https://github.com/ghostery/adblocker/actions?query=workflow%3ATests">
-    <img alt="Github Actions Build Status" src="https://img.shields.io/github/workflow/status/ghostery/adblocker/Tests?label=tests&style=flat-square"></a>
+    <img alt="Github Actions Build Status" src="https://img.shields.io/github/actions/workflow/status/ghostery/adblocker/tests.yml?label=tests&style=flat-square"></a>
   <a href="https://github.com/ghostery/adblocker/actions?query=workflow%3Assets">
-    <img alt="Github Actions Assets Status" src="https://img.shields.io/github/workflow/status/ghostery/adblocker/Assets?label=assets&style=flat-square"></a>
+    <img alt="Github Actions Assets Status" src="https://img.shields.io/github/actions/workflow/status/ghostery/adblocker/assets.yml?label=assets&style=flat-square"></a>
   <a href="https://twitter.com/acdlite/status/974390255393505280">
     <img alt="Blazing Fast" src="https://img.shields.io/badge/speed-blazing%20%F0%9F%94%A5-brightgreen.svg?style=flat-square"></a>
   <a href="https://www.npmjs.com/package/@ghostery/adblocker">
