@@ -84,10 +84,8 @@ const precedence: Record<string, number> = {
 const isOperator = (token: string) => Object.prototype.hasOwnProperty.call(precedence, token);
 
 const testDynamicIdentifier = (identifier: string): boolean => {
-  identifier = identifier.slice(15 /* '__ghostery_eval_'.length */);
-
   const separatorIndex = identifier.lastIndexOf('_');
-  const cmd = identifier.slice(0, separatorIndex);
+  const cmd = identifier.slice(15 /* '__ghostery_eval_'.length */, separatorIndex);
   const arg = identifier.slice(separatorIndex + 1);
 
   if (cmd === 'engine_version_geq') {
