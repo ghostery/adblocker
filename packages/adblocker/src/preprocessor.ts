@@ -85,7 +85,7 @@ const isOperator = (token: string) => Object.prototype.hasOwnProperty.call(prece
 
 const testDynamicIdentifier = (identifier: string): boolean => {
   const separatorIndex = identifier.lastIndexOf('_');
-  const cmd = identifier.slice(15 /* '__ghostery_eval_'.length */, separatorIndex);
+  const cmd = identifier.slice(16 /* '__ghostery_eval_'.length */, separatorIndex);
   const arg = identifier.slice(separatorIndex + 1);
 
   if (cmd === 'engine_version_geq') {
