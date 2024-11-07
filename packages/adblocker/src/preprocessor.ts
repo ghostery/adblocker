@@ -1,4 +1,5 @@
 import { StaticDataView, sizeOfUTF8 } from './data-view.js';
+import { ENGINE_VERSION } from './engine/engine.js';
 
 export type EnvKeys =
   | 'ext_ghostery'
@@ -26,6 +27,10 @@ export type EnvKeys =
   | 'adguard_ext_firefox'
   | 'adguard_ext_opera'
   | 'adguard_ext_safari'
+  // These keys provides fine grained control for "filters".
+  // Please, prefix the keys with `__ghostery_` and list them below for documentation purpose.
+  // The keys may be evaluated in the runtime to extend the ability of preprocessors.
+  | `__ghostery_eval_engine_version_geq_${number}` // Checks if an engine version is greater or equals to the given number.
   | (string & {});
 
 export class Env extends Map<EnvKeys, boolean> {}
@@ -78,6 +83,20 @@ const precedence: Record<string, number> = {
 
 const isOperator = (token: string) => Object.prototype.hasOwnProperty.call(precedence, token);
 
+const testDynamicIdentifier = (identifier: string): boolean => {
+  identifier = identifier.slice(15 /* '__ghostery_eval_'.length */);
+
+  const separatorIndex = identifier.lastIndexOf('_');
+  const cmd = identifier.slice(0, separatorIndex);
+  const arg = identifier.slice(separatorIndex + 1);
+
+  if (cmd === 'engine_version_geq') {
+    return ENGINE_VERSION <= parseInt(arg, 10);
+  }
+
+  return false;
+};
+
 const testIdentifier = (identifier: string, env: Env): boolean => {
   if (identifier === 'true' && !env.has('true')) {
     return true;
@@ -85,6 +104,10 @@ const testIdentifier = (identifier: string, env: Env): boolean => {
 
   if (identifier === 'false' && !env.has('false')) {
     return false;
+  }
+
+  if (identifier.startsWith('__ghostery_eval_')) {
+    return testDynamicIdentifier(identifier);
   }
 
   return !!env.get(identifier);
