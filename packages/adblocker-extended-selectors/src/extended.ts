@@ -7,6 +7,7 @@
  */
 
 import { tokenize, RECURSIVE_PSEUDO_CLASSES } from './parse.js';
+import { Atoms } from './types.js';
 
 export const EXTENDED_PSEUDO_CLASSES = new Set([
   // '-abp-contains',
@@ -136,4 +137,29 @@ export function classifySelector(selector: string): SelectorType {
   }
 
   return SelectorType.Normal;
+}
+
+export function getExtendedPseudoClasses(selector: string): Set<string> {
+  const extendedSelectors = new Set<string>();
+
+  if (selector.indexOf(':') === -1) {
+    return extendedSelectors;
+  }
+
+  const tokens: Atoms = [...tokenize(selector)];
+
+  while (tokens.length !== 0) {
+    const token = tokens.shift()!;
+
+    if (token.type === 'pseudo-class') {
+      if (EXTENDED_PSEUDO_CLASSES.has(token.name) === true) {
+        extendedSelectors.add(token.name);
+      }
+      if (token.argument !== undefined && RECURSIVE_PSEUDO_CLASSES.has(token.name) === true) {
+        tokens.push(...tokenize(token.argument));
+      }
+    }
+  }
+
+  return extendedSelectors;
 }

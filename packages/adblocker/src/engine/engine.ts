@@ -990,6 +990,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromDOM = true,
     getRulesFromHostname = true,
 
+    // Other information
+    experimentalPseudoClasses = ['has'],
     hidingStyle,
     callerContext,
   }: {
@@ -1007,6 +1009,9 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
 
+    // If set, outputs a separate css block with specified experimental selectors.
+    // This argument has a higher priority than `getExtendedRules`.
+    experimentalPseudoClasses?: string[] | undefined;
     hidingStyle?: string | undefined;
     callerContext?: any | undefined;
   }): IMessageFromBackground {
@@ -1122,7 +1127,13 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
             applied = true;
           }
         } else if (filter.isExtended()) {
-          if (getExtendedRules === true) {
+          if (
+            experimentalPseudoClasses.length !== 0 &&
+            filter.hasUnsupportedExtendedPseudoClass(experimentalPseudoClasses) === false
+          ) {
+            styleFilters.push(filter);
+            applied = true;
+          } else if (getExtendedRules === true) {
             extendedFilters.push(filter);
             applied = true;
           }

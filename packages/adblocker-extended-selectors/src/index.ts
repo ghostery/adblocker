@@ -15,4 +15,5 @@ export {
   PSEUDO_ELEMENTS,
   SelectorType,
   classifySelector,
+  getExtendedPseudoClasses,
 } from './extended.js';

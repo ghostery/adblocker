@@ -11,6 +11,7 @@ import {
   classifySelector,
   SelectorType,
   parse as parseCssSelector,
+  getExtendedPseudoClasses,
 } from '@ghostery/adblocker-extended-selectors';
 
 import { Domains } from '../engine/domains.js';
@@ -425,6 +426,7 @@ export default class CosmeticFilter implements IFilter {
 
   private id: number | undefined;
   private scriptletDetails: { name: string; args: string[] } | undefined;
+  private extendedPseudoClasses: Set<string> | undefined;
 
   constructor({
     mask,
@@ -447,6 +449,7 @@ export default class CosmeticFilter implements IFilter {
     this.id = undefined;
     this.rawLine = rawLine;
     this.scriptletDetails = undefined;
+    this.extendedPseudoClasses = undefined;
   }
 
   public isCosmeticFilter(): this is CosmeticFilter {
@@ -866,6 +869,20 @@ export default class CosmeticFilter implements IFilter {
 
   public isExtended(): boolean {
     return getBit(this.mask, COSMETICS_MASK.extended);
+  }
+
+  public hasUnsupportedExtendedPseudoClass(withPseudoClasses: string[]): boolean {
+    if (this.extendedPseudoClasses === undefined) {
+      this.extendedPseudoClasses = getExtendedPseudoClasses(this.getSelector());
+    }
+
+    for (const pseudoClass of withPseudoClasses) {
+      if (!this.extendedPseudoClasses.has(pseudoClass)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public isRemove(): boolean {
