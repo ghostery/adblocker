@@ -942,7 +942,7 @@ foo.com###selector
       ).to.be.eql(`#id { visibility: none; }`);
     });
 
-    context.only('with has selectors', function () {
+    context('with has selectors', function () {
       it('ignores if not allowed', function () {
         expect(
           Engine.parse('foo.com##aside:has(a.ad-remove)').getCosmeticsFilters({
