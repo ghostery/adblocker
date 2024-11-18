@@ -990,6 +990,9 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromDOM = true,
     getRulesFromHostname = true,
 
+    // try to load :has selectors without extended selectors support
+    getHasRulesSafely = false,
+
     hidingStyle,
     callerContext,
   }: {
@@ -1006,6 +1009,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getExtendedRules?: boolean;
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
+
+    getHasRulesSafely?: boolean;
 
     hidingStyle?: string | undefined;
     callerContext?: any | undefined;
@@ -1122,7 +1127,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
             applied = true;
           }
         } else if (filter.isExtended()) {
-          if (getExtendedRules === true) {
+          if (getExtendedRules === true || (getHasRulesSafely && filter.isHas())) {
             extendedFilters.push(filter);
             applied = true;
           }

@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-export { parse, tokenize } from './parse.js';
+export { parse, tokenize, walk } from './parse.js';
 export { querySelectorAll, matches } from './eval.js';
 export * from './types.js';
 export {

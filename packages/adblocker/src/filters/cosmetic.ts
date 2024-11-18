@@ -10,6 +10,8 @@ import {
   AST,
   classifySelector,
   SelectorType,
+  walk,
+  EXTENDED_PSEUDO_CLASSES,
   parse as parseCssSelector,
 } from '@ghostery/adblocker-extended-selectors';
 
@@ -425,6 +427,7 @@ export default class CosmeticFilter implements IFilter {
 
   private id: number | undefined;
   private scriptletDetails: { name: string; args: string[] } | undefined;
+  private selectorAST: AST | undefined;
 
   constructor({
     mask,
@@ -447,6 +450,7 @@ export default class CosmeticFilter implements IFilter {
     this.id = undefined;
     this.rawLine = rawLine;
     this.scriptletDetails = undefined;
+    this.selectorAST = undefined;
   }
 
   public isCosmeticFilter(): this is CosmeticFilter {
@@ -857,7 +861,10 @@ export default class CosmeticFilter implements IFilter {
   }
 
   public getSelectorAST(): AST | undefined {
-    return parseCssSelector(this.getSelector());
+    if (this.selectorAST === undefined) {
+      this.selectorAST = parseCssSelector(this.getSelector());
+    }
+    return this.selectorAST;
   }
 
   public getExtendedSelector(): HTMLSelector | undefined {
@@ -870,6 +877,25 @@ export default class CosmeticFilter implements IFilter {
 
   public isRemove(): boolean {
     return getBit(this.mask, COSMETICS_MASK.remove);
+  }
+
+  public isHas(): boolean {
+    if (!this.isExtended()) {
+      return false;
+    }
+    const extendedPseudoClasses = new Set();
+    const ast = this.getSelectorAST();
+
+    walk(ast, (node) => {
+      if (
+        node.type === 'pseudo-class' &&
+        node.name !== undefined &&
+        EXTENDED_PSEUDO_CLASSES.has(node.name)
+      ) {
+        extendedPseudoClasses.add(node.name);
+      }
+    });
+    return extendedPseudoClasses.size === 1 && extendedPseudoClasses.has('has');
   }
 
   public isUnhide(): boolean {

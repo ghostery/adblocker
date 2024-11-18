@@ -569,7 +569,7 @@ function nestTokens(
 }
 
 // Traverse an AST (or part thereof), in depth-first order
-function walk(
+export function walk(
   node: AST | undefined,
   callback: (node: AST, parentNode?: AST) => void,
   o?: AST,

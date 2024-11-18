@@ -942,6 +942,38 @@ foo.com###selector
       ).to.be.eql(`#id { visibility: none; }`);
     });
 
+    context.only('with has selectors', function () {
+      it('ignores if not allowed', function () {
+        expect(
+          Engine.parse('foo.com##aside:has(a.ad-remove)').getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getExtendedRules: false,
+          }).styles,
+        ).to.be.eql('');
+      });
+
+      it('adds separate blocks if allowed', function () {
+        expect(
+          Engine.parse(
+            `
+            foo.com###test
+            foo.com##aside:has(a.ad-remove)
+          `,
+          ).getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getExtendedRules: false,
+            getHasRulesSafely: true,
+          }).styles,
+        ).to.be.eql(
+          `#test { display: none !important; }\n\naside:has(a.ad-remove) { display: none !important; }`,
+        );
+      });
+    });
+
     it('handles custom :styles', () => {
       expect(
         Engine.parse(

@@ -292,7 +292,11 @@ export default class CosmeticFilterBucket {
         } else {
           genericHideRules.push(rule);
         }
-      } else if (rule.isExtended() === false || config.loadExtendedSelectors === true) {
+      } else if (
+        rule.isExtended() === false ||
+        config.loadExtendedSelectors === true ||
+        rule.isHas()
+      ) {
         hostnameSpecificRules.push(rule);
       }
     }
@@ -510,7 +514,12 @@ export default class CosmeticFilterBucket {
       for (const filter of extendedFilters) {
         const ast = filter.getSelectorAST();
         if (ast !== undefined) {
-          const attribute = filter.isRemove() ? undefined : filter.getStyleAttributeHash();
+          let attribute = undefined;
+          if (filter.isRemove()) {
+            attribute = `[${filter.getStyleAttributeHash()}]`;
+          } else if (filter.isHas()) {
+            attribute = filter.getSelector();
+          }
 
           if (attribute !== undefined) {
             extendedStyles.set(filter.getStyle(hidingStyle), attribute);
@@ -530,7 +539,7 @@ export default class CosmeticFilterBucket {
         }
 
         stylesheet += [...extendedStyles.entries()]
-          .map(([style, attribute]) => `[${attribute}] { ${style} }`)
+          .map(([style, attribute]) => `${attribute} { ${style} }`)
           .join('\n\n');
       }
     }
