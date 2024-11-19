@@ -26,7 +26,7 @@ import { block } from '../filters/dsl.js';
 import { FilterType, IListDiff, IPartialRawDiff, parseFilters } from '../lists.js';
 import Request from '../request.js';
 import Resources from '../resources.js';
-import CosmeticFilterBucket from './bucket/cosmetic.js';
+import CosmeticFilterBucket, { createStylesheet } from './bucket/cosmetic.js';
 import NetworkFilterBucket from './bucket/network.js';
 import HTMLBucket from './bucket/html.js';
 import { Metadata, IPatternLookupResult } from './metadata.js';
@@ -990,8 +990,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromDOM = true,
     getRulesFromHostname = true,
 
-    // try to load :has selectors without extended selectors support
-    getHasRulesSafely = false,
+    enableSafeHas = false,
 
     hidingStyle,
     callerContext,
@@ -1010,7 +1009,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
 
-    getHasRulesSafely?: boolean;
+    enableSafeHas?: boolean;
 
     hidingStyle?: string | undefined;
     callerContext?: any | undefined;
@@ -1105,6 +1104,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const injections: CosmeticFilter[] = [];
     const styleFilters: CosmeticFilter[] = [];
     const extendedFilters: CosmeticFilter[] = [];
+    const hasFilters: CosmeticFilter[] = [];
 
     if (filters.length !== 0) {
       // Apply unhide rules + dispatch
@@ -1127,7 +1127,11 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
             applied = true;
           }
         } else if (filter.isExtended()) {
-          if (getExtendedRules === true || (getHasRulesSafely && filter.isHas())) {
+          if (enableSafeHas && filter.isHas()) {
+            hasFilters.push(filter);
+            applied = true;
+          }
+          if (this.config.loadExtendedSelectors && getExtendedRules === true) {
             extendedFilters.push(filter);
             applied = true;
           }
@@ -1163,24 +1167,29 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       }
     }
 
-    const { stylesheet, extended } = this.cosmetics.getStylesheetsFromFilters(
+    const stylesheets = this.cosmetics.getStylesheetsFromFilters(
       {
         filters: styleFilters,
         extendedFilters,
       },
       { getBaseRules, allowGenericHides, hidingStyle },
     );
+    let styles = stylesheets.stylesheet;
+
+    for (const hasFilter of hasFilters) {
+      styles += `\n\n${createStylesheet([hasFilter.getSelector()], hidingStyle)}`;
+    }
 
     // Emit events
-    if (stylesheet.length !== 0) {
-      this.emit('style-injected', stylesheet, url);
+    if (styles.length !== 0) {
+      this.emit('style-injected', styles, url);
     }
 
     return {
       active: true,
-      extended,
+      extended: stylesheets.extended,
       scripts,
-      styles: stylesheet,
+      styles,
     };
   }
 

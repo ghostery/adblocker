@@ -952,6 +952,16 @@ foo.com###selector
             getExtendedRules: false,
           }).styles,
         ).to.be.eql('');
+
+        expect(
+          Engine.parse('foo.com##aside:has(a.ad-remove)').getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getExtendedRules: true,
+            enableSafeHas: false,
+          }).styles,
+        ).to.be.eql('');
       });
 
       it('adds separate blocks if allowed', function () {
@@ -966,7 +976,7 @@ foo.com###selector
             hostname: 'foo.com',
             url: 'https://foo.com',
             getExtendedRules: false,
-            getHasRulesSafely: true,
+            enableSafeHas: true,
           }).styles,
         ).to.be.eql(
           `#test { display: none !important; }\n\naside:has(a.ad-remove) { display: none !important; }`,
