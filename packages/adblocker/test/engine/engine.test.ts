@@ -964,6 +964,32 @@ foo.com###selector
         ).to.be.eql('');
       });
 
+      it('does not emit extended', function () {
+        expect(
+          Engine.parse('foo.com##aside:has(a.ad-remove)', {
+            loadExtendedSelectors: false,
+          }).getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getExtendedRules: true,
+            enableSafeHas: true,
+          }).extended,
+        ).to.be.empty;
+
+        expect(
+          Engine.parse('foo.com##aside:has(a.ad-remove)', {
+            loadExtendedSelectors: false,
+          }).getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getExtendedRules: false,
+            enableSafeHas: true,
+          }).extended,
+        ).to.be.empty;
+      });
+
       it('adds separate blocks if allowed', function () {
         expect(
           Engine.parse(
@@ -971,6 +997,24 @@ foo.com###selector
             foo.com###test
             foo.com##aside:has(a.ad-remove)
           `,
+          ).getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getExtendedRules: false,
+            enableSafeHas: true,
+          }).styles,
+        ).to.be.eql(
+          `#test { display: none !important; }\n\naside:has(a.ad-remove) { display: none !important; }`,
+        );
+
+        expect(
+          Engine.parse(
+            `
+            foo.com###test
+            foo.com##aside:has(a.ad-remove)
+          `,
+            { loadExtendedSelectors: false },
           ).getCosmeticsFilters({
             domain: 'foo.com',
             hostname: 'foo.com',
