@@ -34,7 +34,7 @@ export function isSafeHasSelector(selector: string) {
       }
     });
   } catch (e) {
-    // stop travesing the ast once pseudo class different from :has is detected
+    // stop traversing the AST once a pseudo-class different from :has is detected
     return false;
   }
 
