@@ -1174,22 +1174,23 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       },
       { getBaseRules, allowGenericHides, hidingStyle },
     );
-    let styles = stylesheets.stylesheet;
+    let { stylesheet } = stylesheets;
+    const { extended } = stylesheets;
 
     for (const safeHasFilter of safeHasFilters) {
-      styles += `\n\n${createStylesheet([safeHasFilter.getSelector()], hidingStyle)}`;
+      stylesheet += `\n\n${createStylesheet([safeHasFilter.getSelector()], hidingStyle)}`;
     }
 
     // Emit events
-    if (styles.length !== 0) {
-      this.emit('style-injected', styles, url);
+    if (stylesheet.length !== 0) {
+      this.emit('style-injected', stylesheet, url);
     }
 
     return {
       active: true,
-      extended: stylesheets.extended,
+      extended,
       scripts,
-      styles,
+      styles: stylesheet,
     };
   }
 
