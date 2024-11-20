@@ -104,6 +104,28 @@ function isSimpleHrefSelector(selector: string, start: number): boolean {
   );
 }
 
+function isSafeHasSelector(selector: string) {
+  const ast = parseCssSelector(selector);
+
+  try {
+    walk(ast, (node) => {
+      if (
+        node.type === 'pseudo-class' &&
+        node.name !== undefined &&
+        EXTENDED_PSEUDO_CLASSES.has(node.name) &&
+        node.name !== 'has'
+      ) {
+        throw new Error('not a :has');
+      }
+    });
+  } catch (e) {
+    // stop travesing the ast once pseudo class different from :has is detected
+    return false;
+  }
+
+  return true;
+}
+
 /**
  * Validate CSS selector. There is a fast path for simple selectors (e.g.: #foo
  * or .bar) which are the most common case. For complex ones, we rely on
@@ -148,6 +170,7 @@ const enum COSMETICS_MASK {
   isHrefSelector = 1 << 5,
   remove = 1 << 6,
   extended = 1 << 7,
+  isSafeHasSelector = 1 << 8,
 }
 
 function computeFilterId(
@@ -329,6 +352,10 @@ export default class CosmeticFilter implements IFilter {
       const selectorType = classifySelector(selector);
       if (selectorType === SelectorType.Extended) {
         mask = setBit(mask, COSMETICS_MASK.extended);
+
+        if (isSafeHasSelector(selector)) {
+          mask = setBit(mask, COSMETICS_MASK.isSafeHasSelector);
+        }
       } else if (selectorType === SelectorType.Invalid || !isValidCss(selector)) {
         // console.error('Invalid', line);
         // TODO - maybe perform `isValidCss` from the other module.
@@ -398,7 +425,7 @@ export default class CosmeticFilter implements IFilter {
    * symetrical to the one in `serializeCosmeticFilter`.
    */
   public static deserialize(buffer: StaticDataView): CosmeticFilter {
-    const mask = buffer.getUint8();
+    const mask = buffer.getUint16();
     const isUnicode = getBit(mask, COSMETICS_MASK.isUnicode);
     const optionalParts = buffer.getUint8();
     const selector = isUnicode ? buffer.getUTF8() : buffer.getCosmeticSelector();
@@ -427,7 +454,6 @@ export default class CosmeticFilter implements IFilter {
 
   private id: number | undefined;
   private scriptletDetails: { name: string; args: string[] } | undefined;
-  private selectorAST: AST | undefined;
 
   constructor({
     mask,
@@ -450,7 +476,6 @@ export default class CosmeticFilter implements IFilter {
     this.id = undefined;
     this.rawLine = rawLine;
     this.scriptletDetails = undefined;
-    this.selectorAST = undefined;
   }
 
   public isCosmeticFilter(): this is CosmeticFilter {
@@ -475,7 +500,7 @@ export default class CosmeticFilter implements IFilter {
    */
   public serialize(buffer: StaticDataView): void {
     // Mandatory fields
-    buffer.pushUint8(this.mask);
+    buffer.pushUint16(this.mask);
     const index = buffer.getPos();
     buffer.pushUint8(0);
 
@@ -512,7 +537,7 @@ export default class CosmeticFilter implements IFilter {
    * upper-bound. It should also be as fast as possible.
    */
   public getSerializedSize(compression: boolean): number {
-    let estimate: number = 1 + 1; // mask (1 byte) + optional parts (1 byte)
+    let estimate: number = 2 + 1; // mask (2 byte) + optional parts (1 byte)
 
     if (this.isUnicode()) {
       estimate += sizeOfUTF8(this.selector);
@@ -861,10 +886,7 @@ export default class CosmeticFilter implements IFilter {
   }
 
   public getSelectorAST(): AST | undefined {
-    if (this.selectorAST === undefined) {
-      this.selectorAST = parseCssSelector(this.getSelector());
-    }
-    return this.selectorAST;
+    return parseCssSelector(this.getSelector());
   }
 
   public getExtendedSelector(): HTMLSelector | undefined {
@@ -879,23 +901,8 @@ export default class CosmeticFilter implements IFilter {
     return getBit(this.mask, COSMETICS_MASK.remove);
   }
 
-  public isHas(): boolean {
-    if (!this.isExtended()) {
-      return false;
-    }
-    const extendedPseudoClasses = new Set();
-    const ast = this.getSelectorAST();
-
-    walk(ast, (node) => {
-      if (
-        node.type === 'pseudo-class' &&
-        node.name !== undefined &&
-        EXTENDED_PSEUDO_CLASSES.has(node.name)
-      ) {
-        extendedPseudoClasses.add(node.name);
-      }
-    });
-    return extendedPseudoClasses.size === 1 && extendedPseudoClasses.has('has');
+  public isSafeHasSelector(): boolean {
+    return getBit(this.mask, COSMETICS_MASK.isSafeHasSelector);
   }
 
   public isUnhide(): boolean {

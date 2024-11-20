@@ -1104,7 +1104,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const injections: CosmeticFilter[] = [];
     const styleFilters: CosmeticFilter[] = [];
     const extendedFilters: CosmeticFilter[] = [];
-    const hasFilters: CosmeticFilter[] = [];
+    const safeHasFilters: CosmeticFilter[] = [];
 
     if (filters.length !== 0) {
       // Apply unhide rules + dispatch
@@ -1127,8 +1127,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
             applied = true;
           }
         } else if (filter.isExtended()) {
-          if (enableSafeHas && filter.isHas()) {
-            hasFilters.push(filter);
+          if (enableSafeHas && filter.isSafeHasSelector()) {
+            safeHasFilters.push(filter);
             applied = true;
           }
           if (this.config.loadExtendedSelectors && getExtendedRules === true) {
@@ -1176,8 +1176,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     );
     let styles = stylesheets.stylesheet;
 
-    for (const hasFilter of hasFilters) {
-      styles += `\n\n${createStylesheet([hasFilter.getSelector()], hidingStyle)}`;
+    for (const safeHasFilter of safeHasFilters) {
+      styles += `\n\n${createStylesheet([safeHasFilter.getSelector()], hidingStyle)}`;
     }
 
     // Emit events
