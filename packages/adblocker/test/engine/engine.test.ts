@@ -1028,16 +1028,40 @@ foo.com###selector
       });
     });
 
-    it('handles custom :styles', () => {
-      expect(
-        Engine.parse(
-          `
-##selector :style(foo)
-##selector :style(bar)
-##selector1 :style(foo)`,
-        ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
-          .styles,
-      ).to.equal('selector ,\nselector1  { foo }\n\nselector  { bar }');
+    context('with :styles psuedo-class', function () {
+      it('injects separate css block', function () {
+        expect(
+          Engine.parse(
+            `
+  ##selector :style(foo)
+  ##selector :style(bar)
+  ##selector1 :style(foo)`,
+          ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+            .styles,
+        ).to.equal('selector ,\nselector1  { foo }\n\nselector  { bar }');
+      });
+
+      it('ignores unhides without style', function () {
+        expect(
+          Engine.parse(
+            `
+  ##selector :style(foo)
+  #@#selector`,
+          ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+            .styles,
+        ).to.equal('selector  { foo }');
+      });
+
+      it('respects unhides with styles', function () {
+        expect(
+          Engine.parse(
+            `
+  ##selector :style(foo)
+  #@#selector :style(foo)`,
+          ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+            .styles,
+        ).to.equal('');
+      });
     });
 
     [

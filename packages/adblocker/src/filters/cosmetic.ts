@@ -181,7 +181,11 @@ export function normalizeSelector(
   filter: CosmeticFilter,
   getScriptletCanonicalName: (name: string) => string | undefined,
 ): string {
-  const selector = filter.getSelector();
+  let selector = filter.getSelector();
+
+  if (filter.style !== undefined) {
+    selector += filter.style;
+  }
 
   if (filter.isScriptInject() === false) {
     return selector;
