@@ -1,3 +1,15 @@
+# v2.1.1 (Wed Nov 20 2024)
+
+#### :bug: Bug Fix
+
+- Fix unhides with styles [#4460](https://github.com/ghostery/adblocker/pull/4460) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 1
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.1.0 (Wed Nov 20 2024)
 
 #### :rocket: New Feature
