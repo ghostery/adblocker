@@ -1,3 +1,29 @@
+# v2.1.0 (Wed Nov 20 2024)
+
+#### :bug: Bug Fix
+
+- Build(deps-dev): Bump @types/chrome from 0.0.280 to 0.0.281 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Remove "branch=master" ([@regseb](https://github.com/regseb))
+- docs: Fix build badges ([@regseb](https://github.com/regseb))
+
+#### :memo: Documentation
+
+- docs: Fix build badges [#4413](https://github.com/ghostery/adblocker/pull/4413) ([@regseb](https://github.com/regseb))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/chrome from 0.0.281 to 0.0.283 [#4451](https://github.com/ghostery/adblocker/pull/4451) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.7.1 to 23.8.0 [#4446](https://github.com/ghostery/adblocker/pull/4446) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 4.25.0 to 4.26.0 [#4445](https://github.com/ghostery/adblocker/pull/4445) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.280 to 0.0.281 [#4444](https://github.com/ghostery/adblocker/pull/4444) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Sébastien Règne ([@regseb](https://github.com/regseb))
+
+---
+
 # v2.0.4 (Tue Nov 05 2024)
 
 #### :bug: Bug Fix

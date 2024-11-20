@@ -1,3 +1,28 @@
+# v2.1.0 (Wed Nov 20 2024)
+
+#### :bug: Bug Fix
+
+- Build(deps): Bump puppeteer from 23.7.1 to 23.8.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.7.0 to 23.7.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Remove "branch=master" ([@regseb](https://github.com/regseb))
+- docs: Fix build badges ([@regseb](https://github.com/regseb))
+
+#### :memo: Documentation
+
+- docs: Fix build badges [#4413](https://github.com/ghostery/adblocker/pull/4413) ([@regseb](https://github.com/regseb))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 23.7.1 to 23.8.0 [#4446](https://github.com/ghostery/adblocker/pull/4446) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.7.0 to 23.7.1 [#4435](https://github.com/ghostery/adblocker/pull/4435) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Sébastien Règne ([@regseb](https://github.com/regseb))
+
+---
+
 # v2.0.4 (Tue Nov 05 2024)
 
 #### :bug: Bug Fix

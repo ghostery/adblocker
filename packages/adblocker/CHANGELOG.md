@@ -1,3 +1,29 @@
+# v2.1.0 (Wed Nov 20 2024)
+
+#### :rocket: New Feature
+
+- feat: Optional support for native :has pseudo classes [#4455](https://github.com/ghostery/adblocker/pull/4455) ([@chrmod](https://github.com/chrmod))
+
+#### :bug: Bug Fix
+
+- Remove "branch=master" ([@regseb](https://github.com/regseb))
+- docs: Fix build badges ([@regseb](https://github.com/regseb))
+
+#### :house: Internal
+
+- Adjust cosmetic filter Ngram size [#4437](https://github.com/ghostery/adblocker/pull/4437) ([@chrmod](https://github.com/chrmod))
+
+#### :memo: Documentation
+
+- docs: Fix build badges [#4413](https://github.com/ghostery/adblocker/pull/4413) ([@regseb](https://github.com/regseb))
+
+#### Authors: 2
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+- Sébastien Règne ([@regseb](https://github.com/regseb))
+
+---
+
 # v2.0.4 (Tue Nov 05 2024)
 
 #### :bug: Bug Fix

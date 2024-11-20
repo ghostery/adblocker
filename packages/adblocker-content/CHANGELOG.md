@@ -1,3 +1,20 @@
+# v2.1.0 (Wed Nov 20 2024)
+
+#### :bug: Bug Fix
+
+- Remove "branch=master" ([@regseb](https://github.com/regseb))
+- docs: Fix build badges ([@regseb](https://github.com/regseb))
+
+#### :memo: Documentation
+
+- docs: Fix build badges [#4413](https://github.com/ghostery/adblocker/pull/4413) ([@regseb](https://github.com/regseb))
+
+#### Authors: 1
+
+- Sébastien Règne ([@regseb](https://github.com/regseb))
+
+---
+
 # v2.0.0 (Thu Oct 17 2024)
 
 #### :boom: Breaking Change
