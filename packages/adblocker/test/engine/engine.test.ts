@@ -1033,31 +1033,40 @@ foo.com###selector
         expect(
           Engine.parse(
             `
-  ##selector :style(foo)
-  ##selector :style(bar)
-  ##selector1 :style(foo)`,
+            ##selector :style(foo)
+            ##selector :style(bar)
+            ##selector1 :style(foo)`,
           ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
             .styles,
         ).to.equal('selector ,\nselector1  { foo }\n\nselector  { bar }');
       });
 
-      it('ignores unhides without style', function () {
+      it('ignores unhides not matching unhides', function () {
         expect(
           Engine.parse(
             `
-  ##selector :style(foo)
-  #@#selector`,
+            ##selector :style(foo)
+            #@#selector`,
           ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
             .styles,
         ).to.equal('selector  { foo }');
+
+        expect(
+          Engine.parse(
+            `
+            ##selector
+            #@#selector :style(foo)`,
+          ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+            .styles,
+        ).to.equal('selector { display: none !important; }');
       });
 
       it('respects unhides with styles', function () {
         expect(
           Engine.parse(
             `
-  ##selector :style(foo)
-  #@#selector :style(foo)`,
+            ##selector :style(foo)
+            #@#selector :style(foo)`,
           ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
             .styles,
         ).to.equal('');
