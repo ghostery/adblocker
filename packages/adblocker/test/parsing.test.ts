@@ -2032,6 +2032,20 @@ describe('Cosmetic filters', () => {
       style: 'display: none',
     });
 
+    cosmetic('bing.com##.b_ad:style(position: absolute !important; top: -9999px !important;)', {
+      ...DEFAULT_COSMETIC_FILTER,
+      domains: {
+        hostnames: h(['bing.com']),
+        entities: undefined,
+        notHostnames: undefined,
+        notEntities: undefined,
+        parts: undefined,
+      },
+      selector: '.b_ad',
+      style: 'position: absolute !important; top: -9999px !important;',
+      isClassSelector: true,
+    });
+
     cosmetic('foo.com,bar.de##foo > bar >baz:style(display: none)', {
       ...DEFAULT_COSMETIC_FILTER,
       domains: {
