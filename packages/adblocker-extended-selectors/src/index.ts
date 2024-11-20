@@ -35,7 +35,7 @@ export function isPureHasSelector(selector: string) {
       }
     });
   } catch (e) {
-    // stop traversing the AST once a pseudo-class different from :has is detected
+    // stop traversing the AST once an extended pseudo-class different from :has is detected
     return false;
   }
 
