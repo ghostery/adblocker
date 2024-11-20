@@ -959,7 +959,7 @@ foo.com###selector
             hostname: 'foo.com',
             url: 'https://foo.com',
             getExtendedRules: true,
-            enableSafeHas: false,
+            injectPureHasSafely: false,
           }).styles,
         ).to.be.eql('');
       });
@@ -973,7 +973,7 @@ foo.com###selector
             hostname: 'foo.com',
             url: 'https://foo.com',
             getExtendedRules: true,
-            enableSafeHas: true,
+            injectPureHasSafely: true,
           }).extended,
         ).to.be.empty;
 
@@ -985,7 +985,7 @@ foo.com###selector
             hostname: 'foo.com',
             url: 'https://foo.com',
             getExtendedRules: false,
-            enableSafeHas: true,
+            injectPureHasSafely: true,
           }).extended,
         ).to.be.empty;
       });
@@ -1002,7 +1002,7 @@ foo.com###selector
             hostname: 'foo.com',
             url: 'https://foo.com',
             getExtendedRules: false,
-            enableSafeHas: true,
+            injectPureHasSafely: true,
           }).styles,
         ).to.be.eql(
           `#test { display: none !important; }\n\naside:has(a.ad-remove) { display: none !important; }`,
@@ -1020,7 +1020,7 @@ foo.com###selector
             hostname: 'foo.com',
             url: 'https://foo.com',
             getExtendedRules: false,
-            enableSafeHas: true,
+            injectPureHasSafely: true,
           }).styles,
         ).to.be.eql(
           `#test { display: none !important; }\n\naside:has(a.ad-remove) { display: none !important; }`,
