@@ -10,8 +10,7 @@ import {
   AST,
   classifySelector,
   SelectorType,
-  walk,
-  EXTENDED_PSEUDO_CLASSES,
+  isSafeHasSelector,
   parse as parseCssSelector,
 } from '@ghostery/adblocker-extended-selectors';
 
@@ -102,28 +101,6 @@ function isSimpleHrefSelector(selector: string, start: number): boolean {
     selector.startsWith('href*="', start) ||
     selector.startsWith('href="', start)
   );
-}
-
-function isSafeHasSelector(selector: string) {
-  const ast = parseCssSelector(selector);
-
-  try {
-    walk(ast, (node) => {
-      if (
-        node.type === 'pseudo-class' &&
-        node.name !== undefined &&
-        EXTENDED_PSEUDO_CLASSES.has(node.name) &&
-        node.name !== 'has'
-      ) {
-        throw new Error('not a :has');
-      }
-    });
-  } catch (e) {
-    // stop travesing the ast once pseudo class different from :has is detected
-    return false;
-  }
-
-  return true;
 }
 
 /**
