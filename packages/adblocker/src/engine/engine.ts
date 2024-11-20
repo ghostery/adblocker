@@ -990,7 +990,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromDOM = true,
     getRulesFromHostname = true,
 
-    enableSafeHas = false,
+    // inject extended selector filters
+    injectPureHasSafely = false,
 
     hidingStyle,
     callerContext,
@@ -1009,7 +1010,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
 
-    enableSafeHas?: boolean;
+    injectPureHasSafely?: boolean;
 
     hidingStyle?: string | undefined;
     callerContext?: any | undefined;
@@ -1104,7 +1105,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const injections: CosmeticFilter[] = [];
     const styleFilters: CosmeticFilter[] = [];
     const extendedFilters: CosmeticFilter[] = [];
-    const safeHasFilters: CosmeticFilter[] = [];
+    const pureHasFilters: CosmeticFilter[] = [];
 
     if (filters.length !== 0) {
       // Apply unhide rules + dispatch
@@ -1127,8 +1128,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
             applied = true;
           }
         } else if (filter.isExtended()) {
-          if (enableSafeHas && filter.isSafeHasSelector()) {
-            safeHasFilters.push(filter);
+          if (injectPureHasSafely && filter.isPureHasSelector()) {
+            pureHasFilters.push(filter);
             applied = true;
           }
           if (this.config.loadExtendedSelectors && getExtendedRules === true) {
@@ -1174,10 +1175,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       },
       { getBaseRules, allowGenericHides, hidingStyle },
     );
-    let { stylesheet } = stylesheets;
     const { extended } = stylesheets;
+    let { stylesheet } = stylesheets;
 
-    for (const safeHasFilter of safeHasFilters) {
+    for (const safeHasFilter of pureHasFilters) {
       stylesheet += `\n\n${createStylesheet([safeHasFilter.getSelector()], hidingStyle)}`;
     }
 

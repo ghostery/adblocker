@@ -19,7 +19,8 @@ export {
 import { EXTENDED_PSEUDO_CLASSES } from './extended.js';
 import { parse, walk } from './parse.js';
 
-export function isSafeHasSelector(selector: string) {
+// check if extended selector consists of :has extended pseudo-classes only
+export function isPureHasSelector(selector: string) {
   const ast = parse(selector);
 
   try {
@@ -27,8 +28,8 @@ export function isSafeHasSelector(selector: string) {
       if (
         node.type === 'pseudo-class' &&
         node.name !== undefined &&
-        EXTENDED_PSEUDO_CLASSES.has(node.name) &&
-        node.name !== 'has'
+        node.name !== 'has' &&
+        EXTENDED_PSEUDO_CLASSES.has(node.name)
       ) {
         throw new Error('not a :has');
       }

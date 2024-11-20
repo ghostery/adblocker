@@ -295,7 +295,7 @@ export default class CosmeticFilterBucket {
       } else if (
         rule.isExtended() === false ||
         config.loadExtendedSelectors === true ||
-        rule.isSafeHasSelector()
+        rule.isPureHasSelector()
       ) {
         hostnameSpecificRules.push(rule);
       }

@@ -10,7 +10,7 @@ import {
   AST,
   classifySelector,
   SelectorType,
-  isSafeHasSelector,
+  isPureHasSelector,
   parse as parseCssSelector,
 } from '@ghostery/adblocker-extended-selectors';
 
@@ -147,7 +147,7 @@ const enum COSMETICS_MASK {
   isHrefSelector = 1 << 5,
   remove = 1 << 6,
   extended = 1 << 7,
-  isSafeHasSelector = 1 << 8,
+  isPureHasSelector = 1 << 8,
 }
 
 function computeFilterId(
@@ -330,8 +330,8 @@ export default class CosmeticFilter implements IFilter {
       if (selectorType === SelectorType.Extended) {
         mask = setBit(mask, COSMETICS_MASK.extended);
 
-        if (isSafeHasSelector(selector)) {
-          mask = setBit(mask, COSMETICS_MASK.isSafeHasSelector);
+        if (isPureHasSelector(selector)) {
+          mask = setBit(mask, COSMETICS_MASK.isPureHasSelector);
         }
       } else if (selectorType === SelectorType.Invalid || !isValidCss(selector)) {
         // console.error('Invalid', line);
@@ -878,8 +878,8 @@ export default class CosmeticFilter implements IFilter {
     return getBit(this.mask, COSMETICS_MASK.remove);
   }
 
-  public isSafeHasSelector(): boolean {
-    return getBit(this.mask, COSMETICS_MASK.isSafeHasSelector);
+  public isPureHasSelector(): boolean {
+    return getBit(this.mask, COSMETICS_MASK.isPureHasSelector);
   }
 
   public isUnhide(): boolean {
