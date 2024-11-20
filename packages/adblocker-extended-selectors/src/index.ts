@@ -16,3 +16,28 @@ export {
   SelectorType,
   classifySelector,
 } from './extended.js';
+import { EXTENDED_PSEUDO_CLASSES } from './extended.js';
+import { parse, walk } from './parse.js';
+
+// check if extended selector consists of :has extended pseudo-classes only
+export function isPureHasSelector(selector: string) {
+  const ast = parse(selector);
+
+  try {
+    walk(ast, (node) => {
+      if (
+        node.type === 'pseudo-class' &&
+        node.name !== undefined &&
+        node.name !== 'has' &&
+        EXTENDED_PSEUDO_CLASSES.has(node.name)
+      ) {
+        throw new Error('not a :has');
+      }
+    });
+  } catch (e) {
+    // stop traversing the AST once an extended pseudo-class different from :has is detected
+    return false;
+  }
+
+  return true;
+}

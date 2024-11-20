@@ -26,7 +26,7 @@ import { block } from '../filters/dsl.js';
 import { FilterType, IListDiff, IPartialRawDiff, parseFilters } from '../lists.js';
 import Request from '../request.js';
 import Resources from '../resources.js';
-import CosmeticFilterBucket from './bucket/cosmetic.js';
+import CosmeticFilterBucket, { createStylesheet } from './bucket/cosmetic.js';
 import NetworkFilterBucket from './bucket/network.js';
 import HTMLBucket from './bucket/html.js';
 import { Metadata, IPatternLookupResult } from './metadata.js';
@@ -37,7 +37,7 @@ import { ICategory } from './metadata/categories.js';
 import { IOrganization } from './metadata/organizations.js';
 import { IPattern } from './metadata/patterns.js';
 
-export const ENGINE_VERSION = 699;
+export const ENGINE_VERSION = 700;
 
 function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   if (filters.length === 0) {
@@ -990,6 +990,9 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromDOM = true,
     getRulesFromHostname = true,
 
+    // inject extended selector filters
+    injectPureHasSafely = false,
+
     hidingStyle,
     callerContext,
   }: {
@@ -1006,6 +1009,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getExtendedRules?: boolean;
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
+
+    injectPureHasSafely?: boolean;
 
     hidingStyle?: string | undefined;
     callerContext?: any | undefined;
@@ -1100,6 +1105,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const injections: CosmeticFilter[] = [];
     const styleFilters: CosmeticFilter[] = [];
     const extendedFilters: CosmeticFilter[] = [];
+    const pureHasFilters: CosmeticFilter[] = [];
 
     if (filters.length !== 0) {
       // Apply unhide rules + dispatch
@@ -1122,7 +1128,11 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
             applied = true;
           }
         } else if (filter.isExtended()) {
-          if (getExtendedRules === true) {
+          if (injectPureHasSafely && filter.isPureHasSelector()) {
+            pureHasFilters.push(filter);
+            applied = true;
+          }
+          if (this.config.loadExtendedSelectors && getExtendedRules === true) {
             extendedFilters.push(filter);
             applied = true;
           }
@@ -1158,13 +1168,19 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       }
     }
 
-    const { stylesheet, extended } = this.cosmetics.getStylesheetsFromFilters(
+    const stylesheets = this.cosmetics.getStylesheetsFromFilters(
       {
         filters: styleFilters,
         extendedFilters,
       },
       { getBaseRules, allowGenericHides, hidingStyle },
     );
+    const { extended } = stylesheets;
+    let { stylesheet } = stylesheets;
+
+    for (const safeHasFilter of pureHasFilters) {
+      stylesheet += `\n\n${createStylesheet([safeHasFilter.getSelector()], hidingStyle)}`;
+    }
 
     // Emit events
     if (stylesheet.length !== 0) {

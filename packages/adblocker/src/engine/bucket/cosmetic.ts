@@ -26,7 +26,7 @@ import FiltersContainer from './filters.js';
  * injected in the page. This also takes care to no create rules with too many
  * selectors for Chrome, see: https://crbug.com/804179
  */
-export function createStylesheet(rules: string[], style: string): string {
+export function createStylesheet(rules: string[], style: string = DEFAULT_HIDING_STYLE): string {
   if (rules.length === 0) {
     return '';
   }
@@ -292,7 +292,11 @@ export default class CosmeticFilterBucket {
         } else {
           genericHideRules.push(rule);
         }
-      } else if (rule.isExtended() === false || config.loadExtendedSelectors === true) {
+      } else if (
+        rule.isExtended() === false ||
+        config.loadExtendedSelectors === true ||
+        rule.isPureHasSelector()
+      ) {
         hostnameSpecificRules.push(rule);
       }
     }
