@@ -15,7 +15,7 @@ import {
   Request,
   tokenize,
 } from '@ghostery/adblocker';
-import { createEngine, domains500 } from './utils';
+import { createEngine, domains500 } from './utils.js';
 
 export function benchEngineCreation({ lists, resources }: { lists: string[]; resources: string }) {
   return createEngine(lists, resources, {
