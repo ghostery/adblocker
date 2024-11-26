@@ -25,8 +25,8 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 
-import * as Benchmark from 'benchmark';
-import * as chalk from 'chalk';
+import Benchmark from 'benchmark';
+import chalk from 'chalk';
 
 import {
   benchCosmeticsFiltersParsing,
@@ -39,22 +39,24 @@ import {
   benchNetworkFiltersParsing,
   benchRequestParsing,
   benchStringTokenize,
-} from './micro';
-import requests from './requests';
-import { createEngine, getFiltersFromLists, parseFilters } from './utils';
+} from './micro.js';
+import requests from './requests.js';
+import { createEngine, getFiltersFromLists, parseFilters } from './utils.js';
 
-const GREP = (process.env.GREP || '').toLowerCase();
+const GREP = (process.env['GREP'] || '').toLowerCase();
 
 function loadLists(): { lists: string[]; resources: string } {
   return {
     lists: [
       readFileSync(
-        resolve(__dirname, '../packages/adblocker/assets/easylist/easylist.txt'),
-        { encoding: 'utf-8' },
+        resolve(import.meta.dirname, '../packages/adblocker/assets/easylist/easylist.txt'),
+        {
+          encoding: 'utf-8',
+        },
       ),
     ],
     resources: readFileSync(
-      resolve(__dirname, '../packages/adblocker/assets/ublock-origin/resources.txt'),
+      resolve(import.meta.dirname, '../packages/adblocker/assets/ublock-origin/resources.txt'),
       { encoding: 'utf-8' },
     ),
   };
@@ -141,11 +143,11 @@ function runMicroBenchmarks(
       const suite = new Benchmark.Suite();
       suite
         .add(bench.name, () => bench(args))
-        .on('cycle', (event: any) => {
+        .on('cycle', (event: { target: Benchmark.Target }) => {
           results[bench.name] = {
-            numberOfSamples: event.target.stats.sample.length,
-            opsPerSecond: event.target.hz,
-            relativeMarginOfError: event.target.stats.rme,
+            numberOfSamples: event.target.stats!.sample.length,
+            opsPerSecond: event.target.hz!,
+            relativeMarginOfError: event.target.stats!.rme,
           };
         })
         .run({ async: false });
