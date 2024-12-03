@@ -19,7 +19,6 @@ type Kind = (typeof KINDS)[number];
 const SCRIPT_PATH = './tools/generate_compression_codebook.ts';
 
 const IS_CI = typeof process.env['CI'] !== 'undefined';
-const IS_CI_DEBUG = process.env['RUNNER_DEBUG'] === '1';
 
 async function runCodebookGeneration(kind: Kind, maxNgram?: number) {
   let cmd = `tsx '${SCRIPT_PATH}' '${kind}'`;
@@ -27,17 +26,16 @@ async function runCodebookGeneration(kind: Kind, maxNgram?: number) {
     cmd += ` '${maxNgram}'`;
   }
 
-  const { stdout, stderr } = await execPrem(cmd);
-
-  if (IS_CI_DEBUG) {
-    console.log(`[DEBUG] Printing stdout and stderr for the kind "${kind}" with maxNgram size of "${maxNgram}"...
-===== stdout =====
-${stdout}
-===== stderr =====
-${stderr}`);
+  try {
+    await execPrem(cmd);
+    return false;
+  } catch (error) {
+    console.error(
+      `[ERROR] Failed to generate codebook for the kind of "${kind}" with "maxNgram" of "${maxNgram}"`,
+      error,
+    );
+    return true;
   }
-
-  return stderr.length !== 0;
 }
 
 async function getScriptContent() {
