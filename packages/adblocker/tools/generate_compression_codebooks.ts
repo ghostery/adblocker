@@ -47,7 +47,7 @@ async function getScriptContent() {
 async function tryCodebookGeneration(kind: Kind) {
   const pattern = new RegExp(`if \\(kind === '${kind}'\\) {\n +maxNgram = (\\d+);`);
   const match = pattern.exec(await getScriptContent());
-  if (IS_CI || match === null) {
+  if (IS_CI === false || match === null) {
     console.log(
       `Skipping automatic search for maximum "maxNgram" value as looking up pre-defined "maxNgram" value for the kind "${kind}" failed or the environment variable "CI" was not set!`,
     );
