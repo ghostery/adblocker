@@ -253,7 +253,7 @@ export class PuppeteerBlocker extends FiltersEngine {
     // should not actively monitor the DOM for changes.
     let numberOfIterations = 0;
     do {
-      if (frame.isDetached()) {
+      if (frame.detached) {
         break;
       }
 
