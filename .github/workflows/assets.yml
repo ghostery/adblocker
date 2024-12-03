@@ -39,7 +39,7 @@ jobs:
         id: codebooks
         working-directory: ./packages/adblocker/
         run: |
-          yarn generate-codebooks
+          CI=true yarn generate-codebooks
 
       - uses: tibdex/github-app-token@v1
         id: generate-token
