@@ -114,7 +114,7 @@ function validateCodebook(codebook: string[], strings: string[]): void {
   });
 }
 
-async function generateCodebook(kind: string): Promise<string[]> {
+async function generateCodebook(kind: string, maxNgram?: number): Promise<string[]> {
   const strings = await getStrings(kind);
   let maxSize = 0;
   for (const string of strings) {
@@ -124,22 +124,31 @@ async function generateCodebook(kind: string): Promise<string[]> {
   }
   console.log(`Generate codebook ${kind} using ${strings.length} strings.`);
   const finetuneNgrams = [1];
-  const options = { finetuneNgrams, maxNgram: maxSize, maxRoundsWithNoImprovements: 10 };
-  if (kind === 'raw-cosmetic') {
-    options.maxNgram = 19;
-  } else if (kind === 'raw-network') {
-    options.maxNgram = 20;
-  } else if (kind === 'cosmetic-selector') {
-    options.maxNgram = 127;
-  }
+  const options = {
+    finetuneNgrams,
+    maxNgram: maxNgram ?? maxSize,
+    maxRoundsWithNoImprovements: 10,
+  };
   const codebook = generate(strings, options);
   validateCodebook(codebook, strings);
   return codebook;
 }
 
 (async () => {
-  const kind = process.argv[process.argv.length - 1];
-  const codebook = await generateCodebook(kind);
+  const [kind, maxNgramLiteral] = process.argv.slice(2);
+  let maxNgram: number | undefined;
+  if (maxNgramLiteral === undefined) {
+    if (kind === 'raw-cosmetic') {
+      maxNgram = 19;
+    } else if (kind === 'raw-network') {
+      maxNgram = 20;
+    } else if (kind === 'cosmetic-selector') {
+      maxNgram = 127;
+    }
+  } else {
+    maxNgram = parseInt(maxNgramLiteral);
+  }
+  const codebook = await generateCodebook(kind, maxNgram);
   const output = resolve(__dirname, `../src/codebooks/${kind}.ts`);
   console.log('Updating', output);
   await fs.writeFile(
