@@ -7,6 +7,209 @@
       "dependencies": []
     },
     {
+      "name": "run-at.fn",
+      "aliases": [],
+      "body": "function runAt(e,t){const n=e=>{const t={loading:1,asap:1,interactive:2,end:2,2:2,complete:3,idle:3,3:3};const n=Array.isArray(e)?e:[e];for(const e of n){const n=`${e}`;if(t.hasOwnProperty(n)===false)continue;return t[n]}return 0};const r=n(t);if(n(document.readyState)>=r){e();return}const o=()=>{if(n(document.readyState)<r)return;e();a.removeEventListener.apply(document,c)};const a=safeSelf();const c=[\"readystatechange\",o,{capture:true}];a.addEventListener.apply(document,c)}",
+      "dependencies": [
+        "safe-self.fn"
+      ]
+    },
+    {
+      "name": "run-at-html-element.fn",
+      "aliases": [],
+      "body": "function runAtHtmlElementFn(e){if(document.documentElement){e();return}const n=new MutationObserver((()=>{n.disconnect();e()}));n.observe(document,{childList:true})}",
+      "dependencies": []
+    },
+    {
+      "name": "set-attr.fn",
+      "aliases": [],
+      "body": "function setAttrFn(e=false,t,n=\"\",o=\"\",r=\"\"){if(n===\"\")return;if(o===\"\")return;const s=safeSelf();const i=e===false&&/^\\[.+\\]$/.test(r)?r.slice(1,-1):\"\";const f=e=>i!==\"\"?e.getAttribute(i)||\"\":r;const u=()=>{let e;try{e=document.querySelectorAll(n)}catch(e){return false}for(const n of e){const e=n.getAttribute(o);const r=f(n);if(r===e)continue;if(r!==\"\"&&/^on/i.test(o))if(o.toLowerCase()in n)continue;n.setAttribute(o,r);s.uboLog(t,`${o}=\"${r}\"`)}return true};let c,l;const a=e=>{if(l!==void 0)return;let t=false;for(const n of e){if(n.addedNodes.length===0)continue;for(const e of n.addedNodes){if(e.nodeType!==1)continue;t=true;break}if(t)break}if(t===false)return;l=self.requestAnimationFrame((()=>{l=void 0;u()}))};const d=()=>{if(u()===false)return;c=new MutationObserver(a);c.observe(document.body,{subtree:true,childList:true})};runAt((()=>{d()}),\"idle\")}",
+      "dependencies": [
+        "run-at.fn",
+        "safe-self.fn"
+      ]
+    },
+    {
+      "name": "set-attr.js",
+      "aliases": [],
+      "body": "function setAttr(t=\"\",e=\"\",s=\"\"){const f=safeSelf();const n=f.makeLogPrefix(\"set-attr\",t,e,s);const r=[\"\",\"false\",\"true\"];if(r.includes(s.toLowerCase())===false)if(/^\\d+$/.test(s)){const t=parseInt(s,10);if(t>=32768)return;s=`${t}`}else if(/^\\[.+\\]$/.test(s)===false)return;setAttrFn(false,n,t,e,s)}",
+      "dependencies": [
+        "safe-self.fn",
+        "set-attr.fn"
+      ],
+      "executionWorld": "ISOLATED"
+    },
+    {
+      "name": "trusted-set-attr.js",
+      "aliases": [],
+      "body": "function trustedSetAttr(t=\"\",e=\"\",r=\"\"){const s=safeSelf();const n=s.makeLogPrefix(\"trusted-set-attr\",t,e,r);setAttrFn(true,n,t,e,r)}",
+      "dependencies": [
+        "safe-self.fn",
+        "set-attr.fn"
+      ],
+      "executionWorld": "ISOLATED",
+      "requiresTrust": true
+    },
+    {
+      "name": "remove-attr.js",
+      "aliases": [
+        "ra.js"
+      ],
+      "body": "function removeAttr(t=\"\",e=\"\",o=\"\"){if(typeof t!==\"string\")return;if(t===\"\")return;const r=safeSelf();const s=r.makeLogPrefix(\"remove-attr\",t,e,o);const n=t.split(/\\s*\\|\\s*/);const i=n.map((t=>`${e}[${CSS.escape(t)}]`)).join(\",\");if(r.logLevel>1)r.uboLog(s,`Target selector:\\n\\t${i}`);const f=/\\basap\\b/.test(o);let u;const l=()=>{if(u!==void 0)return;u=r.onIdle((()=>{u=void 0;a()}),{timeout:17})};const a=()=>{if(u!==void 0){r.offIdle(u);u=void 0}try{const t=document.querySelectorAll(i);for(const e of t)for(const t of n){if(e.hasAttribute(t)===false)continue;e.removeAttribute(t);r.uboLog(s,`Removed attribute '${t}'`)}}catch(t){}};const c=t=>{if(u!==void 0)return;let e=true;for(let o=0;o<t.length&&e;o++){const{type:r,addedNodes:s,removedNodes:n}=t[o];if(r===\"attributes\")e=false;for(let t=0;t<s.length&&e;t++)if(s[t].nodeType===1){e=false;break}for(let t=0;t<n.length&&e;t++)if(n[t].nodeType===1){e=false;break}}if(e)return;f?a():l()};const d=()=>{a();if(/\\bstay\\b/.test(o)===false)return;const t=new MutationObserver(c);t.observe(document,{attributes:true,attributeFilter:n,childList:true,subtree:true})};runAt((()=>{d()}),o.split(/\\s+/))}",
+      "dependencies": [
+        "run-at.fn",
+        "safe-self.fn"
+      ]
+    },
+    {
+      "name": "get-safe-cookie-values.fn",
+      "aliases": [],
+      "body": "function getSafeCookieValuesFn(){return[\"accept\",\"reject\",\"accepted\",\"rejected\",\"notaccepted\",\"allow\",\"disallow\",\"deny\",\"allowed\",\"denied\",\"approved\",\"disapproved\",\"checked\",\"unchecked\",\"dismiss\",\"dismissed\",\"enable\",\"disable\",\"enabled\",\"disabled\",\"essential\",\"nonessential\",\"forbidden\",\"forever\",\"hide\",\"hidden\",\"necessary\",\"required\",\"ok\",\"on\",\"off\",\"true\",\"t\",\"false\",\"f\",\"yes\",\"y\",\"no\",\"n\"]}",
+      "dependencies": []
+    },
+    {
+      "name": "get-all-cookies.fn",
+      "aliases": [],
+      "body": "function getAllCookiesFn(){return document.cookie.split(/\\s*;\\s*/).map((t=>{const e=t.indexOf(\"=\");if(e===0)return;if(e===-1)return`${t.trim()}=`;const i=t.slice(0,e).trim();const n=t.slice(e+1).trim();return{key:i,value:n}})).filter((t=>t!==void 0))}",
+      "dependencies": []
+    },
+    {
+      "name": "get-cookie.fn",
+      "aliases": [],
+      "body": "function getCookieFn(i=\"\"){for(const n of document.cookie.split(/\\s*;\\s*/)){const o=n.indexOf(\"=\");if(o===-1)continue;if(n.slice(0,o)!==i)continue;return n.slice(o+1).trim()}}",
+      "dependencies": []
+    },
+    {
+      "name": "set-cookie.fn",
+      "aliases": [],
+      "body": "function setCookieFn(e=false,o=\"\",n=\"\",i=\"\",t=\"\",r={}){if(e===false&&/[^!#$%&'*+\\-.0-9A-Z[\\]^_`a-z|~]/.test(o))o=encodeURIComponent(o);if(/[^ -:<-[\\]-~]/.test(n))n=encodeURIComponent(n);const s=getCookieFn(o);if(s!==void 0&&r.dontOverwrite)return;if(s===n&&r.reload)return;const f=[o,\"=\",n];if(i!==\"\")f.push(\"; expires=\",i);if(t===\"\")t=\"/\";else if(t===\"none\")t=\"\";if(t!==\"\"&&t!==\"/\")return;if(t===\"/\")f.push(\"; path=/\");if(e){if(r.domain)f.push(`; domain=${r.domain}`);f.push(\"; Secure\")}else if(/^__(Host|Secure)-/.test(o))f.push(\"; Secure\");try{document.cookie=f.join(\"\")}catch(e){}const c=getCookieFn(o)===n;if(c&&r.reload)window.location.reload();return c}",
+      "dependencies": [
+        "get-cookie.fn"
+      ]
+    },
+    {
+      "name": "set-cookie.js",
+      "aliases": [],
+      "body": "function setCookie(e=\"\",o=\"\",t=\"\"){if(e===\"\")return;const s=safeSelf();const n=s.makeLogPrefix(\"set-cookie\",e,o,t);const f=o.toLowerCase();const r=/^(\"?)(.+)\\1$/.exec(f);const c=r&&r[2]||f;const i=getSafeCookieValuesFn();if(i.includes(c)===false){if(/^-?\\d+$/.test(c)===false)return;const e=parseInt(o,10)||0;if(e<-32767||e>32767)return}const a=setCookieFn(false,e,o,\"\",t,s.getExtraArgs(Array.from(arguments),3));if(a)s.uboLog(n,\"Done\")}",
+      "dependencies": [
+        "get-safe-cookie-values.fn",
+        "safe-self.fn",
+        "set-cookie.fn"
+      ],
+      "executionWorld": "ISOLATED"
+    },
+    {
+      "name": "set-cookie-reload.js",
+      "aliases": [],
+      "body": "function setCookieReload(o,e,i,...t){setCookie(o,e,i,\"reload\",\"1\",...t)}",
+      "dependencies": [
+        "set-cookie.js"
+      ],
+      "executionWorld": "ISOLATED"
+    },
+    {
+      "name": "trusted-set-cookie.js",
+      "aliases": [],
+      "body": "function trustedSetCookie(e=\"\",t=\"\",r=\"\",n=\"\"){if(e===\"\")return;const o=safeSelf();const s=o.makeLogPrefix(\"set-cookie\",e,t,n);const l=new Date;if(t.includes(\"$now$\"))t=t.replaceAll(\"$now$\",l.getTime());if(t.includes(\"$currentDate$\"))t=t.replaceAll(\"$currentDate$\",l.toUTCString());if(t.includes(\"$currentISODate$\"))t=t.replaceAll(\"$currentISODate$\",l.toISOString());let a=\"\";if(r!==\"\"){if(r===\"1day\")l.setDate(l.getDate()+1);else if(r===\"1year\")l.setFullYear(l.getFullYear()+1);else{if(/^\\d+$/.test(r)===false)return;l.setSeconds(l.getSeconds()+parseInt(r,10))}a=l.toUTCString()}const i=setCookieFn(true,e,t,a,n,safeSelf().getExtraArgs(Array.from(arguments),4));if(i)o.uboLog(s,\"Done\")}",
+      "dependencies": [
+        "safe-self.fn",
+        "set-cookie.fn"
+      ],
+      "executionWorld": "ISOLATED",
+      "requiresTrust": true
+    },
+    {
+      "name": "trusted-set-cookie-reload.js",
+      "aliases": [],
+      "body": "function trustedSetCookieReload(e,o,t,d,...i){trustedSetCookie(e,o,t,d,\"reload\",\"1\",...i)}",
+      "dependencies": [
+        "trusted-set-cookie.js"
+      ],
+      "executionWorld": "ISOLATED",
+      "requiresTrust": true
+    },
+    {
+      "name": "remove-cookie.js",
+      "aliases": [
+        "cookie-remover.js"
+      ],
+      "body": "function removeCookie(o=\"\"){if(typeof o!==\"string\")return;const e=safeSelf();const t=e.patternToRegex(o);const n=e.getExtraArgs(Array.from(arguments),1);const i=(o,e=500)=>{if(i.timer!==void 0)return;i.timer=setTimeout((()=>{i.timer=void 0;o()}),e)};const c=()=>{document.cookie.split(\";\").forEach((o=>{const e=o.indexOf(\"=\");if(e===-1)return;const n=o.slice(0,e).trim();if(t.test(n)===false)return;const i=n+\"=\";const c=\"; domain=\"+document.location.hostname;const s=\"; domain=.\"+document.location.hostname;let r,d;const m=document.domain;if(m){if(m!==document.location.hostname)r=\"; domain=.\"+m;if(m.startsWith(\"www.\"))d=\"; domain=\"+m.replace(\"www\",\"\")}const a=\"; path=/\";const u=\"; Max-Age=-1000; expires=Thu, 01 Jan 1970 00:00:00 GMT\";document.cookie=i+u;document.cookie=i+c+u;document.cookie=i+s+u;document.cookie=i+a+u;document.cookie=i+c+a+u;document.cookie=i+s+a+u;if(r!==void 0)document.cookie=i+r+a+u;if(d!==void 0)document.cookie=i+d+a+u}))};c();window.addEventListener(\"beforeunload\",c);if(typeof n.when!==\"string\")return;const s=[\"scroll\",\"keydown\"];const r=n.when.split(/\\s/);for(const o of r){if(s.includes(o)===false)continue;document.addEventListener(o,(()=>{i(c)}),{passive:true})}}",
+      "dependencies": [
+        "safe-self.fn"
+      ],
+      "executionWorld": "ISOLATED"
+    },
+    {
+      "name": "get-all-local-storage.fn",
+      "aliases": [],
+      "body": "function getAllLocalStorageFn(t=\"localStorage\"){const e=self[t];const n=[];for(let t=0;t<e.length;t++){const n=e.key(t);const o=e.getItem(n);return{key:n,value:o}}return n}",
+      "dependencies": []
+    },
+    {
+      "name": "set-local-storage-item.fn",
+      "aliases": [],
+      "body": "function setLocalStorageItemFn(e=\"local\",t=false,n=\"\",o=\"\"){if(n===\"\")return;if(o===\"emptyArr\")o=\"[]\";else if(o===\"emptyObj\")o=\"{}\";const r=[\"\",\"undefined\",\"null\",\"{}\",\"[]\",'\"\"',\"$remove$\",...getSafeCookieValuesFn()];if(t){if(o.includes(\"$now$\"))o=o.replaceAll(\"$now$\",Date.now());if(o.includes(\"$currentDate$\"))o=o.replaceAll(\"$currentDate$\",`${Date()}`);if(o.includes(\"$currentISODate$\"))o=o.replaceAll(\"$currentISODate$\",(new Date).toISOString())}else{const e=o.toLowerCase();const t=/^(\"?)(.+)\\1$/.exec(e);const n=t&&t[2]||e;if(r.includes(n)===false){if(/^-?\\d+$/.test(n)===false)return;const e=parseInt(n,10)||0;if(e<-32767||e>32767)return}}try{const t=self[`${e}Storage`];if(o===\"$remove$\"){const e=safeSelf();const o=e.patternToRegex(n,void 0,true);const r=[];for(let e=0,n=t.length;e<n;e++){const n=t.key(e);if(o.test(n))r.push(n)}for(const e of r)t.removeItem(e)}else t.setItem(n,`${o}`)}catch(e){}}",
+      "dependencies": [
+        "get-safe-cookie-values.fn",
+        "safe-self.fn"
+      ]
+    },
+    {
+      "name": "remove-cache-storage-item.fn",
+      "aliases": [],
+      "body": "function removeCacheStorageItem(e=\"\",t=\"\"){if(e===\"\")return;const o=safeSelf();const n=o.makeLogPrefix(\"remove-cache-storage-item\",e,t);const r=self.caches;if(r instanceof Object===false)return;const f=o.patternToRegex(e,void 0,true);const i=o.patternToRegex(t,void 0,true);r.keys().then((e=>{for(const s of e){if(f.test(s)===false)continue;if(t===\"\"){r.delete(s).then((e=>{if(o.logLevel>1)o.uboLog(n,`Deleting ${s}`);if(e!==true)return;o.uboLog(n,`Deleted ${s}: ${e}`)}));continue}r.open(s).then((e=>{e.keys().then((t=>{for(const r of t){if(i.test(r.url)===false)continue;if(o.logLevel>1)o.uboLog(n,`Deleting ${s}/${r.url}`);e.delete(r).then((e=>{if(e!==true)return;o.uboLog(n,`Deleted ${s}/${r.url}: ${e}`)}))}}))}))}}))}",
+      "dependencies": [
+        "safe-self.fn"
+      ],
+      "executionWorld": "ISOLATED"
+    },
+    {
+      "name": "set-local-storage-item.js",
+      "aliases": [],
+      "body": "function setLocalStorageItem(e=\"\",t=\"\"){setLocalStorageItemFn(\"local\",false,e,t)}",
+      "dependencies": [
+        "set-local-storage-item.fn"
+      ],
+      "executionWorld": "ISOLATED"
+    },
+    {
+      "name": "set-session-storage-item.js",
+      "aliases": [],
+      "body": "function setSessionStorageItem(e=\"\",s=\"\"){setLocalStorageItemFn(\"session\",false,e,s)}",
+      "dependencies": [
+        "set-local-storage-item.fn"
+      ],
+      "executionWorld": "ISOLATED"
+    },
+    {
+      "name": "trusted-set-local-storage-item.js",
+      "aliases": [],
+      "body": "function trustedSetLocalStorageItem(t=\"\",e=\"\"){setLocalStorageItemFn(\"local\",true,t,e)}",
+      "dependencies": [
+        "set-local-storage-item.fn"
+      ],
+      "executionWorld": "ISOLATED",
+      "requiresTrust": true
+    },
+    {
+      "name": "trusted-set-session-storage-item.js",
+      "aliases": [],
+      "body": "function trustedSetSessionStorageItem(e=\"\",t=\"\"){setLocalStorageItemFn(\"session\",true,e,t)}",
+      "dependencies": [
+        "set-local-storage-item.fn"
+      ],
+      "executionWorld": "ISOLATED",
+      "requiresTrust": true
+    },
+    {
+      "name": "spoof-css.js",
+      "aliases": [],
+      "body": "function spoofCSS(e,...t){if(typeof e!==\"string\")return;if(e===\"\")return;const r=e=>e.replace(/-[a-z]/g,(e=>e.charAt(1).toUpperCase()));const n=new Map;const o=new Map;for(let e=0;e<t.length;e+=2){const s=r(t[e+0]);if(s===\"\")break;const c=t[e+1];if(typeof c!==\"string\")break;if(s.charCodeAt(0)===95)o.set(s,c);else n.set(s,c)}const s=safeSelf();const c=s.makeLogPrefix(\"spoof-css\",e,...t);const i=[\"cssText\",\"length\",\"parentRule\"];const a=(e,t)=>{const o=r(e);const i=n.has(o);const a=i?n.get(o):t;if(i)s.uboLog(c,`Spoofing ${e} to ${a}`);return a};const f=(e,t,r)=>{const n=e.bind(t);Object.defineProperty(n,\"name\",{value:r});Object.defineProperty(n,\"toString\",{value:()=>`function ${r}() { [native code] }`});return n};self.getComputedStyle=new Proxy(self.getComputedStyle,{apply:function(t,r,s){if(o.has(\"_debug\"))debugger;const c=Reflect.apply(t,r,s);const l=new WeakSet(document.querySelectorAll(e));if(l.has(s[0])===false)return c;const u=new Proxy(c,{get(e,t){if(typeof e[t]===\"function\"){if(t===\"getPropertyValue\")return f((function t(r){return a(r,e[r])}),e,\"getPropertyValue\");return f(e[t],e,t)}if(i.includes(t))return Reflect.get(e,t);return a(t,Reflect.get(e,t))},getOwnPropertyDescriptor(e,t){if(n.has(t))return{configurable:true,enumerable:true,value:n.get(t),writable:true};return Reflect.getOwnPropertyDescriptor(e,t)}});return u},get(e,t){if(t===\"toString\")return e.toString.bind(e);return Reflect.get(e,t)}});Element.prototype.getBoundingClientRect=new Proxy(Element.prototype.getBoundingClientRect,{apply:function(t,r,s){if(o.has(\"_debug\"))debugger;const c=Reflect.apply(t,r,s);const i=new WeakSet(document.querySelectorAll(e));if(i.has(r)===false)return c;let{x:a,y:f,height:l,width:u}=c;if(o.has(\"_rectx\"))a=parseFloat(o.get(\"_rectx\"));if(o.has(\"_recty\"))f=parseFloat(o.get(\"_recty\"));if(o.has(\"_rectw\"))u=parseFloat(o.get(\"_rectw\"));else if(n.has(\"width\"))u=parseFloat(n.get(\"width\"));if(o.has(\"_recth\"))l=parseFloat(o.get(\"_recth\"));else if(n.has(\"height\"))l=parseFloat(n.get(\"height\"));return new self.DOMRect(a,f,u,l)},get(e,t){if(t===\"toString\")return e.toString.bind(e);return Reflect.get(e,t)}})}",
+      "dependencies": [
+        "safe-self.fn"
+      ]
+    },
+    {
       "name": "get-random-token.fn",
       "aliases": [],
       "body": "function getRandomToken(){const o=safeSelf();return o.String_fromCharCode(Date.now()%26+97)+o.Math_floor(o.Math_random()*982451653+982451653).toString(36)}",
@@ -26,20 +229,6 @@
       "name": "should-debug.fn",
       "aliases": [],
       "body": "function shouldDebug(e){if(e instanceof Object===false)return false;return scriptletGlobals.canDebug&&e.debug}",
-      "dependencies": []
-    },
-    {
-      "name": "run-at.fn",
-      "aliases": [],
-      "body": "function runAt(e,t){const n=e=>{const t={loading:1,asap:1,interactive:2,end:2,2:2,complete:3,idle:3,3:3};const n=Array.isArray(e)?e:[e];for(const e of n){const n=`${e}`;if(t.hasOwnProperty(n)===false)continue;return t[n]}return 0};const r=n(t);if(n(document.readyState)>=r){e();return}const o=()=>{if(n(document.readyState)<r)return;e();a.removeEventListener.apply(document,c)};const a=safeSelf();const c=[\"readystatechange\",o,{capture:true}];a.addEventListener.apply(document,c)}",
-      "dependencies": [
-        "safe-self.fn"
-      ]
-    },
-    {
-      "name": "run-at-html-element.fn",
-      "aliases": [],
-      "body": "function runAtHtmlElementFn(e){if(document.documentElement){e();return}const n=new MutationObserver((()=>{n.disconnect();e()}));n.observe(document,{childList:true})}",
       "dependencies": []
     },
     {
@@ -104,47 +293,6 @@
       "dependencies": []
     },
     {
-      "name": "get-safe-cookie-values.fn",
-      "aliases": [],
-      "body": "function getSafeCookieValuesFn(){return[\"accept\",\"reject\",\"accepted\",\"rejected\",\"notaccepted\",\"allow\",\"disallow\",\"deny\",\"allowed\",\"denied\",\"approved\",\"disapproved\",\"checked\",\"unchecked\",\"dismiss\",\"dismissed\",\"enable\",\"disable\",\"enabled\",\"disabled\",\"essential\",\"nonessential\",\"forbidden\",\"forever\",\"hide\",\"hidden\",\"necessary\",\"required\",\"ok\",\"on\",\"off\",\"true\",\"t\",\"false\",\"f\",\"yes\",\"y\",\"no\",\"n\"]}",
-      "dependencies": []
-    },
-    {
-      "name": "get-all-cookies.fn",
-      "aliases": [],
-      "body": "function getAllCookiesFn(){return document.cookie.split(/\\s*;\\s*/).map((t=>{const e=t.indexOf(\"=\");if(e===0)return;if(e===-1)return`${t.trim()}=`;const i=t.slice(0,e).trim();const n=t.slice(e+1).trim();return{key:i,value:n}})).filter((t=>t!==void 0))}",
-      "dependencies": []
-    },
-    {
-      "name": "get-all-local-storage.fn",
-      "aliases": [],
-      "body": "function getAllLocalStorageFn(t=\"localStorage\"){const e=self[t];const n=[];for(let t=0;t<e.length;t++){const n=e.key(t);const o=e.getItem(n);return{key:n,value:o}}return n}",
-      "dependencies": []
-    },
-    {
-      "name": "get-cookie.fn",
-      "aliases": [],
-      "body": "function getCookieFn(i=\"\"){for(const n of document.cookie.split(/\\s*;\\s*/)){const o=n.indexOf(\"=\");if(o===-1)continue;if(n.slice(0,o)!==i)continue;return n.slice(o+1).trim()}}",
-      "dependencies": []
-    },
-    {
-      "name": "set-cookie.fn",
-      "aliases": [],
-      "body": "function setCookieFn(e=false,o=\"\",n=\"\",i=\"\",t=\"\",r={}){if(e===false&&/[^!#$%&'*+\\-.0-9A-Z[\\]^_`a-z|~]/.test(o))o=encodeURIComponent(o);if(/[^ -:<-[\\]-~]/.test(n))n=encodeURIComponent(n);const s=getCookieFn(o);if(s!==void 0&&r.dontOverwrite)return;if(s===n&&r.reload)return;const f=[o,\"=\",n];if(i!==\"\")f.push(\"; expires=\",i);if(t===\"\")t=\"/\";else if(t===\"none\")t=\"\";if(t!==\"\"&&t!==\"/\")return;if(t===\"/\")f.push(\"; path=/\");if(e){if(r.domain)f.push(`; domain=${r.domain}`);f.push(\"; Secure\")}else if(/^__(Host|Secure)-/.test(o))f.push(\"; Secure\");try{document.cookie=f.join(\"\")}catch(e){}const c=getCookieFn(o)===n;if(c&&r.reload)window.location.reload();return c}",
-      "dependencies": [
-        "get-cookie.fn"
-      ]
-    },
-    {
-      "name": "set-local-storage-item.fn",
-      "aliases": [],
-      "body": "function setLocalStorageItemFn(e=\"local\",t=false,n=\"\",o=\"\"){if(n===\"\")return;if(o===\"emptyArr\")o=\"[]\";else if(o===\"emptyObj\")o=\"{}\";const r=[\"\",\"undefined\",\"null\",\"{}\",\"[]\",'\"\"',\"$remove$\",...getSafeCookieValuesFn()];if(t){if(o.includes(\"$now$\"))o=o.replaceAll(\"$now$\",Date.now());if(o.includes(\"$currentDate$\"))o=o.replaceAll(\"$currentDate$\",`${Date()}`);if(o.includes(\"$currentISODate$\"))o=o.replaceAll(\"$currentISODate$\",(new Date).toISOString())}else{const e=o.toLowerCase();const t=/^(\"?)(.+)\\1$/.exec(e);const n=t&&t[2]||e;if(r.includes(n)===false){if(/^\\d+$/.test(n)===false)return;const e=parseInt(n,10);if(e>32767)return}}try{const t=self[`${e}Storage`];if(o===\"$remove$\"){const e=safeSelf();const o=e.patternToRegex(n,void 0,true);const r=[];for(let e=0,n=t.length;e<n;e++){const n=t.key(e);if(o.test(n))r.push(n)}for(const e of r)t.removeItem(e)}else t.setItem(n,`${o}`)}catch(e){}}",
-      "dependencies": [
-        "get-safe-cookie-values.fn",
-        "safe-self.fn"
-      ]
-    },
-    {
       "name": "matches-stack-trace.fn",
       "aliases": [],
       "body": "function matchesStackTrace(t,e=\"\"){const n=safeSelf();const c=getExceptionToken();const i=new n.Error(c);const s=new URL(self.location.href);s.hash=\"\";const o=/(.*?@)?(\\S+)(:\\d+):\\d+\\)?$/;const l=[];for(let t of i.stack.split(/[\\n\\r]+/)){if(t.includes(c))continue;t=t.trim();const e=n.RegExp_exec.call(o,t);if(e===null)continue;let i=e[2];if(i.startsWith(\"(\"))i=i.slice(1);if(i===s.href)i=\"inlineScript\";else if(i.startsWith(\"<anonymous>\"))i=\"injectedScript\";let r=e[1]!==void 0?e[1].slice(0,-1):t.slice(0,e.index).trim();if(r.startsWith(\"at\"))r=r.slice(2).trim();let a=e[3];l.push(\" \"+`${r} ${i}${a}:1`.trim())}l[0]=`stackDepth:${l.length-1}`;const r=l.join(\"\\t\");const a=t.matchAll!==true&&n.testPattern(t,r);if(e===\"all\"||e===\"match\"&&a||e===\"nomatch\"&&!a)n.uboLog(r.replace(/\\t/g,\"\\n\"));return a}",
@@ -199,7 +347,7 @@
     {
       "name": "prevent-xhr.fn",
       "aliases": [],
-      "body": "function preventXhrFn(e=false,t=\"\",r=\"\"){if(typeof t!==\"string\")return;const s=safeSelf();const n=e?\"trusted-prevent-xhr\":\"prevent-xhr\";const o=s.makeLogPrefix(n,t,r);const a=new WeakMap;const p=parsePropertiesToMatch(t,\"url\");const i=scriptletGlobals.warOrigin;const u=(e,t)=>{try{e.dispatchEvent(new Event(t))}catch(e){}};const l=XMLHttpRequest.prototype;self.XMLHttpRequest=class extends self.XMLHttpRequest{open(e,n,...u){a.delete(this);if(i!==void 0&&n.startsWith(i))return super.open(e,n,...u);const l={method:e,url:n};if(t===\"\"&&r===\"\"){s.uboLog(o,`Called: ${s.JSON_stringify(l,null,2)}`);return super.open(e,n,...u)}if(matchObjectProperties(p,l)){const e=Object.assign(l,{xhr:this,defer:u.length===0||!!u[0],directive:r,headers:{date:\"\",\"content-type\":\"\",\"content-length\":\"\"},props:{response:{value:\"\"},responseText:{value:\"\"},responseXML:{value:null},responseURL:{value:l.url}}});a.set(this,e)}return super.open(e,n,...u)}send(...t){const n=a.get(this);if(n===void 0)return super.send(...t);n.headers[\"date\"]=(new Date).toUTCString();let p=\"\";switch(this.responseType){case\"arraybuffer\":n.props.response.value=new ArrayBuffer(0);n.headers[\"content-type\"]=\"application/octet-stream\";break;case\"blob\":n.props.response.value=new Blob([]);n.headers[\"content-type\"]=\"application/octet-stream\";break;case\"document\":{const e=new DOMParser;const t=e.parseFromString(\"\",\"text/html\");n.props.response.value=t;n.props.responseXML.value=t;n.headers[\"content-type\"]=\"text/html\";break}case\"json\":n.props.response.value={};n.props.responseText.value=\"{}\";n.headers[\"content-type\"]=\"application/json\";break;default:if(r===\"\")break;p=generateContentFn(e,n.directive);if(p instanceof Promise)p=p.then((e=>{n.props.response.value=e;n.props.responseText.value=e}));else{n.props.response.value=p;n.props.responseText.value=p}n.headers[\"content-type\"]=\"text/plain\";break}if(n.defer===false){n.headers[\"content-length\"]=`${n.props.response.value}`.length;Object.defineProperties(n.xhr,{readyState:{value:4},status:{value:200},statusText:{value:\"OK\"}});Object.defineProperties(n.xhr,n.props);return}Promise.resolve(p).then((()=>n)).then((e=>{Object.defineProperties(e.xhr,{readyState:{value:1,configurable:true}});u(e.xhr,\"readystatechange\");return e})).then((e=>{n.headers[\"content-length\"]=`${e.props.response.value}`.length;Object.defineProperties(e.xhr,{readyState:{value:2,configurable:true},status:{value:200},statusText:{value:\"OK\"}});u(e.xhr,\"readystatechange\");return e})).then((e=>{Object.defineProperties(e.xhr,{readyState:{value:3,configurable:true}});Object.defineProperties(e.xhr,e.props);u(e.xhr,\"readystatechange\");return e})).then((e=>{Object.defineProperties(e.xhr,{readyState:{value:4}});u(e.xhr,\"readystatechange\");u(e.xhr,\"load\");u(e.xhr,\"loadend\");s.uboLog(o,`Prevented with response:\\n${e.xhr.response}`)}))}getResponseHeader(e){const t=a.get(this);if(t===void 0||this.readyState<this.HEADERS_RECEIVED)return super.getResponseHeader(e);const r=t.headers[e.toLowerCase()];if(r!==void 0&&r!==\"\")return r;return null}getAllResponseHeaders(){const e=a.get(this);if(e===void 0||this.readyState<this.HEADERS_RECEIVED)return super.getAllResponseHeaders();const t=[];for(const[r,s]of Object.entries(e.headers)){if(!s)continue;t.push(`${r}: ${s}`)}if(t.length!==0)t.push(\"\");return t.join(\"\\r\\n\")}};self.XMLHttpRequest.prototype.open.toString=function(){return l.open.toString()};self.XMLHttpRequest.prototype.send.toString=function(){return l.send.toString()};self.XMLHttpRequest.prototype.getResponseHeader.toString=function(){return l.getResponseHeader.toString()};self.XMLHttpRequest.prototype.getAllResponseHeaders.toString=function(){return l.getAllResponseHeaders.toString()}}",
+      "body": "function preventXhrFn(e=false,t=\"\",r=\"\"){if(typeof t!==\"string\")return;const s=safeSelf();const n=e?\"trusted-prevent-xhr\":\"prevent-xhr\";const o=s.makeLogPrefix(n,t,r);const a=new WeakMap;const p=parsePropertiesToMatch(t,\"url\");const i=scriptletGlobals.warOrigin;const u=(e,t)=>{try{e.dispatchEvent(new Event(t))}catch(e){}};const l=XMLHttpRequest.prototype;self.XMLHttpRequest=class extends self.XMLHttpRequest{open(e,n,...u){a.delete(this);if(i!==void 0&&n.startsWith(i))return super.open(e,n,...u);const l={method:e,url:n};if(t===\"\"&&r===\"\"){s.uboLog(o,`Called: ${s.JSON_stringify(l,null,2)}`);return super.open(e,n,...u)}if(matchObjectProperties(p,l)){const e=Object.assign(l,{xhr:this,defer:u.length===0||!!u[0],directive:r,headers:{date:\"\",\"content-type\":\"\",\"content-length\":\"\"},url:l.url,props:{response:{value:\"\"},responseText:{value:\"\"},responseXML:{value:null}}});a.set(this,e)}return super.open(e,n,...u)}send(...t){const n=a.get(this);if(n===void 0)return super.send(...t);n.headers[\"date\"]=(new Date).toUTCString();let p=\"\";switch(this.responseType){case\"arraybuffer\":n.props.response.value=new ArrayBuffer(0);n.headers[\"content-type\"]=\"application/octet-stream\";break;case\"blob\":n.props.response.value=new Blob([]);n.headers[\"content-type\"]=\"application/octet-stream\";break;case\"document\":{const e=new DOMParser;const t=e.parseFromString(\"\",\"text/html\");n.props.response.value=t;n.props.responseXML.value=t;n.headers[\"content-type\"]=\"text/html\";break}case\"json\":n.props.response.value={};n.props.responseText.value=\"{}\";n.headers[\"content-type\"]=\"application/json\";break;default:if(r===\"\")break;p=generateContentFn(e,n.directive);if(p instanceof Promise)p=p.then((e=>{n.props.response.value=e;n.props.responseText.value=e}));else{n.props.response.value=p;n.props.responseText.value=p}n.headers[\"content-type\"]=\"text/plain\";break}if(n.defer===false){n.headers[\"content-length\"]=`${n.props.response.value}`.length;Object.defineProperties(n.xhr,{readyState:{value:4},responseURL:{value:n.url},status:{value:200},statusText:{value:\"OK\"}});Object.defineProperties(n.xhr,n.props);return}Promise.resolve(p).then((()=>n)).then((e=>{Object.defineProperties(e.xhr,{readyState:{value:1,configurable:true},responseURL:{value:n.url}});u(e.xhr,\"readystatechange\");return e})).then((e=>{n.headers[\"content-length\"]=`${e.props.response.value}`.length;Object.defineProperties(e.xhr,{readyState:{value:2,configurable:true},status:{value:200},statusText:{value:\"OK\"}});u(e.xhr,\"readystatechange\");return e})).then((e=>{Object.defineProperties(e.xhr,{readyState:{value:3,configurable:true}});Object.defineProperties(e.xhr,e.props);u(e.xhr,\"readystatechange\");return e})).then((e=>{Object.defineProperties(e.xhr,{readyState:{value:4}});u(e.xhr,\"readystatechange\");u(e.xhr,\"load\");u(e.xhr,\"loadend\");s.uboLog(o,`Prevented with response:\\n${e.xhr.response}`)}))}getResponseHeader(e){const t=a.get(this);if(t===void 0||this.readyState<this.HEADERS_RECEIVED)return super.getResponseHeader(e);const r=t.headers[e.toLowerCase()];if(r!==void 0&&r!==\"\")return r;return null}getAllResponseHeaders(){const e=a.get(this);if(e===void 0||this.readyState<this.HEADERS_RECEIVED)return super.getAllResponseHeaders();const t=[];for(const[r,s]of Object.entries(e.headers)){if(!s)continue;t.push(`${r}: ${s}`)}if(t.length!==0)t.push(\"\");return t.join(\"\\r\\n\")}};self.XMLHttpRequest.prototype.open.toString=function(){return l.open.toString()};self.XMLHttpRequest.prototype.send.toString=function(){return l.send.toString()};self.XMLHttpRequest.prototype.getResponseHeader.toString=function(){return l.getResponseHeader.toString()};self.XMLHttpRequest.prototype.getAllResponseHeaders.toString=function(){return l.getAllResponseHeaders.toString()}}",
       "dependencies": [
         "generate-content.fn",
         "match-object-properties.fn",
@@ -353,23 +501,11 @@
       "aliases": [
         "refresh-defuser.js"
       ],
-      "body": "function preventRefresh(t=\"\"){if(typeof t!==\"string\")return;const e=safeSelf();const n=e.makeLogPrefix(\"prevent-refresh\",t);const o=()=>{const o=document.querySelector('meta[http-equiv=\"refresh\" i][content]');if(o===null)return;e.uboLog(n,`Prevented \"${o.textContent}\"`);const r=t===\"\"?o.getAttribute(\"content\"):t;const s=Math.max(parseFloat(r)||0,0)*1e3;setTimeout((()=>{window.stop()}),s)};runAt((()=>{o()}),\"interactive\")}",
+      "body": "function preventRefresh(e=\"\"){if(typeof e!==\"string\")return;const t=safeSelf();const n=t.makeLogPrefix(\"prevent-refresh\",e);const o=e=>{window.stop();t.uboLog(n,`Prevented \"${e}\"`)};const r=()=>{const t=document.querySelector('meta[http-equiv=\"refresh\" i][content]');if(t===null)return;const n=t.getAttribute(\"content\")||\"\";const r=e===\"\"?Math.max(parseFloat(n)||0,0)*500:0;if(r===0)o(n);else setTimeout((()=>{o(n)}),r)};self.addEventListener(\"load\",r,{capture:true,once:true})}",
       "dependencies": [
-        "run-at.fn",
         "safe-self.fn"
       ],
       "executionWorld": "ISOLATED"
-    },
-    {
-      "name": "remove-attr.js",
-      "aliases": [
-        "ra.js"
-      ],
-      "body": "function removeAttr(t=\"\",e=\"\",o=\"\"){if(typeof t!==\"string\")return;if(t===\"\")return;const r=safeSelf();const s=r.makeLogPrefix(\"remove-attr\",t,e,o);const n=t.split(/\\s*\\|\\s*/);const i=n.map((t=>`${e}[${CSS.escape(t)}]`)).join(\",\");if(r.logLevel>1)r.uboLog(s,`Target selector:\\n\\t${i}`);const f=/\\basap\\b/.test(o);let u;const l=()=>{if(u!==void 0)return;u=r.onIdle((()=>{u=void 0;a()}),{timeout:17})};const a=()=>{if(u!==void 0){r.offIdle(u);u=void 0}try{const t=document.querySelectorAll(i);for(const e of t)for(const t of n){if(e.hasAttribute(t)===false)continue;e.removeAttribute(t);r.uboLog(s,`Removed attribute '${t}'`)}}catch(t){}};const c=t=>{if(u!==void 0)return;let e=true;for(let o=0;o<t.length&&e;o++){const{type:r,addedNodes:s,removedNodes:n}=t[o];if(r===\"attributes\")e=false;for(let t=0;t<s.length&&e;t++)if(s[t].nodeType===1){e=false;break}for(let t=0;t<n.length&&e;t++)if(n[t].nodeType===1){e=false;break}}if(e)return;f?a():l()};const d=()=>{a();if(/\\bstay\\b/.test(o)===false)return;const t=new MutationObserver(c);t.observe(document,{attributes:true,attributeFilter:n,childList:true,subtree:true})};runAt((()=>{d()}),o.split(/\\s+/))}",
-      "dependencies": [
-        "run-at.fn",
-        "safe-self.fn"
-      ]
     },
     {
       "name": "remove-class.js",
@@ -503,17 +639,6 @@
       "dependencies": []
     },
     {
-      "name": "remove-cookie.js",
-      "aliases": [
-        "cookie-remover.js"
-      ],
-      "body": "function cookieRemover(o=\"\"){if(typeof o!==\"string\")return;const e=safeSelf();const t=e.patternToRegex(o);const n=e.getExtraArgs(Array.from(arguments),1);const i=(o,e=500)=>{if(i.timer!==void 0)return;i.timer=setTimeout((()=>{i.timer=void 0;o()}),e)};const c=()=>{document.cookie.split(\";\").forEach((o=>{const e=o.indexOf(\"=\");if(e===-1)return;const n=o.slice(0,e).trim();if(t.test(n)===false)return;const i=n+\"=\";const c=\"; domain=\"+document.location.hostname;const s=\"; domain=.\"+document.location.hostname;let r,d;const m=document.domain;if(m){if(m!==document.location.hostname)r=\"; domain=.\"+m;if(m.startsWith(\"www.\"))d=\"; domain=\"+m.replace(\"www\",\"\")}const a=\"; path=/\";const u=\"; Max-Age=-1000; expires=Thu, 01 Jan 1970 00:00:00 GMT\";document.cookie=i+u;document.cookie=i+c+u;document.cookie=i+s+u;document.cookie=i+a+u;document.cookie=i+c+a+u;document.cookie=i+s+a+u;if(r!==void 0)document.cookie=i+r+a+u;if(d!==void 0)document.cookie=i+d+a+u}))};c();window.addEventListener(\"beforeunload\",c);if(typeof n.when!==\"string\")return;const s=[\"scroll\",\"keydown\"];const r=n.when.split(/\\s/);for(const o of r){if(s.includes(o)===false)continue;document.addEventListener(o,(()=>{i(c)}),{passive:true})}}",
-      "dependencies": [
-        "safe-self.fn"
-      ],
-      "executionWorld": "ISOLATED"
-    },
-    {
       "name": "xml-prune.js",
       "aliases": [],
       "body": "function xmlPrune(e=\"\",t=\"\",r=\"\"){if(typeof e!==\"string\")return;if(e===\"\")return;const n=safeSelf();const s=n.makeLogPrefix(\"xml-prune\",e,t,r);const o=n.patternToRegex(r);const u=n.getExtraArgs(Array.from(arguments),3);const c=(e,t)=>{const r=/^xpath\\(.+\\)$/.test(t);if(r===false)return Array.from(e.querySelectorAll(t));const n=e.evaluate(t.slice(6,-1),e,null,XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,null);const s=[];for(let e=0;e<n.snapshotLength;e++){const t=n.snapshotItem(e);s.push(t)}return s};const i=r=>{try{if(t!==\"\"&&r.querySelector(t)===null)return r;if(u.logdoc){const e=new XMLSerializer;n.uboLog(s,`Document is\\n\\t${e.serializeToString(r)}`)}const o=c(r,e);if(o.length===0)return r;n.uboLog(s,`Removing ${o.length} items`);for(const e of o){if(e.nodeType===1)e.remove();else if(e.nodeType===2)e.ownerElement.removeAttribute(e.nodeName);n.uboLog(s,`${e.constructor.name}.${e.nodeName} removed`)}}catch(e){n.uboErr(s,`Error: ${e}`)}return r};const a=e=>{if((/^\\s*</.test(e)&&/>\\s*$/.test(e))===false)return e;try{const t=new DOMParser;const r=t.parseFromString(e,\"text/xml\");i(r);const n=new XMLSerializer;e=n.serializeToString(r)}catch(e){}return e};const l=e=>{if(typeof e===\"string\")return e;if(e instanceof Request)return e.url;return String(e)};self.fetch=new Proxy(self.fetch,{apply:function(e,t,r){const n=Reflect.apply(e,t,r);if(o.test(l(r[0]))===false)return n;return n.then((e=>{const t=e.clone();return t.text().then((t=>{const r=new Response(a(t),{status:e.status,statusText:e.statusText,headers:e.headers});Object.defineProperties(r,{ok:{value:e.ok},redirected:{value:e.redirected},type:{value:e.type},url:{value:e.url}});return r})).catch((()=>e))}))}});self.XMLHttpRequest.prototype.open=new Proxy(self.XMLHttpRequest.prototype.open,{apply:async(e,t,r)=>{if(o.test(l(r[1]))===false)return Reflect.apply(e,t,r);t.addEventListener(\"readystatechange\",(function(){if(t.readyState!==4)return;const e=t.responseType;if(e===\"document\"||e===\"\"&&t.responseXML instanceof XMLDocument){i(t.responseXML);const e=new XMLSerializer;const r=e.serializeToString(t.responseXML);Object.defineProperty(t,\"responseText\",{value:r});if(typeof t.response===\"string\")Object.defineProperty(t,\"response\",{value:r});return}if(e===\"text\"||e===\"\"&&typeof t.responseText===\"string\"){const e=t.responseText;const r=a(e);if(r===e)return;Object.defineProperty(t,\"response\",{value:r});Object.defineProperty(t,\"responseText\",{value:r});return}}));return Reflect.apply(e,t,r)}})}",
@@ -546,14 +671,6 @@
       "dependencies": []
     },
     {
-      "name": "spoof-css.js",
-      "aliases": [],
-      "body": "function spoofCSS(e,...t){if(typeof e!==\"string\")return;if(e===\"\")return;const n=e=>e.replace(/-[a-z]/g,(e=>e.charAt(1).toUpperCase()));const r=new Map;for(let e=0;e<t.length;e+=2){if(typeof t[e+0]!==\"string\")break;if(t[e+0]===\"\")break;if(typeof t[e+1]!==\"string\")break;r.set(n(t[e+0]),t[e+1])}const o=safeSelf();const i=o.makeLogPrefix(\"spoof-css\",e,...t);const c=scriptletGlobals.canDebug;const f=c&&r.get(\"debug\")||0;const u=[\"cssText\",\"length\",\"parentRule\"];const l=(e,t)=>{const c=n(e);const f=r.has(c);const u=f?r.get(c):t;if(f)o.uboLog(i,`Spoofing ${e} to ${u}`);return u};const s=(e,t,n)=>{const r=e.bind(t);Object.defineProperty(r,\"name\",{value:n});Object.defineProperty(r,\"toString\",{value:()=>`function ${n}() { [native code] }`});return r};self.getComputedStyle=new Proxy(self.getComputedStyle,{apply:function(t,n,o){if(f!==0)debugger;const i=Reflect.apply(t,n,o);const c=new WeakSet(document.querySelectorAll(e));if(c.has(o[0])===false)return i;const g=new Proxy(i,{get(e,t){if(typeof e[t]===\"function\"){if(t===\"getPropertyValue\")return s((function t(n){return l(n,e[n])}),e,\"getPropertyValue\");return s(e[t],e,t)}if(u.includes(t))return Reflect.get(e,t);return l(t,Reflect.get(e,t))},getOwnPropertyDescriptor(e,t){if(r.has(t))return{configurable:true,enumerable:true,value:r.get(t),writable:true};return Reflect.getOwnPropertyDescriptor(e,t)}});return g},get(e,t){if(t===\"toString\")return e.toString.bind(e);return Reflect.get(e,t)}});Element.prototype.getBoundingClientRect=new Proxy(Element.prototype.getBoundingClientRect,{apply:function(t,n,o){if(f!==0)debugger;const i=Reflect.apply(t,n,o);const c=new WeakSet(document.querySelectorAll(e));if(c.has(n)===false)return i;let{height:u,width:l}=i;if(r.has(\"width\"))l=parseFloat(r.get(\"width\"));if(r.has(\"height\"))u=parseFloat(r.get(\"height\"));return new self.DOMRect(i.x,i.y,l,u)},get(e,t){if(t===\"toString\")return e.toString.bind(e);return Reflect.get(e,t)}})}",
-      "dependencies": [
-        "safe-self.fn"
-      ]
-    },
-    {
       "name": "remove-node-text.js",
       "aliases": [
         "rmnt.js"
@@ -561,54 +678,6 @@
       "body": "function removeNodeText(e,n,...o){replaceNodeTextFn(e,\"\",\"\",\"includes\",n||\"\",...o)}",
       "dependencies": [
         "replace-node-text.fn"
-      ],
-      "executionWorld": "ISOLATED"
-    },
-    {
-      "name": "set-cookie.js",
-      "aliases": [],
-      "body": "function setCookie(e=\"\",o=\"\",t=\"\"){if(e===\"\")return;const s=safeSelf();const n=s.makeLogPrefix(\"set-cookie\",e,o,t);const f=o.toLowerCase();const r=/^(\"?)(.+)\\1$/.exec(f);const c=r&&r[2]||f;const i=getSafeCookieValuesFn();if(i.includes(c)===false){if(/^\\d+$/.test(c)===false)return;const e=parseInt(o,10);if(e>32767)return}const a=setCookieFn(false,e,o,\"\",t,s.getExtraArgs(Array.from(arguments),3));if(a)s.uboLog(n,\"Done\")}",
-      "dependencies": [
-        "get-safe-cookie-values.fn",
-        "safe-self.fn",
-        "set-cookie.fn"
-      ],
-      "executionWorld": "ISOLATED"
-    },
-    {
-      "name": "set-cookie-reload.js",
-      "aliases": [],
-      "body": "function setCookieReload(o,e,i,...t){setCookie(o,e,i,\"reload\",\"1\",...t)}",
-      "dependencies": [
-        "set-cookie.js"
-      ],
-      "executionWorld": "ISOLATED"
-    },
-    {
-      "name": "set-local-storage-item.js",
-      "aliases": [],
-      "body": "function setLocalStorageItem(e=\"\",t=\"\"){setLocalStorageItemFn(\"local\",false,e,t)}",
-      "dependencies": [
-        "set-local-storage-item.fn"
-      ],
-      "executionWorld": "ISOLATED"
-    },
-    {
-      "name": "set-session-storage-item.js",
-      "aliases": [],
-      "body": "function setSessionStorageItem(e=\"\",s=\"\"){setLocalStorageItemFn(\"session\",false,e,s)}",
-      "dependencies": [
-        "set-local-storage-item.fn"
-      ],
-      "executionWorld": "ISOLATED"
-    },
-    {
-      "name": "set-attr.js",
-      "aliases": [],
-      "body": "function setAttr(e=\"\",t=\"\",r=\"\"){if(e===\"\")return;if(t===\"\")return;const n=safeSelf();const o=n.makeLogPrefix(\"set-attr\",t,r);const s=[\"\",\"false\",\"true\"];let i=\"\";if(s.includes(r.toLowerCase())===false)if(/^\\d+$/.test(r)){const e=parseInt(r,10);if(e>=32768)return;r=`${e}`}else if(/^\\[.+\\]$/.test(r))i=r.slice(1,-1);else return;const u=e=>{if(i!==\"\")return e.getAttribute(i)||\"\";return r};const f=()=>{const r=[];try{r.push(...document.querySelectorAll(e))}catch(e){return false}for(const e of r){const r=e.getAttribute(t);const s=u(e);if(s===r)continue;if(s!==\"\"&&/^on/i.test(t))if(t.toLowerCase()in e)continue;e.setAttribute(t,s);n.uboLog(o,`${t}=\"${s}\"`)}return true};let c,l;const a=e=>{if(l!==void 0)return;let t=false;for(const r of e){if(r.addedNodes.length===0)continue;for(const e of r.addedNodes){if(e.nodeType!==1)continue;t=true;break}if(t)break}if(t===false)return;l=self.requestAnimationFrame((()=>{l=void 0;f()}))};const d=()=>{if(f()===false)return;c=new MutationObserver(a);c.observe(document.body,{subtree:true,childList:true})};runAt((()=>{d()}),\"idle\")}",
-      "dependencies": [
-        "run-at.fn",
-        "safe-self.fn"
       ],
       "executionWorld": "ISOLATED"
     },
@@ -625,15 +694,6 @@
       "aliases": [],
       "body": "function multiup(){const t=t=>{const e=t.target;if(e.matches(\"button[link]\")===false)return;const n=e.closest(\"form\");if(n===null)return;if(n!==e.parentElement)return;const r=(e.getAttribute(\"link\")||\"\").trim();if(r===\"\")return;t.preventDefault();t.stopPropagation();document.location.href=r};document.addEventListener(\"click\",t,{capture:true})}",
       "dependencies": [],
-      "executionWorld": "ISOLATED"
-    },
-    {
-      "name": "remove-cache-storage-item.js",
-      "aliases": [],
-      "body": "function removeCacheStorageItem(e=\"\",t=\"\"){if(e===\"\")return;const o=safeSelf();const n=o.makeLogPrefix(\"remove-cache-storage-item\",e,t);const r=self.caches;if(r instanceof Object===false)return;const f=o.patternToRegex(e,void 0,true);const i=o.patternToRegex(t,void 0,true);r.keys().then((e=>{for(const s of e){if(f.test(s)===false)continue;if(t===\"\"){r.delete(s).then((e=>{if(o.logLevel>1)o.uboLog(n,`Deleting ${s}`);if(e!==true)return;o.uboLog(n,`Deleted ${s}: ${e}`)}));continue}r.open(s).then((e=>{e.keys().then((t=>{for(const r of t){if(i.test(r.url)===false)continue;if(o.logLevel>1)o.uboLog(n,`Deleting ${s}/${r.url}`);e.delete(r).then((e=>{if(e!==true)return;o.uboLog(n,`Deleted ${s}/${r.url}: ${e}`)}))}}))}))}}))}",
-      "dependencies": [
-        "safe-self.fn"
-      ],
       "executionWorld": "ISOLATED"
     },
     {
@@ -659,47 +719,6 @@
       "dependencies": [
         "set-constant.fn"
       ],
-      "requiresTrust": true
-    },
-    {
-      "name": "trusted-set-cookie.js",
-      "aliases": [],
-      "body": "function trustedSetCookie(e=\"\",t=\"\",r=\"\",n=\"\"){if(e===\"\")return;const o=safeSelf();const s=o.makeLogPrefix(\"set-cookie\",e,t,n);const l=new Date;if(t.includes(\"$now$\"))t=t.replaceAll(\"$now$\",l.getTime());if(t.includes(\"$currentDate$\"))t=t.replaceAll(\"$currentDate$\",l.toUTCString());if(t.includes(\"$currentISODate$\"))t=t.replaceAll(\"$currentISODate$\",l.toISOString());let a=\"\";if(r!==\"\"){if(r===\"1day\")l.setDate(l.getDate()+1);else if(r===\"1year\")l.setFullYear(l.getFullYear()+1);else{if(/^\\d+$/.test(r)===false)return;l.setSeconds(l.getSeconds()+parseInt(r,10))}a=l.toUTCString()}const i=setCookieFn(true,e,t,a,n,safeSelf().getExtraArgs(Array.from(arguments),4));if(i)o.uboLog(s,\"Done\")}",
-      "dependencies": [
-        "safe-self.fn",
-        "set-cookie.fn"
-      ],
-      "executionWorld": "ISOLATED",
-      "requiresTrust": true
-    },
-    {
-      "name": "trusted-set-cookie-reload.js",
-      "aliases": [],
-      "body": "function trustedSetCookieReload(e,o,t,d,...i){trustedSetCookie(e,o,t,d,\"reload\",\"1\",...i)}",
-      "dependencies": [
-        "trusted-set-cookie.js"
-      ],
-      "executionWorld": "ISOLATED",
-      "requiresTrust": true
-    },
-    {
-      "name": "trusted-set-local-storage-item.js",
-      "aliases": [],
-      "body": "function trustedSetLocalStorageItem(t=\"\",e=\"\"){setLocalStorageItemFn(\"local\",true,t,e)}",
-      "dependencies": [
-        "set-local-storage-item.fn"
-      ],
-      "executionWorld": "ISOLATED",
-      "requiresTrust": true
-    },
-    {
-      "name": "trusted-set-session-storage-item.js",
-      "aliases": [],
-      "body": "function trustedSetSessionStorageItem(e=\"\",t=\"\"){setLocalStorageItemFn(\"session\",true,e,t)}",
-      "dependencies": [
-        "set-local-storage-item.fn"
-      ],
-      "executionWorld": "ISOLATED",
       "requiresTrust": true
     },
     {
@@ -783,7 +802,7 @@
     {
       "name": "trusted-suppress-native-method.js",
       "aliases": [],
-      "body": "function trustedSuppressNativeMethod(e=\"\",t=\"\",r=\"\",n=\"\"){if(e===\"\")return;if(n!==\"\")return;const u=safeSelf();const f=u.makeLogPrefix(\"trusted-suppress-native-method\",e,t,r);const i=t.split(/\\s*\\|\\s*/).map((e=>{if(/^\".*\"$/.test(e))return{type:\"pattern\",re:u.patternToRegex(e.slice(1,-1))};if(e===\"false\")return{type:\"exact\",value:false};if(e===\"true\")return{type:\"exact\",value:true};if(e===\"null\")return{type:\"exact\",value:null};if(e===\"undefined\")return{type:\"exact\",value:void 0}}));proxyApplyFn(e,(function(e){const{callArgs:n}=e;if(t===\"\"){u.uboLog(f,`Arguments:\\n${n.join(\"\\n\")}`);return e.reflect()}if(n.length<i.length)return e.reflect();for(let t=0;t<i.length;t++){const r=i[t];if(r===void 0)continue;const f=n[t];if(r.type===\"exact\")if(f!==r.value)return e.reflect();if(r.type===\"pattern\")if(u.RegExp_test.call(r.re,f)===false)return e.reflect()}u.uboLog(f,`Suppressed:\\n${n.join(\"\\n\")}`);if(r===\"abort\")throw new ReferenceError}))}",
+      "body": "function trustedSuppressNativeMethod(e=\"\",t=\"\",r=\"\",n=\"\"){if(e===\"\")return;if(n!==\"\")return;const u=safeSelf();const f=u.makeLogPrefix(\"trusted-suppress-native-method\",e,t,r);const i=t.split(/\\s*\\|\\s*/).map((e=>{if(/^\".*\"$/.test(e))return{type:\"pattern\",re:u.patternToRegex(e.slice(1,-1))};if(e===\"false\")return{type:\"exact\",value:false};if(e===\"true\")return{type:\"exact\",value:true};if(e===\"null\")return{type:\"exact\",value:null};if(e===\"undefined\")return{type:\"exact\",value:void 0}}));proxyApplyFn(e,(function(e){const{callArgs:n}=e;if(t===\"\"){u.uboLog(f,`Arguments:\\n${n.join(\"\\n\")}`);return e.reflect()}for(let t=0;t<i.length;t++){const r=i[t];if(r===void 0)continue;const f=t<n.length?n[t]:void 0;if(r.type===\"exact\")if(f!==r.value)return e.reflect();if(r.type===\"pattern\")if(u.RegExp_test.call(r.re,f)===false)return e.reflect()}if(r===\"debug\"){debugger;return e.reflect()}u.uboLog(f,`Suppressed:\\n${n.join(\"\\n\")}`);if(r===\"abort\")throw new ReferenceError}))}",
       "dependencies": [
         "proxy-apply.fn",
         "safe-self.fn"
@@ -964,7 +983,7 @@
         "googlesyndication.com/adsbygoogle.js",
         "googlesyndication-adsbygoogle"
       ],
-      "body": "(function(){\"use strict\";const e=()=>{window.adsbygoogle={loaded:true,push:function(){}};const e=document.querySelectorAll(\".adsbygoogle\");const t=\"height:1px!important;max-height:1px!important;max-width:1px!important;width:1px!important;\";for(let o=0;o<e.length;o++){const n=`aswift_${o}`;if(document.querySelector(`iframe#${n}`)!==null)continue;const d=document.createElement(\"iframe\");d.id=n;d.style=t;const i=document.createElement(\"iframe\");i.id=`google_ads_frame${o}`;d.appendChild(i);e[o].appendChild(d)}};if(document.querySelectorAll(\".adsbygoogle\").length===0&&document.readyState===\"loading\")window.addEventListener(\"DOMContentLoaded\",e,{once:true});else e()})();",
+      "body": "(function(){\"use strict\";const e=()=>{window.adsbygoogle={loaded:true,push:function(){}};const e=document.querySelectorAll(\".adsbygoogle\");const t=\"height:1px!important;max-height:1px!important;max-width:1px!important;width:1px!important;\";for(let o=0;o<e.length;o++){const n=`aswift_${o}`;if(document.querySelector(`iframe#${n}`)!==null)continue;const d=document.createElement(\"iframe\");d.id=n;d.style=t;const a=document.createElement(\"iframe\");a.id=`google_ads_frame${o}`;d.appendChild(a);const i=e[o];i.appendChild(d);i.setAttribute(\"data-adsbygoogle-status\",\"done\")}};if(document.querySelectorAll(\".adsbygoogle\").length===0&&document.readyState===\"loading\")window.addEventListener(\"DOMContentLoaded\",e,{once:true});else e()})();",
       "contentType": "application/javascript"
     },
     {
