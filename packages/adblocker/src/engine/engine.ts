@@ -1024,6 +1024,145 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       };
     }
 
+    const { styleFilters, scriptletFilters, extendedFilters, pureHasFilters, allowGenericHides } =
+      this.getCosmeticFilters({
+        url,
+        hostname,
+        domain,
+        classes,
+        hrefs,
+        ids,
+        getBaseRules,
+        getInjectionRules,
+        getExtendedRules,
+        getRulesFromDOM,
+        getRulesFromHostname,
+        injectPureHasSafely,
+        hidingStyle,
+        callerContext,
+      });
+
+    const { extended, scripts, stylesheet } = this.injectCosmeticFilters({
+      styleFilters,
+      scriptletFilters,
+      extendedFilters,
+      pureHasFilters,
+      allowGenericHides,
+      getBaseRules,
+      hidingStyle,
+    });
+
+    for (const script of scripts) {
+      this.emit('script-injected', script, url);
+    }
+
+    if (stylesheet.length !== 0) {
+      this.emit('style-injected', stylesheet, url);
+    }
+
+    return {
+      active: true,
+      extended,
+      scripts,
+      styles: stylesheet,
+    };
+  }
+
+  public injectCosmeticFilters({
+    scriptletFilters,
+    styleFilters,
+    extendedFilters,
+    pureHasFilters,
+    allowGenericHides,
+    getBaseRules,
+    hidingStyle,
+  }: {
+    scriptletFilters: CosmeticFilter[];
+    styleFilters: CosmeticFilter[];
+    extendedFilters: CosmeticFilter[];
+    pureHasFilters: CosmeticFilter[];
+    allowGenericHides: boolean;
+    hidingStyle?: string | undefined;
+    getBaseRules?: boolean;
+  }) {
+    // Perform interpolation for injected scripts
+    const scripts: string[] = [];
+    for (const scriptletFilter of scriptletFilters) {
+      const script = scriptletFilter.getScript(this.resources.getScriptlet.bind(this.resources));
+      if (script !== undefined) {
+        scripts.push(script);
+      }
+    }
+
+    const stylesheets = this.cosmetics.getStylesheetsFromFilters(
+      {
+        filters: styleFilters,
+        extendedFilters,
+      },
+      { getBaseRules, allowGenericHides, hidingStyle },
+    );
+    const { extended } = stylesheets;
+    let { stylesheet } = stylesheets;
+
+    for (const safeHasFilter of pureHasFilters) {
+      stylesheet += `\n\n${createStylesheet([safeHasFilter.getSelector()], hidingStyle)}`;
+    }
+
+    return {
+      extended,
+      scripts,
+      stylesheet,
+    };
+  }
+
+  public getCosmeticFilters({
+    // Page information
+    url,
+    hostname,
+    domain,
+
+    // DOM information
+    classes,
+    hrefs,
+    ids,
+
+    // Allows to specify which rules to return
+    getInjectionRules = true,
+    getExtendedRules = true,
+    getRulesFromDOM = true,
+    getRulesFromHostname = true,
+
+    // inject extended selector filters
+    injectPureHasSafely = false,
+
+    hidingStyle,
+    callerContext,
+  }: {
+    url: string;
+    hostname: string;
+    domain: string | null | undefined;
+
+    classes?: string[] | undefined;
+    hrefs?: string[] | undefined;
+    ids?: string[] | undefined;
+
+    getBaseRules?: boolean;
+    getInjectionRules?: boolean;
+    getExtendedRules?: boolean;
+    getRulesFromDOM?: boolean;
+    getRulesFromHostname?: boolean;
+
+    injectPureHasSafely?: boolean;
+
+    hidingStyle?: string | undefined;
+    callerContext?: any | undefined;
+  }): {
+    scriptletFilters: CosmeticFilter[];
+    styleFilters: CosmeticFilter[];
+    extendedFilters: CosmeticFilter[];
+    pureHasFilters: CosmeticFilter[];
+    allowGenericHides: boolean;
+  } {
     domain ||= '';
 
     let allowGenericHides = true;
@@ -1101,7 +1240,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       );
     }
 
-    const injections: CosmeticFilter[] = [];
+    const scriptletFilters: CosmeticFilter[] = [];
     const styleFilters: CosmeticFilter[] = [];
     const extendedFilters: CosmeticFilter[] = [];
     const pureHasFilters: CosmeticFilter[] = [];
@@ -1120,10 +1259,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
         let applied = false;
 
-        // Dispatch filters in `injections` or `styles` depending on type
+        // Dispatch filters in `scriptletFilters` or `styles` depending on type
         if (filter.isScriptInject() === true) {
           if (getInjectionRules === true && injectionsDisabled === false) {
-            injections.push(filter);
+            scriptletFilters.push(filter);
             applied = true;
           }
         } else if (filter.isExtended()) {
@@ -1157,40 +1296,12 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       }
     }
 
-    // Perform interpolation for injected scripts
-    const scripts: string[] = [];
-    for (const injection of injections) {
-      const script = injection.getScript(this.resources.getScriptlet.bind(this.resources));
-      if (script !== undefined) {
-        this.emit('script-injected', script, url);
-        scripts.push(script);
-      }
-    }
-
-    const stylesheets = this.cosmetics.getStylesheetsFromFilters(
-      {
-        filters: styleFilters,
-        extendedFilters,
-      },
-      { getBaseRules, allowGenericHides, hidingStyle },
-    );
-    const { extended } = stylesheets;
-    let { stylesheet } = stylesheets;
-
-    for (const safeHasFilter of pureHasFilters) {
-      stylesheet += `\n\n${createStylesheet([safeHasFilter.getSelector()], hidingStyle)}`;
-    }
-
-    // Emit events
-    if (stylesheet.length !== 0) {
-      this.emit('style-injected', stylesheet, url);
-    }
-
     return {
-      active: true,
-      extended,
-      scripts,
-      styles: stylesheet,
+      scriptletFilters,
+      styleFilters,
+      extendedFilters,
+      pureHasFilters,
+      allowGenericHides,
     };
   }
 
