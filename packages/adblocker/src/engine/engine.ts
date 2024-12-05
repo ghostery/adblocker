@@ -1049,11 +1049,12 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
     const { extended, scripts, styles } = this.injectCosmeticFilters(filters, {
       url,
+      injectScriptlets: getInjectionRules,
+      injectExtended: getExtendedRules === true && this.config.loadExtendedSelectors,
+      injectPureHasSafely,
       allowGenericHides,
       getBaseRules,
       hidingStyle,
-      injectPureHasSafely,
-      injectExtended: getExtendedRules === true && this.config.loadExtendedSelectors,
     });
 
     return {
@@ -1068,18 +1069,26 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     filters: CosmeticFilter[],
     {
       url,
+
+      injectStyles = true,
+      injectScriptlets,
+      injectExtended,
+      injectPureHasSafely,
+
       allowGenericHides = true,
       getBaseRules,
       hidingStyle,
-      injectPureHasSafely,
-      injectExtended,
     }: {
       url: string;
+
+      injectStyles?: boolean;
+      injectScriptlets: boolean;
+      injectExtended: boolean;
+      injectPureHasSafely: boolean;
+
       allowGenericHides?: boolean;
       hidingStyle?: string | undefined;
       getBaseRules?: boolean;
-      injectPureHasSafely: boolean;
-      injectExtended: boolean;
     },
   ): {
     scripts: string[];
@@ -1092,7 +1101,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const pureHasFilters = [];
 
     for (const filter of filters) {
-      if (filter.isScriptInject()) {
+      if (injectScriptlets && filter.isScriptInject()) {
         const script = filter.getScript(this.resources.getScriptlet.bind(this.resources));
         if (script !== undefined) {
           scripts.push(script);
@@ -1104,7 +1113,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         if (injectPureHasSafely && filter.isPureHasSelector()) {
           pureHasFilters.push(filter);
         }
-      } else {
+      } else if (injectStyles === true) {
         styleFilters.push(filter);
       }
     }
