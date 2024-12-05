@@ -347,7 +347,6 @@ export default class CosmeticFilterBucket {
     getRulesFromDOM = true,
     getRulesFromHostname = true,
 
-    hidingStyle = DEFAULT_HIDING_STYLE,
     isFilterExcluded,
   }: {
     domain: string;
@@ -401,7 +400,7 @@ export default class CosmeticFilterBucket {
     // matches the hostname and domain since some generic rules can specify
     // negated hostnames and entities (e.g.: ~foo.*##generic).
     if (allowGenericHides === true && getRulesFromHostname === true) {
-      const genericRules = this.getGenericRules(hidingStyle);
+      const genericRules = this.getGenericRules();
       for (const filter of genericRules) {
         if (filter.match(hostname, domain) === true && !isFilterExcluded?.(filter)) {
           filters.push(filter);
@@ -496,9 +495,11 @@ export default class CosmeticFilterBucket {
     extended: IMessageFromBackground['extended'];
   } {
     let stylesheet: string =
-      getBaseRules === false || allowGenericHides === false
-        ? ''
-        : this.getBaseStylesheet(hidingStyle);
+      getBaseRules === false || allowGenericHides === false ? '' : this.getBaseStylesheet();
+
+    if (hidingStyle !== DEFAULT_HIDING_STYLE) {
+      stylesheet = stylesheet.replace(DEFAULT_HIDING_STYLE, hidingStyle);
+    }
 
     if (filters.length !== 0) {
       if (stylesheet.length !== 0) {
@@ -545,9 +546,9 @@ export default class CosmeticFilterBucket {
    * Return the list of filters which can potentially be un-hidden by another
    * rule currently contained in the cosmetic bucket.
    */
-  private getGenericRules(hidingStyle: string): CosmeticFilter[] {
+  private getGenericRules(): CosmeticFilter[] {
     if (this.extraGenericRules === null) {
-      return this.lazyPopulateGenericRulesCache(hidingStyle).genericRules;
+      return this.lazyPopulateGenericRulesCache().genericRules;
     }
     return this.extraGenericRules;
   }
@@ -559,9 +560,9 @@ export default class CosmeticFilterBucket {
    * the same for all sites. We generate it once and re-use it any-time we want
    * to inject it.
    */
-  private getBaseStylesheet(hidingStyle: string): string {
+  private getBaseStylesheet(): string {
     if (this.baseStylesheet === null) {
-      return this.lazyPopulateGenericRulesCache(hidingStyle).baseStylesheet;
+      return this.lazyPopulateGenericRulesCache().baseStylesheet;
     }
     return this.baseStylesheet;
   }
@@ -573,7 +574,7 @@ export default class CosmeticFilterBucket {
    * be un-hidden. Since this list will not change between updates we can
    * generate once and use many times.
    */
-  private lazyPopulateGenericRulesCache(hidingStyle: string): {
+  private lazyPopulateGenericRulesCache(): {
     baseStylesheet: string;
     genericRules: CosmeticFilter[];
   } {
@@ -608,7 +609,7 @@ export default class CosmeticFilterBucket {
         }
       }
 
-      this.baseStylesheet = createStylesheetFromRules(cannotBeHiddenRules, hidingStyle);
+      this.baseStylesheet = createStylesheetFromRules(cannotBeHiddenRules);
       this.extraGenericRules = canBeHiddenRules;
     }
 

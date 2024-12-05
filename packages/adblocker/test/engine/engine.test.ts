@@ -931,15 +931,40 @@ foo.com###selector
       });
     });
 
-    it('handles custom default hiding styles', () => {
-      expect(
-        Engine.parse('foo.com###id').getCosmeticsFilters({
-          domain: 'foo.com',
-          hostname: 'foo.com',
-          url: 'https://foo.com',
-          hidingStyle: 'visibility: none;',
-        }).styles,
-      ).to.be.eql(`#id { visibility: none; }`);
+    context('with hidingStyle', () => {
+      it('handles custom default hiding styles', () => {
+        expect(
+          Engine.parse('foo.com###id').getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            hidingStyle: 'visibility: none;',
+          }).styles,
+        ).to.be.eql(`#id { visibility: none; }`);
+      });
+
+      it('affects generic filters', () => {
+        const engine = Engine.parse('##test');
+        expect(
+          engine.getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getBaseRules: true,
+            hidingStyle: 'visibility: none;',
+          }).styles,
+        ).to.be.eql(`test { visibility: none; }`);
+        // generic filters are cached but should still respect hidingStyle
+        expect(
+          engine.getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getBaseRules: true,
+            hidingStyle: 'visibility: collapse;',
+          }).styles,
+        ).to.be.eql(`test { visibility: collapse; }`);
+      });
     });
 
     context('with has selectors', function () {
