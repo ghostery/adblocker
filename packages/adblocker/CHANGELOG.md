@@ -1,3 +1,35 @@
+# v2.1.2 (Thu Dec 05 2024)
+
+#### :bug: Bug Fix
+
+- Fix: hidingStyles should not be cached [#4500](https://github.com/ghostery/adblocker/pull/4500) ([@chrmod](https://github.com/chrmod))
+- Update local assets and compression codebooks (ghostery-adblocker-bot@users.noreply.github.com)
+- Fix assets update CI ([@chrmod](https://github.com/chrmod))
+- Build(deps-dev): Bump mocha from 10.8.2 to 11.0.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### :house: Internal
+
+- Update local assets [#4493](https://github.com/ghostery/adblocker/pull/4493) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Fix assets update CI [#4492](https://github.com/ghostery/adblocker/pull/4492) ([@chrmod](https://github.com/chrmod))
+- chore: export referenceable components [#4476](https://github.com/ghostery/adblocker/pull/4476) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump typescript-eslint from 8.16.0 to 8.17.0 [#4490](https://github.com/ghostery/adblocker/pull/4490) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump mocha from 10.8.2 to 11.0.1 [#4489](https://github.com/ghostery/adblocker/pull/4489) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.286 to 0.0.287 [#4480](https://github.com/ghostery/adblocker/pull/4480) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 33.2.0 to 33.2.1 [#4481](https://github.com/ghostery/adblocker/pull/4481) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.1.1 (Wed Nov 20 2024)
 
 #### :bug: Bug Fix

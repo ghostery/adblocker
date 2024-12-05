@@ -1,3 +1,28 @@
+# v2.1.2 (Thu Dec 05 2024)
+
+#### :bug: Bug Fix
+
+- Build(deps-dev): Bump @types/chrome from 0.0.286 to 0.0.287 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.283 to 0.0.286 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### :house: Internal
+
+- fix(benchmark): convert cjs to nodenext [#4465](https://github.com/ghostery/adblocker/pull/4465) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/chrome from 0.0.286 to 0.0.287 [#4480](https://github.com/ghostery/adblocker/pull/4480) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump axios from 1.7.7 to 1.7.8 [#4475](https://github.com/ghostery/adblocker/pull/4475) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump prettier from 3.3.3 to 3.4.0 [#4474](https://github.com/ghostery/adblocker/pull/4474) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.283 to 0.0.286 [#4471](https://github.com/ghostery/adblocker/pull/4471) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.1.0 (Wed Nov 20 2024)
 
 #### :bug: Bug Fix
