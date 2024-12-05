@@ -362,7 +362,6 @@ export default class CosmeticFilterBucket {
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
 
-    hidingStyle?: string | undefined;
     isFilterExcluded?: (filter: CosmeticFilter) => boolean;
   }): {
     filters: CosmeticFilter[];
