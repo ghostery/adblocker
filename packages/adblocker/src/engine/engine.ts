@@ -1047,7 +1047,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       }
     }
 
-    const { extended, scripts, stylesheet } = this.injectCosmeticFilters(filters, {
+    const { extended, scripts, styles } = this.injectCosmeticFilters(filters, {
       url,
       allowGenericHides,
       getBaseRules,
@@ -1060,7 +1060,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       active: true,
       extended,
       scripts,
-      styles: stylesheet,
+      styles,
     };
   }
 
@@ -1084,7 +1084,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
   ): {
     scripts: string[];
     extended: IMessageFromBackground['extended'];
-    stylesheet: string;
+    styles: string;
   } {
     const scripts = [];
     const styleFilters = [];
@@ -1117,23 +1117,23 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       { getBaseRules, allowGenericHides, hidingStyle },
     );
 
-    let stylesheet = stylesheets.stylesheet;
+    let styles = stylesheets.stylesheet;
     for (const filter of pureHasFilters) {
-      stylesheet += `\n\n${createStylesheet([filter.getSelector()], hidingStyle)}`;
+      styles += `\n\n${createStylesheet([filter.getSelector()], hidingStyle)}`;
     }
 
     for (const script of scripts) {
       this.emit('script-injected', script, url);
     }
 
-    if (stylesheet.length !== 0) {
-      this.emit('style-injected', stylesheet, url);
+    if (styles.length !== 0) {
+      this.emit('style-injected', styles, url);
     }
 
     return {
       extended: stylesheets.extended,
       scripts,
-      stylesheet,
+      styles,
     };
   }
 
