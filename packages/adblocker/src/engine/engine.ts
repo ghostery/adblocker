@@ -1050,7 +1050,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const { extended, scripts, styles } = this.injectCosmeticFilters(filters, {
       url,
       injectScriptlets: getInjectionRules,
-      injectExtended: getExtendedRules === true && this.config.loadExtendedSelectors,
+      injectExtended: getExtendedRules,
       injectPureHasSafely,
       allowGenericHides,
       getBaseRules,
@@ -1107,7 +1107,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           scripts.push(script);
         }
       } else if (filter.isExtended()) {
-        if (injectExtended === true) {
+        if (injectExtended === true && this.config.loadExtendedSelectors) {
           extendedFilters.push(filter);
         }
         if (injectPureHasSafely && filter.isPureHasSelector()) {
