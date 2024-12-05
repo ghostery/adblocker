@@ -1033,25 +1033,15 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       ids,
       getRulesFromDOM,
       getRulesFromHostname,
+      getInjectionRules,
+      getExtendedRules,
+      getPureHasRules: injectPureHasSafely,
       callerContext,
     });
 
     const filters = [];
 
     for (const { filter, exception } of matches) {
-      if (filter.isScriptInject() && getInjectionRules === false) {
-        continue;
-      }
-
-      if (
-        filter.isExtended() &&
-        (getExtendedRules === false || this.config.loadExtendedSelectors === false) &&
-        // skip extended but not if we try to inject pure has safely
-        !(injectPureHasSafely && filter.isPureHasSelector())
-      ) {
-        continue;
-      }
-
       if (exception === undefined) {
         filters.push(filter);
       }
@@ -1160,6 +1150,9 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
     getRulesFromDOM = true,
     getRulesFromHostname = true,
+    getInjectionRules,
+    getExtendedRules,
+    getPureHasRules,
 
     callerContext,
   }: {
@@ -1173,6 +1166,9 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
+    getInjectionRules?: boolean;
+    getExtendedRules?: boolean;
+    getPureHasRules?: boolean;
 
     callerContext?: any | undefined;
   }): {
@@ -1270,6 +1266,18 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         if (injectionsDisabledFilter !== undefined) {
           exception = injectionsDisabledFilter;
         }
+        if (getInjectionRules === false) {
+          continue;
+        }
+      }
+
+      if (
+        filter.isExtended() &&
+        (getExtendedRules === false || this.config.loadExtendedSelectors === false) &&
+        // skip extended but not if we try to inject pure has safely
+        !(getPureHasRules && filter.isPureHasSelector())
+      ) {
+        continue;
       }
 
       matches.push({ filter, exception });
