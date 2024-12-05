@@ -1033,7 +1033,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       ids,
       getRulesFromDOM,
       getRulesFromHostname,
-      hidingStyle,
       callerContext,
     });
 
@@ -1162,7 +1161,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromDOM = true,
     getRulesFromHostname = true,
 
-    hidingStyle,
     callerContext,
   }: {
     url: string;
@@ -1176,7 +1174,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
 
-    hidingStyle?: string | undefined;
     callerContext?: any | undefined;
   }): {
     matches: {
