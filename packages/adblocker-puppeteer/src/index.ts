@@ -252,7 +252,7 @@ export class PuppeteerBlocker extends FiltersEngine {
     // `enableMutationObserver` is disabled in config, which means that we
     // should not actively monitor the DOM for changes.
     let numberOfIterations = 0;
-    for (;;) {
+    do {
       if (frame.isDetached()) {
         break;
       }
@@ -279,7 +279,8 @@ export class PuppeteerBlocker extends FiltersEngine {
       }
 
       await sleep(500);
-    }
+      // eslint-disable-next-line no-constant-condition
+    } while (true);
   };
 
   public setRequestInterceptionPriority = (defaultPriority = 0) =>

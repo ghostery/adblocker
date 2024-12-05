@@ -242,7 +242,7 @@ export class PlaywrightBlocker extends FiltersEngine {
     // `enableMutationObserver` is disabled in config, which means that we
     // should not actively monitor the DOM for changes.
     let numberOfIterations = 0;
-    for (;;) {
+    do {
       if (frame.isDetached()) {
         break;
       }
@@ -269,7 +269,8 @@ export class PlaywrightBlocker extends FiltersEngine {
       }
 
       await sleep(500);
-    }
+      // eslint-disable-next-line no-constant-condition
+    } while (true);
   };
 
   public onRequest = async (route: pw.Route): Promise<void> => {
