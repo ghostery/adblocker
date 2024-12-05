@@ -1024,32 +1024,59 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       };
     }
 
-    const { styleFilters, scriptletFilters, extendedFilters, pureHasFilters, allowGenericHides } =
-      this.getCosmeticFilters({
-        url,
-        hostname,
-        domain,
-        classes,
-        hrefs,
-        ids,
-        getBaseRules,
-        getInjectionRules,
-        getExtendedRules,
-        getRulesFromDOM,
-        getRulesFromHostname,
-        injectPureHasSafely,
-        hidingStyle,
-        callerContext,
-      });
+    const { matches, allowGenericHides } = this.getCosmeticFilters({
+      url,
+      hostname,
+      domain,
+      classes,
+      hrefs,
+      ids,
+      getRulesFromDOM,
+      getRulesFromHostname,
+      hidingStyle,
+    });
 
-    const { extended, scripts, stylesheet } = this.injectCosmeticFilters(
-      [...styleFilters, ...scriptletFilters, ...extendedFilters, ...pureHasFilters],
-      {
-        allowGenericHides,
-        getBaseRules,
-        hidingStyle,
-      },
-    );
+    const filters = [];
+
+    for (const { filter, exception } of matches) {
+      if (filter.isScriptInject() && getInjectionRules === false) {
+        continue;
+      }
+
+      if (
+        filter.isExtended() &&
+        (getExtendedRules === false || this.config.loadExtendedSelectors === false) &&
+        // skip extended but not if we try to inject pure has safely
+        !(injectPureHasSafely && filter.isPureHasSelector())
+      ) {
+        continue;
+      }
+
+      this.emit(
+        'filter-matched',
+        {
+          filter,
+          exception,
+        },
+        {
+          url,
+          callerContext,
+          filterType: FilterType.COSMETIC,
+        },
+      );
+
+      if (exception === undefined) {
+        filters.push(filter);
+      }
+    }
+
+    const { extended, scripts, stylesheet } = this.injectCosmeticFilters(filters, {
+      allowGenericHides,
+      getBaseRules,
+      hidingStyle,
+      injectPureHasSafely,
+      injectExtended: getExtendedRules === true && this.config.loadExtendedSelectors,
+    });
 
     for (const script of scripts) {
       this.emit('script-injected', script, url);
@@ -1073,10 +1100,14 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       allowGenericHides = true,
       getBaseRules,
       hidingStyle,
+      injectPureHasSafely,
+      injectExtended,
     }: {
       allowGenericHides?: boolean;
       hidingStyle?: string | undefined;
       getBaseRules?: boolean;
+      injectPureHasSafely: boolean;
+      injectExtended: boolean;
     },
   ): {
     scripts: string[];
@@ -1095,8 +1126,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           scripts.push(script);
         }
       } else if (filter.isExtended()) {
-        extendedFilters.push(filter);
-        if (filter.isPureHasSelector()) {
+        if (injectExtended === true) {
+          extendedFilters.push(filter);
+        }
+        if (injectPureHasSafely && filter.isPureHasSelector()) {
           pureHasFilters.push(filter);
         }
       } else {
@@ -1135,17 +1168,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     hrefs,
     ids,
 
-    // Allows to specify which rules to return
-    getInjectionRules = true,
-    getExtendedRules = true,
     getRulesFromDOM = true,
     getRulesFromHostname = true,
 
-    // inject extended selector filters
-    injectPureHasSafely = false,
-
     hidingStyle,
-    callerContext,
   }: {
     url: string;
     hostname: string;
@@ -1155,21 +1181,15 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     hrefs?: string[] | undefined;
     ids?: string[] | undefined;
 
-    getBaseRules?: boolean;
-    getInjectionRules?: boolean;
-    getExtendedRules?: boolean;
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
 
-    injectPureHasSafely?: boolean;
-
     hidingStyle?: string | undefined;
-    callerContext?: any | undefined;
   }): {
-    scriptletFilters: CosmeticFilter[];
-    styleFilters: CosmeticFilter[];
-    extendedFilters: CosmeticFilter[];
-    pureHasFilters: CosmeticFilter[];
+    matches: {
+      filter: CosmeticFilter;
+      exception: CosmeticFilter | undefined;
+    }[];
     allowGenericHides: boolean;
   } {
     domain ||= '';
@@ -1214,7 +1234,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       allowSpecificHides = shouldApplyHideException(specificHides) === false;
     }
 
-    // Lookup injections as well as stylesheets
     const { filters, unhides } = this.cosmetics.getCosmeticsFilters({
       domain,
       hostname,
@@ -1232,7 +1251,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       isFilterExcluded: this.isFilterExcluded.bind(this),
     });
 
-    let injectionsDisabled = false;
+    let injectionsDisabledFilter: CosmeticFilter | undefined = undefined;
     const unhideExceptions: Map<string, CosmeticFilter> = new Map();
 
     for (const unhide of unhides) {
@@ -1241,75 +1260,33 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         unhide.isUnhide() === true &&
         unhide.getSelector().length === 0
       ) {
-        injectionsDisabled = true;
+        injectionsDisabledFilter = unhide;
+      } else {
+        unhideExceptions.set(
+          normalizeSelector(unhide, this.resources.getScriptletCanonicalName.bind(this.resources)),
+          unhide,
+        );
       }
-      unhideExceptions.set(
-        normalizeSelector(unhide, this.resources.getScriptletCanonicalName.bind(this.resources)),
-        unhide,
-      );
     }
 
-    const scriptletFilters: CosmeticFilter[] = [];
-    const styleFilters: CosmeticFilter[] = [];
-    const extendedFilters: CosmeticFilter[] = [];
-    const pureHasFilters: CosmeticFilter[] = [];
+    const matches: { filter: CosmeticFilter; exception: CosmeticFilter | undefined }[] = [];
 
-    if (filters.length !== 0) {
-      // Apply unhide rules + dispatch
-      for (const filter of filters) {
-        // Make sure `rule` is not un-hidden by a #@# filter
-        const exception = unhideExceptions.get(
-          normalizeSelector(filter, this.resources.getScriptletCanonicalName.bind(this.resources)),
-        );
+    for (const filter of filters) {
+      let exception = unhideExceptions.get(
+        normalizeSelector(filter, this.resources.getScriptletCanonicalName.bind(this.resources)),
+      );
 
-        if (exception !== undefined) {
-          continue;
-        }
-
-        let applied = false;
-
-        // Dispatch filters in `scriptletFilters` or `styles` depending on type
-        if (filter.isScriptInject() === true) {
-          if (getInjectionRules === true && injectionsDisabled === false) {
-            scriptletFilters.push(filter);
-            applied = true;
-          }
-        } else if (filter.isExtended()) {
-          if (injectPureHasSafely && filter.isPureHasSelector()) {
-            pureHasFilters.push(filter);
-            applied = true;
-          }
-          if (this.config.loadExtendedSelectors && getExtendedRules === true) {
-            extendedFilters.push(filter);
-            applied = true;
-          }
-        } else {
-          styleFilters.push(filter);
-          applied = true;
-        }
-
-        if (applied) {
-          this.emit(
-            'filter-matched',
-            {
-              filter,
-              exception,
-            },
-            {
-              url,
-              callerContext,
-              filterType: FilterType.COSMETIC,
-            },
-          );
+      if (filter.isScriptInject()) {
+        if (injectionsDisabledFilter !== undefined) {
+          exception = injectionsDisabledFilter;
         }
       }
+
+      matches.push({ filter, exception });
     }
 
     return {
-      scriptletFilters,
-      styleFilters,
-      extendedFilters,
-      pureHasFilters,
+      matches,
       allowGenericHides,
     };
   }
