@@ -1024,7 +1024,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       };
     }
 
-    const { matches, allowGenericHides } = this.getCosmeticFilters({
+    const { matches, allowGenericHides } = this.matchCosmeticFilters({
       url,
       hostname,
       domain,
@@ -1034,6 +1034,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       getRulesFromDOM,
       getRulesFromHostname,
       hidingStyle,
+      callerContext,
     });
 
     const filters = [];
@@ -1052,39 +1053,19 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         continue;
       }
 
-      this.emit(
-        'filter-matched',
-        {
-          filter,
-          exception,
-        },
-        {
-          url,
-          callerContext,
-          filterType: FilterType.COSMETIC,
-        },
-      );
-
       if (exception === undefined) {
         filters.push(filter);
       }
     }
 
     const { extended, scripts, stylesheet } = this.injectCosmeticFilters(filters, {
+      url,
       allowGenericHides,
       getBaseRules,
       hidingStyle,
       injectPureHasSafely,
       injectExtended: getExtendedRules === true && this.config.loadExtendedSelectors,
     });
-
-    for (const script of scripts) {
-      this.emit('script-injected', script, url);
-    }
-
-    if (stylesheet.length !== 0) {
-      this.emit('style-injected', stylesheet, url);
-    }
 
     return {
       active: true,
@@ -1097,12 +1078,14 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
   public injectCosmeticFilters(
     filters: CosmeticFilter[],
     {
+      url,
       allowGenericHides = true,
       getBaseRules,
       hidingStyle,
       injectPureHasSafely,
       injectExtended,
     }: {
+      url: string;
       allowGenericHides?: boolean;
       hidingStyle?: string | undefined;
       getBaseRules?: boolean;
@@ -1150,6 +1133,14 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       stylesheet += `\n\n${createStylesheet([filter.getSelector()], hidingStyle)}`;
     }
 
+    for (const script of scripts) {
+      this.emit('script-injected', script, url);
+    }
+
+    if (stylesheet.length !== 0) {
+      this.emit('style-injected', stylesheet, url);
+    }
+
     return {
       extended: stylesheets.extended,
       scripts,
@@ -1157,7 +1148,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     };
   }
 
-  public getCosmeticFilters({
+  public matchCosmeticFilters({
     // Page information
     url,
     hostname,
@@ -1172,6 +1163,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromHostname = true,
 
     hidingStyle,
+    callerContext,
   }: {
     url: string;
     hostname: string;
@@ -1185,6 +1177,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromHostname?: boolean;
 
     hidingStyle?: string | undefined;
+    callerContext?: any | undefined;
   }): {
     matches: {
       filter: CosmeticFilter;
@@ -1283,6 +1276,19 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       }
 
       matches.push({ filter, exception });
+
+      this.emit(
+        'filter-matched',
+        {
+          filter,
+          exception,
+        },
+        {
+          url,
+          callerContext,
+          filterType: FilterType.COSMETIC,
+        },
+      );
     }
 
     return {
