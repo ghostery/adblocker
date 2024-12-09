@@ -1065,6 +1065,9 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     };
   }
 
+  /**
+   * Prepares cosmetic filters to be injected by compiling them to stylesheets, scripts and extented selector ASTs.
+   */
   public injectCosmeticFilters(
     filters: CosmeticFilter[],
     {
