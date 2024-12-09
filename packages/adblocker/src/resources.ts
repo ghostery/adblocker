@@ -9,6 +9,7 @@
 import { getResourceForMime } from '@remusao/small';
 
 import { StaticDataView, sizeOfUTF8, sizeOfASCII, sizeOfBool, sizeOfByte } from './data-view.js';
+import { getBit, setBit } from './utils.js';
 
 // Polyfill for `btoa`
 function btoaPolyfill(buffer: string): string {
@@ -122,6 +123,13 @@ const assembleScript = (script: string, dependencies: string[] = []): string =>
     `(${script})(...['{{1}}','{{2}}','{{3}}','{{4}}','{{5}}','{{6}}','{{7}}','{{8}}','{{9}}','{{10}}'].filter((a,i) => a !== '{{'+(i+1)+'}}').map((a) => decodeURIComponent(a)))`,
   ].join(';');
 
+const enum RESOURCES_MASK {
+  executionWorldOfMain = 1 << 0,
+  executionWorldOfIsolated = 2 << 0,
+  scriptletElevationRequired = 3 << 0,
+  scriptletElevationNotRequired = 4 << 0,
+}
+
 /**
  * Abstraction on top of resources.txt used for redirections as well as script
  * injections. It contains logic to parse, serialize and get resources by name
@@ -150,16 +158,13 @@ export default class Resources {
     }
 
     for (let i = 0, numberOfScriptlets = buffer.getUint16(); i < numberOfScriptlets; i++) {
+      const mask = buffer.getUint8();
       const name = buffer.getASCII();
       const aliases: string[] = [];
       for (let i = 0, numberOfAliases = buffer.getUint16(); i < numberOfAliases; i++) {
         aliases.push(buffer.getASCII());
       }
       const body = buffer.getUTF8();
-      const hasExecutionWorld = buffer.getBool();
-      const isExecutionWorldIsolated = buffer.getBool();
-      const hasRequiresTrust = buffer.getBool();
-      const requiresTrust = buffer.getBool();
       const dependencies: string[] = [];
       for (let i = 0, numberOfDependencies = buffer.getUint16(); i < numberOfDependencies; i++) {
         dependencies.push(buffer.getASCII());
@@ -170,11 +175,15 @@ export default class Resources {
         body,
         dependencies,
       };
-      if (hasExecutionWorld) {
-        scriptlet.executionWorld = isExecutionWorldIsolated === true ? 'ISOLATED' : 'MAIN';
+      if (getBit(mask, RESOURCES_MASK.executionWorldOfMain)) {
+        scriptlet.executionWorld = 'MAIN';
+      } else if (getBit(mask, RESOURCES_MASK.executionWorldOfIsolated)) {
+        scriptlet.executionWorld = 'ISOLATED';
       }
-      if (hasRequiresTrust) {
-        scriptlet.requiresTrust = requiresTrust;
+      if (getBit(mask, RESOURCES_MASK.scriptletElevationRequired)) {
+        scriptlet.requiresTrust = true;
+      } else if (getBit(mask, RESOURCES_MASK.scriptletElevationNotRequired)) {
+        scriptlet.requiresTrust = false;
       }
       scriptlets.push(scriptlet);
     }
@@ -389,6 +398,7 @@ export default class Resources {
     }
 
     estimatedSize += 2 * sizeOfByte();
+    estimatedSize += this.scriptlets.length; // mask
     for (const { name, aliases, body: content, dependencies } of this.scriptlets) {
       estimatedSize += sizeOfASCII(name);
       estimatedSize += aliases.reduce(
@@ -396,10 +406,6 @@ export default class Resources {
         2 * sizeOfByte(),
       );
       estimatedSize += sizeOfUTF8(content);
-      estimatedSize += sizeOfBool(); // executionWorld present
-      estimatedSize += sizeOfBool(); // executionWorld
-      estimatedSize += sizeOfBool(); // requiresTrust present
-      estimatedSize += sizeOfBool(); // requiresTrust
       estimatedSize += dependencies.reduce(
         (state, dependency) => state + sizeOfASCII(dependency),
         2 * sizeOfByte(),
@@ -435,16 +441,24 @@ export default class Resources {
       executionWorld,
       requiresTrust,
     } of this.scriptlets) {
+      let mask = 0;
+      if (executionWorld === 'MAIN') {
+        mask = setBit(mask, RESOURCES_MASK.executionWorldOfMain);
+      } else {
+        mask = setBit(mask, RESOURCES_MASK.executionWorldOfIsolated);
+      }
+      if (requiresTrust === true) {
+        mask = setBit(mask, RESOURCES_MASK.scriptletElevationRequired);
+      } else if (requiresTrust === false) {
+        mask = setBit(mask, RESOURCES_MASK.scriptletElevationNotRequired);
+      }
+      buffer.pushUint8(mask);
       buffer.pushASCII(name);
       buffer.pushUint16(aliases.length);
       for (const alias of aliases) {
         buffer.pushASCII(alias);
       }
       buffer.pushUTF8(content);
-      buffer.pushBool(executionWorld !== undefined);
-      buffer.pushBool(executionWorld === 'ISOLATED');
-      buffer.pushBool(requiresTrust !== undefined);
-      buffer.pushBool(requiresTrust === true);
       buffer.pushUint16(dependencies.length);
       dependencies.forEach((dependency) => buffer.pushASCII(dependency));
     }
