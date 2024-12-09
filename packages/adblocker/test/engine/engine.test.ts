@@ -1051,6 +1051,35 @@ foo.com###selector
           `#test { display: none !important; }\n\naside:has(a.ad-remove) { display: none !important; }`,
         );
       });
+
+      it('respects custom styles', function () {
+        expect(
+          Engine.parse(`foo.com##body:has(a):style(visibility: hidden !important;)`, {
+            loadExtendedSelectors: false,
+          }).getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getExtendedRules: false,
+            injectPureHasSafely: true,
+          }).styles,
+        ).to.be.eql(`\n\nbody:has(a) { visibility: hidden !important; }`);
+
+        expect(
+          Engine.parse(
+            `
+            foo.com##body:has(a):style(visibility: hidden !important;)
+            foo.com#@#body:has(a):style(visibility: hidden !important;)
+          `,
+          ).getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getExtendedRules: false,
+            injectPureHasSafely: true,
+          }).styles,
+        ).to.be.eql('');
+      });
     });
 
     context('with :styles psuedo-class', function () {
