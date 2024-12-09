@@ -1178,7 +1178,11 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     let { stylesheet } = stylesheets;
 
     for (const safeHasFilter of pureHasFilters) {
-      stylesheet += `\n\n${createStylesheet([safeHasFilter.getSelector()], hidingStyle)}`;
+      if (safeHasFilter.hasCustomStyle()) {
+        stylesheet += `\n\n${createStylesheet([safeHasFilter.getSelector()], safeHasFilter.getStyle())}`;
+      } else {
+        stylesheet += `\n\n${createStylesheet([safeHasFilter.getSelector()], hidingStyle)}`;
+      }
     }
 
     // Emit events
