@@ -1,3 +1,28 @@
+# v2.2.0 (Mon Dec 09 2024)
+
+#### :rocket: New Feature
+
+- feat: override config when merging [#4495](https://github.com/ghostery/adblocker/pull/4495) ([@seia-soto](https://github.com/seia-soto))
+
+#### :bug: Bug Fix
+
+- fix: `CosmeticFilter.toString()` ignoring custom style [#4505](https://github.com/ghostery/adblocker/pull/4505) ([@seia-soto](https://github.com/seia-soto))
+- fix: custom styles being ignored for pure has filters [#4506](https://github.com/ghostery/adblocker/pull/4506) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets and compression codebooks (ghostery-adblocker-bot@users.noreply.github.com)
+
+#### :house: Internal
+
+- chore: fix `@typescript-eslint/no-unsafe-member-access` [#4487](https://github.com/ghostery/adblocker/pull/4487) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4501](https://github.com/ghostery/adblocker/pull/4501) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.1.2 (Thu Dec 05 2024)
 
 #### :bug: Bug Fix
