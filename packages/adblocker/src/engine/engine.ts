@@ -37,7 +37,7 @@ import { ICategory } from './metadata/categories.js';
 import { IOrganization } from './metadata/organizations.js';
 import { IPattern } from './metadata/patterns.js';
 
-export const ENGINE_VERSION = 701;
+export const ENGINE_VERSION = 702;
 
 function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   if (filters.length === 0) {
@@ -1131,7 +1131,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
     let styles = stylesheets.stylesheet;
     for (const filter of pureHasFilters) {
-      styles += `\n\n${createStylesheet([filter.getSelector()], hidingStyle)}`;
+      styles += `\n\n${createStylesheet([filter.getSelector()], filter.hasCustomStyle() ? filter.getStyle() : hidingStyle)}`;
     }
 
     for (const script of scripts) {

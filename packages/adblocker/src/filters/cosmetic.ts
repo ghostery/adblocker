@@ -574,6 +574,10 @@ export default class CosmeticFilter implements IFilter {
       filter += this.selector;
     }
 
+    if (this.hasCustomStyle()) {
+      filter += ':style(' + this.getStyle() + ')';
+    }
+
     return filter;
   }
 

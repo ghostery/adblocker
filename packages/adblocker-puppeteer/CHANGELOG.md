@@ -1,3 +1,30 @@
+# v2.1.2 (Thu Dec 05 2024)
+
+#### :bug: Bug Fix
+
+- Build(deps): Bump puppeteer from 23.9.0 to 23.10.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump mocha from 10.8.2 to 11.0.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.8.0 to 23.9.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### :house: Internal
+
+- chore: use `Frame.detached` for puppeteer [#4488](https://github.com/ghostery/adblocker/pull/4488) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 23.9.0 to 23.10.1 [#4496](https://github.com/ghostery/adblocker/pull/4496) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript-eslint from 8.16.0 to 8.17.0 [#4490](https://github.com/ghostery/adblocker/pull/4490) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump mocha from 10.8.2 to 11.0.1 [#4489](https://github.com/ghostery/adblocker/pull/4489) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.61 to 6.1.63 [#4464](https://github.com/ghostery/adblocker/pull/4464) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.8.0 to 23.9.0 [#4463](https://github.com/ghostery/adblocker/pull/4463) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.1.0 (Wed Nov 20 2024)
 
 #### :bug: Bug Fix

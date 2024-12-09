@@ -1,3 +1,20 @@
+# v2.1.2 (Thu Dec 05 2024)
+
+#### :bug: Bug Fix
+
+- Build(deps-dev): Bump mocha from 10.8.2 to 11.0.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump typescript-eslint from 8.16.0 to 8.17.0 [#4490](https://github.com/ghostery/adblocker/pull/4490) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump mocha from 10.8.2 to 11.0.1 [#4489](https://github.com/ghostery/adblocker/pull/4489) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v2.1.0 (Wed Nov 20 2024)
 
 #### :rocket: New Feature
