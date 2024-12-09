@@ -444,7 +444,7 @@ export default class Resources {
       let mask = 0;
       if (executionWorld === 'MAIN') {
         mask = setBit(mask, RESOURCES_MASK.executionWorldOfMain);
-      } else {
+      } else if (executionWorld === 'ISOLATED') {
         mask = setBit(mask, RESOURCES_MASK.executionWorldOfIsolated);
       }
       if (requiresTrust === true) {
