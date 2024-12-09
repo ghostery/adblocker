@@ -1,3 +1,16 @@
+# v2.3.0 (Mon Dec 09 2024)
+
+#### :rocket: New Feature
+
+- `@ghostery/adblocker`
+  - Split cosmetic matching from injection [#4499](https://github.com/ghostery/adblocker/pull/4499) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 1
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.2.0 (Mon Dec 09 2024)
 
 #### :rocket: New Feature
