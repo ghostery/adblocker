@@ -134,14 +134,15 @@ infinityscans.xyz,infinityscans.net,infinityscans.org##div[class="alert alert-da
 @@*$script,denyallow=googletagmanager.com|bidgear.com|googlesyndication.com,domain=infinityscans.xyz|infinityscans.net|infinityscans.org
 ||b5rh0rt.infinityscans.net^$xhr,important
 ! https://github.com/uBlockOrigin/uAssets/issues/8719
-1001tracklists.com##[target="_blank"][rel$=" noopener noreferrer"]:has(> img[src*="/"][src*="_"]), [target="_blank"][rel^="noopener noreferrer"]:has(> img[src*="/"][src*="_"])
-1001tracklists.com##div[style^="text-align: center; margin-bottom: 10px; margin-top: 10px;"]:has(a img[src*="/"][src*="_"])
-1001tracklists.com##div[id]:has(> [data-freestar-ad])
-1001tracklists.com###left > div:not(div[id="artworkLeft"][class="c bgArt"], div[class="fTab"], div[class="aMenu"], [id="lSt"].border, div[class="boxBg rB c mb10"]):has(a img[src*="/"][src*="_"])
-1001tracklists.com###fpLeft > div:not(div[id="lSt"][class=""]):has(a img[src*="/"][src*="_"])
-1001tracklists.com###top > [style]:not(a[id="topLogo"][href="//www.1001tracklists.com"], div[id="pageTitle"], script, div[id="hInfo"]):has(a img[src*="/"][src*="_"])
-1001tracklists.com###left + div[style*="grid"][style*="place-content"]:has(a img[src*="/"][src*="_"])
-1001tracklists.com##+js(spoof-css, %5Btarget%3D%22_blank%22%5D%5Brel%24%3D%22%20noopener%20noreferrer%22%5D%3Ahas(%3E%20img%5Bsrc*%3D%22%2F%22%5D%5Bsrc*%3D%22_%22%5D)%2C%20%5Btarget%3D%22_blank%22%5D%5Brel%5E%3D%22noopener%20noreferrer%22%5D%3Ahas(%3E%20img%5Bsrc*%3D%22%2F%22%5D%5Bsrc*%3D%22_%22%5D), display, block)
+1001tracklists.com##[target="_blank"][rel*="noopener"][rel*="noreferrer"]:has(> img[src*="/"][src*="_"]), [target="_blank"][rel^="noopener noreferrer"]:has(> img[src*="/"][src*="_"])
+1001tracklists.com##div[style^="margin: 10px 0px; text-align: center;"]:has(a img[src*="/"][src*="_"])
+1001tracklists.com##div[style^="text-align: center; margin-bottom: 10px;"]:has(a img[src*="/"][src*="_"])
+1001tracklists.com##div[id]:has(> [data-freestar-ad]):remove()
+1001tracklists.com###root > div[id]:last-child > [style] a[target][rel]:has(img[src*="/"][src*="_"])
+1001tracklists.com###root > div[id]:first-child > [style] a[target][rel]:has(img[src*="/"][src*="_"])
+1001tracklists.com###root > div[id] > div:first-child:not([id], [class]):has(a[target][rel]:has(img[src*="/"][src*="_"]))
+1001tracklists.com##a[href^="https://"][target="_blank"][rel="noopener noreferrer"][onclick*="challenge"]:has(> img[src*="/"][src*="_"][alt][title]):remove()
+1001tracklists.com##+js(spoof-css, %5Btarget%3D%22_blank%22%5D%5Brel*%3D%22noopener%22%5D%5Brel*%3D%22noreferrer%22%5D%3Ahas(%3E%20img%5Bsrc*%3D%22%2F%22%5D%5Bsrc*%3D%22_%22%5D), display, block)
 ! filemoon
 ! https://github.com/AdguardTeam/AdguardFilters/issues/190044
 ! https://www.reddit.com/r/uBlockOrigin/comments/1fuaaw5/asblock_detected_in_ask4porncc
@@ -186,23 +187,25 @@ img-load.com##html,body:style(height: 1px !important; overflow: hidden !importan
 ||karistudio.com/wp-content/themes/blogarise-child/check2.js$important
 karistudio.com##p.chapter_content:style(display: block !important; visibility: visible !important; opacity: 1 !important; transform: none !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/20907
-!cursomecanet.com##+js(nostif, %2Fdocument%5C.write%7CMath%5C.floor%2F)
 cursomecanet.com##+js(no-fetch-if, https, , %7B%22statusText%22%3A%20%22%22%2C%20%22type%22%3A%20%22cors%22%7D)
 cursomecanet.com##+js(aost, fetch, .js%3F)
-cursomecanet.com##[style="display: none;"]:style(display: block !important;)
-cursomecanet.com##[style="display: none;"] + div[id][style*="color:"]
-||cursomecanet.com/registro$xhr,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/25344
 ! https://github.com/uBlockOrigin/uAssets/pull/26342
 bing.com##+js(trusted-replace-argument, DOMTokenList.prototype.contains, 0, , condition, %2F%5Eb_algo%24%2F)
 bing.com##li.b_algo:has(> .b_title a[href^="https://www.bing.com/aclk?"])
+bing.com##li.b_algo:has(> h2 > a[href^="https://www.bing.com/aclk?"])
 ! https://github.com/AdguardTeam/AdguardFilters/issues/183252
 exploader.net#@#article > div[style="margin-left: -63px;width: 1120px;height: 450px;margin-bottom: 5px;display: flex;align-items: center;"]:style(position: absolute !important; clip:rect(1px,1px,1px,1px) !important;)
 exploader.net#@#+js(spoof-css, article%20%3E%20div%5Bstyle%3D%22margin-left%3A%20-63px%3Bwidth%3A%201120px%3Bheight%3A%20450px%3Bmargin-bottom%3A%205px%3Bdisplay%3A%20flex%3Balign-items%3A%20center%3B%22%5D, clip, auto)
 exploader.net#@#+js(spoof-css, a%5Bhref%5E%3D%22https%3A%2F%2Fal.dmm.co%22%5D, display, block)
 exploader.net#@#a[href^="https://al.dmm.co"]
-exploader.net##a[style*="display:"][href^="https://al.dmm.co.jp"]
-exploader.net##+js(spoof-css, a%5Bstyle*%3D%22display%3A%22%5D%5Bhref%5E%3D%22https%3A%2F%2Fal.dmm.co.jp%22%5D, display, flex%20!important)
+exploader.net#@#a[style*="display:"][href^="https://al.dmm.co.jp"]
+exploader.net#@#+js(spoof-css, a%5Bstyle*%3D%22display%3A%22%5D%5Bhref%5E%3D%22https%3A%2F%2Fal.dmm.co.jp%22%5D, display, flex%20!important)
+exploader.net##+js(spoof-css, a%5Bstyle*%3D%22display%3A%22%5D%5Bhref%5E%3D%22https%3A%2F%2Fal.dmm.co.jp%22%5D%20img, height, 20px)
+exploader.net##+js(spoof-css, a%5Bstyle*%3D%22display%3A%22%5D%5Bhref%5E%3D%22https%3A%2F%2Fal.dmm.co.jp%22%5D%20img, display, block)
+exploader.net##a[style*="display:"][href^="https://al.dmm.co.jp"] img
+exploader.net##a[style*="display:"][href^="https://al.dmm.co.jp"] > div:has(img):style(height: 20px !important;)
+exploader.net##a[style*="display:"][href^="https://al.dmm.co.jp"] span
 ! https://github.com/uBlockOrigin/uAssets/issues/26299
 entra.news,microsoftsecurityinsights.com,substack.com#@#+js(trusted-set-cookie, intro_popup_last_hidden_at, %24currentDate%24, , , reload, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/26348
