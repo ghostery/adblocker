@@ -255,8 +255,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     engines: InstanceType<T>[],
     {
       skipResources = false,
+      overrideConfig = {},
     }: {
       skipResources?: boolean;
+      overrideConfig?: Partial<Config>;
     } = {},
   ): InstanceType<T> {
     if (!engines || engines.length < 2) {
@@ -348,7 +350,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       preprocessors,
 
       lists,
-      config,
+      config: new Config({ ...config, ...overrideConfig }),
     }) as InstanceType<T>;
 
     if (
