@@ -20,6 +20,9 @@ export const EMPTY_UINT32_ARRAY = new Uint32Array(0);
 // Check if current architecture is little endian
 const LITTLE_ENDIAN: boolean = new Int8Array(new Int16Array([1]).buffer)[0] === 1;
 
+// TextEncoder doesn't need to be recreated every time unlike TextDecoder
+const TEXT_ENCODER = new TextEncoder();
+
 // Store compression in a lazy, global singleton
 let getCompressionSingleton: () => Compression = () => {
   const COMPRESSION = new Compression();
@@ -87,8 +90,7 @@ export function sizeOfASCII(str: string): number {
  * Return number of bytes needed to serialize `str` UTF8 string.
  */
 export function sizeOfUTF8(str: string): number {
-  const encodedLength = encode(str).length;
-  return encodedLength + sizeOfLength(encodedLength);
+  return 4 + TEXT_ENCODER.encode(str).length;
 }
 
 /**
@@ -389,23 +391,19 @@ export class StaticDataView {
   }
 
   public pushUTF8(raw: string): void {
-    const str = encode(raw);
-    this.pushLength(str.length);
-
-    for (let i = 0; i < str.length; i += 1) {
-      this.buffer[this.pos++] = str.charCodeAt(i);
-    }
+    const pos = this.getPos();
+    const { written } = TEXT_ENCODER.encodeInto(raw, this.buffer.subarray(pos + 4));
+    this.setPos(pos);
+    this.pushUint32(written);
+    this.setPos(pos + 4 + written);
   }
 
   public getUTF8(): string {
-    const byteLength = this.getLength();
-    this.pos += byteLength;
-    return decode(
-      String.fromCharCode.apply(
-        null,
-        // @ts-ignore
-        this.buffer.subarray(this.pos - byteLength, this.pos),
-      ),
+    const byteLength = this.getUint32();
+    const pos = this.getPos();
+    this.setPos(pos + byteLength);
+    return new TextDecoder('utf8', { ignoreBOM: true }).decode(
+      this.buffer.subarray(pos, pos + byteLength),
     );
   }
 
