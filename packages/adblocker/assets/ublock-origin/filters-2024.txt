@@ -2249,9 +2249,18 @@ ezaudiobookforsoul.com##+js(set, cabdSettings, undefined)
 ! https://github.com/uBlockOrigin/uAssets/issues/24299
 ! https://github.com/uBlockOrigin/uAssets/issues/24260
 ||popcdn.day/magnitude.js^
+||popcdn.day/stream/floating.js^
 ||freeshot.live/ads/
 ||freeshot.live/manifest.js
+||www.*.com^$script,3p,redirect-rule=noopjs,domain=freeshot.live
 freeshot.live##+js(no-fetch-if, %2Foutbrain%7Cadligature%7Cquantserve%7Cadligature%7Csrvtrck%2F)
+!#if cap_html_filtering
+freeshot.live##^script:has-text(/h=decodeURIComponent|popundersPerIP/)
+!#else
+freeshot.live##+js(rmnt, script, %2Fh%3DdecodeURIComponent%7CpopundersPerIP%2F)
+!#endif
+freeshot.live##+js(acs, document.querySelectorAll, popMagic)
+popcdn.day##+js(aopw, detectedAdblock)
 ! https://github.com/uBlockOrigin/uAssets/issues/24297#event-13341237136
 watch.shout-tv.com##+js(json-prune-fetch-response, adsConfiguration, , propsToMatch, %2Fvod)
 ! https://github.com/uBlockOrigin/uAssets/issues/24303
@@ -3427,9 +3436,28 @@ ragnarokscanlation.opchapters.com###ad-container
 fapomania.com##+js(nowoif)
 fapomania.com##.menuraduo2
 ! https://netplayz.ru/watch?type=movie&id=645757
-*$script,3p,redirect-rule=noopjs,domain=netplayz.ru
-||premiumvertising.com^$script,redirect=noopjs,domain=netplayz.ru
+||www.*.com^$script,3p,redirect-rule=noopjs,domain=netplayz.ru
+||premiumvertising.com^$script,redirect=noopjs
 netplayz.ru##+js(set-cookie, pop, 1)
 netplayz.ru##+js(nowoif, _blank)
 ###__next > div[style="position:fixed;z-index:9999;top:16px;left:16px;right:16px;bottom:16px;pointer-events:none"]
 ###__next > div.absolute.inset-0.w-full.h-screen.z-\[99999\]
+! https://github.com/uBlockOrigin/uAssets/issues/26354
+!#if cap_html_filtering
+genelify.com##^script:has-text(detectedAdblock)
+!#else
+genelify.com##+js(rmnt, script, detectedAdblock)
+!#endif
+! https://embed.warezcdn.link/filme/tt16366836 warezcdn popup
+basseqwevewcewcewecwcw.xyz##+js(nowoif)
+! https://github.com/uBlockOrigin/uAssets/issues/26362
+sheepesports.com##+js(no-fetch-if, googlesyndication)
+! https://github.com/uBlockOrigin/uAssets/issues/26369
+ebook-hell.to##+js(nowoif)
+||ebook-hell.to/jquery/jspololife.js
+! https://github.com/uBlockOrigin/uAssets/issues/26371
+ibooks.to##+js(rmnt, script, ai_adb)
+! https://github.com/uBlockOrigin/uAssets/issues/26364
+||atf-tagmanager.de^$script,redirect=noopjs,domain=bike-magazin.de
+! https://www.gpldose.com/ anti-adb
+gpldose.com##+js(aopr, Dataffcecd)
