@@ -17,6 +17,8 @@ import {
   NetworkFilter,
   FilterType,
 } from '../src/index.js';
+import { findLastIndexOfUnescapedCharacter } from '../src/utils.js';
+import { getFilterOptions } from '../src/filters/network.js';
 
 class Counter<K> {
   private counter: Map<K, number>;
@@ -200,7 +202,7 @@ async function loadAllLists(): Promise<string> {
         // Filter is not supported as is, try to find out why.
         if (NetworkFilter.parse(line) === null) {
           numberOfFiltersUnsupported += 1;
-          const optionStart = line.lastIndexOf('$');
+          const optionStart = findLastIndexOfUnescapedCharacter(line, '$');
 
           // No option and not supported
           if (optionStart === -1) {
@@ -218,11 +220,11 @@ async function loadAllLists(): Promise<string> {
           // failure. If we can't find one such option, we just report the full line
           // as not being supported.
           let found = false;
-          const options = line.slice(optionStart + 1).split(',');
-          for (const option of options) {
-            if (NetworkFilter.parse(`${line.slice(0, optionStart)}$${option}`) === null) {
+          const options = getFilterOptions(line, optionStart + 1, line.length);
+          for (const [key, value] of options) {
+            if (NetworkFilter.parse(`${line.slice(0, optionStart)}$${key}=${value}`) === null) {
               found = true;
-              unsupported.incr(option);
+              unsupported.incr(key);
             }
           }
 

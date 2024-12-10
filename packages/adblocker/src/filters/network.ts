@@ -623,7 +623,7 @@ function getFilterReplaceOptionValue(
  * Depending on the filter option key, the function to collect filter option value can vary.
  * For the generic filter option value, it'll use `getFilterOptionValue` function to get the value.
  */
-function getFilterOptions(line: string, pos: number, end: number): Array<[string, string]> {
+export function getFilterOptions(line: string, pos: number, end: number): Array<[string, string]> {
   const options: Array<[string, string]> = [];
 
   let name: string | undefined;
