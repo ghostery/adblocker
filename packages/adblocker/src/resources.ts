@@ -424,9 +424,7 @@ export default class Resources {
     for (const { name, aliases, body: content, contentType } of this.resources) {
       buffer.pushASCII(name);
       buffer.pushUint16(aliases.length);
-      for (const alias of aliases) {
-        buffer.pushASCII(alias);
-      }
+      aliases.forEach((alias) => buffer.pushASCII(alias));
       buffer.pushUTF8(content);
       buffer.pushASCII(contentType);
     }
@@ -455,9 +453,7 @@ export default class Resources {
       buffer.pushUint8(mask);
       buffer.pushASCII(name);
       buffer.pushUint16(aliases.length);
-      for (const alias of aliases) {
-        buffer.pushASCII(alias);
-      }
+      aliases.forEach((alias) => buffer.pushASCII(alias));
       buffer.pushUTF8(content);
       buffer.pushUint16(dependencies.length);
       dependencies.forEach((dependency) => buffer.pushASCII(dependency));
