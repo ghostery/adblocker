@@ -224,7 +224,7 @@ async function loadAllLists(): Promise<string> {
           for (const [key, value] of options) {
             if (NetworkFilter.parse(`${line.slice(0, optionStart)}$${key}=${value}`) === null) {
               found = true;
-              unsupported.incr(key);
+              unsupported.incr('$' + key);
             }
           }
 
