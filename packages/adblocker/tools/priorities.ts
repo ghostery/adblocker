@@ -166,13 +166,15 @@ async function loadAllListsFromRemote(ignoreCache: boolean): Promise<string> {
       errors.push(remoteUrl);
     } else {
       // Update cache
-      writeFileSync(cacheUrl, body, 'utf8');
+      writeFileSync(cacheUrl, Date.now().toString() + '=' + body, 'utf8');
       contents.push(body);
     }
   }
 
-  console.warn(`[WARN] Possibly failed sources:
+  if (errors.length !== 0) {
+    console.warn(`[WARN] Possibly failed sources:
 ${errors.map((error) => `  - "${error}"`).join('\n')}`);
+  }
 
   return contents.join('\n');
 }
