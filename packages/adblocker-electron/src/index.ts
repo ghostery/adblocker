@@ -73,7 +73,9 @@ export class BlockingContext {
   constructor(
     private readonly session: Electron.Session,
     private readonly blocker: ElectronBlocker,
+    private readonly registerWebRequestHandlers: boolean,
   ) {
+    this.registerWebRequestHandlers = registerWebRequestHandlers;
     this.onBeforeRequest = (details, callback) => blocker.onBeforeRequest(details, callback);
 
     this.onInjectCosmeticFilters = (event, url, msg) =>
@@ -92,22 +94,14 @@ export class BlockingContext {
       );
     }
 
-    if (this.blocker.config.loadNetworkFilters === true) {
+    if (this.blocker.config.loadNetworkFilters === true && this.registerWebRequestHandlers) {
       this.session.webRequest.onHeadersReceived({ urls: ['<all_urls>'] }, this.onHeadersReceived);
       this.session.webRequest.onBeforeRequest({ urls: ['<all_urls>'] }, this.onBeforeRequest);
     }
   }
 
   public disable(): void {
-    if (this.blocker.config.loadNetworkFilters === true) {
-      // NOTE - there is currently no support in Electron for multiple
-      // webRequest listeners registered for the same event. This means that
-      // adblocker's listeners can be overriden by other ones in the same
-      // application (or that the adblocker can override another listener
-      // registered previously). Because of this, the only way to disable the
-      // adblocker is to remove all listeners for the events we are interested
-      // in. In the future, we should consider implementing a webRequest
-      // pipeline allowing to register multiple listeners for the same event.
+    if (this.blocker.config.loadNetworkFilters === true && this.registerWebRequestHandlers) {
       this.session.webRequest.onHeadersReceived(null);
       this.session.webRequest.onBeforeRequest(null);
     }
@@ -131,14 +125,17 @@ export class ElectronBlocker extends FiltersEngine {
   // Helpers to enable and disable blocking for 'browser'
   // ----------------------------------------------------------------------- //
 
-  public enableBlockingInSession(session: Electron.Session): BlockingContext {
+  public enableBlockingInSession(
+    session: Electron.Session,
+    registerWebRequestHandlers: boolean = true,
+  ): BlockingContext {
     let context: undefined | BlockingContext = this.contexts.get(session);
     if (context !== undefined) {
       return context;
     }
 
     // Create new blocking context for `session`
-    context = new BlockingContext(session, this);
+    context = new BlockingContext(session, this, registerWebRequestHandlers);
     this.contexts.set(session, context);
     context.enable();
 
