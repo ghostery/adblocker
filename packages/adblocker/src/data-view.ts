@@ -391,11 +391,9 @@ export class StaticDataView {
   }
 
   public pushUTF8(raw: string): void {
-    const pos = this.getPos();
-    const { written } = TEXT_ENCODER.encodeInto(raw, this.buffer.subarray(pos + 4));
-    this.setPos(pos);
+    const { written } = TEXT_ENCODER.encodeInto(raw, this.buffer.subarray(this.pos + 4));
     this.pushUint32(written);
-    this.setPos(pos + 4 + written);
+    this.setPos(this.pos + written);
   }
 
   public getUTF8(): string {
