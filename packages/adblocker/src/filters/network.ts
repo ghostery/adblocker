@@ -111,9 +111,9 @@ export function normalizeRawFilterOptions(rawFilter: string): string {
 }
 
 /**
- * Masks used to store options of network filters in a bitmask.
+ * Masks used to store source definitions of network filters in a 16-bit bitmask.
  */
-export const enum NETWORK_FILTER_MASK {
+export const enum NETWORK_SOURCE_MASK {
   // Request Type
   fromDocument = 1 << 0,
   fromFont = 1 << 1,
@@ -133,89 +133,93 @@ export const enum NETWORK_FILTER_MASK {
   // Partiness
   firstParty = 1 << 14,
   thirdParty = 1 << 15,
+  // IMPORTANT: the mask is now full, no more options can be added
+}
 
+/**
+ * Masks used to store options of network filters in a bitmask.
+ */
+export const enum NETWORK_FILTER_MASK {
   // Options
-  // isReplace does not fit to the options, but is here from a lack of empty MASK slots
-  isReplace = 1 << 16,
-  isBadFilter = 1 << 17,
-  isCSP = 1 << 18,
-  isGenericHide = 1 << 19,
-  isImportant = 1 << 20,
-  isSpecificHide = 1 << 21,
+  isException = 1 << 0,
+  isReplace = 1 << 1,
+  isBadFilter = 1 << 2,
+  isCSP = 1 << 3,
+  isGenericHide = 1 << 4,
+  isImportant = 1 << 5,
+  isSpecificHide = 1 << 6,
+  isRedirectRule = 1 << 7,
+  isRedirect = 1 << 8,
+  // reserved 9...15
 
   // Kind of patterns
-  isFullRegex = 1 << 22,
-  isRegex = 1 << 23,
-  isUnicode = 1 << 24,
-  isLeftAnchor = 1 << 25,
-  isRightAnchor = 1 << 26,
-  isException = 1 << 27,
-  isHostnameAnchor = 1 << 28,
-  isRedirectRule = 1 << 29,
-  isRedirect = 1 << 30,
-  // IMPORTANT: the mask is now full, no more options can be added
-  // Consider creating a separate fitler type for isReplace if a new
-  // network filter option is needed.
+  isFullRegex = 1 << 16,
+  isRegex = 1 << 17,
+  isUnicode = 1 << 18,
+  isLeftAnchor = 1 << 19,
+  isRightAnchor = 1 << 20,
+  isHostnameAnchor = 1 << 21,
+  // reserved 22...30
 }
 
 /**
  * Mask used when a network filter can be applied on any content type.
  */
 const FROM_ANY: number =
-  NETWORK_FILTER_MASK.fromDocument |
-  NETWORK_FILTER_MASK.fromFont |
-  NETWORK_FILTER_MASK.fromImage |
-  NETWORK_FILTER_MASK.fromMedia |
-  NETWORK_FILTER_MASK.fromObject |
-  NETWORK_FILTER_MASK.fromOther |
-  NETWORK_FILTER_MASK.fromPing |
-  NETWORK_FILTER_MASK.fromScript |
-  NETWORK_FILTER_MASK.fromStylesheet |
-  NETWORK_FILTER_MASK.fromSubdocument |
-  NETWORK_FILTER_MASK.fromWebsocket |
-  NETWORK_FILTER_MASK.fromXmlHttpRequest;
+  NETWORK_SOURCE_MASK.fromDocument |
+  NETWORK_SOURCE_MASK.fromFont |
+  NETWORK_SOURCE_MASK.fromImage |
+  NETWORK_SOURCE_MASK.fromMedia |
+  NETWORK_SOURCE_MASK.fromObject |
+  NETWORK_SOURCE_MASK.fromOther |
+  NETWORK_SOURCE_MASK.fromPing |
+  NETWORK_SOURCE_MASK.fromScript |
+  NETWORK_SOURCE_MASK.fromStylesheet |
+  NETWORK_SOURCE_MASK.fromSubdocument |
+  NETWORK_SOURCE_MASK.fromWebsocket |
+  NETWORK_SOURCE_MASK.fromXmlHttpRequest;
 
 /**
  * Map content type value to mask the corresponding mask.
  * ref: https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIContentPolicy
  */
 const REQUEST_TYPE_TO_MASK: { [s in RequestType]: number | undefined } = {
-  beacon: NETWORK_FILTER_MASK.fromPing, // fromOther?
-  document: NETWORK_FILTER_MASK.fromDocument,
-  cspviolationreport: NETWORK_FILTER_MASK.fromOther,
-  fetch: NETWORK_FILTER_MASK.fromXmlHttpRequest,
-  font: NETWORK_FILTER_MASK.fromFont,
-  image: NETWORK_FILTER_MASK.fromImage,
-  imageset: NETWORK_FILTER_MASK.fromImage,
-  mainFrame: NETWORK_FILTER_MASK.fromDocument,
-  main_frame: NETWORK_FILTER_MASK.fromDocument,
-  media: NETWORK_FILTER_MASK.fromMedia,
-  object: NETWORK_FILTER_MASK.fromObject,
-  object_subrequest: NETWORK_FILTER_MASK.fromObject,
-  ping: NETWORK_FILTER_MASK.fromPing, // fromOther?
-  script: NETWORK_FILTER_MASK.fromScript,
-  stylesheet: NETWORK_FILTER_MASK.fromStylesheet,
-  subFrame: NETWORK_FILTER_MASK.fromSubdocument,
-  sub_frame: NETWORK_FILTER_MASK.fromSubdocument,
-  webSocket: NETWORK_FILTER_MASK.fromWebsocket,
-  websocket: NETWORK_FILTER_MASK.fromWebsocket,
-  xhr: NETWORK_FILTER_MASK.fromXmlHttpRequest,
-  xmlhttprequest: NETWORK_FILTER_MASK.fromXmlHttpRequest,
+  beacon: NETWORK_SOURCE_MASK.fromPing, // fromOther?
+  document: NETWORK_SOURCE_MASK.fromDocument,
+  cspviolationreport: NETWORK_SOURCE_MASK.fromOther,
+  fetch: NETWORK_SOURCE_MASK.fromXmlHttpRequest,
+  font: NETWORK_SOURCE_MASK.fromFont,
+  image: NETWORK_SOURCE_MASK.fromImage,
+  imageset: NETWORK_SOURCE_MASK.fromImage,
+  mainFrame: NETWORK_SOURCE_MASK.fromDocument,
+  main_frame: NETWORK_SOURCE_MASK.fromDocument,
+  media: NETWORK_SOURCE_MASK.fromMedia,
+  object: NETWORK_SOURCE_MASK.fromObject,
+  object_subrequest: NETWORK_SOURCE_MASK.fromObject,
+  ping: NETWORK_SOURCE_MASK.fromPing, // fromOther?
+  script: NETWORK_SOURCE_MASK.fromScript,
+  stylesheet: NETWORK_SOURCE_MASK.fromStylesheet,
+  subFrame: NETWORK_SOURCE_MASK.fromSubdocument,
+  sub_frame: NETWORK_SOURCE_MASK.fromSubdocument,
+  webSocket: NETWORK_SOURCE_MASK.fromWebsocket,
+  websocket: NETWORK_SOURCE_MASK.fromWebsocket,
+  xhr: NETWORK_SOURCE_MASK.fromXmlHttpRequest,
+  xmlhttprequest: NETWORK_SOURCE_MASK.fromXmlHttpRequest,
 
   // Other
-  cspReport: NETWORK_FILTER_MASK.fromOther,
-  csp_report: NETWORK_FILTER_MASK.fromOther,
-  eventsource: NETWORK_FILTER_MASK.fromOther,
-  manifest: NETWORK_FILTER_MASK.fromOther,
-  other: NETWORK_FILTER_MASK.fromOther,
-  prefetch: NETWORK_FILTER_MASK.fromOther,
-  preflight: NETWORK_FILTER_MASK.fromOther,
-  signedexchange: NETWORK_FILTER_MASK.fromOther,
-  speculative: NETWORK_FILTER_MASK.fromOther,
-  texttrack: NETWORK_FILTER_MASK.fromOther,
-  web_manifest: NETWORK_FILTER_MASK.fromOther,
-  xml_dtd: NETWORK_FILTER_MASK.fromOther,
-  xslt: NETWORK_FILTER_MASK.fromOther,
+  cspReport: NETWORK_SOURCE_MASK.fromOther,
+  csp_report: NETWORK_SOURCE_MASK.fromOther,
+  eventsource: NETWORK_SOURCE_MASK.fromOther,
+  manifest: NETWORK_SOURCE_MASK.fromOther,
+  other: NETWORK_SOURCE_MASK.fromOther,
+  prefetch: NETWORK_SOURCE_MASK.fromOther,
+  preflight: NETWORK_SOURCE_MASK.fromOther,
+  signedexchange: NETWORK_SOURCE_MASK.fromOther,
+  speculative: NETWORK_SOURCE_MASK.fromOther,
+  texttrack: NETWORK_SOURCE_MASK.fromOther,
+  web_manifest: NETWORK_SOURCE_MASK.fromOther,
+  xml_dtd: NETWORK_SOURCE_MASK.fromOther,
+  xslt: NETWORK_SOURCE_MASK.fromOther,
 };
 
 function getListOfRequestTypesNegated(filter: NetworkFilter): RequestType[] {
@@ -686,11 +690,12 @@ const MATCH_ALL = new RegExp('');
 export default class NetworkFilter implements IFilter {
   public static parse(line: string, debug: boolean = false): NetworkFilter | null {
     // Represent options as a bitmask
-    let mask: number =
-      NETWORK_FILTER_MASK.thirdParty |
-      NETWORK_FILTER_MASK.firstParty |
-      NETWORK_FILTER_MASK.fromHttps |
-      NETWORK_FILTER_MASK.fromHttp;
+    let sourceMask: number =
+      NETWORK_SOURCE_MASK.thirdParty |
+      NETWORK_SOURCE_MASK.firstParty |
+      NETWORK_SOURCE_MASK.fromHttps |
+      NETWORK_SOURCE_MASK.fromHttp;
+    let mask: number = 0;
 
     // Temporary masks for positive (e.g.: $script) and negative (e.g.: $~script)
     // content type options.
@@ -771,20 +776,20 @@ export default class NetworkFilter implements IFilter {
           case 'third-party':
             if (negation) {
               // ~third-party means we should clear the flag
-              mask = clearBit(mask, NETWORK_FILTER_MASK.thirdParty);
+              sourceMask = clearBit(sourceMask, NETWORK_SOURCE_MASK.thirdParty);
             } else {
               // third-party means ~first-party
-              mask = clearBit(mask, NETWORK_FILTER_MASK.firstParty);
+              sourceMask = clearBit(sourceMask, NETWORK_SOURCE_MASK.firstParty);
             }
             break;
           case '1p':
           case 'first-party':
             if (negation) {
               // ~first-party means we should clear the flag
-              mask = clearBit(mask, NETWORK_FILTER_MASK.firstParty);
+              sourceMask = clearBit(sourceMask, NETWORK_SOURCE_MASK.firstParty);
             } else {
               // first-party means ~third-party
-              mask = clearBit(mask, NETWORK_FILTER_MASK.thirdParty);
+              sourceMask = clearBit(sourceMask, NETWORK_SOURCE_MASK.thirdParty);
             }
             break;
           case 'redirect-rule':
@@ -907,46 +912,46 @@ export default class NetworkFilter implements IFilter {
                 // ].join('; ');
                 break;
               case 'image':
-                optionMask = NETWORK_FILTER_MASK.fromImage;
+                optionMask = NETWORK_SOURCE_MASK.fromImage;
                 break;
               case 'media':
-                optionMask = NETWORK_FILTER_MASK.fromMedia;
+                optionMask = NETWORK_SOURCE_MASK.fromMedia;
                 break;
               case 'object':
               case 'object-subrequest':
-                optionMask = NETWORK_FILTER_MASK.fromObject;
+                optionMask = NETWORK_SOURCE_MASK.fromObject;
                 break;
               case 'other':
-                optionMask = NETWORK_FILTER_MASK.fromOther;
+                optionMask = NETWORK_SOURCE_MASK.fromOther;
                 break;
               case 'ping':
               case 'beacon':
-                optionMask = NETWORK_FILTER_MASK.fromPing;
+                optionMask = NETWORK_SOURCE_MASK.fromPing;
                 break;
               case 'script':
-                optionMask = NETWORK_FILTER_MASK.fromScript;
+                optionMask = NETWORK_SOURCE_MASK.fromScript;
                 break;
               case 'css':
               case 'stylesheet':
-                optionMask = NETWORK_FILTER_MASK.fromStylesheet;
+                optionMask = NETWORK_SOURCE_MASK.fromStylesheet;
                 break;
               case 'frame':
               case 'subdocument':
-                optionMask = NETWORK_FILTER_MASK.fromSubdocument;
+                optionMask = NETWORK_SOURCE_MASK.fromSubdocument;
                 break;
               case 'xhr':
               case 'xmlhttprequest':
-                optionMask = NETWORK_FILTER_MASK.fromXmlHttpRequest;
+                optionMask = NETWORK_SOURCE_MASK.fromXmlHttpRequest;
                 break;
               case 'websocket':
-                optionMask = NETWORK_FILTER_MASK.fromWebsocket;
+                optionMask = NETWORK_SOURCE_MASK.fromWebsocket;
                 break;
               case 'font':
-                optionMask = NETWORK_FILTER_MASK.fromFont;
+                optionMask = NETWORK_SOURCE_MASK.fromFont;
                 break;
               case 'doc':
               case 'document':
-                optionMask = NETWORK_FILTER_MASK.fromDocument;
+                optionMask = NETWORK_SOURCE_MASK.fromDocument;
                 break;
               default:
                 // Disable this filter if we don't support all the options
@@ -1094,33 +1099,33 @@ export default class NetworkFilter implements IFilter {
           filterIndexEnd - filterIndexStart === 5 &&
           fastStartsWithFrom(line, 'ws://', filterIndexStart)
         ) {
-          mask = setBit(mask, NETWORK_FILTER_MASK.fromWebsocket);
+          sourceMask = setBit(sourceMask, NETWORK_SOURCE_MASK.fromWebsocket);
           mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-          mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttp);
-          mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttps);
+          sourceMask = clearBit(sourceMask, NETWORK_SOURCE_MASK.fromHttp);
+          sourceMask = clearBit(sourceMask, NETWORK_SOURCE_MASK.fromHttps);
           filterIndexStart = filterIndexEnd;
         } else if (
           filterIndexEnd - filterIndexStart === 7 &&
           fastStartsWithFrom(line, 'http://', filterIndexStart)
         ) {
-          mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
-          mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttps);
+          sourceMask = setBit(sourceMask, NETWORK_SOURCE_MASK.fromHttp);
+          sourceMask = clearBit(sourceMask, NETWORK_SOURCE_MASK.fromHttps);
           mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
           filterIndexStart = filterIndexEnd;
         } else if (
           filterIndexEnd - filterIndexStart === 8 &&
           fastStartsWithFrom(line, 'https://', filterIndexStart)
         ) {
-          mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
-          mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttp);
+          sourceMask = setBit(sourceMask, NETWORK_SOURCE_MASK.fromHttps);
+          sourceMask = clearBit(sourceMask, NETWORK_SOURCE_MASK.fromHttp);
           mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
           filterIndexStart = filterIndexEnd;
         } else if (
           filterIndexEnd - filterIndexStart === 8 &&
           fastStartsWithFrom(line, 'http*://', filterIndexStart)
         ) {
-          mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
-          mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
+          sourceMask = setBit(sourceMask, NETWORK_SOURCE_MASK.fromHttps);
+          sourceMask = setBit(sourceMask, NETWORK_SOURCE_MASK.fromHttp);
           mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
           filterIndexStart = filterIndexEnd;
         }
@@ -1154,6 +1159,7 @@ export default class NetworkFilter implements IFilter {
     return new NetworkFilter({
       filter,
       hostname,
+      sourceMask,
       mask,
       domains,
       denyallow,
@@ -1168,6 +1174,7 @@ export default class NetworkFilter implements IFilter {
    * symetrical to the one in `serializeNetworkFilter`.
    */
   public static deserialize(buffer: StaticDataView): NetworkFilter {
+    const sourceMask = buffer.getUint16();
     const mask = buffer.getUint32();
     const optionalParts = buffer.getUint8();
     const isUnicode = getBit(mask, NETWORK_FILTER_MASK.isUnicode);
@@ -1178,6 +1185,7 @@ export default class NetworkFilter implements IFilter {
     // `serializeNetworkFilter`).
     return new NetworkFilter({
       // Mandatory field
+      sourceMask,
       mask,
 
       // Optional parts
@@ -1205,6 +1213,7 @@ export default class NetworkFilter implements IFilter {
 
   public readonly filter: string | undefined;
   public readonly hostname: string | undefined;
+  public readonly sourceMask: number;
   public readonly mask: number;
   public readonly domains: Domains | undefined;
   public readonly denyallow: Domains | undefined;
@@ -1220,6 +1229,7 @@ export default class NetworkFilter implements IFilter {
   constructor({
     filter,
     hostname,
+    sourceMask,
     mask,
     domains,
     denyallow,
@@ -1229,6 +1239,7 @@ export default class NetworkFilter implements IFilter {
   }: {
     filter: string | undefined;
     hostname: string | undefined;
+    sourceMask: number;
     mask: number;
     domains: Domains | undefined;
     denyallow: Domains | undefined;
@@ -1238,6 +1249,7 @@ export default class NetworkFilter implements IFilter {
   }) {
     this.filter = filter;
     this.hostname = hostname;
+    this.sourceMask = sourceMask;
     this.mask = mask;
     this.domains = domains;
     this.denyallow = denyallow;
@@ -1314,6 +1326,7 @@ export default class NetworkFilter implements IFilter {
    *  * when packing ascii string, store several of them in each byte.
    */
   public serialize(buffer: StaticDataView): void {
+    buffer.pushUint16(this.sourceMask);
     buffer.pushUint32(this.mask);
 
     const index = buffer.getPos();
@@ -1827,67 +1840,67 @@ export default class NetworkFilter implements IFilter {
   }
 
   public thirdParty() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.thirdParty);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.thirdParty);
   }
 
   public firstParty() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.firstParty);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.firstParty);
   }
 
   public fromImage() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromImage);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromImage);
   }
 
   public fromMedia() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromMedia);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromMedia);
   }
 
   public fromObject() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromObject);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromObject);
   }
 
   public fromOther() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromOther);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromOther);
   }
 
   public fromPing() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromPing);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromPing);
   }
 
   public fromScript() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromScript);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromScript);
   }
 
   public fromStylesheet() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromStylesheet);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromStylesheet);
   }
 
   public fromDocument() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromDocument);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromDocument);
   }
 
   public fromSubdocument() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromSubdocument);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromSubdocument);
   }
 
   public fromWebsocket() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromWebsocket);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromWebsocket);
   }
 
   public fromHttp() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromHttp);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromHttp);
   }
 
   public fromHttps() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromHttps);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromHttps);
   }
 
   public fromXmlHttpRequest() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromXmlHttpRequest);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromXmlHttpRequest);
   }
 
   public fromFont() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromFont);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromFont);
   }
 }
 
