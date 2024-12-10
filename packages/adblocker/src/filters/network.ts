@@ -110,6 +110,51 @@ export function normalizeRawFilterOptions(rawFilter: string): string {
   return `${rawFilter.slice(0, indexOfOptions)}$${normalizedOptions}`;
 }
 
+export const enum LEGACY_NETWORK_FILTER_MASK {
+  // Request Type
+  fromDocument = 1 << 0,
+  fromFont = 1 << 1,
+  fromHttp = 1 << 2,
+  fromHttps = 1 << 3,
+  fromImage = 1 << 4,
+  fromMedia = 1 << 5,
+  fromObject = 1 << 6,
+  fromOther = 1 << 7,
+  fromPing = 1 << 8,
+  fromScript = 1 << 9,
+  fromStylesheet = 1 << 10,
+  fromSubdocument = 1 << 11,
+  fromWebsocket = 1 << 12, // e.g.: ws, wss
+  fromXmlHttpRequest = 1 << 13,
+
+  // Partiness
+  firstParty = 1 << 14,
+  thirdParty = 1 << 15,
+
+  // Options
+  // isReplace does not fit to the options, but is here from a lack of empty MASK slots
+  isReplace = 1 << 16,
+  isBadFilter = 1 << 17,
+  isCSP = 1 << 18,
+  isGenericHide = 1 << 19,
+  isImportant = 1 << 20,
+  isSpecificHide = 1 << 21,
+
+  // Kind of patterns
+  isFullRegex = 1 << 22,
+  isRegex = 1 << 23,
+  isUnicode = 1 << 24,
+  isLeftAnchor = 1 << 25,
+  isRightAnchor = 1 << 26,
+  isException = 1 << 27,
+  isHostnameAnchor = 1 << 28,
+  isRedirectRule = 1 << 29,
+  isRedirect = 1 << 30,
+  // IMPORTANT: the mask is now full, no more options can be added
+  // Consider creating a separate fitler type for isReplace if a new
+  // network filter option is needed.
+}
+
 /**
  * Masks used to store source definitions of network filters in a 16-bit bitmask.
  */
@@ -141,25 +186,24 @@ export const enum NETWORK_SOURCE_MASK {
  */
 export const enum NETWORK_FILTER_MASK {
   // Options
-  isException = 1 << 0,
-  isReplace = 1 << 1,
-  isBadFilter = 1 << 2,
-  isCSP = 1 << 3,
-  isGenericHide = 1 << 4,
-  isImportant = 1 << 5,
-  isSpecificHide = 1 << 6,
-  isRedirectRule = 1 << 7,
-  isRedirect = 1 << 8,
-  // reserved 9...15
+  isReplace = 1 << 0,
+  isBadFilter = 1 << 1,
+  isCSP = 1 << 2,
+  isGenericHide = 1 << 3,
+  isImportant = 1 << 4,
+  isSpecificHide = 1 << 5,
+  isRedirectRule = 1 << 6,
+  isRedirect = 1 << 7,
+  // reserved 8...23
 
   // Kind of patterns
-  isFullRegex = 1 << 16,
-  isRegex = 1 << 17,
-  isUnicode = 1 << 18,
-  isLeftAnchor = 1 << 19,
-  isRightAnchor = 1 << 20,
-  isHostnameAnchor = 1 << 21,
-  // reserved 22...30
+  isFullRegex = 1 << 24,
+  isRegex = 1 << 25,
+  isUnicode = 1 << 26,
+  isLeftAnchor = 1 << 27,
+  isRightAnchor = 1 << 28,
+  isHostnameAnchor = 1 << 29,
+  isException = 1 << 30,
 }
 
 /**
@@ -221,6 +265,43 @@ const REQUEST_TYPE_TO_MASK: { [s in RequestType]: number | undefined } = {
   xml_dtd: NETWORK_SOURCE_MASK.fromOther,
   xslt: NETWORK_SOURCE_MASK.fromOther,
 };
+
+function migrateLegacyMask(n: number): {
+  sourceMask: number;
+  mask: number;
+} {
+  // Bits are saved in LSB order, push left to drop values then restore the position
+  // We need to drop 32th bit on restoration since we regard the given `mask` is signed int
+  const sourceMask = (n << 16) >>> 16;
+  let mask = 0;
+
+  for (const [legacyMask, newMask] of [
+    [LEGACY_NETWORK_FILTER_MASK.isReplace, NETWORK_FILTER_MASK.isReplace],
+    [LEGACY_NETWORK_FILTER_MASK.isBadFilter, NETWORK_FILTER_MASK.isBadFilter],
+    [LEGACY_NETWORK_FILTER_MASK.isCSP, NETWORK_FILTER_MASK.isCSP],
+    [LEGACY_NETWORK_FILTER_MASK.isGenericHide, NETWORK_FILTER_MASK.isGenericHide],
+    [LEGACY_NETWORK_FILTER_MASK.isImportant, NETWORK_FILTER_MASK.isImportant],
+    [LEGACY_NETWORK_FILTER_MASK.isSpecificHide, NETWORK_FILTER_MASK.isSpecificHide],
+    [LEGACY_NETWORK_FILTER_MASK.isRedirectRule, NETWORK_FILTER_MASK.isRedirectRule],
+    [LEGACY_NETWORK_FILTER_MASK.isRedirect, NETWORK_FILTER_MASK.isRedirect],
+    [LEGACY_NETWORK_FILTER_MASK.isFullRegex, NETWORK_FILTER_MASK.isFullRegex],
+    [LEGACY_NETWORK_FILTER_MASK.isRegex, NETWORK_FILTER_MASK.isRegex],
+    [LEGACY_NETWORK_FILTER_MASK.isUnicode, NETWORK_FILTER_MASK.isUnicode],
+    [LEGACY_NETWORK_FILTER_MASK.isLeftAnchor, NETWORK_FILTER_MASK.isLeftAnchor],
+    [LEGACY_NETWORK_FILTER_MASK.isRightAnchor, NETWORK_FILTER_MASK.isRightAnchor],
+    [LEGACY_NETWORK_FILTER_MASK.isHostnameAnchor, NETWORK_FILTER_MASK.isHostnameAnchor],
+    [LEGACY_NETWORK_FILTER_MASK.isException, NETWORK_FILTER_MASK.isException],
+  ] as const) {
+    if (getBit(n, legacyMask)) {
+      mask = setBit(mask, newMask);
+    }
+  }
+
+  return {
+    sourceMask,
+    mask,
+  };
+}
 
 function getListOfRequestTypesNegated(filter: NetworkFilter): RequestType[] {
   const types: RequestType[] = [];
@@ -1226,6 +1307,9 @@ export default class NetworkFilter implements IFilter {
   public id: number | undefined;
   public regex: RegExp | undefined;
 
+  /**
+   * @param sourceMask If this field is empty, we will treat `mask` in legacy format and migrate it into `sourceMask` and `mask` for the compatibility.
+   */
   constructor({
     filter,
     hostname,
@@ -1239,7 +1323,7 @@ export default class NetworkFilter implements IFilter {
   }: {
     filter: string | undefined;
     hostname: string | undefined;
-    sourceMask: number;
+    sourceMask?: number | undefined;
     mask: number;
     domains: Domains | undefined;
     denyallow: Domains | undefined;
@@ -1249,8 +1333,6 @@ export default class NetworkFilter implements IFilter {
   }) {
     this.filter = filter;
     this.hostname = hostname;
-    this.sourceMask = sourceMask;
-    this.mask = mask;
     this.domains = domains;
     this.denyallow = denyallow;
     this.optionValue = optionValue;
@@ -1259,6 +1341,16 @@ export default class NetworkFilter implements IFilter {
 
     this.id = undefined;
     this.regex = regex;
+
+    if (sourceMask !== undefined) {
+      this.sourceMask = sourceMask;
+      this.mask = mask;
+    } else {
+      const migrated = migrateLegacyMask(mask);
+
+      this.sourceMask = migrated.sourceMask;
+      this.mask = migrated.mask;
+    }
   }
 
   public get csp(): string | undefined {
