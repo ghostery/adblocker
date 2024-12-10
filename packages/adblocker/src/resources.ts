@@ -125,9 +125,9 @@ const assembleScript = (script: string, dependencies: string[] = []): string =>
 
 const enum RESOURCES_MASK {
   executionWorldOfMain = 1 << 0,
-  executionWorldOfIsolated = 2 << 0,
-  scriptletElevationRequired = 3 << 0,
-  scriptletElevationNotRequired = 4 << 0,
+  executionWorldOfIsolated = 1 << 1,
+  scriptletElevationRequired = 1 << 2,
+  scriptletElevationNotRequired = 1 << 3,
 }
 
 /**
