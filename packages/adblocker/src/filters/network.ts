@@ -1475,7 +1475,7 @@ export default class NetworkFilter implements IFilter {
   }
 
   public getSerializedSize(compression: boolean): number {
-    let estimate: number = 4 + 1; // mask = 4 bytes // optional parts = 1 byte
+    let estimate: number = 2 + 4 + 1; // sourceMask = 2 bytes // mask = 4 bytes // optional parts = 1 byte
 
     if (this.filter !== undefined) {
       if (this.isUnicode() === true) {
