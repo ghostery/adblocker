@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { promises as fs } from 'node:fs';
+import { existsSync, promises as fs, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -42,12 +42,38 @@ class Counter<K> {
   }
 }
 
+function getCliOptions(args = process.argv.slice(2)) {
+  args = args
+    .map((arg) => arg.trim().toLowerCase())
+    // Trim - or -- prefix for arguments
+    .map((arg) => (arg.length === 2 ? arg.slice(1) : arg.slice(2)));
+
+  const config = {
+    useOriginFilters: ['use-origin-filters', 'o'],
+    ignoreCache: ['ignore-cache', 'i'],
+  };
+  const options: Record<keyof typeof config, boolean> = {
+    useOriginFilters: false,
+    ignoreCache: false,
+  };
+
+  for (const [key, matches] of Object.entries(config)) {
+    if (args.find((arg) => matches.includes(arg))) {
+      options[key as keyof typeof config] = true;
+    }
+  }
+
+  return options;
+}
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const PREFIX =
   'https://raw.githubusercontent.com/ghostery/adblocker/master/packages/adblocker/assets';
+const CACHE_DIR = './.list-cache';
+const CACHE_THRESHOLD = 1000 * 60 * 60 * 24 * 3; // 3 days
 
-async function loadAllLists(): Promise<string> {
+async function loadAllListsFromLocal(): Promise<string> {
   return (
     await Promise.all(
       fullLists
@@ -55,6 +81,110 @@ async function loadAllLists(): Promise<string> {
         .map((path) => fs.readFile(path, 'utf-8')),
     )
   ).join('\n');
+}
+
+function retrieveRemoteUrl(url: string): string {
+  const path = url.slice(PREFIX.length);
+  const [, owner, variant] = path.split('/');
+
+  switch (owner) {
+    case 'ublock-origin': {
+      return 'https://ublockorigin.github.io/uAssets/filters/' + variant;
+    }
+    case 'easylist': {
+      return 'https://easylist.to/easylist/' + variant;
+    }
+    case 'peter-lowe': {
+      return 'https://pgl.yoyo.org/as/serverlist.php?hostformat=adblockplus&mimetype=plaintext';
+    }
+    default: {
+      throw new Error('Unknown filter list URL format: ' + path);
+    }
+  }
+}
+
+function retrieveCacheUrl(remoteUrl: string): string {
+  const key = remoteUrl.split('/').slice(-2).join('_');
+  return join(CACHE_DIR, key);
+}
+
+async function fetchList(url: string): Promise<string> {
+  const maxRetries = 5;
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      console.log(`[INFO] Fetching "${url}"...`);
+
+      const response = await fetch(url);
+      const body = await response.text();
+
+      return body;
+    } catch (error) {
+      console.warn(`[WARN] Failed to fetch "${url}"... retring (${i + 1}/${maxRetries})`);
+    }
+  }
+
+  console.error(`[ERROR] Failed to fetch "${url}"!`);
+  return '';
+}
+
+function retrieveListCache(cacheUrl: string): string {
+  if (existsSync(cacheUrl) === false) {
+    return '';
+  }
+
+  const body = readFileSync(cacheUrl, 'utf8');
+  const timestampEndsAt = body.indexOf('=');
+  if (timestampEndsAt === -1) {
+    console.error(`[ERROR] Invalid cache entry found on "${cacheUrl}"!`);
+    return '';
+  }
+
+  const timestamp = parseInt(body.slice(0, timestampEndsAt), 10);
+  if (timestamp + CACHE_THRESHOLD < Date.now()) {
+    return '';
+  }
+
+  return body.slice(timestampEndsAt + 1);
+}
+
+async function loadAllListsFromRemote(ignoreCache: boolean): Promise<string> {
+  const contents: string[] = [];
+  const errors: string[] = [];
+
+  if (!existsSync(CACHE_DIR)) {
+    mkdirSync(CACHE_DIR, { recursive: true });
+  }
+
+  for (const remoteUrl of fullLists.map(retrieveRemoteUrl)) {
+    const cacheUrl = retrieveCacheUrl(remoteUrl);
+    let body = retrieveListCache(cacheUrl);
+    if (ignoreCache || body.length === 0) {
+      body = await fetchList(remoteUrl);
+    }
+    // Mark as an error when tried both cache and remote then all failed
+    if (body.length === 0) {
+      errors.push(remoteUrl);
+    } else {
+      // Update cache
+      writeFileSync(cacheUrl, body, 'utf8');
+      contents.push(body);
+    }
+  }
+
+  console.warn(`[WARN] Possibly failed sources:
+${errors.map((error) => `  - "${error}"`).join('\n')}`);
+
+  return contents.join('\n');
+}
+
+async function loadAllLists(): Promise<string> {
+  const options = getCliOptions();
+
+  if (options.useOriginFilters) {
+    return loadAllListsFromRemote(options.ignoreCache);
+  }
+
+  return loadAllListsFromLocal();
 }
 
 (async () => {
