@@ -290,7 +290,9 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const configKeysMustMatch: ConfigKey[] = (Object.keys(config) as (keyof Config)[]).filter(
       function (key): key is ConfigKey {
         return (
-          typeof config[key] === 'boolean' && !compatibleConfigKeys.includes(key as ConfigKey)
+          typeof config[key] === 'boolean' &&
+          !compatibleConfigKeys.includes(key as ConfigKey) &&
+          !Object.hasOwnProperty.call(overrideConfig, key)
         );
       },
     );
