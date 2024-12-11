@@ -97,7 +97,9 @@ function retrieveRemoteUrl(url: string): string {
       return 'https://easylist.to/easylist/' + variant;
     }
     case 'peter-lowe': {
-      return 'https://pgl.yoyo.org/as/serverlist.php?hostformat=adblockplus&mimetype=plaintext';
+      // We're skipping this since it doesn't include any complex filter syntax.
+      // return 'https://pgl.yoyo.org/as/serverlist.php?hostformat=adblockplus&mimetype=plaintext';
+      return '';
     }
     default: {
       throw new Error('Unknown filter list URL format: ' + path);
@@ -157,7 +159,9 @@ async function loadAllListsFromRemote(ignoreCache: boolean): Promise<string> {
     mkdirSync(CACHE_DIR, { recursive: true });
   }
 
-  for (const remoteUrl of fullLists.map(retrieveRemoteUrl)) {
+  for (const remoteUrl of fullLists
+    .map(retrieveRemoteUrl)
+    .filter((remoteUrl) => remoteUrl.length !== 0)) {
     const cacheUrl = retrieveCacheUrl(remoteUrl);
     let body = retrieveListCache(cacheUrl);
     if (ignoreCache || body.length === 0) {
