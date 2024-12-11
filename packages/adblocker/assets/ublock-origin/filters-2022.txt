@@ -1659,7 +1659,7 @@ photopea.com##+js(trusted-rpnt, script, added%3Dfalse%3B, added%3Dfalse%3Bif%20(
 !#endif
 !photopea.com##+js(rpnt, script, %2F%5E.*%3F(function%20gtag).*%24%2F, document.documentElement.setAttribute('onreset'%2C(function%20addCustomEvent()%7Bdocument.addEventListener('resizecanvas'%2C()%3D%3E%7Bwindow.innerWidth%3Ddocument.documentElement.clientWidth%2B(window.screen.width%3C1600%3F180%3A320)%7D)%7D)())%3Bdocument.documentElement.dispatchEvent(new%20CustomEvent('reset'))%3Bdocument.documentElement.removeAttribute('onreset')%3Bfunction%20resize(event%3D%7B%7D)%7Bif(!event.skip)%7Bdocument.dispatchEvent(new%20CustomEvent('resizecanvas'))%3Bconst%20resizeEvent%3Dnew%20Event('resize')%3BresizeEvent.skip%3Dtrue%3Bwindow.dispatchEvent(resizeEvent)%7D%7Dlet%20debounce%3Bwindow.addEventListener('resize'%2Cevent%3D%3E%7BclearTimeout(debounce)%3Bdebounce%3DsetTimeout(()%3D%3Eresize(event)%2C100)%7D)%3Bresize()%3B)
 ! https://github.com/uBlockOrigin/uAssets/issues/20232
-@@||cmp.uniconsent.com^$3p,xhr,domain=photopea.com
+photopea.com##+js(no-fetch-if, uniconsent.com, length%3A2300)
 ! https://github.com/uBlockOrigin/uAssets/issues/13104
 vods.tv##+js(no-fetch-if, doubleclick)
 ! freesolana. top anti adb
@@ -3844,28 +3844,29 @@ www.chip.de###CR[class="Downloads-Select"] > #G32 > #M1 > [class="wrapper-safe"]
 www.chip.de###CR[class="Downloads-Select"] > #G32 > #M1 > [class="wrapper-safe"] > .mt-md > section [class]:has(> div > ul.is-separated a img[src^="data:image"])
 www.chip.de###CR[class="Downloads-Detail"] > #G32 > #M1 > [class="wrapper-safe"] > [class="fb mt-lg"] > [class="fb-col-lg-4 is-hidden-sm is-hidden-md"] > *:has(img[src*="https://im.chip.de/ii/"]):not(section[class="mt-md"]:has(> h3:first-child + table:last-child))
 www.chip.de###CR[class="Downloads-Detail"] > #G32 > #M1 > [class="wrapper-safe"] > [class="fb mt-lg"] > [class="fb-col-lg-4 is-hidden-sm is-hidden-md"] > section[class="mt-md"] > h3 + table:has(img[src*="https://im.chip.de/ii/"])
-www.chip.de###CR[class="Downloads-Detail"] > #G32 > #M1 > div[class] [class="ar-1-1 bg-gray-l"]:has(> a[title^="Zum Download: "] > img[src*="https://im.chip.de/ii/"])
+www.chip.de###CR[class="Downloads-Detail"] > #G32 > #M1 > div[class] [class="ar-1-1 bg-gray-l"]:has(> a[title] > img[src*="https://im.chip.de/ii/"])
 www.chip.de###CR[class="Downloads-Detail"] > #G32 > #M1 > div:not([class], [id]):has(> [class] > [class] > .bg-gray-l a img[src*="https://im.chip.de/ii/"])
 www.chip.de###CR[class="Downloads-Detail"] > #G32 > #M1 > div[class]:has(> div[class][style="min-height: 250px;"] > ul.is-separated a img[src*="https://im.chip.de/ii/"])
 www.chip.de###CR[class="Downloads-Getfile"] > #G32 > #M1 > *:not(section[class="wrapper-safe mt-md ft-alts"]) a[href^="https://www.chip.de/downloads/"][title]:has(img[src*="https://im.chip.de/ii/"][alt][width][data-was-processed])
 www.chip.de###CR[class="Downloads-Select"] > #G32 > #M1 > div:not([class], [id]):has(> [class] > .bg-gray-l a img[src*="https://im.chip.de/ii/"])
 www.chip.de###CR[class="Downloads-Select"] > #G32 > #M1 > [class="wrapper-safe"] > [class="fb mt-md"] > [class="fb-col-lg-4 is-hidden-sm is-hidden-md"] > [class]:has(img[src*="https://im.chip.de/ii/"] + div > span[style^="width: "])
 www.chip.de###CR[class="Downloads-Getfile"] > #G32 > #M1 > [class="wrapper-safe"] > [class="fb mt-lg"] > [class="fb-col-lg-4 is-hidden-sm is-hidden-md"] > [class]:has(img[src*="https://im.chip.de/ii/"] + div > span[style^="width: "])
-www.chip.de###CR[class="Downloads-Select"] > #G32 > #M1 > div:not([class="wrapper-safe"]) [class="ar-1-1 bg-gray-l"]:has(> a[title^="Zum Download: "] > img[src*="https://im.chip.de/ii/"])
-www.chip.de###CR[class="Downloads-Getfile"] > #G32 > #M1 > div:not([class="wrapper-safe"]) [class="ar-1-1 bg-gray-l"]:has(> a[title^="Zum Download: "] > img[src*="https://im.chip.de/ii/"])
+www.chip.de###CR[class="Downloads-Select"] > #G32 > #M1 > div:not([class="wrapper-safe"]) [class="ar-1-1 bg-gray-l"]:has(> a[title] > img[src*="https://im.chip.de/ii/"])
+www.chip.de###CR[class="Downloads-Getfile"] > #G32 > #M1 > div:not([class="wrapper-safe"]) [class="ar-1-1 bg-gray-l"]:has(> a[title] > img[src*="https://im.chip.de/ii/"])
 ! restore speed (the anti adblock script causing lag spikes)
 !#if cap_html_filtering
-www.chip.de##^script:has-text(/\+\+\) \{  \} \}/)
+www.chip.de##^script:has-text(/ \= false\; \} else \{ /)
 www.chip.de##^script:has-text(?metric=transit.counter&key=fail_redirect&tags=)
+www.chip.de##^script:has-text(/pushAdTag|link_click|getAds/)
 !#else
-www.chip.de##+js(rmnt, script, %2F%5C%2B%5C%2B%5C)%20%5C%7B%20%20%5C%7D%20%5C%7D%2F)
+www.chip.de##+js(rmnt, script, %2F%20%5C%3D%20false%5C%3B%20%5C%7D%20else%20%5C%7B%20%2F)
 www.chip.de##+js(rmnt, script, %3Fmetric%3Dtransit.counter%26key%3Dfail_redirect%26tags%3D)
+www.chip.de##+js(rmnt, script, %2FpushAdTag%7Clink_click%7CgetAds%2F)
 !#endif
 ||nah-versorger.de^$3p
 ||stopundstart.de^$3p
 ||mein-organizer.de^$3p
 ||schneesommer.de^$3p
-chip.de##^script:has-text(/pushAdTag|link_click|getAds/)
 praxistipps.chip.de##div[data-bc-data-trackvars]
 ! https://github.com/orgs/uBlockOrigin/teams/ublock-filters-volunteers/discussions/448
 chip.de##:root:style(--topbanner-height-min:unset!important;--topbanner-height-max:unset!important;)
