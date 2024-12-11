@@ -167,7 +167,7 @@ async function loadAllListsFromRemote(ignoreCache: boolean): Promise<string> {
     if (ignoreCache || body.length === 0) {
       body = await fetchList(remoteUrl);
     }
-    // Mark as an error when tried both cache and remote then all failed
+    // Mark as an error when both cache and remote failed
     if (body.length === 0) {
       errors.push(remoteUrl);
     } else {
