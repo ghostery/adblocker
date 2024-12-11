@@ -11,7 +11,13 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gzipSync, brotliCompressSync } from 'node:zlib';
 
-import { FiltersEngine, adsLists, adsAndTrackingLists, fullLists } from '../src/index.js';
+import {
+  FiltersEngine,
+  adsLists,
+  adsAndTrackingLists,
+  fullLists,
+  Resources,
+} from '../src/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -37,6 +43,15 @@ function loadFullLists(): Promise<string> {
   return loadFromLocalAssets(fullLists);
 }
 
+function loadResources(): Resources {
+  return Resources.parse(
+    readFileSync(join(__dirname, '..', 'assets', 'ublock-origin', 'resources.json'), 'utf8'),
+    {
+      checksum: '',
+    },
+  );
+}
+
 (async () => {
   for (const [name, raw] of [
     ['ads', await loadAdsLists()],
@@ -48,15 +63,22 @@ function loadFullLists(): Promise<string> {
       { loadNetworkFilters: false, loadCosmeticFilters: true },
       { loadNetworkFilters: true, loadCosmeticFilters: false },
     ]) {
-      const engine = FiltersEngine.parse(raw, { enableCompression: true, ...config });
-      const { networkFilters, cosmeticFilters } = engine.getFilters();
-      console.log(`> ${name} (${networkFilters.length} network + ${cosmeticFilters.length} hide)`);
-      for (const [compression, compress] of [
-        ['raw', (b: Uint8Array) => b],
-        ['gzip', gzipSync],
-        ['brotli', brotliCompressSync],
-      ] as [string, (b: Uint8Array) => Uint8Array][]) {
-        console.log(' +', compression, compress(engine.serialize()).byteLength, 'bytes');
+      for (const includeResources of [false, true]) {
+        const engine = FiltersEngine.parse(raw, { enableCompression: true, ...config });
+        if (includeResources) {
+          engine.resources = loadResources();
+        }
+        const { networkFilters, cosmeticFilters } = engine.getFilters();
+        console.log(
+          `> ${name} (${networkFilters.length} network + ${cosmeticFilters.length} hide + ${engine.resources.resources.length + engine.resources.scriptlets.length} resources)`,
+        );
+        for (const [compression, compress] of [
+          ['raw', (b: Uint8Array) => b],
+          ['gzip', gzipSync],
+          ['brotli', brotliCompressSync],
+        ] as [string, (b: Uint8Array) => Uint8Array][]) {
+          console.log(' +', compression, compress(engine.serialize()).byteLength, 'bytes');
+        }
       }
     }
   }
