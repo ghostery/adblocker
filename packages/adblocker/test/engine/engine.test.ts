@@ -2023,7 +2023,7 @@ foo.com###selector
       });
     });
 
-    context.only('valides configs', () => {
+    context('valides configs', () => {
       it('throws with different configs', () => {
         const engine1 = FilterEngine.empty({ loadCosmeticFilters: true });
         const engine2 = FilterEngine.empty({ loadCosmeticFilters: false });
