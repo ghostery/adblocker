@@ -1,3 +1,23 @@
+# v2.3.1 (Wed Dec 11 2024)
+
+#### :bug: Bug Fix
+
+- Build(deps): Bump puppeteer from 23.10.2 to 23.10.3 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.10.1 to 23.10.2 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 23.10.2 to 23.10.3 [#4515](https://github.com/ghostery/adblocker/pull/4515) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript-eslint from 8.17.0 to 8.18.0 [#4511](https://github.com/ghostery/adblocker/pull/4511) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump playwright from 1.49.0 to 1.49.1 [#4510](https://github.com/ghostery/adblocker/pull/4510) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.10.1 to 23.10.2 [#4512](https://github.com/ghostery/adblocker/pull/4512) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v2.1.2 (Thu Dec 05 2024)
 
 #### :bug: Bug Fix

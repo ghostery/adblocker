@@ -1,3 +1,24 @@
+# v2.3.1 (Wed Dec 11 2024)
+
+#### :bug: Bug Fix
+
+- Merge: allow config differences [#4519](https://github.com/ghostery/adblocker/pull/4519) ([@chrmod](https://github.com/chrmod))
+- Merge: allow config differences ([@chrmod](https://github.com/chrmod))
+- Update local assets and compression codebooks (ghostery-adblocker-bot@users.noreply.github.com)
+
+#### :house: Internal
+
+- Update local assets [#4514](https://github.com/ghostery/adblocker/pull/4514) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4507](https://github.com/ghostery/adblocker/pull/4507) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.3.0 (Mon Dec 09 2024)
 
 #### :rocket: New Feature

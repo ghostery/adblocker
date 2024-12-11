@@ -1,3 +1,33 @@
+# v2.3.1 (Wed Dec 11 2024)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker`
+  - Merge: allow config differences [#4519](https://github.com/ghostery/adblocker/pull/4519) ([@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- `@ghostery/adblocker`
+  - Update local assets [#4514](https://github.com/ghostery/adblocker/pull/4514) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#4507](https://github.com/ghostery/adblocker/pull/4507) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump typescript-eslint from 8.17.0 to 8.18.0 [#4511](https://github.com/ghostery/adblocker/pull/4511) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump playwright from 1.49.0 to 1.49.1 [#4510](https://github.com/ghostery/adblocker/pull/4510) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`
+  - Build(deps): Bump puppeteer from 23.10.2 to 23.10.3 [#4515](https://github.com/ghostery/adblocker/pull/4515) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - Build(deps): Bump puppeteer from 23.10.1 to 23.10.2 [#4512](https://github.com/ghostery/adblocker/pull/4512) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.3.0 (Mon Dec 09 2024)
 
 #### :rocket: New Feature
