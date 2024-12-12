@@ -1,4 +1,4 @@
-import { StaticDataView, sizeOfUTF8 } from './data-view.js';
+import { StaticDataView, sizeOfASCII } from './data-view.js';
 
 export type EnvKeys =
   | 'ext_ghostery'
@@ -202,7 +202,7 @@ export default class Preprocessor {
   }
 
   public static deserialize(view: StaticDataView): Preprocessor {
-    const condition = view.getUTF8();
+    const condition = view.getASCII();
 
     const filterIDs = new Set<FilterId>();
     for (let i = 0, l = view.getUint32(); i < l; i++) {
@@ -234,7 +234,7 @@ export default class Preprocessor {
   }
 
   public serialize(view: StaticDataView): void {
-    view.pushUTF8(this.condition);
+    view.pushASCII(this.condition);
 
     view.pushUint32(this.filterIDs.size);
     for (const filterID of this.filterIDs) {
@@ -243,7 +243,7 @@ export default class Preprocessor {
   }
 
   public getSerializedSize(): number {
-    let estimatedSize = sizeOfUTF8(this.condition);
+    let estimatedSize = sizeOfASCII(this.condition);
 
     estimatedSize += (1 + this.filterIDs.size) * 4;
 
