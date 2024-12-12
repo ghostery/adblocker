@@ -1515,7 +1515,7 @@ export default class NetworkFilter implements IFilter {
 
     if (this.domains !== undefined) {
       if (this.domains.parts !== undefined) {
-        options.push(`domain=${this.domains.parts.split(',').join('|')}`);
+        options.push(`domain=${this.domains.parts.replace(/,/g, '|')}`);
       } else {
         options.push('domain=<hashed>');
       }
@@ -1523,7 +1523,7 @@ export default class NetworkFilter implements IFilter {
 
     if (this.denyallow !== undefined) {
       if (this.denyallow.parts !== undefined) {
-        options.push(`denyallow=${this.denyallow.parts.split(',').join('|')}`);
+        options.push(`denyallow=${this.denyallow.parts.replace(/,/g, '|')}`);
       } else {
         options.push('denyallow=<hashed>');
       }
