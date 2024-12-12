@@ -153,7 +153,7 @@ export const enum NETWORK_FILTER_MASK {
   isHostnameAnchor = 1 << 28,
   isRedirectRule = 1 << 29,
   isRedirect = 1 << 30,
-  isDenyallowNegated = 1 << 31,
+  isTo = 1 << 31,
   // IMPORTANT: the mask is now full, no more options can be added
   // Consider creating a separate fitler type for isReplace if a new
   // network filter option is needed.
@@ -737,10 +737,14 @@ export default class NetworkFilter implements IFilter {
             if (denyallow !== undefined) {
               return null;
             }
+            let parts = value.split('|');
             if (option === 'to') {
-              mask = setBit(mask, NETWORK_FILTER_MASK.isDenyallowNegated);
+              mask = setBit(mask, NETWORK_FILTER_MASK.isTo);
+              parts = parts.map((part) =>
+                part.charCodeAt(0) === 126 /* '~' */ ? part.slice(1) : `~${part}`,
+              );
             }
-            denyallow = Domains.parse(value.split('|'), debug);
+            denyallow = Domains.parse(parts, debug);
             break;
           }
           case 'domain':
@@ -1532,10 +1536,14 @@ export default class NetworkFilter implements IFilter {
     }
 
     if (this.denyallow !== undefined) {
+      const optionName = this.isTo() ? 'to' : 'denyallow';
       if (this.denyallow.parts !== undefined) {
-        options.push(`denyallow=${this.denyallow.parts}`);
+        const parts = this.denyallow.parts.split(',');
+        options.push(
+          `${optionName}=${this.isTo() ? parts.map((part) => (part.charCodeAt(0) === 126 /* '~' */ ? part.slice(1) : `~${part}`)).join('|') : parts.join('|')}`,
+        );
       } else {
-        options.push('denyallow=<hashed>');
+        options.push(`${optionName}=<hashed>`);
       }
     }
 
@@ -1826,8 +1834,8 @@ export default class NetworkFilter implements IFilter {
     return getBit(this.mask, NETWORK_FILTER_MASK.isBadFilter);
   }
 
-  public isDenyallowNegated() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.isDenyallowNegated);
+  public isTo() {
+    return getBit(this.mask, NETWORK_FILTER_MASK.isTo);
   }
 
   public isUnicode() {
@@ -2120,9 +2128,7 @@ function checkOptions(filter: NetworkFilter, request: Request): boolean {
   // If `hostname` is matched by `denyallow` then the request should be allowed.
   if (
     filter.denyallow !== undefined &&
-    filter.denyallow.match(request.getHostnameHashes(), request.getEntityHashes()) ===
-      // In case of `$denyallow`, this should work as an exception so `true` is required.
-      !filter.isDenyallowNegated()
+    filter.denyallow.match(request.getHostnameHashes(), request.getEntityHashes()) === true
   ) {
     return false;
   }
