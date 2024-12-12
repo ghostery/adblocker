@@ -90,7 +90,12 @@ export function sizeOfASCII(str: string): number {
  * Return number of bytes needed to serialize `str` UTF8 string.
  */
 export function sizeOfUTF8(str: string): number {
-  return 4 + TEXT_ENCODER.encode(str).length;
+  // Fast path for short strs considering the worst case (output ratio of 3)
+  if (str.length < 43 /* Math.ceil(127 / 3) */) {
+    return 1 + TEXT_ENCODER.encode(str).length;
+  }
+  const result = TEXT_ENCODER.encode(str);
+  return sizeOfLength(result.length) + result.length;
 }
 
 /**
@@ -391,8 +396,21 @@ export class StaticDataView {
   }
 
   public pushUTF8(raw: string): void {
-    const { written } = TEXT_ENCODER.encodeInto(raw, this.buffer.subarray(this.pos + 4));
+    const pos = this.getPos();
+    // Assume the size of output length is 1 (which means output is less than 128)
+    // based on the possible minimal length to avoid memory reallocation.
+    // The minimal length is always 1 byte per character.
+    const start = pos + (raw.length > 127 ? 5 : 1);
+    const { written } = TEXT_ENCODER.encodeInto(raw, this.buffer.subarray(start));
+    // If we failed to predict, that means the required bytes for length is 5.
+    if (pos + sizeOfLength(written) !== start) {
+      // Push 4 bytes back, `start + 4` or `pos + 5`
+      this.buffer.copyWithin(pos + 5, start, start + written);
+    }
+    // Restore pos to push length
+    this.setPos(pos);
     this.pushLength(written);
+    // Reflect written bytes to pos
     this.setPos(this.pos + written);
   }
 
