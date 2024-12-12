@@ -391,7 +391,7 @@
     {
       "name": "object-prune.fn",
       "aliases": [],
-      "body": "function objectPruneFn(t,e,n,r={matchAll:true},c={}){if(typeof e!==\"string\")return;const o=safeSelf();const s=e!==\"\"?o.String_split.call(e,/ +/):[];const f=s.length!==0&&n!==\"\"?o.String_split.call(n,/ +/):[];if(r.matchAll!==true)if(matchesStackTrace(r,c.logstack)===false)return;if(objectPruneFn.mustProcess===void 0)objectPruneFn.mustProcess=(t,e)=>{for(const n of e)if(objectFindOwnerFn(t,n)===false)return false;return true};if(s.length===0)return;let i=\"nomatch\";if(objectPruneFn.mustProcess(t,f))for(const e of s)if(objectFindOwnerFn(t,e,true))i=\"match\";if(i===\"match\")return t}",
+      "body": "function objectPruneFn(t,e,n,r={matchAll:true},c={}){if(typeof e!==\"string\")return;const o=safeSelf();const s=e!==\"\"?o.String_split.call(e,/ +/):[];const f=s.length!==0&&n!==\"\"?o.String_split.call(n,/ +/):[];if(r.matchAll!==true)if(matchesStackTraceFn(r,c.logstack)===false)return;if(objectPruneFn.mustProcess===void 0)objectPruneFn.mustProcess=(t,e)=>{for(const n of e)if(objectFindOwnerFn(t,n)===false)return false;return true};if(s.length===0)return;let i=\"nomatch\";if(objectPruneFn.mustProcess(t,f))for(const e of s)if(objectFindOwnerFn(t,e,true))i=\"match\";if(i===\"match\")return t}",
       "dependencies": [
         "matches-stack-trace.fn",
         "object-find-owner.fn",
@@ -407,7 +407,7 @@
     {
       "name": "matches-stack-trace.fn",
       "aliases": [],
-      "body": "function matchesStackTrace(t,e=\"\"){const n=safeSelf();const c=getExceptionToken();const i=new n.Error(c);const s=new URL(self.location.href);s.hash=\"\";const l=/(.*?@)?(\\S+)(:\\d+):\\d+\\)?$/;const o=[];for(let t of n.String_split.call(i.stack,/[\\n\\r]+/)){if(t.includes(c))continue;t=t.trim();const e=n.RegExp_exec.call(l,t);if(e===null)continue;let i=e[2];if(i.startsWith(\"(\"))i=i.slice(1);if(i===s.href)i=\"inlineScript\";else if(i.startsWith(\"<anonymous>\"))i=\"injectedScript\";let r=e[1]!==void 0?e[1].slice(0,-1):t.slice(0,e.index).trim();if(r.startsWith(\"at\"))r=r.slice(2).trim();let a=e[3];o.push(\" \"+`${r} ${i}${a}:1`.trim())}o[0]=`stackDepth:${o.length-1}`;const r=o.join(\"\\t\");const a=t.matchAll!==true&&n.testPattern(t,r);if(e===\"all\"||e===\"match\"&&a||e===\"nomatch\"&&!a)n.uboLog(r.replace(/\\t/g,\"\\n\"));return a}",
+      "body": "function matchesStackTraceFn(t,e=\"\"){const n=safeSelf();const c=getExceptionToken();const i=new n.Error(c);const s=new URL(self.location.href);s.hash=\"\";const l=/(.*?@)?(\\S+)(:\\d+):\\d+\\)?$/;const o=[];for(let t of n.String_split.call(i.stack,/[\\n\\r]+/)){if(t.includes(c))continue;t=t.trim();const e=n.RegExp_exec.call(l,t);if(e===null)continue;let i=e[2];if(i.startsWith(\"(\"))i=i.slice(1);if(i===s.href)i=\"inlineScript\";else if(i.startsWith(\"<anonymous>\"))i=\"injectedScript\";let r=e[1]!==void 0?e[1].slice(0,-1):t.slice(0,e.index).trim();if(r.startsWith(\"at\"))r=r.slice(2).trim();let a=e[3];o.push(\" \"+`${r} ${i}${a}:1`.trim())}o[0]=`stackDepth:${o.length-1}`;const r=o.join(\"\\t\");const a=t.matchAll!==true&&n.testPattern(t,r);if(e===\"all\"||e===\"match\"&&a||e===\"nomatch\"&&!a)n.uboLog(r.replace(/\\t/g,\"\\n\"));return a}",
       "dependencies": [
         "get-exception-token.fn",
         "safe-self.fn"
@@ -501,7 +501,7 @@
       "aliases": [
         "aost.js"
       ],
-      "body": "function abortOnStackTrace(e=\"\",t=\"\"){if(typeof e!==\"string\")return;const n=safeSelf();const r=n.initPattern(t,{canNegate:true});const c=n.getExtraArgs(Array.from(arguments),2);if(t===\"\")c.log=\"all\";const o=function(e,t){const n=t.indexOf(\".\");if(n===-1){let n=e[t];Object.defineProperty(e,t,{get:function(){if(matchesStackTrace(r,c.log))throw new ReferenceError(getExceptionToken());return n},set:function(e){if(matchesStackTrace(r,c.log))throw new ReferenceError(getExceptionToken());n=e}});return}const i=t.slice(0,n);let f=e[i];t=t.slice(n+1);if(f){o(f,t);return}const s=Object.getOwnPropertyDescriptor(e,i);if(s&&s.set!==void 0)return;Object.defineProperty(e,i,{get:function(){return f},set:function(e){f=e;if(e instanceof Object)o(e,t)}})};const i=window;o(i,e)}",
+      "body": "function abortOnStackTrace(e=\"\",t=\"\"){if(typeof e!==\"string\")return;const n=safeSelf();const r=n.initPattern(t,{canNegate:true});const c=n.getExtraArgs(Array.from(arguments),2);if(t===\"\")c.log=\"all\";const o=function(e,t){const n=t.indexOf(\".\");if(n===-1){let n=e[t];Object.defineProperty(e,t,{get:function(){if(matchesStackTraceFn(r,c.log))throw new ReferenceError(getExceptionToken());return n},set:function(e){if(matchesStackTraceFn(r,c.log))throw new ReferenceError(getExceptionToken());n=e}});return}const i=t.slice(0,n);let f=e[i];t=t.slice(n+1);if(f){o(f,t);return}const s=Object.getOwnPropertyDescriptor(e,i);if(s&&s.set!==void 0)return;Object.defineProperty(e,i,{get:function(){return f},set:function(e){f=e;if(e instanceof Object)o(e,t)}})};const i=window;o(i,e)}",
       "dependencies": [
         "get-exception-token.fn",
         "matches-stack-trace.fn",
@@ -841,8 +841,9 @@
     {
       "name": "trusted-suppress-native-method.js",
       "aliases": [],
-      "body": "function trustedSuppressNativeMethod(e=\"\",t=\"\",r=\"\",n=\"\"){if(e===\"\")return;if(n!==\"\")return;const u=safeSelf();const f=u.makeLogPrefix(\"trusted-suppress-native-method\",e,t,r);const i=u.String_split.call(t,/\\s*\\|\\s*/).map((e=>{if(/^\".*\"$/.test(e))return{type:\"pattern\",re:u.patternToRegex(e.slice(1,-1))};if(e===\"false\")return{type:\"exact\",value:false};if(e===\"true\")return{type:\"exact\",value:true};if(e===\"null\")return{type:\"exact\",value:null};if(e===\"undefined\")return{type:\"exact\",value:void 0}}));proxyApplyFn(e,(function(e){const{callArgs:n}=e;if(t===\"\"){u.uboLog(f,`Arguments:\\n${n.join(\"\\n\")}`);return e.reflect()}for(let t=0;t<i.length;t++){const r=i[t];if(r===void 0)continue;const f=t<n.length?n[t]:void 0;if(r.type===\"exact\")if(f!==r.value)return e.reflect();if(r.type===\"pattern\")if(u.RegExp_test.call(r.re,f)===false)return e.reflect()}if(r===\"debug\"){debugger;return e.reflect()}u.uboLog(f,`Suppressed:\\n${n.join(\"\\n\")}`);if(r===\"abort\")throw new ReferenceError}))}",
+      "body": "function trustedSuppressNativeMethod(e=\"\",t=\"\",r=\"\",n=\"\"){if(e===\"\")return;const u=safeSelf();const a=u.makeLogPrefix(\"trusted-suppress-native-method\",e,t,r,n);const f=u.String_split.call(t,/\\s*\\|\\s*/).map((e=>{if(/^\".*\"$/.test(e))return{type:\"pattern\",re:u.patternToRegex(e.slice(1,-1))};if(e===\"false\")return{type:\"exact\",value:false};if(e===\"true\")return{type:\"exact\",value:true};if(e===\"null\")return{type:\"exact\",value:null};if(e===\"undefined\")return{type:\"exact\",value:void 0}}));const i=u.initPattern(n,{canNegate:true});proxyApplyFn(e,(function(e){const{callArgs:n}=e;if(t===\"\"){u.uboLog(a,`Arguments:\\n${n.join(\"\\n\")}`);return e.reflect()}for(let t=0;t<f.length;t++){const r=f[t];if(r===void 0)continue;const a=t<n.length?n[t]:void 0;if(r.type===\"exact\")if(a!==r.value)return e.reflect();if(r.type===\"pattern\")if(u.RegExp_test.call(r.re,a)===false)return e.reflect()}if(i.matchAll!==true)if(matchesStackTraceFn(i)===false)return e.reflect();if(r===\"debug\"){debugger;return e.reflect()}u.uboLog(a,`Suppressed:\\n${n.join(\"\\n\")}`);if(r===\"abort\")throw new ReferenceError}))}",
       "dependencies": [
+        "matches-stack-trace.fn",
         "proxy-apply.fn",
         "safe-self.fn"
       ],
