@@ -734,11 +734,11 @@ export default class NetworkFilter implements IFilter {
         switch (option) {
           case 'to':
           case 'denyallow': {
-            // Always override with an option declared later
+            if (denyallow !== undefined) {
+              return null;
+            }
             if (option === 'to') {
               mask = setBit(mask, NETWORK_FILTER_MASK.isDenyallowNegated);
-            } else {
-              mask = clearBit(mask, NETWORK_FILTER_MASK.isDenyallowNegated);
             }
             denyallow = Domains.parse(value.split('|'), debug);
             break;
