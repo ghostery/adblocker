@@ -733,19 +733,17 @@ export default class NetworkFilter implements IFilter {
         switch (option) {
           case 'denyallow': {
             denyallow = Domains.parse(value.split('|'), debug);
+            if (denyallow === undefined) {
+              return null;
+            }
             break;
           }
           case 'domain':
           case 'from': {
-            // domain list starting or ending with '|' is invalid
-            if (
-              value.charCodeAt(0) === 124 /* '|' */ ||
-              value.charCodeAt(value.length - 1) === 124 /* '|' */
-            ) {
+            domains = Domains.parse(value.split('|'), debug);
+            if (domains === undefined) {
               return null;
             }
-
-            domains = Domains.parse(value.split('|'), debug);
             break;
           }
           case 'badfilter':
@@ -1517,7 +1515,7 @@ export default class NetworkFilter implements IFilter {
 
     if (this.domains !== undefined) {
       if (this.domains.parts !== undefined) {
-        options.push(`domain=${this.domains.parts}`);
+        options.push(`domain=${this.domains.parts.replace(/,/g, '|')}`);
       } else {
         options.push('domain=<hashed>');
       }
@@ -1525,7 +1523,7 @@ export default class NetworkFilter implements IFilter {
 
     if (this.denyallow !== undefined) {
       if (this.denyallow.parts !== undefined) {
-        options.push(`denyallow=${this.denyallow.parts}`);
+        options.push(`denyallow=${this.denyallow.parts.replace(/,/g, '|')}`);
       } else {
         options.push('denyallow=<hashed>');
       }
