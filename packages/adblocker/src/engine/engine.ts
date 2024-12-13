@@ -1479,9 +1479,18 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           const searchParams = new URLSearchParams(request.url.slice(searchParamsIndex + 1));
           let parametersRemoved = 0;
           for (const redirect of requestRedirects) {
-            if (searchParams.has(redirect.optionValue!)) {
-              parametersRemoved++;
-              searchParams.delete(redirect.optionValue!);
+            // When removeparam used without any option value, remove all parameter.
+            if (redirect.optionValue === undefined) {
+              redirectUrl = request.url.slice(0, searchParamsIndex);
+              result.filter = requestRedirects[0];
+              // Prevent next branch after the loop to be executed.
+              parametersRemoved = 0;
+              break;
+            } else {
+              if (searchParams.has(redirect.optionValue)) {
+                parametersRemoved++;
+                searchParams.delete(redirect.optionValue);
+              }
             }
           }
           if (parametersRemoved !== 0) {
