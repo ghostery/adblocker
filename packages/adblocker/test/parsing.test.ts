@@ -805,12 +805,16 @@ describe('Network filters', () => {
       });
 
       context('to', () => {
-        it('fails when both denyallow and to used', () => {
-          network('||foo.com$denyallow=foo.com,to=bar.com', null);
-          network('||foo.com$to=foo.com,denyallow=bar.com', null);
-        });
-
         it('reverses domains condition', () => {
+          network('||foo.com$to=foo.com|~bar.com,denyallow=bar.com|~foo.com', {
+            denyallow: {
+              hostnames: h(['bar.com']),
+              entities: undefined,
+              notHostnames: h(['foo.com']),
+              notEntities: undefined,
+              parts: undefined,
+            },
+          });
           network('||foo.com$to=bar.com|baz.com', {
             denyallow: {
               hostnames: undefined,
