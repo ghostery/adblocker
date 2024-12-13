@@ -1724,7 +1724,7 @@ nevcoins.club##.justify-content-center.box-shadow
 ||surfe.pro/js/net.js$script,xhr,redirect-rule=noop.js
 faucetcrypto.net##+js(acs, eval, decodeURIComponent)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/118042
-freepreset.net##+js(no-fetch-if, googlesyndication)
+freepreset.net##+js(no-fetch-if, googlesyndication, length%3A10000, %7B%22type%22%3A%22cors%22%7D)
 ! movie123. in/club ads
 movie123.*##+js(acs, Math, XMLHttpRequest)
 movie123.*##+js(aopw, Fingerprint2)
@@ -2742,17 +2742,28 @@ ygosu.com,bamgosu.site##iframe[src^="https://tab2.clickmon.co.kr/"]
 ygosu.com,bamgosu.site##iframe[src^="https://cdn.nhnace.com/"]
 ygosu.com,bamgosu.site##div[style="text-align:center"]:has(> iframe[src])
 !#endif
-dogdrip.net,infinityfree.com,smsonline.cloud##+js(trusted-replace-argument, atob, 0, , condition, .translate.goog)
-dogdrip.net,infinityfree.com,smsonline.cloud##+js(trusted-replace-argument, String.prototype.indexOf, 0, , condition, .translate.goog)
+dogdrip.net,infinityfree.com,smsonline.cloud##+js(trusted-replace-argument, String.prototype.includes, 0, , condition, NAVER)
+dogdrip.net,infinityfree.com,smsonline.cloud##+js(trusted-replace-argument, String.prototype.indexOf, 0, , condition, NAVER)
+dogdrip.net,infinityfree.com,smsonline.cloud##+js(trusted-replace-argument, String.prototype.split, 0, , condition, NAVER)
 dogdrip.net,infinityfree.com##ins.adsbygoogle:style(height: 1px !important; visibility: hidden !important;)
 ||ad-shield.cc^
 ||html-load.cc^
-||07c225f3.online^$font,ping,media
-||content-loader.com^$font,ping,media
-||css-load.com^$font,ping,media
-||img-load.com^$font,ping,media
-||html-load.com^$font,ping,media
-||html-load.com^$script,xhr,domain=blog.esuteru.com|blog.livedoor.jp|itainews.com|jin115.com|lamire.jp|picrew.me|ndtvprofit.com|crosswordsolver.com|cruciverba.it|demotywatory.pl|dnevno.hr|gloria.hr|heureka.cz|javatpoint.com|joemonster.org|lacuarta.com|laleggepertutti.it|m.economictimes.com|meeco.kr|mirrored.to|mistrzowie.org|motscroises.fr|oeffnungszeitenbuch.de|ondemandkorea.com|oraridiapertura24.it|palabr.as|persoenlich.com|petitfute.com|powerpyx.com|rabitsokuhou.2chblog.jp|rostercon.com|sourceforge.net|suzusoku.blog.jp|the-crossword-solver.com|thestockmarketwatch.com|word-grabber.com|wort-suchen.de|woxikon.*|yutura.net|zagreb.info|golf-live.at|motherlyvisions.com|kreuzwortraetsel.de|raetsel-hilfe.de|verkaufsoffener-sonntag.com|horairesdouverture24.fr|nyitvatartas24.hu|modhub.us|ff14net.2chblog.jp|news4vip.livedoor.biz|onecall2ch.com|yugioh-starlight.com|winfuture.de|automobile-catalog.com|motorbikecatalog.com|talkwithstranger.com|apkmirror.com|wetteronline.de
+||07c225f3.online^$font,ping
+! [dup] from ublock-origin/quick-fixes.txt
+! ||07c225f3.online^$media,redirect=noop-1s.mp4
+||content-loader.com^$font,ping
+! [dup] from ublock-origin/quick-fixes.txt
+! ||content-loader.com^$media,redirect=noop-1s.mp4
+||css-load.com^$font,ping
+! [dup] from ublock-origin/quick-fixes.txt
+! ||css-load.com^$media,redirect=noop-1s.mp4
+||img-load.com^$font,ping
+! [dup] from ublock-origin/quick-fixes.txt
+! ||img-load.com^$media,redirect=noop-1s.mp4
+||html-load.com^$font,ping
+! [dup] from ublock-origin/quick-fixes.txt
+! ||html-load.com^$media,redirect=noop-1s.mp4
+||html-load.com^$script,xhr,domain=blog.esuteru.com|blog.livedoor.jp|itainews.com|jin115.com|lamire.jp|picrew.me|ndtvprofit.com|crosswordsolver.com|cruciverba.it|demotywatory.pl|dnevno.hr|gloria.hr|heureka.cz|javatpoint.com|joemonster.org|lacuarta.com|laleggepertutti.it|m.economictimes.com|meeco.kr|mirrored.to|mistrzowie.org|motscroises.fr|oeffnungszeitenbuch.de|ondemandkorea.com|oraridiapertura24.it|palabr.as|persoenlich.com|petitfute.com|powerpyx.com|rabitsokuhou.2chblog.jp|rostercon.com|sourceforge.net|suzusoku.blog.jp|the-crossword-solver.com|thestockmarketwatch.com|word-grabber.com|wort-suchen.de|woxikon.*|yutura.net|zagreb.info|golf-live.at|motherlyvisions.com|kreuzwortraetsel.de|raetsel-hilfe.de|verkaufsoffener-sonntag.com|horairesdouverture24.fr|nyitvatartas24.hu|modhub.us|ff14net.2chblog.jp|news4vip.livedoor.biz|onecall2ch.com|yugioh-starlight.com|winfuture.de|automobile-catalog.com|motorbikecatalog.com|talkwithstranger.com|apkmirror.com|wetteronline.de|syosetu.com
 ||css-load.com^$domain=ygosu.com|loawa.com|bamgosu.site|thestockmarketwatch.com
 ||css-load.com^$redirect=noopjs,domain=honkailab.com
 ||07c225f3.online^$domain=economist.co.kr|hometownstation.com|sportalkorea.com|edaily.co.kr|isplus.com|tenasia.hankyung.com|etoday.co.kr
@@ -2784,8 +2795,8 @@ apkmirror.com,automobile-catalog.com,motorbikecatalog.com,blog.esuteru.com,blog.
 worldhistory.org##^script:has-text(adShield)
 lovelive-petitsoku.com,pravda.com.ua##^script:has-text(Ad-Shield)
 cinema.com.my,dolldivine.com,jutarnji.hr,slobodnadalmacija.hr##^script:has-text(adrecover.com)
-lacuarta.com,persoenlich.com##^script:has-text(html-load.com)
-powerpyx.com,webdesignledger.com,wetteronline.de##^script:has-text(.slice(-2);return decodeURIComponent)
+lacuarta.com,persoenlich.com,syosetu.com##^script:has-text(html-load.com)
+dziennik.pl,powerpyx.com,webdesignledger.com,wetteronline.de##^script:has-text(.slice(-2);return decodeURIComponent)
 !#else
 interfootball.co.kr,a-ha.io,cboard.net,jjang0u.com,joongdo.co.kr,viva100.com,gamingdeputy.com,thesaurus.net,alle-tests.nl,maketecheasier.com,automobile-catalog.com,allthekingz.com,motorbikecatalog.com,tweaksforgeeks.com,m.inven.co.kr,mlbpark.donga.com##+js(rmnt, script, KCgpPT57bGV0IGU)
 apkmirror.com,automobile-catalog.com,motorbikecatalog.com,blog.esuteru.com,blog.livedoor.jp,itainews.com,jin115.com,allthetests.com,javatpoint.com,globalrph.com,carscoops.com,crosswordsolver.com,cruciverba.it,dnevno.hr,dziennik.pl,ff14net.2chblog.jp,heureka.cz,indiatimes.com,lacuarta.com,laleggepertutti.it,meeco.kr,mirrored.to,motscroises.fr,news4vip.livedoor.biz,oeffnungszeitenbuch.de,onecall2ch.com,oraridiapertura24.it,palabr.as,petitfute.com,rabitsokuhou.2chblog.jp,rostercon.com,slashdot.org,sourceforge.net,suzusoku.blog.jp,the-crossword-solver.com,thestockmarketwatch.com,wfmz.com,word-grabber.com,wort-suchen.de,woxikon.*,yutura.net,zagreb.info,freemcserver.net,golf-live.at,kreuzwortraetsel.de,raetsel-hilfe.de,verkaufsoffener-sonntag.com,horairesdouverture24.fr,nyitvatartas24.hu,modhub.us,yugioh-starlight.com,winfuture.de,talkwithstranger.com##+js(rmnt, script, error-report.com)
@@ -2793,9 +2804,9 @@ worldhistory.org##+js(rmnt, script, adShield)
 lovelive-petitsoku.com,pravda.com.ua##+js(rmnt, script, Ad-Shield)
 cinema.com.my,dolldivine.com,jutarnji.hr,slobodnadalmacija.hr##+js(rmnt, script, adrecover.com)
 cinema.com.my##+js(trusted-suppress-native-method, HTMLScriptElement.prototype.setAttribute, %22data-sdk%22, abort)
-lacuarta.com,persoenlich.com##+js(rmnt, script, html-load.com)
+lacuarta.com,persoenlich.com,syosetu.com##+js(rmnt, script, html-load.com)
 winfuture.de##+js(aeld, load, error-report.com)
-powerpyx.com,webdesignledger.com,wetteronline.de##+js(rmnt, script, .slice(-2)%3Breturn%20decodeURIComponent)
+dziennik.pl,powerpyx.com,webdesignledger.com,wetteronline.de##+js(rmnt, script, .slice(-2)%3Breturn%20decodeURIComponent)
 !#endif
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/357#discussioncomment-10468169
 ||asset.ad-shield.cc/images$image,3p,redirect=32x32.png
@@ -3857,11 +3868,9 @@ www.chip.de###CR[class="Downloads-Select"] > #G32 > #M1 > div:not([class="wrappe
 www.chip.de###CR[class="Downloads-Getfile"] > #G32 > #M1 > div:not([class="wrapper-safe"]) [class="ar-1-1 bg-gray-l"]:has(> a[href*="https://www.chip.de/downloads/"] > img[src*="https://im.chip.de/ii/"])
 ! restore speed (the anti adblock script causing lag spikes)
 !#if cap_html_filtering
-www.chip.de##^script:has-text(/ \= false\; \} else \{ /)
 www.chip.de##^script:has-text(?metric=transit.counter&key=fail_redirect&tags=)
 www.chip.de##^script:has-text(/pushAdTag|link_click|getAds/)
 !#else
-www.chip.de##+js(rmnt, script, %2F%20%5C%3D%20false%5C%3B%20%5C%7D%20else%20%5C%7B%20%2F)
 www.chip.de##+js(rmnt, script, %3Fmetric%3Dtransit.counter%26key%3Dfail_redirect%26tags%3D)
 www.chip.de##+js(rmnt, script, %2FpushAdTag%7Clink_click%7CgetAds%2F)
 !#endif

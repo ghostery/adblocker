@@ -1697,7 +1697,7 @@ hanime.xxx##+js(aopw, Script_Manager)
 hanime.xxx##+js(nowoif)
 hanime.xxx###main-sidebar
 ! https://github.com/AdguardTeam/AdguardFilters/issues/143320
-watchhentai.net#@#.adbox:not(.adbar)
+watchhentai.net##.minlinks-links
 watchhentai.net##+js(rmnt, script, AdBlock)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/142992
 chrysler-club.net###obalovydiv:style(display: block !important;)
@@ -2199,10 +2199,13 @@ idoitmyself.xyz##+js(rpnt, script, %2FdevtoolsDetector%5C.launch%5C(%5C)%5C%3B%2
 ! vidguard
 ||acacdn.com^$script,redirect-rule=noopjs
 bembed.net,elbailedeltroleo.site,embedv.net,fslinks.org,listeamed.net,v6embed.xyz,vembed.*,vgplayer.xyz,vid-guard.com,vidguard.online##+js(nostif, afterOpen)
-bembed.net,elbailedeltroleo.site,embedv.net,fslinks.org,listeamed.net,v6embed.xyz,vembed.*,vgplayer.xyz,vid-guard.com,vidguard.online##+js(nowoif)
+bembed.net,elbailedeltroleo.site,embedv.net,fslinks.org,v6embed.xyz,vembed.*,vgplayer.xyz,vid-guard.com,vidguard.online##+js(nowoif)
+listeamed.net##+js(nowoif, !%2Fd%2F)
+listeamed.net##+js(json-prune, AffiliateAdBlock)
 bembed.net,elbailedeltroleo.site,embedv.net,fslinks.org,listeamed.net,v6embed.xyz,vembed.*,vgplayer.xyz,vid-guard.com,vidguard.online##+js(set, PlayerConfig.config.CustomAdSetting, %5B%5D)
 bembed.net,embedv.net,fslinks.org,listeamed.net,v6embed.xyz,vembed.*,vgplayer.xyz,vid-guard.com##body > div[class]:empty
 *$script,3p,redirect-rule=noopjs,domain=bembed.net|embedv.net
+*$xhr,3p,redirect-rule=nooptext,domain=listeamed.net
 ||oaphoace.net^$script,3p,redirect-rule=noopjs
 ! https://www.jpvhub.com/ popunder on DL
 ! https://github.com/uBlockOrigin/uAssets/issues/18218
@@ -3072,8 +3075,6 @@ securenetsystems.net##+js(rmnt, script, adblock)
 edmdls.com,freshremix.net,scenedl.org##+js(set, loadpagecheck, noopFunc)
 ! https://hentaibooty.com/ popup
 hentaibooty.com##+js(acs, jQuery, popupAt)
-! https://www.reddit.com/r/uBlockOrigin/comments/15q63iq/cant_block_script/
-touguatize.monster##+js(rmnt, script, pop.target)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/158680
 @@||google-analytics.com/debug/collect?$xhr,domain=10bye.com
 ! https://github.com/uBlockOrigin/uAssets/issues/19342
@@ -3103,8 +3104,6 @@ deletedspeedstreams.blogspot.com##+js(nostif, adblock)
 video.q34r.org##+js(set, adblockcheck, false)
 onscreens.me,video.q34r.org##+js(aopr, doSecondPop)
 onscreens.me,video.q34r.org##+js(aopr, BetterJsPop)
-! https://github.com/uBlockOrigin/uAssets/discussions/17361#discussioncomment-6741758
-||faucettrx.store/default.php
 ! https://github.com/uBlockOrigin/uAssets/issues/19396
 freepasses.org##+js(rmnt, script, deblocker)
 freepasses.org##+js(aeld, click, isOpened)
@@ -4021,7 +4020,7 @@ cctvwiki.com##+js(aost, setTimeout, ads)
 cimanow.cc##+js(aopr, navigator.brave)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/23131
-@@||cimanow.cc/wp-content/themes/Cima%20Now%20New/Assets/js/openads.js$script,1p
+@@||cimanow.cc^$script,1p
 @@||deva.cnvids.com/dwcn/Assets/js/openads.js$script,domain=deva.cnvids.com
 cimanow.cc###ad1
 ! https://github.com/uBlockOrigin/uAssets/issues/20516
