@@ -1477,26 +1477,34 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         const searchParamsIndex = request.url.indexOf('?') + 1;
         if (searchParamsIndex !== 0 && resourceRedirects.length !== 0) {
           const searchParams = new URLSearchParams(request.url.slice(searchParamsIndex + 1));
+          let parametersRemoved = 0;
           for (const redirect of requestRedirects) {
-            searchParams.delete(redirect.optionValue!);
+            if (searchParams.has(redirect.optionValue!)) {
+              parametersRemoved++;
+              searchParams.delete(redirect.optionValue!);
+            }
           }
-          redirectUrl = `${request.url.slice(0, searchParamsIndex)}?${searchParams.toString()}`;
-        } else {
-          const redirects = resourceRedirects
-            // highest priorty wins
-            .sort((a, b) => b.getRedirectPriority() - a.getRedirectPriority());
+          if (parametersRemoved !== 0) {
+            redirectUrl = `${request.url.slice(0, searchParamsIndex)}?${searchParams.toString()}`;
+            // TODO: More than one filter needs to be returned
+            result.filter = requestRedirects[0];
+          }
+        }
 
-          if (redirects.length !== 0) {
-            for (const filter of redirects) {
-              if (filter.getRedirectResource() === 'none') {
-                redirectNone = filter;
-              } else if (filter.isRedirectRule()) {
-                if (redirectRule === undefined) {
-                  redirectRule = filter;
-                }
-              } else if (result.filter === undefined) {
-                result.filter = filter;
+        const redirects = resourceRedirects
+          // highest priorty wins
+          .sort((a, b) => b.getRedirectPriority() - a.getRedirectPriority());
+
+        if (redirects.length !== 0) {
+          for (const filter of redirects) {
+            if (filter.getRedirectResource() === 'none') {
+              redirectNone = filter;
+            } else if (filter.isRedirectRule()) {
+              if (redirectRule === undefined) {
+                redirectRule = filter;
               }
+            } else if (result.filter === undefined) {
+              result.filter = filter;
             }
           }
         }
@@ -1528,14 +1536,14 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       // 1. Check if a redirect=none rule was found, which acts as exception.
       // 2. If no exception was found, prepare `result.redirect` response.
       if (result.filter !== undefined && result.exception === undefined) {
-        if (result.filter.isRedirect()) {
+        if (redirectUrl !== undefined) {
+          result.redirect = { body: '', contentType: 'text', dataUrl: redirectUrl };
+        } else {
           if (redirectNone !== undefined) {
             result.exception = redirectNone;
           } else {
             result.redirect = this.resources.getResource(result.filter.getRedirectResource());
           }
-        } else if (result.filter.isRemoveParam()) {
-          result.redirect = { body: '', contentType: 'text', dataUrl: redirectUrl! };
         }
       }
     }
