@@ -890,6 +890,10 @@ export default class NetworkFilter implements IFilter {
 
             break;
           case 'removeparam':
+            if (value.length === 0) {
+              return null;
+            }
+
             mask = setBit(mask, NETWORK_FILTER_MASK.isRemoveParam);
             optionValue = value;
 
@@ -1539,6 +1543,10 @@ export default class NetworkFilter implements IFilter {
 
     if (this.isBadFilter()) {
       options.push('badfilter');
+    }
+
+    if (this.isRemoveParam()) {
+      options.push(`removeparam=${this.optionValue!}`);
     }
 
     if (options.length > 0) {
