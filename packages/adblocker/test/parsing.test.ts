@@ -15,6 +15,7 @@ import { parseFilters } from '../src/lists.js';
 import { hashStrings, tokenize } from '../src/utils.js';
 import { HTMLSelector, HTMLModifier } from '../src/html-filtering.js';
 import { NORMALIZED_TYPE_TOKEN, hashHostnameBackward } from '../src/request.js';
+import { Domains } from '../src/engine/domains.js';
 
 function h(hostnames: string[]): Uint32Array {
   return new Uint32Array(hostnames.map(hashHostnameBackward)).sort();
@@ -2645,6 +2646,14 @@ describe('scriptlets arguments parsing', () => {
       expect(CosmeticFilter.parse(`foo.com##+js(${scriptlet})`)?.parseScript(), scriptlet).to.eql(
         expected,
       );
+    }
+  });
+});
+
+describe('Domains', () => {
+  it('rejects to parse invalid pipes', () => {
+    for (const str of ['|foo.com', 'foo.com|', '|foo.com|']) {
+      expect(Domains.parse(str.split('|'))).to.be.undefined;
     }
   });
 });
