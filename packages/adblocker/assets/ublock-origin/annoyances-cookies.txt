@@ -746,12 +746,12 @@ just-eat.*,justeat.it,lieferando.*,pyszne.pl,takeaway.com,thuisbezorgd.nl##+js(t
 just-eat.*,justeat.it,lieferando.*,pyszne.pl,takeaway.com,thuisbezorgd.nl##+js(trusted-set-cookie, je-cookieConsent, necessary, 1year)
 just-eat.*,justeat.it,lieferando.*,pyszne.pl,takeaway.com,thuisbezorgd.nl##+js(trusted-set-cookie, customerCookieConsent, %255B%257B%2522consentTypeId%2522%253A103%252C%2522consentTypeName%2522%253A%2522necessary%2522%252C%2522isAccepted%2522%253Atrue%257D%252C%257B%2522consentTypeId%2522%253A104%252C%2522consentTypeName%2522%253A%2522functional%2522%252C%2522isAccepted%2522%253Atrue%257D%252C%257B%2522consentTypeId%2522%253A105%252C%2522consentTypeName%2522%253A%2522analytical%2522%252C%2522isAccepted%2522%253Afalse%257D%252C%257B%2522consentTypeId%2522%253A106%252C%2522consentTypeName%2522%253A%2522personalized%2522%252C%2522isAccepted%2522%253Afalse%257D%255D, 1year)
 ! https://www.telekom.com/ - third-party services cookie
-telekom.com##+js(trusted-set-cookie, cookie-optin, %7B%2522version%2522%3A1%252C%2522settings%2522%3A%7B%2522required%2522%3Atrue%252C%2522analytical%2522%3Afalse%252C%2522marketing%2522%3Afalse%252C%2522thirdparty%2522%3Atrue%7D%7D, 1year)
+telekom.com,telekom.net,telekom.de##+js(trusted-set-cookie, cookie-optin, %7B%2522version%2522%3A1%252C%2522settings%2522%3A%7B%2522required%2522%3Atrue%252C%2522analytical%2522%3Afalse%252C%2522marketing%2522%3Afalse%252C%2522thirdparty%2522%3Atrue%7D%7D, 1year)
 ! https://hemmersbach.com/career/13972 - Performance, functional cookies
 hemmersbach.com##+js(trusted-set-cookie, cookiefirst-consent, %257B%2522cookiefirst%2522%253Atrue%252C%2522google_analytics%2522%253Atrue%252C%2522google_tag_manager%2522%253Atrue%252C%2522linkedin_ads%2522%253Afalse%252C%2522hubspot%2522%253Atrue%252C%2522twitter%2522%253Afalse%252C%2522active-campaign%2522%253Atrue%252C%2522email-marketing%2522%253Atrue%252C%2522bing_ads%2522%253Afalse%252C%2522type%2522%253A%2522granular%2522%257D)
 ! https://github.com/uBlockOrigin/uAssets/issues/20523
 ! https://github.com/uBlockOrigin/uAssets/issues/20595
-digi24.ro,digisport.ro,digitalfoundry.net,egx.net,eurogamer.it,gmx.*,mail.com,mcmcomiccon.com,nintendolife.com,oe24.at,paxsite.com,player.pl,purexbox.com,pushsquare.com,southparkstudios.com,starwarscelebration.com,thehaul.com,timeextension.com,travelandleisure.com,tunein.com,videoland.com,wizzair.com,wetter.at##+js(trusted-click-element, %23onetrust-accept-btn-handler, , 1000)
+digi24.ro,digisport.ro,digitalfoundry.net,egx.net,eurogamer.it,gmx.*,mail.com,mcmcomiccon.com,nintendolife.com,oe24.at,paxsite.com,peacocktv.com,player.pl,purexbox.com,pushsquare.com,southparkstudios.com,starwarscelebration.com,thehaul.com,timeextension.com,travelandleisure.com,tunein.com,videoland.com,wizzair.com,wetter.at##+js(trusted-click-element, %23onetrust-accept-btn-handler, , 1000)
 dicebreaker.com,eurogamer.cz,eurogamer.es,eurogamer.net,eurogamer.nl,eurogamer.pl,eurogamer.pt,gamesindustry.biz,jelly.deals,reedpop.com,rockpapershotgun.com,thepopverse.com,vg247.com,videogameschronicle.com##+js(trusted-click-element, button%5Btitle%3D%22Accept%20and%20continue%22%5D)
 dicebreaker.com,eurogamer.cz,eurogamer.es,eurogamer.net,eurogamer.nl,eurogamer.pl,eurogamer.pt,gamesindustry.biz,jelly.deals,reedpop.com,rockpapershotgun.com,thepopverse.com,vg247.com,videogameschronicle.com##+js(trusted-click-element, button%5Btitle%3D%22Accept%20All%20Cookies%22%5D)
 eurogamer.de##+js(trusted-click-element, .accept-all)
@@ -1639,3 +1639,15 @@ www.tk.de##+js(trusted-set-cookie, CONSENTMGR, c1%3A0%257Cc3%3A0%257Cc9%3A1%257C
 salzburg.info##+js(set-attr, img.js-lazy-img%5Bsrc%5E%3D%22data%3Aimage%2F%22%5D, src, %5Bdata-src%5D)
 ! https://github.com/uBlockOrigin/uAssets/issues/26410
 verksamt.se##+js(trusted-click-element, %5Bdata-testid%3D%22consent-necessary%22%5D)
+! decline (reported, allow search to work)
+booking.com##+js(trusted-click-element, button%5Bid%3D%22onetrust-reject-all-handler%22%5D, , 1000)
+! non-essential
+here.com##+js(trusted-click-element, div%5Bclass%3D%22t_cm_ec_reject_button%22%5D, , 1000)
+! www.kooora.com "I Agree" cdn.privacy-mgmt.com
+cdn.privacy-mgmt.com##+js(trusted-click-element, button%5Baria-label%3D%22%D9%86%D8%B9%D9%85%20%D8%A7%D9%86%D8%A7%20%D9%85%D9%88%D8%A7%D9%81%D9%82%22%5D)
+! just necessary
+nizke-napeti.cz.abb.com##+js(trusted-set-cookie, cookiesConsent, %7B%22necessary%22%3Atrue%2C%22statistical%22%3Afalse%2C%22marketing%22%3Afalse%7D, , , reload, 1)
+! accept, consent-wall
+privacy.maennersache.de##+js(trusted-click-element, button%5Btitle%3D%22Einwilligen%20und%20weiter%22%5D, , 1000)
+! https://lovo.ai/ - essential only
+lovo.ai##+js(trusted-set-cookie, cookieConsent, %7B%22essential%22%3Atrue%2C%22analytical%22%3Afalse%2C%22functional%22%3Afalse%2C%22marketing%22%3Afalse%7D)

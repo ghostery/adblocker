@@ -287,6 +287,10 @@ abysscdn.com,hihihaha1.xyz,hihihaha2.xyz,playhydrax.com##+js(aost, HTMLElement.p
 abysscdn.com,playhydrax.com###overlay
 ! https://www.reddit.com/r/uBlockOrigin/comments/1ef4r1f/kisscartoonnz_blocks_720p_quality_for_adblock/
 playhydrax.com##+js(rpnt, script, (isNoAds), (true))
+! breakage on mobile devices(maximise/minimise button hidden after exit screen on portrait mode)
+!#if env_mobile
+abysscdn.com,hihihaha1.xyz#@#.jw-wrapper > div[style="opacity: 0; visibility: hidden; overflow: hidden; display: block; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;"]
+!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/5352
 ! https://github.com/uBlockOrigin/uAssets/issues/23538
 *$ping,domain=buktube.com|fullxh.com|galleryxh.site|hamsterix.*|megaxh.com|movingxh.world|seexh.com|unlockxh4.com|valuexh.life|xhaccess.com|xhadult2.com|xhadult3.com|xhadult4.com|xhadult5.com|xhamster.*|xhamster10.*|xhamster11.*|xhamster12.*|xhamster13.*|xhamster14.*|xhamster15.*|xhamster16.*|xhamster17.*|xhamster18.*|xhamster19.*|xhamster20.*|xhamster2.*|xhamster3.*|xhamster4.*|xhamster42.*|xhamster46.com|xhamster5.*|xhamster7.*|xhamster8.*|xhamsterporno.mx|xhbig.com|xhbranch5.com|xhchannel.com|xhchannel2.com|xhdate.world|xhday.com|xhday1.com|xhlease.world|xhmoon5.com|xhofficial.com|xhopen.com|xhplanet1.com|xhplanet2.com|xhreal2.com|xhreal3.com|xhspot.com|xhtab2.com|xhtab4.com|xhtotal.com|xhtree.com|xhvictory.com|xhwebsite.com|xhwebsite2.com|xhwebsite5.com|xhwide1.com|xhwide2.com|xhwide5.com|xhxh3.xyz
@@ -782,6 +786,11 @@ im9.eu##+js(aost, document.createElement, pda)
 /advert.$image,3p,redirect=1x1.gif,domain=im9.eu
 ||sprzedaz2.oczarjk.pl/img/ads/banner.gif$image,redirect=1x1.gif,domain=im9.eu
 g9g.eu##+js(aopr, adBlockDetected)
+! https://forums.lanik.us/viewtopic.php?f=62&t=43843
+elamigosedition.com##+js(aost, document.addEventListener, blocker)
+elamigosedition.com##+js(nowoif)
+! https://github.com/uBlockOrigin/uAssets/issues/26428
+||elamigosedition.com/templates/games/js/blocker.js^
 ! END: Rules from filters.txt
 ! START: Regional lists
 ! <<<<< czech slovak filters >>>>>
@@ -853,8 +862,6 @@ hdfilmcehennemi1.net##.money-text
 ! <<<<< AdGuard Spanish/Portuguese >>>>>
 ! https://github.com/AdguardTeam/AdguardFilters/issues/191898#issuecomment-2453544544
 ! [badfilter] *$script,3p,denyallow=cdn.jkdesu.com|disqus.com,from=jkanime.net,badfilter
-! https://github.com/uBlockOrigin/uAssets/issues/26245
-sussytoons.site##+js(no-fetch-if, doubleclick)
 ! END: Regional lists
 ! https://github.com/AdguardTeam/AdguardFilters/issues/169660
 flixscans.org##+js(no-fetch-if, googlesyndication)
@@ -878,8 +885,8 @@ bharathwick.com##+js(rmnt, script, deblocker)
 ! https://github.com/uBlockOrigin/uAssets/issues/22851
 ! https://github.com/uBlockOrigin/uAssets/issues/24468
 ! https://github.com/uBlockOrigin/uAssets/commit/b8ec336f4f3ea793750d553129b58df543cc338d#commitcomment-139593195
-animesuge.to,aniwave.*,anix.to,bflix.to,bflixhd.to,flixflare.to,flixhive.to,flixhq.bz,flixtorz.to,fmovies24.to,hurawatch.bz,hurawatch2.to,losmoviesz.to,mangafire.to,moviestowatch.id,soap2dayx.to,watchseriesx.to##+js(nowoif, _blank)
-animesuge.to,aniwave.*,anix.to,anix.vc,bflix.to,bflixhd.to,fboxz.to,flixflare.to,flixhive.to,flixhq.bz,flixtorz.to,fmovies24.to,hurawatch.bz,hurawatch2.to,losmoviesz.to,mangafire.to,moviestowatch.id,soap2dayx.to,watchseriesx.to##+js(set-cookie, __pf, 1)
+aniwave.*,mangafire.to##+js(nowoif, _blank)
+aniwave.*,mangafire.to##+js(set-cookie, __pf, 1)
 !#if cap_html_filtering
 aniwave.*##^script:has-text(document.write)
 !#else
@@ -908,8 +915,8 @@ rgeyyddl.skin##+js(acs, document.createElement, adblock)
 tubereader.me##+js(aeld, %2Fadblock%2Fi)
 tubereader.me##+js(nostif, %2Fadblock%2Fi)
 ! https://github.com/uBlockOrigin/uAssets/pull/21777
-! https://www.reddit.com/r/uBlockOrigin/comments/1fblnh1/prevents_adsluarmornet_to_load/
-! [badfilter] ://ads.$~image,~xhr,domain=~ads.8designers.com|~ads.ac.uk|~ads.adstream.com.ro|~ads.allegro.pl|~ads.am|~ads.amazon|~ads.apple.com|~ads.atmosphere.copernicus.eu|~ads.band|~ads.bestprints.biz|~ads.bikepump.com|~ads.brave.com|~ads.buscaempresas.co|~ads.business.bell.ca|~ads.cafebazaar.ir|~ads.colombiaonline.com|~ads.comeon.com|~ads.cvut.cz|~ads.doordash.com|~ads.dosocial.ge|~ads.dosocial.me|~ads.elevateplatform.co.uk|~ads.finance|~ads.google.cn|~ads.google.com|~ads.gree.net|~ads.gurkerl.at|~ads.harvard.edu|~ads.instacart.com|~ads.jiosaavn.com|~ads.kaipoke.biz|~ads.kazakh-zerno.net|~ads.kifli.hu|~ads.knuspr.de|~ads.listonic.com|~ads.luarmor.net|~ads.magalu.com|~ads.mercadolivre.com.br|~ads.mgid.com|~ads.microsoft.com|~ads.midwayusa.com|~ads.mobilebet.com|~ads.mojagazetka.com|~ads.msstate.edu|~ads.mst.dk|~ads.mt|~ads.nc|~ads.nipr.ac.jp|~ads.olx.pl|~ads.pinterest.com|~ads.rohlik.cz|~ads.rohlik.group|~ads.route.cc|~ads.safi-gmbh.ch|~ads.scotiabank.com|~ads.selfip.com|~ads.shopee.cn|~ads.shopee.co.th|~ads.shopee.com.br|~ads.shopee.com.mx|~ads.shopee.com.my|~ads.shopee.kr|~ads.shopee.ph|~ads.shopee.pl|~ads.shopee.sg|~ads.shopee.tw|~ads.shopee.vn|~ads.smartnews.com|~ads.snapchat.com|~ads.socialtheater.com|~ads.spotify.com|~ads.studyplus.co.jp|~ads.taboola.com|~ads.tiktok.com|~ads.twitter.com|~ads.typepad.jp|~ads.us.tiktok.com|~ads.viksaffiliates.com|~ads.vk.com|~ads.watson.ch|~ads.x.com|~ads.yandex|~badassembly.com|~caravansforsale.co.uk|~fusac.fr|~memo2.nl|~reempresa.org|~satmetrix.com|~seriouswheels.com,badfilter
+!://ads.$~image,~xhr,domain=~ads.8designers.com|~ads.ac.uk|~ads.adstream.com.ro|~ads.allegro.pl|~ads.am|~ads.amazon|~ads.apple.com|~ads.atmosphere.copernicus.eu|~ads.band|~ads.bestprints.biz|~ads.bikepump.com|~ads.brave.com|~ads.buscaempresas.co|~ads.business.bell.ca|~ads.cafebazaar.ir|~ads.colombiaonline.com|~ads.comeon.com|~ads.cvut.cz|~ads.doordash.com|~ads.dosocial.ge|~ads.dosocial.me|~ads.elevateplatform.co.uk|~ads.finance|~ads.google.cn|~ads.google.com|~ads.gree.net|~ads.gurkerl.at|~ads.harvard.edu|~ads.instacart.com|~ads.jiosaavn.com|~ads.kaipoke.biz|~ads.kazakh-zerno.net|~ads.kifli.hu|~ads.knuspr.de|~ads.listonic.com|~ads.luarmor.net|~ads.magalu.com|~ads.mercadolivre.com.br|~ads.mgid.com|~ads.microsoft.com|~ads.midwayusa.com|~ads.mobilebet.com|~ads.mojagazetka.com|~ads.msstate.edu|~ads.mst.dk|~ads.mt|~ads.nc|~ads.nipr.ac.jp|~ads.olx.pl|~ads.pinterest.com|~ads.rohlik.cz|~ads.rohlik.group|~ads.route.cc|~ads.safi-gmbh.ch|~ads.scotiabank.com|~ads.selfip.com|~ads.shopee.cn|~ads.shopee.co.th|~ads.shopee.com.br|~ads.shopee.com.mx|~ads.shopee.com.my|~ads.shopee.kr|~ads.shopee.ph|~ads.shopee.pl|~ads.shopee.sg|~ads.shopee.tw|~ads.shopee.vn|~ads.smartnews.com|~ads.snapchat.com|~ads.socialtheater.com|~ads.spotify.com|~ads.studyplus.co.jp|~ads.taboola.com|~ads.tiktok.com|~ads.twitter.com|~ads.typepad.jp|~ads.us.tiktok.com|~ads.viksaffiliates.com|~ads.vk.com|~ads.watson.ch|~ads.x.com|~ads.yandex|~badassembly.com|~caravansforsale.co.uk|~fusac.fr|~memo2.nl|~reempresa.org|~satmetrix.com|~seriouswheels.com,badfilter
+!://ads.$~image,~xhr,domain=~ads.8designers.com|~ads.ac.uk|~ads.adstream.com.ro|~ads.allegro.pl|~ads.am|~ads.amazon|~ads.apple.com|~ads.atmosphere.copernicus.eu|~ads.band|~ads.bestprints.biz|~ads.bikepump.com|~ads.brave.com|~ads.buscaempresas.co|~ads.business.bell.ca|~ads.cafebazaar.ir|~ads.colombiaonline.com|~ads.comeon.com|~ads.cvut.cz|~ads.doordash.com|~ads.dosocial.ge|~ads.dosocial.me|~ads.elevateplatform.co.uk|~ads.finance|~ads.google.cn|~ads.google.com|~ads.gree.net|~ads.gurkerl.at|~ads.harvard.edu|~ads.instacart.com|~ads.jiosaavn.com|~ads.kaipoke.biz|~ads.kazakh-zerno.net|~ads.kifli.hu|~ads.knuspr.de|~ads.listonic.com|~ads.luarmor.net|~ads.magalu.com|~ads.mercadolivre.com.br|~ads.mgid.com|~ads.microsoft.com|~ads.midwayusa.com|~ads.mobilebet.com|~ads.mojagazetka.com|~ads.msstate.edu|~ads.mst.dk|~ads.mt|~ads.nc|~ads.nipr.ac.jp|~ads.olx.pl|~ads.pinterest.com|~ads.rohlik.cz|~ads.rohlik.group|~ads.route.cc|~ads.safi-gmbh.ch|~ads.scotiabank.com|~ads.selfip.com|~ads.shopee.cn|~ads.shopee.co.th|~ads.shopee.com.br|~ads.shopee.com.mx|~ads.shopee.com.my|~ads.shopee.kr|~ads.shopee.ph|~ads.shopee.pl|~ads.shopee.sg|~ads.shopee.tw|~ads.shopee.vn|~ads.smartnews.com|~ads.snapchat.com|~ads.socialtheater.com|~ads.spotify.com|~ads.studyplus.co.jp|~ads.taboola.com|~ads.tiktok.com|~ads.tuver.ru|~ads.twitter.com|~ads.typepad.jp|~ads.us.tiktok.com|~ads.viksaffiliates.com|~ads.vk.com|~ads.watson.ch|~ads.x.com|~ads.yandex|~badassembly.com|~caravansforsale.co.uk|~fusac.fr|~memo2.nl|~reempresa.org|~satmetrix.com|~seriouswheels.com,to=~ads.remix.es
 ! https://github.com/uBlockOrigin/uAssets/issues/21775
 counterstrike-hack.leforum.eu,ajt.xooit.org##+js(aopr, document.body.style.backgroundPosition)
 ! ludwig-van .com anti-adb
@@ -1061,10 +1068,7 @@ rt3dmodels.com##+js(rmnt, script, deblocker)
 ! https://github.com/uBlockOrigin/uAssets/pull/22119
 plc4me.com##+js(rmnt, script, deblocker)
 ! https://github.com/uBlockOrigin/uAssets/issues/22120
-@@*$ghide,domain=tutoriales-virales.blogspot.com|tyvpaste.blogspot.com|librospreuniversitariospdf.blogspot.com|preu-pdf-paste.blogspot.com
-! https://old.reddit.com/r/uBlockOrigin/comments/19c3qch/
-@@||fernsehzone.online^$ghide
-fernsehzone.online##.adsbygoogle
+@@*$ghide,domain=tutoriales-virales.blogspot.com|tyvpaste.blogspot.com|preu-pdf-paste.blogspot.com
 ! krx18.com
 krx18.com##center > [src*="/ads/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/22126
@@ -1092,6 +1096,8 @@ hole-io.com##.webgl-content:style(width: 100% !important;)
 ||servedbyadbutler.com^$media,3p,redirect=noopmp3-0.1s,domain=freerideworldtour.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/171445
 x-x-x.tube##+js(aopr, popns)
+x-x-x.tube##+js(rmnt, script, location)
+x-x-x.tube##+js(set-cookie, aawsmackeroo0, 1)
 ! Video ads on nsfw sites
 /theme/002/js/application.js?2.0|$script,1p,replace=/video\.maxPop/0/
 ! https://github.com/uBlockOrigin/uAssets/issues/22197
@@ -3267,7 +3273,9 @@ upns.*##+js(aeld, click, document.createElement)
 ! movielinkbd ads
 1movielinkbd.com,filecloud.*,gdfile.org,movieliinkbd.com##+js(nowoif)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1gucwsp/adblock_detection_on_historicaerialscom/
+historicaerials.com##+js(aeld, load, detect)
 ||historicaerials.com/js/adblock-detection.js^
+||historicaerials.com/js/testuserad.js^
 ! https://www.reddit.com/r/uBlockOrigin/comments/1guanqw/need_help_please/
 canela.tv##+js(json-prune-fetch-response, data.custom.bcAdMetadataUrl, , propsToMatch, %2Fmedia%2Fcontent)
 canela.tv##+js(trusted-replace-fetch-response, %2F%23EXT-X-KEY%3AMETHOD%3DNONE%5Cn%23EXT(%3F%3AINF%3A%5B%5E%5Cn%5D%2B%7C-X-DISCONTINUITY)%5Cn.%2B%3F(%3F%3D%23EXT-X-KEY)%2Fgms, , %2Fmedia.m3u8)
@@ -3383,6 +3391,7 @@ gmanetwork.com##.grid_extras_holder
 gmanetwork.com##.mrec_ad
 gmanetwork.com##.mrec-add-container
 gmanetwork.com##.latest_mrec_ad
+gmanetwork.com##.cbox:has(> :is(ads, .skyscraper))
 ! https://github.com/uBlockOrigin/uAssets/issues/26254
 !#if cap_html_filtering
 atlasstudiousa.com##^script:has-text(WebAssembly)
@@ -3474,3 +3483,5 @@ peachprintable.com###popID
 gputrends.net##+js(set-local-storage-item, adWatched, true)
 ! https://www.vikatan.com/lifestyle/toxic-communication
 vikatan.com##+js(nostif, %2Fadblock%7Cisblock%2Fi)
+! https://github.com/uBlockOrigin/uAssets/issues/26441
+||kryptografie.de/js/wb_dead.js

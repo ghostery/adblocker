@@ -158,16 +158,19 @@ wiki.yjsnpi.nu##+js(nostif, ()%3D%3Ek(S(4)
 ||wiki.yjsnpi.nu/comments/$script,replace=/(\);\}\}function [A-Za-z]+\([A-Za-z]?\)\{const [a-z]+=[A-Z]\,(?:const )?[a-z]+=[A-Z]).{500\,2000}\]\(\)\)\);\}/\$1}/
 !#endif
 ! Ad-Shield
-html-load.com##html,body:style(height: 1px !important; overflow: hidden !important;)
-content-loader.com##html,body:style(height: 1px !important; overflow: hidden !important;)
-css-load.com##html,body:style(height: 1px !important; overflow: hidden !important;)
-img-load.com##html,body:style(height: 1px !important; overflow: hidden !important;)
+||07c225f3.online^$media,redirect=noop-1s.mp4
+||content-loader.com^$media,redirect=noop-1s.mp4
+||css-load.com^$media,redirect=noop-1s.mp4
+||img-load.com^$media,redirect=noop-1s.mp4
+||html-load.com^$media,redirect=noop-1s.mp4
 ! https://github.com/uBlockOrigin/uAssets/issues/25990
 ||karistudio.com/wp-content/themes/blogarise-child/check2.js$important
 karistudio.com##p.chapter_content:style(display: block !important; visibility: visible !important; opacity: 1 !important; transform: none !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/20907
 cursomecanet.com##+js(no-fetch-if, https, , %7B%22statusText%22%3A%20%22%22%2C%20%22type%22%3A%20%22cors%22%7D)
 cursomecanet.com##+js(aost, fetch, .js%3F)
+cursomecanet.com##div[style]:has(a[href][target="_blank"]):style(display: block !important;)
+||cursomecanet.com/registro$xhr,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/25344
 ! https://github.com/uBlockOrigin/uAssets/pull/26342
 ! https://github.com/uBlockOrigin/uAssets/issues/26393
@@ -184,8 +187,6 @@ exploader.net##a[style*="display:"][href^="https://al.dmm.co.jp"] span
 exploader.net##+js(aost, Element.prototype.getBoundingClientRect, %2F%5B0-9a-z%5D%7B20%2C%7D%5Cs.%2Bdaotag%2F)
 ||daotag.com/tag/$script,replace=/if\(images\[i_key\]\.parentNode\.offsetHeight<rand\)/if(0)/,domain=exploader.net
 ||daotag.com/tag/$script,replace=/if\(rand\+'px'!=dev_height\)/if(0)/,domain=exploader.net
-! https://github.com/uBlockOrigin/uAssets/issues/26299
-entra.news,microsoftsecurityinsights.com,substack.com#@#+js(trusted-set-cookie, intro_popup_last_hidden_at, %24currentDate%24, , , reload, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/26348
 @@||ac.cnstrc.com^$xhr,domain=bjs.com
 ! https://github.com/uBlockOrigin/uAssets/issues/26392
@@ -195,3 +196,11 @@ entra.news,microsoftsecurityinsights.com,substack.com#@#+js(trusted-set-cookie, 
 ! [badfilter] ||city.onomichi.hiroshima.jp/uploaded/banner/$badfilter
 ! https://www.reddit.com/r/uBlockOrigin/comments/1hbzrji/pixiv_breaking_with_uboagain/
 pixiv.net#@#+js(set-cookie-reload, privacy_policy_agreement, 6)
+! https://github.com/easylist/easylistgermany/issues/216
+!#if cap_html_filtering
+www.chip.de##^script:has-text(/ \=\=\= [0-9]{1,2}\) \{ \}/)
+!#else
+www.chip.de##+js(rmnt, script, %2F%20%5C%3D%5C%3D%5C%3D%20%5B0-9%5D%7B1%2C2%7D%5C)%20%5C%7B%20%5C%7D%2F)
+!#endif
+! https://github.com/uBlockOrigin/uAssets/issues/26443
+@@||premium.services.zam.com/v1/api/$xhr,domain=wowhead.com
