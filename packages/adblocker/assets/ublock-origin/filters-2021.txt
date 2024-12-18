@@ -259,11 +259,12 @@ m-hentai.net##div[class^="landingpageadcontainer_iframe"]
 jetpunk.com##+js(no-xhr-if, prebid)
 jetpunk.com##+js(cookie-remover, PageCount)
 jetpunk.com##+js(set-local-storage-item, PageCount, %24remove%24)
-jetpunk.com##+js(set, asc, 2)
 ! https://github.com/uBlockOrigin/uAssets/issues/25387
-jetpunk.com##+js(trusted-set, google_tag_manager, %7B%20%22value%22%3A%20%7B%20%22G-Z8CH48V654%22%3A%20%7B%20%22_spx%22%3A%20false%2C%20%22bootstrap%22%3A%201704067200000%2C%20%22dataLayer%22%3A%20%7B%20%22name%22%3A%20%22dataLayer%22%20%7D%20%7D%2C%20%22SANDBOXED_JS_SEMAPHORE%22%3A%200%2C%20%22dataLayer%22%3A%20%7B%20%22gtmDom%22%3A%20true%2C%20%22gtmLoad%22%3A%20true%2C%20%22subscribers%22%3A%201%20%7D%2C%20%22sequence%22%3A%201%20%7D%20%7D)
+jetpunk.com##+js(trusted-set, asc, json%3A%7B%22cmd%22%3A%20%5Bnull%5D%2C%20%22que%22%3A%20%5Bnull%5D%2C%20%22wrapperVersion%22%3A%20%226.19.0%22%2C%20%22refreshQue%22%3A%20%7B%22waitDelay%22%3A%203000%2C%20%22que%22%3A%20%5B%5D%7D%2C%20%22isLoaded%22%3A%20true%2C%20%22bidderSettings%22%3A%20%7B%7D%2C%20%22libLoaded%22%3A%20true%2C%20%22version%22%3A%20%22v9.20.0%22%2C%20%22installedModules%22%3A%20%5B%5D%2C%20%22adUnits%22%3A%20%5B%5D%2C%20%22aliasRegistry%22%3A%20%7B%7D%2C%20%22medianetGlobals%22%3A%20%7B%7D%7D)
+jetpunk.com##+js(trusted-set, google_tag_manager, json%3A%7B%20%22G-Z8CH48V654%22%3A%20%7B%20%22_spx%22%3A%20false%2C%20%22bootstrap%22%3A%201704067200000%2C%20%22dataLayer%22%3A%20%7B%20%22name%22%3A%20%22dataLayer%22%20%7D%20%7D%2C%20%22SANDBOXED_JS_SEMAPHORE%22%3A%200%2C%20%22dataLayer%22%3A%20%7B%20%22gtmDom%22%3A%20true%2C%20%22gtmLoad%22%3A%20true%2C%20%22subscribers%22%3A%201%20%7D%2C%20%22sequence%22%3A%201%20%7D)
 @@||jetpunk.com^$script,1p
 @@||jetpunk.com^$ghide
+||jetpunk.com/resources/asc.js^$script,1p,important
 jetpunk.com##.banner-ad-outer
 jetpunk.com##.box-ad-inner
 jetpunk.com##.box-ad-outer
@@ -2543,9 +2544,6 @@ dinamalar.com##.topadtxt728
 dinamalar.com###rladvt
 ! https://github.com/AdguardTeam/AdguardFilters/issues/93501
 gagaltotal666.my.id##+js(acs, addEventListener, nextFunction)
-! https://www.reddit.com/r/uBlockOrigin/comments/pid1a3/adblocker_detected/
-@@||animet.tv^$ghide
-animet.tv##ins.adsbygoogle
 ! https://github.com/uBlockOrigin/uAssets/issues/9929
 owlzo.com##+js(nostif, adblockEnabled)
 ! https://www.reddit.com/r/uBlockOrigin/comments/pifkxt/kumparancom/
@@ -2844,6 +2842,8 @@ bowfile.com##+js(no-fetch-if, cloudfront.net%2F%3F)
 bowfile.com##+js(no-fetch-if, method%3AHEAD)
 bowfile.com##+js(ra, href%7Ctarget%7Cdata-onclick, a%5Bid%3D%22dl%22%5D%5Bdata-onclick%5E%3D%22window.open%22%5D, stay)
 bowfile.com##^script:has-text(FingerprintJS)
+! antiadb/download button not showing
+bowfile.com##+js(trusted-prevent-xhr, googlesyndication, a.getAttribute(%22data-ad-client%22)%7C%7C%22%22)
 *$xhr,redirect-rule=nooptext,domain=bowfile.com
 ! https://github.com/uBlockOrigin/uAssets/issues/10147
 javfor.tv##+js(acs, addEventListener, -0x)
@@ -3193,8 +3193,6 @@ xxxdl.net##.banners
 ||xxxdl.net/nothing.aspx?
 ! https://github.com/uBlockOrigin/uAssets/issues/10399
 thienhatruyen.com##+js(nowoif)
-! https://www.reddit.com/r/uBlockOrigin/comments/qns92q/hello_folks_how_do_i_remove_this/
-@@||futbolfullenvivo.com^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/10406
 shuajota.com##+js(acs, document.addEventListener, nextFunction)
 shuajota.com###HTML8

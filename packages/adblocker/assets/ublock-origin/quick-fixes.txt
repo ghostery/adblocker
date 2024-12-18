@@ -64,8 +64,9 @@ sandratableother.com##+js(set, console.clear, undefined)
 japscan.lol##+js(aost, onload, inlineScript)
 *$image,redirect-rule=1x1.gif,domain=japscan.lol
 japscan.lol##+js(aeld, load, %2Fnavpromo%7CclipPath%7C0p'%5C%2B%2F)
-japscan.lol##+js(aeld, DOMContentLoaded, %2F%5C(%5Cs*%5C)%5Cs*%3D%3E%5Cs*%5C%7B%5Cs*%5B%24%5Cw%5D%2B%5Cs*%5C(%5Cs*%5C(%5Cs*%5C)%5Cs*%3D%3E%5Cs*%5C%7B%5Cs*const%7CPikAk%7C'N'%5C%2B%7CNiger%7CCharger%7CGoodDay%7Cfunct'%7Ct'%5C%2B'y%2F)
-japscan.lol##.navbar-nav > li#navpromo2.nav-item:style(height: 0 !important; overflow: hidden !important;)
+japscan.lol##+js(aeld, DOMContentLoaded, %2Ffunction%5Cs*%5C(%5Cs*%5C)%5Cs*%5C%7B%5B%24%5Cw%5D%2B%5Cs*%5C(function%5Cs*%5C(%5Cs*%5C)%7CPorita%7CgetComputedStyle'%7CgetAttribute'%7C%23Roi'%5C%2B%7C%5C%2B'pr%7C%5C(Lol%7CNiger%7CCharger%7CGoodDay%7Cfunct'%7Ct'%5C%2B'y%2F)
+japscan.lol##+js(spoof-css, .navbar-nav%20%3E%20li%23navpromo2.nav-item, width, auto)
+japscan.lol##.navbar-nav > li#navpromo2.nav-item:style(width: 0 !important; overflow: hidden !important;)
 ||japscan.lol/zjs/$script,replace=/function GoodDay\(\)\{.+?\}\}\}//
 japscan.lol#@#.navbar-nav > li#navpromo2.nav-item
 japscan.lol##body > style + .container > .row > #main + #sidebar.col-md-3 > .card.mt-1 > .card[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 250px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
@@ -112,19 +113,20 @@ poophq.com,veev.to##+js(no-xhr-if, %2F%5C%2Fpreroll%5C.engine%24%2F)
 @@*$ghide,domain=poophq.com|veev.to
 veev.to#@#.avb-active
 ! https://github.com/uBlockOrigin/uAssets/issues/20401
-infinityscans.xyz,infinityscans.org##+js(no-fetch-if, .infinityscans.net)
-infinityscans.xyz,infinityscans.net,infinityscans.org##+js(rpnt, script, %2F%5C%7D%5C)%5C%3B%5Cs%2B%5C(function%5C(%5C)%5C%7B.*%3F%5C)%5C%3B%5C%7D%5C)%5C(%5C)%5C%3B%5Cs%2B%5C%24%5C.ajax%5C(%5C%7B%2Fs, %7D)%3B%20%24.ajax(%7B)
-infinityscans.xyz,infinityscans.net,infinityscans.org##+js(rpnt, script, %2Fasync%20function%20%5C(xhr%5C)%20%5C%7B%5Cs%2B%5C(function%5C(%5C)%7Bvar.*%3F%5C)%5C%3B%5C%7D%5C)%5C(%5C)%5C%3B%20%2Fs, async%20function%20(xhr)%20%7B)
+infinityscans.xyz,infinityscans.org##+js(no-fetch-if, .infinityscans.net%20method%3APOST)
+infinityscans.xyz,infinityscans.net,infinityscans.org##+js(rpnt, script, %2F%5C%7D%5C)%5C%3B%5Cs%2B%5C(function%5C(%5C)%5C%7Bvar%20.*%3F%5C%24%5C(%5C%22%2Fs, %7D)%3B%20%24(%22)
 infinityscans.xyz,infinityscans.net,infinityscans.org##+js(trusted-replace-outbound-text, atob, window.matchMedia('(display-mode%3A%20standalone)').matches, true)
 infinityscans.xyz,infinityscans.net,infinityscans.org##+js(nowoif, _blank)
 infinityscans.xyz,infinityscans.net,infinityscans.org##div[class="alert alert-danger fade show m-0 p-0"]:has-text(/uBlock|AdGuard|advertisments/i)
-@@*$script,denyallow=googletagmanager.com|bidgear.com|googlesyndication.com,domain=infinityscans.xyz|infinityscans.net|infinityscans.org
+@@*$script,denyallow=googletagmanager.com|bidgear.com|googlesyndication.com|a.magsrv.com|fstatic.netpub.media,domain=infinityscans.xyz|infinityscans.net|infinityscans.org
 ||b5rh0rt.infinityscans.net^$xhr,important
 ! https://github.com/uBlockOrigin/uAssets/issues/8719
-1001tracklists.com##a[href^="https://"][target="_blank"][onclick*="challenge"]:has(> img[src*="/"][src*="_"][alt]):remove()
-1001tracklists.com###head + [id] > div:first-child > div:first-child:has(a img[src*="/"][src*="_"][alt])
-1001tracklists.com###head + [id] > div:first-child > div:not([id="topLogo"], [id="pageTitle"], [id="hInfo"]):has(> a > img[src*="/"][src*="_"][alt])
 1001tracklists.com##div[id]:has(> [data-freestar-ad]):remove()
+1001tracklists.com###head + [id] > div:first-child > div:not([id="topLogo"], [id="pageTitle"], [id="hInfo"]):has(> a > :is(img[src*="/"][src*="_"][alt], div[style*="background"]))
+1001tracklists.com##div:has(+ script:has-text(challenge)):has(a :is(img[src*="/"][src*="_"][alt], [style]))
+1001tracklists.com##div[class="nav tabTop"] + div > div:first-child > div:first-child > a:has(> img[src*="/"][src*="_"][alt])
+1001tracklists.com###head + div[id] > div:last-child > div > a:has(> img[src*="/"][src*="_"][alt])
+1001tracklists.com##+js(spoof-css, div%5Bclass%3D%22nav%20tabTop%22%5D%20%2B%20div%20%3E%20div%3Afirst-child%20%3E%20div%3Afirst-child%20%3E%20a%3Ahas(%3E%20img%5Bsrc*%3D%22%2F%22%5D%5Bsrc*%3D%22_%22%5D%5Balt%5D)%2C%20%23head%20%2B%20div%5Bid%5D%20%3E%20div%3Alast-child%20%3E%20div%20%3E%20a%3Ahas(%3E%20img%5Bsrc*%3D%22%2F%22%5D%5Bsrc*%3D%22_%22%5D%5Balt%5D), display, block)
 ! filemoon
 ! https://github.com/AdguardTeam/AdguardFilters/issues/190044
 ! https://www.reddit.com/r/uBlockOrigin/comments/1fuaaw5/asblock_detected_in_ask4porncc
@@ -146,47 +148,32 @@ file-1bl9ruic-moon.com,file-kg88oaak-embed.com,file-mi11ljwj-embed.com,file-sp32
 ||op3xdork.xyz^
 ||skvxbool.xyz^
 ! https://github.com/AdguardTeam/AdguardFilters/issues/190943
-wiki.yjsnpi.nu###mw-content-text div[style] a:is([href*="contents.fc2.com"],[href*="dmm.co.jp"]):style(font-size: 0 !important;)
-wiki.yjsnpi.nu###mw-content-text div[style] a:is([href*="contents.fc2.com"],[href*="dmm.co.jp"]) img:style(height: 0 !important;)
-wiki.yjsnpi.nu##+js(spoof-css, %23mw-content-text%20div%5Bstyle%5D%20a%3Ais(%5Bhref*%3D%22contents.fc2.com%22%5D, %5Bhref*%3D%22dmm.co.jp%22%5D), font-size, 14px)
-wiki.yjsnpi.nu##+js(spoof-css, %23mw-content-text%20div%5Bstyle%5D%20a%3Ais(%5Bhref*%3D%22contents.fc2.com%22%5D, %5Bhref*%3D%22dmm.co.jp%22%5D)%20img, height, 128px)
-wiki.yjsnpi.nu##+js(aost, Function.prototype.toString, %2Fw%2Fload.php%3Flang%3Dja%26modules%3Dcodex-search-styles%252Cjquery%252Coojs%252C%26skin%3Dvector-2022%26version%3DL58hf)
-wiki.yjsnpi.nu##+js(nostif, ()%3D%3Ek(S(4)
-*$script,1p,redirect-rule=noop.js,domain=wiki.yjsnpi.nu
 !#if cap_html_filtering
 ||wiki.yjsnpi.nu/comments/$script,replace=/(;\}\}function [A-Za-z]+\([A-Za-z]?\)\{const [a-z]+=[A-Z]\,(?:const )?[a-z]+=[A-Z]).{500\,2000}\]\(\);\}\}/\$1}/
 ||wiki.yjsnpi.nu/comments/$script,replace=/(\);\}\}function [A-Za-z]+\([A-Za-z]?\)\{const [a-z]+=[A-Z]\,(?:const )?[a-z]+=[A-Z]).{500\,2000}\]\(\)\)\);\}/\$1}/
 !#endif
 ! Ad-Shield
-||07c225f3.online^$media,redirect=noop-1s.mp4
-||content-loader.com^$media,redirect=noop-1s.mp4
-||css-load.com^$media,redirect=noop-1s.mp4
-||img-load.com^$media,redirect=noop-1s.mp4
-||html-load.com^$media,redirect=noop-1s.mp4
+! https://github.com/uBlockOrigin/uAssets/issues/26487
+dogdrip.net,infinityfree.com,smsonline.cloud,webdesignledger.com##+js(trusted-replace-argument, Array.prototype.forEach, 0, noopFunc, condition, %2F%5Cw%2B%3D%3E%5Cw%2B%5C%2B%3DString%5C%5B%5Cw%2B%5C(%5Cd%2B%5C)%5D%5C(%5Cw%2B%5C)%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/25990
 ||karistudio.com/wp-content/themes/blogarise-child/check2.js$important
 karistudio.com##p.chapter_content:style(display: block !important; visibility: visible !important; opacity: 1 !important; transform: none !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/20907
-cursomecanet.com##+js(no-fetch-if, https, , %7B%22statusText%22%3A%20%22%22%2C%20%22type%22%3A%20%22cors%22%7D)
-cursomecanet.com##+js(aost, fetch, .js%3F)
-cursomecanet.com##div[style]:has(a[href][target="_blank"]):style(display: block !important;)
-||cursomecanet.com/registro$xhr,1p
+*$xhr,redirect-rule=noop.txt,domain=cursomecanet.com
 ! https://github.com/uBlockOrigin/uAssets/issues/25344
 ! https://github.com/uBlockOrigin/uAssets/pull/26342
 ! https://github.com/uBlockOrigin/uAssets/issues/26393
-bing.com##+js(trusted-replace-argument, HTMLLIElement.prototype.querySelector, 0, undefined, condition, %2F%5Ea%5C.tilk%24%2F)
+bing.com##+js(trusted-replace-argument, HTMLLIElement.prototype.querySelector, 0, undefined, condition, %2F%5Ea%3F%5C.tilk%24%2F)
+bing.com##+js(trusted-replace-argument, HTMLLIElement.prototype.querySelector, 0, undefined, condition, .b_title%20%3E%20h2%20%3E%20a)
+bing.com##+js(trusted-override-element-method, HTMLDivElement.prototype.querySelector, li.b_algo%3Ahas(.tilk)%20%3E%20div, undefined)
+bing.com##li.b_algo:has(> :is(.b_tpcn, .b_title, h2) a[href^="https://www.bing.com/aclick?"])
 bing.com##li.b_algo:has(> :is(.b_tpcn, .b_title, h2) a[href^="https://www.bing.com/aclk?"])
 ! https://github.com/AdguardTeam/AdguardFilters/issues/183252
-exploader.net#@#a[style*="display:"][href^="https://al.dmm.co.jp"]
-exploader.net#@#+js(spoof-css, a%5Bstyle*%3D%22display%3A%22%5D%5Bhref%5E%3D%22https%3A%2F%2Fal.dmm.co.jp%22%5D, display, flex%20!important)
-exploader.net##+js(spoof-css, a%5Bstyle*%3D%22display%3A%22%5D%5Bhref%5E%3D%22https%3A%2F%2Fal.dmm.co.jp%22%5D%20img, height, 20px)
-exploader.net##+js(spoof-css, a%5Bstyle*%3D%22display%3A%22%5D%5Bhref%5E%3D%22https%3A%2F%2Fal.dmm.co.jp%22%5D%20img, display, block)
-exploader.net##a[style*="display:"][href^="https://al.dmm.co.jp"] img
-exploader.net##a[style*="display:"][href^="https://al.dmm.co.jp"] > div:has(img):style(height: 0 !important;)
-exploader.net##a[style*="display:"][href^="https://al.dmm.co.jp"] span
-exploader.net##+js(aost, Element.prototype.getBoundingClientRect, %2F%5B0-9a-z%5D%7B20%2C%7D%5Cs.%2Bdaotag%2F)
-||daotag.com/tag/$script,replace=/if\(images\[i_key\]\.parentNode\.offsetHeight<rand\)/if(0)/,domain=exploader.net
-||daotag.com/tag/$script,replace=/if\(rand\+'px'!=dev_height\)/if(0)/,domain=exploader.net
+exploader.net##a[style*="display:"][href^="https://al.dmm.co.jp"] img:style(position: absolute !important; clip:rect(1px,1px,1px,1px) !important;)
+exploader.net##a[style*="display:"][href^="https://al.dmm.co.jp"] span:style(position: absolute !important; clip:rect(1px,1px,1px,1px) !important;)
+exploader.net##+js(spoof-css, a%5Bstyle*%3D%22display%3A%22%5D%5Bhref%5E%3D%22https%3A%2F%2Fal.dmm.co.jp%22%5D%20img%2Ca%5Bstyle*%3D%22display%3A%22%5D%5Bhref%5E%3D%22https%3A%2F%2Fal.dmm.co.jp%22%5D%20span, clip, )
+exploader.net###preview_images > span[class^="tracking_"]
+||daotag.com/tag/$script,replace=/if\s*\(!(window\.[0-9a-z]{20\,})\)[\S\s]+/if(!\$1&&typeof \$1==='undefined'||\$1!==false){\$1=true}/,domain=exploader.net
 ! https://github.com/uBlockOrigin/uAssets/issues/26348
 @@||ac.cnstrc.com^$xhr,domain=bjs.com
 ! https://github.com/uBlockOrigin/uAssets/issues/26392
@@ -204,3 +191,8 @@ www.chip.de##+js(rmnt, script, %2F%20%5C%3D%5C%3D%5C%3D%20%5B0-9%5D%7B1%2C2%7D%5
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/26443
 @@||premium.services.zam.com/v1/api/$xhr,domain=wowhead.com
+! baited
+! [badfilter] /nativeads-v2.js$badfilter
+! https://github.com/easylist/easylist/commit/e3c7790c9490c5a4580198025d9d07ca4628a168
+! [badfilter] ||hebiichigo.com^$badfilter
+||hebiichigo.com^$3p
