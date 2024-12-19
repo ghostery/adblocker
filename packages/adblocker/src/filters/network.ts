@@ -725,14 +725,23 @@ export default class NetworkFilter implements IFilter {
       // --------------------------------------------------------------------- //
       // parseOptions
       // --------------------------------------------------------------------- //
+      const denyallowEntities: Set<string> = new Set();
       for (const rawOption of getFilterOptions(line, optionsIndex + 1, line.length)) {
         const negation = rawOption[0].charCodeAt(0) === 126; /* '~' */
         const option = negation === true ? rawOption[0].slice(1) : rawOption[0];
         const value = rawOption[1];
 
         switch (option) {
+          case 'to':
           case 'denyallow': {
-            denyallow = Domains.parse(value.split('|'), debug);
+            let parts = value.split('|');
+            if (option === 'to') {
+              parts = parts.map((part) =>
+                part.charCodeAt(0) === 126 /* '~' */ ? part.slice(1) : `~${part}`,
+              );
+            }
+            parts.forEach((part) => denyallowEntities.add(part));
+            denyallow = Domains.parse(Array.from(denyallowEntities), debug);
             break;
           }
           case 'domain':
@@ -1525,7 +1534,7 @@ export default class NetworkFilter implements IFilter {
 
     if (this.denyallow !== undefined) {
       if (this.denyallow.parts !== undefined) {
-        options.push(`denyallow=${this.denyallow.parts}`);
+        options.push(`denyallow=${this.denyallow.parts.replace(/,/g, '|')}`);
       } else {
         options.push('denyallow=<hashed>');
       }
