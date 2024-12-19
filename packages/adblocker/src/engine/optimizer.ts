@@ -7,7 +7,7 @@
  */
 
 import CosmeticFilter from '../filters/cosmetic.js';
-import NetworkFilter, { NETWORK_FILTER_MASK } from '../filters/network.js';
+import NetworkFilter, { NETWORK_OPTIONS_MASK } from '../filters/network.js';
 import { setBit } from '../utils.js';
 import { Domains } from '../engine/domains.js';
 
@@ -158,7 +158,7 @@ const OPTIMIZATIONS: IOptimization[] = [
 
       return new NetworkFilter(
         Object.assign({}, filters[0], {
-          mask: setBit(filters[0].mask, NETWORK_FILTER_MASK.isRegex),
+          mask: setBit(filters[0].mask, NETWORK_OPTIONS_MASK.isRegex),
           rawLine:
             filters[0].rawLine !== undefined
               ? filters.map(({ rawLine }) => rawLine).join(' <+> ')
@@ -168,7 +168,7 @@ const OPTIMIZATIONS: IOptimization[] = [
       );
     },
     groupByCriteria: (filter: NetworkFilter) =>
-      '' + (filter.getMask() & ~NETWORK_FILTER_MASK.isRegex & ~NETWORK_FILTER_MASK.isFullRegex),
+      '' + (filter.getMask() & ~NETWORK_OPTIONS_MASK.isRegex & ~NETWORK_OPTIONS_MASK.isFullRegex),
     select: (filter: NetworkFilter) =>
       filter.domains === undefined &&
       filter.denyallow === undefined &&
