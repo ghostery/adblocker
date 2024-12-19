@@ -13,7 +13,13 @@ import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils.js';
 
 export class Domains {
   public static parse(parts: string[], debug: boolean = false): Domains | undefined {
-    if (parts.length === 0) {
+    if (
+      parts.length === 0 ||
+      // We accept parts after splitting a string by `|`
+      // Empty first and last entry indicates it's invalid
+      parts[0].length === 0 ||
+      parts[parts.length - 1].length === 0
+    ) {
       return undefined;
     }
 
