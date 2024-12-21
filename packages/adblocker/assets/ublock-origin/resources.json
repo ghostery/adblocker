@@ -62,6 +62,25 @@
       ]
     },
     {
+      "name": "urlskip.fn",
+      "aliases": [],
+      "body": "function urlSkip(e,t,n,r={}){try{let c=false;let s=e;for(const e of n){const t=s;const n=e.charCodeAt(0);if(n===38){const n=(parseInt(e.slice(1))||0)-1;if(n<0)return;const r=new URL(t);if(n>=r.searchParams.size)return;const c=Array.from(r.searchParams.keys());s=decodeURIComponent(c[n]);continue}if(n===43&&e===\"+https\"){const e=t.replace(/^https?:\\/\\//,\"\");if(/^[\\w-]:\\/\\//.test(e))return;s=`https://${e}`;continue}if(n===45){if(e===\"-base64\"){s=self.atob(t);continue}if(e===\"-safebase64\"){if(urlSkip.safeBase64Replacer===void 0){urlSkip.safeBase64Map={\"-\":\"+\",_:\"/\"};urlSkip.safeBase64Replacer=e=>urlSkip.safeBase64Map[e]}s=t.replace(/[-_]/g,urlSkip.safeBase64Replacer);s=self.atob(s);continue}if(e===\"-uricomponent\"){s=self.decodeURIComponent(t);continue}if(e===\"-blocked\"){c=true;continue}}if(n===47){const n=r.cache??new RegExp(e.slice(1,-1));if(r.cache===null)r.cache=n;const c=n.exec(t);if(c===null)return;if(c.length<=1)return;s=c[1];continue}if(n===63){s=new URL(t).searchParams.get(e.slice(1));if(s===null)return;if(s.includes(\" \"))s=s.replace(/ /g,\"%20\");continue}return}const i=new URL(s);if(i.protocol!==\"https:\"){if(i.protocol!==\"http:\")return;s=s.replace(\"http\",\"https\")}if(t&&c!==true)return;return s}catch(e){}}",
+      "dependencies": []
+    },
+    {
+      "name": "href-sanitizer.js",
+      "aliases": [
+        "urlskip.js"
+      ],
+      "body": "function hrefSanitizer(t=\"\",e=\"\"){if(typeof t!==\"string\")return;if(t===\"\")return;const r=safeSelf();const n=r.makeLogPrefix(\"href-sanitizer\",t,e);if(e===\"\")e=\"text\";const o=(t,e)=>{let r=[];try{r=document.querySelectorAll(`a[href=\"${t}\"`)}catch(t){}for(const t of r)t.setAttribute(\"href\",e);return r.length};const i=t=>{if(typeof t!==\"string\")return\"\";if(t===\"\")return\"\";if(/[\\x00-\\x20\\x7f]/.test(t))return\"\";try{const e=new URL(t,document.location);return e.href}catch(t){}return\"\"};const f=(t,e)=>{if(/^\\[.*\\]$/.test(e))return t.getAttribute(e.slice(1,-1).trim())||\"\";if(e===\"text\")return t.textContent.replace(/^[^\\x21-\\x7e]+/,\"\").replace(/[^\\x21-\\x7e]+$/,\"\");if(e.startsWith(\"?\")){const r=e.replace(/(\\S)\\?/g,\"\\\\1?\").split(/\\s+/);const n=urlSkip(t.href,false,r);if(n===void 0)return;return n.replace(/ /g,\"%20\")}return\"\"};const c=()=>{let c=[];try{c=document.querySelectorAll(t)}catch(t){return false}for(const t of c){if(t.localName!==\"a\")continue;if(t.hasAttribute(\"href\")===false)continue;const c=t.getAttribute(\"href\");const s=f(t,e);const u=i(s);if(u===\"\")continue;if(u===c)continue;t.setAttribute(\"href\",u);const l=o(c,u);r.uboLog(n,`Sanitized ${l+1} links to\\n${u}`)}return true};let s,u;const l=t=>{if(u!==void 0)return;let e=false;for(const r of t){if(r.addedNodes.length===0)continue;for(const t of r.addedNodes){if(t.nodeType!==1)continue;e=true;break}if(e)break}if(e===false)return;u=r.onIdle((()=>{u=void 0;c()}))};const a=()=>{if(c()===false)return;s=new MutationObserver(l);s.observe(document.body,{subtree:true,childList:true})};runAt((()=>{a()}),\"interactive\")}",
+      "dependencies": [
+        "run-at.fn",
+        "safe-self.fn",
+        "urlskip.fn"
+      ],
+      "executionWorld": "ISOLATED"
+    },
+    {
       "name": "arglist-parser.fn",
       "aliases": [],
       "body": "class ArglistParser{constructor(t=\",\",e=false){this.separatorChar=this.actualSeparatorChar=t;this.separatorCode=this.actualSeparatorCode=t.charCodeAt(0);this.mustQuote=e;this.quoteBeg=0;this.quoteEnd=0;this.argBeg=0;this.argEnd=0;this.separatorBeg=0;this.separatorEnd=0;this.transform=false;this.failed=false;this.reWhitespaceStart=/^\\s+/;this.reWhitespaceEnd=/\\s+$/;this.reOddTrailingEscape=/(?:^|[^\\\\])(?:\\\\\\\\)*\\\\$/;this.reTrailingEscapeChars=/\\\\+$/}nextArg(t,e=0){const s=t.length;this.quoteBeg=e+this.leftWhitespaceCount(t.slice(e));this.failed=false;const r=t.charCodeAt(this.quoteBeg);if(r===34||r===39||r===96){this.indexOfNextArgSeparator(t,r);if(this.argEnd!==s){this.quoteEnd=this.argEnd+1;this.separatorBeg=this.separatorEnd=this.quoteEnd;this.separatorEnd+=this.leftWhitespaceCount(t.slice(this.quoteEnd));if(this.separatorEnd===s)return this;if(t.charCodeAt(this.separatorEnd)===this.separatorCode){this.separatorEnd+=1;return this}}}this.indexOfNextArgSeparator(t,this.separatorCode);this.separatorBeg=this.separatorEnd=this.argEnd;if(this.separatorBeg<s)this.separatorEnd+=1;this.argEnd-=this.rightWhitespaceCount(t.slice(0,this.separatorBeg));this.quoteEnd=this.argEnd;if(this.mustQuote)this.failed=true;return this}normalizeArg(t,e=\"\"){if(e===\"\")e=this.actualSeparatorChar;let s=\"\";let r=0;while((r=t.lastIndexOf(e))!==-1){s=t.slice(r)+s;t=t.slice(0,r);const e=this.reTrailingEscapeChars.exec(t);if(e===null)continue;const a=(e[0].length&1)!==0?e[0].slice(0,-1):e[0];s=a+s;t=t.slice(0,-e[0].length)}if(s===\"\")return t;return t+s}leftWhitespaceCount(t){const e=this.reWhitespaceStart.exec(t);return e===null?0:e[0].length}rightWhitespaceCount(t){const e=this.reWhitespaceEnd.exec(t);return e===null?0:e[0].length}indexOfNextArgSeparator(t,e){this.argBeg=this.argEnd=e!==this.separatorCode?this.quoteBeg+1:this.quoteBeg;this.transform=false;if(e!==this.actualSeparatorCode){this.actualSeparatorCode=e;this.actualSeparatorChar=String.fromCharCode(e)}while(this.argEnd<t.length){const e=t.indexOf(this.actualSeparatorChar,this.argEnd);if(e===-1)return this.argEnd=t.length;if(this.reOddTrailingEscape.test(t.slice(0,e))===false)return this.argEnd=e;this.transform=true;this.argEnd=e+1}}}",
@@ -197,7 +216,7 @@
     {
       "name": "get-safe-cookie-values.fn",
       "aliases": [],
-      "body": "function getSafeCookieValuesFn(){return[\"accept\",\"reject\",\"accepted\",\"rejected\",\"notaccepted\",\"allow\",\"disallow\",\"deny\",\"allowed\",\"denied\",\"approved\",\"disapproved\",\"checked\",\"unchecked\",\"dismiss\",\"dismissed\",\"enable\",\"disable\",\"enabled\",\"disabled\",\"essential\",\"nonessential\",\"forbidden\",\"forever\",\"hide\",\"hidden\",\"necessary\",\"required\",\"ok\",\"on\",\"off\",\"true\",\"t\",\"false\",\"f\",\"yes\",\"y\",\"no\",\"n\"]}",
+      "body": "function getSafeCookieValuesFn(){return[\"accept\",\"reject\",\"accepted\",\"rejected\",\"notaccepted\",\"allow\",\"disallow\",\"deny\",\"allowed\",\"denied\",\"approved\",\"disapproved\",\"checked\",\"unchecked\",\"dismiss\",\"dismissed\",\"enable\",\"disable\",\"enabled\",\"disabled\",\"essential\",\"nonessential\",\"forbidden\",\"forever\",\"hide\",\"hidden\",\"necessary\",\"required\",\"ok\",\"on\",\"off\",\"true\",\"t\",\"false\",\"f\",\"yes\",\"y\",\"no\",\"n\",\"all\",\"none\",\"functional\"]}",
       "dependencies": []
     },
     {
@@ -712,16 +731,6 @@
       "dependencies": [
         "safe-self.fn"
       ]
-    },
-    {
-      "name": "href-sanitizer.js",
-      "aliases": [],
-      "body": "function hrefSanitizer(t=\"\",e=\"\"){if(typeof t!==\"string\")return;if(t===\"\")return;const r=safeSelf();const n=r.makeLogPrefix(\"href-sanitizer\",t,e);if(e===\"\")e=\"text\";const o=(t,e)=>{let r=[];try{r=document.querySelectorAll(`a[href=\"${t}\"`)}catch(t){}for(const t of r)t.setAttribute(\"href\",e);return r.length};const i=t=>{if(t===\"\")return\"\";if(/[\\x00-\\x20\\x7f]/.test(t))return\"\";try{const e=new URL(t,document.location);return e.href}catch(t){}return\"\"};const c=(t,e)=>{if(Boolean(e)===false)return t;const r=e.includes(\"?\",1);const n=r?e.indexOf(\"?\",1):e.length;try{const o=new URL(t,document.location);let i=o.searchParams.get(e.slice(1,n));if(i===null)return t;if(r)return c(i,e.slice(n));if(i.includes(\" \"))i=i.replace(/ /g,\"%20\");return i}catch(t){}return t};const f=(t,e)=>{if(/^\\[.*\\]$/.test(e))return t.getAttribute(e.slice(1,-1).trim())||\"\";if(e.startsWith(\"?\"))return c(t.href,e);if(e===\"text\")return t.textContent.replace(/^[^\\x21-\\x7e]+/,\"\").replace(/[^\\x21-\\x7e]+$/,\"\");return\"\"};const s=()=>{let c=[];try{c=document.querySelectorAll(t)}catch(t){return false}for(const t of c){if(t.localName!==\"a\")continue;if(t.hasAttribute(\"href\")===false)continue;const c=t.getAttribute(\"href\");const s=f(t,e);const u=i(s);if(u===\"\")continue;if(u===c)continue;t.setAttribute(\"href\",u);const l=o(c,u);r.uboLog(n,`Sanitized ${l+1} links to\\n${u}`)}return true};let u,l;const a=t=>{if(l!==void 0)return;let e=false;for(const r of t){if(r.addedNodes.length===0)continue;for(const t of r.addedNodes){if(t.nodeType!==1)continue;e=true;break}if(e)break}if(e===false)return;l=r.onIdle((()=>{l=void 0;s()}))};const d=()=>{if(s()===false)return;u=new MutationObserver(a);u.observe(document.body,{subtree:true,childList:true})};runAt((()=>{d()}),\"interactive\")}",
-      "dependencies": [
-        "run-at.fn",
-        "safe-self.fn"
-      ],
-      "executionWorld": "ISOLATED"
     },
     {
       "name": "call-nothrow.js",

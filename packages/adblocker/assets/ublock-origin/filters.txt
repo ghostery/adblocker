@@ -40,17 +40,15 @@ m.youtube.com,music.youtube.com,tv.youtube.com,www.youtube.com,youtubekids.com,y
 m.youtube.com,music.youtube.com,tv.youtube.com,www.youtube.com,youtubekids.com,youtube-nocookie.com##+js(set, playerResponse.adPlacements, undefined)
 ! https://github.com/uBlockOrigin/uAssets/issues/7636#issuecomment-1674303331
 m.youtube.com,music.youtube.com,youtubekids.com,youtube-nocookie.com##+js(json-prune, playerResponse.adPlacements%20playerResponse.playerAds%20playerResponse.adSlots%20adPlacements%20playerAds%20adSlots%20important)
-! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-2144781835
-www.youtube.com##+js(json-prune-fetch-response, playerAds%20adPlacements%20adSlots%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots, , propsToMatch, %2Fplaylist%3F)
-! https://www.reddit.com/r/uBlockOrigin/comments/1ebwr6c/is_ublock_broken_again_or_am_i_doing_something/
-! [dup] from ublock-origin/quick-fixes.txt
-! www.youtube.com##+js(json-prune-fetch-response, playerAds%20adPlacements%20adSlots%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots, , propsToMatch, %2Fplayer%3F)
 ! https://github.com/uBlockOrigin/uAssets/issues/15632
 youtube.com##.ytlr-horizontal-list-renderer__items > .yt-virtual-list__container > .yt-virtual-list__item--visible.yt-virtual-list__item--selected.yt-virtual-list__item:has-text(Ad)
 ! https://www.reddit.com/r/uBlockOrigin/comments/163cy47/youtube_antiadblock_and_ads_weekly_thread_august/jyemgzo/
 ||googlevideo.com/initplayback?source=youtube*&c=TVHTML5&oad=$xhr,domain=youtube.com
 ! Shorts Ad
 m.youtube.com,music.youtube.com,tv.youtube.com,www.youtube.com,youtubekids.com,youtube-nocookie.com##+js(json-prune-fetch-response, reelWatchSequenceResponse.entries.%5B-%5D.command.reelWatchEndpoint.adClientParams.isAd%20entries.%5B-%5D.command.reelWatchEndpoint.adClientParams.isAd, , propsToMatch, url%3A%2Freel_watch_sequence%3F)
+!
+||youtube.com/youtubei/v1/get_watch?$xhr,1p,replace=/"adPlacements.*?([A-Z]"\}|"\}{2\,4})\}\]\,//
+||youtube.com/youtubei/v1/get_watch?$xhr,1p,replace=/"adSlots.*?\}\}\]\,"adBreakHeartbeatParams/"adBreakHeartbeatParams/
 ! AdDefend
 !#if env_chromium
 lablue.*##+js(nostif, push, 500)
@@ -832,9 +830,6 @@ hltv.org##body, body::before:style(background-image: unset !important;)
 hltv.org##:is(div, aside):has(> a[href^="/"][data-link-tracking-page="Widget"])
 hltv.org##.presented-by
 hltv.org##.thunderpick-firstcol-box
-! https://github.com/uBlockOrigin/uAssets/issues/516
-! https://github.com/uBlockOrigin/uAssets/issues/18549
-thepiratebay.*,theproxyproxy.com,tpbay.*##+js(aopr, _wm)
 ! https://github.com/uBlockOrigin/uAssets/issues/518
 wallpapershome.com##+js(nostif, .adsbygoogle)
 ! https://github.com/uBlockOrigin/uAssets/issues/7802
@@ -6978,15 +6973,12 @@ iphonetweak.fr##.bigPub
 ! https://github.com/uBlockOrigin/uAssets/issues/16307
 duden.de##[id*="billboard"]
 duden.de##.tabloid__side-column
-!#if !env_mobile
-~mentor.duden.de,duden.de##+js(aeld, DOMContentLoaded, isMobile)
-!#endif
-||duden.de/aab/assets/js/
 ! https://github.com/uBlockOrigin/uAssets/issues/17950
 duden.de##body:style(margin-top: 0px !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/25788
 @@||duden.de^$ghide
-duden.de##+js(no-fetch-if, googlesyndication)
+duden.de##+js(no-fetch-if, googlesyndication, length%3A2001)
+||www.duden.de/utilities/includes/$script,css,1p
 ! https://www.reddit.com/r/uBlockOrigin/comments/bhr1sj/adblocker_detected/
 faresgame.com##+js(aopr, adBlockDetected)
 ! https://github.com/NanoMeow/QuickReports/issues/1087
