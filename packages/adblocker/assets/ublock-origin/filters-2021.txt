@@ -117,6 +117,8 @@ grosnews.com##+js(acs, adcashMacros)
 xxxymovies.com##+js(set, flashvars.adv_pause_html, )
 dirtyship.com##+js(acs, onload)
 hotscopes.*##+js(aopw, puShown)
+hotscopes.*##+js(nowoif)
+hotscopes.*##.ml-auto.navbar-nav
 afrodity.sk,brato.bg,cinema21fullmovie.com,cotannualconference.org.uk,couponsuniverse.com,cycraracing.com,dahh.net,dlhe-videa.sk,elmalajeno.com,extreme-board.com,free-famous-toons.com,istanbulescortnetworks.com,ok-th.com,payt.com,pcparsi.com,podkontrola.pl,redtubemov.com,shtab.su,spiritword.net##+js(acs, document.createElement, script)
 elmalajeno.com##^script:has-text(d.createElement('script'))
 elmalajeno.com##^script:has-text(d.createElement(\'script\'))
@@ -1934,11 +1936,6 @@ imeteo.sk##+js(aeld, scroll, detect)
 imeteo.sk##.page-container__ad-container
 ! https://github.com/AdguardTeam/AdguardFilters/issues/86371
 sixsave.com##+js(no-fetch-if, method%3AHEAD)
-! https://www.reddit.com/r/uBlockOrigin/comments/o4vs5b/adblock_shown_on_url/
-fluttercampus.com##.widget > .card
-fluttercampus.com##div[id^="ezoic-pub-ad-"]
-! https://github.com/uBlockOrigin/uAssets/issues/25335
-fluttercampus.com##+js(nosiif, visibility, 1000)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/86458
 freebulksmsonline.com##+js(aost, String.prototype.charCodeAt, ai_)
 ! https://forums.lanik.us/viewtopic.php?p=160442#p160442
@@ -2935,8 +2932,6 @@ gayvl.net###HTML1
 ! https://github.com/AdguardTeam/AdguardFilters/issues/144071
 japopav.tv##+js(aopr, __Y)
 japopav.tv##+js(set, isadb, false)
-! https://github.com/AdguardTeam/AdguardFilters/issues/97282
-expresscrypto.io##.content > center
 ! https://github.com/uBlockOrigin/uAssets/issues/10227
 @@||c.adsco.re/|$script,domain=hotfrog.*
 ! pirate4all.com popup
@@ -3668,20 +3663,20 @@ dl.apkmb.com##.btnDownload:has-text(SHARE)
 autofaucet.dutchycorp.space##[href^="https://enicyvys.xyz/"]
 autofaucet.dutchycorp.space##[href*="banner"]
 autofaucet.dutchycorp.space##[src^="blob:https://autofaucet.dutchycorp.space/"]:remove()
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=coin-free.com|kienthucrangmieng.com|chinhnhacoban.com|tremamnon.com|95news.com|vnpttelle.com
-*$script,3p,domain=coin-free.com|kienthucrangmieng.com|chinhnhacoban.com|95news.com|vnpttelle.com,denyallow=iconify.design|cloudflare.com
-coin-free.com,kienthucrangmieng.com##[id^="wpsafe-wait"]
-coin-free.com,kienthucrangmieng.com###wpsafe-generate, #wpsafe-link:style(display: block !important)
-*$script,redirect-rule=noopjs,domain=coin-free.com|kienthucrangmieng.com|chinhnhacoban.com|95news.com|vnpttelle.com
+@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=coin-free.com|chinhnhacoban.com|tremamnon.com|95news.com|vnpttelle.com
+*$script,3p,domain=coin-free.com|chinhnhacoban.com|95news.com|vnpttelle.com,denyallow=iconify.design|cloudflare.com
+coin-free.com##[id^="wpsafe-wait"]
+coin-free.com###wpsafe-generate, #wpsafe-link:style(display: block !important)
+*$script,redirect-rule=noopjs,domain=coin-free.com|chinhnhacoban.com|95news.com|vnpttelle.com
 ! https://github.com/uBlockOrigin/uAssets/issues/17166#issuecomment-1480653096
 snowurl.com##+js(nowoif)
 snowurl.com##+js(set, blurred, false)
 snowurl.com##+js(set, go_popup, %7B%7D)
 tremamnon.com##+js(aeld, DOMContentLoaded, adsBlocked)
 chinhnhacoban.com,tremamnon.com,vnpttelle.com##[id^="wpsafe-generate"], #continue:style(display: block !important;)
-kienthucrangmieng.com,coin-free.com,tremamnon.com##^script:has-text(htmls)
+coin-free.com,tremamnon.com##^script:has-text(htmls)
 !#if !cap_html_filtering
-kienthucrangmieng.com,coin-free.com,tremamnon.com##+js(rmnt, script, htmls)
+coin-free.com,tremamnon.com##+js(rmnt, script, htmls)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/10894
 actresstoday.com##+js(acs, eval, replace)
