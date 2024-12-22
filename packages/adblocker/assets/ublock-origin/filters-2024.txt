@@ -3375,8 +3375,16 @@ iqksisgw.xyz##+js(nostif, document%5B'%5Cx)
 stream.hownetwork.xyz##+js(disable-newtab-links)
 /assets/jquery/p2anime.js?v=
 ! https://github.com/uBlockOrigin/uAssets/issues/26214
-streamruby.com##+js(rmnt, script, wpadmngr.com)
+! https://github.com/uBlockOrigin/uAssets/issues/26582
+!#if cap_html_filtering
+favoyeurtube.net##^script:has-text(minBid)
+rubystm.com,streamruby.com##^script:has-text(wpadmngr.com)
+!#else
+favoyeurtube.net##+js(rmnt, script, minBid)
+rubystm.com,streamruby.com##+js(rmnt, script, wpadmngr.com)
+!#endif
 ||astirduller.com^
+||illinformed-imagination.com^
 ! https://github.com/AdguardTeam/AdguardFilters/issues/193664
 ! https://github.com/uBlockOrigin/uAssets/issues/26540
 ||ads.the.tube^
@@ -3523,10 +3531,8 @@ youtubetowav.net##+js(nowoif, _blank)
 ||comfortablepossibilitycarlos.com^$all
 ! https://github.com/AdguardTeam/AdguardFilters/issues/190943
 !#if cap_html_filtering
-! [dup] from ublock-origin/quick-fixes.txt
-! ||wiki.yjsnpi.nu/comments/$script,replace=/(;\}\}function [A-Za-z]+\([A-Za-z]?\)\{const [a-z]+=[A-Z]\,(?:const )?[a-z]+=[A-Z]).{500\,2000}\]\(\);\}\}/\$1}/
-! [dup] from ublock-origin/quick-fixes.txt
-! ||wiki.yjsnpi.nu/comments/$script,replace=/(\);\}\}function [A-Za-z]+\([A-Za-z]?\)\{const [a-z]+=[A-Z]\,(?:const )?[a-z]+=[A-Z]).{500\,2000}\]\(\)\)\);\}/\$1}/
+||wiki.yjsnpi.nu/comments/$script,replace=/(;\}\}function [A-Za-z]+\([A-Za-z]?\)\{const [a-z]+=[A-Z]\,(?:const )?[a-z]+=[A-Z]).{500\,2000}\]\(\);\}\}/\$1}/
+||wiki.yjsnpi.nu/comments/$script,replace=/(\);\}\}function [A-Za-z]+\([A-Za-z]?\)\{const [a-z]+=[A-Z]\,(?:const )?[a-z]+=[A-Z]).{500\,2000}\]\(\)\)\);\}/\$1}/
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/26475
 filmizleplus.cc##+js(rpnt, script, %2F(function%20reklamla%5C(%5B%5E)%5D%2B%5C)%20%7B)%2F, %241rekgecyen(0)%3B)
@@ -3581,3 +3587,15 @@ lineupexperts.com##^script:has-text(/account_ad_blocker|tmaAB/)
 !#else
 lineupexperts.com##+js(rmnt, script, %2Faccount_ad_blocker%7CtmaAB%2F)
 !#endif
+! https://github.com/uBlockOrigin/uAssets/issues/26572
+javx.cc##+js(nowoif, _blank)
+javx.cc##+js(aeld, DOMContentLoaded, window.open)
+||javx.cc/terra.js^
+||mustersvyrnwy.top^
+||isolatedovercomepasted.com^
+! https://tab-maker.com/en/app
+tab-maker.com##+js(no-fetch-if, googletagmanager, length%3A10)
+! https://github.com/easylist/listear/issues/37
+||arabs.alarbda.com^
+! https://github.com/uBlockOrigin/uAssets/issues/24914
+netflix.com##+js(json-prune, result.adverts)
