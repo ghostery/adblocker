@@ -865,6 +865,8 @@ hdfilmcehennemi1.net##.money-text
 ! <<<<< AdGuard Spanish/Portuguese >>>>>
 ! https://github.com/AdguardTeam/AdguardFilters/issues/191898#issuecomment-2453544544
 ! [badfilter] *$script,3p,denyallow=cdn.jkdesu.com|disqus.com,from=jkanime.net,badfilter
+! https://richtoscan.com/manga/el-sueno-de-woo-hoo-young-robando-talentos/capitulo-81/ - Detection
+richtoscan.com##+js(noeval-if, %2Fchp_%3Fad%2F)
 ! <<<<< List-KR >>>>>
 ! https://github.com/uBlockOrigin/uAssets/issues/26461
 !#if cap_html_filtering
@@ -3290,8 +3292,8 @@ movielinkbd.me##+js(nowoif, _blank)
 neodrive.xyz##+js(rmnt, script, FingerprintJS)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1gucwsp/adblock_detection_on_historicaerialscom/
 historicaerials.com##+js(nosiif, data-google-query-id)
-||historicaerials.com/js/adblock-detection.js^
-||historicaerials.com/js/testuserad.js^
+historicaerials.com##+js(nostif, data-google-query-id)
+||historicaerials.com/js/checkuser.js^
 ! https://www.reddit.com/r/uBlockOrigin/comments/1guanqw/need_help_please/
 canela.tv##+js(json-prune-fetch-response, data.custom.bcAdMetadataUrl, , propsToMatch, %2Fmedia%2Fcontent)
 canela.tv##+js(trusted-replace-fetch-response, %2F%23EXT-X-KEY%3AMETHOD%3DNONE%5Cn%23EXT(%3F%3AINF%3A%5B%5E%5Cn%5D%2B%7C-X-DISCONTINUITY)%5Cn.%2B%3F(%3F%3D%23EXT-X-KEY)%2Fgms, , %2Fmedia.m3u8)
@@ -3376,7 +3378,9 @@ stream.hownetwork.xyz##+js(disable-newtab-links)
 streamruby.com##+js(rmnt, script, wpadmngr.com)
 ||astirduller.com^
 ! https://github.com/AdguardTeam/AdguardFilters/issues/193664
-they.tube##+js(set, detectedAdblock, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/26540
+||ads.the.tube^
+||the.tube/js/simpleblocker.js^
 videocdnal24.xyz##+js(nowoif)
 filma24.band##.textwidget
 ! https://github.com/uBlockOrigin/uAssets/issues/26218
@@ -3543,25 +3547,37 @@ xbaaz.com##+js(rmnt, script, %2Fh%3DdecodeURIComponent%7CpopundersPerIP%7Cwpadmn
 xbaaz.com##+js(aost, clearTimeout, %2F%5Cb%5Ba-z%5D%20inlineScript%3A%2F)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/2320
-! [dup] from ublock-origin/quick-fixes.txt
-! @@||freemcserver.net^$ghide
-! [dup] from ublock-origin/quick-fixes.txt
-! @@||cdn.jsdelivr.net/gh/Levii22/$domain=freemcserver.net
-! [dup] from ublock-origin/quick-fixes.txt
-! @@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=panel.freemcserver.net
-! [dup] from ublock-origin/quick-fixes.txt
-! /cdn-cgi/challenge-platform/scripts/jsd/main.js$script,important,1p,domain=freemcserver.net
-! [dup] from ublock-origin/quick-fixes.txt
-! panel.freemcserver.net##+js(rpnt, script, 'G-1B4LC0KT6C')%3B, 'G-1B4LC0KT6C')%3B%20window.setTimeout(function()%7BblockPing()%7D%2C200)%3B)
-! [dup] from ublock-origin/quick-fixes.txt
-! ||panel.freemcserver.net/bs4/bs4$script,1p
-! [dup] from ublock-origin/quick-fixes.txt
-! ||panel.freemcserver.net/*YouUblockAnd$script,1p
-! [dup] from ublock-origin/quick-fixes.txt
-! *$script,redirect-rule=noopjs,domain=panel.freemcserver.net
-! [dup] from ublock-origin/quick-fixes.txt
-! freemcserver.net##+js(nostif, 0x)
-! [dup] from ublock-origin/quick-fixes.txt
-! panel.freemcserver.net##body > #main-wrapper > .page-wrapper > .container-fluid > .row > .col-md-10 > [class] > .row > .col > ul:first-child + [class="row justify-content-center mb-3 billboard_responsive text-center"]
-! [dup] from ublock-origin/quick-fixes.txt
-! panel.freemcserver.net##body > #main-wrapper > .page-wrapper > .container-fluid > .row > .col-md-10 > [class] > .row > [class^="col-"] > [style*="min-height"][style*="flex"]:has(> [id^="stpd-"][style^="position:"]:first-child + div + div:last-child)
+@@||freemcserver.net^$ghide
+@@||cdn.jsdelivr.net/gh/Levii22/$domain=freemcserver.net
+@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=panel.freemcserver.net
+/cdn-cgi/challenge-platform/scripts/jsd/main.js$script,important,1p,domain=freemcserver.net
+panel.freemcserver.net##+js(rpnt, script, 'G-1B4LC0KT6C')%3B, 'G-1B4LC0KT6C')%3B%20window.setTimeout(function()%7BblockPing()%7D%2C200)%3B)
+||panel.freemcserver.net/bs4/bs4$script,1p
+||panel.freemcserver.net/*YouUblockAnd$script,1p
+*$script,redirect-rule=noopjs,domain=panel.freemcserver.net
+freemcserver.net##+js(nostif, 0x)
+panel.freemcserver.net##body > #main-wrapper > .page-wrapper > .container-fluid > .row > .col-md-10 > [class] > .row > .col > ul:first-child + [class="row justify-content-center mb-3 billboard_responsive text-center"]
+panel.freemcserver.net##body > #main-wrapper > .page-wrapper > .container-fluid > .row > .col-md-10 > [class] > .row > [class^="col-"] > [style*="min-height"][style*="flex"]:has(> [id^="stpd-"][style^="position:"]:first-child + div + div:last-child)
+! zinkmovies .in ads
+zinkmovies.in##+js(aopr, app_advert)
+! https://github.com/uBlockOrigin/uAssets/issues/26512
+!#if cap_html_filtering
+pornhoarder.*##^script:has-text(/wpadmngr|adserverDomain/)
+!#else
+pornhoarder.*##+js(rmnt, script, %2Fwpadmngr%7CadserverDomain%2F)
+!#endif
+||misdeedtucked.shop^
+! https://github.com/uBlockOrigin/uAssets/issues/26524
+studwiz.com###KySENPmBUJDe
+! https://github.com/uBlockOrigin/uAssets/issues/26530
+wooflix.tv##+js(aopw, Adcash)
+||wooflix.tv/api/block^
+||getmagic.moe^
+! https://github.com/uBlockOrigin/uAssets/issues/26533
+pngitem.com##+js(aopw, window.onload)
+! https://github.com/uBlockOrigin/uAssets/issues/26103
+!#if cap_html_filtering
+lineupexperts.com##^script:has-text(/account_ad_blocker|tmaAB/)
+!#else
+lineupexperts.com##+js(rmnt, script, %2Faccount_ad_blocker%7CtmaAB%2F)
+!#endif

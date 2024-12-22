@@ -2356,8 +2356,6 @@ gomovies.*##+js(acs, document.oncontextmenu)
 gomovies.*##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 ! https://www.reddit.com/r/uBlockOrigin/comments/k3x8ta/antiadblock_popup_on_proboards/
 *$script,redirect-rule=noopjs,domain=forums.lostmediawiki.com
-! https://www.reddit.com/r/uBlockOrigin/comments/k44in0/techoreelscom_detecting_adblock_other_issues_too/
-techoreels.com##+js(ra, oncontextmenu, body)
 ! https://github.com/uBlockOrigin/uAssets/issues/8299
 promobit.com.br##+js(aeld, mouseout)
 ! liveroger.com anti-select
@@ -3718,9 +3716,6 @@ gmarket.co.kr##+js(set, document.onmousedown, noopFunc)
 ! https://digital.elmercurio.com/2022/05/02/A/SN44A2B9 private mode detection
 ||digital.elmercurio.com/assets/js/detectPrivateMode.js$script,1p
 ! https://www.thetodaypost.com/365-days-2020-hindi-dubbed/ anti right click + dev tools
-thetodaypost.com##+js(set, document.oncontextmenu, trueFunc)
-thetodaypost.com##+js(set, document.onkeydown, trueFunc)
-thetodaypost.com##+js(set, document.onselectstart, trueFunc)
 dlmovies.link##+js(acs, console.clear, contextmenu)
 ! https://github.com/uBlockOrigin/uAssets/issues/13066
 celtadigital.com##+js(aeld, contextmenu)
@@ -4653,7 +4648,8 @@ fjordd.com##+js(rmnt, script, initPopup)
 tumblr.com##+js(nostif, Premium)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/155809
 ! ||assets.tumblr.com/pop/js/modern/async-login-wall
-tumblr.com##+js(set-cookie, logged_in, 1, , reload, 1)
+! https://github.com/uBlockOrigin/uAssets/issues/26535
+! tumblr.com##+js(set-cookie, logged_in, 1, , reload, 1)
 ! oploverz anti right click & text selection, etc
 oploverz.*##+js(rmnt, script, contextmenu)
 oploverz.*##+js(rmnt, style, user-select)
@@ -5622,3 +5618,10 @@ fandom.com##+js(trusted-set-cookie, fandomLeftPanelPersistence, collapsed)
 baomidou.com##astro-island[opts^="{\"name\":\"CheckAdBlocked\""]
 ! https://github.com/uBlockOrigin/uAssets/issues/26478
 wallpapercat.com##+js(nano-sib, counter, 1000, 0.001)
+! https://media.cm/d/ezu1uydqcv8x anti devtools
+||media.cm/dev.js
+! https://github.com/uBlockOrigin/uAssets/issues/26511
+||images.$frame,1p,domain=nintendolife.com|purexbox.com|pushsquare.com|timeextension.com
+nintendolife.com##.insert-blocker
+! https://github.com/uBlockOrigin/uAssets/issues/26533
+pngitem.com##+js(aopr, document.oncontextmenu)

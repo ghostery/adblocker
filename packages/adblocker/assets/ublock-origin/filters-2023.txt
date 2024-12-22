@@ -2384,7 +2384,8 @@ app.covemarkets.com##+js(noeval-if, show)
 ! https://github.com/uBlockOrigin/uAssets/issues/18528
 j91.asia##+js(nostif, fuckadb)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/153796
-rekidai-info.github.io##+js(nostif, ()%3D%3E%7Bvar)
+rekidai-info.github.io##+js(nostif, %2F%5C(%5C)%3D%3E%5C%7B(%3F%3Aconst%7Clet%7Cvar)%7Clocation%2F)
+rekidai-info.github.io##+js(nostif, , 3000)
 @@*$xhr,domain=rekidai-info.github.io
 @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=rekidai-info.github.io
 @@||pagead2.googlesyndication.com/pagead/managed/js/adsense/*/show_ads_impl_$script,domain=rekidai-info.github.io
@@ -2823,10 +2824,8 @@ skill4ltu.eu##+js(aeld, load, adsbygoogle)
 ! https://github.com/uBlockOrigin/uAssets/issues/20505
 *$frame,redirect-rule=noopframe,domain=megaup.net
 download.megaup.net##+js(spoof-css, a%20img%3Anot(%5Bsrc%3D%22images%2Fmain_logo_inverted.png%22%5D), visibility, visible)
-! [dup] from ublock-origin/quick-fixes.txt
-! download.megaup.net##+js(rpnt, script, %2Ffor%5Cs*%5C(%5Cs*(const%7Clet%7Cvar).*%3F%5C)%5C%3Breturn%5C%3B%5C%7D_%2Fg, _, condition, attribute)
-! [dup] from ublock-origin/quick-fixes.txt
-! download.megaup.net##a:has(img[src*="/download"]):style(width: 300px !important; height: 300px !important; display: block !important;)
+download.megaup.net##+js(rpnt, script, %2Ffor%5Cs*%5C(%5Cs*(const%7Clet%7Cvar).*%3F%5C)%5C%3Breturn%5C%3B%5C%7D_%2Fg, _, condition, attribute)
+download.megaup.net##a:has(img[src*="/download"]):style(width: 300px !important; height: 300px !important; display: block !important;)
 @@||megaup.net/imageads/$image,1p
 @@||download.megaup.net^$script,1p
 ! https://www.reddit.com/r/uBlockOrigin/comments/hxzp5h/ublock_fails_to_block_ads_after_clicking_video/
