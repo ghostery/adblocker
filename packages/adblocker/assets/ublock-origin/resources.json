@@ -435,7 +435,7 @@
     {
       "name": "parse-properties-to-match.fn",
       "aliases": [],
-      "body": "function parsePropertiesToMatch(t,n=\"\"){const e=safeSelf();const i=new Map;if(t===void 0||t===\"\")return i;const s={canNegate:true};for(const o of e.String_split.call(t,/\\s+/)){const[t,r]=e.String_split.call(o,\":\");if(t===\"\")continue;if(r!==void 0)i.set(t,e.initPattern(r,s));else if(n!==\"\")i.set(n,e.initPattern(t,s))}return i}",
+      "body": "function parsePropertiesToMatch(t,e=\"\"){const i=safeSelf();const n=new Map;if(t===void 0||t===\"\")return n;const o={canNegate:true};for(const s of i.String_split.call(t,/\\s+/)){let[t,r]=i.String_split.call(s,\":\");if(t===\"\")continue;if(r!==void 0&&/[^$\\w -]/.test(t)){t=`${t}:${r}`;r=void 0}if(r!==void 0)n.set(t,i.initPattern(r,o));else if(e!==\"\")n.set(e,i.initPattern(t,o))}return n}",
       "dependencies": [
         "safe-self.fn"
       ]

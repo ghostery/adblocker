@@ -28,6 +28,7 @@ www.youtube.com##+js(nano-stb, %5Bnative%20code%5D, 17000, 0.001)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1ebwr6c/is_ublock_broken_again_or_am_i_doing_something/
 !www.youtube.com##+js(json-prune-fetch-response, playerAds%20adPlacements%20adSlots%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots, , propsToMatch, %2F%5C%2F(%3F%3Aplayer%7Cplaylist%7Cget_watch)%5C%3F%2F)
 www.youtube.com##+js(json-prune-fetch-response, playerAds%20adPlacements%20adSlots%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots, , propsToMatch, %2F%5C%2F(player%7Cget_watch)%5C%3F%2F)
+! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-2144781835
 www.youtube.com##+js(json-prune-fetch-response, playerAds%20adPlacements%20adSlots%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots, , propsToMatch, %2Fplaylist%3F)
 ! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-2271325338
 ! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-2308486423
@@ -133,14 +134,9 @@ file-1bl9ruic-moon.com,file-kg88oaak-embed.com,file-mi11ljwj-embed.com,file-sp32
 ||nubileforward.com^
 ||op3xdork.xyz^
 ||skvxbool.xyz^
-! https://github.com/AdguardTeam/AdguardFilters/issues/190943
-!#if cap_html_filtering
-||wiki.yjsnpi.nu/comments/$script,replace=/(;\}\}function [A-Za-z]+\([A-Za-z]?\)\{const [a-z]+=[A-Z]\,(?:const )?[a-z]+=[A-Z]).{500\,2000}\]\(\);\}\}/\$1}/
-||wiki.yjsnpi.nu/comments/$script,replace=/(\);\}\}function [A-Za-z]+\([A-Za-z]?\)\{const [a-z]+=[A-Z]\,(?:const )?[a-z]+=[A-Z]).{500\,2000}\]\(\)\)\);\}/\$1}/
-!#endif
 ! Ad-Shield
 ! https://github.com/uBlockOrigin/uAssets/issues/26487
-dogdrip.net,infinityfree.com,smsonline.cloud,webdesignledger.com##+js(trusted-replace-argument, Array.prototype.forEach, 0, noopFunc, condition, %2F%5Cw%2B%3D%3E%5Cw%2B%5C%2B%3DString%5C%5B%5Cw%2B%5C(%5Cd%2B%5C)%5D%5C(%5Cw%2B%5C)%2F)
+dogdrip.net,infinityfree.com,smsonline.cloud,webdesignledger.com##+js(trusted-replace-outbound-text, decodeURIComponent, %2F%5E(Chrome%7CFirefox)%5C%2F%24%2F, %241%2F1)
 ! https://github.com/uBlockOrigin/uAssets/issues/25990
 ||karistudio.com/wp-content/themes/blogarise-child/check2.js$important
 karistudio.com##p.chapter_content:style(display: block !important; visibility: visible !important; opacity: 1 !important; transform: none !important;)
@@ -151,7 +147,7 @@ cursomecanet.com##+js(aeld, contextmenu)
 ! https://github.com/uBlockOrigin/uAssets/issues/25344
 ! https://github.com/uBlockOrigin/uAssets/pull/26342
 ! https://github.com/uBlockOrigin/uAssets/issues/26393
-bing.com##+js(trusted-replace-outbound-text, DOMTokenList.prototype.toString, b_algoSlug, b_algo)
+bing.com##+js(trusted-replace-outbound-text, DOMTokenList.prototype.toString, %2Fb_algoSlug%7Cb_lineclamp.%2F, b_algo)
 bing.com##li.b_algo:has(> :is(.b_tpcn, .b_title, h2) a[href^="https://www.bing.com/aclick?"])
 bing.com##li.b_algo:has(> :is(.b_tpcn, .b_title, h2) a[href^="https://www.bing.com/aclk?"])
 ! https://github.com/AdguardTeam/AdguardFilters/issues/183252
@@ -160,8 +156,6 @@ exploader.net##+js(trusted-rpnt, script, window.addEventListener, (async()%3D%3E
 ||daotag.com/tag/$script,domain=exploader.net,important
 exploader.net###preview_images > span[class^="tracking_"]
 ||daotag.com/tag/$script,replace=/if\s*\(!(window\.[0-9a-z]{20\,})\)[\S\s]+/if(!\$1&&typeof \$1==='undefined'||\$1!==false){\$1=true}/,domain=exploader.net
-! https://github.com/uBlockOrigin/uAssets/issues/26348
-@@||ac.cnstrc.com^$xhr,domain=bjs.com
 ! https://github.com/uBlockOrigin/uAssets/issues/26392
 #@##__next > div[style="position:fixed;z-index:9999;top:16px;left:16px;right:16px;bottom:16px;pointer-events:none"]
 #@##__next > div.absolute.inset-0.w-full.h-screen.z-\[99999\]
@@ -173,11 +167,6 @@ www.chip.de##^script:has-text(/ \=\=\= [0-9]{1,2}\) \{ \}/)
 !#else
 www.chip.de##+js(rmnt, script, %2F%20%5C%3D%5C%3D%5C%3D%20%5B0-9%5D%7B1%2C2%7D%5C)%20%5C%7B%20%5C%7D%2F)
 !#endif
-! baited
-! [badfilter] /nativeads-v2.js$badfilter
-! https://github.com/easylist/easylist/commit/e3c7790c9490c5a4580198025d9d07ca4628a168
-! [badfilter] ||hebiichigo.com^$badfilter
-||hebiichigo.com^$3p
 ! https://github.com/uBlockOrigin/uAssets/issues/26518
 ! [badfilter] ||business-center-$doc,badfilter
 ! https://github.com/easylist/easylist/commit/b769f49d5e96598bf2c58fbbc13b02a48e37c741
