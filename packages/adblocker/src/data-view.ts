@@ -20,6 +20,9 @@ export const EMPTY_UINT32_ARRAY = new Uint32Array(0);
 // Check if current architecture is little endian
 const LITTLE_ENDIAN: boolean = new Int8Array(new Int16Array([1]).buffer)[0] === 1;
 
+// TextEncoder doesn't need to be recreated every time unlike TextDecoder
+const TEXT_ENCODER = new TextEncoder();
+
 // Store compression in a lazy, global singleton
 let getCompressionSingleton: () => Compression = () => {
   const COMPRESSION = new Compression();
@@ -87,8 +90,8 @@ export function sizeOfASCII(str: string): number {
  * Return number of bytes needed to serialize `str` UTF8 string.
  */
 export function sizeOfUTF8(str: string): number {
-  const encodedLength = encode(str).length;
-  return encodedLength + sizeOfLength(encodedLength);
+  const encoded = TEXT_ENCODER.encode(str);
+  return sizeOfLength(encoded.length) + encoded.length;
 }
 
 /**
@@ -389,23 +392,30 @@ export class StaticDataView {
   }
 
   public pushUTF8(raw: string): void {
-    const str = encode(raw);
-    this.pushLength(str.length);
-
-    for (let i = 0; i < str.length; i += 1) {
-      this.buffer[this.pos++] = str.charCodeAt(i);
+    const pos = this.getPos();
+    // Assume the size of output length is 1 (which means output is less than 128)
+    // based on the possible minimal length to avoid memory relocation.
+    // The minimal length is always 1 byte per character.
+    const start = pos + sizeOfLength(raw.length);
+    const { written } = TEXT_ENCODER.encodeInto(raw, this.buffer.subarray(start));
+    // If we failed to predict, that means the required bytes for length is 5.
+    if (pos + sizeOfLength(written) !== start) {
+      // Push 4 bytes back, `start + 4` or `pos + 5`
+      this.buffer.copyWithin(pos + 5, start, start + written);
     }
+    // Restore pos to push length
+    this.setPos(pos);
+    this.pushLength(written);
+    // Reflect written bytes to pos
+    this.setPos(this.pos + written);
   }
 
   public getUTF8(): string {
     const byteLength = this.getLength();
-    this.pos += byteLength;
-    return decode(
-      String.fromCharCode.apply(
-        null,
-        // @ts-ignore
-        this.buffer.subarray(this.pos - byteLength, this.pos),
-      ),
+    const pos = this.getPos();
+    this.setPos(pos + byteLength);
+    return new TextDecoder('utf8', { ignoreBOM: true }).decode(
+      this.buffer.subarray(pos, pos + byteLength),
     );
   }
 
