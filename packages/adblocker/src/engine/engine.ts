@@ -8,6 +8,8 @@
 
 import type { IMessageFromBackground } from '@ghostery/adblocker-content';
 
+import { URLSearchParams } from 'node:url';
+
 import Config from '../config.js';
 import { StaticDataView, sizeOfASCII, sizeOfByte, sizeOfBool } from '../data-view.js';
 import { EventEmitter } from '../events.js';
@@ -779,7 +781,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           exceptions.push(filter);
         } else if (filter.isImportant()) {
           importants.push(filter);
-        } else if (filter.isRedirect()) {
+        } else if (filter.isRedirect() || filter.isRemoveParam()) {
           redirects.push(filter);
         } else {
           filters.push(filter);
@@ -1450,6 +1452,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
       let redirectNone: NetworkFilter | undefined;
       let redirectRule: NetworkFilter | undefined;
+      let redirectUrl: string | undefined;
 
       // If `result.filter` is `undefined`, it means there was no $important
       // filter found so far. We look for a $redirect filter.  There is some
@@ -1460,8 +1463,44 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       // * Else if redirect-rule is found, only redirect if request would be blocked.
       // * Else if redirect is found, redirect.
       if (result.filter === undefined) {
-        const redirects = this.redirects
-          .matchAll(request, this.isFilterExcluded.bind(this))
+        const redirectFilters = this.redirects.matchAll(request, this.isFilterExcluded.bind(this));
+        const resourceRedirects: NetworkFilter[] = [];
+        const requestRedirects: NetworkFilter[] = [];
+        for (const filter of redirectFilters) {
+          if (filter.isRemoveParam()) {
+            requestRedirects.push(filter);
+          } else {
+            resourceRedirects.push(filter);
+          }
+        }
+
+        const searchParamsIndex = request.url.indexOf('?') + 1;
+        if (searchParamsIndex !== 0 && resourceRedirects.length !== 0) {
+          const searchParams = new URLSearchParams(request.url.slice(searchParamsIndex + 1));
+          let parametersRemoved = 0;
+          for (const redirect of requestRedirects) {
+            // When removeparam used without any option value, remove all parameter.
+            if (redirect.optionValue === undefined) {
+              redirectUrl = request.url.slice(0, searchParamsIndex);
+              result.filter = requestRedirects[0];
+              // Prevent next branch after the loop to be executed.
+              parametersRemoved = 0;
+              break;
+            } else {
+              if (searchParams.has(redirect.optionValue)) {
+                parametersRemoved++;
+                searchParams.delete(redirect.optionValue);
+              }
+            }
+          }
+          if (parametersRemoved !== 0) {
+            redirectUrl = `${request.url.slice(0, searchParamsIndex)}?${searchParams.toString()}`;
+            // TODO: More than one filter needs to be returned
+            result.filter = requestRedirects[0];
+          }
+        }
+
+        const redirects = resourceRedirects
           // highest priorty wins
           .sort((a, b) => b.getRedirectPriority() - a.getRedirectPriority());
 
@@ -1505,15 +1544,15 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       //
       // 1. Check if a redirect=none rule was found, which acts as exception.
       // 2. If no exception was found, prepare `result.redirect` response.
-      if (
-        result.filter !== undefined &&
-        result.exception === undefined &&
-        result.filter.isRedirect()
-      ) {
-        if (redirectNone !== undefined) {
-          result.exception = redirectNone;
+      if (result.filter !== undefined && result.exception === undefined) {
+        if (redirectUrl !== undefined) {
+          result.redirect = { body: '', contentType: 'text', dataUrl: redirectUrl };
         } else {
-          result.redirect = this.resources.getResource(result.filter.getRedirectResource());
+          if (redirectNone !== undefined) {
+            result.exception = redirectNone;
+          } else {
+            result.redirect = this.resources.getResource(result.filter.getRedirectResource());
+          }
         }
       }
     }
