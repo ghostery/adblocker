@@ -65,10 +65,11 @@ sandratableother.com##+js(set, console.clear, undefined)
 ! https://github.com/uBlockOrigin/uAssets/issues/23806
 japscan.lol##+js(aost, onload, inlineScript)
 *$image,redirect-rule=1x1.gif,domain=japscan.lol
-japscan.lol##+js(aeld, load, %2Fnavpromo%7CclipPath%7C0p'%5C%2B%2F)
-japscan.lol##+js(aeld, DOMContentLoaded, %2F%5E%5Cs*function%5Cs*%5C(%5Cs*%5C)%5Cs*%7B%5Cs*%5B%5Es%5D%5B%24_0-9A-Za-z%5D%2B%5Cs*%5C(%5Cs*function%5Cs*%5C(%5Cs*%5C)%5Cs*%5C%7B%7CBorito%7CgetComput'%7Cp'%5C%2B''%7CNiger%7CCharger%7CGoodDay%7Cfunct'%7Ct'%5C%2B'y%2F)
+japscan.lol##+js(aeld, load, %2Ffunction%5Cs*%5C(%5Cs*%5C)%5Cs*%5C%7B%5Cs*%5B%24%5Cw%5D%2B%5Cs*%5C(%5Cs*function%5Cs*%5C(%5Cs*%5C)%5Cs*%5C%7B%5Cs*%7CYutamo%7C%3D'%5C%2F'%5C%2B%7CappendChild'%5C%5D%2F)
+japscan.lol##+js(aeld, DOMContentLoaded, %2FNiger%7CCharger%7CGoodDay%7Cfunct'%7Ct'%5C%2B'y%2F)
 japscan.lol#@#+js(rmnt, script, Roiyehe)
-japscan.lol##.navbar-nav > li#navpromo2.nav-item:style(content-visibility: hidden !important;)
+japscan.lol##+js(set-attr, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a, href, )
+japscan.lol##.navbar-nav > li#navpromo2.nav-item:style(opacity: 0 !important;)
 ||japscan.lol/zjs/$script,replace=/function GoodDay\(\)\{.+?\}\}\}//
 japscan.lol#@#.navbar-nav > li#navpromo2.nav-item
 japscan.lol##body > style + .container > .row > #main + #sidebar.col-md-3 > .card.mt-1 > .card[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 250px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
@@ -147,20 +148,14 @@ cursomecanet.com##+js(aeld, contextmenu)
 ! https://github.com/uBlockOrigin/uAssets/issues/25344
 ! https://github.com/uBlockOrigin/uAssets/pull/26342
 ! https://github.com/uBlockOrigin/uAssets/issues/26393
-bing.com##+js(trusted-replace-outbound-text, DOMTokenList.prototype.toString, %2Fb_algoSlug%7Cb_lineclamp.%2F, b_algo)
-bing.com##li.b_algo:has(> :is(.b_tpcn, .b_title, h2) a[href^="https://www.bing.com/aclick?"])
-bing.com##li.b_algo:has(> :is(.b_tpcn, .b_title, h2) a[href^="https://www.bing.com/aclk?"])
+bing.com##ol#b_results > li:has(> :is(.b_tpcn, .b_title, h2) a[href^="https://www.bing.com/aclick?"])
+bing.com##ol#b_results > li:has(> :is(.b_tpcn, .b_title, h2) a[href^="https://www.bing.com/aclk?"])
 ! https://github.com/AdguardTeam/AdguardFilters/issues/183252
-exploader.net##+js(trusted-rpnt, script, window.addEventListener, (async()%3D%3E%7Bconst%20path%3Ddocument.querySelector('script%5Bsrc%5E%3D%22https%3A%2F%2Fdaotag.com%2Ftag%2F').getAttribute('src')%3Bconst%20getVal%3Dasync()%3D%3E%7Bconst%20res%3Dawait%20fetch(path)%3Bconst%20text%3Dawait%20res.text()%3Bconst%20val%3Dtext.match(%2F%5B0-9a-f%5D%7B20%2C%7D%2F)%3Breturn%20val%5B0%5D%7D%3Blet%20value%3Dawait%20getVal()%3Bif(!value%26%26typeof%20value%3D%3D%3D'undefined'%7C%7Cvalue!%3D%3D!1)%7Bwindow%5Bvalue%5D%3D!0%7D%7D)()%3Bwindow.addEventListener)
-! [badfilter] ||daotag.com^$xhr,badfilter
-||daotag.com/tag/$script,domain=exploader.net,important
-exploader.net###preview_images > span[class^="tracking_"]
-||daotag.com/tag/$script,replace=/if\s*\(!(window\.[0-9a-z]{20\,})\)[\S\s]+/if(!\$1&&typeof \$1==='undefined'||\$1!==false){\$1=true}/,domain=exploader.net
+exploader.net##+js(spoof-css, article%20%3E%20div%5Bstyle*%3D%221120px%22%5D%20%3E%20div, clip, )
+exploader.net##article > div[style*="1120px"] > div:style(position: absolute !important; clip:rect(1px,1px,1px,1px) !important)
 ! https://github.com/uBlockOrigin/uAssets/issues/26392
 #@##__next > div[style="position:fixed;z-index:9999;top:16px;left:16px;right:16px;bottom:16px;pointer-events:none"]
 #@##__next > div.absolute.inset-0.w-full.h-screen.z-\[99999\]
-! https://www.reddit.com/r/uBlockOrigin/comments/1hbzrji/pixiv_breaking_with_uboagain/
-pixiv.net#@#+js(set-cookie-reload, privacy_policy_agreement, 6)
 ! https://github.com/easylist/easylistgermany/issues/216
 !#if cap_html_filtering
 www.chip.de##^script:has-text(/ \=\=\= [0-9]{1,2}\) \{ \}/)

@@ -1707,10 +1707,11 @@ megacanais.com##+js(aopr, Adcash)
 ! https://icelz.to/tv/channel.php?id=YWI1MDhjMDk3YzViNDFjYmIwNjI2ZGNjM2ZjOTQ3MGE=&channel=Cartoon%20Network%20%26%20Adult%20Swim
 ! https://gogoanime.co.in/videos/mahou-shoujo-ni-akogarete-episode-1
 ! https://deporte-libre.top/en-vivo-online/espn/
+! https://github.com/uBlockOrigin/uAssets/issues/26585
 !#if cap_html_filtering
-1stream.eu,4kwebplay.xyz,antennasports.ru,buffsports.me,buffstreams.app,claplivehdplay.ru,cracksports.me,euro2024direct.ru,ext.to,eztv.tf,eztvx.to,flix-wave.*,kenitv.me,lewblivehdplay.ru,mixdrop.*,mlbbite.net,mlbstreams.ai,qatarstreams.me,qqwebplay.xyz,rnbastreams.com,sanet.*,soccerworldcup.me,sportshd.*,topstreams.info,totalsportek.to,viwlivehdplay.ru##^script:has-text(adserverDomain)
+1stream.eu,4kwebplay.xyz,antennasports.ru,buffsports.me,buffstreams.app,claplivehdplay.ru,cracksports.me,euro2024direct.ru,ext.to,extreme-down.*,eztv.tf,eztvx.to,flix-wave.*,kenitv.me,lewblivehdplay.ru,mixdrop.*,mlbbite.net,mlbstreams.ai,qatarstreams.me,qqwebplay.xyz,rnbastreams.com,sanet.*,soccerworldcup.me,sportshd.*,topstreams.info,totalsportek.to,viwlivehdplay.ru##^script:has-text(adserverDomain)
 !#else
-1stream.eu,4kwebplay.xyz,antennasports.ru,buffsports.me,buffstreams.app,claplivehdplay.ru,cracksports.me,euro2024direct.ru,ext.to,eztv.tf,eztvx.to,flix-wave.*,kenitv.me,lewblivehdplay.ru,mixdrop.*,mlbbite.net,mlbstreams.ai,qatarstreams.me,qqwebplay.xyz,rnbastreams.com,sanet.*,soccerworldcup.me,sportshd.*,topstreams.info,totalsportek.to,viwlivehdplay.ru##+js(rmnt, script, adserverDomain)
+1stream.eu,4kwebplay.xyz,antennasports.ru,buffsports.me,buffstreams.app,claplivehdplay.ru,cracksports.me,euro2024direct.ru,ext.to,extreme-down.*,eztv.tf,eztvx.to,flix-wave.*,kenitv.me,lewblivehdplay.ru,mixdrop.*,mlbbite.net,mlbstreams.ai,qatarstreams.me,qqwebplay.xyz,rnbastreams.com,sanet.*,soccerworldcup.me,sportshd.*,topstreams.info,totalsportek.to,viwlivehdplay.ru##+js(rmnt, script, adserverDomain)
 !#endif
 gogoanime.co.in,icelz.to,streamtp1.com##+js(aopw, Adcash)
 ###dontfoid
@@ -2390,6 +2391,7 @@ smithsonianmag.com##+js(aeld, DOMContentLoaded, leaderboardAd)
 smithsonianmag.com##+js(acs, document.addEventListener, %23leaderboardAd)
 ! usersdrive .com popups
 usersdrive.com##+js(aopr, popurl)
+usersdrive.com##+js(nowoif, _blank)
 ||pol.azureedge.net^$domain=usersdrive.com
 ||smartpc.click^$all
 usersdrive.com##center > a[href][target="_blank"] > img
@@ -3377,13 +3379,11 @@ stream.hownetwork.xyz##+js(disable-newtab-links)
 ! https://github.com/uBlockOrigin/uAssets/issues/26214
 ! https://github.com/uBlockOrigin/uAssets/issues/26582
 !#if cap_html_filtering
-favoyeurtube.net##^script:has-text(minBid)
 rubystm.com,streamruby.com##^script:has-text(wpadmngr.com)
 !#else
-favoyeurtube.net##+js(rmnt, script, minBid)
 rubystm.com,streamruby.com##+js(rmnt, script, wpadmngr.com)
 !#endif
-||astirduller.com^
+rubystm.com##+js(set, cRAds, false)
 ||illinformed-imagination.com^
 ! https://github.com/AdguardTeam/AdguardFilters/issues/193664
 ! https://github.com/uBlockOrigin/uAssets/issues/26540
@@ -3407,9 +3407,11 @@ dfbplay.tv##+js(no-fetch-if, googlesyndication)
 animedao.com.ru##+js(no-xhr-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/26246
 abs-cbn.com##div[style*="999999"]:has(div[style^="background-color:#ECEDEF;"] > p)
+abs-cbn.com##div[style*="2147483647"]:has(> div[style$="z-index: 999;"])
 abs-cbn.com##div[style*="2147483647"]:has(.imp-adSlot-0)
 abs-cbn.com##div[id^="div-articleOOP"] ~ div:has(.imp-adSlot-0)
-abs-cbn.com##:is(.css-168qn5i, .css-1slfery, .css-xcd31q, .css-4dbdht):has(div[class^="imp-adSlot"])
+abs-cbn.com##:is(.css-168qn5i, .css-1slfery, .css-xcd31q, .css-4dbdht, .css-1d3bbye, .css-ob4cto):has(div[class^="imp-adSlot"])
+abs-cbn.com##.css-15j76c0:has(> div[style*="z-index: 99999"])
 abs-cbn.com##.MuiGrid-root.MuiGrid-item:not([data-testid="test-grid-item"]):has(> div.MuiBox-root > div[style] > div > div[style] > div[class^="imp-adSlot"])
 ! https://github.com/uBlockOrigin/uAssets/issues/26248
 gmanetwork.com###leaderboard
@@ -3545,6 +3547,7 @@ feed2all.org##+js(set-cookie, BetterJsPop0, 1)
 ||bithow.com^
 ! https://github.com/uBlockOrigin/uAssets/issues/26493
 titulky.com##+js(set, showFairUser, true)
+@@||titulky.com^$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/26494
 !#if cap_html_filtering
 xbaaz.com##^script:has-text(/h=decodeURIComponent|popundersPerIP|wpadmngr|popMagic/)
