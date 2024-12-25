@@ -15,7 +15,7 @@ import { parseFilters } from '../src/lists.js';
 import { hashStrings, tokenize } from '../src/utils.js';
 import { HTMLSelector, HTMLModifier } from '../src/html-filtering.js';
 import { NORMALIZED_TYPE_TOKEN, hashHostnameBackward } from '../src/request.js';
-import { Domains, normalizeNetworkEntities } from '../src/engine/domains.js';
+import { normalizeNetworkEntities } from '../src/engine/domains.js';
 
 function h(hostnames: string[]): Uint32Array {
   return new Uint32Array(hostnames.map(hashHostnameBackward)).sort();
@@ -181,6 +181,9 @@ describe('Network filters', () => {
 
     it('pprint domain', () => {
       checkToString('ads$domain=foo.com|bar.co.uk|~baz.io', 'ads$domain=<hashed>');
+      checkToString('ads$domain=foo.com|bar.com', 'ads$domain=foo.com|bar.com', true);
+      checkToString('ads$denyallow=foo.com|bar.co.uk|~baz.io', 'ads$denyallow=<hashed>');
+      checkToString('ads$denyallow=foo.com|bar.com', 'ads$denyallow=foo.com|bar.com', true);
     });
 
     it('pprint with debug=true', () => {
