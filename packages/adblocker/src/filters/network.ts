@@ -1534,7 +1534,7 @@ export default class NetworkFilter implements IFilter {
 
     if (this.denyallow !== undefined) {
       if (this.denyallow.parts !== undefined) {
-        options.push(`denyallow=${this.denyallow.parts.replace(/,/g, '|')}`);
+        options.push(`denyallow=${this.denyallow.parts}`);
       } else {
         options.push('denyallow=<hashed>');
       }
