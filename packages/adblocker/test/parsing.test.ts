@@ -15,7 +15,7 @@ import { parseFilters } from '../src/lists.js';
 import { hashStrings, tokenize } from '../src/utils.js';
 import { HTMLSelector, HTMLModifier } from '../src/html-filtering.js';
 import { NORMALIZED_TYPE_TOKEN, hashHostnameBackward } from '../src/request.js';
-import { Domains } from '../src/engine/domains.js';
+import { Domains, normalizeNetworkEntities } from '../src/engine/domains.js';
 
 function h(hostnames: string[]): Uint32Array {
   return new Uint32Array(hostnames.map(hashHostnameBackward)).sort();
@@ -2651,9 +2651,17 @@ describe('scriptlets arguments parsing', () => {
 });
 
 describe('Domains', () => {
-  it('rejects to parse invalid pipes', () => {
-    for (const str of ['|foo.com', 'foo.com|', '|foo.com|']) {
-      expect(Domains.parse(str.split('|'))).to.be.undefined;
+  context('#normalizeNetworkEntities', () => {
+    for (const [str, normalized] of [
+      ['|foo.com', 'foo.com'],
+      ['foo.com|', 'foo.com'],
+      ['|foo.com|', 'foo.com'],
+      ['foo.com|||', 'foo.com'],
+      ['foo.com|||||bar.com', 'foo.com|bar.com'],
+    ] as const satisfies [string, string][]) {
+      it(`corrects possible typo in domains: "${str}" to "${normalized}"`, () => {
+        expect(normalizeNetworkEntities(str.split('|')).join('|')).to.be.eql(normalized);
+      });
     }
   });
 });

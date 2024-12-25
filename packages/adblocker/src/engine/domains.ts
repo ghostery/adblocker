@@ -18,8 +18,10 @@ export function normalizeNetworkEntities(parts: string[]) {
     if (part.length === 0) {
       continue;
     } else if (part.startsWith('|')) {
-      newParts.push(part);
+      newParts.push(part.slice(1));
     } else if (part.endsWith('|')) {
+      newParts.push(part.slice(0, -1));
+    } else {
       newParts.push(part);
     }
   }
