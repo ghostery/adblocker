@@ -1483,11 +1483,16 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
                 redirectUrl = request.url.slice(0, searchParamsSeparatorAt);
                 break;
               }
-              const searchParamStartsWith = `${redirect.removeparam!}=`;
-              const searchParamStartsAt = request.url.indexOf(
-                searchParamStartsWith,
+              let searchParamStartsAt = request.url.indexOf(
+                `?${redirect.removeparam!}`,
                 searchParamsSeparatorAt,
               );
+              if (searchParamStartsAt === -1) {
+                searchParamStartsAt = request.url.indexOf(
+                  `&${redirect.removeparam!}`,
+                  searchParamsSeparatorAt + 3 /* '?x='.length */,
+                );
+              }
               if (searchParamStartsAt === -1) {
                 continue;
               }

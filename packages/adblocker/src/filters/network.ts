@@ -890,6 +890,7 @@ export default class NetworkFilter implements IFilter {
 
             break;
           case 'removeparam':
+            // TODO: Support regex
             mask = setBit(mask, NETWORK_FILTER_MASK.isRemoveParam);
             optionValue = value;
 
