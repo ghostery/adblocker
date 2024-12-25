@@ -1271,6 +1271,14 @@ export default class NetworkFilter implements IFilter {
     return this.optionValue;
   }
 
+  public get removeparam(): string | undefined {
+    if (!this.isRemoveParam()) {
+      return undefined;
+    }
+
+    return this.optionValue || '';
+  }
+
   public isCosmeticFilter(): this is CosmeticFilter {
     return false;
   }
