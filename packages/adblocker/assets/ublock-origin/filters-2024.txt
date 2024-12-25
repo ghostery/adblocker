@@ -3602,3 +3602,25 @@ tab-maker.com##+js(no-fetch-if, googletagmanager, length%3A10)
 ||arabs.alarbda.com^
 ! https://github.com/uBlockOrigin/uAssets/issues/24914
 netflix.com##+js(json-prune, result.adverts)
+! https://www.reddit.com/r/uBlockOrigin/comments/1hk3x2p/123anime_misbehaving_while_using_ublock_origin/
+!#if cap_html_filtering
+123animehub.cc##^script:has-text(shown_at)
+!#else
+123animehub.cc##+js(rmnt, script, shown_at)
+!#endif
+! https://github.com/uBlockOrigin/uAssets/issues/26594
+worldpopulationreview.com###top_ad_container + div:style(padding-top: 4rem !important;)
+! https://gofirmware.com/ - popup
+gofirmware.com##+js(aeld, click, window.open)
+gofirmware.com##+js(nowoif, _blank)
+! https://wvt.free.nf - anti-adb + popup
+wvt.free.nf##+js(noeval-if, %2Fchp_%3Fad%2F)
+wvt.free.nf##+js(nowoif)
+wvt.free.nf##+js(acs, document.getElementById, window.open)
+wvt.free.nf##.tracking-btn
+||origincracknerves.com^
+||sweatypositive.com^
+! https://github.com/uBlockOrigin/uAssets/issues/26573
+||cdn.jwplayer.com/libraries/QSNV25sR.js^$script,domain=www.ratemyprofessors.com
+! https://github.com/uBlockOrigin/uAssets/issues/26599
+faceittracker.net##+js(no-fetch-if, fundingchoicesmessages)

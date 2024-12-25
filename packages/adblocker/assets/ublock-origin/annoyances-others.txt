@@ -5443,7 +5443,7 @@ abema.tv##+js(trusted-click-element, %23com-onboarding-OnboardingWelcomeModal__t
 abema.tv##.body--prevent-scroll:style(overflow: auto !important;)
 abema.tv##.com-onboarding-OnboardingModalContainerView--enter-done
 ! https://github.com/uBlockOrigin/uAssets/issues/24462
-lookmovie2.to##+js(nano-sib, _counterTimeout)
+lookmovie2.*##+js(trusted-replace-xhr-response, %2FTimeout%22%3A%5Cd%2B%2F, Timeout%22%3A0, %2Fapi%2Fv)
 ! https://www.autopareri.com/ - soft anti-adb
 autopareri.com##+js(no-fetch-if, googlesyndication)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1e5ndpo/video_player_quality_720p1080p_locked_unless_i/
@@ -5627,3 +5627,13 @@ nintendolife.com##.insert-blocker
 pngitem.com##+js(aopr, document.oncontextmenu)
 ! t3n.de anti adblock in articles
 ||assets.t3n.de/t3n-de/assets/t3n/2018/scripts/abdtn-$script,1p
+! https://github.com/uBlockOrigin/uBlock-issues/issues/3491
+!#if env_firefox
+!#else
+foxteller.com##+js(ra, oncontextmenu%7Concopy%7Concut, %5Bid%5E%3D%22chapter%22%5D, stay)
+!#endif
+foxteller.com##+js(aeld, contextmenu, preventDefault)
+foxteller.com##+js(aeld, selectionchange, .html)
+foxteller.com##+js(set, document.onkeydown, noopFunc)
+foxteller.com##+js(trusted-suppress-native-method, RegExp.prototype.test, %22contact%40foxteller.com%22, abort)
+foxteller.com##.m-content#chapter .chapter-content p:style(cursor: revert !important; -webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important;)
