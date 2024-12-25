@@ -77,14 +77,14 @@ function test({
       expect(importants).to.include(result.filter.rawLine);
 
       // Handle case where important filter is also a redirect
-      if (filter.isRedirect()) {
+      if (filter.isRedirectable()) {
         expect(redirects).to.include(result.filter.rawLine);
       }
     }
 
     expect(result.exception).to.be.undefined;
 
-    if (!filter.isRedirect()) {
+    if (!filter.isRedirectable()) {
       expect(result.redirect).to.be.undefined;
     }
 
@@ -108,7 +108,7 @@ function test({
     expect(result.filter).not.to.be.undefined;
     expect(result.redirect).to.be.undefined;
     expect(result.match).to.be.false;
-  } else if (filter.isRedirect() && exceptions.length === 0 && importants.length === 0) {
+  } else if (filter.isRedirectable() && exceptions.length === 0 && importants.length === 0) {
     const result = engine.match(request);
     expect(result.filter).not.to.be.undefined;
     if (
@@ -661,11 +661,11 @@ $csp=baz,domain=bar.com
               importants.push(filter);
             }
 
-            if (parsed.isRedirect()) {
+            if (parsed.isRedirectable()) {
               redirects.push(filter);
             }
 
-            if (!parsed.isRedirect() && !parsed.isException() && !parsed.isImportant()) {
+            if (!parsed.isRedirectable() && !parsed.isException() && !parsed.isImportant()) {
               normalFilters.push(filter);
             }
           }

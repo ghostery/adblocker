@@ -1634,6 +1634,10 @@ export default class NetworkFilter implements IFilter {
     return getBit(this.getMask(), NETWORK_FILTER_MASK.isRemoveParam);
   }
 
+  public isRedirectable(): boolean {
+    return this.isRedirect() || this.isRemoveParam();
+  }
+
   // Expected to be called only with `$replace` modifiers
   public getHtmlModifier(): HTMLModifier | null {
     // Empty `$replace` modifier is to disable all replace modifiers on exception

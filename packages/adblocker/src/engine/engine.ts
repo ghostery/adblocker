@@ -779,7 +779,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           exceptions.push(filter);
         } else if (filter.isImportant()) {
           importants.push(filter);
-        } else if (filter.isRedirect() || filter.isRemoveParam()) {
+        } else if (filter.isRedirectable()) {
           redirects.push(filter);
         } else {
           filters.push(filter);
@@ -1470,7 +1470,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         // * `removeparam` filters not matched
         // * URL doesn't have `?` — parameter separator
         // * URL has `?` but ends right after the separator
-        if (resourceRedirects.length !== 0) {
+        if (requestRedirects.length !== 0) {
           const searchParamsSeparatorAt = request.url.indexOf('?');
           if (
             searchParamsSeparatorAt !== -1 &&
@@ -1491,13 +1491,12 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
               if (searchParamStartsAt === -1) {
                 continue;
               }
-              let searchParamEndsAt = request.url.indexOf('&', searchParamStartsAt + 1);
-              if (searchParamEndsAt === -1) {
-                searchParamEndsAt = request.url.length;
-              }
+              const searchParamEndsAt = request.url.indexOf('&', searchParamStartsAt + 1);
               result.filter = redirect;
-              redirectUrl =
-                request.url.slice(0, searchParamStartsAt) + request.url.slice(searchParamEndsAt);
+              redirectUrl = request.url.slice(0, searchParamStartsAt);
+              if (searchParamEndsAt !== -1) {
+                redirectUrl += request.url.slice(searchParamEndsAt);
+              }
               break;
             }
           }
@@ -1554,10 +1553,14 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       //
       // 1. Check if a redirect=none rule was found, which acts as exception.
       // 2. If no exception was found, prepare `result.redirect` response.
-      if (result.filter !== undefined && result.exception === undefined) {
+      if (
+        result.filter !== undefined &&
+        result.exception === undefined &&
+        result.filter.isRedirectable()
+      ) {
         // Prioritize if `redirectUrl` is set.
         if (redirectUrl !== undefined) {
-          result.redirect = { body: '', contentType: 'text', dataUrl: redirectUrl };
+          result.redirect = { body: '', contentType: 'text/plain', dataUrl: redirectUrl };
         } else {
           if (redirectNone !== undefined) {
             result.exception = redirectNone;
