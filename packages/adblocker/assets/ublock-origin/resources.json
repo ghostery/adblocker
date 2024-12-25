@@ -62,6 +62,25 @@
       ]
     },
     {
+      "name": "urlskip.fn",
+      "aliases": [],
+      "body": "function urlSkip(e,t,n,r={}){try{let c=false;let s=e;for(const e of n){const t=s;const n=e.charCodeAt(0);if(n===38){const n=(parseInt(e.slice(1))||0)-1;if(n<0)return;const r=new URL(t);if(n>=r.searchParams.size)return;const c=Array.from(r.searchParams.keys());s=decodeURIComponent(c[n]);continue}if(n===43&&e===\"+https\"){const e=t.replace(/^https?:\\/\\//,\"\");if(/^[\\w-]:\\/\\//.test(e))return;s=`https://${e}`;continue}if(n===45){if(e===\"-base64\"){s=self.atob(t);continue}if(e===\"-safebase64\"){if(urlSkip.safeBase64Replacer===void 0){urlSkip.safeBase64Map={\"-\":\"+\",_:\"/\"};urlSkip.safeBase64Replacer=e=>urlSkip.safeBase64Map[e]}s=t.replace(/[-_]/g,urlSkip.safeBase64Replacer);s=self.atob(s);continue}if(e===\"-uricomponent\"){s=self.decodeURIComponent(t);continue}if(e===\"-blocked\"){c=true;continue}}if(n===47){const n=r.cache??new RegExp(e.slice(1,-1));if(r.cache===null)r.cache=n;const c=n.exec(t);if(c===null)return;if(c.length<=1)return;s=c[1];continue}if(n===63){s=new URL(t).searchParams.get(e.slice(1));if(s===null)return;if(s.includes(\" \"))s=s.replace(/ /g,\"%20\");continue}return}const i=new URL(s);if(i.protocol!==\"https:\"){if(i.protocol!==\"http:\")return;s=s.replace(\"http\",\"https\")}if(t&&c!==true)return;return s}catch(e){}}",
+      "dependencies": []
+    },
+    {
+      "name": "href-sanitizer.js",
+      "aliases": [
+        "urlskip.js"
+      ],
+      "body": "function hrefSanitizer(t=\"\",e=\"\"){if(typeof t!==\"string\")return;if(t===\"\")return;const r=safeSelf();const n=r.makeLogPrefix(\"href-sanitizer\",t,e);if(e===\"\")e=\"text\";const o=(t,e)=>{let r=[];try{r=document.querySelectorAll(`a[href=\"${t}\"`)}catch(t){}for(const t of r)t.setAttribute(\"href\",e);return r.length};const i=t=>{if(typeof t!==\"string\")return\"\";if(t===\"\")return\"\";if(/[\\x00-\\x20\\x7f]/.test(t))return\"\";try{const e=new URL(t,document.location);return e.href}catch(t){}return\"\"};const f=(t,e)=>{if(/^\\[.*\\]$/.test(e))return t.getAttribute(e.slice(1,-1).trim())||\"\";if(e===\"text\")return t.textContent.replace(/^[^\\x21-\\x7e]+/,\"\").replace(/[^\\x21-\\x7e]+$/,\"\");if(e.startsWith(\"?\")){const r=e.replace(/(\\S)\\?/g,\"\\\\1?\").split(/\\s+/);const n=urlSkip(t.href,false,r);if(n===void 0)return;return n.replace(/ /g,\"%20\")}return\"\"};const c=()=>{let c=[];try{c=document.querySelectorAll(t)}catch(t){return false}for(const t of c){if(t.localName!==\"a\")continue;if(t.hasAttribute(\"href\")===false)continue;const c=t.getAttribute(\"href\");const s=f(t,e);const u=i(s);if(u===\"\")continue;if(u===c)continue;t.setAttribute(\"href\",u);const l=o(c,u);r.uboLog(n,`Sanitized ${l+1} links to\\n${u}`)}return true};let s,u;const l=t=>{if(u!==void 0)return;let e=false;for(const r of t){if(r.addedNodes.length===0)continue;for(const t of r.addedNodes){if(t.nodeType!==1)continue;e=true;break}if(e)break}if(e===false)return;u=r.onIdle((()=>{u=void 0;c()}))};const a=()=>{if(c()===false)return;s=new MutationObserver(l);s.observe(document.body,{subtree:true,childList:true})};runAt((()=>{a()}),\"interactive\")}",
+      "dependencies": [
+        "run-at.fn",
+        "safe-self.fn",
+        "urlskip.fn"
+      ],
+      "executionWorld": "ISOLATED"
+    },
+    {
       "name": "arglist-parser.fn",
       "aliases": [],
       "body": "class ArglistParser{constructor(t=\",\",e=false){this.separatorChar=this.actualSeparatorChar=t;this.separatorCode=this.actualSeparatorCode=t.charCodeAt(0);this.mustQuote=e;this.quoteBeg=0;this.quoteEnd=0;this.argBeg=0;this.argEnd=0;this.separatorBeg=0;this.separatorEnd=0;this.transform=false;this.failed=false;this.reWhitespaceStart=/^\\s+/;this.reWhitespaceEnd=/\\s+$/;this.reOddTrailingEscape=/(?:^|[^\\\\])(?:\\\\\\\\)*\\\\$/;this.reTrailingEscapeChars=/\\\\+$/}nextArg(t,e=0){const s=t.length;this.quoteBeg=e+this.leftWhitespaceCount(t.slice(e));this.failed=false;const r=t.charCodeAt(this.quoteBeg);if(r===34||r===39||r===96){this.indexOfNextArgSeparator(t,r);if(this.argEnd!==s){this.quoteEnd=this.argEnd+1;this.separatorBeg=this.separatorEnd=this.quoteEnd;this.separatorEnd+=this.leftWhitespaceCount(t.slice(this.quoteEnd));if(this.separatorEnd===s)return this;if(t.charCodeAt(this.separatorEnd)===this.separatorCode){this.separatorEnd+=1;return this}}}this.indexOfNextArgSeparator(t,this.separatorCode);this.separatorBeg=this.separatorEnd=this.argEnd;if(this.separatorBeg<s)this.separatorEnd+=1;this.argEnd-=this.rightWhitespaceCount(t.slice(0,this.separatorBeg));this.quoteEnd=this.argEnd;if(this.mustQuote)this.failed=true;return this}normalizeArg(t,e=\"\"){if(e===\"\")e=this.actualSeparatorChar;let s=\"\";let r=0;while((r=t.lastIndexOf(e))!==-1){s=t.slice(r)+s;t=t.slice(0,r);const e=this.reTrailingEscapeChars.exec(t);if(e===null)continue;const a=(e[0].length&1)!==0?e[0].slice(0,-1):e[0];s=a+s;t=t.slice(0,-e[0].length)}if(s===\"\")return t;return t+s}leftWhitespaceCount(t){const e=this.reWhitespaceStart.exec(t);return e===null?0:e[0].length}rightWhitespaceCount(t){const e=this.reWhitespaceEnd.exec(t);return e===null?0:e[0].length}indexOfNextArgSeparator(t,e){this.argBeg=this.argEnd=e!==this.separatorCode?this.quoteBeg+1:this.quoteBeg;this.transform=false;if(e!==this.actualSeparatorCode){this.actualSeparatorCode=e;this.actualSeparatorChar=String.fromCharCode(e)}while(this.argEnd<t.length){const e=t.indexOf(this.actualSeparatorChar,this.argEnd);if(e===-1)return this.argEnd=t.length;if(this.reOddTrailingEscape.test(t.slice(0,e))===false)return this.argEnd=e;this.transform=true;this.argEnd=e+1}}}",
@@ -197,7 +216,7 @@
     {
       "name": "get-safe-cookie-values.fn",
       "aliases": [],
-      "body": "function getSafeCookieValuesFn(){return[\"accept\",\"reject\",\"accepted\",\"rejected\",\"notaccepted\",\"allow\",\"disallow\",\"deny\",\"allowed\",\"denied\",\"approved\",\"disapproved\",\"checked\",\"unchecked\",\"dismiss\",\"dismissed\",\"enable\",\"disable\",\"enabled\",\"disabled\",\"essential\",\"nonessential\",\"forbidden\",\"forever\",\"hide\",\"hidden\",\"necessary\",\"required\",\"ok\",\"on\",\"off\",\"true\",\"t\",\"false\",\"f\",\"yes\",\"y\",\"no\",\"n\"]}",
+      "body": "function getSafeCookieValuesFn(){return[\"accept\",\"reject\",\"accepted\",\"rejected\",\"notaccepted\",\"allow\",\"disallow\",\"deny\",\"allowed\",\"denied\",\"approved\",\"disapproved\",\"checked\",\"unchecked\",\"dismiss\",\"dismissed\",\"enable\",\"disable\",\"enabled\",\"disabled\",\"essential\",\"nonessential\",\"forbidden\",\"forever\",\"hide\",\"hidden\",\"necessary\",\"required\",\"ok\",\"on\",\"off\",\"true\",\"t\",\"false\",\"f\",\"yes\",\"y\",\"no\",\"n\",\"all\",\"none\",\"functional\"]}",
       "dependencies": []
     },
     {
@@ -391,7 +410,7 @@
     {
       "name": "object-prune.fn",
       "aliases": [],
-      "body": "function objectPruneFn(t,e,n,r={matchAll:true},c={}){if(typeof e!==\"string\")return;const o=safeSelf();const s=e!==\"\"?o.String_split.call(e,/ +/):[];const f=s.length!==0&&n!==\"\"?o.String_split.call(n,/ +/):[];if(r.matchAll!==true)if(matchesStackTrace(r,c.logstack)===false)return;if(objectPruneFn.mustProcess===void 0)objectPruneFn.mustProcess=(t,e)=>{for(const n of e)if(objectFindOwnerFn(t,n)===false)return false;return true};if(s.length===0)return;let i=\"nomatch\";if(objectPruneFn.mustProcess(t,f))for(const e of s)if(objectFindOwnerFn(t,e,true))i=\"match\";if(i===\"match\")return t}",
+      "body": "function objectPruneFn(t,e,n,r={matchAll:true},c={}){if(typeof e!==\"string\")return;const o=safeSelf();const s=e!==\"\"?o.String_split.call(e,/ +/):[];const f=s.length!==0&&n!==\"\"?o.String_split.call(n,/ +/):[];if(r.matchAll!==true)if(matchesStackTraceFn(r,c.logstack)===false)return;if(objectPruneFn.mustProcess===void 0)objectPruneFn.mustProcess=(t,e)=>{for(const n of e)if(objectFindOwnerFn(t,n)===false)return false;return true};if(s.length===0)return;let i=\"nomatch\";if(objectPruneFn.mustProcess(t,f))for(const e of s)if(objectFindOwnerFn(t,e,true))i=\"match\";if(i===\"match\")return t}",
       "dependencies": [
         "matches-stack-trace.fn",
         "object-find-owner.fn",
@@ -407,7 +426,7 @@
     {
       "name": "matches-stack-trace.fn",
       "aliases": [],
-      "body": "function matchesStackTrace(t,e=\"\"){const n=safeSelf();const c=getExceptionToken();const i=new n.Error(c);const s=new URL(self.location.href);s.hash=\"\";const l=/(.*?@)?(\\S+)(:\\d+):\\d+\\)?$/;const o=[];for(let t of n.String_split.call(i.stack,/[\\n\\r]+/)){if(t.includes(c))continue;t=t.trim();const e=n.RegExp_exec.call(l,t);if(e===null)continue;let i=e[2];if(i.startsWith(\"(\"))i=i.slice(1);if(i===s.href)i=\"inlineScript\";else if(i.startsWith(\"<anonymous>\"))i=\"injectedScript\";let r=e[1]!==void 0?e[1].slice(0,-1):t.slice(0,e.index).trim();if(r.startsWith(\"at\"))r=r.slice(2).trim();let a=e[3];o.push(\" \"+`${r} ${i}${a}:1`.trim())}o[0]=`stackDepth:${o.length-1}`;const r=o.join(\"\\t\");const a=t.matchAll!==true&&n.testPattern(t,r);if(e===\"all\"||e===\"match\"&&a||e===\"nomatch\"&&!a)n.uboLog(r.replace(/\\t/g,\"\\n\"));return a}",
+      "body": "function matchesStackTraceFn(t,e=\"\"){const n=safeSelf();const c=getExceptionToken();const i=new n.Error(c);const s=new URL(self.location.href);s.hash=\"\";const l=/(.*?@)?(\\S+)(:\\d+):\\d+\\)?$/;const o=[];for(let t of n.String_split.call(i.stack,/[\\n\\r]+/)){if(t.includes(c))continue;t=t.trim();const e=n.RegExp_exec.call(l,t);if(e===null)continue;let i=e[2];if(i.startsWith(\"(\"))i=i.slice(1);if(i===s.href)i=\"inlineScript\";else if(i.startsWith(\"<anonymous>\"))i=\"injectedScript\";let r=e[1]!==void 0?e[1].slice(0,-1):t.slice(0,e.index).trim();if(r.startsWith(\"at\"))r=r.slice(2).trim();let a=e[3];o.push(\" \"+`${r} ${i}${a}:1`.trim())}o[0]=`stackDepth:${o.length-1}`;const r=o.join(\"\\t\");const a=t.matchAll!==true&&n.testPattern(t,r);if(e===\"all\"||e===\"match\"&&a||e===\"nomatch\"&&!a)n.uboLog(r.replace(/\\t/g,\"\\n\"));return a}",
       "dependencies": [
         "get-exception-token.fn",
         "safe-self.fn"
@@ -416,7 +435,7 @@
     {
       "name": "parse-properties-to-match.fn",
       "aliases": [],
-      "body": "function parsePropertiesToMatch(t,n=\"\"){const e=safeSelf();const i=new Map;if(t===void 0||t===\"\")return i;const s={canNegate:true};for(const o of e.String_split.call(t,/\\s+/)){const[t,r]=e.String_split.call(o,\":\");if(t===\"\")continue;if(r!==void 0)i.set(t,e.initPattern(r,s));else if(n!==\"\")i.set(n,e.initPattern(t,s))}return i}",
+      "body": "function parsePropertiesToMatch(t,e=\"\"){const i=safeSelf();const n=new Map;if(t===void 0||t===\"\")return n;const o={canNegate:true};for(const s of i.String_split.call(t,/\\s+/)){let[t,r]=i.String_split.call(s,\":\");if(t===\"\")continue;if(r!==void 0&&/[^$\\w -]/.test(t)){t=`${t}:${r}`;r=void 0}if(r!==void 0)n.set(t,i.initPattern(r,o));else if(e!==\"\")n.set(e,i.initPattern(t,o))}return n}",
       "dependencies": [
         "safe-self.fn"
       ]
@@ -501,7 +520,7 @@
       "aliases": [
         "aost.js"
       ],
-      "body": "function abortOnStackTrace(e=\"\",t=\"\"){if(typeof e!==\"string\")return;const n=safeSelf();const r=n.initPattern(t,{canNegate:true});const c=n.getExtraArgs(Array.from(arguments),2);if(t===\"\")c.log=\"all\";const o=function(e,t){const n=t.indexOf(\".\");if(n===-1){let n=e[t];Object.defineProperty(e,t,{get:function(){if(matchesStackTrace(r,c.log))throw new ReferenceError(getExceptionToken());return n},set:function(e){if(matchesStackTrace(r,c.log))throw new ReferenceError(getExceptionToken());n=e}});return}const i=t.slice(0,n);let f=e[i];t=t.slice(n+1);if(f){o(f,t);return}const s=Object.getOwnPropertyDescriptor(e,i);if(s&&s.set!==void 0)return;Object.defineProperty(e,i,{get:function(){return f},set:function(e){f=e;if(e instanceof Object)o(e,t)}})};const i=window;o(i,e)}",
+      "body": "function abortOnStackTrace(e=\"\",t=\"\"){if(typeof e!==\"string\")return;const n=safeSelf();const r=n.initPattern(t,{canNegate:true});const c=n.getExtraArgs(Array.from(arguments),2);if(t===\"\")c.log=\"all\";const o=function(e,t){const n=t.indexOf(\".\");if(n===-1){let n=e[t];Object.defineProperty(e,t,{get:function(){if(matchesStackTraceFn(r,c.log))throw new ReferenceError(getExceptionToken());return n},set:function(e){if(matchesStackTraceFn(r,c.log))throw new ReferenceError(getExceptionToken());n=e}});return}const i=t.slice(0,n);let f=e[i];t=t.slice(n+1);if(f){o(f,t);return}const s=Object.getOwnPropertyDescriptor(e,i);if(s&&s.set!==void 0)return;Object.defineProperty(e,i,{get:function(){return f},set:function(e){f=e;if(e instanceof Object)o(e,t)}})};const i=window;o(i,e)}",
       "dependencies": [
         "get-exception-token.fn",
         "matches-stack-trace.fn",
@@ -714,16 +733,6 @@
       ]
     },
     {
-      "name": "href-sanitizer.js",
-      "aliases": [],
-      "body": "function hrefSanitizer(t=\"\",e=\"\"){if(typeof t!==\"string\")return;if(t===\"\")return;const r=safeSelf();const n=r.makeLogPrefix(\"href-sanitizer\",t,e);if(e===\"\")e=\"text\";const o=(t,e)=>{let r=[];try{r=document.querySelectorAll(`a[href=\"${t}\"`)}catch(t){}for(const t of r)t.setAttribute(\"href\",e);return r.length};const i=t=>{if(t===\"\")return\"\";if(/[\\x00-\\x20\\x7f]/.test(t))return\"\";try{const e=new URL(t,document.location);return e.href}catch(t){}return\"\"};const c=(t,e)=>{if(Boolean(e)===false)return t;const r=e.includes(\"?\",1);const n=r?e.indexOf(\"?\",1):e.length;try{const o=new URL(t,document.location);let i=o.searchParams.get(e.slice(1,n));if(i===null)return t;if(r)return c(i,e.slice(n));if(i.includes(\" \"))i=i.replace(/ /g,\"%20\");return i}catch(t){}return t};const f=(t,e)=>{if(/^\\[.*\\]$/.test(e))return t.getAttribute(e.slice(1,-1).trim())||\"\";if(e.startsWith(\"?\"))return c(t.href,e);if(e===\"text\")return t.textContent.replace(/^[^\\x21-\\x7e]+/,\"\").replace(/[^\\x21-\\x7e]+$/,\"\");return\"\"};const s=()=>{let c=[];try{c=document.querySelectorAll(t)}catch(t){return false}for(const t of c){if(t.localName!==\"a\")continue;if(t.hasAttribute(\"href\")===false)continue;const c=t.getAttribute(\"href\");const s=f(t,e);const u=i(s);if(u===\"\")continue;if(u===c)continue;t.setAttribute(\"href\",u);const l=o(c,u);r.uboLog(n,`Sanitized ${l+1} links to\\n${u}`)}return true};let u,l;const a=t=>{if(l!==void 0)return;let e=false;for(const r of t){if(r.addedNodes.length===0)continue;for(const t of r.addedNodes){if(t.nodeType!==1)continue;e=true;break}if(e)break}if(e===false)return;l=r.onIdle((()=>{l=void 0;s()}))};const d=()=>{if(s()===false)return;u=new MutationObserver(a);u.observe(document.body,{subtree:true,childList:true})};runAt((()=>{d()}),\"interactive\")}",
-      "dependencies": [
-        "run-at.fn",
-        "safe-self.fn"
-      ],
-      "executionWorld": "ISOLATED"
-    },
-    {
       "name": "call-nothrow.js",
       "aliases": [],
       "body": "function callNothrow(t=\"\"){if(typeof t!==\"string\")return;if(t===\"\")return;const n=safeSelf();const e=n.String_split.call(t,\".\");let r=window,f;for(;;){f=e.shift();if(e.length===0)break;r=r[f];if(r instanceof Object===false)return}if(f===\"\")return;const i=r[f];if(typeof i!==\"function\")return;r[f]=new Proxy(i,{apply:function(...t){let n;try{n=Reflect.apply(...t)}catch(t){}return n}})}",
@@ -841,8 +850,9 @@
     {
       "name": "trusted-suppress-native-method.js",
       "aliases": [],
-      "body": "function trustedSuppressNativeMethod(e=\"\",t=\"\",r=\"\",n=\"\"){if(e===\"\")return;if(n!==\"\")return;const u=safeSelf();const f=u.makeLogPrefix(\"trusted-suppress-native-method\",e,t,r);const i=u.String_split.call(t,/\\s*\\|\\s*/).map((e=>{if(/^\".*\"$/.test(e))return{type:\"pattern\",re:u.patternToRegex(e.slice(1,-1))};if(e===\"false\")return{type:\"exact\",value:false};if(e===\"true\")return{type:\"exact\",value:true};if(e===\"null\")return{type:\"exact\",value:null};if(e===\"undefined\")return{type:\"exact\",value:void 0}}));proxyApplyFn(e,(function(e){const{callArgs:n}=e;if(t===\"\"){u.uboLog(f,`Arguments:\\n${n.join(\"\\n\")}`);return e.reflect()}for(let t=0;t<i.length;t++){const r=i[t];if(r===void 0)continue;const f=t<n.length?n[t]:void 0;if(r.type===\"exact\")if(f!==r.value)return e.reflect();if(r.type===\"pattern\")if(u.RegExp_test.call(r.re,f)===false)return e.reflect()}if(r===\"debug\"){debugger;return e.reflect()}u.uboLog(f,`Suppressed:\\n${n.join(\"\\n\")}`);if(r===\"abort\")throw new ReferenceError}))}",
+      "body": "function trustedSuppressNativeMethod(e=\"\",t=\"\",r=\"\",n=\"\"){if(e===\"\")return;const l=safeSelf();const u=l.makeLogPrefix(\"trusted-suppress-native-method\",e,t,r,n);const a=l.String_split.call(t,/\\s*\\|\\s*/).map((e=>{if(/^\".*\"$/.test(e))return{type:\"pattern\",re:l.patternToRegex(e.slice(1,-1))};if(e===\"false\")return{type:\"exact\",value:false};if(e===\"true\")return{type:\"exact\",value:true};if(e===\"null\")return{type:\"exact\",value:null};if(e===\"undefined\")return{type:\"exact\",value:void 0}}));const f=l.initPattern(n,{canNegate:true});proxyApplyFn(e,(function(e){const{callArgs:n}=e;if(t===\"\"){l.uboLog(u,`Arguments:\\n${n.join(\"\\n\")}`);return e.reflect()}for(let t=0;t<a.length;t++){const r=a[t];if(r===void 0)continue;const u=t<n.length?n[t]:void 0;if(r.type===\"exact\")if(u!==r.value)return e.reflect();if(r.type===\"pattern\")if(l.RegExp_test.call(r.re,u)===false)return e.reflect()}if(f.matchAll!==true){const t=l.logLevel>1?\"all\":\"\";if(matchesStackTraceFn(f,t)===false)return e.reflect()}if(r===\"debug\"){debugger;return e.reflect()}l.uboLog(u,`Suppressed:\\n${n.join(\"\\n\")}`);if(r===\"abort\")throw new ReferenceError}))}",
       "dependencies": [
+        "matches-stack-trace.fn",
         "proxy-apply.fn",
         "safe-self.fn"
       ],
