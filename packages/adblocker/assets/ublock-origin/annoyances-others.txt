@@ -4240,7 +4240,7 @@ freefilesync.org#@#.adsbygoogle
 01.org###main-content > .container:style(padding-top: 20px !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/16690
 sflix.to##+js(nostif, devtools)
-sflix.to,sflix.is,sflix.ca##+js(nosiif, %2F_0x%7Cdevtools%2F)
+sflix.to,sflix.is,sflix.ca,sflix2.to##+js(nosiif, %2F_0x%7Cdevtools%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/5511#issuecomment-1425702549
 magiclen.org##.show.fade.modal
 magiclen.org##.show.fade.modal-backdrop
@@ -5637,3 +5637,10 @@ foxteller.com##+js(aeld, selectionchange, .html)
 foxteller.com##+js(set, document.onkeydown, noopFunc)
 foxteller.com##+js(trusted-suppress-native-method, RegExp.prototype.test, %22contact%40foxteller.com%22, abort)
 foxteller.com##.m-content#chapter .chapter-content p:style(cursor: revert !important; -webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/26602
+!#if cap_html_filtering
+blog.tangwudi.com##^script:has-text(stopPrntScr)
+!#else
+blog.tangwudi.com##+js(rmnt, script, stopPrntScr)
+!#endif
+blog.tangwudi.com##:not(input):not(textarea)::selection:style(background-color: #338FFF !important; color: white !important;)
