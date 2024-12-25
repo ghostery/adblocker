@@ -6,7 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { Domains } from '../engine/domains.js';
+import {
+  Domains,
+  normalizeNetworkEntities,
+  normalizeNetworkPartsLiteral,
+} from '../engine/domains.js';
 import {
   StaticDataView,
   sizeOfNetworkFilter,
@@ -732,7 +736,7 @@ export default class NetworkFilter implements IFilter {
 
         switch (option) {
           case 'denyallow': {
-            denyallow = Domains.parse(value.split('|'), debug);
+            denyallow = Domains.parse(normalizeNetworkEntities(value.split('|')), debug);
             if (denyallow === undefined) {
               return null;
             }
@@ -740,7 +744,7 @@ export default class NetworkFilter implements IFilter {
           }
           case 'domain':
           case 'from': {
-            domains = Domains.parse(value.split('|'), debug);
+            domains = Domains.parse(normalizeNetworkEntities(value.split('|')), debug);
             if (domains === undefined) {
               return null;
             }
@@ -1515,7 +1519,7 @@ export default class NetworkFilter implements IFilter {
 
     if (this.domains !== undefined) {
       if (this.domains.parts !== undefined) {
-        options.push(`domain=${this.domains.parts.replace(/,/g, '|')}`);
+        options.push(`domain=${normalizeNetworkPartsLiteral(this.domains.parts)}`);
       } else {
         options.push('domain=<hashed>');
       }
@@ -1523,7 +1527,7 @@ export default class NetworkFilter implements IFilter {
 
     if (this.denyallow !== undefined) {
       if (this.denyallow.parts !== undefined) {
-        options.push(`denyallow=${this.denyallow.parts.replace(/,/g, '|')}`);
+        options.push(`denyallow=${normalizeNetworkPartsLiteral(this.denyallow.parts)}`);
       } else {
         options.push('denyallow=<hashed>');
       }

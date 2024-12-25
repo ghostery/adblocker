@@ -11,15 +11,29 @@ import { toASCII } from '../punycode.js';
 import { StaticDataView, sizeOfUint32Array, sizeOfUTF8 } from '../data-view.js';
 import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils.js';
 
+export function normalizeNetworkEntities(parts: string[]) {
+  const newParts: string[] = [];
+
+  for (const part of parts) {
+    if (part.length === 0) {
+      continue;
+    } else if (part.startsWith('|')) {
+      newParts.push(part);
+    } else if (part.endsWith('|')) {
+      newParts.push(part);
+    }
+  }
+
+  return newParts;
+}
+
+export function normalizeNetworkPartsLiteral(parts: string) {
+  return parts.replace(/,/g, '|');
+}
+
 export class Domains {
   public static parse(parts: string[], debug: boolean = false): Domains | undefined {
-    if (
-      parts.length === 0 ||
-      // We accept parts after splitting a string by `|`
-      // Empty first and last entry indicates it's invalid
-      parts[0].length === 0 ||
-      parts[parts.length - 1].length === 0
-    ) {
+    if (parts.length === 0) {
       return undefined;
     }
 
