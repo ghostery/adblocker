@@ -734,13 +734,17 @@ export default class NetworkFilter implements IFilter {
         switch (option) {
           case 'to':
           case 'denyallow': {
-            let parts = value.split('|');
-            if (option === 'to') {
-              parts = parts.map((part) =>
-                part.charCodeAt(0) === 126 /* '~' */ ? part.slice(1) : `~${part}`,
-              );
+            for (const part of value.split('|')) {
+              if (option === 'to') {
+                if (part.charCodeAt(0) === 126 /* '~' */) {
+                  denyallowEntities.add(part.slice(1));
+                } else {
+                  denyallowEntities.add(`~${part}`);
+                }
+              } else {
+                denyallowEntities.add(part);
+              }
             }
-            parts.forEach((part) => denyallowEntities.add(part));
             denyallow = Domains.parse(Array.from(denyallowEntities), debug);
             break;
           }
