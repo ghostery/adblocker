@@ -1274,6 +1274,13 @@ eurobaustoff.com##+js(trusted-set-local-storage-item, ccm_consent, %7B%22%2F%22%
 ! https://github.com/uBlockOrigin/uAssets/issues/23454
 dr-beckmann.com##+js(trusted-click-element, %23usercentrics-root%20%3E%3E%3E%20button%5Bdata-testid%3D%22uc-deny-all-button%22%5D)
 @@||usercentrics.eu^$domain=dr-beckmann.com
+! usercentrics consents
+! deny consent
+srf.ch,alternate.de,bayer04.de,douglas.de,falke.com,flaschenpost.de,hornbach.nl,postbank.de##+js(trusted-click-element, %23usercentrics-root%20%3E%3E%3E%20button%5Bdata-testid%3D%22uc-deny-all-button%22%5D, , 1000)
+! accept (no other option)
+immowelt.de,joyn.*,morenutrition.de##+js(trusted-click-element, %23usercentrics-root%20%3E%3E%3E%20button%5Bdata-testid%3D%22uc-accept-all-button%22%5D, , 1000)
+! custom, accept and close
+moebel24.ch,meubles.fr,meubelo.nl,moebel.de##+js(trusted-click-element, %23usercentrics-root%20%3E%3E%3E%20button%5Bdata-testid%3D%22uc-button-accept-and-close%22%5D, , 1000)
 ! https://github.com/uBlockOrigin/uAssets/issues/23499 - Necessary and marketing
 @@||cookiebot.com^$~image,3p,domain=fastnedcharging.com
 fastnedcharging.com##+js(trusted-set-cookie, CookieConsent, %7Bnecessary%3Atrue%252Cpreferences%3Afalse%252Cstatistics%3Afalse%252Cmarketing%3Atrue%7D)
@@ -1666,3 +1673,7 @@ zara.com##+js(trusted-click-element, button%5Baria-label%3D%22Close%22%5D, , 100
 negociardivida.spcbrasil.org.br##+js(trusted-click-element, button.sc-9a9fe76b-0.jgpQHZ, , 1000)
 ! reject
 adidas.*##+js(trusted-click-element, button%5Bdata-auto-id%3D%22glass-gdpr-default-consent-reject-button%22%5D, , 1000)
+! non-essential
+crumblcookies.com##+js(trusted-set-local-storage-item, userTrackingConsent, %7B%22necessary%22%3Atrue%2C%22marketing%22%3Afalse%7D)
+! accept https://www.topreality.sk/
+privacy.topreality.sk##+js(trusted-click-element, button%5Baria-label%3D%22Prija%C5%A5%20v%C5%A1etko%22%5D)
