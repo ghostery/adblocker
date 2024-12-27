@@ -673,6 +673,22 @@ $csp=baz,domain=bar.com
           });
         }
       });
+
+      it('removeparam removes parameter sequentially', () => {
+        const params = ['utm', 'utm_source', 'utm_event'];
+        let request = urlToDocumentRequest('https://foo.com?utm_source=organic&utm_event=b&utm=a');
+        const engine = createEngine(
+          params.map((param) => `||foo.com$removeparam=${param}`).join('\n'),
+        );
+        for (let i = 0; i < params.length; i++) {
+          const { redirect } = engine.match(request);
+          expect(redirect).not.to.be.undefined;
+          request = urlToDocumentRequest(redirect!.dataUrl);
+        }
+        for (const param of params) {
+          expect(request.url).not.to.include(param);
+        }
+      });
     });
   });
 
