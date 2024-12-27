@@ -879,7 +879,6 @@ describe('Network filters', () => {
         network('||foo.com', {
           isRedirectRule: false,
           redirect: '',
-          isRedirectable: true,
         });
       });
     });
