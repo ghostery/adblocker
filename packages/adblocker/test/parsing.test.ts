@@ -34,6 +34,7 @@ function network(filter: string, expected: any) {
       denyallow: parsed.denyallow,
       domains: parsed.domains,
       redirect: parsed.getRedirect(),
+      removeparam: parsed.removeparam,
 
       // Filter type
       isBadFilter: parsed.isBadFilter(),
@@ -48,6 +49,8 @@ function network(filter: string, expected: any) {
       isPlain: parsed.isPlain(),
       isRedirect: parsed.isRedirect(),
       isRedirectRule: parsed.isRedirectRule(),
+      isRemoveParam: parsed.isRemoveParam(),
+      isRedirectable: parsed.isRedirectable(),
       isRegex: parsed.isRegex(),
       isRightAnchor: parsed.isRightAnchor(),
 
@@ -101,6 +104,8 @@ const DEFAULT_NETWORK_FILTER = {
   isPlain: false,
   isRedirect: false,
   isRedirectRule: false,
+  isRemoveParam: false,
+  isRedirectable: false,
   isRegex: false,
   isRightAnchor: false,
 
@@ -845,11 +850,13 @@ describe('Network filters', () => {
         network('||foo.com$redirect-rule=bar.js', {
           isRedirect: true,
           isRedirectRule: true,
+          isRedirectable: true,
           redirect: 'bar.js',
         });
         network('$redirect-rule=bar.js', {
           isRedirect: true,
           isRedirectRule: true,
+          isRedirectable: true,
           redirect: 'bar.js',
         });
       });
@@ -872,6 +879,31 @@ describe('Network filters', () => {
         network('||foo.com', {
           isRedirectRule: false,
           redirect: '',
+          isRedirectable: true,
+        });
+      });
+    });
+
+    describe('removeparam', () => {
+      it('parses ~removeparam', () => {
+        // ~removeparam is not a valid option
+        network('||foo.com$~removeparam=utm', null);
+        network('||fo.com$~removeparam', null);
+      });
+
+      it('parses removeparam', () => {
+        network('||foo.com$removeparam=utm', {
+          removeparam: 'utm',
+          isRemoveParam: true,
+          isRedirectable: true,
+        });
+      });
+
+      it('parses removeparam without a value', () => {
+        network('||foo.com$removeparam', {
+          removeparam: '',
+          isRemoveParam: true,
+          isRedirectable: true,
         });
       });
     });

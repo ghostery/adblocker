@@ -600,6 +600,80 @@ $csp=baz,domain=bar.com
       expect((filter as NetworkFilter).toString()).to.equal('||foo.com$image,redirect=foo.js');
       expect(redirect).to.be.undefined;
     });
+
+    context('removeparam', () => {
+      function urlToDocumentRequest(url: string) {
+        return Request.fromRawDetails({
+          sourceUrl: 'https://foo.com',
+          url,
+          type: 'document',
+        });
+      }
+
+      const requests = [
+        'https://foo.com?utm',
+        'https://foo.com?utm=',
+        'https://foo.com?utm=a',
+        'https://foo.com?utm=a&utm_source=organic',
+        'https://foo.com?utm_source=organic&utm=a',
+      ].map(urlToDocumentRequest);
+
+      describe('removeparam removes all parameters', () => {
+        const engine = createEngine('||foo.com$removeparam');
+        for (const { match, redirect, request } of requests.map((request) => ({
+          ...engine.match(request),
+          request,
+        }))) {
+          it(`removeparam all from "${request.url}"`, () => {
+            expect(match).to.be.true;
+            expect(redirect).not.to.be.undefined;
+            expect(redirect!.body).to.be.eql('');
+            expect(redirect!.contentType).to.be.eql('text/plain');
+            expect(redirect!.dataUrl).to.be.eql('https://foo.com');
+          });
+        }
+      });
+
+      describe('removeparam removes specific parameter', () => {
+        const engine = createEngine('||foo.com$removeparam=utm');
+        for (const { match, redirect, request } of requests.map((request) => ({
+          ...engine.match(request),
+          request,
+        }))) {
+          it(`removeparam "utm" from "${request.url}"`, () => {
+            expect(match).to.be.true;
+            expect(redirect).not.to.be.undefined;
+            expect(redirect!.body).to.be.eql('');
+            expect(redirect!.contentType).to.be.eql('text/plain');
+            expect(redirect!.dataUrl).not.to.include('?utm=');
+            expect(redirect!.dataUrl).not.to.include('&utm=');
+          });
+        }
+      });
+
+      describe('removeparam removes specific parameter regardless of ordering', () => {
+        const engine = createEngine('||foo.com$removeparam=utm');
+        for (const { match, redirect, request } of [
+          // First
+          'https://foo.com?utm=a&utm_source=organic&utm_event=b',
+          // Middle
+          'https://foo.com?utm_source=organic&utm=a&utm_event=b',
+          // Last
+          'https://foo.com?utm_source=organic&utm_event=b&utm=a',
+        ]
+          .map(urlToDocumentRequest)
+          .map((request) => ({
+            ...engine.match(request),
+            request,
+          }))) {
+          it(`removeparam "utm" from "${request.url}"`, () => {
+            expect(match).to.be.true;
+            expect(redirect).not.to.be.undefined;
+            expect(redirect!.dataUrl).to.be.eql('https://foo.com?utm_source=organic&utm_event=b');
+          });
+        }
+      });
+    });
   });
 
   describe('network filters', () => {

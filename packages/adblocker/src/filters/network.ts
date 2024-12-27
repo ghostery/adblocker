@@ -891,6 +891,10 @@ export default class NetworkFilter implements IFilter {
             break;
           case 'removeparam':
             // TODO: Support regex
+            if (negation || value.startsWith('/')) {
+              return null;
+            }
+
             mask = setBit(mask, NETWORK_FILTER_MASK.isRemoveParam);
             optionValue = value;
 
