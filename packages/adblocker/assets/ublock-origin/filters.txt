@@ -4453,7 +4453,7 @@ duellinksmeta.com##+js(noeval)
 @@||duellinksmeta.com^$1p
 @@||duellinksmeta.com^$ghide
 duellinksmeta.com##.advertisement-box
-duellinksmeta.com##.ad-slot
+duellinksmeta.com##div.ad-slot
 ! https://github.com/uBlockOrigin/uAssets/issues/3205
 pornve.com##+js(set, frg, 1)
 pornve.com##+js(nowoif)
@@ -5677,8 +5677,8 @@ hulu.com##.ad-choices
 ! https://www.reddit.com/r/uBlockOrigin/comments/14b5lbw/
 ! https://www.reddit.com/r/uBlockOrigin/comments/158nvca/not_blocking_hulu_ads/jti29qk/
 ! https://www.reddit.com/r/uBlockOrigin/comments/16hr6pk/hulu_subtitles_getting_delayed_again/
-hulu.com##+js(json-prune-fetch-response, breaks%20pause_ads%20video_metadata.end_credits_time, pause_ads)
-hulu.com##+js(json-prune-fetch-response, breaks%20pause_ads%20video_metadata.end_credits_time, breaks)
+hulu.com##+js(json-prune-fetch-response, breaks%20pause_ads%20video_metadata.end_credits_time, pause_ads, propsToMatch, %2Fplaylist)
+hulu.com##+js(json-prune-fetch-response, breaks%20pause_ads%20video_metadata.end_credits_time, breaks, propsToMatch, %2Fplaylist)
 hulu.com##+js(json-prune, breaks%20pause_ads%20video_metadata.end_credits_time, pause_ads)
 hulu.com##+js(json-prune, breaks%20pause_ads%20video_metadata.end_credits_time, breaks)
 hulu.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C'%2Fads-')%5D%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start), Period%5Bid%5E%3D%22Ad%22i%5D, .mpd)

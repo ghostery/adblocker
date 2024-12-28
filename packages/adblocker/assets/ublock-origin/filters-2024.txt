@@ -2762,28 +2762,6 @@ idnes.cz##div[id].pla-net > div > span:empty
 idnes.cz##body::before:style(background: none !important;)
 idnes.cz##html:style(cursor: auto !important;)
 idnes.cz##+js(acs, document.onclick, reklama-flash-body)
-! paste.fo ads
-paste.fo##.wrapper > [class] > a[href*="https://bit.ly/3vKxLhC"], a[href*="https://bit.ly/4aDbAcb"], a[href*="https://bit.ly/4cL4Jz2"], a[href*="https://bit.ly/3VEkIbL"], a[href*="https://goldenaccounts.cc/?r=pastefo"], a[href*="https://discord.gg/R5pN8ZvBVW"], a[href*="https://spadone.cc/"], a[href*="https://orion.hydrolmn.com/"], a[href*="https://anonsmm.com/?utm_source"], a[href*="https://cryptochanger.to/"], a[href*="https://sellsn.io/"], a[href*="https://astralproxies.sellpass.io/"], a[href*="https://discord.gg/GeDqHNzyEh"], a[href*="https://proxylist.to/?ref=pfo"], a[href*="https://themario.sellpass.io/"], a[href*="sigmaproxies.com"], a[href*="notokyc.com"], a[href="https://adultslayer.shop/"]
-! [dup] from ublock-origin/filters-2024.txt
-! ||paste.fo^$image,1p
-! [dup] from ublock-origin/filters-2024.txt
-! @@||paste.fo/assets/svg/*.php$image,1p
-! [dup] from ublock-origin/filters-2024.txt
-! @@||paste.fo/assets/svg/*.svg$image,1p
-! [dup] from ublock-origin/filters-2024.txt
-! @@||paste.fo/favicon.ico|$image,1p
-! [dup] from ublock-origin/filters-2024.txt
-! @@||paste.fo/assets/img/$image,1p
-! [dup] from ublock-origin/filters-2024.txt
-! ||paste.fo/*?as=*&tkn=$xhr
-! [dup] from ublock-origin/filters-2024.txt
-! paste.fo##.lolimg
-! [dup] from ublock-origin/filters-2024.txt
-! paste.fo##.wrapper > *:has(> a > * > * > * [class])
-! [dup] from ublock-origin/filters-2024.txt
-! paste.fo##.wrapper > [class]:has(> a[href^="https://paste.fo/"][id] > * > *)
-! [dup] from ublock-origin/filters-2024.txt
-! paste.fo##style:has-text(background-image:):remove()
 ! https://community.brave.com/t/boundingintocomics-com-ad-banner/565710
 boundingintocomics.com,themix.net##.tpd-banner-mobile
 boundingintocomics.com,themix.net##.container.header-container__main
@@ -3116,7 +3094,6 @@ fastdokan.top,moviedokan.*##.resps
 videovak.com##+js(aeld, click, PopUnder)
 ! linkupload. pro ads
 ||linkupload.pro^$csp=script-src 'self' *.googleapis.com google.com gstatic.com
-! jattfilms. store popup
 ! govtportal. org antiadb(file hosting)
 govtportal.org##+js(no-fetch-if, ads)
 ! https://github.com/uBlockOrigin/uAssets/issues/25020
@@ -3640,3 +3617,9 @@ blog.tangwudi.com##+js(rmnt, script, ai_adb)
 ||cdn.jsdelivr.net/gh/The-3Labs-Team/js-anti-adblock$script
 ! https://www.hotgirlpix.com/ - anti-adb
 hotgirlpix.com##+js(acs, document.addEventListener, Adblock)
+! https://github.com/AdguardTeam/AdguardFilters/issues/193952
+mt-soft.sakura.ne.jp##+js(trusted-set-attr, frameset%5Brows%3D%2295%2C30%2C*%22%5D, rows, 0%2C30%2C*)
+! https://blogx.almontsf.com/ anti adblock
+blogx.almontsf.com##+js(acs, document.addEventListener, google_ad_client)
+blogx.almontsf.com###adxbox
+||almontsf.com/antiproxy.js
