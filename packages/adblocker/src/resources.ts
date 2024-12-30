@@ -398,7 +398,7 @@ export default class Resources {
     }
 
     estimatedSize += 2 * sizeOfByte();
-    estimatedSize += this.scriptlets.length; // mask
+    estimatedSize += this.scriptlets.length * sizeOfByte(); // mask
     for (const { name, aliases, body: content, dependencies } of this.scriptlets) {
       estimatedSize += sizeOfASCII(name);
       estimatedSize += aliases.reduce(
@@ -424,7 +424,9 @@ export default class Resources {
     for (const { name, aliases, body: content, contentType } of this.resources) {
       buffer.pushASCII(name);
       buffer.pushUint16(aliases.length);
-      aliases.forEach((alias) => buffer.pushASCII(alias));
+      for (const alias of aliases) {
+        buffer.pushASCII(alias);
+      }
       buffer.pushUTF8(content);
       buffer.pushASCII(contentType);
     }
@@ -453,10 +455,14 @@ export default class Resources {
       buffer.pushUint8(mask);
       buffer.pushASCII(name);
       buffer.pushUint16(aliases.length);
-      aliases.forEach((alias) => buffer.pushASCII(alias));
+      for (const alias of aliases) {
+        buffer.pushASCII(alias);
+      }
       buffer.pushUTF8(content);
       buffer.pushUint16(dependencies.length);
-      dependencies.forEach((dependency) => buffer.pushASCII(dependency));
+      for (const dependency of dependencies) {
+        buffer.pushASCII(dependency);
+      }
     }
   }
 }
