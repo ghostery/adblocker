@@ -85,15 +85,18 @@ kicker.de##+js(set, ov.advertising.tisoomi.loadScript, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/22096
 !#if cap_html_filtering
 alpin.de,boersennews.de,chefkoch.de,chip.de,clever-tanken.de,desired.de,donnerwetter.de,fanfiktion.de,focus.de,formel1.de,frustfrei-lernen.de,gewinnspiele.tv,giga.de,gut-erklaert.de,kino.de,messen.de,nickles.de,nordbayern.de,spielfilm.de,teltarif.de,unsere-helden.com,weltfussball.at,watson.de,moviepilot.de,mactechnews.de,sport1.de,welt.de##^script:has-text(DisplayAcceptableAdIfAdblocked)
+teltarif.de##^script:has-text(adslotFilledByCriteo)
 !#else
 alpin.de,boersennews.de,chefkoch.de,chip.de,clever-tanken.de,desired.de,donnerwetter.de,fanfiktion.de,focus.de,formel1.de,frustfrei-lernen.de,gewinnspiele.tv,giga.de,gut-erklaert.de,kino.de,messen.de,nickles.de,nordbayern.de,spielfilm.de,teltarif.de,unsere-helden.com,weltfussball.at,watson.de,moviepilot.de,mactechnews.de,sport1.de,welt.de##+js(rmnt, script, DisplayAcceptableAdIfAdblocked)
+teltarif.de##+js(rmnt, script, adslotFilledByCriteo)
 !#endif
 ||giga.de/special/gutscheine/*.png$script,1p
 ||kino.de/mages/*.png$script,1p
 ||teltarif.de/img/$script,1p
-.de/bilder/*.jpg|$script,1p
-.at/bilder/*.jpg|$script,1p
-.de/image/*.gif|$script,1p
+.de/bilder/*.jpg|$script,1p,domain=de
+.at/bilder/*.jpg|$script,1p,domain=at
+.com/bilder/*.jpg|$script,1p,domain=com
+.de/image/*.gif|$script,1p,domain=de
 teltarif.de,kino.de,desired.de,giga.de##img[referrerpolicy="unsafe-url"][src^="/img/"][src$=".jpg"]
 wetter.*##+js(nostif, (null), 10)
 tagesspiegel.de##+js(aopr, Notification)
@@ -2058,6 +2061,7 @@ bigtitsxxxsex.com##.bano1
 ||videos.porndig.com/js/videojs.logobrand.js
 porndig.com##+js(set, Object.prototype.AdOverlay, noopFunc)
 porndig.com##+js(set, tkn_popunder, null)
+videos.porndig.com##+js(aost, document.querySelector, detect)
 ||porndig.com/sw$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/1181
 ! https://github.com/uBlockOrigin/uAssets/issues/4654
@@ -4152,9 +4156,6 @@ files-save.com##+js(popads-dummy)
 @@||files-save.com/Assets/Addon/Css/ads.css$css,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/2901
 @@||fordclub.eu^$ghide
-! https://github.com/uBlockOrigin/uAssets/issues/2907
-tetris.com##.horizontalAxContainer
-tetris.com##div[class^="verticalAxContainer"]
 ! https://github.com/uBlockOrigin/uAssets/issues/2908
 girlsgogames.co.uk##+js(aopr, googletag)
 ! https://github.com/uBlockOrigin/uAssets/issues/2905

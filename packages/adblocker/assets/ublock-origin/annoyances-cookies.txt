@@ -50,8 +50,10 @@ consent.google.*##[data-p*="/consent.google."]:has(button[jsname="tWT92d"])
 ! https://github.com/uBlockOrigin/uAssets/discussions/18598#discussioncomment-8651332
 consent.youtube.com##+js(trusted-click-element, %5Baction%3D%22https%3A%2F%2Fconsent.youtube.com%2Fsave%22%5D%5Bstyle%3D%22display%3Ainline%3B%22%5D%20%5Bname%3D%22set_eom%22%5D%5Bvalue%3D%22true%22%5D%20~%20.basebuttonUIModernization%5Bvalue%5D%5Baria-label%5D)
 consent.youtube.com##body.bodyUIModernization:has([action="https://consent.youtube.com/save"] .saveButtonUIModernization[value][aria-label])
-facebook.com##+js(trusted-set-cookie, datr, __GMZCgwVF5BbyvAtfJojQwg, 1year, , reload, 1)
-instagram.com##+js(trusted-set-cookie, ig_did, 0C826C21-17C3-444A-ABB7-EBABD37214D7, 1year, , reload, 1)
+! decline optional (allow R39uZ-5MEK4VY8yBikIiiv42)
+facebook.com##+js(trusted-set-cookie, datr, 835uZ-bIo1ECQru7AjqnhhRl, 1year, , reload, 1, dontOverwrite, 1)
+! decline (accept E98790B8-2AA3-4D25-AAE2-590E19511822)
+instagram.com##+js(trusted-set-cookie, ig_did, 5443AF77-1A68-4603-BF65-43BB5F664A80, 1year, , reload, 1, dontOverwrite, 1)
 ! Sample page: https://www.bloomberg.com/live/europe || https://www.bloomberg.co.jp/live/asia
 sourcepointcmp.bloomberg.com,sourcepointcmp.bloomberg.co.jp##+js(trusted-click-element, %5Btitle%3D%22Manage%20Cookies%22%5D)
 sourcepointcmp.bloomberg.com,sourcepointcmp.bloomberg.co.jp##+js(trusted-click-element, %5Btitle%3D%22Reject%20All%22%5D, , 1000)
@@ -445,6 +447,8 @@ cosmotemessageplus.gr##+js(set-cookie, cookie_optin, accepted)
 ! Only necessary, expire 1 month
 veikkaus.fi##+js(trusted-set-cookie, gdpr, -ga-ads-fbp-htj-yt, 2629743)
 veikkaus.fi##+js(trusted-set-local-storage-item, cookie-data, %7B%22version%22%3A%2220210906%22%2C%22value%22%3A%22-ga-ads-fbp-htj-yt%22%7D)
+! https://github.com/uBlockOrigin/uAssets/issues/26647
+gymglish.com##+js(trusted-set-cookie, a9_cookie_control_prefs_v2, %25255B%252522essential%252522%25255D)
 !! Needs additional cookies
 ! https://github.com/uBlockOrigin/uAssets/issues/23701
 ! Enable search customization
@@ -934,7 +938,7 @@ snowandrock.com##+js(trusted-set-cookie, consent_setting, analytics%253A0%257Cfu
 ! racingnews365.com
 ! New solution when the next stable version becomes widely used. https://github.com/uBlockOrigin/uBlock-issues/issues/2971
 ! All store information on device cookies
-dw.com,winfuture.de,lippu.fi,racingnews365.com##+js(trusted-click-element, %23cmpwrapper%20%3E%3E%3E%20%23cmpbntyestxt, , 1000)
+dw.com,kinepolis.*,winfuture.de,lippu.fi,racingnews365.com##+js(trusted-click-element, %23cmpwrapper%20%3E%3E%3E%20%23cmpbntyestxt, , 1000)
 ! https://www.zdf.de/ - Functional + social
 zdf.de##+js(trusted-set-cookie, zdf_cmp_client, %7B%2522version%2522%3A%2522v1%2522%252C%2522iteration%2522%3A1%252C%2522consents%2522%3A%5B%7B%2522id%2522%3A%2522personalisierung%2522%252C%2522value%2522%3Afalse%7D%252C%7B%2522id%2522%3A%2522socialMedia%2522%252C%2522value%2522%3Atrue%7D%252C%7B%2522id%2522%3A%2522instagram%2522%252C%2522value%2522%3Atrue%7D%252C%7B%2522id%2522%3A%2522twitter%2522%252C%2522value%2522%3Atrue%7D%252C%7B%2522id%2522%3A%2522facebook%2522%252C%2522value%2522%3Atrue%7D%252C%7B%2522id%2522%3A%2522drittsysteme%2522%252C%2522value%2522%3Atrue%7D%252C%7B%2522id%2522%3A%2522erforderlich%2522%252C%2522value%2522%3Atrue%7D%252C%7B%2522id%2522%3A%2522erfolgsmessung%2522%252C%2522value%2522%3Atrue%7D%5D%7D)
 ! https://microbit.org/ - Functional
@@ -1681,3 +1685,9 @@ privacy.topreality.sk##+js(trusted-click-element, button%5Baria-label%3D%22Prija
 ilmatieteenlaitos.fi##+js(trusted-set-cookie, FMI_COOKIE_CONSENT, %257B%2522ts%2522%253A%25221970-01-01T00%253A00%253A00.000Z%2522%252C%2522allow%2522%253A%257B%2522necessary%2522%253A%257B%2522fmi_necessary%2522%253A1%257D%252C%2522preferences%2522%253A%257B%2522fmi_preferences%2522%253A1%257D%252C%2522analytics%2522%253A%257B%2522rs%2522%253A1%252C%2522userneeds%2522%253A2%257D%252C%2522other%2522%253A%257B%2522youtube%2522%253A1%252C%2522fyrebox%2522%253A1%257D%257D%257D, 1year)
 ! At least chat needs cookies
 s-pankki.fi##+js(trusted-click-element, %23usercentrics-root%20%3E%3E%3E%20button%5Bdata-testid%3D%22uc-accept-all-button%22%5D)
+! Necessary
+vu.lt##+js(trusted-click-element, a.cc-btn.cc-allow, , 1000)
+! Necessary
+krungsriasset.com##+js(trusted-set-cookie, CookieConsentResult, %24currentDate%24)
+krungsriasset.com##+js(set-cookie, CMSCookieLevel, 0)
+krungsriasset.com##+js(set-cookie, CookieConsentPerformance, 0)
