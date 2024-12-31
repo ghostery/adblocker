@@ -874,6 +874,9 @@ x86.co.kr##^script:has-text(adBlockDetected)
 !#else
 x86.co.kr##+js(rmnt, script, adBlockDetected)
 !#endif
+! <<<<< AG-Chinese >>>>>
+! https://github.com/uBlockOrigin/uAssets/issues/26618
+m.akkxs.net##+js(acs, eval, _0x)
 ! END: Regional lists
 ! https://github.com/AdguardTeam/AdguardFilters/issues/169660
 flixscans.org##+js(no-fetch-if, googlesyndication)
@@ -1087,9 +1090,9 @@ krx18.com##center > [src*="/ads/"]
 playerwatch.xyz##+js(nowoif, , 10)
 ! https://old.reddit.com/r/uBlockOrigin/comments/19cwuo4/
 ||ezodn.com^$redirect-rule=noopjs,domain=tv.bdix.app
-! https://www.reddit.com/#reddit/r/uBlockOrigin/comments/1dw1lkz/adblocker_detected_on_the_following_two_websites/
-*$xhr,3p,redirect-rule=noop.txt,domain=tv.bdix.live
-tv.bdix.live##+js(no-fetch-if, outbrain.com)
+! https://github.com/uBlockOrigin/uAssets/issues/22838
+tv.bdix.app##+js(acs, document.readyState, initializeChecks)
+tv.bdix.app##+js(nowoif, _blank)
 ! https://github.com/uBlockOrigin/uAssets/issues/22149
 dagensnytt.com##+js(aeld, load, doTest)
 ! https://github.com/uBlockOrigin/uAssets/pull/22155
@@ -3193,10 +3196,8 @@ ainonline.com##+js(no-xhr-if, adsbygoogle)
 /wp-content/themes/blogarise-child/check*.js^
 ! https://github.com/uBlockOrigin/uAssets/issues/25990
 ! @@||karistudio.com^$script,1p
-! [dup] from ublock-origin/quick-fixes.txt
-! ||karistudio.com/wp-content/themes/blogarise-child/check2.js$important
-! [dup] from ublock-origin/quick-fixes.txt
-! karistudio.com##p.chapter_content:style(display: block !important; visibility: visible !important; opacity: 1 !important; transform: none !important;)
+||karistudio.com/wp-content/themes/blogarise-child/check2.js$important
+karistudio.com##p.chapter_content:style(display: block !important; visibility: visible !important; opacity: 1 !important; transform: none !important;)
 karistudio.com##+js(nostif, %2F%5E(%3F%3D.*location%5C.href)(%3F!.*paragraph).*%2Fs)
 ! https://github.com/uBlockOrigin/uAssets/issues/25995
 cambro.io##+js(acs, document.querySelectorAll, popMagic)
@@ -3623,3 +3624,23 @@ mt-soft.sakura.ne.jp##+js(trusted-set-attr, frameset%5Brows%3D%2295%2C30%2C*%22%
 blogx.almontsf.com##+js(acs, document.addEventListener, google_ad_client)
 blogx.almontsf.com###adxbox
 ||almontsf.com/antiproxy.js
+! https://github.com/uBlockOrigin/uAssets/issues/26642
+!#if cap_html_filtering
+fearmp4.ru##^script:has-text(ads_block)
+!#else
+fearmp4.ru##+js(rmnt, script, ads_block)
+!#endif
+! https://www.reddit.com/r/uBlockOrigin/comments/1ho2uce/fmovies_detects_adblock_prevents_interacting_with/
+fmovies0.cc##+js(nowoif)
+fmovies0.cc##+js(nostif, offsetHeight)
+fmovies0.cc##+js(no-fetch-if, %2Fgooglesyndication%7Cgoogletagservices%2F)
+! https://github.com/uBlockOrigin/uAssets/issues/26668
+chat.deepseek.com##+js(no-xhr-if, %2Fapi%2Fv0%2Fevents)
+! https://github.com/uBlockOrigin/uAssets/issues/26669
+flatai.org##+js(aeld, DOMContentLoaded, adblock)
+! https://github.com/uBlockOrigin/uAssets/issues/26671
+!#if cap_html_filtering
+windowsreport.com##^script:has-text(wpadmngr.com)
+!#else
+windowsreport.com##+js(rmnt, script, wpadmngr.com)
+!#endif
