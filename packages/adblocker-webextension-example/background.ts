@@ -6,15 +6,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { browser } from 'webextension-polyfill';
-
 import {
   BlockingResponse,
-  fullLists,
   HTMLSelector,
   Request,
   WebExtensionBlocker,
 } from '@ghostery/adblocker-webextension';
+import { Browser } from 'webextension-polyfill';
 
 /**
  * Keep track of number of network requests altered for each tab
@@ -55,20 +53,44 @@ chrome.tabs.onUpdated.addListener((tabId, { status, url }) => {
   }
 });
 
+chrome.browserAction.onClicked.addListener(async (_) => {
+  console.log('Trying to open a sample page');
+
+  const details = {
+    url: chrome.extension.getURL('sample.html'),
+  };
+
+  // @ts-expect-error somehow chrome.tabs.query didn't work
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+  let [tab] = await browser.tabs.query(details);
+
+  if (tab === undefined) {
+    tab = await chrome.tabs.create(details);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  void chrome.tabs.update(tab.id, {
+    active: true,
+  });
+});
+
 declare global {
   interface Window {
     adblocker: WebExtensionBlocker;
+    browser: Browser;
   }
 }
 
-WebExtensionBlocker.fromLists(fetch, fullLists, {
-  enableCompression: true,
-  enableHtmlFiltering: true,
-  loadExtendedSelectors: true,
-}).then((blocker: WebExtensionBlocker) => {
+function runner() {
+  const blocker = WebExtensionBlocker.parse('##^script:has-text(test)', {
+    enableCompression: true,
+    enableHtmlFiltering: true,
+    loadExtendedSelectors: true,
+  });
+
   window.adblocker = blocker;
 
-  blocker.enableBlockingInBrowser(browser);
+  blocker.enableBlockingInBrowser(window.browser);
 
   blocker.on('request-blocked', (request: Request, result: BlockingResponse) => {
     incrementBlockedCounter(request, result);
@@ -101,4 +123,6 @@ WebExtensionBlocker.fromLists(fetch, fullLists, {
   });
 
   console.log('Ready to roll!');
-});
+}
+
+runner();
