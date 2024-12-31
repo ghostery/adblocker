@@ -6,11 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import {
-  Domains,
-  normalizeNetworkEntities,
-  normalizeNetworkPartsLiteral,
-} from '../engine/domains.js';
+import { Domains, normalizeNetworkPartsLiteral, testNetworkParts } from '../engine/domains.js';
 import {
   StaticDataView,
   sizeOfNetworkFilter,
@@ -736,18 +732,20 @@ export default class NetworkFilter implements IFilter {
 
         switch (option) {
           case 'denyallow': {
-            denyallow = Domains.parse(normalizeNetworkEntities(value.split('|')), debug);
-            if (denyallow === undefined) {
+            const parts = value.split('|');
+            if (testNetworkParts(parts) === false) {
               return null;
             }
+            denyallow = Domains.parse(parts, debug);
             break;
           }
           case 'domain':
           case 'from': {
-            domains = Domains.parse(normalizeNetworkEntities(value.split('|')), debug);
-            if (domains === undefined) {
+            const parts = value.split('|');
+            if (testNetworkParts(parts) === false) {
               return null;
             }
+            domains = Domains.parse(parts, debug);
             break;
           }
           case 'badfilter':

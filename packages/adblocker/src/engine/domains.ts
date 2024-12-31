@@ -11,22 +11,18 @@ import { toASCII } from '../punycode.js';
 import { StaticDataView, sizeOfUint32Array, sizeOfUTF8 } from '../data-view.js';
 import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils.js';
 
-export function normalizeNetworkEntities(parts: string[]) {
-  const newParts: string[] = [];
-
+export function testNetworkParts(parts: string[]): boolean {
   for (const part of parts) {
     if (part.length === 0) {
-      continue;
+      return false;
     } else if (part.startsWith('|')) {
-      newParts.push(part.slice(1));
+      return false;
     } else if (part.endsWith('|')) {
-      newParts.push(part.slice(0, -1));
-    } else {
-      newParts.push(part);
+      return false;
     }
   }
 
-  return newParts;
+  return true;
 }
 
 export function normalizeNetworkPartsLiteral(parts: string) {
