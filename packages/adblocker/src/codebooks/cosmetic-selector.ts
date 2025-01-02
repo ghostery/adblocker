@@ -194,7 +194,6 @@ export default [
   "op",
   "or",
   "re",
-  "ro",
   "s_",
   "s-",
   "se",
@@ -260,5 +259,6 @@ export default [
   "W",
   "x",
   "y",
+  "Y",
   "z"
 ];

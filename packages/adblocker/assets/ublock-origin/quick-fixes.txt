@@ -27,18 +27,31 @@ www.youtube.com##+js(nano-stb, %5Bnative%20code%5D, 17000, 0.001)
 !#endif
 ! https://www.reddit.com/r/uBlockOrigin/comments/1ebwr6c/is_ublock_broken_again_or_am_i_doing_something/
 !www.youtube.com##+js(json-prune-fetch-response, playerAds%20adPlacements%20adSlots%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots, , propsToMatch, %2F%5C%2F(%3F%3Aplayer%7Cplaylist%7Cget_watch)%5C%3F%2F)
-www.youtube.com##+js(json-prune-fetch-response, playerAds%20adPlacements%20adSlots%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots, , propsToMatch, %2F%5C%2F(player%7Cget_watch)%5C%3F%2F)
+www.youtube.com##+js(json-prune-fetch-response, playerAds%20adPlacements%20adSlots%20no_ads%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20playerResponse.no_ads%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots%20%5B%5D.playerResponse.no_ads, , propsToMatch, %2F%5C%2F(player%7Cget_watch)%5C%3F%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-2144781835
-www.youtube.com##+js(json-prune-fetch-response, playerAds%20adPlacements%20adSlots%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots, , propsToMatch, %2Fplaylist%3F)
+www.youtube.com##+js(json-prune-fetch-response, playerAds%20adPlacements%20adSlots%20no_ads%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20playerResponse.no_ads, , propsToMatch, %2Fplaylist%3F)
 ! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-2271325338
 ! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-2308486423
 ! https://github.com/AdguardTeam/AdguardFilters/commit/61d89cebe154ca17932bedf61df5e2c7bd75bd7d
 !tv.youtube.com#@#+js(trusted-replace-xhr-response, %22adPlacements%22, %22no_ads%22, %2Fplaylist%5C%3Flist%3D%7Cplayer%5C%3F%7Cwatch%5C%3F%5Btv%5D%3D%7Cyoutubei%5C%2Fv1%5C%2Fplayer%2F)
-www.youtube.com##+js(json-prune-xhr-response, playerAds%20adPlacements%20adSlots%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots, , propsToMatch, %2F%5C%2Fplayer(%3F%3A%5C%3F.%2B)%3F%24%2F)
+www.youtube.com##+js(json-prune-xhr-response, playerAds%20adPlacements%20adSlots%20no_ads%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20playerResponse.no_ads%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots%20%5B%5D.playerResponse.no_ads, , propsToMatch, %2F%5C%2Fplayer(%3F%3A%5C%3F.%2B)%3F%24%2F)
 tv.youtube.com##+js(trusted-replace-xhr-response, %22adPlacements%22, %22no_ads%22, %2Fplaylist%5C%3Flist%3D%7C%5C%2Fplayer(%3F%3A%5C%3F.%2B)%3F%24%7Cwatch%5C%3F%5Btv%5D%3D%2F)
 !#if !cap_html_filtering
+www.youtube.com#@#+js(trusted-replace-fetch-response, %2F%22adPlacements.*%3F(%5BA-Z%5D%22%5C%7D%7C%22%5C%7D%7B2%2C4%7D)%5C%7D%5C%5D%2C%2F, , player%3F)
+www.youtube.com#@#+js(trusted-replace-fetch-response, %2F%22adSlots.*%3F%5C%7D%5C%7D%5C%5D%2C%22adBreakHeartbeatParams%2F, %22adBreakHeartbeatParams, player%3F)
 www.youtube.com##+js(trusted-replace-xhr-response, %2F%22adPlacements.*%3F(%5BA-Z%5D%22%5C%7D%7C%22%5C%7D%7B2%2C4%7D)%5C%7D%5C%5D%2C%2F, , %2Fplaylist%5C%3Flist%3D%7C%5C%2Fplayer(%3F%3A%5C%3F.%2B)%3F%24%7Cwatch%5C%3F%5Btv%5D%3D%2F)
 www.youtube.com##+js(trusted-replace-xhr-response, %2F%22adPlacements.*%3F(%22adSlots%22%7C%22adBreakHeartbeatParams%22)%2Fgms, %241, %2F%5C%2Fplayer(%3F%3A%5C%3F.%2B)%3F%24%2F)
+www.youtube.com##+js(trusted-replace-fetch-response, %22adPlacements%22, %22no_ads%22, player%3F)
+www.youtube.com##+js(trusted-replace-fetch-response, %22adSlots%22, %22no_ads%22, player%3F)
+!#else
+||www.youtube.com/playlist?list=$xhr,1p,replace=/"adPlacements"/"no_ads"/
+||www.youtube.com/playlist?list=$xhr,1p,replace=/"adSlots"/"no_ads"/
+||www.youtube.com/watch?$xhr,1p,replace=/"adPlacements"/"no_ads"/
+||www.youtube.com/watch?$xhr,1p,replace=/"adSlots"/"no_ads"/
+||www.youtube.com/youtubei/v1/player?$xhr,1p,replace=/"adPlacements"/"no_ads"/
+||www.youtube.com/youtubei/v1/player?$xhr,1p,replace=/"adSlots"/"no_ads"/
+||youtube.com/youtubei/v1/get_watch?$xhr,1p,replace=/"adPlacements"/"no_ads"/
+||youtube.com/youtubei/v1/get_watch?$xhr,1p,replace=/"adSlots"/"no_ads"/
 !#endif
 www.youtube.com##+js(trusted-prevent-dom-bypass, Node.prototype.appendChild, fetch)
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-2307514494
@@ -65,10 +78,10 @@ sandratableother.com##+js(set, console.clear, undefined)
 ! https://github.com/uBlockOrigin/uAssets/issues/23806
 japscan.lol##+js(aost, onload, inlineScript)
 *$image,redirect-rule=1x1.gif,domain=japscan.lol
-japscan.lol##+js(aeld, DOMContentLoaded, %2FNiger%7CCharger%7CGoodDay%7Cfunct'%7Ct'%5C%2B'y%2F)
+japscan.lol##+js(aeld, DOMContentLoaded, %2FNiger%7CCharger%7Cfunct'%7Ct'%5C%2B'y%2F)
 japscan.lol##.navbar-nav > li#navpromo2.nav-item > a:style(height: 0 !important;)
 japscan.lol##+js(norafif, %2F%5E%2F)
-japscan.lol##+js(spoof-css, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a, height, auto)
+japscan.lol##+js(spoof-css, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a, height, 40px)
 ||japscan.lol/zjs/$script,replace=/function GoodDay\(\)\{.+?\}\}\}//
 japscan.lol##body > style + .container > .row > #main + #sidebar.col-md-3 > .card.mt-1 > .card[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 250px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
 japscan.lol##body > style + .container > .row > #main.col-md-9 > .card > .card-body[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 100px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
@@ -151,6 +164,7 @@ bing.com##ol#b_results > li:has(> :is(.b_tpcn, .b_title, h2) a[href^="https://ww
 exploader.net##+js(trusted-replace-argument, window.addEventListener, 0, json%3A%22DOMContentLoaded%22, condition, %2F%5Eload%24%2F)
 exploader.net##+js(ra, class%7Cstyle, article%20div%3Anot(article%3Ediv%5Bstyle%3D%22width%3A%20750px%3Bmargin-left%3A%20auto%3Bmargin-right%3A%20auto%3B%22%5D%2Carticle%3Ediv%5Bstyle%3D%22width%3A%20750px%3Bmargin-left%3A%20auto%3Bmargin-right%3A%20auto%3B%22%5D%3Ediv%5Bstyle%3D%22float%3A%20right%3Bwidth%3A%20180px%3B%22%5D%2C%5Bclass%3D%22information%22%5D%2C%5Bclass%3D%22information%22%5D%2B%5Bclass%3D%22thumbnail%22%5D%2C%5Bclass%3D%22information%22%5D%3E%5Bclass%3D%22warning%22%5D%2C%5Bclass%3D%22information%22%5D%3E%5Bclass%3D%22d_%22%5D%2Carticle%3E%23freefiles%3E%23sort%2Carticle%3E%23freefiles%3E%5Bclass%3D%22list%22%5D), complete)
 exploader.net##+js(trusted-set, document.readyState, json%3A%22complete%22, runAt, 2)
+exploader.net##+js(aost, document.readyState, HTMLDocument.onStateChange)
 *$image,redirect-rule=32x32.png,domain=exploader.net
 ! https://github.com/easylist/easylistgermany/issues/216
 !#if cap_html_filtering
@@ -162,8 +176,7 @@ www.chip.de##+js(rmnt, script, %2F%20%5C%3D%5C%3D%5C%3D%20%5B0-9%5D%7B1%2C2%7D%5
 altema.jp###sidebar-in > div.widget_text:has(.tuika-widget > a[href*="utm_"])
 altema.jp##.koukoku_common_tag
 ! https://github.com/AdguardTeam/AdguardFilters/issues/153796
-rekidai-info.github.io##+js(nostif, %2Flocation%5C%5B.%2B%5C%5D%5Cs*%3D%5Cs*%5B%24%5Cw%5D%2B%5C(%5Cd%2B%5C)%5Cs*%5C)%5Cs*%5C%7D%2F)
-rekidai-info.github.io##+js(nosiif, %2Flocation%5C%5B.%2B%5C%5D%5Cs*%3D%5Cs*%5B%24%5Cw%5D%2B%5C(%5Cd%2B%5C)%5Cs*%5C)%5Cs*%5C%7D%2F)
+rekidai-info.github.io##+js(nostif, %2Faframe%7CquerySelector%2F)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/195216
 ! [badfilter] ||status.techtarget.itmedia.co.jp^$badfilter
 ! https://github.com/easylist/easylist/commit/2a0156deacd034fccef3e90ae884d41a827067e7
