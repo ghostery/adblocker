@@ -113,7 +113,6 @@ azrom.net##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fazrom.net%2F%22%5D
 ! https://github.com/AdguardTeam/AdguardFilters/issues/139845
 blogmado.com##+js(nano-sib, time, , 0.02)
 ||ibb.co^$image,domain=blogmado.com
-||ivd580.com^$all
 ||noropianicnephrocytebites.com^$all
 ! https://github.com/uBlockOrigin/uAssets/issues/16315
 ! https://github.com/uBlockOrigin/uAssets/issues/16368
@@ -135,12 +134,11 @@ sportshub.to,topsporter.net##+js(nostif, show)
 sportshub.to,topsporter.net##+js(acs, document.onkeypress)
 sportshub.to,topsporter.net##+js(acs, document.oncontextmenu)
 sportshub.to,topsporter.net##+js(no-xhr-if, doubleclick)
-mysports.to,sportfacts.net###footy-side-menu
-mysports.to,sportfacts.net##.footy-related-posts
-mysports.to,sportfacts.net##.scroller
-mysports.to,sportfacts.net###footy_post_extensions-2
-mysports.to,sportfacts.net##+js(aopr, document.oncontextmenu)
-||mysports.to/sticky.html$frame
+sportfacts.net###footy-side-menu
+sportfacts.net##.footy-related-posts
+sportfacts.net##.scroller
+sportfacts.net###footy_post_extensions-2
+sportfacts.net##+js(aopr, document.oncontextmenu)
 ||sportfacts.net/sticky.html$frame
 topsporter.net,sportshub.to##^script:has-text(/ConsoleBan|alert|AdBlocker/)
 !#if !cap_html_filtering
@@ -161,21 +159,25 @@ sportnews.to#@#.ads-by-google
 sportnews.to,soccershoes.blog##+js(aeld, DOMContentLoaded, adsSrc)
 sportnews.to,sportshub.to##+js(aost, DOMTokenList.prototype.add, inlineScript)
 *$script,redirect-rule=noopjs,domain=sportnews.to|sportshub.to
-! https://github.com/uBlockOrigin/uAssets/issues/16320
-seznam.cz##[data-draggable-target]:has-text(Rekl):not(*:has([href*="radio"]))
-seznam.cz##.sticky-content:has-text(Reklama)
-seznam.cz##.sticky-content:has-text(Rek)
-seznam.cz##.sticky-content:has-text(klama)
-seznam.cz##[class*="advert"]
-||seznam.cz/$frame,1p
-@@||diskuze.seznam.cz^$frame
-@@||seznam.cz/html/cmp.html$frame,1p
-seznam.cz##+js(nostif, 0x)
-! [badfilter] @@||seznam.cz^$ghide,badfilter
+! seznam.cz
+/cwl.js$domain=seznam.cz|seznamzpravy.cz|novinky.cz|super.cz|sport.cz|prozeny.cz|garaz.cz|nasezahrada.com|forum24.cz
+seznam.cz##div[data-dot="gadgetCommercial"]
+seznam.cz##.atm-ad-label
+seznam.cz##.mol-ssp-advert-content--responsive
+seznam.cz##div[data-dot^="reklama"]
+@@||h.imedia.cz/js/cmp2/scmp.js$domain=seznam.cz
+slovnik.seznam.cz##.TextSSP
+slovnik.seznam.cz##.BannerSSP
+seznam.cz##.ssp-advert
+seznam.cz##li[data-analytics-entity-type="nativeSspAdvert"]
+||seznam.cz/*/v2/vast?
+||seznam.cz/*/static/js/ssp.js
+www.seznam.cz##+js(set-constant, sssp, emptyObj)
+seznam.cz##+js(remove-cookie, qusnyQusny)
+seznam.cz#@#.adMiddle
 ||sdn.cz/*/ad-*.mp4$media,domain=seznam.cz|seznamzpravy.cz,redirect=noopmp3-0.1s
 ! https://github.com/uBlockOrigin/uAssets/issues/18002#issuecomment-1627314064
 ! https://github.com/uBlockOrigin/uAssets/issues/18890
-@@||seznam.cz/ui/ui.html$frame,domain=seznam.cz
 ! https://github.com/uBlockOrigin/uAssets/issues/20112
 seznamzpravy.cz##[data-draggable-target]:has-text(Rekl):not(*:has([href*="radio"]))
 seznamzpravy.cz##.sticky-content:has-text(Reklama)
@@ -187,10 +189,9 @@ seznamzpravy.cz##[class*="advert"]
 @@||seznamzpravy.cz/html/cmp.html$frame,1p
 seznamzpravy.cz##+js(nostif, 0x)
 ! [badfilter] @@||seznamzpravy.cz^$ghide,badfilter
-@@||seznamzpravy.cz/ui/ui.html$frame,domain=seznam.cz|seznamzpravy.cz
+@@||seznamzpravy.cz/ui/ui.html$frame,domain=seznamzpravy.cz
 seznamzpravy.cz##+js(ra, style, %5Bstyle*%3D%22background-image%3A%20url%22%5D, stay)
 seznamzpravy.cz##+js(ra, href, %5Bhref*%3D%22click%3F%22%5D, stay)
-@@||pocasi.seznam.cz/windyWidget/$frame,1p
 ! https://www.reddit.com/r/uBlockOrigin/comments/10c3euc/
 proxer.me###stream_message_overlay
 ! https://github.com/uBlockOrigin/uAssets/issues/16343
@@ -4070,7 +4071,6 @@ tourbobit.com,tourbobit.net,turbobeet.net,turbobi.pw,turbobif.com,turbobit.net,t
 /files/news/image$image,domain=tourbobit.com|tourbobit.net|turbobeet.net|turbobi.pw|turbobif.com|turbobit.net|turbobita.net|turbobits.cc|turboobit.com
 ||gyazo.com^$image,domain=tourbobit.com|tourbobit.net|turbobeet.net|turbobi.pw|turbobif.com|turbobit.net|turbobita.net|turbobits.cc|turboobit.com
 tourbobit.com,tourbobit.net,turbobeet.net,turbobi.pw,turbobif.com,turbobita.net,turboobit.com###__bgd_link
-||veritiesgarlejobade.com^$all
 ! https://github.com/uBlockOrigin/uAssets/issues/20346
 irctc.co.in###dod
 irctc.co.in###splash-scrollable
