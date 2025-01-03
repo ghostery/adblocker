@@ -153,6 +153,7 @@ export const enum NETWORK_FILTER_MASK {
   isHostnameAnchor = 1 << 28,
   isRedirectRule = 1 << 29,
   isRedirect = 1 << 30,
+  isRemoveParam = 1 << 31,
   // IMPORTANT: the mask is now full, no more options can be added
   // Consider creating a separate fitler type for isReplace if a new
   // network filter option is needed.
@@ -888,6 +889,16 @@ export default class NetworkFilter implements IFilter {
             optionValue = value;
 
             break;
+          case 'removeparam':
+            // TODO: Support regex
+            if (negation || value.startsWith('/')) {
+              return null;
+            }
+
+            mask = setBit(mask, NETWORK_FILTER_MASK.isRemoveParam);
+            optionValue = value;
+
+            break;
           default: {
             // Handle content type options separatly
             let optionMask: number = 0;
@@ -1265,6 +1276,14 @@ export default class NetworkFilter implements IFilter {
     return this.optionValue;
   }
 
+  public get removeparam(): string | undefined {
+    if (!this.isRemoveParam()) {
+      return undefined;
+    }
+
+    return this.optionValue || '';
+  }
+
   public isCosmeticFilter(): this is CosmeticFilter {
     return false;
   }
@@ -1535,6 +1554,14 @@ export default class NetworkFilter implements IFilter {
       options.push('badfilter');
     }
 
+    if (this.isRemoveParam()) {
+      if (this.optionValue !== undefined) {
+        options.push(`removeparam=${this.optionValue}`);
+      } else {
+        options.push('removeparam');
+      }
+    }
+
     if (options.length > 0) {
       if (typeof modifierReplacer === 'function') {
         filter += `$${options.map(modifierReplacer).join(',')}`;
@@ -1606,6 +1633,14 @@ export default class NetworkFilter implements IFilter {
 
   public isReplace(): boolean {
     return getBit(this.getMask(), NETWORK_FILTER_MASK.isReplace);
+  }
+
+  public isRemoveParam(): boolean {
+    return getBit(this.getMask(), NETWORK_FILTER_MASK.isRemoveParam);
+  }
+
+  public isRedirectable(): boolean {
+    return this.isRedirect() || this.isRemoveParam();
   }
 
   // Expected to be called only with `$replace` modifiers

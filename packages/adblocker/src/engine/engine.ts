@@ -779,7 +779,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           exceptions.push(filter);
         } else if (filter.isImportant()) {
           importants.push(filter);
-        } else if (filter.isRedirect()) {
+        } else if (filter.isRedirectable()) {
           redirects.push(filter);
         } else {
           filters.push(filter);
@@ -1443,29 +1443,114 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     if (request.isSupported) {
       // Check the filters in the following order:
       // 1. $important (not subject to exceptions)
-      // 2. redirection ($redirect=resource)
+      // 2. redirection ($removeparam and $redirect=resource)
       // 3. normal filters
       // 4. exceptions
       result.filter = this.importants.match(request, this.isFilterExcluded.bind(this));
 
       let redirectNone: NetworkFilter | undefined;
       let redirectRule: NetworkFilter | undefined;
+      let redirectUrl: string | undefined;
 
       // If `result.filter` is `undefined`, it means there was no $important
-      // filter found so far. We look for a $redirect filter.  There is some
-      // extra logic to handle special cases like redirect-rule and
-      // redirect=none.
-      //
-      // * If redirect=none is found, then cancel all redirects.
-      // * Else if redirect-rule is found, only redirect if request would be blocked.
-      // * Else if redirect is found, redirect.
+      // filter found so far. We look for $removeparam and $redirect filter.
       if (result.filter === undefined) {
-        const redirects = this.redirects
-          .matchAll(request, this.isFilterExcluded.bind(this))
-          // highest priorty wins
-          .sort((a, b) => b.getRedirectPriority() - a.getRedirectPriority());
+        const redirectFilters = this.redirects.matchAll(request, this.isFilterExcluded.bind(this));
+        const resourceRedirects: NetworkFilter[] = [];
+        const requestRedirects: NetworkFilter[] = [];
+        for (const filter of redirectFilters) {
+          if (filter.isRemoveParam()) {
+            requestRedirects.push(filter);
+          } else {
+            resourceRedirects.push(filter);
+          }
+        }
 
-        if (redirects.length !== 0) {
+        // We don't need to match `removeparam` at all if:
+        // * `removeparam` filters not matched
+        // * URL doesn't have `?` — parameter separator
+        // * URL has `?` but ends right after the separator
+        if (requestRedirects.length !== 0) {
+          const searchParamsSeparatorAt = request.url.indexOf('?');
+          if (
+            searchParamsSeparatorAt !== -1 &&
+            searchParamsSeparatorAt + 1 !== request.url.length
+          ) {
+            for (const redirect of requestRedirects) {
+              const target = redirect.removeparam!;
+              // If `removeparam` without a value found, we drop all params
+              if (target.length === 0) {
+                result.filter = redirect;
+                redirectUrl = request.url.slice(0, searchParamsSeparatorAt);
+                break;
+              }
+              // Try to find `searchParamStartsAt` recursively
+              let searchParamStartsAt: number = -1;
+              for (
+                let lookupAfter = searchParamsSeparatorAt;
+                lookupAfter < request.url.length;
+                searchParamStartsAt = -1
+              ) {
+                searchParamStartsAt = request.url.indexOf(target, lookupAfter);
+                // No match found in this string, try to fast exit in the first loop.
+                if (searchParamStartsAt === -1) {
+                  break;
+                }
+
+                // VALID only if the next character is equal sign or EOL:
+                if (
+                  searchParamStartsAt + target.length === request.url.length ||
+                  request.url.charCodeAt(searchParamStartsAt + target.length) === 61 /* '=' */
+                ) {
+                  // In case of first param:
+                  if (searchParamsSeparatorAt === searchParamStartsAt - 1) {
+                    result.filter = redirect;
+                    const searchParamEndsAt = request.url.indexOf('&', searchParamStartsAt);
+                    if (searchParamEndsAt === -1) {
+                      redirectUrl = request.url.slice(0, searchParamStartsAt);
+                    } else {
+                      redirectUrl =
+                        request.url.slice(0, searchParamStartsAt) +
+                        request.url.slice(searchParamEndsAt + 1);
+                    }
+                    break;
+                  } else if (request.url.charCodeAt(searchParamStartsAt - 1) === 38 /* '&' */) {
+                    result.filter = redirect;
+                    const searchParamEndsAt = request.url.indexOf('&', searchParamStartsAt);
+                    // In case of last param:
+                    if (searchParamEndsAt === -1) {
+                      redirectUrl = request.url.slice(0, searchParamStartsAt - 1);
+                    } else {
+                      // In case of param in the middle:
+                      redirectUrl =
+                        request.url.slice(0, searchParamStartsAt) +
+                        request.url.slice(searchParamEndsAt + 1);
+                    }
+                    break;
+                  }
+                }
+
+                lookupAfter = searchParamStartsAt + target.length;
+              }
+              if (searchParamStartsAt !== -1) {
+                break;
+              }
+            }
+          }
+        }
+
+        // If `result.filter` is still remains `undefined`, there
+        // is some extra logic to handle special cases like
+        // redirect-rule and redirect=none.
+        //
+        // * If redirect=none is found, then cancel all redirects.
+        // * Else if redirect-rule is found, only redirect if request would be blocked.
+        // * Else if redirect is found, redirect.
+        if (result.filter === undefined && resourceRedirects.length !== 0) {
+          const redirects = resourceRedirects
+            // highest priorty wins
+            .sort((a, b) => b.getRedirectPriority() - a.getRedirectPriority());
+
           for (const filter of redirects) {
             if (filter.getRedirectResource() === 'none') {
               redirectNone = filter;
@@ -1508,12 +1593,17 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       if (
         result.filter !== undefined &&
         result.exception === undefined &&
-        result.filter.isRedirect()
+        result.filter.isRedirectable()
       ) {
-        if (redirectNone !== undefined) {
-          result.exception = redirectNone;
+        // Prioritize if `redirectUrl` is set.
+        if (redirectUrl !== undefined) {
+          result.redirect = { body: '', contentType: 'text/plain', dataUrl: redirectUrl };
         } else {
-          result.redirect = this.resources.getResource(result.filter.getRedirectResource());
+          if (redirectNone !== undefined) {
+            result.exception = redirectNone;
+          } else {
+            result.redirect = this.resources.getResource(result.filter.getRedirectResource());
+          }
         }
       }
     }
