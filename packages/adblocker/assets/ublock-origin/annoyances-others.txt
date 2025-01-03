@@ -5630,7 +5630,7 @@ pngitem.com##+js(aopr, document.oncontextmenu)
 ! https://github.com/uBlockOrigin/uBlock-issues/issues/3491
 !#if env_firefox
 !#else
-foxteller.com##+js(ra, oncontextmenu%7Concopy%7Concut, %5Bid%5E%3D%22chapter%22%5D, stay)
+foxteller.com##+js(ra, oncontextmenu%7Concopy%7Concut, %5Bid%5E%3D%22chapter%22%5D, complete)
 !#endif
 foxteller.com##+js(aeld, contextmenu, preventDefault)
 foxteller.com##+js(aeld, selectionchange, .html)
@@ -5653,4 +5653,5 @@ blindhelp.net##+js(ra, oncontextmenu%7Concopy%7Conselectstart, body, complete)
 smalley.com##+js(ra, onselectstart%7Concopy, body, complete)
 francis-bacon.com##+js(aeld, contextmenu, return%22undefined%22)
 ! https://nebula.tv/videos/bekindrewind-12-underrated-performances-you-need-to-see-now - "Sign in to watch"
-nebula.tv##+js(trusted-suppress-native-method, Storage.prototype.setItem, freeVideoFriendlySlug, prevent)
+nebula.tv##+js(set-local-storage-item, %2F%5EfreeVideoFriendly%2F, %24remove%24)
+nebula.tv##+js(trusted-replace-argument, Storage.prototype.setItem, 0, json%3A%22freeVideoFriendly%22, condition, freeVideoFriendlySlug)

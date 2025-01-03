@@ -1121,7 +1121,6 @@ civitai.com##div[id][class^="mantine-"].flex:has(a[href="/pricing"] img[alt="Ple
 ||ads.civitai.com^$script,1p,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/22220
 ! https://github.com/uBlockOrigin/uAssets/issues/22492
-||d3mw273ubcaiex.cloudfront.net/images/ad/$image
 @@/^https:\/\/www\.puzzle-[a-z]+\.com\//$script,from=puzzle-loop.com|puzzle-words.com|puzzle-chess.com|puzzle-thermometers.com|puzzle-norinori.com|puzzle-minesweeper.com|puzzle-slant.com|puzzle-lits.com|puzzle-galaxies.com|puzzle-tents.com|puzzle-battleships.com|puzzle-pipes.com|puzzle-hitori.com|puzzle-heyawake.com|puzzle-shingoki.com|puzzle-masyu.com|puzzle-stitches.com|puzzle-aquarium.com|puzzle-tapa.com|puzzle-star-battle.com|puzzle-kakurasu.com|puzzle-skyscrapers.com|puzzle-futoshiki.com|puzzle-shakashaka.com|puzzle-kakuro.com|puzzle-jigsaw-sudoku.com|puzzle-killer-sudoku.com|puzzle-binairo.com|puzzle-nonograms.com|puzzle-sudoku.com|puzzle-light-up.com|puzzle-bridges.com|puzzle-shikaku.com|puzzle-nurikabe.com|puzzle-dominosa.com
 puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com###MainContainer > [id^="bannerTopSpacer"]
 puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com###MainContainer + [id]:has(> #bannerSide)
@@ -2007,8 +2006,6 @@ molbiotools.com##+js(nostif, inner-ad)
 vods.tv##+js(nostif, _ET)
 ! toonnetworkindia. net ads
 ||toonnetworkindia.net^$csp=script-src 'self'
-||apifetchmethod.com^$all
-||limeerror.org^$all
 ||paradizeconstruction.com^$all
 ! https://github.com/uBlockOrigin/uAssets/issues/23927
 hdfilmcehennemi2.cx##+js(set-local-storage-item, adDisplayed, %24remove%24)
@@ -2169,6 +2166,8 @@ arenascan.com###floatcenter
 datanodes.to##[href^="https://cinemaunlocked.com"]
 datanodes.to##[href^="https://fmovies-hd.to"]
 *$script,3p,denyallow=google.com|gstatic.com,domain=datanodes.to
+datanodes.to##div[class] > center > a[href][rel="nofollow"][target="_blank"]
+||loadingfreerar.top^$all
 ! https://github.com/uBlockOrigin/uAssets/issues/24904
 hidan.sh##+js(nowoif, !hidan.sh)
 hidan.sh##+js(rpnt, script, !seen, false)
@@ -2670,10 +2669,6 @@ kenitv.me##+js(rmnt, script, %2Fh%3DdecodeURIComponent%7CpopundersPerIP%2F)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/25073
 ||heraldnet.com/wp-content/plugins/incognito_dectector/
-! https://ptube.pipio.site/ anti-adb, timer
-ptube.pipio.site###videoDiv
-ptube.pipio.site###video-container:style(display: block !important;)
-||ptube.pipio.site/adblock.js
 ! https://github.com/AdguardTeam/AdguardFilters/issues/187059
 zone-telechargement.ing##+js(acs, setTimeout, aclib.runPop)
 ! paste.fo ads
@@ -3418,6 +3413,7 @@ moappmovies.blogspot.com##.sy-adblock
 ||googlesyndication.com^$image,redirect=1x1.gif,domain=minenode.fr
 ! https://github.com/uBlockOrigin/uAssets/issues/24575
 animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,animeyabu.org,anitube.us,anitube.vip,caroloportunidades.com.br,dattebayo-br.com,drstonebr.com,flyanimes.cloud,goanimes.vip,goyabu.us,hinatasoul.com,isekaibrasil.com,meuanime.info,otakuanimess.net,superanimes.in##+js(trusted-prevent-xhr, outbrain.com, outbrain)
+animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,animeyabu.org,anitube.us,anitube.vip,caroloportunidades.com.br,dattebayo-br.com,drstonebr.com,flyanimes.cloud,goanimes.vip,goyabu.us,hinatasoul.com,isekaibrasil.com,meuanime.info,otakuanimess.net,superanimes.in##+js(trusted-prevent-xhr, s4.cdnpc.net%2Ffront%2Fcss%2Fstyle.min.css%3Fversion%3Dv93, slider--features)
 caroloportunidades.com.br,coempregos.com.br,foodiesgallery.com##+js(nostif, hasAdblock)
 ! prmovies. im antiadb
 embdproxy.xyz##+js(rmnt, script, deblocker)
@@ -3491,7 +3487,6 @@ naruldonghua.com##+js(noeval-if, adsbygoogle)
 feed2all.org##+js(aopr, popns)
 feed2all.org##+js(set-cookie, BetterJsPop0, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/26493
-titulky.com##+js(set, showFairUser, true)
 @@||titulky.com^$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/26494
 !#if cap_html_filtering
