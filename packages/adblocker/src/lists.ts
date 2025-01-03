@@ -10,7 +10,6 @@ import Config from './config.js';
 import CosmeticFilter from './filters/cosmetic.js';
 import NetworkFilter from './filters/network.js';
 import Preprocessor, { PreprocessorTokens, detectPreprocessor } from './preprocessor.js';
-import { fastStartsWith, fastStartsWithFrom } from './utils.js';
 
 export const enum FilterType {
   NOT_SUPPORTED = 0,
@@ -46,7 +45,7 @@ export function detectFilterType(
   if (
     firstCharCode === 33 /* '!' */ ||
     (firstCharCode === 35 /* '#' */ && secondCharCode <= 32) ||
-    (firstCharCode === 91 /* '[' */ && fastStartsWith(line, '[Adblock'))
+    (firstCharCode === 91 /* '[' */ && line.startsWith('[Adblock'))
   ) {
     if (extendedNonSupportedTypes) {
       return FilterType.NOT_SUPPORTED_COMMENT;
@@ -86,8 +85,7 @@ export function detectFilterType(
     // Ignore Adguard HTML rewrite rules
     if (
       afterDollarCharCode === 36 /* '$' */ ||
-      (afterDollarCharCode === 64 /* '@' */ &&
-        fastStartsWithFrom(line, /* $@$ */ '@$', afterDollarIndex))
+      (afterDollarCharCode === 64 /* '@' */ && line.startsWith(/* $@$ */ '@$', afterDollarIndex))
     ) {
       if (extendedNonSupportedTypes) {
         return FilterType.NOT_SUPPORTED_ADGUARD;
@@ -104,27 +102,24 @@ export function detectFilterType(
 
     if (
       afterSharpCharCode === 35 /* '#'*/ ||
-      (afterSharpCharCode === 64 /* '@' */ &&
-        fastStartsWithFrom(line, /* #@# */ '@#', afterSharpIndex))
+      (afterSharpCharCode === 64 /* '@' */ && line.startsWith(/* #@# */ '@#', afterSharpIndex))
       // TODO - support ADB/AdGuard extended css selectors
       // || (afterSharpCharCode === 63 /* '?' */ &&
-      //   fastStartsWithFrom(line, /* #?# */ '?#', afterSharpIndex))
+      //   line.startsWith(/* #?# */ '?#', afterSharpIndex))
     ) {
       // Parse supported cosmetic filter
       // `##` `#@#`
       return FilterType.COSMETIC;
     } else if (
       (afterSharpCharCode === 64 /* '@'*/ &&
-        (fastStartsWithFrom(line, /* #@$# */ '@$#', afterSharpIndex) ||
-          fastStartsWithFrom(line, /* #@%# */ '@%#', afterSharpIndex) ||
-          fastStartsWithFrom(line, /* #@?# */ '@?#', afterSharpIndex))) ||
-      (afterSharpCharCode === 37 /* '%' */ &&
-        fastStartsWithFrom(line, /* #%# */ '%#', afterSharpIndex)) ||
+        (line.startsWith(/* #@$# */ '@$#', afterSharpIndex) ||
+          line.startsWith(/* #@%# */ '@%#', afterSharpIndex) ||
+          line.startsWith(/* #@?# */ '@?#', afterSharpIndex))) ||
+      (afterSharpCharCode === 37 /* '%' */ && line.startsWith(/* #%# */ '%#', afterSharpIndex)) ||
       (afterSharpCharCode === 36 /* '$' */ &&
-        (fastStartsWithFrom(line, /* #$# */ '$#', afterSharpIndex) ||
-          fastStartsWithFrom(line, /* #$?# */ '$?#', afterSharpIndex))) ||
-      (afterSharpCharCode === 63 /* '?' */ &&
-        fastStartsWithFrom(line, /* #?# */ '?#', afterSharpIndex))
+        (line.startsWith(/* #$# */ '$#', afterSharpIndex) ||
+          line.startsWith(/* #$?# */ '$?#', afterSharpIndex))) ||
+      (afterSharpCharCode === 63 /* '?' */ && line.startsWith(/* #?# */ '?#', afterSharpIndex))
     ) {
       if (extendedNonSupportedTypes) {
         return FilterType.NOT_SUPPORTED_ADGUARD;
