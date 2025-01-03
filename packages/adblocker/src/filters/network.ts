@@ -111,7 +111,7 @@ export function normalizeRawFilterOptions(rawFilter: string): string {
 }
 
 /**
- * Masks used to store options of network filters in a bitmask.
+ * @deprecated This mask scheme is deprecated and planned to be dropped in next major release. Use `NETWORK_SOURCE_MASK` and `NETWORK_OPTIONS_MASK` instead. You can use `migrateLegacyMask` function to migrate your old masks.
  */
 export const enum NETWORK_FILTER_MASK {
   // Request Type
@@ -159,64 +159,152 @@ export const enum NETWORK_FILTER_MASK {
 }
 
 /**
+ * Masks used to store source definitions of network filters in a 16-bit bitmask.
+ */
+export const enum NETWORK_SOURCE_MASK {
+  // Request Type
+  fromDocument = 1 << 0,
+  fromFont = 1 << 1,
+  fromHttp = 1 << 2,
+  fromHttps = 1 << 3,
+  fromImage = 1 << 4,
+  fromMedia = 1 << 5,
+  fromObject = 1 << 6,
+  fromOther = 1 << 7,
+  fromPing = 1 << 8,
+  fromScript = 1 << 9,
+  fromStylesheet = 1 << 10,
+  fromSubdocument = 1 << 11,
+  fromWebsocket = 1 << 12, // e.g.: ws, wss
+  fromXmlHttpRequest = 1 << 13,
+
+  // Partiness
+  firstParty = 1 << 14,
+  thirdParty = 1 << 15,
+  // IMPORTANT: the mask is now full, no more options can be added
+}
+
+/**
+ * Masks used to store options of network filters in a bitmask.
+ */
+export const enum NETWORK_OPTIONS_MASK {
+  // Options
+  isReplace = 1 << 0,
+  isBadFilter = 1 << 1,
+  isCSP = 1 << 2,
+  isGenericHide = 1 << 3,
+  isImportant = 1 << 4,
+  isSpecificHide = 1 << 5,
+  isRedirectRule = 1 << 6,
+  isRedirect = 1 << 7,
+  // reserved 8...23
+
+  // Kind of patterns
+  isFullRegex = 1 << 24,
+  isRegex = 1 << 25,
+  isUnicode = 1 << 26,
+  isLeftAnchor = 1 << 27,
+  isRightAnchor = 1 << 28,
+  isHostnameAnchor = 1 << 29,
+  isException = 1 << 30,
+}
+
+/**
  * Mask used when a network filter can be applied on any content type.
  */
 const FROM_ANY: number =
-  NETWORK_FILTER_MASK.fromDocument |
-  NETWORK_FILTER_MASK.fromFont |
-  NETWORK_FILTER_MASK.fromImage |
-  NETWORK_FILTER_MASK.fromMedia |
-  NETWORK_FILTER_MASK.fromObject |
-  NETWORK_FILTER_MASK.fromOther |
-  NETWORK_FILTER_MASK.fromPing |
-  NETWORK_FILTER_MASK.fromScript |
-  NETWORK_FILTER_MASK.fromStylesheet |
-  NETWORK_FILTER_MASK.fromSubdocument |
-  NETWORK_FILTER_MASK.fromWebsocket |
-  NETWORK_FILTER_MASK.fromXmlHttpRequest;
+  NETWORK_SOURCE_MASK.fromDocument |
+  NETWORK_SOURCE_MASK.fromFont |
+  NETWORK_SOURCE_MASK.fromImage |
+  NETWORK_SOURCE_MASK.fromMedia |
+  NETWORK_SOURCE_MASK.fromObject |
+  NETWORK_SOURCE_MASK.fromOther |
+  NETWORK_SOURCE_MASK.fromPing |
+  NETWORK_SOURCE_MASK.fromScript |
+  NETWORK_SOURCE_MASK.fromStylesheet |
+  NETWORK_SOURCE_MASK.fromSubdocument |
+  NETWORK_SOURCE_MASK.fromWebsocket |
+  NETWORK_SOURCE_MASK.fromXmlHttpRequest;
 
 /**
  * Map content type value to mask the corresponding mask.
  * ref: https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIContentPolicy
  */
 const REQUEST_TYPE_TO_MASK: { [s in RequestType]: number | undefined } = {
-  beacon: NETWORK_FILTER_MASK.fromPing, // fromOther?
-  document: NETWORK_FILTER_MASK.fromDocument,
-  cspviolationreport: NETWORK_FILTER_MASK.fromOther,
-  fetch: NETWORK_FILTER_MASK.fromXmlHttpRequest,
-  font: NETWORK_FILTER_MASK.fromFont,
-  image: NETWORK_FILTER_MASK.fromImage,
-  imageset: NETWORK_FILTER_MASK.fromImage,
-  mainFrame: NETWORK_FILTER_MASK.fromDocument,
-  main_frame: NETWORK_FILTER_MASK.fromDocument,
-  media: NETWORK_FILTER_MASK.fromMedia,
-  object: NETWORK_FILTER_MASK.fromObject,
-  object_subrequest: NETWORK_FILTER_MASK.fromObject,
-  ping: NETWORK_FILTER_MASK.fromPing, // fromOther?
-  script: NETWORK_FILTER_MASK.fromScript,
-  stylesheet: NETWORK_FILTER_MASK.fromStylesheet,
-  subFrame: NETWORK_FILTER_MASK.fromSubdocument,
-  sub_frame: NETWORK_FILTER_MASK.fromSubdocument,
-  webSocket: NETWORK_FILTER_MASK.fromWebsocket,
-  websocket: NETWORK_FILTER_MASK.fromWebsocket,
-  xhr: NETWORK_FILTER_MASK.fromXmlHttpRequest,
-  xmlhttprequest: NETWORK_FILTER_MASK.fromXmlHttpRequest,
+  beacon: NETWORK_SOURCE_MASK.fromPing, // fromOther?
+  document: NETWORK_SOURCE_MASK.fromDocument,
+  cspviolationreport: NETWORK_SOURCE_MASK.fromOther,
+  fetch: NETWORK_SOURCE_MASK.fromXmlHttpRequest,
+  font: NETWORK_SOURCE_MASK.fromFont,
+  image: NETWORK_SOURCE_MASK.fromImage,
+  imageset: NETWORK_SOURCE_MASK.fromImage,
+  mainFrame: NETWORK_SOURCE_MASK.fromDocument,
+  main_frame: NETWORK_SOURCE_MASK.fromDocument,
+  media: NETWORK_SOURCE_MASK.fromMedia,
+  object: NETWORK_SOURCE_MASK.fromObject,
+  object_subrequest: NETWORK_SOURCE_MASK.fromObject,
+  ping: NETWORK_SOURCE_MASK.fromPing, // fromOther?
+  script: NETWORK_SOURCE_MASK.fromScript,
+  stylesheet: NETWORK_SOURCE_MASK.fromStylesheet,
+  subFrame: NETWORK_SOURCE_MASK.fromSubdocument,
+  sub_frame: NETWORK_SOURCE_MASK.fromSubdocument,
+  webSocket: NETWORK_SOURCE_MASK.fromWebsocket,
+  websocket: NETWORK_SOURCE_MASK.fromWebsocket,
+  xhr: NETWORK_SOURCE_MASK.fromXmlHttpRequest,
+  xmlhttprequest: NETWORK_SOURCE_MASK.fromXmlHttpRequest,
 
   // Other
-  cspReport: NETWORK_FILTER_MASK.fromOther,
-  csp_report: NETWORK_FILTER_MASK.fromOther,
-  eventsource: NETWORK_FILTER_MASK.fromOther,
-  manifest: NETWORK_FILTER_MASK.fromOther,
-  other: NETWORK_FILTER_MASK.fromOther,
-  prefetch: NETWORK_FILTER_MASK.fromOther,
-  preflight: NETWORK_FILTER_MASK.fromOther,
-  signedexchange: NETWORK_FILTER_MASK.fromOther,
-  speculative: NETWORK_FILTER_MASK.fromOther,
-  texttrack: NETWORK_FILTER_MASK.fromOther,
-  web_manifest: NETWORK_FILTER_MASK.fromOther,
-  xml_dtd: NETWORK_FILTER_MASK.fromOther,
-  xslt: NETWORK_FILTER_MASK.fromOther,
+  cspReport: NETWORK_SOURCE_MASK.fromOther,
+  csp_report: NETWORK_SOURCE_MASK.fromOther,
+  eventsource: NETWORK_SOURCE_MASK.fromOther,
+  manifest: NETWORK_SOURCE_MASK.fromOther,
+  other: NETWORK_SOURCE_MASK.fromOther,
+  prefetch: NETWORK_SOURCE_MASK.fromOther,
+  preflight: NETWORK_SOURCE_MASK.fromOther,
+  signedexchange: NETWORK_SOURCE_MASK.fromOther,
+  speculative: NETWORK_SOURCE_MASK.fromOther,
+  texttrack: NETWORK_SOURCE_MASK.fromOther,
+  web_manifest: NETWORK_SOURCE_MASK.fromOther,
+  xml_dtd: NETWORK_SOURCE_MASK.fromOther,
+  xslt: NETWORK_SOURCE_MASK.fromOther,
 };
+
+export function migrateLegacyMask(n: number): {
+  sourceMask: number;
+  mask: number;
+} {
+  // Bits are saved in LSB order, push left to drop values then restore the position
+  // We need to drop 32th bit on restoration since we regard the given `mask` is signed int
+  const sourceMask = (n << 16) >>> 16;
+  let mask = 0;
+
+  for (const [legacyMask, newMask] of [
+    [NETWORK_FILTER_MASK.isReplace, NETWORK_OPTIONS_MASK.isReplace],
+    [NETWORK_FILTER_MASK.isBadFilter, NETWORK_OPTIONS_MASK.isBadFilter],
+    [NETWORK_FILTER_MASK.isCSP, NETWORK_OPTIONS_MASK.isCSP],
+    [NETWORK_FILTER_MASK.isGenericHide, NETWORK_OPTIONS_MASK.isGenericHide],
+    [NETWORK_FILTER_MASK.isImportant, NETWORK_OPTIONS_MASK.isImportant],
+    [NETWORK_FILTER_MASK.isSpecificHide, NETWORK_OPTIONS_MASK.isSpecificHide],
+    [NETWORK_FILTER_MASK.isRedirectRule, NETWORK_OPTIONS_MASK.isRedirectRule],
+    [NETWORK_FILTER_MASK.isRedirect, NETWORK_OPTIONS_MASK.isRedirect],
+    [NETWORK_FILTER_MASK.isFullRegex, NETWORK_OPTIONS_MASK.isFullRegex],
+    [NETWORK_FILTER_MASK.isRegex, NETWORK_OPTIONS_MASK.isRegex],
+    [NETWORK_FILTER_MASK.isUnicode, NETWORK_OPTIONS_MASK.isUnicode],
+    [NETWORK_FILTER_MASK.isLeftAnchor, NETWORK_OPTIONS_MASK.isLeftAnchor],
+    [NETWORK_FILTER_MASK.isRightAnchor, NETWORK_OPTIONS_MASK.isRightAnchor],
+    [NETWORK_FILTER_MASK.isHostnameAnchor, NETWORK_OPTIONS_MASK.isHostnameAnchor],
+    [NETWORK_FILTER_MASK.isException, NETWORK_OPTIONS_MASK.isException],
+  ] as const) {
+    if (getBit(n, legacyMask)) {
+      mask = setBit(mask, newMask);
+    }
+  }
+
+  return {
+    sourceMask,
+    mask,
+  };
+}
 
 function getListOfRequestTypesNegated(filter: NetworkFilter): RequestType[] {
   const types: RequestType[] = [];
@@ -686,11 +774,12 @@ const MATCH_ALL = new RegExp('');
 export default class NetworkFilter implements IFilter {
   public static parse(line: string, debug: boolean = false): NetworkFilter | null {
     // Represent options as a bitmask
-    let mask: number =
-      NETWORK_FILTER_MASK.thirdParty |
-      NETWORK_FILTER_MASK.firstParty |
-      NETWORK_FILTER_MASK.fromHttps |
-      NETWORK_FILTER_MASK.fromHttp;
+    let sourceMask: number =
+      NETWORK_SOURCE_MASK.thirdParty |
+      NETWORK_SOURCE_MASK.firstParty |
+      NETWORK_SOURCE_MASK.fromHttps |
+      NETWORK_SOURCE_MASK.fromHttp;
+    let mask: number = 0;
 
     // Temporary masks for positive (e.g.: $script) and negative (e.g.: $~script)
     // content type options.
@@ -709,7 +798,7 @@ export default class NetworkFilter implements IFilter {
     // @@filter == Exception
     if (line.charCodeAt(0) === 64 /* '@' */ && line.charCodeAt(1) === 64 /* '@' */) {
       filterIndexStart += 2;
-      mask = setBit(mask, NETWORK_FILTER_MASK.isException);
+      mask = setBit(mask, NETWORK_OPTIONS_MASK.isException);
     }
 
     // filter$options == Options
@@ -749,7 +838,7 @@ export default class NetworkFilter implements IFilter {
             break;
           }
           case 'badfilter':
-            mask = setBit(mask, NETWORK_FILTER_MASK.isBadFilter);
+            mask = setBit(mask, NETWORK_OPTIONS_MASK.isBadFilter);
             break;
           case 'important':
             // Note: `negation` should always be `false` here.
@@ -757,7 +846,7 @@ export default class NetworkFilter implements IFilter {
               return null;
             }
 
-            mask = setBit(mask, NETWORK_FILTER_MASK.isImportant);
+            mask = setBit(mask, NETWORK_OPTIONS_MASK.isImportant);
             break;
           case 'match-case':
             // Note: `negation` should always be `false` here.
@@ -771,20 +860,20 @@ export default class NetworkFilter implements IFilter {
           case 'third-party':
             if (negation) {
               // ~third-party means we should clear the flag
-              mask = clearBit(mask, NETWORK_FILTER_MASK.thirdParty);
+              sourceMask = clearBit(sourceMask, NETWORK_SOURCE_MASK.thirdParty);
             } else {
               // third-party means ~first-party
-              mask = clearBit(mask, NETWORK_FILTER_MASK.firstParty);
+              sourceMask = clearBit(sourceMask, NETWORK_SOURCE_MASK.firstParty);
             }
             break;
           case '1p':
           case 'first-party':
             if (negation) {
               // ~first-party means we should clear the flag
-              mask = clearBit(mask, NETWORK_FILTER_MASK.firstParty);
+              sourceMask = clearBit(sourceMask, NETWORK_SOURCE_MASK.firstParty);
             } else {
               // first-party means ~third-party
-              mask = clearBit(mask, NETWORK_FILTER_MASK.thirdParty);
+              sourceMask = clearBit(sourceMask, NETWORK_SOURCE_MASK.thirdParty);
             }
             break;
           case 'redirect-rule':
@@ -811,10 +900,10 @@ export default class NetworkFilter implements IFilter {
               return null;
             }
 
-            mask = setBit(mask, NETWORK_FILTER_MASK.isRedirect);
+            mask = setBit(mask, NETWORK_OPTIONS_MASK.isRedirect);
 
             if (option === 'redirect-rule') {
-              mask = setBit(mask, NETWORK_FILTER_MASK.isRedirectRule);
+              mask = setBit(mask, NETWORK_OPTIONS_MASK.isRedirectRule);
             }
 
             optionValue = value;
@@ -825,7 +914,7 @@ export default class NetworkFilter implements IFilter {
               return null;
             }
 
-            mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
+            mask = setBit(mask, NETWORK_OPTIONS_MASK.isCSP);
             if (value.length > 0) {
               optionValue = value;
             }
@@ -836,8 +925,8 @@ export default class NetworkFilter implements IFilter {
               return null;
             }
 
-            mask = setBit(mask, NETWORK_FILTER_MASK.isGenericHide);
-            mask = setBit(mask, NETWORK_FILTER_MASK.isSpecificHide);
+            mask = setBit(mask, NETWORK_OPTIONS_MASK.isGenericHide);
+            mask = setBit(mask, NETWORK_OPTIONS_MASK.isSpecificHide);
             break;
           case 'shide':
           case 'specifichide':
@@ -845,7 +934,7 @@ export default class NetworkFilter implements IFilter {
               return null;
             }
 
-            mask = setBit(mask, NETWORK_FILTER_MASK.isSpecificHide);
+            mask = setBit(mask, NETWORK_OPTIONS_MASK.isSpecificHide);
             break;
           case 'ghide':
           case 'generichide':
@@ -853,14 +942,14 @@ export default class NetworkFilter implements IFilter {
               return null;
             }
 
-            mask = setBit(mask, NETWORK_FILTER_MASK.isGenericHide);
+            mask = setBit(mask, NETWORK_OPTIONS_MASK.isGenericHide);
             break;
           case 'inline-script':
             if (negation) {
               return null;
             }
 
-            mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
+            mask = setBit(mask, NETWORK_OPTIONS_MASK.isCSP);
             optionValue =
               "script-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:";
             break;
@@ -869,7 +958,7 @@ export default class NetworkFilter implements IFilter {
               return null;
             }
 
-            mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
+            mask = setBit(mask, NETWORK_OPTIONS_MASK.isCSP);
             optionValue =
               "font-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:";
             break;
@@ -878,13 +967,13 @@ export default class NetworkFilter implements IFilter {
             if (
               negation ||
               (value.length === 0
-                ? getBit(mask, NETWORK_FILTER_MASK.isException) === false
+                ? getBit(mask, NETWORK_OPTIONS_MASK.isException) === false
                 : replaceOptionValueToRegexp(value) === null)
             ) {
               return null;
             }
 
-            mask = setBit(mask, NETWORK_FILTER_MASK.isReplace);
+            mask = setBit(mask, NETWORK_OPTIONS_MASK.isReplace);
             optionValue = value;
 
             break;
@@ -907,46 +996,46 @@ export default class NetworkFilter implements IFilter {
                 // ].join('; ');
                 break;
               case 'image':
-                optionMask = NETWORK_FILTER_MASK.fromImage;
+                optionMask = NETWORK_SOURCE_MASK.fromImage;
                 break;
               case 'media':
-                optionMask = NETWORK_FILTER_MASK.fromMedia;
+                optionMask = NETWORK_SOURCE_MASK.fromMedia;
                 break;
               case 'object':
               case 'object-subrequest':
-                optionMask = NETWORK_FILTER_MASK.fromObject;
+                optionMask = NETWORK_SOURCE_MASK.fromObject;
                 break;
               case 'other':
-                optionMask = NETWORK_FILTER_MASK.fromOther;
+                optionMask = NETWORK_SOURCE_MASK.fromOther;
                 break;
               case 'ping':
               case 'beacon':
-                optionMask = NETWORK_FILTER_MASK.fromPing;
+                optionMask = NETWORK_SOURCE_MASK.fromPing;
                 break;
               case 'script':
-                optionMask = NETWORK_FILTER_MASK.fromScript;
+                optionMask = NETWORK_SOURCE_MASK.fromScript;
                 break;
               case 'css':
               case 'stylesheet':
-                optionMask = NETWORK_FILTER_MASK.fromStylesheet;
+                optionMask = NETWORK_SOURCE_MASK.fromStylesheet;
                 break;
               case 'frame':
               case 'subdocument':
-                optionMask = NETWORK_FILTER_MASK.fromSubdocument;
+                optionMask = NETWORK_SOURCE_MASK.fromSubdocument;
                 break;
               case 'xhr':
               case 'xmlhttprequest':
-                optionMask = NETWORK_FILTER_MASK.fromXmlHttpRequest;
+                optionMask = NETWORK_SOURCE_MASK.fromXmlHttpRequest;
                 break;
               case 'websocket':
-                optionMask = NETWORK_FILTER_MASK.fromWebsocket;
+                optionMask = NETWORK_SOURCE_MASK.fromWebsocket;
                 break;
               case 'font':
-                optionMask = NETWORK_FILTER_MASK.fromFont;
+                optionMask = NETWORK_SOURCE_MASK.fromFont;
                 break;
               case 'doc':
               case 'document':
-                optionMask = NETWORK_FILTER_MASK.fromDocument;
+                optionMask = NETWORK_SOURCE_MASK.fromDocument;
                 break;
               default:
                 // Disable this filter if we don't support all the options
@@ -1002,11 +1091,11 @@ export default class NetworkFilter implements IFilter {
         return null; // invalid RegExp
       }
 
-      mask = setBit(mask, NETWORK_FILTER_MASK.isFullRegex);
+      mask = setBit(mask, NETWORK_OPTIONS_MASK.isFullRegex);
     } else {
       // Deal with hostname pattern
       if (filterIndexEnd > 0 && line.charCodeAt(filterIndexEnd - 1) === 124 /* '|' */) {
-        mask = setBit(mask, NETWORK_FILTER_MASK.isRightAnchor);
+        mask = setBit(mask, NETWORK_OPTIONS_MASK.isRightAnchor);
         filterIndexEnd -= 1;
       }
 
@@ -1018,10 +1107,10 @@ export default class NetworkFilter implements IFilter {
           filterIndexStart < filterIndexEnd - 1 &&
           line.charCodeAt(filterIndexStart + 1) === 124 /* '|' */
         ) {
-          mask = setBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor);
+          mask = setBit(mask, NETWORK_OPTIONS_MASK.isHostnameAnchor);
           filterIndexStart += 2;
         } else {
-          mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+          mask = setBit(mask, NETWORK_OPTIONS_MASK.isLeftAnchor);
           filterIndexStart += 1;
         }
       }
@@ -1029,7 +1118,7 @@ export default class NetworkFilter implements IFilter {
       // const isRegex = checkIsRegex(line, filterIndexStart, filterIndexEnd);
       // mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRegex, isRegex);
 
-      if (getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor)) {
+      if (getBit(mask, NETWORK_OPTIONS_MASK.isHostnameAnchor)) {
         // Split at the first character which is not allowed in a hostname
         let firstSeparator = filterIndexStart;
         while (
@@ -1056,16 +1145,16 @@ export default class NetworkFilter implements IFilter {
             // other label on the right
             if (filterIndexEnd - filterIndexStart === 1) {
               filterIndexStart = filterIndexEnd;
-              mask = setBit(mask, NETWORK_FILTER_MASK.isRightAnchor);
+              mask = setBit(mask, NETWORK_OPTIONS_MASK.isRightAnchor);
             } else {
-              mask = setBit(mask, NETWORK_FILTER_MASK.isRegex);
-              mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+              mask = setBit(mask, NETWORK_OPTIONS_MASK.isRegex);
+              mask = setBit(mask, NETWORK_OPTIONS_MASK.isLeftAnchor);
             }
           } else if (separatorCode === 42 /* '*' */) {
-            mask = setBit(mask, NETWORK_FILTER_MASK.isRegex);
+            mask = setBit(mask, NETWORK_OPTIONS_MASK.isRegex);
             // mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
           } else {
-            mask = setBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+            mask = setBit(mask, NETWORK_OPTIONS_MASK.isLeftAnchor);
           }
         }
       }
@@ -1080,48 +1169,48 @@ export default class NetworkFilter implements IFilter {
 
       // Remove leading '*' if the filter is not hostname anchored.
       if (
-        getBit(mask, NETWORK_FILTER_MASK.isHostnameAnchor) === false &&
+        getBit(mask, NETWORK_OPTIONS_MASK.isHostnameAnchor) === false &&
         filterIndexEnd - filterIndexStart > 0 &&
         line.charCodeAt(filterIndexStart) === 42 /* '*' */
       ) {
-        mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+        mask = clearBit(mask, NETWORK_OPTIONS_MASK.isLeftAnchor);
         filterIndexStart += 1;
       }
 
       // Transform filters on protocol (http, https, ws)
-      if (getBit(mask, NETWORK_FILTER_MASK.isLeftAnchor)) {
+      if (getBit(mask, NETWORK_OPTIONS_MASK.isLeftAnchor)) {
         if (
           filterIndexEnd - filterIndexStart === 5 &&
           fastStartsWithFrom(line, 'ws://', filterIndexStart)
         ) {
-          mask = setBit(mask, NETWORK_FILTER_MASK.fromWebsocket);
-          mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
-          mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttp);
-          mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttps);
+          sourceMask = setBit(sourceMask, NETWORK_SOURCE_MASK.fromWebsocket);
+          mask = clearBit(mask, NETWORK_OPTIONS_MASK.isLeftAnchor);
+          sourceMask = clearBit(sourceMask, NETWORK_SOURCE_MASK.fromHttp);
+          sourceMask = clearBit(sourceMask, NETWORK_SOURCE_MASK.fromHttps);
           filterIndexStart = filterIndexEnd;
         } else if (
           filterIndexEnd - filterIndexStart === 7 &&
           fastStartsWithFrom(line, 'http://', filterIndexStart)
         ) {
-          mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
-          mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttps);
-          mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+          sourceMask = setBit(sourceMask, NETWORK_SOURCE_MASK.fromHttp);
+          sourceMask = clearBit(sourceMask, NETWORK_SOURCE_MASK.fromHttps);
+          mask = clearBit(mask, NETWORK_OPTIONS_MASK.isLeftAnchor);
           filterIndexStart = filterIndexEnd;
         } else if (
           filterIndexEnd - filterIndexStart === 8 &&
           fastStartsWithFrom(line, 'https://', filterIndexStart)
         ) {
-          mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
-          mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttp);
-          mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+          sourceMask = setBit(sourceMask, NETWORK_SOURCE_MASK.fromHttps);
+          sourceMask = clearBit(sourceMask, NETWORK_SOURCE_MASK.fromHttp);
+          mask = clearBit(mask, NETWORK_OPTIONS_MASK.isLeftAnchor);
           filterIndexStart = filterIndexEnd;
         } else if (
           filterIndexEnd - filterIndexStart === 8 &&
           fastStartsWithFrom(line, 'http*://', filterIndexStart)
         ) {
-          mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
-          mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
-          mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
+          sourceMask = setBit(sourceMask, NETWORK_SOURCE_MASK.fromHttps);
+          sourceMask = setBit(sourceMask, NETWORK_SOURCE_MASK.fromHttp);
+          mask = clearBit(mask, NETWORK_OPTIONS_MASK.isLeftAnchor);
           filterIndexStart = filterIndexEnd;
         }
       }
@@ -1129,11 +1218,11 @@ export default class NetworkFilter implements IFilter {
       if (filterIndexEnd - filterIndexStart > 0) {
         filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
 
-        mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isUnicode, hasUnicode(filter));
-        if (getBit(mask, NETWORK_FILTER_MASK.isRegex) === false) {
+        mask = setNetworkMask(mask, NETWORK_OPTIONS_MASK.isUnicode, hasUnicode(filter));
+        if (getBit(mask, NETWORK_OPTIONS_MASK.isRegex) === false) {
           mask = setNetworkMask(
             mask,
-            NETWORK_FILTER_MASK.isRegex,
+            NETWORK_OPTIONS_MASK.isRegex,
             checkIsRegex(filter, 0, filter.length),
           );
         }
@@ -1145,7 +1234,7 @@ export default class NetworkFilter implements IFilter {
       if (hostname !== undefined) {
         hostname = hostname.toLowerCase();
         if (hasUnicode(hostname)) {
-          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isUnicode, true);
+          mask = setNetworkMask(mask, NETWORK_OPTIONS_MASK.isUnicode, true);
           hostname = toASCII(hostname);
         }
       }
@@ -1154,6 +1243,7 @@ export default class NetworkFilter implements IFilter {
     return new NetworkFilter({
       filter,
       hostname,
+      sourceMask,
       mask,
       domains,
       denyallow,
@@ -1168,9 +1258,10 @@ export default class NetworkFilter implements IFilter {
    * symetrical to the one in `serializeNetworkFilter`.
    */
   public static deserialize(buffer: StaticDataView): NetworkFilter {
+    const sourceMask = buffer.getUint16();
     const mask = buffer.getUint32();
     const optionalParts = buffer.getUint8();
-    const isUnicode = getBit(mask, NETWORK_FILTER_MASK.isUnicode);
+    const isUnicode = getBit(mask, NETWORK_OPTIONS_MASK.isUnicode);
 
     // The order of these statements is important. Since `buffer.getX()` will
     // internally increment the position of next byte to read, they need to be
@@ -1178,6 +1269,7 @@ export default class NetworkFilter implements IFilter {
     // `serializeNetworkFilter`).
     return new NetworkFilter({
       // Mandatory field
+      sourceMask,
       mask,
 
       // Optional parts
@@ -1193,9 +1285,9 @@ export default class NetworkFilter implements IFilter {
       denyallow: (optionalParts & 16) === 16 ? Domains.deserialize(buffer) : undefined,
       optionValue:
         (optionalParts & 32) === 32
-          ? getBit(mask, NETWORK_FILTER_MASK.isCSP)
+          ? getBit(mask, NETWORK_OPTIONS_MASK.isCSP)
             ? buffer.getNetworkCSP()
-            : getBit(mask, NETWORK_FILTER_MASK.isRedirect)
+            : getBit(mask, NETWORK_OPTIONS_MASK.isRedirect)
               ? buffer.getNetworkRedirect()
               : buffer.getUTF8()
           : undefined,
@@ -1205,6 +1297,7 @@ export default class NetworkFilter implements IFilter {
 
   public readonly filter: string | undefined;
   public readonly hostname: string | undefined;
+  public readonly sourceMask: number;
   public readonly mask: number;
   public readonly domains: Domains | undefined;
   public readonly denyallow: Domains | undefined;
@@ -1217,9 +1310,13 @@ export default class NetworkFilter implements IFilter {
   public id: number | undefined;
   public regex: RegExp | undefined;
 
+  /**
+   * @param sourceMask If this field is empty, we will assume `mask` is in legacy format and automatically migrate it into `sourceMask` and `mask` for the compatibility.
+   */
   constructor({
     filter,
     hostname,
+    sourceMask,
     mask,
     domains,
     denyallow,
@@ -1229,6 +1326,7 @@ export default class NetworkFilter implements IFilter {
   }: {
     filter: string | undefined;
     hostname: string | undefined;
+    sourceMask?: number | undefined;
     mask: number;
     domains: Domains | undefined;
     denyallow: Domains | undefined;
@@ -1238,7 +1336,6 @@ export default class NetworkFilter implements IFilter {
   }) {
     this.filter = filter;
     this.hostname = hostname;
-    this.mask = mask;
     this.domains = domains;
     this.denyallow = denyallow;
     this.optionValue = optionValue;
@@ -1247,6 +1344,16 @@ export default class NetworkFilter implements IFilter {
 
     this.id = undefined;
     this.regex = regex;
+
+    if (sourceMask !== undefined) {
+      this.sourceMask = sourceMask;
+      this.mask = mask;
+    } else {
+      const migrated = migrateLegacyMask(mask);
+
+      this.sourceMask = migrated.sourceMask;
+      this.mask = migrated.mask;
+    }
   }
 
   public get csp(): string | undefined {
@@ -1314,6 +1421,7 @@ export default class NetworkFilter implements IFilter {
    *  * when packing ascii string, store several of them in each byte.
    */
   public serialize(buffer: StaticDataView): void {
+    buffer.pushUint16(this.sourceMask);
     buffer.pushUint32(this.mask);
 
     const index = buffer.getPos();
@@ -1367,7 +1475,7 @@ export default class NetworkFilter implements IFilter {
   }
 
   public getSerializedSize(compression: boolean): number {
-    let estimate: number = 4 + 1; // mask = 4 bytes // optional parts = 1 byte
+    let estimate: number = 2 + 4 + 1; // sourceMask = 2 bytes // mask = 4 bytes // optional parts = 1 byte
 
     if (this.filter !== undefined) {
       if (this.isUnicode() === true) {
@@ -1553,7 +1661,7 @@ export default class NetworkFilter implements IFilter {
     // eliminate bad filters by comparing IDs, which is more robust and faster
     // than string comparison.
     return computeFilterId(
-      this.mask & ~NETWORK_FILTER_MASK.isBadFilter,
+      this.mask & ~NETWORK_OPTIONS_MASK.isBadFilter,
       this.filter,
       this.hostname,
       this.domains,
@@ -1593,11 +1701,11 @@ export default class NetworkFilter implements IFilter {
   }
 
   public isRedirect(): boolean {
-    return getBit(this.getMask(), NETWORK_FILTER_MASK.isRedirect);
+    return getBit(this.getMask(), NETWORK_OPTIONS_MASK.isRedirect);
   }
 
   public isRedirectRule(): boolean {
-    return getBit(this.mask, NETWORK_FILTER_MASK.isRedirectRule);
+    return getBit(this.mask, NETWORK_OPTIONS_MASK.isRedirectRule);
   }
 
   public getRedirect(): string {
@@ -1605,7 +1713,7 @@ export default class NetworkFilter implements IFilter {
   }
 
   public isReplace(): boolean {
-    return getBit(this.getMask(), NETWORK_FILTER_MASK.isReplace);
+    return getBit(this.getMask(), NETWORK_OPTIONS_MASK.isReplace);
   }
 
   // Expected to be called only with `$replace` modifiers
@@ -1764,33 +1872,33 @@ export default class NetworkFilter implements IFilter {
   }
 
   public isException() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.isException);
+    return getBit(this.mask, NETWORK_OPTIONS_MASK.isException);
   }
 
   public isHostnameAnchor() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.isHostnameAnchor);
+    return getBit(this.mask, NETWORK_OPTIONS_MASK.isHostnameAnchor);
   }
 
   public isRightAnchor() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.isRightAnchor);
+    return getBit(this.mask, NETWORK_OPTIONS_MASK.isRightAnchor);
   }
 
   public isLeftAnchor() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.isLeftAnchor);
+    return getBit(this.mask, NETWORK_OPTIONS_MASK.isLeftAnchor);
   }
 
   public isImportant() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.isImportant);
+    return getBit(this.mask, NETWORK_OPTIONS_MASK.isImportant);
   }
 
   public isFullRegex(): boolean {
-    return getBit(this.mask, NETWORK_FILTER_MASK.isFullRegex);
+    return getBit(this.mask, NETWORK_OPTIONS_MASK.isFullRegex);
   }
 
   public isRegex() {
     return (
-      getBit(this.mask, NETWORK_FILTER_MASK.isRegex) ||
-      getBit(this.mask, NETWORK_FILTER_MASK.isFullRegex)
+      getBit(this.mask, NETWORK_OPTIONS_MASK.isRegex) ||
+      getBit(this.mask, NETWORK_OPTIONS_MASK.isFullRegex)
     );
   }
 
@@ -1799,7 +1907,7 @@ export default class NetworkFilter implements IFilter {
   }
 
   public isCSP() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.isCSP);
+    return getBit(this.mask, NETWORK_OPTIONS_MASK.isCSP);
   }
 
   public isElemHide() {
@@ -1807,19 +1915,19 @@ export default class NetworkFilter implements IFilter {
   }
 
   public isSpecificHide() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.isSpecificHide);
+    return getBit(this.mask, NETWORK_OPTIONS_MASK.isSpecificHide);
   }
 
   public isGenericHide() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.isGenericHide);
+    return getBit(this.mask, NETWORK_OPTIONS_MASK.isGenericHide);
   }
 
   public isBadFilter() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.isBadFilter);
+    return getBit(this.mask, NETWORK_OPTIONS_MASK.isBadFilter);
   }
 
   public isUnicode() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.isUnicode);
+    return getBit(this.mask, NETWORK_OPTIONS_MASK.isUnicode);
   }
 
   public fromAny() {
@@ -1827,67 +1935,67 @@ export default class NetworkFilter implements IFilter {
   }
 
   public thirdParty() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.thirdParty);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.thirdParty);
   }
 
   public firstParty() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.firstParty);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.firstParty);
   }
 
   public fromImage() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromImage);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromImage);
   }
 
   public fromMedia() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromMedia);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromMedia);
   }
 
   public fromObject() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromObject);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromObject);
   }
 
   public fromOther() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromOther);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromOther);
   }
 
   public fromPing() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromPing);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromPing);
   }
 
   public fromScript() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromScript);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromScript);
   }
 
   public fromStylesheet() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromStylesheet);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromStylesheet);
   }
 
   public fromDocument() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromDocument);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromDocument);
   }
 
   public fromSubdocument() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromSubdocument);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromSubdocument);
   }
 
   public fromWebsocket() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromWebsocket);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromWebsocket);
   }
 
   public fromHttp() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromHttp);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromHttp);
   }
 
   public fromHttps() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromHttps);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromHttps);
   }
 
   public fromXmlHttpRequest() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromXmlHttpRequest);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromXmlHttpRequest);
   }
 
   public fromFont() {
-    return getBit(this.mask, NETWORK_FILTER_MASK.fromFont);
+    return getBit(this.sourceMask, NETWORK_SOURCE_MASK.fromFont);
   }
 }
 
