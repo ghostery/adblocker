@@ -11,6 +11,24 @@ import { toASCII } from '../punycode.js';
 import { StaticDataView, sizeOfUint32Array, sizeOfUTF8 } from '../data-view.js';
 import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils.js';
 
+export function testNetworkParts(parts: string[]): boolean {
+  for (const part of parts) {
+    if (part.length === 0) {
+      return false;
+    } else if (part.startsWith('|')) {
+      return false;
+    } else if (part.endsWith('|')) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export function normalizeNetworkPartsLiteral(parts: string) {
+  return parts.replace(/,/g, '|');
+}
+
 export class Domains {
   public static parse(parts: string[], debug: boolean = false): Domains | undefined {
     if (parts.length === 0) {
