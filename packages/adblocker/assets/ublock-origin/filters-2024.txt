@@ -1117,7 +1117,7 @@ qwant.com##div[data-testid="pam.container"]:style(max-height: 1px !important; op
 ! https://github.com/uBlockOrigin/uAssets/issues/22203
 civitai.com##+js(no-fetch-if, googlesyndication)
 civitai.com##div:is(.shadow, .flex.w-full.justify-center[style=""]):has(a[href="/pricing"] img[alt="Please support civitai and creators by disabling adblock"]):remove()
-civitai.com##div[id][class^="mantine-"].flex:has(a[href="/pricing"] img[alt="Please support civitai and creators by disabling adblock"]):style(min-height: 0px !important; visibility: collapse !important; padding: 0px !important;)
+civitai.com##div[id][class^="mantine-"].flex.relative.box-content:style(min-height: 0px !important; visibility: collapse !important; padding: 0px !important;)
 ||ads.civitai.com^$script,1p,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/22220
 ! https://github.com/uBlockOrigin/uAssets/issues/22492
@@ -1864,6 +1864,7 @@ asianlbfm.net,schoolgirls-asia.org##+js(aopr, loadTool)
 ||happymod.com/*/appx.php$frame,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/23634
 @@||paktech2.com^$ghide
+paktech2.com##+js(set, openPopunder, noopFunc)
 ! timer to show image
 pimpandhost.com##+js(nano-stb, count)
 ! https://github.com/uBlockOrigin/uAssets/issues/23635
@@ -2769,7 +2770,12 @@ littlebigsnake.com##+js(set, ADS.isBannersEnabled, false)
 ! https://github.com/easylist/easylist/issues/19978
 multi.xxx##+js(set, flashvars.video_click_url, )
 ! https://github.com/uBlockOrigin/uAssets/issues/25280
-animesaturn.cx##+js(acs, globalThis, break%3Bcase)
+!#if cap_html_filtering
+animesaturn.cx##^script:has-text('{delete window[')
+!#else
+animesaturn.cx##+js(rmnt, script, %7Bdelete%20window%5B)
+!#endif
+||usingageghoaft.net^
 ! https://github.com/uBlockOrigin/uAssets/discussions/17361#discussioncomment-10610118
 streamtape.*,watchadsontape.com##.play-overlay
 streamtape.*,watchadsontape.com##+js(rpnt, script, %2F%5C%24%5C(%5B'%22%5D%5C.play-overlay%5B'%22%5D%5C)%5C.click.%2B%2Fs, document.getElementById(%22mainvideo%22).src%3Dsrclink%3Bplayer.currentTrack%3D0%3B%7D)%7D), condition, srclink)
@@ -2967,7 +2973,7 @@ lover937.net##+js(acs, setTimeout, document.getElementById)
 ! Prefer specific to generic (benefits Optimal in uBOL)
 arstechnica.com##.ad-wrapper
 ! tamilprint etc antiadb
-1tamilprint.art,tamilprint29.*,tamilprint30.*,tamilprint31.*##+js(no-fetch-if, googlesyndication)
+1tamilprint.art,2tamilprint.pro,tamilprint29.*,tamilprint30.*,tamilprint31.*##+js(no-fetch-if, googlesyndication)
 ! address popups
 rajtamil.org,vik1ngfile.uk.to,vikingf1le.us.to##+js(nowoif, _blank)
 luxmovies.*,nohost.one,southfreak.*##+js(nowoif)
