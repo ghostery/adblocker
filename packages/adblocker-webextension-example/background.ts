@@ -6,6 +6,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import browser from 'webextension-polyfill';
+
 import {
   BlockingResponse,
   fullLists,
@@ -13,7 +15,6 @@ import {
   Request,
   WebExtensionBlocker,
 } from '@ghostery/adblocker-webextension';
-import { Browser } from 'webextension-polyfill';
 
 /**
  * Keep track of number of network requests altered for each tab
@@ -57,7 +58,7 @@ chrome.tabs.onUpdated.addListener((tabId, { status, url }) => {
 declare global {
   interface Window {
     adblocker: WebExtensionBlocker;
-    browser?: Browser;
+    browser: typeof browser;
   }
 }
 
@@ -68,7 +69,7 @@ WebExtensionBlocker.fromLists(fetch, fullLists, {
 }).then((blocker: WebExtensionBlocker) => {
   window.adblocker = blocker;
 
-  blocker.enableBlockingInBrowser(window.browser ?? window.chrome);
+  blocker.enableBlockingInBrowser(browser);
 
   blocker.on('request-blocked', (request: Request, result: BlockingResponse) => {
     incrementBlockedCounter(request, result);
