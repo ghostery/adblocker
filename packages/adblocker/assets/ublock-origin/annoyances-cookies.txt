@@ -354,10 +354,10 @@ hertz.*##+js(trusted-click-element, a.cc-dismiss, , 1000)
 ! https://github.com/uBlockOrigin/uAssets/issues/24961
 tvpworld.com##+js(trusted-set-cookie, TVPtcs22, CQDpp0AQDpp0AFfADAENBCFgAAAAAAAAAB5YAAAUvAJMNCogDLIkJCDQMIIEAKgrCAigQAAAAkDRAQAmDAp2BgEusJEAIAUAAwQAgABRkACAAASABCIAIACgQAAQCBQABgAQDAQAMDAAGACwEAgABAdAhTAggUCwASMyIhTAhCASCAlsqEEgCBBXCEIs8CCAREwUAAAJABWAAICwWBxJICViQQJcQbQAAEACAQQAVCKTswBBAGbLUXiybRlaQFo-YLntMAwAAAAA.YAAAAAAABYAAAAAA)
 tvpworld.com##+js(set-cookie, TVPtcs22ver, 66)
-! https://www.mediamarkt.be/
-mediamarkt.*##+js(trusted-click-element, button%5Bdata-test%3D%22pwa-consent-layer-save-settings%22%5D, , 1000)
-mediamarkt.*###mms-consent-portal-container:style(visibility: hidden !important;)
-mediamarkt.*##body:has(#mms-consent-portal-container):style(overflow: auto !important;)
+! https://www.mediamarkt.be/ mediaworld.it
+mediaworld.it,mediamarkt.*##+js(trusted-click-element, button%5Bdata-test%3D%22pwa-consent-layer-save-settings%22%5D, , 1000)
+mediaworld.it,mediamarkt.*###mms-consent-portal-container:style(visibility: hidden !important;)
+mediaworld.it,mediamarkt.*##body:has(#mms-consent-portal-container):style(overflow: auto !important;)
 ! https://www.onelink.to/
 onelink.to##+js(trusted-set-local-storage-item, cookie.settings, %7B%22required%22%3Atrue%2C%22experience%22%3Afalse%2C%22performance%22%3Afalse%2C%22analytics%22%3Afalse%2C%22date%22%3A%24now%24%2C%22version%22%3A1%7D)
 ! https://www.swiss.com/
@@ -1653,7 +1653,7 @@ salzburg.info##+js(set-attr, img.js-lazy-img%5Bsrc%5E%3D%22data%3Aimage%2F%22%5D
 ! https://github.com/uBlockOrigin/uAssets/issues/26410
 verksamt.se##+js(trusted-click-element, %5Bdata-testid%3D%22consent-necessary%22%5D)
 ! decline (reported, allow search to work)
-booking.com,pluto.tv##+js(trusted-click-element, button%5Bid%3D%22onetrust-reject-all-handler%22%5D, , 1000)
+booking.com,groceries.asda.com,pluto.tv##+js(trusted-click-element, button%5Bid%3D%22onetrust-reject-all-handler%22%5D, , 1000)
 ! non-essential
 here.com##+js(trusted-click-element, div%5Bclass%3D%22t_cm_ec_reject_button%22%5D, , 1000)
 ! www.kooora.com "I Agree" cdn.privacy-mgmt.com
@@ -1705,6 +1705,21 @@ adnkronos.com,cornwalllive.com,cyprus-mail.com,informazione.it,mymovies.it,tutto
 taxscouts.com##+js(trusted-click-element, button%5Bdata-js%3D%22cookieConsentReject%22%5D, , 1000)
 ! agree, constent wall. https://www.heute.at/
 cdn.privacy-mgmt.com##+js(trusted-click-element, button%5Btitle*%3D%22Jetzt%22%5D, , 1000)
+! decline
+online.no##+js(trusted-click-element, a%5Bid%3D%22consent_prompt_decline%22%5D, , 1000)
+! Necessary
+redcare.it##+js(trusted-set-cookie, usercentrics_consent, %7B%22ad_storage%22%3A0%2C%22analytics_storage%22%3A0%2C%22functional%22%3A0%7D)
+! I do not agree
+austrian.com##+js(trusted-click-element, button%5Bid%3D%22cm-acceptNone%22%5D, , 1000)
+! Just Essential
+hornetsecurity.com###BorlabsCookieBox
+hornetsecurity.com##+js(trusted-click-element, button.brlbs-btn-accept-only-essential, , 1000)
+! disagree
+standaard.be##+js(trusted-click-element, button%5Bid%3D%22didomi-notice-disagree-button%22%5D, , 1000)
+! Agree (consent wall)
+cmp.bz-berlin.de##+js(trusted-click-element, button%5Btitle%3D%22Alle%20akzeptieren%22%5D, , 1000)
 ! https://github.com/uBlockOrigin/uAssets/issues/26727 - functional
 lieferando.de##+js(trusted-set-cookie, je-cookieConsent, necessary, , , domain, lieferando.de)
 lieferando.de##+js(trusted-set-cookie, customerCookieConsent, %5B%7B%22consentTypeId%22%3A103%2C%22consentTypeName%22%3A%22necessary%22%2C%22isAccepted%22%3Atrue%2C%22decisionAt%22%3A%22%24now%24%22%7D%2C%7B%22consentTypeId%22%3A104%2C%22consentTypeName%22%3A%22functional%22%2C%22isAccepted%22%3Atrue%2C%22decisionAt%22%3A%22%24now%24%22%7D%2C%7B%22consentTypeId%22%3A105%2C%22consentTypeName%22%3A%22analytical%22%2C%22isAccepted%22%3Afalse%2C%22decisionAt%22%3A%22%24now%24%22%7D%2C%7B%22consentTypeId%22%3A106%2C%22consentTypeName%22%3A%22personalized%22%2C%22isAccepted%22%3Afalse%2C%22decisionAt%22%3A%22%24now%24%22%7D%5D, , , domain, lieferando.de)
+! Functional, expire 6 months. Search function broken
+multitronic.fi##+js(trusted-set-cookie, consentCookieV2, %7B%22consentAnalytics%22%3Afalse%2C%22consentAds%22%3Afalse%2C%22functionality_storage%22%3Atrue%2C%22security_storage%22%3Atrue%2C%22personalization_storage%22%3Atrue%2C%22ad_storage%22%3Afalse%2C%22ad_user_data%22%3Afalse%2C%22ad_personalization%22%3Afalse%2C%22analytics_storage%22%3Afalse%7D, 15778476)
