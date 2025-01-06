@@ -1468,71 +1468,27 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
         // We don't need to match `removeparam` at all if:
         // * `removeparam` filters not matched
-        // * URL doesn't have `?` — parameter separator
-        // * URL has `?` but ends right after the separator
+        // * URL doesn't have search parameter
         if (requestRedirects.length !== 0) {
-          const searchParamsSeparatorAt = request.url.indexOf('?');
-          if (
-            searchParamsSeparatorAt !== -1 &&
-            searchParamsSeparatorAt + 1 !== request.url.length
-          ) {
-            for (const redirect of requestRedirects) {
-              const target = redirect.removeparam!;
-              // If `removeparam` without a value found, we drop all params
-              if (target.length === 0) {
-                result.filter = redirect;
-                redirectUrl = request.url.slice(0, searchParamsSeparatorAt);
+          const url = new URL(request.url);
+          if (url.searchParams.size !== 0) {
+            for (const filter of requestRedirects) {
+              const key = filter.removeparam!;
+
+              // Remove all params in case of option value is empty
+              if (key === '') {
+                result.filter = filter;
+                redirectUrl = request.url.slice(0, request.url.indexOf('?'));
+
                 break;
               }
-              // Try to find `searchParamStartsAt` recursively
-              let searchParamStartsAt: number = -1;
-              for (
-                let lookupAfter = searchParamsSeparatorAt;
-                lookupAfter < request.url.length;
-                searchParamStartsAt = -1
-              ) {
-                searchParamStartsAt = request.url.indexOf(target, lookupAfter);
-                // No match found in this string, try to fast exit in the first loop.
-                if (searchParamStartsAt === -1) {
-                  break;
-                }
 
-                // VALID only if the next character is equal sign or EOL:
-                if (
-                  searchParamStartsAt + target.length === request.url.length ||
-                  request.url.charCodeAt(searchParamStartsAt + target.length) === 61 /* '=' */
-                ) {
-                  // In case of first param:
-                  if (searchParamsSeparatorAt === searchParamStartsAt - 1) {
-                    result.filter = redirect;
-                    const searchParamEndsAt = request.url.indexOf('&', searchParamStartsAt);
-                    if (searchParamEndsAt === -1) {
-                      redirectUrl = request.url.slice(0, searchParamStartsAt);
-                    } else {
-                      redirectUrl =
-                        request.url.slice(0, searchParamStartsAt) +
-                        request.url.slice(searchParamEndsAt + 1);
-                    }
-                    break;
-                  } else if (request.url.charCodeAt(searchParamStartsAt - 1) === 38 /* '&' */) {
-                    result.filter = redirect;
-                    const searchParamEndsAt = request.url.indexOf('&', searchParamStartsAt);
-                    // In case of last param:
-                    if (searchParamEndsAt === -1) {
-                      redirectUrl = request.url.slice(0, searchParamStartsAt - 1);
-                    } else {
-                      // In case of param in the middle:
-                      redirectUrl =
-                        request.url.slice(0, searchParamStartsAt) +
-                        request.url.slice(searchParamEndsAt + 1);
-                    }
-                    break;
-                  }
-                }
+              if (url.searchParams.has(key)) {
+                url.searchParams.delete(key);
 
-                lookupAfter = searchParamStartsAt + target.length;
-              }
-              if (searchParamStartsAt !== -1) {
+                result.filter = filter;
+                redirectUrl = url.toString();
+
                 break;
               }
             }

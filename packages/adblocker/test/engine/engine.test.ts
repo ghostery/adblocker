@@ -618,13 +618,13 @@ $csp=baz,domain=bar.com
         'https://foo.com?utm_source=organic&utm=a',
       ].map(urlToDocumentRequest);
 
-      describe('removeparam removes all parameters', () => {
+      describe('removes all parameters', () => {
         const engine = createEngine('||foo.com$removeparam');
         for (const { match, redirect, request } of requests.map((request) => ({
           ...engine.match(request),
           request,
         }))) {
-          it(`removeparam all from "${request.url}"`, () => {
+          it(`removes all params from "${request.url}"`, () => {
             expect(match).to.be.true;
             expect(redirect).not.to.be.undefined;
             expect(redirect!.body).to.be.eql('');
@@ -634,13 +634,13 @@ $csp=baz,domain=bar.com
         }
       });
 
-      describe('removeparam removes specific parameter', () => {
+      describe('removes specific parameter', () => {
         const engine = createEngine('||foo.com$removeparam=utm');
         for (const { match, redirect, request } of requests.map((request) => ({
           ...engine.match(request),
           request,
         }))) {
-          it(`removeparam "utm" from "${request.url}"`, () => {
+          it(`removes "utm" from "${request.url}"`, () => {
             expect(match).to.be.true;
             expect(redirect).not.to.be.undefined;
             expect(redirect!.body).to.be.eql('');
@@ -651,7 +651,7 @@ $csp=baz,domain=bar.com
         }
       });
 
-      describe('removeparam removes specific parameter regardless of ordering', () => {
+      describe('removes specific parameter regardless of ordering', () => {
         const engine = createEngine('||foo.com$removeparam=utm');
         for (const { match, redirect, request } of [
           // First
@@ -669,12 +669,12 @@ $csp=baz,domain=bar.com
           it(`removeparam "utm" from "${request.url}"`, () => {
             expect(match).to.be.true;
             expect(redirect).not.to.be.undefined;
-            expect(redirect!.dataUrl).to.be.eql('https://foo.com?utm_source=organic&utm_event=b');
+            expect(redirect!.dataUrl).to.be.eql('https://foo.com/?utm_source=organic&utm_event=b');
           });
         }
       });
 
-      it('removeparam removes parameter sequentially', () => {
+      it('removes parameter sequentially', () => {
         const params = ['utm', 'utm_source', 'utm_event'];
         let request = urlToDocumentRequest('https://foo.com?utm_source=organic&utm_event=b&utm=a');
         const engine = createEngine(
