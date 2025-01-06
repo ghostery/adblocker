@@ -1281,7 +1281,7 @@ export default class NetworkFilter implements IFilter {
       return undefined;
     }
 
-    return this.optionValue || '';
+    return this.optionValue;
   }
 
   public isCosmeticFilter(): this is CosmeticFilter {
@@ -1555,7 +1555,7 @@ export default class NetworkFilter implements IFilter {
     }
 
     if (this.isRemoveParam()) {
-      if (this.optionValue !== undefined) {
+      if (this.removeparam!.length > 0) {
         options.push(`removeparam=${this.optionValue}`);
       } else {
         options.push('removeparam');
