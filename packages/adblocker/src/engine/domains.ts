@@ -11,28 +11,24 @@ import { toASCII } from '../punycode.js';
 import { StaticDataView, sizeOfUint32Array, sizeOfUTF8 } from '../data-view.js';
 import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils.js';
 
-export function testNetworkParts(parts: string[]): boolean {
-  for (const part of parts) {
-    if (part.length === 0) {
-      return false;
-    } else if (part.startsWith('|')) {
-      return false;
-    } else if (part.endsWith('|')) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-export function normalizeNetworkPartsLiteral(parts: string) {
-  return parts.replace(/,/g, '|');
-}
-
 export class Domains {
-  public static parse(parts: string[], debug: boolean = false): Domains | undefined {
+  public static parse(
+    parts: string[],
+    {
+      isNetworkEntities = false,
+      debug = false,
+    }: { isNetworkEntities?: boolean | undefined; debug?: boolean | undefined } = {},
+  ): Domains | undefined {
     if (parts.length === 0) {
       return undefined;
+    }
+
+    if (isNetworkEntities === true) {
+      for (const part of parts) {
+        if (part.length === 0 || part.startsWith('|') || part.endsWith('|')) {
+          return undefined;
+        }
+      }
     }
 
     const entities: number[] = [];
@@ -77,7 +73,7 @@ export class Domains {
       hostnames: hostnames.length !== 0 ? new Uint32Array(hostnames).sort() : undefined,
       notEntities: notEntities.length !== 0 ? new Uint32Array(notEntities).sort() : undefined,
       notHostnames: notHostnames.length !== 0 ? new Uint32Array(notHostnames).sort() : undefined,
-      parts: debug === true ? parts.join(',') : undefined,
+      parts: debug === true ? parts.join(isNetworkEntities ? '|' : ',') : undefined,
     });
   }
 
