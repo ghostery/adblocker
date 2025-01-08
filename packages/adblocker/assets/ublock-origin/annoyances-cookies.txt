@@ -50,10 +50,10 @@ consent.google.*##[data-p*="/consent.google."]:has(button[jsname="tWT92d"])
 ! https://github.com/uBlockOrigin/uAssets/discussions/18598#discussioncomment-8651332
 consent.youtube.com##+js(trusted-click-element, %5Baction%3D%22https%3A%2F%2Fconsent.youtube.com%2Fsave%22%5D%5Bstyle%3D%22display%3Ainline%3B%22%5D%20%5Bname%3D%22set_eom%22%5D%5Bvalue%3D%22true%22%5D%20~%20.basebuttonUIModernization%5Bvalue%5D%5Baria-label%5D)
 consent.youtube.com##body.bodyUIModernization:has([action="https://consent.youtube.com/save"] .saveButtonUIModernization[value][aria-label])
-! decline optional (allow R39uZ-5MEK4VY8yBikIiiv42)
-facebook.com##+js(trusted-set-cookie, datr, 835uZ-bIo1ECQru7AjqnhhRl, 1year, , reload, 1, dontOverwrite, 1)
-! decline (accept E98790B8-2AA3-4D25-AAE2-590E19511822)
-instagram.com##+js(trusted-set-cookie, ig_did, 5443AF77-1A68-4603-BF65-43BB5F664A80, 1year, , reload, 1, dontOverwrite, 1)
+! decline
+facebook.com##+js(trusted-click-element, div%5Baria-label%3D%22Decline%20optional%20cookies%22%5D, , 1000)
+! decline
+instagram.com##+js(trusted-click-element, button._a9_1, , 1000)
 ! Sample page: https://www.bloomberg.com/live/europe || https://www.bloomberg.co.jp/live/asia
 sourcepointcmp.bloomberg.com,sourcepointcmp.bloomberg.co.jp##+js(trusted-click-element, %5Btitle%3D%22Manage%20Cookies%22%5D)
 sourcepointcmp.bloomberg.com,sourcepointcmp.bloomberg.co.jp##+js(trusted-click-element, %5Btitle%3D%22Reject%20All%22%5D, , 1000)
@@ -756,7 +756,7 @@ telekom.com,telekom.net,telekom.de##+js(trusted-set-cookie, cookie-optin, %7B%25
 hemmersbach.com##+js(trusted-set-cookie, cookiefirst-consent, %257B%2522cookiefirst%2522%253Atrue%252C%2522google_analytics%2522%253Atrue%252C%2522google_tag_manager%2522%253Atrue%252C%2522linkedin_ads%2522%253Afalse%252C%2522hubspot%2522%253Atrue%252C%2522twitter%2522%253Afalse%252C%2522active-campaign%2522%253Atrue%252C%2522email-marketing%2522%253Atrue%252C%2522bing_ads%2522%253Afalse%252C%2522type%2522%253A%2522granular%2522%257D)
 ! https://github.com/uBlockOrigin/uAssets/issues/20523
 ! https://github.com/uBlockOrigin/uAssets/issues/20595
-digi24.ro,digisport.ro,digitalfoundry.net,egx.net,eurogamer.it,gmx.*,mail.com,mcmcomiccon.com,nachrichten.at,nintendolife.com,oe24.at,paxsite.com,peacocktv.com,player.pl,purexbox.com,pushsquare.com,southparkstudios.com,starwarscelebration.com,thehaul.com,timeextension.com,travelandleisure.com,tunein.com,videoland.com,wizzair.com,wetter.at##+js(trusted-click-element, %23onetrust-accept-btn-handler, , 1000)
+digi24.ro,digisport.ro,digitalfoundry.net,egx.net,eurogamer.it,gmx.*,mail.com,mcmcomiccon.com,nachrichten.at,nintendolife.com,oe24.at,paxsite.com,peacocktv.com,player.pl,pricerunner.com,pricerunner.se,pricerunner.dk,purexbox.com,pushsquare.com,southparkstudios.com,starwarscelebration.com,thehaul.com,timeextension.com,travelandleisure.com,tunein.com,videoland.com,wizzair.com,wetter.at##+js(trusted-click-element, %23onetrust-accept-btn-handler, , 1000)
 dicebreaker.com,eurogamer.cz,eurogamer.es,eurogamer.net,eurogamer.nl,eurogamer.pl,eurogamer.pt,gamesindustry.biz,jelly.deals,reedpop.com,rockpapershotgun.com,thepopverse.com,vg247.com,videogameschronicle.com##+js(trusted-click-element, button%5Btitle%3D%22Accept%20and%20continue%22%5D)
 dicebreaker.com,eurogamer.cz,eurogamer.es,eurogamer.net,eurogamer.nl,eurogamer.pl,eurogamer.pt,gamesindustry.biz,jelly.deals,reedpop.com,rockpapershotgun.com,thepopverse.com,vg247.com,videogameschronicle.com##+js(trusted-click-element, button%5Btitle%3D%22Accept%20All%20Cookies%22%5D)
 eurogamer.de##+js(trusted-click-element, .accept-all)
@@ -1723,3 +1723,11 @@ lieferando.de##+js(trusted-set-cookie, je-cookieConsent, necessary, , , domain, 
 lieferando.de##+js(trusted-set-cookie, customerCookieConsent, %5B%7B%22consentTypeId%22%3A103%2C%22consentTypeName%22%3A%22necessary%22%2C%22isAccepted%22%3Atrue%2C%22decisionAt%22%3A%22%24now%24%22%7D%2C%7B%22consentTypeId%22%3A104%2C%22consentTypeName%22%3A%22functional%22%2C%22isAccepted%22%3Atrue%2C%22decisionAt%22%3A%22%24now%24%22%7D%2C%7B%22consentTypeId%22%3A105%2C%22consentTypeName%22%3A%22analytical%22%2C%22isAccepted%22%3Afalse%2C%22decisionAt%22%3A%22%24now%24%22%7D%2C%7B%22consentTypeId%22%3A106%2C%22consentTypeName%22%3A%22personalized%22%2C%22isAccepted%22%3Afalse%2C%22decisionAt%22%3A%22%24now%24%22%7D%5D, , , domain, lieferando.de)
 ! Functional, expire 6 months. Search function broken
 multitronic.fi##+js(trusted-set-cookie, consentCookieV2, %7B%22consentAnalytics%22%3Afalse%2C%22consentAds%22%3Afalse%2C%22functionality_storage%22%3Atrue%2C%22security_storage%22%3Atrue%2C%22personalization_storage%22%3Atrue%2C%22ad_storage%22%3Afalse%2C%22ad_user_data%22%3Afalse%2C%22ad_personalization%22%3Afalse%2C%22analytics_storage%22%3Afalse%7D, 15778476)
+! Necessary
+krungsrifinnovate.com##+js(trusted-set-cookie, CookieConsentResult, %24currentISODate%24)
+krungsrifinnovate.com##+js(set-cookie, CMSCookieLevel, 0)
+krungsrifinnovate.com##+js(set-cookie, CookieConsentPerformance, 0)
+! dismiss cookie message
+bruendl.at##+js(trusted-click-element, button.cookie-notice__button--dismiss, , 1000)
+! required+3p
+sbk.org##+js(trusted-set-cookie, cookie-optIn, %7B%22required%22%3Atrue%2C%22statistics%22%3Afalse%2C%22thirdParty%22%3Atrue%7D)
