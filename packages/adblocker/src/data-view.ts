@@ -90,8 +90,8 @@ export function sizeOfASCII(str: string): number {
  * Return number of bytes needed to serialize `str` UTF8 string.
  */
 export function sizeOfUTF8(str: string): number {
-  const encoded = TEXT_ENCODER.encode(str);
-  return sizeOfLength(encoded.length) + encoded.length;
+  const encodedLength = TEXT_ENCODER.encode(str).length;
+  return encodedLength + sizeOfLength(encodedLength);
 }
 
 /**
