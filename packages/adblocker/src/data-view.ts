@@ -414,7 +414,6 @@ export class StaticDataView {
     const byteLength = this.getLength();
     this.pos += byteLength;
     return new TextDecoder('utf8', { ignoreBOM: true }).decode(
-      // @ts-ignore
       this.buffer.subarray(this.pos - byteLength, this.pos),
     );
   }
