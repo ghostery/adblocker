@@ -412,10 +412,10 @@ export class StaticDataView {
 
   public getUTF8(): string {
     const byteLength = this.getLength();
-    const pos = this.getPos();
-    this.setPos(pos + byteLength);
+    this.pos += byteLength;
     return new TextDecoder('utf8', { ignoreBOM: true }).decode(
-      this.buffer.subarray(pos, pos + byteLength),
+      // @ts-ignore
+      this.buffer.subarray(this.pos - byteLength, this.pos),
     );
   }
 
