@@ -1012,8 +1012,8 @@ mafu.de##+js(trusted-set-cookie, wmm-visitor_token, 4cb8860d-4194-4ab5-be04-10f9
 ! essential only
 paf.com##+js(trusted-set-cookie, cookieConsent, %7B%2522essential%2522%3Atrue%252C%2522tracking%2522%3Afalse%252C%2522marketing%2522%3Afalse%7D)
 ! Continue without agreeing, hide consent flash
-boursobank.com,frandroid.com###didomi-host
-boursobank.com,frandroid.com##+js(trusted-click-element, .didomi-continue-without-agreeing)
+boursobank.com,frandroid.com,rmcbfmplay.com###didomi-host
+boursobank.com,frandroid.com,rmcbfmplay.com##+js(trusted-click-element, .didomi-continue-without-agreeing)
 ! functional only, ad/analytics denied
 flip.gr##+js(trusted-set-cookie, consts, %7B%2522ad_storage%2522%3A%2522denied%2522%252C%2522analytics_storage%2522%3A%2522denied%2522%252C%2522functionality_storage%2522%3A%2522granted%2522%7D)
 ! necessarry
@@ -1648,7 +1648,7 @@ salzburg.info##+js(set-attr, img.js-lazy-img%5Bsrc%5E%3D%22data%3Aimage%2F%22%5D
 ! https://github.com/uBlockOrigin/uAssets/issues/26410
 verksamt.se##+js(trusted-click-element, %5Bdata-testid%3D%22consent-necessary%22%5D)
 ! decline (reported, allow search to work)
-booking.com,dhl.de,konami.com,groceries.asda.com,pluto.tv,questdiagnostics.com##+js(trusted-click-element, button%5Bid%3D%22onetrust-reject-all-handler%22%5D, , 1000)
+booking.com,dhl.de,khanacademy.org,konami.com,groceries.asda.com,pluto.tv,samsonite.*,telenet.be,questdiagnostics.com##+js(trusted-click-element, button%5Bid%3D%22onetrust-reject-all-handler%22%5D, , 1000)
 ! non-essential
 here.com##+js(trusted-click-element, div%5Bclass%3D%22t_cm_ec_reject_button%22%5D, , 1000)
 ! www.kooora.com "I Agree" cdn.privacy-mgmt.com
@@ -1763,3 +1763,8 @@ replay.lsm.lv##+js(trusted-click-element, button%5Bdata-cookiefirst-action%3D%22
 mobile.de##+js(trusted-click-element, button.mde-consent-accept-btn, , 1000)
 ! https://github.com/uBlockOrigin/uAssets/issues/26797
 cookist.it,fanpage.it,geopop.it,lexplain.it##+js(trusted-click-element, .gdpr-modal%20.gdpr-btn--secondary%2C%20.gdpr-modal%20.gdpr-modal__box-bottom-dx%20%3E%20button.gdpr-btn--br%3Afirst-child)
+! decline
+royalmail.com##+js(trusted-click-element, button%23consent_prompt_decline, , 1000)
+! gmx.net/gmx.ch consent-wall (agree)
+gmx.net##+js(trusted-click-element, button%5Bid%3D%22save-all-pur%22%5D, , 1000)
+gmx.ch##+js(trusted-click-element, button%5Bid%3D%22save-all-conditionally%22%5D, , 1000)

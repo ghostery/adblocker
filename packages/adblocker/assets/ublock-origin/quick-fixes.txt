@@ -78,13 +78,8 @@ sandratableother.com##+js(set, console.clear, undefined)
 ! https://github.com/uBlockOrigin/uAssets/issues/23806
 *$image,redirect-rule=1x1.gif,domain=japscan.lol
 japscan.lol##+js(norafif, %2F%5E%2F)
-japscan.lol##.navbar-nav > li#navpromo2.nav-item > a:style(content-visibility: hidden !important;)
-japscan.lol##+js(spoof-css, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a, content-visibility, visible)
-!#if !env_firefox
-japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementById, %2F%5Enavpromo%2F, abort, stackDepth%3A3)
-!#else
-japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementById, %2F%5Enavpromo%2F, abort)
-!#endif
+japscan.lol##+js(ra, href, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a, complete)
+japscan.lol##.navbar-nav > li#navpromo2.nav-item:watch-attr(href) > a:not([href])
 ||japscan.lol/zjs/$script,replace=/function GoodDay\(\)\{.+?\}\}\}//
 japscan.lol##body > style + .container > .row > #main + #sidebar.col-md-3 > .card.mt-1 > .card[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 250px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
 japscan.lol##body > style + .container > .row > #main.col-md-9 > .card > .card-body[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 100px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
@@ -163,14 +158,16 @@ brr-55bsolwf-moo.com,brr-69xwmut5-moo.com,file-1bl9ruic-moon.com,file-kg88oaak-e
 dogdrip.net##html[lang="ko"] [id^="img_"][style]:has(iframe[frameborder="0"][style]):style(clip-path: circle(0) !important;)
 infinityfree.com##html[lang][dir="ltr"] [id^="img_"][style]:has(iframe[frameborder="0"][style]):style(clip-path: circle(0) !important;)
 smsonline.cloud##html[data-theme][lang] [id^="img_"][style]:has(iframe[frameborder="0"][style]):style(clip-path: circle(0) !important;)
-~dogdrip.net,~infinityfree.com,~smsonline.cloud,*##body > div[id^="img_"][class^="img_"][style^="width"]:first-child:style(position: absolute !important; top: -100000px !important;)
-~dogdrip.net,~infinityfree.com,~smsonline.cloud,*##body > div:first-child > script + div[id^="img_"][class^="img_"]:style(position: absolute !important; top: -100000px !important;)
-~dogdrip.net,~infinityfree.com,~smsonline.cloud,*##body > a:only-child > div[id^="img_"][class^="img_"]:style(position: absolute !important; top: -100000px !important;)
-~dogdrip.net,~infinityfree.com,~smsonline.cloud,*##div[style*="fixed"] span[id^="img_"][class^="img_"] > style:first-child + div[style*="flex"][style*="relative"]:style(width: 10000px !important;)
-07c225f3.online,content-loader.com,css-load.com,html-load.com,img-load.com##body > *:not(pre):style(filter: opacity(0) !important; pointer-events: none !important;)
+~dogdrip.net,~infinityfree.com,~slashdot.org,~smsonline.cloud,*##body > div[id^="img_"][class^="img_"][style^="width"]:first-child:style(position: absolute !important; top: -100000px !important;)
+~dogdrip.net,~infinityfree.com,~slashdot.org,~smsonline.cloud,*##body > div:first-child > script + div[id^="img_"][class^="img_"]:style(position: absolute !important; top: -100000px !important;)
+~dogdrip.net,~infinityfree.com,~slashdot.org,~smsonline.cloud,*##body > a:only-child > div[id^="img_"][class^="img_"]:style(position: absolute !important; top: -100000px !important;)
+~dogdrip.net,~infinityfree.com,~slashdot.org,~smsonline.cloud,*##div[style*="fixed"] span[id^="img_"][class^="img_"] > style:first-child + div[style*="flex"][style*="relative"]:style(width: 10000px !important;)
+07c225f3.online,content-loader.com,css-load.com,html-load.com,img-load.com##body > *:not(pre):style(pointer-events: none !important; transform: translateX(100000px) !important;)
+*$doc,to=slashdot.org,replace=/data-sdk/defer data-sdk/
 ! https://github.com/uBlockOrigin/uAssets/issues/26487
--load.com/script/$xhr,domain=dogdrip.net|infinityfree.com|smsonline.cloud
-dogdrip.net,infinityfree.com,smsonline.cloud##+js(nostif, )%3Bthrow%20new%20Error()
+-load.com/script/$xhr,domain=dogdrip.net|infinityfree.com|slashdot.org|smsonline.cloud
+dogdrip.net,infinityfree.com,slashdot.org,smsonline.cloud##+js(nostif, )%5D(this%2C...)
+dogdrip.net,infinityfree.com,slashdot.org,smsonline.cloud##+js(aeld, , )%5D(this%2C...)
 ! https://github.com/uBlockOrigin/uAssets/issues/25344
 ! https://github.com/uBlockOrigin/uAssets/pull/26342
 ! https://github.com/uBlockOrigin/uAssets/issues/26393
@@ -214,3 +211,7 @@ chat.deepseek.com#@#+js(no-xhr-if, %2Fapi%2Fv0%2Fevents)
 ! [badfilter] ||hyogo-tourism.jp/img/top/bnr-$badfilter
 ! https://github.com/AdguardTeam/AdguardFilters/commit/04e199ebe94e5a0adc9b5076ddaf717651ea031d#r151196949
 ! [badfilter] ||doujin-assets.dmm.co.jp/p/dc/doujin/bnr$badfilter
+! https://github.com/AdguardTeam/AdguardFilters/commit/01d5a682dd50208ca1e503e38d9a2684e62e8d6f
+app-ranking.net#@#.haj
+! https://github.com/uBlockOrigin/uAssets/issues/26823
+/^https?:\/\/[a-z0-9]{6,20}\.[a-z]{6,20}\.co\.in\//$all,to=co.in,badfilter
