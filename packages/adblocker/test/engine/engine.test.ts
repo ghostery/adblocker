@@ -610,16 +610,22 @@ $csp=baz,domain=bar.com
         });
       }
 
-      const requests = [
-        'https://foo.com?utm',
-        'https://foo.com?utm=',
-        'https://foo.com?utm=a',
-        'https://foo.com?utm=a&utm_source=organic',
-        'https://foo.com?utm_source=organic&utm=a',
-      ].map(urlToDocumentRequest);
+      let requests: Request[];
+      before(() => {
+        requests = [
+          'https://foo.com?utm',
+          'https://foo.com?utm=',
+          'https://foo.com?utm=a',
+          'https://foo.com?utm=a&utm_source=organic',
+          'https://foo.com?utm_source=organic&utm=a',
+        ].map(urlToDocumentRequest);
+      });
 
       describe('removes all parameters', () => {
-        const engine = createEngine('||foo.com$removeparam');
+        let engine: FilterEngine;
+        before(() => {
+          engine = createEngine('||foo.com$removeparam');
+        });
         for (const { match, redirect, request } of requests.map((request) => ({
           ...engine.match(request),
           request,
@@ -635,7 +641,10 @@ $csp=baz,domain=bar.com
       });
 
       describe('removes specific parameter', () => {
-        const engine = createEngine('||foo.com$removeparam=utm');
+        let engine: FilterEngine;
+        before(() => {
+          engine = createEngine('||foo.com$removeparam=utm');
+        });
         for (const { match, redirect, request } of requests.map((request) => ({
           ...engine.match(request),
           request,
@@ -652,7 +661,10 @@ $csp=baz,domain=bar.com
       });
 
       describe('removes specific parameter regardless of ordering', () => {
-        const engine = createEngine('||foo.com$removeparam=utm');
+        let engine: FilterEngine;
+        before(() => {
+          engine = createEngine('||foo.com$removeparam=utm');
+        });
         for (const { match, redirect, request } of [
           // First
           'https://foo.com?utm=a&utm_source=organic&utm_event=b',
@@ -676,10 +688,10 @@ $csp=baz,domain=bar.com
 
       it('removes parameter sequentially', () => {
         const params = ['utm', 'utm_source', 'utm_event'];
-        let request = urlToDocumentRequest('https://foo.com?utm_source=organic&utm_event=b&utm=a');
         const engine = createEngine(
           params.map((param) => `||foo.com$removeparam=${param}`).join('\n'),
         );
+        let request = urlToDocumentRequest('https://foo.com?utm_source=organic&utm_event=b&utm=a');
         for (let i = 0; i < params.length; i++) {
           const { redirect } = engine.match(request);
           expect(redirect).not.to.be.undefined;
