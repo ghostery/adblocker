@@ -601,7 +601,7 @@ $csp=baz,domain=bar.com
       expect(redirect).to.be.undefined;
     });
 
-    context('removeparam', () => {
+    context.only('removeparam', () => {
       function urlToDocumentRequest(url: string) {
         return Request.fromRawDetails({
           sourceUrl: 'https://foo.com',
@@ -610,27 +610,22 @@ $csp=baz,domain=bar.com
         });
       }
 
-      let requests: Request[];
-      before(() => {
-        requests = [
-          'https://foo.com?utm',
-          'https://foo.com?utm=',
-          'https://foo.com?utm=a',
-          'https://foo.com?utm=a&utm_source=organic',
-          'https://foo.com?utm_source=organic&utm=a',
-        ].map(urlToDocumentRequest);
-      });
+      const requests = [
+        'https://foo.com?utm',
+        'https://foo.com?utm=',
+        'https://foo.com?utm=a',
+        'https://foo.com?utm=a&utm_source=organic',
+        'https://foo.com?utm_source=organic&utm=a',
+      ].map(urlToDocumentRequest);
 
       describe('removes all parameters', () => {
         let engine: FilterEngine;
         before(() => {
           engine = createEngine('||foo.com$removeparam');
         });
-        for (const { match, redirect, request } of requests.map((request) => ({
-          ...engine.match(request),
-          request,
-        }))) {
+        for (const request of requests) {
           it(`removes all params from "${request.url}"`, () => {
+            const { match, redirect } = engine.match(request);
             expect(match).to.be.true;
             expect(redirect).not.to.be.undefined;
             expect(redirect!.body).to.be.eql('');
@@ -645,11 +640,9 @@ $csp=baz,domain=bar.com
         before(() => {
           engine = createEngine('||foo.com$removeparam=utm');
         });
-        for (const { match, redirect, request } of requests.map((request) => ({
-          ...engine.match(request),
-          request,
-        }))) {
+        for (const request of requests) {
           it(`removes "utm" from "${request.url}"`, () => {
+            const { match, redirect } = engine.match(request);
             expect(match).to.be.true;
             expect(redirect).not.to.be.undefined;
             expect(redirect!.body).to.be.eql('');
@@ -665,20 +658,16 @@ $csp=baz,domain=bar.com
         before(() => {
           engine = createEngine('||foo.com$removeparam=utm');
         });
-        for (const { match, redirect, request } of [
+        for (const request of [
           // First
           'https://foo.com?utm=a&utm_source=organic&utm_event=b',
           // Middle
           'https://foo.com?utm_source=organic&utm=a&utm_event=b',
           // Last
           'https://foo.com?utm_source=organic&utm_event=b&utm=a',
-        ]
-          .map(urlToDocumentRequest)
-          .map((request) => ({
-            ...engine.match(request),
-            request,
-          }))) {
+        ].map(urlToDocumentRequest)) {
           it(`removeparam "utm" from "${request.url}"`, () => {
+            const { match, redirect } = engine.match(request);
             expect(match).to.be.true;
             expect(redirect).not.to.be.undefined;
             expect(redirect!.dataUrl).to.be.eql('https://foo.com/?utm_source=organic&utm_event=b');
