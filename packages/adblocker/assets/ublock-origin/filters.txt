@@ -1038,8 +1038,6 @@ vipleague.*##.bg-dark.ratio > .position-absolute
 nolive.me##+js(set, attachEvent, trueFunc)
 nolive.me##+js(nosiif, debug)
 vipleague.*##.m-1.btn-danger.btn
-! https://github.com/uBlockOrigin/uAssets/issues/718
-cs-fundamentals.com##+js(aopr, google_jobrunner)
 ! https://github.com/uBlockOrigin/uAssets/issues/723
 xmoviesforyou.*##+js(aopr, popjs.init)
 xmoviesforyou.*##+js(aopr, decodeURI)
@@ -10962,7 +10960,6 @@ programmiedovetrovarli.it##+js(aost, encodeURIComponent, inlineScript)
 ! https://github.com/NanoMeow/QuickReports/issues/3460
 funzen.net##+js(nostif, mdpDeBlocker)
 ! https://github.com/uBlockOrigin/uAssets/issues/7186
-acessarlink.online,subdowns.com##+js(nano-stb, , , 0)
 subsvip.com##+js(nano-stb, , 10000, 0)
 subsvip.com###botaoBloqueio
 subsvip.com###botaoLink:style(display: block !important;)
@@ -11095,9 +11092,6 @@ fakyutube.com##+js(aopr, __Y)
 supervideo.*##+js(aopr, AaDetector)
 /tag*.js$script,domain=supervideo.tv|supervideo.one|supervideo.cc
 ! nsfw thisav .com popups
-*$script,redirect-rule=noopjs,domain=thisav.com
-thisav.com##^script:has-text('shift')
-thisav.com##^script:has-text(\'shift\')
 ||intellipopup.com^$script,redirect=noopjs
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53153
 @@||enterinit.com^$ghide
@@ -11136,6 +11130,8 @@ techdracula.com##ins.adsbygoogle
 /^https?:\/\/[0-9a-z]{13,14}\.cloudfront\.net\/\?[a-z]{3,5}=\d{6,7}$/$script,xhr,3p
 ! https://github.com/easylist/easylist/pull/9330
 /^https:\/\/[0-9a-f]{10}\.[0-9a-f]{10}\.com\/[0-9a-f]{32}\.js$/$script,3p,to=com
+! https://github.com/uBlockOrigin/uAssets/issues/26815 - superembed server
+/^https:\/\/[0-9a-f]{10}\.[0-9a-f]{10}\.com\/[0-9a-f]{32}\/\d{6}\b/$xhr,3p,match-case,to=com
 ! globalThis
 ! propeller new variants
 .top/event|$xhr,3p
