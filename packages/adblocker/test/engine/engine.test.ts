@@ -604,18 +604,18 @@ $csp=baz,domain=bar.com
     context('removeparam', () => {
       function urlToDocumentRequest(url: string) {
         return Request.fromRawDetails({
-          sourceUrl: 'https://foo.com',
+          sourceUrl: 'https://foo.com/',
           url,
           type: 'document',
         });
       }
 
       const urls = [
-        'https://foo.com?utm',
-        'https://foo.com?utm=',
-        'https://foo.com?utm=a',
-        'https://foo.com?utm=a&utm_source=organic',
-        'https://foo.com?utm_source=organic&utm=a',
+        'https://foo.com/?utm',
+        'https://foo.com/?utm=',
+        'https://foo.com/?utm=a',
+        'https://foo.com/?utm=a&utm_source=organic',
+        'https://foo.com/?utm_source=organic&utm=a',
       ];
 
       describe('removes all parameters', () => {
@@ -630,7 +630,7 @@ $csp=baz,domain=bar.com
             expect(redirect).not.to.be.undefined;
             expect(redirect!.body).to.be.eql('');
             expect(redirect!.contentType).to.be.eql('text/plain');
-            expect(redirect!.dataUrl).to.be.eql('https://foo.com');
+            expect(redirect!.dataUrl).to.be.eql('https://foo.com/');
           });
         }
       });
@@ -660,11 +660,11 @@ $csp=baz,domain=bar.com
         });
         for (const url of [
           // First
-          'https://foo.com?utm=a&utm_source=organic&utm_event=b',
+          'https://foo.com/?utm=a&utm_source=organic&utm_event=b',
           // Middle
-          'https://foo.com?utm_source=organic&utm=a&utm_event=b',
+          'https://foo.com/?utm_source=organic&utm=a&utm_event=b',
           // Last
-          'https://foo.com?utm_source=organic&utm_event=b&utm=a',
+          'https://foo.com/?utm_source=organic&utm_event=b&utm=a',
         ]) {
           it(`removeparam "utm" from "${url}"`, () => {
             const { match, redirect } = engine.match(urlToDocumentRequest(url));
@@ -680,7 +680,9 @@ $csp=baz,domain=bar.com
         const engine = createEngine(
           params.map((param) => `||foo.com$removeparam=${param}`).join('\n'),
         );
-        let request = urlToDocumentRequest('https://foo.com?utm_source=organic&utm_event=b&utm=a');
+        let request = urlToDocumentRequest(
+          'https://foo.com/?utm_source=organic&utm_event=b&utm=a',
+        );
         for (let i = 0; i < params.length; i++) {
           const { redirect } = engine.match(request);
           expect(redirect).not.to.be.undefined;

@@ -1498,9 +1498,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
                 // In case of non-existence of global exception, we will remove params
                 if (removeparamExceptionFilter === undefined) {
-                  for (const key in redirectUrl.searchParams) {
-                    redirectUrl.searchParams.delete(key);
-                  }
+                  redirectUrl.search = '';
                 }
 
                 break;
@@ -1587,7 +1585,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           if (removeparamExceptionFilter === undefined) {
             result.redirect = {
               body: '',
-              contentType: 'text/html',
+              contentType: 'text/plain',
               dataUrl: redirectUrl!.toString(),
             };
           } else {
