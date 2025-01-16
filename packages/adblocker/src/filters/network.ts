@@ -733,11 +733,17 @@ export default class NetworkFilter implements IFilter {
         switch (option) {
           case 'denyallow': {
             denyallow = Domains.parse(value.split('|'), '|', debug);
+            if (denyallow === undefined) {
+              return null;
+            }
             break;
           }
           case 'domain':
           case 'from': {
             domains = Domains.parse(value.split('|'), '|', debug);
+            if (domains === undefined) {
+              return null;
+            }
             break;
           }
           case 'badfilter':
