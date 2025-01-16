@@ -12,7 +12,7 @@ import { StaticDataView, sizeOfUint32Array, sizeOfUTF8 } from '../data-view.js';
 import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils.js';
 
 export class Domains {
-  public static parse(parts: string[], delimiter = ',', debug = false): Domains | undefined {
+  public static parse(parts: string[], delimiter: string, debug = false): Domains | undefined {
     if (parts.length === 0) {
       return undefined;
     }
