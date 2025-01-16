@@ -775,15 +775,16 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           htmlFilters.push(filter);
         } else if (filter.isGenericHide() || filter.isSpecificHide()) {
           hideExceptions.push(filter);
-        } else if (
-          filter.isRemoveParam() ||
-          (filter.isRedirect() && filter.isException() === false)
-        ) {
-          redirects.push(filter);
         } else if (filter.isException()) {
-          exceptions.push(filter);
+          if (filter.isRemoveParam()) {
+            redirects.push(filter);
+          } else {
+            exceptions.push(filter);
+          }
         } else if (filter.isImportant()) {
           importants.push(filter);
+        } else if (filter.isRedirectable()) {
+          redirects.push(filter);
         } else {
           filters.push(filter);
         }
@@ -1574,8 +1575,9 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       // If there was a redirect match and no exception was found, then we
       // proceed and process the redirect rule. This means two things:
       //
-      // 1. Check if a redirect=none rule was found, which acts as exception.
-      // 2. If no exception was found, prepare `result.redirect` response.
+      // 1. Check if there's a removeparam exception was found, which acts as exception.
+      // 2. Check if a redirect=none rule was found, which acts as exception.
+      // 3. If no exception was found, prepare `result.redirect` response.
       if (
         result.filter !== undefined &&
         result.exception === undefined &&
