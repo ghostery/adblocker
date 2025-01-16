@@ -263,7 +263,7 @@ export default class CosmeticFilter implements IFilter {
     // number of labels considered. This allows a compact representation of
     // hostnames and fast matching without any string copy.
     if (sharpIndex > 0) {
-      domains = Domains.parse(line.slice(0, sharpIndex).split(','), { debug });
+      domains = Domains.parse(line.slice(0, sharpIndex).split(','), ',', debug);
     }
 
     if (line.endsWith(':remove()')) {

@@ -732,12 +732,12 @@ export default class NetworkFilter implements IFilter {
 
         switch (option) {
           case 'denyallow': {
-            denyallow = Domains.parse(value.split('|'), { isNetworkEntities: true, debug });
+            denyallow = Domains.parse(value.split('|'), '|', debug);
             break;
           }
           case 'domain':
           case 'from': {
-            domains = Domains.parse(value.split('|'), { isNetworkEntities: true, debug });
+            domains = Domains.parse(value.split('|'), '|', debug);
             break;
           }
           case 'badfilter':

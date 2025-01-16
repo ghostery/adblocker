@@ -12,22 +12,14 @@ import { StaticDataView, sizeOfUint32Array, sizeOfUTF8 } from '../data-view.js';
 import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils.js';
 
 export class Domains {
-  public static parse(
-    parts: string[],
-    {
-      isNetworkEntities = false,
-      debug = false,
-    }: { isNetworkEntities?: boolean | undefined; debug?: boolean | undefined } = {},
-  ): Domains | undefined {
+  public static parse(parts: string[], delimiter = ',', debug = false): Domains | undefined {
     if (parts.length === 0) {
       return undefined;
     }
 
-    if (isNetworkEntities === true) {
-      for (const part of parts) {
-        if (part.length === 0 || part.startsWith('|') || part.endsWith('|')) {
-          return undefined;
-        }
+    for (const part of parts) {
+      if (part.length === 0 || part.startsWith(delimiter) || part.endsWith(delimiter)) {
+        return undefined;
       }
     }
 
@@ -73,7 +65,7 @@ export class Domains {
       hostnames: hostnames.length !== 0 ? new Uint32Array(hostnames).sort() : undefined,
       notEntities: notEntities.length !== 0 ? new Uint32Array(notEntities).sort() : undefined,
       notHostnames: notHostnames.length !== 0 ? new Uint32Array(notHostnames).sort() : undefined,
-      parts: debug === true ? parts.join(isNetworkEntities ? '|' : ',') : undefined,
+      parts: debug === true ? parts.join(delimiter) : undefined,
     });
   }
 
