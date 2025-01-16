@@ -775,12 +775,15 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           htmlFilters.push(filter);
         } else if (filter.isGenericHide() || filter.isSpecificHide()) {
           hideExceptions.push(filter);
+        } else if (
+          filter.isRemoveParam() ||
+          (filter.isRedirect() && filter.isException() === false)
+        ) {
+          redirects.push(filter);
         } else if (filter.isException()) {
           exceptions.push(filter);
         } else if (filter.isImportant()) {
           importants.push(filter);
-        } else if (filter.isRedirectable()) {
-          redirects.push(filter);
         } else {
           filters.push(filter);
         }
@@ -1450,60 +1453,89 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
       let redirectNone: NetworkFilter | undefined;
       let redirectRule: NetworkFilter | undefined;
-      let redirectUrl: string | undefined;
+
+      // 1st priority: @@||<entity>$removeparam
+      // 2nd priority: ||<entity>$removeparam
+      // 3rd priority: @@||<entity>$removeparam=x
+      // 4th priority: ||<entity>$removeparam=x
+      let removeparamExceptionFilter: NetworkFilter | undefined;
+      let redirectUrl: URL | undefined;
 
       // If `result.filter` is `undefined`, it means there was no $important
       // filter found so far. We look for $removeparam and $redirect filter.
       if (result.filter === undefined) {
-        const redirectFilters = this.redirects.matchAll(request, this.isFilterExcluded.bind(this));
-        const resourceRedirects: NetworkFilter[] = [];
-        const requestRedirects: NetworkFilter[] = [];
-        for (const filter of redirectFilters) {
+        const redirectableFilters = this.redirects.matchAll(
+          request,
+          this.isFilterExcluded.bind(this),
+        );
+        const redirectFilters: NetworkFilter[] = [];
+        const removeparamFilters: Map<string, NetworkFilter> = new Map();
+        const removeparamExceptionFilters: Map<string, NetworkFilter> = new Map();
+        for (const filter of redirectableFilters) {
           if (filter.isRemoveParam()) {
-            requestRedirects.push(filter);
+            if (filter.isException()) {
+              removeparamExceptionFilters.set(filter.removeparam!, filter);
+            } else {
+              removeparamFilters.set(filter.removeparam!, filter);
+            }
           } else {
-            resourceRedirects.push(filter);
+            redirectFilters.push(filter);
           }
         }
 
         // We don't need to match `removeparam` at all if:
         // * `removeparam` filters not matched
         // * URL doesn't have search parameter
-        if (requestRedirects.length !== 0) {
-          const url = new URL(request.url);
-          if (url.searchParams.size !== 0) {
-            for (const filter of requestRedirects) {
-              const key = filter.removeparam!;
-
+        if (removeparamFilters.size !== 0) {
+          redirectUrl = new URL(request.url);
+          if (redirectUrl.searchParams.size !== 0) {
+            for (const [key, filter] of removeparamFilters) {
               // Remove all params in case of option value is empty
+              // We will not match individual exceptions since it has a higher priority than them
               if (key === '') {
                 result.filter = filter;
-                redirectUrl = request.url.slice(0, request.url.indexOf('?'));
+                removeparamExceptionFilter = removeparamExceptionFilters.get('');
+
+                // In case of non-existence of global exception, we will remove params
+                if (removeparamExceptionFilter === undefined) {
+                  for (const key in redirectUrl.searchParams) {
+                    redirectUrl.searchParams.delete(key);
+                  }
+                }
 
                 break;
               }
 
-              if (url.searchParams.has(key)) {
-                url.searchParams.delete(key);
-
+              if (redirectUrl.searchParams.has(key)) {
                 result.filter = filter;
-                redirectUrl = url.toString();
+                removeparamExceptionFilter =
+                  removeparamExceptionFilters.get('') ?? removeparamExceptionFilters.get(key);
 
-                break;
+                redirectUrl.searchParams.delete(key);
+
+                // Stop if
+                // * the filter was effective
+                // * the filter was excepted with global exception (1st priority)
+                if (
+                  removeparamExceptionFilter === undefined ||
+                  removeparamExceptionFilter.removeparam === ''
+                ) {
+                  break;
+                }
               }
             }
           }
         }
 
-        // If `result.filter` is still remains `undefined`, there
+        // If `result.filter` still remains `undefined`, there
         // is some extra logic to handle special cases like
         // redirect-rule and redirect=none.
         //
         // * If redirect=none is found, then cancel all redirects.
         // * Else if redirect-rule is found, only redirect if request would be blocked.
         // * Else if redirect is found, redirect.
-        if (result.filter === undefined && resourceRedirects.length !== 0) {
-          const redirects = resourceRedirects
+        if (result.filter === undefined && redirectFilters.length !== 0) {
+          const redirects = redirectFilters
             // highest priorty wins
             .sort((a, b) => b.getRedirectPriority() - a.getRedirectPriority());
 
@@ -1551,9 +1583,16 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         result.exception === undefined &&
         result.filter.isRedirectable()
       ) {
-        // Prioritize if `redirectUrl` is set.
-        if (redirectUrl !== undefined) {
-          result.redirect = { body: '', contentType: 'text/plain', dataUrl: redirectUrl };
+        if (result.filter.isRemoveParam()) {
+          if (removeparamExceptionFilter === undefined) {
+            result.redirect = {
+              body: '',
+              contentType: 'text/html',
+              dataUrl: redirectUrl!.toString(),
+            };
+          } else {
+            result.exception = removeparamExceptionFilter;
+          }
         } else {
           if (redirectNone !== undefined) {
             result.exception = redirectNone;

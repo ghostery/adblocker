@@ -601,7 +601,7 @@ $csp=baz,domain=bar.com
       expect(redirect).to.be.undefined;
     });
 
-    context.only('removeparam', () => {
+    context('removeparam', () => {
       function urlToDocumentRequest(url: string) {
         return Request.fromRawDetails({
           sourceUrl: 'https://foo.com',
@@ -689,6 +689,35 @@ $csp=baz,domain=bar.com
         for (const param of params) {
           expect(request.url).not.to.include(param);
         }
+      });
+
+      describe('exceptions', () => {
+        let request: Request;
+        before(() => {
+          request = urlToDocumentRequest('https://foo.com/?x=y');
+        });
+
+        it('respects exception', () => {
+          const engine = createEngine(`||foo.com$removeparam=x
+@@||foo.com$removeparam=x`);
+          expect(engine.match(request).match).to.be.false;
+        });
+        it('respects option value with exception', () => {
+          const engine = createEngine(`||foo.com$removeparam=x
+@@||foo.com$removeparam=y`);
+          expect(engine.match(request).match).to.be.true;
+        });
+
+        it('priorities global removeparam over singular exception', () => {
+          const engine = createEngine(`@@||foo.com$removeparam=x
+||foo.com$removeparam`);
+          expect(engine.match(request).match).to.be.true;
+        });
+        it('priorities global exception over global removeparam', () => {
+          const engine = createEngine(`||foo.com$removeparam
+@@||foo.com$removeparam`);
+          expect(engine.match(request).match).to.be.false;
+        });
       });
     });
   });
