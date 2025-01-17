@@ -78,8 +78,7 @@ sandratableother.com##+js(set, console.clear, undefined)
 ! https://github.com/uBlockOrigin/uAssets/issues/23806
 *$image,redirect-rule=1x1.gif,domain=japscan.lol
 japscan.lol##+js(norafif, %2F%5E%2F)
-japscan.lol##+js(ra, href, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a, complete)
-japscan.lol##.navbar-nav > li#navpromo2.nav-item:watch-attr(href) > a:not([href])
+japscan.lol##+js(trusted-set-attr, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a, href, https%3A%2F%2Fwww.google.com%2F%3Ftest%3Dhttp%3A%2F%2Fwww.toueapo.shop%2F)
 ||japscan.lol/zjs/$script,replace=/function GoodDay\(\)\{.+?\}\}\}//
 japscan.lol##body > style + .container > .row > #main + #sidebar.col-md-3 > .card.mt-1 > .card[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 250px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
 japscan.lol##body > style + .container > .row > #main.col-md-9 > .card > .card-body[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 100px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
@@ -109,7 +108,6 @@ japscan.lol##body > div.container > #interstitial[style*="display"]
 ! https://github.com/uBlockOrigin/uAssets/issues/25121#issuecomment-2325357098
 poophq.com,veev.to##+js(nowoif)
 poophq.com,veev.to##+js(set, fapit.check, noopFunc)
-!poophq.com,veev.to##+js(no-xhr-if, url%3A!%2Fcdn%5C.plyr%5C.io%7Cveev%5C.to%7C%5C%2Fdl%5C%3Fop%3Dplayer_api%2F%20method%3AGET)
 poophq.com,veev.to##+js(no-xhr-if, %2Fvast.php%3F)
 poophq.com,veev.to##+js(no-xhr-if, adsbygoogle, length%3A35000-55000)
 poophq.com,veev.to##+js(rpnt, script, %2F%3D%5C(%5B'%22%5D.*%3Fh.*%3Fo.*%3Fc.*%3Fa.*%3Fs%5B'%22%5D%3F%2F, %241(function()%20%7B'use%20strict'%3B%20const%20handler%20%3D%20%7Bapply%3A%20(target%2C%20thisArg%2C%20argumentsList)%20%3D%3E%20%7Bconst%20e%20%3D%20argumentsList%3B%20if%20(e%5B0%5D%20%26%26%20e%5B0%5D.html%3F.detected%20%3D%3D%3D%20null%20%26%26%20typeof%20e%5B0%5D.html%3F.instance%3F.start%20%3D%3D%3D%20'function'%20%26%26%20typeof%20e%5B0%5D.env%3F.instance%3F.start%20%3D%3D%3D%20'function'%20%26%26%20typeof%20e%5B0%5D.http%3F.instance%3F.start%20%3D%3D%3D%20'function')%20%7Bconst%20resetBooleans%20%3D%20function()%20%7BObject.keys(this).forEach(key%20%3D%3E%20%7Bif%20(typeof%20this%5Bkey%5D%20%3D%3D%3D%20'boolean')%20%7Bthis%5Bkey%5D%20%3D%20false%3B%7D%7D)%3B%7D%3B%20%5B'html'%2C%20'env'%2C%20'http'%5D.forEach(name%20%3D%3E%20%7Be%5B0%5D%5Bname%5D.instance.start%20%3D%20resetBooleans%3B%7D)%3B%7D%20return%20Reflect.apply(target%2C%20thisArg%2C%20argumentsList)%3B%7D%7D%3B%20window.Object.keys%20%3D%20new%20Proxy(Object.keys%2C%20handler)%3B%7D)()%3B, includes, break%3Belse)
@@ -118,6 +116,7 @@ poophq.com,veev.to##+js(no-xhr-if, %2F%5C%2Fpreroll%5C.engine%24%2F)
 *$other,3p,denyallow=veevcdn.co,domain=poophq.com|veev.to
 @@*$ghide,domain=poophq.com|veev.to
 veev.to#@#.avb-active
+@@/ad-provider.js$xhr,domain=poophq.com|veev.to
 ! https://github.com/uBlockOrigin/uAssets/issues/20401
 infinityscans.xyz,infinityscans.net,infinityscans.org##+js(rpnt, script, %2Fasync%20function%20%5C(xhr%5C)%20%5C%7B%5Cs%2B%5C(function%5C(%5C)%7Bvar%20.*%3F%5C%3B%5C%7D%5C)%5C(%5C)%5C%3B%20%2Fs, async%20function%20(xhr)%20%7B)
 infinityscans.xyz,infinityscans.net,infinityscans.org##+js(rpnt, script, %2F%5C%7D%5C)%5C%3B%5Cs%2B%5C(function%5C(%5C)%5C%7Bvar%20.*%3F%5C)%5C%3B%5C%7D%5C)%5C(%5C)%5C%3B%5Cs%2B%5C%24%5C.ajax%5C(%5C%7B%2Fs, %7D)%3B%20%24.ajax(%7B)
@@ -143,11 +142,12 @@ panel.freemcserver.net##+js(rpnt, script, 'G-1B4LC0KT6C')%3B, 'G-1B4LC0KT6C')%3B
 ! filemoon
 ! https://github.com/AdguardTeam/AdguardFilters/issues/190044
 ! https://www.reddit.com/r/uBlockOrigin/comments/1fuaaw5/asblock_detected_in_ask4porncc
-brr-55bsolwf-moo.com,brr-69xwmut5-moo.com,file-1bl9ruic-moon.com,file-kg88oaak-embed.com,file-mi11ljwj-embed.com,file-sp32aoh8-moon.com,file-zz40pd56-embed.com,filemoon-j0l2wxjk.com,filemoon-t8c715ke.com,fle-2ggdmu8q-moo.com,fle-5r8dchma-moo.com,fle-rvd0i9o8-moo.com,moo-teau4c9h-mkay.com,moo-uakkxorh-mkay.com,moon-3uykdl2w-embed.com,moon-4uemks89-embed.com,moon-fm43w1qv.com,moon-kg83docx.com,moon-n9hp2onm-embed.com,moonfile-62es3l9z.com,moonfile-paxadnae.com##+js(nowoif)
-brr-55bsolwf-moo.com,brr-69xwmut5-moo.com,file-1bl9ruic-moon.com,file-kg88oaak-embed.com,file-mi11ljwj-embed.com,file-sp32aoh8-moon.com,file-zz40pd56-embed.com,filemoon-j0l2wxjk.com,filemoon-t8c715ke.com,fle-2ggdmu8q-moo.com,fle-5r8dchma-moo.com,fle-rvd0i9o8-moo.com,moo-teau4c9h-mkay.com,moo-uakkxorh-mkay.com,moon-3uykdl2w-embed.com,moon-4uemks89-embed.com,moon-fm43w1qv.com,moon-kg83docx.com,moon-n9hp2onm-embed.com,moonfile-62es3l9z.com,moonfile-paxadnae.com##+js(acs, Math, localStorage%5B'%5Cx)
+brr-55bsolwf-moo.com,brr-69xwmut5-moo.com,file-1bl9ruic-moon.com,file-kg88oaak-embed.com,file-mi11ljwj-embed.com,file-sp32aoh8-moon.com,file-zz40pd56-embed.com,filemoon-j0l2wxjk.com,filemoon-t8c715ke.com,fle-2ggdmu8q-moo.com,fle-5r8dchma-moo.com,fle-rvd0i9o8-moo.com,mee-cccdoz45.com,mee-x63tvple.com,moo-teau4c9h-mkay.com,moo-uakkxorh-mkay.com,moon-3uykdl2w-embed.com,moon-4uemks89-embed.com,moon-fm43w1qv.com,moon-kg83docx.com,moon-n9hp2onm-embed.com,moonfile-62es3l9z.com,moonfile-paxadnae.com##+js(nowoif)
+brr-55bsolwf-moo.com,brr-69xwmut5-moo.com,file-1bl9ruic-moon.com,file-kg88oaak-embed.com,file-mi11ljwj-embed.com,file-sp32aoh8-moon.com,file-zz40pd56-embed.com,filemoon-j0l2wxjk.com,filemoon-t8c715ke.com,fle-2ggdmu8q-moo.com,fle-5r8dchma-moo.com,fle-rvd0i9o8-moo.com,mee-cccdoz45.com,mee-x63tvple.com,moo-teau4c9h-mkay.com,moo-uakkxorh-mkay.com,moon-3uykdl2w-embed.com,moon-4uemks89-embed.com,moon-fm43w1qv.com,moon-kg83docx.com,moon-n9hp2onm-embed.com,moonfile-62es3l9z.com,moonfile-paxadnae.com##+js(acs, Math, localStorage%5B'%5Cx)
 ! https://github.com/uBlockOrigin/uAssets/issues/25538
-0cbcq8mu.com,4k2h4w04.xyz,a6iqb4m8.xyz,afl3ua5u.xyz,jmzkzesy.xyz##+js(nowoif)
-0cbcq8mu.com,4k2h4w04.xyz,a6iqb4m8.xyz,afl3ua5u.xyz,jmzkzesy.xyz##+js(acs, Math, localStorage%5B'%5Cx)
+0cbcq8mu.com,2cf0xzdu.com,4k2h4w04.xyz,a6iqb4m8.xyz,afl3ua5u.xyz,jmzkzesy.xyz##+js(nowoif)
+0cbcq8mu.com,2cf0xzdu.com,4k2h4w04.xyz,a6iqb4m8.xyz,afl3ua5u.xyz,jmzkzesy.xyz##+js(acs, Math, localStorage%5B'%5Cx)
+0cbcq8mu.com,2cf0xzdu.com,4k2h4w04.xyz,a6iqb4m8.xyz,afl3ua5u.xyz,jmzkzesy.xyz##^script:has-text(/popunder|\(\)\{try\{localStorage\[/)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1hxrnnm/why_is_ublock_blocking_me_from_watching_videos_on/
 !#if env_firefox
 *$frame,csp=sandbox allow-downloads allow-forms allow-modals allow-same-origin allow-scripts,from=filemoon.*
@@ -162,12 +162,12 @@ smsonline.cloud##html[data-theme][lang] [id^="img_"][style]:has(iframe[framebord
 ~dogdrip.net,~infinityfree.com,~slashdot.org,~smsonline.cloud,*##body > div:first-child > script + div[id^="img_"][class^="img_"]:style(position: absolute !important; top: -100000px !important;)
 ~dogdrip.net,~infinityfree.com,~slashdot.org,~smsonline.cloud,*##body > a:only-child > div[id^="img_"][class^="img_"]:style(position: absolute !important; top: -100000px !important;)
 ~dogdrip.net,~infinityfree.com,~slashdot.org,~smsonline.cloud,*##div[style*="fixed"] span[id^="img_"][class^="img_"] > style:first-child + div[style*="flex"][style*="relative"]:style(width: 10000px !important;)
-07c225f3.online,content-loader.com,css-load.com,html-load.com,img-load.com##body > *:not(pre):style(pointer-events: none !important; transform: translateX(100000px) !important;)
+07c225f3.online,content-loader.com,css-load.com,html-load.com,img-load.com##body > *:not(pre):style(pointer-events: none !important; mask-image: linear-gradient(transparent, transparent) !important; -webkit-mask-image: linear-gradient(transparent, transparent) !important;)
 *$doc,to=slashdot.org,replace=/data-sdk/defer data-sdk/
 ! https://github.com/uBlockOrigin/uAssets/issues/26487
--load.com/script/$xhr,domain=dogdrip.net|infinityfree.com|slashdot.org|smsonline.cloud
+dogdrip.net,infinityfree.com,slashdot.org,smsonline.cloud##+js(no-fetch-if, -load.com%2Fscript%2F, length%3A101)
 dogdrip.net,infinityfree.com,slashdot.org,smsonline.cloud##+js(nostif, )%5D(this%2C...)
-dogdrip.net,infinityfree.com,slashdot.org,smsonline.cloud##+js(aeld, , )%5D(this%2C...)
+slashdot.org##+js(aeld, , )%5D(this%2C...)
 ! https://github.com/uBlockOrigin/uAssets/issues/25344
 ! https://github.com/uBlockOrigin/uAssets/pull/26342
 ! https://github.com/uBlockOrigin/uAssets/issues/26393
@@ -191,6 +191,7 @@ www.chip.de##+js(rmnt, script, %2F%5Ba-zA-Z0-9%5D%7B10%2C20%7D%5C%3B%20%5C%7D%20
 !#endif
 ! https://github.com/AdguardTeam/AdguardFilters/issues/153796
 rekidai-info.github.io##+js(nostif, %2Faframe%7CquerySelector%2F)
+rekidai-info.github.io##+js(nosiif, location%5B_0x)
 ! https://github.com/uBlockOrigin/uAssets/issues/20907
 @@||cursomecanet.com^$script,1p
 @@*$image,domain=cursomecanet.com
@@ -202,11 +203,6 @@ robertordercharacter.com##+js(set, console.clear, undefined)
 instagram.com##+js(remove-cookie, ig_did)
 facebook.com#@#+js(trusted-set-cookie, datr, 835uZ-bIo1ECQru7AjqnhhRl, 1year, , reload, 1, dontOverwrite, 1)
 instagram.com#@#+js(trusted-set-cookie, ig_did, 5443AF77-1A68-4603-BF65-43BB5F664A80, 1year, , reload, 1, dontOverwrite, 1)
-! https://github.com/uBlockOrigin/uAssets/issues/26768
-quora.com#@#.q-sticky[style*="box-sizing: border-box; position: sticky;"]
-! https://github.com/uBlockOrigin/uAssets/issues/26668
-! [badfilter] ||chat.deepseek.com/api/v0/events$badfilter
-chat.deepseek.com#@#+js(no-xhr-if, %2Fapi%2Fv0%2Fevents)
 ! https://github.com/AdguardTeam/AdguardFilters/commit/4fb440462309e81876c3ca52a82542aced76ca85#r151049101
 ! [badfilter] ||hyogo-tourism.jp/img/top/bnr-$badfilter
 ! https://github.com/AdguardTeam/AdguardFilters/commit/04e199ebe94e5a0adc9b5076ddaf717651ea031d#r151196949

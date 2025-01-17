@@ -67,6 +67,12 @@ pinterest.*##div[class="Closeup__wrapper"] > div > div[style^="cursor: default"]
 pinterest.*##div[class="GrowthUnauthPinImage__imageDim"]
 pinterest.*##.GrowthUnauthPinImage > a > div[class^="Jea"]:has(button[class^="noButtonStyles "])
 pinterest.*##.Hsu.iyn.zI7:nth-of-type(2) > div > .FullPageModal__scroller
+! https://www.reddit.com/r/uBlockOrigin/comments/1hzblue/how_to_bypass_pinterest_forced_register/
+pinterest.*##+js(set-local-storage-item, DWEB_PIN_IMAGE_CLICK_COUNT, %24remove%24)
+pinterest.*##+js(trusted-replace-argument, Storage.prototype.setItem, 0, json%3A%22DWEB%22, condition, DWEB_PIN_IMAGE_CLICK_COUNT)
+! "Sign Up to download"
+pinterest.*##+js(set-local-storage-item, unauthDownloadCount, %24remove%24)
+pinterest.*##+js(trusted-replace-argument, Storage.prototype.setItem, 0, json%3A%22%22, condition, unauthDownloadCount)
 ! flickr.com "Upgrade to Flickr Pro to hide these ads"
 flickr.com##.moola-search-view:has-text(hide these ads)
 ! https://github.com/NanoAdblocker/NanoFilters/issues/120
@@ -1449,8 +1455,6 @@ langitmovie.com##*:style(-webkit-touch-callout: default !important; -webkit-user
 ! androidmakale .com right click - select
 androidmakale.com##+js(acs, document.oncontextmenu)
 androidmakale.com##body:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
-! https://github.com/uBlockOrigin/uAssets/issues/6931
-u.gg##+js(acs, document.getElementById, dataLayer)
 ! mongri .net right click, copy
 mongri.net##+js(acs, document.oncontextmenu)
 mongri.net##+js(aopr, getSelection)
@@ -2164,8 +2168,6 @@ autophorie.de##*:style(-webkit-touch-callout: default !important; -webkit-user-s
 ||articlesmania.me^$csp=script-src * 'unsafe-eval' 'unsafe-inline'
 ! https://github.com/uBlockOrigin/uAssets/issues/7793
 englishlands.net##+js(aopw, document.oncontextmenu)
-! https://github.com/uBlockOrigin/uAssets/issues/7790
-u.gg##.premium-top-banner-container
 ! https://github.com/NanoMeow/QuickReports/issues/4545
 randomlists.com##.whine
 ! https://github.com/AdguardTeam/AdguardFilters/issues/61999
@@ -4858,7 +4860,8 @@ oreilly.com##+js(aeld, mouseout, cookie)
 ! https://github.com/uBlockOrigin/uAssets/issues/20027
 buktube.com,fullxh.com,galleryxh.site,hamsterix.*,megaxh.com,movingxh.world,seexh.com,unlockxh4.com,valuexh.life,xhaccess.com,xhadult2.com,xhadult3.com,xhadult4.com,xhadult5.com,xhamster.*,xhamster1.*,xhamster10.*,xhamster11.*,xhamster12.*,xhamster13.*,xhamster14.*,xhamster15.*,xhamster16.*,xhamster17.*,xhamster18.*,xhamster19.*,xhamster20.*,xhamster2.*,xhamster3.*,xhamster4.*,xhamster42.*,xhamster46.com,xhamster5.*,xhamster7.*,xhamster8.*,xhamsterporno.mx,xhbig.com,xhbranch5.com,xhchannel.com,xhchannel2.com,xhdate.world,xhday.com,xhday1.com,xhlease.world,xhmoon5.com,xhofficial.com,xhopen.com,xhplanet1.com,xhplanet2.com,xhreal2.com,xhreal3.com,xhspot.com,xhtab2.com,xhtab4.com,xhtotal.com,xhtree.com,xhvictory.com,xhwebsite.com,xhwebsite2.com,xhwebsite5.com,xhwide1.com,xhwide2.com,xhwide5.com,xhxh3.xyz##+js(set, initials.urls.bannerCheckUrl, )
 ! https://github.com/uBlockOrigin/uAssets/issues/4747#issuecomment-1691485028
-@@*$xhr,1p,method=head,domain=buktube.com|fullxh.com|galleryxh.site|hamsterix.*|megaxh.com|movingxh.world|seexh.com|unlockxh4.com|valuexh.life|xhaccess.com|xhadult2.com|xhadult3.com|xhadult4.com|xhadult5.com|xhamster.*|xhamster10.*|xhamster11.*|xhamster12.*|xhamster13.*|xhamster14.*|xhamster15.*|xhamster16.*|xhamster17.*|xhamster18.*|xhamster19.*|xhamster20.*|xhamster2.*|xhamster3.*|xhamster4.*|xhamster42.*|xhamster46.com|xhamster5.*|xhamster7.*|xhamster8.*|xhamsterporno.mx|xhbig.com|xhbranch5.com|xhchannel.com|xhchannel2.com|xhdate.world|xhday.com|xhday1.com|xhlease.world|xhmoon5.com|xhofficial.com|xhopen.com|xhplanet1.com|xhplanet2.com|xhreal2.com|xhreal3.com|xhspot.com|xhtab2.com|xhtab4.com|xhtotal.com|xhtree.com|xhvictory.com|xhwebsite.com|xhwebsite2.com|xhwebsite5.com|xhwide1.com|xhwide2.com|xhwide5.com|xhxh3.xyz
+! https://github.com/uBlockOrigin/uAssets/issues/26838
+buktube.com,fullxh.com,galleryxh.site,hamsterix.*,megaxh.com,movingxh.world,seexh.com,unlockxh4.com,valuexh.life,xhaccess.com,xhadult2.com,xhadult3.com,xhadult4.com,xhadult5.com,xhamster.*,xhamster1.*,xhamster10.*,xhamster11.*,xhamster12.*,xhamster13.*,xhamster14.*,xhamster15.*,xhamster16.*,xhamster17.*,xhamster18.*,xhamster19.*,xhamster20.*,xhamster2.*,xhamster3.*,xhamster4.*,xhamster42.*,xhamster46.com,xhamster5.*,xhamster7.*,xhamster8.*,xhamsterporno.mx,xhbig.com,xhbranch5.com,xhchannel.com,xhchannel2.com,xhdate.world,xhday.com,xhday1.com,xhlease.world,xhmoon5.com,xhofficial.com,xhopen.com,xhplanet1.com,xhplanet2.com,xhreal2.com,xhreal3.com,xhspot.com,xhtab2.com,xhtab4.com,xhtotal.com,xhtree.com,xhvictory.com,xhwebsite.com,xhwebsite2.com,xhwebsite5.com,xhwide1.com,xhwide2.com,xhwide5.com,xhxh3.xyz##+js(no-fetch-if, url%3A_reporting_ads.%20method%3AHEAD)
 ! https://github.com/uBlockOrigin/uAssets/issues/20084
 270towin.com##+js(set-session-storage-item, fs.adb.dis, 1)
 ! https://github.com/easylist/easylist/issues/15515
@@ -5627,11 +5630,6 @@ rds.live##+js(rmnt, script, contextmenu)
 rds.live##*:style(user-select: text !important; -ms-user-select: text !important; -moz-user-select: text !important; -khtml-user-select: text !important; -webkit-user-select: text !important; -webkit-touch-callout: default !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/26159
 @@||autoweek.nl^$script,1p
-! https://jljbacktoclassic.com/archives/16956
-! https://www.ruled.me/supplements/
-||amazon.com/s/ref=$doc,uritransform=/\/ref=[^\/?#]+//
-/gp/*/ref=$doc,uritransform=/\/ref=[^\/?#]+//,to=www.amazon.*
-/^https:\/\/www\.primevideo\.com\/(?:detail|help|offers)[^=]*?\/ref=/$doc,to=primevideo.com,uritransform=/\/ref=[^\/?#]+//
 ! https://www.bhphotovideo.com/c/product/1405061-REG/samsung_u32j590_31_5_4k_uhd.html/BI/865/KBID/1173/SID/dbd77874b38811ef8f447ae1da200b850INT
 ||bhphotovideo.com/c/product/*.html/$doc,uritransform=/\.html\/[^?#]+/.html/
 ! https://github.com/uBlockOrigin/uAssets/issues/26192
@@ -5734,3 +5732,5 @@ nihongoaz.com##body:style(-webkit-touch-callout: default !important; -webkit-use
 ! espressocafe. ro anti select, right click
 espressocafe.ro##+js(rmnt, script, contextmenu)
 espressocafe.ro##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/26840
+@@||u.gg^$ghide
