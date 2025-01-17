@@ -732,7 +732,7 @@ export default class NetworkFilter implements IFilter {
 
         switch (option) {
           case 'denyallow': {
-            denyallow = Domains.parse(value.split('|'), '|', debug);
+            denyallow = Domains.parse(value, '|', debug);
             if (denyallow === undefined) {
               return null;
             }
@@ -740,7 +740,7 @@ export default class NetworkFilter implements IFilter {
           }
           case 'domain':
           case 'from': {
-            domains = Domains.parse(value.split('|'), '|', debug);
+            domains = Domains.parse(value, '|', debug);
             if (domains === undefined) {
               return null;
             }
