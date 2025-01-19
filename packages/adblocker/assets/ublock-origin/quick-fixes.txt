@@ -78,7 +78,7 @@ sandratableother.com##+js(set, console.clear, undefined)
 ! https://github.com/uBlockOrigin/uAssets/issues/23806
 *$image,redirect-rule=1x1.gif,domain=japscan.lol
 japscan.lol##+js(norafif, %2F%5E%2F)
-japscan.lol##+js(trusted-set-attr, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a, href, https%3A%2F%2Fwww.google.com%2F%3Ftest%3Dhttp%3A%2F%2Fwww.toueapo.shop%2F)
+japscan.lol##+js(trusted-set-attr, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a, href, https%3A%2F%2Fwww.example.com%2F%3Ftest%3Dhttp%3A%2F%2Fwww.toueapo.shop%2F)
 ||japscan.lol/zjs/$script,replace=/function GoodDay\(\)\{.+?\}\}\}//
 japscan.lol##body > style + .container > .row > #main + #sidebar.col-md-3 > .card.mt-1 > .card[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 250px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
 japscan.lol##body > style + .container > .row > #main.col-md-9 > .card > .card-body[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 100px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
@@ -196,9 +196,10 @@ rekidai-info.github.io##+js(nosiif, location%5B_0x)
 @@||cursomecanet.com^$script,1p
 @@*$image,domain=cursomecanet.com
 ! https://github.com/uBlockOrigin/uAssets/issues/20207
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=robertordercharacter.com,important
-robertordercharacter.com##+js(nowoif)
-robertordercharacter.com##+js(set, console.clear, undefined)
+! https://github.com/uBlockOrigin/uAssets/issues/26877
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=robertordercharacter.com|voe.sx,important
+robertordercharacter.com,voe.sx##+js(nowoif)
+robertordercharacter.com,voe.sx##+js(set, console.clear, undefined)
 ! https://github.com/uBlockOrigin/uAssets/pull/26754 - remove old value
 instagram.com##+js(remove-cookie, ig_did)
 facebook.com#@#+js(trusted-set-cookie, datr, 835uZ-bIo1ECQru7AjqnhhRl, 1year, , reload, 1, dontOverwrite, 1)
