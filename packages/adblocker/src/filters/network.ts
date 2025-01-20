@@ -725,14 +725,27 @@ export default class NetworkFilter implements IFilter {
       // --------------------------------------------------------------------- //
       // parseOptions
       // --------------------------------------------------------------------- //
+      const denyallowEntities: Set<string> = new Set();
       for (const rawOption of getFilterOptions(line, optionsIndex + 1, line.length)) {
         const negation = rawOption[0].charCodeAt(0) === 126; /* '~' */
         const option = negation === true ? rawOption[0].slice(1) : rawOption[0];
         const value = rawOption[1];
 
         switch (option) {
+          case 'to':
           case 'denyallow': {
-            denyallow = Domains.parse(value.split('|'), debug);
+            for (const part of value.split('|')) {
+              if (option === 'to') {
+                if (part.charCodeAt(0) === 126 /* '~' */) {
+                  denyallowEntities.add(part.slice(1));
+                } else {
+                  denyallowEntities.add(`~${part}`);
+                }
+              } else {
+                denyallowEntities.add(part);
+              }
+            }
+            denyallow = Domains.parse(Array.from(denyallowEntities), debug);
             break;
           }
           case 'domain':
