@@ -65,37 +65,6 @@ export function hashStrings(strings: string[]): Uint32Array {
   return result;
 }
 
-// https://jsperf.com/string-startswith/21
-export function fastStartsWith(haystack: string, needle: string): boolean {
-  if (haystack.length < needle.length) {
-    return false;
-  }
-
-  const ceil = needle.length;
-  for (let i = 0; i < ceil; i += 1) {
-    if (haystack[i] !== needle[i]) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-export function fastStartsWithFrom(haystack: string, needle: string, start: number): boolean {
-  if (haystack.length - start < needle.length) {
-    return false;
-  }
-
-  const ceil = start + needle.length;
-  for (let i = start; i < ceil; i += 1) {
-    if (haystack[i] !== needle[i - start]) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
 export function isDigit(ch: number): boolean {
   // 48 == '0'
   // 57 == '9'
