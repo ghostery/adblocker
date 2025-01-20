@@ -94,10 +94,10 @@ meineorte.com,osthessen-news.de,techadvisor.com,focus.de##+js(nostif, .call(null
 kicker.de##+js(set, ov.advertising.tisoomi.loadScript, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/22096
 !#if cap_html_filtering
-alpin.de,boersennews.de,chefkoch.de,chip.de,clever-tanken.de,desired.de,donnerwetter.de,fanfiktion.de,focus.de,formel1.de,frustfrei-lernen.de,gewinnspiele.tv,giga.de,gut-erklaert.de,kino.de,messen.de,nickles.de,nordbayern.de,spielfilm.de,teltarif.de,unsere-helden.com,weltfussball.at,watson.de,moviepilot.de,mactechnews.de,sport1.de,welt.de##^script:has-text(DisplayAcceptableAdIfAdblocked)
+alpin.de,boersennews.de,chefkoch.de,chip.de,clever-tanken.de,desired.de,donnerwetter.de,fanfiktion.de,focus.de,formel1.de,frustfrei-lernen.de,gewinnspiele.tv,giga.de,gut-erklaert.de,kino.de,messen.de,nickles.de,nordbayern.de,spielfilm.de,teltarif.de,unsere-helden.com,weltfussball.at,watson.de,moviepilot.de,mactechnews.de,sport1.de,welt.de,sport.de##^script:has-text(DisplayAcceptableAdIfAdblocked)
 teltarif.de##^script:has-text(adslotFilledByCriteo)
 !#else
-alpin.de,boersennews.de,chefkoch.de,chip.de,clever-tanken.de,desired.de,donnerwetter.de,fanfiktion.de,focus.de,formel1.de,frustfrei-lernen.de,gewinnspiele.tv,giga.de,gut-erklaert.de,kino.de,messen.de,nickles.de,nordbayern.de,spielfilm.de,teltarif.de,unsere-helden.com,weltfussball.at,watson.de,moviepilot.de,mactechnews.de,sport1.de,welt.de##+js(rmnt, script, DisplayAcceptableAdIfAdblocked)
+alpin.de,boersennews.de,chefkoch.de,chip.de,clever-tanken.de,desired.de,donnerwetter.de,fanfiktion.de,focus.de,formel1.de,frustfrei-lernen.de,gewinnspiele.tv,giga.de,gut-erklaert.de,kino.de,messen.de,nickles.de,nordbayern.de,spielfilm.de,teltarif.de,unsere-helden.com,weltfussball.at,watson.de,moviepilot.de,mactechnews.de,sport1.de,welt.de,sport.de##+js(rmnt, script, DisplayAcceptableAdIfAdblocked)
 teltarif.de##+js(rmnt, script, adslotFilledByCriteo)
 !#endif
 ||giga.de/special/gutscheine/*.png$script,1p
@@ -216,8 +216,6 @@ gellerreport.com##.__hinit
 */wp-adblock-$script,redirect=fuckadblock.js-3.2.0:5
 ! https://github.com/gorhill/uBlock/issues/949
 ! https://github.com/uBlockOrigin/uAssets/issues/6541#issuecomment-1012435405
-||s3.amazonaws.com/homad-global-configs.schneevonmorgen.com/hd-main.js$script,domain=autobild.de|cinema.de|computerbild.de|cdnapi.kaltura.com|focus.de|spieleaffe.de|sueddeutsche.de,redirect=hd-main.js
-||svonm.com/hd-main.js$script,redirect=hd-main.js,domain=cinema.de|cdnapi.kaltura.com
 tvspielfilm.de##.promo-box
 tvtoday.de##+js(nosiif, fireEvent, 500)
 @@||tvtoday.de^$ghide
@@ -3218,25 +3216,6 @@ porngem.com##.bottom-b-s
 ! https://forums.lanik.us/viewtopic.php?p=135477#p135477
 @@||btc-echo.de^$ghide
 btc-echo.de##.elementor-row:has-text([Anzeige])
-! https://forum.kuketz-blog.de/viewtopic.php?f=29&p=7929
-! https://github.com/uBlockOrigin/uAssets/issues/845
-! https://github.com/uBlockOrigin/uAssets/issues/3438
-! https://github.com/uBlockOrigin/uAssets/issues/3443
-! https://github.com/uBlockOrigin/uAssets/issues/5794
-!#if env_chromium
-||amazonaws.com/homad-global-configs.schneevonmorgen.com/global_config.json$xhr,redirect=nooptext,domain=fitforfun.de|golem.de|n-tv.de|wetter.de
-||amazonaws.com/homad-global-configs-eu-fra.schneevonmorgen.com/global_config.json$xhr,redirect=nooptext,domain=desired.de
-!#endif
-n-tv.de##+js(set, Object.prototype.adReinsertion, noopFunc)
-! https://github.com/uBlockOrigin/uAssets/issues/19951
-brigitte.de,stern.de##+js(set, Object.prototype.disableAds, true)
-wetter.de##+js(no-xhr-if, homad-global-configs)
-! https://github.com/uBlockOrigin/uAssets/issues/3443#issuecomment-420714439
-||amazonaws.com/homad-global-configs.schneevonmorgen.com/global_config.json$xhr,redirect=nooptext,domain=tele5.de
-! ||damoh.tele5.de/*$media,redirect=noopmp3-0.1s,domain=tele5.de
-kochbar.de##.ks-ad
-kochbar.de##[data-adslot]
-kochbar.de##.admanager
 ! https://forums.lanik.us/viewtopic.php?f=62&t=41254
 foxsports.com.au##+js(set, cxStartDetectionProcess, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/2064
@@ -5280,8 +5259,6 @@ temp-mail.org##+js(set, checkadBlock, noopFunc)
 temp-mail.org#?#li:has(.viewLink:has-text(AD |))
 ! http://forums.mozillazine.org/viewtopic.php?f=38&t=3043519
 3dprintersforum.co.uk##+js(acs, %24, gandalfads)
-! https://www.reddit.com/r/uBlockOrigin/comments/9wzeku/ublock_detected_in/
-giallozafferano.it##+js(nostif, (), 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/4127
 javstream.com##+js(aopr, AaDetector)
 javstream.com##+js(aopw, __aaZoneid)
@@ -6430,23 +6407,6 @@ ovagames.com##.single-entry-titles:has-text(Sponsor)
 ! https://github.com/NanoMeow/QuickReports/issues/830
 mmacore.tv##+js(acs, %24, importFAB)
 @@||mmacore.tv^$ghide
-! https://github.com/uBlockOrigin/uAssets/issues/5120
-@@||svonm.com/hd-main.js$script,domain=kicker.de|kino.de|videos.giga.de|video.spieletipps.de
-!#if env_chromium
-! [badfilter] @@||svonm.com/hd-main.js$script,domain=kicker.de|kino.de|videos.giga.de|video.spieletipps.de,badfilter
-!#endif
-!#if env_firefox
-! [badfilter] @@||svonm.com/hd-main.js$script,domain=kicker.de|kino.de|videos.giga.de|video.spieletipps.de,badfilter
-!#endif
-!#if env_edge
-! [badfilter] @@||svonm.com/hd-main.js$script,domain=kicker.de|kino.de|videos.giga.de|video.spieletipps.de,badfilter
-!#endif
-!#if env_safari
-! [badfilter] @@||svonm.com/hd-main.js$script,domain=kicker.de|kino.de|videos.giga.de|video.spieletipps.de,badfilter
-!#endif
-!#if env_mobile
-! [badfilter] @@||svonm.com/hd-main.js$script,domain=kicker.de|kino.de|videos.giga.de|video.spieletipps.de,badfilter
-!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/7192
 symbolab.com##.googleLeftSkyScrapper
 ! https://github.com/NanoMeow/QuickReports/issues/811
@@ -7545,8 +7505,6 @@ playpaste.com##+js(set, %24.ajax, trueFunc)
 ktmx.pro##+js(aeld, load, 2000)
 ! https://github.com/uBlockOrigin/uAssets/issues/5850
 @@||darkw.pl^$ghide
-! https://github.com/uBlockOrigin/uAssets/issues/5847
-player.rtl2.de##+js(set, getHomadConfig, noopFunc)
 ! thecrazytourist .com popunder
 thecrazytourist.com##+js(acs, document.getElementsByTagName, appendChild)
 ||sp.booking.com^$domain=thecrazytourist.com
@@ -9062,32 +9020,48 @@ aol.com##.maas-item:has-text(our Partners)
 ! https://github.com/uBlockOrigin/uAssets/issues/6541
 ! https://github.com/uBlockOrigin/uAssets/issues/15698
 ! https://github.com/uBlockOrigin/uAssets/issues/19453
-4players.de,buffed.de,gamesaktuell.de,gamezone.de,pcgames.de,videogameszone.de##+js(set, CustomEvent, noopFunc)
-golem.de,player.pcgameshardware.de##+js(no-xhr-if, damoh)
-vip.de,rtl.de,fitforfun.de,desired.de,kino.de,cinema.de##+js(no-xhr-if, svonm)
-desired.de##+js(ra, data-ivad-preroll-adtag, video, stay)
+player.buffed.de,player.gamezone.de,player.gamesaktuell.de,player.pcgames.de,player.videogameszone.de,player.pcgameshardware.de##+js(rpnt, script, %2F'globalConfig'%3A.*%3F%22%2C%5Cs%7D%3Bvar%20exportz%2Fs, %7D%3Bvar%20exportz)
+golem.de##+js(no-xhr-if, damoh)
+vip.de,rtl.de,cinema.de##+js(no-xhr-if, svonm)
 ||computer-bild.de/_static-assets/homad/homad.js
 ||auto-bild.de/_static-assets/homad/homad.js
-||static.kicker.de/content/js/vendor/homad
-spiegel.de##^script:has-text(homad)
-giga.de,kino.de,spieletipps.de##+js(rpnt, script, %2F%5C%22homad%5C%22%2C%2F)
+! web.de and gmx.net
+||uicdn.com/uimag/*/assets/_sn_/vendor/homad.min.js
+giga.de,kino.de,spieletipps.de,desired.de##+js(rpnt, script, %2F%5C%22homad%5C%22%2C%2F)
 t-online.de##+js(rpnt, script, %2F%5C%22homad%5C%22%3A%5C%7B%5C%22state%5C%22%3A%5C%22enabled%5C%22%5C%7D%2F, %22homad%22%3A%7B%22state%22%3A%22disabled%22%7D)
-!#if !cap_html_filtering
+sport.de##+js(rpnt, script, useAdBlockDefend%3A%20true, useAdBlockDefend%3A%20false)
+stern.de##+js(set, foundation.adPlayer.bitmovin, %7B%7D)
+brigitte.de##+js(trusted-replace-xhr-response, %22enabled%22%3A%20true, %22enabled%22%3A%20false, brigitte.de)
+wetter.de##+js(no-xhr-if, homad-global-configs)
+!#if cap_html_filtering
+spiegel.de##^script:has-text(homad)
+||welt.de/homadConfigEnabled.json$xhr,replace=/"enabled":true/"enabled":false/
+||golem.de/staticrl/scripts/radiant/rmp-rl_$script,1p,replace=/var conf = \{.*?'postrollAdTag': 'response\.empty'\s\}\;/var conf = {}/s
+||cinema.de/sites/default/files/js/js_$script,1p,replace=/var conf=\{'globalConfig'.*?'vpaid':'true'\};var exportz=/var conf={}; var exportz=/
+!#else
 welt.de,~dutyfarm.welt.de##div[id][style^="z-index: 2"][style*="margin"][style*="auto"][style*="top"][style$="px; position: absolute;"]:remove()
 spiegel.de##+js(rmnt, script, homad)
-!#else
-||welt.de/homadConfigEnabled.json$xhr,replace=/"enabled":true/"enabled":false/
 !#endif
 plus.rtl.de##+js(json-prune, adReinsertion)
-tvspielfilm.de,tvtoday.de,chip.de,focus.de##+js(set, DL8_GLOBALS.enableAdSupport, false)
-tvspielfilm.de,tvtoday.de,chip.de,focus.de##+js(set, DL8_GLOBALS.useHomad, false)
-tvspielfilm.de,tvtoday.de,chip.de,focus.de##+js(set, DL8_GLOBALS.enableHomadDesktop, false)
-tvspielfilm.de,tvtoday.de,chip.de,focus.de##+js(set, DL8_GLOBALS.enableHomadMobile, false)
-! https://github.com/uBlockOrigin/uAssets/issues/26865
-stern.de##+js(set, foundation.adPlayer.bitmovin, %7B%7D)
+tvspielfilm.de,tvtoday.de,chip.de,focus.de,fitforfun.de##+js(set, DL8_GLOBALS.enableAdSupport, false)
+tvspielfilm.de,tvtoday.de,chip.de,focus.de,fitforfun.de##+js(set, DL8_GLOBALS.useHomad, false)
+tvspielfilm.de,tvtoday.de,chip.de,focus.de,fitforfun.de##+js(set, DL8_GLOBALS.enableHomadDesktop, false)
+tvspielfilm.de,tvtoday.de,chip.de,focus.de,fitforfun.de##+js(set, DL8_GLOBALS.enableHomadMobile, false)
+!#if env_chromium
+||amazonaws.com/homad-global-configs.schneevonmorgen.com/global_config.json$xhr,redirect=nooptext,domain=n-tv.de|golem.de
+!#endif
+! https://github.com/uBlockOrigin/uAssets/issues/19951
+n-tv.de##+js(set, Object.prototype.adReinsertion, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/5847
+player.rtl2.de##+js(set, getHomadConfig, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/7508#issuecomment-659267224
+||united-infos.net^$domain=gmx.*|web.de
+! https://github.com/uBlockOrigin/uAssets/issues/6541#issuecomment-559272733
+focus.de,kicker.de##+js(json-prune, enabled, force_disabled)
 ! https://github.com/uBlockOrigin/uAssets/issues/7508#issuecomment-659267224
 ||damoh.gmx.*/*$media,redirect=noop-0.1s.mp3,1p
-||united-infos.net^$domain=gmx.*|web.de
+! [dup] from ublock-origin/filters.txt
+! ||united-infos.net^$domain=gmx.*|web.de
 ! https://github.com/uBlockOrigin/uAssets/issues/6541#issuecomment-559272733
 focus.de##+js(json-prune, enabled, force_disabled)
 gmx.*,web.de##+js(aeld, timeupdate)

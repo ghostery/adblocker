@@ -3126,7 +3126,6 @@ www.cambe.pr.gov.br##+js(noeval-if, tigervip2)
 ! https://www.virustotal.com/gui/url/38ad38ba67efdd42656b489e4df678ee065cad109cd1c9dbacf4632d356250d9
 /^https:\/\/vietg[a-z]v[0-9]*\.cc\//$doc,to=cc
 ||clickhereecraigslist.tripod.com^$all
-||unclepigva.com^$all,to=~chase.com
 ||mymokki.ru^$all,to=~hozblokspb.ru
 ||lapmangsctv.com.vn^$doc,to=~sctv.com.vn
 ||socgeneralist.firebaseapp.com^$all,to=~societegenerale.com
@@ -3172,6 +3171,11 @@ www.cambe.pr.gov.br##+js(noeval-if, tigervip2)
 ! https://urldna.io/scan/6787ea54ff48f1c3edd44b8d
 ! https://www.virustotal.com/gui/url/9362994a4404b8b59c426bb8a4637c10a17b298283aa728233c02ca5f48b9ca6
 ||koenig.cx^$all,to=~dropbox.com
+! chase.com
+||unclepigva.com^$all,to=~chase.com
+! https://urldna.io/scan/678b29ad976ce49815c9d092
+! https://www.virustotal.com/gui/url/555d499dc6a45517858cc393ef245217657ddae4d997f43a6c438746add59042
+||aurelie-picard-parentalite.fr/*/Recurring_Payment_Authorizationtt.html^$all,to=~chase.com
 ! ameli.fr
 ! https://urldna.io/scan/673d518d1baadd13b30c1a19
 ! https://www.virustotal.com/gui/url/0b8c995ec706e68efcf33f1b7c567423285c29d0d3bc5b59f606da0735097e57
@@ -3599,6 +3603,9 @@ www.cambe.pr.gov.br##+js(noeval-if, tigervip2)
 ||currentlyatt*.weebly.com^$all
 ! https://www.virustotal.com/gui/url/2ec68ebdc97db155bd29a90d948a1223e9514bb911e91c9e512436ccffabd7e7
 ||currentlymail*.weebly.com^$all
+! https://urldna.io/scan/678bdf428f2d6f01e81e41e3
+! https://www.virustotal.com/gui/url/a4fb0e7b9d9d645300b649e9ad11d36bc2040e0e29fe6e124f8188f241e8bd71
+||att-currently-*.weeblysite.com^$all
 ! https://urldna.io/scan/673e8ad4962aac12d27309a9
 ! https://www.virustotal.com/gui/url/79485aada1c4e81b7f9282623813436167f110cd09ab9d11b65b6f18133f6b89
 ||dropbox.com/*/AT-T-YAHOO-MAIL.paper^$doc
@@ -5851,6 +5858,7 @@ uploadfox.net###ad-gs-05
 ! https://github.com/uBlockOrigin/uAssets/issues/26853
 ||teleqpnm.cn^$all,to=~telegram.org
 ! https://www.malwarebytes.com/blog/news/2025/01/the-great-google-ads-heist-criminals-ransack-advertiser-accounts-via-fake-google-ads
+! https://github.com/uBlockOrigin/uAssets/issues/26878
 ||sites.google.com/view/entteraccess^$all,to=~ads.google.com
 ||sites.google.com/view/helpp2k^$all,to=~ads.google.com
 ||accounts.google.lt1l.com^$all,to=~ads.google.com
@@ -5864,6 +5872,15 @@ uploadfox.net###ad-gs-05
 ||vietnamworks.vn-login.shop^$all,to=~google.com
 ! https://www.reddit.com/r/Scams/comments/1i29m8t/for_the_first_time_i_almost_fell_for_one/
 ||ezdrivema.com-$doc,to=~mass.gov
+! https://www.reddit.com/r/phishing/comments/1i2zh8p/nice_try_ive_gotten_3_this_week/
+||ezdrive.com-$doc,to=~mass.gov
 ! https://www.reddit.com/r/phishing/comments/1i2gi5r/is_this_legit/
 ||thetollroads.texas-$all,to=~thetollroads.com
 /^https:\/\/thetollroads\.[a-z]+-[a-z]{4}\.[a-z]{3}\//$doc,to=~thetollroads.com
+! https://blog.sekoia.io/sneaky-2fa-exposing-a-new-aitm-phishing-as-a-service/
+/^https:\/\/(?:[-a-z0-9]{2,}\.){1,2}(?:[a-z]{2,3}|click|online)\/(?:[-a-z0-9]+\/){1,4}[a-zA-Z0-9]{150}\/index\?a=/$doc,xhr,match-case,method=get,to=~edu|~gov
+/^https:\/\/(?:[-a-z0-9]{2,}\.){1,2}(?:[a-z]{2,3}|click|online)\/(?:[-a-z0-9]+\/){1,4}[a-zA-Z0-9]{150}\/verify\b/$doc,match-case,method=get,to=~edu|~gov
+! https://github.com/uBlockOrigin/uAssets/issues/26886
+||pclpubg.com^$doc,to=~pubgesports.com
+! https://www.reddit.com/r/Scams/comments/1i45a66/is_this_a_scam_so_scared/
+||lazada.dsromorganizer.com^$all,to=~lazada.com

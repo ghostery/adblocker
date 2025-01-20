@@ -23,7 +23,6 @@ export default [
   "nobab2.js:10",
   "noopmp3-0.1s",
   "noop-1s.mp4",
-  "hd-main.js",
   "noopmp4-1s",
   "32x32.png",
   "noop.html",
