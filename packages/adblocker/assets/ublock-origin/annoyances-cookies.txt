@@ -1035,7 +1035,7 @@ aa.com,americanairlines.*##+js(trusted-click-element, button.optoutmulti_button,
 chron.com,greenwichtime.com,houstonchronicle.com,mysanantonio.com,seattlepi.com,sfchronicle.com,sfgate.com,thetelegraph.com,timesunion.com##+js(trusted-set-cookie, _consent_cookie, %7B%22services%22%3A%5B%22jwp%22%2C%22twitter%22%5D%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/21749
 ! button[title="Accepter"]
-consent.capital.fr,programme-tv.net##+js(trusted-click-element, button%5Btitle%3D%22Accepter%22%5D)
+consent.capital.fr,consent.voici.fr,programme-tv.net##+js(trusted-click-element, button%5Btitle%3D%22Accepter%22%5D)
 ! hide banner, allow embeeded social
 24ur.com##.cookies
 24ur.com##+js(trusted-set-cookie, cookies_accept, local%2Cthird)
@@ -1210,7 +1210,7 @@ fruugo.de##+js(set-cookie, consents, essential)
 ! https://github.com/uBlockOrigin/uAssets/issues/22896
 ! https://github.com/uBlockOrigin/uAssets/issues/22911
 ! https://github.com/easylist/easylist/issues/19970
-cdn.privacy-mgmt.com,cmp.computerbild.de,cmp.petbook.de,cmp-sp.siegener-zeitung.de,cmp-sp.sportbuzzer.de,klarmobil.de##+js(trusted-click-element, button%5Btitle%5E%3D%22Alle%20akzeptieren%22%5D)
+cmp-sp.tagesspiegel.de,cmp.bz-berlin.de,cmp.techbook.de,cmp.stylebook.de,sourcepoint.wetter.de,consent.finanzen.at,sourcepoint.n-tv.de,sourcepoint.kochbar.de,cdn.privacy-mgmt.com,cmp.computerbild.de,cmp.petbook.de,cmp-sp.siegener-zeitung.de,cmp-sp.sportbuzzer.de,klarmobil.de##+js(trusted-click-element, button%5Btitle%5E%3D%22Alle%20akzeptieren%22%5D)
 ! necessary = true/ stats = false
 seen.es##+js(trusted-set-cookie, aceptarCookiesSeen, %7B%22necesarias%22%3Atrue%2C%22estadisticas%22%3Afalse%7D, , , reload, 1)
 ! Just necessary cookies
@@ -1381,8 +1381,8 @@ ilgazzettino.it,ilmessaggero.it,ilsecoloxix.it##+js(trusted-click-element, butto
 ! https://www.reddit.com/r/uBlockOrigin/comments/1eb0wlg/weathercom_cannot_load/
 ! weather.com##+js(trusted-set-cookie, consentUUID, df843851-527a-4aec-8dab-5ba35e570618_32_33)
 weather.com##+js(trusted-set-local-storage-item, userConsents, %7B%22functional-technology%22%3Atrue%7D)
-! accept
-privacy.motorradonline.de##+js(trusted-click-element, button%5Btitle%3D%22Akzeptieren%20und%20weiter%22%5D, , 1000)
+! accept / impulse.de
+privacy.motorradonline.de,cdn.privacy-mgmt.com##+js(trusted-click-element, button%5Btitle%3D%22Akzeptieren%20und%20weiter%22%5D, , 1000)
 ! just necessary
 tedbaker.com##+js(trusted-set-cookie, CONSENTMGR, c1%3A0%7Cc6%3A0%7Cc9%3A0%7Cts%3A1718751098255%7Cconsent%3Afalse%7Cid%3A01902d7e715a00551abb1b4878180206f003606700fb9, , , domain, .tedbaker.com)
 ! necessary cookies
@@ -1433,8 +1433,6 @@ tvn24.pl##+js(set, __tcfapi_user_acctepted, true)
 tvn24.pl###onetrust-consent-sdk
 ! Decline
 americanexpress.com##+js(trusted-click-element, button%5Bdata-testid%3D%22granular-banner-button-decline-all%22%5D, , 1000)
-! accept
-golem.de##+js(trusted-click-element, button%5Btitle*%3D%22Zustimmen%22%5D, , 1000)
 ! https://github.com/easylist/easylist/issues/19630
 bergans.com##+js(trusted-set-cookie, cc, 2%3Af, , , reload, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/24660 - 3rd party cookie
@@ -1447,10 +1445,28 @@ cdn.privacy-mgmt.com##+js(trusted-click-element, button%5Baria-label*%3D%22Acept
 ! beteve.cat (accept)
 ! https://www.whatcar.com/reviews
 cdn.privacy-mgmt.com##+js(trusted-click-element, button%5Btitle*%3D%22Accept%22%5D, , 1000)
-! bloodyelbow.com (accept)
-cdn.privacy-mgmt.com##+js(trusted-click-element, button%5Btitle*%3D%22AGREE%22%5D, , 1000)
-! rockhard.de (accept)
-cdn.privacy-mgmt.com##+js(trusted-click-element, button%5Btitle*%3D%22Zustimmen%22%5D, , 1000)
+! bloodyelbow.com (accept) /radiotimes.com
+cdn.privacy-mgmt.com,consent.radiotimes.com##+js(trusted-click-element, button%5Btitle*%3D%22AGREE%22%5D, , 1000)
+! agree
+sp-consent.szbz.de##+js(trusted-click-element, button%5Btitle%3D%22Alles%20akzeptieren%22%5D, , 1000)
+! agree
+cmp.omni.se##+js(trusted-click-element, button%5Btitle%3D%22Godk%C3%A4nn%20alla%20cookies%22%5D, , 1000)
+! accept weltkunst.de
+cdn.privacy-mgmt.com##+js(trusted-click-element, button%5Btitle%3D%22ALLE%20AKZEPTIEREN%22%5D, , 1000)
+! reject
+consent.economist.com##+js(trusted-click-element, button%5Btitle%3D%22Reject%20all%22%5D, , 1000)
+! I Agree cdn.privacy-mgmt.com / driving.co.uk
+cdn.privacy-mgmt.com,cmpv2.foundryco.com,cmpv2.infoworld.com,cmpv2.arnnet.com.au##+js(trusted-click-element, button%5Btitle%3D%22I%20Agree%22%5D, , 1000)
+! agree
+sp-cdn.pcgames.de,sp-cdn.pcgameshardware.de,consentv2.sport1.de##+js(trusted-click-element, button%5Btitle%3D%22AKZEPTIEREN%20UND%20WEITER%22%5D, , 1000)
+! agree
+cmpv2.tori.fi##+js(trusted-click-element, button%5Btitle%3D%22Hyv%C3%A4ksy%20kaikki%20ev%C3%A4steet%22%5D, , 1000)
+! allow nessacry (tidende.dk)
+cdn.privacy-mgmt.co##+js(trusted-click-element, button%5Btitle%3D%22TILLAD%20N%C3%98DVENDIGE%22%5D, , 1000)
+! accept all
+consent.spielaffe.de##+js(trusted-click-element, button%5Btitle%3D%22Accept%20All%20%26%20Close%22%5D, , 1000)
+! agree
+vtwonen.nl##+js(trusted-click-element, %23pg-root-shadow-host%20%3E%3E%3E%20button%23pg-accept-btn)
 ! just Use necessary cookies only
 degiro.*,vikingline.com##+js(trusted-click-element, %23CybotCookiebotDialogBodyButtonDecline)
 ! Necessary + functional cookies
@@ -1470,9 +1486,9 @@ infranken.de##+js(trusted-click-element, span%23cmpbntyestxt, , 1000)
 tvsyd.dk##+js(trusted-set-cookie, tv2reg_cookie_consent, %7B%22revision%22%3A1%2C%22consent%22%3A%5B%7B%22handle%22%3A%22necessary%22%2C%22value%22%3Atrue%7D%2C%7B%22handle%22%3A%22functional%22%2C%22value%22%3Afalse%7D%2C%7B%22handle%22%3A%22statistics%22%2C%22value%22%3Afalse%7D%2C%7B%22handle%22%3A%22preferences%22%2C%22value%22%3Afalse%7D%2C%7B%22handle%22%3A%22marketing%22%2C%22value%22%3Atrue%7D%5D%7D)
 ! required/comfort=true
 suedtirolerjobs.it,kaerntnerjobs.at,tirolerjobs.at,salzburgerjobs.at,wienerjobs.at##+js(trusted-set-cookie, cookieConsents, %7B%2522required%2522%3Atrue%252C%2522statistics%2522%3Anull%252C%2522comfort%2522%3Atrue%252C%2522personalization%2522%3Anull%7D)
-chip.de##[id^="sp_message_container"]
-chip.de##html.sp-message-open > body:style(position: unset !important; overflow: unset !important)
-cmp.chip.de##+js(trusted-click-element, button%5Btitle%3D%22Akzeptieren%22%5D, , 1000)
+bunte.de,chip.de##[id^="sp_message_container"]
+bunte.de,chip.de##html.sp-message-open > body:style(position: unset !important; overflow: unset !important)
+cmp.bunte.de,cmp.chip.de##+js(trusted-click-element, button%5Btitle%3D%22Akzeptieren%22%5D, , 1000)
 ! Mandatory + Functional - for customer service chat
 posti.fi##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24, 1year, , domain, posti.fi)
 posti.fi##+js(trusted-set-cookie, OptanonConsent, groups%3DC0001%253A1%252CC0003%253A1%252CC0002%253A0%252CC0004%253A0%252CC0005%253A0, 1year, , domain, posti.fi)
@@ -1603,7 +1619,7 @@ nytimes.com##+js(trusted-click-element, button%5Bdata-tpl-type%3D%22Button%22%5D
 ! opt-out (mobile)
 uber.com##+js(trusted-click-element, button%5Bdata-tracking-name%3D%22cookie-preferences-sloo-opt-out%22%5D)
 ! Accept cookie-wall (UK IP)
-independent.co.uk##+js(trusted-click-element, button%5Btitle%3D%22ACCEPT%22%5D)
+independent.co.uk,privacy.crash.net##+js(trusted-click-element, button%5Btitle%3D%22ACCEPT%22%5D)
 ! Save and exit  (UK IP)
 the-independent.com##+js(trusted-click-element, button%5Btitle%3D%22SAVE%20AND%20EXIT%22%5D)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/193817
@@ -1661,7 +1677,7 @@ privacy.maennersache.de##+js(trusted-click-element, button%5Btitle%3D%22Einwilli
 ! https://lovo.ai/ - essential only
 lovo.ai##+js(trusted-set-cookie, cookieConsent, %7B%22essential%22%3Atrue%2C%22analytical%22%3Afalse%2C%22functional%22%3Afalse%2C%22marketing%22%3Afalse%7D)
 ! Agree (cookie-wall consent)
-cmp.heise.de##+js(trusted-click-element, button%5Btitle%3D%22Agree%22%5D, , 1000)
+cmp.heise.de,cmp.am-online.com,consent.newsnow.co.uk##+js(trusted-click-element, button%5Btitle%3D%22Agree%22%5D, , 1000)
 ! https://github.com/uBlockOrigin/uAssets/issues/26465
 character.ai##+js(trusted-set-cookie, cookie_consent_v1, reject_all)
 figma.com##+js(trusted-set-cookie, pref, %257B%2522t%2522%253A%2522explicit%2522%252C%2522f%2522%253Afalse%252C%2522a%2522%253Afalse%252C%2522m%2522%253Afalse%257D)
@@ -1681,7 +1697,7 @@ adidas.*##+js(trusted-click-element, button%5Bdata-auto-id%3D%22glass-gdpr-defau
 ! non-essential
 crumblcookies.com##+js(trusted-set-local-storage-item, userTrackingConsent, %7B%22necessary%22%3Atrue%2C%22marketing%22%3Afalse%7D)
 ! accept https://www.topreality.sk/
-privacy.topreality.sk##+js(trusted-click-element, button%5Baria-label%3D%22Prija%C5%A5%20v%C5%A1etko%22%5D)
+privacy.topreality.sk,privacy.autobazar.eu##+js(trusted-click-element, button%5Baria-label%3D%22Prija%C5%A5%20v%C5%A1etko%22%5D)
 ! ilmatieteenlaitos.fi
 ilmatieteenlaitos.fi##+js(trusted-set-cookie, FMI_COOKIE_CONSENT, %257B%2522ts%2522%253A%25221970-01-01T00%253A00%253A00.000Z%2522%252C%2522allow%2522%253A%257B%2522necessary%2522%253A%257B%2522fmi_necessary%2522%253A1%257D%252C%2522preferences%2522%253A%257B%2522fmi_preferences%2522%253A1%257D%252C%2522analytics%2522%253A%257B%2522rs%2522%253A1%252C%2522userneeds%2522%253A2%257D%252C%2522other%2522%253A%257B%2522youtube%2522%253A1%252C%2522fyrebox%2522%253A1%257D%257D%257D, 1year)
 ! At least chat needs cookies
@@ -1712,8 +1728,6 @@ hornetsecurity.com,kayzen.io###BorlabsCookieBox
 hornetsecurity.com,kayzen.io##+js(trusted-click-element, button.brlbs-btn-accept-only-essential, , 1000)
 ! disagree
 standaard.be##+js(trusted-click-element, button%5Bid%3D%22didomi-notice-disagree-button%22%5D, , 1000)
-! Agree (consent wall)
-cmp.bz-berlin.de##+js(trusted-click-element, button%5Btitle%3D%22Alle%20akzeptieren%22%5D, , 1000)
 ! https://github.com/uBlockOrigin/uAssets/issues/26727 - functional
 lieferando.de##+js(trusted-set-cookie, je-cookieConsent, necessary, , , domain, lieferando.de)
 lieferando.de##+js(trusted-set-cookie, customerCookieConsent, %5B%7B%22consentTypeId%22%3A103%2C%22consentTypeName%22%3A%22necessary%22%2C%22isAccepted%22%3Atrue%2C%22decisionAt%22%3A%22%24now%24%22%7D%2C%7B%22consentTypeId%22%3A104%2C%22consentTypeName%22%3A%22functional%22%2C%22isAccepted%22%3Atrue%2C%22decisionAt%22%3A%22%24now%24%22%7D%2C%7B%22consentTypeId%22%3A105%2C%22consentTypeName%22%3A%22analytical%22%2C%22isAccepted%22%3Afalse%2C%22decisionAt%22%3A%22%24now%24%22%7D%2C%7B%22consentTypeId%22%3A106%2C%22consentTypeName%22%3A%22personalized%22%2C%22isAccepted%22%3Afalse%2C%22decisionAt%22%3A%22%24now%24%22%7D%5D, , , domain, lieferando.de)
@@ -1732,13 +1746,10 @@ latamairlines.com##+js(trusted-click-element, button%5Bdata-testid%3D%22cookies-
 ! allow necessary
 elisa.ee##+js(trusted-click-element, cds-button%5Bid%3D%22cookie-allow-necessary-et%22%5D, , 1000)
 ! accept (consent wall)
-baseendpoint.brigitte.de##+js(trusted-click-element, button%5Btitle%3D%22Zustimmen%22%5D, , 1000)
+! cdn.privacy-mgmt.com / rockhard.de
+baseendpoint.brigitte.de,baseendpoint.gala.de,baseendpoint.haeuser.de,baseendpoint.urbia.de,cmp.tag24.de,golem.de,cdn.privacy-mgmt.com##+js(trusted-click-element, button%5Btitle*%3D%22Zustimmen%22%5D, , 1000)
 ! accept (including forms)
 regjeringen.no##+js(trusted-click-element, button%5Bid%3D%22userSelectAll%22%5D, , 1000)
-! agree (consent wall)
-cmp-sp.tagesspiegel.de##+js(trusted-click-element, button%5Btitle%3D%22Alle%20akzeptieren%22%5D, , 1000)
-! agree (consent wall)
-baseendpoint.gala.de##+js(trusted-click-element, button%5Btitle%3D%22Zustimmen%22%5D, , 1000)
 ! necessary only (1836378181=Mar 11 2028)
 kanga.exchange##+js(trusted-set-cookie, cookies-consent%7Ckanga, 1836378181%7CNECESSARY)
 ! necessary cookies
@@ -1784,7 +1795,11 @@ postfinance.ch##+js(trusted-set-cookie, consent_settings, %7B%22consentAnalytics
 ! https://lcp.fr/actualites/retraites-s-il-y-a-des-progres-entre-partenaires-sociaux-un-texte-sera-soumis-au - fix embedded videos and tweets
 lcp.fr##+js(trusted-set-cookie, cookiesjsr, %257B%2522functional%2522%3Afalse%2C%2522gtag%2522%3Afalse%2C%2522recaptcha%2522%3Afalse%2C%2522addtoany%2522%3Afalse%2C%2522twitter%2522%3Atrue%2C%2522video%2522%3Atrue%2C%2522vimeo%2522%3Atrue%257D)
 ! https://github.com/uBlockOrigin/uAssets/issues/11232#issuecomment-2599709662
-! [badfilter] ||nike.com/fragments/privacy-consent?$badfilter
-nike.com##+js(trusted-click-element, button%5Baria-label%3D%22Accept%20All%22%5D, , 1000)
+nike.com,consent.fastcar.co.uk##+js(trusted-click-element, button%5Baria-label%3D%22Accept%20All%22%5D, , 1000)
+! essential only
+sailgp.com##+js(trusted-set-cookie, cookieConsent, %7B%22ad_storage%22%3A%22denied%22%2C%22analytics_storage%22%3A%22denied%22%2C%22ad_user_data%22%3A%22denied%22%2C%22ad_personalization%22%3A%22denied%22%7D)
+sailgp.com##+js(set-cookie, sgp-cp-acceptance, true)
+! accept
+wells.pt##+js(trusted-click-element, button.CybotCookiebotDialogBodyButton, , 1000)
 ! https://ir.ung.edu/ - essential only
 ir.ung.edu##+js(trusted-set-cookie, cookie_preferences, %7B%22allow_all%22%3A0%2C%22google_analytics%22%3A0%2C%22accepted%22%3A1%7D, , , reload, 1)
