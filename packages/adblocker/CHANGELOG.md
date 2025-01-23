@@ -1,3 +1,15 @@
+# v2.4.0 (Thu Jan 23 2025)
+
+#### :running_woman: Performance
+
+- refactor: replace `fastStartsWith` & `fastStartsWithFrom` [#4518](https://github.com/ghostery/adblocker/pull/4518) ([@SukkaW](https://github.com/SukkaW))
+
+#### Authors: 1
+
+- Sukka ([@SukkaW](https://github.com/SukkaW))
+
+---
+
 # v2.3.2 (Thu Jan 23 2025)
 
 #### :bug: Bug Fix
