@@ -732,20 +732,18 @@ export default class NetworkFilter implements IFilter {
 
         switch (option) {
           case 'denyallow': {
-            denyallow = Domains.parse(value.split('|'), debug);
+            denyallow = Domains.parse(value, { delimiter: '|', debug });
+            if (denyallow === undefined) {
+              return null;
+            }
             break;
           }
           case 'domain':
           case 'from': {
-            // domain list starting or ending with '|' is invalid
-            if (
-              value.charCodeAt(0) === 124 /* '|' */ ||
-              value.charCodeAt(value.length - 1) === 124 /* '|' */
-            ) {
+            domains = Domains.parse(value, { delimiter: '|', debug });
+            if (domains === undefined) {
               return null;
             }
-
-            domains = Domains.parse(value.split('|'), debug);
             break;
           }
           case 'badfilter':
