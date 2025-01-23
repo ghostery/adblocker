@@ -745,7 +745,10 @@ export default class NetworkFilter implements IFilter {
                 denyallowEntities.add(part);
               }
             }
-            denyallow = Domains.parse(Array.from(denyallowEntities), { delimiter: '|', debug });
+            denyallow = Domains.parse(Array.from(denyallowEntities).join('|'), {
+              delimiter: '|',
+              debug,
+            });
             if (denyallow === undefined) {
               return null;
             }
