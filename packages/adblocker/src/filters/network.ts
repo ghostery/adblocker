@@ -985,6 +985,7 @@ export default class NetworkFilter implements IFilter {
     } else {
       mask |= cptMaskPositive & cptMaskNegative;
     }
+    mask >>>= 0;
 
     // Identify kind of pattern
     let filter: string | undefined;
