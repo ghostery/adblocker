@@ -14,7 +14,11 @@ import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils.js';
 export class Domains {
   public static parse(
     value: string,
-    { delimiter = ',', debug = false }: { delimiter?: string; debug?: boolean } = {},
+    {
+      delimiter = ',',
+      debug = false,
+      negate = false,
+    }: { delimiter?: string; debug?: boolean; negate?: boolean } = {},
   ): Domains | undefined {
     const parts = value.split(delimiter);
 
@@ -32,8 +36,21 @@ export class Domains {
     const notEntities: number[] = [];
     const hostnames: number[] = [];
     const notHostnames: number[] = [];
+    const rawParts: string[] = [];
 
     for (let hostname of parts) {
+      if (negate) {
+        if (hostname.charCodeAt(0) === 126 /* '~' */) {
+          hostname = hostname.slice(1);
+        } else {
+          hostname = `~${hostname}`;
+        }
+      }
+
+      if (debug === true) {
+        rawParts.push(hostname);
+      }
+
       if (hasUnicode(hostname)) {
         hostname = toASCII(hostname);
       }
@@ -70,7 +87,7 @@ export class Domains {
       hostnames: hostnames.length !== 0 ? new Uint32Array(hostnames).sort() : undefined,
       notEntities: notEntities.length !== 0 ? new Uint32Array(notEntities).sort() : undefined,
       notHostnames: notHostnames.length !== 0 ? new Uint32Array(notHostnames).sort() : undefined,
-      parts: debug === true ? parts.join(delimiter) : undefined,
+      parts: debug === true ? rawParts.join(delimiter) : undefined,
     });
   }
 
