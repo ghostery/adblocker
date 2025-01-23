@@ -23,8 +23,6 @@ import {
   bitCount,
   clearBit,
   fastHash,
-  fastStartsWith,
-  fastStartsWithFrom,
   getBit,
   hasUnicode,
   isAlpha,
@@ -1090,7 +1088,7 @@ export default class NetworkFilter implements IFilter {
       if (getBit(mask, NETWORK_FILTER_MASK.isLeftAnchor)) {
         if (
           filterIndexEnd - filterIndexStart === 5 &&
-          fastStartsWithFrom(line, 'ws://', filterIndexStart)
+          line.startsWith('ws://', filterIndexStart)
         ) {
           mask = setBit(mask, NETWORK_FILTER_MASK.fromWebsocket);
           mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
@@ -1099,7 +1097,7 @@ export default class NetworkFilter implements IFilter {
           filterIndexStart = filterIndexEnd;
         } else if (
           filterIndexEnd - filterIndexStart === 7 &&
-          fastStartsWithFrom(line, 'http://', filterIndexStart)
+          line.startsWith('http://', filterIndexStart)
         ) {
           mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
           mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttps);
@@ -1107,7 +1105,7 @@ export default class NetworkFilter implements IFilter {
           filterIndexStart = filterIndexEnd;
         } else if (
           filterIndexEnd - filterIndexStart === 8 &&
-          fastStartsWithFrom(line, 'https://', filterIndexStart)
+          line.startsWith('https://', filterIndexStart)
         ) {
           mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
           mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttp);
@@ -1115,7 +1113,7 @@ export default class NetworkFilter implements IFilter {
           filterIndexStart = filterIndexEnd;
         } else if (
           filterIndexEnd - filterIndexStart === 8 &&
-          fastStartsWithFrom(line, 'http*://', filterIndexStart)
+          line.startsWith('http*://', filterIndexStart)
         ) {
           mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
           mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
@@ -2044,8 +2042,7 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
       // Since this is not a regex, the filter pattern must follow the hostname
       // with nothing in between. So we extract the part of the URL following
       // after hostname and will perform the matching on it.
-      return fastStartsWithFrom(
-        request.url,
+      return request.url.startsWith(
         pattern,
         request.url.indexOf(filterHostname) + filterHostname.length,
       );
@@ -2068,7 +2065,7 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
     return request.url === pattern;
   } else if (filter.isLeftAnchor()) {
     // |pattern
-    return fastStartsWith(request.url, pattern);
+    return request.url.startsWith(pattern);
   } else if (filter.isRightAnchor()) {
     // pattern|
     return request.url.endsWith(pattern);
