@@ -180,6 +180,9 @@ describe('Network filters', () => {
 
     it('pprint domain', () => {
       checkToString('ads$domain=foo.com|bar.co.uk|~baz.io', 'ads$domain=<hashed>');
+      checkToString('ads$domain=foo.com|bar.com', 'ads$domain=foo.com|bar.com', true);
+      checkToString('ads$denyallow=foo.com|bar.co.uk|~baz.io', 'ads$denyallow=<hashed>');
+      checkToString('ads$denyallow=foo.com|bar.com', 'ads$denyallow=foo.com|bar.com', true);
     });
 
     it('pprint with debug=true', () => {

@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { Browser, Runtime, WebRequest, WebNavigation } from 'webextension-polyfill';
+import browser, { Runtime, WebRequest, WebNavigation } from 'webextension-polyfill';
 import { parse } from 'tldts-experimental';
 
 import {
@@ -46,6 +46,8 @@ type StreamFilter = WebRequest.StreamFilter & {
   onstop: (event: any) => void;
   onerror: (event: any) => void;
 };
+
+type Browser = typeof browser;
 
 function isFirefox() {
   try {

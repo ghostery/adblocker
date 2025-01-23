@@ -1,3 +1,22 @@
+# v2.3.2 (Thu Jan 23 2025)
+
+#### :bug: Bug Fix
+
+- fix(type): avoid use of statics ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#4574](https://github.com/ghostery/adblocker/pull/4574) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(adblocker-webextension): incorrect use of webextension-polyfill [#4564](https://github.com/ghostery/adblocker/pull/4564) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.1.2 (Thu Dec 05 2024)
 
 #### :bug: Bug Fix

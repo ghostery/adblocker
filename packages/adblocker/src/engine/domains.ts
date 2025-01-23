@@ -12,9 +12,20 @@ import { StaticDataView, sizeOfUint32Array, sizeOfUTF8 } from '../data-view.js';
 import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils.js';
 
 export class Domains {
-  public static parse(parts: string[], debug: boolean = false): Domains | undefined {
+  public static parse(
+    value: string,
+    { delimiter = ',', debug = false }: { delimiter?: string; debug?: boolean } = {},
+  ): Domains | undefined {
+    const parts = value.split(delimiter);
+
     if (parts.length === 0) {
       return undefined;
+    }
+
+    for (const part of parts) {
+      if (part.length === 0 || part.startsWith(delimiter) || part.endsWith(delimiter)) {
+        return undefined;
+      }
     }
 
     const entities: number[] = [];
@@ -59,7 +70,7 @@ export class Domains {
       hostnames: hostnames.length !== 0 ? new Uint32Array(hostnames).sort() : undefined,
       notEntities: notEntities.length !== 0 ? new Uint32Array(notEntities).sort() : undefined,
       notHostnames: notHostnames.length !== 0 ? new Uint32Array(notHostnames).sort() : undefined,
-      parts: debug === true ? parts.join(',') : undefined,
+      parts: debug === true ? parts.join(delimiter) : undefined,
     });
   }
 
