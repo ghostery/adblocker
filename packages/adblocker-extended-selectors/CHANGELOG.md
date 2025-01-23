@@ -1,3 +1,21 @@
+# v2.3.2 (Thu Jan 23 2025)
+
+#### :bug: Bug Fix
+
+- Build(deps-dev): Bump jsdom from 25.0.1 to 26.0.0 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump typescript from 5.7.2 to 5.7.3 [#4583](https://github.com/ghostery/adblocker/pull/4583) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.290 to 0.0.293 [#4582](https://github.com/ghostery/adblocker/pull/4582) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump jsdom from 25.0.1 to 26.0.0 [#4584](https://github.com/ghostery/adblocker/pull/4584) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v2.1.2 (Thu Dec 05 2024)
 
 #### :bug: Bug Fix
