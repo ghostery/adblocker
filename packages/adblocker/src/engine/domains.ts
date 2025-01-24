@@ -57,8 +57,8 @@ export class Domains {
         negation === true || entity === true ? hostname.slice(start, end) : hostname,
       );
 
-      // If conditionally negated value of `negation` by `negate` is `true`
-      if ((+negation ^ +negate) === 1) {
+      // If conditionally negated value of `negation` by `negate` is `1`
+      if (+negation ^ +negate) {
         if (entity) {
           notEntities.push(hash);
         } else {
