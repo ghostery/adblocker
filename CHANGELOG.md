@@ -1,3 +1,25 @@
+# v2.5.0 (Fri Jan 24 2025)
+
+#### :rocket: New Feature
+
+- `@ghostery/adblocker`
+  - feat: `to` network modifier [#4524](https://github.com/ghostery/adblocker/pull/4524) ([@seia-soto](https://github.com/seia-soto) [@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump playwright from 1.49.1 to 1.50.0 [#4621](https://github.com/ghostery/adblocker/pull/4621) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 22.10.8 to 22.10.10 [#4619](https://github.com/ghostery/adblocker/pull/4619) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`
+  - Build(deps): Bump puppeteer from 24.1.0 to 24.1.1 [#4620](https://github.com/ghostery/adblocker/pull/4620) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.4.0 (Thu Jan 23 2025)
 
 #### :running_woman: Performance

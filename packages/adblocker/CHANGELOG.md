@@ -1,3 +1,16 @@
+# v2.5.0 (Fri Jan 24 2025)
+
+#### :rocket: New Feature
+
+- feat: `to` network modifier [#4524](https://github.com/ghostery/adblocker/pull/4524) ([@seia-soto](https://github.com/seia-soto) [@chrmod](https://github.com/chrmod))
+
+#### Authors: 2
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.4.0 (Thu Jan 23 2025)
 
 #### :running_woman: Performance
