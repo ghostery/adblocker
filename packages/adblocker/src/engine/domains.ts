@@ -39,14 +39,6 @@ export class Domains {
     const rawParts: string[] = [];
 
     for (let hostname of parts) {
-      if (negate) {
-        if (hostname.charCodeAt(0) === 126 /* '~' */) {
-          hostname = hostname.slice(1);
-        } else {
-          hostname = `~${hostname}`;
-        }
-      }
-
       if (debug === true) {
         rawParts.push(hostname);
       }
@@ -67,7 +59,7 @@ export class Domains {
         negation === true || entity === true ? hostname.slice(start, end) : hostname,
       );
 
-      if (negation) {
+      if (negate ? !negation : negation) {
         if (entity) {
           notEntities.push(hash);
         } else {
