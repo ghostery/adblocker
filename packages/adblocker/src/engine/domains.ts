@@ -38,10 +38,8 @@ export class Domains {
     const notHostnames: number[] = [];
     const rawParts: string[] = [];
 
-    for (let hostname of parts) {
-      if (debug === true) {
-        rawParts.push(hostname);
-      }
+    for (const rawHostname of parts) {
+      let hostname = rawHostname;
 
       if (hasUnicode(hostname)) {
         hostname = toASCII(hostname);
@@ -59,17 +57,24 @@ export class Domains {
         negation === true || entity === true ? hostname.slice(start, end) : hostname,
       );
 
-      if (negate ? !negation : negation) {
+      // If conditionally negated value of `negation` by `negate` is `true`
+      if ((+negation ^ +negate) === 1) {
         if (entity) {
           notEntities.push(hash);
         } else {
           notHostnames.push(hash);
+        }
+        if (debug) {
+          rawParts.push(negation ? rawHostname : `~${rawHostname}`);
         }
       } else {
         if (entity) {
           entities.push(hash);
         } else {
           hostnames.push(hash);
+        }
+        if (debug) {
+          rawParts.push(negation ? rawHostname.slice(1) : rawHostname);
         }
       }
     }
