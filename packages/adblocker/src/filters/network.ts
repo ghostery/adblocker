@@ -729,8 +729,13 @@ export default class NetworkFilter implements IFilter {
         const value = rawOption[1];
 
         switch (option) {
+          case 'to':
           case 'denyallow': {
-            denyallow = Domains.parse(value, { delimiter: '|', debug });
+            denyallow = Domains.parse(value, {
+              delimiter: '|',
+              debug,
+              negate: option === 'to',
+            });
             if (denyallow === undefined) {
               return null;
             }
