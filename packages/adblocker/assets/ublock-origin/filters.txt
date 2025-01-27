@@ -65,7 +65,7 @@ lablue.*##+js(nostif, push, 500)
 ||doubleclick.net^$script,important,domain=auto-motor-und-sport.de
 !#endif
 4-liga.com,4fansites.de,4players.de,9monate.de##+js(nostif, .call(null), 10)
-aachener-nachrichten.de,aachener-zeitung.de,abendblatt.de,abendzeitung-muenchen.de,about-drinks.com,abseits-ka.de,airliners.de,ajaxshowtime.com,allgemeine-zeitung.de,alpin.de,antenne.de,arcor.de,areadvd.de,areamobile.de,ariva.de,astronews.com,aussenwirtschaftslupe.de,auszeit.bio,auto-motor-und-sport.de,auto-service.de,autobild.de,autoextrem.de,autopixx.de,autorevue.at,az-online.de##+js(nostif, .call(null), 10)
+aachener-nachrichten.de,aachener-zeitung.de,abendblatt.de,abendzeitung-muenchen.de,about-drinks.com,abseits-ka.de,airliners.de,ajaxshowtime.com,allgemeine-zeitung.de,alpin.de,antenne.de,arcor.de,areadvd.de,areamobile.de,ariva.de,astronews.com,aussenwirtschaftslupe.de,auszeit.bio,auto-motor-und-sport.de,auto-service.de,autobild.de,autoextrem.de,autopixx.de,autorevue.at,autotrader.nl,az-online.de##+js(nostif, .call(null), 10)
 baby-vornamen.de,babyclub.de,bafoeg-aktuell.de,berliner-kurier.de,berliner-zeitung.de,bigfm.de,bikerszene.de,bildderfrau.de,blackd.de,blick.de,boerse-online.de,boerse.de,boersennews.de,braunschweiger-zeitung.de,brieffreunde.de,brigitte.de,buerstaedter-zeitung.de,buffed.de,businessinsider.de,buzzfeed.at,buzzfeed.de##+js(nostif, .call(null), 10)
 caravaning.de,cavallo.de,chefkoch.de,cinema.de,clever-tanken.de,computerbild.de,computerhilfen.de,comunio-cl.com,comunio.*,connect.de,chip.de##+js(nostif, .call(null), 10)
 da-imnetz.de,dasgelbeblatt.de,dbna.com,dbna.de,deichstube.de,deine-tierwelt.de,der-betze-brennt.de,derwesten.de,desired.de,dhd24.com,dieblaue24.com,digitalfernsehen.de,dnn.de,donnerwetter.de##+js(nostif, .call(null), 10)
@@ -965,35 +965,6 @@ marketrealist.com##.gXgoom > div
 @@||myreadingmanga.disqus.com^$script
 myreadingmanga.info##.imgtop
 myreadingmanga.info##center
-! https://github.com/uBlockOrigin/uAssets/issues/506
-! https://github.com/uBlockOrigin/uAssets/issues/6568
-||msn.com/advertisement.ad.js$script,1p,important
-||aolcdn.com/ads/adswrappermsni.js$script,domain=msn.com,important
-! https://github.com/uBlockOrigin/uAssets/issues/3703#issuecomment-435044782
-msn.com##.extnativeaditem, .serversidenativead > h3
-msn.com##.colombiaintraarticleads
-! https://github.com/NanoMeow/QuickReports/issues/2332
-msn.com##[data-aop="stripe.sponsored.navigation_stripenavigation"]:upward(2)
-!#if !env_mobile
-msn.com##[data-aop="stripe.store.navigation_stripenavigation"]:upward(2)
-!#endif
-!#if env_mobile
-msn.com##.stripenav:has(.adslabel):upward(2)
-!#endif
-msn.com##.todayshowcasead
-! https://github.com/NanoMeow/QuickReports/issues/1486#issuecomment-557161527
-msn.com##.stripecontainer:has(.adslabel)
-! https://www.msn.com/ja-jp/news placeholder
-msn.com##msft-article-card:not([class])
-! https://github.com/uBlockOrigin/uAssets/issues/19845
-!#if env_mobile
-msn.com##msft-article-card:not(.contentCard)
-!#endif
-! https://github.com/AdguardTeam/AdguardFilters/issues/173054
-www.msn.com##+js(json-prune-fetch-response, properties.componentConfigs.slideshowConfigs.slideshowSettings.interstitialNativeAds, , propsToMatch, url%3Aconsumptionpage%2Fgallery_windows%2Fconfig.json)
-! https://github.com/AdguardTeam/AdguardFilters/issues/146823
-www.msn.com##+js(json-prune-fetch-response, *, list.*.link.ad%20list.*.link.kicker, propsToMatch, url%3Acontent%2Fv1%2Fcms%2Fapi%2Famp)
-msn.com##.vd-ad
 ! https://github.com/uBlockOrigin/uAssets/issues/12058
 ! https://www.reddit.com/r/uBlockOrigin/comments/1dnyvz4/fmovies24to_bypass/
 vid2faf.*##+js(nowoif)
@@ -2964,6 +2935,7 @@ insidemarketing.it##.homeBannerMax
 ! https://github.com/uBlockOrigin/uAssets/issues/1835
 9xupload.*##+js(nano-stb)
 desiupload.*##+js(acs, getCookie)
+desiupload.*##+js(aeld, , history.go)
 desiupload.*###container > center > a[href][target="_blank"] > img
 ||a2ztechworld.com^$3p
 ! https://github.com/uBlockOrigin/uAssets/issues/1839
@@ -5268,13 +5240,7 @@ linkspaid.com##+js(nostif, (), 1000)
 ! https://github.com/NanoMeow/QuickReports/issues/329
 kurazone.net##+js(aopr, AaDetector)
 ||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs:10,domain=kurazone.net
-! agar.*
-agar.pro##+js(aeld, load, onload)
-@@||ip-api.com/json/$script,domain=agar.pro
-@@||agar.pro^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/4136
-@@||methbox.com^$ghide
-methbox.com##+js(nostif, nextFunction, 250)
 ||popcent.org^$3p
 ! https://forums.lanik.us/viewtopic.php?f=62&t=42181
 ! https://github.com/uBlockOrigin/uAssets/issues/4202
@@ -6600,14 +6566,9 @@ zona-leros.net##.content_store
 player.zona-leros.net,zlplayer.net###dvr-vid
 zona-leros.net##.Body > .Container > ul.Rows > li:first-child:has(> article > a[href][target="_blank"])
 zpaste.net,zlpaste.net##+js(aeld, DOMContentLoaded, adlinkfly)
-zplayer.live##+js(aopr, I833)
-zplayer.live##+js(nowoif)
-zplayer.live##.user
 zpaste.net,pixeldrain.com###sponsors
-zplayer.live##.banner
 ||zshorte.net/*.html$frame,3p
-*$script,3p,denyallow=cloudflare.com|cloudflare.net|fastly.net|fastlylb.net|google.com|googleapis.com|gstatic.com|hwcdn.net|jquery.com|jsdelivr.net|jwplatform.com|jwpcdn.com|recaptcha.net|arc.io,domain=zpaste.net|zplayer.live
-@@||zplayer.live^$cname
+*$script,3p,denyallow=cloudflare.com|cloudflare.net|fastly.net|fastlylb.net|google.com|googleapis.com|gstatic.com|hwcdn.net|jquery.com|jsdelivr.net|jwplatform.com|jwpcdn.com|recaptcha.net|arc.io,domain=zpaste.net
 ||anime-jl.net^$3p,script
 ||i.imgur.com/YmmGPK1.png^$3p
 ! https://forums.lanik.us/viewtopic.php?f=62&t=42841
@@ -9030,8 +8991,7 @@ vip.de,rtl.de,cinema.de##+js(no-xhr-if, svonm)
 giga.de,kino.de,spieletipps.de,desired.de##+js(rpnt, script, %2F%5C%22homad%5C%22%2C%2F)
 t-online.de##+js(rpnt, script, %2F%5C%22homad%5C%22%3A%5C%7B%5C%22state%5C%22%3A%5C%22enabled%5C%22%5C%7D%2F, %22homad%22%3A%7B%22state%22%3A%22disabled%22%7D)
 sport.de##+js(rpnt, script, useAdBlockDefend%3A%20true, useAdBlockDefend%3A%20false)
-stern.de##+js(set, foundation.adPlayer.bitmovin, %7B%7D)
-brigitte.de##+js(trusted-replace-xhr-response, %22enabled%22%3A%20true, %22enabled%22%3A%20false, brigitte.de)
+stern.de,geo.de,brigitte.de##+js(set, foundation.adPlayer.bitmovin, %7B%7D)
 wetter.de##+js(no-xhr-if, homad-global-configs)
 !#if cap_html_filtering
 spiegel.de##^script:has-text(homad)
@@ -9039,7 +8999,9 @@ spiegel.de##^script:has-text(homad)
 ||golem.de/staticrl/scripts/radiant/rmp-rl_$script,1p,replace=/var conf = \{.*?'postrollAdTag': 'response\.empty'\s\}\;/var conf = {}/s
 ||cinema.de/sites/default/files/js/js_$script,1p,replace=/var conf=\{'globalConfig'.*?'vpaid':'true'\};var exportz=/var conf={}; var exportz=/
 !#else
-welt.de,~dutyfarm.welt.de##div[id][style^="z-index: 2"][style*="margin"][style*="auto"][style*="top"][style$="px; position: absolute;"]:remove()
+||www.welt.de/homadConfigEnabled.json$xhr,redirect=noopjs,domain=welt.de
+||adnxs.com^$xhr,domain=welt.de,important
+||asadcdn.com^$script,domain=welt.de,important
 spiegel.de##+js(rmnt, script, homad)
 !#endif
 plus.rtl.de##+js(json-prune, adReinsertion)
