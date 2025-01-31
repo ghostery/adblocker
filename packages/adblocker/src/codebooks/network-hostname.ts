@@ -8,12 +8,11 @@
 /* eslint-disable prettier/prettier */
 export default [
   "securepubads.g.doubleclick",
-  "pagead2.googlesyndication",
   ".actonservice.com",
   "googlesyndication",
   "imasdk.googleapis",
   ".cloudfront.net",
-  "googletagmanag",
+  "-1.xx.fbcdn",
   "analytics.",
   "marketing.",
   "tracking.",
@@ -129,6 +128,7 @@ export default [
   "he",
   "hi",
   "ho",
+  "ib",
   "ic",
   "id",
   "ie",
