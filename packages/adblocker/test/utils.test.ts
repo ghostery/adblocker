@@ -279,7 +279,7 @@ describe('utils.ts', () => {
     });
     it('keeps all bit fields', () => {
       const n = setBit(0, lastBit);
-      expect(setBit(n, 1 << 30) | (1 << 30)).to.be.eql(1073741824);
+      expect(setBit(n, 1 << 30) | (1 << 30)).to.be.eql(-1073741824);
       expect(setBit(n, 1 << 30) | lastBit).to.be.eql(lastBit);
     });
   });
