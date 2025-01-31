@@ -969,11 +969,11 @@ export default class NetworkFilter implements IFilter {
     }
 
     if (cptMaskPositive === 0) {
-      mask |= cptMaskNegative;
+      mask = setBit(mask, cptMaskNegative);
     } else if (cptMaskNegative === FROM_ANY) {
-      mask |= cptMaskPositive;
+      mask = setBit(mask, cptMaskPositive);
     } else {
-      mask |= cptMaskPositive & cptMaskNegative;
+      mask = setBit(mask, cptMaskPositive & cptMaskNegative);
     }
 
     // Identify kind of pattern
