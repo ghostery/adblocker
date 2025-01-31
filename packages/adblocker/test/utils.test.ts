@@ -19,6 +19,7 @@ import {
   fastHashBetween,
   findLastIndexOfUnescapedCharacter,
   hasUnicode,
+  setBit,
   tokenize,
   tokenizeInPlace,
   tokenizeNoSkip,
@@ -267,5 +268,19 @@ describe('utils.ts', () => {
   it('#findLastIndexOfUnescapedCharacter', () => {
     const line = String.raw`||www.youtube.com/playlist?list=$xhr,1p,replace=/("trackingParam":"kx_fmPxhoPZR)[-_0-9A-Za-z]{150}[-_0-9A-Za-z]+?([-_0-9A-Za-z]{55}lLKPQ-SS"\})/\$1\$2/`;
     expect(findLastIndexOfUnescapedCharacter(line, '$')).to.be.eql(32);
+  });
+
+  describe('#setBit', () => {
+    const lastBit = 1 << 31; // -2147483648
+
+    it('keeps the integer always unsigned', () => {
+      expect(setBit(0, lastBit)).to.be.greaterThan(0);
+      expect(setBit(0, lastBit)).to.be.eql(2147483648);
+    });
+    it('keeps all bit fields', () => {
+      const n = setBit(0, lastBit);
+      expect(setBit(n, 1 << 30) | (1 << 30)).to.be.eql(1073741824);
+      expect(setBit(n, 1 << 30) | lastBit).to.be.eql(lastBit);
+    });
   });
 });
