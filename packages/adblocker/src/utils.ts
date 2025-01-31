@@ -27,7 +27,7 @@ export function getBit(n: number, mask: number): boolean {
 }
 
 export function setBit(n: number, mask: number): number {
-  return (n | mask) >>> 0;
+  return n | mask;
 }
 
 export function clearBit(n: number, mask: number): number {
