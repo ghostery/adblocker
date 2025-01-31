@@ -270,17 +270,29 @@ describe('utils.ts', () => {
     expect(findLastIndexOfUnescapedCharacter(line, '$')).to.be.eql(32);
   });
 
+  // `setBit` only does OR bit operation but this test reavels the use of 32nd bit is safe.
   describe('#setBit', () => {
+    // The reason not to unsigned right shift with zero here is because it doens't affect to the AND operations.
+    // A number after any bit operations is signed in JavaScript.
+    // If all of the bit fields are settled correctly, we see all numbers in signed state and having a signed number as a mask is fine.
     const lastBit = 1 << 31; // -2147483648
 
     it('keeps the integer always unsigned', () => {
-      expect(setBit(0, lastBit)).to.be.greaterThan(0);
-      expect(setBit(0, lastBit)).to.be.eql(2147483648);
+      const n = setBit(0, lastBit);
+      // The result should be negative 2147483648 (1 << 31) after the OR operation.
+      expect(n).to.be.eql(-2147483648);
+      // However, there's actually no change in the readable bit field.
+      // The binary representation of the number should have a length of 32 with the first byte set.
+      expect((n >>> 0).toString(2)).to.be.eql('10000000000000000000000000000000');
     });
     it('keeps all bit fields', () => {
       const n = setBit(0, lastBit);
-      expect(setBit(n, 1 << 30) | (1 << 30)).to.be.eql(-1073741824);
-      expect(setBit(n, 1 << 30) | lastBit).to.be.eql(lastBit);
+      // AND operation should not be affected by using the 32nd bit and another bit (31st bit here).
+      // Therefore, the correctness of `getBit` after doing `setBit` with 32nd bit is ensured here.
+      expect(setBit(n, 1 << 30) & lastBit).to.be.eql(lastBit);
+      // Now, this emulates the situation after the parse or serialization of `NetworkFilter`: `n` is readonly unsigned.
+      // The result should be same, which ensures the correctness of `getBit`.
+      expect(setBit(n >>> 0, 1 << 30) & lastBit).to.be.eql(lastBit);
     });
   });
 });

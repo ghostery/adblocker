@@ -136,6 +136,21 @@ describe('#StaticDataView', () => {
     });
   });
 
+  describe('#pushUint32', () => {
+    it('converts a signed integer into an unsigned integer', () => {
+      const view = StaticDataView.allocate(4, { enableCompression: false });
+      const mask = 1 << 31;
+      // Let's try to put "signed" 32nd bit after OR operation.
+      view.pushUint32(mask | (1 << 30));
+      // Since the `pos` is changed with `pushUint32`, it should be reset.
+      view.setPos(0);
+      // The view should return unsigned integer while keeping.
+      const n = view.getUint32();
+      expect(n).to.be.eql((mask | (1 << 30)) >>> 0);
+      expect(n.toString(2)).to.be.eql('11000000000000000000000000000000');
+    });
+  });
+
   describe('#getUint32ArrayView', () => {
     it('empty view', () => {
       const view = StaticDataView.allocate(0, { enableCompression: false });
