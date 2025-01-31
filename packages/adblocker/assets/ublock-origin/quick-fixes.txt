@@ -79,18 +79,17 @@ maxfinishseveral.com##+js(set, console.clear, undefined)
 *$image,redirect-rule=1x1.gif,domain=japscan.lol
 japscan.lol##+js(norafif, %2F%5E%2F)
 japscan.lol##+js(trusted-set-attr, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a, onclick, let%20a%3Dfunction()%7B%7D%3Breturn%20false%3B)
-japscan.lol##:not(:matches-path(/^\/$/)) body > div.container > div#intePromo[style*="block"]
-japscan.lol##:not(:matches-path(/^\/$/)) body > div.container > div#blir-nter[style*="visible"]
+japscan.lol#@#:matches-path(/\/.+/)body > div.container > div#blir-nter[style*="visible"]
+japscan.lol#@#body > style + .container > .row > #main + #sidebar.col-md-3 > .card.mt-1 > .card[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 100px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
+japscan.lol#@#body > style + .container > .row > #main.col-md-9 > .card > .card-body.rounded-0 > .card-body[style^="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 100px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
+japscan.lol#@#body > style + .container > .row > #main.col-md-9 > .card > .card-body[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 100px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
+japscan.lol#@#body > .container.text-center > .mb-2.mt-2[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 100px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
 ! START: Counter Liste FR rules
 japscan.lol#@##main > .card:has(a[href*="/manga/?type="][href*="&content="][target="_blank"])
 japscan.lol#@#div.container > [href]
 ! END
 ||japscan.lol/zjs/$script,replace=/function GoodDay\(\)\{.+?\}\}\}//
 japscan.lol##body > style + .container > .row > #main + #sidebar.col-md-3 > .card.mt-1 > .card[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 250px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
-japscan.lol##body > style + .container > .row > #main.col-md-9 > .card > .card-body[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 100px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
-japscan.lol##body > .container.text-center > .mb-2.mt-2[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 100px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
-japscan.lol##body > style + .container > .row > #main.col-md-9 > .card > .card-body.rounded-0 > .card-body[style^="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 100px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
-japscan.lol#@#body > style + .container > .row > #main + #sidebar.col-md-3 > .card.mt-1 > .card[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 100px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
 /^https?:\/\/[-a-z]{8,15}\.(?:com|net)\/401\/\d{7}(?:\?v=\d+)?$/$script,3p,domain=japscan.lol,important
 /^https?:\/\/[a-z]{8,15}\.xyz\/$/$xhr,3p,to=xyz,method=head,header=x-traceid2,domain=japscan.lol,important
 /^https?:\/\/[a-z]{8,15}\.com\/$/$xhr,3p,to=com,method=head,header=x-traceid2,domain=japscan.lol,important
@@ -115,7 +114,7 @@ poophq.com,veev.to##+js(set, fapit.check, noopFunc)
 poophq.com,veev.to##+js(no-xhr-if, %2Fvast.php%3F)
 poophq.com,veev.to##+js(no-xhr-if, adsbygoogle, length%3A35000-55000)
 poophq.com,veev.to##+js(rpnt, script, %2F%3D%5C(%5B'%22%5D.*%3Fh.*%3Fo.*%3Fc.*%3Fa.*%3Fs%5B'%22%5D%3F%2F, %241(function()%20%7B'use%20strict'%3B%20const%20handler%20%3D%20%7Bapply%3A%20(target%2C%20thisArg%2C%20argumentsList)%20%3D%3E%20%7Bconst%20e%20%3D%20argumentsList%3B%20if%20(e%5B0%5D%20%26%26%20e%5B0%5D.html%3F.detected%20%3D%3D%3D%20null%20%26%26%20typeof%20e%5B0%5D.html%3F.instance%3F.start%20%3D%3D%3D%20'function'%20%26%26%20typeof%20e%5B0%5D.env%3F.instance%3F.start%20%3D%3D%3D%20'function'%20%26%26%20typeof%20e%5B0%5D.http%3F.instance%3F.start%20%3D%3D%3D%20'function')%20%7Bconst%20resetBooleans%20%3D%20function()%20%7BObject.keys(this).forEach(key%20%3D%3E%20%7Bif%20(typeof%20this%5Bkey%5D%20%3D%3D%3D%20'boolean')%20%7Bthis%5Bkey%5D%20%3D%20false%3B%7D%7D)%3B%7D%3B%20%5B'html'%2C%20'env'%2C%20'http'%5D.forEach(name%20%3D%3E%20%7Be%5B0%5D%5Bname%5D.instance.start%20%3D%20resetBooleans%3B%7D)%3B%7D%20return%20Reflect.apply(target%2C%20thisArg%2C%20argumentsList)%3B%7D%7D%3B%20window.Object.keys%20%3D%20new%20Proxy(Object.keys%2C%20handler)%3B%7D)()%3B, includes, break%3Belse)
-poophq.com,veev.to##+js(no-xhr-if, %2F%5C%2Fpreroll%5C.engine%24%2F)
+poophq.com,veev.to##+js(no-xhr-if, %2F%5C%2Fpreroll%5C.engine%24%7Cjs%2F)
 *$script,3p,domain=poophq.com|veev.to,redirect-rule=noopjs
 *$other,3p,denyallow=veevcdn.co,domain=poophq.com|veev.to
 @@*$ghide,domain=poophq.com|veev.to
@@ -147,8 +146,8 @@ panel.freemcserver.net##+js(rpnt, script, 'G-1B4LC0KT6C')%3B, 'G-1B4LC0KT6C')%3B
 ! filemoon
 ! https://github.com/AdguardTeam/AdguardFilters/issues/190044
 ! https://www.reddit.com/r/uBlockOrigin/comments/1fuaaw5/asblock_detected_in_ask4porncc
-u26bekrb.fun,ur70sq6j.fun,moon-3uykdl2w-embed.com,moo-teau4c9h-mkay.com,moonfile-62es3l9z.com,file-1bl9ruic-moon.com,moon-kg83docx.com,mee-6zeqsgv2.com,moon-fm43w1qv.com,morgan0928-t9xc5eet.fun,stephenking-vy5hgkgu.fun,ghajini-04bl9y7x.lol,semprefi-2tazedzl.fun,fu-12qjdjqh.lol,fu-hbr4fzp4.lol,fu-hjyo3jqu.lol,fu-c66heipu.lol,fu-l6d0ptc6.lol,fu-ys0tjjs1.nl,fu-1fbolpvq.nl,fu-4u3omzw0.nl##+js(nowoif)
-u26bekrb.fun,ur70sq6j.fun,moon-3uykdl2w-embed.com,moo-teau4c9h-mkay.com,moonfile-62es3l9z.com,file-1bl9ruic-moon.com,moon-kg83docx.com,mee-6zeqsgv2.com,moon-fm43w1qv.com,stephenking-vy5hgkgu.fun,ghajini-04bl9y7x.lol,semprefi-2tazedzl.fun,morgan0928-8ufkpqp8.fun,fu-12qjdjqh.lol,fu-hbr4fzp4.lol,fu-hjyo3jqu.lol,fu-c66heipu.lol,fu-l6d0ptc6.lol,fu-ys0tjjs1.nl,fu-1fbolpvq.nl,fu-4u3omzw0.nl##+js(acs, Math, localStorage%5B'%5Cx)
+bf0skv.org,morgan0928-6v7c14vs.fun,ulike-filter-sowe-canplay-rightlets-generate-themrandomlyl89u8.fun,morgan0928-5386paz2.fun,stephenking-7tm3toav.fun,ghajini-y9yq0v8t.lol,gorro-chfzoaas.fun,u26bekrb.fun,ur70sq6j.fun,moon-3uykdl2w-embed.com,moo-teau4c9h-mkay.com,moonfile-62es3l9z.com,file-1bl9ruic-moon.com,moon-kg83docx.com,mee-6zeqsgv2.com,moon-fm43w1qv.com,morgan0928-t9xc5eet.fun,stephenking-vy5hgkgu.fun,ghajini-04bl9y7x.lol,semprefi-2tazedzl.fun,fu-12qjdjqh.lol,fu-hbr4fzp4.lol,fu-hjyo3jqu.lol,fu-c66heipu.lol,fu-l6d0ptc6.lol,fu-ys0tjjs1.nl,fu-1fbolpvq.nl,fu-4u3omzw0.nl##+js(nowoif)
+bf0skv.org,morgan0928-6v7c14vs.fun,ulike-filter-sowe-canplay-rightlets-generate-themrandomlyl89u8.fun,morgan0928-5386paz2.fun,stephenking-7tm3toav.fun,ghajini-y9yq0v8t.lol,gorro-chfzoaas.fun,u26bekrb.fun,ur70sq6j.fun,moon-3uykdl2w-embed.com,moo-teau4c9h-mkay.com,moonfile-62es3l9z.com,file-1bl9ruic-moon.com,moon-kg83docx.com,mee-6zeqsgv2.com,moon-fm43w1qv.com,stephenking-vy5hgkgu.fun,ghajini-04bl9y7x.lol,semprefi-2tazedzl.fun,morgan0928-8ufkpqp8.fun,fu-12qjdjqh.lol,fu-hbr4fzp4.lol,fu-hjyo3jqu.lol,fu-c66heipu.lol,fu-l6d0ptc6.lol,fu-ys0tjjs1.nl,fu-1fbolpvq.nl,fu-4u3omzw0.nl##+js(acs, Math, localStorage%5B'%5Cx)
 u26bekrb.fun##+js(set, adBlockDetected, undefined)
 !#if ext_devbuild
 $frame,3p,domain=filemoon.*|8rm3l0i9.fun,replace='/^/<script>(()=>{window.open=new Proxy(window.open,{apply:(n,o,w)=>{}});let e=document.querySelector("script");e.innerHTML.includes("window.open")&&e.parentElement.removeChild(e)})();<\/script>/i'
@@ -158,14 +157,21 @@ $frame,3p,domain=filemoon.*|8rm3l0i9.fun,replace='/^/<script>(()=>{window.open=n
 0cbcq8mu.com,2cf0xzdu.com,4k2h4w04.xyz,a6iqb4m8.xyz,afl3ua5u.xyz,jmzkzesy.xyz##+js(nowoif)
 0cbcq8mu.com,2cf0xzdu.com,4k2h4w04.xyz,a6iqb4m8.xyz,afl3ua5u.xyz,jmzkzesy.xyz##+js(acs, Math, localStorage%5B'%5Cx)
 0cbcq8mu.com,2cf0xzdu.com,4k2h4w04.xyz,a6iqb4m8.xyz,afl3ua5u.xyz,jmzkzesy.xyz##^script:has-text(/popunder|\(\)\{try\{localStorage\[/)
+||fbpbpmjjg-f.club^$popup,doc
+||gajinifreedomain.fun^$popup,doc
+||h5xzcrigf541b0fzxj.fun^$popup,doc
 ||j-mxponyz.love^
+||nanai-clw.com^
 ||pzcwk-sfend.top^$popup,doc
+||qjvksieybn.vip^$popup,doc
 ||skyscrapertowel.com^
 ||slavicprophetyontherm.com^$popup,doc
 ||tronkwintun.com^$popup
 ||urxox-iqx.online^$popup,doc
 ||vjkyw.vip^$popup,doc
+||wbhwwnzptf.club^$popup,doc
 ||x-ozwpiqlb.rocks^$popup,doc
+||xdgeslibgbim.icu^$popup,doc
 ! Ad-Shield
 dogdrip.net##html[lang="ko"] [id^="img_"][style]:has(iframe[frameborder="0"][style]):style(clip-path: circle(0) !important;)
 infinityfree.com##html[lang][dir="ltr"] [id^="img_"][style]:has(iframe[frameborder="0"][style]):style(clip-path: circle(0) !important;)
@@ -190,8 +196,6 @@ bing.com##ol#b_results > li:has(> :is(.b_tpcn, .b_title, h2) a[href^="https://ww
 bing.com##ol#b_results > li:has(> :is(.b_tpcn, .b_title, h2) a[href^="https://www.bing.com/aclk?"])
 ! https://github.com/AdguardTeam/AdguardFilters/issues/183252
 exploader.net##+js(trusted-rpnt, script, %2F%5Evar%20%5Cw%2B%3D%5C%5B.%2B%2F, (()%3D%3E%7Blet%20e%3D%5B%5D%3Bdocument.addEventListener(%22DOMContentLoaded%22%2C(()%3D%3E%7Bconst%20t%3Ddocument.querySelector(%22body%20script%22).textContent.match(%2F%22%5D%20%3D%20'(.*%3F)'%2Fg)%3Bif(!t)return%3Bt.forEach((t%3D%3E%7Bconst%20r%3Dt.replace(%2F.*'(.*%3F)'%2F%2C%22%241%22)%3Be.push(r)%7D))%3Bconst%20r%3Ddocument.querySelector('.dl_button%5Bhref*%3D%22preview%22%5D').href.split(%22%3F%22)%5B1%5D%3Be.includes(r)%26%26(e%3De.filter((e%3D%3Ee!%3D%3Dr)))%3Bdocument.querySelectorAll(%22.dl_button%5Bhref%5D%22).forEach((t%3D%3E%7Bt.target%3D%22_blank%22%3Blet%20r%3Dt.cloneNode(!0)%3Br.href%3Dt.href.replace(%2F%5C%3F.*%2F%2C%60%3F%24%7Be%5B0%5D%7D%60)%2Ct.after(r)%3Blet%20o%3Dt.cloneNode(!0)%3Bo.href%3Dt.href.replace(%2F%5C%3F.*%2F%2C%60%3F%24%7Be%5B1%5D%7D%60)%2Ct.after(o)%7D))%7D))%7D)()%3B, sedCount, 1)
-exploader.net##+js(acs, EventTarget.prototype.addEventListener, eval)
-||daotag.com/tag/$script,domain=exploader.net,important
 ! https://github.com/easylist/easylistgermany/issues/216
 !#if cap_html_filtering
 www.chip.de##^script:has-text(/[a-zA-Z0-9]{10,20}\; \} \}/)
@@ -199,14 +203,14 @@ www.chip.de##^script:has-text(/[a-zA-Z0-9]{10,20}\; \} \}/)
 www.chip.de##+js(rmnt, script, %2F%5Ba-zA-Z0-9%5D%7B10%2C20%7D%5C%3B%20%5C%7D%20%5C%7D%2F)
 !#endif
 ! https://github.com/AdguardTeam/AdguardFilters/issues/153796
-rekidai-info.github.io#@#+js(nostif, %2Faframe%7CquerySelector%2F)
 rekidai-info.github.io##+js(nostif, %2Faframe%7CquerySelector%2F, 1000-)
 rekidai-info.github.io##+js(nosiif, location%5B_0x)
 ! https://github.com/uBlockOrigin/uAssets/issues/20907
 @@||cursomecanet.com^$script,1p
 @@*$image,domain=cursomecanet.com
-! https://github.com/uBlockOrigin/uAssets/issues/20207
-! https://github.com/uBlockOrigin/uAssets/issues/26877
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=robertordercharacter.com|voe.sx,important
-robertordercharacter.com,voe.sx##+js(nowoif)
-robertordercharacter.com,voe.sx##+js(set, console.clear, undefined)
+! https://github.com/uBlockOrigin/uAssets/issues/26197
+! https://github.com/uBlockOrigin/uAssets/issues/26983
+! [badfilter] ||kemono.su/api/v1/creators$badfilter
+! [badfilter] ||coomer.su/api/v1/creators$badfilter
+||kemono.su/api/v1/creators|
+||coomer.su/api/v1/creators|
