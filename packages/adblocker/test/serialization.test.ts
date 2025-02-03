@@ -74,7 +74,7 @@ describe('Serialization', () => {
     });
   });
 
-  describe.only('NetworkFilter', () => {
+  describe('NetworkFilter', () => {
     it('keeps integrity with the use of 32nd bit', () => {
       const buffer = StaticDataView.allocate(10, { enableCompression: false });
       const mask = (1 << 31) | (1 << 30);
