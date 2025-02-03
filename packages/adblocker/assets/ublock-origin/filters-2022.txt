@@ -163,6 +163,7 @@ cine-calidad.*,veryfreeporn.com##^script:has-text(popMagic)
 !#else
 cine-calidad.*,veryfreeporn.com##+js(rmnt, script, popMagic)
 !#endif
+comicsvalley.com###custom_html-19
 ||xsportshd.com/bet.gif$image
 familyporner.com##.inside-list-boxes:upward(1)
 sexoverdose.com##.table
@@ -2744,7 +2745,7 @@ allthetests.com,apkmirror.com,autoby.jp,automobile-catalog.com,blog.esuteru.com,
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/357#discussioncomment-10468169
 ||asset.ad-shield.cc/images$image,3p,redirect=32x32.png
 ! https://github.com/AdguardTeam/AdguardFilters/issues/197087
-jmty.jp##+js(acs, document.createElement, abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789%2B%2F%3D)
+jmty.jp,knowt.com##+js(acs, document.createElement, abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789%2B%2F%3D)
 ! https://github.com/uBlockOrigin/uAssets/issues/21346
 ||thesaurus.net/public/desktop/images/*grammarly$image,1p
 thesaurus.net##.grammarly-bnr, #grammarly_link, #clickable-area-left, #clickable-area-right, a[href^="https://grammarly.go2cloud.org/"], a[href*="aff_"]
@@ -3766,9 +3767,13 @@ www.chip.de###CR[class="Downloads-Getfile"] > #G32 > #M1 > div:not([class="wrapp
 !#if cap_html_filtering
 www.chip.de##^script:has-text(?metric=transit.counter&key=fail_redirect&tags=)
 www.chip.de##^script:has-text(/pushAdTag|link_click|getAds/)
+! [dup] from ublock-origin/quick-fixes.txt
+! www.chip.de##^script:has-text(/[a-zA-Z0-9]{10,20}\; \} \}/)
 !#else
 www.chip.de##+js(rmnt, script, %3Fmetric%3Dtransit.counter%26key%3Dfail_redirect%26tags%3D)
 www.chip.de##+js(rmnt, script, %2FpushAdTag%7Clink_click%7CgetAds%2F)
+! [dup] from ublock-origin/quick-fixes.txt
+! www.chip.de##+js(rmnt, script, %2F%5Ba-zA-Z0-9%5D%7B10%2C20%7D%5C%3B%20%5C%7D%20%5C%7D%2F)
 !#endif
 ||nah-versorger.de^$3p
 ||stopundstart.de^$3p
