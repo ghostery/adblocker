@@ -969,11 +969,11 @@ export default class NetworkFilter implements IFilter {
     }
 
     if (cptMaskPositive === 0) {
-      mask |= cptMaskNegative;
+      mask = setBit(mask, cptMaskNegative);
     } else if (cptMaskNegative === FROM_ANY) {
-      mask |= cptMaskPositive;
+      mask = setBit(mask, cptMaskPositive);
     } else {
-      mask |= cptMaskPositive & cptMaskNegative;
+      mask = setBit(mask, cptMaskPositive & cptMaskNegative);
     }
 
     // Identify kind of pattern
@@ -1239,16 +1239,7 @@ export default class NetworkFilter implements IFilter {
   }) {
     this.filter = filter;
     this.hostname = hostname;
-    // The >>> 0 (shifting by zero) does not actually shift the bits;
-    // instead, it triggers the conversion of x into a 32-bit unsigned integer.
-    // We use unsigned right shift with zero to ensure the integrity between
-    // runtime and serialized versions.
-    // `2147483648 | (1 << 30)` results `-1073741824` and it's still not a problem:
-    // `(-1073741824 >>> 24).toString(2)` results `'11000000'` and this indicates
-    // `StaticDataView.prototype.pushUint32` is also safe.
-    // However, it's always unsigned when an integer initialized using
-    // `StaticDataView.prototype.getUint32` and this will break the integrity.
-    this.mask = mask >>> 0;
+    this.mask = setBit(mask, 0);
     this.domains = domains;
     this.denyallow = denyallow;
     this.optionValue = optionValue;
