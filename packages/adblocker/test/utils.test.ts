@@ -270,7 +270,6 @@ describe('utils.ts', () => {
     expect(findLastIndexOfUnescapedCharacter(line, '$')).to.be.eql(32);
   });
 
-  // `setBit` only does OR bit operation but this test reavels the use of 32nd bit is safe.
   describe('#setBit', () => {
     // The reason not to unsigned right shift with zero here is because it doens't affect to the AND operations.
     // A number after any bit operations is signed in JavaScript.
@@ -279,11 +278,10 @@ describe('utils.ts', () => {
 
     it('keeps the integer always unsigned', () => {
       const n = setBit(0, lastBit);
-      // The result should be negative 2147483648 (1 << 31) after the OR operation.
-      expect(n).to.be.eql(-2147483648);
-      // However, there's actually no change in the readable bit field.
+      // The result should be positive 2147483648 (1 << 31) after the OR operation.
+      expect(n).to.be.eql(2147483648);
       // The binary representation of the number should have a length of 32 with the first byte set.
-      expect((n >>> 0).toString(2)).to.be.eql('10000000000000000000000000000000');
+      expect(n.toString(2)).to.be.eql('10000000000000000000000000000000');
     });
     it('keeps all bit fields', () => {
       const n = setBit(0, lastBit);

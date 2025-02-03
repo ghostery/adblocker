@@ -74,6 +74,26 @@ describe('Serialization', () => {
     });
   });
 
+  describe.only('NetworkFilter', () => {
+    it('keeps integrity with the use of 32nd bit', () => {
+      const buffer = StaticDataView.allocate(10, { enableCompression: false });
+      const mask = (1 << 31) | (1 << 30);
+      const filter = new NetworkFilter({
+        filter: undefined,
+        hostname: undefined,
+        mask,
+        domains: undefined,
+        denyallow: undefined,
+        optionValue: undefined,
+        rawLine: undefined,
+        regex: undefined,
+      });
+      filter.serialize(buffer);
+      buffer.seekZero();
+      expect(NetworkFilter.deserialize(buffer)).to.be.eql(filter);
+    });
+  });
+
   describe('Engine', () => {
     it('fails with wrong version', () => {
       const engine = Engine.parse('||domain');
