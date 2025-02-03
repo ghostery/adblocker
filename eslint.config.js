@@ -1,4 +1,4 @@
-import { dirname } from 'node:path';
+import { dirname } from 'path';
 import { fileURLToPath } from 'node:url';
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
