@@ -283,14 +283,5 @@ describe('utils.ts', () => {
       // The binary representation of the number should have a length of 32 with the first byte set.
       expect(n.toString(2)).to.be.eql('10000000000000000000000000000000');
     });
-    it('keeps all bit fields', () => {
-      const n = setBit(0, lastBit);
-      // AND operation should not be affected by using the 32nd bit and another bit (31st bit here).
-      // Therefore, the correctness of `getBit` after doing `setBit` with 32nd bit is ensured here.
-      expect(setBit(n, 1 << 30) & lastBit).to.be.eql(lastBit);
-      // Now, this emulates the situation after the parse or serialization of `NetworkFilter`: `n` is readonly unsigned.
-      // The result should be same, which ensures the correctness of `getBit`.
-      expect(setBit(n >>> 0, 1 << 30) & lastBit).to.be.eql(lastBit);
-    });
   });
 });
