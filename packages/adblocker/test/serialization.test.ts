@@ -72,25 +72,21 @@ describe('Serialization', () => {
         checkFilterSerialization(NetworkFilter, networkFilters[i]);
       }
     });
-  });
 
-  describe('NetworkFilter', () => {
-    it('keeps integrity with the use of 32nd bit', () => {
-      const buffer = StaticDataView.allocate(10, { enableCompression: false });
-      const mask = (1 << 31) | (1 << 30);
-      const filter = new NetworkFilter({
-        filter: undefined,
-        hostname: undefined,
-        mask,
-        domains: undefined,
-        denyallow: undefined,
-        optionValue: undefined,
-        rawLine: undefined,
-        regex: undefined,
-      });
-      filter.serialize(buffer);
-      buffer.seekZero();
-      expect(NetworkFilter.deserialize(buffer)).to.be.eql(filter);
+    it('handles a filter mask with 32nd bit', () => {
+      checkFilterSerialization(
+        NetworkFilter,
+        new NetworkFilter({
+          filter: undefined,
+          hostname: undefined,
+          mask: 1 << 31,
+          domains: undefined,
+          denyallow: undefined,
+          optionValue: undefined,
+          rawLine: undefined,
+          regex: undefined,
+        }),
+      );
     });
   });
 

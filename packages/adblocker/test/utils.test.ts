@@ -15,6 +15,7 @@ import {
   HASH_SEED,
   binLookup,
   binSearch,
+  clearBit,
   fastHash,
   fastHashBetween,
   findLastIndexOfUnescapedCharacter,
@@ -270,18 +271,28 @@ describe('utils.ts', () => {
     expect(findLastIndexOfUnescapedCharacter(line, '$')).to.be.eql(32);
   });
 
-  describe('#setBit', () => {
+  context('bit operations', () => {
     // The reason not to unsigned right shift with zero here is because it doens't affect to the AND operations.
     // A number after any bit operations is signed in JavaScript.
     // If all of the bit fields are settled correctly, we see all numbers in signed state and having a signed number as a mask is fine.
     const lastBit = 1 << 31; // -2147483648
 
-    it('keeps the integer always unsigned', () => {
-      const n = setBit(0, lastBit);
-      // The result should be positive 2147483648 (1 << 31) after the OR operation.
-      expect(n).to.be.eql(2147483648);
-      // The binary representation of the number should have a length of 32 with the first byte set.
-      expect(n.toString(2)).to.be.eql('10000000000000000000000000000000');
+    describe('#setBit', () => {
+      it('keeps the integer always unsigned', () => {
+        const n = setBit(0, lastBit);
+        // The result should be positive 2147483648 (1 << 31) after the OR operation.
+        expect(n).to.be.eql(2147483648);
+        // The binary representation of the number should have a length of 32 with the first byte set.
+        expect(n.toString(2)).to.be.eql('10000000000000000000000000000000');
+      });
+    });
+
+    describe('#clearBit', () => {
+      it('keeps the integer always unsigned', () => {
+        const n = clearBit(lastBit, 0);
+        expect(n).to.be.eql(2147483648);
+        expect(n.toString(2)).to.be.eql('10000000000000000000000000000000');
+      });
     });
   });
 });
