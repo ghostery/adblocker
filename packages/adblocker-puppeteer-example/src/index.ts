@@ -12,7 +12,7 @@ function getUrlToLoad(): string {
   return url;
 }
 
-(async () => {
+void (async () => {
   const blocker = await PuppeteerBlocker.fromLists(
     fetch,
     fullLists,

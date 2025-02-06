@@ -363,7 +363,7 @@ async function injectScriptletFirefox(s: string, doc: Document) {
 
 export function injectScript(s: string, doc: Document): void {
   if (isFirefox(doc)) {
-    injectScriptletFirefox(s, doc);
+    void injectScriptletFirefox(s, doc);
   } else {
     injectScriptlet(s, doc);
   }

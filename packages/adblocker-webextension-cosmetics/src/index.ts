@@ -247,21 +247,13 @@ function handleResponseFromBackground(
  * based on a domain or node selectors) and the `handleResponseFromBackground`
  * callback to apply new rules.
  */
-export function injectCosmetics(
+export async function injectCosmetics(
   window: Pick<Window, 'document' | 'addEventListener'>,
   enableMutationObserver: boolean = true,
   getCosmeticsFilters: (
     _: IBackgroundCallback,
   ) => Promise<IMessageFromBackground> = getCosmeticsFiltersWithSendMessage,
-): void {
-  // Invoked as soon as content-script is injected to ask for background to
-  // inject cosmetics and scripts as soon as possible. Some extra elements
-  // might be inserted later whenever we know more about the content of the
-  // page.
-  getCosmeticsFilters({ lifecycle: 'start', ids: [], classes: [], hrefs: [] }).then((response) =>
-    handleResponseFromBackground(window, response),
-  );
-
+): Promise<void> {
   // On DOMContentLoaded, start monitoring the DOM. This means that we will
   // first check which ids and classes exist in the DOM as a one-off operation;
   // this will allow the injection of selectors which have a chance to match.
@@ -270,15 +262,14 @@ export function injectCosmetics(
   window.addEventListener(
     'DOMContentLoaded',
     () => {
-      DOM_MONITOR = new DOMMonitor((update) => {
+      DOM_MONITOR = new DOMMonitor(async (update) => {
         if (update.type === 'elements') {
           if (update.elements.length !== 0) {
             delayedUpdateExtended(update.elements);
           }
         } else {
-          getCosmeticsFilters({ ...update, lifecycle: 'dom-update' }).then((response) =>
-            handleResponseFromBackground(window, response),
-          );
+          const response = await getCosmeticsFilters({ ...update, lifecycle: 'dom-update' });
+          handleResponseFromBackground(window, response);
         }
       });
 
@@ -294,4 +285,16 @@ export function injectCosmetics(
   );
 
   window.addEventListener('pagehide', unload, { once: true, passive: true });
+
+  // Invoked as soon as content-script is injected to ask for background to
+  // inject cosmetics and scripts as soon as possible. Some extra elements
+  // might be inserted later whenever we know more about the content of the
+  // page.
+  const response = await getCosmeticsFilters({
+    lifecycle: 'start',
+    ids: [],
+    classes: [],
+    hrefs: [],
+  });
+  handleResponseFromBackground(window, response);
 }

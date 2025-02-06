@@ -137,7 +137,7 @@ async function generateCodebook(kind: string): Promise<string[]> {
   return codebook;
 }
 
-(async () => {
+void (async () => {
   const kind = process.argv[process.argv.length - 1];
   const codebook = await generateCodebook(kind);
   const output = resolve(__dirname, `../src/codebooks/${kind}.ts`);

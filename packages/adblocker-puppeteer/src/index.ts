@@ -303,7 +303,7 @@ export class PuppeteerBlocker extends FiltersEngine {
       request.isMainFrame() ||
       (request.type === 'document' && frame !== null && frame.parentFrame() === null)
     ) {
-      details.continue(details.continueRequestOverrides?.(), 0);
+      void details.continue(details.continueRequestOverrides?.(), 0);
       return;
     }
 
@@ -311,7 +311,7 @@ export class PuppeteerBlocker extends FiltersEngine {
 
     if (redirect !== undefined) {
       if (redirect.contentType.endsWith(';base64')) {
-        details.respond(
+        void details.respond(
           {
             status: 200,
             headers: {},
@@ -321,7 +321,7 @@ export class PuppeteerBlocker extends FiltersEngine {
           this.priority,
         );
       } else {
-        details.respond(
+        void details.respond(
           {
             status: 200,
             headers: {},
@@ -332,9 +332,9 @@ export class PuppeteerBlocker extends FiltersEngine {
         );
       }
     } else if (match === true) {
-      details.abort('blockedbyclient', this.priority);
+      void details.abort('blockedbyclient', this.priority);
     } else {
-      details.continue(details.continueRequestOverrides?.(), 0);
+      void details.continue(details.continueRequestOverrides?.(), 0);
     }
   };
 

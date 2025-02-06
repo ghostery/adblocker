@@ -66,9 +66,7 @@ export class BlockingContext {
     if (this.blocker.config.loadCosmeticFilters === true) {
       // Register callback to cosmetics injection (CSS + scriptlets)
       this.page.on('framenavigated', this.onFrameNavigated);
-      this.page.once('domcontentloaded', () => {
-        this.onFrameNavigated(this.page.mainFrame());
-      });
+      this.page.once('domcontentloaded', () => this.onFrameNavigated(this.page.mainFrame()));
     }
 
     if (this.blocker.config.loadNetworkFilters === true) {
@@ -286,7 +284,7 @@ export class PlaywrightBlocker extends FiltersEngine {
       request.isMainFrame() ||
       (request.type === 'document' && frame !== null && frame.parentFrame() === null)
     ) {
-      route.continue();
+      void route.continue();
       return;
     }
 
@@ -294,20 +292,20 @@ export class PlaywrightBlocker extends FiltersEngine {
 
     if (redirect !== undefined) {
       if (redirect.contentType.endsWith(';base64')) {
-        route.fulfill({
+        void route.fulfill({
           body: Buffer.from(redirect.body, 'base64'),
           contentType: redirect.contentType.slice(0, -7),
         });
       } else {
-        route.fulfill({
+        void route.fulfill({
           body: redirect.body,
           contentType: redirect.contentType,
         });
       }
     } else if (match === true) {
-      route.abort('blockedbyclient');
+      void route.abort('blockedbyclient');
     } else {
-      route.continue();
+      void route.continue();
     }
   };
 
@@ -344,8 +342,14 @@ export class PlaywrightBlocker extends FiltersEngine {
     const sourceUrl = getTopLevelUrl(frame);
 
     for (const url of await frame.$$eval('iframe[src],iframe[href]', (elements) =>
-      elements.map(({ src, href }: any) => src || href),
+      (elements as HTMLIFrameElement[]).map(
+        (element) => element.src || element.getAttribute('href'),
+      ),
     )) {
+      if (url === null) {
+        continue;
+      }
+
       const { match } = this.match(
         Request.fromRawDetails({
           url,

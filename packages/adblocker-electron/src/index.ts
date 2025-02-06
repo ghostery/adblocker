@@ -210,12 +210,12 @@ export class ElectronBlocker extends FiltersEngine {
     }
 
     if (styles.length > 0) {
-      event.sender.insertCSS(styles, { cssOrigin: 'user' });
+      void event.sender.insertCSS(styles, { cssOrigin: 'user' });
     }
 
     for (const script of scripts) {
       try {
-        event.sender.executeJavaScript(script, true);
+        void event.sender.executeJavaScript(script, true);
       } catch (e) {
         console.error('@ghostery/adblocker scriptlet crashed', e);
       }
