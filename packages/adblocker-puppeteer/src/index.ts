@@ -378,8 +378,12 @@ export class PuppeteerBlocker extends FiltersEngine {
     const sourceUrl = getTopLevelUrl(frame);
 
     for (const url of await frame.$$eval('iframe[src],iframe[href]', (elements) =>
-      elements.map(({ src, href }: any) => src || href),
+      elements.map((element) => element.src || element.getAttribute('href')),
     )) {
+      if (url === null) {
+        continue;
+      }
+
       const { match } = this.match(
         Request.fromRawDetails({
           url,

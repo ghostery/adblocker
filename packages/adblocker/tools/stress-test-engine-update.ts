@@ -148,8 +148,10 @@ function filtersDiff(
   return differences;
 }
 
-async function getMeta(url: string): Promise<{ name: string; revisions: string[] }> {
-  const meta = (await axios.get(url)).data;
+type RevisionsResponse = { name: string; revisions: string[] };
+
+async function getMeta(url: string): Promise<RevisionsResponse> {
+  const meta = (await axios.get<RevisionsResponse>(url)).data;
   if (typeof meta === 'string') {
     const buffer = Buffer.from(
       (
@@ -158,7 +160,7 @@ async function getMeta(url: string): Promise<{ name: string; revisions: string[]
         })
       ).data,
     );
-    return JSON.parse(brotliDecompressSync(buffer).toString('utf-8'));
+    return JSON.parse(brotliDecompressSync(buffer).toString('utf-8')) as RevisionsResponse;
   }
 
   return meta;

@@ -21,7 +21,7 @@ import { IOrganization } from '../src/engine/metadata/organizations.js';
 export function loadEasyListFilters(): string[] {
   return JSON.parse(
     fs.readFileSync(path.resolve(__dirname, 'data', 'easylist.json'), { encoding: 'utf-8' }),
-  );
+  ) as string[];
 }
 
 function readAsset(filepath: string) {
