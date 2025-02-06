@@ -51,8 +51,8 @@ export function fromPlaywrightDetails(details: pw.Request): Request {
  * Wrap `FiltersEngine` into a Playwright-friendly helper class.
  */
 export class BlockingContext {
-  private readonly onFrameNavigated: (frame: pw.Frame) => Promise<void>;
-  private readonly onRequest: (route: pw.Route) => void;
+  private readonly onFrameNavigated: (frame: pw.Frame) => Promise<void> | void;
+  private readonly onRequest: (route: pw.Route) => Promise<void> | void;
 
   constructor(
     private readonly page: pw.Page,
@@ -273,7 +273,7 @@ export class PlaywrightBlocker extends FiltersEngine {
     } while (true);
   };
 
-  public onRequest = async (route: pw.Route): Promise<void> => {
+  public onRequest = (route: pw.Route): void => {
     const details = route.request();
     const request = fromPlaywrightDetails(details);
     if (this.config.guessRequestTypeFromUrl === true && request.type === 'other') {

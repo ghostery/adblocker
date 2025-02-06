@@ -34,8 +34,8 @@ async function createWindow() {
     },
     {
       path: 'engine.bin',
-      read: async (...args) => readFileSync(...args),
-      write: async (...args) => writeFileSync(...args),
+      read: async (...args) => Promise.resolve(readFileSync(...args)),
+      write: async (...args) => Promise.resolve(writeFileSync(...args)),
     },
   );
 

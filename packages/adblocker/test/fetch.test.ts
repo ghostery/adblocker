@@ -13,17 +13,17 @@ import { Fetch, fetchWithRetry } from '../src/fetch.js';
 
 describe('#fetchWithRetry', () => {
   const fakeFetchFactory = (numberOfFailures: number): Fetch => {
-    return async (_: string) => {
+    return (_: string) => {
       if (numberOfFailures > 0) {
         numberOfFailures -= 1;
         throw new Error(`Failed: ${numberOfFailures + 1}`);
       }
 
-      return {
+      return Promise.resolve({
         arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)),
         json: () => Promise.resolve({}),
         text: () => Promise.resolve(`${numberOfFailures}`),
-      };
+      });
     };
   };
 
