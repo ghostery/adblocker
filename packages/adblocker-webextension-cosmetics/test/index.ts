@@ -191,8 +191,7 @@ describe('#injectCosmetics', () => {
       },
     );
 
-    // JSDOM does not support createObjectURL so we replace blobs with data urls
-    // @ts-ignore
+    // @ts-expect-error JSDOM does not support createObjectURL so we replace blobs with data urls
     dom.window.URL.createObjectURL = async (blob: Blob) => {
       const text = await blob.text();
       const base64 = Buffer.from(text).toString('base64');

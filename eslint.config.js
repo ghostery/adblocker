@@ -22,7 +22,6 @@ export default tseslint.config(
       '@typescript-eslint/ban-types': 'off',
       '@typescript-eslint/unbound-method': 'off',
       '@typescript-eslint/no-unsafe-assignment': 'off',
-      '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-misused-promises': [
         'error',
         {

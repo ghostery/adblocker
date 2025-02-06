@@ -121,8 +121,7 @@ describe('utils.ts', () => {
     it('returns HASH_SEED for empty string and non-strings', () => {
       expect(fastHash('')).to.equal(HASH_SEED);
       expect(fastHashBetween('', 0, 0)).to.equal(HASH_SEED);
-
-      // @ts-ignore
+      // @ts-expect-error Test non-string
       expect(fastHash([])).to.equal(HASH_SEED);
     });
   });

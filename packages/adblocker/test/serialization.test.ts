@@ -55,7 +55,7 @@ describe('Serialization', () => {
       buffer.seekZero();
       const deserialized = Filter.deserialize(buffer);
 
-      // @ts-ignore
+      // @ts-expect-error We avoid applying `IFilter.getId()` to prevent `id` to be filled.
       expect(deserialized.id).to.be.undefined;
       expect(deserialized.getId()).to.equal(originalId);
       expect(deserialized).to.eql(filter);
