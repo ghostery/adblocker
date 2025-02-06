@@ -196,7 +196,7 @@ async function getRevision(url: string): Promise<string> {
 
     try {
       data = brotliDecompressSync(buffer).toString('utf-8');
-    } catch (ex) {
+    } catch (_e) {
       // Data is probably already decompressed
     }
   }

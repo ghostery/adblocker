@@ -139,7 +139,7 @@ export class PlaywrightBlocker extends FiltersEngine {
   public onFrameNavigated = async (frame: pw.Frame) => {
     try {
       await this.onFrame(frame);
-    } catch (ex) {
+    } catch (_e) {
       // Ignore
     }
   };
@@ -260,7 +260,7 @@ export class PlaywrightBlocker extends FiltersEngine {
         if (foundNewFeatures === false) {
           break;
         }
-      } catch (ex) {
+      } catch (_e) {
         break;
       }
 

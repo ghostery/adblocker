@@ -308,7 +308,7 @@ export function autoRemoveScript(script: string): string {
   //
   //    try {
   //      ${script}
-  //    } catch (ex) { }
+  //    } catch (e) { }
   //
   //    (function() {
   //      var currentScript = document.currentScript;
@@ -340,7 +340,7 @@ function injectScriptlet(s: string, doc: Document): void {
 function isFirefox(doc: Document) {
   try {
     return doc.defaultView?.navigator?.userAgent?.indexOf('Firefox') !== -1;
-  } catch (e) {
+  } catch (_e: unknown) {
     return false;
   }
 }

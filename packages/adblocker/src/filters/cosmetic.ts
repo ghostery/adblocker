@@ -126,7 +126,7 @@ const isValidCss = (() => {
 
     try {
       matches(selector);
-    } catch (ex) {
+    } catch (_e) {
       return false;
     }
 

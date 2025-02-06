@@ -674,7 +674,7 @@ export function replaceOptionValueToRegexp(value: string): HTMLModifier | null {
     // We expect `/regexp/replacement/flags` to be [regexp, replacement, flags]
     // The first slash should be removed in the early steps
     return [new RegExp(values[0], values[2]), values[1]];
-  } catch (error) {
+  } catch (_e) {
     return null;
   }
 }
@@ -999,7 +999,7 @@ export default class NetworkFilter implements IFilter {
           false /* isRightAnchor */,
           true /* isFullRegex */,
         );
-      } catch (ex) {
+      } catch (_e) {
         return null; // invalid RegExp
       }
 

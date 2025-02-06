@@ -148,7 +148,7 @@ export class PuppeteerBlocker extends FiltersEngine {
   public onFrameNavigated = async (frame: puppeteer.Frame) => {
     try {
       await this.onFrame(frame);
-    } catch (ex) {
+    } catch (_e) {
       // Ignore
     }
   };
@@ -270,7 +270,7 @@ export class PuppeteerBlocker extends FiltersEngine {
         if (foundNewFeatures === false) {
           break;
         }
-      } catch (ex) {
+      } catch (_e) {
         break;
       }
 

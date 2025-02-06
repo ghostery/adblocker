@@ -307,7 +307,7 @@ function main() {
   try {
     const previousResults = JSON.parse(readFileSync(benchDumpPath, { encoding: 'utf-8' }));
     compareBenchmarkResults(previousResults, benchmarkResults);
-  } catch (ex) {
+  } catch (_e) {
     /* No previous result to compare to */
     compareBenchmarkResults(benchmarkResults, benchmarkResults);
   }

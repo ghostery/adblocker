@@ -222,7 +222,7 @@ function handleResponseFromBackground(
     for (const script of scripts) {
       try {
         injectScript(script, window.document);
-      } catch (e) {
+      } catch (_e) {
         // continue regardless of error
       }
     }
