@@ -61,7 +61,7 @@ function unregisterCallback<EventNames>(
  */
 function triggerCallback<EventNames>(
   event: EventNames,
-  args: any[],
+  args: unknown[],
   listeners: EventListeners<EventNames>,
 ): boolean {
   // Fast-path for cases where no listener is registered

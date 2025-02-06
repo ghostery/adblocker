@@ -520,7 +520,10 @@ export class WebExtensionBlocker extends FiltersEngine {
    * 3. `browser.webRequest.filterResponseData` (Firefox only!).
    * 4. `TextEncoder` and `TextDecoder` are available.
    */
-  public performHTMLFiltering(browser: Browser, request: Request): void {
+  public performHTMLFiltering(
+    browser: Browser,
+    request: Request<OnHeadersReceivedDetailsType>,
+  ): void {
     if (
       this.config.enableHtmlFiltering === true &&
       browser.webRequest !== undefined &&

@@ -61,8 +61,8 @@ export class Metadata {
   public categories: CompactMap<ICategory>;
   public patterns: CompactMap<IPattern>;
 
-  constructor(rawTrackerDB: any) {
-    if (!rawTrackerDB) {
+  constructor(rawTrackerDB: unknown) {
+    if (!rawTrackerDB || typeof rawTrackerDB !== 'object') {
       this.organizations = createOrganizationsMap([]);
       this.categories = createCategoriesMap([]);
       this.patterns = createPatternsMap([]);
@@ -73,12 +73,12 @@ export class Metadata {
       patterns: rawPatterns,
       organizations: rawOrganizations,
       categories: rawCategories,
-    } = rawTrackerDB;
+    } = rawTrackerDB as Record<string, unknown>;
 
     // Type-check categories
     const categories: ICategory[] = [];
     if (typeof rawCategories === 'object') {
-      for (const [key, category] of Object.entries(rawCategories)) {
+      for (const [key, category] of Object.entries(rawCategories as Record<string, unknown>)) {
         if (typeof category !== 'object') {
           continue;
         }
@@ -95,7 +95,9 @@ export class Metadata {
     // Type-check organizations
     const organizations: IOrganization[] = [];
     if (typeof rawOrganizations === 'object') {
-      for (const [key, organization] of Object.entries(rawOrganizations)) {
+      for (const [key, organization] of Object.entries(
+        rawOrganizations as Record<string, unknown>,
+      )) {
         if (typeof organization !== 'object') {
           continue;
         }
@@ -112,7 +114,7 @@ export class Metadata {
     // Type-check patterns
     const patterns: IPattern[] = [];
     if (typeof rawPatterns === 'object') {
-      for (const [key, pattern] of Object.entries(rawPatterns)) {
+      for (const [key, pattern] of Object.entries(rawPatterns as Record<string, unknown>)) {
         if (typeof pattern !== 'object') {
           continue;
         }
