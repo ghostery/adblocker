@@ -72,6 +72,22 @@ describe('Serialization', () => {
         checkFilterSerialization(NetworkFilter, networkFilters[i]);
       }
     });
+
+    it('handles a filter mask with 32nd bit', () => {
+      checkFilterSerialization(
+        NetworkFilter,
+        new NetworkFilter({
+          filter: undefined,
+          hostname: undefined,
+          mask: 1 << 31,
+          domains: undefined,
+          denyallow: undefined,
+          optionValue: undefined,
+          rawLine: undefined,
+          regex: undefined,
+        }),
+      );
+    });
   });
 
   describe('Engine', () => {

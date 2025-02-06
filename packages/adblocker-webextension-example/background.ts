@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { browser } from 'webextension-polyfill';
+import browser from 'webextension-polyfill';
 
 import {
   BlockingResponse,
@@ -58,6 +58,7 @@ chrome.tabs.onUpdated.addListener((tabId, { status, url }) => {
 declare global {
   interface Window {
     adblocker: WebExtensionBlocker;
+    browser: typeof browser;
   }
 }
 

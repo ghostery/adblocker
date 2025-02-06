@@ -12,17 +12,35 @@ import { StaticDataView, sizeOfUint32Array, sizeOfUTF8 } from '../data-view.js';
 import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils.js';
 
 export class Domains {
-  public static parse(parts: string[], debug: boolean = false): Domains | undefined {
+  public static parse(
+    value: string,
+    {
+      delimiter = ',',
+      debug = false,
+      negate = false,
+    }: { delimiter?: string; debug?: boolean; negate?: boolean } = {},
+  ): Domains | undefined {
+    const parts = value.split(delimiter);
+
     if (parts.length === 0) {
       return undefined;
+    }
+
+    for (const part of parts) {
+      if (part.length === 0 || part.startsWith(delimiter) || part.endsWith(delimiter)) {
+        return undefined;
+      }
     }
 
     const entities: number[] = [];
     const notEntities: number[] = [];
     const hostnames: number[] = [];
     const notHostnames: number[] = [];
+    const rawParts: string[] = [];
 
-    for (let hostname of parts) {
+    for (const rawHostname of parts) {
+      let hostname = rawHostname;
+
       if (hasUnicode(hostname)) {
         hostname = toASCII(hostname);
       }
@@ -39,17 +57,24 @@ export class Domains {
         negation === true || entity === true ? hostname.slice(start, end) : hostname,
       );
 
-      if (negation) {
+      // If conditionally negated value of `negation` by `negate` is `1`
+      if (+negation ^ +negate) {
         if (entity) {
           notEntities.push(hash);
         } else {
           notHostnames.push(hash);
+        }
+        if (debug) {
+          rawParts.push(negation ? rawHostname : `~${rawHostname}`);
         }
       } else {
         if (entity) {
           entities.push(hash);
         } else {
           hostnames.push(hash);
+        }
+        if (debug) {
+          rawParts.push(negation ? rawHostname.slice(1) : rawHostname);
         }
       }
     }
@@ -59,7 +84,7 @@ export class Domains {
       hostnames: hostnames.length !== 0 ? new Uint32Array(hostnames).sort() : undefined,
       notEntities: notEntities.length !== 0 ? new Uint32Array(notEntities).sort() : undefined,
       notHostnames: notHostnames.length !== 0 ? new Uint32Array(notHostnames).sort() : undefined,
-      parts: debug === true ? parts.join(',') : undefined,
+      parts: debug === true ? rawParts.join(delimiter) : undefined,
     });
   }
 

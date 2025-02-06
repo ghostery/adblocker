@@ -23,8 +23,6 @@ import {
   bitCount,
   clearBit,
   fastHash,
-  fastStartsWith,
-  fastStartsWithFrom,
   getBit,
   hasUnicode,
   isAlpha,
@@ -732,21 +730,24 @@ export default class NetworkFilter implements IFilter {
         const value = rawOption[1];
 
         switch (option) {
+          case 'to':
           case 'denyallow': {
-            denyallow = Domains.parse(value.split('|'), debug);
+            denyallow = Domains.parse(value, {
+              delimiter: '|',
+              debug,
+              negate: option === 'to',
+            });
+            if (denyallow === undefined) {
+              return null;
+            }
             break;
           }
           case 'domain':
           case 'from': {
-            // domain list starting or ending with '|' is invalid
-            if (
-              value.charCodeAt(0) === 124 /* '|' */ ||
-              value.charCodeAt(value.length - 1) === 124 /* '|' */
-            ) {
+            domains = Domains.parse(value, { delimiter: '|', debug });
+            if (domains === undefined) {
               return null;
             }
-
-            domains = Domains.parse(value.split('|'), debug);
             break;
           }
           case 'badfilter':
@@ -979,11 +980,11 @@ export default class NetworkFilter implements IFilter {
     }
 
     if (cptMaskPositive === 0) {
-      mask |= cptMaskNegative;
+      mask = setBit(mask, cptMaskNegative);
     } else if (cptMaskNegative === FROM_ANY) {
-      mask |= cptMaskPositive;
+      mask = setBit(mask, cptMaskPositive);
     } else {
-      mask |= cptMaskPositive & cptMaskNegative;
+      mask = setBit(mask, cptMaskPositive & cptMaskNegative);
     }
 
     // Identify kind of pattern
@@ -1103,7 +1104,7 @@ export default class NetworkFilter implements IFilter {
       if (getBit(mask, NETWORK_FILTER_MASK.isLeftAnchor)) {
         if (
           filterIndexEnd - filterIndexStart === 5 &&
-          fastStartsWithFrom(line, 'ws://', filterIndexStart)
+          line.startsWith('ws://', filterIndexStart)
         ) {
           mask = setBit(mask, NETWORK_FILTER_MASK.fromWebsocket);
           mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
@@ -1112,7 +1113,7 @@ export default class NetworkFilter implements IFilter {
           filterIndexStart = filterIndexEnd;
         } else if (
           filterIndexEnd - filterIndexStart === 7 &&
-          fastStartsWithFrom(line, 'http://', filterIndexStart)
+          line.startsWith('http://', filterIndexStart)
         ) {
           mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
           mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttps);
@@ -1120,7 +1121,7 @@ export default class NetworkFilter implements IFilter {
           filterIndexStart = filterIndexEnd;
         } else if (
           filterIndexEnd - filterIndexStart === 8 &&
-          fastStartsWithFrom(line, 'https://', filterIndexStart)
+          line.startsWith('https://', filterIndexStart)
         ) {
           mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
           mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttp);
@@ -1128,7 +1129,7 @@ export default class NetworkFilter implements IFilter {
           filterIndexStart = filterIndexEnd;
         } else if (
           filterIndexEnd - filterIndexStart === 8 &&
-          fastStartsWithFrom(line, 'http*://', filterIndexStart)
+          line.startsWith('http*://', filterIndexStart)
         ) {
           mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
           mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
@@ -1251,7 +1252,7 @@ export default class NetworkFilter implements IFilter {
   }) {
     this.filter = filter;
     this.hostname = hostname;
-    this.mask = mask;
+    this.mask = setBit(mask, 0);
     this.domains = domains;
     this.denyallow = denyallow;
     this.optionValue = optionValue;
@@ -2083,8 +2084,7 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
       // Since this is not a regex, the filter pattern must follow the hostname
       // with nothing in between. So we extract the part of the URL following
       // after hostname and will perform the matching on it.
-      return fastStartsWithFrom(
-        request.url,
+      return request.url.startsWith(
         pattern,
         request.url.indexOf(filterHostname) + filterHostname.length,
       );
@@ -2107,7 +2107,7 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
     return request.url === pattern;
   } else if (filter.isLeftAnchor()) {
     // |pattern
-    return fastStartsWith(request.url, pattern);
+    return request.url.startsWith(pattern);
   } else if (filter.isRightAnchor()) {
     // pattern|
     return request.url.endsWith(pattern);
