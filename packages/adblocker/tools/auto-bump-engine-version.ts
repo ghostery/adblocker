@@ -11,7 +11,7 @@ writeFileSync(
   engineSourcePath,
   engineSource.replace(
     /(^export const ENGINE_VERSION =\s+)(\d+)(;$)/m,
-    (match, prefix, version, suffix, offset) => {
+    (match, prefix: string, version: string, suffix: string, offset: number) => {
       console.log('Match:', { match, prefix, version, suffix, offset });
 
       const currentVersion = Number(version);

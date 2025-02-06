@@ -26,7 +26,7 @@ export interface IPattern {
  * This function takes an object representing a pattern from TrackerDB dump
  * and validates its shape. The result is the same object, but strongly typed.
  */
-export function isValid(pattern: any): pattern is IPattern {
+export function isValid(pattern: unknown): pattern is IPattern {
   if (pattern === null) {
     return false;
   }
@@ -44,7 +44,7 @@ export function isValid(pattern: any): pattern is IPattern {
     website_url: websiteUrl,
     domains,
     filters,
-  } = pattern;
+  } = pattern as Record<string, unknown>;
 
   if (typeof key !== 'string') {
     return false;

@@ -27,7 +27,7 @@ export interface Resource {
   contentType: string;
 }
 
-function isResourceValid(resource: any): resource is Resource {
+function isResourceValid(resource: unknown): resource is Resource {
   if (resource === null) {
     return false;
   }
@@ -36,7 +36,7 @@ function isResourceValid(resource: any): resource is Resource {
     return false;
   }
 
-  const { name, aliases, body, contentType } = resource;
+  const { name, aliases, body, contentType } = resource as Record<string, unknown>;
 
   if (typeof name !== 'string') {
     return false;
@@ -68,7 +68,7 @@ interface Scriptlet {
   requiresTrust?: boolean;
 }
 
-function isScriptletValid(scriptlet: any): scriptlet is Scriptlet {
+function isScriptletValid(scriptlet: unknown): scriptlet is Scriptlet {
   if (scriptlet === null) {
     return false;
   }
@@ -77,7 +77,10 @@ function isScriptletValid(scriptlet: any): scriptlet is Scriptlet {
     return false;
   }
 
-  const { name, aliases, body, dependencies, executionWorld, requiresTrust } = scriptlet;
+  const { name, aliases, body, dependencies, executionWorld, requiresTrust } = scriptlet as Record<
+    string,
+    unknown
+  >;
 
   if (typeof name !== 'string') {
     return false;
@@ -187,13 +190,16 @@ export default class Resources {
   }
 
   public static parse(data: string, { checksum }: { checksum: string }): Resources {
-    const distribution = JSON.parse(data);
+    const distribution: unknown = JSON.parse(data);
 
     if (distribution === null || typeof distribution !== 'object') {
       throw new Error(`Cannot parse resources.json`);
     }
 
-    const { scriptlets: rawScriplets, redirects: rawResources } = distribution;
+    const { scriptlets: rawScriplets, redirects: rawResources } = distribution as {
+      scriptlets: Scriptlet[];
+      redirects: Resource[];
+    };
 
     const resources: Resource[] = [];
     if (Array.isArray(rawResources)) {

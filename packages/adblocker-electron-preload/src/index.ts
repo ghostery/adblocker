@@ -50,9 +50,9 @@ if (window === window.top && window.location.href.startsWith('devtools://') === 
 
       // Start observing mutations to detect new ids and classes which would
       // need to be hidden.
-      const enableMutationObserver = await ipcRenderer.invoke(
+      const enableMutationObserver = (await ipcRenderer.invoke(
         '@ghostery/adblocker/is-mutation-observer-enabled',
-      );
+      )) as boolean;
       if (enableMutationObserver) {
         DOM_MONITOR?.start(window);
       }

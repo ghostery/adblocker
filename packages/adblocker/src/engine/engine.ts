@@ -266,7 +266,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     }
 
     const config = engines[0].config;
-    const lists = new Map();
+    const lists: Map<string, string> = new Map();
 
     const networkFilters: Map<number, NetworkFilter> = new Map();
     const cosmeticFilters: Map<number, CosmeticFilter> = new Map();
@@ -438,7 +438,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     engine.resources = Resources.deserialize(buffer);
 
     // Deserialize lists
-    const lists = new Map();
+    const lists: Map<string, string> = new Map();
     const numberOfLists = buffer.getUint16();
     for (let i = 0; i < numberOfLists; i += 1) {
       lists.set(buffer.getASCII(), buffer.getASCII());
@@ -930,10 +930,11 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     }
 
     if (networkFilters.length !== 0) {
-      const exceptionsMap = new Map();
-      let replaceDisabledException;
+      const exceptionsMap: Map<string, NetworkFilter> = new Map();
+      let replaceDisabledException: NetworkFilter | undefined;
       for (const exception of exceptions) {
-        const optionValue = exception.optionValue;
+        // `optionValue` is always set as string (or empty string) in `$replace` filters.
+        const optionValue = exception.optionValue!;
         if (optionValue === '') {
           replaceDisabledException = exception;
           break;
@@ -948,7 +949,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           continue;
         }
 
-        const exception = replaceDisabledException || exceptionsMap.get(filter.optionValue);
+        const exception = replaceDisabledException || exceptionsMap.get(filter.optionValue!)!;
 
         this.emit(
           'filter-matched',
@@ -1017,7 +1018,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     injectPureHasSafely?: boolean;
 
     hidingStyle?: string | undefined;
-    callerContext?: any;
+    callerContext?: unknown;
   }): IMessageFromBackground {
     if (this.config.loadCosmeticFilters === false) {
       return {
@@ -1186,7 +1187,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getExtendedRules?: boolean;
     getPureHasRules?: boolean;
 
-    callerContext?: any;
+    callerContext?: unknown;
   }): {
     matches: {
       filter: CosmeticFilter;

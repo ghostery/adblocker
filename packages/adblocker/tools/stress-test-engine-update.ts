@@ -186,7 +186,7 @@ async function getRevision(url: string): Promise<string> {
     return cached;
   }
 
-  let data: string = (await axios.get(url)).data;
+  let data = (await axios.get(url)).data as string;
   if (!data.startsWith('[Ad')) {
     const buffer = Buffer.from(
       (
