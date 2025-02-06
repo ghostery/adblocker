@@ -24,7 +24,6 @@ export default tseslint.config(
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-redundant-type-constituents': 'off',
-      '@typescript-eslint/no-duplicate-type-constituents': 'off',
       '@typescript-eslint/no-misused-promises': [
         'error',
         {

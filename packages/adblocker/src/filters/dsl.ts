@@ -8,7 +8,7 @@
 
 class HidingBuilder {}
 
-type RequestType = 'image' | 'script' | 'font' | 'frame' | 'media' | 'font' | 'css';
+type RequestType = 'image' | 'script' | 'font' | 'frame' | 'media' | 'css';
 
 class NetworkBuilder {
   private options: Set<RequestType> = new Set();
