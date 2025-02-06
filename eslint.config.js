@@ -20,7 +20,6 @@ export default tseslint.config(
       'prettier/prettier': 2, // Means error
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/ban-types': 'off',
-      '@typescript-eslint/unbound-method': 'off',
       '@typescript-eslint/no-misused-promises': [
         'error',
         {

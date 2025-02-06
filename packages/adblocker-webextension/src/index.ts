@@ -533,7 +533,11 @@ export class WebExtensionBlocker extends FiltersEngine {
     ) {
       const htmlFilters = this.getHtmlFilters(request);
       if (htmlFilters.length !== 0) {
-        filterRequestHTML(browser.webRequest.filterResponseData, request, htmlFilters);
+        filterRequestHTML(
+          (requestId: string) => browser.webRequest.filterResponseData(requestId),
+          request,
+          htmlFilters,
+        );
       }
     }
   }

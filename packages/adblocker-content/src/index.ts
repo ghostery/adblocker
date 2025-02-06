@@ -206,7 +206,7 @@ export class DOMMonitor {
       );
 
       this.observer = new window.MutationObserver((mutations: MutationRecord[]) => {
-        getElementsFromMutations(mutations).forEach(nodes.add, nodes);
+        getElementsFromMutations(mutations).forEach(nodes.add.bind(nodes), nodes);
 
         // Set a threshold to prevent websites continuously
         // causing DOM mutations making the set being filled up infinitely.

@@ -1168,7 +1168,7 @@ export default class NetworkFilter implements IFilter {
    * Deserialize network filters. The code accessing the buffer should be
    * symetrical to the one in `serializeNetworkFilter`.
    */
-  public static deserialize(buffer: StaticDataView): NetworkFilter {
+  public static deserialize(this: void, buffer: StaticDataView): NetworkFilter {
     const mask = buffer.getUint32();
     const optionalParts = buffer.getUint8();
     const isUnicode = getBit(mask, NETWORK_FILTER_MASK.isUnicode);

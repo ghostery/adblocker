@@ -404,7 +404,7 @@ export default class CosmeticFilter implements IFilter {
    * Deserialize cosmetic filters. The code accessing the buffer should be
    * symetrical to the one in `serializeCosmeticFilter`.
    */
-  public static deserialize(buffer: StaticDataView): CosmeticFilter {
+  public static deserialize(this: void, buffer: StaticDataView): CosmeticFilter {
     const mask = buffer.getUint16();
     const isUnicode = getBit(mask, COSMETICS_MASK.isUnicode);
     const optionalParts = buffer.getUint8();

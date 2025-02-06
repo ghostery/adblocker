@@ -229,10 +229,10 @@ describe('html-filtering', () => {
       public _pushed: number = 0;
       public _pulled: Uint8Array = new Uint8Array();
 
-      public ondata: (data: WebRequest.StreamFilterEventData) => void = this._ondata;
-      public onstart: (data: WebRequest.StreamFilterEventData) => void = this._noop;
-      public onstop: (data: WebRequest.StreamFilterEventData) => void = this._ondata;
-      public onerror: (data: WebRequest.StreamFilterEventData) => void = this._noop;
+      public ondata: (data: WebRequest.StreamFilterEventData) => void = this._ondata.bind(this);
+      public onstart: (data: WebRequest.StreamFilterEventData) => void = this._noop.bind(this);
+      public onstop: (data: WebRequest.StreamFilterEventData) => void = this._ondata.bind(this);
+      public onerror: (data: WebRequest.StreamFilterEventData) => void = this._noop.bind(this);
 
       public status: WebRequest.StreamFilterStatus = 'uninitialized';
       public error: string = '';
@@ -272,8 +272,8 @@ describe('html-filtering', () => {
 
       public disconnect(): void {
         this.status = 'disconnected';
-        this.ondata = this._ondata;
-        this.onstop = this._noop;
+        this.ondata = this._ondata.bind(this);
+        this.onstop = this._noop.bind(this);
       }
 
       public write(data: ArrayBuffer | Uint8Array): void {
