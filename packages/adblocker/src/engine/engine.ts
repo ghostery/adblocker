@@ -1017,7 +1017,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     injectPureHasSafely?: boolean;
 
     hidingStyle?: string | undefined;
-    callerContext?: any | undefined;
+    callerContext?: any;
   }): IMessageFromBackground {
     if (this.config.loadCosmeticFilters === false) {
       return {
@@ -1186,7 +1186,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getExtendedRules?: boolean;
     getPureHasRules?: boolean;
 
-    callerContext?: any | undefined;
+    callerContext?: any;
   }): {
     matches: {
       filter: CosmeticFilter;
