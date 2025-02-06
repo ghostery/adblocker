@@ -27,8 +27,12 @@ export default tseslint.config(
       '@typescript-eslint/no-duplicate-type-constituents': 'off',
       '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/no-floating-promises': 'off',
-      '@typescript-eslint/no-unsafe-return': 'off',
-      '@typescript-eslint/no-misused-promises': 'off',
+      '@typescript-eslint/no-misused-promises': [
+        'error',
+        {
+          'checksVoidReturn': false,
+        },
+      ],
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
