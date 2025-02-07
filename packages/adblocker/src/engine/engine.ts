@@ -1084,19 +1084,19 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       injectPureHasSafely,
 
       allowGenericHides = true,
-      getBaseRules,
-      hidingStyle,
+      getBaseRules = false,
+      hidingStyle = '',
     }: {
       url: string;
 
-      injectStyles?: boolean;
+      injectStyles?: boolean | undefined;
       injectScriptlets: boolean;
       injectExtended: boolean;
       injectPureHasSafely: boolean;
 
-      allowGenericHides?: boolean;
+      allowGenericHides?: boolean | undefined;
+      getBaseRules?: boolean | undefined;
       hidingStyle?: string | undefined;
-      getBaseRules?: boolean;
     },
   ): {
     scripts: string[];
