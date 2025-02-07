@@ -18,7 +18,6 @@ export default tseslint.config(
     },
     rules: {
       'prettier/prettier': 2, // Means error
-      '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-misused-promises': [
         'error',
         {

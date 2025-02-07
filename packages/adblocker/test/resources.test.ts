@@ -63,7 +63,7 @@ describe('#Resources', function () {
     });
 
     it('throws on missing or invalid data', function () {
-      const subject = (resources: any) => () =>
+      const subject = (resources: unknown) => () =>
         Resources.parse(JSON.stringify(resources), { checksum: '' });
       expect(subject(''), 'resources must be a valid json').to.throw(
         'Cannot parse resources.json',

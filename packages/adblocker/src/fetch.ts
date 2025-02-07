@@ -9,7 +9,7 @@
 interface FetchResponse {
   text: () => Promise<string>;
   arrayBuffer: () => Promise<ArrayBuffer>;
-  json: () => Promise<any>;
+  json: () => Promise<Record<string, unknown>>;
 }
 
 export type Fetch = (url: string) => Promise<FetchResponse>;

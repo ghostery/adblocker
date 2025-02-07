@@ -15,4 +15,4 @@ import { injectCosmetics } from '@ghostery/adblocker-webextension-cosmetics';
  * - Block the execution of some scripts in the page (only if the
  * 'beforescriptexecute' event is available, currently only on Firefox).
  */
-injectCosmetics(window, true /* MutationObserver */);
+void injectCosmetics(window, true /* MutationObserver */);

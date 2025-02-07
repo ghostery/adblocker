@@ -318,7 +318,7 @@ export class PlaywrightBlocker extends FiltersEngine {
   }
 
   private async injectScriptletsIntoFrame(frame: pw.Frame, scripts: string[]): Promise<void> {
-    const promises: Promise<any>[] = [];
+    const promises: Promise<unknown>[] = [];
 
     if (scripts.length !== 0) {
       for (const script of scripts) {

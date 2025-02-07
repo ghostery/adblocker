@@ -485,8 +485,8 @@ export default class CosmeticFilterBucket {
       allowGenericHides,
       hidingStyle = DEFAULT_HIDING_STYLE,
     }: {
-      getBaseRules: any;
-      allowGenericHides: any;
+      getBaseRules: boolean;
+      allowGenericHides: boolean;
       hidingStyle?: string | undefined;
     },
   ): {

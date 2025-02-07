@@ -9,24 +9,12 @@
 import { queueMicrotask } from './queue-microtask.js';
 
 /**
- * Type of an event listener (i.e.: callback). It accepts arbitrary arguments
- * and is not expected to return any result.
- */
-type EventListener = (...args: any[]) => void;
-
-/**
- * Type of event listeners for all events. It maps event names (from a set of
- * type-level string literals) to list of event listeners.
- */
-type EventListeners<EventNames> = Map<EventNames, EventListener[]>;
-
-/**
  * Add `callback` listener for `event` in `listeners` Map.
  */
-function registerCallback<EventNames>(
-  event: EventNames,
-  callback: EventListener,
-  listeners: EventListeners<EventNames>,
+function registerCallback(
+  event: string,
+  callback: (...args: never) => unknown,
+  listeners: Map<string, Array<(...args: never) => unknown>>,
 ): void {
   let listenersForEvent = listeners.get(event);
 
@@ -41,10 +29,10 @@ function registerCallback<EventNames>(
 /**
  * Remove `callback` listener for `event` from `listeners` Map.
  */
-function unregisterCallback<EventNames>(
-  event: EventNames,
-  callback: EventListener,
-  listeners: EventListeners<EventNames>,
+function unregisterCallback(
+  event: string,
+  callback: (...args: never) => unknown,
+  listeners: Map<string, Array<(...args: never) => unknown>>,
 ): void {
   const listenersForEvent = listeners.get(event);
   if (listenersForEvent !== undefined) {
@@ -59,10 +47,10 @@ function unregisterCallback<EventNames>(
  * Call all registered listeners for `event` with `args` as arguments. Return
  * `true` if at least one callback was registered and `false` otherwise.
  */
-function triggerCallback<EventNames>(
-  event: EventNames,
+function triggerCallback(
+  event: string,
   args: unknown[],
-  listeners: EventListeners<EventNames>,
+  listeners: Map<string, Array<(...args: unknown[]) => unknown>>,
 ): boolean {
   // Fast-path for cases where no listener is registered
   if (listeners.size === 0) {
@@ -88,18 +76,18 @@ function triggerCallback<EventNames>(
  * specified as a type parameter while instantiating the event emitter.
  */
 export class EventEmitter<
-  EventHandlers extends Record<string, (...args: any[]) => any>,
-  EventNames extends keyof EventHandlers = keyof EventHandlers,
+  EventHandlers extends Record<string, (...args: never) => unknown>,
+  EventNames extends keyof EventHandlers & string = keyof EventHandlers & string,
 > {
-  private onceListeners: EventListeners<EventNames> = new Map();
-  private onListeners: EventListeners<EventNames> = new Map();
+  private onceListeners: Map<EventNames, Array<(...args: unknown[]) => void>> = new Map();
+  private onListeners: Map<EventNames, Array<(...args: unknown[]) => void>> = new Map();
 
   /**
    * Register an event listener for `event`.
    */
-  public on<EventName extends EventNames>(
+  public on<EventName extends EventNames, Callback extends EventHandlers[EventName]>(
     event: EventName,
-    callback: EventHandlers[EventName],
+    callback: Callback,
   ): void {
     registerCallback(event, callback, this.onListeners);
   }
@@ -108,9 +96,9 @@ export class EventEmitter<
    * Register an event listener for `event`; but only listen to first instance
    * of this event. The listener is automatically deleted afterwards.
    */
-  public once<EventName extends EventNames>(
+  public once<EventName extends EventNames, Callback extends EventHandlers[EventName]>(
     event: EventName,
-    callback: EventHandlers[EventName],
+    callback: Callback,
   ): void {
     registerCallback(event, callback, this.onceListeners);
   }
@@ -118,9 +106,9 @@ export class EventEmitter<
   /**
    * Remove `callback` from list of listeners for `event`.
    */
-  public unsubscribe<EventName extends EventNames>(
+  public unsubscribe<EventName extends EventNames, Callback extends EventHandlers[EventName]>(
     event: EventName,
-    callback: EventHandlers[EventName],
+    callback: Callback,
   ): void {
     unregisterCallback(event, callback, this.onListeners);
     unregisterCallback(event, callback, this.onceListeners);

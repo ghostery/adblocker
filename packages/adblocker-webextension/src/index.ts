@@ -41,10 +41,10 @@ export type OnHeadersReceivedDetailsType = Pick<
 };
 
 type StreamFilter = WebRequest.StreamFilter & {
-  onstart: (event: any) => void;
+  onstart: (event: unknown) => void;
   ondata: (event: { data: ArrayBuffer }) => void;
-  onstop: (event: any) => void;
-  onerror: (event: any) => void;
+  onstop: (event: unknown) => void;
+  onerror: (event: unknown) => void;
 };
 
 type Browser = typeof browser;
