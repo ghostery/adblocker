@@ -20,7 +20,7 @@ import {
   fullLists,
 } from '../fetch.js';
 import { HTMLSelector } from '../html-filtering.js';
-import CosmeticFilter, { normalizeSelector } from '../filters/cosmetic.js';
+import CosmeticFilter, { DEFAULT_HIDING_STYLE, normalizeSelector } from '../filters/cosmetic.js';
 import NetworkFilter from '../filters/network.js';
 import { block } from '../filters/dsl.js';
 import { FilterType, IListDiff, IPartialRawDiff, parseFilters } from '../lists.js';
@@ -1085,7 +1085,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
       allowGenericHides = true,
       getBaseRules = false,
-      hidingStyle = '',
+      hidingStyle = DEFAULT_HIDING_STYLE,
     }: {
       url: string;
 
