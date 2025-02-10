@@ -1163,8 +1163,6 @@ export default class NetworkFilter implements IFilter {
       }
     }
 
-    mask >>>= 0;
-
     return new NetworkFilter({
       filter,
       hostname,
