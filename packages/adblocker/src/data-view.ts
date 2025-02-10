@@ -107,6 +107,15 @@ export function sizeOfNetworkRedirect(str: string, compression: boolean): number
     : sizeOfASCII(str);
 }
 
+export function sizeOfNetworkSubstitude(str: string, compression: boolean): number {
+  return compression === true
+    ? sizeOfBytesWithLength(
+        getCompressionSingleton().networkSubstitude.getCompressedSize(str),
+        false, // align
+      )
+    : sizeOfASCII(str);
+}
+
 export function sizeOfNetworkHostname(str: string, compression: boolean): number {
   return compression === true
     ? sizeOfBytesWithLength(
@@ -436,6 +445,21 @@ export class StaticDataView {
   public getNetworkRedirect(): string {
     if (this.compression !== undefined) {
       return this.compression.networkRedirect.decompress(this.getBytes());
+    }
+    return this.getASCII();
+  }
+
+  public pushNetworkSubstitude(str: string): void {
+    if (this.compression !== undefined) {
+      this.pushBytes(this.compression.networkSubstitude.compress(str));
+    } else {
+      this.pushASCII(str);
+    }
+  }
+
+  public getNetworkSubstitude(): string {
+    if (this.compression !== undefined) {
+      this.compression.networkSubstitude.decompress(this.getBytes());
     }
     return this.getASCII();
   }

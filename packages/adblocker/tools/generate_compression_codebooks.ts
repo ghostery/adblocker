@@ -67,6 +67,11 @@ async function getStrings(kind: string): Promise<string[]> {
         .filter((filter) => filter.isUnicode() === false)
         .map(({ hostname }) => hostname || '')
         .filter((hostname) => hostname.length !== 0);
+    case 'network-substitude':
+      return (await getNetworkFilters())
+        .filter((filter) => filter.isUnicode() === false && filter.isRemoveParam())
+        .map(({ optionValue }) => optionValue || '')
+        .filter((filter) => filter.length !== 0);
     case 'cosmetic-selector':
       return (await getCosmeticFilters())
         .filter((filter) => filter.isUnicode() === false)
@@ -131,6 +136,8 @@ async function generateCodebook(kind: string): Promise<string[]> {
     options.maxNgram = 20;
   } else if (kind === 'cosmetic-selector') {
     options.maxNgram = 96;
+  } else if (kind === 'network-substitude') {
+    options.maxNgram = 16;
   }
   const codebook = generate(strings, options);
   validateCodebook(codebook, strings);

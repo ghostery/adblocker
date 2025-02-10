@@ -50,7 +50,6 @@ function network(filter: string, expected: any) {
       isRedirect: parsed.isRedirect(),
       isRedirectRule: parsed.isRedirectRule(),
       isRemoveParam: parsed.isRemoveParam(),
-      isRedirectable: parsed.isRedirectable(),
       isRegex: parsed.isRegex(),
       isRightAnchor: parsed.isRightAnchor(),
 
@@ -105,7 +104,6 @@ const DEFAULT_NETWORK_FILTER = {
   isRedirect: false,
   isRedirectRule: false,
   isRemoveParam: false,
-  isRedirectable: false,
   isRegex: false,
   isRightAnchor: false,
 
@@ -876,13 +874,11 @@ describe('Network filters', () => {
         network('||foo.com$redirect-rule=bar.js', {
           isRedirect: true,
           isRedirectRule: true,
-          isRedirectable: true,
           redirect: 'bar.js',
         });
         network('$redirect-rule=bar.js', {
           isRedirect: true,
           isRedirectRule: true,
-          isRedirectable: true,
           redirect: 'bar.js',
         });
       });
@@ -913,14 +909,13 @@ describe('Network filters', () => {
       it('parses ~removeparam', () => {
         // ~removeparam is not a valid option
         network('||foo.com$~removeparam=utm', null);
-        network('||fo.com$~removeparam', null);
+        network('||foo.com$~removeparam', null);
       });
 
       it('parses removeparam', () => {
         network('||foo.com$removeparam=utm', {
           removeparam: 'utm',
           isRemoveParam: true,
-          isRedirectable: true,
         });
       });
 
@@ -928,7 +923,6 @@ describe('Network filters', () => {
         network('||foo.com$removeparam', {
           removeparam: '',
           isRemoveParam: true,
-          isRedirectable: true,
         });
       });
     });

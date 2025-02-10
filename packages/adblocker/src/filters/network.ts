@@ -15,6 +15,7 @@ import {
   sizeOfRawNetwork,
   sizeOfNetworkCSP,
   sizeOfNetworkRedirect,
+  sizeOfNetworkSubstitude,
 } from '../data-view.js';
 import { toASCII } from '../punycode.js';
 import Request, { RequestType, NORMALIZED_TYPE_TOKEN } from '../request.js';
@@ -1209,7 +1210,9 @@ export default class NetworkFilter implements IFilter {
             ? buffer.getNetworkCSP()
             : getBit(mask, NETWORK_FILTER_MASK.isRedirect)
               ? buffer.getNetworkRedirect()
-              : buffer.getUTF8()
+              : getBit(mask, NETWORK_FILTER_MASK.isRemoveParam)
+                ? buffer.getNetworkSubstitude()
+                : buffer.getUTF8()
           : undefined,
       regex: undefined,
     });
@@ -1378,6 +1381,8 @@ export default class NetworkFilter implements IFilter {
         buffer.pushNetworkCSP(this.optionValue);
       } else if (this.isRedirect()) {
         buffer.pushNetworkRedirect(this.optionValue);
+      } else if (this.isRemoveParam()) {
+        buffer.pushNetworkSubstitude(this.optionValue);
       } else {
         buffer.pushUTF8(this.optionValue);
       }
@@ -1418,6 +1423,8 @@ export default class NetworkFilter implements IFilter {
         estimate += sizeOfNetworkCSP(this.optionValue, compression);
       } else if (this.isRedirect()) {
         estimate += sizeOfNetworkRedirect(this.optionValue, compression);
+      } else if (this.isRemoveParam()) {
+        estimate += sizeOfNetworkSubstitude(this.optionValue, compression);
       } else {
         estimate += sizeOfUTF8(this.optionValue);
       }
@@ -1638,10 +1645,6 @@ export default class NetworkFilter implements IFilter {
 
   public isRemoveParam(): boolean {
     return getBit(this.getMask(), NETWORK_FILTER_MASK.isRemoveParam);
-  }
-
-  public isRedirectable(): boolean {
-    return this.isRedirect() || this.isRemoveParam();
   }
 
   // Expected to be called only with `$replace` modifiers

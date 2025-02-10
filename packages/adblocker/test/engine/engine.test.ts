@@ -77,14 +77,14 @@ function test({
       expect(importants).to.include(result.filter.rawLine);
 
       // Handle case where important filter is also a redirect
-      if (filter.isRedirectable()) {
+      if (filter.isRedirect()) {
         expect(redirects).to.include(result.filter.rawLine);
       }
     }
 
     expect(result.exception).to.be.undefined;
 
-    if (!filter.isRedirectable()) {
+    if (!filter.isRedirect()) {
       expect(result.redirect).to.be.undefined;
     }
 
@@ -108,7 +108,7 @@ function test({
     expect(result.filter).not.to.be.undefined;
     expect(result.redirect).to.be.undefined;
     expect(result.match).to.be.false;
-  } else if (filter.isRedirectable() && exceptions.length === 0 && importants.length === 0) {
+  } else if (filter.isRedirect() && exceptions.length === 0 && importants.length === 0) {
     const result = engine.match(request);
     expect(result.filter).not.to.be.undefined;
     if (
@@ -621,16 +621,15 @@ $csp=baz,domain=bar.com
       describe('removes all parameters', () => {
         let engine: FilterEngine;
         before(() => {
-          engine = createEngine('||foo.com$removeparam');
+          engine = Engine.parse('||foo.com$removeparam', {
+            debug: true,
+            enableHtmlFiltering: true,
+          });
         });
         for (const url of urls) {
           it(`removes all params from "${url}"`, () => {
-            const { match, redirect } = engine.match(urlToDocumentRequest(url));
-            expect(match).to.be.true;
-            expect(redirect).not.to.be.undefined;
-            expect(redirect!.body).to.be.eql('');
-            expect(redirect!.contentType).to.be.eql('text/plain');
-            expect(redirect!.dataUrl).to.be.eql('https://foo.com/');
+            const { substitude } = engine.match(urlToDocumentRequest(url));
+            expect(substitude?.modifiedUrl).to.be.eql('https://foo.com/');
           });
         }
       });
@@ -638,17 +637,15 @@ $csp=baz,domain=bar.com
       describe('removes specific parameter', () => {
         let engine: FilterEngine;
         before(() => {
-          engine = createEngine('||foo.com$removeparam=utm');
+          engine = Engine.parse('||foo.com$removeparam=utm', {
+            debug: true,
+            enableHtmlFiltering: true,
+          });
         });
         for (const url of urls) {
           it(`removes "utm" from "${url}"`, () => {
-            const { match, redirect } = engine.match(urlToDocumentRequest(url));
-            expect(match).to.be.true;
-            expect(redirect).not.to.be.undefined;
-            expect(redirect!.body).to.be.eql('');
-            expect(redirect!.contentType).to.be.eql('text/plain');
-            expect(redirect!.dataUrl).not.to.include('?utm=');
-            expect(redirect!.dataUrl).not.to.include('&utm=');
+            const { substitude } = engine.match(urlToDocumentRequest(url));
+            expect(substitude?.modifiedUrl).not.to.include('utm=');
           });
         }
       });
@@ -656,7 +653,10 @@ $csp=baz,domain=bar.com
       describe('removes specific parameter regardless of ordering', () => {
         let engine: FilterEngine;
         before(() => {
-          engine = createEngine('||foo.com$removeparam=utm');
+          engine = Engine.parse('||foo.com$removeparam=utm', {
+            debug: true,
+            enableHtmlFiltering: true,
+          });
         });
         for (const url of [
           // First
@@ -667,29 +667,12 @@ $csp=baz,domain=bar.com
           'https://foo.com/?utm_source=organic&utm_event=b&utm=a',
         ]) {
           it(`removeparam "utm" from "${url}"`, () => {
-            const { match, redirect } = engine.match(urlToDocumentRequest(url));
-            expect(match).to.be.true;
-            expect(redirect).not.to.be.undefined;
-            expect(redirect!.dataUrl).to.be.eql('https://foo.com/?utm_source=organic&utm_event=b');
+            const { substitude } = engine.match(urlToDocumentRequest(url));
+            expect(substitude).not.to.be.undefined;
+            expect(substitude!.modifiedUrl).to.be.eql(
+              'https://foo.com/?utm_source=organic&utm_event=b',
+            );
           });
-        }
-      });
-
-      it('removes parameter sequentially', () => {
-        const params = ['utm', 'utm_source', 'utm_event'];
-        const engine = createEngine(
-          params.map((param) => `||foo.com$removeparam=${param}`).join('\n'),
-        );
-        let request = urlToDocumentRequest(
-          'https://foo.com/?utm_source=organic&utm_event=b&utm=a',
-        );
-        for (let i = 0; i < params.length; i++) {
-          const { redirect } = engine.match(request);
-          expect(redirect).not.to.be.undefined;
-          request = urlToDocumentRequest(redirect!.dataUrl);
-        }
-        for (const param of params) {
-          expect(request.url).not.to.include(param);
         }
       });
 
@@ -700,25 +683,49 @@ $csp=baz,domain=bar.com
         });
 
         it('respects exception', () => {
-          const engine = createEngine(`||foo.com$removeparam=x
-@@||foo.com$removeparam=x`);
-          expect(engine.match(request).match).to.be.false;
+          const engine = Engine.parse(
+            `||foo.com$removeparam=x
+@@||foo.com$removeparam=x`,
+            {
+              debug: true,
+              enableHtmlFiltering: true,
+            },
+          );
+          expect(engine.match(request).substitude?.modifiedUrl).to.be.eql(undefined);
         });
         it('respects option value with exception', () => {
-          const engine = createEngine(`||foo.com$removeparam=x
-@@||foo.com$removeparam=y`);
-          expect(engine.match(request).match).to.be.true;
+          const engine = Engine.parse(
+            `||foo.com$removeparam=x
+@@||foo.com$removeparam=y`,
+            {
+              debug: true,
+              enableHtmlFiltering: true,
+            },
+          );
+          expect(engine.match(request).substitude?.modifiedUrl).to.be.eql('https://foo.com/');
         });
 
         it('priorities global removeparam over singular exception', () => {
-          const engine = createEngine(`@@||foo.com$removeparam=x
-||foo.com$removeparam`);
-          expect(engine.match(request).match).to.be.true;
+          const engine = Engine.parse(
+            `@@||foo.com$removeparam=x
+||foo.com$removeparam`,
+            {
+              debug: true,
+              enableHtmlFiltering: true,
+            },
+          );
+          expect(engine.match(request).substitude?.modifiedUrl).to.be.eql('https://foo.com/');
         });
         it('priorities global exception over global removeparam', () => {
-          const engine = createEngine(`||foo.com$removeparam
-@@||foo.com$removeparam`);
-          expect(engine.match(request).match).to.be.false;
+          const engine = Engine.parse(
+            `||foo.com$removeparam
+@@||foo.com$removeparam`,
+            {
+              debug: true,
+              enableHtmlFiltering: true,
+            },
+          );
+          expect(engine.match(request).substitude?.modifiedUrl).to.be.eql(undefined);
         });
       });
     });
@@ -783,11 +790,11 @@ $csp=baz,domain=bar.com
               importants.push(filter);
             }
 
-            if (parsed.isRedirectable()) {
+            if (parsed.isRedirect()) {
               redirects.push(filter);
             }
 
-            if (!parsed.isRedirectable() && !parsed.isException() && !parsed.isImportant()) {
+            if (!parsed.isException() && !parsed.isImportant()) {
               normalFilters.push(filter);
             }
           }
