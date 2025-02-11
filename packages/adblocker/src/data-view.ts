@@ -459,7 +459,7 @@ export class StaticDataView {
 
   public getNetworkSubstitude(): string {
     if (this.compression !== undefined) {
-      this.compression.networkSubstitude.decompress(this.getBytes());
+      return this.compression.networkSubstitude.decompress(this.getBytes());
     }
     return this.getASCII();
   }
