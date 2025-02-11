@@ -2161,7 +2161,7 @@ describe('events', () => {
         resolve(callbacks);
       }, 1000);
 
-      const handler = (...args: any) => {
+      const handler = (...args: unknown[]) => {
         callbacks.push(args as Arguments);
 
         if (callbacks.length === limit) {

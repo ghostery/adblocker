@@ -246,7 +246,7 @@ function isThirdParty(
   return false;
 }
 
-export interface RequestInitialization<T = any | undefined> {
+export interface RequestInitialization<T = unknown> {
   requestId: string;
   tabId: number;
 
@@ -266,14 +266,14 @@ export interface RequestInitialization<T = any | undefined> {
   // * Electron.OnBeforeRequestListenerDetails
   // * puppeteer.Request
   // * webRequest details
-  _originalRequestDetails: T;
+  _originalRequestDetails?: T | undefined;
 }
 
-export default class Request<T = any | undefined> {
+export default class Request<T = unknown> {
   /**
    * Create an instance of `Request` from raw request details.
    */
-  public static fromRawDetails<T = any | undefined>({
+  public static fromRawDetails<T = unknown>({
     requestId = '0',
     tabId = 0,
     url = '',
@@ -300,7 +300,7 @@ export default class Request<T = any | undefined> {
       sourceDomain = sourceDomain || parsed.domain || sourceHostname || '';
     }
 
-    return new Request({
+    return new Request<T>({
       requestId,
       tabId,
 
@@ -318,7 +318,7 @@ export default class Request<T = any | undefined> {
     });
   }
 
-  public readonly _originalRequestDetails: T;
+  public readonly _originalRequestDetails: T | undefined;
 
   public type: RequestType;
   public readonly isHttp: boolean;
@@ -355,8 +355,7 @@ export default class Request<T = any | undefined> {
     sourceHostname,
 
     _originalRequestDetails,
-  }: RequestInitialization) {
-    this._originalRequestDetails = _originalRequestDetails;
+  }: RequestInitialization<T>) {
     this.id = requestId;
     this.tabId = tabId;
     this.type = type;
@@ -405,6 +404,10 @@ export default class Request<T = any | undefined> {
       this.isHttp = false;
       this.isHttps = false;
       this.isSupported = false;
+    }
+
+    if (_originalRequestDetails !== undefined) {
+      this._originalRequestDetails = _originalRequestDetails;
     }
   }
 

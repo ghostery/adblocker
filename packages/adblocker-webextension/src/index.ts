@@ -41,10 +41,10 @@ export type OnHeadersReceivedDetailsType = Pick<
 };
 
 type StreamFilter = WebRequest.StreamFilter & {
-  onstart: (event: any) => void;
+  onstart: (event: unknown) => void;
   ondata: (event: { data: ArrayBuffer }) => void;
-  onstop: (event: any) => void;
-  onerror: (event: any) => void;
+  onstop: (event: unknown) => void;
+  onerror: (event: unknown) => void;
 };
 
 type Browser = typeof browser;
@@ -52,7 +52,7 @@ type Browser = typeof browser;
 function isFirefox() {
   try {
     return navigator.userAgent.indexOf('Firefox') !== -1;
-  } catch (e) {
+  } catch (_e) {
     return false;
   }
 }
@@ -260,9 +260,9 @@ export function filterRequestHTML(
       if (remaining.length !== 0) {
         filter.write(encoder.encode(remaining));
       }
-    } catch (ex) {
+    } catch (e) {
       // If we reach this point, there is probably no way we can recover...
-      console.error('Failed to flush HTML filterer', ex);
+      console.error('Failed to flush HTML filterer', e);
     }
 
     // If latest event had some data attached (i.e. 'ondata' event), we make
@@ -291,7 +291,7 @@ export function filterRequestHTML(
 
     try {
       filter.write(encoder.encode(htmlFilter.write(decoder.decode(event.data, { stream: true }))));
-    } catch (ex) {
+    } catch (_e) {
       // If we fail to decode a chunk, we need to be extra conservative and stop
       // listening to streaming response. Teardown takes care of flushing any
       // data remaining in the pipeline and disconnecting the listener.
@@ -321,7 +321,7 @@ export class BlockingContext {
   private readonly onRuntimeMessage: (
     msg: IBackgroundCallback & { action?: string },
     sender: Runtime.MessageSender,
-  ) => Promise<IMessageFromBackground | {}>;
+  ) => Promise<IMessageFromBackground | object>;
 
   private readonly onCommittedHandler:
     | ((details: WebNavigation.OnCommittedDetailsType) => void)
@@ -520,7 +520,10 @@ export class WebExtensionBlocker extends FiltersEngine {
    * 3. `browser.webRequest.filterResponseData` (Firefox only!).
    * 4. `TextEncoder` and `TextDecoder` are available.
    */
-  public performHTMLFiltering(browser: Browser, request: Request): void {
+  public performHTMLFiltering(
+    browser: Browser,
+    request: Request<OnHeadersReceivedDetailsType>,
+  ): void {
     if (
       this.config.enableHtmlFiltering === true &&
       browser.webRequest !== undefined &&
@@ -530,7 +533,11 @@ export class WebExtensionBlocker extends FiltersEngine {
     ) {
       const htmlFilters = this.getHtmlFilters(request);
       if (htmlFilters.length !== 0) {
-        filterRequestHTML(browser.webRequest.filterResponseData, request, htmlFilters);
+        filterRequestHTML(
+          (requestId: string) => browser.webRequest.filterResponseData(requestId),
+          request,
+          htmlFilters,
+        );
       }
     }
   }
@@ -695,7 +702,7 @@ export class WebExtensionBlocker extends FiltersEngine {
     browser: Browser,
     msg: IBackgroundCallback & { action?: string },
     sender: Runtime.MessageSender,
-  ): Promise<IMessageFromBackground | {}> => {
+  ): Promise<IMessageFromBackground | object> => {
     return new Promise((resolve, reject) => {
       this.handleRuntimeMessage(browser, msg, sender, resolve)
         .catch(reject)
@@ -784,8 +791,8 @@ ${scripts.join('\n\n')}}
       script = document.createElement('script');
       script.appendChild(document.createTextNode(decodeURIComponent(code)));
       (document.head || document.documentElement).appendChild(script);
-    } catch (ex) {
-      console.error('Failed to run script', ex);
+    } catch (e) {
+      console.error('Failed to run script', e);
     }
     if (script) {
         if (script.parentNode) {

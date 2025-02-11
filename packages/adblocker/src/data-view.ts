@@ -403,7 +403,7 @@ export class StaticDataView {
     return decode(
       String.fromCharCode.apply(
         null,
-        // @ts-ignore
+        // @ts-expect-error Two types are actually compatible; The value of Uint8Array<ArrayBufferLike> is accessible with number index.
         this.buffer.subarray(this.pos - byteLength, this.pos),
       ),
     );
@@ -421,8 +421,11 @@ export class StaticDataView {
     const byteLength = this.getLength();
     this.pos += byteLength;
 
-    // @ts-ignore
-    return String.fromCharCode.apply(null, this.buffer.subarray(this.pos - byteLength, this.pos));
+    return String.fromCharCode.apply(
+      null,
+      // @ts-expect-error Two types are actually compatible; The value of Uint8Array<ArrayBufferLike> is accessible with number index.
+      this.buffer.subarray(this.pos - byteLength, this.pos),
+    );
   }
 
   public pushNetworkRedirect(str: string): void {

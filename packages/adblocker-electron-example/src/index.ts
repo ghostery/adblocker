@@ -34,8 +34,8 @@ async function createWindow() {
     },
     {
       path: 'engine.bin',
-      read: async (...args) => readFileSync(...args),
-      write: async (...args) => writeFileSync(...args),
+      read: async (...args) => Promise.resolve(readFileSync(...args)),
+      write: async (...args) => Promise.resolve(writeFileSync(...args)),
     },
   );
 
@@ -67,12 +67,12 @@ async function createWindow() {
 
   blocker.on('filter-matched', console.log.bind(console, 'filter-matched'));
 
-  mainWindow.loadURL(getUrlToLoad());
-  mainWindow.webContents.openDevTools();
-
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+
+  mainWindow.webContents.openDevTools();
+  await mainWindow.loadURL(getUrlToLoad());
 }
 
 app.on('ready', createWindow);
@@ -85,6 +85,6 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
   if (mainWindow === null) {
-    createWindow();
+    void createWindow();
   }
 });

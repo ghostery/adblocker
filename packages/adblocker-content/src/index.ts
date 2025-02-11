@@ -206,7 +206,7 @@ export class DOMMonitor {
       );
 
       this.observer = new window.MutationObserver((mutations: MutationRecord[]) => {
-        getElementsFromMutations(mutations).forEach(nodes.add, nodes);
+        getElementsFromMutations(mutations).forEach(nodes.add.bind(nodes), nodes);
 
         // Set a threshold to prevent websites continuously
         // causing DOM mutations making the set being filled up infinitely.
@@ -308,7 +308,7 @@ export function autoRemoveScript(script: string): string {
   //
   //    try {
   //      ${script}
-  //    } catch (ex) { }
+  //    } catch (e) { }
   //
   //    (function() {
   //      var currentScript = document.currentScript;
@@ -340,7 +340,7 @@ function injectScriptlet(s: string, doc: Document): void {
 function isFirefox(doc: Document) {
   try {
     return doc.defaultView?.navigator?.userAgent?.indexOf('Firefox') !== -1;
-  } catch (e) {
+  } catch (_e: unknown) {
     return false;
   }
 }
@@ -363,7 +363,7 @@ async function injectScriptletFirefox(s: string, doc: Document) {
 
 export function injectScript(s: string, doc: Document): void {
   if (isFirefox(doc)) {
-    injectScriptletFirefox(s, doc);
+    void injectScriptletFirefox(s, doc);
   } else {
     injectScriptlet(s, doc);
   }

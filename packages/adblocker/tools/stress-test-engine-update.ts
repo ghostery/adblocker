@@ -148,8 +148,10 @@ function filtersDiff(
   return differences;
 }
 
-async function getMeta(url: string): Promise<{ name: string; revisions: string[] }> {
-  const meta = (await axios.get(url)).data;
+type RevisionsResponse = { name: string; revisions: string[] };
+
+async function getMeta(url: string): Promise<RevisionsResponse> {
+  const meta = (await axios.get<RevisionsResponse>(url)).data;
   if (typeof meta === 'string') {
     const buffer = Buffer.from(
       (
@@ -158,7 +160,7 @@ async function getMeta(url: string): Promise<{ name: string; revisions: string[]
         })
       ).data,
     );
-    return JSON.parse(brotliDecompressSync(buffer).toString('utf-8'));
+    return JSON.parse(brotliDecompressSync(buffer).toString('utf-8')) as RevisionsResponse;
   }
 
   return meta;
@@ -184,7 +186,7 @@ async function getRevision(url: string): Promise<string> {
     return cached;
   }
 
-  let data: string = (await axios.get(url)).data;
+  let data = (await axios.get(url)).data as string;
   if (!data.startsWith('[Ad')) {
     const buffer = Buffer.from(
       (
@@ -196,7 +198,7 @@ async function getRevision(url: string): Promise<string> {
 
     try {
       data = brotliDecompressSync(buffer).toString('utf-8');
-    } catch (ex) {
+    } catch (_e) {
       // Data is probably already decompressed
     }
   }
@@ -424,4 +426,4 @@ async function run() {
   }
 }
 
-run();
+void run();
