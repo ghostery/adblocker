@@ -1,3 +1,12 @@
+This repo addresses a bug encountered on MacOS where using the node:path module results in execution errors. On MacOS, the node:path import is not properly recognized, leading to failures during execution.
+
+Changes Made:
+Replaced Import Statements:
+All occurrences of node:path have been updated to node throughout the codebase. This change ensures that the correct module is imported and that the feature works seamlessly across all platforms, including MacOS.
+
+This fixes the compatibility issue without affecting functionality on other operating systems.
+
+
 <h1 align="center">Adblocker</h2>
 
 <p align="center">

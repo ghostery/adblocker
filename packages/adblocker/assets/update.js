@@ -1,7 +1,7 @@
 /* global fetch */
 
 import { writeFileSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { join, dirname } from 'path';
 import { fileURLToPath } from 'node:url';
 import { log } from 'node:console';
 import { NetworkFilter, parseFilter } from '@ghostery/adblocker';
