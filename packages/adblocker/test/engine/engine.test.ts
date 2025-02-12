@@ -600,6 +600,135 @@ $csp=baz,domain=bar.com
       expect((filter as NetworkFilter).toString()).to.equal('||foo.com$image,redirect=foo.js');
       expect(redirect).to.be.undefined;
     });
+
+    context('removeparam', () => {
+      function urlToDocumentRequest(url: string) {
+        return Request.fromRawDetails({
+          sourceUrl: 'https://foo.com/',
+          url,
+          type: 'document',
+        });
+      }
+
+      const urls = [
+        'https://foo.com/?utm',
+        'https://foo.com/?utm=',
+        'https://foo.com/?utm=a',
+        'https://foo.com/?utm=a&utm_source=organic',
+        'https://foo.com/?utm_source=organic&utm=a',
+      ];
+
+      describe('removes all parameters', () => {
+        let engine: FilterEngine;
+        before(() => {
+          engine = Engine.parse('||foo.com$removeparam', {
+            debug: true,
+            enableHtmlFiltering: true,
+          });
+        });
+        for (const url of urls) {
+          it(`removes all params from "${url}"`, () => {
+            const { substitude } = engine.match(urlToDocumentRequest(url));
+            expect(substitude?.modifiedUrl).to.be.eql('https://foo.com/');
+          });
+        }
+      });
+
+      describe('removes specific parameter', () => {
+        let engine: FilterEngine;
+        before(() => {
+          engine = Engine.parse('||foo.com$removeparam=utm', {
+            debug: true,
+            enableHtmlFiltering: true,
+          });
+        });
+        for (const url of urls) {
+          it(`removes "utm" from "${url}"`, () => {
+            const { substitude } = engine.match(urlToDocumentRequest(url));
+            expect(substitude?.modifiedUrl).not.to.include('utm=');
+          });
+        }
+      });
+
+      describe('removes specific parameter regardless of ordering', () => {
+        let engine: FilterEngine;
+        before(() => {
+          engine = Engine.parse('||foo.com$removeparam=utm', {
+            debug: true,
+            enableHtmlFiltering: true,
+          });
+        });
+        for (const url of [
+          // First
+          'https://foo.com/?utm=a&utm_source=organic&utm_event=b',
+          // Middle
+          'https://foo.com/?utm_source=organic&utm=a&utm_event=b',
+          // Last
+          'https://foo.com/?utm_source=organic&utm_event=b&utm=a',
+        ]) {
+          it(`removeparam "utm" from "${url}"`, () => {
+            const { substitude } = engine.match(urlToDocumentRequest(url));
+            expect(substitude).not.to.be.undefined;
+            expect(substitude!.modifiedUrl).to.be.eql(
+              'https://foo.com/?utm_source=organic&utm_event=b',
+            );
+          });
+        }
+      });
+
+      describe('exceptions', () => {
+        let request: Request;
+        before(() => {
+          request = urlToDocumentRequest('https://foo.com/?x=y');
+        });
+
+        it('respects exception', () => {
+          const engine = Engine.parse(
+            `||foo.com$removeparam=x
+@@||foo.com$removeparam=x`,
+            {
+              debug: true,
+              enableHtmlFiltering: true,
+            },
+          );
+          expect(engine.match(request).substitude?.modifiedUrl).to.be.eql(undefined);
+        });
+        it('respects option value with exception', () => {
+          const engine = Engine.parse(
+            `||foo.com$removeparam=x
+@@||foo.com$removeparam=y`,
+            {
+              debug: true,
+              enableHtmlFiltering: true,
+            },
+          );
+          expect(engine.match(request).substitude?.modifiedUrl).to.be.eql('https://foo.com/');
+        });
+
+        it('priorities global removeparam over singular exception', () => {
+          const engine = Engine.parse(
+            `@@||foo.com$removeparam=x
+||foo.com$removeparam`,
+            {
+              debug: true,
+              enableHtmlFiltering: true,
+            },
+          );
+          expect(engine.match(request).substitude?.modifiedUrl).to.be.eql('https://foo.com/');
+        });
+        it('priorities global exception over global removeparam', () => {
+          const engine = Engine.parse(
+            `||foo.com$removeparam
+@@||foo.com$removeparam`,
+            {
+              debug: true,
+              enableHtmlFiltering: true,
+            },
+          );
+          expect(engine.match(request).substitude?.modifiedUrl).to.be.eql(undefined);
+        });
+      });
+    });
   });
 
   describe('network filters', () => {
@@ -665,7 +794,7 @@ $csp=baz,domain=bar.com
               redirects.push(filter);
             }
 
-            if (!parsed.isRedirect() && !parsed.isException() && !parsed.isImportant()) {
+            if (!parsed.isException() && !parsed.isImportant()) {
               normalFilters.push(filter);
             }
           }
