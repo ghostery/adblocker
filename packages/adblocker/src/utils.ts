@@ -27,11 +27,11 @@ export function getBit(n: number, mask: number): boolean {
 }
 
 export function setBit(n: number, mask: number): number {
-  return n | mask;
+  return (n | mask) >>> 0;
 }
 
 export function clearBit(n: number, mask: number): number {
-  return n & ~mask;
+  return (n & ~mask) >>> 0;
 }
 
 export function fastHashBetween(str: string, begin: number, end: number): number {

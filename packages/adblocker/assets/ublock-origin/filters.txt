@@ -1007,11 +1007,6 @@ vipleague.*##.bg-dark.ratio > .position-absolute
 nolive.me##+js(set, attachEvent, trueFunc)
 nolive.me##+js(nosiif, debug)
 vipleague.*##.m-1.btn-danger.btn
-! https://github.com/uBlockOrigin/uAssets/issues/723
-xmoviesforyou.*##+js(aopr, popjs.init)
-xmoviesforyou.*##+js(aopr, decodeURI)
-! https://github.com/jspenguin2017/uBlockProtector/issues/624
-kisshentai.net##+js(aopr, adblock)
 ! https://github.com/uBlockOrigin/uAssets/issues/739
 ||zergnet.com/zerg-inf-multi$3p,script
 ! https://github.com/gorhill/uBlock/issues/3114
@@ -6985,11 +6980,6 @@ fc-lc.com##.captcha-page .box-main > a[href][target="_blank"] > img
 fc.lc##+js(nowoif, %2F%5E%2F, 1)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/139812
 ! vocalley.com anti-adb
-#@#.ad-area
-#@#.ads_container
-##.ad-area:not(.text-ad)
-job.inshokuten.com,kurukura.jp,netmile.co.jp#@#.ad-area:not(.text-ad)
-##.ads_container:not(.text-ad)
 ! https://github.com/uBlockOrigin/uAssets/issues/5496
 movie4u.live##+js(aopr, AaDetector)
 ! https://github.com/uBlockOrigin/uAssets/issues/5489#issuecomment-488537713
@@ -7118,8 +7108,6 @@ bezpolitickekorektnosti.cz##.SC_TBlock
 glodls.*##+js(nowebrtc)
 ! https://www.reddit.com/r/uBlockOrigin/comments/bnscg6/ublocknano_adblocker_detected_any_way_to_bypass/
 starcoins.ws##+js(aopw, adBlockDetected)
-! https://github.com/uBlockOrigin/uAssets/issues/5583
-anitube.site###protetorVideo
 ! https://github.com/uBlockOrigin/uAssets/issues/5489#issuecomment-491564073
 bitcoinminingforex.blogspot.com##+js(nofab)
 bitcoinminingforex.blogspot.com##+js(nowoif)
@@ -7150,10 +7138,9 @@ pennlive.com##+js(aeld, load, PrivateMode)
 ! https://github.com/uBlockOrigin/uAssets/issues/5620
 ! https://github.com/uBlockOrigin/uAssets/issues/9009
 ! https://github.com/uBlockOrigin/uAssets/issues/17672
-freeupload.info,fstore.biz,uploadfree.info##+js(acs, document.getElementById, undefined)
+fstore.biz##+js(acs, document.getElementById, undefined)
 fstore.biz##+js(set, blurred, false)
-freeupload.info,fstore.biz,uploadfree.info##+js(nano-sib)
-uploadfree.info###at-btn-download
+fstore.biz##+js(nano-sib)
 ! https://github.com/NanoMeow/QuickReports/issues/1227
 @@||beatricedailysun.com^$ghide
 beatricedailysun.com##.tnt-ads-container
@@ -7788,10 +7775,7 @@ shrink.*##.banner
 @@||shrink.*^$ghide
 bigbtc.win##div[style^="width:300px;height:250px"]
 @@||onceagain.mooo.com/prebid.js$script,domain=bigbtc.win
-bigbtc.win,cryptofun.space##^script:has-text(/block-adb|-0x|ad block|alert/)
-!#if !cap_html_filtering
-bigbtc.win,cryptofun.space##+js(rmnt, script, %2Fblock-adb%7C-0x%7Cad%20block%7Calert%2F)
-!#endif
+@@||dlvi.my/prebid.js$script,domain=bigbtc.win
 @@||bigbtc.win^$ghide
 bigbtc.win,cryptofun.space###block-adb-enabled, #block-add-enabled
 bigbtc.win,cryptofun.space###main, #ielement:style(display: block !important;)
@@ -8868,15 +8852,6 @@ vupload.com##+js(nowoif)
 @@||blogshinobijawi.blogspot.com^$ghide
 ! https://github.com/NanoMeow/QuickReports/issues/2159
 karanapk.com##+js(set, google_jobrunner, true)
-! https://github.com/uBlockOrigin/uAssets/issues/5940
-camhub.world##+js(nostif, visibility, 2000)
-||camhub.world/player/player_ads.html$frame,1p,redirect=noopframe
-! camhub.cc anti-adb/popunder
-camhub.cc##.table
-camhub.cc##+js(nostif, innerText, 2000)
-camhub.cc##+js(set, flashvars.popunder_url, )
-! https://github.com/uBlockOrigin/uAssets/issues/10011
-camhub.*##.popunder-opener
 ! moneyhouse.ch anti adb
 moneyhouse.ch##+js(nostif, bait)
 ! megalink.pro anti adb
