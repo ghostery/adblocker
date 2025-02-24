@@ -188,9 +188,8 @@ uploadhub.to##center
 ! https://github.com/AdguardTeam/AdguardFilters/issues/54403
 verteleseriesonline.com##+js(aopr, adBlockDetected)
 verteleseriesonline.com##+js(nosiif, visibility, 1000)
-! flight-report .com anti adb
 ! https://github.com/uBlockOrigin/uAssets/issues/16548
-flight-report.com##+js(nostif, offsetHeight)
+flight-report.com##+js(aeld, load, %2FAdBlock%2Fi)
 ! ievaphone .com anti adb
 ievaphone.com##+js(acs, onload)
 ! https://github.com/NanoMeow/QuickReports/issues/3669
@@ -324,6 +323,7 @@ wg-gesucht.de##+js(acs, %24, detectAdBlocker)
 mp4mania1.net##+js(aopr, LieDetector)
 mp4mania1.net##.advert
 mp4mania1.net##.prop_native1
+mp4mania1.net##[href^="https://ak.naiwoalooca.net/"]
 ! https://github.com/NanoMeow/QuickReports/issues/3751
 ||undefined^$script,redirect=noopjs
 ||d3g5ovfngjw9bw.cloudfront.net^$script,redirect=noopjs
@@ -483,9 +483,6 @@ thatav.net##+js(aopr, decodeURI)
 digjav.com##+js(aeld, , Pop)
 digjav.com##+js(nowoif)
 ||thatav.net/sw.js$script,1p
-! https://github.com/uBlockOrigin/uAssets/issues/7358
-se-ed.com##+js(aopr, adBlockDetected)
-se-ed.com##[id^="banner"]
 ! https://github.com/uBlockOrigin/uAssets/issues/7375
 phpscripttr.com##+js(noeval-if, ads)
 ! https://github.com/uBlockOrigin/uAssets/issues/7374
@@ -496,11 +493,7 @@ pugam.com##+js(acs, jQuery, ai_adb)
 @@||25cineframes.com^$ghide
 25cineframes.com##ins.adsbygoogle
 ! https://github.com/uBlockOrigin/uAssets/issues/7370
-televisiongratishd.com,rojadirecta-tv-en-vivo.blogspot.com##+js(acs, String.fromCharCode, atob)
-! https://github.com/uBlockOrigin/uAssets/issues/7361
-legendaoficial.net##+js(acs, String.fromCharCode, shift)
-legendaoficial.net##^script:has-text('shift')
-legendaoficial.net##^script:has-text(\'shift\')
+rojadirecta-tv-en-vivo.blogspot.com##+js(acs, String.fromCharCode, atob)
 ! https://github.com/uBlockOrigin/uAssets/issues/7369
 talkceltic.net##+js(set, samDetected, false)
 ! https://github.com/uBlockOrigin/uAssets/issues/7365
@@ -566,6 +559,8 @@ xda-developers.com##+js(rc, twig-body)
 @@||imedikament.de^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/7418
 vosfemmes.com,voyeurfrance.net##+js(set, is_adblocked, false)
+vosfemmes.com,voyeurfrance.net##+js(rmnt, script, %2FisAdBlocked%7CpopUnderUrl%2F)
+vosfemmes.com,voyeurfrance.net##+js(set-cookie, dscl2, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/7419
 sms-anonyme.net##+js(nowebrtc)
 @@||sms-anonyme.net^$ghide
@@ -621,10 +616,6 @@ mentalfloss.com##+js(set, countClicks, 0)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/55911
 /wp-content/plugins/eazy-ad-unblocker/*$script,css
 adala-news.fr###eazy_ad_unblocker_dialog-message
-! https://www.reddit.com/r/uBlockOrigin/comments/got6r7/thehillcom_antiadblock_message/
-! https://github.com/NanoMeow/QuickReports/issues/3917
-! https://github.com/NanoMeow/QuickReports/issues/4442
-thehill.com##+js(acs, atob)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/55954
 anomize.xyz##+js(nano-sib)
 anomize.xyz##+js(nosiif, visibility, 1000)
@@ -1077,8 +1068,7 @@ graphicdesignresources.net##+js(nosiif, visibility, 1000)
 @@||podscribe.com/rss/$media,domain=open.spotify.com
 ! https://www.reddit.com/r/uBlockOrigin/comments/1if6l4n/podcasts_not_playing_on_web_with_ublockorigin/
 @@||mgln.ai/e/$media,domain=open.spotify.com
-! [dup] from ublock-origin/quick-fixes.txt
-! @@/traffic.megaphone.fm/*.mp3^$media,domain=open.spotify.com
+@@/traffic.megaphone.fm/*.mp3^$media,domain=open.spotify.com
 /traffic.megaphone.fm/*.mp3^$media,domain=open.spotify.com,urlskip=/(traffic\.megaphone\.fm\/\w+\.mp3)/ +https
 ! https://github.com/NanoMeow/QuickReports/issues/4239
 ilgeniodellostreaming.*##+js(aopr, AaDetector)
@@ -1174,7 +1164,7 @@ aemenstore.com,byboe.com,cazzette.com,dreamcheeky.com,fidlarmusic.com,hookeaudio
 *$3p,denyallow=bootstrapcdn.com|cloudflare.com|consensu.org|google.com|googleapis.com|gstatic.com|hcaptcha.com|jquery.com|jsdelivr.net|recaptcha.net,domain=link1s.*
 ||i.imgur.com^$image,domain=anhdep24.com|dreamcheeky.com|fidlarmusic.com|kiemlua.com|lucidcam.com|nousdecor.com|publicananker.com|rezence.com
 ! https://github.com/uBlockOrigin/uAssets/issues/18642
-kiemlua.com,link1s.com##+js(noeval-if, %2Fchp_%3Fad%2F)
+kiemlua.com,link1s.com##+js(trusted-suppress-native-method, eval, %22%2Fchp_%3Fad%2F%22)
 kiemlua.com##^script:has-text(Adblock)
 !#if !cap_html_filtering
 kiemlua.com##+js(rmnt, script, Adblock)
@@ -1771,9 +1761,10 @@ nulleb.com##+js(rmnt, script, deblocker)
 *$xhr,redirect-rule=nooptext,domain=nulleb.com
 ! voe.sx
 ! https://github.com/uBlockOrigin/uAssets/issues/20207
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=alleneconomicmatter.com|bethshouldercan.com|bradleyviewdoctor.com|brittneystandardwestern.com|brookethoughi.com|brucevotewithin.com|cindyeyefinal.com|donaldlineelse.com|edwardarriveoften.com|erikcoldperson.com|evelynthankregion.com|graceaddresscommunity.com|heatherdiscussionwhen.com|housecardsummerbutton.com|jamessoundcost.com|jamesstartstudent.com|jamiesamewalk.com|jasminetesttry.com|jasonresponsemeasure.com|jayservicestuff.com|jessicaglassauthor.com|johntryopen.com|josephseveralconcern.com|kathleenmemberhistory.com|kennethofficialitem.com|lisatrialidea.com|lorimuchbenefit.com|loriwithinfamily.com|lukecomparetwo.com|markstyleall.com|michaelapplysome.com|morganoperationface.com|nonesnanking.com|paulkitchendark.com|phenomenalityuniform.com|prefulfilloverdoor.com|rebeccaneverbase.com|roberteachfinal.com|robertordercharacter.com|robertplacespace.com|ryanagoinvolve.com|sandratableother.com|sandrataxeight.com|seanshowcould.com|sethniceletter.com|shannonpersonalcost.com|sharonwhiledemocratic.com|susanhavekeep.com|toddpartneranimal.com|vincentincludesuccessful.com|voe.sx,important
-alleneconomicmatter.com,bethshouldercan.com,bradleyviewdoctor.com,brittneystandardwestern.com,brookethoughi.com,brucevotewithin.com,cindyeyefinal.com,donaldlineelse.com,edwardarriveoften.com,erikcoldperson.com,evelynthankregion.com,graceaddresscommunity.com,heatherdiscussionwhen.com,housecardsummerbutton.com,jamessoundcost.com,jamesstartstudent.com,jamiesamewalk.com,jasminetesttry.com,jasonresponsemeasure.com,jayservicestuff.com,jessicaglassauthor.com,johntryopen.com,josephseveralconcern.com,kathleenmemberhistory.com,kennethofficialitem.com,lisatrialidea.com,lorimuchbenefit.com,loriwithinfamily.com,lukecomparetwo.com,markstyleall.com,michaelapplysome.com,morganoperationface.com,nonesnanking.com,paulkitchendark.com,phenomenalityuniform.com,prefulfilloverdoor.com,rebeccaneverbase.com,roberteachfinal.com,robertordercharacter.com,robertplacespace.com,ryanagoinvolve.com,sandratableother.com,sandrataxeight.com,seanshowcould.com,sethniceletter.com,shannonpersonalcost.com,sharonwhiledemocratic.com,susanhavekeep.com,toddpartneranimal.com,vincentincludesuccessful.com,voe.sx##+js(nowoif)
-alleneconomicmatter.com,apinchcaseation.com,bethshouldercan.com,bigclatterhomesguideservice.com,bradleyviewdoctor.com,brittneystandardwestern.com,brookethoughi.com,brucevotewithin.com,cindyeyefinal.com,denisegrowthwide.com,donaldlineelse.com,edwardarriveoften.com,erikcoldperson.com,evelynthankregion.com,graceaddresscommunity.com,heatherdiscussionwhen.com,housecardsummerbutton.com,jamessoundcost.com,jamesstartstudent.com,jamiesamewalk.com,jasminetesttry.com,jasonresponsemeasure.com,jayservicestuff.com,jessicaglassauthor.com,johntryopen.com,josephseveralconcern.com,kennethofficialitem.com,lisatrialidea.com,lorimuchbenefit.com,loriwithinfamily.com,lukecomparetwo.com,markstyleall.com,michaelapplysome.com,morganoperationface.com,nectareousoverelate.com,paulkitchendark.com,paulkitchendark.com,rebeccaneverbase.com,roberteachfinal.com,robertordercharacter.com,robertplacespace.com,ryanagoinvolve.com,sandratableother.com,sandrataxeight.com,seanshowcould.com,sethniceletter.com,shannonpersonalcost.com,sharonwhiledemocratic.com,stevenimaginelittle.com,strawberriesporail.com,susanhavekeep.com,timberwoodanotia.com,tinycat-voe-fashion.com,toddpartneranimal.com,troyyourlead.com,uptodatefinishconference.com,uptodatefinishconferenceroom.com,vincentincludesuccessful.com,voe.sx##+js(set, console.clear, undefined)
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=alleneconomicmatter.com|bethshouldercan.com|bradleyviewdoctor.com|brittneystandardwestern.com|brookethoughi.com|brucevotewithin.com|cindyeyefinal.com|donaldlineelse.com|edwardarriveoften.com|erikcoldperson.com|evelynthankregion.com|graceaddresscommunity.com|heatherdiscussionwhen.com|housecardsummerbutton.com|jamessoundcost.com|jamesstartstudent.com|jamiesamewalk.com|jasminetesttry.com|jasonresponsemeasure.com|jayservicestuff.com|jessicaglassauthor.com|johntryopen.com|josephseveralconcern.com|kathleenmemberhistory.com|kennethofficialitem.com|lisatrialidea.com|lorimuchbenefit.com|loriwithinfamily.com|lukecomparetwo.com|markstyleall.com|michaelapplysome.com|morganoperationface.com|nonesnanking.com|paulkitchendark.com|phenomenalityuniform.com|prefulfilloverdoor.com|rebeccaneverbase.com|roberteachfinal.com|robertordercharacter.com|robertplacespace.com|ryanagoinvolve.com|sandratableother.com|sandrataxeight.com|seanshowcould.com|sethniceletter.com|shannonpersonalcost.com|sharonwhiledemocratic.com|susanhavekeep.com|toddpartneranimal.com|vincentincludesuccessful.com|voe.sx|maxfinishseveral.com,important
+alleneconomicmatter.com,bethshouldercan.com,bradleyviewdoctor.com,brittneystandardwestern.com,brookethoughi.com,brucevotewithin.com,cindyeyefinal.com,donaldlineelse.com,edwardarriveoften.com,erikcoldperson.com,evelynthankregion.com,graceaddresscommunity.com,heatherdiscussionwhen.com,housecardsummerbutton.com,jamessoundcost.com,jamesstartstudent.com,jamiesamewalk.com,jasminetesttry.com,jasonresponsemeasure.com,jayservicestuff.com,jessicaglassauthor.com,johntryopen.com,josephseveralconcern.com,kathleenmemberhistory.com,kennethofficialitem.com,lisatrialidea.com,lorimuchbenefit.com,loriwithinfamily.com,lukecomparetwo.com,markstyleall.com,michaelapplysome.com,morganoperationface.com,nonesnanking.com,paulkitchendark.com,phenomenalityuniform.com,prefulfilloverdoor.com,rebeccaneverbase.com,roberteachfinal.com,robertordercharacter.com,robertplacespace.com,ryanagoinvolve.com,sandratableother.com,sandrataxeight.com,seanshowcould.com,sethniceletter.com,shannonpersonalcost.com,sharonwhiledemocratic.com,susanhavekeep.com,toddpartneranimal.com,vincentincludesuccessful.com,voe.sx,maxfinishseveral.com##+js(nowoif)
+alleneconomicmatter.com,apinchcaseation.com,bethshouldercan.com,bigclatterhomesguideservice.com,bradleyviewdoctor.com,brittneystandardwestern.com,brookethoughi.com,brucevotewithin.com,cindyeyefinal.com,denisegrowthwide.com,donaldlineelse.com,edwardarriveoften.com,erikcoldperson.com,evelynthankregion.com,graceaddresscommunity.com,heatherdiscussionwhen.com,housecardsummerbutton.com,jamessoundcost.com,jamesstartstudent.com,jamiesamewalk.com,jasminetesttry.com,jasonresponsemeasure.com,jayservicestuff.com,jessicaglassauthor.com,johntryopen.com,josephseveralconcern.com,kennethofficialitem.com,lisatrialidea.com,lorimuchbenefit.com,loriwithinfamily.com,lukecomparetwo.com,markstyleall.com,michaelapplysome.com,morganoperationface.com,nectareousoverelate.com,paulkitchendark.com,paulkitchendark.com,rebeccaneverbase.com,roberteachfinal.com,robertordercharacter.com,robertplacespace.com,ryanagoinvolve.com,sandratableother.com,sandrataxeight.com,seanshowcould.com,sethniceletter.com,shannonpersonalcost.com,sharonwhiledemocratic.com,stevenimaginelittle.com,strawberriesporail.com,susanhavekeep.com,timberwoodanotia.com,tinycat-voe-fashion.com,toddpartneranimal.com,troyyourlead.com,uptodatefinishconference.com,uptodatefinishconferenceroom.com,vincentincludesuccessful.com,voe.sx,maxfinishseveral.com##+js(set, console.clear, undefined)
+alleneconomicmatter.com,apinchcaseation.com,bethshouldercan.com,bigclatterhomesguideservice.com,bradleyviewdoctor.com,brittneystandardwestern.com,brookethoughi.com,brucevotewithin.com,cindyeyefinal.com,denisegrowthwide.com,donaldlineelse.com,edwardarriveoften.com,erikcoldperson.com,evelynthankregion.com,graceaddresscommunity.com,heatherdiscussionwhen.com,housecardsummerbutton.com,jamessoundcost.com,jamesstartstudent.com,jamiesamewalk.com,jasminetesttry.com,jasonresponsemeasure.com,jayservicestuff.com,jessicaglassauthor.com,johntryopen.com,josephseveralconcern.com,kennethofficialitem.com,lisatrialidea.com,lorimuchbenefit.com,loriwithinfamily.com,lukecomparetwo.com,markstyleall.com,michaelapplysome.com,morganoperationface.com,nectareousoverelate.com,paulkitchendark.com,paulkitchendark.com,rebeccaneverbase.com,roberteachfinal.com,robertordercharacter.com,robertplacespace.com,ryanagoinvolve.com,sandratableother.com,sandrataxeight.com,seanshowcould.com,sethniceletter.com,shannonpersonalcost.com,sharonwhiledemocratic.com,stevenimaginelittle.com,strawberriesporail.com,susanhavekeep.com,timberwoodanotia.com,tinycat-voe-fashion.com,toddpartneranimal.com,troyyourlead.com,uptodatefinishconference.com,uptodatefinishconferenceroom.com,vincentincludesuccessful.com,voe.sx,maxfinishseveral.com##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 ||rochestertrend.com^$all
 ||badshores.com^$all
 ||facesnotebook.com^$all
@@ -1864,7 +1855,8 @@ ibeconomist.com##+js(nostif, adsense)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63631
 getitfree.cn##+js(acs, document.getElementById, .style)
 ! https://github.com/uBlockOrigin/uAssets/issues/7900
-*$script,3p,domain=webmusic.*
+! m.webmusic.pro popup ads
+ytjar.info##+js(nowoif, _blank)
 /^https:\/\/(?:cdn77\.)?aj[0-9a-z]{2}\d{2}\.online\/[0-9a-z]{8}\.js$/$script,3p,to=online
 /^https:\/\/(?:cdn77\.)?aj[0-9a-z]{2}\d{2}\.bid\/[0-9a-z]{8}\.js$/$script,3p,to=bid
 /^https:\/\/(?:cdn77\.)?aj[0-9a-z]{2}\d{2}\.online\/[-_0-9A-Za-z]{70,}$/$frame,3p,to=online
@@ -2475,8 +2467,9 @@ discoveryplus.*##+js(json-prune, data.attributes.config.freewheel%20data.attribu
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/18875
 ! https://github.com/uBlockOrigin/uAssets/issues/21007
-discoveryplus.*,go.discovery.com,investigationdiscovery.com##+js(json-prune, data.attributes.ssaiInfo.forecastTimeline%20data.attributes.ssaiInfo.vendorAttributes.nonLinearAds%20data.attributes.ssaiInfo.vendorAttributes.videoView%20data.attributes.ssaiInfo.vendorAttributes.breaks.%5B%5D.ads.%5B%5D.adMetadata%20data.attributes.ssaiInfo.vendorAttributes.breaks.%5B%5D.ads.%5B%5D.adParameters%20data.attributes.ssaiInfo.vendorAttributes.breaks.%5B%5D.timeOffset)
-discoveryplus.*,go.discovery.com,investigationdiscovery.com,go.tlc.com,sciencechannel.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C'dash_clear_fmp4')%20and%20contains(text()%2C'%2Fa%2F')%5D%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C'dash_clear_fmp4')%20and%20contains(text()%2C'%2Fa%2F')%5D%5D), , .mpd)
+! https://github.com/uBlockOrigin/uAssets/issues/27265
+discoveryplus.*,go.discovery.com,investigationdiscovery.com,watch.foodnetwork.com##+js(json-prune, data.attributes.ssaiInfo.forecastTimeline%20data.attributes.ssaiInfo.vendorAttributes.nonLinearAds%20data.attributes.ssaiInfo.vendorAttributes.videoView%20data.attributes.ssaiInfo.vendorAttributes.breaks.%5B%5D.ads.%5B%5D.adMetadata%20data.attributes.ssaiInfo.vendorAttributes.breaks.%5B%5D.ads.%5B%5D.adParameters%20data.attributes.ssaiInfo.vendorAttributes.breaks.%5B%5D.timeOffset)
+discoveryplus.*,go.discovery.com,investigationdiscovery.com,go.tlc.com,sciencechannel.com,watch.foodnetwork.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C'dash_clear_fmp4')%20and%20contains(text()%2C'%2Fa%2F')%5D%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C'dash_clear_fmp4')%20and%20contains(text()%2C'%2Fa%2F')%5D%5D), , .mpd)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67651
 venge.io##+js(nofab)
 venge.io##+js(set, adsProvider.init, noopFunc)
@@ -3187,23 +3180,30 @@ moviezwap.*##[style^=" width: 305px;"][type^="button"][onclick^="window.location
 ! https://s3.xfile.sbs/file/rczaGIkXGE
 ! https://xcloud.pics/c5a83cce79ebbe3
 ! https://app.xcloud.host/login - breakage
-~xcloud.host,xcloud.*##+js(rpnt, script, %2Fwindow.open.*%2Fgms, window.open(url%2C%20%22_self%22)%3B%7D)
+! https://github.com/uBlockOrigin/uAssets/issues/27115
+~xcloud.eu,~xcloud.host,xcloud.*##+js(rpnt, script, %2Fwindow.open.*%2Fgms, window.open(url%2C%20%22_self%22)%3B%7D)
 xfile.*##+js(rpnt, script, %2Fwindow%5C.location%5C.href.*%3F%3B%2F)
-~xcloud.host,xcloud.*##+js(noeval-if, window.open)
-~xcloud.host,xcloud.*##+js(aost, EventTarget.prototype.addEventListener, %2F(%3F%3D%5E(%3F!.*(challenge-platform%7Cjquery%7Cchallenges%5C.cloudflare%5C.com%7Cjwplayer)))%2F)
-~xcloud.host,xcloud.*##^script:has-text(/eval\(.+?RegExp/)
+~xcloud.eu,~xcloud.host,xcloud.*##+js(noeval-if, window.open)
+~xcloud.eu,~xcloud.host,xcloud.*##+js(aost, EventTarget.prototype.addEventListener, %2F(%3F%3D%5E(%3F!.*(challenge-platform%7Cjquery%7Cchallenges%5C.cloudflare%5C.com%7Cjwplayer)))%2F)
+~xcloud.eu,~xcloud.host,xcloud.*##^script:has-text(/eval\(.+?RegExp/)
+xdld.pages.dev,xdld.lat##+js(noeval-if, window.open)
 *$script,3p,denyallow=accounts.google.com|cloudflare.net|fastly.net|jsdelivr.net,from=xfile.*
 xfile.*##.ads-btns
 xfile.*##[href^="https://is.gd/"]
 xfile.*##.downloads-btns-div
-~xcloud.host,xcloud.*##.ads-btns
+~xcloud.eu,~xcloud.host,xcloud.*##.ads-btns
 ||43478y.online^
 ||addi809.buzz^
+||bethonaickou.com^
 ||chubbyfailure.com^
 ||cleanupharm.com^
 ||diligentcloset.com^
+||enginecorruptiontrice.com^
+||hbhgvhgc.cfd^
 ||impliednauseous.com^
 ||impressexaltsculptor.com^
+||mredir.com^
+||outbidplacardshowman.com^
 ||tomarnamki.shop^
 ||worthyboxersympathy.com^
 ! pp_issues
@@ -3244,12 +3244,12 @@ songspk.*##+js(aost, Object, %2F(%3F%3D%5E(%3F!.*(https)))%2F)
 ! ##+js(acs, document.createElement, %3B%7D%7D%7D%3Bbreak%3Bcase%20%24.)
 moviesnation.*##+js(acs, document.createElement, %3B%7D%7D%7D%3Bbreak%3Bcase%20%24.)
 ! ##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
-10hitmovies.com,11xmovies.*,1flix.to,1tamilprint.art,2tamilprint.pro,2024tv.ru,720pflix.*,7hitmovies.*,9animetv.to,9xmoovies.com,advertisertape.com,alphatron.tv,andyday.tv,animeflv.*,animeunity.to,animeyabu.org,anitube.*,apkship.shop,arc018.to,ask4movie.*,ate60vs7zcjhsjo5qgv8.com,avjosa.com,buffshub.stream,capo4play.com,checklinks.online,cinedokan.top,clickndownload.*,cookiewebplay.xyz,crackstreamsfree.com,daddylive1.ru,databasegdriveplayer.*,dlolcast.pro,dooodster.com,dudefilms.*,edgedeliverynetwork.com,embasic.pro,embdproxy.xyz,engstreams.shop,enorme.tv,fastdokan.*,fastdownload.top,file4go.*,filecrypt.co,filmyworlds.*,flostreams.xyz,footballstreams.lol,footybite.to,foreverquote.xyz,freetvsports.com,frembed.*,freshwaterdell.com,fsportshd.net,gdflix.*,gdriveplayer.*,gdtot.*,hdfilme.*,hdhub4u.*,hdstream.one,hdstream.one,hexload.com,hoca2.com,hoca4u.xyz,joyousplay.xyz,jpopsingles.eu,kingstreamz.site,lato.sx,linkmake.in,lulu.st,lulustream.com,luluvdo.com,messitv.org,movi.pk,movies4u.*,movieshubweb.com,moviezwap.*,nbabite.to,nexdrive.*,neymartv.net,nflbite.to,pkembed.*,player.smashy.stream,pahe.*,poscitechs.lol,putlocker.*,reddit-streams.online,ripplestream4u.*,rojadirectaenhd.net,rojadirectaenvivo.la,rubyvid.com,s2watch.link,sflix.*,shazysport.pro,shopr.tv,showflix.*,soap2day.*,soccerstreams.best,sportsgames.today,sportshub.stream,sportsloverz.xyz,sportsurge.best,sportzlive.shop,storynavigation.com,streamblasters.*,streambtw.com,streameast.*,streamed.su,streamlivetv.site,streamruby.com,streamtape.*,subtitlecat.com,swfr.tv,swiftload.io,tamilprint29.*,tamilprint30.*,tamilprint31.*,tamilprint33.art,tarjetarojaenvivo.lat,thedaddy.to,thehesgoal.com,toonstream.*,topembed.pw,totalsportek.*,tvsportslive.fr,updown.cam,usgate.xyz,uqload.*,vegamovies4u.*,vidsrc.*,vinovo.to,viprow.*,vixcloud.co,vodkapr3mium.com,volokit2.com,watch32.sx,watchadsontape.com,wdpglobal.com,weakstreams.online,worldstreamz.shop,xcloud.*,ythd.org##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
+10hitmovies.com,11xmovies.*,1flix.to,1tamilprint.art,2tamilprint.pro,2024tv.ru,720pflix.*,7hitmovies.*,7starhd.*,9animetv.to,9xmoovies.com,advertisertape.com,alphatron.tv,andyday.tv,animeflv.*,animeunity.to,animeyabu.org,anitube.*,apkship.shop,arc018.to,ask4movie.*,ate60vs7zcjhsjo5qgv8.com,avjosa.com,bigwarp.io,buffshub.stream,capo4play.com,checklinks.online,cinedokan.top,clickndownload.*,cookiewebplay.xyz,crackstreamsfree.com,daddylive1.ru,databasegdriveplayer.*,dlolcast.pro,dooodster.com,dudefilms.*,edgedeliverynetwork.com,embasic.pro,embdproxy.xyz,engstreams.shop,enorme.tv,fastdokan.*,fastdownload.top,file4go.*,filecrypt.co,filmyworlds.*,flostreams.xyz,footballstreams.lol,footybite.to,foreverquote.xyz,freetvsports.com,frembed.*,freshwaterdell.com,fsportshd.net,gdflix.*,gdriveplayer.*,gdtot.*,gidplayer.online,hdfilme.*,hdhub4u.*,hdstream.one,hdtodayz.to,hexload.com,hoca2.com,hoca4u.xyz,hollymoviehd.cc,hunterscomics.com,joyousplay.xyz,jpopsingles.eu,kingstreamz.site,lato.sx,linkmake.in,lulu.st,lulustream.com,luluvdo.com,messitv.org,movi.pk,movieku.ink,movies4u.*,movieshubweb.com,moviezwap.*,nbabite.to,nexdrive.*,neymartv.net,nflbite.to,ogoplayer.xyz,pkembed.*,player.smashy.stream,pahe.*,poscitechs.lol,putlocker.*,reddit-streams.online,ripplestream4u.*,rojadirectaenhd.net,rojadirectaenvivo.la,rubyvid.com,s2watch.link,sflix.*,shazysport.pro,shopr.tv,showflix.*,skysetx.*,snowmtl.ru,soap2day.*,soccerstreams.best,sportsgames.today,sportshub.stream,sportsloverz.xyz,sportsurge.best,sportzlive.shop,storynavigation.com,streamblasters.*,streambtw.com,streameast.*,streamed.su,streamlivetv.site,streamruby.com,streamta.site,streamtape.*,subtitlecat.com,swfr.tv,swiftload.io,tamilprint29.*,tamilprint30.*,tamilprint31.*,tamilprint33.art,tarjetarojaenvivo.lat,thedaddy.to,thehesgoal.com,toonstream.*,topembed.pw,totalsportek.*,tvsportslive.fr,updown.cam,usgate.xyz,uqload.*,vegamovies4u.*,vidsrc.*,vidtube.one,vinovo.to,viprow.*,vixcloud.co,vodkapr3mium.com,volokit2.com,watch32.sx,watchadsontape.com,watchonlinemovies.vercel.app,wdpglobal.com,weakstreams.online,worldstreamz.shop,xcloud.*,ythd.org##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 ! ##^script:has-text('{delete window[')
 !#if cap_html_filtering
-11xmovies.*,2024tv.ru,9xmoovies.com,1tamilprint.art,2tamilprint.pro,apkship.shop,ask4movie.*,avjosa.com,buffshub.stream,capo4play.com,checklinks.online,cinego.tv,clickndownload.*,cookiewebplay.xyz,crackstreamsfree.com,cricstream.me,dlolcast.pro,dooodster.com,embasic.pro,engstreams.shop,ev01.to,footballstreams.lol,footybite.to,foreverquote.xyz,freetvsports.com,fstream365.com,fzmovies.*,gdtot.*,hdstream.one,hoca2.com,hoca4u.xyz,kingstreamz.site,linkz.*,lulustream.com,luluvdo.com,messitv.org,mostream.us,movies4u.*,myflixer.*,nbabite.to,nexdrive.*,neymartv.net,nflbite.to,oii.la,pahe.*,pkembed.*,poscitechs.lol,prmovies.*,reddit-streams.online,ripplestream4u.*,rojadirectaenhd.net,rojadirectaenvivo.la,rubyvid.com,s2watch.link,s3embtaku.pro,sflix2.to,shazysport.pro,showflix.*,soccerstreams.best,sportshub.stream,sportsloverz.xyz,sportsurge.best,sportzlive.shop,streamblasters.*,streameast.*,streamed.su,streamingcommunity.*,streamlivetv.site,strikeout.*,tamilprint33.art,tarjetarojaenvivo.lat,thehesgoal.com,topcinema.cam,topembed.pw,totalsportek.*,usgate.xyz,uqload.*,vixcloud.co,weakstreams.online,worldstreamz.shop,xcloud.*,zonatmo.com##^script:has-text('{delete window[')
+11xmovies.*,2024tv.ru,9xmoovies.com,1tamilprint.art,2tamilprint.pro,apkship.shop,ask4movie.*,avjosa.com,bigwarp.io,buffshub.stream,capo4play.com,checklinks.online,cinego.tv,clickndownload.*,cookiewebplay.xyz,crackstreamsfree.com,cricstream.me,dlolcast.pro,dooodster.com,embasic.pro,engstreams.shop,ev01.to,footballstreams.lol,footybite.to,foreverquote.xyz,freetvsports.com,fstream365.com,fzmovies.*,gdtot.*,hdstream.one,hoca2.com,hoca4u.xyz,kingstreamz.site,linkz.*,lulustream.com,luluvdo.com,messitv.org,mostream.us,movies4u.*,myflixer.*,nbabite.to,nexdrive.*,neymartv.net,nflbite.to,oii.la,pahe.*,pkembed.*,poscitechs.lol,prmovies.*,readcomiconline.li,reddit-streams.online,ripplestream4u.*,rojadirectaenhd.net,rojadirectaenvivo.la,rubyvid.com,s2watch.link,s3embtaku.pro,sflix2.to,shazysport.pro,showflix.*,soccerstreams.best,sportshub.stream,sportsloverz.xyz,sportsurge.best,sportzlive.shop,streamblasters.*,streameast.*,streamed.su,streamingcommunity.*,streamlivetv.site,streamta.site,strikeout.*,tamilprint33.art,tarjetarojaenvivo.lat,thehesgoal.com,topcinema.cam,topembed.pw,totalsportek.*,usgate.xyz,uqload.*,vixcloud.co,weakstreams.online,worldstreamz.shop,xcloud.*,zonatmo.com##^script:has-text('{delete window[')
 !#else
-11xmovies.*,buffshub.stream,cinego.tv,ev01.to,fstream365.com,fzmovies.*,linkz.*,lulustream.com,minoplres.xyz,mostream.us,myflixer.*,oii.la,pahe.*,prmovies.*,s3embtaku.pro,sflix2.to,sportshub.stream,streamblasters.*,streamingcommunity.*,strikeout.*,topcinema.cam,topembed.pw,zonatmo.com##+js(rmnt, script, %7Bdelete%20window%5B)
+11xmovies.*,buffshub.stream,cinego.tv,ev01.to,fstream365.com,fzmovies.*,linkz.*,lulustream.com,minoplres.xyz,mostream.us,myflixer.*,oii.la,pahe.*,prmovies.*,readcomiconline.li,s3embtaku.pro,sflix2.to,sportshub.stream,streamblasters.*,streamingcommunity.*,strikeout.*,topcinema.cam,topembed.pw,zonatmo.com##+js(rmnt, script, %7Bdelete%20window%5B)
 !#endif
 pahe.*##html > iframe[style^="display:"]:not([src]):remove()
 atlaq.com,bolly4umovies.*,douploads.net,moalm-qudwa.blogspot.com,shurt.pw##+js(aopr, zfgformats)
@@ -3301,6 +3301,7 @@ vidsrc.cc#@#+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 ||zaisofohow.net^
 ?oo=1^$xhr,3p
 !!! other filters for pp
+||com/|$xhr,3p,method=head,domain=fbstreams.pm|movieku.ink|reliabletv.me
 *$3p,xhr,script,denyallow=arc.io|cdnjs.cloudflare.com|cloudflare.net|fastly.net|fontawesome.com|jwpcdn.com,domain=files.im
 filmpertutti.*##.ads
 filmpertutti.*##.no_pop
