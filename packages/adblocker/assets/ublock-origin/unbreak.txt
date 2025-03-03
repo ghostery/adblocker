@@ -703,9 +703,6 @@ tele5.de##.break-ads
 detroitnews.com###partner-poster-0
 ! https://forums.lanik.us/viewtopic.php?p=147578#p147578
 @@||fontspring.com/analytics/hi.gif$image,1p
-! https://www.reddit.com/r/uBlockOrigin/comments/bpt2b5/getting_big_ads_4_ads_x_2_sponsored_content_on/
-! [badfilter] ||thelibertydaily.com^$csp=script-src 'self' *.leadpages.net *.gstatic.com *.google.com *.googleapis.com *.playwire.com *.facebook.com *.bootstrapcdn.com,badfilter
-! [badfilter] ||bigleaguepolitics.com^$csp=script-src 'self' *.leadpages.net *.gstatic.com *.google.com *.googleapis.com *.playwire.com *.facebook.com *.bootstrapcdn.com *.twitter.com *.spot.im *.x.com,badfilter
 ! https://github.com/uBlockOrigin/uBlock-issues/issues/583
 @@||googletagmanager.com/gtm.js$script,domain=rappi.com.mx
 ! https://github.com/NanoMeow/QuickReports/issues/1257
@@ -3129,10 +3126,11 @@ pcwelt.de#@#a[href^="https://pvn.saturn.de/"]
 ! https://github.com/AdguardTeam/AdguardFilters/issues/143493
 ! games
 ! https://github.com/uBlockOrigin/uAssets/issues/23767
+! https://www.reddit.com/r/uBlockOrigin/comments/1iybutj/adblock_detected_at_skywareinventory/
 @@||scylla.wgplayer.com/f_webp/$image
-@@||universal.wgplayer.com/tag/$script,domain=brightygames.com|eminiclip.ro|sisigames.com|yoho.games
-@@||wgplayer.com/*/wgAds.$script,domain=brightygames.com|eminiclip.ro|pastelkattogames.com|sisigames.com|yoho.games
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=brightygames.com|eminiclip.ro|sisigames.com|yoho.games
+@@||universal.wgplayer.com/tag/$script,domain=atarisalon.com|brightygames.com|eminiclip.ro|sisigames.com|yoho.games
+@@||wgplayer.com/*/wgAds.$script,domain=atarisalon.com|brightygames.com|eminiclip.ro|pastelkattogames.com|sisigames.com|yoho.games
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=atarisalon.com|brightygames.com|eminiclip.ro|sisigames.com|yoho.games
 brightygames.com,yoho.games##^html > head > meta[property="og:url"]:not([content*="/games/"], [content*="/play/"]):upward(1) > script:has-text(wgplayer)
 eminiclip.ro##^html:not(:has(#thegame)) > head > script:has-text(wgplayer)
 sisigames.com##^#index-games:upward(html) > head > script:has-text(wgplayer)
@@ -4220,3 +4218,6 @@ some.porn###fluid_video_wrapper_video-page-player:remove-attr(style)
 some.porn###video-page-player-blocker:style(pointer-events:none)
 some.porn##.skeleton
 some.porn###native__skeleton
+! https://github.com/uBlockOrigin/uAssets/issues/27371
+! [badfilter] ||registry.api.cnn.io^$badfilter
+! [badfilter] ||turnip.cdn.turner.com^$badfilter
