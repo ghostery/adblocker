@@ -1562,9 +1562,10 @@ export default class NetworkFilter implements IFilter {
       options.push('badfilter');
     }
 
-    if (this.isRemoveParam()) {
-      if (this.removeparam!.length > 0) {
-        options.push(`removeparam=${this.optionValue}`);
+    const removeparam = this.removeparam;
+    if (removeparam !== undefined) {
+      if (removeparam.length > 0) {
+        options.push(`removeparam=${removeparam}`);
       } else {
         options.push('removeparam');
       }
