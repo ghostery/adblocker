@@ -375,7 +375,6 @@ export class BlockingContext {
         this.onRuntimeMessage as (
           message: unknown,
           sender: Runtime.MessageSender,
-          sendResponse: (response: unknown) => void,
         ) => Promise<unknown>,
       );
     }
@@ -396,7 +395,6 @@ export class BlockingContext {
         this.onRuntimeMessage as (
           message: unknown,
           sender: Runtime.MessageSender,
-          sendResponse: (response: unknown) => void,
         ) => Promise<unknown>,
       );
     }
