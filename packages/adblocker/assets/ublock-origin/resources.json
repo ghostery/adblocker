@@ -715,7 +715,7 @@
     {
       "name": "disable-newtab-links.js",
       "aliases": [],
-      "body": "function disableNewtabLinks(){document.addEventListener(\"click\",(function(t){var e=t.target;while(e!==null){if(e.localName===\"a\"&&e.hasAttribute(\"target\")){t.stopPropagation();t.preventDefault();break}e=e.parentNode}}))}",
+      "body": "function disableNewtabLinks(){document.addEventListener(\"click\",(e=>{let t=e.target;while(t!==null){if(t.localName===\"a\"&&t.hasAttribute(\"target\")){e.stopPropagation();e.preventDefault();break}t=t.parentNode}}),{capture:true})}",
       "dependencies": []
     },
     {
