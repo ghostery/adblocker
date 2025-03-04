@@ -148,7 +148,7 @@ export class PuppeteerBlocker extends FiltersEngine {
   public onFrameNavigated = async (frame: puppeteer.Frame) => {
     try {
       await this.onFrame(frame);
-    } catch (ex) {
+    } catch (_e) {
       // Ignore
     }
   };
@@ -270,7 +270,7 @@ export class PuppeteerBlocker extends FiltersEngine {
         if (foundNewFeatures === false) {
           break;
         }
-      } catch (ex) {
+      } catch (_e) {
         break;
       }
 
@@ -303,7 +303,7 @@ export class PuppeteerBlocker extends FiltersEngine {
       request.isMainFrame() ||
       (request.type === 'document' && frame !== null && frame.parentFrame() === null)
     ) {
-      details.continue(details.continueRequestOverrides?.(), 0);
+      void details.continue(details.continueRequestOverrides?.(), 0);
       return;
     }
 
@@ -311,7 +311,7 @@ export class PuppeteerBlocker extends FiltersEngine {
 
     if (redirect !== undefined) {
       if (redirect.contentType.endsWith(';base64')) {
-        details.respond(
+        void details.respond(
           {
             status: 200,
             headers: {},
@@ -321,7 +321,7 @@ export class PuppeteerBlocker extends FiltersEngine {
           this.priority,
         );
       } else {
-        details.respond(
+        void details.respond(
           {
             status: 200,
             headers: {},
@@ -332,9 +332,9 @@ export class PuppeteerBlocker extends FiltersEngine {
         );
       }
     } else if (match === true) {
-      details.abort('blockedbyclient', this.priority);
+      void details.abort('blockedbyclient', this.priority);
     } else {
-      details.continue(details.continueRequestOverrides?.(), 0);
+      void details.continue(details.continueRequestOverrides?.(), 0);
     }
   };
 
@@ -378,8 +378,12 @@ export class PuppeteerBlocker extends FiltersEngine {
     const sourceUrl = getTopLevelUrl(frame);
 
     for (const url of await frame.$$eval('iframe[src],iframe[href]', (elements) =>
-      elements.map(({ src, href }: any) => src || href),
+      elements.map((element) => element.src || element.getAttribute('href')),
     )) {
+      if (url === null) {
+        continue;
+      }
+
       const { match } = this.match(
         Request.fromRawDetails({
           url,

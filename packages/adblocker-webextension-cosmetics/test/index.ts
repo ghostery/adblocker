@@ -17,18 +17,18 @@ async function tick(timeout = 0) {
 }
 
 describe('#injectCosmetics', () => {
-  it('asks background for cosmetics when called', () => {
+  it('asks background for cosmetics when called', async () => {
     const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>');
-    const getCosmeticsFilters = sinon.spy(async (_) => {
-      return {
+    const getCosmeticsFilters = sinon.spy((_) => {
+      return Promise.resolve({
         active: true,
         extended: [],
         scripts: [],
         styles: '',
-      };
+      });
     });
 
-    injectCosmetics(dom.window, true, getCosmeticsFilters);
+    await injectCosmetics(dom.window, true, getCosmeticsFilters);
     dom.window.close();
 
     sinon.assert.calledOnce(getCosmeticsFilters);
@@ -51,16 +51,16 @@ describe('#injectCosmetics', () => {
   </div>
 </body>
 `);
-    const getCosmeticsFilters = sinon.spy(async (_) => {
-      return {
+    const getCosmeticsFilters = sinon.spy((_) => {
+      return Promise.resolve({
         active: true,
         extended: [],
         scripts: [],
         styles: '',
-      };
+      });
     });
 
-    injectCosmetics(dom.window, true, getCosmeticsFilters);
+    await injectCosmetics(dom.window, true, getCosmeticsFilters);
     await tick();
     dom.window.close();
 
@@ -85,17 +85,17 @@ describe('#injectCosmetics', () => {
   </div>
 </body>
 `);
-    const getCosmeticsFilters = sinon.spy(async (_) => {
-      return {
+    const getCosmeticsFilters = sinon.spy((_) => {
+      return Promise.resolve({
         active: true,
         extended: [],
         scripts: [],
         styles: '',
-      };
+      });
     });
 
     // Wait for DOMContentLoaded
-    injectCosmetics(dom.window, true, getCosmeticsFilters);
+    await injectCosmetics(dom.window, true, getCosmeticsFilters);
     await tick();
 
     // Mutate the DOM = add nodes
@@ -155,8 +155,8 @@ describe('#injectCosmetics', () => {
       },
     );
 
-    injectCosmetics(dom.window, true, async () => {
-      return {
+    await injectCosmetics(dom.window, true, () => {
+      return Promise.resolve({
         active: true,
         extended: [],
         scripts: [
@@ -168,9 +168,8 @@ describe('#injectCosmetics', () => {
         `,
         ],
         styles: '',
-      };
+      });
     });
-
     await tick(1000);
     expect(dom.window.document.getElementsByTagName('span')).to.have.lengthOf(1);
   });
@@ -192,8 +191,7 @@ describe('#injectCosmetics', () => {
       },
     );
 
-    // JSDOM does not support createObjectURL so we replace blobs with data urls
-    // @ts-ignore
+    // @ts-expect-error JSDOM does not support createObjectURL so we replace blobs with data urls
     dom.window.URL.createObjectURL = async (blob: Blob) => {
       const text = await blob.text();
       const base64 = Buffer.from(text).toString('base64');
@@ -202,8 +200,8 @@ describe('#injectCosmetics', () => {
     dom.window.URL.revokeObjectURL = () => {};
     dom.window.Blob = Blob;
 
-    injectCosmetics(dom.window, true, async () => {
-      return {
+    await injectCosmetics(dom.window, true, async () => {
+      return Promise.resolve({
         active: true,
         extended: [],
         scripts: [
@@ -215,9 +213,8 @@ describe('#injectCosmetics', () => {
         `,
         ],
         styles: '',
-      };
+      });
     });
-
     await tick(1000);
     expect(dom.window.document.getElementsByTagName('span')).to.have.lengthOf(1);
   });
@@ -235,8 +232,8 @@ describe('#injectCosmetics', () => {
       },
     );
 
-    injectCosmetics(dom.window, true, async () => {
-      return {
+    await injectCosmetics(dom.window, true, async () => {
+      return Promise.resolve({
         active: false,
         extended: [],
         scripts: [
@@ -248,9 +245,8 @@ describe('#injectCosmetics', () => {
         `,
         ],
         styles: '',
-      };
+      });
     });
-
     await tick(1000);
     expect(dom.window.document.getElementsByTagName('span')).to.have.lengthOf(0);
   });

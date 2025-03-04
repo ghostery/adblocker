@@ -57,7 +57,7 @@ async function loadAllLists(): Promise<string> {
   ).join('\n');
 }
 
-(async () => {
+void (async () => {
   let numberOfFiltersSupported = 0;
   let numberOfFiltersUnsupported = 0;
 

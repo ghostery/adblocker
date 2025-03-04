@@ -305,9 +305,11 @@ function main() {
   // Read previous bench dump if any
   const benchDumpPath = '.bench.json';
   try {
-    const previousResults = JSON.parse(readFileSync(benchDumpPath, { encoding: 'utf-8' }));
+    const previousResults = JSON.parse(
+      readFileSync(benchDumpPath, { encoding: 'utf-8' }),
+    ) as BenchResults;
     compareBenchmarkResults(previousResults, benchmarkResults);
-  } catch (ex) {
+  } catch (_e) {
     /* No previous result to compare to */
     compareBenchmarkResults(benchmarkResults, benchmarkResults);
   }
