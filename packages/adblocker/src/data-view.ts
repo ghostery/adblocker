@@ -23,8 +23,16 @@ const LITTLE_ENDIAN: boolean = new Int8Array(new Int16Array([1]).buffer)[0] === 
 // TextEncoder doesn't need to be recreated every time unlike TextDecoder
 const TEXT_ENCODER = new TextEncoder();
 
-const SMAZ_CHUNKSIG_ASCII = 0xd0;
-const SMAZ_CHUNKSIG_UTF8 = 0xc0;
+// https://github.com/remusao/mono/blob/275e1e6498e21d8fd0bda4299577bcd2af28a7ee/packages/smaz-compress/src/index.ts#L10
+const SMAZ_BUFFER_MAXSIZE = 30_000;
+
+// The signature bytes to identify internal Smaz payloads.
+enum SMAZ_CHUNK_TYPE {
+  NULL = 0,
+  ASCII = 1,
+  UTF8 = 2,
+  SMAZ = 3,
+}
 
 // Store compression in a lazy, global singleton
 let getCompressionSingleton: () => Compression = () => {
@@ -123,12 +131,19 @@ function sizeOfSmaz(str: string, smaz: Smaz): number {
       // In case of ASCII string
       estimated += sizeOfByte();
       // Find next non-ASCII char
-      for (; bp < l; bp++) {
+      for (; bp < Math.min(l, i + SMAZ_BUFFER_MAXSIZE); bp++) {
         if (str.charCodeAt(bp) > 127) {
           break;
         }
       }
-      estimated += sizeOfBytesWithLength(smaz.getCompressedSize(str.slice(i, bp)), false);
+      const slice = str.slice(i, bp);
+      const bytes = smaz.getCompressedSize(slice);
+      // Skip compression if there's no gain
+      if (bytes >= bp - i) {
+        estimated += sizeOfASCII(slice);
+      } else {
+        estimated += sizeOfBytesWithLength(bytes, false);
+      }
     }
   }
   // Add NULL at the end
@@ -452,8 +467,11 @@ export class StaticDataView {
     for (let i = 0, l = str.length, bp = 0; i < l; i = bp) {
       bp = i + 1;
       if (str.charCodeAt(i) > 127) {
-        this.pushUint8(SMAZ_CHUNKSIG_UTF8);
+        this.pushUint8(SMAZ_CHUNK_TYPE.UTF8);
         // Find next ASCII char
+        // Since we're skipping the compression for the characters
+        // in non-ASCII range, it's safe to passthrough them into
+        // the buffer.
         for (; bp < l; bp++) {
           if (str.charCodeAt(bp) <= 127) {
             break;
@@ -461,27 +479,42 @@ export class StaticDataView {
         }
         this.pushUTF8(str.slice(i, bp));
       } else {
-        this.pushUint8(SMAZ_CHUNKSIG_ASCII);
         // Find next non-ASCII char
-        for (; bp < l; bp++) {
+        // An ASCII character can be contained in int8.
+        for (; bp < Math.min(l, i + SMAZ_BUFFER_MAXSIZE); bp++) {
           if (str.charCodeAt(bp) > 127) {
             break;
           }
         }
-        this.pushBytes(smaz.compress(str.slice(i, bp)));
+        const slice = str.slice(i, bp);
+        const bytes = smaz.compress(slice);
+        // Skip compression if there's no gain
+        if (bytes.length >= bp - i) {
+          this.pushUint8(SMAZ_CHUNK_TYPE.ASCII);
+          this.pushASCII(slice);
+        } else {
+          this.pushUint8(SMAZ_CHUNK_TYPE.SMAZ);
+          this.pushBytes(bytes);
+        }
       }
     }
-    this.pushUint8(0);
+    this.pushUint8(SMAZ_CHUNK_TYPE.NULL);
   }
 
   private getSmaz(smaz: Smaz): string {
     let data = '';
-    let type: number;
-    while ((type = this.getUint8()) !== 0) {
-      if (type === SMAZ_CHUNKSIG_UTF8) {
+    let type: SMAZ_CHUNK_TYPE;
+    // This stops on NULL signature or out of range occurs by catching;
+    // `SMAZ_CHUNK_TYPE.NULL` and `undefined`
+    while ((type = this.getUint8())) {
+      if (type === SMAZ_CHUNK_TYPE.ASCII) {
+        data += this.getASCII();
+      } else if (type === SMAZ_CHUNK_TYPE.UTF8) {
         data += this.getUTF8();
-      } else if (type === SMAZ_CHUNKSIG_ASCII) {
+      } else if (type === SMAZ_CHUNK_TYPE.SMAZ) {
         data += smaz.decompress(this.getBytes());
+      } else {
+        break;
       }
     }
     return data;

@@ -22,9 +22,6 @@ export default class Compression {
   public readonly networkRedirect: Smaz = new Smaz(networkRedirectCodebook);
   public readonly networkHostname: Smaz = new Smaz(networkHostnameCodebook);
   public readonly networkFilter: Smaz = new Smaz(networkFilterCodebook);
-  // Those compression codebooks are used for `rawLine` property on debug.
-  // Extremely long filters may hit this `maxSize` limit and will cause
-  // failure on size estimation tasks.
-  public readonly networkRaw: Smaz = new Smaz(networkRawCodebook, 130000);
-  public readonly cosmeticRaw: Smaz = new Smaz(cosmeticRawCodebook, 130000);
+  public readonly networkRaw: Smaz = new Smaz(networkRawCodebook);
+  public readonly cosmeticRaw: Smaz = new Smaz(cosmeticRawCodebook);
 }
