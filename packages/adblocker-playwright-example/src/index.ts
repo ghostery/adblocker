@@ -3,7 +3,7 @@ import fetch from 'cross-fetch';
 
 import * as pw from 'playwright';
 
-(async () => {
+void (async () => {
   const blocker = await PlaywrightBlocker.fromLists(fetch, fullLists, {
     enableCompression: true,
   });

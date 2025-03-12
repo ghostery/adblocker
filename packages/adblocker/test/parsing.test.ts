@@ -21,7 +21,7 @@ function h(hostnames: string[]): Uint32Array {
 }
 
 // TODO: collaps, popup, popunder, genericblock
-function network(filter: string, expected: any) {
+function network(filter: string, expected: unknown) {
   const parsed = NetworkFilter.parse(filter);
   if (parsed !== null) {
     expect(parsed.isNetworkFilter()).to.be.true;
@@ -1600,7 +1600,7 @@ describe('Network filters', () => {
   });
 });
 
-function cosmetic(filter: string, expected: any) {
+function cosmetic(filter: string, expected: unknown) {
   const parsed = CosmeticFilter.parse(filter);
   if (parsed !== null) {
     expect(parsed.isNetworkFilter()).to.be.false;

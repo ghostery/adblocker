@@ -59,7 +59,7 @@ export class BlockingContext {
     event: Electron.IpcMainInvokeEvent,
     url: string,
     msg?: IBackgroundCallback,
-  ) => Promise<void>;
+  ) => void | Promise<void>;
 
   private readonly onHeadersReceived: (
     details: Electron.OnHeadersReceivedListenerDetails,
@@ -68,7 +68,7 @@ export class BlockingContext {
 
   private readonly onIsMutationObserverEnabled: (
     event: Electron.IpcMainInvokeEvent,
-  ) => Promise<boolean>;
+  ) => boolean | Promise<boolean>;
 
   constructor(
     private readonly session: Electron.Session,
@@ -163,17 +163,15 @@ export class ElectronBlocker extends FiltersEngine {
   // ElectronBlocker-specific additions to FiltersEngine
   // ----------------------------------------------------------------------- //
 
-  public onIsMutationObserverEnabled = async (
-    _: Electron.IpcMainInvokeEvent,
-  ): Promise<boolean> => {
+  public onIsMutationObserverEnabled = (_: Electron.IpcMainInvokeEvent): boolean => {
     return this.config.enableMutationObserver;
   };
 
-  public onInjectCosmeticFilters = async (
+  public onInjectCosmeticFilters = (
     event: Electron.IpcMainInvokeEvent,
     url: string,
     msg?: IBackgroundCallback,
-  ): Promise<void> => {
+  ): void => {
     const parsed = parse(url);
     const hostname = parsed.hostname || '';
     const domain = parsed.domain || '';
@@ -212,12 +210,12 @@ export class ElectronBlocker extends FiltersEngine {
     }
 
     if (styles.length > 0) {
-      event.sender.insertCSS(styles, { cssOrigin: 'user' });
+      void event.sender.insertCSS(styles, { cssOrigin: 'user' });
     }
 
     for (const script of scripts) {
       try {
-        event.sender.executeJavaScript(script, true);
+        void event.sender.executeJavaScript(script, true);
       } catch (e) {
         console.error('@ghostery/adblocker scriptlet crashed', e);
       }

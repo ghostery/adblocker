@@ -30,10 +30,9 @@ function testMatches(selector: string, html: string, target: string, expected: b
   const element = target === 'document' ? document : document.querySelector(target);
   expect(element).to.not.be.null;
   if (element !== null) {
-    // NOTE: here we need to ignore the type warnings so that we can pass a
+    // @ts-expect-error here we need to ignore the type warnings so that we can pass a
     // `Document` argument to test some edge cases (e.g. textContent returns
     // null on document).
-    // @ts-ignore
     const result = matches(element, ast);
     expect(result).to.equal(expected);
   }

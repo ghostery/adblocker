@@ -17,7 +17,7 @@ export interface ICategory {
   description: string;
 }
 
-export function isValid(category: any): category is ICategory {
+export function isValid(category: unknown): category is ICategory {
   if (category === null) {
     return false;
   }
@@ -26,7 +26,7 @@ export function isValid(category: any): category is ICategory {
     return false;
   }
 
-  const { key, name, color, description } = category;
+  const { key, name, color, description } = category as Record<string, unknown>;
 
   if (typeof key !== 'string') {
     return false;

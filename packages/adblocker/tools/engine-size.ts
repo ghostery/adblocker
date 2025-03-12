@@ -18,30 +18,30 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const PREFIX =
   'https://raw.githubusercontent.com/ghostery/adblocker/master/packages/adblocker/assets';
 
-async function loadFromLocalAssets(lists: string[]): Promise<string> {
+function loadFromLocalAssets(lists: string[]): string {
   return lists
     .map((path) => join(__dirname, '..', 'assets', path.slice(PREFIX.length)))
     .map((path) => readFileSync(path, 'utf-8'))
     .join('\n');
 }
 
-function loadAdsLists(): Promise<string> {
+function loadAdsLists(): string {
   return loadFromLocalAssets(adsLists);
 }
 
-function loadAdsAndTrackingLists(): Promise<string> {
+function loadAdsAndTrackingLists(): string {
   return loadFromLocalAssets(adsAndTrackingLists);
 }
 
-function loadFullLists(): Promise<string> {
+function loadFullLists(): string {
   return loadFromLocalAssets(fullLists);
 }
 
-(async () => {
+(() => {
   for (const [name, raw] of [
-    ['ads', await loadAdsLists()],
-    ['ads + trackers', await loadAdsAndTrackingLists()],
-    ['ads + trackers + annoyances', await loadFullLists()],
+    ['ads', loadAdsLists()],
+    ['ads + trackers', loadAdsAndTrackingLists()],
+    ['ads + trackers + annoyances', loadFullLists()],
   ]) {
     for (const config of [
       { loadNetworkFilters: true, loadCosmeticFilters: true },

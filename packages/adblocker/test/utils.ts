@@ -21,7 +21,7 @@ import { IOrganization } from '../src/engine/metadata/organizations.js';
 export function loadEasyListFilters(): string[] {
   return JSON.parse(
     fs.readFileSync(path.resolve(__dirname, 'data', 'easylist.json'), { encoding: 'utf-8' }),
-  );
+  ) as string[];
 }
 
 function readAsset(filepath: string) {
@@ -53,11 +53,11 @@ type TrackerDB = {
 };
 
 export function getRawTrackerDB(): TrackerDB {
-  const trackerdb: TrackerDB = JSON.parse(
+  const trackerdb = JSON.parse(
     zlib
       .unzipSync(fs.readFileSync(path.resolve(__dirname, 'data', 'trackerdb_20221213.json.gz')))
       .toString('utf-8'),
-  );
+  ) as TrackerDB;
 
   for (const [key, pattern] of Object.entries(trackerdb.patterns)) {
     if (pattern !== null && typeof pattern === 'object') {
