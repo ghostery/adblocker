@@ -321,7 +321,7 @@ export class BlockingContext {
   private readonly onRuntimeMessage: (
     msg: IBackgroundCallback & { action?: string },
     sender: Runtime.MessageSender,
-  ) => Promise<IMessageFromBackground | {}>;
+  ) => Promise<IMessageFromBackground | object>;
 
   private readonly onCommittedHandler:
     | ((details: WebNavigation.OnCommittedDetailsType) => void)
@@ -693,7 +693,7 @@ export class WebExtensionBlocker extends FiltersEngine {
     browser: Browser,
     msg: IBackgroundCallback & { action?: string },
     sender: Runtime.MessageSender,
-  ): Promise<IMessageFromBackground | {}> => {
+  ): Promise<IMessageFromBackground | object> => {
     return new Promise((resolve, reject) => {
       this.handleRuntimeMessage(browser, msg, sender, resolve)
         .catch(reject)
