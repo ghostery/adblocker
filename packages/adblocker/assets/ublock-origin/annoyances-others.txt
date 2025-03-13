@@ -1122,7 +1122,8 @@ enotes.com##.paywall-mount
 mtbtutoriales.com##+js(aopw, reEnable)
 mtbtutoriales.com##+js(acs, document.oncontextmenu)
 ! https://github.com/NanoMeow/QuickReports/issues/1396
-@@||wired.com^$ghide
+! [dup] from ublock-origin/filters-2025.txt
+! @@||wired.com^$ghide
 wired.com##.ad
 ! https://github.com/uBlockOrigin/uAssets/issues/6240
 news.chosun.com##+js(aeld, copy, getSelection)
@@ -1366,8 +1367,9 @@ gamebanana.com##+js(aopr, adBlockDetected)
 ! https://github.com/uBlockOrigin/uAssets/issues/10888#issuecomment-1523943368
 www.reddit.com###nsfw-desktop-auth-blocking-modal-dialog,#nsfw-desktop-auth-blocking-modal-overlay-element
 www.reddit.com##body:style(overflow:auto !important)
+||redditstatic.com/shreddit/en-US/xpromo-nsfw-bypassable-modal-desktop-$script
 ! https://www.reddit.com/r/uBlockOrigin/comments/1dzrnq3/remove_popups_from_reddit_mobile/
-reddit.com##div.prompt:has(> .viewInApp)
+www.reddit.com##div.prompt:has(slot[name="view-in-app-button"])
 ! https://www.reddit.com/r/uBlockOrigin/comments/1i3b2kv/preventing_reddit_unreviewed_content_popup/
 ||redditstatic.com/shreddit/*/xpromo-untagged-content-blocking-modal-$script
 ! https://github.com/easylist/easylist/issues/17354
@@ -5163,7 +5165,7 @@ asumanaksoy.com,freshlifecircle.com##+js(rmnt, script, devtoolsDetector)
 ! devtools detection scripts
 ! https://github.com/uBlockOrigin/uAssets/issues/21716
 ! https://github.com/uBlockOrigin/uAssets/issues/21320
-||cdn.jsdelivr.net/npm/disable-devtool$script,3p,domain=~weloma.art
+||cdn.jsdelivr.net/npm/disable-devtool$script,3p,domain=~weloma.art|~welovemanga.one
 ||cdn.jsdelivr.net/npm/devtools-detector$script,domain=asumanaksoy.com|comedyshow.to|freshlifecircle.com|superembeds.com|blsplayer.com|daftmovie.xyz
 ||hentaihd.cyou/assets/js/devtools-detector.js$script
 ! [dup] from ublock-origin/filters-2021.txt
@@ -5368,9 +5370,9 @@ xanimu.com,cosxplay.com##^script:has-text(adblock)
 !#else
 xanimu.com,cosxplay.com##+js(rmnt, script, adblock)
 !#endif
-! https://github.com/AdguardTeam/AdguardFilters/issues/154561
+! https://github.com/AdguardTeam/AdguardFilters/issues/184080#issuecomment-2681098348
 !#if cap_html_filtering
-||tver.jp/_next/static/chunks/$replace=/e\?(e\(\):\(n\.play\(\))/!1?\$1/,script
+||tver.jp/_next/static/chunks/pages/episodes/$script,replace=/e\.openQuestionnaireModal\?\?.+?\[e\.openQuestionnaireModal\,e\.controller\.play/e.controller.play)()}\,[e.controller.play/
 !#endif
 ! https://github.com/EasyDutch-uBO/EasyDutch/issues/127
 solarmagazine.nl##+js(no-xhr-if, ads)
@@ -5767,7 +5769,8 @@ pokeos.com##+js(no-fetch-if, doubleclick)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/156165
 lemon8-app.com##+js(trusted-click-element, .seo-landing-modal-cancel-btn%20.design-system-button-container, , 500)
 ! animekai.to anti-devtools
-animekai.to##+js(set, console.clear, throwFunc)
+animekai.to##+js(aeld, keydown, e1)
+animekai.to,megaup.cc##+js(set, console.clear, throwFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/27010
 loverslab.com##+js(nano-sib)
 ! https://github.com/uBlockOrigin/uAssets/issues/16606
@@ -5799,3 +5802,18 @@ filiser.eu,wishflix.cc##+js(nostif, (!0), 8000)
 bloxd.io##.AdBanner
 ! wasserstoff-leitprojekte.de anti right click
 wasserstoff-leitprojekte.de##+js(ra, oncontextmenu, body, complete)
+! hiphopa. net anti right click, select
+hiphopa.net##+js(rmnt, script, oncontextmenu)
+hiphopa.net##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/27335#issuecomment-2704097659
+||tiktok.com^$removeparam=_r
+||tiktok.com^$removeparam=_t
+! https://github.com/uBlockOrigin/uAssets/issues/27471
+torontosom.ca##+js(acs, document.oncontextmenu, preventDefault)
+torontosom.ca##:root:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
+! https://forums.lanik.us/viewtopic.php?p=168008-bitchute-com#p168008
+bitchute.com##+js(trusted-set-local-storage-item, reference_offer, __q_objt%7C%7B%22offer_type%22%3A%22PROMOTION%22%7D)
+bitchute.com##+js(trusted-set-local-storage-item, show_offer, __q_bool%7C0)
+bitchute.com##+js(trusted-set-local-storage-item, show_offer_timestamp, __q_numb%7C9999999999999)
+! https://github.com/uBlockOrigin/uAssets/issues/15751
+dropbox.com##+js(trusted-click-element, .dig-Modal%3Ahas(div%5Bdata-testid%3D%22digTruncateTooltipTrigger%22%5D)%20%3E%20.dig-Modal-close-btn, , 2000)

@@ -3450,7 +3450,7 @@ neurotray.com##+js(nano-stb, %2FEzoIvent%7CTDELAY%2F, 5000)
 @@||go.ezodn.com/tardisrocinante/$script,3p,domain=neurotray.com
 ! https://github.com/uBlockOrigin/uAssets/issues/12214 - Video breakage
 ! https://github.com/uBlockOrigin/uAssets/issues/24754
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,important,redirect=google-ima.js:5,domain=abczdrowie.pl|animezone.pl|chillizet.pl|claudia.pl|echirurgia.pl|elevensports.pl|elle.pl|elleman.pl|fm.tuba.pl|focusnauka.pl|games.cdn.famobi.com|glamour.pl|grydladzieci.pl|ipla.tv|ipla.tv|kobieta.pl|meloradio.pl|mojegotowanie.pl|mojpieknyogrod.pl|money.pl|national-geographic.pl|parenting.pl|partner.redefine.pl|playpuls.pl|pluscdn.pl|polsatgo.pl|polsatnews.pl|polsatsport.pl|przyslijprzepis.pl|radioplus.pl|radiozet.pl|sadeczanin.info|tvokazje.pl|tvp.pl|twojapogoda.pl|video.onnetwork.tv|videotarget.pl|wp.pl|wtk.pl|interia.pl|www.polsatnews.pl|autocentrum.pl
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,important,redirect=google-ima.js:5,domain=abczdrowie.pl|animezone.pl|chillizet.pl|claudia.pl|echirurgia.pl|elevensports.pl|elle.pl|elleman.pl|fm.tuba.pl|focusnauka.pl|games.cdn.famobi.com|glamour.pl|grydladzieci.pl|ipla.tv|ipla.tv|kobieta.pl|meloradio.pl|mojegotowanie.pl|mojpieknyogrod.pl|money.pl|national-geographic.pl|parenting.pl|partner.redefine.pl|playpuls.pl|pluscdn.pl|polsatgo.pl|polsatnews.pl|polsatsport.pl|przyslijprzepis.pl|radioplus.pl|sadeczanin.info|tvokazje.pl|tvp.pl|twojapogoda.pl|video.onnetwork.tv|videotarget.pl|wp.pl|wtk.pl|interia.pl|www.polsatnews.pl|autocentrum.pl
 ! https://www.reddit.com/r/uBlockOrigin/comments/16gwdpd/virgin_media_player_not_visible_with_ublock/
 virginmediatelevision.ie##+js(set, google.ima.dai, %7B%7D)
 ||imasdk.googleapis.com/js/sdkloader/ima3.js^$script,redirect=google-ima.js,domain=virginmediatelevision.ie
@@ -4194,8 +4194,7 @@ the-independent.com##+js(no-fetch-if, npttech.com%2Fadvertising.js)
 ! https://github.com/uBlockOrigin/uBOL-home/issues/272
 @@||icanhazip.com^$xhr,domain=dnscheck.tools
 ! https://www.reddit.com/r/uBlockOrigin/comments/1ie20ua/nvidia_marketplace_banning_the_fingerprints_of/
-www.nvidia.com##+js(remove-cookie, ak_bmsc)
-nvidia.com,~www.nvidia.com##+js(rpnt, script, %2F%5E(%5Cw)%2F, (()%3D%3E%7Bconst%20remove%3D()%3D%3E%7Bdocument.cookie%3D%22ak_bmsc%3D%3B%20domain%3D.nvidia.com%3B%20path%3D%2F%3B%20Max-Age%3D-1000%3B%20expires%3DThu%2C%2001%20Jan%201970%2000%3A00%3A00%20GMT%22%3Bconsole.debug(%22Removed%22)%7D%3Bremove()%3BsetTimeout(remove%2C5e3)%3Bwindow.addEventListener(%22beforeunload%22%2Cremove)%7D)()%3B%241, sedCount, 1)
+nvidia.com##+js(trusted-set-cookie, ak_bmsc, , 0, , domain, .nvidia.com)
 ! https://github.com/uBlockOrigin/uAssets/issues/27068
 @@||assets.adobedtm.com/extensions/*/AppMeasurement$script,domain=medscape.com
 ! https://github.com/uBlockOrigin/uAssets/issues/27091
@@ -4221,3 +4220,10 @@ some.porn###native__skeleton
 ! https://github.com/uBlockOrigin/uAssets/issues/27371
 ! [badfilter] ||registry.api.cnn.io^$badfilter
 ! [badfilter] ||turnip.cdn.turner.com^$badfilter
+! https://github.com/easylist/easylist/commit/49d775a
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=airtelxstream.in,redirect=google-ima.js,important
+! https://www.digi24.ro/live/digi24 - video breakage
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=digi24.ro,important
+||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$redirect=noopjs,domain=digi24.ro,important
+! https://github.com/uBlockOrigin/uAssets/issues/27523
+! [badfilter] ||cdn.cookielaw.org^$badfilter

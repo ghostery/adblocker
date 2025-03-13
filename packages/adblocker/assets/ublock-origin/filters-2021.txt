@@ -28,8 +28,6 @@ freeporncave.com##+js(nostif, location.replace, 300)
 empregoestagios.com,everydayonsales.com##+js(nostif, css_class.show)
 ! https://www.reddit.com/r/uBlockOrigin/comments/kq6vu7/ublock_detected_on_this_page/
 vectogravic.com##+js(acs, eval, replace)
-! https://github.com/AdguardTeam/AdguardFilters/issues/71596
-pornorips.com##+js(acs, puShown, %2FdoOpen%7Cpopundr%2F)
 ! https://www.reddit.com/r/uBlockOrigin/comments/kq7enz/adblock_detected_on_httpskusonimecom/
 ! https://github.com/uBlockOrigin/uAssets/issues/22390
 kusonime.com##+js(rpnt, script, %2F%5C(window%5C.show%5B%5E%5C)%5D%2B%5C)%2F, (true), condition, classList.add)
@@ -871,8 +869,6 @@ manga18fx.com##.kadx
 sudoku-aktuell.de###ajax
 sudoku-aktuell.de###billboard
 sudoku-aktuell.de###blockdiv
-! jexmovie. com => vidlink. org popup
-vidlink.org##[target="_blank"]
 ! host2.jptorrent.org timer
 jptorrent.org##+js(nano-stb)
 ! https://github.com/uBlockOrigin/uAssets/issues/8658
@@ -3280,8 +3276,13 @@ edealinfo.com##+js(acs, %24, offsetHeight)
 ! https://github.com/uBlockOrigin/uAssets/issues/22375
 edealinfo.com##+js(no-xhr-if, googlesyndication)
 ! popups https://forums.lanik.us/viewtopic.php?t=46951
-mlsbd.shop##+js(aost, Math, inlineScript)
+! mlsbd.news,cinebaz.site ads antiadb
 mlsbd.*##+js(nowoif)
+mlsbd.*##+js(acs, eval, replace)
+bfclive.com,cinebaz.site,mlsbd.news##+js(nowoif)
+mlsbd.*##.link > a[href*="?key"]
+cinebaz.*##div.dlbtn > a[href*="?key"]
+*$script,3p,denyallow=bootstrapcdn.com|google.com|googleapis.com|gstatic.com,domain=fx2.ink
 ! https://www.reddit.com/r/uBlockOrigin/comments/qu7gto/blockadblock_bypassing_ublockorigin/
 tinytranslation.xyz###HTML5
 ! https://github.com/uBlockOrigin/uAssets/issues/10488
@@ -3785,7 +3786,7 @@ mmiyue.com#@#.google-ad:not(.testAd)
 ##.ad-link:not(.adsbox)
 #@#.ad-unit
 #@#.ad_unit
-~lamire.jp##.ad-unit:not(.text-ad):not(.textads):not([style=""width: 1px; height: 1px; position: absolute; left: -999px;"])
+~lamire.jp##.ad-unit:not(.text-ad):not(.textads):not([style^="width: 1px; height: 1px; position: absolute;"])
 ##.ad_unit:not(.text-ad)
 #@#[data-ad-module]
 #@#[data-ad-width]
