@@ -91,39 +91,37 @@ japscan.lol#@#div.container > [href]
 !||googletagmanager.com^$script,domain=japscan.lol,important
 ||cloudflareinsights.com/beacon.min.js/$script,domain=japscan.lol,important
 ||google-analytics.com^$xhr,domain=japscan.lol,important
-/^https?:\/\/(?!curltophp)[a-z]{5,7}\.com\/script\/[-_0-9A-Za-z]+(\.min)?\.js$/$script,3p,match-case,header=x-guploader-uploadid,domain=japscan.lol,important
-/^https:\/\/(?!curltophp)[a-z]{8,12}\.com\/en\/(?!blog)(?:[a-z]{2,10}\/){0,2}[a-z]{2,}\?(?:[a-z]+=(?:\d+|[a-z]+)&)*?id=(?!1234)[12]\d{6}/$script,3p,match-case,to=com,domain=japscan.lol,important
-/^https?:\/\/(?:[a-z]{2}\.)?(?!curltophp)[a-z]{7,14}\.com\/r(?=[a-z]*[0-9A-Z])[0-9A-Za-z]{10,16}\/[A-Za-z]{5}(?:\?param=\w+)?$/$script,3p,match-case,to=com,domain=japscan.lol,important
-/\/[0-9a-f]{32}\/invoke\.js/$script,3p,domain=japscan.lol,important
-/^https?:\/\/(?!curltophp)(?:www\.|[0-9a-z]{7,10}\.)?[-0-9a-z]{5,}\.com\/\/?(?:[0-9a-z]{2}\/){2,3}[0-9a-f]{32}\.js/$script,xhr,3p,to=com,domain=japscan.lol,important
+/^https?:\/\/(?!curltophp|regexgenius)[a-z]{5,7}\.com\/script\/[-_0-9A-Za-z]+(\.min)?\.js$/$script,3p,match-case,header=x-guploader-uploadid,domain=japscan.lol,important
+/^https:\/\/(?!curltophp|regexgenius)[a-z]{8,12}\.com\/en\/(?!blog)(?:[a-z]{2,10}\/){0,2}[a-z]{2,}\?(?:[a-z]+=(?:\d+|[a-z]+)&)*?id=(?!1234)[12]\d{6}/$script,3p,match-case,to=com,domain=japscan.lol,important
+/^https?:\/\/(?:[a-z]{2}\.)?(?!curltophp|regexgenius)[a-z]{7,14}\.com\/r(?=[a-z]*[0-9A-Z])[0-9A-Za-z]{10,16}\/[A-Za-z]{5}(?:\?param=\w+)?$/$script,3p,match-case,to=com,domain=japscan.lol,important
+/^https?:\/\/(?!curltophp|regexgenius)(?:www\.|[0-9a-z]{7,10}\.)?[-0-9a-z]{5,}\.com\/\/?(?:[0-9a-z]{2}\/){2,3}[0-9a-f]{32}\.js/$script,xhr,3p,to=com,domain=japscan.lol,important
 /cuid/?f=https%$xhr,3p,domain=japscan.lol,important
-/^https:\/\/(?!curltophp)[a-z]{3,5}\.[a-z]{10,14}\.top\/[a-z]{10,16}\/[a-z]{5,6}(?:\?d=\d)?$/$script,xhr,3p,match-case,to=top,domain=japscan.lol,important
-/^https?:\/\/(?:[a-z]{2}\.)?(?!curltophp)[a-z]{7,14}\.com\/r(?=[a-z]*[0-9A-Z])[0-9A-Za-z]{10,16}\/[A-Za-z]{5}(?:\?v=\d+)?$/$xhr,3p,match-case,to=com,important,domain=japscan.lol
+/^https:\/\/(?!curltophp|regexgenius)[a-z]{3,5}\.[a-z]{10,14}\.top\/[a-z]{10,16}\/[a-z]{5,6}(?:\?d=\d)?$/$script,xhr,3p,match-case,to=top,domain=japscan.lol,important
+/^https?:\/\/(?:[a-z]{2}\.)?(?!curltophp|regexgenius)[a-z]{7,14}\.com\/r(?=[a-z]*[0-9A-Z])[0-9A-Za-z]{10,16}\/[A-Za-z]{5}(?:\?v=\d+)?$/$xhr,3p,match-case,to=com,important,domain=japscan.lol
 ! https://github.com/uBlockOrigin/uAssets/issues/21064
 ! https://github.com/uBlockOrigin/uAssets/issues/24220
 ! https://github.com/uBlockOrigin/uAssets/issues/25121#issuecomment-2325357098
 poophq.com,veev.to,doods.to##+js(nowoif)
-poophq.com,veev.to,doods.to##+js(set, fapit.check, noopFunc)
 poophq.com,veev.to,doods.to##+js(no-xhr-if, %2Fvast.php%3F)
 poophq.com,veev.to,doods.to##+js(no-xhr-if, adsbygoogle, length%3A35000-55000)
 poophq.com,veev.to,doods.to##+js(no-xhr-if, %2Fclick%5C.com%7Cpreroll%7Cnative_render%5C.js%7Cacscdn%2F, length%3A10001)
 poophq.com,veev.to,doods.to##+js(nostif, )%5D()%3B%7D, 500)
 !#if cap_html_filtering
-||static.veevcdn.co/assets/videoplayer/$script,3p,replace=/return new Promise\(function\(ac\,ad\).*?\}\)\[/return new Promise(function(){})[/,domain=poophq.com|veev.to|doods.to
-||a.pemsrv.com/ad-provider.js$xhr,important,domain=poophq.com|veev.to|doods.to
+||static.veevcdn.co/assets/videoplayer/$script,3p,replace=/return new Promise\(function\(.{100,200}adscoreLibLoader.*?\}\)\[/[/,domain=poophq.com|veev.to|doods.to
+/ad-provider.js$xhr,3p,important,domain=poophq.com|veev.to|doods.to
 !#else
 !#if ext_ubol
 @@||c.adsco.re/|$script,domain=poophq.com|veev.to|doods.to
 ||adsco.re^$xhr,important,domain=poophq.com|veev.to|doods.to
 poophq.com,veev.to,doods.to##+js(no-xhr-if, 162.252.214.4, true)
 !#else
-poophq.com,veev.to,doods.to##+js(nostif, %2Ffunction%5Cs*%5C(%5Cs*%5C)%5Cs*%7B%5Cs*ac%5Cs*%5C(%5Cs*(%60%7C%22%7C')%5Cs*%5Ba-z%5D%5B0-9%5D%5Cs*(%60%7C%22%7C')%5Cs*%5C)%5Cs*%5C%3B%5Cs*%5C%7D%2F)
-poophq.com,veev.to,doods.to##+js(nostif, %2F%5E%5Cs*function%5Cs*.%7B55%2C90%7D%24%2F)
-poophq.com,veev.to,doods.to##+js(nostif, %2Ftimeout%7CHandlers%7C%5C.trigger%7C%5C%22e3%5C%22%7Cfunction%5C(%5C)%5C%7Bt%5C%3D%7C%5C%22%2Cr%5C.%7C%5C'on%5C'%7C%5C%22%5C)%5C%7D%7C%5C'%5C%5D%2C%5C%22%7CtriggerHand%2F)
-||adsco.re^$script,redirect=none:5,domain=poophq.com|veev.to|doods.to
 /dl?op=aa&cmd=ga&_a=$xhr,1p,important,domain=poophq.com|veev.to|doods.to
 ! [dup] from ublock-origin/quick-fixes.txt
-! ||a.pemsrv.com/ad-provider.js$xhr,important,domain=poophq.com|veev.to|doods.to
+! /ad-provider.js$xhr,3p,important,domain=poophq.com|veev.to|doods.to
+||adsco.re^$script,redirect=none:5,domain=poophq.com|veev.to|doods.to
+poophq.com,veev.to,doods.to##+js(nostif, %2F%5E%5Cs*function%5Cs*%5C(%5Cs*%5C)%5Cs*%7B%5Cs*%5Ba-z%5D%7B1%2C2%7D%5Cs*%5C(.%7B1%2C10%7D%24%2F)
+poophq.com,veev.to,doods.to##+js(nostif, %2F('%7C%60%7C%22)%5Cs*%5C%2B.%7B10%2C100%7D('%7C%60%7C%22)%5Cs*%5C%2B%7C%5C%3D%5C'%5C'%2C%7Cjwvv%7C'ndlers'%7C%5C%5D%2C%20ecde%7C(%60%7C'%7C%22)%5Cs*%5C%2B%5Cs*(%60%7C'%7C%22)%7Ct%5C%3D%5C%22tim%5C%22%2F)
+poophq.com,veev.to,doods.to##+js(nostif, %2F%5E%5Cs*function.%7B100%2C120%7D%24%2F)
 !#endif
 !#endif
 *$script,3p,domain=poophq.com|veev.to|doods.to,redirect-rule=noopjs
@@ -155,8 +153,8 @@ panel.freemcserver.net##+js(rpnt, script, 'G-1B4LC0KT6C')%3B, 'G-1B4LC0KT6C')%3B
 ! https://github.com/AdguardTeam/AdguardFilters/issues/190044
 ! https://www.reddit.com/r/uBlockOrigin/comments/1fuaaw5/asblock_detected_in_ask4porncc
 ! https://github.com/uBlockOrigin/uAssets/issues/27173
-xo7c.com,v1kkm.com,hmt6u.com,guum5.com,l8e8.com,l99j.com,58n1.com,z4h4.com,qa2h.com,/^moon(?:-[a-z0-9]+)?-embed\.com$/,/^moonfile-[a-z0-9-]+\.com$/,/^[0-9a-z]{5,8}\.(cfd|fun|sbs)$/,/^moo-[a-z0-9]+(-[a-z0-9]+)*-mkay\.com$/,/^file-[a-z0-9]+(-[a-z0-9]+)*-(moon|embed)\.com$/,/^fle-[a-z0-9]+(-[a-z0-9]+)*-moo\.com$/,/^filemoon-[a-z0-9]+(?:-[a-z0-9]+)*\.(?:com|xyz)$/##+js(nowoif, %2F%5Cd%5C.%5Cd%7B10%2C%7D%2F)
-xo7c.com,v1kkm.com,hmt6u.com,guum5.com,l8e8.com,l99j.com,58n1.com,z4h4.com,qa2h.com,/^moon(?:-[a-z0-9]+)?-embed\.com$/,/^moonfile-[a-z0-9-]+\.com$/,/^[0-9a-z]{5,8}\.(cfd|fun|sbs)$/,/^moo-[a-z0-9]+(-[a-z0-9]+)*-mkay\.com$/,/^file-[a-z0-9]+(-[a-z0-9]+)*-(moon|embed)\.com$/,/^fle-[a-z0-9]+(-[a-z0-9]+)*-moo\.com$/,/^filemoon-[a-z0-9]+(?:-[a-z0-9]+)*\.(?:com|xyz)$/##+js(acs, Math.random, parseInt(localStorage%5B'%5Cx)
+6jlvu.com,xo7c.com,v1kkm.com,hmt6u.com,guum5.com,l8e8.com,l99j.com,58n1.com,z4h4.com,qa2h.com,/^moon(?:-[a-z0-9]+)?-embed\.com$/,/^moonfile-[a-z0-9-]+\.com$/,/^[0-9a-z]{5,8}\.(cfd|fun|sbs)$/,/^moo-[a-z0-9]+(-[a-z0-9]+)*-mkay\.com$/,/^file-[a-z0-9]+(-[a-z0-9]+)*-(moon|embed)\.com$/,/^fle-[a-z0-9]+(-[a-z0-9]+)*-moo\.com$/,/^filemoon-[a-z0-9]+(?:-[a-z0-9]+)*\.(?:com|xyz)$/##+js(nowoif, %2F%5Cd%5C.%5Cd%7B10%2C%7D%2F)
+6jlvu.com,xo7c.com,v1kkm.com,hmt6u.com,guum5.com,l8e8.com,l99j.com,58n1.com,z4h4.com,qa2h.com,/^moon(?:-[a-z0-9]+)?-embed\.com$/,/^moonfile-[a-z0-9-]+\.com$/,/^[0-9a-z]{5,8}\.(cfd|fun|sbs)$/,/^moo-[a-z0-9]+(-[a-z0-9]+)*-mkay\.com$/,/^file-[a-z0-9]+(-[a-z0-9]+)*-(moon|embed)\.com$/,/^fle-[a-z0-9]+(-[a-z0-9]+)*-moo\.com$/,/^filemoon-[a-z0-9]+(?:-[a-z0-9]+)*\.(?:com|xyz)$/##+js(acs, Math.random, parseInt(localStorage%5B'%5Cx)
 u26bekrb.fun##+js(set, adBlockDetected, undefined)
 !#if !ext_devbuild
 $frame,3p,domain=filemoon.*|8rm3l0i9.fun|iqksisgw.xyz|u6lyxl0w.skin|l1afav.net,replace='/^/<script>(()=>{window.open=new Proxy(window.open,{apply:(e,t,r)=>{}});const e=new WeakMap,t=(e,t)=>{try{e.dispatchEvent(new Event(t))}catch{}};XMLHttpRequest.prototype;self.XMLHttpRequest=class extends self.XMLHttpRequest{open(t,r,...n){if(e.delete(this),new URL(r).hostname.endsWith(".cdn255.com"))return super.open(t,r,...n);const s={method:t,url:r},a=Object.assign(s,{xhr:this,headers:{date:"","content-type":"","content-length":""},url:s.url,props:{response:{value:""},responseText:{value:""},responseXML:{value:null}}});return e.set(this,a),super.open(t,r,...n)}send(...r){const n=e.get(this);return void 0===n?super.send(...r):!1===n.defer?(n.headers["content-length"]=`${n.props.response.value}`.length,Object.defineProperties(n.xhr,{readyState:{value:4},responseURL:{value:n.url},status:{value:200},statusText:{value:"OK"}}),void Object.defineProperties(n.xhr,n.props)):void Promise.resolve("").then((()=>n)).then((e=>(Object.defineProperties(e.xhr,{readyState:{value:1,configurable:!0},responseURL:{value:n.url}}),t(e.xhr,"readystatechange"),e))).then((e=>(n.headers["content-length"]=`${e.props.response.value}`.length,Object.defineProperties(e.xhr,{readyState:{value:2,configurable:!0},status:{value:200},statusText:{value:"OK"}}),t(e.xhr,"readystatechange"),e))).then((e=>(Object.defineProperties(e.xhr,{readyState:{value:3,configurable:!0}}),Object.defineProperties(e.xhr,e.props),t(e.xhr,"readystatechange"),e))).then((e=>{Object.defineProperties(e.xhr,{readyState:{value:4}}),t(e.xhr,"readystatechange"),t(e.xhr,"load"),t(e.xhr,"loadend")}))}};let r=document.querySelector("script");r.innerHTML.includes("window.open")&&r.parentElement.removeChild(r)})();<\/script>/'
@@ -203,8 +201,11 @@ smsonline.cloud##aside[class^="css-"]:has(> p:has-text(Advertisement) + ins.adsb
 ! https://github.com/uBlockOrigin/uAssets/issues/26623
 bing.com##+js(rpnt, script, %2F(%5C(function%5C(%5Ba-z%5D%2C%5Ba-z%5D%5C)%5C%7Bonload)%2F, (()%3D%3E%7Bconst%20e%3D%7Bapply%3A(e%2Ct%2Cl)%3D%3E(l%5B0%5D.includes(%22img.rms_img%22)%26%26(t.style.display%3D%22none%22)%2CReflect.apply(e%2Ct%2Cl))%7D%3BHTMLLIElement.prototype.querySelector%3Dnew%20Proxy(HTMLLIElement.prototype.querySelector%2Ce)%7D)()%3B%241)
 bing.com##ol#b_results > li:has(> :is(.b_tpcn, .b_title, h2) a[href^="https://www.bing.com/aclk?"])
-! https://github.com/easylist/easylist/issues/21268
-! [badfilter] ||applicationinsights.io^$3p,badfilter
 ! https://www.reddit.com/r/uBlockOrigin/comments/1j76tpa/adblock_detected_site_gledaitvlive/
 ! https://www.reddit.com/r/uBlockOrigin/comments/197760n/adblock_detected_httpswwwbggledailive/
 bg-gledai.*,gledaitv.*##+js(no-fetch-if, method%3AHEAD)
+! https://github.com/AdguardTeam/AdguardFilters/issues/200690
+! [badfilter] ||fujoho.jp/index.php$frame,3p,badfilter
+#@#.fujoho_custom_banner
+! https://github.com/easylist/easylist/commit/5e62c9a6b725b4023a7ea07a84d90a8a74c8bb05
+@@||f-tra.com^$script,domain=pokemoncenter-online.com
