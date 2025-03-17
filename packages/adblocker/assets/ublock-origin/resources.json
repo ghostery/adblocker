@@ -882,7 +882,7 @@
     {
       "name": "trusted-override-element-method.js",
       "aliases": [],
-      "body": "function trustedOverrideElementMethod(e=\"\",r=\"\",t=\"\"){if(e===\"\")return;const n=safeSelf();const o=n.makeLogPrefix(\"trusted-override-element-method\",e,r,t);proxyApplyFn(e,(function(e){let f=r===\"\";if(f===false){const{thisArg:t}=e;try{f=t.closest(r)===t}catch{}}if(f===false)return e.reflect();n.uboLog(o,\"Overridden\");if(t===\"\")return;if(t===\"debug\"&&n.logLevel!==0)debugger;if(t===\"throw\")throw new ReferenceError;return validateConstantFn(false,t)}))}",
+      "body": "function trustedOverrideElementMethod(e=\"\",r=\"\",t=\"\"){if(e===\"\")return;const n=safeSelf();const o=n.makeLogPrefix(\"trusted-override-element-method\",e,r,t);const f=n.getExtraArgs(Array.from(arguments),3);proxyApplyFn(e,(function(e){let i=r===\"\";if(i===false){const{thisArg:t}=e;try{i=t.closest(r)===t}catch{}}if(i===false)return e.reflect();n.uboLog(o,\"Overridden\");if(t===\"\")return;if(t===\"debug\"&&n.logLevel!==0)debugger;if(t===\"throw\")throw new ReferenceError;return validateConstantFn(true,t,f)}))}",
       "dependencies": [
         "proxy-apply.fn",
         "safe-self.fn",

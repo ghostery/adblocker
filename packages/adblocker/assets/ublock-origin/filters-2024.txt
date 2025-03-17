@@ -1124,6 +1124,7 @@ plc4me.com##+js(rmnt, script, deblocker)
 @@*$ghide,domain=tutoriales-virales.blogspot.com|tyvpaste.blogspot.com|preu-pdf-paste.blogspot.com
 ! krx18.com
 krx18.com##center > [src*="/ads/"]
+krx18.com###dynamic-image
 ! https://github.com/uBlockOrigin/uAssets/issues/22126
 playerwatch.xyz##+js(nowoif, , 10)
 ! https://old.reddit.com/r/uBlockOrigin/comments/19cwuo4/
@@ -1139,9 +1140,6 @@ blisseyhusbands.com##+js(rmnt, script, deblocker)
 @@*$ghide,domain=countrychord.com|wazzuptechph.com|bigbrothergisthub.com|news9.co.ke|techprice.pk|scopenew.com|rokuguru.com|guided.news|techfinancials.co.za|scholarshipexpo.com|dailyparliamenttimes.com|theexchange.africa|thedailyhoosier.com|subhashyadav.org|thenews-chronicle.com|diyprojectslab.com
 ! https://github.com/uBlockOrigin/uAssets/issues/22169
 obf-io.deobfuscate.io##.self-center.overflow-hidden:has(> img[src="/nexus_banner.webp"]:only-child)
-! https://github.com/uBlockOrigin/uAssets/issues/22173
-hole-io.com###aip-sidebarads
-hole-io.com##.webgl-content:style(width: 100% !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/22185
 /^https:\/\/www\.thesun\.co\.uk\/[0-9a-z]{32}\.js$/$script,1p,match-case,domain=thesun.co.uk
 ! https://github.com/uBlockOrigin/uAssets/issues/22190
@@ -1167,10 +1165,10 @@ qwant.com##div[data-testid="pam.container"]:style(max-height: 1px !important; op
 ! https://github.com/AdguardTeam/AdguardFilters/issues/171502
 @@||spite.cz^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/22203
-civitai.com##+js(no-fetch-if, googlesyndication)
-civitai.com##div:is(.shadow, .flex.w-full.justify-center[style=""]):has(a[href="/pricing"] img[alt="Please support civitai and creators by disabling adblock"]):remove()
-civitai.com##div[id][class^="mantine-"].flex.relative.box-content:style(min-height: 0px !important; visibility: collapse !important; padding: 0px !important;)
-||ads.civitai.com^$script,1p,redirect=noopjs
+civitai.com,civitai.green##+js(no-fetch-if, googlesyndication)
+civitai.com,civitai.green##div:is(.shadow, .flex.w-full.justify-center[style=""]):has(a[href="/pricing"] img[alt="Please support civitai and creators by disabling adblock"]):remove()
+civitai.com,civitai.green##div[id][class^="mantine-"].flex.relative.box-content:style(min-height: 0px !important; visibility: collapse !important; padding: 0px !important;)
+||ads.civitai.$script,1p,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/22220
 ! https://github.com/uBlockOrigin/uAssets/issues/22492
 @@/^https:\/\/www\.puzzle-[a-z]+\.com\//$script,from=puzzle-loop.com|puzzle-words.com|puzzle-chess.com|puzzle-thermometers.com|puzzle-norinori.com|puzzle-minesweeper.com|puzzle-slant.com|puzzle-lits.com|puzzle-galaxies.com|puzzle-tents.com|puzzle-battleships.com|puzzle-pipes.com|puzzle-hitori.com|puzzle-heyawake.com|puzzle-shingoki.com|puzzle-masyu.com|puzzle-stitches.com|puzzle-aquarium.com|puzzle-tapa.com|puzzle-star-battle.com|puzzle-kakurasu.com|puzzle-skyscrapers.com|puzzle-futoshiki.com|puzzle-shakashaka.com|puzzle-kakuro.com|puzzle-jigsaw-sudoku.com|puzzle-killer-sudoku.com|puzzle-binairo.com|puzzle-nonograms.com|puzzle-sudoku.com|puzzle-light-up.com|puzzle-bridges.com|puzzle-shikaku.com|puzzle-nurikabe.com|puzzle-dominosa.com
@@ -1305,9 +1303,6 @@ mmsmaza.com##+js(nowoif)
 govtech.com##+js(trusted-set-cookie, adTakeOver, seen)
 govtech.com##body[data-billboard="true"]:remove-attr(data-billboard)
 govtech.com##.Enhancement:has(.GoogleDfpAd)
-! https://github.com/uBlockOrigin/uAssets/issues/22529
-visionpapers.org##+js(rmnt, script, adblockimg)
-visionpapers.org##+js(nano-sib, disabled)
 ! https://github.com/uBlockOrigin/uAssets/issues/22543
 ||pubfuture-ad.com^$script,3p,redirect=noopjs,domain=faqwiki.us
 faqwiki.us##+js(nostif, EzoIvent)
@@ -2086,16 +2081,13 @@ jadoo.lol##+js(aopr, Promise.all)
 kfc.com##+js(no-fetch-if, jssdks.mparticle.com)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1d6he06/video_wont_play_on_barstool_sports/
 ! https://www.reddit.com/r/uBlockOrigin/comments/1d8wqdn/why_is_the_gvt1com_domain_blocked/
-@@||tao.barstoolsports.com/v2/i^$xhr,1p
+@@||tao.barstoolsports.com/v2/$xhr,1p
 @@||htlbid.com/*/htlbid.js^$script,3p,domain=barstoolsports.com
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js^$script,3p,domain=barstoolsports.com
-@@||pubads.g.doubleclick.net/gampad/ads?*barstoolsports.com$xhr,domain=imasdk.googleapis.com
-||pubads.g.doubleclick.net/gampad/ads?*barstoolsports.com$xhr,3p,removeparam=/^a|^c|^l|^m|^n|^o|^t|^u|^w/,domain=imasdk.googleapis.com
-||pubads.g.doubleclick.net/gampad/ads?*barstoolsports.com$xhr,3p,removeparam=/dt|eid|eoidce|frm|gdpr|ged|hl|is_amp|plcmt|pp|ptt|scor|sdk_apis|sdki|sdkv|sdr|sid|vconp|vis|vpa|vpmute/,domain=imasdk.googleapis.com
 ||amazon-adsystem.com/aax2/apstag.js$domain=barstoolsports.com,important
 ||gvt1.com/*/dclk_video_ads/
-imasdk.googleapis.com##+js(xml-prune, VAST, , barstoolsports.com)
-barstoolsports.com##+js(trusted-set-cookie, ajs_anonymous_id, OK, , , domain, barstoolsports.com)
+||imasdk.googleapis.com/js/sdkloader/ima3.js^$script,3p,domain=barstoolsports.com,redirect=google-ima.js,important
+barstoolsports.com##+js(rpnt, script, window._taboola%20%3D, (()%3D%3E%7Bconst%20e%3D%7Bapply%3A(e%2Co%2Cl)%3D%3Eo.closest(%22body%20%3E%20video%5Bsrc%5E%3D%5C%22blob%3A%5C%22%5D%22)%3D%3D%3Do%3FPromise.resolve(!0)%3AReflect.apply(e%2Co%2Cl)%7D%3BHTMLVideoElement.prototype.play%3Dnew%20Proxy(HTMLVideoElement.prototype.play%2Ce)%7D)()%3Bwindow._taboola%20%3D)
+barstoolsports.com##+js(set-cookie, dummy, 1, , reload, 1)
 barstoolsports.com##.videoList__ad
 barstoolsports.com##.ad
 barstoolsports.com##.relative:has(> .ad_skeleton)
@@ -2620,7 +2612,8 @@ mercatinomusicale.com##html:style(background-image: none !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/24932
 audiotools.blog##+js(rmnt, script, deblocker)
 ! https://github.com/uBlockOrigin/uAssets/issues/24933
-cgcosplay.org##+js(noeval-if, ads)
+cgcosplay.org##+js(noeval-if, %2Fads%7Cchp_%3Fad%2F)
+cgcosplay.org###page + div[id][class*=" "]
 ! https://github.com/uBlockOrigin/uAssets/issues/24937
 ||sainsburys.co.uk/groceries-api/$xhr,1p,removeparam=include[PRODUCT_AD]
 sainsburys.co.uk##+js(json-prune, ads.%5B-%5D.ad_id)
@@ -2728,6 +2721,9 @@ androidpolice.com,babygaga.com,backyardboss.net,carbuzz.com,cbr.com,collider.com
 ||adsninja.ca^$media,3p,redirect=noopmp3-0.1s
 ! https://github.com/uBlockOrigin/uAssets/issues/26472
 @@||video.adsninja.ca/*.mp4^$3p,media
+! Miscellaneous
+||adsninja.ca^$removeparam=url
+||adforge.io^
 ! https://github.com/uBlockOrigin/uAssets/issues/25071
 kaas.ro##+js(aopr, aclib)
 kaas.ro##+js(aopr, Adcash)
@@ -2827,6 +2823,10 @@ stitichsports.com##+js(rmnt, script, antiAdBlockerHandler)
 ! https://github.com/uBlockOrigin/uAssets/issues/25250
 @@||api.adinplay.com/libs/aiptag/pub/LBS/littlebigsnake.com/tag.$script,domain=littlebigsnake.com
 littlebigsnake.com##+js(set, ADS.isBannersEnabled, false)
+littlebigsnake.com##+js(trusted-set, ADS.STATUS_ERROR, json%3A%22COMPLETE%22)
+!#if cap_html_filtering
+||littlebigsnake.com/cdn/js/ads/ads_adinplay.js$script,1p,replace=/15000/1000/
+!#endif
 ! https://*lobby.com anti-adb
 @@||metin2lobby.com^$ghide
 @@||knightlobby.com^$ghide
@@ -3206,8 +3206,9 @@ japonhentai.com##+js(acs, document.querySelectorAll, popMagic)
 fomo.id##+js(json-prune-fetch-response, data.%5B-%5D.inner.ctaCopy, , propsToMatch, %3Fpage%3D)
 ! https://github.com/uBlockOrigin/uAssets/issues/25920
 ! https://github.com/uBlockOrigin/uAssets/issues/27289
-/_next/static/chunks/*.js^$script,1p,replace=/\[0\];\w<\w\.length/[0];false/,domain=filiser.eu|wishflix.cc
-filiser.eu,wishflix.cc##+js(rpnt, script, (self.__next_f%3D, %5B%22timeupdate%22%2C%22durationchange%22%2C%22ended%22%2C%22enterpictureinpicture%22%2C%22leavepictureinpicture%22%2C%22loadeddata%22%2C%22loadedmetadata%22%2C%22loadstart%22%2C%22pause%22%2C%22play%22%2C%22playing%22%2C%22ratechange%22%2C%22resize%22%2C%22seeked%22%2C%22seeking%22%2C%22suspend%22%2C%22volumechange%22%2C%22waiting%22%5D.forEach((e%3D%3E%7Bwindow.addEventListener(e%2C(()%3D%3E%7Bconst%20e%3Ddocument.getElementById(%22player%22)%2Ct%3Ddocument.querySelector(%22.plyr__time%22)%3Be.src.startsWith(%22https%3A%2F%2Fi.imgur.com%22)%26%26%22none%22%3D%3D%3Dwindow.getComputedStyle(t).display%26%26(e.src%3D%22https%3A%2F%2Fcdn.plyr.io%2Fstatic%2Fblank.mp4%22%2Ce.paused%26%26e.plyr.play())%7D))%7D))%3B(self.__next_f%3D, sedCount, 1)
+! https://zalukaj.io/filmy/the-gorge
+/_next/static/chunks/*.js^$script,1p,replace=/\[0\];\w<\w\.length/[0];false/,domain=filiser.eu|wishflix.cc|zalukaj.io
+filiser.eu,wishflix.cc,zalukaj.io##+js(rpnt, script, (self.__next_f%3D, %5B%22timeupdate%22%2C%22durationchange%22%2C%22ended%22%2C%22enterpictureinpicture%22%2C%22leavepictureinpicture%22%2C%22loadeddata%22%2C%22loadedmetadata%22%2C%22loadstart%22%2C%22pause%22%2C%22play%22%2C%22playing%22%2C%22ratechange%22%2C%22resize%22%2C%22seeked%22%2C%22seeking%22%2C%22suspend%22%2C%22volumechange%22%2C%22waiting%22%5D.forEach((e%3D%3E%7Bwindow.addEventListener(e%2C(()%3D%3E%7Bconst%20e%3Ddocument.getElementById(%22player%22)%2Ct%3Ddocument.querySelector(%22.plyr__time%22)%3Be.src.startsWith(%22https%3A%2F%2Fi.imgur.com%22)%26%26%22none%22%3D%3D%3Dwindow.getComputedStyle(t).display%26%26(e.src%3D%22https%3A%2F%2Fcdn.plyr.io%2Fstatic%2Fblank.mp4%22%2Ce.paused%26%26e.plyr.play())%7D))%7D))%3B(self.__next_f%3D, sedCount, 1)
 ! https://vid.kimcilonlyofc.com/ - anti-adb
 kimcilonlyofc.com##+js(rmnt, script, mdpDeblocker)
 kimcilonlyofc.com##+js(nowoif)
@@ -3526,6 +3527,7 @@ animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,
 animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,animeyabu.org,anitube.us,anitube.vip,caroloportunidades.com.br,dattebayo-br.com,drstonebr.com,file4go.com,flyanimes.cloud,goanimes.vip,goyabu.us,hinatasoul.com,isekaibrasil.com,meuanime.info,otakuanimess.net,superanimes.in##+js(trusted-prevent-xhr, s4.cdnpc.net%2Ffront%2Fcss%2Fstyle.min.css, slider--features)
 animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,animeyabu.org,anitube.us,anitube.vip,caroloportunidades.com.br,dattebayo-br.com,drstonebr.com,file4go.com,flyanimes.cloud,goanimes.vip,goyabu.us,hinatasoul.com,isekaibrasil.com,meuanime.info,otakuanimess.net,superanimes.in##+js(trusted-prevent-xhr, s4.cdnpc.net%2Fvite-bundle%2Fmain.css, data-v-d23a26c8)
 animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,animeyabu.org,anitube.us,anitube.vip,caroloportunidades.com.br,dattebayo-br.com,drstonebr.com,file4go.com,flyanimes.cloud,goanimes.vip,goyabu.us,hinatasoul.com,isekaibrasil.com,meuanime.info,otakuanimess.net,superanimes.in##+js(trusted-prevent-xhr, cdn.taboola.com%2Flibtrc%2Fsan1go-network%2Floader.js, feOffset)
+animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,animeyabu.org,anitube.us,anitube.vip,caroloportunidades.com.br,dattebayo-br.com,drstonebr.com,file4go.com,flyanimes.cloud,goanimes.vip,goyabu.us,hinatasoul.com,isekaibrasil.com,meuanime.info,otakuanimess.net,superanimes.in##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 @@||widgets.outbrain.com/outbrain.js$xhr,domain=animefire.info|animesonlinecc.us|animesonliner4.com|animesup.info|animeyabu.net|animeyabu.org|anitube.us|anitube.vip|caroloportunidades.com.br|dattebayo-br.com|drstonebr.com|file4go.com|flyanimes.cloud|goanimes.vip|goyabu.us|hinatasoul.com|isekaibrasil.com|meuanime.info|otakuanimess.net|superanimes.in
 @@||s4.cdnpc.net/*.css$xhr,domain=animefire.info|animesonlinecc.us|animesonliner4.com|animesup.info|animeyabu.net|animeyabu.org|anitube.us|anitube.vip|caroloportunidades.com.br|dattebayo-br.com|drstonebr.com|file4go.com|flyanimes.cloud|goanimes.vip|goyabu.us|hinatasoul.com|isekaibrasil.com|meuanime.info|otakuanimess.net|superanimes.in
 @@||cdn.taboola.com/libtrc/san1go-network/loader.js$xhr,domain=animefire.info|animesonlinecc.us|animesonliner4.com|animesup.info|animeyabu.net|animeyabu.org|anitube.us|anitube.vip|caroloportunidades.com.br|dattebayo-br.com|drstonebr.com|file4go.com|flyanimes.cloud|goanimes.vip|goyabu.us|hinatasoul.com|isekaibrasil.com|meuanime.info|otakuanimess.net|superanimes.in
