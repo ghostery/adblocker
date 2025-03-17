@@ -20,7 +20,7 @@ import {
   fullLists,
 } from '../fetch.js';
 import { HTMLSelector } from '../html-filtering.js';
-import CosmeticFilter, { normalizeSelector } from '../filters/cosmetic.js';
+import CosmeticFilter, { DEFAULT_HIDING_STYLE, normalizeSelector } from '../filters/cosmetic.js';
 import NetworkFilter from '../filters/network.js';
 import { block } from '../filters/dsl.js';
 import { FilterType, IListDiff, IPartialRawDiff, parseFilters } from '../lists.js';
@@ -98,7 +98,7 @@ type NetworkFilterMatchingContext = {
 type CosmeticFilterMatchingContext =
   | {
       url: string;
-      callerContext: any; // Additional context given from user
+      callerContext: unknown; // Additional context given from user
       filterType: FilterType.COSMETIC;
     }
   | {
@@ -123,11 +123,11 @@ export type EngineEventHandlers = {
       exception?: CosmeticFilter | NetworkFilter | undefined;
     },
     context: CosmeticFilterMatchingContext | NetworkFilterMatchingContext,
-  ) => any;
+  ) => void;
 };
 
 export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
-  private static fromCached<T extends typeof FilterEngine>(
+  private static async fromCached<T extends typeof FilterEngine>(
     this: T,
     init: () => Promise<InstanceType<T>>,
     caching?: Caching,
@@ -138,15 +138,15 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
     const { path, read, write } = caching;
     return read(path)
-      .then((buffer) => this.deserialize(buffer) as InstanceType<T>)
+      .then((buffer) => this.deserialize(buffer))
       .catch(() => init().then((engine) => write(path, engine.serialize()).then(() => engine)));
   }
 
-  public static empty<T extends FilterEngine>(
-    this: new (...args: any[]) => T,
+  public static empty<T extends typeof FilterEngine>(
+    this: T,
     config: Partial<Config> = {},
-  ): T {
-    return new this({ config });
+  ): InstanceType<T> {
+    return new this({ config }) as InstanceType<T>;
   }
 
   /**
@@ -157,24 +157,24 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
    * Lists are fetched using the instance of `fetch` provided as a first
    * argument. Optionally resources.txt and config can be provided.
    */
-  public static fromLists<T extends typeof FilterEngine>(
+  public static async fromLists<T extends typeof FilterEngine>(
     this: T,
     fetch: Fetch,
     urls: string[],
     config: Partial<Config> = {},
     caching?: Caching,
   ): Promise<InstanceType<T>> {
-    return this.fromCached(() => {
+    return this.fromCached(async () => {
       const listsPromises = fetchLists(fetch, urls);
       const resourcesPromise = fetchResources(fetch);
 
       return Promise.all([listsPromises, resourcesPromise]).then(([lists, resources]) => {
-        const engine = this.parse(lists.join('\n'), config);
+        const engine: InstanceType<T> = this.parse(lists.join('\n'), config);
         if (resources !== undefined) {
           engine.updateResources(resources, '' + resources.length);
         }
 
-        return engine as InstanceType<T>;
+        return engine;
       });
     }, caching);
   }
@@ -187,31 +187,31 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
    * for this version of the library), then falls-back to using `fromLists(...)`
    * method with the same subscriptions.
    */
-  public static fromPrebuiltAdsOnly<T extends typeof FilterEngine>(
+  public static async fromPrebuiltAdsOnly<T extends typeof FilterEngine>(
     this: T,
     fetchImpl: Fetch = fetch,
     caching?: Caching,
   ): Promise<InstanceType<T>> {
-    return this.fromLists(fetchImpl, adsLists, {}, caching);
+    return await this.fromLists(fetchImpl, adsLists, {}, caching);
   }
 
   /**
    * Same as `fromPrebuiltAdsOnly(...)` but also contains rules to block
    * tracking (i.e.: using extra lists such as EasyPrivacy and more).
    */
-  public static fromPrebuiltAdsAndTracking<T extends typeof FilterEngine>(
+  public static async fromPrebuiltAdsAndTracking<T extends typeof FilterEngine>(
     this: T,
     fetchImpl: Fetch = fetch,
     caching?: Caching,
   ): Promise<InstanceType<T>> {
-    return this.fromLists(fetchImpl, adsAndTrackingLists, {}, caching);
+    return await this.fromLists(fetchImpl, adsAndTrackingLists, {}, caching);
   }
 
   /**
    * Same as `fromPrebuiltAdsAndTracking(...)` but also contains annoyances
    * rules to block things like cookie notices.
    */
-  public static fromPrebuiltFull<T extends typeof FilterEngine>(
+  public static async fromPrebuiltFull<T extends typeof FilterEngine>(
     this: T,
     fetchImpl: Fetch = fetch,
     caching?: Caching,
@@ -221,7 +221,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
   public static fromTrackerDB<T extends typeof FilterEngine>(
     this: T,
-    rawJsonDump: any,
+    rawJsonDump: unknown,
     options: Partial<Config> = {},
   ): InstanceType<T> {
     const config = new Config(options);
@@ -232,10 +232,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       filters.push(...pattern.filters);
     }
 
-    const engine = this.parse(filters.join('\n'), config);
+    const engine: InstanceType<T> = this.parse(filters.join('\n'), config);
     engine.metadata = metadata;
 
-    return engine as InstanceType<T>;
+    return engine;
   }
 
   /**
@@ -266,7 +266,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     }
 
     const config = engines[0].config;
-    const lists = new Map();
+    const lists: Map<string, string> = new Map();
 
     const networkFilters: Map<number, NetworkFilter> = new Map();
     const cosmeticFilters: Map<number, CosmeticFilter> = new Map();
@@ -353,7 +353,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
       lists,
       config: new Config({ ...config, ...overrideConfig }),
-    }) as InstanceType<T>;
+    });
 
     if (
       Object.keys(metadata.categories).length +
@@ -375,25 +375,25 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       engine.resources = Resources.copy(engines[0].resources);
     }
 
-    return engine;
+    return engine as InstanceType<T>;
   }
 
-  public static parse<T extends FilterEngine>(
-    this: new (...args: any[]) => T,
+  public static parse<T extends typeof FilterEngine>(
+    this: T,
     filters: string,
     options: Partial<Config> = {},
-  ): T {
+  ): InstanceType<T> {
     const config = new Config(options);
     return new this({
       ...parseFilters(filters, config),
       config,
-    });
+    }) as InstanceType<T>;
   }
 
-  public static deserialize<T extends FilterEngine>(
-    this: new (...args: any[]) => T,
+  public static deserialize<T extends typeof FilterEngine>(
+    this: T,
     serialized: Uint8Array,
-  ): T {
+  ): InstanceType<T> {
     const buffer = StaticDataView.fromUint8Array(serialized, {
       enableCompression: false,
     });
@@ -438,7 +438,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     engine.resources = Resources.deserialize(buffer);
 
     // Deserialize lists
-    const lists = new Map();
+    const lists: Map<string, string> = new Map();
     const numberOfLists = buffer.getUint16();
     for (let i = 0; i < numberOfLists; i += 1) {
       lists.set(buffer.getASCII(), buffer.getASCII());
@@ -468,7 +468,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
     buffer.seekZero();
 
-    return engine;
+    return engine as InstanceType<T>;
   }
 
   public lists: Map<string, string>;
@@ -930,10 +930,11 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     }
 
     if (networkFilters.length !== 0) {
-      const exceptionsMap = new Map();
-      let replaceDisabledException;
+      const exceptionsMap: Map<string, NetworkFilter> = new Map();
+      let replaceDisabledException: NetworkFilter | undefined;
       for (const exception of exceptions) {
-        const optionValue = exception.optionValue;
+        // `optionValue` is always set as string (or empty string) in `$replace` filters.
+        const optionValue = exception.optionValue!;
         if (optionValue === '') {
           replaceDisabledException = exception;
           break;
@@ -948,7 +949,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           continue;
         }
 
-        const exception = replaceDisabledException || exceptionsMap.get(filter.optionValue);
+        const exception = replaceDisabledException || exceptionsMap.get(filter.optionValue!)!;
 
         this.emit(
           'filter-matched',
@@ -1017,7 +1018,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     injectPureHasSafely?: boolean;
 
     hidingStyle?: string | undefined;
-    callerContext?: any | undefined;
+    callerContext?: unknown;
   }): IMessageFromBackground {
     if (this.config.loadCosmeticFilters === false) {
       return {
@@ -1083,19 +1084,19 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       injectPureHasSafely,
 
       allowGenericHides = true,
-      getBaseRules,
-      hidingStyle,
+      getBaseRules = false,
+      hidingStyle = DEFAULT_HIDING_STYLE,
     }: {
       url: string;
 
-      injectStyles?: boolean;
+      injectStyles?: boolean | undefined;
       injectScriptlets: boolean;
       injectExtended: boolean;
       injectPureHasSafely: boolean;
 
-      allowGenericHides?: boolean;
+      allowGenericHides?: boolean | undefined;
+      getBaseRules?: boolean | undefined;
       hidingStyle?: string | undefined;
-      getBaseRules?: boolean;
     },
   ): {
     scripts: string[];
@@ -1186,7 +1187,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getExtendedRules?: boolean;
     getPureHasRules?: boolean;
 
-    callerContext?: any | undefined;
+    callerContext?: unknown;
   }): {
     matches: {
       filter: CosmeticFilter;

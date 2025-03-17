@@ -28,7 +28,7 @@ const counter: Map<number, number> = new Map();
 function updateBlockedCounter(tabId: number, { reset = false, incr = false } = {}) {
   counter.set(tabId, (reset === true ? 0 : counter.get(tabId) || 0) + (incr === true ? 1 : 0));
 
-  chrome.browserAction.setBadgeText({
+  void chrome.browserAction.setBadgeText({
     text: '' + (counter.get(tabId) || 0),
   });
 }
@@ -62,11 +62,13 @@ declare global {
   }
 }
 
-WebExtensionBlocker.fromLists(fetch, fullLists, {
-  enableCompression: true,
-  enableHtmlFiltering: true,
-  loadExtendedSelectors: true,
-}).then((blocker: WebExtensionBlocker) => {
+void (async () => {
+  const blocker = await WebExtensionBlocker.fromLists(fetch, fullLists, {
+    enableCompression: true,
+    enableHtmlFiltering: true,
+    loadExtendedSelectors: true,
+  });
+
   window.adblocker = blocker;
 
   blocker.enableBlockingInBrowser(browser);
@@ -102,4 +104,4 @@ WebExtensionBlocker.fromLists(fetch, fullLists, {
   });
 
   console.log('Ready to roll!');
-});
+})();

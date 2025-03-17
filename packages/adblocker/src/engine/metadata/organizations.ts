@@ -26,7 +26,7 @@ export interface IOrganization {
  * dump and validates its shape. The result is the same object, but strongly
  * typed.
  */
-export function isValid(organization: any): organization is IOrganization {
+export function isValid(organization: unknown): organization is IOrganization {
   if (organization === null) {
     return false;
   }
@@ -44,7 +44,7 @@ export function isValid(organization: any): organization is IOrganization {
     privacy_policy_url: privacyPolicyUrl,
     privacy_contact: privacyContact,
     ghostery_id: ghosteryId,
-  } = organization;
+  } = organization as Record<string, unknown>;
 
   if (typeof key !== 'string') {
     return false;

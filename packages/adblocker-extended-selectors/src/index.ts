@@ -34,7 +34,7 @@ export function isPureHasSelector(selector: string) {
         throw new Error('not a :has');
       }
     });
-  } catch (e) {
+  } catch (_e) {
     // stop traversing the AST once an extended pseudo-class different from :has is detected
     return false;
   }
