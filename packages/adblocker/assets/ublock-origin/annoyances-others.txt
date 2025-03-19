@@ -1366,6 +1366,7 @@ mangaku.*##+js(aeld, contextmenu)
 gamebanana.com##+js(aopr, adBlockDetected)
 ! https://github.com/uBlockOrigin/uAssets/issues/10888#issuecomment-1523943368
 www.reddit.com###nsfw-desktop-auth-blocking-modal-dialog,#nsfw-desktop-auth-blocking-modal-overlay-element
+www.reddit.com###blocking-modal, body > div[style="position: fixed; inset: 0px; backdrop-filter: blur(4px);"], #nsfw-qr-dialog
 www.reddit.com##body:style(overflow:auto !important)
 ||redditstatic.com/shreddit/en-US/xpromo-nsfw-bypassable-modal-desktop-$script
 ! https://www.reddit.com/r/uBlockOrigin/comments/1dzrnq3/remove_popups_from_reddit_mobile/
@@ -5166,7 +5167,7 @@ asumanaksoy.com,freshlifecircle.com##+js(rmnt, script, devtoolsDetector)
 ! devtools detection scripts
 ! https://github.com/uBlockOrigin/uAssets/issues/21716
 ! https://github.com/uBlockOrigin/uAssets/issues/21320
-||cdn.jsdelivr.net/npm/disable-devtool$script,3p,domain=~weloma.art|~welovemanga.one
+||cdn.jsdelivr.net/npm/disable-devtool$script,3p,domain=~rawinu.com|~weloma.art|~welovemanga.one
 ||cdn.jsdelivr.net/npm/devtools-detector$script,domain=asumanaksoy.com|comedyshow.to|freshlifecircle.com|superembeds.com|blsplayer.com|daftmovie.xyz
 ||hentaihd.cyou/assets/js/devtools-detector.js$script
 ! [dup] from ublock-origin/filters-2021.txt
@@ -5278,9 +5279,9 @@ pendulumedu.com##+js(aeld, copy)
 pendulumedu.com##body:remove-attr(/oncopy|oncut|onpaste/)
 ! https://github.com/uBlockOrigin/uAssets/issues/22220
 !#if cap_html_filtering
-puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com##^script:has-text(ab927c49cf1b)
+puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com,puzzle-yin-yang.com##^script:has-text(ab927c49cf1b)
 !#else
-puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com##+js(rmnt, script, ab927c49cf1b)
+puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com,puzzle-yin-yang.com##+js(rmnt, script, ab927c49cf1b)
 !#endif
 ! https://animefire.plus/ anti right-click, ondragstart
 animefire.plus##+js(ra, oncontextmenu%7Condragstart, , complete)
@@ -5653,8 +5654,6 @@ rds.live##+js(rmnt, script, contextmenu)
 rds.live##*:style(user-select: text !important; -ms-user-select: text !important; -moz-user-select: text !important; -khtml-user-select: text !important; -webkit-user-select: text !important; -webkit-touch-callout: default !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/26159
 @@||autoweek.nl^$script,1p
-! https://www.bhphotovideo.com/c/product/1405061-REG/samsung_u32j590_31_5_4k_uhd.html/BI/865/KBID/1173/SID/dbd77874b38811ef8f447ae1da200b850INT
-||bhphotovideo.com/c/product/*.html/$doc,uritransform=/\.html\/[^?#]+/.html/
 ! https://github.com/uBlockOrigin/uAssets/issues/26192
 coomer.su,kemono.su##[href="https://github.com/easylist/easylist/issues"]
 ! https://broflix.cc/watch/movie/845781 - anti right click
@@ -5702,7 +5701,10 @@ hotleak.vip,hotleaks.tv,topfaps.com##+js(aeld, keydown, 123)
 ! https://github.com/uBlockOrigin/uAssets/issues/26335
 astro-cric.pages.dev,crichype.*,jio.pftv.ws,shz.al,tnt2-cricstreaming.pages.dev,wlo-cricstreamiing.pages.dev##+js(set, confirm, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/26426
-fandom.com##+js(trusted-set-cookie, leftPanelOpen, 0)
+fandom.com##+js(set-cookie, leftPanelOpen, 0)
+!#if env_mobile
+fandom.com##+js(set-cookie, mdpsc, 1)
+!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/26435
 baomidou.com##astro-island[opts^="{\"name\":\"CheckAdBlocked\""]
 ! https://github.com/uBlockOrigin/uAssets/issues/26478
@@ -5750,8 +5752,6 @@ nihongoaz.com##^script:has-text(contentprotector)
 nihongoaz.com##+js(rmnt, script, contentprotector)
 !#endif
 nihongoaz.com##body:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
-! https://github.com/uBlockOrigin/uAssets/issues/26805
-||bitchute.com/*/play_$media,1p,redirect=noopmp3-0.1s
 ! espressocafe. ro anti select, right click
 espressocafe.ro##+js(rmnt, script, contextmenu)
 espressocafe.ro##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
@@ -5819,3 +5819,13 @@ bitchute.com##+js(trusted-set-local-storage-item, show_offer, __q_bool%7C0)
 bitchute.com##+js(trusted-set-local-storage-item, show_offer_timestamp, __q_numb%7C9999999999999)
 ! https://github.com/uBlockOrigin/uAssets/issues/15751
 dropbox.com##+js(trusted-click-element, .dig-Modal%3Ahas(div%5Bdata-testid%3D%22digTruncateTooltipTrigger%22%5D)%20%3E%20.dig-Modal-close-btn, , 2000)
+! https://www.rottentomatoes.com/browse/movies_at_home/affiliates:apple-tv-plus
+||rottentomatoes.com/*/affiliates:$doc,uritransform=/\/affiliates:[^\/?#]+//
+! amorlatinochat.com anti devtools
+||jsdelivr.net/npm/disable-devtool@latest/disable-devtool.min.js
+||404le.com/js/disable-devtool.min.js
+! https://github.com/uBlockOrigin/uAssets/issues/26995
+pawastreams.pro##+js(nostif, debugger)
+! https://samurai.wordoco.com/ - anti right click
+samurai.wordoco.com##+js(acs, nocontextmenu)
+samurai.wordoco.com##body * :not(input):not(textarea):style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
