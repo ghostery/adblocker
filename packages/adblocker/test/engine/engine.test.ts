@@ -650,6 +650,23 @@ $csp=baz,domain=bar.com
         }
       });
 
+      describe('inversion', () => {
+        let engine: FilterEngine;
+        before(() => {
+          engine = Engine.parse('||foo.com$removeparam=~utm', {
+            debug: true,
+            enableHtmlFiltering: true,
+          });
+        });
+        for (const url of urls) {
+          it(`removes all parameters except for "utm" from "${url}"`, () => {
+            const { substitude } = engine.match(urlToDocumentRequest(url));
+            expect(substitude).not.to.be.undefined;
+            expect(substitude!.modifiedUrl).not.to.include('utm_');
+          });
+        }
+      });
+
       describe('removes specific parameter regardless of ordering', () => {
         let engine: FilterEngine;
         before(() => {
@@ -720,6 +737,18 @@ $csp=baz,domain=bar.com
           const engine = Engine.parse(
             `||foo.com$removeparam
 @@||foo.com$removeparam`,
+            {
+              debug: true,
+              enableHtmlFiltering: true,
+            },
+          );
+          expect(engine.match(request).substitude?.modifiedUrl).to.be.eql(undefined);
+        });
+
+        it('priorities exception over inversion', () => {
+          const engine = Engine.parse(
+            `||foo.com$removeparam=~z
+@@||foo.com$removeparam=x`,
             {
               debug: true,
               enableHtmlFiltering: true,

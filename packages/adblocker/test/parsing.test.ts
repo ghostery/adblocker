@@ -925,6 +925,13 @@ describe('Network filters', () => {
           isRemoveParam: true,
         });
       });
+
+      it('parses removeparam inversion', () => {
+        network('||foo.com$removeparam=~x', {
+          removeparam: '~x',
+          isRemoveParam: true,
+        });
+      });
     });
 
     describe('match-case', () => {

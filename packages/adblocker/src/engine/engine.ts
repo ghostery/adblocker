@@ -1564,10 +1564,22 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
                 }
                 break;
               }
-              if (url.searchParams.has(key)) {
-                const exception = removeparamExceptions.get(key) ?? removeparamIgnoreFilter;
-                substitutions.set(filter, exception);
-                if (exception === undefined) {
+              if (!url.searchParams.has(key) && !key.startsWith('~')) {
+                continue;
+              }
+              const exception = removeparamExceptions.get(key) ?? removeparamIgnoreFilter;
+              substitutions.set(filter, exception);
+              if (exception === undefined) {
+                // Handle removeparam inversions
+                if (key.startsWith('~')) {
+                  const inversion = key.slice(1);
+                  for (const param of url.searchParams.keys()) {
+                    if (param !== inversion && !removeparamExceptions.has(param)) {
+                      modified = true;
+                      url.searchParams.delete(param);
+                    }
+                  }
+                } else {
                   modified = true;
                   url.searchParams.delete(key);
                 }
