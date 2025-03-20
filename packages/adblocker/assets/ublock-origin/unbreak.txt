@@ -2106,8 +2106,9 @@ coolmathgames.com##+js(set, network_user_id, )
 ! https://www.reddit.com/r/uBlockOrigin/comments/pglvdm/
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=olympics.com
 ! https://github.com/easylist/easylist/issues/8990
+! https://github.com/uBlockOrigin/uAssets/issues/27611
 ://ads.$popup,domain=~smartnews.com,badfilter
-://ads.$popup,domain=~kakaku.com|~smartnews.com
+://ads.$popup,domain=~kakaku.com|~smartnews.com|~reddit.com
 ! https://jbbs.shitaraba.net/bbs/read.cgi/internet/25463/1598352715/232
 !#if env_mobile
 @@||bwb101.goo.ne.jp/b.js$domain=news.goo.ne.jp
@@ -4234,3 +4235,7 @@ some.porn###native__skeleton
 ||main.govpilot.com/jet/js/newrelic.js$1p,redirect=noopjs,important
 ! https://github.com/easylist/easylist/commit/9012aa52cd2baaba2f6eb249f36c51a2b48b3f83
 ||publisher.caroda.io/videoPlayer/$script,redirect=noopjs,domain=online.evropa2.cz,important
+! unbreak https://pizzaonline.dominos.co.in/?src=brand due to PL filter
+@@||dev.visualwebsiteoptimizer.com/server-side/settings$xhr,domain=dominos.co.in
+! https://github.com/uBlockOrigin/uAssets/issues/27207
+! [badfilter] ||keyvdowallet.me^$badfilter
