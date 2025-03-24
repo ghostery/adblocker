@@ -13,7 +13,6 @@ import networkCSPCodebook from './codebooks/network-csp.js';
 import networkFilterCodebook from './codebooks/network-filter.js';
 import networkHostnameCodebook from './codebooks/network-hostname.js';
 import networkRedirectCodebook from './codebooks/network-redirect.js';
-import networkSubstitudeCodebook from './codebooks/network-substitude.js';
 import networkRawCodebook from './codebooks/raw-network.js';
 import cosmeticRawCodebook from './codebooks/raw-cosmetic.js';
 
@@ -22,7 +21,6 @@ export default class Compression {
   public readonly networkCSP: Smaz = new Smaz(networkCSPCodebook);
   public readonly networkRedirect: Smaz = new Smaz(networkRedirectCodebook);
   public readonly networkHostname: Smaz = new Smaz(networkHostnameCodebook);
-  public readonly networkSubstitude: Smaz = new Smaz(networkSubstitudeCodebook);
   public readonly networkFilter: Smaz = new Smaz(networkFilterCodebook);
   public readonly networkRaw: Smaz = new Smaz(networkRawCodebook);
   public readonly cosmeticRaw: Smaz = new Smaz(cosmeticRawCodebook);
