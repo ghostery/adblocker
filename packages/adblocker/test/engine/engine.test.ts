@@ -662,7 +662,7 @@ $csp=baz,domain=bar.com
           it(`removes all parameters except for "utm" from "${url}"`, () => {
             const { substitude } = engine.match(urlToDocumentRequest(url));
             expect(substitude).not.to.be.undefined;
-            expect(substitude!.modifiedUrl).not.to.include('utm_');
+            expect(substitude!.modifiedUrl ?? url).not.to.include('utm_');
           });
         }
       });
