@@ -7,11 +7,15 @@
 !
 ! GitHub issues: https://github.com/uBlockOrigin/uAssets/issues
 ! GitHub pull requests: https://github.com/uBlockOrigin/uAssets/pulls
-! START: Bounce/Click trackings
+! START: Removeparam/Bounce/Click trackings
 ! password reset link broken on coindesk.com
 @@||awstrack.me/*auth.coindesk.com$doc,popup
 ! swagbucks.com - restore inactive
 @@||awstrack.me/*cmd=ac-inactive-restore$doc,popup
+! https://github.com/uBlockOrigin/uAssets/issues/27448
+@@||che168.com^$xhr,removeparam=s_cid
+! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-2741639442
+@@||facebook.com^$xhr,removeparam=/^__s=[A-Za-z0-9]{6\,}/
 ! END: Bounce/Click trackings
 ! https://github.com/uBlockOrigin/uAssets/issues/729
 ! https://github.com/NanoMeow/QuickReports/issues/1636
@@ -223,6 +227,8 @@ hintergrundbild.org#@#.ads1
 @@||googletagservices.com/tag/js/gpt.js$script,domain=blastingnews.com
 ! https://www.reddit.com/r/uBlockOrigin/comments/85oqui/ublock_origin_on_igncom/
 @@||ign.com/newsfeed-block$xhr,1p
+! https://github.com/uBlockOrigin/uAssets/issues/27666
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=ign.com
 ! https://github.com/uBlockOrigin/uAssets/issues/1747
 @@||cxense.com/cx.js$script,domain=letelegramme.fr
 ! https://forums.lanik.us/viewtopic.php?f=64&t=40264
@@ -4239,3 +4245,5 @@ some.porn###native__skeleton
 @@||dev.visualwebsiteoptimizer.com/server-side/settings$xhr,domain=dominos.co.in
 ! https://github.com/uBlockOrigin/uAssets/issues/27207
 ! [badfilter] ||keyvdowallet.me^$badfilter
+! https://www.reddit.com/r/uBlockOrigin/comments/1jeq4th/worldstar_videos_take_6_secs_to_play_how_do_i_fix/
+worldstar.com##+js(set, Object.prototype.shouldExpectGoogleCMP, false)
