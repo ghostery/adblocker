@@ -391,7 +391,7 @@ describe('#Metadata', () => {
             },
           ],
           redirect: undefined,
-          substitude: undefined,
+          urlRewrite: undefined,
         });
       });
 
@@ -417,9 +417,9 @@ describe('#Metadata', () => {
             },
           ],
           redirect: undefined,
-          substitude: {
+          urlRewrite: {
             filters: new Map(),
-            modifiedUrl: undefined,
+            rewrittenUrl: undefined,
           },
         });
       });
