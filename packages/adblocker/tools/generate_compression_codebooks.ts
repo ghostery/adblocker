@@ -135,9 +135,7 @@ async function generateCodebook(kind: string): Promise<string[]> {
   } else if (kind === 'raw-network') {
     options.maxNgram = 20;
   } else if (kind === 'cosmetic-selector') {
-    options.maxNgram = 96;
-  } else if (kind === 'network-substitude') {
-    options.maxNgram = 16;
+    options.maxNgram = 83;
   }
   const codebook = generate(strings, options);
   validateCodebook(codebook, strings);

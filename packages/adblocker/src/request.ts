@@ -107,6 +107,7 @@ export type WebRequestTypeFirefox =
   | 'imageset'
   | 'web_manifest'
   | 'speculative'
+  | 'json'
   | 'other';
 
 // The set of WebRequest types is the union of both Firefox and Chrome
@@ -130,6 +131,7 @@ export const NORMALIZED_TYPE_TOKEN: { [s in RequestType]: number } = {
   font: fastHash('type:font'),
   image: fastHash('type:image'),
   imageset: fastHash('type:image'),
+  json: fastHash('type:script'),
   mainFrame: fastHash('type:document'),
   main_frame: fastHash('type:document'),
   manifest: fastHash('type:other'),

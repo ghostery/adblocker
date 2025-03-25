@@ -186,6 +186,10 @@ const REQUEST_TYPE_TO_MASK: { [s in RequestType]: number | undefined } = {
   font: NETWORK_FILTER_MASK.fromFont,
   image: NETWORK_FILTER_MASK.fromImage,
   imageset: NETWORK_FILTER_MASK.fromImage,
+  // https://searchfox.org/mozilla-central/rev/fcfb558f8946f3648d962576125af46bf6e2910a/toolkit/components/extensions/schemas/web_request.json
+  // This is for JSON modules from import statements.
+  // Our `NETWORK_FILTER_MASK` is already full and we can treat this as a script request.
+  json: NETWORK_FILTER_MASK.fromScript,
   mainFrame: NETWORK_FILTER_MASK.fromDocument,
   main_frame: NETWORK_FILTER_MASK.fromDocument,
   media: NETWORK_FILTER_MASK.fromMedia,
