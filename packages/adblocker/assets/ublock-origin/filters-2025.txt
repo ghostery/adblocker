@@ -922,3 +922,9 @@ mirror.co.uk##div[class^="Header_masthead"]
 mirror.co.uk##.sticky ~ header:style(top: 0px !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/27709
 formatlibrary.com##+js(no-fetch-if, doubleclick)
+! https://github.com/uBlockOrigin/uAssets/issues/27717
+*###target.pk-page-ready > #sales-banner
+!#if cap_ipaddress
+/^https?:\/\/[^\/]+\/[a-zA-Z]{9}\.js$/$script,1p,strict1p,ipaddress=199.59.243.228
+/^https?:\/\/[^\/]+\/_fd$/$xhr,1p,strict1p,ipaddress=199.59.243.228
+!#endif
