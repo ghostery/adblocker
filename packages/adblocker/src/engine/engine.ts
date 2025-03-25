@@ -79,10 +79,10 @@ export interface BlockingResponse {
         contentType: string;
         dataUrl: string;
       };
-  substitude:
+  urlRewrite:
     | undefined
     | {
-        modifiedUrl: string | undefined;
+        rewrittenUrl: undefined | string;
         filters: Map<NetworkFilter, NetworkFilter | undefined>;
       };
   exception: NetworkFilter | undefined;
@@ -457,7 +457,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     // Deserialize buckets
     engine.importants = NetworkFilterBucket.deserialize(buffer, config);
     engine.redirects = NetworkFilterBucket.deserialize(buffer, config);
-    engine.substitudes = NetworkFilterBucket.deserialize(buffer, config);
+    engine.removeparams = NetworkFilterBucket.deserialize(buffer, config);
     engine.filters = NetworkFilterBucket.deserialize(buffer, config);
     engine.exceptions = NetworkFilterBucket.deserialize(buffer, config);
 
@@ -487,7 +487,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
   public exceptions: NetworkFilterBucket;
   public importants: NetworkFilterBucket;
   public redirects: NetworkFilterBucket;
-  public substitudes: NetworkFilterBucket;
+  public removeparams: NetworkFilterBucket;
   public filters: NetworkFilterBucket;
   public cosmetics: CosmeticFilterBucket;
   public htmlFilters: HTMLBucket;
@@ -534,7 +534,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     // $redirect
     this.redirects = new NetworkFilterBucket({ config: this.config });
     // $removeparam
-    this.substitudes = new NetworkFilterBucket({ config: this.config });
+    this.removeparams = new NetworkFilterBucket({ config: this.config });
     // All other filters
     this.filters = new NetworkFilterBucket({ config: this.config });
     // Cosmetic filters
@@ -584,7 +584,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       this.exceptions.getSerializedSize() +
       this.importants.getSerializedSize() +
       this.redirects.getSerializedSize() +
-      this.substitudes.getSerializedSize() +
+      this.removeparams.getSerializedSize() +
       this.csp.getSerializedSize() +
       this.cosmetics.getSerializedSize() +
       this.hideExceptions.getSerializedSize() +
@@ -636,7 +636,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     // Filters buckets
     this.importants.serialize(buffer);
     this.redirects.serialize(buffer);
-    this.substitudes.serialize(buffer);
+    this.removeparams.serialize(buffer);
     this.filters.serialize(buffer);
     this.exceptions.serialize(buffer);
 
@@ -774,7 +774,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       const exceptions: NetworkFilter[] = [];
       const importants: NetworkFilter[] = [];
       const redirects: NetworkFilter[] = [];
-      const substitudes: NetworkFilter[] = [];
+      const removeparams: NetworkFilter[] = [];
       const hideExceptions: NetworkFilter[] = [];
 
       for (const filter of newNetworkFilters) {
@@ -790,9 +790,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           hideExceptions.push(filter);
         } else if (filter.isException()) {
           if (filter.isRemoveParam()) {
-            if (this.config.enableHtmlFiltering) {
-              substitudes.push(filter);
-            }
+            removeparams.push(filter);
           } else {
             exceptions.push(filter);
           }
@@ -801,9 +799,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         } else if (filter.isRedirect()) {
           redirects.push(filter);
         } else if (filter.isRemoveParam()) {
-          if (this.config.enableHtmlFiltering) {
-            substitudes.push(filter);
-          }
+          removeparams.push(filter);
         } else {
           filters.push(filter);
         }
@@ -815,7 +811,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       // Update buckets in-place
       this.importants.update(importants, removedNetworkFiltersSet);
       this.redirects.update(redirects, removedNetworkFiltersSet);
-      this.substitudes.update(substitudes, removedNetworkFiltersSet);
+      this.removeparams.update(removeparams, removedNetworkFiltersSet);
       this.filters.update(filters, removedNetworkFiltersSet);
 
       if (this.config.loadExceptionFilters === true) {
@@ -1457,7 +1453,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       filter: undefined,
       match: false,
       redirect: undefined,
-      substitude: undefined,
+      urlRewrite: undefined,
       metadata: undefined,
     };
 
@@ -1468,19 +1464,28 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     if (request.isSupported) {
       // Check the filters in the following order:
       // 1. $important (not subject to exceptions)
-      // 2. redirection ($removeparam and $redirect=resource)
+      // 2. redirection ($redirect=resource)
       // 3. normal filters
       // 4. exceptions
-      // 5. substitudes
+      // 5. url rewrites ($removeparam)
       result.filter = this.importants.match(request, this.isFilterExcluded.bind(this));
 
       let redirectNone: NetworkFilter | undefined;
       let redirectRule: NetworkFilter | undefined;
 
       // If `result.filter` is `undefined`, it means there was no $important
-      // filter found so far. We look for $removeparam and $redirect filter.
+      // filter found so far. We look for a $redirect filter.  There is some
+      // extra logic to handle special cases like redirect-rule and
+      // redirect=none.
+      //
+      // * If redirect=none is found, then cancel all redirects.
+      // * Else if redirect-rule is found, only redirect if request would be blocked.
+      // * Else if redirect is found, redirect.
       if (result.filter === undefined) {
-        const redirectFilters = this.redirects.matchAll(request, this.isFilterExcluded.bind(this));
+        const redirects = this.redirects
+          .matchAll(request, this.isFilterExcluded.bind(this))
+          // highest priorty wins
+          .sort((a, b) => b.getRedirectPriority() - a.getRedirectPriority());
 
         // There is some extra logic to handle special cases like
         // redirect-rule and redirect=none.
@@ -1488,11 +1493,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         // * If redirect=none is found, then cancel all redirects.
         // * Else if redirect-rule is found, only redirect if request would be blocked.
         // * Else if redirect is found, redirect.
-        if (redirectFilters.length !== 0) {
-          const redirects = redirectFilters
-            // highest priorty wins
-            .sort((a, b) => b.getRedirectPriority() - a.getRedirectPriority());
-
+        if (redirects.length !== 0) {
           for (const filter of redirects) {
             if (filter.getRedirectResource() === 'none') {
               redirectNone = filter;
@@ -1526,70 +1527,109 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           result.exception = this.exceptions.match(request, this.isFilterExcluded.bind(this));
         }
 
-        // If the request is allowed in any way, we match request substitudes.
+        // If the request is allowed in any way, we match request removeparam.
         if (result.filter === undefined || result.exception !== undefined) {
-          const substitutions: Map<NetworkFilter, NetworkFilter | undefined> = new Map();
-          const url = new URL(request.url);
-          const substitudeFilters = this.substitudes.matchAll(
-            request,
-            this.isFilterExcluded.bind(this),
-          );
-          let modified = false;
+          const searchParamSeparatorIndex = request.url.indexOf('?');
+          if (
+            searchParamSeparatorIndex !== -1 ||
+            searchParamSeparatorIndex !== request.url.length - 1
+          ) {
+            const searchParamLiteral = request.url.slice(searchParamSeparatorIndex);
+            // Map holding a filter to an exception.
+            const rewriteFilters: Map<NetworkFilter, NetworkFilter | undefined> = new Map();
+            // Parse a URL only if required.
+            const getSearchParams = (() => {
+              let searchParams: URLSearchParams | undefined;
+              return () => {
+                if (searchParams === undefined) {
+                  searchParams = new URLSearchParams(request.url.slice(searchParamSeparatorIndex));
+                }
+                return searchParams;
+              };
+            })();
+            let modified = false;
 
-          // Handle $removeparam filters:
-          // 1st priority: @@||<entity>$removeparam
-          // 2nd priority: ||<entity>$removeparam
-          // 3rd priority: @@||<entity>$removeparam=x
-          // 4th priority: ||<entity>$removeparam=x
-          const removeparams: Map<string, NetworkFilter> = new Map();
-          const removeparamExceptions: Map<string, NetworkFilter> = new Map();
-          for (const filter of substitudeFilters) {
-            if (filter.isException()) {
-              removeparamExceptions.set(filter.removeparam!, filter);
-            } else {
-              removeparams.set(filter.removeparam!, filter);
+            // Handle $removeparam filters:
+            // 1st priority: @@||<entity>$removeparam
+            // 2nd priority: ||<entity>$removeparam
+            // 3rd priority: @@||<entity>$removeparam=x
+            // 4th priority: ||<entity>$removeparam=x
+            const removeparamFilters: Map<string, NetworkFilter> = new Map();
+            const removeparamExceptions: Map<string, NetworkFilter> = new Map();
+            for (const filter of this.removeparams.matchAll(
+              request,
+              this.isFilterExcluded.bind(this),
+            )) {
+              if (filter.isException()) {
+                removeparamExceptions.set(filter.removeparam!, filter);
+              } else {
+                removeparamFilters.set(filter.removeparam!, filter);
+              }
             }
-          }
-          const removeparamIgnoreFilter: NetworkFilter | undefined = removeparamExceptions.get('');
-          if (removeparams.size > 0 && url.searchParams.size > 0) {
-            for (const [key, filter] of removeparams) {
-              // Remove all params in case of option value is empty
-              // We will not match individual exceptions since it has a higher priority than them
+            const removeparamIgnoreFilter: NetworkFilter | undefined =
+              removeparamExceptions.get('');
+
+            for (const [key, filter] of removeparamFilters) {
+              // Remove all params in case of option value is empty.
+              // We will not match individual exceptions since it has a higher priority than them.
               if (key === '') {
-                substitutions.set(filter, removeparamIgnoreFilter);
-                // In case of non-existence of global exception, we will remove params
+                rewriteFilters.set(filter, removeparamIgnoreFilter);
+                // In case of non-existence of global exception, we will remove all params.
                 if (removeparamIgnoreFilter === undefined) {
+                  const searchParams = getSearchParams();
+                  // We need to collect all keys before the execution of `delete()`.
+                  // Running `delete()` will inference with an iterator and its inner index.
+                  for (const key of Array.from(searchParams.keys())) {
+                    searchParams.delete(key);
+                  }
                   modified = true;
-                  url.search = '';
                 }
                 break;
               }
-              if (!url.searchParams.has(key) && !key.startsWith('~')) {
+
+              if (
+                !key.startsWith('~') &&
+                // Try to find `?${key}` pattern.
+                searchParamLiteral.slice(1, key.length + 1) !== key &&
+                !searchParamLiteral.includes(`&${key}`)
+              ) {
                 continue;
               }
+
+              const searchParams = getSearchParams();
               const exception = removeparamExceptions.get(key) ?? removeparamIgnoreFilter;
-              substitutions.set(filter, exception);
+              rewriteFilters.set(filter, exception);
               if (exception === undefined) {
-                // Handle removeparam inversions
+                // Handle removeparam inversions.
                 if (key.startsWith('~')) {
-                  const inversion = key.slice(1);
-                  for (const param of url.searchParams.keys()) {
-                    if (param !== inversion && !removeparamExceptions.has(param)) {
+                  const inversionKey = key.slice(1);
+                  for (const param of Array.from(searchParams.keys())) {
+                    if (param !== inversionKey && !removeparamExceptions.has(param)) {
+                      searchParams.delete(param);
                       modified = true;
-                      url.searchParams.delete(param);
                     }
                   }
                 } else {
+                  searchParams.delete(key);
                   modified = true;
-                  url.searchParams.delete(key);
                 }
               }
             }
+
+            let rewrittenUrl: string | undefined;
+            if (modified) {
+              rewrittenUrl = request.url.slice(0, searchParamSeparatorIndex);
+              const searchParams = getSearchParams();
+              if (searchParams.size > 0) {
+                rewrittenUrl += '?' + searchParams.toString();
+              }
+            }
+
+            result.urlRewrite = {
+              rewrittenUrl,
+              filters: rewriteFilters,
+            };
           }
-          result.substitude = {
-            modifiedUrl: modified ? url.toString() : undefined,
-            filters: substitutions,
-          };
         }
       }
 
@@ -1622,8 +1662,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       );
     }
 
-    if (result.substitude) {
-      for (const [filter, exception] of result.substitude.filters) {
+    if (result.urlRewrite !== undefined) {
+      for (const [filter, exception] of result.urlRewrite.filters) {
         this.emit(
           'filter-matched',
           { filter, exception },

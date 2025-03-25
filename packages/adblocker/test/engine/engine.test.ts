@@ -628,8 +628,8 @@ $csp=baz,domain=bar.com
         });
         for (const url of urls) {
           it(`removes all params from "${url}"`, () => {
-            const { substitude } = engine.match(urlToDocumentRequest(url));
-            expect(substitude?.modifiedUrl).to.be.eql('https://foo.com/');
+            const { urlRewrite } = engine.match(urlToDocumentRequest(url));
+            expect(urlRewrite?.rewrittenUrl).to.be.eql('https://foo.com/');
           });
         }
       });
@@ -644,8 +644,8 @@ $csp=baz,domain=bar.com
         });
         for (const url of urls) {
           it(`removes "utm" from "${url}"`, () => {
-            const { substitude } = engine.match(urlToDocumentRequest(url));
-            expect(substitude?.modifiedUrl).not.to.include('utm=');
+            const { urlRewrite } = engine.match(urlToDocumentRequest(url));
+            expect(urlRewrite?.rewrittenUrl ?? request.url).not.to.include('utm=');
           });
         }
       });
@@ -660,9 +660,9 @@ $csp=baz,domain=bar.com
         });
         for (const url of urls) {
           it(`removes all parameters except for "utm" from "${url}"`, () => {
-            const { substitude } = engine.match(urlToDocumentRequest(url));
-            expect(substitude).not.to.be.undefined;
-            expect(substitude!.modifiedUrl ?? url).not.to.include('utm_');
+            const { urlRewrite } = engine.match(urlToDocumentRequest(url));
+            expect(urlRewrite).not.to.be.undefined;
+            expect(urlRewrite!.rewrittenUrl ?? url).not.to.include('utm_');
           });
         }
       });
@@ -684,9 +684,9 @@ $csp=baz,domain=bar.com
           'https://foo.com/?utm_source=organic&utm_event=b&utm=a',
         ]) {
           it(`removeparam "utm" from "${url}"`, () => {
-            const { substitude } = engine.match(urlToDocumentRequest(url));
-            expect(substitude).not.to.be.undefined;
-            expect(substitude!.modifiedUrl).to.be.eql(
+            const { urlRewrite } = engine.match(urlToDocumentRequest(url));
+            expect(urlRewrite).not.to.be.undefined;
+            expect(urlRewrite!.rewrittenUrl).to.be.eql(
               'https://foo.com/?utm_source=organic&utm_event=b',
             );
           });
@@ -708,7 +708,7 @@ $csp=baz,domain=bar.com
               enableHtmlFiltering: true,
             },
           );
-          expect(engine.match(request).substitude?.modifiedUrl).to.be.eql(undefined);
+          expect(engine.match(request).urlRewrite?.rewrittenUrl).to.be.eql(undefined);
         });
         it('respects option value with exception', () => {
           const engine = Engine.parse(
@@ -719,7 +719,7 @@ $csp=baz,domain=bar.com
               enableHtmlFiltering: true,
             },
           );
-          expect(engine.match(request).substitude?.modifiedUrl).to.be.eql('https://foo.com/');
+          expect(engine.match(request).urlRewrite?.rewrittenUrl).to.be.eql('https://foo.com/');
         });
 
         it('priorities global removeparam over singular exception', () => {
@@ -731,7 +731,7 @@ $csp=baz,domain=bar.com
               enableHtmlFiltering: true,
             },
           );
-          expect(engine.match(request).substitude?.modifiedUrl).to.be.eql('https://foo.com/');
+          expect(engine.match(request).urlRewrite?.rewrittenUrl).to.be.eql('https://foo.com/');
         });
         it('priorities global exception over global removeparam', () => {
           const engine = Engine.parse(
@@ -742,7 +742,7 @@ $csp=baz,domain=bar.com
               enableHtmlFiltering: true,
             },
           );
-          expect(engine.match(request).substitude?.modifiedUrl).to.be.eql(undefined);
+          expect(engine.match(request).urlRewrite?.rewrittenUrl).to.be.eql(undefined);
         });
 
         it('priorities exception over inversion', () => {
@@ -754,7 +754,7 @@ $csp=baz,domain=bar.com
               enableHtmlFiltering: true,
             },
           );
-          expect(engine.match(request).substitude?.modifiedUrl).to.be.eql(undefined);
+          expect(engine.match(request).urlRewrite?.rewrittenUrl).to.be.eql(undefined);
         });
       });
     });
