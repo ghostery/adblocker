@@ -9,7 +9,7 @@
     {
       "name": "run-at.fn",
       "aliases": [],
-      "body": "function runAt(e,t){const n=e=>{const t={loading:1,asap:1,interactive:2,end:2,2:2,complete:3,idle:3,3:3};const n=Array.isArray(e)?e:[e];for(const e of n){const n=`${e}`;if(t.hasOwnProperty(n)===false)continue;return t[n]}return 0};const r=n(t);if(n(document.readyState)>=r){e();return}const o=()=>{if(n(document.readyState)<r)return;e();a.removeEventListener.apply(document,c)};const a=safeSelf();const c=[\"readystatechange\",o,{capture:true}];a.addEventListener.apply(document,c)}",
+      "body": "function runAt(e,t){const n=e=>{const t={loading:1,asap:1,interactive:2,end:2,2:2,complete:3,idle:3,3:3};const n=Array.isArray(e)?e:[e];for(const e of n){const n=`${e}`;if(Object.hasOwn(t,n)===false)continue;return t[n]}return 0};const r=n(t);if(n(document.readyState)>=r){e();return}const a=()=>{if(n(document.readyState)<r)return;e();c.removeEventListener.apply(document,o)};const c=safeSelf();const o=[\"readystatechange\",a,{capture:true}];c.addEventListener.apply(document,o)}",
       "dependencies": [
         "safe-self.fn"
       ]
@@ -238,7 +238,7 @@
     {
       "name": "jsonl-prune.fn",
       "aliases": [],
-      "body": "function jsonlPruneFn(n=\"\",t=\"\",o=\"\"){const e=safeSelf();const c=n.split(/\\n+/);const s=[];for(const n of c){let c;try{c=e.JSON_parse(n)}catch{}if(typeof c!==\"object\"){s.push(n);continue}const f=objectPruneFn(c,t,o);if(typeof f!==\"object\"){s.push(n);continue}s.push(e.JSON_stringifyFn(f))}return s.join(\"\\n\")}",
+      "body": "function jsonlPruneFn(n=\"\",t=\"\",o=\"\"){const e=safeSelf();const c=n.split(/\\n+/);const s=[];for(const n of c){let c;try{c=e.JSON_parse(n)}catch{}if(typeof c!==\"object\"){s.push(n);continue}const f=objectPruneFn(c,t,o);if(typeof f!==\"object\"){s.push(n);continue}s.push(e.JSON_stringify(f).replace(/\\//g,\"\\\\/\"))}return s.join(\"\\n\")}",
       "dependencies": [
         "object-prune.fn",
         "safe-self.fn"
@@ -296,7 +296,7 @@
     {
       "name": "prevent-innerHTML.js",
       "aliases": [],
-      "body": "function preventInnerHTML(e=\"\",t=\"\"){const n=safeSelf();const r=n.makeLogPrefix(\"prevent-innerHTML\",e,t);const i=n.initPattern(t,{canNegate:true});const o=n.Object_getOwnPropertyDescriptor(Element.prototype,\"innerHTML\");if(o===void 0)return;const s=t=>{if(e!==\"\"){if(typeof this.matches===\"function\"===false)return false;if(this.matches(e)===false)return false}return n.testPattern(i,t)};Object.defineProperty(Element.prototype,\"innerHTML\",{get:function(){return o.get?o.get.call(this):o.value},set:function(e){if(s(e))n.uboLog(r,\"Prevented\");else if(o.set)o.set.call(this,e);if(n.logLevel>1)n.uboLog(r,`Assigned:\\n${e}`);o.value=e}})}",
+      "body": "function preventInnerHTML(e=\"\",t=\"\"){const n=safeSelf();const r=n.makeLogPrefix(\"prevent-innerHTML\",e,t);const i=n.initPattern(t,{canNegate:true});const o=n.Object_getOwnPropertyDescriptor(Element.prototype,\"innerHTML\");if(o===void 0)return;const s=(t,r)=>{if(e!==\"\"){if(typeof t.matches!==\"function\")return false;if(t.matches(e)===false)return false}return n.testPattern(i,r)};Object.defineProperty(Element.prototype,\"innerHTML\",{get:function(){return o.get?o.get.call(this):o.value},set:function(e){if(s(this,e))n.uboLog(r,\"Prevented\");else if(o.set)o.set.call(this,e);if(n.logLevel>1)n.uboLog(r,`Assigned:\\n${e}`);o.value=e}})}",
       "dependencies": [
         "safe-self.fn"
       ]
