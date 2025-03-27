@@ -2215,7 +2215,7 @@ domaha.tv,xxxrip.net,sextor.org,sex-torrent.net##a.dl-stub:not([href]):style(cur
 ! https://www.reddit.com/r/uBlockOrigin/comments/13wzw1e/
 ! https://github.com/uBlockOrigin/uAssets/issues/24033
 hotstar.com##+js(json-prune, success.page.spaces.player.widget_wrappers.%5B%5D.widget.data.intervention_data)
-hotstar.com##div [data-testid^="bbtype-video"]
+hotstar.com##div[data-testid^="bbtype-video"]
 hotstar.com##div[data-testid^="bbtype-image"]
 ! https://github.com/AdguardTeam/AdguardFilters/issues/152471
 streamporn.co.uk##+js(aost, localStorage, window.onload)
@@ -3898,12 +3898,14 @@ cimanow.cc###ad1
 ! https://github.com/uBlockOrigin/uAssets/issues/26653
 cimanow.cc##section[aria-label="details"] a[id][target="_blank"]
 cimanow.online##+js(ra, href, %5Btarget%3D%22_blank%22%5D, stay)
-cimanow.cc,cimanow.online##+js(acs, document.createElement, MutationObserver)
+cimanow.cc,freex2line.online##+js(acs, document.createElement, globalThis)
 freex2line.online##+js(overlay-buster)
 ||freex2line.online/*/?redirect$doc,urlskip=?redirect -base64
 ||flashtalking.com^$image,redirect=2x2.png,domain=cimanow.cc|cimanow.online
 cimanow.cc##main > a[id][target="_blank"]
 freex2line.online##body >a[id][href][target^="_blank"]
+||freex2line.online/dwcn/Assets/js/jquery.countdown360.min.js$script,1p
+freex2line.online##.downloadbtn:style(display: block !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/20516
 ! https://github.com/uBlockOrigin/uAssets/issues/21046
 qiwi.gg##+js(aeld, , sessionStorage)

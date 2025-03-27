@@ -937,7 +937,7 @@
     {
       "name": "trusted-prevent-dom-bypass.js",
       "aliases": [],
-      "body": "function trustedPreventDomBypass(e=\"\",n=\"\"){if(e===\"\")return;const t=safeSelf();const o=t.makeLogPrefix(\"trusted-prevent-dom-bypass\",e,n);proxyApplyFn(e,(function(e){const c=new Set(e.callArgs.filter((e=>e instanceof HTMLElement)));const f=e.reflect();if(c.length===0)return f;for(const e of c)try{if(`${e.contentWindow}`!==\"[object Window]\")continue;if(e.contentWindow.location.href!==\"about:blank\")if(e.contentWindow.location.href!==self.location.href)continue;if(n!==\"\")e.contentWindow[n]=self[n];else Object.defineProperty(e,\"contentWindow\",{value:self});t.uboLog(o,\"Bypass prevented\")}catch{}return f}))}",
+      "body": "function trustedPreventDomBypass(e=\"\",n=\"\"){if(e===\"\")return;const t=safeSelf();const o=t.makeLogPrefix(\"trusted-prevent-dom-bypass\",e,n);proxyApplyFn(e,(function(e){const c=new Set(e.callArgs.filter((e=>e instanceof HTMLElement)));const i=e.reflect();if(c.length===0)return i;for(const e of c)try{if(`${e.contentWindow}`!==\"[object Window]\")continue;if(e.contentWindow.location.href!==\"about:blank\")if(e.contentWindow.location.href!==self.location.href)continue;if(n!==\"\"){let t=self,o=e.contentWindow;let c=n;for(;;){const e=c.indexOf(\".\");if(e===-1)break;const n=c.slice(0,e);t=t[n];o=o[n];c=c.slice(e+1)}o[c]=t[c]}else Object.defineProperty(e,\"contentWindow\",{value:self});t.uboLog(o,\"Bypass prevented\")}catch{}return i}))}",
       "dependencies": [
         "proxy-apply.fn",
         "safe-self.fn"
