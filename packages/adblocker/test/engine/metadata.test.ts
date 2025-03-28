@@ -391,6 +391,7 @@ describe('#Metadata', () => {
             },
           ],
           redirect: undefined,
+          urlRewrite: undefined,
         });
       });
 
@@ -416,6 +417,10 @@ describe('#Metadata', () => {
             },
           ],
           redirect: undefined,
+          urlRewrite: {
+            filters: new Map(),
+            rewrittenUrl: undefined,
+          },
         });
       });
     });
