@@ -387,8 +387,6 @@ incgrepacks.com##[href^="https://candy.ai"]
 incgrepacks.com##.incgr-before-content_2
 ! jattfilms. cfd ad redirect
 jattfilms.cfd###clickfakeplayer[href]:remove-attr(href)
-! https://www.reddit.com/r/uBlockOrigin/comments/1i23n0u/cant_figure_out_how_to_bypass_adblock_detection/
-@@||earnvids.com/ad?type=$script
 ! https://www.reddit.com/r/uBlockOrigin/comments/1i2arg8/detected_on_bypasslink/
 bypass.link##+js(no-fetch-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/26848
@@ -674,8 +672,6 @@ reviewdiv.com##^script:has-text(wpquads_adblocker_check)
 !#else
 reviewdiv.com##+js(rmnt, script, wpquads_adblocker_check)
 !#endif
-! https://github.com/AdguardTeam/AdguardFilters/issues/199124
-pvpoke-re.com##+js(set, firstChecker, noopFunc)
 ! https://www.national-park.com/ - popups
 national-park.com##+js(aeld, click, window.open)
 ! https://fastflix.to/ anti-adb
@@ -738,11 +734,7 @@ drama-online.tv##+js(aost, document.readyState, drama-online)
 ! https://www.esportstales.com/rainbow-six-siege/most-picked-and-banned-operators - anti-adb
 esportstales.com##+js(aeld, DOMContentLoaded, detect)
 ! https://github.com/uBlockOrigin/uAssets/issues/27429
-!#if cap_html_filtering
-tojimanhwas.com##^script:has-text(callbackAdsBlocked)
-!#else
-tojimanhwas.com##+js(rmnt, script, callbackAdsBlocked)
-!#endif
+tojimanhwas.com##+js(aost, setTimeout, adsBlocked)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/200141
 missavtv.com##+js(no-fetch-if, doubleclick)
 ! https://github.com/uBlockOrigin/uAssets/issues/27437
@@ -928,3 +920,24 @@ formatlibrary.com##+js(no-fetch-if, doubleclick)
 /^https?:\/\/[^\/]+\/[a-zA-Z]{9}\.js$/$script,1p,strict1p,ipaddress=199.59.243.228
 /^https?:\/\/[^\/]+\/_fd$/$xhr,1p,strict1p,ipaddress=199.59.243.228
 !#endif
+! https://anime-world.co/episode/my-happy-marriage-2x1/ popup
+anime-world.co>>##+js(nowoif)
+! https://github.com/uBlockOrigin/uAssets/issues/27716
+##.gliaplayer-container
+||player.gliacloud.com^$3p
+! https://github.com/uBlockOrigin/uAssets/issues/27722
+||gaypornhot.com/wp-content/uploads/ountsvf.js
+! sat-sharing.com detection
+sat-sharing.com##+js(rmnt, script, navigator.userAgent)
+! https://github.com/uBlockOrigin/uAssets/issues/27729
+fastt.gg###startDownload
+fastt.gg##+js(nowoif, _blank)
+fastt.gg##+js(nano-sib, countdown, 1000)
+fastt.gg##+js(nano-stb, tick, 1000)
+fastt.gg##+js(rpnt, script, !isAdTriggered, false)
+! https://github.com/AdguardTeam/AdguardFilters/issues/200905
+qrcodemonkey.net##+js(nostif, %23ad_blocker_detector)
+! https://github.com/uBlockOrigin/uAssets/issues/27731
+moviesshub.*##+js(no-fetch-if, adsbygoogle)
+! https://github.com/uBlockOrigin/uAssets/issues/27738
+||z3d.rip/main_script.js
