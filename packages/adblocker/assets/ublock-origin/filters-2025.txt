@@ -247,6 +247,12 @@ senpai-stream.net##div[wire\:click="watching"]:style(display: flex !important;)
 ! <<<<< AG Turkish >>>>>
 ! https://github.com/uBlockOrigin/uAssets/issues/27060
 dizipal851.com,dizipal852.com,dizipal853.com,dizipal854.com,dizipal855.com,dizipal856.com,dizipal857.com,dizipal858.com,dizipal859.com,dizipal860.com,dizipal861.com,dizipal862.com,dizipal863.com,dizipal864.com,dizipal865.com,dizipal866.com,dizipal867.com,dizipal868.com,dizipal869.com,dizipal870.com,dizipal871.com,dizipal872.com,dizipal873.com,dizipal874.com,dizipal875.com,dizipal876.com,dizipal877.com,dizipal878.com,dizipal879.com,dizipal880.com,dizipal881.com,dizipal882.com,dizipal883.com,dizipal884.com,dizipal885.com,dizipal886.com,dizipal887.com,dizipal888.com,dizipal889.com,dizipal890.com,dizipal891.com,dizipal892.com,dizipal893.com,dizipal894.com,dizipal895.com,dizipal896.com,dizipal897.com,dizipal898.com,dizipal899.com,dizipal900.com,dizipal901.com,dizipal902.com,dizipal903.com,dizipal904.com,dizipal905.com,dizipal906.com,dizipal907.com,dizipal908.com,dizipal909.com,dizipal910.com,dizipal911.com,dizipal912.com,dizipal913.com,dizipal914.com,dizipal915.com,dizipal916.com,dizipal917.com,dizipal918.com,dizipal919.com,dizipal920.com,dizipal921.com,dizipal922.com,dizipal923.com,dizipal924.com,dizipal925.com,dizipal926.com,dizipal927.com,dizipal928.com,dizipal929.com,dizipal930.com,dizipal931.com,dizipal932.com,dizipal933.com,dizipal934.com,dizipal935.com,dizipal936.com,dizipal937.com,dizipal938.com,dizipal939.com,dizipal940.com,dizipal941.com,dizipal942.com,dizipal943.com,dizipal944.com,dizipal945.com,dizipal946.com,dizipal947.com,dizipal948.com,dizipal949.com,dizipal950.com##+js(trusted-rpnt, script, %2FmanageAds%5C(video_urls%5C%5BactiveItem%5C%5D%2C%20video_seconds%5C%5BactiveItem%5C%5D%2C%20ad_urls%5C%5BactiveItem%5D%2Ctrue%5C)%3B%2F, playVideo()%3B, condition, playAdd)
+! https://github.com/uBlockOrigin/uAssets/issues/27778
+futbolsayfasi.net##+js(acs, document.getElementById, adb)
+! <<<<< Oficjalne Polskie Filtry do uBlocka Origin - Polish list >>>>>
+! https://github.com/uBlockOrigin/uAssets/issues/27768
+otomoto.pl##+js(nowoif, _blank)
+otomoto.pl##[data-testid="banner-link"]
 ! END: Regional lists
 ! Arbitrary adservers
 ! https://github.com/easylist/easylist/commit/9fed17fe030b739cbb8887dab4f92d03952e3e48
@@ -302,8 +308,9 @@ vidbinge.com##+js(rmnt, script, HTMLAllCollection)
 *$script,3p,denyallow=gstatic.com,domain=vidbinge.com
 ! https://github.com/uBlockOrigin/uAssets/issues/26738
 thesciencetoday.com##+js(rmnt, script, %3D%3D%22%5D)
-sportnews.to,sportshub.to##+js(remove-attr, href, %5Bhref%5E%3D%22https%22%5D, stay)
 sportnews.to##+js(rmnt, script, %3D%3D%22%5D)
+sportshub.to,sportnews.to##+js(trusted-suppress-native-method, DOMTokenList.prototype.add, %22-%22)
+sportshub.to,sportnews.to##body > div > div[class^="active"][style]
 ! popups https://github.com/uBlockOrigin/uAssets/issues/26737
 sumax43.autos##+js(trusted-set-cookie, lastClicked, 9999999999999)
 ! https://github.com/uBlockOrigin/uAssets/issues/26746
@@ -836,9 +843,6 @@ videograbber.cc##+js(rmnt, script, popundersPerIP)
 ! https://github.com/uBlockOrigin/uAssets/issues/27597
 poophd.video-src.com##+js(no-fetch-if, method%3AGET)
 ! https://github.com/uBlockOrigin/uAssets/issues/27601
-||hb.vntsm.com/*/live/$script,domain=skill4ltu.eu,redirect=noopjs
-skill4ltu.eu##+js(nostif, Array)
-skill4ltu.eu##+js(aost, setTimeout, onload)
 skill4ltu.eu##div[id^="top-banner"]
 ! https://github.com/uBlockOrigin/uAssets/issues/27596
 edgedeliverynetwork.com##+js(nowoif, _blank)
@@ -868,18 +872,12 @@ concealednation.org##+js(set, advanced_ads_check_adblocker, noopFunc)
 bigconv.com##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/8719
 @@||1001tracklists.com^$ghide
-! [dup] from ublock-origin/quick-fixes.txt
-! 1001tracklists.com##div[id]:has(> [data-freestar-ad]):remove()
-! [dup] from ublock-origin/quick-fixes.txt
-! 1001tracklists.com###head + [id] > div:first-child > div:not([id="topLogo"], [id="pageTitle"], [id="hInfo"]):has(> a > :is(img[src*="/"][src*="_"][alt], div[style*="background"]))
-! [dup] from ublock-origin/quick-fixes.txt
-! 1001tracklists.com##div:has(+ script:has-text(challenge)):has(a :is(img[src*="/"][src*="_"][alt], [style]))
-! [dup] from ublock-origin/quick-fixes.txt
-! 1001tracklists.com##div[class="nav tabTop"] + div > div:first-child > div:first-child > a:has(> img[src*="/"][src*="_"][alt])
-! [dup] from ublock-origin/quick-fixes.txt
-! 1001tracklists.com###head + div[id] > div:last-child > div > a:has(> img[src*="/"][src*="_"][alt])
-! [dup] from ublock-origin/quick-fixes.txt
-! 1001tracklists.com##+js(spoof-css, div%5Bclass%3D%22nav%20tabTop%22%5D%20%2B%20div%20%3E%20div%3Afirst-child%20%3E%20div%3Afirst-child%20%3E%20a%3Ahas(%3E%20img%5Bsrc*%3D%22%2F%22%5D%5Bsrc*%3D%22_%22%5D%5Balt%5D)%2C%20%23head%20%2B%20div%5Bid%5D%20%3E%20div%3Alast-child%20%3E%20div%20%3E%20a%3Ahas(%3E%20img%5Bsrc*%3D%22%2F%22%5D%5Bsrc*%3D%22_%22%5D%5Balt%5D), display, block)
+1001tracklists.com##div[id]:has(> [data-freestar-ad]):remove()
+1001tracklists.com###head + [id] > div:first-child > div:not([id="topLogo"], [id="pageTitle"], [id="hInfo"]):has(> a > :is(img[src*="/"][src*="_"][alt], div[style*="background"]))
+1001tracklists.com##div:has(+ script:has-text(challenge)):has(a :is(img[src*="/"][src*="_"][alt], [style]))
+1001tracklists.com##div[class="nav tabTop"] + div > div:first-child > div:first-child > a:has(> img[src*="/"][src*="_"][alt])
+1001tracklists.com###head + div[id] > div:last-child > div > a:has(> img[src*="/"][src*="_"][alt])
+1001tracklists.com##+js(spoof-css, div%5Bclass%3D%22nav%20tabTop%22%5D%20%2B%20div%20%3E%20div%3Afirst-child%20%3E%20div%3Afirst-child%20%3E%20a%3Ahas(%3E%20img%5Bsrc*%3D%22%2F%22%5D%5Bsrc*%3D%22_%22%5D%5Balt%5D)%2C%20%23head%20%2B%20div%5Bid%5D%20%3E%20div%3Alast-child%20%3E%20div%20%3E%20a%3Ahas(%3E%20img%5Bsrc*%3D%22%2F%22%5D%5Bsrc*%3D%22_%22%5D%5Balt%5D), display, block)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1jg28ap/how_to_remove_adblocker_notification_from/
 breznikar.com##+js(nostif, modal)
 ! https://github.com/uBlockOrigin/uAssets/issues/27651
@@ -891,11 +889,6 @@ zilla-xr.xyz##+js(nowoif)
 *$script,3p,denyallow=apis.google.com,domain=zilla-xr.xyz
 *$script,3p,denyallow=cloudflare.com|cloudflare.net|gstatic.com|jquery.com|jsdelivr.net,domain=moviesapi.club
 *$script,3p,domain=player.videasy.net
-||alurepirates.com^
-||hinaudeject.com^
-||refriesbharata.com^
-||tenderlybatch.com^
-||wambugureining.shop^
 ! besthdmovies. com ad popups
 besthdmovies.com##+js(nowoif)
 ||parlouroutlayfavor.com^
@@ -941,3 +934,30 @@ qrcodemonkey.net##+js(nostif, %23ad_blocker_detector)
 moviesshub.*##+js(no-fetch-if, adsbygoogle)
 ! https://github.com/uBlockOrigin/uAssets/issues/27738
 ||z3d.rip/main_script.js
+! unbreak play game https://eatcells.com/play/
+eatcells.com##+js(rpnt, script, %2Ffunction%20_.*JSON.*%7D%7D%2Fgms, function%20checkName()%7Bconst%20a%20%3D%20document.querySelector(%22.monsters%20.button_wrapper%20.button%22)%3Bconst%20b%20%3D%20document.querySelector(%22%23nick%22)%3Bconst%20c%20%3D%20%22%2F%3Ffrom_land%3D1%26nick%3D%22%3Ba.addEventListener(%22click%22%2C%20function%20()%20%7Bdocument.location.href%20%3D%20c%20%2B%20b.value%3B%7D)%3B%20%7D%20checkName()%3B)
+! moviemaniak. com antiadb
+moviemaniak.com##+js(aost, Array.prototype.includes, adblockTrigger)
+moviemaniak.com##+js(aopr, LieDetector)
+! https://www.pelotalibretv.me/en-vivo/extremo-uno.php => popups
+||capo5play.com^$csp=sandbox allow-forms allow-same-origin allow-scripts allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-top-navigation
+! https://github.com/uBlockOrigin/uAssets/issues/27757
+netfree.cc##+js(nowoif, _blank, 20)
+||stookroocoudray.com^$all
+! https://www.reddit.com/r/uBlockOrigin/comments/1jlhng5/constant_warning_window/
+omegascans.org##+js(acs, Date.prototype.toISOString, wpadmngr.com)
+||omegascans.org/ads.js
+! https://jav.sb popup
+jav.sb##+js(acs, document.write, insertAd)
+! https://javneon.tv popup
+javneon.tv##+js(set, univresalP, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/27767
+chatropolis.com##+js(acs, document.querySelectorAll, popMagic)
+! https://github.com/AdguardTeam/AdguardFilters/issues/199124
+! [dup] from ublock-origin/quick-fixes.txt
+! pvpoke-re.com##+js(trusted-suppress-native-method, Document.prototype.getElementsByTagName, %22body%22, prevent, %2F%5C%2F%5BA-Za-z%5D%2B%5C.min%5C.js%5C%3F%2F)
+! https://up4stream.com/ccr0jb82zmr1.html - ads
+up4stream.com##+js(aeld, DOMContentLoaded, history.go)
+! https://github.com/uBlockOrigin/uAssets/issues/24812#issuecomment-2763870909
+livestreams.*,maxicast.*##+js(nowoif, _blank)
+livestreams.*,maxicast.*###openLinks
