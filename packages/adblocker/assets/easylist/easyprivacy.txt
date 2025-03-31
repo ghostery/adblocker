@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202503270449
+! Version: 202503300355
 ! Title: EasyPrivacy
-! Last modified: 27 Mar 2025 04:49 UTC
+! Last modified: 30 Mar 2025 03:55 UTC
 ! Expires: 4 days (update frequency)
 ! *** easylist:template_header.txt ***
 !
@@ -1463,6 +1463,7 @@
 /metrics/track/*
 /metrics/v1/frontend/*
 /metrics/vanity/?
+/metrika.js?=
 /metrika/tag.js
 /mi/insite/*
 /microsoft.cognitiveservices.speech.sdk.bundle.js
@@ -2535,6 +2536,7 @@
 /view-tracking/*$image
 /view.gif?
 /view_stats.js.php
+/viewcount/record-page-view?
 /ViewCounter/*
 /viewerimpressions?
 /views_tracking/*
@@ -2728,7 +2730,7 @@
 ://collector.*/event
 ://elqtrk.
 ://fallback.*/collector
-://fathom.$domain=~fathom.fm|~fathom.info|~fathom.io|~fathom.org|~fathom.video|~fathom.world|~fathomdelivers.com|~fathomseo.com|~usesfathom.com
+://fathom.$domain=~fathom.fm|~fathom.info|~fathom.io|~fathom.lib.uchicago.edu|~fathom.org|~fathom.video|~fathom.world|~fathomdelivers.com|~fathomseo.com|~usesfathom.com
 ://gtrack.*/dye
 ://insights-collector.
 ://internal-matomo.
@@ -3445,7 +3447,6 @@ omni.soundestlink.com$image
 ||pzapi-kg.com^
 ||pzimff.com^
 ||q0losid.com^
-||quantserve.com^
 ||quickkoala.io^
 ||quickpcfixer.click^
 ||r42tag.com^
@@ -3961,6 +3962,7 @@ omni.soundestlink.com$image
 ||bubblestat.com^$third-party
 ||bugherd.com^$third-party
 ||bugsnag.com^$third-party
+||bullwhip.cloud^$third-party
 ||bunchbox.co^$third-party
 ||burpee.xyz^$third-party
 ||burstbeacon.com^$third-party
@@ -4579,8 +4581,7 @@ omni.soundestlink.com$image
 ||goneviral.com^$third-party
 ||goodcounter.org^$third-party
 ||goodmeasure.io^$third-party
-! [dup] from peter-lowe/serverlist.txt
-! ||google-analytics.com^$third-party
+||google-analytics.com^$script,third-party,xmlhttprequest
 ! [dup] from peter-lowe/serverlist.txt
 ! ||googleadservices.com^$third-party
 ||googlerank.info^$third-party
@@ -5420,6 +5421,7 @@ omni.soundestlink.com$image
 ||qualaroo.com^$third-party
 ! [dup] from peter-lowe/serverlist.txt
 ! ||quantcount.com^$third-party
+||quantserve.com^$script,third-party
 ! [dup] from peter-lowe/serverlist.txt
 ! ||quantummetric.com^$third-party
 ||quartic.pl^$third-party
@@ -7138,6 +7140,7 @@ omni.soundestlink.com$image
 ||epicoldschool.com^
 ||equablekettle.com^
 ||erraticreaction.com^
+||essayspin.com^
 ||etherealbamboo.com^
 ||ethereallagoon.com^
 ||etherealpinnacle.com^
@@ -7593,6 +7596,7 @@ omni.soundestlink.com$image
 ||lumpylumber.com^
 ||lunchroomlock.com^
 ||lustroushaven.com^
+||luxformula.com^
 ||lyricshook.com^
 ||maddeningpowder.com^
 ||madebyintent.com^
@@ -7859,6 +7863,7 @@ omni.soundestlink.com$image
 ||pluckyzone.com^
 ||pocketfaucet.com^
 ||podiumpresto.com^
+||podname.com^
 ||poemprompt.com^
 ||poeticpackage.com^
 ||pointdigestion.com^
@@ -8639,6 +8644,7 @@ omni.soundestlink.com$image
 ||whisperingcrib.com^
 ||whisperingsummit.com^
 ||whispermeeting.com^
+||whoogled.com^
 ||whymaze.com^
 ||wigglygeese.com^
 ||wigglyindustry.com^
@@ -9813,6 +9819,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||elmasistatistik.com.tr^$third-party
 ||onlinewebstat.com^$third-party
 ||realist.gen.tr^$third-party
+||sayac.net.tr^$third-party
 ||sayyac.com^$third-party
 ||sayyac.net^$third-party
 ||sitetistik.com^$third-party
@@ -14613,6 +14620,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||invisionapp.com/analytics-api/
 ||iono.fm/tracking?
 ||ip.cliphunter.com^
+||iphonelife.com/_app/immutable/chunks/TrackingParamsFormInputs.
 ||irs.gov/h4z97Hz8jMrNO/
 ||isc-tracking.eventim.com^
 ||isharemetric.rediff.com^
@@ -14623,6 +14631,8 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||javedit.com/e/public/ViewClick/
 ||javhd.com/ascripts/gcu.js
 ||javhd.com/rstat
+||javplayer.me/*/views^
+||javynow.com/ajax/access.php
 ||jetbluevacations.com/apis/v2-analytics/
 ||jfapiprod.optimonk.com^
 ||jiji.co.ke/tag_event
@@ -54089,8 +54099,7 @@ coomer.su,kemono.su##+js(set-local-storage-item, plausible_ignore, true)
 @@||f-gear.ec-optimizer.com/img/spacer.gif$image,domain=ec.f-gear.co.jp
 @@||f-gear.ec-optimizer.com/search4.do$script,domain=ec.f-gear.co.jp
 @@||f-gear.ec-optimizer.com/speights/searchresult2fgear.js$script,domain=ec.f-gear.co.jp
-! [dup] from ublock-origin/quick-fixes.txt
-! @@||f-tra.com^$script,domain=pokemoncenter-online.com
+@@||f-tra.com^$script,domain=pokemoncenter-online.com
 @@||gamerch.com/s3-assets/library/js/fingerprint2.min.js?$script,~third-party
 @@||geolocation-db.com/json/$domain=admanager.line.biz
 @@||get.s-onetag.com/*/tag.min.js$domain=zakzak.co.jp
