@@ -56,6 +56,7 @@ sbs.com.au##+js(trusted-prevent-xhr, pagead2.googlesyndication.com%2Fpagead%2Fjs
 sbs.com.au##+js(trusted-prevent-xhr, sbs.demdex.net%2Fdest5.html%3Fd_nsid%3D0%26ord%3D, Demdex.canSetThirdPartyCookies)
 sbs.com.au##+js(trusted-prevent-xhr, securepubads.g.doubleclick.net%2Fpagead%2Fima_ppub_config%3Fippd%3Dhttps%253A%252F%252Fwww.sbs.com.au%252Fondemand%252F%26ord%3D, %5B%224117%22%5D)
 @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?ord=$xhr,domain=sbs.com.au
+@@||pagead2.googlesyndication.com/omsdk/releases/live/omweb-v1.js$script,domain=sbs.com.au
 @@||sbs.demdex.net/dest5.html?d_nsid=0&ord=$xhr,domain=sbs.com.au
 ! https://github.com/uBlockOrigin/uAssets/issues/19534
 ! https://github.com/uBlockOrigin/uAssets/issues/26856
@@ -226,6 +227,28 @@ spankbang.*###shorts-frame
 spankbang.*##+js(set, BJSShowUnder, %7B%7D)
 spankbang.*##+js(set, BJSShowUnder.bindTo, noopFunc)
 spankbang.*##+js(set, BJSShowUnder.add, noopFunc)
+! kissasian .sh, .li, .sk
+! https://www.reddit.com/r/uBlockOrigin/comments/u8f1c6/blocked_video/
+kissasian.*##+js(nowoif)
+@@||kissasian.*^$ghide
+kissasian.*##.ksAds
+kissasian.*##[id*="ScriptRoot"]
+kissasian.*###videoAd
+kissasian.*###hideAds
+kissasian.*##div[style$="width: 610px;"]:has(.adsbyvli)
+kissasian.*##div[style$="height: 90px;"]:has(.adsbyvli)
+kissasian.*###overplay
+||kissasian.*/Ads/$frame
+! kissanime. nz scammy 3p scripts
+kissanime.*###upgrade_pop
+embed.streamx.me##+js(noeval-if, debugger)
+||kissanime.*/api/pop*$xhr,1p
+||kissasian.*/api/pop.php$xhr,1p
+||ad.kissasian.*^$script,1p
+||kisscartoon.*/api/pop.php$xhr,1p
+||ad.kisscartoon.*^$script,1p
+! https://github.com/uBlockOrigin/uAssets/issues/27799
+kissasian.*>>,~google.com,~youtube.com,~youtube-nocookie.com##+js(nowoif)
 ! END: Rules from filters.txt
 ! START: Regional lists
 ! <<<<< ABPVN >>>>>
@@ -671,6 +694,9 @@ game4you.top,innal.top,naylo.top,rustorka.com,rustorka.net,rustorka.top,rustorka
 ! https://github.com/uBlockOrigin/uAssets/issues/27306
 51bonusrummy.in##+js(rmnt, script, WebAssembly)
 51bonusrummy.in##+js(rmnt, script, wpadmngr.com)
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=p2pplay.online,redirect=google-ima.js
+linkstoreanimezone.blogspot.com,workanimezone.blogspot.com###popup
+linkstoreanimezone.blogspot.com,workanimezone.blogspot.com###howToSkipAds
 ||btiatfobkjiv.com^
 ! https://github.com/uBlockOrigin/uAssets/issues/27308
 reviewdiv.com##+js(set, FOXIZ_MAIN_SCRIPT.siteAccessDetector, noopFunc)
@@ -753,7 +779,7 @@ dogsexporn.net##+js(no-xhr-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/27442
 kwejk.pl##+js(rc, froc-blur, , stay)
 ! https://yomucomics.com/ - anti-adb
-yomucomics.com##+js(no-fetch-if, doubleclick, length%3A10, %7B%22type%22%3A%22cors%22%7D)
+yomucomics.com##+js(no-fetch-if, %2Fgooglesyndication%7Cdoubleclick%2F, length%3A10, %7B%22type%22%3A%20%22cors%22%7D)
 yomucomics.com##+js(no-xhr-if, doubleclick)
 ! https://github.com/uBlockOrigin/uAssets/issues/27444
 ||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,redirect=noopjs,domain=streamplay.digital
@@ -953,11 +979,23 @@ jav.sb##+js(acs, document.write, insertAd)
 javneon.tv##+js(set, univresalP, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/27767
 chatropolis.com##+js(acs, document.querySelectorAll, popMagic)
-! https://github.com/AdguardTeam/AdguardFilters/issues/199124
-! [dup] from ublock-origin/quick-fixes.txt
-! pvpoke-re.com##+js(trusted-suppress-native-method, Document.prototype.getElementsByTagName, %22body%22, prevent, %2F%5C%2F%5BA-Za-z%5D%2B%5C.min%5C.js%5C%3F%2F)
 ! https://up4stream.com/ccr0jb82zmr1.html - ads
 up4stream.com##+js(aeld, DOMContentLoaded, history.go)
 ! https://github.com/uBlockOrigin/uAssets/issues/24812#issuecomment-2763870909
-livestreams.*,maxicast.*##+js(nowoif, _blank)
+apl373.me,livestreams.*,maxicast.*##+js(nowoif, _blank)
 livestreams.*,maxicast.*###openLinks
+apex2nova.com##+js(rmnt, script, delete%20window)
+! https://github.com/uBlockOrigin/uBlock-discussions/discussions/939
+zone.msn.com##+js(no-fetch-if, googlesyndication, length%3A40000-60000)
+! worthcrete.com ad popups/antiadb
+worthcrete.com##+js(nowoif)
+worthcrete.com##+js(nostif, offsetHeight)
+||palecount.com^
+! kdramasmaza.com.pk antiadb &related
+kdramasmaza.com.pk##+js(nostif, nextFunction, 2000)
+||blogger.googleusercontent.com^$image,domain=kdramasmaza.com.pk
+kdramasmaza.com.pk##a[href*="?key="][target="_blank"]
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=rpmplay.xyz,redirect=google-ima.js
+! vegamovvies.to ad popups
+vegamovvies.to##+js(aopr, LieDetector)
+vegamovvies.to###clickfakeplayer[href]:remove-attr(href)
