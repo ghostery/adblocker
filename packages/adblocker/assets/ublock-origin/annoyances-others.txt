@@ -555,8 +555,8 @@ ymovies.*##.alert-danger.alert
 almasdarnews.com##+js(acs, jQuery, ai_adb)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/78541
 *$xhr,redirect-rule=noopjs,domain=maxedtech.com
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,domain=maxedtech.com
-@@||googlesyndication.com^$xhr,domain=maxedtech.com
+maxedtech.com##+js(no-fetch-if, googlesyndication)
+maxedtech.com##+js(no-xhr-if, googlesyndication)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/49311
 nmac.to##.alert-errors.in.fade.alert
 ! https://github.com/NanoMeow/QuickReports/issues/2972
@@ -1323,6 +1323,9 @@ sporttotal.tv##+js(no-fetch-if, doubleclick)
 sporttotal.tv##+js(set, HTMLImageElement.prototype.onerror, undefined)
 ! kunststoffe.de anti adblock annoyance
 @@||kunststoffe.de/ads_tracking.js$xhr,1p
+! https://github.com/uBlockOrigin/uAssets/issues/26042
+time.is###attention
+time.is##html:style(overflow: auto !important;)
 ! END: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/933
 ! https://github.com/easylist/EasyListHebrew/issues/332
