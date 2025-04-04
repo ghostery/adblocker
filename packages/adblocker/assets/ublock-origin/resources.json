@@ -113,6 +113,14 @@
       ]
     },
     {
+      "name": "generate-content.fn",
+      "aliases": [],
+      "body": "function generateContentFn(t,e){const n=safeSelf();const r=t=>{const e=[];let r=0;do{const t=n.Math_random().toString(36).slice(2);e.push(t);r+=t.length}while(r<t);return e.join(\" \").slice(0,t)};if(e===\"true\")return r(10);if(e===\"emptyObj\")return\"{}\";if(e===\"emptyArr\")return\"[]\";if(e===\"emptyStr\")return\"\";if(e.startsWith(\"length:\")){const t=/^length:(\\d+)(?:-(\\d+))?$/.exec(e);if(t===null)return\"\";const s=parseInt(t[1],10);const o=n.Math_max(parseInt(t[2],10)||0,s)-s;const i=n.Math_min(s+o*n.Math_random(),5e5);return r(i|0)}if(e.startsWith(\"war:\")){if(scriptletGlobals.warOrigin===void 0)return\"\";return new Promise((t=>{const r=scriptletGlobals.warOrigin;const s=e.slice(4);const o=[r,\"/\",s];const i=scriptletGlobals.warSecret;if(i!==void 0)o.push(\"?secret=\",i);const c=new n.XMLHttpRequest;c.responseType=\"text\";c.onloadend=e=>{t(e.target.responseText||\"\")};c.open(\"GET\",o.join(\"\"));c.send()})).catch((()=>\"\"))}if(t)return e;return\"\"}",
+      "dependencies": [
+        "safe-self.fn"
+      ]
+    },
+    {
       "name": "arglist-parser.fn",
       "aliases": [],
       "body": "class ArglistParser{constructor(t=\",\",e=false){this.separatorChar=this.actualSeparatorChar=t;this.separatorCode=this.actualSeparatorCode=t.charCodeAt(0);this.mustQuote=e;this.quoteBeg=0;this.quoteEnd=0;this.argBeg=0;this.argEnd=0;this.separatorBeg=0;this.separatorEnd=0;this.transform=false;this.failed=false;this.reWhitespaceStart=/^\\s+/;this.reWhitespaceEnd=/\\s+$/;this.reOddTrailingEscape=/(?:^|[^\\\\])(?:\\\\\\\\)*\\\\$/;this.reTrailingEscapeChars=/\\\\+$/}nextArg(t,e=0){const s=t.length;this.quoteBeg=e+this.leftWhitespaceCount(t.slice(e));this.failed=false;const r=t.charCodeAt(this.quoteBeg);if(r===34||r===39||r===96){this.indexOfNextArgSeparator(t,r);if(this.argEnd!==s){this.quoteEnd=this.argEnd+1;this.separatorBeg=this.separatorEnd=this.quoteEnd;this.separatorEnd+=this.leftWhitespaceCount(t.slice(this.quoteEnd));if(this.separatorEnd===s)return this;if(t.charCodeAt(this.separatorEnd)===this.separatorCode){this.separatorEnd+=1;return this}}}this.indexOfNextArgSeparator(t,this.separatorCode);this.separatorBeg=this.separatorEnd=this.argEnd;if(this.separatorBeg<s)this.separatorEnd+=1;this.argEnd-=this.rightWhitespaceCount(t.slice(0,this.separatorBeg));this.quoteEnd=this.argEnd;if(this.mustQuote)this.failed=true;return this}normalizeArg(t,e=\"\"){if(e===\"\")e=this.actualSeparatorChar;let s=\"\";let r=0;while((r=t.lastIndexOf(e))!==-1){s=t.slice(r)+s;t=t.slice(0,r);const e=this.reTrailingEscapeChars.exec(t);if(e===null)continue;const a=(e[0].length&1)!==0?e[0].slice(0,-1):e[0];s=a+s;t=t.slice(0,-e[0].length)}if(s===\"\")return t;return t+s}leftWhitespaceCount(t){const e=this.reWhitespaceStart.exec(t);return e===null?0:e[0].length}rightWhitespaceCount(t){const e=this.reWhitespaceEnd.exec(t);return e===null?0:e[0].length}indexOfNextArgSeparator(t,e){this.argBeg=this.argEnd=e!==this.separatorCode?this.quoteBeg+1:this.quoteBeg;this.transform=false;if(e!==this.actualSeparatorCode){this.actualSeparatorCode=e;this.actualSeparatorChar=String.fromCharCode(e)}while(this.argEnd<t.length){const e=t.indexOf(this.actualSeparatorChar,this.argEnd);if(e===-1)return this.argEnd=t.length;if(this.reOddTrailingEscape.test(t.slice(0,e))===false)return this.argEnd=e;this.transform=true;this.argEnd=e+1}}}",
@@ -395,6 +403,35 @@
       ]
     },
     {
+      "name": "prevent-fetch.fn",
+      "aliases": [],
+      "body": "function preventFetchFn(e=false,t=\"\",n=\"\",s=\"\"){const r=safeSelf();const o=`${e?\"trusted-\":\"\"}prevent-fetch`;const c=r.makeLogPrefix(o,t,n,s);const i=[];for(const e of r.String_split.call(t,/\\s+/)){if(e===\"\")continue;const t=e.indexOf(\":\");let n,s;if(t!==-1){n=e.slice(0,t);s=e.slice(t+1)}else{n=\"url\";s=e}i.push({key:n,pattern:r.initPattern(s,{canNegate:true})})}const f={ok:[false,true],statusText:[\"\",\"Not Found\"],type:[\"basic\",\"cors\",\"default\",\"error\",\"opaque\"]};const a={statusText:{value:\"OK\"}};if(/^\\{.*\\}$/.test(s))try{Object.entries(JSON.parse(s)).forEach((([e,t])=>{if(f[e]===void 0)return;if(f[e].includes(t)===false)return;a[e]={value:t}}))}catch{}else if(s!==\"\")if(f.type.includes(s))a.type={value:s};proxyApplyFn(\"fetch\",(function s(o){const{callArgs:f}=o;const l=f[0]instanceof self.Request?f[0]:Object.assign({url:f[0]},f[1]);let u=true;try{const e=new Map;for(const t in l){let n=l[t];if(typeof n!==\"string\")try{n=r.JSON_stringify(n)}catch{}if(typeof n!==\"string\")continue;e.set(t,n)}if(r.logLevel>1||t===\"\"&&n===\"\"){const t=Array.from(e).map((e=>`${e[0]}:${e[1]}`));r.uboLog(c,`Called: ${t.join(\"\\n\")}`)}if(t===\"\"&&n===\"\")return o.reflect();u=i.length===0;for(const{key:t,pattern:n}of i)if(n.expect&&e.has(t)===false||r.testPattern(n,e.get(t))===false){u=true;break}}catch{}if(u)return o.reflect();return Promise.resolve(generateContentFn(e,n)).then((e=>{r.uboLog(c,`Prevented with response \"${e}\"`);const t=new Response(e,{headers:{\"Content-Length\":e.length}});const n=Object.assign({url:{value:l.url}},a);r.Object_defineProperties(t,n);return t}))}))}",
+      "dependencies": [
+        "generate-content.fn",
+        "proxy-apply.fn",
+        "safe-self.fn"
+      ]
+    },
+    {
+      "name": "prevent-fetch.js",
+      "aliases": [
+        "no-fetch-if.js"
+      ],
+      "body": "function preventFetch(...e){preventFetchFn(false,...e)}",
+      "dependencies": [
+        "prevent-fetch.fn"
+      ]
+    },
+    {
+      "name": "trusted-prevent-fetch.js",
+      "aliases": [],
+      "body": "function trustedPreventFetch(...e){preventFetchFn(true,...e)}",
+      "dependencies": [
+        "prevent-fetch.fn"
+      ],
+      "requiresTrust": true
+    },
+    {
       "name": "prevent-innerHTML.js",
       "aliases": [],
       "body": "function preventInnerHTML(e=\"\",t=\"\"){const n=safeSelf();const r=n.makeLogPrefix(\"prevent-innerHTML\",e,t);const i=n.initPattern(t,{canNegate:true});const o=n.Object_getOwnPropertyDescriptor(Element.prototype,\"innerHTML\");if(o===void 0)return;const s=(t,r)=>{if(e!==\"\"){if(typeof t.matches!==\"function\")return false;if(t.matches(e)===false)return false}return n.testPattern(i,r)};Object.defineProperty(Element.prototype,\"innerHTML\",{get:function(){return o.get?o.get.call(this):o.value},set:function(e){if(s(this,e))n.uboLog(r,\"Prevented\");else if(o.set)o.set.call(this,e);if(n.logLevel>1)n.uboLog(r,`Assigned:\\n${e}`);o.value=e}})}",
@@ -666,14 +703,6 @@
       "dependencies": []
     },
     {
-      "name": "generate-content.fn",
-      "aliases": [],
-      "body": "function generateContentFn(t,e){const n=safeSelf();const r=t=>{const e=[];let r=0;do{const t=n.Math_random().toString(36).slice(2);e.push(t);r+=t.length}while(r<t);return e.join(\" \").slice(0,t)};if(e===\"true\")return r(10);if(e===\"emptyObj\")return\"{}\";if(e===\"emptyArr\")return\"[]\";if(e===\"emptyStr\")return\"\";if(e.startsWith(\"length:\")){const t=/^length:(\\d+)(?:-(\\d+))?$/.exec(e);if(t===null)return\"\";const s=parseInt(t[1],10);const o=n.Math_max(parseInt(t[2],10)||0,s)-s;const i=n.Math_min(s+o*n.Math_random(),5e5);return r(i|0)}if(e.startsWith(\"war:\")){if(scriptletGlobals.warOrigin===void 0)return\"\";return new Promise((t=>{const r=scriptletGlobals.warOrigin;const s=e.slice(4);const o=[r,\"/\",s];const i=scriptletGlobals.warSecret;if(i!==void 0)o.push(\"?secret=\",i);const c=new n.XMLHttpRequest;c.responseType=\"text\";c.onloadend=e=>{t(e.target.responseText||\"\")};c.open(\"GET\",o.join(\"\"));c.send()})).catch((()=>\"\"))}if(t)return e;return\"\"}",
-      "dependencies": [
-        "safe-self.fn"
-      ]
-    },
-    {
       "name": "abort-current-script-core.fn",
       "aliases": [],
       "body": "function abortCurrentScriptCore(e=\"\",t=\"\",r=\"\"){if(typeof e!==\"string\")return;if(e===\"\")return;const n=safeSelf();const c=n.makeLogPrefix(\"abort-current-script\",e,t,r);const o=n.patternToRegex(t);const s=n.patternToRegex(r);const i=n.getExtraArgs(Array.from(arguments),3);const a=document.currentScript;const f=n.String_split.call(e,\".\");let l=window;let u;for(;;){u=f.shift();if(f.length===0)break;if(u in l===false)break;l=l[u];if(l instanceof Object===false)return}let g;let b=Object.getOwnPropertyDescriptor(l,u);if(b instanceof Object===false||b.get instanceof Function===false){g=l[u];b=void 0}const d=shouldDebug(i);const p=getExceptionTokenFn();const h=new WeakMap;const m=e=>{let t=e.textContent;if(t.trim()!==\"\")return t;if(h.has(e))return h.get(e);const[,r,n]=/^data:([^,]*),(.+)$/.exec(e.src.trim())||[\"\",\"\",\"\"];try{switch(true){case r.endsWith(\";base64\"):t=self.atob(n);break;default:t=self.decodeURIComponent(n);break}}catch{}h.set(e,t);return t};const x=()=>{const e=document.currentScript;if(e instanceof HTMLScriptElement===false)return;if(e===a)return;if(r!==\"\"&&s.test(e.src)===false){if(d===\"nomatch\"||d===\"all\")debugger;return}if(n.logLevel>1&&r!==\"\")n.uboLog(c,`Matched src\\n${e.src}`);const t=m(e);if(o.test(t)===false){if(d===\"nomatch\"||d===\"all\")debugger;return}if(n.logLevel>1)n.uboLog(c,`Matched text\\n${t}`);if(d===\"match\"||d===\"all\")debugger;n.uboLog(c,\"Aborted\");throw new ReferenceError(p)};if(d===\"install\")debugger;try{Object.defineProperty(l,u,{get:function(){x();return b instanceof Object?b.get.call(l):g},set:function(e){x();if(b instanceof Object)b.set.call(l,e);else g=e}})}catch(e){n.uboErr(c,`Error: ${e}`)}}",
@@ -782,18 +811,6 @@
       ],
       "body": "function adjustSetTimeout(t=\"\",e=\"\",i=\"\"){if(typeof t!==\"string\")return;const s=safeSelf();const n=s.patternToRegex(t);let a=e!==\"*\"?parseInt(e,10):-1;if(isNaN(a)||isFinite(a)===false)a=1e3;let o=parseFloat(i);o=isNaN(o)===false&&isFinite(o)?Math.min(Math.max(o,.001),50):.05;self.setTimeout=new Proxy(self.setTimeout,{apply:function(t,e,i){const[s,f]=i;if((a===-1||f===a)&&n.test(s.toString()))i[1]=f*o;return t.apply(e,i)}})}",
       "dependencies": [
-        "safe-self.fn"
-      ]
-    },
-    {
-      "name": "prevent-fetch.js",
-      "aliases": [
-        "no-fetch-if.js"
-      ],
-      "body": "function noFetchIf(e=\"\",t=\"\",n=\"\"){const s=safeSelf();const r=s.makeLogPrefix(\"prevent-fetch\",e,t,n);const o=[];for(const t of s.String_split.call(e,/\\s+/)){if(t===\"\")continue;const e=t.indexOf(\":\");let n,r;if(e!==-1){n=t.slice(0,e);r=t.slice(e+1)}else{n=\"url\";r=t}o.push({key:n,pattern:s.initPattern(r,{canNegate:true})})}const c={ok:[false,true],statusText:[\"\",\"Not Found\"],type:[\"basic\",\"cors\",\"default\",\"error\",\"opaque\"]};const f={statusText:{value:\"OK\"}};if(/^\\{.*\\}$/.test(n))try{Object.entries(JSON.parse(n)).forEach((([e,t])=>{if(c[e]===void 0)return;if(c[e].includes(t)===false)return;f[e]={value:t}}))}catch{}else if(n!==\"\")if(c.type.includes(n))f.type={value:n};proxyApplyFn(\"fetch\",(function n(c){const{callArgs:i}=c;const a=i[0]instanceof self.Request?i[0]:Object.assign({url:i[0]},i[1]);let l=true;try{const n=new Map;for(const e in a){let t=a[e];if(typeof t!==\"string\")try{t=s.JSON_stringify(t)}catch{}if(typeof t!==\"string\")continue;n.set(e,t)}if(s.logLevel>1||e===\"\"&&t===\"\"){const e=Array.from(n).map((e=>`${e[0]}:${e[1]}`));s.uboLog(r,`Called: ${e.join(\"\\n\")}`)}if(e===\"\"&&t===\"\")return c.reflect();l=o.length===0;for(const{key:e,pattern:t}of o)if(t.expect&&n.has(e)===false||s.testPattern(t,n.get(e))===false){l=true;break}}catch{}if(l)return c.reflect();return Promise.resolve(generateContentFn(false,t)).then((e=>{s.uboLog(r,`Prevented with response \"${e}\"`);const t=new Response(e,{headers:{\"Content-Length\":e.length}});const n=Object.assign({url:{value:a.url}},f);s.Object_defineProperties(t,n);return t}))}))}",
-      "dependencies": [
-        "generate-content.fn",
-        "proxy-apply.fn",
         "safe-self.fn"
       ]
     },
