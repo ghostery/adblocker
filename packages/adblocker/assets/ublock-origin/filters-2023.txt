@@ -1364,10 +1364,12 @@ elcriticodelatele.com,gadgets.es##+js(set, isAdBlockActive, false)
 ! https://www.reddit.com/r/uBlockOrigin/comments/12g5jyb/
 rackusreads.com##+js(set, DHAntiAdBlocker, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/17522
-elamigos-games.com,elamigos-games.net##+js(nostif, checkAdblockUser)
-elamigos-games.com,elamigos-games.net##.content_store
-elamigos-games.com,elamigos-games.net##h3.my-4:has-text(/^Advertising/)
-elamigos-games.com,elamigos-games.net##.iframeDiv
+elamigos-games.com,elamigos-games.net,elamigosgames.org##+js(nostif, checkAdblockUser)
+elamigos-games.com,elamigos-games.net,elamigosgames.org##.content_store
+elamigos-games.com,elamigos-games.net,elamigosgames.org##h3.my-4:has-text(/^Advertising/)
+elamigos-games.com,elamigos-games.net,elamigosgames.org##.iframeDiv
+elamigosgames.org##.store_fondo
+elamigosgames.org##.store_text
 ! https://www.reddit.com/r/uBlockOrigin/comments/12gwf5q/
 imgbox.com##+js(acs, navigator, shouldPop)
 imgbox.com##^script:has-text(shouldPop)
@@ -3068,6 +3070,7 @@ novelhall.com##+js(rmnt, script, axios)
 ||aitoolnet.com^$image,domain=novelhall.com
 ! https://github.com/uBlockOrigin/uAssets/issues/19419
 myfxbook.com##+js(nostif, %2Fadblock%2Fi)
+myfxbook.com##+js(set-cookie, lastAdBlockerMessageDisplayedDate, 1)
 ! https://github.com/abp-filters/abp-filters-anti-cv/pull/1416
 iusedtobeaboss.com##+js(aeld, mousedown, pop.doEvent)
 ! https://github.com/uBlockOrigin/uAssets/issues/19422
@@ -3090,7 +3093,7 @@ thestar.com###site-navbar-container, #site-top-nav-container:style(padding-top: 
 ! https://www.reddit.com/r/uBlockOrigin/comments/ci5vky/antiadblocker_dailymailcouk/
 ! https://github.com/uBlockOrigin/uAssets/issues/17713
 ! https://github.com/uBlockOrigin/uAssets/issues/16632
-dailymail.co.uk##+js(aopr, Notification)
+dailymail.co.uk,~games.dailymail.co.uk##+js(aopr, Notification)
 @@||cmp.dmgmediaprivacy.co.uk^$script,domain=dailymail.co.uk
 ! dailymail.co.uk##+js(set, atob, trueFunc)
 ||dailymail.co.uk/static/mol-adverts/demo/
@@ -3098,14 +3101,6 @@ dailymail.co.uk##+js(aopr, Notification)
 dailymail.co.uk##.pufftext > .sponsored:upward(3)
 dailymail.co.uk##.pufftext:has-text(/SPONSORED/):upward(2)
 dailymail.co.uk##.mol-ads-label-container
-! https://github.com/NanoMeow/QuickReports/issues/4042
-! https://github.com/uBlockOrigin/uAssets/issues/19857
-games.dailymail.co.uk##+js(nano-sib)
-@@||cdn.arkadiumhosted.com/advertisement/*-ads.js$script,domain=games.dailymail.co.uk
-arcade.dailygazette.com,games.dailymail.co.uk##+js(rpnt, script, %22isAdBlockerEnabled%22%3Atrue, %22isAdBlockerEnabled%22%3Afalse)
-games.dailymail.co.uk##display-ad-component, [class^="DisplayAd"], .ark-ad-message:style(visibility: collapse !important)
-games.dailymail.co.uk##div.RightRail__displayAdRight___1U1Q7llw
-games.dailymail.co.uk##.GameTemplate__displayAdTop___3kN-G-hd
 ! https://www.reddit.com/r/uBlockOrigin/comments/135ix4x/
 ||dailymail.co.uk/feeds/commercial/topVideos.json
 ||dailymail.co.uk/*/client/sync/fpc?$image
