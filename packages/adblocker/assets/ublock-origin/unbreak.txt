@@ -227,7 +227,9 @@ hintergrundbild.org#@#.ads1
 ! https://www.reddit.com/r/uBlockOrigin/comments/85oqui/ublock_origin_on_igncom/
 @@||ign.com/newsfeed-block$xhr,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/27666
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=ign.com
+! https://github.com/uBlockOrigin/uAssets/issues/27836
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=ign.com
+@@||cdn.ziffstatic.com/pg/ign.$script,domain=ign.com
 ! https://github.com/uBlockOrigin/uAssets/issues/1747
 @@||cxense.com/cx.js$script,domain=letelegramme.fr
 ! https://forums.lanik.us/viewtopic.php?f=64&t=40264
@@ -1357,10 +1359,10 @@ order-order.com#@#.tag-sponsored
 ! unbreak cartoonth12.com player
 ! [badfilter] *$script,3p,domain=cartoonth12.com,badfilter
 ! amazon_apstag.js
-||amazon-adsystem.com/*/apstag.js$xhr,redirect-rule=amazon_apstag.js:5
 ! https://github.com/uBlockOrigin/uAssets/issues/22486
+! https://github.com/uBlockOrigin/uAssets/issues/27836
 ! https://www.thelallantop.com/sports/post/champions-trophy-hosted-by-pakistan-one-match-cost-millions-to-board - webpage error
-||amazon-adsystem.com/*/apstag.js$script,redirect-rule=amazon_apstag.js:5,domain=~republicbharat.com|~thelallantop.com
+||amazon-adsystem.com/*apstag.js^$redirect=amazon_apstag.js:5,domain=~republicbharat.com|~thelallantop.com
 ! https://github.com/uBlockOrigin/uAssets/issues/7397
 @@||reference.medscape.com/public/vptrack_iframe.html$frame,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/7399
@@ -4149,7 +4151,7 @@ outletarredamento.it#@#.ad-link:not(.adsbox)
 ||the-independent.com/js/third-party/aps.js^$script,1p,redirect=amazon_apstag.js
 the-independent.com##+js(no-fetch-if, npttech.com%2Fadvertising.js)
 !#else
-||amazon-adsystem.com/aax2/apstag.js$script,redirect=amazon_apstag.js,important,domain=the-independent.com
+!||amazon-adsystem.com/aax2/apstag.js$script,redirect=amazon_apstag.js,important,domain=the-independent.com
 ||npttech.com/advertising.js$xhr,domain=the-independent.com,redirect=noop.js,important
 !#endif
 ! https://github.com/uBlockOrigin/uBOL-home/issues/272
@@ -4215,3 +4217,5 @@ spartanien.de#@#.firstload
 ! https://github.com/uBlockOrigin/uAssets/issues/27809
 ||adsdk.microsoft.com/ast/ast.js$script,redirect=noopjs,domain=prisjakt.no,important
 prisjakt.no##+js(set, apntag.refresh, noopFunc)
+! https://github.com/easylist/easylist/issues/21595
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=haberler.com,redirect=google-ima.js,important

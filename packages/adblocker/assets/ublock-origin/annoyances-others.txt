@@ -52,6 +52,28 @@ up4stream.com##+js(rmnt, script, debugger)
 up4stream.com##+js(acs, document.onkeydown)
 ! https://github.com/uBlockOrigin/uAssets/issues/27772
 kursnacukrzyce.pl##+js(acs, document.addEventListener, contextmenu)
+! https://www.reddit.com/r/uBlockOrigin/comments/1ii8dfa/adblock_detection_on_httpswhoisnovelcom_using/
+whoisnovel.com##+js(acs, document.oncontextmenu)
+whoisnovel.com##*::selection:style(background-color:#338FFF!important)
+whoisnovel.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/27143
+zabawkahurtownia.pl##+js(rmnt, script, %2Foncontextmenu%7Cdisableselect%2F)
+zabawkahurtownia.pl##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
+! wasserstoff-leitprojekte.de anti right click
+wasserstoff-leitprojekte.de##+js(ra, oncontextmenu, body, complete)
+! hiphopa. net anti right click, select
+hiphopa.net##+js(rmnt, script, oncontextmenu)
+hiphopa.net##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/27471
+torontosom.ca##+js(acs, document.oncontextmenu, preventDefault)
+torontosom.ca##:root:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
+! https://samurai.wordoco.com/ - anti right click
+samurai.wordoco.com##+js(acs, nocontextmenu)
+samurai.wordoco.com##body * :not(input):not(textarea):style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
+! https://bcs16.ro/ - anti-contextmenu
+bcs16.ro##+js(aopw, document.oncontextmenu)
+! https://github.com/uBlockOrigin/uAssets/issues/27830
+wowturkey.net##+js(rmnt, script, oncontextmenu)
 ! END: Anti copy, right-click etc.
 ! START: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/2185
@@ -81,8 +103,6 @@ tv.mademyday.com##.blnotice
 punto-informatico.it##+js(aopr, blazemedia_adBlock)
 ! https://github.com/uBlockOrigin/uAssets/issues/3199
 warringtonguardian.co.uk##+js(aopw, _sp_)
-! https://github.com/uBlockOrigin/uAssets/issues/3204
-myfxbook.com##+js(nostif, checkForAds)
 ! https://github.com/uBlockOrigin/uAssets/issues/3220
 planete-205.com###nonono
 ! https://github.com/uBlockOrigin/uAssets/issues/3221
@@ -1225,7 +1245,19 @@ digminecraft.com##+js(set, placeAdsHandler, noopFunc)
 iphoneincanada.ca##.adthrive-ad
 ! https://github.com/uBlockOrigin/uAssets/issues/21255
 *$image,domain=peacocktv.com,redirect-rule=1x1.gif
-peacocktv.com##.playb$script,xhr,1p
+peacocktv.com##.playback-ad-blocker-notice
+! https://github.com/uBlockOrigin/uAssets/issues/21300
+@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,domain=woomy-site.glitch.me
+! https://github.com/uBlockOrigin/uAssets/issues/21352
+||ip.sb/assets/js/wwads_blocked.js
+! https://github.com/uBlockOrigin/uAssets/issues/21301
+! https://github.com/uBlockOrigin/uAssets/issues/24250
+arras.io,arras.netlify.app,arrax.io##+js(set, ramp.addUnits, noopFunc)
+! https://scenexe.io/ anti adblock
+scenexe.io##+js(set-local-storage-item, ad_blocker, false)
+! https://github.com/uBlockOrigin/uAssets/issues/21065
+@@||googlesyndication.com^$script,domain=cheatnetwork.eu
+@@||cheatnetwork.eu^$script,xhr,1p
 @@||cheatnetwork.eu^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/21424
 how-to-pc.info,programming-link.info##+js(set, pqdxwidthqt, false)
@@ -5754,30 +5786,15 @@ loverslab.com##+js(nano-sib)
 /akam/13/*$script,xhr,1p,domain=easyjet.com|ing.nl,important
 easyjet.com,ing.nl##+js(cookie-remover, ak_bmsc, when, scroll%20keydown)
 !#endif
-! https://www.reddit.com/r/uBlockOrigin/comments/1ii8dfa/adblock_detection_on_httpswhoisnovelcom_using/
-whoisnovel.com##+js(acs, document.oncontextmenu)
-whoisnovel.com##*::selection:style(background-color:#338FFF!important)
-whoisnovel.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
-! https://github.com/uBlockOrigin/uAssets/issues/27143
-zabawkahurtownia.pl##+js(rmnt, script, %2Foncontextmenu%7Cdisableselect%2F)
-zabawkahurtownia.pl##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
 ! ajogames.com embedded stream anti devtools
 ||n2olabs.pro/devtool.js
 ! https://github.com/uBlockOrigin/uAssets/issues/25920 - login wall
 ! https://github.com/uBlockOrigin/uAssets/issues/27289
 ! https://zalukaj.io/filmy/the-gorge
 filiser.eu,wishflix.cc,zalukaj.io##+js(nostif, (!0), 8000)
-! wasserstoff-leitprojekte.de anti right click
-wasserstoff-leitprojekte.de##+js(ra, oncontextmenu, body, complete)
-! hiphopa. net anti right click, select
-hiphopa.net##+js(rmnt, script, oncontextmenu)
-hiphopa.net##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/27335#issuecomment-2704097659
 ||tiktok.com^$removeparam=_r
 ||tiktok.com^$removeparam=_t
-! https://github.com/uBlockOrigin/uAssets/issues/27471
-torontosom.ca##+js(acs, document.oncontextmenu, preventDefault)
-torontosom.ca##:root:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
 ! https://forums.lanik.us/viewtopic.php?p=168008-bitchute-com#p168008
 bitchute.com##+js(trusted-set-local-storage-item, reference_offer, __q_objt%7C%7B%22offer_type%22%3A%22PROMOTION%22%7D)
 bitchute.com##+js(trusted-set-local-storage-item, show_offer, __q_bool%7C0)
@@ -5791,8 +5808,13 @@ dropbox.com##+js(trusted-click-element, .dig-Modal%3Ahas(div%5Bdata-testid%3D%22
 ||404le.com/js/disable-devtool.min.js
 ! https://github.com/uBlockOrigin/uAssets/issues/26995
 pawastreams.pro##+js(nostif, debugger)
-! https://samurai.wordoco.com/ - anti right click
-samurai.wordoco.com##+js(acs, nocontextmenu)
-samurai.wordoco.com##body * :not(input):not(textarea):style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
-! https://bcs16.ro/ - anti-contextmenu
-bcs16.ro##+js(aopw, document.oncontextmenu)
+! https://community.brave.com/t/bilibili/601806
+!#if !cap_html_filtering
+bilibili.com##+js(aost, player.pause, %2FstackDepth%3A(9%7C10).%2Bhttps%3A%5B.%2F0-9a-z%5D%2B%5C%2Fvideo%5C.%5B0-9a-f%5D%2B%5C.js%3A1%5Cd%7B2%7D%3A1.%2B%5C.emit%2F)
+bilibili.com#@#+js(aost, player.pause, %2F%5B0-9a-f%5D%7B40%7D%5C.js%3A1%5Cd%7B2%7D(%5B%5CS%5Cs%5D%2B%5C.emit.%2Bcore%5C.)%7B3%7D%2F)
+!#else
+||s1.hdslb.com/bfs/static/jinkela/video/video.$script,replace=/t\.user\.isLogin\?/1?/,domain=bilibili.com
+!#endif
+! https://store.steampowered.com/app/993090/Lossless_Scaling/
+store.steampowered.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fsteamcommunity.com%2Flinkfilter%2F%3Fu%3Dhttp%22%5D, %3Fu)
+||steamcommunity.com/linkfilter/?u=http$doc,urlskip=?u
