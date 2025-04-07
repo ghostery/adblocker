@@ -1354,20 +1354,18 @@ claimlite.club##+js(noeval-if, blocker)
 ! https://github.com/uBlockOrigin/uAssets/issues/17483
 babelwuxia.com##+js(acs, eval, replace)
 babelwuxia.com###close-teaser
-! tmh.io ads
-||tmh.io/wp-content/KU.png
-||i.imgur.com/LJBMhkQ.gif$3p
-||i.imgur.com/vPU6ACq.gif$3p
 ! elcriticodelatele.com,gadgets.es anti-adb
 elcriticodelatele.com,gadgets.es##+js(set, DHAntiAdBlocker, true)
 elcriticodelatele.com,gadgets.es##+js(set, isAdBlockActive, false)
 ! https://www.reddit.com/r/uBlockOrigin/comments/12g5jyb/
 rackusreads.com##+js(set, DHAntiAdBlocker, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/17522
-elamigos-games.com,elamigos-games.net##+js(nostif, checkAdblockUser)
-elamigos-games.com,elamigos-games.net##.content_store
-elamigos-games.com,elamigos-games.net##h3.my-4:has-text(/^Advertising/)
-elamigos-games.com,elamigos-games.net##.iframeDiv
+elamigos-games.com,elamigos-games.net,elamigosgames.org##+js(nostif, checkAdblockUser)
+elamigos-games.com,elamigos-games.net,elamigosgames.org##.content_store
+elamigos-games.com,elamigos-games.net,elamigosgames.org##h3.my-4:has-text(/^Advertising/)
+elamigos-games.com,elamigos-games.net,elamigosgames.org##.iframeDiv
+elamigosgames.org##.store_fondo
+elamigosgames.org##.store_text
 ! https://www.reddit.com/r/uBlockOrigin/comments/12gwf5q/
 imgbox.com##+js(acs, navigator, shouldPop)
 imgbox.com##^script:has-text(shouldPop)
@@ -1750,7 +1748,6 @@ androidadult.com##+js(set, chp_adblock_browser, noopFunc)
 adultcomixxx.com##.adsnative
 ! https://github.com/uBlockOrigin/uAssets/issues/25394
 ||cdnandroadu.b-cdn.net/wp-content/uploads/*_720x480_$media
-||i.ibb.co/gSkSXGm/levi-2.png$image
 androidadult.com###slidevideo
 androidadult.com##[alt="ads"]
 androidadult.com##+js(aeld, DOMContentLoaded, .clientHeight)
@@ -2732,8 +2729,6 @@ f2movies.*##+js(aopr, AaDetector)
 ! http://top16.net popunder
 top16.net##+js(set-cookie, popunder, 1)
 top16.net##+js(set-cookie, visited, 1)
-! https://github.com/AdguardTeam/AdguardFilters/issues/156716
-||i.imgur.com/f0FSNTu.jpg
 ! https://github.com/uBlockOrigin/uAssets/issues/19077
 @@||anisearch.de^$ghide
 ! https://github.com/uBlockOrigin/uAssets/pull/19082
@@ -3068,6 +3063,7 @@ novelhall.com##+js(rmnt, script, axios)
 ||aitoolnet.com^$image,domain=novelhall.com
 ! https://github.com/uBlockOrigin/uAssets/issues/19419
 myfxbook.com##+js(nostif, %2Fadblock%2Fi)
+myfxbook.com##+js(set-cookie, lastAdBlockerMessageDisplayedDate, 1)
 ! https://github.com/abp-filters/abp-filters-anti-cv/pull/1416
 iusedtobeaboss.com##+js(aeld, mousedown, pop.doEvent)
 ! https://github.com/uBlockOrigin/uAssets/issues/19422
@@ -3090,7 +3086,7 @@ thestar.com###site-navbar-container, #site-top-nav-container:style(padding-top: 
 ! https://www.reddit.com/r/uBlockOrigin/comments/ci5vky/antiadblocker_dailymailcouk/
 ! https://github.com/uBlockOrigin/uAssets/issues/17713
 ! https://github.com/uBlockOrigin/uAssets/issues/16632
-dailymail.co.uk##+js(aopr, Notification)
+dailymail.co.uk,~games.dailymail.co.uk##+js(aopr, Notification)
 @@||cmp.dmgmediaprivacy.co.uk^$script,domain=dailymail.co.uk
 ! dailymail.co.uk##+js(set, atob, trueFunc)
 ||dailymail.co.uk/static/mol-adverts/demo/
@@ -3098,14 +3094,6 @@ dailymail.co.uk##+js(aopr, Notification)
 dailymail.co.uk##.pufftext > .sponsored:upward(3)
 dailymail.co.uk##.pufftext:has-text(/SPONSORED/):upward(2)
 dailymail.co.uk##.mol-ads-label-container
-! https://github.com/NanoMeow/QuickReports/issues/4042
-! https://github.com/uBlockOrigin/uAssets/issues/19857
-games.dailymail.co.uk##+js(nano-sib)
-@@||cdn.arkadiumhosted.com/advertisement/*-ads.js$script,domain=games.dailymail.co.uk
-arcade.dailygazette.com,games.dailymail.co.uk##+js(rpnt, script, %22isAdBlockerEnabled%22%3Atrue, %22isAdBlockerEnabled%22%3Afalse)
-games.dailymail.co.uk##display-ad-component, [class^="DisplayAd"], .ark-ad-message:style(visibility: collapse !important)
-games.dailymail.co.uk##div.RightRail__displayAdRight___1U1Q7llw
-games.dailymail.co.uk##.GameTemplate__displayAdTop___3kN-G-hd
 ! https://www.reddit.com/r/uBlockOrigin/comments/135ix4x/
 ||dailymail.co.uk/feeds/commercial/topVideos.json
 ||dailymail.co.uk/*/client/sync/fpc?$image
@@ -3896,6 +3884,7 @@ cimanow.cc###ad1
 cimanow.cc##section[aria-label="details"] a[id][target="_blank"]
 cimanow.online##+js(ra, href, %5Btarget%3D%22_blank%22%5D, stay)
 cimanow.cc,freex2line.online##+js(acs, document.createElement, globalThis)
+freex2line.online##+js(trusted-suppress-native-method, fetch, %22flashtalking%22)
 freex2line.online##+js(overlay-buster)
 ||freex2line.online/*/?redirect$doc,urlskip=?redirect -base64
 ||flashtalking.com^$image,redirect=2x2.png,domain=cimanow.cc|cimanow.online
@@ -4203,8 +4192,6 @@ coin-profits.xyz##+js(nostif, nextFunction)
 ckxsfm.com##+js(acs, document.getElementById, fakeElement)
 ! yottachess .com anti-adb
 yottachess.com##+js(no-xhr-if, googlesyndication)
-! https://github.com/AdguardTeam/AdguardFilters/issues/168023
-stmruby.com##+js(set, cRAds, true)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/167905
 cosplay18.pics##+js(rmnt, script, detectAdBlock)
 ! NSFW pum-overlay sites
