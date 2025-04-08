@@ -499,7 +499,6 @@ www.walmart.com##[data-testid="skyline-ad"]
 ! globalThis crap
 /sw.js?puid=$script,1p
 /utx?tid=$xhr,3p
-/^https?:\/\/[a-z]{8,15}\.com?\/(?=[0-9a-zA-Z]*%)(?=[%a-zA-Z]*\d)(?=[%0-9a-z]*[A-Z])[%0-9a-zA-Z]{170,}$/$script,3p,match-case,from=~edu|~gov,to=co|com
 ! generic adserver rules
 /gb/zone?zid=$xhr,3p
 .club/js/popunder.js$3p
@@ -3655,9 +3654,9 @@ expertplay.net##+js(acis, ips.controller.register)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1bfx7k8/how_do_i_allow_user_ads_on_rr/
 royalroad.com##+js(set, isPremium, true)
 royalroad.com##+js(nostif, loadBanners)
-royalroad.com##+js(rmnt, script, %2Fdetect%7CnitroAds%2F)
+royalroad.com##+js(rmnt, script, %2Fadblock%7Cdetect%7CnitroAds%2Fi)
 royalroad.com##.text-center:has(> div[id*="_"] > div > div a[rel$="sponsored"] img)
-royalroad.com##.t-center-3 > div:has-text(/^Advertisement$/):upward(1)
+royalroad.com##div[class][style] > a[href*="a/r?campaign="] img
 royalroad.com##a[rel$="sponsored"] img
 royalroad.com##.t-center:has(> .bold.uppercase, #Content_Top_Desktop)
 royalroad.com##.portlet:has(> h6)

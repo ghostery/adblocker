@@ -7,7 +7,7 @@
  */
 /* eslint-disable prettier/prettier */
 export default [
-  "_storage%22%3A%22denied%22%2C%22ad_user_data%22%3A%22denied%22%2C%22ad_personalizat",
+  ", %2F*start*%2F(function()%7Blet%20link%3Ddocument.createElement(%22link%22)%3Blink",
   ")%7D)()%3Bdocument.currentScript.textContent%3Ddocument.currentScript.textContent.r",
   "^script:has-text('/\"v4ac1eiZr0\"|\"\"\\)\\.split\\(\",\"\\)\\[4\\]|(\\.localStorage\\)|JSON\\.par",
   "eplace(%2F%5C%2F%5C*start%5C*%5C%2F(.*)%5C%2F%5C*end%5C*%5C%2F%2Fg%2C%22%22)%3B%2F*",
@@ -169,7 +169,6 @@ export default [
   "al",
   "an",
   "ar",
-  "at",
   "de",
   "ed",
   "en",
@@ -219,6 +218,7 @@ export default [
   "7",
   "8",
   "9",
+  "a",
   "b",
   "B",
   "c",
