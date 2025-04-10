@@ -82,7 +82,7 @@ allafricangirls.net##[src*="/banner"]
 elvocero.com##+js(acs, __tnt, compatibility)
 ! popups, popunders, ads
 dirtyfox.net##+js(aopr, decodeURI)
-booru.eu,borwap.xxx,centralboyssp.com.br,czxxx.org,filmdelisi.co,filmovitica.com,foxtube.com,hd-xxx.me,ipornxxx.net,itsfuck.com,javembed.*,javideo.pw,kissanime.*,lametrofitness.net,longporn.xyz,matureworld.ws,mp3-convert.org,sexy-games.*,stilltube.com,streamm4u.club,teenage-nudists.net,xvideos.name,xxx-videos.org,xxxputas.net,youpornfm.com,maxtubeporn.net,vidsvidsvids.com##+js(nowoif)
+booru.eu,borwap.xxx,centralboyssp.com.br,czxxx.org,filmdelisi.co,filmovitica.com,foxtube.com,hd-xxx.me,ipornxxx.net,itsfuck.com,javembed.*,javideo.pw,kissanime.*,lametrofitness.net,longporn.xyz,matureworld.ws,mp3-convert.org,sexy-games.*,stilltube.com,teenage-nudists.net,xvideos.name,xxx-videos.org,xxxputas.net,youpornfm.com,maxtubeporn.net,vidsvidsvids.com##+js(nowoif)
 1youngteenporn.com##+js(aeld, popstate)
 asianpornphoto.net,freexxxvideos.pro,videosxxxporno.gratis,nude-teen-18.com##+js(aopr, document.dispatchEvent)
 123strippoker.com,babepedia.com,boobieblog.com,borwap.xxx,chicpussy.net,gamesofdesire.com,hd-xxx.me,hentaipins.com,longporn.xyz,picmoney.org,pornhd720p.com,sikwap.xyz,super-games.cz,xxx-videos.org,xxxputas.net##+js(aopr, loadTool)
@@ -836,6 +836,8 @@ dogecoin.*##+js(aopr, app_vars.force_disable_adblock)
 ||coinad.*^$3p
 ! https://forums.lanik.us/viewtopic.php?f=62&t=45805&p=158848#p158848
 gayforfans.com##+js(aeld, getexoloader)
+gayforfans.com##+js(rmnt, script, window.open)
+||pagerrentablespotlight.com^
 ! cinecalidad popups
 cinecalidad.*##+js(set, playerAdSettings.adLink, )
 cinecalidad.*##+js(set, playerAdSettings.waitTime, 0)
@@ -1203,12 +1205,6 @@ chapteria.com##+js(acs, document.createElement, ignielAdBlock)
 wolfstream.*##+js(nowoif)
 ! https://github.com/uBlockOrigin/uBlock-issues/issues/1549
 eschenker.dbschenker.com##[style*="pointer-events"]:style(pointer-events:auto !important)
-! https://github.com/uBlockOrigin/uAssets/issues/8861
-highstream.tv##+js(nowoif)
-highstream.tv##.tabs > button
-highstream.tv###container > div > .hidden-xs
-highstream.tv##.cover
-highstream.tv###customAnnouncement
 ! https://github.com/AdguardTeam/AdguardFilters/issues/79482
 *$script,3p,denyallow=cloudflare.com,domain=myadultanimes.com
 ||chandrabindu.net^$3p
@@ -2135,9 +2131,6 @@ smallseo.tools##.border.p25.tracktool_banner .text-center > p
 itsguider.com##+js(aeld, load, nextFunction)
 @@||itsguider.com^$ghide
 *$script,3p,denyallow=cloudflare.com|google.com|gstatic.com,domain=itsguider.com
-! https://www.reddit.com/r/uBlockOrigin/comments/om7dl0/how_to_get_around_adblock_detection_on_this_site/
-surfsees.com##+js(noeval-if, deblocker)
-surfsees.com##+js(aeld, DOMContentLoaded, deblocker)
 ! https://github.com/uBlockOrigin/uAssets/issues/9601
 viserve.com##^responseheader(location)
 ! https://github.com/uBlockOrigin/uAssets/issues/9606
@@ -2507,9 +2500,6 @@ owlzo.com##+js(nostif, adblockEnabled)
 kumparan.com##.adunitContainer:upward([data-qa-id])
 ! DeBlocker sites
 nulljungle.com,oyuncusoruyor.com,pbarecap.ph,sourds.net,teknobalta.com,tvinternetowa.info##+js(aeld, DOMContentLoaded, adsBlocked)
-! https://github.com/uBlockOrigin/uAssets/issues/10493
-celebjared.net##[href^="https://minepi.com/"]
-celebjared.net###text-10
 ! https://www.reddit.com/r/uBlockOrigin/comments/pjq4ez/
 ! https://github.com/uBlockOrigin/uAssets/issues/11859
 1tamilmv.*##+js(acs, document.createElement, cookie)
@@ -2598,8 +2588,11 @@ xemales.com##+js(aopr, document.dispatchEvent)
 xemales.com##[href="https://myteenwebcam.com/"]
 ! cluset.com ads, popunder
 cluset.com##+js(set, flashvars.popunder_url, )
+cluset.com##+js(aeld, click, clickCount)
 cluset.com##.item:has(> div.spot)
+cluset.com##.item.romina.tumba
 cluset.com##.table
+##[href^="https://join.enjoyx.com/track/"]
 ! https://github.com/easylist/easylist/issues/9095
 tumblr.com##header[role="banner"] > div > a[href="/docs/en/relevantads"]:upward(3)
 tumblr.com##a[href^="https://www.bonecoin.com/"]
@@ -3032,8 +3025,6 @@ milfnut.*##+js(aeld, contextmenu)
 milfnut.*##+js(aopr, __Y)
 milfnut.*##+js(acs, onload, onclick)
 milfnut.*##+js(nowoif)
-! https://github.com/uBlockOrigin/uAssets/issues/10338
-streamm4u.club##+js(aopr, __Y)
 ! https://www.reddit.com/r/uBlockOrigin/comments/qhd2fi/zshort_detecting_adblocker_not_allowing_downloads/
 charexempire.com##+js(aopr, app_vars.please_disable_adblock)
 charexempire.com##+js(aopr, open)
@@ -3110,11 +3101,8 @@ iimanga.com##+js(aeld, DOMContentLoaded, adsBlocked)
 iimanga.com##div[id^="teaser"]
 ! https://github.com/uBlockOrigin/uAssets/issues/10372
 @@||thevideome.com^$ghide
-! https://www.reddit.com/r/uBlockOrigin/comments/pokdbp/antiadblock_update_list/hix5f5o/
-rontechtips.com##+js(acs, eval, replace, %2F%5Edata%3A%2F)
-rontechtips.com##+js(no-xhr-if, googlesyndication)
 ! sites anti adb "interfering with this page"
-chicksonright.com,moneyversed.com##+js(aost, Math.random, inlineScript)
+chicksonright.com##+js(aost, Math.random, inlineScript)
 ! https://github.com/uBlockOrigin/uAssets/issues/8606#issuecomment-957843113
 curseforge.com##+js(nano-sib)
 ! https://www.reddit.com/r/uBlockOrigin/comments/ql6wik/block_redirect/
@@ -3295,6 +3283,7 @@ nowtolove.com.au##.page__content-header:style(height: 50px !important)
 ##a[dontfo=""][style$="position: absolute; z-index: 2147483647;"]
 ! https://github.com/uBlockOrigin/uAssets/issues/10506
 sexlist.tv##+js(disable-newtab-links)
+sexlist.tv##+js(set, flashvars.popunder_url, )
 sexlist.tv##.link-premium
 sexlist.tv##.camitems
 ||sexlist.tv/player/html.php$frame
@@ -3552,9 +3541,6 @@ newsmondo.it##+js(acs, document.getElementById, detect)
 *$xhr,redirect-rule=nooptext,domain=zwielkopolski24.pl
 ! https://github.com/uBlockOrigin/uAssets/issues/10809
 goduke.com##+js(no-xhr-if, %2Fanalytics%7Clivestats%2F)
-! https://github.com/uBlockOrigin/uAssets/issues/10810
-hyipstats.net##+js(no-fetch-if, adsbygoogle)
-hyipstats.net##.w-125px
 ! https://github.com/AdguardTeam/AdguardFilters/issues/101509
 ! https://github.com/uBlockOrigin/uAssets/issues/15790
 cutp.in##+js(aopr, app_vars.force_disable_adblock)

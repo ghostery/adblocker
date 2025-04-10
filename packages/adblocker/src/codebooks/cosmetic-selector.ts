@@ -7,6 +7,7 @@
  */
 /* eslint-disable prettier/prettier */
 export default [
+  "_storage%22%3A%22denied%22%2C%22ad_user_data%22%3A%22denied%22%2C%22ad_personalizat",
   ", %2F*start*%2F(function()%7Blet%20link%3Ddocument.createElement(%22link%22)%3Blink",
   ")%7D)()%3Bdocument.currentScript.textContent%3Ddocument.currentScript.textContent.r",
   "^script:has-text('/\"v4ac1eiZr0\"|\"\"\\)\\.split\\(\",\"\\)\\[4\\]|(\\.localStorage\\)|JSON\\.par",
@@ -17,7 +18,6 @@ export default [
   "5D%7C(%5C.localStorage%5C)%7CJSON%5C.parse%5C(%5Cw)%5C.getItem%5C(%22%2F",
   "acs, document.createElement, %2Fl%5C.parentNode%5C.insertBefore%5C(s%2F",
   ", OptanonConsent, groups%3DC0001%253A1%252CC0002%253A0%252CC000",
-  "trusted-suppress-native-method, eval, %22%2Fchp_%3Fad%2F%22",
   "TE0LjA2X3AwGgJmaSADGgYIgOu0sgY, 1year, , domain, google.",
   ":not([style^=\"position: absolute; left: -5000px\"])",
   "href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2F",
@@ -169,6 +169,7 @@ export default [
   "al",
   "an",
   "ar",
+  "at",
   "de",
   "ed",
   "en",
@@ -218,7 +219,6 @@ export default [
   "7",
   "8",
   "9",
-  "a",
   "b",
   "B",
   "c",

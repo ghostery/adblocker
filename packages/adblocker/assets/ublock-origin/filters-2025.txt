@@ -341,12 +341,16 @@ unlimitedfiles.xyz##+js(nowoif)
 moviediskhd.cloud##+js(acs, document.createElement, warning)
 ! https://androidadult.com/latest-games/ - anti-adb (NSFW)
 androidadult.com##+js(rmnt, script, ads-blocked)
+! https://github.com/uBlockOrigin/uAssets/issues/6193
 ! https://www.reddit.com/r/uBlockOrigin/comments/1hvk9jx/captcha_not_working/
 !#if cap_html_filtering
 hentaihere.com##^script:has-text(/shown_at|WebAssembly/)
 !#else
 hentaihere.com##+js(rmnt, script, %2Fshown_at%7CWebAssembly%2F)
 !#endif
+||hentaihere.com/ark/$1p
+hentaihere.com##+js(aeld, getexoloader)
+hentaihere.com##.item:has(a[href^="https://hive.arf.dev"]):upward(div[class])
 ! https://remotescout24.com/en/jobs/search?page=1&city=Berlin anti adblock
 ||remotescout24.com/static/plugins/publicSpace/detect-adblocker/
 ! onlyjerk .net (NSFW) - ads
@@ -1039,3 +1043,7 @@ savefiles.com##body > div[class][oncontextmenu][style="display: block;"]
 xmalay1.net##+js(rmnt, script, %2FisAdBlockActive%7CWebAssembly%2F)
 ! europix.top ad popups
 europix.top##a[href][target^="_blank"]:style(pointer-events:none!important)
+! https://github.com/uBlockOrigin/uAssets/issues/27916
+azmen.com##+js(remove-cookie, videoPlayedNumber)
+azmen.com##.live-button-wrapper
+/player/v*/vast-no-entitlements.js^
