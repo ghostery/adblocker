@@ -6,7 +6,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { Smaz } from '@remusao/smaz';
 import Compression from './compression.js';
 import crc32 from './crc32.js';
 
@@ -22,17 +21,6 @@ const LITTLE_ENDIAN: boolean = new Int8Array(new Int16Array([1]).buffer)[0] === 
 
 // TextEncoder doesn't need to be recreated every time unlike TextDecoder
 const TEXT_ENCODER = new TextEncoder();
-
-// https://github.com/remusao/mono/blob/275e1e6498e21d8fd0bda4299577bcd2af28a7ee/packages/smaz-compress/src/index.ts#L10
-const SMAZ_BUFFER_MAXSIZE = 30_000;
-
-// The signature bytes to identify internal Smaz payloads.
-enum SMAZ_CHUNK_TYPE {
-  NULL = 0,
-  ASCII = 1,
-  UTF8 = 2,
-  SMAZ = 3,
-}
 
 // Store compression in a lazy, global singleton
 let getCompressionSingleton: () => Compression = () => {
@@ -112,84 +100,66 @@ export function sizeOfUint32Array(array: Uint32Array): number {
   return array.byteLength + sizeOfLength(array.length);
 }
 
-function sizeOfSmaz(str: string, smaz: Smaz): number {
-  let estimated = 0;
-  for (let i = 0, l = str.length, bp = 0; i < l; i = bp) {
-    bp = i + 1;
-    // In case of unicode string
-    if (str.charCodeAt(i) > 127) {
-      estimated += sizeOfByte();
-      // Find next ASCII char
-      for (; bp < l; bp++) {
-        if (str.charCodeAt(bp) <= 127) {
-          break;
-        }
-      }
-      // Skip compression
-      estimated += sizeOfUTF8(str.slice(i, bp));
-    } else {
-      // In case of ASCII string
-      estimated += sizeOfByte();
-      // Find next non-ASCII char
-      for (; bp < Math.min(l, i + SMAZ_BUFFER_MAXSIZE); bp++) {
-        if (str.charCodeAt(bp) > 127) {
-          break;
-        }
-      }
-      const slice = str.slice(i, bp);
-      const bytes = smaz.getCompressedSize(slice);
-      // Skip compression if there's no gain
-      if (bytes >= bp - i) {
-        estimated += sizeOfASCII(slice);
-      } else {
-        estimated += sizeOfBytesWithLength(bytes, false);
-      }
-    }
-  }
-  // Add NULL at the end
-  estimated += sizeOfByte();
-  return estimated;
-}
-
 export function sizeOfNetworkRedirect(str: string, compression: boolean): number {
   return compression === true
-    ? sizeOfSmaz(str, getCompressionSingleton().networkRedirect)
+    ? sizeOfBytesWithLength(
+        getCompressionSingleton().networkRedirect.getCompressedSize(str),
+        false, // align
+      )
     : sizeOfASCII(str);
 }
 
 export function sizeOfNetworkHostname(str: string, compression: boolean): number {
   return compression === true
-    ? sizeOfSmaz(str, getCompressionSingleton().networkHostname)
+    ? sizeOfBytesWithLength(
+        getCompressionSingleton().networkHostname.getCompressedSize(str),
+        false, // align
+      )
     : sizeOfASCII(str);
 }
 
 export function sizeOfNetworkCSP(str: string, compression: boolean): number {
   return compression === true
-    ? sizeOfSmaz(str, getCompressionSingleton().networkCSP)
+    ? sizeOfBytesWithLength(
+        getCompressionSingleton().networkCSP.getCompressedSize(str),
+        false, // align
+      )
     : sizeOfASCII(str);
 }
 
 export function sizeOfNetworkFilter(str: string, compression: boolean): number {
   return compression === true
-    ? sizeOfSmaz(str, getCompressionSingleton().networkFilter)
+    ? sizeOfBytesWithLength(
+        getCompressionSingleton().networkFilter.getCompressedSize(str),
+        false, // align
+      )
     : sizeOfASCII(str);
 }
 
 export function sizeOfCosmeticSelector(str: string, compression: boolean): number {
   return compression === true
-    ? sizeOfSmaz(str, getCompressionSingleton().cosmeticSelector)
+    ? sizeOfBytesWithLength(
+        getCompressionSingleton().cosmeticSelector.getCompressedSize(str),
+        false, // align
+      )
     : sizeOfASCII(str);
 }
 
 export function sizeOfRawNetwork(str: string, compression: boolean): number {
   return compression === true
-    ? sizeOfSmaz(str, getCompressionSingleton().networkRaw)
+    ? sizeOfBytesWithLength(
+        getCompressionSingleton().networkRaw.getCompressedSize(str),
+        false, // align
+      )
     : sizeOfUTF8(str);
 }
 
 export function sizeOfRawCosmetic(str: string, compression: boolean): number {
   return compression === true
-    ? sizeOfSmaz(str, getCompressionSingleton().cosmeticRaw)
+    ? sizeOfBytesWithLength(
+        getCompressionSingleton().cosmeticRaw.getCompressedSize(str),
+        false, // align
+      )
     : sizeOfUTF8(str);
 }
 
@@ -463,66 +433,9 @@ export class StaticDataView {
     return String.fromCharCode.apply(null, this.buffer.subarray(this.pos - byteLength, this.pos));
   }
 
-  private pushSmaz(str: string, smaz: Smaz): void {
-    for (let i = 0, l = str.length, bp = 0; i < l; i = bp) {
-      bp = i + 1;
-      if (str.charCodeAt(i) > 127) {
-        this.pushUint8(SMAZ_CHUNK_TYPE.UTF8);
-        // Find next ASCII char
-        // Since we're skipping the compression for the characters
-        // in non-ASCII range, it's safe to passthrough them into
-        // the buffer.
-        for (; bp < l; bp++) {
-          if (str.charCodeAt(bp) <= 127) {
-            break;
-          }
-        }
-        this.pushUTF8(str.slice(i, bp));
-      } else {
-        // Find next non-ASCII char
-        // An ASCII character can be contained in int8.
-        for (; bp < Math.min(l, i + SMAZ_BUFFER_MAXSIZE); bp++) {
-          if (str.charCodeAt(bp) > 127) {
-            break;
-          }
-        }
-        const slice = str.slice(i, bp);
-        const bytes = smaz.compress(slice);
-        // Skip compression if there's no gain
-        if (bytes.length >= bp - i) {
-          this.pushUint8(SMAZ_CHUNK_TYPE.ASCII);
-          this.pushASCII(slice);
-        } else {
-          this.pushUint8(SMAZ_CHUNK_TYPE.SMAZ);
-          this.pushBytes(bytes);
-        }
-      }
-    }
-    this.pushUint8(SMAZ_CHUNK_TYPE.NULL);
-  }
-
-  private getSmaz(smaz: Smaz): string {
-    let data = '';
-    let type: SMAZ_CHUNK_TYPE;
-    // This stops on NULL signature or out of range occurs by catching;
-    // `SMAZ_CHUNK_TYPE.NULL` and `undefined`
-    while ((type = this.getUint8())) {
-      if (type === SMAZ_CHUNK_TYPE.ASCII) {
-        data += this.getASCII();
-      } else if (type === SMAZ_CHUNK_TYPE.UTF8) {
-        data += this.getUTF8();
-      } else if (type === SMAZ_CHUNK_TYPE.SMAZ) {
-        data += smaz.decompress(this.getBytes());
-      } else {
-        break;
-      }
-    }
-    return data;
-  }
-
   public pushNetworkRedirect(str: string): void {
     if (this.compression !== undefined) {
-      this.pushSmaz(str, this.compression.networkRedirect);
+      this.pushBytes(this.compression.networkRedirect.compress(str));
     } else {
       this.pushASCII(str);
     }
@@ -530,14 +443,14 @@ export class StaticDataView {
 
   public getNetworkRedirect(): string {
     if (this.compression !== undefined) {
-      return this.getSmaz(this.compression.networkRedirect);
+      return this.compression.networkRedirect.decompress(this.getBytes());
     }
     return this.getASCII();
   }
 
   public pushNetworkHostname(str: string): void {
     if (this.compression !== undefined) {
-      this.pushSmaz(str, this.compression.networkHostname);
+      this.pushBytes(this.compression.networkHostname.compress(str));
     } else {
       this.pushASCII(str);
     }
@@ -545,14 +458,14 @@ export class StaticDataView {
 
   public getNetworkHostname(): string {
     if (this.compression !== undefined) {
-      return this.getSmaz(this.compression.networkHostname);
+      return this.compression.networkHostname.decompress(this.getBytes());
     }
     return this.getASCII();
   }
 
   public pushNetworkCSP(str: string): void {
     if (this.compression !== undefined) {
-      this.pushSmaz(str, this.compression.networkCSP);
+      this.pushBytes(this.compression.networkCSP.compress(str));
     } else {
       this.pushASCII(str);
     }
@@ -560,14 +473,14 @@ export class StaticDataView {
 
   public getNetworkCSP(): string {
     if (this.compression !== undefined) {
-      return this.getSmaz(this.compression.networkCSP);
+      return this.compression.networkCSP.decompress(this.getBytes());
     }
     return this.getASCII();
   }
 
   public pushNetworkFilter(str: string): void {
     if (this.compression !== undefined) {
-      this.pushSmaz(str, this.compression.networkFilter);
+      this.pushBytes(this.compression.networkFilter.compress(str));
     } else {
       this.pushASCII(str);
     }
@@ -575,14 +488,14 @@ export class StaticDataView {
 
   public getNetworkFilter(): string {
     if (this.compression !== undefined) {
-      return this.getSmaz(this.compression.networkFilter);
+      return this.compression.networkFilter.decompress(this.getBytes());
     }
     return this.getASCII();
   }
 
   public pushCosmeticSelector(str: string): void {
     if (this.compression !== undefined) {
-      this.pushSmaz(str, this.compression.cosmeticSelector);
+      this.pushBytes(this.compression.cosmeticSelector.compress(str));
     } else {
       this.pushASCII(str);
     }
@@ -590,14 +503,14 @@ export class StaticDataView {
 
   public getCosmeticSelector(): string {
     if (this.compression !== undefined) {
-      return this.getSmaz(this.compression.cosmeticSelector);
+      return this.compression.cosmeticSelector.decompress(this.getBytes());
     }
     return this.getASCII();
   }
 
   public pushRawCosmetic(str: string): void {
     if (this.compression !== undefined) {
-      this.pushSmaz(str, this.compression.cosmeticRaw);
+      this.pushBytes(this.compression.cosmeticRaw.compress(str));
     } else {
       this.pushUTF8(str);
     }
@@ -605,14 +518,14 @@ export class StaticDataView {
 
   public getRawCosmetic(): string {
     if (this.compression !== undefined) {
-      return this.getSmaz(this.compression.cosmeticRaw);
+      return this.compression.cosmeticRaw.decompress(this.getBytes());
     }
     return this.getUTF8();
   }
 
   public pushRawNetwork(str: string): void {
     if (this.compression !== undefined) {
-      this.pushSmaz(str, this.compression.networkRaw);
+      this.pushBytes(this.compression.networkRaw.compress(str));
     } else {
       this.pushUTF8(str);
     }
@@ -620,7 +533,7 @@ export class StaticDataView {
 
   public getRawNetwork(): string {
     if (this.compression !== undefined) {
-      return this.getSmaz(this.compression.networkRaw);
+      return this.compression.networkRaw.decompress(this.getBytes());
     }
     return this.getUTF8();
   }

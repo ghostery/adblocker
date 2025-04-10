@@ -2,7 +2,6 @@ import { promises as fs } from 'node:fs';
 import { resolve, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { generate } from '@remusao/smaz-generate';
-import { Smaz } from '@remusao/smaz';
 
 import {
   parseFilters,
@@ -11,6 +10,7 @@ import {
   fullLists,
   hasUnicode,
 } from '../src/index.js';
+import { Smaz } from '../src/compression.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
