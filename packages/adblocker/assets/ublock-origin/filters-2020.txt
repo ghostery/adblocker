@@ -711,8 +711,8 @@ hamakei.com###topBnr, #recBanner, .partner
 ! https://github.com/AdguardTeam/AdguardFilters/issues/56572
 myviptuto.com##+js(nosiif, visibility, 1000)
 ! https://github.com/NanoMeow/QuickReports/issues/3999
-youlikeboys.com##+js(aopr, ExoLoader.serve)
-youlikeboys.com##+js(aopr, AdservingModule)
+youlikeboys.com##+js(acs, document.querySelectorAll, popMagic)
+youlikeboys.com##+js(aeld, getexoloader)
 ! https://github.com/uBlockOrigin/uAssets/issues/7494
 uploadroot.com##+js(aopr, open)
 uploadroot.com##.buttonDownload
@@ -736,7 +736,7 @@ myuploadedpremium.de###babasbmsgx
 myuploadedpremium.de##.copyright > .card
 ! https://github.com/uBlockOrigin/uAssets/issues/7499
 @@||souqsky.net^$ghide
-file4.net,souqsky.net##+js(aopw, Fingerprint2)
+souqsky.net##+js(aopw, Fingerprint2)
 ! https://github.com/NanoMeow/QuickReports/issues/4018
 @@||ubeat.tv^$ghide
 ! https://github.com/AdguardTeam/AdguardFilters/issues/117871
@@ -829,9 +829,6 @@ sexodi.com###video_reklamy
 upxin.net##+js(aeld, load, onload)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57278
 dayoftheweek.org##+js(nosiif, visibility, 1000)
-! https://github.com/AdguardTeam/AdguardFilters/issues/57292
-geeksweb.net##+js(aopr, mdpDeBlocker)
-geeksweb.net###mdp-deblocker-js-disabled
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57302
 @@||world-sms.org/get-ad/$xhr,1p
 world-sms.org##.promoBlock
@@ -855,8 +852,8 @@ hentaistream.com##+js(noeval-if, popUnderStage)
 ! https://github.com/uBlockOrigin/uAssets/issues/7552
 whatsaero.com##+js(set, blockAdBlock._options.baitClass, null)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57256
-hhkungfu.tv##+js(acs, addEventListener, google_ad_client)
-*$script,redirect-rule=noopjs,domain=hhkungfu.tv
+! popups hhkungfu. cash
+hhkungfu.*##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/7554
 *$xhr,redirect-rule=nooptext,domain=pricez.co.il
 ! https://www.reddit.com/r/uBlockOrigin/comments/haekcc/farkcom_blocking_all_ad_blockers/
@@ -1476,6 +1473,7 @@ politico.com##.gallery-carousel-ad
 ! heavy-r .com popunder / ads
 heavy-r.com##+js(acs, document.createElement, insertBefore)
 heavy-r.com##[class^="adzone"]
+||awdeliverynet.com^$3p
 ! https://github.com/NanoMeow/QuickReports/issues/4469
 youtubetomp3.*##+js(nowoif)
 youtubetomp3.*##a[href="/button.php"]
@@ -1838,6 +1836,7 @@ pholder.com##section:has(.OUTBRAIN)
 pholder.com##div[style$="margin-bottom:10px"]:has(.OUTBRAIN)
 pholder.com##div[class]:has(div[class] > iframe[src^="https://chaturbate.com/in/"])
 pholder.com##section:has(div[href^="https://chaturbate.com/in/"])
+pholder.com##section.ShopWidget:has-text(Sponsored)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/63977
 tw-hkt.blogspot.com##+js(nosiif, visibility, 1000)
 ! https://github.com/uBlockOrigin/uAssets/issues/7792#issuecomment-693598611
@@ -2143,8 +2142,6 @@ alltechnerd.com##.ai_widget
 alltechnerd.com##.code-block:has-text(ADV)
 ! https://github.com/uBlockOrigin/uAssets/issues/8074
 iobit.com##+js(aopr, LieDetector)
-! hentaisea. com popunder
-hentaisea.com##+js(aost, Math.random, stackDepth%3A4)
 ! https://www.reddit.com/r/uBlockOrigin/comments/jh1fxe/adblock_detected/
 malaysianwireless.com##+js(nostif, class.scroll, 1000)
 ||malaysianwireless.com/wp-content/banners/*$image,1p
@@ -2900,9 +2897,6 @@ atv.at##+js(set, errcode, 0)
 atv.at##[data-oasis-id="midroll-marker"]
 ! https://github.com/AdguardTeam/AdguardFilters/issues/70563
 anime-saikou.com##+js(nosiif, visibility, 1000)
-! https://forums.lanik.us/viewtopic.php?p=157965#p157965
-arkadiumhosted.com##+js(set, Adv_ab, false)
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=arkadiumhosted.com
 ! https://www.reddit.com/r/uBlockOrigin/comments/kicmhf/adblock_detected/
 streamsport.*##+js(aeld, , _0x)
 streamsport.*##+js(nowoif)

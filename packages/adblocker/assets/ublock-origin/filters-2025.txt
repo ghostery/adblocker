@@ -341,16 +341,6 @@ unlimitedfiles.xyz##+js(nowoif)
 moviediskhd.cloud##+js(acs, document.createElement, warning)
 ! https://androidadult.com/latest-games/ - anti-adb (NSFW)
 androidadult.com##+js(rmnt, script, ads-blocked)
-! https://github.com/uBlockOrigin/uAssets/issues/6193
-! https://www.reddit.com/r/uBlockOrigin/comments/1hvk9jx/captcha_not_working/
-!#if cap_html_filtering
-hentaihere.com##^script:has-text(/shown_at|WebAssembly/)
-!#else
-hentaihere.com##+js(rmnt, script, %2Fshown_at%7CWebAssembly%2F)
-!#endif
-||hentaihere.com/ark/$1p
-hentaihere.com##+js(aeld, getexoloader)
-hentaihere.com##.item:has(a[href^="https://hive.arf.dev"]):upward(div[class])
 ! https://remotescout24.com/en/jobs/search?page=1&city=Berlin anti adblock
 ||remotescout24.com/static/plugins/publicSpace/detect-adblocker/
 ! onlyjerk .net (NSFW) - ads
@@ -654,6 +644,7 @@ theorg.com##[href="/advertise"]:upward(1)
 ! https://github.com/uBlockOrigin/uAssets/issues/27245
 ||dmp.theadex.com/*/adex.js$script,domain=servustv.com,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/27293
+servustv.com##+js(nostif, , 10000-15000)
 servustv.com##+js(no-fetch-if, doubleclick)
 servustv.com##.backdrop-filter
 ! https://github.com/uBlockOrigin/uAssets/issues/27247
@@ -769,13 +760,12 @@ missavtv.com##+js(no-fetch-if, doubleclick)
 ||headerbidding.ai^$script,domain=gamehub.cam,redirect=noopjs
 ! weknowconquer.com detection
 weknowconquer.com##+js(nostif, getComputedStyle)
-! https://forums.lanik.us/viewtopic.php?t=48698-nsfw-dogsexporn-net
-dogsexporn.net##+js(no-xhr-if, googlesyndication)
+! https://yomucomics.com/ - anti-adb
+! https://github.com/uBlockOrigin/uAssets/issues/27942
+dogsexporn.net,yomucomics.com##+js(no-xhr-if, %2Fdoubleclick%7Cgooglesyndication%2F)
+dogsexporn.net,yomucomics.com##+js(no-fetch-if, %2Fdoubleclick%7Cgooglesyndication%2F, length%3A10, %7B%22type%22%3A%20%22cors%22%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/27442
 kwejk.pl##+js(rc, froc-blur, , stay)
-! https://yomucomics.com/ - anti-adb
-yomucomics.com##+js(no-fetch-if, %2Fgooglesyndication%7Cdoubleclick%2F, length%3A10, %7B%22type%22%3A%20%22cors%22%7D)
-yomucomics.com##+js(no-xhr-if, doubleclick)
 ! https://github.com/uBlockOrigin/uAssets/issues/27444
 ||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,redirect=noopjs,domain=streamplay.digital
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=streamplay.digital
@@ -1047,3 +1037,10 @@ europix.top##a[href][target^="_blank"]:style(pointer-events:none!important)
 azmen.com##+js(remove-cookie, videoPlayedNumber)
 azmen.com##.live-button-wrapper
 /player/v*/vast-no-entitlements.js^
+! https://nukibooks.com asg
+*$script,3p,denyallow=cloudflare.com,domain=nukibooks.com
+! https://github.com/uBlockOrigin/uAssets/issues/27936
+manhuaga.com##+js(noeval-if, adsbygoogle)
+! https://github.com/uBlockOrigin/uAssets/issues/27952
+goflix.sbs##+js(trusted-set-cookie, welcome_message_1, true, , , reload, 1)
+goflix.sbs##+js(nowoif, _blank)
