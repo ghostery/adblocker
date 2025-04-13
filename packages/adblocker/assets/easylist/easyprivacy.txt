@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202504090420
+! Version: 202504120400
 ! Title: EasyPrivacy
-! Last modified: 09 Apr 2025 04:20 UTC
+! Last modified: 12 Apr 2025 04:00 UTC
 ! Expires: 4 days (update frequency)
 ! *** easylist:template_header.txt ***
 !
@@ -16,6 +16,7 @@
 !
 ! -----------------General tracking systems-----------------!
 ! *** easylist:easyprivacy/easyprivacy_general.txt ***
+&&sub19=undefined&sub20=undefined
 &action=js_stats
 &ev=PageView&
 &EventType=DataDealImpression&
@@ -1581,6 +1582,7 @@
 /opinionlab.js
 /optiextension.dll?$script
 /optimizelyjs/*
+/orichipixel.min.js
 /ot_e404.gif?
 /OtAutoBlock.js
 /ouibounce.min.js
@@ -2476,6 +2478,7 @@
 /umg-analytics/umgaal.min.js
 /umt.gif?
 /unbxdAnalytics.js
+/uniclick.js?attribution=
 /UniqueUserVisit?
 /updatestats.js
 /urchin.gif?
@@ -2858,11 +2861,13 @@ _WebVitalsReporter_
 /gen_204?$image,other,ping,script
 /generate_204?$image
 ! Server-side GTM
+&event_name=page_view&
 &l=dataLayer&cx=c
 .js?id=GTM-
 /ns.html?id=GTM-
 ://gtm.*.js?st=
 ://load.*.js?st=$~third-party
+://sgtm.*.js?
 ||adservice.google.
 ||google.*/url?$ping
 ||google.com/gen_204?
@@ -4591,6 +4596,7 @@ omni.soundestlink.com$image
 ! [dup] from peter-lowe/serverlist.txt
 ! ||gostats.com^$third-party
 ||gostats.org^$third-party
+||gosupersonic.ai^$third-party
 ||govmetric.com^$third-party
 ||granify.com^$third-party
 ||grapheffect.com^$third-party
@@ -6572,6 +6578,7 @@ omni.soundestlink.com$image
 ||aromamirror.com^
 ||arrivegrowth.com^
 ||artthevoid.com^
+||arubahello.com^
 ||aspiringapples.com^
 ||aspiringattempt.com^
 ||aspiringtoy.com^
@@ -8267,6 +8274,7 @@ omni.soundestlink.com$image
 ||sortsail.com^
 ||sortstructure.com^
 ||sortsummer.com^
+||soulclicking.com^
 ||soundstocking.com^
 ||sowlettuce.com^
 ||spadelocket.com^
@@ -8393,6 +8401,7 @@ omni.soundestlink.com$image
 ||stupidsnake.com^
 ||sturdysnail.com^
 ||subletyoke.com^
+||subseasecurity.com^
 ||subsequentsand.com^
 ||subsequentstew.com^
 ||subsequentswim.com^
@@ -8686,6 +8695,7 @@ omni.soundestlink.com$image
 ||zestywire.com^
 ||zipperxray.com^
 ||zippywind.com^
+||zipthelake.com^
 ||zlp6s.pw^
 ||zonewedgeshaft.com^
 ! *** easylist:easyprivacy/easyprivacy_trackingservers_notifications.txt ***
@@ -12128,6 +12138,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||tracker.netklix.com^$script
 ||tracker.nitropay.com^
 ||tracker.nocodelytics.com^
+||tracker.personizely.net^
 ||tracker.prod.ams3.k8s.hyperia.sk^
 ||tracker.services.vaix.ai^
 ||tracker.smartframe.io^
@@ -13809,6 +13820,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||sayac.kapital.com.tr^
 ||statistics.daktilo.com^
 ||stats.vidyome.com^
+||track.livasoft.com.tr^
 ||traffic.wdc.center^
 ||web.tv/analytics/
 ! Ukranian
@@ -15578,7 +15590,8 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||xhcdn.com/js/*.track.min.js
 ||xing.com/logjam/
 ||xnxx.com/picserror/
-||xp.apple.com^
+||xp.apple.com/config/*/report/
+||xp.apple.com/report/
 ||xvideos.com/picserror/
 ||xxf.mobi/hit
 ||ya.ru/clck/
@@ -18964,7 +18977,6 @@ coomer.su,kemono.su##+js(set-local-storage-item, plausible_ignore, true)
 ||acc.marketing.adobedxcusteng.com^
 ||access.hikaritv.net^
 ||acemetrics.aaa.com^
-||acs.woolworths.com.au^
 ||activity.newlook.com^
 ||adb-analytics.live-now.com^
 ||adb-secured.kijk.nl^
