@@ -30,7 +30,6 @@ import {
 import {
   fastHash,
   fastHashBetween,
-  fastStartsWithFrom,
   getBit,
   hasUnicode,
   setBit,
@@ -263,7 +262,7 @@ export default class CosmeticFilter implements IFilter {
     // number of labels considered. This allows a compact representation of
     // hostnames and fast matching without any string copy.
     if (sharpIndex > 0) {
-      domains = Domains.parse(line.slice(0, sharpIndex).split(','), debug);
+      domains = Domains.parse(line.slice(0, sharpIndex), { debug });
     }
 
     if (line.endsWith(':remove()')) {
@@ -285,7 +284,7 @@ export default class CosmeticFilter implements IFilter {
     // Deal with HTML filters
     if (line.charCodeAt(suffixStartIndex) === 94 /* '^' */) {
       if (
-        fastStartsWithFrom(line, 'script:has-text(', suffixStartIndex + 1) === false ||
+        line.startsWith('script:has-text(', suffixStartIndex + 1) === false ||
         line.charCodeAt(line.length - 1) !== 41 /* ')' */
       ) {
         return null;
@@ -308,7 +307,7 @@ export default class CosmeticFilter implements IFilter {
     } else if (
       line.length - suffixStartIndex > 4 &&
       line.charCodeAt(suffixStartIndex) === 43 /* '+' */ &&
-      fastStartsWithFrom(line, '+js(', suffixStartIndex)
+      line.startsWith('+js(', suffixStartIndex)
     ) {
       // Generic scriptlets are invalid, unless they are un-hide
       if (

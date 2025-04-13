@@ -180,6 +180,9 @@ describe('Network filters', () => {
 
     it('pprint domain', () => {
       checkToString('ads$domain=foo.com|bar.co.uk|~baz.io', 'ads$domain=<hashed>');
+      checkToString('ads$domain=foo.com|bar.com', 'ads$domain=foo.com|bar.com', true);
+      checkToString('ads$denyallow=foo.com|bar.co.uk|~baz.io', 'ads$denyallow=<hashed>');
+      checkToString('ads$denyallow=foo.com|bar.com', 'ads$denyallow=foo.com|bar.com', true);
     });
 
     it('pprint with debug=true', () => {
@@ -801,6 +804,29 @@ describe('Network filters', () => {
       it('defaults to no constraint', () => {
         network('||foo.com', {
           denyallow: undefined,
+        });
+      });
+
+      context('to', () => {
+        it('reverses domains condition', () => {
+          network('||foo.com$to=foo.com|~bar.com,denyallow=bar.com|~foo.com', {
+            denyallow: {
+              hostnames: h(['bar.com']),
+              entities: undefined,
+              notHostnames: h(['foo.com']),
+              notEntities: undefined,
+              parts: undefined,
+            },
+          });
+          network('||foo.com$to=bar.com|baz.com', {
+            denyallow: {
+              hostnames: undefined,
+              entities: undefined,
+              notHostnames: h(['bar.com', 'baz.com']),
+              notEntities: undefined,
+              parts: undefined,
+            },
+          });
         });
       });
     });

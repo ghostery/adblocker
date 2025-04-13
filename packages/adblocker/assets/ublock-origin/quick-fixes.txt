@@ -26,187 +26,195 @@ www.youtube.com##+js(nano-stb, %5Bnative%20code%5D, 17000, 0.001)
 ||www.youtube.com/s/player/*/base.js$script,xhr,replace=/if\(e===""\)/if(0)/
 !#endif
 ! https://www.reddit.com/r/uBlockOrigin/comments/1ebwr6c/is_ublock_broken_again_or_am_i_doing_something/
-www.youtube.com##+js(json-prune-fetch-response, playerAds%20adPlacements%20adSlots%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots, , propsToMatch, %2Fplayer%3F)
+www.youtube.com##+js(json-prune-fetch-response, playerAds%20adPlacements%20adSlots%20no_ads%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20playerResponse.no_ads%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots%20%5B%5D.playerResponse.no_ads, , propsToMatch, %2Fplayer%5C%3F%7Cget_watch%7C%5E%5CW%2B%24%2F)
+! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-2144781835
+www.youtube.com##+js(json-prune-fetch-response, playerAds%20adPlacements%20adSlots%20no_ads%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20playerResponse.no_ads, , propsToMatch, %2Fplaylist%3F)
 ! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-2271325338
 ! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-2308486423
 ! https://github.com/AdguardTeam/AdguardFilters/commit/61d89cebe154ca17932bedf61df5e2c7bd75bd7d
-!tv.youtube.com#@#+js(trusted-replace-xhr-response, %22adPlacements%22, %22no_ads%22, %2Fplaylist%5C%3Flist%3D%7Cplayer%5C%3F%7Cwatch%5C%3F%5Btv%5D%3D%7Cyoutubei%5C%2Fv1%5C%2Fplayer%2F)
-www.youtube.com##+js(json-prune-xhr-response, playerAds%20adPlacements%20adSlots%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots, , propsToMatch, %2F%5C%2Fplayer(%3F%3A%5C%3F.%2B)%3F%24%2F)
+www.youtube.com##+js(json-prune-xhr-response, playerAds%20adPlacements%20adSlots%20no_ads%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20playerResponse.no_ads%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots%20%5B%5D.playerResponse.no_ads, , propsToMatch, %2F%5C%2Fplayer(%3F%3A%5C%3F.%2B)%3F%24%2F)
 tv.youtube.com##+js(trusted-replace-xhr-response, %22adPlacements%22, %22no_ads%22, %2Fplaylist%5C%3Flist%3D%7C%5C%2Fplayer(%3F%3A%5C%3F.%2B)%3F%24%7Cwatch%5C%3F%5Btv%5D%3D%2F)
 !#if !cap_html_filtering
 www.youtube.com##+js(trusted-replace-xhr-response, %2F%22adPlacements.*%3F(%5BA-Z%5D%22%5C%7D%7C%22%5C%7D%7B2%2C4%7D)%5C%7D%5C%5D%2C%2F, , %2Fplaylist%5C%3Flist%3D%7C%5C%2Fplayer(%3F%3A%5C%3F.%2B)%3F%24%7Cwatch%5C%3F%5Btv%5D%3D%2F)
 www.youtube.com##+js(trusted-replace-xhr-response, %2F%22adPlacements.*%3F(%22adSlots%22%7C%22adBreakHeartbeatParams%22)%2Fgms, %241, %2F%5C%2Fplayer(%3F%3A%5C%3F.%2B)%3F%24%2F)
-!#endif
-www.youtube.com##+js(set, yt.config_.EXPERIMENT_FLAGS.web_bind_fetch, false)
-www.youtube.com##+js(trusted-prevent-dom-bypass, Node.prototype.appendChild, fetch)
-! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-2307514494
-! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-2489542767
-web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.node.sponsored_data.id_for_advertisement)
-web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.sponsored_auction_distance)
-web.facebook.com,www.facebook.com##+js(rpnt, script, %2Fnull%2C%22category_sensitive%22%5B%5E%5Cn%5D%2B%3F%2C%22__typename%22%3A%22SponsoredData%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, null%7D)
-!#if cap_html_filtering
-||facebook.com/api/graphql/$xhr,replace=/null,"category_sensitive"[^\n]+?,"__typename":"SponsoredData"[^\n]+"cursor":"[^"]+"\}/null}/g,domain=web.facebook.com|www.facebook.com
-! ||facebook.com^$doc,replace=/null,"category_sensitive"[^\n]+?,"__typename":"SponsoredData"[^\n]+"cursor":"[^"]+"\}/null}/g,to=web.facebook.com|www.facebook.com
+www.youtube.com##+js(trusted-replace-fetch-response, %22adPlacements%22, %22no_ads%22, player%3F)
+www.youtube.com##+js(trusted-replace-fetch-response, %22adSlots%22, %22no_ads%22, player%3F)
+www.youtube.com##+js(trusted-replace-fetch-response, %22adSlots%22, %22no_ads%22, %2F%5E%5CW%2B%24%2F)
 !#else
-web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2Fnull%2C%22category_sensitive%22%5B%5E%5Cn%5D%2B%3F%2C%22__typename%22%3A%22SponsoredData%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, null%7D, %2Fapi%2Fgraphql)
+||www.youtube.com/playlist?list=$xhr,1p,replace=/"adPlacements"/"no_ads"/
+||www.youtube.com/playlist?list=$xhr,1p,replace=/"adSlots"/"no_ads"/
+||www.youtube.com/watch?$xhr,1p,replace=/"adPlacements"/"no_ads"/
+||www.youtube.com/watch?$xhr,1p,replace=/"adSlots"/"no_ads"/
+||www.youtube.com/youtubei/v1/player?$xhr,1p,replace=/"adPlacements"/"no_ads"/
+||www.youtube.com/youtubei/v1/player?$xhr,1p,replace=/"adSlots"/"no_ads"/
+||youtube.com/youtubei/v1/get_watch?$xhr,1p,replace=/"adPlacements"/"no_ads"/
+||youtube.com/youtubei/v1/get_watch?$xhr,1p,replace=/"adSlots"/"no_ads"/
 !#endif
-! https://github.com/uBlockOrigin/uAssets/issues/18476 - https://voe.sx/e/2z9smej3tebe
+www.youtube.com##+js(trusted-prevent-dom-bypass, Node.prototype.appendChild, fetch)
+www.youtube.com##+js(trusted-prevent-dom-bypass, Node.prototype.appendChild, Request)
+! https://github.com/uBlockOrigin/uAssets/issues/3367
+! web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.viewer.sideFeed.nodes.0.%7B-%7D.nodes.0.rhc_ad)
+! web.facebook.com,www.facebook.com##+js(json-prune-xhr-response, data.viewer.sideFeed.nodes.0.%7B-%7D.nodes.0.rhc_ad, , propsToMatch, %2Fapi%2Fgraphql)
+web.facebook.com,www.facebook.com##div[role="complementary"] a[aria-labelledby][attributionsrc^="/privacy_sandbox/comet/register/source/?eid="][href^="http"]
+web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.%7B-%7D.comet_sections.content.story.*.advert_identification_label)
+web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2Fnull%2C%5B%5E%5Cn%5D%7B0%2C170%7D%22node%22%3A%5C%7B%22__typename%22%5B%5E%5Cn%5D%7B0%2C170%7D__typename%22%3A%22SponsoredData%22%5B%5E%5Cn%5D%2B%3F%5C%7D%2C%22cursor%22%2Fg, null%2C%22cursor%22, %2Fapi%2Fgraphql)
+! https://github.com/uBlockOrigin/uAssets/issues/24745 - https://voe.sx/e/2z9smej3tebe
 ! VOE sites
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=sandratableother.com,important
-sandratableother.com##+js(nowoif)
-sandratableother.com##+js(set, console.clear, undefined)
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=nathanfromsubject.com,important
+nathanfromsubject.com##+js(nowoif)
+nathanfromsubject.com##+js(set, console.clear, undefined)
+nathanfromsubject.com##+js(acs, globalThis, break%3Bcase)
+nathanfromsubject.com##+js(acs, WebAssembly, atob)
 ! next-episode .net
 !next-episode.net##+js(rmnt, script, %2F%5B%5Cs%5CS%5D%7B0%2C%7Dhead%5B%5Cs%5CS%5D%7B1900%2C%7D%2F)
 !next-episode.net##+js(rpnt, script, %2F.then%5B%5Cs%5CS%5D%7B0%2C%7D%3F%3B%2Fg)
 !next-episode.net##+js(rmnt, script, %2F%5Cd%2B%5C%2B%5Cd%7C64%7C%5C%2B%5C%2B%7C%5C%2B1%7Cadbl%7Cablk%7C%5B%5Cs%5CS%5D%7B0%2C%7D(%5C.%5C.%7Cfunction)%5B%5Cs%5CS%5D%7B1800%2C%7D%7Cdocument%5C%5B%2Fi)
 @@||pagead2.googlesyndication.com^$script,domain=next-episode.net
 ! https://github.com/uBlockOrigin/uAssets/issues/23806
-japscan.lol##+js(aost, onload, inlineScript)
 *$image,redirect-rule=1x1.gif,domain=japscan.lol
-japscan.lol#@#+js(nostif, %2Ffunction%5C(%5C)%5C%7Bvar%7CgetPropertyValue%7CfontSize%7C0px%7C%5C%2F00%2F)
-japscan.lol#@#.nav ~ div[id] + div[id][class][style]:remove()
-japscan.lol#@#.w-100 > [class]:has(+ div[id]):remove()
-japscan.lol#@#.justify-content-center div[id] + div[id][class][style]:remove()
-japscan.lol#@#+js(aeld, DOMContentLoaded, %2F%3D%3E%5Cs*%5C%7B%5Cs*function%7C%5E.%7B600%2C700%7D%24%7CPrimeVideo%7CMacbook%7C%5C%2B'ined'%7Ct'%5C%2B'y%7CsetTimeout%5C(function%2F)
-japscan.lol#@#+js(rmnt, script, navpromo2)
-japscan.lol#@#+js(aeld, DOMContentLoaded, %2FclipPath%7C0p'%5C%2B%7Ctypeof%20kDo%7CNiger%7CCharger%7CGoodDay%7Cfunct'%7Ct'%5C%2B'y%7CsetTimeout%5C(function%2F)
-japscan.lol##+js(aeld, load, %2Fnavpromo%7CclipPath%7C0p'%5C%2B%2F)
-japscan.lol#@#+js(nostif, %2Ffunction%5C(%5Cs*%5C)%5C%7Bvar%7CgetProp%7Cfont%7CSize%7C%5C%2B'px%7C%5C%2F0'%5C%2B%2F)
-japscan.lol#@#+js(rmnt, script, navpr)
-japscan.lol#@#+js(aeld, DOMContentLoaded, %2FTikAm%7CpointerEvents%7C%5C%2F110%5C.%7CNeSi%7CNiger%7CCharger%7CGoodDay%7Cfunct'%7Ct'%5C%2B'y%2F)
-japscan.lol#@#+js(rmnt, script, %2F'vpr%7Cnavp'%7Cfunction%20Ti%7C%5C%7D%7B4%7D%5C(%5C)%2F)
-japscan.lol#@#+js(aeld, DOMContentLoaded, %2FTikBm%7CterEvents%7Cont'%5C%2B%7C'%5C%2F11%7CNe'%7CNiger%7CCharger%7CGoodDay%7Cfunct'%7Ct'%5C%2B'y%2F)
-japscan.lol##+js(rmnt, script, %2Fnavpr'%7Cfunction%20Tc%7C(%3F%3A%5C%7D%5Cs*)%7B4%7D%5C(%5Cs*%5C)%2F)
-japscan.lol##+js(aeld, DOMContentLoaded, %2F%5C(%7B2%7D%3D%3E%5C%7B%7CTcUAm%7C%5C%2B'vp%7Ctext-indent%7C%5C%2F1'%7CNeSi%7CNiger%7CCharger%7CGoodDay%7Cfunct'%7Ct'%5C%2B'y%2F)
+japscan.lol##+js(norafif, %2F%5E%2F)
+japscan.lol##+js(trusted-set-attr, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a, onclick, let%20a%3Dfunction()%7B%7D%3Breturn%20false%3B)
+japscan.lol##a[href^="https://www.touribora.shop/"]
+! START: Counter Liste FR rules
+japscan.lol#@##main > .card:has(a[href*="/manga/?type="][href*="&content="][target="_blank"])
+japscan.lol#@#div.container > [href]
+! END
 ||japscan.lol/zjs/$script,replace=/function GoodDay\(\)\{.+?\}\}\}//
-japscan.lol#@#.navbar-nav > li#navpromo2.nav-item > a[href^="http://www.toueapo.shop/"]:style(text-indent: -5000px !important;)
-japscan.lol##.navbar-nav > li#navpromo2.nav-item
-japscan.lol##body > style + .container > .row > #main + #sidebar.col-md-3 > .card.mt-1 > .card[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 250px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
-japscan.lol##body > style + .container > .row > #main.col-md-9 > .card > .card-body[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 100px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
-japscan.lol##body > .container.text-center > .mb-2.mt-2[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 100px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
-japscan.lol##body > style + .container > .row > #main.col-md-9 > .card > .card-body.rounded-0 > .card-body[style^="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 100px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
-japscan.lol##body > style + .container > .row > #main + #sidebar.col-md-3 > .card.mt-1 > .card[style="margin: 0px auto; display: block;"] > iframe[id^="__clb-"][id$="_container"][style^="display: inline-block; width: 300px; height: 100px;"][sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-scripts allow-top-navigation-to-custom-protocols"][scrolling="no"]
-/^https?:\/\/[-a-z]{8,15}\.(?:com|net)\/401\/\d{7}(?:\?v=\d+)?$/$script,3p,domain=japscan.lol,important
 @@*$image,xhr,script,domain=japscan.lol
-!||googletagmanager.com^$script,domain=japscan.lol,important
-||cloudflareinsights.com/beacon.min.js/$script,domain=japscan.lol,important
-||google-analytics.com^$xhr,domain=japscan.lol,important
-/^https?:\/\/[a-z]{8,15}\.[a-z]{2,3}\/5\/\d{6,7}(?:\?_=\d+)?$/$script,3p,domain=japscan.lol,important
-/^https?:\/\/[-a-z]{8,15}\.(?:com|net)\/401\/\d{7}$/$script,3p,domain=japscan.lol,important
-/lv/esnk/*$script,3p,domain=japscan.lol,important
-/\/[0-9a-f]{32}\/invoke\.js/$script,3p,domain=japscan.lol,important
-! https://github.com/uBlockOrigin/uAssets/issues/2320
-@@||freemcserver.net^$ghide
-@@||cdn.jsdelivr.net/gh/Levii22/$domain=freemcserver.net
-@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=panel.freemcserver.net
-/cdn-cgi/challenge-platform/scripts/jsd/main.js$script,important,1p,domain=freemcserver.net
-panel.freemcserver.net##+js(rpnt, script, 'G-1B4LC0KT6C')%3B, 'G-1B4LC0KT6C')%3B%20window.setTimeout(function()%7BblockPing()%7D%2C200)%3B)
-||panel.freemcserver.net/bs4/bs4$script,1p
-||panel.freemcserver.net/*YouUblockAnd$script,1p
-*$script,redirect-rule=noopjs,domain=panel.freemcserver.net
-freemcserver.net##+js(nostif, 0x)
-panel.freemcserver.net##body > #main-wrapper > .page-wrapper > .container-fluid > .row > .col-md-10 > [class] > .row > .col > ul:first-child + [class="row justify-content-center mb-3 billboard_responsive text-center"]
-panel.freemcserver.net##body > #main-wrapper > .page-wrapper > .container-fluid > .row > .col-md-10 > [class] > .row > [class^="col-"] > [style*="min-height"][style*="flex"]:has(> [id^="stpd-"][style^="position:"]:first-child + div + div:last-child)
-! https://github.com/uBlockOrigin/uAssets/issues/20505
-download.megaup.net##+js(rpnt, script, %2Ffor%5Cs*%5C(%5Cs*(const%7Clet%7Cvar).*%3F%5C)%5C%3Breturn%5C%3B%5C%7D_%2Fg, _, condition, attribute)
-download.megaup.net##a:has(img[src*="/download"]):style(width: 300px !important; height: 300px !important; display: block !important;)
+*$script,xhr,3p,denyallow=acscdn.com|aozoiekopoaka.shop|base64easy.com|base64hub.com|challenges.cloudflare.com|cdn.jsdelivr.net|cdnjs.cloudflare.com|code.jquery.com|curltophp.com|ebooksmangaia.com|faireundon.vip|fkourazirop.shop|frjelsoieapoas.shop|hakoroubita.shop|mamamiaroubita.shop|morinavotarius.top|regexgenius.com|reoiamlsa.shop|routinato.shop|smaltourinto.shop|tourpowouro.shop,domain=japscan.lol,important
+/^https:\/\/acscdn\.com\/script\/(?:aclib|atg|compatibility|ippg|suv4|ut)\.js(\?cb=\d{13})?$/$script,3p,match-case,important,domain=japscan.lol
+japscan.lol#@#+js(rmnt, script, %2F%5E%5Cs%7B5%7D%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/21064
 ! https://github.com/uBlockOrigin/uAssets/issues/24220
 ! https://github.com/uBlockOrigin/uAssets/issues/25121#issuecomment-2325357098
-poophq.com,veev.to##+js(nowoif)
-poophq.com,veev.to##+js(set, fapit.check, noopFunc)
-!poophq.com,veev.to##+js(no-xhr-if, url%3A!%2Fcdn%5C.plyr%5C.io%7Cveev%5C.to%7C%5C%2Fdl%5C%3Fop%3Dplayer_api%2F%20method%3AGET)
-poophq.com,veev.to##+js(no-xhr-if, %2Fvast.php%3F)
-poophq.com,veev.to##+js(no-xhr-if, adsbygoogle, length%3A35000-55000)
-poophq.com,veev.to##+js(rpnt, script, %2F%5B'%22%5Dh.*%3Fo.*%3Fv.*%3Fc.*%3F%5C%2Fa.*%3Fjs%2F, %241(function()%20%7B'use%20strict'%3B%20const%20handler%20%3D%20%7Bapply%3A%20(target%2C%20thisArg%2C%20argumentsList)%20%3D%3E%20%7Bconst%20e%20%3D%20argumentsList%3B%20if%20(e%5B0%5D%20%26%26%20e%5B0%5D.html%3F.detected%20%3D%3D%3D%20null%20%26%26%20typeof%20e%5B0%5D.html%3F.instance%3F.start%20%3D%3D%3D%20'function'%20%26%26%20typeof%20e%5B0%5D.env%3F.instance%3F.start%20%3D%3D%3D%20'function'%20%26%26%20typeof%20e%5B0%5D.http%3F.instance%3F.start%20%3D%3D%3D%20'function')%20%7Bconst%20resetBooleans%20%3D%20function()%20%7BObject.keys(this).forEach(key%20%3D%3E%20%7Bif%20(typeof%20this%5Bkey%5D%20%3D%3D%3D%20'boolean')%20%7Bthis%5Bkey%5D%20%3D%20false%3B%7D%7D)%3B%7D%3B%20%5B'html'%2C%20'env'%2C%20'http'%5D.forEach(name%20%3D%3E%20%7Be%5B0%5D%5Bname%5D.instance.start%20%3D%20resetBooleans%3B%7D)%3B%7D%20return%20Reflect.apply(target%2C%20thisArg%2C%20argumentsList)%3B%7D%7D%3B%20window.Object.keys%20%3D%20new%20Proxy(Object.keys%2C%20handler)%3B%7D)()%3B, includes, break%3Belse)
-poophq.com,veev.to##+js(no-xhr-if, %2F%5C%2Fpreroll%5C.engine%24%2F)
-*$script,3p,domain=poophq.com|veev.to,redirect-rule=noopjs
-*$other,3p,denyallow=veevcdn.co,domain=poophq.com|veev.to
-@@*$ghide,domain=poophq.com|veev.to
+poophq.com,veev.to,doods.to##+js(nowoif)
+poophq.com,veev.to,doods.to##+js(no-xhr-if, %2Fvast.php%3F)
+poophq.com,veev.to,doods.to##+js(no-xhr-if, %2Fclick%5C.com%7Cpreroll%7Cnative_render%5C.js%7Cacscdn%2F, length%3A10001)
+!#if cap_html_filtering
+||static.veevcdn.co/assets/videoplayer/$script,3p,replace=/\'adblockEnabled\':\!\![a-zA-Z]{1,3}/'adblockEnabled':false/,domain=poophq.com|veev.to|doods.to
+||static.veevcdn.co/assets/videoplayer/$script,3p,replace=/\!0x0\=\=\=HT\?H6\(\)/false===HT?H6()/,domain=poophq.com|veev.to|doods.to
+||adsco.re^$xhr,important,domain=poophq.com|veev.to|doods.to
+||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,important,domain=poophq.com|veev.to|doods.to
+/dl?op=aa&cmd=ga&_a=$xhr,1p,important,domain=poophq.com|veev.to|doods.to
+!#else
+!#if ext_ubol
+@@||c.adsco.re/|$script,domain=poophq.com|veev.to|doods.to
+poophq.com,veev.to,doods.to##+js(no-xhr-if, 162.252.214.4, true)
+poophq.com,veev.to,doods.to##+js(no-xhr-if, c.adsco.re)
+poophq.com,veev.to,doods.to##+js(no-xhr-if, adsco.re%3A2087)
+!#else
+/dl?op=player_api&cmd=*adb=$xhr,1p,important,domain=poophq.com|veev.to|doods.to
+||adsco.re^$script,redirect=none:5,domain=poophq.com|veev.to|doods.to
+poophq.com,veev.to,doods.to##+js(nostif, %2F%5E%5Cs*function%5Cs*%5C(%5Cs*%5C)%5Cs*%7B%5Cs*%5Ba-zA-Z%5D%7B1%2C2%7D%5Cs*%5C(.%7B1%2C10%7D%24%2F)
+poophq.com,veev.to,doods.to##+js(nostif, %2F('%7C%60%7C%22)%5Cs*%5C%2B.%7B10%2C100%7D('%7C%60%7C%22)%5Cs*%5C%2B%7C%5Ba-z%5D%7B1%2C2%7D%5Cs*%5C%5B%5Cs*%5C%5B%7C('%7C%60%7C%22)%5Cs*%2C%5Cs*('%7C%60%7C%22)%7C%5C%22%5Cs*%5C%3B%5Cs*%5Ba-zA-Z%5D%7B1%2C2%7D%5Cs*%5C%3D%5Ba-z%5D%2B%5Cs*%2C%7Czza%7C%5C%5D%5Cs*%2C%5Cs*%5Ba-z%5D%2B%5Cs*%5C)%5Cs*%5C%7D%2F)
+!#endif
+!#endif
+*$script,3p,domain=poophq.com|veev.to|doods.to,redirect-rule=noopjs
+*$other,3p,denyallow=veevcdn.co,domain=poophq.com|veev.to|doods.to
+@@*$ghide,xhr,domain=poophq.com|veev.to|doods.to
 veev.to#@#.avb-active
 ! https://github.com/uBlockOrigin/uAssets/issues/20401
-infinityscans.xyz,infinityscans.net,infinityscans.org##+js(no-fetch-if, %2Fapi%5C%2Fcollect%7Capi%5C%2Fchapter%7Capi-chapter%2F)
-infinityscans.xyz,infinityscans.org##+js(no-fetch-if, infinityscans.net)
-infinityscans.xyz,infinityscans.net,infinityscans.org##+js(rpnt, script, %2Fasync%20function%20%5C(xhr%5C)%20%5C%7B%5Cs%2B%5C(function%5C(%5C)%5C%7Bvar%20.*%3F%5C'%5C%5D%5C(%5C)%5C%3B%5C%7D%5C%7D%5C(%5C)%5C)%5C%3B%2Fs, async%20function%20(xhr)%20%7B)
+infinityscans.xyz,infinityscans.net,infinityscans.org##+js(rpnt, script, %2F%20%20function%20%5Ba-zA-Z%5D%7B1%2C2%7D%5C(%5Ba-zA-Z%5D%7B1%2C2%7D%2C%5Ba-zA-Z%5D%7B1%2C2%7D%5C).*%3F%5C(%5C)%5C%7Breturn%20%5Ba-zA-Z%5D%7B1%2C2%7D%5C%3B%5C%7D%5C%3Breturn%20%5Ba-zA-Z%5D%7B1%2C2%7D%5C(%5C)%5C%3B%5C%7D%2F)
+infinityscans.xyz,infinityscans.net,infinityscans.org##+js(nostif, .adv-)
+infinityscans.xyz,infinityscans.net,infinityscans.org##+js(trusted-replace-outbound-text, atob, .length%20%3D%3D%3D%200, .length%20%3D%3D%3D%2031)
+infinityscans.xyz,infinityscans.net,infinityscans.org##+js(rpnt, script, %2F%5C%7D%5C)%5C%3B%5Cs%2B%5C(function%5C(%5C)%5C%7Bvar%20.*%3F%5C)%5C%3B%5C%7D%5C)%5C(%5C)%5C%3B%5Cs%2B%5C%24%5C(%5C%22%5C%23reportChapte%2F, %7D)%3B%20%24(%22%23reportChapte)
 infinityscans.xyz,infinityscans.net,infinityscans.org##+js(trusted-replace-outbound-text, atob, window.matchMedia('(display-mode%3A%20standalone)').matches, true)
-infinityscans.xyz,infinityscans.net,infinityscans.org##+js(nowoif, _blank)
-infinityscans.xyz,infinityscans.net,infinityscans.org##div[class="alert alert-danger alert-dismissible fade show m-0 p-0"]:has-text(uBlock Origin)
-@@*$script,denyallow=googletagmanager.com|bidgear.com|googlesyndication.com,domain=infinityscans.xyz|infinityscans.net|infinityscans.org
-||b5rh0rt.infinityscans.net^$xhr,important
-! https://github.com/uBlockOrigin/uAssets/issues/8719
-1001tracklists.com##[target="_blank"][rel*="noopener"][rel*="noreferrer"]:has(> img[src*="/"][src*="_"]), [target="_blank"][rel^="noopener noreferrer"]:has(> img[src*="/"][src*="_"])
-1001tracklists.com##div[style^="margin: 10px 0px; text-align: center;"]:has(a img[src*="/"][src*="_"])
-1001tracklists.com##div[style^="text-align: center; margin-bottom: 10px;"]:has(a img[src*="/"][src*="_"])
-1001tracklists.com##div[id]:has(> [data-freestar-ad]):remove()
-1001tracklists.com###root > div[id]:last-child > [style] a[target][rel]:has(img[src*="/"][src*="_"])
-1001tracklists.com###root > div[id]:first-child > [style] a[target][rel]:has(img[src*="/"][src*="_"])
-1001tracklists.com###root > div[id] > div:first-child:not([id], [class]):has(a[target][rel]:has(img[src*="/"][src*="_"]))
-1001tracklists.com##a[href^="https://"][target="_blank"][rel="noopener noreferrer"][onclick*="challenge"]:has(> img[src*="/"][src*="_"][alt][title]):remove()
-1001tracklists.com##+js(spoof-css, %5Btarget%3D%22_blank%22%5D%5Brel*%3D%22noopener%22%5D%5Brel*%3D%22noreferrer%22%5D%3Ahas(%3E%20img%5Bsrc*%3D%22%2F%22%5D%5Bsrc*%3D%22_%22%5D), display, block)
+infinityscans.xyz,infinityscans.net,infinityscans.org##div[class="alert alert-info m-0 p-0"]:has-text(/uBlock|AdGuard|advertisments/i)
+@@*$script,denyallow=googletagmanager.com|bidgear.com|googlesyndication.com|a.magsrv.com|fstatic.netpub.media|cloudfront.net,domain=infinityscans.xyz|infinityscans.net|infinityscans.org
+.infinityscans.net/|$popup,domain=infinityscans.org
+||tbd.infinityscans.net^$all
+||fhhgc.infinityscans.net^$xhr,important
+! https://github.com/uBlockOrigin/uAssets/issues/2320
+panel.freemcserver.net#@#+js(rpnt, script, 'G-1B4LC0KT6C')%3B, 'G-1B4LC0KT6C')%3B%20window.setTimeout(function()%7BblockPing()%7D%2C200)%3B)
+panel.freemcserver.net##+js(rpnt, script, 'G-1B4LC0KT6C')%3B, 'G-1B4LC0KT6C')%3B%20localStorage.setItem(%22tuna%22%2C%20%22dW5kZWZpbmVk%22)%3B%20localStorage.setItem(%22sausage%22%2C%20%22ZmFsc2U%3D%22)%3B%20window.setTimeout(function()%7BfuckYouUblockAndJobcenterTycoon(false)%7D%2C200)%3B)
 ! filemoon
 ! https://github.com/AdguardTeam/AdguardFilters/issues/190044
 ! https://www.reddit.com/r/uBlockOrigin/comments/1fuaaw5/asblock_detected_in_ask4porncc
-file-1bl9ruic-moon.com,file-kg88oaak-embed.com,file-mi11ljwj-embed.com,file-zz40pd56-embed.com,file-sp32aoh8-moon.com,filemoon-j0l2wxjk.com,filemoon-t8c715ke.com,fle-2ggdmu8q-moo.com,fle-5r8dchma-moo.com,moon-3uykdl2w-embed.com,moon-4uemks89-embed.com,moon-n9hp2onm-embed.com,moon-kg83docx.com,moon-fm43w1qv.com,moonfile-62es3l9z.com,moonfile-paxadnae.com##+js(nowoif)
-file-1bl9ruic-moon.com,file-kg88oaak-embed.com,file-mi11ljwj-embed.com,file-zz40pd56-embed.com,file-sp32aoh8-moon.com,filemoon-j0l2wxjk.com,filemoon-t8c715ke.com,fle-2ggdmu8q-moo.com,fle-5r8dchma-moo.com,moon-3uykdl2w-embed.com,moon-4uemks89-embed.com,moon-n9hp2onm-embed.com,moon-kg83docx.com,moon-fm43w1qv.com,moonfile-62es3l9z.com,moonfile-paxadnae.com##+js(acs, Math, localStorage%5B'%5Cx)
-! https://github.com/uBlockOrigin/uAssets/issues/25538
-4k2h4w04.xyz,a6iqb4m8.xyz,afl3ua5u.xyz,jmzkzesy.xyz##+js(nowoif)
-4k2h4w04.xyz,a6iqb4m8.xyz,afl3ua5u.xyz,jmzkzesy.xyz##+js(acs, Math, localStorage%5B'%5Cx)
-!#if env_firefox
-*$frame,csp=sandbox allow-downloads allow-forms allow-modals allow-same-origin allow-scripts,from=filemoon.*
-!#endif
-||hpilzison-r.online^
-||kaarheciqa.xyz^
-||klh3j19w.xyz^
-||gxfh59u4.xyz^
-||lv9qr0g0.xyz^
-||nubileforward.com^
-||op3xdork.xyz^
-||skvxbool.xyz^
-! https://github.com/AdguardTeam/AdguardFilters/issues/190943
-wiki.yjsnpi.nu###mw-content-text div[style] a:is([href*="contents.fc2.com"],[href*="dmm.co.jp"]):style(font-size: 0 !important;)
-wiki.yjsnpi.nu###mw-content-text div[style] a:is([href*="contents.fc2.com"],[href*="dmm.co.jp"]) img:style(height: 0 !important;)
-wiki.yjsnpi.nu##+js(spoof-css, %23mw-content-text%20div%5Bstyle%5D%20a%3Ais(%5Bhref*%3D%22contents.fc2.com%22%5D, %5Bhref*%3D%22dmm.co.jp%22%5D), font-size, 14px)
-wiki.yjsnpi.nu##+js(spoof-css, %23mw-content-text%20div%5Bstyle%5D%20a%3Ais(%5Bhref*%3D%22contents.fc2.com%22%5D, %5Bhref*%3D%22dmm.co.jp%22%5D)%20img, height, 128px)
-wiki.yjsnpi.nu#@#+js(aost, Function.prototype.toString, %2F%5BA-z%5D%2B%5C%2F%5BA-z%5D%5C%2F%5BA-z%5D.%2Bcomments%5C.js%2F)
-wiki.yjsnpi.nu##+js(aost, Function.prototype.toString, %2F%5BA-Za-z%5D%2B%20https%3A%5C%2F%5C%2Fwiki%5C.yjsnpi%5C.nu%5C%2Fw%5C%2Fload%5C.php%5C%3Flang%3Dja%26modules%3Dcodex-search-styles%252Cjquery%252Coojs%252C%26skin%3Dvector-2022%26version%3D%5Cw%2B%3A1%3A1%2F)
-wiki.yjsnpi.nu##+js(nostif, ()%3D%3Ek(S(4)
-*$script,1p,redirect-rule=noop.js,domain=wiki.yjsnpi.nu
+! https://github.com/uBlockOrigin/uAssets/issues/27173
+! https://github.com/AdguardTeam/AdguardFilters/issues/202301
+mee-cccdoz45.com,my4w.com,fu-4u3omzw0.nl,0deh.com,5mgz1.com,6jlvu.com,xo7c.com,v1kkm.com,hmt6u.com,guum5.com,l8e8.com,l99j.com,58n1.com,z4h4.com,qa2h.com,/^moon(?:-[a-z0-9]+)?-embed\.com$/,/^moonfile-[a-z0-9-]+\.com$/,/^[0-9a-z]{5,8}\.(art|cfd|fun|icu|info|pro|sbs|world)$/,/^moo-[a-z0-9]+(-[a-z0-9]+)*-mkay\.com$/,/^file-[a-z0-9]+(-[a-z0-9]+)*-(moon|embed)\.com$/,/^fle-[a-z0-9]+(-[a-z0-9]+)*-moo\.com$/,/^filemoon-[a-z0-9]+(?:-[a-z0-9]+)*\.(?:com|xyz)$/##+js(nowoif, %2F%5E%20%5B-%5Cd%5D%2F)
+mee-cccdoz45.com,my4w.com,fu-4u3omzw0.nl,0deh.com,5mgz1.com,6jlvu.com,xo7c.com,v1kkm.com,hmt6u.com,guum5.com,l8e8.com,l99j.com,58n1.com,z4h4.com,qa2h.com,/^moon(?:-[a-z0-9]+)?-embed\.com$/,/^moonfile-[a-z0-9-]+\.com$/,/^[0-9a-z]{5,8}\.(art|cfd|fun|icu|info|pro|sbs|world)$/,/^moo-[a-z0-9]+(-[a-z0-9]+)*-mkay\.com$/,/^file-[a-z0-9]+(-[a-z0-9]+)*-(moon|embed)\.com$/,/^fle-[a-z0-9]+(-[a-z0-9]+)*-moo\.com$/,/^filemoon-[a-z0-9]+(?:-[a-z0-9]+)*\.(?:com|xyz)$/##+js(acs, Math.random, parseInt(localStorage%5B'%5Cx)
+u26bekrb.fun##+js(set, adBlockDetected, undefined)
 !#if cap_html_filtering
-||wiki.yjsnpi.nu/comments/$script,replace=/(;\}\}function [A-Za-z]+\([A-Za-z]?\)\{const [a-z]+=[A-Z]\,(?:const )?[a-z]+=[A-Z]).{500\,2000}\]\(\);\}\}/\$1}/
-||wiki.yjsnpi.nu/comments/$script,replace=/(\);\}\}function [A-Za-z]+\([A-Za-z]?\)\{const [a-z]+=[A-Z]\,(?:const )?[a-z]+=[A-Z]).{500\,2000}\]\(\)\)\);\}/\$1}/
-||wiki.yjsnpi.nu/yjsnpi.js$replace=/^[\S\s]*(\,)[\S\s]*/function copyToClipboad(e){navigator.clipboard.writeText(this.caller.dataset.text).then((()=>{mw.notify("クリップボードにコピーしました")\$1gtag("event"\$1"clipboard"\$1{wgTitle:RLCONF.wgTitle\$1clipboard_status:"done"})})\$1(()=>{mw.notify("クリップボードにコピーできませんでした…")\$1gtag("event"\$1"clipboard"\$1{wgTitle:RLCONF.wgTitle\$1clipboard_status:"failed"})}))}function searchProduct(e){var t="";if("FANZA"===this.caller.dataset.asp){{const e="https:\/\/www.dmm.co.jp\/digital\/videoa\/-\/list\/search\/=\/?searchstr="+encodeURI(RLCONF.wgPageName);t="https:\/\/al.dmm.co.jp\/?lurl="+encodeURI(e)+"&af_id=takayama-001&ch=toolbar&ch_id=link"}window.open(t\$1"_blank")\$1gtag("event"\$1"search_products"\$1{wgTitle:RLCONF.wgTitle\$1asp:this.caller.dataset.asp})}}function sfw(e){this.caller.classList.remove("nsfw")\$1gtag("event"\$1"nsfw"\$1{wgTitle:RLCONF.wgTitle})}function getAbsolutePath(e){const t=location.href;return new URL(e\$1t).href}document.querySelectorAll(".copy_to_clipboard").forEach((e=>{e.addEventListener("click"\$1{caller:e\$1handleEvent:copyToClipboad})}))\$1document.querySelectorAll(".search_products").forEach((e=>{e.addEventListener("click"\$1{caller:e\$1handleEvent:searchProduct})}))\$1document.querySelectorAll(".share_button").forEach((e=>{e.addEventListener("click"\$1(async e=>{const t={title:RLCONF.wgTitle+" - 真夏の夜の淫夢Wiki"\$1text:RLCONF.wgTitle+" - 真夏の夜の淫夢Wiki"\$1url:getAbsolutePath("\/wiki\/"+encodeURI(RLCONF.wgPageName))};if(navigator.canShare&&navigator.canShare(t))try{await navigator.share(t)\$1mw.notify("シェアしました")\$1gtag("event"\$1"share"\$1{wgTitle:RLCONF.wgTitle\$1share_type:"share"\$1share_status:"done"})}catch(e){mw.notify("シェアできませんでした…")\$1gtag("event"\$1"share"\$1{wgTitle:RLCONF.wgTitle\$1share_type:"share"\$1share_status:"cancelled"})}else navigator.clipboard.writeText(t.text+" "+t.url).then((()=>{mw.notify("クリップボードにコピーしました")\$1gtag("event"\$1"share"\$1{wgTitle:RLCONF.wgTitle\$1share_type:"clipboard"\$1share_status:"done"})})\$1(()=>{mw.notify("クリップボードにコピーできませんでした…")\$1gtag("event"\$1"share"\$1{wgTitle:RLCONF.wgTitle\$1share_type:"clipboard"\$1share_status:"failed"})}))}))}))\$1document.querySelectorAll(".nsfw").forEach((e=>{e.addEventListener("click"\$1{caller:e\$1handleEvent:sfw})}));/
-wiki.yjsnpi.nu##^script:has-text(/catch.+catch/)
-||wiki.yjsnpi.nu/w/load.php?lang=ja&modules=$script,replace=/\((?:function)?\s*\([\$\w]*[\W\s]+?(const|function)[\S\s]+?catch[\S\s]+?catch[\S\s]+?catch[\S\s]+?\)\([\$\w]*\);?\s*\$//
+$frame,3p,domain=filemoon.*|8rm3l0i9.fun|iqksisgw.xyz|u6lyxl0w.skin|l1afav.net,replace='/^/<script>(()=>{window.open=new Proxy(window.open,{apply:(e,t,r)=>{}});const e=new WeakMap,t=(e,t)=>{try{e.dispatchEvent(new Event(t))}catch{}};XMLHttpRequest.prototype;self.XMLHttpRequest=class extends self.XMLHttpRequest{open(t,r,...n){if(e.delete(this),new URL(r).hostname.endsWith(".cdn255.com"))return super.open(t,r,...n);const s={method:t,url:r},a=Object.assign(s,{xhr:this,headers:{date:"","content-type":"","content-length":""},url:s.url,props:{response:{value:""},responseText:{value:""},responseXML:{value:null}}});return e.set(this,a),super.open(t,r,...n)}send(...r){const n=e.get(this);return void 0===n?super.send(...r):!1===n.defer?(n.headers["content-length"]=`${n.props.response.value}`.length,Object.defineProperties(n.xhr,{readyState:{value:4},responseURL:{value:n.url},status:{value:200},statusText:{value:"OK"}}),void Object.defineProperties(n.xhr,n.props)):void Promise.resolve("").then((()=>n)).then((e=>(Object.defineProperties(e.xhr,{readyState:{value:1,configurable:!0},responseURL:{value:n.url}}),t(e.xhr,"readystatechange"),e))).then((e=>(n.headers["content-length"]=`${e.props.response.value}`.length,Object.defineProperties(e.xhr,{readyState:{value:2,configurable:!0},status:{value:200},statusText:{value:"OK"}}),t(e.xhr,"readystatechange"),e))).then((e=>(Object.defineProperties(e.xhr,{readyState:{value:3,configurable:!0}}),Object.defineProperties(e.xhr,e.props),t(e.xhr,"readystatechange"),e))).then((e=>{Object.defineProperties(e.xhr,{readyState:{value:4}}),t(e.xhr,"readystatechange"),t(e.xhr,"load"),t(e.xhr,"loadend")}))}};let r=document.querySelector("script");r.innerHTML.includes("window.open")&&r.parentElement.removeChild(r)})();<\/script>/'
+*$frame,3p,replace=/adBlockDetected//,from=filemoon.*
 !#endif
+! https://github.com/uBlockOrigin/uAssets/issues/25538
+0cbcq8mu.com,2cf0xzdu.com,4k2h4w04.xyz,a6iqb4m8.xyz,afl3ua5u.xyz,jmzkzesy.xyz##+js(nowoif)
+0cbcq8mu.com,2cf0xzdu.com,4k2h4w04.xyz,a6iqb4m8.xyz,afl3ua5u.xyz,jmzkzesy.xyz##+js(acs, Math, localStorage%5B'%5Cx)
+0cbcq8mu.com,2cf0xzdu.com,4k2h4w04.xyz,a6iqb4m8.xyz,afl3ua5u.xyz,jmzkzesy.xyz##^script:has-text(/popunder|\(\)\{try\{localStorage\[/)
+||droci.buzz^$popup,doc
+||qsiyfgazubcu.top^$popup,doc
+||sez88e.fun^$popup,doc
+||vrkonefd.buzz^$popup,doc
+||xpobbwxzhe-l.site^$popup,doc
 ! Ad-Shield
-html-load.com##html,body:style(height: 1px !important; overflow: hidden !important;)
-content-loader.com##html,body:style(height: 1px !important; overflow: hidden !important;)
-css-load.com##html,body:style(height: 1px !important; overflow: hidden !important;)
-img-load.com##html,body:style(height: 1px !important; overflow: hidden !important;)
-! https://github.com/uBlockOrigin/uAssets/issues/25990
-||karistudio.com/wp-content/themes/blogarise-child/check2.js$important
-karistudio.com##p.chapter_content:style(display: block !important; visibility: visible !important; opacity: 1 !important; transform: none !important;)
-! https://github.com/uBlockOrigin/uAssets/issues/20907
-cursomecanet.com##+js(no-fetch-if, https, , %7B%22statusText%22%3A%20%22%22%2C%20%22type%22%3A%20%22cors%22%7D)
-cursomecanet.com##+js(aost, fetch, .js%3F)
+dogdrip.net##html[lang="ko"] [id^="img_"][style]:has(iframe[frameborder="0"][style]):style(clip-path: circle(0) !important;)
+infinityfree.com##html[lang][dir="ltr"] [id^="img_"][style]:has(iframe[frameborder="0"][style]):style(clip-path: circle(0) !important;)
+smsonline.cloud##html[data-theme][lang] [id^="img_"][style]:has(iframe[frameborder="0"][style]):style(clip-path: circle(0) !important;)
+~dogdrip.net,~infinityfree.com,~smsonline.cloud##html[class^="img_"][amp4ads=""][i-amphtml-layout=""][i-amphtml-no-boilerplate=""][amp-version="2502032353000"]
+~dogdrip.net,~infinityfree.com,~smsonline.cloud##*:not(body) > a[href^="https://content-loader.com/content"]
+~dogdrip.net,~infinityfree.com,~smsonline.cloud##*:not(body) > a[href^="https://html-load.com/content"]
+~dogdrip.net,~infinityfree.com,~smsonline.cloud##*:not(body) > a[href^="https://07c225f3.online/content"]
+07c225f3.online,content-loader.com,css-load.com,html-load.com,img-load.com##html:not(:has(> head > style:only-child:has-text(width:399px;height:411px))):style(filter: opacity(0) !important; pointer-events: none !important;)
+/^https:\/\/www\.[0-9a-z-]{8,}\.xyz\/script\/[-.0-9A-Za-z]+\.[-A-Za-z]{2,30}\.js$/$script,3p,match-case,to=xyz,header=x-length
+*$~script,~frame,~xhr,domain=07c225f3.online|content-loader.com|css-load.com|html-load.com|img-load.com
+! https://github.com/uBlockOrigin/uAssets/issues/26487
+dogdrip.net,infinityfree.com,smsonline.cloud##+js(no-fetch-if, -load.com%2Fscript%2F, length%3A101)
+dogdrip.net,infinityfree.com,smsonline.cloud##+js(nostif, )%5D(this%2C..., 3000-6000)
+-load.com/script/$xhr,domain=smsonline.cloud
+smsonline.cloud##+js(nostif, (new%20Error(, 3000-6000)
+smsonline.cloud##aside[class^="css-"]:has(> p:has-text(Advertisement) + ins.adsbygoogle)
 ! https://github.com/uBlockOrigin/uAssets/issues/25344
 ! https://github.com/uBlockOrigin/uAssets/pull/26342
-bing.com##+js(trusted-replace-argument, DOMTokenList.prototype.contains, 0, , condition, %2F%5Eb_algo%24%2F)
-bing.com##li.b_algo:has(> .b_title a[href^="https://www.bing.com/aclk?"])
-bing.com##li.b_algo:has(> h2 > a[href^="https://www.bing.com/aclk?"])
-! https://github.com/AdguardTeam/AdguardFilters/issues/183252
-exploader.net#@#article > div[style="margin-left: -63px;width: 1120px;height: 450px;margin-bottom: 5px;display: flex;align-items: center;"]:style(position: absolute !important; clip:rect(1px,1px,1px,1px) !important;)
-exploader.net#@#+js(spoof-css, article%20%3E%20div%5Bstyle%3D%22margin-left%3A%20-63px%3Bwidth%3A%201120px%3Bheight%3A%20450px%3Bmargin-bottom%3A%205px%3Bdisplay%3A%20flex%3Balign-items%3A%20center%3B%22%5D, clip, auto)
-exploader.net#@#+js(spoof-css, a%5Bhref%5E%3D%22https%3A%2F%2Fal.dmm.co%22%5D, display, block)
-exploader.net#@#a[href^="https://al.dmm.co"]
-exploader.net#@#a[style*="display:"][href^="https://al.dmm.co.jp"]
-exploader.net#@#+js(spoof-css, a%5Bstyle*%3D%22display%3A%22%5D%5Bhref%5E%3D%22https%3A%2F%2Fal.dmm.co.jp%22%5D, display, flex%20!important)
-exploader.net##+js(spoof-css, a%5Bstyle*%3D%22display%3A%22%5D%5Bhref%5E%3D%22https%3A%2F%2Fal.dmm.co.jp%22%5D%20img, height, 20px)
-exploader.net##+js(spoof-css, a%5Bstyle*%3D%22display%3A%22%5D%5Bhref%5E%3D%22https%3A%2F%2Fal.dmm.co.jp%22%5D%20img, display, block)
-exploader.net##a[style*="display:"][href^="https://al.dmm.co.jp"] img
-exploader.net##a[style*="display:"][href^="https://al.dmm.co.jp"] > div:has(img):style(height: 20px !important;)
-exploader.net##a[style*="display:"][href^="https://al.dmm.co.jp"] span
-! https://github.com/uBlockOrigin/uAssets/issues/26299
-entra.news,microsoftsecurityinsights.com,substack.com#@#+js(trusted-set-cookie, intro_popup_last_hidden_at, %24currentDate%24, , , reload, 1)
-! https://github.com/uBlockOrigin/uAssets/issues/26348
-@@||ac.cnstrc.com^$xhr,domain=bjs.com
+! https://github.com/uBlockOrigin/uAssets/issues/26393
+! https://github.com/uBlockOrigin/uAssets/issues/26623
+bing.com##+js(rpnt, script, _w.keyMap%3D, (()%3D%3E%7Bconst%20e%3D%7Bapply%3A(e%2Ct%2Cn)%3D%3E%7Blet%20o%3DReflect.apply(e%2Ct%2Cn)%3Breturn%20o%20instanceof%20HTMLIFrameElement%26%26!o.src%26%26o.contentWindow%26%26(o.contentWindow.document.body.getElementsByTagName%3Dwindow.document.body.getElementsByTagName%2Co.contentWindow.MutationObserver%3Dvoid%200)%2Co%7D%7D%3BHTMLBodyElement.prototype.appendChild%3Dnew%20Proxy(HTMLBodyElement.prototype.appendChild%2Ce)%3Bconst%20t%3D%7Bapply%3A(e%2Ct%2Cn)%3D%3E(t%20instanceof%20HTMLLIElement%26%26%22b_algo%22%3D%3D%3Dt%3F.classList%3F.value%26%26%22a%22%3D%3D%3Dn%3F.%5B0%5D%26%26setTimeout((()%3D%3E%7Bt.style.display%3D%22none%22%7D)%2C100)%2CReflect.apply(e%2Ct%2Cn))%7D%3BHTMLBodyElement.prototype.getElementsByTagName%3Dnew%20Proxy(HTMLBodyElement.prototype.getElementsByTagName%2Ct)%7D)()%3B_w.keyMap%3D)
+bing.com##+js(no-xhr-if, %2Ffd%2Fls%2Flsp.aspx)
+bing.com##ol#b_results > li:has(> :is(.b_tpcn, .b_title, h2) a[href^="https://www.bing.com/aclk?"])
+bing.com##ol#b_results > li.b_algo:has(.b_lineclamp3:matches-css-before(content:/^url\(\Sdata:image\/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD.AAAA/))
+! https://www.reddit.com/r/uBlockOrigin/comments/1j76tpa/adblock_detected_site_gledaitvlive/
+! https://www.reddit.com/r/uBlockOrigin/comments/197760n/adblock_detected_httpswwwbggledailive/
+bg-gledai.*,gledaitv.*##+js(no-fetch-if, method%3AHEAD)
+! https://github.com/AdguardTeam/AdguardFilters/commit/84dda2a9a94651bbd8bb50521cbe755a82fbecdb
+@@||g.doubleclick.net/gampad/ads?$xhr,domain=video-ac.com
+@@||g.doubleclick.net/pagead/managed/js/gpt/*/pubads_impl.js$domain=video-ac.com
+@@||g.doubleclick.net/tag/js/gpt.js$domain=video-ac.com
+@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=video-ac.com
+@@||safeframe.googlesyndication.com/safeframe/$domain=video-ac.com
+! https://www.reddit.com/r/uBlockOrigin/comments/1jef4qb/having_adblock_issues_with_faqwikius/
+faqwiki.us##+js(nostif, .offsetHeight%3E0)
+faqwiki.us##+js(rmnt, script, %2Fadblock%2Fi)
+! https://www.reddit.com/r/uBlockOrigin/comments/1ji7r4o/mirurotv_displays_a_totally_black_page/
+@@||miruro.*/assets/components-shared-popunder-$script,1p
+! https://github.com/AdguardTeam/AdguardFilters/issues/199124
+pvpoke-re.com##+js(trusted-suppress-native-method, Element.prototype.insertAdjacentHTML, %22afterbegin%22, prevent, %2F%5C%2F%5BA-Za-z%5D%2B%5C.min%5C.js%5C%3F%2F)
+pvpoke-re.com##body:style(overflow-y: auto !important;)
+pvpoke-re.com##html:style(overflow-y: auto !important;)
+pvpoke-re.com##+js(aost, Object.create, %2FstackDepth%3A%5B45%5D.%2B%5B0-9A-Za-z%5D%2B%20https%3A%5C%2F%5C%2Fpvpoke-re%5C.com%5C%2F%5B0-9A-Za-z%5D%2B%5C.js%5C%3Fv%3D%5Cd%5C.%5Cd%7B2%7D%5C.%5Cd%2F)
+! https://github.com/uBlockOrigin/uAssets/issues/27746
+! [badfilter] _adv.js$badfilter
+@@||gouv.fr/*_adv.js
+! https://github.com/AdguardTeam/AdguardFilters/issues/201894
+! [badfilter] ||luluvdo.com^$badfilter
+! https://github.com/uBlockOrigin/uAssets/issues/27751
+@@||tix.axs.com^$removeparam=irclickid
+! https://github.com/uBlockOrigin/uAssets/issues/26441
+/page_beg_wb.js$script,domain=cool-web.de|gps-cache.de|web-spiele.de|fun-seiten.de|photo-alben.de|wetter-vorhersage.de|coolsoftware.de|kryptografie.de|cool-domains.de|net-tours.de|such-maschine.de|qul.de|mailtool.de|c-ix.de|softwareengineer.de|net-tools.de|hilfen.de|45er.de|cooldns.de|hardware-entwicklung.de|cool--web-de.translate.goog|gps--cache-de.translate.goog|web--spiele-de.translate.goog|fun--seiten-de.translate.goog|photo--alben-de.translate.goog|wetter--vorhersage-de.translate.goog|coolsoftware-de.translate.goog|kryptografie-de.translate.goog|cool--domains-de.translate.goog|net--tours-de.translate.goog|such--maschine-de.translate.goog|qul-de.translate.goog|mailtool-de.translate.goog|c--ix-de.translate.goog|softwareengineer-de.translate.goog|net--tools-de.translate.goog|hilfen-de.translate.goog|45er-de.translate.goog|cooldns-de.translate.goog|hardware--entwicklung-de.translate.goog
+/js/wb_ban.js$script,domain=cool-web.de|gps-cache.de|web-spiele.de|fun-seiten.de|photo-alben.de|wetter-vorhersage.de|coolsoftware.de|kryptografie.de|cool-domains.de|net-tours.de|such-maschine.de|qul.de|mailtool.de|c-ix.de|softwareengineer.de|net-tools.de|hilfen.de|45er.de|cooldns.de|hardware-entwicklung.de|cool--web-de.translate.goog|gps--cache-de.translate.goog|web--spiele-de.translate.goog|fun--seiten-de.translate.goog|photo--alben-de.translate.goog|wetter--vorhersage-de.translate.goog|coolsoftware-de.translate.goog|kryptografie-de.translate.goog|cool--domains-de.translate.goog|net--tours-de.translate.goog|such--maschine-de.translate.goog|qul-de.translate.goog|mailtool-de.translate.goog|c--ix-de.translate.goog|softwareengineer-de.translate.goog|net--tools-de.translate.goog|hilfen-de.translate.goog|45er-de.translate.goog|cooldns-de.translate.goog|hardware--entwicklung-de.translate.goog
+cool-web.de,gps-cache.de,web-spiele.de,fun-seiten.de,photo-alben.de,wetter-vorhersage.de,coolsoftware.de,kryptografie.de,cool-domains.de,net-tours.de,such-maschine.de,qul.de,mailtool.de,c-ix.de,softwareengineer.de,net-tools.de,hilfen.de,45er.de,cooldns.de,hardware-entwicklung.de,cool--web-de.translate.goog,gps--cache-de.translate.goog,web--spiele-de.translate.goog,fun--seiten-de.translate.goog,photo--alben-de.translate.goog,wetter--vorhersage-de.translate.goog,coolsoftware-de.translate.goog,kryptografie-de.translate.goog,cool--domains-de.translate.goog,net--tours-de.translate.goog,such--maschine-de.translate.goog,qul-de.translate.goog,mailtool-de.translate.goog,c--ix-de.translate.goog,softwareengineer-de.translate.goog,net--tools-de.translate.goog,hilfen-de.translate.goog,45er-de.translate.goog,cooldns-de.translate.goog,hardware--entwicklung-de.translate.goog##+js(nostif, , 2000-)
+cool-web.de,gps-cache.de,web-spiele.de,fun-seiten.de,photo-alben.de,wetter-vorhersage.de,coolsoftware.de,kryptografie.de,cool-domains.de,net-tours.de,such-maschine.de,qul.de,mailtool.de,c-ix.de,softwareengineer.de,net-tools.de,hilfen.de,45er.de,cooldns.de,hardware-entwicklung.de,cool--web-de.translate.goog,gps--cache-de.translate.goog,web--spiele-de.translate.goog,fun--seiten-de.translate.goog,photo--alben-de.translate.goog,wetter--vorhersage-de.translate.goog,coolsoftware-de.translate.goog,kryptografie-de.translate.goog,cool--domains-de.translate.goog,net--tours-de.translate.goog,such--maschine-de.translate.goog,qul-de.translate.goog,mailtool-de.translate.goog,c--ix-de.translate.goog,softwareengineer-de.translate.goog,net--tools-de.translate.goog,hilfen-de.translate.goog,45er-de.translate.goog,cooldns-de.translate.goog,hardware--entwicklung-de.translate.goog##+js(nosiif, %2F%5E%2F)
+cool-web.de,gps-cache.de,web-spiele.de,fun-seiten.de,photo-alben.de,wetter-vorhersage.de,coolsoftware.de,kryptografie.de,cool-domains.de,net-tours.de,such-maschine.de,qul.de,mailtool.de,c-ix.de,softwareengineer.de,net-tools.de,hilfen.de,45er.de,cooldns.de,hardware-entwicklung.de,cool--web-de.translate.goog,gps--cache-de.translate.goog,web--spiele-de.translate.goog,fun--seiten-de.translate.goog,photo--alben-de.translate.goog,wetter--vorhersage-de.translate.goog,coolsoftware-de.translate.goog,kryptografie-de.translate.goog,cool--domains-de.translate.goog,net--tours-de.translate.goog,such--maschine-de.translate.goog,qul-de.translate.goog,mailtool-de.translate.goog,c--ix-de.translate.goog,softwareengineer-de.translate.goog,net--tools-de.translate.goog,hilfen-de.translate.goog,45er-de.translate.goog,cooldns-de.translate.goog,hardware--entwicklung-de.translate.goog##+js(aeld, DOMContentLoaded, 0x)
+cool-web.de,gps-cache.de,web-spiele.de,fun-seiten.de,photo-alben.de,wetter-vorhersage.de,coolsoftware.de,kryptografie.de,cool-domains.de,net-tours.de,such-maschine.de,qul.de,mailtool.de,c-ix.de,softwareengineer.de,net-tools.de,hilfen.de,45er.de,cooldns.de,hardware-entwicklung.de,cool--web-de.translate.goog,gps--cache-de.translate.goog,web--spiele-de.translate.goog,fun--seiten-de.translate.goog,photo--alben-de.translate.goog,wetter--vorhersage-de.translate.goog,coolsoftware-de.translate.goog,kryptografie-de.translate.goog,cool--domains-de.translate.goog,net--tours-de.translate.goog,such--maschine-de.translate.goog,qul-de.translate.goog,mailtool-de.translate.goog,c--ix-de.translate.goog,softwareengineer-de.translate.goog,net--tools-de.translate.goog,hilfen-de.translate.goog,45er-de.translate.goog,cooldns-de.translate.goog,hardware--entwicklung-de.translate.goog###page > div[id]:style(visibility: visible !important; display: inherit !important;)
+! https://github.com/easylist/easylist/commit/65c7ef2f8c56b6994357b6f0e1762848916a3fd5
+@@||s.yimg.jp/images/listing/tool/cv/ytag.js$domain=store-jp.nintendo.com
+! https://github.com/uBlockOrigin/uAssets/issues/27884
+! https://github.com/uBlockOrigin/uAssets/issues/27886
+! royalroad.com##+js(trusted-set, nitroAds, json%3A%7B%22version%22%3A%2220250402%20de32690%22%2C%22createAd%22%3A%22placement%20generation%22%7D)
+! royalroad.com##+js(nostif, _0x)
+royalroad.com##div:is([class*="portlet light "],[class*="portlet dark "]):matches-attr(class="/\bportlet (light|dark) [a-zA-Z0-9]{24}\b/") > div.bold:has-text(/^Advertisement/):upward(1)
+! ||royalroad.com/bd/cr?$xhr,method=get,1p,strict1p
+! https://github.com/uBlockOrigin/uAssets/issues/27925
+! [badfilter] ||massariuscdn.com^$badfilter
+! https://github.com/uBlockOrigin/uAssets/issues/27928
+#@#a[href="#"][title^="Scroll "] + div[id][class*=" "]

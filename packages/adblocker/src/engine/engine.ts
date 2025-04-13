@@ -37,7 +37,7 @@ import { ICategory } from './metadata/categories.js';
 import { IOrganization } from './metadata/organizations.js';
 import { IPattern } from './metadata/patterns.js';
 
-export const ENGINE_VERSION = 703;
+export const ENGINE_VERSION = 751;
 
 function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   if (filters.length === 0) {
@@ -290,7 +290,9 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const configKeysMustMatch: ConfigKey[] = (Object.keys(config) as (keyof Config)[]).filter(
       function (key): key is ConfigKey {
         return (
-          typeof config[key] === 'boolean' && !compatibleConfigKeys.includes(key as ConfigKey)
+          typeof config[key] === 'boolean' &&
+          !compatibleConfigKeys.includes(key as ConfigKey) &&
+          !Object.hasOwnProperty.call(overrideConfig, key)
         );
       },
     );

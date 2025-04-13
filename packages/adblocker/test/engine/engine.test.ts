@@ -2023,6 +2023,28 @@ foo.com###selector
       });
     });
 
+    context('valides configs', () => {
+      it('throws with different configs', () => {
+        const engine1 = FilterEngine.empty({ loadCosmeticFilters: true });
+        const engine2 = FilterEngine.empty({ loadCosmeticFilters: false });
+        expect(() => FilterEngine.merge([engine1, engine2])).to.throw(
+          `config "loadCosmeticFilters" of all merged engines must be the same`,
+        );
+      });
+
+      it('does not check overridden configs', () => {
+        const engine1 = FilterEngine.empty({ enableCompression: true });
+        const engine2 = FilterEngine.empty({ enableCompression: false });
+        let engine: FilterEngine;
+        expect(() => {
+          engine = FilterEngine.merge([engine1, engine2], {
+            overrideConfig: { enableCompression: false },
+          });
+        }).not.to.throw();
+        expect(engine!.config).to.have.property('enableCompression').that.equal(false);
+      });
+    });
+
     context('with resources', () => {
       it('throws with different checksums', () => {
         const engine1 = FilterEngine.empty();
