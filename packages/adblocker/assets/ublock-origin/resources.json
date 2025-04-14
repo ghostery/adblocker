@@ -62,6 +62,16 @@
       ]
     },
     {
+      "name": "trusted-create-html.js",
+      "aliases": [],
+      "body": "function trustedCreateHTML(e,t=\"\",n=\"\"){if(e===\"\")return;if(t===\"\")return;const r=safeSelf();const o=r.makeLogPrefix(\"trusted-create-html\",e,t,n);self.trustedCreateHTML=true;let u=self.frameElement;while(u!==null){const e=u.ownerDocument;if(e===null)break;const t=e.defaultView;if(t===null)break;if(t.trustedCreateHTML)return;u=u.frameElement}const s=parseInt(n,10);const l=new DOMParser;const i=l.parseFromString(t,\"text/html\");const c=new DocumentFragment;const d=[];while(i.body.firstChild!==null){const e=document.adoptNode(i.body.firstChild);c.appendChild(e);if(isNaN(s))continue;d.push(e)}if(c.firstChild===null)return;const f=()=>{for(const e of d){if(e.parentNode===null)continue;e.parentNode.removeChild(e)}r.uboLog(o,\"Node(s) removed\")};const a=()=>{const t=document.querySelector(e);if(t===null)return false;t.append(c);r.uboLog(o,\"Node(s) appended\");if(d.length===0)return true;setTimeout(f,s);return true};if(a())return;const m=new MutationObserver((()=>{if(a()===false)return;m.disconnect()}));m.observe(document,{childList:true,subtree:true})}",
+      "dependencies": [
+        "safe-self.fn"
+      ],
+      "executionWorld": "ISOLATED",
+      "requiresTrust": true
+    },
+    {
       "name": "urlskip.fn",
       "aliases": [],
       "body": "function urlSkip(e,t,n,c={}){try{let r=false;let i=e;for(const e of n){const t=i;const n=e.charCodeAt(0);if(n===35&&e===\"#\"){const e=t.indexOf(\"#\");i=e!==-1?t.slice(e+1):\"\";continue}if(n===38){const n=(parseInt(e.slice(1))||0)-1;if(n<0)return;const c=new URL(t);if(n>=c.searchParams.size)return;const r=Array.from(c.searchParams.keys());i=decodeURIComponent(r[n]);continue}if(n===43&&e===\"+https\"){const e=t.replace(/^https?:\\/\\//,\"\");if(/^[\\w-]:\\/\\//.test(e))return;i=`https://${e}`;continue}if(n===45){if(e===\"-base64\"){i=self.atob(t);continue}if(e===\"-safebase64\"){if(urlSkip.safeBase64Replacer===void 0){urlSkip.safeBase64Map={\"-\":\"+\",_:\"/\"};urlSkip.safeBase64Replacer=e=>urlSkip.safeBase64Map[e]}i=t.replace(/[-_]/g,urlSkip.safeBase64Replacer);i=self.atob(i);continue}if(e===\"-uricomponent\"){i=decodeURIComponent(t);continue}if(e===\"-blocked\"){r=true;continue}}if(n===47){const n=c.cache??new RegExp(e.slice(1,-1));if(c.cache===null)c.cache=n;const r=n.exec(t);if(r===null)return;if(r.length<=1)return;i=r[1];continue}if(n===63){i=new URL(t).searchParams.get(e.slice(1));if(i===null)return;if(i.includes(\" \"))i=i.replace(/ /g,\"%20\");continue}return}const s=new URL(i);if(s.protocol!==\"https:\")if(s.protocol!==\"http:\")return;if(t&&r!==true)return;return i}catch{}}",
