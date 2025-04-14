@@ -148,7 +148,7 @@ export function sizeOfCosmeticSelector(str: string, compression: boolean): numbe
 export function sizeOfRawNetwork(str: string, compression: boolean): number {
   return compression === true
     ? sizeOfBytesWithLength(
-        getCompressionSingleton().networkRaw.getCompressedSize(str),
+        getCompressionSingleton().networkRaw.getCompressedSize(TEXT_ENCODER.encode(str)),
         false, // align
       )
     : sizeOfUTF8(str);
@@ -157,7 +157,7 @@ export function sizeOfRawNetwork(str: string, compression: boolean): number {
 export function sizeOfRawCosmetic(str: string, compression: boolean): number {
   return compression === true
     ? sizeOfBytesWithLength(
-        getCompressionSingleton().cosmeticRaw.getCompressedSize(str),
+        getCompressionSingleton().cosmeticRaw.getCompressedSize(TEXT_ENCODER.encode(str)),
         false, // align
       )
     : sizeOfUTF8(str);
@@ -510,7 +510,7 @@ export class StaticDataView {
 
   public pushRawCosmetic(str: string): void {
     if (this.compression !== undefined) {
-      this.pushBytes(this.compression.cosmeticRaw.compress(str));
+      this.pushBytes(this.compression.cosmeticRaw.compress(TEXT_ENCODER.encode(str)));
     } else {
       this.pushUTF8(str);
     }
@@ -518,14 +518,16 @@ export class StaticDataView {
 
   public getRawCosmetic(): string {
     if (this.compression !== undefined) {
-      return this.compression.cosmeticRaw.decompress(this.getBytes());
+      return new TextDecoder('utf8', { ignoreBOM: true }).decode(
+        this.compression.cosmeticRaw.decompressRaw(this.getBytes()),
+      );
     }
     return this.getUTF8();
   }
 
   public pushRawNetwork(str: string): void {
     if (this.compression !== undefined) {
-      this.pushBytes(this.compression.networkRaw.compress(str));
+      this.pushBytes(this.compression.networkRaw.compress(TEXT_ENCODER.encode(str)));
     } else {
       this.pushUTF8(str);
     }
@@ -533,7 +535,9 @@ export class StaticDataView {
 
   public getRawNetwork(): string {
     if (this.compression !== undefined) {
-      return this.compression.networkRaw.decompress(this.getBytes());
+      return new TextDecoder('utf8', { ignoreBOM: true }).decode(
+        this.compression.networkRaw.decompressRaw(this.getBytes()),
+      );
     }
     return this.getUTF8();
   }
