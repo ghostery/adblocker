@@ -48,6 +48,7 @@
     "lint": "eslint src test tools",
     "build": "tshy && rollup --config ./rollup.config.js",
     "test": "nyc mocha",
+    "test:fuzz": "FUZZ_RUNS=1_000_000 mocha",
     "dev": "mocha --watch",
     "bench-metadata": "tsx ./tools/bench-metadata.ts",
     "bump-internal-engine-version": "tsx ./tools/auto-bump-engine-version.ts",
@@ -98,7 +99,7 @@
     }
   ],
   "devDependencies": {
-    "@remusao/smaz-generate": "^2.0.0",
+    "@remusao/smaz-generate": "^2.1.0",
     "@rollup/plugin-terser": "^0.4.4",
     "@types/chai": "^5.0.0",
     "@types/mocha": "^10.0.1",
@@ -107,6 +108,7 @@
     "chai": "^5.1.0",
     "concurrently": "^9.0.0",
     "eslint": "^9.3.0",
+    "fast-check": "^3.23.2",
     "mocha": "^11.0.1",
     "nyc": "^17.0.0",
     "rimraf": "^6.0.1",
@@ -120,7 +122,7 @@
     "@ghostery/adblocker-extended-selectors": "^2.5.0",
     "@remusao/guess-url-type": "^2.0.0",
     "@remusao/small": "^2.0.0",
-    "@remusao/smaz": "^2.0.0",
+    "@remusao/smaz": "^2.1.0",
     "tldts-experimental": "^6.0.14"
   }
 }
