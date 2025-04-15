@@ -1,3 +1,20 @@
+# v2.5.1 (Tue Apr 15 2025)
+
+#### :house: Internal
+
+- fix(lint): @typescript-eslint/no-empty-object-type [#4734](https://github.com/ghostery/adblocker/pull/4734) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/webextension-polyfill from 0.12.2 to 0.12.3 [#4703](https://github.com/ghostery/adblocker/pull/4703) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.3.2 (Thu Jan 23 2025)
 
 #### :bug: Bug Fix

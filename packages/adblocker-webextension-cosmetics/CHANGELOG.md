@@ -1,3 +1,25 @@
+# v2.5.1 (Tue Apr 15 2025)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/chrome from 0.0.312 to 0.0.313 [#4771](https://github.com/ghostery/adblocker/pull/4771) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.310 to 0.0.312 [#4765](https://github.com/ghostery/adblocker/pull/4765) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump sinon from 19.0.4 to 20.0.0 [#4759](https://github.com/ghostery/adblocker/pull/4759) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.309 to 0.0.310 [#4747](https://github.com/ghostery/adblocker/pull/4747) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.308 to 0.0.309 [#4730](https://github.com/ghostery/adblocker/pull/4730) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.307 to 0.0.308 [#4713](https://github.com/ghostery/adblocker/pull/4713) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.306 to 0.0.307 [#4699](https://github.com/ghostery/adblocker/pull/4699) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.304 to 0.0.306 [#4680](https://github.com/ghostery/adblocker/pull/4680) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.301 to 0.0.304 [#4660](https://github.com/ghostery/adblocker/pull/4660) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.300 to 0.0.301 [#4645](https://github.com/ghostery/adblocker/pull/4645) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.299 to 0.0.300 [#4633](https://github.com/ghostery/adblocker/pull/4633) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v2.3.2 (Thu Jan 23 2025)
 
 #### :bug: Bug Fix
