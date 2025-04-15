@@ -1406,8 +1406,8 @@ euronews.com###poool-fullscreen-widget
 ! just nessary
 vroomly.com##+js(trusted-set-cookie, cookie_consent_202401, %7B%22sentry%22%3Afalse%2C%22braze%22%3Afalse%2C%22userpilot%22%3Afalse%2C%22googleAnalytics%22%3Afalse%2C%22amplitude%22%3Afalse%2C%22hotjar%22%3Afalse%2C%22facebookPixel%22%3Afalse%2C%22googleAds%22%3Afalse%2C%22kwanko%22%3Afalse%7D)
 ! https://github.com/easylist/easylist/issues/12871#issuecomment-2211771161
-ryobitools.eu##+js(trusted-click-element, %23onetrust-pc-btn-handler)
-ryobitools.eu##+js(trusted-click-element, .save-preference-btn-handler, , 1000)
+ryobitools.eu##+js(trusted-click-element, button%23cookie-onetrust-show-info, , 900)
+ryobitools.eu##+js(trusted-click-element, .save-preference-btn-handler, , 1100)
 ryobitools.eu###onetrust-consent-sdk
 ! Decline consent, video playback=good. Set expiry date to 1
 njspotlightnews.org,wliw.org,thirteen.org,njpbs.org,allarts.org##+js(trusted-set-cookie, wnet_vppa_assent, %7B%22choice%22%3A%22decline%22%2C%22expires%22%3A1%7D)
@@ -1665,7 +1665,17 @@ privacy.maennersache.de##+js(trusted-click-element, button%5Btitle%3D%22Einwilli
 ! https://lovo.ai/ - essential only
 lovo.ai##+js(trusted-set-cookie, cookieConsent, %7B%22essential%22%3Atrue%2C%22analytical%22%3Afalse%2C%22functional%22%3Afalse%2C%22marketing%22%3Afalse%7D)
 ! Agree (cookie-wall consent)
-cmp.heise.de,cmp.am-online.com,cmp.motorcyclenews.com,consent.newsnow.co.uk##+js(trusted-click-element, button%5Btitle%3D%22Agree%22%5D, , 1000)
+cmp.heise.de,cmp.am-online.com,cmp.motorcyclenews.com,consent.newsnow.co.uk,cmp.todays-golfer.com##+js(trusted-click-element, button%5Btitle%3D%22Agree%22%5D, , 1000)
+! accept
+koeser.com##+js(trusted-click-element, a.cookie-permission--accept-button, , 1000)
+! essential
+central-bb.de##+js(trusted-click-element, button%5Btitle%3D%22Alle%20ablehnen%22%5D, , 1800)
+! accept
+brainmarket.pl##+js(trusted-click-element, button%5Bdata-testid%3D%22buttonCookiesAccept%22%5D, , 1500)
+! essential
+cart-in.re##+js(trusted-click-element, a%23cookies-consent-essential, , 1000)
+! continue without accepting
+prestonpublishing.pl##+js(trusted-click-element, a.hi-cookie-continue-without-accepting, , 1500)
 ! https://github.com/uBlockOrigin/uAssets/issues/26465
 character.ai##+js(trusted-set-cookie, cookie_consent_v1, reject_all)
 figma.com##+js(trusted-set-cookie, pref, %257B%2522t%2522%253A%2522explicit%2522%252C%2522f%2522%253Afalse%252C%2522a%2522%253Afalse%252C%2522m%2522%253Afalse%257D)
@@ -1710,8 +1720,8 @@ redcare.it##+js(trusted-set-cookie, usercentrics_consent, %7B%22ad_storage%22%3A
 ! I do not agree
 austrian.com,lufthansa.com##+js(trusted-click-element, button%5Bid%3D%22cm-acceptNone%22%5D, , 1000)
 ! Just Essential
-hornetsecurity.com,kayzen.io,wasserkunst-hamburg.de,zahnspange-oelde.de###BorlabsCookieBox
-hornetsecurity.com,kayzen.io,wasserkunst-hamburg.de,zahnspange-oelde.de##+js(trusted-click-element, button.brlbs-btn-accept-only-essential, , 1000)
+kampfkunst-herz.de,hornetsecurity.com,kayzen.io,wasserkunst-hamburg.de,zahnspange-oelde.de###BorlabsCookieBox
+kampfkunst-herz.de,hornetsecurity.com,kayzen.io,wasserkunst-hamburg.de,zahnspange-oelde.de##+js(trusted-click-element, button.brlbs-btn-accept-only-essential, , 1000)
 ! disagree
 bnc.ca,decathlon.fr,egora.fr,engelvoelkers.com,estrategiasdeinversion.com,festo.com,francebleu.fr,francemediasmonde.com,geny.com,giphy.com,idealista.com,infolibre.es,information.tv5monde.com,ing.es,knipex.de,laprovence.com,lemondeinformatique.fr,libertaddigital.com,mappy.com,marianne.net,orf.at,philibertnet.com,researchgate.net,rtbf.be,rtl.be,standaard.be,stroilioro.com,taxfix.de,telecinco.es,vistaalegre.com,zimbra.free.fr##+js(trusted-click-element, button%5Bid%3D%22didomi-notice-disagree-button%22%5D, , 1000)
 ! disagree (ahref)
@@ -2328,8 +2338,7 @@ airbaltic.com##+js(trusted-click-element, button.cookiebanner__buttons__deny, , 
 ! refuse
 zorgzaam010.nl##+js(trusted-click-element, button.button-refuse, , 1000)
 ! refuse
-etos.nl##+js(trusted-set-cookie, etos-cookie-message, 8.0)
-etos.nl##+js(set-cookie, etos-tracking-consent, 0)
+etos.nl##+js(trusted-click-element, button%23cookie-dismiss, , 1000)
 ! saveConsent
 paruvendu.fr##+js(trusted-click-element, a%5Bonclick%3D%22cmp_pv.cookie.saveConsent('onlyLI')%3B%22%5D, , 1000)
 ! approve
@@ -2390,9 +2399,9 @@ consent-cdn.zeit.de##+js(trusted-click-element, button%5Btitle%3D%22Agree%20and%
 incomeshares.com##+js(set-local-storage-item, policyAccepted, true)
 incomeshares.com##+js(trusted-set-local-storage-item, policyAcceptedDate, %24currentDate%24)
 ! mandatory
-1und1.net##+js(set-cookie, cookie-agreed, 2)
-1und1.net##+js(trusted-set-cookie, cookie-agreed-categories, %5B%22mandatory%22%5D)
-1und1.net##+js(trusted-set-cookie, cookie-agreed-version, 1.0.0)
+1und1.net,zdf-studios.com##+js(set-cookie, cookie-agreed, 2)
+1und1.net,zdf-studios.com##+js(trusted-set-cookie, cookie-agreed-categories, %5B%22mandatory%22%5D)
+1und1.net,zdf-studios.com##+js(trusted-set-cookie, cookie-agreed-version, 1.0.0)
 ! refuse
 coway-usa.com##+js(trusted-click-element, span.gmt_refuse, , 1000)
 ! essential
@@ -2916,7 +2925,7 @@ roblox.com##+js(trusted-set-cookie, RBXcb, RBXViralAcquisition%3Dfalse%26RBXSour
 ! reject
 ceneo.pl##+js(trusted-click-element, button%5Bdata-role%3D%22reject-rodo%22%5D, , 1500)
 ! accept, only option
-routershop.nl##+js(trusted-click-element, button%23CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll, , 1000)
+cart-in.re,routershop.nl,woo.pt##+js(trusted-click-element, button%23CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll, , 1000)
 ! reject
 druni.es,druni.pt##+js(trusted-click-element, button%5Baria-label%3D%22Rechazar%22%5D, , 1000)
 ! reject
@@ -2940,7 +2949,7 @@ weareethos.com##+js(trusted-set-cookie, gdprcookienotice, %7B%22date%22%3A%221%2
 ! necessary
 banja-tellig.de##+js(trusted-set-local-storage-item, cookieSettings, %7B%22essential%22%3Atrue%2C%22statistics%22%3Afalse%2C%22thirdparty%22%3Afalse%2C%22cookiesAccepted%22%3Atrue%7D)
 ! accept paywall
-lequipe.fr##+js(trusted-click-element, button.Cmp__action--yes, , 1000)
+lequipe.fr##+js(trusted-click-element, button.Cmp__action--yes, , 1800)
 ! agree only option
 gala.fr##+js(trusted-click-element, button.fig-consent-banner__accept, , 1000)
 ! agree paywall
