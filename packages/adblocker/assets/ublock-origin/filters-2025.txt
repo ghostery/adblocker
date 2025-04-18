@@ -1058,8 +1058,6 @@ europix.top##a[href][target^="_blank"]:style(pointer-events:none!important)
 azmen.com##+js(remove-cookie, videoPlayedNumber)
 azmen.com##.live-button-wrapper
 /player/v*/vast-no-entitlements.js^
-! https://nukibooks.com asg
-*$script,3p,denyallow=cloudflare.com,domain=nukibooks.com
 ! https://github.com/uBlockOrigin/uAssets/issues/27936
 manhuaga.com##+js(noeval-if, adsbygoogle)
 ! https://github.com/uBlockOrigin/uAssets/issues/27952
@@ -1076,3 +1074,25 @@ streamup.ws##+js(set, detectSandbox, noopFunc)
 animenexus.in##+js(nowoif, _blank)
 ! https://github.com/uBlockOrigin/uAssets/issues/27954
 html5.gamedistribution.com###gd__adblocker__overlay
+! https://github.com/uBlockOrigin/uAssets/issues/27980
+!#if cap_html_filtering
+letemsvetemapplem.eu##^script:has-text(videoList)
+!#else
+letemsvetemapplem.eu##+js(rmnt, script, videoList)
+!#endif
+letemsvetemapplem.eu##+js(no-fetch-if, %2Frekaa)
+letemsvetemapplem.eu###lsa_gallery_overlay
+! https://indojavstream.com/watch/1sdmf00051.html - popups
+indojavstream.com##+js(acs, document.createElement, pop_tag)
+indojavstream.com##+js(nowoif, _blank)
+indojavstream.com##.box_item_ads_popup
+! https://github.com/uBlockOrigin/uAssets/issues/27990
+@@||nreer.com^$ghide
+! https://91porna.com/comic/index/detail?video_key=169397 - popups
+91porna.com##[data-ads_url]:remove-attr(data-ads_url)
+! sloways.eu detection
+@@||googletagmanager.com/gtm.js$script,domain=sloways.eu
+@@||cookiefirst.com^$domain=sloways.eu
+@@||sloways.eu/*/cookie-consent$script,css,1p
+! https://github.com/uBlockOrigin/uAssets/issues/28008
+@@||info.eco.ca/adblock-detector/$1p

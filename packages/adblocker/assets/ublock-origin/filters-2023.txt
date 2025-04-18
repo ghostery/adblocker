@@ -241,6 +241,7 @@ vivi.tv##.section__inner:has(> #recommended-posts-result)
 augsburger-allgemeine.de,nikkansports.com##div[id^="cx_"]
 hochi.news###ohtani-pickup
 businessinsider.jp##div[class^="article_specialFeature_"]
+businessinsider.jp##div[class^="displayhandler"]:has(> div[class^="premiumRecommend"])
 ! ziyu.net
 jin115.com,livedoor.biz#?#.plugin-memo:has(> div.side > script[src*="ziyu.net/"])
 okutta.net##.article__footer > div[style="height:500px; overflow-y:scroll;"]
@@ -329,8 +330,9 @@ freepatternsarea.com##+js(nostif, show)
 ! https://github.com/uBlockOrigin/uAssets/issues/16426
 @@||scriptsoup.nx.tc/prebid.js$script
 ! porhubvideo.com,pornktubes.net anti-adb, hilltopads
-porhubvideo.com,pornktubes.net##+js(acs, document.createElement, %2Fl%5C.parentNode%5C.insertBefore%5C(s%2F)
-porhubvideo.com,pornktubes.net##+js(acs, eval, replace)
+porhubvideo.com,webseriessex.com,panuvideo.com,pornktubes.net##+js(nostif, myTestAd)
+porhubvideo.com,webseriessex.com,panuvideo.com,pornktubes.net##+js(acs, document.createElement, %2Fl%5C.parentNode%5C.insertBefore%5C(s%2F)
+porhubvideo.com,webseriessex.com,panuvideo.com,pornktubes.net##+js(acs, eval, replace)
 ! daemonanime.net/daemon-hentai.com anti-adb
 daemonanime.net##+js(acs, eval, replace)
 daemonanime.net##+js(acs, document.addEventListener, google_ad_client)
@@ -370,18 +372,6 @@ alttyab.net##+js(aeld, , show)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/140807
 techclips.net##+js(nostif, sadbl)
 ||techclips.net/jqueri.php
-! AdSpyglass 0i0i0i0.com CNAME adserver
-/^https?:\/\/(?=[a-z]{0,10}\d)[0-9a-z]{11}\.[-0-9a-z]{6,}\.com\/(?=[a-z]*[0-9A-Z])[0-9a-zA-Z]{5,7}\.js$/$script,1p,strict3p,match-case,to=com
-/asg_embed.js
-/vast-im.js$script
-://a.*/click/$image
-://a.*/splash/$xhr
-://a.*/spots/$xhr
-/api/users/*&ev=$script
-://a.*/js/ep.js^
-://a.*/js/stream.js^
-/api/users/*^fill=$xhr
-://cdn.*.com/vast2.js|$3p
 ! PopCash popcashjs.b-cdn.net CNAME adserver
 /^https?:\/\/cdn\.[a-z]{3,8}\.[a-z]{2,6}\/app\.js$/$script,3p,match-case,domain=~edu|~gov
 ://p.*/go/$popup,3p
@@ -946,6 +936,7 @@ link.idblog.eu.org##.ngebut
 @@||jsdelivr.net/gh/niihen/niihen.github.io/niihen-com/safelink/$script,domain=link.idblog.eu.org|niihen.com
 ! https://github.com/uBlockOrigin/uAssets/issues/7897
 multiup.eu,multiup.io,multiup.org##+js(multiup)
+||multiup.io/download-fast/$doc,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/17160
 coursedrive.org##+js(acs, eval, replace)
 ! https://github.com/uBlockOrigin/uAssets/issues/17166
@@ -1508,40 +1499,9 @@ bondagevalley.cc##+js(rmnt, script, innerHTML)
 ! https://github.com/uBlockOrigin/uAssets/issues/17744
 ||aucdn.net/library/*.mp4|$media,domain=clgt.one
 ! https://github.com/AdguardTeam/AdguardFilters/issues/177237
-||in-jpn.com^$script,redirect=noop.js
-||xth.jp^$script,redirect=noop.js
-||oninet.ne.jp^$script,redirect=noop.js
-*$script,3p,domain=in-jpn.com|xth.jp
-*$script,3p,denyallow=ampproject.org,domain=oninet.ne.jp
-@@/^https:\/\/[a-z]*\.?in-jpn\.com\/wp-includes\/js\/jquery\/jquery(-migrate)?\.min\.js\?ver=\d\.\d\.\d{1,2}$/$script,1p,strict1p,match-case,domain=in-jpn.com
-@@/^https:\/\/[a-z]*\.?in-jpn\.com\/wp-includes\/js\/wp-emoji-release\.min\.js\?(?:ver=\?)?ver=\d\.\d\.\d{1,2}$/$script,1p,strict1p,match-case,domain=in-jpn.com
-@@/^https:\/\/[a-z]*\.?in-jpn\.com\/wp-content\/themes\/amphibious\/js\/(?:custom|enquire|fitvids|hover-intent|superfish)\.js\?ver=(?:\d\.\d(?:\.\d{1,2})?|r\d)$/$script,1p,strict1p,match-case,domain=in-jpn.com
-@@/\.oninet\.ne\.jp\/sakigakesoft\/(?!sakigake)[a-z]{5,}-[a-z]{4,}-?[a-z]?\.js$/$script,1p,strict1p,domain=oninet.ne.jp
-@@||oninet.ne.jp/sakigakesoft/s/holmes-geojson.js$1p,strict1p
-@@||oninet.ne.jp/sakigakesoft/s/leaf_main.js$script,1p,strict1p
-@@||in-jpn.com^$ghide
-@@||oninet.ne.jp^$ghide
-@@||xth.jp^$ghide
-in-jpn.com,oninet.ne.jp,xth.jp##body:style(color: #000 !important;)
-in-jpn.com,oninet.ne.jp,xth.jp##body div:matches-css(position: fixed):matches-css(background-color: /rgb/):matches-css(z-index: /\d+/)
-in-jpn.com,oninet.ne.jp##img:style(visibility: visible !important;)
-oninet.ne.jp##a[href^="https://hb.afl.rakuten.co.jp/hsc/"]
-oninet.ne.jp##a[href^="https://hb.afl.rakuten.co.jp/hsc/"] ~ img[src="qr-rakuten-travel-logo.png"]
-oninet.ne.jp##a[href^="https://www.amazon.co.jp/dp/"]
-oninet.ne.jp##a[href^="https://www.amazon.co.jp/dp/"] ~ img[src="qr-amazon-logo.png"]
-xth.jp##body:style(background: none !important;)
-in-jpn.com##+js(trusted-replace-xhr-response, %2F.*%2F, , pagead2.googlesyndication.com%2Fpagead%2Fjs%2Fadsbygoogle.js%3F)
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,domain=in-jpn.com
-oninet.ne.jp,xth.jp##[id]:has(> ins.adsbygoogle):style(height: 100px !important; position: absolute !important; left: -4000px !important;)
-oninet.ne.jp##table:style(visibility: visible !important;)
-in-jpn.com,oninet.ne.jp,xth.jp##+js(set, myFunc, noopFunc)
 !#if cap_html_filtering
-in-jpn.com,xth.jp##^script:has-text(フィルタリングを無効)
-oninet.ne.jp##^script[defer]:has-text(.clientHeight <)
-||in-jpn.com^$script,replace=/w_mode==1/1/
 ||in-jpn.com^$script,replace=/function myFunc[\s\S\n]+?doSakigake\(\);[\s\S\n]+?\}//
 !#endif
-it.in-jpn.com##body > a[rel*="sponsored"]
 ! https://github.com/NanoMeow/QuickReports/issues/21
 ! https://github.com/uBlockOrigin/uAssets/issues/9578
 azaleasdolls.com##td[height="279"]
@@ -1590,10 +1550,11 @@ tempumail.com##+js(nostif, detector)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/149041
 /js/friendbuy.min.js$script,redirect=noopjs,domain=coursera.org
 ! https://github.com/AdguardTeam/AdguardFilters/issues/149595
+! https://github.com/uBlockOrigin/uAssets/issues/27989
 zefoy.com##+js(aost, atob, %2Fzefoy%5C.com%5CS%2B%3A3%3A1%2F)
 zefoy.com##^script[onerror^="$('body')"]
 /^https:\/\/zefoy\.com\/[^\/]+\?/$script,1p,domain=zefoy.com,redirect=noopjs
-/^https:\/\/zefoy\.com(\/[^\/]+){1,}\.js\?/$script,1p,domain=zefoy.com,redirect=noopjs
+! /^https:\/\/zefoy\.com(\/[^\/]+){1,}\.js\?/$script,1p,domain=zefoy.com,redirect=noopjs
 @@||zefoy.com/assets/$script,1p
 @@||zefoy.com/cdnjs$script,1p
 zefoy.com##+js(rpnt, script, (%7B%7D)%3B, (%7B%7D)%3B%20function%20showHideElements(t%2Ce)%7B%24(t).hide()%2C%24(e).show()%7Dfunction%20disableBtnclc()%7Blet%20t%3Ddocument.querySelector(%22.submit-captcha%22)%3Bt.disabled%3D!0%2Ct.innerHTML%3D%22Loading...%22%7Dfunction%20refreshButton()%7B%24(%22.refresh-capthca-btn%22).addClass(%22disabled%22)%7Dfunction%20copyInput()%7Blet%20t%3Ddocument.querySelectorAll(%22.copy-input%22)%3Bt.forEach(t%3D%3E%7Bnavigator.clipboard.writeText(t.value)%7D)%2CMaterialize.toast(%22Copied!%22%2C2e3)%7Dfunction%20imgOnError()%7B%24(%22.ua-check%22).html(window.atob(%22PGRpdiBjbGFzcz0idGV4dC1kYW5nZXIgZm9udC13ZWlnaHQtYm9sZCBoNSBtdC0xIj5DYXB0Y2hhIGltYWdlIGZhaWxlZCB0byBsb2FkLjxicj48YSBvbmNsaWNrPSJsb2NhdGlvbi5yZWxvYWQoKSIgc3R5bGU9ImNvbG9yOiM2MjcwZGE7Y3Vyc29yOnBvaW50ZXIiIGNsYXNzPSJ0ZXh0LWRlY29yYXRpb25lLW5vbmUiPlBsZWFzZSByZWZyZXNoIHRoZSBwYWdlLiA8aSBjbGFzcz0iZmEgZmEtcmVmcmVzaCI%2BPC9pPjwvYT48L2Rpdj4%3D%22))%7D%24(window).on(%22load%22%2Cfunction()%7B%24(%22body%22).addClass(%22loaded%22)%7D)%2Cwindow.history.replaceState%26%26window.history.replaceState(null%2Cnull%2Cwindow.location.href)%2C%24(%22.remove-spaces%22).on(%22input%22%2Cfunction()%7Bthis.value%3Dthis.value.replace(%2F%5Cs%2Fg%2C%22%22)%7D)%2C%24(document).on(%22click%22%2C%22%23toast-container%20.toast%22%2Cfunction()%7B%24(this).fadeOut(function()%7B%24(this).remove()%7D)%7D)%2C%24(%22.tktemizle%22).on(%22input%20propertychange%22%2Cfunction()%7Blet%20t%3D%24(this).val().match(%22access_token%3D(.*%3F)%26%22)%3Bt%26%26%24(%22.tktemizle%22).val(t%5B1%5D)%7D)%2C%24(document).ready(function()%7Blet%20t%3D%5B%7Bbutton%3A%24(%22.t-followers-button%22)%2Cmenu%3A%24(%22.t-followers-menu%22)%7D%2C%7Bbutton%3A%24(%22.t-hearts-button%22)%2Cmenu%3A%24(%22.t-hearts-menu%22)%7D%2C%7Bbutton%3A%24(%22.t-chearts-button%22)%2Cmenu%3A%24(%22.t-chearts-menu%22)%7D%2C%7Bbutton%3A%24(%22.t-views-button%22)%2Cmenu%3A%24(%22.t-views-menu%22)%7D%2C%7Bbutton%3A%24(%22.t-shares-button%22)%2Cmenu%3A%24(%22.t-shares-menu%22)%7D%2C%7Bbutton%3A%24(%22.t-favorites-button%22)%2Cmenu%3A%24(%22.t-favorites-menu%22)%7D%2C%7Bbutton%3A%24(%22.t-livestream-button%22)%2Cmenu%3A%24(%22.t-livestream-menu%22)%7D%2C%7Bbutton%3A%24(%22.ig-followers-button%22)%2Cmenu%3A%24(%22.ig-followers-menu%22)%7D%2C%7Bbutton%3A%24(%22.ig-likes-button%22)%2Cmenu%3A%24(%22.ig-likes-menu%22)%7D%5D%3B%24.each(t%2Cfunction(t%2Ce)%7Be.button.click(function()%7B%24(%22.colsmenu%22).addClass(%22nonec%22)%2Ce.menu.removeClass(%22nonec%22)%7D)%7D)%7D)%3B)
@@ -2916,6 +2877,7 @@ client.falixnodes.net##+js(rmnt, script, Object.keys(window.adngin).length)
 client.falixnodes.net##+js(rpnt, script, typeof%20window.loadtwo, typeof%20window.loadtwo%20%3D%3D%3D%20true)
 client.falixnodes.net##+js(rpnt, script, (window.loadtwo, (window.loadtwo%20%3D%3D%3D%20undefined%20%7C%7C%20true%20%7C%7C%20window.googlescriptloaded)
 client.falixnodes.net##+js(set, window.adngin, %7B%7D)
+client.falixnodes.net##+js(set, amzn_aps_csm, %7B%7D)
 client.falixnodes.net##+js(no-fetch-if, adsbygoogle)
 ||pagead2.googlesyndication.com/|$xhr,redirect=none:5,domain=client.falixnodes.net
 ! https://www.reddit.com/r/uBlockOrigin/comments/15wqphp/anti_ad_block_needed/
@@ -3752,7 +3714,7 @@ cimanow.cc##section[aria-label="details"] a[id][target="_blank"]
 cimanow.online##+js(ra, href, %5Btarget%3D%22_blank%22%5D, stay)
 cimanow.cc,freex2line.online##+js(acs, document.createElement, globalThis)
 cimanow.cc,freex2line.online##+js(trusted-suppress-native-method, fetch, %22flashtalking%22)
-cimanow.cc##+js(acs, document.querySelector, join)
+cimanow.cc,freex2line.online##+js(aost, document.querySelector, %2F(%3F%3D%5E(%3F!.*(cdn-cgi)))%2F)
 cimanow.cc,freex2line.online##+js(no-xhr-if, criteo)
 freex2line.online##+js(overlay-buster)
 ||freex2line.online/*/?redirect$doc,urlskip=?redirect -base64
