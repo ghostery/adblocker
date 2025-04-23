@@ -793,7 +793,6 @@ nekopoi.*##+js(aeld, , adsense)
 nekopoi.*##[href^="http://bit.ly/"]
 .gif$domain=nekopoi.*,image
 ! https://github.com/uBlockOrigin/uAssets/issues/26213
-nekopoi.*##+js(rmnt, script, wpadmngr.com)
 nekopoi.*##.leftarea
 ! https://github.com/uBlockOrigin/uAssets/issues/27849
 nekopoi.*###btm_banner
@@ -1047,7 +1046,7 @@ timesnewsgroup.com.au##+js(acs, %24, popup)
 ! https://github.com/uBlockOrigin/uAssets/issues/21985
 livecamrips.*##+js(rmnt, script, window.open)
 livecamrips.su>>,~cloudflare.com,~disqus.com,~google.com##+js(nowoif)
-filemoon.*>>,96ar.com>>,iqksisgw.xyz>>,u6lyxl0w.skin>>,ww9g.com>>,xcoic.com>>,nptsr.live>>,4bct9.live>>,xztgl.com##+js(nowoif)
+filemoon.*>>,96ar.com>>,iqksisgw.xyz>>,u6lyxl0w.skin>>,ww9g.com>>,xcoic.com>>,nptsr.live>>,4bct9.live>>,xztgl.com>>,remilf.xyz>>##+js(nowoif)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/202301
 designparty.sx>>##+js(nowoif)
 5j386s9.sbs##+js(nowoif)
@@ -2004,7 +2003,8 @@ esportivos.fun##+js(set, sandDetect, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/23800
 @@*$ghide,domain=akillikafa.com|kazanimtestleri.com.tr|testcoz.com
 ! https://poki.com/en/g/subway-surfers - ads
-||api.poki.com/ads/
+! https://github.com/uBlockOrigin/uAssets/discussions/27879
+||v.poki-cdn.com/*/advertisement.$media,redirect=noopmp3-0.1s
 ! https://github.com/uBlockOrigin/uAssets/issues/23811
 scimagojr.com##+js(aeld, load, adblock)
 ! https://github.com/uBlockOrigin/uAssets/issues/25729
@@ -2478,8 +2478,6 @@ samurai.ragnarokscanlation.org##+js(noeval-if, ads)
 thumpertalk.com##a[data-autolink]::after
 thumpertalk.com##a[data-autolink]:style(text-decoration: none !important; color: inherit !important; pointer-events: none;)
 thumpertalk.com##.ipsResponsive_block
-! https://rxlife.net/ anti-adb
-||rxlife.net/src/adb.js
 ! https://github.com/uBlockOrigin/uAssets/issues/15185#issuecomment-2249491908
 *$script,3p,denyallow=google.com|gstatic.com,domain=severeporn.com
 ##.fp-ui > a[href][target="_blank"][style^="position: absolute; inset: 0px;"]
@@ -2922,7 +2920,8 @@ uploadmall.com##+js(nowoif, zigi_tag_id, 10, obj)
 ! https://github.com/uBlockOrigin/uAssets/issues/25435
 app.involve.asia#@#.ads-banner
 ! https://www.reddit.com/r/uBlockOrigin/comments/1fott8f/block_ads_in_preview_feed_on_redgifs/
-redgifs.com##+js(json-prune, gifs.%5B-%5D.cta)
+! https://github.com/uBlockOrigin/uAssets/issues/28013
+redgifs.com##+js(json-prune, gifs.%5B-%5D.cta.link)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1fpr48s/adblock_detected_on_smailpro/
 smailpro.com##+js(set, adsbygoogle_ama_fc_has_run, true)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1fr8hkq/httpswwwautoparericom_ubo_is_detected/
@@ -3051,6 +3050,9 @@ nohost.one##+js(rmnt, script, HTMLAllCollection)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/198930
 vikingf1le.us.to##+js(nowoif, zigi_tag_id)
 vikingf1le.us.to##+js(rmnt, script, FingerprintJS)
+vikingf1le.us.to##+js(aopr, atob)
+vikingf1le.us.to##+js(aeld, DOMContentLoaded, history.go)
+||gxh1yqz2v.xyz^
 ! https://github.com/uBlockOrigin/uAssets/issues/19143
 ddwloclawek.pl,ki24.info##+js(aeld, load, adb)
 ! https://deporte-libre.top/en-vivo-online/espn/
@@ -3470,6 +3472,7 @@ abs-cbn.com##div[id^="div-articleOOP"] ~ div:has(.imp-adSlot-0)
 abs-cbn.com##:is(.css-168qn5i, .css-1slfery, .css-xcd31q, .css-4dbdht, .css-1d3bbye, .css-ob4cto):has(div[class^="imp-adSlot"])
 abs-cbn.com##.css-15j76c0:has(> div[style*="z-index: 99999"])
 abs-cbn.com##.MuiGrid-root.MuiGrid-item:not([data-testid="test-grid-item"]):has(> div.MuiBox-root > div[style] > div > div[style] > div[class^="imp-adSlot"])
+abs-cbn.com##+js(rpnt, style, %7Bheight%3A370px%3B%7D, %7Bheight%3A70px%3B%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/26248
 gmanetwork.com###leaderboard
 gmanetwork.com###mrect
