@@ -264,6 +264,25 @@ ignboards.com##+js(acs, JSON.stringify)
 *$script,redirect-rule=noopjs,domain=ignboards.com
 ! https://www.ign.com/articles/baldurs-gate-3s-huge-patch-8-and-its-12-new-subclasses-finally-have-a-release-date - video breakage
 ||btloader.com^$script,redirect=noopjs,domain=ign.com
+! https://github.com/uBlockOrigin/uAssets/issues/8269
+! https://www.reddit.com/r/uBlockOrigin/comments/9lom6n/help_blocking_ads_on_hulu/
+! https://www.reddit.com/r/uBlockOrigin/comments/eexi26/
+hulu.com##+js(set, Object.prototype._parseVAST, noopFunc)
+hulu.com##+js(set, Object.prototype.createAdBlocker, noopFunc)
+hulu.com##+js(set, Object.prototype.isAdPeriod, falseFunc)
+||assetshuluimcom-a.akamaihd.net/*.mp3$media,redirect=noopmp3-0.1s,domain=hulu.com
+@@||hulu.com^$ghide
+hulu.com###banner-ad-container
+hulu.com##.ad-choices
+! https://github.com/uBlockOrigin/uAssets/issues/17382
+! https://www.reddit.com/r/uBlockOrigin/comments/14b5lbw/
+! https://www.reddit.com/r/uBlockOrigin/comments/158nvca/not_blocking_hulu_ads/jti29qk/
+! https://www.reddit.com/r/uBlockOrigin/comments/16hr6pk/hulu_subtitles_getting_delayed_again/
+! hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, pause_ads, propsToMatch, %2Fplaylist)
+! hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, breaks, propsToMatch, %2Fplaylist)
+! hulu.com##+js(json-prune, breaks%20pause_ads%20video_metadata.end_credits_time, pause_ads)
+! hulu.com##+js(json-prune, breaks%20pause_ads%20video_metadata.end_credits_time, breaks)
+! hulu.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C'%2Fads-')%5D%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start), Period%5Bid%5E%3D%22Ad%22i%5D, .mpd)
 ! END: Rules from filters.txt
 ! START: Regional lists
 ! <<<<< ABPVN >>>>>
@@ -292,6 +311,13 @@ futbolsayfasi.net##+js(acs, document.getElementById, adb)
 ! https://github.com/uBlockOrigin/uAssets/issues/27768
 otomoto.pl##+js(nowoif, _blank)
 otomoto.pl##[data-testid="banner-link"]
+! https://github.com/uBlockOrigin/uAssets/issues/28048
+@@||matzoo.pl^$ghide
+! <<<<< Azerbaijan >>>>>
+! mp3.big.az banner ads
+||az/banner/$image,domain=mp3.big.az
+||unvan.az/$frame,domain=mp3.big.az
+mp3.big.az##.blockreklam
 ! END: Regional lists
 ! https://github.com/uBlockOrigin/uAssets/issues/26682
 opentunnel.net##+js(no-xhr-if, ad.plus)
@@ -342,6 +368,7 @@ vidbinge.com##+js(rmnt, script, HTMLAllCollection)
 thesciencetoday.com##+js(rmnt, script, %3D%3D%22%5D)
 sportnews.to##+js(rmnt, script, %3D%3D%22%5D)
 evaki.fun,sportshub.to,sportnews.to##+js(trusted-suppress-native-method, DOMTokenList.prototype.add, %22-%22)
+evaki.fun##+js(no-fetch-if, googlesyndication)
 sportshub.to,sportnews.to##body > div > div[class^="active"][style]
 ! popups https://github.com/uBlockOrigin/uAssets/issues/26737
 sumax43.autos##+js(trusted-set-cookie, lastClicked, 9999999999999)
@@ -834,10 +861,6 @@ njavtv.com##+js(set-session-storage-item, _x_popped, %7B%7D)
 themoviesflix.*##+js(nowoif, _blank)
 ! https://github.com/uBlockOrigin/uAssets/issues/27526
 ||ffmovies.lol/jss/dectector-
-! https://github.com/uBlockOrigin/uAssets/issues/27532
-filmweb.pl##+js(rc, rodo, body.rodo)
-filmweb.pl##+js(set, rodo.checkIsDidomiConsent, noopFunc)
-filmweb.pl##+js(set, rodo.waitForConsent, noopPromiseResolve)
 ! porno-365. lol popMagic
 porno-365.*##+js(aost, document.createElement, Object.init)
 ! https://github.com/uBlockOrigin/uAssets/issues/27547
@@ -945,12 +968,6 @@ formatlibrary.com##+js(no-fetch-if, doubleclick)
 ||gaypornhot.com/wp-content/uploads/ountsvf.js
 ! sat-sharing.com detection
 sat-sharing.com##+js(rmnt, script, navigator.userAgent)
-! https://github.com/uBlockOrigin/uAssets/issues/27729
-fastt.gg###startDownload
-fastt.gg##+js(nowoif, _blank)
-fastt.gg##+js(nano-sib, countdown, 1000)
-fastt.gg##+js(nano-stb, tick, 1000)
-fastt.gg##+js(rpnt, script, !isAdTriggered, false)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/200905
 qrcodemonkey.net##+js(nostif, %23ad_blocker_detector)
 ! https://github.com/uBlockOrigin/uAssets/issues/27731
@@ -1050,6 +1067,15 @@ savefiles.com##+js(set, SaveFiles.add, noopFunc)
 savefiles.com##body > div[class][oncontextmenu][style="display: block;"]
 ||shoupsoolsoagna.net^
 ||vq4b0q.fun^
+! https://github.com/uBlockOrigin/uAssets/issues/28017
+!#if cap_html_filtering
+savefiles.com##^script:has-text(catcher)
+!#else
+savefiles.com##+js(rmnt, script, catcher)
+!#endif
+savefiles.com##div[id^="clickCatcher"]
+###clickCatcher31
+###clickCatcher32
 ! https://github.com/AdguardTeam/AdguardFilters/issues/202536
 xmalay1.net##+js(rmnt, script, %2FisAdBlockActive%7CWebAssembly%2F)
 ! europix.top ad popups
@@ -1058,8 +1084,6 @@ europix.top##a[href][target^="_blank"]:style(pointer-events:none!important)
 azmen.com##+js(remove-cookie, videoPlayedNumber)
 azmen.com##.live-button-wrapper
 /player/v*/vast-no-entitlements.js^
-! https://nukibooks.com asg
-*$script,3p,denyallow=cloudflare.com,domain=nukibooks.com
 ! https://github.com/uBlockOrigin/uAssets/issues/27936
 manhuaga.com##+js(noeval-if, adsbygoogle)
 ! https://github.com/uBlockOrigin/uAssets/issues/27952
@@ -1069,10 +1093,58 @@ goflix.sbs##+js(nowoif, _blank)
 uindex.org##+js(acs, setTimeout, window.open)
 ! https://streamup.ws/hPqj5Qpm8TiCx - popups, sandbox detection
 streamup.ws##+js(set, detectSandbox, noopFunc)
-*$script,3p,denyallow=cloudflare.com|fastly.net|gstatic.com|jsdelivr.net|jwpcdn.com,domain=streamup.ws
+streamup.ws##+js(aeld, DOMContentLoaded, Promise)
+*$script,3p,denyallow=cloudflare.com|cloudflare.net|fastly.net|gstatic.com|jsdelivr.net|jwpcdn.com,domain=streamup.ws
+||streamup.ws/assets/js/adblock.js$script,1p
 ||queasypolenta.com^
 ||thedreamofus.xyz^
 ! animenexus.in ad popups
 animenexus.in##+js(nowoif, _blank)
 ! https://github.com/uBlockOrigin/uAssets/issues/27954
 html5.gamedistribution.com###gd__adblocker__overlay
+! https://github.com/uBlockOrigin/uAssets/issues/27980
+!#if cap_html_filtering
+letemsvetemapplem.eu##^script:has-text(videoList)
+!#else
+letemsvetemapplem.eu##+js(rmnt, script, videoList)
+!#endif
+letemsvetemapplem.eu##+js(no-fetch-if, %2Frekaa)
+letemsvetemapplem.eu###lsa_gallery_overlay
+! https://indojavstream.com/watch/1sdmf00051.html - popups
+indojavstream.com##+js(acs, document.createElement, pop_tag)
+indojavstream.com##+js(nowoif, _blank)
+indojavstream.com##.box_item_ads_popup
+! https://github.com/uBlockOrigin/uAssets/issues/27990
+@@||nreer.com^$ghide
+! https://91porna.com/comic/index/detail?video_key=169397 - popups
+91porna.com##[data-ads_url]:remove-attr(data-ads_url)
+! sloways.eu detection
+@@||googletagmanager.com/gtm.js$script,domain=sloways.eu
+@@||cookiefirst.com^$domain=sloways.eu
+@@||sloways.eu/*/cookie-consent$script,css,1p
+! https://github.com/uBlockOrigin/uAssets/issues/28008
+@@||info.eco.ca/adblock-detector/$1p
+! https://github.com/uBlockOrigin/uAssets/issues/28035
+||sexjav.tv/popunderjs/
+! pagalfree. com/pagalworld. us ad popups
+pagalfree.com##+js(aopr, LieDetector)
+pagalfree.com,pagalworld.us##+js(aeld, DOMContentLoaded, anchor.href)
+*$script,3p,denyallow=jquery.com|static.addtoany.com,domain=pagalfree.com
+||batchzoo.com^$popup,doc
+||fortuneindoorsinto.com^
+||s0fast.net^$popup,doc
+||sarodesdonnot.com^
+! https://www.ibbs.pro/ - anti-adb
+||magsrv.com^$script,redirect=noopjs,domain=ibbs.pro
+! https://github.com/uBlockOrigin/uAssets/issues/28042
+listar-mc.net##+js(rmnt, script, onerror)
+! https://www.tv-films.co.uk/film/minions-the-rise-of-gru-2022/ - anti-adb
+tv-films.co.uk##+js(nostif, AdBlocker)
+! https://www.reddit.com/r/uBlockOrigin/comments/1k5eoha/ad_block_detection_on_pcbuildscom_plus_ff/
+!#if cap_html_filtering
+pc-builds.com##^script:has-text(freestar)
+!#else
+pc-builds.com##+js(rmnt, script, freestar)
+!#endif
+! https://www.reddit.com/r/uBlockOrigin/comments/1k583fk/help_with_popup_or_overlay/
+abyssplay.pages.dev##+js(nowoif, _blank)

@@ -81,6 +81,11 @@ tools.jabrek.net##+js(no-fetch-if, www3.doubleclick.net)
 impots.gouv.fr##+js(set, PASSER_videoPAS_apres, 0)
 ! flickr.com "Upgrade to Flickr Pro to hide these ads"
 flickr.com##.moola-search-view:has-text(hide these ads)
+! https://github.com/uBlockOrigin/uAssets/issues/28015
+airnavradar.com##+js(set, ads_enabled, true)
+airnavradar.com##.history-ad
+airnavradar.com##section > #content > div[class]:has(> #ads)
+airnavradar.com###ads
 ! END: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/933
 ! https://github.com/easylist/EasyListHebrew/issues/332
@@ -5781,8 +5786,8 @@ pokeos.com##+js(no-fetch-if, doubleclick)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/156165
 lemon8-app.com##+js(trusted-click-element, .seo-landing-modal-cancel-btn%20.design-system-button-container, , 500)
 ! animekai.to anti-devtools
-animekai.to##+js(aeld, keydown, e1)
-animekai.to,megaup.cc##+js(set, console.clear, throwFunc)
+animekai.to,animekai.bz,anigo.to##+js(aeld, keydown, n%7C%7Cr)
+animekai.to,animekai.bz,anigo.to,megaup.cc##+js(set, console.clear, throwFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/27010
 loverslab.com##+js(nano-sib)
 ! https://github.com/uBlockOrigin/uAssets/issues/16606
@@ -5854,3 +5859,5 @@ bilibili.com#@#+js(aost, player.pause, %2F%5B0-9a-f%5D%7B40%7D%5C.js%3A1%5Cd%7B2
 ! https://store.steampowered.com/app/993090/Lossless_Scaling/
 store.steampowered.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fsteamcommunity.com%2Flinkfilter%2F%3Fu%3Dhttp%22%5D, %3Fu)
 ||steamcommunity.com/linkfilter/?u=http$doc,urlskip=?u
+! https://github.com/uBlockOrigin/uAssets/issues/28053
+marriedbiography.com##+js(aeld, %2Fcontextmenu%7Ccopy%2F)

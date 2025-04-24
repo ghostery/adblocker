@@ -2137,6 +2137,10 @@ bs.to,burningseries.*##+js(ra, onclick)
 hentaigo.com##+js(aopr, loadTool)
 hentaigo.com##+js(aopr, r3H4)
 hentaigo.com##a[href*="//www.nutaku.net/signup/"]
+hentaigo.com###text-7
+hentaigo.com###text-10
+hentaigo.com###text-22
+||hentaigo.com/*/ads-*/$image,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/1584
 lin-ks.*##+js(nano-sib)
 ! https://github.com/uBlockOrigin/uAssets/issues/1591
@@ -4951,17 +4955,6 @@ l23movies.*,123moviess.*,123movieshub.*##+js(acs, JSON.parse, atob)
 ||mousheen.net^
 123moviesfree.*##+js(nowoif)
 123moviesd.com,123moviesjr.cc,123moviess.se##+js(aopr, mm)
-! yesmovies .vc/. ws/. org/ .mn
-yesmovies.*##+js(nowoif)
-yesmovies.*##+js(aopr, AaDetector)
-yesmovies.*##+js(nowebrtc)
-/sw-vodlocker.to.js$script
-yesmovies.*##a.btn-successful
-! https://github.com/AdguardTeam/AdguardFilters/issues/198612 / vidguard
-vinomo.xyz##+js(nostif, afterOpen)
-vinomo.xyz##+js(json-prune, AffiliateAdBlock)
-vinomo.xyz##+js(set, PlayerConfig.config.CustomAdSetting, %5B%5D)
-*$xhr,3p,redirect-rule=nooptext,domain=vinomo.xyz
 ! https://github.com/uBlockOrigin/uAssets/issues/2031
 solarmovie.*##+js(aopr, AaDetector)
 solarmovie.*##+js(nowoif)
@@ -5012,25 +5005,6 @@ milfzr.com###post-0
 ||milfzr.com/*.gif$image
 ! https://forums.lanik.us/viewtopic.php?f=62&t=42364
 wemakesites.net##+js(acs, %24, adBlockChecker)
-! https://github.com/uBlockOrigin/uAssets/issues/8269
-! https://www.reddit.com/r/uBlockOrigin/comments/9lom6n/help_blocking_ads_on_hulu/
-! https://www.reddit.com/r/uBlockOrigin/comments/eexi26/
-hulu.com##+js(set, Object.prototype._parseVAST, noopFunc)
-hulu.com##+js(set, Object.prototype.createAdBlocker, noopFunc)
-hulu.com##+js(set, Object.prototype.isAdPeriod, falseFunc)
-||assetshuluimcom-a.akamaihd.net/*.mp3$media,redirect=noopmp3-0.1s,domain=hulu.com
-@@||hulu.com^$ghide
-hulu.com###banner-ad-container
-hulu.com##.ad-choices
-! https://github.com/uBlockOrigin/uAssets/issues/17382
-! https://www.reddit.com/r/uBlockOrigin/comments/14b5lbw/
-! https://www.reddit.com/r/uBlockOrigin/comments/158nvca/not_blocking_hulu_ads/jti29qk/
-! https://www.reddit.com/r/uBlockOrigin/comments/16hr6pk/hulu_subtitles_getting_delayed_again/
-hulu.com##+js(json-prune-fetch-response, breaks%20pause_ads%20video_metadata.end_credits_time, pause_ads, propsToMatch, %2Fplaylist)
-hulu.com##+js(json-prune-fetch-response, breaks%20pause_ads%20video_metadata.end_credits_time, breaks, propsToMatch, %2Fplaylist)
-hulu.com##+js(json-prune, breaks%20pause_ads%20video_metadata.end_credits_time, pause_ads)
-hulu.com##+js(json-prune, breaks%20pause_ads%20video_metadata.end_credits_time, breaks)
-hulu.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C'%2Fads-')%5D%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start), Period%5Bid%5E%3D%22Ad%22i%5D, .mpd)
 ! https://github.com/NanoAdblocker/NanoCore/issues/235
 myjest.com##+js(nosiif, _%24, 12345)
 ! https://github.com/uBlockOrigin/uAssets/issues/4268#issuecomment-449131154
@@ -8181,8 +8155,6 @@ myadslink.com##+js(aeld, load, 2000)
 @@||sabervivirtv.com^$ghide
 sabervivirtv.com##.ad-item
 sabervivirtv.com##.ad-sidebar
-! https://github.com/NanoMeow/QuickReports/issues/2224
-aol.com##.maas-item:has-text(our Partners)
 ! https://github.com/NanoMeow/QuickReports/issues/2261
 @@||debridup.com^$script,xhr,1p
 ! homad
@@ -8469,7 +8441,6 @@ presentation-ppt.com##+js(aeld, load, nextFunction)
 femina.ch##+js(aopr, _sp_.mms.startMsg)
 ! https://www.reddit.com/r/uBlockOrigin/comments/mxeds6/adblocker_detectet_only_first_post_available/
 photovoltaikforum.com##+js(acs, %24, offsetHeight)
-photovoltaikforum.com##.wcfAdLocation:upward(li)
 ! fix mangahere.onl ads & anti adb
 mangahere.onl##+js(aopr, AdservingModule)
 mangahere.onl##+js(aopr, loadRunative)
@@ -9495,17 +9466,6 @@ interracial.com##[src^="https://www.interracial.com/player/html.php"]
 ! https://github.com/AdguardTeam/AdguardFilters/issues/51099
 @@||memexcomputer.it^$ghide
 memexcomputer.it##ins.adsbygoogle
-! https://github.com/NanoMeow/QuickReports/issues/2109
-! https://github.com/uBlockOrigin/uAssets/issues/14433
-@@||forbes.com^$ghide
-forbes.com##fbs-ad
-forbes.com##.ad-unit:not(.text-ad):not(.textads):not([style^="width: 1px; height: 1px; position: absolute;"])
-forbes.com##.footer-ad-labeling
-forbes.com##.ad-rail
-! https://www.reddit.com/r/uBlockOrigin/comments/14d7npb/
-forbes.com##.ed-wrap.rafeed__block
-! https://github.com/easylist/easylist/issues/15513
-forbes.com##.amp-ad-container
 ! https://github.com/uBlockOrigin/uAssets/issues/10165
 *$3p,denyallow=google.com|googleapis.com|gstatic.com,domain=uplinkto.*
 ! https://github.com/AdguardTeam/AdguardFilters/issues/51125
