@@ -1,3 +1,16 @@
+# v2.5.2 (Tue Apr 29 2025)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump electron from 35.2.1 to 36.0.0 [#4836](https://github.com/ghostery/adblocker/pull/4836) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.85 to 7.0.0 [#4807](https://github.com/ghostery/adblocker/pull/4807) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v2.5.1 (Tue Apr 15 2025)
 
 #### :nut_and_bolt: Dependencies

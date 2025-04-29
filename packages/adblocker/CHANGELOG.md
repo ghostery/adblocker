@@ -1,3 +1,28 @@
+# v2.5.2 (Tue Apr 29 2025)
+
+#### :bug: Bug Fix
+
+- fix: remove `$to` support due to regression [#4828](https://github.com/ghostery/adblocker/pull/4828) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#4813](https://github.com/ghostery/adblocker/pull/4813) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4806](https://github.com/ghostery/adblocker/pull/4806) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump fast-check from 3.23.2 to 4.1.1 [#4814](https://github.com/ghostery/adblocker/pull/4814) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.85 to 7.0.0 [#4807](https://github.com/ghostery/adblocker/pull/4807) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.5.1 (Tue Apr 15 2025)
 
 #### :bug: Bug Fix
