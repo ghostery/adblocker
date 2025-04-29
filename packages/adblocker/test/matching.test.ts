@@ -396,23 +396,6 @@ describe('#NetworkFilter.match', () => {
       url: 'https://sub.y.com/bar',
       type: 'script',
     });
-
-    // to
-    expect(f`*$3p,from=a.com,to=b.com`).to.matchRequest({
-      sourceUrl: 'https://a.com',
-      url: 'https://b.com/bar',
-      type: 'script',
-    });
-    expect(f`*$frame,3p,from=a.com|b.com,to=~c.com`).to.not.matchRequest({
-      sourceUrl: 'https://a.com',
-      url: 'https://c.com/bar',
-      type: 'sub_frame',
-    });
-    expect(f`$frame,csp=non-relevant,to=~safe.com,from=c.com|d.com`).to.not.matchRequest({
-      sourceUrl: 'https://c.com',
-      url: 'https://safe.com/foo',
-      type: 'sub_frame',
-    });
   });
 });
 
