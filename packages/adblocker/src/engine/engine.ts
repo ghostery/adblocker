@@ -75,6 +75,7 @@ export interface BlockingResponse {
   redirect:
     | undefined
     | {
+        name: string;
         body: string;
         contentType: string;
         dataUrl: string;

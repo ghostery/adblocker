@@ -297,8 +297,18 @@ export default class Resources {
     }
   }
 
-  public getResource(name: string): { body: string; contentType: string; dataUrl: string } {
-    const { body, contentType } = this.resourcesByName.get(name) || getResourceForMime(name);
+  public getResource(name: string): {
+    name: string;
+    body: string;
+    contentType: string;
+    dataUrl: string;
+  } {
+    const resource = this.resourcesByName.get(name) || getResourceForMime(name);
+    const { contentType, body } = resource;
+
+    if ('name' in resource) {
+      name = (resource as Resource).name;
+    }
 
     let dataUrl;
     if (contentType.indexOf(';') !== -1) {
@@ -307,7 +317,7 @@ export default class Resources {
       dataUrl = `data:${contentType};base64,${btoaPolyfill(body)}`;
     }
 
-    return { body, contentType, dataUrl };
+    return { name, body, contentType, dataUrl };
   }
 
   public getScriptlet(name: string): string | undefined {
