@@ -194,6 +194,7 @@ vid2faf.*,vidplay.*##[src^="assets/bn"]:upward([style])
 /lazymolecule/*.js$script
 ! https://github.com/uBlockOrigin/uAssets/issues/27173
 bflix.*>>,~cloudflare.com,~disqus.com,~google.com##+js(nowoif)
+bflix.*>>,~cloudflare.com,~disqus.com,~google.com##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 ! https://github.com/uBlockOrigin/uAssets/issues/6205
 ! https://github.com/uBlockOrigin/uAssets/issues/20954
 ! https://github.com/uBlockOrigin/uAssets/issues/27477
@@ -370,6 +371,7 @@ sportnews.to##+js(rmnt, script, %3D%3D%22%5D)
 evaki.fun,sportshub.to,sportnews.to##+js(trusted-suppress-native-method, DOMTokenList.prototype.add, %22-%22)
 evaki.fun##+js(no-fetch-if, googlesyndication)
 sportshub.to,sportnews.to##body > div > div[class^="active"][style]
+evaki.fun,sportnews.to###adblock-overlay
 ! popups https://github.com/uBlockOrigin/uAssets/issues/26737
 sumax43.autos##+js(trusted-set-cookie, lastClicked, 9999999999999)
 ! https://github.com/uBlockOrigin/uAssets/issues/26746
@@ -906,6 +908,7 @@ pornproxy.art,pornproxy.app##+js(nowoif)
 pornproxy.art,pornproxy.app##+js(aopr, LieDetector)
 ! watchserieshd. stream ad popups
 watchserieshd.stream>>##+js(nowoif)
+watchserieshd.stream>>##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 ! https://voiceofdenton.com/ - anti-adb
 voiceofdenton.com##+js(set, advanced_ads_check_adblocker, noopFunc)
 ! https://myesports.gg/en - anti-adb
@@ -1148,3 +1151,16 @@ pc-builds.com##+js(rmnt, script, freestar)
 !#endif
 ! https://www.reddit.com/r/uBlockOrigin/comments/1k583fk/help_with_popup_or_overlay/
 abyssplay.pages.dev##+js(nowoif, _blank)
+! https://github.com/uBlockOrigin/uAssets/issues/28085
+!#if !env_mobile
+glamour.com###main-content:style(margin-top: 125px !important;)
+!#endif
+! https://streambolt.tv/8jf21b4022ww.html - anti-adb
+streambolt.tv##+js(aopw, showADBOverlay)
+! https://github.com/uBlockOrigin/uAssets/issues/28090
+cbssports.com##+js(rmnt, script, %2Fadmiral%2Fi)
+! https://github.com/MajkiIT/polish-ads-filter/issues/22746
+||epoznan.pl/getAdsysCode?
+! https://github.com/uBlockOrigin/uAssets/issues/28115
+watch-dbz57.funonline.co.in##+js(rmnt, script, %2FAdBlock%2Fi)
+watch-dbz57.funonline.co.in###sright
