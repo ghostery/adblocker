@@ -37,7 +37,6 @@ export default [
   ".js:5",
   "none",
   "noop",
-  "-3.",
   ":10",
   ".js",
   "ads",
