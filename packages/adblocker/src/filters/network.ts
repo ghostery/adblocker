@@ -727,29 +727,35 @@ export default class NetworkFilter implements IFilter {
       // --------------------------------------------------------------------- //
       // parseOptions
       // --------------------------------------------------------------------- //
+      const domainsList: Set<string> = new Set();
+      const denyallowList: Set<string> = new Set();
+
       for (const rawOption of getFilterOptions(line, optionsIndex + 1, line.length)) {
         const negation = rawOption[0].charCodeAt(0) === 126; /* '~' */
         const option = negation === true ? rawOption[0].slice(1) : rawOption[0];
         const value = rawOption[1];
 
         switch (option) {
-          case 'to':
+          case 'to': {
+            for (const hostname of value.split('|')) {
+              if (hostname.startsWith('~')) {
+                denyallowList.add(hostname.slice(1));
+              } else {
+                domainsList.add(hostname);
+              }
+            }
+            break;
+          }
           case 'denyallow': {
-            denyallow = Domains.parse(value, {
-              delimiter: '|',
-              debug,
-              negate: option === 'to',
-            });
-            if (denyallow === undefined) {
-              return null;
+            for (const domain of value.split('|')) {
+              denyallowList.add(domain);
             }
             break;
           }
           case 'domain':
           case 'from': {
-            domains = Domains.parse(value, { delimiter: '|', debug });
-            if (domains === undefined) {
-              return null;
+            for (const domain of value.split('|')) {
+              domainsList.add(domain);
             }
             break;
           }
@@ -968,6 +974,20 @@ export default class NetworkFilter implements IFilter {
           }
         }
       }
+
+      if (domainsList.size !== 0) {
+        domains = Domains.parse(Array.from(domainsList).join('|'), {
+          delimiter: '|',
+          debug,
+        });
+      }
+      if (denyallowList.size !== 0) {
+        denyallow = Domains.parse(Array.from(denyallowList).join('|'), {
+          delimiter: '|',
+          debug,
+        });
+      }
+
       // End of option parsing
       // --------------------------------------------------------------------- //
     }
