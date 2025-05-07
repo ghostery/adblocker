@@ -87,7 +87,8 @@ japscan.lol#@#div.container > [href]
 *$script,xhr,3p,denyallow=acscdn.com|ansuksar.com|aozoiekopoaka.shop|base64easy.com|base64hub.com|challenges.cloudflare.com|cdn.jsdelivr.net|cdnjs.cloudflare.com|code.jquery.com|coutaricho.shop|curltophp.com|ebooksmangaia.com|faireundon.vip|fkourazirop.shop|fourino.shop|frjelsoieapoas.shop|hakoroubita.shop|mamamiaroubita.shop|morinavotarius.top|platform.pubadx.one|regexgenius.com|reoiamlsa.shop|routinato.shop|smaltourinto.shop|static.cloudflareinsights.com|tourpowouro.shop,domain=japscan.lol,important
 /^https:\/\/acscdn\.com\/script\/(?:aclib|atg|compatibility|ippg|suv4|ut)\.js(\?cb=\d{13})?$/$script,3p,match-case,important,domain=japscan.lol
 japscan.lol#@#+js(rmnt, script, %2F%5E%5Cs%7B5%7D%2F)
-||platform.pubadx.one/pubadx-ad.js$script,important,domain=japscan.lol
+||platform.pubadx.one/pubadx-ad.js$script,domain=japscan.lol,important
+||static.cloudflareinsights.com/beacon.min.js/$script,domain=japscan.lol,important
 ! https://github.com/uBlockOrigin/uAssets/issues/21064
 ! https://github.com/uBlockOrigin/uAssets/issues/24220
 ! https://github.com/uBlockOrigin/uAssets/issues/25121#issuecomment-2325357098
@@ -97,7 +98,7 @@ poophq.com,veev.to,doods.to##+js(no-xhr-if, %2Fclick%5C.com%7Cpreroll%7Cnative_r
 poophq.com,veev.to##+js(nostif, %5D()%3B%7D, 500)
 !#if cap_html_filtering
 ||static.veevcdn.co/assets/videoplayer/$script,3p,replace=/\'adblockEnabled\':[a-zA-Z]{2}/'adblockEnabled':false/g,domain=poophq.com|veev.to|doods.to
-||static.veevcdn.co/assets/videoplayer/$script,3p,replace=/return new Promise\(function\(.{300,450}?AdscoreInit.*?[a-z]\;\}\)\[/[/,domain=poophq.com|veev.to|doods.to
+||static.veevcdn.co/assets/videoplayer/$script,3p,replace=/return new Promise\(function\(.{100,550}?\]\[\'on\'\].*?[a-zA-Z]\;\}\)\[/[/,domain=poophq.com|veev.to|doods.to
 ||static.veevcdn.co/assets/videoplayer/$script,3p,replace=/\'vavl\':\!0x0/'vavl':false/g,domain=poophq.com|veev.to|doods.to
 ||adsco.re^$xhr,important,domain=poophq.com|veev.to|doods.to
 ||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,important,domain=poophq.com|veev.to|doods.to
@@ -112,7 +113,7 @@ poophq.com,veev.to,doods.to##+js(no-xhr-if, adsco.re%3A2087)
 /dl?op=player_api&cmd=*adb=$xhr,1p,important,domain=poophq.com|veev.to|doods.to
 ||adsco.re^$script,redirect=none:5,domain=poophq.com|veev.to|doods.to
 poophq.com,veev.to,doods.to##+js(nostif, %2F%5E%5Cs*function%5Cs*%5C(%5Cs*%5C)%5Cs*%7B%5Cs*%5Ba-zA-Z%5D%7B1%2C2%7D%5Cs*%5C(.%7B1%2C10%7D%24%2F)
-poophq.com,veev.to,doods.to##+js(nostif, %2F%2C%5Cs*r%5Cs*%5C%5B%5Ba-z%5D%2B%5C%5D%5C(%5Ba-z%5D%2B%5C%5B%7Cbehind%20a%7Ccaomputer%7Cl00o0ol%7C%22%3Bwwwt%3D%7Cvar%20hiJo%2F)
+poophq.com,veev.to,doods.to##+js(nostif, %2FbjsjHi%7Cbhhiwynd%7Ccaomppuetter%7C0p0oq0%7Cqrwqwwtz%7CkA_zad1%7Ctrwqqzac11%7Ceeqq%7C247%5C%3F%7C11%5C)%5C%7D%2F)
 poophq.com,veev.to,doods.to##+js(nostif, console%5B)
 !#endif
 !#endif
@@ -247,12 +248,6 @@ hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads)
 hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, pause_ads)
 hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, breaks)
 hulu.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C%22%2Fads-%22)%5D%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bstarts-with(%40id%2C%22ad%22)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bstarts-with(%40id%2C%22Ad%22)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start), MPD%20Period%5Bid%5E%3D%22Ad%22i%5D, .mpd)
-! https://github.com/AdguardTeam/AdguardFilters/issues/203738
-! [badfilter] ||sw.broadcom.com^$badfilter
-! https://github.com/uBlockOrigin/uAssets/issues/28074
-/^https:\/\/(?:seller\.)?ebay-[a-z]{8,15}\.com\//$doc,to=com,badfilter
-! https://github.com/AdguardTeam/AdguardFilters/issues/204094
-qlover.jp#@#.jss128
 ! https://github.com/uBlockOrigin/uAssets/issues/26880#issuecomment-2848908922
 ! [badfilter] ||vidlink.pro/script.js$badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/28175
@@ -265,4 +260,6 @@ qlover.jp#@#.jss128
 *$popup,domain=lulustream.com,badfilter
 ! [badfilter] *$frame,3p,from=lulustream.com,badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/18260
+client.falixnodes.net##+js(rpnt, script, window.location.href%20%3D%20'%2Fdisableadblock'%3B)
 client.falixnodes.net##+js(set, amzn_aps_csm.init, noopFunc)
+client.falixnodes.net##+js(set, amzn_aps_csm.log, noopFunc)

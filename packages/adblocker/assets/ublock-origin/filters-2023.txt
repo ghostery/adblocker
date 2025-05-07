@@ -2759,9 +2759,7 @@ lifestyle.bg,news.bg,topsport.bg,webcafe.bg##+js(no-fetch-if, method%3AHEAD)
 ! [badfilter] @@/securepubads.$domain=lifestyle.bg|news.bg|topsport.bg,badfilter
 lifestyle.bg,news.bg,topsport.bg,webcafe.bg##.mc-layout__bannerContent
 ! https://github.com/uBlockOrigin/uAssets/issues/28116
-news.bg##+js(set-local-storage-item, ublock_trace_id, %24remove%24)
-news.bg##+js(nostif, !call, -500)
-news.bg##+js(rmnt, script, offsetHeight)
+news.bg##+js(rmnt, script, %D1%84)
 ! https://github.com/uBlockOrigin/uAssets/issues/19308
 mtg-print.com##+js(no-fetch-if, ads)
 ! https://www.reddit.com/r/uBlockOrigin/comments/15m7iew/disable_adblock_popup_on_thi_site/
@@ -3629,6 +3627,8 @@ cimanow.cc,freex2line.online##+js(acs, document.createElement, globalThis)
 cimanow.cc,freex2line.online##+js(trusted-suppress-native-method, fetch, %22flashtalking%22)
 cimanow.cc,freex2line.online##+js(aost, document.querySelector, %2F(%3F%3D%5E(%3F!.*(cdn-cgi)))%2F)
 cimanow.cc,freex2line.online##+js(no-xhr-if, criteo)
+@@||cimanow.cc^$ghide
+*.gif$image,domain=cimanow.cc,redirect=1x1.gif
 freex2line.online##+js(overlay-buster)
 ||freex2line.online/*/?redirect$doc,urlskip=?redirect -base64
 ||flashtalking.com^$image,redirect=2x2.png,domain=cimanow.cc|cimanow.online
