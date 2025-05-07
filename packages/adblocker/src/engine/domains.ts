@@ -23,7 +23,7 @@ export class Domains {
     }
 
     for (const part of parts) {
-      if (part.length === 0 || part.startsWith(delimiter) || part.endsWith(delimiter)) {
+      if (part.length === 0) {
         return undefined;
       }
     }
