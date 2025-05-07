@@ -61,7 +61,9 @@ abstream.to##+js(acs, document.onkeydown)
 ! https://github.com/uBlockOrigin/uAssets/issues/27957
 9tsu.vip##+js(set, devtoolsDetector, %7B%7D)
 ! https://streambolt.tv/8jf21b4022ww.html - anti-devtools, right click, keys
+||streambolt.tv/js/dtd.js
 streambolt.tv##+js(set, devtoolsDetector, %7B%7D)
+streambolt.tv##+js(aeld, devtoolschange)
 streambolt.tv##+js(acs, document.onkeydown)
 ! END: Anti copy, right-click etc.
 ! START: Anti-adblock
@@ -89,6 +91,13 @@ airnavradar.com##+js(set, ads_enabled, true)
 airnavradar.com##.history-ad
 airnavradar.com##section > #content > div[class]:has(> #ads)
 airnavradar.com###ads
+! https://github.com/uBlockOrigin/uAssets/issues/20190
+cyanlabs.net##+js(acs, jQuery, ADBLOCK)
+cyanlabs.net#@#ins.adsbygoogle[data-ad-slot]
+cyanlabs.net#@#ins.adsbygoogle[data-ad-client]
+cyanlabs.net##ins.adsbygoogle:style(visibility: hidden !important;)
+! https://tides.net/california/
+tides.net##+js(nostif, adsbygoogle)
 ! END: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/933
 ! https://github.com/easylist/EasyListHebrew/issues/332
@@ -306,8 +315,6 @@ petrimazepa.com##.ui-dialog[tabindex="-1"]
 sabishiidesu.com##+js(acs, document.onkeydown)
 sabishiidesu.com##+js(aopw, document.oncontextmenu)
 sabishiidesu.com##.unselectable:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
-! https://github.com/NanoMeow/QuickReports/issues/215
-gota.io##+js(aopr, fuckAdBlock)
 ! https://github.com/uBlockOrigin/uAssets/issues/3738
 webcodegeeks.com##+js(nostif, onload_popup, 8000)
 ! https://github.com/uBlockOrigin/uAssets/issues/3743
@@ -1712,7 +1719,7 @@ therealdeal.com##.async-hide:style(opacity:1!important)
 ! https://github.com/uBlockOrigin/uAssets/issues/7226
 intergate.info##+js(set, document.oncontextmenu, null)
 ! Steady anti adb warning
-handball-world.news,mobiflip.de,titanic-magazin.de,mimikama.org,langweiledich.net,der-postillon.com,perlentaucher.de,lwlies.com,serieslyawesome.tv,critic.de,mediotejo.net,nahrungsmittel-intoleranz.com,madeinbocholt.de,goodnews-magazin.de,wallauonline.de##+js(nostif, steady-adblock)
+handball-world.news,mobiflip.de,titanic-magazin.de,mimikama.org,langweiledich.net,der-postillon.com,perlentaucher.de,lwlies.com,serieslyawesome.tv,critic.de,mediotejo.net,nahrungsmittel-intoleranz.com,madeinbocholt.de,goodnews-magazin.de,wallauonline.de,cleanthinking.de##+js(nostif, steady-adblock)
 handball-world.news##small
 ! https://github.com/uBlockOrigin/uAssets/issues/7238
 healthitsecurity.com###CoverPop-cover
@@ -4925,10 +4932,6 @@ mathcrave.com##+js(rmnt, script, disable_show_error)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/20189
 vrcmods.com##.showfreemethod
-! https://github.com/uBlockOrigin/uAssets/issues/20190
-cyanlabs.net#@#ins.adsbygoogle[data-ad-slot]
-cyanlabs.net#@#ins.adsbygoogle[data-ad-client]
-cyanlabs.net##ins.adsbygoogle:style(visibility: hidden !important;)
 ! Daily upload limit of 2 images - Sign up now and enjoy monthly free credits
 www.watermarkremover.io##+js(set-local-storage-item, WkdGcGJIbEpiV0ZuWlVSaGRHRT0%3D, %24remove%24)
 ! https://github.com/uBlockOrigin/uAssets/issues/20228
@@ -5195,7 +5198,8 @@ asumanaksoy.com,freshlifecircle.com##+js(rmnt, script, devtoolsDetector)
 ! [dup] from ublock-origin/filters-2021.txt
 ! ||bhplay.me/player/assets/devtools-detector/$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/23689
-/cdn.jsdelivr.net/npm/disable-devtool$script,domain=1jour1film.homes
+! https://github.com/uBlockOrigin/uAssets/issues/28143
+/cdn.jsdelivr.net/npm/disable-devtool$script,domain=1jour1film.homes|simptown.su
 ||player.melaniezettofrais.online/assets/js/devtools-detector$script
 ! https://github.com/NanoMeow/QuickReports/issues/1325
 animedao.*##+js(aopr, devtoolsDetector)
@@ -5865,3 +5869,7 @@ store.steampowered.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fsteam
 ||steamcommunity.com/linkfilter/?u=http$doc,urlskip=?u
 ! https://github.com/uBlockOrigin/uAssets/issues/28053
 marriedbiography.com##+js(aeld, %2Fcontextmenu%7Ccopy%2F)
+! https://github.com/uBlockOrigin/uAssets/issues/28143
+simptown.su##.juice_ban
+! https://labreakfastburrito.com/ - pie adblock
+labreakfastburrito.com##+js(aopr, PieScriptConfig)

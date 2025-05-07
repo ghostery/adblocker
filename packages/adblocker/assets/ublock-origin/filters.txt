@@ -54,6 +54,7 @@ youtube.com##.ytlr-horizontal-list-renderer__items > .yt-virtual-list__container
 ||googlevideo.com/initplayback?source=youtube*&c=TVHTML5&oad=$xhr,domain=youtube.com
 ! Shorts Ad
 m.youtube.com,music.youtube.com,tv.youtube.com,www.youtube.com,youtubekids.com,youtube-nocookie.com##+js(json-prune-fetch-response, reelWatchSequenceResponse.entries.%5B-%5D.command.reelWatchEndpoint.adClientParams.isAd%20entries.%5B-%5D.command.reelWatchEndpoint.adClientParams.isAd, , propsToMatch, url%3A%2Freel_watch_sequence%3F)
+m.youtube.com,music.youtube.com,tv.youtube.com,www.youtube.com,youtubekids.com,youtube-nocookie.com##+js(json-prune, entries.%5B-%5D.command.reelWatchEndpoint.adClientParams.isAd)
 !
 ! [dup] from ublock-origin/quick-fixes.txt
 ! ||youtube.com/youtubei/v1/get_watch?$xhr,1p,replace=/"adPlacements"/"no_ads"/
@@ -2174,25 +2175,6 @@ hindimean.com##+js(nowebrtc)
 streamcdn.*##+js(aopr, open)
 wizhdsports.fi##+js(nowebrtc)
 ||stream2watch.*/sw.js$script,1p
-! daddylive.live (.club .me .eu) popups
-! https://github.com/NanoMeow/QuickReports/issues/1306
-daddylive.*##+js(aopr, AaDetector)
-daddylive.*##+js(aopr, require)
-daddylive.*##+js(nowebrtc)
-daddylive.*##+js(aopw, afStorage)
-daddylive.*##^script:has-text(decodeURIComponent)
-dlhd.sx##+js(aopw, u_cfg)
-/adblock.php$script,domain=dlhd.sx
-dlhd.sx##+js(nostif, (), 150)
-||gocast2.com/z-$script,1p
-||daddylive.*/*ads$frame,1p
-||daddylive.*/sw.js$script,1p
-gooals.*###mo-ads-close
-daddylive.*###floatLayer1
-daddylive.*###html1
-daddylive.*##div > a.btn-outline-primary.btn
-! https://github.com/AdguardTeam/AdguardFilters/issues/150430
-daddylive.link#@#+js(aopr, require)
 ! https://github.com/uBlockOrigin/uAssets/issues/1618
 cnnamador.com##+js(nostif, backRedirect)
 cnnamador.com##+js(aeld, , pop)
@@ -2622,18 +2604,6 @@ hdblog.it##.ads_block
 hdmotori.it##body:style(background: none !important; overflow: auto !important;)
 hdmotori.it##+js(nostif, CANG, 3000)
 hdmotori.it##.ads_block
-! https://github.com/uBlockOrigin/uAssets/issues/7348
-hentai2read.com##+js(nowoif)
-hentai2read.com##[target="_blank"]:has([src^="//"])
-hentai2read.com##[src^="data: ;base64,"]
-||hentaicdn.com^*/NATORI.$script,3p
-/\.com\/\d+/[0-9a-z]+\.js$/$script,1p,domain=hentai2w.com
-||hentai2w.com/templates/default/js/ab.functions.js
-||hentai2w.com/templates/default/js/arf-
-hentai2w.com##+js(acs, Math.random, ExoLoader)
-hentai2w.com##+js(aeld, getexoloader)
-hentai2w.com##.arf-sec
-hentai2w.com##.ark-noAB
 ! https://github.com/uBlockOrigin/uAssets/issues/1938
 megalinks.info##+js(aeld, DOMContentLoaded, adlinkfly)
 megapaste.xyz###newlayercontent
@@ -4334,11 +4304,11 @@ canadianunderwriter.ca##+js(aopw, mockingbird)
 ! https://www.reddit.com/r/uBlockOrigin/comments/brwyhb/ad_filled_redirect_site_detects_ublock_origin/
 ! https://github.com/AdguardTeam/AdguardFilters/issues/128679
 ! https://github.com/uBlockOrigin/uAssets/issues/16601
-forexmab.com,linkjust.com,linkszia.co##+js(set, blurred, false)
-forexlap.com,forexmab.com,forexwaw.club,forex-articles.com,fx4vip.com,forexrw7.com,3rabsports.com,fx-22.com,gold-24.net##+js(nano-sib, , , 0.001)
+linkjust.com##+js(set, blurred, false)
+forexlap.com,forexrw7.com,fx-22.com,gold-24.net##+js(nano-sib, , , 0.001)
 forexlap.com##+js(nowoif)
+forexlap.com##+js(noeval-if, ads)
 linkjust.com##.banner-inner
-linkszia.co##.banner
 @@||linkjust.com^$ghide
 ||forexrw7.com^$frame,3p
 ! https://github.com/uBlockOrigin/uAssets/issues/3741
@@ -5530,7 +5500,7 @@ audiofanzine.com##+js(set, Math.pow, noopFunc)
 hubzter.com##+js(aopr, adsanity_ad_block_vars)
 ! sport stuff
 /adu.php$frame,3p
-allfeeds.*,daddylive.*,sporting77.*,teleriumtv.*##+js(nowoif)
+allfeeds.*,sporting77.*,teleriumtv.*##+js(nowoif)
 allfeeds.*,teleriumtv.*###overlay
 ! https://github.com/uBlockOrigin/uAssets/issues/4927
 problogbooster.com##+js(aopw, hidekeep)
@@ -5933,15 +5903,6 @@ lippycorn.com##+js(acs, document.createElement, __esModule)
 @@||catracalivre.com.br^$ghide
 ! https://github.com/jspenguin2017/uBlockProtector/issues/1051
 pendekarsubs.us##+js(nostif, nextFunction, 250)
-! https://github.com/uBlockOrigin/uAssets/issues/8336
-@@||telepisodes.org^$ghide
-||telepisodes.org^$csp=sandbox allow-forms allow-same-origin allow-scripts allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-top-navigation
-telepisodes.org##+js(nano-sib)
-*$script,3p,denyallow=cdn77.org|cloudflare.com|cloudflare.net|disqus.com|disquscdn.com|facebook.com|facebook.net|fastly.net|fastlylb.net|fbcdn.net|fluidplayer.com|hcaptcha.com|hwcdn.net|jwpcdn.com|wp.com|google.com|googleapis.com|gstatic.com|instagram.com|jquery.com|jsdelivr.net|jwpsrv.com|sharethis.com|stackpathcdn.com|recaptcha.net|twitter.com|x.com,domain=telepisodes.org
-telepisodes.org###play_button:style(display:block!important;)
-telepisodes.org###loading_button
-telepisodes.org##a.button-link.mybutton:has-text(Play)
-||d3d52lhoy0sh2w.cloudfront.net^
 ! https://github.com/uBlockOrigin/uAssets/issues/5315
 7r6.com##+js(aopr, app_vars.force_disable_adblock)
 7r6.com##+js(aopr, LieDetector)
@@ -8116,6 +8077,8 @@ tvspielfilm.de,tvtoday.de,chip.de,focus.de,fitforfun.de##+js(set, DL8_GLOBALS.en
 n-tv.de##+js(set, Object.prototype.adReinsertion, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/5847
 player.rtl2.de##+js(set, getHomadConfig, noopFunc)
+! https://www.ligainsider.de/ welect.de iFrame inside cookie banner
+||damoh.welect.de^
 ! https://github.com/uBlockOrigin/uAssets/issues/7508#issuecomment-659267224
 ||united-infos.net^$domain=gmx.*|web.de
 ! https://github.com/uBlockOrigin/uAssets/issues/6541#issuecomment-559272733
@@ -9821,10 +9784,6 @@ thejobsmovie.com##+js(nostif, adsBlocked)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53238
 @@||techdracula.com^$ghide
 techdracula.com##ins.adsbygoogle
-! thememazing .com broken page + other anti adb
-! fix mdpDeBlocker + some other anti-adb
-||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,xhr,redirect=googlesyndication_adsbygoogle.js:5,domain=~zipextractor.app
-||pagead2.googlesyndication.com^$xhr,redirect=noop.js
 !#include filters-general.txt
 ! As of 2020-04-09, new filters will be added to year-based sublists
 !#include filters-2020.txt

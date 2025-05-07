@@ -7,11 +7,11 @@
  */
 /* eslint-disable prettier/prettier */
 export default [
-  "_storage%22%3A%22denied%22%2C%22ad_user_data%22%3A%22denied%22%2C%22ad_personalizat",
-  "trusted-set-cookie, SOCS, CAISNQgQEitib3FfaWRlbnRpdHlmcm9udGVuZHVpc2VydmVyXzIwMjQwN",
+  "_storage%22%3A%22denied%22%2C%22ad_user_data%22%3A%22denied%22%2C%22ad_personali",
+  "trusted-set-cookie, SOCS, CAISNQgQEitib3FfaWRlbnRpdHlmcm9udGVuZHVpc2VydmVyXzIwMj",
   "acs, document.createElement, %2Fl%5C.parentNode%5C.insertBefore%5C(s%2F",
   ", OptanonConsent, groups%3DC0001%253A1%252CC0002%253A0%252CC000",
-  "TE0LjA2X3AwGgJmaSADGgYIgOu0sgY, 1year, , domain, google.",
+  "QwNTE0LjA2X3AwGgJmaSADGgYIgOu0sgY, 1year, , domain, google.",
   ":not([style^=\"position: absolute; left: -5000px\"])",
   "href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2F",
   ", OptanonAlertBoxClosed, %24currentDate%24",
@@ -67,7 +67,6 @@ export default [
   "[href*=\"",
   "%5Bdata-",
   "AAAAAAAA",
-  "Detector",
   "disclaim",
   "nano-sib",
   "nextFunc",
@@ -93,6 +92,7 @@ export default [
   "[class",
   "[data-",
   "[id^=\"",
+  "728x90",
   "accept",
   "banner",
   "bottom",
