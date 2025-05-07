@@ -808,7 +808,7 @@ describe('Network filters', () => {
       });
 
       context('to', () => {
-        it('reverses domains condition', () => {
+        it('translates positives to domains and negatives to denyallow', () => {
           network('||foo.com$to=foo.com|~bar.com,denyallow=bar.com|~foo.com', {
             domains: {
               hostnames: h(['foo.com']),
@@ -820,13 +820,13 @@ describe('Network filters', () => {
             denyallow: {
               hostnames: h(['bar.com']),
               entities: undefined,
-              notHostnames: undefined,
+              notHostnames: h(['foo.com']),
               notEntities: undefined,
               parts: undefined,
             },
           });
           network('||foo.com$to=bar.com|baz.com', {
-            denyallow: {
+            domains: {
               hostnames: h(['bar.com', 'baz.com']),
               entities: undefined,
               notHostnames: undefined,

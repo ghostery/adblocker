@@ -980,12 +980,18 @@ export default class NetworkFilter implements IFilter {
           delimiter: '|',
           debug,
         });
+        if (domains === undefined) {
+          return null;
+        }
       }
       if (denyallowList.size !== 0) {
         denyallow = Domains.parse(Array.from(denyallowList).join('|'), {
           delimiter: '|',
           debug,
         });
+        if (denyallow === undefined) {
+          return null;
+        }
       }
 
       // End of option parsing
