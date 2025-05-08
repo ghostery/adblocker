@@ -435,6 +435,7 @@ $csp=baz,domain=bar.com
       expect(filter).not.to.be.undefined;
       expect((filter as NetworkFilter).toString()).to.equal('||foo.com$image,redirect=foo.js');
       expect(redirect).to.eql({
+        name: 'foo.js',
         body: 'foo.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,Zm9vLmpz',
@@ -447,6 +448,7 @@ $csp=baz,domain=bar.com
         'foo.js',
       ).match(request);
       expect(redirect).to.eql({
+        name: 'foo.js',
         body: 'foo.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,Zm9vLmpz',
@@ -463,6 +465,7 @@ $csp=baz,domain=bar.com
         'a.js',
       ).match(request);
       expect(redirect).to.eql({
+        name: 'a.js',
         body: 'a.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,YS5qcw==',
@@ -475,6 +478,7 @@ $csp=baz,domain=bar.com
         'a.js',
       ).match(request);
       expect(redirect).to.eql({
+        name: 'a.js',
         body: 'a.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,YS5qcw==',
@@ -504,6 +508,7 @@ $csp=baz,domain=bar.com
         '||foo.com$image,redirect-rule=foo.js',
       );
       expect(redirect).to.eql({
+        name: 'foo.js',
         body: 'foo.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,Zm9vLmpz',
@@ -516,6 +521,7 @@ $csp=baz,domain=bar.com
         'foo.js',
       ).match(request);
       expect(redirect).to.eql({
+        name: 'foo.js',
         body: 'foo.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,Zm9vLmpz',
@@ -533,6 +539,7 @@ $csp=baz,domain=bar.com
         'a.js',
       ).match(request);
       expect(redirect).to.eql({
+        name: 'a.js',
         body: 'a.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,YS5qcw==',
@@ -549,6 +556,7 @@ $csp=baz,domain=bar.com
         'a.js',
       ).match(request);
       expect(redirect).to.eql({
+        name: 'a.js',
         body: 'a.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,YS5qcw==',
