@@ -15,6 +15,7 @@ import { parseFilters } from '../src/lists.js';
 import { hashStrings, tokenize } from '../src/utils.js';
 import { HTMLSelector, HTMLModifier } from '../src/html-filtering.js';
 import { NORMALIZED_TYPE_TOKEN, hashHostnameBackward } from '../src/request.js';
+import FilterEngine from '../src/engine/engine.js';
 
 function h(hostnames: string[]): Uint32Array {
   return new Uint32Array(hostnames.map(hashHostnameBackward)).sort();
@@ -834,6 +835,20 @@ describe('Network filters', () => {
               parts: undefined,
             },
           });
+        });
+        it('requires $domain requirement', () => {
+          expect(
+            FilterEngine.parse(
+              `
+###selector
+@@*$ghide,to=~foo.com
+`,
+            ).getCosmeticsFilters({
+              domain: 'foo.com',
+              hostname: 'foo.com',
+              url: 'https://foo.com',
+            }).styles,
+          ).to.equal('#selector');
         });
       });
     });
