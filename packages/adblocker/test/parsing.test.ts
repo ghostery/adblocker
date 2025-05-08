@@ -15,6 +15,7 @@ import { parseFilters } from '../src/lists.js';
 import { hashStrings, tokenize } from '../src/utils.js';
 import { HTMLSelector, HTMLModifier } from '../src/html-filtering.js';
 import { NORMALIZED_TYPE_TOKEN, hashHostnameBackward } from '../src/request.js';
+import FilterEngine from '../src/engine/engine.js';
 
 function h(hostnames: string[]): Uint32Array {
   return new Uint32Array(hostnames.map(hashHostnameBackward)).sort();
@@ -804,6 +805,50 @@ describe('Network filters', () => {
       it('defaults to no constraint', () => {
         network('||foo.com', {
           denyallow: undefined,
+        });
+      });
+
+      context('to', () => {
+        it('translates positives to domains and negatives to denyallow', () => {
+          network('||foo.com$to=foo.com|~bar.com,denyallow=bar.com|~foo.com', {
+            domains: {
+              hostnames: h(['foo.com']),
+              entities: undefined,
+              notHostnames: undefined,
+              notEntities: undefined,
+              parts: undefined,
+            },
+            denyallow: {
+              hostnames: h(['bar.com']),
+              entities: undefined,
+              notHostnames: h(['foo.com']),
+              notEntities: undefined,
+              parts: undefined,
+            },
+          });
+          network('||foo.com$to=bar.com|baz.com', {
+            domains: {
+              hostnames: h(['bar.com', 'baz.com']),
+              entities: undefined,
+              notHostnames: undefined,
+              notEntities: undefined,
+              parts: undefined,
+            },
+          });
+        });
+        it('requires $domain requirement', () => {
+          expect(
+            FilterEngine.parse(
+              `
+###selector
+@@*$ghide,to=~foo.com
+`,
+            ).getCosmeticsFilters({
+              domain: 'foo.com',
+              hostname: 'foo.com',
+              url: 'https://foo.com',
+            }).styles,
+          ).to.equal('#selector');
         });
       });
     });
