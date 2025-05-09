@@ -337,6 +337,11 @@ daddylive.*###html1
 daddylive.*##div > a.btn-outline-primary.btn
 ! https://github.com/AdguardTeam/AdguardFilters/issues/150430
 daddylive.link#@#+js(aopr, require)
+! https://github.com/uBlockOrigin/uAssets/issues/6296
+||leadnote.me^
+nudogram.com##.sponsor
+nudogram.com##.super_button
+nudogram.com##.wp_xsize_class
 ! END: Rules from filters.txt
 ! START: Regional lists
 ! <<<<< ABPVN >>>>>
@@ -670,8 +675,9 @@ rebajagratis.com,tv.latinlucha.es##+js(rmnt, script, %2FadsBlocked%7C%22popunder
 !#endif
 ! RPMShare
 ! https://github.com/uBlockOrigin/uAssets/issues/27110
+! https://github.com/uBlockOrigin/uAssets/issues/28212
 ! https://rpmshare.rpmvip.com/#klagy
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=anichin.rpmvid.com|rpmhub.site|rpmplay.me|rpmplay.xyz|rpmvip.com
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=anichin.rpmvid.com|disneycdn.net|rpmhub.site|rpmplay.me|rpmplay.xyz|rpmvip.com
 ! bemyhole .com (NSFW) - ads, popups
 bemyhole.com##+js(rmnt, script, egoTab)
 bemyhole.com##.headline-sidebar
@@ -1068,6 +1074,15 @@ championdrive.co,duplex-full.lol##+js(nowoif)
 championdrive.co##+js(aeld, DOMContentLoaded, history.go)
 hoca5.com##+js(rmnt, script, delete%20window)
 catchthrust.net##+js(rmnt, script, popundersPerIP)
+total-sportek.to##+js(rmnt, script, %2Fadbl%2Fi)
+pawastreams.*##+js(nowoif)
+bestsportslive.org##+js(rmnt, script, %2Fai_%7Ceval%7CGoogle%2F)
+vip-box.app##+js(aeld, load, abDetectorPro)
+hesgoal-vip.to##+js(rmnt, script, %2Fadbl%2Fi)
+nativesurge.top##+js(nowoif)
+nativesurge.top###adcashbanner
+nativesurge.top##button#dismiss-btn
+shoot-yalla.me,shoot-yalla-tv.live##+js(rmnt, script, %2Fadbl%2Fi)
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/939
 zone.msn.com##+js(no-fetch-if, googlesyndication, length%3A40000-60000)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/204410#issuecomment-2855256390
@@ -1261,3 +1276,13 @@ asianboy.fans##+js(trusted-suppress-native-method, DOMTokenList.prototype.add, %
 hornyhill.se###adblock-dialog
 hornyhill.se##.card:has(> center:only-child > .adContainer)
 hornyhill.se##div[class="col-6 col-md-4 col-lg-3 col-xl-2 px-5"]:has([data-zoneid])
+! https://github.com/uBlockOrigin/uAssets/issues/28201
+latinluchas.com##+js(no-xhr-if, googlesyndication)
+! https://github.com/uBlockOrigin/uAssets/issues/28209
+!#if cap_html_filtering
+live4all.net##^script:has-text(/andbox|adBlock|data-zone|histats|contextmenu|ConsoleBan/)
+!#else
+live4all.net##+js(rmnt, script, %2Fandbox%7CadBlock%7Cdata-zone%7Chistats%7Ccontextmenu%7CConsoleBan%2F)
+!#endif
+! https://github.com/uBlockOrigin/uAssets/issues/28216
+zeenews.india.com##+js(no-fetch-if, adsbygoogle)
