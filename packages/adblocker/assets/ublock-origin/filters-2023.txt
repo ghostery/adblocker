@@ -2759,7 +2759,7 @@ lifestyle.bg,news.bg,topsport.bg,webcafe.bg##+js(no-fetch-if, method%3AHEAD)
 ! [badfilter] @@/securepubads.$domain=lifestyle.bg|news.bg|topsport.bg,badfilter
 lifestyle.bg,news.bg,topsport.bg,webcafe.bg##.mc-layout__bannerContent
 ! https://github.com/uBlockOrigin/uAssets/issues/28116
-news.bg##+js(rmnt, script, %D1%84)
+news.bg##+js(set, HTMLScriptElement.prototype.onerror, null)
 ! https://github.com/uBlockOrigin/uAssets/issues/19308
 mtg-print.com##+js(no-fetch-if, ads)
 ! https://www.reddit.com/r/uBlockOrigin/comments/15m7iew/disable_adblock_popup_on_thi_site/
@@ -3239,17 +3239,11 @@ rediff.com##+js(rmnt, script, Symbol.iterator)
 towerofgod.me##+js(noeval-if, ads)
 ! https://github.com/uBlockOrigin/uAssets/issues/19901
 downloadfilm.website##+js(no-fetch-if, ads)
-! https://github.com/uBlockOrigin/uAssets/issues/19907
-||googletagmanager.com^$script,domain=netuplayer.top,redirect=noopjs
-*$image,domain=netuplayer.top,redirect-rule=1x1.gif
 ! https://github.com/uBlockOrigin/uAssets/issues/19908
 decorisi.com##+js(acs, Swal.fire)
-! https://github.com/uBlockOrigin/uAssets/issues/19910
-cartoonsarea.xyz##+js(nostif, getComputedStyle, 250)
-cartoonsarea.xyz##[href^="http://fkrt.it"]
 ! https://forums.lanik.us/viewtopic.php?t=48306-nsfw-38-242-194-12-detection
 ! https://github.com/uBlockOrigin/uAssets/issues/21511
-crotpedia.net,158.220.106.212##+js(noeval-if, ads)
+crotpedia.net##+js(noeval-if, ads)
 ! https://www.reddit.com/r/uBlockOrigin/comments/16x5jp9/ublock_dont_work_on_lookmovie/
 lookmovie.*,lookmovie2.to,~lookmovie.studio##+js(set, Yii2App.playbackTimeout, 0)
 flixtor2.to##+js(ra, onclick, a%5Bonclick*%3D%22window.open%22%5D)
@@ -3637,6 +3631,8 @@ cimanow.cc##main > a[id][target="_blank"]
 freex2line.online##body >a[id][href][target^="_blank"]
 ||freex2line.online/dwcn/Assets/js/jquery.countdown360.min.js$script,1p
 freex2line.online##.downloadbtn:style(display: block !important;)
+@@*$ghide,domain=cimanow.cc|freex2line.online
+freex2line.online##a[href*="/jump/next.php?r="]
 ! https://github.com/uBlockOrigin/uAssets/issues/20516
 ! https://github.com/uBlockOrigin/uAssets/issues/21046
 qiwi.gg##+js(aeld, , sessionStorage)
@@ -3797,6 +3793,7 @@ filmweb.pl##+js(set, rodo.waitForConsent, noopPromiseResolve)
 @@||filmweb.pl^$ghide
 filmweb.pl#@##ad
 filmweb.pl#@#+js(acs, decodeURIComponent, newAdblockBoardDisplayed)
+filmweb.pl##+js(rmnt, script, Ads)
 ! https://github.com/easylist/easylist/issues/17915
 thespruce.com##.mntl-leaderboard-spacer:style(min-height: 0px !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/21035
