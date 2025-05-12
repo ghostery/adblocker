@@ -1,3 +1,15 @@
+# v2.5.2 (Tue Apr 29 2025)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump tldts-experimental from 6.1.85 to 7.0.0 [#4807](https://github.com/ghostery/adblocker/pull/4807) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v2.5.1 (Tue Apr 15 2025)
 
 #### :house: Internal

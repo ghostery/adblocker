@@ -20,11 +20,11 @@ youtube.com##+js(json-prune, playerResponse.adPlacements%20playerResponse.player
 !#endif
 !#endif
 ||googlevideo.com/videoplayback*&ctier=L&*%2Cctier%2C$xhr,3p,domain=m.youtube.com|music.youtube.com|www.youtube.com
-www.youtube.com##+js(trusted-rpnt, script, (function%20serverContract(), %2F*START*%2F%22YOUTUBE_PREMIUM_LOGO%22!%3D%3DytInitialData%3F.topbar%3F.desktopTopbarRenderer%3F.logo%3F.topbarLogoRenderer%3F.iconImage%3F.iconType%26%26(location.href.startsWith(%22https%3A%2F%2Fwww.youtube.com%2Ftv%23%2F%22)%7C%7Clocation.href.startsWith(%22https%3A%2F%2Fwww.youtube.com%2Fembed%2F%22)%7C%7Cdocument.addEventListener(%22DOMContentLoaded%22%2C(function()%7Bconst%20t%3D()%3D%3E%7Bconst%20t%3Ddocument.getElementById(%22movie_player%22)%3Bif(!t)return%3Bif(!t.getStatsForNerds%3F.()%3F.debug_info%3F.startsWith%3F.(%22SSAP%2C%20AD%22))return%3Bconst%20e%3Dt.getProgressState%3F.()%3Be%26%26e.duration%3E0%26%26(e.loaded%3Ce.duration%7C%7Ce.duration-e.current%3E1)%26%26t.seekTo%3F.(e.duration)%7D%3Bt()%2Cnew%20MutationObserver((()%3D%3E%7Bt()%7D)).observe(document%2C%7BchildList%3A!0%2Csubtree%3A!0%7D)%7D)))%3B(function%20serverContract(), sedCount, 1)
+www.youtube.com##+js(trusted-rpnt, script, (function%20serverContract(), %2F*START*%2F%22YOUTUBE_PREMIUM_LOGO%22!%3D%3DytInitialData%3F.topbar%3F.desktopTopbarRenderer%3F.logo%3F.topbarLogoRenderer%3F.iconImage%3F.iconType%26%26(location.href.startsWith(%22https%3A%2F%2Fwww.youtube.com%2Ftv%23%2F%22)%7C%7Clocation.href.startsWith(%22https%3A%2F%2Fwww.youtube.com%2Fembed%2F%22)%7C%7Cdocument.addEventListener(%22DOMContentLoaded%22%2C(function()%7Bconst%20t%3D()%3D%3E%7Bconst%20t%3Ddocument.getElementById(%22movie_player%22)%3Bif(!t)return%3Bif(!t.getStatsForNerds%3F.()%3F.debug_info%3F.startsWith%3F.(%22SSAP%2C%20AD%22))return%3Bconst%20e%3Dt.getProgressState%3F.()%3Be%26%26e.duration%3E0%26%26(e.loaded%3Ce.duration%7C%7Ce.duration-e.current%3E1)%26%26t.seekTo%3F.(e.duration)%7D%3Bt()%2Cnew%20MutationObserver((()%3D%3E%7Bt()%7D)).observe(document%2C%7BchildList%3A!0%2Csubtree%3A!0%7D)%7D)))%3B(()%3D%3E%7Bconst%20t%3D%7Bapply%3A(t%2Co%2Cn)%3D%3E%7Bconst%20e%3Dn%5B0%5D%3Breturn%22function%22%3D%3Dtypeof%20e%26%26e.toString().includes(%22onAbnormalityDetected%22)%26%26(n%5B0%5D%3Dfunction()%7B%7D)%2CReflect.apply(t%2Co%2Cn)%7D%7D%3Bwindow.Promise.prototype.then%3Dnew%20Proxy(window.Promise.prototype.then%2Ct)%7D)()%3B(function%20serverContract(), sedCount, 1)
 www.youtube.com##+js(nano-stb, %5Bnative%20code%5D, 17000, 0.001)
-!#if cap_html_filtering
-||www.youtube.com/s/player/*/base.js$script,xhr,replace=/if\(e===""\)/if(0)/
-!#endif
+!!#if cap_html_filtering
+!||www.youtube.com/s/_/ytmainappweb/_/js/$script,xhr,replace=/onAbnormalityDetected"\,function\(\)[\S\s]+?playabilityStatus\)\}/onAbnormalityDetected"\,function(){}/
+!!#endif
 ! https://www.reddit.com/r/uBlockOrigin/comments/1ebwr6c/is_ublock_broken_again_or_am_i_doing_something/
 www.youtube.com##+js(json-prune-fetch-response, playerAds%20adPlacements%20adSlots%20no_ads%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20playerResponse.no_ads%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots%20%5B%5D.playerResponse.no_ads, , propsToMatch, %2Fplayer%5C%3F%7Cget_watch%7C%5E%5CW%2B%24%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-2144781835
@@ -52,19 +52,22 @@ www.youtube.com##+js(trusted-replace-fetch-response, %22adSlots%22, %22no_ads%22
 !#endif
 www.youtube.com##+js(trusted-prevent-dom-bypass, Node.prototype.appendChild, fetch)
 www.youtube.com##+js(trusted-prevent-dom-bypass, Node.prototype.appendChild, Request)
+www.youtube.com##+js(trusted-prevent-dom-bypass, Node.prototype.appendChild, JSON.parse)
+! https://github.com/AdguardTeam/AdguardFilters/issues/172033#issuecomment-1991263854
+youtube.com##+js(json-prune, entries.%5B-%5D.command.reelWatchEndpoint.adClientParams.isAd)
 ! https://github.com/uBlockOrigin/uAssets/issues/3367
 ! web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.viewer.sideFeed.nodes.0.%7B-%7D.nodes.0.rhc_ad)
 ! web.facebook.com,www.facebook.com##+js(json-prune-xhr-response, data.viewer.sideFeed.nodes.0.%7B-%7D.nodes.0.rhc_ad, , propsToMatch, %2Fapi%2Fgraphql)
 web.facebook.com,www.facebook.com##div[role="complementary"] a[aria-labelledby][attributionsrc^="/privacy_sandbox/comet/register/source/?eid="][href^="http"]
-web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.%7B-%7D.sponsored_data.client_token)
-web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2Fnull%2C%5B%5E%5Cn%5D%7B0%2C170%7D%22node%22%3A%5C%7B%22__typename%22%5B%5E%5Cn%5D%7B0%2C170%7D__typename%22%3A%22SponsoredData%22%5B%5E%5Cn%5D%2B%3F%5C%7D%2C%22cursor%22%2Fg, null%2C%22cursor%22, %2Fapi%2Fgraphql)
+web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.serpResponse.results.edges.%5B-%5D.rendering_strategy.view_model.story.sponsored_data.ad_id)
+web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.%7B-%7D.ads_data.__typename)
+web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2Fnull%2C%5B%5E%5Cn%5D%7B0%2C170%7D%22node%22%3A%5C%7B%22__typename%22%5B%5E%5Cn%5D%7B0%2C2500%7D%22__typename%22%3A%22SponsoredData%22%5B%5E%5Cn%5D%2B%3F%5C%7D%2C%22cursor%22%2Fg, null%2C%22cursor%22, %2Fapi%2Fgraphql)
 ! https://github.com/uBlockOrigin/uAssets/issues/24745 - https://voe.sx/e/2z9smej3tebe
 ! VOE sites
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=richardsignfish.com,important
-richardsignfish.com##+js(nowoif)
-richardsignfish.com##+js(set, console.clear, undefined)
-richardsignfish.com##+js(acs, globalThis, break%3Bcase)
-richardsignfish.com##+js(acs, WebAssembly, atob)
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=jonathansociallike.com,important
+jonathansociallike.com##+js(nowoif)
+jonathansociallike.com##+js(set, console.clear, undefined)
+jonathansociallike.com##+js(acs, globalThis, break%3Bcase)
 ! next-episode .net
 !next-episode.net##+js(rmnt, script, %2F%5B%5Cs%5CS%5D%7B0%2C%7Dhead%5B%5Cs%5CS%5D%7B1900%2C%7D%2F)
 !next-episode.net##+js(rpnt, script, %2F.then%5B%5Cs%5CS%5D%7B0%2C%7D%3F%3B%2Fg)
@@ -74,25 +77,28 @@ richardsignfish.com##+js(acs, WebAssembly, atob)
 *$image,redirect-rule=1x1.gif,domain=japscan.lol
 japscan.lol##+js(norafif, %2F%5E%2F)
 japscan.lol##+js(trusted-set-attr, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a, onclick, let%20a%3Dfunction()%7B%7D%3Breturn%20false%3B)
-japscan.lol##+js(no-fetch-if, ansuksar.com, length%3A125746)
+japscan.lol##+js(no-fetch-if, %2F%5C%2F%5C%2Fansuksar%5C.com%5C%2F%5B0-9a-zA-Z%5D%7B3%2C26%7D%5C%2F%5Cd%7B4%2C6%7D%5Cb%2F, length%3A125746)
 ! START: Counter Liste FR rules
 japscan.lol#@##main > .card:has(a[href*="/manga/?type="][href*="&content="][target="_blank"])
 japscan.lol#@#div.container > [href]
 ! END
 ||japscan.lol/zjs/$script,replace=/function GoodDay\(\)\{.+?\}\}\}//
 @@*$image,xhr,script,domain=japscan.lol
-*$script,xhr,3p,denyallow=acscdn.com|aozoiekopoaka.shop|base64easy.com|base64hub.com|challenges.cloudflare.com|cdn.jsdelivr.net|cdnjs.cloudflare.com|code.jquery.com|coutaricho.shop|curltophp.com|ebooksmangaia.com|faireundon.vip|fkourazirop.shop|fourino.shop|frjelsoieapoas.shop|hakoroubita.shop|mamamiaroubita.shop|morinavotarius.top|regexgenius.com|reoiamlsa.shop|routinato.shop|smaltourinto.shop|tourpowouro.shop,domain=japscan.lol,important
+*$script,xhr,3p,denyallow=acscdn.com|ansuksar.com|aozoiekopoaka.shop|base64easy.com|base64hub.com|challenges.cloudflare.com|cdn.jsdelivr.net|cdnjs.cloudflare.com|code.jquery.com|coutaricho.shop|curltophp.com|ebooksmangaia.com|faireundon.vip|fkourazirop.shop|fourino.shop|frjelsoieapoas.shop|hakoroubita.shop|mamamiaroubita.shop|morinavotarius.top|platform.pubadx.one|regexgenius.com|reoiamlsa.shop|routinato.shop|smaltourinto.shop|static.cloudflareinsights.com|tourpowouro.shop,domain=japscan.lol,important
 /^https:\/\/acscdn\.com\/script\/(?:aclib|atg|compatibility|ippg|suv4|ut)\.js(\?cb=\d{13})?$/$script,3p,match-case,important,domain=japscan.lol
-japscan.lol#@#+js(rmnt, script, %2F%5E%5Cs%7B5%7D%2F)
+||platform.pubadx.one/pubadx-ad.js$script,domain=japscan.lol,important
+||static.cloudflareinsights.com/beacon.min.js/$script,domain=japscan.lol,important
 ! https://github.com/uBlockOrigin/uAssets/issues/21064
 ! https://github.com/uBlockOrigin/uAssets/issues/24220
 ! https://github.com/uBlockOrigin/uAssets/issues/25121#issuecomment-2325357098
 poophq.com,veev.to,doods.to##+js(nowoif)
 poophq.com,veev.to,doods.to##+js(no-xhr-if, %2Fvast.php%3F)
 poophq.com,veev.to,doods.to##+js(no-xhr-if, %2Fclick%5C.com%7Cpreroll%7Cnative_render%5C.js%7Cacscdn%2F, length%3A10001)
+poophq.com,veev.to##+js(nostif, %5D()%3B%7D, 500)
 !#if cap_html_filtering
-||static.veevcdn.co/assets/videoplayer/$script,3p,replace=/\'adblockEnabled\':\!\![a-zA-Z]{1,3}/'adblockEnabled':false/,domain=poophq.com|veev.to|doods.to
-||static.veevcdn.co/assets/videoplayer/$script,3p,replace=/\!0x0\=\=\=HT\?H6\(\)/false===HT?H6()/,domain=poophq.com|veev.to|doods.to
+||static.veevcdn.co/assets/videoplayer/$script,3p,replace=/\'adblockEnabled\':[a-zA-Z]{2}/'adblockEnabled':false/g,domain=poophq.com|veev.to|doods.to
+||static.veevcdn.co/assets/videoplayer/$script,3p,replace=/return new Promise\(function\(.{100,550}?\]\[\'on\'\].*?[a-zA-Z]\;\}\)\[/[/,domain=poophq.com|veev.to|doods.to
+||static.veevcdn.co/assets/videoplayer/$script,3p,replace=/\'vavl\':\!0x0/'vavl':false/g,domain=poophq.com|veev.to|doods.to
 ||adsco.re^$xhr,important,domain=poophq.com|veev.to|doods.to
 ||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,important,domain=poophq.com|veev.to|doods.to
 /dl?op=aa&cmd=ga&_a=$xhr,1p,important,domain=poophq.com|veev.to|doods.to
@@ -106,7 +112,9 @@ poophq.com,veev.to,doods.to##+js(no-xhr-if, adsco.re%3A2087)
 /dl?op=player_api&cmd=*adb=$xhr,1p,important,domain=poophq.com|veev.to|doods.to
 ||adsco.re^$script,redirect=none:5,domain=poophq.com|veev.to|doods.to
 poophq.com,veev.to,doods.to##+js(nostif, %2F%5E%5Cs*function%5Cs*%5C(%5Cs*%5C)%5Cs*%7B%5Cs*%5Ba-zA-Z%5D%7B1%2C2%7D%5Cs*%5C(.%7B1%2C10%7D%24%2F)
-poophq.com,veev.to,doods.to##+js(nostif, %2F('%7C%60%7C%22)%5Cs*%5C%2B.%7B10%2C100%7D('%7C%60%7C%22)%5Cs*%5C%2B%7C%5Ba-z%5D%7B1%2C2%7D%5Cs*%5C%5B%5Cs*%5C%5B%7C('%7C%60%7C%22)%5Cs*%2C%5Cs*('%7C%60%7C%22)%7C%5C%22%5Cs*%5C%3B%5Cs*%5Ba-zA-Z%5D%7B1%2C2%7D%5Cs*%5C%3D%5Ba-z%5D%2B%5Cs*%2C%7Czza%7C%5C%5D%5Cs*%2C%5Cs*%5Ba-z%5D%2B%5Cs*%5C)%5Cs*%5C%7D%2F)
+poophq.com,veev.to,doods.to##+js(nostif, %2Fbjwywsj%7Cbhhsywi%7Ccaoampzpue%7C2147%7C00z0oq%7Cqrqwrruqwwtz%7CkA_z3az21%7Ctrwqqkzka1c2%7Coon%5C%3D%5C%22cy%7Czaz%2Cee%2F)
+poophq.com,veev.to,doods.to##+js(nostif, %2Ffunction%5C(%5C)%5Cs*%5C%7B%5Cs*var%20.%7B70%2C300%7D%5Cs*%5C)%5Cs*%5C%7D%5Cs*%24%2F, 4000-6000)
+poophq.com,veev.to,doods.to##+js(nostif, console%5B)
 !#endif
 !#endif
 *$script,3p,domain=poophq.com|veev.to|doods.to,redirect-rule=noopjs
@@ -183,62 +191,55 @@ bg-gledai.*,gledaitv.*##+js(no-fetch-if, method%3AHEAD)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1jef4qb/having_adblock_issues_with_faqwikius/
 faqwiki.us##+js(nostif, .offsetHeight%3E0)
 faqwiki.*##+js(rmnt, script, %2Fadblock%2Fi)
-! https://www.reddit.com/r/uBlockOrigin/comments/1ji7r4o/mirurotv_displays_a_totally_black_page/
-@@||miruro.*/assets/components-shared-popunder-$script,1p
 ! https://github.com/AdguardTeam/AdguardFilters/issues/199124
 pvpoke-re.com##+js(trusted-suppress-native-method, Element.prototype.insertAdjacentHTML, %22afterbegin%22, prevent, %2F%5C%2F%5BA-Za-z%5D%2B%5C.min%5C.js%5C%3F%2F)
 pvpoke-re.com##body:style(overflow-y: auto !important; position: static !important; width: auto !important; height: auto !important;)
 pvpoke-re.com##html:style(overflow-y: auto !important;)
 pvpoke-re.com##+js(aeld, %2Fkeydown%7Cscroll%7Ctouchmove%7Ctouchstart%7Cwheel%2F, function(_0x)
-!pvpoke-re.com##body [style*="z-index"]:style(background: none !important; z-index: -2147483647 !important;)
-pvpoke-re.com##body [style*="fixed"]:style(background: none !important; z-index: -2147483647 !important;)
 pvpoke-re.com##.main-wrap[style*="opacity"]:style(opacity: 1 !important;)
 pvpoke-re.com##+js(aost, Array.from, %2F_tick%7C%5B0-9A-Za-z%5D%7B8%2C%7D%5C%2F%3C%20https%3A%5C%2F%5C%2Fpvpoke-re%5C.com%5C%2F%5B0-9A-Za-z%5D%7B8%2C%7D%5C.js%5C%3Fv%3D%2F)
-pvpoke-re.com##+js(aopr, HTMLElement.prototype.textContent)
 pvpoke-re.com##+js(set, scrollTo, noopFunc)
-||pvpoke-re.com/*.js?v=$script,replace=/&&([0-9A-Za-z]{8\,12})\(\);?\}function \1\(\)\{const _0x[\S\s]+?\1\(\);?\}\}let /&&\$1()}function \$1(){}let /
-||pvpoke-re.com/*.js?v=$script,replace=/(\]=[0-9A-Za-z]{8\,12};function [0-9A-Za-z]{8\,12}\(\)\{)const _0x[0-9a-f]+=\{[\S\s]+?\);?\}\}const/\$1}const/
+pvpoke-re.com##.nitro-any
+pvpoke-re.com##+js(trusted-suppress-native-method, Document.prototype.getElementsByTagName, %22h1%22, prevent, %2F_tick%7C%5B0-9A-Za-z%5D%7B8%2C%7D%5C%2F%3F%3C%3F%20https%3A%5C%2F%5C%2Fpvpoke-re%5C.com%5C%2F%5B0-9A-Za-z%5D%7B8%2C%7D%5C.js%5C%3Fv%3D%2F)
+pvpoke-re.com##+js(trusted-suppress-native-method, Document.prototype.getElementsByTagName, %22h2%22, prevent, %2F_tick%7C%5B0-9A-Za-z%5D%7B8%2C%7D%5C%2F%3F%3C%3F%20https%3A%5C%2F%5C%2Fpvpoke-re%5C.com%5C%2F%5B0-9A-Za-z%5D%7B8%2C%7D%5C.js%5C%3Fv%3D%2F)
+pvpoke-re.com##+js(trusted-suppress-native-method, Document.prototype.getElementsByTagName, %22p%22, prevent, %2F_tick%7C%5B0-9A-Za-z%5D%7B8%2C%7D%5C%2F%3F%3C%3F%20https%3A%5C%2F%5C%2Fpvpoke-re%5C.com%5C%2F%5B0-9A-Za-z%5D%7B8%2C%7D%5C.js%5C%3Fv%3D%2F)
+pvpoke-re.com##body header:is([style*="fixed"],[style*="absolute"],[style*="background"]):has(> *:is([style*="fixed"],[style*="absolute"],[style*="background"]):not(header)):style(visibility: hidden !important;)
+pvpoke-re.com##+js(spoof-css, header%3Ais(%5Bstyle*%3D%22fixed%22%5D%2C%5Bstyle*%3D%22absolute%22%5D%2C%5Bstyle*%3D%22background%22%5D)%3Ahas(%3E%20*%3Ais(%5Bstyle*%3D%22fixed%22%5D%2C%5Bstyle*%3D%22absolute%22%5D%2C%5Bstyle*%3D%22background%22%5D)%3Anot(header)), visibility, visible)
 ! https://github.com/uBlockOrigin/uAssets/issues/26441
 ||vgwort.de^$image,3p,redirect=1x1.gif,domain=cool-web.de|gps-cache.de|web-spiele.de|fun-seiten.de|photo-alben.de|wetter-vorhersage.de|coolsoftware.de|kryptografie.de|cool-domains.de|net-tours.de|such-maschine.de|qul.de|mailtool.de|c-ix.de|softwareengineer.de|net-tools.de|hilfen.de|45er.de|cooldns.de|hardware-entwicklung.de|cool--web-de.translate.goog|gps--cache-de.translate.goog|web--spiele-de.translate.goog|fun--seiten-de.translate.goog|photo--alben-de.translate.goog|wetter--vorhersage-de.translate.goog|coolsoftware-de.translate.goog|kryptografie-de.translate.goog|cool--domains-de.translate.goog|net--tours-de.translate.goog|such--maschine-de.translate.goog|qul-de.translate.goog|mailtool-de.translate.goog|c--ix-de.translate.goog|softwareengineer-de.translate.goog|net--tools-de.translate.goog|hilfen-de.translate.goog|45er-de.translate.goog|cooldns-de.translate.goog|hardware--entwicklung-de.translate.goog
 @@*$ghide,domain=cool-web.de|gps-cache.de|web-spiele.de|fun-seiten.de|photo-alben.de|wetter-vorhersage.de|coolsoftware.de|kryptografie.de|cool-domains.de|net-tours.de|such-maschine.de|qul.de|mailtool.de|c-ix.de|softwareengineer.de|net-tools.de|hilfen.de|45er.de|cooldns.de|hardware-entwicklung.de|cool--web-de.translate.goog|gps--cache-de.translate.goog|web--spiele-de.translate.goog|fun--seiten-de.translate.goog|photo--alben-de.translate.goog|wetter--vorhersage-de.translate.goog|coolsoftware-de.translate.goog|kryptografie-de.translate.goog|cool--domains-de.translate.goog|net--tours-de.translate.goog|such--maschine-de.translate.goog|qul-de.translate.goog|mailtool-de.translate.goog|c--ix-de.translate.goog|softwareengineer-de.translate.goog|net--tools-de.translate.goog|hilfen-de.translate.goog|45er-de.translate.goog|cooldns-de.translate.goog|hardware--entwicklung-de.translate.goog
 @@*$script,1p,domain=cool-web.de|gps-cache.de|web-spiele.de|fun-seiten.de|photo-alben.de|wetter-vorhersage.de|coolsoftware.de|kryptografie.de|cool-domains.de|net-tours.de|such-maschine.de|qul.de|mailtool.de|c-ix.de|softwareengineer.de|net-tools.de|hilfen.de|45er.de|cooldns.de|hardware-entwicklung.de
-cool--web-de.translate.goog,gps--cache-de.translate.goog,web--spiele-de.translate.goog,fun--seiten-de.translate.goog,photo--alben-de.translate.goog,wetter--vorhersage-de.translate.goog,coolsoftware-de.translate.goog,kryptografie-de.translate.goog,cool--domains-de.translate.goog,net--tours-de.translate.goog,such--maschine-de.translate.goog,qul-de.translate.goog,mailtool-de.translate.goog,c--ix-de.translate.goog,softwareengineer-de.translate.goog,net--tools-de.translate.goog,hilfen-de.translate.goog,45er-de.translate.goog,cooldns-de.translate.goog,hardware--entwicklung-de.translate.goog##+js(set, druftlgczqnelbjr, noopFunc)
 cool--web-de.translate.goog,gps--cache-de.translate.goog,web--spiele-de.translate.goog,fun--seiten-de.translate.goog,photo--alben-de.translate.goog,wetter--vorhersage-de.translate.goog,coolsoftware-de.translate.goog,kryptografie-de.translate.goog,cool--domains-de.translate.goog,net--tours-de.translate.goog,such--maschine-de.translate.goog,qul-de.translate.goog,mailtool-de.translate.goog,c--ix-de.translate.goog,softwareengineer-de.translate.goog,net--tools-de.translate.goog,hilfen-de.translate.goog,45er-de.translate.goog,cooldns-de.translate.goog,hardware--entwicklung-de.translate.goog##+js(nostif, wbDeadHinweis)
+cool--web-de.translate.goog,gps--cache-de.translate.goog,web--spiele-de.translate.goog,fun--seiten-de.translate.goog,photo--alben-de.translate.goog,wetter--vorhersage-de.translate.goog,coolsoftware-de.translate.goog,kryptografie-de.translate.goog,cool--domains-de.translate.goog,net--tours-de.translate.goog,such--maschine-de.translate.goog,qul-de.translate.goog,mailtool-de.translate.goog,c--ix-de.translate.goog,softwareengineer-de.translate.goog,net--tools-de.translate.goog,hilfen-de.translate.goog,45er-de.translate.goog,cooldns-de.translate.goog,hardware--entwicklung-de.translate.goog##+js(nostif, , 10000)
 ! https://github.com/uBlockOrigin/uAssets/issues/27884
 ! https://github.com/uBlockOrigin/uAssets/issues/27886
 ! royalroad.com##+js(trusted-set, nitroAds, json%3A%7B%22version%22%3A%2220250402%20de32690%22%2C%22createAd%22%3A%22placement%20generation%22%7D)
 ! royalroad.com##+js(nostif, _0x)
 royalroad.com##.dKKumhSnWiFq75vPUVtmTanQ:has(a[href^="https://www.royalroad.com/a/r?campaign="]:not([href*="&url=https%3A%2F%2Fwww.royalroad.com"]))
 ! ||royalroad.com/bd/cr?$xhr,method=get,1p,strict1p
-! https://github.com/uBlockOrigin/uAssets/issues/27925
-! [badfilter] ||massariuscdn.com^$badfilter
-! https://github.com/uBlockOrigin/uAssets/issues/27928
-#@#a[href="#"][title^="Scroll "] + div[id][class*=" "]
-! https://github.com/easylist/easylist/issues/21629
-radaronline.com#@#.sc-fTZrbU
 ! https://github.com/uBlockOrigin/uAssets/issues/17012
 mail.yahoo.com##+js(nostif, adblock)
 ! https://github.com/uBlockOrigin/uAssets/issues/25421
 gecmisi.com.tr##+js(trusted-replace-argument, String.prototype.includes, 0, json%3A%22gecmisi%22, condition, googleads)
 gecmisi.com.tr##+js(trusted-replace-argument, String.prototype.includes, 0, json%3A%22googleads%22, condition, gecmisi)
-! https://github.com/uBlockOrigin/uAssets/issues/28005
-@@||outbrain.com^$redirect-rule,domain=stuff.co.nz
 ! https://www.aol.com/ - homepage breakage
 aol.com#@#.maas-item:has-text(our Partners)
-! https://github.com/uBlockOrigin/uAssets/issues/28050
-! [badfilter] ||do7go.com^$badfilter
-! https://github.com/uBlockOrigin/uAssets/issues/28049
-! [badfilter] ||r2.e-z.host^$badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/22825
-hulu.com#@#+js(json-prune-fetch-response, breaks%20pause_ads%20video_metadata.end_credits_time, pause_ads, propsToMatch, %2Fplaylist)
-hulu.com#@#+js(json-prune-fetch-response, breaks%20pause_ads%20video_metadata.end_credits_time, breaks, propsToMatch, %2Fplaylist)
-hulu.com#@#+js(json-prune, breaks%20pause_ads%20video_metadata.end_credits_time, pause_ads)
-hulu.com#@#+js(json-prune, breaks%20pause_ads%20video_metadata.end_credits_time, breaks)
-hulu.com#@#+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C'%2Fads-')%5D%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start), Period%5Bid%5E%3D%22Ad%22i%5D, .mpd)
 hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, pause_ads, propsToMatch, %2Fplaylist)
 hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, breaks, propsToMatch, %2Fplaylist)
+hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads, , propsToMatch, %2Fplaylist)
+hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads)
 hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, pause_ads)
 hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, breaks)
-hulu.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C%22%2Fads-%22)%5D%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bstarts-with(%40id%2C%22ad%22)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bstarts-with(%40id%2C%22Ad%22)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start), Period%5Bid%5E%3D%22Ad%22i%5D, .mpd)
-! https://github.com/AdguardTeam/AdguardFilters/issues/203738
-! [badfilter] ||sw.broadcom.com^$badfilter
+hulu.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C%22%2Fads-%22)%5D%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bstarts-with(%40id%2C%22ad%22)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bstarts-with(%40id%2C%22Ad%22)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start), MPD%20Period%5Bid%5E%3D%22Ad%22i%5D, .mpd)
+! https://github.com/AdguardTeam/AdguardFilters/issues/204507#issuecomment-2848611683
+*$popup,domain=lulustream.com,badfilter
+! [badfilter] *$frame,3p,from=lulustream.com,badfilter
+! https://github.com/uBlockOrigin/uAssets/issues/18260
+client.falixnodes.net##+js(rpnt, script, window.location.href%20%3D%20'%2Fdisableadblock'%3B)
+client.falixnodes.net##+js(set, amzn_aps_csm.init, noopFunc)
+client.falixnodes.net##+js(set, amzn_aps_csm.log, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/28207
+@@||dev.visualwebsiteoptimizer.com/cdn/edrv/$script,domain=searchengineland.com
+! https://github.com/uBlockOrigin/uAssets/issues/28211
+! [badfilter] ||users.atw.hu^$all,badfilter

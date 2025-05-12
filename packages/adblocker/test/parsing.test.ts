@@ -806,29 +806,6 @@ describe('Network filters', () => {
           denyallow: undefined,
         });
       });
-
-      context('to', () => {
-        it('reverses domains condition', () => {
-          network('||foo.com$to=foo.com|~bar.com,denyallow=bar.com|~foo.com', {
-            denyallow: {
-              hostnames: h(['bar.com']),
-              entities: undefined,
-              notHostnames: h(['foo.com']),
-              notEntities: undefined,
-              parts: undefined,
-            },
-          });
-          network('||foo.com$to=bar.com|baz.com', {
-            denyallow: {
-              hostnames: undefined,
-              entities: undefined,
-              notHostnames: h(['bar.com', 'baz.com']),
-              notEntities: undefined,
-              parts: undefined,
-            },
-          });
-        });
-      });
     });
 
     describe('redirect', () => {

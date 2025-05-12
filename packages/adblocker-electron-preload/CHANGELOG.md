@@ -1,3 +1,18 @@
+# v2.5.2 (Tue Apr 29 2025)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump electron from 35.2.1 to 36.0.0 [#4836](https://github.com/ghostery/adblocker/pull/4836) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.316 to 0.0.317 [#4832](https://github.com/ghostery/adblocker/pull/4832) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.315 to 0.0.316 [#4825](https://github.com/ghostery/adblocker/pull/4825) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.313 to 0.0.315 [#4811](https://github.com/ghostery/adblocker/pull/4811) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v2.5.1 (Tue Apr 15 2025)
 
 #### :nut_and_bolt: Dependencies

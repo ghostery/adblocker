@@ -1,3 +1,17 @@
+# v2.5.2 (Tue Apr 29 2025)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 24.7.1 to 24.7.2 [#4833](https://github.com/ghostery/adblocker/pull/4833) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 24.6.1 to 24.7.1 [#4827](https://github.com/ghostery/adblocker/pull/4827) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.85 to 7.0.0 [#4807](https://github.com/ghostery/adblocker/pull/4807) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v2.5.1 (Tue Apr 15 2025)
 
 #### :nut_and_bolt: Dependencies
