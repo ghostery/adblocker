@@ -440,6 +440,9 @@ express.co.uk###web-strip-banner
 unlimitedfiles.xyz##+js(nowoif)
 ! https://publicrecords.netronline.com/state/CA/county/fresno anti-adblock
 ||publicrecords.netronline.com/js/checkuser.js$script,1p
+! antiadb https://publicrecords.netronline.com/state/MT
+netronline.com##+js(acs, EventTarget.prototype.addEventListener, alert)
+netronline.com##.ad-container
 ! https://moviediskhd.cloud/ - anti-adb
 moviediskhd.cloud##+js(acs, document.createElement, warning)
 ! https://androidadult.com/latest-games/ - anti-adb (NSFW)
@@ -566,8 +569,9 @@ uexpress.com##[class^="Header_headerContainer"]:style(top: 0px !important;)
 uexpress.com##.ue-app-container:style(margin-top: 60px !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/26963
 *$script,3p,denyallow=challenges.cloudflare.com,domain=bitcine.app|cineby.app
-! moviesnation. email ads
+! moviesnation. video ads
 moviesnation.*##+js(aopw, onpopstate)
+moviesnation.*##+js(nowoif, _blank)
 bollydrive.*##+js(aeld, click, open)
 bollydrive.*##+js(aeld, , history.go)
 bollydrive.*##+js(acs, document.createElement, 'script')
@@ -631,7 +635,6 @@ computer76.ru##+js(nostif, adb)
 mainlinks.xyz##+js(nowoif)
 *$script,3p,domain=gtxgamer.site,denyallow=gdmirrorbot.nl
 *$script,3p,domain=desijaan.com,denyallow=fastly.net|unpkg.com|zencdn.net
-reshare.pm##+js(rmnt, script, popundersPerIP)
 ! https://github.com/uBlockOrigin/uAssets/issues/27072
 pienovels.com##+js(noeval-if, adsbygoogle)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1igns7g/remove_adblocker_notification_on_maggotdrowningcom/
@@ -805,8 +808,6 @@ parametric-architecture.com##+js(set, openAdBlockPopup, noopFunc)
 dailypudding.com,fromwatch.com,visualnewshub.com##+js(aopr, Adcash)
 dailypudding.com,fromwatch.com,visualnewshub.com##+js(aopr, aclib)
 visualnewshub.com##.LailasMagic
-! antiadb https://publicrecords.netronline.com/state/MT
-netronline.com##+js(acs, EventTarget.prototype.addEventListener, alert)
 ! sctoon.net detection
 sctoon.net##+js(aopr, alert)
 ! aniwave. uk ad popups
@@ -1073,6 +1074,9 @@ nativesurge.top##+js(nowoif)
 nativesurge.top###adcashbanner
 nativesurge.top##button#dismiss-btn
 shoot-yalla.me,shoot-yalla-tv.live##+js(rmnt, script, %2Fadbl%2Fi)
+ripplehub.site##+js(rpnt, script, %2Fdocument.body.appendChild.*%3B%2F)
+ripplehub.site##+js(nowoif)
+ripplehub.site###close-ad-button
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/939
 zone.msn.com##+js(no-fetch-if, googlesyndication, length%3A40000-60000)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/204410#issuecomment-2855256390
@@ -1279,16 +1283,11 @@ zeenews.india.com##+js(no-fetch-if, adsbygoogle)
 ! https://github.com/uBlockOrigin/uAssets/issues/28217
 */|$xhr,domain=moviesapi.to,3p
 ! https://github.com/uBlockOrigin/uAssets/issues/26441
-! [dup] from ublock-origin/quick-fixes.txt
-! ||vgwort.de^$image,3p,redirect=1x1.gif,domain=cool-web.de|gps-cache.de|web-spiele.de|fun-seiten.de|photo-alben.de|wetter-vorhersage.de|coolsoftware.de|kryptografie.de|cool-domains.de|net-tours.de|such-maschine.de|qul.de|mailtool.de|c-ix.de|softwareengineer.de|net-tools.de|hilfen.de|45er.de|cooldns.de|hardware-entwicklung.de|cool--web-de.translate.goog|gps--cache-de.translate.goog|web--spiele-de.translate.goog|fun--seiten-de.translate.goog|photo--alben-de.translate.goog|wetter--vorhersage-de.translate.goog|coolsoftware-de.translate.goog|kryptografie-de.translate.goog|cool--domains-de.translate.goog|net--tours-de.translate.goog|such--maschine-de.translate.goog|qul-de.translate.goog|mailtool-de.translate.goog|c--ix-de.translate.goog|softwareengineer-de.translate.goog|net--tools-de.translate.goog|hilfen-de.translate.goog|45er-de.translate.goog|cooldns-de.translate.goog|hardware--entwicklung-de.translate.goog
-! [dup] from ublock-origin/quick-fixes.txt
-! @@*$ghide,domain=cool-web.de|gps-cache.de|web-spiele.de|fun-seiten.de|photo-alben.de|wetter-vorhersage.de|coolsoftware.de|kryptografie.de|cool-domains.de|net-tours.de|such-maschine.de|qul.de|mailtool.de|c-ix.de|softwareengineer.de|net-tools.de|hilfen.de|45er.de|cooldns.de|hardware-entwicklung.de|cool--web-de.translate.goog|gps--cache-de.translate.goog|web--spiele-de.translate.goog|fun--seiten-de.translate.goog|photo--alben-de.translate.goog|wetter--vorhersage-de.translate.goog|coolsoftware-de.translate.goog|kryptografie-de.translate.goog|cool--domains-de.translate.goog|net--tours-de.translate.goog|such--maschine-de.translate.goog|qul-de.translate.goog|mailtool-de.translate.goog|c--ix-de.translate.goog|softwareengineer-de.translate.goog|net--tools-de.translate.goog|hilfen-de.translate.goog|45er-de.translate.goog|cooldns-de.translate.goog|hardware--entwicklung-de.translate.goog
-! [dup] from ublock-origin/quick-fixes.txt
-! @@*$script,1p,domain=cool-web.de|gps-cache.de|web-spiele.de|fun-seiten.de|photo-alben.de|wetter-vorhersage.de|coolsoftware.de|kryptografie.de|cool-domains.de|net-tours.de|such-maschine.de|qul.de|mailtool.de|c-ix.de|softwareengineer.de|net-tools.de|hilfen.de|45er.de|cooldns.de|hardware-entwicklung.de
-! [dup] from ublock-origin/quick-fixes.txt
-! cool--web-de.translate.goog,gps--cache-de.translate.goog,web--spiele-de.translate.goog,fun--seiten-de.translate.goog,photo--alben-de.translate.goog,wetter--vorhersage-de.translate.goog,coolsoftware-de.translate.goog,kryptografie-de.translate.goog,cool--domains-de.translate.goog,net--tours-de.translate.goog,such--maschine-de.translate.goog,qul-de.translate.goog,mailtool-de.translate.goog,c--ix-de.translate.goog,softwareengineer-de.translate.goog,net--tools-de.translate.goog,hilfen-de.translate.goog,45er-de.translate.goog,cooldns-de.translate.goog,hardware--entwicklung-de.translate.goog##+js(nostif, wbDeadHinweis)
-! [dup] from ublock-origin/quick-fixes.txt
-! cool--web-de.translate.goog,gps--cache-de.translate.goog,web--spiele-de.translate.goog,fun--seiten-de.translate.goog,photo--alben-de.translate.goog,wetter--vorhersage-de.translate.goog,coolsoftware-de.translate.goog,kryptografie-de.translate.goog,cool--domains-de.translate.goog,net--tours-de.translate.goog,such--maschine-de.translate.goog,qul-de.translate.goog,mailtool-de.translate.goog,c--ix-de.translate.goog,softwareengineer-de.translate.goog,net--tools-de.translate.goog,hilfen-de.translate.goog,45er-de.translate.goog,cooldns-de.translate.goog,hardware--entwicklung-de.translate.goog##+js(nostif, , 10000)
+||vgwort.de^$image,3p,redirect=1x1.gif,domain=cool-web.de|gps-cache.de|web-spiele.de|fun-seiten.de|photo-alben.de|wetter-vorhersage.de|coolsoftware.de|kryptografie.de|cool-domains.de|net-tours.de|such-maschine.de|qul.de|mailtool.de|c-ix.de|softwareengineer.de|net-tools.de|hilfen.de|45er.de|cooldns.de|hardware-entwicklung.de|cool--web-de.translate.goog|gps--cache-de.translate.goog|web--spiele-de.translate.goog|fun--seiten-de.translate.goog|photo--alben-de.translate.goog|wetter--vorhersage-de.translate.goog|coolsoftware-de.translate.goog|kryptografie-de.translate.goog|cool--domains-de.translate.goog|net--tours-de.translate.goog|such--maschine-de.translate.goog|qul-de.translate.goog|mailtool-de.translate.goog|c--ix-de.translate.goog|softwareengineer-de.translate.goog|net--tools-de.translate.goog|hilfen-de.translate.goog|45er-de.translate.goog|cooldns-de.translate.goog|hardware--entwicklung-de.translate.goog
+@@*$ghide,domain=cool-web.de|gps-cache.de|web-spiele.de|fun-seiten.de|photo-alben.de|wetter-vorhersage.de|coolsoftware.de|kryptografie.de|cool-domains.de|net-tours.de|such-maschine.de|qul.de|mailtool.de|c-ix.de|softwareengineer.de|net-tools.de|hilfen.de|45er.de|cooldns.de|hardware-entwicklung.de|cool--web-de.translate.goog|gps--cache-de.translate.goog|web--spiele-de.translate.goog|fun--seiten-de.translate.goog|photo--alben-de.translate.goog|wetter--vorhersage-de.translate.goog|coolsoftware-de.translate.goog|kryptografie-de.translate.goog|cool--domains-de.translate.goog|net--tours-de.translate.goog|such--maschine-de.translate.goog|qul-de.translate.goog|mailtool-de.translate.goog|c--ix-de.translate.goog|softwareengineer-de.translate.goog|net--tools-de.translate.goog|hilfen-de.translate.goog|45er-de.translate.goog|cooldns-de.translate.goog|hardware--entwicklung-de.translate.goog
+@@*$script,1p,domain=cool-web.de|gps-cache.de|web-spiele.de|fun-seiten.de|photo-alben.de|wetter-vorhersage.de|coolsoftware.de|kryptografie.de|cool-domains.de|net-tours.de|such-maschine.de|qul.de|mailtool.de|c-ix.de|softwareengineer.de|net-tools.de|hilfen.de|45er.de|cooldns.de|hardware-entwicklung.de
+cool--web-de.translate.goog,gps--cache-de.translate.goog,web--spiele-de.translate.goog,fun--seiten-de.translate.goog,photo--alben-de.translate.goog,wetter--vorhersage-de.translate.goog,coolsoftware-de.translate.goog,kryptografie-de.translate.goog,cool--domains-de.translate.goog,net--tours-de.translate.goog,such--maschine-de.translate.goog,qul-de.translate.goog,mailtool-de.translate.goog,c--ix-de.translate.goog,softwareengineer-de.translate.goog,net--tools-de.translate.goog,hilfen-de.translate.goog,45er-de.translate.goog,cooldns-de.translate.goog,hardware--entwicklung-de.translate.goog##+js(nostif, wbDeadHinweis)
+cool--web-de.translate.goog,gps--cache-de.translate.goog,web--spiele-de.translate.goog,fun--seiten-de.translate.goog,photo--alben-de.translate.goog,wetter--vorhersage-de.translate.goog,coolsoftware-de.translate.goog,kryptografie-de.translate.goog,cool--domains-de.translate.goog,net--tours-de.translate.goog,such--maschine-de.translate.goog,qul-de.translate.goog,mailtool-de.translate.goog,c--ix-de.translate.goog,softwareengineer-de.translate.goog,net--tools-de.translate.goog,hilfen-de.translate.goog,45er-de.translate.goog,cooldns-de.translate.goog,hardware--entwicklung-de.translate.goog##+js(nostif, , 10000)
 ! https://github.com/easylist/easylist/commit/e8ce8894620c4b7d4eee158ebd13fe30d71f159c counter PL
 ! [badfilter] ||doubleclick.net^$badfilter
 ! https://github.com/AdguardTeam/AdguardFilters/issues/204889
@@ -1298,3 +1297,5 @@ vide-greniers.org##+js(no-fetch-if, ads)
 vide-greniers.org###mnfDetail_adSenseHead
 ! https://github.com/uBlockOrigin/uAssets/issues/28258
 l2crypt.com##+js(noeval-if, ads)
+! https://github.com/uBlockOrigin/uAssets/issues/28273
+*.js|$script,domain=criptolia.site,redirect=noopjs,3p
