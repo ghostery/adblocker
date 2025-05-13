@@ -983,15 +983,18 @@ export default class NetworkFilter implements IFilter {
         if (domains === undefined) {
           return null;
         }
+      }
+      if (denyallowList.size !== 0) {
         // $denyallow requires $domain
-        if (denyallowList.size !== 0) {
-          denyallow = Domains.parse(Array.from(denyallowList).join('|'), {
-            delimiter: '|',
-            debug,
-          });
-          if (denyallow === undefined) {
-            return null;
-          }
+        if (domainsList.size === 0) {
+          return null;
+        }
+        denyallow = Domains.parse(Array.from(denyallowList).join('|'), {
+          delimiter: '|',
+          debug,
+        });
+        if (denyallow === undefined) {
+          return null;
         }
       }
 
