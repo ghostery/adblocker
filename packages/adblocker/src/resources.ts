@@ -298,7 +298,7 @@ export default class Resources {
   }
 
   public getResource(name: string): {
-    name: string;
+    filename: string;
     body: string;
     contentType: string;
     dataUrl: string;
@@ -317,7 +317,9 @@ export default class Resources {
       dataUrl = `data:${contentType};base64,${btoaPolyfill(body)}`;
     }
 
-    return { name, body, contentType, dataUrl };
+    // TODO: Direct response from `@remusao/small`
+    // refs https://github.com/remusao/mono/pull/869
+    return { filename: name, body, contentType, dataUrl };
   }
 
   public getScriptlet(name: string): string | undefined {
