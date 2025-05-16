@@ -303,7 +303,16 @@ export default class Resources {
     contentType: string;
     dataUrl: string;
   } {
-    const resource = this.resourcesByName.get(name) || getResourceForMime(name);
+    let resource:
+      | {
+          body: string;
+          contentType: string;
+        }
+      | undefined = this.resourcesByName.get(name);
+    if (resource === undefined) {
+      const extensionIndex = name.lastIndexOf('.');
+      resource = getResourceForMime(extensionIndex === -1 ? name : name.slice(extensionIndex));
+    }
     const { contentType, body } = resource;
 
     if ('name' in resource) {
