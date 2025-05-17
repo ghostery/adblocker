@@ -204,6 +204,7 @@ describe('#parseFilters', () => {
           '$~inline-font',
           '$~all',
           '$unknownOption',
+          '$removeparam=/utm/',
         ]) {
           expect(parseFilters(filter, config))
             .to.have.property('notSupportedFilters')
