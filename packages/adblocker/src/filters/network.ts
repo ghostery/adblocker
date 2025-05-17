@@ -727,8 +727,8 @@ export default class NetworkFilter implements IFilter {
       // --------------------------------------------------------------------- //
       // parseOptions
       // --------------------------------------------------------------------- //
-      const domainsList: Set<string> = new Set();
-      const denyallowList: Set<string> = new Set();
+      let domainsList: Set<string> | undefined;
+      let denyallowList: Set<string> | undefined;
 
       for (const rawOption of getFilterOptions(line, optionsIndex + 1, line.length)) {
         const negation = rawOption[0].charCodeAt(0) === 126; /* '~' */
@@ -737,6 +737,8 @@ export default class NetworkFilter implements IFilter {
 
         switch (option) {
           case 'to': {
+            domainsList ??= new Set();
+            denyallowList ??= new Set();
             for (const hostname of value.split('|')) {
               if (hostname.startsWith('~')) {
                 denyallowList.add(hostname.slice(1));
@@ -747,6 +749,7 @@ export default class NetworkFilter implements IFilter {
             break;
           }
           case 'denyallow': {
+            denyallowList ??= new Set();
             for (const domain of value.split('|')) {
               denyallowList.add(domain);
             }
@@ -754,6 +757,7 @@ export default class NetworkFilter implements IFilter {
           }
           case 'domain':
           case 'from': {
+            domainsList ??= new Set();
             for (const domain of value.split('|')) {
               domainsList.add(domain);
             }
@@ -975,7 +979,7 @@ export default class NetworkFilter implements IFilter {
         }
       }
 
-      if (domainsList.size !== 0) {
+      if (domainsList !== undefined && domainsList.size !== 0) {
         domains = Domains.parse(Array.from(domainsList).join('|'), {
           delimiter: '|',
           debug,
@@ -984,9 +988,9 @@ export default class NetworkFilter implements IFilter {
           return null;
         }
       }
-      if (denyallowList.size !== 0) {
+      if (denyallowList !== undefined && denyallowList.size !== 0) {
         // $denyallow requires $domain
-        if (domainsList.size === 0) {
+        if (domainsList === undefined || domainsList.size === 0) {
           return null;
         }
         denyallow = Domains.parse(Array.from(denyallowList).join('|'), {
