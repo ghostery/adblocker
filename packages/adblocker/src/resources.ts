@@ -297,8 +297,27 @@ export default class Resources {
     }
   }
 
-  public getResource(name: string): { body: string; contentType: string; dataUrl: string } {
-    const { body, contentType } = this.resourcesByName.get(name) || getResourceForMime(name);
+  public getResource(name: string): {
+    filename: string;
+    body: string;
+    contentType: string;
+    dataUrl: string;
+  } {
+    let resource:
+      | {
+          body: string;
+          contentType: string;
+        }
+      | undefined = this.resourcesByName.get(name);
+    if (resource === undefined) {
+      const extensionIndex = name.lastIndexOf('.');
+      resource = getResourceForMime(extensionIndex === -1 ? name : name.slice(extensionIndex));
+    }
+    const { contentType, body } = resource;
+
+    if ('name' in resource) {
+      name = (resource as Resource).name;
+    }
 
     let dataUrl;
     if (contentType.indexOf(';') !== -1) {
@@ -307,7 +326,9 @@ export default class Resources {
       dataUrl = `data:${contentType};base64,${btoaPolyfill(body)}`;
     }
 
-    return { body, contentType, dataUrl };
+    // TODO: Direct response from `@remusao/small`
+    // refs https://github.com/remusao/mono/pull/869
+    return { filename: name, body, contentType, dataUrl };
   }
 
   public getScriptlet(name: string): string | undefined {
