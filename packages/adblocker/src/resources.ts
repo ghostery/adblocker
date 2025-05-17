@@ -305,8 +305,9 @@ export default class Resources {
   } {
     let resource:
       | {
-          body: string;
+          name: string;
           contentType: string;
+          body: string;
         }
       | undefined = this.resourcesByName.get(name);
     if (resource === undefined) {
@@ -315,20 +316,14 @@ export default class Resources {
     }
     const { contentType, body } = resource;
 
-    if ('name' in resource) {
-      name = (resource as Resource).name;
-    }
-
-    let dataUrl;
-    if (contentType.indexOf(';') !== -1) {
+    let dataUrl: string;
+    if (resource.contentType.indexOf(';') !== -1) {
       dataUrl = `data:${contentType},${body}`;
     } else {
       dataUrl = `data:${contentType};base64,${btoaPolyfill(body)}`;
     }
 
-    // TODO: Direct response from `@remusao/small`
-    // refs https://github.com/remusao/mono/pull/869
-    return { filename: name, body, contentType, dataUrl };
+    return { filename: resource.name, body, contentType, dataUrl };
   }
 
   public getScriptlet(name: string): string | undefined {
