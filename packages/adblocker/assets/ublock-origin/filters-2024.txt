@@ -996,7 +996,10 @@ digter8.com##+js(acs, eval, replace)
 ! https://www.reddit.com/r/uBlockOrigin/comments/198kyxx/is_there_a_fix_for_ultimate_guitar/
 ultimate-guitar.com##+js(set, Object.prototype.setNeedShowAdblockWarning, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/22032
+! https://github.com/uBlockOrigin/uAssets/issues/28355
 @@||meong.club^$ghide
+||meong.club/go^?$doc,urlskip=&1 -base64
+meong.club##+js(nowoif, _blank)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/170487
 hdporn92.com##+js(acs, onload, puHref)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/170494
@@ -1061,8 +1064,9 @@ obf-io.deobfuscate.io##.self-center.overflow-hidden:has(> img[src="/nexus_banner
 ! https://github.com/uBlockOrigin/uAssets/issues/22185
 /^https:\/\/www\.thesun\.co\.uk\/[0-9a-z]{32}\.js$/$script,1p,match-case,domain=thesun.co.uk
 ! https://github.com/uBlockOrigin/uAssets/issues/22190
-@@||servedbyadbutler.com/vast.spark$xhr,3p,domain=freerideworldtour.com
-||servedbyadbutler.com^$media,3p,redirect=noopmp3-0.1s,domain=freerideworldtour.com
+! https://www.valthorens.com/en/temps-fort/freeride-world-tour-val-thorens-pro/
+@@||servedbyadbutler.com/vast.spark$xhr,3p,domain=freerideworldtour.com|meta-video.com
+||servedbyadbutler.com^$media,3p,redirect=noopmp3-0.1s,domain=freerideworldtour.com|meta-video.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/171445
 x-x-x.tube##+js(aopr, popns)
 x-x-x.tube##+js(rmnt, script, location)
@@ -1422,12 +1426,8 @@ poki.com##div[class]:has(> div > div[style*="height"][style*="width"][style$="px
 web.businessuniqueidea.com##+js(aopr, b2a)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1bhb1yw/tmailorcom_detecting_ublock/
 ! https://github.com/uBlockOrigin/uAssets/issues/24100
-!#if cap_html_filtering
-||tmailor.com/js/main_new.js^$script,1p,replace=/callback\(true\)/callback(false)/g
-!#else
-@@||pagead2.googlesyndication.com^$xhr,3p,domain=tmailor.com
-@@||tmailor.com^$ghide
-!#endif
+tmailor.com##.email-open-read.email-open:style(display:flex !important)
+tmailor.com##.email-adblck-outline:remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/22972
 bgmateriali.com##+js(nostif, adbl)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1bi636p/march_madness_live_adblock_detected/

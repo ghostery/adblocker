@@ -60,7 +60,7 @@ youtube.com##+js(json-prune, entries.%5B-%5D.command.reelWatchEndpoint.adClientP
 ! web.facebook.com,www.facebook.com##+js(json-prune-xhr-response, data.viewer.sideFeed.nodes.0.%7B-%7D.nodes.0.rhc_ad, , propsToMatch, %2Fapi%2Fgraphql)
 web.facebook.com,www.facebook.com##div[role="complementary"] a[aria-labelledby][attributionsrc^="/privacy_sandbox/comet/register/source/?eid="][href^="http"]
 web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.serpResponse.results.edges.%5B-%5D.rendering_strategy.view_model.story.sponsored_data.ad_id)
-web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.%7B-%7D.ads_data.__typename)
+web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.%7B-%7D.the_spons_data.__typename)
 web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2Fnull%2C%5B%5E%5Cn%5D%7B0%2C170%7D%22node%22%3A%5C%7B%22__typename%22%5B%5E%5Cn%5D%7B0%2C2500%7D%22__typename%22%3A%22SponsoredData%22%5B%5E%5Cn%5D%2B%3F%5C%7D%2C%22cursor%22%2Fg, null%2C%22cursor%22, %2Fapi%2Fgraphql)
 ! https://github.com/uBlockOrigin/uAssets/issues/24745 - https://voe.sx/e/2z9smej3tebe
 ! VOE sites
@@ -88,8 +88,8 @@ japscan.lol#@#div.container > [href]
 /^https:\/\/acscdn\.com\/script\/(?:aclib|atg|compatibility|ippg|suv4|ut)\.js(\?cb=\d{13})?$/$script,3p,match-case,important,domain=japscan.lol
 ||platform.pubadx.one/pubadx-ad.js$script,domain=japscan.lol,important
 ||static.cloudflareinsights.com/beacon.min.js/$script,domain=japscan.lol,important
-japscan.lol##+js(trusted-set, pubadxtag, json%3A%7B%22divIds%22%3A%20%5B%22bg-ssp-9017-54912720774%22%2C%20%22bg-ssp-8018-545991978797%22%5D%7D)
-japscan.lol##+js(nostif, divIds)
+japscan.lol##+js(trusted-set, pubadxtag, json%3A%7B%22divIds%22%3A%20%5B%22bg-ssp-9017-1031189172246%22%2C%20%22bg-ssp-8018-1175672404082%22%5D%7D)
+japscan.lol##+js(nostif, isArray)
 ! https://github.com/uBlockOrigin/uAssets/issues/21064
 ! https://github.com/uBlockOrigin/uAssets/issues/24220
 ! https://github.com/uBlockOrigin/uAssets/issues/25121#issuecomment-2325357098
@@ -147,7 +147,7 @@ djx10.org,0deh.com,2glho.org,58n1.com,5mgz1.com,6jlvu.com,djx10.org,fu-4u3omzw0.
 f51rm.com>>##+js(nowoif, %2F%5E%20%5B-%5Cd%5D%2F)
 u26bekrb.fun##+js(set, adBlockDetected, undefined)
 !#if cap_html_filtering
-$frame,3p,domain=filemoon.*|8rm3l0i9.fun|iqksisgw.xyz|u6lyxl0w.skin|l1afav.net,replace='/^/<script>(()=>{window.open=new Proxy(window.open,{apply:(e,t,r)=>{}});const e=new WeakMap,t=(e,t)=>{try{e.dispatchEvent(new Event(t))}catch{}};XMLHttpRequest.prototype;self.XMLHttpRequest=class extends self.XMLHttpRequest{open(t,r,...n){if(e.delete(this),new URL(r).hostname.endsWith(".cdn255.com"))return super.open(t,r,...n);const s={method:t,url:r},a=Object.assign(s,{xhr:this,headers:{date:"","content-type":"","content-length":""},url:s.url,props:{response:{value:""},responseText:{value:""},responseXML:{value:null}}});return e.set(this,a),super.open(t,r,...n)}send(...r){const n=e.get(this);return void 0===n?super.send(...r):!1===n.defer?(n.headers["content-length"]=`${n.props.response.value}`.length,Object.defineProperties(n.xhr,{readyState:{value:4},responseURL:{value:n.url},status:{value:200},statusText:{value:"OK"}}),void Object.defineProperties(n.xhr,n.props)):void Promise.resolve("").then((()=>n)).then((e=>(Object.defineProperties(e.xhr,{readyState:{value:1,configurable:!0},responseURL:{value:n.url}}),t(e.xhr,"readystatechange"),e))).then((e=>(n.headers["content-length"]=`${e.props.response.value}`.length,Object.defineProperties(e.xhr,{readyState:{value:2,configurable:!0},status:{value:200},statusText:{value:"OK"}}),t(e.xhr,"readystatechange"),e))).then((e=>(Object.defineProperties(e.xhr,{readyState:{value:3,configurable:!0}}),Object.defineProperties(e.xhr,e.props),t(e.xhr,"readystatechange"),e))).then((e=>{Object.defineProperties(e.xhr,{readyState:{value:4}}),t(e.xhr,"readystatechange"),t(e.xhr,"load"),t(e.xhr,"loadend")}))}};let r=document.querySelector("script");r.innerHTML.includes("window.open")&&r.parentElement.removeChild(r)})();<\/script>/'
+$frame,3p,domain=8rm3l0i9.fun|iqksisgw.xyz|u6lyxl0w.skin|l1afav.net,replace='/^/<script>(()=>{window.open=new Proxy(window.open,{apply:(e,t,r)=>{}});const e=new WeakMap,t=(e,t)=>{try{e.dispatchEvent(new Event(t))}catch{}};XMLHttpRequest.prototype;self.XMLHttpRequest=class extends self.XMLHttpRequest{open(t,r,...n){if(e.delete(this),new URL(r).hostname.endsWith(".cdn255.com"))return super.open(t,r,...n);const s={method:t,url:r},a=Object.assign(s,{xhr:this,headers:{date:"","content-type":"","content-length":""},url:s.url,props:{response:{value:""},responseText:{value:""},responseXML:{value:null}}});return e.set(this,a),super.open(t,r,...n)}send(...r){const n=e.get(this);return void 0===n?super.send(...r):!1===n.defer?(n.headers["content-length"]=`${n.props.response.value}`.length,Object.defineProperties(n.xhr,{readyState:{value:4},responseURL:{value:n.url},status:{value:200},statusText:{value:"OK"}}),void Object.defineProperties(n.xhr,n.props)):void Promise.resolve("").then((()=>n)).then((e=>(Object.defineProperties(e.xhr,{readyState:{value:1,configurable:!0},responseURL:{value:n.url}}),t(e.xhr,"readystatechange"),e))).then((e=>(n.headers["content-length"]=`${e.props.response.value}`.length,Object.defineProperties(e.xhr,{readyState:{value:2,configurable:!0},status:{value:200},statusText:{value:"OK"}}),t(e.xhr,"readystatechange"),e))).then((e=>(Object.defineProperties(e.xhr,{readyState:{value:3,configurable:!0}}),Object.defineProperties(e.xhr,e.props),t(e.xhr,"readystatechange"),e))).then((e=>{Object.defineProperties(e.xhr,{readyState:{value:4}}),t(e.xhr,"readystatechange"),t(e.xhr,"load"),t(e.xhr,"loadend")}))}};let r=document.querySelector("script");r.innerHTML.includes("window.open")&&r.parentElement.removeChild(r)})();<\/script>/'
 *$frame,3p,replace=/adBlockDetected//,from=filemoon.*
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/25538
@@ -172,6 +172,8 @@ smsonline.cloud##html[data-theme][lang] [id^="img_"][style]:has(iframe[framebord
 *$~script,~frame,~xhr,domain=07c225f3.online|content-loader.com|css-load.com|html-load.com|img-load.com
 ||07c225f3.online/script/*.js?h=$uritransform=/script.+/loader.min.js/
 ||html-load.com/script/*.js?h=$uritransform=/script.+/loader.min.js/
+||content-loader.com/script/*.js?h=$uritransform=/script.+/loader.min.js/
+/^https:\/\/(?:as(?:loader)?|loader)\.([-0-9A-Za-z]+.[-A-Za-z]{2,30})\/script\/(?:www\.)?\1\.js\?h=\d{9}$/$xhr,1p,strict3p,uritransform=/script.+/loader.min.js/
 ! https://github.com/uBlockOrigin/uAssets/issues/26487
 dogdrip.net,infinityfree.com,smsonline.cloud##+js(no-fetch-if, -load.com%2Fscript%2F, length%3A101)
 dogdrip.net,infinityfree.com,smsonline.cloud##+js(nostif, )%5D(this%2C..., 3000-6000)
@@ -195,16 +197,7 @@ faqwiki.us##+js(nostif, .offsetHeight%3E0)
 faqwiki.*##+js(rmnt, script, %2Fadblock%2Fi)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/199124
 pvpoke-re.com##+js(trusted-suppress-native-method, Element.prototype.insertAdjacentHTML, %22afterbegin%22, prevent, %2F%5C%2F%5BA-Za-z%5D%2B%5C.min%5C.js%5C%3F%2F)
-pvpoke-re.com##body:style(overflow-y: auto !important; position: static !important; width: auto !important; height: auto !important;)
-pvpoke-re.com##html:style(overflow-y: auto !important;)
-pvpoke-re.com##+js(aeld, %2Fkeydown%7Cscroll%7Ctouchmove%7Ctouchstart%7Cwheel%2F, function(_0x)
-pvpoke-re.com##.main-wrap[style*="opacity"]:style(opacity: 1 !important;)
-pvpoke-re.com##+js(aost, Array.from, %2F_tick%7C%5B0-9A-Za-z%5D%7B8%2C%7D%5C%2F%3C%20https%3A%5C%2F%5C%2Fpvpoke-re%5C.com%5C%2F%5B0-9A-Za-z%5D%7B8%2C%7D%5C.js%5C%3Fv%3D%2F)
-pvpoke-re.com##+js(set, scrollTo, noopFunc)
 pvpoke-re.com##.nitro-any
-pvpoke-re.com##+js(trusted-suppress-native-method, Document.prototype.getElementsByTagName, %22h1%22, prevent, %2F_tick%7C%5B0-9A-Za-z%5D%7B8%2C%7D%5C%2F%3F%3C%3F%20https%3A%5C%2F%5C%2Fpvpoke-re%5C.com%5C%2F%5B0-9A-Za-z%5D%7B8%2C%7D%5C.js%5C%3Fv%3D%2F)
-pvpoke-re.com##+js(trusted-suppress-native-method, Document.prototype.getElementsByTagName, %22h2%22, prevent, %2F_tick%7C%5B0-9A-Za-z%5D%7B8%2C%7D%5C%2F%3F%3C%3F%20https%3A%5C%2F%5C%2Fpvpoke-re%5C.com%5C%2F%5B0-9A-Za-z%5D%7B8%2C%7D%5C.js%5C%3Fv%3D%2F)
-pvpoke-re.com##+js(trusted-suppress-native-method, Document.prototype.getElementsByTagName, %22p%22, prevent, %2F_tick%7C%5B0-9A-Za-z%5D%7B8%2C%7D%5C%2F%3F%3C%3F%20https%3A%5C%2F%5C%2Fpvpoke-re%5C.com%5C%2F%5B0-9A-Za-z%5D%7B8%2C%7D%5C.js%5C%3Fv%3D%2F)
 pvpoke-re.com##+js(set, PrePl, true)
 pvpoke-re.com##+js(set-local-storage-item, google_tg_rep, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/27884
@@ -218,8 +211,6 @@ mail.yahoo.com##+js(nostif, adblock)
 ! https://github.com/uBlockOrigin/uAssets/issues/25421
 gecmisi.com.tr##+js(trusted-replace-argument, String.prototype.includes, 0, json%3A%22gecmisi%22, condition, googleads)
 gecmisi.com.tr##+js(trusted-replace-argument, String.prototype.includes, 0, json%3A%22googleads%22, condition, gecmisi)
-! https://www.aol.com/ - homepage breakage
-aol.com#@#.maas-item:has-text(our Partners)
 ! https://github.com/uBlockOrigin/uAssets/issues/22825
 hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, pause_ads, propsToMatch, %2Fplaylist)
 hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, breaks, propsToMatch, %2Fplaylist)
@@ -235,7 +226,11 @@ hulu.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresent
 client.falixnodes.net##+js(rpnt, script, window.location.href%20%3D%20'%2Fdisableadblock'%3B)
 client.falixnodes.net##+js(set, amzn_aps_csm.init, noopFunc)
 client.falixnodes.net##+js(set, amzn_aps_csm.log, noopFunc)
-! https://github.com/uBlockOrigin/uAssets/issues/28207
-@@||dev.visualwebsiteoptimizer.com/cdn/edrv/$script,domain=searchengineland.com
-! https://github.com/uBlockOrigin/uAssets/issues/28211
-! [badfilter] ||users.atw.hu^$all,badfilter
+! https://github.com/uBlockOrigin/uAssets/issues/28312
+! [badfilter] ||ibyteimg.com/obj/ad-$xhr,badfilter
+! https://github.com/uBlockOrigin/uAssets/issues/28322
+finanzen.net#@#.ad-hint:upward(1)
+! https://github.com/uBlockOrigin/uAssets/issues/28321
+animenewsnetwork.com#@#[href^="/advertorial/"]:upward(2)
+! https://github.com/uBlockOrigin/uAssets/issues/28320
+! [badfilter] ||spur.us^$third-party,badfilter

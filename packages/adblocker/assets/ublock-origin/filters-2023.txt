@@ -2759,8 +2759,10 @@ lifestyle.bg,news.bg,topsport.bg,webcafe.bg##+js(no-fetch-if, method%3AHEAD)
 ! [badfilter] @@/securepubads.$domain=lifestyle.bg|news.bg|topsport.bg,badfilter
 lifestyle.bg,news.bg,topsport.bg,webcafe.bg##.mc-layout__bannerContent
 ! https://github.com/uBlockOrigin/uAssets/issues/28116
-news.bg##+js(norafif, catch)
+news.bg##+js(norafif, %2F%5E%2F)
 news.bg##+js(set, HTMLScriptElement.prototype.onerror, null)
+news.bg##+js(aeld, error)
+@@||news.bg^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/19308
 mtg-print.com##+js(no-fetch-if, ads)
 ! https://www.reddit.com/r/uBlockOrigin/comments/15m7iew/disable_adblock_popup_on_thi_site/
@@ -3628,6 +3630,7 @@ freex2line.online##+js(overlay-buster)
 ||freex2line.online/*/?redirect$doc,urlskip=?redirect -base64
 ||flashtalking.com^$image,redirect=2x2.png,domain=cimanow.cc|cimanow.online
 ||criteo.net^$image,redirect=2x2.png,domain=cimanow.cc|freex2line.online
+@@||static.criteo.net^$image,domain=cimanow.cc|freex2line.online
 cimanow.cc##main > a[id][target="_blank"]
 freex2line.online##body >a[id][href][target^="_blank"]
 ||freex2line.online/dwcn/Assets/js/jquery.countdown360.min.js$script,1p
@@ -3684,9 +3687,6 @@ greentumble.com##.cp-module
 greentumble.com##html:style(overflow: auto !important)
 ! https://github.com/uBlockOrigin/uAssets/issues/20804
 accuweather.com##body:remove-class(ads-not-loaded)
-! https://github.com/uBlockOrigin/uAssets/issues/20818
-@@||crutto.fun^$script,1p
-@@||crutto.fun^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/20850
 gameshdlive.net##+js(aost, atob, inlineScript)
 ! https://github.com/uBlockOrigin/uAssets/issues/20870
@@ -3703,9 +3703,6 @@ securityweek.com##.pum-overlay[data-popmake*="popup-ad"]
 securityweek.com##.pum-open-overlay:style(overflow: auto !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/20883
 freepornsex.net##+js(aost, setTimeout, ads)
-! https://www.reddit.com/r/uBlockOrigin/comments/183msm2/help_with_embeeded_player_from_netu_pop_ups_and/
-dirtyvideo.fun##+js(nowoif)
-dirtyvideo.fun##+js(set, arrvast, %5B%5D)
 ! https://github.com/uBlockOrigin/uAssets/issues/20899
 tronxminer.com##+js(aeld, load, htmls)
 ! https://sousou-no-frieren.com/ - popup
@@ -3743,8 +3740,6 @@ fplstatistics.co.uk##ins.adsbygoogle:style(clip-path: circle(0) !important;)
 fplstatistics.co.uk##+js(no-fetch-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/20971
 @@||mrfreemium.blogspot.com^$ghide
-! https://github.com/uBlockOrigin/uAssets/issues/20972
-alexsportz.online##+js(acs, fetch, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/20975
 ! https://github.com/uBlockOrigin/uAssets/issues/26020
 btvplus.bg##+js(rmnt, script, onerror)
@@ -3943,9 +3938,10 @@ ckxsfm.com##+js(acs, document.getElementById, fakeElement)
 yottachess.com##+js(no-xhr-if, googlesyndication)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/167905
 cosplay18.pics##+js(rmnt, script, detectAdBlock)
+cosplay18.pics##+js(acs, document.querySelectorAll, popMagic)
 ! NSFW pum-overlay sites
-curs-germana.com,pervertgirlsvideos.com##.pum-overlay
-curs-germana.com,pervertgirlsvideos.com##.pum-open-overlay:style(overflow: auto !important;)
+curs-germana.com##.pum-overlay
+curs-germana.com##.pum-open-overlay:style(overflow: auto !important;)
 ! rollstroll .com anti-adb
 rollstroll.com##+js(nosiif, daadb)
 ! butterpolish .com anti-adb
@@ -3974,9 +3970,6 @@ javggvideo.xyz##+js(nowoif)
 9animes.ru##+js(no-xhr-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/21440
 areascans.net##+js(noeval-if, ads)
-! https://github.com/uBlockOrigin/uAssets/issues/21441
-king-shoot.io##+js(aeld, load, onload)
-king-shoot.io##+js(nosiif, _0x)
 ! bettycrocker.com PH
 bettycrocker.com##.adhesiveHeaderAdFixed header:matches-media((min-width: 1000px)):style(top: 0 !important;)
 bettycrocker.com##.adhesiveAdSpacing

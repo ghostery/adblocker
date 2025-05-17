@@ -1524,5 +1524,14 @@ grok.com##+js(no-fetch-if, url%3A%2Fapi%2Fstatsig%2Flog_event%20method%3APOST)
 @@||script.wikia.nocookie.net/fandom-ae-assets/identity-service/$domain=metacritic.com
 ! https://www.mercari.com/
 ||gateway.us.zip.co/analytics^
+! https://www.reddit.com/r/uBlockOrigin/comments/1kkytyz/how_to_filter_javascript_url_by_id_attribute/
+/^https:\/\/www\.vogue\.com\/[-\w]{120,}$/$script,1p,strict1p,domain=vogue.com
+vogue.com##+js(set-local-storage-item, %2F%5Eavoinspector%2F, %24remove%24)
+vogue.com##^script#journey
+vogue.com##^script#cytokine
+! https://www.abs-cbn.com/
+||abs-cbn.com/resources/$script,1p
+abs-cbn.com##+js(remove-cookie, %2F%5EAMP_%2F)
+abs-cbn.com##+js(set-session-storage-item, VR-INJECTOR-INSTANCES-MAP, %24remove%24)
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt

@@ -1224,6 +1224,8 @@ glamour.com###main-content:style(margin-top: 125px !important;)
 ! https://streambolt.tv/8jf21b4022ww.html - anti-adb
 streambolt.tv##+js(aopw, showADBOverlay)
 streambolt.tv##+js(rmnt, script, ADBlock)
+streambolt.tv,strmbolt.com##+js(nostif, (), 5000)
+/noadblocker.js$domain=streambolt.tv|strmbolt.com
 ! https://github.com/uBlockOrigin/uAssets/issues/28090
 cbssports.com##+js(rmnt, script, %2Fadmiral%2Fi)
 ! https://github.com/MajkiIT/polish-ads-filter/issues/22746
@@ -1288,10 +1290,6 @@ zeenews.india.com##+js(no-fetch-if, adsbygoogle)
 @@*$script,1p,domain=cool-web.de|gps-cache.de|web-spiele.de|fun-seiten.de|photo-alben.de|wetter-vorhersage.de|coolsoftware.de|kryptografie.de|cool-domains.de|net-tours.de|such-maschine.de|qul.de|mailtool.de|c-ix.de|softwareengineer.de|net-tools.de|hilfen.de|45er.de|cooldns.de|hardware-entwicklung.de
 cool--web-de.translate.goog,gps--cache-de.translate.goog,web--spiele-de.translate.goog,fun--seiten-de.translate.goog,photo--alben-de.translate.goog,wetter--vorhersage-de.translate.goog,coolsoftware-de.translate.goog,kryptografie-de.translate.goog,cool--domains-de.translate.goog,net--tours-de.translate.goog,such--maschine-de.translate.goog,qul-de.translate.goog,mailtool-de.translate.goog,c--ix-de.translate.goog,softwareengineer-de.translate.goog,net--tools-de.translate.goog,hilfen-de.translate.goog,45er-de.translate.goog,cooldns-de.translate.goog,hardware--entwicklung-de.translate.goog##+js(nostif, wbDeadHinweis)
 cool--web-de.translate.goog,gps--cache-de.translate.goog,web--spiele-de.translate.goog,fun--seiten-de.translate.goog,photo--alben-de.translate.goog,wetter--vorhersage-de.translate.goog,coolsoftware-de.translate.goog,kryptografie-de.translate.goog,cool--domains-de.translate.goog,net--tours-de.translate.goog,such--maschine-de.translate.goog,qul-de.translate.goog,mailtool-de.translate.goog,c--ix-de.translate.goog,softwareengineer-de.translate.goog,net--tools-de.translate.goog,hilfen-de.translate.goog,45er-de.translate.goog,cooldns-de.translate.goog,hardware--entwicklung-de.translate.goog##+js(nostif, , 10000)
-! https://github.com/easylist/easylist/commit/e8ce8894620c4b7d4eee158ebd13fe30d71f159c counter PL
-! [badfilter] ||doubleclick.net^$badfilter
-! https://github.com/AdguardTeam/AdguardFilters/issues/204889
-@@||tpc.googlesyndication.com/pagead/js/*/elements/html/countdown_handler_fy2021.js$domain=safeframe.googlesyndication.com
 ! https://github.com/uBlockOrigin/uAssets/issues/3221#issuecomment-2867062763
 vide-greniers.org##+js(no-fetch-if, ads)
 vide-greniers.org###mnfDetail_adSenseHead
@@ -1299,3 +1297,26 @@ vide-greniers.org###mnfDetail_adSenseHead
 l2crypt.com##+js(noeval-if, ads)
 ! https://github.com/uBlockOrigin/uAssets/issues/28273
 *.js|$script,domain=criptolia.site,redirect=noopjs,3p
+! https://github.com/uBlockOrigin/uAssets/issues/28285
+5masterzzz.site##+js(nowoif, _blank)
+5masterzzz.site##body > div[style*="z-index:"]:not([id])
+! https://github.com/AdguardTeam/AdguardFilters/issues/205018
+1337x.fyi,1337x.pro##+js(trusted-rpnt, script, window.location.replace(urlRandom)%3B, )
+! https://github.com/uBlockOrigin/uAssets/issues/28317
+brawlify.com##+js(rmnt, script, %2Fadb%2Fi)
+! https://abcnews.go.com/ - top empty space
+abcnews.go.com##.navigation--has-subnav:style(top:0 !important)
+abcnews.go.com##.StickyAdWrapper
+! https://github.com/uBlockOrigin/uAssets/issues/28343
+bgsi.gg##+js(nostif, fired)
+! https://adultgamescollector.com/ popup
+adultgamescollector.com##+js(nowoif)
+! https://github.com/AdguardTeam/AdguardFilters/issues/199124
+! [dup] from ublock-origin/quick-fixes.txt
+! pvpoke-re.com##+js(trusted-suppress-native-method, Element.prototype.insertAdjacentHTML, %22afterbegin%22, prevent, %2F%5C%2F%5BA-Za-z%5D%2B%5C.min%5C.js%5C%3F%2F)
+! [dup] from ublock-origin/quick-fixes.txt
+! pvpoke-re.com##.nitro-any
+! [dup] from ublock-origin/quick-fixes.txt
+! pvpoke-re.com##+js(set, PrePl, true)
+! [dup] from ublock-origin/quick-fixes.txt
+! pvpoke-re.com##+js(set-local-storage-item, google_tg_rep, 1)
