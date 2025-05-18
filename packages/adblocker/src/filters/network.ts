@@ -980,7 +980,7 @@ export default class NetworkFilter implements IFilter {
       }
 
       if (domainsList !== undefined && domainsList.size !== 0) {
-        domains = Domains.parse(Array.from(domainsList).join('|'), {
+        domains = Domains.parse(domainsList, {
           delimiter: '|',
           debug,
         });
@@ -993,7 +993,7 @@ export default class NetworkFilter implements IFilter {
         if (domainsList === undefined || domainsList.size === 0) {
           return null;
         }
-        denyallow = Domains.parse(Array.from(denyallowList).join('|'), {
+        denyallow = Domains.parse(denyallowList, {
           delimiter: '|',
           debug,
         });
