@@ -323,8 +323,8 @@ daddylive.*##+js(nowebrtc)
 daddylive.*##+js(aopw, afStorage)
 daddylive.*##^script:has-text(decodeURIComponent)
 daddylive.*##+js(nowoif)
-daddylive.*>>,caq21harderv991gpluralplay.xyz,~chatango.com##+js(nowoif)
-daddylive.*>>,caq21harderv991gpluralplay.xyz,~chatango.com##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
+daddylive.*>>,~chatango.com##+js(nowoif)
+daddylive.*>>,~chatango.com##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 dlhd.sx##+js(aopw, u_cfg)
 /adblock.php$script,domain=dlhd.sx
 dlhd.sx##+js(nostif, (), 150)
@@ -342,6 +342,20 @@ daddylive.link#@#+js(aopr, require)
 nudogram.com##.sponsor
 nudogram.com##.super_button
 nudogram.com##.wp_xsize_class
+! https://github.com/uBlockOrigin/uAssets/issues/978
+||katestube.com/js/g-ads.js
+||mjedge.net/js/customscript.js
+katestube.com##+js(nostif, '0x)
+katestube.com##+js(nowoif)
+katestube.com##.bottom-banners
+katestube.com##.advertising
+katestube.com###under-video
+katestube.com###pre-items
+katestube.com##.spot-aside
+katestube.com##.native-holder
+katestube.com##.heading
+katestube.com##.bottom-container
+katestube.com##.nav > li:has(> a.btn[target="_blank"])
 ! END: Rules from filters.txt
 ! START: Regional lists
 ! <<<<< ABPVN >>>>>
@@ -943,8 +957,6 @@ forgee.xyz,gamehub.cam##+js(aeld, click, window.open)
 forgee.xyz,gamehub.cam##a[href][target^="_blank"] > button[onclick^="hideButton()"]
 forgee.xyz,gamehub.cam##.downloadbtn:style(display: block !important)
 forgee.xyz,gamehub.cam###clickme
-! https://community.brave.com/t/latest-android-update-allows-website-redirection-to-open-a-new-page-tab/604327
-videograbber.cc##+js(rmnt, script, popundersPerIP)
 ! https://github.com/uBlockOrigin/uAssets/issues/27597
 poophd.video-src.com##+js(no-fetch-if, method%3AGET)
 ! https://github.com/uBlockOrigin/uAssets/issues/27601
@@ -1222,9 +1234,11 @@ abyssplay.pages.dev##+js(nowoif, _blank)
 glamour.com###main-content:style(margin-top: 125px !important;)
 !#endif
 ! https://streambolt.tv/8jf21b4022ww.html - anti-adb
+streambolt.tv,strmbolt.com##div[style*="z-index: 2147483647;"][style*="position: fixed;"]
 streambolt.tv##+js(aopw, showADBOverlay)
 streambolt.tv##+js(rmnt, script, ADBlock)
 streambolt.tv,strmbolt.com##+js(nostif, (), 5000)
+streambolt.tv,strmbolt.com##+js(aost, Promise, HTMLDocument)
 /noadblocker.js$domain=streambolt.tv|strmbolt.com
 ! https://github.com/uBlockOrigin/uAssets/issues/28090
 cbssports.com##+js(rmnt, script, %2Fadmiral%2Fi)
@@ -1246,7 +1260,7 @@ techtalkcounty.com##+js(set-cookie, not-robot, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/28138
 flixrave.me##+js(no-fetch-if, %3D)
 ! https://series9movies.com/ - popups
-series9movies.com##+js(aopw, puTS)
+series9movies.com##+js(rmnt, script, %2Fwindow%5C%5B%5C'open%5C'%5C%5D%2F)
 series9movies.com##+js(nowoif)
 series9movies.com##a[href*="?key="][target="_blank"]
 ||vulnerableimmigrateaboveaverage.com^$all
@@ -1320,3 +1334,20 @@ adultgamescollector.com##+js(nowoif)
 ! pvpoke-re.com##+js(set, PrePl, true)
 ! [dup] from ublock-origin/quick-fixes.txt
 ! pvpoke-re.com##+js(set-local-storage-item, google_tg_rep, 1)
+! https://giff.cloud/gallery/index.php - anti-adb
+giff.cloud##+js(nostif, getComputedStyle)
+! https://github.com/uBlockOrigin/uAssets/issues/28375
+@@||api.adinplay.com/v*/live/aip/ad-manager.js^$script,domain=geotastic.net
+! https://vtcnews.vn/
+||vtcnews.vn/dist/adsbyvtc_ver*.js
+||vtcnews.vn/NewsV*/GetAdsHeader
+! https://www.reddit.com/r/brave_browser/comments/1koxgcs/this_website_detects_brave_adblock/
+onepiecepower.com##+js(aopr, navigator.brave)
+! https://freestreams-live.fi/espn-live05/ - popups
+freestreams-live.*>>,~chatango.com##+js(nowoif)
+freestreams-live.*>>,~chatango.com##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
+freestreams-live.*>>,~chatango.com##+js(rmnt, script, adserverDomain)
+! https://www.natomanga.com/manga/the-night-clenched-in-your-hands
+natomanga.com##.ads-contain
+||natomanga.com/js/cat_
+||natomanga.com/js/pu_

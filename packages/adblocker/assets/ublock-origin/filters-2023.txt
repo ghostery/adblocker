@@ -344,6 +344,9 @@ daemonanime.net#@#[id^="div-gpt-ad"]:not([style^="width: 1px; height: 1px; posit
 daemonanime.net##+js(set, detectAdBlock, noopFunc)
 daemonanime.net,daemon-hentai.com##+js(nowoif, _blank)
 ||preservehalt.com^
+! https://github.com/uBlockOrigin/uBlock-issues/issues/3640
+*$xhr,domain=daemon-hentai.com,redirect=empty,to=adligature.com|outbrain.com|quantserve.com|srvtrck.com
+||daemonanime.net/wp-content/themes/covernews/js/*.js
 ! simulatormods.com anti-adb
 simulatormods.com##+js(acs, eval, replace)
 ! https://github.com/uBlockOrigin/uAssets/issues/16456
@@ -2762,6 +2765,7 @@ lifestyle.bg,news.bg,topsport.bg,webcafe.bg##.mc-layout__bannerContent
 news.bg##+js(norafif, %2F%5E%2F)
 news.bg##+js(set, HTMLScriptElement.prototype.onerror, null)
 news.bg##+js(aeld, error)
+news.bg##+js(no-fetch-if, doubleclick)
 @@||news.bg^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/19308
 mtg-print.com##+js(no-fetch-if, ads)
