@@ -1,3 +1,31 @@
+# v2.6.0 (Tue May 20 2025)
+
+#### :rocket: New Feature
+
+- feat: return filename in `BlockingResponse['redirect']` [#4840](https://github.com/ghostery/adblocker/pull/4840) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#4898](https://github.com/ghostery/adblocker/pull/4898) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4887](https://github.com/ghostery/adblocker/pull/4887) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4886](https://github.com/ghostery/adblocker/pull/4886) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(ci): update `maxNgram` for `cosmetic-selector` [#4884](https://github.com/ghostery/adblocker/pull/4884) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4876](https://github.com/ghostery/adblocker/pull/4876) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4870](https://github.com/ghostery/adblocker/pull/4870) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4866](https://github.com/ghostery/adblocker/pull/4866) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4864](https://github.com/ghostery/adblocker/pull/4864) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(internal): unreachable code [#4861](https://github.com/ghostery/adblocker/pull/4861) ([@seia-soto](https://github.com/seia-soto))
+- fix(internal): asset update with maxNgram of 80 [#4862](https://github.com/ghostery/adblocker/pull/4862) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4829](https://github.com/ghostery/adblocker/pull/4829) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.5.2 (Tue Apr 29 2025)
 
 #### :bug: Bug Fix
