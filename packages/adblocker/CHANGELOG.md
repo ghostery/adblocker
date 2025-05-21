@@ -1,3 +1,15 @@
+# v2.6.1 (Wed May 21 2025)
+
+#### :bug: Bug Fix
+
+- Reimplement network modifier `$to` [#4857](https://github.com/ghostery/adblocker/pull/4857) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.6.0 (Tue May 20 2025)
 
 #### :rocket: New Feature

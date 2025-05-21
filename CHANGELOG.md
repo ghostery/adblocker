@@ -1,3 +1,23 @@
+# v2.6.1 (Wed May 21 2025)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker`
+  - Reimplement network modifier `$to` [#4857](https://github.com/ghostery/adblocker/pull/4857) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/node from 22.15.19 to 22.15.21 [#4901](https://github.com/ghostery/adblocker/pull/4901) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`
+  - Build(deps): Bump puppeteer from 24.8.2 to 24.9.0 [#4902](https://github.com/ghostery/adblocker/pull/4902) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.6.0 (Tue May 20 2025)
 
 #### :rocket: New Feature
