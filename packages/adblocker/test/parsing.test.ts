@@ -15,6 +15,7 @@ import { parseFilters } from '../src/lists.js';
 import { hashStrings, tokenize } from '../src/utils.js';
 import { HTMLSelector, HTMLModifier } from '../src/html-filtering.js';
 import { NORMALIZED_TYPE_TOKEN, hashHostnameBackward } from '../src/request.js';
+import FilterEngine from '../src/engine/engine.js';
 
 function h(hostnames: string[]): Uint32Array {
   return new Uint32Array(hostnames.map(hashHostnameBackward)).sort();
@@ -181,8 +182,15 @@ describe('Network filters', () => {
     it('pprint domain', () => {
       checkToString('ads$domain=foo.com|bar.co.uk|~baz.io', 'ads$domain=<hashed>');
       checkToString('ads$domain=foo.com|bar.com', 'ads$domain=foo.com|bar.com', true);
-      checkToString('ads$denyallow=foo.com|bar.co.uk|~baz.io', 'ads$denyallow=<hashed>');
-      checkToString('ads$denyallow=foo.com|bar.com', 'ads$denyallow=foo.com|bar.com', true);
+      checkToString(
+        'ads$domain=foo.com,denyallow=foo.com|bar.co.uk|~baz.io',
+        'ads$domain=<hashed>,denyallow=<hashed>',
+      );
+      checkToString(
+        'ads$domain=foo.com,denyallow=foo.com|bar.com',
+        'ads$domain=foo.com,denyallow=foo.com|bar.com',
+        true,
+      );
     });
 
     it('pprint with debug=true', () => {
@@ -714,7 +722,14 @@ describe('Network filters', () => {
 
     describe('denyallow', () => {
       it('parses denyallow', () => {
-        network('||foo.com$denyallow=bar.com', {
+        network('||foo.com$domain=foo.com,denyallow=bar.com', {
+          domains: {
+            hostnames: h(['foo.com']),
+            entities: undefined,
+            notHostnames: undefined,
+            notEntities: undefined,
+            parts: undefined,
+          },
           denyallow: {
             hostnames: h(['bar.com']),
             entities: undefined,
@@ -724,7 +739,14 @@ describe('Network filters', () => {
           },
         });
 
-        network('||foo.com$denyallow=bar.com|baz.com', {
+        network('||foo.com$domain=foo.com,denyallow=bar.com|baz.com', {
+          domains: {
+            hostnames: h(['foo.com']),
+            entities: undefined,
+            notHostnames: undefined,
+            notEntities: undefined,
+            parts: undefined,
+          },
           denyallow: {
             hostnames: h(['bar.com', 'baz.com']),
             entities: undefined,
@@ -736,7 +758,14 @@ describe('Network filters', () => {
       });
 
       it('parses ~denyallow', () => {
-        network('||foo.com$denyallow=~bar.com', {
+        network('||foo.com$domain=foo.com,denyallow=~bar.com', {
+          domains: {
+            hostnames: h(['foo.com']),
+            entities: undefined,
+            notHostnames: undefined,
+            notEntities: undefined,
+            parts: undefined,
+          },
           denyallow: {
             notHostnames: h(['bar.com']),
             entities: undefined,
@@ -746,7 +775,14 @@ describe('Network filters', () => {
           },
         });
 
-        network('||foo.com$denyallow=~bar.com|~baz.com', {
+        network('||foo.com$domain=foo.com,denyallow=~bar.com|~baz.com', {
+          domains: {
+            hostnames: h(['foo.com']),
+            entities: undefined,
+            notHostnames: undefined,
+            notEntities: undefined,
+            parts: undefined,
+          },
           denyallow: {
             notHostnames: h(['bar.com', 'baz.com']),
             entities: undefined,
@@ -758,7 +794,14 @@ describe('Network filters', () => {
       });
 
       it('parses denyallow and ~denyallow', () => {
-        network('||foo.com$denyallow=~bar.com|baz.com', {
+        network('||foo.com$domain=foo.com,denyallow=~bar.com|baz.com', {
+          domains: {
+            hostnames: h(['foo.com']),
+            notHostnames: undefined,
+            entities: undefined,
+            notEntities: undefined,
+            parts: undefined,
+          },
           denyallow: {
             hostnames: h(['baz.com']),
             notHostnames: h(['bar.com']),
@@ -768,7 +811,14 @@ describe('Network filters', () => {
           },
         });
 
-        network('||foo.com$denyallow=bar.com|~baz.com', {
+        network('||foo.com$domain=foo.com,denyallow=bar.com|~baz.com', {
+          domains: {
+            hostnames: h(['foo.com']),
+            notHostnames: undefined,
+            entities: undefined,
+            notEntities: undefined,
+            parts: undefined,
+          },
           denyallow: {
             hostnames: h(['bar.com']),
             notHostnames: h(['baz.com']),
@@ -778,7 +828,14 @@ describe('Network filters', () => {
           },
         });
 
-        network('||foo.com$denyallow=foo|~bar|baz', {
+        network('||foo.com$domain=foo.com,denyallow=foo|~bar|baz', {
+          domains: {
+            hostnames: h(['foo.com']),
+            notHostnames: undefined,
+            entities: undefined,
+            notEntities: undefined,
+            parts: undefined,
+          },
           denyallow: {
             hostnames: h(['foo', 'baz']),
             notHostnames: h(['bar']),
@@ -790,7 +847,14 @@ describe('Network filters', () => {
       });
 
       it('accepts entities', () => {
-        network('||foo.com$denyallow=foo.*|~bar.*|baz', {
+        network('||foo.com$domain=foo.com,denyallow=foo.*|~bar.*|baz', {
+          domains: {
+            hostnames: h(['foo.com']),
+            notHostnames: undefined,
+            entities: undefined,
+            notEntities: undefined,
+            parts: undefined,
+          },
           denyallow: {
             hostnames: h(['baz']),
             notHostnames: undefined,
@@ -804,6 +868,52 @@ describe('Network filters', () => {
       it('defaults to no constraint', () => {
         network('||foo.com', {
           denyallow: undefined,
+        });
+      });
+
+      context('to', () => {
+        it('translates positives to domains and negatives to denyallow', () => {
+          network('||foo.com$to=foo.com|~bar.com,denyallow=bar.com|~foo.com', {
+            domains: {
+              hostnames: h(['foo.com']),
+              entities: undefined,
+              notHostnames: undefined,
+              notEntities: undefined,
+              parts: undefined,
+            },
+            denyallow: {
+              hostnames: h(['bar.com']),
+              entities: undefined,
+              notHostnames: h(['foo.com']),
+              notEntities: undefined,
+              parts: undefined,
+            },
+          });
+          network('||foo.com$to=bar.com|baz.com', {
+            domains: {
+              hostnames: h(['bar.com', 'baz.com']),
+              entities: undefined,
+              notHostnames: undefined,
+              notEntities: undefined,
+              parts: undefined,
+            },
+          });
+        });
+        it('requires $domain requirement', () => {
+          expect(
+            FilterEngine.parse(
+              `
+###selector
+@@*$ghide,to=~foo.com
+`,
+            ).getCosmeticsFilters({
+              domain: 'bar.com',
+              hostname: 'bar.com',
+              url: 'https://bar.com',
+              getRulesFromDOM: true,
+              ids: ['selector'],
+            }).styles,
+          ).to.equal('#selector { display: none !important; }');
         });
       });
     });

@@ -13,15 +13,17 @@ import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils.js';
 
 export class Domains {
   public static parse(
-    value: string,
+    value: string | Set<string>,
     { delimiter = ',', debug = false }: { delimiter?: string; debug?: boolean } = {},
   ): Domains | undefined {
-    const parts = value.split(delimiter);
-
-    if (parts.length === 0) {
+    if (typeof value === 'string') {
+      if (value.length === 0) {
+        return undefined;
+      }
+    } else if (value.size === 0) {
       return undefined;
     }
-
+    const parts = typeof value === 'string' ? value.split(delimiter) : value;
     for (const part of parts) {
       if (part.length === 0) {
         return undefined;
