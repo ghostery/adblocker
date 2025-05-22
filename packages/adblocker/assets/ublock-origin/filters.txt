@@ -8026,11 +8026,9 @@ spiegel.de##^script:has-text(homad)
 ||cinema.de/sites/default/files/js/js_$script,1p,replace=/var conf=\{'globalConfig'.*?'vpaid':'true'\};var exportz=/var conf={}; var exportz=/
 ||svonm.com^$xhr,replace=/"enabled":\s*true/"enabled":false/,domain=desired.de|giga.de
 !#else
-||www.welt.de/homadConfigEnabled.json$xhr,redirect=noopjs,domain=welt.de
+giga.de,welt.de##+js(aost, XMLHttpRequest.prototype.open, svonm.com)
 spiegel.de##+js(rmnt, script, homad)
 desired.de##+js(trusted-replace-xhr-response, %2F%22enabled%22%3A%5Cs*true%2F, %22enabled%22%3Afalse, svonm.com)
-giga.de##.alice-video-feed__ad
-giga.de##video[id]:has(> source[src*="media.gigade.ndcaidemh.com"]):remove()
 !#endif
 ||adnxs.com^$xhr,domain=welt.de,important
 ||asadcdn.com^$script,domain=welt.de,important
@@ -8144,18 +8142,7 @@ xiaomi-miui.gr##+js(acs, %24, detected)
 calciomercato.com##.adv
 ! https://github.com/uBlockOrigin/uAssets/issues/8347
 ! https://www.reddit.com/r/uBlockOrigin/comments/zeasej/
-forum.release-apk.com###page-header:has(+ .phpbb-ads-center:matches-css(height: 280px)):style(margin-bottom: -265px !important)
-forum.release-apk.com##.phpbb-ads-center:style(pointer-events: none !important)
-!forum.release-apk.com##^script:has-text(/\'load\'|document.onload/)
-forum.release-apk.com##+js(aeld, load, onload)
-forum.release-apk.com##+js(nobab)
-@@||forum.release-apk.com^$ghide
-@@||pagead2.googlesyndication.com/pagead/$script,domain=forum.release-apk.com
-*$frame,domain=forum.release-apk.com,redirect-rule=noopframe
-@@||googleads.g.doubleclick.net/pagead/*forum.release-apk.com$frame,domain=forum.release-apk.com
-forum.release-apk.com##ins:style(opacity: 0 !important; pointer-events: none !important)
-*$xhr,redirect-rule=nooptext,domain=forum.release-apk.com
-forum.release-apk.com##+js(acs, eval, replace)
+forum.release-apk.com##+js(rpnt, script, %2Fif%20%5C(%5Ba-z0-9%5D%7B10%7D%20%3D%3D%3D%20%5Ba-z0-9%5D%7B10%7D%2F, if(true)
 ! https://github.com/NanoMeow/QuickReports/issues/2294
 adonisfansub.com##+js(nobab)
 ! https://github.com/NanoMeow/QuickReports/issues/2295

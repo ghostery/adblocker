@@ -1949,8 +1949,8 @@ idoitmyself.xyz##+js(rpnt, script, %2FdevtoolsDetector%5C.launch%5C(%5C)%5C%3B%2
 ! https://listeamed.net/v/kKJVORW4oAw53XD
 ! vidguard
 ||acacdn.com^$script,redirect-rule=noopjs
-bembed.net,embedv.net,fslinks.org,listeamed.net,v6embed.xyz,vembed.*,vgplayer.xyz,vid-guard.com##+js(nostif, afterOpen)
-bembed.net,embedv.net,fslinks.org,v6embed.xyz,vembed.*,vgplayer.xyz,vid-guard.com##+js(nowoif)
+bembed.net,embedv.net,fslinks.org,listeamed.net,v6embed.xyz,vembed.*,vgplayer.xyz,vid-guard.com,vidguardto.xyz##+js(nostif, afterOpen)
+bembed.net,embedv.net,fslinks.org,v6embed.xyz,vembed.*,vgplayer.xyz,vid-guard.com,vidguardto.xyz##+js(nowoif)
 listeamed.net##+js(nowoif, !%2Fd%2F)
 listeamed.net##+js(json-prune, AffiliateAdBlock)
 bembed.net,embedv.net,fslinks.org,listeamed.net,v6embed.xyz,vembed.*,vgplayer.xyz,vid-guard.com##+js(set, PlayerConfig.config.CustomAdSetting, %5B%5D)
@@ -2624,6 +2624,8 @@ sotwe.com##.tweet-card .v-responsive.media-carousel-image .v-responsive__content
 *$frame,redirect-rule=noopframe,domain=megaup.net
 download.megaup.net##a img:not([src="images/main_logo_inverted.png"]):matches-css(height: /^([2-4]{1}[0-9]{2}(\.[0-9]+)?px|0px)$/):style(visibility: hidden !important;)
 download.megaup.net##+js(spoof-css, a%20img%3Anot(%5Bsrc%3D%22images%2Fmain_logo_inverted.png%22%5D), visibility, visible)
+download.megaup.net##a[href][target="_blank"],[src^="//ad.a-ads.com/"]:style(visibility:hidden !important)
+download.megaup.net##+js(spoof-css, a%5Bhref%5D%5Btarget%3D%22_blank%22%5D%2C%5Bsrc%5E%3D%22%2F%2Fad.a-ads.com%2F%22%5D, visibility, visible)
 download.megaup.net##+js(rpnt, script, %2Ffor%5Cs*%5C(%5Cs*(const%7Clet%7Cvar).*%3F%5C)%5C%3Breturn%5C%3B%5C%7D_%2Fg, _, condition, attribute)
 download.megaup.net##a:has(img[src*="/download"]):style(width: 300px !important; height: 300px !important; display: block !important;)
 @@||megaup.net/imageads/$image,1p
@@ -2650,15 +2652,20 @@ kukaj.io##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/19207
 ! https://github.com/uBlockOrigin/uAssets/issues/22687
 ! https://github.com/easylist/easylist/commit/3279eb38679284daea90c485c4b9ad298a6f82f3
-||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=southpark.*|southparkstudios.*,important
-||imasdk.googleapis.com/pal/sdkloader/pal.js$redirect=noop.js,domain=southpark.*|southparkstudios.*
-@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=southpark.*|southparkstudios.*
+! [dup] from ublock-origin/quick-fixes.txt
+! ||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=southpark.*|southparkstudios.*,important
+! [dup] from ublock-origin/quick-fixes.txt
+! ||imasdk.googleapis.com/pal/sdkloader/pal.js$redirect=noop.js,domain=southpark.*|southparkstudios.*
+! [dup] from ublock-origin/quick-fixes.txt
+! @@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=southpark.*|southparkstudios.*
 ! [dup] from ublock-origin/unbreak.txt
 ! @@||fwmrm.net^*/admanager.js$script,3p,domain=southpark.*|southparkstudios.*
 ! https://github.com/uBlockOrigin/uAssets/issues/20253
-southpark.*,southparkstudios.*##+js(no-fetch-if, ima3_dai)
+! [dup] from ublock-origin/quick-fixes.txt
+! southpark.*,southparkstudios.*##+js(no-fetch-if, ima3_dai)
 ! https://github.com/uBlockOrigin/uAssets/issues/27712
-southpark.*,southparkstudios.*##+js(json-prune-fetch-response, imasdk, , propsToMatch, topaz.viacomcbs.digital)
+! [dup] from ublock-origin/quick-fixes.txt
+! southpark.*,southparkstudios.*##+js(json-prune-fetch-response, imasdk, , propsToMatch, topaz.viacomcbs.digital)
 ! https://github.com/uBlockOrigin/uAssets/issues/19210
 rain-alarm.com###main_canvas > div[id^="google"]
 rain-alarm.com###main_canvas > div:not(div[id^="google"]):style(width: 100% !important;)
@@ -2875,9 +2882,15 @@ client.falixnodes.net##+js(rmnt, script, Object.keys(window.adngin).length)
 !#endif
 client.falixnodes.net##+js(rpnt, script, typeof%20window.loadtwo, typeof%20window.loadtwo%20%3D%3D%3D%20true)
 client.falixnodes.net##+js(rpnt, script, (window.loadtwo, (window.loadtwo%20%3D%3D%3D%20undefined%20%7C%7C%20true%20%7C%7C%20window.googlescriptloaded)
+! [dup] from ublock-origin/quick-fixes.txt
+! client.falixnodes.net##+js(rpnt, script, window.location.href%20%3D%20'%2Fdisableadblock'%3B)
 client.falixnodes.net##+js(set, window.adngin, %7B%7D)
 client.falixnodes.net##+js(set, amzn_aps_csm, %7B%7D)
 client.falixnodes.net##+js(set, amzn_aps_csm.define, noopFunc)
+! [dup] from ublock-origin/quick-fixes.txt
+! client.falixnodes.net##+js(set, amzn_aps_csm.init, noopFunc)
+! [dup] from ublock-origin/quick-fixes.txt
+! client.falixnodes.net##+js(set, amzn_aps_csm.log, noopFunc)
 client.falixnodes.net##+js(no-fetch-if, adsbygoogle)
 client.falixnodes.net##h6.text-muted:has-text(Advertisement)
 client.falixnodes.net###takeover[style="min-height: 250px;"]
@@ -3446,7 +3459,8 @@ web1s.asia##+js(noeval-if, ads)
 web1s.asia##+js(nano-sib, wait)
 ! https://github.com/uBlockOrigin/uAssets/issues/20301
 ! https://old.reddit.com/r/uBlockOrigin/comments/17dj6qb/how_to_block_this/
-sshkit.com,fastssh.com,howdy.id##+js(no-fetch-if, adsbygoogle)
+! https://www.reddit.com/r/uBlockOrigin/comments/1kr7d8s/cant_access_this_site_with_ublock_enabled/
+sshkit.com,fastssh.com,howdy.id##+js(no-fetch-if, %2Fadsbygoogle%7Cdoubleclick%2F)
 @@*$ghide,domain=sshkit.com|fastssh.com|howdy.id
 ! https://javideo.net/fc2ppv-3941012 VGT#01 server popup
 av-cdn.xyz##+js(nowoif)
@@ -3983,8 +3997,6 @@ player.bestrapeporn.com##+js(nowoif)
 zealtyro.com##+js(aost, document.getElementsByTagName, adsBlocked)
 ! tinyzonetv .se popups
 tinyzonetv.se##+js(nowoif)
-! https://www.reddit.com/r/uBlockOrigin/comments/18jtgkj/how_i_block_hidden_links_from_opening_new_page/
-moviesjoyhd.to##+js(aeld, mousedown, shown_at)
 ! https://community.brave.com/t/nsfw-poop-cx-pop-up/520215
 ! https://github.com/uBlockOrigin/uAssets/issues/22411
 metrolagu.cam,poop.*##+js(nowoif)

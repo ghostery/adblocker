@@ -7,11 +7,11 @@
  */
 /* eslint-disable prettier/prettier */
 export default [
-  "_storage%22%3A%22denied%22%2C%22ad_user_data%22%3A%22denied%22%2C%22ad_personal",
-  "trusted-set-cookie, SOCS, CAISNQgQEitib3FfaWRlbnRpdHlmcm9udGVuZHVpc2VydmVyXzIwM",
+  "_storage%22%3A%22denied%22%2C%22ad_user_data%22%3A%22denied%22%2C%22ad_persona",
+  "trusted-set-cookie, SOCS, CAISNQgQEitib3FfaWRlbnRpdHlmcm9udGVuZHVpc2VydmVyXzIw",
   "acs, document.createElement, %2Fl%5C.parentNode%5C.insertBefore%5C(s%2F",
   ", OptanonConsent, groups%3DC0001%253A1%252CC0002%253A0%252CC000",
-  "jQwNTE0LjA2X3AwGgJmaSADGgYIgOu0sgY, 1year, , domain, google.",
+  "MjQwNTE0LjA2X3AwGgJmaSADGgYIgOu0sgY, 1year, , domain, google.",
   ":not([style^=\"position: absolute; left: -5000px\"])",
   "href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2F",
   ", OptanonAlertBoxClosed, %24currentDate%24",
@@ -38,7 +38,6 @@ export default [
   "decodeURIComponent",
   "[target=\"_blank\"]",
   "%22%3Afalse%2C%22",
-  "^script:has-text(",
   "[href^=\"https://",
   "%22%3Atrue%2C%22",
   "[href^=\"http://",
@@ -95,6 +94,7 @@ export default [
   "[class",
   "[data-",
   "[id^=\"",
+  "728x90",
   "accept",
   "banner",
   "bottom",

@@ -128,6 +128,10 @@ xvideos.com##a[href*="/go.php?"][href*="&ad="]
 1337x.*,x1337x.*,1337x.ninjaproxy1.com##[href*="vpn"]
 1337x.*,x1337x.*,1337x.ninjaproxy1.com##[onclick*="vpn"]
 1337x.*,x1337x.*,1337x.ninjaproxy1.com##+js(nowebrtc)
+! https://github.com/uBlockOrigin/uAssets/issues/17184#issuecomment-2893536824
+1337x.*,x1337x.*,1337x.ninjaproxy1.com##+js(nostif, location.href)
+1337x.*,x1337x.*,1337x.ninjaproxy1.com##.js-modal-url:remove()
+1337x.*,x1337x.*,1337x.ninjaproxy1.com###alert-popup:remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/7273
 cheatcloud.cc,cheater.ninja,cheatermad.com,cheatsquad.gg##+js(nano-sib, clearInterval)
 cheatsquad.gg##+js(nosiif, visibility, 1000)
@@ -317,7 +321,6 @@ porndoe.com##.bunny-icon[disabled]:remove-attr(disabled)
 torrentdownloads.*##+js(nowebrtc)
 torrentdownload.*,torrentdownloads.*##+js(acs, adcashMacros)
 torrentdownload.*,torrentdownloads.*##[href^="/td/?"]
-torrentdownload.*##+js(rmnt, script, shown_at)
 torrentdownload.*##+js(acs, JSON.parse, break%3Bcase)
 torrentdownload.*##+js(nowoif)
 torrentdownload.*##[href^="/bing."]
@@ -437,11 +440,15 @@ u.co.uk,uktvplay.co.uk,uktvplay.uktv.co.uk##+js(no-xhr-if, fwmrm.net)
 u.co.uk,uktvplay.co.uk,uktvplay.uktv.co.uk##+js(no-fetch-if, fwmrm.net)
 ! https://github.com/uBlockOrigin/uAssets/issues/2651
 ! https://github.com/uBlockOrigin/uAssets/issues/14352
-channel4.com##+js(no-xhr-if, %2F%5C%2Fad%5C%2Fg%5C%2F1%2F)
-channel4.com##.advertsMpu
-channel4.com##.block--mpu
+! [dup] from ublock-origin/quick-fixes.txt
+! channel4.com##+js(no-xhr-if, %2F%5C%2Fad%5C%2Fg%5C%2F1%2F)
+! [dup] from ublock-origin/quick-fixes.txt
+! channel4.com##.advertsMpu
+! [dup] from ublock-origin/quick-fixes.txt
+! channel4.com##.block--mpu
 ! https://github.com/uBlockOrigin/uAssets/issues/24873
-channel4.com##+js(json-prune, adverts.breaks)
+! [dup] from ublock-origin/quick-fixes.txt
+! channel4.com##+js(json-prune, adverts.breaks)
 ! mail.yahoo.com stuff
 mail.yahoo.com##[data-test-id="right-rail-ad"]
 ! https://github.com/uBlockOrigin/uAssets/issues/13439
@@ -565,9 +572,8 @@ mangaku.*,~mangaku.win##+js(acs, %24, onclick)
 .gif^$image,domain=mangaku.*|~mangaku.win
 ! https://github.com/uBlockOrigin/uAssets/issues/2484
 ! https://mkvcinemas.cat/
-/\/data\/cache\/min\/1\/[a-f0-9]+\.js\b/$script,1p,domain=mkvcinemas.*
+/\/data\/cache\/min\/1\/[a-f0-9]+\.js\b/$script,1p,domain=mkvcinemas.*|mkvcinemas.cat|mkvcinemas.kim|mkvcinemas.pet
 mkvcinemas.*##a[title="mkvAnime"]
-mkvcinemas.*##+js(rmnt, script, shown_at)
 mkvcinemas.*##+js(nowoif)
 *$script,3p,denyallow=googleapis.com,domain=mkvcinemas.*
 mkvcinemas.*###SH-Ads
@@ -1048,6 +1054,7 @@ plc4me.com##+js(rmnt, script, deblocker)
 ! krx18.com
 krx18.com##center > [src*="/ads/"]
 krx18.com###dynamic-image
+||krx18.com/show-promote.js
 ! https://old.reddit.com/r/uBlockOrigin/comments/19cwuo4/
 ||ezodn.com^$redirect-rule=noopjs,domain=tv.bdix.app
 ! https://github.com/uBlockOrigin/uAssets/issues/22838
@@ -2067,7 +2074,8 @@ rock.porn##.maf
 rock.porn##.watch-link
 rock.porn##a[href^="https://wittered-mainging.com/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/23348
-www.tiktok.com##+js(json-prune-fetch-response, itemList.%5B-%5D.ad_info.ad_id, , propsToMatch, url%3Aapi%2Frecommend%2Fitem_list%2F)
+! [dup] from ublock-origin/quick-fixes.txt
+! www.tiktok.com##+js(json-prune-fetch-response, itemList.%5B-%5D.ad_info.ad_id, , propsToMatch, url%3Aapi%2Frecommend%2Fitem_list%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/24142
 ||video-ads-module.ad-tech.nbcuni.com^
 ! https://github.com/uBlockOrigin/uAssets/issues/24148
@@ -2526,12 +2534,6 @@ m9.news##body:style(display: block !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/25088
 /wp-content/uploads/pum/pum-site-scripts.js^$domain=honghotduongpho.com
 ! https://github.com/uBlockOrigin/uAssets/issues/25015
-!#if cap_html_filtering
-cineb.rs##^script:has-text(shown_at)
-!#else
-cineb.rs##+js(rmnt, script, shown_at)
-!#endif
-cineb.rs##+js(aeld, mousedown, shown_at)
 cineb.rs##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/25023
 hancinema.net##+js(no-fetch-if, %2Fclarity%7Cgooglesyndication%2F)
@@ -3529,12 +3531,6 @@ tab-maker.com##+js(no-fetch-if, googletagmanager, length%3A10)
 ||arabs.alarbda.com^
 ! https://github.com/uBlockOrigin/uAssets/issues/24914
 netflix.com##+js(json-prune, result.adverts)
-! https://www.reddit.com/r/uBlockOrigin/comments/1hk3x2p/123anime_misbehaving_while_using_ublock_origin/
-!#if cap_html_filtering
-123animehub.cc##^script:has-text(shown_at)
-!#else
-123animehub.cc##+js(rmnt, script, shown_at)
-!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/26594
 worldpopulationreview.com###top_ad_container + div:style(padding-top: 4rem !important;)
 ! https://gofirmware.com/ - popup

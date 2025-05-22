@@ -702,6 +702,13 @@ bing.com##+js(href-sanitizer, a%5Bhref%5E%3D%22%2Frebates%2Fwelcome%3Furl%3Dhttp
 !#else
 ||onelink.me/*&af_web_dp=http$doc,urlskip=?af_web_dp
 !#endif
+! https://x.com/JoanaCotar/status/1488443950864216072
+||exactag.com/cl.aspx?*url=http$doc,urlskip=?url
+! https://github.com/uBlockOrigin/uAssets/issues/28429
+! https://github.com/AdguardTeam/AdguardFilters/issues/205974
+||deeplink.musescore.com/redirect?to=http$doc,urlskip=?to
+musescore.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fdeeplink.musescore.com%2Fredirect%3Fto%3Dhttp%22%5D, %3Fto)
+musescore.com##+js(set-local-storage-item, %2F%5Ert_%2F, %24remove%24)
 ! Click Trackers
 ! https://reddit.com/r/uBlockOrigin/comments/14t3y1d/
 html.duckduckgo.com,lite.duckduckgo.com##+js(href-sanitizer, a%5Bhref%5E%3D%22%2F%2Fduckduckgo.com%2Fl%2F%3Fuddg%3D%22%5D, %3Fuddg)
@@ -1259,6 +1266,7 @@ spankbang.*##+js(set, send_recommendation_event, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/25180
 perplexity.ai##+js(aost, window.screen.height, setTimeout)
 ||perplexity.ai/rest/metrics/collect^$xhr,1p,method=post
+||perplexity.ai/rest/event/analytics
 ! https://github.com/uBlockOrigin/uAssets/issues/25204
 nytimes.com##+js(no-fetch-if, api.theathletic.com%2Fgraphql%20body%3A%2FPostEvent%7CPostImpressions%2F)
 ! https://www.oligo.security/blog/0-0-0-0-day-exploiting-localhost-apis-from-the-browser
