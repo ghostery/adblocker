@@ -535,6 +535,10 @@ ikuhentai.net##div[style="position: fixed; display: block; width: 100%; height: 
 zeroupload.com##+js(rmnt, script, adblock)
 ! https://github.com/uBlockOrigin/uAssets/issues/11941
 *$script,redirect-rule=noopjs,domain=vimm.net
+! https://github.com/brave/brave-browser/issues/46182
+vimm.net###footerContainer
+vimm.net###main:style(bottom: 0px !important)
+vimm.net###headerAdContainerInline
 ! https://github.com/uBlockOrigin/uAssets/issues/10053
 surfline.com##+js(nano-stb, adFreePopup, 15000, 0.02)
 surfline.com##+js(set, Object.prototype.isPremium, true)
@@ -1136,7 +1140,7 @@ javqis.com##+js(aopr, decodeURI)
 nsfwzone.xyz##+js(aopr, __Y)
 sdefx.cloud##+js(set, D4zz, noopFunc)
 ! https://javbest. cc/video/cc5f52c98723a2349c97bfe4c00fd799 vast
-||p.jwpcdn.com/*/vast.js$script
+!||p.jwpcdn.com/*/vast.js$script
 ! https://www.intereseducation.com/resources/cambridge-primary-progression-tests-past-papers/ timer
 edufileshare.com##+js(nano-sib, display)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/115967
@@ -1953,7 +1957,6 @@ odum.cl##+js(acs, %24, sam)
 ! https://github.com/uBlockOrigin/uAssets/issues/13966
 ! https://github.com/uBlockOrigin/uAssets/issues/1545
 elektroda.pl#@#.advert
-elektroda.pl##*:has(> div > [class$=" active"] > a[href*=".php?"])
 elektroda.pl,elektroda.com,elektroda.de##div[id]:has(> .text-center > div[id^="div-gpt-ad-"] > script:only-child)
 elektroda.de,elektroda.com##section[class]:has(> .text-center > div[id^="div-gpt-ad-"] > script:only-child)
 elektroda.de,elektroda.com##div[style="min-height: 265px;"]:has(> div[class] > .text-center > div[id^="div-gpt-ad-"] > script:only-child)
@@ -2790,6 +2793,8 @@ shesfreaky.com##+js(acs, document.createElement, appendChild)
 ://a.*/warp^$script,3p
 ://a.*/warpim?id=$script,3p
 ! https://github.com/uBlockOrigin/uAssets/issues/15334
+! https://www.reddit.com/r/uBlockOrigin/comments/1kqwp61/adblocker_detected_on_httpshacksnationcom/
+hacksnation.com##+js(no-xhr-if, adsbygoogle)
 *$image,redirect-rule=1x1.gif,domain=hacksnation.com
 ! https://github.com/uBlockOrigin/uAssets/issues/15352
 watchanime.video##+js(nowoif)

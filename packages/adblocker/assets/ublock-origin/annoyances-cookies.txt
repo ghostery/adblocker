@@ -42,6 +42,7 @@ auto.co.il###disclaimerTermsOfUseApproval.cookie
 israelnationalnews.com##.cookie-consent
 cellcom.co.il##.cookies_popup_container
 partner.co.il##.cookie-message
+||globetel.fi/wp-content/plugins/gdpr-cookie-compliance/
 !!! Trusted scriptlets------------------------------------------------------------
 !! Accept mandatory cookies / reject all additional cookies
 ! When moving from Google search to other Google services or opening them directly. E.G. https://translate.google.com/
@@ -217,7 +218,7 @@ walmart.ca##+js(trusted-click-element, button%5Baria-label%3D%22close%20button%2
 ! sams.com.mx (EU IP)
 sams.com.mx##+js(trusted-click-element, button%5Bclass%3D%22w_eEg0%20w_OoNT%20w_w8Y1%22%5D, , 1000)
 ! festool
-my.tonies.com,cambio-carsharing.de,festool.*,festoolcanada.com,fuso-trucks.*,tracker.fressnapf.de,myfabrics.co.uk##+js(trusted-click-element, %23usercentrics-root%20%3E%3E%3E%20button%5Bdata-testid%3D%22uc-deny-all-button%22%5D)
+my.tonies.com,cambio-carsharing.de,festool.*,festoolcanada.com,fuso-trucks.*,tracker.fressnapf.de,myfabrics.co.uk,zinus.*##+js(trusted-click-element, %23usercentrics-root%20%3E%3E%3E%20button%5Bdata-testid%3D%22uc-deny-all-button%22%5D)
 my.tonies.com,cambio-carsharing.de,festool.*,festoolcanada.com,fuso-trucks.*,tracker.fressnapf.de,myfabrics.co.uk##body.overflowHidden:style(overflow: auto !important)
 cambio-carsharing.de,festool.*,festoolcanada.com,fuso-trucks.*,tracker.fressnapf.de###focus-lock-id
 ! https://www.cc.com/
@@ -287,7 +288,7 @@ programme.conventus.de##+js(trusted-set-cookie, USE_COOKIE_CONSENT_STATE, %7B%25
 ! https://arena.pl/
 arena.pl##+js(trusted-set-cookie, consentCookie, %7B%22arena-functional%22%3Atrue%2C%22sentry%22%3Afalse%2C%22cloudflare%22%3Atrue%2C%22google-tag-manager%22%3Afalse%2C%22google-analytics%22%3Afalse%2C%22facebook-ads%22%3Afalse%2C%22google-ads%22%3Afalse%2C%22bing-ads%22%3Afalse%2C%22arena-advertising%22%3Afalse%7D, , , domain, arena.pl)
 ! https://monkeytype.com/
-monkeytype.com##+js(trusted-set-local-storage-item, acceptedCookies, %7B%22security%22%3Atrue%2C%22analytics%22%3Afalse%7D)
+monkeytype.com##+js(trusted-set-local-storage-item, acceptedCookies, %7B%22security%22%3Atrue%2C%22analytics%22%3Afalse%2C%22sentry%22%3Afalse%7D)
 ! https://www.govirtuo.com/
 govirtuo.com##+js(trusted-set-cookie, cookieConsent, technical%3Dtrue%26analytics%3Dfalse%26advertising%3Dfalse)
 govirtuo.com##+js(trusted-set-cookie, acceptTracking, %7B%22technical%22%3Atrue%2C%22analytics%22%3Afalse%2C%22advertising%22%3Afalse%7D)
@@ -465,7 +466,12 @@ ilgiornale.it##+js(trusted-click-element, %23qc-cmp2-container%20button%23disagr
 ! https://github.com/uBlockOrigin/uAssets/issues/28263
 deltaforce.garena.com##+js(trusted-set-local-storage-item, Cookies, %7B%22googleAnalytics%22%3Afalse%2C%22facebookPixel%22%3Afalse%2C%22tikTokPixel%22%3Afalse%2C%22googleConversionTag%22%3Afalse%7D)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/205429
-monkeytype.com##+js(trusted-set-local-storage-item, acceptedCookies, %7B%22security%22%3Atrue%2C%22analytics%22%3Afalse%2C%22sentry%22%3Afalse%7D)
+! [dup] from ublock-origin/annoyances-cookies.txt
+! monkeytype.com##+js(trusted-set-local-storage-item, acceptedCookies, %7B%22security%22%3Atrue%2C%22analytics%22%3Afalse%2C%22sentry%22%3Afalse%7D)
+! Few samples: imusic.co, imusic.fi
+imusic.*##+js(trusted-set-local-storage-item, cc_cookie, %7B%22categories%22%3A%5B%22necessary%22%5D%2C%22revision%22%3A0%2C%22data%22%3Anull%2C%22consentTimestamp%22%3A%22%24currentISODate%24%22%2C%22consentId%22%3A%2200000000-0000-0000-000-000000000000%22%2C%22services%22%3A%7B%22necessary%22%3A%5B%5D%2C%22analytics%22%3A%5B%5D%2C%22marketing%22%3A%5B%5D%7D%2C%22lastConsentTimestamp%22%3A%22%24currentISODate%24%22%2C%22expirationTime%22%3A1779124118406%7D)
+! https://github.com/uBlockOrigin/uAssets/issues/28414
+feedbutler.app##+js(trusted-set-local-storage-item, consent, %7B%22statistics%22%3Afalse%7D)
 !! Needs additional cookies
 ! https://github.com/uBlockOrigin/uAssets/issues/23701
 ! Enable search customization
@@ -956,7 +962,7 @@ snowandrock.com##+js(trusted-set-cookie, consent_identifier, 16f69085-c6f2-42f6-
 snowandrock.com##+js(trusted-set-cookie, consent_setting, analytics%253A0%257Cfunctional%253A1%257Cmarketing%253A0)
 ! racingnews365.com
 ! All store information on device cookies
-dailybuzz.nl,bnn.de,dosenbach.ch,dw.com,kinepolis.*,mediaite.com,winfuture.de,lippu.fi,racingnews365.com,reifendirekt.ch,vaillant.*##+js(trusted-click-element, %23cmpwrapper%20%3E%3E%3E%20%23cmpbntyestxt, , 1000)
+dailybuzz.nl,bnn.de,dosenbach.ch,dw.com,kinepolis.*,mediaite.com,nzz.ch,winfuture.de,lippu.fi,racingnews365.com,reifendirekt.ch,vaillant.*##+js(trusted-click-element, %23cmpwrapper%20%3E%3E%3E%20%23cmpbntyestxt, , 1000)
 ! .cmptxt_btn_no (shadowroot)
 bauhaus.no,bauhaus.se,beko-group.de,billiger.de,burda.com,vanharen.nl,deichmann.com,meraluna.de,slashdot.org,hermann-saunierduval.it,protherm.cz,saunierduval.es,protherm.sk,protherm.ua,saunierduval.hu,saunierduval.ro,saunierduval.at,awb.nl##+js(trusted-click-element, %23cmpwrapper%20%3E%3E%3E%20.cmptxt_btn_no, , 1000)
 ! .cmptxt_btn_save
@@ -1211,7 +1217,7 @@ pharmacieauterive-ropars.mesoigner.fr##+js(trusted-set-cookie, userconsent, %7B%
 ! https://github.com/uBlockOrigin/uAssets/issues/22896
 ! https://github.com/uBlockOrigin/uAssets/issues/22911
 ! https://github.com/easylist/easylist/issues/19970
-cmp.fitbook.de,cmp.autobild.de,sourcepoint.sport.de,cmp-sp.tagesspiegel.de,cmp.bz-berlin.de,cmp.cicero.de,cmp.techbook.de,cmp.stylebook.de,cmp2.bild.de,cmp2.freiepresse.de,sourcepoint.wetter.de,consent.finanzen.at,consent.up.welt.de,sourcepoint.n-tv.de,sourcepoint.kochbar.de,sourcepoint.rtl.de,cdn.privacy-mgmt.com,cmp.computerbild.de,cmp.petbook.de,cmp-sp.siegener-zeitung.de,cmp-sp.sportbuzzer.de,klarmobil.de##+js(trusted-click-element, button%5Btitle%5E%3D%22Alle%20akzeptieren%22%20i%5D, , 800)
+cmp.fitbook.de,cmp.autobild.de,sourcepoint.sport.de,cmp-sp.tagesspiegel.de,cmp.bz-berlin.de,cmp.cicero.de,cmp.techbook.de,cmp.stylebook.de,cmp2.bild.de,cmp2.freiepresse.de,sourcepoint.wetter.de,consent.finanzen.at,consent.finanzen.net,consent.up.welt.de,sourcepoint.n-tv.de,sourcepoint.kochbar.de,sourcepoint.rtl.de,cdn.privacy-mgmt.com,cmp.computerbild.de,cmp.petbook.de,cmp-sp.siegener-zeitung.de,cmp-sp.sportbuzzer.de,klarmobil.de##+js(trusted-click-element, button%5Btitle%5E%3D%22Alle%20akzeptieren%22%20i%5D, , 1000)
 ! accept
 technikum-wien.at##+js(trusted-click-element, button%5Baria-label%3D%22Alle%20akzeptieren%22%5D)
 ! necessary = true/ stats = false
@@ -1503,7 +1509,7 @@ octopusenergy.de##+js(trusted-set, cmp_importvendors, %7B%22value%22%3A%20%5B%22
 ! https://www.gsk.com/ - functional
 gsk.com##+js(trusted-set-cookie, GSK_CONSENTMGR, c1%3A0%257Cc2%3A1%257Cc3%3A0%257Cc4%3A0%257Cc5%3A0%257Cc6%3A1%257Cc7%3A0%257Cc8%3A0%257Cc9%3A0%257Cc10%3A0%257Cc11%3A0%257Cc12%3A1%257Cc13%3A1%257Cc14%3A0%257Cc15%3A0%257Cts%3A1726229678052%257Cconsent%3Atrue%257Cid%3A0191eb4d9db7005233a45cef34fc0406f001a06700f1c)
 ! https://www.estadiodeportivo.com/ - accept
-estadiodeportivo.com,tameteo.*,tempo.pt,meteored.*,pogoda.com,yourweather.co.uk,tempo.com,theweather.net,tiempo.com,ilmeteo.net,daswetter.com##+js(trusted-click-element, button%23btn-gdpr-accept, , 800)
+estadiodeportivo.com,tameteo.*,tempo.pt,meteored.*,pogoda.com,yourweather.co.uk,tempo.com,theweather.net,tiempo.com,ilmeteo.net,daswetter.com##+js(trusted-click-element, button%23btn-gdpr-accept, , 1500)
 estadiodeportivo.com,tameteo.*,tempo.pt,meteored.*,pogoda.com,yourweather.co.uk,tempo.com,theweather.net,tiempo.com,ilmeteo.net,daswetter.com##.cmp_gdpr:style(visibility: hidden !important;)
 estadiodeportivo.com,tameteo.*,tempo.pt,meteored.*,pogoda.com,yourweather.co.uk,tempo.com,theweather.net,tiempo.com,ilmeteo.net,daswetter.com##.body_fixed:style(overflow: auto !important;)
 ! https://www.kicker.de/ - accept
@@ -2451,6 +2457,18 @@ golfbreaks.com##+js(trusted-click-element, div%23close_button.btn, , 1000)
 lieferando.de,just-eat.*,justeat.*,pyszne.pl,lieferando.at,takeaway.com,thuisbezorgd.nl##+js(trusted-click-element, pie-cookie-banner%20%3E%3E%3E%20pie-button%5Bdata-test-id%3D%22actions-necessary-only%22%5D, , 1000)
 ! agree
 holidayhypermarket.co.uk##+js(trusted-click-element, button%23cmCloseBanner, , 1000)
+! agree/external media
+gastronovi.com##+js(trusted-set-cookie, cookie_consent, %7B%22consent%22%3Atrue%2C%22options%22%3A%5B%22calendly%22%2C%22google_maps%22%2C%22podigee%22%2C%22vimeo%22%2C%22youtube%22%5D%7D)
+! essential
+unisg.ch##+js(trusted-click-element, button%23btn-accept-required-banner, , 1000)
+! essential
+gibgas.de##+js(trusted-set-cookie, gibgas, ga1%253D0)
+! reject
+paulaschoice.nl##+js(trusted-set-cookie, dw_cookies_accepted, %7B%22other%22%3Afalse%2C%22analytical%22%3Afalse%2C%22advertising%22%3Afalse%2C%22social_networks%22%3Afalse%7D)
+! reject
+psgaz.pl##+js(trusted-click-element, button.js-cookies-panel-reject-all, , 1000)
+! agree
+play-asia.com##+js(trusted-click-element, button.acbut.continue, , 1000)
 ! disagree
 beobank.be##+js(trusted-set-cookie, cookie_policy_version, 1.0.1)
 beobank.be##+js(set-cookie, ads, false)
@@ -2474,7 +2492,7 @@ finlayson.fi,cowaymega.ca##+js(trusted-click-element, a%5Bonclick%3D%22Pandectes
 ! agree (a href)
 arktis.de,desktronic.de,belleek.com,brauzz.com,cowaymega.com,dockin.de,dryrobe.com,formswim.com,hairtalk.se,hallmark.co.uk,loopearplugs.com,oleus.com,peopleofshibuya.com,pullup-dip.com,sanctum.shop,tartanblanketco.com##+js(trusted-click-element, a%5Baria-label%3D%22allow%20cookies%22%5D, , 1000)
 ! agree (button)
-desktronic.*,dryrobe.com,hallmark.co.uk,tepedirect.com,loopearplugs.com,maxi-pet.ro,paper-republic.com,pullup-dip.*,vitabiotics.com##+js(trusted-click-element, button%5Baria-label%3D%22allow%20cookies%22%5D, , 1000)
+desktronic.*,dryrobe.com,hallmark.co.uk,hq-germany.com,tepedirect.com,loopearplugs.com,maxi-pet.ro,paper-republic.com,pullup-dip.*,vitabiotics.com##+js(trusted-click-element, button%5Baria-label%3D%22allow%20cookies%22%5D, , 1000)
 ! necessary
 breeam.nl##+js(trusted-set-cookie, cookieConsent, %7B%22necessary%22%3A%221%22%2C%22statistics%22%3A%220%22%2C%22advertising%22%3A%220%22%7D, , , reload, 1)
 ! necessary
@@ -3058,7 +3076,7 @@ shopstyle.co.uk##+js(trusted-set-cookie, gdpr, %7B%22types%22%3A%5B%22ESSENTIAL%
 ! deny
 metroag.de##+js(trusted-click-element, button%23denyallcookie-btn, , 1000)
 ! Necessary
-kamensenica.sk,movimentoofficinedelsud.it,diazfloristasestrella.com,cosechavida.com,broncoillustration.com,sumoingenio.com,aligepro.es,muevo.es,tsconline.es,polifast.it,kunterbunte-kinder.de,ledocom.cz,aliciasuarez.net,lamagnalonga.org,micropigmentacioncapilarbcn.com,videogenic.es,grundschule-remagen.de,aceitessatunion.com,textsteine.de,administradorfincasblog.com,grafika-dtp-produkcia.sk,unmardeconstelaciones.com,gymnosport.com,easyhomes.com.es,dosc.es,berevolk.com,calamo.se,elserratplanoles.com,ecoparquets.com,zlotaraczkalublin.pl,congresoscostadelsol.com,virgendefatima.es,patronatpremia.cat,abantos.es,acaluca.org,ad-particles.com,afplr.fr,agiletalon.fr,agiratou.com,aidaromero.com,alligatorbioscience.se,anea.es,asapservicios.net,ayudatranspersonal.com,letrayframe.com,osteofisintegral.es,uco.cat,berliner-haeuser.de,bio-cord.es,biotropica.fr,braeu-stueble.de,brendanoharamp.scot,caleulalia.com,cande-sur-beuvron.com,carlhag.se,casadelaveiga.com,caytas.com.tr,cecjecuador.org.ec,cegef.com,centropolisportivomassari.it,cerai.org,cervosgrup.com,copysud.fr,cortilar.com,desfiladeroediciones.com,dibujos-animados.net,direkt-immobilie.de,drpuigdollers.com,dunamys.inf.br,eb2b.com.pl,eiglaw.com,emalec.com,espaisperconviure.es,euroenvio.com,eurotex.es,farmarsketrhyfuturum.cz,fisiolistic.com,gestenaval.com,glaskogen.se,goia.org.pl,granibier.com,grupoisn.com,gruporhzaragoza.com,handelskammaren.com,helitecnics.com,helux.se,hermanosalcaraz.com,hummer.cz,icld.se,ict-project.it,imprentalaspalmas.com,informamiele.it##+js(trusted-set-cookie, cookies_and_content_security_policy, %5B%5D)
+profpneumologia.it,kamensenica.sk,movimentoofficinedelsud.it,diazfloristasestrella.com,cosechavida.com,broncoillustration.com,sumoingenio.com,aligepro.es,muevo.es,tsconline.es,polifast.it,kunterbunte-kinder.de,ledocom.cz,aliciasuarez.net,lamagnalonga.org,micropigmentacioncapilarbcn.com,videogenic.es,grundschule-remagen.de,aceitessatunion.com,textsteine.de,administradorfincasblog.com,grafika-dtp-produkcia.sk,unmardeconstelaciones.com,gymnosport.com,easyhomes.com.es,dosc.es,berevolk.com,calamo.se,elserratplanoles.com,ecoparquets.com,zlotaraczkalublin.pl,congresoscostadelsol.com,virgendefatima.es,patronatpremia.cat,abantos.es,acaluca.org,ad-particles.com,afplr.fr,agiletalon.fr,agiratou.com,aidaromero.com,alligatorbioscience.se,anea.es,asapservicios.net,ayudatranspersonal.com,letrayframe.com,osteofisintegral.es,uco.cat,berliner-haeuser.de,bio-cord.es,biotropica.fr,braeu-stueble.de,brendanoharamp.scot,caleulalia.com,cande-sur-beuvron.com,carlhag.se,casadelaveiga.com,caytas.com.tr,cecjecuador.org.ec,cegef.com,centropolisportivomassari.it,cerai.org,cervosgrup.com,copysud.fr,cortilar.com,desfiladeroediciones.com,dibujos-animados.net,direkt-immobilie.de,drpuigdollers.com,dunamys.inf.br,eb2b.com.pl,eiglaw.com,emalec.com,espaisperconviure.es,euroenvio.com,eurotex.es,farmarsketrhyfuturum.cz,fisiolistic.com,gestenaval.com,glaskogen.se,goia.org.pl,granibier.com,grupoisn.com,gruporhzaragoza.com,handelskammaren.com,helitecnics.com,helux.se,hermanosalcaraz.com,hummer.cz,icld.se,ict-project.it,imprentalaspalmas.com,informamiele.it##+js(trusted-set-cookie, cookies_and_content_security_policy, %5B%5D)
 ! agree
 kupbilecik.pl##+js(trusted-click-element, button%23cookie-accept, , 1800)
 ! reject
@@ -3352,6 +3370,19 @@ b-s.de##+js(trusted-click-element, a%23accept-cookies, , 1000)
 imt-mines-ales.fr##+js(trusted-set-cookie, cookie-agreed, 2)
 imt-mines-ales.fr##+js(trusted-set-cookie, cookie-agreed-version, 1.0.0)
 imt-mines-ales.fr##+js(trusted-set-cookie, cookie-agreed-categories, %5B%22required%22%2C%22video%22%5D)
+! reject
+mymuesli.com##+js(set-cookie, cookies_consent_reco, false)
+mymuesli.com##+js(set-cookie, cookies_consent_performance, false)
+mymuesli.com##+js(set-cookie, cookies_consent_targeting, false, , reload, 1)
+mymuesli.com##+js(trusted-set-cookie, cookies_consent_set, %24now%24)
+! reject
+9to5linux.com##+js(trusted-set-cookie, wpconsent_preferences, %7B%22essential%22%3Atrue%2C%22statistics%22%3Afalse%2C%22marketing%22%3Afalse%7D)
+! accept
+novakid.pl##+js(trusted-click-element, button.gdpr-accept-all-btn, , 1000)
+! Necessary
+tingstad.com##+js(trusted-set-cookie, Tingstad.CookieConsent, StrictlyNecessary, , , reload, 1)
+! reject
+piecesauto24.com##+js(trusted-click-element, span%5Bdata-ga-action%3D%22disallow_all_cookies%22%5D, , 1000)
 ! reject
 earpros.com##+js(trusted-click-element, button.cookie-notification-secondary-btn, , 1000)
 ! accept

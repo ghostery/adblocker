@@ -14,8 +14,6 @@
 @@||awstrack.me/*cmd=ac-inactive-restore$doc,popup
 ! https://github.com/uBlockOrigin/uAssets/issues/27448
 @@||che168.com^$xhr,removeparam=s_cid
-! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-2741639442
-@@||facebook.com^$xhr,removeparam=/^__s=[A-Za-z0-9]{6\,}/
 ! END: Bounce/Click trackings
 ! https://github.com/uBlockOrigin/uAssets/issues/729
 ! https://github.com/NanoMeow/QuickReports/issues/1636
@@ -4241,3 +4239,8 @@ developer.arm.com##+js(set, Munchkin.init, noopFunc)
 @@||api.cxense.com/public/widget/data$script,domain=elconfidencial.com
 ! https://github.com/uBlockOrigin/uAssets/issues/28372
 ||gis.railbaltica.org/*/AppMeasurement.js$redirect=noopjs
+! https://www.sportnahrung-engel.de/engel-nutrition-meta-fire.html - reviews breakage
+@@||widgets.trustedshops.com/reviews/tsSticker/$domain=sportnahrung-engel.de
+||widgets.trustedshops.com/reviews/tsSticker/*.gif?$important
+! https://github.com/uBlockOrigin/uAssets/issues/28438
+io.google##+js(aeld, click, Event)
