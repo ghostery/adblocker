@@ -1079,7 +1079,7 @@ shoot-yalla.me,shoot-yalla-tv.live##+js(rmnt, script, %2Fadbl%2Fi)
 ripplehub.site##+js(rpnt, script, %2Fdocument.body.appendChild.*%3B%2F)
 ripplehub.site##+js(nowoif)
 ripplehub.site###close-ad-button
-footybite.to,totalsportek.*##+js(aeld, , open)
+footybite.to,totalsportek.*,totalsportekhd.com##+js(aeld, , open)
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/939
 zone.msn.com##+js(no-fetch-if, googlesyndication, length%3A40000-60000)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/204410#issuecomment-2855256390
@@ -1150,6 +1150,14 @@ savefiles.com##+js(rmnt, script, catcher)
 savefiles.com##div[id^="clickCatcher"]
 ###clickCatcher31
 ###clickCatcher32
+||savefiles.com/js/noadblocker.js
+! https://github.com/uBlockOrigin/uAssets/issues/28454
+!#if cap_html_filtering
+streamhls.to##^script:has-text(/setADBFlag|cRAds|\;break\;case|adManager|const popup/)
+!#else
+streamhls.to##+js(rmnt, script, %2FsetADBFlag%7CcRAds%7C%5C%3Bbreak%5C%3Bcase%7CadManager%7Cconst%20popup%2F)
+!#endif
+||streamhls.to/js/noadblocker.js
 ! https://github.com/AdguardTeam/AdguardFilters/issues/202536
 xmalay1.net##+js(rmnt, script, %2FisAdBlockActive%7CWebAssembly%2F)
 ! europix.top ad popups
@@ -1362,3 +1370,19 @@ thelinuxcode.com##+js(set-cookie, pum-32600, true)
 thelinuxcode.com##+js(set-cookie, pum-44957, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/28401
 feedly.com##.SponsorPrompt
+! https://www.reddit.com/r/uBlockOrigin/comments/1kshv1u/adblock_detection_on_tubticcom/
+tubtic.com##+js(no-fetch-if, mode%3Ano-cors)
+! https://github.com/uBlockOrigin/uAssets/issues/28443
+@@||wiadomosci.onet.pl^$ghide
+! https://github.com/uBlockOrigin/uAssets/issues/28450
+||vntsm.com^$script,redirect=noopjs,3p,domain=trueachievements.com|truesteamachievements.com|truetrophies.com
+! https://forums.lanik.us/viewtopic.php?t=48760-www-seir-sanduk-com
+@@||ads.poshtata.online/adsbygoogle.js$script,domain=seir-sanduk.com
+! https://nmac.to/now/ - ads
+nmac.to##.adslot_buttom_inner > a[href*="/4/"][target="_blank"]
+||nmac.to/dl^$doc,urlskip=/\/dl\/(.+)/ -base64
+||obqj2.com^$popup,doc
+! https://github.com/uBlockOrigin/uAssets/issues/28456
+||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,redirect=noopjs,domain=680thefan.com
+@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=680thefan.com
+680thefan.com##.sc-ad-block

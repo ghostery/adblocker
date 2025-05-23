@@ -1787,6 +1787,9 @@ javct.net##+js(aopr, asgPopScript)
 *$script,3p,denyallow=cloudflare.com|cloudflare.net|jsdelivr.net|jsdelivr.map.fastly.net,domain=javct.net
 ! https://github.com/uBlockOrigin/uAssets/issues/28133
 ||cdntrf.com^$script,domain=anisearch.*,redirect=noopjs
+!#if ext_ubol
+||cdntrf.com^$script,domain=anisearch.com|anisearch.de,redirect=noopjs
+!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/28176
 anisearch.*###screenshots span[style="width:222px"] > a[href]:remove-class(/ad/i)
 ! https://github.com/uBlockOrigin/uAssets/issues/13762
