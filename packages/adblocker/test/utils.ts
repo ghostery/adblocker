@@ -32,8 +32,10 @@ const PREFIX =
   'https://raw.githubusercontent.com/ghostery/adblocker/master/packages/adblocker/assets';
 
 export const allLists = (() => {
-  return fullLists
-    .map((p) => path.join('assets', p.slice(PREFIX.length)))
+  return [
+    ...fullLists.map((p) => path.join('assets', p.slice(PREFIX.length))),
+    'test/data/customs.txt',
+  ]
     .map((p) => readAsset(p))
     .join('\n');
 })();

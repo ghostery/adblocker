@@ -23,5 +23,5 @@ export default class Compression {
   public readonly networkHostname: Smaz = new Smaz(networkHostnameCodebook);
   public readonly networkFilter: Smaz = new Smaz(networkFilterCodebook);
   public readonly networkRaw: Smaz = new Smaz(networkRawCodebook);
-  public readonly cosmeticRaw: Smaz = new Smaz(cosmeticRawCodebook);
+  public readonly cosmeticRaw: Smaz = new Smaz(cosmeticRawCodebook, 800_000);
 }

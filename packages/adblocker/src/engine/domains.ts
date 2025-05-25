@@ -13,21 +13,19 @@ import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils.js';
 
 export class Domains {
   public static parse(
-    value: string,
-    {
-      delimiter = ',',
-      debug = false,
-      negate = false,
-    }: { delimiter?: string; debug?: boolean; negate?: boolean } = {},
+    value: string | Set<string>,
+    { delimiter = ',', debug = false }: { delimiter?: string; debug?: boolean } = {},
   ): Domains | undefined {
-    const parts = value.split(delimiter);
-
-    if (parts.length === 0) {
+    if (typeof value === 'string') {
+      if (value.length === 0) {
+        return undefined;
+      }
+    } else if (value.size === 0) {
       return undefined;
     }
-
+    const parts = typeof value === 'string' ? value.split(delimiter) : value;
     for (const part of parts) {
-      if (part.length === 0 || part.startsWith(delimiter) || part.endsWith(delimiter)) {
+      if (part.length === 0) {
         return undefined;
       }
     }
@@ -57,8 +55,7 @@ export class Domains {
         negation === true || entity === true ? hostname.slice(start, end) : hostname,
       );
 
-      // If conditionally negated value of `negation` by `negate` is `1`
-      if (+negation ^ +negate) {
+      if (negation) {
         if (entity) {
           notEntities.push(hash);
         } else {

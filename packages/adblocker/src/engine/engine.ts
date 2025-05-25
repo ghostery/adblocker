@@ -37,7 +37,7 @@ import { ICategory } from './metadata/categories.js';
 import { IOrganization } from './metadata/organizations.js';
 import { IPattern } from './metadata/patterns.js';
 
-export const ENGINE_VERSION = 742;
+export const ENGINE_VERSION = 765;
 
 function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   if (filters.length === 0) {
@@ -75,6 +75,7 @@ export interface BlockingResponse {
   redirect:
     | undefined
     | {
+        filename: string;
         body: string;
         contentType: string;
         dataUrl: string;
