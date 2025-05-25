@@ -88,7 +88,10 @@ japscan.lol#@#div.container > [href]
 /^https:\/\/acscdn\.com\/script\/(?:aclib|atg|compatibility|ippg|suv4|ut)\.js(\?cb=\d{13})?$/$script,3p,match-case,important,domain=japscan.lol
 ||platform.pubadx.one/pubadx-ad.js$script,domain=japscan.lol,important
 ||static.cloudflareinsights.com/beacon.min.js/$script,domain=japscan.lol,important
-japscan.lol##+js(trusted-suppress-native-method, Document.prototype.querySelectorAll, %22%2F%5E%23%2F%22, stack, %2FstackDepth%3A4.%2B%20inlineScript%2F)
+japscan.lol##+js(trusted-set, pubadxtag, json%3A%7B%22divIds%22%3A%20%5B%22bg-ssp-9017-714938037487%22%2C%20%22bg-ssp-8018-834367375557%22%5D%7D)
+japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementsByClassName, %22ZLQZQP%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%2F)
+japscan.lol##+js(trusted-suppress-native-method, Document.prototype.querySelectorAll, %22%2F%5E%23%2F%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%2F)
+japscan.lol##+js(nostif, nextElementSibling)
 ! https://github.com/uBlockOrigin/uAssets/issues/21064
 ! https://github.com/uBlockOrigin/uAssets/issues/24220
 ! https://github.com/uBlockOrigin/uAssets/issues/25121#issuecomment-2325357098
@@ -168,7 +171,6 @@ smsonline.cloud##html[data-theme][lang] [id^="img_"][style]:has(iframe[framebord
 ~dogdrip.net,~infinityfree.com,~smsonline.cloud##*:not(body) > a[href^="https://07c225f3.online/content"]
 07c225f3.online,content-loader.com,css-load.com,html-load.com,img-load.com##html:not(:has(> head > style:only-child:has-text(width:399px;height:411px))):style(filter: opacity(0) !important; pointer-events: none !important;)
 /^https:\/\/www\.[0-9a-z-]{8,}\.xyz\/script\/[-.0-9A-Za-z]+\.[-A-Za-z]{2,30}\.js$/$script,3p,match-case,to=xyz,header=x-length
-*$~script,~frame,~xhr,domain=07c225f3.online|content-loader.com|css-load.com|html-load.com|img-load.com
 ||07c225f3.online/script/*.js?h=$uritransform=/script.+/loader.min.js/
 ||html-load.com/script/*.js?h=$uritransform=/script.+/loader.min.js/
 ||content-loader.com/script/*.js?h=$uritransform=/script.+/loader.min.js/
@@ -268,3 +270,5 @@ vook.vc##.note-sp-spnsr
 ! https://github.com/AdguardTeam/AdguardFilters/issues/205925
 ncbi.nlm.nih.gov##+js(set, ncbi.sg, %7B%7D)
 ncbi.nlm.nih.gov##+js(set, ncbi.sg.ping, noopFunc)
+! FP by Phishing URL Blocklist
+! [badfilter] ||sbisec.co.jp/etgate/^$all,badfilter

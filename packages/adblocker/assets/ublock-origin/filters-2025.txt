@@ -690,8 +690,11 @@ bemyhole.com##.cams-button
 ! https://github.com/uBlockOrigin/uAssets/issues/27136
 bgmiupdate.com.in##+js(set, HTMLImageElement.prototype.onerror, undefined)
 ! https://lewdgames.to/the-princess-trap-natnatnat/ - popup
-lewdgames.to##+js(acs, document.addEventListener, adLink)
+! https://github.com/uBlockOrigin/uAssets/issues/28472
+!lewdgames.to##+js(acs, document.addEventListener, adLink)
 lewdgames.to##a.downloadLink[data-wpel-link="external"]
+lewdgames.to#@##fwdevpDiv0
+lewdgames.to##+js(rpnt, script, %2FvastSource.*%3F%2C%2F, vastSource%3A''%2C)
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/790#discussioncomment-12108629
 /\/js\/script_\d{2}\.\d{2}\.js\?\d+$/$script,1p,strict1p
 ! https://kissjav.com/
@@ -934,8 +937,12 @@ freevpn.us##.myTestAd
 ! https://github.com/uBlockOrigin/uAssets/issues/27556
 *$script,xhr,3p,denyallow=bootstrapcdn.com|cloudflare.com|cloudflare.net|fastly.net|hdtvcloud.com|jquery.com|jsdelivr.net|zencdn.net,domain=hakunamatata5.org|overtakefans.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/200844
-netmovies.to##+js(nowoif)
+/^https:\/\/netembed\.xyz\/[a-f0-9]{32}\.js\b/$script,1p,domain=netembed.xyz
+!#if env_safari
+/^https:\/\/netembed\.xyz\/[a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9]\.js\?/$script
+!#endif
 netembed.xyz##div[style^="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 2147483647; opacity: 0; pointer-events: auto; background: transparent;"]
+netmovies.to##+js(nowoif)
 netmovies.to###iframe[src^="about:blank"]
 netmovies.to##.advertising-link
 ! https://github.com/AdguardTeam/AdguardFilters/issues/200822
@@ -1316,6 +1323,7 @@ l2crypt.com##+js(noeval-if, ads)
 1337x.fyi,1337x.pro##+js(trusted-rpnt, script, window.location.replace(urlRandom)%3B, )
 ! https://github.com/uBlockOrigin/uAssets/issues/28317
 brawlify.com##+js(rmnt, script, %2Fadb%2Fi)
+||hb.vntsm.com/*/live/$script,redirect=noopjs,domain=brawlify.com
 ! https://abcnews.go.com/ - top empty space
 abcnews.go.com##.navigation--has-subnav:style(top:0 !important)
 abcnews.go.com##.StickyAdWrapper
@@ -1386,3 +1394,8 @@ nmac.to##.adslot_buttom_inner > a[href*="/4/"][target="_blank"]
 ||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,redirect=noopjs,domain=680thefan.com
 @@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=680thefan.com
 680thefan.com##.sc-ad-block
+! https://www.yasir252.com/ - skip ad pages
+||yasir252.com/file^$doc,urlskip=?link -base64
+! https://github.com/AdguardTeam/AdguardFilters/issues/206071
+goodstream.one##+js(set, adbon, 0)
+||goodstream.one/js2/noadblocker.js
