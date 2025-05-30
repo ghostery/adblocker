@@ -1686,8 +1686,19 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       this.emit('request-allowed', request, result);
     }
 
-    if (withMetadata === true && result.filter !== undefined && this.metadata) {
-      result.metadata = this.metadata.fromFilter(result.filter);
+    if (withMetadata === true && this.metadata) {
+      result.metadata = [];
+      if (result.filter !== undefined) {
+        result.metadata.push(...this.metadata.fromFilter(result.filter));
+      }
+      if (result.urlRewrite?.rewrittenUrl !== undefined) {
+        for (const [filter, exception] of result.urlRewrite.filters) {
+          if (exception !== undefined) {
+            continue;
+          }
+          result.metadata.push(...this.metadata.fromFilter(filter));
+        }
+      }
     }
 
     return result;
