@@ -764,6 +764,18 @@ $csp=baz,domain=bar.com
           );
           expect(engine.match(request).urlRewrite?.rewrittenUrl).to.be.eql(undefined);
         });
+
+        it('priorities network exception over others', () => {
+          const engine = Engine.parse(
+            `||foo.com$removeparam=x
+@@||foo.com`,
+            {
+              debug: true,
+              enableHtmlFiltering: true,
+            },
+          );
+          expect(engine.match(request).urlRewrite?.rewrittenUrl).to.be.eql(undefined);
+        });
       });
     });
   });

@@ -1541,7 +1541,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         }
 
         // If the request is allowed in any way, we match request removeparam.
-        if (result.filter === undefined || result.exception !== undefined) {
+        if (result.filter === undefined) {
           const searchParamSeparatorIndex = request.url.indexOf('?');
           if (
             searchParamSeparatorIndex !== -1 ||
@@ -1571,7 +1571,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
               }
             }
             const removeparamIgnoreFilter: NetworkFilter | undefined =
-              removeparamExceptions.get('');
+              // `result.exception` is conditionally matched only if `result.filter` is available.
+              (result.filter === undefined
+                ? this.exceptions.match(request, this.isFilterExcluded.bind(this))
+                : result.exception) || removeparamExceptions.get('');
 
             for (const [key, filter] of removeparamFilters) {
               // Remove all params in case of option value is empty.

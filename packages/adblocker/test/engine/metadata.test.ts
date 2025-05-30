@@ -417,10 +417,7 @@ describe('#Metadata', () => {
             },
           ],
           redirect: undefined,
-          urlRewrite: {
-            filters: new Map(),
-            rewrittenUrl: undefined,
-          },
+          urlRewrite: undefined,
         });
       });
     });
