@@ -7,6 +7,7 @@
  */
 
 import type { IMessageFromBackground } from '@ghostery/adblocker-content';
+import { URLSearchParams } from '@ghostery/url-parser';
 
 import Config from '../config.js';
 import { StaticDataView, sizeOfASCII, sizeOfByte, sizeOfBool } from '../data-view.js';
