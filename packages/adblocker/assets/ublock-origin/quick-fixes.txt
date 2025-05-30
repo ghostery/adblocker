@@ -64,10 +64,10 @@ web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.
 ! web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2Fnull%2C%5B%5E%5Cn%5D%7B0%2C170%7D%22node%22%3A%5C%7B%22__typename%22%5B%5E%5Cn%5D%7B0%2C2500%7D%22__typename%22%3A%22SponsoredData%22%5B%5E%5Cn%5D%2B%3F%5C%7D%2C%22cursor%22%2Fg, null%2C%22cursor%22, %2Fapi%2Fgraphql)
 ! https://github.com/uBlockOrigin/uAssets/issues/24745 - https://voe.sx/e/2z9smej3tebe
 ! VOE sites
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=kellywhatcould.com,important
-kellywhatcould.com##+js(nowoif)
-kellywhatcould.com##+js(set, console.clear, undefined)
-kellywhatcould.com##+js(acs, globalThis, break%3Bcase)
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=jilliandescribecompany.com,important
+jilliandescribecompany.com##+js(nowoif)
+jilliandescribecompany.com##+js(set, console.clear, undefined)
+jilliandescribecompany.com##+js(acs, globalThis, break%3Bcase)
 ! next-episode .net
 !next-episode.net##+js(rmnt, script, %2F%5B%5Cs%5CS%5D%7B0%2C%7Dhead%5B%5Cs%5CS%5D%7B1900%2C%7D%2F)
 !next-episode.net##+js(rpnt, script, %2F.then%5B%5Cs%5CS%5D%7B0%2C%7D%3F%3B%2Fg)
@@ -88,10 +88,12 @@ japscan.lol#@#div.container > [href]
 /^https:\/\/acscdn\.com\/script\/(?:aclib|atg|compatibility|ippg|suv4|ut)\.js(\?cb=\d{13})?$/$script,3p,match-case,important,domain=japscan.lol
 ||platform.pubadx.one/pubadx-ad.js$script,domain=japscan.lol,important
 ||static.cloudflareinsights.com/beacon.min.js/$script,domain=japscan.lol,important
-japscan.lol##+js(trusted-set, pubadxtag, json%3A%7B%22divIds%22%3A%20%5B%22bg-ssp-9017-714938037487%22%2C%20%22bg-ssp-8018-834367375557%22%5D%7D)
+japscan.lol##+js(trusted-set, pubadxtag, json%3A%7B%22divIds%22%3A%20%5B%22bg-ssp-9017-869522122545%22%2C%20%22bg-ssp-8018-1508728781937%22%5D%7D)
 japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementsByClassName, %22ZLQZQP%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%2F)
-japscan.lol##+js(trusted-suppress-native-method, Document.prototype.querySelectorAll, %22%2F%5E%23%2F%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%2F)
-japscan.lol##+js(nostif, nextElementSibling)
+japscan.lol##+js(trusted-suppress-native-method, Document.prototype.querySelectorAll, %22%2F%5E%23%2F%22, prevent, %2FstackDepth%3A4.%2BnawNA%2F)
+japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementById, %22ZLQZQP%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%2F)
+japscan.lol##+js(trusted-suppress-native-method, Document.prototype.querySelector, %22%2F%5E%23%2F%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%3A2%2F)
+japscan.lol##+js(nostif, %3Ddocument%5B_0x)
 ! https://github.com/uBlockOrigin/uAssets/issues/21064
 ! https://github.com/uBlockOrigin/uAssets/issues/24220
 ! https://github.com/uBlockOrigin/uAssets/issues/25121#issuecomment-2325357098
@@ -174,7 +176,7 @@ smsonline.cloud##html[data-theme][lang] [id^="img_"][style]:has(iframe[framebord
 ||07c225f3.online/script/*.js?h=$uritransform=/script.+/loader.min.js/
 ||html-load.com/script/*.js?h=$uritransform=/script.+/loader.min.js/
 ||content-loader.com/script/*.js?h=$uritransform=/script.+/loader.min.js/
-/^https:\/\/(?:as(?:loader)?|loader)\.([-0-9A-Za-z]+.[-A-Za-z]{2,30})\/script\/(?:www\.)?\1\.js\?h=\d{9}$/$xhr,1p,strict3p,uritransform=/script.+/loader.min.js/
+/^https:\/\/(?:as(?:loader)?|loader)\.([-0-9A-Za-z]+.[-A-Za-z]{2,30})\/script\/(?:[-0-9a-z]+\.)?\1\.js\?h=\d{9}$/$xhr,1p,strict3p,uritransform=/script.+/loader.min.js/
 ! https://github.com/uBlockOrigin/uAssets/issues/26487
 dogdrip.net,infinityfree.com,smsonline.cloud##+js(no-fetch-if, -load.com%2Fscript%2F, length%3A101)
 dogdrip.net,infinityfree.com,smsonline.cloud##+js(nostif, )%5D(this%2C..., 3000-6000)
@@ -224,42 +226,15 @@ hulu.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresent
 client.falixnodes.net##+js(rpnt, script, window.location.href%20%3D%20'%2Fdisableadblock'%3B)
 client.falixnodes.net##+js(set, amzn_aps_csm.init, noopFunc)
 client.falixnodes.net##+js(set, amzn_aps_csm.log, noopFunc)
-! https://github.com/easylist/easylist/commit/c0ba1cec6d0f9b584f9c39f411b09753735d8a00
-! [badfilter] ||prodregistryv2.org^$badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/1545
-elektroda.pl##*:has(> div > [class$=" act"] > a[href*=".php?"])
+elektroda.pl##div[class="topic-box clearfix "] + div[class]:last-child:has(> b:only-child > a[class][rel="nofollow"]:only-child)
+elektroda.pl##*:has(> div[style*="height"] > div > a[href*=".php?"]:only-child > i:only-child)
 ! https://github.com/easylist/easylist/issues/21832
 ! [badfilter] ||sapphire-api.target.com^$badfilter
 ! temp address https://github.com/uBlockOrigin/uAssets/commit/53a86edefc152610cf6b81626c64a1e00c29eed7#commitcomment-157540745
-! https://github.com/uBlockOrigin/uAssets/issues/28423
-||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=southpark.*|southparkstudios.*,important
-||imasdk.googleapis.com/pal/sdkloader/pal.js$redirect=noop.js,domain=southpark.*|southparkstudios.*
-@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=southpark.*|southparkstudios.*
-! [dup] from ublock-origin/unbreak.txt
-! @@||fwmrm.net^*/admanager.js$script,3p,domain=southpark.*|southparkstudios.*
-southpark.*,southparkstudios.*##+js(no-fetch-if, ima3_dai)
-southpark.*,southparkstudios.*##+js(json-prune-fetch-response, imasdk, , propsToMatch, topaz.viacomcbs.digital)
-! https://github.com/uBlockOrigin/uAssets/issues/28424
-channel4.com##+js(no-xhr-if, %2F%5C%2Fad%5C%2Fg%5C%2F1%2F)
-channel4.com##.advertsMpu
-channel4.com##.block--mpu
-channel4.com##+js(json-prune, adverts.breaks)
-! https://github.com/uBlockOrigin/uAssets/issues/28425
-www.tiktok.com##+js(json-prune-fetch-response, itemList.%5B-%5D.ad_info.ad_id, , propsToMatch, url%3Aapi%2Frecommend%2Fitem_list%2F)
-! https://github.com/uBlockOrigin/uAssets/issues/28426
-||adxcel.com^
-||akamaized.net/audio/$media,redirect=noop-1s.mp4:10,from=open.spotify.com
-||scdn.co/audio/$media,redirect=noop-1s.mp4:10,domain=open.spotify.com
-||scdn.co/mp3-ad/$media,redirect=noop-1s.mp4:10,domain=open.spotify.com
-||spotifycdn.com/audio/$media,redirect=noop-1s.mp4:10,domain=open.spotify.com
-||amillionads.com^$media,redirect=noop-1s.mp4:10,from=open.spotify.com
-||2mdn.net^$media,redirect=noop-1s.mp4:10,domain=open.spotify.com
-||adxcel.com^$media,redirect=noop-1s.mp4:10,domain=open.spotify.com
-||adstudio-assets.scdn.co^$media,redirect=noop-1s.mp4:10,domain=open.spotify.com
-*$media,3p,redirect-rule=noop-1s.mp4:10,domain=open.spotify.com
-@@||podscribe.com/rss/$media,domain=open.spotify.com
-@@||mgln.ai/e/$media,domain=open.spotify.com
-@@/traffic.megaphone.fm/*.mp3^$media,domain=open.spotify.com
+! https://github.com/uBlockOrigin/uAssets/issues/28557
+! https://www.reddit.com/r/uBlockOrigin/comments/1kx35ii/adblock_detection_on_southparkcccom/
+southpark.*,southpark.cc.com,southparkstudios.*##+js(no-fetch-if, dai_iframe)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/205907
 vook.vc#@#[class*="-spnsr"]
 vook.vc##.note-main-spnsr a:not([href*="vook.vc"])
@@ -267,8 +242,15 @@ vook.vc##.note-right-spnsr
 !#if env_mobile
 vook.vc##.note-sp-spnsr
 !#endif
-! https://github.com/AdguardTeam/AdguardFilters/issues/205925
-ncbi.nlm.nih.gov##+js(set, ncbi.sg, %7B%7D)
-ncbi.nlm.nih.gov##+js(set, ncbi.sg.ping, noopFunc)
 ! FP by Phishing URL Blocklist
 ! [badfilter] ||sbisec.co.jp/etgate/^$all,badfilter
+! https://github.com/easylist/easylist/issues/21848
+! [badfilter] ||msstavby.cz^$badfilter
+! https://github.com/AdguardTeam/AdguardFilters/issues/206173#issuecomment-2913361836
+! [badfilter] ||oogiri-ads-bucket.s3.ap-northeast-3.amazonaws.com^$badfilter
+! [badfilter] ||d37hyjlpzcdxnh.cloudfront.net/images/goods/$domain=oogiri-chaya.com,badfilter
+oogiri-chaya.com#@#.ads_insert
+! https://github.com/uBlockOrigin/uAssets/issues/28561
+@@||githubassets.com^$domain=github.com
+! [badfilter] ||github.com/fluidicon.png^$all,badfilter
+! [badfilter] ||search.odin.io^$all,badfilter

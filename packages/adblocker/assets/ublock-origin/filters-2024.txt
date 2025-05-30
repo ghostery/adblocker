@@ -443,15 +443,11 @@ u.co.uk,uktvplay.co.uk,uktvplay.uktv.co.uk##+js(no-xhr-if, fwmrm.net)
 u.co.uk,uktvplay.co.uk,uktvplay.uktv.co.uk##+js(no-fetch-if, fwmrm.net)
 ! https://github.com/uBlockOrigin/uAssets/issues/2651
 ! https://github.com/uBlockOrigin/uAssets/issues/14352
-! [dup] from ublock-origin/quick-fixes.txt
-! channel4.com##+js(no-xhr-if, %2F%5C%2Fad%5C%2Fg%5C%2F1%2F)
-! [dup] from ublock-origin/quick-fixes.txt
-! channel4.com##.advertsMpu
-! [dup] from ublock-origin/quick-fixes.txt
-! channel4.com##.block--mpu
+channel4.com##+js(no-xhr-if, %2F%5C%2Fad%5C%2Fg%5C%2F1%2F)
+channel4.com##.advertsMpu
+channel4.com##.block--mpu
 ! https://github.com/uBlockOrigin/uAssets/issues/24873
-! [dup] from ublock-origin/quick-fixes.txt
-! channel4.com##+js(json-prune, adverts.breaks)
+channel4.com##+js(json-prune, adverts.breaks)
 ! mail.yahoo.com stuff
 mail.yahoo.com##[data-test-id="right-rail-ad"]
 ! https://github.com/uBlockOrigin/uAssets/issues/13439
@@ -639,17 +635,17 @@ fcportables.com##+js(rmnt, script, ai_adb)
 ! https://github.com/uBlockOrigin/uAssets/issues/28096
 ! https://www.reddit.com/r/uBlockOrigin/comments/1glppet/how_to_block_invisible_ads_over_videos/
 dood.*,doods.*,dooodster.com,dooood.*,ds2play.com##+js(aopw, DoodPop)
-all3do.com,do7go.com,d0o0d.com,do0od.com,dood.*,dooodster.com,ds2video.com,vidply.com##+js(acs, decodeURI, decodeURIComponent)
+all3do.com,d0o0d.com,do0od.com,do7go.com,dood.*,dooodster.com,doply.net,ds2video.com,vidply.com##+js(acs, decodeURI, decodeURIComponent)
 dood.*##+js(aopr, __aaZoneid)
-all3do.com,do7go.com,d0000d.com,d000d.com,d0o0d.com,do0od.com,dood.*,doods.*,dooodster.com,dooood.*,ds2play.com,ds2video.com,vidply.com##+js(nowoif)
+all3do.com,d0000d.com,d000d.com,d0o0d.com,do0od.com,do7go.com,dood.*,doods.*,dooodster.com,dooood.*,doply.net,ds2play.com,ds2video.com,vidply.com##+js(nowoif)
 !#if cap_html_filtering
-all3do.com,do7go.com,d0000d.com,d000d.com,d0o0d.com,do0od.com,dood.*,doods.*,doodstream.*,dooodster.com,dooood.*,ds2play.com,ds2video.com,vidply.com##^script:has-text(/adblock|popunder|openedPop|WebAssembly|wpadmngr/)
+all3do.com,d0000d.com,d000d.com,d0o0d.com,do0od.com,do7go.com,dood.*,doods.*,doodstream.*,dooodster.com,dooood.*,doply.net,ds2play.com,ds2video.com,vidply.com##^script:has-text(/adblock|popunder|openedPop|WebAssembly|wpadmngr/)
 !#else
-all3do.com,do7go.com,d0000d.com,d000d.com,d0o0d.com,do0od.com,dood.*,doods.*,doodstream.*,dooodster.com,dooood.*,ds2play.com,ds2video.com,vidply.com##+js(rmnt, script, %2Fadblock%7Cpopunder%7CopenedPop%7CWebAssembly%7Cwpadmngr%2F)
+all3do.com,d0000d.com,d000d.com,d0o0d.com,do0od.com,do7go.com,dood.*,doods.*,doodstream.*,dooodster.com,dooood.*,doply.net,ds2play.com,ds2video.com,vidply.com##+js(rmnt, script, %2Fadblock%7Cpopunder%7CopenedPop%7CWebAssembly%7Cwpadmngr%2F)
 !#endif
-/sw.js$script,domain=all3do.com|do7go.com|d0000d.com|d000d.com|d0o0d.com|do0od.com|dood.*|doods.*|dooodster.com|dooood.*|ds2play.com|ds2video.com|vidply.com
+/sw.js$script,domain=all3do.com|d0000d.com|d000d.com|d0o0d.com|do0od.com|do7go.com|dood.*|doods.*|dooodster.com|dooood.*|doply.net|ds2play.com|ds2video.com|vidply.com
 *$script,3p,denyallow=cdnjs.cloudflare.com|doodcdn.co|fastlycdn.com|gstatic.com,domain=dooodster.com
-*$script,3p,denyallow=cdnjs.cloudflare.com|crisp.chat|doodcdn.co|doodcdn.io|fastlycdn.com|gstatic.com,domain=all3do.com|do7go.com|vidply.com
+*$script,3p,denyallow=cdnjs.cloudflare.com|crisp.chat|doodcdn.co|doodcdn.io|fastlycdn.com|gstatic.com,domain=all3do.com|do7go.com|doply.net|vidply.com
 $popup,3p,domain=ds2play.com,badfilter
 ||slorpeyes.top^
 ||vizierspavan.com^
@@ -1330,7 +1326,6 @@ kickassanime.*##.text-center:has(> .hide-button)
 kickassanime.*##.latest-update > .row > div:has(.hide-button)
 ! https://github.com/uBlockOrigin/uAssets/issues/23843
 kickassanime.ch##+js(noeval-if, shift)
-kickassanime.ch###close-teaser
 kickassanime.ch###overplay
 ! https://github.com/uBlockOrigin/uAssets/issues/22697
 @@||ad-ipd.sxp.smartclip.net/select?type=vast$xhr,domain=toggo.de
@@ -2077,8 +2072,7 @@ rock.porn##.maf
 rock.porn##.watch-link
 rock.porn##a[href^="https://wittered-mainging.com/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/23348
-! [dup] from ublock-origin/quick-fixes.txt
-! www.tiktok.com##+js(json-prune-fetch-response, itemList.%5B-%5D.ad_info.ad_id, , propsToMatch, url%3Aapi%2Frecommend%2Fitem_list%2F)
+www.tiktok.com##+js(json-prune-fetch-response, itemList.%5B-%5D.ad_info.ad_id, , propsToMatch, url%3Aapi%2Frecommend%2Fitem_list%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/24142
 ||video-ads-module.ad-tech.nbcuni.com^
 ! https://github.com/uBlockOrigin/uAssets/issues/24148
@@ -2266,8 +2260,8 @@ safestream.cc##+js(acs, WebAssembly, _0x)
 safestream.cc##+js(acs, atob, %2FpopundersPerIP%5B%5Cs%5CS%5D*%3FDate%5B%5Cs%5CS%5D*%3FgetElementsByTagName%5B%5Cs%5CS%5D*%3FinsertBefore%2F)
 ! pirate sites asg
 ! https://github.com/uBlockOrigin/uAssets/issues/25065
-*$script,xhr,3p,denyallow=bootstrapcdn.com|cloudflare.com|cloudflare.net|fastly.net|fontawesome.com|googleapis.com|htstreaming.com|jquery.com|jsdelivr.net|jwpcdn.com|rawgit.com|unpkg.com,domain=bentomanga.top|bigcomics.bid|brmangas.top|cmoa1.top|j8jp.com|janime.top|jpraw.xyz|kakuyomu.in|kkraw.com|komiku.win|lectormanga.top|lermanga.top|manga1000.top|manga1001.win|manga1001.xyz|mangajp.top|mangakl.su|mangaraw.bid|mangavy.com|mangaz.win|scanita.top|shinigami-id.top|sushiscan.top|syosetu.gs
-*$script,1p,strict3p,domain=bentomanga.top|bigcomics.bid|brmangas.top|cmoa1.top|j8jp.com|janime.top|jpraw.xyz|kakuyomu.in|kkraw.com|komiku.win|lectormanga.top|lermanga.top|manga1000.top|manga1001.win|manga1001.xyz|mangajp.top|mangakl.su|mangaraw.bid|mangavy.com|mangaz.win|scanita.top|shinigami-id.top|sushiscan.top|syosetu.gs
+*$script,xhr,3p,denyallow=bootstrapcdn.com|cloudflare.com|cloudflare.net|fastly.net|fontawesome.com|googleapis.com|htstreaming.com|jquery.com|jsdelivr.net|jwpcdn.com|rawgit.com|unpkg.com,domain=bentomanga.top|bigcomics.bid|brmangas.top|cmoa1.top|janime.top|jpraw.xyz|kakuyomu.in|kkraw.com|komiku.win|lectormanga.top|lermanga.top|manga1000.top|manga1001.win|manga1001.xyz|mangajp.top|mangakl.su|mangaraw.bid|mangavy.com|mangaz.win|scanita.top|shinigami-id.top|sushiscan.top|syosetu.gs
+*$script,1p,strict3p,domain=bentomanga.top|bigcomics.bid|brmangas.top|cmoa1.top|janime.top|jpraw.xyz|kakuyomu.in|kkraw.com|komiku.win|lectormanga.top|lermanga.top|manga1000.top|manga1001.win|manga1001.xyz|mangajp.top|mangakl.su|mangaraw.bid|mangavy.com|mangaz.win|scanita.top|shinigami-id.top|sushiscan.top|syosetu.gs
 ! https://tubator.com/ (NSFW) ads
 ||tubator.com/lookout/wantfood.js
 tubator.com##+js(aeld, getexoloader)
@@ -2432,7 +2426,7 @@ animeshqip.site,apkship.shop,buzter.pro,enjoysports.bond,filedot.to,foreverquote
 /adc-ads-lib|$script
 ||highperformanceformat.com^$popup
 rgshows.me##+js(aost, localStorage, tag.min.js)
-*$script,3p,denyallow=cloudflare.com|cloudflare.net|googleapis.com|jsdelivr.net|plyr.io,domain=1shows.live|enma.lol|rgshows.me
+||pages.dev^$script,domain=1shows.live|enma.lol|rgshows.me
 ! https://wuxia.click/chapter/alchemy-emperor-of-the-divine-dao-1 ads
 ||api.aieasypic.com/api/civit_model_version/ad_list/$xhr,3p
 wuxia.click##.mantine-Center-root + br + div[class^="mantine-"]:has(> .adsbygoogle)
@@ -2629,9 +2623,6 @@ sadisflix.*##a[href^="https://shorturl.at/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/25121
 g-porno.com,g-streaming.com##+js(nowoif)
 g-porno.com,g-streaming.com##.popup-overlay
-giga-uqload.xyz##+js(nostif, afterOpen)
-giga-uqload.xyz##+js(nowoif)
-giga-uqload.xyz##body > div[class]:empty
 ! https://github.com/uBlockOrigin/uAssets/issues/25122
 ! https://github.com/uBlockOrigin/uAssets/commit/a7c3807f5e12d5a8882f5d645a206249fb8fe0cb#r146053763
 ||player.kick.com^$frame,3p,domain=interactivemap.app
@@ -3091,9 +3082,6 @@ kimcilonlyofc.com##+js(rmnt, script, mdpDeblocker)
 kimcilonlyofc.com##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/25922
 shahid.mbc.net##+js(no-fetch-if, %2Fgampad%2Fads%3F)
-! https://www.reddit.com/r/uBlockOrigin/comments/1gk2o42/help_me_to_block_new_tab_popup/
-moflix-stream.*##+js(nostif, affiliate)
-moflix-stream.*##+js(nostif, afterOpen)
 ! https://github.com/uBlockOrigin/uAssets/issues/25929
 @@||cinemaclock.com^$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/25932
@@ -3120,9 +3108,14 @@ pcgeeks-games.com##+js(rmnt, script, adb)
 pes6.es##+js(set, Object.prototype.DetectByGoogleAd, noopFunc)
 ! faanproj.com and pifansubs.club ads
 ! https://github.com/uBlockOrigin/uAssets/issues/27324
+! https://github.com/uBlockOrigin/uAssets/issues/28523
 faanproj.com##.gmr-bannerpopup
-flyplayer.xyz,blsplayer.com##.pppx
-flyplayer.xyz##+js(nowoif)
+javrider.com###custom_html-2
+javrider.com###custom_html-3
+javrider.com###custom_html-4
+javrider.com###custom_html-5
+blsplayer.com,brbeast.com,flyplayer.xyz,javplayers.com##.pppx
+brbeast.com,flyplayer.xyz,javplayers.com##+js(nowoif)
 ||blsplayer.com/player/assets/js/jquery.js
 ||daftmovie.xyz/player/assets/js/jquery.js
 ! https://github.com/uBlockOrigin/uAssets/issues/25964
@@ -3164,8 +3157,6 @@ boundhub.com##+js(set, NativeAd, noopFunc)
 ||coincodex.com/*/position/ccx_pos-min2.php^$script
 ! https://github.com/AdguardTeam/AdguardFilters/issues/192842
 rivestream.live##+js(aopr, Adcash)
-brbeast.com##+js(nowoif)
-brbeast.com##.pppx
 superflixapi.dev##.sflix_space
 ! goflix. sbs popups
 ||goflix.sbs^$csp=sandbox allow-same-origin allow-scripts allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-top-navigation allow-popups
