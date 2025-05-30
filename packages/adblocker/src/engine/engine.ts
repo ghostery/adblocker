@@ -1633,6 +1633,14 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
               rewrittenUrl,
               filters: rewriteFilters,
             };
+
+            for (const [filter, exception] of rewriteFilters) {
+              this.emit(
+                'filter-matched',
+                { filter, exception },
+                { request, filterType: FilterType.NETWORK },
+              );
+            }
           }
         }
       }
@@ -1664,16 +1672,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         { filter: result.filter, exception: result.exception },
         { request, filterType: FilterType.NETWORK },
       );
-    }
-
-    if (result.urlRewrite !== undefined) {
-      for (const [filter, exception] of result.urlRewrite.filters) {
-        this.emit(
-          'filter-matched',
-          { filter, exception },
-          { request, filterType: FilterType.NETWORK },
-        );
-      }
     }
 
     if (result.exception !== undefined) {
