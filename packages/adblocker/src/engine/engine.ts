@@ -71,6 +71,17 @@ function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   return genericHideFilter.isException();
 }
 
+// Create a search params getter function conditionally initialises search param
+function createOptionalSearchParams(params: string) {
+  let searchParams: URLSearchParams | undefined;
+  return function () {
+    if (searchParams === undefined) {
+      searchParams = new URLSearchParams(params);
+    }
+    return searchParams;
+  };
+}
+
 export interface BlockingResponse {
   match: boolean;
   redirect:
@@ -1539,16 +1550,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
             const searchParamLiteral = request.url.slice(searchParamSeparatorIndex);
             // Map holding a filter to an exception.
             const rewriteFilters: Map<NetworkFilter, NetworkFilter | undefined> = new Map();
-            // Parse a URL only if required.
-            const getSearchParams = (() => {
-              let searchParams: URLSearchParams | undefined;
-              return () => {
-                if (searchParams === undefined) {
-                  searchParams = new URLSearchParams(request.url.slice(searchParamSeparatorIndex));
-                }
-                return searchParams;
-              };
-            })();
+            const getSearchParams = createOptionalSearchParams(searchParamLiteral);
             let modified = false;
 
             // Handle $removeparam filters:
