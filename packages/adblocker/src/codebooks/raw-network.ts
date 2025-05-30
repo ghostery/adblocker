@@ -132,7 +132,7 @@ export default [
   "ev",
   "ew",
   "ex",
-  "ff",
+  "fe",
   "fi",
   "fo",
   "fr",
