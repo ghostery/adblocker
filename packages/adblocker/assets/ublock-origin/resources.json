@@ -235,7 +235,7 @@
     {
       "name": "jsonl-edit.fn",
       "aliases": [],
-      "body": "function jsonlEditFn(n,t=\"\"){const o=safeSelf();const s=t.split(/\\n+/);const c=[];for(const t of s){let s;try{s=o.JSON_parse(t)}catch{}if(typeof s!==\"object\"||s===null){c.push(t);continue}if(n.apply(s)===0){c.push(t);continue}c.push(JSONPath.toJSON(s,o.JSON_stringify))}return c.join(\"\\n\")}",
+      "body": "function jsonlEditFn(n,t=\"\"){const o=safeSelf();const s=/\\r?\\n/.exec(t)?.[0]||\"\\n\";const c=t.split(s);const e=[];for(const t of c){let s;try{s=o.JSON_parse(t)}catch{}if(typeof s!==\"object\"||s===null){e.push(t);continue}if(n.apply(s)===0){e.push(t);continue}const c=o.JSON_stringify(s);e.push(c)}return e.join(s)}",
       "dependencies": [
         "jsonpath.fn",
         "safe-self.fn"
