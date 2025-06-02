@@ -71,17 +71,6 @@ function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   return genericHideFilter.isException();
 }
 
-// Create a search params getter function conditionally initialises search param
-function createOptionalSearchParams(params: string) {
-  let searchParams: URLSearchParams | undefined;
-  return function () {
-    if (searchParams === undefined) {
-      searchParams = new URLSearchParams(params);
-    }
-    return searchParams;
-  };
-}
-
 export interface BlockingResponse {
   match: boolean;
   redirect:
@@ -1550,7 +1539,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
             const searchParamLiteral = request.url.slice(searchParamSeparatorIndex);
             // Map holding a filter to an exception.
             const rewriteFilters: Map<NetworkFilter, NetworkFilter | undefined> = new Map();
-            const getSearchParams = createOptionalSearchParams(searchParamLiteral);
+            const searchParams = new URLSearchParams(searchParamLiteral);
             let modified = false;
 
             // Handle $removeparam filters:
@@ -1583,7 +1572,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
                 rewriteFilters.set(filter, removeparamIgnoreFilter);
                 // In case of non-existence of global exception, we will remove all params.
                 if (removeparamIgnoreFilter === undefined) {
-                  const searchParams = getSearchParams();
                   // We need to collect all keys before the execution of `delete()`.
                   // Running `delete()` will inference with an iterator and its inner index.
                   for (const key of Array.from(searchParams.keys())) {
@@ -1603,7 +1591,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
                 continue;
               }
 
-              const searchParams = getSearchParams();
               const exception = removeparamExceptions.get(key) ?? removeparamIgnoreFilter;
               rewriteFilters.set(filter, exception);
               if (exception === undefined) {
@@ -1626,7 +1613,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
             let rewrittenUrl: string | undefined;
             if (modified) {
               rewrittenUrl = request.url.slice(0, searchParamSeparatorIndex);
-              const searchParams = getSearchParams();
               if (searchParams.size > 0) {
                 rewrittenUrl += '?' + searchParams.toString();
               }
