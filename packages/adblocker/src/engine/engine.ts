@@ -81,11 +81,10 @@ export interface BlockingResponse {
         contentType: string;
         dataUrl: string;
       };
-  urlRewrite:
+  rewrite:
     | undefined
     | {
-        rewrittenUrl: undefined | string;
-        filters: Map<NetworkFilter, NetworkFilter | undefined>;
+        url: undefined | string;
       };
   exception: NetworkFilter | undefined;
   filter: NetworkFilter | undefined;
@@ -1455,7 +1454,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       filter: undefined,
       match: false,
       redirect: undefined,
-      urlRewrite: undefined,
+      rewrite: undefined,
       metadata: undefined,
     };
 
@@ -1537,8 +1536,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
             searchParamSeparatorIndex !== request.url.length - 1
           ) {
             const searchParamLiteral = request.url.slice(searchParamSeparatorIndex);
-            // Map holding a filter to an exception.
-            const rewriteFilters: Map<NetworkFilter, NetworkFilter | undefined> = new Map();
             const searchParams = new URLSearchParams(searchParamLiteral);
             let modified = false;
 
@@ -1569,7 +1566,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
               // Remove all params in case of option value is empty.
               // We will not match individual exceptions since it has a higher priority than them.
               if (key === '') {
-                rewriteFilters.set(filter, removeparamIgnoreFilter);
                 // In case of non-existence of global exception, we will remove all params.
                 if (removeparamIgnoreFilter === undefined) {
                   // We need to collect all keys before the execution of `delete()`.
@@ -1579,6 +1575,11 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
                   }
                   modified = true;
                 }
+                this.emit(
+                  'filter-matched',
+                  { filter, exception: removeparamIgnoreFilter },
+                  { request, filterType: FilterType.NETWORK },
+                );
                 break;
               }
 
@@ -1592,7 +1593,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
               }
 
               const exception = removeparamExceptions.get(key) ?? removeparamIgnoreFilter;
-              rewriteFilters.set(filter, exception);
               if (exception === undefined) {
                 // Handle removeparam inversions.
                 if (key.startsWith('~')) {
@@ -1608,28 +1608,24 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
                   modified = true;
                 }
               }
-            }
-
-            let rewrittenUrl: string | undefined;
-            if (modified) {
-              rewrittenUrl = request.url.slice(0, searchParamSeparatorIndex);
-              if (searchParams.size > 0) {
-                rewrittenUrl += '?' + searchParams.toString();
-              }
-            }
-
-            result.urlRewrite = {
-              rewrittenUrl,
-              filters: rewriteFilters,
-            };
-
-            for (const [filter, exception] of rewriteFilters) {
               this.emit(
                 'filter-matched',
                 { filter, exception },
                 { request, filterType: FilterType.NETWORK },
               );
             }
+
+            let url: string | undefined;
+            if (modified) {
+              url = request.url.slice(0, searchParamSeparatorIndex);
+              if (searchParams.size > 0) {
+                url += '?' + searchParams.toString();
+              }
+            }
+
+            result.rewrite = {
+              url,
+            };
           }
         }
       }
@@ -1673,19 +1669,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       this.emit('request-allowed', request, result);
     }
 
-    if (withMetadata === true && this.metadata) {
-      result.metadata = [];
-      if (result.filter !== undefined) {
-        result.metadata.push(...this.metadata.fromFilter(result.filter));
-      }
-      if (result.urlRewrite?.rewrittenUrl !== undefined) {
-        for (const [filter, exception] of result.urlRewrite.filters) {
-          if (exception !== undefined) {
-            continue;
-          }
-          result.metadata.push(...this.metadata.fromFilter(filter));
-        }
-      }
+    if (withMetadata === true && result.filter !== undefined && this.metadata) {
+      result.metadata = this.metadata.fromFilter(result.filter);
     }
 
     return result;
