@@ -79,7 +79,6 @@ japscan.lol##+js(norafif, %2F%5E%2F)
 japscan.lol##+js(trusted-set-attr, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a, onclick, let%20a%3Dfunction()%7B%7D%3Breturn%20false%3B)
 japscan.lol##+js(no-fetch-if, %2F%5C%2F%5C%2Fansuksar%5C.com%5C%2F%5B0-9a-zA-Z%5D%7B3%2C26%7D%5C%2F%5Cd%7B4%2C6%7D%5Cb%2F, length%3A125746)
 ! START: Counter Liste FR rules
-japscan.lol#@##main > .card:has(a[href*="/manga/?type="][href*="&content="][target="_blank"])
 japscan.lol#@#div.container > [href]
 ! END
 ||japscan.lol/zjs/$script,replace=/function GoodDay\(\)\{.+?\}\}\}//
@@ -88,10 +87,10 @@ japscan.lol#@#div.container > [href]
 /^https:\/\/acscdn\.com\/script\/(?:aclib|atg|compatibility|ippg|suv4|ut)\.js(\?cb=\d{13})?$/$script,3p,match-case,important,domain=japscan.lol
 ||platform.pubadx.one/pubadx-ad.js$script,domain=japscan.lol,important
 ||static.cloudflareinsights.com/beacon.min.js/$script,domain=japscan.lol,important
-japscan.lol##+js(trusted-set, pubadxtag, json%3A%7B%22divIds%22%3A%20%5B%22bg-ssp-9017-869522122545%22%2C%20%22bg-ssp-8018-1508728781937%22%5D%7D)
-japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementsByClassName, %22ZLQZQP%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%2F)
+japscan.lol##+js(trusted-set, pubadxtag, json%3A%7B%22divIds%22%3A%20%5B%22bg-ssp-9017-1543422146274%22%2C%20%22bg-ssp-8018-5896993179%22%2C%20%22bg-ssp-8042-119830060592%22%5D%7D)
+japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementsByClassName, %22%2F%5EZLQZQ%2F%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%2F)
 japscan.lol##+js(trusted-suppress-native-method, Document.prototype.querySelectorAll, %22%2F%5E%23%2F%22, prevent, %2FstackDepth%3A4.%2BnawNA%2F)
-japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementById, %22ZLQZQP%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%2F)
+japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementById, %22%2F%5EZLQZQ%2F%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%2F)
 japscan.lol##+js(trusted-suppress-native-method, Document.prototype.querySelector, %22%2F%5E%23%2F%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%3A2%2F)
 japscan.lol##+js(nostif, %3Ddocument%5B_0x)
 ! https://github.com/uBlockOrigin/uAssets/issues/21064
@@ -244,8 +243,6 @@ vook.vc##.note-sp-spnsr
 !#endif
 ! FP by Phishing URL Blocklist
 ! [badfilter] ||sbisec.co.jp/etgate/^$all,badfilter
-! https://github.com/easylist/easylist/issues/21848
-! [badfilter] ||msstavby.cz^$badfilter
 ! https://github.com/AdguardTeam/AdguardFilters/issues/206173#issuecomment-2913361836
 ! [badfilter] ||oogiri-ads-bucket.s3.ap-northeast-3.amazonaws.com^$badfilter
 ! [badfilter] ||d37hyjlpzcdxnh.cloudfront.net/images/goods/$domain=oogiri-chaya.com,badfilter
@@ -254,3 +251,5 @@ oogiri-chaya.com#@#.ads_insert
 @@||githubassets.com^$domain=github.com
 ! [badfilter] ||github.com/fluidicon.png^$all,badfilter
 ! [badfilter] ||search.odin.io^$all,badfilter
+! https://github.com/easylist/easylist/issues/21880
+! [badfilter] ||yandex.com^$badfilter
