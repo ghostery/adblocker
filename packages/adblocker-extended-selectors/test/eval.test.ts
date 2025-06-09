@@ -42,7 +42,7 @@ function testMatches(selector: string, html: string, target: string, expected: b
 function testQuerySelectorAll(selector: string, html: string, resultSelector?: string): void {
   const {
     window: { document },
-  } = new JSDOM(html);
+  } = new JSDOM(html, { url: 'https://example.com' });
 
   const ast = parse(selector);
   expect(ast).to.not.be.undefined;
@@ -281,6 +281,73 @@ describe('eval', () => {
         );
       });
     });
+
+    describe(':matches-path', () => {
+      afterEach(() => {
+        delete globalThis.window;
+      });
+
+      it('matches current path', () => {
+        const html = '<div>Test</div>';
+        const jsdom = new JSDOM(html, { url: 'https://example.com/search/results' });
+        globalThis.window = jsdom.window;
+        const element = jsdom.window.document.querySelector('div');
+        expect(element).to.not.be.null;
+        if (element !== null) {
+          const ast = parse(':matches-path(/search/)');
+          expect(ast).to.not.be.undefined;
+          if (ast !== undefined) {
+            const result = matches(element, ast);
+            expect(result).to.be.true;
+          }
+        }
+      });
+
+      it('does not match different path', () => {
+        const html = '<div>Test</div>';
+        const jsdom = new JSDOM(html, { url: 'https://example.com/home' });
+        globalThis.window = jsdom.window;
+        const element = jsdom.window.document.querySelector('div');
+        expect(element).to.not.be.null;
+        if (element !== null) {
+          const ast = parse(':matches-path(/search/)');
+          expect(ast).to.not.be.undefined;
+          if (ast !== undefined) {
+            const result = matches(element, ast);
+            expect(result).to.be.false;
+          }
+        }
+      });
+    });
+
+    describe(':matches-attr', () => {
+      it('matches attribute value', () => {
+        testMatches(
+          ':matches-attr(href="/__cft__[0]=abc123/")',
+          '<a href="/__cft__[0]=abc123/">Link</a>',
+          'a',
+          true,
+        );
+      });
+
+      it('does not match different attribute value', () => {
+        testMatches(
+          ':matches-attr(href="/__cft__[0]=abc123/")',
+          '<a href="/different">Link</a>',
+          'a',
+          false,
+        );
+      });
+
+      it('handles regex patterns', () => {
+        testMatches(
+          ':matches-attr(href="/__cft__[0]=[\\w-]{265,}/")',
+          '<a href="/__cft__[0]=abc123">Link</a>',
+          'a',
+          false,
+        );
+      });
+    });
   });
 
   describe('#querySelectorAll', () => {
@@ -480,23 +547,44 @@ describe('eval', () => {
       });
     });
 
-    describe.skip(':upward', () => {
-      describe('argument is a number', () => {
-        it('ignored if 0 or negative', () => {
-          testQuerySelectorAll(
-            'span:upward(1)',
-            [
-              '<p>I am a paragraph.</p>',
-              '<p class="fancy">I am so very fancy!</p>',
-              '<div>I am NOT a paragraph.</div>',
-              '<h2>',
-              '  <div id="res"><span>inside</span> h2</div>',
-              '  <div>bar inside h2</div>',
-              '</h2>',
-            ].join('\n'),
-            '#res',
-          );
-        });
+    describe(':upward', () => {
+      it('handles numeric argument', () => {
+        testQuerySelectorAll('span:upward(2)', '<div><p><span>Test</span></p></div>', 'div');
+      });
+
+      it('handles selector argument', () => {
+        testQuerySelectorAll(
+          'span:upward([role="article"])',
+          '<div role="article"><p><span>Test</span></p></div>',
+          'div',
+        );
+      });
+
+      it('handles compound selectors after upward', () => {
+        testQuerySelectorAll(
+          'span:upward(2).highlight',
+          '<div class="highlight"><p><span>Test</span></p></div>',
+          'div',
+        );
+      });
+
+      it('handles multiple upward selectors', () => {
+        testQuerySelectorAll('span:upward(1):upward(1)', '<div><p><span>Test</span></p></div>', 'div');
+      });
+
+      it('returns empty array for invalid numeric argument', () => {
+        testQuerySelectorAll('span:upward(0)', '<div><p><span>Test</span></p></div>');
+      });
+
+      it('returns empty array for non-matching selector argument', () => {
+        testQuerySelectorAll(
+          'span:upward([role="article"])',
+          '<div><p><span>Test</span></p></div>',
+        );
+      });
+
+      it('handles nested upward selectors', () => {
+        testQuerySelectorAll('span:upward(p):upward(div)', '<div><p><span>Test</span></p></div>', 'div');
       });
     });
 

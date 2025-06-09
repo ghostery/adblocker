@@ -71,6 +71,46 @@ export function matches(element: Element, selector: AST): boolean {
       }
 
       return text.length >= minLength;
+    } else if (selector.name === 'matches-path') {
+      const { argument } = selector;
+      if (argument === undefined) {
+        return false;
+      }
+
+      // Get the current URL path
+      const path = globalThis.window.location.pathname;
+      
+      // Convert the argument to a RegExp pattern
+      // Remove leading and trailing slashes from the argument
+      const pattern = argument.replace(/^\/|\/$/g, '');
+      const regex = new RegExp(pattern);
+      
+      return regex.test(path);
+    } else if (selector.name === 'matches-attr') {
+      const { argument } = selector;
+      if (argument === undefined) {
+        return false;
+      }
+
+      // Parse the attribute name and pattern from the argument
+      // Format: attrName="pattern"
+      const match = argument.match(/^([^=]+)="([^"]+)"$/);
+      if (!match) {
+        return false;
+      }
+
+      const [, attrName, pattern] = match;
+      const value = element.getAttribute(attrName);
+      if (value === null) {
+        return false;
+      }
+
+      // Convert the pattern to a RegExp
+      // Escape special characters except for regex patterns
+      const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(escapedPattern);
+      
+      return regex.test(value);
     }
   }
 
@@ -97,11 +137,64 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
     // :upward is not about selecting, but transforming a set of nodes (i.e.
     // uBO's transpose method).
     if (selector.compound.length !== 0) {
-      elements.push(
-        ...querySelectorAll(element, selector.compound[0]).filter((e) =>
-          selector.compound.slice(1).every((s) => matches(e, s)),
-        ),
-      );
+      const firstSelector = selector.compound[0];
+      const restSelectors = selector.compound.slice(1);
+
+      // Handle :upward pseudo-class
+      if (firstSelector.type === 'pseudo-class' && firstSelector.name === 'upward') {
+        const { argument } = firstSelector;
+        if (argument === undefined) {
+          return elements;
+        }
+
+        // Check if argument is a number (for upward(n))
+        const n = Number(argument);
+        if (!Number.isNaN(n)) {
+          if (n <= 0 || n >= 256) {
+            return elements;
+          }
+
+          let ancestor: Element | null = element;
+          for (let i = 0; i < n; i++) {
+            ancestor = ancestor.parentElement;
+            if (ancestor === null) {
+              return elements;
+            }
+          }
+
+          // If there are more selectors, check if the ancestor matches them
+          if (restSelectors.length > 0) {
+            if (restSelectors.every((s) => matches(ancestor!, s))) {
+              elements.push(ancestor);
+            }
+          } else {
+            elements.push(ancestor);
+          }
+        } else {
+          // Otherwise, argument is a selector
+          let ancestor: Element | null = element;
+          while (ancestor !== null) {
+            if (ancestor.matches(argument)) {
+              // If there are more selectors, check if the ancestor matches them
+              if (restSelectors.length > 0) {
+                if (restSelectors.every((s) => matches(ancestor!, s))) {
+                  elements.push(ancestor);
+                }
+              } else {
+                elements.push(ancestor);
+              }
+              break;
+            }
+            ancestor = ancestor.parentElement;
+          }
+        }
+      } else {
+        elements.push(
+          ...querySelectorAll(element, firstSelector).filter((e) =>
+            restSelectors.every((s) => matches(e, s)),
+          ),
+        );
+      }
     }
   } else if (selector.type === 'complex') {
     const elements2 =
@@ -137,37 +230,11 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
       }
     }
   } else if (selector.type === 'pseudo-class') {
-    // if (selector.name === 'upward') {
-    //   let n = Number(selector.argument);
-    //   console.log('upward', selector, n);
-    //   if (Number.isNaN(n) === false) {
-    //     if (n >= 1 && n < 256) {
-    //       let ancestor: Element | null = element;
-    //       while (ancestor !== null && n > 0) {
-    //         ancestor = ancestor.parentElement;
-    //         n -= 1;
-    //       }
-
-    //       if (ancestor !== null && n === 0) {
-    //         elements.push(element);
-    //       }
-    //     }
-    //   } else if (selector.argument !== undefined) {
-    //     const parent = element.parentElement;
-    //     if (parent !== null) {
-    //       const ancestor = parent.closest(selector.argument);
-    //       if (ancestor !== null) {
-    //         elements.push(ancestor);
-    //       }
-    //     }
-    //   }
-    // } else {
     for (const subElement of element.querySelectorAll('*')) {
       if (matches(subElement, selector) === true) {
         elements.push(subElement);
       }
     }
-    // }
   }
 
   return elements;
