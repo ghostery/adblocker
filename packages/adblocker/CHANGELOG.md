@@ -1,3 +1,27 @@
+# v2.7.0 (Mon Jun 09 2025)
+
+#### :rocket: New Feature
+
+- feat: `$removeparam` [#4528](https://github.com/ghostery/adblocker/pull/4528) ([@seia-soto](https://github.com/seia-soto) [@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- Update local assets [#4911](https://github.com/ghostery/adblocker/pull/4911) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4908](https://github.com/ghostery/adblocker/pull/4908) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4907](https://github.com/ghostery/adblocker/pull/4907) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4905](https://github.com/ghostery/adblocker/pull/4905) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4904](https://github.com/ghostery/adblocker/pull/4904) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(ci): codebook generation of cosmetic selectors [#4903](https://github.com/ghostery/adblocker/pull/4903) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 4
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.6.1 (Wed May 21 2025)
 
 #### :bug: Bug Fix
