@@ -666,8 +666,7 @@ $csp=baz,domain=bar.com
         for (const url of urls) {
           it(`removes all parameters except for "utm" from "${url}"`, () => {
             const { rewrite } = engine.match(urlToDocumentRequest(url));
-            expect(rewrite).not.to.be.undefined;
-            expect(rewrite!.url ?? url).not.to.include('utm_');
+            expect(rewrite?.url ?? url).not.to.include('utm_');
           });
         }
       });
@@ -689,8 +688,7 @@ $csp=baz,domain=bar.com
         ]) {
           it(`removeparam "utm" from "${url}"`, () => {
             const { rewrite } = engine.match(urlToDocumentRequest(url));
-            expect(rewrite).not.to.be.undefined;
-            expect(rewrite!.url).to.be.eql('https://foo.com/?utm_source=organic&utm_event=b');
+            expect(rewrite?.url).to.be.eql('https://foo.com/?utm_source=organic&utm_event=b');
           });
         }
       });
