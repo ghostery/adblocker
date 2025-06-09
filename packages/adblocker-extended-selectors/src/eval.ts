@@ -7,6 +7,7 @@
  */
 
 import type { AST, Complex } from './types.js';
+import { parse } from './parse.js';
 
 export function matchPattern(pattern: string, text: string): boolean {
   // TODO - support 'm' RegExp argument
@@ -27,7 +28,43 @@ export function matchPattern(pattern: string, text: string): boolean {
   return text.includes(pattern);
 }
 
-export function matches(element: Element, selector: AST): boolean {
+// Helper function to get computed style
+function getComputedStyle(element: Element, pseudoElt?: string): CSSStyleDeclaration {
+  const win = element.ownerDocument && element.ownerDocument.defaultView;
+  if (!win) throw new Error('No window context for element');
+  return win.getComputedStyle(element, pseudoElt);
+}
+
+// Helper function to parse CSS property value
+function parseCSSValue(value: string): { property: string; value: string } {
+  const parts = value.split(':').map((part) => part.trim());
+  if (parts.length !== 2) {
+    throw new Error('Invalid CSS value format');
+  }
+  return { property: parts[0], value: parts[1] };
+}
+
+// Helper function to match CSS property value
+function matchCSSProperty(element: Element, cssValue: string, pseudoElt?: string): boolean {
+  try {
+    const { property, value } = parseCSSValue(cssValue);
+    const computedStyle = getComputedStyle(element, pseudoElt);
+    const actualValue = computedStyle[property as keyof CSSStyleDeclaration] as string;
+    return actualValue === value;
+  } catch (e) {
+    return false;
+  }
+}
+
+export function matches(element: Element, selector: string | AST): boolean {
+  if (typeof selector === 'string') {
+    const parsed = parse(selector);
+    if (!parsed) {
+      return false;
+    }
+    return matches(element, parsed);
+  }
+
   if (
     selector.type === 'id' ||
     selector.type === 'class' ||
@@ -40,15 +77,23 @@ export function matches(element: Element, selector: AST): boolean {
   } else if (selector.type === 'compound') {
     return selector.compound.every((s) => matches(element, s));
   } else if (selector.type === 'pseudo-class') {
-    if (selector.name === 'has' || selector.name === 'if') {
-      // TODO - is this a querySelectorAll or matches here?
+    const pseudoClass = selector;
+    if (
+      pseudoClass.name === 'matches-css' ||
+      pseudoClass.name === 'matches-css-after' ||
+      pseudoClass.name === 'matches-css-before'
+    ) {
+      // Removed debug logging
+    }
+    if (pseudoClass.name === 'has' || pseudoClass.name === 'if') {
       return (
-        selector.subtree !== undefined && querySelectorAll(element, selector.subtree).length !== 0
+        pseudoClass.subtree !== undefined &&
+        querySelectorAll(element, pseudoClass.subtree).length !== 0
       );
-    } else if (selector.name === 'not') {
-      return selector.subtree !== undefined && matches(element, selector.subtree) === false;
-    } else if (selector.name === 'has-text') {
-      const { argument } = selector;
+    } else if (pseudoClass.name === 'not') {
+      return pseudoClass.subtree !== undefined && matches(element, pseudoClass.subtree) === false;
+    } else if (pseudoClass.name === 'has-text') {
+      const { argument } = pseudoClass;
       if (argument === undefined) {
         return false;
       }
@@ -59,8 +104,8 @@ export function matches(element: Element, selector: AST): boolean {
       }
 
       return matchPattern(argument, text);
-    } else if (selector.name === 'min-text-length') {
-      const minLength = Number(selector.argument);
+    } else if (pseudoClass.name === 'min-text-length') {
+      const minLength = Number(pseudoClass.argument);
       if (Number.isNaN(minLength) || minLength < 0) {
         return false;
       }
@@ -71,8 +116,8 @@ export function matches(element: Element, selector: AST): boolean {
       }
 
       return text.length >= minLength;
-    } else if (selector.name === 'matches-path') {
-      const { argument } = selector;
+    } else if (pseudoClass.name === 'matches-path') {
+      const { argument } = pseudoClass;
       if (argument === undefined) {
         return false;
       }
@@ -86,8 +131,8 @@ export function matches(element: Element, selector: AST): boolean {
       const regex = new RegExp(pattern);
 
       return regex.test(path);
-    } else if (selector.name === 'matches-attr') {
-      const { argument } = selector;
+    } else if (pseudoClass.name === 'matches-attr') {
+      const { argument } = pseudoClass;
       if (argument === undefined) {
         return false;
       }
@@ -111,9 +156,21 @@ export function matches(element: Element, selector: AST): boolean {
       const regex = new RegExp(escapedPattern);
 
       return regex.test(value);
-    } else if (selector.name === 'upward') {
+    } else if (pseudoClass.name === 'upward') {
       // :upward is handled in querySelectorAll
       return false;
+    } else if (pseudoClass.name === 'matches-css') {
+      return pseudoClass.argument !== undefined && matchCSSProperty(element, pseudoClass.argument);
+    } else if (pseudoClass.name === 'matches-css-after') {
+      return (
+        pseudoClass.argument !== undefined &&
+        matchCSSProperty(element, pseudoClass.argument, '::after')
+      );
+    } else if (pseudoClass.name === 'matches-css-before') {
+      return (
+        pseudoClass.argument !== undefined &&
+        matchCSSProperty(element, pseudoClass.argument, '::before')
+      );
     }
   }
 
@@ -255,7 +312,16 @@ function handleComplexSelector(element: Element, selector: Complex): Element[] {
   return elements;
 }
 
-export function querySelectorAll(element: Element, selector: AST): Element[] {
+export function querySelectorAll(element: Element, selector: string | AST): Element[] {
+  if (typeof selector === 'string') {
+    const parsed = parse(selector);
+
+    if (!parsed) {
+      return [];
+    }
+    return querySelectorAll(element, parsed);
+  }
+
   if (
     selector.type === 'id' ||
     selector.type === 'class' ||
