@@ -1615,17 +1615,16 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
               );
             }
 
-            let url: string | undefined;
             if (modified) {
-              url = request.url.slice(0, searchParamSeparatorIndex);
+              let url = request.url.slice(0, searchParamSeparatorIndex);
               if (searchParams.size > 0) {
                 url += '?' + searchParams.toString();
               }
-            }
 
-            result.rewrite = {
-              url,
-            };
+              result.rewrite = {
+                url,
+              };
+            }
           }
         }
       }
