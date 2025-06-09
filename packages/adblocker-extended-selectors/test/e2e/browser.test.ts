@@ -171,3 +171,61 @@ test.describe('Browser-based CSS matching tests', () => {
     expect(result).toBe(false);
   });
 });
+
+test.describe('Browser-based XPath matching tests', () => {
+  test.beforeEach(async ({ page }) => {
+    // Print browser console messages to Node.js console
+    page.on('console', (msg) => {
+      const type = msg.type();
+      const text = `[browser] ${msg.text()}`;
+      if (type === 'log') console.log(text);
+      else if (type === 'info') console.info(text);
+      else if (type === 'warn') console.warn(text);
+      else if (type === 'error') console.error(text);
+    });
+    // Inject the UMD bundle into the page context
+    await page.addScriptTag({ path: UMD_BUNDLE_PATH });
+  });
+
+  test(':xpath matches element with valid XPath expression', async ({ page }) => {
+    await page.setContent('<div id="parent"><p>Test</p></div>');
+    const result = await page.evaluate(() => {
+      const { querySelectorAll } = window.adblocker;
+      const parent = document.getElementById('parent');
+      const element = document.querySelector('p');
+      if (!parent || !element) return false;
+      const selector = ':xpath(//p)';
+      const matches = querySelectorAll(parent, selector);
+      return matches.includes(element);
+    });
+    expect(result).toBe(true);
+  });
+
+  test(':xpath does not match element with invalid XPath expression', async ({ page }) => {
+    await page.setContent('<div id="parent"><p>Test</p></div>');
+    const result = await page.evaluate(() => {
+      const { querySelectorAll } = window.adblocker;
+      const parent = document.getElementById('parent');
+      const element = document.querySelector('p');
+      if (!parent || !element) return false;
+      const selector = ':xpath(//span)';
+      const matches = querySelectorAll(parent, selector);
+      return matches.includes(element);
+    });
+    expect(result).toBe(false);
+  });
+
+  test(':xpath handles malformed XPath expression', async ({ page }) => {
+    await page.setContent('<div id="parent"><p>Test</p></div>');
+    const result = await page.evaluate(() => {
+      const { querySelectorAll } = window.adblocker;
+      const parent = document.getElementById('parent');
+      const element = document.querySelector('p');
+      if (!parent || !element) return false;
+      const selector = ':xpath(//[invalid])';
+      const matches = querySelectorAll(parent, selector);
+      return matches.includes(element);
+    });
+    expect(result).toBe(false);
+  });
+});
