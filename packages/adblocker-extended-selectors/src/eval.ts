@@ -79,12 +79,12 @@ export function matches(element: Element, selector: AST): boolean {
 
       // Get the current URL path
       const path = globalThis.window.location.pathname;
-      
+
       // Convert the argument to a RegExp pattern
       // Remove leading and trailing slashes from the argument
       const pattern = argument.replace(/^\/|\/$/g, '');
       const regex = new RegExp(pattern);
-      
+
       return regex.test(path);
     } else if (selector.name === 'matches-attr') {
       const { argument } = selector;
@@ -109,8 +109,11 @@ export function matches(element: Element, selector: AST): boolean {
       // Escape special characters except for regex patterns
       const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       const regex = new RegExp(escapedPattern);
-      
+
       return regex.test(value);
+    } else if (selector.name === 'upward') {
+      // :upward is handled in querySelectorAll
+      return false;
     }
   }
 
@@ -132,68 +135,95 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
       elements.push(...querySelectorAll(element, subSelector));
     }
   } else if (selector.type === 'compound') {
-    // TODO - handling compound needs to be reworked...
-    // .cls:upward(1) for example will not work with this implementation.
-    // :upward is not about selecting, but transforming a set of nodes (i.e.
-    // uBO's transpose method).
     if (selector.compound.length !== 0) {
-      const firstSelector = selector.compound[0];
-      const restSelectors = selector.compound.slice(1);
-
-      // Handle :upward pseudo-class
-      if (firstSelector.type === 'pseudo-class' && firstSelector.name === 'upward') {
-        const { argument } = firstSelector;
-        if (argument === undefined) {
-          return elements;
-        }
-
-        // Check if argument is a number (for upward(n))
-        const n = Number(argument);
-        if (!Number.isNaN(n)) {
-          if (n <= 0 || n >= 256) {
-            return elements;
-          }
-
-          let ancestor: Element | null = element;
-          for (let i = 0; i < n; i++) {
-            ancestor = ancestor.parentElement;
-            if (ancestor === null) {
-              return elements;
-            }
-          }
-
-          // If there are more selectors, check if the ancestor matches them
-          if (restSelectors.length > 0) {
-            if (restSelectors.every((s) => matches(ancestor!, s))) {
-              elements.push(ancestor);
-            }
-          } else {
-            elements.push(ancestor);
-          }
-        } else {
-          // Otherwise, argument is a selector
-          let ancestor: Element | null = element;
-          while (ancestor !== null) {
-            if (ancestor.matches(argument)) {
-              // If there are more selectors, check if the ancestor matches them
-              if (restSelectors.length > 0) {
-                if (restSelectors.every((s) => matches(ancestor!, s))) {
-                  elements.push(ancestor);
-                }
-              } else {
-                elements.push(ancestor);
-              }
-              break;
-            }
-            ancestor = ancestor.parentElement;
-          }
-        }
-      } else {
+      // Find the first :upward selector in the compound
+      const upwardIndex = selector.compound.findIndex(
+        (s) => s.type === 'pseudo-class' && s.name === 'upward',
+      );
+      if (upwardIndex === -1) {
+        // No :upward, use original logic
+        const firstSelector = selector.compound[0];
+        const restSelectors = selector.compound.slice(1);
         elements.push(
           ...querySelectorAll(element, firstSelector).filter((e) =>
             restSelectors.every((s) => matches(e, s)),
           ),
         );
+      } else {
+        // Split at first :upward
+        const before = selector.compound.slice(0, upwardIndex);
+        const upward = selector.compound[upwardIndex];
+        const after = selector.compound.slice(upwardIndex + 1);
+
+        // Get initial candidates
+        const candidates: Element[] =
+          before.length > 0
+            ? querySelectorAll(element, { type: 'compound', compound: before })
+            : [element];
+
+        // For each candidate, apply upward logic
+        const ancestors: Element[] = [];
+        for (const c of candidates) {
+          if (upward.type !== 'pseudo-class' || upward.name !== 'upward') {
+            continue;
+          }
+          const { argument } = upward;
+          if (argument === undefined) {
+            continue;
+          }
+          const n = Number(argument);
+          if (!Number.isNaN(n)) {
+            if (n <= 0 || n >= 256) {
+              // Invalid numeric argument, return empty array
+              return [];
+            }
+            let ancestor: Element | null = c;
+            for (let j = 0; j < n; j++) {
+              ancestor = ancestor.parentElement;
+              if (ancestor === null) {
+                break;
+              }
+            }
+            if (ancestor !== null) {
+              ancestors.push(ancestor);
+            }
+          } else {
+            let ancestor: Element | null = c.parentElement;
+            let found = false;
+            while (ancestor !== null) {
+              if (ancestor.matches && ancestor.matches(argument)) {
+                ancestors.push(ancestor);
+                found = true;
+                break;
+              }
+              ancestor = ancestor.parentElement;
+            }
+            if (!found) {
+              // No matching ancestor, return empty array
+              return [];
+            }
+          }
+        }
+
+        if (ancestors.length === 0) {
+          return [];
+        }
+
+        if (after.length > 0) {
+          // If the next selector is another :upward, recursively process
+          if (after[0].type === 'pseudo-class' && after[0].name === 'upward') {
+            let results: Element[] = [];
+            for (const a of ancestors) {
+              results = results.concat(querySelectorAll(a, { type: 'compound', compound: after }));
+            }
+            return results;
+          } else {
+            // Otherwise, filter the ancestors with the remaining selectors using matches
+            return ancestors.filter((a) => after.every((s) => matches(a, s)));
+          }
+        } else {
+          return ancestors;
+        }
       }
     }
   } else if (selector.type === 'complex') {
@@ -230,9 +260,44 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
       }
     }
   } else if (selector.type === 'pseudo-class') {
-    for (const subElement of element.querySelectorAll('*')) {
-      if (matches(subElement, selector) === true) {
-        elements.push(subElement);
+    if (selector.name === 'upward') {
+      const { argument } = selector;
+      if (argument === undefined) {
+        return elements;
+      }
+      const n = Number(argument);
+      if (!Number.isNaN(n)) {
+        if (n <= 0 || n >= 256) {
+          return [];
+        }
+        let ancestor: Element | null = element;
+        for (let i = 0; i < n; i++) {
+          ancestor = ancestor.parentElement;
+          if (ancestor === null) {
+            return [];
+          }
+        }
+        elements.push(ancestor);
+      } else {
+        let ancestor: Element | null = element.parentElement;
+        let found = false;
+        while (ancestor !== null) {
+          if (ancestor.matches && ancestor.matches(argument)) {
+            elements.push(ancestor);
+            found = true;
+            break;
+          }
+          ancestor = ancestor.parentElement;
+        }
+        if (!found) {
+          return [];
+        }
+      }
+    } else {
+      for (const subElement of element.querySelectorAll('*')) {
+        if (matches(subElement, selector) === true) {
+          elements.push(subElement);
+        }
       }
     }
   }
