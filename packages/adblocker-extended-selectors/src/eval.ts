@@ -171,6 +171,24 @@ export function matches(element: Element, selector: string | AST): boolean {
         pseudoClass.argument !== undefined &&
         matchCSSProperty(element, pseudoClass.argument, '::before')
       );
+    } else if (pseudoClass.name === 'xpath') {
+      const { argument } = pseudoClass;
+      if (argument === undefined) {
+        return false;
+      }
+
+      try {
+        // Create an XPath evaluator
+        const evaluator = new XPathEvaluator();
+        // Create an XPath expression
+        const expression = evaluator.createExpression(argument, null);
+        // Evaluate the expression
+        const result = expression.evaluate(element, XPathResult.BOOLEAN_TYPE, null);
+        return result.booleanValue;
+      } catch (e) {
+        // If there's any error in XPath evaluation, return false
+        return false;
+      }
     }
   }
 
