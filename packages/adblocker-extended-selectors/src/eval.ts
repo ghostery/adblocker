@@ -8,6 +8,49 @@
 
 import type { AST, Complex } from './types.js';
 
+/**
+ * Evaluates an XPath expression and returns matching Element nodes.
+ * @param element - The context element for XPath evaluation
+ * @param xpathExpression - The XPath expression to evaluate
+ * @returns Array of Element nodes that match the XPath expression
+ */
+function handleXPathSelector(element: Element, xpathExpression: string | undefined): Element[] {
+  if (xpathExpression === undefined) {
+    return [];
+  }
+
+  try {
+    const document = element.ownerDocument;
+    if (!Node || !XPathResult || !document || typeof document.evaluate !== 'function') {
+      return [];
+    }
+
+    const result = document.evaluate(
+      xpathExpression,
+      element,
+      null,
+      XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+      null,
+    );
+
+    if (result.resultType !== XPathResult.ORDERED_NODE_SNAPSHOT_TYPE) {
+      return [];
+    }
+
+    const elements: Element[] = [];
+    for (let i = 0; i < result.snapshotLength; i++) {
+      const node = result.snapshotItem(i);
+      if (node?.nodeType === Node.ELEMENT_NODE) {
+        elements.push(node as Element);
+      }
+    }
+
+    return elements;
+  } catch (e) {
+    return [];
+  }
+}
+
 function parseCSSValue(cssValue: string): { property: string; value: string; isRegex: boolean } {
   const firstColonIndex = cssValue.indexOf(':');
 
@@ -63,6 +106,7 @@ function stripsWrappingQuotes(str: string): string {
 }
 
 export function matchPattern(pattern: string, text: string): boolean {
+  pattern = stripsWrappingQuotes(pattern);
   // TODO - support 'm' RegExp argument
   if (pattern.startsWith('/') && (pattern.endsWith('/') || pattern.endsWith('/i'))) {
     let caseSensitive = true;
@@ -118,7 +162,7 @@ export function matches(element: Element, selector: AST): boolean {
         return false;
       }
 
-      return matchPattern(argument, text);
+      return matchPattern(argument, text.trim());
     } else if (selector.name === 'min-text-length') {
       const minLength = Number(selector.argument);
       if (Number.isNaN(minLength) || minLength < 0) {
@@ -211,6 +255,9 @@ export function matches(element: Element, selector: AST): boolean {
       return (
         selector.argument !== undefined && matchCSSProperty(element, selector.argument, '::before')
       );
+    } else if (selector.name === 'xpath') {
+      const matches = handleXPathSelector(element, selector.argument);
+      return matches.includes(element);
     }
   }
 
@@ -260,10 +307,9 @@ function handleComplexSelector(element: Element, selector: Complex): Element[] {
  * Try transposing with a selector from the subjective element.
  * @param element The subjective element
  * @param selector A selector
- * @returns An array with and without singular element; we may support transposing to multiple targets in the future
- * but currently it's for the convenience to match return type.
+ * @returns An array of elements or null if not a transpose operator.
  */
-function transpose(element: Element, selector: AST): [] | [Element] | null {
+function transpose(element: Element, selector: AST): Element[] | null {
   if (selector.type === 'pseudo-class') {
     if (selector.name === 'upward') {
       if (selector.argument === undefined) {
@@ -290,6 +336,8 @@ function transpose(element: Element, selector: AST): [] | [Element] | null {
           }
         }
       }
+    } else if (selector.name === 'xpath') {
+      return handleXPathSelector(element, selector.argument);
     }
   }
 
@@ -363,6 +411,10 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
   }
 
   if (selector.type === 'pseudo-class') {
+    if (selector.name === 'xpath') {
+      return handleXPathSelector(element, selector.argument);
+    }
+
     return Array.from(element.querySelectorAll('*')).filter((e) => matches(e, selector));
   }
 

@@ -2053,7 +2053,6 @@ describe('Cosmetic filters', () => {
       'nth-ancestor',
       'watch-attr',
       'watch-attrs',
-      'xpath',
     ]) {
       it(`rejects unsupported: ${pseudo}`, () => {
         cosmetic(`example.com##.cls:${pseudo}()`, null);
