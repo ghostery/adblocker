@@ -77,11 +77,8 @@ export function matches(element: Element, selector: AST): boolean {
         return false;
       }
 
-      // Get the current URL path
       const path = globalThis.window.location.pathname;
 
-      // Convert the argument to a RegExp pattern
-      // Remove leading and trailing slashes from the argument
       const pattern = argument.replace(/^\/|\/$/g, '');
       const regex = new RegExp(pattern);
 
@@ -92,8 +89,6 @@ export function matches(element: Element, selector: AST): boolean {
         return false;
       }
 
-      // Parse the attribute name and pattern from the argument
-      // Format: attrName="pattern"
       const match = argument.match(/^([^=]+)="([^"]+)"$/);
       if (!match) {
         return false;
@@ -105,8 +100,6 @@ export function matches(element: Element, selector: AST): boolean {
         return false;
       }
 
-      // Convert the pattern to a RegExp
-      // Escape special characters except for regex patterns
       const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       const regex = new RegExp(escapedPattern);
 
@@ -120,7 +113,6 @@ export function matches(element: Element, selector: AST): boolean {
   return false;
 }
 
-// Helper function to find ancestor by numeric distance
 function findAncestorByDistance(element: Element, distance: number): Element | null {
   if (distance <= 0 || distance >= 256) {
     return null;
@@ -135,7 +127,6 @@ function findAncestorByDistance(element: Element, distance: number): Element | n
   return ancestor;
 }
 
-// Helper function to find ancestor by selector
 function findAncestorBySelector(element: Element, selector: string): Element | null {
   let ancestor: Element | null = element.parentElement;
   while (ancestor !== null) {
@@ -147,17 +138,14 @@ function findAncestorBySelector(element: Element, selector: string): Element | n
   return null;
 }
 
-// Helper function to handle compound selectors
 function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
   if (compound.length === 0) {
     return [];
   }
 
-  // Find the first :upward selector in the compound
   const upwardIndex = compound.findIndex((s) => s.type === 'pseudo-class' && s.name === 'upward');
 
   if (upwardIndex === -1) {
-    // No :upward, use standard compound logic
     const firstSelector = compound[0];
     const restSelectors = compound.slice(1);
     return querySelectorAll(element, firstSelector).filter((e) =>
@@ -165,18 +153,15 @@ function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
     );
   }
 
-  // Split at first :upward
   const before = compound.slice(0, upwardIndex);
   const upward = compound[upwardIndex];
   const after = compound.slice(upwardIndex + 1);
 
-  // Get initial candidates
   const candidates =
     before.length > 0
       ? querySelectorAll(element, { type: 'compound', compound: before })
       : [element];
 
-  // For each candidate, apply upward logic
   const ancestors: Element[] = [];
   for (const c of candidates) {
     if (upward.type !== 'pseudo-class' || upward.name !== 'upward') {
@@ -193,7 +178,6 @@ function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
       : findAncestorBySelector(c, argument);
 
     if (ancestor === null) {
-      // No matching ancestor, return empty array
       return [];
     }
     ancestors.push(ancestor);
@@ -204,18 +188,15 @@ function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
   }
 
   if (after.length > 0) {
-    // If the next selector is another :upward, recursively process
     if (after[0].type === 'pseudo-class' && after[0].name === 'upward') {
       return ancestors.flatMap((a) => querySelectorAll(a, { type: 'compound', compound: after }));
     }
-    // Otherwise, filter the ancestors with the remaining selectors using matches
     return ancestors.filter((a) => after.every((s) => matches(a, s)));
   }
 
   return ancestors;
 }
 
-// Helper function to handle complex selectors
 function handleComplexSelector(element: Element, selector: Complex): Element[] {
   const elements: Element[] = [];
   const leftElements =

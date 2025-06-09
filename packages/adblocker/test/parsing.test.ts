@@ -2053,7 +2053,6 @@ describe('Cosmetic filters', () => {
       'matches-css-before',
       'min-text-length',
       'nth-ancestor',
-      'upward',
       'watch-attr',
       'watch-attrs',
       'xpath',
