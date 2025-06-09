@@ -631,7 +631,6 @@ $csp=baz,domain=bar.com
         before(() => {
           engine = Engine.parse('||foo.com$removeparam', {
             debug: true,
-            enableHtmlFiltering: true,
           });
         });
         for (const url of urls) {
@@ -647,7 +646,6 @@ $csp=baz,domain=bar.com
         before(() => {
           engine = Engine.parse('||foo.com$removeparam=utm', {
             debug: true,
-            enableHtmlFiltering: true,
           });
         });
         for (const url of urls) {
@@ -663,7 +661,6 @@ $csp=baz,domain=bar.com
         before(() => {
           engine = Engine.parse('||foo.com$removeparam=~utm', {
             debug: true,
-            enableHtmlFiltering: true,
           });
         });
         for (const url of urls) {
@@ -680,7 +677,6 @@ $csp=baz,domain=bar.com
         before(() => {
           engine = Engine.parse('||foo.com$removeparam=utm', {
             debug: true,
-            enableHtmlFiltering: true,
           });
         });
         for (const url of [
@@ -711,7 +707,6 @@ $csp=baz,domain=bar.com
 @@||foo.com$removeparam=x`,
             {
               debug: true,
-              enableHtmlFiltering: true,
             },
           );
           expect(engine.match(request).rewrite?.url).to.be.eql(undefined);
@@ -722,7 +717,6 @@ $csp=baz,domain=bar.com
 @@||foo.com$removeparam=y`,
             {
               debug: true,
-              enableHtmlFiltering: true,
             },
           );
           expect(engine.match(request).rewrite?.url).to.be.eql('https://foo.com/');
@@ -734,7 +728,6 @@ $csp=baz,domain=bar.com
 ||foo.com$removeparam`,
             {
               debug: true,
-              enableHtmlFiltering: true,
             },
           );
           expect(engine.match(request).rewrite?.url).to.be.eql('https://foo.com/');
@@ -745,7 +738,6 @@ $csp=baz,domain=bar.com
 @@||foo.com$removeparam`,
             {
               debug: true,
-              enableHtmlFiltering: true,
             },
           );
           expect(engine.match(request).rewrite?.url).to.be.eql(undefined);
@@ -757,7 +749,6 @@ $csp=baz,domain=bar.com
 @@||foo.com$removeparam=x`,
             {
               debug: true,
-              enableHtmlFiltering: true,
             },
           );
           expect(engine.match(request).rewrite?.url).to.be.eql(undefined);
@@ -769,7 +760,6 @@ $csp=baz,domain=bar.com
 @@||foo.com`,
             {
               debug: true,
-              enableHtmlFiltering: true,
             },
           );
           expect(engine.match(request).rewrite?.url).to.be.eql(undefined);
@@ -779,7 +769,6 @@ $csp=baz,domain=bar.com
       describe('optimizations', () => {
         const engine = Engine.parse(`||foo.com$removeparam=x`, {
           debug: true,
-          enableHtmlFiltering: true,
         });
         expect(
           engine.match(
