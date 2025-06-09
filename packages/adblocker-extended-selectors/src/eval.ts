@@ -120,6 +120,33 @@ export function matches(element: Element, selector: AST): boolean {
   return false;
 }
 
+// Helper function to find ancestor by numeric distance
+function findAncestorByDistance(element: Element, distance: number): Element | null {
+  if (distance <= 0 || distance >= 256) {
+    return null;
+  }
+  let ancestor: Element | null = element;
+  for (let i = 0; i < distance; i++) {
+    ancestor = ancestor.parentElement;
+    if (ancestor === null) {
+      return null;
+    }
+  }
+  return ancestor;
+}
+
+// Helper function to find ancestor by selector
+function findAncestorBySelector(element: Element, selector: string): Element | null {
+  let ancestor: Element | null = element.parentElement;
+  while (ancestor !== null) {
+    if (ancestor.matches && ancestor.matches(selector)) {
+      return ancestor;
+    }
+    ancestor = ancestor.parentElement;
+  }
+  return null;
+}
+
 export function querySelectorAll(element: Element, selector: AST): Element[] {
   const elements: Element[] = [];
 
@@ -171,38 +198,17 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
           if (argument === undefined) {
             continue;
           }
+
           const n = Number(argument);
-          if (!Number.isNaN(n)) {
-            if (n <= 0 || n >= 256) {
-              // Invalid numeric argument, return empty array
-              return [];
-            }
-            let ancestor: Element | null = c;
-            for (let j = 0; j < n; j++) {
-              ancestor = ancestor.parentElement;
-              if (ancestor === null) {
-                break;
-              }
-            }
-            if (ancestor !== null) {
-              ancestors.push(ancestor);
-            }
-          } else {
-            let ancestor: Element | null = c.parentElement;
-            let found = false;
-            while (ancestor !== null) {
-              if (ancestor.matches && ancestor.matches(argument)) {
-                ancestors.push(ancestor);
-                found = true;
-                break;
-              }
-              ancestor = ancestor.parentElement;
-            }
-            if (!found) {
-              // No matching ancestor, return empty array
-              return [];
-            }
+          const ancestor = !Number.isNaN(n)
+            ? findAncestorByDistance(c, n)
+            : findAncestorBySelector(c, argument);
+
+          if (ancestor === null) {
+            // No matching ancestor, return empty array
+            return [];
           }
+          ancestors.push(ancestor);
         }
 
         if (ancestors.length === 0) {
@@ -265,33 +271,14 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
       if (argument === undefined) {
         return elements;
       }
+
       const n = Number(argument);
-      if (!Number.isNaN(n)) {
-        if (n <= 0 || n >= 256) {
-          return [];
-        }
-        let ancestor: Element | null = element;
-        for (let i = 0; i < n; i++) {
-          ancestor = ancestor.parentElement;
-          if (ancestor === null) {
-            return [];
-          }
-        }
+      const ancestor = !Number.isNaN(n)
+        ? findAncestorByDistance(element, n)
+        : findAncestorBySelector(element, argument);
+
+      if (ancestor !== null) {
         elements.push(ancestor);
-      } else {
-        let ancestor: Element | null = element.parentElement;
-        let found = false;
-        while (ancestor !== null) {
-          if (ancestor.matches && ancestor.matches(argument)) {
-            elements.push(ancestor);
-            found = true;
-            break;
-          }
-          ancestor = ancestor.parentElement;
-        }
-        if (!found) {
-          return [];
-        }
       }
     } else {
       for (const subElement of element.querySelectorAll('*')) {
