@@ -1532,7 +1532,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         if (result.filter === undefined) {
           const searchParamSeparatorIndex = request.url.indexOf('?');
           if (
-            searchParamSeparatorIndex !== -1 ||
+            searchParamSeparatorIndex !== -1 &&
             searchParamSeparatorIndex !== request.url.length - 1
           ) {
             const searchParamLiteral = request.url.slice(searchParamSeparatorIndex);

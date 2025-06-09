@@ -775,6 +775,31 @@ $csp=baz,domain=bar.com
           expect(engine.match(request).rewrite?.url).to.be.eql(undefined);
         });
       });
+
+      describe('optimizations', () => {
+        const engine = Engine.parse(`||foo.com$removeparam=x`, {
+          debug: true,
+          enableHtmlFiltering: true,
+        });
+        expect(
+          engine.match(
+            Request.fromRawDetails({
+              sourceUrl: 'https://bar.com',
+              type: 'xhr',
+              url: 'https://foo.com?',
+            }),
+          ).rewrite?.url,
+        ).to.be.eql(undefined);
+        expect(
+          engine.match(
+            Request.fromRawDetails({
+              sourceUrl: 'https://bar.com',
+              type: 'xhr',
+              url: 'https://foo.com/?',
+            }),
+          ).rewrite?.url,
+        ).to.be.eql(undefined);
+      });
     });
   });
 
