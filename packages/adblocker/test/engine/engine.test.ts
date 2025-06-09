@@ -608,6 +608,186 @@ $csp=baz,domain=bar.com
       expect((filter as NetworkFilter).toString()).to.equal('||foo.com$image,redirect=foo.js');
       expect(redirect).to.be.undefined;
     });
+
+    context('removeparam', () => {
+      function urlToDocumentRequest(url: string) {
+        return Request.fromRawDetails({
+          sourceUrl: 'https://foo.com/',
+          url,
+          type: 'document',
+        });
+      }
+
+      const urls = [
+        'https://foo.com/?utm',
+        'https://foo.com/?utm=',
+        'https://foo.com/?utm=a',
+        'https://foo.com/?utm=a&utm_source=organic',
+        'https://foo.com/?utm_source=organic&utm=a',
+      ];
+
+      describe('removes all parameters', () => {
+        let engine: FilterEngine;
+        before(() => {
+          engine = Engine.parse('||foo.com$removeparam', {
+            debug: true,
+          });
+        });
+        for (const url of urls) {
+          it(`removes all params from "${url}"`, () => {
+            const { rewrite } = engine.match(urlToDocumentRequest(url));
+            expect(rewrite?.url).to.be.eql('https://foo.com/');
+          });
+        }
+      });
+
+      describe('removes specific parameter', () => {
+        let engine: FilterEngine;
+        before(() => {
+          engine = Engine.parse('||foo.com$removeparam=utm', {
+            debug: true,
+          });
+        });
+        for (const url of urls) {
+          it(`removes "utm" from "${url}"`, () => {
+            const { rewrite } = engine.match(urlToDocumentRequest(url));
+            expect(rewrite?.url ?? request.url).not.to.include('utm=');
+          });
+        }
+      });
+
+      describe('inversion', () => {
+        let engine: FilterEngine;
+        before(() => {
+          engine = Engine.parse('||foo.com$removeparam=~utm', {
+            debug: true,
+          });
+        });
+        for (const url of urls) {
+          it(`removes all parameters except for "utm" from "${url}"`, () => {
+            const { rewrite } = engine.match(urlToDocumentRequest(url));
+            expect(rewrite?.url ?? url).not.to.include('utm_');
+          });
+        }
+      });
+
+      describe('removes specific parameter regardless of ordering', () => {
+        let engine: FilterEngine;
+        before(() => {
+          engine = Engine.parse('||foo.com$removeparam=utm', {
+            debug: true,
+          });
+        });
+        for (const url of [
+          // First
+          'https://foo.com/?utm=a&utm_source=organic&utm_event=b',
+          // Middle
+          'https://foo.com/?utm_source=organic&utm=a&utm_event=b',
+          // Last
+          'https://foo.com/?utm_source=organic&utm_event=b&utm=a',
+        ]) {
+          it(`removeparam "utm" from "${url}"`, () => {
+            const { rewrite } = engine.match(urlToDocumentRequest(url));
+            expect(rewrite?.url).to.be.eql('https://foo.com/?utm_source=organic&utm_event=b');
+          });
+        }
+      });
+
+      describe('exceptions', () => {
+        let request: Request;
+        before(() => {
+          request = urlToDocumentRequest('https://foo.com/?x=y');
+        });
+
+        it('respects exception', () => {
+          const engine = Engine.parse(
+            `||foo.com$removeparam=x
+@@||foo.com$removeparam=x`,
+            {
+              debug: true,
+            },
+          );
+          expect(engine.match(request).rewrite?.url).to.be.eql(undefined);
+        });
+        it('respects option value with exception', () => {
+          const engine = Engine.parse(
+            `||foo.com$removeparam=x
+@@||foo.com$removeparam=y`,
+            {
+              debug: true,
+            },
+          );
+          expect(engine.match(request).rewrite?.url).to.be.eql('https://foo.com/');
+        });
+
+        it('priorities global removeparam over singular exception', () => {
+          const engine = Engine.parse(
+            `@@||foo.com$removeparam=x
+||foo.com$removeparam`,
+            {
+              debug: true,
+            },
+          );
+          expect(engine.match(request).rewrite?.url).to.be.eql('https://foo.com/');
+        });
+        it('priorities global exception over global removeparam', () => {
+          const engine = Engine.parse(
+            `||foo.com$removeparam
+@@||foo.com$removeparam`,
+            {
+              debug: true,
+            },
+          );
+          expect(engine.match(request).rewrite?.url).to.be.eql(undefined);
+        });
+
+        it('priorities exception over inversion', () => {
+          const engine = Engine.parse(
+            `||foo.com$removeparam=~z
+@@||foo.com$removeparam=x`,
+            {
+              debug: true,
+            },
+          );
+          expect(engine.match(request).rewrite?.url).to.be.eql(undefined);
+        });
+
+        it('priorities network exception over others', () => {
+          const engine = Engine.parse(
+            `||foo.com$removeparam=x
+@@||foo.com`,
+            {
+              debug: true,
+            },
+          );
+          expect(engine.match(request).rewrite?.url).to.be.eql(undefined);
+        });
+      });
+
+      describe('optimizations', () => {
+        const engine = Engine.parse(`||foo.com$removeparam=x`, {
+          debug: true,
+        });
+        expect(
+          engine.match(
+            Request.fromRawDetails({
+              sourceUrl: 'https://bar.com',
+              type: 'xhr',
+              url: 'https://foo.com?',
+            }),
+          ).rewrite?.url,
+        ).to.be.eql(undefined);
+        expect(
+          engine.match(
+            Request.fromRawDetails({
+              sourceUrl: 'https://bar.com',
+              type: 'xhr',
+              url: 'https://foo.com/?',
+            }),
+          ).rewrite?.url,
+        ).to.be.eql(undefined);
+      });
+    });
   });
 
   describe('network filters', () => {
@@ -673,7 +853,7 @@ $csp=baz,domain=bar.com
               redirects.push(filter);
             }
 
-            if (!parsed.isRedirect() && !parsed.isException() && !parsed.isImportant()) {
+            if (!parsed.isException() && !parsed.isImportant()) {
               normalFilters.push(filter);
             }
           }
