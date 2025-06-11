@@ -11,8 +11,8 @@ import 'mocha';
 
 import { JSDOM } from 'jsdom';
 
-import { querySelectorAll, matchPattern, matches } from '../src/eval.js';
-import { parse } from '../src/parse.js';
+import { querySelectorAll, matchPattern, matches } from '../../src/eval.js';
+import { parse } from '../../src/parse.js';
 
 // TODO - check if style:has-text() works (can select style?)
 
@@ -282,7 +282,7 @@ describe('eval', () => {
 
     describe(':matches-path', () => {
       afterEach(() => {
-        delete globalThis.window;
+        globalThis.window = undefined;
       });
 
       it('matches current path', () => {
@@ -344,6 +344,74 @@ describe('eval', () => {
           'a',
           false,
         );
+      });
+    });
+
+    describe(':matches-css', () => {
+      afterEach(() => {
+        globalThis.window = undefined as any;
+      });
+
+      it('matches element with exact CSS property value', () => {
+        const html = `
+          <style>
+            div {
+              color: red;
+            }
+          </style>
+          <div>Test</div>
+        `;
+        const jsdom = new JSDOM(html);
+        globalThis.window = jsdom.window;
+        const element = jsdom.window.document.querySelector('div');
+        expect(element).to.not.be.null;
+        if (element !== null) {
+          const ast = parse(':matches-css(color: rgb(255, 0, 0))');
+          expect(ast).to.not.be.undefined;
+          if (ast !== undefined) {
+            const result = matches(element, ast);
+            expect(result).to.be.true;
+          }
+        }
+      });
+
+      it('does not match element with different CSS property value', () => {
+        const html = `
+          <style>
+            div {
+              color: blue;
+            }
+          </style>
+          <div>Test</div>
+        `;
+        const jsdom = new JSDOM(html);
+        globalThis.window = jsdom.window;
+        const element = jsdom.window.document.querySelector('div');
+        expect(element).to.not.be.null;
+        if (element !== null) {
+          const ast = parse(':matches-css(color: rgb(255, 0, 0))');
+          expect(ast).to.not.be.undefined;
+          if (ast !== undefined) {
+            const result = matches(element, ast);
+            expect(result).to.be.false;
+          }
+        }
+      });
+
+      it('handles invalid CSS value format', () => {
+        const html = '<div>Test</div>';
+        const jsdom = new JSDOM(html);
+        globalThis.window = jsdom.window;
+        const element = jsdom.window.document.querySelector('div');
+        expect(element).to.not.be.null;
+        if (element !== null) {
+          const ast = parse(':matches-css(invalid)');
+          expect(ast).to.not.be.undefined;
+          if (ast !== undefined) {
+            const result = matches(element, ast);
+            expect(result).to.be.false;
+          }
+        }
       });
     });
   });
