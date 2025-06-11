@@ -110,6 +110,10 @@ export function matches(element: Element, selector: AST): boolean {
             break;
           }
         }
+        // could not find a matching attribute name
+        if (attrName === namePattern) {
+          return false;
+        }
       }
 
       if (!valuePattern) {
