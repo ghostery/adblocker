@@ -79,9 +79,12 @@ export function matches(element: Element, selector: AST): boolean {
 
       const path = globalThis.window.location.pathname;
 
-      const pattern = argument.replace(/^\/|\/$/g, '');
-      const regex = new RegExp(pattern);
+      let pattern = argument;
+      if (pattern.startsWith('/') && pattern.endsWith('/')) {
+        pattern = pattern.slice(1, -1);
+      }
 
+      const regex = new RegExp(pattern);
       return regex.test(path);
     } else if (selector.name === 'matches-attr') {
       const { argument } = selector;
@@ -89,21 +92,46 @@ export function matches(element: Element, selector: AST): boolean {
         return false;
       }
 
-      const match = argument.match(/^([^=]+)="([^"]+)"$/);
-      if (!match) {
-        return false;
+      const indexOfEqual = argument.indexOf('=');
+      let namePattern, valuePattern;
+      if (indexOfEqual === -1) {
+        namePattern = argument;
+      } else {
+        namePattern = argument.slice(0, indexOfEqual);
+        valuePattern = argument.slice(indexOfEqual + 1);
       }
 
-      const [, attrName, pattern] = match;
+      let attrName = namePattern;
+      if (namePattern.startsWith('/') && namePattern.endsWith('/')) {
+        const regex = new RegExp(namePattern.slice(1, -1));
+        for (const attr of element.attributes) {
+          if (regex.test(attr.name)) {
+            attrName = attr.name;
+            break;
+          }
+        }
+      }
+
+      if (!valuePattern) {
+        return element.hasAttribute(attrName);
+      }
+
       const value = element.getAttribute(attrName);
+
       if (value === null) {
         return false;
       }
 
-      const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const regex = new RegExp(escapedPattern);
+      if (valuePattern.startsWith('"') && valuePattern.endsWith('"')) {
+        valuePattern = valuePattern.slice(1, -1);
+      }
 
-      return regex.test(value);
+      if (valuePattern.startsWith('/') && valuePattern.endsWith('/')) {
+        const regex = new RegExp(valuePattern.slice(1, -1));
+        return regex.test(value);
+      } else {
+        return value === valuePattern;
+      }
     } else if (selector.name === 'upward') {
       // :upward is handled in querySelectorAll
       return false;

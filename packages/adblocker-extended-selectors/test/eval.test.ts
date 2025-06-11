@@ -320,30 +320,31 @@ describe('eval', () => {
 
     describe(':matches-attr', () => {
       it('matches attribute value', () => {
-        testMatches(
-          ':matches-attr(href="/__cft__[0]=abc123/")',
-          '<a href="/__cft__[0]=abc123/">Link</a>',
-          'a',
-          true,
-        );
+        testMatches(':matches-attr(href="test")', '<a href="test">Link</a>', 'a', true);
+      });
+
+      it('matches attribute name', () => {
+        testMatches(':matches-attr(href)', '<a href="test">Link</a>', 'a', true);
+        testMatches(':matches-attr(href)', '<a ref="test">Link</a>', 'a', false);
       });
 
       it('does not match different attribute value', () => {
-        testMatches(
-          ':matches-attr(href="/__cft__[0]=abc123/")',
-          '<a href="/different">Link</a>',
-          'a',
-          false,
-        );
+        testMatches(':matches-attr(href="test")', '<a href="different">Link</a>', 'a', false);
       });
 
       it('handles regex patterns', () => {
-        testMatches(
-          ':matches-attr(href="/__cft__[0]=[\\w-]{265,}/")',
-          '<a href="/__cft__[0]=abc123">Link</a>',
-          'a',
-          false,
-        );
+        testMatches(':matches-attr(href=/1.*4$/)', '<a href="1234">Link</a>', 'a', true);
+        testMatches(':matches-attr(href=/1.*3$/)', '<a href="1234">Link</a>', 'a', false);
+      });
+
+      it('handles regex attribute name', () => {
+        testMatches(':matches-attr(/h?ref/)', '<a href="test">Link</a>', 'a', true);
+        testMatches(':matches-attr(/h?ref/)', '<a ref="test">Link</a>', 'a', true);
+      });
+
+      it('handles regex for both attribute name and value', () => {
+        testMatches(':matches-attr(/h?ref/=/1.*4$/)', '<a href="1234">Link</a>', 'a', true);
+        testMatches(':matches-attr(/h?ref/=/1.*3$/)', '<a ref="1234">Link</a>', 'a', false);
       });
     });
   });
