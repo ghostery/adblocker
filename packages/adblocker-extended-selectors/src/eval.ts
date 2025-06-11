@@ -191,6 +191,7 @@ function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
       : [element];
 
   const ancestors: Element[] = [];
+
   for (const c of candidates) {
     if (upward.type !== 'pseudo-class' || upward.name !== 'upward') {
       continue;
@@ -206,7 +207,7 @@ function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
       : findAncestorBySelector(c, argument);
 
     if (ancestor === null) {
-      return [];
+      continue;
     }
     ancestors.push(ancestor);
   }

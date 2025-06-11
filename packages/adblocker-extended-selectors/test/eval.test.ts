@@ -598,6 +598,27 @@ describe('eval', () => {
           'div',
         ]);
       });
+
+      it.only('should continue processing when some candidates have no valid ancestor', () => {
+        const html1 = `
+          <div class="target">
+            <div class="lure"></div>
+          </div>
+          <div>
+            <div class="lure"></div>
+          </div>
+        `;
+        testQuerySelectorAll('.lure:upward(.target)', html1, ['.target']);
+        const html2 = `
+          <div>
+            <div class="lure"></div>
+          </div>
+          <div class="target">
+            <div class="lure"></div>
+          </div>
+        `;
+        testQuerySelectorAll('.lure:upward(.target)', html2, ['.target']);
+      });
     });
 
     describe(':has-text', () => {
