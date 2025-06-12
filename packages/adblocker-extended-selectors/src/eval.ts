@@ -150,6 +150,7 @@ export function matches(element: Element, selector: AST): boolean {
 }
 
 function findAncestorByDistance(element: Element, distance: number): Element | null {
+  // sanity check, since the distance is provided as part of filter
   if (distance <= 0 || distance >= 256) {
     return null;
   }
