@@ -35,7 +35,7 @@ export type PseudoClass = Base & {
   type: 'pseudo-class';
   name: string;
   argument: string | undefined;
-  subtree?: AST | undefined;
+  subtree: AST | undefined;
 };
 
 export type PseudoElement = Base & {
