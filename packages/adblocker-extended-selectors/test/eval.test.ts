@@ -599,7 +599,7 @@ describe('eval', () => {
         ]);
       });
 
-      it.only('should continue processing when some candidates have no valid ancestor', () => {
+      it('should continue processing when some candidates have no valid ancestor', () => {
         const html1 = `
           <div class="target">
             <div class="lure"></div>

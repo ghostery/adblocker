@@ -101,39 +101,43 @@ export function matches(element: Element, selector: AST): boolean {
         valuePattern = argument.slice(indexOfEqual + 1);
       }
 
-      let attrName = namePattern;
+      let value;
       if (namePattern.startsWith('/') && namePattern.endsWith('/')) {
+        // matching attribute name by regex
         const regex = new RegExp(namePattern.slice(1, -1));
-        for (const attr of element.attributes) {
-          if (regex.test(attr.name)) {
-            attrName = attr.name;
-            break;
-          }
+        const attribute = [...element.attributes].find((attr) => regex.test(attr.name));
+        if (attribute === undefined) {
+          return false;
         }
-        // could not find a matching attribute name
-        if (attrName === namePattern) {
+        value = attribute.value;
+      } else {
+        // matching attribute name by string
+        value = element.getAttribute(namePattern);
+        // null means the attribute is not present
+        if (value === null) {
           return false;
         }
       }
 
+      // early exit if no value pattern is provided
       if (!valuePattern) {
-        return element.hasAttribute(attrName);
+        return true;
       }
 
-      const value = element.getAttribute(attrName);
-
-      if (value === null) {
-        return false;
-      }
-
-      if (valuePattern.startsWith('"') && valuePattern.endsWith('"')) {
+      // wrapping quotes are optional
+      if (
+        (valuePattern.startsWith('"') && valuePattern.endsWith('"')) ||
+        (valuePattern.startsWith("'") && valuePattern.endsWith("'"))
+      ) {
         valuePattern = valuePattern.slice(1, -1);
       }
 
       if (valuePattern.startsWith('/') && valuePattern.endsWith('/')) {
+        // matching value by regex
         const regex = new RegExp(valuePattern.slice(1, -1));
         return regex.test(value);
       } else {
+        // matching value by string
         return value === valuePattern;
       }
     } else if (selector.name === 'upward') {
