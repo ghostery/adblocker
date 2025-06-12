@@ -183,8 +183,7 @@ function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
   const upwardIndex = compound.findIndex((s) => s.type === 'pseudo-class' && s.name === 'upward');
 
   if (upwardIndex === -1) {
-    const firstSelector = compound[0];
-    const restSelectors = compound.slice(1);
+    const [firstSelector, ...restSelectors] = compound;
     return querySelectorAll(element, firstSelector).filter((e) =>
       restSelectors.every((s) => matches(e, s)),
     );
