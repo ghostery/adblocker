@@ -616,7 +616,6 @@ export function parse(
   }
 
   const ast = nestTokens(tokens, { list });
-
   if (recursive === true) {
     walk(ast, (node) => {
       if (
@@ -629,6 +628,5 @@ export function parse(
       }
     });
   }
-
   return ast;
 }

@@ -609,7 +609,7 @@ describe('parse', () => {
       });
     });
 
-    it.skip(':upward', () => {
+    it(':upward', () => {
       // With integer argument
       expect(parse('.cls:upward(4)')).to.eql({
         'type': 'compound',
@@ -628,6 +628,7 @@ describe('parse', () => {
             'name': 'upward',
             'pos': [4, 14],
             'type': 'pseudo-class',
+            'subtree': undefined,
           },
         ],
       });
@@ -650,6 +651,7 @@ describe('parse', () => {
             'length': 17,
             'name': 'upward',
             'pos': [4, 21],
+            'subtree': undefined,
           },
         ],
       });
