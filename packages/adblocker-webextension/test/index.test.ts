@@ -226,6 +226,7 @@ describe('html-filtering', () => {
 
   context('respects MAXIMUM_RESPONSE_BUFFER_SIZE', () => {
     class StreamFilterMock implements WebRequest.StreamFilter {
+      private _empty: ArrayBuffer = new ArrayBuffer();
       public _pushed: number = 0;
       public _pulled: Uint8Array = new Uint8Array();
 
@@ -259,7 +260,7 @@ describe('html-filtering', () => {
         ) {
           this.error = 'This instance is not resumable!';
           this.onerror({
-            data: Uint8Array.from([]),
+            data: this._empty,
           });
           return;
         }
@@ -287,11 +288,11 @@ describe('html-filtering', () => {
         this.write(event.data);
       }
 
-      public _push(data: ArrayBuffer | Uint8Array, isLast: boolean = false): void {
+      public _push(data: ArrayBuffer, isLast: boolean = false): void {
         if (this.status !== 'transferringdata' && this.status !== 'uninitialized') {
           this.error = 'Further data transfer cannot be done since the stream is already closed!';
           this.onerror({
-            data: Uint8Array.from([]),
+            data: this._empty,
           });
           return;
         }
@@ -302,7 +303,7 @@ describe('html-filtering', () => {
 
         this.ondata({ data });
         if (isLast === true) {
-          this.onstop({ data: Uint8Array.from([]) });
+          this.onstop({ data: this._empty });
           this.status = 'finishedtransferringdata';
         }
       }
@@ -318,7 +319,7 @@ describe('html-filtering', () => {
       }) {
         for (let i = 0; i < chunks; i += 1) {
           const noise = Uint8Array.from(new Array(chunkSize).fill(char.charCodeAt(0)));
-          this._push(noise, i === chunks - 1);
+          this._push(noise.buffer, i === chunks - 1);
         }
       }
     }
@@ -346,9 +347,9 @@ describe('html-filtering', () => {
       // fill the stream below the MAXIMUM_RESPONSE_BUFFER_SIZE
       streamFilterMock._fill({ char: 'a', chunks: 9, chunkSize: 1024 * 1024 });
       // checking only first and last character for the sake of test performance
-      expect(String.fromCharCode(streamFilterMock.content.at(0)!)).to.be.eql('b');
+      expect(String.fromCharCode(streamFilterMock.content[0])).to.be.eql('b');
       expect(
-        String.fromCharCode(streamFilterMock.content.at(streamFilterMock.content.length - 1)!),
+        String.fromCharCode(streamFilterMock.content[streamFilterMock.content.length - 1]),
       ).to.be.eql('b');
     });
 
@@ -360,9 +361,9 @@ describe('html-filtering', () => {
       // fill the stream above the MAXIMUM_RESPONSE_BUFFER_SIZE
       streamFilterMock._fill({ char: 'a', chunks: 10, chunkSize: 1024 * 1024 });
       // checking only first and last character for the sake of test performance
-      expect(String.fromCharCode(streamFilterMock.content.at(0)!)).to.be.eql('a');
+      expect(String.fromCharCode(streamFilterMock.content[0])).to.be.eql('a');
       expect(
-        String.fromCharCode(streamFilterMock.content.at(streamFilterMock.content.length - 1)!),
+        String.fromCharCode(streamFilterMock.content[streamFilterMock.content.length - 1]),
       ).to.be.eql('a');
     });
   });
