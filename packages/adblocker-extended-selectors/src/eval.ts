@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import type { AST } from './types.js';
+import type { AST, Complex } from './types.js';
 
 export function matchPattern(pattern: string, text: string): boolean {
   // TODO - support 'm' RegExp argument
@@ -71,104 +71,247 @@ export function matches(element: Element, selector: AST): boolean {
       }
 
       return text.length >= minLength;
+    } else if (selector.name === 'matches-path') {
+      const { argument } = selector;
+      if (argument === undefined) {
+        return false;
+      }
+
+      const path = globalThis.window.location.pathname;
+
+      let pattern = argument;
+      if (pattern.startsWith('/') && pattern.endsWith('/')) {
+        pattern = pattern.slice(1, -1);
+      }
+
+      const regex = new RegExp(pattern);
+      return regex.test(path);
+    } else if (selector.name === 'matches-attr') {
+      const { argument } = selector;
+      if (argument === undefined) {
+        return false;
+      }
+
+      const indexOfEqual = argument.indexOf('=');
+      let namePattern, valuePattern;
+      if (indexOfEqual === -1) {
+        namePattern = argument;
+      } else {
+        namePattern = argument.slice(0, indexOfEqual);
+        valuePattern = argument.slice(indexOfEqual + 1);
+      }
+
+      let value;
+      if (namePattern.startsWith('/') && namePattern.endsWith('/')) {
+        // matching attribute name by regex
+        const regex = new RegExp(namePattern.slice(1, -1));
+        const attribute = [...element.attributes].find((attr) => regex.test(attr.name));
+        if (attribute === undefined) {
+          return false;
+        }
+        value = attribute.value;
+      } else {
+        // matching attribute name by string
+        value = element.getAttribute(namePattern);
+        // null means the attribute is not present
+        if (value === null) {
+          return false;
+        }
+      }
+
+      // early exit if no value pattern is provided
+      if (!valuePattern) {
+        return true;
+      }
+
+      // wrapping quotes are optional
+      if (
+        (valuePattern.startsWith('"') && valuePattern.endsWith('"')) ||
+        (valuePattern.startsWith("'") && valuePattern.endsWith("'"))
+      ) {
+        valuePattern = valuePattern.slice(1, -1);
+      }
+
+      if (valuePattern.startsWith('/') && valuePattern.endsWith('/')) {
+        // matching value by regex
+        const regex = new RegExp(valuePattern.slice(1, -1));
+        return regex.test(value);
+      } else {
+        // matching value by string
+        return value === valuePattern;
+      }
+    } else if (selector.name === 'upward') {
+      // :upward is handled in querySelectorAll
+      return false;
     }
   }
 
   return false;
 }
 
-export function querySelectorAll(element: Element, selector: AST): Element[] {
-  const elements: Element[] = [];
+function findAncestorByDistance(element: Element, distance: number): Element | null {
+  // sanity check, since the distance is provided as part of filter
+  if (distance <= 0 || distance >= 256) {
+    return null;
+  }
+  let ancestor: Element | null = element;
+  for (let i = 0; i < distance; i++) {
+    ancestor = ancestor.parentElement;
+    if (ancestor === null) {
+      return null;
+    }
+  }
+  return ancestor;
+}
 
+function findAncestorBySelector(element: Element, selector: string): Element | null {
+  let ancestor: Element | null = element.parentElement;
+  while (ancestor !== null) {
+    if (ancestor.matches && ancestor.matches(selector)) {
+      return ancestor;
+    }
+    ancestor = ancestor.parentElement;
+  }
+  return null;
+}
+
+function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
+  if (compound.length === 0) {
+    return [];
+  }
+
+  const upwardIndex = compound.findIndex((s) => s.type === 'pseudo-class' && s.name === 'upward');
+
+  if (upwardIndex === -1) {
+    const [firstSelector, ...restSelectors] = compound;
+    return querySelectorAll(element, firstSelector).filter((e) =>
+      restSelectors.every((s) => matches(e, s)),
+    );
+  }
+
+  const before = compound.slice(0, upwardIndex);
+  const upward = compound[upwardIndex];
+  const after = compound.slice(upwardIndex + 1);
+
+  const candidates =
+    before.length > 0
+      ? querySelectorAll(element, { type: 'compound', compound: before })
+      : [element];
+
+  const ancestors: Element[] = [];
+
+  for (const c of candidates) {
+    if (upward.type !== 'pseudo-class' || upward.name !== 'upward') {
+      continue;
+    }
+    const { argument } = upward;
+    if (argument === undefined) {
+      continue;
+    }
+
+    const n = Number(argument);
+    const ancestor = !Number.isNaN(n)
+      ? findAncestorByDistance(c, n)
+      : findAncestorBySelector(c, argument);
+
+    if (ancestor === null) {
+      continue;
+    }
+    ancestors.push(ancestor);
+  }
+
+  if (ancestors.length === 0) {
+    return [];
+  }
+
+  if (after.length > 0) {
+    if (after[0].type === 'pseudo-class' && after[0].name === 'upward') {
+      return ancestors.flatMap((a) => querySelectorAll(a, { type: 'compound', compound: after }));
+    }
+    return ancestors.filter((a) => after.every((s) => matches(a, s)));
+  }
+
+  return ancestors;
+}
+
+function handleComplexSelector(element: Element, selector: Complex): Element[] {
+  const elements: Element[] = [];
+  const leftElements =
+    selector.left === undefined ? [element] : querySelectorAll(element, selector.left);
+
+  switch (selector.combinator) {
+    case ' ':
+      for (const e of leftElements) {
+        elements.push(...querySelectorAll(e, selector.right));
+      }
+      break;
+    case '>':
+      for (const e of leftElements) {
+        elements.push(...Array.from(e.children).filter((child) => matches(child, selector.right)));
+      }
+      break;
+    case '~':
+      for (const e of leftElements) {
+        let sibling: Element | null = e;
+        while ((sibling = sibling.nextElementSibling) !== null) {
+          if (matches(sibling, selector.right)) {
+            elements.push(sibling);
+          }
+        }
+      }
+      break;
+    case '+':
+      for (const e of leftElements) {
+        const next = e.nextElementSibling;
+        if (next !== null && matches(next, selector.right)) {
+          elements.push(next);
+        }
+      }
+      break;
+  }
+
+  return elements;
+}
+
+export function querySelectorAll(element: Element, selector: AST): Element[] {
   if (
     selector.type === 'id' ||
     selector.type === 'class' ||
     selector.type === 'type' ||
     selector.type === 'attribute'
   ) {
-    elements.push(...element.querySelectorAll(selector.content));
-  } else if (selector.type === 'list') {
-    for (const subSelector of selector.list) {
-      elements.push(...querySelectorAll(element, subSelector));
-    }
-  } else if (selector.type === 'compound') {
-    // TODO - handling compound needs to be reworked...
-    // .cls:upward(1) for example will not work with this implementation.
-    // :upward is not about selecting, but transforming a set of nodes (i.e.
-    // uBO's transpose method).
-    if (selector.compound.length !== 0) {
-      elements.push(
-        ...querySelectorAll(element, selector.compound[0]).filter((e) =>
-          selector.compound.slice(1).every((s) => matches(e, s)),
-        ),
-      );
-    }
-  } else if (selector.type === 'complex') {
-    const elements2 =
-      selector.left === undefined ? [element] : querySelectorAll(element, selector.left);
-
-    if (selector.combinator === ' ') {
-      for (const element2 of elements2) {
-        elements.push(...querySelectorAll(element2, selector.right));
-      }
-    } else if (selector.combinator === '>') {
-      for (const element2 of elements2) {
-        for (const child of element2.children) {
-          if (matches(child, selector.right) === true) {
-            elements.push(child);
-          }
-        }
-      }
-    } else if (selector.combinator === '~') {
-      for (const element2 of elements2) {
-        let sibling: Element | null = element2;
-        while ((sibling = sibling.nextElementSibling) !== null) {
-          if (matches(sibling, selector.right) === true) {
-            elements.push(sibling);
-          }
-        }
-      }
-    } else if (selector.combinator === '+') {
-      for (const element2 of elements2) {
-        const nextElementSibling = element2.nextElementSibling;
-        if (nextElementSibling !== null && matches(nextElementSibling, selector.right) === true) {
-          elements.push(nextElementSibling);
-        }
-      }
-    }
-  } else if (selector.type === 'pseudo-class') {
-    // if (selector.name === 'upward') {
-    //   let n = Number(selector.argument);
-    //   console.log('upward', selector, n);
-    //   if (Number.isNaN(n) === false) {
-    //     if (n >= 1 && n < 256) {
-    //       let ancestor: Element | null = element;
-    //       while (ancestor !== null && n > 0) {
-    //         ancestor = ancestor.parentElement;
-    //         n -= 1;
-    //       }
-
-    //       if (ancestor !== null && n === 0) {
-    //         elements.push(element);
-    //       }
-    //     }
-    //   } else if (selector.argument !== undefined) {
-    //     const parent = element.parentElement;
-    //     if (parent !== null) {
-    //       const ancestor = parent.closest(selector.argument);
-    //       if (ancestor !== null) {
-    //         elements.push(ancestor);
-    //       }
-    //     }
-    //   }
-    // } else {
-    for (const subElement of element.querySelectorAll('*')) {
-      if (matches(subElement, selector) === true) {
-        elements.push(subElement);
-      }
-    }
-    // }
+    return Array.from(element.querySelectorAll(selector.content));
   }
 
-  return elements;
+  if (selector.type === 'list') {
+    return selector.list.flatMap((s) => querySelectorAll(element, s));
+  }
+
+  if (selector.type === 'compound') {
+    return handleCompoundSelector(element, selector.compound);
+  }
+
+  if (selector.type === 'complex') {
+    return handleComplexSelector(element, selector);
+  }
+
+  if (selector.type === 'pseudo-class') {
+    if (selector.name === 'upward') {
+      const { argument } = selector;
+      if (argument === undefined) {
+        return [];
+      }
+
+      const n = Number(argument);
+      const ancestor = !Number.isNaN(n)
+        ? findAncestorByDistance(element, n)
+        : findAncestorBySelector(element, argument);
+
+      return ancestor !== null ? [ancestor] : [];
+    }
+
+    return Array.from(element.querySelectorAll('*')).filter((e) => matches(e, selector));
+  }
+
+  return [];
 }

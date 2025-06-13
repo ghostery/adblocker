@@ -39,10 +39,10 @@ function testMatches(selector: string, html: string, target: string, expected: b
   }
 }
 
-function testQuerySelectorAll(selector: string, html: string, resultSelector?: string): void {
+function testQuerySelectorAll(selector: string, html: string, expectedSelectors: string[]): void {
   const {
     window: { document },
-  } = new JSDOM(html);
+  } = new JSDOM(html, { url: 'https://example.com' });
 
   const ast = parse(selector);
   expect(ast).to.not.be.undefined;
@@ -50,11 +50,9 @@ function testQuerySelectorAll(selector: string, html: string, resultSelector?: s
     return;
   }
 
-  const expected = Array.from(
-    document.querySelectorAll(resultSelector !== undefined ? resultSelector : selector),
-  );
-  expect(expected).to.not.be.empty;
-  expect(querySelectorAll(document.documentElement, ast)).to.have.members(expected);
+  const actual = querySelectorAll(document.documentElement, ast);
+  const expected = expectedSelectors.flatMap((s) => Array.from(document.querySelectorAll(s)));
+  expect(actual).to.have.members(expected);
 }
 
 describe('eval', () => {
@@ -281,21 +279,94 @@ describe('eval', () => {
         );
       });
     });
+
+    describe(':matches-path', () => {
+      afterEach(() => {
+        delete globalThis.window;
+      });
+
+      it('matches current path', () => {
+        const html = '<div>Test</div>';
+        const jsdom = new JSDOM(html, { url: 'https://example.com/search/results' });
+        globalThis.window = jsdom.window;
+        const element = jsdom.window.document.querySelector('div');
+        expect(element).to.not.be.null;
+        if (element !== null) {
+          const ast = parse(':matches-path(/search/)');
+          expect(ast).to.not.be.undefined;
+          if (ast !== undefined) {
+            const result = matches(element, ast);
+            expect(result).to.be.true;
+          }
+        }
+      });
+
+      it('does not match different path', () => {
+        const html = '<div>Test</div>';
+        const jsdom = new JSDOM(html, { url: 'https://example.com/home' });
+        globalThis.window = jsdom.window;
+        const element = jsdom.window.document.querySelector('div');
+        expect(element).to.not.be.null;
+        if (element !== null) {
+          const ast = parse(':matches-path(/search/)');
+          expect(ast).to.not.be.undefined;
+          if (ast !== undefined) {
+            const result = matches(element, ast);
+            expect(result).to.be.false;
+          }
+        }
+      });
+    });
+
+    describe(':matches-attr', () => {
+      it('matches attribute value', () => {
+        testMatches(':matches-attr(href="test")', '<a href="test">Link</a>', 'a', true);
+      });
+
+      it('matches attribute name', () => {
+        testMatches(':matches-attr(href)', '<a href="test">Link</a>', 'a', true);
+        testMatches(':matches-attr(href)', '<a ref="test">Link</a>', 'a', false);
+      });
+
+      it('does not match different attribute value', () => {
+        testMatches(':matches-attr(href="test")', '<a href="different">Link</a>', 'a', false);
+      });
+
+      it('handles regex patterns', () => {
+        testMatches(':matches-attr(href=/1.*4$/)', '<a href="1234">Link</a>', 'a', true);
+        testMatches(':matches-attr(href=/1.*3$/)', '<a href="1234">Link</a>', 'a', false);
+      });
+
+      it('handles regex attribute name', () => {
+        testMatches(':matches-attr(/h?ref/)', '<a href="test">Link</a>', 'a', true);
+        testMatches(':matches-attr(/h?ref/)', '<a ref="test">Link</a>', 'a', true);
+      });
+
+      it('handles regex for both attribute name and value', () => {
+        testMatches(':matches-attr(/h?ref/=/1.*4$/)', '<a href="1234">Link</a>', 'a', true);
+        testMatches(':matches-attr(/h?ref/=/1.*3$/)', '<a ref="1234">Link</a>', 'a', false);
+      });
+    });
   });
 
   describe('#querySelectorAll', () => {
     it('#id', () => {
-      testQuerySelectorAll('#some_id', '<!DOCTYPE html><p id="some_id">Hello world</p>');
+      testQuerySelectorAll('#some_id', '<!DOCTYPE html><p id="some_id">Hello world</p>', [
+        '#some_id',
+      ]);
     });
 
     it('.class', () => {
-      testQuerySelectorAll('.some_class', '<!DOCTYPE html><p class="some_class">Hello world</p>');
+      testQuerySelectorAll('.some_class', '<!DOCTYPE html><p class="some_class">Hello world</p>', [
+        '.some_class',
+      ]);
     });
 
     it('type (span)', () => {
       testQuerySelectorAll(
         'span',
         '<!DOCTYPE html><p class="some_class"><span>Hello</span> <span>world</span></p>',
+        ['span'],
       );
     });
 
@@ -303,6 +374,7 @@ describe('eval', () => {
       testQuerySelectorAll(
         'a[attr1="abcde"][attr2="123"]',
         '<!DOCTYPE html><p class="some_class"><a attr1="abcde" attr2="123" href="https://foo.com">Hello</a> <span>world</span></p>',
+        ['a[attr1="abcde"][attr2="123"]'],
       );
     });
 
@@ -310,22 +382,21 @@ describe('eval', () => {
       testQuerySelectorAll(
         '#id, .cls',
         '<!DOCTYPE html><p class="cls">Hello <span id="id">world</span></p>',
-      );
-
-      testQuerySelectorAll(
-        'span, p',
-        '<!DOCTYPE html><p class="some_class"><span>Hello</span> <span>world</span></p>',
+        ['#id', '.cls'],
       );
     });
 
     it('compound', () => {
-      testQuerySelectorAll('.cls1.cls2', '<!DOCTYPE html><p class="cls1 cls2">Hello world</p>');
+      testQuerySelectorAll('.cls1.cls2', '<!DOCTYPE html><p class="cls1 cls2">Hello world</p>', [
+        '.cls1.cls2',
+      ]);
     });
 
     it('complex: <space>', () => {
       testQuerySelectorAll(
         '.cls1 .cls2',
         '<!DOCTYPE html><p class="cls1">Hello <span class="cls2">world</span></p>',
+        ['.cls2'],
       );
     });
 
@@ -333,6 +404,7 @@ describe('eval', () => {
       testQuerySelectorAll(
         '.cls1 > .cls2',
         '<!DOCTYPE html><p class="cls1">Hello <span class="cls2">world</span><span class="cls2">!</span></p>',
+        ['.cls1 > .cls2'],
       );
     });
 
@@ -340,6 +412,7 @@ describe('eval', () => {
       testQuerySelectorAll(
         '.cls2 ~ .cls3',
         '<!DOCTYPE html><p class="cls1">Hello <span class="cls2">world</span><span class="cls3">!</span></p>',
+        ['.cls3'],
       );
     });
 
@@ -347,6 +420,7 @@ describe('eval', () => {
       testQuerySelectorAll(
         '.cls2 + .cls3',
         '<!DOCTYPE html><p class="cls1"><span class="cls2">Hello</span><span class="cls3">world!</span></p>',
+        ['.cls3'],
       );
     });
 
@@ -366,7 +440,7 @@ describe('eval', () => {
               '  </span>',
               '</p>',
             ].join('\n'),
-            '#res',
+            ['#res'],
           );
         });
 
@@ -377,7 +451,7 @@ describe('eval', () => {
               '<div>Do not select this div</div>',
               '<div id="res">Select this div<span class="banner"></span></div>',
             ].join('\n'),
-            '#res',
+            ['#res'],
           );
 
           testQuerySelectorAll(
@@ -386,7 +460,7 @@ describe('eval', () => {
               '<div>Do not select this div</div>',
               '<div id="res">Select this div<span class="banner"></span></div>',
             ].join('\n'),
-            '#res',
+            ['#res'],
           );
         });
 
@@ -398,7 +472,7 @@ describe('eval', () => {
               '<div id="res">Select this div<span class="banner"></span></div>',
               '<div>Select this div<div id="res"><span class="banner"></span></div></div>',
             ].join('\n'),
-            '#res',
+            ['#res'],
           );
         });
 
@@ -416,7 +490,7 @@ describe('eval', () => {
               '  </div>',
               '</h2>',
             ].join('\n'),
-            '#res',
+            ['#res'],
           );
         });
 
@@ -424,7 +498,7 @@ describe('eval', () => {
           testQuerySelectorAll(
             `body > div:${has}(img[alt="Foo"])`,
             '<!DOCTYPE html><head></head><body><div id="res"><img alt="Foo"></div></body>',
-            '#res',
+            ['#res'],
           );
         });
       }
@@ -443,7 +517,7 @@ describe('eval', () => {
             '  </div>',
             '</body>',
           ].join('\n'),
-          '#res',
+          ['#res'],
         );
       });
 
@@ -459,7 +533,7 @@ describe('eval', () => {
             '  <span id="res" class="bar">bar inside h2</span>',
             '</h2>',
           ].join('\n'),
-          '#res',
+          ['#res'],
         );
       });
 
@@ -475,28 +549,75 @@ describe('eval', () => {
             '  <div id="res" class="bar">bar inside h2</div>',
             '</h2>',
           ].join('\n'),
-          '#res',
+          ['#res'],
         );
       });
     });
 
-    describe.skip(':upward', () => {
-      describe('argument is a number', () => {
-        it('ignored if 0 or negative', () => {
-          testQuerySelectorAll(
-            'span:upward(1)',
-            [
-              '<p>I am a paragraph.</p>',
-              '<p class="fancy">I am so very fancy!</p>',
-              '<div>I am NOT a paragraph.</div>',
-              '<h2>',
-              '  <div id="res"><span>inside</span> h2</div>',
-              '  <div>bar inside h2</div>',
-              '</h2>',
-            ].join('\n'),
-            '#res',
-          );
-        });
+    describe(':upward', () => {
+      it('handles numeric argument', () => {
+        testQuerySelectorAll('span:upward(2)', '<div><p><span>Test</span></p></div>', ['div']);
+      });
+
+      it('handles selector argument', () => {
+        testQuerySelectorAll(
+          'span:upward([role="article"])',
+          '<div role="article"><p><span>Test</span></p></div>',
+          ['div[role="article"]'],
+        );
+      });
+
+      it('handles compound selectors after upward', () => {
+        testQuerySelectorAll(
+          'span:upward(2).highlight',
+          '<div class="highlight"><p><span>Test</span></p></div>',
+          ['div.highlight'],
+        );
+      });
+
+      it('handles multiple upward selectors', () => {
+        testQuerySelectorAll('span:upward(1):upward(1)', '<div><p><span>Test</span></p></div>', [
+          'div',
+        ]);
+      });
+
+      it('returns empty array for invalid numeric argument', () => {
+        testQuerySelectorAll('span:upward(0)', '<div><p><span>Test</span></p></div>', []);
+      });
+
+      it('returns empty array for non-matching selector argument', () => {
+        testQuerySelectorAll(
+          'span:upward([role="article"])',
+          '<div><p><span>Test</span></p></div>',
+          [],
+        );
+      });
+
+      it('handles nested upward selectors', () => {
+        testQuerySelectorAll('span:upward(p):upward(div)', '<div><p><span>Test</span></p></div>', [
+          'div',
+        ]);
+      });
+
+      it('should continue processing when some candidates have no valid ancestor', () => {
+        const html1 = `
+          <div class="target">
+            <div class="lure"></div>
+          </div>
+          <div>
+            <div class="lure"></div>
+          </div>
+        `;
+        testQuerySelectorAll('.lure:upward(.target)', html1, ['.target']);
+        const html2 = `
+          <div>
+            <div class="lure"></div>
+          </div>
+          <div class="target">
+            <div class="lure"></div>
+          </div>
+        `;
+        testQuerySelectorAll('.lure:upward(.target)', html2, ['.target']);
       });
     });
 
@@ -512,7 +633,7 @@ describe('eval', () => {
             '<p id="n2" class="cls">Go to the pub!</p>',
             '</body>',
           ].join('\n'),
-          '#n1',
+          ['#n1'],
         );
       });
     });
