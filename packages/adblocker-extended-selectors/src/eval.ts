@@ -25,6 +25,14 @@ function parseRegex(str: string): RegExp {
   }
 }
 
+function matchesValuePattern(value: string, pattern: string, regex?: RegExp): boolean {
+  if (regex) {
+    return regex.test(value);
+  } else {
+    return value === pattern;
+  }
+}
+
 function stripsWrappingQuotes(str: string): string {
   // wrapping quotes are optional
   if ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'"))) {
@@ -131,39 +139,41 @@ export function matches(element: Element, selector: AST): boolean {
       }
 
       namePattern = stripsWrappingQuotes(namePattern);
+      valuePattern = valuePattern ? stripsWrappingQuotes(valuePattern) : undefined;
 
-      let value: string | null;
+      const valueRegex =
+        valuePattern?.startsWith('/') && valuePattern.lastIndexOf('/') > 0
+          ? parseRegex(valuePattern)
+          : undefined;
+
       if (namePattern.startsWith('/') && namePattern.lastIndexOf('/') > 0) {
         // matching attribute name by regex
         const regex = parseRegex(namePattern);
-        const attribute = [...element.attributes].find((attr) => regex.test(attr.name));
-        if (attribute === undefined) {
-          return false;
+        const matchingAttrs = [...element.attributes].filter((attr) => regex.test(attr.name));
+
+        // If no value pattern, return true if any attribute matches the name pattern
+        if (!valuePattern) {
+          return matchingAttrs.length > 0;
         }
-        value = attribute.value;
+
+        // Check if any of the matching attributes have the specified value
+        return matchingAttrs.some((attr) =>
+          valueRegex ? valueRegex.test(attr.value) : attr.value === valuePattern,
+        );
       } else {
         // matching attribute name by string
-        value = element.getAttribute(namePattern);
+        const value = element.getAttribute(namePattern);
         // null means the attribute is not present
         if (value === null) {
           return false;
         }
-      }
 
-      // early exit if no value pattern is provided
-      if (!valuePattern) {
-        return true;
-      }
+        // early exit if no value pattern is provided
+        if (!valuePattern) {
+          return true;
+        }
 
-      valuePattern = stripsWrappingQuotes(valuePattern);
-
-      if (valuePattern.startsWith('/') && valuePattern.lastIndexOf('/') > 0) {
-        // matching value by regex
-        const regex = parseRegex(valuePattern);
-        return regex.test(value);
-      } else {
-        // matching value by string
-        return value === valuePattern;
+        return valueRegex ? valueRegex.test(value) : value === valuePattern;
       }
     } else if (selector.name === 'upward') {
       // :upward is handled in querySelectorAll

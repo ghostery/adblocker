@@ -372,6 +372,15 @@ describe('eval', () => {
         testMatches(':matches-attr(/h?ref/)', '<a ref="test">Link</a>', 'a', true);
       });
 
+      it('with multiple attribute name matches it looks for matching value', () => {
+        testMatches(
+          ':matches-attr(/h?ref/=test)',
+          '<a href="miss" ref="test">Link</a>',
+          'a',
+          true,
+        );
+      });
+
       it('handles regex for both attribute name and value', () => {
         testMatches(':matches-attr(/h?ref/=/1.*4$/)', '<a href="1234">Link</a>', 'a', true);
         testMatches(':matches-attr(/h?ref/=/1.*3$/)', '<a ref="1234">Link</a>', 'a', false);
