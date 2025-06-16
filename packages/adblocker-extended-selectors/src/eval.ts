@@ -101,7 +101,6 @@ export function matches(element: Element, selector: AST): boolean {
         return false;
       }
 
-      // Get the window object from the element's ownerDocument
       const window = element.ownerDocument?.defaultView;
       if (!window) {
         return false;
