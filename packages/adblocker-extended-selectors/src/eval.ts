@@ -8,6 +8,23 @@
 
 import type { AST, Complex } from './types.js';
 
+function parseRegex(str: string): RegExp {
+  if (str.startsWith('/') && str.lastIndexOf('/') > 0) {
+    const lastSlashIndex = str.lastIndexOf('/');
+    const pattern = str.slice(1, lastSlashIndex);
+    const flags = str.slice(lastSlashIndex + 1);
+
+    if (!/^[gimsuyd]*$/.test(flags)) {
+      throw new Error(`Invalid regex flags: ${flags}`);
+    }
+
+    return new RegExp(pattern, flags);
+  } else {
+    // Treat as raw pattern string, no flags
+    return new RegExp(str);
+  }
+}
+
 export function matchPattern(pattern: string, text: string): boolean {
   // TODO - support 'm' RegExp argument
   if (pattern.startsWith('/') && (pattern.endsWith('/') || pattern.endsWith('/i'))) {
@@ -87,13 +104,7 @@ export function matches(element: Element, selector: AST): boolean {
       const path = window.location.pathname;
       const search = window.location.search;
       const fullUrl = path + search;
-
-      let pattern = argument;
-      if (pattern.startsWith('/') && pattern.endsWith('/')) {
-        pattern = pattern.slice(1, -1);
-      }
-
-      const regex = new RegExp(pattern);
+      const regex = parseRegex(argument);
       return regex.test(fullUrl);
     } else if (selector.name === 'matches-attr') {
       const { argument } = selector;
@@ -111,9 +122,9 @@ export function matches(element: Element, selector: AST): boolean {
       }
 
       let value;
-      if (namePattern.startsWith('/') && namePattern.endsWith('/')) {
+      if (namePattern.startsWith('/') && namePattern.lastIndexOf('/') > 0) {
         // matching attribute name by regex
-        const regex = new RegExp(namePattern.slice(1, -1));
+        const regex = parseRegex(namePattern);
         const attribute = [...element.attributes].find((attr) => regex.test(attr.name));
         if (attribute === undefined) {
           return false;
@@ -141,9 +152,9 @@ export function matches(element: Element, selector: AST): boolean {
         valuePattern = valuePattern.slice(1, -1);
       }
 
-      if (valuePattern.startsWith('/') && valuePattern.endsWith('/')) {
+      if (valuePattern.startsWith('/') && valuePattern.lastIndexOf('/') > 0) {
         // matching value by regex
-        const regex = new RegExp(valuePattern.slice(1, -1));
+        const regex = parseRegex(valuePattern);
         return regex.test(value);
       } else {
         // matching value by string

@@ -296,6 +296,17 @@ describe('eval', () => {
         expect(result).to.be.true;
       });
 
+      it('matches current path with regex flags', () => {
+        const html = '<div>Test</div>';
+        const jsdom = new JSDOM(html, { url: 'https://example.com/home' });
+        // @ts-ignore - JSDOM window type compatibility
+        globalThis.window = jsdom.window;
+        const element = jsdom.window.document.querySelector('div')!;
+        const ast = parse(':matches-path(/home/i)')!;
+        const result = matches(element, ast);
+        expect(result).to.be.true;
+      });
+
       it('combines with other selectors', () => {
         const html = `
           <div class="content">Test 2</div>
