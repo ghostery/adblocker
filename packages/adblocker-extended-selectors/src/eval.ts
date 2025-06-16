@@ -77,7 +77,16 @@ export function matches(element: Element, selector: AST): boolean {
         return false;
       }
 
-      const path = globalThis.window.location.pathname;
+      // Get the window object from the element's ownerDocument
+      const window = element.ownerDocument?.defaultView;
+      if (!window) {
+        return false;
+      }
+
+      // Get both pathname and search (query parameters)
+      const path = window.location.pathname;
+      const search = window.location.search;
+      const fullUrl = path + search;
 
       let pattern = argument;
       if (pattern.startsWith('/') && pattern.endsWith('/')) {
@@ -85,7 +94,7 @@ export function matches(element: Element, selector: AST): boolean {
       }
 
       const regex = new RegExp(pattern);
-      return regex.test(path);
+      return regex.test(fullUrl);
     } else if (selector.name === 'matches-attr') {
       const { argument } = selector;
       if (argument === undefined) {

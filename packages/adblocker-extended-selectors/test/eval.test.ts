@@ -282,39 +282,54 @@ describe('eval', () => {
 
     describe(':matches-path', () => {
       afterEach(() => {
-        delete globalThis.window;
+        globalThis.window = undefined!;
       });
 
       it('matches current path', () => {
         const html = '<div>Test</div>';
-        const jsdom = new JSDOM(html, { url: 'https://example.com/search/results' });
+        const jsdom = new JSDOM(html, { url: 'https://example.com/home' });
+        // @ts-ignore - JSDOM window type compatibility
         globalThis.window = jsdom.window;
-        const element = jsdom.window.document.querySelector('div');
-        expect(element).to.not.be.null;
-        if (element !== null) {
-          const ast = parse(':matches-path(/search/)');
-          expect(ast).to.not.be.undefined;
-          if (ast !== undefined) {
-            const result = matches(element, ast);
-            expect(result).to.be.true;
-          }
-        }
+        const element = jsdom.window.document.querySelector('div')!;
+        const ast = parse(':matches-path(/h(.*){2}e$/)')!;
+        const result = matches(element, ast);
+        expect(result).to.be.true;
+      });
+
+      it('combines with other selectors', () => {
+        const html = `
+          <div class="content">Test 2</div>
+        `;
+        const jsdom = new JSDOM(html, { url: 'https://example.com/content' });
+        // @ts-ignore - JSDOM window type compatibility
+        globalThis.window = jsdom.window;
+        const ast = parse(':matches-path(/content$/) .content')!;
+        const actual = querySelectorAll(jsdom.window.document.documentElement, ast);
+        const expected = Array.from(jsdom.window.document.querySelectorAll('.content'));
+        expect(expected.length).to.equal(1);
+        expect(actual).to.have.members(expected);
+      });
+
+      it('matches current path with query params', () => {
+        const html = '<div>Test</div>';
+        const jsdom = new JSDOM(html, { url: 'https://example.com/search/results?q=foo' });
+        // @ts-ignore - JSDOM window type compatibility
+        globalThis.window = jsdom.window;
+        const element = jsdom.window.document.querySelector('div')!;
+        const ast = parse(':matches-path(/q=foo/)')!;
+        const result = matches(element, ast);
+        expect(result).to.be.true;
       });
 
       it('does not match different path', () => {
         const html = '<div>Test</div>';
         const jsdom = new JSDOM(html, { url: 'https://example.com/home' });
+        // @ts-ignore - JSDOM window type compatibility
         globalThis.window = jsdom.window;
-        const element = jsdom.window.document.querySelector('div');
-        expect(element).to.not.be.null;
-        if (element !== null) {
-          const ast = parse(':matches-path(/search/)');
-          expect(ast).to.not.be.undefined;
-          if (ast !== undefined) {
-            const result = matches(element, ast);
-            expect(result).to.be.false;
-          }
-        }
+        const element = jsdom.window.document.querySelector('div')!;
+        const ast = parse(':matches-path(/search/)')!;
+        const result = matches(element, ast);
+        expect(result).to.be.false;
       });
     });
 
