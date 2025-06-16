@@ -202,7 +202,7 @@ function findAncestorByDistance(element: Element, distance: number): Element | n
 function findAncestorBySelector(element: Element, selector: string): Element | null {
   let ancestor: Element | null = element.parentElement;
   while (ancestor !== null) {
-    if (ancestor.matches && ancestor.matches(selector)) {
+    if (ancestor.matches(selector)) {
       return ancestor;
     }
     ancestor = ancestor.parentElement;
@@ -234,7 +234,7 @@ function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
 
   const ancestors: Element[] = [];
 
-  for (const c of candidates) {
+  for (const candidate of candidates) {
     if (upward.type !== 'pseudo-class' || upward.name !== 'upward') {
       continue;
     }
@@ -243,10 +243,10 @@ function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
       continue;
     }
 
-    const n = Number(argument);
-    const ancestor = !Number.isNaN(n)
-      ? findAncestorByDistance(c, n)
-      : findAncestorBySelector(c, argument);
+    const distance = parseInt(argument, 10);
+    const ancestor = !Number.isNaN(distance)
+      ? findAncestorByDistance(candidate, distance)
+      : findAncestorBySelector(candidate, argument);
 
     if (ancestor === null) {
       continue;
