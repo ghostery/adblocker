@@ -25,6 +25,14 @@ function parseRegex(str: string): RegExp {
   }
 }
 
+function stripsWrappingQuotes(str: string): string {
+  // wrapping quotes are optional
+  if ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'"))) {
+    return str.slice(1, -1);
+  }
+  return str;
+}
+
 export function matchPattern(pattern: string, text: string): boolean {
   // TODO - support 'm' RegExp argument
   if (pattern.startsWith('/') && (pattern.endsWith('/') || pattern.endsWith('/i'))) {
@@ -121,6 +129,8 @@ export function matches(element: Element, selector: AST): boolean {
         valuePattern = argument.slice(indexOfEqual + 1);
       }
 
+      namePattern = stripsWrappingQuotes(namePattern);
+
       let value;
       if (namePattern.startsWith('/') && namePattern.lastIndexOf('/') > 0) {
         // matching attribute name by regex
@@ -144,13 +154,7 @@ export function matches(element: Element, selector: AST): boolean {
         return true;
       }
 
-      // wrapping quotes are optional
-      if (
-        (valuePattern.startsWith('"') && valuePattern.endsWith('"')) ||
-        (valuePattern.startsWith("'") && valuePattern.endsWith("'"))
-      ) {
-        valuePattern = valuePattern.slice(1, -1);
-      }
+      valuePattern = stripsWrappingQuotes(valuePattern);
 
       if (valuePattern.startsWith('/') && valuePattern.lastIndexOf('/') > 0) {
         // matching value by regex

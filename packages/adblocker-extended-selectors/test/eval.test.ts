@@ -349,6 +349,10 @@ describe('eval', () => {
         testMatches(':matches-attr(href="test")', '<a href="test">Link</a>', 'a', true);
       });
 
+      it('accepts optional wrapping quotes', () => {
+        testMatches(':matches-attr("href"="test")', '<a href="test">Link</a>', 'a', true);
+      });
+
       it('matches attribute name', () => {
         testMatches(':matches-attr(href)', '<a href="test">Link</a>', 'a', true);
         testMatches(':matches-attr(href)', '<a ref="test">Link</a>', 'a', false);
