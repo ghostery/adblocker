@@ -658,6 +658,18 @@ describe('eval', () => {
         `;
         testQuerySelectorAll('.lure:upward(.target)', html2, ['.target']);
       });
+
+      it('should return unique ancestors when multiple candidates share the same ancestor', () => {
+        const html = `
+          <div class="target">
+            <p>
+              <span class="lure">First</span>
+              <span class="lure">Second</span>
+            </p>
+          </div>
+        `;
+        testQuerySelectorAll('.lure:upward(.target)', html, ['.target']);
+      });
     });
 
     describe(':has-text', () => {

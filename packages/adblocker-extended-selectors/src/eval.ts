@@ -232,7 +232,7 @@ function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
       ? querySelectorAll(element, { type: 'compound', compound: before })
       : [element];
 
-  const ancestors: Element[] = [];
+  const ancestors = new Set<Element>();
 
   for (const candidate of candidates) {
     if (upward.type !== 'pseudo-class' || upward.name !== 'upward') {
@@ -251,21 +251,23 @@ function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
     if (ancestor === null) {
       continue;
     }
-    ancestors.push(ancestor);
+    ancestors.add(ancestor);
   }
 
-  if (ancestors.length === 0) {
+  if (ancestors.size === 0) {
     return [];
   }
 
   if (after.length > 0) {
     if (after[0].type === 'pseudo-class' && after[0].name === 'upward') {
-      return ancestors.flatMap((a) => querySelectorAll(a, { type: 'compound', compound: after }));
+      return Array.from(ancestors).flatMap((a) =>
+        querySelectorAll(a, { type: 'compound', compound: after }),
+      );
     }
-    return ancestors.filter((a) => after.every((s) => matches(a, s)));
+    return Array.from(ancestors).filter((a) => after.every((s) => matches(a, s)));
   }
 
-  return ancestors;
+  return Array.from(ancestors);
 }
 
 function handleComplexSelector(element: Element, selector: Complex): Element[] {
