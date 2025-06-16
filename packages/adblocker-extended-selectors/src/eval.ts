@@ -25,14 +25,6 @@ function parseRegex(str: string): RegExp {
   }
 }
 
-function matchesValuePattern(value: string, pattern: string, regex?: RegExp): boolean {
-  if (regex) {
-    return regex.test(value);
-  } else {
-    return value === pattern;
-  }
-}
-
 function stripsWrappingQuotes(str: string): string {
   // wrapping quotes are optional
   if ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'"))) {
