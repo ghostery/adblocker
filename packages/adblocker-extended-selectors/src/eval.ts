@@ -121,7 +121,8 @@ export function matches(element: Element, selector: AST): boolean {
       }
 
       const indexOfEqual = argument.indexOf('=');
-      let namePattern, valuePattern;
+      let namePattern: string;
+      let valuePattern: string | undefined;
       if (indexOfEqual === -1) {
         namePattern = argument;
       } else {
@@ -131,7 +132,7 @@ export function matches(element: Element, selector: AST): boolean {
 
       namePattern = stripsWrappingQuotes(namePattern);
 
-      let value;
+      let value: string | null;
       if (namePattern.startsWith('/') && namePattern.lastIndexOf('/') > 0) {
         // matching attribute name by regex
         const regex = parseRegex(namePattern);
