@@ -188,7 +188,6 @@ function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
       restSelectors.every((s) => matches(e, s)),
     );
   }
-
   const before = compound.slice(0, upwardIndex);
   const upward = compound[upwardIndex];
   const after = compound.slice(upwardIndex + 1);
@@ -296,20 +295,6 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
   }
 
   if (selector.type === 'pseudo-class') {
-    if (selector.name === 'upward') {
-      const { argument } = selector;
-      if (argument === undefined) {
-        return [];
-      }
-
-      const n = Number(argument);
-      const ancestor = !Number.isNaN(n)
-        ? findAncestorByDistance(element, n)
-        : findAncestorBySelector(element, argument);
-
-      return ancestor !== null ? [ancestor] : [];
-    }
-
     return Array.from(element.querySelectorAll('*')).filter((e) => matches(e, selector));
   }
 
