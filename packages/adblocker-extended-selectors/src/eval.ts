@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import type { AST, Complex } from './types.js';
+import type { AST, Complex, PseudoClass } from './types.js';
 
 function parseRegex(str: string): RegExp {
   if (str.startsWith('/') && str.lastIndexOf('/') > 0) {
@@ -202,23 +202,12 @@ function findAncestorBySelector(element: Element, selector: string): Element | n
   return null;
 }
 
-function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
-  if (compound.length === 0) {
-    return [];
-  }
-
-  const upwardIndex = compound.findIndex((s) => s.type === 'pseudo-class' && s.name === 'upward');
-
-  if (upwardIndex === -1) {
-    const [firstSelector, ...restSelectors] = compound;
-    return querySelectorAll(element, firstSelector).filter((e) =>
-      restSelectors.every((s) => matches(e, s)),
-    );
-  }
-  const before = compound.slice(0, upwardIndex);
-  const upward = compound[upwardIndex];
-  const after = compound.slice(upwardIndex + 1);
-
+function handleUpwardSelector(
+  element: Element,
+  before: AST[],
+  upward: PseudoClass,
+  after: AST[],
+): Element[] {
   const candidates =
     before.length > 0
       ? querySelectorAll(element, { type: 'compound', compound: before })
@@ -226,40 +215,56 @@ function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
 
   const ancestors = new Set<Element>();
 
-  for (const candidate of candidates) {
-    if (upward.type !== 'pseudo-class' || upward.name !== 'upward') {
-      continue;
-    }
-    const { argument } = upward;
-    if (argument === undefined) {
-      continue;
-    }
+  if (upward.argument !== undefined) {
+    for (const candidate of candidates) {
+      const distance = parseInt(upward.argument, 10);
+      const ancestor = !Number.isNaN(distance)
+        ? findAncestorByDistance(candidate, distance)
+        : findAncestorBySelector(candidate, upward.argument);
 
-    const distance = parseInt(argument, 10);
-    const ancestor = !Number.isNaN(distance)
-      ? findAncestorByDistance(candidate, distance)
-      : findAncestorBySelector(candidate, argument);
-
-    if (ancestor === null) {
-      continue;
+      if (ancestor !== null) {
+        ancestors.add(ancestor);
+      }
     }
-    ancestors.add(ancestor);
   }
 
   if (ancestors.size === 0) {
     return [];
   }
 
-  if (after.length > 0) {
-    if (after[0].type === 'pseudo-class' && after[0].name === 'upward') {
-      return Array.from(ancestors).flatMap((a) =>
-        querySelectorAll(a, { type: 'compound', compound: after }),
-      );
-    }
-    return Array.from(ancestors).filter((a) => after.every((s) => matches(a, s)));
+  const ancestorArray = Array.from(ancestors);
+  if (after.length === 0) {
+    return ancestorArray;
   }
 
-  return Array.from(ancestors);
+  const results = [];
+
+  for (const ancestor of ancestorArray) {
+    const result = querySelectorAll(ancestor, { type: 'compound', compound: after });
+    results.push(...result);
+  }
+
+  return results;
+}
+
+function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
+  if (compound.length === 0) {
+    return [];
+  }
+
+  const upwardIndex = compound.findIndex((s) => s.type === 'pseudo-class' && s.name === 'upward');
+  if (upwardIndex >= 0) {
+    const before = compound.slice(0, upwardIndex);
+    const upward = compound[upwardIndex] as PseudoClass;
+    const after = compound.slice(upwardIndex + 1);
+
+    return handleUpwardSelector(element, before, upward, after);
+  }
+
+  const [firstSelector, ...restSelectors] = compound;
+  return querySelectorAll(element, firstSelector).filter((e) =>
+    restSelectors.every((s) => matches(e, s)),
+  );
 }
 
 function handleComplexSelector(element: Element, selector: Complex): Element[] {

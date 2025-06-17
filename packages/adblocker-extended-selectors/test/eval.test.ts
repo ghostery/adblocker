@@ -659,6 +659,18 @@ describe('eval', () => {
         testQuerySelectorAll('.lure:upward(.target)', html2, ['.target']);
       });
 
+      it('handles chainging', () => {
+        const html = `
+          <div class="target">
+            <div>
+              <span class="lure"></span>
+              <span class="child"></span>
+            </div>
+          </div>
+        `;
+        testQuerySelectorAll('.lure:upward(1):has(.child):upward(1)', html, ['.target']);
+      });
+
       it('should return unique ancestors when multiple candidates share the same ancestor', () => {
         const html = `
           <div class="target">
