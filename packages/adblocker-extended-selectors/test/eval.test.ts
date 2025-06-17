@@ -659,16 +659,50 @@ describe('eval', () => {
         testQuerySelectorAll('.lure:upward(.target)', html2, ['.target']);
       });
 
-      it('handles chainging', () => {
-        const html = `
-          <div class="target">
-            <div>
-              <span class="lure"></span>
-              <span class="child"></span>
+      describe('should support chaining', () => {
+        it('with multiple navigations', () => {
+          const html = `
+            <div class="target">
+              <div class="hop2">
+                <div class="hop1">
+                  <div class="lure"></div>
+                </div>
+              </div>
             </div>
-          </div>
-        `;
-        testQuerySelectorAll('.lure:upward(1):has(.child):upward(1)', html, ['.target']);
+          `;
+          testQuerySelectorAll('.lure:upward(3)', html, ['.target']);
+          testQuerySelectorAll('.lure:upward(1):upward(2)', html, ['.target']);
+          testQuerySelectorAll('.lure:upward(1):upward(1):upward(1)', html, ['.target']);
+          testQuerySelectorAll('.lure:upward(.hop1):upward(.hop2):upward(div)', html, ['.target']);
+        });
+
+        it('with :has between :upward', () => {
+          const html = `
+            <div class="target">
+              <div>
+                <span class="lure"></span>
+                <span class="child"></span>
+              </div>
+            </div>
+          `;
+          testQuerySelectorAll('.lure:upward(1):has(.child):upward(1)', html, ['.target']);
+          testQuerySelectorAll('.lure:upward(1):upward(1)', html, ['.target']);
+          testQuerySelectorAll('.lure:upward(2)', html, ['.target']);
+        });
+
+        it('with navigations (:upward) intersected with non-navigations (:has)', () => {
+          const html = `
+            <div class="target">
+              <div id="after_upward2">
+                <div id="after_has_lure">
+                  <span class="lure"></span>
+                </div>
+              </div>
+            </div>
+          `;
+          testQuerySelectorAll('.lure:upward(2):has(.lure):has(div):upward(1)', html, ['.target']);
+          testQuerySelectorAll('.lure:upward(2):has(.lure):not(:has(a)):upward(1)', html, ['.target']);
+        });
       });
 
       it('should return unique ancestors when multiple candidates share the same ancestor', () => {

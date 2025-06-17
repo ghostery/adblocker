@@ -202,49 +202,53 @@ function findAncestorBySelector(element: Element, selector: string): Element | n
   return null;
 }
 
-function handleUpwardSelector(
-  element: Element,
-  before: AST[],
+function navigateUpward(
+  candidates: Element[],
   upward: PseudoClass,
-  after: AST[],
 ): Element[] {
-  const candidates =
-    before.length > 0
-      ? querySelectorAll(element, { type: 'compound', compound: before })
-      : [element];
-
-  const ancestors = new Set<Element>();
-
-  if (upward.argument !== undefined) {
-    for (const candidate of candidates) {
-      const distance = parseInt(upward.argument, 10);
-      const ancestor = !Number.isNaN(distance)
-        ? findAncestorByDistance(candidate, distance)
-        : findAncestorBySelector(candidate, upward.argument);
-
-      if (ancestor !== null) {
-        ancestors.add(ancestor);
-      }
-    }
-  }
-
-  if (ancestors.size === 0) {
+  if (upward.argument === undefined) {
     return [];
   }
 
-  const ancestorArray = Array.from(ancestors);
-  if (after.length === 0) {
-    return ancestorArray;
+  const ancestors = new Set<Element>();
+  for (const candidate of candidates) {
+    const distance = Number(upward.argument);
+    const ancestor = Number.isInteger(distance)
+      ? findAncestorByDistance(candidate, distance)
+      : findAncestorBySelector(candidate, upward.argument);
+    if (ancestor !== null) {
+      ancestors.add(ancestor);
+    }
   }
+  return [...ancestors];
+}
 
-  const results = [];
-
-  for (const ancestor of ancestorArray) {
-    const result = querySelectorAll(ancestor, { type: 'compound', compound: after });
-    results.push(...result);
+function proceedAfterUpwardNavigation(
+  candidates: Element[],
+  remainingCompound: AST[],
+): Element[] {
+  if (remainingCompound.length === 0) {
+    return candidates;
   }
+  const upwardParts = trySplitUpward(remainingCompound);
+  if (!upwardParts) {
+    return candidates.filter((elem) => remainingCompound.every((x) => matches(elem, x)));
+  }
+  const { before, upward, after } = upwardParts;
+  const matchingBefore = candidates.filter((elem) => before.every((x) => matches(elem, x)));
+  const afterCandidates = navigateUpward(matchingBefore, upward);
+  return proceedAfterUpwardNavigation(afterCandidates, after);
+}
 
-  return results;
+function trySplitUpward(compound: AST[]) : { before: AST[], upward: PseudoClass, after: AST[] } | null {
+  const upwardIndex = compound.findIndex((s) => s.type === 'pseudo-class' && s.name === 'upward');
+  if (upwardIndex < 0) {
+    return null;
+  }
+  const before = compound.slice(0, upwardIndex);
+  const upward = compound[upwardIndex] as PseudoClass;
+  const after = compound.slice(upwardIndex + 1);
+  return { before, upward, after };
 }
 
 function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
@@ -252,13 +256,15 @@ function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
     return [];
   }
 
-  const upwardIndex = compound.findIndex((s) => s.type === 'pseudo-class' && s.name === 'upward');
-  if (upwardIndex >= 0) {
-    const before = compound.slice(0, upwardIndex);
-    const upward = compound[upwardIndex] as PseudoClass;
-    const after = compound.slice(upwardIndex + 1);
-
-    return handleUpwardSelector(element, before, upward, after);
+  const upwardParts = trySplitUpward(compound);
+  if (upwardParts) {
+    const { before, upward, after } = upwardParts;
+    const beforeCandidates =
+      before.length > 0
+        ? querySelectorAll(element, { type: 'compound', compound: before })
+        : [element];
+    const afterCandidates = navigateUpward(beforeCandidates, upward);
+    return proceedAfterUpwardNavigation(afterCandidates, after);
   }
 
   const [firstSelector, ...restSelectors] = compound;
