@@ -51,6 +51,12 @@ export function matchPattern(pattern: string, text: string): boolean {
   return text.includes(pattern);
 }
 
+/**
+ * Checks if an element complies with the given selector.
+ * This function shouldn't handle any transposing as it's intended to check subtree not the parents.
+ * @param element The subjective element
+ * @param selector A selector
+ */
 export function matches(element: Element, selector: AST): boolean {
   if (
     selector.type === 'id' ||
@@ -165,99 +171,45 @@ export function matches(element: Element, selector: AST): boolean {
 
         return valueRegex ? valueRegex.test(value) : value === valuePattern;
       }
-    } else if (selector.name === 'upward') {
-      // :upward is handled in querySelectorAll
-      return false;
     }
   }
 
   return false;
 }
 
-function findAncestorByDistance(element: Element, distance: number): Element | null {
-  // sanity check, since the distance is provided as part of filter
-  if (distance <= 0 || distance >= 256) {
-    return null;
-  }
-  let ancestor: Element | null = element;
-  for (let i = 0; i < distance; i++) {
-    ancestor = ancestor.parentElement;
-    if (ancestor === null) {
-      return null;
+/**
+ * Try transposing with a selector from the subjective element.
+ * @param element The subjective element
+ * @param selector A selector
+ * @returns An array with and without singular element; we may support transposing to multiple targets in the future
+ * but currently it's for the convenience to match return type.
+ */
+function transpose(element: Element, selector: AST): [] | [Element] {
+  if (selector.type === 'pseudo-class') {
+    if (selector.name === 'upward') {
+      if (selector.argument === undefined) {
+        return [];
+      }
+      const literalOrNumeric = stripsWrappingQuotes(selector.argument);
+      let number = parseInt(literalOrNumeric, 10);
+      let parentElement: Element | null = element;
+      if (isNaN(number)) {
+        while ((parentElement = parentElement.parentElement) !== null) {
+          if (parentElement.matches(literalOrNumeric)) {
+            return [parentElement];
+          }
+        }
+      } else if (number > 0 && number < 256) {
+        while ((parentElement = parentElement.parentElement) !== null) {
+          if (--number === 0) {
+            return [parentElement];
+          }
+        }
+      }
     }
   }
-  return ancestor;
-}
 
-function findAncestorBySelector(element: Element, selector: string): Element | null {
-  let ancestor: Element | null = element.parentElement;
-  while (ancestor !== null) {
-    if (ancestor.matches(selector)) {
-      return ancestor;
-    }
-    ancestor = ancestor.parentElement;
-  }
-  return null;
-}
-
-function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
-  if (compound.length === 0) {
-    return [];
-  }
-
-  const upwardIndex = compound.findIndex((s) => s.type === 'pseudo-class' && s.name === 'upward');
-
-  if (upwardIndex === -1) {
-    const [firstSelector, ...restSelectors] = compound;
-    return querySelectorAll(element, firstSelector).filter((e) =>
-      restSelectors.every((s) => matches(e, s)),
-    );
-  }
-  const before = compound.slice(0, upwardIndex);
-  const upward = compound[upwardIndex];
-  const after = compound.slice(upwardIndex + 1);
-
-  const candidates =
-    before.length > 0
-      ? querySelectorAll(element, { type: 'compound', compound: before })
-      : [element];
-
-  const ancestors = new Set<Element>();
-
-  for (const candidate of candidates) {
-    if (upward.type !== 'pseudo-class' || upward.name !== 'upward') {
-      continue;
-    }
-    const { argument } = upward;
-    if (argument === undefined) {
-      continue;
-    }
-
-    const distance = parseInt(argument, 10);
-    const ancestor = !Number.isNaN(distance)
-      ? findAncestorByDistance(candidate, distance)
-      : findAncestorBySelector(candidate, argument);
-
-    if (ancestor === null) {
-      continue;
-    }
-    ancestors.add(ancestor);
-  }
-
-  if (ancestors.size === 0) {
-    return [];
-  }
-
-  if (after.length > 0) {
-    if (after[0].type === 'pseudo-class' && after[0].name === 'upward') {
-      return Array.from(ancestors).flatMap((a) =>
-        querySelectorAll(a, { type: 'compound', compound: after }),
-      );
-    }
-    return Array.from(ancestors).filter((a) => after.every((s) => matches(a, s)));
-  }
-
-  return Array.from(ancestors);
+  return [];
 }
 
 function handleComplexSelector(element: Element, selector: Complex): Element[] {
@@ -297,6 +249,55 @@ function handleComplexSelector(element: Element, selector: Complex): Element[] {
   }
 
   return elements;
+}
+
+/**
+ * Handles compound selectors or a list of selectors for subjective element.
+ * To handle multi-paths matching, this function create branches internally and validates each cases.
+ * @param element The subjective element
+ * @param selectors A list of selectors to sequentially validated
+ * @returns A list of elements matches the list of selectors
+ */
+function handleCompoundSelector(element: Element, selectors: AST[]): Element[] {
+  if (selectors.length === 0) {
+    return [];
+  }
+
+  // Start with validating the subjective element with given selectors
+  const branches: [Element, number][] = querySelectorAll(element, selectors[0]).map(
+    function (element) {
+      return [element, 1];
+    },
+  );
+  const results: Element[] = [];
+
+  while (branches.length) {
+    const branch = branches.pop()!;
+    const element = branch[0];
+    let currentIndex = branch[1];
+    for (let candidates: Element[]; currentIndex < selectors.length; currentIndex++) {
+      // Handle transpose
+      if ((candidates = transpose(element, selectors[currentIndex])).length !== 0) {
+        const nextIndex = currentIndex + 1;
+        branches.push(
+          ...candidates.map<[Element, number]>(function (candidate) {
+            return [candidate, nextIndex];
+          }),
+        );
+        break;
+      }
+      // Handle consecutive selectors
+      if (matches(element, selectors[currentIndex]) === false) {
+        break;
+      }
+    }
+    // Check if the loop was completed
+    if (currentIndex === selectors.length && results.indexOf(element) === -1) {
+      results.push(element);
+    }
+  }
+
+  return results;
 }
 
 export function querySelectorAll(element: Element, selector: AST): Element[] {
