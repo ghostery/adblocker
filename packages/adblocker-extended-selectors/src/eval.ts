@@ -191,15 +191,15 @@ function transpose(element: Element, selector: AST): [] | [Element] {
         return [];
       }
       const literalOrNumeric = stripsWrappingQuotes(selector.argument);
+      let number = parseInt(literalOrNumeric, 10);
       let parentElement: Element | null = element;
-      if (!Number.isInteger(literalOrNumeric)) {
+      if (!Number.isInteger(number)) {
         while ((parentElement = parentElement.parentElement) !== null) {
           if (parentElement.matches(literalOrNumeric)) {
             return [parentElement];
           }
         }
       } else {
-        let number = parseInt(literalOrNumeric, 10);
         if (number <= 0 || number >= 256) {
           return [];
         }
