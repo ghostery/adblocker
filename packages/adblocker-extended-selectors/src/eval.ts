@@ -6,7 +6,31 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import type { AST } from './types.js';
+import type { AST, Complex } from './types.js';
+
+function parseRegex(str: string): RegExp {
+  if (str.startsWith('/') && str.lastIndexOf('/') > 0) {
+    const lastSlashIndex = str.lastIndexOf('/');
+    const pattern = str.slice(1, lastSlashIndex);
+    const flags = str.slice(lastSlashIndex + 1);
+
+    if (!/^[gimsuyd]*$/.test(flags)) {
+      throw new Error(`Invalid regex flags: ${flags}`);
+    }
+
+    return new RegExp(pattern, flags);
+  } else {
+    // Treat as raw pattern string, no flags
+    return new RegExp(str);
+  }
+}
+
+function stripsWrappingQuotes(str: string): string {
+  if ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'"))) {
+    return str.slice(1, -1);
+  }
+  return str;
+}
 
 export function matchPattern(pattern: string, text: string): boolean {
   // TODO - support 'm' RegExp argument
@@ -71,104 +95,235 @@ export function matches(element: Element, selector: AST): boolean {
       }
 
       return text.length >= minLength;
+    } else if (selector.name === 'matches-path') {
+      const { argument } = selector;
+      if (argument === undefined) {
+        return false;
+      }
+
+      const window = element.ownerDocument?.defaultView;
+      if (!window) {
+        return false;
+      }
+
+      // Get both pathname and search (query parameters)
+      const path = window.location.pathname;
+      const search = window.location.search;
+      const fullUrl = path + search;
+      const regex = parseRegex(argument);
+      return regex.test(fullUrl);
+    } else if (selector.name === 'matches-attr') {
+      const { argument } = selector;
+      if (argument === undefined) {
+        return false;
+      }
+
+      const indexOfEqual = argument.indexOf('=');
+      let namePattern: string;
+      let valuePattern: string | undefined;
+      if (indexOfEqual === -1) {
+        namePattern = argument;
+      } else {
+        namePattern = argument.slice(0, indexOfEqual);
+        valuePattern = argument.slice(indexOfEqual + 1);
+      }
+
+      namePattern = stripsWrappingQuotes(namePattern);
+      valuePattern = valuePattern ? stripsWrappingQuotes(valuePattern) : undefined;
+
+      const valueRegex =
+        valuePattern?.startsWith('/') && valuePattern.lastIndexOf('/') > 0
+          ? parseRegex(valuePattern)
+          : undefined;
+
+      if (namePattern.startsWith('/') && namePattern.lastIndexOf('/') > 0) {
+        // matching attribute name by regex
+        const regex = parseRegex(namePattern);
+        const matchingAttrs = [...element.attributes].filter((attr) => regex.test(attr.name));
+
+        // If no value pattern, return true if any attribute matches the name pattern
+        if (!valuePattern) {
+          return matchingAttrs.length > 0;
+        }
+
+        // Check if any of the matching attributes have the specified value
+        return matchingAttrs.some((attr) =>
+          valueRegex ? valueRegex.test(attr.value) : attr.value === valuePattern,
+        );
+      } else {
+        // matching attribute name by string
+        const value = element.getAttribute(namePattern);
+        // null means the attribute is not present
+        if (value === null) {
+          return false;
+        }
+
+        // early exit if no value pattern is provided
+        if (!valuePattern) {
+          return true;
+        }
+
+        return valueRegex ? valueRegex.test(value) : value === valuePattern;
+      }
+    } else if (selector.name === 'upward') {
+      // :upward is handled in querySelectorAll
+      return false;
     }
   }
 
   return false;
 }
 
-export function querySelectorAll(element: Element, selector: AST): Element[] {
-  const elements: Element[] = [];
+function findAncestorByDistance(element: Element, distance: number): Element | null {
+  // sanity check, since the distance is provided as part of filter
+  if (distance <= 0 || distance >= 256) {
+    return null;
+  }
+  let ancestor: Element | null = element;
+  for (let i = 0; i < distance; i++) {
+    ancestor = ancestor.parentElement;
+    if (ancestor === null) {
+      return null;
+    }
+  }
+  return ancestor;
+}
 
+function findAncestorBySelector(element: Element, selector: string): Element | null {
+  let ancestor: Element | null = element.parentElement;
+  while (ancestor !== null) {
+    if (ancestor.matches(selector)) {
+      return ancestor;
+    }
+    ancestor = ancestor.parentElement;
+  }
+  return null;
+}
+
+function handleCompoundSelector(element: Element, compound: AST[]): Element[] {
+  if (compound.length === 0) {
+    return [];
+  }
+
+  const upwardIndex = compound.findIndex((s) => s.type === 'pseudo-class' && s.name === 'upward');
+
+  if (upwardIndex === -1) {
+    const [firstSelector, ...restSelectors] = compound;
+    return querySelectorAll(element, firstSelector).filter((e) =>
+      restSelectors.every((s) => matches(e, s)),
+    );
+  }
+  const before = compound.slice(0, upwardIndex);
+  const upward = compound[upwardIndex];
+  const after = compound.slice(upwardIndex + 1);
+
+  const candidates =
+    before.length > 0
+      ? querySelectorAll(element, { type: 'compound', compound: before })
+      : [element];
+
+  const ancestors = new Set<Element>();
+
+  for (const candidate of candidates) {
+    if (upward.type !== 'pseudo-class' || upward.name !== 'upward') {
+      continue;
+    }
+    const { argument } = upward;
+    if (argument === undefined) {
+      continue;
+    }
+
+    const distance = parseInt(argument, 10);
+    const ancestor = !Number.isNaN(distance)
+      ? findAncestorByDistance(candidate, distance)
+      : findAncestorBySelector(candidate, argument);
+
+    if (ancestor === null) {
+      continue;
+    }
+    ancestors.add(ancestor);
+  }
+
+  if (ancestors.size === 0) {
+    return [];
+  }
+
+  if (after.length > 0) {
+    if (after[0].type === 'pseudo-class' && after[0].name === 'upward') {
+      return Array.from(ancestors).flatMap((a) =>
+        querySelectorAll(a, { type: 'compound', compound: after }),
+      );
+    }
+    return Array.from(ancestors).filter((a) => after.every((s) => matches(a, s)));
+  }
+
+  return Array.from(ancestors);
+}
+
+function handleComplexSelector(element: Element, selector: Complex): Element[] {
+  const elements: Element[] = [];
+  const leftElements =
+    selector.left === undefined ? [element] : querySelectorAll(element, selector.left);
+
+  switch (selector.combinator) {
+    case ' ':
+      for (const e of leftElements) {
+        elements.push(...querySelectorAll(e, selector.right));
+      }
+      break;
+    case '>':
+      for (const e of leftElements) {
+        elements.push(...Array.from(e.children).filter((child) => matches(child, selector.right)));
+      }
+      break;
+    case '~':
+      for (const e of leftElements) {
+        let sibling: Element | null = e;
+        while ((sibling = sibling.nextElementSibling) !== null) {
+          if (matches(sibling, selector.right)) {
+            elements.push(sibling);
+          }
+        }
+      }
+      break;
+    case '+':
+      for (const e of leftElements) {
+        const next = e.nextElementSibling;
+        if (next !== null && matches(next, selector.right)) {
+          elements.push(next);
+        }
+      }
+      break;
+  }
+
+  return elements;
+}
+
+export function querySelectorAll(element: Element, selector: AST): Element[] {
   if (
     selector.type === 'id' ||
     selector.type === 'class' ||
     selector.type === 'type' ||
     selector.type === 'attribute'
   ) {
-    elements.push(...element.querySelectorAll(selector.content));
-  } else if (selector.type === 'list') {
-    for (const subSelector of selector.list) {
-      elements.push(...querySelectorAll(element, subSelector));
-    }
-  } else if (selector.type === 'compound') {
-    // TODO - handling compound needs to be reworked...
-    // .cls:upward(1) for example will not work with this implementation.
-    // :upward is not about selecting, but transforming a set of nodes (i.e.
-    // uBO's transpose method).
-    if (selector.compound.length !== 0) {
-      elements.push(
-        ...querySelectorAll(element, selector.compound[0]).filter((e) =>
-          selector.compound.slice(1).every((s) => matches(e, s)),
-        ),
-      );
-    }
-  } else if (selector.type === 'complex') {
-    const elements2 =
-      selector.left === undefined ? [element] : querySelectorAll(element, selector.left);
-
-    if (selector.combinator === ' ') {
-      for (const element2 of elements2) {
-        elements.push(...querySelectorAll(element2, selector.right));
-      }
-    } else if (selector.combinator === '>') {
-      for (const element2 of elements2) {
-        for (const child of element2.children) {
-          if (matches(child, selector.right) === true) {
-            elements.push(child);
-          }
-        }
-      }
-    } else if (selector.combinator === '~') {
-      for (const element2 of elements2) {
-        let sibling: Element | null = element2;
-        while ((sibling = sibling.nextElementSibling) !== null) {
-          if (matches(sibling, selector.right) === true) {
-            elements.push(sibling);
-          }
-        }
-      }
-    } else if (selector.combinator === '+') {
-      for (const element2 of elements2) {
-        const nextElementSibling = element2.nextElementSibling;
-        if (nextElementSibling !== null && matches(nextElementSibling, selector.right) === true) {
-          elements.push(nextElementSibling);
-        }
-      }
-    }
-  } else if (selector.type === 'pseudo-class') {
-    // if (selector.name === 'upward') {
-    //   let n = Number(selector.argument);
-    //   console.log('upward', selector, n);
-    //   if (Number.isNaN(n) === false) {
-    //     if (n >= 1 && n < 256) {
-    //       let ancestor: Element | null = element;
-    //       while (ancestor !== null && n > 0) {
-    //         ancestor = ancestor.parentElement;
-    //         n -= 1;
-    //       }
-
-    //       if (ancestor !== null && n === 0) {
-    //         elements.push(element);
-    //       }
-    //     }
-    //   } else if (selector.argument !== undefined) {
-    //     const parent = element.parentElement;
-    //     if (parent !== null) {
-    //       const ancestor = parent.closest(selector.argument);
-    //       if (ancestor !== null) {
-    //         elements.push(ancestor);
-    //       }
-    //     }
-    //   }
-    // } else {
-    for (const subElement of element.querySelectorAll('*')) {
-      if (matches(subElement, selector) === true) {
-        elements.push(subElement);
-      }
-    }
-    // }
+    return Array.from(element.querySelectorAll(selector.content));
   }
 
-  return elements;
+  if (selector.type === 'list') {
+    return selector.list.flatMap((s) => querySelectorAll(element, s));
+  }
+
+  if (selector.type === 'compound') {
+    return handleCompoundSelector(element, selector.compound);
+  }
+
+  if (selector.type === 'complex') {
+    return handleComplexSelector(element, selector);
+  }
+
+  if (selector.type === 'pseudo-class') {
+    return Array.from(element.querySelectorAll('*')).filter((e) => matches(e, selector));
+  }
+
+  return [];
 }
