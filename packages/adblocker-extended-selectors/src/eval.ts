@@ -295,7 +295,7 @@ function handleCompoundSelector(element: Element, selectors: AST[]): Element[] {
       }
     }
     // Check if the loop was completed
-    if (currentIndex === selectors.length && results.indexOf(element) === -1) {
+    if (currentIndex === selectors.length && !results.includes(element)) {
       results.push(element);
     }
   }
