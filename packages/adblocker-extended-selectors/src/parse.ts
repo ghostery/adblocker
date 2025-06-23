@@ -48,8 +48,6 @@ export const RECURSIVE_PSEUDO_CLASSES = new Set([
   'dir',
   'has',
   'host-context',
-  'if',
-  'if-not',
   'is',
   'matches',
   'not',

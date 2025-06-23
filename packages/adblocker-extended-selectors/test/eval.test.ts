@@ -464,83 +464,81 @@ describe('eval', () => {
     });
 
     describe(':has', () => {
-      for (const has of ['has', 'if']) {
-        it(`*:${has}`, () => {
-          testQuerySelectorAll(
-            `*:${has}(a[href^="https://"]):not(html):not(body):not(p)`,
-            [
-              '<!DOCTYPE html>',
-              '<p class="cls1">',
-              '  <span id="res" class="cls2">',
-              '    <a href="https://foo.com">Hello</a>',
-              '  </span>',
-              '  <span class="cls3">',
-              '    <a href="http://baz.com">world</a>!',
-              '  </span>',
-              '</p>',
-            ].join('\n'),
-            ['#res'],
-          );
-        });
+      it('*:has', () => {
+        testQuerySelectorAll(
+          `*:has(a[href^="https://"]):not(html):not(body):not(p)`,
+          [
+            '<!DOCTYPE html>',
+            '<p class="cls1">',
+            '  <span id="res" class="cls2">',
+            '    <a href="https://foo.com">Hello</a>',
+            '  </span>',
+            '  <span class="cls3">',
+            '    <a href="http://baz.com">world</a>!',
+            '  </span>',
+            '</p>',
+          ].join('\n'),
+          ['#res'],
+        );
+      });
 
-        it(`simple :${has}`, () => {
-          testQuerySelectorAll(
-            `div:${has}(.banner)`,
-            [
-              '<div>Do not select this div</div>',
-              '<div id="res">Select this div<span class="banner"></span></div>',
-            ].join('\n'),
-            ['#res'],
-          );
+      it('simple :has', () => {
+        testQuerySelectorAll(
+          `div:has(.banner)`,
+          [
+            '<div>Do not select this div</div>',
+            '<div id="res">Select this div<span class="banner"></span></div>',
+          ].join('\n'),
+          ['#res'],
+        );
 
-          testQuerySelectorAll(
-            `:${has}(.banner):not(body)`,
-            [
-              '<div>Do not select this div</div>',
-              '<div id="res">Select this div<span class="banner"></span></div>',
-            ].join('\n'),
-            ['#res'],
-          );
-        });
+        testQuerySelectorAll(
+          `:has(.banner):not(body)`,
+          [
+            '<div>Do not select this div</div>',
+            '<div id="res">Select this div<span class="banner"></span></div>',
+          ].join('\n'),
+          ['#res'],
+        );
+      });
 
-        it(`nested :${has}`, () => {
-          testQuerySelectorAll(
-            `div:${has}(> .banner)`,
-            [
-              '<div>Do not select this div</div>',
-              '<div id="res">Select this div<span class="banner"></span></div>',
-              '<div>Select this div<div id="res"><span class="banner"></span></div></div>',
-            ].join('\n'),
-            ['#res'],
-          );
-        });
+      it('nested :has', () => {
+        testQuerySelectorAll(
+          `div:has(> .banner)`,
+          [
+            '<div>Do not select this div</div>',
+            '<div id="res">Select this div<span class="banner"></span></div>',
+            '<div>Select this div<div id="res"><span class="banner"></span></div></div>',
+          ].join('\n'),
+          ['#res'],
+        );
+      });
 
-        it(`compound ${has}`, () => {
-          testQuerySelectorAll(
-            `h2 :${has}(span.foo)`,
-            [
-              '<p>I am a paragraph.</p>',
-              '<p class="fancy">I am so very fancy!</p>',
-              '<div>I am NOT a paragraph.</div>',
-              '<h2>',
-              '  <div id="res">',
-              '    <span class="foo">foo inside h2</span>',
-              '    <span class="bar">bar inside h2</span>',
-              '  </div>',
-              '</h2>',
-            ].join('\n'),
-            ['#res'],
-          );
-        });
+      it('compound has', () => {
+        testQuerySelectorAll(
+          `h2 :has(span.foo)`,
+          [
+            '<p>I am a paragraph.</p>',
+            '<p class="fancy">I am so very fancy!</p>',
+            '<div>I am NOT a paragraph.</div>',
+            '<h2>',
+            '  <div id="res">',
+            '    <span class="foo">foo inside h2</span>',
+            '    <span class="bar">bar inside h2</span>',
+            '  </div>',
+            '</h2>',
+          ].join('\n'),
+          ['#res'],
+        );
+      });
 
-        it(`compound 2 :${has}`, () => {
-          testQuerySelectorAll(
-            `body > div:${has}(img[alt="Foo"])`,
-            '<!DOCTYPE html><head></head><body><div id="res"><img alt="Foo"></div></body>',
-            ['#res'],
-          );
-        });
-      }
+      it('compound 2 :has', () => {
+        testQuerySelectorAll(
+          `body > div:has(img[alt="Foo"])`,
+          '<!DOCTYPE html><head></head><body><div id="res"><img alt="Foo"></div></body>',
+          ['#res'],
+        );
+      });
     });
 
     describe(':not', () => {
