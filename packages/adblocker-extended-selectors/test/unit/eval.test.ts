@@ -11,8 +11,8 @@ import 'mocha';
 
 import { JSDOM } from 'jsdom';
 
-import { querySelectorAll, matchPattern, matches } from '../src/eval.js';
-import { parse } from '../src/parse.js';
+import { querySelectorAll, matchPattern, matches } from '../../src/eval.js';
+import { parse } from '../../src/parse.js';
 
 // TODO - check if style:has-text() works (can select style?)
 
@@ -384,6 +384,143 @@ describe('eval', () => {
       it('handles regex for both attribute name and value', () => {
         testMatches(':matches-attr(/h?ref/=/1.*4$/)', '<a href="1234">Link</a>', 'a', true);
         testMatches(':matches-attr(/h?ref/=/1.*3$/)', '<a ref="1234">Link</a>', 'a', false);
+      });
+    });
+
+    describe(':matches-css', () => {
+      afterEach(() => {
+        globalThis.window = undefined as any;
+      });
+
+      it('matches element with exact CSS property value', () => {
+        const html = `
+          <style>
+            div {
+              color: red;
+            }
+          </style>
+          <div>Test</div>
+        `;
+        const jsdom = new JSDOM(html);
+        globalThis.window = jsdom.window;
+        const element = jsdom.window.document.querySelector('div');
+        expect(element).to.not.be.null;
+        if (element !== null) {
+          const ast = parse(':matches-css(color: rgb(255, 0, 0))');
+          expect(ast).to.not.be.undefined;
+          if (ast !== undefined) {
+            const result = matches(element, ast);
+            expect(result).to.be.true;
+          }
+        }
+      });
+
+      it('does not match element with different CSS property value', () => {
+        const html = `
+          <style>
+            div {
+              color: blue;
+            }
+          </style>
+          <div>Test</div>
+        `;
+        const jsdom = new JSDOM(html);
+        globalThis.window = jsdom.window;
+        const element = jsdom.window.document.querySelector('div');
+        expect(element).to.not.be.null;
+        if (element !== null) {
+          const ast = parse(':matches-css(color: rgb(255, 0, 0))');
+          expect(ast).to.not.be.undefined;
+          if (ast !== undefined) {
+            const result = matches(element, ast);
+            expect(result).to.be.false;
+          }
+        }
+      });
+
+      it('handles invalid CSS value format', () => {
+        const html = '<div>Test</div>';
+        const jsdom = new JSDOM(html);
+        globalThis.window = jsdom.window;
+        const element = jsdom.window.document.querySelector('div');
+        expect(element).to.not.be.null;
+        if (element !== null) {
+          const ast = parse(':matches-css(invalid)');
+          expect(ast).to.not.be.undefined;
+          if (ast !== undefined) {
+            const result = matches(element, ast);
+            expect(result).to.be.false;
+          }
+        }
+      });
+
+      it('matches element with regex CSS property value', () => {
+        const html = `
+          <style>
+            div {
+              display: block;
+            }
+          </style>
+          <div>Test</div>
+        `;
+        const jsdom = new JSDOM(html);
+        globalThis.window = jsdom.window;
+        const element = jsdom.window.document.querySelector('div');
+        expect(element).to.not.be.null;
+        if (element !== null) {
+          const ast = parse(':matches-css(display: /loc/)');
+          expect(ast).to.not.be.undefined;
+          if (ast !== undefined) {
+            const result = matches(element, ast);
+            expect(result).to.be.true;
+          }
+        }
+      });
+
+      it('matches element with regex CSS property value with flags', () => {
+        const html = `
+          <style>
+            div {
+              display: BLOCK;
+            }
+          </style>
+          <div>Test</div>
+        `;
+        const jsdom = new JSDOM(html);
+        globalThis.window = jsdom.window;
+        const element = jsdom.window.document.querySelector('div');
+        expect(element).to.not.be.null;
+        if (element !== null) {
+          const ast = parse(':matches-css(display: /block/i)');
+          expect(ast).to.not.be.undefined;
+          if (ast !== undefined) {
+            const result = matches(element, ast);
+            expect(result).to.be.true;
+          }
+        }
+      });
+
+      it('does not match element with regex CSS property value when pattern does not match', () => {
+        const html = `
+          <style>
+            div {
+              display: inline;
+            }
+          </style>
+          <div>Test</div>
+        `;
+        const jsdom = new JSDOM(html);
+        globalThis.window = jsdom.window;
+        const element = jsdom.window.document.querySelector('div');
+        expect(element).to.not.be.null;
+        if (element !== null) {
+          const ast = parse(':matches-css(display: /block/)');
+          expect(ast).to.not.be.undefined;
+          if (ast !== undefined) {
+            const result = matches(element, ast);
+            expect(result).to.be.false;
+          }
+        }
       });
     });
   });

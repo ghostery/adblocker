@@ -7,6 +7,54 @@
  */
 
 import type { AST, Complex } from './types.js';
+import { parse } from './parse.js';
+
+// Helper function to get computed style
+
+function getComputedStyle(element: Element, pseudoElt?: string): CSSStyleDeclaration {
+  const win = element.ownerDocument && element.ownerDocument.defaultView;
+
+  if (!win) throw new Error('No window context for element');
+
+  return win.getComputedStyle(element, pseudoElt);
+}
+
+// Helper function to parse CSS property value
+
+function parseCSSValue(cssValue: string): { property: string; value: string; isRegex: boolean } {
+  const firstColonIndex = cssValue.indexOf(':');
+
+  if (firstColonIndex === -1) {
+    throw new Error('Invalid CSS value format: no colon found');
+  }
+
+  const property = cssValue.slice(0, firstColonIndex).trim();
+  const value = cssValue.slice(firstColonIndex + 1).trim();
+  const isRegex = value.startsWith('/') && value.lastIndexOf('/') > 0;
+
+  return { property, value, isRegex };
+}
+
+// Helper function to match CSS property value
+
+function matchCSSProperty(element: Element, cssValue: string, pseudoElt?: string): boolean {
+  try {
+    const { property, value, isRegex } = parseCSSValue(cssValue);
+
+    const computedStyle = getComputedStyle(element, pseudoElt);
+
+    const actualValue = computedStyle[property as keyof CSSStyleDeclaration] as string;
+
+    if (isRegex) {
+      const regex = parseRegex(value);
+      return regex.test(actualValue);
+    }
+
+    return actualValue === value;
+  } catch (e) {
+    return false;
+  }
+}
 
 function parseRegex(str: string): RegExp {
   if (str.startsWith('/') && str.lastIndexOf('/') > 0) {
@@ -57,7 +105,15 @@ export function matchPattern(pattern: string, text: string): boolean {
  * @param element The subjective element
  * @param selector A selector
  */
-export function matches(element: Element, selector: AST): boolean {
+export function matches(element: Element, selector: string | AST): boolean {
+  if (typeof selector === 'string') {
+    const parsed = parse(selector);
+    if (!parsed) {
+      return false;
+    }
+    return matches(element, parsed);
+  }
+
   if (
     selector.type === 'id' ||
     selector.type === 'class' ||
@@ -171,6 +227,16 @@ export function matches(element: Element, selector: AST): boolean {
 
         return valueRegex ? valueRegex.test(value) : value === valuePattern;
       }
+    } else if (selector.name === 'matches-css') {
+      return selector.argument !== undefined && matchCSSProperty(element, selector.argument);
+    } else if (selector.name === 'matches-css-after') {
+      return (
+        selector.argument !== undefined && matchCSSProperty(element, selector.argument, '::after')
+      );
+    } else if (selector.name === 'matches-css-before') {
+      return (
+        selector.argument !== undefined && matchCSSProperty(element, selector.argument, '::before')
+      );
     }
   }
 
@@ -301,6 +367,14 @@ function handleCompoundSelector(element: Element, selectors: AST[]): Element[] {
 }
 
 export function querySelectorAll(element: Element, selector: AST): Element[] {
+  if (typeof selector === 'string') {
+    const parsed = parse(selector);
+    if (!parsed) {
+      return [];
+    }
+    return querySelectorAll(element, parsed);
+  }
+
   if (
     selector.type === 'id' ||
     selector.type === 'class' ||
