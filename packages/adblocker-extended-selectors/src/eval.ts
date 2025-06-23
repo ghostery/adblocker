@@ -70,7 +70,7 @@ export function matches(element: Element, selector: AST): boolean {
   } else if (selector.type === 'compound') {
     return selector.compound.every((s) => matches(element, s));
   } else if (selector.type === 'pseudo-class') {
-    if (selector.name === 'has' || selector.name === 'if') {
+    if (selector.name === 'has') {
       // TODO - is this a querySelectorAll or matches here?
       return (
         selector.subtree !== undefined && querySelectorAll(element, selector.subtree).length !== 0

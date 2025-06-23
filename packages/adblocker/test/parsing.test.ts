@@ -2047,6 +2047,7 @@ describe('Cosmetic filters', () => {
       '-abp-contains',
       '-abp-has',
       '-abp-properties',
+      'if',
       'if-not',
       'matches-css',
       'matches-css-after',
@@ -2062,7 +2063,7 @@ describe('Cosmetic filters', () => {
       });
     }
 
-    for (const pseudo of ['has', 'has-text', 'if']) {
+    for (const pseudo of ['has', 'has-text']) {
       it(`parse supported: ${pseudo}`, () => {
         cosmetic(`example.com##.cls:${pseudo}()`, {
           ...DEFAULT_COSMETIC_FILTER,
