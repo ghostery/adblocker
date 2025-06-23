@@ -177,44 +177,6 @@ export function matches(element: Element, selector: AST): boolean {
   return false;
 }
 
-/**
- * Try transposing with a selector from the subjective element.
- * @param element The subjective element
- * @param selector A selector
- * @returns An array with and without singular element; we may support transposing to multiple targets in the future
- * but currently it's for the convenience to match return type.
- */
-function transpose(element: Element, selector: AST): [] | [Element] {
-  if (selector.type === 'pseudo-class') {
-    if (selector.name === 'upward') {
-      if (selector.argument === undefined) {
-        return [];
-      }
-      const literalOrNumeric = stripsWrappingQuotes(selector.argument);
-      let number = parseInt(literalOrNumeric, 10);
-      let parentElement: Element | null = element;
-      if (!Number.isInteger(number)) {
-        while ((parentElement = parentElement.parentElement) !== null) {
-          if (parentElement.matches(literalOrNumeric)) {
-            return [parentElement];
-          }
-        }
-      } else {
-        if (number <= 0 || number >= 256) {
-          return [];
-        }
-        while ((parentElement = parentElement.parentElement) !== null) {
-          if (--number === 0) {
-            return [parentElement];
-          }
-        }
-      }
-    }
-  }
-
-  return [];
-}
-
 function handleComplexSelector(element: Element, selector: Complex): Element[] {
   const elements: Element[] = [];
   const leftElements =
@@ -255,6 +217,46 @@ function handleComplexSelector(element: Element, selector: Complex): Element[] {
 }
 
 /**
+ * Try transposing with a selector from the subjective element.
+ * @param element The subjective element
+ * @param selector A selector
+ * @returns An array with and without singular element; we may support transposing to multiple targets in the future
+ * but currently it's for the convenience to match return type.
+ */
+function transpose(element: Element, selector: AST): [] | [Element] | null {
+  if (selector.type === 'pseudo-class') {
+    if (selector.name === 'upward') {
+      if (selector.argument === undefined) {
+        return [];
+      }
+      let parentElement: Element | null = element;
+
+      const argumnent = stripsWrappingQuotes(selector.argument);
+      let number = Number(argumnent);
+
+      if (Number.isInteger(number)) {
+        if (number <= 0 || number >= 256) {
+          return [];
+        }
+        while ((parentElement = parentElement.parentElement) !== null) {
+          if (--number === 0) {
+            return [parentElement];
+          }
+        }
+      } else {
+        while ((parentElement = parentElement.parentElement) !== null) {
+          if (parentElement.matches(argumnent)) {
+            return [parentElement];
+          }
+        }
+      }
+    }
+  }
+
+  return null;
+}
+
+/**
  * Handles compound selectors or a list of selectors for subjective element.
  * To handle multi-paths matching, this function create branches internally and validates each cases.
  * @param element The subjective element
@@ -267,35 +269,30 @@ function handleCompoundSelector(element: Element, selectors: AST[]): Element[] {
   }
 
   // Start with validating the subjective element with given selectors
-  const branches: [Element, number][] = querySelectorAll(element, selectors[0]).map(
-    function (element) {
-      return [element, 1];
-    },
-  );
+  const branches = querySelectorAll(element, selectors[0]).map((element) => ({
+    element,
+    index: 1,
+  }));
+
   const results: Element[] = [];
 
   while (branches.length) {
     const branch = branches.pop()!;
-    const element = branch[0];
-    let currentIndex = branch[1];
-    for (let candidates: Element[]; currentIndex < selectors.length; currentIndex++) {
-      // Handle transpose
-      if ((candidates = transpose(element, selectors[currentIndex])).length !== 0) {
-        const nextIndex = currentIndex + 1;
-        branches.push(
-          ...candidates.map<[Element, number]>(function (candidate) {
-            return [candidate, nextIndex];
-          }),
-        );
+    const { element } = branch;
+    let { index } = branch;
+    for (; index < selectors.length; index++) {
+      const candidates = transpose(element, selectors[index]);
+      const isTransposeOperator = candidates !== null;
+      if (isTransposeOperator) {
+        branches.push(...candidates.map((element) => ({ element, index: index + 1 })));
         break;
-      }
-      // Handle consecutive selectors
-      if (matches(element, selectors[currentIndex]) === false) {
+      } else if (matches(element, selectors[index]) === false) {
+        // no maches found - stop processing the branch
         break;
       }
     }
     // Check if the loop was completed
-    if (currentIndex === selectors.length && !results.includes(element)) {
+    if (index === selectors.length && !results.includes(element)) {
       results.push(element);
     }
   }
