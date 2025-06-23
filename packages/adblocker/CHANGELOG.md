@@ -1,3 +1,21 @@
+# v2.8.0 (Mon Jun 23 2025)
+
+#### :rocket: New Feature
+
+- New extended selectors: matches-attr, matches-path, upward [#4931](https://github.com/ghostery/adblocker/pull/4931) ([@chrmod](https://github.com/chrmod) [@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/node from 22.15.30 to 24.0.1 [#4939](https://github.com/ghostery/adblocker/pull/4939) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.7.0 (Mon Jun 09 2025)
 
 #### :rocket: New Feature

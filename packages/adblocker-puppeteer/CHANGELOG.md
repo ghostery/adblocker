@@ -1,3 +1,18 @@
+# v2.8.0 (Mon Jun 23 2025)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 24.10.1 to 24.10.2 [#4961](https://github.com/ghostery/adblocker/pull/4961) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 24.10.0 to 24.10.1 [#4943](https://github.com/ghostery/adblocker/pull/4943) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 22.15.30 to 24.0.1 [#4939](https://github.com/ghostery/adblocker/pull/4939) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.7.0 (Mon Jun 09 2025)
 
 #### :nut_and_bolt: Dependencies
