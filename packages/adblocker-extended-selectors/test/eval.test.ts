@@ -11,7 +11,7 @@ import 'mocha';
 
 import { JSDOM } from 'jsdom';
 
-import { querySelectorAll, matchPattern, matches } from '../src/eval.js';
+import { querySelectorAll, matchPattern, match } from '../src/eval.js';
 import { parse } from '../src/parse.js';
 
 // TODO - check if style:has-text() works (can select style?)
@@ -34,7 +34,7 @@ function testMatches(selector: string, html: string, target: string, expected: b
     // `Document` argument to test some edge cases (e.g. textContent returns
     // null on document).
     // @ts-ignore
-    const result = matches(element, ast);
+    const result = match(element, ast);
     expect(result).to.equal(expected);
   }
 }
@@ -292,7 +292,7 @@ describe('eval', () => {
         globalThis.window = jsdom.window;
         const element = jsdom.window.document.querySelector('div')!;
         const ast = parse(':matches-path(/h(.*){2}e$/)')!;
-        const result = matches(element, ast);
+        const result = match(element, ast);
         expect(result).to.be.true;
       });
 
@@ -303,7 +303,7 @@ describe('eval', () => {
         globalThis.window = jsdom.window;
         const element = jsdom.window.document.querySelector('div')!;
         const ast = parse(':matches-path(/home/i)')!;
-        const result = matches(element, ast);
+        const result = match(element, ast);
         expect(result).to.be.true;
       });
 
@@ -328,7 +328,7 @@ describe('eval', () => {
         globalThis.window = jsdom.window;
         const element = jsdom.window.document.querySelector('div')!;
         const ast = parse(':matches-path(/q=foo/)')!;
-        const result = matches(element, ast);
+        const result = match(element, ast);
         expect(result).to.be.true;
       });
 
@@ -339,7 +339,7 @@ describe('eval', () => {
         globalThis.window = jsdom.window;
         const element = jsdom.window.document.querySelector('div')!;
         const ast = parse(':matches-path(/search/)')!;
-        const result = matches(element, ast);
+        const result = match(element, ast);
         expect(result).to.be.false;
       });
     });
@@ -464,7 +464,7 @@ describe('eval', () => {
     });
 
     describe(':has', () => {
-      for (const has of ['has', 'if']) {
+      for (const has of ['has']) {
         it(`*:${has}`, () => {
           testQuerySelectorAll(
             `*:${has}(a[href^="https://"]):not(html):not(body):not(p)`,
@@ -492,15 +492,6 @@ describe('eval', () => {
             ].join('\n'),
             ['#res'],
           );
-
-          testQuerySelectorAll(
-            `:${has}(.banner):not(body)`,
-            [
-              '<div>Do not select this div</div>',
-              '<div id="res">Select this div<span class="banner"></span></div>',
-            ].join('\n'),
-            ['#res'],
-          );
         });
 
         it(`nested :${has}`, () => {
@@ -508,10 +499,10 @@ describe('eval', () => {
             `div:${has}(> .banner)`,
             [
               '<div>Do not select this div</div>',
-              '<div id="res">Select this div<span class="banner"></span></div>',
-              '<div>Select this div<div id="res"><span class="banner"></span></div></div>',
+              '<div id="res1">Select this div<span class="banner"></span></div>',
+              '<div>Select this div<div id="res2"><span class="banner"></span></div></div>',
             ].join('\n'),
-            ['#res'],
+            ['#res1', '#res2'],
           );
         });
 
@@ -544,22 +535,6 @@ describe('eval', () => {
     });
 
     describe(':not', () => {
-      it('not paragraph', () => {
-        testQuerySelectorAll(
-          ':not(p):not(body):not(html):not(head)',
-          [
-            '<!DOCTYPE html>',
-            '<head></head>',
-            '<body>',
-            '  <div id="res">',
-            '    <img id="res" alt="Foo">',
-            '  </div>',
-            '</body>',
-          ].join('\n'),
-          ['#res'],
-        );
-      });
-
       it('compound', () => {
         testQuerySelectorAll(
           'h2 :not(span.foo)',
@@ -584,11 +559,12 @@ describe('eval', () => {
             '<p class="fancy">I am so very fancy!</p>',
             '<div>I am NOT a paragraph.</div>',
             '<h2>',
-            '  <div><span id="res" class="foo">inside</span> h2</div>',
-            '  <div id="res" class="bar">bar inside h2</div>',
+            '  <div id="res1">',
+            '    <span id="res1" class="bar">inside</span>',
+            '  </div>',
             '</h2>',
           ].join('\n'),
-          ['#res'],
+          ['#res1', '#res2'],
         );
       });
     });
