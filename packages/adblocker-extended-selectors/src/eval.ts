@@ -9,8 +9,6 @@
 import type { AST, Complex } from './types.js';
 import { parse } from './parse.js';
 
-// Helper function to get computed style
-
 function getComputedStyle(element: Element, pseudoElt?: string): CSSStyleDeclaration {
   const win = element.ownerDocument && element.ownerDocument.defaultView;
 
@@ -18,8 +16,6 @@ function getComputedStyle(element: Element, pseudoElt?: string): CSSStyleDeclara
 
   return win.getComputedStyle(element, pseudoElt);
 }
-
-// Helper function to parse CSS property value
 
 function parseCSSValue(cssValue: string): { property: string; value: string; isRegex: boolean } {
   const firstColonIndex = cssValue.indexOf(':');
@@ -35,13 +31,11 @@ function parseCSSValue(cssValue: string): { property: string; value: string; isR
   return { property, value, isRegex };
 }
 
-// Helper function to match CSS property value
-
-function matchCSSProperty(element: Element, cssValue: string, pseudoElt?: string): boolean {
+function matchCSSProperty(element: Element, cssValue: string, pseudoElement?: string): boolean {
   try {
     const { property, value, isRegex } = parseCSSValue(cssValue);
 
-    const computedStyle = getComputedStyle(element, pseudoElt);
+    const computedStyle = getComputedStyle(element, pseudoElement);
 
     const actualValue = computedStyle[property as keyof CSSStyleDeclaration] as string;
 
@@ -366,7 +360,7 @@ function handleCompoundSelector(element: Element, selectors: AST[]): Element[] {
   return results;
 }
 
-export function querySelectorAll(element: Element, selector: AST): Element[] {
+export function querySelectorAll(element: Element, selector: AST | string): Element[] {
   if (typeof selector === 'string') {
     const parsed = parse(selector);
     if (!parsed) {
