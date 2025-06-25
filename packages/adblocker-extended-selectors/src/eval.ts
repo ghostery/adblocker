@@ -9,14 +9,6 @@
 import type { AST, Complex } from './types.js';
 import { parse } from './parse.js';
 
-function getComputedStyle(element: Element, pseudoElt?: string): CSSStyleDeclaration {
-  const win = element.ownerDocument && element.ownerDocument.defaultView;
-
-  if (!win) throw new Error('No window context for element');
-
-  return win.getComputedStyle(element, pseudoElt);
-}
-
 function parseCSSValue(cssValue: string): { property: string; value: string; isRegex: boolean } {
   const firstColonIndex = cssValue.indexOf(':');
 
@@ -35,7 +27,9 @@ function matchCSSProperty(element: Element, cssValue: string, pseudoElement?: st
   try {
     const { property, value, isRegex } = parseCSSValue(cssValue);
 
-    const computedStyle = getComputedStyle(element, pseudoElement);
+    const win = element.ownerDocument && element.ownerDocument.defaultView;
+    if (!win) throw new Error('No window context for element');
+    const computedStyle = win.getComputedStyle(element, pseudoElement);
 
     const actualValue = computedStyle[property as keyof CSSStyleDeclaration] as string;
 
