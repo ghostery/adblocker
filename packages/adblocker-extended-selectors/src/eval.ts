@@ -379,10 +379,6 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
     selector.type === 'type' ||
     selector.type === 'attribute'
   ) {
-    // Try to support literal `html` selector with type of `type`.
-    // if (element instanceof HTMLHtmlElement && selector.content === 'html') {
-    //   return [element];
-    // }
     return Array.from(element.querySelectorAll(selector.content));
   }
 
