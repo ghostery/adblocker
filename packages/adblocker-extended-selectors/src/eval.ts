@@ -62,7 +62,6 @@ function parseRegex(str: string): RegExp {
 
     return new RegExp(pattern, flags);
   } else {
-    // Treat as raw pattern string, no flags
     return new RegExp(str);
   }
 }
@@ -166,8 +165,12 @@ export function matches(element: Element, selector: string | AST): boolean {
       const path = window.location.pathname;
       const search = window.location.search;
       const fullUrl = path + search;
-      const regex = parseRegex(argument);
-      return regex.test(fullUrl);
+      try {
+        const regex = parseRegex(argument);
+        return regex.test(fullUrl);
+      } catch (e) {
+        return false;
+      }
     } else if (selector.name === 'matches-attr') {
       const { argument } = selector;
       if (argument === undefined) {
@@ -187,14 +190,23 @@ export function matches(element: Element, selector: string | AST): boolean {
       namePattern = stripsWrappingQuotes(namePattern);
       valuePattern = valuePattern ? stripsWrappingQuotes(valuePattern) : undefined;
 
-      const valueRegex =
-        valuePattern?.startsWith('/') && valuePattern.lastIndexOf('/') > 0
-          ? parseRegex(valuePattern)
-          : undefined;
+      let valueRegex: RegExp | undefined;
+      if (valuePattern?.startsWith('/') && valuePattern.lastIndexOf('/') > 0) {
+        try {
+          valueRegex = parseRegex(valuePattern);
+        } catch (e) {
+          return false;
+        }
+      }
 
       if (namePattern.startsWith('/') && namePattern.lastIndexOf('/') > 0) {
         // matching attribute name by regex
-        const regex = parseRegex(namePattern);
+        let regex: RegExp;
+        try {
+          regex = parseRegex(namePattern);
+        } catch (e) {
+          return false;
+        }
         const matchingAttrs = [...element.attributes].filter((attr) => regex.test(attr.name));
 
         // If no value pattern, return true if any attribute matches the name pattern
