@@ -297,22 +297,6 @@ function handleComplexSelector(element: Element, selector: Complex): Element[] {
  * but currently it's for the convenience to match return type.
  */
 function transpose(element: Element, selector: AST): Element[] | null {
-  // The difference between `complex` handlers in `querySelectorAll` and `transpose` is nothing.
-  // However, it's also handled here to clarify and reduce complexity in the code flow.
-  // `querySelectorAll` is not used in `traverse` to avoid changing the subjective element unintentionally.
-  // Unlike this function, it assumes the subjective element to be guessed for other selectors.
-  // Also, we don't want to handle other selectors unless required as others are not *actually* transposable selectors.
-  // Since `traverse` assumes the subjective element to be the given element, we don't transpose to that.
-  // For an instance, type of `attribute` is to validate the subjective element has an `attribute`,
-  // not to select and transpose to the selector in a row.
-  // However, we want to do actual *transpose* not *match* with the selector type of `complex`
-  // as it could be mixed in the `compound` type selector and we want to move the target.
-  // e.g. This compound: `html>body` involes *transposing*, but not this compound: `html[lang*="en"]` (only *matching*).
-  // Therefore, this describes the behavior within the children nodes of the `compound` selector.
-  if (selector.type === 'complex') {
-    return handleComplexSelector(element, selector);
-  }
-
   if (selector.type === 'pseudo-class') {
     if (selector.name === 'upward') {
       if (selector.argument === undefined) {
