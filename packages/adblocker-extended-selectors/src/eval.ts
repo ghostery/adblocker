@@ -402,11 +402,6 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
   if (selector.type === 'compound') {
     const results: Element[] = [];
     const selectors = selector.compound.slice(1);
-    // Figure out the subjective element.
-    // If omitted, it will fallback to `pseudo-class` branch of `querySelectorAll`:
-    // - e.g. `:has(body)`, subjective is `html`.
-    // If given, it will run `querySelectorAll` on first selector:
-    // - e.g. `html:has(body)`, subjective is given.
     for (const subjective of querySelectorAll(element, selector.compound[0])) {
       for (const result of traverse(subjective, selectors)) {
         if (!results.includes(result)) {
@@ -423,12 +418,14 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
     return handleComplexSelector(element, selector);
   }
 
-  // `querySelectorAll` is assumed as an entrypoint function and intended to run the first selector of the AST.
-  // If `pseudo-class` is the first selector, it means the given element is the subjective.
   if (selector.type === 'pseudo-class') {
-    if (matches(element, selector)) {
-      return [element];
+    const results: Element[] = [];
+    for (const subjective of [element, ...element.querySelectorAll('*')]) {
+      if (matches(subjective, selector) && !results.includes(subjective)) {
+        results.push(subjective);
+      }
     }
+    return results;
   }
 
   return [];
