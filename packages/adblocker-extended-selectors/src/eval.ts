@@ -360,15 +360,7 @@ function handleCompoundSelector(element: Element, selectors: AST[]): Element[] {
   return results;
 }
 
-export function querySelectorAll(element: Element, selector: AST | string): Element[] {
-  if (typeof selector === 'string') {
-    const parsed = parse(selector);
-    if (!parsed) {
-      return [];
-    }
-    return querySelectorAll(element, parsed);
-  }
-
+export function querySelectorAll(element: Element, selector: AST): Element[] {
   if (
     selector.type === 'id' ||
     selector.type === 'class' ||

@@ -6,8 +6,8 @@ import { fileURLToPath } from 'url';
 declare global {
   interface Window {
     adblocker: {
-      querySelectorAll: (parent: Element, selector: string) => Element[];
-      parse: (...args: any[]) => any;
+      querySelectorAll: (parent: Element, selector: any) => Element[];
+      parse: (selector: string) => any;
     };
   }
 }
@@ -36,11 +36,12 @@ test.describe('Browser-based CSS matching tests', () => {
       '<div id="parent"><div class="block-element" style="display: block">Block</div></div>',
     );
     const result = await page.evaluate(() => {
-      const { querySelectorAll } = window.adblocker;
+      const { querySelectorAll, parse } = window.adblocker;
       const parent = document.getElementById('parent')!;
       const element = document.querySelector('.block-element')!;
       const selector = ':matches-css(display: block)';
-      const matches = querySelectorAll(parent, selector);
+      const ast = parse(selector);
+      const matches = querySelectorAll(parent, ast);
       return matches.includes(element);
     });
     expect(result).toBe(true);
@@ -51,21 +52,23 @@ test.describe('Browser-based CSS matching tests', () => {
       `<div id="parent"><div class="block-element" style='background-image: url("data:image/png;base64,test")'>Block</div></div>`,
     );
     const result1 = await page.evaluate(() => {
-      const { querySelectorAll } = window.adblocker;
+      const { querySelectorAll, parse } = window.adblocker;
       const parent = document.getElementById('parent')!;
       const element = document.querySelector('.block-element')!;
       const selector = ':matches-css(background-image: url("data:image/png;base64,test"))';
-      const matches = querySelectorAll(parent, selector);
+      const ast = parse(selector);
+      const matches = querySelectorAll(parent, ast);
       return matches.includes(element);
     });
     expect(result1).toBe(true);
 
     const result2 = await page.evaluate(() => {
-      const { querySelectorAll } = window.adblocker;
+      const { querySelectorAll, parse } = window.adblocker;
       const parent = document.getElementById('parent')!;
       const element = document.querySelector('.block-element')!;
       const selector = ':matches-css(background-image: /data/)';
-      const matches = querySelectorAll(parent, selector);
+      const ast = parse(selector);
+      const matches = querySelectorAll(parent, ast);
       return matches.includes(element);
     });
     expect(result2).toBe(true);
@@ -76,11 +79,12 @@ test.describe('Browser-based CSS matching tests', () => {
       '<div id="parent"><div class="block-element" style="display: block">Block</div></div>',
     );
     const result = await page.evaluate(() => {
-      const { querySelectorAll } = window.adblocker;
+      const { querySelectorAll, parse } = window.adblocker;
       const parent = document.getElementById('parent')!;
       const element = document.querySelector('.block-element')!;
       const selector = ':matches-css(display: /loc/)';
-      const matches = querySelectorAll(parent, selector);
+      const ast = parse(selector);
+      const matches = querySelectorAll(parent, ast);
       return matches.includes(element);
     });
     expect(result).toBe(true);
@@ -93,11 +97,12 @@ test.describe('Browser-based CSS matching tests', () => {
       '<div id="parent"><div class="inline-element" style="display: inline">Inline</div></div>',
     );
     const result = await page.evaluate(() => {
-      const { querySelectorAll } = window.adblocker;
+      const { querySelectorAll, parse } = window.adblocker;
       const parent = document.getElementById('parent')!;
       const element = document.querySelector('.inline-element')!;
       const selector = ':matches-css(display: block)';
-      const matches = querySelectorAll(parent, selector);
+      const ast = parse(selector);
+      const matches = querySelectorAll(parent, ast);
       return matches.includes(element);
     });
     expect(result).toBe(false);
@@ -118,11 +123,12 @@ test.describe('Browser-based CSS matching tests', () => {
     `);
 
     const result = await page.evaluate(() => {
-      const { querySelectorAll } = window.adblocker;
+      const { querySelectorAll, parse } = window.adblocker;
       const parent = document.getElementById('parent')!;
       const element = document.querySelector('.block-after')!;
       const selector = ':matches-css-after(display: block)';
-      const matches = querySelectorAll(parent, selector);
+      const ast = parse(selector);
+      const matches = querySelectorAll(parent, ast);
       return matches.includes(element);
     });
 
@@ -142,11 +148,12 @@ test.describe('Browser-based CSS matching tests', () => {
     `);
 
     const result = await page.evaluate(() => {
-      const { querySelectorAll } = window.adblocker;
+      const { querySelectorAll, parse } = window.adblocker;
       const parent = document.getElementById('parent')!;
       const element = document.querySelector('.inline-after')!;
       const selector = ':matches-css-after(display: block)';
-      const matches = querySelectorAll(parent, selector);
+      const ast = parse(selector);
+      const matches = querySelectorAll(parent, ast);
       return matches.includes(element);
     });
 
@@ -168,11 +175,12 @@ test.describe('Browser-based CSS matching tests', () => {
     `);
 
     const result = await page.evaluate(() => {
-      const { querySelectorAll } = window.adblocker;
+      const { querySelectorAll, parse } = window.adblocker;
       const parent = document.getElementById('parent')!;
       const element = document.querySelector('.block-before')!;
       const selector = ':matches-css-before(display: block)';
-      const matches = querySelectorAll(parent, selector);
+      const ast = parse(selector);
+      const matches = querySelectorAll(parent, ast);
       return matches.includes(element);
     });
 
@@ -192,11 +200,12 @@ test.describe('Browser-based CSS matching tests', () => {
     `);
 
     const result = await page.evaluate(() => {
-      const { querySelectorAll } = window.adblocker;
+      const { querySelectorAll, parse } = window.adblocker;
       const parent = document.getElementById('parent')!;
       const element = document.querySelector('.inline-before')!;
       const selector = ':matches-css-before(display: block)';
-      const matches = querySelectorAll(parent, selector);
+      const ast = parse(selector);
+      const matches = querySelectorAll(parent, ast);
       return matches.includes(element);
     });
 
