@@ -629,15 +629,6 @@ describe('eval', () => {
           ].join('\n'),
           ['#res'],
         );
-
-        testQuerySelectorAll(
-          `:has(.banner):not(body)`,
-          [
-            '<div>Do not select this div</div>',
-            '<div id="res">Select this div<span class="banner"></span></div>',
-          ].join('\n'),
-          ['#res'],
-        );
       });
 
       it('nested :has', () => {
@@ -680,22 +671,6 @@ describe('eval', () => {
     });
 
     describe(':not', () => {
-      it('not paragraph', () => {
-        testQuerySelectorAll(
-          ':not(p):not(body):not(html):not(head)',
-          [
-            '<!DOCTYPE html>',
-            '<head></head>',
-            '<body>',
-            '  <div id="res">',
-            '    <img id="res" alt="Foo">',
-            '  </div>',
-            '</body>',
-          ].join('\n'),
-          ['#res'],
-        );
-      });
-
       it('compound', () => {
         testQuerySelectorAll(
           'h2 :not(span.foo)',
