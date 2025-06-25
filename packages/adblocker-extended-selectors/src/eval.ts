@@ -7,7 +7,6 @@
  */
 
 import type { AST, Complex } from './types.js';
-import { parse } from './parse.js';
 
 function parseCSSValue(cssValue: string): { property: string; value: string; isRegex: boolean } {
   const firstColonIndex = cssValue.indexOf(':');
@@ -92,15 +91,7 @@ export function matchPattern(pattern: string, text: string): boolean {
  * @param element The subjective element
  * @param selector A selector
  */
-export function matches(element: Element, selector: string | AST): boolean {
-  if (typeof selector === 'string') {
-    const parsed = parse(selector);
-    if (!parsed) {
-      return false;
-    }
-    return matches(element, parsed);
-  }
-
+export function matches(element: Element, selector: AST): boolean {
   if (
     selector.type === 'id' ||
     selector.type === 'class' ||
