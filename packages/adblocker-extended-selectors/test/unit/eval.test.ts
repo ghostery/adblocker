@@ -610,7 +610,7 @@ describe('eval', () => {
     describe(':has', () => {
       it('*:has', () => {
         testQuerySelectorAll(
-          `*:has(a[href^="https://"]):not(html):not(body):not(p)`,
+          `*:has(a[href^="https://"]):not(body):not(p)`,
           [
             '<!DOCTYPE html>',
             '<p class="cls1">',
@@ -637,7 +637,7 @@ describe('eval', () => {
         );
 
         testQuerySelectorAll(
-          `:has(.banner):not(html):not(body)`,
+          `:has(.banner):not(body)`,
           [
             '<div>Do not select this div</div>',
             '<div id="res">Select this div<span class="banner"></span></div>',
@@ -688,7 +688,7 @@ describe('eval', () => {
     describe(':not', () => {
       it('not paragraph', () => {
         testQuerySelectorAll(
-          ':not(p):not(body):not(html):not(head)',
+          ':not(p):not(body):not(head)',
           [
             '<!DOCTYPE html>',
             '<head></head>',

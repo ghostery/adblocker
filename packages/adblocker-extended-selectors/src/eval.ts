@@ -420,7 +420,10 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
 
   if (selector.type === 'pseudo-class') {
     const results: Element[] = [];
-    for (const subjective of [element, ...element.querySelectorAll('*')]) {
+    // This code is intended to be matched with `document.documentElement.querySelectorAll`.
+    // Since `document` is at the higher position rather `document.documentElement`,
+    // it can't select `html` for an instance.
+    for (const subjective of element.querySelectorAll('*')) {
       if (matches(subjective, selector) && !results.includes(subjective)) {
         results.push(subjective);
       }
