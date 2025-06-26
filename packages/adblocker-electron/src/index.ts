@@ -50,7 +50,7 @@ export function fromElectronDetails(
  * This abstraction takes care of blocking in one instance of `Electron.Session`.
  */
 export class BlockingContext {
-  private preloadScriptId: string;
+  private preloadScriptId: string | undefined;
 
   private readonly onBeforeRequest: (
     details: Electron.OnBeforeRequestListenerDetails,
@@ -118,7 +118,10 @@ export class BlockingContext {
     }
 
     if (this.blocker.config.loadCosmeticFilters === true) {
-      this.session.unregisterPreloadScript(this.preloadScriptId);
+      if (this.preloadScriptId !== undefined) {
+        this.session.unregisterPreloadScript(this.preloadScriptId);
+        this.preloadScriptId = undefined;
+      }
       ipcMain.removeHandler('@ghostery/adblocker/inject-cosmetic-filters');
       ipcMain.removeHandler('@ghostery/adblocker/is-mutation-observer-enabled');
     }
