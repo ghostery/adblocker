@@ -527,6 +527,12 @@ describe('eval', () => {
   });
 
   describe('#querySelectorAll', () => {
+    context('deduplicates', () => {
+      it('type of `list`', () => {
+        testQuerySelectorAll('p>a,a', `<p><a/></p>`, ['a']);
+      });
+    });
+
     it('#id', () => {
       testQuerySelectorAll('#some_id', '<!DOCTYPE html><p id="some_id">Hello world</p>', [
         '#some_id',
